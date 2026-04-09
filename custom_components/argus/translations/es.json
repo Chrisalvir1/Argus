@@ -1,0 +1,34 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configuraci\u00f3n de Argus",
+        "description": "Configura tu panel de alarma Argus.",
+        "data": {
+          "name": "Nombre",
+          "code": "C\u00f3digo de alarma (opcional)",
+          "code_arm_required": "Requerir c\u00f3digo para armar",
+          "arming_time": "Tiempo de armado (segundos)",
+          "trigger_time": "Duraci\u00f3n de activaci\u00f3n (segundos)"
+        }
+      }
+    },
+    "error": {
+      "invalid_code": "C\u00f3digo de alarma incorrecto."
+    },
+    "abort": {
+      "already_configured": "Argus ya est\u00e1 configurado."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opciones de Argus",
+        "data": {
+          "arming_time": "Tiempo de armado (segundos)",
+          "trigger_time": "Duraci\u00f3n de activaci\u00f3n (segundos)"
+        }
+      }
+    }
+  }
+}
