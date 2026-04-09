@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="brand/logo.jpeg" alt="Argus logo" width="140"/>
+<img src="brand/icon.png" alt="Argus logo" width="140"/>
 
 # 🛡️ Argus
 
