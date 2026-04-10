@@ -1,5 +1,5 @@
 /**
- * Argus Panel 0.3.5
+ * Argus Panel 0.3.6
  * Custom panel registered in the Home Assistant sidebar.
  * Communicates with the backend via websocket: argus/dashboard and argus/save_ui.
  */
@@ -185,7 +185,7 @@ template.innerHTML = `
       <div class="hero-icon">🛡️</div>
       <div>
         <h1>Argus</h1>
-        <p>Panel de seguridad inteligente para Home Assistant · v0.3.0</p>
+        <p>Argus Home Hub · v0.3.6</p>
       </div>
     </div>
 

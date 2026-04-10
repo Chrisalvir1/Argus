@@ -227,8 +227,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         if self._mqtt_enabled:
             await self._async_setup_mqtt()
 
-    @callback
-    def _async_linked_alarm_changed(self, event):
+    async def _async_linked_alarm_changed(self, event):
         """Update Argus state when the linked alarm (HomeKit/Aqara) changes."""
         if self._syncing_linked:
             return
@@ -245,22 +244,23 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         if target_state == self._alarm_state:
             return
 
-        _LOGGER.info("Argus: Syncing from linked alarm %s -> %s", self._linked_alarm, target_state)
-        self._syncing_linked = True
+        _LOGGER.info("Argus: Syncing FROM linked alarm %s -> %s", self._linked_alarm, target_state)
         
-        # Dispatch appropriate arm/disarm call
-        if target_state == AlarmControlPanelState.DISARMED:
-            self.hass.async_create_task(self.async_alarm_disarm())
-        elif target_state == AlarmControlPanelState.ARMED_HOME:
-            self.hass.async_create_task(self.async_alarm_arm_home())
-        elif target_state == AlarmControlPanelState.ARMED_AWAY:
-            self.hass.async_create_task(self.async_alarm_arm_away())
-        elif target_state == AlarmControlPanelState.ARMED_NIGHT:
-            self.hass.async_create_task(self.async_alarm_arm_night())
-        elif target_state == AlarmControlPanelState.ARMED_VACATION:
-            self.hass.async_create_task(self.async_alarm_arm_vacation())
-            
-        self._syncing_linked = False
+        # Set flag before calling services and keep it until work is dispatched
+        self._syncing_linked = True
+        try:
+            if target_state == AlarmControlPanelState.DISARMED:
+                await self.async_alarm_disarm()
+            elif target_state == AlarmControlPanelState.ARMED_HOME:
+                await self.async_alarm_arm_home()
+            elif target_state == AlarmControlPanelState.ARMED_AWAY:
+                await self.async_alarm_arm_away()
+            elif target_state == AlarmControlPanelState.ARMED_NIGHT:
+                await self.async_alarm_arm_night()
+            elif target_state == AlarmControlPanelState.ARMED_VACATION:
+                await self.async_alarm_arm_vacation()
+        finally:
+            self._syncing_linked = False
 
     async def _async_sync_to_linked(self, state: AlarmControlPanelState):
         """Push Argus state change to the linked alarm entity."""

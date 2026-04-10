@@ -23,8 +23,8 @@ async def async_register_panel(hass: HomeAssistant) -> None:
         webcomponent_name="argus-panel",
         frontend_url_path=DOMAIN,
         module_url=f"/api/{DOMAIN}_static/argus-panel.js",
-        sidebar_title=NAME,
-        sidebar_icon="mdi:shield-home",
+        sidebar_title="Argus Home Center",
+        sidebar_icon="mdi:shield-lock-outline",
         require_admin=True,
         config={
             "domain": DOMAIN,
