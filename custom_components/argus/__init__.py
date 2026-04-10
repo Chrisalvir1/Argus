@@ -16,15 +16,11 @@ _LOGGER = logging.getLogger(__name__)
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     """Set up Argus from configuration.yaml."""
     hass.data.setdefault(DOMAIN, {})
-
-    if not hass.data[DOMAIN].get("panel_registered"):
-        await async_register_panel(hass)
-        hass.data[DOMAIN]["panel_registered"] = True
-
-    if not hass.data[DOMAIN].get("ws_registered"):
-        async_register_websocket_api(hass)
-        hass.data[DOMAIN]["ws_registered"] = True
-
+    
+    # Always try to register panel and ws on startup
+    await async_register_panel(hass)
+    async_register_websocket_api(hass)
+    
     return True
 
 
@@ -33,19 +29,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = entry.data
 
-    if not hass.data[DOMAIN].get("panel_registered"):
-        await async_register_panel(hass)
-        hass.data[DOMAIN]["panel_registered"] = True
-
-    if not hass.data[DOMAIN].get("ws_registered"):
-        async_register_websocket_api(hass)
-        hass.data[DOMAIN]["ws_registered"] = True
+    # Always ensure panel and websocket are registered
+    await async_register_panel(hass)
+    async_register_websocket_api(hass)
 
     # Register update listener
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-    _LOGGER.info("Argus 0.3.8 successfully set up.")
+    _LOGGER.info("Argus 0.3.9 successfully set up.")
     return True
 
 

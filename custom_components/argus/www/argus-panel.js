@@ -185,7 +185,7 @@ template.innerHTML = `
       <div class="hero-icon">🛡️</div>
       <div>
         <h1>Argus</h1>
-        <p>Argus Home Hub · v0.3.8</p>
+        <p>Argus Home Hub · v0.3.9</p>
       </div>
     </div>
 
