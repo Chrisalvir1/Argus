@@ -12,6 +12,18 @@
           "trigger_time": "Trigger duration (seconds)"
         }
       }
+      "sensors": {
+        "title": "Sensors and Sync Configuration",
+        "description": "Link Argus with HomeKit/Aqara and select your sensors.",
+        "data": {
+          "linked_alarm_entity": "Linked alarm entity (HomeKit/Aqara)",
+          "sensors_away": "Sensors in Away mode",
+          "sensors_home": "Sensors in Home mode",
+          "sensors_night": "Sensors in Night mode",
+          "entry_sensors": "Sensors with entry delay",
+          "siren_entity": "Primary Siren"
+        }
+      }
     },
     "error": {
       "invalid_code": "Invalid alarm code."
@@ -23,10 +35,21 @@
   "options": {
     "step": {
       "init": {
-        "title": "Argus Options",
+        "title": "Time Options",
         "data": {
           "arming_time": "Arming delay (seconds)",
-          "trigger_time": "Trigger duration (seconds)"
+          "trigger_time": "Trigger duration (seconds)",
+          "entry_delay": "Entry delay (seconds)"
+        }
+      },
+      "sensors": {
+        "title": "Sensor Options",
+        "data": {
+          "sensors_away": "Sensors in Away mode",
+          "sensors_home": "Sensors in Home mode",
+          "sensors_night": "Sensors in Night mode",
+          "entry_sensors": "Sensors with entry delay",
+          "siren_entity": "Primary Siren"
         }
       }
     }

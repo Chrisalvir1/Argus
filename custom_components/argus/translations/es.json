@@ -12,6 +12,18 @@
           "trigger_time": "Duraci\u00f3n de activaci\u00f3n (segundos)"
         }
       }
+      "sensors": {
+        "title": "Configuraci\u00f3n de Sensores y Sincronizaci\u00f3n",
+        "description": "Vincula Argus con HomeKit/Aqara y selecciona tus sensores.",
+        "data": {
+          "linked_alarm_entity": "Entidad de alarma vinculada (HomeKit/Aqara)",
+          "sensors_away": "Sensores en modo Ausente",
+          "sensors_home": "Sensores en modo Casa",
+          "sensors_night": "Sensores en modo Noche",
+          "entry_sensors": "Sensores con retardo de entrada",
+          "siren_entity": "Sirena principal"
+        }
+      }
     },
     "error": {
       "invalid_code": "C\u00f3digo de alarma incorrecto."
@@ -23,10 +35,21 @@
   "options": {
     "step": {
       "init": {
-        "title": "Opciones de Argus",
+        "title": "Opciones de Tiempos",
         "data": {
           "arming_time": "Tiempo de armado (segundos)",
-          "trigger_time": "Duraci\u00f3n de activaci\u00f3n (segundos)"
+          "trigger_time": "Duraci\u00f3n de activaci\u00f3n (segundos)",
+          "entry_delay": "Retardo de entrada (segundos)"
+        }
+      },
+      "sensors": {
+        "title": "Opciones de Sensores",
+        "data": {
+          "sensors_away": "Sensores en modo Ausente",
+          "sensors_home": "Sensores en modo Casa",
+          "sensors_night": "Sensores en modo Noche",
+          "entry_sensors": "Sensores con retardo de entrada",
+          "siren_entity": "Sirena principal"
         }
       }
     }
