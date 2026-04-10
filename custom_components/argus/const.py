@@ -8,7 +8,7 @@ from homeassistant.const import (
 
 DOMAIN = "argus"
 NAME = "Argus"
-VERSION = "0.3.9"
+VERSION = "0.3.10"
 
 PLATFORMS = ["alarm_control_panel"]
 
@@ -32,6 +32,13 @@ DEFAULT_TRIGGER_TIME = 120
 DEFAULT_ENTRY_DELAY = 60
 DEFAULT_MQTT_TOPIC_STATE = "argus/alarm/state"
 DEFAULT_MQTT_TOPIC_COMMAND = "argus/alarm/command"
+
+# MQTT command payloads
+MQTT_COMMAND_DISARM = "DISARM"
+MQTT_COMMAND_ARM_HOME = "ARM_HOME"
+MQTT_COMMAND_ARM_AWAY = "ARM_AWAY"
+MQTT_COMMAND_ARM_NIGHT = "ARM_NIGHT"
+MQTT_COMMAND_ARM_VACATION = "ARM_VACATION"
 
 # Storage keys
 STORAGE_KEY = "argus_ui_data"
