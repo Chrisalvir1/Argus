@@ -2,31 +2,42 @@
 
 DOMAIN = "argus"
 NAME = "Argus"
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 
 PLATFORMS = ["alarm_control_panel"]
 
-# Alarm states
-STATE_DISARMED = "disarmed"
-STATE_ARMED_HOME = "armed_home"
-STATE_ARMED_AWAY = "armed_away"
-STATE_ARMED_NIGHT = "armed_night"
-STATE_ARMED_VACATION = "armed_vacation"
-STATE_ARMING = "arming"
-STATE_DISARMING = "disarming"
-STATE_TRIGGERED = "triggered"
-STATE_PENDING = "pending"
-
-# Config keys
+# ── Config keys ───────────────────────────────────────────────
 CONF_NAME = "name"
 CONF_CODE = "code"
 CONF_CODE_ARM_REQUIRED = "code_arm_required"
 CONF_ARMING_TIME = "arming_time"
 CONF_TRIGGER_TIME = "trigger_time"
-CONF_DISARM_TIME = "disarm_time"
+CONF_ENTRY_DELAY = "entry_delay"
 
-# Default values
+# Sensor zones
+CONF_SENSORS_AWAY = "sensors_away"
+CONF_SENSORS_HOME = "sensors_home"
+CONF_SENSORS_NIGHT = "sensors_night"
+CONF_SENSORS_VACATION = "sensors_vacation"
+CONF_ENTRY_SENSORS = "entry_sensors"  # sensors that use entry delay
+CONF_SIREN_ENTITY = "siren_entity"
+
+# MQTT
+CONF_MQTT_ENABLED = "mqtt_enabled"
+CONF_MQTT_TOPIC_STATE = "mqtt_topic_state"
+CONF_MQTT_TOPIC_COMMAND = "mqtt_topic_command"
+
+# ── Defaults ──────────────────────────────────────────────────
 DEFAULT_NAME = "Argus"
 DEFAULT_ARMING_TIME = 30
 DEFAULT_TRIGGER_TIME = 300
-DEFAULT_DISARM_TIME = 0
+DEFAULT_ENTRY_DELAY = 30
+DEFAULT_MQTT_TOPIC_STATE = "argus/alarm/state"
+DEFAULT_MQTT_TOPIC_COMMAND = "argus/alarm/set"
+
+# ── MQTT commands ─────────────────────────────────────────────
+MQTT_COMMAND_DISARM = "DISARM"
+MQTT_COMMAND_ARM_HOME = "ARM_HOME"
+MQTT_COMMAND_ARM_AWAY = "ARM_AWAY"
+MQTT_COMMAND_ARM_NIGHT = "ARM_NIGHT"
+MQTT_COMMAND_ARM_VACATION = "ARM_VACATION"

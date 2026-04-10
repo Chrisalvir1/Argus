@@ -1,8 +1,7 @@
-"""Argus Alarm Control Panel platform."""
+"""Argus Alarm Control Panel — full logic with sensors, timers, siren and MQTT."""
 from __future__ import annotations
 
 import logging
-from datetime import timedelta
 
 from homeassistant.components.alarm_control_panel import (
     AlarmControlPanelEntity,
@@ -10,8 +9,13 @@ from homeassistant.components.alarm_control_panel import (
     AlarmControlPanelState,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
+from homeassistant.const import STATE_ON
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.event import (
+    async_track_state_change_event,
+    async_call_later,
+)
 from homeassistant.helpers.restore_state import RestoreEntity
 
 from .const import (
@@ -21,12 +25,35 @@ from .const import (
     CONF_CODE_ARM_REQUIRED,
     CONF_ARMING_TIME,
     CONF_TRIGGER_TIME,
+    CONF_ENTRY_DELAY,
+    CONF_SENSORS_AWAY,
+    CONF_SENSORS_HOME,
+    CONF_SENSORS_NIGHT,
+    CONF_SENSORS_VACATION,
+    CONF_ENTRY_SENSORS,
+    CONF_SIREN_ENTITY,
+    CONF_MQTT_ENABLED,
+    CONF_MQTT_TOPIC_STATE,
+    CONF_MQTT_TOPIC_COMMAND,
     DEFAULT_NAME,
     DEFAULT_ARMING_TIME,
     DEFAULT_TRIGGER_TIME,
+    DEFAULT_ENTRY_DELAY,
+    MQTT_COMMAND_DISARM,
+    MQTT_COMMAND_ARM_HOME,
+    MQTT_COMMAND_ARM_AWAY,
+    MQTT_COMMAND_ARM_NIGHT,
+    MQTT_COMMAND_ARM_VACATION,
 )
 
 _LOGGER = logging.getLogger(__name__)
+
+ARMED_STATES = {
+    AlarmControlPanelState.ARMED_HOME,
+    AlarmControlPanelState.ARMED_AWAY,
+    AlarmControlPanelState.ARMED_NIGHT,
+    AlarmControlPanelState.ARMED_VACATION,
+}
 
 
 async def async_setup_entry(
@@ -35,14 +62,11 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Argus alarm panel from a config entry."""
-    async_add_entities(
-        [ArgusAlarmPanel(hass, config_entry)],
-        update_before_add=True,
-    )
+    async_add_entities([ArgusAlarmPanel(hass, config_entry)], update_before_add=True)
 
 
 class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
-    """Representation of the Argus alarm control panel."""
+    """Argus Smart Alarm Control Panel with sensor monitoring."""
 
     _attr_has_entity_name = True
     _attr_should_poll = False
@@ -55,17 +79,43 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     )
 
     def __init__(self, hass: HomeAssistant, config_entry: ConfigEntry) -> None:
-        """Initialize Argus alarm panel."""
         self.hass = hass
         self._config_entry = config_entry
-        self._name = config_entry.data.get(CONF_NAME, DEFAULT_NAME)
-        self._code = config_entry.data.get(CONF_CODE) or None
-        self._code_arm_required = config_entry.data.get(CONF_CODE_ARM_REQUIRED, False)
-        self._arming_time = config_entry.data.get(CONF_ARMING_TIME, DEFAULT_ARMING_TIME)
-        self._trigger_time = config_entry.data.get(CONF_TRIGGER_TIME, DEFAULT_TRIGGER_TIME)
+        self._load_config()
         self._alarm_state = AlarmControlPanelState.DISARMED
         self._attr_unique_id = config_entry.entry_id
 
+        # Timers
+        self._arming_listener = None
+        self._entry_listener = None
+        self._trigger_listener = None
+        self._arming_target = None
+
+        # Tracking
+        self._unsub_sensors = None
+        self._triggered_by: str | None = None
+        self._mqtt_unsub = None
+
+    # ── Config loading ──────────────────────────────────────────────
+    def _load_config(self):
+        d = self._config_entry.data
+        self._name = d.get(CONF_NAME, DEFAULT_NAME)
+        self._code = d.get(CONF_CODE) or None
+        self._code_arm_required = d.get(CONF_CODE_ARM_REQUIRED, False)
+        self._arming_time = int(d.get(CONF_ARMING_TIME, DEFAULT_ARMING_TIME))
+        self._trigger_time = int(d.get(CONF_TRIGGER_TIME, DEFAULT_TRIGGER_TIME))
+        self._entry_delay = int(d.get(CONF_ENTRY_DELAY, DEFAULT_ENTRY_DELAY))
+        self._sensors_away = d.get(CONF_SENSORS_AWAY, [])
+        self._sensors_home = d.get(CONF_SENSORS_HOME, [])
+        self._sensors_night = d.get(CONF_SENSORS_NIGHT, [])
+        self._sensors_vacation = d.get(CONF_SENSORS_VACATION, self._sensors_away)
+        self._entry_sensors = d.get(CONF_ENTRY_SENSORS, [])
+        self._siren_entity = d.get(CONF_SIREN_ENTITY)
+        self._mqtt_enabled = d.get(CONF_MQTT_ENABLED, False)
+        self._mqtt_topic_state = d.get(CONF_MQTT_TOPIC_STATE, "argus/alarm/state")
+        self._mqtt_topic_command = d.get(CONF_MQTT_TOPIC_COMMAND, "argus/alarm/set")
+
+    # ── Properties ────────────────────────────────────────────────
     @property
     def name(self) -> str:
         return self._name
@@ -78,59 +128,262 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     def code_arm_required(self) -> bool:
         return self._code_arm_required
 
-    async def async_alarm_disarm(self, code=None) -> None:
-        """Disarm the alarm."""
-        if self._validate_code(code):
-            self._alarm_state = AlarmControlPanelState.DISARMED
-            self.async_write_ha_state()
-            _LOGGER.info("Argus disarmed.")
+    @property
+    def extra_state_attributes(self) -> dict:
+        attrs = {}
+        if self._triggered_by:
+            attrs["triggered_by"] = self._triggered_by
+        if self._alarm_state in (
+            AlarmControlPanelState.ARMING,
+            AlarmControlPanelState.PENDING,
+        ):
+            delay = (
+                self._arming_time
+                if self._alarm_state == AlarmControlPanelState.ARMING
+                else self._entry_delay
+            )
+            attrs["delay"] = delay
+        return attrs
 
-    async def async_alarm_arm_home(self, code=None) -> None:
-        """Arm the alarm in home mode."""
-        if not self._code_arm_required or self._validate_code(code):
-            self._alarm_state = AlarmControlPanelState.ARMED_HOME
-            self.async_write_ha_state()
-            _LOGGER.info("Argus armed home.")
+    # ── Sensor helpers ─────────────────────────────────────────────
+    def _sensors_for_state(self, state: AlarmControlPanelState) -> list[str]:
+        if state == AlarmControlPanelState.ARMED_HOME:
+            return self._sensors_home or self._sensors_away
+        if state == AlarmControlPanelState.ARMED_NIGHT:
+            return self._sensors_night or self._sensors_away
+        if state == AlarmControlPanelState.ARMED_VACATION:
+            return self._sensors_vacation or self._sensors_away
+        return self._sensors_away  # ARMED_AWAY
 
-    async def async_alarm_arm_away(self, code=None) -> None:
-        """Arm the alarm in away mode."""
-        if not self._code_arm_required or self._validate_code(code):
-            self._alarm_state = AlarmControlPanelState.ARMED_AWAY
-            self.async_write_ha_state()
-            _LOGGER.info("Argus armed away.")
+    def _all_sensors(self) -> list[str]:
+        s = set()
+        s.update(self._sensors_away or [])
+        s.update(self._sensors_home or [])
+        s.update(self._sensors_night or [])
+        s.update(self._sensors_vacation or [])
+        return list(s)
 
-    async def async_alarm_arm_night(self, code=None) -> None:
-        """Arm the alarm in night mode."""
-        if not self._code_arm_required or self._validate_code(code):
-            self._alarm_state = AlarmControlPanelState.ARMED_NIGHT
-            self.async_write_ha_state()
-            _LOGGER.info("Argus armed night.")
-
-    async def async_alarm_arm_vacation(self, code=None) -> None:
-        """Arm the alarm in vacation mode."""
-        if not self._code_arm_required or self._validate_code(code):
-            self._alarm_state = AlarmControlPanelState.ARMED_VACATION
-            self.async_write_ha_state()
-            _LOGGER.info("Argus armed vacation.")
-
-    async def async_alarm_trigger(self, code=None) -> None:
-        """Trigger the alarm."""
-        self._alarm_state = AlarmControlPanelState.TRIGGERED
-        self.async_write_ha_state()
-        _LOGGER.warning("Argus TRIGGERED.")
-
-    def _validate_code(self, code) -> bool:
-        """Validate the provided code."""
-        if self._code is None:
-            return True
-        return code == self._code
-
+    # ── Lifecycle ──────────────────────────────────────────────────
     async def async_added_to_hass(self) -> None:
-        """Restore previous state on startup."""
         await super().async_added_to_hass()
-        last_state = await self.async_get_last_state()
-        if last_state is not None:
+
+        # Restore last stable state
+        last = await self.async_get_last_state()
+        if last is not None:
             try:
-                self._alarm_state = AlarmControlPanelState(last_state.state)
+                restored = AlarmControlPanelState(last.state)
+                if restored in (
+                    AlarmControlPanelState.DISARMED,
+                    AlarmControlPanelState.ARMED_HOME,
+                    AlarmControlPanelState.ARMED_AWAY,
+                    AlarmControlPanelState.ARMED_NIGHT,
+                    AlarmControlPanelState.ARMED_VACATION,
+                ):
+                    self._alarm_state = restored
             except ValueError:
                 self._alarm_state = AlarmControlPanelState.DISARMED
+
+        # Subscribe to sensor state changes
+        all_sensors = self._all_sensors()
+        if all_sensors:
+            self._unsub_sensors = async_track_state_change_event(
+                self.hass, all_sensors, self._async_sensor_changed
+            )
+
+        # MQTT
+        if self._mqtt_enabled:
+            await self._async_setup_mqtt()
+
+    async def async_will_remove_from_hass(self) -> None:
+        if self._unsub_sensors:
+            self._unsub_sensors()
+        if self._mqtt_unsub:
+            self._mqtt_unsub()
+        self._cancel_timers()
+
+    def _cancel_timers(self):
+        for attr in ("_arming_listener", "_entry_listener", "_trigger_listener"):
+            lst = getattr(self, attr)
+            if lst:
+                lst()
+                setattr(self, attr, None)
+
+    # ── Sensor monitoring ───────────────────────────────────────────
+    @callback
+    def _async_sensor_changed(self, event):
+        """React when a monitored sensor changes state."""
+        if self._alarm_state not in ARMED_STATES:
+            return
+
+        new_state = event.data.get("new_state")
+        entity_id = event.data.get("entity_id")
+
+        if new_state is None or new_state.state != STATE_ON:
+            return
+
+        active = self._sensors_for_state(self._alarm_state)
+        if entity_id not in active:
+            return
+
+        _LOGGER.warning("Argus: Sensor %s tripped while %s", entity_id, self._alarm_state)
+        self._triggered_by = entity_id
+
+        if entity_id in self._entry_sensors and self._entry_delay > 0:
+            # Entry delay → PENDING
+            self._alarm_state = AlarmControlPanelState.PENDING
+            self.async_write_ha_state()
+            if self._entry_listener:
+                self._entry_listener()
+            self._entry_listener = async_call_later(
+                self.hass, self._entry_delay, self._async_trigger_now
+            )
+        else:
+            self.hass.async_create_task(self._async_trigger())
+
+    @callback
+    def _async_trigger_now(self, _now):
+        """Entry delay expired — trigger immediately."""
+        if self._alarm_state == AlarmControlPanelState.PENDING:
+            self.hass.async_create_task(self._async_trigger())
+
+    async def _async_trigger(self):
+        """Activate the alarm."""
+        self._cancel_timers()
+        self._alarm_state = AlarmControlPanelState.TRIGGERED
+        self.async_write_ha_state()
+        _LOGGER.warning("Argus: ALARM TRIGGERED by %s", self._triggered_by)
+
+        await self._async_siren(True)
+        await self._async_mqtt_publish()
+
+        # Auto-reset after trigger_time
+        if self._trigger_time > 0:
+            self._trigger_listener = async_call_later(
+                self.hass, self._trigger_time, self._async_reset_triggered
+            )
+
+    @callback
+    def _async_reset_triggered(self, _now):
+        """Auto-disarm after trigger_time expires."""
+        self._alarm_state = AlarmControlPanelState.DISARMED
+        self._triggered_by = None
+        self.async_write_ha_state()
+        self.hass.async_create_task(self._async_siren(False))
+        self.hass.async_create_task(self._async_mqtt_publish())
+
+    @callback
+    def _async_finish_arming(self, _now):
+        """Arming countdown finished — move to target armed state."""
+        if self._alarm_state == AlarmControlPanelState.ARMING and self._arming_target:
+            self._alarm_state = self._arming_target
+            self._arming_listener = None
+            self.async_write_ha_state()
+            self.hass.async_create_task(self._async_mqtt_publish())
+
+    # ── Siren ───────────────────────────────────────────────────────
+    async def _async_siren(self, activate: bool):
+        if not self._siren_entity:
+            return
+        domain = self._siren_entity.split(".")[0]
+        service = "turn_on" if activate else "turn_off"
+        try:
+            await self.hass.services.async_call(
+                domain, service, {"entity_id": self._siren_entity}, blocking=False
+            )
+        except Exception as e:  # noqa: BLE001
+            _LOGGER.error("Argus: siren control failed: %s", e)
+
+    # ── MQTT ────────────────────────────────────────────────────────
+    async def _async_setup_mqtt(self):
+        """Subscribe to MQTT command topic."""
+        try:
+            from homeassistant.components import mqtt  # noqa: PLC0415
+            self._mqtt_unsub = await mqtt.async_subscribe(
+                self.hass, self._mqtt_topic_command, self._async_mqtt_message
+            )
+            _LOGGER.info("Argus: MQTT subscribed to %s", self._mqtt_topic_command)
+        except Exception as e:  # noqa: BLE001
+            _LOGGER.warning("Argus: MQTT setup failed: %s", e)
+
+    @callback
+    def _async_mqtt_message(self, msg):
+        cmd = msg.payload.strip().upper()
+        dispatch = {
+            MQTT_COMMAND_DISARM: self.async_alarm_disarm,
+            MQTT_COMMAND_ARM_HOME: self.async_alarm_arm_home,
+            MQTT_COMMAND_ARM_AWAY: self.async_alarm_arm_away,
+            MQTT_COMMAND_ARM_NIGHT: self.async_alarm_arm_night,
+            MQTT_COMMAND_ARM_VACATION: self.async_alarm_arm_vacation,
+        }
+        if cmd in dispatch:
+            self.hass.async_create_task(dispatch[cmd]())
+        else:
+            _LOGGER.warning("Argus: Unknown MQTT command: %s", cmd)
+
+    async def _async_mqtt_publish(self):
+        if not self._mqtt_enabled:
+            return
+        try:
+            from homeassistant.components import mqtt  # noqa: PLC0415
+            await mqtt.async_publish(
+                self.hass,
+                self._mqtt_topic_state,
+                self._alarm_state.value,
+                retain=True,
+            )
+        except Exception as e:  # noqa: BLE001
+            _LOGGER.warning("Argus: MQTT publish failed: %s", e)
+
+    # ── Arm / Disarm ───────────────────────────────────────────────
+    def _validate_code(self, code) -> bool:
+        if self._code is None:
+            return True
+        return str(code) == str(self._code)
+
+    async def async_alarm_disarm(self, code=None) -> None:
+        if not self._validate_code(code):
+            _LOGGER.warning("Argus: Disarm rejected — invalid code")
+            return
+        self._cancel_timers()
+        self._alarm_state = AlarmControlPanelState.DISARMED
+        self._triggered_by = None
+        await self._async_siren(False)
+        self.async_write_ha_state()
+        await self._async_mqtt_publish()
+        _LOGGER.info("Argus: Disarmed")
+
+    async def _async_arm(self, target: AlarmControlPanelState, code=None) -> None:
+        if self._code_arm_required and not self._validate_code(code):
+            _LOGGER.warning("Argus: Arm rejected — invalid code")
+            return
+
+        self._cancel_timers()
+
+        if self._arming_time > 0:
+            self._arming_target = target
+            self._alarm_state = AlarmControlPanelState.ARMING
+            self.async_write_ha_state()
+            self._arming_listener = async_call_later(
+                self.hass, self._arming_time, self._async_finish_arming
+            )
+        else:
+            self._alarm_state = target
+            self.async_write_ha_state()
+
+        await self._async_mqtt_publish()
+        _LOGGER.info("Argus: Arming → %s", target)
+
+    async def async_alarm_arm_home(self, code=None) -> None:
+        await self._async_arm(AlarmControlPanelState.ARMED_HOME, code)
+
+    async def async_alarm_arm_away(self, code=None) -> None:
+        await self._async_arm(AlarmControlPanelState.ARMED_AWAY, code)
+
+    async def async_alarm_arm_night(self, code=None) -> None:
+        await self._async_arm(AlarmControlPanelState.ARMED_NIGHT, code)
+
+    async def async_alarm_arm_vacation(self, code=None) -> None:
+        await self._async_arm(AlarmControlPanelState.ARMED_VACATION, code)
+
+    async def async_alarm_trigger(self, code=None) -> None:
+        await self._async_trigger()
