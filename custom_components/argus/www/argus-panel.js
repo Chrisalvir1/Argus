@@ -1,5 +1,5 @@
 /**
- * Argus Panel 0.3.1
+ * Argus Panel 0.3.2
  * Custom panel registered in the Home Assistant sidebar.
  * Communicates with the backend via websocket: argus/dashboard and argus/save_ui.
  */

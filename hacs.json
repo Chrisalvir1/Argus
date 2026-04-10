@@ -1,9 +1,6 @@
 {
   "name": "Argus",
-  "category": "integration",
-  "description": "Premium Smart Alarm & Security Panel with multi-mode config and HomeKit/Aqara sync.",
   "content_in_root": false,
   "render_readme": true,
-  "homeassistant": "2024.1.0",
-  "iot_class": "local_push"
+  "homeassistant": "2024.1.0"
 }
