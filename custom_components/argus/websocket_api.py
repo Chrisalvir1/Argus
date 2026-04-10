@@ -9,7 +9,11 @@ from homeassistant.helpers import area_registry as ar
 from homeassistant.helpers import entity_registry as er
 
 from .const import DOMAIN
-from .storage import async_load_ui_data, async_save_ui_data
+from .storage import (
+    async_get_audit_log,
+    async_load_ui_data,
+    async_save_ui_data,
+)
 
 _SUPPORTED_DOMAINS = {
     "binary_sensor", "camera", "climate", "cover",
@@ -23,6 +27,10 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_argus_save_ui)
     websocket_api.async_register_command(hass, ws_argus_get_mode_config)
     websocket_api.async_register_command(hass, ws_argus_save_mode_config)
+    websocket_api.async_register_command(hass, ws_argus_get_audit_log)
+    websocket_api.async_register_command(hass, ws_argus_clear_audit_log)
+    websocket_api.async_register_command(hass, ws_argus_save_advanced_config)
+    websocket_api.async_register_command(hass, ws_argus_get_advanced_config)
 
 
 @callback
@@ -61,25 +69,37 @@ def _serialize_available_entities(hass: HomeAssistant) -> list[dict]:
     )
 
 
+@callback
+def _resolve_alarm_entity_id(hass: HomeAssistant, config_entry_id: str) -> str | None:
+    """Resolve the alarm_control_panel entity_id for an Argus config entry."""
+    entity_registry = er.async_get(hass)
+
+    for entity_entry in entity_registry.entities.values():
+        if (
+            entity_entry.config_entry_id == config_entry_id
+            and entity_entry.domain == "alarm_control_panel"
+            and not entity_entry.disabled_by
+        ):
+            return entity_entry.entity_id
+
+    for state in hass.states.async_all("alarm_control_panel"):
+        if state.attributes.get("config_entry_id") == config_entry_id:
+            return state.entity_id
+
+    return None
+
+
 @websocket_api.websocket_command({vol.Required("type"): "argus/dashboard"})
 @websocket_api.async_response
 async def ws_argus_dashboard(hass: HomeAssistant, connection, msg) -> None:
-    """Return full dashboard  alarm entries, UI state, and available entities."""
-    entity_registry = er.async_get(hass)
+    """Return full dashboard alarm entries, UI state, and available entities."""
     ui_data = await async_load_ui_data(hass)
     entries_payload = []
 
     for entry in hass.config_entries.async_entries(DOMAIN):
-        alarm_entity_id = None
-        for entity_entry in entity_registry.entities.values():
-            if (
-                entity_entry.config_entry_id == entry.entry_id
-                and entity_entry.domain == "alarm_control_panel"
-            ):
-                alarm_entity_id = entity_entry.entity_id
-                break
-
+        alarm_entity_id = _resolve_alarm_entity_id(hass, entry.entry_id)
         state_obj = hass.states.get(alarm_entity_id) if alarm_entity_id else None
+
         entries_payload.append(
             {
                 "entry_id": entry.entry_id,
@@ -146,3 +166,40 @@ async def ws_argus_save_mode_config(hass: HomeAssistant, connection, msg) -> Non
     modes[mode] = config
     await async_save_ui_data(hass, {"modes": modes})
     connection.send_result(msg["id"], {"success": True, "modes": modes})
+
+
+@websocket_api.websocket_command({vol.Required("type"): "argus/get_audit_log"})
+@websocket_api.async_response
+async def ws_argus_get_audit_log(hass: HomeAssistant, connection, msg) -> None:
+    """Return the Argus audit log."""
+    log = await async_get_audit_log(hass)
+    connection.send_result(msg["id"], {"log": log})
+
+
+@websocket_api.websocket_command({vol.Required("type"): "argus/clear_audit_log"})
+@websocket_api.async_response
+async def ws_argus_clear_audit_log(hass: HomeAssistant, connection, msg) -> None:
+    """Clear the Argus audit log."""
+    await async_save_ui_data(hass, {"audit_log": []})
+    connection.send_result(msg["id"], {"success": True})
+
+
+@websocket_api.websocket_command(
+    {
+        vol.Required("type"): "argus/save_advanced_config",
+        vol.Required("config"): dict,
+    }
+)
+@websocket_api.async_response
+async def ws_argus_save_advanced_config(hass: HomeAssistant, connection, msg) -> None:
+    """Persist advanced config (guest PIN, NFC, etc.)."""
+    await async_save_ui_data(hass, {"advanced": msg["config"]})
+    connection.send_result(msg["id"], {"success": True})
+
+
+@websocket_api.websocket_command({vol.Required("type"): "argus/get_advanced_config"})
+@websocket_api.async_response
+async def ws_argus_get_advanced_config(hass: HomeAssistant, connection, msg) -> None:
+    """Return the advanced config."""
+    ui_data = await async_load_ui_data(hass)
+    connection.send_result(msg["id"], ui_data.get("advanced", {}))

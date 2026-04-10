@@ -8,7 +8,7 @@ from homeassistant.const import (
 
 DOMAIN = "argus"
 NAME = "Argus"
-VERSION = "0.3.10"
+VERSION = "0.4.0"
 
 PLATFORMS = ["alarm_control_panel"]
 
@@ -21,6 +21,8 @@ CONF_SENSORS_VACATION = "sensors_vacation"
 CONF_ENTRY_SENSORS = "entry_sensors"
 CONF_LINKED_ALARM_ENTITY = "linked_alarm_entity"
 CONF_SIREN_ENTITY = "siren_entity"
+CONF_GUEST_CODE = "guest_code"
+CONF_GUEST_CODE_ENABLED = "guest_code_enabled"
 
 CONF_MQTT_ENABLED = "mqtt_enabled"
 CONF_MQTT_TOPIC_STATE = "mqtt_topic_state"

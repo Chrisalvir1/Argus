@@ -46,7 +46,7 @@ from .const import (
     MQTT_COMMAND_ARM_NIGHT,
     MQTT_COMMAND_ARM_VACATION,
 )
-from .storage import async_load_ui_data
+from .storage import async_load_ui_data, async_append_audit_log
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -140,7 +140,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     @property
     def extra_state_attributes(self) -> dict:
-        attrs = {}
+        attrs = {"config_entry_id": self._config_entry.entry_id}
         if self._triggered_by:
             attrs["triggered_by"] = self._triggered_by
         if self._alarm_state in (
@@ -352,6 +352,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         await self._async_siren(True)
         await self._async_mqtt_publish()
+        await async_append_audit_log(
+            self.hass, "triggered",
+            f"Sensor: {self._triggered_by or 'desconocido'}"
+        )
 
         # Auto-reset after trigger_time
         if self._trigger_time > 0:
@@ -378,17 +382,38 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self.hass.async_create_task(self._async_mqtt_publish())
 
     # ── Siren ───────────────────────────────────────────────────────
+    def _get_siren_entities(self) -> list[str]:
+        """Return list of siren entities from UI config or fallback to single entity."""
+        # Mode-specific sirens from UI have priority
+        modes = self._ui_config.get("modes", {})
+        if self._alarm_state in ARMED_STATES:
+            mode_key = self._alarm_state.value.replace("armed_", "")
+            ui_sirens = modes.get(mode_key, {}).get("sirens", [])
+            if ui_sirens:
+                return ui_sirens
+        # Check any mode for sirens list
+        for mode_cfg in modes.values():
+            sirens = mode_cfg.get("sirens", [])
+            if sirens:
+                return sirens
+        # Fallback to single siren from initial config
+        if self._siren_entity:
+            return [self._siren_entity]
+        return []
+
     async def _async_siren(self, activate: bool):
-        if not self._siren_entity:
+        sirens = self._get_siren_entities()
+        if not sirens:
             return
-        domain = self._siren_entity.split(".")[0]
         service = "turn_on" if activate else "turn_off"
-        try:
-            await self.hass.services.async_call(
-                domain, service, {"entity_id": self._siren_entity}, blocking=False
-            )
-        except Exception as e:  # noqa: BLE001
-            _LOGGER.error("Argus: siren control failed: %s", e)
+        for entity_id in sirens:
+            domain = entity_id.split(".")[0]
+            try:
+                await self.hass.services.async_call(
+                    domain, service, {"entity_id": entity_id}, blocking=False
+                )
+            except Exception as e:  # noqa: BLE001
+                _LOGGER.error("Argus: siren control failed for %s: %s", entity_id, e)
 
     # ── MQTT ────────────────────────────────────────────────────────
     async def _async_setup_mqtt(self):
@@ -433,13 +458,22 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     # ── Arm / Disarm ───────────────────────────────────────────────
     def _validate_code(self, code) -> bool:
+        """Validate code against main PIN and optional guest PIN."""
         if self._code is None:
             return True
-        return str(code) == str(self._code)
+        if str(code) == str(self._code):
+            return True
+        # Check guest PIN
+        adv = self._ui_config.get("advanced", {})
+        if adv.get("guest_code_enabled") and adv.get("guest_code"):
+            if str(code) == str(adv["guest_code"]):
+                return True
+        return False
 
     async def async_alarm_disarm(self, code=None) -> None:
         if not self._validate_code(code):
             _LOGGER.warning("Argus: Disarm rejected — invalid code")
+            await async_append_audit_log(self.hass, "disarm_rejected", "Invalid code")
             return
         self._cancel_timers()
         self._alarm_state = AlarmControlPanelState.DISARMED
@@ -448,11 +482,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self.async_write_ha_state()
         await self._async_mqtt_publish()
         await self._async_sync_to_linked(AlarmControlPanelState.DISARMED)
+        await async_append_audit_log(self.hass, "disarmed", "Sistema desarmado")
         _LOGGER.info("Argus: Disarmed")
 
     async def _async_arm(self, target: AlarmControlPanelState, code=None) -> None:
         if self._code_arm_required and not self._validate_code(code):
             _LOGGER.warning("Argus: Arm rejected — invalid code")
+            await async_append_audit_log(self.hass, "arm_rejected", f"Invalid code for {target.value}")
             return
 
         self._cancel_timers()
@@ -470,6 +506,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         await self._async_mqtt_publish()
         await self._async_sync_to_linked(target)
+        await async_append_audit_log(self.hass, "armed", f"Modo: {target.value}")
         _LOGGER.info("Argus: Arming → %s", target)
 
     async def async_alarm_arm_home(self, code=None) -> None:
