@@ -239,6 +239,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         try:
             target_state = AlarmControlPanelState(new_state.state)
         except ValueError:
+            _LOGGER.warning("Argus: Ignoring unknown linked alarm state: %s", new_state.state)
             return
 
         if target_state == self._alarm_state:

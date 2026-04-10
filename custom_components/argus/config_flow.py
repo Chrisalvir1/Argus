@@ -156,6 +156,7 @@ class ArgusOptionsFlow(config_entries.OptionsFlow):
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
         """Initialize."""
+        super().__init__(config_entry)
         self.config_entry = config_entry
         self._opts = dict(config_entry.data)
         self._selected_mode: str | None = None
@@ -243,7 +244,7 @@ class ArgusOptionsFlow(config_entries.OptionsFlow):
 
         return self.async_show_form(
             step_id="mode",
-            description_placeholders={"mode": mode.capitalize()},
+            description_placeholders={"mode": (mode or "unknown").capitalize()},
             data_schema=vol.Schema({
                 vol.Optional("mode_sensors", default=current_sensors): selector.EntitySelector(
                     selector.EntitySelectorConfig(domain="binary_sensor", multiple=True)
