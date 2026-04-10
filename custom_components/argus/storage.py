@@ -13,6 +13,12 @@ _STORAGE_KEY = f"{DOMAIN}.ui"
 def _default_payload() -> dict:
     return {
         "zones": [],
+        "modes": {
+            "home": {},
+            "away": {},
+            "night": {},
+            "vacation": {},
+        },
         "dashboard": {
             "layout": "grid",
             "dense": False,
@@ -27,10 +33,10 @@ async def async_load_ui_data(hass: HomeAssistant) -> dict:
     return data or _default_payload()
 
 
-async def async_save_ui_data(hass: HomeAssistant,  dict) -> dict:
+async def async_save_ui_data(hass: HomeAssistant, data: dict) -> dict:
     """Persist Argus UI data to HA storage."""
     store = Store(hass, _STORAGE_VERSION, _STORAGE_KEY)
-    payload = _default_payload()
-    payload.update(data or {})
-    await store.async_save(payload)
-    return payload
+    current = await async_load_ui_data(hass)
+    current.update(data or {})
+    await store.async_save(current)
+    return current

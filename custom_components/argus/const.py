@@ -21,6 +21,7 @@ CONF_SENSORS_NIGHT = "sensors_night"
 CONF_SENSORS_VACATION = "sensors_vacation"
 CONF_ENTRY_SENSORS = "entry_sensors"  # sensors that use entry delay
 CONF_SIREN_ENTITY = "siren_entity"
+CONF_LINKED_ALARM_ENTITY = "linked_alarm_entity"  # HomeKit/Aqara sync
 
 # MQTT
 CONF_MQTT_ENABLED = "mqtt_enabled"

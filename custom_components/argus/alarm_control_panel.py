@@ -32,6 +32,7 @@ from .const import (
     CONF_SENSORS_VACATION,
     CONF_ENTRY_SENSORS,
     CONF_SIREN_ENTITY,
+    CONF_LINKED_ALARM_ENTITY,
     CONF_MQTT_ENABLED,
     CONF_MQTT_TOPIC_STATE,
     CONF_MQTT_TOPIC_COMMAND,
@@ -45,6 +46,7 @@ from .const import (
     MQTT_COMMAND_ARM_NIGHT,
     MQTT_COMMAND_ARM_VACATION,
 )
+from .storage import async_load_ui_data
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -63,7 +65,6 @@ async def async_setup_entry(
 ) -> None:
     """Set up Argus alarm panel from a config entry."""
     async_add_entities([ArgusAlarmPanel(hass, config_entry)], update_before_add=True)
-
 
 class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     """Argus Smart Alarm Control Panel with sensor monitoring."""
@@ -93,8 +94,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         # Tracking
         self._unsub_sensors = None
+        self._unsub_linked = None
         self._triggered_by: str | None = None
         self._mqtt_unsub = None
+        
+        # UI/Mode config
+        self._ui_config = {}
+        self._syncing_linked = False
 
     # ── Config loading ──────────────────────────────────────────────
     def _load_config(self):
@@ -105,12 +111,16 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._arming_time = int(d.get(CONF_ARMING_TIME, DEFAULT_ARMING_TIME))
         self._trigger_time = int(d.get(CONF_TRIGGER_TIME, DEFAULT_TRIGGER_TIME))
         self._entry_delay = int(d.get(CONF_ENTRY_DELAY, DEFAULT_ENTRY_DELAY))
+        
+        # Base sensors (defaults if no per-mode UI config exists)
         self._sensors_away = d.get(CONF_SENSORS_AWAY, [])
         self._sensors_home = d.get(CONF_SENSORS_HOME, [])
         self._sensors_night = d.get(CONF_SENSORS_NIGHT, [])
         self._sensors_vacation = d.get(CONF_SENSORS_VACATION, self._sensors_away)
         self._entry_sensors = d.get(CONF_ENTRY_SENSORS, [])
         self._siren_entity = d.get(CONF_SIREN_ENTITY)
+        self._linked_alarm = d.get(CONF_LINKED_ALARM_ENTITY)
+        
         self._mqtt_enabled = d.get(CONF_MQTT_ENABLED, False)
         self._mqtt_topic_state = d.get(CONF_MQTT_TOPIC_STATE, "argus/alarm/state")
         self._mqtt_topic_command = d.get(CONF_MQTT_TOPIC_COMMAND, "argus/alarm/set")
@@ -147,6 +157,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     # ── Sensor helpers ─────────────────────────────────────────────
     def _sensors_for_state(self, state: AlarmControlPanelState) -> list[str]:
+        # Try to load from UI configuration first
+        modes = self._ui_config.get("modes", {})
+        mode_key = state.value.replace("armed_", "")
+        if mode_key in modes and modes[mode_key].get("sensors"):
+            return modes[mode_key]["sensors"]
+
+        # Fallback to static config
         if state == AlarmControlPanelState.ARMED_HOME:
             return self._sensors_home or self._sensors_away
         if state == AlarmControlPanelState.ARMED_NIGHT:
@@ -157,15 +174,25 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     def _all_sensors(self) -> list[str]:
         s = set()
+        # Initial config sensors
         s.update(self._sensors_away or [])
         s.update(self._sensors_home or [])
         s.update(self._sensors_night or [])
         s.update(self._sensors_vacation or [])
+        
+        # UI config sensors
+        modes = self._ui_config.get("modes", {})
+        for cfg in modes.values():
+            if cfg.get("sensors"):
+                s.update(cfg["sensors"])
         return list(s)
 
     # ── Lifecycle ──────────────────────────────────────────────────
     async def async_added_to_hass(self) -> None:
         await super().async_added_to_hass()
+
+        # Load dynamic mode configuration from storage
+        self._ui_config = await async_load_ui_data(self.hass)
 
         # Restore last stable state
         last = await self.async_get_last_state()
@@ -190,9 +217,78 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 self.hass, all_sensors, self._async_sensor_changed
             )
 
+        # Subscribe to linked alarm (HomeKit/Aqara)
+        if self._linked_alarm:
+            self._unsub_linked = async_track_state_change_event(
+                self.hass, [self._linked_alarm], self._async_linked_alarm_changed
+            )
+
         # MQTT
         if self._mqtt_enabled:
             await self._async_setup_mqtt()
+
+    @callback
+    def _async_linked_alarm_changed(self, event):
+        """Update Argus state when the linked alarm (HomeKit/Aqara) changes."""
+        if self._syncing_linked:
+            return
+
+        new_state = event.data.get("new_state")
+        if new_state is None:
+            return
+
+        try:
+            target_state = AlarmControlPanelState(new_state.state)
+        except ValueError:
+            return
+
+        if target_state == self._alarm_state:
+            return
+
+        _LOGGER.info("Argus: Syncing from linked alarm %s -> %s", self._linked_alarm, target_state)
+        self._syncing_linked = True
+        
+        # Dispatch appropriate arm/disarm call
+        if target_state == AlarmControlPanelState.DISARMED:
+            self.hass.async_create_task(self.async_alarm_disarm())
+        elif target_state == AlarmControlPanelState.ARMED_HOME:
+            self.hass.async_create_task(self.async_alarm_arm_home())
+        elif target_state == AlarmControlPanelState.ARMED_AWAY:
+            self.hass.async_create_task(self.async_alarm_arm_away())
+        elif target_state == AlarmControlPanelState.ARMED_NIGHT:
+            self.hass.async_create_task(self.async_alarm_arm_night())
+        elif target_state == AlarmControlPanelState.ARMED_VACATION:
+            self.hass.async_create_task(self.async_alarm_arm_vacation())
+            
+        self._syncing_linked = False
+
+    async def _async_sync_to_linked(self, state: AlarmControlPanelState):
+        """Push Argus state change to the linked alarm entity."""
+        if not self._linked_alarm or self._syncing_linked:
+            return
+            
+        _LOGGER.info("Argus: Syncing to linked alarm %s -> %s", self._linked_alarm, state)
+        self._syncing_linked = True
+        
+        domain = "alarm_control_panel"
+        service = "alarm_disarm"
+        if state == AlarmControlPanelState.ARMED_HOME:
+            service = "alarm_arm_home"
+        elif state == AlarmControlPanelState.ARMED_AWAY:
+            service = "alarm_arm_away"
+        elif state == AlarmControlPanelState.ARMED_NIGHT:
+            service = "alarm_arm_night"
+        elif state == AlarmControlPanelState.ARMED_VACATION:
+            service = "alarm_arm_vacation"
+            
+        try:
+            await self.hass.services.async_call(
+                domain, service, {"entity_id": self._linked_alarm}, blocking=True
+            )
+        except Exception as e:
+            _LOGGER.error("Argus: Failed to sync to linked alarm: %s", e)
+        finally:
+            self._syncing_linked = False
 
     async def async_will_remove_from_hass(self) -> None:
         if self._unsub_sensors:
@@ -350,6 +446,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         await self._async_siren(False)
         self.async_write_ha_state()
         await self._async_mqtt_publish()
+        await self._async_sync_to_linked(AlarmControlPanelState.DISARMED)
         _LOGGER.info("Argus: Disarmed")
 
     async def _async_arm(self, target: AlarmControlPanelState, code=None) -> None:
@@ -371,6 +468,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self.async_write_ha_state()
 
         await self._async_mqtt_publish()
+        await self._async_sync_to_linked(target)
         _LOGGER.info("Argus: Arming → %s", target)
 
     async def async_alarm_arm_home(self, code=None) -> None:

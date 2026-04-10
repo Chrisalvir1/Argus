@@ -21,6 +21,8 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
     """Register all Argus websocket commands."""
     websocket_api.async_register_command(hass, ws_argus_dashboard)
     websocket_api.async_register_command(hass, ws_argus_save_ui)
+    websocket_api.async_register_command(hass, ws_argus_get_mode_config)
+    websocket_api.async_register_command(hass, ws_argus_save_mode_config)
 
 
 @callback
@@ -117,3 +119,30 @@ async def ws_argus_save_ui(hass: HomeAssistant, connection, msg) -> None:
         },
     )
     connection.send_result(msg["id"], {"saved": True, "ui": saved})
+
+
+@websocket_api.websocket_command({vol.Required("type"): "argus/get_mode_config"})
+@websocket_api.async_response
+async def ws_argus_get_mode_config(hass: HomeAssistant, connection, msg) -> None:
+    """Return current mode settings from storage."""
+    ui_data = await async_load_ui_data(hass)
+    connection.send_result(msg["id"], ui_data.get("modes", {}))
+
+
+@websocket_api.websocket_command(
+    {
+        vol.Required("type"): "argus/save_mode_config",
+        vol.Required("mode"): vol.In(["home", "away", "night", "vacation"]),
+        vol.Required("config"): dict,
+    }
+)
+@websocket_api.async_response
+async def ws_argus_save_mode_config(hass: HomeAssistant, connection, msg) -> None:
+    """Save configuration for a specific alarm mode."""
+    mode = msg["mode"]
+    config = msg["config"]
+    ui_data = await async_load_ui_data(hass)
+    modes = ui_data.get("modes", {})
+    modes[mode] = config
+    await async_save_ui_data(hass, {"modes": modes})
+    connection.send_result(msg["id"], {"success": True, "modes": modes})

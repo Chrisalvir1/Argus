@@ -88,6 +88,9 @@ class ArgusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="sensors",
             data_schema=vol.Schema({
+                vol.Optional(CONF_LINKED_ALARM_ENTITY): selector.EntitySelector(
+                    selector.EntitySelectorConfig(domain="alarm_control_panel")
+                ),
                 vol.Optional(CONF_SENSORS_AWAY, default=[]): selector.EntitySelector(
                     selector.EntitySelectorConfig(
                         domain="binary_sensor", multiple=True
