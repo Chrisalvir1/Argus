@@ -8,7 +8,7 @@ from homeassistant.const import (
 
 DOMAIN = "argus"
 NAME = "Argus"
-VERSION = "0.4.0"
+VERSION = "0.4.2"
 
 PLATFORMS = ["alarm_control_panel"]
 
