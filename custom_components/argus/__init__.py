@@ -42,7 +42,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.data[DOMAIN]["ws_registered"] = True
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-    _LOGGER.info("Argus 0.2.0 successfully set up.")
+    _LOGGER.info("Argus 0.3.0 successfully set up.")
     return True
 
 

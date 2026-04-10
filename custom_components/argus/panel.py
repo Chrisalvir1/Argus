@@ -4,7 +4,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from homeassistant.components import panel_custom
-from from homeassistant.components.http import StaticPathConfig
+from homeassistant.components.http import StaticPathConfig
 from homeassistant.core import HomeAssistant
 
 from .const import DOMAIN, NAME
