@@ -18,6 +18,7 @@ from .const import (
     CONF_SENSORS_AWAY,
     CONF_SENSORS_HOME,
     CONF_SENSORS_NIGHT,
+    CONF_SENSORS_VACATION,
     CONF_ENTRY_SENSORS,
     CONF_LINKED_ALARM_ENTITY,
     CONF_SIREN_ENTITY,
@@ -39,8 +40,7 @@ class ArgusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 2
 
     def __init__(self) -> None:
-        """Initialize."""
-        self._data: dict[str, Any] = {}
+        self._ dict[str, Any] = {}
 
     # ── Step 1: Basic settings ──────────────────────────────────
     async def async_step_user(self, user_input=None):
@@ -95,24 +95,16 @@ class ArgusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     selector.EntitySelectorConfig(domain="alarm_control_panel")
                 ),
                 vol.Optional(CONF_SENSORS_AWAY, default=[]): selector.EntitySelector(
-                    selector.EntitySelectorConfig(
-                        domain="binary_sensor", multiple=True
-                    )
+                    selector.EntitySelectorConfig(domain="binary_sensor", multiple=True)
                 ),
                 vol.Optional(CONF_SENSORS_HOME, default=[]): selector.EntitySelector(
-                    selector.EntitySelectorConfig(
-                        domain="binary_sensor", multiple=True
-                    )
+                    selector.EntitySelectorConfig(domain="binary_sensor", multiple=True)
                 ),
                 vol.Optional(CONF_SENSORS_NIGHT, default=[]): selector.EntitySelector(
-                    selector.EntitySelectorConfig(
-                        domain="binary_sensor", multiple=True
-                    )
+                    selector.EntitySelectorConfig(domain="binary_sensor", multiple=True)
                 ),
                 vol.Optional(CONF_ENTRY_SENSORS, default=[]): selector.EntitySelector(
-                    selector.EntitySelectorConfig(
-                        domain="binary_sensor", multiple=True
-                    )
+                    selector.EntitySelectorConfig(domain="binary_sensor", multiple=True)
                 ),
                 vol.Optional(CONF_SIREN_ENTITY): selector.EntitySelector(
                     selector.EntitySelectorConfig(
@@ -148,21 +140,25 @@ class ArgusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     @staticmethod
     @callback
     def async_get_options_flow(config_entry):
-        return ArgusOptionsFlow(config_entry)
+        """Return the options flow handler."""
+        return ArgusOptionsFlow()
 
 
 class ArgusOptionsFlow(config_entries.OptionsFlow):
     """Handle Argus options (reconfigure sensors and delays per mode)."""
 
-    def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
-        """Initialize."""
-        super().__init__(config_entry)
-        self.config_entry = config_entry
-        self._opts = dict(config_entry.data)
+    def __init__(self) -> None:
+        """Initialize — no arguments: config_entry is provided by HA framework."""
+        super().__init__()
+        self._opts: dict[str, Any] = {}
         self._selected_mode: str | None = None
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None):
         """Manage the selection of what to configure."""
+        # Load current config on first call
+        if not self._opts:
+            self._opts = dict(self.config_entry.data)
+
         if user_input is not None:
             choice = user_input["config_choice"]
             if choice == "global":
@@ -177,9 +173,9 @@ class ArgusOptionsFlow(config_entries.OptionsFlow):
                     selector.SelectSelectorConfig(
                         options=[
                             {"value": "global", "label": "Global Settings & Siren"},
-                            {"value": "home", "label": "Mode: Home (Casa)"},
-                            {"value": "away", "label": "Mode: Away (Ausente)"},
-                            {"value": "night", "label": "Mode: Night (Noche)"},
+                            {"value": "home",     "label": "Mode: Home (Casa)"},
+                            {"value": "away",     "label": "Mode: Away (Ausente)"},
+                            {"value": "night",    "label": "Mode: Night (Noche)"},
                             {"value": "vacation", "label": "Mode: Vacation (Vacaciones)"},
                         ],
                         mode=selector.SelectSelectorMode.LIST,
@@ -216,17 +212,15 @@ class ArgusOptionsFlow(config_entries.OptionsFlow):
         """Handle specific mode settings."""
         mode = self._selected_mode
         if user_input is not None:
-            # Map user_input back to the correct keys
             if mode == "home":
-                self._opts[CONF_SENSORS_HOME] = user_input["mode_sensors"]
+                self._opts[CONF_SENSORS_HOME] = user_input.get("mode_sensors", [])
             elif mode == "away":
-                self._opts[CONF_SENSORS_AWAY] = user_input["mode_sensors"]
+                self._opts[CONF_SENSORS_AWAY] = user_input.get("mode_sensors", [])
             elif mode == "night":
-                self._opts[CONF_SENSORS_NIGHT] = user_input["mode_sensors"]
+                self._opts[CONF_SENSORS_NIGHT] = user_input.get("mode_sensors", [])
             elif mode == "vacation":
-                self._opts[CONF_SENSORS_VACATION] = user_input["mode_sensors"]
+                self._opts[CONF_SENSORS_VACATION] = user_input.get("mode_sensors", [])
 
-            # Shared fields
             if "mode_entry_delay" in user_input:
                 self._opts[CONF_ENTRY_DELAY] = user_input["mode_entry_delay"]
             if "mode_arming_time" in user_input:
@@ -234,13 +228,16 @@ class ArgusOptionsFlow(config_entries.OptionsFlow):
 
             return self.async_create_entry(title="", data=self._opts)
 
-        # Build schema for specific mode
         d = self._opts
-        current_sensors = []
-        if mode == "home": current_sensors = d.get(CONF_SENSORS_HOME, [])
-        elif mode == "away": current_sensors = d.get(CONF_SENSORS_AWAY, [])
-        elif mode == "night": current_sensors = d.get(CONF_SENSORS_NIGHT, [])
-        elif mode == "vacation": current_sensors = d.get(CONF_SENSORS_VACATION, [])
+        current_sensors: list = []
+        if mode == "home":
+            current_sensors = d.get(CONF_SENSORS_HOME, [])
+        elif mode == "away":
+            current_sensors = d.get(CONF_SENSORS_AWAY, [])
+        elif mode == "night":
+            current_sensors = d.get(CONF_SENSORS_NIGHT, [])
+        elif mode == "vacation":
+            current_sensors = d.get(CONF_SENSORS_VACATION, [])
 
         return self.async_show_form(
             step_id="mode",
@@ -250,10 +247,18 @@ class ArgusOptionsFlow(config_entries.OptionsFlow):
                     selector.EntitySelectorConfig(domain="binary_sensor", multiple=True)
                 ),
                 vol.Optional("mode_arming_time", default=d.get(CONF_ARMING_TIME, DEFAULT_ARMING_TIME)): selector.NumberSelector(
-                    selector.NumberSelectorConfig(min=0, max=300, step=5, unit_of_measurement="s", mode=selector.NumberSelectorMode.BOX)
+                    selector.NumberSelectorConfig(
+                        min=0, max=300, step=5,
+                        unit_of_measurement="s",
+                        mode=selector.NumberSelectorMode.BOX,
+                    )
                 ),
                 vol.Optional("mode_entry_delay", default=d.get(CONF_ENTRY_DELAY, DEFAULT_ENTRY_DELAY)): selector.NumberSelector(
-                    selector.NumberSelectorConfig(min=0, max=300, step=5, unit_of_measurement="s", mode=selector.NumberSelectorMode.BOX)
+                    selector.NumberSelectorConfig(
+                        min=0, max=300, step=5,
+                        unit_of_measurement="s",
+                        mode=selector.NumberSelectorMode.BOX,
+                    )
                 ),
             }),
         )
