@@ -9,7 +9,8 @@
           "code": "C\u00f3digo de alarma (opcional)",
           "code_arm_required": "Requerir c\u00f3digo para armar",
           "arming_time": "Tiempo de armado (segundos)",
-          "trigger_time": "Duraci\u00f3n de activaci\u00f3n (segundos)"
+          "trigger_time": "Duraci\u00f3n de activaci\u00f3n (segundos)",
+          "entry_delay": "Retardo de entrada (segundos)"
         }
       } ,
       "sensors": {

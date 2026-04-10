@@ -36,14 +36,13 @@ class ArgusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     VERSION = 2
 
-    def __init__(self):
-        self._data = {}
+    _data: dict[str, Any] = {}
 
     # ── Step 1: Basic settings ──────────────────────────────────
     async def async_step_user(self, user_input=None):
         """Handle step 1: name, code, and delay settings."""
         if user_input is not None:
-            self._data.update(user_input)
+            self._data = user_input
             return await self.async_step_sensors()
 
         return self.async_show_form(

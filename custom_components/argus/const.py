@@ -2,7 +2,7 @@
 
 DOMAIN = "argus"
 NAME = "Argus"
-VERSION = "0.3.3"
+VERSION = "0.3.4"
 
 PLATFORMS = ["alarm_control_panel"]
 
