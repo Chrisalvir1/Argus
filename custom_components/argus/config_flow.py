@@ -1,5 +1,6 @@
 """Config flow for Argus — multi-step with entity selectors."""
 from __future__ import annotations
+from typing import Any
 
 import voluptuous as vol
 from homeassistant import config_entries
@@ -18,6 +19,7 @@ from .const import (
     CONF_SENSORS_HOME,
     CONF_SENSORS_NIGHT,
     CONF_ENTRY_SENSORS,
+    CONF_LINKED_ALARM_ENTITY,
     CONF_SIREN_ENTITY,
     CONF_MQTT_ENABLED,
     CONF_MQTT_TOPIC_STATE,
@@ -36,13 +38,15 @@ class ArgusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     VERSION = 2
 
-    _data: dict[str, Any] = {}
+    def __init__(self) -> None:
+        """Initialize."""
+        self._data: dict[str, Any] = {}
 
     # ── Step 1: Basic settings ──────────────────────────────────
     async def async_step_user(self, user_input=None):
         """Handle step 1: name, code, and delay settings."""
         if user_input is not None:
-            self._data = user_input
+            self._data.update(user_input)
             return await self.async_step_sensors()
 
         return self.async_show_form(
