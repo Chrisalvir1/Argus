@@ -12,16 +12,23 @@ from .websocket_api import async_register_websocket_api
 
 _LOGGER = logging.getLogger(__name__)
 
+_WS_REGISTERED_KEY = f"{DOMAIN}_ws_registered"
+
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
-    """Set up Argus from configuration.yaml."""
+    """Set up Argus integration (called once on HA startup)."""
     hass.data.setdefault(DOMAIN, {})
-    
-    # Always try to register panel and ws on startup
     await async_register_panel(hass)
-    async_register_websocket_api(hass)
-    
+    _async_register_websocket_once(hass)
     return True
+
+
+def _async_register_websocket_once(hass: HomeAssistant) -> None:
+    """Register websocket commands only once."""
+    if not hass.data[DOMAIN].get(_WS_REGISTERED_KEY):
+        async_register_websocket_api(hass)
+        hass.data[DOMAIN][_WS_REGISTERED_KEY] = True
+        _LOGGER.debug("Argus: websocket API registered")
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -29,15 +36,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = entry.data
 
-    # Always ensure panel and websocket are registered
+    # Panel and websocket are safe to call here too thanks to guards in panel.py
     await async_register_panel(hass)
-    async_register_websocket_api(hass)
+    _async_register_websocket_once(hass)
 
-    # Register update listener
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-    _LOGGER.info("Argus 0.4.3 successfully set up.")
+    _LOGGER.info("Argus 0.4.3 set up for entry: %s", entry.title)
     return True
 
 
