@@ -11,7 +11,7 @@
           "arming_time": "Arming delay (seconds)",
           "trigger_time": "Trigger duration (seconds)"
         }
-      }
+      } ,
       "sensors": {
         "title": "Sensors and Sync Configuration",
         "description": "Link Argus with HomeKit/Aqara and select your sensors.",
