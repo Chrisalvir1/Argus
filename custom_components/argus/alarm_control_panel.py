@@ -77,7 +77,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     _attr_supported_features = (
         AlarmControlPanelEntityFeature.ARM_HOME
         | AlarmControlPanelEntityFeature.ARM_AWAY
-        | AlarmControlPanelEntityFeature.ARM_NIGHT
         | AlarmControlPanelEntityFeature.ARM_VACATION
     )
 
