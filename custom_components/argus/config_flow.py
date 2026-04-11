@@ -42,7 +42,7 @@ class ArgusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     def __init__(self) -> None:
         self._ dict[str, Any] = {}
 
-    # ── Step 1: Basic settings ──────────────────────────────────
+    # ── Step 1: Basic settings ──────────────────────────────
     async def async_step_user(self, user_input=None):
         """Handle step 1: name, code, and delay settings."""
         if user_input is not None:
@@ -81,7 +81,7 @@ class ArgusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             }),
         )
 
-    # ── Step 2: Sensor zones ────────────────────────────────────
+    # ── Step 2: Sensor zones ──────────────────────────────
     async def async_step_sensors(self, user_input=None):
         """Handle step 2: select sensor entities and siren."""
         if user_input is not None:
@@ -114,7 +114,7 @@ class ArgusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             }),
         )
 
-    # ── Step 3: MQTT (optional) ────────────────────────────────
+    # ── Step 3: MQTT (optional) ──────────────────────────
     async def async_step_mqtt(self, user_input=None):
         """Handle step 3: optional MQTT configuration."""
         if user_input is not None:
@@ -155,7 +155,6 @@ class ArgusOptionsFlow(config_entries.OptionsFlow):
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None):
         """Manage the selection of what to configure."""
-        # Load current config on first call
         if not self._opts:
             self._opts = dict(self.config_entry.data)
 
