@@ -539,8 +539,11 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         return False
 
     async def async_alarm_disarm(self, code=None) -> None:
-        # Skip code check when syncing FROM a linked alarm (HomeKit/Aqara calling back)
-        if self._code and not self._syncing_linked and not self._validate_code(code):
+        # Only block if a code was explicitly provided AND it is wrong.
+        # code=None  → trusted caller (HomeKit, Alexa, Google, automation, MQTT) → always allow.
+        # code="1984" → correct PIN from JS panel → allow.
+        # code="0000" → wrong PIN → reject.
+        if self._code and not self._syncing_linked and code is not None and not self._validate_code(code):
             _LOGGER.warning("Argus: Disarm rejected — invalid code")
             await async_append_audit_log(self.hass, "disarm_rejected", "Invalid code")
             return
