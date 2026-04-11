@@ -105,6 +105,10 @@ template.innerHTML = `
         <div id="mode-view"></div>
       </section>
     </div>
+    <section class="glass panel" id="homekit-section" style="display:none">
+      <h2>🏠 HomeKit &amp; Matter</h2>
+      <div id="homekit-content"></div>
+    </section>
   </div>
   <div class="modal-backdrop" id="selector-modal" aria-hidden="true">
     <div class="modal">
@@ -132,7 +136,17 @@ template.innerHTML = `
 `;
 
 class ArgusPanel extends HTMLElement {
-  constructor() { super(); this.attachShadow({mode:'open'}).appendChild(template.content.cloneNode(true)); this._wsId = 1; this._socket = null; this._dashboard = null; this._ui = null; this._available = []; this._mode = 'home'; this._selected = []; this._selectorTarget = null; this._authOk = false; }
+  constructor() { super(); this.attachShadow({mode:'open'}).appendChild(template.content.cloneNode(true)); this._wsId = 1; this._socket = null; this._dashboard = null; this._ui = null; this._available = []; this._mode = 'home'; this._selected = []; this._selectorTarget = null; this._authOk = false; this._hass = null; this._prevStates = {}; }
+  set hass(hass) {
+    this._hass = hass;
+    if (!this._dashboard?.entries?.length) return;
+    const changed = this._dashboard.entries.some(e => e.entity_id && this._prevStates[e.entity_id] !== hass.states[e.entity_id]?.state);
+    if (changed) {
+      this._dashboard.entries.forEach(e => { if (e.entity_id) this._prevStates[e.entity_id] = hass.states[e.entity_id]?.state; });
+      this._renderEntries();
+    }
+  }
+  get hass() { return this._hass; }
   connectedCallback() { this._init(); }
   async _init() {
     this._bindStatic();
@@ -197,6 +211,56 @@ class ArgusPanel extends HTMLElement {
     this._renderModeTabs();
     this._renderModeView();
     this.shadowRoot.getElementById('zones').value = JSON.stringify(this._ui.zones || [], null, 2);
+    this._renderHomeKit();
+  }
+  async _renderHomeKit() {
+    const sec = this.shadowRoot.getElementById('homekit-section');
+    const cnt = this.shadowRoot.getElementById('homekit-content');
+    if (!sec || !cnt) return;
+    sec.style.display = '';
+    let code = null;
+    try {
+      // Try persistent_notification from HA HomeKit integration
+      const notifs = Object.values(this.hass?.states || {}).filter(s => s.entity_id.startsWith('persistent_notification.') && (s.attributes?.message||'').toLowerCase().includes('homekit'));
+      for (const n of notifs) {
+        const m = (n.attributes?.message||'').match(/(\d{3}-\d{2}-\d{3}|\d{8})/);
+        if (m) { code = m[1].replace(/-/g,''); break; }
+      }
+      // Try config entries
+      if (!code) {
+        const entries = await this.hass.callWS({type:'config_entries/get',domain:'homekit'}).catch(()=>[]);
+        for (const ent of (entries||[])) { const c=ent.options?.code||ent.data?.code; if(c){code=String(c).replace(/[^0-9]/g,'');break;} }
+      }
+    } catch(e) {}
+    if (code && code.length >= 8) {
+      const fmt = code.replace(/(\d{3})(\d{2})(\d{3})/,'$1-$2-$3');
+      cnt.innerHTML = `
+        <div style="display:grid;gap:16px;justify-items:center;padding:8px 0">
+          <p class="meta" style="text-align:center">Abre <strong>Casa</strong> en tu iPhone → Agregar accesorio → Escanear código o introducir manualmente.</p>
+          <canvas id="hk-qr"></canvas>
+          <div style="font-size:28px;font-weight:900;letter-spacing:6px;font-family:monospace;padding:10px 20px;border-radius:12px;background:color-mix(in srgb,var(--primary-color,#03a9f4) 8%,var(--card-background-color,#fff));border:2px dashed color-mix(in srgb,var(--primary-color,#03a9f4) 35%,transparent)">${fmt}</div>
+          <div class="small">Categoría: Security System (11) · Protocolo: IP</div>
+        </div>`;
+      this._drawHomeKitQR(code);
+    } else {
+      cnt.innerHTML = `
+        <div style="display:grid;gap:12px">
+          <p class="meta">Para vincular Argus con Apple HomeKit, activa <strong>HomeKit Bridge</strong> en Home Assistant e incluye la entidad <code>alarm_control_panel.argus_alarm</code>.</p>
+          <div style="padding:12px;border-radius:10px;background:color-mix(in srgb,var(--primary-color,#03a9f4) 7%,transparent);font-size:12px">
+            <strong>Pasos:</strong><br>1. HA → Configuración → Integraciones → Agregar → <em>HomeKit Bridge</em><br>2. Incluye la entidad de Argus<br>3. Escanea el QR que aparece en las Notificaciones de HA
+          </div>
+        </div>`;
+    }
+  }
+  async _drawHomeKitQR(code8) {
+    try {
+      if (!window.QRCode) await new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js';s.onload=res;s.onerror=rej;document.head.appendChild(s);});
+      const cat=11,flags=4;
+      const payload=BigInt(cat)*BigInt(0x100000000)+BigInt(parseInt(code8)*16+flags);
+      const uri='X-HM://'+payload.toString(36).toUpperCase().padStart(9,'0');
+      const canvas=this.shadowRoot.getElementById('hk-qr');
+      if(canvas&&window.QRCode) QRCode.toCanvas(canvas,uri,{width:180,margin:2,color:{dark:'#000000',light:'#ffffff'}});
+    } catch(e){ const c=this.shadowRoot.getElementById('hk-qr'); if(c) c.style.display='none'; }
   }
   async _saveZones() {
     const status = this.shadowRoot.getElementById('status-zones');
@@ -213,14 +277,38 @@ class ArgusPanel extends HTMLElement {
   _renderEntries() {
     const el = this.shadowRoot.getElementById('entries');
     const entries = this._dashboard?.entries || [];
-    if (!entries.length) { el.innerHTML = '<div class="empty"><strong>No hay instancias</strong><span>Argus no encontró paneles activos.</span></div>'; return; }
+    if (!entries.length) { el.innerHTML = '<div class="empty"><strong>No hay instancias</strong><span>Agrega una desde Configuración → Integraciones → Argus.</span></div>'; return; }
+    const LABELS = { disarmed:'🟢 Desarmado', armed_home:'🏠 Casa activo', armed_away:'🔴 Ausente activo', armed_night:'🌙 Noche activo', armed_vacation:'✈️ Vacaciones activo', arming:'⏳ Armando...', pending:'⏰ Cuenta regresiva', triggered:'🚨 ALARMA', unavailable:'⚠️ No disponible' };
     el.innerHTML = entries.map((e, idx) => {
-      const unavailable = e.state === 'unavailable' || !e.entity_id;
-      const badge = unavailable ? 'unavailable' : (e.state || 'disarmed');
-      const buttons = unavailable
-        ? `<div class="unavailable-notice">⚠️ Entidad no disponible — la instancia existe pero Home Assistant aún no expone su entidad alarm_control_panel.</div>`
-        : `<div class="actions"><button class="primary" data-idx="${idx}" data-action="home">Casa</button><button class="ghost" data-idx="${idx}" data-action="away">Ausente</button><button class="ghost" data-idx="${idx}" data-action="night">Noche</button><button class="ghost" data-idx="${idx}" data-action="vacation">Vacaciones</button><button class="danger" data-idx="${idx}" data-action="disarm">Desarmar</button></div>`;
-      return `<article class="entry"><div><div class="entry-title">${e.title || 'Argus'}</div><div class="badge ${badge}">${badge.replaceAll('_',' ')}</div></div><div class="meta">${e.entity_id || 'sin entidad'}${e.config?.name ? ' · ' + e.config.name : ''}</div>${buttons}</article>`;
+      const live = this.hass?.states[e.entity_id]?.state;
+      const state = live || e.state || 'unavailable';
+      const isUnavailable = !e.entity_id || (!live && state === 'unavailable');
+      const label = LABELS[state] || state.replaceAll('_',' ');
+      const modeKey = state.replace('armed_','');
+      const sensors = this._ui?.modes?.[modeKey]?.sensors || [];
+      const sirens  = this._ui?.modes?.[modeKey]?.sirens  || [];
+      const openSensors = sensors.filter(s => this.hass?.states[s]?.state === 'on');
+      const triggered = state === 'triggered';
+      const isArmed = state.startsWith('armed_');
+      const sensorLine = sensors.length ? `${sensors.length} sensor${sensors.length>1?'es':''} · ${openSensors.length>0 ? '⚠️ '+openSensors.length+' abierto'+(openSensors.length>1?'s':'') : '✅ todos cerrados'} · ${sirens.length} sirena${sirens.length!==1?'s':''}` : 'Sin sensores configurados';
+      const actionBtns = isUnavailable
+        ? `<div class="unavailable-notice">⚠️ El platform <code>alarm_control_panel</code> no cargó. Ejecuta <code>ha core restart</code> en el Terminal de HA.</div>`
+        : `<div class="actions">
+             <button class="${state==='armed_home'?'primary':'ghost'}" data-idx="${idx}" data-action="home">🏠 Casa</button>
+             <button class="${state==='armed_away'?'primary':'ghost'}" data-idx="${idx}" data-action="away">🔴 Ausente</button>
+             <button class="${state==='armed_night'?'primary':'ghost'}" data-idx="${idx}" data-action="night">🌙 Noche</button>
+             <button class="${state==='armed_vacation'?'primary':'ghost'}" data-idx="${idx}" data-action="vacation">✈️ Vacaciones</button>
+             <button class="danger" data-idx="${idx}" data-action="disarm">🔓 Desarmar</button>
+           </div>`;
+      return `<article class="entry" style="${triggered?'border-color:var(--error-color,#e53935);background:rgba(229,57,53,.06)':''}">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div><div class="entry-title">${e.title||'Argus'}</div><div class="badge ${state}" style="margin-top:5px;font-size:13px;padding:5px 13px">${label}</div></div>
+          ${triggered?'<div style="font-size:32px">🚨</div>':''}
+        </div>
+        <div class="meta" style="margin-top:4px">${e.entity_id||'sin entidad'}</div>
+        ${isArmed&&!isUnavailable?`<div class="meta">${sensorLine}</div>`:''}
+        ${actionBtns}
+      </article>`;
     }).join('');
     el.querySelectorAll('button[data-action]').forEach(btn => btn.addEventListener('click', (ev)=>this._handleAction(ev.currentTarget.dataset.idx, ev.currentTarget.dataset.action)));
   }
