@@ -338,7 +338,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             
         try:
             await self.hass.services.async_call(
-                domain, service, {"entity_id": self._linked_alarm}, blocking=True
+                domain, service, {"entity_id": self._linked_alarm}, blocking=False
             )
         except Exception as e:
             _LOGGER.error("Argus: Failed to sync to linked alarm: %s", e)
@@ -532,7 +532,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         return False
 
     async def async_alarm_disarm(self, code=None) -> None:
-        if not self._validate_code(code):
+        if self._code and self._code_arm_required and not self._validate_code(code):
             _LOGGER.warning("Argus: Disarm rejected — invalid code")
             await async_append_audit_log(self.hass, "disarm_rejected", "Invalid code")
             return
