@@ -7,6 +7,7 @@ from homeassistant.components.alarm_control_panel import (
     AlarmControlPanelEntity,
     AlarmControlPanelEntityFeature,
     AlarmControlPanelState,
+    CodeFormat,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import STATE_ON
@@ -106,7 +107,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     # ── Config loading ──────────────────────────────────────────────
     def _load_config(self):
-        d = self._config_entry.data
+        d = dict(self._config_entry.data)
+        if self._config_entry.options:
+            d.update(self._config_entry.options)
         self._name = d.get(CONF_NAME, DEFAULT_NAME)
         self._code = d.get(CONF_CODE) or None
         self._code_arm_required = d.get(CONF_CODE_ARM_REQUIRED, False)
@@ -139,6 +142,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     @property
     def code_arm_required(self) -> bool:
         return self._code_arm_required
+
+    @property
+    def code_format(self):
+        return CodeFormat.NUMBER if self._code else None
 
     @property
     def extra_state_attributes(self) -> dict:

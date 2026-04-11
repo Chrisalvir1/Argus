@@ -206,23 +206,5 @@ class ArgusOptionsFlow(config_entries.OptionsFlow):
                     CONF_CODE_ARM_REQUIRED,
                     default=bool(d.get(CONF_CODE_ARM_REQUIRED, False)),
                 ): selector.BooleanSelector(),
-                vol.Optional(
-                    CONF_SENSORS_AWAY,
-                    default=d.get(CONF_SENSORS_AWAY, []),
-                ): selector.EntitySelector(
-                    selector.EntitySelectorConfig(domain="binary_sensor", multiple=True)
-                ),
-                vol.Optional(
-                    CONF_SENSORS_HOME,
-                    default=d.get(CONF_SENSORS_HOME, []),
-                ): selector.EntitySelector(
-                    selector.EntitySelectorConfig(domain="binary_sensor", multiple=True)
-                ),
-                vol.Optional(
-                    CONF_SENSORS_NIGHT,
-                    default=d.get(CONF_SENSORS_NIGHT, []),
-                ): selector.EntitySelector(
-                    selector.EntitySelectorConfig(domain="binary_sensor", multiple=True)
-                ),
             }),
         )
