@@ -66,7 +66,7 @@ class ArgusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 ),
                 vol.Optional(CONF_TRIGGER_TIME, default=DEFAULT_TRIGGER_TIME): selector.NumberSelector(
                     selector.NumberSelectorConfig(
-                        min=30, max=3600, step=30,
+                        min=0, max=120, step=1,
                         unit_of_measurement="s",
                         mode=selector.NumberSelectorMode.BOX,
                     )
@@ -181,7 +181,7 @@ class ArgusOptionsFlow(config_entries.OptionsFlow):
                     default=int(d.get(CONF_TRIGGER_TIME, DEFAULT_TRIGGER_TIME)),
                 ): selector.NumberSelector(
                     selector.NumberSelectorConfig(
-                        min=30, max=3600, step=30,
+                        min=0, max=120, step=1,
                         unit_of_measurement="s",
                         mode=selector.NumberSelectorMode.BOX,
                     )
