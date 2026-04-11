@@ -79,7 +79,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         | AlarmControlPanelEntityFeature.ARM_AWAY
         | AlarmControlPanelEntityFeature.ARM_NIGHT
         | AlarmControlPanelEntityFeature.ARM_VACATION
-        | AlarmControlPanelEntityFeature.TRIGGER
     )
 
     def __init__(self, hass: HomeAssistant, config_entry: ConfigEntry) -> None:
