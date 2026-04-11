@@ -38,7 +38,7 @@ async def async_load_ui_data(hass: HomeAssistant) -> dict:
     """Load saved Argus UI data from HA storage."""
     store = Store(hass, _STORAGE_VERSION, _STORAGE_KEY)
     data = await store.async_load()
-    if not 
+    if not data:
         return _default_payload()
     # Ensure new keys exist in old storage data
     data.setdefault("audit_log", [])
@@ -46,7 +46,7 @@ async def async_load_ui_data(hass: HomeAssistant) -> dict:
     return data
 
 
-async def async_save_ui_data(hass: HomeAssistant,  dict) -> dict:
+async def async_save_ui_data(hass: HomeAssistant, data: dict) -> dict:
     """Persist Argus UI data to HA storage."""
     store = Store(hass, _STORAGE_VERSION, _STORAGE_KEY)
     current = await async_load_ui_data(hass)
