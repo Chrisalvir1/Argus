@@ -1,26 +1,19 @@
-## 🚨 Fix crítico — v0.5.0
+## Argus v0.5.1 — Fix armado lento + desarme bloqueado
 
-### 🐛 Bugs corregidos
-- **`config_flow.py` SyntaxError** (`self._ dict` → `self._data`) que causaba:
-  - `Invalid handler specified` en Dispositivos y Servicios
-  - `alarm_control_panel` nunca cargaba (aparecía como unavailable en el panel)
-  - Ninguna entidad de Argus se registraba en Home Assistant
+### Bugs corregidos
 
-### ✨ Nuevas características
-- **Estado en vivo** — el badge del modo (Casa / Ausente / Noche / Vacaciones / ALARMA) se actualiza en tiempo real usando `hass.states` sin recargar la página
-- **Sensores monitoreados visibles** — cuando un modo está activo muestra cuántos sensores hay configurados y cuántos están abiertos en ese momento
-- **Botón del modo activo resaltado** — el modo armado aparece en azul, los demás en gris
-- **Alarma disparada** — borde rojo + icono grande cuando `state = triggered`
-- **Sección HomeKit & Matter** — si tienes HomeKit Bridge activo en HA, detecta el código de emparejamiento y genera el QR automáticamente
-- **Instrucciones HomeKit** — si no tienes HomeKit Bridge, muestra los pasos para configurarlo
+- **Armado instantaneo por defecto** — `DEFAULT_ARMING_TIME` cambiado de 60s a 0s. Las nuevas instalaciones arman de inmediato sin delay de salida. Las existentes pueden cambiarlo en Opciones.
+- **Desarme siempre funciona** — El boton Desarmar ya no es rechazado silenciosamente. Ahora solo se requiere codigo para desarmar si `Codigo requerido para armar` esta activado. Antes cualquier instalacion con un PIN configurado bloqueaba el desarme desde el panel.
+- **Sync a alarma vinculada no bloquea** — `blocking=True` cambiado a `blocking=False` en la sincronizacion con la entidad vinculada (HomeKit/Aqara). Evita que una alarma vinculada lenta bloquee el desarme de Argus.
 
-### 📦 Deploy en HA (Terminal addon)
+### Deploy en HA Terminal
+
 ```bash
-cd /config/custom_components/argus
 REPO=https://raw.githubusercontent.com/Chrisalvir1/Argus/main/custom_components/argus
-for f in __init__.py alarm_control_panel.py config_flow.py const.py manifest.json panel.py storage.py websocket_api.py; do
-  curl -sf "$REPO/$f" -o "$f" && echo "OK $f" || echo "FAIL $f"
-done
-curl -sf "$REPO/www/argus-panel.js" -o www/argus-panel.js
+BASE=/config/custom_components/argus
+curl -sf "$REPO/alarm_control_panel.py" -o "$BASE/alarm_control_panel.py" && echo OK
+curl -sf "$REPO/const.py" -o "$BASE/const.py" && echo OK
 ha core restart
 ```
+
+> Si el armado sigue siendo lento, ve a Integraciones > Argus > Configurar y cambia el **Tiempo de armado** a 0.
