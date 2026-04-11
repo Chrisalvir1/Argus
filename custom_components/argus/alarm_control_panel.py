@@ -145,7 +145,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     @property
     def code_format(self):
-        return CodeFormat.NUMBER if self._code else None
+        # Retornamos None para que HA no bloquee llamadas sin código
+        # (HomeKit Bridge, Alexa, automaciones). El PIN se valida internamente.
+        return None
 
     @property
     def extra_state_attributes(self) -> dict:
@@ -539,11 +541,11 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         return False
 
     async def async_alarm_disarm(self, code=None) -> None:
-        # Only block if a code was explicitly provided AND it is wrong.
-        # code=None  → trusted caller (HomeKit, Alexa, Google, automation, MQTT) → always allow.
-        # code="1984" → correct PIN from JS panel → allow.
-        # code="0000" → wrong PIN → reject.
-        if self._code and not self._syncing_linked and code is not None and not self._validate_code(code):
+        # Trusted callers (HomeKit, Alexa, automaciones, MQTT) NO envían código → permitir.
+        # code=None o code=""  → sin código → permitir siempre.
+        # code="1984"          → PIN correcto → permitir.
+        # code="0000"          → PIN incorrecto → rechazar.
+        if self._code and not self._syncing_linked and bool(code) and not self._validate_code(code):
             _LOGGER.warning("Argus: Disarm rejected — invalid code")
             await async_append_audit_log(self.hass, "disarm_rejected", "Invalid code")
             return
