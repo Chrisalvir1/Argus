@@ -79,6 +79,10 @@ template.innerHTML = `
     .modal-footer{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
     .search{display:flex;gap:10px;align-items:center}
     .search input{min-width:min(420px,100%)}
+    .pin-modal .modal{max-width:340px;min-height:unset;grid-template-rows:auto auto auto}
+    .pin-input{font-size:28px;letter-spacing:10px;text-align:center;padding:14px;border-radius:12px;border:2px solid var(--primary-color,#03a9f4);background:transparent;color:inherit;width:100%;outline:none;transition:border-color .2s}
+    .pin-input:focus{border-color:color-mix(in srgb,var(--primary-color,#03a9f4) 70%,#000)}
+    .pin-error{color:var(--error-color,#e53935);font-size:13px;min-height:18px;text-align:center}
   </style>
   <div class="wrap">
     <div class="glass hero">
@@ -109,6 +113,10 @@ template.innerHTML = `
       <h2>🏠 HomeKit &amp; Matter</h2>
       <div id="homekit-content"></div>
     </section>
+    <section class="glass panel" id="security-section">
+      <h2>🔐 Seguridad</h2>
+      <div id="security-content"></div>
+    </section>
   </div>
   <div class="modal-backdrop" id="selector-modal" aria-hidden="true">
     <div class="modal">
@@ -130,6 +138,20 @@ template.innerHTML = `
       <div class="modal-footer">
         <div class="small" id="selector-count">0 seleccionadas</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="ghost" id="selector-clear">Limpiar</button><button class="primary" id="selector-accept">Aceptar</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop pin-modal" id="pin-modal" aria-hidden="true">
+    <div class="modal">
+      <div class="modal-head"><h3>🔒 Introduce PIN</h3><button class="ghost" id="pin-close">✕</button></div>
+      <div style="display:grid;gap:10px">
+        <p class="small" style="text-align:center;margin:0">Introduce el PIN numérico para desarmar Argus</p>
+        <input id="pin-input" class="pin-input" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="••••" autocomplete="off">
+        <div id="pin-error" class="pin-error"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="ghost" id="pin-cancel">Cancelar</button>
+        <button class="primary" id="pin-confirm">✓ Confirmar</button>
       </div>
     </div>
   </div>
@@ -160,6 +182,37 @@ class ArgusPanel extends HTMLElement {
     this.shadowRoot.getElementById('selector-search').addEventListener('input', ()=>this._renderSelector());
     this.shadowRoot.getElementById('selector-modal').addEventListener('click', (e)=>{ if(e.target.id==='selector-modal') this._closeModal(); });
     this.shadowRoot.getElementById('btn-save-zones')?.addEventListener('click', ()=>this._saveZones());
+    this.shadowRoot.getElementById('pin-close').addEventListener('click', ()=>this._closePinModal());
+    this.shadowRoot.getElementById('pin-cancel').addEventListener('click', ()=>this._closePinModal());
+    this.shadowRoot.getElementById('pin-modal').addEventListener('click', (e)=>{ if(e.target.id==='pin-modal') this._closePinModal(); });
+    this.shadowRoot.getElementById('pin-confirm').addEventListener('click', ()=>this._submitPin());
+    this.shadowRoot.getElementById('pin-input').addEventListener('keydown', (e)=>{ if(e.key==='Enter') this._submitPin(); });
+  }
+  _closePinModal() {
+    const m = this.shadowRoot.getElementById('pin-modal');
+    if (m) { m.classList.remove('open'); m.setAttribute('aria-hidden','true'); }
+    this._pinCallback = null;
+  }
+  _showPinModal(onConfirm) {
+    const m = this.shadowRoot.getElementById('pin-modal');
+    const inp = this.shadowRoot.getElementById('pin-input');
+    const err = this.shadowRoot.getElementById('pin-error');
+    if (!m || !inp) return;
+    inp.value = '';
+    if (err) err.textContent = '';
+    this._pinCallback = onConfirm;
+    m.classList.add('open');
+    m.setAttribute('aria-hidden','false');
+    setTimeout(() => inp.focus(), 60);
+  }
+  _submitPin() {
+    const inp = this.shadowRoot.getElementById('pin-input');
+    const err = this.shadowRoot.getElementById('pin-error');
+    const pin = inp ? inp.value.trim() : '';
+    if (!pin) { if(err) err.textContent = '⚠️ Introduce el PIN'; return; }
+    const cb = this._pinCallback;
+    this._closePinModal();
+    if (cb) cb(pin);
   }
   _connect() {
     return new Promise((resolve, reject) => {
@@ -413,7 +466,9 @@ class ArgusPanel extends HTMLElement {
   }
   async _handleAction(idx, action) {
     const e = this._dashboard.entries[Number(idx)];
-    if (!e || e.state === 'unavailable' || !e.entity_id || !this.hass) return;
+    if (!e || !e.entity_id || !this.hass) return;
+    const live = this.hass.states[e.entity_id];
+    if (!live || live.state === 'unavailable') return;
     const serviceMap = {
       home: 'alarm_arm_home',
       away: 'alarm_arm_away',
@@ -423,6 +478,20 @@ class ArgusPanel extends HTMLElement {
     };
     const service = serviceMap[action];
     if (!service) return;
+    // Disarm: require PIN if code_format is set on the entity
+    if (action === 'disarm' && live.attributes?.code_format) {
+      this._showPinModal(async (pin) => {
+        try {
+          await this.hass.callService('alarm_control_panel', 'alarm_disarm', { entity_id: e.entity_id, code: pin });
+          setTimeout(() => this._load().catch(()=>{}), 800);
+        } catch (err) {
+          const errEl = this.shadowRoot.getElementById('pin-error');
+          // Re-open modal with error if still failed
+          console.error('Argus disarm+PIN error:', err);
+        }
+      });
+      return;
+    }
     try {
       await this.hass.callService('alarm_control_panel', service, { entity_id: e.entity_id });
       setTimeout(() => this._load().catch(()=>{}), 800);
