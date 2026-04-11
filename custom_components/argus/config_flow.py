@@ -40,7 +40,7 @@ class ArgusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 2
 
     def __init__(self) -> None:
-        self._ dict[str, Any] = {}
+        self._data: dict[str, Any] = {}
 
     # ── Step 1: Basic settings ──────────────────────────────
     async def async_step_user(self, user_input=None):
@@ -150,13 +150,13 @@ class ArgusOptionsFlow(config_entries.OptionsFlow):
     def __init__(self) -> None:
         """Initialize — no arguments: config_entry is provided by HA framework."""
         super().__init__()
-        self._opts: dict[str, Any] = {}
+        self._data: dict[str, Any] = {}
         self._selected_mode: str | None = None
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None):
         """Manage the selection of what to configure."""
         if not self._opts:
-            self._opts = dict(self.config_entry.data)
+            self._data: dict(self.config_entry.data)
 
         if user_input is not None:
             choice = user_input["config_choice"]

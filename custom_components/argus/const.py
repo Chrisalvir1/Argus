@@ -1,17 +1,15 @@
 """Constants for the Argus integration."""
-from homeassistant.const import (
-    CONF_NAME,
-    CONF_CODE,
-    CONF_ARMING_TIME,
-    CONF_TRIGGER_TIME,
-)
+from homeassistant.const import CONF_NAME, CONF_CODE
 
 DOMAIN = "argus"
 NAME = "Argus"
-VERSION = "0.4.2"
+VERSION = "0.5.0"
 
 PLATFORMS = ["alarm_control_panel"]
 
+# Config keys (custom - NOT from homeassistant.const)
+CONF_ARMING_TIME = "arming_time"
+CONF_TRIGGER_TIME = "trigger_time"
 CONF_CODE_ARM_REQUIRED = "code_arm_required"
 CONF_ENTRY_DELAY = "entry_delay"
 CONF_SENSORS_AWAY = "sensors_away"
