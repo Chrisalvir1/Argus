@@ -12,6 +12,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import STATE_ON
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.event import (
     async_track_state_change_event,
     async_call_later,
@@ -20,6 +21,7 @@ from homeassistant.helpers.restore_state import RestoreEntity
 
 from .const import (
     DOMAIN,
+    SIGNAL_CONFIG_UPDATED,
     CONF_NAME,
     CONF_CODE,
     CONF_CODE_ARM_REQUIRED,
@@ -227,6 +229,58 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         if self._mqtt_enabled:
             await self._async_setup_mqtt()
 
+        # Re-subscribe sensors & reload config when panel saves changes
+        self.async_on_remove(
+            async_dispatcher_connect(
+                self.hass, SIGNAL_CONFIG_UPDATED, self._async_reload_config
+            )
+        )
+
+    async def _async_reload_config(self) -> None:
+        """Reload UI config and re-subscribe sensors after panel saves mode config."""
+        self._ui_config = await async_load_ui_data(self.hass)
+        # Re-subscribe sensors (picks up newly added/removed sensors from UI)
+        if self._unsub_sensors:
+            self._unsub_sensors()
+            self._unsub_sensors = None
+        all_sensors = self._all_sensors()
+        if all_sensors:
+            self._unsub_sensors = async_track_state_change_event(
+                self.hass, all_sensors, self._async_sensor_changed
+            )
+        _LOGGER.info(
+            "Argus: Config reloaded — monitoreando %d sensores: %s",
+            len(all_sensors), all_sensors
+        )
+
+    async def _async_tts_trigger(self) -> None:
+        """Play TTS alert on devices configured for the active mode."""
+        modes = self._ui_config.get("modes", {})
+        mode_key = self._alarm_state.value.replace("armed_", "") if self._alarm_state in ARMED_STATES else None
+        tts_cfg = modes.get(mode_key, {}).get("tts") if mode_key else None
+        if not tts_cfg:
+            for cfg in modes.values():
+                if cfg.get("tts"):
+                    tts_cfg = cfg["tts"]
+                    break
+        if not tts_cfg:
+            return
+        device = tts_cfg.get("device")
+        message = tts_cfg.get("trigger_message") or "¡Atención! La alarma de Argus ha sido activada."
+        engine = tts_cfg.get("engine", "tts.cloud_say")
+        if not device:
+            return
+        try:
+            await self.hass.services.async_call(
+                "tts", "speak",
+                {"entity_id": engine, "media_player_entity_id": device,
+                 "message": message, "language": "es"},
+                blocking=False,
+            )
+            _LOGGER.info("Argus: TTS enviado a %s", device)
+        except Exception as e:  # noqa: BLE001
+            _LOGGER.warning("Argus: TTS trigger fallido: %s", e)
+
     async def _async_linked_alarm_changed(self, event):
         """Update Argus state when the linked alarm (HomeKit/Aqara) changes."""
         if self._syncing_linked:
@@ -352,6 +406,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         await self._async_siren(True)
         await self._async_mqtt_publish()
+        await self._async_tts_trigger()
+        # Persistent notification in HA
+        self.hass.components.persistent_notification.async_create(
+            f"\u26a0\ufe0f Sensor: **{self._triggered_by or 'desconocido'}**\n\nModo activo: `{self._alarm_state.value}`",
+            title="\U0001f6a8 Argus \u2014 Alarma Activada",
+            notification_id="argus_triggered",
+        )
         await async_append_audit_log(
             self.hass, "triggered",
             f"Sensor: {self._triggered_by or 'desconocido'}"

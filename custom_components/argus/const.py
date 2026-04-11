@@ -45,3 +45,6 @@ MQTT_COMMAND_ARM_VACATION = "ARM_VACATION"
 # Storage keys
 STORAGE_KEY = "argus_ui_data"
 STORAGE_VERSION = 1
+
+# Dispatcher signals
+SIGNAL_CONFIG_UPDATED = f"{DOMAIN}_config_updated"

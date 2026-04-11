@@ -7,8 +7,9 @@ from homeassistant.components import websocket_api
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers import area_registry as ar
 from homeassistant.helpers import entity_registry as er
+from homeassistant.helpers.dispatcher import async_dispatcher_send
 
-from .const import DOMAIN
+from .const import DOMAIN, SIGNAL_CONFIG_UPDATED
 from .storage import (
     async_get_audit_log,
     async_load_ui_data,
@@ -165,6 +166,8 @@ async def ws_argus_save_mode_config(hass: HomeAssistant, connection, msg) -> Non
     modes = ui_data.get("modes", {})
     modes[mode] = config
     await async_save_ui_data(hass, {"modes": modes})
+    # Notify alarm panel to reload config and re-subscribe sensors
+    async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED)
     connection.send_result(msg["id"], {"success": True, "modes": modes})
 
 
