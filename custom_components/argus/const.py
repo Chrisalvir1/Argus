@@ -3,7 +3,7 @@ from homeassistant.const import CONF_NAME, CONF_CODE
 
 DOMAIN = "argus"
 NAME = "Argus"
-VERSION = "0.5.0"
+VERSION = "0.6.0"
 
 PLATFORMS = ["alarm_control_panel"]
 

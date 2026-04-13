@@ -77,6 +77,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     _attr_supported_features = (
         AlarmControlPanelEntityFeature.ARM_HOME
         | AlarmControlPanelEntityFeature.ARM_AWAY
+        | AlarmControlPanelEntityFeature.ARM_NIGHT
         | AlarmControlPanelEntityFeature.ARM_VACATION
     )
 
@@ -143,8 +144,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     @property
     def code_format(self):
-        # Retornamos None para que HA no bloquee llamadas sin código
-        # (HomeKit Bridge, Alexa, automaciones). El PIN se valida internamente.
+        if self._code:
+            return CodeFormat.NUMBER
         return None
 
     @property
