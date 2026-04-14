@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="skyNight" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#16213e;stop-opacity:0.4" />
+    </linearGradient>
+  </defs>
+  <style>
+    .star { fill: #fff; animation: twinkle 3s ease-in-out infinite; }
+    @keyframes twinkle { 0%, 100% { opacity: 0.1; } 50% { opacity: 0.8; } }
+  </style>
+  <rect width="1200" height="600" fill="url(#skyNight)" />
+  
+  <circle cx="100" cy="100" r="1.5" class="star" />
+  <circle cx="300" cy="200" r="1" class="star" style="animation-delay: 1s" />
+  <circle cx="500" cy="50" r="2" class="star" style="animation-delay: 2s" />
+  <circle cx="800" cy="250" r="1" class="star" style="animation-delay: 0.5s" />
+  <circle cx="1000" cy="150" r="1.5" class="star" style="animation-delay: 1.5s" />
+  <circle cx="1100" cy="400" r="1" class="star" style="animation-delay: 2.5s" />
+</svg>

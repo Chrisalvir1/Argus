@@ -1,133 +1,38 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
-<style>
-  /* Camera sweep */
-  .cam-left  { transform-origin: 68px 148px; animation: sweep-left  4s ease-in-out infinite alternate; }
-  .cam-right { transform-origin: 312px 148px; animation: sweep-right 4s ease-in-out infinite alternate; }
-  @keyframes sweep-left  { from { transform: rotate(-15deg); } to { transform: rotate(15deg); } }
-  @keyframes sweep-right { from { transform: rotate(15deg);  } to { transform: rotate(-15deg); } }
-
-  /* Chain glow pulse */
-  .chain-glow { animation: chain-pulse 2.5s ease-in-out infinite; }
-  @keyframes chain-pulse { 0%,100% { opacity:.6; } 50% { opacity:1; } }
-
-  /* Padlock shimmer */
-  .shimmer { animation: shimmer 3s ease-in-out infinite; }
-  @keyframes shimmer { 0%,100% { opacity:0; } 40%,60% { opacity:.9; } }
-
-  /* Shield glow */
-  .shield-glow { animation: shield-pulse 2.8s ease-in-out infinite; }
-  @keyframes shield-pulse { 0%,100% { filter: drop-shadow(0 0 4px #22c55e); opacity:.8; } 50% { filter: drop-shadow(0 0 12px #22c55e); opacity:1; } }
-
-  /* Recording dot */
-  .rec-dot { animation: blink 1.5s ease-in-out infinite; }
-  @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:.1; } }
-</style>
-
-<!-- Sky / background -->
-<rect width="400" height="400" fill="none"/>
-
-<!-- ── HOUSE BODY ── -->
-<!-- Walls -->
-<rect x="80" y="165" width="240" height="165" rx="4" fill="#94a3b8"/>
-<!-- Brick texture rows -->
-<g fill="none" stroke="#7c8fa8" stroke-width="1" opacity="0.5">
-  <line x1="80" y1="195" x2="320" y2="195"/>
-  <line x1="80" y1="215" x2="320" y2="215"/>
-  <line x1="80" y1="235" x2="320" y2="235"/>
-  <line x1="80" y1="255" x2="320" y2="255"/>
-  <line x1="80" y1="275" x2="320" y2="275"/>
-  <line x1="80" y1="295" x2="320" y2="295"/>
-  <line x1="80" y1="315" x2="320" y2="315"/>
-  <!-- Vertical brick offsets -->
-  <line x1="130" y1="195" x2="130" y2="215"/> <line x1="180" y1="195" x2="180" y2="215"/> <line x1="230" y1="195" x2="230" y2="215"/> <line x1="280" y1="195" x2="280" y2="215"/>
-  <line x1="105" y1="215" x2="105" y2="235"/> <line x1="155" y1="215" x2="155" y2="235"/> <line x1="205" y1="215" x2="205" y2="235"/> <line x1="255" y1="215" x2="255" y2="235"/> <line x1="305" y1="215" x2="305" y2="235"/>
-  <line x1="130" y1="235" x2="130" y2="255"/> <line x1="180" y1="235" x2="180" y2="255"/> <line x1="230" y1="235" x2="230" y2="255"/> <line x1="280" y1="235" x2="280" y2="255"/>
-  <line x1="105" y1="255" x2="105" y2="275"/> <line x1="155" y1="255" x2="155" y2="275"/> <line x1="205" y1="255" x2="205" y2="275"/> <line x1="255" y1="255" x2="255" y2="275"/> <line x1="305" y1="255" x2="305" y2="275"/>
-  <line x1="130" y1="275" x2="130" y2="295"/> <line x1="180" y1="275" x2="180" y2="295"/> <line x1="230" y1="275" x2="230" y2="295"/> <line x1="280" y1="275" x2="280" y2="295"/>
-</g>
-
-<!-- Roof -->
-<polygon points="60,168 200,80 340,168" fill="#64748b"/>
-<polygon points="60,168 200,80 340,168" fill="none" stroke="#475569" stroke-width="2"/>
-
-<!-- Door -->
-<rect x="167" y="265" width="66" height="65" rx="33" fill="#475569"/>
-<rect x="170" y="265" width="60" height="62" rx="30" fill="#334155"/>
-
-<!-- Windows -->
-<rect x="100" y="195" width="55" height="45" rx="5" fill="#7dd3fc" opacity="0.7"/>
-<rect x="245" y="195" width="55" height="45" rx="5" fill="#7dd3fc" opacity="0.7"/>
-<line x1="127" y1="195" x2="127" y2="240" stroke="#e2e8f0" stroke-width="1.5"/>
-<line x1="100" y1="217" x2="155" y2="217" stroke="#e2e8f0" stroke-width="1.5"/>
-<line x1="272" y1="195" x2="272" y2="240" stroke="#e2e8f0" stroke-width="1.5"/>
-<line x1="245" y1="217" x2="300" y2="217" stroke="#e2e8f0" stroke-width="1.5"/>
-
-<!-- ── CHAINS (perimeter) ── -->
-<g class="chain-glow">
-  <!-- chain links around house outline -->
-  <rect x="75" y="162" width="250" height="8" rx="4" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="12 6"/>
-  <rect x="75" y="162" width="6" height="170" rx="3" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="12 6"/>
-  <rect x="319" y="162" width="6" height="170" rx="3" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="12 6"/>
-  <rect x="75" y="326" width="250" height="6" rx="3" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="12 6"/>
-  <!-- golden glow layer -->
-  <rect x="75" y="162" width="250" height="8" rx="4" fill="none" stroke="#fbbf24" stroke-width="1" stroke-dasharray="12 6" opacity="0.5"/>
-  <rect x="75" y="162" width="6" height="170" rx="3" fill="none" stroke="#fbbf24" stroke-width="1" stroke-dasharray="12 6" opacity="0.5"/>
-  <rect x="319" y="162" width="6" height="170" rx="3" fill="none" stroke="#fbbf24" stroke-width="1" stroke-dasharray="12 6" opacity="0.5"/>
-  <rect x="75" y="326" width="250" height="6" rx="3" fill="none" stroke="#fbbf24" stroke-width="1" stroke-dasharray="12 6" opacity="0.5"/>
-</g>
-
-<!-- ── PADLOCK ── -->
-<g transform="translate(183,290)">
-  <!-- shackle -->
-  <path d="M4 14 L4 7 Q4 0 17 0 Q30 0 30 7 L30 14" fill="none" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round"/>
-  <!-- body -->
-  <rect x="0" y="14" width="34" height="24" rx="5" fill="#94a3b8"/>
-  <rect x="2" y="16" width="30" height="20" rx="3" fill="#cbd5e1"/>
-  <!-- keyhole -->
-  <circle cx="17" cy="23" r="4" fill="#64748b"/>
-  <rect x="14.5" y="24" width="5" height="7" fill="#64748b"/>
-  <!-- shimmer sweep -->
-  <rect x="0" y="14" width="34" height="24" rx="5" fill="url(#shimmerGrad)" class="shimmer"/>
-</g>
-<defs>
-  <linearGradient id="shimmerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-    <stop offset="0%" stop-color="white" stop-opacity="0"/>
-    <stop offset="50%" stop-color="white" stop-opacity="0.8"/>
-    <stop offset="100%" stop-color="white" stop-opacity="0"/>
-  </linearGradient>
-</defs>
-
-<!-- ── CAMERA LEFT ── -->
-<g class="cam-left" transform="translate(68,148)">
-  <rect x="-12" y="-6" width="22" height="12" rx="3" fill="#334155"/>
-  <rect x="-14" y="-9" width="4" height="18" rx="2" fill="#475569"/>
-  <!-- lens -->
-  <circle cx="10" cy="0" r="5" fill="#1e293b"/>
-  <circle cx="10" cy="0" r="3" fill="#2dd4bf" opacity="0.6"/>
-  <!-- mounting bracket -->
-  <rect x="-16" y="-2" width="5" height="4" fill="#64748b"/>
-  <!-- rec dot -->
-  <circle cx="-5" cy="-10" r="3" fill="#ef4444" class="rec-dot"/>
-</g>
-
-<!-- ── CAMERA RIGHT ── -->
-<g class="cam-right" transform="translate(312,148)">
-  <rect x="-10" y="-6" width="22" height="12" rx="3" fill="#334155"/>
-  <rect x="10" y="-9" width="4" height="18" rx="2" fill="#475569"/>
-  <circle cx="-4" cy="0" r="5" fill="#1e293b"/>
-  <circle cx="-4" cy="0" r="3" fill="#2dd4bf" opacity="0.6"/>
-  <rect x="11" y="-2" width="5" height="4" fill="#64748b"/>
-  <circle cx="5" cy="-10" r="3" fill="#ef4444" class="rec-dot"/>
-</g>
-
-<!-- ── SHIELD (above roof) ── -->
-<g class="shield-glow" transform="translate(185,42)">
-  <path d="M15 0 L30 8 L30 22 Q30 34 15 40 Q0 34 0 22 L0 8 Z" fill="#22c55e" opacity="0.85"/>
-  <path d="M15 0 L30 8 L30 22 Q30 34 15 40 Q0 34 0 22 L0 8 Z" fill="none" stroke="#4ade80" stroke-width="1.5"/>
-  <!-- check mark -->
-  <polyline points="8,20 13,26 22,14" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-</g>
-
-<!-- Ground -->
-<rect x="60" y="330" width="280" height="12" rx="6" fill="#475569" opacity="0.4"/>
+  <defs>
+    <linearGradient id="houseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a90e2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#357abd;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  <style>
+    .chain { stroke: #ffd700; fill: none; stroke-width: 8; stroke-linecap: round; filter: url(#glow); stroke-dasharray: 20 10; animation: dash 3s linear infinite; }
+    @keyframes dash { to { stroke-dashoffset: -30; } }
+    .house-body { fill: url(#houseGrad); }
+    .roof { fill: #2c3e50; }
+    .window { fill: #f1c40f; animation: light 2s ease-in-out infinite alternate; }
+    @keyframes light { from { opacity: 0.5; } to { opacity: 1; } }
+    .pulse { fill: #ffd700; opacity: 0.2; animation: pulse 2s ease-out infinite; }
+    @keyframes pulse { 0% { r: 50; opacity: 0.5; } 100% { r: 180; opacity: 0; } }
+  </style>
+  <rect width="400" height="400" fill="none"/>
+  
+  <!-- Pulse effect -->
+  <circle cx="200" cy="220" r="100" class="pulse" />
+  
+  <!-- House -->
+  <path class="house-body" d="M100,320 L300,320 L300,200 L100,200 Z" />
+  <path class="roof" d="M80,210 L200,80 L320,210 Z" />
+  <rect x="140" y="240" width="30" height="30" class="window" />
+  <rect x="230" y="240" width="30" height="30" class="window" />
+  <rect x="185" y="270" width="30" height="50" fill="#7f8c8d" />
+  
+  <!-- Chains -->
+  <circle cx="200" cy="210" r="140" class="chain" />
+  <path class="chain" d="M50,210 Q200,380 350,210" />
+  <path class="chain" d="M50,210 Q200,40 350,210" />
 </svg>

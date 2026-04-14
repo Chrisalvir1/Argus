@@ -79,64 +79,72 @@ _tmpl.innerHTML = `
   *{box-sizing:border-box}
   .wrap{max-width:1200px;margin:0 auto;padding:24px;display:grid;gap:20px}
   .glass{background:color-mix(in srgb,var(--card-background-color,#1e1e2e) 84%,transparent);border:1px solid color-mix(in srgb,var(--divider-color,#333) 50%,transparent);border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,.18);backdrop-filter:blur(18px) saturate(1.2)}
-  .hero{padding:24px 26px;display:flex;align-items:center;gap:16px}
+  .hero{padding:24px 26px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .hero-left{display:flex;align-items:center;gap:16px}
   .hero-icon{font-size:44px;line-height:1}
   .hero h1{margin:0 0 4px;font-size:26px;font-weight:800}
   .hero p{margin:0;font-size:14px;opacity:.6}
   .grid{display:grid;grid-template-columns:1.35fr 1fr;gap:20px;align-items:start}
   @media(max-width:860px){.grid{grid-template-columns:1fr}}
   .panel{padding:20px}
-  .panel h2{margin:0 0 16px;font-size:13px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;opacity:.55}
-  .entry{padding:16px;border-radius:16px;display:grid;gap:10px;background:color-mix(in srgb,var(--primary-color,#03a9f4) 6%,var(--card-background-color,#1e1e2e));border:1px solid color-mix(in srgb,var(--primary-color,#03a9f4) 16%,transparent);margin-bottom:12px}
-  .entry-title{font-size:17px;font-weight:700}
+  .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+  .panel h2{margin:0;font-size:13px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;opacity:.55}
+  
+  /* Intelligent Entry Card */
+  .entry{position:relative;overflow:hidden;border-radius:24px;border:1px solid rgba(255,255,255,0.1);margin-bottom:16px;min-height:220px;display:flex;flex-direction:column;transition:transform 0.3s ease}
+  .entry-bg{position:absolute;inset:0;z-index:1;background-size:cover;background-position:center;transition:opacity 0.5s ease}
+  .entry-bg img{width:100%;height:100%;object-fit:cover;opacity:0.6}
+  .entry-content{position:relative;z-index:2;flex:1;padding:20px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.3) 0%, transparent 60%)}
+  
+  /* HUD Overlay */
+  .hud{position:absolute;top:15px;right:20px;text-align:right;z-index:3;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,0.5)}
+  .hud-loc{font-size:12px;font-weight:800;text-transform:uppercase;opacity:0.9;letter-spacing:1px}
+  .hud-data{font-size:18px;font-weight:700;margin-top:2px}
+
+  /* Liquid Glass Buttons */
+  .liquid-stack{display:grid;gap:8px}
+  .liquid-btn{border:none;background:rgba(255,255,255,0.08);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);color:#fff;padding:10px 14px;border-radius:14px;font-size:11px;font-weight:700;display:flex;align-items:center;gap:10px;text-align:left;cursor:pointer;transition:all 0.2s cubic-bezier(0.4,0,0.2,1);border:1px solid rgba(255,255,255,0.05)}
+  .liquid-btn:hover{background:rgba(255,255,255,0.15);transform:translateX(5px);border-color:rgba(255,255,255,0.2)}
+  .liquid-btn.active{background:var(--btn-bg, rgba(255,255,255,0.2));border-color:rgba(255,255,255,0.4);box-shadow:0 0 20px var(--btn-shadow, rgba(255,255,255,0.1))}
+  .liquid-btn i{font-size:14px}
+  
+  /* Mode Specific Colors for Liquid Buttons */
+  .btn-home.active{--btn-bg:rgba(251,140,0,0.3); --btn-shadow:rgba(251,140,0,0.4)}
+  .btn-away.active{--btn-bg:rgba(229,57,53,0.3); --btn-shadow:rgba(229,57,53,0.4)}
+  .btn-night.active{--btn-bg:rgba(30,136,229,0.3); --btn-shadow:rgba(30,136,229,0.4)}
+  .btn-vacation.active{--btn-bg:rgba(156,39,176,0.3); --btn-shadow:rgba(156,39,176,0.4)}
+  .btn-disarm{--btn-bg:rgba(67,160,71,0.2); margin-top:4px}
+  
+  .entry-icon{display:flex;justify-content:center;align-items:center;perspective:1000px}
+  .entry-icon img{max-width:100%;height:auto;filter:drop-shadow(0 10px 20px rgba(0,0,0,0.4));animation:float-icon 4s ease-in-out infinite}
+  @keyframes float-icon{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-15px) rotate(2deg)}}
+
   .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
   .badge.armed_away,.badge.armed_vacation{background:rgba(229,57,53,.15);color:var(--error-color,#e53935)}
   .badge.armed_home,.badge.armed_night{background:rgba(251,140,0,.15);color:#fb8c00}
   .badge.disarmed{background:rgba(67,160,71,.15);color:var(--success-color,#43a047)}
   .badge.triggered{background:rgba(229,57,53,.25);color:var(--error-color,#e53935);animation:pulse 1s ease-in-out infinite}
-  .badge.unavailable{background:rgba(120,120,120,.12);color:var(--secondary-text-color,#888)}
+
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
   .meta{font-size:12px;opacity:.5}
-  .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+  
+  /* Generic buttons */
   button{border:0;border-radius:12px;padding:9px 16px;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer;transition:opacity .15s,transform .1s}
   button:active:not(:disabled){transform:scale(.96)}
-  button:disabled{opacity:.35;cursor:not-allowed}
   button.primary{background:var(--primary-color,#03a9f4);color:#fff}
   button.ghost{background:color-mix(in srgb,var(--card-background-color,#1e1e2e) 60%,var(--primary-color,#03a9f4) 12%);color:var(--primary-text-color)}
-  button.danger{background:rgba(229,57,53,.12);color:var(--error-color,#e53935)}
-  button.success{background:rgba(67,160,71,.13);color:var(--success-color,#43a047)}
-  button:hover:not(:disabled){opacity:.82}
-  input[type=text],input[type=password],input[type=time],input[type=number],select:not([multiple]),textarea{width:100%;border-radius:12px;border:1px solid var(--divider-color,#444);background:color-mix(in srgb,var(--card-background-color,#1e1e2e) 52%,transparent);color:var(--primary-text-color);padding:9px 12px;font-size:13px;outline:none;transition:border-color .2s}
-  input:focus,textarea:focus,select:focus{border-color:var(--primary-color,#03a9f4)}
-  textarea{min-height:80px;resize:vertical;font:12.5px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace}
+  
+  /* FS button */
+  .fs-btn{background:rgba(255,255,255,0.05);padding:8px;border-radius:10px;font-size:16px}
+  
+  input[type=text],input[type=password],input[type=number],select:not([multiple]){width:100%;border-radius:12px;border:1px solid var(--divider-color,#444);background:color-mix(in srgb,var(--card-background-color,#1e1e2e) 52%,transparent);color:var(--primary-text-color);padding:9px 12px;font-size:13px;outline:none}
   .save-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px}
   .status{font-size:13px;flex:1}
-  .status.ok{color:var(--success-color,#43a047)}
-  .status.err{color:var(--error-color,#e53935)}
   .tabs{display:flex;gap:6px;margin-bottom:18px;padding:5px;background:color-mix(in srgb,var(--card-background-color,#1e1e2e) 42%,transparent);border-radius:14px;border:1px solid color-mix(in srgb,var(--divider-color,#444) 30%,transparent)}
   .tab{flex:1;padding:9px 6px;text-align:center;cursor:pointer;border-radius:10px;font-size:12px;font-weight:700;white-space:nowrap}
   .tab.active{background:var(--primary-color,#03a9f4);color:#fff;box-shadow:0 4px 12px rgba(3,169,244,.28)}
-  .tab:not(.active):hover{background:color-mix(in srgb,var(--primary-color,#03a9f4) 10%,transparent)}
   .stack{display:grid;gap:14px}
-  .field-group{display:grid;gap:6px}
-  .field-group>label,.subsection-title{font-size:11px;font-weight:800;opacity:.55;text-transform:uppercase;letter-spacing:.05em}
   .subsection{background:color-mix(in srgb,var(--card-background-color,#1e1e2e) 35%,transparent);border:1px solid color-mix(in srgb,var(--divider-color,#444) 45%,transparent);border-radius:14px;padding:14px;display:grid;gap:12px}
-  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-  .checkbox-label{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;cursor:pointer;user-select:none}
-  .small{font-size:12px;opacity:.6}
-  .chip-list{display:flex;flex-wrap:wrap;gap:8px;min-height:28px}
-  .chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:color-mix(in srgb,var(--primary-color,#03a9f4) 10%,var(--card-background-color,#1e1e2e));border:1px solid color-mix(in srgb,var(--primary-color,#03a9f4) 18%,transparent);font-size:12px;font-weight:700}
-  .chip button{padding:0;border:0;background:none;cursor:pointer;opacity:.65;font-size:11px}
-  /* Modal */
-  .modal-back{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:9999}
-  .modal-back.open{display:flex}
-  .modal{width:min(900px,100%);max-height:85vh;overflow:hidden;display:grid;grid-template-rows:auto 1fr auto;gap:14px;padding:20px;border-radius:20px;background:var(--card-background-color,#1e1e2e);border:1px solid var(--divider-color,#444);box-shadow:0 24px 80px rgba(0,0,0,.4)}
-  .modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
-  .modal-head h3{margin:0;font-size:18px;font-weight:700}
-  .modal-body{display:grid;grid-template-columns:1fr 1fr;gap:14px;overflow:auto}
-  @media(max-width:680px){.modal-body{grid-template-columns:1fr}}
-  .listbox{display:grid;gap:8px;max-height:48vh;overflow:auto}
   .list-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;border:1px solid color-mix(in srgb,var(--divider-color,#444) 70%,transparent);background:color-mix(in srgb,var(--card-background-color,#1e1e2e) 76%,transparent)}
   .list-item input[type=checkbox]{width:18px;height:18px;cursor:pointer}
   .modal-footer{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
@@ -171,11 +179,14 @@ _tmpl.innerHTML = `
 <div class="wrap">
   <!-- HERO -->
   <div class="glass hero">
-    <div class="hero-icon">🛡️</div>
-    <div>
-      <h1>Argus Home Hub</h1>
-      <p id="p-hero-desc"></p>
+    <div class="hero-left">
+      <div class="hero-icon">🛡️</div>
+      <div>
+        <h1>Argus Home Hub</h1>
+        <p id="p-hero-desc"></p>
+      </div>
     </div>
+    <button class="ghost fs-btn" id="btn-fullscreen" title="Full Screen">⛶</button>
   </div>
 
   <!-- TWO-COLUMN LAYOUT -->
@@ -185,7 +196,10 @@ _tmpl.innerHTML = `
     <div class="stack">
       <!-- Instances -->
       <section class="glass panel">
-        <h2 id="h-instances"></h2>
+        <div class="panel-head">
+          <h2 id="h-instances"></h2>
+          <div id="global-status"></div>
+        </div>
         <div id="entries"></div>
       </section>
 
@@ -443,6 +457,8 @@ class ArgusPanel extends HTMLElement {
     s('pin-confirm').addEventListener('click', () => this._submitPin());
     s('pin-input').addEventListener('keydown', e => { if (e.key === 'Enter') this._submitPin(); });
 
+    s('btn-fullscreen').addEventListener('click', () => this._toggleFullscreen());
+
     s('btn-add-notif').addEventListener('click', () => this._addNotifTarget());
     s('btn-save-notif').addEventListener('click', () => this._saveNotifications());
     s('btn-save-user').addEventListener('click', () => this._saveUser());
@@ -522,70 +538,87 @@ class ArgusPanel extends HTMLElement {
   /* ── Entries (alarm instances) ───────────────────────────────────── */
   _renderEntries() {
     const el = this.shadowRoot.getElementById('entries');
+    const globalStatusEl = this.shadowRoot.getElementById('global-status');
     const entries = this._dashboard?.entries || [];
+
     if (!entries.length) {
       el.innerHTML = `<div class="small" style="padding:10px">No hay instancias. Agrega Argus desde Integraciones.</div>`;
       return;
     }
-    const LABELS = {
-      disarmed:      `🟢 ${this._t('disarmed')}`,
-      armed_home:    `🏠 ${this._t('armed_home')}`,
-      armed_away:    `🔴 ${this._t('armed_away')}`,
-      armed_night:   `🌙 ${this._t('armed_night')}`,
-      armed_vacation:`✈️ ${this._t('armed_vacation')}`,
-      arming:        `⏳ ${this._t('arming')}`,
-      pending:       `⏰ ${this._t('pending')}`,
-      triggered:     `🚨 ${this._t('triggered')}`,
-      unavailable:   `⚠️ ${this._t('unavailable')}`,
-    };
+
+    // Determine global status
+    const allStates = entries.map(e => this._hass?.states[e.entity_id]?.state || 'unavailable');
+    const isArmed = allStates.some(s => s.startsWith('armed') || s === 'triggered' || s === 'pending');
+    globalStatusEl.innerHTML = `<span class="badge ${isArmed ? 'armed_away' : 'disarmed'}">${isArmed ? 'SISTEMA ARMADO' : 'SISTEMA DESARMADO'}</span>`;
+
+    // Weather & Location Logic
+    const locName = this._hass?.config?.location_name || "Atenas, Costa Rica";
+    const weatherEnt = Object.values(this._hass?.states || {}).find(s => s.entity_id.startsWith('weather.')) || { state: 'clear', attributes: { temperature: 24, temperature_unit: '°C' } };
+    const temp = weatherEnt.attributes.temperature || '--';
+    const unit = weatherEnt.attributes.temperature_unit || '°C';
+    const weatherState = (weatherEnt.state || 'clear').toLowerCase();
+    const sunState = this._hass?.states['sun.sun']?.state || 'above_horizon';
+    const isNight = sunState === 'below_horizon';
+
+    // Time
+    const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+
+    // Background Selection
+    let bgSvg = isNight ? 'env_night.svg' : 'env_day.svg';
+    if (weatherState.includes('rain')) bgSvg = 'env_rain.svg';
+    else if (weatherState.includes('cloud')) bgSvg = 'env_clouds.svg';
+
     el.innerHTML = entries.map((e, idx) => {
       const live  = this._hass?.states[e.entity_id]?.state;
       const state = live || e.state || 'unavailable';
-      const label = LABELS[state] || state;
       const triggered = state === 'triggered';
       const isUnavail = state === 'unavailable' || !e.entity_id;
 
-      const actionBtns = isUnavail ? '' : `
-        <div class="actions">
-          <button class="${state==='armed_home'?'primary':'ghost'}" data-idx="${idx}" data-action="home">🏠</button>
-          <button class="${state==='armed_away'?'primary':'ghost'}" data-idx="${idx}" data-action="away">🔴</button>
-          <button class="${state==='armed_night'?'primary':'ghost'}" data-idx="${idx}" data-action="night">🌙</button>
-          <button class="${state==='armed_vacation'?'primary':'ghost'}" data-idx="${idx}" data-action="vacation">✈️</button>
-          <button class="danger" data-idx="${idx}" data-action="disarm">🔓 ${this._t('disarmed')}</button>
-        </div>`;
+      // Icon Selection
+      let svgName = 'mode_disarmed.svg';
+      if (state === 'armed_home') svgName = 'mode_home.svg';
+      else if (state === 'armed_away') svgName = 'mode_away.svg';
+      else if (state === 'armed_night') svgName = 'mode_night.svg';
+      else if (state === 'armed_vacation') svgName = 'mode_vacation.svg';
 
-      const triggeredBy = this._hass?.states[e.entity_id]?.attributes?.triggered_by;
-      const trigBox = triggeredBy
-        ? `<div class="trig-box">🚨 ${this._hass?.states[triggeredBy]?.attributes?.friendly_name || triggeredBy}</div>`
-        : '';
-        
-      let animSvg = '';
-      if (!isUnavail) {
-        let svgName = 'mode_disarmed.svg';
-        if (state === 'armed_home') svgName = 'mode_home.svg';
-        else if (state === 'armed_away') svgName = 'mode_away.svg';
-        else if (state === 'armed_night') svgName = 'mode_night.svg';
-        else if (state === 'armed_vacation') svgName = 'mode_vacation.svg';
-        
-        animSvg = `<img src="/api/argus_static/${svgName}" width="65" height="65" style="object-fit:contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));" alt="${state}">`;
-      }
-
-      return `<article class="entry" style="${triggered ? 'border-color:var(--error-color)' : ''}">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <div class="entry-title">${e.title || 'Argus'}</div>
-            <span class="badge ${state}" style="margin-top:6px">${label}</span>
+      return `
+        <article class="entry" style="${triggered ? 'border: 2px solid var(--error-color)' : ''}">
+          <div class="entry-bg"><img src="/api/argus_static/${bgSvg}?v=0.8.0"></div>
+          
+          <div class="hud">
+            <div class="hud-loc">${locName}</div>
+            <div class="hud-data">${timeStr} • ${temp}${unit}</div>
           </div>
-          ${triggered ? '<div style="font-size:36px">🚨</div>' : (animSvg ? `<div style="margin-left: 10px">${animSvg}</div>` : '')}
-        </div>
-        ${actionBtns}
-        ${trigBox}
-      </article>`;
+
+          <div class="entry-content">
+            <div class="liquid-stack">
+              <button class="liquid-btn btn-home ${state==='armed_home'?'active':''}" data-idx="${idx}" data-action="home">🏠 EN CASA</button>
+              <button class="liquid-btn btn-away ${state==='armed_away'?'active':''}" data-idx="${idx}" data-action="away">🔒 AUSENTE</button>
+              <button class="liquid-btn btn-night ${state==='armed_night'?'active':''}" data-idx="${idx}" data-action="night">🌙 NOCHE</button>
+              <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''}" data-idx="${idx}" data-action="vacation">✈️ VACACIÓN</button>
+              <button class="liquid-btn btn-disarm" data-idx="${idx}" data-action="disarm">🔓 DESARMADO</button>
+            </div>
+            
+            <div class="entry-icon">
+               ${triggered ? '<div style="font-size:80px; filter: drop-shadow(0 0 20px #f00)">🚨</div>' : `<img src="/api/argus_static/${svgName}?v=0.8.0">`}
+            </div>
+          </div>
+        </article>`;
     }).join('');
 
     el.querySelectorAll('button[data-action]').forEach(btn =>
       btn.addEventListener('click', ev => this._handleAction(ev.currentTarget.dataset.idx, ev.currentTarget.dataset.action))
     );
+  }
+
+  _toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      this.requestFullscreen().catch(err => {
+        alert(`Error al activar pantalla completa: ${err.message}`);
+      });
+    } else {
+      document.exitFullscreen();
+    }
   }
 
   /* ── Activity Log ────────────────────────────────────────────────── */

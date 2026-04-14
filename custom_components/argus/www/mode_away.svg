@@ -1,145 +1,37 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
-<style>
-  /* Camera sweeps */
-  .cam-left  { transform-origin: 68px 148px; animation: sweep-l 4s ease-in-out infinite alternate; }
-  .cam-right { transform-origin: 312px 148px; animation: sweep-r 4s ease-in-out infinite alternate; }
-  @keyframes sweep-l { from { transform: rotate(-15deg); } to { transform: rotate(15deg); } }
-  @keyframes sweep-r { from { transform: rotate(15deg); } to { transform: rotate(-15deg); } }
-
-  /* Chain glow */
-  .chain { animation: c-pulse 2.5s ease-in-out infinite; }
-  @keyframes c-pulse { 0%,100%{opacity:.6;} 50%{opacity:1;} }
-
-  /* Padlock shimmer */
-  .shimmer { animation: shim 3s ease-in-out infinite; }
-  @keyframes shim { 0%,100%{opacity:0;} 45%,55%{opacity:.9;} }
-
-  /* Shield glow */
-  .shield { animation: sh-pulse 2.8s ease-in-out infinite; }
-  @keyframes sh-pulse { 0%,100%{filter:drop-shadow(0 0 4px #22c55e);opacity:.8;} 50%{filter:drop-shadow(0 0 14px #22c55e);opacity:1;} }
-
-  /* Car drive */
-  .car { animation: drive 5s linear infinite; }
-  @keyframes drive { from { transform: translateX(-80px); } to { transform: translateX(480px); } }
-
-  /* Motion blur lines */
-  .blur-lines { animation: drive 5s linear infinite; }
-
-  /* AWAY badge pulse */
-  .away-badge { animation: badge-pulse 2s ease-in-out infinite; }
-  @keyframes badge-pulse { 0%,100%{opacity:.6;} 50%{opacity:1;} }
-
-  /* Rec dot */
-  .rec { animation: rec-blink 1.5s ease-in-out infinite; }
-  @keyframes rec-blink { 0%,100%{opacity:1;} 50%{opacity:.08;} }
-</style>
-<defs>
-  <linearGradient id="shimG" x1="0%" y1="0%" x2="100%" y2="0%">
-    <stop offset="0%"   stop-color="white" stop-opacity="0"/>
-    <stop offset="50%"  stop-color="white" stop-opacity="0.8"/>
-    <stop offset="100%" stop-color="white" stop-opacity="0"/>
-  </linearGradient>
-</defs>
-
-<!-- ── HOUSE BODY ── -->
-<rect x="80" y="165" width="240" height="160" rx="4" fill="#94a3b8"/>
-<!-- Brick texture -->
-<g fill="none" stroke="#7c8fa8" stroke-width="1" opacity="0.45">
-  <line x1="80" y1="195" x2="320" y2="195"/><line x1="80" y1="215" x2="320" y2="215"/>
-  <line x1="80" y1="235" x2="320" y2="235"/><line x1="80" y1="255" x2="320" y2="255"/>
-  <line x1="80" y1="275" x2="320" y2="275"/><line x1="80" y1="295" x2="320" y2="295"/>
-  <line x1="80" y1="315" x2="320" y2="315"/>
-  <line x1="130" y1="195" x2="130" y2="215"/><line x1="180" y1="195" x2="180" y2="215"/><line x1="230" y1="195" x2="230" y2="215"/><line x1="280" y1="195" x2="280" y2="215"/>
-  <line x1="105" y1="215" x2="105" y2="235"/><line x1="155" y1="215" x2="155" y2="235"/><line x1="205" y1="215" x2="205" y2="235"/><line x1="255" y1="215" x2="255" y2="235"/><line x1="305" y1="215" x2="305" y2="235"/>
-</g>
-<!-- Roof -->
-<polygon points="60,168 200,80 340,168" fill="#64748b"/>
-<!-- Door -->
-<rect x="167" y="265" width="66" height="60" rx="5" fill="#475569"/>
-<rect x="170" y="268" width="60" height="55" rx="4" fill="#334155"/>
-<!-- Windows -->
-<rect x="100" y="195" width="55" height="45" rx="5" fill="#7dd3fc" opacity="0.7"/>
-<rect x="245" y="195" width="55" height="45" rx="5" fill="#7dd3fc" opacity="0.7"/>
-<line x1="127" y1="195" x2="127" y2="240" stroke="#e2e8f0" stroke-width="1.5" opacity="0.7"/>
-<line x1="100" y1="217" x2="155" y2="217" stroke="#e2e8f0" stroke-width="1.5" opacity="0.7"/>
-<line x1="272" y1="195" x2="272" y2="240" stroke="#e2e8f0" stroke-width="1.5" opacity="0.7"/>
-<line x1="245" y1="217" x2="300" y2="217" stroke="#e2e8f0" stroke-width="1.5" opacity="0.7"/>
-
-<!-- ── CHAINS ── -->
-<g class="chain">
-  <rect x="75" y="162" width="250" height="8" rx="4" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="12 6"/>
-  <rect x="75" y="162" width="6" height="168" rx="3" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="12 6"/>
-  <rect x="319" y="162" width="6" height="168" rx="3" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="12 6"/>
-  <rect x="75" y="324" width="250" height="6" rx="3" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="12 6"/>
-</g>
-
-<!-- ── PADLOCK ── -->
-<g transform="translate(183,285)">
-  <path d="M4 14 L4 7 Q4 0 17 0 Q30 0 30 7 L30 14" fill="none" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round"/>
-  <rect x="0" y="14" width="34" height="24" rx="5" fill="#94a3b8"/>
-  <rect x="2" y="16" width="30" height="20" rx="3" fill="#cbd5e1"/>
-  <circle cx="17" cy="23" r="4" fill="#64748b"/>
-  <rect x="14.5" y="24" width="5" height="6" fill="#64748b"/>
-  <rect x="0" y="14" width="34" height="24" rx="5" fill="url(#shimG)" class="shimmer"/>
-</g>
-
-<!-- ── CAMERAS ── -->
-<g class="cam-left" transform="translate(68,148)">
-  <rect x="-12" y="-6" width="22" height="12" rx="3" fill="#334155"/>
-  <rect x="-14" y="-9" width="4" height="18" rx="2" fill="#475569"/>
-  <circle cx="10" cy="0" r="5" fill="#1e293b"/>
-  <circle cx="10" cy="0" r="3" fill="#2dd4bf" opacity="0.6"/>
-  <circle cx="-5" cy="-10" r="3" fill="#ef4444" class="rec"/>
-</g>
-<g class="cam-right" transform="translate(312,148)">
-  <rect x="-10" y="-6" width="22" height="12" rx="3" fill="#334155"/>
-  <rect x="10" y="-9" width="4" height="18" rx="2" fill="#475569"/>
-  <circle cx="-4" cy="0" r="5" fill="#1e293b"/>
-  <circle cx="-4" cy="0" r="3" fill="#2dd4bf" opacity="0.6"/>
-  <circle cx="5" cy="-10" r="3" fill="#ef4444" class="rec"/>
-</g>
-
-<!-- ── SHIELD ── -->
-<g class="shield" transform="translate(185,42)">
-  <path d="M15 0 L30 8 L30 22 Q30 34 15 40 Q0 34 0 22 L0 8 Z" fill="#22c55e" opacity="0.85"/>
-  <path d="M15 0 L30 8 L30 22 Q30 34 15 40 Q0 34 0 22 L0 8 Z" fill="none" stroke="#4ade80" stroke-width="1.5"/>
-  <polyline points="8,20 13,26 22,14" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-</g>
-
-<!-- ── AWAY BADGE ── -->
-<g class="away-badge">
-  <rect x="149" y="28" width="102" height="28" rx="14" fill="#f59e0b" opacity="0.95"/>
-  <text x="200" y="47" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="800" fill="#1e293b" letter-spacing="2">AWAY</text>
-</g>
-
-<!-- Ground -->
-<rect x="60" y="328" width="280" height="12" rx="6" fill="#475569" opacity="0.35"/>
-
-<!-- ── CAR ── -->
-<!-- Motion blur lines -->
-<g class="blur-lines">
-  <line x1="-15" y1="354" x2="-35" y2="354" stroke="white" stroke-width="1.5" opacity="0.3"/>
-  <line x1="-15" y1="360" x2="-42" y2="360" stroke="white" stroke-width="1" opacity="0.2"/>
-  <line x1="-15" y1="348" x2="-28" y2="348" stroke="white" stroke-width="1" opacity="0.2"/>
-</g>
-<!-- Car body -->
-<g class="car">
-  <!-- Body -->
-  <rect x="-5" y="340" width="70" height="24" rx="6" fill="#475569"/>
-  <!-- Cabin -->
-  <rect x="5" y="323" width="46" height="20" rx="5" fill="#334155"/>
-  <!-- Windshield / windows -->
-  <rect x="8" y="325" width="18" height="16" rx="3" fill="#7dd3fc" opacity="0.6"/>
-  <rect x="30" y="325" width="18" height="16" rx="3" fill="#7dd3fc" opacity="0.6"/>
-  <!-- Wheels -->
-  <circle cx="14" cy="365" r="9" fill="#1e293b"/>
-  <circle cx="14" cy="365" r="5" fill="#475569"/>
-  <circle cx="52" cy="365" r="9" fill="#1e293b"/>
-  <circle cx="52" cy="365" r="5" fill="#475569"/>
-  <!-- Headlights -->
-  <rect x="62" y="344" width="8" height="5" rx="2" fill="#fbbf24" opacity="0.95"/>
-  <rect x="62" y="351" width="8" height="4" rx="2" fill="#fbbf24" opacity="0.7"/>
-  <!-- Tail lights -->
-  <rect x="-10" y="344" width="7" height="5" rx="2" fill="#ef4444" opacity="0.8"/>
-</g>
+  <defs>
+    <linearGradient id="lockGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e74c3c;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#c0392b;stop-opacity:1" />
+    </linearGradient>
+    <filter id="red-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  <style>
+    .grid-line { stroke: #e74c3c; stroke-width: 1; opacity: 0.3; animation: scanner 4s linear infinite; }
+    @keyframes scanner { 0% { transform: translateY(-200px); } 100% { transform: translateY(200px); } }
+    .lock-body { fill: url(#lockGrad); filter: url(#red-glow); }
+    .shackle { fill: none; stroke: #7f8c8d; stroke-width: 25; stroke-linecap: round; }
+    .eye { fill: #fff; animation: blink 3s step-end infinite; }
+    @keyframes blink { 0%, 90% { opacity: 1; } 95% { opacity: 0; } }
+  </style>
+  <rect width="400" height="400" fill="none"/>
+  
+  <!-- Security Grid -->
+  <g class="grid">
+    <line x1="0" y1="100" x2="400" y2="100" class="grid-line" />
+    <line x1="0" y1="200" x2="400" y2="200" class="grid-line" />
+    <line x1="0" y1="300" x2="400" y2="300" class="grid-line" />
+    <line x1="100" y1="0" x2="100" y2="400" class="grid-line" />
+    <line x1="200" y1="0" x2="200" y2="400" class="grid-line" />
+    <line x1="300" y1="0" x2="300" y2="400" class="grid-line" />
+  </g>
+  
+  <!-- Lock -->
+  <path class="shackle" d="M130,200 L130,130 Q130,70 200,70 Q270,70 270,130 L270,200" />
+  <rect x="110" y="200" width="180" height="140" rx="20" class="lock-body" />
+  <circle cx="200" cy="270" r="15" fill="#2c3e50" />
+  <rect x="195" y="270" width="10" height="30" fill="#2c3e50" />
 </svg>

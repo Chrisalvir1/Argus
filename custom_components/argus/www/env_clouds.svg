@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice">
+  <style>
+    .cloud-mass { fill: #fff; opacity: 0.2; animation: float-slow 40s linear infinite; }
+    @keyframes float-slow { from { transform: translateX(-400px); } to { transform: translateX(1200px); } }
+  </style>
+  <rect width="1200" height="600" fill="#7f8c8d" opacity="0.2" />
+  
+  <ellipse cx="200" cy="100" rx="150" ry="60" class="cloud-mass" />
+  <ellipse cx="500" cy="150" rx="200" ry="80" class="cloud-mass" style="animation-delay: -10s" />
+  <ellipse cx="900" cy="120" rx="180" ry="70" class="cloud-mass" style="animation-delay: -25s" />
+</svg>
