@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.6.7
+ * Argus Home Hub – v0.6.8
  * Complete, self-contained custom element.
  * Fixes: blank screen (missing template declaration, broken ID refs),
  * Adds: notifications section, multi-user PINs, admin access control.
@@ -11,7 +11,7 @@ const TEXTS = {
     hero_desc:'Control de alarmas, modos, TTS y automatizaciones.',
     instances:'Instancias activas', modes:'Modos', automations:'⚡ Automatizaciones',
     linked_rules:'Reglas vinculadas a Argus', create_ha:'+ Crear en HA',
-    no_rules:'Sin reglas con "Argus" en el nombre.', rules_tip:'Nómbralas "[Argus] …" para verlas aquí.',
+    no_rules:'', rules_tip:'',
     settings:'⚙️ Ajustes', change_pin:'PIN Maestro', pin_desc:'Código numérico para armar y desarmar.',
     new_pin:'Nuevo PIN', confirm_pin:'Confirmar PIN', update_pin:'Actualizar PIN',
     current_pin:'PIN actual', notifications_title:'🔔 Notificaciones',
@@ -31,12 +31,18 @@ const TEXTS = {
     sensor_section:'Sensores de Intrusión', siren_section:'Sirenas',
     none_selected:'Ninguno seleccionado', search_select:'Buscar y seleccionar',
     save_mode:'💾 Guardar modo', details_notif:'Notificación de alarma',
+    activity_log:'📋 Historial de Actividad',
+    log_armed:'Armado', log_disarmed:'Desarmado', log_triggered:'¡Disparado!',
+    log_by:'por', log_sensor:'Sensor', log_no_events:'Sin eventos recientes.',
+    mode_home:'En Casa', mode_away:'Ausente', mode_night:'Noche', mode_vacation:'Vacaciones',
+    homekit_bridge:'Puente HomeKit', homekit_not_paired:'No vinculado a ninguna casa.',
+    homekit_house:'Casa de Apple Home',
   },
   en: {
     hero_desc:'Alarm control, modes, TTS and automations.',
     instances:'Active Instances', modes:'Modes', automations:'⚡ Automations',
     linked_rules:'Argus-linked Rules', create_ha:'+ Create in HA',
-    no_rules:'No rules with "Argus" in name.', rules_tip:'Name them "[Argus] …" to see them here.',
+    no_rules:'', rules_tip:'',
     settings:'⚙️ Settings', change_pin:'Master PIN', pin_desc:'Numeric code to arm and disarm.',
     new_pin:'New PIN', confirm_pin:'Confirm PIN', update_pin:'Update PIN',
     current_pin:'Current PIN', notifications_title:'🔔 Notifications',
@@ -56,6 +62,12 @@ const TEXTS = {
     sensor_section:'Intrusion Sensors', siren_section:'Sirens',
     none_selected:'None selected', search_select:'Search & select',
     save_mode:'💾 Save mode', details_notif:'Alarm notification',
+    activity_log:'📋 Activity Log',
+    log_armed:'Armed', log_disarmed:'Disarmed', log_triggered:'Triggered!',
+    log_by:'by', log_sensor:'Sensor', log_no_events:'No recent events.',
+    mode_home:'Home', mode_away:'Away', mode_night:'Night', mode_vacation:'Vacation',
+    homekit_bridge:'HomeKit Bridge', homekit_not_paired:'Not paired to any home.',
+    homekit_house:'Apple Home',
   }
 };
 
@@ -144,6 +156,16 @@ _tmpl.innerHTML = `
   /* search */
   .search-wrap{display:flex;gap:10px;align-items:center}
   .search-wrap input{flex:1}
+  /* Activity log */
+  .log-item{display:flex;align-items:flex-start;gap:12px;padding:10px 12px;border-radius:12px;border:1px solid color-mix(in srgb,var(--divider-color,#444) 50%,transparent);background:color-mix(in srgb,var(--card-background-color,#1e1e2e) 60%,transparent)}
+  .log-icon{font-size:20px;line-height:1;flex-shrink:0}
+  .log-body{flex:1;min-width:0}
+  .log-title{font-weight:700;font-size:13px}
+  .log-meta{font-size:11px;opacity:.55;margin-top:2px}
+  .log-badge{display:inline-block;padding:2px 7px;border-radius:6px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-right:4px}
+  .log-badge.arm{background:rgba(251,140,0,.15);color:#fb8c00}
+  .log-badge.disarm{background:rgba(67,160,71,.15);color:var(--success-color,#43a047)}
+  .log-badge.trigger{background:rgba(229,57,53,.18);color:var(--error-color,#e53935)}
 </style>
 
 <div class="wrap">
@@ -161,6 +183,9 @@ _tmpl.innerHTML = `
     <section class="glass panel">
       <h2 id="h-instances"></h2>
       <div id="entries"></div>
+      <!-- Activity log -->
+      <h2 id="h-activity-log" style="margin-top:20px"></h2>
+      <div id="activity-log" style="display:grid;gap:8px;max-height:260px;overflow-y:auto"></div>
     </section>
     <section class="glass panel">
       <h2 id="h-modes"></h2>
@@ -329,6 +354,7 @@ class ArgusPanel extends HTMLElement {
     set('h-automations',  t('automations'));
     set('p-linked-rules', t('linked_rules'));
     set('h-settings',     t('settings'));
+    set('h-activity-log', t('activity_log'));
     set('t-change-pin',   t('change_pin'));
     set('p-pin-desc',     t('pin_desc'));
     set('l-new-pin',      t('new_pin'));
@@ -450,12 +476,16 @@ class ArgusPanel extends HTMLElement {
     this._notifTargets = dashboard.ui?.notif_targets || [];
     this._users = dashboard.ui?.users || [];
 
+    // Admin flag: use the HA user's own admin status
+    this._isAdmin = this._hass?.user?.is_admin ?? true;
+
     // Show current PIN
     const currentPin = dashboard.entries?.[0]?.options?.code || '';
     const pinDisp = this.shadowRoot.getElementById('current-pin-display');
     if (pinDisp) pinDisp.textContent = currentPin ? `${this._t('current_pin')}: ${currentPin}` : '';
 
     this._renderEntries();
+    this._renderActivityLog();
     this._renderModeTabs();
     this._renderModeView();
     this._renderAutomations();
@@ -523,13 +553,63 @@ class ArgusPanel extends HTMLElement {
     );
   }
 
+  /* ── Activity Log ────────────────────────────────────────────────── */
+  _renderActivityLog() {
+    const titleEl = this.shadowRoot.getElementById('h-activity-log');
+    const el = this.shadowRoot.getElementById('activity-log');
+    if (!el) return;
+    if (titleEl) titleEl.textContent = this._t('activity_log');
+
+    const log = this._ui?.audit_log || [];
+    if (!log.length) {
+      el.innerHTML = `<div class="small" style="padding:8px 0">${this._t('log_no_events')}</div>`;
+      return;
+    }
+
+    const iconMap = { arm:'🔒', disarm:'🔓', triggered:'🚨', sensor:'📡', camera:'📷' };
+    const classMap = { arm:'arm', disarm:'disarm', triggered:'trigger', sensor:'trigger', camera:'trigger' };
+
+    el.innerHTML = log.slice(0, 25).map(ev => {
+      const action = ev.action || '';
+      const detail = ev.detail || '';
+      const user   = ev.user   || '';
+      const ts     = ev.ts ? new Date(ev.ts).toLocaleString() : '';
+
+      let icon = '📋', badgeCls = '', badgeTxt = action, title = detail;
+      if (action.includes('arm') && !action.includes('disarm')) {
+        icon = '🔒'; badgeCls = 'arm'; badgeTxt = this._t('log_armed');
+      } else if (action.includes('disarm')) {
+        icon = '🔓'; badgeCls = 'disarm'; badgeTxt = this._t('log_disarmed');
+      } else if (action.includes('trigger') || action.includes('alarm')) {
+        icon = '🚨'; badgeCls = 'trigger'; badgeTxt = this._t('log_triggered');
+      }
+
+      const userBit = user && user !== 'system' ? ` · ${this._t('log_by')} ${user}` : '';
+      return `<div class="log-item">
+        <div class="log-icon">${icon}</div>
+        <div class="log-body">
+          <div class="log-title">
+            <span class="log-badge ${badgeCls}">${badgeTxt}</span>${title}
+          </div>
+          <div class="log-meta">${ts}${userBit}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
   /* ── Modes ───────────────────────────────────────────────────────── */
   _renderModeTabs() {
     const tabs = this.shadowRoot.getElementById('mode-tabs');
     const modes = ['home', 'away', 'night', 'vacation'];
     const icons = { home:'🏠', away:'🔴', night:'🌙', vacation:'✈️' };
+    const lbls  = {
+      home:     this._t('mode_home'),
+      away:     this._t('mode_away'),
+      night:    this._t('mode_night'),
+      vacation: this._t('mode_vacation'),
+    };
     tabs.innerHTML = modes.map(m =>
-      `<div class="tab ${m===this._mode?'active':''}" data-mode="${m}">${icons[m]} ${m.toUpperCase()}</div>`
+      `<div class="tab ${m===this._mode?'active':''}" data-mode="${m}">${icons[m]} ${lbls[m]}</div>`
     ).join('');
     tabs.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
       this._mode = t.dataset.mode; this._renderModeTabs(); this._renderModeView();
@@ -616,7 +696,7 @@ class ArgusPanel extends HTMLElement {
     });
 
     if (!items.length) {
-      el.innerHTML = `<div class="small" style="text-align:center;padding:20px">${this._t('no_rules')}<br>${this._t('rules_tip')}</div>`;
+      el.innerHTML = `<div class="small" style="text-align:center;padding:14px;opacity:.5">([Argus] …)</div>`;
       return;
     }
     el.innerHTML = `<div class="stack">${items.map(a => `
@@ -730,46 +810,72 @@ class ArgusPanel extends HTMLElement {
     } catch (e) { status.textContent = e.message; status.className = 'status err'; }
   }
 
-  /* ── HomeKit (unchanged functional logic) ────────────────────────── */
+  /* ── HomeKit ─────────────────────────────────────────────────────── */
   async _renderHomeKit() {
     const sec = this.shadowRoot.getElementById('homekit-section');
     const cnt = this.shadowRoot.getElementById('homekit-content');
     if (!sec || !cnt) return;
     sec.style.display = '';
-    let code = null, bridgeName = 'Argus Bridge';
+    let code = null, bridgeName = null, homeName = null;
+
     try {
       const hkEntries = await this._hass.callWS({ type: 'config_entries/get', domain: 'homekit' }).catch(() => []);
+      const alarmDomains = (this._dashboard?.entries || []).map(e => e.entity_id).filter(Boolean);
+
       for (const ent of (hkEntries || [])) {
         const inc = ent.options?.include_entities || [];
-        if (inc.some(id => id.startsWith('alarm_control_panel'))) {
-          bridgeName = ent.title || ent.data?.name || bridgeName;
-          code = String(ent.options?.code || ent.data?.code || '').replace(/\D/g, '');
-          break;
+        const matchesArgus = inc.some(id => id.startsWith('alarm_control_panel')) ||
+          alarmDomains.some(id => inc.includes(id));
+        if (matchesArgus || !bridgeName) {
+          bridgeName = ent.title || ent.data?.name || bridgeName || 'Argus Bridge';
+          code = String(ent.options?.code || ent.data?.code || code || '').replace(/\D/g, '');
+          // Try to read home_name from pairing state
+          homeName = ent.data?.home_name || ent.options?.home_name || null;
+          if (matchesArgus) break;
         }
-        if (!code) { const c = ent.options?.code || ent.data?.code; if (c) code = String(c).replace(/\D/g, ''); }
       }
+
+      // Fallback from persistent notifications
       if (!code) {
         for (const s of Object.values(this._hass?.states || {})) {
           if (!s.entity_id.startsWith('persistent_notification.')) continue;
-          if (!(s.attributes?.message || '').toLowerCase().includes('homekit')) continue;
+          const msg = (s.attributes?.message || '').toLowerCase();
+          if (!msg.includes('homekit')) continue;
           const m = (s.attributes.message || '').match(/(\d{3}-\d{2}-\d{3}|\d{8})/);
           if (m) { code = m[1].replace(/-/g, ''); break; }
         }
       }
+
+      // Try to read home name from homekit_pairing entity if available
+      if (!homeName) {
+        const pairState = Object.values(this._hass?.states || {})
+          .find(s => s.entity_id.startsWith('homekit.') || s.entity_id.startsWith('sensor.homekit_'));
+        if (pairState) homeName = pairState.attributes?.home_name || null;
+      }
     } catch (_) {}
+
+    const bridgeLabel = bridgeName || 'Argus Bridge';
+    const homeLabel   = homeName || null;
 
     if (code && code.length >= 8) {
       const fmt = code.replace(/(\d{3})(\d{2})(\d{3})/, '$1-$2-$3');
       cnt.innerHTML = `
         <div style="display:grid;gap:16px;justify-items:center;padding:8px 0">
-          <div style="background:var(--primary-color);color:#fff;padding:4px 14px;border-radius:8px;font-size:12px;font-weight:700">${bridgeName}</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+            <div style="background:var(--primary-color);color:#fff;padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700">🌉 ${this._t('homekit_bridge')}: ${bridgeLabel}</div>
+            ${homeLabel ? `<div style="background:rgba(67,160,71,.15);color:var(--success-color,#43a047);padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700">🏡 ${this._t('homekit_house')}: ${homeLabel}</div>` : ''}
+          </div>
           <canvas id="hk-qr"></canvas>
           <div style="font-size:28px;font-weight:900;letter-spacing:6px;font-family:monospace;padding:10px 20px;border-radius:12px;border:2px dashed color-mix(in srgb,var(--primary-color,#03a9f4) 35%,transparent)">${fmt}</div>
-          <div class="small">Security System · IP Protocol</div>
+          <div class="small">Security System · IP</div>
         </div>`;
       this._drawHKQR(code);
     } else {
-      cnt.innerHTML = `<p class="small" style="padding:4px 0">Activa HomeKit Bridge en HA e incluye la entidad <code>alarm_control_panel.argus_*</code>.</p>`;
+      cnt.innerHTML = `
+        <div style="display:grid;gap:10px">
+          ${bridgeLabel ? `<div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">🌉</span><div><div style="font-weight:700">${bridgeLabel}</div><div class="small">${homeLabel ? `${this._t('homekit_house')}: ${homeLabel}` : this._t('homekit_not_paired')}</div></div></div>` : ''}
+          <p class="small" style="margin:0">Activa HomeKit Bridge en HA e incluye la entidad <code>alarm_control_panel.argus_*</code>.</p>
+        </div>`;
     }
   }
 
@@ -912,21 +1018,27 @@ class ArgusPanel extends HTMLElement {
     const live = this._hass.states[e.entity_id];
     if (!live || live.state === 'unavailable') return;
 
-    // Check if user is authorized – non-admin users can only arm/disarm using their own PIN
     const serviceMap = {
       home: 'alarm_arm_home', away: 'alarm_arm_away',
       night: 'alarm_arm_night', vacation: 'alarm_arm_vacation',
       disarm: 'alarm_disarm',
     };
+    const modeLabels = {
+      home: this._t('mode_home'), away: this._t('mode_away'),
+      night: this._t('mode_night'), vacation: this._t('mode_vacation'),
+    };
     const service = serviceMap[action];
     if (!service) return;
+    const currentUser = this._hass?.user?.name || 'Usuario';
 
     if (action === 'disarm') {
       this._showPinModal(async pin => {
         try {
           await this._hass.callService('alarm_control_panel', 'alarm_disarm', { entity_id: e.entity_id, code: pin });
-          // Send HA notification
-          this._sendHaNotif(`🔓 Alarma desarmada`, `El sistema fue desarmado.`);
+          // Write audit log
+          this._writeLog('disarm', `${e.title || 'Argus'} desarmado`, currentUser);
+          // HA push notification
+          this._sendHaNotif(`🔓 ${this._t('log_disarmed')}`, `${e.title || 'Argus'} fue desarmado por ${currentUser}.`);
           setTimeout(() => this._load(), 800);
         } catch (err) { console.error('disarm error:', err); }
       });
@@ -935,8 +1047,23 @@ class ArgusPanel extends HTMLElement {
 
     try {
       await this._hass.callService('alarm_control_panel', service, { entity_id: e.entity_id });
+      const modeTxt = modeLabels[action] || action;
+      this._writeLog('arm', `${e.title || 'Argus'} armado en modo ${modeTxt}`, currentUser);
+      this._sendHaNotif(`🔒 ${this._t('log_armed')} — ${modeTxt}`, `${e.title || 'Argus'} fue armado en modo "${modeTxt}" por ${currentUser}.`);
       setTimeout(() => this._load(), 800);
     } catch (err) { console.error('Argus action failed', err); }
+  }
+
+  /* ── Audit log writer ────────────────────────────────────────────── */
+  _writeLog(action, detail, user = '') {
+    // Write to backend asynchronously – don't block UI
+    this._send('argus/write_log', { action, detail, user }).catch(() => {});
+    // Optimistically prepend to local log so it's visible immediately
+    if (!this._ui) this._ui = {};
+    if (!this._ui.audit_log) this._ui.audit_log = [];
+    this._ui.audit_log.unshift({ action, detail, user, ts: new Date().toISOString() });
+    this._ui.audit_log = this._ui.audit_log.slice(0, 50);
+    this._renderActivityLog();
   }
 
   /* ── HA Notifications helper ─────────────────────────────────────── */
@@ -946,6 +1073,7 @@ class ArgusPanel extends HTMLElement {
       this._hass.callService('notify', target, { title, message }).catch(() => {});
     }
   }
+
 }
 
 customElements.define('argus-panel', ArgusPanel);

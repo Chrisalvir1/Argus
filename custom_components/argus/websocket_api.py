@@ -37,6 +37,7 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_argus_get_tts_engines)
     websocket_api.async_register_command(hass, ws_argus_get_media_players)
     websocket_api.async_register_command(hass, ws_argus_update_master_pin)
+    websocket_api.async_register_command(hass, ws_argus_write_log)
 
 
 @callback
@@ -297,3 +298,30 @@ async def ws_argus_update_master_pin(hass: HomeAssistant, connection, msg) -> No
     await hass.config_entries.async_reload(entry.entry_id)
     
     connection.send_result(msg["id"], {"success": True})
+
+
+@websocket_api.websocket_command(
+    {
+        vol.Required("type"): "argus/write_log",
+        vol.Required("action"): str,
+        vol.Optional("detail", default=""): str,
+        vol.Optional("user", default=""): str,
+    }
+)
+@websocket_api.async_response
+async def ws_argus_write_log(hass: HomeAssistant, connection, msg) -> None:
+    """Append an event to the Argus audit log, keeping the last 50 entries."""
+    import datetime
+
+    ui_data = await async_load_ui_data(hass)
+    log = ui_data.get("audit_log", [])
+    log.insert(0, {
+        "action": msg["action"],
+        "detail": msg.get("detail", ""),
+        "user": msg.get("user", ""),
+        "ts": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    })
+    # Keep only last 50 entries
+    ui_data["audit_log"] = log[:50]
+    await async_save_ui_data(hass, ui_data)
+    connection.send_result(msg["id"], {"written": True})
