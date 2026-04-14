@@ -133,16 +133,20 @@ async def ws_argus_dashboard(hass: HomeAssistant, connection, msg) -> None:
         vol.Required("type"): "argus/save_ui",
         vol.Optional("zones", default=[]): list,
         vol.Optional("dashboard", default={}): dict,
+        vol.Optional("notif_targets", default=[]): list,
+        vol.Optional("users", default=[]): list,
     }
 )
 @websocket_api.async_response
 async def ws_argus_save_ui(hass: HomeAssistant, connection, msg) -> None:
-    """Persist zones and dashboard layout from the Argus panel UI."""
+    """Persist zones, dashboard layout, notif_targets and users from the Argus panel UI."""
     saved = await async_save_ui_data(
         hass,
         {
             "zones": msg.get("zones", []),
             "dashboard": msg.get("dashboard", {}),
+            "notif_targets": msg.get("notif_targets", []),
+            "users": msg.get("users", []),
         },
     )
     connection.send_result(msg["id"], {"saved": True, "ui": saved})

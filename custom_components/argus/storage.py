@@ -32,6 +32,8 @@ def _default_payload() -> dict:
             "guest_code_enabled": False,
         },
         "automations": [],
+        "notif_targets": [],
+        "users": [],
     }
 
 
