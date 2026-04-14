@@ -1,5 +1,5 @@
 /**
- * Argus Panel 0.6.2
+ * Argus Panel 0.6.3
  * Clean rebuild after selector refactor.
  */
 const template = document.createElement('template');
@@ -107,11 +107,11 @@ template.innerHTML = `
     <div class="grid">
       <section class="glass panel">
         <h2>⚡ Automatizaciones</h2>
-        <div class="tabs" id="auto-tabs">
-            <div class="tab active" id="tab-auto-list">Mis reglas</div>
-            <div class="tab" id="tab-auto-new">+ Nueva regla</div>
+        <div class="tabs" id="auto-tabs" style="justify-content: space-between; align-items: center; padding-right: 8px;">
+            <div style="padding-left: 12px; font-weight: 600; font-size: 13px;">Reglas vinculadas</div>
+            <button class="primary" id="btn-new-ha-auto" style="padding: 4px 12px; font-size: 12px;">+ Crear en Home Assistant</button>
         </div>
-        <div id="auto-view" style="min-height: 200px"></div>
+        <div id="auto-view" style="min-height: 100px; padding: 12px;"></div>
       </section>
       
       <section class="glass panel">
@@ -200,8 +200,7 @@ class ArgusPanel extends HTMLElement {
     this.shadowRoot.getElementById('selector-search').addEventListener('input', ()=>this._renderSelector());
     this.shadowRoot.getElementById('selector-modal').addEventListener('click', (e)=>{ if(e.target.id==='selector-modal') this._closeModal(); });
     
-    this.shadowRoot.getElementById('tab-auto-list').addEventListener('click', (e)=>{ e.target.classList.add('active'); this.shadowRoot.getElementById('tab-auto-new').classList.remove('active'); this._renderAutomationsList(); });
-    this.shadowRoot.getElementById('tab-auto-new').addEventListener('click', (e)=>{ e.target.classList.add('active'); this.shadowRoot.getElementById('tab-auto-list').classList.remove('active'); this._renderAutomationNew(); });
+    this.shadowRoot.getElementById('btn-new-ha-auto').addEventListener('click', ()=>{ history.pushState(null, "", "/config/automation/edit/new"); window.dispatchEvent(new CustomEvent("location-changed")); });
     this.shadowRoot.getElementById('btn-save-pin').addEventListener('click', ()=>this._savePin());
     
     this.shadowRoot.getElementById('pin-close').addEventListener('click', ()=>this._closePinModal());
@@ -370,134 +369,26 @@ class ArgusPanel extends HTMLElement {
   
   _renderAutomationsList() {
       const el = this.shadowRoot.getElementById('auto-view');
-      if (!this._automations.length) {
-          el.innerHTML = '<div class="empty"><strong>No hay reglas</strong><span>Crea tu primera automatización de Argus.</span></div>';
-          return;
-      }
+      const automations = Object.values(this.hass?.states || {}).filter(s => s.entity_id.startsWith('automation.') && (s.attributes.friendly_name || '').toLowerCase().includes('argus'));
       
-      const evtNames = { 'armed': '🛡️ Armado', 'disarmed': '🔓 Desarmado', 'triggered': '🚨 Disparado', 'arming': '⏳ Armando (Cuenta regresiva)' };
-      
-      el.innerHTML = '<div style="display:grid;gap:10px">' + this._automations.map((a, idx) => `
+      const listHtml = automations.length ? automations.map((a) => `
         <div class="list-item" style="justify-content:space-between">
             <div>
-                <div style="font-weight:700">Cuando: ${evtNames[a.event] || a.event} ${a.condition ? '<span class="badge">Condición</span>' : ''}</div>
-                <div class="small">${a.actions?.length || 0} acciones configuradas</div>
+                <div style="font-weight:700">${a.attributes.friendly_name || a.entity_id}</div>
+                <div class="small">Última ejecución: ${a.attributes.last_triggered ? new Date(a.attributes.last_triggered).toLocaleString() : 'Nunca'}</div>
             </div>
-            <button class="ghost danger" style="padding:4px 8px" data-del-auto="${idx}">🗑️</button>
+            <button class="ghost" style="padding:4px 8px" data-edit-auto="${a.entity_id.replace('automation.','')}">✏️ Abrir Editor Nátivo</button>
         </div>
-      `).join('') + '</div>';
+      `).join('') : '<div class="empty" style="text-align:center; padding: 20px;"><strong>No hay reglas vinculadas</strong><span style="display:block; margin-top:4px;">Usa el botón superior para crear una nueva automatización en Home Assistant. Te sugerimos nombrarla "[Argus] Mi regla..." para que nosotros podamos mostrarla en esta lista.</span></div>';
       
-      el.querySelectorAll('[data-del-auto]').forEach(btn => {
-          btn.addEventListener('click', async (e) => {
-              const idx = e.currentTarget.dataset.delAuto;
-              this._automations.splice(idx, 1);
-              try {
-                  await this._send('argus/save_automations', { automations: this._automations });
-                  this._renderAutomationsList();
-              } catch(err) { alert('Error al borrar'); }
+      el.innerHTML = '<div style="display:grid;gap:10px">' + listHtml + '</div>';
+      
+      el.querySelectorAll('[data-edit-auto]').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+              const id = e.currentTarget.dataset.editAuto;
+              history.pushState(null, "", "/config/automation/edit/" + id);
+              window.dispatchEvent(new CustomEvent("location-changed"));
           });
-      });
-  }
-  
-  _renderAutomationNew() {
-      const el = this.shadowRoot.getElementById('auto-view');
-      el.innerHTML = `
-        <div class="subsection">
-            <div class="field-group">
-                <label>CUANDO</label>
-                <select id="auto-event">
-                    <option value="armed">Sistema es Armado</option>
-                    <option value="disarmed">Sistema es Desarmado</option>
-                    <option value="triggered">Alarma se Dispara</option>
-                    <option value="arming">Cuenta regresiva (Arming) Inicia</option>
-                    <option value="sensor_opened">Sensor se Abre / Movimiento Detectado</option>
-                </select>
-            </div>
-            
-            <div class="field-group" style="padding-top:8px; border-top:1px solid rgba(120,120,120,0.1)">
-                <label>ENTONCES (Acción 1)</label>
-                <select id="auto-action">
-                    <option value="tts">🗣️ Anuncio de Texto a Voz (TTS)</option>
-                    <option value="turn_on">💡 Encender Entidad</option>
-                    <option value="trigger_alarm">🚨 Disparar la Alarma</option>
-                </select>
-            </div>
-            
-            <div id="auto-action-config"></div>
-            
-            <div class="save-row" style="margin-top:10px"><button class="primary" id="btn-save-auto">💾 Crear Regla</button><span class="status" id="auto-status"></span></div>
-        </div>
-      `;
-      
-      const configEl = this.shadowRoot.getElementById('auto-action-config');
-      const actionSel = this.shadowRoot.getElementById('auto-action');
-      
-      const renderConfig = () => {
-          const type = actionSel.value;
-          const evtType = this.shadowRoot.getElementById('auto-event').value;
-          
-          let html = '';
-          
-          if (evtType === 'sensor_opened') {
-              const sens = this._available.filter(x => ['binary_sensor','sensor','camera'].includes(x.domain)).map(e => `<option value="${e.entity_id}">${e.name || e.entity_id}</option>`).join('');
-              html += `<div class="field-group" style="margin-bottom:12px"><label>¿CUAL SENSOR / CÁMARA?</label><select id="auto-sensor">${sens}</select></div>`;
-          }
-          
-          if (type === 'tts') {
-              const engs = this._tts_engines.length ? this._tts_engines.map(e => `<option value="${e.entity_id}">${e.name}</option>`).join('') : '<option value="tts.google_translate_say">Google Translate</option><option value="tts.cloud_say">Nabu Casa Cloud</option>';
-              const players = this._media_players.length ? this._media_players.map(e => `<option value="${e.entity_id}">${e.name} (${e.entity_id})</option>`).join('') : '<option value="">Cargando reproductores...</option>';
-              html += `
-                <div class="two-col">
-                    <div class="field-group"><label>Motor TTS</label><select id="tts-engine">${engs}</select></div>
-                    <div class="field-group"><label>Altavoz</label><select id="tts-device">${players}</select></div>
-                </div>
-                <div class="field-group"><label>Mensaje Opcional a Leer</label><input type="text" id="tts-msg" placeholder="Escribe el mensaje..."></div>
-              `;
-          } else if (type === 'turn_on') {
-              const targets = this._available.filter(x => ['switch','light','siren'].includes(x.domain)).map(e => `<option value="${e.entity_id}">${e.name || e.entity_id}</option>`).join('');
-              html += `
-                <div class="field-group"><label>Entidad a encender</label><select id="turnon-entity">${targets}</select></div>
-              `;
-          }
-          configEl.innerHTML = html;
-      };
-      
-      actionSel.addEventListener('change', renderConfig);
-      this.shadowRoot.getElementById('auto-event').addEventListener('change', renderConfig);
-      renderConfig(); // initial render
-      
-      this.shadowRoot.getElementById('btn-save-auto').addEventListener('click', async () => {
-          const status = this.shadowRoot.getElementById('auto-status');
-          const type = actionSel.value;
-          const evtType = this.shadowRoot.getElementById('auto-event').value;
-          
-          const rule = { event: evtType, actions: [] };
-          
-          if (evtType === 'sensor_opened') {
-              const sens = this.shadowRoot.getElementById('auto-sensor').value;
-              if (!sens) { status.textContent='Selecciona un sensor'; status.className='status err'; return; }
-              rule.condition = { type: 'entity_id', value: sens };
-          }
-          
-          if (type === 'tts') {
-              const dev = this.shadowRoot.getElementById('tts-device').value;
-              if(!dev) { status.textContent='Selecciona un altavoz'; status.className='status err'; return; }
-              rule.actions.push({ type: 'tts', engine: this.shadowRoot.getElementById('tts-engine').value, device: dev, message: this.shadowRoot.getElementById('tts-msg').value });
-          } else if (type === 'turn_on') {
-              const ent = this.shadowRoot.getElementById('turnon-entity').value;
-              if(!ent) { status.textContent='Selecciona una entidad'; status.className='status err'; return; }
-              rule.actions.push({ type: 'turn_on', entities: [ent] });
-          } else if (type === 'trigger_alarm') {
-              rule.actions.push({ type: 'trigger_alarm' });
-          }
-          
-          this._automations.push(rule);
-          try {
-              await this._send('argus/save_automations', { automations: this._automations });
-              this.shadowRoot.getElementById('tab-auto-list').click();
-          } catch(err) {
-              status.textContent = 'Error: ' + err.message; status.className = 'status err';
-          }
       });
   }
   _renderEntries() {
