@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.8.3
+ * Argus Home Hub – v0.8.8
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated sensor (actual vs apparent fix),
@@ -116,6 +116,7 @@ _tmpl.innerHTML = `
   .btn-night.active{--btn-bg:rgba(30,136,229,0.3); --btn-shadow:rgba(30,136,229,0.4)}
   .btn-vacation.active{--btn-bg:rgba(156,39,176,0.3); --btn-shadow:rgba(156,39,176,0.4)}
   .btn-disarm{--btn-bg:rgba(67,160,71,0.2); margin-top:4px}
+  .btn-disarm.active{--btn-bg:rgba(67,160,71,0.35);--btn-shadow:rgba(67,160,71,0.5);border-color:rgba(67,160,71,0.6)!important;box-shadow:0 0 25px rgba(67,160,71,0.45)!important}
   
   .entry-icon{display:flex;justify-content:center;align-items:center;perspective:1000px}
   .entry-icon img{max-width:100%;height:auto;filter:drop-shadow(0 10px 20px rgba(0,0,0,0.4));animation:float-icon 4s ease-in-out infinite}
@@ -615,27 +616,13 @@ class ArgusPanel extends HTMLElement {
                      || weatherEntities.find(s => s.state && s.state !== 'unknown' && s.state !== 'unavailable')
                      || { state: 'sunny', attributes: { temperature: 24, temperature_unit: '°C' } };
 
-    // Temperature: prefer dedicated sensor (actual temp, not apparent/feels-like)
-    // sensor.apple_weather_temperature is actual; weather entity can show apparent
-    const wxTempSensor = Object.values(this._hass?.states || {}).find(s =>
-      s.entity_id.startsWith('sensor.') &&
-      (s.entity_id.includes('apple_weather') || s.entity_id.includes('outside') ||
-       s.entity_id.includes('outdoor') || s.entity_id.includes('exterior')) &&
-      (s.entity_id.endsWith('_temperature') || s.entity_id.endsWith('_temp')) &&
-      !s.entity_id.includes('apparent') && !s.entity_id.includes('feels') &&
-      !s.entity_id.includes('dew') && !s.entity_id.includes('wet_bulb') &&
-      !isNaN(parseFloat(s.state))
-    );
+    // Temperature v0.8.8: use weather entity's temperature attribute directly
+    // Avoids sensor mismatch where a found sensor returns apparent/feels-like temp
     let rawTemp, rawUnit;
-    if (wxTempSensor) {
-      rawTemp = parseFloat(wxTempSensor.state);
-      rawUnit = wxTempSensor.attributes?.unit_of_measurement || '°C';
-    } else {
-      rawTemp = (typeof weatherEnt.attributes?.temperature === 'number')
-                ? weatherEnt.attributes.temperature : null;
-      rawUnit = weatherEnt.attributes?.temperature_unit
-                || this._hass?.config?.unit_system?.temperature || '°C';
-    }
+    rawTemp = (typeof weatherEnt.attributes?.temperature === 'number')
+              ? weatherEnt.attributes.temperature : null;
+    rawUnit = weatherEnt.attributes?.temperature_unit
+              || this._hass?.config?.unit_system?.temperature || '°C';
     let temp, unit;
     if (rawUnit === '°F' || rawUnit === 'F') {
       temp = rawTemp !== null ? Math.round((rawTemp - 32) * 5 / 9) : '--';
@@ -687,11 +674,11 @@ class ArgusPanel extends HTMLElement {
               <button class="liquid-btn btn-home ${state==='armed_home'?'active':''}" data-idx="${idx}" data-action="home">🏠 EN CASA</button>
               <button class="liquid-btn btn-away ${state==='armed_away'?'active':''}" data-idx="${idx}" data-action="away">🔒 AUSENTE</button>
               <button class="liquid-btn btn-night ${state==='armed_night'?'active':''}" data-idx="${idx}" data-action="night">🌙 NOCHE</button>
-              <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm">🔓 DESARMADO</button>
+              <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg> ${t.disarmed}</button>
             </div>
 
             <div class="entry-icon">
-              ${triggered ? '<div style="font-size:90px;filter:drop-shadow(0 0 30px #f00)">🚨</div>' : `<img src="/api/argus_static/${svgName}?v=0.8.3">`}
+              ${triggered ? '<div style="font-size:90px;filter:drop-shadow(0 0 30px #f00)">🚨</div>' : `<img src="/api/argus_static/${svgName}?v=0.8.8">`}
             </div>
           </div>
         </article>`;
