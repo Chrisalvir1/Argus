@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.6.8
+ * Argus Home Hub – v0.7.0
  * Complete, self-contained custom element.
  * Fixes: blank screen (missing template declaration, broken ID refs),
  * Adds: notifications section, multi-user PINs, admin access control.
@@ -558,6 +558,17 @@ class ArgusPanel extends HTMLElement {
       const trigBox = triggeredBy
         ? `<div class="trig-box">🚨 ${this._hass?.states[triggeredBy]?.attributes?.friendly_name || triggeredBy}</div>`
         : '';
+        
+      let animSvg = '';
+      if (!isUnavail) {
+        let svgName = 'mode_disarmed.svg';
+        if (state === 'armed_home') svgName = 'mode_home.svg';
+        else if (state === 'armed_away') svgName = 'mode_away.svg';
+        else if (state === 'armed_night') svgName = 'mode_night.svg';
+        else if (state === 'armed_vacation') svgName = 'mode_vacation.svg';
+        
+        animSvg = `<img src="/api/argus_static/${svgName}" width="65" height="65" style="object-fit:contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));" alt="${state}">`;
+      }
 
       return `<article class="entry" style="${triggered ? 'border-color:var(--error-color)' : ''}">
         <div style="display:flex;justify-content:space-between;align-items:center">
@@ -565,9 +576,8 @@ class ArgusPanel extends HTMLElement {
             <div class="entry-title">${e.title || 'Argus'}</div>
             <span class="badge ${state}" style="margin-top:6px">${label}</span>
           </div>
-          ${triggered ? '<div style="font-size:36px">🚨</div>' : ''}
+          ${triggered ? '<div style="font-size:36px">🚨</div>' : (animSvg ? `<div style="margin-left: 10px">${animSvg}</div>` : '')}
         </div>
-        <div class="meta">${e.entity_id || '—'}</div>
         ${actionBtns}
         ${trigBox}
       </article>`;

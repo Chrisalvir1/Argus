@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+<style>
+  /* Clouds drifting right-to-left */
+  .cloud1 { animation: drift1 14s linear infinite; }
+  .cloud2 { animation: drift2 18s linear infinite 3s; }
+  @keyframes drift1 { from { transform: translateX(420px); } to { transform: translateX(-100px); } }
+  @keyframes drift2 { from { transform: translateX(420px); } to { transform: translateX(-100px); } }
+
+  /* Airplane diagonal flight — bottom-left to upper-right */
+  .plane { animation: fly 6s linear infinite; }
+  @keyframes fly {
+    from { transform: translate(-60px, 80px) rotate(-20deg); }
+    to   { transform: translate(460px, -80px) rotate(-20deg); }
+  }
+
+  /* Plane trail */
+  .trail { animation: fly 6s linear infinite; opacity:.6; }
+
+  /* Flag wave */
+  .flag { transform-origin: 196px 160px; animation: wave 1.5s ease-in-out infinite alternate; }
+  @keyframes wave { from { transform: rotate(-8deg); } to { transform: rotate(8deg); } }
+</style>
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#bae6fd"/>
+    <stop offset="100%" stop-color="#e0f7ff"/>
+  </linearGradient>
+</defs>
+
+<!-- Sky background (subtle) -->
+<rect width="400" height="400" fill="none"/>
+<rect x="0" y="0" width="400" height="370" fill="url(#sky)" opacity="0.25"/>
+
+<!-- ── CLOUDS ── -->
+<g class="cloud1">
+  <!-- Cloud 1 at y=70 -->
+  <ellipse cx="-150" cy="70" rx="55" ry="28" fill="white" opacity="0.85"/>
+  <ellipse cx="-125" cy="58" rx="35" ry="24" fill="white" opacity="0.85"/>
+  <ellipse cx="-175" cy="62" rx="30" ry="20" fill="white" opacity="0.85"/>
+</g>
+<g class="cloud2">
+  <!-- Cloud 2 at y=130 -->
+  <ellipse cx="-120" cy="130" rx="65" ry="30" fill="white" opacity="0.85"/>
+  <ellipse cx="-90"  cy="115" rx="40" ry="26" fill="white" opacity="0.85"/>
+  <ellipse cx="-150" cy="120" rx="36" ry="22" fill="white" opacity="0.85"/>
+</g>
+
+<!-- ── AIRPLANE ── -->
+<!-- Dashed trail behind plane -->
+<g class="trail">
+  <line x1="-60" y1="82" x2="-95" y2="100"
+        stroke="#38bdf8" stroke-width="2" stroke-dasharray="8 6" opacity="0.5"/>
+  <line x1="-68" y1="88" x2="-110" y2="108"
+        stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="6 8" opacity="0.3"/>
+</g>
+<!-- Plane silhouette -->
+<g class="plane">
+  <!-- Fuselage -->
+  <ellipse cx="-50" cy="75" rx="30" ry="9" fill="#1e3a5f"/>
+  <!-- Nose -->
+  <ellipse cx="-21" cy="75" rx="9" ry="6" fill="#1e3a5f"/>
+  <!-- Tail -->
+  <polygon points="-79,75 -88,62 -82,75" fill="#1e3a5f"/>
+  <!-- Wings -->
+  <polygon points="-55,75 -40,75 -35,95 -70,95" fill="#1e3a5f"/>
+  <polygon points="-55,75 -40,75 -35,56 -70,56" fill="#1e3a5f" opacity="0.7"/>
+  <!-- Tail fin -->
+  <polygon points="-79,75 -82,62 -72,72" fill="#1e3a5f"/>
+  <!-- Windows (tiny yellow dots) -->
+  <circle cx="-62" cy="73" r="2.5" fill="#fbbf24" opacity="0.85"/>
+  <circle cx="-52" cy="72" r="2.5" fill="#fbbf24" opacity="0.85"/>
+  <circle cx="-42" cy="72" r="2.5" fill="#fbbf24" opacity="0.85"/>
+  <circle cx="-32" cy="73" r="2.5" fill="#fbbf24" opacity="0.85"/>
+</g>
+
+<!-- ── HOUSE ── -->
+<!-- Walls -->
+<rect x="150" y="240" width="170" height="130" rx="4" fill="#94a3b8"/>
+<!-- Brick lines -->
+<g fill="none" stroke="#8099b0" stroke-width="1" opacity="0.45">
+  <line x1="150" y1="262" x2="320" y2="262"/>
+  <line x1="150" y1="284" x2="320" y2="284"/>
+  <line x1="150" y1="306" x2="320" y2="306"/>
+  <line x1="150" y1="328" x2="320" y2="328"/>
+  <line x1="190" y1="240" x2="190" y2="262"/><line x1="235" y1="240" x2="235" y2="262"/><line x1="280" y1="240" x2="280" y2="262"/>
+  <line x1="168" y1="262" x2="168" y2="284"/><line x1="213" y1="262" x2="213" y2="284"/><line x1="258" y1="262" x2="258" y2="284"/>
+</g>
+<!-- Roof -->
+<polygon points="138,242 235,172 322,242" fill="#64748b"/>
+<polygon points="138,242 235,172 322,242" fill="none" stroke="#475569" stroke-width="2"/>
+<!-- Door -->
+<rect x="208" y="310" width="44" height="60" rx="5" fill="#475569"/>
+<rect x="211" y="313" width="38" height="54" rx="4" fill="#334155"/>
+<!-- Window -->
+<rect x="162" y="255" width="42" height="36" rx="4" fill="#bae6fd" opacity="0.7"/>
+<rect x="268" y="255" width="42" height="36" rx="4" fill="#bae6fd" opacity="0.7"/>
+<line x1="183" y1="255" x2="183" y2="291" stroke="white" stroke-width="1.5" opacity="0.6"/>
+<line x1="162" y1="273" x2="204" y2="273" stroke="white" stroke-width="1.5" opacity="0.6"/>
+<line x1="289" y1="255" x2="289" y2="291" stroke="white" stroke-width="1.5" opacity="0.6"/>
+<line x1="268" y1="273" x2="310" y2="273" stroke="white" stroke-width="1.5" opacity="0.6"/>
+
+<!-- ── FLAG POLE on roof ── -->
+<line x1="196" y1="172" x2="196" y2="148" stroke="#475569" stroke-width="2.5"/>
+<!-- Waving flag -->
+<g class="flag">
+  <path d="M196 150 Q210 153 220 157 Q210 161 196 162 Z" fill="#2dd4bf"/>
+</g>
+
+<!-- Ground -->
+<rect x="100" y="368" width="280" height="12" rx="6" fill="#475569" opacity="0.35"/>
+</svg>

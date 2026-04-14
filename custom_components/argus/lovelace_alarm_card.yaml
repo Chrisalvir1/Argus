@@ -1,0 +1,49 @@
+type: custom:button-card
+entity: alarm_control_panel.argus
+show_name: false
+show_icon: false
+show_label: true
+show_state: false
+styles:
+  card:
+    - background-color: "#0f172a"
+    - border-radius: 16px
+    - padding: 24px
+  custom_fields:
+    animation:
+      - margin-bottom: 16px
+      - display: flex
+      - justify-content: center
+  label:
+    - font-size: 18px
+    - font-weight: 600
+    - justify-self: center
+label: >
+  [[[
+    if (entity.state === 'armed_home') return 'Modo En Casa';
+    if (entity.state === 'armed_away') return 'Modo Ausente';
+    if (entity.state === 'armed_night') return 'Modo Noche';
+    if (entity.state === 'armed_vacation') return 'Modo Vacaciones';
+    if (entity.state === 'disarmed') return 'Desarmado';
+    if (entity.state === 'triggered') return '🚨 ¡DISPARADA! 🚨';
+    return entity.state;
+  ]]]
+custom_fields:
+  animation: >
+    [[[
+      let img = 'mode_disarmed.svg';
+      if (entity.state === 'armed_home') img = 'mode_home.svg';
+      else if (entity.state === 'armed_away') img = 'mode_away.svg';
+      else if (entity.state === 'armed_night') img = 'mode_night.svg';
+      else if (entity.state === 'armed_vacation') img = 'mode_vacation.svg';
+      
+      let color = '#22c55e'; // default green
+      if (entity.state === 'armed_home') color = '#2dd4bf';
+      else if (entity.state === 'armed_away') color = '#f59e0b';
+      else if (entity.state === 'armed_night') color = '#818cf8';
+      else if (entity.state === 'armed_vacation') color = '#38bdf8';
+      
+      this.style.color = color;
+
+      return `<img src="/local/alarm_animations/${img}" width="160" height="160" style="object-fit: contain;">`;
+    ]]]

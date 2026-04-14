@@ -616,7 +616,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         }.get(target)
 
         if mode_key:
-            mode_config = self._ui_data.get("modes", {}).get(mode_key, {})
+            mode_config = self._ui_config.get("modes", {}).get(mode_key, {})
             if mode_config.get("require_closed", False):
                 sensors = mode_config.get("sensors", [])
                 open_names = []
