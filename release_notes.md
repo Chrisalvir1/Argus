@@ -1,19 +1,15 @@
-## Argus v0.5.1 — Fix armado lento + desarme bloqueado
+## Argus v0.7.0 — Animaciones SVG + Mejoras de Interfaz
 
-### Bugs corregidos
+### 🔥 Lo nuevo en esta versión
 
-- **Armado instantaneo por defecto** — `DEFAULT_ARMING_TIME` cambiado de 60s a 0s. Las nuevas instalaciones arman de inmediato sin delay de salida. Las existentes pueden cambiarlo en Opciones.
-- **Desarme siempre funciona** — El boton Desarmar ya no es rechazado silenciosamente. Ahora solo se requiere codigo para desarmar si `Codigo requerido para armar` esta activado. Antes cualquier instalacion con un PIN configurado bloqueaba el desarme desde el panel.
-- **Sync a alarma vinculada no bloquea** — `blocking=True` cambiado a `blocking=False` en la sincronizacion con la entidad vinculada (HomeKit/Aqara). Evita que una alarma vinculada lenta bloquee el desarme de Argus.
+- **Animaciones SVG Dinámicas:** Se agregaron 5 animaciones personalizadas y fluidas que cambian según el estado de la alarma (En Casa, Ausente, Noche, Vacaciones y Desarmado) directamente en el panel de Argus Home Hub.
+- **Diseño Premium:** Se eliminó la visualización de los IDs de entidad (`alarm_control_panel.argus_alarm`) debajo de las instancias para limpiar la interfaz.
+- **Correcciones Críticas:** Se arregló el bug en la lógica de "Bloquear armado si hay sensores abiertos" que impedía que funcionara correctamente en versiones recientes.
+- **Optimización de Caché:** Se incrementó la versión interna del frontend (`v=0.7.0`) para asegurar que el navegador cargue las nuevas animaciones de inmediato sin necesidad de borrar caché manualmente.
 
-### Deploy en HA Terminal
+### 📋 Nota para HACS
+Si HACS no detecta la actualización automáticamente, ve a **HACS > Argus > Tres puntos > Update Information** y luego selecciona **Redownload** eligiendo la versión **v0.7.0**.
 
-```bash
-REPO=https://raw.githubusercontent.com/Chrisalvir1/Argus/main/custom_components/argus
-BASE=/config/custom_components/argus
-curl -sf "$REPO/alarm_control_panel.py" -o "$BASE/alarm_control_panel.py" && echo OK
-curl -sf "$REPO/const.py" -o "$BASE/const.py" && echo OK
-ha core restart
-```
+---
 
-> Si el armado sigue siendo lento, ve a Integraciones > Argus > Configurar y cambia el **Tiempo de armado** a 0.
+### Versión 0.7.0 — by Antigravity AI
