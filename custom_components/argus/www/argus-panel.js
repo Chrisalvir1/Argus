@@ -178,39 +178,53 @@ _tmpl.innerHTML = `
     </div>
   </div>
 
-  <!-- ROW 1: Instances + Modes -->
-  <div class="grid">
-    <section class="glass panel">
-      <h2 id="h-instances"></h2>
-      <div id="entries"></div>
-      <!-- Activity log -->
-      <h2 id="h-activity-log" style="margin-top:20px"></h2>
-      <div id="activity-log" style="display:grid;gap:8px;max-height:260px;overflow-y:auto"></div>
-    </section>
-    <section class="glass panel">
-      <h2 id="h-modes"></h2>
-      <div class="tabs" id="mode-tabs"></div>
-      <div id="mode-view"></div>
-    </section>
-  </div>
+  <!-- TWO-COLUMN LAYOUT -->
+  <div class="grid" style="align-items:start">
 
-  <!-- ROW 2: Automations + Settings -->
-  <div class="grid">
-    <section class="glass panel">
-      <h2 id="h-automations"></h2>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-        <span class="small" id="p-linked-rules"></span>
-        <button class="primary" id="btn-new-auto" style="padding:6px 14px;font-size:12px"></button>
-      </div>
-      <div id="auto-view"></div>
-    </section>
-    <section class="glass panel">
-      <h2 id="h-settings"></h2>
-      <div class="stack">
+    <!-- LEFT COLUMN -->
+    <div class="stack">
+      <!-- Instances -->
+      <section class="glass panel">
+        <h2 id="h-instances"></h2>
+        <div id="entries"></div>
+        <!-- Activity log -->
+        <h2 id="h-activity-log" style="margin-top:20px"></h2>
+        <div id="activity-log" style="display:grid;gap:8px;max-height:260px;overflow-y:auto"></div>
+      </section>
+
+      <!-- Automations -->
+      <section class="glass panel">
+        <h2 id="h-automations"></h2>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <span class="small" id="p-linked-rules"></span>
+          <button class="primary" id="btn-new-auto" style="padding:6px 14px;font-size:12px"></button>
+        </div>
+        <div id="auto-view"></div>
+      </section>
+
+      <!-- HomeKit -->
+      <section class="glass panel" id="homekit-section" style="display:none">
+        <h2 id="h-homekit"></h2>
+        <div id="homekit-content"></div>
+      </section>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="stack">
+      <!-- Modes -->
+      <section class="glass panel">
+        <h2 id="h-modes"></h2>
+        <div class="tabs" id="mode-tabs"></div>
+        <div id="mode-view"></div>
+      </section>
+
+      <!-- Settings -->
+      <section class="glass panel">
+        <h2 id="h-settings"></h2>
         <div class="subsection">
           <div class="subsection-title" id="t-change-pin"></div>
           <p class="small" id="p-pin-desc" style="margin:0"></p>
-      <div id="current-pin-display" style="font-size:13px;font-weight:700;color:var(--primary-color);margin-bottom:4px"></div>
+          <div id="current-pin-display" style="font-size:13px;font-weight:700;color:var(--primary-color);margin-bottom:4px"></div>
           <div class="two-col" style="gap:8px">
             <div class="field-group"><label id="l-new-pin"></label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*"></div>
             <div class="field-group"><label id="l-confirm-pin"></label><input type="password" id="new-pin-2" inputmode="numeric" pattern="[0-9]*"></div>
@@ -218,61 +232,51 @@ _tmpl.innerHTML = `
           <button class="primary" id="btn-save-pin" style="width:100%;margin-top:4px"></button>
           <span class="status" id="pin-status" style="font-size:12px"></span>
         </div>
-      </div>
-    </section>
-  </div>
+      </section>
 
-  <!-- ROW 3: Notifications -->
-  <section class="glass panel">
-    <h2 id="h-notifications"></h2>
-    <p class="small" id="p-notif-desc" style="margin-bottom:10px"></p>
-
-    <!-- Push targets (notify.*) -->
-    <div class="subsection" style="margin-bottom:12px">
-      <div class="subsection-title" id="t-push-title">📱 Notificaciones Push (Móvil)</div>
-      <div id="notif-targets" class="chip-list" style="min-height:28px"></div>
-      <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
-        <select id="notif-select" style="flex:1"></select>
-        <button class="ghost" id="btn-add-notif" style="white-space:nowrap">+ Agregar</button>
-      </div>
-    </div>
-
-    <!-- TTS / Audio targets (media_player.*) -->
-    <div class="subsection" style="margin-bottom:12px">
-      <div class="subsection-title" id="t-tts-title">🔊 Anuncios de Voz (Airplay · Cast · Altavoces)</div>
-      <div id="tts-targets" class="chip-list" style="min-height:28px"></div>
-      <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
-        <select id="tts-select" style="flex:1"></select>
-        <button class="ghost" id="btn-add-tts" style="white-space:nowrap">+ Agregar</button>
-      </div>
-    </div>
-
-    <div class="save-row" style="margin-top:10px"><button class="primary" id="btn-save-notif"></button><span class="status" id="notif-status"></span></div>
-  </section>
-
-  <!-- ROW 4: Users -->
-  <section class="glass panel">
-    <h2 id="h-users"></h2>
-    <p class="small" id="p-admin-only" style="margin-bottom:14px;color:var(--warning-color,#fb8c00)"></p>
-    <div id="users-list" style="display:grid;gap:10px;margin-bottom:16px"></div>
-    <div class="subsection" id="add-user-form">
-      <div class="subsection-title" id="t-add-user"></div>
-      <div class="three-col">
-        <div class="field-group"><label id="l-username"></label><input type="text" id="new-user-name" autocomplete="off"></div>
-        <div class="field-group"><label id="l-user-pin"></label><input type="password" id="new-user-pin" inputmode="numeric" pattern="[0-9]*"></div>
-        <div class="field-group" style="justify-content:end">
-          <label id="l-is-admin" class="checkbox-label" style="margin-top:20px"><input type="checkbox" id="new-user-admin"> <span id="s-is-admin"></span></label>
+      <!-- Notifications -->
+      <section class="glass panel">
+        <h2 id="h-notifications"></h2>
+        <p class="small" id="p-notif-desc" style="margin-bottom:10px"></p>
+        <div class="subsection" style="margin-bottom:12px">
+          <div class="subsection-title" id="t-push-title">📱 Notificaciones Push (Móvil)</div>
+          <div id="notif-targets" class="chip-list" style="min-height:28px"></div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+            <select id="notif-select" style="flex:1"></select>
+            <button class="ghost" id="btn-add-notif" style="white-space:nowrap">+ Agregar</button>
+          </div>
         </div>
-      </div>
-      <div class="save-row"><button class="primary" id="btn-save-user"></button><span class="status" id="user-status"></span></div>
-    </div>
-  </section>
+        <div class="subsection" style="margin-bottom:12px">
+          <div class="subsection-title" id="t-tts-title">🔊 Anuncios de Voz (Airplay · Cast · Altavoces)</div>
+          <div id="tts-targets" class="chip-list" style="min-height:28px"></div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+            <select id="tts-select" style="flex:1"></select>
+            <button class="ghost" id="btn-add-tts" style="white-space:nowrap">+ Agregar</button>
+          </div>
+        </div>
+        <div class="save-row" style="margin-top:10px"><button class="primary" id="btn-save-notif"></button><span class="status" id="notif-status"></span></div>
+      </section>
 
-  <!-- ROW 5: HomeKit -->
-  <section class="glass panel" id="homekit-section" style="display:none">
-    <h2 id="h-homekit"></h2>
-    <div id="homekit-content"></div>
-  </section>
+      <!-- Users -->
+      <section class="glass panel">
+        <h2 id="h-users"></h2>
+        <p class="small" id="p-admin-only" style="margin-bottom:14px;color:var(--warning-color,#fb8c00)"></p>
+        <div id="users-list" style="display:grid;gap:10px;margin-bottom:16px"></div>
+        <div class="subsection" id="add-user-form">
+          <div class="subsection-title" id="t-add-user"></div>
+          <div class="three-col">
+            <div class="field-group"><label id="l-username"></label><input type="text" id="new-user-name" autocomplete="off"></div>
+            <div class="field-group"><label id="l-user-pin"></label><input type="password" id="new-user-pin" inputmode="numeric" pattern="[0-9]*"></div>
+            <div class="field-group" style="justify-content:end">
+              <label id="l-is-admin" class="checkbox-label" style="margin-top:20px"><input type="checkbox" id="new-user-admin"> <span id="s-is-admin"></span></label>
+            </div>
+          </div>
+          <div class="save-row"><button class="primary" id="btn-save-user"></button><span class="status" id="user-status"></span></div>
+        </div>
+      </section>
+    </div> <!-- /RIGHT COLUMN -->
+
+  </div> <!-- /grid -->
 </div>
 
 <!-- Selector modal -->
@@ -941,8 +945,11 @@ class ArgusPanel extends HTMLElement {
       }
     } catch (_) {}
 
+    // If we have no code, but we found a bridge, it means it is already paired
+    // to an Apple Home (the PIN notification is removed by HA upon successful pairing).
+    const isPaired = !code && bridgeName;
     const bridgeLabel = bridgeName || 'Argus Bridge';
-    const homeLabel   = homeName || null;
+    const homeLabel   = homeName || (isPaired ? 'Apple Home (Conectado)' : null);
 
     if (code && code.length >= 8) {
       const fmt = code.replace(/(\d{3})(\d{2})(\d{3})/, '$1-$2-$3');
@@ -957,10 +964,21 @@ class ArgusPanel extends HTMLElement {
           <div class="small">Security System · IP</div>
         </div>`;
       this._drawHKQR(code);
+    } else if (isPaired) {
+      cnt.innerHTML = `
+        <div style="display:grid;gap:10px">
+          <div style="display:flex;align-items:center;gap:12px;padding:8px 0">
+            <span style="font-size:32px;line-height:1">✅</span>
+            <div>
+              <div style="font-weight:700;font-size:15px;color:var(--success-color,#43a047)">¡Puente Vinculado!</div>
+              <div class="small" style="opacity:.7">El puente <b>${bridgeLabel}</b> está actualmente conectado a <b>${homeLabel}</b>.</div>
+            </div>
+          </div>
+        </div>`;
     } else {
       cnt.innerHTML = `
         <div style="display:grid;gap:10px">
-          ${bridgeLabel ? `<div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">🌉</span><div><div style="font-weight:700">${bridgeLabel}</div><div class="small">${homeLabel ? `${this._t('homekit_house')}: ${homeLabel}` : this._t('homekit_not_paired')}</div></div></div>` : ''}
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">🌉</span><div><div style="font-weight:700">${bridgeLabel}</div><div class="small">${this._t('homekit_not_paired')}</div></div></div>
           <p class="small" style="margin:0">Activa HomeKit Bridge en HA e incluye la entidad <code>alarm_control_panel.argus_*</code>.</p>
         </div>`;
     }
