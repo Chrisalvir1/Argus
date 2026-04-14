@@ -369,7 +369,7 @@ class ArgusPanel extends HTMLElement {
   
   _renderAutomationsList() {
       const el = this.shadowRoot.getElementById('auto-view');
-      const automations = Object.values(this.hass?.states || {}).filter(s => s.entity_id.startsWith('automation.') && (s.attributes.friendly_name || '').toLowerCase().includes('argus'));
+      const automations = Object.values(this.hass?.states || {}).filter(s => s.entity_id.startsWith('automation.'));
       
       const listHtml = automations.length ? automations.map((a) => `
         <div class="list-item" style="justify-content:space-between">
@@ -417,6 +417,26 @@ class ArgusPanel extends HTMLElement {
              <button class="${state==='armed_vacation'?'primary':'ghost'}" data-idx="${idx}" data-action="vacation">✈️ Vacaciones</button>
              <button class="danger" data-idx="${idx}" data-action="disarm">🔓 Desarmar</button>
            </div>`;
+           
+      const rawHaObj = this.hass?.states[e.entity_id] || {};
+      const triggeredBy = rawHaObj.attributes?.triggered_by;
+      const historyHtml = triggeredBy ? `
+      <div style="margin-top: 12px; padding: 12px; background: color-mix(in srgb, var(--error-color, #e53935) 10%, transparent); border-radius: 8px; border: 1px dashed var(--error-color, #e53935);">
+          <div style="font-size: 11px; font-weight: bold; color: var(--error-color, #e53935); text-transform: uppercase;">Último Motivo de Disparo</div>
+          <div style="margin-top: 6px; display: flex; align-items: center; gap: 8px;">
+               <span style="font-size: 20px;">🚨</span>
+               <div>
+                   <div style="font-weight: bold;">${triggeredBy === 'Regla Automática' ? triggeredBy : (this.hass?.states[triggeredBy]?.attributes?.friendly_name || triggeredBy)}</div>
+                   <div style="font-size: 12px; opacity: 0.8;">El sistema detectó una intrusión</div>
+               </div>
+          </div>
+      </div>
+      ` : `
+      <div style="margin-top: 12px; padding: 12px; background: rgba(120,120,120,0.05); border-radius: 8px; text-align: center;">
+          <div style="font-size: 12px; opacity: 0.6;">✅ Sin reportes de disparo recientes</div>
+      </div>
+      `;
+      
       return `<article class="entry" style="${triggered?'border-color:var(--error-color,#e53935);background:rgba(229,57,53,.06)':''}">
         <div style="display:flex;justify-content:space-between;align-items:flex-start">
           <div><div class="entry-title">${e.title||'Argus'}</div><div class="badge ${state}" style="margin-top:5px;font-size:13px;padding:5px 13px">${label}</div></div>
@@ -425,6 +445,7 @@ class ArgusPanel extends HTMLElement {
         <div class="meta" style="margin-top:4px">${e.entity_id||'sin entidad'}</div>
         ${isArmed&&!isUnavailable?`<div class="meta">${sensorLine}</div>`:''}
         ${actionBtns}
+        ${historyHtml}
       </article>`;
     }).join('');
     el.querySelectorAll('button[data-action]').forEach(btn => btn.addEventListener('click', (ev)=>this._handleAction(ev.currentTarget.dataset.idx, ev.currentTarget.dataset.action)));
@@ -494,9 +515,16 @@ class ArgusPanel extends HTMLElement {
     const q = (this.shadowRoot.getElementById('selector-search').value || '').toLowerCase().trim();
     const list = this.shadowRoot.getElementById('selector-list');
     const selected = this.shadowRoot.getElementById('selector-selected');
-    const allowedDomains = this._selectorTarget === 'sensor' ? ['binary_sensor','sensor'] : ['siren','switch'];
+    const allowedDomains = this._selectorTarget === 'sensor' ? ['binary_sensor','sensor','camera'] : ['siren','switch'];
     const items = this._available.filter(x => allowedDomains.includes(x.domain)).filter(x => !q || [x.entity_id, x.name, x.area, x.friendly_name].filter(Boolean).join(' ').toLowerCase().includes(q));
-    list.innerHTML = items.map(x => `<label class="list-item"><input type="checkbox" data-entity="${x.entity_id}" ${this._selected.includes(x.entity_id)?'checked':''}><div><div style="font-weight:700">${x.name || x.entity_id}</div><div class="small">${x.entity_id}${x.area ? ' · '+x.area : ''}</div></div></label>`).join('') || '<div class="small">Sin resultados</div>';
+    list.innerHTML = items.map(x => {
+        let stBadge = '';
+        if (this._selectorTarget === 'sensor') {
+            const isTr = this.hass?.states?.[x.entity_id]?.state === 'on';
+            stBadge = `<span class="badge ${isTr?'danger':'ok'}" style="margin-left:6px; font-size:10px; padding:2px 5px;">${isTr?'Abierto':'Cerrado'}</span>`;
+        }
+        return `<label class="list-item"><input type="checkbox" data-entity="${x.entity_id}" ${this._selected.includes(x.entity_id)?'checked':''}><div><div style="font-weight:700">${x.name || x.entity_id} ${stBadge}</div><div class="small">${x.entity_id}${x.area ? ' · '+x.area : ''}</div></div></label>`;
+    }).join('') || '<div class="small">Sin resultados</div>';
     list.querySelectorAll('input[type=checkbox]').forEach(cb => cb.addEventListener('change', (e)=>{ const id=e.target.dataset.entity; if(e.target.checked){ if(!this._selected.includes(id)) this._selected.push(id); } else { this._selected = this._selected.filter(v=>v!==id); } this._renderSelector(); }));
     selected.innerHTML = this._selected.map(id => `<div class="list-item" style="justify-content:space-between"><div>${id}</div><button class="ghost" data-remove-selected="${id}">Quitar</button></div>`).join('') || '<div class="small">Aún no hay selecciones</div>';
     selected.querySelectorAll('[data-remove-selected]').forEach(b => b.addEventListener('click', ()=>{ this._selected = this._selected.filter(v => v !== b.dataset.removeSelected); this._renderSelector(); }));
