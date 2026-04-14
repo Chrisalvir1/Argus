@@ -114,6 +114,7 @@ async def ws_argus_dashboard(hass: HomeAssistant, connection, msg) -> None:
                 "state": state_obj.state if state_obj else "unavailable",
                 "attributes": dict(state_obj.attributes) if state_obj else {},
                 "config": dict(entry.data),
+                "options": dict(entry.options),
             }
         )
 

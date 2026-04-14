@@ -45,7 +45,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     _LOGGER.info(
         "Argus integration starting (versión %s)",
-        getattr(const, "VERSION", "0.6.5"),
+        getattr(const, "VERSION", "0.6.6"),
     )
     return True
 

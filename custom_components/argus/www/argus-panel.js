@@ -1,8 +1,66 @@
-/**
- * Argus Panel 0.6.3
- * Clean rebuild after selector refactor.
- */
-const template = document.createElement('template');
+const TEXTS = {
+  es: {
+    hero_title: 'Argus Home Hub',
+    hero_desc: 'Control de alarmas, modos, horarios, TTS y automatizaciones.',
+    instances: 'Instancias activas',
+    modes: 'Modos',
+    automations: '⚡ Automatizaciones',
+    linked_rules: 'Reglas vinculadas',
+    create_ha: '+ Crear en Home Assistant',
+    no_rules: 'No hay reglas vinculadas',
+    rules_tip: 'Usa el botón superior para crear una nueva automatización en Home Assistant.',
+    settings: '⚙️ Ajustes',
+    change_pin: 'Cambiar PIN Maestro',
+    pin_desc: 'Actualiza el código numérico para armar y desarmar.',
+    new_pin: 'Nuevo PIN',
+    confirm_pin: 'Confirmar PIN',
+    update_pin: 'Actualizar PIN',
+    current_pin: 'PIN Actual',
+    security: '🔐 Seguridad',
+    homekit_title: '🏠 HomeKit & Matter',
+    close: 'Cerrar',
+    search_placeholder: 'Buscar por nombre, área o entity_id',
+    available: 'Disponibles',
+    selected: 'Seleccionadas',
+    clear: 'Limpiar',
+    accept: 'Aceptar',
+    introduce_pin: 'Introduce PIN',
+    pin_modal_desc: 'Introduce el PIN numérico para desarmar Argus',
+    confirm: '✓ Confirmar',
+    cancel: 'Cancelar'
+  },
+  en: {
+    hero_title: 'Argus Home Hub',
+    hero_desc: 'Alarm control, modes, schedules, TTS, and automations.',
+    instances: 'Active Instances',
+    modes: 'Modes',
+    automations: '⚡ Automations',
+    linked_rules: 'Linked Rules',
+    create_ha: '+ Create in Home Assistant',
+    no_rules: 'No linked rules',
+    rules_tip: 'Use the button above to create a new automation in Home Assistant.',
+    settings: '⚙️ Settings',
+    change_pin: 'Change Master PIN',
+    pin_desc: 'Update the numeric code to arm and disarm.',
+    new_pin: 'New PIN',
+    confirm_pin: 'Confirm PIN',
+    update_pin: 'Update PIN',
+    current_pin: 'Current PIN',
+    security: '🔐 Security',
+    homekit_title: '🏠 HomeKit & Matter',
+    close: 'Close',
+    search_placeholder: 'Search by name, area or entity_id',
+    available: 'Available',
+    selected: 'Selected',
+    clear: 'Clear',
+    accept: 'Accept',
+    introduce_pin: 'Introduce PIN',
+    pin_modal_desc: 'Enter the numeric PIN to disarm Argus',
+    confirm: '✓ Confirm',
+    cancel: 'Cancel'
+  }
+};
+
 template.innerHTML = `
   <style>
     :host{display:block;min-height:100vh;box-sizing:border-box;color:var(--primary-text-color);background:var(--lovelace-background,var(--primary-background-color));font-family:Inter,system-ui,sans-serif}
@@ -13,12 +71,11 @@ template.innerHTML = `
     .hero-icon{font-size:40px;line-height:1}
     .hero h1{margin:0 0 4px;font-size:26px;font-weight:700}
     .hero p{margin:0;font-size:14px;opacity:.68}
-    .grid{display:grid;grid-template-columns:1.35fr 1fr;gap:20px}
+    .grid{display:grid;grid-template-columns:1.35fr 1fr;gap:20px;align-items: start;}
     @media (max-width:860px){.grid{grid-template-columns:1fr}}
     .panel{padding:20px}
     .panel h2{margin:0 0 14px;font-size:16px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;opacity:.72}
     .entry{padding:16px;border-radius:16px;display:grid;gap:10px;background:color-mix(in srgb,var(--primary-color,#03a9f4) 6%,var(--card-background-color,#fff));border:1px solid color-mix(in srgb,var(--primary-color,#03a9f4) 16%,transparent);margin-bottom:12px}
-    .entry:last-child{margin-bottom:0}
     .entry-title{font-size:17px;font-weight:700}
     .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:rgba(3,169,244,.13);color:var(--primary-color,#03a9f4)}
     .badge.armed_away,.badge.armed_vacation{background:rgba(229,57,53,.12);color:var(--error-color,#e53935)}
@@ -37,9 +94,9 @@ template.innerHTML = `
     button.danger{background:rgba(229,57,53,.12);color:var(--error-color,#e53935)}
     button.success{background:rgba(67,160,71,.13);color:var(--success-color,#43a047)}
     button:hover:not(:disabled){opacity:.88}
-    textarea,input[type=text],input[type=time],select:not([multiple]){width:100%;border-radius:12px;border:1px solid var(--divider-color,#ccc);background:color-mix(in srgb,var(--card-background-color,#fff) 52%,transparent);color:var(--primary-text-color);padding:9px 12px;font-size:13px;outline:none;transition:border-color .2s}
+    textarea,input[type=text],input[type=time],input[type=password],select:not([multiple]){width:100%;border-radius:12px;border:1px solid var(--divider-color,#ccc);background:color-mix(in srgb,var(--card-background-color,#fff) 52%,transparent);color:var(--primary-text-color);padding:9px 12px;font-size:13px;outline:none;transition:border-color .2s}
     textarea{min-height:120px;resize:vertical;font:12.5px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace}
-    textarea:focus,input[type=text]:focus,input[type=time]:focus,select:not([multiple]):focus,select[multiple]:focus{border-color:var(--primary-color,#03a9f4)}
+    textarea:focus,input[type=text]:focus,input[type=time]:focus,input[type=password]:focus,select:not([multiple]):focus,select[multiple]:focus{border-color:var(--primary-color,#03a9f4)}
     .save-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:4px}
     .status{font-size:13px;flex:1;min-width:100px}
     .status.ok{color:var(--success-color,#43a047)}
@@ -88,17 +145,17 @@ template.innerHTML = `
     <div class="glass hero">
       <div class="hero-icon">🛡️</div>
       <div>
-        <h1>Argus Home Hub</h1>
-        <p>Control de alarmas, modos, horarios, TTS y automatizaciones.</p>
+        <h1 id="lbl-hero-title"></h1>
+        <p id="lbl-hero-desc"></p>
       </div>
     </div>
     <div class="grid">
       <section class="glass panel">
-        <h2>Instancias activas</h2>
+        <h2 id="lbl-instances"></h2>
         <div id="entries"></div>
       </section>
       <section class="glass panel">
-        <h2>Modos</h2>
+        <h2 id="lbl-modes"></h2>
         <div class="tabs" id="mode-tabs"></div>
         <div id="mode-view"></div>
       </section>
@@ -106,70 +163,71 @@ template.innerHTML = `
     
     <div class="grid">
       <section class="glass panel">
-        <h2>⚡ Automatizaciones</h2>
+        <h2 id="lbl-automations"></h2>
         <div class="tabs" id="auto-tabs" style="justify-content: space-between; align-items: center; padding-right: 8px;">
-            <div style="padding-left: 12px; font-weight: 600; font-size: 13px;">Reglas vinculadas</div>
-            <button class="primary" id="btn-new-ha-auto" style="padding: 4px 12px; font-size: 12px;">+ Crear en Home Assistant</button>
+            <div id="lbl-linked-rules" style="padding-left: 12px; font-weight: 600; font-size: 13px;"></div>
+            <button class="primary" id="btn-new-ha-auto" style="padding: 4px 12px; font-size: 12px;"></button>
         </div>
         <div id="auto-view" style="min-height: 100px; padding: 12px;"></div>
       </section>
       
       <section class="glass panel">
-        <h2>⚙️ Ajustes</h2>
+        <h2 id="lbl-settings"></h2>
         <div class="subsection">
-            <div class="subsection-title">Cambiar PIN Maestro</div>
-            <p class="meta" style="margin:0">Actualiza el código numérico para armar y desarmar.</p>
+            <div class="subsection-title" id="lbl-change-pin"></div>
+            <p class="meta" id="lbl-pin-desc" style="margin:0"></p>
+            <div style="margin-top: 8px; font-size: 13px; font-weight: bold; color: var(--primary-color);" id="current-pin-display"></div>
             <div class="two-col">
-                <div class="field-group"><label>Nuevo PIN</label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*" placeholder="Dejar vacío para sin código"></div>
-                <div class="field-group"><label>Confirmar PIN</label><input type="password" id="new-pin-2" inputmode="numeric" pattern="[0-9]*"></div>
+                <div class="field-group"><label id="lbl-new-pin"></label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*"></div>
+                <div class="field-group"><label id="lbl-confirm-pin"></label><input type="password" id="new-pin-2" inputmode="numeric" pattern="[0-9]*"></div>
             </div>
-            <div class="save-row"><button class="primary" id="btn-save-pin">Actualizar PIN</button><span class="status" id="pin-status"></span></div>
+            <div class="save-row"><button class="primary" id="btn-save-pin"></button><span class="status" id="pin-status"></span></div>
         </div>
       </section>
     </div>
     <section class="glass panel" id="homekit-section" style="display:none">
-      <h2>🏠 HomeKit &amp; Matter</h2>
+      <h2 id="lbl-homekit-title"></h2>
       <div id="homekit-content"></div>
     </section>
     <section class="glass panel" id="security-section">
-      <h2>🔐 Seguridad</h2>
+      <h2 id="lbl-security"></h2>
       <div id="security-content"></div>
     </section>
   </div>
   <div class="modal-backdrop" id="selector-modal" aria-hidden="true">
     <div class="modal">
       <div class="modal-head">
-        <h3 id="selector-title">Seleccionar dispositivos</h3>
-        <button class="ghost" id="selector-close">Cerrar</button>
+        <h3 id="selector-title"></h3>
+        <button class="ghost" id="selector-close"></button>
       </div>
-      <div class="search"><input id="selector-search" type="text" placeholder="Buscar por nombre, área o entity_id"></div>
+      <div class="search"><input id="selector-search" type="text"></div>
       <div class="modal-body">
         <div>
-          <div class="subsection-title" style="margin-bottom:8px">Disponibles</div>
+          <div class="subsection-title" id="lbl-available" style="margin-bottom:8px"></div>
           <div class="listbox" id="selector-list"></div>
         </div>
         <div>
-          <div class="subsection-title" style="margin-bottom:8px">Seleccionadas</div>
+          <div class="subsection-title" id="lbl-selected" style="margin-bottom:8px"></div>
           <div class="listbox" id="selector-selected"></div>
         </div>
       </div>
       <div class="modal-footer">
-        <div class="small" id="selector-count">0 seleccionadas</div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="ghost" id="selector-clear">Limpiar</button><button class="primary" id="selector-accept">Aceptar</button></div>
+        <div class="small" id="selector-count">0</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="ghost" id="lbl-clear"></button><button class="primary" id="lbl-accept"></button></div>
       </div>
     </div>
   </div>
   <div class="modal-backdrop pin-modal" id="pin-modal" aria-hidden="true">
     <div class="modal">
-      <div class="modal-head"><h3>🔒 Introduce PIN</h3><button class="ghost" id="pin-close">✕</button></div>
+      <div class="modal-head"><h3 id="lbl-introduce-pin"></h3><button class="ghost" id="pin-close">✕</button></div>
       <div style="display:grid;gap:10px">
-        <p class="small" style="text-align:center;margin:0">Introduce el PIN numérico para desarmar Argus</p>
+        <p id="lbl-pin-modal-desc" class="small" style="text-align:center;margin:0"></p>
         <input id="pin-input" class="pin-input" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="••••" autocomplete="off">
         <div id="pin-error" class="pin-error"></div>
       </div>
       <div class="modal-footer">
-        <button class="ghost" id="pin-cancel">Cancelar</button>
-        <button class="primary" id="pin-confirm">✓ Confirmar</button>
+        <button class="ghost" id="btn-pin-cancel"></button>
+        <button class="primary" id="btn-pin-confirm"></button>
       </div>
     </div>
   </div>
@@ -187,10 +245,48 @@ class ArgusPanel extends HTMLElement {
     }
   }
   get hass() { return this._hass; }
+  
+  _t(key) {
+    const lang = (this.hass?.language || 'es').split('-')[0];
+    const dict = TEXTS[lang] || TEXTS.en;
+    return dict[key] || key;
+  }
+
+  _applyTranslations() {
+    const ids = [
+      'hero_title', 'hero_desc', 'instances', 'modes', 'automations', 'linked_rules',
+      'settings', 'change_pin', 'pin_desc', 'new_pin', 'confirm_pin', 'security', 
+      'homekit_title', 'available', 'selected', 'clear', 'accept', 'introduce_pin', 
+      'pin_modal_desc'
+    ];
+    ids.forEach(id => {
+      const el = this.shadowRoot.getElementById(`lbl-${id.replace('_','-')}`);
+      if (el) el.textContent = this._t(id);
+    });
+    
+    // Buttons and placeholders
+    const btnNew = this.shadowRoot.getElementById('btn-new-ha-auto');
+    if (btnNew) btnNew.textContent = this._t('create_ha');
+    
+    const btnSavePin = this.shadowRoot.getElementById('btn-save-pin');
+    if (btnSavePin) btnSavePin.textContent = this._t('update_pin');
+
+    const search = this.shadowRoot.getElementById('selector-search');
+    if (search) search.placeholder = this._t('search_placeholder');
+
+    this.shadowRoot.getElementById('selector-close').textContent = this._t('close');
+    this.shadowRoot.getElementById('lbl-clear').textContent = this._t('clear');
+    this.shadowRoot.getElementById('lbl-accept').textContent = this._t('accept');
+
+    this.shadowRoot.getElementById('btn-pin-cancel').textContent = this._t('cancel');
+    this.shadowRoot.getElementById('btn-pin-confirm').textContent = this._t('confirm');
+  }
+
   connectedCallback() { this._init(); }
   async _init() {
     this._bindStatic();
     await this._connect();
+    this._applyTranslations();
     await this._load();
   }
   _bindStatic() {
@@ -281,7 +377,11 @@ class ArgusPanel extends HTMLElement {
     this._dashboard = dashboard;
     this._available = dashboard.available_entities || [];
     this._ui = dashboard.ui || { modes: {}, dashboard: {} };
-    this._automations = dashboard.ui?.automations || [];
+    // Set current PIN display
+    const currentPin = dashboard.entries?.[0]?.options?.code || '';
+    const pinDisp = this.shadowRoot.getElementById('current-pin-display');
+    if (pinDisp) pinDisp.textContent = currentPin ? `${this._t('current_pin')}: ${currentPin}` : '';
+
     this._renderEntries();
     this._renderModeTabs();
     this._renderModeView();
@@ -301,36 +401,43 @@ class ArgusPanel extends HTMLElement {
     if (!sec || !cnt) return;
     sec.style.display = '';
     let code = null;
+    let bridgeName = 'Argus Bridge';
     try {
-      // Try persistent_notification from HA HomeKit integration
-      const notifs = Object.values(this.hass?.states || {}).filter(s => s.entity_id.startsWith('persistent_notification.') && (s.attributes?.message||'').toLowerCase().includes('homekit'));
-      for (const n of notifs) {
-        const m = (n.attributes?.message||'').match(/(\d{3}-\d{2}-\d{3}|\d{8})/);
-        if (m) { code = m[1].replace(/-/g,''); break; }
+      // Find the bridge name from config entries if possible
+      const entries = await this.hass.callWS({type:'config_entries/get',domain:'homekit'}).catch(()=>[]);
+      for (const ent of (entries||[])) {
+          const inc = ent.options?.include_entities || [];
+          if (inc.includes('alarm_control_panel.argus_alarm')) {
+              bridgeName = ent.title || ent.data?.name || bridgeName;
+              code = ent.options?.code || ent.data?.code;
+              break;
+          }
       }
-      // Try config entries
+
       if (!code) {
-        const entries = await this.hass.callWS({type:'config_entries/get',domain:'homekit'}).catch(()=>[]);
-        for (const ent of (entries||[])) { const c=ent.options?.code||ent.data?.code; if(c){code=String(c).replace(/[^0-9]/g,'');break;} }
+        const notifs = Object.values(this.hass?.states || {}).filter(s => s.entity_id.startsWith('persistent_notification.') && (s.attributes?.message||'').toLowerCase().includes('homekit'));
+        for (const n of notifs) {
+            const m = (n.attributes?.message||'').match(/(\d{3}-\d{2}-\d{3}|\d{8})/);
+            if (m) { code = m[1].replace(/-/g,''); break; }
+        }
       }
     } catch(e) {}
-    if (code && code.length >= 8) {
-      const fmt = code.replace(/(\d{3})(\d{2})(\d{3})/,'$1-$2-$3');
+
+    if (code && String(code).length >= 8) {
+      const codeStr = String(code).replace(/[^0-9]/g,'');
+      const fmt = codeStr.replace(/(\d{3})(\d{2})(\d{3})/,'$1-$2-$3');
       cnt.innerHTML = `
         <div style="display:grid;gap:16px;justify-items:center;padding:8px 0">
-          <p class="meta" style="text-align:center">Abre <strong>Casa</strong> en tu iPhone → Agregar accesorio → Escanear código o introducir manualmente.</p>
+          <p class="meta" style="text-align:center">${this._t('homekit_desc') || 'Abre <strong>Casa</strong> en tu dispositivo Apple y escanea este código para vincular el puente.'}</p>
+          <div style="font-weight: bold; background: var(--primary-color); color: #fff; padding: 4px 12px; border-radius: 8px; font-size: 12px; margin-bottom: -8px;">${bridgeName}</div>
           <canvas id="hk-qr"></canvas>
           <div style="font-size:28px;font-weight:900;letter-spacing:6px;font-family:monospace;padding:10px 20px;border-radius:12px;background:color-mix(in srgb,var(--primary-color,#03a9f4) 8%,var(--card-background-color,#fff));border:2px dashed color-mix(in srgb,var(--primary-color,#03a9f4) 35%,transparent)">${fmt}</div>
-          <div class="small">Categoría: Security System (11) · Protocolo: IP</div>
         </div>`;
-      this._drawHomeKitQR(code);
+      this._drawHomeKitQR(codeStr);
     } else {
       cnt.innerHTML = `
         <div style="display:grid;gap:12px">
-          <p class="meta">Para vincular Argus con Apple HomeKit, activa <strong>HomeKit Bridge</strong> en Home Assistant e incluye la entidad <code>alarm_control_panel.argus_alarm</code>.</p>
-          <div style="padding:12px;border-radius:10px;background:color-mix(in srgb,var(--primary-color,#03a9f4) 7%,transparent);font-size:12px">
-            <strong>Pasos:</strong><br>1. HA → Configuración → Integraciones → Agregar → <em>HomeKit Bridge</em><br>2. Incluye la entidad de Argus<br>3. Escanea el QR que aparece en las Notificaciones de HA
-          </div>
+          <p class="meta">Víncula Argus con Apple HomeKit activando <strong>HomeKit Bridge</strong> en HA e incluyendo <code>alarm_control_panel.argus_alarm</code>.</p>
         </div>`;
     }
   }
@@ -348,103 +455,87 @@ class ArgusPanel extends HTMLElement {
     const status = this.shadowRoot.getElementById('pin-status');
     const p1 = this.shadowRoot.getElementById('new-pin-1').value;
     const p2 = this.shadowRoot.getElementById('new-pin-2').value;
-    
-    if (p1 !== p2) {
-        status.textContent = 'Error: Los PIN no coinciden';
-        status.className = 'status err';
-        return;
-    }
-    
+    if (p1 !== p2) { status.textContent = 'PIN mismatch'; status.className = 'status err'; return; }
     try {
       await this._send('argus/update_master_pin', { pin: p1 });
-      status.textContent = 'PIN actualizado';
-      status.className = 'status ok';
+      status.textContent = 'OK'; status.className = 'status ok';
       this.shadowRoot.getElementById('new-pin-1').value = '';
       this.shadowRoot.getElementById('new-pin-2').value = '';
-    } catch (err) {
-      status.textContent = `Error: ${err.message}`;
-      status.className = 'status err';
-    }
+      setTimeout(() => this._load(), 1000);
+    } catch (err) { status.textContent = err.message; status.className = 'status err'; }
   }
   
   _renderAutomationsList() {
       const el = this.shadowRoot.getElementById('auto-view');
-      const automations = Object.values(this.hass?.states || {}).filter(s => s.entity_id.startsWith('automation.'));
+      const alarmEntity = this._dashboard?.entries?.[0]?.entity_id || 'alarm_control_panel.argus_alarm';
+      
+      const automations = Object.values(this.hass?.states || {}).filter(s => {
+          if (!s.entity_id.startsWith('automation.')) return false;
+          const name = (s.attributes.friendly_name || '').toLowerCase();
+          const eid = s.entity_id.toLowerCase();
+          // Filter: name contains "argus" OR it mentions the alarm entity in attributes (if available)
+          return name.includes('argus') || eid.includes('argus');
+      });
       
       const listHtml = automations.length ? automations.map((a) => `
         <div class="list-item" style="justify-content:space-between">
             <div>
                 <div style="font-weight:700">${a.attributes.friendly_name || a.entity_id}</div>
-                <div class="small">Última ejecución: ${a.attributes.last_triggered ? new Date(a.attributes.last_triggered).toLocaleString() : 'Nunca'}</div>
+                <div class="small">${a.attributes.last_triggered ? new Date(a.attributes.last_triggered).toLocaleString() : '---'}</div>
             </div>
-            <button class="ghost" style="padding:4px 8px" data-edit-auto="${a.entity_id.replace('automation.','')}">✏️ Abrir Editor Nátivo</button>
+            <button class="ghost" style="padding:4px 8px" data-edit-auto="${a.entity_id.replace('automation.','')}">✏️</button>
         </div>
-      `).join('') : '<div class="empty" style="text-align:center; padding: 20px;"><strong>No hay reglas vinculadas</strong><span style="display:block; margin-top:4px;">Usa el botón superior para crear una nueva automatización en Home Assistant. Te sugerimos nombrarla "[Argus] Mi regla..." para que nosotros podamos mostrarla en esta lista.</span></div>';
+      `).join('') : `<div class="empty" style="text-align:center; padding: 20px;"><strong>${this._t('no_rules')}</strong><span style="display:block; margin-top:4px;">${this._t('rules_tip')}</span></div>`;
       
       el.innerHTML = '<div style="display:grid;gap:10px">' + listHtml + '</div>';
-      
-      el.querySelectorAll('[data-edit-auto]').forEach(btn => {
-          btn.addEventListener('click', (e) => {
-              const id = e.currentTarget.dataset.editAuto;
-              history.pushState(null, "", "/config/automation/edit/" + id);
-              window.dispatchEvent(new CustomEvent("location-changed"));
-          });
-      });
+      el.querySelectorAll('[data-edit-auto]').forEach(btn => btn.addEventListener('click', (e) => {
+          const id = e.currentTarget.dataset.editAuto;
+          history.pushState(null, "", "/config/automation/edit/" + id);
+          window.dispatchEvent(new CustomEvent("location-changed"));
+      }));
   }
   _renderEntries() {
     const el = this.shadowRoot.getElementById('entries');
     const entries = this._dashboard?.entries || [];
-    if (!entries.length) { el.innerHTML = '<div class="empty"><strong>No hay instancias</strong><span>Agrega una desde Configuración → Integraciones → Argus.</span></div>'; return; }
-    const LABELS = { disarmed:'🟢 Desarmado', armed_home:'🏠 Casa activo', armed_away:'🔴 Ausente activo', armed_night:'🌙 Noche activo', armed_vacation:'✈️ Vacaciones activo', arming:'⏳ Armando...', pending:'⏰ Cuenta regresiva', triggered:'🚨 ALARMA', unavailable:'⚠️ No disponible' };
+    if (!entries.length) { el.innerHTML = '<div class="empty"><strong>No instances</strong></div>'; return; }
+    
+    // Localized labels for alarm states
+    const LABELS = { 
+        disarmed: this._hass.localize('component.alarm_control_panel.state._.disarmed') || '🟢 Desarmado', 
+        armed_home: this._hass.localize('component.alarm_control_panel.state._.armed_home') || '🏠 En Casa', 
+        armed_away: this._hass.localize('component.alarm_control_panel.state._.armed_away') || '🔴 Ausente', 
+        armed_night: this._hass.localize('component.alarm_control_panel.state._.armed_night') || '🌙 Noche', 
+        armed_vacation: this._hass.localize('component.alarm_control_panel.state._.armed_vacation') || '✈️ Vacaciones',
+        arming: '⏳ ...', pending: '⏰ ...', triggered: '🚨 ALARMA', unavailable: '⚠️' 
+    };
+
     el.innerHTML = entries.map((e, idx) => {
       const live = this.hass?.states[e.entity_id]?.state;
       const state = live || e.state || 'unavailable';
-      const isUnavailable = !e.entity_id || (!live && state === 'unavailable');
-      const label = LABELS[state] || state.replaceAll('_',' ');
-      const modeKey = state.replace('armed_','');
-      const sensors = this._ui?.modes?.[modeKey]?.sensors || [];
-      const sirens  = this._ui?.modes?.[modeKey]?.sirens  || [];
-      const openSensors = sensors.filter(s => this.hass?.states[s]?.state === 'on');
+      const isUnavailable = !e.entity_id || state === 'unavailable';
+      const label = LABELS[state] || state;
       const triggered = state === 'triggered';
-      const isArmed = state.startsWith('armed_');
-      const sensorLine = sensors.length ? `${sensors.length} sensor${sensors.length>1?'es':''} · ${openSensors.length>0 ? '⚠️ '+openSensors.length+' abierto'+(openSensors.length>1?'s':'') : '✅ todos cerrados'} · ${sirens.length} sirena${sirens.length!==1?'s':''}` : 'Sin sensores configurados';
-      const actionBtns = isUnavailable
-        ? `<div class="unavailable-notice">⚠️ El platform <code>alarm_control_panel</code> no cargó. Ejecuta <code>ha core restart</code> en el Terminal de HA.</div>`
-        : `<div class="actions">
-             <button class="${state==='armed_home'?'primary':'ghost'}" data-idx="${idx}" data-action="home">🏠 Casa</button>
-             <button class="${state==='armed_away'?'primary':'ghost'}" data-idx="${idx}" data-action="away">🔴 Ausente</button>
-             <button class="${state==='armed_night'?'primary':'ghost'}" data-idx="${idx}" data-action="night">🌙 Noche</button>
-             <button class="${state==='armed_vacation'?'primary':'ghost'}" data-idx="${idx}" data-action="vacation">✈️ Vacaciones</button>
-             <button class="danger" data-idx="${idx}" data-action="disarm">🔓 Desarmar</button>
-           </div>`;
+      
+      const actionBtns = isUnavailable ? '' : `
+        <div class="actions">
+             <button class="${state==='armed_home'?'primary':'ghost'}" data-idx="${idx}" data-action="home">🏠</button>
+             <button class="${state==='armed_away'?'primary':'ghost'}" data-idx="${idx}" data-action="away">🔴</button>
+             <button class="${state==='armed_night'?'primary':'ghost'}" data-idx="${idx}" data-action="night">🌙</button>
+             <button class="danger" data-idx="${idx}" data-action="disarm">🔓</button>
+        </div>`;
            
       const rawHaObj = this.hass?.states[e.entity_id] || {};
       const triggeredBy = rawHaObj.attributes?.triggered_by;
       const historyHtml = triggeredBy ? `
-      <div style="margin-top: 12px; padding: 12px; background: color-mix(in srgb, var(--error-color, #e53935) 10%, transparent); border-radius: 8px; border: 1px dashed var(--error-color, #e53935);">
-          <div style="font-size: 11px; font-weight: bold; color: var(--error-color, #e53935); text-transform: uppercase;">Último Motivo de Disparo</div>
-          <div style="margin-top: 6px; display: flex; align-items: center; gap: 8px;">
-               <span style="font-size: 20px;">🚨</span>
-               <div>
-                   <div style="font-weight: bold;">${triggeredBy === 'Regla Automática' ? triggeredBy : (this.hass?.states[triggeredBy]?.attributes?.friendly_name || triggeredBy)}</div>
-                   <div style="font-size: 12px; opacity: 0.8;">El sistema detectó una intrusión</div>
-               </div>
-          </div>
-      </div>
-      ` : `
-      <div style="margin-top: 12px; padding: 12px; background: rgba(120,120,120,0.05); border-radius: 8px; text-align: center;">
-          <div style="font-size: 12px; opacity: 0.6;">✅ Sin reportes de disparo recientes</div>
-      </div>
-      `;
+      <div style="margin-top: 12px; padding: 10px; background: rgba(229,57,53,.1); border-radius: 8px; border: 1px dashed var(--error-color);">
+           <div style="font-weight: bold; color: var(--error-color); font-size: 11px;">${triggeredBy}</div>
+      </div>` : '';
       
-      return `<article class="entry" style="${triggered?'border-color:var(--error-color,#e53935);background:rgba(229,57,53,.06)':''}">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start">
-          <div><div class="entry-title">${e.title||'Argus'}</div><div class="badge ${state}" style="margin-top:5px;font-size:13px;padding:5px 13px">${label}</div></div>
-          ${triggered?'<div style="font-size:32px">🚨</div>':''}
+      return `<article class="entry" style="${triggered?'border-color:var(--error-color)':''}">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><div class="entry-title">${e.title}</div><div class="badge ${state}">${label}</div></div>
+          ${actionBtns}
         </div>
-        <div class="meta" style="margin-top:4px">${e.entity_id||'sin entidad'}</div>
-        ${isArmed&&!isUnavailable?`<div class="meta">${sensorLine}</div>`:''}
-        ${actionBtns}
         ${historyHtml}
       </article>`;
     }).join('');
@@ -453,7 +544,8 @@ class ArgusPanel extends HTMLElement {
   _renderModeTabs() {
     const tabs = this.shadowRoot.getElementById('mode-tabs');
     const modes = ['home','away','night','vacation'];
-    tabs.innerHTML = modes.map(m => `<div class="tab ${m===this._mode?'active':''}" data-mode="${m}">${m[0].toUpperCase()+m.slice(1)}</div>`).join('');
+    const lbls = { home: '🏠', away: '🔴', night: '🌙', vacation: '✈️' };
+    tabs.innerHTML = modes.map(m => `<div class="tab ${m===this._mode?'active':''}" data-mode="${m}">${lbls[m]} ${m.toUpperCase()}</div>`).join('');
     tabs.querySelectorAll('.tab').forEach(t => t.addEventListener('click', ()=>{ this._mode = t.dataset.mode; this._renderModeTabs(); this._renderModeView(); }));
   }
   _currentModeConfig() { const modes = this._ui?.modes || {}; return modes[this._mode] || {}; }
@@ -462,31 +554,21 @@ class ArgusPanel extends HTMLElement {
     const el = this.shadowRoot.getElementById('mode-view');
     const sensors = cfg.sensors || [];
     const sirens = cfg.sirens || [];
-    const days = cfg.days || [];
     el.innerHTML = `
       <div class="stack">
         <div class="subsection">
-          <div class="subsection-title">Sensores de intrusión</div>
-          <div class="chip-list" id="sensor-chips">${sensors.map(x=>this._chip(x,'sensor')).join('') || '<span class="small">Ninguno seleccionado</span>'}</div>
-          <div class="small">Usa el buscador, selecciona y pulsa Aceptar.</div>
-          <div><button class="ghost" data-open-selector="sensor">Buscar y seleccionar</button></div>
+          <div class="subsection-title">${this._t('available')}</div>
+          <div class="chip-list" id="sensor-chips">${sensors.map(x=>this._chip(x,'sensor')).join('') || `<span class="small">${this._t('none')}</span>`}</div>
+          <div><button class="ghost" data-open-selector="sensor">${this._t('search_placeholder')}</button></div>
         </div>
         <div class="subsection">
-          <div class="subsection-title">Sirenas vinculadas</div>
-          <div class="chip-list" id="siren-chips">${sirens.map(x=>this._chip(x,'siren')).join('') || '<span class="small">Ninguna seleccionada</span>'}</div>
-          <div class="small">Puedes escoger múltiples sirenas y confirmar al final.</div>
-          <div><button class="ghost" data-open-selector="siren">Buscar y seleccionar</button></div>
-        </div>
-        <div class="subsection">
-          <div class="subsection-title">Horarios de activación</div>
-          <div class="days-row">${['L','M','X','J','V','S','D'].map((d,i)=>`<button class="day-btn ${days.includes(i)?'sel':''}" data-day="${i}">${d}</button>`).join('')}</div>
-          <div class="two-col"><div class="field-group"><label>Hora activar</label><input id="arm-time" type="time" value="${cfg.arm_time || ''}"></div><div class="field-group"><label>Hora desactivar</label><input id="disarm-time" type="time" value="${cfg.disarm_time || ''}"></div></div>
-          <label class="checkbox-label"><input id="auto-schedule" type="checkbox" ${cfg.auto_schedule ? 'checked' : ''}> Activar horario automático</label>
+          <div class="subsection-title">Sirens</div>
+          <div class="chip-list" id="siren-chips">${sirens.map(x=>this._chip(x,'siren')).join('') || '<span class="small">---</span>'}</div>
+          <div><button class="ghost" data-open-selector="siren">${this._t('search_placeholder')}</button></div>
         </div>
       </div>
-      <div class="save-row" style="margin-top:14px"><button class="primary" id="save-mode">💾 Guardar modo</button><span class="status" id="mode-status"></span></div>
+      <div class="save-row" style="margin-top:14px"><button class="primary" id="save-mode">💾</button><span class="status" id="mode-status"></span></div>
     `;
-    el.querySelectorAll('[data-day]').forEach(btn => btn.addEventListener('click', ()=>btn.classList.toggle('sel')));
     el.querySelectorAll('[data-open-selector]').forEach(btn => btn.addEventListener('click', ()=>this._openModal(btn.dataset.openSelector)));
     el.querySelectorAll('[data-remove]').forEach(btn => btn.addEventListener('click', ()=>this._removeChip(btn.dataset.remove)));
     el.querySelector('#save-mode').addEventListener('click', ()=>this._saveMode());
