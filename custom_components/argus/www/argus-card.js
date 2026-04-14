@@ -1,5 +1,5 @@
 /**
- * Argus Card 0.2.0
+ * Argus Card 0.7.0
  * Lovelace custom card for Home Assistant dashboards.
  * Usage:
  *   type: custom:argus-card

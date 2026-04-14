@@ -6,6 +6,7 @@ import logging
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
+from . import const
 from .const import DOMAIN, PLATFORMS
 from .panel import async_register_panel
 from .websocket_api import async_register_websocket_api
