@@ -210,12 +210,13 @@ _tmpl.innerHTML = `
         <div class="subsection">
           <div class="subsection-title" id="t-change-pin"></div>
           <p class="small" id="p-pin-desc" style="margin:0"></p>
-          <div id="current-pin-display" style="font-size:13px;font-weight:700;color:var(--primary-color)"></div>
-          <div class="two-col">
+      <div id="current-pin-display" style="font-size:13px;font-weight:700;color:var(--primary-color);margin-bottom:4px"></div>
+          <div class="two-col" style="gap:8px">
             <div class="field-group"><label id="l-new-pin"></label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*"></div>
             <div class="field-group"><label id="l-confirm-pin"></label><input type="password" id="new-pin-2" inputmode="numeric" pattern="[0-9]*"></div>
           </div>
-          <div class="save-row"><button class="primary" id="btn-save-pin"></button><span class="status" id="pin-status"></span></div>
+          <button class="primary" id="btn-save-pin" style="width:100%;margin-top:4px"></button>
+          <span class="status" id="pin-status" style="font-size:12px"></span>
         </div>
       </div>
     </section>
@@ -224,16 +225,29 @@ _tmpl.innerHTML = `
   <!-- ROW 3: Notifications -->
   <section class="glass panel">
     <h2 id="h-notifications"></h2>
-    <p class="small" id="p-notif-desc" style="margin-bottom:14px"></p>
-    <div id="notif-targets" class="chip-list" style="margin-bottom:12px"></div>
-    <div class="two-col" style="align-items:end">
-      <div class="field-group">
-        <label>Dispositivo móvil (notify.xxx)</label>
-        <select id="notif-select"></select>
+    <p class="small" id="p-notif-desc" style="margin-bottom:10px"></p>
+
+    <!-- Push targets (notify.*) -->
+    <div class="subsection" style="margin-bottom:12px">
+      <div class="subsection-title" id="t-push-title">📱 Notificaciones Push (Móvil)</div>
+      <div id="notif-targets" class="chip-list" style="min-height:28px"></div>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+        <select id="notif-select" style="flex:1"></select>
+        <button class="ghost" id="btn-add-notif" style="white-space:nowrap">+ Agregar</button>
       </div>
-      <button class="ghost" id="btn-add-notif">+ Agregar</button>
     </div>
-    <div class="save-row" style="margin-top:14px"><button class="primary" id="btn-save-notif"></button><span class="status" id="notif-status"></span></div>
+
+    <!-- TTS / Audio targets (media_player.*) -->
+    <div class="subsection" style="margin-bottom:12px">
+      <div class="subsection-title" id="t-tts-title">🔊 Anuncios de Voz (Airplay · Cast · Altavoces)</div>
+      <div id="tts-targets" class="chip-list" style="min-height:28px"></div>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+        <select id="tts-select" style="flex:1"></select>
+        <button class="ghost" id="btn-add-tts" style="white-space:nowrap">+ Agregar</button>
+      </div>
+    </div>
+
+    <div class="save-row" style="margin-top:10px"><button class="primary" id="btn-save-notif"></button><span class="status" id="notif-status"></span></div>
   </section>
 
   <!-- ROW 4: Users -->
@@ -423,6 +437,7 @@ class ArgusPanel extends HTMLElement {
     s('pin-input').addEventListener('keydown', e => { if (e.key === 'Enter') this._submitPin(); });
 
     s('btn-add-notif').addEventListener('click', () => this._addNotifTarget());
+    s('btn-add-tts').addEventListener('click', () => this._addTtsTarget());
     s('btn-save-notif').addEventListener('click', () => this._saveNotifications());
     s('btn-save-user').addEventListener('click', () => this._saveUser());
   }
@@ -474,6 +489,7 @@ class ArgusPanel extends HTMLElement {
     this._available = dashboard.available_entities || [];
     this._ui = dashboard.ui || { modes: {}, dashboard: {} };
     this._notifTargets = dashboard.ui?.notif_targets || [];
+    this._ttsTargets   = dashboard.ui?.tts_targets   || [];
     this._users = dashboard.ui?.users || [];
 
     // Admin flag: use the HA user's own admin status
@@ -562,20 +578,17 @@ class ArgusPanel extends HTMLElement {
 
     const log = this._ui?.audit_log || [];
     if (!log.length) {
-      el.innerHTML = `<div class="small" style="padding:8px 0">${this._t('log_no_events')}</div>`;
+      el.innerHTML = `<div class="small" style="padding:8px 0;opacity:.55">${this._t('log_no_events')}</div>`;
       return;
     }
 
-    const iconMap = { arm:'🔒', disarm:'🔓', triggered:'🚨', sensor:'📡', camera:'📷' };
-    const classMap = { arm:'arm', disarm:'disarm', triggered:'trigger', sensor:'trigger', camera:'trigger' };
-
-    el.innerHTML = log.slice(0, 25).map(ev => {
+    el.innerHTML = log.slice(0, 30).map(ev => {
       const action = ev.action || '';
       const detail = ev.detail || '';
       const user   = ev.user   || '';
       const ts     = ev.ts ? new Date(ev.ts).toLocaleString() : '';
 
-      let icon = '📋', badgeCls = '', badgeTxt = action, title = detail;
+      let icon = '📋', badgeCls = '', badgeTxt = action;
       if (action.includes('arm') && !action.includes('disarm')) {
         icon = '🔒'; badgeCls = 'arm'; badgeTxt = this._t('log_armed');
       } else if (action.includes('disarm')) {
@@ -584,14 +597,24 @@ class ArgusPanel extends HTMLElement {
         icon = '🚨'; badgeCls = 'trigger'; badgeTxt = this._t('log_triggered');
       }
 
-      const userBit = user && user !== 'system' ? ` · ${this._t('log_by')} ${user}` : '';
+      // Attribute the action clearly
+      let source = '';
+      if (user && user !== 'system') {
+        source = `👤 ${user}`;
+      } else if (action.includes('homekit') || detail.toLowerCase().includes('homekit')) {
+        source = `🍎 HomeKit`;
+      } else {
+        source = `🤖 Argus`;
+      }
+
       return `<div class="log-item">
         <div class="log-icon">${icon}</div>
         <div class="log-body">
           <div class="log-title">
-            <span class="log-badge ${badgeCls}">${badgeTxt}</span>${title}
+            <span class="log-badge ${badgeCls}">${badgeTxt}</span>
+            <span style="font-weight:500">${detail}</span>
           </div>
-          <div class="log-meta">${ts}${userBit}</div>
+          <div class="log-meta">${ts} &nbsp;·&nbsp; ${source}</div>
         </div>
       </div>`;
     }).join('');
@@ -721,7 +744,36 @@ class ArgusPanel extends HTMLElement {
     const opts = Object.keys(services).filter(k => !this._notifTargets.includes(k));
     sel.innerHTML = opts.length
       ? opts.map(k => `<option value="${k}">${k.replace(/_/g, ' ')}</option>`).join('')
-      : `<option value="">— Sin servicios —</option>`;
+      : `<option value="">— Sin servicios móviles —</option>`;
+  }
+
+  _populateTtsSelect() {
+    const sel = this.shadowRoot.getElementById('tts-select');
+    if (!sel) return;
+    // Include all media_player entities that are suitable for TTS
+    const players = Object.values(this._hass?.states || {}).filter(s => {
+      if (!s.entity_id.startsWith('media_player.')) return false;
+      if (this._ttsTargets.includes(s.entity_id)) return false;
+      return true;
+    });
+    if (!players.length) {
+      sel.innerHTML = `<option value="">— No hay dispositivos de audio —</option>`;
+      return;
+    }
+    // Group by type hint via attributes
+    const typeIcon = s => {
+      const st = (s.attributes?.source_list || []).join(',').toLowerCase();
+      const name = (s.attributes?.friendly_name || s.entity_id).toLowerCase();
+      if (name.includes('airplay') || (s.attributes?.device_class||'').includes('airplay')) return '🍎';
+      if (name.includes('cast') || name.includes('chromecast') || st.includes('cast')) return '📡';
+      if (name.includes('alexa') || name.includes('echo')) return '🗣️';
+      if (name.includes('bluetooth') || name.includes('bt')) return '🎧';
+      if (name.includes('spotify')) return '🎵';
+      return '🔊';
+    };
+    sel.innerHTML = players.map(s =>
+      `<option value="${s.entity_id}">${typeIcon(s)} ${s.attributes?.friendly_name || s.entity_id}</option>`
+    ).join('');
   }
 
   _addNotifTarget() {
@@ -733,12 +785,23 @@ class ArgusPanel extends HTMLElement {
     this._populateNotifSelect();
   }
 
+  _addTtsTarget() {
+    const sel = this.shadowRoot.getElementById('tts-select');
+    const val = sel?.value;
+    if (!val || !this._ttsTargets) this._ttsTargets = [];
+    if (!val || this._ttsTargets.includes(val)) return;
+    this._ttsTargets.push(val);
+    this._renderTtsChips();
+    this._populateTtsSelect();
+  }
+
   _renderNotifChips() {
     const el = this.shadowRoot.getElementById('notif-targets');
+    if (!el) return;
     el.innerHTML = this._notifTargets.map(t => `
       <span class="notif-chip">📱 ${t.replace(/_/g,' ')}
         <button data-notif-remove="${t}">✕</button>
-      </span>`).join('') || `<span class="small">${this._t('no_users')}</span>`;
+      </span>`).join('') || `<span class="small" style="opacity:.5">—</span>`;
     el.querySelectorAll('[data-notif-remove]').forEach(btn =>
       btn.addEventListener('click', () => {
         this._notifTargets = this._notifTargets.filter(x => x !== btn.dataset.notifRemove);
@@ -748,15 +811,39 @@ class ArgusPanel extends HTMLElement {
     );
   }
 
+  _renderTtsChips() {
+    const el = this.shadowRoot.getElementById('tts-targets');
+    if (!el) return;
+    if (!this._ttsTargets) this._ttsTargets = [];
+    el.innerHTML = this._ttsTargets.map(t => {
+      const name = this._hass?.states?.[t]?.attributes?.friendly_name || t.replace('media_player.','').replace(/_/g,' ');
+      return `<span class="notif-chip" style="background:rgba(3,169,244,.12);border-color:rgba(3,169,244,.25);color:var(--primary-color)">🔊 ${name}
+        <button data-tts-remove="${t}">✕</button>
+      </span>`;
+    }).join('') || `<span class="small" style="opacity:.5">—</span>`;
+    el.querySelectorAll('[data-tts-remove]').forEach(btn =>
+      btn.addEventListener('click', () => {
+        this._ttsTargets = this._ttsTargets.filter(x => x !== btn.dataset.ttsRemove);
+        this._renderTtsChips();
+        this._populateTtsSelect();
+      })
+    );
+  }
+
   _renderNotifications() {
     this._renderNotifChips();
+    this._renderTtsChips();
     this._populateNotifSelect();
+    this._populateTtsSelect();
   }
 
   async _saveNotifications() {
     const status = this.shadowRoot.getElementById('notif-status');
     try {
-      await this._send('argus/save_ui', { notif_targets: this._notifTargets });
+      await this._send('argus/save_ui', {
+        notif_targets: this._notifTargets,
+        tts_targets: this._ttsTargets || [],
+      });
       status.textContent = '✓'; status.className = 'status ok';
     } catch (e) { status.textContent = e.message; status.className = 'status err'; }
   }
@@ -954,16 +1041,27 @@ class ArgusPanel extends HTMLElement {
     const q = (this.shadowRoot.getElementById('selector-search').value || '').toLowerCase().trim();
     const list   = this.shadowRoot.getElementById('selector-list');
     const selBox = this.shadowRoot.getElementById('selector-selected');
-    const dom = this._selectorTarget === 'sensor' ? ['binary_sensor', 'sensor', 'camera', 'lock'] : ['siren', 'switch'];
-    const items = this._available
-      .filter(x => dom.includes(x.domain))
-      .filter(x => !q || [x.entity_id, x.name, x.area, x.friendly_name].filter(Boolean).join(' ').toLowerCase().includes(q));
+
+    // For sensor type: only contact sensors (door/window/vibration/glass/opening),
+    // camera-linked motion sensors, and locks. Everything else is excluded.
+    const INTRUSION_DC = ['door','window','motion','vibration','glass','opening','smoke','gas','tamper'];
+    const items = this._available.filter(x => {
+      if (this._selectorTarget === 'siren') return ['siren','switch'].includes(x.domain);
+      // sensor mode:
+      if (x.domain === 'lock') return true;
+      if (x.domain === 'binary_sensor') {
+        const dc = this._hass?.states?.[x.entity_id]?.attributes?.device_class || '';
+        return INTRUSION_DC.includes(dc);
+      }
+      return false;
+    }).filter(x => !q || [x.entity_id, x.name, x.area, x.entity_id.split('.')[1]].filter(Boolean).join(' ').toLowerCase().includes(q));
 
     list.innerHTML = items.map(x => {
       const raw   = this._hass?.states?.[x.entity_id]?.state || 'unknown';
       const isTr  = ['on', 'unlocked', 'open', 'recording'].includes(raw);
-      const lblMap = { on:'Detección', off:'Normal', locked:'Cerrado', unlocked:'Abierto', idle:'Reposo', recording:'Grabando' };
-      const lbl   = this._selectorTarget === 'sensor'
+      const dc    = this._hass?.states?.[x.entity_id]?.attributes?.device_class || '';
+      const lblMap = { on:'Abierto', off:'Cerrado', locked:'Cerrado', unlocked:'Abierto', idle:'Reposo', recording:'Grabando', home:'En casa', not_home:'Fuera' };
+      const lbl  = this._selectorTarget === 'sensor'
         ? `<span class="badge ${isTr ? 'armed_away' : 'disarmed'}" style="padding:2px 6px;font-size:10px">${lblMap[raw] || raw}</span>`
         : '';
       return `<label class="list-item">

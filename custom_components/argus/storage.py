@@ -33,6 +33,7 @@ def _default_payload() -> dict:
         },
         "automations": [],
         "notif_targets": [],
+        "tts_targets": [],
         "users": [],
     }
 
