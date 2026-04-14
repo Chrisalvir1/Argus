@@ -1,8 +1,8 @@
 /**
- * Argus Home Hub – v0.7.0
+ * Argus Home Hub – v0.8.2
  * Complete, self-contained custom element.
- * Fixes: blank screen (missing template declaration, broken ID refs),
- * Adds: notifications section, multi-user PINs, admin access control.
+ * Fixes: layout stack gap, input styling, weather bg & temp precision,
+ *        fullscreen button moved to instances panel, containers aligned.
  */
 
 /* ── i18n ─────────────────────────────────────────────────────────────── */
@@ -86,7 +86,8 @@ _tmpl.innerHTML = `
   .hero p{margin:0;font-size:14px;opacity:.6}
   .grid{display:grid;grid-template-columns:1.35fr 1fr;gap:20px;align-items:start}
   @media(max-width:860px){.grid{grid-template-columns:1fr}}
-  .panel{padding:20px}
+  .stack{display:grid;gap:20px}
+  .panel{padding:22px 24px}
   .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
   .panel h2{margin:0;font-size:13px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;opacity:.55}
   
@@ -158,9 +159,12 @@ _tmpl.innerHTML = `
   .notif-chip button{padding:0;border:0;background:none;cursor:pointer;opacity:.65}
   /* Triggered box */
   .trig-box{padding:10px 12px;border-radius:10px;background:rgba(229,57,53,.1);border:1px dashed var(--error-color,#e53935);font-size:12px;font-weight:600;color:var(--error-color,#e53935)}
+  /* inputs */
+  input[type="text"],input[type="password"],input[type="number"],input[type="search"],select{width:100%;padding:10px 14px;border-radius:10px;border:1px solid color-mix(in srgb,var(--divider-color,#444) 60%,transparent);background:color-mix(in srgb,var(--card-background-color,#1e1e2e) 80%,transparent);color:var(--primary-text-color);font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s;display:block}
+  input[type="text"]:focus,input[type="password"]:focus,input[type="number"]:focus,input[type="search"]:focus,select:focus{border-color:var(--primary-color,#03a9f4);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary-color,#03a9f4) 15%,transparent)}
   /* search */
   .search-wrap{display:flex;gap:10px;align-items:center}
-  .search-wrap input{flex:1}
+  .search-wrap input{flex:1;min-width:0}
   /* Activity log */
   .log-item{display:flex;align-items:flex-start;gap:12px;padding:10px 12px;border-radius:12px;border:1px solid color-mix(in srgb,var(--divider-color,#444) 50%,transparent);background:color-mix(in srgb,var(--card-background-color,#1e1e2e) 60%,transparent)}
   .log-icon{font-size:20px;line-height:1;flex-shrink:0}
@@ -183,7 +187,6 @@ _tmpl.innerHTML = `
         <p id="p-hero-desc"></p>
       </div>
     </div>
-    <button class="ghost fs-btn" id="btn-fullscreen" title="Full Screen">⛶</button>
   </div>
 
   <!-- TWO-COLUMN LAYOUT -->
@@ -195,7 +198,10 @@ _tmpl.innerHTML = `
       <section class="glass panel">
         <div class="panel-head">
           <h2 id="h-instances"></h2>
-          <div id="global-status"></div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div id="global-status"></div>
+            <button class="ghost fs-btn" id="btn-fullscreen" title="Pantalla completa" style="padding:6px 10px;font-size:15px">⛶</button>
+          </div>
         </div>
         <div id="entries"></div>
       </section>
@@ -548,35 +554,62 @@ class ArgusPanel extends HTMLElement {
     const isArmed = allStates.some(s => s.startsWith('armed') || s === 'triggered' || s === 'pending');
     globalStatusEl.innerHTML = `<span class="badge ${isArmed ? 'armed_away' : 'disarmed'}">${isArmed ? 'SISTEMA ARMADO' : 'SISTEMA DESARMADO'}</span>`;
 
-    // Weather & Location Logic
+    // Weather & Location Logic — v0.8.2 precise entity selection
     const weatherEntities = Object.values(this._hass?.states || {}).filter(s => s.entity_id.startsWith('weather.'));
-    // Prioritize Apple Weather, then any that have "locality" or detailed state
-    const weatherEnt = weatherEntities.find(s => s.entity_id.includes('apple_weather')) 
-                     || weatherEntities.find(s => s.state && s.state !== 'unknown')
-                     || { state: 'clear', attributes: { temperature: 24, temperature_unit: '°C' } };
+    // Priority: apple_weather → weather.home → first valid → fallback
+    const weatherEnt = weatherEntities.find(s => s.entity_id.includes('apple_weather'))
+                     || weatherEntities.find(s => s.entity_id === 'weather.home')
+                     || weatherEntities.find(s => s.state && s.state !== 'unknown' && s.state !== 'unavailable')
+                     || { state: 'sunny', attributes: { temperature: 24, temperature_unit: '°C' } };
 
-    const rawTemp = weatherEnt.attributes.temperature;
-    const temp = rawTemp !== undefined ? Math.round(rawTemp) : '--';
-    const unit = weatherEnt.attributes.temperature_unit || '°C';
-    const weatherState = (weatherEnt.state || 'clear').toLowerCase();
+    // Read actual temperature (NOT apparent/feels-like)
+    let rawTemp = (typeof weatherEnt.attributes?.temperature === 'number')
+                  ? weatherEnt.attributes.temperature
+                  : null;
+    // Unit conversion: auto-detect °F and convert to °C for display
+    const rawUnit = weatherEnt.attributes?.temperature_unit
+                    || this._hass?.config?.unit_system?.temperature
+                    || '°C';
+    let temp, unit;
+    if (rawUnit === '°F' || rawUnit === 'F') {
+      temp = rawTemp !== null ? Math.round((rawTemp - 32) * 5 / 9) : '--';
+      unit = '°C';
+    } else {
+      temp = rawTemp !== null ? Math.round(rawTemp) : '--';
+      unit = '°C';
+    }
+
+    const weatherState = (weatherEnt.state || 'sunny').toLowerCase().trim();
     const sunState = this._hass?.states['sun.sun']?.state || 'above_horizon';
     const isNight = sunState === 'below_horizon';
 
-    // Improved Location
-    let locName = this._hass?.config?.location_name || "Atenas, Costa Rica";
-    if (locName === "Casa") {
-       // Try to get locality from attributes
-       locName = weatherEnt.attributes.locality || weatherEnt.attributes.city || "Atenas, Alajuela, CR";
-    }
+    // Location: prefer entity locality/city, skip generic names
+    const cfgLoc = this._hass?.config?.location_name || '';
+    const isGenericName = ['home','casa','house','my home'].includes(cfgLoc.toLowerCase());
+    let locName = weatherEnt.attributes?.locality
+                  || weatherEnt.attributes?.city
+                  || weatherEnt.attributes?.station_name
+                  || (!isGenericName && cfgLoc ? cfgLoc : null)
+                  || 'Atenas, Alajuela, CR';
 
     // Time
     const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
 
-    // Detailed Background Selection
-    let bgSvg = isNight ? (weatherState.includes('clear') ? 'env_night_starry.svg' : 'env_night.svg') : 'env_day.svg';
-    if (weatherState.includes('rain') || weatherState.includes('pouring') || weatherState.includes('lightning')) bgSvg = 'env_rain.svg';
-    else if (weatherState.includes('snow')) bgSvg = 'env_snow.svg';
-    else if (weatherState.includes('cloud') || weatherState.includes('overcast') || weatherState.includes('fog')) bgSvg = 'env_clouds.svg';
+    // Background SVG — weather conditions take priority over time of day
+    let bgSvg;
+    if (weatherState.includes('pouring') || weatherState.includes('rain') || weatherState.includes('drizzle') || weatherState.includes('shower')) {
+      bgSvg = 'env_rain.svg';
+    } else if (weatherState.includes('thunder') || weatherState.includes('lightning') || weatherState.includes('storm')) {
+      bgSvg = 'env_rain.svg';
+    } else if (weatherState.includes('snow') || weatherState.includes('hail') || weatherState.includes('sleet') || weatherState.includes('blizzard')) {
+      bgSvg = 'env_snow.svg';
+    } else if (weatherState.includes('cloud') || weatherState.includes('overcast') || weatherState.includes('fog') || weatherState.includes('mist') || weatherState.includes('hazy')) {
+      bgSvg = 'env_clouds.svg';
+    } else if (isNight) {
+      bgSvg = (weatherState.includes('clear') || weatherState.includes('sunny')) ? 'env_night_starry.svg' : 'env_night.svg';
+    } else {
+      bgSvg = 'env_day.svg';
+    }
 
     el.innerHTML = entries.map((e, idx) => {
       const live  = this._hass?.states[e.entity_id]?.state;
