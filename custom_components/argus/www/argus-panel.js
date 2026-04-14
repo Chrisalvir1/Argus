@@ -1,9 +1,11 @@
 /**
- * Argus Home Hub – v0.8.9
+ * Argus Home Hub – v0.9.0
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated sensor (actual vs apparent fix),
- *        DESARMADO button active state when disarmed.
+ *        DESARMADO button active state when disarmed,
+ *        per-instance fullscreen, vacation quick action, numeric PIN dial pad,
+ *        mode tabs including disarmed.
  */
 
 /* ── i18n ─────────────────────────────────────────────────────────────── */
@@ -152,6 +154,11 @@ _tmpl.innerHTML = `
   .pm .modal{max-width:340px;min-height:unset;grid-template-rows:auto auto auto}
   .pin-input{font-size:28px;letter-spacing:10px;text-align:center;padding:14px;border-radius:12px;border:2px solid var(--primary-color,#03a9f4);background:transparent;color:inherit;width:100%;outline:none}
   .pin-error{color:var(--error-color,#e53935);font-size:13px;min-height:18px;text-align:center}
+  .pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
+  .pin-key{border:1px solid color-mix(in srgb,var(--divider-color,#444) 60%,transparent);background:color-mix(in srgb,var(--card-background-color,#1e1e2e) 78%,transparent);color:var(--primary-text-color);padding:14px 0;border-radius:14px;font-size:22px;font-weight:800;min-height:54px}
+  .pin-key:hover{background:color-mix(in srgb,var(--primary-color,#03a9f4) 16%,var(--card-background-color,#1e1e2e) 84%)}
+  .pin-key.action{font-size:18px}
+  .pin-pad-spacer{display:block}
   /* User card */
   .user-card{display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:12px;border:1px solid color-mix(in srgb,var(--divider-color,#444) 50%,transparent);background:color-mix(in srgb,var(--card-background-color,#1e1e2e) 60%,transparent)}
   .user-badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;background:rgba(3,169,244,.15);color:var(--primary-color,#03a9f4)}
@@ -254,7 +261,6 @@ _tmpl.innerHTML = `
           <h2 id="h-instances"></h2>
           <div style="display:flex;align-items:center;gap:10px">
             <div id="global-status"></div>
-            <button class="ghost fs-btn" id="btn-fullscreen" title="Pantalla completa" style="padding:6px 10px;font-size:15px">⛶</button>
           </div>
         </div>
         <div id="entries"></div>
@@ -387,7 +393,21 @@ _tmpl.innerHTML = `
     <div class="modal-head"><h3 id="l-introduce-pin">🔒</h3><button class="ghost" id="pin-close">✕</button></div>
     <div style="display:grid;gap:10px">
       <p id="l-pin-modal-desc" class="small" style="text-align:center;margin:0"></p>
-      <input id="pin-input" class="pin-input" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="••••" autocomplete="off">
+      <input id="pin-input" class="pin-input" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="••••" autocomplete="off" maxlength="8">
+      <div class="pin-pad" id="pin-pad">
+        <button class="pin-key" type="button" data-pin-digit="1">1</button>
+        <button class="pin-key" type="button" data-pin-digit="2">2</button>
+        <button class="pin-key" type="button" data-pin-digit="3">3</button>
+        <button class="pin-key" type="button" data-pin-digit="4">4</button>
+        <button class="pin-key" type="button" data-pin-digit="5">5</button>
+        <button class="pin-key" type="button" data-pin-digit="6">6</button>
+        <button class="pin-key" type="button" data-pin-digit="7">7</button>
+        <button class="pin-key" type="button" data-pin-digit="8">8</button>
+        <button class="pin-key" type="button" data-pin-digit="9">9</button>
+        <span class="pin-pad-spacer" aria-hidden="true"></span>
+        <button class="pin-key" type="button" data-pin-digit="0">0</button>
+        <button class="pin-key action" type="button" id="pin-backspace">⌫</button>
+      </div>
       <div id="pin-error" class="pin-error"></div>
     </div>
     <div class="modal-footer">
@@ -513,8 +533,10 @@ class ArgusPanel extends HTMLElement {
     s('pin-modal').addEventListener('click', e => { if (e.target.id === 'pin-modal') this._closePinModal(); });
     s('pin-confirm').addEventListener('click', () => this._submitPin());
     s('pin-input').addEventListener('keydown', e => { if (e.key === 'Enter') this._submitPin(); });
-
-    s('btn-fullscreen').addEventListener('click', () => this._toggleFullscreen());
+    this.shadowRoot.querySelectorAll('[data-pin-digit]').forEach(btn =>
+      btn.addEventListener('click', () => this._appendPinDigit(btn.dataset.pinDigit))
+    );
+    s('pin-backspace').addEventListener('click', () => this._backspacePin());
 
     s('btn-add-notif').addEventListener('click', () => this._addNotifTarget());
     s('btn-save-notif').addEventListener('click', () => this._saveNotifications());
@@ -572,7 +594,7 @@ class ArgusPanel extends HTMLElement {
     this._users = dashboard.ui?.users || [];
 
     // Admin flag: use the HA user's own admin status
-    this._isAdmin = this._hass?.user?.is_admin ?? true;
+    this._isAdmin = this._hass?.user ? Boolean(this._hass.user.is_admin || this._hass.user.is_owner) : true;
 
     // Show current PIN toggle & validation required
     const currentPin = dashboard.entries?.[0]?.options?.code || '';
@@ -664,6 +686,8 @@ class ArgusPanel extends HTMLElement {
         <article class="entry" style="${triggered ? 'border:3px solid #ff5252;box-shadow:0 0 30px rgba(255,82,82,.4)' : ''}">
           ${this._getWeatherBg(weatherState, isNight)}
 
+          <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="Pantalla completa de esta instancia" style="position:absolute;top:14px;left:16px;z-index:4;padding:6px 10px;font-size:15px">⛶</button>
+
           <div class="hud">
             <div class="hud-loc">${locName}</div>
             <div class="hud-data">${timeStr} • ${temp}${unit}</div>
@@ -674,11 +698,12 @@ class ArgusPanel extends HTMLElement {
               <button class="liquid-btn btn-home ${state==='armed_home'?'active':''}" data-idx="${idx}" data-action="home">🏠 EN CASA</button>
               <button class="liquid-btn btn-away ${state==='armed_away'?'active':''}" data-idx="${idx}" data-action="away">🔒 AUSENTE</button>
               <button class="liquid-btn btn-night ${state==='armed_night'?'active':''}" data-idx="${idx}" data-action="night">🌙 NOCHE</button>
+              <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''}" data-idx="${idx}" data-action="vacation">✈️ VACACIONES</button>
               <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg> ${this._t('disarmed')}</button>
             </div>
 
             <div class="entry-icon">
-              ${triggered ? '<div style="font-size:90px;filter:drop-shadow(0 0 30px #f00)">🚨</div>' : `<img src="/api/argus_static/${svgName}?v=0.8.8">`}
+              ${triggered ? '<div style="font-size:90px;filter:drop-shadow(0 0 30px #f00)">🚨</div>' : `<img src="/api/argus_static/${svgName}?v=0.9.0">`}
             </div>
           </div>
         </article>`;
@@ -687,11 +712,15 @@ class ArgusPanel extends HTMLElement {
     el.querySelectorAll('button[data-action]').forEach(btn =>
       btn.addEventListener('click', ev => this._handleAction(ev.currentTarget.dataset.idx, ev.currentTarget.dataset.action))
     );
+    el.querySelectorAll('button[data-fullscreen]').forEach(btn =>
+      btn.addEventListener('click', ev => this._toggleFullscreen(ev.currentTarget.closest('.entry')))
+    );
   }
 
-  _toggleFullscreen() {
+  _toggleFullscreen(targetEl) {
+    const target = targetEl || this.shadowRoot.querySelector('.entry');
     if (!document.fullscreenElement) {
-      this.requestFullscreen().catch(err => {
+      (target || this).requestFullscreen().catch(err => {
         alert(`Error al activar pantalla completa: ${err.message}`);
       });
     } else {
@@ -863,9 +892,10 @@ class ArgusPanel extends HTMLElement {
   /* ── Modes ───────────────────────────────────────────────────────── */
   _renderModeTabs() {
     const tabs = this.shadowRoot.getElementById('mode-tabs');
-    const modes = ['home', 'away', 'night', 'vacation'];
-    const icons = { home:'🏠', away:'🔴', night:'🌙', vacation:'✈️' };
+    const modes = ['disarmed', 'home', 'away', 'night', 'vacation'];
+    const icons = { disarmed:'🔓', home:'🏠', away:'🔴', night:'🌙', vacation:'✈️' };
     const lbls  = {
+      disarmed: this._t('disarmed'),
       home:     this._t('mode_home'),
       away:     this._t('mode_away'),
       night:    this._t('mode_night'),
@@ -879,7 +909,12 @@ class ArgusPanel extends HTMLElement {
     }));
   }
 
-  _currentModeConfig() { return this._ui?.modes?.[this._mode] || {}; }
+  _currentModeConfig() {
+    if (!this._ui) return { sensors: [], sirens: [], require_closed: false };
+    this._ui.modes = this._ui.modes || {};
+    this._ui.modes[this._mode] = this._ui.modes[this._mode] || { sensors: [], sirens: [], require_closed: false };
+    return this._ui.modes[this._mode];
+  }
 
   _renderModeView() {
     const cfg = this._currentModeConfig();
@@ -1228,6 +1263,22 @@ class ArgusPanel extends HTMLElement {
     this.shadowRoot.getElementById('pin-modal').classList.remove('open');
     this.shadowRoot.getElementById('pin-modal').setAttribute('aria-hidden', 'true');
     this._pinCallback = null;
+  }
+
+  _appendPinDigit(digit) {
+    const inp = this.shadowRoot.getElementById('pin-input');
+    const err = this.shadowRoot.getElementById('pin-error');
+    if (!inp) return;
+    inp.value = `${inp.value || ''}${digit}`.slice(0, 8);
+    if (err) err.textContent = '';
+  }
+
+  _backspacePin() {
+    const inp = this.shadowRoot.getElementById('pin-input');
+    const err = this.shadowRoot.getElementById('pin-error');
+    if (!inp) return;
+    inp.value = (inp.value || '').slice(0, -1);
+    if (err) err.textContent = '';
   }
 
   _submitPin() {
