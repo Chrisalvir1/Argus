@@ -1,5 +1,5 @@
 /**
- * Argus Panel 0.4.1
+ * Argus Panel 0.6.1
  * Clean rebuild after selector refactor.
  */
 const template = document.createElement('template');
@@ -96,17 +96,35 @@ template.innerHTML = `
       <section class="glass panel">
         <h2>Instancias activas</h2>
         <div id="entries"></div>
-        <div style="margin-top:24px">
-          <h2>Zonas globales</h2>
-          <p class="meta" style="margin-bottom:12px">Define zonas personalizadas en JSON.</p>
-          <textarea id="zones" spellcheck="false" placeholder='[{"name":"Sala","entities":["binary_sensor.puerta_principal"]}]'></textarea>
-          <div class="save-row"><button class="primary" id="btn-save-zones">💾 Guardar zonas</button><span class="status" id="status-zones"></span></div>
-        </div>
       </section>
       <section class="glass panel">
         <h2>Modos</h2>
         <div class="tabs" id="mode-tabs"></div>
         <div id="mode-view"></div>
+      </section>
+    </div>
+    
+    <div class="grid">
+      <section class="glass panel">
+        <h2>⚡ Automatizaciones</h2>
+        <div class="tabs" id="auto-tabs">
+            <div class="tab active" id="tab-auto-list">Mis reglas</div>
+            <div class="tab" id="tab-auto-new">+ Nueva regla</div>
+        </div>
+        <div id="auto-view" style="min-height: 200px"></div>
+      </section>
+      
+      <section class="glass panel">
+        <h2>⚙️ Ajustes</h2>
+        <div class="subsection">
+            <div class="subsection-title">Cambiar PIN Maestro</div>
+            <p class="meta" style="margin:0">Actualiza el código numérico para armar y desarmar.</p>
+            <div class="two-col">
+                <div class="field-group"><label>Nuevo PIN</label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*" placeholder="Dejar vacío para sin código"></div>
+                <div class="field-group"><label>Confirmar PIN</label><input type="password" id="new-pin-2" inputmode="numeric" pattern="[0-9]*"></div>
+            </div>
+            <div class="save-row"><button class="primary" id="btn-save-pin">Actualizar PIN</button><span class="status" id="pin-status"></span></div>
+        </div>
       </section>
     </div>
     <section class="glass panel" id="homekit-section" style="display:none">
@@ -158,7 +176,7 @@ template.innerHTML = `
 `;
 
 class ArgusPanel extends HTMLElement {
-  constructor() { super(); this.attachShadow({mode:'open'}).appendChild(template.content.cloneNode(true)); this._wsId = 1; this._socket = null; this._dashboard = null; this._ui = null; this._available = []; this._mode = 'home'; this._selected = []; this._selectorTarget = null; this._authOk = false; this._hass = null; this._prevStates = {}; }
+  constructor() { super(); this.attachShadow({mode:'open'}).appendChild(template.content.cloneNode(true)); this._wsId = 1; this._socket = null; this._dashboard = null; this._ui = null; this._available = []; this._mode = 'home'; this._selected = []; this._selectorTarget = null; this._authOk = false; this._hass = null; this._prevStates = {}; this._automations = []; this._tts_engines = []; this._media_players = []; }
   set hass(hass) {
     this._hass = hass;
     if (!this._dashboard?.entries?.length) return;
@@ -181,7 +199,11 @@ class ArgusPanel extends HTMLElement {
     this.shadowRoot.getElementById('selector-clear').addEventListener('click', ()=>{ this._selected = []; this._renderSelector(); });
     this.shadowRoot.getElementById('selector-search').addEventListener('input', ()=>this._renderSelector());
     this.shadowRoot.getElementById('selector-modal').addEventListener('click', (e)=>{ if(e.target.id==='selector-modal') this._closeModal(); });
-    this.shadowRoot.getElementById('btn-save-zones')?.addEventListener('click', ()=>this._saveZones());
+    
+    this.shadowRoot.getElementById('tab-auto-list').addEventListener('click', (e)=>{ e.target.classList.add('active'); this.shadowRoot.getElementById('tab-auto-new').classList.remove('active'); this._renderAutomationsList(); });
+    this.shadowRoot.getElementById('tab-auto-new').addEventListener('click', (e)=>{ e.target.classList.add('active'); this.shadowRoot.getElementById('tab-auto-list').classList.remove('active'); this._renderAutomationNew(); });
+    this.shadowRoot.getElementById('btn-save-pin').addEventListener('click', ()=>this._savePin());
+    
     this.shadowRoot.getElementById('pin-close').addEventListener('click', ()=>this._closePinModal());
     this.shadowRoot.getElementById('pin-cancel').addEventListener('click', ()=>this._closePinModal());
     this.shadowRoot.getElementById('pin-modal').addEventListener('click', (e)=>{ if(e.target.id==='pin-modal') this._closePinModal(); });
@@ -259,12 +281,20 @@ class ArgusPanel extends HTMLElement {
     const dashboard = await this._send('argus/dashboard');
     this._dashboard = dashboard;
     this._available = dashboard.available_entities || [];
-    this._ui = dashboard.ui || { modes: {}, zones: [], dashboard: {} };
+    this._ui = dashboard.ui || { modes: {}, dashboard: {} };
+    this._automations = dashboard.ui?.automations || [];
     this._renderEntries();
     this._renderModeTabs();
     this._renderModeView();
-    this.shadowRoot.getElementById('zones').value = JSON.stringify(this._ui.zones || [], null, 2);
     this._renderHomeKit();
+    this._renderAutomationsList();
+    this._fetchEngines();
+  }
+  async _fetchEngines() {
+    try {
+        this._tts_engines = await this._send('argus/get_tts_engines') || [];
+        this._media_players = await this._send('argus/get_media_players') || [];
+    } catch(e) {}
   }
   async _renderHomeKit() {
     const sec = this.shadowRoot.getElementById('homekit-section');
@@ -315,17 +345,137 @@ class ArgusPanel extends HTMLElement {
       if(canvas&&window.QRCode) QRCode.toCanvas(canvas,uri,{width:180,margin:2,color:{dark:'#000000',light:'#ffffff'}});
     } catch(e){ const c=this.shadowRoot.getElementById('hk-qr'); if(c) c.style.display='none'; }
   }
-  async _saveZones() {
-    const status = this.shadowRoot.getElementById('status-zones');
+  async _savePin() {
+    const status = this.shadowRoot.getElementById('pin-status');
+    const p1 = this.shadowRoot.getElementById('new-pin-1').value;
+    const p2 = this.shadowRoot.getElementById('new-pin-2').value;
+    
+    if (p1 !== p2) {
+        status.textContent = 'Error: Los PIN no coinciden';
+        status.className = 'status err';
+        return;
+    }
+    
     try {
-      const zones = JSON.parse(this.shadowRoot.getElementById('zones').value || '[]');
-      await this._send('argus/save_ui', { zones, dashboard: this._ui.dashboard || {} });
-      status.textContent = 'Zonas guardadas';
+      await this._send('argus/update_master_pin', { pin: p1 });
+      status.textContent = 'PIN actualizado';
       status.className = 'status ok';
+      this.shadowRoot.getElementById('new-pin-1').value = '';
+      this.shadowRoot.getElementById('new-pin-2').value = '';
     } catch (err) {
       status.textContent = `Error: ${err.message}`;
       status.className = 'status err';
     }
+  }
+  
+  _renderAutomationsList() {
+      const el = this.shadowRoot.getElementById('auto-view');
+      if (!this._automations.length) {
+          el.innerHTML = '<div class="empty"><strong>No hay reglas</strong><span>Crea tu primera automatización de Argus.</span></div>';
+          return;
+      }
+      
+      const evtNames = { 'armed': '🛡️ Armado', 'disarmed': '🔓 Desarmado', 'triggered': '🚨 Disparado', 'arming': '⏳ Armando (Cuenta regresiva)' };
+      
+      el.innerHTML = '<div style="display:grid;gap:10px">' + this._automations.map((a, idx) => `
+        <div class="list-item" style="justify-content:space-between">
+            <div>
+                <div style="font-weight:700">Cuando: ${evtNames[a.event] || a.event} ${a.condition ? '<span class="badge">Condición</span>' : ''}</div>
+                <div class="small">${a.actions?.length || 0} acciones configuradas</div>
+            </div>
+            <button class="ghost danger" style="padding:4px 8px" data-del-auto="${idx}">🗑️</button>
+        </div>
+      `).join('') + '</div>';
+      
+      el.querySelectorAll('[data-del-auto]').forEach(btn => {
+          btn.addEventListener('click', async (e) => {
+              const idx = e.currentTarget.dataset.delAuto;
+              this._automations.splice(idx, 1);
+              try {
+                  await this._send('argus/save_automations', { automations: this._automations });
+                  this._renderAutomationsList();
+              } catch(err) { alert('Error al borrar'); }
+          });
+      });
+  }
+  
+  _renderAutomationNew() {
+      const el = this.shadowRoot.getElementById('auto-view');
+      el.innerHTML = `
+        <div class="subsection">
+            <div class="field-group">
+                <label>CUANDO</label>
+                <select id="auto-event">
+                    <option value="armed">Sistema es Armado</option>
+                    <option value="disarmed">Sistema es Desarmado</option>
+                    <option value="triggered">Alarma se Dispara</option>
+                    <option value="arming">Cuenta regresiva (Arming) Inicia</option>
+                </select>
+            </div>
+            
+            <div class="field-group" style="padding-top:8px; border-top:1px solid rgba(120,120,120,0.1)">
+                <label>ENTONCES (Acción 1)</label>
+                <select id="auto-action">
+                    <option value="tts">🗣️ Anuncio de Texto a Voz (TTS)</option>
+                    <option value="turn_on">💡 Encender Entidad</option>
+                </select>
+            </div>
+            
+            <div id="auto-action-config"></div>
+            
+            <div class="save-row" style="margin-top:10px"><button class="primary" id="btn-save-auto">💾 Crear Regla</button><span class="status" id="auto-status"></span></div>
+        </div>
+      `;
+      
+      const configEl = this.shadowRoot.getElementById('auto-action-config');
+      const actionSel = this.shadowRoot.getElementById('auto-action');
+      
+      const renderConfig = () => {
+          const type = actionSel.value;
+          if (type === 'tts') {
+              const engs = this._tts_engines.length ? this._tts_engines.map(e => \`<option value="\${e.entity_id}">\${e.name}</option>\`).join('') : '<option value="tts.google_translate_say">Google Translate</option><option value="tts.cloud_say">Nabu Casa Cloud</option>';
+              const players = this._media_players.length ? this._media_players.map(e => \`<option value="\${e.entity_id}">\${e.name} (\${e.entity_id})</option>\`).join('') : '<option value="">Cargando reproductores...</option>';
+              configEl.innerHTML = `
+                <div class="two-col">
+                    <div class="field-group"><label>Motor TTS</label><select id="tts-engine">${engs}</select></div>
+                    <div class="field-group"><label>Altavoz</label><select id="tts-device">${players}</select></div>
+                </div>
+                <div class="field-group"><label>Mensaje Opcional a Leer</label><input type="text" id="tts-msg" placeholder="Escribe el mensaje..."></div>
+              `;
+          } else {
+              const targets = this._available.filter(x => ['switch','light','siren'].includes(x.domain)).map(e => \`<option value="\${e.entity_id}">\${e.name || e.entity_id}</option>\`).join('');
+              configEl.innerHTML = `
+                <div class="field-group"><label>Entidad a encender</label><select id="turnon-entity">${targets}</select></div>
+              `;
+          }
+      };
+      
+      actionSel.addEventListener('change', renderConfig);
+      renderConfig(); // initial render
+      
+      this.shadowRoot.getElementById('btn-save-auto').addEventListener('click', async () => {
+          const status = this.shadowRoot.getElementById('auto-status');
+          const type = actionSel.value;
+          const rule = { event: this.shadowRoot.getElementById('auto-event').value, actions: [] };
+          
+          if (type === 'tts') {
+              const dev = this.shadowRoot.getElementById('tts-device').value;
+              if(!dev) { status.textContent='Selecciona un altavoz'; status.className='status err'; return; }
+              rule.actions.push({ type: 'tts', engine: this.shadowRoot.getElementById('tts-engine').value, device: dev, message: this.shadowRoot.getElementById('tts-msg').value });
+          } else {
+              const ent = this.shadowRoot.getElementById('turnon-entity').value;
+              if(!ent) { status.textContent='Selecciona una entidad'; status.className='status err'; return; }
+              rule.actions.push({ type: 'turn_on', entities: [ent] });
+          }
+          
+          this._automations.push(rule);
+          try {
+              await this._send('argus/save_automations', { automations: this._automations });
+              this.shadowRoot.getElementById('tab-auto-list').click();
+          } catch(err) {
+              status.textContent = 'Error: ' + err.message; status.className = 'status err';
+          }
+      });
   }
   _renderEntries() {
     const el = this.shadowRoot.getElementById('entries');

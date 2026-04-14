@@ -31,6 +31,7 @@ def _default_payload() -> dict:
             "guest_code": None,
             "guest_code_enabled": False,
         },
+        "automations": [],
     }
 
 
@@ -43,6 +44,7 @@ async def async_load_ui_data(hass: HomeAssistant) -> dict:
     # Ensure new keys exist in old storage data
     data.setdefault("audit_log", [])
     data.setdefault("advanced", {"guest_code": None, "guest_code_enabled": False})
+    data.setdefault("automations", [])
     return data
 
 

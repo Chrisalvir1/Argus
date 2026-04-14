@@ -32,6 +32,11 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_argus_clear_audit_log)
     websocket_api.async_register_command(hass, ws_argus_save_advanced_config)
     websocket_api.async_register_command(hass, ws_argus_get_advanced_config)
+    websocket_api.async_register_command(hass, ws_argus_save_automations)
+    websocket_api.async_register_command(hass, ws_argus_get_automations)
+    websocket_api.async_register_command(hass, ws_argus_get_tts_engines)
+    websocket_api.async_register_command(hass, ws_argus_get_media_players)
+    websocket_api.async_register_command(hass, ws_argus_update_master_pin)
 
 
 @callback
@@ -206,3 +211,84 @@ async def ws_argus_get_advanced_config(hass: HomeAssistant, connection, msg) -> 
     """Return the advanced config."""
     ui_data = await async_load_ui_data(hass)
     connection.send_result(msg["id"], ui_data.get("advanced", {}))
+
+
+@websocket_api.websocket_command(
+    {
+        vol.Required("type"): "argus/save_automations",
+        vol.Required("automations"): list,
+    }
+)
+@websocket_api.async_response
+async def ws_argus_save_automations(hass: HomeAssistant, connection, msg) -> None:
+    """Save custom Argus automations."""
+    await async_save_ui_data(hass, {"automations": msg["automations"]})
+    async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED)
+    connection.send_result(msg["id"], {"success": True})
+
+
+@websocket_api.websocket_command({vol.Required("type"): "argus/get_automations"})
+@websocket_api.async_response
+async def ws_argus_get_automations(hass: HomeAssistant, connection, msg) -> None:
+    """Return configured automations."""
+    ui_data = await async_load_ui_data(hass)
+    connection.send_result(msg["id"], ui_data.get("automations", []))
+
+
+@websocket_api.websocket_command({vol.Required("type"): "argus/get_tts_engines"})
+@websocket_api.async_response
+async def ws_argus_get_tts_engines(hass: HomeAssistant, connection, msg) -> None:
+    """Return a list of TTS providers/engines available."""
+    engines = []
+    # HA tts providers usually expose entities as tts.<provider>
+    for state in hass.states.async_all("tts"):
+        engines.append({
+            "entity_id": state.entity_id,
+            "name": state.attributes.get("friendly_name") or state.name
+        })
+    # Also some might just be service calls but TTS entity is standard now.
+    connection.send_result(msg["id"], engines)
+
+
+@websocket_api.websocket_command({vol.Required("type"): "argus/get_media_players"})
+@websocket_api.async_response
+async def ws_argus_get_media_players(hass: HomeAssistant, connection, msg) -> None:
+    """Return a list of media_player entities available for TTS."""
+    players = []
+    for state in hass.states.async_all("media_player"):
+        players.append({
+            "entity_id": state.entity_id,
+            "name": state.attributes.get("friendly_name") or state.name
+        })
+    connection.send_result(msg["id"], players)
+
+
+@websocket_api.websocket_command(
+    {
+        vol.Required("type"): "argus/update_master_pin",
+        vol.Required("pin"): str,
+    }
+)
+@websocket_api.async_response
+async def ws_argus_update_master_pin(hass: HomeAssistant, connection, msg) -> None:
+    """Update the master PIN code on the Argus ConfigEntry."""
+    from .const import CONF_CODE
+
+    # Get the first argus config entry
+    entries = hass.config_entries.async_entries(DOMAIN)
+    if not entries:
+        connection.send_result(msg["id"], {"success": False, "error": "No config entry found"})
+        return
+        
+    entry = entries[0]
+    
+    # Update the options
+    new_options = dict(entry.options)
+    new_options[CONF_CODE] = msg["pin"]
+    
+    hass.config_entries.async_update_entry(entry, options=new_options)
+    
+    # Reload the integration so the panel picks up the updated CONF_CODE
+    await hass.config_entries.async_reload(entry.entry_id)
+    
+    connection.send_result(msg["id"], {"success": True})

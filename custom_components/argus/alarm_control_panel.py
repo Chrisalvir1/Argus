@@ -261,33 +261,65 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             len(all_sensors), all_sensors
         )
 
-    async def _async_tts_trigger(self) -> None:
-        """Play TTS alert on devices configured for the active mode."""
-        modes = self._ui_config.get("modes", {})
-        mode_key = self._alarm_state.value.replace("armed_", "") if self._alarm_state in ARMED_STATES else None
-        tts_cfg = modes.get(mode_key, {}).get("tts") if mode_key else None
-        if not tts_cfg:
-            for cfg in modes.values():
-                if cfg.get("tts"):
-                    tts_cfg = cfg["tts"]
-                    break
-        if not tts_cfg:
+    async def _evaluate_automations(self, event_type: str, **kwargs) -> None:
+        """Evaluate and execute matched automations based on event trigger."""
+        automations = self._ui_config.get("automations", [])
+        if not automations:
             return
-        device = tts_cfg.get("device")
-        message = tts_cfg.get("trigger_message") or "¡Atención! La alarma de Argus ha sido activada."
-        engine = tts_cfg.get("engine", "tts.cloud_say")
-        if not device:
-            return
-        try:
-            await self.hass.services.async_call(
-                "tts", "speak",
-                {"entity_id": engine, "media_player_entity_id": device,
-                 "message": message, "language": "es"},
-                blocking=False,
-            )
-            _LOGGER.info("Argus: TTS enviado a %s", device)
-        except Exception as e:  # noqa: BLE001
-            _LOGGER.warning("Argus: TTS trigger fallido: %s", e)
+
+        for rule in automations:
+            if rule.get("event") != event_type:
+                continue
+
+            # Optional Condition checking
+            # Examples: condition={"type": "mode", "value": "night"}
+            cond = rule.get("condition")
+            if cond:
+                c_type = cond.get("type")
+                if c_type == "mode" and self._alarm_state.value.replace("armed_", "") != cond.get("value"):
+                    continue
+                # Add more conditions later, like entity states
+                
+            # Execute Actions
+            actions = rule.get("actions", [])
+            for action in actions:
+                a_type = action.get("type")
+                if a_type == "tts":
+                    engine = action.get("engine", "tts.cloud_say")
+                    device = action.get("device")
+                    message = action.get("message", "Argus")
+                    if device:
+                        try:
+                            await self.hass.services.async_call(
+                                "tts", "speak",
+                                {"entity_id": engine, "media_player_entity_id": device,
+                                 "message": message, "language": "es"},
+                                blocking=False,
+                            )
+                        except Exception as e:
+                            _LOGGER.warning("Argus: TTS action error: %s", e)
+                elif a_type == "turn_on":
+                    entities = action.get("entities", [])
+                    if entities:
+                        for e_id in entities:
+                            domain = e_id.split(".")[0]
+                            try:
+                                await self.hass.services.async_call(
+                                    domain, "turn_on", {"entity_id": e_id}, blocking=False
+                                )
+                            except Exception as e:
+                                _LOGGER.warning("Argus: turn_on action error for %s: %s", e_id, e)
+                elif a_type == "turn_off":
+                    entities = action.get("entities", [])
+                    if entities:
+                        for e_id in entities:
+                            domain = e_id.split(".")[0]
+                            try:
+                                await self.hass.services.async_call(
+                                    domain, "turn_off", {"entity_id": e_id}, blocking=False
+                                )
+                            except Exception as e:
+                                _LOGGER.warning("Argus: turn_off action error for %s: %s", e_id, e)
 
     async def _async_linked_alarm_changed(self, event):
         """Update Argus state when the linked alarm (HomeKit/Aqara) changes."""
@@ -414,7 +446,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         await self._async_siren(True)
         await self._async_mqtt_publish()
-        await self._async_tts_trigger()
+        self.hass.async_create_task(self._evaluate_automations("triggered", sensor=self._triggered_by))
         # Persistent notification in HA
         self.hass.components.persistent_notification.async_create(
             f"\u26a0\ufe0f Sensor: **{self._triggered_by or 'desconocido'}**\n\nModo activo: `{self._alarm_state.value}`",
@@ -555,6 +587,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self.async_write_ha_state()
         await self._async_mqtt_publish()
         await self._async_sync_to_linked(AlarmControlPanelState.DISARMED)
+        self.hass.async_create_task(self._evaluate_automations("disarmed"))
         await async_append_audit_log(self.hass, "disarmed", "Sistema desarmado")
         _LOGGER.info("Argus: Disarmed")
 
@@ -579,6 +612,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         await self._async_mqtt_publish()
         await self._async_sync_to_linked(target)
+        self.hass.async_create_task(self._evaluate_automations("armed", target=target))
         await async_append_audit_log(self.hass, "armed", f"Modo: {target.value}")
         _LOGGER.info("Argus: Arming → %s", target)
 
