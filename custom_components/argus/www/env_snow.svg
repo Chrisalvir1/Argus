@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice">
+  <style>
+    .flake { fill: #fff; opacity: 0.8; animation: snow-fall 10s linear infinite; }
+    @keyframes snow-fall {
+      0% { transform: translate(0, -10px) rotate(0deg); }
+      100% { transform: translate(100px, 610px) rotate(360deg); }
+    }
+  </style>
+  <rect width="1200" height="600" fill="#e0e4e8" opacity="0.4" />
+  
+  <circle cx="100" cy="50" r="3" class="flake" style="animation-duration: 12s; animation-delay: 0s" />
+  <circle cx="300" cy="100" r="2" class="flake" style="animation-duration: 8s; animation-delay: 2s" />
+  <circle cx="500" cy="20" r="4" class="flake" style="animation-duration: 15s; animation-delay: 1s" />
+  <circle cx="700" cy="80" r="2" class="flake" style="animation-duration: 10s; animation-delay: 3s" />
+  <circle cx="900" cy="150" r="3" class="flake" style="animation-duration: 13s; animation-delay: 0.5s" />
+  <circle cx="1100" cy="40" r="2" class="flake" style="animation-duration: 9s; animation-delay: 4s" />
+  
+  <!-- More flakes -->
+  <circle cx="200" cy="-50" r="2.5" class="flake" style="animation-duration: 11s; animation-delay: 5s" />
+  <circle cx="600" cy="-20" r="3" class="flake" style="animation-duration: 14s; animation-delay: 1.5s" />
+</svg>

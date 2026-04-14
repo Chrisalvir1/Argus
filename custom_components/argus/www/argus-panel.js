@@ -102,11 +102,11 @@ _tmpl.innerHTML = `
   .hud-data{font-size:18px;font-weight:700;margin-top:2px}
 
   /* Liquid Glass Buttons */
-  .liquid-stack{display:grid;gap:8px}
-  .liquid-btn{border:none;background:rgba(255,255,255,0.08);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);color:#fff;padding:10px 14px;border-radius:14px;font-size:11px;font-weight:700;display:flex;align-items:center;gap:10px;text-align:left;cursor:pointer;transition:all 0.2s cubic-bezier(0.4,0,0.2,1);border:1px solid rgba(255,255,255,0.05)}
-  .liquid-btn:hover{background:rgba(255,255,255,0.15);transform:translateX(5px);border-color:rgba(255,255,255,0.2)}
-  .liquid-btn.active{background:var(--btn-bg, rgba(255,255,255,0.2));border-color:rgba(255,255,255,0.4);box-shadow:0 0 20px var(--btn-shadow, rgba(255,255,255,0.1))}
-  .liquid-btn i{font-size:14px}
+  .liquid-stack{display:grid;gap:10px}
+  .liquid-btn{border:none;background:rgba(255,255,255,0.08);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);color:#fff;padding:12px 16px;border-radius:16px;font-size:13px;font-weight:800;display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;transition:all 0.2s cubic-bezier(0.4,0,0.2,1);border:1px solid rgba(255,255,255,0.1);text-shadow:0 1px 3px rgba(0,0,0,0.4);letter-spacing:0.5px}
+  .liquid-btn:hover{background:rgba(255,255,255,0.18);transform:translateX(6px);border-color:rgba(255,255,255,0.3)}
+  .liquid-btn.active{background:var(--btn-bg, rgba(255,255,255,0.25));border-color:rgba(255,255,255,0.5);box-shadow:0 0 25px var(--btn-shadow, rgba(255,255,255,0.15))}
+  .liquid-btn i{font-size:16px}
   
   /* Mode Specific Colors for Liquid Buttons */
   .btn-home.active{--btn-bg:rgba(251,140,0,0.3); --btn-shadow:rgba(251,140,0,0.4)}
@@ -137,17 +137,14 @@ _tmpl.innerHTML = `
   /* FS button */
   .fs-btn{background:rgba(255,255,255,0.05);padding:8px;border-radius:10px;font-size:16px}
   
-  input[type=text],input[type=password],input[type=number],select:not([multiple]){width:100%;border-radius:12px;border:1px solid var(--divider-color,#444);background:color-mix(in srgb,var(--card-background-color,#1e1e2e) 52%,transparent);color:var(--primary-text-color);padding:9px 12px;font-size:13px;outline:none}
-  .save-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px}
-  .status{font-size:13px;flex:1}
-  .tabs{display:flex;gap:6px;margin-bottom:18px;padding:5px;background:color-mix(in srgb,var(--card-background-color,#1e1e2e) 42%,transparent);border-radius:14px;border:1px solid color-mix(in srgb,var(--divider-color,#444) 30%,transparent)}
-  .tab{flex:1;padding:9px 6px;text-align:center;cursor:pointer;border-radius:10px;font-size:12px;font-weight:700;white-space:nowrap}
-  .tab.active{background:var(--primary-color,#03a9f4);color:#fff;box-shadow:0 4px 12px rgba(3,169,244,.28)}
-  .stack{display:grid;gap:14px}
-  .subsection{background:color-mix(in srgb,var(--card-background-color,#1e1e2e) 35%,transparent);border:1px solid color-mix(in srgb,var(--divider-color,#444) 45%,transparent);border-radius:14px;padding:14px;display:grid;gap:12px}
-  .list-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;border:1px solid color-mix(in srgb,var(--divider-color,#444) 70%,transparent);background:color-mix(in srgb,var(--card-background-color,#1e1e2e) 76%,transparent)}
-  .list-item input[type=checkbox]{width:18px;height:18px;cursor:pointer}
-  .modal-footer{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+  /* Modal Fixes */
+  .modal-back{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;padding:20px;z-index:999999;backdrop-filter:blur(8px)}
+  .modal-back.open{display:flex}
+  .modal{width:min(400px,100%);max-height:85vh;overflow:hidden;display:grid;grid-template-rows:auto 1fr auto;gap:14px;padding:24px;border-radius:28px;background:color-mix(in srgb, var(--card-background-color,#1e1e2e) 95%, #fff);border:1px solid rgba(255,255,255,0.1);box-shadow:0 30px 100px rgba(0,0,0,0.6)}
+  .modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+  .modal-head h3{margin:0;font-size:20px;font-weight:800}
+  .modal-body{overflow:auto;padding:5px}
+  .modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:15px}
   /* PIN modal */
   .pm .modal{max-width:340px;min-height:unset;grid-template-rows:auto auto auto}
   .pin-input{font-size:28px;letter-spacing:10px;text-align:center;padding:14px;border-radius:12px;border:2px solid var(--primary-color,#03a9f4);background:transparent;color:inherit;width:100%;outline:none}
@@ -552,27 +549,39 @@ class ArgusPanel extends HTMLElement {
     globalStatusEl.innerHTML = `<span class="badge ${isArmed ? 'armed_away' : 'disarmed'}">${isArmed ? 'SISTEMA ARMADO' : 'SISTEMA DESARMADO'}</span>`;
 
     // Weather & Location Logic
-    const locName = this._hass?.config?.location_name || "Atenas, Costa Rica";
-    const weatherEnt = Object.values(this._hass?.states || {}).find(s => s.entity_id.startsWith('weather.')) || { state: 'clear', attributes: { temperature: 24, temperature_unit: '°C' } };
-    const temp = weatherEnt.attributes.temperature || '--';
+    const weatherEntities = Object.values(this._hass?.states || {}).filter(s => s.entity_id.startsWith('weather.'));
+    // Prioritize Apple Weather, then any that have "locality" or detailed state
+    const weatherEnt = weatherEntities.find(s => s.entity_id.includes('apple_weather')) 
+                     || weatherEntities.find(s => s.state && s.state !== 'unknown')
+                     || { state: 'clear', attributes: { temperature: 24, temperature_unit: '°C' } };
+
+    const rawTemp = weatherEnt.attributes.temperature;
+    const temp = rawTemp !== undefined ? Math.round(rawTemp) : '--';
     const unit = weatherEnt.attributes.temperature_unit || '°C';
     const weatherState = (weatherEnt.state || 'clear').toLowerCase();
     const sunState = this._hass?.states['sun.sun']?.state || 'above_horizon';
     const isNight = sunState === 'below_horizon';
 
+    // Improved Location
+    let locName = this._hass?.config?.location_name || "Atenas, Costa Rica";
+    if (locName === "Casa") {
+       // Try to get locality from attributes
+       locName = weatherEnt.attributes.locality || weatherEnt.attributes.city || "Atenas, Alajuela, CR";
+    }
+
     // Time
     const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
 
-    // Background Selection
-    let bgSvg = isNight ? 'env_night.svg' : 'env_day.svg';
-    if (weatherState.includes('rain')) bgSvg = 'env_rain.svg';
-    else if (weatherState.includes('cloud')) bgSvg = 'env_clouds.svg';
+    // Detailed Background Selection
+    let bgSvg = isNight ? (weatherState.includes('clear') ? 'env_night_starry.svg' : 'env_night.svg') : 'env_day.svg';
+    if (weatherState.includes('rain') || weatherState.includes('pouring') || weatherState.includes('lightning')) bgSvg = 'env_rain.svg';
+    else if (weatherState.includes('snow')) bgSvg = 'env_snow.svg';
+    else if (weatherState.includes('cloud') || weatherState.includes('overcast') || weatherState.includes('fog')) bgSvg = 'env_clouds.svg';
 
     el.innerHTML = entries.map((e, idx) => {
       const live  = this._hass?.states[e.entity_id]?.state;
       const state = live || e.state || 'unavailable';
       const triggered = state === 'triggered';
-      const isUnavail = state === 'unavailable' || !e.entity_id;
 
       // Icon Selection
       let svgName = 'mode_disarmed.svg';
@@ -582,7 +591,7 @@ class ArgusPanel extends HTMLElement {
       else if (state === 'armed_vacation') svgName = 'mode_vacation.svg';
 
       return `
-        <article class="entry" style="${triggered ? 'border: 2px solid var(--error-color)' : ''}">
+        <article class="entry" style="${triggered ? 'border: 3px solid #ff5252; box-shadow: 0 0 30px rgba(255,82,82,0.4)' : ''}">
           <div class="entry-bg"><img src="/api/argus_static/${bgSvg}?v=0.8.0"></div>
           
           <div class="hud">
@@ -595,12 +604,11 @@ class ArgusPanel extends HTMLElement {
               <button class="liquid-btn btn-home ${state==='armed_home'?'active':''}" data-idx="${idx}" data-action="home">🏠 EN CASA</button>
               <button class="liquid-btn btn-away ${state==='armed_away'?'active':''}" data-idx="${idx}" data-action="away">🔒 AUSENTE</button>
               <button class="liquid-btn btn-night ${state==='armed_night'?'active':''}" data-idx="${idx}" data-action="night">🌙 NOCHE</button>
-              <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''}" data-idx="${idx}" data-action="vacation">✈️ VACACIÓN</button>
               <button class="liquid-btn btn-disarm" data-idx="${idx}" data-action="disarm">🔓 DESARMADO</button>
             </div>
             
             <div class="entry-icon">
-               ${triggered ? '<div style="font-size:80px; filter: drop-shadow(0 0 20px #f00)">🚨</div>' : `<img src="/api/argus_static/${svgName}?v=0.8.0">`}
+               ${triggered ? '<div style="font-size:100px; filter: drop-shadow(0 0 30px #f00)">🚨</div>' : `<img src="/api/argus_static/${svgName}?v=0.8.0">`}
             </div>
           </div>
         </article>`;

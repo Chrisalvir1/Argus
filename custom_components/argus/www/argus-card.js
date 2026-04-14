@@ -1,6 +1,6 @@
 /**
- * Argus Intelligent Card v0.8.0
- * Unified with the panel UI: Atmospheric backgrounds, Liquid Glass buttons, and HUD.
+ * Argus Intelligent Card v0.8.1
+ * Refined UI: Improved legibility, accurate weather mapping, and detailed location.
  */
 class ArgusCard extends HTMLElement {
   static getStubConfig() {
@@ -40,20 +40,31 @@ class ArgusCard extends HTMLElement {
     const triggered = state === "triggered";
 
     // Weather & Location
-    const locName = this._hass.config.location_name || "Atenas, Costa Rica";
-    const weatherEnt = Object.values(this._hass.states).find(s => s.entity_id.startsWith('weather.')) || { state: 'clear', attributes: { temperature: 24, temperature_unit: '°C' } };
-    const temp = weatherEnt.attributes.temperature || '--';
+    const weatherEntities = Object.values(this._hass.states).filter(s => s.entity_id.startsWith('weather.'));
+    const weatherEnt = weatherEntities.find(s => s.entity_id.includes('apple_weather')) 
+                     || weatherEntities.find(s => s.state && s.state !== 'unknown')
+                     || { state: 'clear', attributes: { temperature: 24, temperature_unit: '°C' } };
+
+    const rawTemp = weatherEnt.attributes.temperature;
+    const temp = rawTemp !== undefined ? Math.round(rawTemp) : '--';
     const unit = weatherEnt.attributes.temperature_unit || '°C';
     const weatherState = (weatherEnt.state || 'clear').toLowerCase();
     const isNight = this._hass.states['sun.sun']?.state === 'below_horizon';
 
+    // Improved Location
+    let locName = this._hass.config.location_name || "Atenas, Costa Rica";
+    if (locName === "Casa") {
+       locName = weatherEnt.attributes.locality || weatherEnt.attributes.city || "Atenas, Alajuela, CR";
+    }
+
     // Time
     const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
 
-    // Background & Icon
-    let bgSvg = isNight ? 'env_night.svg' : 'env_day.svg';
-    if (weatherState.includes('rain')) bgSvg = 'env_rain.svg';
-    else if (weatherState.includes('cloud')) bgSvg = 'env_clouds.svg';
+    // Background selection
+    let bgSvg = isNight ? (weatherState.includes('clear') ? 'env_night_starry.svg' : 'env_night.svg') : 'env_day.svg';
+    if (weatherState.includes('rain') || weatherState.includes('pouring') || weatherState.includes('lightning')) bgSvg = 'env_rain.svg';
+    else if (weatherState.includes('snow')) bgSvg = 'env_snow.svg';
+    else if (weatherState.includes('cloud') || weatherState.includes('overcast') || weatherState.includes('fog')) bgSvg = 'env_clouds.svg';
 
     let svgName = 'mode_disarmed.svg';
     if (state === 'armed_home') svgName = 'mode_home.svg';
@@ -64,46 +75,45 @@ class ArgusCard extends HTMLElement {
     const v = "0.8.0";
 
     this.innerHTML = `
-      <ha-card style="overflow:hidden; border-radius:24px; border:none; background:none;">
+      <ha-card style="overflow:hidden; border-radius:28px; border:none; background:none; box-shadow:0 10px 40px rgba(0,0,0,0.3)">
         <style>
           .argus-card {
             position: relative;
             overflow: hidden;
-            border-radius: 24px;
-            min-height: 220px;
+            border-radius: 28px;
+            min-height: 250px;
             display: flex;
             flex-direction: column;
             font-family: Inter, system-ui, sans-serif;
             color: #fff;
           }
-          .card-bg { position: absolute; inset: 0; z-index: 1; opacity: 0.6; }
+          .card-bg { position: absolute; inset: 0; z-index: 1; opacity: 0.7; }
           .card-bg img { width: 100%; height: 100%; object-fit: cover; }
           
-          .hud { position: absolute; top: 15px; right: 20px; text-align: right; z-index: 3; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-          .hud-loc { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; }
-          .hud-data { font-size: 16px; font-weight: 700; margin-top: 2px; }
+          .hud { position: absolute; top: 18px; right: 22px; text-align: right; z-index: 3; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+          .hud-loc { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
+          .hud-data { font-size: 18px; font-weight: 700; margin-top: 3px; }
 
-          .content { position: relative; z-index: 2; flex: 1; padding: 20px; display: grid; grid-template-columns: 130px 1fr; gap: 15px; align-items: center; background: linear-gradient(90deg, rgba(0,0,0,0.4) 0%, transparent 70%); }
+          .content { position: relative; z-index: 2; flex: 1; padding: 24px; display: grid; grid-template-columns: 150px 1fr; gap: 20px; align-items: center; background: linear-gradient(90deg, rgba(0,0,0,0.45) 0%, transparent 75%); }
           
-          .liquid-stack { display: grid; gap: 6px; }
-          .liquid-btn { border: none; background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: #fff; padding: 8px 12px; border-radius: 12px; font-size: 10px; font-weight: 700; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.05); }
-          .liquid-btn:hover { background: rgba(255,255,255,0.15); transform: translateX(3px); }
-          .liquid-btn.active { background: var(--btn-bg, rgba(255,255,255,0.2)); border-color: rgba(255,255,255,0.3); }
+          .liquid-stack { display: grid; gap: 8px; }
+          .liquid-btn { border: none; background: rgba(255,255,255,0.08); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); color: #fff; padding: 12px 14px; border-radius: 16px; font-size: 12px; font-weight: 800; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.1); text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+          .liquid-btn:hover { background: rgba(255,255,255,0.18); transform: translateX(4px); }
+          .liquid-btn.active { background: var(--btn-bg, rgba(255,255,255,0.25)); border-color: rgba(255,255,255,0.4); }
           
-          .btn-home.active{ --btn-bg: rgba(251,140,0,0.3); }
-          .btn-away.active{ --btn-bg: rgba(229,57,53,0.3); }
-          .btn-night.active{ --btn-bg: rgba(30,136,229,0.3); }
-          .btn-vacation.active{ --btn-bg: rgba(156,39,176,0.3); }
-          .btn-disarm { margin-top: 2px; border: 1px solid rgba(67,160,71,0.2); }
+          .btn-home.active{ --btn-bg: rgba(251,140,0,0.35); }
+          .btn-away.active{ --btn-bg: rgba(229,57,53,0.35); }
+          .btn-night.active{ --btn-bg: rgba(30,136,229,0.35); }
+          .btn-disarm { margin-top: 4px; border: 1px solid rgba(67,160,71,0.3); }
 
-          .icon-wrap { display: flex; justify-content: center; align-items: center; }
-          .icon-wrap img { max-width: 100%; height: auto; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.4)); animation: float 4s ease-in-out infinite; }
-          @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+          .icon-wrap { display: flex; justify-content: center; align-items: center; perspective: 1000px; }
+          .icon-wrap img { max-width: 100%; height: auto; filter: drop-shadow(0 12px 24px rgba(0,0,0,0.5)); animation: float 4s ease-in-out infinite; }
+          @keyframes float { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-12px) rotate(1deg); } }
 
-          .card-title { position: absolute; bottom: 15px; left: 20px; z-index: 3; font-size: 11px; font-weight: 800; text-transform: uppercase; opacity: 0.6; letter-spacing: 0.5px; }
+          .card-title { position: absolute; bottom: 18px; left: 24px; z-index: 3; font-size: 11px; font-weight: 800; text-transform: uppercase; opacity: 0.7; letter-spacing: 1px; }
         </style>
 
-        <div class="argus-card">
+        <div class="argus-card" style="${triggered ? 'border: 3px solid #ff5252' : ''}">
           <div class="card-bg"><img src="/api/argus_static/${bgSvg}?v=${v}"></div>
           
           <div class="hud">
@@ -117,11 +127,10 @@ class ArgusCard extends HTMLElement {
               <button class="liquid-btn btn-away ${state==='armed_away'?'active':''}" id="away">🔒 AUSENTE</button>
               <button class="liquid-btn btn-night ${state==='armed_night'?'active':''}" id="night">🌙 NOCHE</button>
               <button class="liquid-btn btn-disarm" id="disarm">🔓 DESARMADO</button>
-              <button class="liquid-btn" style="color:#ff5252" id="panic">🚨 PÁNICO</button>
             </div>
             
             <div class="icon-wrap">
-              ${triggered ? '<div style="font-size:70px;">🚨</div>' : `<img src="/api/argus_static/${svgName}?v=${v}">`}
+              ${triggered ? '<div style="font-size:90px; filter: drop-shadow(0 0 20px #f00)">🚨</div>' : `<img src="/api/argus_static/${svgName}?v=${v}">`}
             </div>
           </div>
 
@@ -134,7 +143,6 @@ class ArgusCard extends HTMLElement {
     this.querySelector("#away").onclick = () => this._call("alarm_arm_away");
     this.querySelector("#night").onclick = () => this._call("alarm_arm_night");
     this.querySelector("#disarm").onclick = () => this._call("alarm_disarm");
-    this.querySelector("#panic").onclick = () => this._call("alarm_trigger");
   }
 
   getCardSize() { return 3; }
