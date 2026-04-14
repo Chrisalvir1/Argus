@@ -207,27 +207,14 @@ _tmpl.innerHTML = `
         </div>
       </section>
 
-      <!-- Notifications -->
+      <!-- Automations -->
       <section class="glass panel">
-        <h2 id="h-notifications"></h2>
-        <p class="small" id="p-notif-desc" style="margin-bottom:10px"></p>
-        <div class="subsection" style="margin-bottom:12px">
-          <div class="subsection-title" id="t-push-title">📱 Notificaciones Push (Móvil)</div>
-          <div id="notif-targets" class="chip-list" style="min-height:28px"></div>
-          <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
-            <select id="notif-select" style="flex:1"></select>
-            <button class="ghost" id="btn-add-notif" style="white-space:nowrap">+ Agregar</button>
-          </div>
+        <h2 id="h-automations"></h2>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <span class="small" id="p-linked-rules"></span>
+          <button class="primary" id="btn-new-auto" style="padding:6px 14px;font-size:12px"></button>
         </div>
-        <div class="subsection" style="margin-bottom:12px">
-          <div class="subsection-title" id="t-tts-title">🔊 Anuncios de Voz (Airplay · Cast · Altavoces)</div>
-          <div id="tts-targets" class="chip-list" style="min-height:28px"></div>
-          <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
-            <select id="tts-select" style="flex:1"></select>
-            <button class="ghost" id="btn-add-tts" style="white-space:nowrap">+ Agregar</button>
-          </div>
-        </div>
-        <div class="save-row" style="margin-top:10px"><button class="primary" id="btn-save-notif" style="width:100%"></button><span class="status" id="notif-status" style="width:100%;text-align:center"></span></div>
+        <div id="auto-view"></div>
       </section>
 
       <!-- HomeKit -->
@@ -252,14 +239,19 @@ _tmpl.innerHTML = `
         <div id="mode-view"></div>
       </section>
 
-      <!-- Automations -->
+      <!-- Notifications -->
       <section class="glass panel">
-        <h2 id="h-automations"></h2>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-          <span class="small" id="p-linked-rules"></span>
-          <button class="primary" id="btn-new-auto" style="padding:6px 14px;font-size:12px"></button>
+        <h2 id="h-notifications"></h2>
+        <p class="small" id="p-notif-desc" style="margin-bottom:10px"></p>
+        <div class="subsection" style="margin-bottom:12px">
+          <div class="subsection-title" id="t-push-title">📱 Notificaciones Push (Móvil)</div>
+          <div id="notif-targets" class="chip-list" style="min-height:28px"></div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+            <select id="notif-select" style="flex:1"></select>
+            <button class="ghost" id="btn-add-notif" style="white-space:nowrap">+ Agregar</button>
+          </div>
         </div>
-        <div id="auto-view"></div>
+        <div class="save-row" style="margin-top:10px"><button class="primary" id="btn-save-notif" style="width:100%"></button><span class="status" id="notif-status" style="width:100%;text-align:center"></span></div>
       </section>
 
       <!-- Settings -->
@@ -268,9 +260,15 @@ _tmpl.innerHTML = `
         <div class="subsection">
           <div class="subsection-title" id="t-change-pin"></div>
           <p class="small" id="p-pin-desc" style="margin:0"></p>
-          <div id="current-pin-display" style="font-size:13px;font-weight:700;color:var(--primary-color);margin-bottom:4px"></div>
+          <div id="current-pin-display" style="font-size:13px;font-weight:700;color:var(--primary-color);margin-bottom:12px"></div>
+          
+          <div class="field-group" id="group-current-pin" style="display:none; margin-bottom:12px">
+             <label>PIN Actual (Obligatorio para verificar)</label>
+             <input type="password" id="current-pin" inputmode="numeric" pattern="[0-9]*">
+          </div>
+
           <div class="two-col" style="gap:8px">
-            <div class="field-group"><label id="l-new-pin"></label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*"></div>
+            <div class="field-group"><label id="l-new-pin"></label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*" placeholder="Vacío = Desactivar"></div>
             <div class="field-group"><label id="l-confirm-pin"></label><input type="password" id="new-pin-2" inputmode="numeric" pattern="[0-9]*"></div>
           </div>
           <div class="save-row">
@@ -446,7 +444,6 @@ class ArgusPanel extends HTMLElement {
     s('pin-input').addEventListener('keydown', e => { if (e.key === 'Enter') this._submitPin(); });
 
     s('btn-add-notif').addEventListener('click', () => this._addNotifTarget());
-    s('btn-add-tts').addEventListener('click', () => this._addTtsTarget());
     s('btn-save-notif').addEventListener('click', () => this._saveNotifications());
     s('btn-save-user').addEventListener('click', () => this._saveUser());
   }
@@ -504,10 +501,13 @@ class ArgusPanel extends HTMLElement {
     // Admin flag: use the HA user's own admin status
     this._isAdmin = this._hass?.user?.is_admin ?? true;
 
-    // Show current PIN
+    // Show current PIN toggle & validation required
     const currentPin = dashboard.entries?.[0]?.options?.code || '';
     const pinDisp = this.shadowRoot.getElementById('current-pin-display');
-    if (pinDisp) pinDisp.textContent = currentPin ? `${this._t('current_pin')}: ${currentPin}` : '';
+    const groupCurrentPin = this.shadowRoot.getElementById('group-current-pin');
+    
+    if (pinDisp) pinDisp.textContent = currentPin ? `PIN Activo: Sí` : `PIN Activo: No`;
+    if (groupCurrentPin) groupCurrentPin.style.display = currentPin ? 'block' : 'none';
 
     this._renderEntries();
     this._renderActivityLog();
@@ -727,7 +727,7 @@ class ArgusPanel extends HTMLElement {
     });
 
     if (!items.length) {
-      el.innerHTML = `<div class="small" style="text-align:center;padding:14px;opacity:.5">([Argus] …)</div>`;
+      el.innerHTML = '';
       return;
     }
     el.innerHTML = `<div class="stack">${items.map(a => `
@@ -755,35 +755,6 @@ class ArgusPanel extends HTMLElement {
       : `<option value="">— Sin servicios móviles —</option>`;
   }
 
-  _populateTtsSelect() {
-    const sel = this.shadowRoot.getElementById('tts-select');
-    if (!sel) return;
-    // Include all media_player entities that are suitable for TTS
-    const players = Object.values(this._hass?.states || {}).filter(s => {
-      if (!s.entity_id.startsWith('media_player.')) return false;
-      if (this._ttsTargets.includes(s.entity_id)) return false;
-      return true;
-    });
-    if (!players.length) {
-      sel.innerHTML = `<option value="">— No hay dispositivos de audio —</option>`;
-      return;
-    }
-    // Group by type hint via attributes
-    const typeIcon = s => {
-      const st = (s.attributes?.source_list || []).join(',').toLowerCase();
-      const name = (s.attributes?.friendly_name || s.entity_id).toLowerCase();
-      if (name.includes('airplay') || (s.attributes?.device_class||'').includes('airplay')) return '🍎';
-      if (name.includes('cast') || name.includes('chromecast') || st.includes('cast')) return '📡';
-      if (name.includes('alexa') || name.includes('echo')) return '🗣️';
-      if (name.includes('bluetooth') || name.includes('bt')) return '🎧';
-      if (name.includes('spotify')) return '🎵';
-      return '🔊';
-    };
-    sel.innerHTML = players.map(s =>
-      `<option value="${s.entity_id}">${typeIcon(s)} ${s.attributes?.friendly_name || s.entity_id}</option>`
-    ).join('');
-  }
-
   _addNotifTarget() {
     const sel = this.shadowRoot.getElementById('notif-select');
     const val = sel?.value;
@@ -791,16 +762,6 @@ class ArgusPanel extends HTMLElement {
     this._notifTargets.push(val);
     this._renderNotifChips();
     this._populateNotifSelect();
-  }
-
-  _addTtsTarget() {
-    const sel = this.shadowRoot.getElementById('tts-select');
-    const val = sel?.value;
-    if (!val || !this._ttsTargets) this._ttsTargets = [];
-    if (!val || this._ttsTargets.includes(val)) return;
-    this._ttsTargets.push(val);
-    this._renderTtsChips();
-    this._populateTtsSelect();
   }
 
   _renderNotifChips() {
@@ -819,30 +780,9 @@ class ArgusPanel extends HTMLElement {
     );
   }
 
-  _renderTtsChips() {
-    const el = this.shadowRoot.getElementById('tts-targets');
-    if (!el) return;
-    if (!this._ttsTargets) this._ttsTargets = [];
-    el.innerHTML = this._ttsTargets.map(t => {
-      const name = this._hass?.states?.[t]?.attributes?.friendly_name || t.replace('media_player.','').replace(/_/g,' ');
-      return `<span class="notif-chip" style="background:rgba(3,169,244,.12);border-color:rgba(3,169,244,.25);color:var(--primary-color)">🔊 ${name}
-        <button data-tts-remove="${t}">✕</button>
-      </span>`;
-    }).join('') || `<span class="small" style="opacity:.5">—</span>`;
-    el.querySelectorAll('[data-tts-remove]').forEach(btn =>
-      btn.addEventListener('click', () => {
-        this._ttsTargets = this._ttsTargets.filter(x => x !== btn.dataset.ttsRemove);
-        this._renderTtsChips();
-        this._populateTtsSelect();
-      })
-    );
-  }
-
   _renderNotifications() {
     this._renderNotifChips();
-    this._renderTtsChips();
     this._populateNotifSelect();
-    this._populateTtsSelect();
   }
 
   async _saveNotifications() {
@@ -1004,13 +944,32 @@ class ArgusPanel extends HTMLElement {
 
   /* ── PIN management ──────────────────────────────────────────────── */
   async _savePin() {
+    const status = this.shadowRoot.getElementById('pin-status');
+    const currentCode = this._dashboard?.entries?.[0]?.options?.code || '';
+    
+    if (currentCode) {
+      const pinCurrent = this.shadowRoot.getElementById('current-pin').value;
+      if (pinCurrent !== currentCode) {
+        status.textContent = '❌ PIN actual incorrecto';
+        status.className = 'status err';
+        return;
+      }
+    }
+
     const p1 = this.shadowRoot.getElementById('new-pin-1').value;
     const p2 = this.shadowRoot.getElementById('new-pin-2').value;
-    const status = this.shadowRoot.getElementById('pin-status');
-    if (p1 !== p2) { status.textContent = 'PIN no coinciden'; status.className = 'status err'; return; }
+    
+    if (p1 !== p2) { 
+      status.textContent = '❌ PIN nuevo no coincide'; 
+      status.className = 'status err'; 
+      return; 
+    }
+    
     try {
       await this._send('argus/update_master_pin', { pin: p1 });
-      status.textContent = '✓'; status.className = 'status ok';
+      status.textContent = '✓ Guardado'; 
+      status.className = 'status ok';
+      if (this.shadowRoot.getElementById('current-pin')) this.shadowRoot.getElementById('current-pin').value = '';
       this.shadowRoot.getElementById('new-pin-1').value = '';
       this.shadowRoot.getElementById('new-pin-2').value = '';
       setTimeout(() => this._load(), 1200);
