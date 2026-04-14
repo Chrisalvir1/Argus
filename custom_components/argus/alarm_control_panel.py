@@ -278,7 +278,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 c_type = cond.get("type")
                 if c_type == "mode" and self._alarm_state.value.replace("armed_", "") != cond.get("value"):
                     continue
-                # Add more conditions later, like entity states
+                if c_type == "entity_id" and kwargs.get("sensor") != cond.get("value"):
+                    continue
                 
             # Execute Actions
             actions = rule.get("actions", [])
@@ -320,6 +321,12 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                                 )
                             except Exception as e:
                                 _LOGGER.warning("Argus: turn_off action error for %s: %s", e_id, e)
+                elif a_type == "trigger_alarm":
+                    # Forzar evento de disparo
+                    if self._alarm_state in ARMED_STATES or kwargs.get("sensor"):
+                         self._triggered_by = kwargs.get("sensor") or "Regla Automática"
+                         self.hass.async_create_task(self._async_trigger())
+
 
     async def _async_linked_alarm_changed(self, event):
         """Update Argus state when the linked alarm (HomeKit/Aqara) changes."""
@@ -403,13 +410,16 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     @callback
     def _async_sensor_changed(self, event):
         """React when a monitored sensor changes state."""
-        if self._alarm_state not in ARMED_STATES:
-            return
-
         new_state = event.data.get("new_state")
         entity_id = event.data.get("entity_id")
 
         if new_state is None or new_state.state != STATE_ON:
+            return
+
+        # Fire "sensor_opened" automations globally (before filtering by alarm state)
+        self.hass.async_create_task(self._evaluate_automations("sensor_opened", sensor=entity_id))
+
+        if self._alarm_state not in ARMED_STATES:
             return
 
         active = self._sensors_for_state(self._alarm_state)

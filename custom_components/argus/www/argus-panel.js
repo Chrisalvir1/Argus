@@ -1,5 +1,5 @@
 /**
- * Argus Panel 0.6.1
+ * Argus Panel 0.6.2
  * Clean rebuild after selector refactor.
  */
 const template = document.createElement('template');
@@ -410,6 +410,7 @@ class ArgusPanel extends HTMLElement {
                     <option value="disarmed">Sistema es Desarmado</option>
                     <option value="triggered">Alarma se Dispara</option>
                     <option value="arming">Cuenta regresiva (Arming) Inicia</option>
+                    <option value="sensor_opened">Sensor se Abre / Movimiento Detectado</option>
                 </select>
             </div>
             
@@ -418,6 +419,7 @@ class ArgusPanel extends HTMLElement {
                 <select id="auto-action">
                     <option value="tts">🗣️ Anuncio de Texto a Voz (TTS)</option>
                     <option value="turn_on">💡 Encender Entidad</option>
+                    <option value="trigger_alarm">🚨 Disparar la Alarma</option>
                 </select>
             </div>
             
@@ -432,40 +434,61 @@ class ArgusPanel extends HTMLElement {
       
       const renderConfig = () => {
           const type = actionSel.value;
+          const evtType = this.shadowRoot.getElementById('auto-event').value;
+          
+          let html = '';
+          
+          if (evtType === 'sensor_opened') {
+              const sens = this._available.filter(x => ['binary_sensor','sensor','camera'].includes(x.domain)).map(e => `<option value="${e.entity_id}">${e.name || e.entity_id}</option>`).join('');
+              html += `<div class="field-group" style="margin-bottom:12px"><label>¿CUAL SENSOR / CÁMARA?</label><select id="auto-sensor">${sens}</select></div>`;
+          }
+          
           if (type === 'tts') {
-              const engs = this._tts_engines.length ? this._tts_engines.map(e => \`<option value="\${e.entity_id}">\${e.name}</option>\`).join('') : '<option value="tts.google_translate_say">Google Translate</option><option value="tts.cloud_say">Nabu Casa Cloud</option>';
-              const players = this._media_players.length ? this._media_players.map(e => \`<option value="\${e.entity_id}">\${e.name} (\${e.entity_id})</option>\`).join('') : '<option value="">Cargando reproductores...</option>';
-              configEl.innerHTML = `
+              const engs = this._tts_engines.length ? this._tts_engines.map(e => `<option value="${e.entity_id}">${e.name}</option>`).join('') : '<option value="tts.google_translate_say">Google Translate</option><option value="tts.cloud_say">Nabu Casa Cloud</option>';
+              const players = this._media_players.length ? this._media_players.map(e => `<option value="${e.entity_id}">${e.name} (${e.entity_id})</option>`).join('') : '<option value="">Cargando reproductores...</option>';
+              html += `
                 <div class="two-col">
                     <div class="field-group"><label>Motor TTS</label><select id="tts-engine">${engs}</select></div>
                     <div class="field-group"><label>Altavoz</label><select id="tts-device">${players}</select></div>
                 </div>
                 <div class="field-group"><label>Mensaje Opcional a Leer</label><input type="text" id="tts-msg" placeholder="Escribe el mensaje..."></div>
               `;
-          } else {
-              const targets = this._available.filter(x => ['switch','light','siren'].includes(x.domain)).map(e => \`<option value="\${e.entity_id}">\${e.name || e.entity_id}</option>\`).join('');
-              configEl.innerHTML = `
+          } else if (type === 'turn_on') {
+              const targets = this._available.filter(x => ['switch','light','siren'].includes(x.domain)).map(e => `<option value="${e.entity_id}">${e.name || e.entity_id}</option>`).join('');
+              html += `
                 <div class="field-group"><label>Entidad a encender</label><select id="turnon-entity">${targets}</select></div>
               `;
           }
+          configEl.innerHTML = html;
       };
       
       actionSel.addEventListener('change', renderConfig);
+      this.shadowRoot.getElementById('auto-event').addEventListener('change', renderConfig);
       renderConfig(); // initial render
       
       this.shadowRoot.getElementById('btn-save-auto').addEventListener('click', async () => {
           const status = this.shadowRoot.getElementById('auto-status');
           const type = actionSel.value;
-          const rule = { event: this.shadowRoot.getElementById('auto-event').value, actions: [] };
+          const evtType = this.shadowRoot.getElementById('auto-event').value;
+          
+          const rule = { event: evtType, actions: [] };
+          
+          if (evtType === 'sensor_opened') {
+              const sens = this.shadowRoot.getElementById('auto-sensor').value;
+              if (!sens) { status.textContent='Selecciona un sensor'; status.className='status err'; return; }
+              rule.condition = { type: 'entity_id', value: sens };
+          }
           
           if (type === 'tts') {
               const dev = this.shadowRoot.getElementById('tts-device').value;
               if(!dev) { status.textContent='Selecciona un altavoz'; status.className='status err'; return; }
               rule.actions.push({ type: 'tts', engine: this.shadowRoot.getElementById('tts-engine').value, device: dev, message: this.shadowRoot.getElementById('tts-msg').value });
-          } else {
+          } else if (type === 'turn_on') {
               const ent = this.shadowRoot.getElementById('turnon-entity').value;
               if(!ent) { status.textContent='Selecciona una entidad'; status.className='status err'; return; }
               rule.actions.push({ type: 'turn_on', entities: [ent] });
+          } else if (type === 'trigger_alarm') {
+              rule.actions.push({ type: 'trigger_alarm' });
           }
           
           this._automations.push(rule);

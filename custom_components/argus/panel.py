@@ -43,13 +43,13 @@ async def async_register_panel(hass: HomeAssistant) -> None:
                 hass,
                 webcomponent_name="argus-panel",
                 frontend_url_path=DOMAIN,
-                module_url=f"/api/{DOMAIN}_static/argus-panel.js?v=0.6.1",
+                module_url=f"/api/{DOMAIN}_static/argus-panel.js?v=0.6.2",
                 sidebar_title="Argus Home Hub",
                 sidebar_icon="mdi:shield-lock-outline",
                 require_admin=False,
                 config={
                     "domain": DOMAIN,
-                    "card_url": f"/api/{DOMAIN}_static/argus-card.js?v=0.6.1",
+                    "card_url": f"/api/{DOMAIN}_static/argus-card.js?v=0.6.2",
                 },
             )
             hass.data[DOMAIN][_PANEL_REGISTERED_KEY] = True
