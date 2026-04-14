@@ -179,63 +179,34 @@ _tmpl.innerHTML = `
   </div>
 
   <!-- TWO-COLUMN LAYOUT -->
-  <div class="grid" style="align-items:start; margin-bottom: 20px">
-    <!-- LEFT COLUMN - ROW 1 -->
-    <section class="glass panel">
-      <h2 id="h-instances"></h2>
-      <div id="entries"></div>
-      <!-- Activity log -->
-      <h2 id="h-activity-log" style="margin-top:20px"></h2>
-      <div id="activity-log" style="display:grid;gap:8px;max-height:260px;overflow-y:auto"></div>
-    </section>
+  <div class="grid" style="align-items:start">
 
-    <!-- RIGHT COLUMN - ROW 1 -->
+    <!-- LEFT COLUMN -->
     <div class="stack">
-      <!-- Modes -->
+      <!-- Instances -->
       <section class="glass panel">
-        <h2 id="h-modes"></h2>
-        <div class="tabs" id="mode-tabs"></div>
-        <div id="mode-view"></div>
+        <h2 id="h-instances"></h2>
+        <div id="entries"></div>
       </section>
-      <!-- Settings -->
+
+      <!-- Users -->
       <section class="glass panel">
-        <h2 id="h-settings"></h2>
-        <div class="subsection">
-          <div class="subsection-title" id="t-change-pin"></div>
-          <p class="small" id="p-pin-desc" style="margin:0"></p>
-          <div id="current-pin-display" style="font-size:13px;font-weight:700;color:var(--primary-color);margin-bottom:4px"></div>
-          <div class="two-col" style="gap:8px">
-            <div class="field-group"><label id="l-new-pin"></label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*"></div>
-            <div class="field-group"><label id="l-confirm-pin"></label><input type="password" id="new-pin-2" inputmode="numeric" pattern="[0-9]*"></div>
+        <h2 id="h-users"></h2>
+        <p class="small" id="p-admin-only" style="margin-bottom:14px;color:var(--warning-color,#fb8c00)"></p>
+        <div id="users-list" style="display:grid;gap:10px;margin-bottom:16px"></div>
+        <div class="subsection" id="add-user-form">
+          <div class="subsection-title" id="t-add-user"></div>
+          <div class="three-col">
+            <div class="field-group"><label id="l-username"></label><input type="text" id="new-user-name" autocomplete="off"></div>
+            <div class="field-group"><label id="l-user-pin"></label><input type="password" id="new-user-pin" inputmode="numeric" pattern="[0-9]*"></div>
+            <div class="field-group" style="justify-content:end">
+              <label id="l-is-admin" class="checkbox-label" style="margin-top:20px"><input type="checkbox" id="new-user-admin"> <span id="s-is-admin"></span></label>
+            </div>
           </div>
-          <button class="primary" id="btn-save-pin" style="width:100%;margin-top:4px"></button>
-          <span class="status" id="pin-status" style="font-size:12px"></span>
+          <div class="save-row"><button class="primary" id="btn-save-user" style="width:100%"></button><span class="status" id="user-status" style="width:100%;text-align:center"></span></div>
         </div>
       </section>
-    </div>
-  </div>
 
-  <div class="grid" style="align-items:start; margin-bottom: 20px">
-    <!-- LEFT COLUMN - ROW 2 -->
-    <div class="stack">
-      <!-- Automations -->
-      <section class="glass panel">
-        <h2 id="h-automations"></h2>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-          <span class="small" id="p-linked-rules"></span>
-          <button class="primary" id="btn-new-auto" style="padding:6px 14px;font-size:12px"></button>
-        </div>
-        <div id="auto-view"></div>
-      </section>
-      <!-- HomeKit -->
-      <section class="glass panel" id="homekit-section" style="display:none">
-        <h2 id="h-homekit"></h2>
-        <div id="homekit-content"></div>
-      </section>
-    </div>
-
-    <!-- RIGHT COLUMN - ROW 2 -->
-    <div class="stack">
       <!-- Notifications -->
       <section class="glass panel">
         <h2 id="h-notifications"></h2>
@@ -256,27 +227,61 @@ _tmpl.innerHTML = `
             <button class="ghost" id="btn-add-tts" style="white-space:nowrap">+ Agregar</button>
           </div>
         </div>
-        <div class="save-row" style="margin-top:10px"><button class="primary" id="btn-save-notif"></button><span class="status" id="notif-status"></span></div>
+        <div class="save-row" style="margin-top:10px"><button class="primary" id="btn-save-notif" style="width:100%"></button><span class="status" id="notif-status" style="width:100%;text-align:center"></span></div>
       </section>
-      <!-- Users -->
+
+      <!-- HomeKit -->
+      <section class="glass panel" id="homekit-section" style="display:none">
+        <h2 id="h-homekit"></h2>
+        <div id="homekit-content"></div>
+      </section>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="stack">
+      <!-- Activity log -->
       <section class="glass panel">
-        <h2 id="h-users"></h2>
-        <p class="small" id="p-admin-only" style="margin-bottom:14px;color:var(--warning-color,#fb8c00)"></p>
-        <div id="users-list" style="display:grid;gap:10px;margin-bottom:16px"></div>
-        <div class="subsection" id="add-user-form">
-          <div class="subsection-title" id="t-add-user"></div>
-          <div class="three-col">
-            <div class="field-group"><label id="l-username"></label><input type="text" id="new-user-name" autocomplete="off"></div>
-            <div class="field-group"><label id="l-user-pin"></label><input type="password" id="new-user-pin" inputmode="numeric" pattern="[0-9]*"></div>
-            <div class="field-group" style="justify-content:end">
-              <label id="l-is-admin" class="checkbox-label" style="margin-top:20px"><input type="checkbox" id="new-user-admin"> <span id="s-is-admin"></span></label>
-            </div>
+        <h2 id="h-activity-log"></h2>
+        <div id="activity-log" style="display:grid;gap:8px;max-height:260px;overflow-y:auto"></div>
+      </section>
+
+      <!-- Modes -->
+      <section class="glass panel">
+        <h2 id="h-modes"></h2>
+        <div class="tabs" id="mode-tabs"></div>
+        <div id="mode-view"></div>
+      </section>
+
+      <!-- Automations -->
+      <section class="glass panel">
+        <h2 id="h-automations"></h2>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <span class="small" id="p-linked-rules"></span>
+          <button class="primary" id="btn-new-auto" style="padding:6px 14px;font-size:12px"></button>
+        </div>
+        <div id="auto-view"></div>
+      </section>
+
+      <!-- Settings -->
+      <section class="glass panel">
+        <h2 id="h-settings"></h2>
+        <div class="subsection">
+          <div class="subsection-title" id="t-change-pin"></div>
+          <p class="small" id="p-pin-desc" style="margin:0"></p>
+          <div id="current-pin-display" style="font-size:13px;font-weight:700;color:var(--primary-color);margin-bottom:4px"></div>
+          <div class="two-col" style="gap:8px">
+            <div class="field-group"><label id="l-new-pin"></label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*"></div>
+            <div class="field-group"><label id="l-confirm-pin"></label><input type="password" id="new-pin-2" inputmode="numeric" pattern="[0-9]*"></div>
           </div>
-          <div class="save-row"><button class="primary" id="btn-save-user"></button><span class="status" id="user-status"></span></div>
+          <div class="save-row">
+            <button class="primary" id="btn-save-pin" style="width:100%;margin-top:4px"></button>
+            <span class="status" id="pin-status" style="width:100%;text-align:center"></span>
+          </div>
         </div>
       </section>
-    </div> <!-- /RIGHT COLUMN ROW 2 -->
-  </div> <!-- /grid row 2 -->
+    </div> <!-- /RIGHT COLUMN -->
+
+  </div> <!-- /grid -->
 </div>
 
 <!-- Selector modal -->
@@ -667,10 +672,9 @@ class ArgusPanel extends HTMLElement {
           </div>
           ${readonly ? '' : `<div><button class="ghost" data-open-selector="siren">${this._t('search_select')}</button></div>`}
         </div>
-      </div>
       ${readonly ? '' : `<div class="save-row" style="margin-top:14px">
-        <button class="primary" id="save-mode">${this._t('save_mode')}</button>
-        <span class="status" id="mode-status"></span>
+        <button class="primary" id="save-mode" style="width:100%">${this._t('save_mode')}</button>
+        <span class="status" id="mode-status" style="width:100%;text-align:center"></span>
       </div>`}
     `;
     if (!readonly) {
