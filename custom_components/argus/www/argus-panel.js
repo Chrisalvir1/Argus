@@ -1,8 +1,9 @@
 /**
- * Argus Home Hub – v0.8.2
+ * Argus Home Hub – v0.8.3
  * Complete, self-contained custom element.
- * Fixes: layout stack gap, input styling, weather bg & temp precision,
- *        fullscreen button moved to instances panel, containers aligned.
+ * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
+ *        temperature from dedicated sensor (actual vs apparent fix),
+ *        DESARMADO button active state when disarmed.
  */
 
 /* ── i18n ─────────────────────────────────────────────────────────────── */
@@ -175,6 +176,58 @@ _tmpl.innerHTML = `
   .log-badge.arm{background:rgba(251,140,0,.15);color:#fb8c00}
   .log-badge.disarm{background:rgba(67,160,71,.15);color:var(--success-color,#43a047)}
   .log-badge.trigger{background:rgba(229,57,53,.18);color:var(--error-color,#e53935)}
+  /* ── Weather Animated Backgrounds ────────────────────────────────── */
+  .wx{position:absolute;inset:0;overflow:hidden;border-radius:inherit;z-index:1}
+  .wx-sunny{background:linear-gradient(175deg,#0055cc 0%,#1976d2 25%,#42a5f5 55%,#b3e5fc 100%)}
+  .wx-partly{background:linear-gradient(175deg,#0d47a1 0%,#1565c0 30%,#5b97cc 60%,#90caf9 100%)}
+  .wx-cloudy{background:linear-gradient(175deg,#546e7a 0%,#607d8b 40%,#90a4ae 70%,#b0bec5 100%)}
+  .wx-rain{background:linear-gradient(175deg,#1a2e40 0%,#263238 35%,#37474f 65%,#455a64 100%)}
+  .wx-storm{background:linear-gradient(175deg,#05080e 0%,#0b1420 40%,#111e30 75%,#1a2a40 100%)}
+  .wx-snow{background:linear-gradient(175deg,#455a64 0%,#607d8b 35%,#90a4ae 65%,#cfd8dc 100%)}
+  .wx-fog{background:linear-gradient(175deg,#6d8b96 0%,#8faab3 40%,#b0c4cc 70%,#cdd8dc 100%)}
+  .wx-night{background:linear-gradient(175deg,#020613 0%,#05103a 30%,#0a1850 60%,#152060 100%)}
+  .wx-night-cloudy{background:linear-gradient(175deg,#080810 0%,#0f1020 40%,#181828 70%,#222234 100%)}
+  /* sun */
+  .wx-sun{position:absolute;top:9%;right:13%;width:64px;height:64px}
+  .wx-sun-core{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 38% 32%,#fff9e3 5%,#fff176 35%,#fdd835 65%,#fbc02d 85%);box-shadow:0 0 0 7px rgba(255,235,59,.22),0 0 0 16px rgba(255,235,59,.1),0 0 45px 10px rgba(255,210,0,.42);animation:wxSunPulse 4s ease-in-out infinite}
+  .wx-sun-rays{position:absolute;inset:-24px;border-radius:50%;background:repeating-conic-gradient(rgba(255,230,60,.18) 0deg 7deg,transparent 7deg 18deg);animation:wxSunRotate 18s linear infinite}
+  @keyframes wxSunPulse{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.06);filter:brightness(1.1)}}
+  @keyframes wxSunRotate{to{transform:rotate(360deg)}}
+  /* clouds */
+  .wx-cloud{position:absolute;background:rgba(255,255,255,.85);border-radius:60px}
+  .wx-cloud::before,.wx-cloud::after{content:'';position:absolute;background:inherit;border-radius:50%}
+  .wx-cloud::before{width:54%;height:160%;top:-64%;left:17%}
+  .wx-cloud::after{width:40%;height:130%;top:-50%;right:14%}
+  .wx-cloud.gray{background:rgba(118,138,148,.72)}.wx-cloud.gray::before,.wx-cloud.gray::after{background:inherit}
+  .wx-cloud.dark{background:rgba(48,62,76,.84)}.wx-cloud.dark::before,.wx-cloud.dark::after{background:inherit}
+  .wx-cl1{width:130px;height:42px;top:22%;left:-160px;animation:wxDr1 22s linear infinite}
+  .wx-cl2{width:90px;height:30px;top:37%;left:-110px;animation:wxDr2 30s linear infinite 6s}
+  .wx-cl3{width:160px;height:50px;top:15%;left:-190px;animation:wxDr1 28s linear infinite 10s}
+  .wx-cl4{width:110px;height:36px;top:30%;left:-135px;animation:wxDr2 18s linear infinite 2s}
+  @keyframes wxDr1{to{transform:translateX(calc(100vw + 360px))}}
+  @keyframes wxDr2{to{transform:translateX(calc(100vw + 300px))}}
+  /* raindrops */
+  .wx-drop{position:absolute;width:1.5px;background:linear-gradient(to bottom,transparent,rgba(145,200,235,.75));border-radius:1px;animation:wxDropFall linear infinite}
+  @keyframes wxDropFall{0%{top:-5%;opacity:0}15%{opacity:1}85%{opacity:.7}100%{top:108%;opacity:0}}
+  /* lightning */
+  .wx-bolt{position:absolute;top:0;left:44%;width:8px;height:60%;background:rgba(255,255,180,0);clip-path:polygon(42% 0%,78% 0%,52% 44%,82% 44%,22% 100%,48% 52%,12% 52%);animation:wxBolt 7s ease-in-out infinite}
+  .wx-flash{position:absolute;inset:0;background:rgba(255,255,255,0);animation:wxFlash 7s ease-in-out infinite;border-radius:inherit}
+  @keyframes wxBolt{0%,81%,84%,100%{background:rgba(255,255,180,0)}82%,83%{background:linear-gradient(to bottom,#fff9c4,#ffee58,#fff176)}}
+  @keyframes wxFlash{0%,81%,84%,100%{background:rgba(255,255,255,0)}82%,83%{background:rgba(255,255,255,.07)}}
+  /* snowflakes */
+  .wx-flake{position:absolute;color:rgba(255,255,255,.82);animation:wxFlakeFall linear infinite;user-select:none;pointer-events:none}
+  @keyframes wxFlakeFall{0%{top:-8%;opacity:0;transform:translateX(0) rotate(0deg)}10%{opacity:.9}85%{opacity:.65}100%{top:108%;opacity:0;transform:translateX(var(--wx-d,20px)) rotate(540deg)}}
+  /* stars */
+  .wx-star{position:absolute;background:#fff;border-radius:50%;animation:wxStarBlink ease-in-out infinite;pointer-events:none}
+  @keyframes wxStarBlink{0%,100%{opacity:.1;transform:scale(.6)}50%{opacity:1;transform:scale(1.15)}}
+  /* moon */
+  .wx-moon{position:absolute;top:9%;right:13%;width:48px;height:48px}
+  .wx-moon-disc{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 37% 32%,#fffde7 0%,#fff9c4 35%,#fff176 65%,#ffee58 85%);box-shadow:0 0 0 3px rgba(255,238,88,.18),0 0 22px 5px rgba(255,238,88,.22),0 0 48px 12px rgba(255,238,88,.1);animation:wxMoonPulse 6s ease-in-out infinite}
+  .wx-moon-shadow{position:absolute;top:-4%;left:18%;width:90%;height:90%;border-radius:50%;background:radial-gradient(circle,rgba(0,0,0,0) 40%,rgba(8,12,35,.55) 82%)}
+  @keyframes wxMoonPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03);filter:brightness(1.07)}}
+  /* fog */
+  .wx-fog-strip{position:absolute;width:250%;height:44px;background:linear-gradient(90deg,transparent 5%,rgba(175,200,210,.35) 25%,rgba(192,212,218,.44) 50%,rgba(175,200,210,.35) 75%,transparent 95%);animation:wxFogMove linear infinite alternate;border-radius:50px}
+  @keyframes wxFogMove{0%{transform:translateX(-40%)}100%{transform:translateX(10%)}}
 </style>
 
 <div class="wrap">
@@ -562,14 +615,27 @@ class ArgusPanel extends HTMLElement {
                      || weatherEntities.find(s => s.state && s.state !== 'unknown' && s.state !== 'unavailable')
                      || { state: 'sunny', attributes: { temperature: 24, temperature_unit: '°C' } };
 
-    // Read actual temperature (NOT apparent/feels-like)
-    let rawTemp = (typeof weatherEnt.attributes?.temperature === 'number')
-                  ? weatherEnt.attributes.temperature
-                  : null;
-    // Unit conversion: auto-detect °F and convert to °C for display
-    const rawUnit = weatherEnt.attributes?.temperature_unit
-                    || this._hass?.config?.unit_system?.temperature
-                    || '°C';
+    // Temperature: prefer dedicated sensor (actual temp, not apparent/feels-like)
+    // sensor.apple_weather_temperature is actual; weather entity can show apparent
+    const wxTempSensor = Object.values(this._hass?.states || {}).find(s =>
+      s.entity_id.startsWith('sensor.') &&
+      (s.entity_id.includes('apple_weather') || s.entity_id.includes('outside') ||
+       s.entity_id.includes('outdoor') || s.entity_id.includes('exterior')) &&
+      (s.entity_id.endsWith('_temperature') || s.entity_id.endsWith('_temp')) &&
+      !s.entity_id.includes('apparent') && !s.entity_id.includes('feels') &&
+      !s.entity_id.includes('dew') && !s.entity_id.includes('wet_bulb') &&
+      !isNaN(parseFloat(s.state))
+    );
+    let rawTemp, rawUnit;
+    if (wxTempSensor) {
+      rawTemp = parseFloat(wxTempSensor.state);
+      rawUnit = wxTempSensor.attributes?.unit_of_measurement || '°C';
+    } else {
+      rawTemp = (typeof weatherEnt.attributes?.temperature === 'number')
+                ? weatherEnt.attributes.temperature : null;
+      rawUnit = weatherEnt.attributes?.temperature_unit
+                || this._hass?.config?.unit_system?.temperature || '°C';
+    }
     let temp, unit;
     if (rawUnit === '°F' || rawUnit === 'F') {
       temp = rawTemp !== null ? Math.round((rawTemp - 32) * 5 / 9) : '--';
@@ -595,22 +661,6 @@ class ArgusPanel extends HTMLElement {
     // Time
     const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
 
-    // Background SVG — weather conditions take priority over time of day
-    let bgSvg;
-    if (weatherState.includes('pouring') || weatherState.includes('rain') || weatherState.includes('drizzle') || weatherState.includes('shower')) {
-      bgSvg = 'env_rain.svg';
-    } else if (weatherState.includes('thunder') || weatherState.includes('lightning') || weatherState.includes('storm')) {
-      bgSvg = 'env_rain.svg';
-    } else if (weatherState.includes('snow') || weatherState.includes('hail') || weatherState.includes('sleet') || weatherState.includes('blizzard')) {
-      bgSvg = 'env_snow.svg';
-    } else if (weatherState.includes('cloud') || weatherState.includes('overcast') || weatherState.includes('fog') || weatherState.includes('mist') || weatherState.includes('hazy')) {
-      bgSvg = 'env_clouds.svg';
-    } else if (isNight) {
-      bgSvg = (weatherState.includes('clear') || weatherState.includes('sunny')) ? 'env_night_starry.svg' : 'env_night.svg';
-    } else {
-      bgSvg = 'env_day.svg';
-    }
-
     el.innerHTML = entries.map((e, idx) => {
       const live  = this._hass?.states[e.entity_id]?.state;
       const state = live || e.state || 'unavailable';
@@ -624,9 +674,9 @@ class ArgusPanel extends HTMLElement {
       else if (state === 'armed_vacation') svgName = 'mode_vacation.svg';
 
       return `
-        <article class="entry" style="${triggered ? 'border: 3px solid #ff5252; box-shadow: 0 0 30px rgba(255,82,82,0.4)' : ''}">
-          <div class="entry-bg"><img src="/api/argus_static/${bgSvg}?v=0.8.0"></div>
-          
+        <article class="entry" style="${triggered ? 'border:3px solid #ff5252;box-shadow:0 0 30px rgba(255,82,82,.4)' : ''}">
+          ${this._getWeatherBg(weatherState, isNight)}
+
           <div class="hud">
             <div class="hud-loc">${locName}</div>
             <div class="hud-data">${timeStr} • ${temp}${unit}</div>
@@ -637,11 +687,11 @@ class ArgusPanel extends HTMLElement {
               <button class="liquid-btn btn-home ${state==='armed_home'?'active':''}" data-idx="${idx}" data-action="home">🏠 EN CASA</button>
               <button class="liquid-btn btn-away ${state==='armed_away'?'active':''}" data-idx="${idx}" data-action="away">🔒 AUSENTE</button>
               <button class="liquid-btn btn-night ${state==='armed_night'?'active':''}" data-idx="${idx}" data-action="night">🌙 NOCHE</button>
-              <button class="liquid-btn btn-disarm" data-idx="${idx}" data-action="disarm">🔓 DESARMADO</button>
+              <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm">🔓 DESARMADO</button>
             </div>
-            
+
             <div class="entry-icon">
-               ${triggered ? '<div style="font-size:100px; filter: drop-shadow(0 0 30px #f00)">🚨</div>' : `<img src="/api/argus_static/${svgName}?v=0.8.0">`}
+              ${triggered ? '<div style="font-size:90px;filter:drop-shadow(0 0 30px #f00)">🚨</div>' : `<img src="/api/argus_static/${svgName}?v=0.8.3">`}
             </div>
           </div>
         </article>`;
@@ -660,6 +710,116 @@ class ArgusPanel extends HTMLElement {
     } else {
       document.exitFullscreen();
     }
+  }
+
+  /* ── Inline CSS Weather Backgrounds ─────────────────────────── */
+  _getWeatherBg(ws, isNight) {
+    const has = s => ws.includes(s);
+    if (has('pouring') || has('rain') || has('drizzle') || has('shower')) return this._bgRain(false);
+    if (has('thunder') || has('lightning') || has('storm'))               return this._bgRain(true);
+    if (has('snow') || has('hail') || has('sleet') || has('blizzard'))   return this._bgSnow();
+    if (has('fog') || has('mist') || has('hazy'))                         return this._bgFog(isNight);
+    if ((has('cloud') || has('overcast')) && isNight)                     return this._bgNightCloudy(true);
+    if (has('cloud') || has('overcast'))                                  return this._bgCloudy(has('partly'));
+    if (isNight && (has('clear') || has('sunny')))                        return this._bgNightStarry();
+    if (isNight)                                                           return this._bgNightCloudy(false);
+    if (has('partly'))                                                     return this._bgPartlyCloudy();
+    return this._bgSunny();
+  }
+
+  _bgSunny() {
+    return `<div class="wx wx-sunny">
+      <div class="wx-sun"><div class="wx-sun-rays"></div><div class="wx-sun-core"></div></div>
+      <div class="wx-cloud wx-cl1"></div><div class="wx-cloud wx-cl2"></div>
+    </div>`;
+  }
+
+  _bgPartlyCloudy() {
+    return `<div class="wx wx-partly">
+      <div class="wx-sun" style="opacity:.85"><div class="wx-sun-rays"></div><div class="wx-sun-core"></div></div>
+      <div class="wx-cloud wx-cl1"></div><div class="wx-cloud wx-cl2"></div>
+      <div class="wx-cloud wx-cl3"></div><div class="wx-cloud wx-cl4"></div>
+    </div>`;
+  }
+
+  _bgCloudy(isPartly) {
+    const sun = isPartly ? `<div class="wx-sun" style="opacity:.35"><div class="wx-sun-rays"></div><div class="wx-sun-core"></div></div>` : '';
+    return `<div class="wx wx-cloudy">${sun}
+      <div class="wx-cloud gray wx-cl1"></div><div class="wx-cloud gray wx-cl2"></div>
+      <div class="wx-cloud gray wx-cl3"></div><div class="wx-cloud gray wx-cl4"></div>
+    </div>`;
+  }
+
+  _bgRain(hasLightning) {
+    const drops = Array.from({length: 48}, (_, i) => {
+      const l  = ((i * 211 + 13) % 97).toFixed(1);
+      const dd = -((i * 0.09 + (i % 7) * 0.35) % 3.5).toFixed(2);
+      const dur = (0.48 + (i % 6) * 0.09).toFixed(2);
+      const h   = 10 + (i % 6) * 4;
+      return `<div class="wx-drop" style="left:${l}%;height:${h}px;animation-duration:${dur}s;animation-delay:${dd}s"></div>`;
+    }).join('');
+    return `<div class="wx ${hasLightning ? 'wx-storm' : 'wx-rain'}">
+      <div class="wx-cloud dark wx-cl1"></div><div class="wx-cloud dark wx-cl3"></div>
+      ${hasLightning ? '<div class="wx-bolt"></div><div class="wx-flash"></div>' : ''}
+      ${drops}
+    </div>`;
+  }
+
+  _bgSnow() {
+    const chars = ['❄','❅','❆','∗','✶','•'];
+    const flakes = Array.from({length: 28}, (_, i) => {
+      const l   = ((i * 353 + 11) % 94).toFixed(1);
+      const dd  = -((i * 0.28 + (i % 5) * 0.6) % 5).toFixed(2);
+      const dur = (3.2 + (i % 6) * 0.6).toFixed(1);
+      const d   = (((i % 9) - 4) * 14);
+      const sz  = 10 + (i % 5) * 3;
+      return `<div class="wx-flake" style="left:${l}%;animation-duration:${dur}s;animation-delay:${dd}s;--wx-d:${d}px;font-size:${sz}px">${chars[i%6]}</div>`;
+    }).join('');
+    return `<div class="wx wx-snow">
+      <div class="wx-cloud gray wx-cl1"></div><div class="wx-cloud gray wx-cl3"></div>
+      ${flakes}
+    </div>`;
+  }
+
+  _bgFog(isNight) {
+    const strips = Array.from({length: 4}, (_, i) =>
+      `<div class="wx-fog-strip" style="top:${18+i*18}%;animation-duration:${11+i*5}s;animation-delay:-${i*3}s;opacity:${.5+i*.12}"></div>`
+    ).join('');
+    return `<div class="wx ${isNight ? 'wx-night-cloudy' : 'wx-fog'}">
+      ${strips}
+      ${isNight ? '<div class="wx-moon" style="opacity:.45"><div class="wx-moon-disc"></div><div class="wx-moon-shadow"></div></div>' : ''}
+    </div>`;
+  }
+
+  _bgNightStarry() {
+    const stars = Array.from({length: 60}, (_, i) => {
+      const x   = ((i * 181 + 17) % 96).toFixed(1);
+      const y   = ((i * 97  + 7)  % 72).toFixed(1);
+      const s   = (.7 + (i % 4) * .65).toFixed(1);
+      const dd  = -((i * 0.13) % 5.5).toFixed(2);
+      const dur = (1.8 + (i % 6) * .45).toFixed(1);
+      return `<div class="wx-star" style="left:${x}%;top:${y}%;width:${s}px;height:${s}px;animation-duration:${dur}s;animation-delay:${dd}s"></div>`;
+    }).join('');
+    return `<div class="wx wx-night">${stars}
+      <div class="wx-moon"><div class="wx-moon-disc"></div><div class="wx-moon-shadow"></div></div>
+    </div>`;
+  }
+
+  _bgNightCloudy(hasMoon = true) {
+    const stars = Array.from({length: 18}, (_, i) => {
+      const x   = ((i * 53 + 9) % 85).toFixed(1);
+      const y   = ((i * 41 + 5) % 48).toFixed(1);
+      const s   = (.6 + (i % 3) * .5).toFixed(1);
+      const dd  = -((i * 0.2) % 5).toFixed(2);
+      const dur = (2.5 + (i % 5) * .6).toFixed(1);
+      return `<div class="wx-star" style="left:${x}%;top:${y}%;width:${s}px;height:${s}px;animation-duration:${dur}s;animation-delay:${dd}s;opacity:.25"></div>`;
+    }).join('');
+    return `<div class="wx wx-night-cloudy">${stars}
+      ${hasMoon ? '<div class="wx-moon" style="opacity:.5"><div class="wx-moon-disc"></div><div class="wx-moon-shadow"></div></div>' : ''}
+      <div class="wx-cloud dark wx-cl1" style="opacity:.75"></div>
+      <div class="wx-cloud dark wx-cl2" style="opacity:.85"></div>
+      <div class="wx-cloud dark wx-cl3" style="opacity:.65"></div>
+    </div>`;
   }
 
   /* ── Activity Log ────────────────────────────────────────────────── */
