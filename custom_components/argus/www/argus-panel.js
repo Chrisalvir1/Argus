@@ -179,37 +179,17 @@ _tmpl.innerHTML = `
   </div>
 
   <!-- TWO-COLUMN LAYOUT -->
-  <div class="grid" style="align-items:start">
+  <div class="grid" style="align-items:start; margin-bottom: 20px">
+    <!-- LEFT COLUMN - ROW 1 -->
+    <section class="glass panel">
+      <h2 id="h-instances"></h2>
+      <div id="entries"></div>
+      <!-- Activity log -->
+      <h2 id="h-activity-log" style="margin-top:20px"></h2>
+      <div id="activity-log" style="display:grid;gap:8px;max-height:260px;overflow-y:auto"></div>
+    </section>
 
-    <!-- LEFT COLUMN -->
-    <div class="stack">
-      <!-- Instances -->
-      <section class="glass panel">
-        <h2 id="h-instances"></h2>
-        <div id="entries"></div>
-        <!-- Activity log -->
-        <h2 id="h-activity-log" style="margin-top:20px"></h2>
-        <div id="activity-log" style="display:grid;gap:8px;max-height:260px;overflow-y:auto"></div>
-      </section>
-
-      <!-- Automations -->
-      <section class="glass panel">
-        <h2 id="h-automations"></h2>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-          <span class="small" id="p-linked-rules"></span>
-          <button class="primary" id="btn-new-auto" style="padding:6px 14px;font-size:12px"></button>
-        </div>
-        <div id="auto-view"></div>
-      </section>
-
-      <!-- HomeKit -->
-      <section class="glass panel" id="homekit-section" style="display:none">
-        <h2 id="h-homekit"></h2>
-        <div id="homekit-content"></div>
-      </section>
-    </div>
-
-    <!-- RIGHT COLUMN -->
+    <!-- RIGHT COLUMN - ROW 1 -->
     <div class="stack">
       <!-- Modes -->
       <section class="glass panel">
@@ -217,7 +197,6 @@ _tmpl.innerHTML = `
         <div class="tabs" id="mode-tabs"></div>
         <div id="mode-view"></div>
       </section>
-
       <!-- Settings -->
       <section class="glass panel">
         <h2 id="h-settings"></h2>
@@ -233,7 +212,30 @@ _tmpl.innerHTML = `
           <span class="status" id="pin-status" style="font-size:12px"></span>
         </div>
       </section>
+    </div>
+  </div>
 
+  <div class="grid" style="align-items:start; margin-bottom: 20px">
+    <!-- LEFT COLUMN - ROW 2 -->
+    <div class="stack">
+      <!-- Automations -->
+      <section class="glass panel">
+        <h2 id="h-automations"></h2>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <span class="small" id="p-linked-rules"></span>
+          <button class="primary" id="btn-new-auto" style="padding:6px 14px;font-size:12px"></button>
+        </div>
+        <div id="auto-view"></div>
+      </section>
+      <!-- HomeKit -->
+      <section class="glass panel" id="homekit-section" style="display:none">
+        <h2 id="h-homekit"></h2>
+        <div id="homekit-content"></div>
+      </section>
+    </div>
+
+    <!-- RIGHT COLUMN - ROW 2 -->
+    <div class="stack">
       <!-- Notifications -->
       <section class="glass panel">
         <h2 id="h-notifications"></h2>
@@ -256,7 +258,6 @@ _tmpl.innerHTML = `
         </div>
         <div class="save-row" style="margin-top:10px"><button class="primary" id="btn-save-notif"></button><span class="status" id="notif-status"></span></div>
       </section>
-
       <!-- Users -->
       <section class="glass panel">
         <h2 id="h-users"></h2>
@@ -274,9 +275,8 @@ _tmpl.innerHTML = `
           <div class="save-row"><button class="primary" id="btn-save-user"></button><span class="status" id="user-status"></span></div>
         </div>
       </section>
-    </div> <!-- /RIGHT COLUMN -->
-
-  </div> <!-- /grid -->
+    </div> <!-- /RIGHT COLUMN ROW 2 -->
+  </div> <!-- /grid row 2 -->
 </div>
 
 <!-- Selector modal -->
@@ -1152,9 +1152,9 @@ class ArgusPanel extends HTMLElement {
         try {
           await this._hass.callService('alarm_control_panel', 'alarm_disarm', { entity_id: e.entity_id, code: pin });
           // Write audit log
-          this._writeLog('disarm', `${e.title || 'Argus'} desarmado`, currentUser);
+          this._writeLog('disarm', `Sistema desarmado`, currentUser);
           // HA push notification
-          this._sendHaNotif(`🔓 ${this._t('log_disarmed')}`, `${e.title || 'Argus'} fue desarmado por ${currentUser}.`);
+          this._sendHaNotif(`🔓 ${this._t('log_disarmed')}`, `El sistema fue desarmado manualmente por ${currentUser}.`);
           setTimeout(() => this._load(), 800);
         } catch (err) { console.error('disarm error:', err); }
       });
@@ -1164,8 +1164,8 @@ class ArgusPanel extends HTMLElement {
     try {
       await this._hass.callService('alarm_control_panel', service, { entity_id: e.entity_id });
       const modeTxt = modeLabels[action] || action;
-      this._writeLog('arm', `${e.title || 'Argus'} armado en modo ${modeTxt}`, currentUser);
-      this._sendHaNotif(`🔒 ${this._t('log_armed')} — ${modeTxt}`, `${e.title || 'Argus'} fue armado en modo "${modeTxt}" por ${currentUser}.`);
+      this._writeLog('arm', `Sistema armado en modo ${modeTxt}`, currentUser);
+      this._sendHaNotif(`🔒 ${this._t('log_armed')} — ${modeTxt}`, `El sistema fue armado en modo "${modeTxt}" manualmente por ${currentUser}.`);
       setTimeout(() => this._load(), 800);
     } catch (err) { console.error('Argus action failed', err); }
   }
