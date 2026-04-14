@@ -663,7 +663,11 @@ class ArgusPanel extends HTMLElement {
           <div class="chip-list" id="sensor-chips">
             ${sensors.map(x => this._chip(x, 'sensor')).join('') || `<span class="small">${this._t('none_selected')}</span>`}
           </div>
-          ${readonly ? '' : `<div><button class="ghost" data-open-selector="sensor">${this._t('search_select')}</button></div>`}
+          ${readonly ? '' : `<div><button class="ghost" data-open-selector="sensor">${this._t('search_select')}</button></div>
+          <label class="checkbox-label" style="display:block;margin-top:10px">
+            <input type="checkbox" id="mode-require-closed" ${cfg.require_closed ? 'checked' : ''}>
+            Bloquear armado si hay sensores abiertos
+          </label>`}
         </div>
         <div class="subsection">
           <div class="subsection-title">${this._t('siren_section')}</div>
@@ -710,6 +714,9 @@ class ArgusPanel extends HTMLElement {
 
   async _saveMode() {
     const cfg = this._currentModeConfig();
+    const chk = this.shadowRoot.getElementById('mode-require-closed');
+    if (chk) cfg.require_closed = chk.checked;
+    
     const status = this.shadowRoot.getElementById('mode-status');
     try {
       await this._send('argus/save_mode_config', { mode: this._mode, config: cfg });
@@ -1114,14 +1121,31 @@ class ArgusPanel extends HTMLElement {
       this._showPinModal(async pin => {
         try {
           await this._hass.callService('alarm_control_panel', 'alarm_disarm', { entity_id: e.entity_id, code: pin });
-          // Write audit log
           this._writeLog('disarm', `Sistema desarmado`, currentUser);
-          // HA push notification
           this._sendHaNotif(`🔓 ${this._t('log_disarmed')}`, `El sistema fue desarmado manualmente por ${currentUser}.`);
           setTimeout(() => this._load(), 800);
         } catch (err) { console.error('disarm error:', err); }
       });
       return;
+    }
+
+    // Check if mode requires closed sensors
+    const modeCfg = this._ui?.modes?.[action] || {};
+    if (modeCfg.require_closed) {
+      const modeSensors = modeCfg.sensors || [];
+      const openNames = [];
+      for (const entityId of modeSensors) {
+        const estado = this._hass.states[entityId]?.state;
+        if (['on', 'open', 'unlocked', 'active', 'motion', 'recording'].includes(estado)) {
+          const name = this._hass.states[entityId]?.attributes?.friendly_name || entityId;
+          openNames.push(name);
+        }
+      }
+      if (openNames.length > 0) {
+        alert(`🚨 Armado bloqueado.\n\nEl modo requiere que los sensores estén cerrados.\nSensores abiertos:\n- ${openNames.join('\n- ')}`);
+        this._writeLog('arm_rejected', `Sensores abiertos al intentar armar: ${openNames.join(', ')}`, currentUser);
+        return; // Abort
+      }
     }
 
     try {

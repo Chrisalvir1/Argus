@@ -607,6 +607,34 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             await async_append_audit_log(self.hass, "arm_rejected", f"Invalid code for {target.value}")
             return
 
+        # Evaluate require_closed restrictions
+        mode_key = {
+            AlarmControlPanelState.ARMED_HOME: "home",
+            AlarmControlPanelState.ARMED_AWAY: "away",
+            AlarmControlPanelState.ARMED_NIGHT: "night",
+            AlarmControlPanelState.ARMED_VACATION: "vacation",
+        }.get(target)
+
+        if mode_key:
+            mode_config = self._ui_data.get("modes", {}).get(mode_key, {})
+            if mode_config.get("require_closed", False):
+                sensors = mode_config.get("sensors", [])
+                open_names = []
+                for entity_id in sensors:
+                    state_obj = self.hass.states.get(entity_id)
+                    if state_obj and state_obj.state in ("on", "open", "unlocked", "recording", "active", "motion"):
+                        open_names.append(state_obj.attributes.get("friendly_name", entity_id))
+                if open_names:
+                    msg = f"Sensores abiertos: {', '.join(open_names)}"
+                    _LOGGER.warning("Argus: Arm rejected — %s", msg)
+                    await async_append_audit_log(self.hass, "arm_rejected", msg)
+                    self.hass.components.persistent_notification.async_create(
+                        title="Argus: Armado Bloqueado",
+                        message=f"No se pudo armar el sistema porque los siguientes sensores están inseguros:\\n- " + "\\n- ".join(open_names),
+                        notification_id="argus_arm_blocked"
+                    )
+                    return
+
         self._cancel_timers()
 
         if self._arming_time > 0:
