@@ -64,11 +64,27 @@ async def async_append_audit_log(
     hass: HomeAssistant, action: str, detail: str = "", user: str = "system"
 ) -> None:
     """Append an event to the Argus audit log (max 200 entries, newest first)."""
+    import datetime
     store = Store(hass, _STORAGE_VERSION, _STORAGE_KEY)
     current = await async_load_ui_data(hass)
     log: list = current.get("audit_log", [])
+    
+    # Deduplication for UI actions: If a real user logged a similar action (arm/disarm) <5s ago, ignore the system default log.
+    now = datetime.datetime.now(datetime.timezone.utc)
+    if log and user == "system":
+        latest = log[0]
+        try:
+            latest_ts = datetime.datetime.fromisoformat(latest["ts"].replace("Z", "+00:00"))
+            if (now - latest_ts).total_seconds() < 5.0:
+                act_new = action.replace("ed", "")
+                act_old = latest.get("action", "").replace("ed", "")
+                if act_new == act_old and latest.get("user", "system") != "system":
+                    return  # Skip duplicate system log
+        except Exception:
+            pass
+
     entry = {
-        "ts": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "ts": now.isoformat(),
         "action": action,
         "detail": detail,
         "user": user,
