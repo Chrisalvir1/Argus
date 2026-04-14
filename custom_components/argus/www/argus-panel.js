@@ -1,8 +1,8 @@
 /**
- * Argus Home Hub – v0.9.0
+ * Argus Home Hub – v0.9.1
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
- *        temperature from dedicated sensor (actual vs apparent fix),
+ *        temperature from dedicated local sensor with weather fallback,
  *        DESARMADO button active state when disarmed,
  *        per-instance fullscreen, vacation quick action, numeric PIN dial pad,
  *        mode tabs including disarmed.
@@ -630,21 +630,53 @@ class ArgusPanel extends HTMLElement {
     const isArmed = allStates.some(s => s.startsWith('armed') || s === 'triggered' || s === 'pending');
     globalStatusEl.innerHTML = `<span class="badge ${isArmed ? 'armed_away' : 'disarmed'}">${isArmed ? 'SISTEMA ARMADO' : 'SISTEMA DESARMADO'}</span>`;
 
-    // Weather & Location Logic — v0.8.2 precise entity selection
-    const weatherEntities = Object.values(this._hass?.states || {}).filter(s => s.entity_id.startsWith('weather.'));
-    // Priority: apple_weather → weather.home → first valid → fallback
+    // Weather & precise local temperature source
+    const allHaStates = Object.values(this._hass?.states || {});
+    const weatherEntities = allHaStates.filter(s => s.entity_id.startsWith('weather.'));
     const weatherEnt = weatherEntities.find(s => s.entity_id.includes('apple_weather'))
                      || weatherEntities.find(s => s.entity_id === 'weather.home')
                      || weatherEntities.find(s => s.state && s.state !== 'unknown' && s.state !== 'unavailable')
                      || { state: 'sunny', attributes: { temperature: 24, temperature_unit: '°C' } };
 
-    // Temperature v0.8.8: use weather entity's temperature attribute directly
-    // Avoids sensor mismatch where a found sensor returns apparent/feels-like temp
-    let rawTemp, rawUnit;
-    rawTemp = (typeof weatherEnt.attributes?.temperature === 'number')
-              ? weatherEnt.attributes.temperature : null;
-    rawUnit = weatherEnt.attributes?.temperature_unit
-              || this._hass?.config?.unit_system?.temperature || '°C';
+    const validTempState = s => {
+      if (!s || s.entity_id.startsWith('weather.') || s.entity_id.startsWith('climate.')) return false;
+      if (!['sensor', 'binary_sensor'].includes(s.entity_id.split('.')[0])) return false;
+      if (['unknown', 'unavailable', 'none', ''].includes(String(s.state).toLowerCase())) return false;
+      const dc = String(s.attributes?.device_class || '').toLowerCase();
+      const unit = String(s.attributes?.unit_of_measurement || '').toLowerCase();
+      const val = Number(s.state);
+      return Number.isFinite(val) && (dc === 'temperature' || unit === '°c' || unit === '°f' || unit === 'c' || unit === 'f');
+    };
+
+    const rankTempSensor = s => {
+      const id = String(s.entity_id || '').toLowerCase();
+      const name = String(s.attributes?.friendly_name || '').toLowerCase();
+      const text = `${id} ${name}`;
+      let score = 0;
+      if (text.includes('apple_weather')) score += 120;
+      if (text.includes('weather')) score += 90;
+      if (text.includes('outdoor') || text.includes('outside') || text.includes('exterior') || text.includes('afuera')) score += 70;
+      if (text.includes('atenas') || text.includes('alajuela') || text.includes('costa rica')) score += 50;
+      if (text.includes('temperature') || text.includes('temperatura')) score += 20;
+      if (id.includes('iphone') || name.includes('iphone')) score -= 40;
+      if (id.includes('battery') || id.includes('setpoint') || id.includes('target')) score -= 100;
+      return score;
+    };
+
+    const preciseTempSensor = allHaStates
+      .filter(validTempState)
+      .sort((a, b) => rankTempSensor(b) - rankTempSensor(a))[0] || null;
+
+    let rawTemp = null;
+    let rawUnit = null;
+    if (preciseTempSensor) {
+      rawTemp = Number(preciseTempSensor.state);
+      rawUnit = preciseTempSensor.attributes?.unit_of_measurement || preciseTempSensor.attributes?.native_unit_of_measurement || '°C';
+    } else {
+      rawTemp = (typeof weatherEnt.attributes?.temperature === 'number') ? weatherEnt.attributes.temperature : null;
+      rawUnit = weatherEnt.attributes?.temperature_unit || this._hass?.config?.unit_system?.temperature || '°C';
+    }
+
     let temp, unit;
     if (rawUnit === '°F' || rawUnit === 'F') {
       temp = rawTemp !== null ? Math.round((rawTemp - 32) * 5 / 9) : '--';
@@ -653,6 +685,7 @@ class ArgusPanel extends HTMLElement {
       temp = rawTemp !== null ? Math.round(rawTemp) : '--';
       unit = '°C';
     }
+
 
     const weatherState = (weatherEnt.state || 'sunny').toLowerCase().trim();
     const sunState = this._hass?.states['sun.sun']?.state || 'above_horizon';
@@ -703,7 +736,7 @@ class ArgusPanel extends HTMLElement {
             </div>
 
             <div class="entry-icon">
-              ${triggered ? '<div style="font-size:90px;filter:drop-shadow(0 0 30px #f00)">🚨</div>' : `<img src="/api/argus_static/${svgName}?v=0.9.0">`}
+              ${triggered ? '<div style="font-size:90px;filter:drop-shadow(0 0 30px #f00)">🚨</div>' : `<img src="/api/argus_static/${svgName}?v=0.9.1">`}
             </div>
           </div>
         </article>`;
