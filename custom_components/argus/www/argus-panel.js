@@ -491,7 +491,15 @@ class ArgusPanel extends HTMLElement {
     el.querySelectorAll('[data-remove]').forEach(btn => btn.addEventListener('click', ()=>this._removeChip(btn.dataset.remove)));
     el.querySelector('#save-mode').addEventListener('click', ()=>this._saveMode());
   }
-  _chip(entityId, type) { return `<span class="chip">${entityId}<button title="Quitar" data-remove="${type}:${entityId}">✕</button></span>`; }
+  _chip(entityId, type) {
+      let dot = '';
+      if (type === 'sensor') {
+          const raw = this.hass?.states?.[entityId]?.state;
+          const isTr = ['on', 'unlocked', 'open', 'recording'].includes(raw);
+          dot = `<span title="Estado real: ${raw}" style="display:inline-block;vertical-align:middle;width:8px;height:8px;border-radius:50%;margin-right:6px;background:var(--${isTr?'error-color':'success-color'}, ${isTr?'#e53935':'#4caf50'})"></span>`;
+      }
+      return `<span class="chip">${dot}${entityId}<button title="Quitar" data-remove="${type}:${entityId}">✕</button></span>`; 
+  }
   _removeChip(value) {
     const [type, entityId] = value.split(':');
     const cfg = this._currentModeConfig();
@@ -515,13 +523,22 @@ class ArgusPanel extends HTMLElement {
     const q = (this.shadowRoot.getElementById('selector-search').value || '').toLowerCase().trim();
     const list = this.shadowRoot.getElementById('selector-list');
     const selected = this.shadowRoot.getElementById('selector-selected');
-    const allowedDomains = this._selectorTarget === 'sensor' ? ['binary_sensor','sensor','camera'] : ['siren','switch'];
+    const allowedDomains = this._selectorTarget === 'sensor' ? ['binary_sensor','sensor','camera','lock'] : ['siren','switch'];
     const items = this._available.filter(x => allowedDomains.includes(x.domain)).filter(x => !q || [x.entity_id, x.name, x.area, x.friendly_name].filter(Boolean).join(' ').toLowerCase().includes(q));
     list.innerHTML = items.map(x => {
         let stBadge = '';
         if (this._selectorTarget === 'sensor') {
-            const isTr = this.hass?.states?.[x.entity_id]?.state === 'on';
-            stBadge = `<span class="badge ${isTr?'danger':'ok'}" style="margin-left:6px; font-size:10px; padding:2px 5px;">${isTr?'Abierto':'Cerrado'}</span>`;
+            const raw = this.hass?.states?.[x.entity_id]?.state || 'Desconocido';
+            const isTr = ['on', 'unlocked', 'open', 'recording'].includes(raw);
+            
+            let lbl = raw;
+            if (raw === 'on') lbl = 'Detección / Abierto';
+            else if (raw === 'off') lbl = 'Normal / Cerrado';
+            else if (raw === 'locked') lbl = 'Cerrado Seguro';
+            else if (raw === 'unlocked') lbl = 'Desbloqueado';
+            else if (raw === 'idle') lbl = 'Reposo';
+            
+            stBadge = `<span class="badge ${isTr?'danger':'ok'}" style="margin-left:6px; font-size:10px; padding:2px 5px; text-transform:uppercase;">${lbl}</span>`;
         }
         return `<label class="list-item"><input type="checkbox" data-entity="${x.entity_id}" ${this._selected.includes(x.entity_id)?'checked':''}><div><div style="font-weight:700">${x.name || x.entity_id} ${stBadge}</div><div class="small">${x.entity_id}${x.area ? ' · '+x.area : ''}</div></div></label>`;
     }).join('') || '<div class="small">Sin resultados</div>';
