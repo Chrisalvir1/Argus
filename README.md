@@ -1,153 +1,68 @@
-<div align="center">
+# 🛡️ Argus Home Hub para Home Assistant
 
-<img src="brand/icon.png" alt="Argus logo" width="140"/>
+![Versión](https://img.shields.io/badge/Versi%C3%B3n-0.9.6-blue.svg)
+![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)
+![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)
 
-# 🛡️ Argus
-
-### Premium Smart Alarm & Security Panel for Home Assistant
-
-**Argus** is a powerful, elegant, and privacy-first alarm system for Home Assistant.  
-Designed to go far beyond a simple alarm panel — Argus brings security, guest access, audit trails, automation, and a glass-style UI all in one unified experience.
-
-[![HACS Custom](https://img.shields.io/badge/HACS-Custom%20Repository-orange?style=for-the-badge&logo=home-assistant)](https://hacs.xyz)
-[![Home Assistant](https://img.shields.io/badge/Home%20Assistant-2024.1%2B-blue?style=for-the-badge&logo=home-assistant)](https://www.home-assistant.io)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
-[![Created by Christopher Alvir](https://img.shields.io/badge/Created%20by-Christopher%20Alvir-blueviolet?style=for-the-badge)](https://instagram.com/Chrisalvir1)
+**Argus Home Hub** es un avanzado sistema de seguridad y panel de control de alarmas para Home Assistant. Construido desde cero para ofrecer una experiencia visual *premium* con una interfaz *Liquid Glass* inspirada en macOS e iOS. Combina la gestión de sensores, sirenas, control de acceso y notificaciones push en un único *Custom Element* sumamente fluido y autoconstruido.
 
 ---
 
-*"Security should feel as polished as the home it protects."*
+## ✨ Novedades Recientes (v0.9.6)
 
-</div>
-
----
-
-## ✨ Why Argus?
-
-Most Home Assistant alarm integrations are functional but bare. **Argus is different.**
-
-Built from the ground up with a premium UI, multi-zone logic, guest access management, and a smooth glass-style control panel, Argus is designed for people who want both **real protection** and **real elegance**.
-
-Whether you're protecting a smart apartment, a family home, or a professional space — Argus adapts to your needs.
+*   **💎 Interfaz Liquid Glass**: Contenedores translúcidos con efecto *blur* y *saturate*, sombras suaves y bordes refinados integrados al ecosistema visual de Apple.
+*   **🚨 Botón de Pánico (SOS) con Gestos**: Nuevo botón de emergencia con un modal de confirmación deslizante interactivo (slider estilo iOS) para disparar la alarma al instante evitando toques accidentales.
+*   **🔋 Monitor Dinámico de Baterías**: Argus escanea inteligentemente tus sensores de intrusión (puertas, ventanas, movimiento) y lanza alertas visuales automáticas en la pantalla principal si algún dispositivo baja del 20% de batería.
 
 ---
 
-## 🔐 Core Features
+## 🚀 Características Principales
 
-- **🏠 Multi-zone alarm system** — arm, disarm, and configure each area independently
-- **👤 Guest access management** — create temporary or permanent access with PIN and NFC tag support
-- **📋 Full audit history** — every action is logged with timestamps, user, and device
-- **🌙 Light & Dark Mode** — a beautiful Liquid Glass-inspired UI, auto-synced with your system theme
-- **📱 Mobile-first panel** — designed for tablets, phones, and wall-mounted displays
-- **🔔 Smart notifications** — TTS announcements, push alerts, and custom automations
-- **🔒 Device-aware sessions** — guest sessions are tied to devices, not just PINs
-- **🌡️ Integrated controls** — manage lights, locks, climate, and cameras from the same panel
-- **🌍 Multi-language** — English and Spanish included out of the box
-- **⚡ Fast & offline-capable** — works even when your internet is down
-
----
-
-## 🛡️ Security Philosophy
-
-Argus is built with a **secure-by-default** mindset:
-
-- All access is role-based (admin, resident, guest, emergency)
-- Actions are logged and non-repudiable
-- Token-based guest sessions expire automatically
-- No cloud dependency — your data stays in your home
-- Audit history is tamper-resistant and stored locally
-
-> Argus does not promise to be unhackable — no system is. What it promises is transparency, control, and resilience.
+*   **🛡️ Modos de Seguridad**: Soporte completo para los modos *En Casa*, *Ausente*, *Noche*, *Vacaciones* y estado *Desarmado*.
+*   **🌤️ Fondos Meteorológicos Animados**: El fondo de las tarjetas de instancia cambia dinámicamente (animaciones CSS puras: lluvia, tormenta, nieve, estrellas, luna, sol) basado en el estado del clima y la hora.
+*   **🔐 Control de Acceso Avanzado**: Teclado numérico (*PIN Pad*) integrado y minimalista. Gestión de múltiples usuarios con roles de Administrador y códigos PIN individuales directos desde el panel.
+*   **🔔 Notificaciones y Auditoría**: 
+    *   Selección visual de dispositivos móviles de HA para enviar alertas Push.
+    *   *Registro de Actividad (Audit Log)* en tiempo real: Entérate exactamente quién armó o desarmó el sistema, o qué sensor disparó la alarma.
+*   **⚡ Automatizaciones Integradas**: Gestiona y visualiza las reglas de automatización vinculadas a la seguridad de la casa sin salir del panel.
+*   **🏠 HomeKit & Matter**: Sección dedicada a la administración del puente e integración nativa con el ecosistema de Apple.
+*   **🌐 Diseño Bilingüe e Inteligente**: Soporte nativo y automático para inglés y español. Diseño altamente responsivo con opción de pantalla completa (*fullscreen*) independiente por instancia.
 
 ---
 
-## 📦 Installation via HACS
+## 📦 Instalación
 
-1. Go to **HACS → Integrations**
-2. Click the three dots menu (⋮) → **Custom repositories**
-3. Add: `https://github.com/Chrisalvir1/argus`
-4. Select category: **Integration**
-5. Search for **Argus** and click **Install**
-6. Restart Home Assistant
-7. Go to **Settings → Integrations → Add Integration → Argus**
+### Opción A: HACS (Recomendado)
+1. Abre tu panel de Home Assistant y dirígete a **HACS** -> **Integraciones**.
+2. Haz clic en el menú superior derecho (tres puntos) -> **Repositorios Personalizados** (*Custom repositories*).
+3. Añade la URL de este repositorio: `https://github.com/Chrisalvir1/argus`
+4. Selecciona la categoría: `Integration` y haz clic en **Añadir**.
+5. Busca "Argus" en HACS, descárgalo y **reinicia Home Assistant**.
 
----
-
-## 🌐 Languages
-
-| Language | Status |
-|---|---|
-| English | ✅ Full |
-| Español | ✅ Completo |
+### Opción B: Manual
+1. Descarga el último [Release](https://github.com/Chrisalvir1/Argus/releases) (v0.9.6).
+2. Extrae el contenido en la carpeta `/config/custom_components/argus` de tu instancia de Home Assistant.
+3. Reinicia Home Assistant.
 
 ---
 
-## 🗺️ Roadmap
+## ⚙️ Configuración
 
-- [x] Core alarm control panel entity
-- [x] Multi-zone support
-- [x] Guest access with PIN
-- [x] Audit history
-- [ ] NFC tag integration
-- [ ] Lovelace card (Argus Card)
-- [ ] Mobile companion optimizations
-- [ ] Voice assistant hooks (Assist)
+### 1. Inicializar la integración
+Una vez instalado y reiniciado, ve a **Ajustes** -> **Dispositivos y servicios** -> **Añadir integración**. Busca **Argus** y sigue el flujo rápido de configuración para establecer tu PIN Maestro.
 
----
+### 2. Añadir al Dashboard (Lovelace)
+Para ver la hermosa interfaz de usuario, edita tu panel de Lovelace, añade una tarjeta manual y utiliza el *custom element*:
 
-## 💬 Suggestions & Feedback
+```yaml
+type: custom:argus-panel
+```
 
-Have an idea, found a bug, or want to help improve Argus?
-
-📧 **Email:** [chrisalvir01@gmail.com](mailto:chrisalvir01@gmail.com?subject=Argus%20Suggestion)
-
-Or open a [GitHub Issue](../../issues) — all feedback is welcome.
+Listo, no necesitas complicados archivos YAML para los sensores, Argus incluye un buscador visual de entidades en su pestaña de **Ajustes**.
 
 ---
 
-## 👤 Created by
+## 👨‍💻 Autor y Desarrollo
 
-<div align="center">
-
-**Christopher Alvir**
-
-*Developer · Home Automation Enthusiast · Creator of Argus*
-
-[![Instagram](https://img.shields.io/badge/Instagram-@Chrisalvir1-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/Chrisalvir1)
-[![Threads](https://img.shields.io/badge/Threads-@Chrisalvir1-000000?style=for-the-badge&logo=threads&logoColor=white)](https://www.threads.net/@Chrisalvir1)
-[![Threads Pro](https://img.shields.io/badge/Threads-@Chrisalvirpro-000000?style=for-the-badge&logo=threads&logoColor=white)](https://www.threads.net/@Chrisalvirpro)
-
-*Building tools that make smart homes feel truly smart.*
-
-</div>
-
----
-
-## ☕ Support the Project
-
-Argus is free, open-source, and built with love during personal time.
-
-If it helps protect your home, saves you time, or just makes your Home Assistant setup feel more premium — consider supporting the project with a coffee.
-
-<div align="center">
-
-[![☕ Buy me a coffee on PayPal](https://img.shields.io/badge/☕%20Buy%20me%20a%20coffee-PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/CEstradaAlvir)
-
-*Every coffee is a thank-you that fuels the next feature.* ❤️
-
-</div>
-
----
-
-## 📄 License
-
-Argus is licensed under the [MIT License](LICENSE).  
-You are free to use, modify, and distribute it — with attribution.
-
----
-
-<div align="center">
-
-*Made with ❤️ in Costa Rica · by Christopher Alvir*
-
-</div>
+Desarrollado y diseñado por **Christopher Alvir** (@Chrisalvir1).
+Diseñado para la comunidad de Home Assistant en Costa Rica y el mundo.
