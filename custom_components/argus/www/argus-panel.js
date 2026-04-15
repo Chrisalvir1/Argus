@@ -21,7 +21,7 @@ const TEXTS = {
     notif_desc:'Selecciona los dispositivos móviles registrados en HA que recibirán alertas de Argus.',
     save_notif:'Guardar', users_title:'👥 Usuarios y Control de Acceso',
     admin_only:'Solo administradores pueden modificar esta sección.',
-    add_user:'Agregar usuario', username:'Nombre de usuario', user_pin:'PIN de usuario',
+    add_user:'Agregar usuario', username:'Nombre de Usuario', user_pin:'PIN de usuario',
     is_admin:'Administrador', save_user:'Guardar', no_users:'Sin usuarios adicionales configurados.',
     homekit_title:'🏠 HomeKit & Matter', close:'Cerrar',
     search_placeholder:'Buscar por nombre, área o entity_id',
@@ -970,13 +970,14 @@ class ArgusPanel extends HTMLElement {
     const activeEntityId = this._modeEntryId || entries[0]?.entity_id || '';
     const activeEntry = entries.find(e => e.entity_id === activeEntityId) || entries[0] || null;
     const instanceOptions = entries.map(e => `<option value="${e.entity_id}" ${e.entity_id===activeEntityId ? 'selected' : ''}>${e.title || e.entity_id}</option>`).join('');
-    el.innerHTML = `
-      <div class="stack">
+    const instanceBlock = entries.length > 1 ? `
         <div class="subsection">
           <div class="subsection-title">Instancia</div>
           <select id="mode-instance-select">${instanceOptions}</select>
-          <div class="small" style="margin-top:8px;opacity:.7">${activeEntry?.entity_id || '—'}</div>
-        </div>
+        </div>` : '';
+    el.innerHTML = `
+      <div class="stack">
+        ${instanceBlock}
         <div class="subsection">
           <div class="subsection-title">${this._t('sensor_section')}</div>
           <div class="chip-list" id="sensor-chips">
