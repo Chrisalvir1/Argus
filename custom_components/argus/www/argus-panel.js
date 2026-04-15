@@ -1616,7 +1616,7 @@ class ArgusPanel extends HTMLElement {
         this._hass.callService('notify', target, {
           message,
           title: 'Argus — Alerta de Temperatura',
-           { push: { sound: 'default', badge: 1 } }
+             data: { push: { sound: 'default', badge: 1 } }
         });
       } catch (_) {}
     });
@@ -1633,7 +1633,7 @@ class ArgusPanel extends HTMLElement {
           this._hass.callService('notify', target, {
             message: '🚨 Botón SOS activado desde ' + loc + '. Revisa el estado de la alarma de inmediato.',
             title: 'ARGUS — SOS / PÁNICO',
-             { push: { sound: 'alarm.caf', badge: 1 }, priority: 'high', ttl: 0 }
+               data: { push: { sound: 'alarm.caf', badge: 1 }, priority: 'high', ttl: 0 }
           });
         } catch (_) {}
       });
