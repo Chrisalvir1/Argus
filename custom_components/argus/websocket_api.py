@@ -137,6 +137,10 @@ async def ws_argus_dashboard(hass: HomeAssistant, connection, msg) -> None:
         vol.Optional("notif_targets", default=[]): list,
         vol.Optional("tts_targets", default=[]): list,
         vol.Optional("users", default=[]): list,
+        vol.Optional("home_name", default=""): str,
+        vol.Optional("background_mode", default="weather"): vol.In(["weather", "none", "photo", "collage"]),
+        vol.Optional("background_images", default=[]): list,
+        vol.Optional("temperature_source", default="auto"): str,
     }
 )
 @websocket_api.async_response
@@ -150,6 +154,10 @@ async def ws_argus_save_ui(hass: HomeAssistant, connection, msg) -> None:
             "notif_targets": msg.get("notif_targets", []),
             "tts_targets": msg.get("tts_targets", []),
             "users": msg.get("users", []),
+            "home_name": msg.get("home_name", ""),
+            "background_mode": msg.get("background_mode", "weather"),
+            "background_images": msg.get("background_images", []),
+            "temperature_source": msg.get("temperature_source", "auto"),
         },
     )
     connection.send_result(msg["id"], {"saved": True, "ui": saved})

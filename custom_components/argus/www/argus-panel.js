@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.9.4
+ * Argus Home Hub – v0.9.5
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -249,6 +249,12 @@ _tmpl.innerHTML = `
   /* fog */
   .wx-fog-strip{position:absolute;width:250%;height:44px;background:linear-gradient(90deg,transparent 5%,rgba(175,200,210,.35) 25%,rgba(192,212,218,.44) 50%,rgba(175,200,210,.35) 75%,transparent 95%);animation:wxFogMove linear infinite alternate;border-radius:50px}
   @keyframes wxFogMove{0%{transform:translateX(-40%)}100%{transform:translateX(10%)}}
+  .wx-static{background:linear-gradient(180deg,rgba(22,28,42,.92),rgba(35,44,67,.95))}
+  .wx-photo,.wx-collage{background:#10141d}
+  .wx-photo::before{content:"";position:absolute;inset:0;background:var(--bg-image) center/cover no-repeat;filter:saturate(1.05) contrast(1.05)}
+  .wx-photo::after,.wx-collage::after,.wx-static::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,8,12,.18),rgba(5,8,12,.5))}
+  .wx-collage-grid{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4px;padding:4px}
+  .wx-collage-cell{border-radius:18px;background:center/cover no-repeat;min-height:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
 </style>
 
 <div class="wrap">
@@ -276,7 +282,7 @@ _tmpl.innerHTML = `
             <div id="global-status"></div>
             <button class="ghost home-name-btn" id="btn-edit-home-name" title="Cambiar nombre del hogar" style="padding:5px 10px;font-size:13px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;gap:5px">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-              <span id="lbl-home-name">Mi Hogar</span>
+              <span id="lbl-home-name">Mi Casa</span>
             </button>
           </div>
         </div>
@@ -370,6 +376,14 @@ _tmpl.innerHTML = `
             <span class="status" id="pin-status" style="width:100%;text-align:center"></span>
           </div>
         </div>
+        <div class="subsection" style="margin-top:14px">
+          <div class="subsection-title">Mi Casa</div>
+          <div class="field-group" style="margin-bottom:10px"><label>Nombre de la casa</label><input type="text" id="home-name-setting" placeholder="Mi Casa" maxlength="60" autocomplete="off"></div>
+          <div class="field-group" style="margin-bottom:10px"><label>Fondo del panel</label><select id="bg-mode-select"><option value="weather">Clima animado</option><option value="none">Sin animación</option><option value="photo">Una foto</option><option value="collage">Collage</option></select></div>
+          <div class="field-group" style="margin-bottom:10px"><label>Subir foto(s)</label><input type="file" id="bg-file-input" accept="image/*" multiple><div class="small" id="bg-file-help" style="margin-top:6px;opacity:.7">Puedes subir 1 foto o varias para collage.</div></div>
+          <div class="field-group" style="margin-bottom:10px"><label>Temperatura a mostrar</label><select id="temp-source-select"></select></div>
+          <div class="save-row"><button class="primary" id="btn-save-personalization" style="width:100%">Guardar Mi Casa</button><span class="status" id="personalization-status" style="width:100%;text-align:center"></span></div>
+        </div>
       </section>
     </div> <!-- /RIGHT COLUMN -->
 
@@ -423,7 +437,7 @@ _tmpl.innerHTML = `
       <p class="small" style="margin:0;opacity:.7">Este nombre aparece en el panel de instancias y en pantalla completa.</p>
       <div class="field-group">
         <label>Nombre del Hogar</label>
-        <input type="text" id="home-name-input" placeholder="Ej: El Chante de Gecko y Chris" maxlength="60" autocomplete="off" style="font-size:15px">
+        <input type="text" id="home-name-input" placeholder="Mi Casa" maxlength="60" autocomplete="off" style="font-size:15px">
       </div>
       <span class="status" id="home-name-status" style="text-align:center"></span>
     </div>
@@ -479,6 +493,9 @@ class ArgusPanel extends HTMLElement {
     this._isAdmin = true;    // determined from hass user
     this._pinCallback = null;
     this._homeName = '';     // custom home name, editable with PIN
+    this._backgroundMode = 'weather';
+    this._backgroundImages = [];
+    this._temperatureSource = 'auto';
     this._pending = {};
   }
 
@@ -599,6 +616,8 @@ class ArgusPanel extends HTMLElement {
     s('home-name-modal').addEventListener('click', e => { if (e.target.id === 'home-name-modal') this._closeHomeNameModal(); });
     s('home-name-save').addEventListener('click', () => this._saveHomeName());
     s('home-name-input').addEventListener('keydown', e => { if (e.key === 'Enter') this._saveHomeName(); });
+    s('bg-file-input').addEventListener('change', e => this._handleBackgroundFiles(e));
+    s('btn-save-personalization').addEventListener('click', () => this._savePersonalization());
   }
 
   /* ── WebSocket ───────────────────────────────────────────────────── */
@@ -651,9 +670,18 @@ class ArgusPanel extends HTMLElement {
     this._ttsTargets   = dashboard.ui?.tts_targets   || [];
     this._users = dashboard.ui?.users || [];
     this._homeName = dashboard.ui?.home_name || '';
-    // Sync label in button
+    this._backgroundMode = dashboard.ui?.background_mode || 'weather';
+    this._backgroundImages = dashboard.ui?.background_images || [];
+    this._temperatureSource = dashboard.ui?.temperature_source || 'auto';
     const hnLbl = this.shadowRoot.getElementById('lbl-home-name');
-    if (hnLbl) hnLbl.textContent = this._homeName || 'Mi Hogar';
+    if (hnLbl) hnLbl.textContent = this._homeName || 'Mi Casa';
+    const homeNameSetting = this.shadowRoot.getElementById('home-name-setting');
+    if (homeNameSetting) homeNameSetting.value = this._homeName || '';
+    const bgMode = this.shadowRoot.getElementById('bg-mode-select');
+    if (bgMode) bgMode.value = this._backgroundMode || 'weather';
+    this._populateTemperatureSources();
+    const tempSel = this.shadowRoot.getElementById('temp-source-select');
+    if (tempSel) tempSel.value = this._temperatureSource || 'auto';
 
     // Admin flag: use the HA user's own admin status
     this._isAdmin = this._hass?.user ? Boolean(this._hass.user.is_admin || this._hass.user.is_owner) : true;
@@ -751,7 +779,9 @@ class ArgusPanel extends HTMLElement {
 
     let rawTemp = null;
     let rawUnit = null;
-    if (preciseTempSensor) {
+    const configuredTempState = this._temperatureSource && this._temperatureSource !== 'auto' ? this._hass?.states?.[this._temperatureSource] : null;
+    const configuredTemp = configuredTempState ? (() => { const s = configuredTempState; if (s.entity_id.startsWith('climate.') && typeof s.attributes?.current_temperature === 'number') return { temp: s.attributes.current_temperature, unit: s.attributes?.temperature_unit || '°C' }; const unit = s.attributes?.unit_of_measurement || s.attributes?.native_unit_of_measurement || '°C'; const val = Number(s.state); return Number.isFinite(val) ? { temp: val, unit } : null; })() : null;
+    if (configuredTemp) { rawTemp = configuredTemp.temp; rawUnit = configuredTemp.unit; } else if (preciseTempSensor) {
       rawTemp = Number(preciseTempSensor.state);
       rawUnit = preciseTempSensor.attributes?.unit_of_measurement || preciseTempSensor.attributes?.native_unit_of_measurement || '°C';
     } else if (thermostatTemp) {
@@ -807,7 +837,7 @@ class ArgusPanel extends HTMLElement {
 
       return `
         <article class="entry" style="${triggered ? 'border:3px solid #ff5252;box-shadow:0 0 30px rgba(255,82,82,.4)' : ''}">
-          ${this._getWeatherBg(weatherState, isNight)}
+          ${this._renderEntryBackground(weatherState, isNight)}
 
           <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="Pantalla completa de esta instancia" style="position:absolute;bottom:14px;right:16px;z-index:4;padding:6px 10px;font-size:15px">⛶</button>
 
@@ -826,7 +856,7 @@ class ArgusPanel extends HTMLElement {
             </div>
 
             <div class="entry-icon">
-              ${triggered ? '<div style="font-size:90px;filter:drop-shadow(0 0 30px #f00)">🚨</div>' : `<img src="/api/argus_static/${svgName}?v=0.9.4">`}
+              ${triggered ? '<div style="font-size:90px;filter:drop-shadow(0 0 30px #f00)">🚨</div>' : `<img src="/api/argus_static/${svgName}?v=0.9.5">`}
             </div>
           </div>
         </article>`;
@@ -1362,6 +1392,58 @@ class ArgusPanel extends HTMLElement {
     } catch (_) { const c = this.shadowRoot.getElementById('hk-qr'); if (c) c.style.display = 'none'; }
   }
 
+  _populateTemperatureSources() {
+    const sel = this.shadowRoot.getElementById('temp-source-select');
+    if (!sel || !this._hass) return;
+    const extra = [{ entity_id: 'auto', name: 'Automático (sensor local / termostato / clima)' }];
+    for (const s of Object.values(this._hass.states || {})) {
+      const id = s.entity_id || ''; const a = s.attributes || {};
+      if (id.startsWith('climate.') && typeof a.current_temperature === 'number') { extra.push({ entity_id:id, name:`🌡️ ${a.friendly_name || id} (termostato)` }); continue; }
+      if (!id.startsWith('sensor.')) continue;
+      const dc = String(a.device_class || '').toLowerCase(); const u = String(a.unit_of_measurement || a.native_unit_of_measurement || '').toLowerCase(); const v = Number(s.state);
+      if (Number.isFinite(v) && (dc === 'temperature' || ['°c','°f','c','f'].includes(u))) extra.push({ entity_id:id, name:`🌡️ ${a.friendly_name || id}` });
+    }
+    const seen = new Set();
+    sel.innerHTML = extra.filter(x => !seen.has(x.entity_id) && seen.add(x.entity_id) === undefined).map(x => `<option value="${x.entity_id}">${x.name}</option>`).join('');
+  }
+
+  async _handleBackgroundFiles(ev) {
+    const files = Array.from(ev?.target?.files || []).slice(0, 4); if (!files.length) return;
+    const read = f => new Promise((ok, bad) => { const r = new FileReader(); r.onload = () => ok(String(r.result || '')); r.onerror = bad; r.readAsDataURL(f); });
+    this._backgroundImages = (await Promise.all(files.map(read))).filter(Boolean);
+    const help = this.shadowRoot.getElementById('bg-file-help'); if (help) help.textContent = `${this._backgroundImages.length} imagen(es) cargadas para el panel.`;
+  }
+
+  _renderEntryBackground(ws, isNight) {
+    const mode = this._backgroundMode || 'weather', imgs = this._backgroundImages || [];
+    if (mode === 'none') return `<div class="wx wx-static"></div>`;
+    if (mode === 'photo' && imgs[0]) return `<div class="wx wx-photo" style="--bg-image:url('${imgs[0].replace(/'/g, "%27")}')"></div>`;
+    if (mode === 'collage' && imgs.length) return `<div class="wx wx-collage"><div class="wx-collage-grid">${imgs.slice(0,4).map(src => `<div class="wx-collage-cell" style="background-image:url('${src.replace(/'/g, "%27")}')"></div>`).join('')}</div></div>`;
+    return this._getWeatherBg(ws, isNight);
+  }
+
+  _savePersonalization() {
+    const pin = this._dashboard?.entries?.[0]?.options?.code || '';
+    const run = () => this._persistPersonalization();
+    if (!pin) return run();
+    this._showPinModal(v => { if (v !== pin) return alert('PIN incorrecto'); run(); });
+  }
+
+  async _persistPersonalization() {
+    const status = this.shadowRoot.getElementById('personalization-status');
+    const home_name = (this.shadowRoot.getElementById('home-name-setting')?.value || '').trim();
+    const background_mode = this.shadowRoot.getElementById('bg-mode-select')?.value || 'weather';
+    const temperature_source = this.shadowRoot.getElementById('temp-source-select')?.value || 'auto';
+    try {
+      await this._send('argus/save_ui', { home_name, background_mode, background_images: this._backgroundImages || [], temperature_source });
+      this._homeName = home_name; this._backgroundMode = background_mode; this._temperatureSource = temperature_source;
+      this._ui = this._ui || {}; this._ui.home_name = home_name; this._ui.background_mode = background_mode; this._ui.background_images = this._backgroundImages || []; this._ui.temperature_source = temperature_source;
+      const lbl = this.shadowRoot.getElementById('lbl-home-name'); if (lbl) lbl.textContent = this._homeName || 'Mi Casa';
+      if (status) { status.textContent = '✓ Mi Casa guardada'; status.className = 'status ok'; }
+      this._renderEntries();
+    } catch (e) { if (status) { status.textContent = e.message; status.className = 'status err'; } }
+  }
+
   /* ── Home Name management ────────────────────────────────────────── */
   _editHomeName() {
     const masterPin = this._dashboard?.entries?.[0]?.options?.code || '';
@@ -1369,7 +1451,7 @@ class ArgusPanel extends HTMLElement {
       const m = this.shadowRoot.getElementById('home-name-modal');
       const inp = this.shadowRoot.getElementById('home-name-input');
       const st  = this.shadowRoot.getElementById('home-name-status');
-      inp.value = this._homeName || '';
+      inp.value = this._homeName || this.shadowRoot.getElementById('home-name-setting')?.value || '';
       if (st) st.textContent = '';
       m.classList.add('open'); m.setAttribute('aria-hidden', 'false');
       setTimeout(() => inp.focus(), 60);
@@ -1405,7 +1487,9 @@ class ArgusPanel extends HTMLElement {
       if (!this._ui) this._ui = {};
       this._ui.home_name = name;
       const lbl = this.shadowRoot.getElementById('lbl-home-name');
-      if (lbl) lbl.textContent = name || 'Mi Hogar';
+      if (lbl) lbl.textContent = name || 'Mi Casa';
+      const field = this.shadowRoot.getElementById('home-name-setting');
+      if (field) field.value = name || '';
       if (st) { st.textContent = '\u2713 Nombre guardado'; st.className = 'status ok'; }
       this._renderEntries();
       setTimeout(() => this._closeHomeNameModal(), 1200);

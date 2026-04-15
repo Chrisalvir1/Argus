@@ -35,6 +35,10 @@ def _default_payload() -> dict:
         "notif_targets": [],
         "tts_targets": [],
         "users": [],
+        "home_name": "",
+        "background_mode": "weather",
+        "background_images": [],
+        "temperature_source": "auto",
     }
 
 
@@ -48,6 +52,10 @@ async def async_load_ui_data(hass: HomeAssistant) -> dict:
     data.setdefault("audit_log", [])
     data.setdefault("advanced", {"guest_code": None, "guest_code_enabled": False})
     data.setdefault("automations", [])
+    data.setdefault("home_name", "")
+    data.setdefault("background_mode", "weather")
+    data.setdefault("background_images", [])
+    data.setdefault("temperature_source", "auto")
     return data
 
 
