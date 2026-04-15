@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.9.5
+ * Argus Home Hub – v0.9.6
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -78,6 +78,32 @@ const TEXTS = {
 const _tmpl = document.createElement('template');
 _tmpl.innerHTML = `
 <style>
+
+  /* Liquid Glass & SOS Styles */
+  :host {
+    --glass-bg: rgba(255, 255, 255, 0.14);
+    --glass-border: rgba(255, 255, 255, 0.22);
+    --glass-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+    --sos-red: linear-gradient(135deg, #ff4d4f, #d90429);
+    --ios-track: rgba(255, 255, 255, 0.12);
+    --ios-thumb: linear-gradient(180deg, #ffffff, #dfe7f5);
+  }
+  .liquid-glass { background: var(--glass-bg); backdrop-filter: blur(22px) saturate(180%); -webkit-backdrop-filter: blur(22px) saturate(180%); border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); }
+  .battery-alert { margin: 0 0 12px 0; padding: 12px 16px; border-radius: 16px; background: rgba(255, 149, 0, 0.16); border: 1px solid rgba(255, 179, 71, 0.32); color: #fff3d6; font-weight: 600; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); text-align: left;}
+  .btn-sos { width: 100%; min-height: 54px; border: 0; border-radius: 18px; background: var(--sos-red); color: white; font-size: 1rem; font-weight: 800; letter-spacing: 0.02em; cursor: pointer; box-shadow: 0 12px 28px rgba(217, 4, 41, 0.35); transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease; margin-top: 8px; }
+  .btn-sos:hover { transform: translateY(-1px); box-shadow: 0 16px 34px rgba(217, 4, 41, 0.42); }
+  .btn-sos:active { transform: translateY(0); opacity: 0.94; }
+  .ios-confirm-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 999999; backdrop-filter: blur(10px); }
+  .ios-confirm-backdrop.open { display: flex; }
+  .ios-confirm-card { width: min(100%, 420px); border-radius: 28px; padding: 22px; color: white; background: rgba(30,30,40,0.85); border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
+  .ios-confirm-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; text-align: center; }
+  .ios-confirm-text { font-size: 0.96rem; opacity: 0.92; line-height: 1.45; text-align: center; margin-bottom: 18px; }
+  .ios-slider-shell { padding: 4px 0 16px; }
+  .ios-slider-track { position: relative; height: 64px; border-radius: 999px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255, 255, 255, 0.16); overflow: hidden; }
+  .ios-slider-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 82px; font-size: 0.95rem; font-weight: 700; color: rgba(255, 255, 255, 0.92); pointer-events: none; text-align: center; }
+  .ios-slider-thumb { position: absolute; top: 6px; left: 6px; width: 52px; height: 52px; border-radius: 50%; background: var(--ios-thumb); color: #d90429; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 900; box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22); touch-action: none; user-select: none; cursor: grab; transition: transform 0.1s ease-out; }
+  .ios-confirm-cancel { width: 100%; min-height: 48px; border: 0; border-radius: 16px; background: rgba(255,255,255,0.1); color: white; font-weight: 700; cursor: pointer; }
+
   :host{display:block;min-height:100vh;box-sizing:border-box;color:var(--primary-text-color);background:var(--lovelace-background,var(--primary-background-color));font-family:Inter,system-ui,sans-serif}
   *{box-sizing:border-box}
   .wrap{max-width:1200px;margin:0 auto;padding:24px;display:grid;gap:20px}
@@ -257,9 +283,25 @@ _tmpl.innerHTML = `
   .wx-collage-cell{border-radius:18px;background:center/cover no-repeat;min-height:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
 </style>
 
+<!-- SOS Confirm Modal -->
+<div class="ios-confirm-backdrop" id="sos-modal">
+  <div class="ios-confirm-card liquid-glass" id="sos-card">
+    <div class="ios-confirm-title">Confirmar pánico</div>
+    <div class="ios-confirm-text">Desliza para disparar la alarma inmediatamente.</div>
+    <div class="ios-slider-shell">
+      <div class="ios-slider-track">
+        <div class="ios-slider-label" id="sos-label">Desliza para activar SOS</div>
+        <div class="ios-slider-thumb" id="sos-thumb">🚨</div>
+      </div>
+    </div>
+    <button class="ios-confirm-cancel" id="btn-cancel-sos">Cancelar</button>
+  </div>
+</div>
+
+
 <div class="wrap">
   <!-- HERO -->
-  <div class="glass hero">
+  <div class="glass hero liquid-glass">
     <div class="hero-left">
       <div class="hero-icon">🛡️</div>
       <div>
@@ -275,7 +317,7 @@ _tmpl.innerHTML = `
     <!-- LEFT COLUMN -->
     <div class="stack">
       <!-- Instances -->
-      <section class="glass panel">
+      <section class="glass panel liquid-glass">
         <div class="panel-head">
           <h2 id="h-instances"></h2>
           <div style="display:flex;align-items:center;gap:10px">
@@ -290,7 +332,7 @@ _tmpl.innerHTML = `
       </section>
 
       <!-- Users -->
-      <section class="glass panel">
+      <section class="glass panel liquid-glass">
         <h2 id="h-users"></h2>
         <p class="small" id="p-admin-only" style="margin-bottom:14px;color:var(--warning-color,#fb8c00)"></p>
         <div id="users-list" style="display:grid;gap:10px;margin-bottom:16px"></div>
@@ -308,7 +350,7 @@ _tmpl.innerHTML = `
       </section>
 
       <!-- Automations -->
-      <section class="glass panel">
+      <section class="glass panel liquid-glass">
         <h2 id="h-automations"></h2>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
           <span class="small" id="p-linked-rules"></span>
@@ -318,7 +360,7 @@ _tmpl.innerHTML = `
       </section>
 
       <!-- HomeKit -->
-      <section class="glass panel" id="homekit-section" style="display:none">
+      <section class="glass panel liquid-glass" id="homekit-section" style="display:none">
         <h2 id="h-homekit"></h2>
         <div id="homekit-content"></div>
       </section>
@@ -327,20 +369,20 @@ _tmpl.innerHTML = `
     <!-- RIGHT COLUMN -->
     <div class="stack">
       <!-- Activity log -->
-      <section class="glass panel">
+      <section class="glass panel liquid-glass">
         <h2 id="h-activity-log"></h2>
         <div id="activity-log" style="display:grid;gap:8px;max-height:260px;overflow-y:auto"></div>
       </section>
 
       <!-- Modes -->
-      <section class="glass panel">
+      <section class="glass panel liquid-glass">
         <h2 id="h-modes"></h2>
         <div class="tabs" id="mode-tabs"></div>
         <div id="mode-view"></div>
       </section>
 
       <!-- Notifications -->
-      <section class="glass panel">
+      <section class="glass panel liquid-glass">
         <h2 id="h-notifications"></h2>
         <p class="small" id="p-notif-desc" style="margin-bottom:10px"></p>
         <div class="subsection" style="margin-bottom:12px">
@@ -355,7 +397,7 @@ _tmpl.innerHTML = `
       </section>
 
       <!-- Settings -->
-      <section class="glass panel">
+      <section class="glass panel liquid-glass">
         <h2 id="h-settings"></h2>
         <div class="subsection">
           <div class="subsection-title" id="t-change-pin"></div>
@@ -483,6 +525,12 @@ _tmpl.innerHTML = `
 class ArgusPanel extends HTMLElement {
   constructor() {
     super();
+    this._showSosConfirm = false;
+    this._sosSliding = false;
+    this._sosStartX = 0;
+    this._sosOffsetX = 0;
+    this._sosConfirmed = false;
+
     this.attachShadow({ mode: 'open' }).appendChild(_tmpl.content.cloneNode(true));
     this._wsId = 1; this._socket = null; this._dashboard = null;
     this._ui = null; this._available = []; this._mode = 'home'; this._modeEntryId = null;
@@ -706,6 +754,21 @@ class ArgusPanel extends HTMLElement {
   }
 
   /* ── Entries (alarm instances) ───────────────────────────────────── */
+
+  _renderBatteryAlerts() {
+    if (!this._hass?.states) return '';
+    const states = this._hass.states;
+    const lowBatteries = Object.values(states).filter((st) => {
+      const isBattery = st.entity_id?.endsWith('_battery') || st.attributes?.device_class === 'battery';
+      if (!isBattery || st.state === 'unknown' || st.state === 'unavailable') return false;
+      const level = Number(st.state);
+      return !Number.isNaN(level) && level <= 20;
+    });
+    if (!lowBatteries.length) return '';
+    const rows = lowBatteries.map(b => `<div class="battery-alert">⚠️ Batería baja: ${b.attributes.friendly_name || b.entity_id} (${b.state}%)</div>`).join('');
+    return `<div class="battery-alerts-container" style="margin-top: 10px;">${rows}</div>`;
+  }
+
   _renderEntries() {
     const el = this.shadowRoot.getElementById('entries');
     const globalStatusEl = this.shadowRoot.getElementById('global-status');
@@ -841,6 +904,7 @@ class ArgusPanel extends HTMLElement {
 
           <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="Pantalla completa de esta instancia" style="position:absolute;bottom:14px;right:16px;z-index:4;padding:6px 10px;font-size:15px">⛶</button>
 
+          ${this._renderBatteryAlerts()}
           <div class="hud">
             <div class="hud-loc">${locName}</div>
             <div class="hud-data">${timeStr} • ${temp}${unit}</div>
@@ -852,6 +916,8 @@ class ArgusPanel extends HTMLElement {
               <button class="liquid-btn btn-away ${state==='armed_away'?'active':''}" data-idx="${idx}" data-action="away">🔒 AUSENTE</button>
               <button class="liquid-btn btn-night ${state==='armed_night'?'active':''}" data-idx="${idx}" data-action="night">🌙 NOCHE</button>
               <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''}" data-idx="${idx}" data-action="vacation">✈️ VACACIONES</button>
+              <button class="btn-sos" data-action="sos">🚨 SOS / PÁNICO</button>
+              <!-- SOS injected -->
               <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg> ${this._t('disarmed')}</button>
             </div>
 
@@ -864,6 +930,13 @@ class ArgusPanel extends HTMLElement {
 
     el.querySelectorAll('button[data-action]').forEach(btn =>
       btn.addEventListener('click', ev => this._handleAction(ev.currentTarget.dataset.idx, ev.currentTarget.dataset.action))
+    );
+    
+    el.querySelectorAll('button[data-action="sos"]').forEach(btn =>
+      btn.addEventListener('click', () => {
+        const sosModal = this.shadowRoot.getElementById('sos-modal');
+        if (sosModal) sosModal.classList.add('open');
+      })
     );
     el.querySelectorAll('button[data-fullscreen]').forEach(btn =>
       btn.addEventListener('click', ev => this._toggleFullscreen(ev.currentTarget.closest('.entry')))
