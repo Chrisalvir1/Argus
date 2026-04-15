@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.9.6
+ * Argus Home Hub – v0.9.7
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -31,7 +31,7 @@ const TEXTS = {
     disarmed:'Desarmado', armed_home:'En Casa', armed_away:'Ausente',
     armed_night:'Noche', armed_vacation:'Vacaciones', triggered:'¡ALARMA!',
     pending:'Cuenta regresiva', arming:'Armando', unavailable:'No disponible',
-    sensor_section:'Sensores de Intrusión', siren_section:'Sirenas',
+    sensor_section:'Sensores de Intrusión', siren_section:'Sirenas', thermostat_alert_notif:'🌡️ Alerta de temperatura',
     none_selected:'Ninguno seleccionado', search_select:'Buscar y seleccionar',
     save_mode:'💾 Guardar modo', details_notif:'Notificación de alarma',
     activity_log:'📋 Historial de Actividad',
@@ -62,7 +62,7 @@ const TEXTS = {
     disarmed:'Disarmed', armed_home:'Home', armed_away:'Away',
     armed_night:'Night', armed_vacation:'Vacation', triggered:'ALARM!',
     pending:'Pending', arming:'Arming', unavailable:'Unavailable',
-    sensor_section:'Intrusion Sensors', siren_section:'Sirens',
+    sensor_section:'Intrusion Sensors', siren_section:'Sirens', thermostat_alert_notif:'🌡️ Temperature alert',
     none_selected:'None selected', search_select:'Search & select',
     save_mode:'💾 Save mode', details_notif:'Alarm notification',
     activity_log:'📋 Activity Log',
@@ -158,6 +158,12 @@ _tmpl.innerHTML = `
 
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
   .meta{font-size:12px;opacity:.5}
+  .setting-label{font-size:13px;font-weight:700;color:var(--primary-text-color);letter-spacing:0.01em;margin-bottom:2px;display:block}
+  .setting-sublabel{font-size:12px;font-weight:400;opacity:0.55;color:var(--primary-text-color);margin-bottom:6px;display:block}
+  .temp-alert-row{display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap}
+  .temp-alert-row input[type=number]{width:72px;padding:6px 8px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:inherit;font-size:13px;font-weight:700;text-align:center}
+  .temp-alert-status-ok{color:#66bb6a;font-size:12px}
+  .temp-alert-status-warn{color:#ef5350;font-size:12px;font-weight:700}
   
   /* Generic buttons */
   button{border:0;border-radius:12px;padding:9px 16px;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer;transition:opacity .15s,transform .1s}
@@ -423,7 +429,22 @@ _tmpl.innerHTML = `
           <div class="field-group" style="margin-bottom:10px"><label>Nombre de la casa</label><input type="text" id="home-name-setting" placeholder="Mi Casa" maxlength="60" autocomplete="off"></div>
           <div class="field-group" style="margin-bottom:10px"><label>Fondo del panel</label><select id="bg-mode-select"><option value="weather">Clima animado</option><option value="none">Sin animación</option><option value="photo">Una foto</option><option value="collage">Collage</option></select></div>
           <div class="field-group" style="margin-bottom:10px"><label>Subir foto(s)</label><input type="file" id="bg-file-input" accept="image/*" multiple><div class="small" id="bg-file-help" style="margin-top:6px;opacity:.7">Puedes subir 1 foto o varias para collage.</div></div>
-          <div class="field-group" style="margin-bottom:10px"><label>Temperatura a mostrar</label><select id="temp-source-select"></select></div>
+          <div class="field-group" style="margin-bottom:10px">
+            <span class="setting-label">🌡️ Temperatura a mostrar</span>
+            <span class="setting-sublabel">Sensor o termostato que se muestra en el panel</span>
+            <select id="temp-source-select"></select>
+          </div>
+          <div class="field-group" style="margin-bottom:10px">
+            <span class="setting-label">🔔 Alertas de temperatura del termostato</span>
+            <span class="setting-sublabel">Recibes notificación push si la temperatura sale de este rango</span>
+            <div class="temp-alert-row">
+              <label style="font-size:12px;opacity:0.7">Mín °C</label>
+              <input type="number" id="temp-alert-min" min="-20" max="50" step="0.5" placeholder="16">
+              <label style="font-size:12px;opacity:0.7">Máx °C</label>
+              <input type="number" id="temp-alert-max" min="-20" max="60" step="0.5" placeholder="28">
+              <span id="temp-alert-status"></span>
+            </div>
+          </div>
           <div class="save-row"><button class="primary" id="btn-save-personalization" style="width:100%">Guardar Mi Casa</button><span class="status" id="personalization-status" style="width:100%;text-align:center"></span></div>
         </div>
       </section>
@@ -616,8 +637,54 @@ class ArgusPanel extends HTMLElement {
   /* ── Init ────────────────────────────────────────────────────────── */
   connectedCallback() { this._init(); }
 
+  _bindSOS() {
+    const thumb = this.shadowRoot.getElementById('sos-thumb');
+    const track = thumb && thumb.closest('.ios-slider-track');
+    if (!thumb || !track) return;
+    let sliding = false, startX = 0, offsetX = 0;
+    const maxSlide = () => Math.max(1, track.offsetWidth - thumb.offsetWidth - 12);
+    const startDrag = (clientX) => {
+      sliding = true;
+      startX = clientX - offsetX;
+      thumb.style.transition = 'none';
+      thumb.style.cursor = 'grabbing';
+    };
+    const moveDrag = (clientX) => {
+      if (!sliding) return;
+      offsetX = Math.max(0, Math.min(clientX - startX, maxSlide()));
+      thumb.style.left = (6 + offsetX) + 'px';
+      const pct = offsetX / maxSlide();
+      track.style.background = 'rgba(217,4,41,' + (0.15 + pct * 0.55) + ')';
+      if (pct >= 0.92) endDrag(true);
+    };
+    const endDrag = (confirmed) => {
+      if (!sliding) return;
+      sliding = false;
+      thumb.style.transition = '';
+      thumb.style.cursor = 'grab';
+      if (confirmed) {
+        this._triggerSOS();
+      } else {
+        offsetX = 0;
+        thumb.style.left = '6px';
+        track.style.background = '';
+      }
+    };
+    // Touch events
+    thumb.addEventListener('touchstart', e => { e.preventDefault(); startDrag(e.touches[0].clientX); }, { passive: false });
+    thumb.addEventListener('touchmove',  e => { e.preventDefault(); moveDrag(e.touches[0].clientX); }, { passive: false });
+    thumb.addEventListener('touchend',   () => endDrag(false));
+    thumb.addEventListener('touchcancel',() => endDrag(false));
+    // Mouse events
+    thumb.addEventListener('mousedown', e => { e.preventDefault(); startDrag(e.clientX); });
+    document.addEventListener('mousemove', e => { if (sliding) moveDrag(e.clientX); });
+    document.addEventListener('mouseup',   () => { if (sliding) endDrag(false); });
+    thumb.addEventListener('mouseleave',   () => {});  // handled by document mouseup
+  }
+
   async _init() {
     this._bindStatic();
+    this._bindSOS();
     try {
       await this._connect();
     } catch (e) {
@@ -725,6 +792,10 @@ class ArgusPanel extends HTMLElement {
     if (hnLbl) hnLbl.textContent = this._homeName || 'Mi Casa';
     const homeNameSetting = this.shadowRoot.getElementById('home-name-setting');
     if (homeNameSetting) homeNameSetting.value = this._homeName || '';
+    const alertMinEl = this.shadowRoot.getElementById('temp-alert-min');
+    const alertMaxEl = this.shadowRoot.getElementById('temp-alert-max');
+    if (alertMinEl && dashboard.ui && dashboard.ui.temp_alert_min != null) alertMinEl.value = dashboard.ui.temp_alert_min;
+    if (alertMaxEl && dashboard.ui && dashboard.ui.temp_alert_max != null) alertMaxEl.value = dashboard.ui.temp_alert_max;
     const bgMode = this.shadowRoot.getElementById('bg-mode-select');
     if (bgMode) bgMode.value = this._backgroundMode || 'weather';
     this._populateTemperatureSources();
@@ -884,7 +955,15 @@ class ArgusPanel extends HTMLElement {
                   || 'Atenas, Alajuela, CR';
 
     // Time
-    const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+    const _tsensor = this._hass && this._hass.states && this._hass.states['sensor.time'];
+    let timeStr;
+    if (_tsensor && _tsensor.state && _tsensor.state !== 'unknown' && _tsensor.state !== 'unavailable') {
+      const _p = _tsensor.state.split(':');
+      const _h = parseInt(_p[0], 10);
+      timeStr = (_h % 12 || 12) + ':' + _p[1] + ' ' + (_h >= 12 ? 'PM' : 'AM');
+    } else {
+      timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+    }
 
     el.innerHTML = entries.map((e, idx) => {
       const live  = this._hass?.states[e.entity_id]?.state;
@@ -1502,13 +1581,80 @@ class ArgusPanel extends HTMLElement {
     this._showPinModal(v => { if (v !== pin) return alert('PIN incorrecto'); run(); });
   }
 
+  _checkTempAlerts(currentTemp) {
+    if (currentTemp == null || !Number.isFinite(currentTemp)) return;
+    const minEl = this.shadowRoot && this.shadowRoot.getElementById('temp-alert-min');
+    const maxEl = this.shadowRoot && this.shadowRoot.getElementById('temp-alert-max');
+    const statusEl = this.shadowRoot && this.shadowRoot.getElementById('temp-alert-status');
+    const tMin = (minEl && minEl.value !== '') ? parseFloat(minEl.value) : null;
+    const tMax = (maxEl && maxEl.value !== '') ? parseFloat(maxEl.value) : null;
+    if (tMin === null && tMax === null) return;
+    if (tMin !== null && currentTemp < tMin) {
+      const msg = '🌡️ Temperatura baja: ' + currentTemp + '°C (mín ' + tMin + '°C)';
+      if (statusEl) { statusEl.textContent = '⚠️ ' + msg; statusEl.className = 'temp-alert-status-warn'; }
+      if (!this._lastTempAlert || Date.now() - this._lastTempAlert > 300000) {
+        this._lastTempAlert = Date.now();
+        this._sendTempNotification(msg);
+      }
+    } else if (tMax !== null && currentTemp > tMax) {
+      const msg = '🌡️ Temperatura alta: ' + currentTemp + '°C (máx ' + tMax + '°C)';
+      if (statusEl) { statusEl.textContent = '⚠️ ' + msg; statusEl.className = 'temp-alert-status-warn'; }
+      if (!this._lastTempAlert || Date.now() - this._lastTempAlert > 300000) {
+        this._lastTempAlert = Date.now();
+        this._sendTempNotification(msg);
+      }
+    } else {
+      if (statusEl) { statusEl.textContent = '✓ Rango normal'; statusEl.className = 'temp-alert-status-ok'; }
+    }
+  }
+
+  _sendTempNotification(message) {
+    const targets = (this._ui && this._ui.notification_targets) || [];
+    if (!targets.length || !this._hass) return;
+    targets.forEach(target => {
+      try {
+        this._hass.callService('notify', target, {
+          message,
+          title: 'Argus — Alerta de Temperatura',
+           { push: { sound: 'default', badge: 1 } }
+        });
+      } catch (_) {}
+    });
+  }
+
+  _triggerSOS() {
+    const modal = this.shadowRoot && this.shadowRoot.getElementById('sos-modal');
+    if (modal) modal.classList.remove('open');
+    const targets = (this._ui && this._ui.notification_targets) || [];
+    const loc = this._homeName || 'Mi Casa';
+    if (targets.length && this._hass) {
+      targets.forEach(target => {
+        try {
+          this._hass.callService('notify', target, {
+            message: '🚨 Botón SOS activado desde ' + loc + '. Revisa el estado de la alarma de inmediato.',
+            title: 'ARGUS — SOS / PÁNICO',
+             { push: { sound: 'alarm.caf', badge: 1 }, priority: 'high', ttl: 0 }
+          });
+        } catch (_) {}
+      });
+    }
+    if (this._hass) {
+      this._hass.callService('argus', 'trigger', {}).catch(() => {});
+    }
+    this._logEvent('sos', 'SOS activado', 'manual');
+  }
+
   async _persistPersonalization() {
     const status = this.shadowRoot.getElementById('personalization-status');
     const home_name = (this.shadowRoot.getElementById('home-name-setting')?.value || '').trim();
     const background_mode = this.shadowRoot.getElementById('bg-mode-select')?.value || 'weather';
     const temperature_source = this.shadowRoot.getElementById('temp-source-select')?.value || 'auto';
     try {
-      await this._send('argus/save_ui', { home_name, background_mode, background_images: this._backgroundImages || [], temperature_source });
+      const temp_alert_min_el = this.shadowRoot.getElementById('temp-alert-min');
+      const temp_alert_max_el = this.shadowRoot.getElementById('temp-alert-max');
+      const temp_alert_min = (temp_alert_min_el && temp_alert_min_el.value !== '') ? parseFloat(temp_alert_min_el.value) : null;
+      const temp_alert_max = (temp_alert_max_el && temp_alert_max_el.value !== '') ? parseFloat(temp_alert_max_el.value) : null;
+      await this._send('argus/save_ui', { home_name, background_mode, background_images: this._backgroundImages || [], temperature_source, temp_alert_min, temp_alert_max });
       this._homeName = home_name; this._backgroundMode = background_mode; this._temperatureSource = temperature_source;
       this._ui = this._ui || {}; this._ui.home_name = home_name; this._ui.background_mode = background_mode; this._ui.background_images = this._backgroundImages || []; this._ui.temperature_source = temperature_source;
       const lbl = this.shadowRoot.getElementById('lbl-home-name'); if (lbl) lbl.textContent = this._homeName || 'Mi Casa';
