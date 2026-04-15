@@ -424,7 +424,7 @@ class ArgusPanel extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' }).appendChild(_tmpl.content.cloneNode(true));
     this._wsId = 1; this._socket = null; this._dashboard = null;
-    this._ui = null; this._available = []; this._mode = 'home';
+    this._ui = null; this._available = []; this._mode = 'home'; this._modeEntryId = null;
     this._selected = []; this._selectorTarget = null;
     this._hass = null; this._prevStates = {};
     this._notifTargets = []; // list of notify service_ids selected
@@ -595,6 +595,7 @@ class ArgusPanel extends HTMLElement {
 
     // Admin flag: use the HA user's own admin status
     this._isAdmin = this._hass?.user ? Boolean(this._hass.user.is_admin || this._hass.user.is_owner) : true;
+    if (!this._modeEntryId) this._modeEntryId = dashboard.entries?.[0]?.entity_id || null;
 
     // Show current PIN toggle & validation required
     const currentPin = dashboard.entries?.[0]?.options?.code || '';
@@ -934,19 +935,29 @@ class ArgusPanel extends HTMLElement {
       night:    this._t('mode_night'),
       vacation: this._t('mode_vacation'),
     };
-    tabs.innerHTML = modes.map(m =>
-      `<div class="tab ${m===this._mode?'active':''}" data-mode="${m}">${icons[m]} ${lbls[m]}</div>`
-    ).join('');
-    tabs.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+    tabs.innerHTML = `<div style="display:flex;flex-wrap:wrap;gap:8px">${modes.map(m => `
+      <button type="button" data-mode="${m}" style="padding:10px 14px;border-radius:12px;font-weight:800;border:1px solid ${m===this._mode ? 'rgba(3,169,244,.65)' : 'rgba(255,255,255,.12)'};background:${m===this._mode ? 'rgba(3,169,244,.18)' : 'rgba(255,255,255,.04)'};color:inherit">${icons[m]} ${lbls[m]}</button>`).join('')}</div>`;
+    tabs.querySelectorAll('[data-mode]').forEach(t => t.addEventListener('click', () => {
       this._mode = t.dataset.mode; this._renderModeTabs(); this._renderModeView();
     }));
   }
 
   _currentModeConfig() {
-    if (!this._ui) return { sensors: [], sirens: [], require_closed: false };
+    const emptyCfg = { sensors: [], sirens: [], require_closed: false };
+    if (!this._ui) return { ...emptyCfg };
     this._ui.modes = this._ui.modes || {};
-    this._ui.modes[this._mode] = this._ui.modes[this._mode] || { sensors: [], sirens: [], require_closed: false };
-    return this._ui.modes[this._mode];
+    this._ui.modes.__by_entity__ = this._ui.modes.__by_entity__ || {};
+    const entityId = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id || 'default';
+    this._modeEntryId = entityId;
+    this._ui.modes.__by_entity__[entityId] = this._ui.modes.__by_entity__[entityId] || {};
+    const legacy = this._ui.modes[this._mode] || emptyCfg;
+    const current = this._ui.modes.__by_entity__[entityId][this._mode] || legacy;
+    this._ui.modes.__by_entity__[entityId][this._mode] = {
+      sensors: Array.isArray(current.sensors) ? current.sensors : [],
+      sirens: Array.isArray(current.sirens) ? current.sirens : [],
+      require_closed: Boolean(current.require_closed),
+    };
+    return this._ui.modes.__by_entity__[entityId][this._mode];
   }
 
   _renderModeView() {
@@ -955,8 +966,17 @@ class ArgusPanel extends HTMLElement {
     const sirens  = cfg.sirens  || [];
     const el = this.shadowRoot.getElementById('mode-view');
     const readonly = !this._isAdmin;
+    const entries = this._dashboard?.entries || [];
+    const activeEntityId = this._modeEntryId || entries[0]?.entity_id || '';
+    const activeEntry = entries.find(e => e.entity_id === activeEntityId) || entries[0] || null;
+    const instanceOptions = entries.map(e => `<option value="${e.entity_id}" ${e.entity_id===activeEntityId ? 'selected' : ''}>${e.title || e.entity_id}</option>`).join('');
     el.innerHTML = `
       <div class="stack">
+        <div class="subsection">
+          <div class="subsection-title">Instancia</div>
+          <select id="mode-instance-select">${instanceOptions}</select>
+          <div class="small" style="margin-top:8px;opacity:.7">${activeEntry?.entity_id || '—'}</div>
+        </div>
         <div class="subsection">
           <div class="subsection-title">${this._t('sensor_section')}</div>
           <div class="chip-list" id="sensor-chips">
@@ -980,6 +1000,10 @@ class ArgusPanel extends HTMLElement {
         <span class="status" id="mode-status" style="width:100%;text-align:center"></span>
       </div>`}
     `;
+    el.querySelector('#mode-instance-select')?.addEventListener('change', ev => {
+      this._modeEntryId = ev.target.value;
+      this._renderModeView();
+    });
     if (!readonly) {
       el.querySelectorAll('[data-open-selector]').forEach(btn =>
         btn.addEventListener('click', () => this._openModal(btn.dataset.openSelector))
@@ -1018,7 +1042,7 @@ class ArgusPanel extends HTMLElement {
     
     const status = this.shadowRoot.getElementById('mode-status');
     try {
-      await this._send('argus/save_mode_config', { mode: this._mode, config: cfg });
+      await this._send('argus/save_mode_config', { entity_id: this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id || '', mode: this._mode, config: cfg });
       status.textContent = '✓'; status.className = 'status ok';
     } catch (err) { status.textContent = err.message; status.className = 'status err'; }
   }

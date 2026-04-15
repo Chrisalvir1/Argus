@@ -166,7 +166,8 @@ async def ws_argus_get_mode_config(hass: HomeAssistant, connection, msg) -> None
 @websocket_api.websocket_command(
     {
         vol.Required("type"): "argus/save_mode_config",
-        vol.Required("mode"): vol.In(["home", "away", "night", "vacation"]),
+        vol.Required("mode"): vol.In(["disarmed", "home", "away", "night", "vacation"]),
+        vol.Optional("entity_id", default=""): str,
         vol.Required("config"): dict,
     }
 )
@@ -175,8 +176,13 @@ async def ws_argus_save_mode_config(hass: HomeAssistant, connection, msg) -> Non
     """Save configuration for a specific alarm mode."""
     mode = msg["mode"]
     config = msg["config"]
+    entity_id = msg.get("entity_id", "")
     ui_data = await async_load_ui_data(hass)
     modes = ui_data.get("modes", {})
+    if entity_id:
+        modes.setdefault("__by_entity__", {})
+        modes["__by_entity__"].setdefault(entity_id, {})
+        modes["__by_entity__"][entity_id][mode] = config
     modes[mode] = config
     await async_save_ui_data(hass, {"modes": modes})
     # Notify alarm panel to reload config and re-subscribe sensors
