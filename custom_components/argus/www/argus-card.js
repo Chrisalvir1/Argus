@@ -1,5 +1,5 @@
 /**
- * Argus Intelligent Card v0.8.1
+ * Argus Intelligent Card v0.9.10
  * Refined UI: Improved legibility, accurate weather mapping, and detailed location.
  */
 class ArgusCard extends HTMLElement {
@@ -51,11 +51,17 @@ class ArgusCard extends HTMLElement {
     const weatherState = (weatherEnt.state || 'clear').toLowerCase();
     const isNight = this._hass.states['sun.sun']?.state === 'below_horizon';
 
-    // Improved Location
-    let locName = this._hass.config.location_name || "Atenas, Costa Rica";
-    if (locName === "Casa") {
-       locName = weatherEnt.attributes.locality || weatherEnt.attributes.city || "Atenas, Alajuela, CR";
-    }
+    // Robust Location Logic: Canton, Provincia, Pais
+    const cfg = this._hass?.config || {};
+    const wAttr = weatherEnt?.attributes || {};
+    const canton = cfg.city || wAttr.locality || wAttr.city || '';
+    const prov   = cfg.location_name && !['home','casa','hogar'].includes(cfg.location_name.toLowerCase()) 
+                 ? cfg.location_name 
+                 : (wAttr.region || wAttr.province || '');
+    const pais   = cfg.country || 'Costa Rica';
+
+    let locName = [canton, prov, pais].filter(Boolean).join(', ');
+    if (!locName) locName = 'Ubicación Desconocida';
 
     // Time
     const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });

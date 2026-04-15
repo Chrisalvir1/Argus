@@ -463,9 +463,19 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             title="\U0001f6a8 Argus \u2014 Alarma Activada",
             notification_id="argus_triggered",
         )
+        sensor_name = "desconocido"
+        if self._triggered_by:
+            state_obj = self.hass.states.get(self._triggered_by)
+            if state_obj:
+                sensor_name = state_obj.attributes.get("friendly_name", self._triggered_by)
+            else:
+                sensor_name = self._triggered_by
+        
+        mode_label = self._alarm_state.value.replace("armed_", "").capitalize()
         await async_append_audit_log(
             self.hass, "triggered",
-            f"Sensor: {self._triggered_by or 'desconocido'}"
+            f"Sensor: {sensor_name} (Modo: {mode_label})",
+            user="Argus"
         )
 
         # Auto-reset after trigger_time
@@ -588,7 +598,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         # code="0000"          → PIN incorrecto → rechazar.
         if self._code and not self._syncing_linked and bool(code) and not self._validate_code(code):
             _LOGGER.warning("Argus: Disarm rejected — invalid code")
-            await async_append_audit_log(self.hass, "disarm_rejected", "Invalid code")
+            await async_append_audit_log(self.hass, "disarm_rejected", "Invalid code", user="Argus")
             return
         self._cancel_timers()
         self._alarm_state = AlarmControlPanelState.DISARMED
@@ -598,13 +608,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         await self._async_mqtt_publish()
         await self._async_sync_to_linked(AlarmControlPanelState.DISARMED)
         self.hass.async_create_task(self._evaluate_automations("disarmed"))
-        await async_append_audit_log(self.hass, "disarmed", "Sistema desarmado")
+        await async_append_audit_log(self.hass, "disarmed", "Sistema desarmado", user="Argus")
         _LOGGER.info("Argus: Disarmed")
 
     async def _async_arm(self, target: AlarmControlPanelState, code=None) -> None:
         if self._code_arm_required and not self._validate_code(code):
             _LOGGER.warning("Argus: Arm rejected — invalid code")
-            await async_append_audit_log(self.hass, "arm_rejected", f"Invalid code for {target.value}")
+            await async_append_audit_log(self.hass, "arm_rejected", f"Invalid code for {target.value}", user="Argus")
             return
 
         # Evaluate require_closed restrictions
@@ -627,7 +637,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 if open_names:
                     msg = f"Sensores abiertos: {', '.join(open_names)}"
                     _LOGGER.warning("Argus: Arm rejected — %s", msg)
-                    await async_append_audit_log(self.hass, "arm_rejected", msg)
+                    await async_append_audit_log(self.hass, "arm_rejected", msg, user="Argus")
                     self.hass.components.persistent_notification.async_create(
                         title="Argus: Armado Bloqueado",
                         message=f"No se pudo armar el sistema porque los siguientes sensores están inseguros:\\n- " + "\\n- ".join(open_names),
@@ -651,7 +661,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         await self._async_mqtt_publish()
         await self._async_sync_to_linked(target)
         self.hass.async_create_task(self._evaluate_automations("armed", target=target))
-        await async_append_audit_log(self.hass, "armed", f"Modo: {target.value}")
+        await async_append_audit_log(self.hass, "armed", f"Modo: {target.value}", user="Argus")
         _LOGGER.info("Argus: Arming → %s", target)
 
     async def async_alarm_arm_home(self, code=None) -> None:

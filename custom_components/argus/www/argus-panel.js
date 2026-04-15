@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.9.9
+ * Argus Home Hub – v0.9.10
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -104,21 +104,28 @@ _tmpl.innerHTML = `
   .ios-slider-thumb { position: absolute; top: 6px; left: 6px; width: 52px; height: 52px; border-radius: 50%; background: var(--ios-thumb); color: #d90429; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 900; box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22); touch-action: none; user-select: none; cursor: grab; transition: transform 0.1s ease-out; }
   .ios-confirm-cancel { width: 100%; min-height: 48px; border: 0; border-radius: 16px; background: rgba(255,255,255,0.1); color: white; font-weight: 700; cursor: pointer; }
 
-  :host{display:block;min-height:100vh;box-sizing:border-box;color:var(--primary-text-color);background:var(--lovelace-background,var(--primary-background-color));font-family:Inter,system-ui,sans-serif}
+  :host{display:block;min-height:100vh;box-sizing:border-box;color:var(--primary-text-color);background:var(--lovelace-background,var(--primary-background-color));font-family:'Outfit',Inter,system-ui,sans-serif}
   *{box-sizing:border-box}
-  .wrap{max-width:1200px;margin:0 auto;padding:24px;display:grid;gap:20px}
-  .glass{background:color-mix(in srgb,var(--card-background-color,#1e1e2e) 84%,transparent);border:1px solid color-mix(in srgb,var(--divider-color,#333) 50%,transparent);border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,.18);backdrop-filter:blur(18px) saturate(1.2)}
-  .hero{padding:24px 26px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-  .hero-left{display:flex;align-items:center;gap:16px}
-  .hero-icon{font-size:44px;line-height:1}
-  .hero h1{margin:0 0 4px;font-size:26px;font-weight:800}
-  .hero p{margin:0;font-size:14px;opacity:.6}
-  .grid{display:grid;grid-template-columns:1.35fr 1fr;gap:20px;align-items:start}
-  @media(max-width:860px){.grid{grid-template-columns:1fr}}
-  .stack{display:grid;gap:20px}
-  .panel{padding:22px 24px}
-  .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-  .panel h2{margin:0;font-size:13px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;opacity:.55}
+  .wrap{max-width:1400px;margin:0 auto;padding:24px;display:grid;gap:24px}
+  .glass{background:rgba(255, 255, 255, 0.08);border:1px solid rgba(255, 255, 255, 0.15);border-radius:24px;box-shadow:0 12px 40px rgba(0,0,0,0.2);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5)}
+  .hero{padding:30px 35px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05))}
+  .hero-left{display:flex;align-items:center;gap:20px}
+  .hero-icon{font-size:52px;line-height:1;filter:drop-shadow(0 0 15px rgba(255,255,255,0.2))}
+  .hero h1{margin:0 0 4px;font-size:32px;font-weight:900;letter-spacing:-0.03em;background:linear-gradient(to right, #fff, #b3e5fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .hero p{margin:0;font-size:15px;opacity:.7;font-weight:500}
+  .grid{display:grid;grid-template-columns:1.2fr 0.9fr 0.9fr;gap:24px;align-items:start}
+  @media(max-width:1100px){.grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:750px){.grid{grid-template-columns:1fr}.hero{flex-direction:column;text-align:center}.hero-left{flex-direction:column}}
+  
+  .stack{display:grid;gap:24px}
+  .panel{padding:26px;position:relative;overflow:hidden}
+  .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+  .panel h2{margin:0;font-size:14px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--primary-color,#03a9f4);opacity:0.9}
+  
+  /* Section Mi Casa accessibility */
+  .micasa-grid { display: grid; gap: 16px; margin-top: 10px; }
+  .micasa-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 18px; transition: all 0.3s ease; }
+  .micasa-card:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.15); transform: translateY(-2px); }
   
   /* Intelligent Entry Card */
   .entry{position:relative;overflow:hidden;border-radius:24px;border:1px solid rgba(255,255,255,0.1);margin-bottom:16px;min-height:220px;display:flex;flex-direction:column;transition:transform 0.3s ease}
@@ -127,9 +134,10 @@ _tmpl.innerHTML = `
   .entry-content{position:relative;z-index:2;flex:1;padding:20px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.3) 0%, transparent 60%)}
   
   /* HUD Overlay */
-  .hud{position:absolute;top:15px;right:20px;text-align:right;z-index:3;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,0.5)}
-  .hud-loc{font-size:12px;font-weight:800;text-transform:uppercase;opacity:0.9;letter-spacing:1px}
-  .hud-data{font-size:18px;font-weight:700;margin-top:2px}
+  .hud{position:absolute;top:20px;right:24px;text-align:right;z-index:3;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.6);display:flex;flex-direction:column;gap:4px}
+  .hud-loc{font-size:13px;font-weight:900;text-transform:uppercase;opacity:1;letter-spacing:1.5px;background:rgba(0,0,0,0.25);padding:4px 12px;border-radius:10px;backdrop-filter:blur(5px);border:1px solid rgba(255,255,255,0.1);align-self:flex-end}
+  .hud-data{font-size:20px;font-weight:800;letter-spacing:-0.02em;background:rgba(255,255,255,0.1);padding:6px 14px;border-radius:12px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.1);display:inline-flex;align-items:center;gap:8px;align-self:flex-end}
+  .hud-data i{font-size:14px;opacity:0.7;font-style:normal}
 
   /* Liquid Glass Buttons */
   .liquid-stack{display:grid;gap:10px}
@@ -289,20 +297,23 @@ _tmpl.innerHTML = `
   .wx-collage-cell{border-radius:18px;background:center/cover no-repeat;min-height:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
 
 .sensor-pill {
-  display:inline-flex; align-items:center; gap:5px;
-  background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.22);
-  border-radius:20px; padding:3px 10px 3px 8px;
-  font-size:12px; color:rgba(255,255,255,0.9);
-  backdrop-filter:blur(4px); transition:background 0.2s;
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12);
+  border-radius:14px; padding:10px 14px;
+  font-size:13px; color:rgba(255,255,255,0.95);
+  backdrop-filter:blur(10px); transition:all 0.2s cubic-bezier(0.4,0,0.2,1);
+  font-weight:700; box-shadow:0 4px 12px rgba(0,0,0,0.1);
 }
-.sensor-pill:hover { background:rgba(255,255,255,0.2); }
-.sensor-pill .pill-dot { width:7px; height:7px; border-radius:50%; background:#4caf50; flex-shrink:0; }
-.sensor-pill .pill-dot.open { background:#f44336; }
-.sensor-pill .pill-dot.unavailable { background:#9e9e9e; }
-.sensor-pill .pill-bypass { cursor:pointer; opacity:0.6; font-size:10px; margin-left:3px; }
-.sensor-pill .pill-bypass:hover { opacity:1; }
-.mode-sensor-list { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 4px 0; }
-.mode-sensor-none { font-size:12px; opacity:0.5; font-style:italic; }
+.sensor-pill:hover { background:rgba(255,255,255,0.12); border-color:rgba(255,255,255,0.3); transform:translateY(-1px); }
+.sensor-pill .pill-dot { width:10px; height:10px; border-radius:50%; background:#4caf50; flex-shrink:0; box-shadow:0 0 10px rgba(76,175,80,0.5); }
+.sensor-pill .pill-dot.open { background:#ff5252; box-shadow:0 0 10px rgba(255,82,82,0.5); }
+.sensor-pill .pill-dot.unavailable { background:#999; }
+.sensor-pill button { background:none; border:none; color:#fff; cursor:pointer; opacity:0.5; padding:4px; font-size:14px; transition:opacity 0.2s; }
+.sensor-pill button:hover { opacity:1; }
+
+.mode-sensor-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:12px; margin-top:12px; }
+.mode-sensor-none { grid-column:1/-1; padding:30px; text-align:center; background:rgba(255,255,255,0.03); border:2px dashed rgba(255,255,255,0.1); border-radius:20px; color:rgba(255,255,255,0.4); font-size:14px; font-weight:600; }
+.subsection-title { font-size:12px; font-weight:900; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px; color:rgba(255,255,255,0.5); display:block; }
 
 </style>
 
@@ -335,137 +346,137 @@ _tmpl.innerHTML = `
   </div>
 
   <!-- TWO-COLUMN LAYOUT -->
-  <div class="grid" style="align-items:start">
+  <div class="grid">
 
-    <!-- LEFT COLUMN -->
+    <!-- LEFT COLUMN: Activity & Instances -->
     <div class="stack">
       <!-- Instances -->
       <section class="glass panel liquid-glass">
         <div class="panel-head">
           <h2 id="h-instances"></h2>
-          <div style="display:flex;align-items:center;gap:10px">
+          <div style="display:flex;align-items:center;gap:12px">
             <div id="global-status"></div>
-            <button class="ghost home-name-btn" id="btn-edit-home-name" title="Cambiar nombre del hogar" style="padding:5px 10px;font-size:13px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;gap:5px">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-              <span id="lbl-home-name">Mi Casa</span>
-            </button>
           </div>
         </div>
         <div id="entries"></div>
       </section>
 
+      <!-- Activity log -->
+      <section class="glass panel liquid-glass">
+        <h2 id="h-activity-log"></h2>
+        <div id="activity-log" style="display:grid;gap:10px;max-height:400px;overflow-y:auto;margin-top:10px"></div>
+      </section>
+    </div>
+
+    <!-- CENTER COLUMN: Mi Casa & Modes -->
+    <div class="stack">
+      <!-- Mi Casa Section (Standalone) -->
+      <section class="glass panel liquid-glass">
+        <div class="panel-head">
+          <h2>🏡 Mi Casa</h2>
+          <button class="ghost" id="btn-edit-home-name-standalone" style="padding:6px 12px;font-size:12px;border-radius:10px;display:flex;align-items:center;gap:6px">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            <span>Editar</span>
+          </button>
+        </div>
+        <div class="micasa-grid">
+          <div class="micasa-card">
+            <span class="setting-label">Nombre del Hogar</span>
+            <div id="lbl-home-name-prominent" style="font-size:22px;font-weight:900;color:#fff;margin-top:4px">Mi Casa</div>
+          </div>
+          <div class="micasa-card">
+            <span class="setting-label">Fondo del Panel</span>
+            <select id="bg-mode-select-standalone" style="margin-top:8px"></select>
+          </div>
+          <div class="micasa-card">
+            <span class="setting-label">Sensor de Temperatura</span>
+            <select id="temp-source-select-standalone" style="margin-top:8px"></select>
+          </div>
+        </div>
+        <div class="save-row" style="margin-top:20px">
+          <button class="primary" id="btn-save-personalization-standalone" style="width:100%;height:50px;font-size:14px">Guardar Cambios</button>
+        </div>
+      </section>
+
+      <!-- Modes -->
+      <section class="glass panel liquid-glass">
+        <div class="panel-head">
+           <h2 id="h-modes"></h2>
+        </div>
+        <div class="tabs" id="mode-tabs" style="margin-bottom:15px"></div>
+        <div id="mode-view"></div>
+      </section>
+    </div>
+
+    <!-- RIGHT COLUMN: Tools & Settings -->
+    <div class="stack">
       <!-- Users -->
       <section class="glass panel liquid-glass">
         <h2 id="h-users"></h2>
-        <p class="small" id="p-admin-only" style="margin-bottom:14px;color:var(--warning-color,#fb8c00)"></p>
-        <div id="users-list" style="display:grid;gap:10px;margin-bottom:16px"></div>
+        <p class="small" id="p-admin-only" style="margin-bottom:14px;color:#fb8c00;font-weight:600"></p>
+        <div id="users-list" style="display:grid;gap:12px;margin-bottom:16px"></div>
         <div class="subsection" id="add-user-form">
           <div class="subsection-title" id="t-add-user"></div>
-          <div class="three-col">
-            <div class="field-group"><label id="l-username"></label><input type="text" id="new-user-name" autocomplete="off"></div>
-            <div class="field-group"><label id="l-user-pin"></label><input type="password" id="new-user-pin" inputmode="numeric" pattern="[0-9]*"></div>
-            <div class="field-group" style="justify-content:end">
-              <label id="l-is-admin" class="checkbox-label" style="margin-top:20px"><input type="checkbox" id="new-user-admin"> <span id="s-is-admin"></span></label>
-            </div>
-          </div>
-          <div class="save-row"><button class="primary" id="btn-save-user" style="width:100%"></button><span class="status" id="user-status" style="width:100%;text-align:center"></span></div>
+          <div class="field-group"><label id="l-username"></label><input type="text" id="new-user-name" autocomplete="off"></div>
+          <div class="field-group"><label id="l-user-pin"></label><input type="password" id="new-user-pin" inputmode="numeric" pattern="[0-9]*"></div>
+          <label id="l-is-admin" class="checkbox-label" style="margin-top:10px;display:flex;align-items:center;gap:10px"><input type="checkbox" id="new-user-admin"> <span id="s-is-admin"></span></label>
+          <div class="save-row" style="margin-top:15px"><button class="primary" id="btn-save-user" style="width:100%"></button></div>
         </div>
       </section>
 
       <!-- Automations -->
       <section class="glass panel liquid-glass">
         <h2 id="h-automations"></h2>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-          <span class="small" id="p-linked-rules"></span>
-          <button class="primary" id="btn-new-auto" style="padding:6px 14px;font-size:12px"></button>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <span class="small" id="p-linked-rules" style="opacity:0.7"></span>
+          <button class="primary" id="btn-new-auto" style="padding:6px 12px;font-size:11px"></button>
         </div>
         <div id="auto-view"></div>
       </section>
 
-      <!-- HomeKit -->
-      <section class="glass panel liquid-glass" id="homekit-section" style="display:none">
-        <h2 id="h-homekit"></h2>
-        <div id="homekit-content"></div>
-      </section>
-    </div>
-
-    <!-- RIGHT COLUMN -->
-    <div class="stack">
-      <!-- Activity log -->
+      <!-- Master PIN Settings -->
       <section class="glass panel liquid-glass">
-        <h2 id="h-activity-log"></h2>
-        <div id="activity-log" style="display:grid;gap:8px;max-height:260px;overflow-y:auto"></div>
-      </section>
+        <h2 id="h-settings-pin">PIN Maestro</h2>
+        <div class="subsection">
+          <p class="small" style="margin-bottom:12px;opacity:0.7">Control de acceso global para desactivar y cambiar ajustes.</p>
+          <div id="current-pin-display" style="font-size:13px;font-weight:800;color:var(--primary-color);margin-bottom:15px;background:rgba(3,169,244,0.1);padding:8px 12px;border-radius:10px;display:inline-block"></div>
+          
+          <div class="field-group" id="group-current-pin" style="display:none; margin-bottom:12px">
+             <label>PIN Actual</label>
+             <input type="password" id="current-pin" inputmode="numeric" pattern="[0-9]*">
+          </div>
 
-      <!-- Modes -->
-      <section class="glass panel liquid-glass">
-        <h2 id="h-modes"></h2>
-        <div class="tabs" id="mode-tabs"></div>
-        <div id="mode-view"></div>
+          <div style="display:grid;gap:10px">
+            <div class="field-group"><label id="l-new-pin"></label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*" placeholder="••••"></div>
+            <div class="field-group"><label id="l-confirm-pin"></label><input type="password" id="new-pin-2" inputmode="numeric" pattern="[0-9]*"></div>
+          </div>
+          <div class="save-row" style="margin-top:15px">
+            <button class="primary" id="btn-save-pin" style="width:100%"></button>
+          </div>
+        </div>
       </section>
 
       <!-- Notifications -->
       <section class="glass panel liquid-glass">
         <h2 id="h-notifications"></h2>
-        <p class="small" id="p-notif-desc" style="margin-bottom:10px"></p>
-        <div class="subsection" style="margin-bottom:12px">
-          <div class="subsection-title" id="t-push-title">📱 Notificaciones Push (Móvil)</div>
-          <div id="notif-targets" class="chip-list" style="min-height:28px"></div>
-          <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
-            <select id="notif-select" style="flex:1"></select>
-            <button class="ghost" id="btn-add-notif" style="white-space:nowrap">+ Agregar</button>
-          </div>
-        </div>
-        <div class="save-row" style="margin-top:10px"><button class="primary" id="btn-save-notif" style="width:100%"></button><span class="status" id="notif-status" style="width:100%;text-align:center"></span></div>
-      </section>
-
-      <!-- Settings -->
-      <section class="glass panel liquid-glass">
-        <h2 id="h-settings"></h2>
+        <p class="small" id="p-notif-desc" style="margin-bottom:12px;opacity:0.7"></p>
         <div class="subsection">
-          <div class="subsection-title" id="t-change-pin"></div>
-          <p class="small" id="p-pin-desc" style="margin:0"></p>
-          <div id="current-pin-display" style="font-size:13px;font-weight:700;color:var(--primary-color);margin-bottom:12px"></div>
-          
-          <div class="field-group" id="group-current-pin" style="display:none; margin-bottom:12px">
-             <label>PIN Actual (Obligatorio para verificar)</label>
-             <input type="password" id="current-pin" inputmode="numeric" pattern="[0-9]*">
-          </div>
-
-          <div class="two-col" style="gap:8px">
-            <div class="field-group"><label id="l-new-pin"></label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*" placeholder="Vacío = Desactivar"></div>
-            <div class="field-group"><label id="l-confirm-pin"></label><input type="password" id="new-pin-2" inputmode="numeric" pattern="[0-9]*"></div>
-          </div>
-          <div class="save-row">
-            <button class="primary" id="btn-save-pin" style="width:100%;margin-top:4px"></button>
-            <span class="status" id="pin-status" style="width:100%;text-align:center"></span>
+          <div class="subsection-title">Dispositivos Vinculados</div>
+          <div id="notif-targets" class="chip-list" style="margin-bottom:12px"></div>
+          <div style="display:flex;gap:10px">
+            <select id="notif-select" style="flex:1"></select>
+            <button class="ghost" id="btn-add-notif" style="white-space:nowrap;padding:0 15px">+ Añadir</button>
           </div>
         </div>
-        <div class="subsection" style="margin-top:14px">
-          <div class="subsection-title">Mi Casa</div>
-          <div class="field-group" style="margin-bottom:10px"><label>Nombre de la casa</label><input type="text" id="home-name-setting" placeholder="Mi Casa" maxlength="60" autocomplete="off"></div>
-          <div class="field-group" style="margin-bottom:10px"><label>Fondo del panel</label><select id="bg-mode-select"><option value="weather">Clima animado</option><option value="none">Sin animación</option><option value="photo">Una foto</option><option value="collage">Collage</option></select></div>
-          <div class="field-group" style="margin-bottom:10px"><label>Subir foto(s)</label><input type="file" id="bg-file-input" accept="image/*" multiple><div class="small" id="bg-file-help" style="margin-top:6px;opacity:.7">Puedes subir 1 foto o varias para collage.</div></div>
-          <div class="field-group" style="margin-bottom:10px">
-            <span class="setting-label">🌡️ Temperatura a mostrar</span>
-            <span class="setting-sublabel">Sensor o termostato que se muestra en el panel</span>
-            <select id="temp-source-select"></select>
-          </div>
-          <div class="field-group" style="margin-bottom:10px">
-            <span class="setting-label">🔔 Alertas de temperatura del termostato</span>
-            <span class="setting-sublabel">Recibes notificación push si la temperatura sale de este rango</span>
-            <div class="temp-alert-row">
-              <label style="font-size:12px;opacity:0.7">Mín °C</label>
-              <input type="number" id="temp-alert-min" min="-20" max="50" step="0.5" placeholder="16">
-              <label style="font-size:12px;opacity:0.7">Máx °C</label>
-              <input type="number" id="temp-alert-max" min="-20" max="60" step="0.5" placeholder="28">
-              <span id="temp-alert-status"></span>
-            </div>
-          </div>
-          <div class="save-row"><button class="primary" id="btn-save-personalization" style="width:100%">Guardar Mi Casa</button><span class="status" id="personalization-status" style="width:100%;text-align:center"></span></div>
-        </div>
+        <div class="save-row" style="margin-top:20px"><button class="primary" id="btn-save-notif" style="width:100%"></button></div>
       </section>
-    </div> <!-- /RIGHT COLUMN -->
+
+      <!-- Advanced -->
+      <section class="glass panel liquid-glass" id="homekit-section" style="display:none">
+        <h2 id="h-homekit"></h2>
+        <div id="homekit-content"></div>
+      </section>
+    </div>
 
   </div> <!-- /grid -->
 </div>
@@ -583,20 +594,46 @@ class ArgusPanel extends HTMLElement {
     this._backgroundImages = [];
     this._temperatureSource = 'auto';
     this._pending = {};
+    this._lastClockUpdate = 0;
   }
 
   set hass(hass) {
+    const oldHass = this._hass;
     this._hass = hass;
     if (!this._dashboard?.entries?.length) return;
-    const changed = this._dashboard.entries.some(
-      e => e.entity_id && this._prevStates[e.entity_id] !== hass.states[e.entity_id]?.state
+
+    // Trigger render if any of these change:
+    // 1. Alarm states
+    // 2. Temperature sensor state
+    // 3. Clock (roughly every minute)
+    // 4. Weather state
+    
+    const now = Date.now();
+    const clockChanged = (now - this._lastClockUpdate) > 30000; // 30 sec buffer
+    if (clockChanged) this._lastClockUpdate = now;
+
+    const alarmChanged = this._dashboard.entries.some(
+      e => e.entity_id && oldHass?.states[e.entity_id]?.state !== hass.states[e.entity_id]?.state
     );
-    if (changed) {
-      this._dashboard.entries.forEach(e => {
-        if (e.entity_id) this._prevStates[e.entity_id] = hass.states[e.entity_id]?.state;
-      });
+
+    const tempEntity = this._temperatureSource === 'auto' ? null : this._temperatureSource;
+    const tempChanged = tempEntity && oldHass?.states[tempEntity]?.state !== hass.states[tempEntity]?.state;
+    
+    const weatherEnt = Object.values(hass.states).find(s => s.entity_id.startsWith('weather.'))?.entity_id;
+    const weatherChanged = weatherEnt && oldHass?.states[weatherEnt]?.state !== hass.states[weatherEnt]?.state;
+
+    if (alarmChanged || tempChanged || clockChanged || weatherChanged || !oldHass) {
       this._renderEntries();
-      this._bindSOS();
+      this._renderActivityLog();
+      // Only re-render setup views if they are visible or if it's the first load
+      if (!oldHass) {
+        this._renderModeTabs();
+        this._renderModeView();
+        this._renderAutomations();
+        this._renderNotifications();
+        this._renderUsers();
+        this._renderHomeKit();
+      }
     }
   }
   get hass() { return this._hass; }
@@ -620,7 +657,6 @@ class ArgusPanel extends HTMLElement {
     set('h-settings',     t('settings'));
     set('h-activity-log', t('activity_log'));
     set('t-change-pin',   t('change_pin'));
-    set('p-pin-desc',     t('pin_desc'));
     set('l-new-pin',      t('new_pin'));
     set('l-confirm-pin',  t('confirm_pin'));
     set('h-notifications',t('notifications_title'));
@@ -742,14 +778,13 @@ class ArgusPanel extends HTMLElement {
     s('btn-save-user').addEventListener('click', () => this._saveUser());
 
     // Home name edit (requires PIN)
-    s('btn-edit-home-name').addEventListener('click', () => this._editHomeName());
+    s('btn-edit-home-name-standalone')?.addEventListener('click', () => this._editHomeName());
     s('home-name-modal-close').addEventListener('click', () => this._closeHomeNameModal());
     s('home-name-cancel').addEventListener('click', () => this._closeHomeNameModal());
     s('home-name-modal').addEventListener('click', e => { if (e.target.id === 'home-name-modal') this._closeHomeNameModal(); });
     s('home-name-save').addEventListener('click', () => this._saveHomeName());
     s('home-name-input').addEventListener('keydown', e => { if (e.key === 'Enter') this._saveHomeName(); });
-    s('bg-file-input').addEventListener('change', e => this._handleBackgroundFiles(e));
-    s('btn-save-personalization').addEventListener('click', () => this._savePersonalization());
+    s('btn-save-personalization-standalone')?.addEventListener('click', () => this._savePersonalization());
   }
 
   /* ── WebSocket ───────────────────────────────────────────────────── */
@@ -805,19 +840,22 @@ class ArgusPanel extends HTMLElement {
     this._backgroundMode = dashboard.ui?.background_mode || 'weather';
     this._backgroundImages = dashboard.ui?.background_images || [];
     this._temperatureSource = dashboard.ui?.temperature_source || 'auto';
-    const hnLbl = this.shadowRoot.getElementById('lbl-home-name');
-    if (hnLbl) hnLbl.textContent = this._homeName || 'Mi Casa';
-    const homeNameSetting = this.shadowRoot.getElementById('home-name-setting');
-    if (homeNameSetting) homeNameSetting.value = this._homeName || '';
-    const alertMinEl = this.shadowRoot.getElementById('temp-alert-min');
-    const alertMaxEl = this.shadowRoot.getElementById('temp-alert-max');
-    if (alertMinEl && dashboard.ui && dashboard.ui.temp_alert_min != null) alertMinEl.value = dashboard.ui.temp_alert_min;
-    if (alertMaxEl && dashboard.ui && dashboard.ui.temp_alert_max != null) alertMaxEl.value = dashboard.ui.temp_alert_max;
-    const bgMode = this.shadowRoot.getElementById('bg-mode-select');
-    if (bgMode) bgMode.value = this._backgroundMode || 'weather';
+    
+    this._updateHomeNameDisplay();
+
     this._populateTemperatureSources();
-    const tempSel = this.shadowRoot.getElementById('temp-source-select');
+    const tempSel = this.shadowRoot.getElementById('temp-source-select-standalone');
     if (tempSel) tempSel.value = this._temperatureSource || 'auto';
+    const bgMode = this.shadowRoot.getElementById('bg-mode-select-standalone');
+    if (bgMode) {
+      bgMode.innerHTML = `
+        <option value="weather">Clima animado</option>
+        <option value="none">Sin animación</option>
+        <option value="photo">Una foto</option>
+        <option value="collage">Collage</option>
+      `;
+      bgMode.value = this._backgroundMode || 'weather';
+    }
 
     // Admin flag: use the HA user's own admin status
     this._isAdmin = this._hass?.user ? Boolean(this._hass.user.is_admin || this._hass.user.is_owner) : true;
@@ -936,11 +974,9 @@ class ArgusPanel extends HTMLElement {
       rawTemp = Number(preciseTempSensor.state);
       rawUnit = preciseTempSensor.attributes?.unit_of_measurement || preciseTempSensor.attributes?.native_unit_of_measurement || '°C';
     } else if (thermostatTemp) {
-      // Use climate entity current_temperature (real room sensor, very precise)
       rawTemp = thermostatTemp.temp;
       rawUnit = thermostatTemp.unit;
     } else {
-      // Last resort: weather entity reports forecast/station temp (less precise)
       rawTemp = (typeof weatherEnt.attributes?.temperature === 'number') ? weatherEnt.attributes.temperature : null;
       rawUnit = weatherEnt.attributes?.temperature_unit || this._hass?.config?.unit_system?.temperature || '°C';
     }
@@ -954,32 +990,29 @@ class ArgusPanel extends HTMLElement {
       unit = '°C';
     }
 
-
     const weatherState = (weatherEnt.state || 'sunny').toLowerCase().trim();
     const sunState = this._hass?.states['sun.sun']?.state || 'above_horizon';
     const isNight = sunState === 'below_horizon';
 
-    // Location: prefer entity locality/city, skip generic names
-    const cfgLoc = this._hass?.config?.location_name || '';
-    const isGenericName = ['home','casa','house','my home'].includes(cfgLoc.toLowerCase());
-    // Home name: custom (editable) > weather locality > HA location name > default
-    const savedHome = this._homeName || this._ui?.home_name || '';
-    const exactLocation = this._hass?.config?.location_name || weatherEnt?.attributes?.locality || weatherEnt?.attributes?.city || '';
-    let locName = savedHome && exactLocation ? `${savedHome} • ${exactLocation}` : (savedHome || exactLocation || 'Mi Casa')
-                  || weatherEnt.attributes?.station_name
-                  || (!isGenericName && cfgLoc ? cfgLoc : null)
-                  || 'Atenas, Alajuela, CR';
+    // Robust Location Logic: Canton, Provincia, Pais
+    const customName = this._homeName || 'Mi Casa';
+    const cfg = this._hass?.config || {};
+    
+    // Try to get Canton/Province from Weather first if config is generic
+    const wAttr = weatherEnt?.attributes || {};
+    const canton = cfg.city || wAttr.locality || wAttr.city || '';
+    const prov   = cfg.location_name && !['home','casa','hogar'].includes(cfg.location_name.toLowerCase()) 
+                 ? cfg.location_name 
+                 : (wAttr.region || wAttr.province || '');
+    const pais   = cfg.country || 'Costa Rica';
+
+    let detailedLoc = [canton, prov, pais].filter(Boolean).join(', ');
+    if (!detailedLoc) detailedLoc = 'Ubicación Desconocida';
+    
+    const fullHudLoc = `${customName} • ${detailedLoc}`;
 
     // Time
-    const _tsensor = this._hass && this._hass.states && this._hass.states['sensor.time'];
-    let timeStr;
-    if (_tsensor && _tsensor.state && _tsensor.state !== 'unknown' && _tsensor.state !== 'unavailable') {
-      const _p = _tsensor.state.split(':');
-      const _h = parseInt(_p[0], 10);
-      timeStr = (_h % 12 || 12) + ':' + _p[1] + ' ' + (_h >= 12 ? 'PM' : 'AM');
-    } else {
-      timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
-    }
+    const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
 
     el.innerHTML = entries.map((e, idx) => {
       const live  = this._hass?.states[e.entity_id]?.state;
@@ -997,12 +1030,16 @@ class ArgusPanel extends HTMLElement {
         <article class="entry" style="${triggered ? 'border:3px solid #ff5252;box-shadow:0 0 30px rgba(255,82,82,.4)' : ''}">
           ${this._renderEntryBackground(weatherState, isNight)}
 
-          <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="Pantalla completa de esta instancia" style="position:absolute;bottom:14px;right:16px;z-index:4;padding:6px 10px;font-size:15px">⛶</button>
+          <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="Pantalla completa" style="position:absolute;bottom:14px;left:16px;z-index:4;padding:8px 12px;font-size:16px;background:rgba(0,0,0,0.3);backdrop-filter:blur(5px);border-radius:12px">⛶</button>
 
           ${this._renderBatteryAlerts()}
           <div class="hud">
-            <div class="hud-loc">${locName}</div>
-            <div class="hud-data">${timeStr} • ${temp}${unit}</div>
+            <div class="hud-loc">${fullHudLoc}</div>
+            <div class="hud-data">
+               <span>${timeStr}</span>
+               <i>•</i>
+               <span>${temp}${unit}</span>
+            </div>
           </div>
 
           <div class="entry-content">
@@ -1011,13 +1048,12 @@ class ArgusPanel extends HTMLElement {
               <button class="liquid-btn btn-away ${state==='armed_away'?'active':''}" data-idx="${idx}" data-action="away">🔒 AUSENTE</button>
               <button class="liquid-btn btn-night ${state==='armed_night'?'active':''}" data-idx="${idx}" data-action="night">🌙 NOCHE</button>
               <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''}" data-idx="${idx}" data-action="vacation">✈️ VACACIONES</button>
-              <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg> ${this._t('disarmed')}</button>
+              <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg> <span>DESARMADO</span></button>
               <button class="btn-sos" data-action="sos">🚨 SOS / PÁNICO</button>
-              <!-- SOS injected -->
             </div>
 
             <div class="entry-icon">
-              ${triggered ? '<div style="font-size:90px;filter:drop-shadow(0 0 30px #f00)">🚨</div>' : `<img src="/api/argus_static/${svgName}?v=0.9.5">`}
+              ${triggered ? '<div style="font-size:100px;filter:drop-shadow(0 0 30px #f00)">🚨</div>' : `<img src="/api/argus_static/${svgName}?v=1.0.0">`}
             </div>
           </div>
         </article>`;
@@ -1189,9 +1225,9 @@ class ArgusPanel extends HTMLElement {
 
       // Attribute the action clearly
       let source = '';
-      if (user && user !== 'system') {
+      if (user && user !== 'Argus' && user !== 'system') {
         source = `👤 ${user}`;
-      } else if (action.includes('homekit') || detail.toLowerCase().includes('homekit')) {
+      } else if (action.toLowerCase().includes('homekit') || detail.toLowerCase().includes('homekit')) {
         source = `🍎 HomeKit`;
       } else {
         source = `🤖 Argus`;
@@ -1267,25 +1303,24 @@ class ArgusPanel extends HTMLElement {
         ${instanceBlock}
         <div class="subsection">
           <div class="subsection-title">${this._t('sensor_section')}</div>
-          <div class="chip-list" id="sensor-chips">
-            ${sensors.map(x => this._chip(x, 'sensor')).join('') || `<span class="small">${this._t('none_selected')}</span>`}
+          <div class="mode-sensor-grid" id="sensor-chips">
+            ${sensors.map(x => this._chip(x, 'sensor')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
           </div>
-          ${readonly ? '' : `<div><button class="ghost" data-open-selector="sensor">${this._t('search_select')}</button></div>
-          <label class="checkbox-label" style="display:block;margin-top:10px">
+          ${readonly ? '' : `<div><button class="ghost" data-open-selector="sensor" style="margin-top:12px">${this._t('search_select')}</button></div>
+          <label class="checkbox-label" style="display:flex;align-items:center;gap:10px;margin-top:16px;background:rgba(255,255,255,0.05);padding:12px;border-radius:12px">
             <input type="checkbox" id="mode-require-closed" ${cfg.require_closed ? 'checked' : ''}>
-            Bloquear armado si hay sensores abiertos
+            <span style="font-size:13px;font-weight:600">Bloquear armado si hay sensores abiertos</span>
           </label>`}
         </div>
-        <div class="subsection">
+        <div class="subsection" style="margin-top:10px">
           <div class="subsection-title">${this._t('siren_section')}</div>
-          <div class="chip-list" id="siren-chips">
-            ${sirens.map(x => this._chip(x, 'siren')).join('') || `<span class="small">${this._t('none_selected')}</span>`}
+          <div class="mode-sensor-grid" id="siren-chips">
+            ${sirens.map(x => this._chip(x, 'siren')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
           </div>
-          ${readonly ? '' : `<div><button class="ghost" data-open-selector="siren">${this._t('search_select')}</button></div>`}
+          ${readonly ? '' : `<div><button class="ghost" data-open-selector="siren" style="margin-top:12px">${this._t('search_select')}</button></div>`}
         </div>
-      ${readonly ? '' : `<div class="save-row" style="margin-top:14px">
-        <button class="primary" id="save-mode" style="width:100%">${this._t('save_mode')}</button>
-        <span class="status" id="mode-status" style="width:100%;text-align:center"></span>
+      ${readonly ? '' : `<div class="save-row" style="margin-top:20px">
+        <button class="primary" id="save-mode" style="width:100%;height:48px">${this._t('save_mode')}</button>
       </div>`}
     `;
     el.querySelector('#mode-instance-select')?.addEventListener('change', ev => {
@@ -1305,13 +1340,13 @@ class ArgusPanel extends HTMLElement {
 
   _chip(entityId, type) {
     const raw = this._hass?.states?.[entityId]?.state;
-    const isTr = ['on', 'unlocked', 'open', 'recording'].includes(raw);
+    const isTr = ['on', 'unlocked', 'open', 'recording', 'active', 'motion'].includes(raw);
     const dot = type === 'sensor'
-      ? `<span style="width:8px;height:8px;border-radius:50%;display:inline-block;background:${isTr ? 'var(--error-color,#e53935)' : 'var(--success-color,#43a047)'}" title="${raw}"></span>`
+      ? `<span class="pill-dot ${isTr ? 'open' : ''}" title="${raw}"></span>`
       : '';
     const name = this._hass?.states?.[entityId]?.attributes?.friendly_name || entityId;
     const readonly = !this._isAdmin;
-    return `<span class="chip">${dot}${name}${readonly ? '' : `<button data-remove="${type}:${entityId}">✕</button>`}</span>`;
+    return `<span class="sensor-pill">${dot}<span>${name}</span>${readonly ? '' : `<button data-remove="${type}:${entityId}">✕</button>`}</span>`;
   }
 
   _removeChip(value) {
@@ -1561,7 +1596,7 @@ class ArgusPanel extends HTMLElement {
   }
 
   _populateTemperatureSources() {
-    const sel = this.shadowRoot.getElementById('temp-source-select');
+    const sel = this.shadowRoot.getElementById('temp-source-select-standalone');
     if (!sel || !this._hass) return;
     const extra = [{ entity_id: 'auto', name: 'Automático (sensor local / termostato / clima)' }];
     for (const s of Object.values(this._hass.states || {})) {
@@ -1590,38 +1625,9 @@ class ArgusPanel extends HTMLElement {
     return this._getWeatherBg(ws, isNight);
   }
 
-  _savePersonalization() {
-    const pin = this._dashboard?.entries?.[0]?.options?.code || '';
-    const run = () => this._persistPersonalization();
-    if (!pin) return run();
-    this._showPinModal(v => { if (v !== pin) return alert('PIN incorrecto'); run(); });
-  }
-
-  _checkTempAlerts(currentTemp) {
-    if (currentTemp == null || !Number.isFinite(currentTemp)) return;
-    const minEl = this.shadowRoot && this.shadowRoot.getElementById('temp-alert-min');
-    const maxEl = this.shadowRoot && this.shadowRoot.getElementById('temp-alert-max');
-    const statusEl = this.shadowRoot && this.shadowRoot.getElementById('temp-alert-status');
-    const tMin = (minEl && minEl.value !== '') ? parseFloat(minEl.value) : null;
-    const tMax = (maxEl && maxEl.value !== '') ? parseFloat(maxEl.value) : null;
-    if (tMin === null && tMax === null) return;
-    if (tMin !== null && currentTemp < tMin) {
-      const msg = '🌡️ Temperatura baja: ' + currentTemp + '°C (mín ' + tMin + '°C)';
-      if (statusEl) { statusEl.textContent = '⚠️ ' + msg; statusEl.className = 'temp-alert-status-warn'; }
-      if (!this._lastTempAlert || Date.now() - this._lastTempAlert > 300000) {
-        this._lastTempAlert = Date.now();
-        this._sendTempNotification(msg);
-      }
-    } else if (tMax !== null && currentTemp > tMax) {
-      const msg = '🌡️ Temperatura alta: ' + currentTemp + '°C (máx ' + tMax + '°C)';
-      if (statusEl) { statusEl.textContent = '⚠️ ' + msg; statusEl.className = 'temp-alert-status-warn'; }
-      if (!this._lastTempAlert || Date.now() - this._lastTempAlert > 300000) {
-        this._lastTempAlert = Date.now();
-        this._sendTempNotification(msg);
-      }
-    } else {
-      if (statusEl) { statusEl.textContent = '✓ Rango normal'; statusEl.className = 'temp-alert-status-ok'; }
-    }
+  _updateHomeNameDisplay() {
+    const prominent = this.shadowRoot.getElementById('lbl-home-name-prominent');
+    if (prominent) prominent.textContent = this._homeName || 'Mi Casa';
   }
 
   _sendTempNotification(message) {
@@ -1659,23 +1665,36 @@ class ArgusPanel extends HTMLElement {
     }
   }
 
+  _savePersonalization() {
+    const pin = this._dashboard?.entries?.[0]?.options?.code || '';
+    const run = () => this._persistPersonalization();
+    if (!pin) return run();
+    this._showPinModal(v => { if (v !== pin) return alert('PIN incorrecto'); run(); });
+  }
+
   async _persistPersonalization() {
     const status = this.shadowRoot.getElementById('personalization-status');
-    const home_name = (this.shadowRoot.getElementById('home-name-setting')?.value || '').trim();
-    const background_mode = this.shadowRoot.getElementById('bg-mode-select')?.value || 'weather';
-    const temperature_source = this.shadowRoot.getElementById('temp-source-select')?.value || 'auto';
+    const background_mode = this.shadowRoot.getElementById('bg-mode-select-standalone')?.value || 'weather';
+    const temperature_source = this.shadowRoot.getElementById('temp-source-select-standalone')?.value || 'auto';
     try {
-      const temp_alert_min_el = this.shadowRoot.getElementById('temp-alert-min');
-      const temp_alert_max_el = this.shadowRoot.getElementById('temp-alert-max');
-      const temp_alert_min = (temp_alert_min_el && temp_alert_min_el.value !== '') ? parseFloat(temp_alert_min_el.value) : null;
-      const temp_alert_max = (temp_alert_max_el && temp_alert_max_el.value !== '') ? parseFloat(temp_alert_max_el.value) : null;
-      await this._send('argus/save_ui', { home_name, background_mode, background_images: this._backgroundImages || [], temperature_source, temp_alert_min, temp_alert_max });
-      this._homeName = home_name; this._backgroundMode = background_mode; this._temperatureSource = temperature_source;
-      this._ui = this._ui || {}; this._ui.home_name = home_name; this._ui.background_mode = background_mode; this._ui.background_images = this._backgroundImages || []; this._ui.temperature_source = temperature_source;
-      const lbl = this.shadowRoot.getElementById('lbl-home-name'); if (lbl) lbl.textContent = this._homeName || 'Mi Casa';
-      if (status) { status.textContent = '✓ Mi Casa guardada'; status.className = 'status ok'; }
+      await this._send('argus/save_ui', { 
+        home_name: this._homeName, 
+        background_mode, 
+        background_images: this._backgroundImages || [], 
+        temperature_source 
+      });
+      this._backgroundMode = background_mode; this._temperatureSource = temperature_source;
+      this._ui = this._ui || {}; this._ui.background_mode = background_mode; this._ui.background_images = this._backgroundImages || []; this._ui.temperature_source = temperature_source;
       this._renderEntries();
-    } catch (e) { if (status) { status.textContent = e.message; status.className = 'status err'; } }
+      
+      const btn = this.shadowRoot.getElementById('btn-save-personalization-standalone');
+      if (btn) {
+        const oldText = btn.textContent;
+        btn.textContent = '✓ Guardado Correctamente';
+        btn.style.background = '#43a047';
+        setTimeout(() => { btn.textContent = oldText; btn.style.background = ''; }, 3000);
+      }
+    } catch (e) { alert('Error: ' + e.message); }
   }
 
   /* ── Home Name management ────────────────────────────────────────── */
@@ -1713,23 +1732,16 @@ class ArgusPanel extends HTMLElement {
 
   async _saveHomeName() {
     const inp = this.shadowRoot.getElementById('home-name-input');
-    const st  = this.shadowRoot.getElementById('home-name-status');
     const name = (inp?.value || '').trim();
     try {
       await this._send('argus/save_ui', { home_name: name });
       this._homeName = name;
       if (!this._ui) this._ui = {};
       this._ui.home_name = name;
-      const lbl = this.shadowRoot.getElementById('lbl-home-name');
-      if (lbl) lbl.textContent = name || 'Mi Casa';
-      const field = this.shadowRoot.getElementById('home-name-setting');
-      if (field) field.value = name || '';
-      if (st) { st.textContent = '\u2713 Nombre guardado'; st.className = 'status ok'; }
+      this._updateHomeNameDisplay();
       this._renderEntries();
-      setTimeout(() => this._closeHomeNameModal(), 1200);
-    } catch (e) {
-      if (st) { st.textContent = e.message; st.className = 'status err'; }
-    }
+      setTimeout(() => this._closeHomeNameModal(), 800);
+    } catch (e) { alert('Error: ' + e.message); }
   }
 
   /* ── PIN management ──────────────────────────────────────────────── */
@@ -1935,7 +1947,7 @@ class ArgusPanel extends HTMLElement {
       this._showPinModal(async pin => {
         try {
           await this._hass.callService('alarm_control_panel', 'alarm_disarm', { entity_id: e.entity_id, code: pin });
-          this._writeLog('disarm', `Sistema desarmado`, currentUser);
+          this._writeLog('disarmed', `Sistema desarmado`, currentUser);
           this._sendHaNotif(`🔓 ${this._t('log_disarmed')}`, `El sistema fue desarmado manualmente por ${currentUser}.`);
           setTimeout(() => this._load(), 800);
         } catch (err) { console.error('disarm error:', err); }
@@ -1965,7 +1977,7 @@ class ArgusPanel extends HTMLElement {
     try {
       await this._hass.callService('alarm_control_panel', service, { entity_id: e.entity_id });
       const modeTxt = modeLabels[action] || action;
-      this._writeLog('arm', `Sistema armado en modo ${modeTxt}`, currentUser);
+      this._writeLog('armed', `Sistema armado en modo ${modeTxt}`, currentUser);
       this._sendHaNotif(`🔒 ${this._t('log_armed')} — ${modeTxt}`, `El sistema fue armado en modo "${modeTxt}" manualmente por ${currentUser}.`);
       setTimeout(() => this._load(), 800);
     } catch (err) { console.error('Argus action failed', err); }

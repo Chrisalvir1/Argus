@@ -69,7 +69,7 @@ async def async_save_ui_data(hass: HomeAssistant, data: dict) -> dict:
 
 
 async def async_append_audit_log(
-    hass: HomeAssistant, action: str, detail: str = "", user: str = "system"
+    hass: HomeAssistant, action: str, detail: str = "", user: str = "Argus"
 ) -> None:
     """Append an event to the Argus audit log (max 200 entries, newest first)."""
     import datetime
@@ -77,17 +77,21 @@ async def async_append_audit_log(
     current = await async_load_ui_data(hass)
     log: list = current.get("audit_log", [])
     
-    # Deduplication for UI actions: If a real user logged a similar action (arm/disarm) <5s ago, ignore the system default log.
+    # Standardize action key for comparison
+    def norm(s): return str(s or "").lower().replace("ed", "").strip()
+    
+    # Deduplication: Ensure we prefer User logs over generic Argus logs for the same event
     now = datetime.datetime.now(datetime.timezone.utc)
-    if log and user == "system":
+    if log:
         latest = log[0]
         try:
             latest_ts = datetime.datetime.fromisoformat(latest["ts"].replace("Z", "+00:00"))
             if (now - latest_ts).total_seconds() < 5.0:
-                act_new = action.replace("ed", "")
-                act_old = latest.get("action", "").replace("ed", "")
-                if act_new == act_old and latest.get("user", "system") != "system":
-                    return  # Skip duplicate system log
+                if norm(action) == norm(latest.get("action")):
+                    if user == "Argus" and latest.get("user") != "Argus":
+                        return  # Skip generic log since we already have a user log
+                    if user != "Argus" and latest.get("user") == "Argus":
+                        log.pop(0) # Remove existing generic log to favor the user log
         except Exception:
             pass
 

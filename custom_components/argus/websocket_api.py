@@ -330,18 +330,11 @@ async def ws_argus_update_master_pin(hass: HomeAssistant, connection, msg) -> No
 )
 @websocket_api.async_response
 async def ws_argus_write_log(hass: HomeAssistant, connection, msg) -> None:
-    """Append an event to the Argus audit log, keeping the last 50 entries."""
-    import datetime
-
-    ui_data = await async_load_ui_data(hass)
-    log = ui_data.get("audit_log", [])
-    log.insert(0, {
-        "action": msg["action"],
-        "detail": msg.get("detail", ""),
-        "user": msg.get("user", ""),
-        "ts": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-    })
-    # Keep only last 50 entries
-    ui_data["audit_log"] = log[:50]
-    await async_save_ui_data(hass, ui_data)
+    """Append an event to the Argus audit log using the centralized helper."""
+    await async_append_audit_log(
+        hass, 
+        action=msg["action"], 
+        detail=msg.get("detail", ""), 
+        user=msg.get("user", "Argus")
+    )
     connection.send_result(msg["id"], {"written": True})

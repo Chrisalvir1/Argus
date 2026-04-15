@@ -1,3 +1,23 @@
+## Argus v0.9.10 — Interfaz Premium y Logs Inteligentes
+
+### 🔥 Lo nuevo en esta versión
+
+- **Interfaz Glassmorphism Premium:** Rediseño total del panel con efectos de desenfoque, bordes refinados y tipografía "Outfit" para una experiencia de usuario de lujo.
+- **HUD con Ubicación Detallada:** El encabezado ahora muestra tu ubicación exacta (Cantón, Provincia, País) y sincroniza en tiempo real el reloj y la temperatura local.
+- **Sección "Mi Casa" Independiente:** Acceso directo y simplificado para personalizar el nombre de tu hogar y el fondo del panel.
+- **Historial de Actividad Inteligente:** Se implementó un sistema de deduplicación que prioriza los nombres de usuario sobre los logs genéricos de "Argus". 
+- **Logs de Disparo Enriquecidos:** Cuando la alarma se dispara, el historial ahora registra el nombre amigable del sensor y el modo en que se encontraba la alarma.
+- **Smart Píldoras para Sensores:** Rediseño de la lista de sensores en MODOS usando un grid moderno de píldoras digitales con estados visuales claros.
+
+### 📋 Nota de Instalación
+Como siempre, asegúrate de recargar el frontend de Home Assistant (F5) para ver los cambios estéticos reflejados.
+
+---
+
+### Versión 0.9.10 — by Antigravity AI
+
+---
+
 ## Argus v0.7.0 — Animaciones SVG + Mejoras de Interfaz
 
 ### 🔥 Lo nuevo en esta versión
