@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.9.8
+ * Argus Home Hub – v0.9.9
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -287,6 +287,23 @@ _tmpl.innerHTML = `
   .wx-photo::after,.wx-collage::after,.wx-static::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,8,12,.18),rgba(5,8,12,.5))}
   .wx-collage-grid{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4px;padding:4px}
   .wx-collage-cell{border-radius:18px;background:center/cover no-repeat;min-height:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+
+.sensor-pill {
+  display:inline-flex; align-items:center; gap:5px;
+  background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.22);
+  border-radius:20px; padding:3px 10px 3px 8px;
+  font-size:12px; color:rgba(255,255,255,0.9);
+  backdrop-filter:blur(4px); transition:background 0.2s;
+}
+.sensor-pill:hover { background:rgba(255,255,255,0.2); }
+.sensor-pill .pill-dot { width:7px; height:7px; border-radius:50%; background:#4caf50; flex-shrink:0; }
+.sensor-pill .pill-dot.open { background:#f44336; }
+.sensor-pill .pill-dot.unavailable { background:#9e9e9e; }
+.sensor-pill .pill-bypass { cursor:pointer; opacity:0.6; font-size:10px; margin-left:3px; }
+.sensor-pill .pill-bypass:hover { opacity:1; }
+.mode-sensor-list { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 4px 0; }
+.mode-sensor-none { font-size:12px; opacity:0.5; font-style:italic; }
+
 </style>
 
 <!-- SOS Confirm Modal -->
@@ -947,9 +964,8 @@ class ArgusPanel extends HTMLElement {
     const isGenericName = ['home','casa','house','my home'].includes(cfgLoc.toLowerCase());
     // Home name: custom (editable) > weather locality > HA location name > default
     const savedHome = this._homeName || this._ui?.home_name || '';
-    let locName = savedHome
-                  || weatherEnt.attributes?.locality
-                  || weatherEnt.attributes?.city
+    const exactLocation = this._hass?.config?.location_name || weatherEnt?.attributes?.locality || weatherEnt?.attributes?.city || '';
+    let locName = savedHome && exactLocation ? `${savedHome} • ${exactLocation}` : (savedHome || exactLocation || 'Mi Casa')
                   || weatherEnt.attributes?.station_name
                   || (!isGenericName && cfgLoc ? cfgLoc : null)
                   || 'Atenas, Alajuela, CR';
@@ -995,9 +1011,9 @@ class ArgusPanel extends HTMLElement {
               <button class="liquid-btn btn-away ${state==='armed_away'?'active':''}" data-idx="${idx}" data-action="away">🔒 AUSENTE</button>
               <button class="liquid-btn btn-night ${state==='armed_night'?'active':''}" data-idx="${idx}" data-action="night">🌙 NOCHE</button>
               <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''}" data-idx="${idx}" data-action="vacation">✈️ VACACIONES</button>
+              <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg> ${this._t('disarmed')}</button>
               <button class="btn-sos" data-action="sos">🚨 SOS / PÁNICO</button>
               <!-- SOS injected -->
-              <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg> ${this._t('disarmed')}</button>
             </div>
 
             <div class="entry-icon">
