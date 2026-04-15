@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.9.1
+ * Argus Home Hub – v0.9.4
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -174,6 +174,19 @@ _tmpl.innerHTML = `
   /* search */
   .search-wrap{display:flex;gap:10px;align-items:center}
   .search-wrap input{flex:1;min-width:0}
+  /* ── Dual-panel selector modal ───────────────────────────────────────────────────── */
+  #selector-modal .modal{width:min(860px,96vw);max-height:92vh}
+  .sel-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;overflow:hidden}
+  @media(max-width:600px){.sel-grid{grid-template-columns:1fr}}
+  .sel-panel{display:flex;flex-direction:column;gap:8px;overflow:hidden;min-height:0}
+  .sel-panel-inner{overflow-y:auto;flex:1;display:grid;gap:4px;align-content:start}
+  .sel-actions{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}
+  .pick-row{display:grid;grid-template-columns:20px 1fr;align-items:start;gap:8px;padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.03);cursor:pointer;transition:background .12s}
+  .pick-row:hover{background:rgba(255,255,255,0.08)}
+  .pick-row input[type=checkbox]{width:16px;height:16px;cursor:pointer;accent-color:var(--primary-color,#03a9f4);margin-top:2px}
+  .pick-row-name{font-weight:700;font-size:13px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .pick-row-meta{font-size:11px;opacity:0.5;margin-top:2px}
+  .sel-right-item{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.04);font-size:13px}
   /* Activity log */
   .log-item{display:flex;align-items:flex-start;gap:12px;padding:10px 12px;border-radius:12px;border:1px solid color-mix(in srgb,var(--divider-color,#444) 50%,transparent);background:color-mix(in srgb,var(--card-background-color,#1e1e2e) 60%,transparent)}
   .log-icon{font-size:20px;line-height:1;flex-shrink:0}
@@ -261,6 +274,10 @@ _tmpl.innerHTML = `
           <h2 id="h-instances"></h2>
           <div style="display:flex;align-items:center;gap:10px">
             <div id="global-status"></div>
+            <button class="ghost home-name-btn" id="btn-edit-home-name" title="Cambiar nombre del hogar" style="padding:5px 10px;font-size:13px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;gap:5px">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              <span id="lbl-home-name">Mi Hogar</span>
+            </button>
           </div>
         </div>
         <div id="entries"></div>
@@ -359,30 +376,60 @@ _tmpl.innerHTML = `
   </div> <!-- /grid -->
 </div>
 
-<!-- Selector modal -->
+<!-- Selector modal (dual-panel) -->
 <div class="modal-back" id="selector-modal" aria-hidden="true">
   <div class="modal">
     <div class="modal-head">
       <h3 id="selector-title">Seleccionar</h3>
       <button class="ghost" id="selector-close"></button>
     </div>
-    <div class="search-wrap"><input id="selector-search" type="text"></div>
-    <div class="modal-body">
-      <div>
-        <div class="subsection-title" id="l-available" style="margin-bottom:8px"></div>
-        <div class="listbox" id="selector-list"></div>
-      </div>
-      <div>
-        <div class="subsection-title" id="l-selected-lbl" style="margin-bottom:8px"></div>
-        <div class="listbox" id="selector-selected"></div>
+    <div class="modal-body" style="overflow:hidden;display:flex;flex-direction:column;gap:10px">
+      <div class="sel-grid">
+        <!-- LEFT: lista disponible con búsqueda y acciones rápidas -->
+        <div class="sel-panel">
+          <div class="subsection-title" id="l-available">Disponibles</div>
+          <div class="search-wrap" style="margin:0"><input id="selector-search" type="search" placeholder="Buscar..."></div>
+          <div class="sel-actions">
+            <button class="ghost" id="selector-select-all" style="padding:5px 10px;font-size:12px">☑ Todos</button>
+            <button class="ghost" id="selector-deselect-all" style="padding:5px 10px;font-size:12px">☐ Ninguno</button>
+          </div>
+          <div class="sel-panel-inner" id="selector-list"></div>
+        </div>
+        <!-- RIGHT: panel de seleccionados -->
+        <div class="sel-panel">
+          <div class="subsection-title" id="l-selected-lbl">Seleccionados</div>
+          <div class="small" id="selector-count" style="margin-bottom:4px">0 seleccionados</div>
+          <div class="sel-panel-inner" id="selector-selected"></div>
+        </div>
       </div>
     </div>
     <div class="modal-footer">
-      <div class="small" id="selector-count">0</div>
-      <div style="display:flex;gap:10px">
+      <div style="display:flex;gap:10px;width:100%;justify-content:flex-end">
         <button class="ghost" id="selector-clear"></button>
         <button class="primary" id="selector-accept"></button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Home name edit modal -->
+<div class="modal-back" id="home-name-modal" aria-hidden="true">
+  <div class="modal" style="width:min(400px,96vw)">
+    <div class="modal-head">
+      <h3>🏡 Nombre del Hogar</h3>
+      <button class="ghost" id="home-name-modal-close">✕</button>
+    </div>
+    <div style="display:grid;gap:14px;padding:4px 0">
+      <p class="small" style="margin:0;opacity:.7">Este nombre aparece en el panel de instancias y en pantalla completa.</p>
+      <div class="field-group">
+        <label>Nombre del Hogar</label>
+        <input type="text" id="home-name-input" placeholder="Ej: El Chante de Gecko y Chris" maxlength="60" autocomplete="off" style="font-size:15px">
+      </div>
+      <span class="status" id="home-name-status" style="text-align:center"></span>
+    </div>
+    <div class="modal-footer">
+      <button class="ghost" id="home-name-cancel">Cancelar</button>
+      <button class="primary" id="home-name-save">Guardar</button>
     </div>
   </div>
 </div>
@@ -431,6 +478,7 @@ class ArgusPanel extends HTMLElement {
     this._users = [];        // [{name, pin, is_admin}]
     this._isAdmin = true;    // determined from hass user
     this._pinCallback = null;
+    this._homeName = '';     // custom home name, editable with PIN
     this._pending = {};
   }
 
@@ -521,6 +569,8 @@ class ArgusPanel extends HTMLElement {
     s('selector-clear').addEventListener('click', () => { this._selected = []; this._renderSelector(); });
     s('selector-search').addEventListener('input', () => this._renderSelector());
     s('selector-modal').addEventListener('click', e => { if (e.target.id === 'selector-modal') this._closeModal(); });
+    s('selector-select-all').addEventListener('click', () => this._selectAll());
+    s('selector-deselect-all').addEventListener('click', () => { this._selected = []; this._renderSelector(); });
 
     s('btn-new-auto').addEventListener('click', () => {
       history.pushState(null, '', '/config/automation/edit/new');
@@ -541,6 +591,14 @@ class ArgusPanel extends HTMLElement {
     s('btn-add-notif').addEventListener('click', () => this._addNotifTarget());
     s('btn-save-notif').addEventListener('click', () => this._saveNotifications());
     s('btn-save-user').addEventListener('click', () => this._saveUser());
+
+    // Home name edit (requires PIN)
+    s('btn-edit-home-name').addEventListener('click', () => this._editHomeName());
+    s('home-name-modal-close').addEventListener('click', () => this._closeHomeNameModal());
+    s('home-name-cancel').addEventListener('click', () => this._closeHomeNameModal());
+    s('home-name-modal').addEventListener('click', e => { if (e.target.id === 'home-name-modal') this._closeHomeNameModal(); });
+    s('home-name-save').addEventListener('click', () => this._saveHomeName());
+    s('home-name-input').addEventListener('keydown', e => { if (e.key === 'Enter') this._saveHomeName(); });
   }
 
   /* ── WebSocket ───────────────────────────────────────────────────── */
@@ -592,6 +650,10 @@ class ArgusPanel extends HTMLElement {
     this._notifTargets = dashboard.ui?.notif_targets || [];
     this._ttsTargets   = dashboard.ui?.tts_targets   || [];
     this._users = dashboard.ui?.users || [];
+    this._homeName = dashboard.ui?.home_name || '';
+    // Sync label in button
+    const hnLbl = this.shadowRoot.getElementById('lbl-home-name');
+    if (hnLbl) hnLbl.textContent = this._homeName || 'Mi Hogar';
 
     // Admin flag: use the HA user's own admin status
     this._isAdmin = this._hass?.user ? Boolean(this._hass.user.is_admin || this._hass.user.is_owner) : true;
@@ -639,6 +701,25 @@ class ArgusPanel extends HTMLElement {
                      || weatherEntities.find(s => s.state && s.state !== 'unknown' && s.state !== 'unavailable')
                      || { state: 'sunny', attributes: { temperature: 24, temperature_unit: '°C' } };
 
+    // ── Thermostat / climate entity as a high-priority temp source ──
+    const thermostatTemp = (() => {
+      const climates = allHaStates.filter(s =>
+        s.entity_id.startsWith('climate.') &&
+        typeof s.attributes?.current_temperature === 'number' &&
+        !['unknown','unavailable'].includes(String(s.state).toLowerCase())
+      );
+      if (!climates.length) return null;
+      // Prefer a climate that does NOT look like a pure HVAC heater/AC (no setpoint-only)
+      const best = climates.find(s => {
+        const id   = s.entity_id.toLowerCase();
+        const name = (s.attributes?.friendly_name || '').toLowerCase();
+        return !id.includes('heater') && !id.includes('boiler') && !id.includes('water_heater');
+      }) || climates[0];
+      const t = best.attributes.current_temperature;
+      const u = best.attributes?.temperature_unit || '°C';
+      return Number.isFinite(t) ? { temp: t, unit: u } : null;
+    })();
+
     const validTempState = s => {
       if (!s || s.entity_id.startsWith('weather.') || s.entity_id.startsWith('climate.')) return false;
       if (!['sensor', 'binary_sensor'].includes(s.entity_id.split('.')[0])) return false;
@@ -673,7 +754,12 @@ class ArgusPanel extends HTMLElement {
     if (preciseTempSensor) {
       rawTemp = Number(preciseTempSensor.state);
       rawUnit = preciseTempSensor.attributes?.unit_of_measurement || preciseTempSensor.attributes?.native_unit_of_measurement || '°C';
+    } else if (thermostatTemp) {
+      // Use climate entity current_temperature (real room sensor, very precise)
+      rawTemp = thermostatTemp.temp;
+      rawUnit = thermostatTemp.unit;
     } else {
+      // Last resort: weather entity reports forecast/station temp (less precise)
       rawTemp = (typeof weatherEnt.attributes?.temperature === 'number') ? weatherEnt.attributes.temperature : null;
       rawUnit = weatherEnt.attributes?.temperature_unit || this._hass?.config?.unit_system?.temperature || '°C';
     }
@@ -695,7 +781,10 @@ class ArgusPanel extends HTMLElement {
     // Location: prefer entity locality/city, skip generic names
     const cfgLoc = this._hass?.config?.location_name || '';
     const isGenericName = ['home','casa','house','my home'].includes(cfgLoc.toLowerCase());
-    let locName = weatherEnt.attributes?.locality
+    // Home name: custom (editable) > weather locality > HA location name > default
+    const savedHome = this._homeName || this._ui?.home_name || '';
+    let locName = savedHome
+                  || weatherEnt.attributes?.locality
                   || weatherEnt.attributes?.city
                   || weatherEnt.attributes?.station_name
                   || (!isGenericName && cfgLoc ? cfgLoc : null)
@@ -720,7 +809,7 @@ class ArgusPanel extends HTMLElement {
         <article class="entry" style="${triggered ? 'border:3px solid #ff5252;box-shadow:0 0 30px rgba(255,82,82,.4)' : ''}">
           ${this._getWeatherBg(weatherState, isNight)}
 
-          <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="Pantalla completa de esta instancia" style="position:absolute;top:14px;left:16px;z-index:4;padding:6px 10px;font-size:15px">⛶</button>
+          <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="Pantalla completa de esta instancia" style="position:absolute;bottom:14px;right:16px;z-index:4;padding:6px 10px;font-size:15px">⛶</button>
 
           <div class="hud">
             <div class="hud-loc">${locName}</div>
@@ -737,7 +826,7 @@ class ArgusPanel extends HTMLElement {
             </div>
 
             <div class="entry-icon">
-              ${triggered ? '<div style="font-size:90px;filter:drop-shadow(0 0 30px #f00)">🚨</div>' : `<img src="/api/argus_static/${svgName}?v=0.9.1">`}
+              ${triggered ? '<div style="font-size:90px;filter:drop-shadow(0 0 30px #f00)">🚨</div>' : `<img src="/api/argus_static/${svgName}?v=0.9.4">`}
             </div>
           </div>
         </article>`;
@@ -1273,6 +1362,58 @@ class ArgusPanel extends HTMLElement {
     } catch (_) { const c = this.shadowRoot.getElementById('hk-qr'); if (c) c.style.display = 'none'; }
   }
 
+  /* ── Home Name management ────────────────────────────────────────── */
+  _editHomeName() {
+    const masterPin = this._dashboard?.entries?.[0]?.options?.code || '';
+    const doOpen = () => {
+      const m = this.shadowRoot.getElementById('home-name-modal');
+      const inp = this.shadowRoot.getElementById('home-name-input');
+      const st  = this.shadowRoot.getElementById('home-name-status');
+      inp.value = this._homeName || '';
+      if (st) st.textContent = '';
+      m.classList.add('open'); m.setAttribute('aria-hidden', 'false');
+      setTimeout(() => inp.focus(), 60);
+    };
+    if (masterPin) {
+      this._showPinModal(pin => {
+        if (pin !== masterPin) {
+          setTimeout(() => {
+            const err = this.shadowRoot.getElementById('pin-error');
+            if (err) err.textContent = '\u274c PIN incorrecto';
+          }, 50);
+          return;
+        }
+        doOpen();
+      });
+    } else {
+      doOpen();
+    }
+  }
+
+  _closeHomeNameModal() {
+    const m = this.shadowRoot.getElementById('home-name-modal');
+    m.classList.remove('open'); m.setAttribute('aria-hidden', 'true');
+  }
+
+  async _saveHomeName() {
+    const inp = this.shadowRoot.getElementById('home-name-input');
+    const st  = this.shadowRoot.getElementById('home-name-status');
+    const name = (inp?.value || '').trim();
+    try {
+      await this._send('argus/save_ui', { home_name: name });
+      this._homeName = name;
+      if (!this._ui) this._ui = {};
+      this._ui.home_name = name;
+      const lbl = this.shadowRoot.getElementById('lbl-home-name');
+      if (lbl) lbl.textContent = name || 'Mi Hogar';
+      if (st) { st.textContent = '\u2713 Nombre guardado'; st.className = 'status ok'; }
+      this._renderEntries();
+      setTimeout(() => this._closeHomeNameModal(), 1200);
+    } catch (e) {
+      if (st) { st.textContent = e.message; st.className = 'status err'; }
+    }
+  }
+
   /* ── PIN management ──────────────────────────────────────────────── */
   async _savePin() {
     const status = this.shadowRoot.getElementById('pin-status');
@@ -1348,6 +1489,22 @@ class ArgusPanel extends HTMLElement {
   }
 
   /* ── Selector modal ──────────────────────────────────────────────── */
+  _selectAll() {
+    const q = (this.shadowRoot.getElementById('selector-search').value || '').toLowerCase().trim();
+    const INTRUSION_DC = ['door','window','motion','vibration','glass','opening','smoke','gas','tamper'];
+    const items = this._available.filter(x => {
+      if (this._selectorTarget === 'siren') return ['siren','switch'].includes(x.domain);
+      if (x.domain === 'lock') return true;
+      if (x.domain === 'binary_sensor') {
+        const dc = this._hass?.states?.[x.entity_id]?.attributes?.device_class || '';
+        return INTRUSION_DC.includes(dc);
+      }
+      return false;
+    }).filter(x => !q || [x.entity_id, x.name, x.area].filter(Boolean).join(' ').toLowerCase().includes(q));
+    items.forEach(x => { if (!this._selected.includes(x.entity_id)) this._selected.push(x.entity_id); });
+    this._renderSelector();
+  }
+
   _openModal(type) {
     this._selectorTarget = type;
     const cfg = this._currentModeConfig();
@@ -1387,19 +1544,18 @@ class ArgusPanel extends HTMLElement {
     list.innerHTML = items.map(x => {
       const raw   = this._hass?.states?.[x.entity_id]?.state || 'unknown';
       const isTr  = ['on', 'unlocked', 'open', 'recording'].includes(raw);
-      const dc    = this._hass?.states?.[x.entity_id]?.attributes?.device_class || '';
       const lblMap = { on:'Abierto', off:'Cerrado', locked:'Cerrado', unlocked:'Abierto', idle:'Reposo', recording:'Grabando', home:'En casa', not_home:'Fuera' };
       const lbl  = this._selectorTarget === 'sensor'
         ? `<span class="badge ${isTr ? 'armed_away' : 'disarmed'}" style="padding:2px 6px;font-size:10px">${lblMap[raw] || raw}</span>`
         : '';
-      return `<label class="list-item">
+      return `<label class="pick-row">
         <input type="checkbox" data-entity="${x.entity_id}" ${this._selected.includes(x.entity_id) ? 'checked' : ''}>
         <div>
-          <div style="font-weight:700;display:flex;align-items:center;gap:6px">${x.name || x.entity_id}${lbl}</div>
-          <div class="small">${x.entity_id}${x.area ? ' · '+x.area : ''}</div>
+          <div class="pick-row-name">${x.name || x.entity_id}${lbl}</div>
+          <div class="pick-row-meta">${x.entity_id}${x.area ? ' · '+x.area : ''}</div>
         </div>
       </label>`;
-    }).join('') || `<div class="small">Sin resultados</div>`;
+    }).join('') || `<div class="small" style="padding:10px">Sin resultados</div>`;
 
     list.querySelectorAll('input[type=checkbox]').forEach(cb =>
       cb.addEventListener('change', e => {
@@ -1411,11 +1567,11 @@ class ArgusPanel extends HTMLElement {
     );
 
     selBox.innerHTML = this._selected.map(id =>
-      `<div class="list-item" style="justify-content:space-between">
-        <div>${this._hass?.states?.[id]?.attributes?.friendly_name || id}</div>
-        <button class="ghost" style="padding:4px 9px" data-rm="${id}">✕</button>
+      `<div class="sel-right-item">
+        <div style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${this._hass?.states?.[id]?.attributes?.friendly_name || id}</div>
+        <button class="ghost" style="padding:3px 8px;font-size:11px;flex-shrink:0;margin-left:6px" data-rm="${id}">✕</button>
       </div>`
-    ).join('') || `<div class="small">${this._t('none_selected')}</div>`;
+    ).join('') || `<div class="small" style="padding:10px;opacity:.5">${this._t('none_selected')}</div>`;
 
     selBox.querySelectorAll('[data-rm]').forEach(b =>
       b.addEventListener('click', () => {
