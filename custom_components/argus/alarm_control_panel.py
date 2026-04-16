@@ -166,12 +166,29 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         return attrs
 
     # ── Sensor helpers ─────────────────────────────────────────────
+    def _get_mode_val(self, mode_key, key, default):
+        """Get value from UI mode config, fallback to self, then global default."""
+        mode_cfg = self._ui_config.get("modes", {}).get(mode_key, {})
+        if key in mode_cfg:
+            return mode_cfg[key]
+        
+        # Mapping component internal attrs to keys
+        attr_map = {
+            "arming_time": self._arming_time,
+            "entry_delay": self._entry_delay,
+            "mqtt_enabled": self._mqtt_enabled,
+        }
+        return attr_map.get(key, default)
+
     def _sensors_for_state(self, state: AlarmControlPanelState) -> list[str]:
         # Try to load from UI configuration first
         modes = self._ui_config.get("modes", {})
         mode_key = state.value.replace("armed_", "")
-        if mode_key in modes and modes[mode_key].get("sensors"):
-            return modes[mode_key]["sensors"]
+        if mode_key in modes:
+            m_cfg = modes[mode_key]
+            sensors = m_cfg.get("sensors") or []
+            bypassed = m_cfg.get("bypassed_sensors") or []
+            return [s for s in sensors if s not in bypassed]
 
         # Fallback to static config
         if state == AlarmControlPanelState.ARMED_HOME:
@@ -323,9 +340,20 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                                 _LOGGER.warning("Argus: turn_off action error for %s: %s", e_id, e)
                 elif a_type == "trigger_alarm":
                     # Forzar evento de disparo
+                    rule_name = rule.get("name") or "Regla Automática"
                     if self._alarm_state in ARMED_STATES or kwargs.get("sensor"):
-                         self._triggered_by = kwargs.get("sensor") or "Regla Automática"
+                         self._triggered_by = f"Regla: {rule_name}"
+                         if kwargs.get("sensor"):
+                              self._triggered_by += f" (Sensor: {kwargs.get('sensor')})"
                          self.hass.async_create_task(self._async_trigger())
+                
+                # Log the automation action
+                rule_name = rule.get("name") or "Argus"
+                await async_append_audit_log(
+                    self.hass, f"auto_{action.get('type')}", 
+                    f"Ejecutando: {rule_name} (Acción: {action.get('type')})",
+                    user="Argus"
+                )
 
 
     async def _async_linked_alarm_changed(self, event):
@@ -429,14 +457,21 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         _LOGGER.warning("Argus: Sensor %s tripped while %s", entity_id, self._alarm_state)
         self._triggered_by = entity_id
 
-        if entity_id in self._entry_sensors and self._entry_delay > 0:
+        mode_key = self._alarm_state.value.replace("armed_", "")
+        mode_cfg = self._ui_config.get("modes", {}).get(mode_key, {})
+        
+        # Per-mode entry list or global entry list
+        entry_list = mode_cfg.get("entry_sensors", self._entry_sensors)
+        entry_delay = mode_cfg.get("entry_delay", self._entry_delay)
+
+        if entity_id in entry_list and entry_delay > 0:
             # Entry delay → PENDING
             self._alarm_state = AlarmControlPanelState.PENDING
             self.async_write_ha_state()
             if self._entry_listener:
                 self._entry_listener()
             self._entry_listener = async_call_later(
-                self.hass, self._entry_delay, self._async_trigger_now
+                self.hass, entry_delay, self._async_trigger_now
             )
         else:
             self.hass.async_create_task(self._async_trigger())
@@ -472,9 +507,14 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 sensor_name = self._triggered_by
         
         mode_label = self._alarm_state.value.replace("armed_", "").capitalize()
+        # If triggered by a rule, mention it
+        trigger_detail = f"Sensor: {sensor_name} (Modo: {mode_label})"
+        if "Regla" in str(self._triggered_by):
+            trigger_detail = f"Disparado por {self._triggered_by} ({mode_label})"
+
         await async_append_audit_log(
             self.hass, "triggered",
-            f"Sensor: {sensor_name} (Modo: {mode_label})",
+            trigger_detail,
             user="Argus"
         )
 
@@ -564,8 +604,16 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             _LOGGER.warning("Argus: Unknown MQTT command: %s", cmd)
 
     async def _async_mqtt_publish(self):
-        if not self._mqtt_enabled:
-            return
+        """Publish status to MQTT if enabled globally or for current mode."""
+        if not self._get_mode_val(None, "mqtt_enabled", self._mqtt_enabled):
+             # If target is armed, we might have a per-mode override
+             if self._alarm_state in ARMED_STATES:
+                 m_key = self._alarm_state.value.replace("armed_", "")
+                 if not self._get_mode_val(m_key, "mqtt_enabled", False):
+                     return
+             else:
+                 return
+
         try:
             from homeassistant.components import mqtt  # noqa: PLC0415
             await mqtt.async_publish(
@@ -647,12 +695,15 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         self._cancel_timers()
 
-        if self._arming_time > 0:
+        mode_key = target.value.replace("armed_", "")
+        arming_delay = self._get_mode_val(mode_key, "arming_time", self._arming_time)
+
+        if arming_delay > 0:
             self._arming_target = target
             self._alarm_state = AlarmControlPanelState.ARMING
             self.async_write_ha_state()
             self._arming_listener = async_call_later(
-                self.hass, self._arming_time, self._async_finish_arming
+                self.hass, arming_delay, self._async_finish_arming
             )
         else:
             self._alarm_state = target

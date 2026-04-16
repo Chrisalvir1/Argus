@@ -1,7 +1,7 @@
 {
   "domain": "argus",
   "name": "Argus Home Assistant",
-  "version": "0.9.10",
+  "version": "0.9.12",
   "documentation": "https://github.com/Chrisalvir1/Argus",
   "issue_tracker": "https://github.com/Chrisalvir1/Argus/issues",
   "codeowners": [

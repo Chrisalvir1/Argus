@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.9.10
+ * Argus Home Hub – v0.9.12
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -81,14 +81,29 @@ _tmpl.innerHTML = `
 
   /* Liquid Glass & SOS Styles */
   :host {
-    --glass-bg: rgba(255, 255, 255, 0.14);
-    --glass-border: rgba(255, 255, 255, 0.22);
-    --glass-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+    --glass-bg: var(--argus-glass-bg, rgba(255, 255, 255, 0.12));
+    --glass-border: var(--argus-glass-border, rgba(255, 255, 255, 0.2));
+    --glass-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
     --sos-red: linear-gradient(135deg, #ff4d4f, #d90429);
-    --ios-track: rgba(255, 255, 255, 0.12);
-    --ios-thumb: linear-gradient(180deg, #ffffff, #dfe7f5);
+    --ios-track: rgba(0, 0, 0, 0.1);
+    --ios-thumb: linear-gradient(180deg, #ffffff, #f0f0f0);
+    --text-shadow: 0 1px 2px rgba(0,0,0,0.2);
   }
-  .liquid-glass { background: var(--glass-bg); backdrop-filter: blur(22px) saturate(180%); -webkit-backdrop-filter: blur(22px) saturate(180%); border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); }
+  
+  /* Detect light mode via HA variables and adjust glass */
+  :host([selected-theme*="light"]), :host(:not([selected-theme*="dark"])) {
+    --argus-glass-bg: rgba(0, 0, 0, 0.04);
+    --argus-glass-border: rgba(0, 0, 0, 0.08);
+    --text-shadow: none;
+  }
+
+  .liquid-glass { 
+    background: var(--glass-bg); 
+    backdrop-filter: blur(20px) saturate(170%); 
+    -webkit-backdrop-filter: blur(20px) saturate(170%); 
+    border: 1px solid var(--glass-border); 
+    box-shadow: var(--glass-shadow); 
+  }
   .battery-alert { margin: 0 0 12px 0; padding: 12px 16px; border-radius: 16px; background: rgba(255, 149, 0, 0.16); border: 1px solid rgba(255, 179, 71, 0.32); color: #fff3d6; font-weight: 600; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); text-align: left;}
   .btn-sos { width: 100%; min-height: 54px; border: 0; border-radius: 18px; background: var(--sos-red); color: white; font-size: 1rem; font-weight: 800; letter-spacing: 0.02em; cursor: pointer; box-shadow: 0 12px 28px rgba(217, 4, 41, 0.35); transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease; margin-top: 8px; }
   .btn-sos:hover { transform: translateY(-1px); box-shadow: 0 16px 34px rgba(217, 4, 41, 0.42); }
@@ -363,7 +378,10 @@ _tmpl.innerHTML = `
 
       <!-- Activity log -->
       <section class="glass panel liquid-glass">
-        <h2 id="h-activity-log"></h2>
+        <div class="panel-head">
+          <h2 id="h-activity-log"></h2>
+          <button class="ghost" id="btn-clear-log" style="font-size:10px;padding:4px 8px;opacity:0.6">BORRAR</button>
+        </div>
         <div id="activity-log" style="display:grid;gap:10px;max-height:400px;overflow-y:auto;margin-top:10px"></div>
       </section>
     </div>
@@ -445,6 +463,8 @@ _tmpl.innerHTML = `
              <label>PIN Actual</label>
              <input type="password" id="current-pin" inputmode="numeric" pattern="[0-9]*">
           </div>
+
+          <p class="small" style="margin:0 0 10px 0; color:var(--primary-color); font-weight:700">Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.</p>
 
           <div style="display:grid;gap:10px">
             <div class="field-group"><label id="l-new-pin"></label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*" placeholder="••••"></div>
@@ -609,8 +629,8 @@ class ArgusPanel extends HTMLElement {
     // 4. Weather state
     
     const now = Date.now();
-    const clockChanged = (now - this._lastClockUpdate) > 30000; // 30 sec buffer
-    if (clockChanged) this._lastClockUpdate = now;
+    // Clock is now handled by a dedicated interval for better accuracy
+    const clockChanged = false; 
 
     const alarmChanged = this._dashboard.entries.some(
       e => e.entity_id && oldHass?.states[e.entity_id]?.state !== hass.states[e.entity_id]?.state
@@ -689,51 +709,78 @@ class ArgusPanel extends HTMLElement {
   }
 
   /* ── Init ────────────────────────────────────────────────────────── */
-  connectedCallback() { this._init(); }
+  connectedCallback() { 
+    this._init(); 
+    this._startClock();
+  }
+  disconnectedCallback() {
+    if (this._clockInterval) clearInterval(this._clockInterval);
+  }
+
+  _startClock() {
+    if (this._clockInterval) clearInterval(this._clockInterval);
+    this._clockInterval = setInterval(() => {
+      const now = new Date();
+      if (now.getSeconds() === 0 || !this._lastClockUpdate) {
+         this._lastClockUpdate = Date.now();
+         this._renderEntries();
+      }
+    }, 1000);
+  }
 
   _bindSOS() {
     const thumb = this.shadowRoot.getElementById('sos-thumb');
     const track = thumb && thumb.closest('.ios-slider-track');
     if (!thumb || !track) return;
+
     let sliding = false, startX = 0, offsetX = 0;
     const maxSlide = () => Math.max(1, track.offsetWidth - thumb.offsetWidth - 12);
-    const startDrag = (clientX) => {
+
+    const onPointerDown = (e) => {
       sliding = true;
-      startX = clientX - offsetX;
+      startX = e.clientX - offsetX;
+      thumb.setPointerCapture(e.pointerId);
       thumb.style.transition = 'none';
       thumb.style.cursor = 'grabbing';
+      e.preventDefault();
     };
-    const moveDrag = (clientX) => {
+
+    const onPointerMove = (e) => {
       if (!sliding) return;
-      offsetX = Math.max(0, Math.min(clientX - startX, maxSlide()));
+      offsetX = Math.max(0, Math.min(e.clientX - startX, maxSlide()));
       thumb.style.left = (6 + offsetX) + 'px';
       const pct = offsetX / maxSlide();
       track.style.background = 'rgba(217,4,41,' + (0.15 + pct * 0.55) + ')';
-      if (pct >= 0.92) endDrag(true);
+      if (pct >= 0.98) finalize(true);
     };
-    const endDrag = (confirmed) => {
+
+    const onPointerUp = (e) => {
       if (!sliding) return;
+      finalize(false);
+    };
+
+    const finalize = (confirmed) => {
       sliding = false;
-      thumb.style.transition = '';
+      thumb.style.transition = 'all 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28)';
       thumb.style.cursor = 'grab';
       if (confirmed) {
         this._triggerSOS();
+        offsetX = 0;
+        setTimeout(() => {
+          thumb.style.left = '6px';
+          track.style.background = 'rgba(217,4,41,0.15)';
+        }, 600);
       } else {
         offsetX = 0;
         thumb.style.left = '6px';
-        track.style.background = '';
+        track.style.background = 'rgba(217,4,41,0.15)';
       }
     };
-    // Touch events
-    thumb.addEventListener('touchstart', e => { e.preventDefault(); startDrag(e.touches[0].clientX); }, { passive: false });
-    thumb.addEventListener('touchmove',  e => { e.preventDefault(); moveDrag(e.touches[0].clientX); }, { passive: false });
-    thumb.addEventListener('touchend',   () => endDrag(false));
-    thumb.addEventListener('touchcancel',() => endDrag(false));
-    // Mouse events
-    thumb.addEventListener('mousedown', e => { e.preventDefault(); startDrag(e.clientX); });
-    document.addEventListener('mousemove', e => { if (sliding) moveDrag(e.clientX); });
-    document.addEventListener('mouseup',   () => { if (sliding) endDrag(false); });
-    thumb.addEventListener('mouseleave',   () => {});  // handled by document mouseup
+
+    thumb.addEventListener('pointerdown', onPointerDown);
+    thumb.addEventListener('pointermove', onPointerMove);
+    thumb.addEventListener('pointerup', onPointerUp);
+    thumb.addEventListener('pointercancel', onPointerUp);
   }
 
   async _init() {
@@ -745,6 +792,15 @@ class ArgusPanel extends HTMLElement {
     }
     this._applyTranslations();
     await this._load();
+    this.shadowRoot.getElementById('btn-clear-log')?.addEventListener('click', () => this._clearHistory());
+  }
+
+  async _clearHistory() {
+    if (!confirm('¿Seguro que deseas borrar todo el historial?')) return;
+    try {
+      await this._send('argus/clear_audit_log');
+      await this._load();
+    } catch (e) { alert('Error: ' + e.message); }
   }
 
   _bindStatic() {
@@ -952,13 +1008,13 @@ class ArgusPanel extends HTMLElement {
       const name = String(s.attributes?.friendly_name || '').toLowerCase();
       const text = `${id} ${name}`;
       let score = 0;
-      if (text.includes('apple_weather')) score += 120;
-      if (text.includes('weather')) score += 90;
-      if (text.includes('outdoor') || text.includes('outside') || text.includes('exterior') || text.includes('afuera')) score += 70;
-      if (text.includes('atenas') || text.includes('alajuela') || text.includes('costa rica')) score += 50;
-      if (text.includes('temperature') || text.includes('temperatura')) score += 20;
-      if (id.includes('iphone') || name.includes('iphone')) score -= 40;
-      if (id.includes('battery') || id.includes('setpoint') || id.includes('target')) score -= 100;
+      if (text.includes('outdoor') || text.includes('outside') || text.includes('exterior') || text.includes('afuera') || text.includes('patio')) score += 150;
+      if (text.includes('temperature') || text.includes('temperatura')) score += 100;
+      if (text.includes('apple_weather')) score += 50;
+      if (text.includes('weather')) score += 40;
+      if (text.includes('atenas') || text.includes('alajuela') || text.includes('costa rica')) score += 30;
+      if (id.includes('iphone') || name.includes('iphone')) score -= 80;
+      if (id.includes('battery') || id.includes('setpoint') || id.includes('target')) score -= 200;
       return score;
     };
 
@@ -1030,7 +1086,7 @@ class ArgusPanel extends HTMLElement {
         <article class="entry" style="${triggered ? 'border:3px solid #ff5252;box-shadow:0 0 30px rgba(255,82,82,.4)' : ''}">
           ${this._renderEntryBackground(weatherState, isNight)}
 
-          <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="Pantalla completa" style="position:absolute;bottom:14px;left:16px;z-index:4;padding:8px 12px;font-size:16px;background:rgba(0,0,0,0.3);backdrop-filter:blur(5px);border-radius:12px">⛶</button>
+          <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="Pantalla completa" style="position:absolute;bottom:14px;right:16px;z-index:4;padding:8px 12px;font-size:16px;background:rgba(0,0,0,0.3);backdrop-filter:blur(5px);border-radius:12px">⛶</button>
 
           ${this._renderBatteryAlerts()}
           <div class="hud">
@@ -1266,7 +1322,11 @@ class ArgusPanel extends HTMLElement {
   }
 
   _currentModeConfig() {
-    const emptyCfg = { sensors: [], sirens: [], require_closed: false };
+    const emptyCfg = { 
+      sensors: [], bypassed_sensors: [], sirens: [], 
+      require_closed: false, arming_time: null, entry_delay: null, 
+      mqtt_enabled: null, entry_sensors: [] 
+    };
     if (!this._ui) return { ...emptyCfg };
     this._ui.modes = this._ui.modes || {};
     this._ui.modes.__by_entity__ = this._ui.modes.__by_entity__ || {};
@@ -1277,10 +1337,27 @@ class ArgusPanel extends HTMLElement {
     const current = this._ui.modes.__by_entity__[entityId][this._mode] || legacy;
     this._ui.modes.__by_entity__[entityId][this._mode] = {
       sensors: Array.isArray(current.sensors) ? current.sensors : [],
+      bypassed_sensors: Array.isArray(current.bypassed_sensors) ? current.bypassed_sensors : [],
       sirens: Array.isArray(current.sirens) ? current.sirens : [],
       require_closed: Boolean(current.require_closed),
+      arming_time: current.arming_time ?? null,
+      entry_delay: current.entry_delay ?? null,
+      mqtt_enabled: current.mqtt_enabled ?? null,
+      entry_sensors: Array.isArray(current.entry_sensors) ? current.entry_sensors : [],
     };
     return this._ui.modes.__by_entity__[entityId][this._mode];
+  }
+
+  _toggleEntrySensor(entityId) {
+    if (!this._isAdmin) return;
+    const cfg = this._currentModeConfig();
+    const list = Array.isArray(cfg.entry_sensors) ? [...cfg.entry_sensors] : [];
+    if (list.includes(entityId)) {
+      cfg.entry_sensors = list.filter(v => v !== entityId);
+    } else {
+      cfg.entry_sensors = [...list, entityId];
+    }
+    this._renderModeView();
   }
 
   _renderModeView() {
@@ -1312,12 +1389,37 @@ class ArgusPanel extends HTMLElement {
             <span style="font-size:13px;font-weight:600">Bloquear armado si hay sensores abiertos</span>
           </label>`}
         </div>
+        <div class="subsection">
+          <div class="subsection-title">Sensores para Omitir / Ignorar</div>
+          <div class="mode-sensor-grid" id="bypass-chips">
+            ${cfg.bypassed_sensors.map(x => this._chip(x, 'bypass')).join('') || `<div class="mode-sensor-none">Ninguno omitido</div>`}
+          </div>
+          ${readonly ? '' : `<div><button class="ghost" data-open-selector="bypass" style="margin-top:12px">+ Añadir Sensor para Ignorar</button></div>`}
+        </div>
         <div class="subsection" style="margin-top:10px">
           <div class="subsection-title">${this._t('siren_section')}</div>
           <div class="mode-sensor-grid" id="siren-chips">
             ${sirens.map(x => this._chip(x, 'siren')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
           </div>
           ${readonly ? '' : `<div><button class="ghost" data-open-selector="siren" style="margin-top:12px">${this._t('search_select')}</button></div>`}
+        </div>
+
+        <div class="subsection" style="margin-top:10px">
+          <div class="subsection-title">Tiempos y MQTT</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="input-stack">
+              <label>Retraso de Armado (s)</label>
+              <input type="number" id="mode-arming-time" value="${cfg.arming_time ?? ''}" placeholder="Global">
+            </div>
+            <div class="input-stack">
+              <label>Retraso de Entrada (s)</label>
+              <input type="number" id="mode-entry-delay" value="${cfg.entry_delay ?? ''}" placeholder="Global">
+            </div>
+          </div>
+          <label class="checkbox-label" style="display:flex;align-items:center;gap:10px;margin-top:12px;background:rgba(255,255,255,0.05);padding:12px;border-radius:12px">
+            <input type="checkbox" id="mode-mqtt-enabled" ${cfg.mqtt_enabled === false ? '' : (cfg.mqtt_enabled === true ? 'checked' : (this._ui_config.mqtt_enabled ? 'checked' : ''))}>
+            <span style="font-size:13px;font-weight:600">Habilitar MQTT para este modo</span>
+          </label>
         </div>
       ${readonly ? '' : `<div class="save-row" style="margin-top:20px">
         <button class="primary" id="save-mode" style="width:100%;height:48px">${this._t('save_mode')}</button>
@@ -1334,6 +1436,9 @@ class ArgusPanel extends HTMLElement {
       el.querySelectorAll('[data-remove]').forEach(btn =>
         btn.addEventListener('click', () => this._removeChip(btn.dataset.remove))
       );
+      el.querySelectorAll('[data-toggle-delay]').forEach(btn =>
+        btn.addEventListener('click', () => this._toggleEntrySensor(btn.dataset.toggleDelay))
+      );
       el.querySelector('#save-mode')?.addEventListener('click', () => this._saveMode());
     }
   }
@@ -1341,19 +1446,28 @@ class ArgusPanel extends HTMLElement {
   _chip(entityId, type) {
     const raw = this._hass?.states?.[entityId]?.state;
     const isTr = ['on', 'unlocked', 'open', 'recording', 'active', 'motion'].includes(raw);
+    const cfg = this._currentModeConfig();
+    const isEntry = (cfg.entry_sensors || []).includes(entityId);
+    
     const dot = type === 'sensor'
       ? `<span class="pill-dot ${isTr ? 'open' : ''}" title="${raw}"></span>`
       : '';
+    
+    const delayIcon = type === 'sensor' && !this._isAdmin ? (isEntry ? ' ⏳' : '') : (type === 'sensor' ? `
+      <button class="icon-btn ${isEntry ? 'active' : ''}" data-toggle-delay="${entityId}" title="Retraso de entrada (5s)">
+        ${isEntry ? '⏳' : '⚡'}
+      </button>` : '');
+
     const name = this._hass?.states?.[entityId]?.attributes?.friendly_name || entityId;
     const readonly = !this._isAdmin;
-    return `<span class="sensor-pill">${dot}<span>${name}</span>${readonly ? '' : `<button data-remove="${type}:${entityId}">✕</button>`}</span>`;
+    return `<span class="sensor-pill">${dot}<span>${name}</span>${delayIcon}${readonly ? '' : `<button data-remove="${type}:${entityId}">✕</button>`}</span>`;
   }
 
   _removeChip(value) {
     if (!this._isAdmin) return;
     const [type, entityId] = value.split(':');
     const cfg = this._currentModeConfig();
-    const key = type === 'sensor' ? 'sensors' : 'sirens';
+    const key = type === 'sensor' ? 'sensors' : (type === 'bypass' ? 'bypassed_sensors' : 'sirens');
     this._ui.modes[this._mode] = { ...cfg, [key]: (cfg[key] || []).filter(v => v !== entityId) };
     this._renderModeView();
   }
@@ -1361,7 +1475,14 @@ class ArgusPanel extends HTMLElement {
   async _saveMode() {
     const cfg = this._currentModeConfig();
     const chk = this.shadowRoot.getElementById('mode-require-closed');
+    const armTime = this.shadowRoot.getElementById('mode-arming-time');
+    const entDelay = this.shadowRoot.getElementById('mode-entry-delay');
+    const mqttChk = this.shadowRoot.getElementById('mode-mqtt-enabled');
+
     if (chk) cfg.require_closed = chk.checked;
+    if (armTime) cfg.arming_time = armTime.value ? parseInt(armTime.value) : null;
+    if (entDelay) cfg.entry_delay = entDelay.value ? parseInt(entDelay.value) : null;
+    if (mqttChk) cfg.mqtt_enabled = mqttChk.checked;
     
     const status = this.shadowRoot.getElementById('mode-status');
     try {
@@ -1769,8 +1890,11 @@ class ArgusPanel extends HTMLElement {
     
     try {
       await this._send('argus/update_master_pin', { pin: p1 });
-      status.textContent = '✓ Guardado'; 
+      status.textContent = p1 ? '✓ PIN Actualizado' : '✓ PIN Eliminado'; 
       status.className = 'status ok';
+      if (this.shadowRoot.getElementById('current-pin-display')) {
+        this.shadowRoot.getElementById('current-pin-display').textContent = p1 ? 'PIN Activo: Sí' : 'PIN Activo: No';
+      }
       if (this.shadowRoot.getElementById('current-pin')) this.shadowRoot.getElementById('current-pin').value = '';
       this.shadowRoot.getElementById('new-pin-1').value = '';
       this.shadowRoot.getElementById('new-pin-2').value = '';
@@ -1838,9 +1962,11 @@ class ArgusPanel extends HTMLElement {
   _openModal(type) {
     this._selectorTarget = type;
     const cfg = this._currentModeConfig();
-    this._selected = [...(cfg[type === 'sensor' ? 'sensors' : 'sirens'] || [])];
+    this._selected = [...(cfg[type === 'sensor' ? 'sensors' : (type === 'bypass' ? 'bypassed_sensors' : 'sirens')] || [])];
     const title = this.shadowRoot.getElementById('selector-title');
-    title.textContent = type === 'sensor' ? this._t('sensor_section') : this._t('siren_section');
+    if (type === 'sensor') title.textContent = this._t('sensor_section');
+    else if (type === 'bypass') title.textContent = 'Sensores a Omitir';
+    else title.textContent = this._t('siren_section');
     this.shadowRoot.getElementById('selector-search').value = '';
     this._renderSelector();
     const m = this.shadowRoot.getElementById('selector-modal');
@@ -1861,8 +1987,8 @@ class ArgusPanel extends HTMLElement {
     // camera-linked motion sensors, and locks. Everything else is excluded.
     const INTRUSION_DC = ['door','window','motion','vibration','glass','opening','smoke','gas','tamper'];
     const items = this._available.filter(x => {
-      if (this._selectorTarget === 'siren') return ['siren','switch'].includes(x.domain);
-      // sensor mode:
+      if (this._selectorTarget === 'siren') return ['siren','switch','light','fan','input_boolean'].includes(x.domain);
+      // sensor / bypass mode:
       if (x.domain === 'lock') return true;
       if (x.domain === 'binary_sensor') {
         const dc = this._hass?.states?.[x.entity_id]?.attributes?.device_class || '';
@@ -1918,6 +2044,7 @@ class ArgusPanel extends HTMLElement {
     if (!this._ui.modes) this._ui.modes = {};
     if (this._selectorTarget === 'sensor') cfg.sensors = [...this._selected];
     if (this._selectorTarget === 'siren')  cfg.sirens  = [...this._selected];
+    if (this._selectorTarget === 'bypass') cfg.bypassed_sensors = [...this._selected];
     this._ui.modes[this._mode] = cfg;
     this._closeModal();
     this._renderModeView();
@@ -1947,10 +2074,13 @@ class ArgusPanel extends HTMLElement {
       this._showPinModal(async pin => {
         try {
           await this._hass.callService('alarm_control_panel', 'alarm_disarm', { entity_id: e.entity_id, code: pin });
-          this._writeLog('disarmed', `Sistema desarmado`, currentUser);
-          this._sendHaNotif(`🔓 ${this._t('log_disarmed')}`, `El sistema fue desarmado manualmente por ${currentUser}.`);
+          this._writeLog('disarm', `Manual (Desarmado)`, currentUser);
+          this._sendHaNotif(`🔓 ${this._t('log_disarmed')}`, `${currentUser} desarmó el sistema.`);
           setTimeout(() => this._load(), 800);
-        } catch (err) { console.error('disarm error:', err); }
+        } catch (err) { 
+          const pinErr = this.shadowRoot.getElementById('pin-error');
+          if (pinErr) pinErr.textContent = '❌ PIN incorrecto';
+        }
       });
       return;
     }
@@ -1977,8 +2107,8 @@ class ArgusPanel extends HTMLElement {
     try {
       await this._hass.callService('alarm_control_panel', service, { entity_id: e.entity_id });
       const modeTxt = modeLabels[action] || action;
-      this._writeLog('armed', `Sistema armado en modo ${modeTxt}`, currentUser);
-      this._sendHaNotif(`🔒 ${this._t('log_armed')} — ${modeTxt}`, `El sistema fue armado en modo "${modeTxt}" manualmente por ${currentUser}.`);
+      this._writeLog('arm', `Manual (${modeTxt})`, currentUser);
+      this._sendHaNotif(`🔒 ${this._t('log_armed')} — ${modeTxt}`, `${currentUser} activó el modo ${modeTxt}.`);
       setTimeout(() => this._load(), 800);
     } catch (err) { console.error('Argus action failed', err); }
   }
