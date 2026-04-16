@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.9.16
+ * Argus Home Hub – v0.9.18
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1339,37 +1339,12 @@ class ArgusPanel extends HTMLElement {
             <span style="font-size:13px;font-weight:600">Bloquear armado si hay sensores abiertos</span>
           </label>`}
         </div>
-        <div class="subsection">
-          <div class="subsection-title">Sensores para Omitir / Ignorar</div>
-          <div class="mode-sensor-grid" id="bypass-chips">
-            ${cfg.bypassed_sensors.map(x => this._chip(x, 'bypass')).join('') || `<div class="mode-sensor-none">Ninguno omitido</div>`}
-          </div>
-          ${readonly ? '' : `<div><button class="ghost" data-open-selector="bypass" style="margin-top:12px">+ Añadir Sensor para Ignorar</button></div>`}
-        </div>
         <div class="subsection" style="margin-top:10px">
           <div class="subsection-title">${this._t('siren_section')}</div>
           <div class="mode-sensor-grid" id="siren-chips">
             ${sirens.map(x => this._chip(x, 'siren')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
           </div>
           ${readonly ? '' : `<div><button class="ghost" data-open-selector="siren" style="margin-top:12px">${this._t('search_select')}</button></div>`}
-        </div>
-
-        <div class="subsection" style="margin-top:10px">
-          <div class="subsection-title">Tiempos y MQTT</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-            <div class="input-stack">
-              <label>Retraso de Armado (s)</label>
-              <input type="number" id="mode-arming-time" value="${cfg.arming_time ?? ''}" placeholder="Global">
-            </div>
-            <div class="input-stack">
-              <label>Retraso de Entrada (s)</label>
-              <input type="number" id="mode-entry-delay" value="${cfg.entry_delay ?? ''}" placeholder="Global">
-            </div>
-          </div>
-          <label class="checkbox-label" style="display:flex;align-items:center;gap:10px;margin-top:12px;background:rgba(255,255,255,0.05);padding:12px;border-radius:12px">
-            <input type="checkbox" id="mode-mqtt-enabled" ${cfg.mqtt_enabled === false ? '' : (cfg.mqtt_enabled === true ? 'checked' : (this._ui_config.mqtt_enabled ? 'checked' : ''))}>
-            <span style="font-size:13px;font-weight:600">Habilitar MQTT para este modo</span>
-          </label>
         </div>
       ${readonly ? '' : `<div class="save-row" style="margin-top:20px">
         <button class="primary" id="save-mode" style="width:100%;height:48px">${this._t('save_mode')}</button>
@@ -1386,9 +1361,6 @@ class ArgusPanel extends HTMLElement {
       el.querySelectorAll('[data-remove]').forEach(btn =>
         btn.addEventListener('click', () => this._removeChip(btn.dataset.remove))
       );
-      el.querySelectorAll('[data-toggle-delay]').forEach(btn =>
-        btn.addEventListener('click', () => this._toggleEntrySensor(btn.dataset.toggleDelay))
-      );
       el.querySelector('#save-mode')?.addEventListener('click', () => this._saveMode());
     }
   }
@@ -1396,21 +1368,12 @@ class ArgusPanel extends HTMLElement {
   _chip(entityId, type) {
     const raw = this._hass?.states?.[entityId]?.state;
     const isTr = ['on', 'unlocked', 'open', 'recording', 'active', 'motion'].includes(raw);
-    const cfg = this._currentModeConfig();
-    const isEntry = (cfg.entry_sensors || []).includes(entityId);
-    
     const dot = type === 'sensor'
       ? `<span class="pill-dot ${isTr ? 'open' : ''}" title="${raw}"></span>`
       : '';
-    
-    const delayIcon = type === 'sensor' && !this._isAdmin ? (isEntry ? ' ⏳' : '') : (type === 'sensor' ? `
-      <button class="icon-btn ${isEntry ? 'active' : ''}" data-toggle-delay="${entityId}" title="Retraso de entrada (5s)">
-        ${isEntry ? '⏳' : '⚡'}
-      </button>` : '');
-
     const name = this._hass?.states?.[entityId]?.attributes?.friendly_name || entityId;
     const readonly = !this._isAdmin;
-    return `<span class="sensor-pill">${dot}<span>${name}</span>${delayIcon}${readonly ? '' : `<button data-remove="${type}:${entityId}">✕</button>`}</span>`;
+    return `<span class="sensor-pill">${dot}<span>${name}</span>${readonly ? '' : `<button data-remove="${type}:${entityId}">✕</button>`}</span>`;
   }
 
   _removeChip(value) {
