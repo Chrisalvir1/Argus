@@ -95,8 +95,12 @@ _tmpl.innerHTML = `
     --argus-glass-bg: rgba(255, 255, 255, 0.7);
     --argus-glass-border: rgba(0, 0, 0, 0.15);
     --text-shadow: none;
-    --hud-bg: rgba(0,0,0,0.08);
+    --hud-bg: rgba(0,0,0,0.06);
     --hero-gradient: linear-gradient(135deg, #1e3c72, #2a5298);
+    --card-title-color: #0d47a1;
+    --pill-bg: rgba(0,0,0,0.04);
+    --pill-border: rgba(0,0,0,0.1);
+    --pill-text: #1e1e2d;
   }
   
   :host {
@@ -148,6 +152,22 @@ _tmpl.innerHTML = `
   .micasa-grid { display: grid; gap: 16px; margin-top: 10px; }
   .micasa-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 18px; transition: all 0.3s ease; }
   .micasa-card:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.15); transform: translateY(-2px); }
+  
+  /* Mode Reorganization Styles */
+  .mode-grid-layout { display: flex; flex-direction: column; gap: 20px; }
+  .mode-section-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 20px; transition: all 0.3s ease; }
+  :host([selected-theme*="light"]) .mode-section-card { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.06); }
+  .mode-section-card:hover { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.06); }
+  :host([selected-theme*="light"]) .mode-section-card:hover { border-color: rgba(0,0,0,0.12); background: rgba(0,0,0,0.05); }
+  .mode-section-title { font-size: 14px; font-weight: 800; color: var(--card-title-color, #fff); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+  
+  .sensor-pill { background: var(--pill-bg, rgba(255,255,255,0.08)); color: var(--pill-text, #fff); border: 1px solid var(--pill-border, rgba(255,255,255,0.1)); padding: 6px 12px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; }
+  .icon-btn { background: none; border: none; padding: 4px; color: inherit; opacity: 0.6; cursor: pointer; transition: opacity 0.2s; display: flex; align-items: center; justify-content: center; border-radius: 6px; }
+  .icon-btn:hover { opacity: 1; background: rgba(255,255,255,0.1); }
+  .icon-btn.active { color: #fb8c00; opacity: 1; }
+  
+  .input-group { display: flex; flex-direction: column; gap: 6px; }
+  .input-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-left: 4px; }
   
   /* Intelligent Entry Card */
   .entry{position:relative;overflow:hidden;border-radius:24px;border:1px solid rgba(255,255,255,0.1);margin-bottom:16px;min-height:220px;display:flex;flex-direction:column;transition:transform 0.3s ease}
@@ -1313,43 +1333,75 @@ class ArgusPanel extends HTMLElement {
   _renderModeView() {
     const cfg = this._currentModeConfig();
     const sensors = cfg.sensors || [];
+    const bypass  = cfg.bypassed_sensors || [];
     const sirens  = cfg.sirens  || [];
     const el = this.shadowRoot.getElementById('mode-view');
     const readonly = !this._isAdmin;
     const entries = this._dashboard?.entries || [];
     const activeEntityId = this._modeEntryId || entries[0]?.entity_id || '';
-    const activeEntry = entries.find(e => e.entity_id === activeEntityId) || entries[0] || null;
-    const instanceOptions = entries.map(e => `<option value="${e.entity_id}" ${e.entity_id===activeEntityId ? 'selected' : ''}>${e.title || e.entity_id}</option>`).join('');
+
     const instanceBlock = entries.length > 1 ? `
-        <div class="subsection">
-          <div class="subsection-title">Instancia</div>
-          <select id="mode-instance-select">${instanceOptions}</select>
+        <div class="mode-section-card">
+          <div class="mode-section-title">📍 Instancia de Alarma</div>
+          <select id="mode-instance-select" style="width:100%">${entries.map(e => `<option value="${e.entity_id}" ${e.entity_id===activeEntityId ? 'selected' : ''}>${e.title || e.entity_id}</option>`).join('')}</select>
         </div>` : '';
+
     el.innerHTML = `
-      <div class="stack">
+      <div class="mode-grid-layout">
         ${instanceBlock}
-        <div class="subsection">
-          <div class="subsection-title">${this._t('sensor_section')}</div>
+
+        <div class="mode-section-card">
+          <div class="mode-section-title">🛡️ Sensores de Activación</div>
           <div class="mode-sensor-grid" id="sensor-chips">
             ${sensors.map(x => this._chip(x, 'sensor')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
           </div>
-          ${readonly ? '' : `<div><button class="ghost" data-open-selector="sensor" style="margin-top:12px">${this._t('search_select')}</button></div>
-          <label class="checkbox-label" style="display:flex;align-items:center;gap:10px;margin-top:16px;background:rgba(255,255,255,0.05);padding:12px;border-radius:12px">
-            <input type="checkbox" id="mode-require-closed" ${cfg.require_closed ? 'checked' : ''}>
-            <span style="font-size:13px;font-weight:600">Bloquear armado si hay sensores abiertos</span>
-          </label>`}
+          ${readonly ? '' : `
+            <button class="ghost" data-open-selector="sensor" style="margin-top:16px; width:100%; justify-content:center">+ Seleccionar Sensores</button>
+            <label class="checkbox-label" style="display:flex;align-items:center;gap:12px;margin-top:16px;padding:12px;background:rgba(255,255,255,0.03);border-radius:12px;border:1px solid rgba(255,255,255,0.05)">
+              <input type="checkbox" id="mode-require-closed" ${cfg.require_closed ? 'checked' : ''}>
+              <span style="font-size:13px;font-weight:700">Bloquear armado si hay sensores abiertos</span>
+            </label>
+          `}
         </div>
-        <div class="subsection" style="margin-top:10px">
-          <div class="subsection-title">${this._t('siren_section')}</div>
+
+        <div class="mode-section-card">
+          <div class="mode-section-title">🚫 Sensores para Omitir</div>
+          <div class="mode-sensor-grid" id="bypass-chips">
+            ${bypass.map(x => this._chip(x, 'bypass')).join('') || `<div class="mode-sensor-none">No hay sensores omitidos</div>`}
+          </div>
+          ${readonly ? '' : `<button class="ghost" data-open-selector="bypass" style="margin-top:16px; width:100%; justify-content:center">+ Añadir Sensor para Ignorar</button>`}
+        </div>
+
+        <div class="mode-section-card">
+          <div class="mode-section-title">📢 Sirenas</div>
           <div class="mode-sensor-grid" id="siren-chips">
             ${sirens.map(x => this._chip(x, 'siren')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
           </div>
-          ${readonly ? '' : `<div><button class="ghost" data-open-selector="siren" style="margin-top:12px">${this._t('search_select')}</button></div>`}
+          ${readonly ? '' : `<button class="ghost" data-open-selector="siren" style="margin-top:16px; width:100%; justify-content:center">+ Seleccionar Sirenas</button>`}
         </div>
-      ${readonly ? '' : `<div class="save-row" style="margin-top:20px">
-        <button class="primary" id="save-mode" style="width:100%;height:48px">${this._t('save_mode')}</button>
-      </div>`}
+
+        <div class="mode-section-card">
+          <div class="mode-section-title">⌨️ Tiempos y MQTT</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div class="input-group">
+              <span class="input-label">Retraso Armado (s)</span>
+              <input type="number" id="mode-arming-time" value="${cfg.arming_time ?? ''}" placeholder="Defecto">
+            </div>
+            <div class="input-group">
+              <span class="input-label">Retraso Entrada (s)</span>
+              <input type="number" id="mode-entry-delay" value="${cfg.entry_delay ?? ''}" placeholder="Defecto">
+            </div>
+          </div>
+          <label class="checkbox-label" style="display:flex;align-items:center;gap:12px;margin-top:16px;padding:12px;background:rgba(255,255,255,0.03);border-radius:12px;border:1px solid rgba(255,255,255,0.05)">
+            <input type="checkbox" id="mode-mqtt-enabled" ${cfg.mqtt_enabled !== false ? 'checked' : ''}>
+            <span style="font-size:13px;font-weight:700">Habilitar MQTT para este modo</span>
+          </label>
+        </div>
+
+        ${readonly ? '' : `<button class="primary" id="save-mode" style="width:100%;height:54px;font-size:15px;box-shadow:0 10px 25px rgba(0,0,0,0.2)">GUARDAR CONFIGURACIÓN</button>`}
+      </div>
     `;
+
     el.querySelector('#mode-instance-select')?.addEventListener('change', ev => {
       this._modeEntryId = ev.target.value;
       this._renderModeView();
@@ -1361,6 +1413,9 @@ class ArgusPanel extends HTMLElement {
       el.querySelectorAll('[data-remove]').forEach(btn =>
         btn.addEventListener('click', () => this._removeChip(btn.dataset.remove))
       );
+      el.querySelectorAll('[data-toggle-delay]').forEach(btn =>
+        btn.addEventListener('click', () => this._toggleEntrySensor(btn.dataset.toggleDelay))
+      );
       el.querySelector('#save-mode')?.addEventListener('click', () => this._saveMode());
     }
   }
@@ -1368,12 +1423,28 @@ class ArgusPanel extends HTMLElement {
   _chip(entityId, type) {
     const raw = this._hass?.states?.[entityId]?.state;
     const isTr = ['on', 'unlocked', 'open', 'recording', 'active', 'motion'].includes(raw);
-    const dot = type === 'sensor'
-      ? `<span class="pill-dot ${isTr ? 'open' : ''}" title="${raw}"></span>`
-      : '';
+    const cfg = this._currentModeConfig();
+    const isEntry = (cfg.entry_sensors || []).includes(entityId);
     const name = this._hass?.states?.[entityId]?.attributes?.friendly_name || entityId;
     const readonly = !this._isAdmin;
-    return `<span class="sensor-pill">${dot}<span>${name}</span>${readonly ? '' : `<button data-remove="${type}:${entityId}">✕</button>`}</span>`;
+
+    const dot = type === 'sensor' || type === 'bypass'
+      ? `<span class="pill-dot ${isTr ? 'open' : ''}" title="${raw}"></span>`
+      : '';
+    
+    const delayIcon = type === 'sensor' ? `
+      <button class="icon-btn ${isEntry ? 'active' : ''}" data-toggle-delay="${entityId}" title="Retraso de entrada (⏳) o Instantáneo (⚡)">
+        ${isEntry ? '⏳' : '⚡'}
+      </button>` : '';
+
+    return `
+      <span class="sensor-pill">
+        ${dot}
+        <span style="flex:1">${name}</span>
+        ${delayIcon}
+        ${readonly ? '' : `<button data-remove="${type}:${entityId}" style="background:none; border:none; color:inherit; opacity:0.5; padding:0 4px; cursor:pointer">✕</button>`}
+      </span>
+    `;
   }
 
   _removeChip(value) {
