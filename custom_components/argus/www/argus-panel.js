@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.9.13
+ * Argus Home Hub – v0.9.14
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -92,9 +92,16 @@ _tmpl.innerHTML = `
   
   /* Detect light mode via HA variables and adjust glass */
   :host([selected-theme*="light"]), :host(:not([selected-theme*="dark"])) {
-    --argus-glass-bg: rgba(0, 0, 0, 0.04);
-    --argus-glass-border: rgba(0, 0, 0, 0.08);
+    --argus-glass-bg: rgba(255, 255, 255, 0.6);
+    --argus-glass-border: rgba(0, 0, 0, 0.1);
     --text-shadow: none;
+    --hud-text-color: #333;
+    --hud-bg: rgba(0,0,0,0.05);
+  }
+  
+  :host {
+    --hud-text-color: #fff;
+    --hud-bg: rgba(255,255,255,0.1);
   }
 
   .liquid-glass { 
@@ -149,9 +156,9 @@ _tmpl.innerHTML = `
   .entry-content{position:relative;z-index:2;flex:1;padding:20px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.3) 0%, transparent 60%)}
   
   /* HUD Overlay */
-  .hud{position:absolute;top:20px;right:24px;text-align:right;z-index:3;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.6);display:flex;flex-direction:column;gap:4px}
-  .hud-loc{font-size:13px;font-weight:900;text-transform:uppercase;opacity:1;letter-spacing:1.5px;background:rgba(0,0,0,0.25);padding:4px 12px;border-radius:10px;backdrop-filter:blur(5px);border:1px solid rgba(255,255,255,0.1);align-self:flex-end}
-  .hud-data{font-size:20px;font-weight:800;letter-spacing:-0.02em;background:rgba(255,255,255,0.1);padding:6px 14px;border-radius:12px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.1);display:inline-flex;align-items:center;gap:8px;align-self:flex-end}
+  .hud{position:absolute;top:20px;right:24px;text-align:right;z-index:3;color:var(--hud-text-color);text-shadow:var(--text-shadow);display:flex;flex-direction:column;gap:4px}
+  .hud-loc{font-size:13px;font-weight:900;text-transform:uppercase;opacity:1;letter-spacing:1.5px;background:var(--hud-bg);padding:4px 12px;border-radius:10px;backdrop-filter:blur(5px);border:1px solid rgba(255,255,255,0.1);align-self:flex-end}
+  .hud-data{font-size:20px;font-weight:800;letter-spacing:-0.02em;background:var(--hud-bg);padding:6px 14px;border-radius:12px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.1);display:inline-flex;align-items:center;gap:8px;align-self:flex-end}
   .hud-data i{font-size:14px;opacity:0.7;font-style:normal}
 
   /* Liquid Glass Buttons */
@@ -400,15 +407,11 @@ _tmpl.innerHTML = `
         <div class="micasa-grid">
           <div class="micasa-card">
             <span class="setting-label">Nombre del Hogar</span>
-            <div id="lbl-home-name-prominent" style="font-size:22px;font-weight:900;color:#fff;margin-top:4px">Mi Casa</div>
+            <div id="lbl-home-name-prominent" style="font-size:22px;font-weight:900;margin-top:4px">Mi Casa</div>
           </div>
           <div class="micasa-card">
             <span class="setting-label">Fondo del Panel</span>
             <select id="bg-mode-select-standalone" style="margin-top:8px"></select>
-          </div>
-          <div class="micasa-card">
-            <span class="setting-label">Sensor de Temperatura</span>
-            <select id="temp-source-select-standalone" style="margin-top:8px"></select>
           </div>
         </div>
         <div class="save-row" style="margin-top:20px">
@@ -489,6 +492,19 @@ _tmpl.innerHTML = `
           </div>
         </div>
         <div class="save-row" style="margin-top:20px"><button class="primary" id="btn-save-notif" style="width:100%"></button></div>
+      </section>
+
+      <!-- Backup & Restore -->
+      <section class="glass panel liquid-glass">
+        <h2>Respaldo y Restauración</h2>
+        <p class="small" style="margin-bottom:12px;opacity:0.7">Guarda una copia de seguridad de tus ajustes o restaura una anterior.</p>
+        <div style="display:grid;gap:10px">
+          <button class="ghost" id="btn-export-config">📤 Descargar Copia de Seguridad</button>
+          <div style="position:relative">
+            <button class="ghost" style="width:100%" id="btn-import-trigger">📥 Restaurar desde Archivo</button>
+            <input type="file" id="import-config-file" style="display:none" accept=".json">
+          </div>
+        </div>
       </section>
 
       <!-- Advanced -->
@@ -793,14 +809,47 @@ class ArgusPanel extends HTMLElement {
     this._applyTranslations();
     await this._load();
     this.shadowRoot.getElementById('btn-clear-log')?.addEventListener('click', () => this._clearHistory());
+    this.shadowRoot.getElementById('btn-export-config')?.addEventListener('click', () => this._exportConfig());
+    this.shadowRoot.getElementById('btn-import-trigger')?.addEventListener('click', () => this.shadowRoot.getElementById('import-config-file').click());
+    this.shadowRoot.getElementById('import-config-file')?.addEventListener('change', (ev) => this._importConfig(ev));
+
+    this.shadowRoot.getElementById('btn-save-personalization-standalone')?.addEventListener('click', () => this._savePersonalization());
   }
 
   async _clearHistory() {
-    if (!confirm('¿Seguro que deseas borrar todo el historial?')) return;
+    if (!confirm('¿Seguro que quieres borrar todo el historial?')) return;
     try {
-      await this._send('argus/clear_audit_log');
-      await this._load();
-    } catch (e) { alert('Error: ' + e.message); }
+      await this._send('argus/clear_activity_log');
+      this._renderActivityLog();
+    } catch (err) { alert(err.message); }
+  }
+
+  _exportConfig() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this._ui, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", `argus_backup_${new Date().toISOString().split('T')[0]}.json`);
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  }
+
+  _importConfig(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const config = JSON.parse(e.target.result);
+        if (!config.modes) throw new Error('Archivo de configuración no válido.');
+        await this._send('argus/restore_config', { config });
+        alert('Configuración restaurada con éxito. Recargando...');
+        window.location.reload();
+      } catch (err) {
+        alert('Error al importar: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
   }
 
   _bindStatic() {
@@ -840,7 +889,6 @@ class ArgusPanel extends HTMLElement {
     s('home-name-modal').addEventListener('click', e => { if (e.target.id === 'home-name-modal') this._closeHomeNameModal(); });
     s('home-name-save').addEventListener('click', () => this._saveHomeName());
     s('home-name-input').addEventListener('keydown', e => { if (e.key === 'Enter') this._saveHomeName(); });
-    s('btn-save-personalization-standalone')?.addEventListener('click', () => this._savePersonalization());
   }
 
   /* ── WebSocket ───────────────────────────────────────────────────── */
@@ -966,106 +1014,10 @@ class ArgusPanel extends HTMLElement {
     const isArmed = allStates.some(s => s.startsWith('armed') || s === 'triggered' || s === 'pending');
     globalStatusEl.innerHTML = `<span class="badge ${isArmed ? 'armed_away' : 'disarmed'}">${isArmed ? 'SISTEMA ARMADO' : 'SISTEMA DESARMADO'}</span>`;
 
-    // Weather & precise local temperature source
-    const allHaStates = Object.values(this._hass?.states || {});
-    const weatherEntities = allHaStates.filter(s => s.entity_id.startsWith('weather.'));
-    const weatherEnt = weatherEntities.find(s => s.entity_id.includes('apple_weather'))
-                     || weatherEntities.find(s => s.entity_id === 'weather.home')
-                     || weatherEntities.find(s => s.state && s.state !== 'unknown' && s.state !== 'unavailable')
-                     || { state: 'sunny', attributes: { temperature: 24, temperature_unit: '°C' } };
-
-    // ── Thermostat / climate entity as a high-priority temp source ──
-    const thermostatTemp = (() => {
-      const climates = allHaStates.filter(s =>
-        s.entity_id.startsWith('climate.') &&
-        typeof s.attributes?.current_temperature === 'number' &&
-        !['unknown','unavailable'].includes(String(s.state).toLowerCase())
-      );
-      if (!climates.length) return null;
-      // Prefer a climate that does NOT look like a pure HVAC heater/AC (no setpoint-only)
-      const best = climates.find(s => {
-        const id   = s.entity_id.toLowerCase();
-        const name = (s.attributes?.friendly_name || '').toLowerCase();
-        return !id.includes('heater') && !id.includes('boiler') && !id.includes('water_heater');
-      }) || climates[0];
-      const t = best.attributes.current_temperature;
-      const u = best.attributes?.temperature_unit || '°C';
-      return Number.isFinite(t) ? { temp: t, unit: u } : null;
-    })();
-
-    const validTempState = s => {
-      if (!s || s.entity_id.startsWith('weather.') || s.entity_id.startsWith('climate.')) return false;
-      if (!['sensor', 'binary_sensor'].includes(s.entity_id.split('.')[0])) return false;
-      if (['unknown', 'unavailable', 'none', ''].includes(String(s.state).toLowerCase())) return false;
-      const dc = String(s.attributes?.device_class || '').toLowerCase();
-      const unit = String(s.attributes?.unit_of_measurement || '').toLowerCase();
-      const val = Number(s.state);
-      return Number.isFinite(val) && (dc === 'temperature' || unit === '°c' || unit === '°f' || unit === 'c' || unit === 'f');
-    };
-
-    const rankTempSensor = s => {
-      const id = String(s.entity_id || '').toLowerCase();
-      const name = String(s.attributes?.friendly_name || '').toLowerCase();
-      const text = `${id} ${name}`;
-      let score = 0;
-      if (text.includes('outdoor') || text.includes('outside') || text.includes('exterior') || text.includes('afuera') || text.includes('patio')) score += 150;
-      if (text.includes('temperature') || text.includes('temperatura')) score += 100;
-      if (text.includes('apple_weather')) score += 50;
-      if (text.includes('weather')) score += 40;
-      if (text.includes('atenas') || text.includes('alajuela') || text.includes('costa rica')) score += 30;
-      if (id.includes('iphone') || name.includes('iphone')) score -= 80;
-      if (id.includes('battery') || id.includes('setpoint') || id.includes('target')) score -= 200;
-      return score;
-    };
-
-    const preciseTempSensor = allHaStates
-      .filter(validTempState)
-      .sort((a, b) => rankTempSensor(b) - rankTempSensor(a))[0] || null;
-
-    let rawTemp = null;
-    let rawUnit = null;
-    const configuredTempState = this._temperatureSource && this._temperatureSource !== 'auto' ? this._hass?.states?.[this._temperatureSource] : null;
-    const configuredTemp = configuredTempState ? (() => { const s = configuredTempState; if (s.entity_id.startsWith('climate.') && typeof s.attributes?.current_temperature === 'number') return { temp: s.attributes.current_temperature, unit: s.attributes?.temperature_unit || '°C' }; const unit = s.attributes?.unit_of_measurement || s.attributes?.native_unit_of_measurement || '°C'; const val = Number(s.state); return Number.isFinite(val) ? { temp: val, unit } : null; })() : null;
-    if (configuredTemp) { rawTemp = configuredTemp.temp; rawUnit = configuredTemp.unit; } else if (preciseTempSensor) {
-      rawTemp = Number(preciseTempSensor.state);
-      rawUnit = preciseTempSensor.attributes?.unit_of_measurement || preciseTempSensor.attributes?.native_unit_of_measurement || '°C';
-    } else if (thermostatTemp) {
-      rawTemp = thermostatTemp.temp;
-      rawUnit = thermostatTemp.unit;
-    } else {
-      rawTemp = (typeof weatherEnt.attributes?.temperature === 'number') ? weatherEnt.attributes.temperature : null;
-      rawUnit = weatherEnt.attributes?.temperature_unit || this._hass?.config?.unit_system?.temperature || '°C';
-    }
-
-    let temp, unit;
-    if (rawUnit === '°F' || rawUnit === 'F') {
-      temp = rawTemp !== null ? Math.round((rawTemp - 32) * 5 / 9) : '--';
-      unit = '°C';
-    } else {
-      temp = rawTemp !== null ? Math.round(rawTemp) : '--';
-      unit = '°C';
-    }
-
-    const weatherState = (weatherEnt.state || 'sunny').toLowerCase().trim();
-    const sunState = this._hass?.states['sun.sun']?.state || 'above_horizon';
-    const isNight = sunState === 'below_horizon';
-
-    // Robust Location Logic: Canton, Provincia, Pais
-    const customName = this._homeName || 'Mi Casa';
-    const cfg = this._hass?.config || {};
-    
-    // Try to get Canton/Province from Weather first if config is generic
-    const wAttr = weatherEnt?.attributes || {};
-    const canton = cfg.city || wAttr.locality || wAttr.city || '';
-    const prov   = cfg.location_name && !['home','casa','hogar'].includes(cfg.location_name.toLowerCase()) 
-                 ? cfg.location_name 
-                 : (wAttr.region || wAttr.province || '');
-    const pais   = cfg.country || 'Costa Rica';
-
-    let detailedLoc = [canton, prov, pais].filter(Boolean).join(', ');
-    if (!detailedLoc) detailedLoc = 'Ubicación Desconocida';
-    
-    const fullHudLoc = `${customName} • ${detailedLoc}`;
+    // Weather
+    const weatherEnt = Object.values(this._hass?.states || {}).find(s => s.entity_id.startsWith('weather.')) || { state: 'sunny' };
+    const weatherState = weatherEnt.state || 'sunny';
+    const isNight = this._hass.states['sun.sun']?.state === 'below_horizon';
 
     // Time
     const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
@@ -1074,6 +1026,7 @@ class ArgusPanel extends HTMLElement {
       const live  = this._hass?.states[e.entity_id]?.state;
       const state = live || e.state || 'unavailable';
       const triggered = state === 'triggered';
+      const fullHudLoc = this._homeNameProminent || this._hass?.config?.location_name || 'Hogar';
 
       // Icon Selection
       let svgName = 'mode_disarmed.svg';
@@ -1086,15 +1039,13 @@ class ArgusPanel extends HTMLElement {
         <article class="entry" style="${triggered ? 'border:3px solid #ff5252;box-shadow:0 0 30px rgba(255,82,82,.4)' : ''}">
           ${this._renderEntryBackground(weatherState, isNight)}
 
-          <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="Pantalla completa" style="position:absolute;bottom:14px;right:16px;z-index:4;padding:8px 12px;font-size:16px;background:rgba(0,0,0,0.3);backdrop-filter:blur(5px);border-radius:12px">⛶</button>
+          <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="Pantalla completa" style="position:absolute;top:12px;right:12px;z-index:4;padding:6px 10px;font-size:14px;background:rgba(0,0,0,0.2);backdrop-filter:blur(5px);border-radius:10px;opacity:0.4">⛶</button>
 
           ${this._renderBatteryAlerts()}
           <div class="hud">
             <div class="hud-loc">${fullHudLoc}</div>
             <div class="hud-data">
-               <span>${timeStr}</span>
-               <i>•</i>
-               <span>${temp}${unit}</span>
+                <span>${timeStr}</span>
             </div>
           </div>
 

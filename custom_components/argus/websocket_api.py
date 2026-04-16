@@ -30,6 +30,7 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_argus_save_mode_config)
     websocket_api.async_register_command(hass, ws_argus_get_audit_log)
     websocket_api.async_register_command(hass, ws_argus_clear_audit_log)
+    websocket_api.async_register_command(hass, ws_argus_restore_config)
     websocket_api.async_register_command(hass, ws_argus_save_advanced_config)
     websocket_api.async_register_command(hass, ws_argus_get_advanced_config)
     websocket_api.async_register_command(hass, ws_argus_save_automations)
@@ -210,11 +211,28 @@ async def ws_argus_get_audit_log(hass: HomeAssistant, connection, msg) -> None:
     connection.send_result(msg["id"], {"log": log})
 
 
-@websocket_api.websocket_command({vol.Required("type"): "argus/clear_audit_log"})
+@websocket_api.websocket_command({vol.Required("type"): "argus/clear_activity_log"})
 @websocket_api.async_response
 async def ws_argus_clear_audit_log(hass: HomeAssistant, connection, msg) -> None:
     """Clear the Argus audit log."""
     await async_save_ui_data(hass, {"audit_log": []})
+    connection.send_result(msg["id"], {"success": True})
+
+
+@websocket_api.websocket_command(
+    {
+        vol.Required("type"): "argus/restore_config",
+        vol.Required("config"): dict,
+    }
+)
+@websocket_api.async_response
+async def ws_argus_restore_config(hass: HomeAssistant, connection, msg) -> None:
+    """Restore the full Argus UI configuration from an external backup."""
+    # We replace the entire persistent storage dictionary
+    from .storage import Store, _STORAGE_VERSION, _STORAGE_KEY
+    store = Store(hass, _STORAGE_VERSION, _STORAGE_KEY)
+    await store.async_save(msg["config"])
+    async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED)
     connection.send_result(msg["id"], {"success": True})
 
 
