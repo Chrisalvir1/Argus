@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.9.14
+ * Argus Home Hub – v0.9.15
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -92,11 +92,12 @@ _tmpl.innerHTML = `
   
   /* Detect light mode via HA variables and adjust glass */
   :host([selected-theme*="light"]), :host(:not([selected-theme*="dark"])) {
-    --argus-glass-bg: rgba(255, 255, 255, 0.6);
-    --argus-glass-border: rgba(0, 0, 0, 0.1);
+    --argus-glass-bg: rgba(255, 255, 255, 0.7);
+    --argus-glass-border: rgba(0, 0, 0, 0.15);
     --text-shadow: none;
-    --hud-text-color: #333;
-    --hud-bg: rgba(0,0,0,0.05);
+    --hud-text-color: #1e1e2d;
+    --hud-bg: rgba(0,0,0,0.08);
+    --hero-gradient: linear-gradient(135deg, #1e3c72, #2a5298);
   }
   
   :host {
@@ -133,7 +134,7 @@ _tmpl.innerHTML = `
   .hero{padding:30px 35px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05))}
   .hero-left{display:flex;align-items:center;gap:20px}
   .hero-icon{font-size:52px;line-height:1;filter:drop-shadow(0 0 15px rgba(255,255,255,0.2))}
-  .hero h1{margin:0 0 4px;font-size:32px;font-weight:900;letter-spacing:-0.03em;background:linear-gradient(to right, #fff, #b3e5fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .hero h1{margin:0 0 4px;font-size:32px;font-weight:900;letter-spacing:-0.03em;background:var(--hero-gradient, linear-gradient(to right, #fff, #b3e5fc));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
   .hero p{margin:0;font-size:15px;opacity:.7;font-weight:500}
   .grid{display:grid;grid-template-columns:1.2fr 0.9fr 0.9fr;gap:24px;align-items:start}
   @media(max-width:1100px){.grid{grid-template-columns:1fr 1fr}}
@@ -800,6 +801,7 @@ class ArgusPanel extends HTMLElement {
   }
 
   async _init() {
+    this._mode = 'disarmed';
     this._bindStatic();
     try {
       await this._connect();
@@ -1039,7 +1041,7 @@ class ArgusPanel extends HTMLElement {
         <article class="entry" style="${triggered ? 'border:3px solid #ff5252;box-shadow:0 0 30px rgba(255,82,82,.4)' : ''}">
           ${this._renderEntryBackground(weatherState, isNight)}
 
-          <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="Pantalla completa" style="position:absolute;top:12px;right:12px;z-index:4;padding:6px 10px;font-size:14px;background:rgba(0,0,0,0.2);backdrop-filter:blur(5px);border-radius:10px;opacity:0.4">⛶</button>
+          <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="Pantalla completa" style="position:absolute;bottom:16px;right:16px;z-index:4;padding:8px 12px;font-size:16px;background:rgba(0,0,0,0.3);backdrop-filter:blur(10px);border-radius:12px;opacity:0.6;color:white;border:1px solid rgba(255,255,255,0.1)">⛶</button>
 
           ${this._renderBatteryAlerts()}
           <div class="hud">
@@ -1283,19 +1285,23 @@ class ArgusPanel extends HTMLElement {
     this._ui.modes.__by_entity__ = this._ui.modes.__by_entity__ || {};
     const entityId = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id || 'default';
     this._modeEntryId = entityId;
+    this._mode = this._mode || 'disarmed';
+    
+    // Legacy migration: if per-entity data is missing, import from old global key
     this._ui.modes.__by_entity__[entityId] = this._ui.modes.__by_entity__[entityId] || {};
-    const legacy = this._ui.modes[this._mode] || emptyCfg;
-    const current = this._ui.modes.__by_entity__[entityId][this._mode] || legacy;
-    this._ui.modes.__by_entity__[entityId][this._mode] = {
-      sensors: Array.isArray(current.sensors) ? current.sensors : [],
-      bypassed_sensors: Array.isArray(current.bypassed_sensors) ? current.bypassed_sensors : [],
-      sirens: Array.isArray(current.sirens) ? current.sirens : [],
-      require_closed: Boolean(current.require_closed),
-      arming_time: current.arming_time ?? null,
-      entry_delay: current.entry_delay ?? null,
-      mqtt_enabled: current.mqtt_enabled ?? null,
-      entry_sensors: Array.isArray(current.entry_sensors) ? current.entry_sensors : [],
-    };
+    if (!this._ui.modes.__by_entity__[entityId][this._mode]) {
+        const legacy = this._ui.modes[this._mode] || emptyCfg;
+        this._ui.modes.__by_entity__[entityId][this._mode] = {
+            sensors: Array.isArray(legacy.sensors) ? [...legacy.sensors] : [],
+            bypassed_sensors: Array.isArray(legacy.bypassed_sensors) ? [...legacy.bypassed_sensors] : [],
+            sirens: Array.isArray(legacy.sirens) ? [...legacy.sirens] : [],
+            require_closed: Boolean(legacy.require_closed),
+            arming_time: legacy.arming_time ?? null,
+            entry_delay: legacy.entry_delay ?? null,
+            mqtt_enabled: legacy.mqtt_enabled ?? null,
+            entry_sensors: Array.isArray(legacy.entry_sensors) ? [...legacy.entry_sensors] : [],
+        };
+    }
     return this._ui.modes.__by_entity__[entityId][this._mode];
   }
 

@@ -1,5 +1,5 @@
 /**
- * Argus Alarm Card – v0.9.14
+ * Argus Alarm Card – v0.9.15
  * Refined UI: Improved legibility, accurate weather mapping, and detailed location.
  */
 class ArgusCard extends HTMLElement {
