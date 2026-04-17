@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.9.32
+ * Argus Home Hub – v0.9.33
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -975,6 +975,7 @@ class ArgusPanel extends HTMLElement {
     if (!confirm('¿Seguro que quieres borrar todo el historial?')) return;
     try {
       await this._send('argus/clear_activity_log');
+      this._activityLog = []; // v0.9.33 Fix #4: limpiar caché local para que desaparezca inmediatamente
       this._renderActivityLog();
     } catch (err) { alert(err.message); }
   }
@@ -1189,7 +1190,7 @@ class ArgusPanel extends HTMLElement {
       const live  = this._hass?.states[e.entity_id]?.state;
       const state = live || e.state || 'unavailable';
       const triggered = state === 'triggered';
-      const fullHudLoc = this._homeNameProminent || this._hass?.config?.location_name || 'Hogar';
+      const fullHudLoc = this._homeName || this._hass?.config?.location_name || 'Hogar'; // v0.9.33 Fix #3: _homeNameProminent → _homeName
 
       // Icon Selection
       let svgName = 'mode_disarmed.svg';
@@ -1197,6 +1198,24 @@ class ArgusPanel extends HTMLElement {
       else if (state === 'armed_away') svgName = 'mode_away.svg';
       else if (state === 'armed_night') svgName = 'mode_night.svg';
       else if (state === 'armed_vacation') svgName = 'mode_vacation.svg';
+
+      // v0.9.33 Fix #2: Mostrar píldoras de sensores activos debajo de la hora
+      const mKey = state.replace('armed_', '');
+      const eCfg = (this._ui?.modes?.__by_entity__?.[e.entity_id]?.[mKey])
+                || (this._ui?.modes?.[mKey]) || {};
+      const sList = eCfg.sensors || [];
+      const sByps = eCfg.bypassed_sensors || [];
+      const activeSensors = sList.filter(s => !sByps.includes(s));
+      const OPEN = ['on', 'open', 'unlocked', 'recording', 'active', 'motion'];
+      const openHtml = activeSensors.map(sid => {
+        const sObj = this._hass?.states[sid];
+        if (sObj && OPEN.includes(sObj.state)) {
+          return `<span class="sensor-pill ${triggered ? 'triggered-sensor' : ''}" style="margin-top:6px; font-size:11px; padding:4px 8px; border:1px solid rgba(255,255,255,0.2)">
+            <span class="pill-dot open"></span> ${sObj.attributes.friendly_name || sid}
+          </span>`;
+        }
+        return '';
+      }).join('');
 
       return `
         <article class="entry" style="${triggered ? 'border:3px solid #ff5252;box-shadow:0 0 30px rgba(255,82,82,.4)' : ''}">
@@ -1209,6 +1228,7 @@ class ArgusPanel extends HTMLElement {
             <div class="hud-loc">${fullHudLoc}</div>
             <div class="hud-data">
                 <span>${timeStr}</span>
+                ${openHtml ? `<div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end">${openHtml}</div>` : ''}
             </div>
           </div>
 
@@ -1242,6 +1262,7 @@ class ArgusPanel extends HTMLElement {
     el.querySelectorAll('button[data-fullscreen]').forEach(btn =>
       btn.addEventListener('click', ev => this._toggleFullscreen(ev.currentTarget.closest('.entry')))
     );
+    this._bindSOS(); // v0.9.33 Fix #5: re-bind SOS slider despues de cada re-render del DOM
   }
 
   _toggleFullscreen(targetEl) {

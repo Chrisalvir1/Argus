@@ -589,6 +589,14 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     async def _async_trigger(self):
         """Activate the alarm."""
         self._cancel_timers()
+        
+        # v0.9.33 Fix #1: si la alarma se dispara sin pasar por un sensor normal (ej. botón SOS manual),
+        # _triggered_mode sería None y las sirenas nunca sonarían. Asignar un fallback si falta.
+        if not self._triggered_mode and self._alarm_state in ARMED_STATES:
+            self._triggered_mode = self._alarm_state.value.replace("armed_", "")
+        elif not self._triggered_mode:
+            self._triggered_mode = "away" # Fallback universal para pánico/SOS
+            
         self._alarm_state = AlarmControlPanelState.TRIGGERED
         self.async_write_ha_state()
         _LOGGER.warning("Argus: ALARM TRIGGERED by %s", self._triggered_by)
@@ -632,11 +640,15 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     @callback
     def _async_reset_triggered(self, _now):
         """Auto-disarm after trigger_time expires."""
-        self._alarm_state = AlarmControlPanelState.DISARMED
-        self._triggered_by = None
-        self.async_write_ha_state()
-        self.hass.async_create_task(self._async_siren(False))
-        self.hass.async_create_task(self._async_mqtt_publish())
+        # FIX v0.9.31: apagar sirenas primero, LUEGO limpiar estado
+        async def _do_reset():
+            await self._async_siren(False)
+            self._triggered_mode = None
+            self._alarm_state = AlarmControlPanelState.DISARMED
+            self._triggered_by = None
+            self.async_write_ha_state()
+            await self._async_mqtt_publish()
+        self.hass.async_create_task(_do_reset())
 
     @callback
     def _async_finish_arming(self, _now):
@@ -813,9 +825,12 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             await async_append_audit_log(self.hass, "disarm_rejected", "Invalid code", user="Argus")
             return
         self._cancel_timers()
+        # FIX v0.9.31: apagar sirenas ANTES de cambiar estado a DISARMED
+        # para que _get_siren_entities pueda resolver el modo via _triggered_mode
+        await self._async_siren(False)
+        self._triggered_mode = None
         self._alarm_state = AlarmControlPanelState.DISARMED
         self._triggered_by = None
-        await self._async_siren(False)
         self.async_write_ha_state()
         await self._async_mqtt_publish()
         await self._async_sync_to_linked(AlarmControlPanelState.DISARMED)
