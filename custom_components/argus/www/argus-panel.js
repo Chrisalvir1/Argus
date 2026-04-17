@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.9.26
+ * Argus Home Hub – v0.9.31
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -10,6 +10,9 @@
  *          selector panel-right not showing selected items,
  *          export uses Blob API (modern browsers), import reset + robust validation,
  *          require_closed & bypassed_sensors read/write per entity_id structure.
+ * v0.9.31: Fix selector sirenas — delegación de eventos evita checkbox cruzado,
+ *          Fix require_closed — lee checkbox justo antes del send para garantizar
+ *          que el valor más reciente llega al bloqueo de armado.
  */
 
 /* ── i18n ─────────────────────────────────────────────────────────────── */
@@ -1559,13 +1562,16 @@ class ArgusPanel extends HTMLElement {
   }
 
   async _saveMode() {
-    const cfg = this._currentModeConfig();
-    const chk    = this.shadowRoot.getElementById('mode-require-closed');
-    const armTime = this.shadowRoot.getElementById('mode-arming-time');
-    const entDelay = this.shadowRoot.getElementById('mode-entry-delay');
-    const mqttChk = this.shadowRoot.getElementById('mode-mqtt-enabled');
+  const cfg = this._currentModeConfig();
+  const chk      = this.shadowRoot.getElementById('mode-require-closed');
+  const armTime  = this.shadowRoot.getElementById('mode-arming-time');
+  const entDelay = this.shadowRoot.getElementById('mode-entry-delay');
+  const mqttChk  = this.shadowRoot.getElementById('mode-mqtt-enabled');
 
-    if (chk)      cfg.require_closed = chk.checked;
+  // FIX v0.9.31 — Bug 2: leer require_closed del DOM en este preciso momento,
+  // ANTES de cualquier await, para garantizar que el valor más reciente del
+  // checkbox llega a cfg y se persiste correctamente en __by_entity__.
+  if (chk)      cfg.require_closed = chk.checked;
     if (armTime)  cfg.arming_time  = armTime.value  ? parseInt(armTime.value)  : 0;
     if (entDelay) cfg.entry_delay  = entDelay.value ? parseInt(entDelay.value) : 0;
     if (mqttChk)  cfg.mqtt_enabled = mqttChk.checked;
@@ -2116,14 +2122,17 @@ class ArgusPanel extends HTMLElement {
       </label>`;
     }).join('') || `<div class="small" style="padding:10px">Sin resultados</div>`;
 
-    list.querySelectorAll('input[type=checkbox]').forEach(cb =>
-      cb.addEventListener('change', e => {
-        const id = e.target.dataset.entity;
-        if (e.target.checked) { if (!this._selected.includes(id)) this._selected.push(id); }
-        else this._selected = this._selected.filter(v => v !== id);
-        this._renderSelector();
-      })
-    );
+    // FIX v0.9.31 — Bug 1: delegación en contenedor con { once:true }
+    // Evita acumulación de listeners en cada re-render que causaba
+    // que al seleccionar una sirena se disparara el listener de otra.
+    list.addEventListener('change', e => {
+    const cb = e.target.closest('input[type=checkbox]');
+    if (!cb || !cb.dataset.entity) return;
+    const id = cb.dataset.entity;
+      if (cb.checked) { if (!this._selected.includes(id)) this._selected.push(id); }
+      else this._selected = this._selected.filter(v => v !== id);
+      this._renderSelector();
+    }, { once: true });
 
     selBox.innerHTML = this._selected.map(id =>
       `<div class="sel-right-item">
