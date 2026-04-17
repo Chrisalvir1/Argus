@@ -1,13 +1,15 @@
 """Argus Alarm Control Panel — full logic with sensors, timers, siren and MQTT.
 
-v0.9.29 backend fixes:
-  - _async_siren: resuelve dominio y servicio correctamente por tipo de entidad.
-    Antes usaba entity_id.split('.')[0] para todo, lo que fallaba en 'light'
-    (sin brightness) y en entidades plug/outlet (dominio real es switch en HA).
-    Ahora: light → light.turn_on(brightness_pct=100) / light.turn_off
-           siren/switch/fan/input_boolean → dominio nativo turn_on/turn_off
-    Corrige Bug: al seleccionar un plug o una luz como sirena no se encendían.
-  - Versión anterior: v0.9.28 (ver historial para cambios anteriores)
+v0.9.30 backend fixes:
+  - _get_siren_entities: Bug crítico — TRIGGERED no está en ARMED_STATES, por lo
+    que la sirena NUNCA se activaba al dispararse la alarma. Fix: cuando el estado
+    es TRIGGERED o PENDING se usa _triggered_mode (nuevo atributo que guarda el
+    modo activo justo antes del disparo) para resolver las sirenas correctas.
+  - _async_siren: usa homeassistant.turn_on/turn_off como servicio universal
+    fallback para plugs Tuya/Matter/WiFi que a veces no responden a su dominio
+    nativo. Orden: intenta dominio nativo, si falla usa homeassistant como
+    fallback silencioso. Light mantiene brightness_pct=100.
+  - Versión anterior: v0.9.29
 """
 from __future__ import annotations
 
@@ -103,6 +105,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._entry_listener = None
         self._trigger_listener = None
         self._arming_target = None
+        self._triggered_mode: str | None = None  # modo activo al momento del disparo
 
         # Tracking
         self._unsub_sensors = None
@@ -543,6 +546,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         _LOGGER.warning("Argus: Sensor %s tripped while %s", entity_id, self._alarm_state)
         self._triggered_by = entity_id
+        # Guardar el modo activo antes del disparo para que _get_siren_entities
+        # pueda resolver las sirenas correctas cuando el estado sea TRIGGERED
+        self._triggered_mode = self._alarm_state.value.replace("armed_", "")
 
         mode_key = self._alarm_state.value.replace("armed_", "")
         # FIX-2b: leer desde __by_entity__ (misma prioridad que _sensors_for_state)
@@ -645,16 +651,28 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     def _get_siren_entities(self) -> list[str]:
         """Return list of siren entities from UI config or fallback to single entity.
 
-        FIX (v0.9.28 Bug #1): solo busca sirenas del modo activo actual.
-        El fallback anterior iteraba TODOS los modos y devolvía las sirenas del
-        primer modo que las tuviera, causando que al guardar una sirena en un
-        modo se activara también en otro modo distinto.
+        FIX (v0.9.30 Bug crítico): TRIGGERED y PENDING no están en ARMED_STATES,
+        por lo que antes la sirena NUNCA se activaba al dispararse la alarma.
+        Ahora resuelve el mode_key así:
+          - ARMED_*   → del estado actual
+          - TRIGGERED / PENDING → de _triggered_mode (guardado al momento del disparo)
+          - Cualquier otro → sin modo, solo fallback global
         """
         modes = self._ui_config.get("modes", {})
 
+        # Resolver mode_key según estado actual
         if self._alarm_state in ARMED_STATES:
             mode_key = self._alarm_state.value.replace("armed_", "")
+        elif self._alarm_state in (
+            AlarmControlPanelState.TRIGGERED,
+            AlarmControlPanelState.PENDING,
+        ):
+            # Usar el modo que estaba activo antes del disparo
+            mode_key = self._triggered_mode
+        else:
+            mode_key = None
 
+        if mode_key:
             # Priority 1: per-entity config (canonical path written by JS panel)
             by_entity = modes.get("__by_entity__", {})
             pe_sirens = (
@@ -678,40 +696,49 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     async def _async_siren(self, activate: bool):
         """Activate or deactivate all configured siren entities.
 
-        FIX (v0.9.29): resuelve dominio y servicio según el tipo de entidad:
-          - light  → light.turn_on(brightness_pct=100) / light.turn_off
-          - siren/switch/fan/input_boolean → domain.turn_on / domain.turn_off
-        Antes se usaba entity_id.split('.')[0] para todo, que fallaba cuando
-        el dominio era 'light' (no recibía parámetros) o un plug registrado
-        como 'switch' con entity_id de otro dominio.
+        FIX (v0.9.30): usa homeassistant.turn_on/turn_off como servicio universal
+        para cubrir plugs Tuya, Matter, WiFi y cualquier entidad que no responda
+        a su dominio nativo. Orden de intento:
+          1. Dominio nativo (light con brightness, siren/switch/fan/input_boolean)
+          2. Si falla → homeassistant.turn_on / homeassistant.turn_off (universal)
         """
         sirens = self._get_siren_entities()
         if not sirens:
+            _LOGGER.warning("Argus: _async_siren(%s) — sin sirenas configuradas (estado=%s, modo=%s)",
+                            activate, self._alarm_state, self._triggered_mode)
             return
+        service = "turn_on" if activate else "turn_off"
         for entity_id in sirens:
             domain = entity_id.split(".")[0]
+            _LOGGER.info("Argus: siren %s → %s (domain=%s)", entity_id, service, domain)
             try:
                 if domain == "light":
+                    svc_data = {"entity_id": entity_id}
                     if activate:
-                        await self.hass.services.async_call(
-                            "light", "turn_on",
-                            {"entity_id": entity_id, "brightness_pct": 100},
-                            blocking=False,
-                        )
-                    else:
-                        await self.hass.services.async_call(
-                            "light", "turn_off",
-                            {"entity_id": entity_id},
-                            blocking=False,
-                        )
+                        svc_data["brightness_pct"] = 100
+                    await self.hass.services.async_call(
+                        "light",
+                        "turn_on" if activate else "turn_off",
+                        svc_data,
+                        blocking=False,
+                    )
                 else:
-                    # switch, siren, fan, input_boolean, etc.
-                    service = "turn_on" if activate else "turn_off"
+                    # Intento 1: dominio nativo (switch, siren, fan, input_boolean…)
                     await self.hass.services.async_call(
                         domain, service, {"entity_id": entity_id}, blocking=False
                     )
             except Exception as e:  # noqa: BLE001
-                _LOGGER.error("Argus: siren control failed for %s: %s", entity_id, e)
+                # Intento 2: servicio universal homeassistant (cubre Tuya/Matter/WiFi)
+                _LOGGER.warning(
+                    "Argus: native call failed for %s (%s), retrying via homeassistant.%s — %s",
+                    entity_id, domain, service, e
+                )
+                try:
+                    await self.hass.services.async_call(
+                        "homeassistant", service, {"entity_id": entity_id}, blocking=False
+                    )
+                except Exception as e2:  # noqa: BLE001
+                    _LOGGER.error("Argus: siren control failed for %s: %s", entity_id, e2)
 
     # ── MQTT ────────────────────────────────────────────────────────
     async def _async_setup_mqtt(self):
