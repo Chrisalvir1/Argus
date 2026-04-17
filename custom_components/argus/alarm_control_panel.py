@@ -1,11 +1,16 @@
 """Argus Alarm Control Panel — full logic with sensors, timers, siren and MQTT.
 
-v0.9.21 backend fixes:
-  - _sensors_for_state: reads modes["__by_entity__"][entity_id][mode] first,
-    then flat legacy modes[mode]; supports both bypassed_sensors and bypassedSensors.
-  - _async_arm / require_closed: same dual-source lookup + supports requireClosed key.
-  - _all_sensors: now collects sensors from both flat and __by_entity__ namespaces
-    so async_track_state_change_event subscribes to all user-configured sensors.
+v0.9.28 backend fixes:
+  - _get_siren_entities: elimina el fallback cross-mode que devolvía sirenas de
+    otro modo al seleccionar una sirena en la UI (Bug #1 — sirena dispara otra).
+    Ahora solo usa: (1) sirenas del modo activo en __by_entity__, (2) sirenas del
+    modo activo en flat config, (3) _siren_entity global. Ya no itera todos los
+    modos indiscriminadamente.
+  - _async_arm / require_closed: excluye sensores bypasseados del chequeo de
+    sensores abiertos, igual que _sensors_for_state. Corrige Bug #2 donde el
+    popup "no se puede armar" no aparecía porque bypassedSensors bloqueaban
+    la comparación.
+  - Versión anterior: v0.9.27
 """
 from __future__ import annotations
 
@@ -120,9 +125,16 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._name = d.get(CONF_NAME, DEFAULT_NAME)
         self._code = d.get(CONF_CODE) or None
         self._code_arm_required = d.get(CONF_CODE_ARM_REQUIRED, False)
-        self._arming_time = int(d.get(CONF_ARMING_TIME, DEFAULT_ARMING_TIME))
-        self._trigger_time = int(d.get(CONF_TRIGGER_TIME, DEFAULT_TRIGGER_TIME))
-        self._entry_delay = int(d.get(CONF_ENTRY_DELAY, DEFAULT_ENTRY_DELAY))
+        # Safe int cast — el config entry puede traer None si el usuario no
+        # configuró el campo; int(None) lanza TypeError → usamos fallback.
+        def _safe_int(val, default):
+            try:
+                return int(val) if val is not None else int(default)
+            except (TypeError, ValueError):
+                return int(default)
+        self._arming_time  = _safe_int(d.get(CONF_ARMING_TIME),  DEFAULT_ARMING_TIME)
+        self._trigger_time = _safe_int(d.get(CONF_TRIGGER_TIME), DEFAULT_TRIGGER_TIME)
+        self._entry_delay  = _safe_int(d.get(CONF_ENTRY_DELAY),  DEFAULT_ENTRY_DELAY)
         
         # Base sensors (defaults if no per-mode UI config exists)
         self._sensors_away = d.get(CONF_SENSORS_AWAY, [])
@@ -608,9 +620,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         )
 
         # Auto-reset after trigger_time
-        if self._trigger_time > 0:
+        _tt = self._trigger_time if isinstance(self._trigger_time, int) else 0
+        if _tt > 0:
             self._trigger_listener = async_call_later(
-                self.hass, self._trigger_time, self._async_reset_triggered
+                self.hass, _tt, self._async_reset_triggered
             )
 
     @callback
@@ -633,20 +646,34 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     # ── Siren ───────────────────────────────────────────────────────
     def _get_siren_entities(self) -> list[str]:
-        """Return list of siren entities from UI config or fallback to single entity."""
-        # Mode-specific sirens from UI have priority
+        """Return list of siren entities from UI config or fallback to single entity.
+
+        FIX (v0.9.28 Bug #1): solo busca sirenas del modo activo actual.
+        El fallback anterior iteraba TODOS los modos y devolvía las sirenas del
+        primer modo que las tuviera, causando que al guardar una sirena en un
+        modo se activara también en otro modo distinto.
+        """
         modes = self._ui_config.get("modes", {})
+
         if self._alarm_state in ARMED_STATES:
             mode_key = self._alarm_state.value.replace("armed_", "")
-            ui_sirens = modes.get(mode_key, {}).get("sirens", [])
-            if ui_sirens:
-                return ui_sirens
-        # Check any mode for sirens list
-        for mode_cfg in modes.values():
-            sirens = mode_cfg.get("sirens", [])
-            if sirens:
-                return sirens
-        # Fallback to single siren from initial config
+
+            # Priority 1: per-entity config (canonical path written by JS panel)
+            by_entity = modes.get("__by_entity__", {})
+            pe_sirens = (
+                by_entity.get(self.entity_id, {})
+                .get(mode_key, {})
+                .get("sirens", [])
+            )
+            if pe_sirens:
+                return pe_sirens
+
+            # Priority 2: flat legacy config for the ACTIVE mode only
+            flat_sirens = modes.get(mode_key, {}).get("sirens", [])
+            if flat_sirens:
+                return flat_sirens
+
+        # Priority 3: single siren from initial YAML config (global fallback)
         if self._siren_entity:
             return [self._siren_entity]
         return []
@@ -780,9 +807,18 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             )
             if req_closed:
                 sensors = mode_config.get("sensors") or []
+                # Excluir sensores bypasseados — igual que _sensors_for_state
+                # FIX (v0.9.28 Bug #2): sin este filtro los bypassed bloqueaban
+                # el armado y el popup nunca aparecía para los realmente abiertos.
+                bypassed = (
+                    mode_config.get("bypassed_sensors")
+                    or mode_config.get("bypassedSensors")
+                    or []
+                )
+                active_sensors = [s for s in sensors if s not in bypassed]
                 OPEN_STATES = {"on", "open", "unlocked", "recording", "active", "motion"}
                 open_names = []
-                for eid in sensors:
+                for eid in active_sensors:
                     state_obj = self.hass.states.get(eid)
                     if state_obj and state_obj.state in OPEN_STATES:
                         open_names.append(
@@ -794,14 +830,25 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                     await async_append_audit_log(
                         self.hass, "arm_rejected", msg, user="Argus"
                     )
+                    # Persistent notification → aparece en el panel de HA
                     self.hass.components.persistent_notification.async_create(
-                        title="Argus: Armado Bloqueado",
+                        title="🔒 Argus — No se pudo armar",
                         message=(
-                            "No se pudo armar el sistema porque los siguientes "
-                            "sensores están inseguros:\n- "
-                            + "\n- ".join(open_names)
+                            "El sistema **no se armó** porque los siguientes "
+                            "sensores están abiertos o activos:\n\n"
+                            + "\n".join(f"• {n}" for n in open_names)
+                            + "\n\nCiérralos o activa el bypass antes de armar."
                         ),
                         notification_id="argus_arm_blocked",
+                    )
+                    # Evento de bus → el frontend JS lo escucha para mostrar el popup
+                    self.hass.bus.async_fire(
+                        "argus_arm_blocked",
+                        {
+                            "entity_id": self.entity_id,
+                            "mode": mode_key,
+                            "open_sensors": open_names,
+                        },
                     )
                     return
 
