@@ -1554,21 +1554,37 @@ class ArgusPanel extends HTMLElement {
 
   async _saveMode() {
     const cfg = this._currentModeConfig();
-    const chk = this.shadowRoot.getElementById('mode-require-closed');
+    const chk    = this.shadowRoot.getElementById('mode-require-closed');
     const armTime = this.shadowRoot.getElementById('mode-arming-time');
     const entDelay = this.shadowRoot.getElementById('mode-entry-delay');
     const mqttChk = this.shadowRoot.getElementById('mode-mqtt-enabled');
 
-    if (chk) cfg.require_closed = chk.checked;
-    if (armTime) cfg.arming_time = armTime.value ? parseInt(armTime.value) : null;
-    if (entDelay) cfg.entry_delay = entDelay.value ? parseInt(entDelay.value) : null;
-    if (mqttChk) cfg.mqtt_enabled = mqttChk.checked;
-    
+    if (chk)      cfg.require_closed = chk.checked;
+    if (armTime)  cfg.arming_time  = armTime.value  ? parseInt(armTime.value)  : 0;
+    if (entDelay) cfg.entry_delay  = entDelay.value ? parseInt(entDelay.value) : 0;
+    if (mqttChk)  cfg.mqtt_enabled = mqttChk.checked;
+
+    // FIX-1: persistir en __by_entity__ ANTES del send para que el re-render
+    // muestre los valores correctos aunque el WS tarde o falle
+    const _eid = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id || 'default';
+    this._ui.modes = this._ui.modes || {};
+    this._ui.modes.__by_entity__ = this._ui.modes.__by_entity__ || {};
+    this._ui.modes.__by_entity__[_eid] = this._ui.modes.__by_entity__[_eid] || {};
+    this._ui.modes.__by_entity__[_eid][this._mode] = { ...cfg };
+
     const status = this.shadowRoot.getElementById('mode-status');
+    if (status) { status.textContent = '…'; status.className = 'status'; }
     try {
-      await this._send('argus/save_mode_config', { entity_id: this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id || '', mode: this._mode, config: cfg });
-      status.textContent = '✓'; status.className = 'status ok';
-    } catch (err) { status.textContent = err.message; status.className = 'status err'; }
+      await this._send('argus/save_mode_config', {
+        entity_id: _eid,
+        mode: this._mode,
+        config: cfg,
+      });
+      if (status) { status.textContent = '✓ Guardado'; status.className = 'status ok'; }
+      setTimeout(() => { if (status) status.textContent = ''; }, 3000);
+    } catch (err) {
+      if (status) { status.textContent = '✗ ' + (err.message || 'Error'); status.className = 'status err'; }
+    }
   }
 
   /* ── Automations ─────────────────────────────────────────────────── */
@@ -2166,39 +2182,48 @@ class ArgusPanel extends HTMLElement {
     const currentUser = this._hass?.user?.name || 'Usuario';
 
     if (action === 'disarm') {
-      this._showPinModal(async pin => {
+      // FIX-4: sólo mostrar modal de PIN si hay código configurado
+      const masterPin = this._ui?.code || '';
+      const doDisarm = async (pin) => {
         try {
-          await this._hass.callService('alarm_control_panel', 'alarm_disarm', { entity_id: e.entity_id, code: pin });
-          this._writeLog('disarm', `Manual (Desarmado)`, currentUser);
+          await this._hass.callService('alarm_control_panel', 'alarm_disarm',
+            { entity_id: e.entity_id, ...(pin ? { code: pin } : {}) });
+          this._writeLog('disarm', 'Manual (Desarmado)', currentUser);
           this._sendHaNotif(`🔓 ${this._t('log_disarmed')}`, `${currentUser} desarmó el sistema.`);
           setTimeout(() => this._load(), 800);
-        } catch (err) { 
+        } catch (err) {
           const pinErr = this.shadowRoot.getElementById('pin-error');
-          if (pinErr) pinErr.textContent = '❌ PIN incorrecto';
+          if (pinErr) pinErr.textContent = '❌ PIN incorrecto o error al desarmar';
         }
-      });
+      };
+      if (masterPin) {
+        this._showPinModal(async pin => { await doDisarm(pin); });
+      } else {
+        await doDisarm(null);
+      }
       return;
     }
 
-    // Fix #4+5 - Leer config del modo desde estructura persistida por entity_id
+    // FIX-3: leer modeCfg desde la ruta canónica __by_entity__
     const _armEid = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id;
-    const modeCfg = (this._ui?.modes?.[_armEid]?.[action])
+    const modeCfg = (this._ui?.modes?.__by_entity__?.[_armEid]?.[action])
                  || (this._ui?.modes?.[action])
                  || {};
+
+    // FIX-5: bloqueo require_closed con detalle de sensores abiertos
     if (modeCfg.require_closed) {
       const modeSensors = modeCfg.sensors || [];
       const openNames = [];
-      for (const entityId of modeSensors) {
-        const estado = this._hass.states[entityId]?.state;
+      for (const sId of modeSensors) {
+        const estado = this._hass.states[sId]?.state;
         if (['on', 'open', 'unlocked', 'active', 'motion', 'recording'].includes(estado)) {
-          const name = this._hass.states[entityId]?.attributes?.friendly_name || entityId;
-          openNames.push(name);
+          openNames.push(this._hass.states[sId]?.attributes?.friendly_name || sId);
         }
       }
       if (openNames.length > 0) {
-        alert(`🚨 Armado bloqueado.\n\nEl modo requiere que los sensores estén cerrados.\nSensores abiertos:\n- ${openNames.join('\n- ')}`);
-        this._writeLog('arm_rejected', `Sensores abiertos al intentar armar: ${openNames.join(', ')}`, currentUser);
-        return; // Abort
+        this._showArmBlockedAlert(openNames);
+        this._writeLog('arm_rejected', `Sensores abiertos: ${openNames.join(', ')}`, currentUser);
+        return;
       }
     }
 
@@ -2208,7 +2233,26 @@ class ArgusPanel extends HTMLElement {
       this._writeLog('arm', `Manual (${modeTxt})`, currentUser);
       this._sendHaNotif(`🔒 ${this._t('log_armed')} — ${modeTxt}`, `${currentUser} activó el modo ${modeTxt}.`);
       setTimeout(() => this._load(), 800);
-    } catch (err) { console.error('Argus action failed', err); }
+    } catch (err) {
+      // FIX-5: mostrar error real del backend al usuario
+      const msg = err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
+      this._showArmBlockedAlert([], msg);
+      console.error('Argus action failed', err);
+    }
+  }
+
+  _showArmBlockedAlert(openSensors = [], customMsg = '') {
+    // FIX-5: alerta rica con motivo real
+    if (customMsg) {
+      alert('🚨 No se pudo realizar la acción\n\n' + customMsg);
+      return;
+    }
+    const lines = openSensors.map(n => `  • ${n}`).join('\n');
+    alert(
+      `🚨 No se puede armar\n\n` +
+      `Los siguientes sensores están abiertos:\n${lines}\n\n` +
+      `Ciérralos antes de armar, o activa "Omitir" en el sensor.`
+    );
   }
 
   /* ── Audit log writer ────────────────────────────────────────────── */

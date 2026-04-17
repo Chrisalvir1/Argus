@@ -175,18 +175,52 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     # ── Sensor helpers ─────────────────────────────────────────────
     def _get_mode_val(self, mode_key, key, default):
-        """Get value from UI mode config, fallback to self, then global default."""
-        mode_cfg = self._ui_config.get("modes", {}).get(mode_key, {})
-        if key in mode_cfg:
-            return mode_cfg[key]
-        
-        # Mapping component internal attrs to keys
+        """Get value from UI mode config, fallback to self, then global default.
+
+        FIX-2: reads __by_entity__ first (canonical path written by JS panel),
+        then falls back to flat legacy modes[mode_key].
+        Also casts numeric values safely so None never reaches comparisons.
+        """
+        modes = self._ui_config.get("modes", {})
+
+        # Priority 1: per-entity config (canonical path)
+        if mode_key:
+            by_entity = modes.get("__by_entity__", {})
+            per_entity_cfg = by_entity.get(self.entity_id, {}).get(mode_key, {})
+            if key in per_entity_cfg:
+                val = per_entity_cfg[key]
+                if key in ("arming_time", "entry_delay") and val is not None:
+                    try:
+                        return int(val)
+                    except (TypeError, ValueError):
+                        pass
+                return val
+
+        # Priority 2: flat legacy config
+        if mode_key:
+            flat_cfg = modes.get(mode_key, {})
+            if key in flat_cfg:
+                val = flat_cfg[key]
+                if key in ("arming_time", "entry_delay") and val is not None:
+                    try:
+                        return int(val)
+                    except (TypeError, ValueError):
+                        pass
+                return val
+
+        # Priority 3: component-level defaults
         attr_map = {
             "arming_time": self._arming_time,
             "entry_delay": self._entry_delay,
             "mqtt_enabled": self._mqtt_enabled,
         }
-        return attr_map.get(key, default)
+        val = attr_map.get(key, default)
+        if key in ("arming_time", "entry_delay") and val is not None:
+            try:
+                return int(val)
+            except (TypeError, ValueError):
+                pass
+        return val if val is not None else default
 
     def _sensors_for_state(self, state: AlarmControlPanelState) -> list[str]:
         """Return active sensors for the given state, excluding bypassed ones.
@@ -502,11 +536,22 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._triggered_by = entity_id
 
         mode_key = self._alarm_state.value.replace("armed_", "")
-        mode_cfg = self._ui_config.get("modes", {}).get(mode_key, {})
-        
+        # FIX-2b: leer desde __by_entity__ (misma prioridad que _sensors_for_state)
+        _modes = self._ui_config.get("modes", {})
+        _by_e  = _modes.get("__by_entity__", {})
+        mode_cfg = (
+            _by_e.get(self.entity_id, {}).get(mode_key)
+            or _modes.get(mode_key)
+            or {}
+        )
+
         # Per-mode entry list or global entry list
-        entry_list = mode_cfg.get("entry_sensors", self._entry_sensors)
-        entry_delay = mode_cfg.get("entry_delay", self._entry_delay)
+        entry_list  = mode_cfg.get("entry_sensors", self._entry_sensors)
+        _raw_delay  = mode_cfg.get("entry_delay", self._entry_delay)
+        try:
+            entry_delay = int(_raw_delay) if _raw_delay is not None else 0
+        except (TypeError, ValueError):
+            entry_delay = 0
 
         if entity_id in entry_list and entry_delay > 0:
             # Entry delay → PENDING
