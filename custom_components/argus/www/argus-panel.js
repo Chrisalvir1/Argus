@@ -173,6 +173,73 @@ _tmpl.innerHTML = `
   :host([selected-theme*="light"]) .sensor-pill        { color: var(--pill-text, #1e1e2d); }
   :host([selected-theme*="light"]) .sensor-pill button { color: #1e1e2d; }
   .icon-btn { background: none; border: none; padding: 4px; color: inherit; opacity: 0.6; cursor: pointer; transition: opacity 0.2s; display: flex; align-items: center; justify-content: center; border-radius: 6px; }
+
+  /* ── Fix #1 COMPLETO: Selector Modal en Modo Claro ──────────────── */
+  /* FIX D: modal solo en tema explícitamente light */
+  :host([selected-theme*="light"]) .modal {
+    background: rgba(250,250,252,0.98) !important;
+    border: 1px solid rgba(0,0,0,0.12) !important;
+    color: #1e1e2d !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25) !important;
+  }
+  :host([selected-theme*="light"]) .modal * {
+    color: #1e1e2d !important;
+  }
+  :host([selected-theme*="light"]) .modal input[type="search"],
+  :host([selected-theme*="light"]) .modal input[type="text"],
+  :host([selected-theme*="light"]) .modal input[type="number"],
+  :host([selected-theme*="light"]) .modal select {
+    background: rgba(0,0,0,0.04) !important;
+    border-color: rgba(0,0,0,0.15) !important;
+    color: #1e1e2d !important;
+  }
+  /* FIX E: solo selector explícito [selected-theme*=light] para pick-row y sel-right-item */
+  :host([selected-theme*="light"]) .pick-row {
+    background: rgba(0,0,0,0.02) !important;
+    border-color: rgba(0,0,0,0.07) !important;
+    color: #1e1e2d !important;
+  }
+  :host([selected-theme*="light"]) .pick-row:hover {
+    background: rgba(3,169,244,0.07) !important;
+    border-color: rgba(3,169,244,0.25) !important;
+  }
+  :host([selected-theme*="light"]) .pick-row-name,
+  :host([selected-theme*="light"]) .pick-row-meta {
+    color: #1e1e2d !important;
+  }
+  :host([selected-theme*="light"]) .pick-row-meta {
+    opacity: 0.55 !important;
+  }
+  :host([selected-theme*="light"]) .sel-right-item {
+    background: rgba(0,0,0,0.03) !important;
+    border-color: rgba(0,0,0,0.08) !important;
+    color: #1e1e2d !important;
+  }
+  :host([selected-theme*="light"]) .sel-right-item button {
+    color: #1e1e2d !important;
+  }
+  :host([selected-theme*="light"]) .subsection-title {
+    color: rgba(30,30,45,0.5) !important;
+  }
+  :host([selected-theme*="light"]) .modal h3,
+  :host([selected-theme*="light"]) #selector-title {
+    color: #1e1e2d !important;
+  }
+  :host([selected-theme*="light"]) #selector-count {
+    color: rgba(30,30,45,0.6) !important;
+  }
+  :host([selected-theme*="light"]) .sel-actions button {
+    color: #1e1e2d !important;
+    border-color: rgba(0,0,0,0.12) !important;
+  }
+  :host([selected-theme*="light"]) .mode-sensor-none {
+    color: rgba(30,30,45,0.45) !important;
+  }
+  /* FIX B+C: .modal-back es la clase real del backdrop */
+  :host([selected-theme*="light"]) .modal-back,
+  :host(:not([selected-theme*="dark"])) .modal-back {
+    background: rgba(0,0,0,0.55) !important;
+  }
   .icon-btn:hover { opacity: 1; background: rgba(255,255,255,0.1); }
   .icon-btn.active { color: #fb8c00; opacity: 1; }
   
@@ -2047,19 +2114,26 @@ class ArgusPanel extends HTMLElement {
   }
 
   _acceptSelection() {
-    const cfg = this._currentModeConfig();
+    // FIX A DEFINITIVO: leer cfg fresco, mutar, y escribir de vuelta
+    // EXACTAMENTE en modes.__by_entity__[eid][mode] — la misma ruta que _currentModeConfig lee
+    if (!this._ui) return;
     if (!this._ui.modes) this._ui.modes = {};
+    if (!this._ui.modes.__by_entity__) this._ui.modes.__by_entity__ = {};
+    const _eid = this._modeEntryId
+              || this._dashboard?.entries?.[0]?.entity_id
+              || 'default';
+    this._modeEntryId = _eid;
+    if (!this._ui.modes.__by_entity__[_eid]) this._ui.modes.__by_entity__[_eid] = {};
+    const EMPTY = { sensors:[], bypassed_sensors:[], sirens:[], require_closed:false,
+                    arming_time:null, entry_delay:null, mqtt_enabled:null, entry_sensors:[] };
+    // Partir de la config existente para no perder otros campos
+    const existing = this._ui.modes.__by_entity__[_eid][this._mode] || {};
+    const cfg = { ...EMPTY, ...existing };
     if (this._selectorTarget === 'sensor') cfg.sensors          = [...this._selected];
     if (this._selectorTarget === 'siren')  cfg.sirens           = [...this._selected];
     if (this._selectorTarget === 'bypass') cfg.bypassed_sensors = [...this._selected];
-    // Fix #2+5 - Persistir por entity_id para aislamiento multi-instancia
-    const _eid = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id;
-    if (_eid) {
-      if (!this._ui.modes[_eid]) this._ui.modes[_eid] = {};
-      this._ui.modes[_eid][this._mode] = cfg;
-    } else {
-      this._ui.modes[this._mode] = cfg;
-    }
+    // Escribir de vuelta en la ruta canónica
+    this._ui.modes.__by_entity__[_eid][this._mode] = cfg;
     this._closeModal();
     this._renderModeView();
   }
