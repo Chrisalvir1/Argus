@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.9.31
+ * Argus Home Hub – v0.9.32
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -13,6 +13,10 @@
  * v0.9.31: Fix selector sirenas — delegación de eventos evita checkbox cruzado,
  *          Fix require_closed — lee checkbox justo antes del send para garantizar
  *          que el valor más reciente llega al bloqueo de armado.
+ * v0.9.32: Fix DESARMADO apaga animación parpadeo en sirenas/sensores triggered,
+ *          Fix historial muestra sensor que disparó la alarma,
+ *          Fix píldoras de sirenas parpadean rojo cuando estado=triggered,
+ *          Animación triggered muestra chips con nombre de sensores abiertos.
  */
 
 /* ── i18n ─────────────────────────────────────────────────────────────── */
@@ -177,7 +181,11 @@ _tmpl.innerHTML = `
   :host([selected-theme*="light"]) .mode-section-title { color: var(--primary-text-color, #1e1e2d); }
   :host([selected-theme*="light"]) .subsection-title   { color: rgba(30,30,45,0.55); }
   
-  .sensor-pill { background: var(--pill-bg, rgba(255,255,255,0.08)); color: var(--pill-text, #fff); border: 1px solid var(--pill-border, rgba(255,255,255,0.1)); padding: 6px 12px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; }
+  .sensor-pill { background: var(--pill-bg, rgba(255,255,255,0.08)); color: var(--pill-text, #fff); border: 1px solid var(--pill-border, rgba(255,255,255,0.1)); padding: 6px 12px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; transition: all 0.3s; }
+  /* FIX v0.9.32 — parpadeo rojo para sirenas activas y sensores disparados */
+  @keyframes argus-blink-red { 0%,100%{box-shadow:0 0 0 0 rgba(255,50,50,0);background:var(--pill-bg,rgba(255,255,255,0.08))} 50%{box-shadow:0 0 0 5px rgba(255,50,50,0.3);background:rgba(255,50,50,0.2)} }
+  .sensor-pill.siren-active   { animation: argus-blink-red 1.1s ease-in-out infinite; border-color: rgba(255,82,82,0.6) !important; }
+  .sensor-pill.triggered-sensor { animation: argus-blink-red 0.85s ease-in-out infinite; border-color: rgba(255,82,82,0.7) !important; }
   /* Fix #1 - Light Mode: pills visibles */
   :host([selected-theme*="light"]) .sensor-pill        { color: var(--pill-text, #1e1e2d); }
   :host([selected-theme*="light"]) .sensor-pill button { color: #1e1e2d; }
@@ -771,18 +779,51 @@ class ArgusPanel extends HTMLElement {
     const weatherEnt = Object.values(hass.states).find(s => s.entity_id.startsWith('weather.'))?.entity_id;
     const weatherChanged = weatherEnt && oldHass?.states[weatherEnt]?.state !== hass.states[weatherEnt]?.state;
 
-    if (alarmChanged || tempChanged || clockChanged || weatherChanged || !oldHass) {
-      this._renderEntries();
-      this._renderActivityLog();
-      // Only re-render setup views if they are visible or if it's the first load
-      if (!oldHass) {
-        this._renderModeTabs();
-        this._renderModeView();
-        this._renderAutomations();
-        this._renderNotifications();
-        this._renderUsers();
-        this._renderHomeKit();
-      }
+    // FIX v0.9.32 — Bug 2: detectar transición a 'triggered' y escribir log
+    // con los sensores que estaban abiertos en ese momento.
+    if (alarmChanged && oldHass) {
+    this._dashboard.entries.forEach(e => {
+      const prev = oldHass?.states[e.entity_id]?.state;
+    const curr = hass.states[e.entity_id]?.state;
+    if (curr === 'triggered' && prev !== 'triggered') {
+      // Buscar sensores del modo activo que estén abiertos ahora
+      const modeKey = prev || 'away'; // el modo previo = modo en que estaba armado
+      const _eid = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id;
+      const modeCfg = (this._ui?.modes?.__by_entity__?.[_eid]?.[modeKey])
+                     || (this._ui?.modes?.[modeKey])
+                       || {};
+          const modeSensors = modeCfg.sensors || [];
+          const openSensors = modeSensors
+            .filter(sId => ['on','open','unlocked','active','motion','recording']
+              .includes(hass.states[sId]?.state))
+            .map(sId => hass.states[sId]?.attributes?.friendly_name || sId);
+          const detail = openSensors.length
+            ? `Sensores: ${openSensors.join(', ')}`
+            : 'Activación automática';
+          this._writeLog('triggered', detail, 'Argus');
+          this._sendHaNotif('🚨 ¡ALARMA DISPARADA!', detail);
+          // Re-render mode view para que las píldoras parpadeen
+          this._renderModeView();
+        }
+        // Al volver de triggered a cualquier otro estado, re-render para quitar parpadeo
+        if (prev === 'triggered' && curr !== 'triggered') {
+          this._renderModeView();
+        }
+      });
+    }
+
+    if (alarmChanged || tempChanged || clockChanged || weatherChanged || !oldHass) { 
+      this._renderEntries(); 
+      this._renderActivityLog(); 
+      // Only re-render setup views if they are visible or if it's the first load 
+      if (!oldHass) { 
+        this._renderModeTabs(); 
+        this._renderModeView(); 
+        this._renderAutomations(); 
+        this._renderNotifications(); 
+        this._renderUsers(); 
+        this._renderHomeKit(); 
+      } 
     }
   }
   get hass() { return this._hass; }
@@ -1529,22 +1570,31 @@ class ArgusPanel extends HTMLElement {
     const name = this._hass?.states?.[entityId]?.attributes?.friendly_name || entityId;
     const readonly = !this._isAdmin;
 
-    const dot = type === 'sensor' || type === 'bypass'
-      ? `<span class="pill-dot ${isTr ? 'open' : ''}" title="${raw}"></span>`
-      : '';
+    const dot = type === 'sensor' || type === 'bypass' 
+    ? `<span class="pill-dot ${isTr ? 'open' : ''}" title="${raw}"></span>` 
+    : ''; 
     
-    const delayIcon = type === 'sensor' ? `
-      <button class="icon-btn ${isEntry ? 'active' : ''}" data-toggle-delay="${entityId}" title="Retraso de entrada (⏳) o Instantáneo (⚡)">
-        ${isEntry ? '⏳' : '⚡'}
-      </button>` : '';
+    const delayIcon = type === 'sensor' ? ` 
+    <button class="icon-btn ${isEntry ? 'active' : ''}" data-toggle-delay="${entityId}" title="Retraso de entrada (⏳) o Instantáneo (⚡)"> 
+    ${isEntry ? '⏳' : '⚡'} 
+    </button>` : ''; 
 
-    return `
-      <span class="sensor-pill">
-        ${dot}
-        <span style="flex:1">${name}</span>
-        ${delayIcon}
-        ${readonly ? '' : `<button data-remove="${type}:${entityId}" style="background:none; border:none; color:inherit; opacity:0.5; padding:0 4px; cursor:pointer">✕</button>`}
-      </span>
+    // FIX v0.9.32 — Bug 3: sirenas parpadean rojo si el sistema está en triggered.
+    // Sensores abiertos también se marcan como triggered-sensor.
+    const alarmTriggered = this._dashboard?.entries?.some(en =>
+    this._hass?.states?.[en.entity_id]?.state === 'triggered'
+    );
+    let pillExtra = '';
+    if (type === 'siren' && alarmTriggered) pillExtra = ' siren-active';
+    if ((type === 'sensor' || type === 'bypass') && alarmTriggered && isTr) pillExtra = ' triggered-sensor';
+
+    return ` 
+      <span class="sensor-pill${pillExtra}"> 
+        ${dot} 
+        <span style="flex:1">${name}</span> 
+        ${delayIcon} 
+        ${readonly ? '' : `<button data-remove="${type}:${entityId}" style="background:none; border:none; color:inherit; opacity:0.5; padding:0 4px; cursor:pointer">✕</button>`} 
+      </span> 
     `;
   }
 
@@ -2199,13 +2249,15 @@ class ArgusPanel extends HTMLElement {
     if (action === 'disarm') {
       // FIX-4: sólo mostrar modal de PIN si hay código configurado
       const masterPin = this._ui?.code || '';
-      const doDisarm = async (pin) => {
-        try {
-          await this._hass.callService('alarm_control_panel', 'alarm_disarm',
-            { entity_id: e.entity_id, ...(pin ? { code: pin } : {}) });
-          this._writeLog('disarm', 'Manual (Desarmado)', currentUser);
-          this._sendHaNotif(`🔓 ${this._t('log_disarmed')}`, `${currentUser} desarmó el sistema.`);
-          setTimeout(() => this._load(), 800);
+      const doDisarm = async (pin) => { 
+      try { 
+      await this._hass.callService('alarm_control_panel', 'alarm_disarm', 
+      { entity_id: e.entity_id, ...(pin ? { code: pin } : {}) }); 
+      this._writeLog('disarm', 'Manual (Desarmado)', currentUser); 
+      this._sendHaNotif(`🔓 ${this._t('log_disarmed')}`, `${currentUser} desarmó el sistema.`); 
+      // FIX v0.9.32 — Bug 1: al desarmar, forzar re-render inmediato para
+          // quitar la clase siren-active/triggered-sensor de todas las píldoras.
+          setTimeout(() => { this._renderModeView(); this._load(); }, 300);
         } catch (err) {
           const pinErr = this.shadowRoot.getElementById('pin-error');
           if (pinErr) pinErr.textContent = '❌ PIN incorrecto o error al desarmar';
