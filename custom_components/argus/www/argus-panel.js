@@ -2049,7 +2049,7 @@ class ArgusPanel extends HTMLElement {
     const q = (this.shadowRoot.getElementById('selector-search').value || '').toLowerCase().trim();
     const INTRUSION_DC = ['door','window','motion','vibration','glass','opening','smoke','gas','tamper'];
     const items = this._available.filter(x => {
-      if (this._selectorTarget === 'siren') return ['siren','switch'].includes(x.domain);
+      if (this._selectorTarget === 'siren') return ['siren','switch','light','fan','input_boolean'].includes(x.domain);
       if (x.domain === 'lock') return true;
       if (x.domain === 'binary_sensor') {
         const dc = this._hass?.states?.[x.entity_id]?.attributes?.device_class || '';

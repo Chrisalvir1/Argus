@@ -1,16 +1,13 @@
 """Argus Alarm Control Panel — full logic with sensors, timers, siren and MQTT.
 
-v0.9.28 backend fixes:
-  - _get_siren_entities: elimina el fallback cross-mode que devolvía sirenas de
-    otro modo al seleccionar una sirena en la UI (Bug #1 — sirena dispara otra).
-    Ahora solo usa: (1) sirenas del modo activo en __by_entity__, (2) sirenas del
-    modo activo en flat config, (3) _siren_entity global. Ya no itera todos los
-    modos indiscriminadamente.
-  - _async_arm / require_closed: excluye sensores bypasseados del chequeo de
-    sensores abiertos, igual que _sensors_for_state. Corrige Bug #2 donde el
-    popup "no se puede armar" no aparecía porque bypassedSensors bloqueaban
-    la comparación.
-  - Versión anterior: v0.9.27
+v0.9.29 backend fixes:
+  - _async_siren: resuelve dominio y servicio correctamente por tipo de entidad.
+    Antes usaba entity_id.split('.')[0] para todo, lo que fallaba en 'light'
+    (sin brightness) y en entidades plug/outlet (dominio real es switch en HA).
+    Ahora: light → light.turn_on(brightness_pct=100) / light.turn_off
+           siren/switch/fan/input_boolean → dominio nativo turn_on/turn_off
+    Corrige Bug: al seleccionar un plug o una luz como sirena no se encendían.
+  - Versión anterior: v0.9.28 (ver historial para cambios anteriores)
 """
 from __future__ import annotations
 
@@ -679,16 +676,40 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         return []
 
     async def _async_siren(self, activate: bool):
+        """Activate or deactivate all configured siren entities.
+
+        FIX (v0.9.29): resuelve dominio y servicio según el tipo de entidad:
+          - light  → light.turn_on(brightness_pct=100) / light.turn_off
+          - siren/switch/fan/input_boolean → domain.turn_on / domain.turn_off
+        Antes se usaba entity_id.split('.')[0] para todo, que fallaba cuando
+        el dominio era 'light' (no recibía parámetros) o un plug registrado
+        como 'switch' con entity_id de otro dominio.
+        """
         sirens = self._get_siren_entities()
         if not sirens:
             return
-        service = "turn_on" if activate else "turn_off"
         for entity_id in sirens:
             domain = entity_id.split(".")[0]
             try:
-                await self.hass.services.async_call(
-                    domain, service, {"entity_id": entity_id}, blocking=False
-                )
+                if domain == "light":
+                    if activate:
+                        await self.hass.services.async_call(
+                            "light", "turn_on",
+                            {"entity_id": entity_id, "brightness_pct": 100},
+                            blocking=False,
+                        )
+                    else:
+                        await self.hass.services.async_call(
+                            "light", "turn_off",
+                            {"entity_id": entity_id},
+                            blocking=False,
+                        )
+                else:
+                    # switch, siren, fan, input_boolean, etc.
+                    service = "turn_on" if activate else "turn_off"
+                    await self.hass.services.async_call(
+                        domain, service, {"entity_id": entity_id}, blocking=False
+                    )
             except Exception as e:  # noqa: BLE001
                 _LOGGER.error("Argus: siren control failed for %s: %s", entity_id, e)
 
