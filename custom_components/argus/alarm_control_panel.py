@@ -809,6 +809,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         mode_key = target.value.replace("armed_", "")
         arming_delay = self._get_mode_val(mode_key, "arming_time", self._arming_time)
+        try:
+            arming_delay = int(arming_delay) if arming_delay is not None else 0
+        except (TypeError, ValueError):
+            arming_delay = 0
 
         if arming_delay > 0:
             self._arming_target = target

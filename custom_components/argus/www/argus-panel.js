@@ -1,12 +1,12 @@
 /**
- * Argus Home Hub – v0.9.21
+ * Argus Home Hub – v0.9.26
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
  *        DESARMADO button active state when disarmed,
  *        per-instance fullscreen, vacation quick action, numeric PIN dial pad,
  *        mode tabs including disarmed.
- * v0.9.21: Fix light-mode invisible text (mode-section-title/sensor-pill),
+ * v0.9.26: Fix light-mode invisible text (mode-section-title/sensor-pill),
  *          selector panel-right not showing selected items,
  *          export uses Blob API (modern browsers), import reset + robust validation,
  *          require_closed & bypassed_sensors read/write per entity_id structure.
@@ -179,6 +179,12 @@ _tmpl.innerHTML = `
   :host([selected-theme*="light"]) .sensor-pill        { color: var(--pill-text, #1e1e2d); }
   :host([selected-theme*="light"]) .sensor-pill button { color: #1e1e2d; }
   .icon-btn { background: none; border: none; padding: 4px; color: inherit; opacity: 0.6; cursor: pointer; transition: opacity 0.2s; display: flex; align-items: center; justify-content: center; border-radius: 6px; }
+  /* ── mode-status toast (FIX-A) ───────────────────────────────── */
+  #mode-status { opacity: 0; transition: opacity .35s; }
+  #mode-status.show { opacity: 1; }
+  #mode-status.ok  { color: #4caf50; }
+  #mode-status.err { color: #f44336; }
+
 
   /* ── Fix #1 COMPLETO: Selector Modal en Modo Claro ──────────────── */
   /* FIX D: modal solo en tema explícitamente light */
@@ -1490,7 +1496,7 @@ class ArgusPanel extends HTMLElement {
           </label>
         </div>
 
-        ${readonly ? '' : `<button class="primary" id="save-mode" style="width:100%;height:54px;font-size:15px;box-shadow:0 10px 25px rgba(0,0,0,0.2)">GUARDAR CONFIGURACIÓN</button>`}
+        ${readonly ? '' : `<div style="display:flex;flex-direction:column;gap:8px;"><button class="primary" id="save-mode" style="width:100%;height:54px;font-size:15px;box-shadow:0 10px 25px rgba(0,0,0,0.2)">GUARDAR CONFIGURACIÓN</button><span id="mode-status" style="display:block;text-align:center;font-size:13px;font-weight:700;min-height:20px;transition:opacity .4s;opacity:1;color:var(--primary-color,#03a9f4)"></span></div>`}
       </div>
     `;
 
@@ -1580,10 +1586,10 @@ class ArgusPanel extends HTMLElement {
         mode: this._mode,
         config: cfg,
       });
-      if (status) { status.textContent = '✓ Guardado'; status.className = 'status ok'; }
-      setTimeout(() => { if (status) status.textContent = ''; }, 3000);
+      if (status) { status.textContent = '✓ Guardado'; status.className = 'status ok show'; }
+      setTimeout(() => { if (status) { status.textContent = ''; status.className = 'status'; } }, 3000);
     } catch (err) {
-      if (status) { status.textContent = '✗ ' + (err.message || 'Error'); status.className = 'status err'; }
+      if (status) { status.textContent = '✗ ' + (err.message || 'Error'); status.className = 'status err show'; }
     }
   }
 
