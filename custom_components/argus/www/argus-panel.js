@@ -1470,7 +1470,11 @@ class ArgusPanel extends HTMLElement {
     const [type, entityId] = value.split(':');
     const cfg = this._currentModeConfig();
     const key = type === 'sensor' ? 'sensors' : (type === 'bypass' ? 'bypassed_sensors' : 'sirens');
-    this._ui.modes[this._mode] = { ...cfg, [key]: (cfg[key] || []).filter(v => v !== entityId) };
+    // FIX #4/#5: write back into __by_entity__ structure, not flat modes[mode]
+    const eId = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id || 'default';
+    this._ui.modes.__by_entity__ = this._ui.modes.__by_entity__ || {};
+    this._ui.modes.__by_entity__[eId] = this._ui.modes.__by_entity__[eId] || {};
+    this._ui.modes.__by_entity__[eId][this._mode] = { ...cfg, [key]: (cfg[key] || []).filter(v => v !== entityId) };
     this._renderModeView();
   }
 

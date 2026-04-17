@@ -1,4 +1,12 @@
-"""Argus Alarm Control Panel — full logic with sensors, timers, siren and MQTT."""
+"""Argus Alarm Control Panel — full logic with sensors, timers, siren and MQTT.
+
+v0.9.21 backend fixes:
+  - _sensors_for_state: reads modes["__by_entity__"][entity_id][mode] first,
+    then flat legacy modes[mode]; supports both bypassed_sensors and bypassedSensors.
+  - _async_arm / require_closed: same dual-source lookup + supports requireClosed key.
+  - _all_sensors: now collects sensors from both flat and __by_entity__ namespaces
+    so async_track_state_change_event subscribes to all user-configured sensors.
+"""
 from __future__ import annotations
 
 import logging
@@ -181,16 +189,40 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         return attr_map.get(key, default)
 
     def _sensors_for_state(self, state: AlarmControlPanelState) -> list[str]:
-        # Try to load from UI configuration first
+        """Return active sensors for the given state, excluding bypassed ones.
+
+        Priority:
+          1. Per-entity config  → modes["__by_entity__"][entity_id][mode_key]
+          2. Flat/legacy config → modes[mode_key]
+          3. Static YAML config (fallback)
+        """
         modes = self._ui_config.get("modes", {})
         mode_key = state.value.replace("armed_", "")
-        if mode_key in modes:
-            m_cfg = modes[mode_key]
-            sensors = m_cfg.get("sensors") or []
-            bypassed = m_cfg.get("bypassed_sensors") or []
-            return [s for s in sensors if s not in bypassed]
 
-        # Fallback to static config
+        # 1 – per-entity config written by the JS panel via argus/save_mode_config
+        by_entity = modes.get("__by_entity__", {})
+        m_cfg = by_entity.get(self.entity_id, {}).get(mode_key)
+
+        # 2 – flat legacy config (written by older versions / direct saves)
+        if not m_cfg:
+            m_cfg = modes.get(mode_key)
+
+        if m_cfg:
+            sensors  = m_cfg.get("sensors") or []
+            # Accept both camelCase (JS) and snake_case (Python) key names
+            bypassed = (
+                m_cfg.get("bypassed_sensors")
+                or m_cfg.get("bypassedSensors")
+                or []
+            )
+            active = [s for s in sensors if s not in bypassed]
+            _LOGGER.debug(
+                "Argus [%s] mode=%s sensors=%s bypassed=%s active=%s",
+                self.entity_id, mode_key, sensors, bypassed, active,
+            )
+            return active
+
+        # 3 – static YAML fallback
         if state == AlarmControlPanelState.ARMED_HOME:
             return self._sensors_home or self._sensors_away
         if state == AlarmControlPanelState.ARMED_NIGHT:
@@ -200,18 +232,30 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         return self._sensors_away  # ARMED_AWAY
 
     def _all_sensors(self) -> list[str]:
-        s = set()
-        # Initial config sensors
-        s.update(self._sensors_away or [])
-        s.update(self._sensors_home or [])
-        s.update(self._sensors_night or [])
+        """Return the union of all sensors across every mode config source."""
+        s: set[str] = set()
+
+        # 1 – static YAML config
+        s.update(self._sensors_away     or [])
+        s.update(self._sensors_home     or [])
+        s.update(self._sensors_night    or [])
         s.update(self._sensors_vacation or [])
-        
-        # UI config sensors
+
         modes = self._ui_config.get("modes", {})
-        for cfg in modes.values():
-            if cfg.get("sensors"):
+
+        # 2 – flat / legacy mode configs  (modes["home"], modes["away"] …)
+        for key, cfg in modes.items():
+            if key == "__by_entity__":
+                continue
+            if isinstance(cfg, dict) and cfg.get("sensors"):
                 s.update(cfg["sensors"])
+
+        # 3 – per-entity configs  (modes["__by_entity__"][entity_id][mode_key])
+        for _eid, entity_modes in modes.get("__by_entity__", {}).items():
+            for _mode_key, cfg in entity_modes.items():
+                if isinstance(cfg, dict) and cfg.get("sensors"):
+                    s.update(cfg["sensors"])
+
         return list(s)
 
     # ── Lifecycle ──────────────────────────────────────────────────
@@ -666,30 +710,53 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             return
 
         # Evaluate require_closed restrictions
-        mode_key = {
-            AlarmControlPanelState.ARMED_HOME: "home",
-            AlarmControlPanelState.ARMED_AWAY: "away",
-            AlarmControlPanelState.ARMED_NIGHT: "night",
+        _MODE_KEY_MAP = {
+            AlarmControlPanelState.ARMED_HOME:     "home",
+            AlarmControlPanelState.ARMED_AWAY:     "away",
+            AlarmControlPanelState.ARMED_NIGHT:    "night",
             AlarmControlPanelState.ARMED_VACATION: "vacation",
-        }.get(target)
+        }
+        mode_key = _MODE_KEY_MAP.get(target)
 
         if mode_key:
-            mode_config = self._ui_config.get("modes", {}).get(mode_key, {})
-            if mode_config.get("require_closed", False):
-                sensors = mode_config.get("sensors", [])
+            modes = self._ui_config.get("modes", {})
+            # Priority: per-entity config > flat legacy config
+            by_entity  = modes.get("__by_entity__", {})
+            mode_config = (
+                by_entity.get(self.entity_id, {}).get(mode_key)
+                or modes.get(mode_key)
+                or {}
+            )
+            # Support both camelCase (requireClosed, JS) and snake_case (require_closed, Python)
+            req_closed = (
+                mode_config.get("require_closed")
+                or mode_config.get("requireClosed")
+                or False
+            )
+            if req_closed:
+                sensors = mode_config.get("sensors") or []
+                OPEN_STATES = {"on", "open", "unlocked", "recording", "active", "motion"}
                 open_names = []
-                for entity_id in sensors:
-                    state_obj = self.hass.states.get(entity_id)
-                    if state_obj and state_obj.state in ("on", "open", "unlocked", "recording", "active", "motion"):
-                        open_names.append(state_obj.attributes.get("friendly_name", entity_id))
+                for eid in sensors:
+                    state_obj = self.hass.states.get(eid)
+                    if state_obj and state_obj.state in OPEN_STATES:
+                        open_names.append(
+                            state_obj.attributes.get("friendly_name", eid)
+                        )
                 if open_names:
                     msg = f"Sensores abiertos: {', '.join(open_names)}"
                     _LOGGER.warning("Argus: Arm rejected — %s", msg)
-                    await async_append_audit_log(self.hass, "arm_rejected", msg, user="Argus")
+                    await async_append_audit_log(
+                        self.hass, "arm_rejected", msg, user="Argus"
+                    )
                     self.hass.components.persistent_notification.async_create(
                         title="Argus: Armado Bloqueado",
-                        message=f"No se pudo armar el sistema porque los siguientes sensores están inseguros:\\n- " + "\\n- ".join(open_names),
-                        notification_id="argus_arm_blocked"
+                        message=(
+                            "No se pudo armar el sistema porque los siguientes "
+                            "sensores están inseguros:\n- "
+                            + "\n- ".join(open_names)
+                        ),
+                        notification_id="argus_arm_blocked",
                     )
                     return
 
