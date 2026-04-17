@@ -1,11 +1,15 @@
 /**
- * Argus Home Hub – v0.9.20
+ * Argus Home Hub – v0.9.21
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
  *        DESARMADO button active state when disarmed,
  *        per-instance fullscreen, vacation quick action, numeric PIN dial pad,
  *        mode tabs including disarmed.
+ * v0.9.21: Fix light-mode invisible text (mode-section-title/sensor-pill),
+ *          selector panel-right not showing selected items,
+ *          export uses Blob API (modern browsers), import reset + robust validation,
+ *          require_closed & bypassed_sensors read/write per entity_id structure.
  */
 
 /* ── i18n ─────────────────────────────────────────────────────────────── */
@@ -160,8 +164,14 @@ _tmpl.innerHTML = `
   .mode-section-card:hover { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.06); }
   :host([selected-theme*="light"]) .mode-section-card:hover { border-color: rgba(0,0,0,0.12); background: rgba(0,0,0,0.05); }
   .mode-section-title { font-size: 14px; font-weight: 800; color: var(--card-title-color, #fff); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+  /* Fix #1 - Light Mode: titulos visibles */
+  :host([selected-theme*="light"]) .mode-section-title { color: var(--primary-text-color, #1e1e2d); }
+  :host([selected-theme*="light"]) .subsection-title   { color: rgba(30,30,45,0.55); }
   
   .sensor-pill { background: var(--pill-bg, rgba(255,255,255,0.08)); color: var(--pill-text, #fff); border: 1px solid var(--pill-border, rgba(255,255,255,0.1)); padding: 6px 12px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; }
+  /* Fix #1 - Light Mode: pills visibles */
+  :host([selected-theme*="light"]) .sensor-pill        { color: var(--pill-text, #1e1e2d); }
+  :host([selected-theme*="light"]) .sensor-pill button { color: #1e1e2d; }
   .icon-btn { background: none; border: none; padding: 4px; color: inherit; opacity: 0.6; cursor: pointer; transition: opacity 0.2s; display: flex; align-items: center; justify-content: center; border-radius: 6px; }
   .icon-btn:hover { opacity: 1; background: rgba(255,255,255,0.1); }
   .icon-btn.active { color: #fb8c00; opacity: 1; }
@@ -858,11 +868,13 @@ class ArgusPanel extends HTMLElement {
   _importConfig(event) {
     const file = event.target.files[0];
     if (!file) return;
+    event.target.value = ''; // Fix #3 - permite reimportar el mismo archivo
     const reader = new FileReader();
     reader.onload = async (e) => {
       try {
         const config = JSON.parse(e.target.result);
-        if (!config.modes) throw new Error('Archivo de configuración no válido.');
+        if (typeof config !== 'object' || config === null)
+          throw new Error('Archivo de configuración no válido.');
         await this._send('argus/restore_config', { config });
         alert('Configuración restaurada con éxito. Recargando...');
         window.location.reload();
@@ -870,6 +882,7 @@ class ArgusPanel extends HTMLElement {
         alert('Error al importar: ' + err.message);
       }
     };
+    reader.onerror = () => alert('No se pudo leer el archivo.');
     reader.readAsText(file);
   }
 
@@ -1946,7 +1959,8 @@ class ArgusPanel extends HTMLElement {
   _openModal(type) {
     this._selectorTarget = type;
     const cfg = this._currentModeConfig();
-    this._selected = [...(cfg[type === 'sensor' ? 'sensors' : (type === 'bypass' ? 'bypassed_sensors' : 'sirens')] || [])];
+    const _srcKey = type === 'sensor' ? 'sensors' : (type === 'bypass' ? 'bypassed_sensors' : 'sirens');
+    this._selected = Array.isArray(cfg[_srcKey]) ? [...cfg[_srcKey]] : [];
     const title = this.shadowRoot.getElementById('selector-title');
     if (type === 'sensor') title.textContent = this._t('sensor_section');
     else if (type === 'bypass') title.textContent = 'Sensores a Omitir';
@@ -2026,10 +2040,17 @@ class ArgusPanel extends HTMLElement {
   _acceptSelection() {
     const cfg = this._currentModeConfig();
     if (!this._ui.modes) this._ui.modes = {};
-    if (this._selectorTarget === 'sensor') cfg.sensors = [...this._selected];
-    if (this._selectorTarget === 'siren')  cfg.sirens  = [...this._selected];
+    if (this._selectorTarget === 'sensor') cfg.sensors          = [...this._selected];
+    if (this._selectorTarget === 'siren')  cfg.sirens           = [...this._selected];
     if (this._selectorTarget === 'bypass') cfg.bypassed_sensors = [...this._selected];
-    this._ui.modes[this._mode] = cfg;
+    // Fix #2+5 - Persistir por entity_id para aislamiento multi-instancia
+    const _eid = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id;
+    if (_eid) {
+      if (!this._ui.modes[_eid]) this._ui.modes[_eid] = {};
+      this._ui.modes[_eid][this._mode] = cfg;
+    } else {
+      this._ui.modes[this._mode] = cfg;
+    }
     this._closeModal();
     this._renderModeView();
   }
@@ -2069,8 +2090,11 @@ class ArgusPanel extends HTMLElement {
       return;
     }
 
-    // Check if mode requires closed sensors
-    const modeCfg = this._ui?.modes?.[action] || {};
+    // Fix #4+5 - Leer config del modo desde estructura persistida por entity_id
+    const _armEid = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id;
+    const modeCfg = (this._ui?.modes?.[_armEid]?.[action])
+                 || (this._ui?.modes?.[action])
+                 || {};
     if (modeCfg.require_closed) {
       const modeSensors = modeCfg.sensors || [];
       const openNames = [];
