@@ -1,68 +1,88 @@
-# 🛡️ Argus Home Hub para Home Assistant
+<div align="center">
+  <img src="images/logo.png" alt="Argus Seguridad de Hogar" width="200" style="border-radius: 20%; box-shadow: 0 10px 20px rgba(0,0,0,0.15); margin-bottom: 20px;">
 
-![Versión](https://img.shields.io/badge/Versi%C3%B3n-0.9.6-blue.svg)
-![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)
-![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)
+  # 🛡️ Argus Home Hub
+
+  **El Sistema de Seguridad Premium para Home Assistant**
+
+  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-0.9.33-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
+  [![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)](https://www.home-assistant.io/)
+  [![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)](https://hacs.xyz/)
+
+  [❤️ Donar con PayPal](https://www.paypal.com/donate/?hosted_button_id=YOUR_PAYPAL_ID_HERE) | [✉️ Enviar Sugerencia](mailto:chrisalvir01@gmail.com)
+</div>
+
+<br>
 
 **Argus Home Hub** es un avanzado sistema de seguridad y panel de control de alarmas para Home Assistant. Construido desde cero para ofrecer una experiencia visual *premium* con una interfaz *Liquid Glass* inspirada en macOS e iOS. Combina la gestión de sensores, sirenas, control de acceso y notificaciones push en un único *Custom Element* sumamente fluido y autoconstruido.
 
 ---
 
-## ✨ Novedades Recientes (v0.9.6)
+## ✨ Novedades y Correcciones Críticas (v0.9.33)
 
-*   **💎 Interfaz Liquid Glass**: Contenedores translúcidos con efecto *blur* y *saturate*, sombras suaves y bordes refinados integrados al ecosistema visual de Apple.
-*   **🚨 Botón de Pánico (SOS) con Gestos**: Nuevo botón de emergencia con un modal de confirmación deslizante interactivo (slider estilo iOS) para disparar la alarma al instante evitando toques accidentales.
-*   **🔋 Monitor Dinámico de Baterías**: Argus escanea inteligentemente tus sensores de intrusión (puertas, ventanas, movimiento) y lanza alertas visuales automáticas en la pantalla principal si algún dispositivo baja del 20% de batería.
+Esta versión incluye la mayor actualización de estabilidad y UI hasta la fecha:
+
+*   **🚨 Fix Crítico de Sirenas (Backend)**: Garantiza que las sirenas (incluso enchufes y luces Tuya/Matter) siempre suenen como *fallback* universal, independientemente si la alarma se disparó vía sensor o por pánico.
+*   **🔓 Píldoras de Sensores en el HUD Principal**: Ahora puedes ver qué sensores específicos están abiertos (`Abierto`/`Activado`) directamente debajo del reloj central, sin tener que ir a los ajustes. Si la alarma se dispara, el sensor causante parpadea en rojo al instante.
+*   **🛠️ Interfaz Liquid Glass Mejorada**: Efectos *blur* perfeccionados para la visibilidad de los títulos en modo claro y corrección del nombre del hogar centralizado y editable desde ajustes.
+*   **🚨 Botón SOS / Pánico (Gestos Fix)**: Botón de emergencia con *slider* deslizante iOS-style. Se ha corregido un bug donde el drag-and-drop se perdía tras la recarga del panel.
+*   **🧹 Limpieza Inmediata de Historial**: El borrado del registro de actividad (*Audit Log*) ahora tiene un efecto instantáneo en pantalla limpiando la caché local.
 
 ---
 
 ## 🚀 Características Principales
 
-*   **🛡️ Modos de Seguridad**: Soporte completo para los modos *En Casa*, *Ausente*, *Noche*, *Vacaciones* y estado *Desarmado*.
-*   **🌤️ Fondos Meteorológicos Animados**: El fondo de las tarjetas de instancia cambia dinámicamente (animaciones CSS puras: lluvia, tormenta, nieve, estrellas, luna, sol) basado en el estado del clima y la hora.
-*   **🔐 Control de Acceso Avanzado**: Teclado numérico (*PIN Pad*) integrado y minimalista. Gestión de múltiples usuarios con roles de Administrador y códigos PIN individuales directos desde el panel.
-*   **🔔 Notificaciones y Auditoría**: 
-    *   Selección visual de dispositivos móviles de HA para enviar alertas Push.
-    *   *Registro de Actividad (Audit Log)* en tiempo real: Entérate exactamente quién armó o desarmó el sistema, o qué sensor disparó la alarma.
-*   **⚡ Automatizaciones Integradas**: Gestiona y visualiza las reglas de automatización vinculadas a la seguridad de la casa sin salir del panel.
-*   **🏠 HomeKit & Matter**: Sección dedicada a la administración del puente e integración nativa con el ecosistema de Apple.
-*   **🌐 Diseño Bilingüe e Inteligente**: Soporte nativo y automático para inglés y español. Diseño altamente responsivo con opción de pantalla completa (*fullscreen*) independiente por instancia.
+*   **🛡️ Modos de Seguridad Inteligentes**: Soporte completo para *En Casa*, *Ausente*, *Noche*, *Vacaciones* y *Desarmado*. Restricción de armado si hay sensores activos (con opción *Bypass*).
+*   **🌤️ Fondos Meteorológicos Animados CSS Puros**: El fondo de las tarjetas cambia dinámicamente según el clima local (lluvia, tormenta, nieve, estrellas, nublado) usando CSS 100% nativo.
+*   **🔋 Monitor Dinámico de Baterías**: Escanea automáticamente tus sensores de intrusión (puertas, ventanas, PIR) y muestra alertas visuales en el inicio si alguno baja del 20%.
+*   **🔐 Control de Acceso Avanzado**: Teclado numérico (*PIN Pad*) integrado y fluido. Gestión de PIN maestro y usuarios administradores directamente desde el panel, sin tocar YAML.
+*   **🔔 Notificaciones y Auditoría en Tiempo Real**: 
+    *   Selección visual de dispositivos móviles para enviar Alertas Push críticas.
+    *   *Registro de Actividad (Audit Log)*: Ve exactamente quién armó/desarmó y qué sensor desencadenó la alarma.
+*   **⚡ Automatizaciones Integradas**: Gestiona y visualiza las reglas de automatización vinculadas a la seguridad sin salir del panel.
+*   **🏠 HomeKit & Matter**: Sección dedicada para la administración del puente y la integración nativa con Apple Home.
+*   **🌐 Pantalla Completa & Multi-Instancia**: Soporte nativo para modo *fullscreen* (ideal para tablets de pared) y manejo de múltiples instancias de alarma en un solo panel.
 
 ---
 
-## 📦 Instalación
+## 📦 Instalación Rápida
 
-### Opción A: HACS (Recomendado)
-1. Abre tu panel de Home Assistant y dirígete a **HACS** -> **Integraciones**.
-2. Haz clic en el menú superior derecho (tres puntos) -> **Repositorios Personalizados** (*Custom repositories*).
-3. Añade la URL de este repositorio: `https://github.com/Chrisalvir1/argus`
-4. Selecciona la categoría: `Integration` y haz clic en **Añadir**.
-5. Busca "Argus" en HACS, descárgalo y **reinicia Home Assistant**.
-
-### Opción B: Manual
-1. Descarga el último [Release](https://github.com/Chrisalvir1/Argus/releases) (v0.9.6).
-2. Extrae el contenido en la carpeta `/config/custom_components/argus` de tu instancia de Home Assistant.
-3. Reinicia Home Assistant.
+### HACS (Recomendado)
+1. Abre Home Assistant y dirígete a **HACS** -> **Integraciones**.
+2. Clic en los tres puntos (arriba a la derecha) -> **Repositorios Personalizados**.
+3. Añade la URL: `https://github.com/Chrisalvir1/argus`
+4. Selecciona categoría: `Integration` y clic en **Añadir**.
+5. Descarga **Argus**, reinicia Home Assistant y ve a **Ajustes > Dispositivos** para configurarlo.
 
 ---
 
-## ⚙️ Configuración
+## ⚙️ Configuración del Dashboard
 
-### 1. Inicializar la integración
-Una vez instalado y reiniciado, ve a **Ajustes** -> **Dispositivos y servicios** -> **Añadir integración**. Busca **Argus** y sigue el flujo rápido de configuración para establecer tu PIN Maestro.
-
-### 2. Añadir al Dashboard (Lovelace)
-Para ver la hermosa interfaz de usuario, edita tu panel de Lovelace, añade una tarjeta manual y utiliza el *custom element*:
+Para ver la interfaz, edita tu panel de Lovelace (Dashboard), añade una tarjeta Manual y escribe:
 
 ```yaml
 type: custom:argus-panel
 ```
 
-Listo, no necesitas complicados archivos YAML para los sensores, Argus incluye un buscador visual de entidades en su pestaña de **Ajustes**.
+Listo, **no necesitas YAML extra**. Argus incluye un buscador visual de entidades en su pestaña de **Ajustes** para que elijas tus sensores, sirenas y usuarios con checkboxes.
 
 ---
 
-## 👨‍💻 Autor y Desarrollo
+## 💡 Sugerencias y Soporte
 
-Desarrollado y diseñado por **Christopher Alvir** (@Chrisalvir1).
-Diseñado para la comunidad de Home Assistant en Costa Rica y el mundo.
+¿Tienes una idea para mejorar Argus o encontraste un bug? 
+Escríbeme directamente: **[chrisalvir01@gmail.com](mailto:chrisalvir01@gmail.com)**
+
+### ☕ Apoya el Desarrollo
+Argus es un proyecto de código abierto desarrollado para la comunidad. Si te ha sido útil para proteger tu hogar o simplificar tu instalación, considera invitarme un café:
+
+<a href="https://www.paypal.com/donate/?hosted_button_id=YOUR_PAYPAL_ID_HERE" target="_blank">
+  <img src="https://www.paypalobjects.com/es_XC/i/btn/btn_donateCC_LG.gif" alt="Donar con PayPal" />
+</a>
+
+---
+
+<div align="center">
+  <b>Desarrollado con pasión por Christopher Alvir (@Chrisalvir1)</b><br>
+  <i>Diseñado para la comunidad de Home Assistant en Costa Rica y el mundo.</i>
+</div>
