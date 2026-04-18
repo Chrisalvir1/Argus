@@ -9,7 +9,7 @@
   [![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)](https://www.home-assistant.io/)
   [![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)](https://hacs.xyz/)
 
-  [❤️ Donar con PayPal](https://www.paypal.com/donate/?hosted_button_id=YOUR_PAYPAL_ID_HERE) | [✉️ Enviar Sugerencia](mailto:chrisalvir01@gmail.com)
+  [❤️ Donar con PayPal](https://paypal.me/CEstradaAlvir) | [✉️ Enviar Sugerencia](mailto:chrisalvir01@gmail.com)
 </div>
 
 <br>
@@ -76,7 +76,7 @@ Escríbeme directamente: **[chrisalvir01@gmail.com](mailto:chrisalvir01@gmail.co
 ### ☕ Apoya el Desarrollo
 Argus es un proyecto de código abierto desarrollado para la comunidad. Si te ha sido útil para proteger tu hogar o simplificar tu instalación, considera invitarme un café:
 
-<a href="https://www.paypal.com/donate/?hosted_button_id=YOUR_PAYPAL_ID_HERE" target="_blank">
+<a href="https://paypal.me/CEstradaAlvir" target="_blank">
   <img src="https://www.paypalobjects.com/es_XC/i/btn/btn_donateCC_LG.gif" alt="Donar con PayPal" />
 </a>
 
