@@ -156,6 +156,27 @@ _tmpl.innerHTML = `
   .hero-icon{font-size:52px;line-height:1;filter:drop-shadow(0 0 15px rgba(255,255,255,0.2))}
   .hero h1{margin:0 0 4px;font-size:32px;font-weight:900;letter-spacing:-0.03em;background:var(--hero-gradient, linear-gradient(to right, #ffffff, #b3e5fc));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
   .hero p{margin:0;font-size:15px;opacity:.7;font-weight:500}
+  
+  .tabs { display: flex; background: rgba(255,255,255,0.05); padding: 5px; border-radius: 14px; gap: 4px; overflow-x: auto; scrollbar-width: none; margin-bottom: 20px; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { flex: 1; min-width: 80px; text-align: center; border-radius: 10px; padding: 10px 0; font-size: 13px; font-weight: 800; color: rgba(255,255,255,0.6); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; border: none; outline: none; background: transparent; }
+  .tab:hover { color: #fff; background: rgba(255,255,255,0.08); }
+  .tab.active { background: var(--primary-color, #03a9f4); color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transform: translateY(-2px); opacity: 1; }
+  :host([selected-theme*="light"]) .tabs { background: rgba(0,0,0,0.05); }
+  :host([selected-theme*="light"]) .tab { color: rgba(0,0,0,0.6); }
+  :host([selected-theme*="light"]) .tab:hover { color: #000; background: rgba(0,0,0,0.08); }
+  :host([selected-theme*="light"]) .tab.active { color: #fff; }
+
+  @keyframes bounceIn {
+    0% { transform: scale(0.95); opacity: 0; }
+    50% { transform: scale(1.02); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .bounce-in { animation: bounceIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+  .panoramic-instances { width: 100%; max-width: 960px; aspect-ratio: 16 / 9; display: flex; flex-direction: column; margin: 0 auto 24px auto; }
+  #entries { flex: 1; overflow-y: auto; overflow-x: hidden; }
+
   .grid{display:grid;grid-template-columns:1.2fr 0.9fr 0.9fr;gap:24px;align-items:start}
   @media(max-width:1100px){.grid{grid-template-columns:1fr 1fr}}
   @media(max-width:750px){.grid{grid-template-columns:1fr}.hero{flex-direction:column;text-align:center}.hero-left{flex-direction:column}}
@@ -492,25 +513,22 @@ _tmpl.innerHTML = `
     </div>
   </div>
 
-  <!-- TWO-COLUMN LAYOUT -->
-  <!-- PANORAMICO: INSTANCES -->
-      <!-- Instances -->
-      <section class="glass panel liquid-glass" style="width:100%; max-width:960px; aspect-ratio:16/9; display:flex; flex-direction:column; margin: 0 auto 24px auto;">
-        <div class="panel-head">
-          <h2 id="h-instances"></h2>
-          <div style="display:flex;align-items:center;gap:12px">
-            <div id="global-status"></div>
-          </div>
-        </div>
-        <div id="entries" style="flex:1; overflow-y:auto; overflow-x:hidden;"></div>
-      </section>
+  <!-- PANORAMIC: INSTANCES -->
+  <section class="glass panel liquid-glass panoramic-instances">
+    <div class="panel-head">
+      <h2 id="h-instances"></h2>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div id="global-status"></div>
+      </div>
+    </div>
+    <div id="entries"></div>
+  </section>
 
+  <!-- THREE-COLUMN LAYOUT -->
   <div class="grid">
 
-    <!-- LEFT COLUMN: Activity & Instances -->
+    <!-- LEFT COLUMN -->
     <div class="stack">
-
-
       <!-- Activity log -->
       <section class="glass panel liquid-glass">
         <div class="panel-head">
@@ -519,10 +537,7 @@ _tmpl.innerHTML = `
         </div>
         <div id="activity-log" style="display:grid;gap:10px;max-height:400px;overflow-y:auto;margin-top:10px"></div>
       </section>
-    </div>
 
-    <!-- CENTER COLUMN: Mi Casa & Modes -->
-    <div class="stack">
       <!-- Mi Casa Section (Standalone) -->
       <section class="glass panel liquid-glass">
         <div class="panel-head">
@@ -546,7 +561,10 @@ _tmpl.innerHTML = `
           <button class="primary" id="btn-save-personalization-standalone" style="width:100%;height:50px;font-size:14px">Guardar Cambios</button>
         </div>
       </section>
+    </div>
 
+    <!-- CENTER COLUMN -->
+    <div class="stack">
       <!-- Modes -->
       <section class="glass panel liquid-glass">
         <div class="panel-head">
@@ -557,7 +575,7 @@ _tmpl.innerHTML = `
       </section>
     </div>
 
-    <!-- RIGHT COLUMN: Tools & Settings -->
+    <!-- RIGHT COLUMN -->
     <div class="stack">
       <!-- Users -->
       <section class="glass panel liquid-glass">
@@ -961,20 +979,6 @@ class ArgusPanel extends HTMLElement {
   }
 
   async _init() {
-    try {
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
-      const callBtn = this.shadowRoot.getElementById('sos-call-btn');
-      if (callBtn) {
-          if (tz.includes('Europe') || tz.includes('Madrid') || tz.includes('Berlin') || tz.includes('Paris') || tz.includes('London')) {
-              callBtn.href = "tel:112";
-              callBtn.innerHTML = "📞 Llamar a Emergencias (112)";
-          } else if (tz.includes('Australia')) {
-              callBtn.href = "tel:000";
-              callBtn.innerHTML = "📞 Llamar a Emergencias (000)";
-          }
-      }
-    } catch(e) {}
-
     this._mode = 'disarmed';
     this._bindStatic();
     try {
@@ -990,6 +994,20 @@ class ArgusPanel extends HTMLElement {
     this.shadowRoot.getElementById('import-config-file')?.addEventListener('change', (ev) => this._importConfig(ev));
 
     this.shadowRoot.getElementById('btn-save-personalization-standalone')?.addEventListener('click', () => this._savePersonalization());
+
+    try {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+      const callBtn = this.shadowRoot.getElementById('sos-call-btn');
+      if (callBtn) {
+          if (tz.includes('Europe') || tz.includes('Madrid') || tz.includes('Berlin') || tz.includes('Paris') || tz.includes('London')) {
+              callBtn.href = "tel:112";
+              callBtn.innerHTML = "📞 Llamar a Emergencias (112)";
+          } else if (tz.includes('Australia')) {
+              callBtn.href = "tel:000";
+              callBtn.innerHTML = "📞 Llamar a Emergencias (000)";
+          }
+      }
+    } catch(e) {}
   }
 
   async _clearHistory() {
@@ -1472,10 +1490,14 @@ class ArgusPanel extends HTMLElement {
       night:    this._t('mode_night'),
       vacation: this._t('mode_vacation'),
     };
-    tabs.innerHTML = `<div style="display:flex;flex-wrap:wrap;gap:8px">${modes.map(m => `
-      <button type="button" data-mode="${m}" style="padding:10px 14px;border-radius:12px;font-weight:800;border:1px solid ${m===this._mode ? 'rgba(3,169,244,.65)' : 'rgba(255,255,255,.12)'};background:${m===this._mode ? 'rgba(3,169,244,.18)' : 'rgba(255,255,255,.04)'};color:inherit">${icons[m]} ${lbls[m]}</button>`).join('')}</div>`;
+    tabs.className = 'tabs';
+    tabs.innerHTML = modes.map(m => `
+      <button type="button" class="tab ${m===this._mode ? 'active' : ''}" data-mode="${m}">${icons[m]} ${lbls[m]}</button>`).join('');
+      
     tabs.querySelectorAll('[data-mode]').forEach(t => t.addEventListener('click', () => {
-      this._mode = t.dataset.mode; this._renderModeTabs(); this._renderModeView();
+      this._mode = t.dataset.mode; 
+      this._renderModeTabs(); 
+      this._renderModeView();
     }));
   }
 
@@ -1517,17 +1539,16 @@ class ArgusPanel extends HTMLElement {
   }
 
   _renderModeView() {
-    const el = this.shadowRoot.getElementById('mode-view');
-    if (el) {
-      el.classList.remove('bounce-in');
-      void el.offsetWidth;
-      el.classList.add('bounce-in');
-    }
     const cfg = this._currentModeConfig();
     const sensors = cfg.sensors || [];
     const bypass  = cfg.bypassed_sensors || [];
     const sirens  = cfg.sirens  || [];
     const el = this.shadowRoot.getElementById('mode-view');
+    if (el) {
+      el.classList.remove('bounce-in');
+      void el.offsetWidth; // force reflow
+      el.classList.add('bounce-in');
+    }
     const readonly = !this._isAdmin;
     const entries = this._dashboard?.entries || [];
     const activeEntityId = this._modeEntryId || entries[0]?.entity_id || '';
