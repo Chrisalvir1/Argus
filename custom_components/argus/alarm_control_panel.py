@@ -798,15 +798,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             _LOGGER.warning("Argus: Unknown MQTT command: %s", cmd)
 
     async def _async_mqtt_publish(self):
-        """Publish status to MQTT if enabled globally or for current mode."""
-        if not self._get_mode_val(None, "mqtt_enabled", self._mqtt_enabled):
-             # If target is armed, we might have a per-mode override
-             if self._alarm_state in ARMED_STATES:
-                 m_key = self._alarm_state.value.replace("armed_", "")
-                 if not self._get_mode_val(m_key, "mqtt_enabled", False):
-                     return
-             else:
-                 return
+        """Publish status to MQTT if enabled globally or for any mode."""
+        # Ensure we don't spam if strictly disabled everywhere
+        global_mqtt = self._get_mode_val(None, "mqtt_enabled", self._mqtt_enabled)
+        any_mode_mqtt = any(self._get_mode_val(m, "mqtt_enabled", False) for m in ["home", "away", "night", "vacation"])
+        
+        if not global_mqtt and not any_mode_mqtt:
+             return
 
         try:
             from homeassistant.components import mqtt  # noqa: PLC0415

@@ -176,9 +176,8 @@ _tmpl.innerHTML = `
   :host([selected-theme*="light"]) .mode-section-card { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.06); }
   .mode-section-card:hover { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.06); }
   :host([selected-theme*="light"]) .mode-section-card:hover { border-color: rgba(0,0,0,0.12); background: rgba(0,0,0,0.05); }
-  .mode-section-title { font-size: 14px; font-weight: 800; color: var(--card-title-color, #fff); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
-  /* Fix #1 - Light Mode: titulos visibles */
-  :host([selected-theme*="light"]) .mode-section-title { color: var(--primary-text-color, #1e1e2d); }
+  .mode-section-title { font-size: 14px; font-weight: 800; color: var(--primary-color, #03a9f4); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; opacity:0.9; }
+  /* Fix #1 - Light Mode: sub-titles visibles */
   :host([selected-theme*="light"]) .subsection-title   { color: rgba(30,30,45,0.55); }
   
   .sensor-pill { background: var(--pill-bg, rgba(255,255,255,0.08)); color: var(--pill-text, #fff); border: 1px solid var(--pill-border, rgba(255,255,255,0.1)); padding: 6px 12px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; transition: all 0.3s; }
@@ -1712,7 +1711,8 @@ class ArgusPanel extends HTMLElement {
 
     const items = Object.values(this._hass.states).filter(s => {
       if (!s.entity_id.startsWith('automation.')) return false;
-      return this._cachedRelatedAutomations.has(s.entity_id);
+      const name = (s.attributes.friendly_name || '').toLowerCase();
+      return this._cachedRelatedAutomations.has(s.entity_id) || name.includes('argus') || s.entity_id.toLowerCase().includes('argus');
     });
 
     if (!items.length) {
@@ -1743,9 +1743,17 @@ class ArgusPanel extends HTMLElement {
     const sel = this.shadowRoot.getElementById('notif-select');
     if (!sel) return;
     const services = this._hass?.services?.notify || {};
-    const opts = Object.keys(services).filter(k => !this._notifTargets.includes(k));
+    
+    // Solo mostrar las de celular, quitando "notify" genérico o "persistent_notification"
+    let opts = Object.keys(services).filter(k => k !== 'notify' && !k.includes('persistent_notification') && !this._notifTargets.includes(k));
+    
     sel.innerHTML = opts.length
-      ? opts.map(k => `<option value="${k}">${k.replace(/_/g, ' ')}</option>`).join('')
+      ? opts.map(k => {
+          let label = k;
+          if (k.startsWith('mobile_app')) label = "📱 " + k.replace('mobile_app_', '').replace(/_/g, ' ');
+          else label = "🔔 " + label.replace(/_/g, ' ');
+          return `<option value="${k}">${label}</option>`;
+        }).join('')
       : `<option value="">— Sin servicios móviles —</option>`;
   }
 
