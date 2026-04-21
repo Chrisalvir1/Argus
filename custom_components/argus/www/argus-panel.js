@@ -1673,24 +1673,63 @@ class ArgusPanel extends HTMLElement {
   /* ── Automations ─────────────────────────────────────────────────── */
   _renderAutomations() {
     const el = this.shadowRoot.getElementById('auto-view');
-    const items = Object.values(this._hass?.states || {}).filter(s => {
+    if (!el || !this._dashboard?.entries?.length || !this._hass) return;
+
+    if (!this._relatedAutomationsQueried) {
+        this._relatedAutomationsQueried = true;
+        this._cachedRelatedAutomations = new Set();
+        (async () => {
+            try {
+                let relatedSets = [];
+                for (const e of this._dashboard.entries) {
+                    const res = await this._hass.callWS({ type: 'search/related', item_type: 'entity', item_id: e.entity_id });
+                    if (res) {
+                        if (res.automation) relatedSets.push(...res.automation);
+                        if (res.device && res.device.length) {
+                            for (const d of res.device) {
+                                const resDev = await this._hass.callWS({ type: 'search/related', item_type: 'device', item_id: d });
+                                if (resDev && resDev.automation) relatedSets.push(...resDev.automation);
+                            }
+                        }
+                    }
+                }
+                this._cachedRelatedAutomations = new Set(relatedSets);
+            } catch (err) {
+                this._cachedRelatedAutomations = new Set();
+            } finally {
+                this._relatedAutomationsFetched = true;
+                this._renderAutomations(); // Re-render when data is ready
+            }
+        })();
+        el.innerHTML = '<div class="small" style="padding:10px 0;opacity:.55">↻ Buscando automatizaciones...</div>';
+        return;
+    }
+
+    // Si ya consultamos pero aún no termina, mantenemos el UI de carga
+    if (!this._relatedAutomationsFetched) return;
+
+    const items = Object.values(this._hass.states).filter(s => {
       if (!s.entity_id.startsWith('automation.')) return false;
-      const name = (s.attributes.friendly_name || '').toLowerCase();
-      return name.includes('argus') || s.entity_id.toLowerCase().includes('argus');
+      return this._cachedRelatedAutomations.has(s.entity_id);
     });
 
     if (!items.length) {
-      el.innerHTML = '';
+      el.innerHTML = '<div class="small" style="padding:8px 0;opacity:.55">No hay automatizaciones vinculadas a Argus.</div>';
       return;
     }
-    el.innerHTML = `<div class="stack">${items.map(a => `
-      <div class="list-item" style="justify-content:space-between">
+    
+    el.innerHTML = `<div style="display:flex;flex-direction:column;gap:12px;max-height:300px;overflow-y:auto;padding-right:8px">${items.map(a => {
+      const editId = a.attributes.id || a.entity_id.replace('automation.', '');
+      return `
+      <div class="list-item" style="justify-content:space-between;background:rgba(255,255,255,0.03);border-radius:10px;padding:12px;border:1px solid rgba(255,255,255,0.05)">
         <div>
           <div style="font-weight:700">${a.attributes.friendly_name || a.entity_id}</div>
-          <div class="small">${a.attributes.last_triggered ? new Date(a.attributes.last_triggered).toLocaleString() : '—'}</div>
+          <div class="small" style="opacity:0.7;margin-top:4px">${a.attributes.last_triggered ? new Date(a.attributes.last_triggered).toLocaleString() : 'Nunca activada'}</div>
         </div>
-        <button class="ghost" style="padding:5px 10px" data-edit-auto="${a.entity_id.replace('automation.','')}">✏️</button>
-      </div>`).join('')}</div>`;
+        <button class="ghost" style="padding:6px 12px;background:rgba(255,255,255,0.08);border-radius:8px" data-edit-auto="${editId}">✏️</button>
+      </div>`;
+    }).join('')}</div>`;
+      
     el.querySelectorAll('[data-edit-auto]').forEach(btn => btn.addEventListener('click', () => {
       history.pushState(null, '', `/config/automation/edit/${btn.dataset.editAuto}`);
       window.dispatchEvent(new CustomEvent('location-changed'));
