@@ -470,7 +470,12 @@ _tmpl.innerHTML = `
         <div class="ios-slider-thumb" id="sos-thumb">🚨</div>
       </div>
     </div>
-    <button class="ios-confirm-cancel" id="btn-cancel-sos">Cancelar</button>
+    <div style="margin-top:20px;text-align:center">
+      <a id="sos-call-btn" href="tel:911" style="display:flex;justify-content:center;align-items:center;gap:8px;background:rgba(255,59,48,0.2);color:#ff3b30;text-decoration:none;padding:14px;border-radius:18px;font-weight:800;font-size:15px;border:1px solid rgba(255,59,48,0.3)">
+        📞 Llamar a Emergencias (911)
+      </a>
+    </div>
+    <button class="ios-confirm-cancel" id="btn-cancel-sos" style="margin-top:10px">Cancelar</button>
   </div>
 </div>
 
@@ -488,20 +493,23 @@ _tmpl.innerHTML = `
   </div>
 
   <!-- TWO-COLUMN LAYOUT -->
-  <div class="grid">
-
-    <!-- LEFT COLUMN: Activity & Instances -->
-    <div class="stack">
+  <!-- PANORAMICO: INSTANCES -->
       <!-- Instances -->
-      <section class="glass panel liquid-glass">
+      <section class="glass panel liquid-glass" style="width:100%; max-width:960px; aspect-ratio:16/9; display:flex; flex-direction:column; margin: 0 auto 24px auto;">
         <div class="panel-head">
           <h2 id="h-instances"></h2>
           <div style="display:flex;align-items:center;gap:12px">
             <div id="global-status"></div>
           </div>
         </div>
-        <div id="entries"></div>
+        <div id="entries" style="flex:1; overflow-y:auto; overflow-x:hidden;"></div>
       </section>
+
+  <div class="grid">
+
+    <!-- LEFT COLUMN: Activity & Instances -->
+    <div class="stack">
+
 
       <!-- Activity log -->
       <section class="glass panel liquid-glass">
@@ -953,6 +961,20 @@ class ArgusPanel extends HTMLElement {
   }
 
   async _init() {
+    try {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+      const callBtn = this.shadowRoot.getElementById('sos-call-btn');
+      if (callBtn) {
+          if (tz.includes('Europe') || tz.includes('Madrid') || tz.includes('Berlin') || tz.includes('Paris') || tz.includes('London')) {
+              callBtn.href = "tel:112";
+              callBtn.innerHTML = "📞 Llamar a Emergencias (112)";
+          } else if (tz.includes('Australia')) {
+              callBtn.href = "tel:000";
+              callBtn.innerHTML = "📞 Llamar a Emergencias (000)";
+          }
+      }
+    } catch(e) {}
+
     this._mode = 'disarmed';
     this._bindStatic();
     try {
@@ -1495,6 +1517,12 @@ class ArgusPanel extends HTMLElement {
   }
 
   _renderModeView() {
+    const el = this.shadowRoot.getElementById('mode-view');
+    if (el) {
+      el.classList.remove('bounce-in');
+      void el.offsetWidth;
+      el.classList.add('bounce-in');
+    }
     const cfg = this._currentModeConfig();
     const sensors = cfg.sensors || [];
     const bypass  = cfg.bypassed_sensors || [];
@@ -2010,7 +2038,10 @@ class ArgusPanel extends HTMLElement {
       });
     }
     if (this._hass) {
-      this._hass.callService('argus', 'trigger', {}).catch(() => {});
+      const eid = this._dashboard?.entries?.[0]?.entity_id;
+      if (eid) {
+        this._hass.callService('alarm_control_panel', 'alarm_trigger', { entity_id: eid }).catch(() => {});
+      }
     }
   }
 
