@@ -174,32 +174,34 @@ _tmpl.innerHTML = `
   }
   .bounce-in { animation: bounceIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
-  .panoramic-instances { width: 100%; max-width: 960px; aspect-ratio: 16 / 9; display: flex; flex-direction: column; margin: 0 auto 24px auto; }
-  #entries { flex: 1; overflow-y: auto; overflow-x: hidden; }
-
-  .grid{display:grid;grid-template-columns:1.2fr 0.9fr 0.9fr;gap:24px;align-items:start}
-  @media(max-width:1100px){.grid{grid-template-columns:1fr 1fr}}
-  @media(max-width:750px){.grid{grid-template-columns:1fr}.hero{flex-direction:column;text-align:center}.hero-left{flex-direction:column}}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}}
+  @media(max-width:750px){.hero{flex-direction:column;text-align:center}.hero-left{flex-direction:column}}
   
   .stack{display:grid;gap:24px}
   .panel{padding:26px;position:relative;overflow:hidden}
   .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
   .panel h2{margin:0;font-size:14px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--primary-color,#03a9f4);opacity:0.9}
   
-  /* Section Mi Casa accessibility */
-  .micasa-grid { display: grid; gap: 16px; margin-top: 10px; }
-  .micasa-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 18px; transition: all 0.3s ease; }
-  .micasa-card:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.15); transform: translateY(-2px); }
+  /* Personalization inside instances */
+  .personalize-row { display: flex; gap: 12px; align-items: center; margin-top: 16px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; flex-wrap: wrap; }
+  :host([selected-theme*="light"]) .personalize-row { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.06); }
+  .personalize-row .setting-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-bottom: 4px; }
   
-  /* Mode Reorganization Styles */
-  .mode-grid-layout { display: flex; flex-direction: column; gap: 20px; }
-  .mode-section-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 20px; transition: all 0.3s ease; }
+  /* Mode Reorganization Styles — HORIZONTAL */
+  .mode-grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media(max-width:900px){ .mode-grid-layout { grid-template-columns: 1fr; } }
+  .mode-section-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 16px; transition: all 0.3s ease; }
   :host([selected-theme*="light"]) .mode-section-card { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.06); }
   .mode-section-card:hover { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.06); }
   :host([selected-theme*="light"]) .mode-section-card:hover { border-color: rgba(0,0,0,0.12); background: rgba(0,0,0,0.05); }
-  .mode-section-title { font-size: 14px; font-weight: 800; color: var(--primary-color, #03a9f4); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; opacity:0.9; }
-  /* Fix #1 - Light Mode: sub-titles visibles */
-  :host([selected-theme*="light"]) .subsection-title   { color: rgba(30,30,45,0.55); }
+  .mode-section-title { font-size: 13px; font-weight: 800; color: var(--primary-color, #03a9f4); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+  /* Dark mode sensor text fix */
+  .mode-sensor-grid { color: var(--primary-text-color, #fff); }
+  .mode-sensor-none { color: var(--primary-text-color, rgba(255,255,255,0.5)); opacity: 0.6; font-size: 13px; }
+  .mode-section-card span, .mode-section-card label, .mode-section-card .input-label { color: var(--primary-text-color, #fff); }
+  :host([selected-theme*="light"]) .mode-section-card span, :host([selected-theme*="light"]) .mode-section-card label, :host([selected-theme*="light"]) .mode-section-card .input-label { color: var(--primary-text-color, #1e1e2d); }
+  :host([selected-theme*="light"]) .subsection-title { color: rgba(30,30,45,0.55); }
   
   .sensor-pill { background: var(--pill-bg, rgba(255,255,255,0.08)); color: var(--pill-text, #fff); border: 1px solid var(--pill-border, rgba(255,255,255,0.1)); padding: 6px 12px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; transition: all 0.3s; }
   /* FIX v0.9.32 — parpadeo rojo para sirenas activas y sensores disparados */
@@ -513,58 +515,35 @@ _tmpl.innerHTML = `
     </div>
   </div>
 
-  <!-- PANORAMIC: INSTANCES -->
-  <section class="glass panel liquid-glass panoramic-instances">
-    <div class="panel-head">
-      <h2 id="h-instances"></h2>
-      <div style="display:flex;align-items:center;gap:12px">
-        <div id="global-status"></div>
-      </div>
-    </div>
-    <div id="entries"></div>
-  </section>
-
-  <!-- THREE-COLUMN LAYOUT -->
+  <!-- TWO-COLUMN LAYOUT -->
   <div class="grid">
 
-    <!-- LEFT COLUMN -->
+    <!-- LEFT COLUMN: Primary -->
     <div class="stack">
-      <!-- Activity log -->
+      <!-- Instances (with personalization inside) -->
       <section class="glass panel liquid-glass">
         <div class="panel-head">
-          <h2 id="h-activity-log"></h2>
-          <button class="ghost" id="btn-clear-log" style="font-size:10px;padding:4px 8px;opacity:0.6">BORRAR</button>
-        </div>
-        <div id="activity-log" style="display:grid;gap:10px;max-height:400px;overflow-y:auto;margin-top:10px"></div>
-      </section>
-
-      <!-- Mi Casa Section (Standalone) -->
-      <section class="glass panel liquid-glass">
-        <div class="panel-head">
-          <h2>🏡 Mi Casa</h2>
-          <button class="ghost" id="btn-edit-home-name-standalone" style="padding:6px 12px;font-size:12px;border-radius:10px;display:flex;align-items:center;gap:6px">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-            <span>Editar</span>
-          </button>
-        </div>
-        <div class="micasa-grid">
-          <div class="micasa-card">
-            <span class="setting-label">Nombre del Hogar</span>
-            <div id="lbl-home-name-prominent" style="font-size:22px;font-weight:900;margin-top:4px">Mi Casa</div>
-          </div>
-          <div class="micasa-card">
-            <span class="setting-label">Fondo del Panel</span>
-            <select id="bg-mode-select-standalone" style="margin-top:8px"></select>
+          <h2 id="h-instances"></h2>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div id="global-status"></div>
           </div>
         </div>
-        <div class="save-row" style="margin-top:20px">
-          <button class="primary" id="btn-save-personalization-standalone" style="width:100%;height:50px;font-size:14px">Guardar Cambios</button>
+        <div id="entries"></div>
+        <!-- Personalization merged from Mi Casa -->
+        <div class="personalize-row">
+          <div style="flex:1;min-width:140px">
+            <div class="setting-label">Nombre del Hogar</div>
+            <div id="lbl-home-name-prominent" style="font-size:18px;font-weight:900;margin-top:2px">Mi Casa</div>
+          </div>
+          <div style="flex:1;min-width:140px">
+            <div class="setting-label">Fondo</div>
+            <select id="bg-mode-select-standalone" style="margin-top:4px;width:100%"></select>
+          </div>
+          <button class="ghost" id="btn-edit-home-name-standalone" style="padding:6px 10px;font-size:11px;border-radius:10px;white-space:nowrap">✏️ Editar</button>
+          <button class="primary" id="btn-save-personalization-standalone" style="padding:8px 14px;font-size:12px;border-radius:10px;white-space:nowrap">Guardar</button>
         </div>
       </section>
-    </div>
 
-    <!-- CENTER COLUMN -->
-    <div class="stack">
       <!-- Modes -->
       <section class="glass panel liquid-glass">
         <div class="panel-head">
@@ -572,23 +551,6 @@ _tmpl.innerHTML = `
         </div>
         <div class="tabs" id="mode-tabs" style="margin-bottom:15px"></div>
         <div id="mode-view"></div>
-      </section>
-    </div>
-
-    <!-- RIGHT COLUMN -->
-    <div class="stack">
-      <!-- Users -->
-      <section class="glass panel liquid-glass">
-        <h2 id="h-users"></h2>
-        <p class="small" id="p-admin-only" style="margin-bottom:14px;color:#fb8c00;font-weight:600"></p>
-        <div id="users-list" style="display:grid;gap:12px;margin-bottom:16px"></div>
-        <div class="subsection" id="add-user-form">
-          <div class="subsection-title" id="t-add-user"></div>
-          <div class="field-group"><label id="l-username"></label><input type="text" id="new-user-name" autocomplete="off"></div>
-          <div class="field-group"><label id="l-user-pin"></label><input type="password" id="new-user-pin" inputmode="numeric" pattern="[0-9]*"></div>
-          <label id="l-is-admin" class="checkbox-label" style="margin-top:10px;display:flex;align-items:center;gap:10px"><input type="checkbox" id="new-user-admin"> <span id="s-is-admin"></span></label>
-          <div class="save-row" style="margin-top:15px"><button class="primary" id="btn-save-user" style="width:100%"></button></div>
-        </div>
       </section>
 
       <!-- Automations -->
@@ -600,28 +562,30 @@ _tmpl.innerHTML = `
         </div>
         <div id="auto-view"></div>
       </section>
+    </div>
 
-      <!-- Master PIN Settings -->
+    <!-- RIGHT COLUMN: Secondary -->
+    <div class="stack">
+      <!-- Activity log -->
       <section class="glass panel liquid-glass">
-        <h2 id="h-settings-pin">PIN Maestro</h2>
-        <div class="subsection">
-          <p class="small" style="margin-bottom:12px;opacity:0.7">Control de acceso global para desactivar y cambiar ajustes.</p>
-          <div id="current-pin-display" style="font-size:13px;font-weight:800;color:var(--primary-color);margin-bottom:15px;background:rgba(3,169,244,0.1);padding:8px 12px;border-radius:10px;display:inline-block"></div>
-          
-          <div class="field-group" id="group-current-pin" style="display:none; margin-bottom:12px">
-             <label>PIN Actual</label>
-             <input type="password" id="current-pin" inputmode="numeric" pattern="[0-9]*">
-          </div>
+        <div class="panel-head">
+          <h2 id="h-activity-log"></h2>
+          <button class="ghost" id="btn-clear-log" style="font-size:10px;padding:4px 8px;opacity:0.6">BORRAR</button>
+        </div>
+        <div id="activity-log" style="display:grid;gap:10px;max-height:400px;overflow-y:auto;margin-top:10px"></div>
+      </section>
 
-          <p class="small" style="margin:0 0 10px 0; color:var(--primary-color); font-weight:700">Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.</p>
-
-          <div style="display:grid;gap:10px">
-            <div class="field-group"><label id="l-new-pin"></label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*" placeholder="••••"></div>
-            <div class="field-group"><label id="l-confirm-pin"></label><input type="password" id="new-pin-2" inputmode="numeric" pattern="[0-9]*"></div>
-          </div>
-          <div class="save-row" style="margin-top:15px">
-            <button class="primary" id="btn-save-pin" style="width:100%"></button>
-          </div>
+      <!-- Users -->
+      <section class="glass panel liquid-glass">
+        <h2 id="h-users"></h2>
+        <p class="small" id="p-admin-only" style="margin-bottom:14px;color:#fb8c00;font-weight:600"></p>
+        <div id="users-list" style="display:grid;gap:12px;margin-bottom:16px"></div>
+        <div class="subsection" id="add-user-form">
+          <div class="subsection-title" id="t-add-user"></div>
+          <div class="field-group"><label id="l-username"></label><input type="text" id="new-user-name" autocomplete="off"></div>
+          <div class="field-group"><label id="l-user-pin"></label><input type="password" id="new-user-pin" inputmode="numeric" pattern="[0-9]*"></div>
+          <label id="l-is-admin" class="checkbox-label" style="margin-top:10px;display:flex;align-items:center;gap:10px"><input type="checkbox" id="new-user-admin"> <span id="s-is-admin"></span></label>
+          <div class="save-row" style="margin-top:15px"><button class="primary" id="btn-save-user" style="width:100%"></button></div>
         </div>
       </section>
 
@@ -638,6 +602,27 @@ _tmpl.innerHTML = `
           </div>
         </div>
         <div class="save-row" style="margin-top:20px"><button class="primary" id="btn-save-notif" style="width:100%"></button></div>
+      </section>
+
+      <!-- Master PIN Settings -->
+      <section class="glass panel liquid-glass">
+        <h2 id="h-settings-pin">PIN Maestro</h2>
+        <div class="subsection">
+          <p class="small" style="margin-bottom:12px;opacity:0.7">Control de acceso global para desactivar y cambiar ajustes.</p>
+          <div id="current-pin-display" style="font-size:13px;font-weight:800;color:var(--primary-color);margin-bottom:15px;background:rgba(3,169,244,0.1);padding:8px 12px;border-radius:10px;display:inline-block"></div>
+          <div class="field-group" id="group-current-pin" style="display:none; margin-bottom:12px">
+             <label>PIN Actual</label>
+             <input type="password" id="current-pin" inputmode="numeric" pattern="[0-9]*">
+          </div>
+          <p class="small" style="margin:0 0 10px 0; color:var(--primary-color); font-weight:700">Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.</p>
+          <div style="display:grid;gap:10px">
+            <div class="field-group"><label id="l-new-pin"></label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*" placeholder="••••"></div>
+            <div class="field-group"><label id="l-confirm-pin"></label><input type="password" id="new-pin-2" inputmode="numeric" pattern="[0-9]*"></div>
+          </div>
+          <div class="save-row" style="margin-top:15px">
+            <button class="primary" id="btn-save-pin" style="width:100%"></button>
+          </div>
+        </div>
       </section>
 
       <!-- Backup & Restore -->
@@ -1564,25 +1549,25 @@ class ArgusPanel extends HTMLElement {
         ${instanceBlock}
 
         <div class="mode-section-card">
-          <div class="mode-section-title">🛡️ Sensores de Activación</div>
+          <div class="mode-section-title">🛡️ Sensores</div>
           <div class="mode-sensor-grid" id="sensor-chips">
             ${sensors.map(x => this._chip(x, 'sensor')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
           </div>
           ${readonly ? '' : `
-            <button class="ghost" data-open-selector="sensor" style="margin-top:16px; width:100%; justify-content:center">+ Seleccionar Sensores</button>
-            <label class="checkbox-label" style="display:flex;align-items:center;gap:12px;margin-top:16px;padding:12px;background:rgba(255,255,255,0.03);border-radius:12px;border:1px solid rgba(255,255,255,0.05)">
+            <button class="ghost" data-open-selector="sensor" style="margin-top:12px; width:100%; justify-content:center; font-size:12px">+ Seleccionar</button>
+            <label class="checkbox-label" style="display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05);font-size:12px">
               <input type="checkbox" id="mode-require-closed" ${cfg.require_closed ? 'checked' : ''}>
-              <span style="font-size:13px;font-weight:700">Bloquear armado si hay sensores abiertos</span>
+              <span style="font-size:12px;font-weight:600">Bloquear si abiertos</span>
             </label>
           `}
         </div>
 
         <div class="mode-section-card">
-          <div class="mode-section-title">🚫 Sensores para Omitir</div>
+          <div class="mode-section-title">🚫 Omitir</div>
           <div class="mode-sensor-grid" id="bypass-chips">
-            ${bypass.map(x => this._chip(x, 'bypass')).join('') || `<div class="mode-sensor-none">No hay sensores omitidos</div>`}
+            ${bypass.map(x => this._chip(x, 'bypass')).join('') || `<div class="mode-sensor-none">Ninguno</div>`}
           </div>
-          ${readonly ? '' : `<button class="ghost" data-open-selector="bypass" style="margin-top:16px; width:100%; justify-content:center">+ Añadir Sensor para Ignorar</button>`}
+          ${readonly ? '' : `<button class="ghost" data-open-selector="bypass" style="margin-top:12px; width:100%; justify-content:center; font-size:12px">+ Añadir</button>`}
         </div>
 
         <div class="mode-section-card">
@@ -1590,29 +1575,28 @@ class ArgusPanel extends HTMLElement {
           <div class="mode-sensor-grid" id="siren-chips">
             ${sirens.map(x => this._chip(x, 'siren')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
           </div>
-          ${readonly ? '' : `<button class="ghost" data-open-selector="siren" style="margin-top:16px; width:100%; justify-content:center">+ Seleccionar Sirenas</button>`}
+          ${readonly ? '' : `<button class="ghost" data-open-selector="siren" style="margin-top:12px; width:100%; justify-content:center; font-size:12px">+ Seleccionar</button>`}
         </div>
 
         <div class="mode-section-card">
-          <div class="mode-section-title">⌨️ Tiempos y MQTT</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="mode-section-title">⌨️ Tiempos</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
             <div class="input-group">
-              <span class="input-label">Retraso Armado (s)</span>
-              <input type="number" id="mode-arming-time" value="${cfg.arming_time ?? ''}" placeholder="Defecto" style="padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:inherit">
+              <span class="input-label">Armado (s)</span>
+              <input type="number" id="mode-arming-time" value="${cfg.arming_time ?? ''}" placeholder="0" style="padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:inherit; font-size:13px">
             </div>
             <div class="input-group">
-              <span class="input-label">Retraso Entrada (s)</span>
-              <input type="number" id="mode-entry-delay" value="${cfg.entry_delay ?? ''}" placeholder="Defecto" style="padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:inherit">
+              <span class="input-label">Entrada (s)</span>
+              <input type="number" id="mode-entry-delay" value="${cfg.entry_delay ?? ''}" placeholder="0" style="padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:inherit; font-size:13px">
             </div>
           </div>
-          <label class="checkbox-label" style="display:flex;align-items:center;gap:12px;margin-top:16px;padding:12px;background:rgba(255,255,255,0.03);border-radius:12px;border:1px solid rgba(255,255,255,0.05)">
+          <label class="checkbox-label" style="display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05)">
             <input type="checkbox" id="mode-mqtt-enabled" ${cfg.mqtt_enabled !== false ? 'checked' : ''}>
-            <span style="font-size:13px;font-weight:700">Habilitar MQTT para este modo</span>
+            <span style="font-size:12px;font-weight:600">MQTT</span>
           </label>
         </div>
-
-        ${readonly ? '' : `<div style="display:flex;flex-direction:column;gap:8px;"><button class="primary" id="save-mode" style="width:100%;height:54px;font-size:15px;box-shadow:0 10px 25px rgba(0,0,0,0.2)">GUARDAR CONFIGURACIÓN</button><span id="mode-status" style="display:block;text-align:center;font-size:13px;font-weight:700;min-height:20px;transition:opacity .4s;opacity:1;color:var(--primary-color,#03a9f4)"></span></div>`}
       </div>
+      ${readonly ? '' : `<div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;"><button class="primary" id="save-mode" style="width:100%;height:48px;font-size:14px;box-shadow:0 8px 20px rgba(0,0,0,0.2)">GUARDAR CONFIGURACIÓN</button><span id="mode-status" style="display:block;text-align:center;font-size:13px;font-weight:700;min-height:20px;transition:opacity .4s;opacity:1;color:var(--primary-color,#03a9f4)"></span></div>`}
     `;
 
     el.querySelector('#mode-instance-select')?.addEventListener('change', ev => {
