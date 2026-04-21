@@ -156,9 +156,16 @@ _tmpl.innerHTML = `
   .hero-icon{font-size:52px;line-height:1;filter:drop-shadow(0 0 15px rgba(255,255,255,0.2))}
   .hero h1{margin:0 0 4px;font-size:32px;font-weight:900;letter-spacing:-0.03em;background:var(--hero-gradient, linear-gradient(to right, #ffffff, #b3e5fc));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
   .hero p{margin:0;font-size:15px;opacity:.7;font-weight:500}
-  .grid{display:grid;grid-template-columns:1.2fr 0.9fr 0.9fr;gap:24px;align-items:start}
-  @media(max-width:1100px){.grid{grid-template-columns:1fr 1fr}}
-  @media(max-width:750px){.grid{grid-template-columns:1fr}.hero{flex-direction:column;text-align:center}.hero-left{flex-direction:column}}
+  
+  .masonry-grid { column-count: 3; column-gap: 24px; width: 100%; }
+  .masonry-grid > section { break-inside: avoid; margin-bottom: 24px; display: inline-block; width: 100%; }
+  @media(max-width:1100px){ .masonry-grid { column-count: 2; } }
+  @media(max-width:750px){ .masonry-grid { column-count: 1; } }
+  
+  .panoramic-instances { margin-bottom: 24px; }
+
+  
+  @media(max-width:750px){.hero{flex-direction:column;text-align:center}.hero-left{flex-direction:column}}
   
   .stack{display:grid;gap:24px}
   .panel{padding:26px;position:relative;overflow:hidden}
@@ -470,7 +477,12 @@ _tmpl.innerHTML = `
         <div class="ios-slider-thumb" id="sos-thumb">🚨</div>
       </div>
     </div>
-    <button class="ios-confirm-cancel" id="btn-cancel-sos">Cancelar</button>
+    <div style="margin-top:20px;text-align:center">
+      <a id="sos-call-btn" href="tel:911" style="display:flex;justify-content:center;align-items:center;gap:8px;background:rgba(255,59,48,0.2);color:#ff3b30;text-decoration:none;padding:14px;border-radius:18px;font-weight:800;font-size:15px;border:1px solid rgba(255,59,48,0.3)">
+        📞 Llamar a Emergencias (911)
+      </a>
+    </div>
+    <button class="ios-confirm-cancel" id="btn-cancel-sos" style="margin-top:10px">Cancelar</button>
   </div>
 </div>
 
@@ -488,12 +500,9 @@ _tmpl.innerHTML = `
   </div>
 
   <!-- TWO-COLUMN LAYOUT -->
-  <div class="grid">
-
-    <!-- LEFT COLUMN: Activity & Instances -->
-    <div class="stack">
+  <div class="panoramic-container">
       <!-- Instances -->
-      <section class="glass panel liquid-glass">
+      <section class="glass panel liquid-glass panoramic-instances">
         <div class="panel-head">
           <h2 id="h-instances"></h2>
           <div style="display:flex;align-items:center;gap:12px">
@@ -502,6 +511,11 @@ _tmpl.innerHTML = `
         </div>
         <div id="entries"></div>
       </section>
+    </div>
+    <div class="masonry-grid">
+
+    
+      
 
       <!-- Activity log -->
       <section class="glass panel liquid-glass">
@@ -513,8 +527,7 @@ _tmpl.innerHTML = `
       </section>
     </div>
 
-    <!-- CENTER COLUMN: Mi Casa & Modes -->
-    <div class="stack">
+    
       <!-- Mi Casa Section (Standalone) -->
       <section class="glass panel liquid-glass">
         <div class="panel-head">
@@ -549,8 +562,7 @@ _tmpl.innerHTML = `
       </section>
     </div>
 
-    <!-- RIGHT COLUMN: Tools & Settings -->
-    <div class="stack">
+    
       <!-- Users -->
       <section class="glass panel liquid-glass">
         <h2 id="h-users"></h2>
@@ -953,6 +965,20 @@ class ArgusPanel extends HTMLElement {
   }
 
   async _init() {
+    try {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+      const callBtn = this.shadowRoot.getElementById('sos-call-btn');
+      if (callBtn) {
+          if (tz.includes('Europe') || tz.includes('Madrid') || tz.includes('Berlin') || tz.includes('Paris') || tz.includes('London')) {
+              callBtn.href = "tel:112";
+              callBtn.innerHTML = "📞 Llamar a Emergencias (112)";
+          } else if (tz.includes('Australia')) {
+              callBtn.href = "tel:000";
+              callBtn.innerHTML = "📞 Llamar a Emergencias (000)";
+          }
+      }
+    } catch(e) {}
+
     this._mode = 'disarmed';
     this._bindStatic();
     try {
@@ -2010,7 +2036,10 @@ class ArgusPanel extends HTMLElement {
       });
     }
     if (this._hass) {
-      this._hass.callService('argus', 'trigger', {}).catch(() => {});
+      const eid = this._dashboard?.entries?.[0]?.entity_id;
+      if (eid) {
+        this._hass.callService('alarm_control_panel', 'alarm_trigger', { entity_id: eid }).catch(() => {});
+      }
     }
   }
 
