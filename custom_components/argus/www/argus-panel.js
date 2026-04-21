@@ -1210,9 +1210,9 @@ class ArgusPanel extends HTMLElement {
       const openHtml = activeSensors.map(sid => {
         const sObj = this._hass?.states[sid];
         if (sObj && OPEN.includes(sObj.state)) {
-          return `<span class="sensor-pill ${triggered ? 'triggered-sensor' : ''}" style="margin-top:6px; font-size:11px; padding:4px 8px; border:1px solid rgba(255,255,255,0.2)">
-            <span class="pill-dot open"></span> ${sObj.attributes.friendly_name || sid}
-          </span>`;
+          return `<div class="sensor-pill-big ${triggered ? 'triggered-sensor' : ''}" style="margin-bottom:10px; font-size:17px; font-weight:800; padding:12px 18px; border-radius:18px; border:1px solid rgba(255,255,255,0.2); background:var(--hud-bg); backdrop-filter:blur(12px); color:var(--hud-text-color); text-shadow:var(--text-shadow); display:inline-flex; align-items:center; gap:10px; letter-spacing:0.5px; box-shadow:0 4px 12px rgba(0,0,0,0.2)">
+            <span class="pill-dot open" style="width:14px; height:14px; box-shadow:0 0 8px #ff5252"></span> ${sObj.attributes.friendly_name || sid}
+          </div>`;
         }
         return '';
       }).join('');
@@ -1224,11 +1224,13 @@ class ArgusPanel extends HTMLElement {
           <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="Pantalla completa" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>
 
           ${this._renderBatteryAlerts()}
+          
+          ${openHtml ? `<div style="position:absolute;top:20px;left:24px;right:180px;display:flex;flex-direction:column;align-items:flex-start;z-index:4;pointer-events:none">${openHtml}</div>` : ''}
+          
           <div class="hud">
             <div class="hud-loc">${fullHudLoc}</div>
             <div class="hud-data">
                 <span>${timeStr}</span>
-                ${openHtml ? `<div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end">${openHtml}</div>` : ''}
             </div>
           </div>
 

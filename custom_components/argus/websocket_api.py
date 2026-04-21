@@ -133,38 +133,31 @@ async def ws_argus_dashboard(hass: HomeAssistant, connection, msg) -> None:
 @websocket_api.websocket_command(
     {
         vol.Required("type"): "argus/save_ui",
-        vol.Optional("zones", default=[]): list,
-        vol.Optional("dashboard", default={}): dict,
-        vol.Optional("notif_targets", default=[]): list,
-        vol.Optional("tts_targets", default=[]): list,
-        vol.Optional("users", default=[]): list,
-        vol.Optional("home_name", default=""): str,
-        vol.Optional("background_mode", default="weather"): vol.In(["weather", "none", "photo", "collage"]),
-        vol.Optional("background_images", default=[]): list,
-        vol.Optional("temperature_source", default="auto"): str,
-        vol.Optional("temp_alert_min", default=None): vol.Any(None, vol.Coerce(float)),
-        vol.Optional("temp_alert_max", default=None): vol.Any(None, vol.Coerce(float)),
+        vol.Optional("zones"): list,
+        vol.Optional("dashboard"): dict,
+        vol.Optional("notif_targets"): list,
+        vol.Optional("tts_targets"): list,
+        vol.Optional("users"): list,
+        vol.Optional("home_name"): str,
+        vol.Optional("background_mode"): vol.In(["weather", "none", "photo", "collage"]),
+        vol.Optional("background_images"): list,
+        vol.Optional("temperature_source"): str,
+        vol.Optional("temp_alert_min"): vol.Any(None, vol.Coerce(float)),
+        vol.Optional("temp_alert_max"): vol.Any(None, vol.Coerce(float)),
     }
 )
 @websocket_api.async_response
 async def ws_argus_save_ui(hass: HomeAssistant, connection, msg) -> None:
-    """Persist zones, dashboard layout, notif_targets, tts_targets and users from the Argus panel UI."""
-    saved = await async_save_ui_data(
-        hass,
-        {
-            "zones": msg.get("zones", []),
-            "dashboard": msg.get("dashboard", {}),
-            "notif_targets": msg.get("notif_targets", []),
-            "tts_targets": msg.get("tts_targets", []),
-            "users": msg.get("users", []),
-            "home_name": msg.get("home_name", ""),
-            "background_mode": msg.get("background_mode", "weather"),
-            "background_images": msg.get("background_images", []),
-            "temperature_source": msg.get("temperature_source", "auto"),
-            "temp_alert_min": msg.get("temp_alert_min"),
-            "temp_alert_max": msg.get("temp_alert_max"),
-        },
-    )
+    """Persist UI data from the Argus panel without overwriting missing fields."""
+    
+    updates = {}
+    valid_keys = ["zones", "dashboard", "notif_targets", "tts_targets", "users", "home_name", "background_mode", "background_images", "temperature_source", "temp_alert_min", "temp_alert_max"]
+    
+    for key in valid_keys:
+        if key in msg:
+            updates[key] = msg[key]
+            
+    saved = await async_save_ui_data(hass, updates)
     connection.send_result(msg["id"], {"saved": True, "ui": saved})
 
 

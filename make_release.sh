@@ -1,1 +1,1 @@
-gh release create v0.9.33 -t "Argus v0.9.33" -n "Critical fixes for SOS and Sirens"
+gh release create v0.9.34 -t "Argus v0.9.34" -n "UI sizing fixes and automation sync improvements"

@@ -65,6 +65,13 @@ from .storage import async_load_ui_data, async_append_audit_log
 
 _LOGGER = logging.getLogger(__name__)
 
+_MODE_LABELS = {
+    'armed_home': 'En Casa',
+    'armed_away': 'Ausente',
+    'armed_night': 'Noche',
+    'armed_vacation': 'Vacaciones'
+}
+
 ARMED_STATES = {
     AlarmControlPanelState.ARMED_HOME,
     AlarmControlPanelState.ARMED_AWAY,
@@ -80,6 +87,17 @@ async def async_setup_entry(
 ) -> None:
     """Set up Argus alarm panel from a config entry."""
     async_add_entities([ArgusAlarmPanel(hass, config_entry)], update_before_add=True)
+
+    async def _get_context_user(self) -> str:
+        ctx = self._context
+        if ctx and ctx.user_id:
+            try:
+                user = await self.hass.auth.async_get_user(ctx.user_id)
+                if user:
+                    return user.name
+            except Exception:
+                pass
+        return "Argus"
 
 class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     """Argus Smart Alarm Control Panel with sensor monitoring."""
@@ -835,7 +853,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         await self._async_mqtt_publish()
         await self._async_sync_to_linked(AlarmControlPanelState.DISARMED)
         self.hass.async_create_task(self._evaluate_automations("disarmed"))
-        await async_append_audit_log(self.hass, "disarmed", "Sistema desarmado", user="Argus")
+        await async_append_audit_log(self.hass, "disarmed", "Sistema desarmado", user=await self._get_context_user())
         _LOGGER.info("Argus: Disarmed")
 
     async def _async_arm(self, target: AlarmControlPanelState, code=None) -> None:
@@ -938,7 +956,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         await self._async_mqtt_publish()
         await self._async_sync_to_linked(target)
         self.hass.async_create_task(self._evaluate_automations("armed", target=target))
-        await async_append_audit_log(self.hass, "armed", f"Modo: {target.value}", user="Argus")
+        await async_append_audit_log(self.hass, "armed", f"Modo: {_MODE_LABELS.get(target.value, target.value)}", user=await self._get_context_user())
         _LOGGER.info("Argus: Arming → %s", target)
 
     async def async_alarm_arm_home(self, code=None) -> None:
