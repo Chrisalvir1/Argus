@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.9.33
+ * Argus Home Hub – v0.9.40
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -103,8 +103,9 @@ _tmpl.innerHTML = `
   
   /* Detect light mode via HA variables and adjust glass */
   :host([selected-theme*="light"]), :host(:not([selected-theme*="dark"])) {
-    --argus-glass-bg: rgba(255, 255, 255, 0.7);
-    --argus-glass-border: rgba(0, 0, 0, 0.15);
+    --argus-glass-bg: rgba(255, 255, 255, 0.85);
+    --argus-glass-border: rgba(0, 0, 0, 0.12);
+    --glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
     --text-shadow: none;
     --hud-bg: rgba(0,0,0,0.06);
     --hero-gradient: linear-gradient(135deg, #1e3c72, #2a5298);
@@ -157,9 +158,9 @@ _tmpl.innerHTML = `
   .hero h1{margin:0 0 4px;font-size:32px;font-weight:900;letter-spacing:-0.03em;background:var(--hero-gradient, linear-gradient(to right, #ffffff, #b3e5fc));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
   .hero p{margin:0;font-size:15px;opacity:.7;font-weight:500}
   
-  .tabs { display: flex; background: rgba(255,255,255,0.05); padding: 5px; border-radius: 14px; gap: 4px; overflow-x: auto; scrollbar-width: none; margin-bottom: 20px; }
+  .tabs { display: flex; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 16px; gap: 6px; overflow-x: auto; scrollbar-width: none; margin-bottom: 20px; }
   .tabs::-webkit-scrollbar { display: none; }
-  .tab { flex: 1; min-width: 80px; text-align: center; border-radius: 10px; padding: 10px 0; font-size: 13px; font-weight: 800; color: rgba(255,255,255,0.6); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; border: none; outline: none; background: transparent; }
+  .tab { flex: 1; min-width: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 12px; padding: 12px 6px; font-size: 13px; font-weight: 800; color: rgba(255,255,255,0.6); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; border: none; outline: none; background: transparent; }
   .tab:hover { color: #fff; background: rgba(255,255,255,0.08); }
   .tab.active { background: var(--primary-color, #03a9f4); color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transform: translateY(-2px); opacity: 1; }
   :host([selected-theme*="light"]) .tabs { background: rgba(0,0,0,0.05); }
@@ -479,6 +480,10 @@ _tmpl.innerHTML = `
 .mode-sensor-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:12px; margin-top:12px; }
 .mode-sensor-none { grid-column:1/-1; padding:30px; text-align:center; background:var(--argus-pill-bg,rgba(255,255,255,0.03)); border:2px dashed var(--argus-pill-border,rgba(255,255,255,0.1)); border-radius:20px; color:var(--argus-pill-color-muted,rgba(255,255,255,0.4)); font-size:14px; font-weight:600; }
 .subsection-title { font-size:12px; font-weight:900; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px; color:var(--argus-pill-color-muted,rgba(255,255,255,0.5)); display:block; }
+
+.list-item-card { display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.04); border-radius:12px; padding:12px; border:1px solid rgba(255,255,255,0.08); }
+:host([selected-theme*="light"]) .list-item-card { background:rgba(0,0,0,0.03); border-color:rgba(0,0,0,0.08); }
+:host([selected-theme*="light"]) .list-item-card * { color: #1e1e2d; }
 
 </style>
 
@@ -1285,9 +1290,13 @@ class ArgusPanel extends HTMLElement {
         if (sosModal) sosModal.classList.add('open');
       })
     );
-    el.querySelectorAll('button[data-fullscreen]').forEach(btn =>
-      btn.addEventListener('click', ev => this._toggleFullscreen(ev.currentTarget.closest('.entry')))
-    );
+    el.querySelectorAll('button[data-fullscreen]').forEach(btn => {
+      btn.addEventListener('click', ev => this._toggleFullscreen(ev.currentTarget.closest('.entry')));
+      btn.addEventListener('touchend', ev => {
+        ev.preventDefault();
+        this._toggleFullscreen(ev.currentTarget.closest('.entry'));
+      });
+    });
     this._bindSOS(); // v0.9.33 Fix #5: re-bind SOS slider despues de cada re-render del DOM
   }
 
@@ -1477,7 +1486,10 @@ class ArgusPanel extends HTMLElement {
     };
     tabs.className = 'tabs';
     tabs.innerHTML = modes.map(m => `
-      <button type="button" class="tab ${m===this._mode ? 'active' : ''}" data-mode="${m}">${icons[m]} ${lbls[m]}</button>`).join('');
+      <button type="button" class="tab ${m===this._mode ? 'active' : ''}" data-mode="${m}">
+        <span style="font-size: 22px;">${icons[m]}</span>
+        <span>${lbls[m]}</span>
+      </button>`).join('');
       
     tabs.querySelectorAll('[data-mode]').forEach(t => t.addEventListener('click', () => {
       this._mode = t.dataset.mode; 
@@ -1756,7 +1768,7 @@ class ArgusPanel extends HTMLElement {
     el.innerHTML = `<div style="display:flex;flex-direction:column;gap:12px;max-height:300px;overflow-y:auto;padding-right:8px">${items.map(a => {
       const editId = a.attributes.id || a.entity_id.replace('automation.', '');
       return `
-      <div class="list-item" style="justify-content:space-between;background:rgba(255,255,255,0.03);border-radius:10px;padding:12px;border:1px solid rgba(255,255,255,0.05)">
+      <div class="list-item-card">
         <div>
           <div style="font-weight:700">${a.attributes.friendly_name || a.entity_id}</div>
           <div class="small" style="opacity:0.7;margin-top:4px">${a.attributes.last_triggered ? new Date(a.attributes.last_triggered).toLocaleString() : 'Nunca activada'}</div>
