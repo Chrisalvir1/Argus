@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.9.42
+ * Argus Home Hub – v0.9.43
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -160,7 +160,7 @@ _tmpl.innerHTML = `
   
   .tabs { display: flex; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 16px; gap: 6px; overflow-x: auto; scrollbar-width: none; margin-bottom: 20px; }
   .tabs::-webkit-scrollbar { display: none; }
-  .tab { flex: 1; min-width: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 12px; padding: 12px 6px; font-size: 13px; font-weight: 800; color: rgba(255,255,255,0.6); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; border: none; outline: none; background: transparent; }
+  .tab { flex: 1; min-width: 55px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 12px; padding: 10px 4px; font-size: 11px; font-weight: 800; color: rgba(255,255,255,0.6); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; border: none; outline: none; background: transparent; }
   .tab:hover { color: #fff; background: rgba(255,255,255,0.08); }
   .tab.active { background: var(--primary-color, #03a9f4); color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transform: translateY(-2px); opacity: 1; }
   :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .tabs { background: rgba(0,0,0,0.05); }
@@ -190,7 +190,7 @@ _tmpl.innerHTML = `
   .personalize-row .setting-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-bottom: 4px; }
   
   /* Mode Reorganization Styles — HORIZONTAL */
-  .mode-grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .mode-grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
   @media(max-width:900px){ .mode-grid-layout { grid-template-columns: 1fr; } }
   .mode-section-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 16px; transition: all 0.3s ease; }
   :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .mode-section-card { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.06); }
@@ -204,7 +204,7 @@ _tmpl.innerHTML = `
   :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .mode-section-card span, :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .mode-section-card label, :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .mode-section-card .input-label { color: var(--primary-text-color, #1e1e2d); }
   :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .subsection-title { color: rgba(30,30,45,0.55); }
   
-  .sensor-pill { background: var(--pill-bg, rgba(255,255,255,0.08)); color: var(--pill-text, #fff); border: 1px solid var(--pill-border, rgba(255,255,255,0.1)); padding: 6px 12px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; transition: all 0.3s; }
+  .sensor-pill { background: var(--pill-bg, rgba(255,255,255,0.08)); color: var(--pill-text, #fff); border: 1px solid var(--pill-border, rgba(255,255,255,0.1)); padding: 6px 12px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; transition: all 0.3s; max-width: 100%; box-sizing: border-box; }
   /* FIX v0.9.32 — parpadeo rojo para sirenas activas y sensores disparados */
   @keyframes argus-blink-red { 0%,100%{box-shadow:0 0 0 0 rgba(255,50,50,0);background:var(--pill-bg,rgba(255,255,255,0.08))} 50%{box-shadow:0 0 0 5px rgba(255,50,50,0.3);background:rgba(255,50,50,0.2)} }
   .sensor-pill.siren-active   { animation: argus-blink-red 1.1s ease-in-out infinite; border-color: rgba(255,82,82,0.6) !important; }
@@ -1487,7 +1487,7 @@ class ArgusPanel extends HTMLElement {
     tabs.className = 'tabs';
     tabs.innerHTML = modes.map(m => `
       <button type="button" class="tab ${m===this._mode ? 'active' : ''}" data-mode="${m}">
-        <span style="font-size: 22px;">${icons[m]}</span>
+        <span style="font-size: 20px;">${icons[m]}</span>
         <span>${lbls[m]}</span>
       </button>`).join('');
       
@@ -1658,9 +1658,9 @@ class ArgusPanel extends HTMLElement {
     return ` 
       <span class="sensor-pill${pillExtra}"> 
         ${dot} 
-        <span style="flex:1">${name}</span> 
+        <span style="flex:1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${name}</span> 
         ${delayIcon} 
-        ${readonly ? '' : `<button data-remove="${type}:${entityId}" style="background:none; border:none; color:inherit; opacity:0.5; padding:0 4px; cursor:pointer">✕</button>`} 
+        ${readonly ? '' : `<button data-remove="${type}:${entityId}" style="background:none; border:none; color:inherit; opacity:0.5; padding:0 4px; cursor:pointer; flex-shrink:0;">✕</button>`} 
       </span> 
     `;
   }
