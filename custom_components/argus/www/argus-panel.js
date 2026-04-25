@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.9.43
+ * Argus Home Hub – v0.9.44
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -580,52 +580,44 @@ _tmpl.innerHTML = `
         <div id="activity-log" style="display:grid;gap:10px;max-height:400px;overflow-y:auto;margin-top:10px"></div>
       </section>
 
-      <!-- Users -->
+      <!-- Users & Master PIN Settings -->
       <section class="glass panel liquid-glass">
-        <h2 id="h-users"></h2>
-        <p class="small" id="p-admin-only" style="margin-bottom:14px;color:#fb8c00;font-weight:600"></p>
-        <div id="users-list" style="display:grid;gap:12px;margin-bottom:16px"></div>
-        <div class="subsection" id="add-user-form">
-          <div class="subsection-title" id="t-add-user"></div>
-          <div class="field-group"><label id="l-username"></label><input type="text" id="new-user-name" autocomplete="off"></div>
-          <div class="field-group"><label id="l-user-pin"></label><input type="password" id="new-user-pin" inputmode="numeric" pattern="[0-9]*"></div>
-          <label id="l-is-admin" class="checkbox-label" style="margin-top:10px;display:flex;align-items:center;gap:10px"><input type="checkbox" id="new-user-admin"> <span id="s-is-admin"></span></label>
-          <div class="save-row" style="margin-top:15px"><button class="primary" id="btn-save-user" style="width:100%"></button></div>
-        </div>
-      </section>
-
-      <!-- Notifications -->
-      <section class="glass panel liquid-glass">
-        <h2 id="h-notifications"></h2>
-        <p class="small" id="p-notif-desc" style="margin-bottom:12px;opacity:0.7"></p>
-        <div class="subsection">
-          <div class="subsection-title">Dispositivos Vinculados</div>
-          <div id="notif-targets" class="chip-list" style="margin-bottom:12px"></div>
-          <div style="display:flex;gap:10px">
-            <select id="notif-select" style="flex:1"></select>
-            <button class="ghost" id="btn-add-notif" style="white-space:nowrap;padding:0 15px">+ Añadir</button>
+        <h2>Control de Acceso y Usuarios</h2>
+        <p class="small" style="margin-bottom:12px;opacity:0.7">Gestión global de seguridad, PIN maestro y administradores.</p>
+        
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start;">
+          <!-- Left: Users -->
+          <div>
+            <h3 id="h-users" style="font-size: 13px; font-weight: 900; opacity: 0.8; margin-top:0; margin-bottom: 12px; text-transform: uppercase;"></h3>
+            <p class="small" id="p-admin-only" style="margin-bottom:14px;color:#fb8c00;font-weight:600"></p>
+            <div id="users-list" style="display:grid;gap:12px;margin-bottom:16px"></div>
+            <div class="subsection" id="add-user-form">
+              <div class="subsection-title" id="t-add-user"></div>
+              <div class="field-group"><label id="l-username"></label><input type="text" id="new-user-name" autocomplete="off"></div>
+              <div class="field-group"><label id="l-user-pin"></label><input type="password" id="new-user-pin" inputmode="numeric" pattern="[0-9]*"></div>
+              <label id="l-is-admin" class="checkbox-label" style="margin-top:10px;display:flex;align-items:center;gap:10px"><input type="checkbox" id="new-user-admin"> <span id="s-is-admin"></span></label>
+              <div class="save-row" style="margin-top:15px"><button class="primary" id="btn-save-user" style="width:100%"></button></div>
+            </div>
           </div>
-        </div>
-        <div class="save-row" style="margin-top:20px"><button class="primary" id="btn-save-notif" style="width:100%"></button></div>
-      </section>
-
-      <!-- Master PIN Settings -->
-      <section class="glass panel liquid-glass">
-        <h2 id="h-settings-pin">PIN Maestro</h2>
-        <div class="subsection">
-          <p class="small" style="margin-bottom:12px;opacity:0.7">Control de acceso global para desactivar y cambiar ajustes.</p>
-          <div id="current-pin-display" style="font-size:13px;font-weight:800;color:var(--primary-color);margin-bottom:15px;background:rgba(3,169,244,0.1);padding:8px 12px;border-radius:10px;display:inline-block"></div>
-          <div class="field-group" id="group-current-pin" style="display:none; margin-bottom:12px">
-             <label>PIN Actual</label>
-             <input type="password" id="current-pin" inputmode="numeric" pattern="[0-9]*">
-          </div>
-          <p class="small" style="margin:0 0 10px 0; color:var(--primary-color); font-weight:700">Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.</p>
-          <div style="display:grid;gap:10px">
-            <div class="field-group"><label id="l-new-pin"></label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*" placeholder="••••"></div>
-            <div class="field-group"><label id="l-confirm-pin"></label><input type="password" id="new-pin-2" inputmode="numeric" pattern="[0-9]*"></div>
-          </div>
-          <div class="save-row" style="margin-top:15px">
-            <button class="primary" id="btn-save-pin" style="width:100%"></button>
+          
+          <!-- Right: Master PIN -->
+          <div>
+            <h3 id="h-settings-pin" style="font-size: 13px; font-weight: 900; opacity: 0.8; margin-top:0; margin-bottom: 12px; text-transform: uppercase;">PIN Maestro</h3>
+            <div class="subsection">
+              <div id="current-pin-display" style="font-size:13px;font-weight:800;color:var(--primary-color);margin-bottom:15px;background:rgba(3,169,244,0.1);padding:8px 12px;border-radius:10px;display:inline-block"></div>
+              <div class="field-group" id="group-current-pin" style="display:none; margin-bottom:12px">
+                 <label>PIN Actual</label>
+                 <input type="password" id="current-pin" inputmode="numeric" pattern="[0-9]*">
+              </div>
+              <p class="small" style="margin:0 0 10px 0; color:var(--primary-color); font-weight:700">Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.</p>
+              <div style="display:grid;gap:10px">
+                <div class="field-group"><label id="l-new-pin"></label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*" placeholder="••••"></div>
+                <div class="field-group"><label id="l-confirm-pin"></label><input type="password" id="new-pin-2" inputmode="numeric" pattern="[0-9]*"></div>
+              </div>
+              <div class="save-row" style="margin-top:15px">
+                <button class="primary" id="btn-save-pin" style="width:100%"></button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -634,10 +626,10 @@ _tmpl.innerHTML = `
       <section class="glass panel liquid-glass">
         <h2>Respaldo y Restauración</h2>
         <p class="small" style="margin-bottom:12px;opacity:0.7">Guarda una copia de seguridad de tus ajustes o restaura una anterior.</p>
-        <div style="display:grid;gap:10px">
-          <button class="ghost" id="btn-export-config">📤 Descargar Copia de Seguridad</button>
-          <div style="position:relative">
-            <button class="ghost" style="width:100%" id="btn-import-trigger">📥 Restaurar desde Archivo</button>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <button class="ghost" id="btn-export-config" style="flex:1">📤 Descargar</button>
+          <div style="position:relative; flex:1">
+            <button class="ghost" style="width:100%" id="btn-import-trigger">📥 Restaurar</button>
             <input type="file" id="import-config-file" style="display:none" accept=".json">
           </div>
         </div>
@@ -1071,8 +1063,8 @@ class ArgusPanel extends HTMLElement {
     );
     s('pin-backspace').addEventListener('click', () => this._backspacePin());
 
-    s('btn-add-notif').addEventListener('click', () => this._addNotifTarget());
-    s('btn-save-notif').addEventListener('click', () => this._saveNotifications());
+    s('btn-add-notif')?.addEventListener('click', () => this._addNotifTarget());
+    s('btn-save-notif')?.addEventListener('click', () => this._saveNotifications());
     s('btn-save-user').addEventListener('click', () => this._saveUser());
 
     // Home name edit (requires PIN)
@@ -1828,8 +1820,7 @@ class ArgusPanel extends HTMLElement {
   }
 
   _renderNotifications() {
-    this._renderNotifChips();
-    this._populateNotifSelect();
+    return;
   }
 
   async _saveNotifications() {
@@ -1936,11 +1927,9 @@ class ArgusPanel extends HTMLElement {
       }
     } catch (_) {}
 
-    // If we have no code, but we found a bridge, it means it is already paired
-    // to an Apple Home (the PIN notification is removed by HA upon successful pairing).
     const isPaired = !code && bridgeName;
     const bridgeLabel = bridgeName || 'Argus Bridge';
-    const homeLabel   = homeName || (isPaired ? 'Apple Home (Conectado)' : null);
+    const homeLabel   = homeName || (isPaired ? 'App Controlador (Apple Home, Alexa, etc.)' : null);
 
     if (code && code.length >= 8) {
       const fmt = code.replace(/(\d{3})(\d{2})(\d{3})/, '$1-$2-$3');
@@ -1948,7 +1937,7 @@ class ArgusPanel extends HTMLElement {
         <div style="display:grid;gap:16px;justify-items:center;padding:8px 0">
           <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
             <div style="background:var(--primary-color);color:#fff;padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700">🌉 ${this._t('homekit_bridge')}: ${bridgeLabel}</div>
-            ${homeLabel ? `<div style="background:rgba(67,160,71,.15);color:var(--success-color,#43a047);padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700">🏡 ${this._t('homekit_house')}: ${homeLabel}</div>` : ''}
+            ${homeLabel ? `<div style="background:rgba(67,160,71,.15);color:var(--success-color,#43a047);padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700">🏡 ${homeLabel}</div>` : ''}
           </div>
           <canvas id="hk-qr"></canvas>
           <div style="font-size:28px;font-weight:900;letter-spacing:6px;font-family:monospace;padding:10px 20px;border-radius:12px;border:2px dashed color-mix(in srgb,var(--primary-color,#03a9f4) 35%,transparent)">${fmt}</div>
@@ -1962,15 +1951,15 @@ class ArgusPanel extends HTMLElement {
             <span style="font-size:32px;line-height:1">✅</span>
             <div>
               <div style="font-weight:700;font-size:15px;color:var(--success-color,#43a047)">¡Puente Vinculado!</div>
-              <div class="small" style="opacity:.7">El puente <b>${bridgeLabel}</b> está actualmente conectado a <b>${homeLabel}</b>.</div>
+              <div class="small" style="opacity:.7">El puente <b>${bridgeLabel}</b> está actualmente conectado a un ecosistema externo (HomeKit, Matter). Home Assistant no reporta el nombre de la casa destino.</div>
             </div>
           </div>
         </div>`;
     } else {
       cnt.innerHTML = `
         <div style="display:grid;gap:10px">
-          <div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">🌉</span><div><div style="font-weight:700">${bridgeLabel}</div><div class="small">${this._t('homekit_not_paired')}</div></div></div>
-          <p class="small" style="margin:0">Activa HomeKit Bridge en HA e incluye la entidad <code>alarm_control_panel.argus_*</code>.</p>
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">🌉</span><div><div style="font-weight:700">${bridgeLabel}</div><div class="small">Puente NO Conectado</div></div></div>
+          <p class="small" style="margin:0">Activa la integración HomeKit Bridge en Home Assistant e incluye la entidad <code>alarm_control_panel.argus_*</code> para generar un código QR de emparejamiento.</p>
         </div>`;
     }
   }
