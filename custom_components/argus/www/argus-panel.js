@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.9.44
+ * Argus Home Hub – v0.9.45
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -557,16 +557,6 @@ _tmpl.innerHTML = `
         <div class="tabs" id="mode-tabs" style="margin-bottom:15px"></div>
         <div id="mode-view"></div>
       </section>
-
-      <!-- Automations -->
-      <section class="glass panel liquid-glass">
-        <h2 id="h-automations"></h2>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-          <span class="small" id="p-linked-rules" style="opacity:0.7"></span>
-          <button class="primary" id="btn-new-auto" style="padding:6px 12px;font-size:11px"></button>
-        </div>
-        <div id="auto-view"></div>
-      </section>
     </div>
 
     <!-- RIGHT COLUMN: Secondary -->
@@ -620,6 +610,16 @@ _tmpl.innerHTML = `
             </div>
           </div>
         </div>
+      </section>
+
+      <!-- Automations -->
+      <section class="glass panel liquid-glass">
+        <h2 id="h-automations"></h2>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <span class="small" id="p-linked-rules" style="opacity:0.7"></span>
+          <button class="primary" id="btn-new-auto" style="padding:6px 12px;font-size:11px"></button>
+        </div>
+        <div id="auto-view"></div>
       </section>
 
       <!-- Backup & Restore -->
@@ -2212,7 +2212,7 @@ class ArgusPanel extends HTMLElement {
     const q = (this.shadowRoot.getElementById('selector-search').value || '').toLowerCase().trim();
     const INTRUSION_DC = ['door','window','motion','vibration','glass','opening','smoke','gas','tamper'];
     const items = this._available.filter(x => {
-      if (this._selectorTarget === 'siren') return ['siren','switch','light','fan','input_boolean'].includes(x.domain);
+      if (this._selectorTarget === 'siren') return ['siren','switch','light','fan','input_boolean','script'].includes(x.domain);
       if (x.domain === 'lock') return true;
       if (x.domain === 'binary_sensor') {
         const dc = this._hass?.states?.[x.entity_id]?.attributes?.device_class || '';
@@ -2253,7 +2253,7 @@ class ArgusPanel extends HTMLElement {
     // camera-linked motion sensors, and locks. Everything else is excluded.
     const INTRUSION_DC = ['door','window','motion','vibration','glass','opening','smoke','gas','tamper'];
     const items = this._available.filter(x => {
-      if (this._selectorTarget === 'siren') return ['siren','switch','light','fan','input_boolean'].includes(x.domain);
+      if (this._selectorTarget === 'siren') return ['siren','switch','light','fan','input_boolean','script'].includes(x.domain);
       // sensor / bypass mode:
       if (x.domain === 'lock') return true;
       if (x.domain === 'binary_sensor') {
