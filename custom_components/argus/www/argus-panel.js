@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.9.46
+ * Argus Home Hub – v0.9.47
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1591,7 +1591,7 @@ class ArgusPanel extends HTMLElement {
               <input type="number" id="mode-arming-time" value="${cfg.arming_time ?? ''}" placeholder="0" style="padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:inherit; font-size:13px">
             </div>
             <div class="input-group">
-              <span class="input-label">Entrada (s)</span>
+              <span class="input-label">Desarmado (s)</span>
               <input type="number" id="mode-entry-delay" value="${cfg.entry_delay ?? ''}" placeholder="0" style="padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:inherit; font-size:13px">
             </div>
           </div>
@@ -1635,7 +1635,7 @@ class ArgusPanel extends HTMLElement {
     : ''; 
     
     const delayIcon = type === 'sensor' ? ` 
-    <button class="icon-btn ${isEntry ? 'active' : ''}" data-toggle-delay="${entityId}" title="Retraso de entrada (⏳) o Instantáneo (⚡)"> 
+    <button class="icon-btn ${isEntry ? 'active' : ''}" data-toggle-delay="${entityId}" title="Retraso de desarmado (⏳) o Instantáneo (⚡)"> 
     ${isEntry ? '⏳' : '⚡'} 
     </button>` : ''; 
 
