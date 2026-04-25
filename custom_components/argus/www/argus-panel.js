@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.9.45
+ * Argus Home Hub – v0.9.46
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -102,7 +102,7 @@ _tmpl.innerHTML = `
   }
   
   /* Detect light mode via HA variables and adjust glass */
-  :host([selected-theme*="light"]), :host(:not([selected-theme*="dark"])) {
+  :host([argus-dark-mode="false"]) {
     --argus-glass-bg: rgba(255, 255, 255, 0.85);
     --argus-glass-border: rgba(0, 0, 0, 0.12);
     --glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
@@ -163,10 +163,10 @@ _tmpl.innerHTML = `
   .tab { flex: 1; min-width: 55px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 12px; padding: 10px 4px; font-size: 11px; font-weight: 800; color: rgba(255,255,255,0.6); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; border: none; outline: none; background: transparent; }
   .tab:hover { color: #fff; background: rgba(255,255,255,0.08); }
   .tab.active { background: var(--primary-color, #03a9f4); color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transform: translateY(-2px); opacity: 1; }
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .tabs { background: rgba(0,0,0,0.05); }
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .tab { color: rgba(0,0,0,0.6); }
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .tab:hover { color: #000; background: rgba(0,0,0,0.08); }
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .tab.active { color: #fff; }
+  :host([argus-dark-mode="false"]) .tabs { background: rgba(0,0,0,0.05); }
+  :host([argus-dark-mode="false"]) .tab { color: rgba(0,0,0,0.6); }
+  :host([argus-dark-mode="false"]) .tab:hover { color: #000; background: rgba(0,0,0,0.08); }
+  :host([argus-dark-mode="false"]) .tab.active { color: #fff; }
 
   @keyframes bounceIn {
     0% { transform: scale(0.95); opacity: 0; }
@@ -186,23 +186,23 @@ _tmpl.innerHTML = `
   
   /* Personalization inside instances */
   .personalize-row { display: flex; gap: 12px; align-items: center; margin-top: 16px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; flex-wrap: wrap; }
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .personalize-row { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.06); }
+  :host([argus-dark-mode="false"]) .personalize-row { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.06); }
   .personalize-row .setting-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-bottom: 4px; }
   
   /* Mode Reorganization Styles — HORIZONTAL */
   .mode-grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
   @media(max-width:900px){ .mode-grid-layout { grid-template-columns: 1fr; } }
   .mode-section-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 16px; transition: all 0.3s ease; }
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .mode-section-card { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.06); }
+  :host([argus-dark-mode="false"]) .mode-section-card { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.06); }
   .mode-section-card:hover { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.06); }
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .mode-section-card:hover { border-color: rgba(0,0,0,0.12); background: rgba(0,0,0,0.05); }
+  :host([argus-dark-mode="false"]) .mode-section-card:hover { border-color: rgba(0,0,0,0.12); background: rgba(0,0,0,0.05); }
   .mode-section-title { font-size: 13px; font-weight: 800; color: var(--primary-color, #03a9f4); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
   /* Dark mode sensor text fix */
   .mode-sensor-grid { color: var(--primary-text-color, #fff); }
   .mode-sensor-none { color: var(--primary-text-color, rgba(255,255,255,0.5)); opacity: 0.6; font-size: 13px; }
   .mode-section-card span, .mode-section-card label, .mode-section-card .input-label { color: var(--primary-text-color, #fff); }
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .mode-section-card span, :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .mode-section-card label, :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .mode-section-card .input-label { color: var(--primary-text-color, #1e1e2d); }
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .subsection-title { color: rgba(30,30,45,0.55); }
+  :host([argus-dark-mode="false"]) .mode-section-card span, :host([argus-dark-mode="false"]) .mode-section-card label, :host([argus-dark-mode="false"]) .mode-section-card .input-label { color: var(--primary-text-color, #1e1e2d); }
+  :host([argus-dark-mode="false"]) .subsection-title { color: rgba(30,30,45,0.55); }
   
   .sensor-pill { background: var(--pill-bg, rgba(255,255,255,0.08)); color: var(--pill-text, #fff); border: 1px solid var(--pill-border, rgba(255,255,255,0.1)); padding: 6px 12px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; transition: all 0.3s; max-width: 100%; box-sizing: border-box; }
   /* FIX v0.9.32 — parpadeo rojo para sirenas activas y sensores disparados */
@@ -210,8 +210,8 @@ _tmpl.innerHTML = `
   .sensor-pill.siren-active   { animation: argus-blink-red 1.1s ease-in-out infinite; border-color: rgba(255,82,82,0.6) !important; }
   .sensor-pill.triggered-sensor { animation: argus-blink-red 0.85s ease-in-out infinite; border-color: rgba(255,82,82,0.7) !important; }
   /* Fix #1 - Light Mode: pills visibles */
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .sensor-pill        { color: var(--pill-text, #1e1e2d); }
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .sensor-pill button { color: #1e1e2d; }
+  :host([argus-dark-mode="false"]) .sensor-pill        { color: var(--pill-text, #1e1e2d); }
+  :host([argus-dark-mode="false"]) .sensor-pill button { color: #1e1e2d; }
   .icon-btn { background: none; border: none; padding: 4px; color: inherit; opacity: 0.6; cursor: pointer; transition: opacity 0.2s; display: flex; align-items: center; justify-content: center; border-radius: 6px; }
   /* ── mode-status toast (FIX-A) ───────────────────────────────── */
   #mode-status { opacity: 0; transition: opacity .35s; }
@@ -222,68 +222,68 @@ _tmpl.innerHTML = `
 
   /* ── Fix #1 COMPLETO: Selector Modal en Modo Claro ──────────────── */
   /* FIX D: modal solo en tema explícitamente light */
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .modal {
+  :host([argus-dark-mode="false"]) .modal {
     background: rgba(250,250,252,0.98) !important;
     border: 1px solid rgba(0,0,0,0.12) !important;
     color: #1e1e2d !important;
     box-shadow: 0 20px 60px rgba(0,0,0,0.25) !important;
   }
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .modal * {
+  :host([argus-dark-mode="false"]) .modal * {
     color: #1e1e2d !important;
   }
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .modal input[type="search"],
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .modal input[type="text"],
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .modal input[type="number"],
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .modal select {
+  :host([argus-dark-mode="false"]) .modal input[type="search"],
+  :host([argus-dark-mode="false"]) .modal input[type="text"],
+  :host([argus-dark-mode="false"]) .modal input[type="number"],
+  :host([argus-dark-mode="false"]) .modal select {
     background: rgba(0,0,0,0.04) !important;
     border-color: rgba(0,0,0,0.15) !important;
     color: #1e1e2d !important;
   }
   /* FIX E: solo selector explícito [selected-theme*=light] para pick-row y sel-right-item */
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .pick-row {
+  :host([argus-dark-mode="false"]) .pick-row {
     background: rgba(0,0,0,0.02) !important;
     border-color: rgba(0,0,0,0.07) !important;
     color: #1e1e2d !important;
   }
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .pick-row:hover {
+  :host([argus-dark-mode="false"]) .pick-row:hover {
     background: rgba(3,169,244,0.07) !important;
     border-color: rgba(3,169,244,0.25) !important;
   }
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .pick-row-name,
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .pick-row-meta {
+  :host([argus-dark-mode="false"]) .pick-row-name,
+  :host([argus-dark-mode="false"]) .pick-row-meta {
     color: #1e1e2d !important;
   }
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .pick-row-meta {
+  :host([argus-dark-mode="false"]) .pick-row-meta {
     opacity: 0.55 !important;
   }
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .sel-right-item {
+  :host([argus-dark-mode="false"]) .sel-right-item {
     background: rgba(0,0,0,0.03) !important;
     border-color: rgba(0,0,0,0.08) !important;
     color: #1e1e2d !important;
   }
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .sel-right-item button {
+  :host([argus-dark-mode="false"]) .sel-right-item button {
     color: #1e1e2d !important;
   }
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .subsection-title {
+  :host([argus-dark-mode="false"]) .subsection-title {
     color: rgba(30,30,45,0.5) !important;
   }
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .modal h3,
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) #selector-title {
+  :host([argus-dark-mode="false"]) .modal h3,
+  :host([argus-dark-mode="false"]) #selector-title {
     color: #1e1e2d !important;
   }
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) #selector-count {
+  :host([argus-dark-mode="false"]) #selector-count {
     color: rgba(30,30,45,0.6) !important;
   }
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .sel-actions button {
+  :host([argus-dark-mode="false"]) .sel-actions button {
     color: #1e1e2d !important;
     border-color: rgba(0,0,0,0.12) !important;
   }
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .mode-sensor-none {
+  :host([argus-dark-mode="false"]) .mode-sensor-none {
     color: rgba(30,30,45,0.45) !important;
   }
   /* FIX B+C: .modal-back es la clase real del backdrop */
-  :host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .modal-back,
-  :host(:not([selected-theme*="dark"])) .modal-back {
+  :host([argus-dark-mode="false"]) .modal-back,
+  :host([argus-dark-mode="false"]) .modal-back {
     background: rgba(0,0,0,0.55) !important;
   }
   .icon-btn:hover { opacity: 1; background: rgba(255,255,255,0.1); }
@@ -393,7 +393,7 @@ _tmpl.innerHTML = `
   .pick-row-meta{font-size:11px;opacity:0.5;margin-top:2px}
   .sel-right-item{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.04);font-size:13px}
   /* Activity log */
-  .log-item{display:flex;align-items:flex-start;gap:12px;padding:10px 12px;border-radius:12px;border:1px solid color-mix(in srgb,var(--divider-color,#444) 50%,transparent);background:color-mix(in srgb,var(--card-background-color,#1e1e2e) 60%,transparent)}
+  .log-item{display:flex;align-items:flex-start;gap:12px;padding:10px 12px;border-radius:12px;border:1px solid color-mix(in srgb,var(--divider-color,#444) 50%,transparent);background:color-mix(in srgb,var(--card-background-color,#1e1e2e) 60%,transparent);color:var(--primary-text-color,#fff)}
   .log-icon{font-size:20px;line-height:1;flex-shrink:0}
   .log-body{flex:1;min-width:0}
   .log-title{font-weight:700;font-size:13px}
@@ -482,8 +482,8 @@ _tmpl.innerHTML = `
 .subsection-title { font-size:12px; font-weight:900; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px; color:var(--argus-pill-color-muted,rgba(255,255,255,0.5)); display:block; }
 
 .list-item-card { display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.04); border-radius:12px; padding:12px; border:1px solid rgba(255,255,255,0.08); }
-:host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .list-item-card { background:rgba(0,0,0,0.03); border-color:rgba(0,0,0,0.08); }
-:host([selected-theme*="light"]) , :host(:not([selected-theme*="dark"])) .list-item-card * { color: #1e1e2d; }
+:host([argus-dark-mode="false"]) .list-item-card { background:rgba(0,0,0,0.03); border-color:rgba(0,0,0,0.08); }
+:host([argus-dark-mode="false"]) .list-item-card * { color: #1e1e2d; }
 
 </style>
 
@@ -764,6 +764,7 @@ class ArgusPanel extends HTMLElement {
   set hass(hass) {
     const oldHass = this._hass;
     this._hass = hass;
+    if (hass.themes) this.setAttribute('argus-dark-mode', hass.themes.darkMode === true);
     if (!this._dashboard?.entries?.length) return;
 
     // Trigger render if any of these change:
