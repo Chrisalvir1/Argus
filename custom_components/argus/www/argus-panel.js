@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v0.9.48
+ * Argus Home Hub – v0.9.49
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -512,7 +512,7 @@ _tmpl.innerHTML = `
   <!-- HERO -->
   <div class="glass hero liquid-glass">
     <div class="hero-left">
-      <img src="/argus/argus_logo.png" alt="Argus Logo" style="width: 75px; height: 75px; border-radius: 18px; object-fit: cover; box-shadow: 0 8px 24px rgba(0,0,0,0.25); flex-shrink: 0;">
+      <img src="/api/argus_static/argus_logo.png" alt="Argus Logo" style="width: 75px; height: 75px; border-radius: 18px; object-fit: cover; box-shadow: 0 8px 24px rgba(0,0,0,0.25); flex-shrink: 0;">
       <div>
         <h1>Argus Home Hub</h1>
         <p id="p-hero-desc"></p>
