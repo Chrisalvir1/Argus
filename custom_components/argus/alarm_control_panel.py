@@ -88,16 +88,7 @@ async def async_setup_entry(
     """Set up Argus alarm panel from a config entry."""
     async_add_entities([ArgusAlarmPanel(hass, config_entry)], update_before_add=True)
 
-    async def _get_context_user(self) -> str:
-        ctx = self._context
-        if ctx and ctx.user_id:
-            try:
-                user = await self.hass.auth.async_get_user(ctx.user_id)
-                if user:
-                    return user.name
-            except Exception:
-                pass
-        return "Argus"
+
 
 class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     """Argus Smart Alarm Control Panel with sensor monitoring."""
@@ -134,6 +125,18 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         # UI/Mode config
         self._ui_config = {}
         self._syncing_linked = False
+
+    async def _get_context_user(self) -> str:
+        """Get the user name from the current context."""
+        ctx = self._context
+        if ctx and ctx.user_id:
+            try:
+                user = await self.hass.auth.async_get_user(ctx.user_id)
+                if user:
+                    return user.name
+            except Exception:
+                pass
+        return "Argus"
 
     # ── Config loading ──────────────────────────────────────────────
     def _load_config(self):
