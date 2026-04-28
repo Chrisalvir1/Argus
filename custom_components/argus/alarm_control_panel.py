@@ -470,6 +470,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             return
 
         new_state = event.data.get("new_state")
+        old_state = event.data.get("old_state")
         if new_state is None:
             return
 
@@ -481,6 +482,21 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         if target_state == self._alarm_state:
             return
+
+        # FIX: Prevenir reset de timers si el linked_alarm confirma el target mode durante el ARMING
+        if self._alarm_state == AlarmControlPanelState.ARMING and target_state == self._arming_target:
+            _LOGGER.info("Argus: Linked alarm confirmed target mode %s, finishing arming early.", target_state)
+            self._cancel_timers()
+            self._alarm_state = target_state
+            self.async_write_ha_state()
+            self.hass.async_create_task(self._async_mqtt_publish())
+            return
+
+        # FIX: Si el linked_alarm es rechazado/falla y se queda en DISARMED, no revertir Argus si estamos ARMING
+        if target_state == AlarmControlPanelState.DISARMED and self._alarm_state == AlarmControlPanelState.ARMING:
+            if old_state and old_state.state == "disarmed":
+                _LOGGER.warning("Argus: Linked alarm rejected arming and stayed disarmed. Ignoring revert.")
+                return
 
         _LOGGER.info("Argus: Syncing FROM linked alarm %s -> %s", self._linked_alarm, target_state)
         
