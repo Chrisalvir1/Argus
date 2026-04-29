@@ -1,11 +1,11 @@
 <div align="center">
-  <img src="logo.png" alt="Argus Seguridad de Hogar" width="200" style="border-radius: 20%; box-shadow: 0 10px 20px rgba(0,0,0,0.15); margin-bottom: 20px;">
+  <img src="https://raw.githubusercontent.com/Chrisalvir1/Argus/main/logo.png" alt="Argus Seguridad de Hogar" width="200" style="border-radius: 20%; box-shadow: 0 10px 20px rgba(0,0,0,0.15); margin-bottom: 20px;">
 
-  # 🛡️ Argus Home Hub
+  # Argus Home Hub
 
   **El Sistema de Seguridad Premium para Home Assistant**
 
-  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-0.9.65-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
+  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-0.9.66-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
   [![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)](https://www.home-assistant.io/)
   [![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)](https://hacs.xyz/)
 
@@ -18,15 +18,9 @@
 
 ---
 
-## ✨ Novedades y Correcciones Críticas (v0.9.65)
+## ✨ Novedades y Correcciones Críticas (v0.9.66)
 
-Esta versión incluye mejoras críticas de estabilidad y rendimiento:
-
-*   **⚡ 0 Retrasos e Instantaneidad**: Se ha eliminado el estado *ARMING* y cualquier delay artificial. Los cambios de modo son 100% inmediatos.
-*   **🛡️ Blindaje Anti-Rebote**: Implementación de un sistema inteligente que evita que HomeKit revierta el estado de la alarma a "En Casa" por conflictos con otros dispositivos (como hubs Aqara).
-*   **🧹 Limpieza de Código**: Eliminación completa de la vinculación forzada con hubs externos (linked_alarm) para garantizar que Argus funcione de manera independiente y sin errores de sincronización.
-*   **🪲 Fix de Congelamiento**: Corregido un bug crítico que provocaba que el panel dejara de responder al intentar desarmar el sistema.
-
+Arreglo de ruta de logo para HACS y eliminación de emoji de escudo.
 ---
 
 ## 🚀 Características Principales
