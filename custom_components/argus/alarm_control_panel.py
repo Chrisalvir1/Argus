@@ -996,11 +996,20 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._cancel_timers()
 
         mode_key = target.value.replace("armed_", "")
-        arming_delay = self._get_mode_val(mode_key, "arming_time", self._arming_time)
-        try:
-            arming_delay = int(arming_delay) if arming_delay is not None else 0
-        except (TypeError, ValueError):
+
+        # ── TRANSICIÓN INSTANTÁNEA entre modos armados ───────────────────
+        # Si ya estamos armados, NO pasar por ARMING (sin arming_delay).
+        # El arming_delay solo aplica cuando se arma DESDE el estado desarmado.
+        # Esto evita el estado "activando..." en HomeKit al cambiar de modo.
+        already_armed = self._alarm_state in ARMED_STATES
+        if already_armed:
             arming_delay = 0
+        else:
+            arming_delay = self._get_mode_val(mode_key, "arming_time", self._arming_time)
+            try:
+                arming_delay = int(arming_delay) if arming_delay is not None else 0
+            except (TypeError, ValueError):
+                arming_delay = 0
 
         if arming_delay > 0:
             self._arming_target = target
@@ -1018,7 +1027,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         # 30s cubre cualquier latencia del hub fisico o Apple Home.
         import time as _time
         self._arm_lock_until = _time.monotonic() + 30.0
-        _LOGGER.info("Argus: ARM-LOCK activado por 30s (modo=%s)", target)
+        _LOGGER.info("Argus: ARM-LOCK 30s activado (modo=%s, desde_armado=%s)", target, already_armed)
 
         await self._async_mqtt_publish()
         await self._async_sync_to_linked(target)
