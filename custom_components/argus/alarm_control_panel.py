@@ -125,6 +125,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         # UI/Mode config
         self._ui_config = {}
         self._syncing_linked = False
+        self._arm_lock_until: float = 0.0   # monotonic: bloquear re-arm externo hasta esta hora
 
     async def _get_context_user(self) -> str:
         """Get the user name from the current context."""
@@ -862,6 +863,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         # para que _get_siren_entities pueda resolver el modo via _triggered_mode
         await self._async_siren(False)
         self._triggered_mode = None
+        self._arm_lock_until = 0.0  # liberar el lock al desarmar
         self._alarm_state = AlarmControlPanelState.DISARMED
         self._triggered_by = None
         self.async_write_ha_state()
@@ -872,6 +874,30 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         _LOGGER.info("Argus: Disarmed")
 
     async def _async_arm(self, target: AlarmControlPanelState, code=None) -> None:
+        import time as _time
+
+        # ── ARM-LOCK: si Argus ya está armado en un modo específico y se
+        # llamó desde fuera (automatización Aqara, HomeKit round-trip) con
+        # un modo DISTINTO, ignorar durante la ventana de bloqueo.
+        # Se permite:
+        #   • Mismo modo (idempotente) → sin-op silencioso
+        #   • Cambio de modo despues de que expira el lock → siempre OK
+        #   • DISARMED no tiene lock (desarmar siempre funciona)
+        if self._alarm_state in ARMED_STATES and target != self._alarm_state:
+            if _time.monotonic() < self._arm_lock_until:
+                _LOGGER.info(
+                    "Argus: ARM-LOCK activo — ignorando cambio de modo %s → %s (lock expira en %.1fs)",
+                    self._alarm_state, target,
+                    self._arm_lock_until - _time.monotonic(),
+                )
+                # Rebroadcast nuestro estado real para corregir cualquier entidad externa confundida
+                self.async_write_ha_state()
+                return
+
+        if self._alarm_state == target:
+            # Idempotente: ya está en ese modo, no hacer nada
+            return
+
         if self._code_arm_required and not self._validate_code(code):
             _LOGGER.warning("Argus: Arm rejected — invalid code")
             await async_append_audit_log(self.hass, "arm_rejected", f"Invalid code for {target.value}", user="Argus")
@@ -968,11 +994,16 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self._alarm_state = target
             self.async_write_ha_state()
 
+        # Activar arm-lock: 20 segundos desde ahora nadie puede cambiar el modo
+        import time as _time
+        self._arm_lock_until = _time.monotonic() + 20.0
+        _LOGGER.info("Argus: ARM-LOCK activado por 20s (modo=%s)", target)
+
         await self._async_mqtt_publish()
         await self._async_sync_to_linked(target)
         self.hass.async_create_task(self._evaluate_automations("armed", target=target))
         await async_append_audit_log(self.hass, "armed", f"Modo: {_MODE_LABELS.get(target.value, target.value)}", user=await self._get_context_user())
-        _LOGGER.info("Argus: Arming → %s", target)
+        _LOGGER.info("Argus: Armado → %s", target)
 
     async def async_alarm_arm_home(self, code=None) -> None:
         await self._async_arm(AlarmControlPanelState.ARMED_HOME, code)
