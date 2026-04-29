@@ -689,9 +689,14 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     @callback
     def _async_finish_arming(self, _now):
         """Arming countdown finished — move to target armed state."""
+        import time as _time
         if self._alarm_state == AlarmControlPanelState.ARMING and self._arming_target:
             self._alarm_state = self._arming_target
             self._arming_listener = None
+            # Re-activar ARM-LOCK desde este momento (el lock anterior ya pudo haber expirado
+            # si el arming_delay era mayor que la ventana del lock)
+            self._arm_lock_until = _time.monotonic() + 30.0
+            _LOGGER.info("Argus: ARM-LOCK re-activado en finish_arming por 30s (modo=%s)", self._arming_target)
             self.async_write_ha_state()
             self.hass.async_create_task(self._async_mqtt_publish())
 
@@ -1008,10 +1013,12 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self._alarm_state = target
             self.async_write_ha_state()
 
-        # Activar arm-lock: 20 segundos desde ahora nadie puede cambiar el modo
+        # Activar ARM-LOCK por 30 segundos — bloquea que Aqara (que no soporta
+        # todos los modos) sobreescriba el modo elegido con armed_home.
+        # 30s cubre cualquier latencia del hub fisico o Apple Home.
         import time as _time
-        self._arm_lock_until = _time.monotonic() + 5.0
-        _LOGGER.info("Argus: ARM-LOCK activado por 5s (modo=%s)", target)
+        self._arm_lock_until = _time.monotonic() + 30.0
+        _LOGGER.info("Argus: ARM-LOCK activado por 30s (modo=%s)", target)
 
         await self._async_mqtt_publish()
         await self._async_sync_to_linked(target)
