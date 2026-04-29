@@ -881,41 +881,29 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     async def _async_arm(self, target: AlarmControlPanelState, code=None) -> None:
         import time as _time
 
-        # ── ARM-LOCK INTELIGENTE ────────────────────────────────────────
-        # El problema: Aqara M2 no soporta todos los modos, y cuando Argus
-        # sincroniza a Aqara (ej: armed_away), Aqara responde con armed_home.
-        # Eso dispara _async_linked_alarm_changed o automatizaciones que
-        # llaman alarm_arm_home en Argus, sobreescribiendo el modo elegido.
+        # ── ARM-LOCK v0.9.59 ─────────────────────────────────────────────
+        # Bloquea CUALQUIER cambio de modo durante los primeros 30 segundos
+        # después de armar, EXCEPTO si el usuario quiere cambiar deliberadamente
+        # (lo cual se detecta porque cambia a un modo DIFERENTE de armed_home).
         #
-        # Solución específica: SOLO bloquear si:
-        #   1. Argus ya está armado en un modo X
-        #   2. Alguien intenta cambiar a armed_HOME (el fallback de Aqara)
-        #   3. Y el modo actual NO es armed_home (evitar idempotencia)
-        #   4. Y el lock está activo (5s desde el último armado)
-        #
-        # El usuario SÍ puede cambiar libremente entre modos (away→night, etc.)
-        # porque esos cambios NO son el fallback de Aqara.
-        is_aqara_fallback = (
+        # Apple Home sincroniza todos los accesorios de seguridad. Si Aqara
+        # no soporta away/night, Apple Home puede forzar armed_home en todos.
+        # El lock solo bloquea ese forced-armed_home.
+        if (
             self._alarm_state in ARMED_STATES
-            and self._alarm_state != AlarmControlPanelState.ARMED_HOME
             and target == AlarmControlPanelState.ARMED_HOME
+            and self._alarm_state != AlarmControlPanelState.ARMED_HOME
             and _time.monotonic() < self._arm_lock_until
-        )
-        if is_aqara_fallback:
+        ):
             _LOGGER.info(
-                "Argus: ARM-LOCK — ignorando fallback armed_home de Aqara (modo actual=%s, lock %.1fs restante)",
+                "Argus: ARM-LOCK — bloqueando armed_home forzado (modo=%s, quedan %.0fs)",
                 self._alarm_state, self._arm_lock_until - _time.monotonic(),
             )
-            self.async_write_ha_state()  # rebroadcast estado real
+            # NO hacer async_write_ha_state aquí — evita loops con HomeKit
             return
 
         if self._alarm_state == target:
-            # Idempotente: ya está en ese modo, no hacer nada
             return
-
-        # Si viene de un estado armado a otro, resetear el lock para el nuevo modo
-        if self._alarm_state in ARMED_STATES and target in ARMED_STATES:
-            self._arm_lock_until = 0.0  # se reactivará al final
 
         if self._code_arm_required and not self._validate_code(code):
             _LOGGER.warning("Argus: Arm rejected — invalid code")
@@ -994,17 +982,14 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                     return
 
         self._cancel_timers()
-
-        mode_key = target.value.replace("armed_", "")
-
-        # ── TRANSICIÓN INSTANTÁNEA entre modos armados ───────────────────
-        # Si ya estamos armados, NO pasar por ARMING (sin arming_delay).
-        # El arming_delay solo aplica cuando se arma DESDE el estado desarmado.
-        # Esto evita el estado "activando..." en HomeKit al cambiar de modo.
         already_armed = self._alarm_state in ARMED_STATES
+
+        # Transición SIEMPRE instantánea si ya estamos armados.
+        # Arming delay solo cuando se arma desde DESARMADO.
         if already_armed:
             arming_delay = 0
         else:
+            mode_key = target.value.replace("armed_", "")
             arming_delay = self._get_mode_val(mode_key, "arming_time", self._arming_time)
             try:
                 arming_delay = int(arming_delay) if arming_delay is not None else 0
@@ -1022,18 +1007,29 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self._alarm_state = target
             self.async_write_ha_state()
 
-        # Activar ARM-LOCK por 30 segundos — bloquea que Aqara (que no soporta
-        # todos los modos) sobreescriba el modo elegido con armed_home.
-        # 30s cubre cualquier latencia del hub fisico o Apple Home.
-        import time as _time
-        self._arm_lock_until = _time.monotonic() + 30.0
-        _LOGGER.info("Argus: ARM-LOCK 30s activado (modo=%s, desde_armado=%s)", target, already_armed)
+        # ARM-LOCK: bloquear armed_home forzado por 60 segundos.
+        # Solo se activa cuando el modo NO es armed_home (away/night/vacation).
+        if target != AlarmControlPanelState.ARMED_HOME:
+            self._arm_lock_until = _time.monotonic() + 60.0
+            _LOGGER.info("Argus: ARM-LOCK 60s (modo=%s)", target)
+        else:
+            # Si el usuario puso armed_home, no necesitamos lock
+            self._arm_lock_until = 0.0
 
         await self._async_mqtt_publish()
-        await self._async_sync_to_linked(target)
+
+        # Solo sincronizar a linked alarm si el modo es soportado por Aqara.
+        # away/night/vacation causan que Aqara caiga a armed_home, lo cual
+        # crea una discrepancia que Apple Home resuelve forzando armed_home
+        # en TODOS los accesorios. Evitar eso NO sincronizando.
+        if target in (AlarmControlPanelState.ARMED_HOME, AlarmControlPanelState.DISARMED):
+            await self._async_sync_to_linked(target)
+        else:
+            _LOGGER.info("Argus: NO sincronizando a linked alarm (modo %s no soportado por Aqara)", target)
+
         self.hass.async_create_task(self._evaluate_automations("armed", target=target))
         await async_append_audit_log(self.hass, "armed", f"Modo: {_MODE_LABELS.get(target.value, target.value)}", user=await self._get_context_user())
-        _LOGGER.info("Argus: Armado → %s", target)
+        _LOGGER.info("Argus: Armado → %s (instantáneo=%s)", target, already_armed)
 
     async def async_alarm_arm_home(self, code=None) -> None:
         await self._async_arm(AlarmControlPanelState.ARMED_HOME, code)
