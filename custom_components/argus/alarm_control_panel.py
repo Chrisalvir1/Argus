@@ -996,8 +996,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         # Activar arm-lock: 20 segundos desde ahora nadie puede cambiar el modo
         import time as _time
-        self._arm_lock_until = _time.monotonic() + 20.0
-        _LOGGER.info("Argus: ARM-LOCK activado por 20s (modo=%s)", target)
+        self._arm_lock_until = _time.monotonic() + 5.0
+        _LOGGER.info("Argus: ARM-LOCK activado por 5s (modo=%s)", target)
 
         await self._async_mqtt_publish()
         await self._async_sync_to_linked(target)

@@ -296,8 +296,27 @@ _tmpl.innerHTML = `
   .entry{position:relative;overflow:hidden;border-radius:24px;border:1px solid rgba(255,255,255,0.1);margin-bottom:16px;min-height:220px;display:flex;flex-direction:column;transition:transform 0.3s ease}
   .entry-bg{position:absolute;inset:0;z-index:1;background-size:cover;background-position:center;transition:opacity 0.5s ease}
   .entry-bg img{width:100%;height:100%;object-fit:cover;opacity:0.6}
-  .entry-content{position:relative;z-index:2;flex:1;padding:20px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.3) 0%, transparent 60%)}
+  .entry-content{position:relative;z-index:2;flex:1;padding:20px;display:grid;grid-template-columns:140px 1fr auto;gap:16px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.3) 0%, transparent 60%)}
   
+  /* Sensor column — right side, compact pills */
+  .sensor-column{display:flex;flex-direction:column;gap:6px;align-items:flex-end;justify-content:center;max-width:140px;min-width:80px;overflow:hidden}
+  .sensor-chip{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:136px;backdrop-filter:blur(12px);border:1px solid rgba(0,0,0,0.15);box-shadow:0 2px 6px rgba(0,0,0,0.25);transition:opacity 0.2s}
+  .sensor-chip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+  /* Abierto (alerta) */
+  .sensor-chip--open{background:rgba(255,82,82,0.85);color:#fff}
+  .sensor-chip--open .sensor-chip-dot{background:#fff;box-shadow:0 0 6px rgba(255,255,255,0.9)}
+  .sensor-chip--triggered{background:rgba(255,23,23,0.95);animation:chip-pulse 1s ease-in-out infinite}
+  /* Cerrado (ok) */
+  .sensor-chip--closed{background:rgba(20,20,20,0.55);color:#fff}
+  .sensor-chip--closed .sensor-chip-dot{background:#4cff72;box-shadow:0 0 5px rgba(76,255,114,0.8)}
+  /* En temas claros HA, forzar texto legible */
+  :host-context(.light-theme) .sensor-chip--closed,
+  :host-context([data-theme="default"]) .sensor-chip--closed{background:rgba(240,240,240,0.75);color:#111}
+  :host-context(.light-theme) .sensor-chip--open,
+  :host-context([data-theme="default"]) .sensor-chip--open{background:rgba(211,47,47,0.85);color:#fff}
+  @keyframes chip-pulse{0%,100%{opacity:1}50%{opacity:0.6}}
+
+
   /* HUD Overlay */
   .hud{position:absolute;top:20px;right:24px;text-align:right;z-index:3;color:var(--hud-text-color);text-shadow:var(--text-shadow);display:flex;flex-direction:column;gap:4px}
   .hud-loc{font-size:13px;font-weight:900;text-transform:uppercase;opacity:1;letter-spacing:1.5px;background:var(--hud-bg);padding:4px 12px;border-radius:10px;backdrop-filter:blur(5px);border:1px solid rgba(255,255,255,0.1);align-self:flex-end}
@@ -1212,7 +1231,7 @@ class ArgusPanel extends HTMLElement {
       const live  = this._hass?.states[e.entity_id]?.state;
       const state = live || e.state || 'unavailable';
       const triggered = state === 'triggered';
-      const fullHudLoc = this._homeName || this._hass?.config?.location_name || 'Hogar'; // v0.9.33 Fix #3: _homeNameProminent → _homeName
+      const fullHudLoc = this._homeName || this._hass?.config?.location_name || 'Hogar';
 
       // Icon Selection
       let svgName = 'mode_disarmed.svg';
@@ -1221,7 +1240,6 @@ class ArgusPanel extends HTMLElement {
       else if (state === 'armed_night') svgName = 'mode_night.svg';
       else if (state === 'armed_vacation') svgName = 'mode_vacation.svg';
 
-      // v0.9.33 Fix #2: Mostrar píldoras de sensores activos debajo de la hora
       const mKey = state.replace('armed_', '');
       const eCfg = (this._ui?.modes?.__by_entity__?.[e.entity_id]?.[mKey])
                 || (this._ui?.modes?.[mKey]) || {};
@@ -1229,15 +1247,6 @@ class ArgusPanel extends HTMLElement {
       const sByps = eCfg.bypassed_sensors || [];
       const activeSensors = sList.filter(s => !sByps.includes(s));
       const OPEN = ['on', 'open', 'unlocked', 'recording', 'active', 'motion'];
-      const openHtml = activeSensors.map(sid => {
-        const sObj = this._hass?.states[sid];
-        if (sObj && OPEN.includes(sObj.state)) {
-          return `<div class="sensor-pill-big ${triggered ? 'triggered-sensor' : ''}" style="margin-bottom:10px; font-size:17px; font-weight:800; padding:12px 18px; border-radius:18px; border:1px solid rgba(255,255,255,0.2); background:var(--hud-bg); backdrop-filter:blur(12px); color:var(--hud-text-color); text-shadow:var(--text-shadow); display:inline-flex; align-items:center; gap:10px; letter-spacing:0.5px; box-shadow:0 4px 12px rgba(0,0,0,0.2)">
-            <span class="pill-dot open" style="width:14px; height:14px; box-shadow:0 0 8px #ff5252"></span> ${sObj.attributes.friendly_name || sid}
-          </div>`;
-        }
-        return '';
-      }).join('');
 
       return `
         <article class="entry" style="${triggered ? 'border:3px solid #ff5252;box-shadow:0 0 30px rgba(255,82,82,.4)' : ''}">
@@ -1246,8 +1255,6 @@ class ArgusPanel extends HTMLElement {
           <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="Pantalla completa" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>
 
           ${this._renderBatteryAlerts()}
-          
-          ${openHtml ? `<div style="position:absolute;top:20px;left:24px;right:180px;display:flex;flex-direction:column;align-items:flex-start;z-index:4;pointer-events:none">${openHtml}</div>` : ''}
           
           <div class="hud">
             <div class="hud-loc">${fullHudLoc}</div>
@@ -1269,6 +1276,20 @@ class ArgusPanel extends HTMLElement {
             <div class="entry-icon">
               ${triggered ? '<div style="font-size:100px;filter:drop-shadow(0 0 30px #f00)">🚨</div>' : `<img src="/api/argus_static/${svgName}?v=1.0.0">`}
             </div>
+
+            ${activeSensors.length ? `
+            <div class="sensor-column">
+              ${activeSensors.map(sid => {
+                const s = this._hass?.states[sid];
+                if (!s) return '';
+                const isOpen = OPEN.includes(s.state);
+                const name = s.attributes?.friendly_name || sid.split('.')[1] || sid;
+                const shortName = name.length > 16 ? name.slice(0, 15) + '…' : name;
+                return `<div class="sensor-chip ${isOpen ? 'sensor-chip--open' + (triggered ? ' sensor-chip--triggered' : '') : 'sensor-chip--closed'}">
+                  <span class="sensor-chip-dot"></span>${shortName}
+                </div>`;
+              }).join('')}
+            </div>` : ''}
           </div>
         </article>`;
     }).join('');
