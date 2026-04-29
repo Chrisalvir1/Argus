@@ -47,7 +47,6 @@ from .const import (
     CONF_SENSORS_VACATION,
     CONF_ENTRY_SENSORS,
     CONF_SIREN_ENTITY,
-    CONF_LINKED_ALARM_ENTITY,
     CONF_MQTT_ENABLED,
     CONF_MQTT_TOPIC_STATE,
     CONF_MQTT_TOPIC_COMMAND,
@@ -118,13 +117,11 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         # Tracking
         self._unsub_sensors = None
-        self._unsub_linked = None
         self._triggered_by: str | None = None
         self._mqtt_unsub = None
         
         # UI/Mode config
         self._ui_config = {}
-                self._arm_lock_until: float = 0.0   # monotonic: bloquear re-arm externo hasta esta hora
 
     async def _get_context_user(self) -> str:
         """Get the user name from the current context."""
@@ -164,7 +161,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._sensors_vacation = d.get(CONF_SENSORS_VACATION, self._sensors_away)
         self._entry_sensors = d.get(CONF_ENTRY_SENSORS, [])
         self._siren_entity = d.get(CONF_SIREN_ENTITY)
-                
+        
         self._mqtt_enabled = d.get(CONF_MQTT_ENABLED, False)
         self._mqtt_topic_state = d.get(CONF_MQTT_TOPIC_STATE, "argus/alarm/state")
         self._mqtt_topic_command = d.get(CONF_MQTT_TOPIC_COMMAND, "argus/alarm/set")
@@ -354,12 +351,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 self.hass, all_sensors, self._async_sensor_changed
             )
 
-        # Subscribe to linked alarm (HomeKit/Aqara)
-        if self._linked_alarm:
-            self._unsub_linked = async_track_state_change_event(
-                self.hass, [self._linked_alarm], self._async_linked_alarm_changed
-            )
-
         # MQTT
         if self._mqtt_enabled:
             await self._async_setup_mqtt()
@@ -466,82 +457,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 )
 
 
-    async def _async_linked_alarm_changed(self, event):
-        """Update Argus state when the linked alarm (HomeKit/Aqara) changes.
-        
-        v0.9.53 — Regla simple: el linked alarm SOLO puede cambiar Argus
-        si Argus está DESARMADO. En cualquier otro estado, Argus manda
-        y el linked alarm obedece.
-        """
-        if self._syncing_linked:
-            return
-
-        new_state = event.data.get("new_state")
-        if new_state is None:
-            return
-
-        try:
-            target_state = AlarmControlPanelState(new_state.state)
-        except ValueError:
-            _LOGGER.warning("Argus: Ignorando estado desconocido del linked alarm: %s", new_state.state)
-            return
-
-        if target_state == self._alarm_state:
-            return
-
-        # ── REGLA CLAVE: solo aceptar cambios del linked alarm cuando
-        # Argus está completamente desarmado. En cualquier otro caso
-        # (armado, armando, pendiente, triggered) Argus es la autoridad.
-        if self._alarm_state != AlarmControlPanelState.DISARMED:
-            _LOGGER.info(
-                "Argus: Ignorando cambio del linked alarm (%s → %s) porque Argus está en %s",
-                self._linked_alarm, target_state, self._alarm_state
-            )
-            return
-
-        _LOGGER.info("Argus: Sincronizando DESDE linked alarm %s → %s", self._linked_alarm, target_state)
-        
-        self._syncing_linked = True
-        try:
-            if target_state == AlarmControlPanelState.DISARMED:
-                await self.async_alarm_disarm()
-            elif target_state == AlarmControlPanelState.ARMED_HOME:
-                await self.async_alarm_arm_home()
-            elif target_state == AlarmControlPanelState.ARMED_AWAY:
-                await self.async_alarm_arm_away()
-            elif target_state == AlarmControlPanelState.ARMED_NIGHT:
-                await self.async_alarm_arm_night()
-            elif target_state == AlarmControlPanelState.ARMED_VACATION:
-                await self.async_alarm_arm_vacation()
-        finally:
-            
-    async def _async_sync_to_linked(self, state: AlarmControlPanelState):
-        """Push Argus state change to the linked alarm entity."""
-        if not self._linked_alarm or self._syncing_linked:
-            return
-            
-        _LOGGER.info("Argus: Sincronizando HACIA linked alarm %s → %s", self._linked_alarm, state)
-        self._syncing_linked = True
-        
-        domain = "alarm_control_panel"
-        service = "alarm_disarm"
-        if state == AlarmControlPanelState.ARMED_HOME:
-            service = "alarm_arm_home"
-        elif state == AlarmControlPanelState.ARMED_AWAY:
-            service = "alarm_arm_away"
-        elif state == AlarmControlPanelState.ARMED_NIGHT:
-            service = "alarm_arm_night"
-        elif state == AlarmControlPanelState.ARMED_VACATION:
-            service = "alarm_arm_vacation"
-            
-        try:
-            await self.hass.services.async_call(
-                domain, service, {"entity_id": self._linked_alarm}, blocking=False
-            )
-        except Exception as e:
-            _LOGGER.error("Argus: Failed to sync to linked alarm: %s", e)
-        finally:
-            
     async def async_will_remove_from_hass(self) -> None:
         if self._unsub_sensors:
             self._unsub_sensors()
@@ -877,6 +792,22 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         # después de armar, EXCEPTO si el usuario quiere cambiar deliberadamente
         # (lo cual se detecta porque cambia a un modo DIFERENTE de armed_home).
         #
+        # Apple Home sincroniza todos los accesorios de seguridad. Si Aqara
+        # no soporta away/night, Apple Home puede forzar armed_home en todos.
+        # El lock solo bloquea ese forced-armed_home.
+        if (
+            self._alarm_state in ARMED_STATES
+            and target == AlarmControlPanelState.ARMED_HOME
+            and self._alarm_state != AlarmControlPanelState.ARMED_HOME
+            and _time.monotonic() < self._arm_lock_until
+        ):
+            _LOGGER.info(
+                "Argus: ARM-LOCK — bloqueando armed_home forzado (modo=%s, quedan %.0fs)",
+                self._alarm_state, self._arm_lock_until - _time.monotonic(),
+            )
+            # NO hacer async_write_ha_state aquí — evita loops con HomeKit
+            return
+
         if self._alarm_state == target:
             return
 
