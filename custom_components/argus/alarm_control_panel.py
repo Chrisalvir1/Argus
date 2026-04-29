@@ -121,6 +121,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._unsub_linked = None
         self._triggered_by: str | None = None
         self._mqtt_unsub = None
+        self._sync_cooldown_until: float = 0.0  # epoch time until linked sync is blocked
         
         # UI/Mode config
         self._ui_config = {}
@@ -468,42 +469,51 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
 
     async def _async_linked_alarm_changed(self, event):
-        """Update Argus state when the linked alarm (HomeKit/Aqara) changes."""
+        """Update Argus state when the linked alarm (HomeKit/Aqara) changes.
+        
+        Argus es la AUTORIDAD. El linked alarm solo puede influenciar a Argus
+        cuando Argus está desarmado y no está en medio de una operación propia.
+        Si Argus acaba de cambiar su estado (cooldown), se ignora el linked alarm.
+        """
+        import time
         if self._syncing_linked:
             return
 
+        # Si Argus cambió su estado recientemente, ignorar el linked alarm (evita override)
+        if time.monotonic() < self._sync_cooldown_until:
+            _LOGGER.debug(
+                "Argus: Ignorando linked alarm (dentro de cooldown) — estado_linked=%s",
+                event.data.get("new_state", {}).state if event.data.get("new_state") else "?"
+            )
+            return
+
         new_state = event.data.get("new_state")
-        old_state = event.data.get("old_state")
         if new_state is None:
             return
 
         try:
             target_state = AlarmControlPanelState(new_state.state)
         except ValueError:
-            _LOGGER.warning("Argus: Ignoring unknown linked alarm state: %s", new_state.state)
+            _LOGGER.warning("Argus: Ignorando estado desconocido del linked alarm: %s", new_state.state)
             return
 
         if target_state == self._alarm_state:
             return
 
-        # FIX: Prevenir reset de timers si el linked_alarm confirma el target mode durante el ARMING
-        if self._alarm_state == AlarmControlPanelState.ARMING and target_state == self._arming_target:
-            _LOGGER.info("Argus: Linked alarm confirmed target mode %s, finishing arming early.", target_state)
-            self._cancel_timers()
-            self._alarm_state = target_state
-            self.async_write_ha_state()
-            self.hass.async_create_task(self._async_mqtt_publish())
+        # Solo sincronizar desde linked si Argus está DISARMED o TRIGGERED
+        # (es decir, el usuario inició la acción desde HomeKit/físico, no desde Argus)
+        if self._alarm_state not in (
+            AlarmControlPanelState.DISARMED,
+            AlarmControlPanelState.TRIGGERED,
+        ):
+            _LOGGER.info(
+                "Argus: Ignorando cambio del linked alarm (%s) porque Argus ya está en %s",
+                target_state, self._alarm_state
+            )
             return
 
-        # FIX: Si el linked_alarm es rechazado/falla y se queda en DISARMED, no revertir Argus si estamos ARMING
-        if target_state == AlarmControlPanelState.DISARMED and self._alarm_state == AlarmControlPanelState.ARMING:
-            if old_state and old_state.state == "disarmed":
-                _LOGGER.warning("Argus: Linked alarm rejected arming and stayed disarmed. Ignoring revert.")
-                return
-
-        _LOGGER.info("Argus: Syncing FROM linked alarm %s -> %s", self._linked_alarm, target_state)
+        _LOGGER.info("Argus: Sincronizando DESDE linked alarm %s -> %s", self._linked_alarm, target_state)
         
-        # Set flag before calling services and keep it until work is dispatched
         self._syncing_linked = True
         try:
             if target_state == AlarmControlPanelState.DISARMED:
@@ -521,10 +531,15 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     async def _async_sync_to_linked(self, state: AlarmControlPanelState):
         """Push Argus state change to the linked alarm entity."""
+        import time
         if not self._linked_alarm or self._syncing_linked:
             return
+        
+        # Activar cooldown de 10 segundos para que el linked alarm no pueda
+        # sobreescribir el modo que Argus acaba de establecer
+        self._sync_cooldown_until = time.monotonic() + 10.0
             
-        _LOGGER.info("Argus: Syncing to linked alarm %s -> %s", self._linked_alarm, state)
+        _LOGGER.info("Argus: Sincronizando HACIA linked alarm %s -> %s", self._linked_alarm, state)
         self._syncing_linked = True
         
         domain = "alarm_control_panel"
