@@ -121,7 +121,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._unsub_linked = None
         self._triggered_by: str | None = None
         self._mqtt_unsub = None
-        self._sync_cooldown_until: float = 0.0  # epoch time until linked sync is blocked
         
         # UI/Mode config
         self._ui_config = {}
@@ -471,20 +470,11 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     async def _async_linked_alarm_changed(self, event):
         """Update Argus state when the linked alarm (HomeKit/Aqara) changes.
         
-        Argus es la AUTORIDAD. El linked alarm solo puede influenciar a Argus
-        cuando Argus está desarmado y no está en medio de una operación propia.
-        Si Argus acaba de cambiar su estado (cooldown), se ignora el linked alarm.
+        v0.9.53 — Regla simple: el linked alarm SOLO puede cambiar Argus
+        si Argus está DESARMADO. En cualquier otro estado, Argus manda
+        y el linked alarm obedece.
         """
-        import time
         if self._syncing_linked:
-            return
-
-        # Si Argus cambió su estado recientemente, ignorar el linked alarm (evita override)
-        if time.monotonic() < self._sync_cooldown_until:
-            _LOGGER.debug(
-                "Argus: Ignorando linked alarm (dentro de cooldown) — estado_linked=%s",
-                event.data.get("new_state", {}).state if event.data.get("new_state") else "?"
-            )
             return
 
         new_state = event.data.get("new_state")
@@ -500,19 +490,17 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         if target_state == self._alarm_state:
             return
 
-        # Solo sincronizar desde linked si Argus está DISARMED o TRIGGERED
-        # (es decir, el usuario inició la acción desde HomeKit/físico, no desde Argus)
-        if self._alarm_state not in (
-            AlarmControlPanelState.DISARMED,
-            AlarmControlPanelState.TRIGGERED,
-        ):
+        # ── REGLA CLAVE: solo aceptar cambios del linked alarm cuando
+        # Argus está completamente desarmado. En cualquier otro caso
+        # (armado, armando, pendiente, triggered) Argus es la autoridad.
+        if self._alarm_state != AlarmControlPanelState.DISARMED:
             _LOGGER.info(
-                "Argus: Ignorando cambio del linked alarm (%s) porque Argus ya está en %s",
-                target_state, self._alarm_state
+                "Argus: Ignorando cambio del linked alarm (%s → %s) porque Argus está en %s",
+                self._linked_alarm, target_state, self._alarm_state
             )
             return
 
-        _LOGGER.info("Argus: Sincronizando DESDE linked alarm %s -> %s", self._linked_alarm, target_state)
+        _LOGGER.info("Argus: Sincronizando DESDE linked alarm %s → %s", self._linked_alarm, target_state)
         
         self._syncing_linked = True
         try:
@@ -531,15 +519,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     async def _async_sync_to_linked(self, state: AlarmControlPanelState):
         """Push Argus state change to the linked alarm entity."""
-        import time
         if not self._linked_alarm or self._syncing_linked:
             return
-        
-        # Activar cooldown de 10 segundos para que el linked alarm no pueda
-        # sobreescribir el modo que Argus acaba de establecer
-        self._sync_cooldown_until = time.monotonic() + 10.0
             
-        _LOGGER.info("Argus: Sincronizando HACIA linked alarm %s -> %s", self._linked_alarm, state)
+        _LOGGER.info("Argus: Sincronizando HACIA linked alarm %s → %s", self._linked_alarm, state)
         self._syncing_linked = True
         
         domain = "alarm_control_panel"
