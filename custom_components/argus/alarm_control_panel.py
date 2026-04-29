@@ -122,7 +122,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         
         # UI/Mode config
         self._ui_config = {}
-        self._arm_lock_until: float = 0.0
 
     async def _get_context_user(self) -> str:
         """Get the user name from the current context."""
@@ -766,7 +765,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         # code=None o code=""  → sin código → permitir siempre.
         # code="1984"          → PIN correcto → permitir.
         # code="0000"          → PIN incorrecto → rechazar.
-        if self._code and not self._syncing_linked and bool(code) and not self._validate_code(code):
+        if self._code and bool(code) and not self._validate_code(code):
             _LOGGER.warning("Argus: Disarm rejected — invalid code")
             await async_append_audit_log(self.hass, "disarm_rejected", "Invalid code", user="Argus")
             return
@@ -775,35 +774,16 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         # para que _get_siren_entities pueda resolver el modo via _triggered_mode
         await self._async_siren(False)
         self._triggered_mode = None
-        self._arm_lock_until = 0.0  # liberar el lock al desarmar
         self._alarm_state = AlarmControlPanelState.DISARMED
         self._triggered_by = None
         self.async_write_ha_state()
         await self._async_mqtt_publish()
-        await self._async_sync_to_linked(AlarmControlPanelState.DISARMED)
         self.hass.async_create_task(self._evaluate_automations("disarmed"))
         await async_append_audit_log(self.hass, "disarmed", "Sistema desarmado", user=await self._get_context_user())
         _LOGGER.info("Argus: Disarmed")
 
     async def _async_arm(self, target: AlarmControlPanelState, code=None) -> None:
         import time as _time
-
-        # ── ARM-LOCK (Anti-Rebote HomeKit) ─────────────────────────
-        # HomeKit tiene un comportamiento donde si hay otra alarma agrupada (Aqara)
-        # que no soporta Away/Night, HomeKit fuerza a TODAS las alarmas a "Home".
-        # Para evitar que HomeKit "salte" Argus de regreso a Home, bloqueamos
-        # cualquier orden de ir a "Home" durante 60 segundos si Argus acaba
-        # de ser puesto en Away, Night o Vacation.
-        if (
-            self._alarm_state in ARMED_STATES
-            and self._alarm_state != AlarmControlPanelState.ARMED_HOME
-            and target == AlarmControlPanelState.ARMED_HOME
-            and getattr(self, "_arm_lock_until", 0) > _time.monotonic()
-        ):
-            _LOGGER.warning("Argus: ARM-LOCK bloqueó intento de forzar modo Casa. Manteniendo %s", self._alarm_state)
-            # RE-PUBLICAR ESTADO: Esto le dice a HomeKit que no aceptamos el cambio y forzamos su UI a regresar a nuestro estado real.
-            self.async_write_ha_state()
-            return
 
         if self._alarm_state == target:
             return
@@ -890,12 +870,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         # Sin ARMING intermedio, sin delays. El usuario lo pidió explícitamente.
         self._alarm_state = target
         self.async_write_ha_state()
-
-        # Activar el ARM-LOCK por 60s si el nuevo modo NO es Casa.
-        if target != AlarmControlPanelState.ARMED_HOME:
-            self._arm_lock_until = _time.monotonic() + 60.0
-        else:
-            self._arm_lock_until = 0.0
 
         await self._async_mqtt_publish()
 
