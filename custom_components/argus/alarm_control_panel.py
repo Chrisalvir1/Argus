@@ -124,8 +124,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         
         # UI/Mode config
         self._ui_config = {}
-        self._syncing_linked = False
-        self._arm_lock_until: float = 0.0   # monotonic: bloquear re-arm externo hasta esta hora
+                self._arm_lock_until: float = 0.0   # monotonic: bloquear re-arm externo hasta esta hora
 
     async def _get_context_user(self) -> str:
         """Get the user name from the current context."""
@@ -165,8 +164,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._sensors_vacation = d.get(CONF_SENSORS_VACATION, self._sensors_away)
         self._entry_sensors = d.get(CONF_ENTRY_SENSORS, [])
         self._siren_entity = d.get(CONF_SIREN_ENTITY)
-        self._linked_alarm = d.get(CONF_LINKED_ALARM_ENTITY)
-        
+                
         self._mqtt_enabled = d.get(CONF_MQTT_ENABLED, False)
         self._mqtt_topic_state = d.get(CONF_MQTT_TOPIC_STATE, "argus/alarm/state")
         self._mqtt_topic_command = d.get(CONF_MQTT_TOPIC_COMMAND, "argus/alarm/set")
@@ -516,8 +514,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             elif target_state == AlarmControlPanelState.ARMED_VACATION:
                 await self.async_alarm_arm_vacation()
         finally:
-            self._syncing_linked = False
-
+            
     async def _async_sync_to_linked(self, state: AlarmControlPanelState):
         """Push Argus state change to the linked alarm entity."""
         if not self._linked_alarm or self._syncing_linked:
@@ -544,8 +541,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         except Exception as e:
             _LOGGER.error("Argus: Failed to sync to linked alarm: %s", e)
         finally:
-            self._syncing_linked = False
-
+            
     async def async_will_remove_from_hass(self) -> None:
         if self._unsub_sensors:
             self._unsub_sensors()
@@ -881,22 +877,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         # después de armar, EXCEPTO si el usuario quiere cambiar deliberadamente
         # (lo cual se detecta porque cambia a un modo DIFERENTE de armed_home).
         #
-        # Apple Home sincroniza todos los accesorios de seguridad. Si Aqara
-        # no soporta away/night, Apple Home puede forzar armed_home en todos.
-        # El lock solo bloquea ese forced-armed_home.
-        if (
-            self._alarm_state in ARMED_STATES
-            and target == AlarmControlPanelState.ARMED_HOME
-            and self._alarm_state != AlarmControlPanelState.ARMED_HOME
-            and _time.monotonic() < self._arm_lock_until
-        ):
-            _LOGGER.info(
-                "Argus: ARM-LOCK — bloqueando armed_home forzado (modo=%s, quedan %.0fs)",
-                self._alarm_state, self._arm_lock_until - _time.monotonic(),
-            )
-            # NO hacer async_write_ha_state aquí — evita loops con HomeKit
-            return
-
         if self._alarm_state == target:
             return
 
@@ -983,25 +963,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._alarm_state = target
         self.async_write_ha_state()
 
-        # ARM-LOCK: bloquear armed_home forzado por 60 segundos.
-        # Solo se activa cuando el modo NO es armed_home.
-        # Esto bloquea el fallback de Apple Home / Aqara.
-        if target != AlarmControlPanelState.ARMED_HOME:
-            self._arm_lock_until = _time.monotonic() + 60.0
-            _LOGGER.info("Argus: ARM-LOCK 60s (modo=%s)", target)
-        else:
-            self._arm_lock_until = 0.0
-
         await self._async_mqtt_publish()
-
-        # Solo sincronizar a linked alarm si Aqara soporta el modo.
-        # Aqara solo soporta armed_home y disarmed.
-        # Si enviamos away/night, Aqara cae a armed_home y Apple Home
-        # fuerza armed_home en TODOS los accesorios, creando el loop.
-        if target in (AlarmControlPanelState.ARMED_HOME, AlarmControlPanelState.DISARMED):
-            await self._async_sync_to_linked(target)
-        else:
-            _LOGGER.info("Argus: Modo %s no se sincroniza a Aqara (no soportado)", target)
 
         self.hass.async_create_task(self._evaluate_automations("armed", target=target))
         await async_append_audit_log(self.hass, "armed", f"Modo: {_MODE_LABELS.get(target.value, target.value)}", user=await self._get_context_user())
