@@ -5,7 +5,7 @@
 
   **El Sistema de Seguridad Premium para Home Assistant**
 
-  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-0.9.33-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
+  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-0.9.64-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
   [![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)](https://www.home-assistant.io/)
   [![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)](https://hacs.xyz/)
 
@@ -18,15 +18,14 @@
 
 ---
 
-## ✨ Novedades y Correcciones Críticas (v0.9.33)
+## ✨ Novedades y Correcciones Críticas (v0.9.64)
 
-Esta versión incluye la mayor actualización de estabilidad y UI hasta la fecha:
+Esta versión incluye mejoras críticas de estabilidad y rendimiento:
 
-*   **🚨 Fix Crítico de Sirenas (Backend)**: Garantiza que las sirenas (incluso enchufes y luces Tuya/Matter) siempre suenen como *fallback* universal, independientemente si la alarma se disparó vía sensor o por pánico.
-*   **🔓 Píldoras de Sensores en el HUD Principal**: Ahora puedes ver qué sensores específicos están abiertos (`Abierto`/`Activado`) directamente debajo del reloj central, sin tener que ir a los ajustes. Si la alarma se dispara, el sensor causante parpadea en rojo al instante.
-*   **🛠️ Interfaz Liquid Glass Mejorada**: Efectos *blur* perfeccionados para la visibilidad de los títulos en modo claro y corrección del nombre del hogar centralizado y editable desde ajustes.
-*   **🚨 Botón SOS / Pánico (Gestos Fix)**: Botón de emergencia con *slider* deslizante iOS-style. Se ha corregido un bug donde el drag-and-drop se perdía tras la recarga del panel.
-*   **🧹 Limpieza Inmediata de Historial**: El borrado del registro de actividad (*Audit Log*) ahora tiene un efecto instantáneo en pantalla limpiando la caché local.
+*   **⚡ 0 Retrasos e Instantaneidad**: Se ha eliminado el estado *ARMING* y cualquier delay artificial. Los cambios de modo son 100% inmediatos.
+*   **🛡️ Blindaje Anti-Rebote**: Implementación de un sistema inteligente que evita que HomeKit revierta el estado de la alarma a "En Casa" por conflictos con otros dispositivos (como hubs Aqara).
+*   **🧹 Limpieza de Código**: Eliminación completa de la vinculación forzada con hubs externos (linked_alarm) para garantizar que Argus funcione de manera independiente y sin errores de sincronización.
+*   **🪲 Fix de Congelamiento**: Corregido un bug crítico que provocaba que el panel dejara de responder al intentar desarmar el sistema.
 
 ---
 
