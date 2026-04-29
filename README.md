@@ -20,7 +20,7 @@
 
 ## ✨ Novedades y Correcciones Críticas (v0.9.66)
 
-Arreglo de ruta de logo para HACS y eliminación de emoji de escudo.
+Cambios de disenos FIN
 ---
 
 ## 🚀 Características Principales
