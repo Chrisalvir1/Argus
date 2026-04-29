@@ -876,27 +876,41 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     async def _async_arm(self, target: AlarmControlPanelState, code=None) -> None:
         import time as _time
 
-        # ── ARM-LOCK: si Argus ya está armado en un modo específico y se
-        # llamó desde fuera (automatización Aqara, HomeKit round-trip) con
-        # un modo DISTINTO, ignorar durante la ventana de bloqueo.
-        # Se permite:
-        #   • Mismo modo (idempotente) → sin-op silencioso
-        #   • Cambio de modo despues de que expira el lock → siempre OK
-        #   • DISARMED no tiene lock (desarmar siempre funciona)
-        if self._alarm_state in ARMED_STATES and target != self._alarm_state:
-            if _time.monotonic() < self._arm_lock_until:
-                _LOGGER.info(
-                    "Argus: ARM-LOCK activo — ignorando cambio de modo %s → %s (lock expira en %.1fs)",
-                    self._alarm_state, target,
-                    self._arm_lock_until - _time.monotonic(),
-                )
-                # Rebroadcast nuestro estado real para corregir cualquier entidad externa confundida
-                self.async_write_ha_state()
-                return
+        # ── ARM-LOCK INTELIGENTE ────────────────────────────────────────
+        # El problema: Aqara M2 no soporta todos los modos, y cuando Argus
+        # sincroniza a Aqara (ej: armed_away), Aqara responde con armed_home.
+        # Eso dispara _async_linked_alarm_changed o automatizaciones que
+        # llaman alarm_arm_home en Argus, sobreescribiendo el modo elegido.
+        #
+        # Solución específica: SOLO bloquear si:
+        #   1. Argus ya está armado en un modo X
+        #   2. Alguien intenta cambiar a armed_HOME (el fallback de Aqara)
+        #   3. Y el modo actual NO es armed_home (evitar idempotencia)
+        #   4. Y el lock está activo (5s desde el último armado)
+        #
+        # El usuario SÍ puede cambiar libremente entre modos (away→night, etc.)
+        # porque esos cambios NO son el fallback de Aqara.
+        is_aqara_fallback = (
+            self._alarm_state in ARMED_STATES
+            and self._alarm_state != AlarmControlPanelState.ARMED_HOME
+            and target == AlarmControlPanelState.ARMED_HOME
+            and _time.monotonic() < self._arm_lock_until
+        )
+        if is_aqara_fallback:
+            _LOGGER.info(
+                "Argus: ARM-LOCK — ignorando fallback armed_home de Aqara (modo actual=%s, lock %.1fs restante)",
+                self._alarm_state, self._arm_lock_until - _time.monotonic(),
+            )
+            self.async_write_ha_state()  # rebroadcast estado real
+            return
 
         if self._alarm_state == target:
             # Idempotente: ya está en ese modo, no hacer nada
             return
+
+        # Si viene de un estado armado a otro, resetear el lock para el nuevo modo
+        if self._alarm_state in ARMED_STATES and target in ARMED_STATES:
+            self._arm_lock_until = 0.0  # se reactivará al final
 
         if self._code_arm_required and not self._validate_code(code):
             _LOGGER.warning("Argus: Arm rejected — invalid code")

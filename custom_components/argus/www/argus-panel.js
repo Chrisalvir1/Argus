@@ -296,26 +296,18 @@ _tmpl.innerHTML = `
   .entry{position:relative;overflow:hidden;border-radius:24px;border:1px solid rgba(255,255,255,0.1);margin-bottom:16px;min-height:220px;display:flex;flex-direction:column;transition:transform 0.3s ease}
   .entry-bg{position:absolute;inset:0;z-index:1;background-size:cover;background-position:center;transition:opacity 0.5s ease}
   .entry-bg img{width:100%;height:100%;object-fit:cover;opacity:0.6}
-  .entry-content{position:relative;z-index:2;flex:1;padding:20px;display:grid;grid-template-columns:140px 1fr auto;gap:16px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.3) 0%, transparent 60%)}
+  .entry-content{position:relative;z-index:2;flex:1;padding:20px 140px 20px 20px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.3) 0%, transparent 60%)}
   
-  /* Sensor column — right side, compact pills */
-  .sensor-column{display:flex;flex-direction:column;gap:6px;align-items:flex-end;justify-content:center;max-width:140px;min-width:80px;overflow:hidden}
-  .sensor-chip{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:136px;backdrop-filter:blur(12px);border:1px solid rgba(0,0,0,0.15);box-shadow:0 2px 6px rgba(0,0,0,0.25);transition:opacity 0.2s}
-  .sensor-chip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-  /* Abierto (alerta) */
-  .sensor-chip--open{background:rgba(255,82,82,0.85);color:#fff}
-  .sensor-chip--open .sensor-chip-dot{background:#fff;box-shadow:0 0 6px rgba(255,255,255,0.9)}
-  .sensor-chip--triggered{background:rgba(255,23,23,0.95);animation:chip-pulse 1s ease-in-out infinite}
-  /* Cerrado (ok) */
-  .sensor-chip--closed{background:rgba(20,20,20,0.55);color:#fff}
-  .sensor-chip--closed .sensor-chip-dot{background:#4cff72;box-shadow:0 0 5px rgba(76,255,114,0.8)}
-  /* En temas claros HA, forzar texto legible */
-  :host-context(.light-theme) .sensor-chip--closed,
-  :host-context([data-theme="default"]) .sensor-chip--closed{background:rgba(240,240,240,0.75);color:#111}
-  :host-context(.light-theme) .sensor-chip--open,
-  :host-context([data-theme="default"]) .sensor-chip--open{background:rgba(211,47,47,0.85);color:#fff}
-  @keyframes chip-pulse{0%,100%{opacity:1}50%{opacity:0.6}}
-
+  /* Sensor column — franja derecha absoluta, nunca tapa botones ni icono */
+  .sensor-column{position:absolute;right:0;top:0;bottom:0;width:130px;z-index:4;display:flex;flex-direction:column;gap:5px;align-items:flex-end;justify-content:center;padding:12px 10px 12px 0;overflow:hidden;pointer-events:none}
+  .sensor-chip{display:flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:0.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:125px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.15);box-shadow:0 2px 8px rgba(0,0,0,0.35);transition:opacity 0.2s}
+  .sensor-chip-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+  .sensor-chip--open{background:rgba(220,50,50,0.88);color:#fff}
+  .sensor-chip--open .sensor-chip-dot{background:#fff;box-shadow:0 0 5px rgba(255,255,255,0.9)}
+  .sensor-chip--triggered{background:rgba(255,10,10,0.95);animation:chip-pulse 0.9s ease-in-out infinite}
+  .sensor-chip--closed{background:rgba(15,15,15,0.62);color:#e8e8e8}
+  .sensor-chip--closed .sensor-chip-dot{background:#44ff66;box-shadow:0 0 5px rgba(68,255,102,0.8)}
+  @keyframes chip-pulse{0%,100%{opacity:1}50%{opacity:0.55}}
 
   /* HUD Overlay */
   .hud{position:absolute;top:20px;right:24px;text-align:right;z-index:3;color:var(--hud-text-color);text-shadow:var(--text-shadow);display:flex;flex-direction:column;gap:4px}
