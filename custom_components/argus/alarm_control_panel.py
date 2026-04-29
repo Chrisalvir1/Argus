@@ -122,6 +122,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         
         # UI/Mode config
         self._ui_config = {}
+        self._arm_lock_until: float = 0.0
 
     async def _get_context_user(self) -> str:
         """Get the user name from the current context."""
@@ -787,25 +788,21 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     async def _async_arm(self, target: AlarmControlPanelState, code=None) -> None:
         import time as _time
 
-        # ── ARM-LOCK v0.9.59 ─────────────────────────────────────────────
-        # Bloquea CUALQUIER cambio de modo durante los primeros 30 segundos
-        # después de armar, EXCEPTO si el usuario quiere cambiar deliberadamente
-        # (lo cual se detecta porque cambia a un modo DIFERENTE de armed_home).
-        #
-        # Apple Home sincroniza todos los accesorios de seguridad. Si Aqara
-        # no soporta away/night, Apple Home puede forzar armed_home en todos.
-        # El lock solo bloquea ese forced-armed_home.
+        # ── ARM-LOCK (Anti-Rebote HomeKit) ─────────────────────────
+        # HomeKit tiene un comportamiento donde si hay otra alarma agrupada (Aqara)
+        # que no soporta Away/Night, HomeKit fuerza a TODAS las alarmas a "Home".
+        # Para evitar que HomeKit "salte" Argus de regreso a Home, bloqueamos
+        # cualquier orden de ir a "Home" durante 60 segundos si Argus acaba
+        # de ser puesto en Away, Night o Vacation.
         if (
             self._alarm_state in ARMED_STATES
-            and target == AlarmControlPanelState.ARMED_HOME
             and self._alarm_state != AlarmControlPanelState.ARMED_HOME
-            and _time.monotonic() < self._arm_lock_until
+            and target == AlarmControlPanelState.ARMED_HOME
+            and getattr(self, "_arm_lock_until", 0) > _time.monotonic()
         ):
-            _LOGGER.info(
-                "Argus: ARM-LOCK — bloqueando armed_home forzado (modo=%s, quedan %.0fs)",
-                self._alarm_state, self._arm_lock_until - _time.monotonic(),
-            )
-            # NO hacer async_write_ha_state aquí — evita loops con HomeKit
+            _LOGGER.warning("Argus: ARM-LOCK bloqueó intento de forzar modo Casa. Manteniendo %s", self._alarm_state)
+            # RE-PUBLICAR ESTADO: Esto le dice a HomeKit que no aceptamos el cambio y forzamos su UI a regresar a nuestro estado real.
+            self.async_write_ha_state()
             return
 
         if self._alarm_state == target:
@@ -893,6 +890,12 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         # Sin ARMING intermedio, sin delays. El usuario lo pidió explícitamente.
         self._alarm_state = target
         self.async_write_ha_state()
+
+        # Activar el ARM-LOCK por 60s si el nuevo modo NO es Casa.
+        if target != AlarmControlPanelState.ARMED_HOME:
+            self._arm_lock_until = _time.monotonic() + 60.0
+        else:
+            self._arm_lock_until = 0.0
 
         await self._async_mqtt_publish()
 
