@@ -5,7 +5,7 @@
 
   **El Sistema de Seguridad Premium para Home Assistant**
 
-  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-0.9.67-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
+  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-0.9.68-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
   [![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)](https://www.home-assistant.io/)
   [![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)](https://hacs.xyz/)
 
@@ -18,16 +18,17 @@
 
 ---
 
-## ✨ Novedades y Correcciones Críticas (v0.9.67)
+## ✨ Novedades y Correcciones Críticas (v0.9.68)
 
-Solución definitiva al rebote de HomeKit hacia modo Casa.
+Solución completa al rebote de HomeKit.
 
-**ARM-LOCK v2** — Sistema de protección anti-rebote completamente reescrito:
-- Cuando activas Ausente, Noche o Vacaciones, Argus levanta un escudo de **120 segundos**
-- Si HomeKit o Aqara intentan forzar el modo Casa durante ese tiempo, Argus **rechaza la orden** y le dice a HomeKit que corrija su interfaz
-- Puedes cambiar libremente entre Ausente, Noche y Vacaciones sin restricción
-- Desarmar siempre funciona sin ningún bloqueo
-- **0 congelamientos** — el error de freeze anterior estaba causado por código de sincronización con Aqara que ya fue eliminado por completo
+**ARM-LOCK v3** — Protección contra TODOS los tipos de rebote de HomeKit:
+- Bloquea intentos externos de forzar **modo Casa** (120 segundos de protección)
+- Bloquea intentos externos de **desarmar automáticamente** (120 segundos de protección)
+- HomeKit a veces envía DISARM cuando no puede sincronizar Aqara en modo Ausente — ahora Argus lo rechaza
+- Cambiar entre Ausente/Noche/Vacaciones sigue siendo libre e instantáneo
+- Desarmar con PIN siempre funciona sin restricción
+- 0 congelamientos, 0 retrasos
 ---
 
 ## 🚀 Características Principales

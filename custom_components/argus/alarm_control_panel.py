@@ -764,6 +764,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         return False
 
     async def async_alarm_disarm(self, code=None) -> None:
+        import time as _time
+
         # Trusted callers (HomeKit, Alexa, automaciones, MQTT) NO envían código → permitir.
         # code=None o code=""  → sin código → permitir siempre.
         # code="1984"          → PIN correcto → permitir.
@@ -772,6 +774,29 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             _LOGGER.warning("Argus: Disarm rejected — invalid code")
             await async_append_audit_log(self.hass, "disarm_rejected", "Invalid code", user="Argus")
             return
+
+        # ── ARM-LOCK v3: Anti-rebote para desarme automático ──────────
+        # HomeKit a veces envía DISARM (en vez de ARM_HOME) cuando no puede
+        # sincronizar Aqara con el modo Away/Night/Vacation.
+        # Bloqueamos desarmes sin código durante los primeros 10 segundos
+        # después de armar en un modo avanzado. Si el usuario realmente
+        # quiere desarmar, puede esperar unos segundos o usar su PIN.
+        if (
+            self._alarm_state in ARMED_STATES
+            and self._alarm_state != AlarmControlPanelState.ARMED_HOME
+            and _time.monotonic() < self._arm_lock_until
+            and not bool(code)  # sin código = probable rebote automático
+        ):
+            _LOGGER.warning(
+                "Argus ARM-LOCK: Bloqueado intento de desarme automático. "
+                "Estado protegido: %s (lock restante: %.0fs)",
+                self._alarm_state,
+                self._arm_lock_until - _time.monotonic(),
+            )
+            # Re-publicar estado real → HomeKit corrige su interfaz
+            self.async_write_ha_state()
+            return
+
         self._cancel_timers()
         # FIX v0.9.31: apagar sirenas ANTES de cambiar estado a DISARMED
         # para que _get_siren_entities pueda resolver el modo via _triggered_mode
