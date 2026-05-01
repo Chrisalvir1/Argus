@@ -5,7 +5,7 @@
 
   **El Sistema de Seguridad Premium para Home Assistant**
 
-  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-0.9.66-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
+  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-0.9.67-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
   [![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)](https://www.home-assistant.io/)
   [![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)](https://hacs.xyz/)
 
@@ -18,9 +18,16 @@
 
 ---
 
-## ✨ Novedades y Correcciones Críticas (v0.9.66)
+## ✨ Novedades y Correcciones Críticas (v0.9.67)
 
-Cambios de disenos FIN
+Solución definitiva al rebote de HomeKit hacia modo Casa.
+
+**ARM-LOCK v2** — Sistema de protección anti-rebote completamente reescrito:
+- Cuando activas Ausente, Noche o Vacaciones, Argus levanta un escudo de **120 segundos**
+- Si HomeKit o Aqara intentan forzar el modo Casa durante ese tiempo, Argus **rechaza la orden** y le dice a HomeKit que corrija su interfaz
+- Puedes cambiar libremente entre Ausente, Noche y Vacaciones sin restricción
+- Desarmar siempre funciona sin ningún bloqueo
+- **0 congelamientos** — el error de freeze anterior estaba causado por código de sincronización con Aqara que ya fue eliminado por completo
 ---
 
 ## 🚀 Características Principales

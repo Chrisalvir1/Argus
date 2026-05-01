@@ -123,6 +123,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         # UI/Mode config
         self._ui_config = {}
 
+        # ARM-LOCK v2: timestamp (monotonic) until which forced-Home is blocked
+        self._arm_lock_until: float = 0.0
+
     async def _get_context_user(self) -> str:
         """Get the user name from the current context."""
         ctx = self._context
@@ -774,6 +777,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         # para que _get_siren_entities pueda resolver el modo via _triggered_mode
         await self._async_siren(False)
         self._triggered_mode = None
+        self._arm_lock_until = 0.0  # liberar lock al desarmar
         self._alarm_state = AlarmControlPanelState.DISARMED
         self._triggered_by = None
         self.async_write_ha_state()
@@ -784,6 +788,31 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     async def _async_arm(self, target: AlarmControlPanelState, code=None) -> None:
         import time as _time
+
+        # ── ARM-LOCK v2 (Anti-Rebote HomeKit) ──────────────────────────
+        # Cuando Argus está en Away/Night/Vacation y algo externo (HomeKit
+        # sincronizando con Aqara) intenta forzarlo a Home dentro de los
+        # primeros 120 segundos, rechazamos la orden y re-publicamos
+        # nuestro estado real para corregir la UI de HomeKit.
+        #
+        # Reglas:
+        #   - Solo bloquea transiciones HACIA Home desde Away/Night/Vacation
+        #   - Permite cambiar entre Away ↔ Night ↔ Vacation libremente
+        #   - Permite desarmar siempre (disarm no pasa por _async_arm)
+        #   - No causa ningún congelamiento ni retraso
+        if (
+            target == AlarmControlPanelState.ARMED_HOME
+            and self._alarm_state in ARMED_STATES
+            and self._alarm_state != AlarmControlPanelState.ARMED_HOME
+            and _time.monotonic() < self._arm_lock_until
+        ):
+            _LOGGER.warning(
+                "Argus ARM-LOCK: Bloqueado intento externo de forzar Home. "
+                "Estado actual protegido: %s", self._alarm_state
+            )
+            # Re-publicar estado real → HomeKit corrige su interfaz
+            self.async_write_ha_state()
+            return
 
         if self._alarm_state == target:
             return
@@ -870,6 +899,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         # Sin ARMING intermedio, sin delays. El usuario lo pidió explícitamente.
         self._alarm_state = target
         self.async_write_ha_state()
+
+        # ARM-LOCK v2: activar protección de 120s si el modo NO es Home.
+        # Esto protege contra el rebote automático de HomeKit/Aqara.
+        if target != AlarmControlPanelState.ARMED_HOME:
+            self._arm_lock_until = _time.monotonic() + 120.0
+        else:
+            self._arm_lock_until = 0.0
 
         await self._async_mqtt_publish()
 
