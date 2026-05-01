@@ -5,7 +5,7 @@
 
   **El Sistema de Seguridad Premium para Home Assistant**
 
-  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-0.9.68-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
+  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-0.9.69-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
   [![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)](https://www.home-assistant.io/)
   [![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)](https://hacs.xyz/)
 
@@ -18,17 +18,14 @@
 
 ---
 
-## ✨ Novedades y Correcciones Críticas (v0.9.68)
+## ✨ Novedades y Correcciones Críticas (v0.9.69)
 
-Solución completa al rebote de HomeKit.
+Fix crítico: Desarmar ahora SIEMPRE funciona sin restricción.
 
-**ARM-LOCK v3** — Protección contra TODOS los tipos de rebote de HomeKit:
-- Bloquea intentos externos de forzar **modo Casa** (120 segundos de protección)
-- Bloquea intentos externos de **desarmar automáticamente** (120 segundos de protección)
-- HomeKit a veces envía DISARM cuando no puede sincronizar Aqara en modo Ausente — ahora Argus lo rechaza
-- Cambiar entre Ausente/Noche/Vacaciones sigue siendo libre e instantáneo
-- Desarmar con PIN siempre funciona sin restricción
-- 0 congelamientos, 0 retrasos
+**Cambios:**
+- Eliminado completamente el bloqueo de desarme — puedes desactivar en cualquier momento sin importar nada
+- El ARM-LOCK ahora SOLO protege contra el rebote a modo Casa (30 segundos)
+- Desarmar desde HomeKit, Argus, o cualquier sistema funciona al instante
 ---
 
 ## 🚀 Características Principales
