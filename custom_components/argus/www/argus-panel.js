@@ -357,6 +357,7 @@ _tmpl.innerHTML = `
   
   /* FS button */
   .fs-btn{background:rgba(255,255,255,0.05);padding:8px;border-radius:10px;font-size:16px}
+  .ios-fullscreen { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; max-width: none !important; z-index: 999999 !important; margin: 0 !important; border-radius: 0 !important; }
   
   /* Modal Fixes */
   .modal-back{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;padding:20px;z-index:999999;backdrop-filter:blur(8px)}
@@ -1000,6 +1001,10 @@ class ArgusPanel extends HTMLElement {
               callBtn.href = "tel:000";
               callBtn.innerHTML = "📞 Llamar a Emergencias (000)";
           }
+          callBtn.addEventListener('click', (e) => {
+              e.preventDefault();
+              window.top.location.href = callBtn.href;
+          });
       }
     } catch(e) {}
   }
@@ -1308,12 +1313,31 @@ class ArgusPanel extends HTMLElement {
 
   _toggleFullscreen(targetEl) {
     const target = targetEl || this.shadowRoot.querySelector('.entry');
-    if (!document.fullscreenElement) {
-      (target || this).requestFullscreen().catch(err => {
-        alert(`Error al activar pantalla completa: ${err.message}`);
-      });
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    if (!document.fullscreenEnabled && !target.webkitRequestFullscreen) {
+      target.classList.toggle('ios-fullscreen');
+      return;
+    }
+
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+      if (target.requestFullscreen) {
+        target.requestFullscreen().catch(err => {
+          if (isIOS) target.classList.add('ios-fullscreen');
+          else console.warn(`Fullscreen error: ${err.message}`);
+        });
+      } else if (target.webkitRequestFullscreen) {
+        target.webkitRequestFullscreen();
+      } else {
+        target.classList.add('ios-fullscreen');
+      }
     } else {
-      document.exitFullscreen();
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
+      target.classList.remove('ios-fullscreen');
     }
   }
 
