@@ -1091,6 +1091,17 @@ class ArgusPanel extends HTMLElement {
     s('home-name-modal').addEventListener('click', e => { if (e.target.id === 'home-name-modal') this._closeHomeNameModal(); });
     s('home-name-save').addEventListener('click', () => this._saveHomeName());
     s('home-name-input').addEventListener('keydown', e => { if (e.key === 'Enter') this._saveHomeName(); });
+
+    // SOS Modal
+    const closeSOS = () => {
+      s('sos-modal')?.classList.remove('open');
+      if (s('sos-thumb')) {
+         s('sos-thumb').style.left = '6px';
+         s('sos-thumb').closest('.ios-slider-track').style.background = 'rgba(217,4,41,0.15)';
+      }
+    };
+    s('btn-cancel-sos')?.addEventListener('click', closeSOS);
+    s('sos-modal')?.addEventListener('click', e => { if (e.target.id === 'sos-modal') closeSOS(); });
   }
 
   /* ── WebSocket ───────────────────────────────────────────────────── */
