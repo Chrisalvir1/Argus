@@ -501,7 +501,8 @@ _tmpl.innerHTML = `
 
 <!-- SOS Confirm Modal -->
 <div class="ios-confirm-backdrop" id="sos-modal">
-  <div class="ios-confirm-card liquid-glass" id="sos-card">
+  <div class="ios-confirm-card liquid-glass" id="sos-card" style="position:relative;">
+    <button id="sos-close-x" style="position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.1); border:none; color:white; border-radius:50%; width:32px; height:32px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; opacity:0.8; padding:0; transition:background 0.2s;">✕</button>
     <div class="ios-confirm-title">Confirmar pánico</div>
     <div class="ios-confirm-text">Desliza para disparar la alarma inmediatamente.</div>
     <div class="ios-slider-shell">
@@ -1101,6 +1102,7 @@ class ArgusPanel extends HTMLElement {
       }
     };
     s('btn-cancel-sos')?.addEventListener('click', closeSOS);
+    s('sos-close-x')?.addEventListener('click', closeSOS);
     s('sos-modal')?.addEventListener('click', e => { if (e.target.id === 'sos-modal') closeSOS(); });
   }
 
