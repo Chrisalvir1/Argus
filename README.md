@@ -9,9 +9,11 @@
   [![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)](https://www.home-assistant.io/)
   [![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)](https://hacs.xyz/)
 
-  [❤️ Donar con PayPal](https://paypal.me/CEstradaAlvir) | [✉️ Enviar Sugerencia](mailto:chrisalvir01@gmail.com)
+  <br>
+  <a href="https://paypal.me/CEstradaAlvir" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-blue.svg?logo=paypal&style=for-the-badge" alt="Donar con PayPal"></a>
+  <a href="https://github.com/Chrisalvir1/Argus/issues" target="_blank"><img src="https://img.shields.io/badge/Report_a_Bug_/_Request_Feature-GitHub-black.svg?logo=github&style=for-the-badge" alt="Enviar Sugerencia"></a>
+  <br>
 </div>
-
 <br>
 
 **Argus Home Hub** es un avanzado sistema de seguridad y panel de control de alarmas para Home Assistant. Construido desde cero para ofrecer una experiencia visual *premium* con una interfaz *Liquid Glass* inspirada en macOS e iOS. Combina la gestión de sensores, sirenas, control de acceso y notificaciones push en un único *Custom Element* sumamente fluido y autoconstruido.
