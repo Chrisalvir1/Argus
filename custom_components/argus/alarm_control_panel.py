@@ -180,7 +180,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     @property
     def code_arm_required(self) -> bool:
-        return self._code_arm_required
+        # FIX: Si se devuelve True, HomeKit asume que armar fallará porque no puede enviar PIN,
+        # lo que provoca que el botón rebote a "Desactivado" inmediatamente.
+        return False
 
     @property
     def code_format(self):
