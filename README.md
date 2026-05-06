@@ -5,7 +5,7 @@
 
   **El Sistema de Seguridad Premium para Home Assistant**
 
-  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-0.9.77-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
+  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-0.9.78-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
   [![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)](https://www.home-assistant.io/)
   [![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)](https://hacs.xyz/)
 
@@ -18,11 +18,12 @@
 
 ---
 
-## ✨ Novedades y Correcciones Críticas (v0.9.70)
+## ✨ Novedades y Correcciones Críticas (v0.9.77)
 
-Fix crítico: Integración con HomeKit (Apple Home) estabilizada.
+Fix crítico: Integración con HomeKit (Apple Home) estabilizada y optimización de Branding en HACS.
 
 **Cambios:**
+- **Identidad Premium**: Renombrado a "Argus Home Hub" y soporte de Logos Nativos 2026.3+ (carpeta `brand/` optimizada para el modo oscuro).
 - **HomeKit**: Armar a modo "Afuera" o cualquier otro modo desde Apple Home ahora ignora la solicitud de PIN y los sensores abiertos, asegurando que el comando sea obedecido sin rebotar al estado anterior.
 - **UI iOS**: El botón de Pantalla Completa ahora utiliza una alternativa visual (CSS full-screen fallback) para iPhone, saltándose las restricciones de Apple.
 - **Botón SOS**: El enlace "Llamar a Emergencias" en el modal de Pánico fue reescrito para disparar la llamada nativa en móviles directamente (`window.top.location.href`).

@@ -1,7 +1,7 @@
 {
   "domain": "argus",
   "name": "Argus Home Hub",
-  "version": "0.9.77",
+  "version": "0.9.78",
   "documentation": "https://github.com/Chrisalvir1/Argus",
   "issue_tracker": "https://github.com/Chrisalvir1/Argus/issues",
   "codeowners": [
