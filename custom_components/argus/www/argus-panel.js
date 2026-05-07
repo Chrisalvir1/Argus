@@ -83,7 +83,9 @@ const TEXTS = {
     home_name_modal_title:'🏡 Nombre del Hogar',
     home_name_modal_desc:'Este nombre aparece en el panel de instancias y en pantalla completa.',
     home_name_label:'Nombre del Hogar', home_name_placeholder:'Mi Casa',
-    clear_log_btn:'BORRAR', battery_low:'⚠️ Batería baja',
+    clear_log_btn:'BORRAR',
+    bg_weather:'Clima animado', bg_none:'Sin animación', bg_photo:'Una foto', bg_collage:'Collage',
+    temp_auto:'Automático (sensor local / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Batería baja',
     times_section:'⏱️ Tiempos', arm_time:'Armado (s)', disarm_time:'Desarmado (s)',
     save_config:'GUARDAR CONFIGURACIÓN', never_triggered:'Nunca activada',
     bridge_paired:'¡Puente Vinculado!',
@@ -151,7 +153,9 @@ const TEXTS = {
     home_name_modal_title:'🏡 Home Name',
     home_name_modal_desc:'This name appears in the instances panel and in full screen.',
     home_name_label:'Home Name', home_name_placeholder:'My Home',
-    clear_log_btn:'CLEAR', battery_low:'⚠️ Low Battery',
+    clear_log_btn:'CLEAR',
+    bg_weather:'Animated weather', bg_none:'No animation', bg_photo:'One photo', bg_collage:'Collage',
+    temp_auto:'Automatic (local sensor / thermostat / climate)', temp_thermostat:'(thermostat)', battery_low:'⚠️ Low Battery',
     times_section:'⏱️ Times', arm_time:'Arming (s)', disarm_time:'Entry delay (s)',
     save_config:'SAVE CONFIGURATION', never_triggered:'Never triggered',
     bridge_paired:'Bridge Paired!',
@@ -217,7 +221,9 @@ const TEXTS = {
     home_name_modal_title:'🏡 Nom du domicile',
     home_name_modal_desc:'Ce nom apparaît dans le panneau des instances et en plein écran.',
     home_name_label:'Nom du domicile', home_name_placeholder:'Ma maison',
-    clear_log_btn:'EFFACER', battery_low:'⚠️ Batterie faible',
+    clear_log_btn:'EFFACER',
+    bg_weather:'Météo animée', bg_none:'Sans animation', bg_photo:'Une photo', bg_collage:'Collage',
+    temp_auto:'Automatique (capteur local / thermostat / climat)', temp_thermostat:'(thermostat)', battery_low:'⚠️ Batterie faible',
     times_section:'⏱️ Temps', arm_time:'Armé (s)', disarm_time:'Délai entrée (s)',
     save_config:'ENREGISTRER LA CONFIGURATION', never_triggered:'Jamais déclenché',
     bridge_paired:'Pont associé!',
@@ -280,7 +286,9 @@ const TEXTS = {
     home_name_modal_title:'🏡 Nome do lar',
     home_name_modal_desc:'Este nome aparece no painel de instâncias e em tela cheia.',
     home_name_label:'Nome do lar', home_name_placeholder:'Minha Casa',
-    clear_log_btn:'LIMPAR', battery_low:'⚠️ Bateria fraca',
+    clear_log_btn:'LIMPAR',
+    bg_weather:'Clima animado', bg_none:'Sem animação', bg_photo:'Uma foto', bg_collage:'Colagem',
+    temp_auto:'Automático (sensor local / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Bateria fraca',
     times_section:'⏱️ Tempos', arm_time:'Armado (s)', disarm_time:'Atraso de entrada (s)',
     save_config:'SALVAR CONFIGURAÇÃO', never_triggered:'Nunca ativado',
     bridge_paired:'Ponte Associada!',
@@ -343,7 +351,9 @@ const TEXTS = {
     home_name_modal_title:'🏡 Nome della casa',
     home_name_modal_desc:'Questo nome appare nel pannello delle istanze e a schermo intero.',
     home_name_label:'Nome della casa', home_name_placeholder:'Casa mia',
-    clear_log_btn:'CANCELLA', battery_low:'⚠️ Batteria scarica',
+    clear_log_btn:'CANCELLA',
+    bg_weather:'Meteo animato', bg_none:'Nessuna animazione', bg_photo:'Una foto', bg_collage:'Collage',
+    temp_auto:'Automatico (sensore locale / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Batteria scarica',
     times_section:'⏱️ Tempi', arm_time:'Armato (s)', disarm_time:'Ritardo entrata (s)',
     save_config:'SALVA CONFIGURAZIONE', never_triggered:'Mai attivato',
     bridge_paired:'Ponte Associato!',
@@ -368,7 +378,7 @@ const TEXTS = {
     admin_only:'只有管理员才能修改此部分。',
     add_user:'添加用户', username:'用户名', user_pin:'用户PIN码',
     is_admin:'管理员', save_user:'保存', no_users:'未配置额外用户。',
-    homekit_title:'🏠 HomeKit & Matter', close:'关闭',
+    homekit_title:'🏠 HomeKit与Matter', close:'关闭',
     search_placeholder:'按名称、区域或entity_id搜索',
     available:'可用', selected_lbl:'已选择', clear:'清除', accept:'接受',
     introduce_pin:'输入您的PIN码', pin_modal_desc:'撤防Argus的数字PIN码',
@@ -406,7 +416,9 @@ const TEXTS = {
     home_name_modal_title:'🏡 家庭名称',
     home_name_modal_desc:'此名称显示在实例面板和全屏中。',
     home_name_label:'家庭名称', home_name_placeholder:'我的家',
-    clear_log_btn:'清除', battery_low:'⚠️ 电池不足',
+    clear_log_btn:'清除',
+    bg_weather:'动画天气', bg_none:'无动画', bg_photo:'单张照片', bg_collage:'拼贴画',
+    temp_auto:'自动（本地传感器 / 恒温器 / 气候）', temp_thermostat:'(恒温器)', battery_low:'⚠️ 电池不足',
     times_section:'⏱️ 时间', arm_time:'布防延迟(s)', disarm_time:'进入延迟(s)',
     save_config:'保存配置', never_triggered:'从未触发',
     bridge_paired:'桥已关联!',
@@ -431,7 +443,7 @@ const TEXTS = {
     admin_only:'Только администраторы могут изменять этот раздел.',
     add_user:'Добавить пользователя', username:'Имя пользователя', user_pin:'PIN пользователя',
     is_admin:'Администратор', save_user:'Сохранить', no_users:'Дополнительные пользователи не настроены.',
-    homekit_title:'🏠 HomeKit & Matter', close:'Закрыть',
+    homekit_title:'🏠 HomeKit и Matter', close:'Закрыть',
     search_placeholder:'Поиск по имени, зоне или entity_id',
     available:'Доступные', selected_lbl:'Выбранные', clear:'Очистить', accept:'Принять',
     introduce_pin:'Введите PIN', pin_modal_desc:'Цифровой PIN для снятия с охраны Argus',
@@ -469,7 +481,9 @@ const TEXTS = {
     home_name_modal_title:'🏡 Название дома',
     home_name_modal_desc:'Это имя отображается в панели экземпляров и в полноекранном режиме.',
     home_name_label:'Название дома', home_name_placeholder:'Мой дом',
-    clear_log_btn:'ОЧИСТИТЬ', battery_low:'⚠️ Низкий заряд',
+    clear_log_btn:'ОЧИСТИТЬ',
+    bg_weather:'Анимированная погода', bg_none:'Без анимации', bg_photo:'Одно фото', bg_collage:'Коллаж',
+    temp_auto:'Авто (лок. датчик / термостат / климат)', temp_thermostat:'(термостат)', battery_low:'⚠️ Низкий заряд',
     times_section:'⏱️ Времена', arm_time:'Постановка (s)', disarm_time:'Задержка входа (s)',
     save_config:'СОХРАНИТЬ КОНФИГУРАЦИЮ', never_triggered:'Никогда не срабатывало',
     bridge_paired:'Мост связан!',
@@ -1467,6 +1481,21 @@ class ArgusPanel extends HTMLElement {
     set('p-home-name-modal-desc', t('home_name_modal_desc'));
     set('l-home-name-modal-label', t('home_name_label'));
     set('lang-modal-title',     `\ud83c\udf10 ${t('lang_select_title')}`);
+
+    const bgMode = s('bg-mode-select-standalone');
+    if (bgMode) {
+      const v = bgMode.value;
+      bgMode.innerHTML = `
+        <option value="weather">${t('bg_weather')}</option>
+        <option value="none">${t('bg_none')}</option>
+        <option value="photo">${t('bg_photo')}</option>
+        <option value="collage">${t('bg_collage')}</option>
+      `;
+      if (v) bgMode.value = v;
+    }
+
+    this._populateTemperatureSources();
+
     // PIN display
     const pinDisp2 = s('current-pin-display');
     if (pinDisp2 && pinDisp2.textContent) {
@@ -2682,10 +2711,10 @@ class ArgusPanel extends HTMLElement {
   _populateTemperatureSources() {
     const sel = this.shadowRoot.getElementById('temp-source-select-standalone');
     if (!sel || !this._hass) return;
-    const extra = [{ entity_id: 'auto', name: 'Automático (sensor local / termostato / clima)' }];
+    const extra = [{ entity_id: 'auto', name: this._t('temp_auto') }];
     for (const s of Object.values(this._hass.states || {})) {
       const id = s.entity_id || ''; const a = s.attributes || {};
-      if (id.startsWith('climate.') && typeof a.current_temperature === 'number') { extra.push({ entity_id:id, name:`🌡️ ${a.friendly_name || id} (termostato)` }); continue; }
+      if (id.startsWith('climate.') && typeof a.current_temperature === 'number') { extra.push({ entity_id:id, name:`🌡️ ${a.friendly_name || id} ${this._t('temp_thermostat')}` }); continue; }
       if (!id.startsWith('sensor.')) continue;
       const dc = String(a.device_class || '').toLowerCase(); const u = String(a.unit_of_measurement || a.native_unit_of_measurement || '').toLowerCase(); const v = Number(s.state);
       if (Number.isFinite(v) && (dc === 'temperature' || ['°c','°f','c','f'].includes(u))) extra.push({ entity_id:id, name:`🌡️ ${a.friendly_name || id}` });
