@@ -73,6 +73,8 @@ const TEXTS = {
     pin_master_title:'PIN Maestro', pin_active_yes:'PIN Activo: Sí', pin_active_no:'PIN Activo: No',
     select_all:'☑ Todos', deselect_all:'☐ Ninguno', mqtt_label:'MQTT',
     arm_time_label:'Tiempo armado (s)', disarm_time_label:'Tiempo desarmado (s)',
+    pin_incorrect:'❌ PIN actual incorrecto', pin_updated:'✓ PIN Actualizado', pin_deleted:'✓ PIN Eliminado',
+    searching_auto:'↻ Buscando automatizaciones...', no_auto_linked:'No hay automatizaciones vinculadas a Argus.',
     pin_remove_hint:'Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.',
     bypass_lbl:'🚫 Omitir', lock_if_open:'Bloquear si abiertos',
     select_btn:'+ Seleccionar', add_btn:'+ Añadir',
@@ -145,6 +147,8 @@ const TEXTS = {
     pin_master_title:'Master PIN', pin_active_yes:'PIN Active: Yes', pin_active_no:'PIN Active: No',
     select_all:'☑ All', deselect_all:'☐ None', mqtt_label:'MQTT',
     arm_time_label:'Arm time (s)', disarm_time_label:'Disarm time (s)',
+    pin_incorrect:'❌ Incorrect current PIN', pin_updated:'✓ PIN Updated', pin_deleted:'✓ PIN Deleted',
+    searching_auto:'↻ Searching automations...', no_auto_linked:'No automations linked to Argus.',
     pin_remove_hint:'To remove PIN: Enter the current one and leave the fields below empty.',
     bypass_lbl:'🚫 Bypass', lock_if_open:'Lock if open',
     select_btn:'+ Select', add_btn:'+ Add',
@@ -217,6 +221,8 @@ const TEXTS = {
     pin_master_title:'PIN Maître', pin_active_yes:'PIN actif: Oui', pin_active_no:'PIN actif: Non',
     select_all:'☑ Tous', deselect_all:'☐ Aucun', mqtt_label:'MQTT',
     arm_time_label:'Temps armement (s)', disarm_time_label:'Temps désarmement (s)',
+    pin_incorrect:'❌ PIN actuel incorrect', pin_updated:'✓ PIN mis à jour', pin_deleted:'✓ PIN supprimé',
+    searching_auto:'↻ Recherche automatisations...', no_auto_linked:'Aucune automatisation liée à Argus.',
     pin_remove_hint:'Pour supprimer le PIN: entrez le PIN actuel et laissez les champs vides.',
     bypass_lbl:'🚫 Ignorer', lock_if_open:'Bloquer si ouvert',
     select_btn:'+ Sélectionner', add_btn:'+ Ajouter',
@@ -284,6 +290,8 @@ const TEXTS = {
     pin_master_title:'PIN Mestre', pin_active_yes:'PIN Ativo: Sim', pin_active_no:'PIN Ativo: Não',
     select_all:'☑ Todos', deselect_all:'☐ Nenhum', mqtt_label:'MQTT',
     arm_time_label:'Tempo armado (s)', disarm_time_label:'Tempo desarmado (s)',
+    pin_incorrect:'❌ PIN atual incorreto', pin_updated:'✓ PIN Atualizado', pin_deleted:'✓ PIN Removido',
+    searching_auto:'↻ Buscando automações...', no_auto_linked:'Nenhuma automação vinculada ao Argus.',
     pin_remove_hint:'Para remover o PIN: insira o atual e deixe os campos abaixo vazios.',
     bypass_lbl:'🚫 Ignorar', lock_if_open:'Bloquear se aberto',
     select_btn:'+ Selecionar', add_btn:'+ Adicionar',
@@ -351,6 +359,8 @@ const TEXTS = {
     pin_master_title:'PIN Principale', pin_active_yes:'PIN Attivo: Sì', pin_active_no:'PIN Attivo: No',
     select_all:'☑ Tutti', deselect_all:'☐ Nessuno', mqtt_label:'MQTT',
     arm_time_label:'Tempo armato (s)', disarm_time_label:'Tempo disarmato (s)',
+    pin_incorrect:'❌ PIN attuale errato', pin_updated:'✓ PIN Aggiornato', pin_deleted:'✓ PIN Eliminato',
+    searching_auto:'↻ Ricerca automazioni...', no_auto_linked:'Nessuna automazione collegata ad Argus.',
     pin_remove_hint:'Per rimuovere il PIN: inserisci quello attuale e lascia vuoti i campi sottostanti.',
     bypass_lbl:'🚫 Ignora', lock_if_open:'Blocca se aperto',
     select_btn:'+ Seleziona', add_btn:'+ Aggiungi',
@@ -418,6 +428,8 @@ const TEXTS = {
     pin_master_title:'主PIN码', pin_active_yes:'PIN激活: 是', pin_active_no:'PIN激活: 否',
     select_all:'☑ 全选', deselect_all:'☐ 全不选', mqtt_label:'MQTT',
     arm_time_label:'布防延迟(s)', disarm_time_label:'进入延迟(s)',
+    pin_incorrect:'❌ 当前PIN错误', pin_updated:'✓ PIN已更新', pin_deleted:'✓ PIN已删除',
+    searching_auto:'↻ 正在搜索自动化...', no_auto_linked:'没有链接到Argus的自动化。',
     pin_remove_hint:'删除PIN: 输入当前PIN并将下面字段留空。',
     bypass_lbl:'🚫 跳过', lock_if_open:'开启时锁定',
     select_btn:'+ 选择', add_btn:'+ 添加',
@@ -485,6 +497,8 @@ const TEXTS = {
     pin_master_title:'Мастер PIN', pin_active_yes:'PIN активен: Да', pin_active_no:'PIN активен: Нет',
     select_all:'☑ Все', deselect_all:'☐ Ничего', mqtt_label:'MQTT',
     arm_time_label:'Время взятия (с)', disarm_time_label:'Время снятия (с)',
+    pin_incorrect:'❌ Неверный текущий PIN', pin_updated:'✓ PIN Обновлен', pin_deleted:'✓ PIN Удален',
+    searching_auto:'↻ Поиск автоматизаций...', no_auto_linked:'Нет автоматизаций, связанных с Argus.',
     pin_remove_hint:'Для удаления PIN: введите текущий и оставьте поля пустыми.',
     bypass_lbl:'🚫 Обход', lock_if_open:'Блокировать если открыто',
     select_btn:'+ Выбрать', add_btn:'+ Добавить',
@@ -1125,7 +1139,7 @@ _tmpl.innerHTML = `
             <div class="subsection">
               <div id="current-pin-display" style="font-size:13px;font-weight:800;color:var(--primary-color);margin-bottom:15px;background:rgba(3,169,244,0.1);padding:8px 12px;border-radius:10px;display:inline-block"></div>
               <div class="field-group" id="group-current-pin" style="display:none; margin-bottom:12px">
-                 <label>PIN Actual</label>
+                 <label id="l-current-pin-lbl"></label>
                  <input type="password" id="current-pin" inputmode="numeric" pattern="[0-9]*">
               </div>
               <p class="small" id="p-pin-remove-hint" style="margin:0 0 10px 0; color:var(--primary-color); font-weight:700">Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.</p>
@@ -1442,6 +1456,8 @@ class ArgusPanel extends HTMLElement {
     set('h-settings',     t('settings'));
     set('h-activity-log', t('activity_log'));
     set('t-change-pin',   t('change_pin'));
+    set('l-current-pin-lbl', t('current_pin'));
+    set('btn-save-pin',   t('update_pin'));
     set('l-new-pin',      t('new_pin'));
     set('l-confirm-pin',  t('confirm_pin'));
     set('h-notifications',t('notifications_title'));
@@ -2485,7 +2501,7 @@ class ArgusPanel extends HTMLElement {
                 this._renderAutomations(); // Re-render when data is ready
             }
         })();
-        el.innerHTML = '<div class="small" style="padding:10px 0;opacity:.55">↻ Buscando automatizaciones...</div>';
+        el.innerHTML = `<div class="small" style="padding:10px 0;opacity:.55">${this._t('searching_auto')}</div>`;
         return;
     }
 
@@ -2499,7 +2515,7 @@ class ArgusPanel extends HTMLElement {
     });
 
     if (!items.length) {
-      el.innerHTML = '<div class="small" style="padding:8px 0;opacity:.55">No hay automatizaciones vinculadas a Argus.</div>';
+      el.innerHTML = `<div class="small" style="padding:8px 0;opacity:.55">${this._t('no_auto_linked')}</div>`;
       return;
     }
     
@@ -2884,7 +2900,7 @@ class ArgusPanel extends HTMLElement {
     if (currentCode) {
       const pinCurrent = this.shadowRoot.getElementById('current-pin').value;
       if (pinCurrent !== currentCode) {
-        status.textContent = '❌ PIN actual incorrecto';
+        status.textContent = this._t('pin_incorrect');
         status.className = 'status err';
         return;
       }
@@ -2901,7 +2917,7 @@ class ArgusPanel extends HTMLElement {
     
     try {
       await this._send('argus/update_master_pin', { pin: p1 });
-      status.textContent = p1 ? '✓ PIN Actualizado' : '✓ PIN Eliminado'; 
+      status.textContent = p1 ? this._t('pin_updated') : this._t('pin_deleted'); 
       status.className = 'status ok';
       if (this.shadowRoot.getElementById('current-pin-display')) {
         this.shadowRoot.getElementById('current-pin-display').textContent = p1 ? this._t('pin_active_yes') : this._t('pin_active_no');
