@@ -67,7 +67,7 @@ const TEXTS = {
     home_name_lbl:'Nombre del Hogar', background_lbl:'Fondo', edit_btn:'✏️ Editar',
     save_btn:'Guardar', backup_title:'Respaldo y Restauración',
     backup_desc:'Guarda una copia de seguridad de tus ajustes o restaura una anterior.',
-    export_btn:'📤 Descargar', import_btn:'📥 Restaurar',
+    export_btn:'📤 Descargar', import_btn:'📥 Restaurar', reset_btn:'⚠️ Restablecer', undo_reset_btn:'↩️ Deshacer Restablecimiento',
     access_title:'Control de Acceso y Usuarios',
     access_desc:'Gestión global de seguridad, PIN maestro y administradores.',
     pin_master_title:'PIN Maestro', pin_active_yes:'PIN Activo: Sí', pin_active_no:'PIN Activo: No',
@@ -135,7 +135,7 @@ const TEXTS = {
     home_name_lbl:'Home Name', background_lbl:'Background', edit_btn:'✏️ Edit',
     save_btn:'Save', backup_title:'Backup & Restore',
     backup_desc:'Save a backup of your settings or restore a previous one.',
-    export_btn:'📤 Download', import_btn:'📥 Restore',
+    export_btn:'📤 Download', import_btn:'📥 Restore', reset_btn:'⚠️ Factory Reset', undo_reset_btn:'↩️ Undo Reset',
     access_title:'Access Control & Users',
     access_desc:'Global security management, master PIN and administrators.',
     pin_master_title:'Master PIN', pin_active_yes:'PIN Active: Yes', pin_active_no:'PIN Active: No',
@@ -203,7 +203,7 @@ const TEXTS = {
     home_name_lbl:'Nom du domicile', background_lbl:'Fond', edit_btn:'✏️ Modifier',
     save_btn:'Enregistrer', backup_title:'Sauvegarde & Restauration',
     backup_desc:'Enregistrez une sauvegarde ou restaurez une précédente.',
-    export_btn:'📤 Télécharger', import_btn:'📥 Restaurer',
+    export_btn:'📤 Télécharger', import_btn:'📥 Restaurer', reset_btn:'⚠️ Réinitialiser', undo_reset_btn:'↩️ Annuler la réinitialisation',
     access_title:'Contrôle d\'accès & Utilisateurs',
     access_desc:'Gestion globale de la sécurité, PIN maître et administrateurs.',
     pin_master_title:'PIN Maître', pin_active_yes:'PIN actif: Oui', pin_active_no:'PIN actif: Non',
@@ -266,7 +266,7 @@ const TEXTS = {
     home_name_lbl:'Nome do lar', background_lbl:'Fundo', edit_btn:'✏️ Editar',
     save_btn:'Salvar', backup_title:'Backup & Restauração',
     backup_desc:'Salve um backup ou restaure um anterior.',
-    export_btn:'📤 Baixar', import_btn:'📥 Restaurar',
+    export_btn:'📤 Baixar', import_btn:'📥 Restaurar', reset_btn:'⚠️ Redefinir', undo_reset_btn:'↩️ Desfazer Redefinição',
     access_title:'Controle de Acesso & Usuários',
     access_desc:'Gerenciamento global, PIN mestre e administradores.',
     pin_master_title:'PIN Mestre', pin_active_yes:'PIN Ativo: Sim', pin_active_no:'PIN Ativo: Não',
@@ -329,7 +329,7 @@ const TEXTS = {
     home_name_lbl:'Nome della casa', background_lbl:'Sfondo', edit_btn:'✏️ Modifica',
     save_btn:'Salva', backup_title:'Backup & Ripristino',
     backup_desc:'Salva un backup o ripristina uno precedente.',
-    export_btn:'📤 Scarica', import_btn:'📥 Ripristina',
+    export_btn:'📤 Scarica', import_btn:'📥 Ripristina', reset_btn:'⚠️ Ripristina', undo_reset_btn:'↩️ Annulla Ripristino',
     access_title:'Controllo Accessi & Utenti',
     access_desc:'Gestione globale della sicurezza, PIN principale e amministratori.',
     pin_master_title:'PIN Principale', pin_active_yes:'PIN Attivo: Sì', pin_active_no:'PIN Attivo: No',
@@ -392,7 +392,7 @@ const TEXTS = {
     home_name_lbl:'家庭名称', background_lbl:'背景', edit_btn:'✏️ 编辑',
     save_btn:'保存', backup_title:'备份与恢复',
     backup_desc:'保存设置备份或恢复之前的设置。',
-    export_btn:'📤 下载', import_btn:'📥 恢复',
+    export_btn:'📤 下载', import_btn:'📥 恢复', reset_btn:'⚠️ 恢复出厂', undo_reset_btn:'↩️ 撤销重置',
     access_title:'访问控制和用户',
     access_desc:'全局安全管理、主PIN码和管理员。',
     pin_master_title:'主PIN码', pin_active_yes:'PIN激活: 是', pin_active_no:'PIN激活: 否',
@@ -455,7 +455,7 @@ const TEXTS = {
     home_name_lbl:'Название дома', background_lbl:'Фон', edit_btn:'✏️ Редактировать',
     save_btn:'Сохранить', backup_title:'Резервная копия',
     backup_desc:'Сохраните резервную копию или восстановите предыдущую.',
-    export_btn:'📤 Скачать', import_btn:'📥 Восстановить',
+    export_btn:'📤 Скачать', import_btn:'📥 Восстановить', reset_btn:'⚠️ Сброс', undo_reset_btn:'↩️ Отменить сброс',
     access_title:'Контроль доступа и пользователи',
     access_desc:'Глобальная безопасность, мастер PIN и администраторы.',
     pin_master_title:'Мастер PIN', pin_active_yes:'PIN активен: Да', pin_active_no:'PIN активен: Нет',
@@ -1133,6 +1133,8 @@ _tmpl.innerHTML = `
             <button class="ghost" style="width:100%" id="btn-import-trigger">📥 Restaurar</button>
             <input type="file" id="import-config-file" style="display:none" accept=".json">
           </div>
+          <button class="ghost danger" id="btn-reset-config" style="flex:1">⚠️ Restablecer</button>
+          <button class="primary" id="btn-undo-reset" style="flex:1; display:none;">↩️ Deshacer</button>
         </div>
       </section>
 
@@ -1453,6 +1455,8 @@ class ArgusPanel extends HTMLElement {
     set('h-backup-title',       t('backup_title'));
     set('p-backup-desc',        t('backup_desc'));
     set('btn-export-config',    t('export_btn'));
+    set('btn-reset-config',     t('reset_btn'));
+    set('btn-undo-reset',       t('undo_reset_btn'));
     set('btn-import-trigger',   t('import_btn'));
     set('sos-title-txt',        t('sos_confirm_title'));
     set('sos-text-txt',         t('sos_confirm_text'));
@@ -1566,6 +1570,8 @@ class ArgusPanel extends HTMLElement {
     this.shadowRoot.getElementById('btn-export-config')?.addEventListener('click', () => this._exportConfig());
     this.shadowRoot.getElementById('btn-import-trigger')?.addEventListener('click', () => this.shadowRoot.getElementById('import-config-file').click());
     this.shadowRoot.getElementById('import-config-file')?.addEventListener('change', (ev) => this._importConfig(ev));
+    this.shadowRoot.getElementById('btn-reset-config')?.addEventListener('click', () => this._resetConfig());
+    this.shadowRoot.getElementById('btn-undo-reset')?.addEventListener('click', () => this._undoResetConfig());
 
     this.shadowRoot.getElementById('btn-save-personalization-standalone')?.addEventListener('click', () => this._savePersonalization());
 
@@ -1631,6 +1637,45 @@ class ArgusPanel extends HTMLElement {
     };
     reader.onerror = () => alert('No se pudo leer el archivo.');
     reader.readAsText(file);
+  }
+
+  async _resetConfig() {
+    if (!confirm('¿Estás seguro de que deseas restablecer Argus a sus valores de fábrica? Perderás todas tus configuraciones, PINs y modos.')) return;
+    try {
+      this._undoState = JSON.parse(JSON.stringify(this._ui)); // Store for undo
+      
+      const defaultConfig = {};
+      await this._send('argus/restore_config', { config: defaultConfig });
+      
+      this.shadowRoot.getElementById('btn-reset-config').style.display = 'none';
+      this.shadowRoot.getElementById('btn-undo-reset').style.display = 'block';
+      
+      alert('Argus restablecido. Tienes unos segundos para deshacer si cambias de opinión, o simplemente recarga la página para aplicar los cambios.');
+      
+      // Auto reload after 10s if not undone
+      this._resetTimer = setTimeout(() => {
+        window.location.reload();
+      }, 10000);
+      
+    } catch (err) {
+      alert('Error al restablecer: ' + err.message);
+    }
+  }
+
+  async _undoResetConfig() {
+    if (!this._undoState) return;
+    try {
+      clearTimeout(this._resetTimer);
+      await this._send('argus/restore_config', { config: this._undoState });
+      
+      this.shadowRoot.getElementById('btn-reset-config').style.display = 'block';
+      this.shadowRoot.getElementById('btn-undo-reset').style.display = 'none';
+      
+      alert('Restablecimiento deshecho con éxito.');
+      window.location.reload();
+    } catch (err) {
+      alert('Error al deshacer: ' + err.message);
+    }
   }
 
   _bindStatic() {
