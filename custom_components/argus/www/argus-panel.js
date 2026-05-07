@@ -84,6 +84,19 @@ const TEXTS = {
     home_name_modal_desc:'Este nombre aparece en el panel de instancias y en pantalla completa.',
     home_name_label:'Nombre del Hogar', home_name_placeholder:'Mi Casa',
     clear_log_btn:'BORRAR', battery_low:'⚠️ Batería baja',
+    times_section:this._t('times_section'), arm_time:'Armado (s)', disarm_time:'Desarmado (s)',
+    save_config:'GUARDAR CONFIGURACIÓN', never_triggered:this._t('never_triggered'),
+    bridge_paired:'¡Puente Vinculado!',
+    bridge_paired_desc:'El puente <b>{bridge}</b> está actualmente conectado a un ecosistema externo (HomeKit, Matter). Home Assistant no reporta el nombre de la casa destino.',
+    bridge_not_connected:'Puente NO Conectado',
+    bridge_not_desc:'Activa la integración HomeKit Bridge en Home Assistant e incluye la entidad <code>alarm_control_panel.argus_*</code> para generar un código QR de emparejamiento.',
+    manual_disarm:'Manual (Desarmado)',
+    manual_arm:'Manual',
+    open_sensors:'Sensores abiertos',
+    log_detail_disarm:'Sistema desarmado',
+    alarm_instance:'Instancia de Alarma',
+    log_detail_armed:'Modo',
+    log_detail_triggered:'Activación automática',
   },
   en: {
     hero_desc:'Alarm control, modes, TTS and automations.',
@@ -139,6 +152,19 @@ const TEXTS = {
     home_name_modal_desc:'This name appears in the instances panel and in full screen.',
     home_name_label:'Home Name', home_name_placeholder:'My Home',
     clear_log_btn:'CLEAR', battery_low:'⚠️ Low Battery',
+    times_section:'⏱️ Times', arm_time:'Arming (s)', disarm_time:'Entry delay (s)',
+    save_config:'SAVE CONFIGURATION', never_triggered:'Never triggered',
+    bridge_paired:'Bridge Paired!',
+    bridge_paired_desc:'The bridge <b>{bridge}</b> is currently connected to an external ecosystem (HomeKit, Matter). Home Assistant does not report the destination home name.',
+    bridge_not_connected:'Bridge NOT Connected',
+    bridge_not_desc:'Enable the HomeKit Bridge integration in Home Assistant and include the entity <code>alarm_control_panel.argus_*</code> to generate a pairing QR code.',
+    manual_disarm:'Manual (Disarmed)',
+    manual_arm:'Manual',
+    open_sensors:'Open sensors',
+    log_detail_disarm:'System disarmed',
+    alarm_instance:'Alarm Instance',
+    log_detail_armed:'Mode',
+    log_detail_triggered:'Automatic activation',
   },
   fr: {
     hero_desc:"Sécurité intégrée, contrôle d'accès, automatisations et HomeKit.",
@@ -192,6 +218,16 @@ const TEXTS = {
     home_name_modal_desc:'Ce nom apparaît dans le panneau des instances et en plein écran.',
     home_name_label:'Nom du domicile', home_name_placeholder:'Ma maison',
     clear_log_btn:'EFFACER', battery_low:'⚠️ Batterie faible',
+    times_section:'⏱️ Temps', arm_time:'Armé (s)', disarm_time:'Délai entrée (s)',
+    save_config:'ENREGISTRER LA CONFIGURATION', never_triggered:'Jamais déclenché',
+    bridge_paired:'Pont associé!',
+    bridge_paired_desc:'Le pont <b>{bridge}</b> est connecté à un écosystème externe (HomeKit, Matter). Home Assistant ne rapporte pas le nom de la maison.',
+    bridge_not_connected:'Pont NON connecté',
+    bridge_not_desc:'Activez l\'intégration HomeKit Bridge dans Home Assistant et incluez l\'entité <code>alarm_control_panel.argus_*</code> pour générer un QR d\'appairage.',
+    manual_disarm:'Manuel (Désarmé)', manual_arm:'Manuel',
+    open_sensors:'Capteurs ouverts', log_detail_disarm:'Système désarmé',
+    alarm_instance:"Instance d'alarme",
+    log_detail_armed:'Mode', log_detail_triggered:'Activation automatique',
   },
   pt: {
     hero_desc:'Segurança integrada, controle de acesso, automações e HomeKit.',
@@ -245,6 +281,16 @@ const TEXTS = {
     home_name_modal_desc:'Este nome aparece no painel de instâncias e em tela cheia.',
     home_name_label:'Nome do lar', home_name_placeholder:'Minha Casa',
     clear_log_btn:'LIMPAR', battery_low:'⚠️ Bateria fraca',
+    times_section:'⏱️ Tempos', arm_time:'Armado (s)', disarm_time:'Atraso de entrada (s)',
+    save_config:'SALVAR CONFIGURAÇÃO', never_triggered:'Nunca ativado',
+    bridge_paired:'Ponte Associada!',
+    bridge_paired_desc:'A ponte <b>{bridge}</b> está conectada a um ecossistema externo (HomeKit, Matter). O Home Assistant não reporta o nome da casa.',
+    bridge_not_connected:'Ponte NÃO Conectada',
+    bridge_not_desc:'Ative a integração HomeKit Bridge no Home Assistant e inclua a entidade <code>alarm_control_panel.argus_*</code> para gerar um QR de emparelhamento.',
+    manual_disarm:'Manual (Desarmado)', manual_arm:'Manual',
+    open_sensors:'Sensores abertos', log_detail_disarm:'Sistema desarmado',
+    log_detail_armed:'Modo', log_detail_triggered:'Ativação automática',
+    alarm_instance:'Instância do alarme',
   },
   it: {
     hero_desc:'Sicurezza integrata, controllo accessi, automazioni e HomeKit.',
@@ -298,6 +344,16 @@ const TEXTS = {
     home_name_modal_desc:'Questo nome appare nel pannello delle istanze e a schermo intero.',
     home_name_label:'Nome della casa', home_name_placeholder:'Casa mia',
     clear_log_btn:'CANCELLA', battery_low:'⚠️ Batteria scarica',
+    times_section:'⏱️ Tempi', arm_time:'Armato (s)', disarm_time:'Ritardo entrata (s)',
+    save_config:'SALVA CONFIGURAZIONE', never_triggered:'Mai attivato',
+    bridge_paired:'Ponte Associato!',
+    bridge_paired_desc:'Il ponte <b>{bridge}</b> è connesso a un ecosistema esterno (HomeKit, Matter). Home Assistant non riporta il nome della casa.',
+    bridge_not_connected:'Ponte NON Connesso',
+    bridge_not_desc:"Abilita l'integrazione HomeKit Bridge in Home Assistant e includi l'entità <code>alarm_control_panel.argus_*</code> per generare un QR di abbinamento.",
+    manual_disarm:'Manuale (Disarmato)', manual_arm:'Manuale',
+    open_sensors:'Sensori aperti', log_detail_disarm:'Sistema disarmato',
+    alarm_instance:'Istanza allarme',
+    log_detail_armed:'Modalità', log_detail_triggered:'Attivazione automatica',
   },
   zh: {
     hero_desc:'集成安全、访问控制、自动化和HomeKit。',
@@ -351,6 +407,16 @@ const TEXTS = {
     home_name_modal_desc:'此名称显示在实例面板和全屏中。',
     home_name_label:'家庭名称', home_name_placeholder:'我的家',
     clear_log_btn:'清除', battery_low:'⚠️ 电池不足',
+    times_section:'⏱️ 时间', arm_time:'布防延迟(s)', disarm_time:'进入延迟(s)',
+    save_config:'保存配置', never_triggered:'从未触发',
+    bridge_paired:'桥已关联!',
+    bridge_paired_desc:'桥接<b>{bridge}</b>当前已连接到外部生态系统(HomeKit, Matter)。Home Assistant不报告目标家庭名称。',
+    bridge_not_connected:'桥未连接',
+    bridge_not_desc:'在Home Assistant中启用HomeKit Bridge集成并包含实体<code>alarm_control_panel.argus_*</code>以生成配对QR码。',
+    manual_disarm:'手动(已撤防)', manual_arm:'手动',
+    open_sensors:'开启的传感器', log_detail_disarm:'系统已撤防',
+    alarm_instance:'报警实例',
+    log_detail_armed:'模式', log_detail_triggered:'自动激活',
   },
   ru: {
     hero_desc:'Комплексная безопасность, контроль доступа, автоматизация и HomeKit.',
@@ -404,6 +470,16 @@ const TEXTS = {
     home_name_modal_desc:'Это имя отображается в панели экземпляров и в полноекранном режиме.',
     home_name_label:'Название дома', home_name_placeholder:'Мой дом',
     clear_log_btn:'ОЧИСТИТЬ', battery_low:'⚠️ Низкий заряд',
+    times_section:'⏱️ Времена', arm_time:'Постановка (s)', disarm_time:'Задержка входа (s)',
+    save_config:'СОХРАНИТЬ КОНФИГУРАЦИЮ', never_triggered:'Никогда не срабатывало',
+    bridge_paired:'Мост связан!',
+    bridge_paired_desc:'Мост <b>{bridge}</b> подключён к внешней системе (HomeKit, Matter). Home Assistant не сообщает название дома.',
+    bridge_not_connected:'Мост НЕ подключён',
+    bridge_not_desc:'Включите интеграцию HomeKit Bridge в Home Assistant и добавьте <code>alarm_control_panel.argus_*</code> для QR сопряжения.',
+    manual_disarm:'Вручную (Снято)', manual_arm:'Вручную',
+    open_sensors:'Открытые датчики', log_detail_disarm:'Система снята',
+    alarm_instance:'Экземпляр тревоги',
+    log_detail_armed:'Режим', log_detail_triggered:'Автоматическая активация',
   },
 };
 
@@ -1988,9 +2064,27 @@ class ArgusPanel extends HTMLElement {
 
     el.innerHTML = log.slice(0, 30).map(ev => {
       const action = ev.action || '';
-      const detail = ev.detail || '';
+      const rawDetail = ev.detail || '';
       const user   = ev.user   || '';
       const ts     = ev.ts ? new Date(ev.ts).toLocaleString() : '';
+
+      // Translate stored detail strings (may be stored in any language)
+      let detail = rawDetail;
+      const detailLower = rawDetail.toLowerCase();
+      if (detailLower.includes('desarmado') || detailLower.includes('disarmed') || detailLower.includes('désarmé') || detailLower.includes('sistema desarmado') || detailLower.includes('system disarmed') || detailLower === 'manual (desarmado)') {
+        detail = this._t('manual_disarm');
+      } else if (detailLower.includes('en casa') || detailLower.includes('home') || detailLower.includes('heim') || (rawDetail.toLowerCase().includes('manual') && action.includes('arm') && !action.includes('disarm'))) {
+        // Keep as-is but prefix with translated label
+        const modeMap = {
+          'en casa': this._t('mode_home'), 'home': this._t('mode_home'),
+          'ausente': this._t('mode_away'), 'away': this._t('mode_away'),
+          'noche': this._t('mode_night'), 'night': this._t('mode_night'),
+          'vacaciones': this._t('mode_vacation'), 'vacation': this._t('mode_vacation'),
+        };
+        for (const [k,v] of Object.entries(modeMap)) {
+          if (detailLower.includes(k)) { detail = this._t('manual_arm') + ' (' + v + ')'; break; }
+        }
+      }
 
       let icon = '📋', badgeCls = '', badgeTxt = action;
       if (action.includes('arm') && !action.includes('disarm')) {
@@ -2104,7 +2198,7 @@ class ArgusPanel extends HTMLElement {
 
     const instanceBlock = entries.length > 1 ? `
         <div class="mode-section-card">
-          <div class="mode-section-title">📍 Instancia de Alarma</div>
+          <div class="mode-section-title">${this._t('alarm_instance')}</div>
           <select id="mode-instance-select" style="width:100%; padding:10px; border-radius:10px; background:rgba(255,255,255,0.05); color:inherit; border:1px solid rgba(255,255,255,0.1)">${entries.map(e => `<option value="${e.entity_id}" ${e.entity_id===activeEntityId ? 'selected' : ''}>${e.title || e.entity_id}</option>`).join('')}</select>
         </div>` : '';
 
@@ -2146,11 +2240,11 @@ class ArgusPanel extends HTMLElement {
           <div class="mode-section-title">⌨️ Tiempos</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
             <div class="input-group">
-              <span class="input-label">Armado (s)</span>
+              <span class="input-label">${this._t('arm_time')}</span>
               <input type="number" id="mode-arming-time" value="${cfg.arming_time ?? ''}" placeholder="0" style="padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:inherit; font-size:13px">
             </div>
             <div class="input-group">
-              <span class="input-label">Desarmado (s)</span>
+              <span class="input-label">${this._t('disarm_time')}</span>
               <input type="number" id="mode-entry-delay" value="${cfg.entry_delay ?? ''}" placeholder="0" style="padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:inherit; font-size:13px">
             </div>
           </div>
@@ -2160,7 +2254,7 @@ class ArgusPanel extends HTMLElement {
           </label>
         </div>
       </div>
-      ${readonly ? '' : `<div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;"><button class="primary" id="save-mode" style="width:100%;height:48px;font-size:14px;box-shadow:0 8px 20px rgba(0,0,0,0.2)">GUARDAR CONFIGURACIÓN</button><span id="mode-status" style="display:block;text-align:center;font-size:13px;font-weight:700;min-height:20px;transition:opacity .4s;opacity:1;color:var(--primary-color,#03a9f4)"></span></div>`}
+      ${readonly ? '' : `<div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;"><button class="primary" id="save-mode" style="width:100%;height:48px;font-size:14px;box-shadow:0 8px 20px rgba(0,0,0,0.2)">${this._t('save_config')}</button><span id="mode-status" style="display:block;text-align:center;font-size:13px;font-weight:700;min-height:20px;transition:opacity .4s;opacity:1;color:var(--primary-color,#03a9f4)"></span></div>`}
     `;
 
     el.querySelector('#mode-instance-select')?.addEventListener('change', ev => {
@@ -2323,7 +2417,7 @@ class ArgusPanel extends HTMLElement {
       <div class="list-item-card">
         <div>
           <div style="font-weight:700">${a.attributes.friendly_name || a.entity_id}</div>
-          <div class="small" style="opacity:0.7;margin-top:4px">${a.attributes.last_triggered ? new Date(a.attributes.last_triggered).toLocaleString() : 'Nunca activada'}</div>
+          <div class="small" style="opacity:0.7;margin-top:4px">${a.attributes.last_triggered ? new Date(a.attributes.last_triggered).toLocaleString() : this._t('never_triggered')}</div>
         </div>
         <button class="ghost" style="padding:6px 12px;background:rgba(255,255,255,0.08);border-radius:8px" data-edit-auto="${editId}">✏️</button>
       </div>`;
@@ -2510,16 +2604,16 @@ class ArgusPanel extends HTMLElement {
           <div style="display:flex;align-items:center;gap:12px;padding:8px 0">
             <span style="font-size:32px;line-height:1">✅</span>
             <div>
-              <div style="font-weight:700;font-size:15px;color:var(--success-color,#43a047)">¡Puente Vinculado!</div>
-              <div class="small" style="opacity:.7">El puente <b>${bridgeLabel}</b> está actualmente conectado a un ecosistema externo (HomeKit, Matter). Home Assistant no reporta el nombre de la casa destino.</div>
+              <div style="font-weight:700;font-size:15px;color:var(--success-color,#43a047)">${this._t('bridge_paired')}</div>
+              <div class="small" style="opacity:.7">${this._t('bridge_paired_desc').replace('{bridge}', bridgeLabel)}</div>
             </div>
           </div>
         </div>`;
     } else {
       cnt.innerHTML = `
         <div style="display:grid;gap:10px">
-          <div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">🌉</span><div><div style="font-weight:700">${bridgeLabel}</div><div class="small">Puente NO Conectado</div></div></div>
-          <p class="small" style="margin:0">Activa la integración HomeKit Bridge en Home Assistant e incluye la entidad <code>alarm_control_panel.argus_*</code> para generar un código QR de emparejamiento.</p>
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">🌉</span><div><div style="font-weight:700">${bridgeLabel}</div><div class="small">${this._t('bridge_not_connected')}</div></div></div>
+          <p class="small" style="margin:0">${this._t('bridge_not_desc')}</p>
         </div>`;
     }
   }
@@ -2920,7 +3014,7 @@ class ArgusPanel extends HTMLElement {
       try { 
       await this._hass.callService('alarm_control_panel', 'alarm_disarm', 
       { entity_id: e.entity_id, ...(pin ? { code: pin } : {}) }); 
-      this._writeLog('disarm', 'Manual (Desarmado)', currentUser); 
+      this._writeLog('disarm', this._t('manual_disarm'), currentUser); 
       this._sendHaNotif(`🔓 ${this._t('log_disarmed')}`, `${currentUser} desarmó el sistema.`); 
       // FIX v0.9.32 — Bug 1: al desarmar, forzar re-render inmediato para
           // quitar la clase siren-active/triggered-sensor de todas las píldoras.
@@ -2956,7 +3050,7 @@ class ArgusPanel extends HTMLElement {
       }
       if (openNames.length > 0) {
         this._showArmBlockedAlert(openNames);
-        this._writeLog('arm_rejected', `Sensores abiertos: ${openNames.join(', ')}`, currentUser);
+        this._writeLog('arm_rejected', `${this._t('open_sensors')}: ${openNames.join(', ')}`, currentUser);
         return;
       }
     }
@@ -2964,7 +3058,7 @@ class ArgusPanel extends HTMLElement {
     try {
       await this._hass.callService('alarm_control_panel', service, { entity_id: e.entity_id });
       const modeTxt = modeLabels[action] || action;
-      this._writeLog('arm', `Manual (${modeTxt})`, currentUser);
+      this._writeLog('arm', `${this._t('manual_arm')} (${modeTxt})`, currentUser);
       this._sendHaNotif(`🔒 ${this._t('log_armed')} — ${modeTxt}`, `${currentUser} activó el modo ${modeTxt}.`);
       setTimeout(() => this._load(), 800);
     } catch (err) {
