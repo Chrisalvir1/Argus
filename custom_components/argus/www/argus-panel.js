@@ -20,6 +20,15 @@
  */
 
 /* ── i18n ─────────────────────────────────────────────────────────────── */
+const LANG_LIST = [
+  { code:'es', flag:'🇪🇸', label:'Español' },
+  { code:'en', flag:'🇬🇧', label:'English' },
+  { code:'fr', flag:'🇫🇷', label:'Français' },
+  { code:'pt', flag:'🇧🇷', label:'Português' },
+  { code:'it', flag:'🇮🇹', label:'Italiano' },
+  { code:'zh', flag:'🇨🇳', label:'中文' },
+  { code:'ru', flag:'🇷🇺', label:'Русский' },
+];
 const TEXTS = {
   es: {
     hero_desc:'Sistema integral de seguridad, control de acceso, automatizaciones y HomeKit.',
@@ -50,7 +59,8 @@ const TEXTS = {
     log_by:'por', log_sensor:'Sensor', log_no_events:'Sin eventos recientes.',
     mode_home:'En Casa', mode_away:'Ausente', mode_night:'Noche', mode_vacation:'Vacaciones',
     homekit_bridge:'Puente HomeKit', homekit_not_paired:'No vinculado a ninguna casa.',
-    homekit_house:'Casa de Apple Home',
+    homekit_house:'Casa de Apple Home', language:'Idioma',
+    lang_select_title:'Seleccionar Idioma',
   },
   en: {
     hero_desc:'Alarm control, modes, TTS and automations.',
@@ -81,8 +91,169 @@ const TEXTS = {
     log_by:'by', log_sensor:'Sensor', log_no_events:'No recent events.',
     mode_home:'Home', mode_away:'Away', mode_night:'Night', mode_vacation:'Vacation',
     homekit_bridge:'HomeKit Bridge', homekit_not_paired:'Not paired to any home.',
-    homekit_house:'Apple Home',
-  }
+    homekit_house:'Apple Home', language:'Language',
+    lang_select_title:'Select Language',
+  },
+  fr: {
+    hero_desc:"Sécurité intégrée, contrôle d'accès, automatisations et HomeKit.",
+    instances:'Instances actives', modes:'Modes', automations:'⚡ Automatisations',
+    linked_rules:'Règles liées à Argus', create_ha:'+ Créer dans HA',
+    no_rules:'', rules_tip:'',
+    settings:'⚙️ Paramètres', change_pin:'PIN maître', pin_desc:'Code numérique pour armer et désarmer.',
+    new_pin:'Nouveau PIN', confirm_pin:'Confirmer PIN', update_pin:'Mettre à jour PIN',
+    current_pin:'PIN actuel', notifications_title:'🔔 Notifications',
+    notif_desc:'Sélectionnez les appareils mobiles enregistrés dans HA pour recevoir les alertes Argus.',
+    save_notif:'Enregistrer', users_title:'👥 Utilisateurs & Contrôle d\'accès',
+    admin_only:'Seuls les administrateurs peuvent modifier cette section.',
+    add_user:'Ajouter un utilisateur', username:'Nom d\'utilisateur', user_pin:'PIN utilisateur',
+    is_admin:'Administrateur', save_user:'Enregistrer', no_users:'Aucun utilisateur supplémentaire configuré.',
+    homekit_title:'🏠 HomeKit & Matter', close:'Fermer',
+    search_placeholder:'Rechercher par nom, zone ou entity_id',
+    available:'Disponibles', selected_lbl:'Sélectionnés', clear:'Effacer', accept:'Accepter',
+    introduce_pin:'Entrez votre PIN', pin_modal_desc:'PIN numérique pour désarmer Argus',
+    confirm:'✓ Confirmer', cancel:'Annuler',
+    disarmed:'Désarmé', armed_home:'À la maison', armed_away:'Absent',
+    armed_night:'Nuit', armed_vacation:'Vacances', triggered:'ALARME!',
+    pending:'En attente', arming:'Armement', unavailable:'Indisponible',
+    sensor_section:'Capteurs d\'intrusion', siren_section:'Sirènes', thermostat_alert_notif:'🌡️ Alerte de température',
+    none_selected:'Aucun sélectionné', search_select:'Rechercher & sélectionner',
+    save_mode:'💾 Enregistrer mode', details_notif:'Notification d\'alarme',
+    activity_log:'📋 Journal d\'activité',
+    log_armed:'Armé', log_disarmed:'Désarmé', log_triggered:'Déclenché!',
+    log_by:'par', log_sensor:'Capteur', log_no_events:'Aucun événement récent.',
+    mode_home:'Maison', mode_away:'Absent', mode_night:'Nuit', mode_vacation:'Vacances',
+    homekit_bridge:'Pont HomeKit', homekit_not_paired:'Non associé à une maison.',
+    homekit_house:'Apple Home', language:'Langue',
+    lang_select_title:'Sélectionner la langue',
+  },
+  pt: {
+    hero_desc:'Segurança integrada, controle de acesso, automações e HomeKit.',
+    instances:'Instâncias ativas', modes:'Modos', automations:'⚡ Automações',
+    linked_rules:'Regras vinculadas ao Argus', create_ha:'+ Criar no HA',
+    no_rules:'', rules_tip:'',
+    settings:'⚙️ Configurações', change_pin:'PIN Mestre', pin_desc:'Código numérico para armar e desarmar.',
+    new_pin:'Novo PIN', confirm_pin:'Confirmar PIN', update_pin:'Atualizar PIN',
+    current_pin:'PIN atual', notifications_title:'🔔 Notificações',
+    notif_desc:'Selecione os dispositivos móveis registrados no HA que receberão alertas do Argus.',
+    save_notif:'Salvar', users_title:'👥 Usuários & Controle de Acesso',
+    admin_only:'Somente administradores podem modificar esta seção.',
+    add_user:'Adicionar usuário', username:'Nome de usuário', user_pin:'PIN do usuário',
+    is_admin:'Administrador', save_user:'Salvar', no_users:'Nenhum usuário adicional configurado.',
+    homekit_title:'🏠 HomeKit & Matter', close:'Fechar',
+    search_placeholder:'Buscar por nome, área ou entity_id',
+    available:'Disponíveis', selected_lbl:'Selecionados', clear:'Limpar', accept:'Aceitar',
+    introduce_pin:'Digite seu PIN', pin_modal_desc:'PIN numérico para desarmar o Argus',
+    confirm:'✓ Confirmar', cancel:'Cancelar',
+    disarmed:'Desarmado', armed_home:'Em Casa', armed_away:'Ausente',
+    armed_night:'Noite', armed_vacation:'Férias', triggered:'ALARME!',
+    pending:'Pendente', arming:'Armando', unavailable:'Indisponível',
+    sensor_section:'Sensores de Intrusão', siren_section:'Sirenes', thermostat_alert_notif:'🌡️ Alerta de temperatura',
+    none_selected:'Nenhum selecionado', search_select:'Buscar & selecionar',
+    save_mode:'💾 Salvar modo', details_notif:'Notificação de alarme',
+    activity_log:'📋 Registro de Atividade',
+    log_armed:'Armado', log_disarmed:'Desarmado', log_triggered:'Disparado!',
+    log_by:'por', log_sensor:'Sensor', log_no_events:'Nenhum evento recente.',
+    mode_home:'Em Casa', mode_away:'Ausente', mode_night:'Noite', mode_vacation:'Férias',
+    homekit_bridge:'Ponte HomeKit', homekit_not_paired:'Não associado a nenhuma casa.',
+    homekit_house:'Apple Home', language:'Idioma',
+    lang_select_title:'Selecionar Idioma',
+  },
+  it: {
+    hero_desc:'Sicurezza integrata, controllo accessi, automazioni e HomeKit.',
+    instances:'Istanze attive', modes:'Modi', automations:'⚡ Automazioni',
+    linked_rules:'Regole collegate ad Argus', create_ha:'+ Crea in HA',
+    no_rules:'', rules_tip:'',
+    settings:'⚙️ Impostazioni', change_pin:'PIN Principale', pin_desc:'Codice numerico per armare e disarmare.',
+    new_pin:'Nuovo PIN', confirm_pin:'Conferma PIN', update_pin:'Aggiorna PIN',
+    current_pin:'PIN attuale', notifications_title:'🔔 Notifiche',
+    notif_desc:'Seleziona i dispositivi mobili registrati in HA che riceveranno gli avvisi di Argus.',
+    save_notif:'Salva', users_title:'👥 Utenti & Controllo Accessi',
+    admin_only:'Solo gli amministratori possono modificare questa sezione.',
+    add_user:'Aggiungi utente', username:'Nome utente', user_pin:'PIN utente',
+    is_admin:'Amministratore', save_user:'Salva', no_users:'Nessun utente aggiuntivo configurato.',
+    homekit_title:'🏠 HomeKit & Matter', close:'Chiudi',
+    search_placeholder:'Cerca per nome, area o entity_id',
+    available:'Disponibili', selected_lbl:'Selezionati', clear:'Cancella', accept:'Accetta',
+    introduce_pin:'Inserisci il tuo PIN', pin_modal_desc:'PIN numerico per disarmare Argus',
+    confirm:'✓ Conferma', cancel:'Annulla',
+    disarmed:'Disarmato', armed_home:'In Casa', armed_away:'Assente',
+    armed_night:'Notte', armed_vacation:'Vacanze', triggered:'ALLARME!',
+    pending:'In attesa', arming:'Armamento', unavailable:'Non disponibile',
+    sensor_section:'Sensori di intrusione', siren_section:'Sirene', thermostat_alert_notif:'🌡️ Avviso temperatura',
+    none_selected:'Nessuno selezionato', search_select:'Cerca & seleziona',
+    save_mode:'💾 Salva modalità', details_notif:'Notifica allarme',
+    activity_log:'📋 Registro Attività',
+    log_armed:'Armato', log_disarmed:'Disarmato', log_triggered:'Attivato!',
+    log_by:'da', log_sensor:'Sensore', log_no_events:'Nessun evento recente.',
+    mode_home:'In Casa', mode_away:'Assente', mode_night:'Notte', mode_vacation:'Vacanze',
+    homekit_bridge:'Ponte HomeKit', homekit_not_paired:'Non associato a nessuna casa.',
+    homekit_house:'Apple Home', language:'Lingua',
+    lang_select_title:'Seleziona Lingua',
+  },
+  zh: {
+    hero_desc:'集成安全、访问控制、自动化和HomeKit。',
+    instances:'活跃实例', modes:'模式', automations:'⚡ 自动化',
+    linked_rules:'Argus关联规则', create_ha:'+ 在HA中创建',
+    no_rules:'', rules_tip:'',
+    settings:'⚙️ 设置', change_pin:'主PIN码', pin_desc:'用于布防和撤防的数字代码。',
+    new_pin:'新PIN码', confirm_pin:'确认PIN码', update_pin:'更新PIN码',
+    current_pin:'当前PIN码', notifications_title:'🔔 通知',
+    notif_desc:'选择在HA中注册的移动设备以接收Argus警报。',
+    save_notif:'保存', users_title:'👥 用户和访问控制',
+    admin_only:'只有管理员才能修改此部分。',
+    add_user:'添加用户', username:'用户名', user_pin:'用户PIN码',
+    is_admin:'管理员', save_user:'保存', no_users:'未配置额外用户。',
+    homekit_title:'🏠 HomeKit & Matter', close:'关闭',
+    search_placeholder:'按名称、区域或entity_id搜索',
+    available:'可用', selected_lbl:'已选择', clear:'清除', accept:'接受',
+    introduce_pin:'输入您的PIN码', pin_modal_desc:'撤防Argus的数字PIN码',
+    confirm:'✓ 确认', cancel:'取消',
+    disarmed:'已撤防', armed_home:'在家', armed_away:'外出',
+    armed_night:'夜间', armed_vacation:'度假', triggered:'警报！',
+    pending:'等待中', arming:'布防中', unavailable:'不可用',
+    sensor_section:'入侵传感器', siren_section:'警报器', thermostat_alert_notif:'🌡️ 温度警报',
+    none_selected:'未选择', search_select:'搜索并选择',
+    save_mode:'💾 保存模式', details_notif:'警报通知',
+    activity_log:'📋 活动日志',
+    log_armed:'已布防', log_disarmed:'已撤防', log_triggered:'已触发！',
+    log_by:'由', log_sensor:'传感器', log_no_events:'没有最近事件。',
+    mode_home:'在家', mode_away:'外出', mode_night:'夜间', mode_vacation:'度假',
+    homekit_bridge:'HomeKit桥接', homekit_not_paired:'未与任何家庭关联。',
+    homekit_house:'Apple Home', language:'语言',
+    lang_select_title:'选择语言',
+  },
+  ru: {
+    hero_desc:'Комплексная безопасность, контроль доступа, автоматизация и HomeKit.',
+    instances:'Активные экземпляры', modes:'Режимы', automations:'⚡ Автоматизации',
+    linked_rules:'Правила Argus', create_ha:'+ Создать в HA',
+    no_rules:'', rules_tip:'',
+    settings:'⚙️ Настройки', change_pin:'Мастер PIN', pin_desc:'Цифровой код для постановки и снятия с охраны.',
+    new_pin:'Новый PIN', confirm_pin:'Подтвердить PIN', update_pin:'Обновить PIN',
+    current_pin:'Текущий PIN', notifications_title:'🔔 Уведомления',
+    notif_desc:'Выберите мобильные устройства, зарегистрированные в HA для получения оповещений Argus.',
+    save_notif:'Сохранить', users_title:'👥 Пользователи и контроль доступа',
+    admin_only:'Только администраторы могут изменять этот раздел.',
+    add_user:'Добавить пользователя', username:'Имя пользователя', user_pin:'PIN пользователя',
+    is_admin:'Администратор', save_user:'Сохранить', no_users:'Дополнительные пользователи не настроены.',
+    homekit_title:'🏠 HomeKit & Matter', close:'Закрыть',
+    search_placeholder:'Поиск по имени, зоне или entity_id',
+    available:'Доступные', selected_lbl:'Выбранные', clear:'Очистить', accept:'Принять',
+    introduce_pin:'Введите PIN', pin_modal_desc:'Цифровой PIN для снятия с охраны Argus',
+    confirm:'✓ Подтвердить', cancel:'Отмена',
+    disarmed:'Снято с охраны', armed_home:'Дома', armed_away:'Ушёл',
+    armed_night:'Ночь', armed_vacation:'Отпуск', triggered:'ТРЕВОГА!',
+    pending:'Ожидание', arming:'Постановка', unavailable:'Недоступно',
+    sensor_section:'Датчики вторжения', siren_section:'Сирены', thermostat_alert_notif:'🌡️ Температурный сигнал',
+    none_selected:'Не выбрано', search_select:'Поиск и выбор',
+    save_mode:'💾 Сохранить режим', details_notif:'Уведомление тревоги',
+    activity_log:'📋 Журнал активности',
+    log_armed:'Поставлено', log_disarmed:'Снято', log_triggered:'Сработало!',
+    log_by:'от', log_sensor:'Датчик', log_no_events:'Нет последних событий.',
+    mode_home:'Дома', mode_away:'Ушёл', mode_night:'Ночь', mode_vacation:'Отпуск',
+    homekit_bridge:'Мост HomeKit', homekit_not_paired:'Не связано ни с каким домом.',
+    homekit_house:'Apple Home', language:'Язык',
+    lang_select_title:'Выбрать язык',
+  },
 };
 
 /* ── Template ─────────────────────────────────────────────────────────── */
@@ -497,7 +668,93 @@ _tmpl.innerHTML = `
 :host([argus-dark-mode="false"]) .list-item-card { background:rgba(0,0,0,0.03); border-color:rgba(0,0,0,0.08); }
 :host([argus-dark-mode="false"]) .list-item-card * { color: #1e1e2d; }
 
+/* ── Language Picker ───────────────────────────────────── */
+.lang-pill {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:7px 14px; border-radius:999px;
+  background:rgba(255,255,255,0.10);
+  border:1px solid rgba(255,255,255,0.18);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  color:#fff; font-size:13px; font-weight:700;
+  cursor:pointer; transition:all 0.22s cubic-bezier(0.4,0,0.2,1);
+  box-shadow:0 4px 16px rgba(0,0,0,0.18);
+  white-space:nowrap; flex-shrink:0;
+}
+.lang-pill:hover { background:rgba(255,255,255,0.22); transform:translateY(-1px); }
+:host([argus-dark-mode="false"]) .lang-pill {
+  background:rgba(0,0,0,0.07); border-color:rgba(0,0,0,0.15); color:#1e1e2d;
+}
+:host([argus-dark-mode="false"]) .lang-pill:hover { background:rgba(0,0,0,0.12); }
+
+/* Language modal */
+.lang-modal-back { position:fixed; inset:0; background:rgba(0,0,0,0.55); display:none; align-items:center; justify-content:center; z-index:999998; backdrop-filter:blur(10px); }
+.lang-modal-back.open { display:flex; }
+.lang-modal-card {
+  width:min(400px,92vw); border-radius:28px; padding:28px 24px 20px;
+  background:rgba(20,22,35,0.92);
+  border:1px solid rgba(255,255,255,0.14);
+  box-shadow:0 32px 80px rgba(0,0,0,0.55);
+  backdrop-filter:blur(28px) saturate(170%);
+  -webkit-backdrop-filter:blur(28px) saturate(170%);
+  color:#fff;
+  animation: langBounceIn 0.38s cubic-bezier(0.175,0.885,0.32,1.275) forwards;
+}
+:host([argus-dark-mode="false"]) .lang-modal-card {
+  background:rgba(255,255,255,0.96); color:#1e1e2d;
+  border-color:rgba(0,0,0,0.12); box-shadow:0 20px 60px rgba(0,0,0,0.25);
+}
+@keyframes langBounceIn {
+  0%   { transform:scale(0.82) translateY(20px); opacity:0; }
+  60%  { transform:scale(1.03) translateY(-4px); opacity:1; }
+  100% { transform:scale(1)    translateY(0);    opacity:1; }
+}
+.lang-modal-title {
+  font-size:18px; font-weight:900; letter-spacing:-0.01em;
+  margin-bottom:20px; text-align:center;
+}
+.lang-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:10px;
+}
+.lang-option {
+  display:flex; align-items:center; gap:10px;
+  padding:12px 14px; border-radius:16px;
+  background:rgba(255,255,255,0.07);
+  border:1.5px solid rgba(255,255,255,0.1);
+  cursor:pointer; transition:all 0.18s ease;
+  font-size:14px; font-weight:700;
+}
+.lang-option:hover { background:rgba(255,255,255,0.16); border-color:rgba(255,255,255,0.28); transform:translateY(-1px); }
+.lang-option.active {
+  background:rgba(3,169,244,0.22); border-color:rgba(3,169,244,0.55);
+  box-shadow:0 0 18px rgba(3,169,244,0.25);
+}
+:host([argus-dark-mode="false"]) .lang-option { background:rgba(0,0,0,0.04); border-color:rgba(0,0,0,0.1); color:#1e1e2d; }
+:host([argus-dark-mode="false"]) .lang-option:hover { background:rgba(0,0,0,0.09); }
+:host([argus-dark-mode="false"]) .lang-option.active { background:rgba(3,169,244,0.12); border-color:rgba(3,169,244,0.4); }
+.lang-flag { font-size:22px; line-height:1; }
+.lang-close-row { display:flex; justify-content:center; margin-top:18px; }
+.lang-close-btn {
+  padding:9px 28px; border-radius:14px;
+  background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15);
+  color:#fff; font-size:13px; font-weight:700; cursor:pointer;
+  transition:background 0.18s;
+}
+:host([argus-dark-mode="false"]) .lang-close-btn { background:rgba(0,0,0,0.07); border-color:rgba(0,0,0,0.14); color:#1e1e2d; }
+.lang-close-btn:hover { background:rgba(255,255,255,0.2); }
+
 </style>
+
+<!-- Language picker modal -->
+<div class="lang-modal-back" id="lang-modal" aria-hidden="true">
+  <div class="lang-modal-card">
+    <div class="lang-modal-title" id="lang-modal-title">🌐 Select Language</div>
+    <div class="lang-grid" id="lang-grid"></div>
+    <div class="lang-close-row">
+      <button class="lang-close-btn" id="lang-modal-close">✕ Close</button>
+    </div>
+  </div>
+</div>
 
 <!-- SOS Confirm Modal -->
 <div class="ios-confirm-backdrop" id="sos-modal">
@@ -531,6 +788,10 @@ _tmpl.innerHTML = `
         <p id="p-hero-desc"></p>
       </div>
     </div>
+    <button class="lang-pill" id="btn-lang-picker" title="Language / Idioma">
+      <span id="lang-pill-flag">🌐</span>
+      <span id="lang-pill-label">Language</span>
+    </button>
   </div>
 
   <!-- TWO-COLUMN LAYOUT -->
@@ -772,6 +1033,7 @@ class ArgusPanel extends HTMLElement {
     this._temperatureSource = 'auto';
     this._pending = {};
     this._lastClockUpdate = 0;
+    this._manualLang = null;
   }
 
   set hass(hass) {
@@ -851,14 +1113,67 @@ class ArgusPanel extends HTMLElement {
 
   /* ── Translation ─────────────────────────────────────────────────── */
   _t(key) {
-    const lang = (this._hass?.language || 'es').split('-')[0];
+    const lang = this._manualLang || (this._hass?.language || 'es').split('-')[0];
     return (TEXTS[lang] || TEXTS.en)[key] || key;
+  }
+
+  _getCurrentLangCode() {
+    return this._manualLang || (this._hass?.language || 'es').split('-')[0];
+  }
+
+  _openLangModal() {
+    const modal = this.shadowRoot.getElementById('lang-modal');
+    if (!modal) return;
+    const grid = this.shadowRoot.getElementById('lang-grid');
+    const cur = this._getCurrentLangCode();
+    if (grid) {
+      grid.innerHTML = LANG_LIST.map(l => `
+        <button class="lang-option${l.code === cur ? ' active' : ''}" data-lang="${l.code}">
+          <span class="lang-flag">${l.flag}</span>
+          <span>${l.label}</span>
+        </button>`).join('');
+      grid.querySelectorAll('.lang-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this._setLanguage(btn.dataset.lang);
+          this._closeLangModal();
+        });
+      });
+    }
+    const title = this.shadowRoot.getElementById('lang-modal-title');
+    if (title) title.textContent = `\ud83c\udf10 ${this._t('lang_select_title')}`;
+    const card = modal.querySelector('.lang-modal-card');
+    if (card) { card.style.animation='none'; void card.offsetWidth; card.style.animation=''; }
+    modal.classList.add('open');
+  }
+
+  _closeLangModal() {
+    this.shadowRoot.getElementById('lang-modal')?.classList.remove('open');
+  }
+
+  _setLanguage(code) {
+    if (!TEXTS[code]) return;
+    this._manualLang = code;
+    try { localStorage.setItem('argus_lang', code); } catch(e) {}
+    this._applyTranslations();
+    this._renderEntries();
+    this._renderModeTabs();
+    this._renderModeView();
+    this._renderActivityLog();
+    this._renderAutomations();
   }
 
   _applyTranslations() {
     const t = k => this._t(k);
     const s = id => this.shadowRoot.getElementById(id);
     const set = (id, txt) => { const e = s(id); if (e) e.textContent = txt; };
+
+    // Update lang pill
+    const cur = this._getCurrentLangCode();
+    const langDef = LANG_LIST.find(l => l.code === cur) || LANG_LIST[0];
+    const flagEl = s('lang-pill-flag'); const labelEl = s('lang-pill-label');
+    if (flagEl) flagEl.textContent = langDef.flag;
+    if (labelEl) labelEl.textContent = langDef.label;
+
 
     set('p-hero-desc',    t('hero_desc'));
     set('h-instances',    t('instances'));
@@ -901,6 +1216,8 @@ class ArgusPanel extends HTMLElement {
 
   /* ── Init ────────────────────────────────────────────────────────── */
   connectedCallback() { 
+    // Restore persisted language
+    try { this._manualLang = localStorage.getItem('argus_lang') || null; } catch(e) {}
     this._init(); 
     this._startClock();
   }
@@ -1092,6 +1409,11 @@ class ArgusPanel extends HTMLElement {
     s('home-name-modal').addEventListener('click', e => { if (e.target.id === 'home-name-modal') this._closeHomeNameModal(); });
     s('home-name-save').addEventListener('click', () => this._saveHomeName());
     s('home-name-input').addEventListener('keydown', e => { if (e.key === 'Enter') this._saveHomeName(); });
+
+    // Language picker
+    s('btn-lang-picker')?.addEventListener('click', () => this._openLangModal());
+    s('lang-modal-close')?.addEventListener('click', () => this._closeLangModal());
+    s('lang-modal')?.addEventListener('click', e => { if (e.target.id === 'lang-modal') this._closeLangModal(); });
 
     // SOS Modal
     const closeSOS = () => {
