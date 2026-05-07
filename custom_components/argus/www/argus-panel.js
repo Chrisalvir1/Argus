@@ -61,6 +61,29 @@ const TEXTS = {
     homekit_bridge:'Puente HomeKit', homekit_not_paired:'No vinculado a ninguna casa.',
     homekit_house:'Casa de Apple Home', language:'Idioma',
     lang_select_title:'Seleccionar Idioma',
+    btn_home:'🏠 EN CASA', btn_away:'🔒 AUSENTE', btn_night:'🌙 NOCHE',
+    btn_vacation:'✈️ VACACIONES', btn_disarmed:'DESARMADO', btn_sos:'🚨 SOS / PÁNICO',
+    system_armed:'SISTEMA ARMADO', system_disarmed:'SISTEMA DESARMADO',
+    home_name_lbl:'Nombre del Hogar', background_lbl:'Fondo', edit_btn:'✏️ Editar',
+    save_btn:'Guardar', backup_title:'Respaldo y Restauración',
+    backup_desc:'Guarda una copia de seguridad de tus ajustes o restaura una anterior.',
+    export_btn:'📤 Descargar', import_btn:'📥 Restaurar',
+    access_title:'Control de Acceso y Usuarios',
+    access_desc:'Gestión global de seguridad, PIN maestro y administradores.',
+    pin_master_title:'PIN Maestro', pin_active_yes:'PIN Activo: Sí', pin_active_no:'PIN Activo: No',
+    pin_remove_hint:'Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.',
+    bypass_lbl:'🚫 Omitir', lock_if_open:'Bloquear si abiertos',
+    select_btn:'+ Seleccionar', add_btn:'+ Añadir',
+    sensors_to_bypass:'Sensores a Omitir',
+    no_instances:'No hay instancias. Agrega Argus desde Integraciones.',
+    fullscreen_title:'Pantalla completa',
+    sos_slide:'Desliza para activar SOS', sos_confirm_title:'Confirmar pánico',
+    sos_confirm_text:'Desliza para disparar la alarma inmediatamente.',
+    sos_call:'📞 Llamar a Emergencias',
+    home_name_modal_title:'🏡 Nombre del Hogar',
+    home_name_modal_desc:'Este nombre aparece en el panel de instancias y en pantalla completa.',
+    home_name_label:'Nombre del Hogar', home_name_placeholder:'Mi Casa',
+    clear_log_btn:'BORRAR', battery_low:'⚠️ Batería baja',
   },
   en: {
     hero_desc:'Alarm control, modes, TTS and automations.',
@@ -93,6 +116,29 @@ const TEXTS = {
     homekit_bridge:'HomeKit Bridge', homekit_not_paired:'Not paired to any home.',
     homekit_house:'Apple Home', language:'Language',
     lang_select_title:'Select Language',
+    btn_home:'🏠 HOME', btn_away:'🔒 AWAY', btn_night:'🌙 NIGHT',
+    btn_vacation:'✈️ VACATION', btn_disarmed:'DISARMED', btn_sos:'🚨 SOS / PANIC',
+    system_armed:'SYSTEM ARMED', system_disarmed:'SYSTEM DISARMED',
+    home_name_lbl:'Home Name', background_lbl:'Background', edit_btn:'✏️ Edit',
+    save_btn:'Save', backup_title:'Backup & Restore',
+    backup_desc:'Save a backup of your settings or restore a previous one.',
+    export_btn:'📤 Download', import_btn:'📥 Restore',
+    access_title:'Access Control & Users',
+    access_desc:'Global security management, master PIN and administrators.',
+    pin_master_title:'Master PIN', pin_active_yes:'PIN Active: Yes', pin_active_no:'PIN Active: No',
+    pin_remove_hint:'To remove PIN: Enter the current one and leave the fields below empty.',
+    bypass_lbl:'🚫 Bypass', lock_if_open:'Lock if open',
+    select_btn:'+ Select', add_btn:'+ Add',
+    sensors_to_bypass:'Sensors to Bypass',
+    no_instances:'No instances. Add Argus from Integrations.',
+    fullscreen_title:'Full screen',
+    sos_slide:'Slide to activate SOS', sos_confirm_title:'Confirm panic',
+    sos_confirm_text:'Slide to trigger the alarm immediately.',
+    sos_call:'📞 Call Emergency Services',
+    home_name_modal_title:'🏡 Home Name',
+    home_name_modal_desc:'This name appears in the instances panel and in full screen.',
+    home_name_label:'Home Name', home_name_placeholder:'My Home',
+    clear_log_btn:'CLEAR', battery_low:'⚠️ Low Battery',
   },
   fr: {
     hero_desc:"Sécurité intégrée, contrôle d'accès, automatisations et HomeKit.",
@@ -125,6 +171,27 @@ const TEXTS = {
     homekit_bridge:'Pont HomeKit', homekit_not_paired:'Non associé à une maison.',
     homekit_house:'Apple Home', language:'Langue',
     lang_select_title:'Sélectionner la langue',
+    btn_home:'🏠 MAISON', btn_away:'🔒 ABSENT', btn_night:'🌙 NUIT',
+    btn_vacation:'✈️ VACANCES', btn_disarmed:'DÉSARMÉ', btn_sos:'🚨 SOS / PANIQUE',
+    system_armed:'SYSTÈME ARMÉ', system_disarmed:'SYSTÈME DÉSARMÉ',
+    home_name_lbl:'Nom du domicile', background_lbl:'Fond', edit_btn:'✏️ Modifier',
+    save_btn:'Enregistrer', backup_title:'Sauvegarde & Restauration',
+    backup_desc:'Enregistrez une sauvegarde ou restaurez une précédente.',
+    export_btn:'📤 Télécharger', import_btn:'📥 Restaurer',
+    access_title:'Contrôle d\'accès & Utilisateurs',
+    access_desc:'Gestion globale de la sécurité, PIN maître et administrateurs.',
+    pin_master_title:'PIN Maître', pin_active_yes:'PIN actif: Oui', pin_active_no:'PIN actif: Non',
+    pin_remove_hint:'Pour supprimer le PIN: entrez le PIN actuel et laissez les champs vides.',
+    bypass_lbl:'🚫 Ignorer', lock_if_open:'Bloquer si ouvert',
+    select_btn:'+ Sélectionner', add_btn:'+ Ajouter',
+    sensors_to_bypass:'Capteurs à ignorer', no_instances:'Aucune instance.',
+    fullscreen_title:'Plein écran', sos_slide:'Glisser pour activer SOS',
+    sos_confirm_title:'Confirmer la panique', sos_confirm_text:'Glissez pour déclencher l\'alarme immédiatement.',
+    sos_call:'📞 Appeler les urgences',
+    home_name_modal_title:'🏡 Nom du domicile',
+    home_name_modal_desc:'Ce nom apparaît dans le panneau des instances et en plein écran.',
+    home_name_label:'Nom du domicile', home_name_placeholder:'Ma maison',
+    clear_log_btn:'EFFACER', battery_low:'⚠️ Batterie faible',
   },
   pt: {
     hero_desc:'Segurança integrada, controle de acesso, automações e HomeKit.',
@@ -157,6 +224,27 @@ const TEXTS = {
     homekit_bridge:'Ponte HomeKit', homekit_not_paired:'Não associado a nenhuma casa.',
     homekit_house:'Apple Home', language:'Idioma',
     lang_select_title:'Selecionar Idioma',
+    btn_home:'🏠 EM CASA', btn_away:'🔒 AUSENTE', btn_night:'🌙 NOITE',
+    btn_vacation:'✈️ FÉRIAS', btn_disarmed:'DESARMADO', btn_sos:'🚨 SOS / PÂNICO',
+    system_armed:'SISTEMA ARMADO', system_disarmed:'SISTEMA DESARMADO',
+    home_name_lbl:'Nome do lar', background_lbl:'Fundo', edit_btn:'✏️ Editar',
+    save_btn:'Salvar', backup_title:'Backup & Restauração',
+    backup_desc:'Salve um backup ou restaure um anterior.',
+    export_btn:'📤 Baixar', import_btn:'📥 Restaurar',
+    access_title:'Controle de Acesso & Usuários',
+    access_desc:'Gerenciamento global, PIN mestre e administradores.',
+    pin_master_title:'PIN Mestre', pin_active_yes:'PIN Ativo: Sim', pin_active_no:'PIN Ativo: Não',
+    pin_remove_hint:'Para remover o PIN: insira o atual e deixe os campos abaixo vazios.',
+    bypass_lbl:'🚫 Ignorar', lock_if_open:'Bloquear se aberto',
+    select_btn:'+ Selecionar', add_btn:'+ Adicionar',
+    sensors_to_bypass:'Sensores a ignorar', no_instances:'Nenhuma instância.',
+    fullscreen_title:'Tela cheia', sos_slide:'Deslize para ativar SOS',
+    sos_confirm_title:'Confirmar pânico', sos_confirm_text:'Deslize para acionar o alarme imediatamente.',
+    sos_call:'📞 Chamar emergências',
+    home_name_modal_title:'🏡 Nome do lar',
+    home_name_modal_desc:'Este nome aparece no painel de instâncias e em tela cheia.',
+    home_name_label:'Nome do lar', home_name_placeholder:'Minha Casa',
+    clear_log_btn:'LIMPAR', battery_low:'⚠️ Bateria fraca',
   },
   it: {
     hero_desc:'Sicurezza integrata, controllo accessi, automazioni e HomeKit.',
@@ -189,6 +277,27 @@ const TEXTS = {
     homekit_bridge:'Ponte HomeKit', homekit_not_paired:'Non associato a nessuna casa.',
     homekit_house:'Apple Home', language:'Lingua',
     lang_select_title:'Seleziona Lingua',
+    btn_home:'🏠 CASA', btn_away:'🔒 ASSENTE', btn_night:'🌙 NOTTE',
+    btn_vacation:'✈️ VACANZE', btn_disarmed:'DISARMATO', btn_sos:'🚨 SOS / PANICO',
+    system_armed:'SISTEMA ARMATO', system_disarmed:'SISTEMA DISARMATO',
+    home_name_lbl:'Nome della casa', background_lbl:'Sfondo', edit_btn:'✏️ Modifica',
+    save_btn:'Salva', backup_title:'Backup & Ripristino',
+    backup_desc:'Salva un backup o ripristina uno precedente.',
+    export_btn:'📤 Scarica', import_btn:'📥 Ripristina',
+    access_title:'Controllo Accessi & Utenti',
+    access_desc:'Gestione globale della sicurezza, PIN principale e amministratori.',
+    pin_master_title:'PIN Principale', pin_active_yes:'PIN Attivo: Sì', pin_active_no:'PIN Attivo: No',
+    pin_remove_hint:'Per rimuovere il PIN: inserisci quello attuale e lascia vuoti i campi sottostanti.',
+    bypass_lbl:'🚫 Ignora', lock_if_open:'Blocca se aperto',
+    select_btn:'+ Seleziona', add_btn:'+ Aggiungi',
+    sensors_to_bypass:'Sensori da ignorare', no_instances:'Nessuna istanza.',
+    fullscreen_title:'Schermo intero', sos_slide:'Scorri per attivare SOS',
+    sos_confirm_title:'Conferma panico', sos_confirm_text:'Scorri per attivare immediatamente l\'allarme.',
+    sos_call:'📞 Chiama i soccorsi',
+    home_name_modal_title:'🏡 Nome della casa',
+    home_name_modal_desc:'Questo nome appare nel pannello delle istanze e a schermo intero.',
+    home_name_label:'Nome della casa', home_name_placeholder:'Casa mia',
+    clear_log_btn:'CANCELLA', battery_low:'⚠️ Batteria scarica',
   },
   zh: {
     hero_desc:'集成安全、访问控制、自动化和HomeKit。',
@@ -221,6 +330,27 @@ const TEXTS = {
     homekit_bridge:'HomeKit桥接', homekit_not_paired:'未与任何家庭关联。',
     homekit_house:'Apple Home', language:'语言',
     lang_select_title:'选择语言',
+    btn_home:'🏠 在家', btn_away:'🔒 外出', btn_night:'🌙 夜间',
+    btn_vacation:'✈️ 度假', btn_disarmed:'已撤防', btn_sos:'🚨 SOS / 紧急',
+    system_armed:'系统已布防', system_disarmed:'系统已撤防',
+    home_name_lbl:'家庭名称', background_lbl:'背景', edit_btn:'✏️ 编辑',
+    save_btn:'保存', backup_title:'备份与恢复',
+    backup_desc:'保存设置备份或恢复之前的设置。',
+    export_btn:'📤 下载', import_btn:'📥 恢复',
+    access_title:'访问控制和用户',
+    access_desc:'全局安全管理、主PIN码和管理员。',
+    pin_master_title:'主PIN码', pin_active_yes:'PIN激活: 是', pin_active_no:'PIN激活: 否',
+    pin_remove_hint:'删除PIN: 输入当前PIN并将下面字段留空。',
+    bypass_lbl:'🚫 跳过', lock_if_open:'开启时锁定',
+    select_btn:'+ 选择', add_btn:'+ 添加',
+    sensors_to_bypass:'跳过的传感器', no_instances:'没有实例。',
+    fullscreen_title:'全屏', sos_slide:'滑动以激活SOS',
+    sos_confirm_title:'确认紧急', sos_confirm_text:'滑动以立即触发警报。',
+    sos_call:'📞 拨打紧急服务',
+    home_name_modal_title:'🏡 家庭名称',
+    home_name_modal_desc:'此名称显示在实例面板和全屏中。',
+    home_name_label:'家庭名称', home_name_placeholder:'我的家',
+    clear_log_btn:'清除', battery_low:'⚠️ 电池不足',
   },
   ru: {
     hero_desc:'Комплексная безопасность, контроль доступа, автоматизация и HomeKit.',
@@ -253,6 +383,27 @@ const TEXTS = {
     homekit_bridge:'Мост HomeKit', homekit_not_paired:'Не связано ни с каким домом.',
     homekit_house:'Apple Home', language:'Язык',
     lang_select_title:'Выбрать язык',
+    btn_home:'🏠 ДОМА', btn_away:'🔒 УШЁЛ', btn_night:'🌙 НОЧЬ',
+    btn_vacation:'✈️ ОТПУСК', btn_disarmed:'СНЯТО', btn_sos:'🚨 SOS / ТРЕВОГА',
+    system_armed:'СИСТЕМА ПОСТАВЛЕНА', system_disarmed:'СИСТЕМА СНЯТА',
+    home_name_lbl:'Название дома', background_lbl:'Фон', edit_btn:'✏️ Редактировать',
+    save_btn:'Сохранить', backup_title:'Резервная копия',
+    backup_desc:'Сохраните резервную копию или восстановите предыдущую.',
+    export_btn:'📤 Скачать', import_btn:'📥 Восстановить',
+    access_title:'Контроль доступа и пользователи',
+    access_desc:'Глобальная безопасность, мастер PIN и администраторы.',
+    pin_master_title:'Мастер PIN', pin_active_yes:'PIN активен: Да', pin_active_no:'PIN активен: Нет',
+    pin_remove_hint:'Для удаления PIN: введите текущий и оставьте поля пустыми.',
+    bypass_lbl:'🚫 Обход', lock_if_open:'Блокировать если открыто',
+    select_btn:'+ Выбрать', add_btn:'+ Добавить',
+    sensors_to_bypass:'Датчики для обхода', no_instances:'Нет экземпляров.',
+    fullscreen_title:'Полный экран', sos_slide:'Проведите для активации SOS',
+    sos_confirm_title:'Подтвердить тревогу', sos_confirm_text:'Проведите для немедленной активации тревоги.',
+    sos_call:'📞 Вызвать экстренные службы',
+    home_name_modal_title:'🏡 Название дома',
+    home_name_modal_desc:'Это имя отображается в панели экземпляров и в полноекранном режиме.',
+    home_name_label:'Название дома', home_name_placeholder:'Мой дом',
+    clear_log_btn:'ОЧИСТИТЬ', battery_low:'⚠️ Низкий заряд',
   },
 };
 
@@ -760,8 +911,8 @@ _tmpl.innerHTML = `
 <div class="ios-confirm-backdrop" id="sos-modal">
   <div class="ios-confirm-card liquid-glass" id="sos-card" style="position:relative;">
     <button id="sos-close-x" style="position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.1); border:none; color:white; border-radius:50%; width:32px; height:32px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; opacity:0.8; padding:0; transition:background 0.2s;">✕</button>
-    <div class="ios-confirm-title">Confirmar pánico</div>
-    <div class="ios-confirm-text">Desliza para disparar la alarma inmediatamente.</div>
+    <div class="ios-confirm-title" id="sos-title-txt">Confirmar pánico</div>
+    <div class="ios-confirm-text" id="sos-text-txt">Desliza para disparar la alarma inmediatamente.</div>
     <div class="ios-slider-shell">
       <div class="ios-slider-track">
         <div class="ios-slider-label" id="sos-label">Desliza para activar SOS</div>
@@ -811,11 +962,11 @@ _tmpl.innerHTML = `
         <!-- Personalization merged from Mi Casa -->
         <div class="personalize-row">
           <div style="flex:1;min-width:140px">
-            <div class="setting-label">Nombre del Hogar</div>
+            <div class="setting-label" id="lbl-home-name-hdr">Nombre del Hogar</div>
             <div id="lbl-home-name-prominent" style="font-size:18px;font-weight:900;margin-top:2px">Mi Casa</div>
           </div>
           <div style="flex:1;min-width:140px">
-            <div class="setting-label">Fondo</div>
+            <div class="setting-label" id="lbl-background-hdr">Fondo</div>
             <select id="bg-mode-select-standalone" style="margin-top:4px;width:100%"></select>
           </div>
           <button class="ghost" id="btn-edit-home-name-standalone" style="padding:6px 10px;font-size:11px;border-radius:10px;white-space:nowrap">✏️ Editar</button>
@@ -846,8 +997,8 @@ _tmpl.innerHTML = `
 
       <!-- Users & Master PIN Settings -->
       <section class="glass panel liquid-glass">
-        <h2>Control de Acceso y Usuarios</h2>
-        <p class="small" style="margin-bottom:12px;opacity:0.7">Gestión global de seguridad, PIN maestro y administradores.</p>
+        <h2 id="h-access-title">Control de Acceso y Usuarios</h2>
+        <p class="small" id="p-access-desc" style="margin-bottom:12px;opacity:0.7">Gestión global de seguridad, PIN maestro y administradores.</p>
         
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start;">
           <!-- Left: Users -->
@@ -873,7 +1024,7 @@ _tmpl.innerHTML = `
                  <label>PIN Actual</label>
                  <input type="password" id="current-pin" inputmode="numeric" pattern="[0-9]*">
               </div>
-              <p class="small" style="margin:0 0 10px 0; color:var(--primary-color); font-weight:700">Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.</p>
+              <p class="small" id="p-pin-remove-hint" style="margin:0 0 10px 0; color:var(--primary-color); font-weight:700">Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.</p>
               <div style="display:grid;gap:10px">
                 <div class="field-group"><label id="l-new-pin"></label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*" placeholder="••••"></div>
                 <div class="field-group"><label id="l-confirm-pin"></label><input type="password" id="new-pin-2" inputmode="numeric" pattern="[0-9]*"></div>
@@ -898,8 +1049,8 @@ _tmpl.innerHTML = `
 
       <!-- Backup & Restore -->
       <section class="glass panel liquid-glass">
-        <h2>Respaldo y Restauración</h2>
-        <p class="small" style="margin-bottom:12px;opacity:0.7">Guarda una copia de seguridad de tus ajustes o restaura una anterior.</p>
+        <h2 id="h-backup-title">Respaldo y Restauración</h2>
+        <p class="small" id="p-backup-desc" style="margin-bottom:12px;opacity:0.7">Guarda una copia de seguridad de tus ajustes o restaura una anterior.</p>
         <div style="display:flex;gap:10px;align-items:center;">
           <button class="ghost" id="btn-export-config" style="flex:1">📤 Descargar</button>
           <div style="position:relative; flex:1">
@@ -959,7 +1110,7 @@ _tmpl.innerHTML = `
 <div class="modal-back" id="home-name-modal" aria-hidden="true">
   <div class="modal" style="width:min(400px,96vw)">
     <div class="modal-head">
-      <h3>🏡 Nombre del Hogar</h3>
+      <h3 id="home-name-modal-h3">🏡 Nombre del Hogar</h3>
       <button class="ghost" id="home-name-modal-close">✕</button>
     </div>
     <div style="display:grid;gap:14px;padding:4px 0">
@@ -1212,6 +1363,40 @@ class ArgusPanel extends HTMLElement {
     btn('selector-accept','accept');
     btn('pin-cancel',     'cancel');
     btn('pin-confirm',    'confirm');
+
+    // Static template labels (new in v1.0.1)
+    set('lbl-home-name-hdr',    t('home_name_lbl'));
+    set('lbl-background-hdr',   t('background_lbl'));
+    set('btn-edit-home-name-standalone', t('edit_btn'));
+    set('btn-save-personalization-standalone', t('save_btn'));
+    set('btn-clear-log',        t('clear_log_btn'));
+    set('h-access-title',       t('access_title'));
+    set('p-access-desc',        t('access_desc'));
+    set('h-settings-pin',       t('pin_master_title'));
+    set('p-pin-remove-hint',    t('pin_remove_hint'));
+    set('h-backup-title',       t('backup_title'));
+    set('p-backup-desc',        t('backup_desc'));
+    set('btn-export-config',    t('export_btn'));
+    set('btn-import-trigger',   t('import_btn'));
+    set('sos-title-txt',        t('sos_confirm_title'));
+    set('sos-text-txt',         t('sos_confirm_text'));
+    set('sos-label',            t('sos_slide'));
+    set('home-name-modal-h3',   t('home_name_modal_title'));
+    set('p-home-name-modal-desc', t('home_name_modal_desc'));
+    set('l-home-name-modal-label', t('home_name_label'));
+    set('lang-modal-title',     `\ud83c\udf10 ${t('lang_select_title')}`);
+    // PIN display
+    const pinDisp2 = s('current-pin-display');
+    if (pinDisp2 && pinDisp2.textContent) {
+      const hasPIN = pinDisp2.textContent.includes('Sí') || pinDisp2.textContent.includes('Yes')
+        || pinDisp2.textContent.includes('Sim') || pinDisp2.textContent.includes('Sì')
+        || pinDisp2.textContent.includes('是') || pinDisp2.textContent.includes('Да')
+        || pinDisp2.textContent.includes('Ja') || pinDisp2.textContent.includes('Oui');
+      pinDisp2.textContent = hasPIN ? t('pin_active_yes') : t('pin_active_no');
+    }
+    // Home name input placeholder
+    const hnInput = s('home-name-input');
+    if (hnInput) hnInput.placeholder = t('home_name_placeholder');
   }
 
   /* ── Init ────────────────────────────────────────────────────────── */
@@ -1532,7 +1717,8 @@ class ArgusPanel extends HTMLElement {
       return !Number.isNaN(level) && level <= 20;
     });
     if (!lowBatteries.length) return '';
-    const rows = lowBatteries.map(b => `<div class="battery-alert">⚠️ Batería baja: ${b.attributes.friendly_name || b.entity_id} (${b.state}%)</div>`).join('');
+    const t = k => this._t(k);
+    const rows = lowBatteries.map(b => `<div class="battery-alert">${t('battery_low')}: ${b.attributes.friendly_name || b.entity_id} (${b.state}%)</div>`).join('');
     return `<div class="battery-alerts-container" style="margin-top: 10px;">${rows}</div>`;
   }
 
@@ -1540,16 +1726,17 @@ class ArgusPanel extends HTMLElement {
     const el = this.shadowRoot.getElementById('entries');
     const globalStatusEl = this.shadowRoot.getElementById('global-status');
     const entries = this._dashboard?.entries || [];
+    const t = k => this._t(k);
 
     if (!entries.length) {
-      el.innerHTML = `<div class="small" style="padding:10px">No hay instancias. Agrega Argus desde Integraciones.</div>`;
+      el.innerHTML = `<div class="small" style="padding:10px">${t('no_instances')}</div>`;
       return;
     }
 
     // Determine global status
     const allStates = entries.map(e => this._hass?.states[e.entity_id]?.state || 'unavailable');
     const isArmed = allStates.some(s => s.startsWith('armed') || s === 'triggered' || s === 'pending');
-    globalStatusEl.innerHTML = `<span class="badge ${isArmed ? 'armed_away' : 'disarmed'}">${isArmed ? 'SISTEMA ARMADO' : 'SISTEMA DESARMADO'}</span>`;
+    globalStatusEl.innerHTML = `<span class="badge ${isArmed ? 'armed_away' : 'disarmed'}">${isArmed ? t('system_armed') : t('system_disarmed')}</span>`;
 
     // Weather
     const weatherEnt = Object.values(this._hass?.states || {}).find(s => s.entity_id.startsWith('weather.')) || { state: 'sunny' };
@@ -1597,12 +1784,12 @@ class ArgusPanel extends HTMLElement {
 
           <div class="entry-content">
             <div class="liquid-stack">
-              <button class="liquid-btn btn-home ${state==='armed_home'?'active':''}" data-idx="${idx}" data-action="home">🏠 EN CASA</button>
-              <button class="liquid-btn btn-away ${state==='armed_away'?'active':''}" data-idx="${idx}" data-action="away">🔒 AUSENTE</button>
-              <button class="liquid-btn btn-night ${state==='armed_night'?'active':''}" data-idx="${idx}" data-action="night">🌙 NOCHE</button>
-              <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''}" data-idx="${idx}" data-action="vacation">✈️ VACACIONES</button>
-              <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg> <span>DESARMADO</span></button>
-              <button class="btn-sos" data-action="sos">🚨 SOS / PÁNICO</button>
+              <button class="liquid-btn btn-home ${state==='armed_home'?'active':''}" data-idx="${idx}" data-action="home">${t('btn_home')}</button>
+              <button class="liquid-btn btn-away ${state==='armed_away'?'active':''}" data-idx="${idx}" data-action="away">${t('btn_away')}</button>
+              <button class="liquid-btn btn-night ${state==='armed_night'?'active':''}" data-idx="${idx}" data-action="night">${t('btn_night')}</button>
+              <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''}" data-idx="${idx}" data-action="vacation">${t('btn_vacation')}</button>
+              <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg> <span>${t('btn_disarmed')}</span></button>
+              <button class="btn-sos" data-action="sos">${t('btn_sos')}</button>
             </div>
 
             <div class="entry-icon">
@@ -1926,33 +2113,33 @@ class ArgusPanel extends HTMLElement {
         ${instanceBlock}
 
         <div class="mode-section-card">
-          <div class="mode-section-title">🛡️ Sensores</div>
+          <div class="mode-section-title">🛡️ ${this._t('sensor_section')}</div>
           <div class="mode-sensor-grid" id="sensor-chips">
             ${sensors.map(x => this._chip(x, 'sensor')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
           </div>
           ${readonly ? '' : `
-            <button class="ghost" data-open-selector="sensor" style="margin-top:12px; width:100%; justify-content:center; font-size:12px">+ Seleccionar</button>
+            <button class="ghost" data-open-selector="sensor" style="margin-top:12px; width:100%; justify-content:center; font-size:12px">${this._t('select_btn')}</button>
             <label class="checkbox-label" style="display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05);font-size:12px">
               <input type="checkbox" id="mode-require-closed" ${cfg.require_closed ? 'checked' : ''}>
-              <span style="font-size:12px;font-weight:600">Bloquear si abiertos</span>
+              <span style="font-size:12px;font-weight:600">${this._t('lock_if_open')}</span>
             </label>
           `}
         </div>
 
         <div class="mode-section-card">
-          <div class="mode-section-title">🚫 Omitir</div>
+          <div class="mode-section-title">${this._t('bypass_lbl')}</div>
           <div class="mode-sensor-grid" id="bypass-chips">
-            ${bypass.map(x => this._chip(x, 'bypass')).join('') || `<div class="mode-sensor-none">Ninguno</div>`}
+            ${bypass.map(x => this._chip(x, 'bypass')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
           </div>
-          ${readonly ? '' : `<button class="ghost" data-open-selector="bypass" style="margin-top:12px; width:100%; justify-content:center; font-size:12px">+ Añadir</button>`}
+          ${readonly ? '' : `<button class="ghost" data-open-selector="bypass" style="margin-top:12px; width:100%; justify-content:center; font-size:12px">${this._t('add_btn')}</button>`}
         </div>
 
         <div class="mode-section-card">
-          <div class="mode-section-title">📢 Sirenas</div>
+          <div class="mode-section-title">📢 ${this._t('siren_section')}</div>
           <div class="mode-sensor-grid" id="siren-chips">
             ${sirens.map(x => this._chip(x, 'siren')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
           </div>
-          ${readonly ? '' : `<button class="ghost" data-open-selector="siren" style="margin-top:12px; width:100%; justify-content:center; font-size:12px">+ Seleccionar</button>`}
+          ${readonly ? '' : `<button class="ghost" data-open-selector="siren" style="margin-top:12px; width:100%; justify-content:center; font-size:12px">${this._t('select_btn')}</button>`}
         </div>
 
         <div class="mode-section-card">
@@ -2604,7 +2791,7 @@ class ArgusPanel extends HTMLElement {
     this._selected = Array.isArray(cfg[_srcKey]) ? [...cfg[_srcKey]] : [];
     const title = this.shadowRoot.getElementById('selector-title');
     if (type === 'sensor') title.textContent = this._t('sensor_section');
-    else if (type === 'bypass') title.textContent = 'Sensores a Omitir';
+    else if (type === 'bypass') title.textContent = this._t('sensors_to_bypass');
     else title.textContent = this._t('siren_section');
     this.shadowRoot.getElementById('selector-search').value = '';
     this._renderSelector();
