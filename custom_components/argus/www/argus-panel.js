@@ -1389,6 +1389,8 @@ class ArgusPanel extends HTMLElement {
     this._renderModeView();
     this._renderActivityLog();
     this._renderAutomations();
+    this._renderUsers();
+    this._renderHomeKit();
   }
 
   _applyTranslations() {
@@ -2282,7 +2284,7 @@ class ArgusPanel extends HTMLElement {
         </div>
 
         <div class="mode-section-card">
-          <div class="mode-section-title">⌨️ Tiempos</div>
+          <div class="mode-section-title">${this._t('times_section')}</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
             <div class="input-group">
               <span class="input-label">${this._t('arm_time')}</span>
