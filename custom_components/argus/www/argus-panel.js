@@ -71,6 +71,8 @@ const TEXTS = {
     access_title:'Control de Acceso y Usuarios',
     access_desc:'Gestión global de seguridad, PIN maestro y administradores.',
     pin_master_title:'PIN Maestro', pin_active_yes:'PIN Activo: Sí', pin_active_no:'PIN Activo: No',
+    select_all:'☑ Todos', deselect_all:'☐ Ninguno', mqtt_label:'MQTT',
+    arm_time_label:'Tiempo armado (s)', disarm_time_label:'Tiempo desarmado (s)',
     pin_remove_hint:'Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.',
     bypass_lbl:'🚫 Omitir', lock_if_open:'Bloquear si abiertos',
     select_btn:'+ Seleccionar', add_btn:'+ Añadir',
@@ -141,6 +143,8 @@ const TEXTS = {
     access_title:'Access Control & Users',
     access_desc:'Global security management, master PIN and administrators.',
     pin_master_title:'Master PIN', pin_active_yes:'PIN Active: Yes', pin_active_no:'PIN Active: No',
+    select_all:'☑ All', deselect_all:'☐ None', mqtt_label:'MQTT',
+    arm_time_label:'Arm time (s)', disarm_time_label:'Disarm time (s)',
     pin_remove_hint:'To remove PIN: Enter the current one and leave the fields below empty.',
     bypass_lbl:'🚫 Bypass', lock_if_open:'Lock if open',
     select_btn:'+ Select', add_btn:'+ Add',
@@ -211,6 +215,8 @@ const TEXTS = {
     access_title:'Contrôle d\'accès & Utilisateurs',
     access_desc:'Gestion globale de la sécurité, PIN maître et administrateurs.',
     pin_master_title:'PIN Maître', pin_active_yes:'PIN actif: Oui', pin_active_no:'PIN actif: Non',
+    select_all:'☑ Tous', deselect_all:'☐ Aucun', mqtt_label:'MQTT',
+    arm_time_label:'Temps armement (s)', disarm_time_label:'Temps désarmement (s)',
     pin_remove_hint:'Pour supprimer le PIN: entrez le PIN actuel et laissez les champs vides.',
     bypass_lbl:'🚫 Ignorer', lock_if_open:'Bloquer si ouvert',
     select_btn:'+ Sélectionner', add_btn:'+ Ajouter',
@@ -276,6 +282,8 @@ const TEXTS = {
     access_title:'Controle de Acesso & Usuários',
     access_desc:'Gerenciamento global, PIN mestre e administradores.',
     pin_master_title:'PIN Mestre', pin_active_yes:'PIN Ativo: Sim', pin_active_no:'PIN Ativo: Não',
+    select_all:'☑ Todos', deselect_all:'☐ Nenhum', mqtt_label:'MQTT',
+    arm_time_label:'Tempo armado (s)', disarm_time_label:'Tempo desarmado (s)',
     pin_remove_hint:'Para remover o PIN: insira o atual e deixe os campos abaixo vazios.',
     bypass_lbl:'🚫 Ignorar', lock_if_open:'Bloquear se aberto',
     select_btn:'+ Selecionar', add_btn:'+ Adicionar',
@@ -341,6 +349,8 @@ const TEXTS = {
     access_title:'Controllo Accessi & Utenti',
     access_desc:'Gestione globale della sicurezza, PIN principale e amministratori.',
     pin_master_title:'PIN Principale', pin_active_yes:'PIN Attivo: Sì', pin_active_no:'PIN Attivo: No',
+    select_all:'☑ Tutti', deselect_all:'☐ Nessuno', mqtt_label:'MQTT',
+    arm_time_label:'Tempo armato (s)', disarm_time_label:'Tempo disarmato (s)',
     pin_remove_hint:'Per rimuovere il PIN: inserisci quello attuale e lascia vuoti i campi sottostanti.',
     bypass_lbl:'🚫 Ignora', lock_if_open:'Blocca se aperto',
     select_btn:'+ Seleziona', add_btn:'+ Aggiungi',
@@ -406,6 +416,8 @@ const TEXTS = {
     access_title:'访问控制和用户',
     access_desc:'全局安全管理、主PIN码和管理员。',
     pin_master_title:'主PIN码', pin_active_yes:'PIN激活: 是', pin_active_no:'PIN激活: 否',
+    select_all:'☑ 全选', deselect_all:'☐ 全不选', mqtt_label:'MQTT',
+    arm_time_label:'布防延迟(s)', disarm_time_label:'进入延迟(s)',
     pin_remove_hint:'删除PIN: 输入当前PIN并将下面字段留空。',
     bypass_lbl:'🚫 跳过', lock_if_open:'开启时锁定',
     select_btn:'+ 选择', add_btn:'+ 添加',
@@ -471,6 +483,8 @@ const TEXTS = {
     access_title:'Контроль доступа и пользователи',
     access_desc:'Глобальная безопасность, мастер PIN и администраторы.',
     pin_master_title:'Мастер PIN', pin_active_yes:'PIN активен: Да', pin_active_no:'PIN активен: Нет',
+    select_all:'☑ Все', deselect_all:'☐ Ничего', mqtt_label:'MQTT',
+    arm_time_label:'Время взятия (с)', disarm_time_label:'Время снятия (с)',
     pin_remove_hint:'Для удаления PIN: введите текущий и оставьте поля пустыми.',
     bypass_lbl:'🚫 Обход', lock_if_open:'Блокировать если открыто',
     select_btn:'+ Выбрать', add_btn:'+ Добавить',
@@ -1439,6 +1453,8 @@ class ArgusPanel extends HTMLElement {
     set('l-user-pin',     t('user_pin'));
     set('s-is-admin',     t('is_admin'));
     set('h-homekit',      t('homekit_title'));
+    set('selector-select-all',   t('select_all'));
+    set('selector-deselect-all', t('deselect_all'));
     set('l-available',    t('available'));
     set('l-selected-lbl', t('selected_lbl'));
     set('l-introduce-pin',`🔒 ${t('introduce_pin')}`);
@@ -1827,10 +1843,10 @@ class ArgusPanel extends HTMLElement {
     const bgMode = this.shadowRoot.getElementById('bg-mode-select-standalone');
     if (bgMode) {
       bgMode.innerHTML = `
-        <option value="weather">Clima animado</option>
-        <option value="none">Sin animación</option>
-        <option value="photo">Una foto</option>
-        <option value="collage">Collage</option>
+        <option value="weather">${this._t('bg_weather')}</option>
+        <option value="none">${this._t('bg_none')}</option>
+        <option value="photo">${this._t('bg_photo')}</option>
+        <option value="collage">${this._t('bg_collage')}</option>
       `;
       bgMode.value = this._backgroundMode || 'weather';
     }
@@ -1844,7 +1860,7 @@ class ArgusPanel extends HTMLElement {
     const pinDisp = this.shadowRoot.getElementById('current-pin-display');
     const groupCurrentPin = this.shadowRoot.getElementById('group-current-pin');
     
-    if (pinDisp) pinDisp.textContent = currentPin ? `PIN Activo: Sí` : `PIN Activo: No`;
+    if (pinDisp) pinDisp.textContent = currentPin ? this._t('pin_active_yes') : this._t('pin_active_no');
     if (groupCurrentPin) groupCurrentPin.style.display = currentPin ? 'block' : 'none';
 
     this._renderEntries();
@@ -2326,7 +2342,7 @@ class ArgusPanel extends HTMLElement {
           </div>
           <label class="checkbox-label" style="display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05)">
             <input type="checkbox" id="mode-mqtt-enabled" ${cfg.mqtt_enabled !== false ? 'checked' : ''}>
-            <span style="font-size:12px;font-weight:600">MQTT</span>
+            <span style="font-size:12px;font-weight:600">${this._t('mqtt_label')}</span>
           </label>
         </div>
       </div>
@@ -2888,7 +2904,7 @@ class ArgusPanel extends HTMLElement {
       status.textContent = p1 ? '✓ PIN Actualizado' : '✓ PIN Eliminado'; 
       status.className = 'status ok';
       if (this.shadowRoot.getElementById('current-pin-display')) {
-        this.shadowRoot.getElementById('current-pin-display').textContent = p1 ? 'PIN Activo: Sí' : 'PIN Activo: No';
+        this.shadowRoot.getElementById('current-pin-display').textContent = p1 ? this._t('pin_active_yes') : this._t('pin_active_no');
       }
       if (this.shadowRoot.getElementById('current-pin')) this.shadowRoot.getElementById('current-pin').value = '';
       this.shadowRoot.getElementById('new-pin-1').value = '';
