@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.1.6
+ * Argus Home Hub – v1.1.7
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -770,9 +770,10 @@ _tmpl.innerHTML = `
   .btn-disarm{--btn-bg:rgba(67,160,71,0.2); margin-top:4px}
   .btn-disarm.active{--btn-bg:rgba(67,160,71,0.35);--btn-shadow:rgba(67,160,71,0.5);border-color:rgba(67,160,71,0.6)!important;box-shadow:0 0 25px rgba(67,160,71,0.45)!important}
   
-  .entry-icon{display:flex;justify-content:center;align-items:center;perspective:1000px}
-  .entry-icon img{max-width:100%;height:auto;filter:drop-shadow(0 10px 20px rgba(0,0,0,0.4));animation:float-icon 4s ease-in-out infinite}
-  @keyframes float-icon{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-15px) rotate(2deg)}}
+  .entry-icon{display:flex;justify-content:center;align-items:center;perspective:1000px;min-height:160px}
+  .entry-icon svg{width:100%;height:auto;max-width:260px;filter:drop-shadow(0 0 25px rgba(255,255,255,0.15));animation:float-icon 5s ease-in-out infinite;transition:max-width 0.4s ease}
+  .ios-fullscreen .entry-icon svg{max-width:480px;filter:drop-shadow(0 0 40px rgba(255,255,255,0.25))}
+  @keyframes float-icon{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-15px) rotate(1.5deg)}}
 
   .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
   .badge.armed_away,.badge.armed_vacation{background:rgba(229,57,53,.15);color:var(--error-color,#e53935)}
@@ -1305,6 +1306,7 @@ class ArgusPanel extends HTMLElement {
     this._pending = {};
     this._lastClockUpdate = 0;
     this._manualLang = null;
+    this._fullscreenIdx = -1;
   }
 
   set hass(hass) {
@@ -2111,8 +2113,9 @@ class ArgusPanel extends HTMLElement {
       const activeSensors = sList.filter(s => !sByps.includes(s));
       const OPEN = ['on', 'open', 'unlocked', 'recording', 'active', 'motion'];
 
+      const isFS = this._fullscreenIdx === idx;
       return `
-        <article class="entry" style="${triggered ? 'border:3px solid #ff5252;box-shadow:0 0 30px rgba(255,82,82,.4)' : ''}">
+        <article class="entry ${isFS ? 'ios-fullscreen' : ''}" style="${triggered ? 'border:3px solid #ff5252;box-shadow:0 0 30px rgba(255,82,82,.4)' : ''}">
           ${this._renderEntryBackground(weatherState, isNight)}
 
           <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="Pantalla completa" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>
@@ -2179,31 +2182,38 @@ class ArgusPanel extends HTMLElement {
 
   _toggleFullscreen(targetEl) {
     const target = targetEl || this.shadowRoot.querySelector('.entry');
+    const idx = parseInt(target.querySelector('.entry-fs')?.dataset?.fullscreen ?? -1);
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
     if (!document.fullscreenEnabled && !target.webkitRequestFullscreen) {
-      target.classList.toggle('ios-fullscreen');
+      if (target.classList.contains('ios-fullscreen')) {
+        target.classList.remove('ios-fullscreen');
+        this._fullscreenIdx = -1;
+      } else {
+        target.classList.add('ios-fullscreen');
+        this._fullscreenIdx = idx;
+      }
       return;
     }
 
     if (!document.fullscreenElement && !document.webkitFullscreenElement) {
       if (target.requestFullscreen) {
-        target.requestFullscreen().catch(err => {
-          if (isIOS) target.classList.add('ios-fullscreen');
+        target.requestFullscreen().then(() => { this._fullscreenIdx = idx; }).catch(err => {
+          if (isIOS) { target.classList.add('ios-fullscreen'); this._fullscreenIdx = idx; }
           else console.warn(`Fullscreen error: ${err.message}`);
         });
       } else if (target.webkitRequestFullscreen) {
         target.webkitRequestFullscreen();
+        this._fullscreenIdx = idx;
       } else {
         target.classList.add('ios-fullscreen');
+        this._fullscreenIdx = idx;
       }
     } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      }
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
       target.classList.remove('ios-fullscreen');
+      this._fullscreenIdx = -1;
     }
   }
 
