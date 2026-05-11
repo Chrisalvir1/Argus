@@ -1661,7 +1661,8 @@ class ArgusPanel extends HTMLElement {
     if (!confirm('¿Seguro que quieres borrar todo el historial?')) return;
     try {
       await this._send('argus/clear_activity_log');
-      this._activityLog = []; // v0.9.33 Fix #4: limpiar caché local para que desaparezca inmediatamente
+      if (this._ui) this._ui.audit_log = [];
+      this._activityLog = []; // limpiar caché local
       this._renderActivityLog();
     } catch (err) { alert(err.message); }
   }
