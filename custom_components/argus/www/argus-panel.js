@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.1.5
+ * Argus Home Hub – v1.1.6
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -2210,112 +2210,114 @@ class ArgusPanel extends HTMLElement {
   /* ── Inline CSS Weather Backgrounds ─────────────────────────── */
   _getWeatherBg(ws, isNight) {
     const has = s => ws.includes(s);
-    if (has('pouring') || has('rain') || has('drizzle') || has('shower')) return this._bgRain(false);
-    if (has('thunder') || has('lightning') || has('storm'))               return this._bgRain(true);
-    if (has('snow') || has('hail') || has('sleet') || has('blizzard'))   return this._bgSnow();
-    if (has('fog') || has('mist') || has('hazy'))                         return this._bgFog(isNight);
-    if ((has('cloud') || has('overcast')) && isNight)                     return this._bgNightCloudy(true);
-    if (has('cloud') || has('overcast'))                                  return this._bgCloudy(has('partly'));
-    if (isNight && (has('clear') || has('sunny')))                        return this._bgNightStarry();
-    if (isNight)                                                           return this._bgNightCloudy(false);
-    if (has('partly'))                                                     return this._bgPartlyCloudy();
-    return this._bgSunny();
+    const isRain = has('pouring') || has('rain') || has('drizzle') || has('shower');
+    const isStorm = has('thunder') || has('lightning') || has('storm');
+    const isSnow = has('snow') || has('hail') || has('sleet') || has('blizzard');
+    const isFog = has('fog') || has('mist') || has('hazy');
+    const isCloudy = has('cloud') || has('overcast');
+    const isPartly = has('partly');
+    
+    // Detect Moon Phase from Home Assistant sensors
+    let moonPhase = 'full';
+    const mp = (this._hass?.states?.['sensor.moon_phase']?.state || this._hass?.states?.['sensor.moon']?.state || '').toLowerCase();
+    if (mp.includes('new')) moonPhase = 'new';
+    else if (mp.includes('crescent') || mp.includes('quarter')) moonPhase = 'crescent';
+
+    // Adaptive Sky Colors (Gradients)
+    let topC = '#4facfe', botC = '#00f2fe'; // Sunny Default
+    if (isNight) {
+      if (isStorm) { topC = '#0f172a'; botC = '#1e293b'; }
+      else if (isCloudy) { topC = '#1e293b'; botC = '#334155'; }
+      else { topC = '#0b192c'; botC = '#1a365d'; }
+    } else {
+      if (isStorm) { topC = '#334155'; botC = '#475569'; }
+      else if (isRain) { topC = '#64748b'; botC = '#94a3b8'; }
+      else if (isSnow) { topC = '#94a3b8'; botC = '#cbd5e1'; }
+      else if (isFog) { topC = '#cbd5e1'; botC = '#e2e8f0'; }
+      else if (isCloudy && !isPartly) { topC = '#7dd3fc'; botC = '#bae6fd'; }
+    }
+
+    // Landscape & Tree Colors
+    let m1 = '#60a5fa', m2 = '#3b82f6', m3 = '#2563eb', g1 = '#1d4ed8'; 
+    if (!isNight && !isRain && !isSnow && !isStorm && !isFog) { // Sunny with green trees
+      m1 = '#86efac'; m2 = '#4ade80'; m3 = '#22c55e'; g1 = '#16a34a';
+    } else if (isNight) {
+      m1 = '#1e3a8a'; m2 = '#172554'; m3 = '#0f172a'; g1 = '#020617';
+    } else if (isSnow) {
+      m1 = '#f1f5f9'; m2 = '#e2e8f0'; m3 = '#cbd5e1'; g1 = '#94a3b8';
+    } else if (isRain || isStorm || isFog) {
+      m1 = '#94a3b8'; m2 = '#64748b'; m3 = '#475569'; g1 = '#334155';
+    }
+
+    // Celestial Body (Sun/Moon with Phase)
+    let celestial = '';
+    if (isNight) {
+      if (moonPhase === 'new') {
+        celestial = `<circle cx="80%" cy="25%" r="35" fill="#ffffff" opacity="0.05" filter="blur(2px)"/>`;
+      } else if (moonPhase === 'crescent') {
+        celestial = `<path d="M 640 60 A 40 40 0 1 0 720 140 A 30 30 0 1 1 640 60 Z" fill="#fef08a" filter="drop-shadow(0 0 15px #fef08a)"/>`;
+      } else {
+        celestial = `<g filter="drop-shadow(0 0 20px #fef08a)">
+          <circle cx="80%" cy="25%" r="35" fill="#fef08a"/>
+          <circle cx="77%" cy="22%" r="8" fill="#000" opacity="0.06"/>
+          <circle cx="82%" cy="28%" r="12" fill="#000" opacity="0.04"/>
+        </g>`;
+      }
+    } else if (!isCloudy || isPartly) {
+      celestial = `
+        <circle cx="80%" cy="30%" r="45" fill="#fbbf24" filter="drop-shadow(0 0 35px #f59e0b)"/>
+        <circle cx="80%" cy="30%" r="55" fill="#fcd34d" opacity="0.35">
+          <animate attributeName="r" values="50;60;50" dur="5s" repeatCount="indefinite"/>
+        </circle>`;
+    }
+
+    // Dynamic Weather Elements (Lightning, Clouds, Rain, Snow)
+    let fx = '';
+    if (isStorm) {
+      fx += `<rect width="100%" height="100%" fill="#ffffff" opacity="0"><animate attributeName="opacity" values="0;0;0.7;0;0;0.4;0;0" dur="6s" repeatCount="indefinite"/></rect>
+             <path d="M 320 0 L 400 150 L 360 170 L 480 400" fill="none" stroke="#fff" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0;1;0;0;0.8;0;0" dur="6s" repeatCount="indefinite"/></path>`;
+    }
+
+    let cloudGroup = '';
+    if (isCloudy || isPartly || isRain || isSnow) {
+      const cCol = isNight ? '#334155' : (isStorm ? '#475569' : '#f8fafc');
+      cloudGroup = `<g fill="${cCol}" opacity="0.75" filter="blur(5px)">
+        <path d="M -50 60 Q 20 10 90 60 Q 160 20 230 70 Q 300 40 370 80 Q 180 120 0 120 Z"><animateTransform attributeName="transform" type="translate" values="-400 0; 900 0" dur="45s" repeatCount="indefinite"/></path>
+        <path d="M 50 110 Q 150 50 250 110 Q 350 40 450 130 Q 550 60 650 150 Q 350 200 50 200 Z" opacity="0.5"><animateTransform attributeName="transform" type="translate" values="-700 20; 900 20" dur="65s" repeatCount="indefinite"/></path>
+      </g>`;
+    }
+
+    let particles = '';
+    if (isRain || isStorm) {
+      const drops = Array.from({length: 60}, (_, i) => `<line x1="${(i*1.7)%100}%" y1="-10%" x2="${((i*1.7)%100)-4}%" y2="110%" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"><animate attributeName="y1" values="-10%;110%" dur="${0.4+(i%4)*0.1}s" begin="-${(i*0.1)%2}s" repeatCount="indefinite"/><animate attributeName="y2" values="0%;120%" dur="${0.4+(i%4)*0.1}s" begin="-${(i*0.1)%2}s" repeatCount="indefinite"/></line>`).join('');
+      particles = `<g>${drops}</g>`;
+    } else if (isSnow) {
+      const flakes = Array.from({length: 50}, (_, i) => `<circle cx="${(i*2.1)%100}%" cy="-10%" r="${2+(i%3)}" fill="rgba(255,255,255,0.8)"><animate attributeName="cy" values="-10%;110%" dur="${4+(i%5)}s" begin="-${(i*0.2)%5}s" repeatCount="indefinite"/><animate attributeName="cx" values="${(i*2.1)%100}%;${((i*2.1)%100)+3}%;${((i*2.1)%100)-3}%;${(i*2.1)%100}%" dur="${2+i%3}s" repeatCount="indefinite"/></circle>`).join('');
+      particles = `<g filter="blur(1px)">${flakes}</g>`;
+    }
+
+    const svg = `
+      <svg preserveAspectRatio="xMidYMax slice" viewBox="0 0 800 400" style="position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none;">
+        <defs><linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="${topC}"/><stop offset="100%" stop-color="${botC}"/></linearGradient></defs>
+        <rect width="100%" height="100%" fill="url(#sky)"/>
+        ${isNight && !isCloudy ? Array.from({length: 30}, (_, i) => `<circle cx="${(i*31.7)%100}%" cy="${(i*17.3)%60}%" r="${0.5+Math.random()*1.5}" fill="#fff"><animate attributeName="opacity" values="0.3;1;0.3" dur="${2+Math.random()*3}s" repeatCount="indefinite"/></circle>`).join('') : ''}
+        ${celestial}
+        ${fx}
+        <path d="M 0 350 L 150 200 L 300 320 L 500 150 L 700 280 L 800 200 L 800 400 L 0 400 Z" fill="${m1}" opacity="0.6"/>
+        <path d="M -50 400 L 100 250 L 250 380 L 400 220 L 600 350 L 850 220 L 850 400 Z" fill="${m2}" opacity="0.8"/>
+        <path d="M 0 400 Q 200 280 400 350 T 800 300 L 800 400 Z" fill="${m3}"/>
+        <g fill="${g1}">
+          <polygon points="50,400 75,290 100,400"/><polygon points="30,400 65,310 100,400"/><polygon points="80,400 110,310 140,400"/><polygon points="120,400 150,260 180,400"/>
+          <polygon points="350,400 390,290 430,400"/><polygon points="410,400 440,270 470,400"/><polygon points="650,400 690,250 730,400"/><polygon points="720,400 760,270 800,400"/>
+        </g>
+        ${cloudGroup}
+        ${particles}
+        ${isFog ? `<rect width="100%" height="100%" fill="#fff" opacity="0.35" filter="blur(15px)"/>` : ''}
+      </svg>`;
+
+    return `<div class="wx wx-scenic">${svg}</div>`;
   }
 
-  _bgSunny() {
-    return `<div class="wx wx-sunny">
-      <div class="wx-sun"><div class="wx-sun-rays"></div><div class="wx-sun-core"></div></div>
-      <div class="wx-cloud wx-cl1"></div><div class="wx-cloud wx-cl2"></div>
-    </div>`;
-  }
-
-  _bgPartlyCloudy() {
-    return `<div class="wx wx-partly">
-      <div class="wx-sun" style="opacity:.85"><div class="wx-sun-rays"></div><div class="wx-sun-core"></div></div>
-      <div class="wx-cloud wx-cl1"></div><div class="wx-cloud wx-cl2"></div>
-      <div class="wx-cloud wx-cl3"></div><div class="wx-cloud wx-cl4"></div>
-    </div>`;
-  }
-
-  _bgCloudy(isPartly) {
-    const sun = isPartly ? `<div class="wx-sun" style="opacity:.35"><div class="wx-sun-rays"></div><div class="wx-sun-core"></div></div>` : '';
-    return `<div class="wx wx-cloudy">${sun}
-      <div class="wx-cloud gray wx-cl1"></div><div class="wx-cloud gray wx-cl2"></div>
-      <div class="wx-cloud gray wx-cl3"></div><div class="wx-cloud gray wx-cl4"></div>
-    </div>`;
-  }
-
-  _bgRain(hasLightning) {
-    const drops = Array.from({length: 48}, (_, i) => {
-      const l  = ((i * 211 + 13) % 97).toFixed(1);
-      const dd = -((i * 0.09 + (i % 7) * 0.35) % 3.5).toFixed(2);
-      const dur = (0.48 + (i % 6) * 0.09).toFixed(2);
-      const h   = 10 + (i % 6) * 4;
-      return `<div class="wx-drop" style="left:${l}%;height:${h}px;animation-duration:${dur}s;animation-delay:${dd}s"></div>`;
-    }).join('');
-    return `<div class="wx ${hasLightning ? 'wx-storm' : 'wx-rain'}">
-      <div class="wx-cloud dark wx-cl1"></div><div class="wx-cloud dark wx-cl3"></div>
-      ${hasLightning ? '<div class="wx-bolt"></div><div class="wx-flash"></div>' : ''}
-      ${drops}
-    </div>`;
-  }
-
-  _bgSnow() {
-    const chars = ['❄','❅','❆','∗','✶','•'];
-    const flakes = Array.from({length: 28}, (_, i) => {
-      const l   = ((i * 353 + 11) % 94).toFixed(1);
-      const dd  = -((i * 0.28 + (i % 5) * 0.6) % 5).toFixed(2);
-      const dur = (3.2 + (i % 6) * 0.6).toFixed(1);
-      const d   = (((i % 9) - 4) * 14);
-      const sz  = 10 + (i % 5) * 3;
-      return `<div class="wx-flake" style="left:${l}%;animation-duration:${dur}s;animation-delay:${dd}s;--wx-d:${d}px;font-size:${sz}px">${chars[i%6]}</div>`;
-    }).join('');
-    return `<div class="wx wx-snow">
-      <div class="wx-cloud gray wx-cl1"></div><div class="wx-cloud gray wx-cl3"></div>
-      ${flakes}
-    </div>`;
-  }
-
-  _bgFog(isNight) {
-    const strips = Array.from({length: 4}, (_, i) =>
-      `<div class="wx-fog-strip" style="top:${18+i*18}%;animation-duration:${11+i*5}s;animation-delay:-${i*3}s;opacity:${.5+i*.12}"></div>`
-    ).join('');
-    return `<div class="wx ${isNight ? 'wx-night-cloudy' : 'wx-fog'}">
-      ${strips}
-      ${isNight ? '<div class="wx-moon" style="opacity:.45"><div class="wx-moon-disc"></div><div class="wx-moon-shadow"></div></div>' : ''}
-    </div>`;
-  }
-
-  _bgNightStarry() {
-    const stars = Array.from({length: 60}, (_, i) => {
-      const x   = ((i * 181 + 17) % 96).toFixed(1);
-      const y   = ((i * 97  + 7)  % 72).toFixed(1);
-      const s   = (.7 + (i % 4) * .65).toFixed(1);
-      const dd  = -((i * 0.13) % 5.5).toFixed(2);
-      const dur = (1.8 + (i % 6) * .45).toFixed(1);
-      return `<div class="wx-star" style="left:${x}%;top:${y}%;width:${s}px;height:${s}px;animation-duration:${dur}s;animation-delay:${dd}s"></div>`;
-    }).join('');
-    return `<div class="wx wx-night">${stars}
-      <div class="wx-moon"><div class="wx-moon-disc"></div><div class="wx-moon-shadow"></div></div>
-    </div>`;
-  }
-
-  _bgNightCloudy(hasMoon = true) {
-    const stars = Array.from({length: 18}, (_, i) => {
-      const x   = ((i * 53 + 9) % 85).toFixed(1);
-      const y   = ((i * 41 + 5) % 48).toFixed(1);
-      const s   = (.6 + (i % 3) * .5).toFixed(1);
-      const dd  = -((i * 0.2) % 5).toFixed(2);
-      const dur = (2.5 + (i % 5) * .6).toFixed(1);
-      return `<div class="wx-star" style="left:${x}%;top:${y}%;width:${s}px;height:${s}px;animation-duration:${dur}s;animation-delay:${dd}s;opacity:.25"></div>`;
-    }).join('');
-    return `<div class="wx wx-night-cloudy">${stars}
-      ${hasMoon ? '<div class="wx-moon" style="opacity:.5"><div class="wx-moon-disc"></div><div class="wx-moon-shadow"></div></div>' : ''}
-      <div class="wx-cloud dark wx-cl1" style="opacity:.75"></div>
-      <div class="wx-cloud dark wx-cl2" style="opacity:.85"></div>
-      <div class="wx-cloud dark wx-cl3" style="opacity:.65"></div>
-    </div>`;
-  }
 
   /* ── Activity Log ────────────────────────────────────────────────── */
   _renderActivityLog() {
