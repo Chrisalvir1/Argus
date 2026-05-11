@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.1.4
+ * Argus Home Hub – v1.1.5
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1910,215 +1910,164 @@ class ArgusPanel extends HTMLElement {
   }
 
   _getIntelligentSVG(state, w, isNight, triggered) {
-    w = typeof w === 'string' ? w : 'sunny';
-    let skyColors = isNight ? ['#0f172a', '#1e293b'] : ['#38bdf8', '#bae6fd'];
-    if (w.includes('cloudy') || w.includes('fog')) skyColors = isNight ? ['#1e293b', '#334155'] : ['#94a3b8', '#cbd5e1'];
-    if (w.includes('rain') || w.includes('storm')) skyColors = isNight ? ['#0f172a', '#1e293b'] : ['#475569', '#94a3b8'];
-
-    const rainSvg = w.includes('rain') || w.includes('storm') ? `
-      <g opacity="0.5">
-        <line x1="20" y1="-20" x2="0" y2="200" stroke="#bae6fd" stroke-width="2"><animateTransform attributeName="transform" type="translate" from="0 -200" to="0 200" dur="0.5s" repeatCount="indefinite"/></line>
-        <line x1="60" y1="-20" x2="40" y2="200" stroke="#bae6fd" stroke-width="2"><animateTransform attributeName="transform" type="translate" from="0 -200" to="0 200" dur="0.4s" repeatCount="indefinite"/></line>
-        <line x1="100" y1="-20" x2="80" y2="200" stroke="#bae6fd" stroke-width="2"><animateTransform attributeName="transform" type="translate" from="0 -200" to="0 200" dur="0.6s" repeatCount="indefinite"/></line>
-        <line x1="140" y1="-20" x2="120" y2="200" stroke="#bae6fd" stroke-width="2"><animateTransform attributeName="transform" type="translate" from="0 -200" to="0 200" dur="0.55s" repeatCount="indefinite"/></line>
-        <line x1="180" y1="-20" x2="160" y2="200" stroke="#bae6fd" stroke-width="2"><animateTransform attributeName="transform" type="translate" from="0 -200" to="0 200" dur="0.45s" repeatCount="indefinite"/></line>
-      </g>
-    ` : '';
-
-    const snowSvg = w.includes('snow') ? `
-      <g fill="#fff" opacity="0.8">
-        <circle cx="30" cy="-10" r="3"><animateTransform attributeName="transform" type="translate" from="0 -200" to="0 200" dur="2s" repeatCount="indefinite"/></circle>
-        <circle cx="80" cy="-10" r="4"><animateTransform attributeName="transform" type="translate" from="0 -200" to="0 200" dur="2.5s" repeatCount="indefinite"/></circle>
-        <circle cx="130" cy="-10" r="2.5"><animateTransform attributeName="transform" type="translate" from="0 -200" to="0 200" dur="1.8s" repeatCount="indefinite"/></circle>
-        <circle cx="170" cy="-10" r="5"><animateTransform attributeName="transform" type="translate" from="0 -200" to="0 200" dur="3s" repeatCount="indefinite"/></circle>
-      </g>
-    ` : '';
-
-    const celestialSvg = isNight 
-      ? `<circle cx="160" cy="40" r="15" fill="#fef08a" filter="drop-shadow(0 0 10px #fef08a)"/>`
-      : `<circle cx="160" cy="40" r="20" fill="#fbbf24" filter="drop-shadow(0 0 15px #fbbf24)"><animateTransform attributeName="transform" type="rotate" from="0 160 40" to="360 160 40" dur="10s" repeatCount="indefinite"/></circle>`;
-
-    const weatherBg = `
-      <defs>
-        <linearGradient id="skyGradInt" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${skyColors[0]}"/>
-          <stop offset="100%" stop-color="${skyColors[1]}"/>
-        </linearGradient>
-      </defs>
-      <rect width="200" height="200" fill="url(#skyGradInt)" rx="20"/>
-      ${celestialSvg}
-      ${rainSvg}
-      ${snowSvg}
-    `;
-
+    const base = `<svg viewBox="0 0 200 200" width="100%" height="100%" style="filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6)); max-width: 140px; margin: 0 auto; display: block;">`;
+    
     if (triggered) {
-      return `
-        <svg viewBox="0 0 200 200" width="100%" height="100%" style="border-radius:20px; box-shadow:0 0 30px #f00;">
-          <rect width="200" height="200" fill="#1a0000" rx="20"/>
-          <path d="M40 160 L100 80 L160 160 Z" fill="#333"/>
-          <rect x="70" y="160" width="60" height="40" fill="#222"/>
-          <circle cx="100" cy="70" r="20" fill="#f00">
-            <animate attributeName="opacity" values="1;0.2;1" dur="0.5s" repeatCount="indefinite"/>
-            <animate attributeName="r" values="20;25;20" dur="0.5s" repeatCount="indefinite"/>
-          </circle>
-          <path d="M100 40 Q50 20 20 60" fill="none" stroke="#f00" stroke-width="4" stroke-linecap="round">
-             <animate attributeName="opacity" values="1;0;1" dur="0.5s" repeatCount="indefinite"/>
-          </path>
-          <path d="M100 40 Q150 20 180 60" fill="none" stroke="#f00" stroke-width="4" stroke-linecap="round">
-             <animate attributeName="opacity" values="1;0;1" dur="0.5s" repeatCount="indefinite"/>
-          </path>
-          <path d="M100 20 Q30 0 0 50" fill="none" stroke="#f00" stroke-width="6" stroke-linecap="round">
-             <animate attributeName="opacity" values="0;1;0" dur="0.5s" repeatCount="indefinite"/>
-          </path>
-          <path d="M100 20 Q170 0 200 50" fill="none" stroke="#f00" stroke-width="6" stroke-linecap="round">
-             <animate attributeName="opacity" values="0;1;0" dur="0.5s" repeatCount="indefinite"/>
-          </path>
-        </svg>
-      `;
+      return base + `
+        <defs>
+          <filter id="glow-red"><feGaussianBlur stdDeviation="8" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <circle cx="100" cy="100" r="60" fill="none" stroke="#ff2a2a" stroke-width="4" filter="url(#glow-red)">
+          <animate attributeName="r" values="60;80;60" dur="1s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
+        </circle>
+        <path d="M100 30 L170 150 L30 150 Z" fill="rgba(255,42,42,0.15)" stroke="#ff2a2a" stroke-width="6" stroke-linejoin="round" filter="url(#glow-red)">
+           <animate attributeName="opacity" values="1;0.4;1" dur="0.5s" repeatCount="indefinite"/>
+        </path>
+        <rect x="95" y="70" width="10" height="40" rx="5" fill="#fff" filter="url(#glow-red)"/>
+        <circle cx="100" cy="130" r="6" fill="#fff" filter="url(#glow-red)"/>
+      </svg>`;
     }
 
     if (state === 'armed_home') {
-      return `
-        <svg viewBox="0 0 200 200" width="100%" height="100%" style="border-radius:20px; overflow:hidden;">
-          ${weatherBg}
-          <polygon points="40,140 100,90 160,140" fill="#475569"/>
-          <polygon points="100,90 160,140 180,120 120,70" fill="#334155"/>
-          <rect x="50" y="140" width="100" height="60" fill="#1e293b"/>
-          <rect x="90" y="160" width="20" height="40" fill="#0f172a"/>
-          
-          <!-- Moving Spotlight -->
-          <polygon points="100,200 20,100 180,100" fill="#fef08a" opacity="0.3">
-            <animateTransform attributeName="transform" type="rotate" values="-20 100 200; 20 100 200; -20 100 200" dur="4s" repeatCount="indefinite"/>
-          </polygon>
-          
-          <!-- IR Cameras -->
-          <circle cx="50" cy="140" r="4" fill="#111"/>
-          <circle cx="50" cy="140" r="1.5" fill="#f00">
-             <animate attributeName="opacity" values="1;0.5;1" dur="1s" repeatCount="indefinite"/>
-          </circle>
-          <circle cx="150" cy="140" r="4" fill="#111"/>
-          <circle cx="150" cy="140" r="1.5" fill="#f00">
-             <animate attributeName="opacity" values="1;0.5;1" dur="1s" repeatCount="indefinite"/>
-          </circle>
-          
-          <!-- Padlock -->
-          <rect x="85" y="150" width="30" height="20" rx="3" fill="#ef4444"/>
-          <path d="M92 150 V140 A8 8 0 0 1 108 140 V150" fill="none" stroke="#ef4444" stroke-width="4"/>
-        </svg>
-      `;
+      return base + `
+        <defs>
+          <filter id="glow-orange"><feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="grad-home" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#fb8c00" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#ffb74d" stop-opacity="0.3"/>
+          </linearGradient>
+        </defs>
+        <!-- Glowing 3D-like House -->
+        <path d="M100 20 L20 90 V170 A10 10 0 0 0 30 180 H170 A10 10 0 0 0 180 170 V90 Z" fill="url(#grad-home)" stroke="#ffb74d" stroke-width="3" stroke-linejoin="round" filter="url(#glow-orange)"/>
+        <path d="M100 20 L180 90 M100 20 L20 90" fill="none" stroke="#fff" stroke-width="2" opacity="0.5"/>
+        
+        <!-- Animated Radar/Spotlight -->
+        <path d="M100 180 L40 50 A120 120 0 0 1 160 50 Z" fill="#fb8c00" opacity="0.15">
+           <animateTransform attributeName="transform" type="rotate" values="-25 100 180; 25 100 180; -25 100 180" dur="4s" repeatCount="indefinite"/>
+        </path>
+        
+        <!-- Glowing Cameras -->
+        <circle cx="40" cy="90" r="4" fill="#ff0000" filter="url(#glow-orange)">
+           <animate attributeName="opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="160" cy="90" r="4" fill="#ff0000" filter="url(#glow-orange)">
+           <animate attributeName="opacity" values="0.2;1;0.2" dur="1s" repeatCount="indefinite"/>
+        </circle>
+        
+        <!-- Center Lock -->
+        <rect x="75" y="100" width="50" height="40" rx="8" fill="#111" stroke="#fb8c00" stroke-width="3" filter="url(#glow-orange)"/>
+        <path d="M85 100 V80 A15 15 0 0 1 115 80 V100" fill="none" stroke="#fb8c00" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="100" cy="120" r="6" fill="#fb8c00"/>
+      </svg>`;
     }
 
     if (state === 'armed_away') {
-      return `
-        <svg viewBox="0 0 200 200" width="100%" height="100%" style="border-radius:20px; overflow:hidden;">
-          ${weatherBg}
-          <polygon points="60,120 100,80 140,120" fill="#475569"/>
-          <rect x="70" y="120" width="60" height="50" fill="#1e293b"/>
-          <rect x="90" y="140" width="20" height="30" fill="#0f172a"/>
-          
-          <circle cx="70" cy="120" r="3" fill="#111"/>
-          <circle cx="70" cy="120" r="1" fill="#f00"><animate attributeName="opacity" values="1;0.5;1" dur="1s" repeatCount="indefinite"/></circle>
-          <circle cx="130" cy="120" r="3" fill="#111"/>
-          <circle cx="130" cy="120" r="1" fill="#f00"><animate attributeName="opacity" values="1;0.5;1" dur="1s" repeatCount="indefinite"/></circle>
-          
-          <!-- Persons leaving -->
-          <g fill="#111" opacity="0.8">
-            <animateTransform attributeName="transform" type="translate" values="0 0; -20 20; 0 0" dur="4s" repeatCount="indefinite"/>
-            <circle cx="40" cy="150" r="6"/>
-            <path d="M35 160 L45 160 L45 180 L35 180 Z"/>
-          </g>
-          <g fill="#111" opacity="0.8">
-            <animateTransform attributeName="transform" type="translate" values="0 0; 20 20; 0 0" dur="4.2s" repeatCount="indefinite"/>
-            <circle cx="160" cy="160" r="5"/>
-            <path d="M156 168 L164 168 L164 185 L156 185 Z"/>
-          </g>
-          
-          <rect x="85" y="40" width="30" height="20" rx="3" fill="#ef4444" filter="drop-shadow(0 0 5px #ef4444)"/>
-          <path d="M92 40 V30 A8 8 0 0 1 108 30 V40" fill="none" stroke="#ef4444" stroke-width="4"/>
-        </svg>
-      `;
+      return base + `
+        <defs>
+          <filter id="glow-red"><feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="grad-away" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#e53935" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#ef9a9a" stop-opacity="0.3"/>
+          </linearGradient>
+        </defs>
+        <!-- High-tech Shield -->
+        <path d="M100 10 L30 40 V100 C30 150 60 180 100 195 C140 180 170 150 170 100 V40 Z" fill="url(#grad-away)" stroke="#ef9a9a" stroke-width="3" stroke-linejoin="round" filter="url(#glow-red)"/>
+        
+        <!-- Pulse Rings -->
+        <circle cx="100" cy="100" r="40" fill="none" stroke="#e53935" stroke-width="3" opacity="0.5">
+           <animate attributeName="r" values="40; 80; 40" dur="2.5s" repeatCount="indefinite"/>
+           <animate attributeName="opacity" values="0.8; 0; 0.8" dur="2.5s" repeatCount="indefinite"/>
+        </circle>
+        
+        <!-- Center Lock -->
+        <rect x="75" y="100" width="50" height="40" rx="8" fill="#111" stroke="#fff" stroke-width="3"/>
+        <path d="M85 100 V80 A15 15 0 0 1 115 80 V100" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="100" cy="120" r="6" fill="#fff"/>
+      </svg>`;
     }
 
     if (state === 'armed_night') {
-      return `
-        <svg viewBox="0 0 200 200" width="100%" height="100%" style="border-radius:20px; overflow:hidden;">
-          <rect width="200" height="200" fill="#0f172a"/>
-          
-          <!-- Window frame -->
-          <g transform="translate(110, 20) scale(0.4)">
-             <rect x="0" y="0" width="160" height="200" fill="#333" stroke="#222" stroke-width="8"/>
-             <g clip-path="url(#win-clip)">
-               <clipPath id="win-clip"><rect x="0" y="0" width="160" height="200"/></clipPath>
-               ${weatherBg}
-             </g>
-             <line x1="80" y1="0" x2="80" y2="200" stroke="#222" stroke-width="6"/>
-             <line x1="0" y1="100" x2="160" y2="100" stroke="#222" stroke-width="6"/>
-          </g>
-          
-          <!-- TV Screen glowing -->
-          <rect x="20" y="60" width="60" height="40" rx="3" fill="#111" stroke="#333" stroke-width="2"/>
-          <rect x="22" y="62" width="56" height="36" rx="2" fill="#38bdf8">
-            <animate attributeName="opacity" values="0.6;1;0.4;0.8;0.5" dur="3s" repeatCount="indefinite"/>
-          </rect>
-          
-          <!-- Bed -->
-          <rect x="30" y="140" width="140" height="40" rx="10" fill="#334155"/>
-          <rect x="40" y="130" width="40" height="20" rx="10" fill="#cbd5e1"/>
-          <!-- Person sleeping -->
-          <path d="M40 145 Q90 120 150 145 L150 180 L30 180 Z" fill="#475569"/>
-          
-          <!-- Padlock -->
-          <rect x="15" y="15" width="20" height="15" rx="3" fill="#ef4444"/>
-          <path d="M19 15 V10 A6 6 0 0 1 31 10 V15" fill="none" stroke="#ef4444" stroke-width="3"/>
-        </svg>
-      `;
+      return base + `
+        <defs>
+          <filter id="glow-blue"><feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="grad-night" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#1e88e5" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#90caf9" stop-opacity="0.3"/>
+          </linearGradient>
+        </defs>
+        <!-- Crescent Moon -->
+        <path d="M110 20 A 75 75 0 1 0 180 140 A 85 85 0 0 1 110 20 Z" fill="url(#grad-night)" stroke="#90caf9" stroke-width="2" filter="url(#glow-blue)">
+           <animateTransform attributeName="transform" type="rotate" values="-5 100 100; 5 100 100; -5 100 100" dur="8s" repeatCount="indefinite"/>
+        </path>
+        
+        <!-- Floating Zzz -->
+        <text x="130" y="80" fill="#90caf9" font-family="sans-serif" font-weight="900" font-size="24" filter="url(#glow-blue)">
+           Z<animate attributeName="opacity" values="0;1;0" dur="4s" repeatCount="indefinite"/>
+           <animate attributeName="y" values="80;50;80" dur="4s" repeatCount="indefinite"/>
+        </text>
+        <text x="160" y="50" fill="#90caf9" font-family="sans-serif" font-weight="900" font-size="32" filter="url(#glow-blue)">
+           Z<animate attributeName="opacity" values="0;1;0" dur="4s" begin="1.5s" repeatCount="indefinite"/>
+           <animate attributeName="y" values="50;10;50" dur="4s" begin="1.5s" repeatCount="indefinite"/>
+        </text>
+        
+        <!-- Night Lock -->
+        <rect x="40" y="110" width="40" height="30" rx="6" fill="#111" stroke="#1e88e5" stroke-width="3" filter="url(#glow-blue)"/>
+        <path d="M48 110 V95 A12 12 0 0 1 72 95 V110" fill="none" stroke="#1e88e5" stroke-width="3" stroke-linecap="round"/>
+      </svg>`;
     }
 
     if (state === 'armed_vacation') {
-      return `
-        <svg viewBox="0 0 200 200" width="100%" height="100%" style="border-radius:20px; overflow:hidden;">
-          ${weatherBg}
-          <!-- Runway -->
-          <polygon points="0,200 200,200 150,150 50,150" fill="#334155"/>
-          <line x1="100" y1="150" x2="100" y2="200" stroke="#fff" stroke-width="4" stroke-dasharray="10,10"/>
-          
-          <!-- Airplane -->
-          <g fill="#f8fafc">
-            <animateTransform attributeName="transform" type="translate" values="-20 20; 20 -20; -20 20" dur="6s" repeatCount="indefinite"/>
-            <path d="M100 100 L140 80 L160 80 A10 10 0 0 0 160 70 L140 70 L90 50 L80 50 L100 70 L50 70 L30 60 L20 60 L40 75 L30 85 L100 100 Z"/>
-          </g>
-          
-          <!-- Padlock -->
-          <rect x="85" y="15" width="30" height="20" rx="3" fill="#ef4444" filter="drop-shadow(0 0 5px #ef4444)"/>
-          <path d="M92 15 V5 A8 8 0 0 1 108 5 V15" fill="none" stroke="#ef4444" stroke-width="4"/>
-        </svg>
-      `;
+      return base + `
+        <defs>
+          <filter id="glow-purple"><feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="grad-vacation" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#9c27b0" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#ce93d8" stop-opacity="0.3"/>
+          </linearGradient>
+        </defs>
+        <!-- Hologram Globe -->
+        <circle cx="100" cy="100" r="75" fill="rgba(156,39,176,0.1)" stroke="#ce93d8" stroke-width="3" filter="url(#glow-purple)"/>
+        <path d="M100 25 C 140 25, 160 70, 160 100 C 160 130, 140 175, 100 175 C 60 175, 40 130, 40 100 C 40 70, 60 25, 100 25 Z" fill="none" stroke="#ce93d8" stroke-width="2" opacity="0.6"/>
+        <path d="M25 100 H 175" fill="none" stroke="#ce93d8" stroke-width="2" opacity="0.6"/>
+        
+        <!-- Airplane Orbiting -->
+        <g fill="url(#grad-vacation)" stroke="#fff" stroke-width="2" filter="url(#glow-purple)">
+           <animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" dur="8s" repeatCount="indefinite"/>
+           <path d="M85 10 L115 10 L130 30 L160 30 A8 8 0 0 1 160 40 L130 40 L100 70 L85 70 L100 40 L70 40 L55 50 L45 50 L65 35 L45 20 L55 20 L70 30 L100 30 Z" transform="translate(0, -25)"/>
+        </g>
+        
+        <!-- Center Lock -->
+        <rect x="80" y="90" width="40" height="30" rx="6" fill="#111" stroke="#9c27b0" stroke-width="3" filter="url(#glow-purple)"/>
+        <path d="M90 90 V75 A10 10 0 0 1 110 75 V90" fill="none" stroke="#9c27b0" stroke-width="3" stroke-linecap="round"/>
+      </svg>`;
     }
 
     // Disarmed Mode
-    return `
-      <svg viewBox="0 0 200 200" width="100%" height="100%" style="border-radius:20px; overflow:hidden;">
-        ${weatherBg}
-        <!-- Relaxing Coffee Scene -->
-        <rect x="70" y="90" width="60" height="70" rx="30" fill="#f8fafc" opacity="0.9"/>
-        <path d="M130 110 A20 20 0 0 1 130 140" fill="none" stroke="#f8fafc" stroke-width="8"/>
-        <!-- Steam -->
-        <path d="M90 80 Q100 60 90 40" fill="none" stroke="#e2e8f0" stroke-width="4" stroke-linecap="round">
-          <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite"/>
-        </path>
-        <path d="M110 85 Q120 65 110 45" fill="none" stroke="#e2e8f0" stroke-width="4" stroke-linecap="round">
-          <animate attributeName="opacity" values="0;1;0" dur="2.5s" repeatCount="indefinite"/>
-        </path>
-        
-        <!-- Glowing Green Shield (Unlocking) -->
-        <path d="M40 30 L100 10 L160 30 V80 Q160 140 100 190 Q40 140 40 80 Z" fill="none" stroke="#22c55e" stroke-width="4" stroke-dasharray="10 10" opacity="0.5">
-          <animateTransform attributeName="transform" type="translate" values="0 0; 0 -5; 0 0" dur="3s" repeatCount="indefinite"/>
-        </path>
-        <circle cx="100" cy="150" r="15" fill="#22c55e"/>
-        <rect x="96" y="142" width="8" height="10" fill="#0f172a"/>
-        <rect x="92" y="152" width="16" height="10" rx="2" fill="#0f172a"/>
-      </svg>
-    `;
+    return base + `
+      <defs>
+        <filter id="glow-green"><feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <linearGradient id="grad-disarm" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#43a047" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#a5d6a7" stop-opacity="0.3"/>
+        </linearGradient>
+      </defs>
+      
+      <!-- Open Shield -->
+      <path d="M100 15 L35 45 V100 C35 145 65 175 100 190 C135 175 165 145 165 100 V45 Z" fill="url(#grad-disarm)" stroke="#a5d6a7" stroke-width="3" stroke-linejoin="round" filter="url(#glow-green)"/>
+      
+      <!-- Open Lock -->
+      <rect x="75" y="100" width="50" height="40" rx="8" fill="#111" stroke="#fff" stroke-width="3"/>
+      <path d="M115 100 V75 A15 15 0 0 0 85 75" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round">
+         <animateTransform attributeName="transform" type="rotate" values="0 85 75; -25 85 75; 0 85 75" dur="3s" repeatCount="indefinite"/>
+      </path>
+      
+      <!-- Safe Pulse Rings -->
+      <circle cx="100" cy="120" r="30" fill="none" stroke="#43a047" stroke-width="3" opacity="0.6">
+        <animate attributeName="r" values="30; 70" dur="2.5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.8; 0" dur="2.5s" repeatCount="indefinite"/>
+      </circle>
+    </svg>`;
   }
 
   _renderEntries() {
