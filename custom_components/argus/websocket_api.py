@@ -29,6 +29,7 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_argus_get_mode_config)
     websocket_api.async_register_command(hass, ws_argus_save_mode_config)
     websocket_api.async_register_command(hass, ws_argus_get_audit_log)
+    websocket_api.async_register_command(hass, ws_argus_get_stats)
     websocket_api.async_register_command(hass, ws_argus_clear_audit_log)
     websocket_api.async_register_command(hass, ws_argus_restore_config)
     websocket_api.async_register_command(hass, ws_argus_save_advanced_config)
@@ -202,6 +203,31 @@ async def ws_argus_get_audit_log(hass: HomeAssistant, connection, msg) -> None:
     """Return the Argus audit log."""
     log = await async_get_audit_log(hass)
     connection.send_result(msg["id"], {"log": log})
+
+
+@websocket_api.websocket_command({vol.Required("type"): "argus/get_stats"})
+@websocket_api.async_response
+async def ws_argus_get_stats(hass: HomeAssistant, connection, msg) -> None:
+    """Return computed statistics from the audit log."""
+    log = await async_get_audit_log(hass)
+    stats = {
+        "total_events": len(log),
+        "triggers_30d": 0,
+        "armings_30d": 0,
+        "top_sensors": {}
+    }
+    for entry in log:
+        act = entry.get("action", "")
+        if "trigger" in act:
+            stats["triggers_30d"] += 1
+            det = entry.get("detail", "")
+            if "Sensor:" in det:
+                s = det.split("Sensor:")[1].split("(")[0].strip()
+                stats["top_sensors"][s] = stats["top_sensors"].get(s, 0) + 1
+        elif "arm" in act and "disarm" not in act:
+            stats["armings_30d"] += 1
+
+    connection.send_result(msg["id"], stats)
 
 
 @websocket_api.websocket_command({vol.Required("type"): "argus/clear_activity_log"})

@@ -5,7 +5,7 @@
 
   **El Sistema de Seguridad Premium para Home Assistant**
 
-  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.0.0-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
+  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.1.0-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
   [![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)](https://www.home-assistant.io/)
   [![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)](https://hacs.xyz/)
   [![GitHub stars](https://img.shields.io/github/stars/Chrisalvir1/Argus?style=social)](https://github.com/Chrisalvir1/Argus/stargazers)
@@ -21,15 +21,16 @@
 
 ---
 
-## ✨ Novedades y Correcciones Críticas (v0.9.77)
+## ✨ Novedades y Correcciones Críticas (v1.1.0)
 
-Fix crítico: Integración con HomeKit (Apple Home) estabilizada y optimización de Branding en HACS.
+¡Actualización masiva de inteligencia artificial y compatibilidad de ecosistema!
 
 **Cambios:**
-- **Identidad Premium**: Renombrado a "Argus Home Hub" y soporte de Logos Nativos 2026.3+ (carpeta `brand/` optimizada para el modo oscuro).
-- **HomeKit**: Armar a modo "Afuera" o cualquier otro modo desde Apple Home ahora ignora la solicitud de PIN y los sensores abiertos, asegurando que el comando sea obedecido sin rebotar al estado anterior.
-- **UI iOS**: El botón de Pantalla Completa ahora utiliza una alternativa visual (CSS full-screen fallback) para iPhone, saltándose las restricciones de Apple.
-- **Botón SOS**: El enlace "Llamar a Emergencias" en el modal de Pánico fue reescrito para disparar la llamada nativa en móviles directamente (`window.top.location.href`).
+- **Sincronización HomeKit (Apple Home)**: Solucionado el error crítico donde la app de Apple Home revertía el modo Ausente o Noche a "Desactivado". Argus ahora fuerza la re-sincronización del estado de HomeKit al usar el ARM-LOCK v2.
+- **Sugerencias de Armado Inteligente**: Argus AI monitoreará si todas las personas han salido de casa. Si detecta la casa vacía pero la alarma sigue desarmada, te enviará una notificación push sugiriendo armar la alarma.
+- **Integración de Cámaras IA**: ¡Nuevo analizador de cámaras usando Google Gemini! Si configuras una cámara en las acciones, Argus la analizará al dispararse la alarma y te dirá exactamente qué ve mediante TTS (ej. *"Se detectó una persona en el jardín"*).
+- **Soporte de Wildcards y Estadísticas**: Las acciones de automatización ahora soportan variables como `{{sensor}}` y `{{entity_id}}` para mensajes TTS personalizados. Se han preparado las bases para un próximo dashboard de estadísticas.
+- **Fix HACS Version**: Corregido el manifiesto interno para que HACS detecte correctamente las actualizaciones a partir de v1.1.0.
 ---
 
 ## 🚀 Características Principales

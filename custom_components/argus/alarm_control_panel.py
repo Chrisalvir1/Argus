@@ -29,7 +29,9 @@ from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.event import (
     async_track_state_change_event,
     async_call_later,
+    async_track_time_interval,
 )
+from datetime import timedelta
 from homeassistant.helpers.restore_state import RestoreEntity
 
 from .const import (
@@ -125,6 +127,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         # ARM-LOCK v2: timestamp (monotonic) until which forced-Home is blocked
         self._arm_lock_until: float = 0.0
+        self._smart_arming_suggested = False
+        self._unsub_smart_arming = None
 
     async def _get_context_user(self) -> str:
         """Get the user name from the current context."""
@@ -193,6 +197,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     @property
     def extra_state_attributes(self) -> dict:
         attrs = {"config_entry_id": self._config_entry.entry_id}
+        if getattr(self, "_arm_lock_bounces", 0) > 0:
+            attrs["arm_lock_bounces"] = self._arm_lock_bounces
         if self._triggered_by:
             attrs["triggered_by"] = self._triggered_by
         if self._alarm_state in (
@@ -367,6 +373,37 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             )
         )
 
+        # Start smart arming AI check every 15 mins
+        self._unsub_smart_arming = async_track_time_interval(
+            self.hass, self._async_check_smart_arming, timedelta(minutes=15)
+        )
+
+    @callback
+    def _async_check_smart_arming(self, _now=None):
+        """AI Pattern check: suggest arming if house is empty and disarmed."""
+        if self._alarm_state != AlarmControlPanelState.DISARMED:
+            self._smart_arming_suggested = False
+            return
+            
+        persons = self.hass.states.async_all("person")
+        if not persons:
+            return
+            
+        all_away = all(p.state not in ("home", "En casa") for p in persons)
+        if all_away:
+            if not getattr(self, "_smart_arming_suggested", False):
+                self._smart_arming_suggested = True
+                self.hass.components.persistent_notification.async_create(
+                    "Todos parecen haber salido de casa, pero la alarma sigue desarmada. ¿Deseas armar Argus?",
+                    title="💡 Sugerencia Inteligente Argus AI",
+                    notification_id="argus_smart_arming"
+                )
+                self.hass.async_create_task(
+                    async_append_audit_log(self.hass, "ai_suggestion", "Sugerencia de armado (casa vacía)", user="Argus AI")
+                )
+        else:
+            self._smart_arming_suggested = False
+
     async def _async_reload_config(self) -> None:
         """Reload UI config and re-subscribe sensors after panel saves mode config."""
         self._ui_config = await async_load_ui_data(self.hass)
@@ -390,6 +427,24 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         if not automations:
             return
 
+        sensor_id = kwargs.get("sensor", "")
+        sensor_name = "un sensor"
+        if sensor_id:
+            state_obj = self.hass.states.get(sensor_id)
+            if state_obj:
+                sensor_name = state_obj.attributes.get("friendly_name", sensor_id)
+            else:
+                sensor_name = sensor_id
+
+        def _replace_wildcards(obj):
+            if isinstance(obj, str):
+                return obj.replace("{{sensor}}", sensor_name).replace("{{ sensor }}", sensor_name).replace("{sensor}", sensor_name).replace("{{entity_id}}", sensor_id).replace("{{ entity_id }}", sensor_id)
+            elif isinstance(obj, dict):
+                return {k: _replace_wildcards(v) for k, v in obj.items()}
+            elif isinstance(obj, list):
+                return [_replace_wildcards(v) for v in obj]
+            return obj
+
         for rule in automations:
             if rule.get("event") != event_type:
                 continue
@@ -406,7 +461,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 
             # Execute Actions
             actions = rule.get("actions", [])
-            for action in actions:
+            for action_raw in actions:
+                action = _replace_wildcards(action_raw)
                 a_type = action.get("type")
                 if a_type == "tts":
                     engine = action.get("engine", "tts.cloud_say")
@@ -444,6 +500,35 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                                 )
                             except Exception as e:
                                 _LOGGER.warning("Argus: turn_off action error for %s: %s", e_id, e)
+                elif a_type == "analyze_camera":
+                    camera_id = action.get("camera_id")
+                    tts_device = action.get("tts_device")
+                    if camera_id and tts_device:
+                        async def _analyze_and_speak():
+                            try:
+                                # Call Gemini to analyze the camera stream
+                                response = await self.hass.services.async_call(
+                                    "google_generative_ai_conversation", "generate_content",
+                                    {
+                                        "image_entity_id": camera_id,
+                                        "prompt": "Hay alguien en la imagen de la cámara de seguridad? Describe brevemente en español lo que ves y si parece una amenaza (ej. 'Se detectó una persona caminando en el jardín'). Si no hay nadie, di 'No se detecta movimiento inusual en la cámara'."
+                                    },
+                                    blocking=True,
+                                    return_response=True
+                                )
+                                text = ""
+                                if response and "text" in response:
+                                    text = response["text"]
+                                if text:
+                                    await self.hass.services.async_call(
+                                        "tts", "speak",
+                                        {"entity_id": "tts.cloud_say", "media_player_entity_id": tts_device, "message": text, "language": "es"},
+                                        blocking=False
+                                    )
+                                await async_append_audit_log(self.hass, "ai_camera", f"Análisis: {text[:50]}...", user="Argus AI")
+                            except Exception as e:
+                                _LOGGER.warning("Argus: Camera analysis error: %s", e)
+                        self.hass.async_create_task(_analyze_and_speak())
                 elif a_type == "trigger_alarm":
                     # Forzar evento de disparo
                     rule_name = rule.get("name") or "Regla Automática"
@@ -467,6 +552,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self._unsub_sensors()
         if self._mqtt_unsub:
             self._mqtt_unsub()
+        if self._unsub_smart_arming:
+            self._unsub_smart_arming()
         self._cancel_timers()
 
     def _cancel_timers(self):
@@ -807,7 +894,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 "Argus ARM-LOCK: Bloqueado intento externo de forzar Home. "
                 "Estado actual protegido: %s", self._alarm_state
             )
-            # Re-publicar estado real → HomeKit corrige su interfaz
+            # Re-publicar estado real cambiando un atributo para forzar evento en HA
+            # Esto evita que HomeKit asuma que falló y devuelva la UI a 'Desarmado'
+            self._arm_lock_bounces = getattr(self, "_arm_lock_bounces", 0) + 1
             self.async_write_ha_state()
             return
 
