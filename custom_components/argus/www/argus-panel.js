@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.1.2
+ * Argus Home Hub – v1.1.3
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1909,6 +1909,217 @@ class ArgusPanel extends HTMLElement {
     return `<div class="battery-alerts-container" style="margin-top: 10px;">${rows}</div>`;
   }
 
+  _getIntelligentSVG(state, w, isNight, triggered) {
+    let skyColors = isNight ? ['#0f172a', '#1e293b'] : ['#38bdf8', '#bae6fd'];
+    if (w.includes('cloudy') || w.includes('fog')) skyColors = isNight ? ['#1e293b', '#334155'] : ['#94a3b8', '#cbd5e1'];
+    if (w.includes('rain') || w.includes('storm')) skyColors = isNight ? ['#0f172a', '#1e293b'] : ['#475569', '#94a3b8'];
+
+    const rainSvg = w.includes('rain') || w.includes('storm') ? `
+      <g opacity="0.5">
+        <line x1="20" y1="-20" x2="0" y2="200" stroke="#bae6fd" stroke-width="2"><animateTransform attributeName="transform" type="translate" from="0 -200" to="0 200" dur="0.5s" repeatCount="indefinite"/></line>
+        <line x1="60" y1="-20" x2="40" y2="200" stroke="#bae6fd" stroke-width="2"><animateTransform attributeName="transform" type="translate" from="0 -200" to="0 200" dur="0.4s" repeatCount="indefinite"/></line>
+        <line x1="100" y1="-20" x2="80" y2="200" stroke="#bae6fd" stroke-width="2"><animateTransform attributeName="transform" type="translate" from="0 -200" to="0 200" dur="0.6s" repeatCount="indefinite"/></line>
+        <line x1="140" y1="-20" x2="120" y2="200" stroke="#bae6fd" stroke-width="2"><animateTransform attributeName="transform" type="translate" from="0 -200" to="0 200" dur="0.55s" repeatCount="indefinite"/></line>
+        <line x1="180" y1="-20" x2="160" y2="200" stroke="#bae6fd" stroke-width="2"><animateTransform attributeName="transform" type="translate" from="0 -200" to="0 200" dur="0.45s" repeatCount="indefinite"/></line>
+      </g>
+    ` : '';
+
+    const snowSvg = w.includes('snow') ? `
+      <g fill="#fff" opacity="0.8">
+        <circle cx="30" cy="-10" r="3"><animateTransform attributeName="transform" type="translate" from="0 -200" to="0 200" dur="2s" repeatCount="indefinite"/></circle>
+        <circle cx="80" cy="-10" r="4"><animateTransform attributeName="transform" type="translate" from="0 -200" to="0 200" dur="2.5s" repeatCount="indefinite"/></circle>
+        <circle cx="130" cy="-10" r="2.5"><animateTransform attributeName="transform" type="translate" from="0 -200" to="0 200" dur="1.8s" repeatCount="indefinite"/></circle>
+        <circle cx="170" cy="-10" r="5"><animateTransform attributeName="transform" type="translate" from="0 -200" to="0 200" dur="3s" repeatCount="indefinite"/></circle>
+      </g>
+    ` : '';
+
+    const celestialSvg = isNight 
+      ? \`<circle cx="160" cy="40" r="15" fill="#fef08a" filter="drop-shadow(0 0 10px #fef08a)"/>\`
+      : \`<circle cx="160" cy="40" r="20" fill="#fbbf24" filter="drop-shadow(0 0 15px #fbbf24)"><animateTransform attributeName="transform" type="rotate" from="0 160 40" to="360 160 40" dur="10s" repeatCount="indefinite"/></circle>\`;
+
+    const weatherBg = `
+      <defs>
+        <linearGradient id="skyGradInt" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="\${skyColors[0]}"/>
+          <stop offset="100%" stop-color="\${skyColors[1]}"/>
+        </linearGradient>
+      </defs>
+      <rect width="200" height="200" fill="url(#skyGradInt)" rx="20"/>
+      \${celestialSvg}
+      \${rainSvg}
+      \${snowSvg}
+    `;
+
+    if (triggered) {
+      return `
+        <svg viewBox="0 0 200 200" width="100%" height="100%" style="border-radius:20px; box-shadow:0 0 30px #f00;">
+          <rect width="200" height="200" fill="#1a0000" rx="20"/>
+          <path d="M40 160 L100 80 L160 160 Z" fill="#333"/>
+          <rect x="70" y="160" width="60" height="40" fill="#222"/>
+          <circle cx="100" cy="70" r="20" fill="#f00">
+            <animate attributeName="opacity" values="1;0.2;1" dur="0.5s" repeatCount="indefinite"/>
+            <animate attributeName="r" values="20;25;20" dur="0.5s" repeatCount="indefinite"/>
+          </circle>
+          <path d="M100 40 Q50 20 20 60" fill="none" stroke="#f00" stroke-width="4" stroke-linecap="round">
+             <animate attributeName="opacity" values="1;0;1" dur="0.5s" repeatCount="indefinite"/>
+          </path>
+          <path d="M100 40 Q150 20 180 60" fill="none" stroke="#f00" stroke-width="4" stroke-linecap="round">
+             <animate attributeName="opacity" values="1;0;1" dur="0.5s" repeatCount="indefinite"/>
+          </path>
+          <path d="M100 20 Q30 0 0 50" fill="none" stroke="#f00" stroke-width="6" stroke-linecap="round">
+             <animate attributeName="opacity" values="0;1;0" dur="0.5s" repeatCount="indefinite"/>
+          </path>
+          <path d="M100 20 Q170 0 200 50" fill="none" stroke="#f00" stroke-width="6" stroke-linecap="round">
+             <animate attributeName="opacity" values="0;1;0" dur="0.5s" repeatCount="indefinite"/>
+          </path>
+        </svg>
+      `;
+    }
+
+    if (state === 'armed_home') {
+      return `
+        <svg viewBox="0 0 200 200" width="100%" height="100%" style="border-radius:20px; overflow:hidden;">
+          \${weatherBg}
+          <polygon points="40,140 100,90 160,140" fill="#475569"/>
+          <polygon points="100,90 160,140 180,120 120,70" fill="#334155"/>
+          <rect x="50" y="140" width="100" height="60" fill="#1e293b"/>
+          <rect x="90" y="160" width="20" height="40" fill="#0f172a"/>
+          
+          <!-- Moving Spotlight -->
+          <polygon points="100,200 20,100 180,100" fill="#fef08a" opacity="0.3">
+            <animateTransform attributeName="transform" type="rotate" values="-20 100 200; 20 100 200; -20 100 200" dur="4s" repeatCount="indefinite"/>
+          </polygon>
+          
+          <!-- IR Cameras -->
+          <circle cx="50" cy="140" r="4" fill="#111"/>
+          <circle cx="50" cy="140" r="1.5" fill="#f00">
+             <animate attributeName="opacity" values="1;0.5;1" dur="1s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="150" cy="140" r="4" fill="#111"/>
+          <circle cx="150" cy="140" r="1.5" fill="#f00">
+             <animate attributeName="opacity" values="1;0.5;1" dur="1s" repeatCount="indefinite"/>
+          </circle>
+          
+          <!-- Padlock -->
+          <rect x="85" y="150" width="30" height="20" rx="3" fill="#ef4444"/>
+          <path d="M92 150 V140 A8 8 0 0 1 108 140 V150" fill="none" stroke="#ef4444" stroke-width="4"/>
+        </svg>
+      `;
+    }
+
+    if (state === 'armed_away') {
+      return `
+        <svg viewBox="0 0 200 200" width="100%" height="100%" style="border-radius:20px; overflow:hidden;">
+          \${weatherBg}
+          <polygon points="60,120 100,80 140,120" fill="#475569"/>
+          <rect x="70" y="120" width="60" height="50" fill="#1e293b"/>
+          <rect x="90" y="140" width="20" height="30" fill="#0f172a"/>
+          
+          <circle cx="70" cy="120" r="3" fill="#111"/>
+          <circle cx="70" cy="120" r="1" fill="#f00"><animate attributeName="opacity" values="1;0.5;1" dur="1s" repeatCount="indefinite"/></circle>
+          <circle cx="130" cy="120" r="3" fill="#111"/>
+          <circle cx="130" cy="120" r="1" fill="#f00"><animate attributeName="opacity" values="1;0.5;1" dur="1s" repeatCount="indefinite"/></circle>
+          
+          <!-- Persons leaving -->
+          <g fill="#111" opacity="0.8">
+            <animateTransform attributeName="transform" type="translate" values="0 0; -20 20; 0 0" dur="4s" repeatCount="indefinite"/>
+            <circle cx="40" cy="150" r="6"/>
+            <path d="M35 160 L45 160 L45 180 L35 180 Z"/>
+          </g>
+          <g fill="#111" opacity="0.8">
+            <animateTransform attributeName="transform" type="translate" values="0 0; 20 20; 0 0" dur="4.2s" repeatCount="indefinite"/>
+            <circle cx="160" cy="160" r="5"/>
+            <path d="M156 168 L164 168 L164 185 L156 185 Z"/>
+          </g>
+          
+          <rect x="85" y="40" width="30" height="20" rx="3" fill="#ef4444" filter="drop-shadow(0 0 5px #ef4444)"/>
+          <path d="M92 40 V30 A8 8 0 0 1 108 30 V40" fill="none" stroke="#ef4444" stroke-width="4"/>
+        </svg>
+      `;
+    }
+
+    if (state === 'armed_night') {
+      return `
+        <svg viewBox="0 0 200 200" width="100%" height="100%" style="border-radius:20px; overflow:hidden;">
+          <rect width="200" height="200" fill="#0f172a"/>
+          
+          <!-- Window frame -->
+          <g transform="translate(110, 20) scale(0.4)">
+             <rect x="0" y="0" width="160" height="200" fill="#333" stroke="#222" stroke-width="8"/>
+             <g clip-path="url(#win-clip)">
+               <clipPath id="win-clip"><rect x="0" y="0" width="160" height="200"/></clipPath>
+               \${weatherBg}
+             </g>
+             <line x1="80" y1="0" x2="80" y2="200" stroke="#222" stroke-width="6"/>
+             <line x1="0" y1="100" x2="160" y2="100" stroke="#222" stroke-width="6"/>
+          </g>
+          
+          <!-- TV Screen glowing -->
+          <rect x="20" y="60" width="60" height="40" rx="3" fill="#111" stroke="#333" stroke-width="2"/>
+          <rect x="22" y="62" width="56" height="36" rx="2" fill="#38bdf8">
+            <animate attributeName="opacity" values="0.6;1;0.4;0.8;0.5" dur="3s" repeatCount="indefinite"/>
+          </rect>
+          
+          <!-- Bed -->
+          <rect x="30" y="140" width="140" height="40" rx="10" fill="#334155"/>
+          <rect x="40" y="130" width="40" height="20" rx="10" fill="#cbd5e1"/>
+          <!-- Person sleeping -->
+          <path d="M40 145 Q90 120 150 145 L150 180 L30 180 Z" fill="#475569"/>
+          
+          <!-- Padlock -->
+          <rect x="15" y="15" width="20" height="15" rx="3" fill="#ef4444"/>
+          <path d="M19 15 V10 A6 6 0 0 1 31 10 V15" fill="none" stroke="#ef4444" stroke-width="3"/>
+        </svg>
+      `;
+    }
+
+    if (state === 'armed_vacation') {
+      return `
+        <svg viewBox="0 0 200 200" width="100%" height="100%" style="border-radius:20px; overflow:hidden;">
+          \${weatherBg}
+          <!-- Runway -->
+          <polygon points="0,200 200,200 150,150 50,150" fill="#334155"/>
+          <line x1="100" y1="150" x2="100" y2="200" stroke="#fff" stroke-width="4" stroke-dasharray="10,10"/>
+          
+          <!-- Airplane -->
+          <g fill="#f8fafc">
+            <animateTransform attributeName="transform" type="translate" values="-20 20; 20 -20; -20 20" dur="6s" repeatCount="indefinite"/>
+            <path d="M100 100 L140 80 L160 80 A10 10 0 0 0 160 70 L140 70 L90 50 L80 50 L100 70 L50 70 L30 60 L20 60 L40 75 L30 85 L100 100 Z"/>
+          </g>
+          
+          <!-- Padlock -->
+          <rect x="85" y="15" width="30" height="20" rx="3" fill="#ef4444" filter="drop-shadow(0 0 5px #ef4444)"/>
+          <path d="M92 15 V5 A8 8 0 0 1 108 5 V15" fill="none" stroke="#ef4444" stroke-width="4"/>
+        </svg>
+      `;
+    }
+
+    // Disarmed Mode
+    return `
+      <svg viewBox="0 0 200 200" width="100%" height="100%" style="border-radius:20px; overflow:hidden;">
+        \${weatherBg}
+        <!-- Relaxing Coffee Scene -->
+        <rect x="70" y="90" width="60" height="70" rx="30" fill="#f8fafc" opacity="0.9"/>
+        <path d="M130 110 A20 20 0 0 1 130 140" fill="none" stroke="#f8fafc" stroke-width="8"/>
+        <!-- Steam -->
+        <path d="M90 80 Q100 60 90 40" fill="none" stroke="#e2e8f0" stroke-width="4" stroke-linecap="round">
+          <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite"/>
+        </path>
+        <path d="M110 85 Q120 65 110 45" fill="none" stroke="#e2e8f0" stroke-width="4" stroke-linecap="round">
+          <animate attributeName="opacity" values="0;1;0" dur="2.5s" repeatCount="indefinite"/>
+        </path>
+        
+        <!-- Glowing Green Shield (Unlocking) -->
+        <path d="M40 30 L100 10 L160 30 V80 Q160 140 100 190 Q40 140 40 80 Z" fill="none" stroke="#22c55e" stroke-width="4" stroke-dasharray="10 10" opacity="0.5">
+          <animateTransform attributeName="transform" type="translate" values="0 0; 0 -5; 0 0" dur="3s" repeatCount="indefinite"/>
+        </path>
+        <circle cx="100" cy="150" r="15" fill="#22c55e"/>
+        <rect x="96" y="142" width="8" height="10" fill="#0f172a"/>
+        <rect x="92" y="152" width="16" height="10" rx="2" fill="#0f172a"/>
+      </svg>
+    `;
+  }
+
   _renderEntries() {
     const el = this.shadowRoot.getElementById('entries');
     const globalStatusEl = this.shadowRoot.getElementById('global-status');
@@ -1939,12 +2150,8 @@ class ArgusPanel extends HTMLElement {
       const triggered = state === 'triggered';
       const fullHudLoc = this._homeName || this._hass?.config?.location_name || 'Hogar';
 
-      // Icon Selection
-      let svgName = 'mode_disarmed.svg';
-      if (state === 'armed_home') svgName = 'mode_home.svg';
-      else if (state === 'armed_away') svgName = 'mode_away.svg';
-      else if (state === 'armed_night') svgName = 'mode_night.svg';
-      else if (state === 'armed_vacation') svgName = 'mode_vacation.svg';
+      // Dynamic SVG Icon Generation
+      // Replaced old static svgName logic with dynamic intelligent SVGs
 
       const mKey = state.replace('armed_', '');
       const eCfg = (this._ui?.modes?.__by_entity__?.[e.entity_id]?.[mKey])
@@ -1980,7 +2187,7 @@ class ArgusPanel extends HTMLElement {
             </div>
 
             <div class="entry-icon">
-              ${triggered ? '<div style="font-size:100px;filter:drop-shadow(0 0 30px #f00)">🚨</div>' : `<img src="/api/argus_static/${svgName}?v=1.0.0">`}
+              ${this._getIntelligentSVG(state, weatherState, isNight, triggered)}
             </div>
 
             ${activeSensors.length ? `
