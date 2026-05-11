@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.1.3
+ * Argus Home Hub – v1.1.4
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1910,6 +1910,7 @@ class ArgusPanel extends HTMLElement {
   }
 
   _getIntelligentSVG(state, w, isNight, triggered) {
+    w = typeof w === 'string' ? w : 'sunny';
     let skyColors = isNight ? ['#0f172a', '#1e293b'] : ['#38bdf8', '#bae6fd'];
     if (w.includes('cloudy') || w.includes('fog')) skyColors = isNight ? ['#1e293b', '#334155'] : ['#94a3b8', '#cbd5e1'];
     if (w.includes('rain') || w.includes('storm')) skyColors = isNight ? ['#0f172a', '#1e293b'] : ['#475569', '#94a3b8'];
@@ -1934,20 +1935,20 @@ class ArgusPanel extends HTMLElement {
     ` : '';
 
     const celestialSvg = isNight 
-      ? \`<circle cx="160" cy="40" r="15" fill="#fef08a" filter="drop-shadow(0 0 10px #fef08a)"/>\`
-      : \`<circle cx="160" cy="40" r="20" fill="#fbbf24" filter="drop-shadow(0 0 15px #fbbf24)"><animateTransform attributeName="transform" type="rotate" from="0 160 40" to="360 160 40" dur="10s" repeatCount="indefinite"/></circle>\`;
+      ? `<circle cx="160" cy="40" r="15" fill="#fef08a" filter="drop-shadow(0 0 10px #fef08a)"/>`
+      : `<circle cx="160" cy="40" r="20" fill="#fbbf24" filter="drop-shadow(0 0 15px #fbbf24)"><animateTransform attributeName="transform" type="rotate" from="0 160 40" to="360 160 40" dur="10s" repeatCount="indefinite"/></circle>`;
 
     const weatherBg = `
       <defs>
         <linearGradient id="skyGradInt" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="\${skyColors[0]}"/>
-          <stop offset="100%" stop-color="\${skyColors[1]}"/>
+          <stop offset="0%" stop-color="${skyColors[0]}"/>
+          <stop offset="100%" stop-color="${skyColors[1]}"/>
         </linearGradient>
       </defs>
       <rect width="200" height="200" fill="url(#skyGradInt)" rx="20"/>
-      \${celestialSvg}
-      \${rainSvg}
-      \${snowSvg}
+      ${celestialSvg}
+      ${rainSvg}
+      ${snowSvg}
     `;
 
     if (triggered) {
@@ -1979,7 +1980,7 @@ class ArgusPanel extends HTMLElement {
     if (state === 'armed_home') {
       return `
         <svg viewBox="0 0 200 200" width="100%" height="100%" style="border-radius:20px; overflow:hidden;">
-          \${weatherBg}
+          ${weatherBg}
           <polygon points="40,140 100,90 160,140" fill="#475569"/>
           <polygon points="100,90 160,140 180,120 120,70" fill="#334155"/>
           <rect x="50" y="140" width="100" height="60" fill="#1e293b"/>
@@ -2010,7 +2011,7 @@ class ArgusPanel extends HTMLElement {
     if (state === 'armed_away') {
       return `
         <svg viewBox="0 0 200 200" width="100%" height="100%" style="border-radius:20px; overflow:hidden;">
-          \${weatherBg}
+          ${weatherBg}
           <polygon points="60,120 100,80 140,120" fill="#475569"/>
           <rect x="70" y="120" width="60" height="50" fill="#1e293b"/>
           <rect x="90" y="140" width="20" height="30" fill="#0f172a"/>
@@ -2048,7 +2049,7 @@ class ArgusPanel extends HTMLElement {
              <rect x="0" y="0" width="160" height="200" fill="#333" stroke="#222" stroke-width="8"/>
              <g clip-path="url(#win-clip)">
                <clipPath id="win-clip"><rect x="0" y="0" width="160" height="200"/></clipPath>
-               \${weatherBg}
+               ${weatherBg}
              </g>
              <line x1="80" y1="0" x2="80" y2="200" stroke="#222" stroke-width="6"/>
              <line x1="0" y1="100" x2="160" y2="100" stroke="#222" stroke-width="6"/>
@@ -2076,7 +2077,7 @@ class ArgusPanel extends HTMLElement {
     if (state === 'armed_vacation') {
       return `
         <svg viewBox="0 0 200 200" width="100%" height="100%" style="border-radius:20px; overflow:hidden;">
-          \${weatherBg}
+          ${weatherBg}
           <!-- Runway -->
           <polygon points="0,200 200,200 150,150 50,150" fill="#334155"/>
           <line x1="100" y1="150" x2="100" y2="200" stroke="#fff" stroke-width="4" stroke-dasharray="10,10"/>
@@ -2097,7 +2098,7 @@ class ArgusPanel extends HTMLElement {
     // Disarmed Mode
     return `
       <svg viewBox="0 0 200 200" width="100%" height="100%" style="border-radius:20px; overflow:hidden;">
-        \${weatherBg}
+        ${weatherBg}
         <!-- Relaxing Coffee Scene -->
         <rect x="70" y="90" width="60" height="70" rx="30" fill="#f8fafc" opacity="0.9"/>
         <path d="M130 110 A20 20 0 0 1 130 140" fill="none" stroke="#f8fafc" stroke-width="8"/>
@@ -2139,7 +2140,7 @@ class ArgusPanel extends HTMLElement {
     // Weather
     const weatherEnt = Object.values(this._hass?.states || {}).find(s => s.entity_id.startsWith('weather.')) || { state: 'sunny' };
     const weatherState = weatherEnt.state || 'sunny';
-    const isNight = this._hass.states['sun.sun']?.state === 'below_horizon';
+    const isNight = this._hass?.states?.['sun.sun']?.state === 'below_horizon';
 
     // Time
     const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
