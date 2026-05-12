@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.1.7
+ * Argus Home Hub – v1.1.8
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -770,9 +770,17 @@ _tmpl.innerHTML = `
   .btn-disarm{--btn-bg:rgba(67,160,71,0.2); margin-top:4px}
   .btn-disarm.active{--btn-bg:rgba(67,160,71,0.35);--btn-shadow:rgba(67,160,71,0.5);border-color:rgba(67,160,71,0.6)!important;box-shadow:0 0 25px rgba(67,160,71,0.45)!important}
   
+  .ios-fullscreen { position: fixed !important; inset: 0 !important; width: 100vw !important; height: 100vh !important; max-width: none !important; z-index: 999999 !important; margin: 0 !important; border-radius: 0 !important; display: flex !important; flex-direction: column !important; background: #000 !important; }
+  .ios-fullscreen .entry-content { grid-template-columns: 280px 1fr !important; padding: 5% !important; gap: 40px !important; height: 100% !important; align-items: center !important; background: radial-gradient(circle at 20% 50%, rgba(0,0,0,0.4) 0%, transparent 70%) !important; }
+  .ios-fullscreen .liquid-btn { padding: 22px 28px !important; font-size: 18px !important; border-radius: 24px !important; gap: 20px !important; }
+  .ios-fullscreen .liquid-btn i { font-size: 24px !important; }
+  .ios-fullscreen .hud { top: 40px !important; right: 40px !important; scale: 1.2; transform-origin: top right; }
+  .ios-fullscreen .sensor-column { width: 200px !important; padding-right: 40px !important; }
+  .ios-fullscreen .sensor-chip { font-size: 14px !important; padding: 8px 16px !important; max-width: 190px !important; }
+  
   .entry-icon{display:flex;justify-content:center;align-items:center;perspective:1000px;min-height:160px}
   .entry-icon svg{width:100%;height:auto;max-width:260px;filter:drop-shadow(0 0 25px rgba(255,255,255,0.15));animation:float-icon 5s ease-in-out infinite;transition:max-width 0.4s ease}
-  .ios-fullscreen .entry-icon svg{max-width:480px;filter:drop-shadow(0 0 40px rgba(255,255,255,0.25))}
+  .ios-fullscreen .entry-icon svg{max-width:550px;filter:drop-shadow(0 0 50px rgba(255,255,255,0.3))}
   @keyframes float-icon{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-15px) rotate(1.5deg)}}
 
   .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
@@ -798,7 +806,6 @@ _tmpl.innerHTML = `
   
   /* FS button */
   .fs-btn{background:rgba(255,255,255,0.05);padding:8px;border-radius:10px;font-size:16px}
-  .ios-fullscreen { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; max-width: none !important; z-index: 999999 !important; margin: 0 !important; border-radius: 0 !important; }
   
   /* Modal Fixes */
   .modal-back{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;padding:20px;z-index:999999;backdrop-filter:blur(8px)}
@@ -2183,37 +2190,17 @@ class ArgusPanel extends HTMLElement {
   _toggleFullscreen(targetEl) {
     const target = targetEl || this.shadowRoot.querySelector('.entry');
     const idx = parseInt(target.querySelector('.entry-fs')?.dataset?.fullscreen ?? -1);
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
-    if (!document.fullscreenEnabled && !target.webkitRequestFullscreen) {
-      if (target.classList.contains('ios-fullscreen')) {
-        target.classList.remove('ios-fullscreen');
-        this._fullscreenIdx = -1;
-      } else {
-        target.classList.add('ios-fullscreen');
-        this._fullscreenIdx = idx;
-      }
-      return;
-    }
-
-    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-      if (target.requestFullscreen) {
-        target.requestFullscreen().then(() => { this._fullscreenIdx = idx; }).catch(err => {
-          if (isIOS) { target.classList.add('ios-fullscreen'); this._fullscreenIdx = idx; }
-          else console.warn(`Fullscreen error: ${err.message}`);
-        });
-      } else if (target.webkitRequestFullscreen) {
-        target.webkitRequestFullscreen();
-        this._fullscreenIdx = idx;
-      } else {
-        target.classList.add('ios-fullscreen');
-        this._fullscreenIdx = idx;
-      }
-    } else {
-      if (document.exitFullscreen) document.exitFullscreen();
-      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    if (target.classList.contains('ios-fullscreen')) {
       target.classList.remove('ios-fullscreen');
       this._fullscreenIdx = -1;
+      document.body.style.overflow = ''; // Restore scroll
+    } else {
+      // Clear any other fullscreen first
+      this.shadowRoot.querySelectorAll('.entry').forEach(e => e.classList.remove('ios-fullscreen'));
+      target.classList.add('ios-fullscreen');
+      this._fullscreenIdx = idx;
+      document.body.style.overflow = 'hidden'; // Prevent background scroll
     }
   }
 
