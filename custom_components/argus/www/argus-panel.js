@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.1.9
+ * Argus Home Hub – v1.1.10
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -770,16 +770,6 @@ _tmpl.innerHTML = `
   .btn-disarm{--btn-bg:rgba(67,160,71,0.2); margin-top:4px}
   .btn-disarm.active{--btn-bg:rgba(67,160,71,0.35);--btn-shadow:rgba(67,160,71,0.5);border-color:rgba(67,160,71,0.6)!important;box-shadow:0 0 25px rgba(67,160,71,0.45)!important}
   
-  :host(.panel-fullscreen) { background: #000 !important; }
-  :host(.panel-fullscreen) header, 
-  :host(.panel-fullscreen) #modes-tabs,
-  :host(.panel-fullscreen) #automations,
-  :host(.panel-fullscreen) #activity-log,
-  :host(.panel-fullscreen) #settings,
-  :host(.panel-fullscreen) .entry:not(.ios-fullscreen) { 
-    display: none !important; 
-  }
-
   .ios-fullscreen { position: fixed !important; inset: 0 !important; width: 100vw !important; height: 100vh !important; max-width: none !important; z-index: 999999 !important; margin: 0 !important; border-radius: 0 !important; display: flex !important; flex-direction: column !important; background: #000 !important; }
   .ios-fullscreen .entry-content { grid-template-columns: 320px 1fr !important; padding: 60px !important; gap: 60px !important; height: 100% !important; align-items: center !important; background: radial-gradient(circle at 20% 50%, rgba(0,0,0,0.5) 0%, transparent 80%) !important; }
   .ios-fullscreen .liquid-btn { padding: 24px 32px !important; font-size: 20px !important; border-radius: 28px !important; gap: 24px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.4) !important; }
@@ -1567,14 +1557,6 @@ class ArgusPanel extends HTMLElement {
     try { this._manualLang = localStorage.getItem('argus_lang') || null; } catch(e) {}
     this._init(); 
     this._startClock();
-    document.addEventListener('fullscreenchange', () => {
-      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-        this.classList.remove('panel-fullscreen');
-        this._fullscreenIdx = -1;
-        document.body.style.overflow = '';
-        this._renderEntries();
-      }
-    });
   }
   disconnectedCallback() {
     if (this._clockInterval) clearInterval(this._clockInterval);
@@ -2121,7 +2103,15 @@ class ArgusPanel extends HTMLElement {
     // Time
     const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
 
-    el.innerHTML = entries.map((e, idx) => {
+    // Surgical Update: Maintain article nodes to persist fullscreen state
+    const existing = Array.from(el.querySelectorAll('article.entry'));
+    if (existing.length !== entries.length) {
+      el.innerHTML = entries.map((_, i) => `<article class="entry" data-idx="${i}"></article>`).join('');
+    }
+
+    const currentArticles = el.querySelectorAll('article.entry');
+    entries.forEach((e, idx) => {
+      const art = currentArticles[idx];
       const live  = this._hass?.states[e.entity_id]?.state;
       const state = live || e.state || 'unavailable';
       const triggered = state === 'triggered';
@@ -2139,21 +2129,17 @@ class ArgusPanel extends HTMLElement {
       const OPEN = ['on', 'open', 'unlocked', 'recording', 'active', 'motion'];
 
       const isFS = this._fullscreenIdx === idx;
-      return `
-        <article class="entry ${isFS ? 'ios-fullscreen' : ''}" style="${triggered ? 'border:3px solid #ff5252;box-shadow:0 0 30px rgba(255,82,82,.4)' : ''}">
+      art.className = `entry ${isFS ? 'ios-fullscreen' : ''}`;
+      art.style.cssText = triggered ? 'border:3px solid #ff5252;box-shadow:0 0 30px rgba(255,82,82,.4)' : '';
+
+      art.innerHTML = `
           ${this._renderEntryBackground(weatherState, isNight)}
-
           <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="Pantalla completa" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>
-
           ${this._renderBatteryAlerts()}
-          
           <div class="hud">
             <div class="hud-loc">${fullHudLoc}</div>
-            <div class="hud-data">
-                <span>${timeStr}</span>
-            </div>
+            <div class="hud-data"><span>${timeStr}</span></div>
           </div>
-
           <div class="entry-content">
             <div class="liquid-stack">
               <button class="liquid-btn btn-home ${state==='armed_home'?'active':''}" data-idx="${idx}" data-action="home">${t('btn_home')}</button>
@@ -2163,27 +2149,25 @@ class ArgusPanel extends HTMLElement {
               <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg> <span>${t('btn_disarmed')}</span></button>
               <button class="btn-sos" data-action="sos">${t('btn_sos')}</button>
             </div>
-
             <div class="entry-icon">
               ${this._getIntelligentSVG(state, weatherState, isNight, triggered)}
             </div>
-
             ${activeSensors.length ? `
-            <div class="sensor-column">
-              ${activeSensors.map(sid => {
-                const s = this._hass?.states[sid];
-                if (!s) return '';
-                const isOpen = OPEN.includes(s.state);
-                const name = s.attributes?.friendly_name || sid.split('.')[1] || sid;
-                const shortName = name.length > 16 ? name.slice(0, 15) + '…' : name;
-                return `<div class="sensor-chip ${isOpen ? 'sensor-chip--open' + (triggered ? ' sensor-chip--triggered' : '') : 'sensor-chip--closed'}">
-                  <span class="sensor-chip-dot"></span>${shortName}
-                </div>`;
-              }).join('')}
-            </div>` : ''}
+              <div class="sensor-column">
+                ${activeSensors.map(sid => {
+                  const s = this._hass?.states[sid];
+                  if (!s) return '';
+                  const isOpen = OPEN.includes(s.state);
+                  const name = s.attributes?.friendly_name || sid.split('.')[1] || sid;
+                  const shortName = name.length > 16 ? name.slice(0, 15) + '…' : name;
+                  return `<div class="sensor-chip ${isOpen ? 'sensor-chip--open' + (triggered ? ' sensor-chip--triggered' : '') : 'sensor-chip--closed'}">
+                    <span class="sensor-chip-dot"></span>${shortName}
+                  </div>`;
+                }).join('')}
+              </div>` : ''}
           </div>
-        </article>`;
-    }).join('');
+      `;
+    });
 
     el.querySelectorAll('button[data-action]').forEach(btn =>
       btn.addEventListener('click', ev => this._handleAction(ev.currentTarget.dataset.idx, ev.currentTarget.dataset.action))
@@ -2208,32 +2192,29 @@ class ArgusPanel extends HTMLElement {
   _toggleFullscreen(targetEl) {
     const target = targetEl || this.shadowRoot.querySelector('.entry');
     const idx = parseInt(target.querySelector('.entry-fs')?.dataset?.fullscreen ?? -1);
-    const requestFS = this.requestFullscreen || this.webkitRequestFullscreen;
+    const requestFS = target.requestFullscreen || target.webkitRequestFullscreen;
 
-    if (this._fullscreenIdx !== -1) {
-      // EXIT Fullscreen
+    if (document.fullscreenElement === target || document.webkitFullscreenElement === target || target.classList.contains('ios-fullscreen')) {
+      // EXIT
       if (document.exitFullscreen) document.exitFullscreen();
       else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-      this.classList.remove('panel-fullscreen');
+      target.classList.remove('ios-fullscreen');
       this._fullscreenIdx = -1;
       document.body.style.overflow = '';
     } else {
-      // ENTER Fullscreen
+      // ENTER
+      this._fullscreenIdx = idx;
       if (requestFS) {
-        requestFS.call(this).then(() => {
-          this._fullscreenIdx = idx;
-          this.classList.add('panel-fullscreen');
+        requestFS.call(target).then(() => {
           document.body.style.overflow = 'hidden';
           this._renderEntries();
         }).catch(() => {
-          this._fullscreenIdx = idx;
-          this.classList.add('panel-fullscreen');
+          target.classList.add('ios-fullscreen');
           document.body.style.overflow = 'hidden';
           this._renderEntries();
         });
       } else {
-        this._fullscreenIdx = idx;
-        this.classList.add('panel-fullscreen');
+        target.classList.add('ios-fullscreen');
         document.body.style.overflow = 'hidden';
         this._renderEntries();
       }
