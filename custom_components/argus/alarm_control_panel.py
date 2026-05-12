@@ -32,6 +32,7 @@ from homeassistant.helpers.event import (
     async_track_time_interval,
 )
 from datetime import timedelta
+from homeassistant.components.persistent_notification import async_create as pn_create
 from homeassistant.helpers.restore_state import RestoreEntity
 
 from .const import (
@@ -171,7 +172,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         
         self._mqtt_enabled = d.get(CONF_MQTT_ENABLED, False)
         self._mqtt_topic_state = d.get(CONF_MQTT_TOPIC_STATE, "argus/alarm/state")
-        self._mqtt_topic_command = d.get(CONF_MQTT_TOPIC_COMMAND, "argus/alarm/set")
+        self._mqtt_topic_command = d.get(CONF_MQTT_TOPIC_COMMAND, DEFAULT_MQTT_TOPIC_COMMAND)
 
     # ── Properties ────────────────────────────────────────────────
     @property
@@ -393,10 +394,11 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         if all_away:
             if not getattr(self, "_smart_arming_suggested", False):
                 self._smart_arming_suggested = True
-                self.hass.components.persistent_notification.async_create(
-                    "Todos parecen haber salido de casa, pero la alarma sigue desarmada. ¿Deseas armar Argus?",
+                pn_create(
+                    self.hass,
+                    message="Todos parecen haber salido de casa, pero la alarma sigue desarmada. ¿Deseas armar Argus?",
                     title="💡 Sugerencia Inteligente Argus AI",
-                    notification_id="argus_smart_arming"
+                    notification_id="argus_smart_arming",
                 )
                 self.hass.async_create_task(
                     async_append_audit_log(self.hass, "ai_suggestion", "Sugerencia de armado (casa vacía)", user="Argus AI")
@@ -570,7 +572,11 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         new_state = event.data.get("new_state")
         entity_id = event.data.get("entity_id")
 
-        if new_state is None or new_state.state != STATE_ON:
+        if new_state is None:
+            return
+        # Accept both binary_sensor ON and cover/lock open/unlocked states
+        OPEN_TRIGGER_STATES = {"on", "open", "unlocked", "detected", "motion"}
+        if new_state.state not in OPEN_TRIGGER_STATES:
             return
 
         # Fire "sensor_opened" automations globally (before filtering by alarm state)
@@ -644,8 +650,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         await self._async_mqtt_publish()
         self.hass.async_create_task(self._evaluate_automations("triggered", sensor=self._triggered_by))
         # Persistent notification in HA
-        self.hass.components.persistent_notification.async_create(
-            f"\u26a0\ufe0f Sensor: **{self._triggered_by or 'desconocido'}**\n\nModo activo: `{self._alarm_state.value}`",
+        pn_create(
+            self.hass,
+            message=f"\u26a0\ufe0f Sensor: **{self._triggered_by or 'desconocido'}**\n\nModo activo: `{self._alarm_state.value}`",
             title="\U0001f6a8 Argus \u2014 Alarma Activada",
             notification_id="argus_triggered",
         )
@@ -657,10 +664,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             else:
                 sensor_name = self._triggered_by
         
-        mode_label = self._alarm_state.value.replace("armed_", "").capitalize()
+        mode_label = (self._triggered_mode or self._alarm_state.value.replace("armed_", "")).capitalize()
         # If triggered by a rule, mention it
         trigger_detail = f"Sensor: {sensor_name} (Modo: {mode_label})"
-        if "Regla" in str(self._triggered_by):
+        if self._triggered_by and "Regla" in str(self._triggered_by):
             trigger_detail = f"Disparado por {self._triggered_by} ({mode_label})"
 
         await async_append_audit_log(
@@ -960,7 +967,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                         self.hass, "arm_rejected", msg, user="Argus"
                     )
                     # Persistent notification → aparece en el panel de HA
-                    self.hass.components.persistent_notification.async_create(
+                    pn_create(
+                        self.hass,
                         title="🔒 Argus — No se pudo armar",
                         message=(
                             "El sistema **no se armó** porque los siguientes "
