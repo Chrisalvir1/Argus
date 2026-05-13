@@ -2544,6 +2544,29 @@ class ArgusPanel extends HTMLElement {
             <span style="font-size:12px;font-weight:600">${this._t('mqtt_label')}</span>
           </label>
         </div>
+
+        <div class="mode-section-card">
+          <div class="mode-section-title">🧪 Simulacro</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <label style="display:flex;align-items:center;gap:10px;padding:9px 10px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05);cursor:${readonly?'default':'pointer'}">
+              <input type="checkbox" id="drill-cfg-siren" ${cfg.drill_siren !== false ? 'checked' : ''} ${readonly ? 'disabled' : ''} style="width:17px;height:17px;accent-color:#f5c800;cursor:${readonly?'default':'pointer'}">
+              <span style="font-size:12px;font-weight:600">🔔 Activar sirena</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:10px;padding:9px 10px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05);cursor:${readonly?'default':'pointer'}">
+              <input type="checkbox" id="drill-cfg-notify" ${cfg.drill_notify ? 'checked' : ''} ${readonly ? 'disabled' : ''} style="width:17px;height:17px;accent-color:#f5c800;cursor:${readonly?'default':'pointer'}">
+              <span style="font-size:12px;font-weight:600">📣 Enviar notificaciones</span>
+            </label>
+            <div style="padding:9px 10px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05)">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                <span style="font-size:12px;font-weight:600">⏱️ Duración</span>
+                <span id="drill-cfg-dur-val" style="font-size:12px;font-weight:800;color:#f5e97a">${cfg.drill_duration ?? 30}s</span>
+              </div>
+              <input type="range" id="drill-cfg-duration" min="10" max="120" step="5" value="${cfg.drill_duration ?? 30}" ${readonly ? 'disabled' : ''} style="width:100%;accent-color:#f5c800">
+              <div style="display:flex;justify-content:space-between;font-size:10px;color:#777;margin-top:3px"><span>10s</span><span>2 min</span></div>
+            </div>
+          </div>
+        </div>
+
       </div>
       ${readonly ? '' : `<div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;"><button class="primary" id="save-mode" style="width:100%;height:48px;font-size:14px;box-shadow:0 8px 20px rgba(0,0,0,0.2)">${this._t('save_config')}</button><span id="mode-status" style="display:block;text-align:center;font-size:13px;font-weight:700;min-height:20px;transition:opacity .4s;opacity:1;color:var(--primary-color,#03a9f4)"></span></div>`}
     `;
@@ -2563,6 +2586,12 @@ class ArgusPanel extends HTMLElement {
         btn.addEventListener('click', () => this._toggleEntrySensor(btn.dataset.toggleDelay))
       );
       el.querySelector('#save-mode')?.addEventListener('click', () => this._saveMode());
+      // Live update drill duration label
+      const drillSlider = el.querySelector('#drill-cfg-duration');
+      const drillDurVal = el.querySelector('#drill-cfg-dur-val');
+      if (drillSlider && drillDurVal) {
+        drillSlider.addEventListener('input', () => { drillDurVal.textContent = drillSlider.value + 's'; });
+      }
     }
   }
 
@@ -2629,6 +2658,12 @@ class ArgusPanel extends HTMLElement {
     if (armTime)  cfg.arming_time  = armTime.value  ? parseInt(armTime.value)  : 0;
     if (entDelay) cfg.entry_delay  = entDelay.value ? parseInt(entDelay.value) : 0;
     if (mqttChk)  cfg.mqtt_enabled = mqttChk.checked;
+    const drillSirenEl    = this.shadowRoot.getElementById('drill-cfg-siren');
+    const drillNotifyEl   = this.shadowRoot.getElementById('drill-cfg-notify');
+    const drillDurationEl = this.shadowRoot.getElementById('drill-cfg-duration');
+    if (drillSirenEl)    cfg.drill_siren    = drillSirenEl.checked;
+    if (drillNotifyEl)   cfg.drill_notify   = drillNotifyEl.checked;
+    if (drillDurationEl) cfg.drill_duration = parseInt(drillDurationEl.value);
 
     // FIX-1: persistir en __by_entity__ ANTES del send para que el re-render
     // muestre los valores correctos aunque el WS tarde o falle
@@ -3401,6 +3436,10 @@ class ArgusPanel extends HTMLElement {
 
   /* ── Drill confirm modal ─────────────────────────────────────────── */
   _showDrillConfirm() {
+    const modeCfg = this._currentModeConfig();
+    const defSiren    = modeCfg.drill_siren    !== false;
+    const defNotify   = modeCfg.drill_notify   === true;
+    const defDuration = modeCfg.drill_duration ?? 30;
     return new Promise(resolve => {
       const overlay = document.createElement('div');
       overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;';
@@ -3420,7 +3459,7 @@ class ArgusPanel extends HTMLElement {
                 <div style="font-weight:700;font-size:0.88rem;color:#eee">🔔 Activar sirena</div>
                 <div style="font-size:0.75rem;color:#999;margin-top:2px">Las sirenas configuradas sonarán</div>
               </div>
-              <input type="checkbox" id="drill-siren" checked style="width:18px;height:18px;accent-color:#f5c800;cursor:pointer">
+              <input type="checkbox" id="drill-siren" ${defSiren ? 'checked' : ''} style="width:18px;height:18px;accent-color:#f5c800;cursor:pointer">
             </label>
 
             <!-- Notificaciones -->
@@ -3429,7 +3468,7 @@ class ArgusPanel extends HTMLElement {
                 <div style="font-weight:700;font-size:0.88rem;color:#eee">📣 Enviar notificaciones</div>
                 <div style="font-size:0.75rem;color:#999;margin-top:2px">Se ejecutarán las automatizaciones de alerta</div>
               </div>
-              <input type="checkbox" id="drill-notify" style="width:18px;height:18px;accent-color:#f5c800;cursor:pointer">
+              <input type="checkbox" id="drill-notify" ${defNotify ? 'checked' : ''} style="width:18px;height:18px;accent-color:#f5c800;cursor:pointer">
             </label>
 
             <!-- Duración -->
