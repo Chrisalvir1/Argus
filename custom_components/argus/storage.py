@@ -72,7 +72,6 @@ async def async_append_audit_log(
     hass: HomeAssistant, action: str, detail: str = "", user: str = "Argus"
 ) -> None:
     """Append an event to the Argus audit log (max 200 entries, newest first)."""
-    import datetime
     store = Store(hass, _STORAGE_VERSION, _STORAGE_KEY)
     current = await async_load_ui_data(hass)
     log: list = current.get("audit_log", [])

@@ -9,11 +9,16 @@ from homeassistant.helpers import area_registry as ar
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 
+from homeassistant.helpers.storage import Store
+
 from .const import DOMAIN, SIGNAL_CONFIG_UPDATED
 from .storage import (
+    async_append_audit_log,
     async_get_audit_log,
     async_load_ui_data,
     async_save_ui_data,
+    _STORAGE_VERSION,
+    _STORAGE_KEY,
 )
 
 _SUPPORTED_DOMAINS = {
@@ -40,6 +45,8 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_argus_get_media_players)
     websocket_api.async_register_command(hass, ws_argus_update_master_pin)
     websocket_api.async_register_command(hass, ws_argus_write_log)
+    websocket_api.async_register_command(hass, ws_argus_drill_start)
+    websocket_api.async_register_command(hass, ws_argus_drill_stop)
 
 
 @callback
@@ -230,7 +237,7 @@ async def ws_argus_get_stats(hass: HomeAssistant, connection, msg) -> None:
     connection.send_result(msg["id"], stats)
 
 
-@websocket_api.websocket_command({vol.Required("type"): "argus/clear_activity_log"})
+@websocket_api.websocket_command({vol.Required("type"): "argus/clear_audit_log"})
 @websocket_api.async_response
 async def ws_argus_clear_audit_log(hass: HomeAssistant, connection, msg) -> None:
     """Clear the Argus audit log."""
@@ -248,7 +255,6 @@ async def ws_argus_clear_audit_log(hass: HomeAssistant, connection, msg) -> None
 async def ws_argus_restore_config(hass: HomeAssistant, connection, msg) -> None:
     """Restore the full Argus UI configuration from an external backup."""
     # We replace the entire persistent storage dictionary
-    from .storage import Store, _STORAGE_VERSION, _STORAGE_KEY
     store = Store(hass, _STORAGE_VERSION, _STORAGE_KEY)
     await store.async_save(msg["config"])
     async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED)
@@ -369,9 +375,87 @@ async def ws_argus_update_master_pin(hass: HomeAssistant, connection, msg) -> No
 async def ws_argus_write_log(hass: HomeAssistant, connection, msg) -> None:
     """Append an event to the Argus audit log using the centralized helper."""
     await async_append_audit_log(
-        hass, 
-        action=msg["action"], 
-        detail=msg.get("detail", ""), 
+        hass,
+        action=msg["action"],
+        detail=msg.get("detail", ""),
         user=msg.get("user", "Argus")
     )
     connection.send_result(msg["id"], {"written": True})
+
+
+# ─────────────────────────────────────────────────────────────
+# DRILL MODE (Simulacro)
+# ─────────────────────────────────────────────────────────────
+
+def _get_argus_panel(hass, entry_id):
+    """Helper: return the ArgusAlarmPanel entity for the given entry."""
+    from homeassistant.helpers import entity_registry as er
+    ent_reg = er.async_get(hass)
+    for entity_id, entry in ent_reg.entities.items():
+        if entry.config_entry_id == entry_id and entity_id.startswith("alarm_control_panel."):
+            return hass.data["entity_components"]["alarm_control_panel"].get_entity(entity_id)
+    return None
+
+
+@websocket_api.websocket_command(
+    {
+        vol.Required("type"): "argus/drill_start",
+        vol.Required("entry_id"): str,
+    }
+)
+@websocket_api.async_response
+async def ws_argus_drill_start(hass: HomeAssistant, connection, msg) -> None:
+    """Activate drill (simulacro) mode: arm + flag, sirena sí, notificaciones no."""
+    from homeassistant.components.alarm_control_panel import AlarmControlPanelState
+    panel = _get_argus_panel(hass, msg["entry_id"])
+    if panel is None:
+        connection.send_error(msg["id"], "not_found", "Panel Argus no encontrado")
+        return
+    if panel._alarm_state != AlarmControlPanelState.DISARMED:
+        connection.send_error(msg["id"], "invalid_state", "El sistema debe estar desarmado para iniciar un simulacro")
+        return
+
+    panel._drill_mode = True
+    panel._triggered_by = "Simulacro manual"
+    panel._triggered_mode = "away"
+    await async_append_audit_log(
+        hass, "drill",
+        "[SIMULACRO] Iniciado manualmente",
+        user="Argus"
+    )
+    # Arm silently in away to enable sensors, then immediately trigger as drill
+    panel._alarm_state = AlarmControlPanelState.ARMED_AWAY
+    panel.async_write_ha_state()
+    hass.async_create_task(panel._async_trigger())
+    connection.send_result(msg["id"], {"drill": True})
+
+
+@websocket_api.websocket_command(
+    {
+        vol.Required("type"): "argus/drill_stop",
+        vol.Required("entry_id"): str,
+    }
+)
+@websocket_api.async_response
+async def ws_argus_drill_stop(hass: HomeAssistant, connection, msg) -> None:
+    """Cancel an active drill (simulacro) immediately."""
+    panel = _get_argus_panel(hass, msg["entry_id"])
+    if panel is None:
+        connection.send_error(msg["id"], "not_found", "Panel Argus no encontrado")
+        return
+
+    panel._cancel_timers()
+    await panel._async_siren(False)
+    panel._drill_mode = False
+    panel._triggered_mode = None
+    from homeassistant.components.alarm_control_panel import AlarmControlPanelState
+    panel._alarm_state = AlarmControlPanelState.DISARMED
+    panel._triggered_by = None
+    panel.async_write_ha_state()
+    await panel._async_mqtt_publish()
+    await async_append_audit_log(
+        hass, "drill",
+        "[SIMULACRO] Cancelado manualmente",
+        user="Argus"
+    )
+    connection.send_result(msg["id"], {"drill": False})

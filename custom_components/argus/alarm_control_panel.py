@@ -128,6 +128,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         # ARM-LOCK v2: timestamp (monotonic) until which forced-Home is blocked
         self._arm_lock_until: float = 0.0
+
+        # DRILL MODE (Simulacro)
+        self._drill_mode: bool = False
+        self._drill_listener = None
         self._smart_arming_suggested = False
         self._unsub_smart_arming = None
 
@@ -200,6 +204,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         attrs = {"config_entry_id": self._config_entry.entry_id}
         if getattr(self, "_arm_lock_bounces", 0) > 0:
             attrs["arm_lock_bounces"] = self._arm_lock_bounces
+        if self._drill_mode:
+            attrs["drill_mode"] = True
         if self._triggered_by:
             attrs["triggered_by"] = self._triggered_by
         if self._alarm_state in (
@@ -559,8 +565,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._cancel_timers()
 
     def _cancel_timers(self):
-        for attr in ("_arming_listener", "_entry_listener", "_trigger_listener"):
-            lst = getattr(self, attr)
+        for attr in ("_arming_listener", "_entry_listener", "_trigger_listener", "_drill_listener"):
+            lst = getattr(self, attr, None)
             if lst:
                 lst()
                 setattr(self, attr, None)
@@ -632,20 +638,46 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self.hass.async_create_task(self._async_trigger())
 
     async def _async_trigger(self):
-        """Activate the alarm."""
+        """Activate the alarm (or drill if _drill_mode is True)."""
         self._cancel_timers()
-        
+
         # v0.9.33 Fix #1: si la alarma se dispara sin pasar por un sensor normal (ej. botón SOS manual),
         # _triggered_mode sería None y las sirenas nunca sonarían. Asignar un fallback si falta.
         if not self._triggered_mode and self._alarm_state in ARMED_STATES:
             self._triggered_mode = self._alarm_state.value.replace("armed_", "")
         elif not self._triggered_mode:
-            self._triggered_mode = "away" # Fallback universal para pánico/SOS
-            
+            self._triggered_mode = "away"  # Fallback universal para pánico/SOS
+
         self._alarm_state = AlarmControlPanelState.TRIGGERED
         self.async_write_ha_state()
-        _LOGGER.warning("Argus: ALARM TRIGGERED by %s", self._triggered_by)
 
+        # ── DRILL MODE — sirena SÍ, notificaciones NO, log marcado como simulacro ──
+        if self._drill_mode:
+            _LOGGER.info("Argus: [SIMULACRO] disparado por %s", self._triggered_by)
+            await self._async_siren(True)
+            await self._async_mqtt_publish()
+
+            sensor_name = "desconocido"
+            if self._triggered_by:
+                state_obj = self.hass.states.get(self._triggered_by)
+                sensor_name = state_obj.attributes.get("friendly_name", self._triggered_by) if state_obj else self._triggered_by
+
+            await async_append_audit_log(
+                self.hass, "drill",
+                f"[SIMULACRO] Sensor: {sensor_name}",
+                user="Argus"
+            )
+
+            # Auto-reset simulacro tras 60 s (o trigger_time si es menor)
+            _tt = self._trigger_time if isinstance(self._trigger_time, int) and self._trigger_time > 0 else 60
+            _drill_timeout = min(_tt, 120)  # máximo 2 min en simulacro
+            self._trigger_listener = async_call_later(
+                self.hass, _drill_timeout, self._async_reset_drill
+            )
+            return
+        # ── FIN DRILL MODE ──────────────────────────────────────────────────────────
+
+        _LOGGER.warning("Argus: ALARM TRIGGERED by %s", self._triggered_by)
         await self._async_siren(True)
         await self._async_mqtt_publish()
         self.hass.async_create_task(self._evaluate_automations("triggered", sensor=self._triggered_by))
@@ -663,9 +695,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 sensor_name = state_obj.attributes.get("friendly_name", self._triggered_by)
             else:
                 sensor_name = self._triggered_by
-        
+
         mode_label = (self._triggered_mode or self._alarm_state.value.replace("armed_", "")).capitalize()
-        # If triggered by a rule, mention it
         trigger_detail = f"Sensor: {sensor_name} (Modo: {mode_label})"
         if self._triggered_by and "Regla" in str(self._triggered_by):
             trigger_detail = f"Disparado por {self._triggered_by} ({mode_label})"
@@ -695,6 +726,26 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self.async_write_ha_state()
             await self._async_mqtt_publish()
         self.hass.async_create_task(_do_reset())
+
+    @callback
+    def _async_reset_drill(self, _now):
+        """Auto-reset after drill (simulacro) ends."""
+        async def _do_drill_reset():
+            await self._async_siren(False)
+            self._drill_mode = False
+            self._drill_listener = None
+            self._triggered_mode = None
+            self._alarm_state = AlarmControlPanelState.DISARMED
+            self._triggered_by = None
+            self.async_write_ha_state()
+            await self._async_mqtt_publish()
+            await async_append_audit_log(
+                self.hass, "drill",
+                "[SIMULACRO] Finalizado automáticamente",
+                user="Argus"
+            )
+            _LOGGER.info("Argus: [SIMULACRO] finalizado.")
+        self.hass.async_create_task(_do_drill_reset())
 
     @callback
     def _async_finish_arming(self, _now):

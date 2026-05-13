@@ -62,7 +62,7 @@ const TEXTS = {
     homekit_house:'Casa de Apple Home', language:'Idioma',
     lang_select_title:'Seleccionar Idioma',
     btn_home:'🏠 EN CASA', btn_away:'🔒 AUSENTE', btn_night:'🌙 NOCHE',
-    btn_vacation:'✈️ VACACIONES', btn_disarmed:'DESARMADO', btn_sos:'🚨 SOS / PÁNICO',
+    btn_vacation:'✈️ VACACIONES', btn_disarmed:'DESARMADO', btn_sos:'🚨 SOS / PÁNICO', btn_drill:'🧪 SIMULACRO', drill_confirm_title:'Iniciar Simulacro', drill_confirm_text:'La sirena sonará pero NO se enviarán notificaciones reales. Ideal para probar el sistema.', drill_active:'🧪 SIMULACRO ACTIVO', drill_stop:'Detener Simulacro',
     system_armed:'SISTEMA ARMADO', system_disarmed:'SISTEMA DESARMADO',
     home_name_lbl:'Nombre del Hogar', background_lbl:'Fondo', edit_btn:'✏️ Editar',
     save_btn:'Guardar', backup_title:'Respaldo y Restauración',
@@ -136,7 +136,7 @@ const TEXTS = {
     homekit_house:'Apple Home', language:'Language',
     lang_select_title:'Select Language',
     btn_home:'🏠 HOME', btn_away:'🔒 AWAY', btn_night:'🌙 NIGHT',
-    btn_vacation:'✈️ VACATION', btn_disarmed:'DISARMED', btn_sos:'🚨 SOS / PANIC',
+    btn_vacation:'✈️ VACATION', btn_disarmed:'DISARMED', btn_sos:'🚨 SOS / PANIC', btn_drill:'🧪 DRILL', drill_confirm_title:'Start Drill', drill_confirm_text:'The siren will sound but NO real notifications will be sent. Ideal for testing the system.', drill_active:'🧪 DRILL ACTIVE', drill_stop:'Stop Drill',
     system_armed:'SYSTEM ARMED', system_disarmed:'SYSTEM DISARMED',
     home_name_lbl:'Home Name', background_lbl:'Background', edit_btn:'✏️ Edit',
     save_btn:'Save', backup_title:'Backup & Restore',
@@ -577,6 +577,11 @@ _tmpl.innerHTML = `
   .btn-sos { width: 100%; min-height: 54px; border: 0; border-radius: 18px; background: var(--sos-red); color: white; font-size: 1rem; font-weight: 800; letter-spacing: 0.02em; cursor: pointer; box-shadow: 0 12px 28px rgba(217, 4, 41, 0.35); transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease; margin-top: 8px; }
   .btn-sos:hover { transform: translateY(-1px); box-shadow: 0 16px 34px rgba(217, 4, 41, 0.42); }
   .btn-sos:active { transform: translateY(0); opacity: 0.94; }
+  .btn-drill { width: 100%; min-height: 44px; border: 2px solid rgba(255,180,0,0.55); border-radius: 14px; background: rgba(255,180,0,0.10); color: #e6a800; font-size: 0.88rem; font-weight: 700; letter-spacing: 0.03em; cursor: pointer; transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease; margin-top: 6px; }
+  .btn-drill:hover { background: rgba(255,180,0,0.18); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(255,180,0,0.22); }
+  .btn-drill:active { transform: translateY(0); opacity: 0.9; }
+  .btn-drill.drill-active { background: rgba(255,140,0,0.22); border-color: rgba(255,140,0,0.8); color: #ff8c00; animation: drill-pulse 1.4s ease-in-out infinite; }
+  @keyframes drill-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,140,0,0.35); } 50% { box-shadow: 0 0 0 8px rgba(255,140,0,0); } }
   .ios-confirm-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 999999; backdrop-filter: blur(10px); }
   .ios-confirm-backdrop.open { display: flex; }
   .ios-confirm-card { width: min(100%, 420px); border-radius: 28px; padding: 22px; color: white; background: rgba(30,30,40,0.85); border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
@@ -2115,6 +2120,7 @@ class ArgusPanel extends HTMLElement {
       const live  = this._hass?.states[e.entity_id]?.state;
       const state = live || e.state || 'unavailable';
       const triggered = state === 'triggered';
+      const isDrill = !!(this._hass?.states[e.entity_id]?.attributes?.drill_mode);
       const fullHudLoc = this._homeName || this._hass?.config?.location_name || 'Hogar';
 
       // Dynamic SVG Icon Generation
@@ -2147,7 +2153,8 @@ class ArgusPanel extends HTMLElement {
               <button class="liquid-btn btn-night ${state==='armed_night'?'active':''}" data-idx="${idx}" data-action="night">${t('btn_night')}</button>
               <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''}" data-idx="${idx}" data-action="vacation">${t('btn_vacation')}</button>
               <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg> <span>${t('btn_disarmed')}</span></button>
-              <button class="btn-sos" data-action="sos">${t('btn_sos')}</button>
+              <button class="btn-sos" data-idx="${idx}" data-action="sos">${t('btn_sos')}</button>
+              <button class="btn-drill${isDrill?' drill-active':''}" data-idx="${idx}" data-action="drill">${isDrill ? t('drill_stop') : t('btn_drill')}</button>
             </div>
             <div class="entry-icon">
               ${this._getIntelligentSVG(state, weatherState, isNight, triggered)}
@@ -3287,6 +3294,25 @@ class ArgusPanel extends HTMLElement {
       home: this._t('mode_home'), away: this._t('mode_away'),
       night: this._t('mode_night'), vacation: this._t('mode_vacation'),
     };
+    // ── DRILL MODE ──────────────────────────────────────────────────
+    if (action === 'drill') {
+      const isDrillNow = !!(live.attributes?.drill_mode);
+      const entryId = live.attributes?.config_entry_id;
+      if (!entryId) return;
+      if (isDrillNow) {
+        // Detener simulacro
+        await this._hass.callWS({ type: 'argus/drill_stop', entry_id: entryId });
+      } else {
+        // Confirmar antes de iniciar
+        const ok = await this._showDrillConfirm();
+        if (!ok) return;
+        await this._hass.callWS({ type: 'argus/drill_start', entry_id: entryId });
+      }
+      setTimeout(() => this._load(), 600);
+      return;
+    }
+    // ── FIN DRILL MODE ──────────────────────────────────────────────
+
     const service = serviceMap[action];
     if (!service) return;
     const currentUser = this._hass?.user?.name || 'Usuario';
@@ -3365,6 +3391,30 @@ class ArgusPanel extends HTMLElement {
       `Los siguientes sensores están abiertos:\n${lines}\n\n` +
       `Ciérralos antes de armar, o activa "Omitir" en el sensor.`
     );
+  }
+
+  /* ── Drill confirm modal ─────────────────────────────────────────── */
+  _showDrillConfirm() {
+    return new Promise(resolve => {
+      const t = this._t.bind(this);
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;display:flex;align-items:center;justify-content:center;';
+      overlay.innerHTML = `
+        <div style="background:#1c1a14;border:1.5px solid rgba(255,180,0,0.4);border-radius:20px;padding:28px 24px;max-width:320px;width:90%;text-align:center;">
+          <div style="font-size:2rem;margin-bottom:8px">🧪</div>
+          <div style="font-weight:800;font-size:1.05rem;color:#f5e97a;margin-bottom:10px">${t('drill_confirm_title')}</div>
+          <div style="font-size:0.84rem;color:#ccc;line-height:1.5;margin-bottom:20px">${t('drill_confirm_text')}</div>
+          <div style="display:flex;gap:10px;justify-content:center">
+            <button id="drill-cancel" style="flex:1;padding:10px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.15);background:transparent;color:#aaa;font-weight:600;cursor:pointer">Cancelar</button>
+            <button id="drill-ok" style="flex:1;padding:10px;border-radius:12px;border:0;background:rgba(255,180,0,0.85);color:#1a1400;font-weight:800;cursor:pointer">🧪 Iniciar</button>
+          </div>
+        </div>`;
+      document.body.appendChild(overlay);
+      const cleanup = (result) => { document.body.removeChild(overlay); resolve(result); };
+      overlay.querySelector('#drill-ok').addEventListener('click', () => cleanup(true));
+      overlay.querySelector('#drill-cancel').addEventListener('click', () => cleanup(false));
+      overlay.addEventListener('click', e => { if (e.target === overlay) cleanup(false); });
+    });
   }
 
   /* ── Audit log writer ────────────────────────────────────────────── */
