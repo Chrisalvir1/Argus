@@ -401,32 +401,53 @@ def _get_argus_panel(hass, entry_id):
     {
         vol.Required("type"): "argus/drill_start",
         vol.Required("entry_id"): str,
+        # Opciones configurables desde el frontend
+        vol.Optional("siren", default=True): bool,
+        vol.Optional("notify", default=False): bool,
+        vol.Optional("duration", default=30): int,  # segundos, 10-120
     }
 )
 @websocket_api.async_response
 async def ws_argus_drill_start(hass: HomeAssistant, connection, msg) -> None:
-    """Activate drill (simulacro) mode: arm + flag, sirena sí, notificaciones no."""
+    """Activate drill (simulacro) mode — funciona en cualquier estado del sistema."""
     from homeassistant.components.alarm_control_panel import AlarmControlPanelState
     panel = _get_argus_panel(hass, msg["entry_id"])
     if panel is None:
         connection.send_error(msg["id"], "not_found", "Panel Argus no encontrado")
         return
-    if panel._alarm_state != AlarmControlPanelState.DISARMED:
-        connection.send_error(msg["id"], "invalid_state", "El sistema debe estar desarmado para iniciar un simulacro")
-        return
 
+    # Guardar estado previo para restaurar al terminar el simulacro
+    panel._drill_prev_state = panel._alarm_state
     panel._drill_mode = True
+    panel._drill_siren = msg.get("siren", True)
+    panel._drill_notify = msg.get("notify", False)
+    panel._drill_duration = max(10, min(120, msg.get("duration", 30)))
     panel._triggered_by = "Simulacro manual"
     panel._triggered_mode = "away"
+
     await async_append_audit_log(
         hass, "drill",
-        "[SIMULACRO] Iniciado manualmente",
+        f"[SIMULACRO] Iniciado — sirena={'sí' if panel._drill_siren else 'no'}, notif={'sí' if panel._drill_notify else 'no'}, duración={panel._drill_duration}s",
         user="Argus"
     )
-    # Arm silently in away to enable sensors, then immediately trigger as drill
-    panel._alarm_state = AlarmControlPanelState.ARMED_AWAY
+
+    # Activar sirena si configurado
+    if panel._drill_siren:
+        await panel._async_siren(True)
+
+    # Enviar notificación si configurado
+    if panel._drill_notify:
+        await panel._evaluate_automations("triggered", sensor="Simulacro manual")
+
+    panel._alarm_state = AlarmControlPanelState.TRIGGERED
     panel.async_write_ha_state()
-    hass.async_create_task(panel._async_trigger())
+    await panel._async_mqtt_publish()
+
+    # Auto-reset tras la duración configurada
+    from homeassistant.helpers.event import async_call_later
+    panel._drill_listener = async_call_later(
+        hass, panel._drill_duration, panel._async_reset_drill
+    )
     connection.send_result(msg["id"], {"drill": True})
 
 
@@ -444,18 +465,21 @@ async def ws_argus_drill_stop(hass: HomeAssistant, connection, msg) -> None:
         connection.send_error(msg["id"], "not_found", "Panel Argus no encontrado")
         return
 
+    from homeassistant.components.alarm_control_panel import AlarmControlPanelState
     panel._cancel_timers()
     await panel._async_siren(False)
+    # Restaurar estado previo al simulacro
+    prev = getattr(panel, "_drill_prev_state", AlarmControlPanelState.DISARMED)
+    panel._alarm_state = prev
     panel._drill_mode = False
+    panel._drill_prev_state = None
     panel._triggered_mode = None
-    from homeassistant.components.alarm_control_panel import AlarmControlPanelState
-    panel._alarm_state = AlarmControlPanelState.DISARMED
     panel._triggered_by = None
     panel.async_write_ha_state()
     await panel._async_mqtt_publish()
     await async_append_audit_log(
         hass, "drill",
-        "[SIMULACRO] Cancelado manualmente",
+        f"[SIMULACRO] Cancelado manualmente — sistema restaurado a {prev.value if hasattr(prev,'value') else prev}",
         user="Argus"
     )
     connection.send_result(msg["id"], {"drill": False})

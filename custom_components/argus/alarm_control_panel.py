@@ -729,22 +729,25 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     @callback
     def _async_reset_drill(self, _now):
-        """Auto-reset after drill (simulacro) ends."""
+        """Auto-reset after drill (simulacro) ends — restores previous state."""
         async def _do_drill_reset():
             await self._async_siren(False)
+            # Restaurar el estado que tenía ANTES del simulacro
+            prev = getattr(self, "_drill_prev_state", AlarmControlPanelState.DISARMED)
+            self._alarm_state = prev
             self._drill_mode = False
             self._drill_listener = None
             self._triggered_mode = None
-            self._alarm_state = AlarmControlPanelState.DISARMED
             self._triggered_by = None
+            self._drill_prev_state = None
             self.async_write_ha_state()
             await self._async_mqtt_publish()
             await async_append_audit_log(
                 self.hass, "drill",
-                "[SIMULACRO] Finalizado automáticamente",
+                f"[SIMULACRO] Finalizado — sistema restaurado a {prev.value if hasattr(prev,'value') else prev}",
                 user="Argus"
             )
-            _LOGGER.info("Argus: [SIMULACRO] finalizado.")
+            _LOGGER.info("Argus: [SIMULACRO] finalizado. Estado restaurado: %s", prev)
         self.hass.async_create_task(_do_drill_reset())
 
     @callback

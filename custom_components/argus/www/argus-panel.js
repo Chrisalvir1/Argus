@@ -3303,10 +3303,16 @@ class ArgusPanel extends HTMLElement {
         // Detener simulacro
         await this._hass.callWS({ type: 'argus/drill_stop', entry_id: entryId });
       } else {
-        // Confirmar antes de iniciar
-        const ok = await this._showDrillConfirm();
-        if (!ok) return;
-        await this._hass.callWS({ type: 'argus/drill_start', entry_id: entryId });
+        // Mostrar modal configurable
+        const cfg = await this._showDrillConfirm();
+        if (!cfg) return;  // usuario canceló
+        await this._hass.callWS({
+          type: 'argus/drill_start',
+          entry_id: entryId,
+          siren: cfg.siren,
+          notify: cfg.notify,
+          duration: cfg.duration,
+        });
       }
       setTimeout(() => this._load(), 600);
       return;
@@ -3396,21 +3402,76 @@ class ArgusPanel extends HTMLElement {
   /* ── Drill confirm modal ─────────────────────────────────────────── */
   _showDrillConfirm() {
     return new Promise(resolve => {
-      const t = this._t.bind(this);
       const overlay = document.createElement('div');
-      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;display:flex;align-items:center;justify-content:center;';
+      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;';
       overlay.innerHTML = `
-        <div style="background:#1c1a14;border:1.5px solid rgba(255,180,0,0.4);border-radius:20px;padding:28px 24px;max-width:320px;width:90%;text-align:center;">
-          <div style="font-size:2rem;margin-bottom:8px">🧪</div>
-          <div style="font-weight:800;font-size:1.05rem;color:#f5e97a;margin-bottom:10px">${t('drill_confirm_title')}</div>
-          <div style="font-size:0.84rem;color:#ccc;line-height:1.5;margin-bottom:20px">${t('drill_confirm_text')}</div>
-          <div style="display:flex;gap:10px;justify-content:center">
-            <button id="drill-cancel" style="flex:1;padding:10px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.15);background:transparent;color:#aaa;font-weight:600;cursor:pointer">Cancelar</button>
-            <button id="drill-ok" style="flex:1;padding:10px;border-radius:12px;border:0;background:rgba(255,180,0,0.85);color:#1a1400;font-weight:800;cursor:pointer">🧪 Iniciar</button>
+        <div style="background:#1c1a14;border:1.5px solid rgba(255,180,0,0.45);border-radius:22px;padding:28px 24px;max-width:340px;width:100%;">
+          <div style="text-align:center;margin-bottom:18px">
+            <div style="font-size:2.2rem;margin-bottom:6px">🧪</div>
+            <div style="font-weight:800;font-size:1.08rem;color:#f5e97a">Iniciar Simulacro</div>
+            <div style="font-size:0.8rem;color:#999;margin-top:4px">Funciona en cualquier modo del sistema</div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px">
+
+            <!-- Sirena -->
+            <label style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.05);border-radius:12px;padding:12px 14px;cursor:pointer">
+              <div>
+                <div style="font-weight:700;font-size:0.88rem;color:#eee">🔔 Activar sirena</div>
+                <div style="font-size:0.75rem;color:#999;margin-top:2px">Las sirenas configuradas sonarán</div>
+              </div>
+              <input type="checkbox" id="drill-siren" checked style="width:18px;height:18px;accent-color:#f5c800;cursor:pointer">
+            </label>
+
+            <!-- Notificaciones -->
+            <label style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.05);border-radius:12px;padding:12px 14px;cursor:pointer">
+              <div>
+                <div style="font-weight:700;font-size:0.88rem;color:#eee">📣 Enviar notificaciones</div>
+                <div style="font-size:0.75rem;color:#999;margin-top:2px">Se ejecutarán las automatizaciones de alerta</div>
+              </div>
+              <input type="checkbox" id="drill-notify" style="width:18px;height:18px;accent-color:#f5c800;cursor:pointer">
+            </label>
+
+            <!-- Duración -->
+            <div style="background:rgba(255,255,255,0.05);border-radius:12px;padding:12px 14px">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <div>
+                  <div style="font-weight:700;font-size:0.88rem;color:#eee">⏱️ Duración</div>
+                  <div style="font-size:0.75rem;color:#999;margin-top:2px">El simulacro se detiene automáticamente</div>
+                </div>
+                <span id="drill-dur-val" style="font-weight:800;color:#f5e97a;font-size:1rem;min-width:42px;text-align:right">30s</span>
+              </div>
+              <input type="range" id="drill-duration" min="10" max="120" step="5" value="30"
+                style="width:100%;accent-color:#f5c800;cursor:pointer">
+              <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:#666;margin-top:2px"><span>10s</span><span>2 min</span></div>
+            </div>
+
+          </div>
+
+          <div style="display:flex;gap:10px">
+            <button id="drill-cancel" style="flex:1;padding:11px;border-radius:13px;border:1.5px solid rgba(255,255,255,0.15);background:transparent;color:#aaa;font-weight:600;cursor:pointer">Cancelar</button>
+            <button id="drill-ok" style="flex:1;padding:11px;border-radius:13px;border:0;background:rgba(255,180,0,0.9);color:#1a1400;font-weight:800;cursor:pointer">🧪 Iniciar</button>
           </div>
         </div>`;
       document.body.appendChild(overlay);
-      const cleanup = (result) => { document.body.removeChild(overlay); resolve(result); };
+
+      // Live update duration label
+      const slider = overlay.querySelector('#drill-duration');
+      const durVal = overlay.querySelector('#drill-dur-val');
+      slider.addEventListener('input', () => {
+        const s = parseInt(slider.value);
+        durVal.textContent = s >= 60 ? `${Math.floor(s/60)}m${s%60?` ${s%60}s`:''}` : `${s}s`;
+      });
+
+      const cleanup = (result) => {
+        document.body.removeChild(overlay);
+        if (!result) { resolve(null); return; }
+        resolve({
+          siren:    overlay.querySelector('#drill-siren').checked,
+          notify:   overlay.querySelector('#drill-notify').checked,
+          duration: parseInt(overlay.querySelector('#drill-duration').value),
+        });
+      };
       overlay.querySelector('#drill-ok').addEventListener('click', () => cleanup(true));
       overlay.querySelector('#drill-cancel').addEventListener('click', () => cleanup(false));
       overlay.addEventListener('click', e => { if (e.target === overlay) cleanup(false); });
