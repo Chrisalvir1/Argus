@@ -15,17 +15,53 @@ from __future__ import annotations
 
 import logging
 
-from homeassistant.components.alarm_control_panel import (
-    AlarmControlPanelEntity,
-    AlarmControlPanelEntityFeature,
-    CodeFormat,
-)
-# Intento de importación segura de estados (cambió en versiones recientes de HA)
 try:
-    from homeassistant.components.alarm_control_panel import AlarmControlPanelState
+    from homeassistant.components.alarm_control_panel import (
+        AlarmControlPanelEntity,
+        AlarmControlPanelEntityFeature,
+        AlarmControlPanelState,
+        CodeFormat,
+    )
 except ImportError:
-    # Fallback para versiones antiguas
-    class AlarmControlPanelState:
+    # Fallback para versiones antiguas de Home Assistant
+    from homeassistant.components.alarm_control_panel import (
+        AlarmControlPanelEntity,
+    )
+    try:
+        from homeassistant.components.alarm_control_panel import CodeFormat
+    except ImportError:
+        class CodeFormat:
+            NUMBER = "number"
+            TEXT = "text"
+
+    try:
+        from homeassistant.components.alarm_control_panel import (
+            SUPPORT_ALARM_ARM_AWAY,
+            SUPPORT_ALARM_ARM_HOME,
+            SUPPORT_ALARM_ARM_NIGHT,
+            SUPPORT_ALARM_ARM_VACATION,
+            SUPPORT_ALARM_TRIGGER,
+        )
+    except ImportError:
+        # Versiones muy antiguas
+        SUPPORT_ALARM_ARM_HOME = 1
+        SUPPORT_ALARM_ARM_AWAY = 2
+        SUPPORT_ALARM_ARM_NIGHT = 4
+        SUPPORT_ALARM_TRIGGER = 16
+        SUPPORT_ALARM_ARM_VACATION = 32
+
+    class AlarmControlPanelEntityFeature:
+        ARM_HOME = SUPPORT_ALARM_ARM_HOME
+        ARM_AWAY = SUPPORT_ALARM_ARM_AWAY
+        ARM_NIGHT = SUPPORT_ALARM_ARM_NIGHT
+        ARM_VACATION = SUPPORT_ALARM_ARM_VACATION
+        TRIGGER = SUPPORT_ALARM_TRIGGER
+
+    class AlarmControlPanelStateMeta(type):
+        def __call__(cls, value):
+            return value
+
+    class AlarmControlPanelState(metaclass=AlarmControlPanelStateMeta):
         DISARMED = "disarmed"
         ARMED_HOME = "armed_home"
         ARMED_AWAY = "armed_away"
@@ -118,16 +154,22 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
     _attr_should_poll = False
     
     @property
-    def supported_features(self) -> int:
-        # 1:HOME, 2:AWAY, 4:NIGHT, 16:TRIGGER, 32:VACATION
-        return 1 | 2 | 4 | 16 | 32
+    def supported_features(self) -> AlarmControlPanelEntityFeature:
+        """Return the list of supported features."""
+        return (
+            AlarmControlPanelEntityFeature.ARM_HOME
+            | AlarmControlPanelEntityFeature.ARM_AWAY
+            | AlarmControlPanelEntityFeature.ARM_NIGHT
+            | AlarmControlPanelEntityFeature.TRIGGER
+            | AlarmControlPanelEntityFeature.ARM_VACATION
+        )
 
     def __init__(self, hass: HomeAssistant, config_entry: ConfigEntry) -> None:
         self.hass = hass
         self._config_entry = config_entry
         self._attr_name = config_entry.data.get(CONF_NAME, DEFAULT_NAME)
         self._attr_unique_id = f"argus_unique_{config_entry.entry_id}"
-        self.entity_id = f"alarm_control_panel.argus_home_hub"
+        self._attr_has_entity_name = True
         self._name = self._attr_name
         self._load_config()
         self._alarm_state = AlarmControlPanelState.DISARMED
@@ -155,6 +197,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
         self._drill_listener = None
         self._smart_arming_suggested = False
         self._unsub_smart_arming = None
+
+    def _get_state_value(self, state: str | AlarmControlPanelState | None = None) -> str:
+        """Helper to safely get the string value of a state (Enum or string)."""
+        target = state if state is not None else self._alarm_state
+        if hasattr(target, "value"):
+            return str(target.value)
+        return str(target)
 
     async def _get_context_user(self) -> str:
         """Get the user name from the current context."""
@@ -205,21 +254,14 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
         return self._name
 
     @property
-    def alarm_state(self) -> str | AlarmControlPanelState:
-        """Return the state of the alarm."""
-        # Forzamos devolver el valor (string) para máxima compatibilidad con UI y HomeKit
-        state = self._alarm_state
-        if hasattr(state, "value"):
-            return state.value
-        return state
+    def state(self) -> str | None:
+        """Return the state of the entity (fallback for older HA versions)."""
+        return self._get_state_value()
 
     @property
-    def state(self) -> str:
-        """Return the state of the entity."""
-        state = self._alarm_state
-        if hasattr(state, "value"):
-            return state.value
-        return str(state)
+    def alarm_state(self) -> AlarmControlPanelState | str | None:
+        """Return the state of the alarm (preferred for modern HA)."""
+        return self._alarm_state
 
     @property
     def code_arm_required(self) -> bool:
@@ -312,7 +354,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
           3. Static YAML config (fallback)
         """
         modes = self._ui_config.get("modes", {})
-        mode_key = state.value.replace("armed_", "")
+        mode_key = self._get_state_value(state).replace("armed_", "")
 
         # 1 – per-entity config written by the JS panel via argus/save_mode_config
         by_entity = modes.get("__by_entity__", {})
@@ -384,16 +426,23 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
         last = await self.async_get_last_state()
         if last is not None:
             try:
+                # El metaclass maneja la llamada si es el fallback
                 restored = AlarmControlPanelState(last.state)
-                if restored in (
+                VALID_STATES = (
                     AlarmControlPanelState.DISARMED,
                     AlarmControlPanelState.ARMED_HOME,
                     AlarmControlPanelState.ARMED_AWAY,
                     AlarmControlPanelState.ARMED_NIGHT,
                     AlarmControlPanelState.ARMED_VACATION,
-                ):
+                    AlarmControlPanelState.ARMING,
+                    AlarmControlPanelState.PENDING,
+                    AlarmControlPanelState.TRIGGERED,
+                )
+                if restored in VALID_STATES:
                     self._alarm_state = restored
-            except ValueError:
+                else:
+                    self._alarm_state = AlarmControlPanelState.DISARMED
+            except (ValueError, TypeError):
                 self._alarm_state = AlarmControlPanelState.DISARMED
 
         # Subscribe to sensor state changes
@@ -496,7 +545,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
             cond = rule.get("condition")
             if cond:
                 c_type = cond.get("type")
-                if c_type == "mode" and self._alarm_state.value.replace("armed_", "") != cond.get("value"):
+                if c_type == "mode" and self._get_state_value().replace("armed_", "") != cond.get("value"):
                     continue
                 if c_type == "entity_id" and kwargs.get("sensor") != cond.get("value"):
                     continue
@@ -633,9 +682,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
         self._triggered_by = entity_id
         # Guardar el modo activo antes del disparo para que _get_siren_entities
         # pueda resolver las sirenas correctas cuando el estado sea TRIGGERED
-        self._triggered_mode = self._alarm_state.value.replace("armed_", "")
+        self._triggered_mode = self._get_state_value().replace("armed_", "")
 
-        mode_key = self._alarm_state.value.replace("armed_", "")
+        mode_key = self._get_state_value().replace("armed_", "")
         # FIX-2b: leer desde __by_entity__ (misma prioridad que _sensors_for_state)
         _modes = self._ui_config.get("modes", {})
         _by_e  = _modes.get("__by_entity__", {})
@@ -678,7 +727,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
         # v0.9.33 Fix #1: si la alarma se dispara sin pasar por un sensor normal (ej. botón SOS manual),
         # _triggered_mode sería None y las sirenas nunca sonarían. Asignar un fallback si falta.
         if not self._triggered_mode and self._alarm_state in ARMED_STATES:
-            self._triggered_mode = self._alarm_state.value.replace("armed_", "")
+            self._triggered_mode = self._get_state_value().replace("armed_", "")
         elif not self._triggered_mode:
             self._triggered_mode = "away"  # Fallback universal para pánico/SOS
 
@@ -718,7 +767,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
         # Persistent notification in HA
         pn_create(
             self.hass,
-            message=f"\u26a0\ufe0f Sensor: **{self._triggered_by or 'desconocido'}**\n\nModo activo: `{self._alarm_state.value}`",
+            message=f"\u26a0\ufe0f Sensor: **{self._triggered_by or 'desconocido'}**\n\nModo activo: `{self._get_state_value()}`",
             title="\U0001f6a8 Argus \u2014 Alarma Activada",
             notification_id="argus_triggered",
         )
@@ -730,7 +779,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
             else:
                 sensor_name = self._triggered_by
 
-        mode_label = (self._triggered_mode or self._alarm_state.value.replace("armed_", "")).capitalize()
+        mode_label = (self._triggered_mode or self._get_state_value().replace("armed_", "")).capitalize()
         trigger_detail = f"Sensor: {sensor_name} (Modo: {mode_label})"
         if self._triggered_by and "Regla" in str(self._triggered_by):
             trigger_detail = f"Disparado por {self._triggered_by} ({mode_label})"
@@ -778,7 +827,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
             await self._async_mqtt_publish()
             await async_append_audit_log(
                 self.hass, "drill",
-                f"[SIMULACRO] Finalizado — sistema restaurado a {prev.value if hasattr(prev,'value') else prev}",
+                f"[SIMULACRO] Finalizado — sistema restaurado a {self._get_state_value(prev)}",
                 user="Argus"
             )
             _LOGGER.info("Argus: [SIMULACRO] finalizado. Estado restaurado: %s", prev)
@@ -808,7 +857,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
 
         # Resolver mode_key según estado actual
         if self._alarm_state in ARMED_STATES:
-            mode_key = self._alarm_state.value.replace("armed_", "")
+            mode_key = self._get_state_value().replace("armed_", "")
         elif self._alarm_state in (
             AlarmControlPanelState.TRIGGERED,
             AlarmControlPanelState.PENDING,
@@ -927,7 +976,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
             await mqtt.async_publish(
                 self.hass,
                 self._mqtt_topic_state,
-                self._alarm_state.value,
+                self._get_state_value(),
                 retain=True,
             )
         except Exception as e:  # noqa: BLE001
@@ -949,10 +998,12 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
 
     async def async_alarm_disarm(self, code=None) -> None:
         # Trusted callers (HomeKit, Alexa, automaciones, MQTT) NO envían código → permitir.
-        if self._code and bool(code) and not self._validate_code(code):
+        # FIX: Validar que no sea un string vacío si el PIN está configurado (evita bypass accidental)
+        if self._code and code is not None and code != "" and not self._validate_code(code):
             _LOGGER.warning("Argus: Disarm rejected — invalid code")
             await async_append_audit_log(self.hass, "disarm_rejected", "Invalid code", user="Argus")
             return
+
         self._cancel_timers()
         await self._async_siren(False)
         self._triggered_mode = None
@@ -960,9 +1011,11 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
         self._alarm_state = AlarmControlPanelState.DISARMED
         self._triggered_by = None
         self.async_write_ha_state()
-        await self._async_mqtt_publish()
+        
+        # secondary tasks
+        self.hass.async_create_task(self._async_mqtt_publish())
         self.hass.async_create_task(self._evaluate_automations("disarmed"))
-        await async_append_audit_log(self.hass, "disarmed", "Sistema desarmado", user=await self._get_context_user())
+        self.hass.async_create_task(async_append_audit_log(self.hass, "disarmed", "Sistema desarmado", user=await self._get_context_user()))
         _LOGGER.info("Argus: Disarmed")
 
     async def _async_arm(self, target: AlarmControlPanelState, code=None) -> None:
@@ -1001,7 +1054,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
         # Trusted callers (HomeKit, Alexa, automaciones sin código) NO envían código o envían vacío → permitir armar sin validar.
         if self._code_arm_required and bool(code) and not self._validate_code(code):
             _LOGGER.warning("Argus: Arm rejected — invalid code")
-            await async_append_audit_log(self.hass, "arm_rejected", f"Invalid code for {target.value}", user="Argus")
+            await async_append_audit_log(self.hass, "arm_rejected", f"Invalid code for {self._get_state_value(target)}", user="Argus")
             return
 
         # Evaluate require_closed restrictions
@@ -1080,21 +1133,19 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
         self._cancel_timers()
 
         # v0.9.60: TODOS los cambios de modo son INSTANTÁNEOS.
-        # Sin ARMING intermedio, sin delays. El usuario lo pidió explícitamente.
         self._alarm_state = target
         self.async_write_ha_state()
 
-        # ARM-LOCK: protección de 30s contra rebote automático de HomeKit.
-        # Solo bloquea intentos de forzar Home. Desarmar siempre funciona.
+        # ARM-LOCK: protección contra rebote automático de HomeKit.
+        # Reducido de 30s a 15s para mayor fluidez.
         if target != AlarmControlPanelState.ARMED_HOME:
-            self._arm_lock_until = _time.monotonic() + 30.0
+            self._arm_lock_until = _time.monotonic() + 15.0
         else:
             self._arm_lock_until = 0.0
 
-        await self._async_mqtt_publish()
-
+        self.hass.async_create_task(self._async_mqtt_publish())
         self.hass.async_create_task(self._evaluate_automations("armed", target=target))
-        await async_append_audit_log(self.hass, "armed", f"Modo: {_MODE_LABELS.get(target.value, target.value)}", user=await self._get_context_user())
+        self.hass.async_create_task(async_append_audit_log(self.hass, "armed", f"Modo: {_MODE_LABELS.get(self._get_state_value(target), self._get_state_value(target))}", user=await self._get_context_user()))
         _LOGGER.info("Argus: Armado → %s", target)
 
     async def async_alarm_arm_home(self, code=None) -> None:
