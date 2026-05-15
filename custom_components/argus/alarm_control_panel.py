@@ -90,7 +90,10 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Argus alarm panel from a config entry."""
-    async_add_entities([ArgusAlarmPanel(hass, config_entry)], update_before_add=True)
+    _LOGGER.debug("Argus: Setting up alarm_control_panel platform for entry %s", config_entry.entry_id)
+    panel = ArgusAlarmPanel(hass, config_entry)
+    async_add_entities([panel])
+    _LOGGER.info("Argus: Alarm panel entity added successfully")
 
 
 
