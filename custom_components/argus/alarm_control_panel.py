@@ -91,9 +91,12 @@ async def async_setup_entry(
 ) -> None:
     """Set up Argus alarm panel from a config entry."""
     _LOGGER.debug("Argus: Setting up alarm_control_panel platform for entry %s", config_entry.entry_id)
-    panel = ArgusAlarmPanel(hass, config_entry)
-    async_add_entities([panel])
-    _LOGGER.info("Argus: Alarm panel entity added successfully")
+    try:
+        panel = ArgusAlarmPanel(hass, config_entry)
+        async_add_entities([panel])
+        _LOGGER.info("Argus: Alarm panel entity added successfully")
+    except Exception as err:
+        _LOGGER.error("Argus: CRITICAL ERROR adding entity: %s", err, exc_info=True)
 
 
 
@@ -102,13 +105,20 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     _attr_has_entity_name = True
     _attr_should_poll = False
-    _attr_supported_features = (
-        AlarmControlPanelEntityFeature.ARM_HOME
-        | AlarmControlPanelEntityFeature.ARM_AWAY
-        | AlarmControlPanelEntityFeature.ARM_NIGHT
-        | AlarmControlPanelEntityFeature.ARM_VACATION
-        | AlarmControlPanelEntityFeature.TRIGGER
-    )
+    @property
+    def supported_features(self) -> AlarmControlPanelEntityFeature:
+        """Return the list of supported features with dynamic detection."""
+        features = (
+            AlarmControlPanelEntityFeature.ARM_HOME
+            | AlarmControlPanelEntityFeature.ARM_AWAY
+            | AlarmControlPanelEntityFeature.ARM_NIGHT
+        )
+        # Compatibilidad con versiones que no tienen VACATION o TRIGGER
+        if hasattr(AlarmControlPanelEntityFeature, "ARM_VACATION"):
+            features |= AlarmControlPanelEntityFeature.ARM_VACATION
+        if hasattr(AlarmControlPanelEntityFeature, "TRIGGER"):
+            features |= AlarmControlPanelEntityFeature.TRIGGER
+        return features
 
     def __init__(self, hass: HomeAssistant, config_entry: ConfigEntry) -> None:
         self.hass = hass
