@@ -205,13 +205,21 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
         return self._name
 
     @property
-    def state(self):
-        # Fallback para versiones que no usan alarm_state property
-        return self._alarm_state
+    def alarm_state(self) -> str | AlarmControlPanelState:
+        """Return the state of the alarm."""
+        # Forzamos devolver el valor (string) para máxima compatibilidad con UI y HomeKit
+        state = self._alarm_state
+        if hasattr(state, "value"):
+            return state.value
+        return state
 
     @property
-    def alarm_state(self) -> AlarmControlPanelState:
-        return self._alarm_state
+    def state(self) -> str:
+        """Return the state of the entity."""
+        state = self._alarm_state
+        if hasattr(state, "value"):
+            return state.value
+        return str(state)
 
     @property
     def code_arm_required(self) -> bool:
