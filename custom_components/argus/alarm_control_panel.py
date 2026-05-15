@@ -34,6 +34,7 @@ from homeassistant.helpers.event import (
 from datetime import timedelta
 from homeassistant.components.persistent_notification import async_create as pn_create
 from homeassistant.helpers.restore_state import RestoreEntity
+from homeassistant.helpers.entity import DeviceInfo
 
 from .const import (
     DOMAIN,
@@ -53,6 +54,7 @@ from .const import (
     CONF_MQTT_ENABLED,
     CONF_MQTT_TOPIC_STATE,
     CONF_MQTT_TOPIC_COMMAND,
+    VERSION,
     DEFAULT_NAME,
     DEFAULT_ARMING_TIME,
     DEFAULT_TRIGGER_TIME,
@@ -183,6 +185,17 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     @property
     def name(self) -> str:
         return self._name
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device information about this alarm panel."""
+        return DeviceInfo(
+            identifiers={(DOMAIN, self._attr_unique_id)},
+            name=self._name,
+            manufacturer="Argus",
+            model="Home Hub",
+            sw_version=VERSION,
+        )
 
     @property
     def alarm_state(self) -> AlarmControlPanelState:
