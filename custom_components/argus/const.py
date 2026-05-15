@@ -26,7 +26,7 @@ CONF_MQTT_ENABLED = "mqtt_enabled"
 CONF_MQTT_TOPIC_STATE = "mqtt_topic_state"
 CONF_MQTT_TOPIC_COMMAND = "mqtt_topic_command"
 
-DEFAULT_NAME = "Argus Alarm Card v1.1.16"
+DEFAULT_NAME = "Argus Smart Alarm"
 DEFAULT_ARMING_TIME = 0
 DEFAULT_TRIGGER_TIME = 120
 DEFAULT_ENTRY_DELAY = 60
