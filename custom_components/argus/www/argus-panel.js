@@ -3359,8 +3359,9 @@ class ArgusPanel extends HTMLElement {
     const currentUser = this._hass?.user?.name || 'Usuario';
 
     if (action === 'disarm') {
-      // FIX-4: sólo mostrar modal de PIN si hay código configurado
-      const masterPin = this._ui?.code || '';
+      // FIX-4: buscar código en UI o en cualquiera de las instancias cargadas
+      const masterPin = this._ui?.code || this._dashboard?.entries?.find(e => e.options?.code)?.options?.code || '';
+      console.info('Argus: Disarm requested', { entity: e.entity_id, hasPin: !!masterPin });
       const doDisarm = async (pin) => { 
       try { 
       await this._hass.callService('alarm_control_panel', 'alarm_disarm', 
@@ -3407,6 +3408,7 @@ class ArgusPanel extends HTMLElement {
     }
 
     try {
+      console.info('Argus: Arm requested', { entity: e.entity_id, action, service });
       await this._hass.callService('alarm_control_panel', service, { entity_id: e.entity_id });
       const modeTxt = modeLabels[action] || action;
       this._writeLog('arm', `${this._t('manual_arm')} (${modeTxt})`, currentUser);

@@ -254,13 +254,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
         return self._name
 
     @property
-    def state(self) -> str | None:
-        """Return the state of the entity (fallback for older HA versions)."""
-        return self._get_state_value()
-
-    @property
     def alarm_state(self) -> AlarmControlPanelState | str | None:
-        """Return the state of the alarm (preferred for modern HA)."""
+        """Return the state of the alarm."""
         return self._alarm_state
 
     @property
@@ -1036,17 +1031,12 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
             target == AlarmControlPanelState.ARMED_HOME
             and self._alarm_state in ARMED_STATES
             and self._alarm_state != AlarmControlPanelState.ARMED_HOME
-            and _time.monotonic() < self._arm_lock_until
         ):
-            _LOGGER.warning(
-                "Argus ARM-LOCK: Bloqueado intento externo de forzar Home. "
-                "Estado actual protegido: %s", self._alarm_state
-            )
-            # Re-publicar estado real cambiando un atributo para forzar evento en HA
-            # Esto evita que HomeKit asuma que falló y devuelva la UI a 'Desarmado'
-            self._arm_lock_bounces = getattr(self, "_arm_lock_bounces", 0) + 1
-            self.async_write_ha_state()
-            return
+            if _time.monotonic() < self._arm_lock_until:
+                _LOGGER.info("Argus: ARM-LOCK active (HomeKit bounce protection) — skipping arm_home")
+                self._arm_lock_bounces = getattr(self, "_arm_lock_bounces", 0) + 1
+                self.async_write_ha_state()
+                return
 
         if self._alarm_state == target:
             return
