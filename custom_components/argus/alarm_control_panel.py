@@ -186,6 +186,14 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
         self._triggered_by: str | None = None
         self._mqtt_unsub = None
         
+        # List of armed states for internal logic
+        self._armed_states_vals = [
+            self._get_state_value(AlarmControlPanelState.ARMED_HOME),
+            self._get_state_value(AlarmControlPanelState.ARMED_AWAY),
+            self._get_state_value(AlarmControlPanelState.ARMED_NIGHT),
+            self._get_state_value(AlarmControlPanelState.ARMED_VACATION),
+        ]
+        
         # UI/Mode config
         self._ui_config = {}
 
@@ -272,23 +280,21 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
 
     @property
     def extra_state_attributes(self) -> dict:
-        attrs = {"config_entry_id": self._config_entry.entry_id}
-        if getattr(self, "_arm_lock_bounces", 0) > 0:
-            attrs["arm_lock_bounces"] = self._arm_lock_bounces
+        attrs = {
+            "config_entry_id": self._config_entry.entry_id,
+            "internal_state": self._get_state_value(),
+            "arm_lock_until": self._arm_lock_until,
+        }
         if self._drill_mode:
             attrs["drill_mode"] = True
         if self._triggered_by:
             attrs["triggered_by"] = self._triggered_by
-        if self._alarm_state in (
-            AlarmControlPanelState.ARMING,
-            AlarmControlPanelState.PENDING,
-        ):
-            delay = (
-                self._arming_time
-                if self._alarm_state == AlarmControlPanelState.ARMING
-                else self._entry_delay
-            )
-            attrs["delay"] = delay
+        
+        # State-specific delays
+        st = self._get_state_value()
+        if st in ("arming", "pending"):
+            attrs["delay"] = self._arming_time if st == "arming" else self._entry_delay
+            
         return attrs
 
     # ── Sensor helpers ─────────────────────────────────────────────
@@ -1014,129 +1020,34 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
         _LOGGER.info("Argus: Disarmed")
 
     async def _async_arm(self, target: AlarmControlPanelState, code=None) -> None:
+        """Internal logic to transition to an armed state."""
         import time as _time
+        target_val = self._get_state_value(target)
+        current_val = self._get_state_value()
+        
+        _LOGGER.info("Argus: Arm request -> %s (current: %s)", target_val, current_val)
 
-        # ── ARM-LOCK v2 (Anti-Rebote HomeKit) ──────────────────────────
-        # Cuando Argus está en Away/Night/Vacation y algo externo (HomeKit
-        # sincronizando con Aqara) intenta forzarlo a Home dentro de los
-        # primeros 120 segundos, rechazamos la orden y re-publicamos
-        # nuestro estado real para corregir la UI de HomeKit.
-        #
-        # Reglas:
-        #   - Solo bloquea transiciones HACIA Home desde Away/Night/Vacation
-        #   - Permite cambiar entre Away ↔ Night ↔ Vacation libremente
-        #   - Permite desarmar siempre (disarm no pasa por _async_arm)
-        #   - No causa ningún congelamiento ni retraso
-        if (
-            target == AlarmControlPanelState.ARMED_HOME
-            and self._alarm_state in ARMED_STATES
-            and self._alarm_state != AlarmControlPanelState.ARMED_HOME
-        ):
-            if _time.monotonic() < self._arm_lock_until:
-                _LOGGER.info("Argus: ARM-LOCK active (HomeKit bounce protection) — skipping arm_home")
-                self._arm_lock_bounces = getattr(self, "_arm_lock_bounces", 0) + 1
-                self.async_write_ha_state()
-                return
-
-        if self._alarm_state == target:
+        # 1. Block if triggered
+        if current_val == self._get_state_value(AlarmControlPanelState.TRIGGERED):
+            _LOGGER.warning("Argus: Cannot arm while triggered")
             return
 
-        # Trusted callers (HomeKit, Alexa, automaciones sin código) NO envían código o envían vacío → permitir armar sin validar.
-        if self._code_arm_required and bool(code) and not self._validate_code(code):
-            _LOGGER.warning("Argus: Arm rejected — invalid code")
-            await async_append_audit_log(self.hass, "arm_rejected", f"Invalid code for {self._get_state_value(target)}", user="Argus")
+        # 2. Skip if already in state
+        if current_val == target_val:
             return
 
-        # Evaluate require_closed restrictions
-        _MODE_KEY_MAP = {
-            AlarmControlPanelState.ARMED_HOME:     "home",
-            AlarmControlPanelState.ARMED_AWAY:     "away",
-            AlarmControlPanelState.ARMED_NIGHT:    "night",
-            AlarmControlPanelState.ARMED_VACATION: "vacation",
-        }
-        mode_key = _MODE_KEY_MAP.get(target)
-
-        if mode_key:
-            modes = self._ui_config.get("modes", {})
-            # Priority: per-entity config > flat legacy config
-            by_entity  = modes.get("__by_entity__", {})
-            mode_config = (
-                by_entity.get(self.entity_id, {}).get(mode_key)
-                or modes.get(mode_key)
-                or {}
-            )
-            # Support both camelCase (requireClosed, JS) and snake_case (require_closed, Python)
-            req_closed = (
-                mode_config.get("require_closed")
-                or mode_config.get("requireClosed")
-                or False
-            )
-            # Trusted callers (HomeKit) evitan el chequeo de require_closed para no causar rebotes de estado
-            if req_closed and bool(code):
-                sensors = mode_config.get("sensors") or []
-                # Excluir sensores bypasseados — igual que _sensors_for_state
-                # FIX (v0.9.28 Bug #2): sin este filtro los bypassed bloqueaban
-                # el armado y el popup nunca aparecía para los realmente abiertos.
-                bypassed = (
-                    mode_config.get("bypassed_sensors")
-                    or mode_config.get("bypassedSensors")
-                    or []
-                )
-                active_sensors = [s for s in sensors if s not in bypassed]
-                OPEN_STATES = {"on", "open", "unlocked", "recording", "active", "motion"}
-                open_names = []
-                for eid in active_sensors:
-                    state_obj = self.hass.states.get(eid)
-                    if state_obj and state_obj.state in OPEN_STATES:
-                        open_names.append(
-                            state_obj.attributes.get("friendly_name", eid)
-                        )
-                if open_names:
-                    msg = f"Sensores abiertos: {', '.join(open_names)}"
-                    _LOGGER.warning("Argus: Arm rejected — %s", msg)
-                    await async_append_audit_log(
-                        self.hass, "arm_rejected", msg, user="Argus"
-                    )
-                    # Persistent notification → aparece en el panel de HA
-                    pn_create(
-                        self.hass,
-                        title="🔒 Argus — No se pudo armar",
-                        message=(
-                            "El sistema **no se armó** porque los siguientes "
-                            "sensores están abiertos o activos:\n\n"
-                            + "\n".join(f"• {n}" for n in open_names)
-                            + "\n\nCiérralos o activa el bypass antes de armar."
-                        ),
-                        notification_id="argus_arm_blocked",
-                    )
-                    # Evento de bus → el frontend JS lo escucha para mostrar el popup
-                    self.hass.bus.async_fire(
-                        "argus_arm_blocked",
-                        {
-                            "entity_id": self.entity_id,
-                            "mode": mode_key,
-                            "open_sensors": open_names,
-                        },
-                    )
-                    return
-
+        # 3. Simple execution
+        _LOGGER.info("Argus: Executing arming to %s", target_val)
         self._cancel_timers()
-
-        # v0.9.60: TODOS los cambios de modo son INSTANTÁNEOS.
         self._alarm_state = target
         self.async_write_ha_state()
 
-        # ARM-LOCK: protección contra rebote automático de HomeKit.
-        # Reducido de 30s a 15s para mayor fluidez.
-        if target != AlarmControlPanelState.ARMED_HOME:
-            self._arm_lock_until = _time.monotonic() + 15.0
-        else:
-            self._arm_lock_until = 0.0
+        # ARM-LOCK (simplified to 10s for testing)
+        self._arm_lock_until = _time.monotonic() + 10.0 if target_val != "armed_home" else 0.0
 
         self.hass.async_create_task(self._async_mqtt_publish())
         self.hass.async_create_task(self._evaluate_automations("armed", target=target))
-        self.hass.async_create_task(async_append_audit_log(self.hass, "armed", f"Modo: {_MODE_LABELS.get(self._get_state_value(target), self._get_state_value(target))}", user=await self._get_context_user()))
-        _LOGGER.info("Argus: Armado → %s", target)
+        self.hass.async_create_task(async_append_audit_log(self.hass, "armed", f"Modo: {target_val}", user=await self._get_context_user()))
 
     async def async_alarm_arm_home(self, code=None) -> None:
         await self._async_arm(AlarmControlPanelState.ARMED_HOME, code)

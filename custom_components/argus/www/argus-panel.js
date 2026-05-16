@@ -3359,21 +3359,34 @@ class ArgusPanel extends HTMLElement {
     const currentUser = this._hass?.user?.name || 'Usuario';
 
     if (action === 'disarm') {
-      // FIX-4: buscar código en UI o en cualquiera de las instancias cargadas
       const masterPin = this._ui?.code || this._dashboard?.entries?.find(e => e.options?.code)?.options?.code || '';
       console.info('Argus: Disarm requested', { entity: e.entity_id, hasPin: !!masterPin });
+
+      const btn = ev?.currentTarget || {};
+      const oldHtml = btn.innerHTML;
+
       const doDisarm = async (pin) => { 
-      try { 
-      await this._hass.callService('alarm_control_panel', 'alarm_disarm', 
-      { entity_id: e.entity_id, ...(pin ? { code: pin } : {}) }); 
-      this._writeLog('disarm', this._t('manual_disarm'), currentUser); 
-      this._sendHaNotif(`🔓 ${this._t('log_disarmed')}`, `${currentUser} desarmó el sistema.`); 
-      // FIX v0.9.32 — Bug 1: al desarmar, forzar re-render inmediato para
-          // quitar la clase siren-active/triggered-sensor de todas las píldoras.
-          setTimeout(() => { this._renderModeView(); this._load(); }, 300);
+        try { 
+          btn.disabled = true;
+          btn.innerHTML = `<span class="spinner" style="display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.6s linear infinite;margin-right:8px"></span> Espere...`;
+
+          await this._hass.callService('alarm_control_panel', 'alarm_disarm', 
+            { entity_id: e.entity_id, ...(pin ? { code: pin } : {}) }); 
+          
+          this._writeLog('disarm', this._t('manual_disarm'), currentUser); 
+          this._sendHaNotif(`🔓 ${this._t('log_disarmed')}`, `${currentUser} desarmó el sistema.`); 
+          
+          setTimeout(() => { 
+            btn.disabled = false;
+            btn.innerHTML = oldHtml;
+            this._renderModeView(); 
+            this._load(); 
+          }, 1500);
         } catch (err) {
-          const pinErr = this.shadowRoot.getElementById('pin-error');
-          if (pinErr) pinErr.textContent = '❌ PIN incorrecto o error al desarmar';
+          btn.disabled = false;
+          btn.innerHTML = oldHtml;
+          console.error('Argus: Disarm failed', err);
+          alert('❌ Error al desarmar: ' + (err?.message || 'Error desconocido'));
         }
       };
       if (masterPin) {
@@ -3408,17 +3421,27 @@ class ArgusPanel extends HTMLElement {
     }
 
     try {
+      const btn = ev?.currentTarget || {};
+      const oldHtml = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner" style="display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.6s linear infinite;margin-right:8px"></span> Espere...`;
+
       console.info('Argus: Arm requested', { entity: e.entity_id, action, service });
       await this._hass.callService('alarm_control_panel', service, { entity_id: e.entity_id });
+      
       const modeTxt = modeLabels[action] || action;
       this._writeLog('arm', `${this._t('manual_arm')} (${modeTxt})`, currentUser);
       this._sendHaNotif(`🔒 ${this._t('log_armed')} — ${modeTxt}`, `${currentUser} activó el modo ${modeTxt}.`);
-      setTimeout(() => this._load(), 800);
+      
+      setTimeout(() => {
+          btn.disabled = false;
+          btn.innerHTML = oldHtml;
+          this._load();
+      }, 1500);
     } catch (err) {
-      // FIX-5: mostrar error real del backend al usuario
-      const msg = err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
-      this._showArmBlockedAlert([], msg);
-      console.error('Argus action failed', err);
+      console.error('Argus: Action failed', err);
+      alert('❌ Error al ejecutar acción: ' + (err?.message || 'Error desconocido'));
+      this._load();
     }
   }
 
