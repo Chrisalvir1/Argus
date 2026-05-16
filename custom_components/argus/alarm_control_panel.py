@@ -15,61 +15,12 @@ from __future__ import annotations
 
 import logging
 
-try:
-    from homeassistant.components.alarm_control_panel import (
-        AlarmControlPanelEntity,
-        AlarmControlPanelEntityFeature,
-        AlarmControlPanelState,
-        CodeFormat,
-    )
-except ImportError:
-    # Fallback para versiones antiguas de Home Assistant
-    from homeassistant.components.alarm_control_panel import (
-        AlarmControlPanelEntity,
-    )
-    try:
-        from homeassistant.components.alarm_control_panel import CodeFormat
-    except ImportError:
-        class CodeFormat:
-            NUMBER = "number"
-            TEXT = "text"
-
-    try:
-        from homeassistant.components.alarm_control_panel import (
-            SUPPORT_ALARM_ARM_AWAY,
-            SUPPORT_ALARM_ARM_HOME,
-            SUPPORT_ALARM_ARM_NIGHT,
-            SUPPORT_ALARM_ARM_VACATION,
-            SUPPORT_ALARM_TRIGGER,
-        )
-    except ImportError:
-        # Versiones muy antiguas
-        SUPPORT_ALARM_ARM_HOME = 1
-        SUPPORT_ALARM_ARM_AWAY = 2
-        SUPPORT_ALARM_ARM_NIGHT = 4
-        SUPPORT_ALARM_TRIGGER = 16
-        SUPPORT_ALARM_ARM_VACATION = 32
-
-    class AlarmControlPanelEntityFeature:
-        ARM_HOME = SUPPORT_ALARM_ARM_HOME
-        ARM_AWAY = SUPPORT_ALARM_ARM_AWAY
-        ARM_NIGHT = SUPPORT_ALARM_ARM_NIGHT
-        ARM_VACATION = SUPPORT_ALARM_ARM_VACATION
-        TRIGGER = SUPPORT_ALARM_TRIGGER
-
-    class AlarmControlPanelStateMeta(type):
-        def __call__(cls, value):
-            return value
-
-    class AlarmControlPanelState(metaclass=AlarmControlPanelStateMeta):
-        DISARMED = "disarmed"
-        ARMED_HOME = "armed_home"
-        ARMED_AWAY = "armed_away"
-        ARMED_NIGHT = "armed_night"
-        ARMED_VACATION = "armed_vacation"
-        ARMING = "arming"
-        PENDING = "pending"
-        TRIGGERED = "triggered"
+from homeassistant.components.alarm_control_panel import (
+    AlarmControlPanelEntity,
+    AlarmControlPanelEntityFeature,
+    AlarmControlPanelState,
+    CodeFormat,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import STATE_ON
 from homeassistant.core import HomeAssistant, callback
@@ -82,7 +33,7 @@ from homeassistant.helpers.event import (
 )
 from datetime import timedelta
 from homeassistant.components.persistent_notification import async_create as pn_create
-# Eliminamos RestoreEntity temporalmente para máxima compatibilidad
+from homeassistant.helpers.restore_state import RestoreEntity
 
 from .const import (
     DOMAIN,
@@ -138,39 +89,28 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Argus alarm panel from a config entry."""
-    _LOGGER.debug("Argus: Setting up alarm_control_panel platform for entry %s", config_entry.entry_id)
-    try:
-        panel = ArgusAlarmPanel(hass, config_entry)
-        async_add_entities([panel])
-        _LOGGER.info("Argus: Alarm panel entity added successfully")
-    except Exception as err:
-        _LOGGER.error("Argus: CRITICAL ERROR adding entity: %s", err, exc_info=True)
+    async_add_entities([ArgusAlarmPanel(hass, config_entry)], update_before_add=True)
 
 
 
-class ArgusAlarmPanel(AlarmControlPanelEntity):
-    """Argus Alarm Control Panel — Simplified for maximum compatibility."""
+class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
+    """Argus Smart Alarm Control Panel with sensor monitoring."""
 
+    _attr_has_entity_name = True
     _attr_should_poll = False
-    
-    @property
-    def supported_features(self) -> AlarmControlPanelEntityFeature:
-        """Return the list of supported features."""
-        return (
-            AlarmControlPanelEntityFeature.ARM_HOME
-            | AlarmControlPanelEntityFeature.ARM_AWAY
-            | AlarmControlPanelEntityFeature.ARM_NIGHT
-            | AlarmControlPanelEntityFeature.TRIGGER
-            | AlarmControlPanelEntityFeature.ARM_VACATION
-        )
+    _attr_supported_features = (
+        AlarmControlPanelEntityFeature.ARM_HOME
+        | AlarmControlPanelEntityFeature.ARM_AWAY
+        | AlarmControlPanelEntityFeature.ARM_NIGHT
+        | AlarmControlPanelEntityFeature.ARM_VACATION
+        | AlarmControlPanelEntityFeature.TRIGGER
+    )
 
     def __init__(self, hass: HomeAssistant, config_entry: ConfigEntry) -> None:
         self.hass = hass
         self._config_entry = config_entry
-        self._attr_name = config_entry.data.get(CONF_NAME, DEFAULT_NAME)
-        self._attr_unique_id = f"argus_unique_{config_entry.entry_id}"
-        self._attr_has_entity_name = True
-        self._name = self._attr_name
+        self._attr_unique_id = config_entry.entry_id
+        self._name = config_entry.data.get(CONF_NAME, DEFAULT_NAME)
         self._load_config()
         self._alarm_state = AlarmControlPanelState.DISARMED
 
@@ -262,7 +202,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity):
         return self._name
 
     @property
-    def alarm_state(self) -> AlarmControlPanelState | str | None:
+    def alarm_state(self) -> AlarmControlPanelState:
         """Return the state of the alarm."""
         return self._alarm_state
 
