@@ -179,7 +179,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         return self._name
 
     @property
-    def alarm_state(self) -> AlarmControlPanelState:
+    def state(self) -> AlarmControlPanelState | None:
+        """Return the state of the device."""
+        return self._alarm_state
+
+    @property
+    def alarm_state(self) -> AlarmControlPanelState | None:
+        """Return the state (modern property name)."""
         return self._alarm_state
 
     @property
@@ -904,7 +910,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             return
 
         # Trusted callers (HomeKit, Alexa, automaciones sin código) NO envían código → permitir armar sin validar.
-        if self._code_arm_required and code is not None and not self._validate_code(code):
+        if self._code_arm_required and bool(code) and not self._validate_code(code):
             _LOGGER.warning("Argus: Arm rejected — invalid code")
             await async_append_audit_log(self.hass, "arm_rejected", f"Invalid code for {target.value}", user="Argus")
             return
@@ -934,7 +940,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 or False
             )
             # Trusted callers (HomeKit) evitan el chequeo de require_closed para no causar rebotes de estado
-            if req_closed and code is not None:
+            if req_closed and bool(code):
                 sensors = mode_config.get("sensors") or []
                 # Excluir sensores bypasseados — igual que _sensors_for_state
                 # FIX (v0.9.28 Bug #2): sin este filtro los bypassed bloqueaban
