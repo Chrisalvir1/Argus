@@ -11,6 +11,8 @@
   "requirements": [],
   "iot_class": "local_push",
   "after_dependencies": [
-    "frontend"
+    "frontend",
+    "http",
+    "mqtt"
   ]
 }
