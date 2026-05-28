@@ -70,7 +70,7 @@ const TEXTS = {
     export_btn:'📤 Descargar', import_btn:'📥 Restaurar', reset_btn:'⚠️ Restablecer', undo_reset_btn:'↩️ Deshacer Restablecimiento',
     access_title:'Control de Acceso y Usuarios',
     access_desc:'Gestión global de seguridad, PIN maestro y administradores.',
-    pin_master_title:'PIN Maestro', pin_active_yes:'PIN Activo: Sí', pin_active_no:'PIN Activo: No',
+    pin_master_title:'PIN Maestro', pin_active_yes:'PIN Maestro: Activo', pin_active_no:'PIN Maestro: Desactivado',
     select_all:'☑ Todos', deselect_all:'☐ Ninguno', mqtt_label:'MQTT',
     arm_time_label:'Tiempo armado (s)', disarm_time_label:'Tiempo desarmado (s)',
     pin_incorrect:'❌ PIN actual incorrecto', pin_updated:'✓ PIN Actualizado', pin_deleted:'✓ PIN Eliminado',
@@ -150,7 +150,7 @@ const TEXTS = {
     export_btn:'📤 Download', import_btn:'📥 Restore', reset_btn:'⚠️ Factory Reset', undo_reset_btn:'↩️ Undo Reset',
     access_title:'Access Control & Users',
     access_desc:'Global security management, master PIN and administrators.',
-    pin_master_title:'Master PIN', pin_active_yes:'PIN Active: Yes', pin_active_no:'PIN Active: No',
+    pin_master_title:'Master PIN', pin_active_yes:'Master PIN: Active', pin_active_no:'Master PIN: Deactivated',
     select_all:'☑ All', deselect_all:'☐ None', mqtt_label:'MQTT',
     arm_time_label:'Arm time (s)', disarm_time_label:'Disarm time (s)',
     pin_incorrect:'❌ Incorrect current PIN', pin_updated:'✓ PIN Updated', pin_deleted:'✓ PIN Deleted',
@@ -1281,6 +1281,7 @@ _tmpl.innerHTML = `
                 <input type="datetime-local" id="new-user-exp-date" style="margin-top:4px">
               </div>
               <div class="save-row" style="margin-top:15px"><button class="primary" id="btn-save-user" style="width:100%"></button></div>
+              <div id="user-status" class="status" style="margin-top:8px; text-align:center; font-size:12px; font-weight:bold; min-height:18px;"></div>
             </div>
           </div>
           
@@ -1295,12 +1296,13 @@ _tmpl.innerHTML = `
               </div>
               <p class="small" id="p-pin-remove-hint" style="margin:0 0 10px 0; color:var(--primary-color); font-weight:700">Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.</p>
               <div style="display:grid;gap:10px">
-                <div class="field-group"><label id="l-new-pin"></label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*" placeholder="••••"></div>
+                <div class="field-group"><label id="l-new-pin"></label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*"></div>
                 <div class="field-group"><label id="l-confirm-pin"></label><input type="password" id="new-pin-2" inputmode="numeric" pattern="[0-9]*"></div>
               </div>
               <div class="save-row" style="margin-top:15px">
                 <button class="primary" id="btn-save-pin" style="width:100%"></button>
               </div>
+              <div id="pin-status" class="status" style="margin-top:8px; text-align:center; font-size:12px; font-weight:bold; min-height:18px;"></div>
             </div>
           </div>
         </div>
@@ -1707,12 +1709,19 @@ class ArgusPanel extends HTMLElement {
 
     // PIN display
     const pinDisp2 = s('current-pin-display');
-    if (pinDisp2 && pinDisp2.textContent) {
-      const hasPIN = pinDisp2.textContent.includes('Sí') || pinDisp2.textContent.includes('Yes')
-        || pinDisp2.textContent.includes('Sim') || pinDisp2.textContent.includes('Sì')
-        || pinDisp2.textContent.includes('是') || pinDisp2.textContent.includes('Да')
-        || pinDisp2.textContent.includes('Ja') || pinDisp2.textContent.includes('Oui');
-      pinDisp2.textContent = hasPIN ? t('pin_active_yes') : t('pin_active_no');
+    if (pinDisp2) {
+      const hasPIN = this._dashboard?.entries?.[0]?.options?.code;
+      if (hasPIN !== undefined && hasPIN !== null) {
+        pinDisp2.textContent = hasPIN ? t('pin_active_yes') : t('pin_active_no');
+      } else {
+        const text = pinDisp2.textContent || '';
+        const hasPINText = text.includes('Sí') || text.includes('Yes')
+          || text.includes('Sim') || text.includes('Sì')
+          || text.includes('是') || text.includes('Да')
+          || text.includes('Ja') || text.includes('Oui')
+          || text.includes('Activo') || text.includes('Active');
+        pinDisp2.textContent = hasPINText ? t('pin_active_yes') : t('pin_active_no');
+      }
     }
     // Home name input placeholder
     const hnInput = s('home-name-input');
@@ -3026,8 +3035,11 @@ class ArgusPanel extends HTMLElement {
         notif_targets: this._notifTargets,
         tts_targets: this._ttsTargets || [],
       });
-      status.textContent = '✓'; status.className = 'status ok';
-    } catch (e) { status.textContent = e.message; status.className = 'status err'; }
+      if (status) { status.textContent = '✓'; status.className = 'status ok'; }
+    } catch (e) {
+      if (status) { status.textContent = e.message; status.className = 'status err'; }
+      else { alert('Error: ' + e.message); }
+    }
   }
 
   /* ── Users ───────────────────────────────────────────────────────── */
@@ -3097,7 +3109,11 @@ class ArgusPanel extends HTMLElement {
     const expType = this.shadowRoot.getElementById('new-user-exp-type').value;
     const expDate = expType === 'temporary' ? this.shadowRoot.getElementById('new-user-exp-date').value : '';
     const status = this.shadowRoot.getElementById('user-status');
-    if (!name || !pin) { status.textContent = 'Nombre y PIN requeridos'; status.className = 'status err'; return; }
+    if (!name || !pin) {
+      if (status) { status.textContent = 'Nombre y PIN requeridos'; status.className = 'status err'; }
+      else { alert('Nombre y PIN requeridos'); }
+      return;
+    }
     
     this._users.push({ name, pin, is_admin: isAdmin, expiration_date: expDate });
     try {
@@ -3115,10 +3131,13 @@ class ArgusPanel extends HTMLElement {
         this.shadowRoot.getElementById('new-user-exp-date').value = '';
         this.shadowRoot.getElementById('group-new-user-exp')?.classList.add('collapsed');
       }
-      status.textContent = '✓'; status.className = 'status ok';
+      if (status) { status.textContent = '✓'; status.className = 'status ok'; }
       this._renderUsers();
       this._renderActivityLog();
-    } catch (e) { status.textContent = e.message; status.className = 'status err'; }
+    } catch (e) {
+      if (status) { status.textContent = e.message; status.className = 'status err'; }
+      else { alert('Error: ' + e.message); }
+    }
   }
 
   /* ── HomeKit ─────────────────────────────────────────────────────── */
@@ -3523,8 +3542,12 @@ class ArgusPanel extends HTMLElement {
     if (currentCode) {
       const pinCurrent = this.shadowRoot.getElementById('current-pin').value;
       if (pinCurrent !== currentCode) {
-        status.textContent = this._t('pin_incorrect');
-        status.className = 'status err';
+        if (status) {
+          status.textContent = this._t('pin_incorrect');
+          status.className = 'status err';
+        } else {
+          alert(this._t('pin_incorrect'));
+        }
         return;
       }
     }
@@ -3533,15 +3556,21 @@ class ArgusPanel extends HTMLElement {
     const p2 = this.shadowRoot.getElementById('new-pin-2').value;
     
     if (p1 !== p2) { 
-      status.textContent = '❌ PIN nuevo no coincide'; 
-      status.className = 'status err'; 
+      if (status) {
+        status.textContent = '❌ PIN nuevo no coincide'; 
+        status.className = 'status err'; 
+      } else {
+        alert('❌ PIN nuevo no coincide');
+      }
       return; 
     }
     
     try {
       await this._send('argus/update_master_pin', { pin: p1 });
-      status.textContent = p1 ? this._t('pin_updated') : this._t('pin_deleted'); 
-      status.className = 'status ok';
+      if (status) {
+        status.textContent = p1 ? this._t('pin_updated') : this._t('pin_deleted'); 
+        status.className = 'status ok';
+      }
       if (this.shadowRoot.getElementById('current-pin-display')) {
         this.shadowRoot.getElementById('current-pin-display').textContent = p1 ? this._t('pin_active_yes') : this._t('pin_active_no');
       }
@@ -3549,7 +3578,14 @@ class ArgusPanel extends HTMLElement {
       this.shadowRoot.getElementById('new-pin-1').value = '';
       this.shadowRoot.getElementById('new-pin-2').value = '';
       setTimeout(() => this._load(), 1200);
-    } catch (e) { status.textContent = e.message; status.className = 'status err'; }
+    } catch (e) {
+      if (status) {
+        status.textContent = e.message; 
+        status.className = 'status err';
+      } else {
+        alert(e.message);
+      }
+    }
   }
 
   _showPinModal(onConfirm) {
@@ -3769,7 +3805,8 @@ class ArgusPanel extends HTMLElement {
 
     if (action === 'disarm') {
       // FIX-4: sólo mostrar modal de PIN si hay código configurado
-      const masterPin = this._ui?.code || '';
+      const masterPin = this._dashboard?.entries?.[0]?.options?.code || '';
+      const hasUsers = this._users && this._users.length > 0;
       const doDisarm = async (pin) => { 
       try { 
       await this._hass.callService('alarm_control_panel', 'alarm_disarm', 
@@ -3784,7 +3821,7 @@ class ArgusPanel extends HTMLElement {
           if (pinErr) pinErr.textContent = '❌ PIN incorrecto o error al desarmar';
         }
       };
-      if (masterPin) {
+      if (masterPin || hasUsers) {
         this._showPinModal(async pin => { await doDisarm(pin); });
       } else {
         await doDisarm(null);
