@@ -5,7 +5,7 @@
 
   **El Sistema de Seguridad Premium para Home Assistant**
 
-  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.1.32-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
+  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.1.33-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
   [![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)](https://www.home-assistant.io/)
   [![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)](https://hacs.xyz/)
   [![GitHub stars](https://img.shields.io/github/stars/Chrisalvir1/Argus?style=social)](https://github.com/Chrisalvir1/Argus/stargazers)
@@ -21,11 +21,15 @@
 
 ---
 
-## ✨ Novedades y Correcciones Críticas (v1.1.32)
+## ✨ Novedades y Correcciones Críticas (v1.1.33)
 
-¡Actualización de compatibilidad y estabilidad!
+¡Actualización estética y de localización!
 
 **Cambios:**
+- **Rediseño Liquid Glass Premium (v1.1.33)**: Nueva interfaz ultra-lúcida con efectos de desenfoque incrementados, sombras ambientales con tintes de color y micro-animaciones físicas en clics de botones.
+- **Transición de Pestañas de Modo Elástica (v1.1.33)**: Indicador de burbuja líquida estilo iOS con deslizamiento y cambio de color adaptativo elástico al alternar los modos.
+- **Formularios Colapsables Fluidos (v1.1.33)**: Animaciones suaves de apertura/cierre de formularios para configuraciones de usuarios y PIN.
+- **Correcciones de i18n (v1.1.33)**: Localización completa al cambiar de idioma de todos los textos y botones fijos (modales de SOS, nombre de hogar, idioma).
 - **Compatibilidad con HomeKit (v1.1.32)**: Se aplicó un parche para solucionar problemas de sincronización de estado y validación de códigos de seguridad en cadenas vacías con HomeKit.
 - **Restauración de Estabilidad (v1.1.31)**: Reversión al núcleo estable de la v1.1.10, removiendo las funciones experimentales de simulacro y trigger para asegurar el correcto funcionamiento de los botones de armado.
 - **Sincronización HomeKit (Apple Home) (v1.1.0)**: Solucionado el error crítico donde la app de Apple Home revertía el modo Ausente o Noche a "Desactivado". Argus ahora fuerza la re-sincronización del estado de HomeKit al usar el ARM-LOCK v2.
