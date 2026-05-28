@@ -35,102 +35,39 @@ from .const import (
 
 
 class ArgusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    """Multi-step config flow for Argus."""
+    """Single-step config flow for Argus."""
 
     VERSION = 2
 
-    def __init__(self) -> None:
-        self._data: dict[str, Any] = {}
-
-    # ── Step 1: Basic settings ──────────────────────────────
     async def async_step_user(self, user_input=None):
-        """Handle step 1: name, code, and delay settings."""
+        """Handle user step: confirm installation and name, apply default configuration."""
         if user_input is not None:
-            self._data.update(user_input)
-            return await self.async_step_sensors()
+            name = user_input.get(CONF_NAME, DEFAULT_NAME)
+            data = {
+                CONF_NAME: name,
+                CONF_CODE: "",
+                CONF_CODE_ARM_REQUIRED: False,
+                CONF_ARMING_TIME: DEFAULT_ARMING_TIME,
+                CONF_TRIGGER_TIME: DEFAULT_TRIGGER_TIME,
+                CONF_ENTRY_DELAY: DEFAULT_ENTRY_DELAY,
+                CONF_SENSORS_AWAY: [],
+                CONF_SENSORS_HOME: [],
+                CONF_SENSORS_NIGHT: [],
+                CONF_SENSORS_VACATION: [],
+                CONF_ENTRY_SENSORS: [],
+                CONF_MQTT_ENABLED: False,
+                CONF_MQTT_TOPIC_STATE: DEFAULT_MQTT_TOPIC_STATE,
+                CONF_MQTT_TOPIC_COMMAND: DEFAULT_MQTT_TOPIC_COMMAND,
+            }
+            return self.async_create_entry(
+                title=name,
+                data=data,
+            )
 
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema({
                 vol.Required(CONF_NAME, default=DEFAULT_NAME): selector.TextSelector(),
-                vol.Optional(CONF_CODE, default=""): selector.TextSelector(
-                    selector.TextSelectorConfig(type=selector.TextSelectorType.PASSWORD)
-                ),
-                vol.Optional(CONF_CODE_ARM_REQUIRED, default=False): selector.BooleanSelector(),
-                vol.Optional(CONF_ARMING_TIME, default=DEFAULT_ARMING_TIME): selector.NumberSelector(
-                    selector.NumberSelectorConfig(
-                        min=0, max=300, step=5,
-                        unit_of_measurement="s",
-                        mode=selector.NumberSelectorMode.BOX,
-                    )
-                ),
-                vol.Optional(CONF_TRIGGER_TIME, default=DEFAULT_TRIGGER_TIME): selector.NumberSelector(
-                    selector.NumberSelectorConfig(
-                        min=0, max=120, step=1,
-                        unit_of_measurement="s",
-                        mode=selector.NumberSelectorMode.BOX,
-                    )
-                ),
-                vol.Optional(CONF_ENTRY_DELAY, default=DEFAULT_ENTRY_DELAY): selector.NumberSelector(
-                    selector.NumberSelectorConfig(
-                        min=0, max=300, step=5,
-                        unit_of_measurement="s",
-                        mode=selector.NumberSelectorMode.BOX,
-                    )
-                ),
-            }),
-        )
-
-    # ── Step 2: Sensor zones ──────────────────────────────
-    async def async_step_sensors(self, user_input=None):
-        """Handle step 2: select sensor entities and siren."""
-        if user_input is not None:
-            self._data.update(user_input)
-            return await self.async_step_mqtt()
-
-        return self.async_show_form(
-            step_id="sensors",
-            data_schema=vol.Schema({
-                vol.Optional(CONF_SENSORS_AWAY, default=[]): selector.EntitySelector(
-                    selector.EntitySelectorConfig(domain="binary_sensor", multiple=True)
-                ),
-                vol.Optional(CONF_SENSORS_HOME, default=[]): selector.EntitySelector(
-                    selector.EntitySelectorConfig(domain="binary_sensor", multiple=True)
-                ),
-                vol.Optional(CONF_SENSORS_NIGHT, default=[]): selector.EntitySelector(
-                    selector.EntitySelectorConfig(domain="binary_sensor", multiple=True)
-                ),
-                vol.Optional(CONF_ENTRY_SENSORS, default=[]): selector.EntitySelector(
-                    selector.EntitySelectorConfig(domain="binary_sensor", multiple=True)
-                ),
-                vol.Optional(CONF_SIREN_ENTITY): selector.EntitySelector(
-                    selector.EntitySelectorConfig(
-                        domain=["switch", "siren", "script", "light"]
-                    )
-                ),
-            }),
-        )
-
-    # ── Step 3: MQTT (optional) ──────────────────────────
-    async def async_step_mqtt(self, user_input=None):
-        """Handle step 3: optional MQTT configuration."""
-        if user_input is not None:
-            self._data.update(user_input)
-            return self.async_create_entry(
-                title=self._data.get(CONF_NAME, DEFAULT_NAME),
-                data=self._data,
-            )
-
-        return self.async_show_form(
-            step_id="mqtt",
-            data_schema=vol.Schema({
-                vol.Optional(CONF_MQTT_ENABLED, default=False): selector.BooleanSelector(),
-                vol.Optional(
-                    CONF_MQTT_TOPIC_STATE, default=DEFAULT_MQTT_TOPIC_STATE
-                ): selector.TextSelector(),
-                vol.Optional(
-                    CONF_MQTT_TOPIC_COMMAND, default=DEFAULT_MQTT_TOPIC_COMMAND
-                ): selector.TextSelector(),
             }),
         )
 
