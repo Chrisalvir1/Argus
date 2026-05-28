@@ -39,6 +39,11 @@ def _default_payload() -> dict:
         "background_mode": "weather",
         "background_images": [],
         "temperature_source": "auto",
+        "panel_bg_file": "",
+        "panel_bg_sound": False,
+        "hub_bg_mode": "none",
+        "hub_bg_file": "",
+        "hub_bg_sound": False,
     }
 
 
@@ -56,6 +61,11 @@ async def async_load_ui_data(hass: HomeAssistant) -> dict:
     data.setdefault("background_mode", "weather")
     data.setdefault("background_images", [])
     data.setdefault("temperature_source", "auto")
+    data.setdefault("panel_bg_file", "")
+    data.setdefault("panel_bg_sound", False)
+    data.setdefault("hub_bg_mode", "none")
+    data.setdefault("hub_bg_file", "")
+    data.setdefault("hub_bg_sound", False)
     return data
 
 

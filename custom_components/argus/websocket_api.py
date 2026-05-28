@@ -141,11 +141,16 @@ async def ws_argus_dashboard(hass: HomeAssistant, connection, msg) -> None:
         vol.Optional("tts_targets"): list,
         vol.Optional("users"): list,
         vol.Optional("home_name"): str,
-        vol.Optional("background_mode"): vol.In(["weather", "none", "photo", "collage"]),
+        vol.Optional("background_mode"): vol.In(["weather", "none", "photo", "collage", "video"]),
         vol.Optional("background_images"): list,
         vol.Optional("temperature_source"): str,
         vol.Optional("temp_alert_min"): vol.Any(None, vol.Coerce(float)),
         vol.Optional("temp_alert_max"): vol.Any(None, vol.Coerce(float)),
+        vol.Optional("panel_bg_file"): str,
+        vol.Optional("panel_bg_sound"): bool,
+        vol.Optional("hub_bg_mode"): vol.In(["none", "image", "video"]),
+        vol.Optional("hub_bg_file"): str,
+        vol.Optional("hub_bg_sound"): bool,
     }
 )
 @websocket_api.async_response
@@ -153,7 +158,11 @@ async def ws_argus_save_ui(hass: HomeAssistant, connection, msg) -> None:
     """Persist UI data from the Argus panel without overwriting missing fields."""
     
     updates = {}
-    valid_keys = ["zones", "dashboard", "notif_targets", "tts_targets", "users", "home_name", "background_mode", "background_images", "temperature_source", "temp_alert_min", "temp_alert_max"]
+    valid_keys = [
+        "zones", "dashboard", "notif_targets", "tts_targets", "users", "home_name",
+        "background_mode", "background_images", "temperature_source", "temp_alert_min", "temp_alert_max",
+        "panel_bg_file", "panel_bg_sound", "hub_bg_mode", "hub_bg_file", "hub_bg_sound"
+    ]
     
     for key in valid_keys:
         if key in msg:

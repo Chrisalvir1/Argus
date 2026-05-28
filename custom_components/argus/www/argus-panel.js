@@ -88,7 +88,7 @@ const TEXTS = {
     home_name_modal_desc:'Este nombre aparece en el panel de instancias y en pantalla completa.',
     home_name_label:'Nombre del Hogar', home_name_placeholder:'Mi Casa',
     clear_log_btn:'BORRAR',
-    bg_weather:'Clima animado', bg_none:'Sin animación', bg_photo:'Una foto', bg_collage:'Collage',
+    bg_weather:'Clima animado', bg_none:'Sin animación', bg_photo:'Una foto', bg_collage:'Collage', bg_video:'Video en loop', bg_panel_title:'Fondo para panel', bg_hub_title:'Fondo Argus (Canvas)', bg_sound_opt:'Sonido de video', bg_image_opt:'Imagen / GIF',
     temp_auto:'Automático (sensor local / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Batería baja',
     times_section:'⏱️ Tiempos', arm_time:'Armado (s)', disarm_time:'Desarmado (s)',
     save_config:'GUARDAR CONFIGURACIÓN', never_triggered:'Nunca activada',
@@ -168,7 +168,7 @@ const TEXTS = {
     home_name_modal_desc:'This name appears in the instances panel and in full screen.',
     home_name_label:'Home Name', home_name_placeholder:'My Home',
     clear_log_btn:'CLEAR',
-    bg_weather:'Animated weather', bg_none:'No animation', bg_photo:'One photo', bg_collage:'Collage',
+    bg_weather:'Animated weather', bg_none:'No animation', bg_photo:'One photo', bg_collage:'Collage', bg_video:'Loop video', bg_panel_title:'Panel background', bg_hub_title:'Argus background (Canvas)', bg_sound_opt:'Video sound', bg_image_opt:'Image / GIF',
     temp_auto:'Automatic (local sensor / thermostat / climate)', temp_thermostat:'(thermostat)', battery_low:'⚠️ Low Battery',
     times_section:'⏱️ Times', arm_time:'Arming (s)', disarm_time:'Entry delay (s)',
     save_config:'SAVE CONFIGURATION', never_triggered:'Never triggered',
@@ -246,7 +246,7 @@ const TEXTS = {
     home_name_modal_desc:'Ce nom apparaît dans le panneau des instances et en plein écran.',
     home_name_label:'Nom du domicile', home_name_placeholder:'Ma maison',
     clear_log_btn:'EFFACER',
-    bg_weather:'Météo animée', bg_none:'Sans animation', bg_photo:'Une photo', bg_collage:'Collage',
+    bg_weather:'Météo animée', bg_none:'Sans animation', bg_photo:'Une photo', bg_collage:'Collage', bg_video:'Vidéo en boucle', bg_panel_title:'Fond du panneau', bg_hub_title:'Fond Argus (Canevas)', bg_sound_opt:'Son de la vidéo', bg_image_opt:'Image / GIF',
     temp_auto:'Automatique (capteur local / thermostat / climat)', temp_thermostat:'(thermostat)', battery_low:'⚠️ Batterie faible',
     times_section:'⏱️ Temps', arm_time:'Armé (s)', disarm_time:'Délai entrée (s)',
     save_config:'ENREGISTRER LA CONFIGURATION', never_triggered:'Jamais déclenché',
@@ -315,7 +315,7 @@ const TEXTS = {
     home_name_modal_desc:'Este nome aparece no painel de instâncias e em tela cheia.',
     home_name_label:'Nome do lar', home_name_placeholder:'Minha Casa',
     clear_log_btn:'LIMPAR',
-    bg_weather:'Clima animado', bg_none:'Sem animação', bg_photo:'Uma foto', bg_collage:'Colagem',
+    bg_weather:'Clima animado', bg_none:'Sem animação', bg_photo:'Uma foto', bg_collage:'Colagem', bg_video:'Vídeo em loop', bg_panel_title:'Fundo do painel', bg_hub_title:'Fundo Argus (Tela)', bg_sound_opt:'Som do vídeo', bg_image_opt:'Imagem / GIF',
     temp_auto:'Automático (sensor local / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Bateria fraca',
     times_section:'⏱️ Tempos', arm_time:'Armado (s)', disarm_time:'Atraso de entrada (s)',
     save_config:'SALVAR CONFIGURAÇÃO', never_triggered:'Nunca ativado',
@@ -384,7 +384,7 @@ const TEXTS = {
     home_name_modal_desc:'Questo nome appare nel pannello delle istanze e a schermo intero.',
     home_name_label:'Nome della casa', home_name_placeholder:'Casa mia',
     clear_log_btn:'CANCELLA',
-    bg_weather:'Meteo animato', bg_none:'Nessuna animazione', bg_photo:'Una foto', bg_collage:'Collage',
+    bg_weather:'Meteo animato', bg_none:'Nessuna animazione', bg_photo:'Una foto', bg_collage:'Collage', bg_video:'Video in loop', bg_panel_title:'Sfondo pannello', bg_hub_title:'Sfondo Argus (Tela)', bg_sound_opt:'Audio video', bg_image_opt:'Immagine / GIF',
     temp_auto:'Automatico (sensore locale / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Batteria scarica',
     times_section:'⏱️ Tempi', arm_time:'Armato (s)', disarm_time:'Ritardo entrata (s)',
     save_config:'SALVA CONFIGURAZIONE', never_triggered:'Mai attivato',
@@ -453,7 +453,7 @@ const TEXTS = {
     home_name_modal_desc:'此名称显示在实例面板和全屏中。',
     home_name_label:'家庭名称', home_name_placeholder:'我的家',
     clear_log_btn:'清除',
-    bg_weather:'动画天气', bg_none:'无动画', bg_photo:'单张照片', bg_collage:'拼贴画',
+    bg_weather:'动画天气', bg_none:'无动画', bg_photo:'单张照片', bg_collage:'拼贴画', bg_video:'循环视频', bg_panel_title:'面板背景', bg_hub_title:'Argus 背景 (画布)', bg_sound_opt:'视频声音', bg_image_opt:'图片 / GIF',
     temp_auto:'自动（本地传感器 / 恒温器 / 气候）', temp_thermostat:'(恒温器)', battery_low:'⚠️ 电池不足',
     times_section:'⏱️ 时间', arm_time:'布防延迟(s)', disarm_time:'进入延迟(s)',
     save_config:'保存配置', never_triggered:'从未触发',
@@ -522,7 +522,7 @@ const TEXTS = {
     home_name_modal_desc:'Это имя отображается в панели экземпляров и в полноекранном режиме.',
     home_name_label:'Название дома', home_name_placeholder:'Мой дом',
     clear_log_btn:'ОЧИСТИТЬ',
-    bg_weather:'Анимированная погода', bg_none:'Без анимации', bg_photo:'Одно фото', bg_collage:'Коллаж',
+    bg_weather:'Анимированная погода', bg_none:'Без анимации', bg_photo:'Одно фото', bg_collage:'Коллаж', bg_video:'Зацикленное видео', bg_panel_title:'Фон панели', bg_hub_title:'Фон Argus (Холст)', bg_sound_opt:'Звук видео', bg_image_opt:'Изображение / GIF',
     temp_auto:'Авто (лок. датчик / термостат / климат)', temp_thermostat:'(термостат)', battery_low:'⚠️ Низкий заряд',
     times_section:'⏱️ Времена', arm_time:'Постановка (s)', disarm_time:'Задержка входа (s)',
     save_config:'СОХРАНИТЬ КОНФИГУРАЦИЮ', never_triggered:'Никогда не срабатывало',
@@ -591,7 +591,7 @@ _tmpl.innerHTML = `
     box-shadow: var(--glass-shadow); 
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
   }
-  .wrap { transition: filter 0.35s ease, opacity 0.35s ease; }
+  .wrap { position: relative; z-index: 1; transition: filter 0.35s ease, opacity 0.35s ease; }
   .wrap.wrap-blurred { filter: blur(15px); opacity: 0.45; pointer-events: none; }
   @keyframes dialElasticIn {
     0% { transform: scale(0.8) translateY(20px); opacity: 0; }
@@ -1001,6 +1001,10 @@ _tmpl.innerHTML = `
   .wx-photo::after,.wx-collage::after,.wx-static::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,8,12,.18),rgba(5,8,12,.5))}
   .wx-collage-grid{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4px;padding:4px}
   .wx-collage-cell{border-radius:18px;background:center/cover no-repeat;min-height:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+  .wx-video{position:absolute;inset:0;overflow:hidden;border-radius:inherit;z-index:1;background:#10141d}
+  .wx-video::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,8,12,.18),rgba(5,8,12,.5));z-index:2}
+  #argus-canvas-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background-size:cover;background-position:center;background-repeat:no-repeat}
+  #argus-canvas-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.3) 100%);z-index:1;pointer-events:none}
 
 .sensor-pill {
   display:inline-flex; align-items:center; gap:8px;
@@ -1134,6 +1138,9 @@ _tmpl.innerHTML = `
 </div>
 
 
+<div id="argus-canvas-bg"></div>
+
+
 <div class="wrap">
   <!-- HERO -->
   <div class="glass hero liquid-glass">
@@ -1164,18 +1171,64 @@ _tmpl.innerHTML = `
           </div>
         </div>
         <div id="entries"></div>
-        <!-- Personalization merged from Mi Casa -->
-        <div class="personalize-row">
-          <div style="flex:1;min-width:140px">
-            <div class="setting-label" id="lbl-home-name-hdr">Nombre del Hogar</div>
-            <div id="lbl-home-name-prominent" style="font-size:18px;font-weight:900;margin-top:2px">Mi Casa</div>
+        <!-- Personalization section -->
+        <div class="personalize-section" style="margin-top:18px; padding:18px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:22px; display:grid; gap:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:10px; flex-wrap:wrap; gap:10px;">
+            <div style="font-weight:900; font-size:14px; letter-spacing:-0.01em;">🎨 Personalización Estética</div>
+            <div style="display:flex; gap:8px;">
+              <button class="ghost" id="btn-edit-home-name-standalone" style="padding:6px 10px;font-size:11px;border-radius:10px;white-space:nowrap">✏️ Editar Nombre</button>
+              <button class="primary" id="btn-save-personalization-standalone" style="padding:8px 14px;font-size:12px;border-radius:10px;white-space:nowrap">Guardar</button>
+            </div>
           </div>
-          <div style="flex:1;min-width:140px">
-            <div class="setting-label" id="lbl-background-hdr">Fondo</div>
-            <select id="bg-mode-select-standalone" style="margin-top:4px;width:100%"></select>
+          
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:20px;">
+            <!-- Column 1: Nombre y Fondo para Panel -->
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <div>
+                <div class="setting-label" id="lbl-home-name-hdr" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6;">Nombre del Hogar</div>
+                <div id="lbl-home-name-prominent" style="font-size:18px;font-weight:900;margin-top:2px">Mi Casa</div>
+              </div>
+              
+              <div>
+                <div class="setting-label" id="lbl-panel-bg-title" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">Fondo para Panel</div>
+                <select id="bg-mode-select-standalone" style="width:100%; padding:8px 12px; border-radius:10px; background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.12); color:white; font-family:inherit; outline:none;"></select>
+              </div>
+
+              <!-- Panel Background Custom Inputs (shown dynamically) -->
+              <div id="panel-custom-bg-inputs" style="display:none; flex-direction:column; gap:8px; background:rgba(0,0,0,0.15); padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,0.05);">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+                  <span style="font-size:11px; opacity:0.8;">Cargar archivo:</span>
+                  <input type="file" id="panel-bg-file-input" style="font-size:10px; max-width:180px;">
+                </div>
+                <div style="font-size:10px; opacity:0.5; text-align:right;" id="bg-file-help"></div>
+                <input type="text" id="panel-bg-url-input" style="width:100%; font-size:11px; padding:6px 10px; border-radius:8px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:white; box-sizing:border-box; outline:none;">
+                <label id="lbl-panel-bg-sound" style="display:none; align-items:center; gap:8px; font-size:11px; cursor:pointer;">
+                  <input type="checkbox" id="chk-panel-bg-sound"> <span id="s-panel-bg-sound-lbl">Sonido de video</span>
+                </label>
+              </div>
+            </div>
+            
+            <!-- Column 2: Fondo Argus -->
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <div>
+                <div class="setting-label" id="lbl-hub-bg-title" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">Fondo Argus</div>
+                <select id="hub-bg-mode-select" style="width:100%; padding:8px 12px; border-radius:10px; background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.12); color:white; font-family:inherit; outline:none;"></select>
+              </div>
+
+              <!-- Argus Background Custom Inputs (shown dynamically) -->
+              <div id="hub-custom-bg-inputs" style="display:none; flex-direction:column; gap:8px; background:rgba(0,0,0,0.15); padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,0.05);">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+                  <span style="font-size:11px; opacity:0.8;">Cargar archivo:</span>
+                  <input type="file" id="hub-bg-file-input" style="font-size:10px; max-width:180px;">
+                </div>
+                <div style="font-size:10px; opacity:0.5; text-align:right;" id="hub-file-help"></div>
+                <input type="text" id="hub-bg-url-input" style="width:100%; font-size:11px; padding:6px 10px; border-radius:8px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:white; box-sizing:border-box; outline:none;">
+                <label id="lbl-hub-bg-sound" style="display:none; align-items:center; gap:8px; font-size:11px; cursor:pointer;">
+                  <input type="checkbox" id="chk-hub-bg-sound"> <span id="s-hub-bg-sound-lbl">Sonido de video</span>
+                </label>
+              </div>
+            </div>
           </div>
-          <button class="ghost" id="btn-edit-home-name-standalone" style="padding:6px 10px;font-size:11px;border-radius:10px;white-space:nowrap">✏️ Editar</button>
-          <button class="primary" id="btn-save-personalization-standalone" style="padding:8px 14px;font-size:12px;border-radius:10px;white-space:nowrap">Guardar</button>
         </div>
       </section>
 
@@ -1601,7 +1654,10 @@ class ArgusPanel extends HTMLElement {
 
     // Static template labels (new in v1.0.1)
     set('lbl-home-name-hdr',    t('home_name_lbl'));
-    set('lbl-background-hdr',   t('background_lbl'));
+    set('lbl-panel-bg-title',   t('bg_panel_title'));
+    set('lbl-hub-bg-title',     t('bg_hub_title'));
+    set('s-panel-bg-sound-lbl', t('bg_sound_opt'));
+    set('s-hub-bg-sound-lbl',   t('bg_sound_opt'));
     set('btn-edit-home-name-standalone', t('edit_btn'));
     set('btn-save-personalization-standalone', t('save_btn'));
     set('btn-clear-log',        t('clear_log_btn'));
@@ -1621,7 +1677,7 @@ class ArgusPanel extends HTMLElement {
     set('home-name-modal-h3',   t('home_name_modal_title'));
     set('p-home-name-modal-desc', t('home_name_modal_desc'));
     set('l-home-name-modal-label', t('home_name_label'));
-    set('lang-modal-title',     `\ud83c\udf10 ${t('lang_select_title')}`);
+    set('lang-modal-title',     `🌐 ${t('lang_select_title')}`);
 
     const bgMode = s('bg-mode-select-standalone');
     if (bgMode) {
@@ -1631,8 +1687,20 @@ class ArgusPanel extends HTMLElement {
         <option value="none">${t('bg_none')}</option>
         <option value="photo">${t('bg_photo')}</option>
         <option value="collage">${t('bg_collage')}</option>
+        <option value="video">${t('bg_video')}</option>
       `;
       if (v) bgMode.value = v;
+    }
+
+    const hubBgSelect = s('hub-bg-mode-select');
+    if (hubBgSelect) {
+      const v = hubBgSelect.value;
+      hubBgSelect.innerHTML = `
+        <option value="none">${t('bg_none')}</option>
+        <option value="image">${t('bg_image_opt')}</option>
+        <option value="video">${t('bg_video')}</option>
+      `;
+      if (v) hubBgSelect.value = v;
     }
 
     this._populateTemperatureSources();
@@ -1915,6 +1983,11 @@ class ArgusPanel extends HTMLElement {
     s('btn-cancel-sos')?.addEventListener('click', closeSOS);
     s('sos-close-x')?.addEventListener('click', closeSOS);
     s('sos-modal')?.addEventListener('click', e => { if (e.target.id === 'sos-modal') closeSOS(); });
+
+    s('bg-mode-select-standalone')?.addEventListener('change', () => this._updateBgFieldsVisibility());
+    s('hub-bg-mode-select')?.addEventListener('change', () => this._updateBgFieldsVisibility());
+    s('panel-bg-file-input')?.addEventListener('change', e => this._handlePanelBgFile(e));
+    s('hub-bg-file-input')?.addEventListener('change', e => this._handleHubBgFile(e));
   }
 
   /* ── WebSocket ───────────────────────────────────────────────────── */
@@ -1970,12 +2043,18 @@ class ArgusPanel extends HTMLElement {
     this._backgroundMode = dashboard.ui?.background_mode || 'weather';
     this._backgroundImages = dashboard.ui?.background_images || [];
     this._temperatureSource = dashboard.ui?.temperature_source || 'auto';
+    this._panelBgFile = dashboard.ui?.panel_bg_file || '';
+    this._panelBgSound = Boolean(dashboard.ui?.panel_bg_sound);
+    this._hubBgMode = dashboard.ui?.hub_bg_mode || 'none';
+    this._hubBgFile = dashboard.ui?.hub_bg_file || '';
+    this._hubBgSound = Boolean(dashboard.ui?.hub_bg_sound);
     
     this._updateHomeNameDisplay();
 
     this._populateTemperatureSources();
     const tempSel = this.shadowRoot.getElementById('temp-source-select-standalone');
     if (tempSel) tempSel.value = this._temperatureSource || 'auto';
+    
     const bgMode = this.shadowRoot.getElementById('bg-mode-select-standalone');
     if (bgMode) {
       bgMode.innerHTML = `
@@ -1983,9 +2062,35 @@ class ArgusPanel extends HTMLElement {
         <option value="none">${this._t('bg_none')}</option>
         <option value="photo">${this._t('bg_photo')}</option>
         <option value="collage">${this._t('bg_collage')}</option>
+        <option value="video">${this._t('bg_video')}</option>
       `;
       bgMode.value = this._backgroundMode || 'weather';
     }
+
+    const hubBgSelect = this.shadowRoot.getElementById('hub-bg-mode-select');
+    if (hubBgSelect) {
+      hubBgSelect.innerHTML = `
+        <option value="none">${this._t('bg_none')}</option>
+        <option value="image">${this._t('bg_image_opt')}</option>
+        <option value="video">${this._t('bg_video')}</option>
+      `;
+      hubBgSelect.value = this._hubBgMode || 'none';
+    }
+
+    const panelUrlInput = this.shadowRoot.getElementById('panel-bg-url-input');
+    if (panelUrlInput) panelUrlInput.value = (this._panelBgFile && !this._panelBgFile.startsWith('data:')) ? this._panelBgFile : '';
+
+    const chkPanelSound = this.shadowRoot.getElementById('chk-panel-bg-sound');
+    if (chkPanelSound) chkPanelSound.checked = this._panelBgSound;
+
+    const hubUrlInput = this.shadowRoot.getElementById('hub-bg-url-input');
+    if (hubUrlInput) hubUrlInput.value = (this._hubBgFile && !this._hubBgFile.startsWith('data:')) ? this._hubBgFile : '';
+
+    const chkHubSound = this.shadowRoot.getElementById('chk-hub-bg-sound');
+    if (chkHubSound) chkHubSound.checked = this._hubBgSound;
+
+    this._updateBgFieldsVisibility();
+    this._updateCanvasBackground();
 
     // Admin flag: use the HA user's own admin status
     this._isAdmin = this._hass?.user ? Boolean(this._hass.user.is_admin || this._hass.user.is_owner) : true;
@@ -3133,11 +3238,116 @@ class ArgusPanel extends HTMLElement {
     const help = this.shadowRoot.getElementById('bg-file-help'); if (help) help.textContent = `${this._backgroundImages.length} imagen(es) cargadas para el panel.`;
   }
 
+  async _handlePanelBgFile(ev) {
+    const file = ev?.target?.files?.[0]; if (!file) return;
+    const r = new FileReader();
+    r.onload = () => {
+      this._panelBgFile = String(r.result || '');
+      const inp = this.shadowRoot.getElementById('panel-bg-url-input');
+      if (inp) inp.value = '';
+      const help = this.shadowRoot.getElementById('bg-file-help');
+      if (help) help.textContent = 'Archivo de panel cargado.';
+    };
+    r.readAsDataURL(file);
+  }
+
+  async _handleHubBgFile(ev) {
+    const file = ev?.target?.files?.[0]; if (!file) return;
+    const r = new FileReader();
+    r.onload = () => {
+      this._hubBgFile = String(r.result || '');
+      const inp = this.shadowRoot.getElementById('hub-bg-url-input');
+      if (inp) inp.value = '';
+      const help = this.shadowRoot.getElementById('hub-file-help');
+      if (help) help.textContent = 'Archivo Argus cargado.';
+    };
+    r.readAsDataURL(file);
+  }
+
+  _updateBgFieldsVisibility() {
+    const bgMode = this.shadowRoot.getElementById('bg-mode-select-standalone')?.value || 'weather';
+    const hubBgMode = this.shadowRoot.getElementById('hub-bg-mode-select')?.value || 'none';
+
+    const panelInputs = this.shadowRoot.getElementById('panel-custom-bg-inputs');
+    if (panelInputs) {
+      if (bgMode === 'photo' || bgMode === 'collage' || bgMode === 'video') {
+        panelInputs.style.display = 'flex';
+        const soundLabel = this.shadowRoot.getElementById('lbl-panel-bg-sound');
+        if (soundLabel) soundLabel.style.display = (bgMode === 'video') ? 'flex' : 'none';
+        
+        const fileInput = this.shadowRoot.getElementById('panel-bg-file-input');
+        if (fileInput) fileInput.accept = (bgMode === 'video') ? 'video/*' : 'image/*';
+        
+        const urlInput = this.shadowRoot.getElementById('panel-bg-url-input');
+        if (urlInput) urlInput.placeholder = (bgMode === 'video') ? 'Pegar URL del video (ej. /local/video.mp4)' : 'Pegar URL de la imagen';
+      } else {
+        panelInputs.style.display = 'none';
+      }
+    }
+
+    const hubInputs = this.shadowRoot.getElementById('hub-custom-bg-inputs');
+    if (hubInputs) {
+      if (hubBgMode !== 'none') {
+        hubInputs.style.display = 'flex';
+        const soundLabel = this.shadowRoot.getElementById('lbl-hub-bg-sound');
+        if (soundLabel) soundLabel.style.display = (hubBgMode === 'video') ? 'flex' : 'none';
+        
+        const fileInput = this.shadowRoot.getElementById('hub-bg-file-input');
+        if (fileInput) fileInput.accept = (hubBgMode === 'video') ? 'video/*' : 'image/*';
+        
+        const urlInput = this.shadowRoot.getElementById('hub-bg-url-input');
+        if (urlInput) urlInput.placeholder = (hubBgMode === 'video') ? 'Pegar URL del video (ej. /local/video.mp4)' : 'Pegar URL de la imagen/GIF';
+      } else {
+        hubInputs.style.display = 'none';
+      }
+    }
+  }
+
+  _updateCanvasBackground() {
+    const bgContainer = this.shadowRoot.getElementById('argus-canvas-bg');
+    if (!bgContainer) return;
+
+    const mode = this._hubBgMode || 'none';
+    const file = this._hubBgFile || '';
+    const sound = this._hubBgSound;
+
+    if (mode === 'none' || !file) {
+      bgContainer.innerHTML = '';
+      bgContainer.style.backgroundImage = '';
+      return;
+    }
+
+    if (mode === 'image') {
+      bgContainer.innerHTML = '';
+      bgContainer.style.backgroundImage = `url('${file.replace(/'/g, "%27")}')`;
+    } else if (mode === 'video') {
+      bgContainer.style.backgroundImage = '';
+      const existingVideo = bgContainer.querySelector('video');
+      if (existingVideo && existingVideo.querySelector('source')?.src === file) {
+        existingVideo.muted = !sound;
+        return;
+      }
+      bgContainer.innerHTML = `
+        <video autoplay loop playsinline ${sound ? '' : 'muted'} style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; z-index:0;">
+          <source src="${file}">
+        </video>
+      `;
+    }
+  }
+
   _renderEntryBackground(ws, isNight) {
     const mode = this._backgroundMode || 'weather', imgs = this._backgroundImages || [];
     if (mode === 'none') return `<div class="wx wx-static"></div>`;
     if (mode === 'photo' && imgs[0]) return `<div class="wx wx-photo" style="--bg-image:url('${imgs[0].replace(/'/g, "%27")}')"></div>`;
     if (mode === 'collage' && imgs.length) return `<div class="wx wx-collage"><div class="wx-collage-grid">${imgs.slice(0,4).map(src => `<div class="wx-collage-cell" style="background-image:url('${src.replace(/'/g, "%27")}')"></div>`).join('')}</div></div>`;
+    if (mode === 'video' && this._panelBgFile) {
+      const sound = this._panelBgSound;
+      return `<div class="wx wx-video">
+        <video autoplay loop playsinline ${sound ? '' : 'muted'} style="width:100%; height:100%; object-fit:cover; pointer-events:none; position:absolute; inset:0; z-index:1;">
+          <source src="${this._panelBgFile}">
+        </video>
+      </div>`;
+    }
     return this._getWeatherBg(ws, isNight);
   }
 
@@ -3195,16 +3405,58 @@ class ArgusPanel extends HTMLElement {
     const status = this.shadowRoot.getElementById('personalization-status');
     const background_mode = this.shadowRoot.getElementById('bg-mode-select-standalone')?.value || 'weather';
     const temperature_source = this.shadowRoot.getElementById('temp-source-select-standalone')?.value || 'auto';
+
+    let panel_bg_file = '';
+    const panel_bg_url = this.shadowRoot.getElementById('panel-bg-url-input')?.value || '';
+    if (panel_bg_url) {
+      panel_bg_file = panel_bg_url;
+    } else if (this._panelBgFile && this._panelBgFile.startsWith('data:')) {
+      panel_bg_file = this._panelBgFile;
+    }
+    const panel_bg_sound = Boolean(this.shadowRoot.getElementById('chk-panel-bg-sound')?.checked);
+
+    const hub_bg_mode = this.shadowRoot.getElementById('hub-bg-mode-select')?.value || 'none';
+    let hub_bg_file = '';
+    const hub_bg_url = this.shadowRoot.getElementById('hub-bg-url-input')?.value || '';
+    if (hub_bg_url) {
+      hub_bg_file = hub_bg_url;
+    } else if (this._hubBgFile && this._hubBgFile.startsWith('data:')) {
+      hub_bg_file = this._hubBgFile;
+    }
+    const hub_bg_sound = Boolean(this.shadowRoot.getElementById('chk-hub-bg-sound')?.checked);
+
     try {
       await this._send('argus/save_ui', { 
         home_name: this._homeName, 
         background_mode, 
         background_images: this._backgroundImages || [], 
-        temperature_source 
+        temperature_source,
+        panel_bg_file,
+        panel_bg_sound,
+        hub_bg_mode,
+        hub_bg_file,
+        hub_bg_sound
       });
-      this._backgroundMode = background_mode; this._temperatureSource = temperature_source;
-      this._ui = this._ui || {}; this._ui.background_mode = background_mode; this._ui.background_images = this._backgroundImages || []; this._ui.temperature_source = temperature_source;
+      this._backgroundMode = background_mode;
+      this._temperatureSource = temperature_source;
+      this._panelBgFile = panel_bg_file;
+      this._panelBgSound = panel_bg_sound;
+      this._hubBgMode = hub_bg_mode;
+      this._hubBgFile = hub_bg_file;
+      this._hubBgSound = hub_bg_sound;
+
+      this._ui = this._ui || {};
+      this._ui.background_mode = background_mode;
+      this._ui.background_images = this._backgroundImages || [];
+      this._ui.temperature_source = temperature_source;
+      this._ui.panel_bg_file = panel_bg_file;
+      this._ui.panel_bg_sound = panel_bg_sound;
+      this._ui.hub_bg_mode = hub_bg_mode;
+      this._ui.hub_bg_file = hub_bg_file;
+      this._ui.hub_bg_sound = hub_bg_sound;
+
       this._renderEntries();
+      this._updateCanvasBackground();
       
       const btn = this.shadowRoot.getElementById('btn-save-personalization-standalone');
       if (btn) {
