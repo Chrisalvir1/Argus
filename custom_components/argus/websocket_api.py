@@ -11,6 +11,7 @@ from homeassistant.helpers.dispatcher import async_dispatcher_send
 
 from .const import DOMAIN, SIGNAL_CONFIG_UPDATED
 from .storage import (
+    async_append_audit_log,
     async_get_audit_log,
     async_load_ui_data,
     async_save_ui_data,
@@ -157,6 +158,47 @@ async def ws_argus_save_ui(hass: HomeAssistant, connection, msg) -> None:
     for key in valid_keys:
         if key in msg:
             updates[key] = msg[key]
+            
+    if "users" in msg:
+        old_ui = await async_load_ui_data(hass)
+        old_users = old_ui.get("users", [])
+        new_users = msg["users"]
+        
+        # Get admin name
+        user_id = connection.context.user_id
+        admin_name = "Administrador"
+        if user_id:
+            try:
+                user = await hass.auth.async_get_user(user_id)
+                if user:
+                    admin_name = user.name
+            except Exception:
+                pass
+                
+        # Find added users
+        old_names = {u.get("name") for u in old_users if u.get("name")}
+        for u in new_users:
+            if u.get("name") and u.get("name") not in old_names:
+                role = "Administrador" if u.get("is_admin") else "Usuario"
+                exp = u.get("expiration_date")
+                exp_info = f" (Vence: {exp.replace('T', ' ')})" if exp else " (Indefinido)"
+                await async_append_audit_log(
+                    hass, 
+                    "user_added", 
+                    f"Usuario '{u.get('name')}' ({role}) agregado{exp_info}", 
+                    user=admin_name
+                )
+                
+        # Find deleted users
+        new_names = {u.get("name") for u in new_users if u.get("name")}
+        for u in old_users:
+            if u.get("name") and u.get("name") not in new_names:
+                await async_append_audit_log(
+                    hass, 
+                    "user_deleted", 
+                    f"Usuario '{u.get('name')}' eliminado", 
+                    user=admin_name
+                )
             
     saved = await async_save_ui_data(hass, updates)
     connection.send_result(msg["id"], {"saved": True, "ui": saved})

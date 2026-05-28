@@ -103,6 +103,12 @@ const TEXTS = {
     alarm_instance:'Instancia de Alarma',
     log_detail_armed:'Modo',
     log_detail_triggered:'Activación automática',
+    user_exp_type: 'Vencimiento',
+    user_exp_date: 'Fecha/Hora de Vencimiento',
+    exp_indefinite: 'Indefinido',
+    exp_temporary: 'Temporal (Fecha/Hora)',
+    expired: 'Expirado',
+    active_until: 'Vence',
   },
   en: {
     hero_desc:'Alarm control, modes, TTS and automations.',
@@ -177,6 +183,12 @@ const TEXTS = {
     alarm_instance:'Alarm Instance',
     log_detail_armed:'Mode',
     log_detail_triggered:'Automatic activation',
+    user_exp_type: 'Expiration',
+    user_exp_date: 'Expiration Date/Time',
+    exp_indefinite: 'Indefinite',
+    exp_temporary: 'Temporary (Date/Time)',
+    expired: 'Expired',
+    active_until: 'Expires',
   },
   fr: {
     hero_desc:"Sécurité intégrée, contrôle d'accès, automatisations et HomeKit.",
@@ -532,8 +544,8 @@ _tmpl.innerHTML = `
 
   /* Modern Premium Liquid Glass & iOS Wobble Styles */
   :host {
-    --glass-bg: var(--argus-glass-bg, rgba(255, 255, 255, 0.04));
-    --glass-border: var(--argus-glass-border, rgba(255, 255, 255, 0.07));
+    --glass-bg: var(--argus-glass-bg, rgba(255, 255, 255, 0.07));
+    --glass-border: var(--argus-glass-border, rgba(255, 255, 255, 0.09));
     --glass-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.35), 
                     0 15px 30px -10px rgba(0, 122, 255, 0.12),
                     inset 0 1px 0 rgba(255, 255, 255, 0.15);
@@ -573,12 +585,21 @@ _tmpl.innerHTML = `
 
   .liquid-glass { 
     background: var(--glass-bg); 
-    backdrop-filter: blur(30px) saturate(190%); 
-    -webkit-backdrop-filter: blur(30px) saturate(190%); 
+    backdrop-filter: blur(12px) saturate(120%); 
+    -webkit-backdrop-filter: blur(12px) saturate(120%); 
     border: 1px solid var(--glass-border); 
     box-shadow: var(--glass-shadow); 
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
   }
+  .wrap { transition: filter 0.35s ease, opacity 0.35s ease; }
+  .wrap.wrap-blurred { filter: blur(15px); opacity: 0.45; pointer-events: none; }
+  @keyframes dialElasticIn {
+    0% { transform: scale(0.8) translateY(20px); opacity: 0; }
+    60% { transform: scale(1.04) translateY(-4px); opacity: 0.9; }
+    85% { transform: scale(0.98) translateY(1px); opacity: 0.98; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+  }
+  .dial-elastic { animation: dialElasticIn 0.5s cubic-bezier(0.25, 1.25, 0.5, 1) forwards; }
   
   .collapsible {
     transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease, margin 0.4s ease, padding 0.4s ease;
@@ -641,7 +662,7 @@ _tmpl.innerHTML = `
   :host{display:block;min-height:100vh;box-sizing:border-box;color:var(--primary-text-color);background:var(--lovelace-background,var(--primary-background-color));font-family:'Outfit',Inter,system-ui,sans-serif}
   *{box-sizing:border-box}
   .wrap{max-width:1400px;margin:0 auto;padding:24px;display:grid;gap:24px}
-  .glass{background:rgba(255, 255, 255, 0.03);border:1px solid rgba(255, 255, 255, 0.08);border-radius:28px;box-shadow:var(--glass-shadow);backdrop-filter:blur(30px) saturate(1.8);-webkit-backdrop-filter:blur(30px) saturate(1.8)}
+  .glass{background:rgba(255, 255, 255, 0.06);border:1px solid rgba(255, 255, 255, 0.09);border-radius:28px;box-shadow:var(--glass-shadow);backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2)}
   .hero{padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));margin-bottom:12px}
   .hero-left{display:flex;align-items:center;gap:22px}
   .hero-icon{font-size:54px;line-height:1;filter:drop-shadow(0 0 20px rgba(255,255,255,0.15))}
@@ -866,15 +887,24 @@ _tmpl.innerHTML = `
   .modal-body{overflow:auto;padding:5px}
   .modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:15px}
   /* PIN modal */
-  .pm .modal{max-width:340px;min-height:unset;grid-template-rows:auto auto auto}
-  .pin-input{font-size:28px;letter-spacing:10px;text-align:center;padding:14px;border-radius:14px;border:2px solid var(--primary-color,#007aff);background:transparent;color:inherit;width:100%;outline:none}
+  .pm .modal{max-width:340px;min-height:unset;grid-template-rows:auto auto auto;background:rgba(22, 24, 38, 0.82) !important;backdrop-filter:blur(16px) saturate(140%) !important;-webkit-backdrop-filter:blur(16px) saturate(140%) !important;border:1px solid rgba(255, 255, 255, 0.12) !important;box-shadow:0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;border-radius:36px;padding:28px;display:flex;flex-direction:column;align-items:center;gap:16px}
+  :host([argus-dark-mode="false"]) .pm .modal{background:rgba(255, 255, 255, 0.85) !important;border:1px solid rgba(0, 0, 0, 0.08) !important;box-shadow:0 20px 50px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;color:#1d1d1f !important}
+  .pin-input{font-size:28px;letter-spacing:10px;text-align:center;padding:12px;border-radius:16px;border:none;background:rgba(255,255,255,0.02);color:inherit;width:100%;outline:none;box-shadow:inset 0 1px 3px rgba(0,0,0,0.2)}
+  :host([argus-dark-mode="false"]) .pin-input{background:rgba(0,0,0,0.03)}
   .pin-error{color:var(--error-color,#e53935);font-size:13px;min-height:18px;text-align:center}
-  .pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
-  .pin-key{border:1px solid rgba(255, 255, 255, 0.08);background:rgba(255, 255, 255, 0.04);color:var(--primary-text-color);padding:14px 0;border-radius:18px;font-size:22px;font-weight:800;min-height:56px;transition:background 0.2s, transform 0.15s;}
-  .pin-key:hover{background:rgba(255, 255, 255, 0.1)}
-  .pin-key:active{transform:scale(0.92)}
-  .pin-key.action{font-size:18px}
-  .pin-pad-spacer{display:block}
+  .pin-grid{display:grid;grid-template-columns:repeat(3,68px);gap:16px;justify-content:center;margin-top:10px}
+  .pin-btn-round{width:68px;height:68px;border-radius:50% !important;border:1px solid rgba(255,255,255,0.1) !important;background:rgba(255,255,255,0.04) !important;color:#fff !important;font-size:24px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.2s, transform 0.15s, border-color 0.2s;box-shadow:0 4px 10px rgba(0,0,0,0.15);padding:0 !important;outline:none}
+  .pin-btn-round:hover{background:rgba(255,255,255,0.12) !important;border-color:rgba(255,255,255,0.2) !important}
+  .pin-btn-round:active{transform:scale(0.92) !important;background:rgba(255,255,255,0.2) !important}
+  :host([argus-dark-mode="false"]) .pin-btn-round{background:rgba(0,0,0,0.03) !important;border-color:rgba(0,0,0,0.08) !important;color:#1d1d1f !important}
+  :host([argus-dark-mode="false"]) .pin-btn-round:hover{background:rgba(0,0,0,0.08) !important}
+  .pin-btn-round.action-key{font-size:12px;font-weight:700;letter-spacing:0.3px;text-transform:uppercase;border-color:transparent !important;background:transparent !important;box-shadow:none}
+  .pin-btn-round.action-key:hover{background:rgba(255,255,255,0.05) !important}
+  :host([argus-dark-mode="false"]) .pin-btn-round.action-key:hover{background:rgba(0,0,0,0.04) !important}
+  .pin-btn-round.action-key.enter-key{color:#34c759 !important}
+  :host([argus-dark-mode="false"]) .pin-btn-round.action-key.enter-key{color:#28a745 !important}
+  .pin-btn-round.action-key.delete-key{color:#ff3b30 !important}
+  :host([argus-dark-mode="false"]) .pin-btn-round.action-key.delete-key{color:#dc3545 !important}
   /* User card */
   .user-card{display:flex;align-items:center;justify-content:space-between;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);box-shadow:0 4px 10px rgba(0,0,0,0.08)}
   .user-badge{display:inline-block;padding:3px 9px;border-radius:8px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;background:rgba(0,122,255,.12);color:var(--primary-color,#007aff)}
@@ -1000,8 +1030,8 @@ _tmpl.innerHTML = `
   padding:7px 14px; border-radius:999px;
   background:rgba(255,255,255,0.10);
   border:1px solid rgba(255,255,255,0.18);
-  backdrop-filter:blur(20px) saturate(180%);
-  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  backdrop-filter:blur(12px) saturate(120%);
+  -webkit-backdrop-filter:blur(12px) saturate(120%);
   color:#fff; font-size:13px; font-weight:700;
   cursor:pointer; transition:all 0.22s cubic-bezier(0.4,0,0.2,1);
   box-shadow:0 4px 16px rgba(0,0,0,0.18);
@@ -1014,15 +1044,15 @@ _tmpl.innerHTML = `
 :host([argus-dark-mode="false"]) .lang-pill:hover { background:rgba(0,0,0,0.12); }
 
 /* Language modal */
-.lang-modal-back { position:fixed; inset:0; background:rgba(0,0,0,0.55); display:none; align-items:center; justify-content:center; z-index:999998; backdrop-filter:blur(10px); }
+.lang-modal-back { position:fixed; inset:0; background:rgba(0,0,0,0.55); display:none; align-items:center; justify-content:center; z-index:999998; backdrop-filter:blur(4px); }
 .lang-modal-back.open { display:flex; }
 .lang-modal-card {
   width:min(400px,92vw); border-radius:28px; padding:28px 24px 20px;
   background:rgba(20,22,35,0.92);
   border:1px solid rgba(255,255,255,0.14);
   box-shadow:0 32px 80px rgba(0,0,0,0.55);
-  backdrop-filter:blur(28px) saturate(170%);
-  -webkit-backdrop-filter:blur(28px) saturate(170%);
+  backdrop-filter:blur(12px) saturate(120%);
+  -webkit-backdrop-filter:blur(12px) saturate(120%);
   color:#fff;
   animation: langBounceIn 0.38s cubic-bezier(0.175,0.885,0.32,1.275) forwards;
 }
@@ -1186,6 +1216,17 @@ _tmpl.innerHTML = `
               <div class="field-group"><label id="l-username"></label><input type="text" id="new-user-name" autocomplete="off"></div>
               <div class="field-group"><label id="l-user-pin"></label><input type="password" id="new-user-pin" inputmode="numeric" pattern="[0-9]*"></div>
               <label id="l-is-admin" class="checkbox-label" style="margin-top:10px;display:flex;align-items:center;gap:10px"><input type="checkbox" id="new-user-admin"> <span id="s-is-admin"></span></label>
+              <div class="field-group" style="margin-top:10px">
+                <label id="l-user-exp-type">Vencimiento</label>
+                <select id="new-user-exp-type" style="margin-top:4px">
+                  <option value="indefinite" id="opt-exp-indefinite">Indefinido</option>
+                  <option value="temporary" id="opt-exp-temporary">Temporal (Fecha/Hora)</option>
+                </select>
+              </div>
+              <div class="field-group collapsible collapsed" id="group-new-user-exp" style="margin-top:10px">
+                <label id="l-user-exp-date">Fecha/Hora de Vencimiento</label>
+                <input type="datetime-local" id="new-user-exp-date" style="margin-top:4px">
+              </div>
               <div class="save-row" style="margin-top:15px"><button class="primary" id="btn-save-user" style="width:100%"></button></div>
             </div>
           </div>
@@ -1308,30 +1349,30 @@ _tmpl.innerHTML = `
 <!-- PIN modal -->
 <div class="modal-back pm" id="pin-modal" aria-hidden="true">
   <div class="modal">
-    <div class="modal-head"><h3 id="l-introduce-pin">🔒</h3><button class="ghost" id="pin-close">✕</button></div>
-    <div style="display:grid;gap:10px">
-      <p id="l-pin-modal-desc" class="small" style="text-align:center;margin:0"></p>
-      <input id="pin-input" class="pin-input" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="••••" autocomplete="off" maxlength="8">
-      <div class="pin-pad" id="pin-pad">
-        <button class="pin-key" type="button" data-pin-digit="1">1</button>
-        <button class="pin-key" type="button" data-pin-digit="2">2</button>
-        <button class="pin-key" type="button" data-pin-digit="3">3</button>
-        <button class="pin-key" type="button" data-pin-digit="4">4</button>
-        <button class="pin-key" type="button" data-pin-digit="5">5</button>
-        <button class="pin-key" type="button" data-pin-digit="6">6</button>
-        <button class="pin-key" type="button" data-pin-digit="7">7</button>
-        <button class="pin-key" type="button" data-pin-digit="8">8</button>
-        <button class="pin-key" type="button" data-pin-digit="9">9</button>
-        <span class="pin-pad-spacer" aria-hidden="true"></span>
-        <button class="pin-key" type="button" data-pin-digit="0">0</button>
-        <button class="pin-key action" type="button" id="pin-backspace">⌫</button>
+    <div class="modal-head">
+      <h3 id="l-introduce-pin">🔒</h3>
+      <button class="ghost" id="pin-close" style="background:transparent; border:none; color:inherit; font-size:20px; cursor:pointer; padding:4px 8px;">✕</button>
+    </div>
+    <div style="display:grid;gap:10px;width:100%">
+      <p id="l-pin-modal-desc" class="small" style="text-align:center;margin:0;opacity:0.75"></p>
+      <input id="pin-input" class="pin-input" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="••••" autocomplete="off" maxlength="8" readonly>
+      <div class="pin-grid" id="pin-pad">
+        <button class="pin-btn-round" type="button" data-pin-digit="1">1</button>
+        <button class="pin-btn-round" type="button" data-pin-digit="2">2</button>
+        <button class="pin-btn-round" type="button" data-pin-digit="3">3</button>
+        <button class="pin-btn-round" type="button" data-pin-digit="4">4</button>
+        <button class="pin-btn-round" type="button" data-pin-digit="5">5</button>
+        <button class="pin-btn-round" type="button" data-pin-digit="6">6</button>
+        <button class="pin-btn-round" type="button" data-pin-digit="7">7</button>
+        <button class="pin-btn-round" type="button" data-pin-digit="8">8</button>
+        <button class="pin-btn-round" type="button" data-pin-digit="9">9</button>
+        <button class="pin-btn-round action-key delete-key" type="button" id="pin-backspace">Borrar</button>
+        <button class="pin-btn-round" type="button" data-pin-digit="0">0</button>
+        <button class="pin-btn-round action-key enter-key" type="button" id="pin-confirm">Enter</button>
       </div>
       <div id="pin-error" class="pin-error"></div>
     </div>
-    <div class="modal-footer">
-      <button class="ghost" id="pin-cancel"></button>
-      <button class="primary" id="pin-confirm"></button>
-    </div>
+    <button id="pin-cancel" style="display:none"></button>
   </div>
 </div>
 `;
@@ -1526,6 +1567,10 @@ class ArgusPanel extends HTMLElement {
     set('l-username',     t('username'));
     set('l-user-pin',     t('user_pin'));
     set('s-is-admin',     t('is_admin'));
+    set('l-user-exp-type', t('user_exp_type'));
+    set('l-user-exp-date', t('user_exp_date'));
+    const optInd = s('opt-exp-indefinite'); if (optInd) optInd.textContent = t('exp_indefinite');
+    const optTemp = s('opt-exp-temporary'); if (optTemp) optTemp.textContent = t('exp_temporary');
     set('h-homekit',      t('homekit_title'));
     set('selector-select-all',   t('select_all'));
     set('selector-deselect-all', t('deselect_all'));
@@ -1837,6 +1882,14 @@ class ArgusPanel extends HTMLElement {
     s('btn-add-notif')?.addEventListener('click', () => this._addNotifTarget());
     s('btn-save-notif')?.addEventListener('click', () => this._saveNotifications());
     s('btn-save-user').addEventListener('click', () => this._saveUser());
+    s('new-user-exp-type')?.addEventListener('change', e => {
+      const group = this.shadowRoot.getElementById('group-new-user-exp');
+      if (e.target.value === 'temporary') {
+        group?.classList.remove('collapsed');
+      } else {
+        group?.classList.add('collapsed');
+      }
+    });
 
     // Home name edit (requires PIN)
     s('btn-edit-home-name-standalone')?.addEventListener('click', () => this._editHomeName());
@@ -2633,7 +2686,7 @@ class ArgusPanel extends HTMLElement {
             </div>
           </div>
           <label class="checkbox-label" style="display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05)">
-            <input type="checkbox" id="mode-mqtt-enabled" ${cfg.mqtt_enabled !== false ? 'checked' : ''}>
+            <input type="checkbox" id="mode-mqtt-enabled" ${cfg.mqtt_enabled === true ? 'checked' : ''}>
             <span style="font-size:12px;font-weight:600">${this._t('mqtt_label')}</span>
           </label>
         </div>
@@ -2879,22 +2932,47 @@ class ArgusPanel extends HTMLElement {
       el.innerHTML = `<div class="small">${this._t('no_users')}</div>`;
       return;
     }
-    el.innerHTML = this._users.map((u, i) => `
-      <div class="user-card">
-        <div>
-          <div style="font-weight:700">${u.name}</div>
-          <span class="user-badge ${u.is_admin ? 'admin' : ''}">${u.is_admin ? '⭐ Admin' : '👤 User'}</span>
+    el.innerHTML = this._users.map((u, i) => {
+      const isExpired = u.expiration_date && new Date(u.expiration_date) < new Date();
+      const expBadge = u.expiration_date 
+        ? (isExpired 
+          ? `<span class="user-badge admin" style="background:rgba(229,57,53,0.12);color:#e53935;margin-left:5px">❌ ${this._t('expired')} (${u.expiration_date.replace('T', ' ')})</span>`
+          : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">⏳ ${this._t('active_until')}: ${u.expiration_date.replace('T', ' ')}</span>`)
+        : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">♾️ ${this._t('exp_indefinite')}</span>`;
+
+      return `
+      <div class="user-card" style="display:flex;flex-direction:column;align-items:stretch;gap:8px">
+        <div style="display:flex;justify-content:between;align-items:center;width:100%">
+          <div style="flex:1">
+            <div style="font-weight:700">${u.name}</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
+              <span class="user-badge ${u.is_admin ? 'admin' : ''}">${u.is_admin ? '⭐ Admin' : '👤 User'}</span>
+              ${expBadge}
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            ${this._isAdmin ? `<span class="small" style="font-family:monospace">PIN: ${u.pin || '—'}</span>
+            <button class="danger" style="padding:5px 10px" data-user-del="${i}">🗑</button>` : ''}
+          </div>
         </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          ${this._isAdmin ? `<span class="small">PIN: ${u.pin || '—'}</span>
-          <button class="danger" style="padding:5px 10px" data-user-del="${i}">🗑</button>` : ''}
-        </div>
-      </div>`).join('');
+      </div>`;
+    }).join('');
+
     if (this._isAdmin) {
       el.querySelectorAll('[data-user-del]').forEach(btn =>
-        btn.addEventListener('click', () => {
-          this._users.splice(Number(btn.dataset.userDel), 1);
-          this._renderUsers();
+        btn.addEventListener('click', async () => {
+          const idx = Number(btn.dataset.userDel);
+          this._users.splice(idx, 1);
+          try {
+            const resp = await this._send('argus/save_ui', { users: this._users });
+            if (resp && resp.ui) {
+              this._ui = resp.ui;
+            }
+            this._renderUsers();
+            this._renderActivityLog();
+          } catch (e) {
+            alert('Error: ' + e.message);
+          }
         })
       );
     }
@@ -2911,16 +2989,30 @@ class ArgusPanel extends HTMLElement {
     const name = this.shadowRoot.getElementById('new-user-name').value.trim();
     const pin  = this.shadowRoot.getElementById('new-user-pin').value.trim();
     const isAdmin = this.shadowRoot.getElementById('new-user-admin').checked;
+    const expType = this.shadowRoot.getElementById('new-user-exp-type').value;
+    const expDate = expType === 'temporary' ? this.shadowRoot.getElementById('new-user-exp-date').value : '';
     const status = this.shadowRoot.getElementById('user-status');
     if (!name || !pin) { status.textContent = 'Nombre y PIN requeridos'; status.className = 'status err'; return; }
-    this._users.push({ name, pin, is_admin: isAdmin });
+    
+    this._users.push({ name, pin, is_admin: isAdmin, expiration_date: expDate });
     try {
-      await this._send('argus/save_ui', { users: this._users });
+      const resp = await this._send('argus/save_ui', { users: this._users });
+      if (resp && resp.ui) {
+        this._ui = resp.ui;
+      }
       this.shadowRoot.getElementById('new-user-name').value = '';
       this.shadowRoot.getElementById('new-user-pin').value = '';
       this.shadowRoot.getElementById('new-user-admin').checked = false;
+      if (this.shadowRoot.getElementById('new-user-exp-type')) {
+        this.shadowRoot.getElementById('new-user-exp-type').value = 'indefinite';
+      }
+      if (this.shadowRoot.getElementById('new-user-exp-date')) {
+        this.shadowRoot.getElementById('new-user-exp-date').value = '';
+        this.shadowRoot.getElementById('group-new-user-exp')?.classList.add('collapsed');
+      }
       status.textContent = '✓'; status.className = 'status ok';
       this._renderUsers();
+      this._renderActivityLog();
     } catch (e) { status.textContent = e.message; status.className = 'status err'; }
   }
 
@@ -3212,15 +3304,44 @@ class ArgusPanel extends HTMLElement {
     const m = this.shadowRoot.getElementById('pin-modal');
     const inp = this.shadowRoot.getElementById('pin-input');
     const err = this.shadowRoot.getElementById('pin-error');
+    const wrap = this.shadowRoot.querySelector('.wrap');
     inp.value = ''; if (err) err.textContent = '';
     this._pinCallback = onConfirm;
+
+    // Check if in fullscreen
+    const isFS = this.shadowRoot.querySelector('.entry.ios-fullscreen') !== null;
+
+    if (isFS) {
+      m.style.background = 'rgba(0, 0, 0, 0.55)';
+      m.style.backdropFilter = 'none';
+      m.style.webkitBackdropFilter = 'none';
+      const modalBox = m.querySelector('.modal');
+      if (modalBox) {
+        modalBox.classList.remove('dial-elastic');
+        void modalBox.offsetWidth; // force reflow
+        modalBox.classList.add('dial-elastic');
+      }
+    } else {
+      m.style.background = 'rgba(0, 0, 0, 0.3)';
+      m.style.backdropFilter = 'none';
+      m.style.webkitBackdropFilter = 'none';
+      if (wrap) {
+        wrap.classList.add('wrap-blurred');
+      }
+    }
+
     m.classList.add('open'); m.setAttribute('aria-hidden', 'false');
     setTimeout(() => inp.focus(), 60);
   }
 
   _closePinModal() {
-    this.shadowRoot.getElementById('pin-modal').classList.remove('open');
-    this.shadowRoot.getElementById('pin-modal').setAttribute('aria-hidden', 'true');
+    const m = this.shadowRoot.getElementById('pin-modal');
+    m.classList.remove('open');
+    m.setAttribute('aria-hidden', 'true');
+    const wrap = this.shadowRoot.querySelector('.wrap');
+    if (wrap) {
+      wrap.classList.remove('wrap-blurred');
+    }
     this._pinCallback = null;
   }
 

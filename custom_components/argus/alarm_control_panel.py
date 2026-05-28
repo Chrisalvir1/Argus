@@ -411,7 +411,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self._smart_arming_suggested = False
 
     async def _async_reload_config(self) -> None:
-        """Reload UI config and re-subscribe sensors after panel saves mode config."""
+        """Reload UI config, re-subscribe sensors, and update MQTT subscriptions after panel saves configuration."""
         self._ui_config = await async_load_ui_data(self.hass)
         # Re-subscribe sensors (picks up newly added/removed sensors from UI)
         if self._unsub_sensors:
@@ -422,6 +422,19 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self._unsub_sensors = async_track_state_change_event(
                 self.hass, all_sensors, self._async_sensor_changed
             )
+
+        # Update MQTT status dynamically on config reload
+        global_mqtt = self._get_mode_val(None, "mqtt_enabled", self._mqtt_enabled)
+        any_mode_mqtt = any(self._get_mode_val(m, "mqtt_enabled", False) for m in ["home", "away", "night", "vacation"])
+        should_mqtt = global_mqtt or any_mode_mqtt
+
+        if should_mqtt and not self._mqtt_unsub:
+            await self._async_setup_mqtt()
+        elif not should_mqtt and self._mqtt_unsub:
+            self._mqtt_unsub()
+            self._mqtt_unsub = None
+            _LOGGER.info("Argus: MQTT unsubscribed due to configuration reload")
+
         _LOGGER.info(
             "Argus: Config reloaded — monitoreando %d sensores: %s",
             len(all_sensors), all_sensors
@@ -846,7 +859,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     # ── Arm / Disarm ───────────────────────────────────────────────
     def _validate_code(self, code) -> bool:
-        """Validate code against main PIN and optional guest PIN."""
+        """Validate code against main PIN, guest PIN, and dynamic users."""
         if self._code is None:
             return True
         if str(code) == str(self._code):
@@ -856,6 +869,23 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         if adv.get("guest_code_enabled") and adv.get("guest_code"):
             if str(code) == str(adv["guest_code"]):
                 return True
+        # Check dynamic users
+        users = self._ui_config.get("users", [])
+        for u in users:
+            if u.get("pin") and str(code) == str(u.get("pin")):
+                # Check expiration
+                exp_date = u.get("expiration_date")
+                if exp_date:
+                    from datetime import datetime
+                    try:
+                        dt = datetime.fromisoformat(exp_date)
+                        if datetime.now() > dt:
+                            _LOGGER.warning("Argus: User code for %s is expired", u.get("name"))
+                            continue
+                    except Exception as e:
+                        _LOGGER.error("Argus: Error parsing user %s expiration %s: %s", u.get("name"), exp_date, e)
+                        continue
+                return True
         return False
 
     async def async_alarm_disarm(self, code=None) -> None:
@@ -864,6 +894,26 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             _LOGGER.warning("Argus: Disarm rejected — invalid code")
             await async_append_audit_log(self.hass, "disarm_rejected", "Invalid code", user="Argus")
             return
+
+        # Find which user code matches
+        caller_name = None
+        if code:
+            if str(code) == str(self._code):
+                caller_name = "Master Admin"
+            else:
+                adv = self._ui_config.get("advanced", {})
+                if adv.get("guest_code_enabled") and adv.get("guest_code") and str(code) == str(adv["guest_code"]):
+                    caller_name = "Invitado"
+                else:
+                    users = self._ui_config.get("users", [])
+                    for u in users:
+                        if u.get("pin") and str(code) == str(u.get("pin")):
+                            caller_name = u.get("name")
+                            break
+
+        if not caller_name:
+            caller_name = await self._get_context_user()
+
         self._cancel_timers()
         await self._async_siren(False)
         self._triggered_mode = None
@@ -873,8 +923,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self.async_write_ha_state()
         await self._async_mqtt_publish()
         self.hass.async_create_task(self._evaluate_automations("disarmed"))
-        await async_append_audit_log(self.hass, "disarmed", "Sistema desarmado", user=await self._get_context_user())
-        _LOGGER.info("Argus: Disarmed")
+        await async_append_audit_log(self.hass, "disarmed", f"Sistema desarmado por {caller_name}", user=caller_name)
+        _LOGGER.info("Argus: Disarmed by %s", caller_name)
 
     async def _async_arm(self, target: AlarmControlPanelState, code=None) -> None:
         import time as _time

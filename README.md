@@ -5,7 +5,7 @@
 
   **El Sistema de Seguridad Premium para Home Assistant**
 
-  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.1.34-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
+  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.1.35-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
   [![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)](https://www.home-assistant.io/)
   [![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)](https://hacs.xyz/)
   [![GitHub stars](https://img.shields.io/github/stars/Chrisalvir1/Argus?style=social)](https://github.com/Chrisalvir1/Argus/stargazers)
@@ -21,15 +21,17 @@
 
 ---
 
-## ✨ Novedades y Correcciones Críticas (v1.1.34)
+## ✨ Novedades y Correcciones Críticas (v1.1.35)
 
-¡Simplificación del asistente de instalación inicial!
+¡Mejoras de seguridad, control de acceso y cristal líquido!
 
 **Cambios:**
-- **Instalación en un Paso (v1.1.34)**: Se eliminaron los pasos secuenciales de configuración de sensores y MQTT del asistente inicial de Home Assistant. Ahora solo se requiere confirmar el nombre del dispositivo para completar la instalación en un solo click. Toda la configuración se realiza cómodamente desde el panel web de ajustes de Argus.
-- **Rediseño Liquid Glass Premium (v1.1.33)**: Nueva interfaz ultra-lúcida con efectos de desenfoque incrementados, sombras ambientales con tintes de color y micro-animaciones físicas en clics de botones.
-- **Transición de Pestañas de Modo Elástica (v1.1.33)**: Indicador de burbuja líquida estilo iOS con deslizamiento y cambio de color adaptativo elástico al alternar los modos.
-- **Formularios Colapsables Fluidos (v1.1.33)**: Animaciones suaves de apertura/cierre de formularios para configuraciones de usuarios y PIN.
+- **Desenfoque Optimizado (v1.1.35)**: Atenuado el desenfoque Liquid Glass a 12px y saturación a 120% para asegurar legibilidad nítida y contraste del texto sobre el cristal.
+- **Teclado de Desarmado Circular (v1.1.35)**: Nuevo PIN dial iOS-style con botones redondos, botones de "Borrar" y "Enter" integrados en la rejilla, y close '✕' en la cabecera. Soporta difuminado inteligente de fondo en pantalla normal y rebote elástico en pantalla completa.
+- **Gestión de Vencimiento de Usuarios (v1.1.35)**: Añadido soporte de expiración (temporal con fecha/hora o indefinido) para usuarios dinámicos y persistencia robusta de borrado en base de datos.
+- **Auditoría de Administradores (v1.1.35)**: Registro automático en el historial de qué administrador agregó/eliminó a un usuario, y qué usuario específico desarmó el sistema con su PIN.
+- **MQTT Dinámico (v1.1.35)**: Suscripción y cancelación automática en caliente de temas MQTT sin necesidad de reiniciar la integración.
+- **Instalación en un Paso (v1.1.34)**: Se eliminaron los pasos secuenciales de configuración de sensores y MQTT del asistente inicial de Home Assistant. Toda la configuración se realiza cómodamente desde el panel web de ajustes de Argus.
 - **Correcciones de i18n (v1.1.33)**: Localización completa al cambiar de idioma de todos los textos y botones fijos (modales de SOS, nombre de hogar, idioma).
 - **Compatibilidad con HomeKit (v1.1.32)**: Se aplicó un parche para solucionar problemas de sincronización de estado y validación de códigos de seguridad en cadenas vacías con HomeKit.
 - **Restauración de Estabilidad (v1.1.31)**: Reversión al núcleo estable de la v1.1.10, removiendo las funciones experimentales de simulacro y trigger para asegurar el correcto funcionamiento de los botones de armado.
