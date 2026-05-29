@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.2.2
+ * Argus Home Hub – v1.3.0
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -90,6 +90,7 @@ const TEXTS = {
     home_name_label:'Nombre del Hogar', home_name_placeholder:'Mi Casa',
     clear_log_btn:'BORRAR',
     bg_weather:'Clima animado', bg_none:'Predeterminado', bg_panel_none:'Sin fondo', bg_photo:'Una foto', bg_collage:'Collage', bg_video:'Video en loop', bg_panel_title:'Fondo para panel', bg_hub_title:'Fondo Argus', bg_sound_opt:'Sonido de video', bg_image_opt:'Imagen / GIF', bg_hub_default:'Predeterminado (Argus)',
+    forgot_pin:'¿Olvidaste tu PIN?', pin_reset_admin_only:'❌ Error: Solo los administradores de Home Assistant pueden restablecer el PIN maestro.', pin_reset_confirm:'¿Estás seguro de que deseas restablecer el PIN maestro? Se eliminará el PIN actual y se desactivará.',
     temp_auto:'Automático (sensor local / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Batería baja',
     times_section:'⏱️ Tiempos', arm_time:'Armado (s)', disarm_time:'Desarmado (s)',
     save_config:'GUARDAR CONFIGURACIÓN', never_triggered:'Nunca activada',
@@ -171,6 +172,7 @@ const TEXTS = {
     home_name_label:'Home Name', home_name_placeholder:'My Home',
     clear_log_btn:'CLEAR',
     bg_weather:'Animated weather', bg_none:'Default', bg_panel_none:'No background', bg_photo:'One photo', bg_collage:'Collage', bg_video:'Loop video', bg_panel_title:'Panel background', bg_hub_title:'Argus background', bg_sound_opt:'Video sound', bg_image_opt:'Image / GIF', bg_hub_default:'Default (Argus)',
+    forgot_pin:'Forgot PIN?', pin_reset_admin_only:'❌ Error: Only Home Assistant administrators can reset the master PIN.', pin_reset_confirm:'Are you sure you want to reset the master PIN? The current PIN will be removed and deactivated.',
     temp_auto:'Automatic (local sensor / thermostat / climate)', temp_thermostat:'(thermostat)', battery_low:'⚠️ Low Battery',
     times_section:'⏱️ Times', arm_time:'Arming (s)', disarm_time:'Entry delay (s)',
     save_config:'SAVE CONFIGURATION', never_triggered:'Never triggered',
@@ -250,6 +252,7 @@ const TEXTS = {
     home_name_label:'Nom du domicile', home_name_placeholder:'Ma maison',
     clear_log_btn:'EFFACER',
     bg_weather:'Météo animée', bg_none:'Par défaut', bg_panel_none:'Sans fond', bg_photo:'Une photo', bg_collage:'Collage', bg_video:'Vidéo en boucle', bg_panel_title:'Fond du panneau', bg_hub_title:'Fond Argus', bg_sound_opt:'Son de la vidéo', bg_image_opt:'Image / GIF', bg_hub_default:'Par défaut (Argus)',
+    forgot_pin:'PIN oublié ?', pin_reset_admin_only:'❌ Erreur : Seuls les administrateurs de Home Assistant peuvent réinitialiser le PIN maître.', pin_reset_confirm:'Êtes-vous sûr de vouloir réinitialiser le PIN maître ? Le PIN actuel sera supprimé et désactivé.',
     temp_auto:'Automatique (capteur local / thermostat / climat)', temp_thermostat:'(thermostat)', battery_low:'⚠️ Batterie faible',
     times_section:'⏱️ Temps', arm_time:'Armé (s)', disarm_time:'Délai entrée (s)',
     save_config:'ENREGISTRER LA CONFIGURATION', never_triggered:'Jamais déclenché',
@@ -320,6 +323,7 @@ const TEXTS = {
     home_name_label:'Nome do lar', home_name_placeholder:'Minha Casa',
     clear_log_btn:'LIMPAR',
     bg_weather:'Clima animado', bg_none:'Padrão', bg_panel_none:'Sem fundo', bg_photo:'Uma foto', bg_collage:'Colagem', bg_video:'Vídeo em loop', bg_panel_title:'Fundo do painel', bg_hub_title:'Fundo Argus', bg_sound_opt:'Som do vídeo', bg_image_opt:'Imagem / GIF', bg_hub_default:'Padrão (Argus)',
+    forgot_pin:'Esqueceu o PIN?', pin_reset_admin_only:'❌ Erro: Apenas administradores do Home Assistant podem redefinir o PIN mestre.', pin_reset_confirm:'Tem certeza que deseja redefinir o PIN mestre? O PIN atual será removido e desativado.',
     temp_auto:'Automático (sensor local / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Bateria fraca',
     times_section:'⏱️ Tempos', arm_time:'Armado (s)', disarm_time:'Atraso de entrada (s)',
     save_config:'SALVAR CONFIGURAÇÃO', never_triggered:'Nunca ativado',
@@ -390,6 +394,7 @@ const TEXTS = {
     home_name_label:'Nome della casa', home_name_placeholder:'Casa mia',
     clear_log_btn:'CANCELLA',
     bg_weather:'Meteo animato', bg_none:'Predefinito', bg_panel_none:'Nessuno sfondo', bg_photo:'Una foto', bg_collage:'Collage', bg_video:'Video in loop', bg_panel_title:'Sfondo pannello', bg_hub_title:'Sfondo Argus', bg_sound_opt:'Audio video', bg_image_opt:'Immagine / GIF', bg_hub_default:'Predefinito (Argus)',
+    forgot_pin:'PIN dimenticato?', pin_reset_admin_only:'❌ Errore: Solo gli amministratori di Home Assistant possono reimpostare el PIN principale.', pin_reset_confirm:'Sei sicuro di voler reimpostare il PIN principale? Il PIN attuale verrà rimosso e disattivato.',
     temp_auto:'Automatico (sensore locale / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Batteria scarica',
     times_section:'⏱️ Tempi', arm_time:'Armato (s)', disarm_time:'Ritardo entrata (s)',
     save_config:'SALVA CONFIGURAZIONE', never_triggered:'Mai attivato',
@@ -460,6 +465,7 @@ const TEXTS = {
     home_name_label:'家庭名称', home_name_placeholder:'我的家',
     clear_log_btn:'清除',
     bg_weather:'动画天气', bg_none:'默认', bg_panel_none:'无背景', bg_photo:'单张照片', bg_collage:'拼贴画', bg_video:'循环视频', bg_panel_title:'面板背景', bg_hub_title:'Argus 背景', bg_sound_opt:'视频声音', bg_image_opt:'图片 / GIF', bg_hub_default:'默认 (Argus)',
+    forgot_pin:'忘记PIN码？', pin_reset_admin_only:'❌ 错误：只有 Home Assistant 管理员可以重置主 PIN 码。', pin_reset_confirm:'您确定要重置主 PIN 码吗？当前的 PIN 码将被删除并停用。',
     temp_auto:'自动（本地传感器 / 恒温器 / 气候）', temp_thermostat:'(恒温器)', battery_low:'⚠️ 电池不足',
     times_section:'⏱️ 时间', arm_time:'布防延迟(s)', disarm_time:'进入延迟(s)',
     save_config:'保存配置', never_triggered:'从未触发',
@@ -530,6 +536,7 @@ const TEXTS = {
     home_name_label:'Название дома', home_name_placeholder:'Мой дом',
     clear_log_btn:'ОЧИСТИТЬ',
     bg_weather:'Анимированная погода', bg_none:'По умолчанию', bg_panel_none:'Без фона', bg_photo:'Одно фото', bg_collage:'Коллаж', bg_video:'Зацикленное видео', bg_panel_title:'Фон панели', bg_hub_title:'Фон Argus', bg_sound_opt:'Звук видео', bg_image_opt:'Изображение / GIF', bg_hub_default:'По умолчанию (Argus)',
+    forgot_pin:'Забыли PIN?', pin_reset_admin_only:'❌ Ошибка: Только администраторы Home Assistant могут сбросить мастер-PIN.', pin_reset_confirm:'Вы уверены, что хотите сбросить мастер-PIN? Текущий PIN-код будет удален и отключен.',
     temp_auto:'Авто (лок. датчик / термостат / климат)', temp_thermostat:'(термостат)', battery_low:'⚠️ Низкий заряд',
     times_section:'⏱️ Времена', arm_time:'Постановка (s)', disarm_time:'Задержка входа (s)',
     save_config:'СОХРАНИТЬ КОНФИГУРАЦИЮ', never_triggered:'Никогда не срабатывало',
@@ -1540,7 +1547,10 @@ _tmpl.innerHTML = `
             <div class="subsection">
               <div id="current-pin-display" style="font-size:13px;font-weight:800;color:var(--primary-color);margin-bottom:15px;background:rgba(3,169,244,0.1);padding:8px 12px;border-radius:10px;display:inline-block"></div>
               <div class="field-group collapsible collapsed" id="group-current-pin" style="margin-bottom: 12px">
-                 <label id="l-current-pin-lbl"></label>
+                 <div style="display:flex; justify-content:space-between; align-items:center;">
+                   <label id="l-current-pin-lbl"></label>
+                   <a href="#" id="lnk-forgot-pin" style="font-size:11px; color:var(--accent-color, #ff4081); text-decoration:none; font-weight:bold; margin-bottom:4px; display:none;"></a>
+                 </div>
                  <input type="password" id="current-pin" inputmode="numeric" pattern="[0-9]*">
               </div>
               <p class="small" id="p-pin-remove-hint" style="margin:0 0 10px 0; color:var(--primary-color); font-weight:700">Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.</p>
@@ -1675,6 +1685,9 @@ _tmpl.innerHTML = `
         <button class="pin-btn-round action-key enter-key" type="button" id="pin-confirm">Enter</button>
       </div>
       <div id="pin-error" class="pin-error"></div>
+      <div style="text-align:center; margin-top: 5px;">
+        <a href="#" id="pin-forgot-link" style="font-size:12px; color:var(--accent-color, #ff4081); text-decoration:none; font-weight:700; display:none;"></a>
+      </div>
     </div>
     <button id="pin-cancel" style="display:none"></button>
   </div>
@@ -1969,6 +1982,8 @@ class ArgusPanel extends HTMLElement {
     set('h-activity-log', t('activity_log'));
     set('t-change-pin',   t('change_pin'));
     set('l-current-pin-lbl', t('current_pin'));
+    set('lnk-forgot-pin', t('forgot_pin'));
+    set('pin-forgot-link', t('forgot_pin'));
     set('btn-save-pin',   t('update_pin'));
     set('l-new-pin',      t('new_pin'));
     set('l-confirm-pin',  t('confirm_pin'));
@@ -2326,6 +2341,8 @@ class ArgusPanel extends HTMLElement {
       window.dispatchEvent(new CustomEvent('location-changed'));
     });
     s('btn-save-pin').addEventListener('click', () => this._savePin());
+    s('lnk-forgot-pin')?.addEventListener('click', e => { e.preventDefault(); this._handleForgotPin(); });
+    s('pin-forgot-link')?.addEventListener('click', e => { e.preventDefault(); this._handleForgotPin(); });
 
     s('pin-close').addEventListener('click', () => this._closePinModal());
     s('pin-cancel').addEventListener('click', () => this._closePinModal());
@@ -2498,6 +2515,10 @@ class ArgusPanel extends HTMLElement {
       if (currentPin) groupCurrentPin.classList.remove('collapsed');
       else groupCurrentPin.classList.add('collapsed');
     }
+    const lnkForgot = this.shadowRoot.getElementById('lnk-forgot-pin');
+    if (lnkForgot) lnkForgot.style.display = currentPin ? 'inline' : 'none';
+    const pinForgot = this.shadowRoot.getElementById('pin-forgot-link');
+    if (pinForgot) pinForgot.style.display = currentPin ? 'inline' : 'none';
 
     this._renderEntries();
     this._renderActivityLog();
@@ -4223,6 +4244,69 @@ class ArgusPanel extends HTMLElement {
     }
   }
 
+  async _handleForgotPin() {
+    const status = this.shadowRoot.getElementById('pin-status');
+    const pinErr = this.shadowRoot.getElementById('pin-error');
+    
+    // 1. Verificar si el usuario es administrador en HA
+    const isAdmin = this._hass?.user?.is_admin === true;
+    const currentUser = this._hass?.user?.name || 'Usuario';
+    
+    if (!isAdmin) {
+      const errMsg = this._t('pin_reset_admin_only');
+      if (status) {
+        status.textContent = errMsg;
+        status.className = 'status err';
+      }
+      if (pinErr) {
+        pinErr.textContent = errMsg;
+      }
+      this._writeLog('pin_reset_failed', 'Intento no autorizado de restablecer el PIN maestro', currentUser);
+      return;
+    }
+    
+    // 2. Confirmación
+    if (confirm(this._t('pin_reset_confirm'))) {
+      try {
+        await this._send('argus/update_master_pin', { pin: '' });
+        
+        // Log en auditoría
+        this._writeLog('pin_reset', 'PIN maestro restablecido por el administrador', currentUser);
+        
+        // Mensaje de éxito
+        const successMsg = '✓ PIN Maestro restablecido';
+        if (status) {
+          status.textContent = successMsg;
+          status.className = 'status ok';
+        }
+        if (pinErr) {
+          pinErr.textContent = successMsg;
+          pinErr.style.color = '#43a047';
+        }
+        
+        // Limpiar inputs
+        if (this.shadowRoot.getElementById('current-pin')) this.shadowRoot.getElementById('current-pin').value = '';
+        this.shadowRoot.getElementById('new-pin-1').value = '';
+        this.shadowRoot.getElementById('new-pin-2').value = '';
+        
+        // Cerrar modal de PIN si estuviera abierto
+        setTimeout(() => {
+          this._closePinModal();
+          this._load();
+        }, 1200);
+      } catch (e) {
+        const errMsg = 'Error: ' + e.message;
+        if (status) {
+          status.textContent = errMsg;
+          status.className = 'status err';
+        }
+        if (pinErr) {
+          pinErr.textContent = errMsg;
+        }
+      }
+    }
+  }
+
   _runWithPin(action) {
     const masterPin = this._dashboard?.entries?.[0]?.options?.code || '';
     if (masterPin) {
@@ -4246,7 +4330,11 @@ class ArgusPanel extends HTMLElement {
     const inp = this.shadowRoot.getElementById('pin-input');
     const err = this.shadowRoot.getElementById('pin-error');
     const wrap = this.shadowRoot.querySelector('.wrap');
-    inp.value = ''; if (err) err.textContent = '';
+    inp.value = ''; 
+    if (err) {
+      err.textContent = '';
+      err.style.color = '';
+    }
     this._pinCallback = onConfirm;
 
     // Check if in fullscreen
