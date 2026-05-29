@@ -3509,63 +3509,81 @@ class ArgusPanel extends HTMLElement {
   async _handlePanelBgFile(ev) {
     const file = ev?.target?.files?.[0]; if (!file) return;
     const help = this.shadowRoot.getElementById('bg-file-help');
-    if (help) help.textContent = 'Leyendo archivo...';
+    if (help) help.textContent = 'Subiendo al servidor...';
     
-    const r = new FileReader();
-    r.onload = async () => {
-      if (help) help.textContent = 'Subiendo al servidor...';
-      try {
-        const res = await this._send('argus/upload_file', {
-          filename: file.name,
-          data: String(r.result || '')
-        });
-        if (res && res.success) {
-          this._panelBgFile = res.url;
-          const inp = this.shadowRoot.getElementById('panel-bg-url-input');
-          if (inp) inp.value = res.url;
-          if (help) help.textContent = `Subido: ${file.name}`;
-          this._loadUploadedFiles();
-        } else {
-          if (help) help.textContent = 'Error al subir archivo.';
-        }
-      } catch (err) {
-        console.error('Upload failed:', err);
-        if (help) help.textContent = `Error: ${err.message || err}`;
+    try {
+      const token = this._hass?.auth?.accessToken;
+      const headers = {};
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/argus/upload', {
+        method: 'POST',
+        body: formData,
+        headers: headers
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-      ev.target.value = '';
-    };
-    r.readAsDataURL(file);
+
+      const res = await response.json();
+      if (res && res.success) {
+        this._panelBgFile = res.url;
+        const inp = this.shadowRoot.getElementById('panel-bg-url-input');
+        if (inp) inp.value = res.url;
+        if (help) help.textContent = `Subido: ${file.name}`;
+        this._loadUploadedFiles();
+      } else {
+        if (help) help.textContent = 'Error: ' + (res?.error || 'Falló la subida.');
+      }
+    } catch (err) {
+      console.error('Upload failed:', err);
+      if (help) help.textContent = `Error: ${err.message || err}`;
+    }
+    ev.target.value = '';
   }
 
   async _handleHubBgFile(ev) {
     const file = ev?.target?.files?.[0]; if (!file) return;
     const help = this.shadowRoot.getElementById('hub-file-help');
-    if (help) help.textContent = 'Leyendo archivo...';
+    if (help) help.textContent = 'Subiendo al servidor...';
     
-    const r = new FileReader();
-    r.onload = async () => {
-      if (help) help.textContent = 'Subiendo al servidor...';
-      try {
-        const res = await this._send('argus/upload_file', {
-          filename: file.name,
-          data: String(r.result || '')
-        });
-        if (res && res.success) {
-          this._hubBgFile = res.url;
-          const inp = this.shadowRoot.getElementById('hub-bg-url-input');
-          if (inp) inp.value = res.url;
-          if (help) help.textContent = `Subido: ${file.name}`;
-          this._loadUploadedFiles();
-        } else {
-          if (help) help.textContent = 'Error al subir archivo.';
-        }
-      } catch (err) {
-        console.error('Upload failed:', err);
-        if (help) help.textContent = `Error: ${err.message || err}`;
+    try {
+      const token = this._hass?.auth?.accessToken;
+      const headers = {};
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/argus/upload', {
+        method: 'POST',
+        body: formData,
+        headers: headers
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-      ev.target.value = '';
-    };
-    r.readAsDataURL(file);
+
+      const res = await response.json();
+      if (res && res.success) {
+        this._hubBgFile = res.url;
+        const inp = this.shadowRoot.getElementById('hub-bg-url-input');
+        if (inp) inp.value = res.url;
+        if (help) help.textContent = `Subido: ${file.name}`;
+        this._loadUploadedFiles();
+      } else {
+        if (help) help.textContent = 'Error: ' + (res?.error || 'Falló la subida.');
+      }
+    } catch (err) {
+      console.error('Upload failed:', err);
+      if (help) help.textContent = `Error: ${err.message || err}`;
+    }
+    ev.target.value = '';
   }
 
   async _loadUploadedFiles() {
