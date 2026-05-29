@@ -2139,8 +2139,11 @@ class ArgusPanel extends HTMLElement {
         if (result?.success === false) reject(new Error(result.error?.message || 'failed'));
         else resolve(result);
       };
-      this._socket.send(JSON.stringify({ id, type, ...data }));
-      setTimeout(() => { if (this._pending[id]) { delete this._pending[id]; reject(new Error('timeout')); } }, 10000);
+      const payload = JSON.stringify({ id, type, ...data });
+      this._socket.send(payload);
+      // Dynamic timeout: 120 seconds for payloads > 1MB, 15 seconds otherwise
+      const timeoutMs = payload.length > 1000000 ? 120000 : 15000;
+      setTimeout(() => { if (this._pending[id]) { delete this._pending[id]; reject(new Error('timeout')); } }, timeoutMs);
     });
   }
 
