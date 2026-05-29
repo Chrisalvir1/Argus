@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.2.0
+ * Argus Home Hub – v1.2.1
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -89,7 +89,7 @@ const TEXTS = {
     home_name_modal_desc:'Este nombre aparece en el panel de instancias y en pantalla completa.',
     home_name_label:'Nombre del Hogar', home_name_placeholder:'Mi Casa',
     clear_log_btn:'BORRAR',
-    bg_weather:'Clima animado', bg_none:'Predeterminado', bg_photo:'Una foto', bg_collage:'Collage', bg_video:'Video en loop', bg_panel_title:'Fondo para panel', bg_hub_title:'Fondo Argus', bg_sound_opt:'Sonido de video', bg_image_opt:'Imagen / GIF', bg_hub_default:'Predeterminado (Argus)',
+    bg_weather:'Clima animado', bg_none:'Predeterminado', bg_panel_none:'Sin fondo', bg_photo:'Una foto', bg_collage:'Collage', bg_video:'Video en loop', bg_panel_title:'Fondo para panel', bg_hub_title:'Fondo Argus', bg_sound_opt:'Sonido de video', bg_image_opt:'Imagen / GIF', bg_hub_default:'Predeterminado (Argus)',
     temp_auto:'Automático (sensor local / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Batería baja',
     times_section:'⏱️ Tiempos', arm_time:'Armado (s)', disarm_time:'Desarmado (s)',
     save_config:'GUARDAR CONFIGURACIÓN', never_triggered:'Nunca activada',
@@ -170,7 +170,7 @@ const TEXTS = {
     home_name_modal_desc:'This name appears in the instances panel and in full screen.',
     home_name_label:'Home Name', home_name_placeholder:'My Home',
     clear_log_btn:'CLEAR',
-    bg_weather:'Animated weather', bg_none:'Default', bg_photo:'One photo', bg_collage:'Collage', bg_video:'Loop video', bg_panel_title:'Panel background', bg_hub_title:'Argus background', bg_sound_opt:'Video sound', bg_image_opt:'Image / GIF', bg_hub_default:'Default (Argus)',
+    bg_weather:'Animated weather', bg_none:'Default', bg_panel_none:'No background', bg_photo:'One photo', bg_collage:'Collage', bg_video:'Loop video', bg_panel_title:'Panel background', bg_hub_title:'Argus background', bg_sound_opt:'Video sound', bg_image_opt:'Image / GIF', bg_hub_default:'Default (Argus)',
     temp_auto:'Automatic (local sensor / thermostat / climate)', temp_thermostat:'(thermostat)', battery_low:'⚠️ Low Battery',
     times_section:'⏱️ Times', arm_time:'Arming (s)', disarm_time:'Entry delay (s)',
     save_config:'SAVE CONFIGURATION', never_triggered:'Never triggered',
@@ -249,7 +249,7 @@ const TEXTS = {
     home_name_modal_desc:'Ce nom apparaît dans le panneau des instances et en plein écran.',
     home_name_label:'Nom du domicile', home_name_placeholder:'Ma maison',
     clear_log_btn:'EFFACER',
-    bg_weather:'Météo animée', bg_none:'Par défaut', bg_photo:'Une photo', bg_collage:'Collage', bg_video:'Vidéo en boucle', bg_panel_title:'Fond du panneau', bg_hub_title:'Fond Argus', bg_sound_opt:'Son de la vidéo', bg_image_opt:'Image / GIF', bg_hub_default:'Par défaut (Argus)',
+    bg_weather:'Météo animée', bg_none:'Par défaut', bg_panel_none:'Sans fond', bg_photo:'Une photo', bg_collage:'Collage', bg_video:'Vidéo en boucle', bg_panel_title:'Fond du panneau', bg_hub_title:'Fond Argus', bg_sound_opt:'Son de la vidéo', bg_image_opt:'Image / GIF', bg_hub_default:'Par défaut (Argus)',
     temp_auto:'Automatique (capteur local / thermostat / climat)', temp_thermostat:'(thermostat)', battery_low:'⚠️ Batterie faible',
     times_section:'⏱️ Temps', arm_time:'Armé (s)', disarm_time:'Délai entrée (s)',
     save_config:'ENREGISTRER LA CONFIGURATION', never_triggered:'Jamais déclenché',
@@ -319,7 +319,7 @@ const TEXTS = {
     home_name_modal_desc:'Este nome aparece no painel de instâncias e em tela cheia.',
     home_name_label:'Nome do lar', home_name_placeholder:'Minha Casa',
     clear_log_btn:'LIMPAR',
-    bg_weather:'Clima animado', bg_none:'Padrão', bg_photo:'Uma foto', bg_collage:'Colagem', bg_video:'Vídeo em loop', bg_panel_title:'Fundo do painel', bg_hub_title:'Fundo Argus', bg_sound_opt:'Som do vídeo', bg_image_opt:'Imagem / GIF', bg_hub_default:'Padrão (Argus)',
+    bg_weather:'Clima animado', bg_none:'Padrão', bg_panel_none:'Sem fundo', bg_photo:'Uma foto', bg_collage:'Colagem', bg_video:'Vídeo em loop', bg_panel_title:'Fundo do painel', bg_hub_title:'Fundo Argus', bg_sound_opt:'Som do vídeo', bg_image_opt:'Imagem / GIF', bg_hub_default:'Padrão (Argus)',
     temp_auto:'Automático (sensor local / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Bateria fraca',
     times_section:'⏱️ Tempos', arm_time:'Armado (s)', disarm_time:'Atraso de entrada (s)',
     save_config:'SALVAR CONFIGURAÇÃO', never_triggered:'Nunca ativado',
@@ -389,7 +389,7 @@ const TEXTS = {
     home_name_modal_desc:'Questo nome appare nel pannello delle istanze e a schermo intero.',
     home_name_label:'Nome della casa', home_name_placeholder:'Casa mia',
     clear_log_btn:'CANCELLA',
-    bg_weather:'Meteo animato', bg_none:'Predefinito', bg_photo:'Una foto', bg_collage:'Collage', bg_video:'Video in loop', bg_panel_title:'Sfondo pannello', bg_hub_title:'Sfondo Argus', bg_sound_opt:'Audio video', bg_image_opt:'Immagine / GIF', bg_hub_default:'Predefinito (Argus)',
+    bg_weather:'Meteo animato', bg_none:'Predefinito', bg_panel_none:'Nessuno sfondo', bg_photo:'Una foto', bg_collage:'Collage', bg_video:'Video in loop', bg_panel_title:'Sfondo pannello', bg_hub_title:'Sfondo Argus', bg_sound_opt:'Audio video', bg_image_opt:'Immagine / GIF', bg_hub_default:'Predefinito (Argus)',
     temp_auto:'Automatico (sensore locale / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Batteria scarica',
     times_section:'⏱️ Tempi', arm_time:'Armato (s)', disarm_time:'Ritardo entrata (s)',
     save_config:'SALVA CONFIGURAZIONE', never_triggered:'Mai attivato',
@@ -459,7 +459,7 @@ const TEXTS = {
     home_name_modal_desc:'此名称显示在实例面板和全屏中。',
     home_name_label:'家庭名称', home_name_placeholder:'我的家',
     clear_log_btn:'清除',
-    bg_weather:'动画天气', bg_none:'默认', bg_photo:'单张照片', bg_collage:'拼贴画', bg_video:'循环视频', bg_panel_title:'面板背景', bg_hub_title:'Argus 背景', bg_sound_opt:'视频声音', bg_image_opt:'图片 / GIF', bg_hub_default:'默认 (Argus)',
+    bg_weather:'动画天气', bg_none:'默认', bg_panel_none:'无背景', bg_photo:'单张照片', bg_collage:'拼贴画', bg_video:'循环视频', bg_panel_title:'面板背景', bg_hub_title:'Argus 背景', bg_sound_opt:'视频声音', bg_image_opt:'图片 / GIF', bg_hub_default:'默认 (Argus)',
     temp_auto:'自动（本地传感器 / 恒温器 / 气候）', temp_thermostat:'(恒温器)', battery_low:'⚠️ 电池不足',
     times_section:'⏱️ 时间', arm_time:'布防延迟(s)', disarm_time:'进入延迟(s)',
     save_config:'保存配置', never_triggered:'从未触发',
@@ -529,7 +529,7 @@ const TEXTS = {
     home_name_modal_desc:'Это имя отображается в панели экземпляров и в полноекранном режиме.',
     home_name_label:'Название дома', home_name_placeholder:'Мой дом',
     clear_log_btn:'ОЧИСТИТЬ',
-    bg_weather:'Анимированная погода', bg_none:'По умолчанию', bg_photo:'Одно фото', bg_collage:'Коллаж', bg_video:'Зацикленное видео', bg_panel_title:'Фон панели', bg_hub_title:'Фон Argus', bg_sound_opt:'Звук видео', bg_image_opt:'Изображение / GIF', bg_hub_default:'По умолчанию (Argus)',
+    bg_weather:'Анимированная погода', bg_none:'По умолчанию', bg_panel_none:'Без фона', bg_photo:'Одно фото', bg_collage:'Коллаж', bg_video:'Зацикленное видео', bg_panel_title:'Фон панели', bg_hub_title:'Фон Argus', bg_sound_opt:'Звук видео', bg_image_opt:'Изображение / GIF', bg_hub_default:'По умолчанию (Argus)',
     temp_auto:'Авто (лок. датчик / термостат / климат)', temp_thermostat:'(термостат)', battery_low:'⚠️ Низкий заряд',
     times_section:'⏱️ Времена', arm_time:'Постановка (s)', disarm_time:'Задержка входа (s)',
     save_config:'СОХРАНИТЬ КОНФИГУРАЦИЮ', never_triggered:'Никогда не срабатывало',
@@ -1710,7 +1710,7 @@ class ArgusPanel extends HTMLElement {
     this._fullscreenIdx = -1;
     this._cachedBgUrl = null;
     this._cachedBgBrightness = undefined;
-    this._hubBgMode = 'none';
+    this._hubBgMode = 'default';
     this._hubBgFile = '';
     this._hubBgSound = false;
   }
@@ -2048,7 +2048,7 @@ class ArgusPanel extends HTMLElement {
       const v = bgMode.value;
       bgMode.innerHTML = `
         <option value="weather">${t('bg_weather')}</option>
-        <option value="none">${t('bg_none')}</option>
+        <option value="none">${t('bg_panel_none')}</option>
         <option value="photo">${t('bg_photo')}</option>
         <option value="collage">${t('bg_collage')}</option>
       `;
@@ -2061,7 +2061,6 @@ class ArgusPanel extends HTMLElement {
       hubBgSelect.innerHTML = `
         <option value="default">${t('bg_hub_default')}</option>
         <option value="image">${t('bg_image_opt')}</option>
-        <option value="none">${t('bg_none')}</option>
       `;
       if (v) hubBgSelect.value = v;
     }
@@ -2439,7 +2438,8 @@ class ArgusPanel extends HTMLElement {
     this._temperatureSource = dashboard.ui?.temperature_source || 'auto';
     this._panelBgFile = dashboard.ui?.panel_bg_file || '';
     this._panelBgSound = Boolean(dashboard.ui?.panel_bg_sound);
-    this._hubBgMode = dashboard.ui?.hub_bg_mode || 'default';
+    const rawHubBgMode = dashboard.ui?.hub_bg_mode || 'none';
+    this._hubBgMode = (rawHubBgMode === 'none' || rawHubBgMode === 'default') ? 'default' : rawHubBgMode;
     this._hubBgFile = dashboard.ui?.hub_bg_file || '';
     this._hubBgSound = Boolean(dashboard.ui?.hub_bg_sound);
     this._updateTheme();
@@ -2453,7 +2453,7 @@ class ArgusPanel extends HTMLElement {
     if (bgMode) {
       bgMode.innerHTML = `
         <option value="weather">${this._t('bg_weather')}</option>
-        <option value="none">${this._t('bg_none')}</option>
+        <option value="none">${this._t('bg_panel_none')}</option>
         <option value="photo">${this._t('bg_photo')}</option>
         <option value="collage">${this._t('bg_collage')}</option>
       `;
@@ -2465,7 +2465,6 @@ class ArgusPanel extends HTMLElement {
       hubBgSelect.innerHTML = `
         <option value="default">${this._t('bg_hub_default')}</option>
         <option value="image">${this._t('bg_image_opt')}</option>
-        <option value="none">${this._t('bg_none')}</option>
       `;
       hubBgSelect.value = this._hubBgMode || 'default';
     }
@@ -4082,7 +4081,8 @@ class ArgusPanel extends HTMLElement {
     }
     const panel_bg_sound = Boolean(this.shadowRoot.getElementById('chk-panel-bg-sound')?.checked);
 
-    const hub_bg_mode = this.shadowRoot.getElementById('hub-bg-mode-select')?.value || 'none';
+    const selected_hub_bg_mode = this.shadowRoot.getElementById('hub-bg-mode-select')?.value || 'default';
+    const hub_bg_mode = selected_hub_bg_mode === 'default' ? 'none' : selected_hub_bg_mode;
     let hub_bg_file = '';
     const hub_bg_url = this.shadowRoot.getElementById('hub-bg-url-input')?.value || '';
     if (hub_bg_url) {
@@ -4108,7 +4108,7 @@ class ArgusPanel extends HTMLElement {
       this._temperatureSource = temperature_source;
       this._panelBgFile = panel_bg_file;
       this._panelBgSound = panel_bg_sound;
-      this._hubBgMode = hub_bg_mode;
+      this._hubBgMode = selected_hub_bg_mode;
       this._hubBgFile = hub_bg_file;
       this._hubBgSound = hub_bg_sound;
       this._updateTheme();
