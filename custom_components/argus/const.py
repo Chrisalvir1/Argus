@@ -1,9 +1,9 @@
-"""Constants for the Argus Home Hub v1.1.43"""
+"""Constants for the Argus Home Hub v1.1.44"""
 from homeassistant.const import CONF_NAME, CONF_CODE
 
 DOMAIN = "argus"
 NAME = "Argus Home Hub"
-VERSION = "1.1.43"
+VERSION = "1.1.44"
 
 PLATFORMS = ["alarm_control_panel"]
 

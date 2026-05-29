@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.1.43
+ * Argus Home Hub – v1.1.44
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -561,6 +561,18 @@ _tmpl.innerHTML = `
     --ios-thumb: linear-gradient(180deg, #ffffff, #f4f4f7);
     --text-shadow: 0 1px 3px rgba(0,0,0,0.15);
     --primary-color: #007aff;
+    --personalize-bg: rgba(255, 255, 255, 0.02);
+    --personalize-border: rgba(255, 255, 255, 0.06);
+    --personalize-divider: rgba(255, 255, 255, 0.08);
+    --bg-inputs-bg: rgba(0, 0, 0, 0.15);
+    --bg-inputs-border: rgba(255, 255, 255, 0.05);
+    --input-bg-darker: rgba(0, 0, 0, 0.25);
+    --input-border-darker: rgba(255, 255, 255, 0.12);
+    --hero-bg: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    --log-item-bg: rgba(255, 255, 255, 0.02);
+    --log-item-border: rgba(255, 255, 255, 0.05);
+    --user-card-bg: rgba(255, 255, 255, 0.02);
+    --user-card-border: rgba(255, 255, 255, 0.06);
   }
   
   /* Detect light mode via HA variables and adjust glass */
@@ -583,6 +595,18 @@ _tmpl.innerHTML = `
     --argus-pill-color: #1d1d1f;
     --argus-pill-color-muted: rgba(0,0,0,0.5);
     --primary-color: #007aff;
+    --personalize-bg: rgba(0, 0, 0, 0.02);
+    --personalize-border: rgba(0, 0, 0, 0.05);
+    --personalize-divider: rgba(0, 0, 0, 0.08);
+    --bg-inputs-bg: rgba(0, 0, 0, 0.03);
+    --bg-inputs-border: rgba(0, 0, 0, 0.07);
+    --input-bg-darker: rgba(0, 0, 0, 0.04);
+    --input-border-darker: rgba(0, 0, 0, 0.12);
+    --hero-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.45));
+    --log-item-bg: rgba(0, 0, 0, 0.02);
+    --log-item-border: rgba(0, 0, 0, 0.05);
+    --user-card-bg: rgba(0, 0, 0, 0.02);
+    --user-card-border: rgba(0, 0, 0, 0.06);
   }
   
   :host {
@@ -746,8 +770,8 @@ _tmpl.innerHTML = `
   :host{display:block;min-height:100vh;box-sizing:border-box;color:var(--primary-text-color);background:var(--lovelace-background,var(--primary-background-color));font-family:'Outfit',Inter,system-ui,sans-serif}
   *{box-sizing:border-box}
   .wrap{max-width:1400px;margin:0 auto;padding:24px;display:grid;gap:24px}
-  .glass{background:rgba(255, 255, 255, 0.06);border:1px solid rgba(255, 255, 255, 0.09);border-radius:28px;box-shadow:var(--glass-shadow);backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2)}
-  .hero{padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));margin-bottom:12px}
+  .glass{background:var(--glass-bg, rgba(255, 255, 255, 0.06));border:1px solid var(--glass-border, rgba(255, 255, 255, 0.09));border-radius:28px;box-shadow:var(--glass-shadow);backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2)}
+  .hero{padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:var(--hero-bg, linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)));margin-bottom:12px}
   .hero-left{display:flex;align-items:center;gap:22px}
   .hero-icon{font-size:54px;line-height:1;filter:drop-shadow(0 0 20px rgba(255,255,255,0.15))}
   .hero h1{margin:0 0 4px;font-size:34px;font-weight:900;letter-spacing:-0.03em;background:var(--hero-gradient, linear-gradient(to right, #ffffff, #82b1ff));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
@@ -990,7 +1014,7 @@ _tmpl.innerHTML = `
   .pin-btn-round.action-key.delete-key{color:#ff3b30 !important}
   :host([argus-dark-mode="false"]) .pin-btn-round.action-key.delete-key{color:#dc3545 !important}
   /* User card */
-  .user-card{display:flex;align-items:center;justify-content:space-between;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);box-shadow:0 4px 10px rgba(0,0,0,0.08)}
+  .user-card{display:flex;align-items:center;justify-content:space-between;padding:14px;border-radius:16px;border:1px solid var(--user-card-border, rgba(255,255,255,0.06));background:var(--user-card-bg, rgba(255,255,255,0.02));box-shadow:0 4px 10px rgba(0,0,0,0.08)}
   .user-badge{display:inline-block;padding:3px 9px;border-radius:8px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;background:rgba(0,122,255,.12);color:var(--primary-color,#007aff)}
   .user-badge.admin{background:rgba(251,140,0,.12);color:#fb8c00}
   /* Notif target chip */
@@ -999,7 +1023,7 @@ _tmpl.innerHTML = `
   /* Triggered box */
   .trig-box{padding:12px 14px;border-radius:14px;background:rgba(229,57,53,.08);border:1px dashed var(--error-color,#e53935);font-size:12px;font-weight:600;color:var(--error-color,#e53935)}
   /* inputs */
-  input[type="text"],input[type="password"],input[type="number"],input[type="search"],select{width:100%;padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:var(--primary-text-color);font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s;display:block}
+  input[type="text"],input[type="password"],input[type="number"],input[type="search"],select{width:100%;padding:10px 14px;border-radius:12px;border:1px solid var(--input-border, rgba(255,255,255,0.08));background:var(--input-bg, rgba(255,255,255,0.03));color:var(--primary-text-color);font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s;display:block}
   input[type="text"]:focus,input[type="password"]:focus,input[type="number"]:focus,input[type="search"]:focus,select:focus{border-color:var(--primary-color,#007aff);box-shadow:0 0 0 3px rgba(0, 122, 255, 0.15)}
   /* search */
   .search-wrap{display:flex;gap:10px;align-items:center}
@@ -1018,7 +1042,7 @@ _tmpl.innerHTML = `
   .pick-row-meta{font-size:11px;opacity:0.5;margin-top:2px}
   .sel-right-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.03);font-size:13px}
   /* Activity log */
-  .log-item{display:flex;align-items:flex-start;gap:12px;padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02);color:var(--primary-text-color,#fff);box-shadow:0 4px 10px rgba(0,0,0,0.08)}
+  .log-item{display:flex;align-items:flex-start;gap:12px;padding:12px;border-radius:16px;border:1px solid var(--log-item-border, rgba(255,255,255,0.05));background:var(--log-item-bg, rgba(255,255,255,0.02));color:var(--primary-text-color,#fff);box-shadow:0 4px 10px rgba(0,0,0,0.08)}
   .log-icon{font-size:20px;line-height:1;flex-shrink:0}
   .log-body{flex:1;min-width:0}
   .log-title{font-weight:700;font-size:13px}
@@ -1027,6 +1051,22 @@ _tmpl.innerHTML = `
   .log-badge.arm{background:rgba(251,140,0,.12);color:#fb8c00}
   .log-badge.disarm{background:rgba(67,160,71,.12);color:var(--success-color,#43a047)}
   .log-badge.trigger{background:rgba(229,57,53,.15);color:var(--error-color,#e53935)}
+  /* Personalization section styles */
+  .personalize-section {
+    margin-top: 18px;
+    padding: 18px;
+    background: var(--personalize-bg, rgba(255,255,255,0.02));
+    border: 1px solid var(--personalize-border, rgba(255,255,255,0.06));
+    border-radius: 22px;
+    display: grid;
+    gap: 16px;
+  }
+  .personalize-section select,
+  .personalize-section input[type="text"] {
+    background: var(--input-bg-darker, rgba(0, 0, 0, 0.25));
+    border: 1px solid var(--input-border-darker, rgba(255, 255, 255, 0.12));
+    color: inherit;
+  }
   /* ── Weather Animated Backgrounds ────────────────────────────────── */
   .wx{position:absolute;inset:0;overflow:hidden;border-radius:inherit;z-index:1}
   .wx-sunny{background:linear-gradient(175deg,#0055cc 0%,#1976d2 25%,#42a5f5 55%,#b3e5fc 100%)}
@@ -1359,8 +1399,8 @@ _tmpl.innerHTML = `
         </div>
         <div id="entries"></div>
         <!-- Personalization section -->
-        <div class="personalize-section" style="margin-top:18px; padding:18px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:22px; display:grid; gap:16px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:10px; flex-wrap:wrap; gap:10px;">
+        <div class="personalize-section">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--personalize-divider, rgba(255,255,255,0.08)); padding-bottom:10px; flex-wrap:wrap; gap:10px;">
             <div id="lbl-aesthetic-custom" style="font-weight:900; font-size:14px; letter-spacing:-0.01em;">🎨 Personalización Estética</div>
             <div style="display:flex; gap:8px;">
               <button class="ghost" id="btn-edit-home-name-standalone" style="padding:6px 10px;font-size:11px;border-radius:10px;white-space:nowrap">✏️ Editar Nombre</button>
@@ -1378,17 +1418,17 @@ _tmpl.innerHTML = `
               
               <div>
                 <div class="setting-label" id="lbl-panel-bg-title" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">Fondo para Panel</div>
-                <select id="bg-mode-select-standalone" style="width:100%; padding:8px 12px; border-radius:10px; background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.12); color:white; font-family:inherit; outline:none;"></select>
+                <select id="bg-mode-select-standalone" style="width:100%; padding:8px 12px; border-radius:10px; font-family:inherit; outline:none;"></select>
               </div>
 
               <!-- Panel Background Custom Inputs (shown dynamically) -->
-              <div id="panel-custom-bg-inputs" style="display:none; flex-direction:column; gap:8px; background:rgba(0,0,0,0.15); padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,0.05);">
+              <div id="panel-custom-bg-inputs" style="display:none; flex-direction:column; gap:8px; background:var(--bg-inputs-bg, rgba(0,0,0,0.15)); padding:10px; border-radius:12px; border:1px solid var(--bg-inputs-border, rgba(255,255,255,0.05));">
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
                   <span id="lbl-panel-bg-upload" style="font-size:11px; opacity:0.8;">Cargar archivo:</span>
                   <input type="file" id="panel-bg-file-input" style="font-size:10px; max-width:180px;">
                 </div>
                 <div style="font-size:10px; opacity:0.5; text-align:right;" id="bg-file-help"></div>
-                <input type="text" id="panel-bg-url-input" style="width:100%; font-size:11px; padding:6px 10px; border-radius:8px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:white; box-sizing:border-box; outline:none;">
+                <input type="text" id="panel-bg-url-input" style="width:100%; font-size:11px; padding:6px 10px; border-radius:8px; box-sizing:border-box; outline:none;">
                 <label id="lbl-panel-bg-sound" style="display:none; align-items:center; gap:8px; font-size:11px; cursor:pointer;">
                   <input type="checkbox" id="chk-panel-bg-sound"> <span id="s-panel-bg-sound-lbl">Sonido de video</span>
                 </label>
@@ -1399,17 +1439,17 @@ _tmpl.innerHTML = `
             <div style="display:flex; flex-direction:column; gap:12px;">
               <div>
                 <div class="setting-label" id="lbl-hub-bg-title" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">Fondo Argus</div>
-                <select id="hub-bg-mode-select" style="width:100%; padding:8px 12px; border-radius:10px; background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.12); color:white; font-family:inherit; outline:none;"></select>
+                <select id="hub-bg-mode-select" style="width:100%; padding:8px 12px; border-radius:10px; font-family:inherit; outline:none;"></select>
               </div>
 
               <!-- Argus Background Custom Inputs (shown dynamically) -->
-              <div id="hub-custom-bg-inputs" style="display:none; flex-direction:column; gap:8px; background:rgba(0,0,0,0.15); padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,0.05);">
+              <div id="hub-custom-bg-inputs" style="display:none; flex-direction:column; gap:8px; background:var(--bg-inputs-bg, rgba(0,0,0,0.15)); padding:10px; border-radius:12px; border:1px solid var(--bg-inputs-border, rgba(255,255,255,0.05));">
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
                   <span id="lbl-hub-bg-upload" style="font-size:11px; opacity:0.8;">Cargar archivo:</span>
                   <input type="file" id="hub-bg-file-input" style="font-size:10px; max-width:180px;">
                 </div>
                 <div style="font-size:10px; opacity:0.5; text-align:right;" id="hub-file-help"></div>
-                <input type="text" id="hub-bg-url-input" style="width:100%; font-size:11px; padding:6px 10px; border-radius:8px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:white; box-sizing:border-box; outline:none;">
+                <input type="text" id="hub-bg-url-input" style="width:100%; font-size:11px; padding:6px 10px; border-radius:8px; box-sizing:border-box; outline:none;">
                 <label id="lbl-hub-bg-sound" style="display:none; align-items:center; gap:8px; font-size:11px; cursor:pointer;">
                   <input type="checkbox" id="chk-hub-bg-sound"> <span id="s-hub-bg-sound-lbl">Sonido de video</span>
                 </label>
@@ -1418,7 +1458,7 @@ _tmpl.innerHTML = `
           </div>
 
           <!-- Historial de Archivos Subidos -->
-          <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:14px; margin-top:6px;">
+          <div style="border-top:1px solid var(--personalize-divider, rgba(255,255,255,0.08)); padding-top:14px; margin-top:6px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:6px;">
               <div style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; display:flex; align-items:center; gap:6px;">
                 📁 <span id="lbl-uploaded-files-title">Archivos Subidos en Servidor</span>
@@ -1662,10 +1702,22 @@ class ArgusPanel extends HTMLElement {
     this._fullscreenIdx = -1;
   }
 
+  _updateTheme() {
+    if (!this._hass) return;
+    const hasCustomBg = (this._backgroundMode && this._backgroundMode !== 'none') || 
+                        (this._hubBgMode && this._hubBgMode !== 'none');
+    if (hasCustomBg) {
+      this.setAttribute('argus-dark-mode', 'true');
+    } else {
+      const isDark = this._hass.themes ? this._hass.themes.darkMode === true : false;
+      this.setAttribute('argus-dark-mode', isDark ? 'true' : 'false');
+    }
+  }
+
   set hass(hass) {
     const oldHass = this._hass;
     this._hass = hass;
-    if (hass.themes) this.setAttribute('argus-dark-mode', hass.themes.darkMode === true);
+    this._updateTheme();
     if (!this._dashboard?.entries?.length) return;
 
     // Trigger render if any of these change:
@@ -2286,7 +2338,7 @@ class ArgusPanel extends HTMLElement {
     this._hubBgMode = dashboard.ui?.hub_bg_mode || 'none';
     this._hubBgFile = dashboard.ui?.hub_bg_file || '';
     this._hubBgSound = Boolean(dashboard.ui?.hub_bg_sound);
-    
+    this._updateTheme();
     this._updateHomeNameDisplay();
 
     this._populateTemperatureSources();
@@ -3906,6 +3958,7 @@ class ArgusPanel extends HTMLElement {
       this._hubBgMode = hub_bg_mode;
       this._hubBgFile = hub_bg_file;
       this._hubBgSound = hub_bg_sound;
+      this._updateTheme();
 
       this._ui = this._ui || {};
       this._ui.background_mode = background_mode;
