@@ -9,7 +9,7 @@ from homeassistant.helpers import area_registry as ar
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 
-from .const import DOMAIN, SIGNAL_CONFIG_UPDATED
+from .const import DOMAIN, SIGNAL_CONFIG_UPDATED, CONF_CODE
 from .storage import (
     async_append_audit_log,
     async_get_audit_log,
@@ -20,6 +20,14 @@ from .storage import (
 _SUPPORTED_DOMAINS = {
     "binary_sensor", "camera", "climate", "cover",
     "light", "lock", "media_player", "sensor", "siren", "switch",
+}
+
+# Extensiones permitidas para subir como fondos (imágenes/vídeo). Se excluye SVG
+# a propósito: un SVG abierto directamente puede ejecutar scripts (XSS) y aquí
+# solo se usan fondos rasterizados o vídeo.
+_ALLOWED_UPLOAD_EXTS = {
+    ".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp",
+    ".mp4", ".webm", ".ogg", ".mov", ".m4v",
 }
 
 
@@ -46,6 +54,7 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_argus_delete_file)
 
 
+@websocket_api.require_admin
 @websocket_api.websocket_command(
     {
         vol.Required("type"): "argus/upload_file",
@@ -55,11 +64,21 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
 )
 @websocket_api.async_response
 async def ws_argus_upload_file(hass: HomeAssistant, connection, msg) -> None:
-    """Upload a file to the local Argus media directory."""
+    """Upload a file to the local Argus media directory (admin only)."""
     import os
     import base64
 
     filename = os.path.basename(msg["filename"])
+    if not filename:
+        connection.send_error(msg["id"], "invalid_filename", "Empty filename")
+        return
+    ext = os.path.splitext(filename)[1].lower()
+    if ext not in _ALLOWED_UPLOAD_EXTS:
+        connection.send_error(
+            msg["id"], "invalid_extension",
+            f"File type '{ext}' not allowed",
+        )
+        return
     data_url = msg["data"]
 
     # Decode base64 data
@@ -142,6 +161,7 @@ async def ws_argus_list_files(hass: HomeAssistant, connection, msg) -> None:
         connection.send_error(msg["id"], "list_failed", f"Failed to list files: {err}")
 
 
+@websocket_api.require_admin
 @websocket_api.websocket_command(
     {
         vol.Required("type"): "argus/delete_uploaded_file",
@@ -150,7 +170,7 @@ async def ws_argus_list_files(hass: HomeAssistant, connection, msg) -> None:
 )
 @websocket_api.async_response
 async def ws_argus_delete_file(hass: HomeAssistant, connection, msg) -> None:
-    """Delete an uploaded background file."""
+    """Delete an uploaded background file (admin only)."""
     import os
 
     filename = os.path.basename(msg["filename"])
@@ -253,12 +273,34 @@ async def ws_argus_dashboard(hass: HomeAssistant, connection, msg) -> None:
             }
         )
 
+    is_admin = bool(connection.user and connection.user.is_admin)
+
+    # Redactar secretos (PIN maestro, PINs de usuario, PIN de invitado) para
+    # usuarios no administradores. Se trabaja sobre una copia profunda para no
+    # mutar el objeto cacheado del Store.
+    if not is_admin:
+        import copy
+
+        ui_data = copy.deepcopy(ui_data)
+        for u in ui_data.get("users", []) or []:
+            if isinstance(u, dict):
+                u.pop("pin", None)
+        adv = ui_data.get("advanced")
+        if isinstance(adv, dict):
+            adv.pop("guest_code", None)
+        for e in entries_payload:
+            if isinstance(e.get("config"), dict):
+                e["config"].pop(CONF_CODE, None)
+            if isinstance(e.get("options"), dict):
+                e["options"].pop(CONF_CODE, None)
+
     connection.send_result(
         msg["id"],
         {
             "entries": entries_payload,
             "ui": ui_data,
             "available_entities": _serialize_available_entities(hass),
+            "is_admin": is_admin,
         },
     )
 
@@ -300,20 +342,26 @@ async def ws_argus_save_ui(hass: HomeAssistant, connection, msg) -> None:
             updates[key] = msg[key]
             
     if "users" in msg:
+        # Gestionar usuarios/PINs es una operación de administrador.
+        if not (connection.user and connection.user.is_admin):
+            connection.send_error(
+                msg["id"], "unauthorized",
+                "Solo un administrador puede modificar usuarios y PINs",
+            )
+            return
+
         old_ui = await async_load_ui_data(hass)
         old_users = old_ui.get("users", [])
         new_users = msg["users"]
-        
-        # Get admin name
-        user_id = connection.context.user_id
+
+        # Get admin name (connection.user es la API estable; no existe
+        # connection.context en ActiveConnection y rompía la gestión de usuarios).
         admin_name = "Administrador"
-        if user_id:
-            try:
-                user = await hass.auth.async_get_user(user_id)
-                if user:
-                    admin_name = user.name
-            except Exception:
-                pass
+        try:
+            if connection.user and connection.user.name:
+                admin_name = connection.user.name
+        except Exception:
+            pass
                 
         # Find added users
         old_names = {u.get("name") for u in old_users if u.get("name")}
@@ -420,6 +468,7 @@ async def ws_argus_clear_audit_log(hass: HomeAssistant, connection, msg) -> None
     connection.send_result(msg["id"], {"success": True})
 
 
+@websocket_api.require_admin
 @websocket_api.websocket_command(
     {
         vol.Required("type"): "argus/restore_config",
@@ -428,7 +477,7 @@ async def ws_argus_clear_audit_log(hass: HomeAssistant, connection, msg) -> None
 )
 @websocket_api.async_response
 async def ws_argus_restore_config(hass: HomeAssistant, connection, msg) -> None:
-    """Restore the full Argus UI configuration from an external backup."""
+    """Restore the full Argus UI configuration from an external backup (admin only)."""
     # We replace the entire persistent storage dictionary
     from .storage import Store, _STORAGE_VERSION, _STORAGE_KEY
     store = Store(hass, _STORAGE_VERSION, _STORAGE_KEY)
@@ -437,6 +486,7 @@ async def ws_argus_restore_config(hass: HomeAssistant, connection, msg) -> None:
     connection.send_result(msg["id"], {"success": True})
 
 
+@websocket_api.require_admin
 @websocket_api.websocket_command(
     {
         vol.Required("type"): "argus/save_advanced_config",
@@ -445,7 +495,7 @@ async def ws_argus_restore_config(hass: HomeAssistant, connection, msg) -> None:
 )
 @websocket_api.async_response
 async def ws_argus_save_advanced_config(hass: HomeAssistant, connection, msg) -> None:
-    """Persist advanced config (guest PIN, NFC, etc.)."""
+    """Persist advanced config (guest PIN, NFC, etc.) — admin only."""
     await async_save_ui_data(hass, {"advanced": msg["config"]})
     connection.send_result(msg["id"], {"success": True})
 
@@ -508,6 +558,7 @@ async def ws_argus_get_media_players(hass: HomeAssistant, connection, msg) -> No
     connection.send_result(msg["id"], players)
 
 
+@websocket_api.require_admin
 @websocket_api.websocket_command(
     {
         vol.Required("type"): "argus/update_master_pin",
@@ -516,7 +567,12 @@ async def ws_argus_get_media_players(hass: HomeAssistant, connection, msg) -> No
 )
 @websocket_api.async_response
 async def ws_argus_update_master_pin(hass: HomeAssistant, connection, msg) -> None:
-    """Update the master PIN code on the Argus ConfigEntry."""
+    """Update/reset the master PIN on the Argus ConfigEntry.
+
+    Restringido a administradores de Home Assistant: la sesión autenticada de HA
+    actúa como verificación de identidad, de modo que un administrador siempre
+    puede restablecer el PIN aunque se haya olvidado, sin conocer el anterior.
+    """
     from .const import CONF_CODE
 
     # Get the first argus config entry
@@ -532,10 +588,20 @@ async def ws_argus_update_master_pin(hass: HomeAssistant, connection, msg) -> No
     new_options[CONF_CODE] = msg["pin"]
     
     hass.config_entries.async_update_entry(entry, options=new_options)
-    
+
+    # Audit log: registrar quién cambió/restableció el PIN (sin guardar el PIN).
+    admin_name = "Administrador"
+    try:
+        if connection.user and connection.user.name:
+            admin_name = connection.user.name
+    except Exception:
+        pass
+    action_detail = "PIN maestro restablecido" if not msg["pin"] else "PIN maestro actualizado"
+    await async_append_audit_log(hass, "master_pin_changed", action_detail, user=admin_name)
+
     # Reload the integration so the panel picks up the updated CONF_CODE
     await hass.config_entries.async_reload(entry.entry_id)
-    
+
     connection.send_result(msg["id"], {"success": True})
 
 

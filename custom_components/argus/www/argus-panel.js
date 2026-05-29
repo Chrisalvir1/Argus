@@ -74,6 +74,7 @@ const TEXTS = {
     select_all:'☑ Todos', deselect_all:'☐ Ninguno', mqtt_label:'MQTT',
     arm_time_label:'Tiempo armado (s)', disarm_time_label:'Tiempo desarmado (s)',
     pin_incorrect:'❌ PIN actual incorrecto', pin_updated:'✓ PIN Actualizado', pin_deleted:'✓ PIN Eliminado',
+    forgot_pin:'¿Olvidaste tu PIN?', admin_only_pin:'🔒 Solo un administrador puede cambiar el PIN maestro.', recovery_mode:'🔓 Modo recuperación: define un nuevo PIN (no se requiere el actual).',
     searching_auto:'↻ Buscando automatizaciones...', no_auto_linked:'No hay automatizaciones vinculadas a Argus.',
     pin_remove_hint:'Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.',
     lbl_load_file:'Cargar archivo:', lbl_aesthetic_custom:'Personalización Estética', lbl_uploaded_files:'Archivos subidos en servidor',
@@ -155,6 +156,7 @@ const TEXTS = {
     select_all:'☑ All', deselect_all:'☐ None', mqtt_label:'MQTT',
     arm_time_label:'Arm time (s)', disarm_time_label:'Disarm time (s)',
     pin_incorrect:'❌ Incorrect current PIN', pin_updated:'✓ PIN Updated', pin_deleted:'✓ PIN Deleted',
+    forgot_pin:'Forgot your PIN?', admin_only_pin:'🔒 Only an administrator can change the master PIN.', recovery_mode:'🔓 Recovery mode: set a new PIN (current PIN not required).',
     searching_auto:'↻ Searching automations...', no_auto_linked:'No automations linked to Argus.',
     pin_remove_hint:'To remove PIN: Enter the current one and leave the fields below empty.',
     lbl_load_file:'Upload file:', lbl_aesthetic_custom:'Aesthetic Customization', lbl_uploaded_files:'Uploaded files on server',
@@ -236,6 +238,7 @@ const TEXTS = {
     select_all:'☑ Tous', deselect_all:'☐ Aucun', mqtt_label:'MQTT',
     arm_time_label:'Temps armement (s)', disarm_time_label:'Temps désarmement (s)',
     pin_incorrect:'❌ PIN actuel incorrect', pin_updated:'✓ PIN mis à jour', pin_deleted:'✓ PIN supprimé',
+    forgot_pin:'PIN oublié ?', admin_only_pin:'🔒 Seul un administrateur peut changer le PIN maître.', recovery_mode:'🔓 Mode récupération : définissez un nouveau PIN (PIN actuel non requis).',
     searching_auto:'↻ Recherche automatisations...', no_auto_linked:'Aucune automatisation liée à Argus.',
     pin_remove_hint:'Pour supprimer le PIN: entrez le PIN actuel et laissez les champs vides.',
     lbl_load_file:'Charger le fichier:', lbl_aesthetic_custom:'Personnalisation esthétique', lbl_uploaded_files:'Fichiers téléchargés sur le serveur',
@@ -306,6 +309,7 @@ const TEXTS = {
     select_all:'☑ Todos', deselect_all:'☐ Nenhum', mqtt_label:'MQTT',
     arm_time_label:'Tempo armado (s)', disarm_time_label:'Tempo desarmado (s)',
     pin_incorrect:'❌ PIN atual incorreto', pin_updated:'✓ PIN Atualizado', pin_deleted:'✓ PIN Removido',
+    forgot_pin:'Esqueceu o PIN?', admin_only_pin:'🔒 Apenas um administrador pode alterar o PIN mestre.', recovery_mode:'🔓 Modo recuperação: defina um novo PIN (PIN atual não é necessário).',
     searching_auto:'↻ Buscando automações...', no_auto_linked:'Nenhuma automação vinculada ao Argus.',
     pin_remove_hint:'Para remover o PIN: insira o atual e deixe os campos abaixo vazios.',
     lbl_load_file:'Carregar arquivo:', lbl_aesthetic_custom:'Personalização estética', lbl_uploaded_files:'Arquivos enviados no servidor',
@@ -376,6 +380,7 @@ const TEXTS = {
     select_all:'☑ Tutti', deselect_all:'☐ Nessuno', mqtt_label:'MQTT',
     arm_time_label:'Tempo armato (s)', disarm_time_label:'Tempo disarmato (s)',
     pin_incorrect:'❌ PIN attuale errato', pin_updated:'✓ PIN Aggiornato', pin_deleted:'✓ PIN Eliminato',
+    forgot_pin:'PIN dimenticato?', admin_only_pin:'🔒 Solo un amministratore può cambiare il PIN principale.', recovery_mode:'🔓 Modalità recupero: imposta un nuovo PIN (PIN attuale non richiesto).',
     searching_auto:'↻ Ricerca automazioni...', no_auto_linked:'Nessuna automazione collegata ad Argus.',
     pin_remove_hint:'Per rimuovere il PIN: inserisci quello attuale e lascia vuoti i campi sottostanti.',
     lbl_load_file:'Carica file:', lbl_aesthetic_custom:'Personalizzazione estetica', lbl_uploaded_files:'File caricati sul server',
@@ -446,6 +451,7 @@ const TEXTS = {
     select_all:'☑ 全选', deselect_all:'☐ 全不选', mqtt_label:'MQTT',
     arm_time_label:'布防延迟(s)', disarm_time_label:'进入延迟(s)',
     pin_incorrect:'❌ 当前PIN错误', pin_updated:'✓ PIN已更新', pin_deleted:'✓ PIN已删除',
+    forgot_pin:'忘记PIN码？', admin_only_pin:'🔒 只有管理员可以更改主PIN码。', recovery_mode:'🔓 恢复模式：设置新PIN码（无需当前PIN码）。',
     searching_auto:'↻ 正在搜索自动化...', no_auto_linked:'没有链接到Argus的自动化。',
     pin_remove_hint:'删除PIN: 输入当前PIN并将下面字段留空。',
     lbl_load_file:'上传文件:', lbl_aesthetic_custom:'美学个性化', lbl_uploaded_files:'服务器上上传的文件',
@@ -516,6 +522,7 @@ const TEXTS = {
     select_all:'☑ Все', deselect_all:'☐ Ничего', mqtt_label:'MQTT',
     arm_time_label:'Время взятия (с)', disarm_time_label:'Время снятия (с)',
     pin_incorrect:'❌ Неверный текущий PIN', pin_updated:'✓ PIN Обновлен', pin_deleted:'✓ PIN Удален',
+    forgot_pin:'Забыли PIN?', admin_only_pin:'🔒 Только администратор может изменить мастер-PIN.', recovery_mode:'🔓 Режим восстановления: задайте новый PIN (текущий не требуется).',
     searching_auto:'↻ Поиск автоматизаций...', no_auto_linked:'Нет автоматизаций, связанных с Argus.',
     pin_remove_hint:'Для удаления PIN: введите текущий и оставьте поля пустыми.',
     lbl_load_file:'Загрузить файл:', lbl_aesthetic_custom:'Эстетическая персонализация', lbl_uploaded_files:'Загруженные файлы на сервере',
@@ -1503,6 +1510,9 @@ _tmpl.innerHTML = `
               <div class="save-row" style="margin-top:15px">
                 <button class="primary" id="btn-save-pin" style="width:100%"></button>
               </div>
+              <button class="ghost" id="btn-forgot-pin" style="width:100%;margin-top:8px;font-size:12px;display:none"></button>
+              <p class="small" id="p-recovery-mode" style="margin:8px 0 0 0;color:var(--primary-color);font-weight:700;display:none"></p>
+              <p class="small" id="p-admin-only-pin" style="margin:8px 0 0 0;opacity:0.8;display:none"></p>
               <div id="pin-status" class="status" style="margin-top:8px; text-align:center; font-size:12px; font-weight:bold; min-height:18px;"></div>
             </div>
           </div>
@@ -1520,7 +1530,7 @@ _tmpl.innerHTML = `
       </section>
 
       <!-- Backup & Restore -->
-      <section class="glass panel liquid-glass">
+      <section class="glass panel liquid-glass" id="backup-section">
         <h2 id="h-backup-title">Respaldo y Restauración</h2>
         <p class="small" id="p-backup-desc" style="margin-bottom:12px;opacity:0.7">Guarda una copia de seguridad de tus ajustes o restaura una anterior.</p>
         <div style="display:flex;gap:10px;align-items:center;">
@@ -1813,6 +1823,8 @@ class ArgusPanel extends HTMLElement {
     set('t-change-pin',   t('change_pin'));
     set('l-current-pin-lbl', t('current_pin'));
     set('btn-save-pin',   t('update_pin'));
+    set('btn-forgot-pin', t('forgot_pin'));
+    set('p-admin-only-pin', t('admin_only_pin'));
     set('l-new-pin',      t('new_pin'));
     set('l-confirm-pin',  t('confirm_pin'));
     set('h-notifications',t('notifications_title'));
@@ -2121,10 +2133,16 @@ class ArgusPanel extends HTMLElement {
     if (!confirm('¿Estás seguro de que deseas restablecer Argus a sus valores de fábrica? Perderás todas tus configuraciones, PINs y modos.')) return;
     try {
       this._undoState = JSON.parse(JSON.stringify(this._ui)); // Store for undo
-      
+      // El PIN maestro vive en las opciones del config entry, no en el storage UI.
+      // Lo guardamos aparte para poder deshacer y lo borramos para que el
+      // restablecimiento sea realmente de fábrica (antes el PIN sobrevivía).
+      this._undoPin = this._dashboard?.entries?.[0]?.options?.code || '';
+
       const defaultConfig = {};
       await this._send('argus/restore_config', { config: defaultConfig });
-      
+      try { await this._send('argus/update_master_pin', { pin: '' }); }
+      catch (e) { console.warn('Argus: no se pudo borrar el PIN en el reset:', e); }
+
       this.shadowRoot.getElementById('btn-reset-config').style.display = 'none';
       this.shadowRoot.getElementById('btn-undo-reset').style.display = 'block';
       
@@ -2145,7 +2163,12 @@ class ArgusPanel extends HTMLElement {
     try {
       clearTimeout(this._resetTimer);
       await this._send('argus/restore_config', { config: this._undoState });
-      
+      // Restaurar también el PIN maestro que borramos en el reset.
+      if (this._undoPin) {
+        try { await this._send('argus/update_master_pin', { pin: this._undoPin }); }
+        catch (e) { console.warn('Argus: no se pudo restaurar el PIN:', e); }
+      }
+
       this.shadowRoot.getElementById('btn-reset-config').style.display = 'block';
       this.shadowRoot.getElementById('btn-undo-reset').style.display = 'none';
       
@@ -2171,6 +2194,7 @@ class ArgusPanel extends HTMLElement {
       window.dispatchEvent(new CustomEvent('location-changed'));
     });
     s('btn-save-pin').addEventListener('click', () => this._savePin());
+    this.shadowRoot.getElementById('btn-forgot-pin')?.addEventListener('click', () => this._enterPinRecovery());
 
     s('pin-close').addEventListener('click', () => this._closePinModal());
     s('pin-cancel').addEventListener('click', () => this._closePinModal());
@@ -2272,6 +2296,7 @@ class ArgusPanel extends HTMLElement {
     catch (e) { console.error('Argus dashboard load failed:', e); return; }
 
     this._dashboard = dashboard;
+    this._isAdmin = dashboard.is_admin !== false; // por defecto permisivo si el backend no lo envía
     this._available = dashboard.available_entities || [];
     this._ui = dashboard.ui || { modes: {}, dashboard: {} };
     this._notifTargets = dashboard.ui?.notif_targets || [];
@@ -2288,6 +2313,7 @@ class ArgusPanel extends HTMLElement {
     this._hubBgSound = Boolean(dashboard.ui?.hub_bg_sound);
     
     this._updateHomeNameDisplay();
+    this._applyAdminVisibility();
 
     this._populateTemperatureSources();
     const tempSel = this.shadowRoot.getElementById('temp-source-select-standalone');
@@ -3964,11 +3990,60 @@ class ArgusPanel extends HTMLElement {
   }
 
   /* ── PIN management ──────────────────────────────────────────────── */
+  // Muestra/oculta controles sensibles según si el usuario de HA es admin.
+  _applyAdminVisibility() {
+    const isAdmin = this._isAdmin !== false;
+    const hide = (id, hidden) => {
+      const el = this.shadowRoot.getElementById(id);
+      if (el) el.style.display = hidden ? 'none' : '';
+    };
+    // PIN maestro: solo admins pueden editarlo (backend exige admin).
+    hide('group-current-pin', !isAdmin);
+    hide('p-pin-remove-hint', !isAdmin);
+    hide('btn-save-pin', !isAdmin);
+    const newPinGroups = this.shadowRoot.querySelectorAll('#new-pin-1, #new-pin-2');
+    newPinGroups.forEach(inp => {
+      const fg = inp.closest('.field-group');
+      if (fg) fg.style.display = isAdmin ? '' : 'none';
+    });
+    // Nota explicativa para no-admins.
+    const adminNote = this.shadowRoot.getElementById('p-admin-only-pin');
+    if (adminNote) {
+      adminNote.textContent = this._t('admin_only_pin');
+      adminNote.style.display = isAdmin ? 'none' : 'block';
+    }
+    // Respaldo/Restauración/Restablecer también es admin-only.
+    hide('backup-section', !isAdmin);
+    // Botón "¿Olvidaste tu PIN?": visible solo para admins cuando hay un PIN.
+    const hasPIN = !!(this._dashboard?.entries?.[0]?.options?.code);
+    const forgotBtn = this.shadowRoot.getElementById('btn-forgot-pin');
+    if (forgotBtn) {
+      forgotBtn.textContent = this._t('forgot_pin');
+      forgotBtn.style.display = (isAdmin && hasPIN && !this._pinRecovery) ? 'block' : 'none';
+    }
+  }
+
+  // Activa el modo recuperación: permite definir un nuevo PIN sin conocer el actual.
+  // Seguro porque el backend (argus/update_master_pin) ya exige sesión de administrador.
+  _enterPinRecovery() {
+    this._pinRecovery = true;
+    const cur = this.shadowRoot.getElementById('group-current-pin');
+    if (cur) cur.style.display = 'none';
+    const forgotBtn = this.shadowRoot.getElementById('btn-forgot-pin');
+    if (forgotBtn) forgotBtn.style.display = 'none';
+    const recMsg = this.shadowRoot.getElementById('p-recovery-mode');
+    if (recMsg) { recMsg.textContent = this._t('recovery_mode'); recMsg.style.display = 'block'; }
+    const np = this.shadowRoot.getElementById('new-pin-1');
+    if (np) np.focus();
+  }
+
   async _savePin() {
     const status = this.shadowRoot.getElementById('pin-status');
     const currentCode = this._dashboard?.entries?.[0]?.options?.code || '';
-    
-    if (currentCode) {
+
+    // En modo recuperación se omite la verificación del PIN actual (la sesión
+    // de administrador de HA ya verificó la identidad en el backend).
+    if (currentCode && !this._pinRecovery) {
       const pinCurrent = this.shadowRoot.getElementById('current-pin').value;
       if (pinCurrent !== currentCode) {
         if (status) {
@@ -4006,6 +4081,10 @@ class ArgusPanel extends HTMLElement {
       if (this.shadowRoot.getElementById('current-pin')) this.shadowRoot.getElementById('current-pin').value = '';
       this.shadowRoot.getElementById('new-pin-1').value = '';
       this.shadowRoot.getElementById('new-pin-2').value = '';
+      // Salir del modo recuperación tras un cambio exitoso.
+      this._pinRecovery = false;
+      const recMsg = this.shadowRoot.getElementById('p-recovery-mode');
+      if (recMsg) recMsg.style.display = 'none';
       setTimeout(() => this._load(), 1200);
     } catch (e) {
       if (status) {

@@ -14,6 +14,13 @@ from .const import DOMAIN, VERSION
 
 _LOGGER = logging.getLogger(__name__)
 
+# Mismas extensiones permitidas que en el WebSocket API. SVG excluido a propósito
+# (riesgo de XSS si se abre directamente).
+_ALLOWED_UPLOAD_EXTS = {
+    ".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp",
+    ".mp4", ".webm", ".ogg", ".mov", ".m4v",
+}
+
 _PANEL_REGISTERED_KEY = f"{DOMAIN}_panel_registered"
 _STATIC_REGISTERED_KEY = f"{DOMAIN}_static_registered"
 _UPLOAD_VIEW_REGISTERED_KEY = f"{DOMAIN}_upload_view_registered"
@@ -27,17 +34,30 @@ class ArgusUploadView(HomeAssistantView):
     requires_auth = True
     
     async def post(self, request: web.Request) -> web.Response:
-        """Handle file upload."""
+        """Handle file upload (admin only, allow-listed extensions)."""
         hass = request.app["hass"]
-        
+
+        # Solo administradores pueden subir archivos al directorio público www.
+        hass_user = request.get("hass_user")
+        if hass_user is None or not hass_user.is_admin:
+            return self.json({"success": False, "error": "Unauthorized"}, status=401)
+
         try:
             reader = await request.multipart()
             field = await reader.next()
-            
+
             if not field or field.name != "file":
                 return self.json({"success": False, "error": "No file field found"}, status=400)
-                
-            filename = os.path.basename(field.filename)
+
+            filename = os.path.basename(field.filename or "")
+            if not filename:
+                return self.json({"success": False, "error": "Empty filename"}, status=400)
+            ext = os.path.splitext(filename)[1].lower()
+            if ext not in _ALLOWED_UPLOAD_EXTS:
+                return self.json(
+                    {"success": False, "error": f"File type '{ext}' not allowed"},
+                    status=400,
+                )
             upload_dir = hass.config.path("www", "argus")
             
             def _write_uploaded_file():
