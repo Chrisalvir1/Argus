@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================
-# Argus v1.1.48 — Deploy completo a Home Assistant
+# Argus v1.2.0 — Deploy completo a Home Assistant
 # Ejecutar en: HA Terminal & SSH addon
 # =============================================================
 set -e
@@ -8,7 +8,7 @@ set -e
 BASE=/config/custom_components/argus
 REPO=https://raw.githubusercontent.com/Chrisalvir1/Argus/main/custom_components/argus
 
-echo "=== Argus v1.1.48 Deploy ==="
+echo "=== Argus v1.2.0 Deploy ==="
 
 # 1. Verificar que existe el directorio
 mkdir -p "$BASE/www"
@@ -22,11 +22,18 @@ for f in __init__.py alarm_control_panel.py config_flow.py const.py manifest.jso
   fi
 done
 
-# 3. Descargar el panel JS
+# 3. Descargar el panel JS y activos www
 if curl -sf "$REPO/www/argus-panel.js" -o "$BASE/www/argus-panel.js"; then
   echo "  OK  www/argus-panel.js"
 else
   echo "  ERR www/argus-panel.js" && exit 1
+fi
+
+# 3b. Descargar la imagen de fondo oficial de Argus
+if curl -sf "$REPO/www/argus-default-bg.jpg" -o "$BASE/www/argus-default-bg.jpg"; then
+  echo "  OK  www/argus-default-bg.jpg"
+else
+  echo "  WARN  www/argus-default-bg.jpg no encontrado (puede ser una instalación antigua)"
 fi
 
 # 4. Verificar que config_flow.py está reparado (sin el bug)

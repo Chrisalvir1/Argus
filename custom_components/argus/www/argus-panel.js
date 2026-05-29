@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.1.48
+ * Argus Home Hub – v1.2.0
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -89,7 +89,7 @@ const TEXTS = {
     home_name_modal_desc:'Este nombre aparece en el panel de instancias y en pantalla completa.',
     home_name_label:'Nombre del Hogar', home_name_placeholder:'Mi Casa',
     clear_log_btn:'BORRAR',
-    bg_weather:'Clima animado', bg_none:'Sin animación', bg_photo:'Una foto', bg_collage:'Collage', bg_video:'Video en loop', bg_panel_title:'Fondo para panel', bg_hub_title:'Fondo Argus (Canvas)', bg_sound_opt:'Sonido de video', bg_image_opt:'Imagen / GIF',
+    bg_weather:'Clima animado', bg_none:'Predeterminado', bg_photo:'Una foto', bg_collage:'Collage', bg_video:'Video en loop', bg_panel_title:'Fondo para panel', bg_hub_title:'Fondo Argus', bg_sound_opt:'Sonido de video', bg_image_opt:'Imagen / GIF', bg_hub_default:'Predeterminado (Argus)',
     temp_auto:'Automático (sensor local / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Batería baja',
     times_section:'⏱️ Tiempos', arm_time:'Armado (s)', disarm_time:'Desarmado (s)',
     save_config:'GUARDAR CONFIGURACIÓN', never_triggered:'Nunca activada',
@@ -170,7 +170,7 @@ const TEXTS = {
     home_name_modal_desc:'This name appears in the instances panel and in full screen.',
     home_name_label:'Home Name', home_name_placeholder:'My Home',
     clear_log_btn:'CLEAR',
-    bg_weather:'Animated weather', bg_none:'No animation', bg_photo:'One photo', bg_collage:'Collage', bg_video:'Loop video', bg_panel_title:'Panel background', bg_hub_title:'Argus background (Canvas)', bg_sound_opt:'Video sound', bg_image_opt:'Image / GIF',
+    bg_weather:'Animated weather', bg_none:'Default', bg_photo:'One photo', bg_collage:'Collage', bg_video:'Loop video', bg_panel_title:'Panel background', bg_hub_title:'Argus background', bg_sound_opt:'Video sound', bg_image_opt:'Image / GIF', bg_hub_default:'Default (Argus)',
     temp_auto:'Automatic (local sensor / thermostat / climate)', temp_thermostat:'(thermostat)', battery_low:'⚠️ Low Battery',
     times_section:'⏱️ Times', arm_time:'Arming (s)', disarm_time:'Entry delay (s)',
     save_config:'SAVE CONFIGURATION', never_triggered:'Never triggered',
@@ -249,7 +249,7 @@ const TEXTS = {
     home_name_modal_desc:'Ce nom apparaît dans le panneau des instances et en plein écran.',
     home_name_label:'Nom du domicile', home_name_placeholder:'Ma maison',
     clear_log_btn:'EFFACER',
-    bg_weather:'Météo animée', bg_none:'Sans animation', bg_photo:'Une photo', bg_collage:'Collage', bg_video:'Vidéo en boucle', bg_panel_title:'Fond du panneau', bg_hub_title:'Fond Argus (Canevas)', bg_sound_opt:'Son de la vidéo', bg_image_opt:'Image / GIF',
+    bg_weather:'Météo animée', bg_none:'Par défaut', bg_photo:'Une photo', bg_collage:'Collage', bg_video:'Vidéo en boucle', bg_panel_title:'Fond du panneau', bg_hub_title:'Fond Argus', bg_sound_opt:'Son de la vidéo', bg_image_opt:'Image / GIF', bg_hub_default:'Par défaut (Argus)',
     temp_auto:'Automatique (capteur local / thermostat / climat)', temp_thermostat:'(thermostat)', battery_low:'⚠️ Batterie faible',
     times_section:'⏱️ Temps', arm_time:'Armé (s)', disarm_time:'Délai entrée (s)',
     save_config:'ENREGISTRER LA CONFIGURATION', never_triggered:'Jamais déclenché',
@@ -319,7 +319,7 @@ const TEXTS = {
     home_name_modal_desc:'Este nome aparece no painel de instâncias e em tela cheia.',
     home_name_label:'Nome do lar', home_name_placeholder:'Minha Casa',
     clear_log_btn:'LIMPAR',
-    bg_weather:'Clima animado', bg_none:'Sem animação', bg_photo:'Uma foto', bg_collage:'Colagem', bg_video:'Vídeo em loop', bg_panel_title:'Fundo do painel', bg_hub_title:'Fundo Argus (Tela)', bg_sound_opt:'Som do vídeo', bg_image_opt:'Imagem / GIF',
+    bg_weather:'Clima animado', bg_none:'Padrão', bg_photo:'Uma foto', bg_collage:'Colagem', bg_video:'Vídeo em loop', bg_panel_title:'Fundo do painel', bg_hub_title:'Fundo Argus', bg_sound_opt:'Som do vídeo', bg_image_opt:'Imagem / GIF', bg_hub_default:'Padrão (Argus)',
     temp_auto:'Automático (sensor local / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Bateria fraca',
     times_section:'⏱️ Tempos', arm_time:'Armado (s)', disarm_time:'Atraso de entrada (s)',
     save_config:'SALVAR CONFIGURAÇÃO', never_triggered:'Nunca ativado',
@@ -389,7 +389,7 @@ const TEXTS = {
     home_name_modal_desc:'Questo nome appare nel pannello delle istanze e a schermo intero.',
     home_name_label:'Nome della casa', home_name_placeholder:'Casa mia',
     clear_log_btn:'CANCELLA',
-    bg_weather:'Meteo animato', bg_none:'Nessuna animazione', bg_photo:'Una foto', bg_collage:'Collage', bg_video:'Video in loop', bg_panel_title:'Sfondo pannello', bg_hub_title:'Sfondo Argus (Tela)', bg_sound_opt:'Audio video', bg_image_opt:'Immagine / GIF',
+    bg_weather:'Meteo animato', bg_none:'Predefinito', bg_photo:'Una foto', bg_collage:'Collage', bg_video:'Video in loop', bg_panel_title:'Sfondo pannello', bg_hub_title:'Sfondo Argus', bg_sound_opt:'Audio video', bg_image_opt:'Immagine / GIF', bg_hub_default:'Predefinito (Argus)',
     temp_auto:'Automatico (sensore locale / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Batteria scarica',
     times_section:'⏱️ Tempi', arm_time:'Armato (s)', disarm_time:'Ritardo entrata (s)',
     save_config:'SALVA CONFIGURAZIONE', never_triggered:'Mai attivato',
@@ -459,7 +459,7 @@ const TEXTS = {
     home_name_modal_desc:'此名称显示在实例面板和全屏中。',
     home_name_label:'家庭名称', home_name_placeholder:'我的家',
     clear_log_btn:'清除',
-    bg_weather:'动画天气', bg_none:'无动画', bg_photo:'单张照片', bg_collage:'拼贴画', bg_video:'循环视频', bg_panel_title:'面板背景', bg_hub_title:'Argus 背景 (画布)', bg_sound_opt:'视频声音', bg_image_opt:'图片 / GIF',
+    bg_weather:'动画天气', bg_none:'默认', bg_photo:'单张照片', bg_collage:'拼贴画', bg_video:'循环视频', bg_panel_title:'面板背景', bg_hub_title:'Argus 背景', bg_sound_opt:'视频声音', bg_image_opt:'图片 / GIF', bg_hub_default:'默认 (Argus)',
     temp_auto:'自动（本地传感器 / 恒温器 / 气候）', temp_thermostat:'(恒温器)', battery_low:'⚠️ 电池不足',
     times_section:'⏱️ 时间', arm_time:'布防延迟(s)', disarm_time:'进入延迟(s)',
     save_config:'保存配置', never_triggered:'从未触发',
@@ -529,7 +529,7 @@ const TEXTS = {
     home_name_modal_desc:'Это имя отображается в панели экземпляров и в полноекранном режиме.',
     home_name_label:'Название дома', home_name_placeholder:'Мой дом',
     clear_log_btn:'ОЧИСТИТЬ',
-    bg_weather:'Анимированная погода', bg_none:'Без анимации', bg_photo:'Одно фото', bg_collage:'Коллаж', bg_video:'Зацикленное видео', bg_panel_title:'Фон панели', bg_hub_title:'Фон Argus (Холст)', bg_sound_opt:'Звук видео', bg_image_opt:'Изображение / GIF',
+    bg_weather:'Анимированная погода', bg_none:'По умолчанию', bg_photo:'Одно фото', bg_collage:'Коллаж', bg_video:'Зацикленное видео', bg_panel_title:'Фон панели', bg_hub_title:'Фон Argus', bg_sound_opt:'Звук видео', bg_image_opt:'Изображение / GIF', bg_hub_default:'По умолчанию (Argus)',
     temp_auto:'Авто (лок. датчик / термостат / климат)', temp_thermostat:'(термостат)', battery_low:'⚠️ Низкий заряд',
     times_section:'⏱️ Времена', arm_time:'Постановка (s)', disarm_time:'Задержка входа (s)',
     save_config:'СОХРАНИТЬ КОНФИГУРАЦИЮ', never_triggered:'Никогда не срабатывало',
@@ -1759,9 +1759,12 @@ class ArgusPanel extends HTMLElement {
     if (!this._hass) return;
 
     let isDark = false;
-    const hubBgMode = this._hubBgMode || 'none';
+    const hubBgMode = this._hubBgMode || 'default';
 
-    if (hubBgMode === 'image') {
+    if (hubBgMode === 'default') {
+      // Official Argus background is dark — always use dark mode
+      isDark = true;
+    } else if (hubBgMode === 'image') {
       const src = this._hubBgFile || '';
       if (src) {
         if (this._cachedBgUrl === src && this._cachedBgBrightness !== undefined) {
@@ -1776,8 +1779,6 @@ class ArgusPanel extends HTMLElement {
         // Fallback to Home Assistant theme if no image URL is populated yet
         isDark = this._hass.themes ? this._hass.themes.darkMode === true : false;
       }
-    } else if (hubBgMode === 'video') {
-      isDark = true;
     } else {
       // hubBgMode is 'none', so use panel background mode or Lovelace theme
       const mode = this._backgroundMode || 'weather';
@@ -1812,8 +1813,6 @@ class ArgusPanel extends HTMLElement {
         } else {
           isDark = this._hass.themes ? this._hass.themes.darkMode === true : false;
         }
-      } else if (mode === 'video') {
-        isDark = true;
       }
     }
 
@@ -2052,7 +2051,6 @@ class ArgusPanel extends HTMLElement {
         <option value="none">${t('bg_none')}</option>
         <option value="photo">${t('bg_photo')}</option>
         <option value="collage">${t('bg_collage')}</option>
-        <option value="video">${t('bg_video')}</option>
       `;
       if (v) bgMode.value = v;
     }
@@ -2061,9 +2059,9 @@ class ArgusPanel extends HTMLElement {
     if (hubBgSelect) {
       const v = hubBgSelect.value;
       hubBgSelect.innerHTML = `
-        <option value="none">${t('bg_none')}</option>
+        <option value="default">${t('bg_hub_default')}</option>
         <option value="image">${t('bg_image_opt')}</option>
-        <option value="video">${t('bg_video')}</option>
+        <option value="none">${t('bg_none')}</option>
       `;
       if (v) hubBgSelect.value = v;
     }
@@ -2441,7 +2439,7 @@ class ArgusPanel extends HTMLElement {
     this._temperatureSource = dashboard.ui?.temperature_source || 'auto';
     this._panelBgFile = dashboard.ui?.panel_bg_file || '';
     this._panelBgSound = Boolean(dashboard.ui?.panel_bg_sound);
-    this._hubBgMode = dashboard.ui?.hub_bg_mode || 'none';
+    this._hubBgMode = dashboard.ui?.hub_bg_mode || 'default';
     this._hubBgFile = dashboard.ui?.hub_bg_file || '';
     this._hubBgSound = Boolean(dashboard.ui?.hub_bg_sound);
     this._updateTheme();
@@ -2458,7 +2456,6 @@ class ArgusPanel extends HTMLElement {
         <option value="none">${this._t('bg_none')}</option>
         <option value="photo">${this._t('bg_photo')}</option>
         <option value="collage">${this._t('bg_collage')}</option>
-        <option value="video">${this._t('bg_video')}</option>
       `;
       bgMode.value = this._backgroundMode || 'weather';
     }
@@ -2466,11 +2463,11 @@ class ArgusPanel extends HTMLElement {
     const hubBgSelect = this.shadowRoot.getElementById('hub-bg-mode-select');
     if (hubBgSelect) {
       hubBgSelect.innerHTML = `
-        <option value="none">${this._t('bg_none')}</option>
+        <option value="default">${this._t('bg_hub_default')}</option>
         <option value="image">${this._t('bg_image_opt')}</option>
-        <option value="video">${this._t('bg_video')}</option>
+        <option value="none">${this._t('bg_none')}</option>
       `;
-      hubBgSelect.value = this._hubBgMode || 'none';
+      hubBgSelect.value = this._hubBgMode || 'default';
     }
 
     const panelUrlInput = this.shadowRoot.getElementById('panel-bg-url-input');
@@ -3664,84 +3661,145 @@ class ArgusPanel extends HTMLElement {
     const help = this.shadowRoot.getElementById('bg-file-help'); if (help) help.textContent = `${this._backgroundImages.length} imagen(es) cargadas para el panel.`;
   }
 
+  _isVideoFile(file) {
+    const videoExts = ['.mov', '.mp4', '.webm', '.ogg', '.avi', '.m4v'];
+    const name = (file.name || '').toLowerCase();
+    return videoExts.some(e => name.endsWith(e)) || file.type.startsWith('video/');
+  }
+
+  async _showLivePhotoDialog(file, onImage, onVideo) {
+    // Show a simple confirm dialog asking what to do with .mov files
+    const choice = confirm(`"${file.name}"\n\n¿Usar como imagen estática (OK) o como video animado (Cancelar)?\n\n• OK → Imagen estática\n• Cancelar → Video animado`);
+    if (choice) {
+      await onImage();
+    } else {
+      await onVideo();
+    }
+  }
+
+  async _uploadFile(file, help) {
+    const token = this._hass?.auth?.accessToken;
+    const headers = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await fetch('/api/argus/upload', {
+      method: 'POST',
+      body: formData,
+      headers: headers
+    });
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return await response.json();
+  }
+
   async _handlePanelBgFile(ev) {
     const file = ev?.target?.files?.[0]; if (!file) return;
     const help = this.shadowRoot.getElementById('bg-file-help');
     if (help) help.textContent = 'Subiendo al servidor...';
-    
+    ev.target.value = '';
     try {
-      const token = this._hass?.auth?.accessToken;
-      const headers = {};
-      if (token) headers['Authorization'] = `Bearer ${token}`;
-
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const response = await fetch('/api/argus/upload', {
-        method: 'POST',
-        body: formData,
-        headers: headers
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const res = await response.json();
-      if (res && res.success) {
-        this._panelBgFile = res.url;
-        const inp = this.shadowRoot.getElementById('panel-bg-url-input');
-        if (inp) inp.value = res.url;
-        if (help) help.textContent = `Subido: ${file.name}`;
-        this._loadUploadedFiles();
+      const isVideo = this._isVideoFile(file);
+      if (isVideo) {
+        await this._showLivePhotoDialog(
+          file,
+          async () => {
+            // As static image — still upload the file
+            const res = await this._uploadFile(file, help);
+            if (res?.success) {
+              this._panelBgFile = res.url;
+              const inp = this.shadowRoot.getElementById('panel-bg-url-input');
+              if (inp) inp.value = res.url;
+              if (help) help.textContent = `Subido como imagen: ${file.name}`;
+              this._loadUploadedFiles();
+            } else {
+              if (help) help.textContent = 'Error: ' + (res?.error || 'Falló la subida.');
+            }
+          },
+          async () => {
+            // As animated video
+            const res = await this._uploadFile(file, help);
+            if (res?.success) {
+              this._panelBgFile = res.url;
+              const inp = this.shadowRoot.getElementById('panel-bg-url-input');
+              if (inp) inp.value = res.url;
+              if (help) help.textContent = `Subido como video: ${file.name}`;
+              this._loadUploadedFiles();
+            } else {
+              if (help) help.textContent = 'Error: ' + (res?.error || 'Falló la subida.');
+            }
+          }
+        );
       } else {
-        if (help) help.textContent = 'Error: ' + (res?.error || 'Falló la subida.');
+        const res = await this._uploadFile(file, help);
+        if (res?.success) {
+          this._panelBgFile = res.url;
+          const inp = this.shadowRoot.getElementById('panel-bg-url-input');
+          if (inp) inp.value = res.url;
+          if (help) help.textContent = `Subido: ${file.name}`;
+          this._loadUploadedFiles();
+        } else {
+          if (help) help.textContent = 'Error: ' + (res?.error || 'Falló la subida.');
+        }
       }
     } catch (err) {
       console.error('Upload failed:', err);
       if (help) help.textContent = `Error: ${err.message || err}`;
     }
-    ev.target.value = '';
   }
 
   async _handleHubBgFile(ev) {
     const file = ev?.target?.files?.[0]; if (!file) return;
     const help = this.shadowRoot.getElementById('hub-file-help');
     if (help) help.textContent = 'Subiendo al servidor...';
-    
+    ev.target.value = '';
     try {
-      const token = this._hass?.auth?.accessToken;
-      const headers = {};
-      if (token) headers['Authorization'] = `Bearer ${token}`;
-
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const response = await fetch('/api/argus/upload', {
-        method: 'POST',
-        body: formData,
-        headers: headers
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const res = await response.json();
-      if (res && res.success) {
-        this._hubBgFile = res.url;
-        const inp = this.shadowRoot.getElementById('hub-bg-url-input');
-        if (inp) inp.value = res.url;
-        if (help) help.textContent = `Subido: ${file.name}`;
-        this._loadUploadedFiles();
+      const isVideo = this._isVideoFile(file);
+      if (isVideo) {
+        await this._showLivePhotoDialog(
+          file,
+          async () => {
+            // As static image
+            const res = await this._uploadFile(file, help);
+            if (res?.success) {
+              this._hubBgFile = res.url;
+              const inp = this.shadowRoot.getElementById('hub-bg-url-input');
+              if (inp) inp.value = res.url;
+              if (help) help.textContent = `Subido como imagen: ${file.name}`;
+              this._loadUploadedFiles();
+            } else {
+              if (help) help.textContent = 'Error: ' + (res?.error || 'Falló la subida.');
+            }
+          },
+          async () => {
+            // As animated video — set hub bg mode to 'image' and use video URL directly
+            const res = await this._uploadFile(file, help);
+            if (res?.success) {
+              this._hubBgFile = res.url;
+              const inp = this.shadowRoot.getElementById('hub-bg-url-input');
+              if (inp) inp.value = res.url;
+              if (help) help.textContent = `Subido como video: ${file.name}`;
+              this._loadUploadedFiles();
+            } else {
+              if (help) help.textContent = 'Error: ' + (res?.error || 'Falló la subida.');
+            }
+          }
+        );
       } else {
-        if (help) help.textContent = 'Error: ' + (res?.error || 'Falló la subida.');
+        const res = await this._uploadFile(file, help);
+        if (res?.success) {
+          this._hubBgFile = res.url;
+          const inp = this.shadowRoot.getElementById('hub-bg-url-input');
+          if (inp) inp.value = res.url;
+          if (help) help.textContent = `Subido: ${file.name}`;
+          this._loadUploadedFiles();
+        } else {
+          if (help) help.textContent = 'Error: ' + (res?.error || 'Falló la subida.');
+        }
       }
     } catch (err) {
       console.error('Upload failed:', err);
       if (help) help.textContent = `Error: ${err.message || err}`;
     }
-    ev.target.value = '';
   }
 
   async _loadUploadedFiles() {
@@ -3776,14 +3834,12 @@ class ArgusPanel extends HTMLElement {
         countLabel.textContent = `${files.length} arch. (${totalStr})`;
       }
 
-      listContainer.innerHTML = files.map(file => `
-        <div class="file-card">
+      listContainer.innerHTML = files
+        .filter(file => !file.is_video)
+        .map(file => `
+        <div class="file-card" data-filename="${file.name}">
           <div class="file-card-preview">
-            ${file.is_video ? `
-              <video src="${file.url}" muted playsinline></video>
-            ` : `
-              <img src="${file.url}" loading="lazy">
-            `}
+            <img src="${file.url}" loading="lazy">
           </div>
           <div class="file-card-name" title="${file.name}">${file.name}</div>
           <div class="file-card-meta">
@@ -3800,8 +3856,9 @@ class ArgusPanel extends HTMLElement {
       listContainer.querySelectorAll('.file-card-btn-delete').forEach(btn => {
         btn.addEventListener('click', () => {
           const fname = btn.dataset.filename;
-          if (confirm(`¿Seguro que deseas borrar el archivo "${fname}" del servidor permanentemente?`)) {
-            this._deleteUploadedFile(fname);
+          if (confirm(`¿Seguro que deseas borrar "${fname}" permanentemente?`)) {
+            const card = btn.closest('.file-card');
+            this._deleteUploadedFile(fname, card);
           }
         });
       });
@@ -3838,47 +3895,54 @@ class ArgusPanel extends HTMLElement {
     }
   }
 
-  async _deleteUploadedFile(filename) {
-    try {
-      const res = await this._send('argus/delete_uploaded_file', { filename });
-      if (res && res.success) {
-        this._loadUploadedFiles();
-        
-        const panelInp = this.shadowRoot.getElementById('panel-bg-url-input');
-        if (panelInp && panelInp.value === `/local/argus/${filename}`) {
-          panelInp.value = '';
-          this._panelBgFile = '';
-        }
-        const hubInp = this.shadowRoot.getElementById('hub-bg-url-input');
-        if (hubInp && hubInp.value === `/local/argus/${filename}`) {
-          hubInp.value = '';
-          this._hubBgFile = '';
-        }
-      } else {
-        alert('Error al intentar borrar el archivo.');
+  async _deleteUploadedFile(filename, cardEl) {
+    // Optimistic: remove from UI immediately
+    if (cardEl) cardEl.remove();
+    // Update local cache
+    if (this._uploadedFiles) {
+      this._uploadedFiles = this._uploadedFiles.filter(f => f.name !== filename);
+      const countLabel = this.shadowRoot.getElementById('storage-files-count');
+      const listContainer = this.shadowRoot.getElementById('uploaded-files-list');
+      if (countLabel && this._uploadedFiles.length === 0 && listContainer) {
+        listContainer.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:20px; font-size:11px; opacity:0.5;">Sin archivos subidos.</div>`;
+        countLabel.textContent = '0 archivos';
       }
+    }
+    // Also clear inputs if this file was selected
+    const panelInp = this.shadowRoot.getElementById('panel-bg-url-input');
+    if (panelInp && panelInp.value === `/local/argus/${filename}`) {
+      panelInp.value = '';
+      this._panelBgFile = '';
+    }
+    const hubInp = this.shadowRoot.getElementById('hub-bg-url-input');
+    if (hubInp && hubInp.value === `/local/argus/${filename}`) {
+      hubInp.value = '';
+      this._hubBgFile = '';
+    }
+    // Fire-and-forget server delete (no timeout block)
+    try {
+      await this._send('argus/delete_uploaded_file', { filename });
     } catch (err) {
-      console.error('Delete failed:', err);
-      alert(`Error al borrar: ${err.message || err}`);
+      console.warn('Server delete failed (file already removed from UI):', err);
     }
   }
 
   _updateBgFieldsVisibility() {
     const bgMode = this.shadowRoot.getElementById('bg-mode-select-standalone')?.value || 'weather';
-    const hubBgMode = this.shadowRoot.getElementById('hub-bg-mode-select')?.value || 'none';
+    const hubBgMode = this.shadowRoot.getElementById('hub-bg-mode-select')?.value || 'default';
 
     const panelInputs = this.shadowRoot.getElementById('panel-custom-bg-inputs');
     if (panelInputs) {
-      if (bgMode === 'photo' || bgMode === 'collage' || bgMode === 'video') {
+      if (bgMode === 'photo' || bgMode === 'collage') {
         panelInputs.style.display = 'flex';
         const soundLabel = this.shadowRoot.getElementById('lbl-panel-bg-sound');
-        if (soundLabel) soundLabel.style.display = (bgMode === 'video') ? 'flex' : 'none';
+        if (soundLabel) soundLabel.style.display = 'none';
         
         const fileInput = this.shadowRoot.getElementById('panel-bg-file-input');
-        if (fileInput) fileInput.accept = (bgMode === 'video') ? 'video/*' : 'image/*';
+        if (fileInput) fileInput.accept = 'image/*,.mov,.heic,.heif';
         
         const urlInput = this.shadowRoot.getElementById('panel-bg-url-input');
-        if (urlInput) urlInput.placeholder = (bgMode === 'video') ? 'Pegar URL del video (ej. /local/video.mp4)' : 'Pegar URL de la imagen';
+        if (urlInput) urlInput.placeholder = 'Pegar URL de la imagen';
       } else {
         panelInputs.style.display = 'none';
       }
@@ -3886,16 +3950,16 @@ class ArgusPanel extends HTMLElement {
 
     const hubInputs = this.shadowRoot.getElementById('hub-custom-bg-inputs');
     if (hubInputs) {
-      if (hubBgMode !== 'none') {
+      if (hubBgMode === 'image') {
         hubInputs.style.display = 'flex';
         const soundLabel = this.shadowRoot.getElementById('lbl-hub-bg-sound');
-        if (soundLabel) soundLabel.style.display = (hubBgMode === 'video') ? 'flex' : 'none';
+        if (soundLabel) soundLabel.style.display = 'none';
         
         const fileInput = this.shadowRoot.getElementById('hub-bg-file-input');
-        if (fileInput) fileInput.accept = (hubBgMode === 'video') ? 'video/*' : 'image/*';
+        if (fileInput) fileInput.accept = 'image/*,.mov,.heic,.heif';
         
         const urlInput = this.shadowRoot.getElementById('hub-bg-url-input');
-        if (urlInput) urlInput.placeholder = (hubBgMode === 'video') ? 'Pegar URL del video (ej. /local/video.mp4)' : 'Pegar URL de la imagen/GIF';
+        if (urlInput) urlInput.placeholder = 'Pegar URL de la imagen/GIF';
       } else {
         hubInputs.style.display = 'none';
       }
@@ -3904,9 +3968,8 @@ class ArgusPanel extends HTMLElement {
 
   _updateCanvasBackground() {
     const bgContainer = this.shadowRoot.getElementById('argus-canvas-bg');
-    const mode = this._hubBgMode || 'none';
+    const mode = this._hubBgMode || 'default';
     const file = this._hubBgFile || '';
-    const sound = this._hubBgSound;
 
     // Reset inline host background styling
     this.style.backgroundImage = '';
@@ -3921,37 +3984,21 @@ class ArgusPanel extends HTMLElement {
       bgContainer.style.backgroundImage = '';
     }
 
-    if (mode === 'none' || !file) {
+    if (mode === 'none') {
       return;
     }
 
-    if (mode === 'image') {
-      // Clear any potential video inside the container
-      if (bgContainer) {
-        bgContainer.innerHTML = '';
-        bgContainer.style.backgroundImage = '';
-      }
+    const imgSrc = (mode === 'default')
+      ? '/local/argus/www/argus-default-bg.jpg'
+      : (mode === 'image' && file ? file : '');
+
+    if (imgSrc) {
       // Apply background directly to :host to prevent browser/Safari z-index Shadow DOM rendering issues
-      this.style.backgroundImage = `url('${file.replace(/'/g, "%27")}')`;
+      this.style.backgroundImage = `url('${imgSrc.replace(/'/g, "%27")}')`;
       this.style.backgroundSize = 'cover';
       this.style.backgroundPosition = 'center';
       this.style.backgroundRepeat = 'no-repeat';
       this.style.backgroundAttachment = 'fixed';
-    } else if (mode === 'video') {
-      if (bgContainer) {
-        // Clear host background to allow the video container behind it to be visible
-        this.style.background = 'transparent';
-        const existingVideo = bgContainer.querySelector('video');
-        if (existingVideo && existingVideo.querySelector('source')?.src === file) {
-          existingVideo.muted = !sound;
-          return;
-        }
-        bgContainer.innerHTML = `
-          <video autoplay loop playsinline ${sound ? '' : 'muted'} style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; z-index:0;">
-            <source src="${file}">
-          </video>
-        `;
-      }
     }
   }
 
