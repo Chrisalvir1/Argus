@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.1.47
+ * Argus Home Hub – v1.1.48
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -573,6 +573,10 @@ _tmpl.innerHTML = `
     --log-item-border: rgba(255, 255, 255, 0.05);
     --user-card-bg: rgba(255, 255, 255, 0.02);
     --user-card-border: rgba(255, 255, 255, 0.06);
+    --primary-text-color: #ffffff;
+    --secondary-text-color: rgba(255, 255, 255, 0.7);
+    --input-bg: rgba(255, 255, 255, 0.04);
+    --input-border: rgba(255, 255, 255, 0.12);
   }
   
   /* Detect light mode via HA variables and adjust glass */
@@ -607,6 +611,10 @@ _tmpl.innerHTML = `
     --log-item-border: rgba(0, 0, 0, 0.05);
     --user-card-bg: rgba(0, 0, 0, 0.02);
     --user-card-border: rgba(0, 0, 0, 0.06);
+    --primary-text-color: #1d1d1f;
+    --secondary-text-color: rgba(0, 0, 0, 0.6);
+    --input-bg: rgba(0, 0, 0, 0.03);
+    --input-border: rgba(0, 0, 0, 0.10);
   }
   
   :host {
@@ -1702,6 +1710,9 @@ class ArgusPanel extends HTMLElement {
     this._fullscreenIdx = -1;
     this._cachedBgUrl = null;
     this._cachedBgBrightness = undefined;
+    this._hubBgMode = 'none';
+    this._hubBgFile = '';
+    this._hubBgSound = false;
   }
 
   _getBrightness(src) {
@@ -1748,34 +1759,10 @@ class ArgusPanel extends HTMLElement {
     if (!this._hass) return;
 
     let isDark = false;
-    const mode = this._backgroundMode || 'weather';
+    const hubBgMode = this._hubBgMode || 'none';
 
-    if (mode === 'none') {
-      // Respect Home Assistant theme
-      isDark = this._hass.themes ? this._hass.themes.darkMode === true : false;
-    } else if (mode === 'weather') {
-      // Weather logic
-      const isNight = this._hass.states?.['sun.sun']?.state === 'below_horizon';
-      if (isNight) {
-        isDark = true;
-      } else {
-        const weatherEnt = Object.values(this._hass.states || {}).find(s => s.entity_id.startsWith('weather.')) || { state: 'sunny' };
-        const weatherState = weatherEnt.state || 'sunny';
-        // Light weather conditions: sunny, fog, snow, windy
-        const lightConditions = ['sunny', 'fog', 'snow', 'windy'];
-        isDark = !lightConditions.includes(weatherState);
-      }
-    } else if (mode === 'photo' || mode === 'collage') {
-      // Image logic
-      let src = '';
-      if (this._backgroundImages && this._backgroundImages[0]) {
-        src = this._backgroundImages[0];
-      } else if (this._panelBgFile) {
-        src = this._panelBgFile;
-      } else if (this._hubBgFile) {
-        src = this._hubBgFile;
-      }
-
+    if (hubBgMode === 'image') {
+      const src = this._hubBgFile || '';
       if (src) {
         if (this._cachedBgUrl === src && this._cachedBgBrightness !== undefined) {
           isDark = this._cachedBgBrightness < 135;
@@ -1789,9 +1776,45 @@ class ArgusPanel extends HTMLElement {
         // Fallback to Home Assistant theme if no image URL is populated yet
         isDark = this._hass.themes ? this._hass.themes.darkMode === true : false;
       }
-    } else if (mode === 'video') {
-      // Video is usually dark
+    } else if (hubBgMode === 'video') {
       isDark = true;
+    } else {
+      // hubBgMode is 'none', so use panel background mode or Lovelace theme
+      const mode = this._backgroundMode || 'weather';
+      if (mode === 'none') {
+        isDark = this._hass.themes ? this._hass.themes.darkMode === true : false;
+      } else if (mode === 'weather') {
+        const isNight = this._hass.states?.['sun.sun']?.state === 'below_horizon';
+        if (isNight) {
+          isDark = true;
+        } else {
+          const weatherEnt = Object.values(this._hass.states || {}).find(s => s.entity_id.startsWith('weather.')) || { state: 'sunny' };
+          const weatherState = weatherEnt.state || 'sunny';
+          const lightConditions = ['sunny', 'fog', 'snow', 'windy'];
+          isDark = !lightConditions.includes(weatherState);
+        }
+      } else if (mode === 'photo' || mode === 'collage') {
+        let src = '';
+        if (this._backgroundImages && this._backgroundImages[0]) {
+          src = this._backgroundImages[0];
+        } else if (this._panelBgFile) {
+          src = this._panelBgFile;
+        }
+        if (src) {
+          if (this._cachedBgUrl === src && this._cachedBgBrightness !== undefined) {
+            isDark = this._cachedBgBrightness < 135;
+          } else {
+            const brightness = await this._getBrightness(src);
+            this._cachedBgUrl = src;
+            this._cachedBgBrightness = brightness;
+            isDark = brightness < 135;
+          }
+        } else {
+          isDark = this._hass.themes ? this._hass.themes.darkMode === true : false;
+        }
+      } else if (mode === 'video') {
+        isDark = true;
+      }
     }
 
     this.setAttribute('argus-dark-mode', isDark ? 'true' : 'false');
