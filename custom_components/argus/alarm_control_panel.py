@@ -21,9 +21,11 @@ from homeassistant.components.alarm_control_panel import (
     AlarmControlPanelState,
     CodeFormat,
 )
+from homeassistant.components import persistent_notification
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import STATE_ON
 from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers import entity_platform
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.event import (
@@ -88,6 +90,11 @@ async def async_setup_entry(
 ) -> None:
     """Set up Argus alarm panel from a config entry."""
     async_add_entities([ArgusAlarmPanel(hass, config_entry)], update_before_add=True)
+
+    # Registrar el servicio de entidad `argus.panic` que services.yaml anuncia
+    # (antes no existía). Dispara inmediatamente la alarma de la entidad objetivo.
+    platform = entity_platform.async_get_current_platform()
+    platform.async_register_entity_service("panic", {}, "async_alarm_trigger")
 
 
 
@@ -394,12 +401,19 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         persons = self.hass.states.async_all("person")
         if not persons:
             return
-            
-        all_away = all(p.state not in ("home", "En casa") for p in persons)
+
+        # Considerar solo personas con un estado de presencia conocido
+        # (home/not_home). Ignorar unknown/unavailable para no disparar
+        # sugerencias falsas. Requiere al menos una persona con estado válido.
+        known = [p for p in persons if p.state in ("home", "not_home")]
+        if not known:
+            return
+        all_away = all(p.state == "not_home" for p in known)
         if all_away:
             if not getattr(self, "_smart_arming_suggested", False):
                 self._smart_arming_suggested = True
-                self.hass.components.persistent_notification.async_create(
+                persistent_notification.async_create(
+                    self.hass,
                     "Todos parecen haber salido de casa, pero la alarma sigue desarmada. ¿Deseas armar Argus?",
                     title="💡 Sugerencia Inteligente Argus AI",
                     notification_id="argus_smart_arming"
@@ -663,7 +677,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         await self._async_mqtt_publish()
         self.hass.async_create_task(self._evaluate_automations("triggered", sensor=self._triggered_by))
         # Persistent notification in HA
-        self.hass.components.persistent_notification.async_create(
+        persistent_notification.async_create(
+            self.hass,
             f"\u26a0\ufe0f Sensor: **{self._triggered_by or 'desconocido'}**\n\nModo activo: `{self._alarm_state.value}`",
             title="\U0001f6a8 Argus \u2014 Alarma Activada",
             notification_id="argus_triggered",
@@ -879,7 +894,11 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                     from datetime import datetime
                     try:
                         dt = datetime.fromisoformat(exp_date)
-                        if datetime.now() > dt:
+                        # Comparar respetando tz: si la fecha de expiración trae
+                        # zona horaria usamos "ahora" aware, si no, naive. Así
+                        # evitamos un TypeError que descartaba el PIN como expirado.
+                        now = datetime.now(dt.tzinfo) if dt.tzinfo else datetime.now()
+                        if now > dt:
                             _LOGGER.warning("Argus: User code for %s is expired", u.get("name"))
                             continue
                     except Exception as e:
@@ -931,8 +950,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         # ── ARM-LOCK v2 (Anti-Rebote HomeKit) ──────────────────────────
         # Cuando Argus está en Away/Night/Vacation y algo externo (HomeKit
-        # sincronizando con Aqara) intenta forzarlo a Home dentro de los
-        # primeros 120 segundos, rechazamos la orden y re-publicamos
+        # sincronizando con Aqara) intenta forzarlo a Home dentro de la ventana
+        # de bloqueo (30 s, ver _arm_lock_until más abajo), rechazamos la orden y re-publicamos
         # nuestro estado real para corregir la UI de HomeKit.
         #
         # Reglas:
@@ -1016,7 +1035,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                         self.hass, "arm_rejected", msg, user="Argus"
                     )
                     # Persistent notification → aparece en el panel de HA
-                    self.hass.components.persistent_notification.async_create(
+                    persistent_notification.async_create(
+                        self.hass,
                         title="🔒 Argus — No se pudo armar",
                         message=(
                             "El sistema **no se armó** porque los siguientes "
