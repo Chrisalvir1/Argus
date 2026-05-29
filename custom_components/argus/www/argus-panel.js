@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.1.42
+ * Argus Home Hub – v1.1.43
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -3746,33 +3746,54 @@ class ArgusPanel extends HTMLElement {
 
   _updateCanvasBackground() {
     const bgContainer = this.shadowRoot.getElementById('argus-canvas-bg');
-    if (!bgContainer) return;
-
     const mode = this._hubBgMode || 'none';
     const file = this._hubBgFile || '';
     const sound = this._hubBgSound;
 
-    if (mode === 'none' || !file) {
+    // Reset inline host background styling
+    this.style.backgroundImage = '';
+    this.style.backgroundSize = '';
+    this.style.backgroundPosition = '';
+    this.style.backgroundRepeat = '';
+    this.style.backgroundAttachment = '';
+    this.style.background = ''; // restore CSS stylesheet default
+
+    if (bgContainer) {
       bgContainer.innerHTML = '';
       bgContainer.style.backgroundImage = '';
+    }
+
+    if (mode === 'none' || !file) {
       return;
     }
 
     if (mode === 'image') {
-      bgContainer.innerHTML = '';
-      bgContainer.style.backgroundImage = `url('${file.replace(/'/g, "%27")}')`;
-    } else if (mode === 'video') {
-      bgContainer.style.backgroundImage = '';
-      const existingVideo = bgContainer.querySelector('video');
-      if (existingVideo && existingVideo.querySelector('source')?.src === file) {
-        existingVideo.muted = !sound;
-        return;
+      // Clear any potential video inside the container
+      if (bgContainer) {
+        bgContainer.innerHTML = '';
+        bgContainer.style.backgroundImage = '';
       }
-      bgContainer.innerHTML = `
-        <video autoplay loop playsinline ${sound ? '' : 'muted'} style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; z-index:0;">
-          <source src="${file}">
-        </video>
-      `;
+      // Apply background directly to :host to prevent browser/Safari z-index Shadow DOM rendering issues
+      this.style.backgroundImage = `url('${file.replace(/'/g, "%27")}')`;
+      this.style.backgroundSize = 'cover';
+      this.style.backgroundPosition = 'center';
+      this.style.backgroundRepeat = 'no-repeat';
+      this.style.backgroundAttachment = 'fixed';
+    } else if (mode === 'video') {
+      if (bgContainer) {
+        // Clear host background to allow the video container behind it to be visible
+        this.style.background = 'transparent';
+        const existingVideo = bgContainer.querySelector('video');
+        if (existingVideo && existingVideo.querySelector('source')?.src === file) {
+          existingVideo.muted = !sound;
+          return;
+        }
+        bgContainer.innerHTML = `
+          <video autoplay loop playsinline ${sound ? '' : 'muted'} style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; z-index:0;">
+            <source src="${file}">
+          </video>
+        `;
+      }
     }
   }
 
