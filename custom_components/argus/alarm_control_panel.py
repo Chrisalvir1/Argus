@@ -25,6 +25,7 @@ from homeassistant.components import persistent_notification
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import STATE_ON
 from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers import entity_platform
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.event import (
@@ -89,6 +90,11 @@ async def async_setup_entry(
 ) -> None:
     """Set up Argus alarm panel from a config entry."""
     async_add_entities([ArgusAlarmPanel(hass, config_entry)], update_before_add=True)
+
+    # Registrar el servicio de entidad `argus.panic` que services.yaml anuncia
+    # (antes no existía). Dispara inmediatamente la alarma de la entidad objetivo.
+    platform = entity_platform.async_get_current_platform()
+    platform.async_register_entity_service("panic", {}, "async_alarm_trigger")
 
 
 

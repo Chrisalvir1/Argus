@@ -1,14 +1,7 @@
-save_ui:
-  name: Guardar UI de Argus
-  description: Persiste zonas y configuracion del panel Argus creadas desde la UI.
-
 panic:
-  name: Disparo de panico
-  description: Activa inmediatamente la alarma en modo triggered.
-  fields:
-    entity_id:
-      required: true
-      example: alarm_control_panel.argus
-      selector:
-        entity:
-          domain: alarm_control_panel
+  name: Disparo de pánico
+  description: Activa inmediatamente la alarma del panel Argus en modo disparado (triggered).
+  target:
+    entity:
+      integration: argus
+      domain: alarm_control_panel

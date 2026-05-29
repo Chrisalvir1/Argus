@@ -1753,6 +1753,18 @@ class ArgusPanel extends HTMLElement {
     return (TEXTS[lang] || TEXTS.en)[key] || key;
   }
 
+  // Escapa HTML para evitar XSS en el DOM al interpolar datos controlados por el
+  // usuario (nombre del hogar, nombres de usuario, detalles del log, nombres de
+  // archivo, friendly_name de sensores, etc.) dentro de plantillas innerHTML.
+  _esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   _getCurrentLangCode() {
     return this._manualLang || (this._hass?.language || 'es').split('-')[0];
   }
@@ -2618,7 +2630,7 @@ class ArgusPanel extends HTMLElement {
           <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="Pantalla completa" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>
           ${this._renderBatteryAlerts()}
           <div class="hud">
-            <div class="hud-loc">${fullHudLoc}</div>
+            <div class="hud-loc">${this._esc(fullHudLoc)}</div>
             <div class="hud-data"><span>${timeStr}</span></div>
           </div>
           <div class="entry-content">
@@ -2642,7 +2654,7 @@ class ArgusPanel extends HTMLElement {
                   const name = s.attributes?.friendly_name || sid.split('.')[1] || sid;
                   const shortName = name.length > 16 ? name.slice(0, 15) + '…' : name;
                   return `<div class="sensor-chip ${isOpen ? 'sensor-chip--open' + (triggered ? ' sensor-chip--triggered' : '') : 'sensor-chip--closed'}">
-                    <span class="sensor-chip-dot"></span>${shortName}
+                    <span class="sensor-chip-dot"></span>${this._esc(shortName)}
                   </div>`;
                 }).join('')}
               </div>` : ''}
@@ -2866,7 +2878,7 @@ class ArgusPanel extends HTMLElement {
       // Attribute the action clearly
       let source = '';
       if (user && user !== 'Argus' && user !== 'system') {
-        source = `👤 ${user}`;
+        source = `👤 ${this._esc(user)}`;
       } else if (action.toLowerCase().includes('homekit') || detail.toLowerCase().includes('homekit')) {
         source = `🍎 HomeKit`;
       } else {
@@ -2878,7 +2890,7 @@ class ArgusPanel extends HTMLElement {
         <div class="log-body">
           <div class="log-title">
             <span class="log-badge ${badgeCls}">${badgeTxt}</span>
-            <span style="font-weight:500">${detail}</span>
+            <span style="font-weight:500">${this._esc(detail)}</span>
           </div>
           <div class="log-meta">${ts} &nbsp;·&nbsp; ${source}</div>
         </div>
@@ -3228,7 +3240,7 @@ class ArgusPanel extends HTMLElement {
       return `
       <div class="list-item-card">
         <div>
-          <div style="font-weight:700">${a.attributes.friendly_name || a.entity_id}</div>
+          <div style="font-weight:700">${this._esc(a.attributes.friendly_name || a.entity_id)}</div>
           <div class="small" style="opacity:0.7;margin-top:4px">${a.attributes.last_triggered ? new Date(a.attributes.last_triggered).toLocaleString() : this._t('never_triggered')}</div>
         </div>
         <button class="ghost" style="padding:6px 12px;background:rgba(255,255,255,0.08);border-radius:8px" data-edit-auto="${editId}">✏️</button>
@@ -3330,7 +3342,7 @@ class ArgusPanel extends HTMLElement {
         <div class="user-card" style="display:flex;flex-direction:column;align-items:stretch;gap:8px">
           <div style="display:flex;justify-content:between;align-items:center;width:100%">
             <div style="flex:1">
-              <div style="font-weight:700">${u.name}</div>
+              <div style="font-weight:700">${this._esc(u.name)}</div>
               <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
                 <span class="user-badge ${u.is_admin ? 'admin' : ''}">${u.is_admin ? '⭐ Admin' : '👤 User'}</span>
                 ${expBadge}
@@ -3468,8 +3480,8 @@ class ArgusPanel extends HTMLElement {
       cnt.innerHTML = `
         <div style="display:grid;gap:16px;justify-items:center;padding:8px 0">
           <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
-            <div style="background:var(--primary-color);color:#fff;padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700">🌉 ${this._t('homekit_bridge')}: ${bridgeLabel}</div>
-            ${homeLabel ? `<div style="background:rgba(67,160,71,.15);color:var(--success-color,#43a047);padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700">🏡 ${homeLabel}</div>` : ''}
+            <div style="background:var(--primary-color);color:#fff;padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700">🌉 ${this._t('homekit_bridge')}: ${this._esc(bridgeLabel)}</div>
+            ${homeLabel ? `<div style="background:rgba(67,160,71,.15);color:var(--success-color,#43a047);padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700">🏡 ${this._esc(homeLabel)}</div>` : ''}
           </div>
           <canvas id="hk-qr"></canvas>
           <div style="font-size:28px;font-weight:900;letter-spacing:6px;font-family:monospace;padding:10px 20px;border-radius:12px;border:2px dashed color-mix(in srgb,var(--primary-color,#03a9f4) 35%,transparent)">${fmt}</div>
@@ -3483,14 +3495,14 @@ class ArgusPanel extends HTMLElement {
             <span style="font-size:32px;line-height:1">✅</span>
             <div>
               <div style="font-weight:700;font-size:15px;color:var(--success-color,#43a047)">${this._t('bridge_paired')}</div>
-              <div class="small" style="opacity:.7">${this._t('bridge_paired_desc').replace('{bridge}', bridgeLabel)}</div>
+              <div class="small" style="opacity:.7">${this._t('bridge_paired_desc').replace('{bridge}', this._esc(bridgeLabel))}</div>
             </div>
           </div>
         </div>`;
     } else {
       cnt.innerHTML = `
         <div style="display:grid;gap:10px">
-          <div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">🌉</span><div><div style="font-weight:700">${bridgeLabel}</div><div class="small">${this._t('bridge_not_connected')}</div></div></div>
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">🌉</span><div><div style="font-weight:700">${this._esc(bridgeLabel)}</div><div class="small">${this._t('bridge_not_connected')}</div></div></div>
           <p class="small" style="margin:0">${this._t('bridge_not_desc')}</p>
         </div>`;
     }
@@ -3522,7 +3534,7 @@ class ArgusPanel extends HTMLElement {
       if (Number.isFinite(v) && (dc === 'temperature' || ['°c','°f','c','f'].includes(u))) extra.push({ entity_id:id, name:`🌡️ ${a.friendly_name || id}` });
     }
     const seen = new Set();
-    sel.innerHTML = extra.filter(x => !seen.has(x.entity_id) && seen.add(x.entity_id) === undefined).map(x => `<option value="${x.entity_id}">${x.name}</option>`).join('');
+    sel.innerHTML = extra.filter(x => !seen.has(x.entity_id) && seen.add(x.entity_id) === undefined).map(x => `<option value="${this._esc(x.entity_id)}">${this._esc(x.name)}</option>`).join('');
   }
 
   async _handleBackgroundFiles(ev) {
@@ -3653,10 +3665,10 @@ class ArgusPanel extends HTMLElement {
               <img src="${file.url}" loading="lazy">
             `}
           </div>
-          <div class="file-card-name" title="${file.name}">${file.name}</div>
+          <div class="file-card-name" title="${this._esc(file.name)}">${this._esc(file.name)}</div>
           <div class="file-card-meta">
-            <span>${file.size_str}</span>
-            <button class="file-card-btn-delete" data-filename="${file.name}" title="Borrar de almacenamiento">🗑️</button>
+            <span>${this._esc(file.size_str)}</span>
+            <button class="file-card-btn-delete" data-filename="${this._esc(file.name)}" title="Borrar de almacenamiento">🗑️</button>
           </div>
           <div class="file-card-actions">
             <button class="file-card-btn use-for-panel" data-url="${file.url}">Panel</button>
