@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================
-# Argus v0.5.0 — Deploy completo a Home Assistant
+# Argus v1.1.38 — Deploy completo a Home Assistant
 # Ejecutar en: HA Terminal & SSH addon
 # =============================================================
 set -e
@@ -8,7 +8,7 @@ set -e
 BASE=/config/custom_components/argus
 REPO=https://raw.githubusercontent.com/Chrisalvir1/Argus/main/custom_components/argus
 
-echo "=== Argus v0.5.0 Deploy ==="
+echo "=== Argus v1.1.38 Deploy ==="
 
 # 1. Verificar que existe el directorio
 mkdir -p "$BASE/www"
