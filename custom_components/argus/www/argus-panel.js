@@ -76,6 +76,7 @@ const TEXTS = {
     pin_incorrect:'❌ PIN actual incorrecto', pin_updated:'✓ PIN Actualizado', pin_deleted:'✓ PIN Eliminado',
     searching_auto:'↻ Buscando automatizaciones...', no_auto_linked:'No hay automatizaciones vinculadas a Argus.',
     pin_remove_hint:'Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.',
+    lbl_load_file:'Cargar archivo:', lbl_aesthetic_custom:'Personalización Estética',
     bypass_lbl:'🚫 Omitir', lock_if_open:'Bloquear si abiertos',
     select_btn:'+ Seleccionar', add_btn:'+ Añadir',
     sensors_to_bypass:'Sensores a Omitir',
@@ -156,6 +157,7 @@ const TEXTS = {
     pin_incorrect:'❌ Incorrect current PIN', pin_updated:'✓ PIN Updated', pin_deleted:'✓ PIN Deleted',
     searching_auto:'↻ Searching automations...', no_auto_linked:'No automations linked to Argus.',
     pin_remove_hint:'To remove PIN: Enter the current one and leave the fields below empty.',
+    lbl_load_file:'Upload file:', lbl_aesthetic_custom:'Aesthetic Customization',
     bypass_lbl:'🚫 Bypass', lock_if_open:'Lock if open',
     select_btn:'+ Select', add_btn:'+ Add',
     sensors_to_bypass:'Sensors to Bypass',
@@ -236,6 +238,7 @@ const TEXTS = {
     pin_incorrect:'❌ PIN actuel incorrect', pin_updated:'✓ PIN mis à jour', pin_deleted:'✓ PIN supprimé',
     searching_auto:'↻ Recherche automatisations...', no_auto_linked:'Aucune automatisation liée à Argus.',
     pin_remove_hint:'Pour supprimer le PIN: entrez le PIN actuel et laissez les champs vides.',
+    lbl_load_file:'Charger le fichier:', lbl_aesthetic_custom:'Personnalisation esthétique',
     bypass_lbl:'🚫 Ignorer', lock_if_open:'Bloquer si ouvert',
     select_btn:'+ Sélectionner', add_btn:'+ Ajouter',
     sensors_to_bypass:'Capteurs à ignorer', no_instances:'Aucune instance.',
@@ -305,6 +308,7 @@ const TEXTS = {
     pin_incorrect:'❌ PIN atual incorreto', pin_updated:'✓ PIN Atualizado', pin_deleted:'✓ PIN Removido',
     searching_auto:'↻ Buscando automações...', no_auto_linked:'Nenhuma automação vinculada ao Argus.',
     pin_remove_hint:'Para remover o PIN: insira o atual e deixe os campos abaixo vazios.',
+    lbl_load_file:'Carregar arquivo:', lbl_aesthetic_custom:'Personalização estética',
     bypass_lbl:'🚫 Ignorar', lock_if_open:'Bloquear se aberto',
     select_btn:'+ Selecionar', add_btn:'+ Adicionar',
     sensors_to_bypass:'Sensores a ignorar', no_instances:'Nenhuma instância.',
@@ -374,6 +378,7 @@ const TEXTS = {
     pin_incorrect:'❌ PIN attuale errato', pin_updated:'✓ PIN Aggiornato', pin_deleted:'✓ PIN Eliminato',
     searching_auto:'↻ Ricerca automazioni...', no_auto_linked:'Nessuna automazione collegata ad Argus.',
     pin_remove_hint:'Per rimuovere il PIN: inserisci quello attuale e lascia vuoti i campi sottostanti.',
+    lbl_load_file:'Carica file:', lbl_aesthetic_custom:'Personalizzazione estetica',
     bypass_lbl:'🚫 Ignora', lock_if_open:'Blocca se aperto',
     select_btn:'+ Seleziona', add_btn:'+ Aggiungi',
     sensors_to_bypass:'Sensori da ignorare', no_instances:'Nessuna istanza.',
@@ -443,6 +448,7 @@ const TEXTS = {
     pin_incorrect:'❌ 当前PIN错误', pin_updated:'✓ PIN已更新', pin_deleted:'✓ PIN已删除',
     searching_auto:'↻ 正在搜索自动化...', no_auto_linked:'没有链接到Argus的自动化。',
     pin_remove_hint:'删除PIN: 输入当前PIN并将下面字段留空。',
+    lbl_load_file:'上传文件:', lbl_aesthetic_custom:'美学个性化',
     bypass_lbl:'🚫 跳过', lock_if_open:'开启时锁定',
     select_btn:'+ 选择', add_btn:'+ 添加',
     sensors_to_bypass:'跳过的传感器', no_instances:'没有实例。',
@@ -512,6 +518,7 @@ const TEXTS = {
     pin_incorrect:'❌ Неверный текущий PIN', pin_updated:'✓ PIN Обновлен', pin_deleted:'✓ PIN Удален',
     searching_auto:'↻ Поиск автоматизаций...', no_auto_linked:'Нет автоматизаций, связанных с Argus.',
     pin_remove_hint:'Для удаления PIN: введите текущий и оставьте поля пустыми.',
+    lbl_load_file:'Загрузить файл:', lbl_aesthetic_custom:'Эстетическая персонализация',
     bypass_lbl:'🚫 Обход', lock_if_open:'Блокировать если открыто',
     select_btn:'+ Выбрать', add_btn:'+ Добавить',
     sensors_to_bypass:'Датчики для обхода', no_instances:'Нет экземпляров.',
@@ -581,6 +588,83 @@ _tmpl.innerHTML = `
   :host {
     --hud-text-color: #fff;
     --hud-bg: rgba(255,255,255,0.06);
+  }
+
+  /* Fullscreen Active / Virtual Fullscreen CSS Overrides */
+  :host(.fullscreen-active) {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 99999999 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  :host(.fullscreen-active) .wrap {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  :host(.fullscreen-active) .hero {
+    display: none !important;
+  }
+  :host(.fullscreen-active) .grid {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    gap: 0 !important;
+  }
+  :host(.fullscreen-active) .grid > .stack:not(:first-child) {
+    display: none !important;
+  }
+  :host(.fullscreen-active) .grid > .stack:first-child {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  :host(.fullscreen-active) .grid > .stack:first-child > section:not(:first-child) {
+    display: none !important;
+  }
+  :host(.fullscreen-active) .grid > .stack:first-child > section:first-child {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  :host(.fullscreen-active) .grid > .stack:first-child > section:first-child .panel-head {
+    display: none !important;
+  }
+  :host(.fullscreen-active) .grid > .stack:first-child > section:first-child .personalize-section {
+    display: none !important;
+  }
+  :host(.fullscreen-active) #entries {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  :host(.fullscreen-active) #entries > .entry:not(.ios-fullscreen) {
+    display: none !important;
+  }
+  :host(.fullscreen-active) #entries > .entry.ios-fullscreen {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    z-index: 100 !important;
   }
 
   .liquid-glass { 
@@ -1174,7 +1258,7 @@ _tmpl.innerHTML = `
         <!-- Personalization section -->
         <div class="personalize-section" style="margin-top:18px; padding:18px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:22px; display:grid; gap:16px;">
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:10px; flex-wrap:wrap; gap:10px;">
-            <div style="font-weight:900; font-size:14px; letter-spacing:-0.01em;">🎨 Personalización Estética</div>
+            <div id="lbl-aesthetic-custom" style="font-weight:900; font-size:14px; letter-spacing:-0.01em;">🎨 Personalización Estética</div>
             <div style="display:flex; gap:8px;">
               <button class="ghost" id="btn-edit-home-name-standalone" style="padding:6px 10px;font-size:11px;border-radius:10px;white-space:nowrap">✏️ Editar Nombre</button>
               <button class="primary" id="btn-save-personalization-standalone" style="padding:8px 14px;font-size:12px;border-radius:10px;white-space:nowrap">Guardar</button>
@@ -1197,7 +1281,7 @@ _tmpl.innerHTML = `
               <!-- Panel Background Custom Inputs (shown dynamically) -->
               <div id="panel-custom-bg-inputs" style="display:none; flex-direction:column; gap:8px; background:rgba(0,0,0,0.15); padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,0.05);">
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
-                  <span style="font-size:11px; opacity:0.8;">Cargar archivo:</span>
+                  <span id="lbl-panel-bg-upload" style="font-size:11px; opacity:0.8;">Cargar archivo:</span>
                   <input type="file" id="panel-bg-file-input" style="font-size:10px; max-width:180px;">
                 </div>
                 <div style="font-size:10px; opacity:0.5; text-align:right;" id="bg-file-help"></div>
@@ -1218,7 +1302,7 @@ _tmpl.innerHTML = `
               <!-- Argus Background Custom Inputs (shown dynamically) -->
               <div id="hub-custom-bg-inputs" style="display:none; flex-direction:column; gap:8px; background:rgba(0,0,0,0.15); padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,0.05);">
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
-                  <span style="font-size:11px; opacity:0.8;">Cargar archivo:</span>
+                  <span id="lbl-hub-bg-upload" style="font-size:11px; opacity:0.8;">Cargar archivo:</span>
                   <input type="file" id="hub-bg-file-input" style="font-size:10px; max-width:180px;">
                 </div>
                 <div style="font-size:10px; opacity:0.5; text-align:right;" id="hub-file-help"></div>
@@ -1250,7 +1334,7 @@ _tmpl.innerHTML = `
           <h2 id="h-activity-log"></h2>
           <button class="ghost" id="btn-clear-log" style="font-size:10px;padding:4px 8px;opacity:0.6">BORRAR</button>
         </div>
-        <div id="activity-log" style="display:grid;gap:10px;max-height:400px;overflow-y:auto;margin-top:10px"></div>
+        <div id="activity-log" style="display:grid;gap:10px;height:280px;overflow-y:auto;margin-top:10px"></div>
       </section>
 
       <!-- Users & Master PIN Settings -->
@@ -1660,6 +1744,9 @@ class ArgusPanel extends HTMLElement {
     set('lbl-hub-bg-title',     t('bg_hub_title'));
     set('s-panel-bg-sound-lbl', t('bg_sound_opt'));
     set('s-hub-bg-sound-lbl',   t('bg_sound_opt'));
+    set('lbl-aesthetic-custom', '🎨 ' + t('lbl_aesthetic_custom'));
+    set('lbl-panel-bg-upload',  t('lbl_load_file'));
+    set('lbl-hub-bg-upload',    t('lbl_load_file'));
     set('btn-edit-home-name-standalone', t('edit_btn'));
     set('btn-save-personalization-standalone', t('save_btn'));
     set('btn-clear-log',        t('clear_log_btn'));
@@ -1734,9 +1821,30 @@ class ArgusPanel extends HTMLElement {
     try { this._manualLang = localStorage.getItem('argus_lang') || null; } catch(e) {}
     this._init(); 
     this._startClock();
+
+    // Listen to fullscreen changes to handle native escape key / exit
+    this._onFsChange = () => {
+      const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+      if (!fsEl) {
+        this.classList.remove('fullscreen-active');
+        const activeFS = this.shadowRoot.querySelector('.entry.ios-fullscreen');
+        if (activeFS) {
+          activeFS.classList.remove('ios-fullscreen');
+        }
+        this._fullscreenIdx = -1;
+        document.body.style.overflow = '';
+        this._renderEntries();
+      }
+    };
+    document.addEventListener('fullscreenchange', this._onFsChange);
+    document.addEventListener('webkitfullscreenchange', this._onFsChange);
   }
   disconnectedCallback() {
     if (this._clockInterval) clearInterval(this._clockInterval);
+    if (this._onFsChange) {
+      document.removeEventListener('fullscreenchange', this._onFsChange);
+      document.removeEventListener('webkitfullscreenchange', this._onFsChange);
+    }
   }
 
   _startClock() {
@@ -2101,8 +2209,8 @@ class ArgusPanel extends HTMLElement {
     this._updateBgFieldsVisibility();
     this._updateCanvasBackground();
 
-    // Admin flag: use the HA user's own admin status
-    this._isAdmin = this._hass?.user ? Boolean(this._hass.user.is_admin || this._hass.user.is_owner) : true;
+    // Admin flag: always true by default, authorization checked via Master PIN
+    this._isAdmin = true;
     if (!this._modeEntryId) this._modeEntryId = dashboard.entries?.[0]?.entity_id || null;
 
     // Show current PIN toggle & validation required
@@ -2424,11 +2532,14 @@ class ArgusPanel extends HTMLElement {
       if (document.exitFullscreen) document.exitFullscreen();
       else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
       target.classList.remove('ios-fullscreen');
+      this.classList.remove('fullscreen-active');
       this._fullscreenIdx = -1;
       document.body.style.overflow = '';
+      this._renderEntries();
     } else {
       // ENTER
       this._fullscreenIdx = idx;
+      this.classList.add('fullscreen-active');
       if (requestFS) {
         requestFS.call(target).then(() => {
           document.body.style.overflow = 'hidden';
@@ -2876,41 +2987,43 @@ class ArgusPanel extends HTMLElement {
   }
 
   async _saveMode() {
-  const cfg = this._currentModeConfig();
-  const chk      = this.shadowRoot.getElementById('mode-require-closed');
-  const armTime  = this.shadowRoot.getElementById('mode-arming-time');
-  const entDelay = this.shadowRoot.getElementById('mode-entry-delay');
-  const mqttChk  = this.shadowRoot.getElementById('mode-mqtt-enabled');
+    const cfg = this._currentModeConfig();
+    const chk      = this.shadowRoot.getElementById('mode-require-closed');
+    const armTime  = this.shadowRoot.getElementById('mode-arming-time');
+    const entDelay = this.shadowRoot.getElementById('mode-entry-delay');
+    const mqttChk  = this.shadowRoot.getElementById('mode-mqtt-enabled');
 
-  // FIX v0.9.31 — Bug 2: leer require_closed del DOM en este preciso momento,
-  // ANTES de cualquier await, para garantizar que el valor más reciente del
-  // checkbox llega a cfg y se persiste correctamente en __by_entity__.
-  if (chk)      cfg.require_closed = chk.checked;
+    // FIX v0.9.31 — Bug 2: leer require_closed del DOM en este preciso momento,
+    // ANTES de cualquier await, para garantizar que el valor más reciente del
+    // checkbox llega a cfg y se persiste correctamente en __by_entity__.
+    if (chk)      cfg.require_closed = chk.checked;
     if (armTime)  cfg.arming_time  = armTime.value  ? parseInt(armTime.value)  : 0;
     if (entDelay) cfg.entry_delay  = entDelay.value ? parseInt(entDelay.value) : 0;
     if (mqttChk)  cfg.mqtt_enabled = mqttChk.checked;
 
-    // FIX-1: persistir en __by_entity__ ANTES del send para que el re-render
-    // muestre los valores correctos aunque el WS tarde o falle
-    const _eid = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id || 'default';
-    this._ui.modes = this._ui.modes || {};
-    this._ui.modes.__by_entity__ = this._ui.modes.__by_entity__ || {};
-    this._ui.modes.__by_entity__[_eid] = this._ui.modes.__by_entity__[_eid] || {};
-    this._ui.modes.__by_entity__[_eid][this._mode] = { ...cfg };
+    this._runWithPin(async () => {
+      // FIX-1: persistir en __by_entity__ ANTES del send para que el re-render
+      // muestre los valores correctos aunque el WS tarde o falle
+      const _eid = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id || 'default';
+      this._ui.modes = this._ui.modes || {};
+      this._ui.modes.__by_entity__ = this._ui.modes.__by_entity__ || {};
+      this._ui.modes.__by_entity__[_eid] = this._ui.modes.__by_entity__[_eid] || {};
+      this._ui.modes.__by_entity__[_eid][this._mode] = { ...cfg };
 
-    const status = this.shadowRoot.getElementById('mode-status');
-    if (status) { status.textContent = '…'; status.className = 'status'; }
-    try {
-      await this._send('argus/save_mode_config', {
-        entity_id: _eid,
-        mode: this._mode,
-        config: cfg,
-      });
-      if (status) { status.textContent = '✓ Guardado'; status.className = 'status ok show'; }
-      setTimeout(() => { if (status) { status.textContent = ''; status.className = 'status'; } }, 3000);
-    } catch (err) {
-      if (status) { status.textContent = '✗ ' + (err.message || 'Error'); status.className = 'status err show'; }
-    }
+      const status = this.shadowRoot.getElementById('mode-status');
+      if (status) { status.textContent = '…'; status.className = 'status'; }
+      try {
+        await this._send('argus/save_mode_config', {
+          entity_id: _eid,
+          mode: this._mode,
+          config: cfg,
+        });
+        if (status) { status.textContent = '✓ Guardado'; status.className = 'status ok show'; }
+        setTimeout(() => { if (status) { status.textContent = ''; status.className = 'status'; } }, 3000);
+      } catch (err) {
+        if (status) { status.textContent = '✗ ' + (err.message || 'Error'); status.className = 'status err show'; }
+      }
+    });
   }
 
   /* ── Automations ─────────────────────────────────────────────────── */
@@ -3030,69 +3143,81 @@ class ArgusPanel extends HTMLElement {
 
   async _saveNotifications() {
     const status = this.shadowRoot.getElementById('notif-status');
-    try {
-      await this._send('argus/save_ui', {
-        notif_targets: this._notifTargets,
-        tts_targets: this._ttsTargets || [],
-      });
-      if (status) { status.textContent = '✓'; status.className = 'status ok'; }
-    } catch (e) {
-      if (status) { status.textContent = e.message; status.className = 'status err'; }
-      else { alert('Error: ' + e.message); }
-    }
+    this._runWithPin(async () => {
+      try {
+        await this._send('argus/save_ui', {
+          notif_targets: this._notifTargets,
+          tts_targets: this._ttsTargets || [],
+        });
+        if (status) { status.textContent = '✓'; status.className = 'status ok'; }
+      } catch (e) {
+        if (status) { status.textContent = e.message; status.className = 'status err'; }
+        else { alert('Error: ' + e.message); }
+      }
+    });
   }
 
   /* ── Users ───────────────────────────────────────────────────────── */
   _renderUsers() {
     const el = this.shadowRoot.getElementById('users-list');
-    if (!this._users.length) {
-      el.innerHTML = `<div class="small">${this._t('no_users')}</div>`;
-      return;
-    }
-    el.innerHTML = this._users.map((u, i) => {
-      const isExpired = u.expiration_date && new Date(u.expiration_date) < new Date();
-      const expBadge = u.expiration_date 
-        ? (isExpired 
-          ? `<span class="user-badge admin" style="background:rgba(229,57,53,0.12);color:#e53935;margin-left:5px">❌ ${this._t('expired')} (${u.expiration_date.replace('T', ' ')})</span>`
-          : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">⏳ ${this._t('active_until')}: ${u.expiration_date.replace('T', ' ')}</span>`)
-        : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">♾️ ${this._t('exp_indefinite')}</span>`;
+    if (!el) return;
 
-      return `
-      <div class="user-card" style="display:flex;flex-direction:column;align-items:stretch;gap:8px">
-        <div style="display:flex;justify-content:between;align-items:center;width:100%">
-          <div style="flex:1">
-            <div style="font-weight:700">${u.name}</div>
-            <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
-              <span class="user-badge ${u.is_admin ? 'admin' : ''}">${u.is_admin ? '⭐ Admin' : '👤 User'}</span>
-              ${expBadge}
+    const adminOnlyText = this.shadowRoot.getElementById('p-admin-only');
+    if (adminOnlyText) {
+      adminOnlyText.style.display = this._isAdmin ? 'none' : 'block';
+    }
+
+    if (!this._users || !this._users.length) {
+      el.innerHTML = `<div class="small">${this._t('no_users')}</div>`;
+    } else {
+      el.innerHTML = this._users.map((u, i) => {
+        const isExpired = u.expiration_date && new Date(u.expiration_date) < new Date();
+        const expBadge = u.expiration_date 
+          ? (isExpired 
+            ? `<span class="user-badge admin" style="background:rgba(229,57,53,0.12);color:#e53935;margin-left:5px">❌ ${this._t('expired')} (${u.expiration_date.replace('T', ' ')})</span>`
+            : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">⏳ ${this._t('active_until')}: ${u.expiration_date.replace('T', ' ')}</span>`)
+          : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">♾️ ${this._t('exp_indefinite')}</span>`;
+
+        return `
+        <div class="user-card" style="display:flex;flex-direction:column;align-items:stretch;gap:8px">
+          <div style="display:flex;justify-content:between;align-items:center;width:100%">
+            <div style="flex:1">
+              <div style="font-weight:700">${u.name}</div>
+              <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
+                <span class="user-badge ${u.is_admin ? 'admin' : ''}">${u.is_admin ? '⭐ Admin' : '👤 User'}</span>
+                ${expBadge}
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              ${this._isAdmin ? `<span class="small" style="font-family:monospace">PIN: ${u.pin || '—'}</span>
+              <button class="danger" style="padding:5px 10px" data-user-del="${i}">🗑</button>` : ''}
             </div>
           </div>
-          <div style="display:flex;gap:8px;align-items:center">
-            ${this._isAdmin ? `<span class="small" style="font-family:monospace">PIN: ${u.pin || '—'}</span>
-            <button class="danger" style="padding:5px 10px" data-user-del="${i}">🗑</button>` : ''}
-          </div>
-        </div>
-      </div>`;
-    }).join('');
+        </div>`;
+      }).join('');
 
-    if (this._isAdmin) {
-      el.querySelectorAll('[data-user-del]').forEach(btn =>
-        btn.addEventListener('click', async () => {
-          const idx = Number(btn.dataset.userDel);
-          this._users.splice(idx, 1);
-          try {
-            const resp = await this._send('argus/save_ui', { users: this._users });
-            if (resp && resp.ui) {
-              this._ui = resp.ui;
-            }
-            this._renderUsers();
-            this._renderActivityLog();
-          } catch (e) {
-            alert('Error: ' + e.message);
-          }
-        })
-      );
+      if (this._isAdmin) {
+        el.querySelectorAll('[data-user-del]').forEach(btn =>
+          btn.addEventListener('click', async () => {
+            const idx = Number(btn.dataset.userDel);
+            this._runWithPin(async () => {
+              this._users.splice(idx, 1);
+              try {
+                const resp = await this._send('argus/save_ui', { users: this._users });
+                if (resp && resp.ui) {
+                  this._ui = resp.ui;
+                }
+                this._renderUsers();
+                this._renderActivityLog();
+              } catch (e) {
+                alert('Error: ' + e.message);
+              }
+            });
+          })
+        );
+      }
     }
+
     // show/hide form based on admin
     const form = this.shadowRoot.getElementById('add-user-form');
     if (form) {
@@ -3115,29 +3240,31 @@ class ArgusPanel extends HTMLElement {
       return;
     }
     
-    this._users.push({ name, pin, is_admin: isAdmin, expiration_date: expDate });
-    try {
-      const resp = await this._send('argus/save_ui', { users: this._users });
-      if (resp && resp.ui) {
-        this._ui = resp.ui;
+    this._runWithPin(async () => {
+      this._users.push({ name, pin, is_admin: isAdmin, expiration_date: expDate });
+      try {
+        const resp = await this._send('argus/save_ui', { users: this._users });
+        if (resp && resp.ui) {
+          this._ui = resp.ui;
+        }
+        this.shadowRoot.getElementById('new-user-name').value = '';
+        this.shadowRoot.getElementById('new-user-pin').value = '';
+        this.shadowRoot.getElementById('new-user-admin').checked = false;
+        if (this.shadowRoot.getElementById('new-user-exp-type')) {
+          this.shadowRoot.getElementById('new-user-exp-type').value = 'indefinite';
+        }
+        if (this.shadowRoot.getElementById('new-user-exp-date')) {
+          this.shadowRoot.getElementById('new-user-exp-date').value = '';
+          this.shadowRoot.getElementById('group-new-user-exp')?.classList.add('collapsed');
+        }
+        if (status) { status.textContent = '✓'; status.className = 'status ok'; }
+        this._renderUsers();
+        this._renderActivityLog();
+      } catch (e) {
+        if (status) { status.textContent = e.message; status.className = 'status err'; }
+        else { alert('Error: ' + e.message); }
       }
-      this.shadowRoot.getElementById('new-user-name').value = '';
-      this.shadowRoot.getElementById('new-user-pin').value = '';
-      this.shadowRoot.getElementById('new-user-admin').checked = false;
-      if (this.shadowRoot.getElementById('new-user-exp-type')) {
-        this.shadowRoot.getElementById('new-user-exp-type').value = 'indefinite';
-      }
-      if (this.shadowRoot.getElementById('new-user-exp-date')) {
-        this.shadowRoot.getElementById('new-user-exp-date').value = '';
-        this.shadowRoot.getElementById('group-new-user-exp')?.classList.add('collapsed');
-      }
-      if (status) { status.textContent = '✓'; status.className = 'status ok'; }
-      this._renderUsers();
-      this._renderActivityLog();
-    } catch (e) {
-      if (status) { status.textContent = e.message; status.className = 'status err'; }
-      else { alert('Error: ' + e.message); }
-    }
+    });
   }
 
   /* ── HomeKit ─────────────────────────────────────────────────────── */
@@ -3414,10 +3541,7 @@ class ArgusPanel extends HTMLElement {
   }
 
   _savePersonalization() {
-    const pin = this._dashboard?.entries?.[0]?.options?.code || '';
-    const run = () => this._persistPersonalization();
-    if (!pin) return run();
-    this._showPinModal(v => { if (v !== pin) return alert('PIN incorrecto'); run(); });
+    this._runWithPin(() => this._persistPersonalization());
   }
 
   async _persistPersonalization() {
@@ -3489,7 +3613,6 @@ class ArgusPanel extends HTMLElement {
 
   /* ── Home Name management ────────────────────────────────────────── */
   _editHomeName() {
-    const masterPin = this._dashboard?.entries?.[0]?.options?.code || '';
     const doOpen = () => {
       const m = this.shadowRoot.getElementById('home-name-modal');
       const inp = this.shadowRoot.getElementById('home-name-input');
@@ -3499,20 +3622,7 @@ class ArgusPanel extends HTMLElement {
       m.classList.add('open'); m.setAttribute('aria-hidden', 'false');
       setTimeout(() => inp.focus(), 60);
     };
-    if (masterPin) {
-      this._showPinModal(pin => {
-        if (pin !== masterPin) {
-          setTimeout(() => {
-            const err = this.shadowRoot.getElementById('pin-error');
-            if (err) err.textContent = '\u274c PIN incorrecto';
-          }, 50);
-          return;
-        }
-        doOpen();
-      });
-    } else {
-      doOpen();
-    }
+    this._runWithPin(doOpen);
   }
 
   _closeHomeNameModal() {
@@ -3588,6 +3698,24 @@ class ArgusPanel extends HTMLElement {
     }
   }
 
+  _runWithPin(action) {
+    const masterPin = this._dashboard?.entries?.[0]?.options?.code || '';
+    if (masterPin) {
+      this._showPinModal(pin => {
+        if (pin === masterPin) {
+          action();
+          return true;
+        } else {
+          const pinErr = this.shadowRoot.getElementById('pin-error');
+          if (pinErr) pinErr.textContent = '❌ PIN incorrecto';
+          return false;
+        }
+      });
+    } else {
+      action();
+    }
+  }
+
   _showPinModal(onConfirm) {
     const m = this.shadowRoot.getElementById('pin-modal');
     const inp = this.shadowRoot.getElementById('pin-input');
@@ -3597,9 +3725,16 @@ class ArgusPanel extends HTMLElement {
     this._pinCallback = onConfirm;
 
     // Check if in fullscreen
-    const isFS = this.shadowRoot.querySelector('.entry.ios-fullscreen') !== null;
+    const isNativeFS = document.fullscreenElement !== null || document.webkitFullscreenElement !== null;
+    let fsEl = this.shadowRoot.querySelector('.entry.ios-fullscreen');
+    if (!fsEl && isNativeFS) {
+      fsEl = this.shadowRoot.querySelector('.entry') || this.shadowRoot.querySelector('article');
+    }
+    const isFS = fsEl !== null;
 
     if (isFS) {
+      m.style.position = 'absolute';
+      m.style.zIndex = '99999999';
       m.style.background = 'rgba(0, 0, 0, 0.55)';
       m.style.backdropFilter = 'none';
       m.style.webkitBackdropFilter = 'none';
@@ -3609,7 +3744,10 @@ class ArgusPanel extends HTMLElement {
         void modalBox.offsetWidth; // force reflow
         modalBox.classList.add('dial-elastic');
       }
+      fsEl.appendChild(m);
     } else {
+      m.style.position = 'fixed';
+      m.style.zIndex = '999999';
       m.style.background = 'rgba(0, 0, 0, 0.3)';
       m.style.backdropFilter = 'none';
       m.style.webkitBackdropFilter = 'none';
@@ -3630,6 +3768,9 @@ class ArgusPanel extends HTMLElement {
     if (wrap) {
       wrap.classList.remove('wrap-blurred');
     }
+    m.style.position = 'fixed';
+    m.style.zIndex = '999999';
+    this.shadowRoot.appendChild(m);
     this._pinCallback = null;
   }
 
@@ -3649,12 +3790,27 @@ class ArgusPanel extends HTMLElement {
     if (err) err.textContent = '';
   }
 
-  _submitPin() {
+  async _submitPin() {
     const pin = this.shadowRoot.getElementById('pin-input').value.trim();
-    if (!pin) { this.shadowRoot.getElementById('pin-error').textContent = '⚠️ Introduce el PIN'; return; }
+    if (!pin) {
+      const errEl = this.shadowRoot.getElementById('pin-error');
+      if (errEl) errEl.textContent = '⚠️ Introduce el PIN';
+      return;
+    }
     const cb = this._pinCallback;
-    this._closePinModal();
-    if (cb) cb(pin);
+    if (cb) {
+      try {
+        const success = await cb(pin);
+        if (success !== false) {
+          this._closePinModal();
+        }
+      } catch (err) {
+        const errEl = this.shadowRoot.getElementById('pin-error');
+        if (errEl) errEl.textContent = err.message || '❌ PIN incorrecto';
+      }
+    } else {
+      this._closePinModal();
+    }
   }
 
   /* ── Selector modal ──────────────────────────────────────────────── */
@@ -3808,21 +3964,23 @@ class ArgusPanel extends HTMLElement {
       const masterPin = this._dashboard?.entries?.[0]?.options?.code || '';
       const hasUsers = this._users && this._users.length > 0;
       const doDisarm = async (pin) => { 
-      try { 
-      await this._hass.callService('alarm_control_panel', 'alarm_disarm', 
-      { entity_id: e.entity_id, ...(pin ? { code: pin } : {}) }); 
-      this._writeLog('disarm', this._t('manual_disarm'), currentUser); 
-      this._sendHaNotif(`🔓 ${this._t('log_disarmed')}`, `${currentUser} desarmó el sistema.`); 
-      // FIX v0.9.32 — Bug 1: al desarmar, forzar re-render inmediato para
+        try { 
+          await this._hass.callService('alarm_control_panel', 'alarm_disarm', 
+            { entity_id: e.entity_id, ...(pin ? { code: pin } : {}) }); 
+          this._writeLog('disarm', this._t('manual_disarm'), currentUser); 
+          this._sendHaNotif(`🔓 ${this._t('log_disarmed')}`, `${currentUser} desarmó el sistema.`); 
+          // FIX v0.9.32 — Bug 1: al desarmar, forzar re-render inmediato para
           // quitar la clase siren-active/triggered-sensor de todas las píldoras.
           setTimeout(() => { this._renderModeView(); this._load(); }, 300);
+          return true;
         } catch (err) {
           const pinErr = this.shadowRoot.getElementById('pin-error');
           if (pinErr) pinErr.textContent = '❌ PIN incorrecto o error al desarmar';
+          return false;
         }
       };
       if (masterPin || hasUsers) {
-        this._showPinModal(async pin => { await doDisarm(pin); });
+        this._showPinModal(async pin => { return await doDisarm(pin); });
       } else {
         await doDisarm(null);
       }
