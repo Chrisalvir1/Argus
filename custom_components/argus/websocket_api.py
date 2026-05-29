@@ -41,6 +41,137 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_argus_get_media_players)
     websocket_api.async_register_command(hass, ws_argus_update_master_pin)
     websocket_api.async_register_command(hass, ws_argus_write_log)
+    websocket_api.async_register_command(hass, ws_argus_upload_file)
+    websocket_api.async_register_command(hass, ws_argus_list_files)
+    websocket_api.async_register_command(hass, ws_argus_delete_file)
+
+
+@websocket_api.websocket_command(
+    {
+        vol.Required("type"): "argus/upload_file",
+        vol.Required("filename"): str,
+        vol.Required("data"): str,
+    }
+)
+@websocket_api.async_response
+async def ws_argus_upload_file(hass: HomeAssistant, connection, msg) -> None:
+    """Upload a file to the local Argus media directory."""
+    import os
+    import base64
+
+    filename = os.path.basename(msg["filename"])
+    data_url = msg["data"]
+
+    # Decode base64 data
+    try:
+        if "," in data_url:
+            _, encoded = data_url.split(",", 1)
+        else:
+            encoded = data_url
+        file_data = base64.b64decode(encoded)
+    except Exception as err:
+        connection.send_error(msg["id"], "invalid_data", f"Failed to decode base64: {err}")
+        return
+
+    upload_dir = hass.config.path("www", "argus")
+
+    def _write_file():
+        os.makedirs(upload_dir, exist_ok=True)
+        target_path = os.path.join(upload_dir, filename)
+        with open(target_path, "wb") as f:
+            f.write(file_data)
+
+    try:
+        await hass.async_add_executor_job(_write_file)
+        connection.send_result(
+            msg["id"],
+            {"success": True, "url": f"/local/argus/{filename}"}
+        )
+    except Exception as err:
+        connection.send_error(msg["id"], "write_failed", f"Failed to write file: {err}")
+
+
+@websocket_api.websocket_command(
+    {
+        vol.Required("type"): "argus/list_uploaded_files",
+    }
+)
+@websocket_api.async_response
+async def ws_argus_list_files(hass: HomeAssistant, connection, msg) -> None:
+    """List all uploaded background files."""
+    import os
+
+    upload_dir = hass.config.path("www", "argus")
+
+    def _list_files():
+        if not os.path.exists(upload_dir):
+            return []
+        
+        files_list = []
+        for filename in os.listdir(upload_dir):
+            filepath = os.path.join(upload_dir, filename)
+            if os.path.isfile(filepath):
+                stat = os.stat(filepath)
+                # Formatted size
+                size_bytes = stat.st_size
+                if size_bytes >= 1024 * 1024:
+                    size_str = f"{size_bytes / (1024 * 1024):.2f} MB"
+                else:
+                    size_str = f"{size_bytes / 1024:.2f} KB"
+                
+                # Simple file type check
+                ext = os.path.splitext(filename)[1].lower()
+                is_video = ext in (".mp4", ".webm", ".ogg", ".mov", ".m4v")
+                
+                files_list.append({
+                    "name": filename,
+                    "size_bytes": size_bytes,
+                    "size_str": size_str,
+                    "mtime": stat.st_mtime,
+                    "url": f"/local/argus/{filename}",
+                    "is_video": is_video,
+                })
+        # Sort by modification time (newest first)
+        files_list.sort(key=lambda x: x["mtime"], reverse=True)
+        return files_list
+
+    try:
+        files = await hass.async_add_executor_job(_list_files)
+        connection.send_result(msg["id"], files)
+    except Exception as err:
+        connection.send_error(msg["id"], "list_failed", f"Failed to list files: {err}")
+
+
+@websocket_api.websocket_command(
+    {
+        vol.Required("type"): "argus/delete_uploaded_file",
+        vol.Required("filename"): str,
+    }
+)
+@websocket_api.async_response
+async def ws_argus_delete_file(hass: HomeAssistant, connection, msg) -> None:
+    """Delete an uploaded background file."""
+    import os
+
+    filename = os.path.basename(msg["filename"])
+    upload_dir = hass.config.path("www", "argus")
+    target_path = os.path.join(upload_dir, filename)
+
+    def _delete_file():
+        if os.path.exists(target_path):
+            os.remove(target_path)
+            return True
+        return False
+
+    try:
+        deleted = await hass.async_add_executor_job(_delete_file)
+        if deleted:
+            connection.send_result(msg["id"], {"success": True})
+        else:
+            connection.send_error(msg["id"], "not_found", "File not found")
+    except Exception as err:
+        connection.send_error(msg["id"], "delete_failed", f"Failed to delete file: {err}")
+
 
 
 @callback

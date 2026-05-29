@@ -76,7 +76,7 @@ const TEXTS = {
     pin_incorrect:'❌ PIN actual incorrecto', pin_updated:'✓ PIN Actualizado', pin_deleted:'✓ PIN Eliminado',
     searching_auto:'↻ Buscando automatizaciones...', no_auto_linked:'No hay automatizaciones vinculadas a Argus.',
     pin_remove_hint:'Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.',
-    lbl_load_file:'Cargar archivo:', lbl_aesthetic_custom:'Personalización Estética',
+    lbl_load_file:'Cargar archivo:', lbl_aesthetic_custom:'Personalización Estética', lbl_uploaded_files:'Archivos subidos en servidor',
     bypass_lbl:'🚫 Omitir', lock_if_open:'Bloquear si abiertos',
     select_btn:'+ Seleccionar', add_btn:'+ Añadir',
     sensors_to_bypass:'Sensores a Omitir',
@@ -157,7 +157,7 @@ const TEXTS = {
     pin_incorrect:'❌ Incorrect current PIN', pin_updated:'✓ PIN Updated', pin_deleted:'✓ PIN Deleted',
     searching_auto:'↻ Searching automations...', no_auto_linked:'No automations linked to Argus.',
     pin_remove_hint:'To remove PIN: Enter the current one and leave the fields below empty.',
-    lbl_load_file:'Upload file:', lbl_aesthetic_custom:'Aesthetic Customization',
+    lbl_load_file:'Upload file:', lbl_aesthetic_custom:'Aesthetic Customization', lbl_uploaded_files:'Uploaded files on server',
     bypass_lbl:'🚫 Bypass', lock_if_open:'Lock if open',
     select_btn:'+ Select', add_btn:'+ Add',
     sensors_to_bypass:'Sensors to Bypass',
@@ -238,7 +238,7 @@ const TEXTS = {
     pin_incorrect:'❌ PIN actuel incorrect', pin_updated:'✓ PIN mis à jour', pin_deleted:'✓ PIN supprimé',
     searching_auto:'↻ Recherche automatisations...', no_auto_linked:'Aucune automatisation liée à Argus.',
     pin_remove_hint:'Pour supprimer le PIN: entrez le PIN actuel et laissez les champs vides.',
-    lbl_load_file:'Charger le fichier:', lbl_aesthetic_custom:'Personnalisation esthétique',
+    lbl_load_file:'Charger le fichier:', lbl_aesthetic_custom:'Personnalisation esthétique', lbl_uploaded_files:'Fichiers téléchargés sur le serveur',
     bypass_lbl:'🚫 Ignorer', lock_if_open:'Bloquer si ouvert',
     select_btn:'+ Sélectionner', add_btn:'+ Ajouter',
     sensors_to_bypass:'Capteurs à ignorer', no_instances:'Aucune instance.',
@@ -308,7 +308,7 @@ const TEXTS = {
     pin_incorrect:'❌ PIN atual incorreto', pin_updated:'✓ PIN Atualizado', pin_deleted:'✓ PIN Removido',
     searching_auto:'↻ Buscando automações...', no_auto_linked:'Nenhuma automação vinculada ao Argus.',
     pin_remove_hint:'Para remover o PIN: insira o atual e deixe os campos abaixo vazios.',
-    lbl_load_file:'Carregar arquivo:', lbl_aesthetic_custom:'Personalização estética',
+    lbl_load_file:'Carregar arquivo:', lbl_aesthetic_custom:'Personalização estética', lbl_uploaded_files:'Arquivos enviados no servidor',
     bypass_lbl:'🚫 Ignorar', lock_if_open:'Bloquear se aberto',
     select_btn:'+ Selecionar', add_btn:'+ Adicionar',
     sensors_to_bypass:'Sensores a ignorar', no_instances:'Nenhuma instância.',
@@ -378,7 +378,7 @@ const TEXTS = {
     pin_incorrect:'❌ PIN attuale errato', pin_updated:'✓ PIN Aggiornato', pin_deleted:'✓ PIN Eliminato',
     searching_auto:'↻ Ricerca automazioni...', no_auto_linked:'Nessuna automazione collegata ad Argus.',
     pin_remove_hint:'Per rimuovere il PIN: inserisci quello attuale e lascia vuoti i campi sottostanti.',
-    lbl_load_file:'Carica file:', lbl_aesthetic_custom:'Personalizzazione estetica',
+    lbl_load_file:'Carica file:', lbl_aesthetic_custom:'Personalizzazione estetica', lbl_uploaded_files:'File caricati sul server',
     bypass_lbl:'🚫 Ignora', lock_if_open:'Blocca se aperto',
     select_btn:'+ Seleziona', add_btn:'+ Aggiungi',
     sensors_to_bypass:'Sensori da ignorare', no_instances:'Nessuna istanza.',
@@ -448,7 +448,7 @@ const TEXTS = {
     pin_incorrect:'❌ 当前PIN错误', pin_updated:'✓ PIN已更新', pin_deleted:'✓ PIN已删除',
     searching_auto:'↻ 正在搜索自动化...', no_auto_linked:'没有链接到Argus的自动化。',
     pin_remove_hint:'删除PIN: 输入当前PIN并将下面字段留空。',
-    lbl_load_file:'上传文件:', lbl_aesthetic_custom:'美学个性化',
+    lbl_load_file:'上传文件:', lbl_aesthetic_custom:'美学个性化', lbl_uploaded_files:'服务器上上传的文件',
     bypass_lbl:'🚫 跳过', lock_if_open:'开启时锁定',
     select_btn:'+ 选择', add_btn:'+ 添加',
     sensors_to_bypass:'跳过的传感器', no_instances:'没有实例。',
@@ -518,7 +518,7 @@ const TEXTS = {
     pin_incorrect:'❌ Неверный текущий PIN', pin_updated:'✓ PIN Обновлен', pin_deleted:'✓ PIN Удален',
     searching_auto:'↻ Поиск автоматизаций...', no_auto_linked:'Нет автоматизаций, связанных с Argus.',
     pin_remove_hint:'Для удаления PIN: введите текущий и оставьте поля пустыми.',
-    lbl_load_file:'Загрузить файл:', lbl_aesthetic_custom:'Эстетическая персонализация',
+    lbl_load_file:'Загрузить файл:', lbl_aesthetic_custom:'Эстетическая персонализация', lbl_uploaded_files:'Загруженные файлы на сервере',
     bypass_lbl:'🚫 Обход', lock_if_open:'Блокировать если открыто',
     select_btn:'+ Выбрать', add_btn:'+ Добавить',
     sensors_to_bypass:'Датчики для обхода', no_instances:'Нет экземпляров.',
@@ -1187,6 +1187,109 @@ _tmpl.innerHTML = `
 :host([argus-dark-mode="false"]) .lang-close-btn { background:rgba(0,0,0,0.07); border-color:rgba(0,0,0,0.14); color:#1e1e2d; }
 .lang-close-btn:hover { background:rgba(255,255,255,0.2); }
 
+/* Background File Manager Styles */
+.file-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.22s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.file-card:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+:host([argus-dark-mode="false"]) .file-card {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.07);
+  color: #1c1c1e;
+}
+:host([argus-dark-mode="false"]) .file-card:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+.file-card-preview {
+  position: relative;
+  width: 100%;
+  height: 64px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.2);
+}
+.file-card-preview img, .file-card-preview video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.file-card-name {
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.85;
+}
+.file-card-meta {
+  font-size: 9px;
+  opacity: 0.55;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.file-card-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: auto;
+}
+.file-card-btn {
+  flex: 1;
+  padding: 4px;
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  color: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+.file-card-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+:host([argus-dark-mode="false"]) .file-card-btn {
+  border-color: rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.02);
+}
+:host([argus-dark-mode="false"]) .file-card-btn:hover {
+  background: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.25);
+}
+.file-card-btn-delete {
+  padding: 3px 6px;
+  color: #ff3b30;
+  border: 1px solid rgba(255, 59, 48, 0.15);
+  background: rgba(255, 59, 48, 0.05);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 9px;
+  transition: all 0.15s ease;
+}
+.file-card-btn-delete:hover {
+  background: rgba(255, 59, 48, 0.25);
+  border-color: rgba(255, 59, 48, 0.45);
+}
+
 </style>
 
 <!-- Language picker modal -->
@@ -1313,6 +1416,20 @@ _tmpl.innerHTML = `
               </div>
             </div>
           </div>
+
+          <!-- Historial de Archivos Subidos -->
+          <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:14px; margin-top:6px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:6px;">
+              <div style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; display:flex; align-items:center; gap:6px;">
+                📁 <span id="lbl-uploaded-files-title">Archivos Subidos en Servidor</span>
+              </div>
+              <span id="storage-files-count" style="font-size:10px; opacity:0.5;">Cargando...</span>
+            </div>
+            <div id="uploaded-files-list" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr)); gap:10px; max-height:220px; overflow-y:auto; padding:5px 0;">
+              <!-- Los archivos se renderizan aquí dinámicamente -->
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -1747,6 +1864,7 @@ class ArgusPanel extends HTMLElement {
     set('lbl-aesthetic-custom', '🎨 ' + t('lbl_aesthetic_custom'));
     set('lbl-panel-bg-upload',  t('lbl_load_file'));
     set('lbl-hub-bg-upload',    t('lbl_load_file'));
+    set('lbl-uploaded-files-title', t('lbl_uploaded_files'));
     set('btn-edit-home-name-standalone', t('edit_btn'));
     set('btn-save-personalization-standalone', t('save_btn'));
     set('btn-clear-log',        t('clear_log_btn'));
@@ -2235,6 +2353,7 @@ class ArgusPanel extends HTMLElement {
     this._renderNotifications();
     this._renderUsers();
     this._renderHomeKit();
+    this._loadUploadedFiles();
   }
 
   /* ── Entries (alarm instances) ───────────────────────────────────── */
@@ -3389,28 +3508,183 @@ class ArgusPanel extends HTMLElement {
 
   async _handlePanelBgFile(ev) {
     const file = ev?.target?.files?.[0]; if (!file) return;
+    const help = this.shadowRoot.getElementById('bg-file-help');
+    if (help) help.textContent = 'Leyendo archivo...';
+    
     const r = new FileReader();
-    r.onload = () => {
-      this._panelBgFile = String(r.result || '');
-      const inp = this.shadowRoot.getElementById('panel-bg-url-input');
-      if (inp) inp.value = '';
-      const help = this.shadowRoot.getElementById('bg-file-help');
-      if (help) help.textContent = 'Archivo de panel cargado.';
+    r.onload = async () => {
+      if (help) help.textContent = 'Subiendo al servidor...';
+      try {
+        const res = await this._send('argus/upload_file', {
+          filename: file.name,
+          data: String(r.result || '')
+        });
+        if (res && res.success) {
+          this._panelBgFile = res.url;
+          const inp = this.shadowRoot.getElementById('panel-bg-url-input');
+          if (inp) inp.value = res.url;
+          if (help) help.textContent = `Subido: ${file.name}`;
+          this._loadUploadedFiles();
+        } else {
+          if (help) help.textContent = 'Error al subir archivo.';
+        }
+      } catch (err) {
+        console.error('Upload failed:', err);
+        if (help) help.textContent = `Error: ${err.message || err}`;
+      }
+      ev.target.value = '';
     };
     r.readAsDataURL(file);
   }
 
   async _handleHubBgFile(ev) {
     const file = ev?.target?.files?.[0]; if (!file) return;
+    const help = this.shadowRoot.getElementById('hub-file-help');
+    if (help) help.textContent = 'Leyendo archivo...';
+    
     const r = new FileReader();
-    r.onload = () => {
-      this._hubBgFile = String(r.result || '');
-      const inp = this.shadowRoot.getElementById('hub-bg-url-input');
-      if (inp) inp.value = '';
-      const help = this.shadowRoot.getElementById('hub-file-help');
-      if (help) help.textContent = 'Archivo Argus cargado.';
+    r.onload = async () => {
+      if (help) help.textContent = 'Subiendo al servidor...';
+      try {
+        const res = await this._send('argus/upload_file', {
+          filename: file.name,
+          data: String(r.result || '')
+        });
+        if (res && res.success) {
+          this._hubBgFile = res.url;
+          const inp = this.shadowRoot.getElementById('hub-bg-url-input');
+          if (inp) inp.value = res.url;
+          if (help) help.textContent = `Subido: ${file.name}`;
+          this._loadUploadedFiles();
+        } else {
+          if (help) help.textContent = 'Error al subir archivo.';
+        }
+      } catch (err) {
+        console.error('Upload failed:', err);
+        if (help) help.textContent = `Error: ${err.message || err}`;
+      }
+      ev.target.value = '';
     };
     r.readAsDataURL(file);
+  }
+
+  async _loadUploadedFiles() {
+    const listContainer = this.shadowRoot.getElementById('uploaded-files-list');
+    const countLabel = this.shadowRoot.getElementById('storage-files-count');
+    if (!listContainer) return;
+
+    try {
+      const files = await this._send('argus/list_uploaded_files');
+      this._uploadedFiles = files || [];
+      
+      if (!files || !files.length) {
+        listContainer.innerHTML = `
+          <div style="grid-column:1/-1; text-align:center; padding:20px; font-size:11px; opacity:0.5;">
+            Sin archivos subidos. Carga un fondo usando los controles de arriba.
+          </div>
+        `;
+        if (countLabel) countLabel.textContent = '0 archivos';
+        return;
+      }
+
+      let totalBytes = 0;
+      files.forEach(f => totalBytes += (f.size_bytes || 0));
+      let totalStr = '';
+      if (totalBytes >= 1024 * 1024) {
+        totalStr = `${(totalBytes / (1024 * 1024)).toFixed(2)} MB`;
+      } else {
+        totalStr = `${(totalBytes / 1024).toFixed(2)} KB`;
+      }
+
+      if (countLabel) {
+        countLabel.textContent = `${files.length} arch. (${totalStr})`;
+      }
+
+      listContainer.innerHTML = files.map(file => `
+        <div class="file-card">
+          <div class="file-card-preview">
+            ${file.is_video ? `
+              <video src="${file.url}" muted playsinline></video>
+            ` : `
+              <img src="${file.url}" loading="lazy">
+            `}
+          </div>
+          <div class="file-card-name" title="${file.name}">${file.name}</div>
+          <div class="file-card-meta">
+            <span>${file.size_str}</span>
+            <button class="file-card-btn-delete" data-filename="${file.name}" title="Borrar de almacenamiento">🗑️</button>
+          </div>
+          <div class="file-card-actions">
+            <button class="file-card-btn use-for-panel" data-url="${file.url}">Panel</button>
+            <button class="file-card-btn use-for-hub" data-url="${file.url}">Argus</button>
+          </div>
+        </div>
+      `).join('');
+
+      listContainer.querySelectorAll('.file-card-btn-delete').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const fname = btn.dataset.filename;
+          if (confirm(`¿Seguro que deseas borrar el archivo "${fname}" del servidor permanentemente?`)) {
+            this._deleteUploadedFile(fname);
+          }
+        });
+      });
+
+      listContainer.querySelectorAll('.use-for-panel').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const url = btn.dataset.url;
+          this._panelBgFile = url;
+          const inp = this.shadowRoot.getElementById('panel-bg-url-input');
+          if (inp) inp.value = url;
+          const help = this.shadowRoot.getElementById('bg-file-help');
+          if (help) help.textContent = 'Fondo de panel seleccionado desde historial.';
+        });
+      });
+
+      listContainer.querySelectorAll('.use-for-hub').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const url = btn.dataset.url;
+          this._hubBgFile = url;
+          const inp = this.shadowRoot.getElementById('hub-bg-url-input');
+          if (inp) inp.value = url;
+          const help = this.shadowRoot.getElementById('hub-file-help');
+          if (help) help.textContent = 'Fondo Argus seleccionado desde historial.';
+        });
+      });
+
+    } catch (err) {
+      console.error('Failed to load uploaded files:', err);
+      listContainer.innerHTML = `
+        <div style="grid-column:1/-1; text-align:center; padding:20px; font-size:11px; color:#ff4d4d; opacity:0.8;">
+          Error al cargar historial de archivos.
+        </div>
+      `;
+    }
+  }
+
+  async _deleteUploadedFile(filename) {
+    try {
+      const res = await this._send('argus/delete_uploaded_file', { filename });
+      if (res && res.success) {
+        this._loadUploadedFiles();
+        
+        const panelInp = this.shadowRoot.getElementById('panel-bg-url-input');
+        if (panelInp && panelInp.value === `/local/argus/${filename}`) {
+          panelInp.value = '';
+          this._panelBgFile = '';
+        }
+        const hubInp = this.shadowRoot.getElementById('hub-bg-url-input');
+        if (hubInp && hubInp.value === `/local/argus/${filename}`) {
+          hubInp.value = '';
+          this._hubBgFile = '';
+        }
+      } else {
+        alert('Error al intentar borrar el archivo.');
+      }
+    } catch (err) {
+      console.error('Delete failed:', err);
+      alert(`Error al borrar: ${err.message || err}`);
+    }
   }
 
   _updateBgFieldsVisibility() {
@@ -3487,7 +3761,10 @@ class ArgusPanel extends HTMLElement {
   _renderEntryBackground(ws, isNight) {
     const mode = this._backgroundMode || 'weather', imgs = this._backgroundImages || [];
     if (mode === 'none') return `<div class="wx wx-static"></div>`;
-    if (mode === 'photo' && imgs[0]) return `<div class="wx wx-photo" style="--bg-image:url('${imgs[0].replace(/'/g, "%27")}')"></div>`;
+    if (mode === 'photo' && (this._panelBgFile || imgs[0])) {
+      const bgImg = this._panelBgFile || imgs[0];
+      return `<div class="wx wx-photo" style="--bg-image:url('${bgImg.replace(/'/g, "%27")}')"></div>`;
+    }
     if (mode === 'collage' && imgs.length) return `<div class="wx wx-collage"><div class="wx-collage-grid">${imgs.slice(0,4).map(src => `<div class="wx-collage-cell" style="background-image:url('${src.replace(/'/g, "%27")}')"></div>`).join('')}</div></div>`;
     if (mode === 'video' && this._panelBgFile) {
       const sound = this._panelBgSound;
@@ -3556,7 +3833,7 @@ class ArgusPanel extends HTMLElement {
     const panel_bg_url = this.shadowRoot.getElementById('panel-bg-url-input')?.value || '';
     if (panel_bg_url) {
       panel_bg_file = panel_bg_url;
-    } else if (this._panelBgFile && this._panelBgFile.startsWith('data:')) {
+    } else if (this._panelBgFile) {
       panel_bg_file = this._panelBgFile;
     }
     const panel_bg_sound = Boolean(this.shadowRoot.getElementById('chk-panel-bg-sound')?.checked);
@@ -3566,7 +3843,7 @@ class ArgusPanel extends HTMLElement {
     const hub_bg_url = this.shadowRoot.getElementById('hub-bg-url-input')?.value || '';
     if (hub_bg_url) {
       hub_bg_file = hub_bg_url;
-    } else if (this._hubBgFile && this._hubBgFile.startsWith('data:')) {
+    } else if (this._hubBgFile) {
       hub_bg_file = this._hubBgFile;
     }
     const hub_bg_sound = Boolean(this.shadowRoot.getElementById('chk-hub-bg-sound')?.checked);
