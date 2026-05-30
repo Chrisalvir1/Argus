@@ -61,6 +61,7 @@ GIT_TERMINAL_PROMPT=0 git fetch upstream master --quiet 2>/dev/null || git fetch
 git checkout -B add-argus-integration upstream/master 2>/dev/null \
   || git checkout -B add-argus-integration origin/master
 
+rm -f integration 2>/dev/null || true
 mkdir -p integration
 cat > "integration/$ARGUS_DOMAIN.json" << 'JSON'
 {
