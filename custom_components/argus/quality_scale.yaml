@@ -1,0 +1,68 @@
+rules:
+  # Bronze tier — required for HA Core submission
+  action-setup:
+    status: done
+  appropriate-polling:
+    status: exempt
+    comment: Integration uses local_push (WebSocket/MQTT), no polling.
+  brands:
+    status: done
+  common-modules:
+    status: todo
+  config-flow:
+    status: done
+  config-flow-test-coverage:
+    status: todo
+  dependency-transparency:
+    status: done
+    comment: Zero external dependencies.
+  docs-actions:
+    status: todo
+  docs-high-level-description:
+    status: done
+  docs-installation-instructions:
+    status: done
+  docs-removal-instructions:
+    status: todo
+  entity-event-setup:
+    status: done
+  entity-unique-id:
+    status: done
+  has-entity-name:
+    status: done
+  integration-owner:
+    status: done
+  log-when-unavailable:
+    status: todo
+  parallel-updates:
+    status: exempt
+    comment: Single alarm panel entity per entry.
+  reauthentication-flow:
+    status: exempt
+    comment: Local integration, no cloud authentication required.
+  runtime-data:
+    status: todo
+  test-before-configure:
+    status: todo
+  test-before-setup:
+    status: todo
+  unique-config-entry:
+    status: done
+  # Silver tier
+  action-exceptions:
+    status: todo
+  config-entry-unloading:
+    status: done
+  docs-configuration-parameters:
+    status: todo
+  docs-installation-parameters:
+    status: done
+  entity-unavailable:
+    status: todo
+  integration-reconfiguration:
+    status: todo
+  log-when-unavailable:
+    status: todo
+  stale-devices:
+    status: exempt
+    comment: No devices, single alarm panel entity.
