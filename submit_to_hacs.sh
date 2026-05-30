@@ -7,6 +7,9 @@
 
 set -e
 
+# Accept GitHub host key automatically (avoids "Are you sure?" prompt)
+export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=accept-new"
+
 ARGUS_DOMAIN="argus"
 ARGUS_DIR="$(cd "$(dirname "$0")" && pwd)"
 WORK_DIR=$(mktemp -d)
@@ -58,6 +61,7 @@ GIT_TERMINAL_PROMPT=0 git fetch upstream master --quiet 2>/dev/null || git fetch
 git checkout -B add-argus-integration upstream/master 2>/dev/null \
   || git checkout -B add-argus-integration origin/master
 
+mkdir -p integration
 cat > "integration/$ARGUS_DOMAIN.json" << 'JSON'
 {
   "description": "Premium Smart Alarm & Security Panel for Home Assistant",
