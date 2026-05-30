@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.3.0
+ * Argus Home Hub – v1.3.1
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -2503,7 +2503,20 @@ class ArgusPanel extends HTMLElement {
 
     // Admin flag: always true by default, authorization checked via Master PIN
     this._isAdmin = true;
-    if (!this._modeEntryId) this._modeEntryId = dashboard.entries?.[0]?.entity_id || null;
+    const resolvedEntityId = dashboard.entries?.[0]?.entity_id;
+    if (resolvedEntityId) {
+      if (!this._modeEntryId || this._modeEntryId === 'default') {
+        this._modeEntryId = resolvedEntityId;
+      }
+      if (this._loadRetryTimeout) {
+        clearTimeout(this._loadRetryTimeout);
+        this._loadRetryTimeout = null;
+      }
+    } else {
+      if (!this._modeEntryId || this._modeEntryId === 'default') {
+        this._modeEntryId = null;
+      }
+    }
 
     // Show current PIN toggle & validation required
     const currentPin = dashboard.entries?.[0]?.options?.code || '';
@@ -2529,6 +2542,23 @@ class ArgusPanel extends HTMLElement {
     this._renderUsers();
     this._renderHomeKit();
     this._loadUploadedFiles();
+
+    // Retry loading if integration is reloading and has no active entity_id yet
+    const hasEntries = dashboard.entries && dashboard.entries.length > 0;
+    const hasEntityId = hasEntries && dashboard.entries[0].entity_id;
+    if (hasEntries && !hasEntityId) {
+      if (!this._loadRetryTimeout) {
+        this._loadRetryTimeout = setTimeout(() => {
+          this._loadRetryTimeout = null;
+          this._load();
+        }, 1500);
+      }
+    } else {
+      if (this._loadRetryTimeout) {
+        clearTimeout(this._loadRetryTimeout);
+        this._loadRetryTimeout = null;
+      }
+    }
   }
 
   /* ── Entries (alarm instances) ───────────────────────────────────── */
@@ -3112,7 +3142,10 @@ class ArgusPanel extends HTMLElement {
     if (!this._ui) return { ...emptyCfg };
     this._ui.modes = this._ui.modes || {};
     this._ui.modes.__by_entity__ = this._ui.modes.__by_entity__ || {};
-    const entityId = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id || 'default';
+    let entityId = this._modeEntryId;
+    if (!entityId || entityId === 'default') {
+      entityId = this._dashboard?.entries?.[0]?.entity_id || 'default';
+    }
     this._modeEntryId = entityId;
     this._mode = this._mode || 'disarmed';
     
@@ -3276,7 +3309,11 @@ class ArgusPanel extends HTMLElement {
     const cfg = this._currentModeConfig();
     const key = type === 'sensor' ? 'sensors' : (type === 'bypass' ? 'bypassed_sensors' : 'sirens');
     // FIX #4/#5: write back into __by_entity__ structure, not flat modes[mode]
-    const eId = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id || 'default';
+    let eId = this._modeEntryId;
+    if (!eId || eId === 'default') {
+      eId = this._dashboard?.entries?.[0]?.entity_id || 'default';
+    }
+    this._modeEntryId = eId;
     this._ui.modes.__by_entity__ = this._ui.modes.__by_entity__ || {};
     this._ui.modes.__by_entity__[eId] = this._ui.modes.__by_entity__[eId] || {};
     this._ui.modes.__by_entity__[eId][this._mode] = { ...cfg, [key]: (cfg[key] || []).filter(v => v !== entityId) };
@@ -4534,9 +4571,10 @@ class ArgusPanel extends HTMLElement {
     if (!this._ui) return;
     if (!this._ui.modes) this._ui.modes = {};
     if (!this._ui.modes.__by_entity__) this._ui.modes.__by_entity__ = {};
-    const _eid = this._modeEntryId
-              || this._dashboard?.entries?.[0]?.entity_id
-              || 'default';
+    let _eid = this._modeEntryId;
+    if (!_eid || _eid === 'default') {
+      _eid = this._dashboard?.entries?.[0]?.entity_id || 'default';
+    }
     this._modeEntryId = _eid;
     if (!this._ui.modes.__by_entity__[_eid]) this._ui.modes.__by_entity__[_eid] = {};
     const EMPTY = { sensors:[], bypassed_sensors:[], sirens:[], require_closed:false,
