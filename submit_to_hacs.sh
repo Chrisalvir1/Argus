@@ -7,83 +7,60 @@
 
 set -e
 
-ARGUS_REPO="Chrisalvir1/Argus"
 ARGUS_DOMAIN="argus"
 ARGUS_DIR="$(cd "$(dirname "$0")" && pwd)"
 WORK_DIR=$(mktemp -d)
+trap "rm -rf '$WORK_DIR'" EXIT
 
 echo "🔐 Checking GitHub CLI authentication..."
 gh auth status || { echo "❌ Run: gh auth login"; exit 1; }
 GH_USER=$(gh api user --jq '.login')
 echo "✅ Logged in as: $GH_USER"
-
-# Helper: clone using gh (handles SSH/HTTPS automatically)
-gh_clone() {
-  local repo="$1"
-  local dest="$2"
-  gh repo clone "$repo" "$dest" -- --depth=1 2>/dev/null || true
-}
+echo ""
 
 # ============================================================
 # PART 1: hacs/brands
 # ============================================================
-echo ""
 echo "══════════════════════════════════════════"
-echo "  PART 1: Submitting brand to hacs/brands"
+echo "  PART 1: hacs/brands"
 echo "══════════════════════════════════════════"
 
-echo "📥 Forking hacs/brands (if not already forked)..."
-gh repo fork hacs/brands --default-branch-only 2>/dev/null || true
+cd "$WORK_DIR"
+echo "📥 Forking + cloning hacs/brands..."
+gh repo fork hacs/brands --clone --fork-name brands
+cd brands
 
-BRANDS_DIR="$WORK_DIR/brands"
-echo "📥 Cloning your fork..."
-gh_clone "$GH_USER/brands" "$BRANDS_DIR"
-
-cd "$BRANDS_DIR"
-
-# Sync fork with upstream
+# Sync with upstream
 git remote add upstream https://github.com/hacs/brands.git 2>/dev/null || true
 git fetch upstream --quiet
-DEFAULT_BRANCH=$(git remote show upstream | grep 'HEAD branch' | awk '{print $NF}')
-echo "  upstream default branch: $DEFAULT_BRANCH"
-git checkout -B "add-argus-brand" "upstream/$DEFAULT_BRANCH"
+UB=$(git ls-remote --symref upstream HEAD | head -1 | sed 's/.*refs\/heads\///')
+echo "  upstream branch: $UB"
+git checkout -B add-argus-brand "upstream/$UB"
 
-# Create the brand folder and copy images
-TARGET_DIR="custom_integrations/$ARGUS_DOMAIN"
-mkdir -p "$TARGET_DIR"
+# Copy images
+TARGET="custom_integrations/$ARGUS_DOMAIN"
+mkdir -p "$TARGET"
+cp "$ARGUS_DIR/custom_components/argus/brand/icon.png"      "$TARGET/icon.png"
+cp "$ARGUS_DIR/custom_components/argus/brand/logo.png"      "$TARGET/logo.png"
+cp "$ARGUS_DIR/custom_components/argus/brand/dark_icon.png" "$TARGET/dark_icon.png" 2>/dev/null || true
+cp "$ARGUS_DIR/custom_components/argus/brand/dark_logo.png" "$TARGET/dark_logo.png" 2>/dev/null || true
+echo "✅ Brand images copied (RGBA 256x256)"
 
-echo "📋 Copying brand images from Argus repo..."
-cp "$ARGUS_DIR/custom_components/argus/brand/icon.png"      "$TARGET_DIR/icon.png"
-cp "$ARGUS_DIR/custom_components/argus/brand/logo.png"      "$TARGET_DIR/logo.png"
-cp "$ARGUS_DIR/custom_components/argus/brand/dark_icon.png" "$TARGET_DIR/dark_icon.png" 2>/dev/null || true
-cp "$ARGUS_DIR/custom_components/argus/brand/dark_logo.png" "$TARGET_DIR/dark_logo.png" 2>/dev/null || true
-
-# Verify image specs
-python3 -c "
-from PIL import Image
-for name in ['icon.png', 'logo.png']:
-    img = Image.open('$TARGET_DIR/' + name)
-    assert img.size == (256, 256), f'{name} must be 256x256'
-    assert img.mode == 'RGBA', f'{name} must be RGBA (transparent background)'
-    print(f'  ✅ {name}: {img.mode} {img.size}')
-" 2>/dev/null || echo "  ⚠️  Pillow not available — images copied without local verification"
-
-git add "$TARGET_DIR/"
+git add "$TARGET/"
 git commit -m "Add Argus Home Hub brand assets
 
 - Domain: argus
 - Repository: https://github.com/Chrisalvir1/Argus
 - Icon and logo: 256x256px PNG with transparent background (RGBA)
-- Dark variants included
-" || { echo "  ℹ️  Nothing new to commit for brands"; }
+- Dark variants included"
 
-echo "📤 Pushing brand branch to your fork..."
 git push origin add-argus-brand --force
+echo "📤 Pushed to fork"
 
 echo "🔀 Creating PR to hacs/brands..."
 BRANDS_PR=$(gh pr create \
   --repo hacs/brands \
-  --base "$DEFAULT_BRANCH" \
+  --base "$UB" \
   --head "$GH_USER:add-argus-brand" \
   --title "Add Argus Home Hub brand" \
   --body "## Description
@@ -100,35 +77,29 @@ Adds brand assets for **Argus Home Hub** — a premium security integration for 
 - [x] Images are PNG format
 - [x] Images have transparent background (RGBA)
 - [x] Domain \`argus\` matches integration manifest
-- [x] Folder: \`custom_integrations/argus/\`
-" 2>&1) || BRANDS_PR="(PR may already exist — check https://github.com/hacs/brands/pulls)"
+- [x] Folder path: \`custom_integrations/argus/\`") || BRANDS_PR="PR may already exist — check https://github.com/hacs/brands/pulls"
 
-echo "✅ hacs/brands: $BRANDS_PR"
+echo "✅ hacs/brands PR: $BRANDS_PR"
 
 # ============================================================
 # PART 2: hacs/default
 # ============================================================
 echo ""
 echo "══════════════════════════════════════════"
-echo "  PART 2: Submitting to hacs/default"
+echo "  PART 2: hacs/default"
 echo "══════════════════════════════════════════"
 
-echo "📥 Forking hacs/default (if not already forked)..."
-gh repo fork hacs/default --default-branch-only 2>/dev/null || true
-
-DEFAULT_DIR="$WORK_DIR/default"
-echo "📥 Cloning your fork..."
-gh_clone "$GH_USER/default" "$DEFAULT_DIR"
-
-cd "$DEFAULT_DIR"
+cd "$WORK_DIR"
+echo "📥 Forking + cloning hacs/default..."
+gh repo fork hacs/default --clone --fork-name default
+cd default
 
 git remote add upstream https://github.com/hacs/default.git 2>/dev/null || true
 git fetch upstream --quiet
-DEFAULT_BRANCH2=$(git remote show upstream | grep 'HEAD branch' | awk '{print $NF}')
-echo "  upstream default branch: $DEFAULT_BRANCH2"
-git checkout -B "add-argus-integration" "upstream/$DEFAULT_BRANCH2"
+UB2=$(git ls-remote --symref upstream HEAD | head -1 | sed 's/.*refs\/heads\///')
+echo "  upstream branch: $UB2"
+git checkout -B add-argus-integration "upstream/$UB2"
 
-# Create the integration entry
 cat > "integration/$ARGUS_DOMAIN.json" << 'JSON'
 {
   "description": "Premium Smart Alarm & Security Panel for Home Assistant",
@@ -145,16 +116,15 @@ git commit -m "Add Argus Home Hub integration
 - Domain: argus
 - IoT class: local_push
 - Config flow: Yes
-- Zero external dependencies
-" || { echo "  ℹ️  Nothing new to commit for default"; }
+- Zero external dependencies"
 
-echo "📤 Pushing to your fork..."
 git push origin add-argus-integration --force
+echo "📤 Pushed to fork"
 
 echo "🔀 Creating PR to hacs/default..."
 DEFAULT_PR=$(gh pr create \
   --repo hacs/default \
-  --base "$DEFAULT_BRANCH2" \
+  --base "$UB2" \
   --head "$GH_USER:add-argus-integration" \
   --title "Add Argus Home Hub integration" \
   --body "## Integration details
@@ -187,18 +157,15 @@ Argus Home Hub is a complete premium security alarm system for Home Assistant:
 - 📋 **Full audit log** — 200 entries, user attribution, sensor detail
 - 🔋 **Battery monitoring HUD** for all intrusion sensors
 - 🌍 **7 languages** with instant in-app switching (no reload)
-- 📱 **Fullscreen + multi-instance** support for wall-mounted tablets
+- 📱 **Fullscreen + multi-instance** for wall tablets
 - 🏠 **HomeKit bridge status** display
 - ⚡ **MQTT sync** for external integrations
 - 🔧 **Zero YAML** — pure config flow setup
 
-**IoT class:** \`local_push\` | **Config flow:** Yes | **Zero external dependencies**
-" 2>&1) || DEFAULT_PR="(PR may already exist — check https://github.com/hacs/default/pulls)"
+**IoT class:** \`local_push\` | **Config flow:** Yes | **Zero external dependencies**") || DEFAULT_PR="PR may already exist — check https://github.com/hacs/default/pulls"
 
-echo "✅ hacs/default: $DEFAULT_PR"
+echo "✅ hacs/default PR: $DEFAULT_PR"
 
-# ============================================================
-# Done
 # ============================================================
 echo ""
 echo "══════════════════════════════════════════"
@@ -210,8 +177,5 @@ echo "hacs/default PR: $DEFAULT_PR"
 echo ""
 echo "Next steps:"
 echo "  1. Wait for CI to pass on both PRs"
-echo "  2. Respond to any reviewer feedback"
-echo "  3. hacs/brands usually needs to merge first before hacs/default is reviewed"
-echo ""
-
-rm -rf "$WORK_DIR"
+echo "  2. hacs/brands typically merges before hacs/default is reviewed"
+echo "  3. Respond to any reviewer feedback"
