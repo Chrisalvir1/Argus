@@ -5,7 +5,7 @@
 
   **El Sistema de Seguridad Premium para Home Assistant**
 
-  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.1.35-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
+  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.3.3-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
   [![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)](https://www.home-assistant.io/)
   [![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)](https://hacs.xyz/)
   [![GitHub stars](https://img.shields.io/github/stars/Chrisalvir1/Argus?style=social)](https://github.com/Chrisalvir1/Argus/stargazers)
@@ -21,25 +21,17 @@
 
 ---
 
-## ✨ Novedades y Correcciones Críticas (v1.1.35)
+## ✨ Novedades y Correcciones Recientes (v1.3.3)
 
-¡Mejoras de seguridad, control de acceso y cristal líquido!
+¡Mejoras de seguridad, control de acceso, traducciones dinámicas y diseño Liquid Glass!
 
-**Cambios:**
-- **Desenfoque Optimizado (v1.1.35)**: Atenuado el desenfoque Liquid Glass a 12px y saturación a 120% para asegurar legibilidad nítida y contraste del texto sobre el cristal.
-- **Teclado de Desarmado Circular (v1.1.35)**: Nuevo PIN dial iOS-style con botones redondos, botones de "Borrar" y "Enter" integrados en la rejilla, y close '✕' en la cabecera. Soporta difuminado inteligente de fondo en pantalla normal y rebote elástico en pantalla completa.
-- **Gestión de Vencimiento de Usuarios (v1.1.35)**: Añadido soporte de expiración (temporal con fecha/hora o indefinido) para usuarios dinámicos y persistencia robusta de borrado en base de datos.
-- **Auditoría de Administradores (v1.1.35)**: Registro automático en el historial de qué administrador agregó/eliminó a un usuario, y qué usuario específico desarmó el sistema con su PIN.
-- **MQTT Dinámico (v1.1.35)**: Suscripción y cancelación automática en caliente de temas MQTT sin necesidad de reiniciar la integración.
-- **Instalación en un Paso (v1.1.34)**: Se eliminaron los pasos secuenciales de configuración de sensores y MQTT del asistente inicial de Home Assistant. Toda la configuración se realiza cómodamente desde el panel web de ajustes de Argus.
-- **Correcciones de i18n (v1.1.33)**: Localización completa al cambiar de idioma de todos los textos y botones fijos (modales de SOS, nombre de hogar, idioma).
-- **Compatibilidad con HomeKit (v1.1.32)**: Se aplicó un parche para solucionar problemas de sincronización de estado y validación de códigos de seguridad en cadenas vacías con HomeKit.
-- **Restauración de Estabilidad (v1.1.31)**: Reversión al núcleo estable de la v1.1.10, removiendo las funciones experimentales de simulacro y trigger para asegurar el correcto funcionamiento de los botones de armado.
-- **Sincronización HomeKit (Apple Home) (v1.1.0)**: Solucionado el error crítico donde la app de Apple Home revertía el modo Ausente o Noche a "Desactivado". Argus ahora fuerza la re-sincronización del estado de HomeKit al usar el ARM-LOCK v2.
-- **Sugerencias de Armado Inteligente**: Argus AI monitoreará si todas las personas han salido de casa. Si detecta la casa vacía pero la alarma sigue desarmada, te enviará una notificación push sugiriendo armar la alarma.
-- **Integración de Cámaras IA**: ¡Nuevo analizador de cámaras usando Google Gemini! Si configuras una cámara en las acciones, Argus la analizará al dispararse la alarma y te dirá exactamente qué ve mediante TTS (ej. *"Se detectó una persona en el jardín"*).
-- **Soporte de Wildcards y Estadísticas**: Las acciones de automatización ahora soportan variables como `{{sensor}}` y `{{entity_id}}` para mensajes TTS personalizados. Se han preparado las bases para un próximo dashboard de estadísticas.
-- **Fix HACS Version**: Corregido el manifiesto interno para que HACS detecte correctamente las actualizaciones a partir de v1.1.0.
+**Cambios y Características Nuevas:**
+- **Tarjeta Lovelace Premium con Teclado Integrado (v1.3.3)**: La tarjeta personalizada `custom:argus-card` ahora incluye un overlay de teclado numérico (dial) con efecto *Liquid Glass*. Si el PIN Maestro está activo, al intentar desarmar se desplegará de forma automática el teclado numérico.
+- **Traducción y Reactividad i18n Completa (v1.3.3)**: Corregidos los textos del gestor de archivos subidos y los registros de auditoría de restablecimiento de PIN para que cambien dinámicamente y al instante al seleccionar cualquiera de los idiomas soportados.
+- **Restablecimiento de PIN Maestro por Administrador (v1.3.0)**: Si eres administrador de Home Assistant, ahora puedes restablecer el PIN maestro de Argus de forma segura desde la interfaz, registrando la acción en el historial de auditoría.
+- **Gestión Física de Fondos de Pantalla (v1.2.0 - v1.2.2)**: Subida de imágenes de fondo directamente al almacenamiento del servidor de Home Assistant en lugar de guardar cadenas Base64. Incluye un fondo predeterminado oficial de Argus, opción de "Sin fondo" para respetar el tema del usuario, y borrado optimista instantáneo.
+- **Contraste Inteligente y Legibilidad (v1.1.47 - v1.1.48)**: Detección automática del brillo del fondo de pantalla seleccionado para adaptar el contraste y color de los textos, garantizando una excelente legibilidad tanto en fondos oscuros como claros.
+
 ---
 
 ## 🚀 Características Principales
@@ -61,36 +53,32 @@
 
 ### HACS (Recomendado)
 1. Abre Home Assistant y dirígete a **HACS** -> **Integraciones**.
-2. Clic en los tres puntos (arriba a la derecha) -> **Repositorios Personalizados**.
-3. Añade la URL: `https://github.com/Chrisalvir1/argus`
-4. Selecciona categoría: `Integration` y clic en **Añadir**.
-5. Descarga **Argus**, reinicia Home Assistant y ve a **Ajustes > Dispositivos** para configurarlo.
+2. Haz clic en los tres puntos (arriba a la derecha) -> **Repositorios Personalizados**.
+3. Añade la URL del repositorio: `https://github.com/Chrisalvir1/Argus`
+4. Selecciona la categoría: `Integration` y haz clic en **Añadir**.
+5. Descarga **Argus** y reinicia tu Home Assistant.
+6. Ve a **Ajustes > Dispositivos y servicios > Añadir integración**, busca **Argus** y sigue el asistente para configurarlo.
 
 ---
 
-## ⚙️ Configuración del Dashboard
+## ⚙️ Configuración del Dashboard (Lovelace)
 
-Para ver la interfaz, edita tu panel de Lovelace (Dashboard), añade una tarjeta Manual y escribe:
+Argus te ofrece dos tarjetas personalizadas que puedes usar en tus tableros de Home Assistant:
 
+### Opción A: Tarjeta Premium de Alarma (`argus-card`)
+Una tarjeta de control compacta con diseño *Liquid Glass*, clima dinámico en el fondo y dial numérico integrado para desarmar.
+Para añadirla, edita tu tablero, añade una tarjeta **Manual** y escribe:
+```yaml
+type: custom:argus-card
+entity: alarm_control_panel.argus
+title: Panel de Seguridad Argus
+```
+
+### Opción B: Panel de Control e Instancia Completa (`argus-panel`)
+Para incrustar el panel completo de administración y control de Argus en una pestaña de tu dashboard:
 ```yaml
 type: custom:argus-panel
 ```
-
-Listo, **no necesitas YAML extra**. Argus incluye un buscador visual de entidades en su pestaña de **Ajustes** para que elijas tus sensores, sirenas y usuarios con checkboxes.
-
----
-
-## 💡 Sugerencias y Soporte
-
-¿Tienes una idea para mejorar Argus o encontraste un bug? 
-Escríbeme directamente: **[chrisalvir01@gmail.com](mailto:chrisalvir01@gmail.com)**
-
-### ☕ Apoya el Desarrollo
-Argus es un proyecto de código abierto desarrollado para la comunidad. Si te ha sido útil para proteger tu hogar o simplificar tu instalación, considera invitarme un café:
-
-<a href="https://paypal.me/CEstradaAlvir" target="_blank">
-  <img src="https://www.paypalobjects.com/es_XC/i/btn/btn_donateCC_LG.gif" alt="Donar con PayPal" />
-</a>
 
 ---
 
