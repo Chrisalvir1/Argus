@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.3.1
+ * Argus Home Hub – v1.3.2
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -111,6 +111,21 @@ const TEXTS = {
     exp_temporary: 'Temporal (Fecha/Hora)',
     expired: 'Expirado',
     active_until: 'Vence',
+    log_detail_pin_reset: 'PIN maestro restablecido por el administrador',
+    log_detail_pin_reset_failed: 'Intento no autorizado de restablecer el PIN maestro',
+    badge_pin_reset: 'PIN Restablecido',
+    badge_pin_reset_failed: 'Fallo Reset PIN',
+    no_files_uploaded: 'Sin archivos subidos. Carga un fondo usando los controles de arriba.',
+    no_files_uploaded_short: 'Sin archivos subidos.',
+    files_count: '{count} archivos',
+    files_count_short: '{count} arch.',
+    file_delete_confirm: '¿Seguro que deseas borrar "{filename}" permanentemente?',
+    use_for_panel: 'Panel',
+    use_for_hub: 'Argus',
+    delete_btn_title: 'Borrar de almacenamiento',
+    bg_panel_selected_from_history: 'Fondo de panel seleccionado desde historial.',
+    bg_hub_selected_from_history: 'Fondo Argus seleccionado desde historial.',
+    error_loading_uploaded_files: 'Error al cargar historial de archivos.',
   },
   en: {
     hero_desc:'Alarm control, modes, TTS and automations.',
@@ -193,6 +208,21 @@ const TEXTS = {
     exp_temporary: 'Temporary (Date/Time)',
     expired: 'Expired',
     active_until: 'Expires',
+    log_detail_pin_reset: 'Master PIN reset by administrator',
+    log_detail_pin_reset_failed: 'Unauthorized attempt to reset master PIN',
+    badge_pin_reset: 'PIN Reset',
+    badge_pin_reset_failed: 'PIN Reset Failed',
+    no_files_uploaded: 'No uploaded files. Upload a background using the controls above.',
+    no_files_uploaded_short: 'No uploaded files.',
+    files_count: '{count} files',
+    files_count_short: '{count} files',
+    file_delete_confirm: 'Are you sure you want to permanently delete "{filename}"?',
+    use_for_panel: 'Panel',
+    use_for_hub: 'Argus',
+    delete_btn_title: 'Delete from storage',
+    bg_panel_selected_from_history: 'Panel background selected from history.',
+    bg_hub_selected_from_history: 'Argus background selected from history.',
+    error_loading_uploaded_files: 'Error loading file history.',
   },
   fr: {
     hero_desc:"Sécurité intégrée, contrôle d'accès, automatisations et HomeKit.",
@@ -264,6 +294,21 @@ const TEXTS = {
     open_sensors:'Capteurs ouverts', log_detail_disarm:'Système désarmé',
     alarm_instance:"Instance d'alarme",
     log_detail_armed:'Mode', log_detail_triggered:'Activation automatique',
+    log_detail_pin_reset: "Code PIN maître réinitialisé par l'administrateur",
+    log_detail_pin_reset_failed: "Tentative non autorisée de réinitialiser le code PIN maître",
+    badge_pin_reset: 'PIN Réinitialisé',
+    badge_pin_reset_failed: 'Échec Réinit. PIN',
+    no_files_uploaded: "Aucun fichier téléchargé. Téléchargez un arrière-plan à l'aide des commandes ci-dessus.",
+    no_files_uploaded_short: 'Aucun fichier téléchargé.',
+    files_count: '{count} fichiers',
+    files_count_short: '{count} fich.',
+    file_delete_confirm: 'Voulez-vous vraiment supprimer définitivement "{filename}" ?',
+    use_for_panel: 'Panneau',
+    use_for_hub: 'Argus',
+    delete_btn_title: 'Supprimer du stockage',
+    bg_panel_selected_from_history: "Arrière-plan du panneau sélectionné depuis l'historique.",
+    bg_hub_selected_from_history: "Arrière-plan Argus sélectionné depuis l'historique.",
+    error_loading_uploaded_files: "Erreur lors du chargement de l'historique des fichiers.",
   },
   pt: {
     hero_desc:'Segurança integrada, controle de acesso, automações e HomeKit.',
@@ -335,6 +380,21 @@ const TEXTS = {
     open_sensors:'Sensores abertos', log_detail_disarm:'Sistema desarmado',
     log_detail_armed:'Modo', log_detail_triggered:'Ativação automática',
     alarm_instance:'Instância do alarme',
+    log_detail_pin_reset: 'PIN mestre redefinido pelo administrador',
+    log_detail_pin_reset_failed: 'Tentativa não autorizada de redefinir o PIN mestre',
+    badge_pin_reset: 'PIN Redefinido',
+    badge_pin_reset_failed: 'Falha ao Redefinir PIN',
+    no_files_uploaded: 'Nenhum arquivo enviado. Envie um plano de fundo usando os controles acima.',
+    no_files_uploaded_short: 'Nenhum arquivo enviado.',
+    files_count: '{count} arquivos',
+    files_count_short: '{count} arq.',
+    file_delete_confirm: 'Tem certeza de que deseja excluir "{filename}" permanentemente?',
+    use_for_panel: 'Painel',
+    use_for_hub: 'Argus',
+    delete_btn_title: 'Excluir do armazenamento',
+    bg_panel_selected_from_history: 'Plano de fundo do painel selecionado a partir do histórico.',
+    bg_hub_selected_from_history: 'Plano de fundo do Argus selecionado a partir do histórico.',
+    error_loading_uploaded_files: 'Erro ao carregar o histórico de arquivos.',
   },
   it: {
     hero_desc:'Sicurezza integrata, controllo accessi, automazioni e HomeKit.',
@@ -406,6 +466,21 @@ const TEXTS = {
     open_sensors:'Sensori aperti', log_detail_disarm:'Sistema disarmato',
     alarm_instance:'Istanza allarme',
     log_detail_armed:'Modalità', log_detail_triggered:'Attivazione automatica',
+    log_detail_pin_reset: "PIN principale reimpostato dall'amministratore",
+    log_detail_pin_reset_failed: 'Tentativo non autorizzato di reimpostare il PIN principale',
+    badge_pin_reset: 'PIN Reimpostato',
+    badge_pin_reset_failed: 'Reimpostazione PIN Fallita',
+    no_files_uploaded: 'Nessun file caricato. Carica uno sfondo usando i controlli sopra.',
+    no_files_uploaded_short: 'Nessun file caricato.',
+    files_count: '{count} file',
+    files_count_short: '{count} file',
+    file_delete_confirm: 'Sei sicuro di voler eliminare permanentemente "{filename}"?',
+    use_for_panel: 'Pannello',
+    use_for_hub: 'Argus',
+    delete_btn_title: 'Elimina dalla memoria',
+    bg_panel_selected_from_history: 'Sfondo del pannello selezionato dalla cronologia.',
+    bg_hub_selected_from_history: 'Sfondo di Argus selezionato dalla cronologia.',
+    error_loading_uploaded_files: 'Errore durante il caricamento della cronologia dei file.',
   },
   zh: {
     hero_desc:'集成安全、访问控制、自动化和HomeKit。',
@@ -477,6 +552,21 @@ const TEXTS = {
     open_sensors:'开启的传感器', log_detail_disarm:'系统已撤防',
     alarm_instance:'报警实例',
     log_detail_armed:'模式', log_detail_triggered:'自动激活',
+    log_detail_pin_reset: '管理员已重置主PIN码',
+    log_detail_pin_reset_failed: '未授权尝试重置主PIN码',
+    badge_pin_reset: 'PIN已重置',
+    badge_pin_reset_failed: 'PIN重置失败',
+    no_files_uploaded: '未上传文件。请使用上方控件上传背景。',
+    no_files_uploaded_short: '未上传文件。',
+    files_count: '{count} 个文件',
+    files_count_short: '{count} 文件',
+    file_delete_confirm: '您确定要永久删除 "{filename}" 吗？',
+    use_for_panel: '面板',
+    use_for_hub: 'Argus',
+    delete_btn_title: '从存储中删除',
+    bg_panel_selected_from_history: '已从历史记录中选择面板背景。',
+    bg_hub_selected_from_history: '已从历史记录中选择Argus背景。',
+    error_loading_uploaded_files: '加载文件历史记录出错。',
   },
   ru: {
     hero_desc:'Комплексная безопасность, контроль доступа, автоматизация и HomeKit.',
@@ -548,6 +638,21 @@ const TEXTS = {
     open_sensors:'Открытые датчики', log_detail_disarm:'Система снята',
     alarm_instance:'Экземпляр тревоги',
     log_detail_armed:'Режим', log_detail_triggered:'Автоматическая активация',
+    log_detail_pin_reset: 'Мастер-PIN сброшен администратором',
+    log_detail_pin_reset_failed: 'Несанкционированная попытка сбросить мастер-PIN',
+    badge_pin_reset: 'PIN Сброшен',
+    badge_pin_reset_failed: 'Ошибка Сброса PIN',
+    no_files_uploaded: 'Нет загруженных файлов. Загрузите фон с помощью элементов управления выше.',
+    no_files_uploaded_short: 'Нет загруженных файлов.',
+    files_count: '{count} файлов',
+    files_count_short: '{count} файл.',
+    file_delete_confirm: 'Вы уверены, что хотите навсегда удалить «{filename}»?',
+    use_for_panel: 'Панель',
+    use_for_hub: 'Argus',
+    delete_btn_title: 'Удалить из хранилища',
+    bg_panel_selected_from_history: 'Фон панели выбран из истории.',
+    bg_hub_selected_from_history: 'Фон Argus выбран из истории.',
+    error_loading_uploaded_files: 'Ошибка при загрузке истории файлов.',
   },
 };
 
@@ -3018,7 +3123,11 @@ class ArgusPanel extends HTMLElement {
       // Translate stored detail strings (may be stored in any language)
       let detail = rawDetail;
       const detailLower = rawDetail.toLowerCase();
-      if (detailLower.includes('desarmado') || detailLower.includes('disarmed') || detailLower.includes('désarmé') || detailLower.includes('sistema desarmado') || detailLower.includes('system disarmed') || detailLower === 'manual (desarmado)') {
+      if (action === 'pin_reset') {
+        detail = this._t('log_detail_pin_reset');
+      } else if (action === 'pin_reset_failed') {
+        detail = this._t('log_detail_pin_reset_failed');
+      } else if (detailLower.includes('desarmado') || detailLower.includes('disarmed') || detailLower.includes('désarmé') || detailLower.includes('sistema desarmado') || detailLower.includes('system disarmed') || detailLower === 'manual (desarmado)') {
         detail = this._t('manual_disarm');
       } else if (detailLower.includes('en casa') || detailLower.includes('home') || detailLower.includes('heim') || (rawDetail.toLowerCase().includes('manual') && action.includes('arm') && !action.includes('disarm'))) {
         // Keep as-is but prefix with translated label
@@ -3040,6 +3149,10 @@ class ArgusPanel extends HTMLElement {
         icon = '🔓'; badgeCls = 'disarm'; badgeTxt = this._t('log_disarmed');
       } else if (action.includes('trigger') || action.includes('alarm')) {
         icon = '🚨'; badgeCls = 'trigger'; badgeTxt = this._t('log_triggered');
+      } else if (action === 'pin_reset') {
+        icon = '🔑'; badgeCls = 'disarm'; badgeTxt = this._t('badge_pin_reset');
+      } else if (action === 'pin_reset_failed') {
+        icon = '⚠️'; badgeCls = 'trigger'; badgeTxt = this._t('badge_pin_reset_failed');
       }
 
       // Attribute the action clearly
@@ -3871,10 +3984,10 @@ class ArgusPanel extends HTMLElement {
       if (!files || !files.length) {
         listContainer.innerHTML = `
           <div style="grid-column:1/-1; text-align:center; padding:20px; font-size:11px; opacity:0.5;">
-            Sin archivos subidos. Carga un fondo usando los controles de arriba.
+            ${this._t('no_files_uploaded')}
           </div>
         `;
-        if (countLabel) countLabel.textContent = '0 archivos';
+        if (countLabel) countLabel.textContent = this._t('files_count').replace('{count}', '0');
         return;
       }
 
@@ -3888,7 +4001,7 @@ class ArgusPanel extends HTMLElement {
       }
 
       if (countLabel) {
-        countLabel.textContent = `${files.length} arch. (${totalStr})`;
+        countLabel.textContent = this._t('files_count_short').replace('{count}', files.length) + ` (${totalStr})`;
       }
 
       listContainer.innerHTML = files
@@ -3901,11 +4014,11 @@ class ArgusPanel extends HTMLElement {
           <div class="file-card-name" title="${file.name}">${file.name}</div>
           <div class="file-card-meta">
             <span>${file.size_str}</span>
-            <button class="file-card-btn-delete" data-filename="${file.name}" title="Borrar de almacenamiento">🗑️</button>
+            <button class="file-card-btn-delete" data-filename="${file.name}" title="${this._t('delete_btn_title')}">🗑️</button>
           </div>
           <div class="file-card-actions">
-            <button class="file-card-btn use-for-panel" data-url="${file.url}">Panel</button>
-            <button class="file-card-btn use-for-hub" data-url="${file.url}">Argus</button>
+            <button class="file-card-btn use-for-panel" data-url="${file.url}">${this._t('use_for_panel')}</button>
+            <button class="file-card-btn use-for-hub" data-url="${file.url}">${this._t('use_for_hub')}</button>
           </div>
         </div>
       `).join('');
@@ -3913,7 +4026,7 @@ class ArgusPanel extends HTMLElement {
       listContainer.querySelectorAll('.file-card-btn-delete').forEach(btn => {
         btn.addEventListener('click', () => {
           const fname = btn.dataset.filename;
-          if (confirm(`¿Seguro que deseas borrar "${fname}" permanentemente?`)) {
+          if (confirm(this._t('file_delete_confirm').replace('{filename}', fname))) {
             const card = btn.closest('.file-card');
             this._deleteUploadedFile(fname, card);
           }
@@ -3927,7 +4040,7 @@ class ArgusPanel extends HTMLElement {
           const inp = this.shadowRoot.getElementById('panel-bg-url-input');
           if (inp) inp.value = url;
           const help = this.shadowRoot.getElementById('bg-file-help');
-          if (help) help.textContent = 'Fondo de panel seleccionado desde historial.';
+          if (help) help.textContent = this._t('bg_panel_selected_from_history');
         });
       });
 
@@ -3938,7 +4051,7 @@ class ArgusPanel extends HTMLElement {
           const inp = this.shadowRoot.getElementById('hub-bg-url-input');
           if (inp) inp.value = url;
           const help = this.shadowRoot.getElementById('hub-file-help');
-          if (help) help.textContent = 'Fondo Argus seleccionado desde historial.';
+          if (help) help.textContent = this._t('bg_hub_selected_from_history');
         });
       });
 
@@ -3946,7 +4059,7 @@ class ArgusPanel extends HTMLElement {
       console.error('Failed to load uploaded files:', err);
       listContainer.innerHTML = `
         <div style="grid-column:1/-1; text-align:center; padding:20px; font-size:11px; color:#ff4d4d; opacity:0.8;">
-          Error al cargar historial de archivos.
+          ${this._t('error_loading_uploaded_files')}
         </div>
       `;
     }
@@ -3961,8 +4074,8 @@ class ArgusPanel extends HTMLElement {
       const countLabel = this.shadowRoot.getElementById('storage-files-count');
       const listContainer = this.shadowRoot.getElementById('uploaded-files-list');
       if (countLabel && this._uploadedFiles.length === 0 && listContainer) {
-        listContainer.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:20px; font-size:11px; opacity:0.5;">Sin archivos subidos.</div>`;
-        countLabel.textContent = '0 archivos';
+        listContainer.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:20px; font-size:11px; opacity:0.5;">${this._t('no_files_uploaded_short')}</div>`;
+        countLabel.textContent = this._t('files_count').replace('{count}', '0');
       }
     }
     // Also clear inputs if this file was selected
