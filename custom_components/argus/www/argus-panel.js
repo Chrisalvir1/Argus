@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.3.2
+ * Argus Home Hub – v1.3.3
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -2063,6 +2063,7 @@ class ArgusPanel extends HTMLElement {
     this._renderAutomations();
     this._renderUsers();
     this._renderHomeKit();
+    this._renderUploadedFiles();
   }
 
   _applyTranslations() {
@@ -3973,96 +3974,102 @@ class ArgusPanel extends HTMLElement {
   }
 
   async _loadUploadedFiles() {
+    try {
+      const files = await this._send('argus/list_uploaded_files');
+      this._uploadedFiles = files || [];
+      this._renderUploadedFiles();
+    } catch (err) {
+      console.error('Failed to load uploaded files:', err);
+      const listContainer = this.shadowRoot.getElementById('uploaded-files-list');
+      if (listContainer) {
+        listContainer.innerHTML = `
+          <div style="grid-column:1/-1; text-align:center; padding:20px; font-size:11px; color:#ff4d4d; opacity:0.8;">
+            ${this._t('error_loading_uploaded_files')}
+          </div>
+        `;
+      }
+    }
+  }
+
+  _renderUploadedFiles() {
     const listContainer = this.shadowRoot.getElementById('uploaded-files-list');
     const countLabel = this.shadowRoot.getElementById('storage-files-count');
     if (!listContainer) return;
 
-    try {
-      const files = await this._send('argus/list_uploaded_files');
-      this._uploadedFiles = files || [];
-      
-      if (!files || !files.length) {
-        listContainer.innerHTML = `
-          <div style="grid-column:1/-1; text-align:center; padding:20px; font-size:11px; opacity:0.5;">
-            ${this._t('no_files_uploaded')}
-          </div>
-        `;
-        if (countLabel) countLabel.textContent = this._t('files_count').replace('{count}', '0');
-        return;
-      }
-
-      let totalBytes = 0;
-      files.forEach(f => totalBytes += (f.size_bytes || 0));
-      let totalStr = '';
-      if (totalBytes >= 1024 * 1024) {
-        totalStr = `${(totalBytes / (1024 * 1024)).toFixed(2)} MB`;
-      } else {
-        totalStr = `${(totalBytes / 1024).toFixed(2)} KB`;
-      }
-
-      if (countLabel) {
-        countLabel.textContent = this._t('files_count_short').replace('{count}', files.length) + ` (${totalStr})`;
-      }
-
-      listContainer.innerHTML = files
-        .filter(file => !file.is_video)
-        .map(file => `
-        <div class="file-card" data-filename="${file.name}">
-          <div class="file-card-preview">
-            <img src="${file.url}" loading="lazy">
-          </div>
-          <div class="file-card-name" title="${file.name}">${file.name}</div>
-          <div class="file-card-meta">
-            <span>${file.size_str}</span>
-            <button class="file-card-btn-delete" data-filename="${file.name}" title="${this._t('delete_btn_title')}">🗑️</button>
-          </div>
-          <div class="file-card-actions">
-            <button class="file-card-btn use-for-panel" data-url="${file.url}">${this._t('use_for_panel')}</button>
-            <button class="file-card-btn use-for-hub" data-url="${file.url}">${this._t('use_for_hub')}</button>
-          </div>
-        </div>
-      `).join('');
-
-      listContainer.querySelectorAll('.file-card-btn-delete').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const fname = btn.dataset.filename;
-          if (confirm(this._t('file_delete_confirm').replace('{filename}', fname))) {
-            const card = btn.closest('.file-card');
-            this._deleteUploadedFile(fname, card);
-          }
-        });
-      });
-
-      listContainer.querySelectorAll('.use-for-panel').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const url = btn.dataset.url;
-          this._panelBgFile = url;
-          const inp = this.shadowRoot.getElementById('panel-bg-url-input');
-          if (inp) inp.value = url;
-          const help = this.shadowRoot.getElementById('bg-file-help');
-          if (help) help.textContent = this._t('bg_panel_selected_from_history');
-        });
-      });
-
-      listContainer.querySelectorAll('.use-for-hub').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const url = btn.dataset.url;
-          this._hubBgFile = url;
-          const inp = this.shadowRoot.getElementById('hub-bg-url-input');
-          if (inp) inp.value = url;
-          const help = this.shadowRoot.getElementById('hub-file-help');
-          if (help) help.textContent = this._t('bg_hub_selected_from_history');
-        });
-      });
-
-    } catch (err) {
-      console.error('Failed to load uploaded files:', err);
+    const files = this._uploadedFiles || [];
+    if (!files.length) {
       listContainer.innerHTML = `
-        <div style="grid-column:1/-1; text-align:center; padding:20px; font-size:11px; color:#ff4d4d; opacity:0.8;">
-          ${this._t('error_loading_uploaded_files')}
+        <div style="grid-column:1/-1; text-align:center; padding:20px; font-size:11px; opacity:0.5;">
+          ${this._t('no_files_uploaded')}
         </div>
       `;
+      if (countLabel) countLabel.textContent = this._t('files_count').replace('{count}', '0');
+      return;
     }
+
+    let totalBytes = 0;
+    files.forEach(f => totalBytes += (f.size_bytes || 0));
+    let totalStr = '';
+    if (totalBytes >= 1024 * 1024) {
+      totalStr = `${(totalBytes / (1024 * 1024)).toFixed(2)} MB`;
+    } else {
+      totalStr = `${(totalBytes / 1024).toFixed(2)} KB`;
+    }
+
+    if (countLabel) {
+      countLabel.textContent = this._t('files_count_short').replace('{count}', files.length) + ` (${totalStr})`;
+    }
+
+    listContainer.innerHTML = files
+      .filter(file => !file.is_video)
+      .map(file => `
+      <div class="file-card" data-filename="${file.name}">
+        <div class="file-card-preview">
+          <img src="${file.url}" loading="lazy">
+        </div>
+        <div class="file-card-name" title="${file.name}">${file.name}</div>
+        <div class="file-card-meta">
+          <span>${file.size_str}</span>
+          <button class="file-card-btn-delete" data-filename="${file.name}" title="${this._t('delete_btn_title')}">🗑️</button>
+        </div>
+        <div class="file-card-actions">
+          <button class="file-card-btn use-for-panel" data-url="${file.url}">${this._t('use_for_panel')}</button>
+          <button class="file-card-btn use-for-hub" data-url="${file.url}">${this._t('use_for_hub')}</button>
+        </div>
+      </div>
+    `).join('');
+
+    listContainer.querySelectorAll('.file-card-btn-delete').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const fname = btn.dataset.filename;
+        if (confirm(this._t('file_delete_confirm').replace('{filename}', fname))) {
+          const card = btn.closest('.file-card');
+          this._deleteUploadedFile(fname, card);
+        }
+      });
+    });
+
+    listContainer.querySelectorAll('.use-for-panel').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const url = btn.dataset.url;
+        this._panelBgFile = url;
+        const inp = this.shadowRoot.getElementById('panel-bg-url-input');
+        if (inp) inp.value = url;
+        const help = this.shadowRoot.getElementById('bg-file-help');
+        if (help) help.textContent = this._t('bg_panel_selected_from_history');
+      });
+    });
+
+    listContainer.querySelectorAll('.use-for-hub').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const url = btn.dataset.url;
+        this._hubBgFile = url;
+        const inp = this.shadowRoot.getElementById('hub-bg-url-input');
+        if (inp) inp.value = url;
+        const help = this.shadowRoot.getElementById('hub-file-help');
+        if (help) help.textContent = this._t('bg_hub_selected_from_history');
+      });
+    });
   }
 
   async _deleteUploadedFile(filename, cardEl) {
@@ -4071,12 +4078,7 @@ class ArgusPanel extends HTMLElement {
     // Update local cache
     if (this._uploadedFiles) {
       this._uploadedFiles = this._uploadedFiles.filter(f => f.name !== filename);
-      const countLabel = this.shadowRoot.getElementById('storage-files-count');
-      const listContainer = this.shadowRoot.getElementById('uploaded-files-list');
-      if (countLabel && this._uploadedFiles.length === 0 && listContainer) {
-        listContainer.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:20px; font-size:11px; opacity:0.5;">${this._t('no_files_uploaded_short')}</div>`;
-        countLabel.textContent = this._t('files_count').replace('{count}', '0');
-      }
+      this._renderUploadedFiles();
     }
     // Also clear inputs if this file was selected
     const panelInp = this.shadowRoot.getElementById('panel-bg-url-input');

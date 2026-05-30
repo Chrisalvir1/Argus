@@ -1,6 +1,7 @@
 /**
- * Argus Alarm Card – v0.9.20
- * Refined UI: Improved legibility, accurate weather mapping, and detailed location.
+ * Argus Alarm Card – v1.3.3
+ * Refined UI: Improved legibility, accurate weather mapping, detailed location,
+ * and built-in premium Liquid Glass keypad/dial pad for PIN protection.
  */
 class ArgusCard extends HTMLElement {
   static getStubConfig() {
@@ -21,12 +22,12 @@ class ArgusCard extends HTMLElement {
     this._render();
   }
 
-  async _call(service) {
+  async _call(service, code = null) {
     if (!this._hass) return;
     try {
-      await this._hass.callService("alarm_control_panel", service, {
-        entity_id: this._config.entity,
-      });
+      const data = { entity_id: this._config.entity };
+      if (code) data.code = code;
+      await this._hass.callService("alarm_control_panel", service, data);
     } catch (e) {
       console.error("[ArgusCard]", e);
     }
@@ -78,7 +79,7 @@ class ArgusCard extends HTMLElement {
     else if (state === 'armed_night') svgName = 'mode_night.svg';
     else if (state === 'armed_vacation') svgName = 'mode_vacation.svg';
 
-    const v = "0.8.0";
+    const v = "1.3.3";
 
     this.innerHTML = `
       <ha-card style="overflow:hidden; border-radius:28px; border:none; background:none; box-shadow:0 10px 40px rgba(0,0,0,0.3)">
@@ -117,6 +118,106 @@ class ArgusCard extends HTMLElement {
           @keyframes float { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-12px) rotate(1deg); } }
 
           .card-title { position: absolute; bottom: 18px; left: 24px; z-index: 3; font-size: 11px; font-weight: 800; text-transform: uppercase; opacity: 0.7; letter-spacing: 1px; }
+
+          /* Liquid Glass Keypad Overlay Styles */
+          .keypad-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            animation: fadeIn 0.25s ease-out;
+          }
+          @keyframes fadeIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+          
+          .keypad-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            padding: 0 12px;
+          }
+          .keypad-title {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            opacity: 0.85;
+          }
+          .keypad-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+            padding: 4px;
+          }
+          .keypad-close:hover { opacity: 1; }
+          
+          .keypad-display {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 6px;
+            margin-bottom: 2px;
+            min-height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+          }
+          .keypad-error {
+            color: #ff5252;
+            font-size: 10px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+          }
+          
+          .keypad-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            width: 100%;
+            max-width: 220px;
+          }
+          .keypad-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-radius: 12px;
+            padding: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .keypad-btn:hover {
+            background: rgba(255, 255, 255, 0.18);
+            transform: translateY(-1px);
+          }
+          .keypad-btn:active {
+            transform: translateY(1px);
+          }
+          #keypad-confirm {
+            background: rgba(34, 197, 94, 0.25);
+            border-color: rgba(34, 197, 94, 0.4);
+          }
+          #keypad-confirm:hover {
+            background: rgba(34, 197, 94, 0.35);
+          }
         </style>
 
         <div class="argus-card" style="${triggered ? 'border: 3px solid #ff5252' : ''}">
@@ -141,6 +242,31 @@ class ArgusCard extends HTMLElement {
           </div>
 
           <div class="card-title">${title}</div>
+
+          ${this._showKeypad ? `
+            <div class="keypad-overlay">
+              <div class="keypad-header">
+                <div class="keypad-title">INTRODUCIR PIN</div>
+                <button class="keypad-close" id="keypad-cancel">✕</button>
+              </div>
+              <div class="keypad-display">${'•'.repeat((this._enteredPin || '').length) || '—'}</div>
+              ${this._pinError ? `<div class="keypad-error">${this._pinError}</div>` : ''}
+              <div class="keypad-grid">
+                <button class="keypad-btn num-btn" data-val="1">1</button>
+                <button class="keypad-btn num-btn" data-val="2">2</button>
+                <button class="keypad-btn num-btn" data-val="3">3</button>
+                <button class="keypad-btn num-btn" data-val="4">4</button>
+                <button class="keypad-btn num-btn" data-val="5">5</button>
+                <button class="keypad-btn num-btn" data-val="6">6</button>
+                <button class="keypad-btn num-btn" data-val="7">7</button>
+                <button class="keypad-btn num-btn" data-val="8">8</button>
+                <button class="keypad-btn num-btn" data-val="9">9</button>
+                <button class="keypad-btn" id="keypad-backspace">⌫</button>
+                <button class="keypad-btn num-btn" data-val="0">0</button>
+                <button class="keypad-btn" id="keypad-confirm">✓</button>
+              </div>
+            </div>
+          ` : ''}
         </div>
       </ha-card>
     `;
@@ -148,7 +274,65 @@ class ArgusCard extends HTMLElement {
     this.querySelector("#home").onclick = () => this._call("alarm_arm_home");
     this.querySelector("#away").onclick = () => this._call("alarm_arm_away");
     this.querySelector("#night").onclick = () => this._call("alarm_arm_night");
-    this.querySelector("#disarm").onclick = () => this._call("alarm_disarm");
+    
+    this.querySelector("#disarm").onclick = () => {
+      const codeFormat = stateObj?.attributes?.code_format;
+      if (codeFormat) {
+        this._showKeypad = true;
+        this._enteredPin = "";
+        this._pinError = "";
+        this._render();
+      } else {
+        this._call("alarm_disarm");
+      }
+    };
+
+    if (this._showKeypad) {
+      this.querySelectorAll(".num-btn").forEach(btn => {
+        btn.onclick = () => {
+          this._pinError = "";
+          this._enteredPin = (this._enteredPin || "") + btn.dataset.val;
+          this._render();
+        };
+      });
+      const backspaceBtn = this.querySelector("#keypad-backspace");
+      if (backspaceBtn) {
+        backspaceBtn.onclick = () => {
+          this._pinError = "";
+          this._enteredPin = (this._enteredPin || "").slice(0, -1);
+          this._render();
+        };
+      }
+      const cancelBtn = this.querySelector("#keypad-cancel");
+      if (cancelBtn) {
+        cancelBtn.onclick = () => {
+          this._showKeypad = false;
+          this._enteredPin = "";
+          this._pinError = "";
+          this._render();
+        };
+      }
+      const confirmBtn = this.querySelector("#keypad-confirm");
+      if (confirmBtn) {
+        confirmBtn.onclick = async () => {
+          if (!this._enteredPin) return;
+          try {
+            await this._hass.callService("alarm_control_panel", "alarm_disarm", {
+              entity_id: this._config.entity,
+              code: this._enteredPin,
+            });
+            this._showKeypad = false;
+            this._enteredPin = "";
+            this._pinError = "";
+          } catch (e) {
+            console.error(e);
+            this._pinError = "PIN incorrecto";
+            this._enteredPin = "";
+            this._render();
+          }
+        };
+      }
+    }
   }
 
   getCardSize() { return 3; }
