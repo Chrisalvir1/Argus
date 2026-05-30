@@ -82,6 +82,12 @@ type: custom:argus-panel
 
 ---
 
+## 💡 Soporte y Sugerencias
+
+Si tienes alguna duda, sugerencia o encuentras algún error, puedes escribirme directamente a: **[chrisalvir01@gmail.com](mailto:chrisalvir01@gmail.com)**
+
+---
+
 <div align="center">
   <b>Desarrollado con pasión por Christopher Alvir (@Chrisalvir1)</b><br>
   <i>Diseñado para la comunidad de Home Assistant en Costa Rica y el mundo.</i>
