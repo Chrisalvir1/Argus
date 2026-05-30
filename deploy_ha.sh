@@ -22,11 +22,17 @@ for f in __init__.py alarm_control_panel.py config_flow.py const.py manifest.jso
   fi
 done
 
-# 3. Descargar el panel JS y activos www
+# 3. Descargar el panel JS, la tarjeta Lovelace y activos www
 if curl -sf "$REPO/www/argus-panel.js" -o "$BASE/www/argus-panel.js"; then
   echo "  OK  www/argus-panel.js"
 else
   echo "  ERR www/argus-panel.js" && exit 1
+fi
+
+if curl -sf "$REPO/www/argus-card.js" -o "$BASE/www/argus-card.js"; then
+  echo "  OK  www/argus-card.js"
+else
+  echo "  ERR www/argus-card.js" && exit 1
 fi
 
 # 3b. Descargar la imagen de fondo oficial de Argus
