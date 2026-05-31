@@ -31,14 +31,26 @@ ensure_fork() {
     return 0
   fi
 
-  echo "  Creating fork of $upstream..."
-  gh api "repos/$upstream/forks" -X POST --silent 2>/dev/null && sleep 8 || {
-    echo ""
-    echo "  ⚠️  Auto-fork failed. Please fork manually:"
-    echo "     👉 https://github.com/$upstream  → click 'Fork'"
-    echo "  Press ENTER when done..."
-    read -r
-  }
+  echo "  Creating fork of $upstream (large repos can take a while)..."
+  gh api "repos/$upstream/forks" -X POST --silent 2>/dev/null || true
+
+  # Poll until the fork is resolvable (up to ~3 minutes)
+  local i
+  for i in $(seq 1 36); do
+    if gh api "repos/$fork_repo" --silent 2>/dev/null; then
+      echo "  ✅ Fork $fork_repo is ready"
+      sleep 3   # small grace period for git availability
+      return 0
+    fi
+    printf "  ⏳ Waiting for fork to be ready (%d/36)...\r" "$i"
+    sleep 5
+  done
+
+  echo ""
+  echo "  ⚠️  Fork still not ready. Please fork manually:"
+  echo "     👉 https://github.com/$upstream  → click 'Fork'"
+  echo "  Press ENTER when done..."
+  read -r
 }
 
 # ============================================================
