@@ -61,17 +61,32 @@ GIT_TERMINAL_PROMPT=0 git fetch upstream master --quiet 2>/dev/null || git fetch
 git checkout -B add-argus-integration upstream/master 2>/dev/null \
   || git checkout -B add-argus-integration origin/master
 
-rm -f integration 2>/dev/null || true
-mkdir -p integration
-cat > "integration/$ARGUS_DOMAIN.json" << 'JSON'
-{
-  "description": "Premium Smart Alarm & Security Panel for Home Assistant",
-  "full_name": "Chrisalvir1/Argus",
-  "render_readme": true
-}
-JSON
+# hacs/default uses a single FILE named "integration" containing a JSON
+# array of "owner/repo" strings, sorted case-insensitively. We insert
+# our entry into that array (NOT a separate json file).
+python3 - "$PWD/integration" << 'PYEOF'
+import json, sys
 
-git add "integration/$ARGUS_DOMAIN.json"
+path = sys.argv[1]
+entry = "Chrisalvir1/Argus"
+
+with open(path) as f:
+    data = json.load(f)
+
+if entry not in data:
+    data.append(entry)
+
+# HACS sorts case-insensitively by the full "owner/repo" string
+data = sorted(set(data), key=lambda s: s.lower())
+
+with open(path, "w") as f:
+    json.dump(data, f, indent=2)
+    f.write("\n")
+
+print(f"  ✅ Added {entry} to integration list ({len(data)} total entries)")
+PYEOF
+
+git add integration
 git commit -m "Add Argus Home Hub integration
 
 - Name: Argus Home Hub
