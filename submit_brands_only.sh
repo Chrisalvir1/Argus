@@ -22,24 +22,30 @@ trap "rm -rf '$WORK_DIR'" EXIT
 GH_USER=$(gh api user --jq '.login')
 echo "✅ Logged in as: $GH_USER"
 
-# Verify the fork actually exists before doing anything
-echo "🔍 Checking that $GH_USER/brands fork exists..."
-if ! gh api "repos/$GH_USER/brands" --silent 2>/dev/null; then
+# The fork may be named "brands" OR "ha-brands" depending on how it was created.
+# Detect the actual fork repo that points to home-assistant/brands.
+echo "🔍 Detecting your fork of home-assistant/brands..."
+FORK_REPO=""
+for candidate in "brands" "ha-brands"; do
+  if gh api "repos/$GH_USER/$candidate" --jq '.parent.full_name' 2>/dev/null \
+      | grep -qi "home-assistant/brands"; then
+    FORK_REPO="$GH_USER/$candidate"
+    break
+  fi
+done
+
+if [ -z "$FORK_REPO" ]; then
   echo ""
-  echo "❌ Fork $GH_USER/brands does NOT exist yet."
-  echo ""
-  echo "   Please fork it manually first:"
-  echo "   1. Open https://github.com/home-assistant/brands"
-  echo "   2. Click 'Fork' → 'Create fork'"
-  echo "   3. Wait until it finishes (1-2 min)"
-  echo "   4. Re-run this script: bash submit_brands_only.sh"
+  echo "❌ Could not find your fork of home-assistant/brands."
+  echo "   Fork it manually: https://github.com/home-assistant/brands → Fork"
+  echo "   Then re-run: bash submit_brands_only.sh"
   exit 1
 fi
-echo "✅ Fork exists!"
+echo "✅ Fork found: $FORK_REPO"
 
 HA_BRANDS_DIR="$WORK_DIR/brands"
-echo "📥 Cloning $GH_USER/brands (large repo, may take a minute)..."
-gh repo clone "$GH_USER/brands" "$HA_BRANDS_DIR" -- --depth=1
+echo "📥 Cloning $FORK_REPO (large repo, may take a minute)..."
+gh repo clone "$FORK_REPO" "$HA_BRANDS_DIR" -- --depth=1
 cd "$HA_BRANDS_DIR"
 
 git remote add upstream https://github.com/home-assistant/brands.git 2>/dev/null || true
@@ -63,7 +69,7 @@ git commit -m "Add Argus Home Hub brand assets
 - Icon and logo: 256x256px PNG with transparent background (RGBA)
 - Dark variants included" || echo "  (nothing to commit)"
 
-echo "📤 Pushing to $GH_USER/brands..."
+echo "📤 Pushing to $FORK_REPO..."
 git push origin add-argus-brand --force
 
 echo "🔀 Creating PR to home-assistant/brands..."
