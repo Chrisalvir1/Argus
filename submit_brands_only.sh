@@ -48,10 +48,12 @@ echo "📥 Cloning $FORK_REPO (large repo, may take a minute)..."
 gh repo clone "$FORK_REPO" "$HA_BRANDS_DIR" -- --depth=1
 cd "$HA_BRANDS_DIR"
 
-git remote add upstream https://github.com/home-assistant/brands.git 2>/dev/null || true
-GIT_TERMINAL_PROMPT=0 git fetch upstream master --quiet 2>/dev/null || git fetch origin --quiet
-git checkout -B add-argus-brand upstream/master 2>/dev/null \
-  || git checkout -B add-argus-brand origin/master
+# Branch from the FORK's own master (origin), NOT upstream. Branching from
+# upstream/master would include upstream workflow files in the push, which
+# GitHub rejects unless the token has the 'workflow' scope. Since the fork
+# was just created it is current with upstream, so the PR diff stays clean.
+git checkout -B add-argus-brand origin/master 2>/dev/null \
+  || git checkout -B add-argus-brand HEAD
 
 TARGET="custom_integrations/$ARGUS_DOMAIN"
 mkdir -p "$TARGET"
