@@ -80,6 +80,10 @@ ARMED_STATES = {
     AlarmControlPanelState.ARMED_VACATION,
 }
 
+# Argus accepts locks and several binary-sensor style entities as intrusion
+# sensors.  Home Assistant represents their active state with different values.
+_INTRUSION_ACTIVE_STATES = {STATE_ON, "open", "unlocked", "active", "motion", "recording"}
+
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -589,7 +593,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         new_state = event.data.get("new_state")
         entity_id = event.data.get("entity_id")
 
-        if new_state is None or new_state.state != STATE_ON:
+        if new_state is None or new_state.state not in _INTRUSION_ACTIVE_STATES:
             return
 
         # Fire "sensor_opened" automations globally (before filtering by alarm state)

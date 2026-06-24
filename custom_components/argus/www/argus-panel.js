@@ -94,9 +94,9 @@ const TEXTS = {
     temp_auto:'Automático (sensor local / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Batería baja',
     times_section:'⏱️ Tiempos', arm_time:'Armado (s)', disarm_time:'Desarmado (s)',
     save_config:'GUARDAR CONFIGURACIÓN', never_triggered:'Nunca activada',
-    bridge_paired:'¡Puente Vinculado!',
-    bridge_paired_desc:'El puente <b>{bridge}</b> está actualmente conectado a un ecosistema externo (HomeKit, Matter). Home Assistant no reporta el nombre de la casa destino.',
-    bridge_not_connected:'Puente NO Conectado',
+    bridge_paired:'Puente configurado',
+    bridge_paired_desc:'El puente <b>{bridge}</b> está configurado en Home Assistant. Home Assistant no permite comprobar desde aquí si fue añadido a una casa de Apple Home/Matter ni conocer su nombre.',
+    bridge_not_connected:'Puente no configurado',
     bridge_not_desc:'Activa la integración HomeKit Bridge en Home Assistant e incluye la entidad <code>alarm_control_panel.argus_*</code> para generar un código QR de emparejamiento.',
     manual_disarm:'Manual (Desarmado)',
     manual_arm:'Manual',
@@ -191,9 +191,9 @@ const TEXTS = {
     temp_auto:'Automatic (local sensor / thermostat / climate)', temp_thermostat:'(thermostat)', battery_low:'⚠️ Low Battery',
     times_section:'⏱️ Times', arm_time:'Arming (s)', disarm_time:'Entry delay (s)',
     save_config:'SAVE CONFIGURATION', never_triggered:'Never triggered',
-    bridge_paired:'Bridge Paired!',
-    bridge_paired_desc:'The bridge <b>{bridge}</b> is currently connected to an external ecosystem (HomeKit, Matter). Home Assistant does not report the destination home name.',
-    bridge_not_connected:'Bridge NOT Connected',
+    bridge_paired:'Bridge configured',
+    bridge_paired_desc:'The <b>{bridge}</b> bridge is configured in Home Assistant. Home Assistant cannot verify from here whether it was added to an Apple Home/Matter home or report its name.',
+    bridge_not_connected:'Bridge not configured',
     bridge_not_desc:'Enable the HomeKit Bridge integration in Home Assistant and include the entity <code>alarm_control_panel.argus_*</code> to generate a pairing QR code.',
     manual_disarm:'Manual (Disarmed)',
     manual_arm:'Manual',
@@ -286,9 +286,9 @@ const TEXTS = {
     temp_auto:'Automatique (capteur local / thermostat / climat)', temp_thermostat:'(thermostat)', battery_low:'⚠️ Batterie faible',
     times_section:'⏱️ Temps', arm_time:'Armé (s)', disarm_time:'Délai entrée (s)',
     save_config:'ENREGISTRER LA CONFIGURATION', never_triggered:'Jamais déclenché',
-    bridge_paired:'Pont associé!',
-    bridge_paired_desc:'Le pont <b>{bridge}</b> est connecté à un écosystème externe (HomeKit, Matter). Home Assistant ne rapporte pas le nom de la maison.',
-    bridge_not_connected:'Pont NON connecté',
+    bridge_paired:'Pont configuré',
+    bridge_paired_desc:'Le pont <b>{bridge}</b> est configuré dans Home Assistant. Home Assistant ne peut pas vérifier ici son ajout à une maison Apple Home/Matter ni fournir son nom.',
+    bridge_not_connected:'Pont non configuré',
     bridge_not_desc:'Activez l\'intégration HomeKit Bridge dans Home Assistant et incluez l\'entité <code>alarm_control_panel.argus_*</code> pour générer un QR d\'appairage.',
     manual_disarm:'Manuel (Désarmé)', manual_arm:'Manuel',
     open_sensors:'Capteurs ouverts', log_detail_disarm:'Système désarmé',
@@ -372,9 +372,9 @@ const TEXTS = {
     temp_auto:'Automático (sensor local / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Bateria fraca',
     times_section:'⏱️ Tempos', arm_time:'Armado (s)', disarm_time:'Atraso de entrada (s)',
     save_config:'SALVAR CONFIGURAÇÃO', never_triggered:'Nunca ativado',
-    bridge_paired:'Ponte Associada!',
-    bridge_paired_desc:'A ponte <b>{bridge}</b> está conectada a um ecossistema externo (HomeKit, Matter). O Home Assistant não reporta o nome da casa.',
-    bridge_not_connected:'Ponte NÃO Conectada',
+    bridge_paired:'Ponte configurada',
+    bridge_paired_desc:'A ponte <b>{bridge}</b> está configurada no Home Assistant. Não é possível verificar daqui se foi adicionada a uma casa Apple Home/Matter nem informar seu nome.',
+    bridge_not_connected:'Ponte não configurada',
     bridge_not_desc:'Ative a integração HomeKit Bridge no Home Assistant e inclua a entidade <code>alarm_control_panel.argus_*</code> para gerar um QR de emparelhamento.',
     manual_disarm:'Manual (Desarmado)', manual_arm:'Manual',
     open_sensors:'Sensores abertos', log_detail_disarm:'Sistema desarmado',
@@ -458,9 +458,9 @@ const TEXTS = {
     temp_auto:'Automatico (sensore locale / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Batteria scarica',
     times_section:'⏱️ Tempi', arm_time:'Armato (s)', disarm_time:'Ritardo entrata (s)',
     save_config:'SALVA CONFIGURAZIONE', never_triggered:'Mai attivato',
-    bridge_paired:'Ponte Associato!',
-    bridge_paired_desc:'Il ponte <b>{bridge}</b> è connesso a un ecosistema esterno (HomeKit, Matter). Home Assistant non riporta il nome della casa.',
-    bridge_not_connected:'Ponte NON Connesso',
+    bridge_paired:'Ponte configurato',
+    bridge_paired_desc:'Il ponte <b>{bridge}</b> è configurato in Home Assistant. Da qui non è possibile verificare se sia stato aggiunto a una casa Apple Home/Matter né conoscerne il nome.',
+    bridge_not_connected:'Ponte non configurato',
     bridge_not_desc:"Abilita l'integrazione HomeKit Bridge in Home Assistant e includi l'entità <code>alarm_control_panel.argus_*</code> per generare un QR di abbinamento.",
     manual_disarm:'Manuale (Disarmato)', manual_arm:'Manuale',
     open_sensors:'Sensori aperti', log_detail_disarm:'Sistema disarmato',
@@ -544,9 +544,9 @@ const TEXTS = {
     temp_auto:'自动（本地传感器 / 恒温器 / 气候）', temp_thermostat:'(恒温器)', battery_low:'⚠️ 电池不足',
     times_section:'⏱️ 时间', arm_time:'布防延迟(s)', disarm_time:'进入延迟(s)',
     save_config:'保存配置', never_triggered:'从未触发',
-    bridge_paired:'桥已关联!',
-    bridge_paired_desc:'桥接<b>{bridge}</b>当前已连接到外部生态系统(HomeKit, Matter)。Home Assistant不报告目标家庭名称。',
-    bridge_not_connected:'桥未连接',
+    bridge_paired:'桥接已配置',
+    bridge_paired_desc:'桥接 <b>{bridge}</b> 已在 Home Assistant 中配置。Home Assistant 无法从这里验证它是否已添加到 Apple Home/Matter 家庭，也无法提供家庭名称。',
+    bridge_not_connected:'桥接未配置',
     bridge_not_desc:'在Home Assistant中启用HomeKit Bridge集成并包含实体<code>alarm_control_panel.argus_*</code>以生成配对QR码。',
     manual_disarm:'手动(已撤防)', manual_arm:'手动',
     open_sensors:'开启的传感器', log_detail_disarm:'系统已撤防',
@@ -630,9 +630,9 @@ const TEXTS = {
     temp_auto:'Авто (лок. датчик / термостат / климат)', temp_thermostat:'(термостат)', battery_low:'⚠️ Низкий заряд',
     times_section:'⏱️ Времена', arm_time:'Постановка (s)', disarm_time:'Задержка входа (s)',
     save_config:'СОХРАНИТЬ КОНФИГУРАЦИЮ', never_triggered:'Никогда не срабатывало',
-    bridge_paired:'Мост связан!',
-    bridge_paired_desc:'Мост <b>{bridge}</b> подключён к внешней системе (HomeKit, Matter). Home Assistant не сообщает название дома.',
-    bridge_not_connected:'Мост НЕ подключён',
+    bridge_paired:'Мост настроен',
+    bridge_paired_desc:'Мост <b>{bridge}</b> настроен в Home Assistant. Здесь нельзя проверить, добавлен ли он в дом Apple Home/Matter, или узнать его название.',
+    bridge_not_connected:'Мост не настроен',
     bridge_not_desc:'Включите интеграцию HomeKit Bridge в Home Assistant и добавьте <code>alarm_control_panel.argus_*</code> для QR сопряжения.',
     manual_disarm:'Вручную (Снято)', manual_arm:'Вручную',
     open_sensors:'Открытые датчики', log_detail_disarm:'Система снята',
@@ -1102,6 +1102,8 @@ _tmpl.innerHTML = `
   button.ghost:hover{background:rgba(255, 255, 255, 0.1)}
   :host([argus-dark-mode="false"]) button.ghost { background:rgba(0,0,0,0.03); border-color:rgba(0,0,0,0.08); }
   :host([argus-dark-mode="false"]) button.ghost:hover { background:rgba(0,0,0,0.06); }
+  .glass-control{width:100%;padding:9px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.08);color:var(--primary-text-color);backdrop-filter:blur(14px) saturate(130%);-webkit-backdrop-filter:blur(14px) saturate(130%);box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 6px 18px rgba(0,0,0,.10);font:700 12px/1.2 'Outfit',Inter,system-ui,sans-serif;outline:none}
+  :host([argus-dark-mode="false"]) .glass-control{background:rgba(255,255,255,.52);border-color:rgba(0,0,0,.10)}
   
   /* FS button */
   .fs-btn{background:rgba(255,255,255,0.05);padding:8px;border-radius:10px;font-size:16px}
@@ -1535,17 +1537,21 @@ _tmpl.innerHTML = `
                 <div class="setting-label" id="lbl-home-name-hdr" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6;">Nombre del Hogar</div>
                 <div id="lbl-home-name-prominent" style="font-size:18px;font-weight:900;margin-top:2px">Mi Casa</div>
               </div>
+              <div>
+                <label class="setting-label" for="temp-source-select-standalone" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">🌡️ Temperatura mostrada</label>
+                <select id="temp-source-select-standalone" class="glass-control"></select>
+              </div>
               
               <div>
                 <div class="setting-label" id="lbl-panel-bg-title" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">Fondo para Panel</div>
-                <select id="bg-mode-select-standalone" style="width:100%; padding:8px 12px; border-radius:10px; font-family:inherit; outline:none;"></select>
+                <select id="bg-mode-select-standalone" class="glass-control"></select>
               </div>
 
               <!-- Panel Background Custom Inputs (shown dynamically) -->
               <div id="panel-custom-bg-inputs" style="display:none; flex-direction:column; gap:8px; background:var(--bg-inputs-bg, rgba(0,0,0,0.15)); padding:10px; border-radius:12px; border:1px solid var(--bg-inputs-border, rgba(255,255,255,0.05));">
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
                   <span id="lbl-panel-bg-upload" style="font-size:11px; opacity:0.8;">Cargar archivo:</span>
-                  <input type="file" id="panel-bg-file-input" style="font-size:10px; max-width:180px;">
+                  <input type="file" id="panel-bg-file-input" accept="image/*,video/mp4,video/webm,video/quicktime,.heic,.heif" style="font-size:10px; max-width:180px;">
                 </div>
                 <div style="font-size:10px; opacity:0.5; text-align:right;" id="bg-file-help"></div>
                 <input type="text" id="panel-bg-url-input" style="width:100%; font-size:11px; padding:6px 10px; border-radius:8px; box-sizing:border-box; outline:none;">
@@ -1559,14 +1565,14 @@ _tmpl.innerHTML = `
             <div style="display:flex; flex-direction:column; gap:12px;">
               <div>
                 <div class="setting-label" id="lbl-hub-bg-title" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">Fondo Argus</div>
-                <select id="hub-bg-mode-select" style="width:100%; padding:8px 12px; border-radius:10px; font-family:inherit; outline:none;"></select>
+                <select id="hub-bg-mode-select" class="glass-control"></select>
               </div>
 
               <!-- Argus Background Custom Inputs (shown dynamically) -->
               <div id="hub-custom-bg-inputs" style="display:none; flex-direction:column; gap:8px; background:var(--bg-inputs-bg, rgba(0,0,0,0.15)); padding:10px; border-radius:12px; border:1px solid var(--bg-inputs-border, rgba(255,255,255,0.05));">
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
                   <span id="lbl-hub-bg-upload" style="font-size:11px; opacity:0.8;">Cargar archivo:</span>
-                  <input type="file" id="hub-bg-file-input" style="font-size:10px; max-width:180px;">
+                  <input type="file" id="hub-bg-file-input" accept="image/*,video/mp4,video/webm,video/quicktime,.heic,.heif" style="font-size:10px; max-width:180px;">
                 </div>
                 <div style="font-size:10px; opacity:0.5; text-align:right;" id="hub-file-help"></div>
                 <input type="text" id="hub-bg-url-input" style="width:100%; font-size:11px; padding:6px 10px; border-radius:8px; box-sizing:border-box; outline:none;">
@@ -1804,6 +1810,8 @@ class ArgusPanel extends HTMLElement {
   constructor() {
     super();
     this._showSosConfirm = false;
+    this._sosEntryIdx = null;
+    this._sosBusy = false;
     this._sosSliding = false;
     this._sosStartX = 0;
     this._sosOffsetX = 0;
@@ -1831,6 +1839,9 @@ class ArgusPanel extends HTMLElement {
     this._hubBgMode = 'default';
     this._hubBgFile = '';
     this._hubBgSound = false;
+    this._initPromise = null;
+    this._staticBound = false;
+    this._postLoadBound = false;
   }
 
   _getBrightness(src) {
@@ -1941,7 +1952,10 @@ class ArgusPanel extends HTMLElement {
     const oldHass = this._hass;
     this._hass = hass;
     this._updateTheme();
-    if (!this._dashboard?.entries?.length) return;
+    if (!this._dashboard?.entries?.length) {
+      this._ensureInitialized();
+      return;
+    }
 
     // Trigger render if any of these change:
     // 1. Alarm states
@@ -1961,7 +1975,11 @@ class ArgusPanel extends HTMLElement {
     const tempChanged = tempEntity && oldHass?.states[tempEntity]?.state !== hass.states[tempEntity]?.state;
     
     const weatherEnt = Object.values(hass.states).find(s => s.entity_id.startsWith('weather.'))?.entity_id;
-    const weatherChanged = weatherEnt && oldHass?.states[weatherEnt]?.state !== hass.states[weatherEnt]?.state;
+    const weatherChanged = weatherEnt && (
+      oldHass?.states[weatherEnt]?.state !== hass.states[weatherEnt]?.state ||
+      oldHass?.states[weatherEnt]?.attributes?.temperature !== hass.states[weatherEnt]?.attributes?.temperature ||
+      oldHass?.states[weatherEnt]?.attributes?.temperature_unit !== hass.states[weatherEnt]?.attributes?.temperature_unit
+    );
 
     // FIX v0.9.32 — Bug 2: detectar transición a 'triggered' y escribir log
     // con los sensores que estaban abiertos en ese momento.
@@ -2016,6 +2034,12 @@ class ArgusPanel extends HTMLElement {
   _t(key) {
     const lang = this._manualLang || (this._hass?.language || 'es').split('-')[0];
     return (TEXTS[lang] || TEXTS.en)[key] || key;
+  }
+
+  _escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, char => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[char]);
   }
 
   _getCurrentLangCode() {
@@ -2213,7 +2237,7 @@ class ArgusPanel extends HTMLElement {
   connectedCallback() { 
     // Restore persisted language
     try { this._manualLang = localStorage.getItem('argus_lang') || null; } catch(e) {}
-    this._init(); 
+    this._ensureInitialized();
     this._startClock();
 
     // Listen to fullscreen changes to handle native escape key / exit
@@ -2235,6 +2259,11 @@ class ArgusPanel extends HTMLElement {
   }
   disconnectedCallback() {
     if (this._clockInterval) clearInterval(this._clockInterval);
+    if (this._initRetryTimer) clearTimeout(this._initRetryTimer);
+    if (this._socket) {
+      this._socket.close();
+      this._socket = null;
+    }
     if (this._onFsChange) {
       document.removeEventListener('fullscreenchange', this._onFsChange);
       document.removeEventListener('webkitfullscreenchange', this._onFsChange);
@@ -2250,6 +2279,20 @@ class ArgusPanel extends HTMLElement {
          this._renderEntries();
       }
     }, 1000);
+  }
+
+  _ensureInitialized() {
+    // Lovelace can attach the element before assigning hass.  Waiting for the
+    // authenticated hass object avoids a permanent blank panel after a reload.
+    if (!this.isConnected || !this._hass || this._dashboard || this._initPromise) return;
+    this._initPromise = this._init()
+      .catch(err => {
+        console.error('Argus initialization failed:', err);
+        if (this.isConnected) {
+          this._initRetryTimer = setTimeout(() => this._ensureInitialized(), 5000);
+        }
+      })
+      .finally(() => { this._initPromise = null; });
   }
 
   _bindSOS() {
@@ -2309,14 +2352,16 @@ class ArgusPanel extends HTMLElement {
 
   async _init() {
     this._mode = 'disarmed';
-    this._bindStatic();
-    try {
-      await this._connect();
-    } catch (e) {
-      console.error('Argus WS connect failed:', e);
+    if (!this._staticBound) {
+      this._bindStatic();
+      this._staticBound = true;
     }
+    await this._connect();
     this._applyTranslations();
     await this._load();
+    if (!this._dashboard) throw new Error('dashboard unavailable');
+    if (this._postLoadBound) return;
+    this._postLoadBound = true;
     this.shadowRoot.getElementById('btn-clear-log')?.addEventListener('click', () => this._clearHistory());
     this.shadowRoot.getElementById('btn-export-config')?.addEventListener('click', () => this._exportConfig());
     this.shadowRoot.getElementById('btn-import-trigger')?.addEventListener('click', () => this.shadowRoot.getElementById('import-config-file').click());
@@ -2488,6 +2533,7 @@ class ArgusPanel extends HTMLElement {
     // SOS Modal
     const closeSOS = () => {
       s('sos-modal')?.classList.remove('open');
+      this._sosEntryIdx = null;
       if (s('sos-thumb')) {
          s('sos-thumb').style.left = '6px';
          s('sos-thumb').closest('.ios-slider-track').style.background = 'rgba(217,4,41,0.15)';
@@ -2510,7 +2556,9 @@ class ArgusPanel extends HTMLElement {
       this._pending = {};
       this._socket = new WebSocket(`${proto}://${location.host}/api/websocket`);
       this._socket.addEventListener('message', ev => {
-        const msg = JSON.parse(ev.data);
+        let msg;
+        try { msg = JSON.parse(ev.data); }
+        catch (_) { return; }
         if (msg.type === 'auth_required') {
           const tok = this._hass?.auth?.data?.access_token;
           if (!tok) { reject(new Error('no token')); return; }
@@ -2525,10 +2573,14 @@ class ArgusPanel extends HTMLElement {
         }
       });
       this._socket.addEventListener('error', reject, { once: true });
+      this._socket.addEventListener('close', () => reject(new Error('websocket closed')), { once: true });
     });
   }
 
   _send(type, data = {}) {
+    if (!this._socket || this._socket.readyState !== WebSocket.OPEN) {
+      return Promise.reject(new Error('websocket not connected'));
+    }
     const id = this._wsId++;
     return new Promise((resolve, reject) => {
       this._pending[id] = result => {
@@ -2881,7 +2933,8 @@ class ArgusPanel extends HTMLElement {
       const live  = this._hass?.states[e.entity_id]?.state;
       const state = live || e.state || 'unavailable';
       const triggered = state === 'triggered';
-      const fullHudLoc = this._homeName || this._hass?.config?.location_name || 'Hogar';
+      const fullHudLoc = this._hass?.config?.location_name || this._homeName || 'Hogar';
+      const displayedTemperature = this._getDisplayedTemperature();
 
       // Dynamic SVG Icon Generation
       // Replaced old static svgName logic with dynamic intelligent SVGs
@@ -2904,7 +2957,7 @@ class ArgusPanel extends HTMLElement {
           ${this._renderBatteryAlerts()}
           <div class="hud">
             <div class="hud-loc">${fullHudLoc}</div>
-            <div class="hud-data"><span>${timeStr}</span></div>
+            <div class="hud-data"><span>${timeStr}</span>${displayedTemperature ? `<i>🌡️ ${displayedTemperature}</i>` : ''}</div>
           </div>
           <div class="entry-content">
             <div class="liquid-stack">
@@ -2913,7 +2966,7 @@ class ArgusPanel extends HTMLElement {
               <button class="liquid-btn btn-night ${state==='armed_night'?'active':''}" data-idx="${idx}" data-action="night">${t('btn_night')}</button>
               <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''}" data-idx="${idx}" data-action="vacation">${t('btn_vacation')}</button>
               <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg> <span>${t('btn_disarmed')}</span></button>
-              <button class="btn-sos" data-action="sos">${t('btn_sos')}</button>
+              <button class="btn-sos" data-action="sos" data-idx="${idx}">${t('btn_sos')}</button>
             </div>
             <div class="entry-icon">
               ${this._getIntelligentSVG(state, weatherState, isNight, triggered)}
@@ -2935,22 +2988,19 @@ class ArgusPanel extends HTMLElement {
       `;
     });
 
-    el.querySelectorAll('button[data-action]').forEach(btn =>
+    el.querySelectorAll('button[data-action]:not([data-action="sos"])').forEach(btn =>
       btn.addEventListener('click', ev => this._handleAction(ev.currentTarget.dataset.idx, ev.currentTarget.dataset.action))
     );
     
     el.querySelectorAll('button[data-action="sos"]').forEach(btn =>
       btn.addEventListener('click', () => {
+        this._sosEntryIdx = Number(btn.dataset.idx);
         const sosModal = this.shadowRoot.getElementById('sos-modal');
         if (sosModal) sosModal.classList.add('open');
       })
     );
     el.querySelectorAll('button[data-fullscreen]').forEach(btn => {
       btn.addEventListener('click', ev => this._toggleFullscreen(ev.currentTarget.closest('.entry')));
-      btn.addEventListener('touchend', ev => {
-        ev.preventDefault();
-        this._toggleFullscreen(ev.currentTarget.closest('.entry'));
-      });
     });
     this._bindSOS(); // v0.9.33 Fix #5: re-bind SOS slider despues de cada re-render del DOM
   }
@@ -3721,7 +3771,7 @@ class ArgusPanel extends HTMLElement {
     const cnt = this.shadowRoot.getElementById('homekit-content');
     if (!sec || !cnt) return;
     sec.style.display = '';
-    let code = null, bridgeName = null, homeName = null;
+    let code = null, bridgeName = null, bridgeEntryId = null, bridgeDeviceId = null;
 
     try {
       const hkEntries = await this._hass.callWS({ type: 'config_entries/get', domain: 'homekit' }).catch(() => []);
@@ -3733,11 +3783,17 @@ class ArgusPanel extends HTMLElement {
           alarmDomains.some(id => inc.includes(id));
         if (matchesArgus || !bridgeName) {
           bridgeName = ent.title || ent.data?.name || bridgeName || 'Argus Bridge';
+          bridgeEntryId = ent.entry_id || bridgeEntryId;
           code = String(ent.options?.code || ent.data?.code || code || '').replace(/\D/g, '');
-          // Try to read home_name from pairing state
-          homeName = ent.data?.home_name || ent.options?.home_name || null;
           if (matchesArgus) break;
         }
+      }
+
+      if (bridgeEntryId) {
+        const devices = await this._hass.callWS({ type: 'config/device_registry/list' }).catch(() => []);
+        bridgeDeviceId = (devices || []).find(device =>
+          Array.isArray(device.config_entries) && device.config_entries.includes(bridgeEntryId)
+        )?.id || null;
       }
 
       // Fallback from persistent notifications
@@ -3751,42 +3807,52 @@ class ArgusPanel extends HTMLElement {
         }
       }
 
-      // Try to read home name from homekit_pairing entity if available
-      if (!homeName) {
-        const pairState = Object.values(this._hass?.states || {})
-          .find(s => s.entity_id.startsWith('homekit.') || s.entity_id.startsWith('sensor.homekit_'));
-        if (pairState) homeName = pairState.attributes?.home_name || null;
-      }
     } catch (_) {}
 
-    const isPaired = !code && bridgeName;
-    const bridgeLabel = bridgeName || 'Argus Bridge';
-    const homeLabel   = homeName || (isPaired ? 'App Controlador (Apple Home, Alexa, etc.)' : null);
+    // A HomeKit Bridge config entry only proves that the bridge is configured.
+    // Home Assistant deliberately does not expose the paired Apple Home/Matter
+    // home name or a reliable pairing status to frontend clients.
+    const isConfigured = Boolean(bridgeName);
+    const bridgeLabel = this._escapeHtml(bridgeName || 'Argus Bridge');
 
-    if (code && code.length >= 8) {
+    if (code && code.length === 8) {
       const fmt = code.replace(/(\d{3})(\d{2})(\d{3})/, '$1-$2-$3');
       cnt.innerHTML = `
         <div style="display:grid;gap:16px;justify-items:center;padding:8px 0">
           <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
             <div style="background:var(--primary-color);color:#fff;padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700">🌉 ${this._t('homekit_bridge')}: ${bridgeLabel}</div>
-            ${homeLabel ? `<div style="background:rgba(67,160,71,.15);color:var(--success-color,#43a047);padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700">🏡 ${homeLabel}</div>` : ''}
           </div>
           <canvas id="hk-qr"></canvas>
           <div style="font-size:28px;font-weight:900;letter-spacing:6px;font-family:monospace;padding:10px 20px;border-radius:12px;border:2px dashed color-mix(in srgb,var(--primary-color,#03a9f4) 35%,transparent)">${fmt}</div>
           <div class="small">Security System · IP</div>
         </div>`;
       this._drawHKQR(code);
-    } else if (isPaired) {
+    } else if (isConfigured) {
       cnt.innerHTML = `
-        <div style="display:grid;gap:10px">
-          <div style="display:flex;align-items:center;gap:12px;padding:8px 0">
-            <span style="font-size:32px;line-height:1">✅</span>
+        <div style="display:grid;gap:10px;padding:12px;border:1px solid color-mix(in srgb,var(--primary-color,#03a9f4) 35%,transparent);border-radius:14px;background:color-mix(in srgb,var(--primary-color,#03a9f4) 8%,transparent)">
+          <div style="display:flex;align-items:flex-start;gap:12px">
+            <span style="font-size:28px;line-height:1">ℹ️</span>
             <div>
-              <div style="font-weight:700;font-size:15px;color:var(--success-color,#43a047)">${this._t('bridge_paired')}</div>
+              <div style="font-weight:700;font-size:15px">${this._t('bridge_paired')}</div>
               <div class="small" style="opacity:.7">${this._t('bridge_paired_desc').replace('{bridge}', bridgeLabel)}</div>
+              ${bridgeDeviceId ? '<button class="ghost" id="btn-unpair-homekit" style="margin-top:10px;padding:7px 10px;font-size:11px">Desvincular y volver a emparejar</button>' : ''}
             </div>
           </div>
         </div>`;
+      const unpairButton = cnt.querySelector('#btn-unpair-homekit');
+      if (unpairButton) {
+        unpairButton.addEventListener('click', async () => {
+          if (!confirm('Esto eliminará todos los emparejamientos de este puente. Tendrás que volver a añadirlo en Apple Home. ¿Continuar?')) return;
+          unpairButton.disabled = true;
+          try {
+            await this._hass.callService('homekit', 'unpair', { device_id: bridgeDeviceId });
+            this._renderHomeKit();
+          } catch (err) {
+            alert(`No se pudo desvincular el puente: ${err?.message || err}`);
+            unpairButton.disabled = false;
+          }
+        });
+      }
     } else {
       cnt.innerHTML = `
         <div style="display:grid;gap:10px">
@@ -3823,6 +3889,24 @@ class ArgusPanel extends HTMLElement {
     }
     const seen = new Set();
     sel.innerHTML = extra.filter(x => !seen.has(x.entity_id) && seen.add(x.entity_id) === undefined).map(x => `<option value="${x.entity_id}">${x.name}</option>`).join('');
+  }
+
+  _getDisplayedTemperature() {
+    if (!this._hass) return null;
+    const source = this._temperatureSource || 'auto';
+    if (source !== 'auto') {
+      const state = this._hass.states?.[source];
+      if (!state) return null;
+      const value = source.startsWith('climate.') ? state.attributes?.current_temperature : Number(state.state);
+      const unit = source.startsWith('climate.')
+        ? state.attributes?.temperature_unit
+        : (state.attributes?.unit_of_measurement || state.attributes?.native_unit_of_measurement);
+      return Number.isFinite(Number(value)) ? `${Number(value).toFixed(1).replace(/\.0$/, '')}°${String(unit || '').replace('°', '')}` : null;
+    }
+    const weather = Object.values(this._hass.states || {}).find(s => s.entity_id.startsWith('weather.'));
+    const value = weather?.attributes?.temperature;
+    const unit = weather?.attributes?.temperature_unit;
+    return Number.isFinite(Number(value)) ? `${Number(value).toFixed(1).replace(/\.0$/, '')}°${String(unit || '').replace('°', '')}` : null;
   }
 
   async _handleBackgroundFiles(ev) {
@@ -4043,8 +4127,7 @@ class ArgusPanel extends HTMLElement {
       btn.addEventListener('click', () => {
         const fname = btn.dataset.filename;
         if (confirm(this._t('file_delete_confirm').replace('{filename}', fname))) {
-          const card = btn.closest('.file-card');
-          this._deleteUploadedFile(fname, card);
+          this._deleteUploadedFile(fname);
         }
       });
     });
@@ -4072,30 +4155,27 @@ class ArgusPanel extends HTMLElement {
     });
   }
 
-  async _deleteUploadedFile(filename, cardEl) {
-    // Optimistic: remove from UI immediately
-    if (cardEl) cardEl.remove();
-    // Update local cache
-    if (this._uploadedFiles) {
-      this._uploadedFiles = this._uploadedFiles.filter(f => f.name !== filename);
-      this._renderUploadedFiles();
-    }
-    // Also clear inputs if this file was selected
-    const panelInp = this.shadowRoot.getElementById('panel-bg-url-input');
-    if (panelInp && panelInp.value === `/local/argus/${filename}`) {
-      panelInp.value = '';
-      this._panelBgFile = '';
-    }
-    const hubInp = this.shadowRoot.getElementById('hub-bg-url-input');
-    if (hubInp && hubInp.value === `/local/argus/${filename}`) {
-      hubInp.value = '';
-      this._hubBgFile = '';
-    }
-    // Fire-and-forget server delete (no timeout block)
+  async _deleteUploadedFile(filename) {
     try {
       await this._send('argus/delete_uploaded_file', { filename });
+      if (this._uploadedFiles) {
+        this._uploadedFiles = this._uploadedFiles.filter(f => f.name !== filename);
+        this._renderUploadedFiles();
+      }
+      // Clear a selected file only after the server confirms deletion.
+      const panelInp = this.shadowRoot.getElementById('panel-bg-url-input');
+      if (panelInp && panelInp.value === `/local/argus/${filename}`) {
+        panelInp.value = '';
+        this._panelBgFile = '';
+      }
+      const hubInp = this.shadowRoot.getElementById('hub-bg-url-input');
+      if (hubInp && hubInp.value === `/local/argus/${filename}`) {
+        hubInp.value = '';
+        this._hubBgFile = '';
+      }
     } catch (err) {
-      console.warn('Server delete failed (file already removed from UI):', err);
+      console.warn('Server delete failed:', err);
+      alert(`No se pudo eliminar el archivo: ${err.message || err}`);
     }
   }
 
@@ -4199,7 +4279,7 @@ class ArgusPanel extends HTMLElement {
   }
 
   _sendTempNotification(message) {
-    const targets = (this._ui && this._ui.notification_targets) || [];
+    const targets = this._notifTargets || [];
     if (!targets.length || !this._hass) return;
     targets.forEach(target => {
       try {
@@ -4212,27 +4292,29 @@ class ArgusPanel extends HTMLElement {
     });
   }
 
-  _triggerSOS() {
+  async _triggerSOS() {
+    if (this._sosBusy) return;
+    this._sosBusy = true;
     const modal = this.shadowRoot && this.shadowRoot.getElementById('sos-modal');
     if (modal) modal.classList.remove('open');
-    const targets = (this._ui && this._ui.notification_targets) || [];
+    const targets = this._notifTargets || [];
     const loc = this._homeName || 'Mi Casa';
-    if (targets.length && this._hass) {
-      targets.forEach(target => {
-        try {
-          this._hass.callService('notify', target, {
-            message: '🚨 Botón SOS activado desde ' + loc + '. Revisa el estado de la alarma de inmediato.',
-            title: 'ARGUS — SOS / PÁNICO',
-               data: { push: { sound: 'alarm.caf', badge: 1 }, priority: 'high', ttl: 0 }
-          });
-        } catch (_) {}
-      });
-    }
-    if (this._hass) {
-      const eid = this._dashboard?.entries?.[0]?.entity_id;
-      if (eid) {
-        this._hass.callService('alarm_control_panel', 'alarm_trigger', { entity_id: eid }).catch(() => {});
-      }
+    const idx = Number.isInteger(this._sosEntryIdx) ? this._sosEntryIdx : 0;
+    const eid = this._dashboard?.entries?.[idx]?.entity_id;
+    try {
+      if (!this._hass || !eid) throw new Error('No hay una instancia de alarma disponible');
+      await this._hass.callService('alarm_control_panel', 'alarm_trigger', { entity_id: eid });
+      this._writeLog('sos', `SOS/Pánico activado en ${loc}`, this._hass.user?.name || 'Usuario');
+      targets.forEach(target => this._hass.callService('notify', target, {
+        message: '🚨 Botón SOS activado desde ' + loc + '. Revisa el estado de la alarma de inmediato.',
+        title: 'ARGUS — SOS / PÁNICO',
+        data: { push: { sound: 'alarm.caf', badge: 1 }, priority: 'high', ttl: 0 }
+      }).catch(() => {}));
+    } catch (err) {
+      alert(`No se pudo activar el SOS: ${err?.message || err}`);
+    } finally {
+      this._sosEntryIdx = null;
+      this._sosBusy = false;
     }
   }
 

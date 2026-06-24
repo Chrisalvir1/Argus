@@ -17,6 +17,12 @@ from .storage import (
     async_save_ui_data,
 )
 
+_MAX_UPLOAD_BYTES = 50 * 1024 * 1024
+_ALLOWED_MEDIA_EXTENSIONS = {
+    ".avif", ".gif", ".heic", ".heif", ".jpeg", ".jpg", ".m4v",
+    ".mov", ".mp4", ".png", ".webm", ".webp",
+}
+
 _SUPPORTED_DOMAINS = {
     "binary_sensor", "camera", "climate", "cover",
     "light", "lock", "media_player", "sensor", "siren", "switch",
@@ -61,6 +67,14 @@ async def ws_argus_upload_file(hass: HomeAssistant, connection, msg) -> None:
 
     filename = os.path.basename(msg["filename"])
     data_url = msg["data"]
+    extension = os.path.splitext(filename)[1].lower()
+    if not filename or extension not in _ALLOWED_MEDIA_EXTENSIONS:
+        connection.send_error(msg["id"], "invalid_file", "Unsupported media type")
+        return
+    # Reject oversized base64 before decoding it to avoid an avoidable memory spike.
+    if len(data_url) > (_MAX_UPLOAD_BYTES * 4 // 3) + 1024:
+        connection.send_error(msg["id"], "file_too_large", "File exceeds the 50 MB limit")
+        return
 
     # Decode base64 data
     try:
@@ -68,7 +82,10 @@ async def ws_argus_upload_file(hass: HomeAssistant, connection, msg) -> None:
             _, encoded = data_url.split(",", 1)
         else:
             encoded = data_url
-        file_data = base64.b64decode(encoded)
+        file_data = base64.b64decode(encoded, validate=True)
+        if len(file_data) > _MAX_UPLOAD_BYTES:
+            connection.send_error(msg["id"], "file_too_large", "File exceeds the 50 MB limit")
+            return
     except Exception as err:
         connection.send_error(msg["id"], "invalid_data", f"Failed to decode base64: {err}")
         return

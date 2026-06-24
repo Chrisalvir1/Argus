@@ -17,6 +17,11 @@ _LOGGER = logging.getLogger(__name__)
 _PANEL_REGISTERED_KEY = f"{DOMAIN}_panel_registered"
 _STATIC_REGISTERED_KEY = f"{DOMAIN}_static_registered"
 _UPLOAD_VIEW_REGISTERED_KEY = f"{DOMAIN}_upload_view_registered"
+_MAX_UPLOAD_BYTES = 50 * 1024 * 1024
+_ALLOWED_MEDIA_EXTENSIONS = {
+    ".avif", ".gif", ".heic", ".heif", ".jpeg", ".jpg", ".m4v",
+    ".mov", ".mp4", ".png", ".webm", ".webp",
+}
 
 
 class ArgusUploadView(HomeAssistantView):
@@ -38,6 +43,11 @@ class ArgusUploadView(HomeAssistantView):
                 return self.json({"success": False, "error": "No file field found"}, status=400)
                 
             filename = os.path.basename(field.filename)
+            extension = Path(filename).suffix.lower()
+            if not filename or extension not in _ALLOWED_MEDIA_EXTENSIONS:
+                return self.json({"success": False, "error": "Unsupported media type"}, status=400)
+            if request.content_length and request.content_length > _MAX_UPLOAD_BYTES:
+                return self.json({"success": False, "error": "File exceeds the 50 MB limit"}, status=413)
             upload_dir = hass.config.path("www", "argus")
             
             def _write_uploaded_file():
@@ -47,6 +57,8 @@ class ArgusUploadView(HomeAssistantView):
             target_path = await hass.async_add_executor_job(_write_uploaded_file)
             
             file_data = await field.read()
+            if len(file_data) > _MAX_UPLOAD_BYTES:
+                return self.json({"success": False, "error": "File exceeds the 50 MB limit"}, status=413)
             
             def _write_data(data):
                 with open(target_path, "wb") as f:
@@ -111,4 +123,3 @@ async def async_register_panel(hass: HomeAssistant) -> None:
             _LOGGER.info("Argus: panel registered in sidebar")
         except Exception as err:  # noqa: BLE001
             _LOGGER.warning("Argus: could not register panel: %s", err)
-
