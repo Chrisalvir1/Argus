@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.3.4] - 2026-06-24
+## [1.3.5] - 2026-06-24
 
 ### Added
 - **Selector Inteligente de Temperatura**: Nuevo selector de fuente de temperatura. Puedes elegir el clima de tu área o un sensor/termostato específico, mostrando la temperatura real junto a la hora en la instancia activa.

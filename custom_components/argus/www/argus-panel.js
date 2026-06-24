@@ -3777,16 +3777,35 @@ class ArgusPanel extends HTMLElement {
       const hkEntries = await this._hass.callWS({ type: 'config_entries/get', domain: 'homekit' }).catch(() => []);
       const alarmDomains = (this._dashboard?.entries || []).map(e => e.entity_id).filter(Boolean);
 
+      let bestMatch = null;
+      let firstBridge = null;
+
       for (const ent of (hkEntries || [])) {
-        const inc = ent.options?.include_entities || [];
-        const matchesArgus = inc.some(id => id.startsWith('alarm_control_panel')) ||
-          alarmDomains.some(id => inc.includes(id));
-        if (matchesArgus || !bridgeName) {
-          bridgeName = ent.title || ent.data?.name || bridgeName || 'Argus Bridge';
-          bridgeEntryId = ent.entry_id || bridgeEntryId;
-          code = String(ent.options?.code || ent.data?.code || code || '').replace(/\D/g, '');
-          if (matchesArgus) break;
+        if (!firstBridge) firstBridge = ent;
+        
+        const title = (ent.title || ent.data?.name || '').toLowerCase();
+        const matchesName = title.includes('argus');
+        
+        const incEnts = ent.options?.filter?.include_entities || ent.options?.include_entities || [];
+        const incDoms = ent.options?.filter?.include_domains || ent.options?.include_domains || [];
+        
+        const matchesDomains = incDoms.includes('alarm_control_panel') || 
+                               incEnts.some(id => id.startsWith('alarm_control_panel')) || 
+                               alarmDomains.some(id => incEnts.includes(id));
+        
+        if (matchesName) {
+          bestMatch = ent;
+          break;
+        } else if (matchesDomains) {
+          bestMatch = ent;
         }
+      }
+
+      const selected = bestMatch || firstBridge;
+      if (selected) {
+        bridgeName = selected.title || selected.data?.name || 'Argus Bridge';
+        bridgeEntryId = selected.entry_id;
+        code = String(selected.options?.code || selected.data?.code || code || '').replace(/\D/g, '');
       }
 
       if (bridgeEntryId) {
@@ -3888,7 +3907,11 @@ class ArgusPanel extends HTMLElement {
       if (Number.isFinite(v) && (dc === 'temperature' || ['°c','°f','c','f'].includes(u))) extra.push({ entity_id:id, name:`🌡️ ${a.friendly_name || id}` });
     }
     const seen = new Set();
-    sel.innerHTML = extra.filter(x => !seen.has(x.entity_id) && seen.add(x.entity_id) === undefined).map(x => `<option value="${x.entity_id}">${x.name}</option>`).join('');
+    sel.innerHTML = extra.filter(x => {
+      if (seen.has(x.entity_id)) return false;
+      seen.add(x.entity_id);
+      return true;
+    }).map(x => `<option value="${x.entity_id}">${x.name}</option>`).join('');
   }
 
   _getDisplayedTemperature() {
