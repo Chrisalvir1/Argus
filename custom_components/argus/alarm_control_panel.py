@@ -14,6 +14,7 @@ v0.9.30 backend fixes:
 from __future__ import annotations
 
 import logging
+import json
 
 from homeassistant.components.alarm_control_panel import (
     AlarmControlPanelEntity,
@@ -63,6 +64,7 @@ from .const import (
     MQTT_COMMAND_ARM_VACATION,
 )
 from .storage import async_load_ui_data, async_append_audit_log
+from .security import verify_pin
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -828,7 +830,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     @callback
     def _async_mqtt_message(self, msg):
-        cmd = msg.payload.strip().upper()
+        try:
+            payload = json.loads(msg.payload)
+            cmd = str(payload.get("command", "")).upper()
+            code = payload.get("code")
+        except (TypeError, ValueError, json.JSONDecodeError):
+            _LOGGER.warning("Argus: MQTT command must be JSON with command and code")
+            return
         dispatch = {
             MQTT_COMMAND_DISARM: self.async_alarm_disarm,
             MQTT_COMMAND_ARM_HOME: self.async_alarm_arm_home,
@@ -837,7 +845,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             MQTT_COMMAND_ARM_VACATION: self.async_alarm_arm_vacation,
         }
         if cmd in dispatch:
-            self.hass.async_create_task(dispatch[cmd]())
+            self.hass.async_create_task(dispatch[cmd](code=code))
         else:
             _LOGGER.warning("Argus: Unknown MQTT command: %s", cmd)
 
@@ -866,17 +874,17 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         """Validate code against main PIN, guest PIN, and dynamic users."""
         if self._code is None:
             return True
-        if str(code) == str(self._code):
+        if verify_pin(code, self._code):
             return True
         # Check guest PIN
         adv = self._ui_config.get("advanced", {})
         if adv.get("guest_code_enabled") and adv.get("guest_code"):
-            if str(code) == str(adv["guest_code"]):
+            if verify_pin(code, adv["guest_code"]):
                 return True
         # Check dynamic users
         users = self._ui_config.get("users", [])
         for u in users:
-            if u.get("pin") and str(code) == str(u.get("pin")):
+            if u.get("pin") and verify_pin(code, u.get("pin")):
                 # Check expiration
                 exp_date = u.get("expiration_date")
                 if exp_date:
@@ -893,8 +901,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         return False
 
     async def async_alarm_disarm(self, code=None) -> None:
-        # Trusted callers (HomeKit, Alexa, automaciones, MQTT) NO envían código → permitir.
-        if self._code and bool(code) and not self._validate_code(code):
+        if self._code and not self._validate_code(code):
             _LOGGER.warning("Argus: Disarm rejected — invalid code")
             await async_append_audit_log(self.hass, "disarm_rejected", "Invalid code", user="Argus")
             return
@@ -963,8 +970,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         if self._alarm_state == target:
             return
 
-        # Trusted callers (HomeKit, Alexa, automaciones sin código) NO envían código → permitir armar sin validar.
-        if self._code_arm_required and bool(code) and not self._validate_code(code):
+        if self._code_arm_required and not self._validate_code(code):
             _LOGGER.warning("Argus: Arm rejected — invalid code")
             await async_append_audit_log(self.hass, "arm_rejected", f"Invalid code for {target.value}", user="Argus")
             return
@@ -993,8 +999,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 or mode_config.get("requireClosed")
                 or False
             )
-            # Trusted callers (HomeKit) evitan el chequeo de require_closed para no causar rebotes de estado
-            if req_closed and bool(code):
+            if req_closed:
                 sensors = mode_config.get("sensors") or []
                 # Excluir sensores bypasseados — igual que _sensors_for_state
                 # FIX (v0.9.28 Bug #2): sin este filtro los bypassed bloqueaban

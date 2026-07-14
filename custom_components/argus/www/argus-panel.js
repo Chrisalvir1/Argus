@@ -29,6 +29,12 @@ const LANG_LIST = [
   { code:'zh', flag:'🇨🇳', label:'中文' },
   { code:'ru', flag:'🇷🇺', label:'Русский' },
 ];
+
+// Values received from Home Assistant or persisted storage must never become
+// executable markup when rendered through a template literal.
+const escapeHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, char => ({
+  '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;',
+}[char]));
 const TEXTS = {
   es: {
     hero_desc:'Sistema integral de seguridad, control de acceso, automatizaciones y HomeKit.',
@@ -889,6 +895,14 @@ _tmpl.innerHTML = `
 
   :host{display:block;min-height:100vh;box-sizing:border-box;color:var(--primary-text-color);background:var(--lovelace-background,var(--primary-background-color));font-family:'Outfit',Inter,system-ui,sans-serif}
   *{box-sizing:border-box}
+  @keyframes iosGlassIn{0%{opacity:0;transform:translateY(14px) scale(.965)}65%{opacity:1;transform:translateY(-2px) scale(1.008)}100%{transform:translateY(0) scale(1)}}
+  @keyframes iosSelectPop{0%{transform:scale(.92);opacity:.45}60%{transform:scale(1.045);opacity:1}100%{transform:scale(1)}}
+  .glass,.entry,.mode-section-card,.user-card,.file-card,.log-item{animation:iosGlassIn .5s cubic-bezier(.22,1.18,.36,1) both}
+  .pick-row:has(input:checked),.tab.active,.liquid-btn.active{animation:iosSelectPop .34s cubic-bezier(.2,1.45,.35,1);box-shadow:0 0 0 1px color-mix(in srgb,var(--primary-color,#007aff) 45%,transparent),0 12px 30px color-mix(in srgb,var(--primary-color,#007aff) 18%,transparent)}
+  .liquid-glass{background:linear-gradient(135deg,color-mix(in srgb,var(--glass-bg) 86%,#fff 14%),var(--glass-bg));backdrop-filter:blur(24px) saturate(155%);-webkit-backdrop-filter:blur(24px) saturate(155%);border-color:color-mix(in srgb,var(--glass-border) 70%,#fff 30%)}
+  button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 70%,#fff);outline-offset:3px}
+  button:disabled{cursor:not-allowed;opacity:.5;filter:saturate(.45)}
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
   .wrap{max-width:1400px;margin:0 auto;padding:24px;display:grid;gap:24px}
   .glass{background:var(--glass-bg, rgba(255, 255, 255, 0.06));border:1px solid var(--glass-border, rgba(255, 255, 255, 0.09));border-radius:28px;box-shadow:var(--glass-shadow);backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2)}
   .hero{padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:var(--hero-bg, linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)));margin-bottom:12px}
@@ -896,6 +910,7 @@ _tmpl.innerHTML = `
   .hero-icon{font-size:54px;line-height:1;filter:drop-shadow(0 0 20px rgba(255,255,255,0.15))}
   .hero h1{margin:0 0 4px;font-size:34px;font-weight:900;letter-spacing:-0.03em;background:var(--hero-gradient, linear-gradient(to right, #ffffff, #82b1ff));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
   .hero p{margin:0;font-size:16px;opacity:.7;font-weight:500}
+  @media(max-width:700px){.wrap{padding:14px;gap:14px}.glass{border-radius:22px}.hero{padding:22px;align-items:flex-start}.hero-icon{font-size:40px}.hero h1{font-size:27px}.hero p{font-size:14px}.entry-content{grid-template-columns:96px 1fr;padding:16px 105px 16px 14px;gap:10px}.sensor-column{width:98px}.sensor-chip{max-width:94px}.entry-icon{min-height:110px}.entry-icon svg{max-width:150px}.hud{top:12px;right:12px}.hud-data{font-size:15px;padding:5px 9px}.hud-loc{font-size:10px;padding:3px 8px}}
   
   /* Modern Mode Navigation & iOS Liquid Bubble Transition */
   .tabs { position: relative; display: flex; background: rgba(255, 255, 255, 0.03); padding: 6px; border-radius: 20px; gap: 6px; overflow: visible; scrollbar-width: none; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.06); z-index: 1; }
@@ -2215,7 +2230,7 @@ class ArgusPanel extends HTMLElement {
     // PIN display
     const pinDisp2 = s('current-pin-display');
     if (pinDisp2) {
-      const hasPIN = this._dashboard?.entries?.[0]?.options?.code;
+      const hasPIN = this._dashboard?.entries?.[0]?.pin_configured;
       if (hasPIN !== undefined && hasPIN !== null) {
         pinDisp2.textContent = hasPIN ? t('pin_active_yes') : t('pin_active_no');
       } else {
@@ -2677,19 +2692,19 @@ class ArgusPanel extends HTMLElement {
     }
 
     // Show current PIN toggle & validation required
-    const currentPin = dashboard.entries?.[0]?.options?.code || '';
+    const pinConfigured = dashboard.entries?.[0]?.pin_configured === true;
     const pinDisp = this.shadowRoot.getElementById('current-pin-display');
     const groupCurrentPin = this.shadowRoot.getElementById('group-current-pin');
     
-    if (pinDisp) pinDisp.textContent = currentPin ? this._t('pin_active_yes') : this._t('pin_active_no');
+    if (pinDisp) pinDisp.textContent = pinConfigured ? this._t('pin_active_yes') : this._t('pin_active_no');
     if (groupCurrentPin) {
-      if (currentPin) groupCurrentPin.classList.remove('collapsed');
+      if (pinConfigured) groupCurrentPin.classList.remove('collapsed');
       else groupCurrentPin.classList.add('collapsed');
     }
     const lnkForgot = this.shadowRoot.getElementById('lnk-forgot-pin');
-    if (lnkForgot) lnkForgot.style.display = currentPin ? 'inline' : 'none';
+    if (lnkForgot) lnkForgot.style.display = pinConfigured ? 'inline' : 'none';
     const pinForgot = this.shadowRoot.getElementById('pin-forgot-link');
-    if (pinForgot) pinForgot.style.display = currentPin ? 'inline' : 'none';
+    if (pinForgot) pinForgot.style.display = pinConfigured ? 'inline' : 'none';
 
     this._renderEntries();
     this._renderActivityLog();
@@ -2956,8 +2971,8 @@ class ArgusPanel extends HTMLElement {
           <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="Pantalla completa" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>
           ${this._renderBatteryAlerts()}
           <div class="hud">
-            <div class="hud-loc">${fullHudLoc}</div>
-            <div class="hud-data"><span>${timeStr}</span>${displayedTemperature ? `<i>🌡️ ${displayedTemperature}</i>` : ''}</div>
+            <div class="hud-loc">${escapeHtml(fullHudLoc)}</div>
+            <div class="hud-data"><span>${escapeHtml(timeStr)}</span>${displayedTemperature ? `<i>🌡️ ${escapeHtml(displayedTemperature)}</i>` : ''}</div>
           </div>
           <div class="entry-content">
             <div class="liquid-stack">
@@ -2980,7 +2995,7 @@ class ArgusPanel extends HTMLElement {
                   const name = s.attributes?.friendly_name || sid.split('.')[1] || sid;
                   const shortName = name.length > 16 ? name.slice(0, 15) + '…' : name;
                   return `<div class="sensor-chip ${isOpen ? 'sensor-chip--open' + (triggered ? ' sensor-chip--triggered' : '') : 'sensor-chip--closed'}">
-                    <span class="sensor-chip-dot"></span>${shortName}
+                    <span class="sensor-chip-dot"></span>${escapeHtml(shortName)}
                   </div>`;
                 }).join('')}
               </div>` : ''}
@@ -3220,10 +3235,10 @@ class ArgusPanel extends HTMLElement {
         <div class="log-icon">${icon}</div>
         <div class="log-body">
           <div class="log-title">
-            <span class="log-badge ${badgeCls}">${badgeTxt}</span>
-            <span style="font-weight:500">${detail}</span>
+            <span class="log-badge ${badgeCls}">${escapeHtml(badgeTxt)}</span>
+            <span style="font-weight:500">${escapeHtml(detail)}</span>
           </div>
-          <div class="log-meta">${ts} &nbsp;·&nbsp; ${source}</div>
+          <div class="log-meta">${escapeHtml(ts)} &nbsp;·&nbsp; ${escapeHtml(source)}</div>
         </div>
       </div>`;
     }).join('');
@@ -3355,7 +3370,7 @@ class ArgusPanel extends HTMLElement {
     const instanceBlock = entries.length > 1 ? `
         <div class="mode-section-card">
           <div class="mode-section-title">${this._t('alarm_instance')}</div>
-          <select id="mode-instance-select" style="width:100%; padding:10px; border-radius:10px; background:rgba(255,255,255,0.05); color:inherit; border:1px solid rgba(255,255,255,0.1)">${entries.map(e => `<option value="${e.entity_id}" ${e.entity_id===activeEntityId ? 'selected' : ''}>${e.title || e.entity_id}</option>`).join('')}</select>
+          <select id="mode-instance-select" style="width:100%; padding:10px; border-radius:10px; background:rgba(255,255,255,0.05); color:inherit; border:1px solid rgba(255,255,255,0.1)">${entries.map(e => `<option value="${escapeHtml(e.entity_id)}" ${e.entity_id===activeEntityId ? 'selected' : ''}>${escapeHtml(e.title || e.entity_id)}</option>`).join('')}</select>
         </div>` : '';
 
     el.innerHTML = `
@@ -3578,10 +3593,10 @@ class ArgusPanel extends HTMLElement {
       return `
       <div class="list-item-card">
         <div>
-          <div style="font-weight:700">${a.attributes.friendly_name || a.entity_id}</div>
+          <div style="font-weight:700">${escapeHtml(a.attributes.friendly_name || a.entity_id)}</div>
           <div class="small" style="opacity:0.7;margin-top:4px">${a.attributes.last_triggered ? new Date(a.attributes.last_triggered).toLocaleString() : this._t('never_triggered')}</div>
         </div>
-        <button class="ghost" style="padding:6px 12px;background:rgba(255,255,255,0.08);border-radius:8px" data-edit-auto="${editId}">✏️</button>
+        <button class="ghost" style="padding:6px 12px;background:rgba(255,255,255,0.08);border-radius:8px" data-edit-auto="${escapeHtml(editId)}">✏️</button>
       </div>`;
     }).join('')}</div>`;
       
@@ -3605,7 +3620,7 @@ class ArgusPanel extends HTMLElement {
           let label = k;
           if (k.startsWith('mobile_app')) label = "📱 " + k.replace('mobile_app_', '').replace(/_/g, ' ');
           else label = "🔔 " + label.replace(/_/g, ' ');
-          return `<option value="${k}">${label}</option>`;
+          return `<option value="${escapeHtml(k)}">${escapeHtml(label)}</option>`;
         }).join('')
       : `<option value="">— Sin servicios móviles —</option>`;
   }
@@ -3623,8 +3638,8 @@ class ArgusPanel extends HTMLElement {
     const el = this.shadowRoot.getElementById('notif-targets');
     if (!el) return;
     el.innerHTML = this._notifTargets.map(t => `
-      <span class="notif-chip">📱 ${t.replace(/_/g,' ')}
-        <button data-notif-remove="${t}">✕</button>
+      <span class="notif-chip">📱 ${escapeHtml(t.replace(/_/g,' '))}
+        <button data-notif-remove="${escapeHtml(t)}">✕</button>
       </span>`).join('') || `<span class="small" style="opacity:.5">—</span>`;
     el.querySelectorAll('[data-notif-remove]').forEach(btn =>
       btn.addEventListener('click', () => {
@@ -3670,25 +3685,25 @@ class ArgusPanel extends HTMLElement {
     } else {
       el.innerHTML = this._users.map((u, i) => {
         const isExpired = u.expiration_date && new Date(u.expiration_date) < new Date();
+        const expirationDate = escapeHtml(u.expiration_date || '');
         const expBadge = u.expiration_date 
           ? (isExpired 
-            ? `<span class="user-badge admin" style="background:rgba(229,57,53,0.12);color:#e53935;margin-left:5px">❌ ${this._t('expired')} (${u.expiration_date.replace('T', ' ')})</span>`
-            : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">⏳ ${this._t('active_until')}: ${u.expiration_date.replace('T', ' ')}</span>`)
+            ? `<span class="user-badge admin" style="background:rgba(229,57,53,0.12);color:#e53935;margin-left:5px">❌ ${escapeHtml(this._t('expired'))} (${expirationDate.replace('T', ' ')})</span>`
+            : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">⏳ ${escapeHtml(this._t('active_until'))}: ${expirationDate.replace('T', ' ')}</span>`)
           : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">♾️ ${this._t('exp_indefinite')}</span>`;
 
         return `
         <div class="user-card" style="display:flex;flex-direction:column;align-items:stretch;gap:8px">
           <div style="display:flex;justify-content:between;align-items:center;width:100%">
             <div style="flex:1">
-              <div style="font-weight:700">${u.name}</div>
+              <div style="font-weight:700">${escapeHtml(u.name)}</div>
               <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
                 <span class="user-badge ${u.is_admin ? 'admin' : ''}">${u.is_admin ? '⭐ Admin' : '👤 User'}</span>
                 ${expBadge}
               </div>
             </div>
             <div style="display:flex;gap:8px;align-items:center">
-              ${this._isAdmin ? `<span class="small" style="font-family:monospace">PIN: ${u.pin || '—'}</span>
-              <button class="danger" style="padding:5px 10px" data-user-del="${i}">🗑</button>` : ''}
+              ${this._isAdmin ? `<button class="danger" style="padding:5px 10px" data-user-del="${i}">🗑</button>` : ''}
             </div>
           </div>
         </div>`;
@@ -3911,7 +3926,7 @@ class ArgusPanel extends HTMLElement {
       if (seen.has(x.entity_id)) return false;
       seen.add(x.entity_id);
       return true;
-    }).map(x => `<option value="${x.entity_id}">${x.name}</option>`).join('');
+    }).map(x => `<option value="${escapeHtml(x.entity_id)}">${escapeHtml(x.name)}</option>`).join('');
   }
 
   _getDisplayedTemperature() {
@@ -4130,18 +4145,18 @@ class ArgusPanel extends HTMLElement {
     listContainer.innerHTML = files
       .filter(file => !file.is_video)
       .map(file => `
-      <div class="file-card" data-filename="${file.name}">
+      <div class="file-card" data-filename="${escapeHtml(file.name)}">
         <div class="file-card-preview">
-          <img src="${file.url}" loading="lazy">
+          <img src="${escapeHtml(file.url)}" loading="lazy">
         </div>
-        <div class="file-card-name" title="${file.name}">${file.name}</div>
+        <div class="file-card-name" title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</div>
         <div class="file-card-meta">
-          <span>${file.size_str}</span>
-          <button class="file-card-btn-delete" data-filename="${file.name}" title="${this._t('delete_btn_title')}">🗑️</button>
+          <span>${escapeHtml(file.size_str)}</span>
+          <button class="file-card-btn-delete" data-filename="${escapeHtml(file.name)}" title="${escapeHtml(this._t('delete_btn_title'))}">🗑️</button>
         </div>
         <div class="file-card-actions">
-          <button class="file-card-btn use-for-panel" data-url="${file.url}">${this._t('use_for_panel')}</button>
-          <button class="file-card-btn use-for-hub" data-url="${file.url}">${this._t('use_for_hub')}</button>
+          <button class="file-card-btn use-for-panel" data-url="${escapeHtml(file.url)}">${escapeHtml(this._t('use_for_panel'))}</button>
+          <button class="file-card-btn use-for-hub" data-url="${escapeHtml(file.url)}">${escapeHtml(this._t('use_for_hub'))}</button>
         </div>
       </div>
     `).join('');
@@ -4450,19 +4465,15 @@ class ArgusPanel extends HTMLElement {
   /* ── PIN management ──────────────────────────────────────────────── */
   async _savePin() {
     const status = this.shadowRoot.getElementById('pin-status');
-    const currentCode = this._dashboard?.entries?.[0]?.options?.code || '';
+    const pinConfigured = this._dashboard?.entries?.[0]?.pin_configured === true;
     
-    if (currentCode) {
-      const pinCurrent = this.shadowRoot.getElementById('current-pin').value;
-      if (pinCurrent !== currentCode) {
-        if (status) {
-          status.textContent = this._t('pin_incorrect');
-          status.className = 'status err';
-        } else {
-          alert(this._t('pin_incorrect'));
-        }
-        return;
+    const pinCurrent = this.shadowRoot.getElementById('current-pin').value;
+    if (pinConfigured && !pinCurrent) {
+      if (status) {
+        status.textContent = this._t('pin_incorrect');
+        status.className = 'status err';
       }
+      return;
     }
 
     const p1 = this.shadowRoot.getElementById('new-pin-1').value;
@@ -4479,7 +4490,7 @@ class ArgusPanel extends HTMLElement {
     }
     
     try {
-      await this._send('argus/update_master_pin', { pin: p1 });
+      await this._send('argus/update_master_pin', { pin: p1, current_pin: pinCurrent });
       if (status) {
         status.textContent = p1 ? this._t('pin_updated') : this._t('pin_deleted'); 
         status.className = 'status ok';
@@ -4525,7 +4536,7 @@ class ArgusPanel extends HTMLElement {
     // 2. Confirmación
     if (confirm(this._t('pin_reset_confirm'))) {
       try {
-        await this._send('argus/update_master_pin', { pin: '' });
+        await this._send('argus/update_master_pin', { pin: '', force_reset: true });
         
         // Log en auditoría
         this._writeLog('pin_reset', 'PIN maestro restablecido por el administrador', currentUser);
@@ -4565,21 +4576,9 @@ class ArgusPanel extends HTMLElement {
   }
 
   _runWithPin(action) {
-    const masterPin = this._dashboard?.entries?.[0]?.options?.code || '';
-    if (masterPin) {
-      this._showPinModal(pin => {
-        if (pin === masterPin) {
-          action();
-          return true;
-        } else {
-          const pinErr = this.shadowRoot.getElementById('pin-error');
-          if (pinErr) pinErr.textContent = '❌ PIN incorrecto';
-          return false;
-        }
-      });
-    } else {
-      action();
-    }
+    // Administrative settings are protected by Home Assistant server-side.
+    // The alarm service itself still validates a PIN when it is required.
+    action();
   }
 
   _showPinModal(onConfirm) {
@@ -4745,13 +4744,13 @@ class ArgusPanel extends HTMLElement {
       const isTr  = ['on', 'unlocked', 'open', 'recording'].includes(raw);
       const lblMap = { on:'Abierto', off:'Cerrado', locked:'Cerrado', unlocked:'Abierto', idle:'Reposo', recording:'Grabando', home:'En casa', not_home:'Fuera' };
       const lbl  = this._selectorTarget === 'sensor'
-        ? `<span class="badge ${isTr ? 'armed_away' : 'disarmed'}" style="padding:2px 6px;font-size:10px">${lblMap[raw] || raw}</span>`
+        ? `<span class="badge ${isTr ? 'armed_away' : 'disarmed'}" style="padding:2px 6px;font-size:10px">${escapeHtml(lblMap[raw] || raw)}</span>`
         : '';
       return `<label class="pick-row">
-        <input type="checkbox" data-entity="${x.entity_id}" ${this._selected.includes(x.entity_id) ? 'checked' : ''}>
+        <input type="checkbox" data-entity="${escapeHtml(x.entity_id)}" ${this._selected.includes(x.entity_id) ? 'checked' : ''}>
         <div>
-          <div class="pick-row-name">${x.name || x.entity_id}${lbl}</div>
-          <div class="pick-row-meta">${x.entity_id}${x.area ? ' · '+x.area : ''}</div>
+          <div class="pick-row-name">${escapeHtml(x.name || x.entity_id)}${lbl}</div>
+          <div class="pick-row-meta">${escapeHtml(x.entity_id)}${x.area ? ' · '+escapeHtml(x.area) : ''}</div>
         </div>
       </label>`;
     }).join('') || `<div class="small" style="padding:10px">Sin resultados</div>`;
@@ -4770,8 +4769,8 @@ class ArgusPanel extends HTMLElement {
 
     selBox.innerHTML = this._selected.map(id =>
       `<div class="sel-right-item">
-        <div style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${this._hass?.states?.[id]?.attributes?.friendly_name || id}</div>
-        <button class="ghost" style="padding:3px 8px;font-size:11px;flex-shrink:0;margin-left:6px" data-rm="${id}">✕</button>
+        <div style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtml(this._hass?.states?.[id]?.attributes?.friendly_name || id)}</div>
+        <button class="ghost" style="padding:3px 8px;font-size:11px;flex-shrink:0;margin-left:6px" data-rm="${escapeHtml(id)}">✕</button>
       </div>`
     ).join('') || `<div class="small" style="padding:10px;opacity:.5">${this._t('none_selected')}</div>`;
 
@@ -4833,7 +4832,7 @@ class ArgusPanel extends HTMLElement {
 
     if (action === 'disarm') {
       // FIX-4: sólo mostrar modal de PIN si hay código configurado
-      const masterPin = this._dashboard?.entries?.[0]?.options?.code || '';
+      const masterPin = this._dashboard?.entries?.[0]?.pin_configured === true;
       const hasUsers = this._users && this._users.length > 0;
       const doDisarm = async (pin) => { 
         try { 

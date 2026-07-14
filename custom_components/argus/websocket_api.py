@@ -1,6 +1,8 @@
 """WebSocket API for the Argus frontend panel."""
 from __future__ import annotations
 
+import datetime
+
 import voluptuous as vol
 
 from homeassistant.components import websocket_api
@@ -16,6 +18,7 @@ from .storage import (
     async_load_ui_data,
     async_save_ui_data,
 )
+from .security import hash_pin, verify_pin
 
 _MAX_UPLOAD_BYTES = 50 * 1024 * 1024
 _ALLOWED_MEDIA_EXTENSIONS = {
@@ -31,25 +34,22 @@ _SUPPORTED_DOMAINS = {
 
 def async_register_websocket_api(hass: HomeAssistant) -> None:
     """Register all Argus websocket commands."""
-    websocket_api.async_register_command(hass, ws_argus_dashboard)
-    websocket_api.async_register_command(hass, ws_argus_save_ui)
-    websocket_api.async_register_command(hass, ws_argus_get_mode_config)
-    websocket_api.async_register_command(hass, ws_argus_save_mode_config)
-    websocket_api.async_register_command(hass, ws_argus_get_audit_log)
-    websocket_api.async_register_command(hass, ws_argus_get_stats)
-    websocket_api.async_register_command(hass, ws_argus_clear_audit_log)
-    websocket_api.async_register_command(hass, ws_argus_restore_config)
-    websocket_api.async_register_command(hass, ws_argus_save_advanced_config)
-    websocket_api.async_register_command(hass, ws_argus_get_advanced_config)
-    websocket_api.async_register_command(hass, ws_argus_save_automations)
-    websocket_api.async_register_command(hass, ws_argus_get_automations)
-    websocket_api.async_register_command(hass, ws_argus_get_tts_engines)
-    websocket_api.async_register_command(hass, ws_argus_get_media_players)
-    websocket_api.async_register_command(hass, ws_argus_update_master_pin)
-    websocket_api.async_register_command(hass, ws_argus_write_log)
-    websocket_api.async_register_command(hass, ws_argus_upload_file)
-    websocket_api.async_register_command(hass, ws_argus_list_files)
-    websocket_api.async_register_command(hass, ws_argus_delete_file)
+    # The panel exposes configuration, credentials and local media.  UI checks
+    # are not an authorization boundary: Home Assistant must enforce admin access.
+    commands = (
+        ws_argus_dashboard, ws_argus_save_ui, ws_argus_get_mode_config,
+        ws_argus_save_mode_config, ws_argus_get_audit_log, ws_argus_get_stats,
+        ws_argus_clear_audit_log, ws_argus_restore_config,
+        ws_argus_save_advanced_config, ws_argus_get_advanced_config,
+        ws_argus_save_automations, ws_argus_get_automations,
+        ws_argus_get_tts_engines, ws_argus_get_media_players,
+        ws_argus_update_master_pin, ws_argus_write_log, ws_argus_upload_file,
+        ws_argus_list_files, ws_argus_delete_file,
+    )
+    for command in commands:
+        websocket_api.async_register_command(
+            hass, websocket_api.require_admin(command)
+        )
 
 
 @websocket_api.websocket_command(
@@ -265,8 +265,12 @@ async def ws_argus_dashboard(hass: HomeAssistant, connection, msg) -> None:
                 "entity_id": alarm_entity_id,
                 "state": state_obj.state if state_obj else "unavailable",
                 "attributes": dict(state_obj.attributes) if state_obj else {},
-                "config": dict(entry.data),
-                "options": dict(entry.options),
+                # Never serialize a ConfigEntry wholesale: it can contain the
+                # master PIN and other credentials.  The frontend only needs to
+                # know whether a PIN has been configured.
+                "pin_configured": bool(
+                    entry.options.get("code") or entry.data.get("code")
+                ),
             }
         )
 
@@ -320,6 +324,9 @@ async def ws_argus_save_ui(hass: HomeAssistant, connection, msg) -> None:
         old_ui = await async_load_ui_data(hass)
         old_users = old_ui.get("users", [])
         new_users = msg["users"]
+        for user_data in new_users:
+            if user_data.get("pin") and not user_data["pin"].startswith("scrypt:"):
+                user_data["pin"] = hash_pin(user_data["pin"])
         
         # Get admin name
         user_id = connection.context.user_id
@@ -415,7 +422,16 @@ async def ws_argus_get_stats(hass: HomeAssistant, connection, msg) -> None:
         "armings_30d": 0,
         "top_sensors": {}
     }
+    cutoff = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=30)
     for entry in log:
+        try:
+            timestamp = datetime.datetime.fromisoformat(
+                entry.get("ts", "").replace("Z", "+00:00")
+            )
+        except (AttributeError, TypeError, ValueError):
+            continue
+        if timestamp < cutoff:
+            continue
         act = entry.get("action", "")
         if "trigger" in act:
             stats["triggers_30d"] += 1
@@ -463,7 +479,11 @@ async def ws_argus_restore_config(hass: HomeAssistant, connection, msg) -> None:
 @websocket_api.async_response
 async def ws_argus_save_advanced_config(hass: HomeAssistant, connection, msg) -> None:
     """Persist advanced config (guest PIN, NFC, etc.)."""
-    await async_save_ui_data(hass, {"advanced": msg["config"]})
+    config = dict(msg["config"])
+    guest_code = config.get("guest_code")
+    if guest_code and not guest_code.startswith("scrypt:"):
+        config["guest_code"] = hash_pin(guest_code)
+    await async_save_ui_data(hass, {"advanced": config})
     connection.send_result(msg["id"], {"success": True})
 
 
@@ -528,7 +548,11 @@ async def ws_argus_get_media_players(hass: HomeAssistant, connection, msg) -> No
 @websocket_api.websocket_command(
     {
         vol.Required("type"): "argus/update_master_pin",
-        vol.Required("pin"): str,
+        vol.Required("pin"): vol.All(str, vol.Match(r"^\d{0,32}$")),
+        vol.Optional("current_pin", default=""): vol.All(
+            str, vol.Match(r"^\d{0,32}$")
+        ),
+        vol.Optional("force_reset", default=False): bool,
     }
 )
 @websocket_api.async_response
@@ -543,10 +567,14 @@ async def ws_argus_update_master_pin(hass: HomeAssistant, connection, msg) -> No
         return
         
     entry = entries[0]
+    current_pin = entry.options.get(CONF_CODE) or entry.data.get(CONF_CODE) or ""
+    if current_pin and not msg["force_reset"] and not verify_pin(msg["current_pin"], current_pin):
+        connection.send_error(msg["id"], "invalid_pin", "Current PIN is incorrect")
+        return
     
     # Update the options
     new_options = dict(entry.options)
-    new_options[CONF_CODE] = msg["pin"]
+    new_options[CONF_CODE] = hash_pin(msg["pin"]) if msg["pin"] else ""
     
     hass.config_entries.async_update_entry(entry, options=new_options)
     

@@ -5,7 +5,7 @@
 
   **El Sistema de Seguridad Premium para Home Assistant**
 
-  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.3.5-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
+  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.3.7-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
   [![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)](https://www.home-assistant.io/)
   [![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)](https://hacs.xyz/)
   [![GitHub stars](https://img.shields.io/github/stars/Chrisalvir1/Argus?style=social)](https://github.com/Chrisalvir1/Argus/stargazers)
@@ -21,17 +21,17 @@
 
 ---
 
-## ✨ Novedades y Correcciones Recientes (v1.3.5)
+## ✨ Novedades y Correcciones Recientes (v1.3.7)
 
-¡Mejoras funcionales de pánico, soporte ampliado de sensores y gestión avanzada de HomeKit!
+¡Refuerzo de seguridad en alarmas y renovación de la interfaz Liquid Glass al estilo iOS!
 
 **Cambios y Características Nuevas:**
-- **Corrección Funcional SOS/Pánico**: El botón SOS ahora dispara exactamente la instancia desde la que se abrió. Además, registra el evento en auditoría y envía notificaciones a los destinos configurados reales.
-- **Soporte Ampliado para Sensores**: Las cerraduras (locks) y sensores con estados `open`, `unlocked`, `motion`, etc. ahora pueden disparar Argus de forma nativa (antes solo reaccionaba a `on`).
-- **Selector Inteligente de Temperatura**: Nuevo selector de fuente de temperatura. Puedes elegir el clima de tu área o un sensor/termostato específico, mostrando la temperatura real junto a la hora en la instancia activa.
-- **Gestión de HomeKit Bridge**: Añadida la opción de "Desvincular y volver a emparejar". Usa la acción oficial `homekit.unpair` para borrar de forma segura todos los emparejamientos y generar un nuevo QR para tu casa en Apple Home.
-- **Liquid Glass en Selectores**: Los selectores de "Fondo del panel" y "Fondo Argus" adoptan el elegante estilo *Liquid Glass*.
-- **Mejoras de Ubicación**: La ubicación en pantalla ahora prioriza de forma inteligente el nombre configurado de la ubicación de tu Home Assistant.
+- **Seguridad Mejorada**: Validación de PIN requerida para acciones de alarma y comandos MQTT autenticados.
+- **Cifrado de PIN**: Hashing con scrypt para PINs recién guardados (maestro, invitado y usuarios).
+- **Persistencia Segura**: Prevención de escrituras concurrentes en almacenamiento para evitar sobrescribir configuraciones o registros de auditoría.
+- **Protección XSS**: Escape de contenido dinámico adicional en la interfaz de usuario.
+- **Interfaz Renovada**: Estilo Liquid Glass refinado al estilo iOS, rebote elástico de selección, diseño móvil responsivo, foco de teclado visible y soporte para movimiento reducido.
+- **Pruebas de Regresión y CI**: Se agregaron chequeos de regresión y se anclaron las acciones de CI a revisiones inmutables.
 
 ---
 

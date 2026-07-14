@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import logging
 import os
+import tempfile
 from pathlib import Path
 
 from homeassistant.components import panel_custom
@@ -24,6 +25,19 @@ _ALLOWED_MEDIA_EXTENSIONS = {
 }
 
 
+def _append_chunk(path: str, chunk: bytes) -> None:
+    """Append one upload chunk from an executor thread."""
+    with open(path, "ab") as handle:
+        handle.write(chunk)
+
+
+def _create_tempfile(directory: str) -> str:
+    """Create a closed temporary file in the upload directory."""
+    descriptor, path = tempfile.mkstemp(dir=directory, prefix=".argus-")
+    os.close(descriptor)
+    return path
+
+
 class ArgusUploadView(HomeAssistantView):
     """API view to upload background media files for Argus."""
     
@@ -34,6 +48,9 @@ class ArgusUploadView(HomeAssistantView):
     async def post(self, request: web.Request) -> web.Response:
         """Handle file upload."""
         hass = request.app["hass"]
+
+        if not request["hass_user"].is_admin:
+            return self.json({"success": False, "error": "Administrator access required"}, status=403)
         
         try:
             reader = await request.multipart()
@@ -55,16 +72,30 @@ class ArgusUploadView(HomeAssistantView):
                 return os.path.join(upload_dir, filename)
                 
             target_path = await hass.async_add_executor_job(_write_uploaded_file)
-            
-            file_data = await field.read()
-            if len(file_data) > _MAX_UPLOAD_BYTES:
-                return self.json({"success": False, "error": "File exceeds the 50 MB limit"}, status=413)
-            
-            def _write_data(data):
-                with open(target_path, "wb") as f:
-                    f.write(data)
-                    
-            await hass.async_add_executor_job(_write_data, file_data)
+
+            # Stream multipart data to a temporary file so a forged or missing
+            # Content-Length cannot force the whole upload into memory.
+            # aiohttp's multipart reader is asynchronous, so keep the bounded
+            # read loop here and only perform the atomic rename in the executor.
+            temporary_path = None
+            written = 0
+            while True:
+                chunk = await field.read_chunk(size=64 * 1024)
+                if not chunk:
+                    break
+                written += len(chunk)
+                if written > _MAX_UPLOAD_BYTES:
+                    if temporary_path:
+                        await hass.async_add_executor_job(os.unlink, temporary_path)
+                    return self.json({"success": False, "error": "File exceeds the 50 MB limit"}, status=413)
+                if temporary_path is None:
+                    temporary_path = await hass.async_add_executor_job(
+                        _create_tempfile, upload_dir
+                    )
+                await hass.async_add_executor_job(_append_chunk, temporary_path, chunk)
+            if not temporary_path:
+                return self.json({"success": False, "error": "Empty file"}, status=400)
+            await hass.async_add_executor_job(os.replace, temporary_path, target_path)
             
             return self.json({
                 "success": True, 
@@ -113,7 +144,7 @@ async def async_register_panel(hass: HomeAssistant) -> None:
                 module_url=f"/api/{DOMAIN}_static/argus-panel.js?v={VERSION}",
                 sidebar_title="Argus Home Hub",
                 sidebar_icon="mdi:shield-lock-outline",
-                require_admin=False,
+                require_admin=True,
                 config={
                     "domain": DOMAIN,
                     "card_url": f"/api/{DOMAIN}_static/argus-card.js?v={VERSION}",

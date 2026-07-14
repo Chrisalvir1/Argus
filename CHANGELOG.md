@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.7] - 2026-07-14
+
+### Security
+- El panel y todos sus comandos WebSocket ahora requieren permisos de administrador de Home Assistant.
+- El PIN maestro ya no se serializa hacia el navegador; su validación ocurre en el backend.
+- Se escaparon valores dinámicos del panel para impedir inyección HTML y las subidas HTTP ahora se escriben por fragmentos con límite real de tamaño.
+
+### Changed
+- Mejoras de accesibilidad y respuesta móvil: foco visible, respeto por movimiento reducido y diseño compacto en pantallas pequeñas.
+- La validación CI usa commits inmutables para HACS y Hassfest, Dependabot revisa GitHub Actions semanalmente y se añadieron pruebas de regresión rápidas.
+
+### Fixed
+- Las estadísticas de 30 días ahora excluyen eventos anteriores al período.
+
 ## [1.3.5] - 2026-06-24
 
 ### Added

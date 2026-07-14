@@ -6,13 +6,29 @@ on:
   schedule:
     - cron: '0 0 * * 0'
 
+permissions:
+  contents: read
+
 jobs:
+  static-tests:
+    name: Static regression tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m unittest discover -s tests -v
+      - run: node --check custom_components/argus/www/argus-card.js
+      - run: node --check custom_components/argus/www/argus-panel.js
+
   validate-hacs:
     name: Validate HACS
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: hacs/action@main
+      # Pinned commit from hacs/action main (reviewed 2026-07-14).
+      - uses: hacs/action@1ebf01c408f29afcb6406bd431bc98fd8cbb15aa
         with:
           category: integration
 
@@ -21,4 +37,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: home-assistant/actions/hassfest@master
+      # Pinned commit from home-assistant/actions master (reviewed 2026-07-14).
+      - uses: home-assistant/actions/hassfest@f4ca6f671bd429efb108c0f2fa0ae8af0215986c

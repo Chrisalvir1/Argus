@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import base64
+import asyncio
 import datetime
 import os
 import re
@@ -14,6 +15,12 @@ from .const import DOMAIN
 _STORAGE_VERSION = 1
 _STORAGE_KEY = f"{DOMAIN}.ui"
 AUDIT_LOG_MAX = 200
+_LOCK_KEY = f"{DOMAIN}_storage_lock"
+
+
+def _storage_lock(hass: HomeAssistant) -> asyncio.Lock:
+    """Return the single lock used for all read-modify-write storage operations."""
+    return hass.data.setdefault(_LOCK_KEY, asyncio.Lock())
 
 
 def _default_payload() -> dict:
@@ -154,49 +161,44 @@ async def async_load_ui_data(hass: HomeAssistant) -> dict:
 
 async def async_save_ui_data(hass: HomeAssistant, data: dict) -> dict:
     """Persist Argus UI data to HA storage."""
-    store = Store(hass, _STORAGE_VERSION, _STORAGE_KEY)
-    current = await async_load_ui_data(hass)
-    current.update(data or {})
-    await store.async_save(current)
-    return current
+    async with _storage_lock(hass):
+        store = Store(hass, _STORAGE_VERSION, _STORAGE_KEY)
+        current = await async_load_ui_data(hass)
+        current.update(data or {})
+        await store.async_save(current)
+        return current
 
 
 async def async_append_audit_log(
     hass: HomeAssistant, action: str, detail: str = "", user: str = "Argus"
 ) -> None:
     """Append an event to the Argus audit log (max 200 entries, newest first)."""
-    import datetime
-    store = Store(hass, _STORAGE_VERSION, _STORAGE_KEY)
-    current = await async_load_ui_data(hass)
-    log: list = current.get("audit_log", [])
-    
-    # Standardize action key for comparison
-    def norm(s): return str(s or "").lower().replace("ed", "").strip()
-    
-    # Deduplication: Ensure we prefer User logs over generic Argus logs for the same event
-    now = datetime.datetime.now(datetime.timezone.utc)
-    if log:
-        latest = log[0]
-        try:
-            latest_ts = datetime.datetime.fromisoformat(latest["ts"].replace("Z", "+00:00"))
-            if (now - latest_ts).total_seconds() < 5.0:
-                if norm(action) == norm(latest.get("action")):
-                    if user == "Argus" and latest.get("user") != "Argus":
-                        return  # Skip generic log since we already have a user log
-                    if user != "Argus" and latest.get("user") == "Argus":
-                        log.pop(0) # Remove existing generic log to favor the user log
-        except Exception:
-            pass
+    async with _storage_lock(hass):
+        store = Store(hass, _STORAGE_VERSION, _STORAGE_KEY)
+        current = await async_load_ui_data(hass)
+        log: list = current.get("audit_log", [])
 
-    entry = {
-        "ts": now.isoformat(),
-        "action": action,
-        "detail": detail,
-        "user": user,
-    }
-    log.insert(0, entry)
-    current["audit_log"] = log[:AUDIT_LOG_MAX]
-    await store.async_save(current)
+        def norm(s): return str(s or "").lower().replace("ed", "").strip()
+
+        now = datetime.datetime.now(datetime.timezone.utc)
+        if log:
+            latest = log[0]
+            try:
+                latest_ts = datetime.datetime.fromisoformat(latest["ts"].replace("Z", "+00:00"))
+                if (now - latest_ts).total_seconds() < 5.0 and norm(action) == norm(latest.get("action")):
+                    if user == "Argus" and latest.get("user") != "Argus":
+                        return
+                    if user != "Argus" and latest.get("user") == "Argus":
+                        log.pop(0)
+            except (KeyError, TypeError, ValueError):
+                pass
+
+        entry = {
+            "ts": now.isoformat(), "action": action, "detail": detail, "user": user,
+        }
+        log.insert(0, entry)
+        current["audit_log"] = log[:AUDIT_LOG_MAX]
+        await store.async_save(current)
 
 
 async def async_get_audit_log(hass: HomeAssistant) -> list:
