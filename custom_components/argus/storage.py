@@ -44,6 +44,8 @@ def _default_payload() -> dict:
         "automations": [],
         "notif_targets": [],
         "tts_targets": [],
+        "emergency_number": "911",
+        "panic_outputs": [],
         "users": [],
         "home_name": "",
         "background_mode": "weather",

@@ -291,6 +291,10 @@ async def ws_argus_dashboard(hass: HomeAssistant, connection, msg) -> None:
         vol.Optional("dashboard"): dict,
         vol.Optional("notif_targets"): list,
         vol.Optional("tts_targets"): list,
+        vol.Optional("emergency_number"): vol.All(
+            str, vol.Length(min=1, max=16), vol.Match(r"^[0-9+()\-\s]+$")
+        ),
+        vol.Optional("panic_outputs"): list,
         vol.Optional("users"): list,
         vol.Optional("home_name"): str,
         vol.Optional("background_mode"): vol.In(["weather", "none", "photo", "collage", "video"]),
@@ -311,7 +315,7 @@ async def ws_argus_save_ui(hass: HomeAssistant, connection, msg) -> None:
     
     updates = {}
     valid_keys = [
-        "zones", "dashboard", "notif_targets", "tts_targets", "users", "home_name",
+        "zones", "dashboard", "notif_targets", "tts_targets", "emergency_number", "panic_outputs", "users", "home_name",
         "background_mode", "background_images", "temperature_source", "temp_alert_min", "temp_alert_max",
         "panel_bg_file", "panel_bg_sound", "hub_bg_mode", "hub_bg_file", "hub_bg_sound"
     ]
@@ -365,6 +369,7 @@ async def ws_argus_save_ui(hass: HomeAssistant, connection, msg) -> None:
                 )
             
     saved = await async_save_ui_data(hass, updates)
+    async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED)
     connection.send_result(msg["id"], {"saved": True, "ui": saved})
 
 

@@ -1496,6 +1496,7 @@ _tmpl.innerHTML = `
       <a id="sos-call-btn" href="tel:911" style="display:flex;justify-content:center;align-items:center;gap:8px;background:rgba(255,59,48,0.2);color:#ff3b30;text-decoration:none;padding:14px;border-radius:18px;font-weight:800;font-size:15px;border:1px solid rgba(255,59,48,0.3)">
         📞 Llamar a Emergencias (911)
       </a>
+      <p id="sos-call-help" class="small" style="margin:10px 4px 0;opacity:.72;line-height:1.35">Si este equipo no admite llamadas, Argus enviará una alerta urgente a los dispositivos móviles configurados.</p>
     </div>
     <button class="ios-confirm-cancel" id="btn-cancel-sos" style="margin-top:10px">Cancelar</button>
   </div>
@@ -1555,6 +1556,17 @@ _tmpl.innerHTML = `
               <div>
                 <label class="setting-label" for="temp-source-select-standalone" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">🌡️ Temperatura mostrada</label>
                 <select id="temp-source-select-standalone" class="glass-control"></select>
+              </div>
+              <div>
+                <label class="setting-label" for="emergency-number-input" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">🚨 Número de emergencias local</label>
+                <input id="emergency-number-input" class="glass-control" inputmode="tel" maxlength="16" value="911" aria-describedby="emergency-number-help">
+                <div id="emergency-number-help" class="small" style="margin-top:5px;opacity:.65;line-height:1.35">Configúralo para la ubicación del hogar (p. ej., Costa Rica: 911; España: 112). Se incluirá en las alertas SOS.</div>
+              </div>
+              <div>
+                <div class="setting-label" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:6px;">🚨 Acciones SOS</div>
+                <div id="sos-output-chips" class="mode-sensor-grid" style="margin-bottom:8px"></div>
+                <button class="ghost" id="btn-select-sos-outputs" style="width:100%;justify-content:center;font-size:12px">Seleccionar luces, sirenas o scripts</button>
+                <div class="small" style="margin-top:5px;opacity:.65;line-height:1.35">Estos dispositivos se activarán siempre al usar SOS, incluso con Argus desarmado.</div>
               </div>
               
               <div>
@@ -2311,9 +2323,11 @@ class ArgusPanel extends HTMLElement {
   }
 
   _bindSOS() {
+    if (this._sosBound) return;
     const thumb = this.shadowRoot.getElementById('sos-thumb');
     const track = thumb && thumb.closest('.ios-slider-track');
-    if (!thumb || !track) return;
+    if (!thumb || !track || thumb._sosBound) return;
+    thumb._sosBound = true;
 
     let sliding = false, startX = 0, offsetX = 0;
     const maxSlide = () => Math.max(1, track.offsetWidth - thumb.offsetWidth - 12);
@@ -2363,6 +2377,7 @@ class ArgusPanel extends HTMLElement {
     thumb.addEventListener('pointermove', onPointerMove);
     thumb.addEventListener('pointerup', onPointerUp);
     thumb.addEventListener('pointercancel', onPointerUp);
+    this._sosBound = true;
   }
 
   async _init() {
@@ -2385,24 +2400,9 @@ class ArgusPanel extends HTMLElement {
     this.shadowRoot.getElementById('btn-undo-reset')?.addEventListener('click', () => this._undoResetConfig());
 
     this.shadowRoot.getElementById('btn-save-personalization-standalone')?.addEventListener('click', () => this._savePersonalization());
+    this.shadowRoot.getElementById('btn-select-sos-outputs')?.addEventListener('click', () => this._openModal('panic'));
 
-    try {
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
-      const callBtn = this.shadowRoot.getElementById('sos-call-btn');
-      if (callBtn) {
-          if (tz.includes('Europe') || tz.includes('Madrid') || tz.includes('Berlin') || tz.includes('Paris') || tz.includes('London')) {
-              callBtn.href = "tel:112";
-              callBtn.innerHTML = "📞 Llamar a Emergencias (112)";
-          } else if (tz.includes('Australia')) {
-              callBtn.href = "tel:000";
-              callBtn.innerHTML = "📞 Llamar a Emergencias (000)";
-          }
-          callBtn.addEventListener('click', (e) => {
-              e.preventDefault();
-              window.top.location.href = callBtn.href;
-          });
-      }
-    } catch(e) {}
+    this._configureEmergencyCall();
   }
 
   async _clearHistory() {
@@ -2623,6 +2623,8 @@ class ArgusPanel extends HTMLElement {
     this._ttsTargets   = dashboard.ui?.tts_targets   || [];
     this._users = dashboard.ui?.users || [];
     this._homeName = dashboard.ui?.home_name || '';
+    this._emergencyNumber = dashboard.ui?.emergency_number || '911';
+    this._panicOutputs = dashboard.ui?.panic_outputs || [];
     this._backgroundMode = dashboard.ui?.background_mode || 'weather';
     this._backgroundImages = dashboard.ui?.background_images || [];
     this._temperatureSource = dashboard.ui?.temperature_source || 'auto';
@@ -2638,6 +2640,10 @@ class ArgusPanel extends HTMLElement {
     this._populateTemperatureSources();
     const tempSel = this.shadowRoot.getElementById('temp-source-select-standalone');
     if (tempSel) tempSel.value = this._temperatureSource || 'auto';
+    const emergencyInput = this.shadowRoot.getElementById('emergency-number-input');
+    if (emergencyInput) emergencyInput.value = this._emergencyNumber;
+    this._renderSosOutputs();
+    this._configureEmergencyCall();
     
     const bgMode = this.shadowRoot.getElementById('bg-mode-select-standalone');
     if (bgMode) {
@@ -2913,6 +2919,7 @@ class ArgusPanel extends HTMLElement {
   }
 
   _renderEntries() {
+    this._sosBound = false;
     const el = this.shadowRoot.getElementById('entries');
     const globalStatusEl = this.shadowRoot.getElementById('global-status');
     const entries = this._dashboard?.entries || [];
@@ -2948,6 +2955,7 @@ class ArgusPanel extends HTMLElement {
       const live  = this._hass?.states[e.entity_id]?.state;
       const state = live || e.state || 'unavailable';
       const triggered = state === 'triggered';
+      const panicActive = Boolean(this._hass?.states?.[e.entity_id]?.attributes?.argus_panic_active);
       const fullHudLoc = this._hass?.config?.location_name || this._homeName || 'Hogar';
       const displayedTemperature = this._getDisplayedTemperature();
 
@@ -2981,7 +2989,7 @@ class ArgusPanel extends HTMLElement {
               <button class="liquid-btn btn-night ${state==='armed_night'?'active':''}" data-idx="${idx}" data-action="night">${t('btn_night')}</button>
               <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''}" data-idx="${idx}" data-action="vacation">${t('btn_vacation')}</button>
               <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg> <span>${t('btn_disarmed')}</span></button>
-              <button class="btn-sos" data-action="sos" data-idx="${idx}">${t('btn_sos')}</button>
+              <button class="btn-sos" data-action="${panicActive ? 'stop-sos' : 'sos'}" data-idx="${idx}">${panicActive ? '🛑 DETENER PÁNICO' : t('btn_sos')}</button>
             </div>
             <div class="entry-icon">
               ${this._getIntelligentSVG(state, weatherState, isNight, triggered)}
@@ -3003,7 +3011,7 @@ class ArgusPanel extends HTMLElement {
       `;
     });
 
-    el.querySelectorAll('button[data-action]:not([data-action="sos"])').forEach(btn =>
+    el.querySelectorAll('button[data-action]:not([data-action="sos"]):not([data-action="stop-sos"])').forEach(btn =>
       btn.addEventListener('click', ev => this._handleAction(ev.currentTarget.dataset.idx, ev.currentTarget.dataset.action))
     );
     
@@ -3013,6 +3021,9 @@ class ArgusPanel extends HTMLElement {
         const sosModal = this.shadowRoot.getElementById('sos-modal');
         if (sosModal) sosModal.classList.add('open');
       })
+    );
+    el.querySelectorAll('button[data-action="stop-sos"]').forEach(btn =>
+      btn.addEventListener('click', () => this._stopSOS(Number(btn.dataset.idx)))
     );
     el.querySelectorAll('button[data-fullscreen]').forEach(btn => {
       btn.addEventListener('click', ev => this._toggleFullscreen(ev.currentTarget.closest('.entry')));
@@ -4330,6 +4341,28 @@ class ArgusPanel extends HTMLElement {
     });
   }
 
+  _normaliseEmergencyNumber(value) {
+    const number = String(value || '').replace(/[^0-9+]/g, '');
+    return /^[+]?[0-9]{2,15}$/.test(number) ? number : '911';
+  }
+
+  _renderSosOutputs() {
+    const container = this.shadowRoot?.getElementById('sos-output-chips');
+    if (!container) return;
+    const outputs = this._panicOutputs || [];
+    container.innerHTML = outputs.length
+      ? outputs.map(id => `<span class="sensor-pill"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtml(this._hass?.states?.[id]?.attributes?.friendly_name || id)}</span></span>`).join('')
+      : '<div class="mode-sensor-none">Sin dispositivos seleccionados</div>';
+  }
+
+  _configureEmergencyCall() {
+    const callBtn = this.shadowRoot?.getElementById('sos-call-btn');
+    if (!callBtn) return;
+    const number = this._normaliseEmergencyNumber(this._emergencyNumber);
+    callBtn.href = `tel:${number}`;
+    callBtn.textContent = `📞 Llamar a Emergencias (${number})`;
+  }
+
   async _triggerSOS() {
     if (this._sosBusy) return;
     this._sosBusy = true;
@@ -4337,23 +4370,60 @@ class ArgusPanel extends HTMLElement {
     if (modal) modal.classList.remove('open');
     const targets = this._notifTargets || [];
     const loc = this._homeName || 'Mi Casa';
+    const emergencyNumber = this._normaliseEmergencyNumber(this._emergencyNumber);
     const idx = Number.isInteger(this._sosEntryIdx) ? this._sosEntryIdx : 0;
     const eid = this._dashboard?.entries?.[idx]?.entity_id;
     try {
       if (!this._hass || !eid) throw new Error('No hay una instancia de alarma disponible');
       await this._hass.callService('alarm_control_panel', 'alarm_trigger', { entity_id: eid });
       this._writeLog('sos', `SOS/Pánico activado en ${loc}`, this._hass.user?.name || 'Usuario');
-      targets.forEach(target => this._hass.callService('notify', target, {
-        message: '🚨 Botón SOS activado desde ' + loc + '. Revisa el estado de la alarma de inmediato.',
-        title: 'ARGUS — SOS / PÁNICO',
-        data: { push: { sound: 'alarm.caf', badge: 1 }, priority: 'high', ttl: 0 }
-      }).catch(() => {}));
+      if (window.confirm(`SOS activado. ¿Quieres llamar ahora a emergencias (${emergencyNumber})?`)) {
+        // A tel: URI is intentionally delegated to the device.  Phones/tablets
+        // can place the call; kiosks without a dialer keep the mobile alerts.
+        window.location.href = `tel:${emergencyNumber}`;
+      }
     } catch (err) {
       alert(`No se pudo activar el SOS: ${err?.message || err}`);
     } finally {
       this._sosEntryIdx = null;
       this._sosBusy = false;
     }
+  }
+
+  async _stopSOS(idx) {
+    const entry = this._dashboard?.entries?.[idx];
+    const live = entry && this._hass?.states?.[entry.entity_id];
+    const previous = live?.attributes?.panic_previous_state;
+    const restoreService = {
+      armed_home: 'alarm_arm_home', armed_away: 'alarm_arm_away',
+      armed_night: 'alarm_arm_night', armed_vacation: 'alarm_arm_vacation',
+      disarmed: 'alarm_disarm',
+    }[previous];
+    if (!entry?.entity_id || !restoreService) {
+      alert('No se pudo determinar el estado anterior del pánico. Desarma o rearma manualmente.');
+      return;
+    }
+    if (!confirm(`¿Detener el pánico y restaurar Argus a ${previous.replace('_', ' ')}?`)) return;
+
+    const restore = async (pin) => {
+      try {
+        await this._hass.callService('alarm_control_panel', restoreService, {
+          entity_id: entry.entity_id, ...(pin ? { code: pin } : {})
+        });
+        this._writeLog('sos_stopped', `Pánico detenido; restaurado a ${previous}`, this._hass.user?.name || 'Usuario');
+        await this._load();
+        return true;
+      } catch (err) {
+        const pinError = this.shadowRoot.getElementById('pin-error');
+        if (pinError) pinError.textContent = '❌ No se pudo detener el pánico';
+        else alert(`No se pudo detener el pánico: ${err?.message || err}`);
+        return false;
+      }
+    };
+
+    const pinConfigured = entry.pin_configured === true || (this._users || []).length > 0;
+    if (pinConfigured) this._showPinModal(restore);
+    else await restore(null);
   }
 
   _savePersonalization() {
@@ -4364,6 +4434,8 @@ class ArgusPanel extends HTMLElement {
     const status = this.shadowRoot.getElementById('personalization-status');
     const background_mode = this.shadowRoot.getElementById('bg-mode-select-standalone')?.value || 'weather';
     const temperature_source = this.shadowRoot.getElementById('temp-source-select-standalone')?.value || 'auto';
+    const emergency_number = this._normaliseEmergencyNumber(this.shadowRoot.getElementById('emergency-number-input')?.value);
+    const panic_outputs = this._panicOutputs || [];
 
     let panel_bg_file = '';
     const panel_bg_url = this.shadowRoot.getElementById('panel-bg-url-input')?.value || '';
@@ -4391,6 +4463,8 @@ class ArgusPanel extends HTMLElement {
         background_mode, 
         background_images: this._backgroundImages || [], 
         temperature_source,
+        emergency_number,
+        panic_outputs,
         panel_bg_file,
         panel_bg_sound,
         hub_bg_mode,
@@ -4399,6 +4473,8 @@ class ArgusPanel extends HTMLElement {
       });
       this._backgroundMode = background_mode;
       this._temperatureSource = temperature_source;
+      this._emergencyNumber = emergency_number;
+      this._panicOutputs = panic_outputs;
       this._panelBgFile = panel_bg_file;
       this._panelBgSound = panel_bg_sound;
       this._hubBgMode = selected_hub_bg_mode;
@@ -4410,6 +4486,9 @@ class ArgusPanel extends HTMLElement {
       this._ui.background_mode = background_mode;
       this._ui.background_images = this._backgroundImages || [];
       this._ui.temperature_source = temperature_source;
+      this._ui.emergency_number = emergency_number;
+      this._ui.panic_outputs = panic_outputs;
+      this._configureEmergencyCall();
       this._ui.panel_bg_file = panel_bg_file;
       this._ui.panel_bg_sound = panel_bg_sound;
       this._ui.hub_bg_mode = hub_bg_mode;
@@ -4688,7 +4767,7 @@ class ArgusPanel extends HTMLElement {
     const q = (this.shadowRoot.getElementById('selector-search').value || '').toLowerCase().trim();
     const INTRUSION_DC = ['door','window','motion','vibration','glass','opening','smoke','gas','tamper'];
     const items = this._available.filter(x => {
-      if (this._selectorTarget === 'siren') return ['siren','switch','light','fan','input_boolean','script'].includes(x.domain);
+      if (this._selectorTarget === 'siren' || this._selectorTarget === 'panic') return ['siren','switch','light','fan','input_boolean','script'].includes(x.domain);
       if (x.domain === 'lock') return true;
       if (x.domain === 'binary_sensor') {
         const dc = this._hass?.states?.[x.entity_id]?.attributes?.device_class || '';
@@ -4704,10 +4783,13 @@ class ArgusPanel extends HTMLElement {
     this._selectorTarget = type;
     const cfg = this._currentModeConfig();
     const _srcKey = type === 'sensor' ? 'sensors' : (type === 'bypass' ? 'bypassed_sensors' : 'sirens');
-    this._selected = Array.isArray(cfg[_srcKey]) ? [...cfg[_srcKey]] : [];
+    this._selected = type === 'panic'
+      ? [...(this._panicOutputs || [])]
+      : (Array.isArray(cfg[_srcKey]) ? [...cfg[_srcKey]] : []);
     const title = this.shadowRoot.getElementById('selector-title');
     if (type === 'sensor') title.textContent = this._t('sensor_section');
     else if (type === 'bypass') title.textContent = this._t('sensors_to_bypass');
+    else if (type === 'panic') title.textContent = '🚨 Acciones SOS';
     else title.textContent = this._t('siren_section');
     this.shadowRoot.getElementById('selector-search').value = '';
     this._renderSelector();
@@ -4729,7 +4811,7 @@ class ArgusPanel extends HTMLElement {
     // camera-linked motion sensors, and locks. Everything else is excluded.
     const INTRUSION_DC = ['door','window','motion','vibration','glass','opening','smoke','gas','tamper'];
     const items = this._available.filter(x => {
-      if (this._selectorTarget === 'siren') return ['siren','switch','light','fan','input_boolean','script'].includes(x.domain);
+      if (this._selectorTarget === 'siren' || this._selectorTarget === 'panic') return ['siren','switch','light','fan','input_boolean','script'].includes(x.domain);
       // sensor / bypass mode:
       if (x.domain === 'lock') return true;
       if (x.domain === 'binary_sensor') {
@@ -4788,6 +4870,12 @@ class ArgusPanel extends HTMLElement {
     // FIX A DEFINITIVO: leer cfg fresco, mutar, y escribir de vuelta
     // EXACTAMENTE en modes.__by_entity__[eid][mode] — la misma ruta que _currentModeConfig lee
     if (!this._ui) return;
+    if (this._selectorTarget === 'panic') {
+      this._panicOutputs = [...this._selected];
+      this._renderSosOutputs();
+      this._closeModal();
+      return;
+    }
     if (!this._ui.modes) this._ui.modes = {};
     if (!this._ui.modes.__by_entity__) this._ui.modes.__by_entity__ = {};
     let _eid = this._modeEntryId;

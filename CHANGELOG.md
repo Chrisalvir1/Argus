@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.8] - 2026-07-14
+
+### Added
+- SOS reversible con restauración automática al modo/estado anterior.
+- Selector de luces, sirenas, interruptores, ventiladores y scripts para la acción de pánico (SOS).
+- Número de emergencias configurable con envío de alertas móviles con botón de llamada directa.
+- Switch de pánico independiente por instancia exportable para HomeKit Bridge.
+
 ## [1.3.7] - 2026-07-14
 
 ### Security

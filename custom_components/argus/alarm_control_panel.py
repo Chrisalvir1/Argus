@@ -37,6 +37,7 @@ from homeassistant.helpers.restore_state import RestoreEntity
 
 from .const import (
     DOMAIN,
+    DATA_PANELS,
     SIGNAL_CONFIG_UPDATED,
     CONF_NAME,
     CONF_CODE,
@@ -93,7 +94,9 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Argus alarm panel from a config entry."""
-    async_add_entities([ArgusAlarmPanel(hass, config_entry)], update_before_add=True)
+    panel = ArgusAlarmPanel(hass, config_entry)
+    hass.data.setdefault(DOMAIN, {}).setdefault(DATA_PANELS, {})[config_entry.entry_id] = panel
+    async_add_entities([panel], update_before_add=True)
 
 
 
@@ -107,6 +110,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         | AlarmControlPanelEntityFeature.ARM_AWAY
         | AlarmControlPanelEntityFeature.ARM_NIGHT
         | AlarmControlPanelEntityFeature.ARM_VACATION
+        | AlarmControlPanelEntityFeature.TRIGGER
     )
 
     def __init__(self, hass: HomeAssistant, config_entry: ConfigEntry) -> None:
@@ -122,6 +126,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._trigger_listener = None
         self._arming_target = None
         self._triggered_mode: str | None = None  # modo activo al momento del disparo
+        self._panic_active = False
+        self._panic_previous_state: AlarmControlPanelState | None = None
 
         # Tracking
         self._unsub_sensors = None
@@ -213,6 +219,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             attrs["arm_lock_bounces"] = self._arm_lock_bounces
         if self._triggered_by:
             attrs["triggered_by"] = self._triggered_by
+        if self._panic_active:
+            attrs["argus_panic_active"] = True
+            if self._panic_previous_state:
+                attrs["panic_previous_state"] = self._panic_previous_state.value
         if self._alarm_state in (
             AlarmControlPanelState.ARMING,
             AlarmControlPanelState.PENDING,
@@ -579,6 +589,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self._mqtt_unsub()
         if self._unsub_smart_arming:
             self._unsub_smart_arming()
+        self.hass.data.get(DOMAIN, {}).get(DATA_PANELS, {}).pop(
+            self._config_entry.entry_id, None
+        )
         self._cancel_timers()
 
     def _cancel_timers(self):
@@ -668,6 +681,36 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         await self._async_siren(True)
         await self._async_mqtt_publish()
         self.hass.async_create_task(self._evaluate_automations("triggered", sensor=self._triggered_by))
+
+        if self._panic_active:
+            notif_targets = self._ui_config.get("notif_targets", [])
+            emergency_number = self._ui_config.get("emergency_number", "911")
+            loc = self._ui_config.get("home_name", "Mi Casa") or "Mi Casa"
+            for target in notif_targets:
+                try:
+                    await self.hass.services.async_call(
+                        "notify",
+                        target,
+                        {
+                            "message": f"🚨 Botón SOS activado desde {loc}. Revisa el estado de la alarma de inmediato.",
+                            "title": "ARGUS — SOS / PÁNICO",
+                            "data": {
+                                "push": {"sound": "alarm.caf", "badge": 1},
+                                "priority": "high",
+                                "ttl": 0,
+                                "actions": [
+                                    {
+                                        "action": "URI",
+                                        "title": f"Llamar al {emergency_number}",
+                                        "uri": f"tel:{emergency_number}",
+                                    }
+                                ],
+                            },
+                        },
+                        blocking=False,
+                    )
+                except Exception as e:
+                    _LOGGER.warning("Argus: SOS notification error for %s: %s", target, e)
         # Persistent notification in HA
         self.hass.components.persistent_notification.async_create(
             f"\u26a0\ufe0f Sensor: **{self._triggered_by or 'desconocido'}**\n\nModo activo: `{self._alarm_state.value}`",
@@ -694,9 +737,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             user="Argus"
         )
 
-        # Auto-reset after trigger_time
+        # An SOS is ended deliberately by the user.  It must never silently
+        # disarm or return the system to normal because a timer expired.
         _tt = self._trigger_time if isinstance(self._trigger_time, int) else 0
-        if _tt > 0:
+        if _tt > 0 and not self._panic_active:
             self._trigger_listener = async_call_later(
                 self.hass, _tt, self._async_reset_triggered
             )
@@ -735,6 +779,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
           - Cualquier otro → sin modo, solo fallback global
         """
         modes = self._ui_config.get("modes", {})
+
+        # SOS can have its own output profile, independent from the active
+        # armed mode. This also makes panic useful while Argus is disarmed.
+        if self._panic_active:
+            panic_outputs = self._ui_config.get("panic_outputs", [])
+            if isinstance(panic_outputs, list) and panic_outputs:
+                return panic_outputs
 
         # Resolver mode_key según estado actual
         if self._alarm_state in ARMED_STATES:
@@ -927,6 +978,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         self._cancel_timers()
         await self._async_siren(False)
+        self._panic_active = False
+        self._panic_previous_state = None
         self._triggered_mode = None
         self._arm_lock_until = 0.0
         self._alarm_state = AlarmControlPanelState.DISARMED
@@ -939,6 +992,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     async def _async_arm(self, target: AlarmControlPanelState, code=None) -> None:
         import time as _time
+        restoring_panic = (
+            self._panic_active and target == self._panic_previous_state
+        )
 
         # ── ARM-LOCK v2 (Anti-Rebote HomeKit) ──────────────────────────
         # Cuando Argus está en Away/Night/Vacation y algo externo (HomeKit
@@ -970,7 +1026,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         if self._alarm_state == target:
             return
 
-        if self._code_arm_required and not self._validate_code(code):
+        if self._code_arm_required and not restoring_panic and not self._validate_code(code):
             _LOGGER.warning("Argus: Arm rejected — invalid code")
             await async_append_audit_log(self.hass, "arm_rejected", f"Invalid code for {target.value}", user="Argus")
             return
@@ -999,7 +1055,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 or mode_config.get("requireClosed")
                 or False
             )
-            if req_closed:
+            if req_closed and not restoring_panic:
                 sensors = mode_config.get("sensors") or []
                 # Excluir sensores bypasseados — igual que _sensors_for_state
                 # FIX (v0.9.28 Bug #2): sin este filtro los bypassed bloqueaban
@@ -1048,6 +1104,15 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         self._cancel_timers()
 
+        # Restoring an armed state from the Panic stop action must turn off the
+        # selected sirens/lights, then preserve the user's prior armed mode.
+        if self._panic_active:
+            await self._async_siren(False)
+            self._panic_active = False
+            self._panic_previous_state = None
+            self._triggered_by = None
+            self._triggered_mode = None
+
         # v0.9.60: TODOS los cambios de modo son INSTANTÁNEOS.
         # Sin ARMING intermedio, sin delays. El usuario lo pidió explícitamente.
         self._alarm_state = target
@@ -1079,4 +1144,52 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         await self._async_arm(AlarmControlPanelState.ARMED_VACATION, code)
 
     async def async_alarm_trigger(self, code=None) -> None:
+        """Trigger the alarm from an explicit SOS/manual panic action."""
+        if not self._panic_active:
+            if self._alarm_state in ARMED_STATES or self._alarm_state == AlarmControlPanelState.DISARMED:
+                self._panic_previous_state = self._alarm_state
+            elif self._triggered_mode:
+                mode_map = {
+                    "home": AlarmControlPanelState.ARMED_HOME,
+                    "away": AlarmControlPanelState.ARMED_AWAY,
+                    "night": AlarmControlPanelState.ARMED_NIGHT,
+                    "vacation": AlarmControlPanelState.ARMED_VACATION,
+                }
+                self._panic_previous_state = mode_map.get(self._triggered_mode, AlarmControlPanelState.DISARMED)
+            else:
+                self._panic_previous_state = AlarmControlPanelState.DISARMED
+            self._panic_active = True
+        self._triggered_by = "SOS / manual panic"
         await self._async_trigger()
+
+    async def async_stop_panic(self) -> None:
+        """Stop an active SOS and restore the state captured before it started."""
+        if not self._panic_active:
+            return
+        previous_state = self._panic_previous_state or AlarmControlPanelState.DISARMED
+        self._cancel_timers()
+        await self._async_siren(False)
+        self._panic_active = False
+        self._panic_previous_state = None
+        self._triggered_mode = None
+        self._triggered_by = None
+        self._alarm_state = previous_state
+        self.async_write_ha_state()
+        await self._async_mqtt_publish()
+        if previous_state in ARMED_STATES:
+            self.hass.async_create_task(
+                self._evaluate_automations("armed", target=previous_state)
+            )
+        await async_append_audit_log(
+            self.hass,
+            "panic_stopped",
+            f"Pánico detenido; restaurado a {_MODE_LABELS.get(previous_state.value, previous_state.value)}",
+            user=await self._get_context_user(),
+        )
+
+    @callback
+    def async_write_ha_state(self) -> None:
+        """Write entity state and send a dispatcher signal."""
+        super().async_write_ha_state()
+        from homeassistant.helpers.dispatcher import async_dispatcher_send
+        async_dispatcher_send(self.hass, f"{DOMAIN}_state_changed")

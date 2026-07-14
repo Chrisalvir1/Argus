@@ -1,11 +1,12 @@
-"""Constants for the Argus Home Hub v1.3.7"""
+"""Constants for the Argus Home Hub v1.3.8"""
 from homeassistant.const import CONF_NAME, CONF_CODE
 
 DOMAIN = "argus"
 NAME = "Argus Home Hub"
-VERSION = "1.3.7"
+VERSION = "1.3.8"
 
-PLATFORMS = ["alarm_control_panel"]
+PLATFORMS = ["alarm_control_panel", "switch"]
+DATA_PANELS = "panels"
 
 # Config keys (custom - NOT from homeassistant.const)
 CONF_ARMING_TIME = "arming_time"
