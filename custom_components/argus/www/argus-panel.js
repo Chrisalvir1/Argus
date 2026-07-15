@@ -692,6 +692,13 @@ Object.assign(TEXTS.pt, { entry_sensors:'Sensores com atraso de entrada', select
 Object.assign(TEXTS.it, { entry_sensors:'Sensori con ritardo di ingresso', select_entry_sensors:'Seleziona sensori di ingresso' });
 Object.assign(TEXTS.zh, { entry_sensors:'具有进入延迟的传感器', select_entry_sensors:'选择进入传感器' });
 Object.assign(TEXTS.ru, { entry_sensors:'Датчики с задержкой входа', select_entry_sensors:'Выбрать датчики входа' });
+Object.assign(TEXTS.es, { entry_delay_toggle:'Retraso de entrada (⏳) o instantáneo (⚡)', saved:'✓ Guardado correctamente', pin_mismatch:'❌ El nuevo PIN no coincide' });
+Object.assign(TEXTS.en, { entry_delay_toggle:'Entry delay (⏳) or instant (⚡)', saved:'✓ Saved successfully', pin_mismatch:'❌ New PIN does not match' });
+Object.assign(TEXTS.fr, { entry_delay_toggle:'Délai d’entrée (⏳) ou instantané (⚡)', saved:'✓ Enregistré', pin_mismatch:'❌ Le nouveau code PIN ne correspond pas' });
+Object.assign(TEXTS.pt, { entry_delay_toggle:'Atraso de entrada (⏳) ou instantâneo (⚡)', saved:'✓ Salvo com sucesso', pin_mismatch:'❌ O novo PIN não coincide' });
+Object.assign(TEXTS.it, { entry_delay_toggle:'Ritardo di ingresso (⏳) o istantaneo (⚡)', saved:'✓ Salvato correttamente', pin_mismatch:'❌ Il nuovo PIN non corrisponde' });
+Object.assign(TEXTS.zh, { entry_delay_toggle:'进入延迟 (⏳) 或即时 (⚡)', saved:'✓ 已成功保存', pin_mismatch:'❌ 新 PIN 不匹配' });
+Object.assign(TEXTS.ru, { entry_delay_toggle:'Задержка входа (⏳) или мгновенно (⚡)', saved:'✓ Успешно сохранено', pin_mismatch:'❌ Новый PIN-код не совпадает' });
 
 /* ── Template ─────────────────────────────────────────────────────────── */
 const _tmpl = document.createElement('template');
@@ -2103,10 +2110,10 @@ class ArgusPanel extends HTMLElement {
               .includes(hass.states[sId]?.state))
             .map(sId => hass.states[sId]?.attributes?.friendly_name || sId);
           const detail = openSensors.length
-            ? `Sensores: ${openSensors.join(', ')}`
-            : 'Activación automática';
+            ? `${this._t('log_sensor')}: ${openSensors.join(', ')}`
+            : this._t('log_detail_triggered');
           this._writeLog('triggered', detail, 'Argus');
-          this._sendHaNotif('🚨 ¡ALARMA DISPARADA!', detail);
+          this._sendHaNotif(`🚨 ${this._t('triggered')}`, detail);
           // Re-render mode view para que las píldoras parpadeen
           this._renderModeView();
         }
@@ -3583,7 +3590,7 @@ class ArgusPanel extends HTMLElement {
     : ''; 
     
     const delayIcon = type === 'sensor' ? `
-    <button class="icon-btn ${isEntry ? 'active' : ''}" data-toggle-delay="${entityId}" title="Retraso de entrada (⏳) o Instantáneo (⚡)">
+    <button class="icon-btn ${isEntry ? 'active' : ''}" data-toggle-delay="${entityId}" title="${escapeHtml(this._t('entry_delay_toggle'))}">
     ${isEntry ? '⏳' : '⚡'}
     </button>` : ''; 
 
@@ -3655,10 +3662,10 @@ class ArgusPanel extends HTMLElement {
           mode: this._mode,
           config: cfg,
         });
-        if (status) { status.textContent = '✓ Guardado'; status.className = 'status ok show'; }
+        if (status) { status.textContent = this._t('saved'); status.className = 'status ok show'; }
         setTimeout(() => { if (status) { status.textContent = ''; status.className = 'status'; } }, 3000);
       } catch (err) {
-        if (status) { status.textContent = '✗ ' + (err.message || 'Error'); status.className = 'status err show'; }
+        if (status) { status.textContent = '✗ ' + (err.message || this._t('generic_error').replace(': {error}', '')); status.className = 'status err show'; }
       }
     });
   }
@@ -3960,7 +3967,7 @@ class ArgusPanel extends HTMLElement {
 
   async _showLivePhotoDialog(file, onImage, onVideo) {
     // Show a simple confirm dialog asking what to do with .mov files
-    const choice = confirm(`"${file.name}"\n\n¿Usar como imagen estática (OK) o como video animado (Cancelar)?\n\n• OK → Imagen estática\n• Cancelar → Video animado`);
+    const choice = confirm(this._format('file_choice', { file: file.name }));
     if (choice) {
       await onImage();
     } else {
@@ -4486,11 +4493,11 @@ class ArgusPanel extends HTMLElement {
       const btn = this.shadowRoot.getElementById('btn-save-personalization-standalone');
       if (btn) {
         const oldText = btn.textContent;
-        btn.textContent = '✓ Guardado Correctamente';
+        btn.textContent = this._t('saved');
         btn.style.background = '#43a047';
         setTimeout(() => { btn.textContent = oldText; btn.style.background = ''; }, 3000);
       }
-    } catch (e) { alert('Error: ' + e.message); }
+    } catch (e) { alert(this._format('generic_error', { error: e.message })); }
   }
 
   /* ── Home Name management ────────────────────────────────────────── */
@@ -4523,7 +4530,7 @@ class ArgusPanel extends HTMLElement {
       this._updateHomeNameDisplay();
       this._renderEntries();
       setTimeout(() => this._closeHomeNameModal(), 800);
-    } catch (e) { alert('Error: ' + e.message); }
+    } catch (e) { alert(this._format('generic_error', { error: e.message })); }
   }
 
   /* ── PIN management ──────────────────────────────────────────────── */
@@ -4545,10 +4552,10 @@ class ArgusPanel extends HTMLElement {
     
     if (p1 !== p2) { 
       if (status) {
-        status.textContent = '❌ PIN nuevo no coincide'; 
+        status.textContent = this._t('pin_mismatch');
         status.className = 'status err'; 
       } else {
-        alert('❌ PIN nuevo no coincide');
+        alert(this._t('pin_mismatch'));
       }
       return; 
     }
@@ -4582,7 +4589,7 @@ class ArgusPanel extends HTMLElement {
     
     // 1. Verificar si el usuario es administrador en HA
     const isAdmin = this._hass?.user?.is_admin === true;
-    const currentUser = this._hass?.user?.name || 'Usuario';
+    const currentUser = this._hass?.user?.name || this._t('user_default');
     
     if (!isAdmin) {
       const errMsg = this._t('pin_reset_admin_only');
@@ -4627,7 +4634,7 @@ class ArgusPanel extends HTMLElement {
           this._load();
         }, 1200);
       } catch (e) {
-        const errMsg = 'Error: ' + e.message;
+        const errMsg = this._format('generic_error', { error: e.message });
         if (status) {
           status.textContent = errMsg;
           status.className = 'status err';
@@ -4914,7 +4921,7 @@ class ArgusPanel extends HTMLElement {
           await this._hass.callService('alarm_control_panel', 'alarm_disarm', 
             { entity_id: e.entity_id, ...(pin ? { code: pin } : {}) }); 
           this._writeLog('disarm', this._t('manual_disarm'), currentUser); 
-          this._sendHaNotif(`🔓 ${this._t('log_disarmed')}`, `${currentUser} desarmó el sistema.`); 
+          this._sendHaNotif(`🔓 ${this._t('log_disarmed')}`, this._format('notification_disarmed', { user: currentUser }));
           // FIX v0.9.32 — Bug 1: al desarmar, forzar re-render inmediato para
           // quitar la clase siren-active/triggered-sensor de todas las píldoras.
           setTimeout(() => { this._renderModeView(); this._load(); }, 300);
@@ -4960,7 +4967,7 @@ class ArgusPanel extends HTMLElement {
       await this._hass.callService('alarm_control_panel', service, { entity_id: e.entity_id });
       const modeTxt = modeLabels[action] || action;
       this._writeLog('arm', `${this._t('manual_arm')} (${modeTxt})`, currentUser);
-      this._sendHaNotif(`🔒 ${this._t('log_armed')} — ${modeTxt}`, `${currentUser} activó el modo ${modeTxt}.`);
+      this._sendHaNotif(`🔒 ${this._t('log_armed')} — ${modeTxt}`, this._format('notification_armed', { user: currentUser, mode: modeTxt }));
       setTimeout(() => this._load(), 800);
     } catch (err) {
       // FIX-5: mostrar error real del backend al usuario
@@ -4973,14 +4980,13 @@ class ArgusPanel extends HTMLElement {
   _showArmBlockedAlert(openSensors = [], customMsg = '') {
     // FIX-5: alerta rica con motivo real
     if (customMsg) {
-      alert('🚨 No se pudo realizar la acción\n\n' + customMsg);
+      alert(`🚨 ${this._t('action_failed')}\n\n${customMsg}`);
       return;
     }
     const lines = openSensors.map(n => `  • ${n}`).join('\n');
     alert(
-      `🚨 No se puede armar\n\n` +
-      `Los siguientes sensores están abiertos:\n${lines}\n\n` +
-      `Ciérralos antes de armar, o activa "Omitir" en el sensor.`
+      `🚨 ${this._t('cannot_arm')}\n\n` +
+      this._format('open_sensors_explain', { names: lines })
     );
   }
 

@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.1] - 2026-07-14
+
+### Fixed
+- Corrección de textos dinámicos fijos en la interfaz que permanecían en español (mensajes de confirmación de guardado, error de PIN no coincidente y notificaciones del sistema de armado/desarmado) para los siete idiomas.
+
+## [1.4.0] - 2026-07-14
+
+### Added
+- Internacionalización completa y sincronización en los 7 idiomas (español, inglés, francés, portugués, italiano, chino y ruso) para toda la experiencia de Argus (panel, modos, usuarios, notificaciones y diálogos de configuración/opciones).
+- Configuración opcional "Usar idioma de Home Assistant" en el selector.
+- Formateo de fechas y horas locales según el idioma seleccionado.
+- Tiempos de armado reales (`arming`), cancelación de armado al desarmar, y retardo de entrada por sensores configurables por modo.
+- Integración dinámica e inmediata de MQTT reactivo con Broker topic de comandos `argus/alarm/set`, comandos JSON o plain text y control seguro de conexión.
+
 ## [1.3.9] - 2026-07-14
 
 ### Changed

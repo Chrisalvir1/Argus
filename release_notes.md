@@ -1,3 +1,34 @@
+## Argus v1.4.1 — Correcciones finales de idioma en la interfaz
+
+### 🔥 Lo nuevo en esta versión
+
+- **Traducción Completa de Textos Dinámicos:** Se corrigieron textos dinámicos fijos (como la confirmación de guardado, error de PIN no coincidente y notificaciones del sistema de armado/desarmado) para que se muestren en el idioma seleccionado por el usuario en lugar de permanecer en español.
+- **Sincronización en 7 Idiomas:** Interfaz completamente localizada en español, inglés, francés, portugués, italiano, chino y ruso.
+
+---
+
+### Versión 1.4.1 — by Antigravity AI
+
+---
+
+## Argus v1.4.0 — Localización Completa, Temporizadores Reales y MQTT Reactivo
+
+### 🔥 Lo nuevo en esta versión
+
+- **Internacionalización Completa (i18n):** Sincronización de los 7 idiomas admitidos en toda la interfaz de Argus, incluyendo el panel, modos de seguridad, SOS, historial de actividad, configuraciones, mensajes y modales.
+- **Opción "Usar idioma de Home Assistant":** Sigue dinámicamente el idioma configurado en tu servidor de Home Assistant.
+- **Formateo de Fechas/Horas Localizadas:** Formateo nativo y automático de las marcas de tiempo según el locale del idioma seleccionado.
+- **Modos y Temporizadores Reales:** Los retardos de armado (`arming`) ahora ocurren en tiempo real y cambian correctamente el estado del panel. Cancelación del retardo al desarmar.
+- **Retardo de entrada configurable por Sensores:** Permite designar qué sensores activan el delay de entrada por modo, disparando la alarma de forma instantánea ante cualquier otro sensor.
+- **MQTT Integrado e Inmediato:** Suscripción al topic `argus/alarm/set` para recibir comandos JSON o texto plano, y publicación del estado actual inmediatamente con persistencia en `argus/alarm/state` en cada transición.
+- **Logs Claros de Broker no Disponible:** En caso de que la integración MQTT no esté configurada o no haya broker activo, se registra un error amigable en el log de Home Assistant sin romper la inicialización de Argus.
+
+---
+
+### Versión 1.4.0 — by Antigravity AI
+
+---
+
 ## Argus v0.9.10 — Interfaz Premium y Logs Inteligentes
 
 ### 🔥 Lo nuevo en esta versión
