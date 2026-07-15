@@ -22,8 +22,8 @@ async def async_setup_entry(
 class ArgusPanicSwitch(SwitchEntity):
     """Turn on to activate panic; turn off to restore the previous Argus state."""
 
-    _attr_has_entity_name = True
-    _attr_name = "Panic"
+    _attr_has_entity_name = False
+    _attr_name = "Argus Panic"
     _attr_icon = "mdi:alarm-light"
 
     def __init__(self, hass: HomeAssistant, config_entry: ConfigEntry) -> None:

@@ -22,6 +22,7 @@ from homeassistant.components.alarm_control_panel import (
     AlarmControlPanelState,
     CodeFormat,
 )
+from homeassistant.components import persistent_notification
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import STATE_ON
 from homeassistant.core import HomeAssistant, callback
@@ -415,7 +416,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         if all_away:
             if not getattr(self, "_smart_arming_suggested", False):
                 self._smart_arming_suggested = True
-                self.hass.components.persistent_notification.async_create(
+                persistent_notification.async_create(
+                    self.hass,
                     "Todos parecen haber salido de casa, pero la alarma sigue desarmada. ¿Deseas armar Argus?",
                     title="💡 Sugerencia Inteligente Argus AI",
                     notification_id="argus_smart_arming"
@@ -712,11 +714,20 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 except Exception as e:
                     _LOGGER.warning("Argus: SOS notification error for %s: %s", target, e)
         # Persistent notification in HA
-        self.hass.components.persistent_notification.async_create(
-            f"\u26a0\ufe0f Sensor: **{self._triggered_by or 'desconocido'}**\n\nModo activo: `{self._alarm_state.value}`",
-            title="\U0001f6a8 Argus \u2014 Alarma Activada",
-            notification_id="argus_triggered",
-        )
+        if self._panic_active:
+            persistent_notification.async_create(
+                self.hass,
+                "🚨 Botón SOS activado. Revisa el estado de la alarma de inmediato.",
+                title="🚨 Argus — SOS / PÁNICO",
+                notification_id="argus_triggered",
+            )
+        else:
+            persistent_notification.async_create(
+                self.hass,
+                f"⚠️ Sensor: **{self._triggered_by or 'desconocido'}**\n\nModo activo: `{self._alarm_state.value}`",
+                title="🚨 Argus — Alarma Activada",
+                notification_id="argus_triggered",
+            )
         sensor_name = "desconocido"
         if self._triggered_by:
             state_obj = self.hass.states.get(self._triggered_by)
@@ -978,6 +989,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         self._cancel_timers()
         await self._async_siren(False)
+        persistent_notification.async_dismiss(self.hass, "argus_triggered")
         self._panic_active = False
         self._panic_previous_state = None
         self._triggered_mode = None
@@ -1081,7 +1093,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                         self.hass, "arm_rejected", msg, user="Argus"
                     )
                     # Persistent notification → aparece en el panel de HA
-                    self.hass.components.persistent_notification.async_create(
+                    persistent_notification.async_create(
+                        self.hass,
                         title="🔒 Argus — No se pudo armar",
                         message=(
                             "El sistema **no se armó** porque los siguientes "
@@ -1169,6 +1182,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         previous_state = self._panic_previous_state or AlarmControlPanelState.DISARMED
         self._cancel_timers()
         await self._async_siren(False)
+        persistent_notification.async_dismiss(self.hass, "argus_triggered")
         self._panic_active = False
         self._panic_previous_state = None
         self._triggered_mode = None

@@ -5,7 +5,7 @@
 
   **El Sistema de Seguridad Premium para Home Assistant**
 
-  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.3.8-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
+  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.3.9-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
   [![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)](https://www.home-assistant.io/)
   [![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)](https://hacs.xyz/)
   [![GitHub stars](https://img.shields.io/github/stars/Chrisalvir1/Argus?style=social)](https://github.com/Chrisalvir1/Argus/stargazers)
@@ -21,15 +21,17 @@
 
 ---
 
-## ✨ Novedades y Correcciones Recientes (v1.3.8)
+## ✨ Novedades y Correcciones Recientes (v1.3.9)
 
-¡SOS reversible con salidas configurables, número de emergencias y switch de pánico independiente para HomeKit!
+¡SOS pulido, Argus Panic y UI Liquid Glass!
 
 **Cambios y Características Nuevas:**
-- **SOS Reversible**: El pánico se puede detener retornando Argus automáticamente al estado anterior.
-- **Acciones SOS Configurables**: Selector de luces, sirenas, interruptores, ventiladores y scripts dedicados para activarse durante SOS, incluso si la alarma está desarmada.
-- **Llamadas y Alertas de Emergencia**: Número de emergencias configurable (911 por defecto) con notificaciones móviles accionables que permiten llamar directamente.
-- **Switch de Pánico Externo**: Plataforma `switch` expuesta por instancia de Argus para ser integrada e independiente de la entidad de alarma en HomeKit Bridge.
+- **Argus Panic**: Entidad switch de pánico renombrada e independiente.
+- **Notificaciones SOS corregidas**: Gestión limpia del ciclo de notificaciones persistentes en disparo y desarme.
+- **Personalización Estética Optimizada**: Rediseño responsivo en columnas balanceadas para eliminar espacios vacíos.
+- **Controles Unificados**: Entradas y selects unificados bajo diseño Liquid Glass redondeado con transiciones de foco fluidas.
+- **Limpieza de HomeKit & Matter**: Eliminación del bloque de emparejamiento no verificable para mantener una UI limpia e íntegra.
+- **Animaciones Premium**: Animaciones suaves de rebote y gota para focos e interacciones de modales.
 
 ---
 

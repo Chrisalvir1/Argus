@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.9] - 2026-07-14
+
+### Changed
+- Renombrada la entidad de pánico a `Argus Panic`.
+- Corrección de notificaciones persistentes en disparo y restauración de SOS.
+- Rediseño de la personalización estética para eliminar espacios vacíos en pantallas responsivas.
+- Unificación de controles del panel con estilo de vidrio redondeado y transiciones fluidas de foco.
+- Eliminación del bloque informativo HomeKit & Matter por falta de confiabilidad del estado de emparejamiento.
+
 ## [1.3.8] - 2026-07-14
 
 ### Added

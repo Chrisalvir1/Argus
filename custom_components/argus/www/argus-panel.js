@@ -1117,8 +1117,7 @@ _tmpl.innerHTML = `
   button.ghost:hover{background:rgba(255, 255, 255, 0.1)}
   :host([argus-dark-mode="false"]) button.ghost { background:rgba(0,0,0,0.03); border-color:rgba(0,0,0,0.08); }
   :host([argus-dark-mode="false"]) button.ghost:hover { background:rgba(0,0,0,0.06); }
-  .glass-control{width:100%;padding:9px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.08);color:var(--primary-text-color);backdrop-filter:blur(14px) saturate(130%);-webkit-backdrop-filter:blur(14px) saturate(130%);box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 6px 18px rgba(0,0,0,.10);font:700 12px/1.2 'Outfit',Inter,system-ui,sans-serif;outline:none}
-  :host([argus-dark-mode="false"]) .glass-control{background:rgba(255,255,255,.52);border-color:rgba(0,0,0,.10)}
+
   
   /* FS button */
   .fs-btn{background:rgba(255,255,255,0.05);padding:8px;border-radius:10px;font-size:16px}
@@ -1160,8 +1159,38 @@ _tmpl.innerHTML = `
   /* Triggered box */
   .trig-box{padding:12px 14px;border-radius:14px;background:rgba(229,57,53,.08);border:1px dashed var(--error-color,#e53935);font-size:12px;font-weight:600;color:var(--error-color,#e53935)}
   /* inputs */
-  input[type="text"],input[type="password"],input[type="number"],input[type="search"],select{width:100%;padding:10px 14px;border-radius:12px;border:1px solid var(--input-border, rgba(255,255,255,0.08));background:var(--input-bg, rgba(255,255,255,0.03));color:var(--primary-text-color);font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s;display:block}
-  input[type="text"]:focus,input[type="password"]:focus,input[type="number"]:focus,input[type="search"]:focus,select:focus{border-color:var(--primary-color,#007aff);box-shadow:0 0 0 3px rgba(0, 122, 255, 0.15)}
+  input[type="text"], input[type="password"], input[type="number"], input[type="search"], select, input[type="datetime-local"], .glass-control {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.055));
+    color: var(--primary-text-color);
+    backdrop-filter: blur(18px) saturate(145%);
+    -webkit-backdrop-filter: blur(18px) saturate(145%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 8px 22px rgba(0, 0, 0, 0.12);
+    font: 700 13px/1.2 'Outfit', Inter, system-ui, sans-serif;
+    outline: none;
+    transition: transform 0.34s cubic-bezier(0.18, 0.89, 0.32, 1.32), border-color 0.22s, box-shadow 0.22s;
+    display: block;
+    box-sizing: border-box;
+  }
+  input[type="text"]:focus, input[type="password"]:focus, input[type="number"]:focus, input[type="search"]:focus, select:focus, input[type="datetime-local"]:focus, .glass-control:focus {
+    transform: scale(1.018);
+    border-color: rgba(112, 188, 255, 0.78);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.23), 0 0 0 4px rgba(0, 122, 255, 0.14), 0 10px 28px rgba(0, 0, 0, 0.16);
+  }
+  :host([argus-dark-mode="false"]) input[type="text"],
+  :host([argus-dark-mode="false"]) input[type="password"],
+  :host([argus-dark-mode="false"]) input[type="number"],
+  :host([argus-dark-mode="false"]) input[type="search"],
+  :host([argus-dark-mode="false"]) select,
+  :host([argus-dark-mode="false"]) input[type="datetime-local"],
+  :host([argus-dark-mode="false"]) .glass-control {
+    background: rgba(255, 255, 255, 0.52);
+    border-color: rgba(0, 0, 0, 0.10);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 6px 16px rgba(0, 0, 0, 0.05);
+  }
   /* search */
   .search-wrap{display:flex;gap:10px;align-items:center}
   .search-wrap input{flex:1;min-width:0}
@@ -1198,12 +1227,34 @@ _tmpl.innerHTML = `
     display: grid;
     gap: 16px;
   }
-  .personalize-section select,
-  .personalize-section input[type="text"] {
-    background: var(--input-bg-darker, rgba(0, 0, 0, 0.25));
-    border: 1px solid var(--input-border-darker, rgba(255, 255, 255, 0.12));
-    color: inherit;
+  .personalize-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:start}
+  .personalize-column{display:flex;flex-direction:column;gap:14px;min-width:0}
+  .sos-configuration {
+    padding: 18px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 59, 48, 0.25);
+    background: linear-gradient(135deg, rgba(255, 59, 48, 0.12), rgba(255, 255, 255, 0.02));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 12px 28px rgba(255, 59, 48, 0.06), 0 8px 20px rgba(0, 0, 0, 0.12);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
+  .sos-configuration:hover {
+    transform: translateY(-2px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 16px 36px rgba(255, 59, 48, 0.10), 0 12px 24px rgba(0, 0, 0, 0.16);
+  }
+  :host([argus-dark-mode="false"]) .sos-configuration {
+    border-color: rgba(255, 59, 48, 0.3);
+    background: linear-gradient(135deg, rgba(255, 59, 48, 0.08), rgba(0, 0, 0, 0.01));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 10px 24px rgba(255, 59, 48, 0.05);
+  }
+  #sos-output-chips .sensor-pill{background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.06));border-color:rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 5px 14px rgba(0,0,0,.10)}
+  .background-custom-inputs{flex-direction:column;gap:8px;background:rgba(0,0,0,.15);padding:12px;border-radius:18px;border:1px solid rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+  .modal-back.open .modal,
+  .lang-modal-back.open .lang-modal-card,
+  .ios-confirm-backdrop.open .ios-confirm-card {
+    animation: liquidDropIn .48s cubic-bezier(.16,1.24,.32,1) both;
+  }
+  @keyframes liquidDropIn{0%{opacity:0;transform:translateY(18px) scale(.91);filter:blur(5px)}65%{opacity:1;transform:translateY(-3px) scale(1.018);filter:blur(0)}100%{transform:translateY(0) scale(1)}}
+  @media(max-width:1080px){.personalize-grid{grid-template-columns:1fr}.personalize-section{padding:14px}.sos-configuration{padding:14px;border-radius:24px}}
   /* ── Weather Animated Backgrounds ────────────────────────────────── */
   .wx{position:absolute;inset:0;overflow:hidden;border-radius:inherit;z-index:1}
   .wx-sunny{background:linear-gradient(175deg,#0055cc 0%,#1976d2 25%,#42a5f5 55%,#b3e5fc 100%)}
@@ -1546,13 +1597,48 @@ _tmpl.innerHTML = `
             </div>
           </div>
           
-          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:20px;">
-            <!-- Column 1: Nombre y Fondo para Panel -->
-            <div style="display:flex; flex-direction:column; gap:12px;">
+          <div class="personalize-grid">
+            <!-- Column 1: Nombre y Fondos -->
+            <div class="personalize-column">
               <div>
                 <div class="setting-label" id="lbl-home-name-hdr" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6;">Nombre del Hogar</div>
                 <div id="lbl-home-name-prominent" style="font-size:18px;font-weight:900;margin-top:2px">Mi Casa</div>
               </div>
+              <div>
+                <div class="setting-label" id="lbl-panel-bg-title" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">Fondo para Panel</div>
+                <select id="bg-mode-select-standalone" class="glass-control"></select>
+              </div>
+              <div id="panel-custom-bg-inputs" class="background-custom-inputs" style="display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+                  <span id="lbl-panel-bg-upload" style="font-size:11px; opacity:0.8;">Cargar archivo:</span>
+                  <input type="file" id="panel-bg-file-input" accept="image/*,video/mp4,video/webm,video/quicktime,.heic,.heif" style="font-size:10px; max-width:180px;">
+                </div>
+                <div style="font-size:10px; opacity:0.5; text-align:right;" id="bg-file-help"></div>
+                <input type="text" id="panel-bg-url-input" class="glass-control" placeholder="URL del fondo...">
+                <label id="lbl-panel-bg-sound" style="display:none; align-items:center; gap:8px; font-size:11px; cursor:pointer;">
+                  <input type="checkbox" id="chk-panel-bg-sound"> <span id="s-panel-bg-sound-lbl">Sonido de video</span>
+                </label>
+              </div>
+              <div>
+                <div class="setting-label" id="lbl-hub-bg-title" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">Fondo Argus</div>
+                <select id="hub-bg-mode-select" class="glass-control"></select>
+              </div>
+              <!-- Argus Background Custom Inputs (shown dynamically) -->
+              <div id="hub-custom-bg-inputs" class="background-custom-inputs" style="display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+                  <span id="lbl-hub-bg-upload" style="font-size:11px; opacity:0.8;">Cargar archivo:</span>
+                  <input type="file" id="hub-bg-file-input" accept="image/*,video/mp4,video/webm,video/quicktime,.heic,.heif" style="font-size:10px; max-width:180px;">
+                </div>
+                <div style="font-size:10px; opacity:0.5; text-align:right;" id="hub-file-help"></div>
+                <input type="text" id="hub-bg-url-input" class="glass-control" placeholder="URL del fondo...">
+                <label id="lbl-hub-bg-sound" style="display:none; align-items:center; gap:8px; font-size:11px; cursor:pointer;">
+                  <input type="checkbox" id="chk-hub-bg-sound"> <span id="s-hub-bg-sound-lbl">Sonido de video</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Column 2: Sensores, Emergencias y SOS -->
+            <div class="personalize-column">
               <div>
                 <label class="setting-label" for="temp-source-select-standalone" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">🌡️ Temperatura mostrada</label>
                 <select id="temp-source-select-standalone" class="glass-control"></select>
@@ -1562,50 +1648,11 @@ _tmpl.innerHTML = `
                 <input id="emergency-number-input" class="glass-control" inputmode="tel" maxlength="16" value="911" aria-describedby="emergency-number-help">
                 <div id="emergency-number-help" class="small" style="margin-top:5px;opacity:.65;line-height:1.35">Configúralo para la ubicación del hogar (p. ej., Costa Rica: 911; España: 112). Se incluirá en las alertas SOS.</div>
               </div>
-              <div>
+              <div class="sos-configuration">
                 <div class="setting-label" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:6px;">🚨 Acciones SOS</div>
                 <div id="sos-output-chips" class="mode-sensor-grid" style="margin-bottom:8px"></div>
                 <button class="ghost" id="btn-select-sos-outputs" style="width:100%;justify-content:center;font-size:12px">Seleccionar luces, sirenas o scripts</button>
                 <div class="small" style="margin-top:5px;opacity:.65;line-height:1.35">Estos dispositivos se activarán siempre al usar SOS, incluso con Argus desarmado.</div>
-              </div>
-              
-              <div>
-                <div class="setting-label" id="lbl-panel-bg-title" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">Fondo para Panel</div>
-                <select id="bg-mode-select-standalone" class="glass-control"></select>
-              </div>
-
-              <!-- Panel Background Custom Inputs (shown dynamically) -->
-              <div id="panel-custom-bg-inputs" style="display:none; flex-direction:column; gap:8px; background:var(--bg-inputs-bg, rgba(0,0,0,0.15)); padding:10px; border-radius:12px; border:1px solid var(--bg-inputs-border, rgba(255,255,255,0.05));">
-                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
-                  <span id="lbl-panel-bg-upload" style="font-size:11px; opacity:0.8;">Cargar archivo:</span>
-                  <input type="file" id="panel-bg-file-input" accept="image/*,video/mp4,video/webm,video/quicktime,.heic,.heif" style="font-size:10px; max-width:180px;">
-                </div>
-                <div style="font-size:10px; opacity:0.5; text-align:right;" id="bg-file-help"></div>
-                <input type="text" id="panel-bg-url-input" style="width:100%; font-size:11px; padding:6px 10px; border-radius:8px; box-sizing:border-box; outline:none;">
-                <label id="lbl-panel-bg-sound" style="display:none; align-items:center; gap:8px; font-size:11px; cursor:pointer;">
-                  <input type="checkbox" id="chk-panel-bg-sound"> <span id="s-panel-bg-sound-lbl">Sonido de video</span>
-                </label>
-              </div>
-            </div>
-            
-            <!-- Column 2: Fondo Argus -->
-            <div style="display:flex; flex-direction:column; gap:12px;">
-              <div>
-                <div class="setting-label" id="lbl-hub-bg-title" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">Fondo Argus</div>
-                <select id="hub-bg-mode-select" class="glass-control"></select>
-              </div>
-
-              <!-- Argus Background Custom Inputs (shown dynamically) -->
-              <div id="hub-custom-bg-inputs" style="display:none; flex-direction:column; gap:8px; background:var(--bg-inputs-bg, rgba(0,0,0,0.15)); padding:10px; border-radius:12px; border:1px solid var(--bg-inputs-border, rgba(255,255,255,0.05));">
-                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
-                  <span id="lbl-hub-bg-upload" style="font-size:11px; opacity:0.8;">Cargar archivo:</span>
-                  <input type="file" id="hub-bg-file-input" accept="image/*,video/mp4,video/webm,video/quicktime,.heic,.heif" style="font-size:10px; max-width:180px;">
-                </div>
-                <div style="font-size:10px; opacity:0.5; text-align:right;" id="hub-file-help"></div>
-                <input type="text" id="hub-bg-url-input" style="width:100%; font-size:11px; padding:6px 10px; border-radius:8px; box-sizing:border-box; outline:none;">
-                <label id="lbl-hub-bg-sound" style="display:none; align-items:center; gap:8px; font-size:11px; cursor:pointer;">
-                  <input type="checkbox" id="chk-hub-bg-sound"> <span id="s-hub-bg-sound-lbl">Sonido de video</span>
-                </label>
               </div>
             </div>
           </div>
@@ -1660,19 +1707,19 @@ _tmpl.innerHTML = `
             <div id="users-list" style="display:grid;gap:12px;margin-bottom:16px"></div>
             <div class="subsection collapsible collapsed" id="add-user-form">
               <div class="subsection-title" id="t-add-user"></div>
-              <div class="field-group"><label id="l-username"></label><input type="text" id="new-user-name" autocomplete="off"></div>
-              <div class="field-group"><label id="l-user-pin"></label><input type="password" id="new-user-pin" inputmode="numeric" pattern="[0-9]*"></div>
+              <div class="field-group"><label id="l-username"></label><input type="text" id="new-user-name" autocomplete="off" class="glass-control"></div>
+              <div class="field-group"><label id="l-user-pin"></label><input type="password" id="new-user-pin" inputmode="numeric" pattern="[0-9]*" class="glass-control"></div>
               <label id="l-is-admin" class="checkbox-label" style="margin-top:10px;display:flex;align-items:center;gap:10px"><input type="checkbox" id="new-user-admin"> <span id="s-is-admin"></span></label>
               <div class="field-group" style="margin-top:10px">
                 <label id="l-user-exp-type">Vencimiento</label>
-                <select id="new-user-exp-type" style="margin-top:4px">
+                <select id="new-user-exp-type" class="glass-control">
                   <option value="indefinite" id="opt-exp-indefinite">Indefinido</option>
                   <option value="temporary" id="opt-exp-temporary">Temporal (Fecha/Hora)</option>
                 </select>
               </div>
               <div class="field-group collapsible collapsed" id="group-new-user-exp" style="margin-top:10px">
                 <label id="l-user-exp-date">Fecha/Hora de Vencimiento</label>
-                <input type="datetime-local" id="new-user-exp-date" style="margin-top:4px">
+                <input type="datetime-local" id="new-user-exp-date" class="glass-control">
               </div>
               <div class="save-row" style="margin-top:15px"><button class="primary" id="btn-save-user" style="width:100%"></button></div>
               <div id="user-status" class="status" style="margin-top:8px; text-align:center; font-size:12px; font-weight:bold; min-height:18px;"></div>
@@ -1689,12 +1736,12 @@ _tmpl.innerHTML = `
                    <label id="l-current-pin-lbl"></label>
                    <a href="#" id="lnk-forgot-pin" style="font-size:11px; color:var(--accent-color, #ff4081); text-decoration:none; font-weight:bold; margin-bottom:4px; display:none;"></a>
                  </div>
-                 <input type="password" id="current-pin" inputmode="numeric" pattern="[0-9]*">
+                 <input type="password" id="current-pin" inputmode="numeric" pattern="[0-9]*" class="glass-control">
               </div>
               <p class="small" id="p-pin-remove-hint" style="margin:0 0 10px 0; color:var(--primary-color); font-weight:700">Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.</p>
               <div style="display:grid;gap:10px">
-                <div class="field-group"><label id="l-new-pin"></label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*"></div>
-                <div class="field-group"><label id="l-confirm-pin"></label><input type="password" id="new-pin-2" inputmode="numeric" pattern="[0-9]*"></div>
+                <div class="field-group"><label id="l-new-pin"></label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*" class="glass-control"></div>
+                <div class="field-group"><label id="l-confirm-pin"></label><input type="password" id="new-pin-2" inputmode="numeric" pattern="[0-9]*" class="glass-control"></div>
               </div>
               <div class="save-row" style="margin-top:15px">
                 <button class="primary" id="btn-save-pin" style="width:100%"></button>
@@ -1730,11 +1777,6 @@ _tmpl.innerHTML = `
         </div>
       </section>
 
-      <!-- Advanced -->
-      <section class="glass panel liquid-glass" id="homekit-section" style="display:none">
-        <h2 id="h-homekit"></h2>
-        <div id="homekit-content"></div>
-      </section>
     </div>
 
   </div> <!-- /grid -->
@@ -1787,7 +1829,7 @@ _tmpl.innerHTML = `
       <p class="small" style="margin:0;opacity:.7">Este nombre aparece en el panel de instancias y en pantalla completa.</p>
       <div class="field-group">
         <label>Nombre del Hogar</label>
-        <input type="text" id="home-name-input" placeholder="Mi Casa" maxlength="60" autocomplete="off" style="font-size:15px">
+        <input type="text" id="home-name-input" placeholder="Mi Casa" maxlength="60" autocomplete="off" class="glass-control">
       </div>
       <span class="status" id="home-name-status" style="text-align:center"></span>
     </div>
@@ -2051,7 +2093,6 @@ class ArgusPanel extends HTMLElement {
         this._renderAutomations(); 
         this._renderNotifications(); 
         this._renderUsers(); 
-        this._renderHomeKit(); 
       } 
     }
   }
@@ -2113,7 +2154,6 @@ class ArgusPanel extends HTMLElement {
     this._renderActivityLog();
     this._renderAutomations();
     this._renderUsers();
-    this._renderHomeKit();
     this._renderUploadedFiles();
   }
 
@@ -2156,7 +2196,6 @@ class ArgusPanel extends HTMLElement {
     set('l-user-exp-date', t('user_exp_date'));
     const optInd = s('opt-exp-indefinite'); if (optInd) optInd.textContent = t('exp_indefinite');
     const optTemp = s('opt-exp-temporary'); if (optTemp) optTemp.textContent = t('exp_temporary');
-    set('h-homekit',      t('homekit_title'));
     set('selector-select-all',   t('select_all'));
     set('selector-deselect-all', t('deselect_all'));
     set('l-available',    t('available'));
@@ -2719,7 +2758,6 @@ class ArgusPanel extends HTMLElement {
     this._renderAutomations();
     this._renderNotifications();
     this._renderUsers();
-    this._renderHomeKit();
     this._loadUploadedFiles();
 
     // Retry loading if integration is reloading and has no active entity_id yet
@@ -3791,135 +3829,7 @@ class ArgusPanel extends HTMLElement {
     });
   }
 
-  /* ── HomeKit ─────────────────────────────────────────────────────── */
-  async _renderHomeKit() {
-    const sec = this.shadowRoot.getElementById('homekit-section');
-    const cnt = this.shadowRoot.getElementById('homekit-content');
-    if (!sec || !cnt) return;
-    sec.style.display = '';
-    let code = null, bridgeName = null, bridgeEntryId = null, bridgeDeviceId = null;
 
-    try {
-      const hkEntries = await this._hass.callWS({ type: 'config_entries/get', domain: 'homekit' }).catch(() => []);
-      const alarmDomains = (this._dashboard?.entries || []).map(e => e.entity_id).filter(Boolean);
-
-      let bestMatch = null;
-      let firstBridge = null;
-
-      for (const ent of (hkEntries || [])) {
-        if (!firstBridge) firstBridge = ent;
-        
-        const title = (ent.title || ent.data?.name || '').toLowerCase();
-        const matchesName = title.includes('argus');
-        
-        const incEnts = ent.options?.filter?.include_entities || ent.options?.include_entities || [];
-        const incDoms = ent.options?.filter?.include_domains || ent.options?.include_domains || [];
-        
-        const matchesDomains = incDoms.includes('alarm_control_panel') || 
-                               incEnts.some(id => id.startsWith('alarm_control_panel')) || 
-                               alarmDomains.some(id => incEnts.includes(id));
-        
-        if (matchesName) {
-          bestMatch = ent;
-          break;
-        } else if (matchesDomains) {
-          bestMatch = ent;
-        }
-      }
-
-      const selected = bestMatch || firstBridge;
-      if (selected) {
-        bridgeName = selected.title || selected.data?.name || 'Argus Bridge';
-        bridgeEntryId = selected.entry_id;
-        code = String(selected.options?.code || selected.data?.code || code || '').replace(/\D/g, '');
-      }
-
-      if (bridgeEntryId) {
-        const devices = await this._hass.callWS({ type: 'config/device_registry/list' }).catch(() => []);
-        bridgeDeviceId = (devices || []).find(device =>
-          Array.isArray(device.config_entries) && device.config_entries.includes(bridgeEntryId)
-        )?.id || null;
-      }
-
-      // Fallback from persistent notifications
-      if (!code) {
-        for (const s of Object.values(this._hass?.states || {})) {
-          if (!s.entity_id.startsWith('persistent_notification.')) continue;
-          const msg = (s.attributes?.message || '').toLowerCase();
-          if (!msg.includes('homekit')) continue;
-          const m = (s.attributes.message || '').match(/(\d{3}-\d{2}-\d{3}|\d{8})/);
-          if (m) { code = m[1].replace(/-/g, ''); break; }
-        }
-      }
-
-    } catch (_) {}
-
-    // A HomeKit Bridge config entry only proves that the bridge is configured.
-    // Home Assistant deliberately does not expose the paired Apple Home/Matter
-    // home name or a reliable pairing status to frontend clients.
-    const isConfigured = Boolean(bridgeName);
-    const bridgeLabel = this._escapeHtml(bridgeName || 'Argus Bridge');
-
-    if (code && code.length === 8) {
-      const fmt = code.replace(/(\d{3})(\d{2})(\d{3})/, '$1-$2-$3');
-      cnt.innerHTML = `
-        <div style="display:grid;gap:16px;justify-items:center;padding:8px 0">
-          <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
-            <div style="background:var(--primary-color);color:#fff;padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700">🌉 ${this._t('homekit_bridge')}: ${bridgeLabel}</div>
-          </div>
-          <canvas id="hk-qr"></canvas>
-          <div style="font-size:28px;font-weight:900;letter-spacing:6px;font-family:monospace;padding:10px 20px;border-radius:12px;border:2px dashed color-mix(in srgb,var(--primary-color,#03a9f4) 35%,transparent)">${fmt}</div>
-          <div class="small">Security System · IP</div>
-        </div>`;
-      this._drawHKQR(code);
-    } else if (isConfigured) {
-      cnt.innerHTML = `
-        <div style="display:grid;gap:10px;padding:12px;border:1px solid color-mix(in srgb,var(--primary-color,#03a9f4) 35%,transparent);border-radius:14px;background:color-mix(in srgb,var(--primary-color,#03a9f4) 8%,transparent)">
-          <div style="display:flex;align-items:flex-start;gap:12px">
-            <span style="font-size:28px;line-height:1">ℹ️</span>
-            <div>
-              <div style="font-weight:700;font-size:15px">${this._t('bridge_paired')}</div>
-              <div class="small" style="opacity:.7">${this._t('bridge_paired_desc').replace('{bridge}', bridgeLabel)}</div>
-              ${bridgeDeviceId ? '<button class="ghost" id="btn-unpair-homekit" style="margin-top:10px;padding:7px 10px;font-size:11px">Desvincular y volver a emparejar</button>' : ''}
-            </div>
-          </div>
-        </div>`;
-      const unpairButton = cnt.querySelector('#btn-unpair-homekit');
-      if (unpairButton) {
-        unpairButton.addEventListener('click', async () => {
-          if (!confirm('Esto eliminará todos los emparejamientos de este puente. Tendrás que volver a añadirlo en Apple Home. ¿Continuar?')) return;
-          unpairButton.disabled = true;
-          try {
-            await this._hass.callService('homekit', 'unpair', { device_id: bridgeDeviceId });
-            this._renderHomeKit();
-          } catch (err) {
-            alert(`No se pudo desvincular el puente: ${err?.message || err}`);
-            unpairButton.disabled = false;
-          }
-        });
-      }
-    } else {
-      cnt.innerHTML = `
-        <div style="display:grid;gap:10px">
-          <div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">🌉</span><div><div style="font-weight:700">${bridgeLabel}</div><div class="small">${this._t('bridge_not_connected')}</div></div></div>
-          <p class="small" style="margin:0">${this._t('bridge_not_desc')}</p>
-        </div>`;
-    }
-  }
-
-  async _drawHKQR(code8) {
-    try {
-      if (!window.QRCode) await new Promise((res, rej) => {
-        const s = document.createElement('script');
-        s.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js';
-        s.onload = res; s.onerror = rej; document.head.appendChild(s);
-      });
-      const payload = BigInt(11) * BigInt(0x100000000) + BigInt(parseInt(code8) * 16 + 4);
-      const uri = 'X-HM://' + payload.toString(36).toUpperCase().padStart(9, '0');
-      const canvas = this.shadowRoot.getElementById('hk-qr');
-      if (canvas && window.QRCode) QRCode.toCanvas(canvas, uri, { width: 180, margin: 2, color: { dark: '#000', light: '#fff' } });
-    } catch (_) { const c = this.shadowRoot.getElementById('hk-qr'); if (c) c.style.display = 'none'; }
-  }
 
   _populateTemperatureSources() {
     const sel = this.shadowRoot.getElementById('temp-source-select-standalone');
@@ -4403,8 +4313,6 @@ class ArgusPanel extends HTMLElement {
       alert('No se pudo determinar el estado anterior del pánico. Desarma o rearma manualmente.');
       return;
     }
-    if (!confirm(`¿Detener el pánico y restaurar Argus a ${previous.replace('_', ' ')}?`)) return;
-
     const restore = async (pin) => {
       try {
         await this._hass.callService('alarm_control_panel', restoreService, {

@@ -40,6 +40,7 @@ class TestSecurityContract(unittest.TestCase):
         self.assertIn("_stopSOS", frontend)
         self.assertIn("panic_outputs", panel)
         self.assertIn("panic_outputs", frontend)
+        self.assertNotIn("hass.components.persistent_notification", panel)
 
     def test_panic_switch_is_available_for_home_assistant_exports(self) -> None:
         """The external, stateful SOS control must remain part of the integration."""
@@ -47,3 +48,4 @@ class TestSecurityContract(unittest.TestCase):
         switch = (COMPONENT / "switch.py").read_text(encoding="utf-8")
         self.assertIn('"switch"', const)
         self.assertIn("async_stop_panic", switch)
+        self.assertIn('_attr_name = "Argus Panic"', switch)
