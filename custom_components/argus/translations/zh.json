@@ -1,0 +1,58 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Argus 设置",
+        "description": "配置您的 Argus 警报面板。",
+        "data": {
+          "name": "名称",
+          "code": "警报代码（可选）",
+          "code_arm_required": "布防时需要代码",
+          "arming_time": "布防延迟（秒）",
+          "trigger_time": "触发持续时间（秒）",
+          "entry_delay": "进入延迟（秒）"
+        }
+      },
+      "sensors": {
+        "title": "传感器与同步配置",
+        "description": "将 Argus 与 HomeKit/Aqara 关联并选择您的传感器。",
+        "data": {
+          "linked_alarm_entity": "关联的警报实体 (HomeKit/Aqara)",
+          "sensors_away": "离家模式下的传感器",
+          "sensors_home": "在家模式下的传感器",
+          "sensors_night": "夜间模式下的传感器",
+          "entry_sensors": "具有进入延迟的传感器",
+          "siren_entity": "主警报器"
+        }
+      }
+    },
+    "error": {
+      "invalid_code": "警报代码无效。"
+    },
+    "abort": {
+      "already_configured": "Argus 已配置。"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "时间选项",
+        "data": {
+          "arming_time": "布防延迟（秒）",
+          "trigger_time": "触发持续时间（秒）",
+          "entry_delay": "进入延迟（秒）"
+        }
+      },
+      "sensors": {
+        "title": "传感器选项",
+        "data": {
+          "sensors_away": "离家模式下的传感器",
+          "sensors_home": "在家模式下的传感器",
+          "sensors_night": "夜间模式下的传感器",
+          "entry_sensors": "具有进入延迟的传感器",
+          "siren_entity": "主警报器"
+        }
+      }
+    }
+  }
+}

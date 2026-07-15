@@ -1,9 +1,9 @@
-"""Constants for the Argus Home Hub v1.3.9"""
+"""Constants for the Argus Home Hub v1.4.0"""
 from homeassistant.const import CONF_NAME, CONF_CODE
 
 DOMAIN = "argus"
 NAME = "Argus Home Hub"
-VERSION = "1.3.9"
+VERSION = "1.4.0"
 
 PLATFORMS = ["alarm_control_panel", "switch"]
 DATA_PANELS = "panels"
@@ -32,7 +32,7 @@ DEFAULT_ARMING_TIME = 0
 DEFAULT_TRIGGER_TIME = 120
 DEFAULT_ENTRY_DELAY = 60
 DEFAULT_MQTT_TOPIC_STATE = "argus/alarm/state"
-DEFAULT_MQTT_TOPIC_COMMAND = "argus/alarm/command"
+DEFAULT_MQTT_TOPIC_COMMAND = "argus/alarm/set"
 
 # MQTT command payloads
 MQTT_COMMAND_DISARM = "DISARM"

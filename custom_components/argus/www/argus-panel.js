@@ -21,6 +21,7 @@
 
 /* ── i18n ─────────────────────────────────────────────────────────────── */
 const LANG_LIST = [
+  { code:'auto', flag:'🏠', label:'Home Assistant' },
   { code:'es', flag:'🇪🇸', label:'Español' },
   { code:'en', flag:'🇬🇧', label:'English' },
   { code:'fr', flag:'🇫🇷', label:'Français' },
@@ -78,7 +79,7 @@ const TEXTS = {
     access_desc:'Gestión global de seguridad, PIN maestro y administradores.',
     pin_master_title:'PIN Maestro', pin_active_yes:'PIN Maestro: Activo', pin_active_no:'PIN Maestro: Desactivado',
     select_all:'☑ Todos', deselect_all:'☐ Ninguno', mqtt_label:'MQTT',
-    arm_time_label:'Tiempo armado (s)', disarm_time_label:'Tiempo desarmado (s)',
+    arm_time_label:'Tiempo armado (s)', disarm_time_label:'Retraso de entrada (s)',
     pin_incorrect:'❌ PIN actual incorrecto', pin_updated:'✓ PIN Actualizado', pin_deleted:'✓ PIN Eliminado',
     searching_auto:'↻ Buscando automatizaciones...', no_auto_linked:'No hay automatizaciones vinculadas a Argus.',
     pin_remove_hint:'Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.',
@@ -98,7 +99,7 @@ const TEXTS = {
     bg_weather:'Clima animado', bg_none:'Predeterminado', bg_panel_none:'Sin fondo', bg_photo:'Una foto', bg_collage:'Collage', bg_video:'Video en loop', bg_panel_title:'Fondo para panel', bg_hub_title:'Fondo Argus', bg_sound_opt:'Sonido de video', bg_image_opt:'Imagen / GIF', bg_hub_default:'Predeterminado (Argus)',
     forgot_pin:'¿Olvidaste tu PIN?', pin_reset_admin_only:'❌ Error: Solo los administradores de Home Assistant pueden restablecer el PIN maestro.', pin_reset_confirm:'¿Estás seguro de que deseas restablecer el PIN maestro? Se eliminará el PIN actual y se desactivará.',
     temp_auto:'Automático (sensor local / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Batería baja',
-    times_section:'⏱️ Tiempos', arm_time:'Armado (s)', disarm_time:'Desarmado (s)',
+    times_section:'⏱️ Tiempos', arm_time:'Armado (s)', disarm_time:'Retraso de entrada (s)',
     save_config:'GUARDAR CONFIGURACIÓN', never_triggered:'Nunca activada',
     bridge_paired:'Puente configurado',
     bridge_paired_desc:'El puente <b>{bridge}</b> está configurado en Home Assistant. Home Assistant no permite comprobar desde aquí si fue añadido a una casa de Apple Home/Matter ni conocer su nombre.',
@@ -175,7 +176,7 @@ const TEXTS = {
     access_desc:'Global security management, master PIN and administrators.',
     pin_master_title:'Master PIN', pin_active_yes:'Master PIN: Active', pin_active_no:'Master PIN: Deactivated',
     select_all:'☑ All', deselect_all:'☐ None', mqtt_label:'MQTT',
-    arm_time_label:'Arm time (s)', disarm_time_label:'Disarm time (s)',
+    arm_time_label:'Arm time (s)', disarm_time_label:'Entry delay (s)',
     pin_incorrect:'❌ Incorrect current PIN', pin_updated:'✓ PIN Updated', pin_deleted:'✓ PIN Deleted',
     searching_auto:'↻ Searching automations...', no_auto_linked:'No automations linked to Argus.',
     pin_remove_hint:'To remove PIN: Enter the current one and leave the fields below empty.',
@@ -272,7 +273,7 @@ const TEXTS = {
     access_desc:'Gestion globale de la sécurité, PIN maître et administrateurs.',
     pin_master_title:'PIN Maître', pin_active_yes:'PIN actif: Oui', pin_active_no:'PIN actif: Non',
     select_all:'☑ Tous', deselect_all:'☐ Aucun', mqtt_label:'MQTT',
-    arm_time_label:'Temps armement (s)', disarm_time_label:'Temps désarmement (s)',
+    arm_time_label:'Temps armement (s)', disarm_time_label:'Délai d\'entrée (s)',
     pin_incorrect:'❌ PIN actuel incorrect', pin_updated:'✓ PIN mis à jour', pin_deleted:'✓ PIN supprimé',
     searching_auto:'↻ Recherche automatisations...', no_auto_linked:'Aucune automatisation liée à Argus.',
     pin_remove_hint:'Pour supprimer le PIN: entrez le PIN actuel et laissez les champs vides.',
@@ -358,7 +359,7 @@ const TEXTS = {
     access_desc:'Gerenciamento global, PIN mestre e administradores.',
     pin_master_title:'PIN Mestre', pin_active_yes:'PIN Ativo: Sim', pin_active_no:'PIN Ativo: Não',
     select_all:'☑ Todos', deselect_all:'☐ Nenhum', mqtt_label:'MQTT',
-    arm_time_label:'Tempo armado (s)', disarm_time_label:'Tempo desarmado (s)',
+    arm_time_label:'Tempo armado (s)', disarm_time_label:'Atraso de entrada (s)',
     pin_incorrect:'❌ PIN atual incorreto', pin_updated:'✓ PIN Atualizado', pin_deleted:'✓ PIN Removido',
     searching_auto:'↻ Buscando automações...', no_auto_linked:'Nenhuma automação vinculada ao Argus.',
     pin_remove_hint:'Para remover o PIN: insira o atual e deixe os campos abaixo vazios.',
@@ -444,7 +445,7 @@ const TEXTS = {
     access_desc:'Gestione globale della sicurezza, PIN principale e amministratori.',
     pin_master_title:'PIN Principale', pin_active_yes:'PIN Attivo: Sì', pin_active_no:'PIN Attivo: No',
     select_all:'☑ Tutti', deselect_all:'☐ Nessuno', mqtt_label:'MQTT',
-    arm_time_label:'Tempo armato (s)', disarm_time_label:'Tempo disarmato (s)',
+    arm_time_label:'Tempo armato (s)', disarm_time_label:'Ritardo ingresso (s)',
     pin_incorrect:'❌ PIN attuale errato', pin_updated:'✓ PIN Aggiornato', pin_deleted:'✓ PIN Eliminato',
     searching_auto:'↻ Ricerca automazioni...', no_auto_linked:'Nessuna automazione collegata ad Argus.',
     pin_remove_hint:'Per rimuovere il PIN: inserisci quello attuale e lascia vuoti i campi sottostanti.',
@@ -616,7 +617,7 @@ const TEXTS = {
     access_desc:'Глобальная безопасность, мастер PIN и администраторы.',
     pin_master_title:'Мастер PIN', pin_active_yes:'PIN активен: Да', pin_active_no:'PIN активен: Нет',
     select_all:'☑ Все', deselect_all:'☐ Ничего', mqtt_label:'MQTT',
-    arm_time_label:'Время взятия (с)', disarm_time_label:'Время снятия (с)',
+    arm_time_label:'Время взятия (с)', disarm_time_label:'Задержка входа (с)',
     pin_incorrect:'❌ Неверный текущий PIN', pin_updated:'✓ PIN Обновлен', pin_deleted:'✓ PIN Удален',
     searching_auto:'↻ Поиск автоматизаций...', no_auto_linked:'Нет автоматизаций, связанных с Argus.',
     pin_remove_hint:'Для удаления PIN: введите текущий и оставьте поля пустыми.',
@@ -661,6 +662,36 @@ const TEXTS = {
     error_loading_uploaded_files: 'Ошибка при загрузке истории файлов.',
   },
 };
+
+// Text that is shared by controls created dynamically. Keeping this separate
+// from the original dictionaries makes it much harder for a new UI feature to
+// accidentally ship in only one language.
+const EXTRA_TEXTS = {
+  es: { use_ha_language:'Usar idioma de Home Assistant', emergency_number_label:'🚨 Número local de emergencias', emergency_help:'Configúralo según la ubicación del hogar (p. ej., Costa Rica: 911; España: 112). Se incluirá en las alertas SOS.', sos_actions:'🚨 Acciones SOS', sos_select_outputs:'Seleccionar luces, sirenas o scripts', sos_outputs_help:'Estos dispositivos se activarán siempre al usar SOS, incluso con Argus desarmado.', sos_no_outputs:'Sin dispositivos seleccionados', sos_call_help:'Si este equipo no admite llamadas, Argus enviará una alerta urgente a los dispositivos móviles configurados.', sos_stop:'🛑 DETENER PÁNICO', sos_activated:'SOS activado', sos_call_confirm:'¿Quieres llamar ahora a emergencias ({number})?', sos_error:'No se pudo activar el SOS: {error}', no_alarm_instance:'No hay una instancia de alarma disponible', panic_state_unknown:'No se pudo determinar el estado anterior del pánico. Desarma o rearma manualmente.', panic_stopped:'Pánico detenido; restaurado a {state}', panic_stop_error:'No se pudo detener el pánico: {error}', selector_panic:'🚨 Acciones SOS', status_open:'Abierto', status_closed:'Cerrado', status_idle:'En reposo', status_recording:'Grabando', status_home:'En casa', status_away:'Fuera', no_results:'Sin resultados', user_required:'Nombre y PIN requeridos', generic_error:'Error: {error}', clear_history_confirm:'¿Seguro que quieres borrar todo el historial?', export_error:'Error al exportar: {error}', invalid_config:'Archivo de configuración no válido.', import_success:'Configuración restaurada con éxito. Recargando...', import_error:'Error al importar: {error}', file_read_error:'No se pudo leer el archivo.', reset_confirm:'¿Estás seguro de que deseas restablecer Argus a sus valores de fábrica? Perderás todas tus configuraciones, PINs y modos.', reset_success:'Argus restablecido. Tienes unos segundos para deshacer si cambias de opinión, o simplemente recarga la página para aplicar los cambios.', reset_error:'Error al restablecer: {error}', undo_success:'Restablecimiento deshecho con éxito.', undo_error:'Error al deshacer: {error}', url_placeholder:'URL del fondo...', loading:'Cargando...', delete:'Borrar', fullscreen_title:'Pantalla completa', home_default:'Mi Casa', home_fallback:'Hogar', user_default:'Usuario', temp_notification_title:'Argus — Alerta de Temperatura', action_failed:'No se pudo realizar la acción', cannot_arm:'No se puede armar', open_sensors_explain:'Los siguientes sensores están abiertos:\n{names}\n\nCiérralos antes de armar, o activa “Omitir” en el sensor.', pin_disarm_error:'PIN incorrecto o error al desarmar', notification_disarmed:'{user} desarmó el sistema.', notification_armed:'{user} activó el modo {mode}.', upload_error:'Falló la subida.', delete_file_error:'No se pudo eliminar el archivo: {error}', file_choice:'“{file}”\n\n¿Usar como imagen estática (Aceptar) o como video animado (Cancelar)?\n\n• Aceptar → Imagen estática\n• Cancelar → Video animado' },
+  en: { use_ha_language:'Use Home Assistant language', emergency_number_label:'🚨 Local emergency number', emergency_help:'Configure it for the home location (e.g., Costa Rica: 911; Spain: 112). It will be included in SOS alerts.', sos_actions:'🚨 SOS actions', sos_select_outputs:'Select lights, sirens, or scripts', sos_outputs_help:'These devices will always activate when SOS is used, even while Argus is disarmed.', sos_no_outputs:'No devices selected', sos_call_help:'If this device cannot place calls, Argus will send an urgent alert to the configured mobile devices.', sos_stop:'🛑 STOP PANIC', sos_activated:'SOS activated', sos_call_confirm:'Call emergency services now ({number})?', sos_error:'Could not activate SOS: {error}', no_alarm_instance:'No alarm instance is available', panic_state_unknown:'The prior panic state could not be determined. Disarm or arm manually.', panic_stopped:'Panic stopped; restored to {state}', panic_stop_error:'Could not stop panic: {error}', selector_panic:'🚨 SOS actions', status_open:'Open', status_closed:'Closed', status_idle:'Idle', status_recording:'Recording', status_home:'Home', status_away:'Away', no_results:'No results', user_required:'Name and PIN are required', generic_error:'Error: {error}', clear_history_confirm:'Delete the entire activity history?', export_error:'Export failed: {error}', invalid_config:'Invalid configuration file.', import_success:'Configuration restored successfully. Reloading…', import_error:'Import failed: {error}', file_read_error:'Could not read the file.', reset_confirm:'Reset Argus to factory settings? All configurations, PINs, and modes will be lost.', reset_success:'Argus was reset. You have a few seconds to undo it, or reload the page to apply the changes.', reset_error:'Reset failed: {error}', undo_success:'Reset undone successfully.', undo_error:'Could not undo reset: {error}', url_placeholder:'Background URL…', loading:'Loading…', delete:'Delete', fullscreen_title:'Full screen', home_default:'My Home', home_fallback:'Home', user_default:'User', temp_notification_title:'Argus — Temperature Alert', action_failed:'Action could not be completed', cannot_arm:'Cannot arm', open_sensors_explain:'The following sensors are open:\n{names}\n\nClose them before arming, or enable “Bypass” on the sensor.', pin_disarm_error:'Incorrect PIN or error while disarming', notification_disarmed:'{user} disarmed the system.', notification_armed:'{user} activated {mode} mode.', upload_error:'Upload failed.', delete_file_error:'Could not delete the file: {error}', file_choice:'“{file}”\n\nUse as a static image (OK) or an animated video (Cancel)?\n\n• OK → Static image\n• Cancel → Animated video' },
+  fr: { use_ha_language:'Utiliser la langue de Home Assistant', emergency_number_label:'🚨 Numéro d’urgence local', emergency_help:'Configurez-le pour le domicile (ex. Costa Rica : 911 ; Espagne : 112). Il sera inclus dans les alertes SOS.', sos_actions:'🚨 Actions SOS', sos_select_outputs:'Sélectionner lumières, sirènes ou scripts', sos_outputs_help:'Ces appareils s’activeront toujours avec SOS, même si Argus est désarmé.', sos_no_outputs:'Aucun appareil sélectionné', sos_call_help:'Si cet appareil ne peut pas appeler, Argus enverra une alerte urgente aux appareils mobiles configurés.', sos_stop:'🛑 ARRÊTER LA PANIQUE', sos_activated:'SOS activé', sos_call_confirm:'Appeler les urgences maintenant ({number}) ?', sos_error:'Impossible d’activer SOS : {error}', no_alarm_instance:'Aucune instance d’alarme disponible', panic_state_unknown:'L’état antérieur de la panique est inconnu. Armez ou désarmez manuellement.', panic_stopped:'Panique arrêtée ; rétablie à {state}', panic_stop_error:'Impossible d’arrêter la panique : {error}', selector_panic:'🚨 Actions SOS', status_open:'Ouvert', status_closed:'Fermé', status_idle:'Au repos', status_recording:'Enregistrement', status_home:'Maison', status_away:'Absent', no_results:'Aucun résultat', user_required:'Nom et PIN requis', generic_error:'Erreur : {error}', clear_history_confirm:'Supprimer tout l’historique d’activité ?', export_error:'Échec de l’exportation : {error}', invalid_config:'Fichier de configuration invalide.', import_success:'Configuration restaurée. Rechargement…', import_error:'Échec de l’importation : {error}', file_read_error:'Impossible de lire le fichier.', reset_confirm:'Réinitialiser Argus ? Toutes les configurations, PIN et modes seront perdus.', reset_success:'Argus a été réinitialisé. Vous avez quelques secondes pour annuler.', reset_error:'Échec de la réinitialisation : {error}', undo_success:'Réinitialisation annulée.', undo_error:'Impossible d’annuler : {error}', url_placeholder:'URL de l’arrière-plan…', loading:'Chargement…', delete:'Supprimer', fullscreen_title:'Plein écran', home_default:'Ma maison', home_fallback:'Maison', user_default:'Utilisateur', temp_notification_title:'Argus — Alerte de température', action_failed:'Action impossible', cannot_arm:'Impossible d’armer', open_sensors_explain:'Les capteurs suivants sont ouverts :\n{names}\n\nFermez-les avant d’armer ou activez « Ignorer ». ', pin_disarm_error:'PIN incorrect ou erreur de désarmement', notification_disarmed:'{user} a désarmé le système.', notification_armed:'{user} a activé le mode {mode}.', upload_error:'Échec du téléversement.', delete_file_error:'Impossible de supprimer le fichier : {error}', file_choice:'« {file} »\n\nUtiliser comme image fixe (OK) ou vidéo animée (Annuler) ?' },
+  pt: { use_ha_language:'Usar idioma do Home Assistant', emergency_number_label:'🚨 Número local de emergência', emergency_help:'Configure para a localização da casa (ex.: Costa Rica: 911; Espanha: 112). Será incluído nos alertas SOS.', sos_actions:'🚨 Ações SOS', sos_select_outputs:'Selecionar luzes, sirenes ou scripts', sos_outputs_help:'Estes dispositivos sempre serão ativados ao usar SOS, mesmo com Argus desarmado.', sos_no_outputs:'Nenhum dispositivo selecionado', sos_call_help:'Se este dispositivo não puder ligar, o Argus enviará um alerta urgente aos dispositivos móveis configurados.', sos_stop:'🛑 PARAR PÂNICO', sos_activated:'SOS ativado', sos_call_confirm:'Ligar para emergência agora ({number})?', sos_error:'Não foi possível ativar SOS: {error}', no_alarm_instance:'Nenhuma instância de alarme disponível', panic_state_unknown:'Não foi possível determinar o estado anterior do pânico. Arme ou desarme manualmente.', panic_stopped:'Pânico parado; restaurado para {state}', panic_stop_error:'Não foi possível parar o pânico: {error}', selector_panic:'🚨 Ações SOS', status_open:'Aberto', status_closed:'Fechado', status_idle:'Em repouso', status_recording:'Gravando', status_home:'Em casa', status_away:'Fora', no_results:'Sem resultados', user_required:'Nome e PIN são obrigatórios', generic_error:'Erro: {error}', clear_history_confirm:'Excluir todo o histórico de atividade?', export_error:'Erro ao exportar: {error}', invalid_config:'Arquivo de configuração inválido.', import_success:'Configuração restaurada. Recarregando…', import_error:'Erro ao importar: {error}', file_read_error:'Não foi possível ler o arquivo.', reset_confirm:'Restaurar Argus aos padrões de fábrica? Todas as configurações, PINs e modos serão perdidos.', reset_success:'Argus foi restaurado. Você tem alguns segundos para desfazer.', reset_error:'Erro ao restaurar: {error}', undo_success:'Restauração desfeita.', undo_error:'Erro ao desfazer: {error}', url_placeholder:'URL do fundo…', loading:'Carregando…', delete:'Excluir', fullscreen_title:'Tela cheia', home_default:'Minha Casa', home_fallback:'Casa', user_default:'Usuário', temp_notification_title:'Argus — Alerta de Temperatura', action_failed:'Não foi possível realizar a ação', cannot_arm:'Não é possível armar', open_sensors_explain:'Os seguintes sensores estão abertos:\n{names}\n\nFeche-os antes de armar ou ative “Ignorar”.', pin_disarm_error:'PIN incorreto ou erro ao desarmar', notification_disarmed:'{user} desarmou o sistema.', notification_armed:'{user} ativou o modo {mode}.', upload_error:'Falha no envio.', delete_file_error:'Não foi possível excluir o arquivo: {error}', file_choice:'“{file}”\n\nUsar como imagem estática (OK) ou vídeo animado (Cancelar)?' },
+  it: { use_ha_language:'Usa la lingua di Home Assistant', emergency_number_label:'🚨 Numero di emergenza locale', emergency_help:'Configurarlo per la posizione della casa (es. Costa Rica: 911; Spagna: 112). Sarà incluso negli avvisi SOS.', sos_actions:'🚨 Azioni SOS', sos_select_outputs:'Seleziona luci, sirene o script', sos_outputs_help:'Questi dispositivi saranno sempre attivati con SOS, anche se Argus è disarmato.', sos_no_outputs:'Nessun dispositivo selezionato', sos_call_help:'Se questo dispositivo non può effettuare chiamate, Argus invierà un avviso urgente ai dispositivi mobili configurati.', sos_stop:'🛑 FERMA PANICO', sos_activated:'SOS attivato', sos_call_confirm:'Chiamare ora i servizi di emergenza ({number})?', sos_error:'Impossibile attivare SOS: {error}', no_alarm_instance:'Nessuna istanza di allarme disponibile', panic_state_unknown:'Impossibile determinare lo stato precedente del panico. Armare o disarmare manualmente.', panic_stopped:'Panico fermato; ripristinato a {state}', panic_stop_error:'Impossibile fermare il panico: {error}', selector_panic:'🚨 Azioni SOS', status_open:'Aperto', status_closed:'Chiuso', status_idle:'Inattivo', status_recording:'Registrazione', status_home:'Casa', status_away:'Fuori', no_results:'Nessun risultato', user_required:'Nome e PIN obbligatori', generic_error:'Errore: {error}', clear_history_confirm:'Eliminare tutta la cronologia attività?', export_error:'Esportazione non riuscita: {error}', invalid_config:'File di configurazione non valido.', import_success:'Configurazione ripristinata. Ricaricamento…', import_error:'Importazione non riuscita: {error}', file_read_error:'Impossibile leggere il file.', reset_confirm:'Ripristinare Argus alle impostazioni di fabbrica? Configurazioni, PIN e modalità saranno persi.', reset_success:'Argus è stato ripristinato. Hai alcuni secondi per annullare.', reset_error:'Ripristino non riuscito: {error}', undo_success:'Ripristino annullato.', undo_error:'Impossibile annullare: {error}', url_placeholder:'URL dello sfondo…', loading:'Caricamento…', delete:'Elimina', fullscreen_title:'Schermo intero', home_default:'Casa mia', home_fallback:'Casa', user_default:'Utente', temp_notification_title:'Argus — Avviso temperatura', action_failed:'Impossibile eseguire l’azione', cannot_arm:'Impossibile armare', open_sensors_explain:'I seguenti sensori sono aperti:\n{names}\n\nChiudili prima di armare o abilita “Ignora”.', pin_disarm_error:'PIN errato o errore durante il disarmo', notification_disarmed:'{user} ha disarmato il sistema.', notification_armed:'{user} ha attivato la modalità {mode}.', upload_error:'Caricamento non riuscito.', delete_file_error:'Impossibile eliminare il file: {error}', file_choice:'“{file}”\n\nUsare come immagine statica (OK) o video animato (Annulla)?' },
+  zh: { use_ha_language:'使用 Home Assistant 语言', emergency_number_label:'🚨 本地紧急号码', emergency_help:'请按家庭所在地设置（例如哥斯达黎加：911；西班牙：112）。该号码将包含在 SOS 警报中。', sos_actions:'🚨 SOS 操作', sos_select_outputs:'选择灯、警报器或脚本', sos_outputs_help:'即使 Argus 已撤防，使用 SOS 时这些设备也会始终启动。', sos_no_outputs:'未选择设备', sos_call_help:'如果该设备无法拨号，Argus 将向已配置的移动设备发送紧急警报。', sos_stop:'🛑 停止紧急状态', sos_activated:'SOS 已激活', sos_call_confirm:'现在拨打紧急服务电话 ({number})？', sos_error:'无法激活 SOS：{error}', no_alarm_instance:'没有可用的警报实例', panic_state_unknown:'无法确定紧急状态之前的状态。请手动布防或撤防。', panic_stopped:'紧急状态已停止；恢复为 {state}', panic_stop_error:'无法停止紧急状态：{error}', selector_panic:'🚨 SOS 操作', status_open:'打开', status_closed:'关闭', status_idle:'空闲', status_recording:'录制中', status_home:'在家', status_away:'离家', no_results:'无结果', user_required:'需要姓名和 PIN', generic_error:'错误：{error}', clear_history_confirm:'删除全部活动历史记录？', export_error:'导出失败：{error}', invalid_config:'配置文件无效。', import_success:'配置已恢复。正在重新加载…', import_error:'导入失败：{error}', file_read_error:'无法读取文件。', reset_confirm:'将 Argus 恢复为出厂设置？所有配置、PIN 和模式将丢失。', reset_success:'Argus 已重置。你有几秒钟可以撤销。', reset_error:'重置失败：{error}', undo_success:'已撤销重置。', undo_error:'无法撤销重置：{error}', url_placeholder:'背景 URL…', loading:'正在加载…', delete:'删除', fullscreen_title:'全屏', home_default:'我的家', home_fallback:'家', user_default:'用户', temp_notification_title:'Argus — 温度警报', action_failed:'无法完成操作', cannot_arm:'无法布防', open_sensors_explain:'以下传感器处于打开状态：\n{names}\n\n请在布防前关闭它们，或启用“跳过”。', pin_disarm_error:'PIN 错误或撤防时出错', notification_disarmed:'{user} 已撤防系统。', notification_armed:'{user} 已激活 {mode} 模式。', upload_error:'上传失败。', delete_file_error:'无法删除文件：{error}', file_choice:'“{file}”\n\n用作静态图片（确定）还是动画视频（取消）？' },
+  ru: { use_ha_language:'Использовать язык Home Assistant', emergency_number_label:'🚨 Местный номер экстренной службы', emergency_help:'Настройте для местоположения дома (например, Коста-Рика: 911; Испания: 112). Номер будет включён в SOS-оповещения.', sos_actions:'🚨 Действия SOS', sos_select_outputs:'Выбрать свет, сирены или сценарии', sos_outputs_help:'Эти устройства всегда будут включаться при SOS, даже когда Argus снят с охраны.', sos_no_outputs:'Устройства не выбраны', sos_call_help:'Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.', sos_stop:'🛑 ОСТАНОВИТЬ ТРЕВОГУ', sos_activated:'SOS активирован', sos_call_confirm:'Позвонить в экстренную службу ({number})?', sos_error:'Не удалось активировать SOS: {error}', no_alarm_instance:'Нет доступного экземпляра сигнализации', panic_state_unknown:'Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.', panic_stopped:'Тревога остановлена; восстановлено состояние {state}', panic_stop_error:'Не удалось остановить тревогу: {error}', selector_panic:'🚨 Действия SOS', status_open:'Открыто', status_closed:'Закрыто', status_idle:'Ожидание', status_recording:'Запись', status_home:'Дома', status_away:'Вне дома', no_results:'Нет результатов', user_required:'Требуются имя и PIN', generic_error:'Ошибка: {error}', clear_history_confirm:'Удалить всю историю активности?', export_error:'Ошибка экспорта: {error}', invalid_config:'Недопустимый файл конфигурации.', import_success:'Конфигурация восстановлена. Перезагрузка…', import_error:'Ошибка импорта: {error}', file_read_error:'Не удалось прочитать файл.', reset_confirm:'Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.', reset_success:'Argus сброшен. У вас есть несколько секунд, чтобы отменить это.', reset_error:'Ошибка сброса: {error}', undo_success:'Сброс отменён.', undo_error:'Не удалось отменить сброс: {error}', url_placeholder:'URL фона…', loading:'Загрузка…', delete:'Удалить', fullscreen_title:'Полный экран', home_default:'Мой дом', home_fallback:'Дом', user_default:'Пользователь', temp_notification_title:'Argus — Температурное предупреждение', action_failed:'Не удалось выполнить действие', cannot_arm:'Невозможно поставить на охрану', open_sensors_explain:'Следующие датчики открыты:\n{names}\n\nЗакройте их перед постановкой на охрану или включите «Обход».', pin_disarm_error:'Неверный PIN или ошибка снятия с охраны', notification_disarmed:'{user} снял систему с охраны.', notification_armed:'{user} активировал режим {mode}.', upload_error:'Ошибка загрузки.', delete_file_error:'Не удалось удалить файл: {error}', file_choice:'«{file}»\n\nИспользовать как статичное изображение (ОК) или анимированное видео (Отмена)?' },
+};
+
+for (const language of Object.keys(TEXTS)) {
+  Object.assign(TEXTS[language], EXTRA_TEXTS[language]);
+}
+
+Object.assign(TEXTS.fr, { expired:'Expiré', active_until:'Expire', exp_indefinite:'Indéfini' });
+Object.assign(TEXTS.pt, { expired:'Expirado', active_until:'Expira', exp_indefinite:'Indefinido' });
+Object.assign(TEXTS.it, { expired:'Scaduto', active_until:'Scade', exp_indefinite:'Indefinito' });
+Object.assign(TEXTS.zh, { expired:'已过期', active_until:'到期', exp_indefinite:'无限期' });
+Object.assign(TEXTS.ru, { expired:'Истёк', active_until:'Действует до', exp_indefinite:'Бессрочно' });
+Object.assign(TEXTS.es, { entry_sensors:'Sensores con retraso de entrada', select_entry_sensors:'Seleccionar sensores de entrada' });
+Object.assign(TEXTS.en, { entry_sensors:'Entry-delay sensors', select_entry_sensors:'Select entry sensors' });
+Object.assign(TEXTS.fr, { entry_sensors:'Capteurs avec délai d’entrée', select_entry_sensors:'Sélectionner les capteurs d’entrée' });
+Object.assign(TEXTS.pt, { entry_sensors:'Sensores com atraso de entrada', select_entry_sensors:'Selecionar sensores de entrada' });
+Object.assign(TEXTS.it, { entry_sensors:'Sensori con ritardo di ingresso', select_entry_sensors:'Seleziona sensori di ingresso' });
+Object.assign(TEXTS.zh, { entry_sensors:'具有进入延迟的传感器', select_entry_sensors:'选择进入传感器' });
+Object.assign(TEXTS.ru, { entry_sensors:'Датчики с задержкой входа', select_entry_sensors:'Выбрать датчики входа' });
 
 /* ── Template ─────────────────────────────────────────────────────────── */
 const _tmpl = document.createElement('template');
@@ -1547,7 +1578,7 @@ _tmpl.innerHTML = `
       <a id="sos-call-btn" href="tel:911" style="display:flex;justify-content:center;align-items:center;gap:8px;background:rgba(255,59,48,0.2);color:#ff3b30;text-decoration:none;padding:14px;border-radius:18px;font-weight:800;font-size:15px;border:1px solid rgba(255,59,48,0.3)">
         📞 Llamar a Emergencias (911)
       </a>
-      <p id="sos-call-help" class="small" style="margin:10px 4px 0;opacity:.72;line-height:1.35">Si este equipo no admite llamadas, Argus enviará una alerta urgente a los dispositivos móviles configurados.</p>
+      <p id="sos-call-help" class="small" style="margin:10px 4px 0;opacity:.72;line-height:1.35">If this device cannot place calls, Argus will send an urgent alert to the configured mobile devices.</p>
     </div>
     <button class="ios-confirm-cancel" id="btn-cancel-sos" style="margin-top:10px">Cancelar</button>
   </div>
@@ -1614,7 +1645,7 @@ _tmpl.innerHTML = `
                   <input type="file" id="panel-bg-file-input" accept="image/*,video/mp4,video/webm,video/quicktime,.heic,.heif" style="font-size:10px; max-width:180px;">
                 </div>
                 <div style="font-size:10px; opacity:0.5; text-align:right;" id="bg-file-help"></div>
-                <input type="text" id="panel-bg-url-input" class="glass-control" placeholder="URL del fondo...">
+                <input type="text" id="panel-bg-url-input" class="glass-control" placeholder="Background URL…">
                 <label id="lbl-panel-bg-sound" style="display:none; align-items:center; gap:8px; font-size:11px; cursor:pointer;">
                   <input type="checkbox" id="chk-panel-bg-sound"> <span id="s-panel-bg-sound-lbl">Sonido de video</span>
                 </label>
@@ -1630,7 +1661,7 @@ _tmpl.innerHTML = `
                   <input type="file" id="hub-bg-file-input" accept="image/*,video/mp4,video/webm,video/quicktime,.heic,.heif" style="font-size:10px; max-width:180px;">
                 </div>
                 <div style="font-size:10px; opacity:0.5; text-align:right;" id="hub-file-help"></div>
-                <input type="text" id="hub-bg-url-input" class="glass-control" placeholder="URL del fondo...">
+                <input type="text" id="hub-bg-url-input" class="glass-control" placeholder="Background URL…">
                 <label id="lbl-hub-bg-sound" style="display:none; align-items:center; gap:8px; font-size:11px; cursor:pointer;">
                   <input type="checkbox" id="chk-hub-bg-sound"> <span id="s-hub-bg-sound-lbl">Sonido de video</span>
                 </label>
@@ -1644,15 +1675,15 @@ _tmpl.innerHTML = `
                 <select id="temp-source-select-standalone" class="glass-control"></select>
               </div>
               <div>
-                <label class="setting-label" for="emergency-number-input" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">🚨 Número de emergencias local</label>
+                <label class="setting-label" id="lbl-emergency-number" for="emergency-number-input" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">🚨 Local emergency number</label>
                 <input id="emergency-number-input" class="glass-control" inputmode="tel" maxlength="16" value="911" aria-describedby="emergency-number-help">
-                <div id="emergency-number-help" class="small" style="margin-top:5px;opacity:.65;line-height:1.35">Configúralo para la ubicación del hogar (p. ej., Costa Rica: 911; España: 112). Se incluirá en las alertas SOS.</div>
+                <div id="emergency-number-help" class="small" style="margin-top:5px;opacity:.65;line-height:1.35">Configure it for the home location. It will be included in SOS alerts.</div>
               </div>
               <div class="sos-configuration">
-                <div class="setting-label" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:6px;">🚨 Acciones SOS</div>
+                <div class="setting-label" id="lbl-sos-actions" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:6px;">🚨 SOS actions</div>
                 <div id="sos-output-chips" class="mode-sensor-grid" style="margin-bottom:8px"></div>
-                <button class="ghost" id="btn-select-sos-outputs" style="width:100%;justify-content:center;font-size:12px">Seleccionar luces, sirenas o scripts</button>
-                <div class="small" style="margin-top:5px;opacity:.65;line-height:1.35">Estos dispositivos se activarán siempre al usar SOS, incluso con Argus desarmado.</div>
+                <button class="ghost" id="btn-select-sos-outputs" style="width:100%;justify-content:center;font-size:12px">Select lights, sirens, or scripts</button>
+                <div class="small" id="sos-output-help" style="margin-top:5px;opacity:.65;line-height:1.35">These devices will always activate when SOS is used, even while Argus is disarmed.</div>
               </div>
             </div>
           </div>
@@ -1663,7 +1694,7 @@ _tmpl.innerHTML = `
               <div style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; display:flex; align-items:center; gap:6px;">
                 📁 <span id="lbl-uploaded-files-title">Archivos Subidos en Servidor</span>
               </div>
-              <span id="storage-files-count" style="font-size:10px; opacity:0.5;">Cargando...</span>
+              <span id="storage-files-count" style="font-size:10px; opacity:0.5;">Loading…</span>
             </div>
             <div id="uploaded-files-list" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr)); gap:10px; max-height:220px; overflow-y:auto; padding:5px 0;">
               <!-- Los archivos se renderizan aquí dinámicamente -->
@@ -1826,9 +1857,9 @@ _tmpl.innerHTML = `
       <button class="ghost" id="home-name-modal-close">✕</button>
     </div>
     <div style="display:grid;gap:14px;padding:4px 0">
-      <p class="small" style="margin:0;opacity:.7">Este nombre aparece en el panel de instancias y en pantalla completa.</p>
+      <p class="small" id="home-name-modal-desc" style="margin:0;opacity:.7">This name appears in the instances panel and in full screen.</p>
       <div class="field-group">
-        <label>Nombre del Hogar</label>
+        <label id="l-home-name-modal-label">Home name</label>
         <input type="text" id="home-name-input" placeholder="Mi Casa" maxlength="60" autocomplete="off" class="glass-control">
       </div>
       <span class="status" id="home-name-status" style="text-align:center"></span>
@@ -2036,6 +2067,9 @@ class ArgusPanel extends HTMLElement {
     // Clock is now handled by a dedicated interval for better accuracy
     const clockChanged = false; 
 
+    const languageChanged = oldHass?.language !== hass.language;
+    if (languageChanged && !this._manualLang) this._refreshLocalizedUi();
+
     const alarmChanged = this._dashboard.entries.some(
       e => e.entity_id && oldHass?.states[e.entity_id]?.state !== hass.states[e.entity_id]?.state
     );
@@ -2100,8 +2134,12 @@ class ArgusPanel extends HTMLElement {
 
   /* ── Translation ─────────────────────────────────────────────────── */
   _t(key) {
-    const lang = this._manualLang || (this._hass?.language || 'es').split('-')[0];
-    return (TEXTS[lang] || TEXTS.en)[key] || key;
+    const lang = this._getCurrentLangCode();
+    return TEXTS[lang]?.[key] || TEXTS.en[key] || key;
+  }
+
+  _format(key, values = {}) {
+    return this._t(key).replace(/\{(\w+)\}/g, (_, name) => String(values[name] ?? `{${name}}`));
   }
 
   _escapeHtml(value) {
@@ -2111,19 +2149,27 @@ class ArgusPanel extends HTMLElement {
   }
 
   _getCurrentLangCode() {
-    return this._manualLang || (this._hass?.language || 'es').split('-')[0];
+    const candidate = this._manualLang || (this._hass?.language || 'en').split('-')[0];
+    return TEXTS[candidate] ? candidate : 'en';
+  }
+
+  _getLocale() {
+    return {
+      es: 'es-ES', en: 'en-US', fr: 'fr-FR', pt: 'pt-BR',
+      it: 'it-IT', zh: 'zh-CN', ru: 'ru-RU',
+    }[this._getCurrentLangCode()] || 'en-US';
   }
 
   _openLangModal() {
     const modal = this.shadowRoot.getElementById('lang-modal');
     if (!modal) return;
     const grid = this.shadowRoot.getElementById('lang-grid');
-    const cur = this._getCurrentLangCode();
+    const cur = this._manualLang || 'auto';
     if (grid) {
       grid.innerHTML = LANG_LIST.map(l => `
         <button class="lang-option${l.code === cur ? ' active' : ''}" data-lang="${l.code}">
           <span class="lang-flag">${l.flag}</span>
-          <span>${l.label}</span>
+          <span>${l.code === 'auto' ? this._t('use_ha_language') : l.label}</span>
         </button>`).join('');
       grid.querySelectorAll('.lang-option').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -2144,16 +2190,29 @@ class ArgusPanel extends HTMLElement {
   }
 
   _setLanguage(code) {
-    if (!TEXTS[code]) return;
-    this._manualLang = code;
-    try { localStorage.setItem('argus_lang', code); } catch(e) {}
+    if (code === 'auto') {
+      this._manualLang = null;
+      try { localStorage.removeItem('argus_lang'); } catch(e) {}
+    } else {
+      if (!TEXTS[code]) return;
+      this._manualLang = code;
+      try { localStorage.setItem('argus_lang', code); } catch(e) {}
+    }
+    this._refreshLocalizedUi();
+  }
+
+  _refreshLocalizedUi() {
     this._applyTranslations();
     this._renderEntries();
     this._renderModeTabs();
     this._renderModeView();
     this._renderActivityLog();
     this._renderAutomations();
+    this._renderNotifications();
     this._renderUsers();
+    this._renderSosOutputs();
+    this._configureEmergencyCall();
+    this._updateHomeNameDisplay();
     this._renderUploadedFiles();
   }
 
@@ -2163,11 +2222,11 @@ class ArgusPanel extends HTMLElement {
     const set = (id, txt) => { const e = s(id); if (e) e.textContent = txt; };
 
     // Update lang pill
-    const cur = this._getCurrentLangCode();
-    const langDef = LANG_LIST.find(l => l.code === cur) || LANG_LIST[0];
+    const cur = this._manualLang || 'auto';
+    const langDef = LANG_LIST.find(l => l.code === cur) || LANG_LIST[1];
     const flagEl = s('lang-pill-flag'); const labelEl = s('lang-pill-label');
     if (flagEl) flagEl.textContent = langDef.flag;
-    if (labelEl) labelEl.textContent = langDef.label;
+    if (labelEl) labelEl.textContent = cur === 'auto' ? this._t('use_ha_language') : langDef.label;
 
 
     set('p-hero-desc',    t('hero_desc'));
@@ -2253,6 +2312,14 @@ class ArgusPanel extends HTMLElement {
     set('p-home-name-modal-desc', t('home_name_modal_desc'));
     set('l-home-name-modal-label', t('home_name_label'));
     set('lang-modal-title',     `🌐 ${t('lang_select_title')}`);
+    set('sos-call-help', t('sos_call_help'));
+    set('lbl-emergency-number', t('emergency_number_label'));
+    set('emergency-number-help', t('emergency_help'));
+    set('lbl-sos-actions', t('sos_actions'));
+    set('btn-select-sos-outputs', t('sos_select_outputs'));
+    set('sos-output-help', t('sos_outputs_help'));
+    set('home-name-modal-desc', t('home_name_modal_desc'));
+    set('pin-backspace', t('delete'));
 
     const bgMode = s('bg-mode-select-standalone');
     if (bgMode) {
@@ -2297,6 +2364,10 @@ class ArgusPanel extends HTMLElement {
     // Home name input placeholder
     const hnInput = s('home-name-input');
     if (hnInput) hnInput.placeholder = t('home_name_placeholder');
+    const panelUrl = s('panel-bg-url-input');
+    if (panelUrl) panelUrl.placeholder = t('url_placeholder');
+    const hubUrl = s('hub-bg-url-input');
+    if (hubUrl) hubUrl.placeholder = t('url_placeholder');
   }
 
   /* ── Init ────────────────────────────────────────────────────────── */
@@ -2445,7 +2516,7 @@ class ArgusPanel extends HTMLElement {
   }
 
   async _clearHistory() {
-    if (!confirm('¿Seguro que quieres borrar todo el historial?')) return;
+    if (!confirm(this._t('clear_history_confirm'))) return;
     try {
       await this._send('argus/clear_activity_log');
       if (this._ui) this._ui.audit_log = [];
@@ -2453,7 +2524,7 @@ class ArgusPanel extends HTMLElement {
       const el = this.shadowRoot.getElementById('activity-log');
       if (el) el.innerHTML = `<div class="small" style="padding:8px 0;opacity:.55">${this._t('log_no_events')}</div>`;
       this._renderActivityLog();
-    } catch (err) { alert(err.message); }
+    } catch (err) { alert(this._format('generic_error', { error: err.message })); }
   }
 
   _exportConfig() {
@@ -2467,7 +2538,7 @@ class ArgusPanel extends HTMLElement {
       a.click();
       setTimeout(() => URL.revokeObjectURL(url), 5000);
     } catch (err) {
-      alert('Error al exportar: ' + err.message);
+      alert(this._format('export_error', { error: err.message }));
     }
   }
 
@@ -2480,20 +2551,20 @@ class ArgusPanel extends HTMLElement {
       try {
         const config = JSON.parse(e.target.result);
         if (typeof config !== 'object' || config === null)
-          throw new Error('Archivo de configuración no válido.');
+          throw new Error(this._t('invalid_config'));
         await this._send('argus/restore_config', { config });
-        alert('Configuración restaurada con éxito. Recargando...');
+        alert(this._t('import_success'));
         window.location.reload();
       } catch (err) {
-        alert('Error al importar: ' + err.message);
+        alert(this._format('import_error', { error: err.message }));
       }
     };
-    reader.onerror = () => alert('No se pudo leer el archivo.');
+    reader.onerror = () => alert(this._t('file_read_error'));
     reader.readAsText(file);
   }
 
   async _resetConfig() {
-    if (!confirm('¿Estás seguro de que deseas restablecer Argus a sus valores de fábrica? Perderás todas tus configuraciones, PINs y modos.')) return;
+    if (!confirm(this._t('reset_confirm'))) return;
     try {
       this._undoState = JSON.parse(JSON.stringify(this._ui)); // Store for undo
       
@@ -2503,7 +2574,7 @@ class ArgusPanel extends HTMLElement {
       this.shadowRoot.getElementById('btn-reset-config').style.display = 'none';
       this.shadowRoot.getElementById('btn-undo-reset').style.display = 'block';
       
-      alert('Argus restablecido. Tienes unos segundos para deshacer si cambias de opinión, o simplemente recarga la página para aplicar los cambios.');
+      alert(this._t('reset_success'));
       
       // Auto reload after 10s if not undone
       this._resetTimer = setTimeout(() => {
@@ -2511,7 +2582,7 @@ class ArgusPanel extends HTMLElement {
       }, 10000);
       
     } catch (err) {
-      alert('Error al restablecer: ' + err.message);
+      alert(this._format('reset_error', { error: err.message }));
     }
   }
 
@@ -2524,10 +2595,10 @@ class ArgusPanel extends HTMLElement {
       this.shadowRoot.getElementById('btn-reset-config').style.display = 'block';
       this.shadowRoot.getElementById('btn-undo-reset').style.display = 'none';
       
-      alert('Restablecimiento deshecho con éxito.');
+      alert(this._t('undo_success'));
       window.location.reload();
     } catch (err) {
-      alert('Error al deshacer: ' + err.message);
+      alert(this._format('undo_error', { error: err.message }));
     }
   }
 
@@ -2979,7 +3050,7 @@ class ArgusPanel extends HTMLElement {
     const isNight = this._hass?.states?.['sun.sun']?.state === 'below_horizon';
 
     // Time
-    const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+    const timeStr = new Date().toLocaleTimeString(this._getLocale(), { hour: '2-digit', minute: '2-digit' });
 
     // Surgical Update: Maintain article nodes to persist fullscreen state
     const existing = Array.from(el.querySelectorAll('article.entry'));
@@ -2994,7 +3065,7 @@ class ArgusPanel extends HTMLElement {
       const state = live || e.state || 'unavailable';
       const triggered = state === 'triggered';
       const panicActive = Boolean(this._hass?.states?.[e.entity_id]?.attributes?.argus_panic_active);
-      const fullHudLoc = this._hass?.config?.location_name || this._homeName || 'Hogar';
+      const fullHudLoc = this._hass?.config?.location_name || this._homeName || t('home_fallback');
       const displayedTemperature = this._getDisplayedTemperature();
 
       // Dynamic SVG Icon Generation
@@ -3014,7 +3085,7 @@ class ArgusPanel extends HTMLElement {
 
       art.innerHTML = `
           ${this._renderEntryBackground(weatherState, isNight)}
-          <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="Pantalla completa" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>
+          <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="${escapeHtml(t('fullscreen_title'))}" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>
           ${this._renderBatteryAlerts()}
           <div class="hud">
             <div class="hud-loc">${escapeHtml(fullHudLoc)}</div>
@@ -3027,7 +3098,7 @@ class ArgusPanel extends HTMLElement {
               <button class="liquid-btn btn-night ${state==='armed_night'?'active':''}" data-idx="${idx}" data-action="night">${t('btn_night')}</button>
               <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''}" data-idx="${idx}" data-action="vacation">${t('btn_vacation')}</button>
               <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg> <span>${t('btn_disarmed')}</span></button>
-              <button class="btn-sos" data-action="${panicActive ? 'stop-sos' : 'sos'}" data-idx="${idx}">${panicActive ? '🛑 DETENER PÁNICO' : t('btn_sos')}</button>
+              <button class="btn-sos" data-action="${panicActive ? 'stop-sos' : 'sos'}" data-idx="${idx}">${panicActive ? t('sos_stop') : t('btn_sos')}</button>
             </div>
             <div class="entry-icon">
               ${this._getIntelligentSVG(state, weatherState, isNight, triggered)}
@@ -3233,7 +3304,7 @@ class ArgusPanel extends HTMLElement {
       const action = ev.action || '';
       const rawDetail = ev.detail || '';
       const user   = ev.user   || '';
-      const ts     = ev.ts ? new Date(ev.ts).toLocaleString() : '';
+      const ts     = ev.ts ? new Date(ev.ts).toLocaleString(this._getLocale()) : '';
 
       // Translate stored detail strings (may be stored in any language)
       let detail = rawDetail;
@@ -3468,6 +3539,10 @@ class ArgusPanel extends HTMLElement {
               <input type="number" id="mode-entry-delay" value="${cfg.entry_delay ?? ''}" placeholder="0" style="padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:inherit; font-size:13px">
             </div>
           </div>
+          <div class="mode-sensor-grid" style="margin-top:10px">
+            ${(cfg.entry_sensors || []).map(x => this._chip(x, 'entry')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
+          </div>
+          ${readonly ? '' : `<button class="ghost" data-open-selector="entry" style="margin-top:10px;width:100%;justify-content:center;font-size:12px">${this._t('select_entry_sensors')}</button>`}
           <label class="checkbox-label" style="display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05)">
             <input type="checkbox" id="mode-mqtt-enabled" ${cfg.mqtt_enabled === true ? 'checked' : ''}>
             <span style="font-size:12px;font-weight:600">${this._t('mqtt_label')}</span>
@@ -3507,9 +3582,9 @@ class ArgusPanel extends HTMLElement {
     ? `<span class="pill-dot ${isTr ? 'open' : ''}" title="${raw}"></span>` 
     : ''; 
     
-    const delayIcon = type === 'sensor' ? ` 
-    <button class="icon-btn ${isEntry ? 'active' : ''}" data-toggle-delay="${entityId}" title="Retraso de desarmado (⏳) o Instantáneo (⚡)"> 
-    ${isEntry ? '⏳' : '⚡'} 
+    const delayIcon = type === 'sensor' ? `
+    <button class="icon-btn ${isEntry ? 'active' : ''}" data-toggle-delay="${entityId}" title="Retraso de entrada (⏳) o Instantáneo (⚡)">
+    ${isEntry ? '⏳' : '⚡'}
     </button>` : ''; 
 
     // FIX v0.9.32 — Bug 3: sirenas parpadean rojo si el sistema está en triggered.
@@ -3535,7 +3610,7 @@ class ArgusPanel extends HTMLElement {
     if (!this._isAdmin) return;
     const [type, entityId] = value.split(':');
     const cfg = this._currentModeConfig();
-    const key = type === 'sensor' ? 'sensors' : (type === 'bypass' ? 'bypassed_sensors' : 'sirens');
+    const key = type === 'sensor' ? 'sensors' : (type === 'bypass' ? 'bypassed_sensors' : (type === 'entry' ? 'entry_sensors' : 'sirens'));
     // FIX #4/#5: write back into __by_entity__ structure, not flat modes[mode]
     let eId = this._modeEntryId;
     if (!eId || eId === 'default') {
@@ -3643,7 +3718,7 @@ class ArgusPanel extends HTMLElement {
       <div class="list-item-card">
         <div>
           <div style="font-weight:700">${escapeHtml(a.attributes.friendly_name || a.entity_id)}</div>
-          <div class="small" style="opacity:0.7;margin-top:4px">${a.attributes.last_triggered ? new Date(a.attributes.last_triggered).toLocaleString() : this._t('never_triggered')}</div>
+          <div class="small" style="opacity:0.7;margin-top:4px">${a.attributes.last_triggered ? new Date(a.attributes.last_triggered).toLocaleString(this._getLocale()) : this._t('never_triggered')}</div>
         </div>
         <button class="ghost" style="padding:6px 12px;background:rgba(255,255,255,0.08);border-radius:8px" data-edit-auto="${escapeHtml(editId)}">✏️</button>
       </div>`;
@@ -3714,7 +3789,7 @@ class ArgusPanel extends HTMLElement {
         if (status) { status.textContent = '✓'; status.className = 'status ok'; }
       } catch (e) {
         if (status) { status.textContent = e.message; status.className = 'status err'; }
-        else { alert('Error: ' + e.message); }
+        else { alert(this._format('generic_error', { error: e.message })); }
       }
     });
   }
@@ -3734,11 +3809,13 @@ class ArgusPanel extends HTMLElement {
     } else {
       el.innerHTML = this._users.map((u, i) => {
         const isExpired = u.expiration_date && new Date(u.expiration_date) < new Date();
-        const expirationDate = escapeHtml(u.expiration_date || '');
+        const formattedDate = u.expiration_date
+          ? escapeHtml(new Date(u.expiration_date).toLocaleString(this._getLocale()))
+          : '';
         const expBadge = u.expiration_date 
           ? (isExpired 
-            ? `<span class="user-badge admin" style="background:rgba(229,57,53,0.12);color:#e53935;margin-left:5px">❌ ${escapeHtml(this._t('expired'))} (${expirationDate.replace('T', ' ')})</span>`
-            : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">⏳ ${escapeHtml(this._t('active_until'))}: ${expirationDate.replace('T', ' ')}</span>`)
+            ? `<span class="user-badge admin" style="background:rgba(229,57,53,0.12);color:#e53935;margin-left:5px">❌ ${escapeHtml(this._t('expired'))} (${formattedDate})</span>`
+            : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">⏳ ${escapeHtml(this._t('active_until'))}: ${formattedDate}</span>`)
           : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">♾️ ${this._t('exp_indefinite')}</span>`;
 
         return `
@@ -3772,7 +3849,7 @@ class ArgusPanel extends HTMLElement {
                 this._renderUsers();
                 this._renderActivityLog();
               } catch (e) {
-                alert('Error: ' + e.message);
+                alert(this._format('generic_error', { error: e.message }));
               }
             });
           })
@@ -3797,8 +3874,8 @@ class ArgusPanel extends HTMLElement {
     const expDate = expType === 'temporary' ? this.shadowRoot.getElementById('new-user-exp-date').value : '';
     const status = this.shadowRoot.getElementById('user-status');
     if (!name || !pin) {
-      if (status) { status.textContent = 'Nombre y PIN requeridos'; status.className = 'status err'; }
-      else { alert('Nombre y PIN requeridos'); }
+      if (status) { status.textContent = this._t('user_required'); status.className = 'status err'; }
+      else { alert(this._t('user_required')); }
       return;
     }
     
@@ -3824,7 +3901,7 @@ class ArgusPanel extends HTMLElement {
         this._renderActivityLog();
       } catch (e) {
         if (status) { status.textContent = e.message; status.className = 'status err'; }
-        else { alert('Error: ' + e.message); }
+        else { alert(this._format('generic_error', { error: e.message })); }
       }
     });
   }
@@ -3926,7 +4003,7 @@ class ArgusPanel extends HTMLElement {
               if (help) help.textContent = `Subido como imagen: ${file.name}`;
               this._loadUploadedFiles();
             } else {
-              if (help) help.textContent = 'Error: ' + (res?.error || 'Falló la subida.');
+      if (help) help.textContent = this._format('generic_error', { error: res?.error || this._t('upload_error') });
             }
           },
           async () => {
@@ -3939,7 +4016,7 @@ class ArgusPanel extends HTMLElement {
               if (help) help.textContent = `Subido como video: ${file.name}`;
               this._loadUploadedFiles();
             } else {
-              if (help) help.textContent = 'Error: ' + (res?.error || 'Falló la subida.');
+              if (help) help.textContent = this._format('generic_error', { error: res?.error || this._t('upload_error') });
             }
           }
         );
@@ -3952,12 +4029,12 @@ class ArgusPanel extends HTMLElement {
           if (help) help.textContent = `Subido: ${file.name}`;
           this._loadUploadedFiles();
         } else {
-          if (help) help.textContent = 'Error: ' + (res?.error || 'Falló la subida.');
+          if (help) help.textContent = this._format('generic_error', { error: res?.error || this._t('upload_error') });
         }
       }
     } catch (err) {
       console.error('Upload failed:', err);
-      if (help) help.textContent = `Error: ${err.message || err}`;
+      if (help) help.textContent = this._format('generic_error', { error: err.message || err });
     }
   }
 
@@ -3981,7 +4058,7 @@ class ArgusPanel extends HTMLElement {
               if (help) help.textContent = `Subido como imagen: ${file.name}`;
               this._loadUploadedFiles();
             } else {
-              if (help) help.textContent = 'Error: ' + (res?.error || 'Falló la subida.');
+              if (help) help.textContent = this._format('generic_error', { error: res?.error || this._t('upload_error') });
             }
           },
           async () => {
@@ -3994,7 +4071,7 @@ class ArgusPanel extends HTMLElement {
               if (help) help.textContent = `Subido como video: ${file.name}`;
               this._loadUploadedFiles();
             } else {
-              if (help) help.textContent = 'Error: ' + (res?.error || 'Falló la subida.');
+              if (help) help.textContent = this._format('generic_error', { error: res?.error || this._t('upload_error') });
             }
           }
         );
@@ -4007,12 +4084,12 @@ class ArgusPanel extends HTMLElement {
           if (help) help.textContent = `Subido: ${file.name}`;
           this._loadUploadedFiles();
         } else {
-          if (help) help.textContent = 'Error: ' + (res?.error || 'Falló la subida.');
+          if (help) help.textContent = this._format('generic_error', { error: res?.error || this._t('upload_error') });
         }
       }
     } catch (err) {
       console.error('Upload failed:', err);
-      if (help) help.textContent = `Error: ${err.message || err}`;
+      if (help) help.textContent = this._format('generic_error', { error: err.message || err });
     }
   }
 
@@ -4134,7 +4211,7 @@ class ArgusPanel extends HTMLElement {
       }
     } catch (err) {
       console.warn('Server delete failed:', err);
-      alert(`No se pudo eliminar el archivo: ${err.message || err}`);
+      alert(this._format('delete_file_error', { error: err.message || err }));
     }
   }
 
@@ -4234,7 +4311,7 @@ class ArgusPanel extends HTMLElement {
 
   _updateHomeNameDisplay() {
     const prominent = this.shadowRoot.getElementById('lbl-home-name-prominent');
-    if (prominent) prominent.textContent = this._homeName || 'Mi Casa';
+    if (prominent) prominent.textContent = this._homeName || this._t('home_default');
   }
 
   _sendTempNotification(message) {
@@ -4244,7 +4321,7 @@ class ArgusPanel extends HTMLElement {
       try {
         this._hass.callService('notify', target, {
           message,
-          title: 'Argus — Alerta de Temperatura',
+          title: this._t('temp_notification_title'),
              data: { push: { sound: 'default', badge: 1 } }
         });
       } catch (_) {}
@@ -4262,7 +4339,7 @@ class ArgusPanel extends HTMLElement {
     const outputs = this._panicOutputs || [];
     container.innerHTML = outputs.length
       ? outputs.map(id => `<span class="sensor-pill"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtml(this._hass?.states?.[id]?.attributes?.friendly_name || id)}</span></span>`).join('')
-      : '<div class="mode-sensor-none">Sin dispositivos seleccionados</div>';
+      : `<div class="mode-sensor-none">${this._t('sos_no_outputs')}</div>`;
   }
 
   _configureEmergencyCall() {
@@ -4270,7 +4347,7 @@ class ArgusPanel extends HTMLElement {
     if (!callBtn) return;
     const number = this._normaliseEmergencyNumber(this._emergencyNumber);
     callBtn.href = `tel:${number}`;
-    callBtn.textContent = `📞 Llamar a Emergencias (${number})`;
+    callBtn.textContent = `${this._t('sos_call')} (${number})`;
   }
 
   async _triggerSOS() {
@@ -4279,21 +4356,21 @@ class ArgusPanel extends HTMLElement {
     const modal = this.shadowRoot && this.shadowRoot.getElementById('sos-modal');
     if (modal) modal.classList.remove('open');
     const targets = this._notifTargets || [];
-    const loc = this._homeName || 'Mi Casa';
+    const loc = this._homeName || this._t('home_default');
     const emergencyNumber = this._normaliseEmergencyNumber(this._emergencyNumber);
     const idx = Number.isInteger(this._sosEntryIdx) ? this._sosEntryIdx : 0;
     const eid = this._dashboard?.entries?.[idx]?.entity_id;
     try {
-      if (!this._hass || !eid) throw new Error('No hay una instancia de alarma disponible');
+      if (!this._hass || !eid) throw new Error(this._t('no_alarm_instance'));
       await this._hass.callService('alarm_control_panel', 'alarm_trigger', { entity_id: eid });
-      this._writeLog('sos', `SOS/Pánico activado en ${loc}`, this._hass.user?.name || 'Usuario');
-      if (window.confirm(`SOS activado. ¿Quieres llamar ahora a emergencias (${emergencyNumber})?`)) {
+      this._writeLog('sos', `${this._t('sos_activated')} — ${loc}`, this._hass.user?.name || this._t('user_default'));
+      if (window.confirm(`${this._t('sos_activated')}. ${this._format('sos_call_confirm', { number: emergencyNumber })}`)) {
         // A tel: URI is intentionally delegated to the device.  Phones/tablets
         // can place the call; kiosks without a dialer keep the mobile alerts.
         window.location.href = `tel:${emergencyNumber}`;
       }
     } catch (err) {
-      alert(`No se pudo activar el SOS: ${err?.message || err}`);
+      alert(this._format('sos_error', { error: err?.message || err }));
     } finally {
       this._sosEntryIdx = null;
       this._sosBusy = false;
@@ -4310,7 +4387,7 @@ class ArgusPanel extends HTMLElement {
       disarmed: 'alarm_disarm',
     }[previous];
     if (!entry?.entity_id || !restoreService) {
-      alert('No se pudo determinar el estado anterior del pánico. Desarma o rearma manualmente.');
+      alert(this._t('panic_state_unknown'));
       return;
     }
     const restore = async (pin) => {
@@ -4318,13 +4395,13 @@ class ArgusPanel extends HTMLElement {
         await this._hass.callService('alarm_control_panel', restoreService, {
           entity_id: entry.entity_id, ...(pin ? { code: pin } : {})
         });
-        this._writeLog('sos_stopped', `Pánico detenido; restaurado a ${previous}`, this._hass.user?.name || 'Usuario');
+        this._writeLog('sos_stopped', this._format('panic_stopped', { state: previous }), this._hass.user?.name || this._t('user_default'));
         await this._load();
         return true;
       } catch (err) {
         const pinError = this.shadowRoot.getElementById('pin-error');
-        if (pinError) pinError.textContent = '❌ No se pudo detener el pánico';
-        else alert(`No se pudo detener el pánico: ${err?.message || err}`);
+        if (pinError) pinError.textContent = `❌ ${this._format('panic_stop_error', { error: '' }).replace(/:\s*$/, '')}`;
+        else alert(this._format('panic_stop_error', { error: err?.message || err }));
         return false;
       }
     };
@@ -4690,14 +4767,15 @@ class ArgusPanel extends HTMLElement {
   _openModal(type) {
     this._selectorTarget = type;
     const cfg = this._currentModeConfig();
-    const _srcKey = type === 'sensor' ? 'sensors' : (type === 'bypass' ? 'bypassed_sensors' : 'sirens');
+    const _srcKey = type === 'sensor' ? 'sensors' : (type === 'bypass' ? 'bypassed_sensors' : (type === 'entry' ? 'entry_sensors' : 'sirens'));
     this._selected = type === 'panic'
       ? [...(this._panicOutputs || [])]
       : (Array.isArray(cfg[_srcKey]) ? [...cfg[_srcKey]] : []);
     const title = this.shadowRoot.getElementById('selector-title');
     if (type === 'sensor') title.textContent = this._t('sensor_section');
     else if (type === 'bypass') title.textContent = this._t('sensors_to_bypass');
-    else if (type === 'panic') title.textContent = '🚨 Acciones SOS';
+    else if (type === 'entry') title.textContent = this._t('entry_sensors');
+    else if (type === 'panic') title.textContent = this._t('selector_panic');
     else title.textContent = this._t('siren_section');
     this.shadowRoot.getElementById('selector-search').value = '';
     this._renderSelector();
@@ -4732,8 +4810,8 @@ class ArgusPanel extends HTMLElement {
     list.innerHTML = items.map(x => {
       const raw   = this._hass?.states?.[x.entity_id]?.state || 'unknown';
       const isTr  = ['on', 'unlocked', 'open', 'recording'].includes(raw);
-      const lblMap = { on:'Abierto', off:'Cerrado', locked:'Cerrado', unlocked:'Abierto', idle:'Reposo', recording:'Grabando', home:'En casa', not_home:'Fuera' };
-      const lbl  = this._selectorTarget === 'sensor'
+      const lblMap = { on:this._t('status_open'), off:this._t('status_closed'), locked:this._t('status_closed'), unlocked:this._t('status_open'), idle:this._t('status_idle'), recording:this._t('status_recording'), home:this._t('status_home'), not_home:this._t('status_away') };
+      const lbl  = (this._selectorTarget === 'sensor' || this._selectorTarget === 'entry')
         ? `<span class="badge ${isTr ? 'armed_away' : 'disarmed'}" style="padding:2px 6px;font-size:10px">${escapeHtml(lblMap[raw] || raw)}</span>`
         : '';
       return `<label class="pick-row">
@@ -4743,7 +4821,7 @@ class ArgusPanel extends HTMLElement {
           <div class="pick-row-meta">${escapeHtml(x.entity_id)}${x.area ? ' · '+escapeHtml(x.area) : ''}</div>
         </div>
       </label>`;
-    }).join('') || `<div class="small" style="padding:10px">Sin resultados</div>`;
+    }).join('') || `<div class="small" style="padding:10px">${this._t('no_results')}</div>`;
 
     // FIX v0.9.31 — Bug 1: delegación en contenedor con { once:true }
     // Evita acumulación de listeners en cada re-render que causaba
@@ -4800,6 +4878,7 @@ class ArgusPanel extends HTMLElement {
     if (this._selectorTarget === 'sensor') cfg.sensors          = [...this._selected];
     if (this._selectorTarget === 'siren')  cfg.sirens           = [...this._selected];
     if (this._selectorTarget === 'bypass') cfg.bypassed_sensors = [...this._selected];
+    if (this._selectorTarget === 'entry')  cfg.entry_sensors    = [...this._selected];
     // Escribir de vuelta en la ruta canónica
     this._ui.modes.__by_entity__[_eid][this._mode] = cfg;
     this._closeModal();
@@ -4824,7 +4903,7 @@ class ArgusPanel extends HTMLElement {
     };
     const service = serviceMap[action];
     if (!service) return;
-    const currentUser = this._hass?.user?.name || 'Usuario';
+    const currentUser = this._hass?.user?.name || this._t('user_default');
 
     if (action === 'disarm') {
       // FIX-4: sólo mostrar modal de PIN si hay código configurado

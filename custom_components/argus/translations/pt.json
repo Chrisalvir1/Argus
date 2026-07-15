@@ -1,0 +1,58 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configuração do Argus",
+        "description": "Configure seu painel de alarme Argus.",
+        "data": {
+          "name": "Nome",
+          "code": "Código de alarme (opcional)",
+          "code_arm_required": "Exigir código para armar",
+          "arming_time": "Atraso de ativação (segundos)",
+          "trigger_time": "Duração do disparo (segundos)",
+          "entry_delay": "Atraso de entrada (segundos)"
+        }
+      },
+      "sensors": {
+        "title": "Configuração de Sensores e Sincronização",
+        "description": "Vincule o Argus ao HomeKit/Aqara e selecione seus sensores.",
+        "data": {
+          "linked_alarm_entity": "Entidade de alarme vinculada (HomeKit/Aqara)",
+          "sensors_away": "Sensores no modo Ausente",
+          "sensors_home": "Sensores no modo Casa",
+          "sensors_night": "Sensores no modo Noite",
+          "entry_sensors": "Sensores com atraso de entrada",
+          "siren_entity": "Sirene principal"
+        }
+      }
+    },
+    "error": {
+      "invalid_code": "Código de alarme inválido."
+    },
+    "abort": {
+      "already_configured": "O Argus já está configurado."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opções de Tempo",
+        "data": {
+          "arming_time": "Atraso de ativação (segundos)",
+          "trigger_time": "Duração do disparo (segundos)",
+          "entry_delay": "Atraso de entrada (segundos)"
+        }
+      },
+      "sensors": {
+        "title": "Opções de Sensores",
+        "data": {
+          "sensors_away": "Sensores no modo Ausente",
+          "sensors_home": "Sensores no modo Casa",
+          "sensors_night": "Sensores no modo Noite",
+          "entry_sensors": "Sensores com atraso de entrada",
+          "siren_entity": "Sirene principal"
+        }
+      }
+    }
+  }
+}

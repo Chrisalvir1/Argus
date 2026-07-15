@@ -1,0 +1,58 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configuration d'Argus",
+        "description": "Configurez votre panneau d'alarme Argus.",
+        "data": {
+          "name": "Nom",
+          "code": "Code d'alarme (facultatif)",
+          "code_arm_required": "Exiger le code pour armer",
+          "arming_time": "Délai d'armement (secondes)",
+          "trigger_time": "Durée de déclenchement (secondes)",
+          "entry_delay": "Délai d'entrée (secondes)"
+        }
+      },
+      "sensors": {
+        "title": "Configuration des Capteurs et de la Synchronisation",
+        "description": "Associez Argus avec HomeKit/Aqara et sélectionnez vos capteurs.",
+        "data": {
+          "linked_alarm_entity": "Entité d'alarme liée (HomeKit/Aqara)",
+          "sensors_away": "Capteurs en mode Absent",
+          "sensors_home": "Capteurs en mode Maison",
+          "sensors_night": "Capteurs en mode Nuit",
+          "entry_sensors": "Capteurs avec délai d'entrée",
+          "siren_entity": "Sirène principale"
+        }
+      }
+    },
+    "error": {
+      "invalid_code": "Code d'alarme invalide."
+    },
+    "abort": {
+      "already_configured": "Argus est déjà configuré."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options de Temps",
+        "data": {
+          "arming_time": "Délai d'armement (secondes)",
+          "trigger_time": "Durée de déclenchement (secondes)",
+          "entry_delay": "Délai d'entrée (secondes)"
+        }
+      },
+      "sensors": {
+        "title": "Options des Capteurs",
+        "data": {
+          "sensors_away": "Capteurs en mode Absent",
+          "sensors_home": "Capteurs en mode Maison",
+          "sensors_night": "Capteurs en mode Nuit",
+          "entry_sensors": "Capteurs avec délai d'entrée",
+          "siren_entity": "Sirène principale"
+        }
+      }
+    }
+  }
+}

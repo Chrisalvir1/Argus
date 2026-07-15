@@ -77,6 +77,21 @@ _MODE_LABELS = {
     'armed_vacation': 'Vacaciones'
 }
 
+_LANGUAGE_NAMES = {
+    "es": "Spanish", "en": "English", "fr": "French", "pt": "Portuguese",
+    "it": "Italian", "zh": "Chinese", "ru": "Russian",
+}
+
+_SOS_TEXT = {
+    "es": ("ARGUS — SOS / PÁNICO", "🚨 Botón SOS activado desde {home}. Revisa el estado de la alarma de inmediato.", "Llamar al {number}"),
+    "en": ("ARGUS — SOS / PANIC", "🚨 SOS button activated from {home}. Check the alarm status immediately.", "Call {number}"),
+    "fr": ("ARGUS — SOS / PANIQUE", "🚨 Bouton SOS activé depuis {home}. Vérifiez immédiatement l’état de l’alarme.", "Appeler le {number}"),
+    "pt": ("ARGUS — SOS / PÂNICO", "🚨 Botão SOS ativado em {home}. Verifique o estado do alarme imediatamente.", "Ligar para {number}"),
+    "it": ("ARGUS — SOS / PANICO", "🚨 Pulsante SOS attivato da {home}. Controlla subito lo stato dell’allarme.", "Chiama {number}"),
+    "zh": ("ARGUS — SOS / 紧急", "🚨 SOS 按钮已从 {home} 激活。请立即检查警报状态。", "呼叫 {number}"),
+    "ru": ("ARGUS — SOS / ТРЕВОГА", "🚨 Кнопка SOS активирована из {home}. Немедленно проверьте состояние сигнализации.", "Позвонить {number}"),
+}
+
 ARMED_STATES = {
     AlarmControlPanelState.ARMED_HOME,
     AlarmControlPanelState.ARMED_AWAY,
@@ -154,6 +169,11 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             except Exception:
                 pass
         return "Argus"
+
+    def _language(self) -> str:
+        """Return the supported Home Assistant language for server-side output."""
+        language = str(getattr(self.hass.config, "language", "en")).split("-", 1)[0]
+        return language if language in _SOS_TEXT else "en"
 
     # ── Config loading ──────────────────────────────────────────────
     def _load_config(self):
@@ -446,10 +466,14 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         any_mode_mqtt = any(self._get_mode_val(m, "mqtt_enabled", False) for m in ["home", "away", "night", "vacation"])
         should_mqtt = global_mqtt or any_mode_mqtt
 
-        if should_mqtt and not self._mqtt_unsub:
+        if should_mqtt:
             await self._async_setup_mqtt()
-        elif not should_mqtt and self._mqtt_unsub:
-            self._mqtt_unsub()
+            await self._async_mqtt_publish()
+        elif self._mqtt_unsub:
+            try:
+                self._mqtt_unsub()
+            except Exception:  # noqa: BLE001
+                pass
             self._mqtt_unsub = None
             _LOGGER.info("Argus: MQTT unsubscribed due to configuration reload")
 
@@ -510,7 +534,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                             await self.hass.services.async_call(
                                 "tts", "speak",
                                 {"entity_id": engine, "media_player_entity_id": device,
-                                 "message": message, "language": "es"},
+                                 "message": message, "language": self._language()},
                                 blocking=False,
                             )
                         except Exception as e:
@@ -548,7 +572,11 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                                     "google_generative_ai_conversation", "generate_content",
                                     {
                                         "image_entity_id": camera_id,
-                                        "prompt": "Hay alguien en la imagen de la cámara de seguridad? Describe brevemente en español lo que ves y si parece una amenaza (ej. 'Se detectó una persona caminando en el jardín'). Si no hay nadie, di 'No se detecta movimiento inusual en la cámara'."
+                                        "prompt": (
+                                            "Analyze this security camera image. Briefly describe what is "
+                                            "visible and whether it appears to be a threat. Respond in "
+                                            f"{_LANGUAGE_NAMES[self._language()]}."
+                                        )
                                     },
                                     blocking=True,
                                     return_response=True
@@ -559,7 +587,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                                 if text:
                                     await self.hass.services.async_call(
                                         "tts", "speak",
-                                        {"entity_id": "tts.cloud_say", "media_player_entity_id": tts_device, "message": text, "language": "es"},
+                                        {"entity_id": "tts.cloud_say", "media_player_entity_id": tts_device, "message": text, "language": self._language()},
                                         blocking=False
                                     )
                                 await async_append_audit_log(self.hass, "ai_camera", f"Análisis: {text[:50]}...", user="Argus AI")
@@ -602,6 +630,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             if lst:
                 lst()
                 setattr(self, attr, None)
+        self._arming_target = None
 
     # ── Sensor monitoring ───────────────────────────────────────────
     @callback
@@ -640,8 +669,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         )
 
         # Per-mode entry list or global entry list
-        entry_list  = mode_cfg.get("entry_sensors", self._entry_sensors)
-        _raw_delay  = mode_cfg.get("entry_delay", self._entry_delay)
+        entry_list = mode_cfg.get("entry_sensors")
+        if not isinstance(entry_list, list):
+            entry_list = self._entry_sensors
+        if not isinstance(entry_list, list):
+            entry_list = []
+
+        _raw_delay = mode_cfg.get("entry_delay", self._entry_delay)
         try:
             entry_delay = int(_raw_delay) if _raw_delay is not None else 0
         except (TypeError, ValueError):
@@ -688,14 +722,16 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             notif_targets = self._ui_config.get("notif_targets", [])
             emergency_number = self._ui_config.get("emergency_number", "911")
             loc = self._ui_config.get("home_name", "Mi Casa") or "Mi Casa"
+            sos_title, sos_message, call_title = _SOS_TEXT[self._language()]
+            sos_message = sos_message.format(home=loc)
             for target in notif_targets:
                 try:
                     await self.hass.services.async_call(
                         "notify",
                         target,
                         {
-                            "message": f"🚨 Botón SOS activado desde {loc}. Revisa el estado de la alarma de inmediato.",
-                            "title": "ARGUS — SOS / PÁNICO",
+                            "message": sos_message,
+                            "title": sos_title,
                             "data": {
                                 "push": {"sound": "alarm.caf", "badge": 1},
                                 "priority": "high",
@@ -703,7 +739,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                                 "actions": [
                                     {
                                         "action": "URI",
-                                        "title": f"Llamar al {emergency_number}",
+                                        "title": call_title.format(number=emergency_number),
                                         "uri": f"tel:{emergency_number}",
                                     }
                                 ],
@@ -715,10 +751,11 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                     _LOGGER.warning("Argus: SOS notification error for %s: %s", target, e)
         # Persistent notification in HA
         if self._panic_active:
+            sos_title, sos_message, _ = _SOS_TEXT[self._language()]
             persistent_notification.async_create(
                 self.hass,
-                "🚨 Botón SOS activado. Revisa el estado de la alarma de inmediato.",
-                title="🚨 Argus — SOS / PÁNICO",
+                sos_message.format(home=self._ui_config.get("home_name") or self._name),
+                title=f"🚨 {sos_title}",
                 notification_id="argus_triggered",
             )
         else:
@@ -881,6 +918,17 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     # ── MQTT ────────────────────────────────────────────────────────
     async def _async_setup_mqtt(self):
         """Subscribe to MQTT command topic."""
+        if "mqtt" not in self.hass.config.components:
+            _LOGGER.error("Argus: MQTT integration is not configured in Home Assistant. Please set up the MQTT integration first.")
+            return
+
+        if self._mqtt_unsub:
+            try:
+                self._mqtt_unsub()
+            except Exception:  # noqa: BLE001
+                pass
+            self._mqtt_unsub = None
+
         try:
             from homeassistant.components import mqtt  # noqa: PLC0415
             self._mqtt_unsub = await mqtt.async_subscribe(
@@ -888,17 +936,26 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             )
             _LOGGER.info("Argus: MQTT subscribed to %s", self._mqtt_topic_command)
         except Exception as e:  # noqa: BLE001
-            _LOGGER.warning("Argus: MQTT setup failed: %s", e)
+            _LOGGER.error("Argus: MQTT setup failed (broker may not be available or connected): %s", e)
 
     @callback
     def _async_mqtt_message(self, msg):
+        cmd = ""
+        code = None
+        payload_str = str(msg.payload or "").strip()
+
+        # Try to parse as JSON first
         try:
-            payload = json.loads(msg.payload)
-            cmd = str(payload.get("command", "")).upper()
-            code = payload.get("code")
+            payload = json.loads(payload_str)
+            if isinstance(payload, dict):
+                cmd = str(payload.get("command", "")).upper()
+                code = payload.get("code")
+            else:
+                cmd = str(payload).upper()
         except (TypeError, ValueError, json.JSONDecodeError):
-            _LOGGER.warning("Argus: MQTT command must be JSON with command and code")
-            return
+            # Fallback to raw string command
+            cmd = payload_str.upper()
+
         dispatch = {
             MQTT_COMMAND_DISARM: self.async_alarm_disarm,
             MQTT_COMMAND_ARM_HOME: self.async_alarm_arm_home,
@@ -922,12 +979,14 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         try:
             from homeassistant.components import mqtt  # noqa: PLC0415
-            await mqtt.async_publish(
-                self.hass,
-                self._mqtt_topic_state,
-                self._alarm_state.value,
-                retain=True,
-            )
+            state_val = self._alarm_state.value if self._alarm_state else None
+            if state_val:
+                await mqtt.async_publish(
+                    self.hass,
+                    self._mqtt_topic_state,
+                    state_val,
+                    retain=True,
+                )
         except Exception as e:  # noqa: BLE001
             _LOGGER.warning("Argus: MQTT publish failed: %s", e)
 
@@ -1126,8 +1185,39 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self._triggered_by = None
             self._triggered_mode = None
 
-        # v0.9.60: TODOS los cambios de modo son INSTANTÁNEOS.
-        # Sin ARMING intermedio, sin delays. El usuario lo pidió explícitamente.
+        arming_delay = 0 if restoring_panic else self._get_mode_val(
+            mode_key, "arming_time", self._arming_time
+        )
+        try:
+            arming_delay = max(0, int(arming_delay or 0))
+        except (TypeError, ValueError):
+            arming_delay = 0
+
+        if arming_delay:
+            self._arming_target = target
+            self._alarm_state = AlarmControlPanelState.ARMING
+            self.async_write_ha_state()
+            await self._async_mqtt_publish()
+            self._arming_listener = async_call_later(
+                self.hass, arming_delay, self._async_finish_arming
+            )
+            _LOGGER.info("Argus: arming %s in %s seconds", target, arming_delay)
+            return
+
+        await self._async_complete_arming(target)
+
+    @callback
+    def _async_finish_arming(self, _now) -> None:
+        """Finish an arming countdown unless it was cancelled by disarm."""
+        target = self._arming_target
+        self._arming_listener = None
+        self._arming_target = None
+        if target:
+            self.hass.async_create_task(self._async_complete_arming(target))
+
+    async def _async_complete_arming(self, target: AlarmControlPanelState) -> None:
+        """Commit an armed state and publish the completed transition."""
+        import time as _time
         self._alarm_state = target
         self.async_write_ha_state()
 
@@ -1207,3 +1297,5 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         super().async_write_ha_state()
         from homeassistant.helpers.dispatcher import async_dispatcher_send
         async_dispatcher_send(self.hass, f"{DOMAIN}_state_changed")
+        if self.hass.is_running:
+            self.hass.async_create_task(self._async_mqtt_publish())

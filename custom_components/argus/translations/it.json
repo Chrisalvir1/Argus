@@ -1,0 +1,58 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configurazione Argus",
+        "description": "Configura il pannello di allarme Argus.",
+        "data": {
+          "name": "Nome",
+          "code": "Codice allarme (facoltativo)",
+          "code_arm_required": "Richiedi codice per armare",
+          "arming_time": "Ritardo di attivazione (secondi)",
+          "trigger_time": "Durata attivazione (secondi)",
+          "entry_delay": "Ritardo ingresso (secondi)"
+        }
+      },
+      "sensors": {
+        "title": "Configurazione Sensori e Sincronizzazione",
+        "description": "Collega Argus a HomeKit/Aqara e seleziona i tuoi sensori.",
+        "data": {
+          "linked_alarm_entity": "Entità allarme collegata (HomeKit/Aqara)",
+          "sensors_away": "Sensori in modalità Fuori",
+          "sensors_home": "Sensori in modalità Casa",
+          "sensors_night": "Sensori in modalità Notte",
+          "entry_sensors": "Sensori con ritardo di ingresso",
+          "siren_entity": "Sirena principale"
+        }
+      }
+    },
+    "error": {
+      "invalid_code": "Codice allarme non valido."
+    },
+    "abort": {
+      "already_configured": "Argus è già configurato."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opzioni di Tempo",
+        "data": {
+          "arming_time": "Ritardo di attivazione (secondi)",
+          "trigger_time": "Durata attivazione (secondi)",
+          "entry_delay": "Ritardo ingresso (secondi)"
+        }
+      },
+      "sensors": {
+        "title": "Opzioni Sensori",
+        "data": {
+          "sensors_away": "Sensori in modalità Fuori",
+          "sensors_home": "Sensori in modalità Casa",
+          "sensors_night": "Sensori in modalità Notte",
+          "entry_sensors": "Sensori con ritardo di ingresso",
+          "siren_entity": "Sirena principale"
+        }
+      }
+    }
+  }
+}

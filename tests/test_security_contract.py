@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import ast
+import json
 from pathlib import Path
 import unittest
 
@@ -49,3 +50,49 @@ class TestSecurityContract(unittest.TestCase):
         self.assertIn('"switch"', const)
         self.assertIn("async_stop_panic", switch)
         self.assertIn('_attr_name = "Argus Panic"', switch)
+
+    def test_frontend_language_refresh_covers_all_supported_languages(self) -> None:
+        """Changing language must refresh every dynamic Argus view."""
+        frontend = (COMPONENT / "www" / "argus-panel.js").read_text(encoding="utf-8")
+        for language in ("es", "en", "fr", "pt", "it", "zh", "ru"):
+            self.assertIn(f"{language}: {{", frontend)
+        self.assertIn("use_ha_language", frontend)
+        self.assertIn("_refreshLocalizedUi()", frontend)
+        self.assertIn("this._renderNotifications();", frontend)
+        self.assertIn("this._renderSosOutputs();", frontend)
+        self.assertIn("toLocaleString(this._getLocale())", frontend)
+
+    def test_config_flow_has_all_panel_languages(self) -> None:
+        """The setup flow must not fall back to a different language."""
+        for language in ("es", "en", "fr", "pt", "it", "zh", "ru"):
+            path = COMPONENT / "translations" / f"{language}.json"
+            with self.subTest(language=language):
+                data = json.loads(path.read_text(encoding="utf-8"))
+                self.assertIn("user", data["config"]["step"])
+                self.assertIn("options", data)
+                self.assertIn("init", data["options"]["step"])
+
+    def test_v1_4_0_features(self) -> None:
+        """Verify new version versioning, MQTT topic updates, and new features."""
+        # 1. Check version is bumped consistently
+        manifest = json.loads((COMPONENT / "manifest.json").read_text(encoding="utf-8"))
+        self.assertEqual(manifest["version"], "1.4.0")
+
+        const = (COMPONENT / "const.py").read_text(encoding="utf-8")
+        self.assertIn('VERSION = "1.4.0"', const)
+        self.assertIn('DEFAULT_MQTT_TOPIC_COMMAND = "argus/alarm/set"', const)
+
+        # 2. Check MQTT commands/handling
+        panel = (COMPONENT / "alarm_control_panel.py").read_text(encoding="utf-8")
+        self.assertIn("payload_str = str(msg.payload or \"\").strip()", panel)
+        self.assertIn("json.loads(payload_str)", panel)
+        self.assertIn("fallback to raw string command", panel.lower())
+        self.assertIn("self.hass.async_create_task(self._async_mqtt_publish())", panel)
+
+        # 3. Check entry_list type checking safety in panel
+        self.assertIn("if not isinstance(entry_list, list):", panel)
+
+        # 4. Check date/time localization formatting in panel users list
+        frontend = (COMPONENT / "www" / "argus-panel.js").read_text(encoding="utf-8")
+        self.assertIn("formattedDate", frontend)
+        self.assertIn("new Date(u.expiration_date).toLocaleString(this._getLocale())", frontend)
