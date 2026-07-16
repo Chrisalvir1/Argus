@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.4] - 2026-07-16
+
+### Fixed
+- **Estabilidad del Panel:** Corregido un fallo crítico de carga donde datos antiguos o incompletos en `ui.audit_log`, `ui.users` o `ui.modes` podían detener el renderizado posterior de la interfaz.
+- **Historial Resiliente:** Validación robusta del historial de eventos (`audit_log`), filtrado de entradas inválidas y formateo seguro de fechas/acciones.
+- **Secciones Aisladas:** Implementado renderizado independiente con bloques try/catch en `_load()` para evitar que un fallo en una sección (como automatizaciones o usuarios) rompa el panel completo.
+- **Configuración de Modos Segura:** Validación estricta de variables en la migración de configuraciones antiguas para garantizar que campos heredados no rompan la interfaz.
+- **Acceso Seguro a Automatizaciones:** Se robusteció el acceso a las entidades de automatización del sistema ante estados nulos.
+
 ## [1.4.3] - 2026-07-16
 
 ### Fixed

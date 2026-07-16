@@ -1,8 +1,10 @@
-## Argus v1.4.3 — Bugfix de Interfaz, Rendimiento y Liquid Glass
+# Argus v1.4.4 — Estabilidad del panel y recuperación de secciones
 
-### 🐛 Correcciones en esta versión
+### 🐛 Correcciones y Mejoras de Estabilidad
 
-- **Restauración de Liquid Glass:** Se corrige un problema en modo claro donde las tarjetas se volvían paneles opacos blancos al usar el fondo predeterminado. Ahora las tarjetas mantienen su estética Liquid Glass oscura y translúcida original con fondo predeterminado, y adaptan su contraste correctamente cuando se usan fondos personalizados claros.
-- **Rendimiento del Historial:** La obtención del historial de eventos (`argus/get_audit_log`) ya no bloquea la carga principal del panel. Se carga de forma asíncrona mejorando el tiempo de respuesta inicial.
-- **Robustez en Pestañas de Modos:** Mejorada la validación de configuraciones antiguas para evitar problemas de renderizado en los sensores vinculados, garantizando la altura mínima y regeneración de pestañas.
-
+- **Resiliencia ante Datos Heredados:** Corregido un fallo crítico en el cual datos antiguos, incompletos o malformados en `ui.audit_log`, `ui.users` o `ui.modes` causaban excepciones de JavaScript que detenían el renderizado del panel, dejando secciones en blanco.
+- **Historial de Actividad Protegido:** Validación estricta para garantizar que `audit_log` sea un array de objetos válidos. Se realiza una conversión segura a string de campos sensibles (`action`, `detail`, `user`) y se validan las marcas de tiempo antes de su visualización. En caso de error, el panel muestra sutilmente el mensaje localizado *"Sin eventos recientes."*
+- **Carga de Secciones Aislada:** Cada módulo del panel (Instancias, Historial, Automatizaciones, Modos, Notificaciones y Usuarios) ahora carga en un bloque `try/catch` individual. Si una sección falla al dibujar, las demás continuarán renderizándose sin problemas, y se registrará detalladamente el error en la consola del navegador.
+- **Configuración de Modos Robustecida:** Validación exhaustiva durante la lectura y migración de configuraciones antiguas para asegurar que arrays como `sensors`, `bypassed_sensors`, `sirens` y `entry_sensors` se inicialicen vacíos si están dañados, y se respetan los parámetros funcionales existentes.
+- **Usuarios y Fechas Seguras:** Limpieza de la colección de usuarios heredados ignorando valores nulos, y robustecimiento en el cálculo y formateo de expiraciones del PIN de acceso.
+- **Automatizaciones Tolerantes:** Acceso seguro al estado de automatizaciones en Home Assistant para prevenir crashes cuando no hay entidades asociadas.

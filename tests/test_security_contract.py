@@ -72,14 +72,14 @@ class TestSecurityContract(unittest.TestCase):
                 self.assertIn("options", data)
                 self.assertIn("init", data["options"]["step"])
 
-    def test_v1_4_3_features(self) -> None:
+    def test_v1_4_4_features(self) -> None:
         """Verify new version versioning, MQTT topic updates, and new features."""
         # 1. Check version is bumped consistently
         manifest = json.loads((COMPONENT / "manifest.json").read_text(encoding="utf-8"))
-        self.assertEqual(manifest["version"], "1.4.3")
+        self.assertEqual(manifest["version"], "1.4.4")
 
         const = (COMPONENT / "const.py").read_text(encoding="utf-8")
-        self.assertIn('VERSION = "1.4.3"', const)
+        self.assertIn('VERSION = "1.4.4"', const)
         self.assertIn('DEFAULT_MQTT_TOPIC_COMMAND = "argus/alarm/set"', const)
 
         # 2. Check MQTT commands/handling
@@ -95,4 +95,4 @@ class TestSecurityContract(unittest.TestCase):
         # 4. Check date/time localization formatting in panel users list
         frontend = (COMPONENT / "www" / "argus-panel.js").read_text(encoding="utf-8")
         self.assertIn("formattedDate", frontend)
-        self.assertIn("new Date(u.expiration_date).toLocaleString(this._getLocale())", frontend)
+        self.assertIn("toLocaleString(this._getLocale())", frontend)

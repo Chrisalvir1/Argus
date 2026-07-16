@@ -2814,7 +2814,9 @@ class ArgusPanel extends HTMLElement {
     });
     this._notifTargets = dashboard.ui?.notif_targets || [];
     this._ttsTargets   = dashboard.ui?.tts_targets   || [];
-    this._users = dashboard.ui?.users || [];
+    this._users = Array.isArray(dashboard.ui?.users)
+      ? dashboard.ui.users.filter(user => user && typeof user === 'object' && !Array.isArray(user))
+      : [];
     this._homeName = dashboard.ui?.home_name || '';
     this._emergencyNumber = dashboard.ui?.emergency_number || '911';
     this._panicOutputs = dashboard.ui?.panic_outputs || [];
@@ -2905,13 +2907,20 @@ class ArgusPanel extends HTMLElement {
     const pinForgot = this.shadowRoot.getElementById('pin-forgot-link');
     if (pinForgot) pinForgot.style.display = pinConfigured ? 'inline' : 'none';
 
-    this._renderEntries();
-    this._renderActivityLog();
-    this._renderModeTabs();
-    this._renderModeView();
-    this._renderAutomations();
-    this._renderNotifications();
-    this._renderUsers();
+    // Each section is independent. A bad legacy value in one must not leave
+    // the rest of the dashboard as an empty template skeleton.
+    [
+      ['instances', () => this._renderEntries()],
+      ['activity log', () => this._renderActivityLog()],
+      ['mode tabs', () => this._renderModeTabs()],
+      ['mode view', () => this._renderModeView()],
+      ['automations', () => this._renderAutomations()],
+      ['notifications', () => this._renderNotifications()],
+      ['users', () => this._renderUsers()],
+    ].forEach(([name, render]) => {
+      try { render(); }
+      catch (err) { console.error(`Argus ${name} render failed:`, err); }
+    });
     this._loadUploadedFiles();
 
     // Retry loading if integration is reloading and has no active entity_id yet
@@ -3461,61 +3470,76 @@ class ArgusPanel extends HTMLElement {
     if (!el) return;
     if (titleEl) titleEl.textContent = this._t('activity_log');
 
-    const log = this._ui?.audit_log || [];
-    if (!log.length) {
-      el.innerHTML = `<div class="small" style="padding:8px 0;opacity:.55">${this._t('log_no_events')}</div>`;
-      return;
-    }
-
-    el.innerHTML = log.slice(0, 30).map(ev => {
-      const action = ev.action || '';
-      const rawDetail = ev.detail || '';
-      const user   = ev.user   || '';
-      const ts     = ev.ts ? new Date(ev.ts).toLocaleString(this._getLocale()) : '';
-
-      // Audit entries are persisted by HA and can have been written in a
-      // different UI language.  Derive their display text from the stable
-      // action code every time the selected language changes.
-      const detail = this._localizeActivityDetail(action, rawDetail);
-
-      let icon = '<div class="glass-orb"></div>', badgeCls = '', badgeTxt = action, itemCls = '';
-      if (action.endsWith('_rejected')) {
-        itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('log_action_rejected');
-      } else if (action.includes('arm') && !action.includes('disarm')) {
-        itemCls = 'log-item--armed'; badgeCls = 'arm'; badgeTxt = this._t('log_armed');
-      } else if (action.includes('disarm')) {
-        itemCls = 'log-item--disarmed'; badgeCls = 'disarm'; badgeTxt = this._t('log_disarmed');
-      } else if (action.includes('trigger') || action.includes('alarm')) {
-        itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('log_triggered');
-      } else if (action === 'pin_reset') {
-        itemCls = 'log-item--disarmed'; badgeCls = 'disarm'; badgeTxt = this._t('badge_pin_reset');
-      } else if (action === 'pin_reset_failed') {
-        itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('badge_pin_reset_failed');
-      } else if (action === 'sos' || action === 'sos_stopped' || action === 'panic_stopped') {
-        itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('log_action_sos');
+    try {
+      const log = Array.isArray(this._ui?.audit_log)
+        ? this._ui.audit_log.filter(entry => entry && typeof entry === 'object' && !Array.isArray(entry))
+        : [];
+      if (!log.length) {
+        el.innerHTML = `<div class="small" style="padding:8px 0;opacity:.55">${this._t('log_no_events')}</div>`;
+        return;
       }
 
-      // Attribute the action clearly
-      let source = '';
-      if (user && user !== 'Argus' && user !== 'system') {
-        source = `👤 ${user}`;
-      } else if (action.toLowerCase().includes('homekit') || detail.toLowerCase().includes('homekit')) {
-        source = `🍎 HomeKit`;
-      } else {
-        source = `🤖 Argus`;
-      }
+      el.innerHTML = log.slice(0, 30).map(ev => {
+        const action = String(ev.action || '');
+        const rawDetail = String(ev.detail || '');
+        const user   = String(ev.user || '');
+        const date = ev.ts ? new Date(ev.ts) : null;
+        let ts = '';
+        if (date && !Number.isNaN(date.getTime())) {
+          try {
+            ts = date.toLocaleString(this._getLocale());
+          } catch (e) {
+            ts = date.toISOString();
+          }
+        }
 
-      return `<div class="log-item ${itemCls}">
-        <div class="log-icon">${icon}</div>
-        <div class="log-body">
-          <div class="log-title">
-            <span class="log-badge ${badgeCls}">${escapeHtml(badgeTxt)}</span>
-            <span style="font-weight:500">${escapeHtml(detail)}</span>
+        // Audit entries are persisted by HA and can have been written in a
+        // different UI language.  Derive their display text from the stable
+        // action code every time the selected language changes.
+        const detail = this._localizeActivityDetail(action, rawDetail);
+
+        let icon = '<div class="glass-orb"></div>', badgeCls = '', badgeTxt = action, itemCls = '';
+        if (action.endsWith('_rejected')) {
+          itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('log_action_rejected');
+        } else if (action.includes('arm') && !action.includes('disarm')) {
+          itemCls = 'log-item--armed'; badgeCls = 'arm'; badgeTxt = this._t('log_armed');
+        } else if (action.includes('disarm')) {
+          itemCls = 'log-item--disarmed'; badgeCls = 'disarm'; badgeTxt = this._t('log_disarmed');
+        } else if (action.includes('trigger') || action.includes('alarm')) {
+          itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('log_triggered');
+        } else if (action === 'pin_reset') {
+          itemCls = 'log-item--disarmed'; badgeCls = 'disarm'; badgeTxt = this._t('badge_pin_reset');
+        } else if (action === 'pin_reset_failed') {
+          itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('badge_pin_reset_failed');
+        } else if (action === 'sos' || action === 'sos_stopped' || action === 'panic_stopped') {
+          itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('log_action_sos');
+        }
+
+        // Attribute the action clearly
+        let source = '';
+        if (user && user !== 'Argus' && user !== 'system') {
+          source = `👤 ${user}`;
+        } else if (action.toLowerCase().includes('homekit') || detail.toLowerCase().includes('homekit')) {
+          source = `🍎 HomeKit`;
+        } else {
+          source = `🤖 Argus`;
+        }
+
+        return `<div class="log-item ${itemCls}">
+          <div class="log-icon">${icon}</div>
+          <div class="log-body">
+            <div class="log-title">
+              <span class="log-badge ${badgeCls}">${escapeHtml(badgeTxt)}</span>
+              <span style="font-weight:500">${escapeHtml(detail)}</span>
+            </div>
+            <div class="log-meta">${escapeHtml(ts)} &nbsp;·&nbsp; ${escapeHtml(source)}</div>
           </div>
-          <div class="log-meta">${escapeHtml(ts)} &nbsp;·&nbsp; ${escapeHtml(source)}</div>
-        </div>
-      </div>`;
-    }).join('');
+        </div>`;
+      }).join('');
+    } catch (err) {
+      console.error('Argus activity log render failed:', err);
+      el.innerHTML = `<div class="small" style="padding:8px 0;opacity:.55">${this._t('log_no_events')}</div>`;
+    }
   }
 
   /* ── Modes ───────────────────────────────────────────────────────── */
@@ -3595,9 +3619,17 @@ class ArgusPanel extends HTMLElement {
       require_closed: false, arming_time: null, entry_delay: null,
       mqtt_enabled: null, entry_sensors: []
     };
-    if (!this._ui) return { ...emptyCfg };
-    this._ui.modes = this._ui.modes || {};
-    this._ui.modes.__by_entity__ = this._ui.modes.__by_entity__ || {};
+    if (!this._ui || typeof this._ui !== 'object' || Array.isArray(this._ui)) {
+      this._ui = { modes: {}, dashboard: {} };
+    }
+
+    if (!this._ui.modes || typeof this._ui.modes !== 'object' || Array.isArray(this._ui.modes)) {
+      this._ui.modes = {};
+    }
+    if (!this._ui.modes.__by_entity__ || typeof this._ui.modes.__by_entity__ !== 'object' || Array.isArray(this._ui.modes.__by_entity__)) {
+      this._ui.modes.__by_entity__ = {};
+    }
+
     let entityId = this._modeEntryId;
     if (!entityId || entityId === 'default') {
       entityId = this._dashboard?.entries?.[0]?.entity_id || 'default';
@@ -3605,15 +3637,21 @@ class ArgusPanel extends HTMLElement {
     this._modeEntryId = entityId;
     this._mode = this._mode || 'disarmed';
 
-    this._ui.modes.__by_entity__[entityId] = this._ui.modes.__by_entity__[entityId] || {};
+    if (!this._ui.modes.__by_entity__[entityId] || typeof this._ui.modes.__by_entity__[entityId] !== 'object' || Array.isArray(this._ui.modes.__by_entity__[entityId])) {
+      this._ui.modes.__by_entity__[entityId] = {};
+    }
 
     // Migration/Ensure valid
-    if (!this._ui.modes.__by_entity__[entityId][this._mode]) {
-        const legacy = this._ui.modes[this._mode] || emptyCfg;
+    if (!this._ui.modes.__by_entity__[entityId][this._mode] || typeof this._ui.modes.__by_entity__[entityId][this._mode] !== 'object' || Array.isArray(this._ui.modes.__by_entity__[entityId][this._mode])) {
+        let legacy = {};
+        if (this._ui.modes[this._mode] && typeof this._ui.modes[this._mode] === 'object' && !Array.isArray(this._ui.modes[this._mode])) {
+          legacy = this._ui.modes[this._mode];
+        }
         this._ui.modes.__by_entity__[entityId][this._mode] = { ...emptyCfg, ...legacy };
     }
 
-    const cfg = this._ui.modes.__by_entity__[entityId][this._mode];
+    const savedCfg = this._ui.modes.__by_entity__[entityId][this._mode];
+    const cfg = savedCfg && typeof savedCfg === 'object' && !Array.isArray(savedCfg) ? savedCfg : emptyCfg;
     // Older stored UI data may contain a missing or malformed collection.
     // Never allow that to abort rendering the entire Modes section.
     return {
@@ -3623,6 +3661,10 @@ class ArgusPanel extends HTMLElement {
       bypassed_sensors: Array.isArray(cfg?.bypassed_sensors) ? cfg.bypassed_sensors : [],
       sirens: Array.isArray(cfg?.sirens) ? cfg.sirens : [],
       entry_sensors: Array.isArray(cfg?.entry_sensors) ? cfg.entry_sensors : [],
+      require_closed: typeof cfg?.require_closed === 'boolean' ? cfg.require_closed : false,
+      arming_time: (cfg?.arming_time !== undefined && cfg?.arming_time !== null) ? cfg.arming_time : null,
+      entry_delay: (cfg?.entry_delay !== undefined && cfg?.entry_delay !== null) ? cfg.entry_delay : null,
+      mqtt_enabled: (cfg?.mqtt_enabled !== undefined && cfg?.mqtt_enabled !== null) ? cfg.mqtt_enabled : null,
     };
   }
 
@@ -3853,68 +3895,78 @@ class ArgusPanel extends HTMLElement {
   /* ── Automations ─────────────────────────────────────────────────── */
   _renderAutomations() {
     const el = this.shadowRoot.getElementById('auto-view');
-    if (!el || !this._dashboard?.entries?.length || !this._hass) return;
-
-    if (!this._relatedAutomationsQueried) {
-        this._relatedAutomationsQueried = true;
-        this._cachedRelatedAutomations = new Set();
-        (async () => {
-            try {
-                let relatedSets = [];
-                for (const e of this._dashboard.entries) {
-                    const res = await this._hass.callWS({ type: 'search/related', item_type: 'entity', item_id: e.entity_id });
-                    if (res) {
-                        if (res.automation) relatedSets.push(...res.automation);
-                        if (res.device && res.device.length) {
-                            for (const d of res.device) {
-                                const resDev = await this._hass.callWS({ type: 'search/related', item_type: 'device', item_id: d });
-                                if (resDev && resDev.automation) relatedSets.push(...resDev.automation);
-                            }
-                        }
-                    }
-                }
-                this._cachedRelatedAutomations = new Set(relatedSets);
-            } catch (err) {
-                this._cachedRelatedAutomations = new Set();
-            } finally {
-                this._relatedAutomationsFetched = true;
-                this._renderAutomations(); // Re-render when data is ready
-            }
-        })();
-        el.innerHTML = `<div class="small" style="padding:10px 0;opacity:.55">${this._t('searching_auto')}</div>`;
-        return;
-    }
-
-    // Si ya consultamos pero aún no termina, mantenemos el UI de carga
-    if (!this._relatedAutomationsFetched) return;
-
-    const items = Object.values(this._hass.states).filter(s => {
-      if (!s.entity_id.startsWith('automation.')) return false;
-      const name = (s.attributes.friendly_name || '').toLowerCase();
-      return this._cachedRelatedAutomations.has(s.entity_id) || name.includes('argus') || s.entity_id.toLowerCase().includes('argus');
-    });
-
-    if (!items.length) {
-      el.innerHTML = `<div class="small" style="padding:8px 0;opacity:.55">${this._t('no_auto_linked')}</div>`;
+    if (!el) return;
+    if (!this._dashboard?.entries?.length || !this._hass) {
+      el.innerHTML = `<div class="small" style="padding:10px 0;opacity:.55">${this._t('searching_auto')}</div>`;
       return;
     }
 
-    el.innerHTML = `<div style="display:flex;flex-direction:column;gap:12px;max-height:300px;overflow-y:auto;padding-right:8px">${items.map(a => {
-      const editId = a.attributes.id || a.entity_id.replace('automation.', '');
-      return `
-      <div class="list-item-card">
-        <div>
-          <div style="font-weight:700">${escapeHtml(a.attributes.friendly_name || a.entity_id)}</div>
-          <div class="small" style="opacity:0.7;margin-top:4px">${a.attributes.last_triggered ? new Date(a.attributes.last_triggered).toLocaleString(this._getLocale()) : this._t('never_triggered')}</div>
-        </div>
-        <button class="ghost" style="padding:6px 12px;background:rgba(255,255,255,0.08);border-radius:8px" data-edit-auto="${escapeHtml(editId)}">✏️</button>
-      </div>`;
-    }).join('')}</div>`;
+    try {
+      if (!this._relatedAutomationsQueried) {
+          this._relatedAutomationsQueried = true;
+          this._cachedRelatedAutomations = new Set();
+          (async () => {
+              try {
+                  let relatedSets = [];
+                  for (const e of this._dashboard.entries) {
+                      const res = await this._hass.callWS({ type: 'search/related', item_type: 'entity', item_id: e.entity_id });
+                      if (res) {
+                          if (res.automation) relatedSets.push(...res.automation);
+                          if (res.device && res.device.length) {
+                              for (const d of res.device) {
+                                  const resDev = await this._hass.callWS({ type: 'search/related', item_type: 'device', item_id: d });
+                                  if (resDev && resDev.automation) relatedSets.push(...resDev.automation);
+                              }
+                          }
+                      }
+                  }
+                  this._cachedRelatedAutomations = new Set(relatedSets);
+              } catch (err) {
+                  this._cachedRelatedAutomations = new Set();
+              } finally {
+                  this._relatedAutomationsFetched = true;
+                  this._renderAutomations(); // Re-render when data is ready
+              }
+          })();
+          el.innerHTML = `<div class="small" style="padding:10px 0;opacity:.55">${this._t('searching_auto')}</div>`;
+          return;
+      }
 
-    el.querySelectorAll('[data-edit-auto]').forEach(btn => btn.addEventListener('click', () => {
-      history.pushState(null, '', `/config/automation/edit/${btn.dataset.editAuto}`);
-      window.dispatchEvent(new CustomEvent('location-changed'));
-    }));
+      // Si ya consultamos pero aún no termina, mantenemos el UI de carga
+      if (!this._relatedAutomationsFetched) return;
+
+      const states = this._hass.states || {};
+      const items = Object.values(states).filter(s => {
+        if (!s || !s.entity_id || !s.entity_id.startsWith('automation.')) return false;
+        const name = (s.attributes?.friendly_name || '').toLowerCase();
+        return this._cachedRelatedAutomations.has(s.entity_id) || name.includes('argus') || s.entity_id.toLowerCase().includes('argus');
+      });
+
+      if (!items.length) {
+        el.innerHTML = `<div class="small" style="padding:8px 0;opacity:.55">${this._t('no_auto_linked')}</div>`;
+        return;
+      }
+
+      el.innerHTML = `<div style="display:flex;flex-direction:column;gap:12px;max-height:300px;overflow-y:auto;padding-right:8px">${items.map(a => {
+        const editId = a.attributes?.id || a.entity_id.replace('automation.', '');
+        return `
+        <div class="list-item-card">
+          <div>
+            <div style="font-weight:700">${escapeHtml(a.attributes?.friendly_name || a.entity_id)}</div>
+            <div class="small" style="opacity:0.7;margin-top:4px">${a.attributes?.last_triggered ? new Date(a.attributes.last_triggered).toLocaleString(this._getLocale()) : this._t('never_triggered')}</div>
+          </div>
+          <button class="ghost" style="padding:6px 12px;background:rgba(255,255,255,0.08);border-radius:8px" data-edit-auto="${escapeHtml(editId)}">✏️</button>
+        </div>`;
+      }).join('')}</div>`;
+
+      el.querySelectorAll('[data-edit-auto]').forEach(btn => btn.addEventListener('click', () => {
+        history.pushState(null, '', `/config/automation/edit/${btn.dataset.editAuto}`);
+        window.dispatchEvent(new CustomEvent('location-changed'));
+      }));
+    } catch (err) {
+      console.error('Argus automations render failed:', err);
+      el.innerHTML = `<div class="small" style="padding:8px 0;opacity:.55">${this._t('no_auto_linked')}</div>`;
+    }
   }
 
   /* ── Notifications ───────────────────────────────────────────────── */
@@ -3991,57 +4043,71 @@ class ArgusPanel extends HTMLElement {
       adminOnlyText.style.display = this._isAdmin ? 'none' : 'block';
     }
 
-    if (!this._users || !this._users.length) {
-      el.innerHTML = `<div class="small">${this._t('no_users')}</div>`;
-    } else {
-      el.innerHTML = this._users.map((u, i) => {
-        const isExpired = u.expiration_date && new Date(u.expiration_date) < new Date();
-        const formattedDate = u.expiration_date
-          ? escapeHtml(new Date(u.expiration_date).toLocaleString(this._getLocale()))
-          : '';
-        const expBadge = u.expiration_date
-          ? (isExpired
-            ? `<span class="user-badge admin" style="background:rgba(229,57,53,0.12);color:#e53935;margin-left:5px">❌ ${escapeHtml(this._t('expired'))} (${formattedDate})</span>`
-            : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">⏳ ${escapeHtml(this._t('active_until'))}: ${formattedDate}</span>`)
-          : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">♾️ ${this._t('exp_indefinite')}</span>`;
+    try {
+      const users = Array.isArray(this._users) ? this._users.filter(u => u && typeof u === 'object' && !Array.isArray(u)) : [];
+      if (!users.length) {
+        el.innerHTML = `<div class="small">${this._t('no_users')}</div>`;
+      } else {
+        el.innerHTML = users.map((u, i) => {
+          const isExpired = u.expiration_date && new Date(u.expiration_date) < new Date();
+          let formattedDate = '';
+          if (u.expiration_date) {
+            const dateObj = new Date(u.expiration_date);
+            if (!isNaN(dateObj.getTime())) {
+              try {
+                formattedDate = dateObj.toLocaleString(this._getLocale());
+              } catch (e) {
+                formattedDate = dateObj.toISOString();
+              }
+            }
+          }
+          const expBadge = u.expiration_date
+            ? (isExpired
+              ? `<span class="user-badge admin" style="background:rgba(229,57,53,0.12);color:#e53935;margin-left:5px">❌ ${escapeHtml(this._t('expired'))} (${escapeHtml(formattedDate)})</span>`
+              : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">⏳ ${escapeHtml(this._t('active_until'))}: ${escapeHtml(formattedDate)}</span>`)
+            : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">♾️ ${this._t('exp_indefinite')}</span>`;
 
-        return `
-        <div class="user-card" style="display:flex;flex-direction:column;align-items:stretch;gap:8px">
-          <div style="display:flex;justify-content:between;align-items:center;width:100%">
-            <div style="flex:1">
-              <div style="font-weight:700">${escapeHtml(u.name)}</div>
-              <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
-                <span class="user-badge ${u.is_admin ? 'admin' : ''}">${u.is_admin ? '⭐ Admin' : '👤 User'}</span>
-                ${expBadge}
+          return `
+          <div class="user-card" style="display:flex;flex-direction:column;align-items:stretch;gap:8px">
+            <div style="display:flex;justify-content:between;align-items:center;width:100%">
+              <div style="flex:1">
+                <div style="font-weight:700">${escapeHtml(u.name || '')}</div>
+                <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
+                  <span class="user-badge ${u.is_admin ? 'admin' : ''}">${u.is_admin ? '⭐ Admin' : '👤 User'}</span>
+                  ${expBadge}
+                </div>
+              </div>
+              <div style="display:flex;gap:8px;align-items:center">
+                ${this._isAdmin ? `<button class="danger" style="padding:5px 10px" data-user-del="${i}">🗑</button>` : ''}
               </div>
             </div>
-            <div style="display:flex;gap:8px;align-items:center">
-              ${this._isAdmin ? `<button class="danger" style="padding:5px 10px" data-user-del="${i}">🗑</button>` : ''}
-            </div>
-          </div>
-        </div>`;
-      }).join('');
+          </div>`;
+        }).join('');
 
-      if (this._isAdmin) {
-        el.querySelectorAll('[data-user-del]').forEach(btn =>
-          btn.addEventListener('click', async () => {
-            const idx = Number(btn.dataset.userDel);
-            this._runWithPin(async () => {
-              this._users.splice(idx, 1);
-              try {
-                const resp = await this._send('argus/save_ui', { users: this._users });
-                if (resp && resp.ui) {
-                  this._ui = resp.ui;
+        if (this._isAdmin) {
+          el.querySelectorAll('[data-user-del]').forEach(btn =>
+            btn.addEventListener('click', async () => {
+              const idx = Number(btn.dataset.userDel);
+              this._runWithPin(async () => {
+                this._users.splice(idx, 1);
+                try {
+                  const resp = await this._send('argus/save_ui', { users: this._users });
+                  if (resp && resp.ui) {
+                    this._ui = resp.ui;
+                  }
+                  this._renderUsers();
+                  this._renderActivityLog();
+                } catch (e) {
+                  alert(this._format('generic_error', { error: e.message }));
                 }
-                this._renderUsers();
-                this._renderActivityLog();
-              } catch (e) {
-                alert(this._format('generic_error', { error: e.message }));
-              }
-            });
-          })
-        );
+              });
+            })
+          );
+        }
       }
+    } catch (err) {
+      console.error('Argus users list render failed:', err);
+      el.innerHTML = `<div class="small">${this._t('no_users')}</div>`;
     }
 
     // show/hide form based on admin
