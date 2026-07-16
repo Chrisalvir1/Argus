@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.8] - 2026-07-16
+
+### Changed
+- **Rediseño compacto de “Control de Acceso y Usuarios”**: El panel ahora muestra un resumen del PIN maestro y usuarios configurados. Los formularios de usuarios y PIN se abren solo bajo demanda, conservando toda la funcionalidad existente.
+
 ## [1.4.7] - 2026-07-16
 
 ### Updated

@@ -5,7 +5,7 @@
 
   **El Sistema de Seguridad Premium para Home Assistant**
 
-  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.4.7-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
+  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.4.8-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
   [![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)](https://www.home-assistant.io/)
   [![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)](https://hacs.xyz/)
   [![GitHub stars](https://img.shields.io/github/stars/Chrisalvir1/Argus?style=social)](https://github.com/Chrisalvir1/Argus/stargazers)
@@ -21,17 +21,14 @@
 
 ---
 
-## ✨ Novedades y Correcciones Recientes (v1.4.7)
+## ✨ Novedades y Correcciones Recientes (v1.4.8)
 
-¡Gran salto en estabilidad, reorganización simétrica responsive y refinamiento de la interfaz Liquid Glass!
+¡Rediseño compacto de “Control de Acceso y Usuarios”!
 
 **Cambios y Características Nuevas:**
-- **Estabilidad y Carga Resiliente:** Se agregaron validaciones exhaustivas y bloques try/catch independientes en el historial de eventos, control de usuarios y automatizaciones. Los datos antiguos o corruptos ya no bloquean la carga del panel.
-- **Reorganización Simétrica:** Rediseño del diseño principal a una cuadrícula simétrica de dos columnas en ordenadores, y adaptación completa a una sola columna fluida en móviles para evitar cualquier desbordamiento.
-- **SOS Compacto y Seguro:** Las acciones de SOS ahora cuentan con un diseño compacto que trunca de forma segura nombres largos de sensores y utiliza scroll interno independiente, adaptándose a textos de cualquier longitud e idioma.
-- **Restauración del Liquid Glass:** Ajustado el contraste y la transparencia del modo claro para conservar la elegancia translúcida original oscura sobre el fondo predeterminado, y mejorar la visibilidad sobre fondos personalizados claros.
-- **Contraste de Idiomas:** Corrección de contraste en el selector de idiomas para garantizar la legibilidad en cualquier modo visual.
-- **Personalización Alineada:** Sección de personalización organizada en filas equilibradas de dos columnas.
+- **Control de Acceso y Usuarios:** El panel ahora muestra un resumen del PIN maestro y usuarios configurados.
+- **Formularios bajo demanda:** Los formularios de usuarios y PIN se abren solo bajo demanda.
+- **Funcionalidad intacta:** Se conserva toda la funcionalidad existente, ahora en una presentación mucho más limpia y organizada.
 
 ---
 
