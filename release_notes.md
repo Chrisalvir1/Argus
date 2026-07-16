@@ -1,10 +1,11 @@
-# Argus v1.4.4 — Estabilidad del panel y recuperación de secciones
+# Argus v1.4.5 — Estabilidad, legibilidad y diseño Liquid Glass
 
-### 🐛 Correcciones y Mejoras de Estabilidad
+Esta versión de lanzamiento pule detalles visuales importantes del panel de seguridad Argus Home Hub y mejora la resiliencia en la carga ante datos antiguos o incompletos.
 
-- **Resiliencia ante Datos Heredados:** Corregido un fallo crítico en el cual datos antiguos, incompletos o malformados en `ui.audit_log`, `ui.users` o `ui.modes` causaban excepciones de JavaScript que detenían el renderizado del panel, dejando secciones en blanco.
-- **Historial de Actividad Protegido:** Validación estricta para garantizar que `audit_log` sea un array de objetos válidos. Se realiza una conversión segura a string de campos sensibles (`action`, `detail`, `user`) y se validan las marcas de tiempo antes de su visualización. En caso de error, el panel muestra sutilmente el mensaje localizado *"Sin eventos recientes."*
-- **Carga de Secciones Aislada:** Cada módulo del panel (Instancias, Historial, Automatizaciones, Modos, Notificaciones y Usuarios) ahora carga en un bloque `try/catch` individual. Si una sección falla al dibujar, las demás continuarán renderizándose sin problemas, y se registrará detalladamente el error en la consola del navegador.
-- **Configuración de Modos Robustecida:** Validación exhaustiva durante la lectura y migración de configuraciones antiguas para asegurar que arrays como `sensors`, `bypassed_sensors`, `sirens` y `entry_sensors` se inicialicen vacíos si están dañados, y se respetan los parámetros funcionales existentes.
-- **Usuarios y Fechas Seguras:** Limpieza de la colección de usuarios heredados ignorando valores nulos, y robustecimiento en el cálculo y formateo de expiraciones del PIN de acceso.
-- **Automatizaciones Tolerantes:** Acceso seguro al estado de automatizaciones en Home Assistant para prevenir crashes cuando no hay entidades asociadas.
+### 🌟 Cambios en esta versión
+
+- **Contraste de Idioma:** Se mejoró la legibilidad de los textos dentro del selector de idioma en temas claros y oscuros.
+- **Rediseño de Selectores:** El selector de sensores, sirenas, bypass y SOS ahora posee una distribución moderna de dos columnas, altura estable, scroll independiente y tarjetas Liquid Glass.
+- **SOS de Ancho Completo:** La fila de acciones de SOS ocupa ahora todo el ancho horizontal del panel, eliminando espacios vacíos.
+- **Distribución Simétrica del Panel:** Reorganización de las columnas para un diseño equilibrado. La columna derecha muestra ahora Historial y Modos antes del Control de acceso.
+- **Carga de Datos Resiliente:** Incorporadas validaciones robustas y bloques try/catch en el historial, automatizaciones y usuarios para evitar que datos antiguos e incompletos bloqueen la carga del panel.

@@ -1262,18 +1262,22 @@ _tmpl.innerHTML = `
   .search-wrap{display:flex;gap:10px;align-items:center}
   .search-wrap input{flex:1;min-width:0}
   /* ── Dual-panel selector modal ───────────────────────────────────────────────────── */
-  #selector-modal .modal{width:min(860px,96vw);max-height:92vh}
-  .sel-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;overflow:hidden}
+  #selector-modal .modal{width:min(860px,96vw);height:min(760px,92vh);max-height:92vh;grid-template-rows:auto minmax(0,1fr) auto}
+  #selector-modal .modal-body{min-height:0;height:100%;padding:5px 0}
+  .sel-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;overflow:hidden;min-height:0;height:100%}
   @media(max-width:600px){.sel-grid{grid-template-columns:1fr}}
-  .sel-panel{display:flex;flex-direction:column;gap:8px;overflow:hidden;min-height:0}
-  .sel-panel-inner{overflow-y:auto;flex:1;display:grid;gap:6px;align-content:start}
+  .sel-panel{display:flex;flex-direction:column;gap:8px;overflow:hidden;min-width:0;min-height:0;padding:12px;border-radius:18px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.07)}
+  .sel-panel-inner{overflow-y:auto;overscroll-behavior:contain;flex:1;min-height:0;display:grid;gap:6px;align-content:start;padding-right:4px}
   .sel-actions{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}
   .pick-row{display:grid;grid-template-columns:20px 1fr;align-items:start;gap:8px;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02);cursor:pointer;transition:background .12s}
   .pick-row:hover{background:rgba(255,255,255,0.06)}
   .pick-row input[type=checkbox]{width:16px;height:16px;cursor:pointer;accent-color:var(--primary-color,#007aff);margin-top:2px}
   .pick-row-name{font-weight:700;font-size:13px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
   .pick-row-meta{font-size:11px;opacity:0.5;margin-top:2px}
-  .sel-right-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.03);font-size:13px}
+  .sel-right-item{display:flex;align-items:center;justify-content:space-between;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.09);background:rgba(255,255,255,0.055);font-size:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.06)}
+  .sel-panel-inner::-webkit-scrollbar{width:7px}.sel-panel-inner::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.18);border-radius:99px}
+  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .sel-panel{background:rgba(0,0,0,0.025);border-color:rgba(0,0,0,0.08)}
+  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .sel-right-item{background:rgba(255,255,255,0.58);border-color:rgba(0,0,0,0.09)}
   /* Activity log */
   .log-item{display:flex;align-items:flex-start;gap:12px;padding:13px;border-radius:18px;border:1px solid var(--log-item-border, rgba(255,255,255,.05));background:linear-gradient(135deg,color-mix(in srgb,var(--log-item-bg,rgba(255,255,255,.02)) 84%,#fff 16%),var(--log-item-bg,rgba(255,255,255,.02)));color:var(--primary-text-color,#fff);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 7px 18px rgba(0,0,0,.10)}
   .log-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:13px;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 5px 12px rgba(0,0,0,.12)}
@@ -1311,6 +1315,13 @@ _tmpl.innerHTML = `
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 12px 28px rgba(255, 59, 48, 0.06), 0 8px 20px rgba(0, 0, 0, 0.12);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
+  /* SOS uses the full personalization width so outputs never create a tall,
+     narrow list with unused space beside it. */
+  .sos-configuration{display:grid;grid-template-columns:auto minmax(180px,1fr) minmax(190px,auto);grid-template-areas:"title outputs action" "title outputs help";column-gap:16px;align-items:center}
+  .sos-configuration #lbl-sos-actions{grid-area:title;margin:0!important;white-space:nowrap}
+  .sos-configuration #sos-output-chips{grid-area:outputs;margin:0!important;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .sos-configuration #btn-select-sos-outputs{grid-area:action;width:auto!important;white-space:nowrap}
+  .sos-configuration #sos-output-help{grid-area:help;margin:0!important;max-width:310px}
   .sos-configuration:hover {
     transform: translateY(-2px);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 16px 36px rgba(255, 59, 48, 0.10), 0 12px 24px rgba(0, 0, 0, 0.16);
@@ -1329,6 +1340,7 @@ _tmpl.innerHTML = `
   }
   @keyframes liquidDropIn{0%{opacity:0;transform:translateY(18px) scale(.91);filter:blur(5px)}65%{opacity:1;transform:translateY(-3px) scale(1.018);filter:blur(0)}100%{transform:translateY(0) scale(1)}}
   @media(max-width:1080px){.personalize-grid{grid-template-columns:1fr}.personalize-section{padding:14px}.sos-configuration{padding:14px;border-radius:24px}}
+  @media(max-width:700px){.sos-configuration{display:flex;flex-direction:column;align-items:stretch;gap:10px}.sos-configuration #lbl-sos-actions{white-space:normal}.sos-configuration #btn-select-sos-outputs{width:100%!important}.sos-configuration #sos-output-help{max-width:none}}
   /* ── Weather Animated Backgrounds ────────────────────────────────── */
   .wx{position:absolute;inset:0;overflow:hidden;border-radius:inherit;z-index:1}
   .wx-sunny{background:linear-gradient(175deg,#0055cc 0%,#1976d2 25%,#42a5f5 55%,#b3e5fc 100%)}
@@ -1465,17 +1477,22 @@ _tmpl.innerHTML = `
 .lang-option {
   display:flex; align-items:center; gap:10px;
   padding:12px 14px; border-radius:16px;
-  background:rgba(255,255,255,0.07);
-  border:1.5px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.10);
+  border:1.5px solid rgba(255,255,255,0.18);
+  /* Buttons do not inherit color reliably through the HA shadow DOM. */
+  color:rgba(255,255,255,0.98) !important;
+  text-shadow:0 1px 2px rgba(0,0,0,0.38);
   cursor:pointer; transition:all 0.18s ease;
-  font-size:14px; font-weight:700;
+  font-size:14px; font-weight:750;
 }
+.lang-option span:not(.lang-flag) { color:inherit !important; }
 .lang-option:hover { background:rgba(255,255,255,0.16); border-color:rgba(255,255,255,0.28); transform:translateY(-1px); }
 .lang-option.active {
-  background:rgba(3,169,244,0.22); border-color:rgba(3,169,244,0.55);
+  background:rgba(3,169,244,0.30); border-color:rgba(76,201,255,0.82);
   box-shadow:0 0 18px rgba(3,169,244,0.25);
 }
-:host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .lang-option { background:rgba(0,0,0,0.04); border-color:rgba(0,0,0,0.1); color:#1e1e2d; }
+:host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .lang-option { background:rgba(0,0,0,0.04); border-color:rgba(0,0,0,0.1); color:#18212f !important; text-shadow:none; }
+:host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .lang-option span:not(.lang-flag) { color:#18212f !important; }
 :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .lang-option:hover { background:rgba(0,0,0,0.09); }
 :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .lang-option.active { background:rgba(3,169,244,0.12); border-color:rgba(3,169,244,0.4); }
 .lang-flag { font-size:22px; line-height:1; }
@@ -1722,13 +1739,14 @@ _tmpl.innerHTML = `
                 <input id="emergency-number-input" class="glass-control" inputmode="tel" maxlength="16" value="911" aria-describedby="emergency-number-help">
                 <div id="emergency-number-help" class="small" style="margin-top:5px;opacity:.65;line-height:1.35">Configure it for the home location. It will be included in SOS alerts.</div>
               </div>
-              <div class="sos-configuration">
-                <div class="setting-label" id="lbl-sos-actions" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:6px;">🚨 SOS actions</div>
-                <div id="sos-output-chips" class="mode-sensor-grid" style="margin-bottom:8px"></div>
-                <button class="ghost" id="btn-select-sos-outputs" style="width:100%;justify-content:center;font-size:12px">Select lights, sirens, or scripts</button>
-                <div class="small" id="sos-output-help" style="margin-top:5px;opacity:.65;line-height:1.35">These devices will always activate when SOS is used, even while Argus is disarmed.</div>
-              </div>
             </div>
+          </div>
+
+          <div class="sos-configuration">
+            <div class="setting-label" id="lbl-sos-actions" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:6px;">🚨 SOS actions</div>
+            <div id="sos-output-chips" class="mode-sensor-grid" style="margin-bottom:8px"></div>
+            <button class="ghost" id="btn-select-sos-outputs" style="width:100%;justify-content:center;font-size:12px">Select lights, sirens, or scripts</button>
+            <div class="small" id="sos-output-help" style="margin-top:5px;opacity:.65;line-height:1.35">These devices will always activate when SOS is used, even while Argus is disarmed.</div>
           </div>
 
           <!-- Historial de Archivos Subidos -->
@@ -1747,14 +1765,6 @@ _tmpl.innerHTML = `
         </div>
       </section>
 
-      <!-- Modes -->
-      <section class="glass panel liquid-glass">
-        <div class="panel-head">
-           <h2 id="h-modes"></h2>
-        </div>
-        <div class="tabs" id="mode-tabs" style="margin-bottom:15px"></div>
-        <div id="mode-view"></div>
-      </section>
     </div>
 
     <!-- RIGHT COLUMN: Secondary -->
@@ -1766,6 +1776,15 @@ _tmpl.innerHTML = `
           <button class="ghost" id="btn-clear-log" style="font-size:10px;padding:4px 8px;opacity:0.6">BORRAR</button>
         </div>
         <div id="activity-log" style="display:grid;gap:10px;height:280px;overflow-y:auto;margin-top:10px"></div>
+      </section>
+
+      <!-- Modes: placed beside the primary dashboard for a balanced layout. -->
+      <section class="glass panel liquid-glass">
+        <div class="panel-head">
+           <h2 id="h-modes"></h2>
+        </div>
+        <div class="tabs" id="mode-tabs" style="margin-bottom:15px"></div>
+        <div id="mode-view"></div>
       </section>
 
       <!-- Users & Master PIN Settings -->

@@ -72,14 +72,14 @@ class TestSecurityContract(unittest.TestCase):
                 self.assertIn("options", data)
                 self.assertIn("init", data["options"]["step"])
 
-    def test_v1_4_4_features(self) -> None:
+    def test_v1_4_5_features(self) -> None:
         """Verify new version versioning, MQTT topic updates, and new features."""
         # 1. Check version is bumped consistently
         manifest = json.loads((COMPONENT / "manifest.json").read_text(encoding="utf-8"))
-        self.assertEqual(manifest["version"], "1.4.4")
+        self.assertEqual(manifest["version"], "1.4.5")
 
         const = (COMPONENT / "const.py").read_text(encoding="utf-8")
-        self.assertIn('VERSION = "1.4.4"', const)
+        self.assertIn('VERSION = "1.4.5"', const)
         self.assertIn('DEFAULT_MQTT_TOPIC_COMMAND = "argus/alarm/set"', const)
 
         # 2. Check MQTT commands/handling

@@ -5,7 +5,7 @@
 
   **El Sistema de Seguridad Premium para Home Assistant**
 
-  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.4.4-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
+  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.4.5-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
   [![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)](https://www.home-assistant.io/)
   [![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)](https://hacs.xyz/)
   [![GitHub stars](https://img.shields.io/github/stars/Chrisalvir1/Argus?style=social)](https://github.com/Chrisalvir1/Argus/stargazers)
