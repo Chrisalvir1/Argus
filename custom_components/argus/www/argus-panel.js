@@ -990,8 +990,17 @@ _tmpl.innerHTML = `
   }
   .bounce-in { animation: bounceIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
-  @media(max-width:900px){.grid{grid-template-columns:1fr}}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"instances activity" "instances modes" "access access" "automations backup";gap:24px;align-items:start}
+  .grid > .stack{display:contents}
+  .dashboard-instances{grid-area:instances}
+  .activity-panel{grid-area:activity}
+  .modes-panel{grid-area:modes}
+  .access-panel{grid-area:access}
+  .automations-panel{grid-area:automations;height:100%}
+  .backup-panel{grid-area:backup;height:100%}
+  @media(max-width:900px){
+    .grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"instances" "activity" "modes" "access" "automations" "backup"}
+  }
   @media(max-width:750px){.hero{flex-direction:column;text-align:center}.hero-left{flex-direction:column}}
 
   .stack{display:grid;gap:24px}
@@ -1305,8 +1314,13 @@ _tmpl.innerHTML = `
     display: grid;
     gap: 16px;
   }
-  .personalize-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:start}
-  .personalize-column{display:flex;flex-direction:column;gap:14px;min-width:0}
+  .personalize-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"home temp" "panel hub" "emergency emergency";gap:14px 16px;align-items:start}
+  .personalize-column{display:contents}
+  .personalize-field{min-width:0;align-self:stretch}
+  .pf-home{grid-area:home}.pf-temp{grid-area:temp}.pf-panel{grid-area:panel}.pf-hub{grid-area:hub}.pf-emergency{grid-area:emergency}
+  .pf-panel,.pf-hub{display:flex;flex-direction:column;gap:8px}
+  .pf-emergency{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"emergency-label emergency-label" "emergency-input emergency-help";gap:5px 16px;align-items:start;padding-top:2px}
+  .pf-emergency #lbl-emergency-number{grid-area:emergency-label}.pf-emergency #emergency-number-input{grid-area:emergency-input}.pf-emergency #emergency-number-help{grid-area:emergency-help;margin:0!important}
   .sos-configuration {
     padding: 18px;
     border-radius: 24px;
@@ -1317,11 +1331,14 @@ _tmpl.innerHTML = `
   }
   /* SOS uses the full personalization width so outputs never create a tall,
      narrow list with unused space beside it. */
-  .sos-configuration{display:grid;grid-template-columns:auto minmax(180px,1fr) minmax(190px,auto);grid-template-areas:"title outputs action" "title outputs help";column-gap:16px;align-items:center}
+  .sos-configuration{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"title action" "outputs outputs" "help help";gap:12px 16px;align-items:center}
   .sos-configuration #lbl-sos-actions{grid-area:title;margin:0!important;white-space:nowrap}
-  .sos-configuration #sos-output-chips{grid-area:outputs;margin:0!important;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-  .sos-configuration #btn-select-sos-outputs{grid-area:action;width:auto!important;white-space:nowrap}
-  .sos-configuration #sos-output-help{grid-area:help;margin:0!important;max-width:310px}
+  .sos-configuration #sos-output-chips{grid-area:outputs;margin:0!important;display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:7px;align-items:stretch;max-height:148px;overflow-y:auto;overflow-x:hidden;padding:2px 5px 2px 2px;overscroll-behavior:contain}
+  .sos-configuration #sos-output-chips .sensor-pill{width:100%;min-width:0;min-height:34px;justify-content:center;padding:7px 10px;font-size:11px;border-radius:12px}
+  .sos-configuration #sos-output-chips .sensor-pill > span{display:block;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
+  .sos-configuration #sos-output-chips .mode-sensor-none{grid-column:1/-1;padding:18px;min-height:54px}
+  .sos-configuration #btn-select-sos-outputs{grid-area:action;width:auto!important;max-width:230px;min-width:0;white-space:normal;overflow-wrap:anywhere;line-height:1.15}
+  .sos-configuration #sos-output-help{grid-area:help;margin:0!important;max-width:none}
   .sos-configuration:hover {
     transform: translateY(-2px);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 16px 36px rgba(255, 59, 48, 0.10), 0 12px 24px rgba(0, 0, 0, 0.16);
@@ -1339,8 +1356,13 @@ _tmpl.innerHTML = `
     animation: liquidDropIn .48s cubic-bezier(.16,1.24,.32,1) both;
   }
   @keyframes liquidDropIn{0%{opacity:0;transform:translateY(18px) scale(.91);filter:blur(5px)}65%{opacity:1;transform:translateY(-3px) scale(1.018);filter:blur(0)}100%{transform:translateY(0) scale(1)}}
-  @media(max-width:1080px){.personalize-grid{grid-template-columns:1fr}.personalize-section{padding:14px}.sos-configuration{padding:14px;border-radius:24px}}
-  @media(max-width:700px){.sos-configuration{display:flex;flex-direction:column;align-items:stretch;gap:10px}.sos-configuration #lbl-sos-actions{white-space:normal}.sos-configuration #btn-select-sos-outputs{width:100%!important}.sos-configuration #sos-output-help{max-width:none}}
+  @media(max-width:700px){
+    .personalize-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"home" "temp" "panel" "hub" "emergency"}
+    .pf-emergency{grid-template-columns:minmax(0,1fr);grid-template-areas:"emergency-label" "emergency-input" "emergency-help"}
+    .personalize-section{padding:14px}
+    .sos-configuration{display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:14px;border-radius:24px}
+    .sos-configuration #lbl-sos-actions{white-space:normal}.sos-configuration #btn-select-sos-outputs{width:100%!important}.sos-configuration #sos-output-help{max-width:none}
+  }
   /* ── Weather Animated Backgrounds ────────────────────────────────── */
   .wx{position:absolute;inset:0;overflow:hidden;border-radius:inherit;z-index:1}
   .wx-sunny{background:linear-gradient(175deg,#0055cc 0%,#1976d2 25%,#42a5f5 55%,#b3e5fc 100%)}
@@ -1670,7 +1692,7 @@ _tmpl.innerHTML = `
     <!-- LEFT COLUMN: Primary -->
     <div class="stack">
       <!-- Instances (with personalization inside) -->
-      <section class="glass panel liquid-glass">
+      <section class="glass panel liquid-glass dashboard-instances">
         <div class="panel-head">
           <h2 id="h-instances"></h2>
           <div style="display:flex;align-items:center;gap:12px">
@@ -1691,50 +1713,50 @@ _tmpl.innerHTML = `
           <div class="personalize-grid">
             <!-- Column 1: Nombre y Fondos -->
             <div class="personalize-column">
-              <div>
+              <div class="personalize-field pf-home">
                 <div class="setting-label" id="lbl-home-name-hdr" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6;">Nombre del Hogar</div>
                 <div id="lbl-home-name-prominent" style="font-size:18px;font-weight:900;margin-top:2px">Mi Casa</div>
               </div>
-              <div>
+              <div class="personalize-field pf-panel">
                 <div class="setting-label" id="lbl-panel-bg-title" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">Fondo para Panel</div>
                 <select id="bg-mode-select-standalone" class="glass-control"></select>
-              </div>
-              <div id="panel-custom-bg-inputs" class="background-custom-inputs" style="display:none;">
-                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
-                  <span id="lbl-panel-bg-upload" style="font-size:11px; opacity:0.8;">Cargar archivo:</span>
-                  <input type="file" id="panel-bg-file-input" accept="image/*,video/mp4,video/webm,video/quicktime,.heic,.heif" style="font-size:10px; max-width:180px;">
+                <div id="panel-custom-bg-inputs" class="background-custom-inputs" style="display:none;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+                    <span id="lbl-panel-bg-upload" style="font-size:11px; opacity:0.8;">Cargar archivo:</span>
+                    <input type="file" id="panel-bg-file-input" accept="image/*,video/mp4,video/webm,video/quicktime,.heic,.heif" style="font-size:10px; max-width:180px;">
+                  </div>
+                  <div style="font-size:10px; opacity:0.5; text-align:right;" id="bg-file-help"></div>
+                  <input type="text" id="panel-bg-url-input" class="glass-control" placeholder="Background URL…">
+                  <label id="lbl-panel-bg-sound" style="display:none; align-items:center; gap:8px; font-size:11px; cursor:pointer;">
+                    <input type="checkbox" id="chk-panel-bg-sound"> <span id="s-panel-bg-sound-lbl">Sonido de video</span>
+                  </label>
                 </div>
-                <div style="font-size:10px; opacity:0.5; text-align:right;" id="bg-file-help"></div>
-                <input type="text" id="panel-bg-url-input" class="glass-control" placeholder="Background URL…">
-                <label id="lbl-panel-bg-sound" style="display:none; align-items:center; gap:8px; font-size:11px; cursor:pointer;">
-                  <input type="checkbox" id="chk-panel-bg-sound"> <span id="s-panel-bg-sound-lbl">Sonido de video</span>
-                </label>
               </div>
-              <div>
+              <div class="personalize-field pf-hub">
                 <div class="setting-label" id="lbl-hub-bg-title" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">Fondo Argus</div>
                 <select id="hub-bg-mode-select" class="glass-control"></select>
-              </div>
-              <!-- Argus Background Custom Inputs (shown dynamically) -->
-              <div id="hub-custom-bg-inputs" class="background-custom-inputs" style="display:none;">
-                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
-                  <span id="lbl-hub-bg-upload" style="font-size:11px; opacity:0.8;">Cargar archivo:</span>
-                  <input type="file" id="hub-bg-file-input" accept="image/*,video/mp4,video/webm,video/quicktime,.heic,.heif" style="font-size:10px; max-width:180px;">
+                <!-- Argus Background Custom Inputs (shown dynamically) -->
+                <div id="hub-custom-bg-inputs" class="background-custom-inputs" style="display:none;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+                    <span id="lbl-hub-bg-upload" style="font-size:11px; opacity:0.8;">Cargar archivo:</span>
+                    <input type="file" id="hub-bg-file-input" accept="image/*,video/mp4,video/webm,video/quicktime,.heic,.heif" style="font-size:10px; max-width:180px;">
+                  </div>
+                  <div style="font-size:10px; opacity:0.5; text-align:right;" id="hub-file-help"></div>
+                  <input type="text" id="hub-bg-url-input" class="glass-control" placeholder="Background URL…">
+                  <label id="lbl-hub-bg-sound" style="display:none; align-items:center; gap:8px; font-size:11px; cursor:pointer;">
+                    <input type="checkbox" id="chk-hub-bg-sound"> <span id="s-hub-bg-sound-lbl">Sonido de video</span>
+                  </label>
                 </div>
-                <div style="font-size:10px; opacity:0.5; text-align:right;" id="hub-file-help"></div>
-                <input type="text" id="hub-bg-url-input" class="glass-control" placeholder="Background URL…">
-                <label id="lbl-hub-bg-sound" style="display:none; align-items:center; gap:8px; font-size:11px; cursor:pointer;">
-                  <input type="checkbox" id="chk-hub-bg-sound"> <span id="s-hub-bg-sound-lbl">Sonido de video</span>
-                </label>
               </div>
             </div>
 
             <!-- Column 2: Sensores, Emergencias y SOS -->
             <div class="personalize-column">
-              <div>
+              <div class="personalize-field pf-temp">
                 <label class="setting-label" id="lbl-temperature-source" for="temp-source-select-standalone" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">🌡️ Temperatura mostrada</label>
                 <select id="temp-source-select-standalone" class="glass-control"></select>
               </div>
-              <div>
+              <div class="personalize-field pf-emergency">
                 <label class="setting-label" id="lbl-emergency-number" for="emergency-number-input" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">🚨 Local emergency number</label>
                 <input id="emergency-number-input" class="glass-control" inputmode="tel" maxlength="16" value="911" aria-describedby="emergency-number-help">
                 <div id="emergency-number-help" class="small" style="margin-top:5px;opacity:.65;line-height:1.35">Configure it for the home location. It will be included in SOS alerts.</div>
@@ -1770,7 +1792,7 @@ _tmpl.innerHTML = `
     <!-- RIGHT COLUMN: Secondary -->
     <div class="stack">
       <!-- Activity log -->
-      <section class="glass panel liquid-glass">
+      <section class="glass panel liquid-glass activity-panel">
         <div class="panel-head">
           <h2 id="h-activity-log"></h2>
           <button class="ghost" id="btn-clear-log" style="font-size:10px;padding:4px 8px;opacity:0.6">BORRAR</button>
@@ -1779,7 +1801,7 @@ _tmpl.innerHTML = `
       </section>
 
       <!-- Modes: placed beside the primary dashboard for a balanced layout. -->
-      <section class="glass panel liquid-glass">
+      <section class="glass panel liquid-glass modes-panel">
         <div class="panel-head">
            <h2 id="h-modes"></h2>
         </div>
@@ -1788,7 +1810,7 @@ _tmpl.innerHTML = `
       </section>
 
       <!-- Users & Master PIN Settings -->
-      <section class="glass panel liquid-glass">
+      <section class="glass panel liquid-glass access-panel">
         <h2 id="h-access-title">Control de Acceso y Usuarios</h2>
         <p class="small" id="p-access-desc" style="margin-bottom:12px;opacity:0.7">Gestión global de seguridad, PIN maestro y administradores.</p>
 
@@ -1846,7 +1868,7 @@ _tmpl.innerHTML = `
       </section>
 
       <!-- Automations -->
-      <section class="glass panel liquid-glass">
+      <section class="glass panel liquid-glass automations-panel">
         <h2 id="h-automations"></h2>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
           <span class="small" id="p-linked-rules" style="opacity:0.7"></span>
@@ -1856,7 +1878,7 @@ _tmpl.innerHTML = `
       </section>
 
       <!-- Backup & Restore -->
-      <section class="glass panel liquid-glass">
+      <section class="glass panel liquid-glass backup-panel">
         <h2 id="h-backup-title">Respaldo y Restauración</h2>
         <p class="small" id="p-backup-desc" style="margin-bottom:12px;opacity:0.7">Guarda una copia de seguridad de tus ajustes o restaura una anterior.</p>
         <div style="display:flex;gap:10px;align-items:center;">
@@ -4612,7 +4634,10 @@ class ArgusPanel extends HTMLElement {
     if (!container) return;
     const outputs = this._panicOutputs || [];
     container.innerHTML = outputs.length
-      ? outputs.map(id => `<span class="sensor-pill"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtml(this._hass?.states?.[id]?.attributes?.friendly_name || id)}</span></span>`).join('')
+      ? outputs.map(id => {
+          const name = this._hass?.states?.[id]?.attributes?.friendly_name || id;
+          return `<span class="sensor-pill" title="${escapeHtml(name)}"><span>${escapeHtml(name)}</span></span>`;
+        }).join('')
       : `<div class="mode-sensor-none">${this._t('sos_no_outputs')}</div>`;
   }
 

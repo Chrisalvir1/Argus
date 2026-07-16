@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.6] - 2026-07-16
+
+### Fixed
+- **Sometría Responsive y Organización:** Cuadrícula del panel y sección de Personalización Estética reorganizadas en filas equilibradas.
+- **Acciones SOS Compactas:** Cuadrícula adaptable con altura máxima y scroll interno. Los nombres largos ahora se truncan con seguridad y se muestra el título completo al posicionar el cursor sobre ellos.
+- **Evitar Desbordes Visuales:** Mejoras para la vista móvil en una sola columna y optimizaciones para prevenir desbordes de textos largos en diferentes idiomas.
+
 ## [1.4.5] - 2026-07-16
 
 ### Fixed
