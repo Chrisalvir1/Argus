@@ -5,7 +5,7 @@
 
   **El Sistema de Seguridad Premium para Home Assistant**
 
-  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.4.1-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
+  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.4.2-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
   [![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)](https://www.home-assistant.io/)
   [![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)](https://hacs.xyz/)
   [![GitHub stars](https://img.shields.io/github/stars/Chrisalvir1/Argus?style=social)](https://github.com/Chrisalvir1/Argus/stargazers)
@@ -21,13 +21,17 @@
 
 ---
 
-## ✨ Novedades y Correcciones Recientes (v1.4.1)
+## ✨ Novedades y Correcciones Recientes (v1.4.2)
 
-¡Internacionalización completa, temporizadores reales, MQTT sincronizado y correcciones de idioma!
+¡Mejoras de UI premium, validación inteligente de bypass, sensores vivos y accesibilidad total!
 
 **Cambios y Características Nuevas:**
-- **Internacionalización Completa (i18n):** Sincronización en los 7 idiomas (español, inglés, francés, portugués, italiano, chino y ruso) para toda la experiencia del panel, modos, usuarios, notificaciones y diálogos.
-- **Modos y Temporizadores de Alarma:** Lógica de armado real (`arming`), desarmado cancela el temporizador de armado, y retardo de entrada por sensores configurables (`entry_sensors`) por modo.
+- **Sensores Premium Vivos:** Los chips de sensores ahora obtienen dinámicamente y muestran de forma nativa la batería restante (🔋%) y su estado real (Abierto/Cerrado).
+- **Alerta 'Buzz Orange':** Sistema proactivo de interfaz que hará latir (`buzz-orange`) al botón del estado armado en tu Hub si algún sensor se abre mientras la seguridad perimetral está activa.
+- **Historial de Orbes Liquid Glass:** Renovado diseño de logs. Sustituimos íconos estáticos por orbes vibrantes (verde para desarmado, naranja y rojo para disparo).
+- **Omisión Segura de Sensores (Bypass):** El panel de control asegura al 100% que la directiva de omitir sensores funcionará *exclusivamente* para el modo donde fue asignado, manteniendo tu seguridad firme.
+- **Internacionalización Dinámica Instantánea:** Todas las fechas y el historial se adaptarán a la ubicación (locale) del idioma seleccionado en tiempo real. Trascendencia completa de traducciones sin estática.
+- **Refinamiento UI (Modo Claro):** Soporte mejorado para modo claro en Home Assistant que realza la visibilidad de las capas y fuentes usando fondos vivos o brillantes.
 - **MQTT Sincronizado e Inmediato:** Broker topic de comandos cambiado a `argus/alarm/set`, recarga dinámica, publicación inmediata del estado al activarse y en cada transición, y comandos JSON/plain text.
 - **Correcciones Finales de Idioma:** Traducción de textos dinámicos fijos (como la confirmación de guardado, error de PIN no coincidente, y notificaciones de armado/desarmado) en los siete idiomas.
 

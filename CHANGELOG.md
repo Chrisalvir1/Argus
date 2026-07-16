@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.2] - 2026-07-16
+
+### Added
+- **UI/UX Refinada:** Soporte para Tema Claro con alto contraste (superficies opacas, mejor visibilidad con fondos dinámicos).
+- **Sensores Premium:** Chips compactos tipo *Liquid Glass* en modales que muestran nombre amigable, estado (Abierto/Cerrado) y % de batería real.
+- **Efecto Buzz Orange:** El botón del modo de sistema activo mostrará un sutil zumbido de alerta naranja (`buzz-orange`) si un sensor perimetral se abre estando el sistema armado.
+- **Historial Visual:** Nuevos iconos estilo orbe *Liquid Glass* con iluminación dinámica (verde, naranja, rojo) en vez de emojis fijos. Además, se registra el nombre exacto del sensor causante.
+- **Internacionalización Profunda:** Traducciones dinámicas para etiquetas de vencimiento de PINs. El historial y las fechas se localizan y redibujan de inmediato al cambiar el idioma (sin recargar).
+
+### Changed
+- **Alineación Visual:** Sección de Tiempos de Configuración mejor estructurada manteniendo un diseño uniforme.
+- **Bypass (Omitir):** Se garantiza que la directiva de omitir sensores sea evaluada rigurosamente por modo de armado independiente (p. ej., un sensor omitido en `Away` no afecta a `Night`).
+
 ## [1.4.1] - 2026-07-14
 
 ### Fixed

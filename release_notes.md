@@ -1,5 +1,21 @@
-## Argus v1.4.1 — Correcciones finales de idioma en la interfaz
+## Argus v1.4.2 — Interfaz Refinada, Chips de Sensores Reales y Bypass por Modo
 
+### 🔥 Lo nuevo en esta versión
+
+- **Sensores y Modales Mejorados:** Los chips de sensores ahora leen y muestran automáticamente el porcentaje de batería real y el estado abierto/cerrado traducido, todo con un estilo *Liquid Glass* compacto.
+- **Efecto Visual "Buzz Orange":** Alerta visual inteligente en el botón del modo de armado activo. Si estás armado y un sensor perimetral se abre, el botón palpitará sutilmente en naranja advirtiendo la anomalía.
+- **Historial Visual de Eventos:** Cambiamos los emojis fijos del historial por nuevos orbes interactivos de *Liquid Glass* (verde, naranja, rojo). Además, el historial ahora muestra explícitamente qué sensor rechazó el armado o disparó la alarma.
+- **Internacionalización Dinámica:** Nuevas traducciones para gestión de usuarios. El reloj, fechas e historial se re-renderizan instantáneamente (sin refrescar) cuando cambias de idioma.
+- **Bypass (Omitir) Perfeccionado:** Integración total del sistema de bypass (omisión) por modo de armado. Ahora puedes excluir sensores individualmente para *Casa* o *Noche* sin afectar la seguridad completa en *Ausente*.
+- **Compatibilidad con Tema Claro:** Contrastes mejorados y legibilidad asegurada si utilizas fondos muy claros o animados, manteniendo la belleza estética.
+
+---
+
+### Versión 1.4.2 — by Antigravity AI
+
+---
+
+## Argus v1.4.1 — Correcciones finales de idioma en la interfaz
 ### 🔥 Lo nuevo en esta versión
 
 - **Traducción Completa de Textos Dinámicos:** Se corrigieron textos dinámicos fijos (como la confirmación de guardado, error de PIN no coincidente y notificaciones del sistema de armado/desarmado) para que se muestren en el idioma seleccionado por el usuario en lugar de permanecer en español.
