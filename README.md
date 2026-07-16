@@ -5,7 +5,7 @@
 
   **El Sistema de Seguridad Premium para Home Assistant**
 
-  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.4.6-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
+  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.4.7-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
   [![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)](https://www.home-assistant.io/)
   [![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)](https://hacs.xyz/)
   [![GitHub stars](https://img.shields.io/github/stars/Chrisalvir1/Argus?style=social)](https://github.com/Chrisalvir1/Argus/stargazers)
@@ -21,19 +21,17 @@
 
 ---
 
-## ✨ Novedades y Correcciones Recientes (v1.4.2)
+## ✨ Novedades y Correcciones Recientes (v1.4.7)
 
-¡Mejoras de UI premium, validación inteligente de bypass, sensores vivos y accesibilidad total!
+¡Gran salto en estabilidad, reorganización simétrica responsive y refinamiento de la interfaz Liquid Glass!
 
 **Cambios y Características Nuevas:**
-- **Sensores Premium Vivos:** Los chips de sensores ahora obtienen dinámicamente y muestran de forma nativa la batería restante (🔋%) y su estado real (Abierto/Cerrado).
-- **Alerta 'Buzz Orange':** Sistema proactivo de interfaz que hará latir (`buzz-orange`) al botón del estado armado en tu Hub si algún sensor se abre mientras la seguridad perimetral está activa.
-- **Historial de Orbes Liquid Glass:** Renovado diseño de logs. Sustituimos íconos estáticos por orbes vibrantes (verde para desarmado, naranja y rojo para disparo).
-- **Omisión Segura de Sensores (Bypass):** El panel de control asegura al 100% que la directiva de omitir sensores funcionará *exclusivamente* para el modo donde fue asignado, manteniendo tu seguridad firme.
-- **Internacionalización Dinámica Instantánea:** Todas las fechas y el historial se adaptarán a la ubicación (locale) del idioma seleccionado en tiempo real. Trascendencia completa de traducciones sin estática.
-- **Refinamiento UI (Modo Claro):** Soporte mejorado para modo claro en Home Assistant que realza la visibilidad de las capas y fuentes usando fondos vivos o brillantes.
-- **MQTT Sincronizado e Inmediato:** Broker topic de comandos cambiado a `argus/alarm/set`, recarga dinámica, publicación inmediata del estado al activarse y en cada transición, y comandos JSON/plain text.
-- **Correcciones Finales de Idioma:** Traducción de textos dinámicos fijos (como la confirmación de guardado, error de PIN no coincidente, y notificaciones de armado/desarmado) en los siete idiomas.
+- **Estabilidad y Carga Resiliente:** Se agregaron validaciones exhaustivas y bloques try/catch independientes en el historial de eventos, control de usuarios y automatizaciones. Los datos antiguos o corruptos ya no bloquean la carga del panel.
+- **Reorganización Simétrica:** Rediseño del diseño principal a una cuadrícula simétrica de dos columnas en ordenadores, y adaptación completa a una sola columna fluida en móviles para evitar cualquier desbordamiento.
+- **SOS Compacto y Seguro:** Las acciones de SOS ahora cuentan con un diseño compacto que trunca de forma segura nombres largos de sensores y utiliza scroll interno independiente, adaptándose a textos de cualquier longitud e idioma.
+- **Restauración del Liquid Glass:** Ajustado el contraste y la transparencia del modo claro para conservar la elegancia translúcida original oscura sobre el fondo predeterminado, y mejorar la visibilidad sobre fondos personalizados claros.
+- **Contraste de Idiomas:** Corrección de contraste en el selector de idiomas para garantizar la legibilidad en cualquier modo visual.
+- **Personalización Alineada:** Sección de personalización organizada en filas equilibradas de dos columnas.
 
 ---
 

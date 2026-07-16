@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.7] - 2026-07-16
+
+### Updated
+- **Información de Instalación:** Actualizadas las novedades y correcciones de versión en el archivo README.md que HACS lee para mostrar las características recientes al actualizar.
+
 ## [1.4.6] - 2026-07-16
 
 ### Fixed
