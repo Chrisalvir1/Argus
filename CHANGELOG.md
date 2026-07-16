@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.3] - 2026-07-16
+
+### Fixed
+- **Restauración de Liquid Glass:** Corrección de la renderización en modo claro que convertía el panel en blanco opaco; ahora el diseño Liquid Glass original (oscuro y translúcido) se mantiene intacto si se utiliza el fondo predeterminado de Argus, y se adapta con contraste accesible si se utiliza un fondo personalizado claro.
+- **Rendimiento del Historial:** La solicitud de historial (`argus/get_audit_log`) ya no bloquea la carga principal del panel, mejorando el tiempo de respuesta inicial.
+- **Robustez de la Interfaz:** Validación estricta de configuraciones de modos antiguas (como `sensors` o `entry_sensors` incompletos) para prevenir que la sección de modos y pestañas dejen de renderizarse adecuadamente.
+
 ## [1.4.2] - 2026-07-16
 
 ### Added
