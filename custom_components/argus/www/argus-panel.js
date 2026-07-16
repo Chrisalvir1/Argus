@@ -680,6 +680,8 @@ for (const language of Object.keys(TEXTS)) {
   Object.assign(TEXTS[language], EXTRA_TEXTS[language]);
 }
 
+Object.assign(TEXTS.es, { expired:'Expirado', active_until:'Vigente hasta', exp_indefinite:'Indefinido' });
+Object.assign(TEXTS.en, { expired:'Expired', active_until:'Valid until', exp_indefinite:'Indefinite' });
 Object.assign(TEXTS.fr, { expired:'Expiré', active_until:'Expire', exp_indefinite:'Indéfini' });
 Object.assign(TEXTS.pt, { expired:'Expirado', active_until:'Expira', exp_indefinite:'Indefinido' });
 Object.assign(TEXTS.it, { expired:'Scaduto', active_until:'Scade', exp_indefinite:'Indefinito' });
@@ -700,6 +702,17 @@ Object.assign(TEXTS.it, { entry_delay_toggle:'Ritardo di ingresso (⏳) o istant
 Object.assign(TEXTS.zh, { entry_delay_toggle:'进入延迟 (⏳) 或即时 (⚡)', saved:'✓ 已成功保存', pin_mismatch:'❌ 新 PIN 不匹配' });
 Object.assign(TEXTS.ru, { entry_delay_toggle:'Задержка входа (⏳) или мгновенно (⚡)', saved:'✓ Успешно сохранено', pin_mismatch:'❌ Новый PIN-код не совпадает' });
 
+// Labels introduced after the original language dictionaries.  Keeping these
+// together makes the UI resilient when a newly-added static control is
+// translated, rather than falling back to English (or its template text).
+Object.assign(TEXTS.es, { temp_displayed:'🌡️ Temperatura mostrada', user_exp_type:'Vencimiento', user_exp_date:'Fecha/Hora de vencimiento', exp_temporary:'Temporal (fecha/hora)', log_mode:'Modo', log_action_user_added:'Usuario añadido', log_action_user_deleted:'Usuario eliminado', log_action_rejected:'Acción rechazada', log_action_automation:'Automatización ejecutada', log_action_analysis:'Análisis de IA', log_action_sos:'SOS activado', log_action_sos_stopped:'Pánico detenido' });
+Object.assign(TEXTS.en, { temp_displayed:'🌡️ Displayed temperature', user_exp_type:'Expiration', user_exp_date:'Expiration date/time', exp_temporary:'Temporary (date/time)', log_mode:'Mode', log_action_user_added:'User added', log_action_user_deleted:'User deleted', log_action_rejected:'Action rejected', log_action_automation:'Automation executed', log_action_analysis:'AI analysis', log_action_sos:'SOS activated', log_action_sos_stopped:'Panic stopped' });
+Object.assign(TEXTS.fr, { temp_displayed:'🌡️ Température affichée', user_exp_type:'Expiration', user_exp_date:"Date/heure d’expiration", exp_temporary:'Temporaire (date/heure)', log_mode:'Mode', log_action_user_added:'Utilisateur ajouté', log_action_user_deleted:'Utilisateur supprimé', log_action_rejected:'Action refusée', log_action_automation:'Automatisation exécutée', log_action_analysis:'Analyse IA', log_action_sos:'SOS activé', log_action_sos_stopped:'Panique arrêtée' });
+Object.assign(TEXTS.pt, { temp_displayed:'🌡️ Temperatura exibida', user_exp_type:'Expiração', user_exp_date:'Data/hora de expiração', exp_temporary:'Temporário (data/hora)', log_mode:'Modo', log_action_user_added:'Usuário adicionado', log_action_user_deleted:'Usuário removido', log_action_rejected:'Ação recusada', log_action_automation:'Automação executada', log_action_analysis:'Análise de IA', log_action_sos:'SOS ativado', log_action_sos_stopped:'Pânico interrompido' });
+Object.assign(TEXTS.it, { temp_displayed:'🌡️ Temperatura visualizzata', user_exp_type:'Scadenza', user_exp_date:'Data/ora di scadenza', exp_temporary:'Temporaneo (data/ora)', log_mode:'Modalità', log_action_user_added:'Utente aggiunto', log_action_user_deleted:'Utente eliminato', log_action_rejected:'Azione rifiutata', log_action_automation:'Automazione eseguita', log_action_analysis:'Analisi IA', log_action_sos:'SOS attivato', log_action_sos_stopped:'Panico interrotto' });
+Object.assign(TEXTS.zh, { temp_displayed:'🌡️ 显示的温度', user_exp_type:'到期', user_exp_date:'到期日期/时间', exp_temporary:'临时（日期/时间）', log_mode:'模式', log_action_user_added:'已添加用户', log_action_user_deleted:'已删除用户', log_action_rejected:'操作被拒绝', log_action_automation:'自动化已执行', log_action_analysis:'AI 分析', log_action_sos:'SOS 已激活', log_action_sos_stopped:'紧急状态已停止' });
+Object.assign(TEXTS.ru, { temp_displayed:'🌡️ Отображаемая температура', user_exp_type:'Срок действия', user_exp_date:'Дата/время окончания', exp_temporary:'Временный (дата/время)', log_mode:'Режим', log_action_user_added:'Пользователь добавлен', log_action_user_deleted:'Пользователь удалён', log_action_rejected:'Действие отклонено', log_action_automation:'Автоматизация выполнена', log_action_analysis:'Анализ ИИ', log_action_sos:'SOS активирован', log_action_sos_stopped:'Тревога остановлена' });
+
 /* ── Template ─────────────────────────────────────────────────────────── */
 const _tmpl = document.createElement('template');
 _tmpl.innerHTML = `
@@ -709,7 +722,7 @@ _tmpl.innerHTML = `
   :host {
     --glass-bg: var(--argus-glass-bg, rgba(255, 255, 255, 0.07));
     --glass-border: var(--argus-glass-border, rgba(255, 255, 255, 0.09));
-    --glass-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.35), 
+    --glass-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.35),
                     0 15px 30px -10px rgba(0, 122, 255, 0.12),
                     inset 0 1px 0 rgba(255, 255, 255, 0.15);
     --sos-red: linear-gradient(135deg, #ff3b30, #ff2d55);
@@ -734,45 +747,63 @@ _tmpl.innerHTML = `
     --input-bg: rgba(255, 255, 255, 0.04);
     --input-border: rgba(255, 255, 255, 0.12);
   }
-  
+
   /* Detect light mode via HA variables and adjust glass */
   :host([argus-dark-mode="false"]) {
-    --argus-glass-bg: rgba(255, 255, 255, 0.65);
-    --argus-glass-border: rgba(0, 0, 0, 0.08);
-    --glass-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.08),
-                    0 10px 20px -10px rgba(0, 122, 255, 0.05),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.5);
-    --text-shadow: none;
-    --hud-bg: rgba(0,0,0,0.04);
+    --argus-glass-bg: rgba(255, 255, 255, 0.92);
+    --argus-glass-border: rgba(0, 0, 0, 0.12);
+    --glass-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.10),
+                    0 10px 20px -10px rgba(0, 122, 255, 0.08),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    --text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+    --hud-bg: rgba(0,0,0,0.06);
     --hero-gradient: linear-gradient(135deg, #0052d4, #4364f7, #6fb1fc);
     --card-title-color: #0052d4;
-    --pill-bg: rgba(0,0,0,0.03);
-    --pill-border: rgba(0,0,0,0.08);
+    --pill-bg: rgba(0,0,0,0.05);
+    --pill-border: rgba(0,0,0,0.10);
     --pill-text: #1d1d1f;
-    --argus-pill-bg: rgba(0,0,0,0.04);
-    --argus-pill-bg-hover: rgba(0,0,0,0.08);
-    --argus-pill-border: rgba(0,0,0,0.12);
+    --argus-pill-bg: rgba(0,0,0,0.06);
+    --argus-pill-bg-hover: rgba(0,0,0,0.10);
+    --argus-pill-border: rgba(0,0,0,0.15);
     --argus-pill-color: #1d1d1f;
-    --argus-pill-color-muted: rgba(0,0,0,0.5);
+    --argus-pill-color-muted: rgba(0,0,0,0.6);
     --primary-color: #007aff;
-    --personalize-bg: rgba(0, 0, 0, 0.02);
-    --personalize-border: rgba(0, 0, 0, 0.05);
-    --personalize-divider: rgba(0, 0, 0, 0.08);
-    --bg-inputs-bg: rgba(0, 0, 0, 0.03);
-    --bg-inputs-border: rgba(0, 0, 0, 0.07);
-    --input-bg-darker: rgba(0, 0, 0, 0.04);
-    --input-border-darker: rgba(0, 0, 0, 0.12);
-    --hero-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.45));
-    --log-item-bg: rgba(0, 0, 0, 0.02);
-    --log-item-border: rgba(0, 0, 0, 0.05);
-    --user-card-bg: rgba(0, 0, 0, 0.02);
-    --user-card-border: rgba(0, 0, 0, 0.06);
+    --personalize-bg: rgba(255, 255, 255, 0.6);
+    --personalize-border: rgba(0, 0, 0, 0.08);
+    --personalize-divider: rgba(0, 0, 0, 0.1);
+    --bg-inputs-bg: rgba(0, 0, 0, 0.04);
+    --bg-inputs-border: rgba(0, 0, 0, 0.1);
+    --input-bg-darker: rgba(0, 0, 0, 0.06);
+    --input-border-darker: rgba(0, 0, 0, 0.15);
+    --hero-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.65));
+    --log-item-bg: rgba(255, 255, 255, 0.6);
+    --log-item-border: rgba(0, 0, 0, 0.08);
+    --user-card-bg: rgba(255, 255, 255, 0.6);
+    --user-card-border: rgba(0, 0, 0, 0.08);
     --primary-text-color: #1d1d1f;
-    --secondary-text-color: rgba(0, 0, 0, 0.6);
-    --input-bg: rgba(0, 0, 0, 0.03);
-    --input-border: rgba(0, 0, 0, 0.10);
+    --secondary-text-color: rgba(0, 0, 0, 0.7);
+    --input-bg: rgba(0, 0, 0, 0.04);
+    --input-border: rgba(0, 0, 0, 0.12);
   }
-  
+
+  /* HA's light theme needs an opaque enough surface over a photo or animated
+     background.  This keeps secondary text readable instead of inheriting
+     the white values used by the dark glass theme. */
+  :host([argus-dark-mode="false"]) .glass,
+  :host([argus-dark-mode="false"]) .personalize-section,
+  :host([argus-dark-mode="false"]) .log-item,
+  :host([argus-dark-mode="false"]) .user-card {
+    color: var(--primary-text-color, #1d1d1f);
+  }
+  :host([argus-dark-mode="false"]) .small,
+  :host([argus-dark-mode="false"]) .setting-label,
+  :host([argus-dark-mode="false"]) .input-label,
+  :host([argus-dark-mode="false"]) .subsection-title,
+  :host([argus-dark-mode="false"]) .log-meta {
+    color: var(--secondary-text-color, rgba(0,0,0,.68));
+    opacity: 1;
+  }
+
   :host {
     --hud-text-color: #fff;
     --hud-bg: rgba(255,255,255,0.06);
@@ -855,12 +886,12 @@ _tmpl.innerHTML = `
     z-index: 100 !important;
   }
 
-  .liquid-glass { 
-    background: var(--glass-bg); 
-    backdrop-filter: blur(12px) saturate(120%); 
-    -webkit-backdrop-filter: blur(12px) saturate(120%); 
-    border: 1px solid var(--glass-border); 
-    box-shadow: var(--glass-shadow); 
+  .liquid-glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
   }
   .wrap { position: relative; z-index: 1; transition: filter 0.35s ease, opacity 0.35s ease; }
@@ -872,7 +903,7 @@ _tmpl.innerHTML = `
     100% { transform: scale(1) translateY(0); opacity: 1; }
   }
   .dial-elastic { animation: dialElasticIn 0.5s cubic-bezier(0.25, 1.25, 0.5, 1) forwards; }
-  
+
   .collapsible {
     transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease, margin 0.4s ease, padding 0.4s ease;
     overflow: hidden;
@@ -889,7 +920,7 @@ _tmpl.innerHTML = `
     border: none !important;
     pointer-events: none;
   }
-  
+
   /* Scrollbar aesthetics */
   ::-webkit-scrollbar {
     width: 6px;
@@ -913,7 +944,7 @@ _tmpl.innerHTML = `
   }
 
   .battery-alert { margin: 0 0 16px 0; padding: 14px 18px; border-radius: 20px; background: rgba(255, 149, 0, 0.12); border: 1px solid rgba(255, 149, 0, 0.22); color: #ffe3b3; font-weight: 700; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); text-align: left; box-shadow: 0 4px 15px rgba(255,149,0,0.1); }
-  
+
   /* SOS Slider redesign */
   .btn-sos { width: 100%; min-height: 56px; border: 0; border-radius: 20px; background: var(--sos-red); color: white; font-size: 1.05rem; font-weight: 800; letter-spacing: 0.02em; cursor: pointer; box-shadow: 0 10px 25px rgba(255, 59, 48, 0.35); transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, opacity 0.2s; margin-top: 8px; }
   .btn-sos:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(255, 59, 48, 0.45); }
@@ -949,7 +980,7 @@ _tmpl.innerHTML = `
   .hero h1{margin:0 0 4px;font-size:34px;font-weight:900;letter-spacing:-0.03em;background:var(--hero-gradient, linear-gradient(to right, #ffffff, #82b1ff));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
   .hero p{margin:0;font-size:16px;opacity:.7;font-weight:500}
   @media(max-width:700px){.wrap{padding:14px;gap:14px}.glass{border-radius:22px}.hero{padding:22px;align-items:flex-start}.hero-icon{font-size:40px}.hero h1{font-size:27px}.hero p{font-size:14px}.entry-content{grid-template-columns:96px 1fr;padding:16px 105px 16px 14px;gap:10px}.sensor-column{width:98px}.sensor-chip{max-width:94px}.entry-icon{min-height:110px}.entry-icon svg{max-width:150px}.hud{top:12px;right:12px}.hud-data{font-size:15px;padding:5px 9px}.hud-loc{font-size:10px;padding:3px 8px}}
-  
+
   /* Modern Mode Navigation & iOS Liquid Bubble Transition */
   .tabs { position: relative; display: flex; background: rgba(255, 255, 255, 0.03); padding: 6px; border-radius: 20px; gap: 6px; overflow: visible; scrollbar-width: none; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.06); z-index: 1; }
   .tabs::-webkit-scrollbar { display: none; }
@@ -957,14 +988,14 @@ _tmpl.innerHTML = `
   .tab:hover { color: #fff; }
   .tab:active:not(:disabled) { transform: scale(0.94); }
   .tab.active { color: #fff !important; background: transparent !important; box-shadow: none !important; transform: none !important; }
-  
+
   .tab-bubble { position: absolute; top: 6px; bottom: 6px; height: calc(100% - 12px); border-radius: 14px; z-index: 2; transform-origin: left center; transition: transform 0.45s cubic-bezier(0.25, 1.35, 0.4, 1.05), background 0.4s ease, box-shadow 0.4s ease; pointer-events: none; }
   .tab-bubble.bubble-disarmed { background: #43a047; box-shadow: 0 8px 24px rgba(67, 160, 71, 0.4); }
   .tab-bubble.bubble-home { background: #fb8c00; box-shadow: 0 8px 24px rgba(251, 140, 0, 0.4); }
   .tab-bubble.bubble-away { background: #e53935; box-shadow: 0 8px 24px rgba(229, 57, 53, 0.4); }
   .tab-bubble.bubble-night { background: #1e88e5; box-shadow: 0 8px 24px rgba(30, 136, 229, 0.4); }
   .tab-bubble.bubble-vacation { background: #9c27b0; box-shadow: 0 8px 24px rgba(156, 39, 176, 0.4); }
-  
+
   :host([argus-dark-mode="false"]) .tabs { background: rgba(0, 0, 0, 0.03); border-color: rgba(0, 0, 0, 0.06); }
   :host([argus-dark-mode="false"]) .tab { color: rgba(0, 0, 0, 0.55); }
   :host([argus-dark-mode="false"]) .tab:hover { color: #000; }
@@ -980,17 +1011,17 @@ _tmpl.innerHTML = `
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
   @media(max-width:900px){.grid{grid-template-columns:1fr}}
   @media(max-width:750px){.hero{flex-direction:column;text-align:center}.hero-left{flex-direction:column}}
-  
+
   .stack{display:grid;gap:24px}
   .panel{padding:28px;position:relative;overflow:hidden}
   .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
   .panel h2{margin:0;font-size:14px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--primary-color,#007aff);opacity:0.95}
-  
+
   /* Personalization inside instances */
   .personalize-row { display: flex; gap: 14px; align-items: center; margin-top: 18px; padding: 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 18px; flex-wrap: wrap; }
   :host([argus-dark-mode="false"]) .personalize-row { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.05); }
   .personalize-row .setting-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-bottom: 4px; }
-  
+
   /* Mode Reorganization Styles — HORIZONTAL */
   .mode-grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
   @media(max-width:900px){ .mode-grid-layout { grid-template-columns: 1fr; } }
@@ -1003,7 +1034,7 @@ _tmpl.innerHTML = `
   .mode-sensor-none { color: var(--primary-text-color, rgba(255,255,255,0.5)); opacity: 0.6; font-size: 13px; }
   .mode-section-card span, .mode-section-card label, .mode-section-card .input-label { color: var(--primary-text-color, #fff); }
   :host([argus-dark-mode="false"]) .mode-section-card span, :host([argus-dark-mode="false"]) .mode-section-card label, :host([argus-dark-mode="false"]) .mode-section-card .input-label { color: var(--primary-text-color, #1d1d1f); }
-  
+
   .sensor-pill { background: var(--pill-bg, rgba(255,255,255,0.06)); color: var(--pill-text, #fff); border: 1px solid var(--pill-border, rgba(255,255,255,0.1)); padding: 8px 14px; border-radius: 14px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; transition: all 0.2s; max-width: 100%; box-sizing: border-box; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
   @keyframes argus-blink-red { 0%,100%{box-shadow:0 0 0 0 rgba(255,50,50,0);background:var(--pill-bg,rgba(255,255,255,0.06))} 50%{box-shadow:0 0 0 6px rgba(255,50,50,0.25);background:rgba(255,50,50,0.15)} }
   .sensor-pill.siren-active   { animation: argus-blink-red 1.2s ease-in-out infinite; border-color: rgba(255,82,82,0.5) !important; }
@@ -1012,7 +1043,7 @@ _tmpl.innerHTML = `
   :host([argus-dark-mode="false"]) .sensor-pill button { color: #1d1d1f; }
   .icon-btn { background: none; border: none; padding: 4px; color: inherit; opacity: 0.6; cursor: pointer; transition: opacity 0.2s, transform 0.15s; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
   .icon-btn:active { transform: scale(0.9); }
-  
+
   #mode-status { opacity: 0; transition: opacity .35s; }
   #mode-status.show { opacity: 1; }
   #mode-status.ok  { color: #4caf50; }
@@ -1076,27 +1107,43 @@ _tmpl.innerHTML = `
   }
   .icon-btn:hover { opacity: 1; background: rgba(255,255,255,0.08); }
   .icon-btn.active { color: #fb8c00; opacity: 1; }
-  
+
   .input-group { display: flex; flex-direction: column; gap: 6px; }
+  .times-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:end}
+  .time-field{min-width:0;display:flex;flex-direction:column;justify-content:flex-end;height:100%}
+  .time-field .input-label{min-height:34px;display:flex;align-items:flex-end;line-height:1.2;margin-bottom:6px;padding-bottom:2px}
+  .time-field input{width:100%;height:44px!important;padding:8px 12px!important;border-radius:12px!important;box-sizing:border-box!important;margin:0!important;font-size:14px!important}
+  .entry-sensor-list{min-height:44px;margin-top:12px!important;display:flex;flex-wrap:wrap;align-items:center;border:1px solid rgba(255,255,255,.10)!important;background:rgba(255,255,255,.03)!important;border-radius:12px!important;padding:10px;gap:8px}
+  .mode-mqtt-row{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 14px!important;min-height:44px;border-radius:12px!important;background:rgba(255,255,255,.03)!important;border:1px solid rgba(255,255,255,.10)!important}
+  .mode-mqtt-row input{margin:0;accent-color:var(--primary-color,#007aff)}
+  :host([argus-dark-mode="false"]) .entry-sensor-list{border-color:rgba(0,0,0,.12)!important;background:rgba(0,0,0,.03)!important}
+  :host([argus-dark-mode="false"]) .mode-mqtt-row{background:rgba(0,0,0,.03)!important;border-color:rgba(0,0,0,.12)!important}
   .input-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-left: 4px; }
-  
+
   /* Intelligent Entry Card */
   .entry{position:relative;overflow:hidden;border-radius:28px;border:1px solid rgba(255,255,255,0.08);margin-bottom:16px;min-height:220px;display:flex;flex-direction:column;transition:transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);box-shadow:0 12px 30px rgba(0,0,0,0.15)}
   .entry-bg{position:absolute;inset:0;z-index:1;background-size:cover;background-position:center;transition:opacity 0.5s ease}
   .entry-bg img{width:100%;height:100%;object-fit:cover;opacity:0.6}
   .entry-content{position:relative;z-index:2;flex:1;padding:20px 140px 20px 20px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.2) 0%, transparent 60%)}
-  
+
   /* Sensor column */
-  .sensor-column{position:absolute;right:0;top:0;bottom:0;width:130px;z-index:4;display:flex;flex-direction:column;gap:6px;align-items:flex-end;justify-content:center;padding:12px 12px 12px 0;overflow:hidden;pointer-events:none}
-  .sensor-chip{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800;letter-spacing:0.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:125px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.12);box-shadow:0 4px 12px rgba(0,0,0,0.25);transition:opacity 0.2s}
-  .sensor-chip-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-  .sensor-chip--open{background:rgba(220,50,50,0.85);color:#fff}
-  .sensor-chip--open .sensor-chip-dot{background:#fff;box-shadow:0 0 5px rgba(255,255,255,0.9)}
-  .sensor-chip--triggered{background:rgba(255,10,10,0.95);animation:chip-pulse 0.9s ease-in-out infinite}
-  .sensor-chip--closed{background:rgba(15,15,15,0.6);color:#e8e8e8}
-  .sensor-chip--closed .sensor-chip-dot{background:#34c759;box-shadow:0 0 5px rgba(52,199,89,0.8)}
+  .sensor-column{position:absolute;right:0;top:0;bottom:0;width:152px;z-index:4;display:flex;flex-direction:column;gap:7px;align-items:flex-end;justify-content:center;padding:12px 12px 12px 0;overflow:hidden;pointer-events:none}
+  .sensor-chip{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;column-gap:6px;padding:7px 10px;border-radius:16px;font-size:10px;font-weight:800;letter-spacing:.2px;max-width:148px;backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 7px 18px rgba(0,0,0,.24);transition:transform .2s,box-shadow .2s}
+  .sensor-chip-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .sensor-chip-state{grid-column:2;font-size:8px;letter-spacing:.08em;text-transform:uppercase;opacity:.82;margin-top:2px}
+  .sensor-chip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;grid-row:span 2}
+  .sensor-chip-battery{grid-column:1 / -1;margin-top:5px;padding-top:5px;border-top:1px solid currentColor;font-size:9px;line-height:1;opacity:.9}
+  .sensor-chip--open{background:linear-gradient(135deg,rgba(255,149,0,.9),rgba(255,96,0,.64));color:#fff}
+  .sensor-chip--open .sensor-chip-dot{background:#fff;box-shadow:0 0 8px rgba(255,255,255,.95)}
+  .sensor-chip--triggered{background:linear-gradient(135deg,rgba(255,69,58,.96),rgba(190,30,35,.82));animation:chip-pulse .9s ease-in-out infinite}
+  .sensor-chip--closed{background:rgba(15,23,32,.62);color:#eef8f1}
+  .sensor-chip--closed .sensor-chip-dot{background:#34c759;box-shadow:0 0 8px rgba(52,199,89,.9)}
+  .sensor-chip-battery.low{color:#ffd166;font-weight:900}
+  .buzz-orange{position:relative;border-color:rgba(255,171,64,.92)!important;background:linear-gradient(135deg,rgba(255,149,0,.38),rgba(255,109,0,.16))!important;box-shadow:0 0 0 1px rgba(255,183,77,.45),0 0 25px rgba(255,145,0,.55),inset 0 1px 0 rgba(255,255,255,.3)!important;animation:buzz-orange 1.05s cubic-bezier(.36,.07,.19,.97) infinite}
+  .buzz-orange::after{content:'⚠';margin-left:auto;color:#fff3d1;font-size:14px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.28))}
+  @keyframes buzz-orange{0%,100%{transform:translateX(0) rotate(0)}12%{transform:translateX(-2px) rotate(-.65deg)}25%{transform:translateX(3px) rotate(.8deg)}40%{transform:translateX(-3px) rotate(-.8deg)}55%{transform:translateX(2px) rotate(.55deg)}70%{transform:translateX(-1px) rotate(-.25deg)}}
   @keyframes chip-pulse{0%,100%{opacity:1}50%{opacity:0.55}}
- 
+
   /* HUD Overlay */
   .hud{position:absolute;top:20px;right:24px;text-align:right;z-index:3;color:var(--hud-text-color);text-shadow:var(--text-shadow);display:flex;flex-direction:column;gap:4px}
   .hud-loc{font-size:13px;font-weight:900;text-transform:uppercase;opacity:1;letter-spacing:1.5px;background:var(--hud-bg);padding:4px 12px;border-radius:10px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.08);align-self:flex-end}
@@ -1110,14 +1157,14 @@ _tmpl.innerHTML = `
   .liquid-btn.active{background:var(--btn-bg, rgba(255,255,255,0.2));border-color:rgba(255,255,255,0.4);box-shadow:0 8px 24px var(--btn-shadow, rgba(255,255,255,0.12))}
   .liquid-btn:active:not(:disabled) { transform: scale(0.96); }
   .liquid-btn i{font-size:16px}
-  
+
   .btn-home.active{--btn-bg:rgba(251,140,0,0.22); --btn-shadow:rgba(251,140,0,0.3)}
   .btn-away.active{--btn-bg:rgba(229,57,53,0.22); --btn-shadow:rgba(229,57,53,0.3)}
   .btn-night.active{--btn-bg:rgba(30,136,229,0.22); --btn-shadow:rgba(30,136,229,0.3)}
   .btn-vacation.active{--btn-bg:rgba(156,39,176,0.22); --btn-shadow:rgba(156,39,176,0.3)}
   .btn-disarm{--btn-bg:rgba(67,160,71,0.15); margin-top:4px}
   .btn-disarm.active{--btn-bg:rgba(67,160,71,0.25);--btn-shadow:rgba(67,160,71,0.4);border-color:rgba(67,160,71,0.45)!important;box-shadow:0 8px 24px rgba(67,160,71,0.35)!important}
-  
+
   .ios-fullscreen { position: fixed !important; inset: 0 !important; width: 100vw !important; height: 100vh !important; max-width: none !important; z-index: 999999 !important; margin: 0 !important; border-radius: 0 !important; display: flex !important; flex-direction: column !important; background: #000 !important; }
   .ios-fullscreen .entry-content { grid-template-columns: 320px 1fr !important; padding: 60px !important; gap: 60px !important; height: 100% !important; align-items: center !important; background: radial-gradient(circle at 20% 50%, rgba(0,0,0,0.5) 0%, transparent 80%) !important; }
   .ios-fullscreen .liquid-btn { padding: 24px 32px !important; font-size: 20px !important; border-radius: 28px !important; gap: 24px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.4) !important; }
@@ -1125,7 +1172,7 @@ _tmpl.innerHTML = `
   .ios-fullscreen .hud { top: 60px !important; right: 60px !important; scale: 1.4; transform-origin: top right; }
   .ios-fullscreen .sensor-column { width: 220px !important; padding-right: 60px !important; }
   .ios-fullscreen .sensor-chip { font-size: 16px !important; padding: 10px 20px !important; max-width: 210px !important; }
-  
+
   .entry-icon{display:flex;justify-content:center;align-items:center;perspective:1000px;min-height:160px}
   .entry-icon svg{width:100%;height:auto;max-width:280px;filter:drop-shadow(0 0 25px rgba(255,255,255,0.12));animation:float-icon 5s ease-in-out infinite;transition:max-width 0.4s ease}
   .ios-fullscreen .entry-icon svg{max-width:650px;filter:drop-shadow(0 0 60px rgba(255,255,255,0.3))}
@@ -1145,7 +1192,7 @@ _tmpl.innerHTML = `
   .temp-alert-row input[type=number]{width:72px;padding:6px 8px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:inherit;font-size:13px;font-weight:700;text-align:center}
   .temp-alert-status-ok{color:#43a047;font-size:12px}
   .temp-alert-status-warn{color:#e53935;font-size:12px;font-weight:700}
-  
+
   /* Generic buttons */
   button{border:0;border-radius:14px;padding:10px 18px;font:700 13px/1 'Outfit',Inter,system-ui,sans-serif;cursor:pointer;transition:background 0.2s,opacity .15s,transform .15s cubic-bezier(0.175, 0.885, 0.32, 1.275),box-shadow 0.2s}
   button:active:not(:disabled){transform:scale(.94) translateY(1px)}
@@ -1156,10 +1203,10 @@ _tmpl.innerHTML = `
   :host([argus-dark-mode="false"]) button.ghost { background:rgba(0,0,0,0.03); border-color:rgba(0,0,0,0.08); }
   :host([argus-dark-mode="false"]) button.ghost:hover { background:rgba(0,0,0,0.06); }
 
-  
+
   /* FS button */
   .fs-btn{background:rgba(255,255,255,0.05);padding:8px;border-radius:10px;font-size:16px}
-  
+
   /* Modal Fixes */
   .modal-back{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;padding:20px;z-index:999999;backdrop-filter:blur(12px)}
   .modal-back.open{display:flex}
@@ -1246,8 +1293,15 @@ _tmpl.innerHTML = `
   .pick-row-meta{font-size:11px;opacity:0.5;margin-top:2px}
   .sel-right-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.03);font-size:13px}
   /* Activity log */
-  .log-item{display:flex;align-items:flex-start;gap:12px;padding:12px;border-radius:16px;border:1px solid var(--log-item-border, rgba(255,255,255,0.05));background:var(--log-item-bg, rgba(255,255,255,0.02));color:var(--primary-text-color,#fff);box-shadow:0 4px 10px rgba(0,0,0,0.08)}
-  .log-icon{font-size:20px;line-height:1;flex-shrink:0}
+  .log-item{display:flex;align-items:flex-start;gap:12px;padding:13px;border-radius:18px;border:1px solid var(--log-item-border, rgba(255,255,255,.05));background:linear-gradient(135deg,color-mix(in srgb,var(--log-item-bg,rgba(255,255,255,.02)) 84%,#fff 16%),var(--log-item-bg,rgba(255,255,255,.02)));color:var(--primary-text-color,#fff);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 7px 18px rgba(0,0,0,.10)}
+  .log-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:13px;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 5px 12px rgba(0,0,0,.12)}
+  .glass-orb{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 2px 4px rgba(255,255,255,0.5),0 2px 6px rgba(0,0,0,0.2);background:rgba(255,255,255,0.3)}
+  .log-item.log-item--armed .log-icon{background:rgba(255,149,0,.16);border-color:rgba(255,183,77,.28)}
+  .log-item.log-item--armed .glass-orb{background:linear-gradient(135deg,#ffb74d,#f57c00)}
+  .log-item.log-item--disarmed .log-icon{background:rgba(52,199,89,.14);border-color:rgba(105,219,139,.28)}
+  .log-item.log-item--disarmed .glass-orb{background:linear-gradient(135deg,#69db8b,#388e3c)}
+  .log-item.log-item--triggered .log-icon{background:rgba(255,69,58,.16);border-color:rgba(255,139,131,.30)}
+  .log-item.log-item--triggered .glass-orb{background:linear-gradient(135deg,#ff8b83,#d32f2f)}
   .log-body{flex:1;min-width:0}
   .log-title{font-weight:700;font-size:13px}
   .log-meta{font-size:11px;opacity:.55;margin-top:2px}
@@ -1634,7 +1688,7 @@ _tmpl.innerHTML = `
               <button class="primary" id="btn-save-personalization-standalone" style="padding:8px 14px;font-size:12px;border-radius:10px;white-space:nowrap">Guardar</button>
             </div>
           </div>
-          
+
           <div class="personalize-grid">
             <!-- Column 1: Nombre y Fondos -->
             <div class="personalize-column">
@@ -1678,7 +1732,7 @@ _tmpl.innerHTML = `
             <!-- Column 2: Sensores, Emergencias y SOS -->
             <div class="personalize-column">
               <div>
-                <label class="setting-label" for="temp-source-select-standalone" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">🌡️ Temperatura mostrada</label>
+                <label class="setting-label" id="lbl-temperature-source" for="temp-source-select-standalone" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">🌡️ Temperatura mostrada</label>
                 <select id="temp-source-select-standalone" class="glass-control"></select>
               </div>
               <div>
@@ -1736,7 +1790,7 @@ _tmpl.innerHTML = `
       <section class="glass panel liquid-glass">
         <h2 id="h-access-title">Control de Acceso y Usuarios</h2>
         <p class="small" id="p-access-desc" style="margin-bottom:12px;opacity:0.7">Gestión global de seguridad, PIN maestro y administradores.</p>
-        
+
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start;">
           <!-- Left: Users -->
           <div>
@@ -1763,7 +1817,7 @@ _tmpl.innerHTML = `
               <div id="user-status" class="status" style="margin-top:8px; text-align:center; font-size:12px; font-weight:bold; min-height:18px;"></div>
             </div>
           </div>
-          
+
           <!-- Right: Master PIN -->
           <div>
             <h3 id="h-settings-pin" style="font-size: 13px; font-weight: 900; opacity: 0.8; margin-top:0; margin-bottom: 12px; text-transform: uppercase;">PIN Maestro</h3>
@@ -1998,8 +2052,9 @@ class ArgusPanel extends HTMLElement {
     const hubBgMode = this._hubBgMode || 'default';
 
     if (hubBgMode === 'default') {
-      // Official Argus background is dark — always use dark mode
-      isDark = true;
+      // Respect Home Assistant's selected appearance.  The light palette uses
+      // opaque glass surfaces so it remains legible over the Argus artwork.
+      isDark = this._hass.themes ? this._hass.themes.darkMode === true : false;
     } else if (hubBgMode === 'image') {
       const src = this._hubBgFile || '';
       if (src) {
@@ -2069,10 +2124,10 @@ class ArgusPanel extends HTMLElement {
     // 2. Temperature sensor state
     // 3. Clock (roughly every minute)
     // 4. Weather state
-    
+
     const now = Date.now();
     // Clock is now handled by a dedicated interval for better accuracy
-    const clockChanged = false; 
+    const clockChanged = false;
 
     const languageChanged = oldHass?.language !== hass.language;
     if (languageChanged && !this._manualLang) this._refreshLocalizedUi();
@@ -2083,13 +2138,39 @@ class ArgusPanel extends HTMLElement {
 
     const tempEntity = this._temperatureSource === 'auto' ? null : this._temperatureSource;
     const tempChanged = tempEntity && oldHass?.states[tempEntity]?.state !== hass.states[tempEntity]?.state;
-    
+
     const weatherEnt = Object.values(hass.states).find(s => s.entity_id.startsWith('weather.'))?.entity_id;
     const weatherChanged = weatherEnt && (
       oldHass?.states[weatherEnt]?.state !== hass.states[weatherEnt]?.state ||
       oldHass?.states[weatherEnt]?.attributes?.temperature !== hass.states[weatherEnt]?.attributes?.temperature ||
       oldHass?.states[weatherEnt]?.attributes?.temperature_unit !== hass.states[weatherEnt]?.attributes?.temperature_unit
     );
+
+    // Instance cards display live contact state and battery level.  Restrict
+    // updates to configured sensors so unrelated HA state changes do not
+    // redraw the dashboard.
+    const configuredSensors = new Set();
+    const collectConfiguredSensors = value => {
+      if (!value || typeof value !== 'object') return;
+      if (Array.isArray(value.sensors)) value.sensors.forEach(id => configuredSensors.add(id));
+      Object.values(value).forEach(child => {
+        if (child && typeof child === 'object') collectConfiguredSensors(child);
+      });
+    };
+    collectConfiguredSensors(this._ui?.modes);
+    const sensorChanged = Boolean(oldHass) && [...configuredSensors].some(id => {
+      const previous = oldHass.states[id];
+      const current = hass.states[id];
+      return previous?.state !== current?.state
+        || previous?.attributes?.battery_level !== current?.attributes?.battery_level
+        || previous?.attributes?.battery_percentage !== current?.attributes?.battery_percentage;
+    });
+    const batteryChanged = Boolean(oldHass) && Object.values(hass.states).some(current => {
+      const id = current.entity_id || '';
+      const isBattery = current.attributes?.device_class === 'battery' || /_battery$/i.test(id);
+      const previous = oldHass.states[id];
+      return isBattery && previous?.state !== current.state;
+    });
 
     // FIX v0.9.32 — Bug 2: detectar transición a 'triggered' y escribir log
     // con los sensores que estaban abiertos en ese momento.
@@ -2124,17 +2205,17 @@ class ArgusPanel extends HTMLElement {
       });
     }
 
-    if (alarmChanged || tempChanged || clockChanged || weatherChanged || !oldHass) { 
-      this._renderEntries(); 
-      this._renderActivityLog(); 
-      // Only re-render setup views if they are visible or if it's the first load 
-      if (!oldHass) { 
-        this._renderModeTabs(); 
-        this._renderModeView(); 
-        this._renderAutomations(); 
-        this._renderNotifications(); 
-        this._renderUsers(); 
-      } 
+    if (alarmChanged || sensorChanged || batteryChanged || tempChanged || clockChanged || weatherChanged || !oldHass) {
+      this._renderEntries();
+      this._renderActivityLog();
+      // Only re-render setup views if they are visible or if it's the first load
+      if (!oldHass) {
+        this._renderModeTabs();
+        this._renderModeView();
+        this._renderAutomations();
+        this._renderNotifications();
+        this._renderUsers();
+      }
     }
   }
   get hass() { return this._hass; }
@@ -2296,6 +2377,7 @@ class ArgusPanel extends HTMLElement {
     set('s-panel-bg-sound-lbl', t('bg_sound_opt'));
     set('s-hub-bg-sound-lbl',   t('bg_sound_opt'));
     set('lbl-aesthetic-custom', '🎨 ' + t('lbl_aesthetic_custom'));
+    set('lbl-temperature-source', t('temp_displayed'));
     set('lbl-panel-bg-upload',  t('lbl_load_file'));
     set('lbl-hub-bg-upload',    t('lbl_load_file'));
     set('lbl-uploaded-files-title', t('lbl_uploaded_files'));
@@ -2378,7 +2460,7 @@ class ArgusPanel extends HTMLElement {
   }
 
   /* ── Init ────────────────────────────────────────────────────────── */
-  connectedCallback() { 
+  connectedCallback() {
     // Restore persisted language
     try { this._manualLang = localStorage.getItem('argus_lang') || null; } catch(e) {}
     this._ensureInitialized();
@@ -2527,7 +2609,7 @@ class ArgusPanel extends HTMLElement {
     try {
       await this._send('argus/clear_activity_log');
       if (this._ui) this._ui.audit_log = [];
-      this._activityLog = []; 
+      this._activityLog = [];
       const el = this.shadowRoot.getElementById('activity-log');
       if (el) el.innerHTML = `<div class="small" style="padding:8px 0;opacity:.55">${this._t('log_no_events')}</div>`;
       this._renderActivityLog();
@@ -2574,20 +2656,20 @@ class ArgusPanel extends HTMLElement {
     if (!confirm(this._t('reset_confirm'))) return;
     try {
       this._undoState = JSON.parse(JSON.stringify(this._ui)); // Store for undo
-      
+
       const defaultConfig = {};
       await this._send('argus/restore_config', { config: defaultConfig });
-      
+
       this.shadowRoot.getElementById('btn-reset-config').style.display = 'none';
       this.shadowRoot.getElementById('btn-undo-reset').style.display = 'block';
-      
+
       alert(this._t('reset_success'));
-      
+
       // Auto reload after 10s if not undone
       this._resetTimer = setTimeout(() => {
         window.location.reload();
       }, 10000);
-      
+
     } catch (err) {
       alert(this._format('reset_error', { error: err.message }));
     }
@@ -2598,10 +2680,10 @@ class ArgusPanel extends HTMLElement {
     try {
       clearTimeout(this._resetTimer);
       await this._send('argus/restore_config', { config: this._undoState });
-      
+
       this.shadowRoot.getElementById('btn-reset-config').style.display = 'block';
       this.shadowRoot.getElementById('btn-undo-reset').style.display = 'none';
-      
+
       alert(this._t('undo_success'));
       window.location.reload();
     } catch (err) {
@@ -2761,7 +2843,7 @@ class ArgusPanel extends HTMLElement {
     if (emergencyInput) emergencyInput.value = this._emergencyNumber;
     this._renderSosOutputs();
     this._configureEmergencyCall();
-    
+
     const bgMode = this.shadowRoot.getElementById('bg-mode-select-standalone');
     if (bgMode) {
       bgMode.innerHTML = `
@@ -2818,7 +2900,7 @@ class ArgusPanel extends HTMLElement {
     const pinConfigured = dashboard.entries?.[0]?.pin_configured === true;
     const pinDisp = this.shadowRoot.getElementById('current-pin-display');
     const groupCurrentPin = this.shadowRoot.getElementById('group-current-pin');
-    
+
     if (pinDisp) pinDisp.textContent = pinConfigured ? this._t('pin_active_yes') : this._t('pin_active_no');
     if (groupCurrentPin) {
       if (pinConfigured) groupCurrentPin.classList.remove('collapsed');
@@ -2858,6 +2940,27 @@ class ArgusPanel extends HTMLElement {
 
   /* ── Entries (alarm instances) ───────────────────────────────────── */
 
+  _getSensorBattery(sensorId, sensorState) {
+    const direct = [
+      sensorState?.attributes?.battery_level,
+      sensorState?.attributes?.battery,
+      sensorState?.attributes?.battery_percentage,
+    ].find(value => Number.isFinite(Number(value)));
+    if (direct !== undefined) return Math.max(0, Math.min(100, Math.round(Number(direct))));
+
+    // Most HA integrations expose battery as a companion sensor (for example
+    // binary_sensor.front_door + sensor.front_door_battery).
+    const objectId = sensorId.split('.').slice(1).join('.').toLowerCase();
+    const base = objectId.replace(/_(contact|door|window|motion|occupancy|opening|sensor)$/i, '');
+    const companion = Object.values(this._hass?.states || {}).find(state => {
+      const id = state.entity_id || '';
+      const isBattery = state.attributes?.device_class === 'battery' || /_battery$/i.test(id);
+      return isBattery && (id.toLowerCase().includes(base) || id.toLowerCase().includes(objectId));
+    });
+    const level = Number(companion?.state);
+    return Number.isFinite(level) ? Math.max(0, Math.min(100, Math.round(level))) : null;
+  }
+
   _renderBatteryAlerts() {
     if (!this._hass?.states) return '';
     const states = this._hass.states;
@@ -2875,7 +2978,7 @@ class ArgusPanel extends HTMLElement {
 
   _getIntelligentSVG(state, w, isNight, triggered) {
     const base = `<svg viewBox="0 0 200 200" width="100%" height="100%" style="filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6)); max-width: 140px; margin: 0 auto; display: block;">`;
-    
+
     if (triggered) {
       return base + `
         <defs>
@@ -2905,12 +3008,12 @@ class ArgusPanel extends HTMLElement {
         <!-- Glowing 3D-like House -->
         <path d="M100 20 L20 90 V170 A10 10 0 0 0 30 180 H170 A10 10 0 0 0 180 170 V90 Z" fill="url(#grad-home)" stroke="#ffb74d" stroke-width="3" stroke-linejoin="round" filter="url(#glow-orange)"/>
         <path d="M100 20 L180 90 M100 20 L20 90" fill="none" stroke="#fff" stroke-width="2" opacity="0.5"/>
-        
+
         <!-- Animated Radar/Spotlight -->
         <path d="M100 180 L40 50 A120 120 0 0 1 160 50 Z" fill="#fb8c00" opacity="0.15">
            <animateTransform attributeName="transform" type="rotate" values="-25 100 180; 25 100 180; -25 100 180" dur="4s" repeatCount="indefinite"/>
         </path>
-        
+
         <!-- Glowing Cameras -->
         <circle cx="40" cy="90" r="4" fill="#ff0000" filter="url(#glow-orange)">
            <animate attributeName="opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite"/>
@@ -2918,7 +3021,7 @@ class ArgusPanel extends HTMLElement {
         <circle cx="160" cy="90" r="4" fill="#ff0000" filter="url(#glow-orange)">
            <animate attributeName="opacity" values="0.2;1;0.2" dur="1s" repeatCount="indefinite"/>
         </circle>
-        
+
         <!-- Center Lock -->
         <rect x="75" y="100" width="50" height="40" rx="8" fill="#111" stroke="#fb8c00" stroke-width="3" filter="url(#glow-orange)"/>
         <path d="M85 100 V80 A15 15 0 0 1 115 80 V100" fill="none" stroke="#fb8c00" stroke-width="4" stroke-linecap="round"/>
@@ -2937,13 +3040,13 @@ class ArgusPanel extends HTMLElement {
         </defs>
         <!-- High-tech Shield -->
         <path d="M100 10 L30 40 V100 C30 150 60 180 100 195 C140 180 170 150 170 100 V40 Z" fill="url(#grad-away)" stroke="#ef9a9a" stroke-width="3" stroke-linejoin="round" filter="url(#glow-red)"/>
-        
+
         <!-- Pulse Rings -->
         <circle cx="100" cy="100" r="40" fill="none" stroke="#e53935" stroke-width="3" opacity="0.5">
            <animate attributeName="r" values="40; 80; 40" dur="2.5s" repeatCount="indefinite"/>
            <animate attributeName="opacity" values="0.8; 0; 0.8" dur="2.5s" repeatCount="indefinite"/>
         </circle>
-        
+
         <!-- Center Lock -->
         <rect x="75" y="100" width="50" height="40" rx="8" fill="#111" stroke="#fff" stroke-width="3"/>
         <path d="M85 100 V80 A15 15 0 0 1 115 80 V100" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
@@ -2964,7 +3067,7 @@ class ArgusPanel extends HTMLElement {
         <path d="M110 20 A 75 75 0 1 0 180 140 A 85 85 0 0 1 110 20 Z" fill="url(#grad-night)" stroke="#90caf9" stroke-width="2" filter="url(#glow-blue)">
            <animateTransform attributeName="transform" type="rotate" values="-5 100 100; 5 100 100; -5 100 100" dur="8s" repeatCount="indefinite"/>
         </path>
-        
+
         <!-- Floating Zzz -->
         <text x="130" y="80" fill="#90caf9" font-family="sans-serif" font-weight="900" font-size="24" filter="url(#glow-blue)">
            Z<animate attributeName="opacity" values="0;1;0" dur="4s" repeatCount="indefinite"/>
@@ -2974,7 +3077,7 @@ class ArgusPanel extends HTMLElement {
            Z<animate attributeName="opacity" values="0;1;0" dur="4s" begin="1.5s" repeatCount="indefinite"/>
            <animate attributeName="y" values="50;10;50" dur="4s" begin="1.5s" repeatCount="indefinite"/>
         </text>
-        
+
         <!-- Night Lock -->
         <rect x="40" y="110" width="40" height="30" rx="6" fill="#111" stroke="#1e88e5" stroke-width="3" filter="url(#glow-blue)"/>
         <path d="M48 110 V95 A12 12 0 0 1 72 95 V110" fill="none" stroke="#1e88e5" stroke-width="3" stroke-linecap="round"/>
@@ -2994,13 +3097,13 @@ class ArgusPanel extends HTMLElement {
         <circle cx="100" cy="100" r="75" fill="rgba(156,39,176,0.1)" stroke="#ce93d8" stroke-width="3" filter="url(#glow-purple)"/>
         <path d="M100 25 C 140 25, 160 70, 160 100 C 160 130, 140 175, 100 175 C 60 175, 40 130, 40 100 C 40 70, 60 25, 100 25 Z" fill="none" stroke="#ce93d8" stroke-width="2" opacity="0.6"/>
         <path d="M25 100 H 175" fill="none" stroke="#ce93d8" stroke-width="2" opacity="0.6"/>
-        
+
         <!-- Airplane Orbiting -->
         <g fill="url(#grad-vacation)" stroke="#fff" stroke-width="2" filter="url(#glow-purple)">
            <animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" dur="8s" repeatCount="indefinite"/>
            <path d="M85 10 L115 10 L130 30 L160 30 A8 8 0 0 1 160 40 L130 40 L100 70 L85 70 L100 40 L70 40 L55 50 L45 50 L65 35 L45 20 L55 20 L70 30 L100 30 Z" transform="translate(0, -25)"/>
         </g>
-        
+
         <!-- Center Lock -->
         <rect x="80" y="90" width="40" height="30" rx="6" fill="#111" stroke="#9c27b0" stroke-width="3" filter="url(#glow-purple)"/>
         <path d="M90 90 V75 A10 10 0 0 1 110 75 V90" fill="none" stroke="#9c27b0" stroke-width="3" stroke-linecap="round"/>
@@ -3016,16 +3119,16 @@ class ArgusPanel extends HTMLElement {
           <stop offset="100%" stop-color="#a5d6a7" stop-opacity="0.3"/>
         </linearGradient>
       </defs>
-      
+
       <!-- Open Shield -->
       <path d="M100 15 L35 45 V100 C35 145 65 175 100 190 C135 175 165 145 165 100 V45 Z" fill="url(#grad-disarm)" stroke="#a5d6a7" stroke-width="3" stroke-linejoin="round" filter="url(#glow-green)"/>
-      
+
       <!-- Open Lock -->
       <rect x="75" y="100" width="50" height="40" rx="8" fill="#111" stroke="#fff" stroke-width="3"/>
       <path d="M115 100 V75 A15 15 0 0 0 85 75" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round">
          <animateTransform attributeName="transform" type="rotate" values="0 85 75; -25 85 75; 0 85 75" dur="3s" repeatCount="indefinite"/>
       </path>
-      
+
       <!-- Safe Pulse Rings -->
       <circle cx="100" cy="120" r="30" fill="none" stroke="#43a047" stroke-width="3" opacity="0.6">
         <animate attributeName="r" values="30; 70" dur="2.5s" repeatCount="indefinite"/>
@@ -3079,12 +3182,21 @@ class ArgusPanel extends HTMLElement {
       // Replaced old static svgName logic with dynamic intelligent SVGs
 
       const mKey = state.replace('armed_', '');
-      const eCfg = (this._ui?.modes?.__by_entity__?.[e.entity_id]?.[mKey])
+      let eCfg = (this._ui?.modes?.__by_entity__?.[e.entity_id]?.[mKey])
                 || (this._ui?.modes?.[mKey]) || {};
+      if (triggered && !(eCfg.sensors || []).length) {
+        const modes = this._ui?.modes?.__by_entity__?.[e.entity_id] || this._ui?.modes || {};
+        eCfg = ['away', 'home', 'night', 'vacation']
+          .map(mode => modes[mode])
+          .find(config => (config?.sensors || []).some(id => ['on', 'open', 'unlocked', 'recording', 'active', 'motion'].includes(this._hass?.states?.[id]?.state)))
+          || {};
+      }
       const sList = eCfg.sensors || [];
       const sByps = eCfg.bypassed_sensors || [];
       const activeSensors = sList.filter(s => !sByps.includes(s));
       const OPEN = ['on', 'open', 'unlocked', 'recording', 'active', 'motion'];
+      const hasOpenSensor = activeSensors.some(sid => OPEN.includes(this._hass?.states?.[sid]?.state));
+      const sensorAlert = hasOpenSensor && (state.startsWith('armed') || state === 'pending') && !triggered;
 
       const isFS = this._fullscreenIdx === idx;
       art.className = `entry ${isFS ? 'ios-fullscreen' : ''}`;
@@ -3100,10 +3212,10 @@ class ArgusPanel extends HTMLElement {
           </div>
           <div class="entry-content">
             <div class="liquid-stack">
-              <button class="liquid-btn btn-home ${state==='armed_home'?'active':''}" data-idx="${idx}" data-action="home">${t('btn_home')}</button>
-              <button class="liquid-btn btn-away ${state==='armed_away'?'active':''}" data-idx="${idx}" data-action="away">${t('btn_away')}</button>
-              <button class="liquid-btn btn-night ${state==='armed_night'?'active':''}" data-idx="${idx}" data-action="night">${t('btn_night')}</button>
-              <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''}" data-idx="${idx}" data-action="vacation">${t('btn_vacation')}</button>
+              <button class="liquid-btn btn-home ${state==='armed_home'?'active':''} ${sensorAlert && state==='armed_home'?'buzz-orange':''}" data-idx="${idx}" data-action="home">${t('btn_home')}</button>
+              <button class="liquid-btn btn-away ${state==='armed_away'?'active':''} ${sensorAlert && state==='armed_away'?'buzz-orange':''}" data-idx="${idx}" data-action="away">${t('btn_away')}</button>
+              <button class="liquid-btn btn-night ${state==='armed_night'?'active':''} ${sensorAlert && state==='armed_night'?'buzz-orange':''}" data-idx="${idx}" data-action="night">${t('btn_night')}</button>
+              <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''} ${sensorAlert && state==='armed_vacation'?'buzz-orange':''}" data-idx="${idx}" data-action="vacation">${t('btn_vacation')}</button>
               <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg> <span>${t('btn_disarmed')}</span></button>
               <button class="btn-sos" data-action="${panicActive ? 'stop-sos' : 'sos'}" data-idx="${idx}">${panicActive ? t('sos_stop') : t('btn_sos')}</button>
             </div>
@@ -3118,8 +3230,13 @@ class ArgusPanel extends HTMLElement {
                   const isOpen = OPEN.includes(s.state);
                   const name = s.attributes?.friendly_name || sid.split('.')[1] || sid;
                   const shortName = name.length > 16 ? name.slice(0, 15) + '…' : name;
+                  const battery = this._getSensorBattery(sid, s);
+                  const batteryClass = battery !== null && battery <= 20 ? ' low' : '';
                   return `<div class="sensor-chip ${isOpen ? 'sensor-chip--open' + (triggered ? ' sensor-chip--triggered' : '') : 'sensor-chip--closed'}">
-                    <span class="sensor-chip-dot"></span>${escapeHtml(shortName)}
+                    <span class="sensor-chip-dot"></span>
+                    <span class="sensor-chip-name">${escapeHtml(shortName)}</span>
+                    <span class="sensor-chip-state">${escapeHtml(isOpen ? t('status_open') : t('status_closed'))}</span>
+                    ${battery !== null ? `<span class="sensor-chip-battery${batteryClass}">🔋 ${battery}%</span>` : ''}
                   </div>`;
                 }).join('')}
               </div>` : ''}
@@ -3130,7 +3247,7 @@ class ArgusPanel extends HTMLElement {
     el.querySelectorAll('button[data-action]:not([data-action="sos"]):not([data-action="stop-sos"])').forEach(btn =>
       btn.addEventListener('click', ev => this._handleAction(ev.currentTarget.dataset.idx, ev.currentTarget.dataset.action))
     );
-    
+
     el.querySelectorAll('button[data-action="sos"]').forEach(btn =>
       btn.addEventListener('click', () => {
         this._sosEntryIdx = Number(btn.dataset.idx);
@@ -3191,7 +3308,7 @@ class ArgusPanel extends HTMLElement {
     const isFog = has('fog') || has('mist') || has('hazy');
     const isCloudy = has('cloud') || has('overcast');
     const isPartly = has('partly');
-    
+
     // Detect Moon Phase from Home Assistant sensors
     let moonPhase = 'full';
     const mp = (this._hass?.states?.['sensor.moon_phase']?.state || this._hass?.states?.['sensor.moon']?.state || '').toLowerCase();
@@ -3213,7 +3330,7 @@ class ArgusPanel extends HTMLElement {
     }
 
     // Landscape & Tree Colors
-    let m1 = '#60a5fa', m2 = '#3b82f6', m3 = '#2563eb', g1 = '#1d4ed8'; 
+    let m1 = '#60a5fa', m2 = '#3b82f6', m3 = '#2563eb', g1 = '#1d4ed8';
     if (!isNight && !isRain && !isSnow && !isStorm && !isFog) { // Sunny with green trees
       m1 = '#86efac'; m2 = '#4ade80'; m3 = '#22c55e'; g1 = '#16a34a';
     } else if (isNight) {
@@ -3295,6 +3412,55 @@ class ArgusPanel extends HTMLElement {
 
 
   /* ── Activity Log ────────────────────────────────────────────────── */
+  _localizeActivityDetail(action, rawDetail) {
+    const raw = String(rawDetail || '').trim();
+    const normalized = raw.toLocaleLowerCase();
+    const findMode = () => {
+      const modes = {
+        home: ['en casa', 'home', 'casa', 'maison', 'em casa', 'дом', '在家'],
+        away: ['ausente', 'away', 'absent', 'fora', 'fuori', 'ушёл', '外出'],
+        night: ['noche', 'night', 'nuit', 'noite', 'notte', 'ночь', '夜间'],
+        vacation: ['vacaciones', 'vacation', 'vacances', 'férias', 'vacanza', 'отпуск', '度假'],
+      };
+      return Object.entries(modes).find(([, terms]) => terms.some(term => normalized.includes(term)))?.[0];
+    };
+    const mode = findMode();
+
+    if (action === 'pin_reset') return this._t('log_detail_pin_reset');
+    if (action === 'pin_reset_failed') return this._t('log_detail_pin_reset_failed');
+    if (action === 'disarmed' || action === 'disarm') return this._t('log_detail_disarm');
+    if (action === 'armed' || action === 'arm') {
+      return mode ? `${this._t('manual_arm')} (${this._t(`mode_${mode}`)})` : this._t('manual_arm');
+    }
+    if (action === 'triggered') {
+      const modeMatch = raw.match(/\((?:modo|mode|modalità|режим|模式)\s*:?\s*([^)]+)\)/i);
+      let displayMode = '';
+      if (modeMatch && modeMatch[1]) {
+        const mStr = modeMatch[1].toLowerCase();
+        const modeKey = Object.entries(modes).find(([, terms]) => terms.some(t => mStr.includes(t)))?.[0];
+        displayMode = modeKey ? this._t(`mode_${modeKey}`) : modeMatch[1];
+      }
+      const sensor = raw.match(/(?:sensor|capteur|sensore|датчик|传感器)\s*:\s*(.+)$/i)?.[1]
+        ?.replace(/\s*\((?:modo|mode|modalità|режим|模式)\s*:?[^)]*\)\s*$/i, '')?.trim();
+
+      let msg = sensor ? `${this._t('log_sensor')}: ${sensor}` : this._t('log_detail_triggered');
+      if (displayMode) msg += ` (${this._t('log_mode')}: ${displayMode})`;
+      return msg;
+    }
+    if (action === 'user_added') return this._t('log_action_user_added');
+    if (action === 'user_deleted') return this._t('log_action_user_deleted');
+    if (action === 'sos') return this._t('log_action_sos');
+    if (action === 'sos_stopped' || action === 'panic_stopped') return this._t('log_action_sos_stopped');
+    if (action.startsWith('auto_')) return this._t('log_action_automation');
+    if (action.startsWith('ai_')) return this._t('log_action_analysis');
+    if (action === 'disarm_rejected') return this._t('log_action_rejected');
+    if (action === 'arm_rejected') {
+      const sensors = raw.split(':').slice(1).join(':').trim();
+      return sensors ? `${this._t('open_sensors')}: ${sensors}` : this._t('log_action_rejected');
+    }
+    return raw;
+  }
+
   _renderActivityLog() {
     const titleEl = this.shadowRoot.getElementById('h-activity-log');
     const el = this.shadowRoot.getElementById('activity-log');
@@ -3313,39 +3479,26 @@ class ArgusPanel extends HTMLElement {
       const user   = ev.user   || '';
       const ts     = ev.ts ? new Date(ev.ts).toLocaleString(this._getLocale()) : '';
 
-      // Translate stored detail strings (may be stored in any language)
-      let detail = rawDetail;
-      const detailLower = rawDetail.toLowerCase();
-      if (action === 'pin_reset') {
-        detail = this._t('log_detail_pin_reset');
-      } else if (action === 'pin_reset_failed') {
-        detail = this._t('log_detail_pin_reset_failed');
-      } else if (detailLower.includes('desarmado') || detailLower.includes('disarmed') || detailLower.includes('désarmé') || detailLower.includes('sistema desarmado') || detailLower.includes('system disarmed') || detailLower === 'manual (desarmado)') {
-        detail = this._t('manual_disarm');
-      } else if (detailLower.includes('en casa') || detailLower.includes('home') || detailLower.includes('heim') || (rawDetail.toLowerCase().includes('manual') && action.includes('arm') && !action.includes('disarm'))) {
-        // Keep as-is but prefix with translated label
-        const modeMap = {
-          'en casa': this._t('mode_home'), 'home': this._t('mode_home'),
-          'ausente': this._t('mode_away'), 'away': this._t('mode_away'),
-          'noche': this._t('mode_night'), 'night': this._t('mode_night'),
-          'vacaciones': this._t('mode_vacation'), 'vacation': this._t('mode_vacation'),
-        };
-        for (const [k,v] of Object.entries(modeMap)) {
-          if (detailLower.includes(k)) { detail = this._t('manual_arm') + ' (' + v + ')'; break; }
-        }
-      }
+      // Audit entries are persisted by HA and can have been written in a
+      // different UI language.  Derive their display text from the stable
+      // action code every time the selected language changes.
+      const detail = this._localizeActivityDetail(action, rawDetail);
 
-      let icon = '📋', badgeCls = '', badgeTxt = action;
-      if (action.includes('arm') && !action.includes('disarm')) {
-        icon = '🔒'; badgeCls = 'arm'; badgeTxt = this._t('log_armed');
+      let icon = '<div class="glass-orb"></div>', badgeCls = '', badgeTxt = action, itemCls = '';
+      if (action.endsWith('_rejected')) {
+        itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('log_action_rejected');
+      } else if (action.includes('arm') && !action.includes('disarm')) {
+        itemCls = 'log-item--armed'; badgeCls = 'arm'; badgeTxt = this._t('log_armed');
       } else if (action.includes('disarm')) {
-        icon = '🔓'; badgeCls = 'disarm'; badgeTxt = this._t('log_disarmed');
+        itemCls = 'log-item--disarmed'; badgeCls = 'disarm'; badgeTxt = this._t('log_disarmed');
       } else if (action.includes('trigger') || action.includes('alarm')) {
-        icon = '🚨'; badgeCls = 'trigger'; badgeTxt = this._t('log_triggered');
+        itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('log_triggered');
       } else if (action === 'pin_reset') {
-        icon = '🔑'; badgeCls = 'disarm'; badgeTxt = this._t('badge_pin_reset');
+        itemCls = 'log-item--disarmed'; badgeCls = 'disarm'; badgeTxt = this._t('badge_pin_reset');
       } else if (action === 'pin_reset_failed') {
-        icon = '⚠️'; badgeCls = 'trigger'; badgeTxt = this._t('badge_pin_reset_failed');
+        itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('badge_pin_reset_failed');
+      } else if (action === 'sos' || action === 'sos_stopped' || action === 'panic_stopped') {
+        itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('log_action_sos');
       }
 
       // Attribute the action clearly
@@ -3358,7 +3511,7 @@ class ArgusPanel extends HTMLElement {
         source = `🤖 Argus`;
       }
 
-      return `<div class="log-item">
+      return `<div class="log-item ${itemCls}">
         <div class="log-icon">${icon}</div>
         <div class="log-body">
           <div class="log-title">
@@ -3384,7 +3537,7 @@ class ArgusPanel extends HTMLElement {
       night:    this._t('mode_night'),
       vacation: this._t('mode_vacation'),
     };
-    
+
     let bubble = tabs.querySelector('.tab-bubble');
     if (!bubble) {
       tabs.className = 'tabs';
@@ -3398,10 +3551,10 @@ class ArgusPanel extends HTMLElement {
         `).join('')}
       `;
       bubble = tabs.querySelector('.tab-bubble');
-      
+
       tabs.querySelectorAll('[data-mode]').forEach(t => t.addEventListener('click', () => {
-        this._mode = t.dataset.mode; 
-        this._renderModeTabs(); 
+        this._mode = t.dataset.mode;
+        this._renderModeTabs();
         this._renderModeView();
       }));
     } else {
@@ -3440,10 +3593,10 @@ class ArgusPanel extends HTMLElement {
   }
 
   _currentModeConfig() {
-    const emptyCfg = { 
-      sensors: [], bypassed_sensors: [], sirens: [], 
-      require_closed: false, arming_time: null, entry_delay: null, 
-      mqtt_enabled: null, entry_sensors: [] 
+    const emptyCfg = {
+      sensors: [], bypassed_sensors: [], sirens: [],
+      require_closed: false, arming_time: null, entry_delay: null,
+      mqtt_enabled: null, entry_sensors: []
     };
     if (!this._ui) return { ...emptyCfg };
     this._ui.modes = this._ui.modes || {};
@@ -3454,15 +3607,15 @@ class ArgusPanel extends HTMLElement {
     }
     this._modeEntryId = entityId;
     this._mode = this._mode || 'disarmed';
-    
+
     this._ui.modes.__by_entity__[entityId] = this._ui.modes.__by_entity__[entityId] || {};
-    
+
     // Migration/Ensure valid
     if (!this._ui.modes.__by_entity__[entityId][this._mode]) {
         const legacy = this._ui.modes[this._mode] || emptyCfg;
         this._ui.modes.__by_entity__[entityId][this._mode] = { ...emptyCfg, ...legacy };
     }
-    
+
     const cfg = this._ui.modes.__by_entity__[entityId][this._mode];
     return { ...emptyCfg, ...cfg };
   }
@@ -3536,21 +3689,21 @@ class ArgusPanel extends HTMLElement {
 
         <div class="mode-section-card">
           <div class="mode-section-title">${this._t('times_section')}</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-            <div class="input-group">
+          <div class="times-grid">
+            <div class="input-group time-field">
               <span class="input-label">${this._t('arm_time')}</span>
               <input type="number" id="mode-arming-time" value="${cfg.arming_time ?? ''}" placeholder="0" style="padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:inherit; font-size:13px">
             </div>
-            <div class="input-group">
+            <div class="input-group time-field">
               <span class="input-label">${this._t('disarm_time')}</span>
               <input type="number" id="mode-entry-delay" value="${cfg.entry_delay ?? ''}" placeholder="0" style="padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:inherit; font-size:13px">
             </div>
           </div>
-          <div class="mode-sensor-grid" style="margin-top:10px">
+          <div class="mode-sensor-grid entry-sensor-list">
             ${(cfg.entry_sensors || []).map(x => this._chip(x, 'entry')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
           </div>
           ${readonly ? '' : `<button class="ghost" data-open-selector="entry" style="margin-top:10px;width:100%;justify-content:center;font-size:12px">${this._t('select_entry_sensors')}</button>`}
-          <label class="checkbox-label" style="display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05)">
+          <label class="checkbox-label mode-mqtt-row">
             <input type="checkbox" id="mode-mqtt-enabled" ${cfg.mqtt_enabled === true ? 'checked' : ''}>
             <span style="font-size:12px;font-weight:600">${this._t('mqtt_label')}</span>
           </label>
@@ -3585,14 +3738,31 @@ class ArgusPanel extends HTMLElement {
     const name = this._hass?.states?.[entityId]?.attributes?.friendly_name || entityId;
     const readonly = !this._isAdmin;
 
-    const dot = type === 'sensor' || type === 'bypass' 
-    ? `<span class="pill-dot ${isTr ? 'open' : ''}" title="${raw}"></span>` 
-    : ''; 
-    
+    const dot = type === 'sensor' || type === 'bypass'
+    ? `<span class="pill-dot ${isTr ? 'open' : ''}" title="${raw}"></span>`
+    : '';
+
+    let stateLabel = '';
+    let batteryHtml = '';
+    if (type === 'sensor' || type === 'bypass' || type === 'entry') {
+      const stateObj = this._hass?.states?.[entityId];
+      if (stateObj) {
+        let bat = stateObj.attributes?.battery_level ?? stateObj.attributes?.battery ?? stateObj.attributes?.battery_percentage;
+        if (bat === undefined) {
+          const bEnt = this._hass?.states?.[`${entityId}_battery`] || this._hass?.states?.[entityId.replace(/_(contact|door|window|motion|occupancy|opening|sensor)$/i, '_battery')];
+          if (bEnt) bat = bEnt.state;
+        }
+        if (bat !== undefined && !isNaN(bat)) {
+          batteryHtml = `<span style="font-size:10.5px; opacity:0.75; font-weight:500; margin-left:4px; display:inline-flex; align-items:center; background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:8px;">🔋 ${bat}%</span>`;
+        }
+      }
+      stateLabel = `<span style="font-size:11px; font-weight:600; opacity:0.85; margin-left:6px;">${isTr ? this._t('status_open') : this._t('status_closed')}</span>`;
+    }
+
     const delayIcon = type === 'sensor' ? `
     <button class="icon-btn ${isEntry ? 'active' : ''}" data-toggle-delay="${entityId}" title="${escapeHtml(this._t('entry_delay_toggle'))}">
     ${isEntry ? '⏳' : '⚡'}
-    </button>` : ''; 
+    </button>` : '';
 
     // FIX v0.9.32 — Bug 3: sirenas parpadean rojo si el sistema está en triggered.
     // Sensores abiertos también se marcan como triggered-sensor.
@@ -3601,15 +3771,19 @@ class ArgusPanel extends HTMLElement {
     );
     let pillExtra = '';
     if (type === 'siren' && alarmTriggered) pillExtra = ' siren-active';
-    if ((type === 'sensor' || type === 'bypass') && alarmTriggered && isTr) pillExtra = ' triggered-sensor';
+    if ((type === 'sensor' || type === 'bypass' || type === 'entry') && alarmTriggered && isTr) pillExtra = ' triggered-sensor';
 
-    return ` 
-      <span class="sensor-pill${pillExtra}"> 
-        ${dot} 
-        <span style="flex:1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${name}</span> 
-        ${delayIcon} 
-        ${readonly ? '' : `<button data-remove="${type}:${entityId}" style="background:none; border:none; color:inherit; opacity:0.5; padding:0 4px; cursor:pointer; flex-shrink:0;">✕</button>`} 
-      </span> 
+    return `
+      <span class="sensor-pill${pillExtra}">
+        ${dot}
+        <span style="display:flex; align-items:center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+          <span style="flex:1; overflow:hidden; text-overflow:ellipsis;">${name}</span>
+          ${stateLabel}
+          ${batteryHtml}
+        </span>
+        ${delayIcon}
+        ${readonly ? '' : `<button data-remove="${type}:${entityId}" style="background:none; border:none; color:inherit; opacity:0.5; padding:0 4px; cursor:pointer; flex-shrink:0;">✕</button>`}
+      </span>
     `;
   }
 
@@ -3718,7 +3892,7 @@ class ArgusPanel extends HTMLElement {
       el.innerHTML = `<div class="small" style="padding:8px 0;opacity:.55">${this._t('no_auto_linked')}</div>`;
       return;
     }
-    
+
     el.innerHTML = `<div style="display:flex;flex-direction:column;gap:12px;max-height:300px;overflow-y:auto;padding-right:8px">${items.map(a => {
       const editId = a.attributes.id || a.entity_id.replace('automation.', '');
       return `
@@ -3730,7 +3904,7 @@ class ArgusPanel extends HTMLElement {
         <button class="ghost" style="padding:6px 12px;background:rgba(255,255,255,0.08);border-radius:8px" data-edit-auto="${escapeHtml(editId)}">✏️</button>
       </div>`;
     }).join('')}</div>`;
-      
+
     el.querySelectorAll('[data-edit-auto]').forEach(btn => btn.addEventListener('click', () => {
       history.pushState(null, '', `/config/automation/edit/${btn.dataset.editAuto}`);
       window.dispatchEvent(new CustomEvent('location-changed'));
@@ -3742,10 +3916,10 @@ class ArgusPanel extends HTMLElement {
     const sel = this.shadowRoot.getElementById('notif-select');
     if (!sel) return;
     const services = this._hass?.services?.notify || {};
-    
+
     // Solo mostrar las de celular, quitando "notify" genérico o "persistent_notification"
     let opts = Object.keys(services).filter(k => k !== 'notify' && !k.includes('persistent_notification') && !this._notifTargets.includes(k));
-    
+
     sel.innerHTML = opts.length
       ? opts.map(k => {
           let label = k;
@@ -3819,8 +3993,8 @@ class ArgusPanel extends HTMLElement {
         const formattedDate = u.expiration_date
           ? escapeHtml(new Date(u.expiration_date).toLocaleString(this._getLocale()))
           : '';
-        const expBadge = u.expiration_date 
-          ? (isExpired 
+        const expBadge = u.expiration_date
+          ? (isExpired
             ? `<span class="user-badge admin" style="background:rgba(229,57,53,0.12);color:#e53935;margin-left:5px">❌ ${escapeHtml(this._t('expired'))} (${formattedDate})</span>`
             : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">⏳ ${escapeHtml(this._t('active_until'))}: ${formattedDate}</span>`)
           : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">♾️ ${this._t('exp_indefinite')}</span>`;
@@ -3885,7 +4059,7 @@ class ArgusPanel extends HTMLElement {
       else { alert(this._t('user_required')); }
       return;
     }
-    
+
     this._runWithPin(async () => {
       this._users.push({ name, pin, is_admin: isAdmin, expiration_date: expDate });
       try {
@@ -4232,10 +4406,10 @@ class ArgusPanel extends HTMLElement {
         panelInputs.style.display = 'flex';
         const soundLabel = this.shadowRoot.getElementById('lbl-panel-bg-sound');
         if (soundLabel) soundLabel.style.display = 'none';
-        
+
         const fileInput = this.shadowRoot.getElementById('panel-bg-file-input');
         if (fileInput) fileInput.accept = 'image/*,.mov,.heic,.heif';
-        
+
         const urlInput = this.shadowRoot.getElementById('panel-bg-url-input');
         if (urlInput) urlInput.placeholder = 'Pegar URL de la imagen';
       } else {
@@ -4249,10 +4423,10 @@ class ArgusPanel extends HTMLElement {
         hubInputs.style.display = 'flex';
         const soundLabel = this.shadowRoot.getElementById('lbl-hub-bg-sound');
         if (soundLabel) soundLabel.style.display = 'none';
-        
+
         const fileInput = this.shadowRoot.getElementById('hub-bg-file-input');
         if (fileInput) fileInput.accept = 'image/*,.mov,.heic,.heif';
-        
+
         const urlInput = this.shadowRoot.getElementById('hub-bg-url-input');
         if (urlInput) urlInput.placeholder = 'Pegar URL de la imagen/GIF';
       } else {
@@ -4450,10 +4624,10 @@ class ArgusPanel extends HTMLElement {
     const hub_bg_sound = Boolean(this.shadowRoot.getElementById('chk-hub-bg-sound')?.checked);
 
     try {
-      await this._send('argus/save_ui', { 
-        home_name: this._homeName, 
-        background_mode, 
-        background_images: this._backgroundImages || [], 
+      await this._send('argus/save_ui', {
+        home_name: this._homeName,
+        background_mode,
+        background_images: this._backgroundImages || [],
         temperature_source,
         emergency_number,
         panic_outputs,
@@ -4489,7 +4663,7 @@ class ArgusPanel extends HTMLElement {
 
       this._renderEntries();
       this._updateCanvasBackground();
-      
+
       const btn = this.shadowRoot.getElementById('btn-save-personalization-standalone');
       if (btn) {
         const oldText = btn.textContent;
@@ -4537,7 +4711,7 @@ class ArgusPanel extends HTMLElement {
   async _savePin() {
     const status = this.shadowRoot.getElementById('pin-status');
     const pinConfigured = this._dashboard?.entries?.[0]?.pin_configured === true;
-    
+
     const pinCurrent = this.shadowRoot.getElementById('current-pin').value;
     if (pinConfigured && !pinCurrent) {
       if (status) {
@@ -4549,21 +4723,21 @@ class ArgusPanel extends HTMLElement {
 
     const p1 = this.shadowRoot.getElementById('new-pin-1').value;
     const p2 = this.shadowRoot.getElementById('new-pin-2').value;
-    
-    if (p1 !== p2) { 
+
+    if (p1 !== p2) {
       if (status) {
         status.textContent = this._t('pin_mismatch');
-        status.className = 'status err'; 
+        status.className = 'status err';
       } else {
         alert(this._t('pin_mismatch'));
       }
-      return; 
+      return;
     }
-    
+
     try {
       await this._send('argus/update_master_pin', { pin: p1, current_pin: pinCurrent });
       if (status) {
-        status.textContent = p1 ? this._t('pin_updated') : this._t('pin_deleted'); 
+        status.textContent = p1 ? this._t('pin_updated') : this._t('pin_deleted');
         status.className = 'status ok';
       }
       if (this.shadowRoot.getElementById('current-pin-display')) {
@@ -4575,7 +4749,7 @@ class ArgusPanel extends HTMLElement {
       setTimeout(() => this._load(), 1200);
     } catch (e) {
       if (status) {
-        status.textContent = e.message; 
+        status.textContent = e.message;
         status.className = 'status err';
       } else {
         alert(e.message);
@@ -4586,11 +4760,11 @@ class ArgusPanel extends HTMLElement {
   async _handleForgotPin() {
     const status = this.shadowRoot.getElementById('pin-status');
     const pinErr = this.shadowRoot.getElementById('pin-error');
-    
+
     // 1. Verificar si el usuario es administrador en HA
     const isAdmin = this._hass?.user?.is_admin === true;
     const currentUser = this._hass?.user?.name || this._t('user_default');
-    
+
     if (!isAdmin) {
       const errMsg = this._t('pin_reset_admin_only');
       if (status) {
@@ -4603,15 +4777,15 @@ class ArgusPanel extends HTMLElement {
       this._writeLog('pin_reset_failed', 'Intento no autorizado de restablecer el PIN maestro', currentUser);
       return;
     }
-    
+
     // 2. Confirmación
     if (confirm(this._t('pin_reset_confirm'))) {
       try {
         await this._send('argus/update_master_pin', { pin: '', force_reset: true });
-        
+
         // Log en auditoría
         this._writeLog('pin_reset', 'PIN maestro restablecido por el administrador', currentUser);
-        
+
         // Mensaje de éxito
         const successMsg = '✓ PIN Maestro restablecido';
         if (status) {
@@ -4622,12 +4796,12 @@ class ArgusPanel extends HTMLElement {
           pinErr.textContent = successMsg;
           pinErr.style.color = '#43a047';
         }
-        
+
         // Limpiar inputs
         if (this.shadowRoot.getElementById('current-pin')) this.shadowRoot.getElementById('current-pin').value = '';
         this.shadowRoot.getElementById('new-pin-1').value = '';
         this.shadowRoot.getElementById('new-pin-2').value = '';
-        
+
         // Cerrar modal de PIN si estuviera abierto
         setTimeout(() => {
           this._closePinModal();
@@ -4657,7 +4831,7 @@ class ArgusPanel extends HTMLElement {
     const inp = this.shadowRoot.getElementById('pin-input');
     const err = this.shadowRoot.getElementById('pin-error');
     const wrap = this.shadowRoot.querySelector('.wrap');
-    inp.value = ''; 
+    inp.value = '';
     if (err) {
       err.textContent = '';
       err.style.color = '';
@@ -4916,11 +5090,11 @@ class ArgusPanel extends HTMLElement {
       // FIX-4: sólo mostrar modal de PIN si hay código configurado
       const masterPin = this._dashboard?.entries?.[0]?.pin_configured === true;
       const hasUsers = this._users && this._users.length > 0;
-      const doDisarm = async (pin) => { 
-        try { 
-          await this._hass.callService('alarm_control_panel', 'alarm_disarm', 
-            { entity_id: e.entity_id, ...(pin ? { code: pin } : {}) }); 
-          this._writeLog('disarm', this._t('manual_disarm'), currentUser); 
+      const doDisarm = async (pin) => {
+        try {
+          await this._hass.callService('alarm_control_panel', 'alarm_disarm',
+            { entity_id: e.entity_id, ...(pin ? { code: pin } : {}) });
+          this._writeLog('disarm', this._t('manual_disarm'), currentUser);
           this._sendHaNotif(`🔓 ${this._t('log_disarmed')}`, this._format('notification_disarmed', { user: currentUser }));
           // FIX v0.9.32 — Bug 1: al desarmar, forzar re-render inmediato para
           // quitar la clase siren-active/triggered-sensor de todas las píldoras.
@@ -4949,8 +5123,14 @@ class ArgusPanel extends HTMLElement {
     // FIX-5: bloqueo require_closed con detalle de sensores abiertos
     if (modeCfg.require_closed) {
       const modeSensors = modeCfg.sensors || [];
+      // Match the integration behaviour: bypassed sensors never block arming
+      // and never trigger the alarm in this specific mode.
+      const bypassedSensors = new Set(
+        modeCfg.bypassed_sensors || modeCfg.bypassedSensors || []
+      );
       const openNames = [];
       for (const sId of modeSensors) {
+        if (bypassedSensors.has(sId)) continue;
         const estado = this._hass.states[sId]?.state;
         if (['on', 'open', 'unlocked', 'active', 'motion', 'recording'].includes(estado)) {
           openNames.push(this._hass.states[sId]?.attributes?.friendly_name || sId);
