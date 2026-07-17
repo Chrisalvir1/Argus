@@ -300,6 +300,8 @@ async def ws_argus_dashboard(hass: HomeAssistant, connection, msg) -> None:
         vol.Optional("background_mode"): vol.In(["weather", "none", "photo", "collage", "video"]),
         vol.Optional("background_images"): list,
         vol.Optional("temperature_source"): str,
+        vol.Optional("holiday_effects_enabled"): bool,
+        vol.Optional("holiday_country"): vol.All(str, vol.Length(min=2, max=8)),
         vol.Optional("temp_alert_min"): vol.Any(None, vol.Coerce(float)),
         vol.Optional("temp_alert_max"): vol.Any(None, vol.Coerce(float)),
         vol.Optional("panel_bg_file"): str,
@@ -316,7 +318,7 @@ async def ws_argus_save_ui(hass: HomeAssistant, connection, msg) -> None:
     updates = {}
     valid_keys = [
         "zones", "dashboard", "notif_targets", "tts_targets", "emergency_number", "panic_outputs", "users", "home_name",
-        "background_mode", "background_images", "temperature_source", "temp_alert_min", "temp_alert_max",
+        "background_mode", "background_images", "temperature_source", "holiday_effects_enabled", "holiday_country", "temp_alert_min", "temp_alert_max",
         "panel_bg_file", "panel_bg_sound", "hub_bg_mode", "hub_bg_file", "hub_bg_sound"
     ]
     

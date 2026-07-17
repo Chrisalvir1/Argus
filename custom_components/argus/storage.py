@@ -51,6 +51,8 @@ def _default_payload() -> dict:
         "background_mode": "weather",
         "background_images": [],
         "temperature_source": "auto",
+        "holiday_effects_enabled": False,
+        "holiday_country": "auto",
         "panel_bg_file": "",
         "panel_bg_sound": False,
         "hub_bg_mode": "none",
@@ -115,6 +117,8 @@ async def async_load_ui_data(hass: HomeAssistant) -> dict:
     data.setdefault("background_mode", "weather")
     data.setdefault("background_images", [])
     data.setdefault("temperature_source", "auto")
+    data.setdefault("holiday_effects_enabled", False)
+    data.setdefault("holiday_country", "auto")
     data.setdefault("panel_bg_file", "")
     data.setdefault("panel_bg_sound", False)
     data.setdefault("hub_bg_mode", "none")

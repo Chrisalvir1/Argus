@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.0] - 2026-07-17
+
+### Added
+- **Escena atmosférica cinematográfica**: Reemplazo de la escena básica anterior por una atmósfera cinematográfica interactiva generada localmente con CSS que responde al clima real de Home Assistant (sol, nubes, niebla, lluvia, llovizna, nieve, tormenta eléctrica), soporte de día/noche, estrellas, sol, fases lunares reales (vía `sensor.moon_phase`), estaciones según hemisferio/fecha, y soporte de eclipses.
+- **Efectos de festividades opcionales**: Ajuste persistente (desactivado por defecto) para activar festividades con detección de país automática o manual, animación de ondeado de bandera nacional en el día de independencia correspondiente, y efectos para Navidad y Pascua.
+
+### Changed
+- **Optimización de Sensores y Batería**: Visualización compacta en tarjetas que muestran nombre, estado (abierto/cerrado), batería real reportada y alimentación "AC" sólo si se declara explícitamente. Se corrigieron posibles errores de asociación cruzada de baterías y se eliminó el icono ambiguo de rayo en el retardo de entrada.
+- **Selector de Sensores/Sirenas**: Rediseño amplio del selector con mejor legibilidad que detalla entidad, área, estado real y alimentación/batería en dispositivos disponibles y seleccionados, conservando controles correctos para sirenas.
+- **Control de Acceso simplificado**: Reducción del tamaño visual en la sección de control de acceso y usuarios mostrando un resumen compacto, abriendo los paneles detallados únicamente bajo demanda.
+- **Diseño Móvil y Responsive**: Adaptación completa para móviles de la sección de Instancias Activas, con modos en dos columnas (Desarmado y SOS a ancho completo), sensores reubicados debajo de los modos, y correcciones de pantalla completa vertical/horizontal usando `100dvh`.
+
 ## [1.4.8] - 2026-07-16
 
 ### Changed
