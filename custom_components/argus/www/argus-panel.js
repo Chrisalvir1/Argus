@@ -705,8 +705,8 @@ Object.assign(TEXTS.ru, { entry_delay_toggle:'Задержка входа (⏳) 
 // Labels introduced after the original language dictionaries.  Keeping these
 // together makes the UI resilient when a newly-added static control is
 // translated, rather than falling back to English (or its template text).
-Object.assign(TEXTS.es, { temp_displayed:'🌡️ Temperatura mostrada', holiday_effects:'🎉 Activar festividades', holiday_country:'País de festividades', holiday_auto:'Automático (ubicación de Home Assistant)', user_exp_type:'Vencimiento', user_exp_date:'Fecha/Hora de vencimiento', exp_temporary:'Temporal (fecha/hora)', log_mode:'Modo', log_action_user_added:'Usuario añadido', log_action_user_deleted:'Usuario eliminado', log_action_rejected:'Acción rechazada', log_action_automation:'Automatización ejecutada', log_action_analysis:'Análisis de IA', log_action_sos:'SOS activado', log_action_sos_stopped:'Pánico detenido' });
-Object.assign(TEXTS.en, { temp_displayed:'🌡️ Displayed temperature', holiday_effects:'🎉 Enable holidays', holiday_country:'Holiday country', holiday_auto:'Automatic (Home Assistant location)', user_exp_type:'Expiration', user_exp_date:'Expiration date/time', exp_temporary:'Temporary (date/time)', log_mode:'Mode', log_action_user_added:'User added', log_action_user_deleted:'User deleted', log_action_rejected:'Action rejected', log_action_automation:'Automation executed', log_action_analysis:'AI analysis', log_action_sos:'SOS activated', log_action_sos_stopped:'Panic stopped' });
+Object.assign(TEXTS.es, { temp_displayed:'🌡️ Temperatura mostrada', weather_source:'☁️ Fuente de clima', weather_auto:'Automático (primera entidad de clima)', user_exp_type:'Vencimiento', user_exp_date:'Fecha/Hora de vencimiento', exp_temporary:'Temporal (fecha/hora)', log_mode:'Modo', log_action_user_added:'Usuario añadido', log_action_user_deleted:'Usuario eliminado', log_action_rejected:'Acción rechazada', log_action_automation:'Automatización ejecutada', log_action_analysis:'Análisis de IA', log_action_sos:'SOS activado', log_action_sos_stopped:'Pánico detenido' });
+Object.assign(TEXTS.en, { temp_displayed:'🌡️ Displayed temperature', weather_source:'☁️ Weather source', weather_auto:'Automatic (first weather entity)', user_exp_type:'Expiration', user_exp_date:'Expiration date/time', exp_temporary:'Temporary (date/time)', log_mode:'Mode', log_action_user_added:'User added', log_action_user_deleted:'User deleted', log_action_rejected:'Action rejected', log_action_automation:'Automation executed', log_action_analysis:'AI analysis', log_action_sos:'SOS activated', log_action_sos_stopped:'Panic stopped' });
 Object.assign(TEXTS.fr, { temp_displayed:'🌡️ Température affichée', user_exp_type:'Expiration', user_exp_date:"Date/heure d’expiration", exp_temporary:'Temporaire (date/heure)', log_mode:'Mode', log_action_user_added:'Utilisateur ajouté', log_action_user_deleted:'Utilisateur supprimé', log_action_rejected:'Action refusée', log_action_automation:'Automatisation exécutée', log_action_analysis:'Analyse IA', log_action_sos:'SOS activé', log_action_sos_stopped:'Panique arrêtée' });
 Object.assign(TEXTS.pt, { temp_displayed:'🌡️ Temperatura exibida', user_exp_type:'Expiração', user_exp_date:'Data/hora de expiração', exp_temporary:'Temporário (data/hora)', log_mode:'Modo', log_action_user_added:'Usuário adicionado', log_action_user_deleted:'Usuário removido', log_action_rejected:'Ação recusada', log_action_automation:'Automação executada', log_action_analysis:'Análise de IA', log_action_sos:'SOS ativado', log_action_sos_stopped:'Pânico interrompido' });
 Object.assign(TEXTS.it, { temp_displayed:'🌡️ Temperatura visualizzata', user_exp_type:'Scadenza', user_exp_date:'Data/ora di scadenza', exp_temporary:'Temporaneo (data/ora)', log_mode:'Modalità', log_action_user_added:'Utente aggiunto', log_action_user_deleted:'Utente eliminato', log_action_rejected:'Azione rifiutata', log_action_automation:'Automazione eseguita', log_action_analysis:'Analisi IA', log_action_sos:'SOS attivato', log_action_sos_stopped:'Panico interrotto' });
@@ -928,7 +928,7 @@ _tmpl.innerHTML = `
   .battery-alert { margin: 0 0 16px 0; padding: 14px 18px; border-radius: 20px; background: rgba(255, 149, 0, 0.12); border: 1px solid rgba(255, 149, 0, 0.22); color: #ffe3b3; font-weight: 700; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); text-align: left; box-shadow: 0 4px 15px rgba(255,149,0,0.1); }
 
   /* SOS Slider redesign */
-  .btn-sos { width: 100%; min-height: 56px; border: 0; border-radius: 20px; background: var(--sos-red); color: white; font-size: 1.05rem; font-weight: 800; letter-spacing: 0.02em; cursor: pointer; box-shadow: 0 10px 25px rgba(255, 59, 48, 0.35); transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, opacity 0.2s; margin-top: 8px; }
+  .btn-sos { width: 100%; min-height: 56px; border: 0; border-radius: 20px; background: var(--sos-red); color: white; font-size: 1.05rem; font-weight: 800; letter-spacing: 0.02em; cursor: pointer; box-shadow: 0 10px 25px rgba(255, 59, 48, 0.35); transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, opacity 0.2s; margin-top: 8px; display:flex;align-items:center;justify-content:center;gap:10px; }
   .btn-sos:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(255, 59, 48, 0.45); }
   .btn-sos:active { transform: scale(0.95); opacity: 0.92; }
   .ios-confirm-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 999999; backdrop-filter: blur(12px); }
@@ -1002,6 +1002,7 @@ _tmpl.innerHTML = `
     .grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"instances" "activity" "modes" "access" "automations" "backup"}
   }
   @media(max-width:750px){.hero{flex-direction:column;text-align:center}.hero-left{flex-direction:column}}
+  @media(max-width:750px){.hero .lang-pill{align-self:center;margin-inline:auto}.hero-left{width:100%;align-items:center}}
 
   .stack{display:grid;gap:24px}
   .panel{padding:28px;position:relative;overflow:hidden}
@@ -1157,18 +1158,14 @@ _tmpl.innerHTML = `
   .hud-data i{font-size:14px;opacity:0.7;font-style:normal}
   .hud-temperatures{display:flex;justify-content:flex-end;gap:5px;flex-wrap:wrap}
   .hud-temperature{padding:4px 8px;border-radius:999px;background:var(--hud-bg);border:1px solid rgba(255,255,255,.09);font-size:10px;font-weight:800;backdrop-filter:blur(8px)}
-  .weather-celebration{position:absolute;right:22px;bottom:18px;z-index:2;display:flex;align-items:center;gap:8px;padding:7px 11px;border-radius:14px;background:rgba(5,12,24,.35);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(10px);box-shadow:0 8px 24px rgba(0,0,0,.2);pointer-events:none}
-  .weather-celebration .holiday-flag{font-size:25px;line-height:1;display:inline-block;transform-origin:left center;animation:argusFlagWave 2.8s ease-in-out infinite;filter:drop-shadow(0 3px 3px rgba(0,0,0,.25))}
-  .weather-celebration .holiday-label{font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#fff}
-  .weather-celebration.holiday-christmas{background:linear-gradient(135deg,rgba(132,23,37,.55),rgba(20,92,57,.52))}
-  .weather-celebration.holiday-easter{background:linear-gradient(135deg,rgba(120,83,175,.52),rgba(232,158,193,.45))}
-  .weather-celebration.holiday-national{background:rgba(5,12,24,.42)}
   .weather-eclipse{position:absolute;left:22px;bottom:18px;z-index:2;padding:7px 11px;border-radius:14px;background:rgba(18,10,28,.52);border:1px solid rgba(255,192,92,.36);backdrop-filter:blur(10px);font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.25);pointer-events:none}
-  @keyframes argusFlagWave{0%,100%{transform:perspective(70px) rotateY(-12deg) skewY(-2deg)}50%{transform:perspective(70px) rotateY(14deg) skewY(2deg)}}
 
   /* Liquid Glass Buttons */
   .liquid-stack{display:grid;gap:10px}
   .liquid-btn{border:none;background:rgba(255,255,255,0.06);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);color:#fff;padding:14px 18px;border-radius:18px;font-size:13.5px;font-weight:800;display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;transition:all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);border:1px solid rgba(255,255,255,0.08);text-shadow:0 1px 2px rgba(0,0,0,0.3);letter-spacing:0.5px}
+  .mode-btn-icon{width:26px;height:26px;padding:5px;border-radius:10px;flex:0 0 auto;background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 4px 10px rgba(0,0,0,.16);filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}
+  .liquid-btn.active .mode-btn-icon{background:linear-gradient(135deg,rgba(255,255,255,.36),rgba(255,255,255,.12));border-color:rgba(255,255,255,.42)}
+  .btn-sos .mode-btn-icon{width:28px;height:28px;border-radius:11px;background:rgba(255,255,255,.17)}
   .liquid-btn:hover{background:rgba(255,255,255,0.14);transform:translateX(4px);border-color:rgba(255,255,255,0.2)}
   .liquid-btn.active{background:var(--btn-bg, rgba(255,255,255,0.2));border-color:rgba(255,255,255,0.4);box-shadow:0 8px 24px var(--btn-shadow, rgba(255,255,255,0.12))}
   .liquid-btn:active:not(:disabled) { transform: scale(0.96); }
@@ -1210,7 +1207,6 @@ _tmpl.innerHTML = `
     .hud-data i{font-size:11px}
     .hud-temperatures{justify-content:flex-start;position:absolute;top:42px;left:0}
     .hud-temperature{font-size:9px;padding:3px 6px}
-    .weather-celebration{right:60px;bottom:14px;padding:5px 7px}.weather-celebration .holiday-flag{font-size:20px}.weather-celebration .holiday-label{display:none}
     .weather-eclipse{left:14px;bottom:14px;padding:5px 7px;font-size:8px}
     .sensor-column{position:static;grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;width:auto;padding:0;overflow:visible;pointer-events:auto;align-items:stretch}
     .sensor-chip{max-width:none;min-width:0;padding:8px 9px;font-size:10px;border-radius:13px}
@@ -1365,7 +1361,7 @@ _tmpl.innerHTML = `
   .sel-right-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
   .sel-right-facts{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
   .mode-sensor-grid .sensor-pill{width:100%;min-width:0;padding:9px 10px;gap:7px}
-  .mode-sensor-grid .sensor-pill .pill-content{display:flex;align-items:center;gap:6px;min-width:0;flex:1;overflow:hidden}
+  .mode-sensor-grid .sensor-pill .pill-content{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:6px;min-width:0;flex:1}
   .mode-sensor-grid .sensor-pill .pill-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .mode-sensor-grid .sensor-pill .pill-status{font-size:10px;font-weight:800;opacity:.78;white-space:nowrap}
   .mode-sensor-grid .sensor-pill .pill-power{font-size:10px;font-weight:700;opacity:.82;white-space:nowrap}
@@ -1399,10 +1395,10 @@ _tmpl.innerHTML = `
     display: grid;
     gap: 16px;
   }
-  .personalize-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"home temp" "panel holidays" "hub emergency";gap:14px 16px;align-items:start}
+  .personalize-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"home temp" "panel weather" "hub emergency";gap:14px 16px;align-items:start}
   .personalize-column{display:contents}
   .personalize-field{min-width:0;align-self:stretch}
-  .pf-home{grid-area:home}.pf-temp{grid-area:temp}.pf-panel{grid-area:panel}.pf-hub{grid-area:hub}.pf-holidays{grid-area:holidays}.pf-emergency{grid-area:emergency}
+  .pf-home{grid-area:home}.pf-temp{grid-area:temp}.pf-weather{grid-area:weather}.pf-panel{grid-area:panel}.pf-hub{grid-area:hub}.pf-emergency{grid-area:emergency}
   .pf-panel,.pf-hub{display:flex;flex-direction:column;gap:8px}
   .pf-emergency{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"emergency-label emergency-label" "emergency-input emergency-help";gap:5px 16px;align-items:start;padding-top:2px}
   .pf-emergency #lbl-emergency-number{grid-area:emergency-label}.pf-emergency #emergency-number-input{grid-area:emergency-input}.pf-emergency #emergency-number-help{grid-area:emergency-help;margin:0!important}
@@ -1442,7 +1438,7 @@ _tmpl.innerHTML = `
   }
   @keyframes liquidDropIn{0%{opacity:0;transform:translateY(18px) scale(.91);filter:blur(5px)}65%{opacity:1;transform:translateY(-3px) scale(1.018);filter:blur(0)}100%{transform:translateY(0) scale(1)}}
   @media(max-width:700px){
-    .personalize-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"home" "temp" "holidays" "panel" "hub" "emergency"}
+    .personalize-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"home" "temp" "weather" "panel" "hub" "emergency"}
     .pf-emergency{grid-template-columns:minmax(0,1fr);grid-template-areas:"emergency-label" "emergency-input" "emergency-help"}
     .personalize-section{padding:14px}
     .sos-configuration{display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:14px;border-radius:24px}
@@ -1452,6 +1448,8 @@ _tmpl.innerHTML = `
   .wx{position:absolute;inset:0;overflow:hidden;border-radius:inherit;z-index:1}
   /* Cinematic, data-driven atmosphere replacing the old illustrated landscape. */
   .wx-atmosphere{isolation:isolate;background:linear-gradient(180deg,var(--sky-top),var(--sky-mid) 58%,var(--sky-bottom));overflow:hidden}
+  .wx-webgl{position:absolute;inset:0;z-index:2;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;opacity:.92}
+  .wx-atmosphere.webgl-active .wx-precip,.wx-atmosphere.webgl-active .wx-lightning,.wx-atmosphere.webgl-active .wx-fog-real{opacity:0}
   .wx-atmosphere::before{content:'';position:absolute;inset:-20%;z-index:-1;background:radial-gradient(ellipse at 65% 20%,rgba(255,255,255,.18),transparent 30%),radial-gradient(ellipse at 50% 120%,rgba(0,0,0,.48),transparent 48%),linear-gradient(115deg,rgba(255,255,255,.07),transparent 42%);filter:blur(12px)}
   .wx-horizon{position:absolute;inset:auto -10% 0;height:38%;background:linear-gradient(180deg,transparent,rgba(4,10,18,.22) 18%,rgba(3,8,14,.72));filter:blur(1px)}
   .wx-horizon::before{content:'';position:absolute;inset:26% 0 0;background:radial-gradient(ellipse at 12% 100%,rgba(0,0,0,.34) 0 18%,transparent 19%),radial-gradient(ellipse at 50% 100%,rgba(0,0,0,.29) 0 23%,transparent 24%),radial-gradient(ellipse at 89% 100%,rgba(0,0,0,.36) 0 20%,transparent 21%);filter:blur(10px)}
@@ -1462,12 +1460,12 @@ _tmpl.innerHTML = `
   .wx-moon-real.full::after{display:none}.wx-moon-real.new{opacity:.14}.wx-moon-real.new::after{display:block;transform:none}.wx-moon-real.waxing-crescent{--moon-offset:42px}.wx-moon-real.first-quarter{--moon-offset:31px}.wx-moon-real.waxing-gibbous{--moon-offset:17px}.wx-moon-real.waning-gibbous{--moon-offset:-17px}.wx-moon-real.last-quarter{--moon-offset:-31px}.wx-moon-real.waning-crescent{--moon-offset:-42px}
   .wx-starfield{position:absolute;inset:0;background-image:radial-gradient(circle at 12% 16%,#fff 0 1px,transparent 1.5px),radial-gradient(circle at 33% 31%,rgba(255,255,255,.8) 0 1px,transparent 1.5px),radial-gradient(circle at 56% 11%,#fff 0 1px,transparent 1.5px),radial-gradient(circle at 73% 38%,rgba(255,255,255,.7) 0 1px,transparent 1.5px),radial-gradient(circle at 91% 20%,#fff 0 1px,transparent 1.5px);opacity:.78;animation:wxStarDrift 16s ease-in-out infinite alternate}
   .wx-cloudfield{position:absolute;inset:-15% -20%;background:radial-gradient(ellipse at 14% 31%,var(--cloud-color) 0 9%,transparent 22%),radial-gradient(ellipse at 43% 18%,var(--cloud-color) 0 12%,transparent 28%),radial-gradient(ellipse at 74% 35%,var(--cloud-color) 0 10%,transparent 24%),radial-gradient(ellipse at 92% 13%,var(--cloud-color) 0 12%,transparent 27%);filter:blur(18px);opacity:var(--cloud-opacity,.72);animation:wxCloudDrift 45s ease-in-out infinite alternate}
-  .wx-precip{position:absolute;inset:-20% -10%;opacity:.65;pointer-events:none}.wx-precip.rain{background:repeating-linear-gradient(112deg,transparent 0 20px,rgba(218,239,255,.62) 21px 22px,transparent 23px 42px);background-size:82px 94px;animation:wxRainReal .52s linear infinite}.wx-precip.drizzle{background-size:125px 140px;opacity:.38;animation-duration:1.1s}.wx-precip.snow{background-image:radial-gradient(circle,rgba(255,255,255,.92) 0 1.6px,transparent 2px);background-size:42px 42px;animation:wxSnowReal 8s linear infinite}
+  .wx-precip{position:absolute;inset:-20% -10%;opacity:.78;pointer-events:none;overflow:hidden}.wx-precip.rain,.wx-precip.drizzle{background:none;animation:none}.wx-rain-drop{position:absolute;top:-20%;left:var(--x);width:var(--w);height:var(--h);border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(211,237,255,.92));box-shadow:0 0 3px rgba(195,230,255,.38);opacity:var(--o);transform:rotate(17deg);animation:wxDropReal var(--fall) linear var(--delay) infinite}.wx-precip.drizzle .wx-rain-drop{width:1px;opacity:.42;animation-duration:1.35s}.wx-precip.snow{background-image:radial-gradient(circle,rgba(255,255,255,.92) 0 1.6px,transparent 2px);background-size:42px 42px;animation:wxSnowReal 8s linear infinite}
   .wx-lightning{position:absolute;inset:0;background:rgba(238,247,255,0);animation:wxLightningReal 8s ease-in-out infinite;mix-blend-mode:screen}.wx-lightning::after{content:'';position:absolute;top:-5%;left:63%;width:13%;height:72%;background:linear-gradient(115deg,transparent 43%,rgba(255,255,235,.95) 44% 47%,transparent 48%) center/100% 100%;clip-path:polygon(43% 0,75% 0,51% 38%,82% 38%,21% 100%,43% 55%,13% 55%);opacity:0;animation:wxBoltReal 8s ease-in-out infinite;filter:drop-shadow(0 0 8px #fff6bd)}
   .wx-fog-real{position:absolute;inset:20% -40%;background:repeating-linear-gradient(180deg,transparent 0 48px,rgba(235,244,247,.17) 52px 76px,transparent 82px 132px);filter:blur(14px);animation:wxFogReal 18s ease-in-out infinite alternate}
   .wx-seasonal{position:absolute;inset:-20% 0;pointer-events:none;opacity:.62}.wx-seasonal.spring{background-image:radial-gradient(ellipse,rgba(255,204,220,.9) 0 2px,transparent 2.8px);background-size:54px 68px;animation:wxPetals 12s linear infinite}.wx-seasonal.autumn{background-image:radial-gradient(ellipse,rgba(229,142,57,.88) 0 2px,transparent 3px);background-size:66px 80px;animation:wxPetals 10s linear infinite}
   .wx-atmosphere.eclipse-solar .wx-celestial{background:#090d15!important;box-shadow:0 0 0 7px #fff2ad,0 0 24px 12px #ffc75a,0 0 70px 30px rgba(255,195,80,.32)!important}.wx-atmosphere.eclipse-lunar .wx-celestial{background:radial-gradient(circle at 35% 28%,#f08c7c,#a43c3a 60%,#5e232a)!important;box-shadow:0 0 28px 8px rgba(230,86,72,.35)!important}
-  @keyframes wxSunBreathe{50%{transform:scale(1.045);filter:brightness(1.08)}}@keyframes wxStarDrift{to{transform:translateY(5px);opacity:.5}}@keyframes wxCloudDrift{to{transform:translateX(9%) translateY(3%)}}@keyframes wxRainReal{to{transform:translate(-24px,48px)}}@keyframes wxSnowReal{to{transform:translate(30px,90px)}}@keyframes wxLightningReal{0%,71%,74%,100%{background:transparent}72%,73%{background:rgba(238,247,255,.33)}}@keyframes wxBoltReal{0%,71%,74%,100%{opacity:0}72%,73%{opacity:1}}@keyframes wxFogReal{to{transform:translateX(12%)}}@keyframes wxPetals{to{transform:translate(12%,105%) rotate(180deg)}}
+  @keyframes wxSunBreathe{50%{transform:scale(1.045);filter:brightness(1.08)}}@keyframes wxStarDrift{to{transform:translateY(5px);opacity:.5}}@keyframes wxCloudDrift{to{transform:translateX(9%) translateY(3%)}}@keyframes wxDropReal{to{transform:translate(-14vw,145vh) rotate(17deg)}}@keyframes wxSnowReal{to{transform:translate(30px,90px)}}@keyframes wxLightningReal{0%,71%,74%,100%{background:transparent}72%,73%{background:rgba(238,247,255,.33)}}@keyframes wxBoltReal{0%,71%,74%,100%{opacity:0}72%,73%{opacity:1}}@keyframes wxFogReal{to{transform:translateX(12%)}}@keyframes wxPetals{to{transform:translate(12%,105%) rotate(180deg)}}
   .wx-sunny{background:linear-gradient(175deg,#0055cc 0%,#1976d2 25%,#42a5f5 55%,#b3e5fc 100%)}
   .wx-partly{background:linear-gradient(175deg,#0d47a1 0%,#1565c0 30%,#5b97cc 60%,#90caf9 100%)}
   .wx-cloudy{background:linear-gradient(175deg,#546e7a 0%,#607d8b 40%,#90a4ae 70%,#b0bec5 100%)}
@@ -1859,12 +1857,9 @@ _tmpl.innerHTML = `
                 <label class="setting-label" id="lbl-temperature-source" for="temp-source-select-standalone" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">🌡️ Temperatura mostrada</label>
                 <select id="temp-source-select-standalone" class="glass-control"></select>
               </div>
-              <div class="personalize-field pf-holidays">
-                <label style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:750;cursor:pointer;">
-                  <input id="holiday-effects-enabled" type="checkbox"> <span id="lbl-holiday-effects">🎉 Activar festividades</span>
-                </label>
-                <label class="setting-label" id="lbl-holiday-country" for="holiday-country-select" style="font-size:11px;font-weight:800;text-transform:uppercase;opacity:.6;margin:10px 0 4px;display:block;">País de festividades</label>
-                <select id="holiday-country-select" class="glass-control"></select>
+              <div class="personalize-field pf-weather">
+                <label class="setting-label" id="lbl-weather-source" for="weather-source-select" style="font-size:11px;font-weight:800;text-transform:uppercase;opacity:.6;margin-bottom:4px;">☁️ Fuente de clima</label>
+                <select id="weather-source-select" class="glass-control"></select>
               </div>
               <div class="personalize-field pf-emergency">
                 <label class="setting-label" id="lbl-emergency-number" for="emergency-number-input" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">🚨 Local emergency number</label>
@@ -2132,8 +2127,7 @@ class ArgusPanel extends HTMLElement {
     this._backgroundMode = 'weather';
     this._backgroundImages = [];
     this._temperatureSource = 'auto';
-    this._holidayEffectsEnabled = false;
-    this._holidayCountry = 'auto';
+    this._weatherSource = 'auto';
     this._pending = {};
     this._lastClockUpdate = 0;
     this._manualLang = null;
@@ -2224,7 +2218,7 @@ class ArgusPanel extends HTMLElement {
         if (isNight) {
           isDark = true;
         } else {
-          const weatherEnt = Object.values(this._hass.states || {}).find(s => s.entity_id.startsWith('weather.')) || { state: 'sunny' };
+          const weatherEnt = this._getWeatherEntity();
           const weatherState = weatherEnt.state || 'sunny';
           const lightConditions = ['sunny', 'fog', 'snow', 'windy'];
           isDark = !lightConditions.includes(weatherState);
@@ -2283,7 +2277,7 @@ class ArgusPanel extends HTMLElement {
     const tempEntity = this._temperatureSource === 'auto' ? null : this._temperatureSource;
     const tempChanged = tempEntity && oldHass?.states[tempEntity]?.state !== hass.states[tempEntity]?.state;
 
-    const weatherEnt = Object.values(hass.states).find(s => s.entity_id.startsWith('weather.'))?.entity_id;
+    const weatherEnt = (this._weatherSource !== 'auto' ? this._weatherSource : Object.values(hass.states).find(s => s.entity_id.startsWith('weather.'))?.entity_id);
     const weatherChanged = weatherEnt && (
       oldHass?.states[weatherEnt]?.state !== hass.states[weatherEnt]?.state ||
       oldHass?.states[weatherEnt]?.attributes?.temperature !== hass.states[weatherEnt]?.attributes?.temperature ||
@@ -2522,8 +2516,7 @@ class ArgusPanel extends HTMLElement {
     set('s-hub-bg-sound-lbl',   t('bg_sound_opt'));
     set('lbl-aesthetic-custom', '🎨 ' + t('lbl_aesthetic_custom'));
     set('lbl-temperature-source', t('temp_displayed'));
-    set('lbl-holiday-effects', t('holiday_effects'));
-    set('lbl-holiday-country', t('holiday_country'));
+    set('lbl-weather-source', t('weather_source'));
     set('lbl-panel-bg-upload',  t('lbl_load_file'));
     set('lbl-hub-bg-upload',    t('lbl_load_file'));
     set('lbl-uploaded-files-title', t('lbl_uploaded_files'));
@@ -2991,8 +2984,7 @@ class ArgusPanel extends HTMLElement {
     this._backgroundMode = dashboard.ui?.background_mode || 'weather';
     this._backgroundImages = dashboard.ui?.background_images || [];
     this._temperatureSource = dashboard.ui?.temperature_source || 'auto';
-    this._holidayEffectsEnabled = Boolean(dashboard.ui?.holiday_effects_enabled);
-    this._holidayCountry = dashboard.ui?.holiday_country || 'auto';
+    this._weatherSource = dashboard.ui?.weather_source || 'auto';
     this._panelBgFile = dashboard.ui?.panel_bg_file || '';
     this._panelBgSound = Boolean(dashboard.ui?.panel_bg_sound);
     const rawHubBgMode = dashboard.ui?.hub_bg_mode || 'none';
@@ -3005,11 +2997,9 @@ class ArgusPanel extends HTMLElement {
     this._populateTemperatureSources();
     const tempSel = this.shadowRoot.getElementById('temp-source-select-standalone');
     if (tempSel) tempSel.value = this._temperatureSource || 'auto';
-    this._populateHolidayCountries();
-    const holidayEnabled = this.shadowRoot.getElementById('holiday-effects-enabled');
-    if (holidayEnabled) holidayEnabled.checked = this._holidayEffectsEnabled;
-    const holidayCountry = this.shadowRoot.getElementById('holiday-country-select');
-    if (holidayCountry) holidayCountry.value = this._holidayCountry;
+    this._populateWeatherSources();
+    const weatherSel = this.shadowRoot.getElementById('weather-source-select');
+    if (weatherSel) weatherSel.value = this._weatherSource || 'auto';
     const emergencyInput = this.shadowRoot.getElementById('emergency-number-input');
     if (emergencyInput) emergencyInput.value = this._emergencyNumber;
     this._renderSosOutputs();
@@ -3189,7 +3179,34 @@ class ArgusPanel extends HTMLElement {
     return `<div class="battery-alerts-container" style="margin-top: 10px;">${rows}</div>`;
   }
 
+  _modeButtonIcon(mode) {
+    const paths = {
+      home: '<path d="M3 10.5 12 3l9 7.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 19.5z"/><path d="M9 21v-6h6v6"/>',
+      away: '<path d="M12 3 20 6.5v5.2c0 5-3.4 8-8 9.8-4.6-1.8-8-4.8-8-9.8V6.5z"/><path d="M8.5 12h7M12 8.5v7"/>',
+      night: '<path d="M20 15.5A8.5 8.5 0 0 1 8.5 4 8.5 8.5 0 1 0 20 15.5z"/><path d="m17.5 4 .5 1.2L19.2 6l-1.2.5-.5 1.2-.5-1.2-1.2-.5 1.2-.8z"/>',
+      vacation: '<path d="M3 13.5 21 5l-6.8 15-2.3-6.2z"/><path d="m11.9 13.8 3.4 3.4M11.9 13.8 7.2 12"/>',
+      disarm: '<path d="M12 3 20 6.5v5.2c0 5-3.4 8-8 9.8-4.6-1.8-8-4.8-8-9.8V6.5z"/><path d="m8.5 12 2.2 2.2 4.8-5"/>',
+      sos: '<path d="M12 3 21 20H3z"/><path d="M12 9v4.5M12 17h.01"/>'
+    };
+    return `<svg class="mode-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[mode] || paths.disarm}</svg>`;
+  }
+
+  _renderPremiumStatusIcon(state, triggered) {
+    const mode = triggered ? 'triggered' : ({ armed_home:'home', armed_away:'away', armed_night:'night', armed_vacation:'vacation', disarmed:'disarm' }[state] || 'disarm');
+    const accent = { home:'#ffad42', away:'#ff6464', night:'#7fb9ff', vacation:'#d69cff', disarm:'#6be295', triggered:'#ff424f' }[mode];
+    const symbol = {
+      home:'<path d="M66 98 100 69l34 29v35H66z"/><path d="M89 133v-22h22v22"/>',
+      away:'<path d="M100 70c18 0 32 14 32 32s-14 32-32 32-32-14-32-32 14-32 32-32z"/><path d="M100 79v46M77 102h46"/>',
+      night:'<path d="M120 70a34 34 0 1 0 13 63 38 38 0 1 1-13-63z"/><circle cx="134" cy="73" r="3"/>',
+      vacation:'<path d="m67 113 66-34-28 66-9-25z"/><path d="m96 120 15 15M96 120l-20-6"/>',
+      disarm:'<path d="m76 104 16 16 34-39"/>',
+      triggered:'<path d="M100 65 139 137H61z"/><path d="M100 90v23M100 124h.01"/>'
+    }[mode];
+    return `<svg viewBox="0 0 200 200" width="100%" height="100%" style="filter:drop-shadow(0 18px 28px rgba(0,0,0,.34));max-width:180px;margin:auto;display:block" aria-label="${escapeHtml(mode)}"><defs><linearGradient id="premium-${mode}" x1="20%" y1="10%" x2="85%" y2="100%"><stop stop-color="#fff" stop-opacity=".38"/><stop offset=".25" stop-color="${accent}" stop-opacity=".78"/><stop offset="1" stop-color="${accent}" stop-opacity=".18"/></linearGradient><filter id="premium-glow-${mode}"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M100 22 157 46v42c0 42-23 69-57 87-34-18-57-45-57-87V46z" fill="url(#premium-${mode})" stroke="${accent}" stroke-width="3" filter="url(#premium-glow-${mode})"/><path d="M100 31 148 51" stroke="#fff" stroke-opacity=".45" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="105" r="43" fill="rgba(5,12,23,.3)" stroke="rgba(255,255,255,.22)" stroke-width="2"/><g fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" filter="url(#premium-glow-${mode})">${symbol}</g><circle cx="100" cy="105" r="55" fill="none" stroke="${accent}" stroke-opacity=".42" stroke-width="2"><animate attributeName="r" values="51;60;51" dur="3.5s" repeatCount="indefinite"/><animate attributeName="opacity" values=".6;.08;.6" dur="3.5s" repeatCount="indefinite"/></circle></svg>`;
+  }
+
   _getIntelligentSVG(state, w, isNight, triggered) {
+    return this._renderPremiumStatusIcon(state, triggered);
     const base = `<svg viewBox="0 0 200 200" width="100%" height="100%" style="filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6)); max-width: 140px; margin: 0 auto; display: block;">`;
 
     if (triggered) {
@@ -3368,7 +3385,7 @@ class ArgusPanel extends HTMLElement {
     globalStatusEl.innerHTML = `<span class="badge ${isArmed ? 'armed_away' : 'disarmed'}">${isArmed ? t('system_armed') : t('system_disarmed')}</span>`;
 
     // Weather
-    const weatherEnt = Object.values(this._hass?.states || {}).find(s => s.entity_id.startsWith('weather.')) || { state: 'sunny' };
+    const weatherEnt = this._getWeatherEntity();
     const weatherState = weatherEnt.state || 'sunny';
     const isNight = this._hass?.states?.['sun.sun']?.state === 'below_horizon';
 
@@ -3415,6 +3432,7 @@ class ArgusPanel extends HTMLElement {
       const isFS = this._fullscreenIdx === idx;
       art.className = `entry ${isFS ? 'ios-fullscreen' : ''}`;
       art.style.cssText = triggered ? 'border:3px solid #ff5252;box-shadow:0 0 30px rgba(255,82,82,.4)' : '';
+      art.querySelectorAll('.wx-webgl').forEach(canvas => canvas._argusWebglStop?.());
 
       art.innerHTML = `
           ${this._renderEntryBackground(weatherState, isNight)}
@@ -3427,12 +3445,12 @@ class ArgusPanel extends HTMLElement {
           </div>
           <div class="entry-content">
             <div class="liquid-stack">
-              <button class="liquid-btn btn-home ${state==='armed_home'?'active':''} ${sensorAlert && state==='armed_home'?'buzz-orange':''}" data-idx="${idx}" data-action="home">${t('btn_home')}</button>
-              <button class="liquid-btn btn-away ${state==='armed_away'?'active':''} ${sensorAlert && state==='armed_away'?'buzz-orange':''}" data-idx="${idx}" data-action="away">${t('btn_away')}</button>
-              <button class="liquid-btn btn-night ${state==='armed_night'?'active':''} ${sensorAlert && state==='armed_night'?'buzz-orange':''}" data-idx="${idx}" data-action="night">${t('btn_night')}</button>
-              <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''} ${sensorAlert && state==='armed_vacation'?'buzz-orange':''}" data-idx="${idx}" data-action="vacation">${t('btn_vacation')}</button>
-              <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg> <span>${t('btn_disarmed')}</span></button>
-              <button class="btn-sos" data-action="${panicActive ? 'stop-sos' : 'sos'}" data-idx="${idx}">${panicActive ? t('sos_stop') : t('btn_sos')}</button>
+              <button class="liquid-btn btn-home ${state==='armed_home'?'active':''} ${sensorAlert && state==='armed_home'?'buzz-orange':''}" data-idx="${idx}" data-action="home">${this._modeButtonIcon('home')}<span>${t('btn_home')}</span></button>
+              <button class="liquid-btn btn-away ${state==='armed_away'?'active':''} ${sensorAlert && state==='armed_away'?'buzz-orange':''}" data-idx="${idx}" data-action="away">${this._modeButtonIcon('away')}<span>${t('btn_away')}</span></button>
+              <button class="liquid-btn btn-night ${state==='armed_night'?'active':''} ${sensorAlert && state==='armed_night'?'buzz-orange':''}" data-idx="${idx}" data-action="night">${this._modeButtonIcon('night')}<span>${t('btn_night')}</span></button>
+              <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''} ${sensorAlert && state==='armed_vacation'?'buzz-orange':''}" data-idx="${idx}" data-action="vacation">${this._modeButtonIcon('vacation')}<span>${t('btn_vacation')}</span></button>
+              <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm">${this._modeButtonIcon('disarm')}<span>${t('btn_disarmed')}</span></button>
+              <button class="btn-sos" data-action="${panicActive ? 'stop-sos' : 'sos'}" data-idx="${idx}">${this._modeButtonIcon('sos')}<span>${panicActive ? t('sos_stop') : t('btn_sos')}</span></button>
             </div>
             <div class="entry-icon">
               ${this._getIntelligentSVG(state, weatherState, isNight, triggered)}
@@ -3476,6 +3494,7 @@ class ArgusPanel extends HTMLElement {
     el.querySelectorAll('button[data-fullscreen]').forEach(btn => {
       btn.addEventListener('click', ev => this._toggleFullscreen(ev.currentTarget.closest('.entry')));
     });
+    el.querySelectorAll('.wx-webgl').forEach(canvas => this._initWeatherWebGL(canvas));
     this._bindSOS(); // v0.9.33 Fix #5: re-bind SOS slider despues de cada re-render del DOM
   }
 
@@ -3514,6 +3533,38 @@ class ArgusPanel extends HTMLElement {
     }
   }
 
+  _initWeatherWebGL(canvas) {
+    if (!canvas || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+    const gl = canvas.getContext('webgl', { alpha: true, antialias: false, powerPreference: 'low-power' });
+    if (!gl) return;
+    const vertex = 'attribute vec2 p;varying vec2 uv;void main(){uv=(p+1.0)*.5;gl_Position=vec4(p,0.0,1.0);}';
+    const fragment = `precision mediump float;varying vec2 uv;uniform float time,rain,snow,fog,storm;
+      float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
+      float rainLayer(vec2 u,float t,float n){vec2 s=vec2(20.0+8.0*n,7.0+3.0*n);vec2 g=u*s;vec2 id=floor(g);vec2 q=fract(g);float sp=2.4+n*1.35+h(id)*1.2;q.y=fract(q.y-t*sp-h(id));float x=abs(q.x-(.54-q.y*.16));return (1.0-smoothstep(.003,.035-n*.006,x))*(1.0-smoothstep(.18,.98,q.y));}
+      float snowLayer(vec2 u,float t){vec2 g=u*vec2(17.0,10.0);vec2 id=floor(g);vec2 q=fract(g);q.y=fract(q.y-t*(.23+h(id)*.34)-h(id));q.x+=sin(t+h(id)*6.28)*.14;return 1.0-smoothstep(.012,.075,length(q-vec2(.5)));}
+      void main(){float t=time*.001;float r=rainLayer(uv,t,0.0)+rainLayer(uv,t,1.0)*.62+rainLayer(uv,t,2.0)*.34;float s=snowLayer(uv,t)+snowLayer(uv*1.6,t*.82)*.42;float mist=(sin(uv.y*33.0+t*.8)+sin(uv.y*18.0-t*.45))*0.025+0.045;float flash=step(.985,fract(t*.115))*storm*.42;vec3 col=vec3(.72,.88,1.0)*r*rain+vec3(1.0)*s*snow+vec3(.78,.88,.92)*mist*fog+vec3(1.0)*flash;float a=min(1.0,r*rain*.78+s*snow*.82+mist*fog+flash);gl_FragColor=vec4(col,a);}`;
+    const compile = (type, source) => { const shader = gl.createShader(type); gl.shaderSource(shader, source); gl.compileShader(shader); return gl.getShaderParameter(shader, gl.COMPILE_STATUS) ? shader : null; };
+    const vs = compile(gl.VERTEX_SHADER, vertex), fs = compile(gl.FRAGMENT_SHADER, fragment);
+    if (!vs || !fs) return;
+    const program = gl.createProgram(); gl.attachShader(program, vs); gl.attachShader(program, fs); gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return;
+    const buffer = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buffer); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
+    const position = gl.getAttribLocation(program, 'p'); const uniform = key => gl.getUniformLocation(program, key);
+    const values = { rain:Number(canvas.dataset.rain), snow:Number(canvas.dataset.snow), fog:Number(canvas.dataset.fog), storm:Number(canvas.dataset.storm) };
+    let frame = 0, active = true;
+    const draw = now => {
+      if (!active || !canvas.isConnected) return;
+      const ratio = Math.min(window.devicePixelRatio || 1, 1.5), width = Math.max(1, Math.round(canvas.clientWidth * ratio)), height = Math.max(1, Math.round(canvas.clientHeight * ratio));
+      if (canvas.width !== width || canvas.height !== height) { canvas.width = width; canvas.height = height; gl.viewport(0, 0, width, height); }
+      gl.useProgram(program); gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.bindBuffer(gl.ARRAY_BUFFER, buffer); gl.enableVertexAttribArray(position); gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+      gl.uniform1f(uniform('time'), now); gl.uniform1f(uniform('rain'), values.rain); gl.uniform1f(uniform('snow'), values.snow); gl.uniform1f(uniform('fog'), values.fog); gl.uniform1f(uniform('storm'), values.storm); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      frame = requestAnimationFrame(draw);
+    };
+    canvas._argusWebglStop = () => { active = false; cancelAnimationFrame(frame); gl.getExtension('WEBGL_lose_context')?.loseContext(); };
+    canvas.closest('.wx-atmosphere')?.classList.add('webgl-active');
+    frame = requestAnimationFrame(draw);
+  }
+
   /* ── Inline CSS Weather Backgrounds ─────────────────────────── */
   _renderAtmosphere(ws, isNight) {
     const value = String(ws || '').toLowerCase();
@@ -3533,9 +3584,18 @@ class ArgusPanel extends HTMLElement {
     else if (fog) sky = isNight ? ['#19212a', '#3b4750', '#627078'] : ['#aab7bd', '#d1dadd', '#e3e5e0'];
     else if (has('sunny')) sky = isNight ? sky : ['#0b4675', '#4c94bd', '#d4c99e'];
     const precip = snow ? 'snow' : (drizzle ? 'drizzle' : ((rain || storm) ? 'rain' : ''));
+    const rainDrops = (precip === 'rain' || precip === 'drizzle') ? Array.from({ length: storm ? 56 : (precip === 'rain' ? 38 : 22) }, (_, index) => {
+      const x = (index * 37) % 112 - 6;
+      const height = 15 + (index % 5) * 8;
+      const width = index % 7 === 0 ? 2 : 1;
+      const opacity = 0.28 + (index % 6) * 0.1;
+      const fall = 0.48 + (index % 5) * 0.11;
+      const delay = -((index * 0.17) % 1.8);
+      return `<span class="wx-rain-drop" style="--x:${x}%;--h:${height}px;--w:${width}px;--o:${opacity};--fall:${fall}s;--delay:${delay}s"></span>`;
+    }).join('') : '';
     const celestial = isNight ? `<div class="wx-celestial wx-moon-real ${this._moonPhase()}" style="--moon-shadow:${sky[0]}"></div>` : (!clouds || has('partly') ? '<div class="wx-celestial wx-sun-real"></div>' : '');
     return `<div class="wx wx-atmosphere ${isNight ? 'night' : 'day'} ${eclipse ? `eclipse-${eclipse}` : ''}" style="--sky-top:${sky[0]};--sky-mid:${sky[1]};--sky-bottom:${sky[2]};--cloud-color:${storm ? 'rgba(17,25,35,.84)' : (isNight ? 'rgba(38,52,68,.76)' : 'rgba(235,241,242,.68)')};--cloud-opacity:${clouds ? '.8' : '0'}">
-      ${isNight ? '<div class="wx-starfield"></div>' : ''}${celestial}${clouds ? '<div class="wx-cloudfield"></div>' : ''}${precip ? `<div class="wx-precip ${precip}"></div>` : ''}${storm ? '<div class="wx-lightning"></div>' : ''}${fog ? '<div class="wx-fog-real"></div>' : ''}${!rain && !drizzle && !storm && !snow && (season === 'spring' || season === 'autumn') ? `<div class="wx-seasonal ${season}"></div>` : ''}<div class="wx-horizon"></div>${this._renderHolidayOverlay()}${this._renderEclipseOverlay(eclipse)}</div>`;
+      <canvas class="wx-webgl" aria-hidden="true" data-rain="${rain || storm ? 1 : 0}" data-drizzle="${drizzle ? 1 : 0}" data-snow="${snow ? 1 : 0}" data-fog="${fog ? 1 : 0}" data-storm="${storm ? 1 : 0}"></canvas>${isNight ? '<div class="wx-starfield"></div>' : ''}${celestial}${clouds ? '<div class="wx-cloudfield"></div>' : ''}${precip ? `<div class="wx-precip ${precip}">${rainDrops}</div>` : ''}${storm ? '<div class="wx-lightning"></div>' : ''}${fog ? '<div class="wx-fog-real"></div>' : ''}${!rain && !drizzle && !storm && !snow && (season === 'spring' || season === 'autumn') ? `<div class="wx-seasonal ${season}"></div>` : ''}<div class="wx-horizon"></div>${this._renderEclipseOverlay(eclipse)}</div>`;
   }
 
   _getWeatherBg(ws, isNight) {
@@ -3665,7 +3725,7 @@ class ArgusPanel extends HTMLElement {
         ${isFog ? `<rect width="100%" height="100%" fill="#fff" opacity="0.35" filter="blur(15px)"/>` : ''}
       </svg>`;
 
-    return `<div class="wx wx-scenic">${svg}${this._renderHolidayOverlay()}${this._renderEclipseOverlay(eclipse)}</div>`;
+    return `<div class="wx wx-scenic">${svg}${this._renderEclipseOverlay(eclipse)}</div>`;
   }
 
 
@@ -4036,8 +4096,6 @@ class ArgusPanel extends HTMLElement {
   _chip(entityId, type) {
     const raw = this._hass?.states?.[entityId]?.state;
     const isTr = ['on', 'unlocked', 'open', 'recording', 'active', 'motion'].includes(raw);
-    const cfg = this._currentModeConfig();
-    const isEntry = (cfg.entry_sensors || []).includes(entityId);
     const name = this._hass?.states?.[entityId]?.attributes?.friendly_name || entityId;
     const readonly = !this._isAdmin;
 
@@ -4053,11 +4111,6 @@ class ArgusPanel extends HTMLElement {
       stateLabel = `<span class="pill-status">${isTr ? this._t('status_open') : this._t('status_closed')}</span>`;
       powerHtml = `${power.mains ? '<span class="pill-power">🔌 AC</span>' : ''}${power.battery !== null ? `<span class="pill-power">🔋 ${power.battery}%</span>` : ''}`;
     }
-
-    const delayIcon = type === 'sensor' ? `
-    <button class="icon-btn ${isEntry ? 'active' : ''}" data-toggle-delay="${entityId}" title="${escapeHtml(this._t('entry_delay_toggle'))}">
-    ${isEntry ? '⏳' : '⏱️'}
-    </button>` : '';
 
     // FIX v0.9.32 — Bug 3: sirenas parpadean rojo si el sistema está en triggered.
     // Sensores abiertos también se marcan como triggered-sensor.
@@ -4076,7 +4129,6 @@ class ArgusPanel extends HTMLElement {
           ${stateLabel}
           ${powerHtml}
         </span>
-        ${delayIcon}
         ${readonly ? '' : `<button data-remove="${type}:${entityId}" style="background:none; border:none; color:inherit; opacity:0.5; padding:0 4px; cursor:pointer; flex-shrink:0;">✕</button>`}
       </span>
     `;
@@ -4458,21 +4510,18 @@ class ArgusPanel extends HTMLElement {
     }).map(x => `<option value="${escapeHtml(x.entity_id)}">${escapeHtml(x.name)}</option>`).join('');
   }
 
-  _populateHolidayCountries() {
-    const select = this.shadowRoot.getElementById('holiday-country-select');
-    if (!select) return;
-    const countries = [
-      ['auto', this._t('holiday_auto')], ['AR', 'Argentina'], ['BR', 'Brasil'], ['CA', 'Canadá'], ['CL', 'Chile'],
-      ['CO', 'Colombia'], ['CR', 'Costa Rica'], ['DE', 'Alemania'], ['ES', 'España'], ['FR', 'Francia'],
-      ['GB', 'Reino Unido'], ['IT', 'Italia'], ['MX', 'México'], ['PA', 'Panamá'], ['PE', 'Perú'],
-      ['US', 'Estados Unidos'], ['UY', 'Uruguay'], ['VE', 'Venezuela']
-    ];
-    select.innerHTML = countries.map(([code, name]) => `<option value="${code}">${code === 'auto' ? '' : `${this._flagEmoji(code)} `}${escapeHtml(name)}</option>`).join('');
+  _populateWeatherSources() {
+    const select = this.shadowRoot.getElementById('weather-source-select');
+    if (!select || !this._hass?.states) return;
+    const weather = Object.values(this._hass.states).filter(state => state.entity_id?.startsWith('weather.'));
+    select.innerHTML = [{ entity_id: 'auto', name: this._t('weather_auto') }, ...weather.map(state => ({ entity_id: state.entity_id, name: state.attributes?.friendly_name || state.entity_id }))]
+      .map(item => `<option value="${escapeHtml(item.entity_id)}">${escapeHtml(item.name)}</option>`).join('');
   }
 
-  _flagEmoji(country) {
-    const code = String(country || '').toUpperCase();
-    return /^[A-Z]{2}$/.test(code) ? String.fromCodePoint(...[...code].map(char => 0x1F1E6 + char.charCodeAt(0) - 65)) : '🏳️';
+  _getWeatherEntity() {
+    const selected = this._weatherSource || 'auto';
+    const configured = selected !== 'auto' ? this._hass?.states?.[selected] : null;
+    return configured || Object.values(this._hass?.states || {}).find(state => state.entity_id?.startsWith('weather.')) || { state: 'sunny', attributes: {} };
   }
 
   _getDisplayedTemperature() {
@@ -4487,7 +4536,7 @@ class ArgusPanel extends HTMLElement {
         : (state.attributes?.unit_of_measurement || state.attributes?.native_unit_of_measurement);
       return Number.isFinite(Number(value)) ? `${Number(value).toFixed(1).replace(/\.0$/, '')}°${String(unit || '').replace('°', '')}` : null;
     }
-    const weather = Object.values(this._hass.states || {}).find(s => s.entity_id.startsWith('weather.'));
+    const weather = this._getWeatherEntity();
     const value = weather?.attributes?.temperature;
     const unit = weather?.attributes?.temperature_unit;
     return Number.isFinite(Number(value)) ? `${Number(value).toFixed(1).replace(/\.0$/, '')}°${String(unit || '').replace('°', '')}` : null;
@@ -4496,7 +4545,7 @@ class ArgusPanel extends HTMLElement {
   _getTemperatureReadings() {
     if (!this._hass?.states) return [];
     const readings = [];
-    const weather = Object.values(this._hass.states).find(state => state.entity_id?.startsWith('weather.'));
+    const weather = this._getWeatherEntity();
     const outside = weather?.attributes?.temperature;
     const outsideUnit = weather?.attributes?.temperature_unit;
     if (Number.isFinite(Number(outside))) readings.push({ label: 'EXT.', value: `${Number(outside).toFixed(1).replace(/\.0$/, '')}°${String(outsideUnit || '').replace('°', '')}` });
@@ -4522,33 +4571,6 @@ class ArgusPanel extends HTMLElement {
     if (raw.includes('last_quarter') || raw.includes('third_quarter')) return 'last-quarter';
     if (raw.includes('waning_crescent')) return 'waning-crescent';
     return raw.includes('full') ? 'full' : 'full';
-  }
-
-  _easterDate(year) {
-    const a = year % 19, b = Math.floor(year / 100), c = year % 100, d = Math.floor(b / 4), e = b % 4;
-    const f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30;
-    const i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451);
-    return new Date(year, Math.floor((h + l - 7 * m + 114) / 31) - 1, ((h + l - 7 * m + 114) % 31) + 1);
-  }
-
-  _holidayTheme() {
-    if (!this._holidayEffectsEnabled) return null;
-    const today = new Date();
-    const country = (this._holidayCountry === 'auto' ? this._hass?.config?.country : this._holidayCountry || '').toUpperCase();
-    const month = today.getMonth() + 1, day = today.getDate();
-    const officialFlag = /^[A-Z]{2}$/.test(country) ? this._flagEmoji(country) : '🏳️';
-    if ((month === 12 && day >= 20) || (month === 1 && day <= 6)) return { kind: 'christmas', label: '🎄 Navidad', flag: officialFlag };
-    const easter = this._easterDate(today.getFullYear());
-    if (Math.abs((today - easter) / 86400000) <= 2) return { kind: 'easter', label: '🕊️ Pascua', flag: officialFlag };
-    const nationalDays = { AR:[7,9], BR:[9,7], CA:[7,1], CL:[9,18], CO:[7,20], CR:[9,15], DE:[10,3], ES:[10,12], FR:[7,14], GB:[6,14], IT:[6,2], MX:[9,16], PA:[11,3], PE:[7,28], US:[7,4], UY:[8,25], VE:[7,5] };
-    const holiday = nationalDays[country];
-    return holiday?.[0] === month && holiday?.[1] === day ? { kind: 'national', label: 'Independencia', flag: this._flagEmoji(country) } : null;
-  }
-
-  _renderHolidayOverlay() {
-    const holiday = this._holidayTheme();
-    if (!holiday) return '';
-    return `<div class="weather-celebration holiday-${holiday.kind}" aria-label="${escapeHtml(holiday.label)}"><span class="holiday-flag">${holiday.flag}</span><span class="holiday-label">${escapeHtml(holiday.label)}</span></div>`;
   }
 
   _eclipseEvent() {
@@ -5058,8 +5080,7 @@ class ArgusPanel extends HTMLElement {
     const status = this.shadowRoot.getElementById('personalization-status');
     const background_mode = this.shadowRoot.getElementById('bg-mode-select-standalone')?.value || 'weather';
     const temperature_source = this.shadowRoot.getElementById('temp-source-select-standalone')?.value || 'auto';
-    const holiday_effects_enabled = Boolean(this.shadowRoot.getElementById('holiday-effects-enabled')?.checked);
-    const holiday_country = this.shadowRoot.getElementById('holiday-country-select')?.value || 'auto';
+    const weather_source = this.shadowRoot.getElementById('weather-source-select')?.value || 'auto';
     const emergency_number = this._normaliseEmergencyNumber(this.shadowRoot.getElementById('emergency-number-input')?.value);
     const panic_outputs = this._panicOutputs || [];
 
@@ -5089,8 +5110,7 @@ class ArgusPanel extends HTMLElement {
         background_mode,
         background_images: this._backgroundImages || [],
         temperature_source,
-        holiday_effects_enabled,
-        holiday_country,
+        weather_source,
         emergency_number,
         panic_outputs,
         panel_bg_file,
@@ -5101,8 +5121,7 @@ class ArgusPanel extends HTMLElement {
       });
       this._backgroundMode = background_mode;
       this._temperatureSource = temperature_source;
-      this._holidayEffectsEnabled = holiday_effects_enabled;
-      this._holidayCountry = holiday_country;
+      this._weatherSource = weather_source;
       this._emergencyNumber = emergency_number;
       this._panicOutputs = panic_outputs;
       this._panelBgFile = panel_bg_file;
@@ -5116,8 +5135,7 @@ class ArgusPanel extends HTMLElement {
       this._ui.background_mode = background_mode;
       this._ui.background_images = this._backgroundImages || [];
       this._ui.temperature_source = temperature_source;
-      this._ui.holiday_effects_enabled = holiday_effects_enabled;
-      this._ui.holiday_country = holiday_country;
+      this._ui.weather_source = weather_source;
       this._ui.emergency_number = emergency_number;
       this._ui.panic_outputs = panic_outputs;
       this._configureEmergencyCall();

@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.1] - 2026-07-17
+
+### Added
+- **Atmósfera WebGL nativa**: Incorporación de un motor WebGL nativo en la GPU (sin dependencias externas) para renderizar dinámicamente partículas de lluvia, nieve, niebla y destellos de relámpagos. Si WebGL está disponible, las capas equivalentes en CSS se desactivan para optimizar rendimiento; en caso contrario o si se detecta "reducir movimiento", el panel vuelve automáticamente al fallback de CSS. Además, se liberan adecuadamente los recursos WebGL al desmontar o cambiar de tarjeta.
+- **Selector de Fuente de Clima**: Ajuste persistente que permite elegir de forma manual la entidad `weather.*` correcta de Home Assistant para obtener las condiciones meteorológicas y temperatura exterior exactas de tu ubicación.
+- **Iconografía Liquid Glass Premium**: Reemplazo de los iconos de estado (En casa, Ausente, Noche, Vacaciones, Desarmado y SOS/Pánico) por vectores SVG premium de estilo vidrio templado. El escudo central del panel ahora es dinámico, con degradados de color, reflejo de luz y pulso animado según el estado del sistema.
+
+### Changed
+- **Interfaz Móvil**: Corrección y centrado del botón selector de idioma en móvil, manteniendo la adaptabilidad de las instancias activas y visualización responsive a pantalla completa.
+- **Optimización de Energía de Sensores**: Se eliminó por completo el icono de reloj/retardo de entrada en las tarjetas de sensores. El panel muestra exclusivamente información confirmada por Home Assistant, distinguiendo entre batería (`🔋 %`) y alimentación eléctrica (`🔌 AC`), sin simular ni estimar estados nulos.
+
+### Removed
+- **Festividades**: Eliminación total del soporte de festividades, incluyendo interfaz de usuario, endpoints WebSocket, lógica de banderas nacionales/efectos festivos y variables de almacenamiento asociadas.
+
 ## [1.5.0] - 2026-07-17
 
 ### Added
