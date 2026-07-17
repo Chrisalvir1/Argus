@@ -990,17 +990,16 @@ _tmpl.innerHTML = `
   }
   .bounce-in { animation: bounceIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"instances activity" "instances health" "instances modes" "access access" "automations backup";gap:24px;align-items:start}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"instances activity" "instances modes" "access access" "automations backup";gap:24px;align-items:start}
   .grid > .stack{display:contents}
   .dashboard-instances{grid-area:instances}
   .activity-panel{grid-area:activity}
-  .health-panel{grid-area:health}
   .modes-panel{grid-area:modes}
   .access-panel{grid-area:access}
   .automations-panel{grid-area:automations;height:100%}
   .backup-panel{grid-area:backup;height:100%}
   @media(max-width:900px){
-    .grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"instances" "health" "activity" "modes" "access" "automations" "backup"}
+    .grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"instances" "activity" "modes" "access" "automations" "backup"}
   }
   @media(max-width:750px){.hero{flex-direction:column;text-align:center}.hero-left{flex-direction:column}}
   @media(max-width:750px){.hero .lang-pill{align-self:center;margin-inline:auto}.hero-left{width:100%;align-items:center}}
@@ -1386,22 +1385,6 @@ _tmpl.innerHTML = `
   .log-badge.arm{background:rgba(251,140,0,.12);color:#fb8c00}
   .log-badge.disarm{background:rgba(67,160,71,.12);color:var(--success-color,#43a047)}
   .log-badge.trigger{background:rgba(229,57,53,.15);color:var(--error-color,#e53935)}
-  .health-summary{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;margin:12px 0 16px}
-  .health-score{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;font-size:20px;font-weight:900;background:conic-gradient(var(--primary-color,#007aff) calc(var(--score,0)*1%),rgba(255,255,255,.08) 0);box-shadow:inset 0 0 0 7px rgba(15,23,42,.72)}
-  .health-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-  .health-metric{padding:9px;border-radius:13px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08);text-align:center;min-width:0}
-  .health-metric strong{display:block;font-size:16px}.health-metric span{display:block;font-size:9px;opacity:.62;text-transform:uppercase;margin-top:2px}
-  .health-list{display:grid;gap:7px;max-height:170px;overflow:auto}
-  .health-row{display:flex;justify-content:space-between;gap:10px;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.045);font-size:11px}
-  .health-row>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .security-intelligence{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.09);display:grid;gap:9px}
-  .security-intelligence label{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:750}
-  .security-intelligence-controls{display:grid;grid-template-columns:1fr 1fr auto;gap:8px}
-  .copilot-box{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.09)}
-  .copilot-input{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}.copilot-answer{margin-top:8px;padding:10px 12px;border-radius:13px;background:rgba(0,122,255,.09);font-size:12px;line-height:1.45;display:none}
-  .schedule-box{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.09)}.schedule-controls{display:grid;grid-template-columns:1.2fr .8fr 1fr auto;gap:7px}.schedule-list{display:grid;gap:6px;margin-top:9px}.schedule-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.045);font-size:11px}
-  @media(max-width:560px){.schedule-controls{grid-template-columns:1fr 1fr}.schedule-controls button{grid-column:1/-1}}
-  @media(max-width:480px){.health-metrics{grid-template-columns:1fr}.security-intelligence-controls{grid-template-columns:1fr 1fr}.security-intelligence-controls button{grid-column:1/-1}}
   button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 72%,#fff);outline-offset:3px}
   @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}.wx canvas{display:none!important}}
   /* Personalization section styles */
@@ -1922,36 +1905,6 @@ _tmpl.innerHTML = `
           <div style="display:flex;gap:6px"><button class="ghost" id="btn-export-forensic" style="font-size:10px;padding:4px 8px;opacity:.7">JSON</button><button class="ghost" id="btn-clear-log" style="font-size:10px;padding:4px 8px;opacity:0.6">BORRAR</button></div>
         </div>
         <div id="activity-log" style="display:grid;gap:10px;height:280px;overflow-y:auto;margin-top:10px"></div>
-      </section>
-
-      <!-- Real telemetry only: no fabricated battery or energy values. -->
-      <section class="glass panel liquid-glass health-panel" aria-labelledby="h-health-title">
-        <div class="panel-head"><h2 id="h-health-title">Centro de salud y energía</h2><span id="health-local-badge" class="small">Local-first</span></div>
-        <div id="health-center" aria-live="polite"><div class="small" style="opacity:.6">Cargando…</div></div>
-        <div class="security-intelligence">
-          <label><input type="checkbox" id="confirm-enabled"> <span id="confirm-label">Confirmación inteligente</span></label>
-          <div class="small" id="confirm-help" style="opacity:.62">Requiere señales independientes dentro de una ventana. Humo, gas y seguridad siempre disparan de inmediato.</div>
-          <div class="security-intelligence-controls">
-            <select class="glass-control" id="confirm-signals" aria-label="Señales requeridas"><option value="2">2 señales</option><option value="3">3 señales</option></select>
-            <select class="glass-control" id="confirm-window" aria-label="Ventana de confirmación"><option value="10">10 s</option><option value="15">15 s</option><option value="30">30 s</option><option value="60">60 s</option></select>
-            <button class="primary" id="btn-save-confirmation">Guardar</button>
-          </div>
-        </div>
-        <div class="schedule-box">
-          <div class="small" id="schedule-title" style="font-weight:850;margin-bottom:7px">Horarios locales de estado</div>
-          <div class="schedule-controls">
-            <select class="glass-control" id="schedule-state"></select>
-            <input class="glass-control" type="time" id="schedule-time" value="23:00" aria-label="Hora">
-            <select class="glass-control" id="schedule-days"></select>
-            <button class="primary" id="btn-add-schedule">+</button>
-          </div>
-          <div class="schedule-list" id="schedule-list"></div>
-        </div>
-        <div class="copilot-box">
-          <div class="small" id="copilot-title" style="font-weight:850;margin-bottom:7px">Argus Copilot · local</div>
-          <div class="copilot-input"><input class="glass-control" id="copilot-query" maxlength="500" placeholder="¿Cuál es el estado del sistema?" aria-label="Argus Copilot"><button class="primary" id="btn-copilot-ask">Consultar</button></div>
-          <div class="copilot-answer" id="copilot-answer" aria-live="polite"></div>
-        </div>
       </section>
 
       <!-- Modes: placed beside the primary dashboard for a balanced layout. -->
@@ -2482,7 +2435,6 @@ class ArgusPanel extends HTMLElement {
     this._renderModeTabs();
     this._renderModeView();
     this._renderActivityLog();
-    this._renderHealthCenter();
     this._renderAutomations();
     this._renderNotifications();
     this._renderUsers();
@@ -2791,10 +2743,6 @@ class ArgusPanel extends HTMLElement {
     this.shadowRoot.getElementById('import-config-file')?.addEventListener('change', (ev) => this._importConfig(ev));
     this.shadowRoot.getElementById('btn-reset-config')?.addEventListener('click', () => this._resetConfig());
     this.shadowRoot.getElementById('btn-undo-reset')?.addEventListener('click', () => this._undoResetConfig());
-    this.shadowRoot.getElementById('btn-save-confirmation')?.addEventListener('click', () => this._saveIntelligentConfirmation());
-    this.shadowRoot.getElementById('btn-copilot-ask')?.addEventListener('click', () => this._askCopilot());
-    this.shadowRoot.getElementById('btn-add-schedule')?.addEventListener('click', () => this._addStateSchedule());
-    this.shadowRoot.getElementById('copilot-query')?.addEventListener('keydown', event => { if (event.key === 'Enter') this._askCopilot(); });
 
     this.shadowRoot.getElementById('btn-save-personalization-standalone')?.addEventListener('click', () => this._savePersonalization());
     this.shadowRoot.getElementById('btn-select-sos-outputs')?.addEventListener('click', () => this._openModal('panic'));
@@ -3115,14 +3063,6 @@ class ArgusPanel extends HTMLElement {
     }).catch(err => {
       console.warn('Argus audit log refresh failed; using dashboard data.', err);
     });
-    this._send('argus/get_system_health').then(health => {
-      this._systemHealth = health;
-      this._renderHealthCenter();
-    }).catch(err => {
-      console.warn('Argus health center unavailable:', err);
-      this._systemHealth = null;
-      this._renderHealthCenter();
-    });
     this._send('argus/get_forensic_timeline', {limit:200}).then(result => {
       this._forensicTimeline = result?.events || [];
       this._renderActivityLog();
@@ -3231,7 +3171,6 @@ class ArgusPanel extends HTMLElement {
     [
       ['instances', () => this._renderEntries()],
       ['activity log', () => this._renderActivityLog()],
-      ['health center', () => this._renderHealthCenter()],
       ['mode tabs', () => this._renderModeTabs()],
       ['mode view', () => this._renderModeView()],
       ['automations', () => this._renderAutomations()],
@@ -3887,13 +3826,13 @@ class ArgusPanel extends HTMLElement {
   /* ── Activity Log ────────────────────────────────────────────────── */
   _healthText() {
     const copy = {
-      es:{title:'Centro de salud y energía',healthy:'Sistema saludable',warning:'Requiere atención',critical:'Dispositivos sin conexión',devices:'dispositivos',offline:'sin conexión',low:'baterías bajas',battery:'Batería',energy:'Energía y potencia en vivo',none:'Sin telemetría compatible',local:'Local-first activo',confirm:'Confirmación inteligente',help:'Requiere señales independientes dentro de una ventana. Humo, gas, CO y seguridad siempre disparan de inmediato.',save:'Guardar',saved:'Guardado'},
-      en:{title:'Health & energy center',healthy:'System healthy',warning:'Attention required',critical:'Devices offline',devices:'devices',offline:'offline',low:'low batteries',battery:'Battery',energy:'Live energy and power',none:'No compatible telemetry',local:'Local-first active',confirm:'Intelligent confirmation',help:'Requires independent signals within a window. Smoke, gas, CO and safety always trigger immediately.',save:'Save',saved:'Saved'},
-      fr:{title:'Centre de santé et énergie',healthy:'Système sain',warning:'Attention requise',critical:'Appareils hors ligne',devices:'appareils',offline:'hors ligne',low:'batteries faibles',battery:'Batterie',energy:'Énergie et puissance en direct',none:'Aucune télémétrie compatible',local:'Local-first actif',confirm:'Confirmation intelligente',help:'Exige des signaux indépendants. Fumée, gaz, CO et sécurité déclenchent toujours immédiatement.',save:'Enregistrer',saved:'Enregistré'},
-      pt:{title:'Centro de saúde e energia',healthy:'Sistema saudável',warning:'Requer atenção',critical:'Dispositivos offline',devices:'dispositivos',offline:'offline',low:'baterias fracas',battery:'Bateria',energy:'Energia e potência ao vivo',none:'Sem telemetria compatível',local:'Local-first ativo',confirm:'Confirmação inteligente',help:'Exige sinais independentes. Fumaça, gás, CO e segurança sempre disparam imediatamente.',save:'Salvar',saved:'Salvo'},
-      it:{title:'Centro salute ed energia',healthy:'Sistema integro',warning:'Richiede attenzione',critical:'Dispositivi offline',devices:'dispositivi',offline:'offline',low:'batterie scariche',battery:'Batteria',energy:'Energia e potenza in tempo reale',none:'Nessuna telemetria compatibile',local:'Local-first attivo',confirm:'Conferma intelligente',help:'Richiede segnali indipendenti. Fumo, gas, CO e sicurezza scattano sempre subito.',save:'Salva',saved:'Salvato'},
-      zh:{title:'健康与能源中心',healthy:'系统健康',warning:'需要注意',critical:'设备离线',devices:'设备',offline:'离线',low:'低电量',battery:'电池',energy:'实时能源与功率',none:'无兼容遥测',local:'本地优先已启用',confirm:'智能确认',help:'需要在时间窗口内收到独立信号。烟雾、燃气、一氧化碳和安全传感器始终立即触发。',save:'保存',saved:'已保存'},
-      ru:{title:'Центр здоровья и энергии',healthy:'Система исправна',warning:'Требуется внимание',critical:'Устройства не в сети',devices:'устройств',offline:'не в сети',low:'низкий заряд',battery:'Батарея',energy:'Энергия и мощность',none:'Нет совместимой телеметрии',local:'Local-first активен',confirm:'Умное подтверждение',help:'Требует независимых сигналов. Дым, газ, CO и безопасность всегда срабатывают сразу.',save:'Сохранить',saved:'Сохранено'},
+      es:{title:'Centro de salud',healthy:'Sistema saludable',warning:'Requiere atención',critical:'Dispositivos sin conexión',devices:'dispositivos configurados',offline:'sin conexión',low:'baterías bajas',battery:'Batería',none:'No hay dispositivos seleccionados en los modos.',local:'Local-first activo',confirm:'Confirmación inteligente',help:'Requiere señales independientes dentro de una ventana. Humo, gas, CO y seguridad siempre disparan de inmediato.',save:'Guardar',saved:'Guardado'},
+      en:{title:'Health center',healthy:'System healthy',warning:'Attention required',critical:'Devices offline',devices:'configured devices',offline:'offline',low:'low batteries',battery:'Battery',none:'No devices are selected in the modes.',local:'Local-first active',confirm:'Intelligent confirmation',help:'Requires independent signals within a window. Smoke, gas, CO and safety always trigger immediately.',save:'Save',saved:'Saved'},
+      fr:{title:'Centre de santé',healthy:'Système sain',warning:'Attention requise',critical:'Appareils hors ligne',devices:'appareils configurés',offline:'hors ligne',low:'batteries faibles',battery:'Batterie',none:'Aucun appareil n’est sélectionné dans les modes.',local:'Local-first actif',confirm:'Confirmation intelligente',help:'Exige des signaux indépendants. Fumée, gaz, CO et sécurité déclenchent toujours immédiatement.',save:'Enregistrer',saved:'Enregistré'},
+      pt:{title:'Centro de saúde',healthy:'Sistema saudável',warning:'Requer atenção',critical:'Dispositivos offline',devices:'dispositivos configurados',offline:'offline',low:'baterias fracas',battery:'Bateria',none:'Nenhum dispositivo foi selecionado nos modos.',local:'Local-first ativo',confirm:'Confirmação inteligente',help:'Exige sinais independentes. Fumaça, gás, CO e segurança sempre disparam imediatamente.',save:'Salvar',saved:'Salvo'},
+      it:{title:'Centro salute',healthy:'Sistema integro',warning:'Richiede attenzione',critical:'Dispositivi offline',devices:'dispositivi configurati',offline:'offline',low:'batterie scariche',battery:'Batteria',none:'Nessun dispositivo è selezionato nelle modalità.',local:'Local-first attivo',confirm:'Conferma intelligente',help:'Richiede segnali indipendenti. Fumo, gas, CO e sicurezza scattano sempre subito.',save:'Salva',saved:'Salvato'},
+      zh:{title:'健康中心',healthy:'系统健康',warning:'需要注意',critical:'设备离线',devices:'已配置设备',offline:'离线',low:'低电量',battery:'电池',none:'模式中未选择设备。',local:'本地优先已启用',confirm:'智能确认',help:'需要在时间窗口内收到独立信号。烟雾、燃气、一氧化碳和安全传感器始终立即触发。',save:'保存',saved:'已保存'},
+      ru:{title:'Центр здоровья',healthy:'Система исправна',warning:'Требуется внимание',critical:'Устройства не в сети',devices:'настроенных устройств',offline:'не в сети',low:'низкий заряд',battery:'Батарея',none:'В режимах не выбраны устройства.',local:'Local-first активен',confirm:'Умное подтверждение',help:'Требует независимых сигналов. Дым, газ, CO и безопасность всегда срабатывают сразу.',save:'Сохранить',saved:'Сохранено'},
     };
     return copy[this._getCurrentLangCode()] || copy.en;
   }
@@ -3915,11 +3854,6 @@ class ArgusPanel extends HTMLElement {
     const label = this.shadowRoot.getElementById('confirm-label'); if (label) label.textContent = text.confirm;
     const help = this.shadowRoot.getElementById('confirm-help'); if (help) help.textContent = text.help;
     const save = this.shadowRoot.getElementById('btn-save-confirmation'); if (save && save.dataset.saved !== '1') save.textContent = text.save;
-    const copilotCopy = {
-      es:['¿Cuál es el estado del sistema?','Consultar'],en:['What is the system status?','Ask'],fr:['Quel est l’état du système ?','Consulter'],pt:['Qual é o estado do sistema?','Consultar'],it:['Qual è lo stato del sistema?','Chiedi'],zh:['系统当前状态如何？','查询'],ru:['Каково состояние системы?','Спросить']
-    }[this._getCurrentLangCode()] || ['What is the system status?','Ask'];
-    const copilotInput = this.shadowRoot.getElementById('copilot-query'); if (copilotInput) copilotInput.placeholder = copilotCopy[0];
-    const copilotButton = this.shadowRoot.getElementById('btn-copilot-ask'); if (copilotButton) copilotButton.textContent = copilotCopy[1];
     this._renderStateSchedule();
     if (!el) return;
     const health = this._systemHealth;
@@ -3929,11 +3863,14 @@ class ArgusPanel extends HTMLElement {
     const offline = Array.isArray(health.unavailable) ? health.unavailable : [];
     const devices = Array.isArray(health.configured_devices) ? health.configured_devices : [];
     const statusText = health.status === 'critical' ? text.critical : health.status === 'warning' ? text.warning : text.healthy;
-    const details = [
-      ...offline.slice(0,4).map(item => ({name:item.name,value:text.offline,alert:true})),
-      ...low.slice(0,4).map(item => ({name:item.name,value:`${item.value}${item.unit || '%'}`,alert:true})),
-      ...(health.energy || []).filter(item => item.available && item.value !== null).slice(0,5).map(item => ({name:item.name,value:`${item.value} ${item.unit}`.trim(),alert:false})),
-    ];
+    const batteriesByEntity = new Map(batteries.map(item => [item.entity_id, item]));
+    const details = devices.map(item => {
+      const battery = batteriesByEntity.get(item.entity_id);
+      const isOffline = item.state === 'unknown' || item.state === 'unavailable';
+      const facts = [isOffline ? text.offline : item.state];
+      if (battery?.value !== null && battery?.value !== undefined) facts.push(`${battery.value}${battery.unit || '%'}`);
+      return {name:item.name, value:facts.join(' · '), alert:isOffline || Boolean(battery?.low)};
+    });
     el.innerHTML = `<div class="health-summary">
       <div class="health-score" style="--score:${Number(health.score)||0}" aria-label="${Number(health.score)||0}%">${Number(health.score)||0}</div>
       <div><div style="font-weight:850">${this._escapeHtml(statusText)}</div><div class="small" style="opacity:.6;margin-top:3px">${devices.length} ${this._escapeHtml(text.devices)}</div></div>
@@ -3941,8 +3878,7 @@ class ArgusPanel extends HTMLElement {
       <div class="health-metric"><strong>${offline.length}</strong><span>${this._escapeHtml(text.offline)}</span></div>
       <div class="health-metric"><strong>${low.length}</strong><span>${this._escapeHtml(text.low)}</span></div>
       <div class="health-metric"><strong>${batteries.length}</strong><span>${this._escapeHtml(text.battery)}</span></div>
-    </div><div class="small" style="margin:13px 0 7px;font-weight:800">${this._escapeHtml(text.energy)}</div>
-    <div class="health-list">${details.length ? details.map(item => `<div class="health-row"><span>${this._escapeHtml(item.name)}</span><strong style="color:${item.alert?'#ff8a80':'inherit'}">${this._escapeHtml(item.value)}</strong></div>`).join('') : `<div class="small" style="opacity:.55">${this._escapeHtml(text.none)}</div>`}</div>`;
+    </div><div class="health-list" style="margin-top:13px">${details.length ? details.map(item => `<div class="health-row"><span>${this._escapeHtml(item.name)}</span><strong style="color:${item.alert?'#ff8a80':'inherit'}">${this._escapeHtml(item.value)}</strong></div>`).join('') : `<div class="small" style="opacity:.55">${this._escapeHtml(text.none)}</div>`}</div>`;
   }
 
   async _saveIntelligentConfirmation() {
@@ -4018,21 +3954,6 @@ class ArgusPanel extends HTMLElement {
       this._ui.state_schedule = schedules;
       this._renderStateSchedule();
     } catch (err) { alert(this._format('generic_error', {error:err.message})); }
-  }
-
-  async _askCopilot() {
-    const input = this.shadowRoot.getElementById('copilot-query');
-    const answer = this.shadowRoot.getElementById('copilot-answer');
-    const query = String(input?.value || '').trim();
-    if (!query || !answer) return;
-    answer.style.display = 'block';
-    answer.textContent = '…';
-    try {
-      const result = await this._send('argus/copilot', {query, language:this._getCurrentLangCode()});
-      answer.textContent = result?.answer || '';
-    } catch (err) {
-      answer.textContent = this._format('generic_error', {error:err.message});
-    }
   }
 
   _localizeActivityDetail(action, rawDetail) {

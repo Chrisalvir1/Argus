@@ -75,14 +75,14 @@ class TestSecurityContract(unittest.TestCase):
                 self.assertIn("options", data)
                 self.assertIn("init", data["options"]["step"])
 
-    def test_v1_5_2_features(self) -> None:
+    def test_v1_5_3_features(self) -> None:
         """Verify new version versioning, MQTT topic updates, and new features."""
         # 1. Check version is bumped consistently
         manifest = json.loads((COMPONENT / "manifest.json").read_text(encoding="utf-8"))
-        self.assertEqual(manifest["version"], "1.5.2")
+        self.assertEqual(manifest["version"], "1.5.3")
 
         const = (COMPONENT / "const.py").read_text(encoding="utf-8")
-        self.assertIn('VERSION = "1.5.2"', const)
+        self.assertIn('VERSION = "1.5.3"', const)
         self.assertIn('DEFAULT_MQTT_TOPIC_COMMAND = "argus/alarm/set"', const)
 
         # 2. Check MQTT commands/handling
@@ -100,8 +100,8 @@ class TestSecurityContract(unittest.TestCase):
         self.assertIn("formattedDate", frontend)
         self.assertIn("toLocaleString(this._getLocale())", frontend)
 
-    def test_local_first_health_and_forensic_contract(self) -> None:
-        """The operational features remain local, real, and restart-safe."""
+    def test_local_first_and_forensic_contract(self) -> None:
+        """Operational recovery and forensic events remain restart-safe."""
         storage = (COMPONENT / "storage.py").read_text(encoding="utf-8")
         panel = (COMPONENT / "alarm_control_panel.py").read_text(encoding="utf-8")
         api = (COMPONENT / "websocket_api.py").read_text(encoding="utf-8")
@@ -110,10 +110,7 @@ class TestSecurityContract(unittest.TestCase):
         self.assertIn("async_save_alarm_runtime_state", storage)
         self.assertIn("_async_reconcile_state_schedule", panel)
         self.assertIn("schedule_recovery", panel)
-        self.assertIn("argus/get_system_health", api)
         self.assertIn("argus/get_forensic_timeline", api)
-        self.assertIn("argus/copilot", api)
-        self.assertIn('"local": True', api)
         self.assertIn("AES-GCM", frontend)
         self.assertIn("PBKDF2", frontend)
         self.assertIn("prefers-reduced-motion", frontend)

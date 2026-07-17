@@ -7,14 +7,9 @@ an administrator account; no Argus security data is sent to a third party.
 ## Read-only extension commands
 
 - `argus/dashboard` — instances, safe UI configuration, and selectable entities.
-- `argus/get_system_health` — real availability, linked batteries, and separate
-  energy/power telemetry. Argus never invents a battery percentage or totals
-  incompatible meters.
 - `argus/get_forensic_timeline` — structured events with timestamp, actor,
   severity, action, and detail. Accepts `limit` from 1 to 200.
 - `argus/get_stats` — 30-day alarm statistics.
-- `argus/copilot` — local multilingual security queries. Requires `query` and
-  accepts `language`: `es`, `en`, `fr`, `pt`, `it`, `zh`, or `ru`.
 
 Example payload:
 

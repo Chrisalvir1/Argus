@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.3] - 2026-07-17
+
+### Changed
+- **Traducción de Fuente de Clima**: La etiqueta y el estado de la fuente de clima seleccionada ahora se actualizan de forma dinámica al cambiar de idioma en el panel.
+
+### Removed
+- **Centro de Salud y Energía**: Se eliminaron completamente todos los elementos visuales de la interfaz de usuario correspondientes al contenedor de Salud y Energía, así como sus endpoints asociados en WebSocket.
+- **Argus Copilot**: Eliminación total del asistente de inteligencia local Copilot (interfaz de usuario, endpoints WebSocket de procesamiento y traducciones locales).
+
+### Retained
+- **Resiliencia y Forense**: Se conservan a nivel interno la recuperación automática de estado tras apagones y el registro de la línea de tiempo forense.
+
 ## [1.5.2] - 2026-07-17
 
 ### Added

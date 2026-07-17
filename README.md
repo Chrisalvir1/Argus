@@ -5,7 +5,7 @@
 
   **El Sistema de Seguridad Premium para Home Assistant**
 
-  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.5.2-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
+  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.5.3-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
   [![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)](https://www.home-assistant.io/)
   [![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)](https://hacs.xyz/)
   [![GitHub stars](https://img.shields.io/github/stars/Chrisalvir1/Argus?style=social)](https://github.com/Chrisalvir1/Argus/stargazers)
@@ -21,18 +21,16 @@
 
 ---
 
-## ✨ Novedades y Correcciones Recientes (v1.5.2)
+## ✨ Novedades y Correcciones Recientes (v1.5.3)
 
-¡Operaciones Local-First, Salud del Sistema, Energía y Recuperación Cifrada!
+¡Interfaz Refinada, Fuente de Clima Traducible y Autonomía Local!
 
-**Novedades de la versión 1.5.2:**
-- **Operaciones Local-First:** Inteligencia y control ejecutados localmente en tu Home Assistant sin dependencias de servicios externos en la nube.
-- **Horarios Recuperables:** Resiliencia ante apagones y fallos eléctricos; tus estados y horarios de armado/desarmado se restauran automáticamente tras el encendido.
-- **Centro de Salud y Energía:** Monitoreo del estado del sistema, reporte exclusivo de baterías reales y telemetría de energía sin estimaciones inventadas.
-- **Línea Forense (Forensic Timeline):** Registro estructurado de auditoría con detalles precisos de eventos, severidad y actores responsables.
-- **Copilot Local Multilingüe:** Asistente inteligente integrado que responde consultas de seguridad localmente en 7 idiomas.
-- **Copias Cifradas (Backups):** Copias de seguridad de configuración cifradas con PBKDF2-SHA256 y AES-256-GCM.
-- **Accesibilidad y API de Extensiones:** Accesibilidad mejorada para lectores de pantalla y APIs WebSocket documentadas para integraciones de terceros. Consulta la documentación técnica en [docs/EXTENSIONS_API.md](file:///Users/chrisalvir/Desktop/GITHUB%20PROJECT/argus/docs/EXTENSIONS_API.md).
+**Novedades de la versión 1.5.3:**
+- **Local-First y Recuperación de Estado:** Se mantiene internamente la recuperación automática de estado tras un apagón y el registro de la línea forense.
+- **Traducción Dinámica de Clima:** La etiqueta y descripción de la fuente de clima configurada ahora se traducen y redibujan inmediatamente al cambiar el idioma del panel.
+- **Simplificación de Interfaz:** Se ha removido el contenedor visual del Centro de Salud y Energía del panel Lovelace y sus endpoints correspondientes.
+- **Remoción de Copilot:** Se eliminó por completo el asistente inteligente Copilot local y su API WebSocket asociada para simplificar la interfaz.
+- **API de Extensiones:** API WebSocket documentada para integraciones de terceros. Consulta la documentación técnica en [docs/EXTENSIONS_API.md](file:///Users/chrisalvir/Desktop/GITHUB%20PROJECT/argus/docs/EXTENSIONS_API.md).
 
 ---
 
@@ -73,7 +71,7 @@
 
 ### Instalación Manual
 
-1. Descarga el archivo `.zip` del último *Release* en GitHub (v1.5.2).
+1. Descarga el archivo `.zip` del último *Release* en GitHub (v1.5.3).
 2. Descomprímelo y copia la carpeta `argus` en el directorio de tu servidor: `custom_components/argus`.
 3. **Reinicia Home Assistant**.
 4. **IMPORTANTE: Recarga / actualiza tu navegador** (o limpia la caché) para refrescar los componentes Lovelace.
