@@ -52,6 +52,19 @@ def _default_payload() -> dict:
         "background_images": [],
         "temperature_source": "auto",
         "weather_source": "auto",
+        # Safety features are deliberately opt-in.  A single sensor must keep
+        # its normal immediate behaviour until the administrator enables the
+        # confirmation policy for this installation.
+        "intelligent_confirmation": {
+            "enabled": False,
+            "window_seconds": 15,
+            "required_signals": 2,
+        },
+        "state_schedule": [],
+        # Runtime data is kept separately from UI preferences so an Argus
+        # restart can recover the *last committed* state without replaying a
+        # timer or an outdated scheduled action.
+        "runtime": {"alarm_states": {}},
         "panel_bg_file": "",
         "panel_bg_sound": False,
         "hub_bg_mode": "none",
@@ -117,6 +130,12 @@ async def async_load_ui_data(hass: HomeAssistant) -> dict:
     data.setdefault("background_images", [])
     data.setdefault("temperature_source", "auto")
     data.setdefault("weather_source", "auto")
+    data.setdefault("intelligent_confirmation", {
+        "enabled": False, "window_seconds": 15, "required_signals": 2,
+    })
+    data.setdefault("state_schedule", [])
+    data.setdefault("runtime", {"alarm_states": {}})
+    data["runtime"].setdefault("alarm_states", {})
     data.setdefault("panel_bg_file", "")
     data.setdefault("panel_bg_sound", False)
     data.setdefault("hub_bg_mode", "none")
@@ -209,3 +228,39 @@ async def async_get_audit_log(hass: HomeAssistant) -> list:
     """Return the audit log list."""
     data = await async_load_ui_data(hass)
     return data.get("audit_log", [])
+
+
+async def async_save_alarm_runtime_state(
+    hass: HomeAssistant, entry_id: str, state: str, *, source: str
+) -> None:
+    """Persist a completed alarm state for local-first recovery.
+
+    Transitional states (arming/pending/triggered) are intentionally never
+    saved here: after power or network recovery they must not resume a stale
+    countdown or a siren.  Home Assistant's entity restore remains a fallback
+    for older installs.
+    """
+    stable_states = {
+        "disarmed", "armed_home", "armed_away", "armed_night", "armed_vacation",
+    }
+    if state not in stable_states:
+        return
+    async with _storage_lock(hass):
+        store = Store(hass, _STORAGE_VERSION, _STORAGE_KEY)
+        current = await async_load_ui_data(hass)
+        runtime = current.setdefault("runtime", {})
+        states = runtime.setdefault("alarm_states", {})
+        states[entry_id] = {
+            "state": state,
+            "updated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "source": source,
+        }
+        await store.async_save(current)
+
+
+async def async_get_alarm_runtime_state(hass: HomeAssistant, entry_id: str) -> dict:
+    """Return the last locally committed state for one Argus instance."""
+    data = await async_load_ui_data(hass)
+    runtime = data.get("runtime", {})
+    state = runtime.get("alarm_states", {}).get(entry_id, {})
+    return state if isinstance(state, dict) else {}

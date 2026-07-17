@@ -61,6 +61,9 @@ class TestSecurityContract(unittest.TestCase):
         self.assertIn("this._renderNotifications();", frontend)
         self.assertIn("this._renderSosOutputs();", frontend)
         self.assertIn("toLocaleString(this._getLocale())", frontend)
+        self.assertIn("this._populateWeatherSources();", frontend)
+        for language in ("es", "en", "fr", "pt", "it", "zh", "ru"):
+            self.assertIn(f"Object.assign(TEXTS.{language}", frontend)
 
     def test_config_flow_has_all_panel_languages(self) -> None:
         """The setup flow must not fall back to a different language."""
@@ -72,14 +75,14 @@ class TestSecurityContract(unittest.TestCase):
                 self.assertIn("options", data)
                 self.assertIn("init", data["options"]["step"])
 
-    def test_v1_5_1_features(self) -> None:
+    def test_v1_5_2_features(self) -> None:
         """Verify new version versioning, MQTT topic updates, and new features."""
         # 1. Check version is bumped consistently
         manifest = json.loads((COMPONENT / "manifest.json").read_text(encoding="utf-8"))
-        self.assertEqual(manifest["version"], "1.5.1")
+        self.assertEqual(manifest["version"], "1.5.2")
 
         const = (COMPONENT / "const.py").read_text(encoding="utf-8")
-        self.assertIn('VERSION = "1.5.1"', const)
+        self.assertIn('VERSION = "1.5.2"', const)
         self.assertIn('DEFAULT_MQTT_TOPIC_COMMAND = "argus/alarm/set"', const)
 
         # 2. Check MQTT commands/handling
@@ -96,3 +99,22 @@ class TestSecurityContract(unittest.TestCase):
         frontend = (COMPONENT / "www" / "argus-panel.js").read_text(encoding="utf-8")
         self.assertIn("formattedDate", frontend)
         self.assertIn("toLocaleString(this._getLocale())", frontend)
+
+    def test_local_first_health_and_forensic_contract(self) -> None:
+        """The operational features remain local, real, and restart-safe."""
+        storage = (COMPONENT / "storage.py").read_text(encoding="utf-8")
+        panel = (COMPONENT / "alarm_control_panel.py").read_text(encoding="utf-8")
+        api = (COMPONENT / "websocket_api.py").read_text(encoding="utf-8")
+        frontend = (COMPONENT / "www" / "argus-panel.js").read_text(encoding="utf-8")
+
+        self.assertIn("async_save_alarm_runtime_state", storage)
+        self.assertIn("_async_reconcile_state_schedule", panel)
+        self.assertIn("schedule_recovery", panel)
+        self.assertIn("argus/get_system_health", api)
+        self.assertIn("argus/get_forensic_timeline", api)
+        self.assertIn("argus/copilot", api)
+        self.assertIn('"local": True', api)
+        self.assertIn("AES-GCM", frontend)
+        self.assertIn("PBKDF2", frontend)
+        self.assertIn("prefers-reduced-motion", frontend)
+        self.assertIn("delete config.runtime", frontend)

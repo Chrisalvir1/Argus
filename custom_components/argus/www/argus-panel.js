@@ -707,11 +707,11 @@ Object.assign(TEXTS.ru, { entry_delay_toggle:'Задержка входа (⏳) 
 // translated, rather than falling back to English (or its template text).
 Object.assign(TEXTS.es, { temp_displayed:'🌡️ Temperatura mostrada', weather_source:'☁️ Fuente de clima', weather_auto:'Automático (primera entidad de clima)', user_exp_type:'Vencimiento', user_exp_date:'Fecha/Hora de vencimiento', exp_temporary:'Temporal (fecha/hora)', log_mode:'Modo', log_action_user_added:'Usuario añadido', log_action_user_deleted:'Usuario eliminado', log_action_rejected:'Acción rechazada', log_action_automation:'Automatización ejecutada', log_action_analysis:'Análisis de IA', log_action_sos:'SOS activado', log_action_sos_stopped:'Pánico detenido' });
 Object.assign(TEXTS.en, { temp_displayed:'🌡️ Displayed temperature', weather_source:'☁️ Weather source', weather_auto:'Automatic (first weather entity)', user_exp_type:'Expiration', user_exp_date:'Expiration date/time', exp_temporary:'Temporary (date/time)', log_mode:'Mode', log_action_user_added:'User added', log_action_user_deleted:'User deleted', log_action_rejected:'Action rejected', log_action_automation:'Automation executed', log_action_analysis:'AI analysis', log_action_sos:'SOS activated', log_action_sos_stopped:'Panic stopped' });
-Object.assign(TEXTS.fr, { temp_displayed:'🌡️ Température affichée', user_exp_type:'Expiration', user_exp_date:"Date/heure d’expiration", exp_temporary:'Temporaire (date/heure)', log_mode:'Mode', log_action_user_added:'Utilisateur ajouté', log_action_user_deleted:'Utilisateur supprimé', log_action_rejected:'Action refusée', log_action_automation:'Automatisation exécutée', log_action_analysis:'Analyse IA', log_action_sos:'SOS activé', log_action_sos_stopped:'Panique arrêtée' });
-Object.assign(TEXTS.pt, { temp_displayed:'🌡️ Temperatura exibida', user_exp_type:'Expiração', user_exp_date:'Data/hora de expiração', exp_temporary:'Temporário (data/hora)', log_mode:'Modo', log_action_user_added:'Usuário adicionado', log_action_user_deleted:'Usuário removido', log_action_rejected:'Ação recusada', log_action_automation:'Automação executada', log_action_analysis:'Análise de IA', log_action_sos:'SOS ativado', log_action_sos_stopped:'Pânico interrompido' });
-Object.assign(TEXTS.it, { temp_displayed:'🌡️ Temperatura visualizzata', user_exp_type:'Scadenza', user_exp_date:'Data/ora di scadenza', exp_temporary:'Temporaneo (data/ora)', log_mode:'Modalità', log_action_user_added:'Utente aggiunto', log_action_user_deleted:'Utente eliminato', log_action_rejected:'Azione rifiutata', log_action_automation:'Automazione eseguita', log_action_analysis:'Analisi IA', log_action_sos:'SOS attivato', log_action_sos_stopped:'Panico interrotto' });
-Object.assign(TEXTS.zh, { temp_displayed:'🌡️ 显示的温度', user_exp_type:'到期', user_exp_date:'到期日期/时间', exp_temporary:'临时（日期/时间）', log_mode:'模式', log_action_user_added:'已添加用户', log_action_user_deleted:'已删除用户', log_action_rejected:'操作被拒绝', log_action_automation:'自动化已执行', log_action_analysis:'AI 分析', log_action_sos:'SOS 已激活', log_action_sos_stopped:'紧急状态已停止' });
-Object.assign(TEXTS.ru, { temp_displayed:'🌡️ Отображаемая температура', user_exp_type:'Срок действия', user_exp_date:'Дата/время окончания', exp_temporary:'Временный (дата/время)', log_mode:'Режим', log_action_user_added:'Пользователь добавлен', log_action_user_deleted:'Пользователь удалён', log_action_rejected:'Действие отклонено', log_action_automation:'Автоматизация выполнена', log_action_analysis:'Анализ ИИ', log_action_sos:'SOS активирован', log_action_sos_stopped:'Тревога остановлена' });
+Object.assign(TEXTS.fr, { temp_displayed:'🌡️ Température affichée', weather_source:'☁️ Source météo', weather_auto:'Automatique (première entité météo)', user_exp_type:'Expiration', user_exp_date:"Date/heure d’expiration", exp_temporary:'Temporaire (date/heure)', log_mode:'Mode', log_action_user_added:'Utilisateur ajouté', log_action_user_deleted:'Utilisateur supprimé', log_action_rejected:'Action refusée', log_action_automation:'Automatisation exécutée', log_action_analysis:'Analyse IA', log_action_sos:'SOS activé', log_action_sos_stopped:'Panique arrêtée' });
+Object.assign(TEXTS.pt, { temp_displayed:'🌡️ Temperatura exibida', weather_source:'☁️ Fonte de clima', weather_auto:'Automático (primeira entidade meteorológica)', user_exp_type:'Expiração', user_exp_date:'Data/hora de expiração', exp_temporary:'Temporário (data/hora)', log_mode:'Modo', log_action_user_added:'Usuário adicionado', log_action_user_deleted:'Usuário removido', log_action_rejected:'Ação recusada', log_action_automation:'Automação executada', log_action_analysis:'Análise de IA', log_action_sos:'SOS ativado', log_action_sos_stopped:'Pânico interrompido' });
+Object.assign(TEXTS.it, { temp_displayed:'🌡️ Temperatura visualizzata', weather_source:'☁️ Fonte meteo', weather_auto:'Automatico (prima entità meteo)', user_exp_type:'Scadenza', user_exp_date:'Data/ora di scadenza', exp_temporary:'Temporaneo (data/ora)', log_mode:'Modalità', log_action_user_added:'Utente aggiunto', log_action_user_deleted:'Utente eliminato', log_action_rejected:'Azione rifiutata', log_action_automation:'Automazione eseguita', log_action_analysis:'Analisi IA', log_action_sos:'SOS attivato', log_action_sos_stopped:'Panico interrotto' });
+Object.assign(TEXTS.zh, { temp_displayed:'🌡️ 显示的温度', weather_source:'☁️ 天气来源', weather_auto:'自动（第一个天气实体）', user_exp_type:'到期', user_exp_date:'到期日期/时间', exp_temporary:'临时（日期/时间）', log_mode:'模式', log_action_user_added:'已添加用户', log_action_user_deleted:'已删除用户', log_action_rejected:'操作被拒绝', log_action_automation:'自动化已执行', log_action_analysis:'AI 分析', log_action_sos:'SOS 已激活', log_action_sos_stopped:'紧急状态已停止' });
+Object.assign(TEXTS.ru, { temp_displayed:'🌡️ Отображаемая температура', weather_source:'☁️ Источник погоды', weather_auto:'Автоматически (первая погодная сущность)', user_exp_type:'Срок действия', user_exp_date:'Дата/время окончания', exp_temporary:'Временный (дата/время)', log_mode:'Режим', log_action_user_added:'Пользователь добавлен', log_action_user_deleted:'Пользователь удалён', log_action_rejected:'Действие отклонено', log_action_automation:'Автоматизация выполнена', log_action_analysis:'Анализ ИИ', log_action_sos:'SOS активирован', log_action_sos_stopped:'Тревога остановлена' });
 
 /* ── Template ─────────────────────────────────────────────────────────── */
 const _tmpl = document.createElement('template');
@@ -990,16 +990,17 @@ _tmpl.innerHTML = `
   }
   .bounce-in { animation: bounceIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"instances activity" "instances modes" "access access" "automations backup";gap:24px;align-items:start}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"instances activity" "instances health" "instances modes" "access access" "automations backup";gap:24px;align-items:start}
   .grid > .stack{display:contents}
   .dashboard-instances{grid-area:instances}
   .activity-panel{grid-area:activity}
+  .health-panel{grid-area:health}
   .modes-panel{grid-area:modes}
   .access-panel{grid-area:access}
   .automations-panel{grid-area:automations;height:100%}
   .backup-panel{grid-area:backup;height:100%}
   @media(max-width:900px){
-    .grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"instances" "activity" "modes" "access" "automations" "backup"}
+    .grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"instances" "health" "activity" "modes" "access" "automations" "backup"}
   }
   @media(max-width:750px){.hero{flex-direction:column;text-align:center}.hero-left{flex-direction:column}}
   @media(max-width:750px){.hero .lang-pill{align-self:center;margin-inline:auto}.hero-left{width:100%;align-items:center}}
@@ -1385,6 +1386,24 @@ _tmpl.innerHTML = `
   .log-badge.arm{background:rgba(251,140,0,.12);color:#fb8c00}
   .log-badge.disarm{background:rgba(67,160,71,.12);color:var(--success-color,#43a047)}
   .log-badge.trigger{background:rgba(229,57,53,.15);color:var(--error-color,#e53935)}
+  .health-summary{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;margin:12px 0 16px}
+  .health-score{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;font-size:20px;font-weight:900;background:conic-gradient(var(--primary-color,#007aff) calc(var(--score,0)*1%),rgba(255,255,255,.08) 0);box-shadow:inset 0 0 0 7px rgba(15,23,42,.72)}
+  .health-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .health-metric{padding:9px;border-radius:13px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08);text-align:center;min-width:0}
+  .health-metric strong{display:block;font-size:16px}.health-metric span{display:block;font-size:9px;opacity:.62;text-transform:uppercase;margin-top:2px}
+  .health-list{display:grid;gap:7px;max-height:170px;overflow:auto}
+  .health-row{display:flex;justify-content:space-between;gap:10px;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.045);font-size:11px}
+  .health-row>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .security-intelligence{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.09);display:grid;gap:9px}
+  .security-intelligence label{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:750}
+  .security-intelligence-controls{display:grid;grid-template-columns:1fr 1fr auto;gap:8px}
+  .copilot-box{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.09)}
+  .copilot-input{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}.copilot-answer{margin-top:8px;padding:10px 12px;border-radius:13px;background:rgba(0,122,255,.09);font-size:12px;line-height:1.45;display:none}
+  .schedule-box{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.09)}.schedule-controls{display:grid;grid-template-columns:1.2fr .8fr 1fr auto;gap:7px}.schedule-list{display:grid;gap:6px;margin-top:9px}.schedule-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.045);font-size:11px}
+  @media(max-width:560px){.schedule-controls{grid-template-columns:1fr 1fr}.schedule-controls button{grid-column:1/-1}}
+  @media(max-width:480px){.health-metrics{grid-template-columns:1fr}.security-intelligence-controls{grid-template-columns:1fr 1fr}.security-intelligence-controls button{grid-column:1/-1}}
+  button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 72%,#fff);outline-offset:3px}
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}.wx canvas{display:none!important}}
   /* Personalization section styles */
   .personalize-section {
     margin-top: 18px;
@@ -1900,9 +1919,39 @@ _tmpl.innerHTML = `
       <section class="glass panel liquid-glass activity-panel">
         <div class="panel-head">
           <h2 id="h-activity-log"></h2>
-          <button class="ghost" id="btn-clear-log" style="font-size:10px;padding:4px 8px;opacity:0.6">BORRAR</button>
+          <div style="display:flex;gap:6px"><button class="ghost" id="btn-export-forensic" style="font-size:10px;padding:4px 8px;opacity:.7">JSON</button><button class="ghost" id="btn-clear-log" style="font-size:10px;padding:4px 8px;opacity:0.6">BORRAR</button></div>
         </div>
         <div id="activity-log" style="display:grid;gap:10px;height:280px;overflow-y:auto;margin-top:10px"></div>
+      </section>
+
+      <!-- Real telemetry only: no fabricated battery or energy values. -->
+      <section class="glass panel liquid-glass health-panel" aria-labelledby="h-health-title">
+        <div class="panel-head"><h2 id="h-health-title">Centro de salud y energía</h2><span id="health-local-badge" class="small">Local-first</span></div>
+        <div id="health-center" aria-live="polite"><div class="small" style="opacity:.6">Cargando…</div></div>
+        <div class="security-intelligence">
+          <label><input type="checkbox" id="confirm-enabled"> <span id="confirm-label">Confirmación inteligente</span></label>
+          <div class="small" id="confirm-help" style="opacity:.62">Requiere señales independientes dentro de una ventana. Humo, gas y seguridad siempre disparan de inmediato.</div>
+          <div class="security-intelligence-controls">
+            <select class="glass-control" id="confirm-signals" aria-label="Señales requeridas"><option value="2">2 señales</option><option value="3">3 señales</option></select>
+            <select class="glass-control" id="confirm-window" aria-label="Ventana de confirmación"><option value="10">10 s</option><option value="15">15 s</option><option value="30">30 s</option><option value="60">60 s</option></select>
+            <button class="primary" id="btn-save-confirmation">Guardar</button>
+          </div>
+        </div>
+        <div class="schedule-box">
+          <div class="small" id="schedule-title" style="font-weight:850;margin-bottom:7px">Horarios locales de estado</div>
+          <div class="schedule-controls">
+            <select class="glass-control" id="schedule-state"></select>
+            <input class="glass-control" type="time" id="schedule-time" value="23:00" aria-label="Hora">
+            <select class="glass-control" id="schedule-days"></select>
+            <button class="primary" id="btn-add-schedule">+</button>
+          </div>
+          <div class="schedule-list" id="schedule-list"></div>
+        </div>
+        <div class="copilot-box">
+          <div class="small" id="copilot-title" style="font-weight:850;margin-bottom:7px">Argus Copilot · local</div>
+          <div class="copilot-input"><input class="glass-control" id="copilot-query" maxlength="500" placeholder="¿Cuál es el estado del sistema?" aria-label="Argus Copilot"><button class="primary" id="btn-copilot-ask">Consultar</button></div>
+          <div class="copilot-answer" id="copilot-answer" aria-live="polite"></div>
+        </div>
       </section>
 
       <!-- Modes: placed beside the primary dashboard for a balanced layout. -->
@@ -1998,7 +2047,7 @@ _tmpl.innerHTML = `
           <button class="ghost" id="btn-export-config" style="flex:1">📤 Descargar</button>
           <div style="position:relative; flex:1">
             <button class="ghost" style="width:100%" id="btn-import-trigger">📥 Restaurar</button>
-            <input type="file" id="import-config-file" style="display:none" accept=".json">
+            <input type="file" id="import-config-file" style="display:none" accept=".json,.argus,application/json">
           </div>
           <button class="ghost danger" id="btn-reset-config" style="flex:1">⚠️ Restablecer</button>
           <button class="primary" id="btn-undo-reset" style="flex:1; display:none;">↩️ Deshacer</button>
@@ -2433,6 +2482,7 @@ class ArgusPanel extends HTMLElement {
     this._renderModeTabs();
     this._renderModeView();
     this._renderActivityLog();
+    this._renderHealthCenter();
     this._renderAutomations();
     this._renderNotifications();
     this._renderUsers();
@@ -2574,6 +2624,7 @@ class ArgusPanel extends HTMLElement {
     }
 
     this._populateTemperatureSources();
+    this._populateWeatherSources();
 
     // PIN display
     const pinDisp2 = s('current-pin-display');
@@ -2734,11 +2785,16 @@ class ArgusPanel extends HTMLElement {
     if (this._postLoadBound) return;
     this._postLoadBound = true;
     this.shadowRoot.getElementById('btn-clear-log')?.addEventListener('click', () => this._clearHistory());
+    this.shadowRoot.getElementById('btn-export-forensic')?.addEventListener('click', () => this._exportForensicTimeline());
     this.shadowRoot.getElementById('btn-export-config')?.addEventListener('click', () => this._exportConfig());
     this.shadowRoot.getElementById('btn-import-trigger')?.addEventListener('click', () => this.shadowRoot.getElementById('import-config-file').click());
     this.shadowRoot.getElementById('import-config-file')?.addEventListener('change', (ev) => this._importConfig(ev));
     this.shadowRoot.getElementById('btn-reset-config')?.addEventListener('click', () => this._resetConfig());
     this.shadowRoot.getElementById('btn-undo-reset')?.addEventListener('click', () => this._undoResetConfig());
+    this.shadowRoot.getElementById('btn-save-confirmation')?.addEventListener('click', () => this._saveIntelligentConfirmation());
+    this.shadowRoot.getElementById('btn-copilot-ask')?.addEventListener('click', () => this._askCopilot());
+    this.shadowRoot.getElementById('btn-add-schedule')?.addEventListener('click', () => this._addStateSchedule());
+    this.shadowRoot.getElementById('copilot-query')?.addEventListener('keydown', event => { if (event.key === 'Enter') this._askCopilot(); });
 
     this.shadowRoot.getElementById('btn-save-personalization-standalone')?.addEventListener('click', () => this._savePersonalization());
     this.shadowRoot.getElementById('btn-select-sos-outputs')?.addEventListener('click', () => this._openModal('panic'));
@@ -2752,20 +2808,93 @@ class ArgusPanel extends HTMLElement {
       await this._send('argus/clear_activity_log');
       if (this._ui) this._ui.audit_log = [];
       this._activityLog = [];
+      this._forensicTimeline = [];
       const el = this.shadowRoot.getElementById('activity-log');
       if (el) el.innerHTML = `<div class="small" style="padding:8px 0;opacity:.55">${this._t('log_no_events')}</div>`;
       this._renderActivityLog();
     } catch (err) { alert(this._format('generic_error', { error: err.message })); }
   }
 
-  _exportConfig() {
+  _exportForensicTimeline() {
+    const events = Array.isArray(this._forensicTimeline) ? this._forensicTimeline : (this._ui?.audit_log || []);
+    const blob = new Blob([JSON.stringify({format:'argus-forensic-timeline',generated_at:new Date().toISOString(),events}, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob); const anchor = document.createElement('a');
+    anchor.href = url; anchor.download = `argus_forensic_${new Date().toISOString().replace(/[:.]/g,'-')}.json`; anchor.click();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+  }
+
+  _backupText(key) {
+    const language = this._getCurrentLangCode();
+    const messages = {
+      es:{password:'Contraseña de cifrado (mínimo 8 caracteres)',weak:'La contraseña debe tener al menos 8 caracteres.',decrypt:'Contraseña de la copia cifrada',bad:'No se pudo descifrar la copia. Verifica la contraseña.'},
+      en:{password:'Encryption password (minimum 8 characters)',weak:'The password must be at least 8 characters.',decrypt:'Encrypted backup password',bad:'The backup could not be decrypted. Check the password.'},
+      fr:{password:'Mot de passe de chiffrement (8 caractères minimum)',weak:'Le mot de passe doit comporter au moins 8 caractères.',decrypt:'Mot de passe de la sauvegarde chiffrée',bad:'Impossible de déchiffrer la sauvegarde. Vérifiez le mot de passe.'},
+      pt:{password:'Senha de criptografia (mínimo de 8 caracteres)',weak:'A senha deve ter pelo menos 8 caracteres.',decrypt:'Senha do backup criptografado',bad:'Não foi possível descriptografar o backup. Verifique a senha.'},
+      it:{password:'Password di cifratura (minimo 8 caratteri)',weak:'La password deve contenere almeno 8 caratteri.',decrypt:'Password del backup cifrato',bad:'Impossibile decifrare il backup. Verifica la password.'},
+      zh:{password:'加密密码（至少 8 个字符）',weak:'密码必须至少包含 8 个字符。',decrypt:'加密备份密码',bad:'无法解密备份，请检查密码。'},
+      ru:{password:'Пароль шифрования (минимум 8 символов)',weak:'Пароль должен содержать не менее 8 символов.',decrypt:'Пароль зашифрованной копии',bad:'Не удалось расшифровать копию. Проверьте пароль.'},
+    };
+    return (messages[language] || messages.en)[key];
+  }
+
+  _bytesToBase64(bytes) {
+    let binary = '';
+    bytes.forEach(byte => { binary += String.fromCharCode(byte); });
+    return btoa(binary);
+  }
+
+  _base64ToBytes(value) {
+    return Uint8Array.from(atob(value), char => char.charCodeAt(0));
+  }
+
+  async _backupKey(password, salt, usages) {
+    const material = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
+    return crypto.subtle.deriveKey(
+      {name:'PBKDF2',salt,iterations:250000,hash:'SHA-256'}, material,
+      {name:'AES-GCM',length:256}, false, usages
+    );
+  }
+
+  _requestBackupPassword(kind) {
+    return new Promise(resolve => {
+      const layer = document.createElement('div');
+      layer.className = 'modal-back open';
+      layer.setAttribute('role', 'dialog');
+      layer.setAttribute('aria-modal', 'true');
+      const title = kind === 'decrypt' ? this._backupText('decrypt') : this._backupText('password');
+      layer.innerHTML = `<div class="modal" style="max-width:430px"><div class="modal-head"><h3>${this._escapeHtml(title)}</h3></div><input type="password" class="glass-control" autocomplete="new-password" style="font-size:17px"><div style="display:flex;gap:9px;justify-content:flex-end;margin-top:14px"><button class="ghost" data-secret-cancel>✕</button><button class="primary" data-secret-ok>✓</button></div></div>`;
+      this.shadowRoot.appendChild(layer);
+      const input = layer.querySelector('input');
+      const finish = value => { layer.remove(); resolve(value); };
+      layer.querySelector('[data-secret-cancel]').addEventListener('click', () => finish(null));
+      layer.querySelector('[data-secret-ok]').addEventListener('click', () => finish(input.value));
+      input.addEventListener('keydown', event => { if (event.key === 'Enter') finish(input.value); if (event.key === 'Escape') finish(null); });
+      requestAnimationFrame(() => input.focus());
+    });
+  }
+
+  async _exportConfig() {
     try {
-      const json = JSON.stringify(this._ui, null, 2);
-      const blob = new Blob([json], { type: 'application/json' });
+      const password = await this._requestBackupPassword('encrypt');
+      if (password === null) return;
+      if (password.length < 8) { alert(this._backupText('weak')); return; }
+      const config = JSON.parse(JSON.stringify(this._ui || {}));
+      // Runtime alarm state belongs to the current installation and must not
+      // be imported as a command on another system.
+      delete config.runtime;
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const key = await this._backupKey(password, salt, ['encrypt']);
+      const cipher = await crypto.subtle.encrypt({name:'AES-GCM',iv}, key, new TextEncoder().encode(JSON.stringify(config)));
+      const envelope = {
+        format:'argus-encrypted-backup',version:1,kdf:'PBKDF2-SHA256',iterations:250000,cipher:'AES-256-GCM',
+        salt:this._bytesToBase64(salt),iv:this._bytesToBase64(iv),data:this._bytesToBase64(new Uint8Array(cipher))
+      };
+      const blob = new Blob([JSON.stringify(envelope)], { type: 'application/json' });
       const url  = URL.createObjectURL(blob);
       const a    = document.createElement('a');
       a.href     = url;
-      a.download = `argus_backup_${new Date().toISOString().split('T')[0]}.json`;
+      a.download = `argus_backup_${new Date().toISOString().split('T')[0]}.argus`;
       a.click();
       setTimeout(() => URL.revokeObjectURL(url), 5000);
     } catch (err) {
@@ -2780,7 +2909,20 @@ class ArgusPanel extends HTMLElement {
     const reader = new FileReader();
     reader.onload = async (e) => {
       try {
-        const config = JSON.parse(e.target.result);
+        let config = JSON.parse(e.target.result);
+        if (config?.format === 'argus-encrypted-backup') {
+          const password = await this._requestBackupPassword('decrypt');
+          if (password === null) return;
+          try {
+            const salt = this._base64ToBytes(config.salt);
+            const iv = this._base64ToBytes(config.iv);
+            const key = await this._backupKey(password, salt, ['decrypt']);
+            const plain = await crypto.subtle.decrypt({name:'AES-GCM',iv}, key, this._base64ToBytes(config.data));
+            config = JSON.parse(new TextDecoder().decode(plain));
+          } catch (_) {
+            throw new Error(this._backupText('bad'));
+          }
+        }
         if (typeof config !== 'object' || config === null)
           throw new Error(this._t('invalid_config'));
         await this._send('argus/restore_config', { config });
@@ -2973,6 +3115,18 @@ class ArgusPanel extends HTMLElement {
     }).catch(err => {
       console.warn('Argus audit log refresh failed; using dashboard data.', err);
     });
+    this._send('argus/get_system_health').then(health => {
+      this._systemHealth = health;
+      this._renderHealthCenter();
+    }).catch(err => {
+      console.warn('Argus health center unavailable:', err);
+      this._systemHealth = null;
+      this._renderHealthCenter();
+    });
+    this._send('argus/get_forensic_timeline', {limit:200}).then(result => {
+      this._forensicTimeline = result?.events || [];
+      this._renderActivityLog();
+    }).catch(() => { this._forensicTimeline = []; });
     this._notifTargets = dashboard.ui?.notif_targets || [];
     this._ttsTargets   = dashboard.ui?.tts_targets   || [];
     this._users = Array.isArray(dashboard.ui?.users)
@@ -3077,6 +3231,7 @@ class ArgusPanel extends HTMLElement {
     [
       ['instances', () => this._renderEntries()],
       ['activity log', () => this._renderActivityLog()],
+      ['health center', () => this._renderHealthCenter()],
       ['mode tabs', () => this._renderModeTabs()],
       ['mode view', () => this._renderModeView()],
       ['automations', () => this._renderAutomations()],
@@ -3730,6 +3885,156 @@ class ArgusPanel extends HTMLElement {
 
 
   /* ── Activity Log ────────────────────────────────────────────────── */
+  _healthText() {
+    const copy = {
+      es:{title:'Centro de salud y energía',healthy:'Sistema saludable',warning:'Requiere atención',critical:'Dispositivos sin conexión',devices:'dispositivos',offline:'sin conexión',low:'baterías bajas',battery:'Batería',energy:'Energía y potencia en vivo',none:'Sin telemetría compatible',local:'Local-first activo',confirm:'Confirmación inteligente',help:'Requiere señales independientes dentro de una ventana. Humo, gas, CO y seguridad siempre disparan de inmediato.',save:'Guardar',saved:'Guardado'},
+      en:{title:'Health & energy center',healthy:'System healthy',warning:'Attention required',critical:'Devices offline',devices:'devices',offline:'offline',low:'low batteries',battery:'Battery',energy:'Live energy and power',none:'No compatible telemetry',local:'Local-first active',confirm:'Intelligent confirmation',help:'Requires independent signals within a window. Smoke, gas, CO and safety always trigger immediately.',save:'Save',saved:'Saved'},
+      fr:{title:'Centre de santé et énergie',healthy:'Système sain',warning:'Attention requise',critical:'Appareils hors ligne',devices:'appareils',offline:'hors ligne',low:'batteries faibles',battery:'Batterie',energy:'Énergie et puissance en direct',none:'Aucune télémétrie compatible',local:'Local-first actif',confirm:'Confirmation intelligente',help:'Exige des signaux indépendants. Fumée, gaz, CO et sécurité déclenchent toujours immédiatement.',save:'Enregistrer',saved:'Enregistré'},
+      pt:{title:'Centro de saúde e energia',healthy:'Sistema saudável',warning:'Requer atenção',critical:'Dispositivos offline',devices:'dispositivos',offline:'offline',low:'baterias fracas',battery:'Bateria',energy:'Energia e potência ao vivo',none:'Sem telemetria compatível',local:'Local-first ativo',confirm:'Confirmação inteligente',help:'Exige sinais independentes. Fumaça, gás, CO e segurança sempre disparam imediatamente.',save:'Salvar',saved:'Salvo'},
+      it:{title:'Centro salute ed energia',healthy:'Sistema integro',warning:'Richiede attenzione',critical:'Dispositivi offline',devices:'dispositivi',offline:'offline',low:'batterie scariche',battery:'Batteria',energy:'Energia e potenza in tempo reale',none:'Nessuna telemetria compatibile',local:'Local-first attivo',confirm:'Conferma intelligente',help:'Richiede segnali indipendenti. Fumo, gas, CO e sicurezza scattano sempre subito.',save:'Salva',saved:'Salvato'},
+      zh:{title:'健康与能源中心',healthy:'系统健康',warning:'需要注意',critical:'设备离线',devices:'设备',offline:'离线',low:'低电量',battery:'电池',energy:'实时能源与功率',none:'无兼容遥测',local:'本地优先已启用',confirm:'智能确认',help:'需要在时间窗口内收到独立信号。烟雾、燃气、一氧化碳和安全传感器始终立即触发。',save:'保存',saved:'已保存'},
+      ru:{title:'Центр здоровья и энергии',healthy:'Система исправна',warning:'Требуется внимание',critical:'Устройства не в сети',devices:'устройств',offline:'не в сети',low:'низкий заряд',battery:'Батарея',energy:'Энергия и мощность',none:'Нет совместимой телеметрии',local:'Local-first активен',confirm:'Умное подтверждение',help:'Требует независимых сигналов. Дым, газ, CO и безопасность всегда срабатывают сразу.',save:'Сохранить',saved:'Сохранено'},
+    };
+    return copy[this._getCurrentLangCode()] || copy.en;
+  }
+
+  _renderHealthCenter() {
+    const text = this._healthText();
+    const title = this.shadowRoot.getElementById('h-health-title');
+    const badge = this.shadowRoot.getElementById('health-local-badge');
+    const el = this.shadowRoot.getElementById('health-center');
+    if (title) title.textContent = text.title;
+    if (badge) badge.textContent = text.local;
+    const policy = this._ui?.intelligent_confirmation || {enabled:false,window_seconds:15,required_signals:2};
+    const enabled = this.shadowRoot.getElementById('confirm-enabled');
+    const signals = this.shadowRoot.getElementById('confirm-signals');
+    const windowSelect = this.shadowRoot.getElementById('confirm-window');
+    if (enabled) enabled.checked = Boolean(policy.enabled);
+    if (signals) signals.value = String(policy.required_signals || 2);
+    if (windowSelect) windowSelect.value = String(policy.window_seconds || 15);
+    const label = this.shadowRoot.getElementById('confirm-label'); if (label) label.textContent = text.confirm;
+    const help = this.shadowRoot.getElementById('confirm-help'); if (help) help.textContent = text.help;
+    const save = this.shadowRoot.getElementById('btn-save-confirmation'); if (save && save.dataset.saved !== '1') save.textContent = text.save;
+    const copilotCopy = {
+      es:['¿Cuál es el estado del sistema?','Consultar'],en:['What is the system status?','Ask'],fr:['Quel est l’état du système ?','Consulter'],pt:['Qual é o estado do sistema?','Consultar'],it:['Qual è lo stato del sistema?','Chiedi'],zh:['系统当前状态如何？','查询'],ru:['Каково состояние системы?','Спросить']
+    }[this._getCurrentLangCode()] || ['What is the system status?','Ask'];
+    const copilotInput = this.shadowRoot.getElementById('copilot-query'); if (copilotInput) copilotInput.placeholder = copilotCopy[0];
+    const copilotButton = this.shadowRoot.getElementById('btn-copilot-ask'); if (copilotButton) copilotButton.textContent = copilotCopy[1];
+    this._renderStateSchedule();
+    if (!el) return;
+    const health = this._systemHealth;
+    if (!health) { el.innerHTML = `<div class="small" style="opacity:.6">${this._escapeHtml(text.none)}</div>`; return; }
+    const batteries = Array.isArray(health.batteries) ? health.batteries : [];
+    const low = batteries.filter(item => item.low);
+    const offline = Array.isArray(health.unavailable) ? health.unavailable : [];
+    const devices = Array.isArray(health.configured_devices) ? health.configured_devices : [];
+    const statusText = health.status === 'critical' ? text.critical : health.status === 'warning' ? text.warning : text.healthy;
+    const details = [
+      ...offline.slice(0,4).map(item => ({name:item.name,value:text.offline,alert:true})),
+      ...low.slice(0,4).map(item => ({name:item.name,value:`${item.value}${item.unit || '%'}`,alert:true})),
+      ...(health.energy || []).filter(item => item.available && item.value !== null).slice(0,5).map(item => ({name:item.name,value:`${item.value} ${item.unit}`.trim(),alert:false})),
+    ];
+    el.innerHTML = `<div class="health-summary">
+      <div class="health-score" style="--score:${Number(health.score)||0}" aria-label="${Number(health.score)||0}%">${Number(health.score)||0}</div>
+      <div><div style="font-weight:850">${this._escapeHtml(statusText)}</div><div class="small" style="opacity:.6;margin-top:3px">${devices.length} ${this._escapeHtml(text.devices)}</div></div>
+    </div><div class="health-metrics">
+      <div class="health-metric"><strong>${offline.length}</strong><span>${this._escapeHtml(text.offline)}</span></div>
+      <div class="health-metric"><strong>${low.length}</strong><span>${this._escapeHtml(text.low)}</span></div>
+      <div class="health-metric"><strong>${batteries.length}</strong><span>${this._escapeHtml(text.battery)}</span></div>
+    </div><div class="small" style="margin:13px 0 7px;font-weight:800">${this._escapeHtml(text.energy)}</div>
+    <div class="health-list">${details.length ? details.map(item => `<div class="health-row"><span>${this._escapeHtml(item.name)}</span><strong style="color:${item.alert?'#ff8a80':'inherit'}">${this._escapeHtml(item.value)}</strong></div>`).join('') : `<div class="small" style="opacity:.55">${this._escapeHtml(text.none)}</div>`}</div>`;
+  }
+
+  async _saveIntelligentConfirmation() {
+    const config = {
+      enabled:Boolean(this.shadowRoot.getElementById('confirm-enabled')?.checked),
+      required_signals:Number(this.shadowRoot.getElementById('confirm-signals')?.value || 2),
+      window_seconds:Number(this.shadowRoot.getElementById('confirm-window')?.value || 15),
+    };
+    try {
+      await this._send('argus/save_ui', {intelligent_confirmation:config});
+      this._ui.intelligent_confirmation = config;
+      const button = this.shadowRoot.getElementById('btn-save-confirmation');
+      if (button) { button.textContent = `✓ ${this._healthText().saved}`; button.dataset.saved = '1'; setTimeout(() => { button.dataset.saved='0'; button.textContent=this._healthText().save; }, 1600); }
+    } catch (err) { alert(this._format('generic_error', {error:err.message})); }
+  }
+
+  _scheduleText() {
+    const copy = {
+      es:{title:'Horarios locales de estado',all:'Todos los días',weekdays:'Lunes a viernes',weekend:'Fin de semana',empty:'Sin horarios. Argus conservará el último estado confirmado.',disarmed:'Desarmado',home:'En casa',away:'Ausente',night:'Noche',vacation:'Vacaciones'},
+      en:{title:'Local state schedules',all:'Every day',weekdays:'Monday to Friday',weekend:'Weekend',empty:'No schedules. Argus will preserve the last confirmed state.',disarmed:'Disarmed',home:'Home',away:'Away',night:'Night',vacation:'Vacation'},
+      fr:{title:'Horaires d’état locaux',all:'Tous les jours',weekdays:'Lundi à vendredi',weekend:'Week-end',empty:'Aucun horaire. Argus conservera le dernier état confirmé.',disarmed:'Désarmé',home:'Maison',away:'Absent',night:'Nuit',vacation:'Vacances'},
+      pt:{title:'Horários locais de estado',all:'Todos os dias',weekdays:'Segunda a sexta',weekend:'Fim de semana',empty:'Sem horários. Argus preservará o último estado confirmado.',disarmed:'Desarmado',home:'Em casa',away:'Ausente',night:'Noite',vacation:'Férias'},
+      it:{title:'Programmi locali di stato',all:'Ogni giorno',weekdays:'Da lunedì a venerdì',weekend:'Fine settimana',empty:'Nessun programma. Argus manterrà l’ultimo stato confermato.',disarmed:'Disarmato',home:'Casa',away:'Assente',night:'Notte',vacation:'Vacanza'},
+      zh:{title:'本地状态计划',all:'每天',weekdays:'周一至周五',weekend:'周末',empty:'没有计划。Argus 将保留最后确认的状态。',disarmed:'撤防',home:'在家',away:'外出',night:'夜间',vacation:'度假'},
+      ru:{title:'Локальное расписание состояния',all:'Каждый день',weekdays:'Понедельник–пятница',weekend:'Выходные',empty:'Расписания нет. Argus сохранит последнее подтверждённое состояние.',disarmed:'Снято',home:'Дома',away:'Нет дома',night:'Ночь',vacation:'Отпуск'},
+    };
+    return copy[this._getCurrentLangCode()] || copy.en;
+  }
+
+  _renderStateSchedule() {
+    const text = this._scheduleText();
+    const title = this.shadowRoot.getElementById('schedule-title'); if (title) title.textContent = text.title;
+    const stateSelect = this.shadowRoot.getElementById('schedule-state');
+    const daysSelect = this.shadowRoot.getElementById('schedule-days');
+    if (stateSelect) {
+      const current = stateSelect.value;
+      stateSelect.innerHTML = `<option value="disarmed">${text.disarmed}</option><option value="armed_home">${text.home}</option><option value="armed_away">${text.away}</option><option value="armed_night">${text.night}</option><option value="armed_vacation">${text.vacation}</option>`;
+      stateSelect.value = current || 'armed_night';
+    }
+    if (daysSelect) {
+      const current = daysSelect.value;
+      daysSelect.innerHTML = `<option value="all">${text.all}</option><option value="weekdays">${text.weekdays}</option><option value="weekend">${text.weekend}</option>`;
+      daysSelect.value = current || 'all';
+    }
+    const list = this.shadowRoot.getElementById('schedule-list'); if (!list) return;
+    const schedules = Array.isArray(this._ui?.state_schedule) ? this._ui.state_schedule : [];
+    const deleteLabel = {es:'Eliminar horario',en:'Delete schedule',fr:'Supprimer l’horaire',pt:'Excluir horário',it:'Elimina programma',zh:'删除计划',ru:'Удалить расписание'}[this._getCurrentLangCode()] || 'Delete schedule';
+    const labelForState = state => ({disarmed:text.disarmed,armed_home:text.home,armed_away:text.away,armed_night:text.night,armed_vacation:text.vacation}[state] || state);
+    const labelForDays = days => days?.length === 2 ? text.weekend : days?.length === 5 ? text.weekdays : text.all;
+    list.innerHTML = schedules.length ? schedules.map(item => `<div class="schedule-row"><span><strong>${this._escapeHtml(item.time || '')}</strong> · ${this._escapeHtml(labelForState(item.state))} · ${this._escapeHtml(labelForDays(item.days))}</span><button class="ghost" data-schedule-delete="${this._escapeHtml(item.id)}" aria-label="${this._escapeHtml(deleteLabel)}">×</button></div>`).join('') : `<div class="small" style="opacity:.55">${this._escapeHtml(text.empty)}</div>`;
+    list.querySelectorAll('[data-schedule-delete]').forEach(button => button.addEventListener('click', () => this._deleteStateSchedule(button.dataset.scheduleDelete)));
+  }
+
+  async _addStateSchedule() {
+    const state = this.shadowRoot.getElementById('schedule-state')?.value;
+    const time = this.shadowRoot.getElementById('schedule-time')?.value;
+    const dayPreset = this.shadowRoot.getElementById('schedule-days')?.value || 'all';
+    if (!state || !/^([01]\d|2[0-3]):[0-5]\d$/.test(time || '')) return;
+    const days = dayPreset === 'weekdays' ? [0,1,2,3,4] : dayPreset === 'weekend' ? [5,6] : [0,1,2,3,4,5,6];
+    const schedules = Array.isArray(this._ui?.state_schedule) ? [...this._ui.state_schedule] : [];
+    schedules.push({id:`schedule_${Date.now()}`,state,time,days,enabled:true});
+    await this._saveStateSchedule(schedules);
+  }
+
+  async _deleteStateSchedule(id) {
+    const schedules = (this._ui?.state_schedule || []).filter(item => item.id !== id);
+    await this._saveStateSchedule(schedules);
+  }
+
+  async _saveStateSchedule(schedules) {
+    try {
+      await this._send('argus/save_ui', {state_schedule:schedules});
+      this._ui.state_schedule = schedules;
+      this._renderStateSchedule();
+    } catch (err) { alert(this._format('generic_error', {error:err.message})); }
+  }
+
+  async _askCopilot() {
+    const input = this.shadowRoot.getElementById('copilot-query');
+    const answer = this.shadowRoot.getElementById('copilot-answer');
+    const query = String(input?.value || '').trim();
+    if (!query || !answer) return;
+    answer.style.display = 'block';
+    answer.textContent = '…';
+    try {
+      const result = await this._send('argus/copilot', {query, language:this._getCurrentLangCode()});
+      answer.textContent = result?.answer || '';
+    } catch (err) {
+      answer.textContent = this._format('generic_error', {error:err.message});
+    }
+  }
+
   _localizeActivityDetail(action, rawDetail) {
     const raw = String(rawDetail || '').trim();
     const normalized = raw.toLocaleLowerCase();
@@ -3746,6 +4051,8 @@ class ArgusPanel extends HTMLElement {
 
     if (action === 'pin_reset') return this._t('log_detail_pin_reset');
     if (action === 'pin_reset_failed') return this._t('log_detail_pin_reset_failed');
+    if (action === 'state_restored') return raw || this._healthText().local;
+    if (action === 'confirmation_pending') return raw;
     if (action === 'disarmed' || action === 'disarm') return this._t('log_detail_disarm');
     if (action === 'armed' || action === 'arm') {
       return mode ? `${this._t('manual_arm')} (${this._t(`mode_${mode}`)})` : this._t('manual_arm');
@@ -3786,8 +4093,9 @@ class ArgusPanel extends HTMLElement {
     if (titleEl) titleEl.textContent = this._t('activity_log');
 
     try {
-      const log = Array.isArray(this._ui?.audit_log)
-        ? this._ui.audit_log.filter(entry => entry && typeof entry === 'object' && !Array.isArray(entry))
+      const sourceLog = Array.isArray(this._forensicTimeline) && this._forensicTimeline.length ? this._forensicTimeline : this._ui?.audit_log;
+      const log = Array.isArray(sourceLog)
+        ? sourceLog.filter(entry => entry && typeof entry === 'object' && !Array.isArray(entry))
         : [];
       if (!log.length) {
         el.innerHTML = `<div class="small" style="padding:8px 0;opacity:.55">${this._t('log_no_events')}</div>`;
@@ -3797,7 +4105,7 @@ class ArgusPanel extends HTMLElement {
       el.innerHTML = log.slice(0, 30).map(ev => {
         const action = String(ev.action || '');
         const rawDetail = String(ev.detail || '');
-        const user   = String(ev.user || '');
+        const user   = String(ev.user || ev.actor || '');
         const date = ev.ts ? new Date(ev.ts) : null;
         let ts = '';
         if (date && !Number.isNaN(date.getTime())) {
@@ -4444,7 +4752,10 @@ class ArgusPanel extends HTMLElement {
     const pinConfigured = this._dashboard?.entries?.[0]?.pin_configured === true;
     const userCount = Array.isArray(this._users) ? this._users.filter(u => u && typeof u === 'object').length : 0;
     const pinLabel = pinConfigured ? this._t('pin_active_yes') : this._t('pin_active_no');
-    const userLabel = userCount === 1 ? '1 usuario adicional' : `${userCount} usuarios adicionales`;
+    const userForms = {
+      es:['usuario adicional','usuarios adicionales'],en:['additional user','additional users'],fr:['utilisateur supplémentaire','utilisateurs supplémentaires'],pt:['usuário adicional','usuários adicionais'],it:['utente aggiuntivo','utenti aggiuntivi'],zh:['个附加用户','个附加用户'],ru:['дополнительный пользователь','дополнительных пользователей']
+    }[this._getCurrentLangCode()] || ['additional user','additional users'];
+    const userLabel = `${userCount} ${userCount === 1 ? userForms[0] : userForms[1]}`;
     summary.textContent = `${pinLabel} · ${userLabel}`;
   }
 
@@ -4513,9 +4824,11 @@ class ArgusPanel extends HTMLElement {
   _populateWeatherSources() {
     const select = this.shadowRoot.getElementById('weather-source-select');
     if (!select || !this._hass?.states) return;
+    const previous = select.value || this._weatherSource || 'auto';
     const weather = Object.values(this._hass.states).filter(state => state.entity_id?.startsWith('weather.'));
     select.innerHTML = [{ entity_id: 'auto', name: this._t('weather_auto') }, ...weather.map(state => ({ entity_id: state.entity_id, name: state.attributes?.friendly_name || state.entity_id }))]
       .map(item => `<option value="${escapeHtml(item.entity_id)}">${escapeHtml(item.name)}</option>`).join('');
+    select.value = [...select.options].some(option => option.value === previous) ? previous : 'auto';
   }
 
   _getWeatherEntity() {

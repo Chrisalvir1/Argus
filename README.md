@@ -5,7 +5,7 @@
 
   **El Sistema de Seguridad Premium para Home Assistant**
 
-  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.4.8-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
+  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.5.2-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
   [![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)](https://www.home-assistant.io/)
   [![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)](https://hacs.xyz/)
   [![GitHub stars](https://img.shields.io/github/stars/Chrisalvir1/Argus?style=social)](https://github.com/Chrisalvir1/Argus/stargazers)
@@ -21,21 +21,25 @@
 
 ---
 
-## ✨ Novedades y Correcciones Recientes (v1.4.8)
+## ✨ Novedades y Correcciones Recientes (v1.5.2)
 
-¡Rediseño compacto de “Control de Acceso y Usuarios”!
+¡Operaciones Local-First, Salud del Sistema, Energía y Recuperación Cifrada!
 
-**Cambios y Características Nuevas:**
-- **Control de Acceso y Usuarios:** El panel ahora muestra un resumen del PIN maestro y usuarios configurados.
-- **Formularios bajo demanda:** Los formularios de usuarios y PIN se abren solo bajo demanda.
-- **Funcionalidad intacta:** Se conserva toda la funcionalidad existente, ahora en una presentación mucho más limpia y organizada.
+**Novedades de la versión 1.5.2:**
+- **Operaciones Local-First:** Inteligencia y control ejecutados localmente en tu Home Assistant sin dependencias de servicios externos en la nube.
+- **Horarios Recuperables:** Resiliencia ante apagones y fallos eléctricos; tus estados y horarios de armado/desarmado se restauran automáticamente tras el encendido.
+- **Centro de Salud y Energía:** Monitoreo del estado del sistema, reporte exclusivo de baterías reales y telemetría de energía sin estimaciones inventadas.
+- **Línea Forense (Forensic Timeline):** Registro estructurado de auditoría con detalles precisos de eventos, severidad y actores responsables.
+- **Copilot Local Multilingüe:** Asistente inteligente integrado que responde consultas de seguridad localmente en 7 idiomas.
+- **Copias Cifradas (Backups):** Copias de seguridad de configuración cifradas con PBKDF2-SHA256 y AES-256-GCM.
+- **Accesibilidad y API de Extensiones:** Accesibilidad mejorada para lectores de pantalla y APIs WebSocket documentadas para integraciones de terceros. Consulta la documentación técnica en [docs/EXTENSIONS_API.md](file:///Users/chrisalvir/Desktop/GITHUB%20PROJECT/argus/docs/EXTENSIONS_API.md).
 
 ---
 
 ## 🚀 Características Principales
 
 *   **🛡️ Modos de Seguridad Inteligentes**: Soporte completo para *En Casa*, *Ausente*, *Noche*, *Vacaciones* y *Desarmado*. Restricción de armado si hay sensores activos (con opción *Bypass*).
-*   **🌤️ Fondos Meteorológicos Animados CSS Puros**: El fondo de las tarjetas cambia dinámicamente según el clima local (lluvia, tormenta, nieve, estrellas, nublado) usando CSS 100% nativo.
+*   **🌤️ Fondos Meteorológicos Animados WebGL/CSS**: El fondo de las tarjetas cambia dinámicamente según el clima local (lluvia, tormenta, nieve, estrellas, nublado) usando WebGL nativo con fallback a CSS.
 *   **🔋 Monitor Dinámico de Baterías**: Escanea automáticamente tus sensores de intrusión (puertas, ventanas, PIR) y muestra alertas visuales en el inicio si alguno baja del 20%.
 *   **🔐 Control de Acceso Avanzado**: Teclado numérico (*PIN Pad*) integrado y fluido. Gestión de PIN maestro y usuarios administradores directamente desde el panel, sin tocar YAML.
 *   **🔔 Notificaciones y Auditoría en Tiempo Real**: 
@@ -49,6 +53,11 @@
 
 ## 📦 Instalación Rápida
 
+### Requisitos y Compatibilidad
+* **Home Assistant:** Versión compatible con custom components.
+* **Permisos:** Las APIs WebSocket de configuración de Argus requieren una cuenta con **permisos de administrador** en Home Assistant.
+* **Configuración Inicial:** Tras instalar, añade la integración desde la interfaz de HA para iniciar el asistente de configuración.
+
 ### Instalación vía HACS
 
 > **Nota:** Argus está optimizado para funcionar mediante HACS, lo que garantiza actualizaciones automáticas y sin fricciones.
@@ -59,14 +68,16 @@
 4. Selecciona la categoría: **Integración** y haz clic en **Añadir**.
 5. Busca "Argus Home Hub" en HACS y descárgalo.
 6. **Reinicia tu servidor de Home Assistant**.
-7. Ve a **Ajustes > Dispositivos y servicios > Añadir integración**, busca **Argus** y sigue el asistente interactivo de configuración inicial.
+7. **IMPORTANTE: Recarga / actualiza tu navegador** (o limpia la caché) para asegurar que Lovelace cargue los nuevos elementos JavaScript actualizados.
+8. Ve a **Ajustes > Dispositivos y servicios > Añadir integración**, busca **Argus** y sigue el asistente interactivo de configuración inicial.
 
 ### Instalación Manual
 
-1. Descarga el archivo `.zip` del último *Release* en GitHub.
-2. Descomprímelo y copia la carpeta `argus` dentro de tu directorio `/config/custom_components/` en Home Assistant.
-3. Reinicia Home Assistant.
-4. Dirígete a **Ajustes > Dispositivos y servicios > Añadir integración**, busca **Argus** y sigue los pasos de configuración.
+1. Descarga el archivo `.zip` del último *Release* en GitHub (v1.5.2).
+2. Descomprímelo y copia la carpeta `argus` en el directorio de tu servidor: `custom_components/argus`.
+3. **Reinicia Home Assistant**.
+4. **IMPORTANTE: Recarga / actualiza tu navegador** (o limpia la caché) para refrescar los componentes Lovelace.
+5. Dirígete a **Ajustes > Dispositivos y servicios > Añadir integración**, busca **Argus** y sigue los pasos de configuración.
 
 ---
 

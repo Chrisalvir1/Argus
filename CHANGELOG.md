@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.2] - 2026-07-17
+
+### Added
+- **Operaciones Local-First**: Toda la inteligencia, procesamiento y control de la alarma ocurren íntegramente de manera local en el servidor, sin dependencias de servicios en la nube externos.
+- **Resiliencia ante Apagones**: Implementación de persistencia local robusta para estados de alarma y horarios programados, garantizando la recuperación automática y segura del estado tras cualquier corte eléctrico.
+- **Centro de Salud y Energía**: Monitoreo de disponibilidad en tiempo real, enlace de baterías reales (sin porcentajes inventados) y telemetría de energía/potencia de red.
+- **Línea de Tiempo Forense (Forensic Timeline)**: Nuevo registro de eventos estructurado en profundidad con actores, severidad, marcas de tiempo y acciones detalladas.
+- **Copilot Multilingüe Local**: Soporte para consultas de seguridad locales directamente procesadas por el asistente integrado en 7 idiomas.
+- **Copias Cifradas**: Copias de seguridad de configuración portables y seguras utilizando cifrado robusto PBKDF2-SHA256 y AES-256-GCM.
+- **API de Extensiones**: API WebSocket documentada para integraciones externas seguras (detallada en [docs/EXTENSIONS_API.md](file:///Users/chrisalvir/Desktop/GITHUB%20PROJECT/argus/docs/EXTENSIONS_API.md)).
+
 ## [1.5.1] - 2026-07-17
 
 ### Added

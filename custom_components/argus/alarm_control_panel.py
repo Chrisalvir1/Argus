@@ -33,8 +33,9 @@ from homeassistant.helpers.event import (
     async_call_later,
     async_track_time_interval,
 )
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 from homeassistant.helpers.restore_state import RestoreEntity
+from homeassistant.util import dt as dt_util
 
 from .const import (
     DOMAIN,
@@ -65,7 +66,10 @@ from .const import (
     MQTT_COMMAND_ARM_NIGHT,
     MQTT_COMMAND_ARM_VACATION,
 )
-from .storage import async_load_ui_data, async_append_audit_log
+from .storage import (
+    async_load_ui_data, async_append_audit_log,
+    async_get_alarm_runtime_state, async_save_alarm_runtime_state,
+)
 from .security import verify_pin
 
 _LOGGER = logging.getLogger(__name__)
@@ -157,6 +161,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._arm_lock_until: float = 0.0
         self._smart_arming_suggested = False
         self._unsub_smart_arming = None
+        self._unsub_schedule = None
+        self._confirmation_events: dict[str, float] = {}
+        self._confirmation_listener = None
 
     async def _get_context_user(self) -> str:
         """Get the user name from the current context."""
@@ -382,9 +389,33 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         # Load dynamic mode configuration from storage
         self._ui_config = await async_load_ui_data(self.hass)
 
-        # Restore last stable state
+        # Local-first recovery: prefer the last *committed* stable state.  We
+        # never restore a countdown, an entry delay, or a triggered state, so
+        # power recovery cannot replay an order that was already obsolete.
+        runtime_state = await async_get_alarm_runtime_state(
+            self.hass, self._config_entry.entry_id
+        )
+        restored_from_runtime = False
+        runtime_value = runtime_state.get("state")
+        if runtime_value:
+            try:
+                candidate = AlarmControlPanelState(runtime_value)
+                if candidate in (
+                    AlarmControlPanelState.DISARMED,
+                    AlarmControlPanelState.ARMED_HOME,
+                    AlarmControlPanelState.ARMED_AWAY,
+                    AlarmControlPanelState.ARMED_NIGHT,
+                    AlarmControlPanelState.ARMED_VACATION,
+                ):
+                    self._alarm_state = candidate
+                    restored_from_runtime = True
+            except ValueError:
+                pass
+
+        # RestoreEntity is the compatibility fallback for installations made
+        # before runtime persistence existed.
         last = await self.async_get_last_state()
-        if last is not None:
+        if last is not None and not restored_from_runtime:
             try:
                 restored = AlarmControlPanelState(last.state)
                 if restored in (
@@ -395,8 +426,23 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                     AlarmControlPanelState.ARMED_VACATION,
                 ):
                     self._alarm_state = restored
+                    runtime_state = {
+                        "state": restored.value,
+                        "updated_at": last.last_updated.isoformat(),
+                        "source": "restore_entity",
+                    }
             except ValueError:
                 self._alarm_state = AlarmControlPanelState.DISARMED
+
+        if restored_from_runtime:
+            await async_append_audit_log(
+                self.hass, "state_restored",
+                f"Estado local restaurado: {self._alarm_state.value}", user="Argus",
+            )
+
+        await self._async_reconcile_state_schedule(runtime_state)
+        if not runtime_value:
+            await self._async_persist_stable_state("legacy_restore")
 
         # Subscribe to sensor state changes
         all_sensors = self._all_sensors()
@@ -420,6 +466,93 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._unsub_smart_arming = async_track_time_interval(
             self.hass, self._async_check_smart_arming, timedelta(minutes=15)
         )
+        self._unsub_schedule = async_track_time_interval(
+            self.hass, self._async_check_state_schedule, timedelta(seconds=30)
+        )
+
+    def _latest_scheduled_transition(self):
+        """Return the most recent enabled local schedule occurrence."""
+        schedule = self._ui_config.get("state_schedule", [])
+        if not isinstance(schedule, list):
+            return None
+        now = dt_util.now()
+        candidates = []
+        valid_states = {
+            "disarmed", "armed_home", "armed_away", "armed_night", "armed_vacation",
+        }
+        for item in schedule:
+            if not isinstance(item, dict) or item.get("enabled", True) is False:
+                continue
+            state = item.get("state")
+            time_value = str(item.get("time", ""))
+            days = item.get("days", list(range(7)))
+            if state not in valid_states or not isinstance(days, list):
+                continue
+            try:
+                hour, minute = (int(part) for part in time_value.split(":", 1))
+                if not (0 <= hour <= 23 and 0 <= minute <= 59):
+                    continue
+            except (TypeError, ValueError):
+                continue
+            for days_ago in range(8):
+                date = (now - timedelta(days=days_ago)).date()
+                if date.weekday() not in days:
+                    continue
+                occurrence = now.replace(
+                    year=date.year, month=date.month, day=date.day,
+                    hour=hour, minute=minute, second=0, microsecond=0,
+                )
+                if occurrence <= now:
+                    candidates.append((occurrence, state, item.get("id", "schedule")))
+                    break
+        return max(candidates, key=lambda value: value[0]) if candidates else None
+
+    async def _async_reconcile_state_schedule(self, runtime_state: dict) -> None:
+        """Apply only a schedule transition newer than the committed state."""
+        latest = self._latest_scheduled_transition()
+        if not latest:
+            return
+        occurrence, state_value, schedule_id = latest
+        updated_at = runtime_state.get("updated_at")
+        if updated_at:
+            try:
+                committed = datetime.fromisoformat(str(updated_at).replace("Z", "+00:00"))
+                if committed.tzinfo is None:
+                    committed = committed.replace(tzinfo=timezone.utc)
+                if occurrence.astimezone(timezone.utc) <= committed.astimezone(timezone.utc):
+                    return
+            except (TypeError, ValueError):
+                pass
+        try:
+            scheduled_state = AlarmControlPanelState(state_value)
+        except ValueError:
+            return
+        if self._alarm_state != scheduled_state:
+            self._cancel_timers()
+            if scheduled_state == AlarmControlPanelState.DISARMED or self._alarm_state == AlarmControlPanelState.TRIGGERED:
+                await self._async_siren(False)
+                self._triggered_by = None
+                self._triggered_mode = None
+                self._panic_active = False
+                self._panic_previous_state = None
+            self._alarm_state = scheduled_state
+            self.async_write_ha_state()
+            await self._async_mqtt_publish()
+        await self._async_persist_stable_state("schedule_recovery")
+        await async_append_audit_log(
+            self.hass, "schedule_reconciled",
+            f"Horario {schedule_id}: {state_value}", user="Argus",
+        )
+
+    @callback
+    def _async_check_state_schedule(self, _now=None) -> None:
+        """Keep local schedules working even when internet/cloud services fail."""
+        async def _check():
+            runtime = await async_get_alarm_runtime_state(
+                self.hass, self._config_entry.entry_id
+            )
+            await self._async_reconcile_state_schedule(runtime)
+        self.hass.async_create_task(_check())
 
     @callback
     def _async_check_smart_arming(self, _now=None):
@@ -619,18 +752,82 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self._mqtt_unsub()
         if self._unsub_smart_arming:
             self._unsub_smart_arming()
+        if self._unsub_schedule:
+            self._unsub_schedule()
         self.hass.data.get(DOMAIN, {}).get(DATA_PANELS, {}).pop(
             self._config_entry.entry_id, None
         )
         self._cancel_timers()
 
     def _cancel_timers(self):
-        for attr in ("_arming_listener", "_entry_listener", "_trigger_listener"):
+        for attr in (
+            "_arming_listener", "_entry_listener", "_trigger_listener",
+            "_confirmation_listener",
+        ):
             lst = getattr(self, attr)
             if lst:
                 lst()
                 setattr(self, attr, None)
         self._arming_target = None
+        self._confirmation_events.clear()
+
+    async def _async_persist_stable_state(self, source: str) -> None:
+        """Record the state after a real transition, never during a timer."""
+        await async_save_alarm_runtime_state(
+            self.hass, self._config_entry.entry_id, self._alarm_state.value,
+            source=source,
+        )
+
+    def _requires_immediate_trigger(self, entity_id: str) -> bool:
+        """Critical life-safety devices always bypass intelligent confirmation."""
+        state = self.hass.states.get(entity_id)
+        device_class = str(state.attributes.get("device_class", "")).lower() if state else ""
+        return device_class in {"smoke", "gas", "carbon_monoxide", "safety", "tamper"}
+
+    def _request_intelligent_confirmation(self, entity_id: str) -> bool:
+        """Collect corroborating intrusion signals without weakening life safety."""
+        import time as _time
+
+        policy = self._ui_config.get("intelligent_confirmation", {})
+        if not policy.get("enabled") or self._requires_immediate_trigger(entity_id):
+            return False
+        try:
+            window = max(3, min(120, int(policy.get("window_seconds", 15))))
+            required = max(2, min(5, int(policy.get("required_signals", 2))))
+        except (TypeError, ValueError):
+            return False
+
+        now = _time.monotonic()
+        self._confirmation_events = {
+            sensor: seen for sensor, seen in self._confirmation_events.items()
+            if now - seen <= window
+        }
+        self._confirmation_events[entity_id] = now
+        if len(self._confirmation_events) >= required:
+            if self._confirmation_listener:
+                self._confirmation_listener()
+                self._confirmation_listener = None
+            return False
+
+        self.hass.async_create_task(async_append_audit_log(
+            self.hass, "confirmation_pending",
+            f"Esperando confirmación: {entity_id} ({len(self._confirmation_events)}/{required})",
+            user="Argus",
+        ))
+        if self._confirmation_listener:
+            self._confirmation_listener()
+        self._confirmation_listener = async_call_later(
+            self.hass, window, self._async_finish_confirmation
+        )
+        return True
+
+    @callback
+    def _async_finish_confirmation(self, _now) -> None:
+        """Close an unconfirmed incident; no stale event can trigger later."""
+        self._confirmation_listener = None
+        self._confirmation_events.clear()
+        if self._alarm_state in ARMED_STATES:
+            self._triggered_by = None
 
     # ── Sensor monitoring ───────────────────────────────────────────
     @callback
@@ -690,6 +887,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self._entry_listener = async_call_later(
                 self.hass, entry_delay, self._async_trigger_now
             )
+        elif self._request_intelligent_confirmation(entity_id):
+            return
         else:
             self.hass.async_create_task(self._async_trigger())
 
@@ -804,6 +1003,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self._triggered_by = None
             self.async_write_ha_state()
             await self._async_mqtt_publish()
+            await self._async_persist_stable_state("trigger_timeout")
         self.hass.async_create_task(_do_reset())
 
     @callback
@@ -1057,6 +1257,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._triggered_by = None
         self.async_write_ha_state()
         await self._async_mqtt_publish()
+        await self._async_persist_stable_state("disarm")
         self.hass.async_create_task(self._evaluate_automations("disarmed"))
         await async_append_audit_log(self.hass, "disarmed", f"Sistema desarmado por {caller_name}", user=caller_name)
         _LOGGER.info("Argus: Disarmed by %s", caller_name)
@@ -1229,6 +1430,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self._arm_lock_until = 0.0
 
         await self._async_mqtt_publish()
+        await self._async_persist_stable_state("arm")
 
         self.hass.async_create_task(self._evaluate_automations("armed", target=target))
         await async_append_audit_log(self.hass, "armed", f"Modo: {_MODE_LABELS.get(target.value, target.value)}", user=await self._get_context_user())
@@ -1280,6 +1482,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._alarm_state = previous_state
         self.async_write_ha_state()
         await self._async_mqtt_publish()
+        await self._async_persist_stable_state("panic_restore")
         if previous_state in ARMED_STATES:
             self.hass.async_create_task(
                 self._evaluate_automations("armed", target=previous_state)
