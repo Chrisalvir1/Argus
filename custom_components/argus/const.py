@@ -1,14 +1,13 @@
-"""Constants for the Argus Home Hub v1.4.2"""
-from homeassistant.const import CONF_NAME, CONF_CODE
+"""Constants for the Argus Home Hub integration."""
+from homeassistant.const import CONF_CODE, CONF_NAME
 
 DOMAIN = "argus"
 NAME = "Argus Home Hub"
-VERSION = "1.5.3"
+VERSION = "1.6.0"
 
 PLATFORMS = ["alarm_control_panel", "switch"]
 DATA_PANELS = "panels"
 
-# Config keys (custom - NOT from homeassistant.const)
 CONF_ARMING_TIME = "arming_time"
 CONF_TRIGGER_TIME = "trigger_time"
 CONF_CODE_ARM_REQUIRED = "code_arm_required"
@@ -27,23 +26,19 @@ CONF_MQTT_ENABLED = "mqtt_enabled"
 CONF_MQTT_TOPIC_STATE = "mqtt_topic_state"
 CONF_MQTT_TOPIC_COMMAND = "mqtt_topic_command"
 
-DEFAULT_NAME = "Argus Alarm Card v1.1.35"
+DEFAULT_NAME = NAME
 DEFAULT_ARMING_TIME = 0
 DEFAULT_TRIGGER_TIME = 120
 DEFAULT_ENTRY_DELAY = 60
 DEFAULT_MQTT_TOPIC_STATE = "argus/alarm/state"
 DEFAULT_MQTT_TOPIC_COMMAND = "argus/alarm/set"
 
-# MQTT command payloads
 MQTT_COMMAND_DISARM = "DISARM"
 MQTT_COMMAND_ARM_HOME = "ARM_HOME"
 MQTT_COMMAND_ARM_AWAY = "ARM_AWAY"
 MQTT_COMMAND_ARM_NIGHT = "ARM_NIGHT"
 MQTT_COMMAND_ARM_VACATION = "ARM_VACATION"
 
-# Storage keys
 STORAGE_KEY = "argus_ui_data"
 STORAGE_VERSION = 1
-
-# Dispatcher signals
 SIGNAL_CONFIG_UPDATED = f"{DOMAIN}_config_updated"

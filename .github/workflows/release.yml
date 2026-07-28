@@ -1,0 +1,40 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Validate version and sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME#v}"
+          VERSION="$(python -c 'import json; print(json.load(open("custom_components/argus/manifest.json"))["version"])')"
+          test "$TAG" = "$VERSION"
+          python -m compileall -q custom_components/argus
+          python -m unittest discover -s tests -v
+          node --check custom_components/argus/www/argus-card.js
+          node --check custom_components/argus/www/argus-panel.js
+      - name: Build HACS archive
+        run: |
+          cd custom_components/argus
+          zip -r "../../../argus.zip" . -x '__pycache__/*' '*.pyc'
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" argus.zip \
+            --title "Argus Home Hub ${GITHUB_REF_NAME}" \
+            --notes-file docs/RELEASE_NOTES_1.6.0.md

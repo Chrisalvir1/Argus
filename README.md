@@ -1,112 +1,110 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/Chrisalvir1/Argus/main/logo.png" alt="Argus Seguridad de Hogar" width="200" style="border-radius: 20%; box-shadow: 0 10px 20px rgba(0,0,0,0.15); margin-bottom: 20px;">
+  <img src="logo.png" alt="Argus Home Hub" width="180">
 
-  # Argus Home Hub
+# Argus Home Hub
 
-  **El Sistema de Seguridad Premium para Home Assistant**
+**Panel de alarma local-first para Home Assistant**
 
-  [![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.5.3-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
-  [![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5.svg?logo=home-assistant)](https://www.home-assistant.io/)
-  [![HACS](https://img.shields.io/badge/HACS-Custom_Repository-orange.svg)](https://hacs.xyz/)
-  [![GitHub stars](https://img.shields.io/github/stars/Chrisalvir1/Argus?style=social)](https://github.com/Chrisalvir1/Argus/stargazers)
+[![Release](https://img.shields.io/github/v/release/Chrisalvir1/Argus)](https://github.com/Chrisalvir1/Argus/releases)
+[![Validate](https://github.com/Chrisalvir1/Argus/actions/workflows/validate.yml/badge.svg)](https://github.com/Chrisalvir1/Argus/actions/workflows/validate.yml)
+[![HACS](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://hacs.xyz/)
+[![License](https://img.shields.io/github/license/Chrisalvir1/Argus)](LICENSE)
 
-  <br>
-  <a href="https://paypal.me/CEstradaAlvir" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-blue.svg?logo=paypal&style=for-the-badge" alt="Donar con PayPal"></a>
-  <a href="https://github.com/Chrisalvir1/Argus/issues" target="_blank"><img src="https://img.shields.io/badge/Report_a_Bug_/_Request_Feature-GitHub-black.svg?logo=github&style=for-the-badge" alt="Enviar Sugerencia"></a>
-  <br>
 </div>
-<br>
 
-**Argus Home Hub** es un avanzado sistema de seguridad y panel de control de alarmas para Home Assistant. Construido desde cero para ofrecer una experiencia visual *premium* con una interfaz *Liquid Glass* inspirada en macOS e iOS. Combina la gestión de sensores, sirenas, control de acceso y notificaciones push en un único *Custom Element* sumamente fluido y autoconstruido.
+Argus reúne alarma, sensores, sirenas, auditoría, acceso mediante PIN, notificaciones y una interfaz Liquid Glass en una integración para Home Assistant. El procesamiento principal es local y no requiere un servicio cloud de Argus.
 
----
+> [!IMPORTANT]
+> Argus no sustituye una alarma certificada ni garantiza comunicación con servicios de emergencia. Prueba siempre tus sensores, sirenas y métodos de respaldo.
 
-## ✨ Novedades y Correcciones Recientes (v1.5.3)
+## Funciones
 
-¡Interfaz Refinada, Fuente de Clima Traducible y Autonomía Local!
+- Modos desarmado, casa, ausente, noche y vacaciones.
+- Retardos de entrada, salida y duración de alarma.
+- Detección de sensores abiertos y bypass controlado.
+- Switch SOS compatible con automatizaciones y exportaciones de Home Assistant.
+- Recuperación del último estado estable después de un reinicio.
+- MQTT opcional para estado y comandos.
+- Auditoría y línea temporal forense local.
+- Panel completo y tarjeta Lovelace compacta.
+- Fondos meteorológicos y soporte multilenguaje.
 
-**Novedades de la versión 1.5.3:**
-- **Local-First y Recuperación de Estado:** Se mantiene internamente la recuperación automática de estado tras un apagón y el registro de la línea forense.
-- **Traducción Dinámica de Clima:** La etiqueta y descripción de la fuente de clima configurada ahora se traducen y redibujan inmediatamente al cambiar el idioma del panel.
-- **Simplificación de Interfaz:** Se ha removido el contenedor visual del Centro de Salud y Energía del panel Lovelace y sus endpoints correspondientes.
-- **Remoción de Copilot:** Se eliminó por completo el asistente inteligente Copilot local y su API WebSocket asociada para simplificar la interfaz.
-- **API de Extensiones:** API WebSocket documentada para integraciones de terceros. Consulta la documentación técnica en [docs/EXTENSIONS_API.md](file:///Users/chrisalvir/Desktop/GITHUB%20PROJECT/argus/docs/EXTENSIONS_API.md).
+## Requisitos
 
----
+- Home Assistant **2024.7.0 o posterior**.
+- HACS recomendado.
+- Cuenta administradora para instalar y configurar.
 
-## 🚀 Características Principales
+## Instalación con HACS
 
-*   **🛡️ Modos de Seguridad Inteligentes**: Soporte completo para *En Casa*, *Ausente*, *Noche*, *Vacaciones* y *Desarmado*. Restricción de armado si hay sensores activos (con opción *Bypass*).
-*   **🌤️ Fondos Meteorológicos Animados WebGL/CSS**: El fondo de las tarjetas cambia dinámicamente según el clima local (lluvia, tormenta, nieve, estrellas, nublado) usando WebGL nativo con fallback a CSS.
-*   **🔋 Monitor Dinámico de Baterías**: Escanea automáticamente tus sensores de intrusión (puertas, ventanas, PIR) y muestra alertas visuales en el inicio si alguno baja del 20%.
-*   **🔐 Control de Acceso Avanzado**: Teclado numérico (*PIN Pad*) integrado y fluido. Gestión de PIN maestro y usuarios administradores directamente desde el panel, sin tocar YAML.
-*   **🔔 Notificaciones y Auditoría en Tiempo Real**: 
-    *   Selección visual de dispositivos móviles para enviar Alertas Push críticas.
-    *   *Registro de Actividad (Audit Log)*: Ve exactamente quién armó/desarmó y qué sensor desencadenó la alarma.
-*   **⚡ Automatizaciones Integradas**: Gestiona y visualiza las reglas de automatización vinculadas a la seguridad sin salir del panel.
-*   **🏠 HomeKit & Matter**: Sección dedicada para la administración del puente y la integración nativa con Apple Home.
-*   **🌐 Pantalla Completa & Multi-Instancia**: Soporte nativo para modo *fullscreen* (ideal para tablets de pared) y manejo de múltiples instancias de alarma en un solo panel.
+1. Abre **HACS → Integraciones**.
+2. Selecciona **Repositorios personalizados**.
+3. Añade `https://github.com/Chrisalvir1/Argus` como **Integración**.
+4. Instala **Argus Home Hub**.
+5. Reinicia Home Assistant.
+6. Abre **Ajustes → Dispositivos y servicios → Añadir integración** y busca **Argus**.
+7. Recarga completamente el navegador para actualizar los recursos del frontend.
 
----
+## Instalación manual
 
-## 📦 Instalación Rápida
+1. Descarga `argus.zip` desde la última release.
+2. Copia su contenido a `custom_components/argus`.
+3. Reinicia Home Assistant y añade la integración desde la interfaz.
 
-### Requisitos y Compatibilidad
-* **Home Assistant:** Versión compatible con custom components.
-* **Permisos:** Las APIs WebSocket de configuración de Argus requieren una cuenta con **permisos de administrador** en Home Assistant.
-* **Configuración Inicial:** Tras instalar, añade la integración desde la interfaz de HA para iniciar el asistente de configuración.
+## Lovelace
 
-### Instalación vía HACS
+### Tarjeta compacta
 
-> **Nota:** Argus está optimizado para funcionar mediante HACS, lo que garantiza actualizaciones automáticas y sin fricciones.
-
-1. Abre tu panel de Home Assistant y dirígete a **HACS** -> **Integraciones**.
-2. Haz clic en los tres puntos (arriba a la derecha) -> **Repositorios Personalizados**.
-3. Añade la URL del repositorio: `https://github.com/Chrisalvir1/Argus`
-4. Selecciona la categoría: **Integración** y haz clic en **Añadir**.
-5. Busca "Argus Home Hub" en HACS y descárgalo.
-6. **Reinicia tu servidor de Home Assistant**.
-7. **IMPORTANTE: Recarga / actualiza tu navegador** (o limpia la caché) para asegurar que Lovelace cargue los nuevos elementos JavaScript actualizados.
-8. Ve a **Ajustes > Dispositivos y servicios > Añadir integración**, busca **Argus** y sigue el asistente interactivo de configuración inicial.
-
-### Instalación Manual
-
-1. Descarga el archivo `.zip` del último *Release* en GitHub (v1.5.3).
-2. Descomprímelo y copia la carpeta `argus` en el directorio de tu servidor: `custom_components/argus`.
-3. **Reinicia Home Assistant**.
-4. **IMPORTANTE: Recarga / actualiza tu navegador** (o limpia la caché) para refrescar los componentes Lovelace.
-5. Dirígete a **Ajustes > Dispositivos y servicios > Añadir integración**, busca **Argus** y sigue los pasos de configuración.
-
----
-
-## ⚙️ Configuración del Dashboard (Lovelace)
-
-Argus te ofrece dos tarjetas personalizadas que puedes usar en tus tableros de Home Assistant:
-
-### Opción A: Tarjeta Premium de Alarma (`argus-card`)
-Una tarjeta de control compacta con diseño *Liquid Glass*, clima dinámico en el fondo y dial numérico integrado para desarmar.
-Para añadirla, edita tu tablero, añade una tarjeta **Manual** y escribe:
 ```yaml
 type: custom:argus-card
 entity: alarm_control_panel.argus
-title: Panel de Seguridad Argus
+title: Seguridad
 ```
 
-### Opción B: Panel de Control e Instancia Completa (`argus-panel`)
-Para incrustar el panel completo de administración y control de Argus en una pestaña de tu dashboard:
+### Panel completo
+
 ```yaml
 type: custom:argus-panel
 ```
 
----
+## Seguridad
 
-## 💡 Soporte y Sugerencias
+- Los PIN se almacenan con `scrypt` y salt aleatorio.
+- Usa un PIN único de 4 a 12 dígitos; evita secuencias y repeticiones.
+- No compartas respaldos o registros sin redactar.
+- Los archivos ubicados en `/config/www` se sirven mediante `/local` y no deben considerarse privados.
+- Reporta vulnerabilidades siguiendo [SECURITY.md](SECURITY.md).
 
-Si tienes alguna duda, sugerencia o encuentras algún error, puedes escribirme directamente a: **[chrisalvir01@gmail.com](mailto:chrisalvir01@gmail.com)**
+## Actualización segura
 
----
+1. Crea un respaldo de Home Assistant.
+2. Actualiza desde HACS.
+3. Reinicia Home Assistant.
+4. Recarga el navegador.
+5. Verifica armado, desarmado, sensores, sirena, SOS y notificaciones.
+
+## Solución de problemas
+
+- **El panel no cambia:** recarga el navegador sin caché.
+- **La integración no aparece:** confirma que existe `custom_components/argus/manifest.json` y reinicia HA.
+- **Una entidad está unavailable:** revisa el registro de Home Assistant y la configuración de la instancia.
+- **HACS rechaza el repositorio:** confirma que seleccionaste la categoría Integración.
+
+## Desarrollo
+
+```bash
+python -m compileall -q custom_components/argus
+python -m unittest discover -s tests -v
+node --check custom_components/argus/www/argus-card.js
+node --check custom_components/argus/www/argus-panel.js
+```
+
+Consulta [CONTRIBUTING.md](CONTRIBUTING.md), la [API de extensiones](docs/EXTENSIONS_API.md) y el [registro de mejoras 1.6.0](docs/CHANGESET_1.6.0.md).
+
+## Licencia
+
+MIT. Consulta [LICENSE](LICENSE).
 
 <div align="center">
-  <b>Desarrollado con pasión por Christopher Alvir (@Chrisalvir1)</b><br>
-  <i>Diseñado para la comunidad de Home Assistant en Costa Rica y el mundo.</i>
+Desarrollado por Christopher Alvir · Costa Rica
 </div>
