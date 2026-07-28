@@ -1,0 +1,35 @@
+name: Reporte de error
+description: Informa un fallo reproducible de Argus
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Descripción
+      description: Explica qué ocurrió y qué esperabas.
+    validations:
+      required: true
+  - type: input
+    id: argus-version
+    attributes:
+      label: Versión de Argus
+    validations:
+      required: true
+  - type: input
+    id: ha-version
+    attributes:
+      label: Versión de Home Assistant
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Pasos para reproducir
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Registros redactados
+      description: Elimina PIN, tokens, URL externas y datos personales.
