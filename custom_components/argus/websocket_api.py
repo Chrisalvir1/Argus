@@ -154,6 +154,40 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_argus_update_incident)
     websocket_api.async_register_command(hass, ws_argus_get_forensic_timeline)
     websocket_api.async_register_command(hass, ws_argus_get_health)
+    websocket_api.async_register_command(hass, ws_argus_import_alarmo)
+
+
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/import_alarmo",
+    vol.Required("alarmo_data"): dict,
+    vol.Optional("entry_id"): str,
+})
+@websocket_api.async_response
+async def ws_argus_import_alarmo(hass, connection, msg) -> None:
+    entry_id = msg.get("entry_id")
+    _, actor = _actor(connection)
+
+    from .core.migration import AlarmoImporter
+    preview = AlarmoImporter.preview_import(msg["alarmo_data"])
+    if not preview.safe_to_import:
+        connection.send_error(msg["id"], "invalid_alarmo_data", "Cannot import Alarmo payload")
+        return
+
+    argus_config = AlarmoImporter.generate_argus_config(msg["alarmo_data"])
+    saved = await async_save_ui_data(hass, argus_config, entry_id)
+    await async_append_audit_log(
+        hass, "alarmo_imported", f"Imported {argus_config['migrated_sensors_count']} sensors from Alarmo", user=actor, entry_id=entry_id
+    )
+    async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED)
+    connection.send_result(msg["id"], {
+        "success": True,
+        "preview": {
+            "supported_areas": preview.supported_areas,
+            "supported_sensors": preview.supported_sensors,
+            "incompatible_items": preview.incompatible_items,
+        },
+        "ui": _redact_ui_data(saved),
+    })
 
 
 @websocket_api.websocket_command({
