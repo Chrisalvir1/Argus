@@ -5,17 +5,30 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from .state_machine import (
-    ARMED_STATES,
-    STATE_ARMED_AWAY,
-    STATE_ARMED_HOME,
-    STATE_ARMED_NIGHT,
-    STATE_ARMED_VACATION,
-    STATE_DISARMED,
-    STATE_PENDING,
-    STATE_TRIGGERED,
-    is_armed_state,
-)
+try:
+    from .state_machine import (
+        ARMED_STATES,
+        STATE_ARMED_AWAY,
+        STATE_ARMED_HOME,
+        STATE_ARMED_NIGHT,
+        STATE_ARMED_VACATION,
+        STATE_DISARMED,
+        STATE_PENDING,
+        STATE_TRIGGERED,
+        is_armed_state,
+    )
+except ImportError:
+    from state_machine import (  # type: ignore
+        ARMED_STATES,
+        STATE_ARMED_AWAY,
+        STATE_ARMED_HOME,
+        STATE_ARMED_NIGHT,
+        STATE_ARMED_VACATION,
+        STATE_DISARMED,
+        STATE_PENDING,
+        STATE_TRIGGERED,
+        is_armed_state,
+    )
 
 
 class ZoneType(str, Enum):

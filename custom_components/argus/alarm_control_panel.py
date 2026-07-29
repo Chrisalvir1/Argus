@@ -128,6 +128,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._alarm_state = AlarmControlPanelState.DISARMED
         self._attr_unique_id = config_entry.entry_id
 
+        # Core Engines
+        from .core.incidents import IncidentEngine
+        self._incident_engine = IncidentEngine(correlation_window_seconds=60)
+
         # Timers
         self._arming_listener = None
         self._entry_listener = None
@@ -247,6 +251,22 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 else self._entry_delay
             )
             attrs["delay"] = delay
+
+        # Spatial Model & Master Alarm Attributes
+        from .core.spatial import Property, Building, Floor, Area, Room, MasterAlarm
+        st_val = self._alarm_state.value if hasattr(self._alarm_state, "value") else str(self._alarm_state)
+        area_house = Area("area_house", "Main House", state=st_val)
+        prop = Property("prop_home", self._name, buildings=[Building("bld_main", "Main Residence", floors=[Floor("floor_1", "Main Floor", areas=[area_house])])])
+        master = MasterAlarm(prop)
+        attrs["spatial_summary"] = master.get_summary()
+        attrs["combined_state"] = master.get_combined_state()
+
+        # Health Diagnostic Attributes
+        from .core.health import evaluate_system_health
+        states_dict = {st.entity_id: {"state": st.state, "attributes": dict(st.attributes)} for st in self.hass.states.async_all()}
+        health_rep = evaluate_system_health(states_dict, self._all_sensors(), self._siren_entity, self._mqtt_enabled)
+        attrs["health_readiness_score"] = health_rep.readiness_score
+        attrs["health_status"] = health_rep.status
         return attrs
 
     # ── Sensor helpers ─────────────────────────────────────────────
@@ -736,6 +756,15 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         # Fire "sensor_opened" automations globally (before filtering by alarm state)
         self.hass.async_create_task(self._evaluate_automations("sensor_opened", sensor=entity_id))
+        self.hass.bus.async_fire("argus_sensor_opened", {
+            "entity_id": entity_id, "state": new_state.state, "alarm_entity_id": self.entity_id, "entry_id": self._config_entry.entry_id
+        })
+
+        # Process incident correlation
+        from .core.incidents import IncidentEvent
+        dev_cls = str(new_state.attributes.get("device_class", "")) if new_state else ""
+        inc_event = IncidentEvent(sensor_id=entity_id, area_id="main_house", state_value=new_state.state, device_class=dev_cls)
+        inc = self._incident_engine.process_sensor_event(inc_event, mode=str(self._alarm_state))
 
         if self._alarm_state not in ARMED_STATES:
             return
@@ -1398,6 +1427,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 self._panic_previous_state = AlarmControlPanelState.DISARMED
             self._panic_active = True
         self._triggered_by = "SOS / manual panic"
+        self.hass.bus.async_fire("argus_panic_activated", {
+            "entity_id": self.entity_id, "user": await self._get_context_user(), "entry_id": self._config_entry.entry_id
+        })
         await self._async_trigger()
 
     async def async_stop_panic(self) -> None:

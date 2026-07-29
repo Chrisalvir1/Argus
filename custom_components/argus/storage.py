@@ -211,13 +211,18 @@ async def async_append_audit_log(
         log = current.get("audit_log", [])
         if not isinstance(log, list):
             log = []
-        log.insert(0, {
+        
+        prev_hash = log[0].get("hash", "") if log and isinstance(log[0], dict) else ""
+        from .audit.forensics import compute_event_hash
+        entry_data = {
             "ts": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "action": str(action)[:64], "detail": str(detail)[:1000],
             "user": str(user)[:128],
             "severity": severity if severity in {"info", "warning", "critical"} else "info",
             "metadata": copy.deepcopy(metadata or {}),
-        })
+        }
+        entry_data["hash"] = compute_event_hash(entry_data, prev_hash)
+        log.insert(0, entry_data)
         current["audit_log"] = log[:AUDIT_LOG_MAX]
         await _store(hass, entry_id).async_save(current)
 

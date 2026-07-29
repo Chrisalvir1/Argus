@@ -367,6 +367,9 @@ async def ws_argus_save_ui(hass, connection, msg) -> None:
     try:
         if "users" in updates:
             updates["users"] = _sanitize_users(updates["users"])
+        if "floorplan" in updates and isinstance(updates["floorplan"], dict):
+            from .core.floorplan import validate_floorplan_schema
+            updates["floorplan"] = validate_floorplan_schema(updates["floorplan"])
         saved = await async_save_ui_data(hass, updates, entry_id)
     except ValueError as err:
         connection.send_error(msg["id"], "invalid_config", str(err))
