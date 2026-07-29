@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="logo.png" alt="Argus Home Hub" width="180">
+  <img src="https://raw.githubusercontent.com/Chrisalvir1/Argus/main/logo.png" alt="Argus Home Hub" width="180">
 
 # Argus Home Hub
 
