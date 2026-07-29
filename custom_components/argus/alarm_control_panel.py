@@ -58,7 +58,7 @@ from .storage import (
     async_load_ui_data, async_append_audit_log,
     async_get_alarm_runtime_state, async_save_alarm_runtime_state,
 )
-from .security import verify_pin
+from .security import PinAttemptLimiter, verify_pin
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -1147,15 +1147,25 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     async def async_alarm_disarm(self, code=None) -> None:
         user_id = await self._get_context_user()
-        limiter = PinAttemptLimiter()
-        limiter_key = f"{self._config_entry.entry_id}_{user_id}"
+        limiter_key = f"{DOMAIN}_pin_limiter_{self._config_entry.entry_id}"
+        limiter = self.hass.data.setdefault(limiter_key, PinAttemptLimiter())
+
+        if limiter.is_blocked():
+            _LOGGER.warning("Argus: Disarm rejected — too many failed PIN attempts")
+            await async_append_audit_log(
+                self.hass, "disarm_blocked", "Too many failed attempts", user=user_id, entry_id=self._config_entry.entry_id
+            )
+            return
 
         if self._code and code and not self._validate_code(code):
+            limiter.register_attempt(False)
             _LOGGER.warning("Argus: Disarm rejected — invalid code")
             await async_append_audit_log(
                 self.hass, "disarm_rejected", "Invalid code", user=user_id, entry_id=self._config_entry.entry_id
             )
             return
+
+        limiter.register_attempt(True)
 
         # Check Duress PIN (PIN de Coacción)
         adv = self._ui_config.get("advanced", {})
