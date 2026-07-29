@@ -2,6 +2,12 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [1.8.2] - 2026-07-29
+
+### Fixed
+- Corregida la importación de `PinAttemptLimiter` en `alarm_control_panel.py` que causaba el error `NameError: name 'PinAttemptLimiter' is not defined` al desarmar desde Home Assistant y HomeKit (`alarm_control_panel/alarm_disarm`).
+- Conectado el limitador de intentos por instancia (`entry_id`) durante el desarmado.
+
 ## [1.8.1] - 2026-07-29
 
 ### Fixed
