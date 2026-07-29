@@ -2,6 +2,14 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [1.8.1] - 2026-07-29
+
+### Fixed
+- Ruido WebGL suavizado en el fondo cinemático eliminando la cuadrícula de bloques rectangulares grises.
+- Removida la etiqueta de texto flotante de estación ("summer", "winter", etc.) en la esquina de la tarjeta.
+- Formateada la alerta de batería baja en un badge flotante glassmorphism con desenfoque de fondo y borde sutil.
+- Idempotencia del workflow de publicación en GitHub Actions para releases con tags existentes.
+
 ## [1.8.0] - 2026-07-28
 
 ### Added
