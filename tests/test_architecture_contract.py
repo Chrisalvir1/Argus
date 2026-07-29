@@ -1,4 +1,4 @@
-"""Architecture contracts for Argus 1.7."""
+"""Architecture contracts for Argus 1.8."""
 from pathlib import Path
 import unittest
 
@@ -10,8 +10,10 @@ class TestArchitectureContract(unittest.TestCase):
     def test_version_is_consistent(self) -> None:
         manifest = (COMPONENT / "manifest.json").read_text(encoding="utf-8")
         constants = (COMPONENT / "const.py").read_text(encoding="utf-8")
-        self.assertIn('"version": "1.7.0"', manifest)
-        self.assertIn('VERSION = "1.7.0"', constants)
+        card = (COMPONENT / "www" / "argus-card.js").read_text(encoding="utf-8")
+        self.assertIn('"version": "1.8.0"', manifest)
+        self.assertIn('VERSION = "1.8.0"', constants)
+        self.assertIn("ARGUS_CARD_VERSION='1.8.0'", card)
 
     def test_private_media_is_not_local(self) -> None:
         media = (COMPONENT / "media.py").read_text(encoding="utf-8")
@@ -22,9 +24,19 @@ class TestArchitectureContract(unittest.TestCase):
 
     def test_frontend_is_composed_from_clients(self) -> None:
         bootstrap = (COMPONENT / "www" / "argus-bootstrap.js").read_text(encoding="utf-8")
-        for module in ("security-client.js", "audit-client.js", "media-client.js"):
+        for module in ("security-client.js", "audit-client.js", "media-client.js", "premium-experience.js"):
             self.assertIn(module, bootstrap)
             self.assertTrue((COMPONENT / "www" / module).is_file())
+
+    def test_removed_features_are_not_registered(self) -> None:
+        api = (COMPONENT / "websocket_api.py").read_text(encoding="utf-8")
+        panel = (COMPONENT / "alarm_control_panel.py").read_text(encoding="utf-8")
+        self.assertNotIn("get_tts_engines", api)
+        self.assertNotIn("google_generative_ai", panel)
+        self.assertNotIn("analyze_camera", panel)
+        card = (COMPONENT / "www" / "argus-card.js").read_text(encoding="utf-8")
+        self.assertNotIn("Costa Rica", card)
+        self.assertNotIn("temperature: 24", card)
 
     def test_legacy_websocket_uses_single_media_manager(self) -> None:
         init = (COMPONENT / "__init__.py").read_text(encoding="utf-8")

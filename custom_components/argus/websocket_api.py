@@ -1,4 +1,4 @@
-"""Validated WebSocket API for the Argus frontend panel."""
+"""Validated WebSocket API for the Argus frontend panel with per-instance isolation."""
 from __future__ import annotations
 
 import base64
@@ -36,11 +36,11 @@ _SUPPORTED_DOMAINS = {
     "binary_sensor", "camera", "climate", "cover", "light", "lock",
     "media_player", "sensor", "siren", "switch",
 }
-_LIMITER_KEY = f"{DOMAIN}_pin_attempt_limiter"
 
 
-def _limiter(hass: HomeAssistant) -> PinAttemptLimiter:
-    return hass.data.setdefault(_LIMITER_KEY, PinAttemptLimiter())
+def _limiter(hass: HomeAssistant, entry_id: str = "global") -> PinAttemptLimiter:
+    key = f"{DOMAIN}_limiter_{entry_id}"
+    return hass.data.setdefault(key, PinAttemptLimiter())
 
 
 def _actor(connection) -> tuple[str, str]:
@@ -69,6 +69,8 @@ def _redact_ui_data(data: dict) -> dict:
     if isinstance(advanced, dict):
         advanced["guest_code_configured"] = bool(advanced.get("guest_code"))
         advanced.pop("guest_code", None)
+        advanced["duress_pin_configured"] = bool(advanced.get("duress_pin"))
+        advanced.pop("duress_pin", None)
     redacted.pop("runtime", None)
     return redacted
 
@@ -82,149 +84,216 @@ def _sanitize_users(users: list) -> list[dict]:
         pin = user.get("pin")
         if pin and not str(pin).startswith("scrypt:"):
             if not validate_pin(str(pin)):
-                raise ValueError("A user PIN does not satisfy the security policy")
+                raise ValueError(f"PIN for user '{user.get('name')}' is weak")
             user["pin"] = hash_pin(str(pin))
+        user.setdefault("enabled", True)
         sanitized.append(user)
     return sanitized
 
 
-def async_register_websocket_api(hass: HomeAssistant) -> None:
-    commands = (
-        ws_argus_dashboard, ws_argus_save_ui, ws_argus_get_mode_config,
-        ws_argus_save_mode_config, ws_argus_get_audit_log, ws_argus_get_stats,
-        ws_argus_get_forensic_timeline, ws_argus_clear_audit_log,
-        ws_argus_restore_config, ws_argus_save_advanced_config,
-        ws_argus_get_advanced_config, ws_argus_save_automations,
-        ws_argus_get_automations, ws_argus_get_tts_engines,
-        ws_argus_get_media_players, ws_argus_update_master_pin,
-        ws_argus_write_log, ws_argus_upload_file, ws_argus_list_files,
-        ws_argus_delete_file,
-    )
-    for command in commands:
-        websocket_api.async_register_command(hass, websocket_api.require_admin(command))
-
-
-@websocket_api.websocket_command({
-    vol.Required("type"): "argus/upload_file",
-    vol.Required("filename"): str,
-    vol.Required("data"): str,
-})
-@websocket_api.async_response
-async def ws_argus_upload_file(hass, connection, msg) -> None:
-    extension = os.path.splitext(os.path.basename(msg["filename"]))[1].lower()
-    if extension not in _ALLOWED_MEDIA_EXTENSIONS:
-        connection.send_error(msg["id"], "invalid_file", "Unsupported media type")
-        return
-    encoded = msg["data"].split(",", 1)[-1]
-    if len(encoded) > (_MAX_UPLOAD_BYTES * 4 // 3) + 1024:
-        connection.send_error(msg["id"], "file_too_large", "File exceeds the 50 MB limit")
-        return
-    try:
-        file_data = base64.b64decode(encoded, validate=True)
-        if len(file_data) > _MAX_UPLOAD_BYTES:
-            raise ValueError("oversized")
-        upload_dir = hass.config.path("www", "argus")
-        filename = f"{uuid.uuid4().hex}{extension}"
-
-        def _write() -> None:
-            os.makedirs(upload_dir, exist_ok=True)
-            temporary = os.path.join(upload_dir, f".{filename}.tmp")
-            target = os.path.join(upload_dir, filename)
-            try:
-                with open(temporary, "wb") as handle:
-                    handle.write(file_data)
-                os.replace(temporary, target)
-            finally:
-                if os.path.exists(temporary):
-                    os.unlink(temporary)
-
-        await hass.async_add_executor_job(_write)
-        connection.send_result(msg["id"], {"success": True, "url": f"/local/argus/{filename}"})
-    except (ValueError, OSError):
-        _LOGGER.exception("Argus WebSocket media upload failed")
-        connection.send_error(msg["id"], "upload_failed", "Upload failed")
-
-
-@websocket_api.websocket_command({vol.Required("type"): "argus/list_uploaded_files"})
-@websocket_api.async_response
-async def ws_argus_list_files(hass, connection, msg) -> None:
-    upload_dir = hass.config.path("www", "argus")
-
-    def _list() -> list[dict]:
-        if not os.path.isdir(upload_dir):
-            return []
-        result = []
-        for filename in os.listdir(upload_dir):
-            path = os.path.join(upload_dir, filename)
-            extension = os.path.splitext(filename)[1].lower()
-            if not os.path.isfile(path) or extension not in _ALLOWED_MEDIA_EXTENSIONS:
-                continue
-            stat = os.stat(path)
-            result.append({
-                "name": filename,
-                "size_bytes": stat.st_size,
-                "size_str": f"{stat.st_size / 1024:.2f} KB",
-                "mtime": stat.st_mtime,
-                "url": f"/local/argus/{filename}",
-                "is_video": extension in {".mp4", ".webm", ".mov", ".m4v"},
-            })
-        return sorted(result, key=lambda item: item["mtime"], reverse=True)
-
-    try:
-        connection.send_result(msg["id"], await hass.async_add_executor_job(_list))
-    except OSError:
-        _LOGGER.exception("Argus media listing failed")
-        connection.send_error(msg["id"], "list_failed", "Unable to list files")
-
-
-@websocket_api.websocket_command({
-    vol.Required("type"): "argus/delete_uploaded_file",
-    vol.Required("filename"): str,
-})
-@websocket_api.async_response
-async def ws_argus_delete_file(hass, connection, msg) -> None:
-    filename = os.path.basename(msg["filename"])
-    if filename != msg["filename"] or os.path.splitext(filename)[1].lower() not in _ALLOWED_MEDIA_EXTENSIONS:
-        connection.send_error(msg["id"], "invalid_file", "Invalid filename")
-        return
-    target = hass.config.path("www", "argus", filename)
-    try:
-        deleted = await hass.async_add_executor_job(
-            lambda: os.path.isfile(target) and not os.remove(target)
-        )
-        if deleted:
-            connection.send_result(msg["id"], {"success": True})
-        else:
-            connection.send_error(msg["id"], "not_found", "File not found")
-    except OSError:
-        _LOGGER.exception("Argus media deletion failed")
-        connection.send_error(msg["id"], "delete_failed", "Unable to delete file")
-
-
-@callback
 def _serialize_available_entities(hass: HomeAssistant) -> list[dict]:
-    entity_registry = er.async_get(hass)
-    area_registry = ar.async_get(hass)
-    items = []
+    entity_reg = er.async_get(hass)
+    area_reg = ar.async_get(hass)
+    entities = []
+
     for state in hass.states.async_all():
         domain = state.entity_id.split(".", 1)[0]
         if domain not in _SUPPORTED_DOMAINS:
             continue
-        entry = entity_registry.async_get(state.entity_id)
+
+        entry = entity_reg.async_get(state.entity_id)
+        if entry and entry.disabled_by:
+            continue
+
+        area_id = entry.area_id if entry else None
+        if not area_id and entry and entry.device_id:
+            from homeassistant.helpers import device_registry as dr
+            dev_reg = dr.async_get(hass)
+            dev = dev_reg.async_get(entry.device_id)
+            if dev:
+                area_id = dev.area_id
+
         area_name = None
-        if entry and entry.area_id:
-            area = area_registry.async_get_area(entry.area_id)
-            area_name = area.name if area else None
-        items.append({
+        if area_id:
+            area = area_reg.async_get_area(area_id)
+            if area:
+                area_name = area.name
+
+        entities.append({
             "entity_id": state.entity_id,
-            "name": state.name,
+            "name": state.attributes.get("friendly_name") or state.entity_id,
             "domain": domain,
+            "device_class": state.attributes.get("device_class"),
             "state": state.state,
             "area": area_name,
             "icon": state.attributes.get("icon"),
-            "friendly_name": state.attributes.get("friendly_name"),
         })
-    return sorted(items, key=lambda item: (item.get("area") or "zzz", item["domain"], item["entity_id"]))
+
+    return entities
+
+
+@callback
+def async_register_websocket_api(hass: HomeAssistant) -> None:
+    websocket_api.async_register_command(hass, ws_argus_dashboard)
+    websocket_api.async_register_command(hass, ws_argus_save_ui)
+    websocket_api.async_register_command(hass, ws_argus_get_mode_config)
+    websocket_api.async_register_command(hass, ws_argus_save_mode_config)
+    websocket_api.async_register_command(hass, ws_argus_get_audit_log)
+    websocket_api.async_register_command(hass, ws_argus_get_forensic_timeline)
+    websocket_api.async_register_command(hass, ws_argus_get_stats)
+    websocket_api.async_register_command(hass, ws_argus_clear_audit_log)
+    websocket_api.async_register_command(hass, ws_argus_restore_config)
+    websocket_api.async_register_command(hass, ws_argus_save_advanced_config)
+    websocket_api.async_register_command(hass, ws_argus_get_advanced_config)
+    websocket_api.async_register_command(hass, ws_argus_save_automations)
+    websocket_api.async_register_command(hass, ws_argus_get_automations)
+    websocket_api.async_register_command(hass, ws_argus_get_media_players)
+    websocket_api.async_register_command(hass, ws_argus_update_master_pin)
+    websocket_api.async_register_command(hass, ws_argus_write_log)
+    websocket_api.async_register_command(hass, ws_argus_get_incidents)
+    websocket_api.async_register_command(hass, ws_argus_update_incident)
+    websocket_api.async_register_command(hass, ws_argus_get_forensic_timeline)
+    websocket_api.async_register_command(hass, ws_argus_get_health)
+    websocket_api.async_register_command(hass, ws_argus_import_alarmo)
+
+
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/import_alarmo",
+    vol.Required("alarmo_data"): dict,
+    vol.Optional("entry_id"): str,
+})
+@websocket_api.async_response
+async def ws_argus_import_alarmo(hass, connection, msg) -> None:
+    entry_id = msg.get("entry_id")
+    _, actor = _actor(connection)
+
+    from .core.migration import AlarmoImporter
+    preview = AlarmoImporter.preview_import(msg["alarmo_data"])
+    if not preview.safe_to_import:
+        connection.send_error(msg["id"], "invalid_alarmo_data", "Cannot import Alarmo payload")
+        return
+
+    argus_config = AlarmoImporter.generate_argus_config(msg["alarmo_data"])
+    saved = await async_save_ui_data(hass, argus_config, entry_id)
+    await async_append_audit_log(
+        hass, "alarmo_imported", f"Imported {argus_config['migrated_sensors_count']} sensors from Alarmo", user=actor, entry_id=entry_id
+    )
+    async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED)
+    connection.send_result(msg["id"], {
+        "success": True,
+        "preview": {
+            "supported_areas": preview.supported_areas,
+            "supported_sensors": preview.supported_sensors,
+            "incompatible_items": preview.incompatible_items,
+        },
+        "ui": _redact_ui_data(saved),
+    })
+
+
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/get_forensic_timeline",
+    vol.Optional("entry_id"): str,
+    vol.Optional("limit", default=100): int,
+})
+@websocket_api.async_response
+async def ws_argus_get_forensic_timeline(hass, connection, msg) -> None:
+    entry_id = msg.get("entry_id")
+    log = await async_get_audit_log(hass, entry_id)
+    timeline = log[:msg["limit"]]
+    connection.send_result(msg["id"], {"timeline": timeline})
+
+
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/get_health",
+    vol.Optional("entry_id"): str,
+})
+@websocket_api.async_response
+async def ws_argus_get_health(hass, connection, msg) -> None:
+    entry_id = msg.get("entry_id")
+    data = await async_load_ui_data(hass, entry_id)
+
+    # Gather sensor and siren states
+    states = {}
+    for state in hass.states.async_all():
+        states[state.entity_id] = {
+            "state": state.state,
+            "attributes": dict(state.attributes),
+        }
+
+    modes = data.get("modes", {})
+    sensors = []
+    for mode_cfg in modes.values():
+        if isinstance(mode_cfg, dict):
+            sensors.extend(mode_cfg.get("sensors") or [])
+
+    from .core.health import evaluate_system_health
+    report = evaluate_system_health(
+        states_dict=states,
+        configured_sensors=list(set(sensors)),
+        siren_entity=data.get("siren_entity"),
+        mqtt_enabled=bool(data.get("mqtt_enabled")),
+    )
+    connection.send_result(msg["id"], {
+        "readiness_score": report.readiness_score,
+        "status": report.status,
+        "issues": [{"issue_id": i.issue_id, "severity": i.severity, "category": i.category, "message": i.message, "recommendation": i.recommendation} for i in report.issues],
+        "recommendations": report.recommendations,
+    })
+
+
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/get_incidents",
+    vol.Optional("entry_id"): str,
+})
+@websocket_api.async_response
+async def ws_argus_get_incidents(hass, connection, msg) -> None:
+    entry_id = msg.get("entry_id")
+    data = await async_load_ui_data(hass, entry_id)
+    incidents = data.get("incidents", [])
+    connection.send_result(msg["id"], {"incidents": incidents})
+
+
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/update_incident",
+    vol.Required("incident_id"): str,
+    vol.Required("action"): vol.In(["confirm", "false_alarm", "silence_siren", "resolve"]),
+    vol.Optional("reason", default=""): str,
+    vol.Optional("entry_id"): str,
+})
+@websocket_api.async_response
+async def ws_argus_update_incident(hass, connection, msg) -> None:
+    entry_id = msg.get("entry_id")
+    action, incident_id = msg["action"], msg["incident_id"]
+    _, actor = _actor(connection)
+
+    data = await async_load_ui_data(hass, entry_id)
+    incidents = copy.deepcopy(data.get("incidents", []))
+    target_inc = None
+    for inc in incidents:
+        if inc.get("id") == incident_id:
+            target_inc = inc
+            break
+
+    if not target_inc:
+        connection.send_error(msg["id"], "not_found", "Incident not found")
+        return
+
+    if action == "confirm":
+        target_inc["status"] = "confirmed"
+    elif action == "false_alarm":
+        target_inc["status"] = "false_alarm"
+    elif action == "resolve":
+        target_inc["status"] = "resolved"
+
+    target_inc.setdefault("executed_actions", []).append({
+        "action": action, "actor": actor, "reason": msg.get("reason"), "ts": datetime.datetime.now(datetime.timezone.utc).isoformat()
+    })
+
+    await async_save_ui_data(hass, {"incidents": incidents}, entry_id)
+    await async_append_audit_log(
+        hass, f"incident_{action}", f"Incident {incident_id} action: {action}", user=actor, entry_id=entry_id
+    )
+    connection.send_result(msg["id"], {"success": True, "incident": target_inc})
 
 
 @callback
@@ -236,10 +305,14 @@ def _resolve_alarm_entity_id(hass: HomeAssistant, config_entry_id: str) -> str |
     return None
 
 
-@websocket_api.websocket_command({vol.Required("type"): "argus/dashboard"})
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/dashboard",
+    vol.Optional("entry_id"): str,
+})
 @websocket_api.async_response
 async def ws_argus_dashboard(hass, connection, msg) -> None:
-    ui_data = await async_load_ui_data(hass)
+    entry_id = msg.get("entry_id")
+    ui_data = await async_load_ui_data(hass, entry_id)
     entries = []
     for entry in hass.config_entries.async_entries(DOMAIN):
         entity_id = _resolve_alarm_entity_id(hass, entry.entry_id)
@@ -261,10 +334,10 @@ async def ws_argus_dashboard(hass, connection, msg) -> None:
 
 _SAVE_UI_SCHEMA = {
     vol.Required("type"): "argus/save_ui",
+    vol.Optional("entry_id"): str,
     vol.Optional("zones"): list,
     vol.Optional("dashboard"): dict,
     vol.Optional("notif_targets"): list,
-    vol.Optional("tts_targets"): list,
     vol.Optional("emergency_number"): vol.All(str, vol.Length(min=1, max=16), vol.Match(r"^[0-9+()\-\s]+$")),
     vol.Optional("panic_outputs"): list,
     vol.Optional("users"): list,
@@ -288,56 +361,74 @@ _SAVE_UI_SCHEMA = {
 @websocket_api.websocket_command(_SAVE_UI_SCHEMA)
 @websocket_api.async_response
 async def ws_argus_save_ui(hass, connection, msg) -> None:
-    updates = {key: copy.deepcopy(value) for key, value in msg.items() if key not in {"id", "type"}}
+    entry_id = msg.get("entry_id")
+    updates = {key: copy.deepcopy(value) for key, value in msg.items() if key not in {"id", "type", "entry_id"}}
     _, actor = _actor(connection)
     try:
         if "users" in updates:
             updates["users"] = _sanitize_users(updates["users"])
-        saved = await async_save_ui_data(hass, updates)
+        if "floorplan" in updates and isinstance(updates["floorplan"], dict):
+            from .core.floorplan import validate_floorplan_schema
+            updates["floorplan"] = validate_floorplan_schema(updates["floorplan"])
+        saved = await async_save_ui_data(hass, updates, entry_id)
     except ValueError as err:
         connection.send_error(msg["id"], "invalid_config", str(err))
         return
     async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED)
-    await async_append_audit_log(hass, "ui_configuration_updated", user=actor)
+    await async_append_audit_log(hass, "ui_configuration_updated", user=actor, entry_id=entry_id)
     connection.send_result(msg["id"], {"saved": True, "ui": _redact_ui_data(saved)})
 
 
-@websocket_api.websocket_command({vol.Required("type"): "argus/get_mode_config"})
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/get_mode_config",
+    vol.Optional("entry_id"): str,
+})
 @websocket_api.async_response
 async def ws_argus_get_mode_config(hass, connection, msg) -> None:
-    connection.send_result(msg["id"], (await async_load_ui_data(hass)).get("modes", {}))
+    entry_id = msg.get("entry_id")
+    connection.send_result(msg["id"], (await async_load_ui_data(hass, entry_id)).get("modes", {}))
 
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/save_mode_config",
     vol.Required("mode"): vol.In(["disarmed", "home", "away", "night", "vacation"]),
     vol.Optional("entity_id", default=""): str,
+    vol.Optional("entry_id"): str,
     vol.Required("config"): dict,
 })
 @websocket_api.async_response
 async def ws_argus_save_mode_config(hass, connection, msg) -> None:
-    data = await async_load_ui_data(hass)
+    entry_id = msg.get("entry_id")
+    data = await async_load_ui_data(hass, entry_id)
     modes = copy.deepcopy(data.get("modes", {}))
     mode, config, entity_id = msg["mode"], copy.deepcopy(msg["config"]), msg["entity_id"]
     if entity_id:
         modes.setdefault("__by_entity__", {}).setdefault(entity_id, {})[mode] = config
     else:
         modes[mode] = config
-    await async_save_ui_data(hass, {"modes": modes})
+    await async_save_ui_data(hass, {"modes": modes}, entry_id)
     async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED)
     connection.send_result(msg["id"], {"success": True, "modes": modes})
 
 
-@websocket_api.websocket_command({vol.Required("type"): "argus/get_audit_log"})
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/get_audit_log",
+    vol.Optional("entry_id"): str,
+})
 @websocket_api.async_response
 async def ws_argus_get_audit_log(hass, connection, msg) -> None:
-    connection.send_result(msg["id"], {"log": await async_get_audit_log(hass)})
+    entry_id = msg.get("entry_id")
+    connection.send_result(msg["id"], {"log": await async_get_audit_log(hass, entry_id)})
 
 
-@websocket_api.websocket_command({vol.Required("type"): "argus/get_stats"})
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/get_stats",
+    vol.Optional("entry_id"): str,
+})
 @websocket_api.async_response
 async def ws_argus_get_stats(hass, connection, msg) -> None:
-    log = await async_get_audit_log(hass)
+    entry_id = msg.get("entry_id")
+    log = await async_get_audit_log(hass, entry_id)
     cutoff = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=30)
     stats = {"total_events": len(log), "triggers_30d": 0, "armings_30d": 0, "top_sensors": {}}
     for event in log:
@@ -350,45 +441,37 @@ async def ws_argus_get_stats(hass, connection, msg) -> None:
         action = str(event.get("action", ""))
         if "trigger" in action:
             stats["triggers_30d"] += 1
-            sensor = event.get("metadata", {}).get("sensor_entity_id")
-            if sensor:
-                stats["top_sensors"][sensor] = stats["top_sensors"].get(sensor, 0) + 1
-        elif "arm" in action and "disarm" not in action:
+        elif "armed" in action:
             stats["armings_30d"] += 1
+        sensor = event.get("metadata", {}).get("sensor_entity_id")
+        if sensor:
+            stats["top_sensors"][sensor] = stats["top_sensors"].get(sensor, 0) + 1
     connection.send_result(msg["id"], stats)
 
 
 @websocket_api.websocket_command({
-    vol.Required("type"): "argus/get_forensic_timeline",
-    vol.Optional("limit", default=200): vol.All(vol.Coerce(int), vol.Range(min=1, max=500)),
+    vol.Required("type"): "argus/clear_audit_log",
+    vol.Optional("entry_id"): str,
 })
 @websocket_api.async_response
-async def ws_argus_get_forensic_timeline(hass, connection, msg) -> None:
-    events = (await async_get_audit_log(hass))[:msg["limit"]]
-    connection.send_result(msg["id"], {
-        "events": events,
-        "event_count": len(events),
-        "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-    })
-
-
-@websocket_api.websocket_command({vol.Required("type"): "argus/clear_activity_log"})
-@websocket_api.async_response
 async def ws_argus_clear_audit_log(hass, connection, msg) -> None:
+    entry_id = msg.get("entry_id")
     _, actor = _actor(connection)
-    await async_clear_audit_log(hass, actor=actor)
-    connection.send_result(msg["id"], {"success": True})
+    await async_clear_audit_log(hass, actor=actor, entry_id=entry_id)
+    connection.send_result(msg["id"], {"cleared": True})
 
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/restore_config",
+    vol.Optional("entry_id"): str,
     vol.Required("config"): dict,
 })
 @websocket_api.async_response
 async def ws_argus_restore_config(hass, connection, msg) -> None:
+    entry_id = msg.get("entry_id")
     _, actor = _actor(connection)
     try:
-        restored = await async_restore_ui_data(hass, msg["config"], actor=actor)
+        restored = await async_restore_ui_data(hass, msg["config"], actor=actor, entry_id=entry_id)
     except ValueError as err:
         connection.send_error(msg["id"], "invalid_backup", str(err))
         return
@@ -398,10 +481,12 @@ async def ws_argus_restore_config(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/save_advanced_config",
+    vol.Optional("entry_id"): str,
     vol.Required("config"): dict,
 })
 @websocket_api.async_response
 async def ws_argus_save_advanced_config(hass, connection, msg) -> None:
+    entry_id = msg.get("entry_id")
     config = copy.deepcopy(msg["config"])
     guest = config.get("guest_code")
     if guest and not str(guest).startswith("scrypt:"):
@@ -409,37 +494,54 @@ async def ws_argus_save_advanced_config(hass, connection, msg) -> None:
             connection.send_error(msg["id"], "invalid_pin", "Guest PIN does not satisfy the security policy")
             return
         config["guest_code"] = hash_pin(str(guest))
-    await async_save_ui_data(hass, {"advanced": config})
+
+    duress = config.get("duress_pin")
+    if duress and not str(duress).startswith("scrypt:"):
+        if not validate_pin(str(duress)):
+            connection.send_error(msg["id"], "invalid_pin", "Duress PIN does not satisfy the security policy")
+            return
+        config["duress_pin"] = hash_pin(str(duress))
+
+    await async_save_ui_data(hass, {"advanced": config}, entry_id)
     connection.send_result(msg["id"], {"success": True})
 
 
-@websocket_api.websocket_command({vol.Required("type"): "argus/get_advanced_config"})
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/get_advanced_config",
+    vol.Optional("entry_id"): str,
+})
 @websocket_api.async_response
 async def ws_argus_get_advanced_config(hass, connection, msg) -> None:
-    advanced = copy.deepcopy((await async_load_ui_data(hass)).get("advanced", {}))
+    entry_id = msg.get("entry_id")
+    advanced = copy.deepcopy((await async_load_ui_data(hass, entry_id)).get("advanced", {}))
     advanced["guest_code_configured"] = bool(advanced.get("guest_code"))
     advanced.pop("guest_code", None)
+    advanced["duress_pin_configured"] = bool(advanced.get("duress_pin"))
+    advanced.pop("duress_pin", None)
     connection.send_result(msg["id"], advanced)
 
 
-@websocket_api.websocket_command({vol.Required("type"): "argus/save_automations", vol.Required("automations"): list})
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/save_automations",
+    vol.Optional("entry_id"): str,
+    vol.Required("automations"): list,
+})
 @websocket_api.async_response
 async def ws_argus_save_automations(hass, connection, msg) -> None:
-    await async_save_ui_data(hass, {"automations": copy.deepcopy(msg["automations"])})
+    entry_id = msg.get("entry_id")
+    await async_save_ui_data(hass, {"automations": copy.deepcopy(msg["automations"])}, entry_id)
     async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED)
     connection.send_result(msg["id"], {"success": True})
 
 
-@websocket_api.websocket_command({vol.Required("type"): "argus/get_automations"})
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/get_automations",
+    vol.Optional("entry_id"): str,
+})
 @websocket_api.async_response
 async def ws_argus_get_automations(hass, connection, msg) -> None:
-    connection.send_result(msg["id"], (await async_load_ui_data(hass)).get("automations", []))
-
-
-@websocket_api.websocket_command({vol.Required("type"): "argus/get_tts_engines"})
-@websocket_api.async_response
-async def ws_argus_get_tts_engines(hass, connection, msg) -> None:
-    connection.send_result(msg["id"], [{"entity_id": state.entity_id, "name": state.name} for state in hass.states.async_all("tts")])
+    entry_id = msg.get("entry_id")
+    connection.send_result(msg["id"], (await async_load_ui_data(hass, entry_id)).get("automations", []))
 
 
 @websocket_api.websocket_command({vol.Required("type"): "argus/get_media_players"})
@@ -467,7 +569,7 @@ async def ws_argus_update_master_pin(hass, connection, msg) -> None:
 
     user_id, actor = _actor(connection)
     key = f"{user_id}:{entry.entry_id}"
-    limiter = _limiter(hass)
+    limiter = _limiter(hass, entry.entry_id)
     if limiter.is_blocked(key):
         connection.send_error(msg["id"], "rate_limited", "Too many failed attempts; try again later")
         return
@@ -481,6 +583,7 @@ async def ws_argus_update_master_pin(hass, connection, msg) -> None:
             user=actor,
             severity="critical" if blocked else "warning",
             metadata={"entry_id": entry.entry_id, "rate_limited": blocked},
+            entry_id=entry.entry_id,
         )
         connection.send_error(msg["id"], "invalid_pin", "Current PIN is incorrect")
         return
@@ -495,6 +598,7 @@ async def ws_argus_update_master_pin(hass, connection, msg) -> None:
         user=actor,
         severity="warning",
         metadata={"entry_id": entry.entry_id, "legacy_migrated": needs_rehash(current)},
+        entry_id=entry.entry_id,
     )
     await hass.config_entries.async_reload(entry.entry_id)
     connection.send_result(msg["id"], {"success": True})
@@ -502,11 +606,13 @@ async def ws_argus_update_master_pin(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/write_log",
+    vol.Optional("entry_id"): str,
     vol.Required("action"): vol.All(str, vol.Length(min=1, max=64)),
     vol.Optional("detail", default=""): vol.All(str, vol.Length(max=1000)),
 })
 @websocket_api.async_response
 async def ws_argus_write_log(hass, connection, msg) -> None:
+    entry_id = msg.get("entry_id")
     _, actor = _actor(connection)
-    await async_append_audit_log(hass, msg["action"], msg["detail"], user=actor)
+    await async_append_audit_log(hass, msg["action"], msg["detail"], user=actor, entry_id=entry_id)
     connection.send_result(msg["id"], {"written": True})

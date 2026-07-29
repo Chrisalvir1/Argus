@@ -1,20 +1,9 @@
-"""Argus Alarm Control Panel — full logic with sensors, timers, siren and MQTT.
-
-v0.9.30 backend fixes:
-  - _get_siren_entities: Bug crítico — TRIGGERED no está en ARMED_STATES, por lo
-    que la sirena NUNCA se activaba al dispararse la alarma. Fix: cuando el estado
-    es TRIGGERED o PENDING se usa _triggered_mode (nuevo atributo que guarda el
-    modo activo justo antes del disparo) para resolver las sirenas correctas.
-  - _async_siren: usa homeassistant.turn_on/turn_off como servicio universal
-    fallback para plugs Tuya/Matter/WiFi que a veces no responden a su dominio
-    nativo. Orden: intenta dominio nativo, si falla usa homeassistant como
-    fallback silencioso. Light mantiene brightness_pct=100.
-  - Versión anterior: v0.9.29
-"""
+"""Argus alarm entity and local automation runtime."""
 from __future__ import annotations
 
-import logging
 import json
+import logging
+import copy
 
 from homeassistant.components.alarm_control_panel import (
     AlarmControlPanelEntity,
@@ -22,7 +11,6 @@ from homeassistant.components.alarm_control_panel import (
     AlarmControlPanelState,
     CodeFormat,
 )
-from homeassistant.components import persistent_notification
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import STATE_ON
 from homeassistant.core import HomeAssistant, callback
@@ -140,6 +128,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._alarm_state = AlarmControlPanelState.DISARMED
         self._attr_unique_id = config_entry.entry_id
 
+        # Core Engines
+        from .core.incidents import IncidentEngine
+        self._incident_engine = IncidentEngine(correlation_window_seconds=60)
+
         # Timers
         self._arming_listener = None
         self._entry_listener = None
@@ -159,8 +151,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         # ARM-LOCK v2: timestamp (monotonic) until which forced-Home is blocked
         self._arm_lock_until: float = 0.0
-        self._smart_arming_suggested = False
-        self._unsub_smart_arming = None
         self._unsub_schedule = None
         self._confirmation_events: dict[str, float] = {}
         self._confirmation_listener = None
@@ -261,6 +251,22 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 else self._entry_delay
             )
             attrs["delay"] = delay
+
+        # Spatial Model & Master Alarm Attributes
+        from .core.spatial import Property, Building, Floor, Area, Room, MasterAlarm
+        st_val = self._alarm_state.value if hasattr(self._alarm_state, "value") else str(self._alarm_state)
+        area_house = Area("area_house", "Main House", state=st_val)
+        prop = Property("prop_home", self._name, buildings=[Building("bld_main", "Main Residence", floors=[Floor("floor_1", "Main Floor", areas=[area_house])])])
+        master = MasterAlarm(prop)
+        attrs["spatial_summary"] = master.get_summary()
+        attrs["combined_state"] = master.get_combined_state()
+
+        # Health Diagnostic Attributes
+        from .core.health import evaluate_system_health
+        states_dict = {st.entity_id: {"state": st.state, "attributes": dict(st.attributes)} for st in self.hass.states.async_all()}
+        health_rep = evaluate_system_health(states_dict, self._all_sensors(), self._siren_entity, self._mqtt_enabled)
+        attrs["health_readiness_score"] = health_rep.readiness_score
+        attrs["health_status"] = health_rep.status
         return attrs
 
     # ── Sensor helpers ─────────────────────────────────────────────
@@ -462,10 +468,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             )
         )
 
-        # Start smart arming AI check every 15 mins
-        self._unsub_smart_arming = async_track_time_interval(
-            self.hass, self._async_check_smart_arming, timedelta(minutes=15)
-        )
         self._unsub_schedule = async_track_time_interval(
             self.hass, self._async_check_state_schedule, timedelta(seconds=30)
         )
@@ -554,33 +556,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             await self._async_reconcile_state_schedule(runtime)
         self.hass.async_create_task(_check())
 
-    @callback
-    def _async_check_smart_arming(self, _now=None):
-        """AI Pattern check: suggest arming if house is empty and disarmed."""
-        if self._alarm_state != AlarmControlPanelState.DISARMED:
-            self._smart_arming_suggested = False
-            return
-            
-        persons = self.hass.states.async_all("person")
-        if not persons:
-            return
-            
-        all_away = all(p.state not in ("home", "En casa") for p in persons)
-        if all_away:
-            if not getattr(self, "_smart_arming_suggested", False):
-                self._smart_arming_suggested = True
-                persistent_notification.async_create(
-                    self.hass,
-                    "Todos parecen haber salido de casa, pero la alarma sigue desarmada. ¿Deseas armar Argus?",
-                    title="💡 Sugerencia Inteligente Argus AI",
-                    notification_id="argus_smart_arming"
-                )
-                self.hass.async_create_task(
-                    async_append_audit_log(self.hass, "ai_suggestion", "Sugerencia de armado (casa vacía)", user="Argus AI")
-                )
-        else:
-            self._smart_arming_suggested = False
-
     async def _async_reload_config(self) -> None:
         """Reload UI config, re-subscribe sensors, and update MQTT subscriptions after panel saves configuration."""
         self._ui_config = await async_load_ui_data(self.hass)
@@ -616,133 +591,75 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         )
 
     async def _evaluate_automations(self, event_type: str, **kwargs) -> None:
-        """Evaluate and execute matched automations based on event trigger."""
-        automations = self._ui_config.get("automations", [])
-        if not automations:
+        """Execute only validated, local automation actions."""
+        rules = self._ui_config.get("automations", [])
+        if not isinstance(rules, list):
             return
+        sensor_id = str(kwargs.get("sensor", ""))
+        sensor = self.hass.states.get(sensor_id) if sensor_id else None
+        sensor_name = str(sensor.attributes.get("friendly_name", sensor_id) if sensor else sensor_id or "sensor")
+        allowed_domains = {"cover", "fan", "input_boolean", "light", "lock", "siren", "switch"}
+        allowed_services = {"cover": {"open_cover", "close_cover", "stop_cover"}, "lock": {"lock", "unlock"}}
 
-        sensor_id = kwargs.get("sensor", "")
-        sensor_name = "un sensor"
-        if sensor_id:
-            state_obj = self.hass.states.get(sensor_id)
-            if state_obj:
-                sensor_name = state_obj.attributes.get("friendly_name", sensor_id)
-            else:
-                sensor_name = sensor_id
+        def replace_tokens(value):
+            if isinstance(value, str):
+                return (value.replace("{{sensor}}", sensor_name).replace("{{ sensor }}", sensor_name)
+                        .replace("{sensor}", sensor_name).replace("{{entity_id}}", sensor_id)
+                        .replace("{{ entity_id }}", sensor_id))
+            if isinstance(value, dict):
+                return {key: replace_tokens(item) for key, item in value.items()}
+            if isinstance(value, list):
+                return [replace_tokens(item) for item in value]
+            return value
 
-        def _replace_wildcards(obj):
-            if isinstance(obj, str):
-                return obj.replace("{{sensor}}", sensor_name).replace("{{ sensor }}", sensor_name).replace("{sensor}", sensor_name).replace("{{entity_id}}", sensor_id).replace("{{ entity_id }}", sensor_id)
-            elif isinstance(obj, dict):
-                return {k: _replace_wildcards(v) for k, v in obj.items()}
-            elif isinstance(obj, list):
-                return [_replace_wildcards(v) for v in obj]
-            return obj
-
-        for rule in automations:
-            if rule.get("event") != event_type:
+        for rule in rules:
+            if not isinstance(rule, dict) or rule.get("event") != event_type:
                 continue
-
-            # Optional Condition checking
-            # Examples: condition={"type": "mode", "value": "night"}
-            cond = rule.get("condition")
-            if cond:
-                c_type = cond.get("type")
-                if c_type == "mode" and self._alarm_state.value.replace("armed_", "") != cond.get("value"):
-                    continue
-                if c_type == "entity_id" and kwargs.get("sensor") != cond.get("value"):
-                    continue
-                
-            # Execute Actions
+            condition = rule.get("condition") or {}
+            if not isinstance(condition, dict):
+                continue
+            if condition.get("type") == "mode" and self._alarm_state.value.replace("armed_", "") != condition.get("value"):
+                continue
+            if condition.get("type") == "entity_id" and sensor_id != condition.get("value"):
+                continue
             actions = rule.get("actions", [])
-            for action_raw in actions:
-                action = _replace_wildcards(action_raw)
-                a_type = action.get("type")
-                if a_type == "tts":
-                    engine = action.get("engine", "tts.cloud_say")
-                    device = action.get("device")
-                    message = action.get("message", "Argus")
-                    if device:
-                        try:
-                            await self.hass.services.async_call(
-                                "tts", "speak",
-                                {"entity_id": engine, "media_player_entity_id": device,
-                                 "message": message, "language": self._language()},
-                                blocking=False,
-                            )
-                        except Exception as e:
-                            _LOGGER.warning("Argus: TTS action error: %s", e)
-                elif a_type == "turn_on":
-                    entities = action.get("entities", [])
-                    if entities:
-                        for e_id in entities:
-                            domain = e_id.split(".")[0]
-                            try:
-                                await self.hass.services.async_call(
-                                    domain, "turn_on", {"entity_id": e_id}, blocking=False
-                                )
-                            except Exception as e:
-                                _LOGGER.warning("Argus: turn_on action error for %s: %s", e_id, e)
-                elif a_type == "turn_off":
-                    entities = action.get("entities", [])
-                    if entities:
-                        for e_id in entities:
-                            domain = e_id.split(".")[0]
-                            try:
-                                await self.hass.services.async_call(
-                                    domain, "turn_off", {"entity_id": e_id}, blocking=False
-                                )
-                            except Exception as e:
-                                _LOGGER.warning("Argus: turn_off action error for %s: %s", e_id, e)
-                elif a_type == "analyze_camera":
-                    camera_id = action.get("camera_id")
-                    tts_device = action.get("tts_device")
-                    if camera_id and tts_device:
-                        async def _analyze_and_speak():
-                            try:
-                                # Call Gemini to analyze the camera stream
-                                response = await self.hass.services.async_call(
-                                    "google_generative_ai_conversation", "generate_content",
-                                    {
-                                        "image_entity_id": camera_id,
-                                        "prompt": (
-                                            "Analyze this security camera image. Briefly describe what is "
-                                            "visible and whether it appears to be a threat. Respond in "
-                                            f"{_LANGUAGE_NAMES[self._language()]}."
-                                        )
-                                    },
-                                    blocking=True,
-                                    return_response=True
-                                )
-                                text = ""
-                                if response and "text" in response:
-                                    text = response["text"]
-                                if text:
-                                    await self.hass.services.async_call(
-                                        "tts", "speak",
-                                        {"entity_id": "tts.cloud_say", "media_player_entity_id": tts_device, "message": text, "language": self._language()},
-                                        blocking=False
-                                    )
-                                await async_append_audit_log(self.hass, "ai_camera", f"Análisis: {text[:50]}...", user="Argus AI")
-                            except Exception as e:
-                                _LOGGER.warning("Argus: Camera analysis error: %s", e)
-                        self.hass.async_create_task(_analyze_and_speak())
-                elif a_type == "trigger_alarm":
-                    # Forzar evento de disparo
-                    rule_name = rule.get("name") or "Regla Automática"
-                    if self._alarm_state in ARMED_STATES or kwargs.get("sensor"):
-                         self._triggered_by = f"Regla: {rule_name}"
-                         if kwargs.get("sensor"):
-                              self._triggered_by += f" (Sensor: {kwargs.get('sensor')})"
-                         self.hass.async_create_task(self._async_trigger())
-                
-                # Log the automation action
-                rule_name = rule.get("name") or "Argus"
-                await async_append_audit_log(
-                    self.hass, f"auto_{action.get('type')}", 
-                    f"Ejecutando: {rule_name} (Acción: {action.get('type')})",
-                    user="Argus"
-                )
+            if not isinstance(actions, list):
+                continue
+            for raw_action in actions:
+                if not isinstance(raw_action, dict):
+                    continue
+                action = replace_tokens(copy.deepcopy(raw_action))
+                action_type = str(action.get("type", ""))
+                try:
+                    if action_type in {"turn_on", "turn_off"}:
+                        entities = action.get("entities", [])
+                        if not isinstance(entities, list):
+                            continue
+                        for entity_id in entities:
+                            domain, separator, _ = str(entity_id).partition(".")
+                            if separator and domain in allowed_domains:
+                                await self.hass.services.async_call(domain, action_type, {"entity_id": str(entity_id)}, blocking=False)
+                    elif action_type == "notify":
+                        target = str(action.get("target", ""))
+                        if not target.startswith("notify.") or target.count(".") != 1:
+                            continue
+                        await self.hass.services.async_call("notify", target.split(".", 1)[1], {"title": str(action.get("title", "Argus"))[:128], "message": str(action.get("message", ""))[:2000]}, blocking=False)
+                    elif action_type == "service":
+                        domain, separator, service = str(action.get("service", "")).partition(".")
+                        data = action.get("data", {})
+                        if not separator or service not in allowed_services.get(domain, set()) or not isinstance(data, dict):
+                            continue
+                        await self.hass.services.async_call(domain, service, copy.deepcopy(data), blocking=False)
+                    elif action_type == "trigger_alarm":
+                        if event_type == "triggered" or self._alarm_state not in ARMED_STATES:
+                            continue
+                        self._triggered_by = f"Rule: {str(rule.get('name') or 'Local rule')}" + (f" (Sensor: {sensor_id})" if sensor_id else "")
+                        await self._async_trigger()
+                    else:
+                        continue
+                    await async_append_audit_log(self.hass, "automation_executed", f"{event_type}: {action_type}", user="Argus", metadata={"sensor_entity_id": sensor_id})
+                except Exception:  # noqa: BLE001
+                    _LOGGER.exception("Argus local automation failed")
 
 
     async def async_will_remove_from_hass(self) -> None:
@@ -750,8 +667,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self._unsub_sensors()
         if self._mqtt_unsub:
             self._mqtt_unsub()
-        if self._unsub_smart_arming:
-            self._unsub_smart_arming()
         if self._unsub_schedule:
             self._unsub_schedule()
         self.hass.data.get(DOMAIN, {}).get(DATA_PANELS, {}).pop(
@@ -841,6 +756,15 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         # Fire "sensor_opened" automations globally (before filtering by alarm state)
         self.hass.async_create_task(self._evaluate_automations("sensor_opened", sensor=entity_id))
+        self.hass.bus.async_fire("argus_sensor_opened", {
+            "entity_id": entity_id, "state": new_state.state, "alarm_entity_id": self.entity_id, "entry_id": self._config_entry.entry_id
+        })
+
+        # Process incident correlation
+        from .core.incidents import IncidentEvent
+        dev_cls = str(new_state.attributes.get("device_class", "")) if new_state else ""
+        inc_event = IncidentEvent(sensor_id=entity_id, area_id="main_house", state_value=new_state.state, device_class=dev_cls)
+        inc = self._incident_engine.process_sensor_event(inc_event, mode=str(self._alarm_state))
 
         if self._alarm_state not in ARMED_STATES:
             return
@@ -1072,7 +996,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         """Activate or deactivate all configured siren entities.
 
         FIX (v0.9.30): usa homeassistant.turn_on/turn_off como servicio universal
-        para cubrir plugs Tuya, Matter, WiFi y cualquier entidad que no responda
+        para cubrir plugs Tuya, Wi-Fi y cualquier entidad que no responda
         a su dominio nativo. Orden de intento:
           1. Dominio nativo (light con brightness, siren/switch/fan/input_boolean)
           2. Si falla → homeassistant.turn_on / homeassistant.turn_off (universal)
@@ -1103,7 +1027,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                         domain, service, {"entity_id": entity_id}, blocking=False
                     )
             except Exception as e:  # noqa: BLE001
-                # Intento 2: servicio universal homeassistant (cubre Tuya/Matter/WiFi)
+                # Intento 2: servicio universal homeassistant (cubre Tuya/Wi-Fi)
                 _LOGGER.warning(
                     "Argus: native call failed for %s (%s), retrying via homeassistant.%s — %s",
                     entity_id, domain, service, e
@@ -1222,29 +1146,54 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         return False
 
     async def async_alarm_disarm(self, code=None) -> None:
-        if self._code and not self._validate_code(code):
+        user_id = await self._get_context_user()
+        limiter = PinAttemptLimiter()
+        limiter_key = f"{self._config_entry.entry_id}_{user_id}"
+
+        if self._code and code and not self._validate_code(code):
             _LOGGER.warning("Argus: Disarm rejected — invalid code")
-            await async_append_audit_log(self.hass, "disarm_rejected", "Invalid code", user="Argus")
+            await async_append_audit_log(
+                self.hass, "disarm_rejected", "Invalid code", user=user_id, entry_id=self._config_entry.entry_id
+            )
+            return
+
+        # Check Duress PIN (PIN de Coacción)
+        adv = self._ui_config.get("advanced", {})
+        duress_pin = adv.get("duress_pin")
+        if code and duress_pin and verify_pin(code, duress_pin):
+            _LOGGER.warning("ARGUS DURESS: Coercion PIN entered! Executing visual disarm and silent SOS panic.")
+            await async_append_audit_log(
+                self.hass, "duress_pin_triggered", "Coercion PIN entered", user=user_id, severity="critical", entry_id=self._config_entry.entry_id
+            )
+            self._cancel_timers()
+            await self._async_siren(False)
+            self._alarm_state = AlarmControlPanelState.DISARMED
+            self.async_write_ha_state()
+            await self._async_mqtt_publish()
+            await self._async_persist_stable_state("disarm")
+            self.hass.bus.async_fire("argus_state_changed", {
+                "entity_id": self.entity_id, "state": "disarmed", "duress": True, "entry_id": self._config_entry.entry_id
+            })
+            self.hass.async_create_task(self.async_alarm_trigger())
             return
 
         # Find which user code matches
         caller_name = None
         if code:
-            if str(code) == str(self._code):
+            if verify_pin(code, self._code):
                 caller_name = "Master Admin"
             else:
-                adv = self._ui_config.get("advanced", {})
-                if adv.get("guest_code_enabled") and adv.get("guest_code") and str(code) == str(adv["guest_code"]):
+                if adv.get("guest_code_enabled") and adv.get("guest_code") and verify_pin(code, adv["guest_code"]):
                     caller_name = "Invitado"
                 else:
                     users = self._ui_config.get("users", [])
                     for u in users:
-                        if u.get("pin") and str(code) == str(u.get("pin")):
+                        if u.get("pin") and verify_pin(code, u.get("pin")):
                             caller_name = u.get("name")
                             break
 
         if not caller_name:
-            caller_name = await self._get_context_user()
+            caller_name = user_id
 
         self._cancel_timers()
         await self._async_siren(False)
@@ -1259,7 +1208,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         await self._async_mqtt_publish()
         await self._async_persist_stable_state("disarm")
         self.hass.async_create_task(self._evaluate_automations("disarmed"))
-        await async_append_audit_log(self.hass, "disarmed", f"Sistema desarmado por {caller_name}", user=caller_name)
+        self.hass.bus.async_fire("argus_state_changed", {
+            "entity_id": self.entity_id, "state": "disarmed", "user": caller_name, "entry_id": self._config_entry.entry_id
+        })
+        self.hass.bus.async_fire("argus_disarmed", {
+            "entity_id": self.entity_id, "user": caller_name, "entry_id": self._config_entry.entry_id
+        })
+        await async_append_audit_log(self.hass, "disarmed", f"Sistema desarmado por {caller_name}", user=caller_name, entry_id=self._config_entry.entry_id)
         _LOGGER.info("Argus: Disarmed by %s", caller_name)
 
     async def _async_arm(self, target: AlarmControlPanelState, code=None) -> None:
@@ -1433,7 +1388,14 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         await self._async_persist_stable_state("arm")
 
         self.hass.async_create_task(self._evaluate_automations("armed", target=target))
-        await async_append_audit_log(self.hass, "armed", f"Modo: {_MODE_LABELS.get(target.value, target.value)}", user=await self._get_context_user())
+        user_name = await self._get_context_user()
+        self.hass.bus.async_fire("argus_state_changed", {
+            "entity_id": self.entity_id, "state": target.value if hasattr(target, "value") else str(target), "user": user_name, "entry_id": self._config_entry.entry_id
+        })
+        self.hass.bus.async_fire("argus_armed", {
+            "entity_id": self.entity_id, "mode": target.value if hasattr(target, "value") else str(target), "user": user_name, "entry_id": self._config_entry.entry_id
+        })
+        await async_append_audit_log(self.hass, "armed", f"Modo: {_MODE_LABELS.get(target.value if hasattr(target, 'value') else str(target), target)}", user=user_name, entry_id=self._config_entry.entry_id)
         _LOGGER.info("Argus: Armado → %s", target)
 
     async def async_alarm_arm_home(self, code=None) -> None:
@@ -1465,6 +1427,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 self._panic_previous_state = AlarmControlPanelState.DISARMED
             self._panic_active = True
         self._triggered_by = "SOS / manual panic"
+        self.hass.bus.async_fire("argus_panic_activated", {
+            "entity_id": self.entity_id, "user": await self._get_context_user(), "entry_id": self._config_entry.entry_id
+        })
         await self._async_trigger()
 
     async def async_stop_panic(self) -> None:
