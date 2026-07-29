@@ -48,6 +48,16 @@ class TestSecurityHelpers(unittest.TestCase):
         self.assertFalse(security.needs_rehash(security.hash_pin("7391")))
         self.assertFalse(security.needs_rehash(None))
 
+    def test_hash_fallback_without_scrypt(self) -> None:
+        from unittest.mock import patch
+        import types
+        fake_hashlib = types.ModuleType("hashlib")
+        fake_hashlib.pbkdf2_hmac = security.hashlib.pbkdf2_hmac
+        with patch.object(security, "hashlib", fake_hashlib):
+            h = security.hash_pin("7391")
+            self.assertTrue(security.verify_pin("7391", h))
+            self.assertFalse(security.verify_pin("7392", h))
+
 
 if __name__ == "__main__":
     unittest.main()
