@@ -20,12 +20,26 @@ class TestSecurityHelpers(unittest.TestCase):
         self.assertTrue(security.verify_pin("7391", first))
         self.assertFalse(security.verify_pin("7392", first))
 
+    def test_hash_rejects_weak_pin(self) -> None:
+        for weak in ("1234", "0000", "1111"):
+            with self.subTest(pin=weak), self.assertRaises(ValueError):
+                security.hash_pin(weak)
+
     def test_pin_policy(self) -> None:
         for weak in (None, "", "1234", "0000", "12ab", "123", "1234567890123"):
             with self.subTest(pin=weak):
                 self.assertFalse(security.validate_pin(weak))
         self.assertTrue(security.validate_pin("7391"))
         self.assertTrue(security.validate_pin("840275"))
+
+    def test_attempt_limiter(self) -> None:
+        limiter = security.PinAttemptLimiter(max_attempts=2, block_seconds=60)
+        self.assertFalse(limiter.is_blocked("user"))
+        self.assertFalse(limiter.record_failure("user"))
+        self.assertTrue(limiter.record_failure("user"))
+        self.assertTrue(limiter.is_blocked("user"))
+        limiter.reset("user")
+        self.assertFalse(limiter.is_blocked("user"))
 
     def test_legacy_detection(self) -> None:
         self.assertTrue(security.needs_rehash("7391"))

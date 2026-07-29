@@ -2,10 +2,12 @@
 from __future__ import annotations
 
 import base64
+from dataclasses import dataclass
 import hashlib
 import hmac
 import os
 import re
+import time
 
 _PREFIX = "scrypt"
 _PIN_PATTERN = re.compile(r"^\d{4,12}$")
@@ -17,17 +19,16 @@ def validate_pin(pin: str | None) -> bool:
     if not pin or not _PIN_PATTERN.fullmatch(str(pin)):
         return False
     value = str(pin)
-    if value in _COMMON_PINS:
+    if value in _COMMON_PINS or len(set(value)) == 1:
         return False
-    if len(set(value)) == 1:
-        return False
-    ascending = "01234567890123456789"
-    descending = ascending[::-1]
-    return value not in ascending and value not in descending
+    sequences = "01234567890123456789"
+    return value not in sequences and value not in sequences[::-1]
 
 
 def hash_pin(pin: str) -> str:
-    """Return a salted scrypt representation of a PIN."""
+    """Return a salted scrypt representation of a validated PIN."""
+    if not validate_pin(pin):
+        raise ValueError("PIN does not satisfy the Argus security policy")
     salt = os.urandom(16)
     digest = hashlib.scrypt(pin.encode(), salt=salt, n=2**14, r=8, p=1)
     return ":".join(
@@ -36,12 +37,10 @@ def hash_pin(pin: str) -> str:
 
 
 def verify_pin(pin: str | None, stored: str | None) -> bool:
-    """Compare a PIN against a current hash or a legacy plaintext value."""
+    """Compare a PIN against a current hash or legacy plaintext value."""
     if not pin or not stored:
         return False
     if not stored.startswith(f"{_PREFIX}:"):
-        # Legacy support is intentionally comparison-only. Callers should
-        # replace the value with hash_pin(pin) after successful authentication.
         return hmac.compare_digest(str(pin), str(stored))
     try:
         _, raw_salt, raw_digest = stored.split(":", 2)
@@ -56,3 +55,41 @@ def verify_pin(pin: str | None, stored: str | None) -> bool:
 def needs_rehash(stored: str | None) -> bool:
     """Return whether a stored credential still uses the legacy format."""
     return bool(stored) and not str(stored).startswith(f"{_PREFIX}:")
+
+
+@dataclass
+class PinAttemptState:
+    """Failed-attempt state for one authenticated Home Assistant user."""
+
+    failures: int = 0
+    blocked_until: float = 0.0
+
+
+class PinAttemptLimiter:
+    """Bound repeated online PIN attempts using monotonic time."""
+
+    def __init__(self, max_attempts: int = 5, block_seconds: int = 300) -> None:
+        self.max_attempts = max_attempts
+        self.block_seconds = block_seconds
+        self._states: dict[str, PinAttemptState] = {}
+
+    def is_blocked(self, key: str) -> bool:
+        state = self._states.get(key)
+        if not state:
+            return False
+        if state.blocked_until <= time.monotonic():
+            if state.blocked_until:
+                self._states.pop(key, None)
+            return False
+        return True
+
+    def record_failure(self, key: str) -> bool:
+        state = self._states.setdefault(key, PinAttemptState())
+        state.failures += 1
+        if state.failures >= self.max_attempts:
+            state.blocked_until = time.monotonic() + self.block_seconds
+            return True
+        return False
+
+    def reset(self, key: str) -> None:
+        self._states.pop(key, None)
