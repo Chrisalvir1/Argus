@@ -27,9 +27,9 @@ jobs:
           fi
           python -m compileall -q custom_components/argus
           python -m unittest discover -s tests -v
-          node --check custom_components/argus/www/argus-card.js
-          node --check custom_components/argus/www/argus-panel.js
-          node --check custom_components/argus/www/argus-bootstrap.js
+          for file in custom_components/argus/www/*.js; do
+            node --check "$file"
+          done
       - name: Build HACS archive
         run: |
           set -euo pipefail
@@ -38,8 +38,7 @@ jobs:
           cd ../..
           test -s argus.zip
           unzip -t argus.zip
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: argus
           path: argus.zip

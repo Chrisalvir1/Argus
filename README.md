@@ -3,31 +3,30 @@
 
 # Argus Home Hub
 
-**Panel de alarma local-first para Home Assistant**
+**Panel de alarma local-first y modular para Home Assistant**
 
 [![Release](https://img.shields.io/github/v/release/Chrisalvir1/Argus)](https://github.com/Chrisalvir1/Argus/releases)
 [![Validate](https://github.com/Chrisalvir1/Argus/actions/workflows/validate.yml/badge.svg)](https://github.com/Chrisalvir1/Argus/actions/workflows/validate.yml)
 [![HACS](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://hacs.xyz/)
 [![License](https://img.shields.io/github/license/Chrisalvir1/Argus)](LICENSE)
-
 </div>
 
-Argus reúne alarma, sensores, sirenas, auditoría, acceso mediante PIN, notificaciones y una interfaz Liquid Glass en una integración para Home Assistant. El procesamiento principal es local y no requiere un servicio cloud de Argus.
+Argus reúne alarma, sensores, sirenas, auditoría, acceso mediante PIN, notificaciones y una interfaz Liquid Glass en una integración local para Home Assistant.
 
 > [!IMPORTANT]
-> Argus no sustituye una alarma certificada ni garantiza comunicación con servicios de emergencia. Prueba siempre tus sensores, sirenas y métodos de respaldo.
+> Argus no sustituye una alarma certificada ni garantiza comunicación con servicios de emergencia. Prueba sensores, sirenas y respaldos antes de depender del sistema.
 
 ## Funciones
 
 - Modos desarmado, casa, ausente, noche y vacaciones.
 - Retardos de entrada, salida y duración de alarma.
-- Detección de sensores abiertos y bypass controlado.
-- Switch SOS compatible con automatizaciones y exportaciones de Home Assistant.
-- Recuperación del último estado estable después de un reinicio.
-- MQTT opcional para estado y comandos.
-- Auditoría y línea temporal forense local.
-- Panel completo y tarjeta Lovelace compacta.
-- Fondos meteorológicos y soporte multilenguaje.
+- Sensores, bypass controlado, sirenas y SOS.
+- PIN con `scrypt`, política robusta y limitación de intentos.
+- Auditoría estructurada y recuperación del último estado estable.
+- MQTT opcional.
+- Panel completo y tarjeta Lovelace.
+- Medios firmados bajo `.storage` para cargas nuevas.
+- Frontend modular para seguridad, auditoría y medios.
 
 ## Requisitos
 
@@ -37,23 +36,18 @@ Argus reúne alarma, sensores, sirenas, auditoría, acceso mediante PIN, notific
 
 ## Instalación con HACS
 
-1. Abre **HACS → Integraciones**.
-2. Selecciona **Repositorios personalizados**.
-3. Añade `https://github.com/Chrisalvir1/Argus` como **Integración**.
-4. Instala **Argus Home Hub**.
-5. Reinicia Home Assistant.
-6. Abre **Ajustes → Dispositivos y servicios → Añadir integración** y busca **Argus**.
-7. Recarga completamente el navegador para actualizar los recursos del frontend.
+1. Abre **HACS → Integraciones → Repositorios personalizados**.
+2. Añade `https://github.com/Chrisalvir1/Argus` como **Integración**.
+3. Instala Argus, reinicia Home Assistant y añade la integración.
+4. Recarga completamente el navegador.
 
 ## Instalación manual
 
 1. Descarga `argus.zip` desde la última release.
 2. Copia su contenido a `custom_components/argus`.
-3. Reinicia Home Assistant y añade la integración desde la interfaz.
+3. Reinicia Home Assistant y añade la integración.
 
 ## Lovelace
-
-### Tarjeta compacta
 
 ```yaml
 type: custom:argus-card
@@ -61,7 +55,7 @@ entity: alarm_control_panel.argus
 title: Seguridad
 ```
 
-### Panel completo
+Panel completo:
 
 ```yaml
 type: custom:argus-panel
@@ -69,42 +63,32 @@ type: custom:argus-panel
 
 ## Seguridad
 
-- Los PIN se almacenan con `scrypt` y salt aleatorio.
-- Usa un PIN único de 4 a 12 dígitos; evita secuencias y repeticiones.
-- No compartas respaldos o registros sin redactar.
-- Los archivos ubicados en `/config/www` se sirven mediante `/local` y no deben considerarse privados.
-- Reporta vulnerabilidades siguiendo [SECURITY.md](SECURITY.md).
+- Usa un PIN único de 4–12 dígitos.
+- No compartas respaldos, tokens ni URL firmadas.
+- Las cargas nuevas de 1.7 se guardan en `/config/.storage/argus_media`.
+- Los fondos históricos bajo `/local` siguen siendo públicos hasta reemplazarlos.
+- Reporta vulnerabilidades según [SECURITY.md](SECURITY.md).
 
-## Actualización segura
+## Actualización
 
-1. Crea un respaldo de Home Assistant.
+1. Crea un respaldo.
 2. Actualiza desde HACS.
 3. Reinicia Home Assistant.
-4. Recarga el navegador.
-5. Verifica armado, desarmado, sensores, sirena, SOS y notificaciones.
+4. Recarga sin caché.
+5. Verifica armado, desarmado, SOS, PIN, medios y restauración.
 
-## Solución de problemas
-
-- **El panel no cambia:** recarga el navegador sin caché.
-- **La integración no aparece:** confirma que existe `custom_components/argus/manifest.json` y reinicia HA.
-- **Una entidad está unavailable:** revisa el registro de Home Assistant y la configuración de la instancia.
-- **HACS rechaza el repositorio:** confirma que seleccionaste la categoría Integración.
+Para 1.7 consulta [la guía de migración](docs/MIGRATION_1.7.md).
 
 ## Desarrollo
 
 ```bash
 python -m compileall -q custom_components/argus
 python -m unittest discover -s tests -v
-node --check custom_components/argus/www/argus-card.js
-node --check custom_components/argus/www/argus-panel.js
+for file in custom_components/argus/www/*.js; do node --check "$file"; done
 ```
 
-Consulta [CONTRIBUTING.md](CONTRIBUTING.md), la [API de extensiones](docs/EXTENSIONS_API.md) y el [registro de mejoras 1.6.0](docs/CHANGESET_1.6.0.md).
+Consulta [la arquitectura](docs/ARCHITECTURE.md) y [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Licencia
 
 MIT. Consulta [LICENSE](LICENSE).
-
-<div align="center">
-Desarrollado por Christopher Alvir · Costa Rica
-</div>
