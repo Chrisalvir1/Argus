@@ -49,25 +49,21 @@ class ArgusUploadView(HomeAssistantView):
         user = request["hass_user"]
         if not user.is_admin:
             return self.json({"success": False, "error": "Administrator access required"}, status=403)
-
         temporary_path: str | None = None
         try:
             reader = await request.multipart()
             field = await reader.next()
             if not field or field.name != "file" or not field.filename:
                 return self.json({"success": False, "error": "No file field found"}, status=400)
-
             extension = Path(os.path.basename(field.filename)).suffix.lower()
             if extension not in _ALLOWED_MEDIA_EXTENSIONS:
                 return self.json({"success": False, "error": "Unsupported media type"}, status=400)
             if request.content_length and request.content_length > _MAX_UPLOAD_BYTES:
                 return self.json({"success": False, "error": "File exceeds the 50 MB limit"}, status=413)
-
             upload_dir = hass.config.path("www", "argus")
             filename = f"{uuid.uuid4().hex}{extension}"
             target_path = os.path.join(upload_dir, filename)
             temporary_path = await hass.async_add_executor_job(_create_tempfile, upload_dir)
-
             written = 0
             while True:
                 chunk = await field.read_chunk(size=64 * 1024)
@@ -77,7 +73,6 @@ class ArgusUploadView(HomeAssistantView):
                 if written > _MAX_UPLOAD_BYTES:
                     return self.json({"success": False, "error": "File exceeds the 50 MB limit"}, status=413)
                 await hass.async_add_executor_job(_append_chunk, temporary_path, chunk)
-
             if not written:
                 return self.json({"success": False, "error": "Empty file"}, status=400)
             await hass.async_add_executor_job(os.replace, temporary_path, target_path)
@@ -97,24 +92,21 @@ class ArgusUploadView(HomeAssistantView):
 async def async_register_panel(hass: HomeAssistant) -> None:
     """Register sidebar panel, static assets and upload view once."""
     hass.data.setdefault(DOMAIN, {})
-
     if not hass.data[DOMAIN].get(_UPLOAD_VIEW_REGISTERED_KEY):
         hass.http.register_view(ArgusUploadView())
         hass.data[DOMAIN][_UPLOAD_VIEW_REGISTERED_KEY] = True
-
     if not hass.data[DOMAIN].get(_STATIC_REGISTERED_KEY):
         www_path = Path(__file__).parent / "www"
-        await hass.http.async_register_static_paths(
-            [StaticPathConfig(f"/api/{DOMAIN}_static", str(www_path), cache_headers=True)]
-        )
+        await hass.http.async_register_static_paths([
+            StaticPathConfig(f"/api/{DOMAIN}_static", str(www_path), cache_headers=True)
+        ])
         hass.data[DOMAIN][_STATIC_REGISTERED_KEY] = True
-
     if not hass.data[DOMAIN].get(_PANEL_REGISTERED_KEY):
         await panel_custom.async_register_panel(
             hass,
             webcomponent_name="argus-panel",
             frontend_url_path=DOMAIN,
-            module_url=f"/api/{DOMAIN}_static/argus-panel.js?v={VERSION}",
+            module_url=f"/api/{DOMAIN}_static/argus-bootstrap.js?v={VERSION}",
             sidebar_title="Argus Home Hub",
             sidebar_icon="mdi:shield-lock-outline",
             require_admin=True,
