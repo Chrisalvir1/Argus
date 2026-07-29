@@ -1134,7 +1134,7 @@ _tmpl.innerHTML = `
   .entry-content{position:relative;z-index:2;flex:1;padding:20px 140px 20px 20px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.2) 0%, transparent 60%)}
 
   /* Sensor column */
-  .sensor-column{position:absolute;right:0;top:0;bottom:0;width:152px;z-index:4;display:flex;flex-direction:column;gap:7px;align-items:flex-end;justify-content:center;padding:12px 12px 12px 0;overflow:hidden;pointer-events:none}
+  .sensor-column{position:absolute;right:0;top:0;bottom:0;width:auto;max-width:40%;z-index:4;display:flex;flex-direction:column;gap:7px;align-items:flex-end;justify-content:center;padding:12px 12px 12px 0;pointer-events:none}
   .sensor-chip{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:16px;font-size:10px;font-weight:800;letter-spacing:.2px;max-width:148px;backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 7px 18px rgba(0,0,0,.24);transition:transform .2s,box-shadow .2s}
   .sensor-chip-text{display:flex;flex-direction:column;min-width:0;flex:1}
   .sensor-chip-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -1184,8 +1184,8 @@ _tmpl.innerHTML = `
   .ios-fullscreen .liquid-btn { padding: 24px 32px !important; font-size: 20px !important; border-radius: 28px !important; gap: 24px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.4) !important; }
   .ios-fullscreen .liquid-btn i { font-size: 28px !important; }
   .ios-fullscreen .hud { top: 60px !important; right: 60px !important; scale: 1.4; transform-origin: top right; }
-  .ios-fullscreen .sensor-column { width: 220px !important; padding-right: 60px !important; }
-  .ios-fullscreen .sensor-chip { font-size: 16px !important; padding: 10px 20px !important; max-width: 210px !important; }
+  .ios-fullscreen .sensor-column { max-width: 45% !important; padding-right: 60px !important; }
+  .ios-fullscreen .sensor-chip { font-size: 14px !important; padding: 10px 16px !important; max-width: 260px !important; }
 
   .entry-icon{display:flex;justify-content:center;align-items:center;perspective:1000px;min-height:160px}
   .entry-icon svg{width:100%;height:auto;max-width:280px;filter:drop-shadow(0 0 25px rgba(255,255,255,0.12));animation:float-icon 5s ease-in-out infinite;transition:max-width 0.4s ease}
@@ -1234,8 +1234,8 @@ _tmpl.innerHTML = `
     .ios-fullscreen .liquid-stack .btn-sos{min-height:46px!important}
     .ios-fullscreen .entry-icon svg{max-width:min(42vw,300px)!important}
     .ios-fullscreen .hud{top:10px!important;right:18px!important;scale:1!important}
-    .ios-fullscreen .sensor-column{width:150px!important;padding-right:16px!important;gap:5px!important}
-    .ios-fullscreen .sensor-chip{max-width:145px!important;padding:6px 8px!important;font-size:9px!important}
+    .ios-fullscreen .sensor-column{max-width: 40% !important;padding-right:16px!important;gap:5px!important}
+    .ios-fullscreen .sensor-chip{max-width:180px!important;padding:6px 8px!important;font-size:10px!important}
   }
 
   .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
