@@ -3064,7 +3064,7 @@ class ArgusPanel extends HTMLElement {
       console.warn('Argus audit log refresh failed; using dashboard data.', err);
     });
     this._send('argus/get_forensic_timeline', {limit:200}).then(result => {
-      this._forensicTimeline = result?.events || [];
+      this._forensicTimeline = result?.timeline || [];
       this._renderActivityLog();
     }).catch(() => { this._forensicTimeline = []; });
     this._notifTargets = dashboard.ui?.notif_targets || [];
