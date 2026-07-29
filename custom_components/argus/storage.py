@@ -1,8 +1,9 @@
-"""Local UI storage helpers for Argus."""
+"""Atomic local storage helpers for Argus."""
 from __future__ import annotations
 
-import base64
 import asyncio
+import base64
+import copy
 import datetime
 import os
 import re
@@ -11,256 +12,244 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.storage import Store
 
 from .const import DOMAIN
+from .security import hash_pin, validate_pin
 
+# Keep version 1 so existing Home Assistant Store data loads without a custom
+# migration callback. Shape migrations are handled by _merge_defaults.
 _STORAGE_VERSION = 1
 _STORAGE_KEY = f"{DOMAIN}.ui"
-AUDIT_LOG_MAX = 200
+AUDIT_LOG_MAX = 500
 _LOCK_KEY = f"{DOMAIN}_storage_lock"
+_MAX_MEDIA_BYTES = 50 * 1024 * 1024
 
 
 def _storage_lock(hass: HomeAssistant) -> asyncio.Lock:
-    """Return the single lock used for all read-modify-write storage operations."""
     return hass.data.setdefault(_LOCK_KEY, asyncio.Lock())
+
+
+def _store(hass: HomeAssistant) -> Store:
+    return Store(hass, _STORAGE_VERSION, _STORAGE_KEY)
 
 
 def _default_payload() -> dict:
     return {
-        "zones": [],
-        "modes": {
-            "home": {},
-            "away": {},
-            "night": {},
-            "vacation": {},
-        },
-        "dashboard": {
-            "layout": "grid",
-            "dense": False,
-        },
-        "audit_log": [],
-        "advanced": {
-            "guest_code": None,
-            "guest_code_enabled": False,
-        },
-        "automations": [],
-        "notif_targets": [],
-        "tts_targets": [],
-        "emergency_number": "911",
-        "panic_outputs": [],
-        "users": [],
-        "home_name": "",
-        "background_mode": "weather",
-        "background_images": [],
-        "temperature_source": "auto",
-        "weather_source": "auto",
-        # Safety features are deliberately opt-in.  A single sensor must keep
-        # its normal immediate behaviour until the administrator enables the
-        # confirmation policy for this installation.
-        "intelligent_confirmation": {
-            "enabled": False,
-            "window_seconds": 15,
-            "required_signals": 2,
-        },
-        "state_schedule": [],
-        # Runtime data is kept separately from UI preferences so an Argus
-        # restart can recover the *last committed* state without replaying a
-        # timer or an outdated scheduled action.
-        "runtime": {"alarm_states": {}},
-        "panel_bg_file": "",
-        "panel_bg_sound": False,
-        "hub_bg_mode": "none",
-        "hub_bg_file": "",
-        "hub_bg_sound": False,
+        "zones": [], "modes": {"home": {}, "away": {}, "night": {}, "vacation": {}},
+        "dashboard": {"layout": "grid", "dense": False}, "audit_log": [],
+        "advanced": {"guest_code": None, "guest_code_enabled": False},
+        "automations": [], "notif_targets": [], "tts_targets": [],
+        "emergency_number": "911", "panic_outputs": [], "users": [],
+        "home_name": "", "background_mode": "weather", "background_images": [],
+        "temperature_source": "auto", "weather_source": "auto",
+        "intelligent_confirmation": {"enabled": False, "window_seconds": 15, "required_signals": 2},
+        "state_schedule": [], "runtime": {"alarm_states": {}},
+        "panel_bg_file": "", "panel_bg_sound": False,
+        "hub_bg_mode": "none", "hub_bg_file": "", "hub_bg_sound": False,
     }
 
 
-def _migrate_base64_file(hass: HomeAssistant, value: str, prefix: str) -> str:
-    """Migrate a base64 string from config to a physical file and return the /local URL."""
-    if not value or not isinstance(value, str) or not value.startswith("data:"):
-        return value
+def _merge_defaults(data: object) -> dict:
+    result = _default_payload()
+    if isinstance(data, dict):
+        result.update(copy.deepcopy(data))
+    if not isinstance(result.get("runtime"), dict):
+        result["runtime"] = {"alarm_states": {}}
+    result["runtime"].setdefault("alarm_states", {})
+    return result
 
-    try:
-        # Extract extension from data URI e.g. "data:image/png;base64,..."
-        match = re.match(r"^data:([^;]+);base64,", value)
-        if not match:
-            return value
-        
-        mime_type = match.group(1)
-        ext = "bin"
-        if "image/png" in mime_type:
-            ext = "png"
-        elif "image/jpeg" in mime_type or "image/jpg" in mime_type:
-            ext = "jpg"
-        elif "image/gif" in mime_type:
-            ext = "gif"
-        elif "video/mp4" in mime_type:
-            ext = "mp4"
-        elif "video/webm" in mime_type:
-            ext = "webm"
-        elif "image/webp" in mime_type:
-            ext = "webp"
-            
-        _, encoded = value.split(",", 1)
-        file_data = base64.b64decode(encoded)
-        
-        filename = f"{prefix}_migrated.{ext}"
-        upload_dir = hass.config.path("www", "argus")
-        os.makedirs(upload_dir, exist_ok=True)
-        target_path = os.path.join(upload_dir, filename)
-        
-        with open(target_path, "wb") as f:
-            f.write(file_data)
-            
-        return f"/local/argus/{filename}"
-    except Exception:
+
+def _migrate_base64_file(hass: HomeAssistant, value: str, prefix: str) -> str:
+    if not isinstance(value, str) or not value.startswith("data:"):
         return value
+    match = re.match(r"^data:([^;]+);base64,", value)
+    extensions = {
+        "image/png": "png", "image/jpeg": "jpg", "image/jpg": "jpg",
+        "image/gif": "gif", "image/webp": "webp",
+        "video/mp4": "mp4", "video/webm": "webm",
+    }
+    extension = extensions.get(match.group(1)) if match else None
+    if not extension:
+        return ""
+    try:
+        encoded = value.split(",", 1)[1]
+        if len(encoded) > (_MAX_MEDIA_BYTES * 4 // 3) + 1024:
+            return ""
+        content = base64.b64decode(encoded, validate=True)
+        if len(content) > _MAX_MEDIA_BYTES:
+            return ""
+        directory = hass.config.path("www", "argus")
+        os.makedirs(directory, exist_ok=True)
+        target = os.path.join(directory, f"{prefix}_migrated.{extension}")
+        temporary = f"{target}.tmp"
+        with open(temporary, "wb") as handle:
+            handle.write(content)
+        os.replace(temporary, target)
+        return f"/local/argus/{os.path.basename(target)}"
+    except (ValueError, OSError):
+        return ""
 
 
 async def async_load_ui_data(hass: HomeAssistant) -> dict:
-    """Load saved Argus UI data from HA storage and migrate legacy Base64 files."""
-    store = Store(hass, _STORAGE_VERSION, _STORAGE_KEY)
-    data = await store.async_load()
-    if not data:
-        return _default_payload()
-    # Ensure new keys exist in old storage data
-    data.setdefault("audit_log", [])
-    data.setdefault("advanced", {"guest_code": None, "guest_code_enabled": False})
-    data.setdefault("automations", [])
-    data.setdefault("home_name", "")
-    data.setdefault("background_mode", "weather")
-    data.setdefault("background_images", [])
-    data.setdefault("temperature_source", "auto")
-    data.setdefault("weather_source", "auto")
-    data.setdefault("intelligent_confirmation", {
-        "enabled": False, "window_seconds": 15, "required_signals": 2,
-    })
-    data.setdefault("state_schedule", [])
-    data.setdefault("runtime", {"alarm_states": {}})
-    data["runtime"].setdefault("alarm_states", {})
-    data.setdefault("panel_bg_file", "")
-    data.setdefault("panel_bg_sound", False)
-    data.setdefault("hub_bg_mode", "none")
-    data.setdefault("hub_bg_file", "")
-    data.setdefault("hub_bg_sound", False)
-
-    # Legacy Base64 to physical files migration
-    needs_save = False
-
-    panel_bg = data.get("panel_bg_file", "")
-    if isinstance(panel_bg, str) and panel_bg.startswith("data:"):
-        def _mig1():
-            return _migrate_base64_file(hass, panel_bg, "panel_bg")
-        data["panel_bg_file"] = await hass.async_add_executor_job(_mig1)
-        needs_save = True
-
-    hub_bg = data.get("hub_bg_file", "")
-    if isinstance(hub_bg, str) and hub_bg.startswith("data:"):
-        def _mig2():
-            return _migrate_base64_file(hass, hub_bg, "hub_bg")
-        data["hub_bg_file"] = await hass.async_add_executor_job(_mig2)
-        needs_save = True
-
-    bg_images = data.get("background_images", [])
-    if isinstance(bg_images, list):
-        new_images = []
-        changed = False
-        for idx, img in enumerate(bg_images):
-            if isinstance(img, str) and img.startswith("data:"):
-                def _mig_img(i=idx, val=img):
-                    return _migrate_base64_file(hass, val, f"bg_image_{i}")
-                new_img = await hass.async_add_executor_job(_mig_img)
-                new_images.append(new_img)
+    store = _store(hass)
+    raw = await store.async_load()
+    data = _merge_defaults(raw)
+    changed = raw != data
+    for field, prefix in (("panel_bg_file", "panel_bg"), ("hub_bg_file", "hub_bg")):
+        value = data.get(field, "")
+        if isinstance(value, str) and value.startswith("data:"):
+            data[field] = await hass.async_add_executor_job(_migrate_base64_file, hass, value, prefix)
+            changed = True
+    images = data.get("background_images", [])
+    if isinstance(images, list):
+        migrated = []
+        for index, value in enumerate(images):
+            if isinstance(value, str) and value.startswith("data:"):
+                value = await hass.async_add_executor_job(_migrate_base64_file, hass, value, f"bg_image_{index}")
                 changed = True
-            else:
-                new_images.append(img)
-        if changed:
-            data["background_images"] = new_images
-            needs_save = True
-
-    if needs_save:
+            if value:
+                migrated.append(value)
+        data["background_images"] = migrated
+    if changed:
         await store.async_save(data)
-
     return data
 
 
-async def async_save_ui_data(hass: HomeAssistant, data: dict) -> dict:
-    """Persist Argus UI data to HA storage."""
+def _preserve_redacted_user_pins(current: object, incoming: object) -> list[dict]:
+    """Keep stored hashes when the browser sends redacted user objects."""
+    if not isinstance(incoming, list):
+        raise ValueError("users must be a list")
+    current_by_name = {
+        str(item.get("name")): item for item in (current if isinstance(current, list) else [])
+        if isinstance(item, dict) and item.get("name")
+    }
+    merged = []
+    for item in incoming:
+        if not isinstance(item, dict):
+            raise ValueError("every user must be an object")
+        user = copy.deepcopy(item)
+        if not user.get("pin"):
+            previous = current_by_name.get(str(user.get("name")))
+            if previous and previous.get("pin"):
+                user["pin"] = previous["pin"]
+        merged.append(user)
+    return merged
+
+
+async def async_save_ui_data(hass: HomeAssistant, updates: dict) -> dict:
     async with _storage_lock(hass):
-        store = Store(hass, _STORAGE_VERSION, _STORAGE_KEY)
         current = await async_load_ui_data(hass)
-        current.update(data or {})
-        await store.async_save(current)
+        safe_updates = copy.deepcopy(updates or {})
+        if "users" in safe_updates:
+            safe_updates["users"] = _preserve_redacted_user_pins(
+                current.get("users", []), safe_updates["users"]
+            )
+        current.update(safe_updates)
+        await _store(hass).async_save(current)
         return current
 
 
-async def async_append_audit_log(
-    hass: HomeAssistant, action: str, detail: str = "", user: str = "Argus"
-) -> None:
-    """Append an event to the Argus audit log (max 200 entries, newest first)."""
+def _sanitize_users(users: object) -> list[dict]:
+    if not isinstance(users, list):
+        raise ValueError("users must be a list")
+    result = []
+    for item in users:
+        if not isinstance(item, dict):
+            raise ValueError("every user must be an object")
+        user = copy.deepcopy(item)
+        pin = user.get("pin")
+        if pin and not str(pin).startswith("scrypt:"):
+            if not validate_pin(str(pin)):
+                raise ValueError("backup contains an invalid user PIN")
+            user["pin"] = hash_pin(str(pin))
+        result.append(user)
+    return result
+
+
+def _sanitize_restore(payload: object, runtime: dict) -> dict:
+    if not isinstance(payload, dict):
+        raise ValueError("backup must be an object")
+    defaults = _default_payload()
+    restored = copy.deepcopy(defaults)
+    for key in defaults:
+        if key in payload and key not in {"runtime", "audit_log"}:
+            restored[key] = copy.deepcopy(payload[key])
+    restored["runtime"] = copy.deepcopy(runtime)
+    restored["users"] = _sanitize_users(restored.get("users", []))
+    advanced = restored.get("advanced")
+    if not isinstance(advanced, dict):
+        raise ValueError("advanced must be an object")
+    guest = advanced.get("guest_code")
+    if guest and not str(guest).startswith("scrypt:"):
+        if not validate_pin(str(guest)):
+            raise ValueError("backup contains an invalid guest PIN")
+        advanced["guest_code"] = hash_pin(str(guest))
+    return restored
+
+
+async def async_restore_ui_data(hass: HomeAssistant, payload: object, *, actor: str) -> dict:
     async with _storage_lock(hass):
-        store = Store(hass, _STORAGE_VERSION, _STORAGE_KEY)
         current = await async_load_ui_data(hass)
-        log: list = current.get("audit_log", [])
+        restored = _sanitize_restore(payload, current.get("runtime", {}))
+        restored["audit_log"] = [{
+            "ts": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "action": "configuration_restored", "detail": "Portable configuration restored",
+            "user": actor, "severity": "warning", "metadata": {},
+        }]
+        await _store(hass).async_save(restored)
+        return restored
 
-        def norm(s): return str(s or "").lower().replace("ed", "").strip()
 
-        now = datetime.datetime.now(datetime.timezone.utc)
-        if log:
-            latest = log[0]
-            try:
-                latest_ts = datetime.datetime.fromisoformat(latest["ts"].replace("Z", "+00:00"))
-                if (now - latest_ts).total_seconds() < 5.0 and norm(action) == norm(latest.get("action")):
-                    if user == "Argus" and latest.get("user") != "Argus":
-                        return
-                    if user != "Argus" and latest.get("user") == "Argus":
-                        log.pop(0)
-            except (KeyError, TypeError, ValueError):
-                pass
-
-        entry = {
-            "ts": now.isoformat(), "action": action, "detail": detail, "user": user,
-        }
-        log.insert(0, entry)
+async def async_append_audit_log(
+    hass: HomeAssistant, action: str, detail: str = "", user: str = "Argus",
+    *, severity: str = "info", metadata: dict | None = None,
+) -> None:
+    async with _storage_lock(hass):
+        current = await async_load_ui_data(hass)
+        log = current.get("audit_log", [])
+        if not isinstance(log, list):
+            log = []
+        log.insert(0, {
+            "ts": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "action": str(action)[:64], "detail": str(detail)[:1000],
+            "user": str(user)[:128],
+            "severity": severity if severity in {"info", "warning", "critical"} else "info",
+            "metadata": copy.deepcopy(metadata or {}),
+        })
         current["audit_log"] = log[:AUDIT_LOG_MAX]
-        await store.async_save(current)
+        await _store(hass).async_save(current)
+
+
+async def async_clear_audit_log(hass: HomeAssistant, *, actor: str) -> None:
+    async with _storage_lock(hass):
+        current = await async_load_ui_data(hass)
+        count = len(current.get("audit_log", []))
+        current["audit_log"] = [{
+            "ts": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "action": "audit_log_cleared", "detail": f"Cleared {count} prior events",
+            "user": actor, "severity": "warning", "metadata": {"prior_count": count},
+        }]
+        await _store(hass).async_save(current)
 
 
 async def async_get_audit_log(hass: HomeAssistant) -> list:
-    """Return the audit log list."""
-    data = await async_load_ui_data(hass)
-    return data.get("audit_log", [])
+    log = (await async_load_ui_data(hass)).get("audit_log", [])
+    return log if isinstance(log, list) else []
 
 
 async def async_save_alarm_runtime_state(
     hass: HomeAssistant, entry_id: str, state: str, *, source: str
 ) -> None:
-    """Persist a completed alarm state for local-first recovery.
-
-    Transitional states (arming/pending/triggered) are intentionally never
-    saved here: after power or network recovery they must not resume a stale
-    countdown or a siren.  Home Assistant's entity restore remains a fallback
-    for older installs.
-    """
-    stable_states = {
-        "disarmed", "armed_home", "armed_away", "armed_night", "armed_vacation",
-    }
-    if state not in stable_states:
+    if state not in {"disarmed", "armed_home", "armed_away", "armed_night", "armed_vacation"}:
         return
     async with _storage_lock(hass):
-        store = Store(hass, _STORAGE_VERSION, _STORAGE_KEY)
         current = await async_load_ui_data(hass)
-        runtime = current.setdefault("runtime", {})
-        states = runtime.setdefault("alarm_states", {})
-        states[entry_id] = {
+        current.setdefault("runtime", {}).setdefault("alarm_states", {})[entry_id] = {
             "state": state,
             "updated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-            "source": source,
+            "source": str(source)[:64],
         }
-        await store.async_save(current)
+        await _store(hass).async_save(current)
 
 
 async def async_get_alarm_runtime_state(hass: HomeAssistant, entry_id: str) -> dict:
-    """Return the last locally committed state for one Argus instance."""
-    data = await async_load_ui_data(hass)
-    runtime = data.get("runtime", {})
-    state = runtime.get("alarm_states", {}).get(entry_id, {})
+    state = (await async_load_ui_data(hass)).get("runtime", {}).get("alarm_states", {}).get(entry_id, {})
     return state if isinstance(state, dict) else {}
