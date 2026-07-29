@@ -8,6 +8,9 @@ from homeassistant.components import websocket_api
 
 from .media import async_get_media_manager
 
+_MAX_UPLOAD_BYTES = 50 * 1024 * 1024
+_MAX_ENCODED_BYTES = (_MAX_UPLOAD_BYTES * 4 // 3) + 1024
+
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/upload_file",
@@ -18,6 +21,9 @@ from .media import async_get_media_manager
 async def ws_upload(hass, connection, msg) -> None:
     try:
         encoded = msg["data"].split(",", 1)[-1]
+        if len(encoded) > _MAX_ENCODED_BYTES:
+            connection.send_error(msg["id"], "file_too_large", "File exceeds the 50 MB limit")
+            return
         content = base64.b64decode(encoded, validate=True)
         descriptor = await (await async_get_media_manager(hass)).async_save_bytes(
             msg["filename"], content
