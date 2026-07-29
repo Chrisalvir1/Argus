@@ -1135,10 +1135,11 @@ _tmpl.innerHTML = `
 
   /* Sensor column */
   .sensor-column{position:absolute;right:0;top:0;bottom:0;width:152px;z-index:4;display:flex;flex-direction:column;gap:7px;align-items:flex-end;justify-content:center;padding:12px 12px 12px 0;overflow:hidden;pointer-events:none}
-  .sensor-chip{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;column-gap:6px;padding:7px 10px;border-radius:16px;font-size:10px;font-weight:800;letter-spacing:.2px;max-width:148px;backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 7px 18px rgba(0,0,0,.24);transition:transform .2s,box-shadow .2s}
+  .sensor-chip{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:16px;font-size:10px;font-weight:800;letter-spacing:.2px;max-width:148px;backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 7px 18px rgba(0,0,0,.24);transition:transform .2s,box-shadow .2s}
+  .sensor-chip-text{display:flex;flex-direction:column;min-width:0;flex:1}
   .sensor-chip-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .sensor-chip-state{grid-column:2;font-size:8px;letter-spacing:.08em;text-transform:uppercase;opacity:.82;margin-top:2px}
-  .sensor-chip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;grid-row:span 2}
+  .sensor-chip-state{font-size:8px;letter-spacing:.08em;text-transform:uppercase;opacity:.82;margin-top:2px}
+  .sensor-chip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
   .sensor-chip-battery{grid-column:1 / -1;margin-top:5px;padding-top:5px;border-top:1px solid currentColor;font-size:9px;line-height:1;opacity:.9}
   .sensor-chip--open{background:linear-gradient(135deg,rgba(255,149,0,.9),rgba(255,96,0,.64));color:#fff}
   .sensor-chip--open .sensor-chip-dot{background:#fff;box-shadow:0 0 8px rgba(255,255,255,.95)}
@@ -3262,7 +3263,8 @@ class ArgusPanel extends HTMLElement {
     const states = this._hass.states;
     const lowBatteries = Object.values(states).filter((st) => {
       const isBattery = st.entity_id?.endsWith('_battery') || st.attributes?.device_class === 'battery';
-      if (!isBattery || st.state === 'unknown' || st.state === 'unavailable') return false;
+      const isMains = /dimmer|switch|light|plug|outlet/i.test(st.entity_id) || /dimmer|switch|light|plug|outlet/i.test(st.attributes?.friendly_name || '');
+      if (!isBattery || isMains || st.state === 'unknown' || st.state === 'unavailable') return false;
       const level = Number(st.state);
       return !Number.isNaN(level) && level <= 20;
     });
@@ -3560,8 +3562,10 @@ class ArgusPanel extends HTMLElement {
                   const batteryClass = battery !== null && battery <= 20 ? ' low' : '';
                   return `<div class="sensor-chip ${isOpen ? 'sensor-chip--open' + (triggered ? ' sensor-chip--triggered' : '') : 'sensor-chip--closed'}">
                     <span class="sensor-chip-dot"></span>
-                    <span class="sensor-chip-name">${escapeHtml(shortName)}</span>
-                    <span class="sensor-chip-state">${escapeHtml(isOpen ? t('status_open') : t('status_closed'))}</span>
+                    <div class="sensor-chip-text">
+                      <span class="sensor-chip-name">${escapeHtml(shortName)}</span>
+                      <span class="sensor-chip-state">${escapeHtml(isOpen ? t('status_open') : t('status_closed'))}</span>
+                    </div>
                     ${battery !== null ? `<span class="sensor-chip-battery${batteryClass}">🔋 ${battery}%</span>` : ''}
                   </div>`;
                 }).join('')}

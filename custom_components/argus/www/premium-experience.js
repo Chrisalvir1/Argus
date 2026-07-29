@@ -33,7 +33,7 @@ const CSS = `
 `;
 
 const VERTEX = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
-const FRAGMENT = `precision mediump float;uniform vec2 r;uniform float t,m,n,s,e,phase;
+const FRAGMENT = `precision highp float;uniform vec2 r;uniform float t,m,n,s,e,phase;
 float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);float a=h(i),b=h(i+vec2(1.,0.)),c=h(i+vec2(0.,1.)),d=h(i+vec2(1.,1.));return mix(mix(a,b,f.x),mix(c,d,f.x),f.y);}
 float disk(vec2 u,vec2 c,float z,float a){return smoothstep(z,z-.008,length((u-c)*vec2(a,1.)));}

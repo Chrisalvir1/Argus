@@ -1263,6 +1263,16 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         if self._alarm_state == target:
             return
 
+        # STRICT AWAY/VACATION LOCK:
+        # Prevent automations or accidental clicks from lowering the security state from Away/Vacation.
+        # To exit Away/Vacation, the user MUST disarm first.
+        if self._alarm_state in (AlarmControlPanelState.ARMED_AWAY, AlarmControlPanelState.ARMED_VACATION) and target in ARMED_STATES:
+            _LOGGER.warning(
+                "Argus: Blocked transition from %s to %s. System must be disarmed first.",
+                self._alarm_state, target
+            )
+            return
+
         if self._code_arm_required and not restoring_panic and not self._validate_code(code):
             _LOGGER.warning("Argus: Arm rejected — invalid code")
             await async_append_audit_log(self.hass, "arm_rejected", f"Invalid code for {target.value}", user="Argus")
