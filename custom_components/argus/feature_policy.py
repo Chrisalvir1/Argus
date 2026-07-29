@@ -95,6 +95,12 @@ async def evaluate_local_automations(panel, event_type: str, **kwargs) -> None:
                     await panel.hass.services.async_call(
                         domain, service, copy.deepcopy(action.get("data", {})), blocking=False
                     )
+                elif action_type == "trigger_alarm":
+                    rule_name = str(raw_rule.get("name") or "Local rule")
+                    panel._triggered_by = f"Rule: {rule_name}"  # noqa: SLF001
+                    if sensor_id:
+                        panel._triggered_by += f" (Sensor: {sensor_id})"  # noqa: SLF001
+                    await panel._async_trigger()  # noqa: SLF001
                 else:
                     continue
                 await async_append_audit_log(
