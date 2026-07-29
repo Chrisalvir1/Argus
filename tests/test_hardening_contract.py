@@ -1,4 +1,4 @@
-"""Regression contracts for the Argus 1.6 security hardening."""
+"""Regression contracts for Argus security hardening."""
 from pathlib import Path
 import unittest
 
@@ -34,11 +34,13 @@ class TestHardeningContract(unittest.TestCase):
         self.assertIn("_preserve_redacted_user_pins", source)
         self.assertIn('_STORAGE_VERSION = 1', source)
 
-    def test_frontend_bootstrap_matches_hardened_contract(self) -> None:
+    def test_modular_frontend_matches_hardened_contract(self) -> None:
         bootstrap = (COMPONENT / "www" / "argus-bootstrap.js").read_text(encoding="utf-8")
+        security = (COMPONENT / "www" / "security-client.js").read_text(encoding="utf-8")
         panel = (COMPONENT / "panel.py").read_text(encoding="utf-8")
-        self.assertIn("entry_id: entry.entry_id", bootstrap)
-        self.assertNotIn("force_reset", bootstrap)
+        self.assertIn("entry_id: entry.entry_id", security)
+        self.assertNotIn("force_reset", security)
+        self.assertIn("applySecurityClient", bootstrap)
         self.assertIn("argus-bootstrap.js", panel)
         self.assertIn("cache_headers=True", panel)
 
