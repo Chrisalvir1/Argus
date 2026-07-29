@@ -35,7 +35,9 @@ from .security import hash_pin, validate_pin
 class ArgusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Create a local Argus alarm instance."""
 
-    VERSION = 3
+    # Keep v2 until a real async_migrate_entry implementation is required.
+    # Bumping this value alone can prevent existing config entries from loading.
+    VERSION = 2
 
     async def async_step_user(self, user_input=None):
         if user_input is not None:
