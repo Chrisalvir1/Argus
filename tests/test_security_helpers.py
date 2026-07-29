@@ -3,12 +3,14 @@ from __future__ import annotations
 
 import importlib.util
 from pathlib import Path
+import sys
 import unittest
 
 MODULE = Path(__file__).parents[1] / "custom_components" / "argus" / "security.py"
 SPEC = importlib.util.spec_from_file_location("argus_security", MODULE)
-security = importlib.util.module_from_spec(SPEC)
 assert SPEC and SPEC.loader
+security = importlib.util.module_from_spec(SPEC)
+sys.modules[SPEC.name] = security
 SPEC.loader.exec_module(security)
 
 
