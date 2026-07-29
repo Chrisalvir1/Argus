@@ -2,6 +2,12 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [1.8.3] - 2026-07-29
+
+### Fixed
+- Forzado el refresco de caché del navegador web mediante query strings (`?v=1.8.3`) en las importaciones de `argus-bootstrap.js` para asegurar que las correcciones visuales de la versión 1.8.1 (texto de estación "summer", shader WebGL y badge de batería) se apliquen automáticamente sin requerir borrar la caché manualmente.
+- Corregida la relación de aspecto del sol y la luna en el shader WebGL para que mantengan una forma circular perfecta independientemente de la resolución de la pantalla.
+
 ## [1.8.2] - 2026-07-29
 
 ### Fixed
