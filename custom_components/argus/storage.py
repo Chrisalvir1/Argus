@@ -36,7 +36,7 @@ def _default_payload() -> dict:
         "zones": [], "modes": {"home": {}, "away": {}, "night": {}, "vacation": {}},
         "dashboard": {"layout": "grid", "dense": False}, "audit_log": [],
         "advanced": {"guest_code": None, "guest_code_enabled": False},
-        "automations": [], "notif_targets": [], "tts_targets": [],
+        "automations": [], "notif_targets": [],
         "emergency_number": "911", "panic_outputs": [], "users": [],
         "home_name": "", "background_mode": "weather", "background_images": [],
         "temperature_source": "auto", "weather_source": "auto",
@@ -51,6 +51,7 @@ def _merge_defaults(data: object) -> dict:
     result = _default_payload()
     if isinstance(data, dict):
         result.update(copy.deepcopy(data))
+    result.pop("tts_targets", None)
     if not isinstance(result.get("runtime"), dict):
         result["runtime"] = {"alarm_states": {}}
     result["runtime"].setdefault("alarm_states", {})

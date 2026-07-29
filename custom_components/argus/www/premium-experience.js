@@ -1,103 +1,79 @@
-const REMOVED_TERMS = /\b(TTS|Matter|Argus\s+AI|Argus\s+Copilot|Copilot|google[_ ]generative[_ ]ai|analyze[_ ]camera)\b/i;
+const WEATHER_MODE = Object.freeze({sunny:0,'clear-night':1,rainy:2,pouring:2,'lightning-rainy':3,lightning:4,snowy:5,fog:6,cloudy:7,partlycloudy:7});
+const SEASONS = ['winter','spring','summer','autumn'];
 
 function seasonFor(hass) {
   const month = new Date().getMonth();
   const latitude = Number(hass?.config?.latitude);
   const adjusted = Number.isFinite(latitude) && latitude < 0 ? (month + 6) % 12 : month;
-  if ([11, 0, 1].includes(adjusted)) return 'winter';
-  if ([2, 3, 4].includes(adjusted)) return 'spring';
-  if ([5, 6, 7].includes(adjusted)) return 'summer';
-  return 'autumn';
+  return SEASONS[Math.floor(((adjusted + 1) % 12) / 3)];
 }
 
 function weatherMode(value, isNight) {
-  const text = String(value || '').toLowerCase();
-  const has = (...terms) => terms.some(term => text.includes(term));
-  if (has('lightning-rainy', 'thunderstorm', 'storm')) return 3;
-  if (has('lightning') && !has('rain', 'pouring')) return 4;
-  if (has('snow', 'snowy')) return 5;
-  if (has('fog', 'mist', 'hazy')) return 6;
-  if (has('rain', 'pouring', 'drizzle', 'shower')) return 2;
-  if (has('cloud', 'overcast', 'partly')) return 7;
-  return isNight ? 1 : 0;
+  const condition = String(value || '').toLowerCase();
+  if (Object.hasOwn(WEATHER_MODE, condition)) return WEATHER_MODE[condition];
+  return isNight ? WEATHER_MODE['clear-night'] : WEATHER_MODE.sunny;
 }
 
-function eclipseMode(panel) {
-  const event = panel._eclipseEvent?.();
-  return event === 'solar' ? 1 : event === 'lunar' ? 2 : 0;
+function moonPhase(hass) {
+  const state = Object.values(hass?.states || {}).find(item => item.entity_id === 'sensor.moon_phase')?.state;
+  const values = ['new_moon','waxing_crescent','first_quarter','waxing_gibbous','full_moon','waning_gibbous','last_quarter','waning_crescent'];
+  const index = values.indexOf(String(state || '').toLowerCase());
+  return index < 0 ? -1 : index / 7;
 }
 
-function scrubRemovedFeatures(root) {
-  if (!root) return;
-  root.querySelectorAll('option').forEach(option => {
-    if (REMOVED_TERMS.test(option.textContent || option.value || '')) option.remove();
-  });
-  root.querySelectorAll('[data-action-type],[data-type],[data-feature]').forEach(node => {
-    const value = `${node.dataset.actionType || ''} ${node.dataset.type || ''} ${node.dataset.feature || ''}`;
-    if (REMOVED_TERMS.test(value)) node.remove();
-  });
-  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-  const nodes = [];
-  while (walker.nextNode()) nodes.push(walker.currentNode);
-  for (const node of nodes) {
-    let value = node.nodeValue || '';
-    value = value.replace(/HomeKit\s*&\s*Matter/gi, 'HomeKit');
-    value = value.replace(/Apple Home\/Matter/gi, 'Apple Home');
-    value = value.replace(/\bMatter\b/gi, '');
-    value = value.replace(/\bArgus\s+(AI|Copilot)\b/gi, 'Argus');
-    value = value.replace(/\bTTS\b/gi, '');
-    node.nodeValue = value.replace(/\s{2,}/g, ' ').trimStart();
-  }
+function eclipseMode(hass) {
+  const event = Object.values(hass?.states || {}).find(item => /eclipse/i.test(item.entity_id || ''))?.state?.toLowerCase();
+  return event === 'solar' || event === 'solar_eclipse' ? 1 : event === 'lunar' || event === 'lunar_eclipse' ? 2 : 0;
 }
 
-const PREMIUM_CSS = `
-:host{--argus-ease:cubic-bezier(.16,1,.3,1);--argus-fast:220ms;--argus-medium:480ms}
-.glass,.entry,.mode-section-card,.user-card,.file-card,.log-item,.automation-card{transform-origin:50% 16%;animation:argusPremiumIn .62s var(--argus-ease) both;will-change:transform,opacity,filter}
-.glass:nth-child(2n),.file-card:nth-child(2n),.sensor-pill:nth-child(2n){animation-delay:45ms}
-.glass:nth-child(3n),.file-card:nth-child(3n),.sensor-pill:nth-child(3n){animation-delay:90ms}
-@keyframes argusPremiumIn{0%{opacity:0;transform:translateY(18px) scale(.975);filter:blur(8px)}100%{opacity:1;transform:none;filter:none}}
-.modal,.modal-overlay,[role=dialog]{animation:argusModalOpen .46s var(--argus-ease) both;backdrop-filter:blur(26px) saturate(1.25)}
-@keyframes argusModalOpen{0%{opacity:0;transform:translateY(24px) scale(.94);filter:blur(10px)}100%{opacity:1;transform:none;filter:none}}
-details::details-content{transition:height .42s var(--argus-ease),opacity .28s ease,content-visibility .42s allow-discrete;overflow:hidden}details[open]::details-content{opacity:1}@starting-style{details[open]::details-content{height:0;opacity:0}}
-button,.liquid-btn,.ghost,.primary{transition:transform var(--argus-fast) var(--argus-ease),box-shadow var(--argus-fast),background var(--argus-fast),border-color var(--argus-fast),filter var(--argus-fast)}
-button:hover,.liquid-btn:hover{transform:translateY(-2px) scale(1.015);filter:brightness(1.08)}button:active,.liquid-btn:active{transform:translateY(1px) scale(.985)}
-.sensor-pill,.sensor-chip{animation:argusSensorIn .5s var(--argus-ease) both;transition:transform .26s var(--argus-ease),box-shadow .26s,border-color .26s,background .26s}
-.sensor-pill:hover,.sensor-chip:hover{transform:translateY(-3px) scale(1.025);box-shadow:0 12px 28px rgba(0,0,0,.24)}
-@keyframes argusSensorIn{0%{opacity:0;transform:translateX(-14px) scale(.94)}100%{opacity:1;transform:none}}
-.argus-saving{position:relative;pointer-events:none;filter:saturate(.75)}.argus-saving::after{content:'';position:absolute;inset:-3px;border-radius:inherit;border:2px solid transparent;border-top-color:#66d9ff;animation:argusSaving .72s linear infinite}.argus-saved{animation:argusSaved .7s var(--argus-ease)}
-@keyframes argusSaving{to{transform:rotate(360deg)}}@keyframes argusSaved{0%{box-shadow:0 0 0 0 rgba(72,255,174,.65)}100%{box-shadow:0 0 0 18px rgba(72,255,174,0)}}
-.argus-cinematic-weather{position:absolute;inset:0;overflow:hidden;background:#050914}.argus-cinematic-weather canvas{width:100%;height:100%;display:block;filter:saturate(1.08) contrast(1.035)}
-.argus-weather-vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 42%,transparent 35%,rgba(2,5,12,.18) 72%,rgba(0,0,0,.48) 100%),linear-gradient(180deg,rgba(255,255,255,.035),transparent 32%,rgba(0,0,0,.14));mix-blend-mode:multiply}
-.argus-season-label{position:absolute;left:18px;bottom:18px;padding:6px 10px;border-radius:999px;background:rgba(5,12,24,.34);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(16px);font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.82)}
-@media(prefers-reduced-motion:reduce){.glass,.entry,.mode-section-card,.user-card,.file-card,.log-item,.sensor-pill,.sensor-chip,.modal,[role=dialog]{animation:none!important;transition:none!important}}
+const CSS = `
+.argus-cinematic-weather{position:absolute;inset:0;overflow:hidden;background:linear-gradient(#204d77,#9bb9cc)}
+.argus-cinematic-weather canvas{width:100%;height:100%;display:block}.argus-weather-vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse,transparent 38%,rgba(0,0,0,.42))}
+.argus-season-label{position:absolute;left:18px;bottom:18px;padding:6px 10px;border-radius:999px;background:#07142199;color:#fff;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+@media(prefers-reduced-motion:reduce){.argus-cinematic-weather{background:#264d6b}}
 `;
 
-const VERTEX = `attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}`;
-const FRAGMENT = `
-precision highp float;uniform vec2 r;uniform float t;uniform float mode;uniform float night;uniform float season;uniform float eclipse;
-float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1)),f.x),f.y);}float fb(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*n(p);p=p*2.03+13.7;a*=.5;}return v;}
-float circle(vec2 uv,vec2 c,float s){return smoothstep(s,s-.008,length(uv-c));}
-void main(){vec2 uv=gl_FragCoord.xy/r.xy;vec2 q=uv;float tm=t*.08;vec3 top=mix(vec3(.12,.42,.72),vec3(.01,.025,.07),night);vec3 bot=mix(vec3(.64,.79,.88),vec3(.035,.08,.16),night);if(mode>1.5){top*=.46;bot*=.62;}if(season<.5)bot+=vec3(.055,.035,.0);else if(season<1.5)bot+=vec3(.0,.045,.02);else if(season>2.5)bot+=vec3(.055,.018,.0);vec3 col=mix(bot,top,smoothstep(0.,1.,uv.y));
-float clouds=fb(vec2(uv.x*3.2+tm,uv.y*2.1));clouds=smoothstep(.48,.77,clouds+sin(uv.x*5.-tm)*.05);if(mode>6.5||mode>1.5)col=mix(col,vec3(.52,.58,.62)*mix(.7,1.,uv.y),clouds*.68);
-if(night>.5){vec2 cell=floor(uv*r/vec2(3.2));float star=step(.996,h(cell));col+=star*(.55+.45*sin(t*2.+h(cell)*20.));}
-vec2 celestial=vec2(.78,.76);float sun=circle(uv,celestial,.055);if(night<.5){col+=sun*vec3(1.2,.82,.28);col+=vec3(1.,.62,.15)*.18/(1.+850.*pow(length(uv-celestial),2.));}else{float moon=circle(uv,celestial,.043);float crater=n(uv*95.);col+=moon*mix(vec3(.55,.58,.62),vec3(1.,.98,.85),crater);}
-if(eclipse>.5&&eclipse<1.5){float corona=.03/(.01+abs(length(uv-celestial)-.055));col+=vec3(1.,.65,.22)*corona*.12;col*=1.-circle(uv,celestial,.052)*.82;}if(eclipse>1.5){col=mix(col,vec3(.55,.11,.09),circle(uv,celestial,.045)*.72);}
-if(mode>1.5&&mode<4.5){vec2 p=uv*vec2(115.,38.);p.y+=t*18.;float lane=h(vec2(floor(p.x),0.));float drop=smoothstep(.94,1.,fract(p.y+lane*17.))*step(.55,lane);col+=drop*vec3(.48,.72,.92)*(mode>2.5?1.25:.78);}
-if(mode>4.5&&mode<5.5){vec2 p=uv*vec2(48.,38.);p.y+=t*1.4;float flake=smoothstep(.94,1.,h(floor(p)+floor(t*.7)));col+=flake*vec3(.92,.96,1.);}
-if(mode>5.5&&mode<6.5){float fog=fb(vec2(uv.x*2.2+tm*.7,uv.y*7.));col=mix(col,vec3(.72,.78,.8),smoothstep(.36,.72,fog)*.58);}
-if(mode>2.5&&mode<4.5){float pulse=pow(max(0.,sin(t*.73+2.4)),95.);col+=pulse*vec3(.72,.82,1.)*.72;float path=.62+sin(uv.y*19.+floor(t*.3))*0.035;float bolt=smoothstep(.012,0.,abs(uv.x-path)) * smoothstep(.82,.28,uv.y)*pulse;col+=bolt*vec3(1.,.97,.82)*4.;}
-float grain=(h(gl_FragCoord.xy+floor(t*12.))-.5)*.018;col+=grain;gl_FragColor=vec4(pow(max(col,0.),vec3(.94)),1.);}`;
+const VERTEX = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+const FRAGMENT = `precision mediump float;uniform vec2 r;uniform float t,m,n,s,e,phase;
+float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}float disk(vec2 u,vec2 c,float z){return smoothstep(z,z-.008,length(u-c));}
+void main(){vec2 u=gl_FragCoord.xy/r;vec3 c=mix(vec3(.11,.38,.66),vec3(.01,.03,.09),n);if(m>1.)c*=.62;if(m>6.)c=mix(c,vec3(.48,.54,.59),.6);if(s<.5)c+=vec3(.03,.03,.08);if(s>2.5)c+=vec3(.07,.02,0.);float cloud=smoothstep(.62,.82,h(floor(u*vec2(22.,9.))+floor(t*.15)));if(m>1.||m>6.)c=mix(c,vec3(.5),cloud*.4);vec2 q=vec2(.78,.76);if(n<.5){c+=disk(u,q,.055)*vec3(1.,.74,.25);}else{float moon=disk(u,q,.043);if(phase>=0.)moon*=smoothstep(-.05,.06,u.x-q.x+(phase-.5)*.075);c+=moon*vec3(.9,.9,.82);c+=step(.997,h(floor(u*r/3.)))*vec3(.7);}if(m>1.&&m<4.){float rain=step(.88,h(floor(vec2(u.x*100.,u.y*38.+t*20.))));c+=rain*vec3(.45,.67,.8);}if(m>4.&&m<5.){float snow=step(.97,h(floor(u*vec2(75.,55.)+t)));c+=snow*vec3(1.);}if(m>5.&&m<7.)c=mix(c,vec3(.72),.32);if(m>2.&&m<5.)c+=pow(max(0.,sin(t*.7)),60.)*vec3(.8);if(e>0.)c=mix(c,e<1.5?vec3(.13,.08,.04):vec3(.4,.05,.05),.55);gl_FragColor=vec4(c,1.);}`;
 
-function compile(gl, type, source) { const shader=gl.createShader(type); gl.shaderSource(shader,source); gl.compileShader(shader); if(!gl.getShaderParameter(shader,gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(shader)); return shader; }
+function shader(gl, type, source) { const value = gl.createShader(type); gl.shaderSource(value, source); gl.compileShader(value); if (!gl.getShaderParameter(value, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(value)); return value; }
+
+function dispose(canvas) {
+  const state = canvas?.__argusWebgl;
+  if (!state) return;
+  cancelAnimationFrame(state.frame);
+  state.observer?.disconnect();
+  document.removeEventListener('visibilitychange', state.visibility);
+  state.gl.deleteBuffer(state.buffer); state.gl.deleteProgram(state.program);
+  state.gl.getExtension('WEBGL_lose_context')?.loseContext();
+  delete canvas.__argusWebgl;
+}
 
 export function applyPremiumExperience(ArgusPanel) {
-  const proto=ArgusPanel?.prototype;if(!proto||proto.__argusPremiumExperience)return;proto.__argusPremiumExperience=true;
-  proto._season=function(){return seasonFor(this._hass);};
-  proto._renderAtmosphere=function(ws,isNight){const mode=weatherMode(ws,isNight),season=seasonFor(this._hass),eclipse=eclipseMode(this);return `<div class="wx argus-cinematic-weather" data-season="${season}"><canvas class="wx-webgl" aria-hidden="true" data-premium="1" data-mode="${mode}" data-night="${isNight?1:0}" data-season="${['winter','spring','summer','autumn'].indexOf(season)}" data-eclipse="${eclipse}"></canvas><div class="argus-weather-vignette"></div><div class="argus-season-label">${season}</div></div>`;};
-  proto._initWeatherWebGL=function(canvas){if(!canvas||canvas.dataset.running==='1')return;const gl=canvas.getContext('webgl',{alpha:false,antialias:true,powerPreference:'high-performance'});if(!gl)return;try{const program=gl.createProgram();gl.attachShader(program,compile(gl,gl.VERTEX_SHADER,VERTEX));gl.attachShader(program,compile(gl,gl.FRAGMENT_SHADER,FRAGMENT));gl.linkProgram(program);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(program));gl.useProgram(program);const buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]),gl.STATIC_DRAW);const loc=gl.getAttribLocation(program,'p');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);const uniforms={r:gl.getUniformLocation(program,'r'),t:gl.getUniformLocation(program,'t'),mode:gl.getUniformLocation(program,'mode'),night:gl.getUniformLocation(program,'night'),season:gl.getUniformLocation(program,'season'),eclipse:gl.getUniformLocation(program,'eclipse')};canvas.dataset.running='1';const start=performance.now(),reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;const draw=now=>{if(!canvas.isConnected)return;const dpr=Math.min(devicePixelRatio||1,2),w=Math.max(1,canvas.clientWidth*dpr|0),h=Math.max(1,canvas.clientHeight*dpr|0);if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;gl.viewport(0,0,w,h);}gl.uniform2f(uniforms.r,w,h);gl.uniform1f(uniforms.t,(now-start)/1000);for(const key of ['mode','night','season','eclipse'])gl.uniform1f(uniforms[key],Number(canvas.dataset[key]||0));gl.drawArrays(gl.TRIANGLES,0,6);if(!reduced)requestAnimationFrame(draw);};requestAnimationFrame(draw);}catch(error){console.error('Argus cinematic WebGL failed',error);}};
-  const originalConnected=proto.connectedCallback;proto.connectedCallback=function(){const result=originalConnected?.call(this);queueMicrotask(()=>{if(this.shadowRoot&&!this.shadowRoot.getElementById('argus-premium-style')){const style=document.createElement('style');style.id='argus-premium-style';style.textContent=PREMIUM_CSS;this.shadowRoot.append(style);}scrubRemovedFeatures(this.shadowRoot);if(!this.__argusScrubber&&this.shadowRoot){this.__argusScrubber=new MutationObserver(()=>scrubRemovedFeatures(this.shadowRoot));this.__argusScrubber.observe(this.shadowRoot,{childList:true,subtree:true});}});return result;};
-  const originalDisconnected=proto.disconnectedCallback;proto.disconnectedCallback=function(){this.__argusScrubber?.disconnect();this.__argusScrubber=null;return originalDisconnected?.call(this);};
-  const originalLoad=proto._load;proto._load=async function(...args){const value=await originalLoad?.apply(this,args);this._ttsTargets=[];scrubRemovedFeatures(this.shadowRoot);return value;};
-  const originalRenderAutomations=proto._renderAutomations;proto._renderAutomations=function(...args){const value=originalRenderAutomations?.apply(this,args);scrubRemovedFeatures(this.shadowRoot);return value;};
-  for(const name of ['_saveMode','_savePin','_saveUser','_saveNotifications','_savePersonalization','_saveStateSchedule','_saveIntelligentConfirmation']){const original=proto[name];if(typeof original!=='function')continue;proto[name]=async function(...args){const button=this.shadowRoot?.activeElement||this.shadowRoot?.querySelector('button.primary');button?.classList.add('argus-saving');try{const result=await original.apply(this,args);button?.classList.add('argus-saved');setTimeout(()=>button?.classList.remove('argus-saved'),800);return result;}finally{button?.classList.remove('argus-saving');}};}
+  const proto = ArgusPanel?.prototype;
+  if (!proto || proto.__argusPremiumExperience) return;
+  proto.__argusPremiumExperience = true;
+  proto._renderAtmosphere = function(condition, isNight) {
+    const season = seasonFor(this._hass), phase = moonPhase(this._hass), eclipse = eclipseMode(this._hass);
+    return `<div class="wx argus-cinematic-weather"><canvas class="wx-webgl" aria-hidden="true" data-mode="${weatherMode(condition,isNight)}" data-night="${isNight?1:0}" data-season="${SEASONS.indexOf(season)}" data-phase="${phase}" data-eclipse="${eclipse}"></canvas><div class="argus-weather-vignette"></div><div class="argus-season-label">${season}</div></div>`;
+  };
+  proto._initWeatherWebGL = function(canvas) {
+    if (!canvas || canvas.__argusWebgl) return;
+    const gl = canvas.getContext('webgl', {alpha:false, antialias:false, powerPreference:'low-power'});
+    if (!gl) return;
+    try {
+      const program = gl.createProgram(), vs = shader(gl,gl.VERTEX_SHADER,VERTEX), fs = shader(gl,gl.FRAGMENT_SHADER,FRAGMENT);
+      gl.attachShader(program,vs);gl.attachShader(program,fs);gl.linkProgram(program);gl.deleteShader(vs);gl.deleteShader(fs);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(program));
+      const buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]),gl.STATIC_DRAW);gl.useProgram(program);const p=gl.getAttribLocation(program,'p');gl.enableVertexAttribArray(p);gl.vertexAttribPointer(p,2,gl.FLOAT,false,0,0);
+      const uniforms=Object.fromEntries(['r','t','m','n','s','e','phase'].map(key=>[key,gl.getUniformLocation(program,key)]));
+      const state={gl,program,buffer,frame:0,visible:true,onscreen:true,visibility:null,observer:null};
+      state.visibility=()=>{state.visible=!document.hidden;}; state.observer=new IntersectionObserver(entries=>{state.onscreen=entries[0]?.isIntersecting??false;},{threshold:0});state.observer.observe(canvas);document.addEventListener('visibilitychange',state.visibility);canvas.__argusWebgl=state;
+      const start=performance.now(),reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const draw=now=>{if(!canvas.isConnected){dispose(canvas);return;}if(state.visible&&state.onscreen){const dpr=Math.min(devicePixelRatio||1,1.5),w=Math.max(1,Math.floor(canvas.clientWidth*dpr)),h=Math.max(1,Math.floor(canvas.clientHeight*dpr));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;gl.viewport(0,0,w,h);}gl.uniform2f(uniforms.r,w,h);gl.uniform1f(uniforms.t,(now-start)/1000);for(const key of ['m','n','s','e','phase'])gl.uniform1f(uniforms[key],Number(canvas.dataset[{m:'mode',n:'night',s:'season',e:'eclipse',phase:'phase'}[key]]||0));gl.drawArrays(gl.TRIANGLES,0,6);}if(!reduced)state.frame=requestAnimationFrame(draw);};state.frame=requestAnimationFrame(draw);
+    } catch (error) { console.warn('Argus weather uses its CSS fallback.', error); dispose(canvas); }
+  };
+  const connected=proto.connectedCallback;proto.connectedCallback=function(){const value=connected?.call(this);queueMicrotask(()=>{if(this.shadowRoot&&!this.shadowRoot.getElementById('argus-premium-style')){const style=document.createElement('style');style.id='argus-premium-style';style.textContent=CSS;this.shadowRoot.append(style);}});return value;};
+  const disconnected=proto.disconnectedCallback;proto.disconnectedCallback=function(){this.shadowRoot?.querySelectorAll('.wx-webgl').forEach(dispose);return disconnected?.call(this);};
 }

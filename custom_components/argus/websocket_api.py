@@ -95,7 +95,7 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
         ws_argus_get_forensic_timeline, ws_argus_clear_audit_log,
         ws_argus_restore_config, ws_argus_save_advanced_config,
         ws_argus_get_advanced_config, ws_argus_save_automations,
-        ws_argus_get_automations, ws_argus_get_tts_engines,
+        ws_argus_get_automations,
         ws_argus_get_media_players, ws_argus_update_master_pin,
         ws_argus_write_log, ws_argus_upload_file, ws_argus_list_files,
         ws_argus_delete_file,
@@ -264,7 +264,6 @@ _SAVE_UI_SCHEMA = {
     vol.Optional("zones"): list,
     vol.Optional("dashboard"): dict,
     vol.Optional("notif_targets"): list,
-    vol.Optional("tts_targets"): list,
     vol.Optional("emergency_number"): vol.All(str, vol.Length(min=1, max=16), vol.Match(r"^[0-9+()\-\s]+$")),
     vol.Optional("panic_outputs"): list,
     vol.Optional("users"): list,
@@ -434,12 +433,6 @@ async def ws_argus_save_automations(hass, connection, msg) -> None:
 @websocket_api.async_response
 async def ws_argus_get_automations(hass, connection, msg) -> None:
     connection.send_result(msg["id"], (await async_load_ui_data(hass)).get("automations", []))
-
-
-@websocket_api.websocket_command({vol.Required("type"): "argus/get_tts_engines"})
-@websocket_api.async_response
-async def ws_argus_get_tts_engines(hass, connection, msg) -> None:
-    connection.send_result(msg["id"], [{"entity_id": state.entity_id, "name": state.name} for state in hass.states.async_all("tts")])
 
 
 @websocket_api.websocket_command({vol.Required("type"): "argus/get_media_players"})

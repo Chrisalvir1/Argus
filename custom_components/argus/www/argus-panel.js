@@ -50,7 +50,7 @@ const TEXTS = {
     admin_only:'Solo administradores pueden modificar esta sección.',
     add_user:'Agregar usuario', username:'Nombre de Usuario', user_pin:'PIN de usuario',
     is_admin:'Administrador', save_user:'Guardar', no_users:'Sin usuarios adicionales configurados.',
-    homekit_title:'🏠 HomeKit & Matter', close:'Cerrar',
+    homekit_title:'🏠 HomeKit', close:'Cerrar',
     search_placeholder:'Buscar por nombre, área o entity_id',
     available:'Disponibles', selected_lbl:'Seleccionadas', clear:'Limpiar', accept:'Aceptar',
     introduce_pin:'Introduce tu PIN', pin_modal_desc:'PIN numérico para desarmar Argus',
@@ -102,7 +102,7 @@ const TEXTS = {
     times_section:'⏱️ Tiempos', arm_time:'Armado (s)', disarm_time:'Retraso de entrada (s)',
     save_config:'GUARDAR CONFIGURACIÓN', never_triggered:'Nunca activada',
     bridge_paired:'Puente configurado',
-    bridge_paired_desc:'El puente <b>{bridge}</b> está configurado en Home Assistant. Home Assistant no permite comprobar desde aquí si fue añadido a una casa de Apple Home/Matter ni conocer su nombre.',
+    bridge_paired_desc:'El puente <b>{bridge}</b> está configurado en Home Assistant. Home Assistant no permite comprobar desde aquí si fue añadido a Apple Home ni conocer su nombre.',
     bridge_not_connected:'Puente no configurado',
     bridge_not_desc:'Activa la integración HomeKit Bridge en Home Assistant e incluye la entidad <code>alarm_control_panel.argus_*</code> para generar un código QR de emparejamiento.',
     manual_disarm:'Manual (Desarmado)',
@@ -135,7 +135,7 @@ const TEXTS = {
     error_loading_uploaded_files: 'Error al cargar historial de archivos.',
   },
   en: {
-    hero_desc:'Alarm control, modes, TTS and automations.',
+    hero_desc:'Alarm control, modes and automations.',
     instances:'Active Instances', modes:'Modes', automations:'⚡ Automations',
     linked_rules:'Argus-linked Rules', create_ha:'+ Create in HA',
     no_rules:'', rules_tip:'',
@@ -147,7 +147,7 @@ const TEXTS = {
     admin_only:'Only administrators can modify this section.',
     add_user:'Add user', username:'Username', user_pin:'User PIN',
     is_admin:'Administrator', save_user:'Save', no_users:'No additional users configured.',
-    homekit_title:'🏠 HomeKit & Matter', close:'Close',
+    homekit_title:'🏠 HomeKit', close:'Close',
     search_placeholder:'Search by name, area or entity_id',
     available:'Available', selected_lbl:'Selected', clear:'Clear', accept:'Accept',
     introduce_pin:'Enter your PIN', pin_modal_desc:'Numeric PIN to disarm Argus',
@@ -199,7 +199,7 @@ const TEXTS = {
     times_section:'⏱️ Times', arm_time:'Arming (s)', disarm_time:'Entry delay (s)',
     save_config:'SAVE CONFIGURATION', never_triggered:'Never triggered',
     bridge_paired:'Bridge configured',
-    bridge_paired_desc:'The <b>{bridge}</b> bridge is configured in Home Assistant. Home Assistant cannot verify from here whether it was added to an Apple Home/Matter home or report its name.',
+    bridge_paired_desc:'The <b>{bridge}</b> bridge is configured in Home Assistant. Home Assistant cannot verify from here whether it was added to Apple Home or report its name.',
     bridge_not_connected:'Bridge not configured',
     bridge_not_desc:'Enable the HomeKit Bridge integration in Home Assistant and include the entity <code>alarm_control_panel.argus_*</code> to generate a pairing QR code.',
     manual_disarm:'Manual (Disarmed)',
@@ -244,7 +244,7 @@ const TEXTS = {
     admin_only:'Seuls les administrateurs peuvent modifier cette section.',
     add_user:'Ajouter un utilisateur', username:'Nom d\'utilisateur', user_pin:'PIN utilisateur',
     is_admin:'Administrateur', save_user:'Enregistrer', no_users:'Aucun utilisateur supplémentaire configuré.',
-    homekit_title:'🏠 HomeKit & Matter', close:'Fermer',
+    homekit_title:'🏠 HomeKit', close:'Fermer',
     search_placeholder:'Rechercher par nom, zone ou entity_id',
     available:'Disponibles', selected_lbl:'Sélectionnés', clear:'Effacer', accept:'Accepter',
     introduce_pin:'Entrez votre PIN', pin_modal_desc:'PIN numérique pour désarmer Argus',
@@ -294,7 +294,7 @@ const TEXTS = {
     times_section:'⏱️ Temps', arm_time:'Armé (s)', disarm_time:'Délai entrée (s)',
     save_config:'ENREGISTRER LA CONFIGURATION', never_triggered:'Jamais déclenché',
     bridge_paired:'Pont configuré',
-    bridge_paired_desc:'Le pont <b>{bridge}</b> est configuré dans Home Assistant. Home Assistant ne peut pas vérifier ici son ajout à une maison Apple Home/Matter ni fournir son nom.',
+    bridge_paired_desc:'Le pont <b>{bridge}</b> est configuré dans Home Assistant. Home Assistant ne peut pas vérifier ici son ajout à Apple Home ni fournir son nom.',
     bridge_not_connected:'Pont non configuré',
     bridge_not_desc:'Activez l\'intégration HomeKit Bridge dans Home Assistant et incluez l\'entité <code>alarm_control_panel.argus_*</code> pour générer un QR d\'appairage.',
     manual_disarm:'Manuel (Désarmé)', manual_arm:'Manuel',
@@ -330,7 +330,7 @@ const TEXTS = {
     admin_only:'Somente administradores podem modificar esta seção.',
     add_user:'Adicionar usuário', username:'Nome de usuário', user_pin:'PIN do usuário',
     is_admin:'Administrador', save_user:'Salvar', no_users:'Nenhum usuário adicional configurado.',
-    homekit_title:'🏠 HomeKit & Matter', close:'Fechar',
+    homekit_title:'🏠 HomeKit', close:'Fechar',
     search_placeholder:'Buscar por nome, área ou entity_id',
     available:'Disponíveis', selected_lbl:'Selecionados', clear:'Limpar', accept:'Aceitar',
     introduce_pin:'Digite seu PIN', pin_modal_desc:'PIN numérico para desarmar o Argus',
@@ -380,7 +380,7 @@ const TEXTS = {
     times_section:'⏱️ Tempos', arm_time:'Armado (s)', disarm_time:'Atraso de entrada (s)',
     save_config:'SALVAR CONFIGURAÇÃO', never_triggered:'Nunca ativado',
     bridge_paired:'Ponte configurada',
-    bridge_paired_desc:'A ponte <b>{bridge}</b> está configurada no Home Assistant. Não é possível verificar daqui se foi adicionada a uma casa Apple Home/Matter nem informar seu nome.',
+    bridge_paired_desc:'A ponte <b>{bridge}</b> está configurada no Home Assistant. Não é possível verificar daqui se foi adicionada ao Apple Home nem informar seu nome.',
     bridge_not_connected:'Ponte não configurada',
     bridge_not_desc:'Ative a integração HomeKit Bridge no Home Assistant e inclua a entidade <code>alarm_control_panel.argus_*</code> para gerar um QR de emparelhamento.',
     manual_disarm:'Manual (Desarmado)', manual_arm:'Manual',
@@ -416,7 +416,7 @@ const TEXTS = {
     admin_only:'Solo gli amministratori possono modificare questa sezione.',
     add_user:'Aggiungi utente', username:'Nome utente', user_pin:'PIN utente',
     is_admin:'Amministratore', save_user:'Salva', no_users:'Nessun utente aggiuntivo configurato.',
-    homekit_title:'🏠 HomeKit & Matter', close:'Chiudi',
+    homekit_title:'🏠 HomeKit', close:'Chiudi',
     search_placeholder:'Cerca per nome, area o entity_id',
     available:'Disponibili', selected_lbl:'Selezionati', clear:'Cancella', accept:'Accetta',
     introduce_pin:'Inserisci il tuo PIN', pin_modal_desc:'PIN numerico per disarmare Argus',
@@ -466,7 +466,7 @@ const TEXTS = {
     times_section:'⏱️ Tempi', arm_time:'Armato (s)', disarm_time:'Ritardo entrata (s)',
     save_config:'SALVA CONFIGURAZIONE', never_triggered:'Mai attivato',
     bridge_paired:'Ponte configurato',
-    bridge_paired_desc:'Il ponte <b>{bridge}</b> è configurato in Home Assistant. Da qui non è possibile verificare se sia stato aggiunto a una casa Apple Home/Matter né conoscerne il nome.',
+    bridge_paired_desc:'Il ponte <b>{bridge}</b> è configurato in Home Assistant. Da qui non è possibile verificare se sia stato aggiunto ad Apple Home né conoscerne il nome.',
     bridge_not_connected:'Ponte non configurato',
     bridge_not_desc:"Abilita l'integrazione HomeKit Bridge in Home Assistant e includi l'entità <code>alarm_control_panel.argus_*</code> per generare un QR di abbinamento.",
     manual_disarm:'Manuale (Disarmato)', manual_arm:'Manuale',
@@ -502,7 +502,7 @@ const TEXTS = {
     admin_only:'只有管理员才能修改此部分。',
     add_user:'添加用户', username:'用户名', user_pin:'用户PIN码',
     is_admin:'管理员', save_user:'保存', no_users:'未配置额外用户。',
-    homekit_title:'🏠 HomeKit与Matter', close:'关闭',
+    homekit_title:'🏠 HomeKit', close:'关闭',
     search_placeholder:'按名称、区域或entity_id搜索',
     available:'可用', selected_lbl:'已选择', clear:'清除', accept:'接受',
     introduce_pin:'输入您的PIN码', pin_modal_desc:'撤防Argus的数字PIN码',
@@ -552,7 +552,7 @@ const TEXTS = {
     times_section:'⏱️ 时间', arm_time:'布防延迟(s)', disarm_time:'进入延迟(s)',
     save_config:'保存配置', never_triggered:'从未触发',
     bridge_paired:'桥接已配置',
-    bridge_paired_desc:'桥接 <b>{bridge}</b> 已在 Home Assistant 中配置。Home Assistant 无法从这里验证它是否已添加到 Apple Home/Matter 家庭，也无法提供家庭名称。',
+    bridge_paired_desc:'桥接 <b>{bridge}</b> 已在 Home Assistant 中配置。Home Assistant 无法从这里验证它是否已添加到 Apple Home，也无法提供家庭名称。',
     bridge_not_connected:'桥接未配置',
     bridge_not_desc:'在Home Assistant中启用HomeKit Bridge集成并包含实体<code>alarm_control_panel.argus_*</code>以生成配对QR码。',
     manual_disarm:'手动(已撤防)', manual_arm:'手动',
@@ -588,7 +588,7 @@ const TEXTS = {
     admin_only:'Только администраторы могут изменять этот раздел.',
     add_user:'Добавить пользователя', username:'Имя пользователя', user_pin:'PIN пользователя',
     is_admin:'Администратор', save_user:'Сохранить', no_users:'Дополнительные пользователи не настроены.',
-    homekit_title:'🏠 HomeKit и Matter', close:'Закрыть',
+    homekit_title:'🏠 HomeKit', close:'Закрыть',
     search_placeholder:'Поиск по имени, зоне или entity_id',
     available:'Доступные', selected_lbl:'Выбранные', clear:'Очистить', accept:'Принять',
     introduce_pin:'Введите PIN', pin_modal_desc:'Цифровой PIN для снятия с охраны Argus',
@@ -638,7 +638,7 @@ const TEXTS = {
     times_section:'⏱️ Времена', arm_time:'Постановка (s)', disarm_time:'Задержка входа (s)',
     save_config:'СОХРАНИТЬ КОНФИГУРАЦИЮ', never_triggered:'Никогда не срабатывало',
     bridge_paired:'Мост настроен',
-    bridge_paired_desc:'Мост <b>{bridge}</b> настроен в Home Assistant. Здесь нельзя проверить, добавлен ли он в дом Apple Home/Matter, или узнать его название.',
+    bridge_paired_desc:'Мост <b>{bridge}</b> настроен в Home Assistant. Здесь нельзя проверить, добавлен ли он в Apple Home, или узнать его название.',
     bridge_not_connected:'Мост не настроен',
     bridge_not_desc:'Включите интеграцию HomeKit Bridge в Home Assistant и добавьте <code>alarm_control_panel.argus_*</code> для QR сопряжения.',
     manual_disarm:'Вручную (Снято)', manual_arm:'Вручную',
@@ -3068,7 +3068,6 @@ class ArgusPanel extends HTMLElement {
       this._renderActivityLog();
     }).catch(() => { this._forensicTimeline = []; });
     this._notifTargets = dashboard.ui?.notif_targets || [];
-    this._ttsTargets   = dashboard.ui?.tts_targets   || [];
     this._users = Array.isArray(dashboard.ui?.users)
       ? dashboard.ui.users.filter(user => user && typeof user === 'object' && !Array.isArray(user))
       : [];
@@ -4551,7 +4550,6 @@ class ArgusPanel extends HTMLElement {
       try {
         await this._send('argus/save_ui', {
           notif_targets: this._notifTargets,
-          tts_targets: this._ttsTargets || [],
         });
         if (status) { status.textContent = '✓'; status.className = 'status ok'; }
       } catch (e) {

@@ -29,10 +29,11 @@ class TestArchitectureContract(unittest.TestCase):
             self.assertTrue((COMPONENT / "www" / module).is_file())
 
     def test_removed_features_are_not_registered(self) -> None:
-        policy = (COMPONENT / "feature_policy.py").read_text(encoding="utf-8")
-        self.assertIn('"tts", "analyze_camera", "ai", "copilot"', policy)
-        registration = policy.split("command_names =", 1)[1].split("def _register", 1)[0]
-        self.assertNotIn("ws_argus_get_tts_engines", registration)
+        api = (COMPONENT / "websocket_api.py").read_text(encoding="utf-8")
+        panel = (COMPONENT / "alarm_control_panel.py").read_text(encoding="utf-8")
+        self.assertNotIn("get_tts_engines", api)
+        self.assertNotIn("google_generative_ai", panel)
+        self.assertNotIn("analyze_camera", panel)
         card = (COMPONENT / "www" / "argus-card.js").read_text(encoding="utf-8")
         self.assertNotIn("Costa Rica", card)
         self.assertNotIn("temperature: 24", card)
