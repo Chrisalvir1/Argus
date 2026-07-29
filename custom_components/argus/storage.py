@@ -1,4 +1,4 @@
-"""Atomic local storage helpers for Argus."""
+"""Atomic local storage helpers for Argus with per-instance isolation support."""
 from __future__ import annotations
 
 import asyncio
@@ -14,10 +14,8 @@ from homeassistant.helpers.storage import Store
 from .const import DOMAIN
 from .security import hash_pin, validate_pin
 
-# Keep version 1 so existing Home Assistant Store data loads without a custom
-# migration callback. Shape migrations are handled by _merge_defaults.
 _STORAGE_VERSION = 1
-_STORAGE_KEY = f"{DOMAIN}.ui"
+_STORAGE_KEY_GLOBAL = f"{DOMAIN}.ui"
 AUDIT_LOG_MAX = 500
 _LOCK_KEY = f"{DOMAIN}_storage_lock"
 _MAX_MEDIA_BYTES = 50 * 1024 * 1024
@@ -27,15 +25,16 @@ def _storage_lock(hass: HomeAssistant) -> asyncio.Lock:
     return hass.data.setdefault(_LOCK_KEY, asyncio.Lock())
 
 
-def _store(hass: HomeAssistant) -> Store:
-    return Store(hass, _STORAGE_VERSION, _STORAGE_KEY)
+def _store(hass: HomeAssistant, entry_id: str | None = None) -> Store:
+    key = f"{_STORAGE_KEY_GLOBAL}.{entry_id}" if entry_id else _STORAGE_KEY_GLOBAL
+    return Store(hass, _STORAGE_VERSION, key)
 
 
 def _default_payload() -> dict:
     return {
         "zones": [], "modes": {"home": {}, "away": {}, "night": {}, "vacation": {}},
         "dashboard": {"layout": "grid", "dense": False}, "audit_log": [],
-        "advanced": {"guest_code": None, "guest_code_enabled": False},
+        "advanced": {"guest_code": None, "guest_code_enabled": False, "duress_pin": None},
         "automations": [], "notif_targets": [],
         "emergency_number": "911", "panic_outputs": [], "users": [],
         "home_name": "", "background_mode": "weather", "background_images": [],
@@ -89,8 +88,8 @@ def _migrate_base64_file(hass: HomeAssistant, value: str, prefix: str) -> str:
         return ""
 
 
-async def async_load_ui_data(hass: HomeAssistant) -> dict:
-    store = _store(hass)
+async def async_load_ui_data(hass: HomeAssistant, entry_id: str | None = None) -> dict:
+    store = _store(hass, entry_id)
     raw = await store.async_load()
     data = _merge_defaults(raw)
     changed = raw != data
@@ -135,16 +134,18 @@ def _preserve_redacted_user_pins(current: object, incoming: object) -> list[dict
     return merged
 
 
-async def async_save_ui_data(hass: HomeAssistant, updates: dict) -> dict:
+async def async_save_ui_data(
+    hass: HomeAssistant, updates: dict, entry_id: str | None = None
+) -> dict:
     async with _storage_lock(hass):
-        current = await async_load_ui_data(hass)
+        current = await async_load_ui_data(hass, entry_id)
         safe_updates = copy.deepcopy(updates or {})
         if "users" in safe_updates:
             safe_updates["users"] = _preserve_redacted_user_pins(
                 current.get("users", []), safe_updates["users"]
             )
         current.update(safe_updates)
-        await _store(hass).async_save(current)
+        await _store(hass, entry_id).async_save(current)
         return current
 
 
@@ -186,25 +187,27 @@ def _sanitize_restore(payload: object, runtime: dict) -> dict:
     return restored
 
 
-async def async_restore_ui_data(hass: HomeAssistant, payload: object, *, actor: str) -> dict:
+async def async_restore_ui_data(
+    hass: HomeAssistant, payload: object, *, actor: str, entry_id: str | None = None
+) -> dict:
     async with _storage_lock(hass):
-        current = await async_load_ui_data(hass)
+        current = await async_load_ui_data(hass, entry_id)
         restored = _sanitize_restore(payload, current.get("runtime", {}))
         restored["audit_log"] = [{
             "ts": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "action": "configuration_restored", "detail": "Portable configuration restored",
             "user": actor, "severity": "warning", "metadata": {},
         }]
-        await _store(hass).async_save(restored)
+        await _store(hass, entry_id).async_save(restored)
         return restored
 
 
 async def async_append_audit_log(
     hass: HomeAssistant, action: str, detail: str = "", user: str = "Argus",
-    *, severity: str = "info", metadata: dict | None = None,
+    *, severity: str = "info", metadata: dict | None = None, entry_id: str | None = None
 ) -> None:
     async with _storage_lock(hass):
-        current = await async_load_ui_data(hass)
+        current = await async_load_ui_data(hass, entry_id)
         log = current.get("audit_log", [])
         if not isinstance(log, list):
             log = []
@@ -216,23 +219,23 @@ async def async_append_audit_log(
             "metadata": copy.deepcopy(metadata or {}),
         })
         current["audit_log"] = log[:AUDIT_LOG_MAX]
-        await _store(hass).async_save(current)
+        await _store(hass, entry_id).async_save(current)
 
 
-async def async_clear_audit_log(hass: HomeAssistant, *, actor: str) -> None:
+async def async_clear_audit_log(hass: HomeAssistant, *, actor: str, entry_id: str | None = None) -> None:
     async with _storage_lock(hass):
-        current = await async_load_ui_data(hass)
+        current = await async_load_ui_data(hass, entry_id)
         count = len(current.get("audit_log", []))
         current["audit_log"] = [{
             "ts": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "action": "audit_log_cleared", "detail": f"Cleared {count} prior events",
             "user": actor, "severity": "warning", "metadata": {"prior_count": count},
         }]
-        await _store(hass).async_save(current)
+        await _store(hass, entry_id).async_save(current)
 
 
-async def async_get_audit_log(hass: HomeAssistant) -> list:
-    log = (await async_load_ui_data(hass)).get("audit_log", [])
+async def async_get_audit_log(hass: HomeAssistant, entry_id: str | None = None) -> list:
+    log = (await async_load_ui_data(hass, entry_id)).get("audit_log", [])
     return log if isinstance(log, list) else []
 
 
@@ -242,15 +245,15 @@ async def async_save_alarm_runtime_state(
     if state not in {"disarmed", "armed_home", "armed_away", "armed_night", "armed_vacation"}:
         return
     async with _storage_lock(hass):
-        current = await async_load_ui_data(hass)
+        current = await async_load_ui_data(hass, entry_id)
         current.setdefault("runtime", {}).setdefault("alarm_states", {})[entry_id] = {
             "state": state,
             "updated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "source": str(source)[:64],
         }
-        await _store(hass).async_save(current)
+        await _store(hass, entry_id).async_save(current)
 
 
 async def async_get_alarm_runtime_state(hass: HomeAssistant, entry_id: str) -> dict:
-    state = (await async_load_ui_data(hass)).get("runtime", {}).get("alarm_states", {}).get(entry_id, {})
+    state = (await async_load_ui_data(hass, entry_id)).get("runtime", {}).get("alarm_states", {}).get(entry_id, {})
     return state if isinstance(state, dict) else {}

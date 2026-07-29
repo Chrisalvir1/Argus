@@ -1117,29 +1117,54 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         return False
 
     async def async_alarm_disarm(self, code=None) -> None:
-        if self._code and not self._validate_code(code):
+        user_id = await self._get_context_user()
+        limiter = PinAttemptLimiter()
+        limiter_key = f"{self._config_entry.entry_id}_{user_id}"
+
+        if self._code and code and not self._validate_code(code):
             _LOGGER.warning("Argus: Disarm rejected — invalid code")
-            await async_append_audit_log(self.hass, "disarm_rejected", "Invalid code", user="Argus")
+            await async_append_audit_log(
+                self.hass, "disarm_rejected", "Invalid code", user=user_id, entry_id=self._config_entry.entry_id
+            )
+            return
+
+        # Check Duress PIN (PIN de Coacción)
+        adv = self._ui_config.get("advanced", {})
+        duress_pin = adv.get("duress_pin")
+        if code and duress_pin and verify_pin(code, duress_pin):
+            _LOGGER.warning("ARGUS DURESS: Coercion PIN entered! Executing visual disarm and silent SOS panic.")
+            await async_append_audit_log(
+                self.hass, "duress_pin_triggered", "Coercion PIN entered", user=user_id, severity="critical", entry_id=self._config_entry.entry_id
+            )
+            self._cancel_timers()
+            await self._async_siren(False)
+            self._alarm_state = AlarmControlPanelState.DISARMED
+            self.async_write_ha_state()
+            await self._async_mqtt_publish()
+            await self._async_persist_stable_state("disarm")
+            self.hass.bus.async_fire("argus_state_changed", {
+                "entity_id": self.entity_id, "state": "disarmed", "duress": True, "entry_id": self._config_entry.entry_id
+            })
+            self.hass.async_create_task(self.async_alarm_trigger())
             return
 
         # Find which user code matches
         caller_name = None
         if code:
-            if str(code) == str(self._code):
+            if verify_pin(code, self._code):
                 caller_name = "Master Admin"
             else:
-                adv = self._ui_config.get("advanced", {})
-                if adv.get("guest_code_enabled") and adv.get("guest_code") and str(code) == str(adv["guest_code"]):
+                if adv.get("guest_code_enabled") and adv.get("guest_code") and verify_pin(code, adv["guest_code"]):
                     caller_name = "Invitado"
                 else:
                     users = self._ui_config.get("users", [])
                     for u in users:
-                        if u.get("pin") and str(code) == str(u.get("pin")):
+                        if u.get("pin") and verify_pin(code, u.get("pin")):
                             caller_name = u.get("name")
                             break
 
         if not caller_name:
-            caller_name = await self._get_context_user()
+            caller_name = user_id
 
         self._cancel_timers()
         await self._async_siren(False)
@@ -1154,7 +1179,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         await self._async_mqtt_publish()
         await self._async_persist_stable_state("disarm")
         self.hass.async_create_task(self._evaluate_automations("disarmed"))
-        await async_append_audit_log(self.hass, "disarmed", f"Sistema desarmado por {caller_name}", user=caller_name)
+        self.hass.bus.async_fire("argus_state_changed", {
+            "entity_id": self.entity_id, "state": "disarmed", "user": caller_name, "entry_id": self._config_entry.entry_id
+        })
+        self.hass.bus.async_fire("argus_disarmed", {
+            "entity_id": self.entity_id, "user": caller_name, "entry_id": self._config_entry.entry_id
+        })
+        await async_append_audit_log(self.hass, "disarmed", f"Sistema desarmado por {caller_name}", user=caller_name, entry_id=self._config_entry.entry_id)
         _LOGGER.info("Argus: Disarmed by %s", caller_name)
 
     async def _async_arm(self, target: AlarmControlPanelState, code=None) -> None:
@@ -1328,7 +1359,14 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         await self._async_persist_stable_state("arm")
 
         self.hass.async_create_task(self._evaluate_automations("armed", target=target))
-        await async_append_audit_log(self.hass, "armed", f"Modo: {_MODE_LABELS.get(target.value, target.value)}", user=await self._get_context_user())
+        user_name = await self._get_context_user()
+        self.hass.bus.async_fire("argus_state_changed", {
+            "entity_id": self.entity_id, "state": target.value if hasattr(target, "value") else str(target), "user": user_name, "entry_id": self._config_entry.entry_id
+        })
+        self.hass.bus.async_fire("argus_armed", {
+            "entity_id": self.entity_id, "mode": target.value if hasattr(target, "value") else str(target), "user": user_name, "entry_id": self._config_entry.entry_id
+        })
+        await async_append_audit_log(self.hass, "armed", f"Modo: {_MODE_LABELS.get(target.value if hasattr(target, 'value') else str(target), target)}", user=user_name, entry_id=self._config_entry.entry_id)
         _LOGGER.info("Argus: Armado → %s", target)
 
     async def async_alarm_arm_home(self, code=None) -> None:
