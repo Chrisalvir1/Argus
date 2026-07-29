@@ -153,6 +153,7 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_argus_get_incidents)
     websocket_api.async_register_command(hass, ws_argus_update_incident)
     websocket_api.async_register_command(hass, ws_argus_get_forensic_timeline)
+    websocket_api.async_register_command(hass, ws_argus_get_health)
 
 
 @websocket_api.websocket_command({
@@ -166,6 +167,44 @@ async def ws_argus_get_forensic_timeline(hass, connection, msg) -> None:
     log = await async_get_audit_log(hass, entry_id)
     timeline = log[:msg["limit"]]
     connection.send_result(msg["id"], {"timeline": timeline})
+
+
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/get_health",
+    vol.Optional("entry_id"): str,
+})
+@websocket_api.async_response
+async def ws_argus_get_health(hass, connection, msg) -> None:
+    entry_id = msg.get("entry_id")
+    data = await async_load_ui_data(hass, entry_id)
+
+    # Gather sensor and siren states
+    states = {}
+    for state in hass.states.async_all():
+        states[state.entity_id] = {
+            "state": state.state,
+            "attributes": dict(state.attributes),
+        }
+
+    modes = data.get("modes", {})
+    sensors = []
+    for mode_cfg in modes.values():
+        if isinstance(mode_cfg, dict):
+            sensors.extend(mode_cfg.get("sensors") or [])
+
+    from .core.health import evaluate_system_health
+    report = evaluate_system_health(
+        states_dict=states,
+        configured_sensors=list(set(sensors)),
+        siren_entity=data.get("siren_entity"),
+        mqtt_enabled=bool(data.get("mqtt_enabled")),
+    )
+    connection.send_result(msg["id"], {
+        "readiness_score": report.readiness_score,
+        "status": report.status,
+        "issues": [{"issue_id": i.issue_id, "severity": i.severity, "category": i.category, "message": i.message, "recommendation": i.recommendation} for i in report.issues],
+        "recommendations": report.recommendations,
+    })
 
 
 @websocket_api.websocket_command({
