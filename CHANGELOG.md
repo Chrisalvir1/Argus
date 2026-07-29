@@ -2,6 +2,11 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [1.8.9] - 2026-07-29
+
+### Fixed
+- Corregido un error en la importación de `persistent_notification` que impedía que el proceso de desarmado completara su ejecución, dejando la alarma estancada en estado "Triggered" y fallando en guardar el evento en el historial de actividad.
+
 ## [1.8.3] - 2026-07-29
 
 ### Fixed
