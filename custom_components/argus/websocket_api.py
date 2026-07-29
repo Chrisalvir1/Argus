@@ -150,6 +150,9 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_argus_get_media_players)
     websocket_api.async_register_command(hass, ws_argus_update_master_pin)
     websocket_api.async_register_command(hass, ws_argus_write_log)
+    websocket_api.async_register_command(hass, ws_argus_get_incidents)
+    websocket_api.async_register_command(hass, ws_argus_update_incident)
+    websocket_api.async_register_command(hass, ws_argus_get_forensic_timeline)
 
 
 @websocket_api.websocket_command({
@@ -163,6 +166,61 @@ async def ws_argus_get_forensic_timeline(hass, connection, msg) -> None:
     log = await async_get_audit_log(hass, entry_id)
     timeline = log[:msg["limit"]]
     connection.send_result(msg["id"], {"timeline": timeline})
+
+
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/get_incidents",
+    vol.Optional("entry_id"): str,
+})
+@websocket_api.async_response
+async def ws_argus_get_incidents(hass, connection, msg) -> None:
+    entry_id = msg.get("entry_id")
+    data = await async_load_ui_data(hass, entry_id)
+    incidents = data.get("incidents", [])
+    connection.send_result(msg["id"], {"incidents": incidents})
+
+
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/update_incident",
+    vol.Required("incident_id"): str,
+    vol.Required("action"): vol.In(["confirm", "false_alarm", "silence_siren", "resolve"]),
+    vol.Optional("reason", default=""): str,
+    vol.Optional("entry_id"): str,
+})
+@websocket_api.async_response
+async def ws_argus_update_incident(hass, connection, msg) -> None:
+    entry_id = msg.get("entry_id")
+    action, incident_id = msg["action"], msg["incident_id"]
+    _, actor = _actor(connection)
+
+    data = await async_load_ui_data(hass, entry_id)
+    incidents = copy.deepcopy(data.get("incidents", []))
+    target_inc = None
+    for inc in incidents:
+        if inc.get("id") == incident_id:
+            target_inc = inc
+            break
+
+    if not target_inc:
+        connection.send_error(msg["id"], "not_found", "Incident not found")
+        return
+
+    if action == "confirm":
+        target_inc["status"] = "confirmed"
+    elif action == "false_alarm":
+        target_inc["status"] = "false_alarm"
+    elif action == "resolve":
+        target_inc["status"] = "resolved"
+
+    target_inc.setdefault("executed_actions", []).append({
+        "action": action, "actor": actor, "reason": msg.get("reason"), "ts": datetime.datetime.now(datetime.timezone.utc).isoformat()
+    })
+
+    await async_save_ui_data(hass, {"incidents": incidents}, entry_id)
+    await async_append_audit_log(
+        hass, f"incident_{action}", f"Incident {incident_id} action: {action}", user=actor, entry_id=entry_id
+    )
+    connection.send_result(msg["id"], {"success": True, "incident": target_inc})
 
 
 @callback
