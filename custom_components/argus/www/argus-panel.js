@@ -3268,8 +3268,8 @@ class ArgusPanel extends HTMLElement {
     });
     if (!lowBatteries.length) return '';
     const t = k => this._t(k);
-    const rows = lowBatteries.map(b => `<div class="battery-alert">${t('battery_low')}: ${b.attributes.friendly_name || b.entity_id} (${b.state}%)</div>`).join('');
-    return `<div class="battery-alerts-container" style="margin-top: 10px;">${rows}</div>`;
+    const rows = lowBatteries.map(b => `<div class="battery-alert-pill" style="display:inline-flex; align-items:center; gap:6px; background:rgba(239,68,68,0.25); border:1px solid rgba(239,68,68,0.5); color:#fee2e2; padding:4px 12px; border-radius:999px; font-size:11px; font-weight:600; backdrop-filter:blur(12px); box-shadow:0 4px 12px rgba(0,0,0,0.3)">⚠️ ${t('battery_low')}: ${this._escapeHtml(b.attributes.friendly_name || b.entity_id)} (${b.state}%)</div>`).join('');
+    return `<div class="battery-alerts-container" style="position:absolute; top:18px; left:18px; z-index:15; display:flex; flex-direction:column; gap:6px; max-width:75%; pointer-events:none;">${rows}</div>`;
   }
 
   _modeButtonIcon(mode) {

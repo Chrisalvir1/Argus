@@ -27,16 +27,17 @@ function eclipseMode(hass) {
 }
 
 const CSS = `
-.argus-cinematic-weather{position:absolute;inset:0;overflow:hidden;background:linear-gradient(#204d77,#9bb9cc)}
-.argus-cinematic-weather canvas{width:100%;height:100%;display:block}.argus-weather-vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse,transparent 38%,rgba(0,0,0,.42))}
-.argus-season-label{position:absolute;left:18px;bottom:18px;padding:6px 10px;border-radius:999px;background:#07142199;color:#fff;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
-@media(prefers-reduced-motion:reduce){.argus-cinematic-weather{background:#264d6b}}
+.argus-cinematic-weather{position:absolute;inset:0;overflow:hidden;background:linear-gradient(to bottom, #0f172a, #1e293b)}
+.argus-cinematic-weather canvas{width:100%;height:100%;display:block}.argus-weather-vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse,transparent 40%,rgba(0,0,0,.5))}
+@media(prefers-reduced-motion:reduce){.argus-cinematic-weather{background:#0f172a}}
 `;
 
 const VERTEX = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
 const FRAGMENT = `precision mediump float;uniform vec2 r;uniform float t,m,n,s,e,phase;
-float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}float disk(vec2 u,vec2 c,float z){return smoothstep(z,z-.008,length(u-c));}
-void main(){vec2 u=gl_FragCoord.xy/r;vec3 c=mix(vec3(.11,.38,.66),vec3(.01,.03,.09),n);if(m>1.)c*=.62;if(m>6.)c=mix(c,vec3(.48,.54,.59),.6);if(s<.5)c+=vec3(.03,.03,.08);if(s>2.5)c+=vec3(.07,.02,0.);float cloud=smoothstep(.62,.82,h(floor(u*vec2(22.,9.))+floor(t*.15)));if(m>1.||m>6.)c=mix(c,vec3(.5),cloud*.4);vec2 q=vec2(.78,.76);if(n<.5){c+=disk(u,q,.055)*vec3(1.,.74,.25);}else{float moon=disk(u,q,.043);if(phase>=0.)moon*=smoothstep(-.05,.06,u.x-q.x+(phase-.5)*.075);c+=moon*vec3(.9,.9,.82);c+=step(.997,h(floor(u*r/3.)))*vec3(.7);}if(m>1.&&m<4.){float rain=step(.88,h(floor(vec2(u.x*100.,u.y*38.+t*20.))));c+=rain*vec3(.45,.67,.8);}if(m>4.&&m<5.){float snow=step(.97,h(floor(u*vec2(75.,55.)+t)));c+=snow*vec3(1.);}if(m>5.&&m<7.)c=mix(c,vec3(.72),.32);if(m>2.&&m<5.)c+=pow(max(0.,sin(t*.7)),60.)*vec3(.8);if(e>0.)c=mix(c,e<1.5?vec3(.13,.08,.04):vec3(.4,.05,.05),.55);gl_FragColor=vec4(c,1.);}`;
+float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}
+float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);float a=h(i),b=h(i+vec2(1.,0.)),c=h(i+vec2(0.,1.)),d=h(i+vec2(1.,1.));return mix(mix(a,b,f.x),mix(c,d,f.x),f.y);}
+float disk(vec2 u,vec2 c,float z){return smoothstep(z,z-.008,length(u-c));}
+void main(){vec2 u=gl_FragCoord.xy/r;vec3 c=mix(vec3(.08,.22,.42),vec3(.01,.03,.08),n);if(m>1.)c*=.62;if(m>6.)c=mix(c,vec3(.42,.48,.54),.6);if(s<.5)c+=vec3(.02,.02,.06);if(s>2.5)c+=vec3(.05,.02,0.);float cloud=smoothstep(.35,.75,noise(u*vec2(5.,2.5)+vec2(t*.04,0.)));if(m>1.||m>6.)c=mix(c,vec3(.55,.58,.62),cloud*.35);vec2 q=vec2(.78,.76);if(n<.5){c+=disk(u,q,.055)*vec3(1.,.78,.3);}else{float moon=disk(u,q,.043);if(phase>=0.)moon*=smoothstep(-.05,.06,u.x-q.x+(phase-.5)*.075);c+=moon*vec3(.92,.92,.85);c+=step(.998,h(floor(u*r/3.)))*vec3(.7);}if(m>1.&&m<4.){float rain=step(.88,h(floor(vec2(u.x*100.,u.y*38.+t*20.))));c+=rain*vec3(.45,.67,.8);}if(m>4.&&m<5.){float snow=step(.97,h(floor(u*vec2(75.,55.)+t)));c+=snow*vec3(1.);}if(m>5.&&m<7.)c=mix(c,vec3(.72),.32);if(m>2.&&m<5.)c+=pow(max(0.,sin(t*.7)),60.)*vec3(.8);if(e>0.)c=mix(c,e<1.5?vec3(.13,.08,.04):vec3(.4,.05,.05),.55);gl_FragColor=vec4(c,1.);}`;
 
 function shader(gl, type, source) { const value = gl.createShader(type); gl.shaderSource(value, source); gl.compileShader(value); if (!gl.getShaderParameter(value, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(value)); return value; }
 
@@ -57,7 +58,7 @@ export function applyPremiumExperience(ArgusPanel) {
   proto.__argusPremiumExperience = true;
   proto._renderAtmosphere = function(condition, isNight) {
     const season = seasonFor(this._hass), phase = moonPhase(this._hass), eclipse = eclipseMode(this._hass);
-    return `<div class="wx argus-cinematic-weather"><canvas class="wx-webgl" aria-hidden="true" data-mode="${weatherMode(condition,isNight)}" data-night="${isNight?1:0}" data-season="${SEASONS.indexOf(season)}" data-phase="${phase}" data-eclipse="${eclipse}"></canvas><div class="argus-weather-vignette"></div><div class="argus-season-label">${season}</div></div>`;
+    return `<div class="wx argus-cinematic-weather"><canvas class="wx-webgl" aria-hidden="true" data-mode="${weatherMode(condition,isNight)}" data-night="${isNight?1:0}" data-season="${SEASONS.indexOf(season)}" data-phase="${phase}" data-eclipse="${eclipse}"></canvas><div class="argus-weather-vignette"></div></div>`;
   };
   proto._initWeatherWebGL = function(canvas) {
     if (!canvas || canvas.__argusWebgl) return;
