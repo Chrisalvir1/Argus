@@ -67,13 +67,12 @@ async def evaluate_local_automations(panel, event_type: str, **kwargs) -> None:
 
             try:
                 if action_type in {"turn_on", "turn_off"}:
-                    service = action_type
                     for entity_id in action.get("entities", []):
                         domain = str(entity_id).split(".", 1)[0]
                         if domain not in _ALLOWED_SERVICE_DOMAINS:
                             continue
                         await panel.hass.services.async_call(
-                            domain, service, {"entity_id": entity_id}, blocking=False
+                            domain, action_type, {"entity_id": entity_id}, blocking=False
                         )
                 elif action_type == "notify":
                     target = str(action.get("target", ""))
@@ -113,11 +112,23 @@ def install_alarm_policy() -> None:
     """Replace experimental AI/TTS paths with the deterministic engine."""
     from .alarm_control_panel import ArgusAlarmPanel
 
-    async def _disabled_smart_arming(self, _now=None) -> None:
+    if getattr(ArgusAlarmPanel, "_argus_18_policy_installed", False):
+        return
+    original_added = ArgusAlarmPanel.async_added_to_hass
+
+    def _disabled_smart_arming(self, _now=None) -> None:
         self._smart_arming_suggested = False
+
+    async def _added_without_smart_arming(self) -> None:
+        await original_added(self)
+        if self._unsub_smart_arming:
+            self._unsub_smart_arming()
+            self._unsub_smart_arming = None
 
     ArgusAlarmPanel._evaluate_automations = evaluate_local_automations
     ArgusAlarmPanel._async_check_smart_arming = _disabled_smart_arming
+    ArgusAlarmPanel.async_added_to_hass = _added_without_smart_arming
+    ArgusAlarmPanel._argus_18_policy_installed = True
 
 
 def install_websocket_policy(module) -> None:
