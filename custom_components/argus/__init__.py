@@ -8,6 +8,11 @@ from homeassistant.core import HomeAssistant
 
 from . import const, websocket_api
 from .const import DOMAIN, PLATFORMS
+from .feature_policy import (
+    cleanup_removed_features,
+    install_alarm_policy,
+    install_websocket_policy,
+)
 from .media_websocket import install as install_media_websocket
 from .panel import async_register_panel
 
@@ -17,6 +22,8 @@ _WS_REGISTERED_KEY = f"{DOMAIN}_ws_registered"
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     hass.data.setdefault(DOMAIN, {})
+    cleanup_removed_features(hass)
+    install_alarm_policy()
     await async_register_panel(hass)
     _async_register_websocket_once(hass)
     return True
@@ -26,6 +33,7 @@ def _async_register_websocket_once(hass: HomeAssistant) -> None:
     if hass.data[DOMAIN].get(_WS_REGISTERED_KEY):
         return
     install_media_websocket(websocket_api)
+    install_websocket_policy(websocket_api)
     websocket_api.async_register_websocket_api(hass)
     hass.data[DOMAIN][_WS_REGISTERED_KEY] = True
 
@@ -33,6 +41,8 @@ def _async_register_websocket_once(hass: HomeAssistant) -> None:
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = entry.data
+    cleanup_removed_features(hass)
+    install_alarm_policy()
     await async_register_panel(hass)
     _async_register_websocket_once(hass)
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))
