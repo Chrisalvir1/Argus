@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.9.6
+ * Argus Home Hub – v1.9.7
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -135,6 +135,7 @@ const TEXTS = {
     error_loading_uploaded_files: 'Error al cargar historial de archivos.',
     select_profile_title: 'Selecciona tu perfil',
     select_profile_subtitle: 'Accede a tus paneles e instancias de seguridad de Argus.',
+    exit_to_ha: 'Volver a Home Assistant',
     role_argus_admin: 'Administrador de Argus',
     role_argus_user: 'Usuario estándar',
     ha_account_linked: 'Cuenta de Home Assistant: {name}',
@@ -279,6 +280,7 @@ const TEXTS = {
     error_loading_uploaded_files: 'Error loading file history.',
     select_profile_title: 'Select Your Profile',
     select_profile_subtitle: 'Access your security panels and Argus instances.',
+    exit_to_ha: 'Back to Home Assistant',
     role_argus_admin: 'Argus Administrator',
     role_argus_user: 'Standard User',
     ha_account_linked: 'Home Assistant Account: {name}',
@@ -412,6 +414,7 @@ const TEXTS = {
     error_loading_uploaded_files: "Erreur lors du chargement de l'historique des fichiers.",
     select_profile_title: 'Sélectionnez votre profil',
     select_profile_subtitle: 'Accédez à vos panneaux de sécurité et instances Argus.',
+    exit_to_ha: 'Retour à Home Assistant',
     role_argus_admin: 'Administrateur Argus',
     role_argus_user: 'Utilisateur standard',
     ha_account_linked: 'Compte Home Assistant : {name}',
@@ -545,6 +548,7 @@ const TEXTS = {
     error_loading_uploaded_files: 'Erro ao carregar o histórico de arquivos.',
     select_profile_title: 'Selecione o seu perfil',
     select_profile_subtitle: 'Acesse seus painéis de segurança e instâncias Argus.',
+    exit_to_ha: 'Voltar ao Home Assistant',
     role_argus_admin: 'Administrador do Argus',
     role_argus_user: 'Usuário padrão',
     ha_account_linked: 'Conta do Home Assistant: {name}',
@@ -678,6 +682,7 @@ const TEXTS = {
     error_loading_uploaded_files: 'Errore durante il caricamento della cronologia dei file.',
     select_profile_title: 'Seleziona il tuo profilo',
     select_profile_subtitle: 'Accedi ai tuoi pannelli di sicurezza e istanze Argus.',
+    exit_to_ha: 'Torna a Home Assistant',
     role_argus_admin: 'Amministratore Argus',
     role_argus_user: 'Utente standard',
     ha_account_linked: 'Account Home Assistant: {name}',
@@ -811,6 +816,7 @@ const TEXTS = {
     error_loading_uploaded_files: '加载文件历史记录出错。',
     select_profile_title: '选择您的个人资料',
     select_profile_subtitle: '访问您的安全面板和 Argus 实例。',
+    exit_to_ha: '返回 Home Assistant',
     role_argus_admin: 'Argus 管理员',
     role_argus_user: '标准用户',
     ha_account_linked: 'Home Assistant 账户：{name}',
@@ -944,6 +950,7 @@ const TEXTS = {
     error_loading_uploaded_files: 'Ошибка при загрузке истории файлов.',
     select_profile_title: 'Выберите ваш профиль',
     select_profile_subtitle: 'Доступ к вашим панелям безопасности и экземплярам Argus.',
+    exit_to_ha: 'Вернуться в Home Assistant',
     role_argus_admin: 'Администратор Argus',
     role_argus_user: 'Стандартный пользователь',
     ha_account_linked: 'Учетная запись Home Assistant: {name}',
@@ -2075,7 +2082,7 @@ _tmpl.innerHTML = `
 }
 
 .argus-bootstrap-layer {
-  position: fixed;
+  position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
   background: rgba(0,0,0,0.4);
   backdrop-filter: blur(20px);
@@ -3343,12 +3350,31 @@ class ArgusPanel extends HTMLElement {
   async _clearHistory() {
     if (!confirm(this._t('clear_history_confirm'))) return;
     try {
-      await this._send('argus/clear_audit_log');
-      if (this._ui) this._ui.audit_log = [];
-      const el = this.shadowRoot.getElementById('activity-log');
-      if (el) el.innerHTML = `<div class="small" style="padding:8px 0;opacity:.55">${this._t('log_no_events')}</div>`;
+      const entryId = this._dashboard?.entries?.[0]?.entry_id;
+      await this._send('argus/clear_audit_log', entryId ? { entry_id: entryId } : {});
+      await this._loadActivityTimeline(entryId);
       this._renderActivityLog();
     } catch (err) { alert(this._format('generic_error', { error: err.message })); }
+  }
+
+  async _loadActivityTimeline(entryId = null) {
+    if (!this._ui) return;
+    try {
+      const payload = { limit: 100 };
+      if (entryId) payload.entry_id = entryId;
+      const response = await this._send('argus/get_forensic_timeline', payload);
+      const timeline = Array.isArray(response?.timeline)
+        ? response.timeline.filter(entry => entry && typeof entry === 'object' && !Array.isArray(entry))
+        : [];
+      this._forensicTimeline = timeline;
+      this._ui.audit_log = timeline;
+    } catch (err) {
+      // A profile without view_history may continue using the dashboard.
+      // Preserve any audit data already present instead of erasing it.
+      console.warn('Argus activity timeline unavailable:', err);
+      this._forensicTimeline = null;
+      if (!Array.isArray(this._ui.audit_log)) this._ui.audit_log = [];
+    }
   }
 
   _exportForensicTimeline() {
@@ -3647,6 +3673,7 @@ class ArgusPanel extends HTMLElement {
     this._currentProfile = dashboard.current_profile || null;
     this._available = dashboard.available_entities || [];
     this._ui = dashboard.ui || { modes: {}, dashboard: {} };
+    await this._loadActivityTimeline(dashboard.entries?.[0]?.entry_id);
     this._notifTargets = dashboard.ui?.notif_targets || [];
     this._users = Array.isArray(dashboard.ui?.users)
       ? dashboard.ui.users.filter(user => user && typeof user === 'object' && !Array.isArray(user))
@@ -6441,6 +6468,10 @@ class ArgusPanel extends HTMLElement {
         <div class="user-selector-grid" style="margin-top:18px">
           ${usersHtml}
         </div>
+        <button id="btn-exit-to-ha" class="btn-cancel"
+                style="margin:18px 0 0;width:100%">
+          ← ${this._escapeHtml(this._t('exit_to_ha'))}
+        </button>
         <div id="pin-prompt" class="pin-prompt" style="display:none;margin-top:16px;animation:fadeIn .25s ease">
           <div id="pin-prompt-label" style="font-size:13px;opacity:0.75;margin-bottom:8px;text-align:center"></div>
           <input type="password" id="login-pin-input" placeholder="${this._escapeHtml(this._t('pin_placeholder'))}" inputmode="numeric" pattern="[0-9]*"
@@ -6460,6 +6491,10 @@ class ArgusPanel extends HTMLElement {
     const pinError = this.shadowRoot.getElementById('login-pin-error');
     const grid = this.shadowRoot.querySelector('.user-selector-grid');
     let selectedUserId = null;
+
+    this.shadowRoot.getElementById('btn-exit-to-ha')?.addEventListener('click', () => {
+      window.location.assign('/');
+    });
 
     const _showGrid = () => {
       selectedUserId = null;
@@ -6552,4 +6587,4 @@ class ArgusPanel extends HTMLElement {
 
 }
 
-customElements.define('argus-panel-v196', ArgusPanel);
+customElements.define('argus-panel-v197', ArgusPanel);

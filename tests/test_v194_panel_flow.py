@@ -56,7 +56,7 @@ class TestV194PanelFlow(unittest.TestCase):
         self.assertIn("_renderInitializationError(err)", self.panel)
 
     def test_versioned_custom_element_prevents_stale_definition(self) -> None:
-        self.assertIn("customElements.define('argus-panel-v196'", self.panel)
+        self.assertIn("customElements.define('argus-panel-v197'", self.panel)
         self.assertIn(
             'webcomponent_name=f"argus-panel-v{VERSION.replace(\'.\', \'\')}"',
             self.panel_registration,
@@ -69,6 +69,27 @@ class TestV194PanelFlow(unittest.TestCase):
         )[0]
         self.assertIn("if (!this._dashboard)", method)
         self.assertIn("this._t('access_desc')", method)
+
+    def test_profile_selector_does_not_block_home_assistant_navigation(self) -> None:
+        self.assertIn(".argus-bootstrap-layer {\n  position: absolute;", self.panel)
+        self.assertIn('id="btn-exit-to-ha"', self.panel)
+        self.assertIn("window.location.assign('/')", self.panel)
+        for language in ("es", "en", "fr", "pt", "it", "zh", "ru"):
+            dictionary = self.panel.split(f"{language}: {{", 1)[1].split("\n  },", 1)[0]
+            self.assertIn("exit_to_ha:", dictionary)
+
+    def test_activity_history_is_loaded_from_protected_timeline_endpoint(self) -> None:
+        self.assertIn(
+            "await this._loadActivityTimeline(dashboard.entries?.[0]?.entry_id)",
+            self.panel,
+        )
+        self.assertIn("async _loadActivityTimeline(entryId = null)", self.panel)
+        self.assertIn("'argus/get_forensic_timeline'", self.panel)
+        self.assertIn("this._ui.audit_log = timeline", self.panel)
+        clear_method = self.panel.split("async _clearHistory()", 1)[1].split(
+            "\n  }\n", 1
+        )[0]
+        self.assertIn("await this._loadActivityTimeline(entryId)", clear_method)
 
 
 if __name__ == "__main__":
