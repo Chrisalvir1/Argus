@@ -26,7 +26,6 @@
 `argus-bootstrap.js` carga el elemento histórico y aplica clientes pequeños:
 
 - `security-client.js`
-- `audit-client.js`
 - `media-client.js`
 
 Esto permite seguir separando vistas sin una reescritura riesgosa de 380 KB en una sola entrega.

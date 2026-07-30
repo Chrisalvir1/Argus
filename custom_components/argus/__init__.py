@@ -30,9 +30,19 @@ def _async_register_websocket_once(hass: HomeAssistant) -> None:
     hass.data[DOMAIN][_WS_REGISTERED_KEY] = True
 
 
+from .presence import PresenceManager
+
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN][entry.entry_id] = entry.data
+
+    pm = PresenceManager(hass, entry.entry_id)
+    await pm.async_setup()
+
+    hass.data[DOMAIN][entry.entry_id] = {
+        "config": entry.data,
+        "presence_manager": pm
+    }
+
     await async_register_panel(hass)
     _async_register_websocket_once(hass)
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))
@@ -48,5 +58,7 @@ async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     if unload_ok:
-        hass.data[DOMAIN].pop(entry.entry_id, None)
+        data = hass.data[DOMAIN].pop(entry.entry_id, None)
+        if data and "presence_manager" in data:
+            data["presence_manager"].async_unload()
     return unload_ok

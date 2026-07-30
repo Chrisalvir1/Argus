@@ -31,17 +31,16 @@ Argus reúne alarma, sensores, sirenas, SOS, usuarios, auditoría, MQTT y una in
 - Atmósfera WebGL procedimental para lluvia, tormenta con lluvia, tormenta eléctrica, nieve, niebla, nubes, sol, estrellas, luna, estaciones y eclipses respaldados por entidades reales.
 - Animaciones premium para paneles, opciones, guardado, sensores, botones y modales, con respeto por `prefers-reduced-motion`.
 
-## Privacidad 1.8
+## Seguridad y Privacidad 1.9
 
-Argus 1.8 elimina del runtime activo:
+Argus 1.9 incorpora importantes mejoras de seguridad:
 
-- acciones TTS;
-- análisis de cámaras mediante Google Generative AI Conversation;
-- sugerencias “Argus AI”;
-- Argus Copilot;
-- afirmaciones o controles Matter propios.
+- **Zero-Leak Privacy:** Eliminación de los registros desde el cliente para prevenir fugas de PINs y hashes al navegador.
+- **Autorización Forense:** Exigencia de sesión + permiso específico `view_history` para el timeline forense.
+- **Onboarding Seguro:** Manejo estricto e independiente del PIN de acceso (hasheado) y el PIN maestro (opciones de configuración).
+- **Verificaciones Estrictas de Administrador:** Requiere privilegios de administrador de Home Assistant y Argus para consultar usuarios y personas.
 
-HomeKit Bridge continúa como compatibilidad real proporcionada por Home Assistant. Las automatizaciones locales deterministas, notificaciones, entidades y disparo de alarma permanecen disponibles.
+*Anteriormente en 1.8:* Se eliminaron acciones TTS, análisis por IA, y controles Matter de terceros del runtime activo para maximizar la privacidad. HomeKit Bridge y rutinas locales deterministas continúan disponibles.
 
 ## Requisitos
 
@@ -88,16 +87,16 @@ title: Seguridad
 - Reemplaza fondos históricos bajo `/local`, ya que esos archivos son públicos para clientes autenticados según la configuración de Home Assistant.
 - Reporta vulnerabilidades según [SECURITY.md](SECURITY.md).
 
-## Actualización a 1.8
+## Actualización a 1.9
 
 1. Crea un respaldo.
 2. Actualiza desde HACS.
 3. Reinicia Home Assistant.
 4. Recarga el navegador sin caché.
-5. Revisa automatizaciones antiguas y elimina acciones TTS o generativas retiradas.
+5. Revisa automatizaciones antiguas y elimina acciones retiradas si venías de versiones previas.
 6. Verifica armado, desarmado, SOS, PIN, sirenas, medios y restauración.
 
-Consulta [las notas de 1.8.0](docs/RELEASE_NOTES_1.8.0.md).
+Consulta [las notas de 1.9.0](docs/RELEASE_NOTES_1.9.0.md).
 
 ## Desarrollo
 

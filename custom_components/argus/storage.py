@@ -7,6 +7,7 @@ import copy
 import datetime
 import os
 import re
+import uuid
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.storage import Store
@@ -32,6 +33,7 @@ def _store(hass: HomeAssistant, entry_id: str | None = None) -> Store:
 
 def _default_payload() -> dict:
     return {
+        "first_run": True,
         "zones": [], "modes": {"home": {}, "away": {}, "night": {}, "vacation": {}},
         "dashboard": {"layout": "grid", "dense": False}, "audit_log": [],
         "advanced": {"guest_code": None, "guest_code_enabled": False, "duress_pin": None},
@@ -91,6 +93,8 @@ def _migrate_base64_file(hass: HomeAssistant, value: str, prefix: str) -> str:
 async def async_load_ui_data(hass: HomeAssistant, entry_id: str | None = None) -> dict:
     store = _store(hass, entry_id)
     raw = await store.async_load()
+    if isinstance(raw, dict) and "first_run" not in raw:
+        raw["first_run"] = False
     data = _merge_defaults(raw)
     changed = raw != data
     for field, prefix in (("panel_bg_file", "panel_bg"), ("hub_bg_file", "hub_bg")):
@@ -126,13 +130,28 @@ def _preserve_redacted_user_pins(current: object, incoming: object) -> list[dict
         if not isinstance(item, dict):
             raise ValueError("every user must be an object")
         user = copy.deepcopy(item)
-        if not user.get("pin"):
-            previous = current_by_name.get(str(user.get("name")))
-            if previous and previous.get("pin"):
+
+        previous = current_by_name.get(str(user.get("name")))
+        if previous:
+            # Preserve old pin
+            if not user.get("pin") and previous.get("pin"):
                 user["pin"] = previous["pin"]
+            # Preserve new access_pin_hash
+            if not user.get("access_pin_hash") and previous.get("access_pin_hash"):
+                user["access_pin_hash"] = previous["access_pin_hash"]
+
         merged.append(user)
     return merged
 
+
+async def _count_real_ha_admins(hass: HomeAssistant, users_list: list[dict]) -> int:
+    count = 0
+    for u in users_list:
+        if isinstance(u, dict) and u.get("role") == "admin" and u.get("enabled", True) and u.get("ha_user_id"):
+            ha_user = await hass.auth.async_get_user(u["ha_user_id"])
+            if ha_user and ha_user.is_admin:
+                count += 1
+    return count
 
 async def async_save_ui_data(
     hass: HomeAssistant, updates: dict, entry_id: str | None = None
@@ -141,8 +160,18 @@ async def async_save_ui_data(
         current = await async_load_ui_data(hass, entry_id)
         safe_updates = copy.deepcopy(updates or {})
         if "users" in safe_updates:
+            # Check if this change would remove the last real HA admin
+            current_users = current.get("users", [])
+            new_users = safe_updates["users"]
+
+            current_admin_count = await _count_real_ha_admins(hass, current_users)
+            if current_admin_count > 0:
+                new_admin_count = await _count_real_ha_admins(hass, new_users)
+                if new_admin_count == 0:
+                    raise ValueError("Cannot remove, disable, or demote the last Argus administrator linked to a real Home Assistant administrator")
+
             safe_updates["users"] = _preserve_redacted_user_pins(
-                current.get("users", []), safe_updates["users"]
+                current_users, new_users
             )
         current.update(safe_updates)
         await _store(hass, entry_id).async_save(current)
@@ -157,11 +186,56 @@ def _sanitize_users(users: object) -> list[dict]:
         if not isinstance(item, dict):
             raise ValueError("every user must be an object")
         user = copy.deepcopy(item)
+
+        if not user.get("id"):
+            user["id"] = str(uuid.uuid4())
+
+        user.setdefault("name", "Unknown")
+        user.setdefault("ha_user_id", None)
+
+        if "is_admin" in user:
+            is_admin = user.pop("is_admin")
+            if "role" not in user:
+                user["role"] = "admin" if is_admin else "standard"
+
+        user.setdefault("role", "standard")
+        if user["role"] not in {"admin", "standard"}:
+            user["role"] = "standard"
+
+        user.setdefault("enabled", True)
+        user.setdefault("person_entity", None)
+        user.setdefault("shared_kiosk_profile", False)
+
+        if user["shared_kiosk_profile"]:
+            user["role"] = "standard"
+
+        user.setdefault("theme", {"background_mode": "default", "background_file": ""})
+
+        perms = user.get("permissions", {})
+        if not isinstance(perms, dict):
+            perms = {}
+        user["permissions"] = {
+            "view_status": bool(perms.get("view_status", True)),
+            "view_history": bool(perms.get("view_history", False)),
+            "arm": bool(perms.get("arm", False)),
+            "disarm": bool(perms.get("disarm", False)),
+            "sos": bool(perms.get("sos", False)),
+        }
+
+        # Validate/Hash alarm pin
         pin = user.get("pin")
         if pin and not str(pin).startswith("scrypt:"):
             if not validate_pin(str(pin)):
                 raise ValueError("backup contains an invalid user PIN")
             user["pin"] = hash_pin(str(pin))
+
+        # Validate/Hash access pin
+        access_pin = user.get("access_pin_hash")
+        if access_pin and not str(access_pin).startswith("scrypt:"):
+            if not validate_pin(str(access_pin)):
+                raise ValueError("backup contains an invalid access PIN")
+            user["access_pin_hash"] = hash_pin(str(access_pin))
+
         result.append(user)
     return result
 
@@ -211,7 +285,7 @@ async def async_append_audit_log(
         log = current.get("audit_log", [])
         if not isinstance(log, list):
             log = []
-        
+
         prev_hash = log[0].get("hash", "") if log and isinstance(log[0], dict) else ""
         from .audit.forensics import compute_event_hash
         entry_data = {

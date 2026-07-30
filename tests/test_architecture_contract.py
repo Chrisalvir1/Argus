@@ -11,9 +11,9 @@ class TestArchitectureContract(unittest.TestCase):
         manifest = (COMPONENT / "manifest.json").read_text(encoding="utf-8")
         constants = (COMPONENT / "const.py").read_text(encoding="utf-8")
         card = (COMPONENT / "www" / "argus-card.js").read_text(encoding="utf-8")
-        self.assertIn('"version": "1.8.10"', manifest)
-        self.assertIn('VERSION = "1.8.10"', constants)
-        self.assertIn("ARGUS_CARD_VERSION='1.8.10'", card)
+        self.assertIn('"version": "1.9.0"', manifest)
+        self.assertIn('VERSION = "1.9.0"', constants)
+        self.assertIn("ARGUS_CARD_VERSION='1.9.0'", card)
 
     def test_private_media_is_not_local(self) -> None:
         media = (COMPONENT / "media.py").read_text(encoding="utf-8")
@@ -24,7 +24,7 @@ class TestArchitectureContract(unittest.TestCase):
 
     def test_frontend_is_composed_from_clients(self) -> None:
         bootstrap = (COMPONENT / "www" / "argus-bootstrap.js").read_text(encoding="utf-8")
-        for module in ("security-client.js", "audit-client.js", "media-client.js", "premium-experience.js"):
+        for module in ("security-client.js", "media-client.js", "premium-experience.js"):
             self.assertIn(module, bootstrap)
             self.assertTrue((COMPONENT / "www" / module).is_file())
 

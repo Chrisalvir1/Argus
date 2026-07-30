@@ -1735,7 +1735,138 @@ _tmpl.innerHTML = `
   border-color: rgba(255, 59, 48, 0.45);
 }
 
+.argus-bootstrap-layer {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  animation: fadeIn 0.4s ease forwards;
+}
+.argus-bootstrap-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 24px;
+  padding: 40px;
+  max-width: 480px;
+  width: 90%;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+  text-align: center;
+}
+.argus-bootstrap-card h1 {
+  margin: 0 0 16px;
+  font-weight: 300;
+  font-size: 28px;
+  letter-spacing: 0.5px;
+}
+.argus-bootstrap-card p {
+  color: rgba(255,255,255,0.7);
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 32px;
+}
+.user-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+.user-card {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 16px;
+  padding: 20px 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.user-card:hover {
+  background: rgba(255,255,255,0.2);
+  transform: translateY(-2px);
+}
+.user-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+.user-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.9);
+}
+.pin-prompt {
+  display: none;
+  animation: fadeIn 0.3s ease forwards;
+  margin-top: 20px;
+}
+.pin-prompt input {
+  font-size: 24px;
+  letter-spacing: 8px;
+  text-align: center;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(0,0,0,0.2);
+  color: white;
+  width: 200px;
+  margin-bottom: 20px;
+}
+.btn-claim {
+  background: #ff3b30;
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-claim:hover { background: #ff453a; }
+.btn-start {
+  background: #34c759;
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-start:hover { background: #30d158; }
+.btn-cancel {
+  background: rgba(255,255,255,0.1);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 10px;
+}
 </style>
+
+<!-- Bootstrap UI -->
+<div id="bootstrap-overlay" class="argus-bootstrap-layer" style="display:none"></div>
 
 <!-- Language picker modal -->
 <div class="lang-modal-back" id="lang-modal" aria-hidden="true">
@@ -2006,6 +2137,15 @@ _tmpl.innerHTML = `
           <button class="ghost danger" id="btn-reset-config" style="flex:1">⚠️ Restablecer</button>
           <button class="primary" id="btn-undo-reset" style="flex:1; display:none;">↩️ Deshacer</button>
         </div>
+      </section>
+
+      <!-- GitHub Opt-In -->
+      <section class="glass panel liquid-glass" id="github-panel" style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); padding:16px;">
+        <div style="flex:1">
+          <h3 style="margin:0; font-size:14px; font-weight:600">Apoya a Argus</h3>
+          <p style="margin:4px 0 0; font-size:12px; opacity:0.7">Si te gusta este proyecto, considera darle una estrella en GitHub para apoyar su desarrollo.</p>
+        </div>
+        <a href="https://github.com/chrisalvir/argus" target="_blank" style="background:#24292e; color:white; padding:8px 16px; border-radius:8px; text-decoration:none; font-size:12px; font-weight:bold; margin-left:16px">⭐ Star on GitHub</a>
       </section>
 
     </div>
@@ -2312,39 +2452,6 @@ class ArgusPanel extends HTMLElement {
       const previous = oldHass.states[id];
       return isBattery && previous?.state !== current.state;
     });
-
-    // FIX v0.9.32 — Bug 2: detectar transición a 'triggered' y escribir log
-    // con los sensores que estaban abiertos en ese momento.
-    if (alarmChanged && oldHass) {
-    this._dashboard.entries.forEach(e => {
-      const prev = oldHass?.states[e.entity_id]?.state;
-    const curr = hass.states[e.entity_id]?.state;
-    if (curr === 'triggered' && prev !== 'triggered') {
-      // Buscar sensores del modo activo que estén abiertos ahora
-      const modeKey = prev || 'away'; // el modo previo = modo en que estaba armado
-      const _eid = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id;
-      const modeCfg = (this._ui?.modes?.__by_entity__?.[_eid]?.[modeKey])
-                     || (this._ui?.modes?.[modeKey])
-                       || {};
-          const modeSensors = modeCfg.sensors || [];
-          const openSensors = modeSensors
-            .filter(sId => ['on','open','unlocked','active','motion','recording']
-              .includes(hass.states[sId]?.state))
-            .map(sId => hass.states[sId]?.attributes?.friendly_name || sId);
-          const detail = openSensors.length
-            ? `${this._t('log_sensor')}: ${openSensors.join(', ')}`
-            : this._t('log_detail_triggered');
-          this._writeLog('triggered', detail, 'Argus');
-          this._sendHaNotif(`🚨 ${this._t('triggered')}`, detail);
-          // Re-render mode view para que las píldoras parpadeen
-          this._renderModeView();
-        }
-        // Al volver de triggered a cualquier otro estado, re-render para quitar parpadeo
-        if (prev === 'triggered' && curr !== 'triggered') {
-          this._renderModeView();
-        }
-      });
-    }
 
     if (alarmChanged || sensorChanged || batteryChanged || tempChanged || clockChanged || weatherChanged || !oldHass) {
       this._renderEntries();
@@ -2756,8 +2863,6 @@ class ArgusPanel extends HTMLElement {
     try {
       await this._send('argus/clear_audit_log');
       if (this._ui) this._ui.audit_log = [];
-      this._activityLog = [];
-      this._forensicTimeline = [];
       const el = this.shadowRoot.getElementById('activity-log');
       if (el) el.innerHTML = `<div class="small" style="padding:8px 0;opacity:.55">${this._t('log_no_events')}</div>`;
       this._renderActivityLog();
@@ -2904,7 +3009,7 @@ class ArgusPanel extends HTMLElement {
       }, 10000);
 
     } catch (err) {
-      alert(this._format('reset_error', { error: err.message }));
+      alert(this._t('reset_error_auth'));
     }
   }
 
@@ -3046,28 +3151,45 @@ class ArgusPanel extends HTMLElement {
 
   /* ── Load dashboard ──────────────────────────────────────────────── */
   async _load() {
+    let bootstrap;
+    try { bootstrap = await this._send('argus/login_bootstrap'); }
+    catch (e) { console.error('Argus bootstrap load failed:', e); return; }
+
+    this._bootstrap = bootstrap;
+    this._backgroundMode = bootstrap.background_mode || 'none';
+    this._backgroundImages = bootstrap.background_images || [];
+    this._updateCanvasBackground();
+
+    if (bootstrap.first_run) {
+      this._renderFirstRunScreen();
+      return;
+    }
+
+    if (bootstrap.legacy_claim_needed) {
+      this._renderLegacyClaimScreen();
+      return;
+    }
+
+    if (!bootstrap.has_active_session) {
+      this._renderLoginScreen(bootstrap);
+      return;
+    }
+
+    // Now we have a session, load dashboard
     let dashboard;
     try { dashboard = await this._send('argus/dashboard'); }
-    catch (e) { console.error('Argus dashboard load failed:', e); return; }
+    catch (e) {
+      if (e.message.includes('permission') || e.message.includes('session') || e.message.includes('unauthorized')) {
+        this._renderLoginScreen(bootstrap);
+        return;
+      }
+      console.error('Argus dashboard load failed:', e);
+      return;
+    }
 
     this._dashboard = dashboard;
     this._available = dashboard.available_entities || [];
     this._ui = dashboard.ui || { modes: {}, dashboard: {} };
-    // Fetch the audit log independently as well. This prevents a partial
-    // dashboard response or an old cached panel payload from leaving the
-    // visible history blank while the server still has its entries.
-    this._send('argus/get_audit_log').then(auditResponse => {
-      if (Array.isArray(auditResponse?.log)) {
-        this._ui.audit_log = auditResponse.log;
-        this._renderActivityLog();
-      }
-    }).catch(err => {
-      console.warn('Argus audit log refresh failed; using dashboard data.', err);
-    });
-    this._send('argus/get_forensic_timeline', {limit:200}).then(result => {
-      this._forensicTimeline = result?.timeline || [];
-      this._renderActivityLog();
-    }).catch(() => { this._forensicTimeline = []; });
     this._notifTargets = dashboard.ui?.notif_targets || [];
     this._users = Array.isArray(dashboard.ui?.users)
       ? dashboard.ui.users.filter(user => user && typeof user === 'object' && !Array.isArray(user))
@@ -3134,8 +3256,8 @@ class ArgusPanel extends HTMLElement {
     this._updateBgFieldsVisibility();
     this._updateCanvasBackground();
 
-    // Admin flag: always true by default, authorization checked via Master PIN
-    this._isAdmin = true;
+    this._isAdmin = dashboard.current_profile?.role === 'admin';
+    this._permissions = dashboard.current_profile?.permissions || {};
     const resolvedEntityId = dashboard.entries?.[0]?.entity_id;
     if (resolvedEntityId) {
       if (!this._modeEntryId || this._modeEntryId === 'default') {
@@ -3297,169 +3419,11 @@ class ArgusPanel extends HTMLElement {
       disarm:'<path d="m76 104 16 16 34-39"/>',
       triggered:'<path d="M100 65 139 137H61z"/><path d="M100 90v23M100 124h.01"/>'
     }[mode];
-    return `<svg viewBox="0 0 200 200" width="100%" height="100%" style="filter:drop-shadow(0 18px 28px rgba(0,0,0,.34));max-width:180px;margin:auto;display:block" aria-label="${escapeHtml(mode)}"><defs><linearGradient id="premium-${mode}" x1="20%" y1="10%" x2="85%" y2="100%"><stop stop-color="#fff" stop-opacity=".38"/><stop offset=".25" stop-color="${accent}" stop-opacity=".78"/><stop offset="1" stop-color="${accent}" stop-opacity=".18"/></linearGradient><filter id="premium-glow-${mode}"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M100 22 157 46v42c0 42-23 69-57 87-34-18-57-45-57-87V46z" fill="url(#premium-${mode})" stroke="${accent}" stroke-width="3" filter="url(#premium-glow-${mode})"/><path d="M100 31 148 51" stroke="#fff" stroke-opacity=".45" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="105" r="43" fill="rgba(5,12,23,.3)" stroke="rgba(255,255,255,.22)" stroke-width="2"/><g fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" filter="url(#premium-glow-${mode})">${symbol}</g><circle cx="100" cy="105" r="55" fill="none" stroke="${accent}" stroke-opacity=".42" stroke-width="2"><animate attributeName="r" values="51;60;51" dur="3.5s" repeatCount="indefinite"/><animate attributeName="opacity" values=".6;.08;.6" dur="3.5s" repeatCount="indefinite"/></circle></svg>`;
+    return `<svg viewBox="0 0 200 200" width="100%" height="100%" style="filter:drop-shadow(0 18px 28px rgba(0,0,0,.34));max-width:180px;margin:auto;display:block" aria-label="${this._escapeHtml(mode)}"><defs><linearGradient id="premium-${mode}" x1="20%" y1="10%" x2="85%" y2="100%"><stop stop-color="#fff" stop-opacity=".38"/><stop offset=".25" stop-color="${accent}" stop-opacity=".78"/><stop offset="1" stop-color="${accent}" stop-opacity=".18"/></linearGradient><filter id="premium-glow-${mode}"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M100 22 157 46v42c0 42-23 69-57 87-34-18-57-45-57-87V46z" fill="url(#premium-${mode})" stroke="${accent}" stroke-width="3" filter="url(#premium-glow-${mode})"/><path d="M100 31 148 51" stroke="#fff" stroke-opacity=".45" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="105" r="43" fill="rgba(5,12,23,.3)" stroke="rgba(255,255,255,.22)" stroke-width="2"/><g fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" filter="url(#premium-glow-${mode})">${symbol}</g><circle cx="100" cy="105" r="55" fill="none" stroke="${accent}" stroke-opacity=".42" stroke-width="2"><animate attributeName="r" values="51;60;51" dur="3.5s" repeatCount="indefinite"/><animate attributeName="opacity" values=".6;.08;.6" dur="3.5s" repeatCount="indefinite"/></circle></svg>`;
   }
 
   _getIntelligentSVG(state, w, isNight, triggered) {
     return this._renderPremiumStatusIcon(state, triggered);
-    const base = `<svg viewBox="0 0 200 200" width="100%" height="100%" style="filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6)); max-width: 140px; margin: 0 auto; display: block;">`;
-
-    if (triggered) {
-      return base + `
-        <defs>
-          <filter id="glow-red"><feGaussianBlur stdDeviation="8" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        </defs>
-        <circle cx="100" cy="100" r="60" fill="none" stroke="#ff2a2a" stroke-width="4" filter="url(#glow-red)">
-          <animate attributeName="r" values="60;80;60" dur="1s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
-        </circle>
-        <path d="M100 30 L170 150 L30 150 Z" fill="rgba(255,42,42,0.15)" stroke="#ff2a2a" stroke-width="6" stroke-linejoin="round" filter="url(#glow-red)">
-           <animate attributeName="opacity" values="1;0.4;1" dur="0.5s" repeatCount="indefinite"/>
-        </path>
-        <rect x="95" y="70" width="10" height="40" rx="5" fill="#fff" filter="url(#glow-red)"/>
-        <circle cx="100" cy="130" r="6" fill="#fff" filter="url(#glow-red)"/>
-      </svg>`;
-    }
-
-    if (state === 'armed_home') {
-      return base + `
-        <defs>
-          <filter id="glow-orange"><feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-          <linearGradient id="grad-home" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#fb8c00" stop-opacity="0.9"/>
-            <stop offset="100%" stop-color="#ffb74d" stop-opacity="0.3"/>
-          </linearGradient>
-        </defs>
-        <!-- Glowing 3D-like House -->
-        <path d="M100 20 L20 90 V170 A10 10 0 0 0 30 180 H170 A10 10 0 0 0 180 170 V90 Z" fill="url(#grad-home)" stroke="#ffb74d" stroke-width="3" stroke-linejoin="round" filter="url(#glow-orange)"/>
-        <path d="M100 20 L180 90 M100 20 L20 90" fill="none" stroke="#fff" stroke-width="2" opacity="0.5"/>
-
-        <!-- Animated Radar/Spotlight -->
-        <path d="M100 180 L40 50 A120 120 0 0 1 160 50 Z" fill="#fb8c00" opacity="0.15">
-           <animateTransform attributeName="transform" type="rotate" values="-25 100 180; 25 100 180; -25 100 180" dur="4s" repeatCount="indefinite"/>
-        </path>
-
-        <!-- Glowing Cameras -->
-        <circle cx="40" cy="90" r="4" fill="#ff0000" filter="url(#glow-orange)">
-           <animate attributeName="opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite"/>
-        </circle>
-        <circle cx="160" cy="90" r="4" fill="#ff0000" filter="url(#glow-orange)">
-           <animate attributeName="opacity" values="0.2;1;0.2" dur="1s" repeatCount="indefinite"/>
-        </circle>
-
-        <!-- Center Lock -->
-        <rect x="75" y="100" width="50" height="40" rx="8" fill="#111" stroke="#fb8c00" stroke-width="3" filter="url(#glow-orange)"/>
-        <path d="M85 100 V80 A15 15 0 0 1 115 80 V100" fill="none" stroke="#fb8c00" stroke-width="4" stroke-linecap="round"/>
-        <circle cx="100" cy="120" r="6" fill="#fb8c00"/>
-      </svg>`;
-    }
-
-    if (state === 'armed_away') {
-      return base + `
-        <defs>
-          <filter id="glow-red"><feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-          <linearGradient id="grad-away" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#e53935" stop-opacity="0.9"/>
-            <stop offset="100%" stop-color="#ef9a9a" stop-opacity="0.3"/>
-          </linearGradient>
-        </defs>
-        <!-- High-tech Shield -->
-        <path d="M100 10 L30 40 V100 C30 150 60 180 100 195 C140 180 170 150 170 100 V40 Z" fill="url(#grad-away)" stroke="#ef9a9a" stroke-width="3" stroke-linejoin="round" filter="url(#glow-red)"/>
-
-        <!-- Pulse Rings -->
-        <circle cx="100" cy="100" r="40" fill="none" stroke="#e53935" stroke-width="3" opacity="0.5">
-           <animate attributeName="r" values="40; 80; 40" dur="2.5s" repeatCount="indefinite"/>
-           <animate attributeName="opacity" values="0.8; 0; 0.8" dur="2.5s" repeatCount="indefinite"/>
-        </circle>
-
-        <!-- Center Lock -->
-        <rect x="75" y="100" width="50" height="40" rx="8" fill="#111" stroke="#fff" stroke-width="3"/>
-        <path d="M85 100 V80 A15 15 0 0 1 115 80 V100" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
-        <circle cx="100" cy="120" r="6" fill="#fff"/>
-      </svg>`;
-    }
-
-    if (state === 'armed_night') {
-      return base + `
-        <defs>
-          <filter id="glow-blue"><feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-          <linearGradient id="grad-night" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#1e88e5" stop-opacity="0.9"/>
-            <stop offset="100%" stop-color="#90caf9" stop-opacity="0.3"/>
-          </linearGradient>
-        </defs>
-        <!-- Crescent Moon -->
-        <path d="M110 20 A 75 75 0 1 0 180 140 A 85 85 0 0 1 110 20 Z" fill="url(#grad-night)" stroke="#90caf9" stroke-width="2" filter="url(#glow-blue)">
-           <animateTransform attributeName="transform" type="rotate" values="-5 100 100; 5 100 100; -5 100 100" dur="8s" repeatCount="indefinite"/>
-        </path>
-
-        <!-- Floating Zzz -->
-        <text x="130" y="80" fill="#90caf9" font-family="sans-serif" font-weight="900" font-size="24" filter="url(#glow-blue)">
-           Z<animate attributeName="opacity" values="0;1;0" dur="4s" repeatCount="indefinite"/>
-           <animate attributeName="y" values="80;50;80" dur="4s" repeatCount="indefinite"/>
-        </text>
-        <text x="160" y="50" fill="#90caf9" font-family="sans-serif" font-weight="900" font-size="32" filter="url(#glow-blue)">
-           Z<animate attributeName="opacity" values="0;1;0" dur="4s" begin="1.5s" repeatCount="indefinite"/>
-           <animate attributeName="y" values="50;10;50" dur="4s" begin="1.5s" repeatCount="indefinite"/>
-        </text>
-
-        <!-- Night Lock -->
-        <rect x="40" y="110" width="40" height="30" rx="6" fill="#111" stroke="#1e88e5" stroke-width="3" filter="url(#glow-blue)"/>
-        <path d="M48 110 V95 A12 12 0 0 1 72 95 V110" fill="none" stroke="#1e88e5" stroke-width="3" stroke-linecap="round"/>
-      </svg>`;
-    }
-
-    if (state === 'armed_vacation') {
-      return base + `
-        <defs>
-          <filter id="glow-purple"><feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-          <linearGradient id="grad-vacation" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#9c27b0" stop-opacity="0.9"/>
-            <stop offset="100%" stop-color="#ce93d8" stop-opacity="0.3"/>
-          </linearGradient>
-        </defs>
-        <!-- Hologram Globe -->
-        <circle cx="100" cy="100" r="75" fill="rgba(156,39,176,0.1)" stroke="#ce93d8" stroke-width="3" filter="url(#glow-purple)"/>
-        <path d="M100 25 C 140 25, 160 70, 160 100 C 160 130, 140 175, 100 175 C 60 175, 40 130, 40 100 C 40 70, 60 25, 100 25 Z" fill="none" stroke="#ce93d8" stroke-width="2" opacity="0.6"/>
-        <path d="M25 100 H 175" fill="none" stroke="#ce93d8" stroke-width="2" opacity="0.6"/>
-
-        <!-- Airplane Orbiting -->
-        <g fill="url(#grad-vacation)" stroke="#fff" stroke-width="2" filter="url(#glow-purple)">
-           <animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" dur="8s" repeatCount="indefinite"/>
-           <path d="M85 10 L115 10 L130 30 L160 30 A8 8 0 0 1 160 40 L130 40 L100 70 L85 70 L100 40 L70 40 L55 50 L45 50 L65 35 L45 20 L55 20 L70 30 L100 30 Z" transform="translate(0, -25)"/>
-        </g>
-
-        <!-- Center Lock -->
-        <rect x="80" y="90" width="40" height="30" rx="6" fill="#111" stroke="#9c27b0" stroke-width="3" filter="url(#glow-purple)"/>
-        <path d="M90 90 V75 A10 10 0 0 1 110 75 V90" fill="none" stroke="#9c27b0" stroke-width="3" stroke-linecap="round"/>
-      </svg>`;
-    }
-
-    // Disarmed Mode
-    return base + `
-      <defs>
-        <filter id="glow-green"><feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        <linearGradient id="grad-disarm" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#43a047" stop-opacity="0.9"/>
-          <stop offset="100%" stop-color="#a5d6a7" stop-opacity="0.3"/>
-        </linearGradient>
-      </defs>
-
-      <!-- Open Shield -->
-      <path d="M100 15 L35 45 V100 C35 145 65 175 100 190 C135 175 165 145 165 100 V45 Z" fill="url(#grad-disarm)" stroke="#a5d6a7" stroke-width="3" stroke-linejoin="round" filter="url(#glow-green)"/>
-
-      <!-- Open Lock -->
-      <rect x="75" y="100" width="50" height="40" rx="8" fill="#111" stroke="#fff" stroke-width="3"/>
-      <path d="M115 100 V75 A15 15 0 0 0 85 75" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round">
-         <animateTransform attributeName="transform" type="rotate" values="0 85 75; -25 85 75; 0 85 75" dur="3s" repeatCount="indefinite"/>
-      </path>
-
-      <!-- Safe Pulse Rings -->
-      <circle cx="100" cy="120" r="30" fill="none" stroke="#43a047" stroke-width="3" opacity="0.6">
-        <animate attributeName="r" values="30; 70" dur="2.5s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0.8; 0" dur="2.5s" repeatCount="indefinite"/>
-      </circle>
-    </svg>`;
   }
 
   _renderEntries() {
@@ -3504,9 +3468,6 @@ class ArgusPanel extends HTMLElement {
       const displayedTemperature = this._getDisplayedTemperature();
       const temperatures = this._getTemperatureReadings();
 
-      // Dynamic SVG Icon Generation
-      // Replaced old static svgName logic with dynamic intelligent SVGs
-
       const mKey = state.replace('armed_', '');
       let eCfg = (this._ui?.modes?.__by_entity__?.[e.entity_id]?.[mKey])
                 || (this._ui?.modes?.[mKey]) || {};
@@ -3531,12 +3492,12 @@ class ArgusPanel extends HTMLElement {
 
       art.innerHTML = `
           ${this._renderEntryBackground(weatherState, isNight)}
-          <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="${escapeHtml(t('fullscreen_title'))}" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>
+          <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>
           ${this._renderBatteryAlerts()}
           <div class="hud">
-            <div class="hud-loc">${escapeHtml(fullHudLoc)}</div>
-            <div class="hud-data"><span>${escapeHtml(timeStr)}</span>${displayedTemperature ? `<i>🌡️ ${escapeHtml(displayedTemperature)}</i>` : ''}</div>
-            ${temperatures.length ? `<div class="hud-temperatures">${temperatures.map(item => `<span class="hud-temperature">${escapeHtml(item.label)} ${escapeHtml(item.value)}</span>`).join('')}</div>` : ''}
+            <div class="hud-loc">${this._escapeHtml(fullHudLoc)}</div>
+            <div class="hud-data"><span>${this._escapeHtml(timeStr)}</span>${displayedTemperature ? `<i>🌡️ ${this._escapeHtml(displayedTemperature)}</i>` : ''}</div>
+            ${temperatures.length ? `<div class="hud-temperatures">${temperatures.map(item => `<span class="hud-temperature">${this._escapeHtml(item.label)} ${this._escapeHtml(item.value)}</span>`).join('')}</div>` : ''}
           </div>
           <div class="entry-content">
             <div class="liquid-stack">
@@ -3545,7 +3506,7 @@ class ArgusPanel extends HTMLElement {
               <button class="liquid-btn btn-night ${state==='armed_night'?'active':''} ${sensorAlert && state==='armed_night'?'buzz-orange':''}" data-idx="${idx}" data-action="night">${this._modeButtonIcon('night')}<span>${t('btn_night')}</span></button>
               <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''} ${sensorAlert && state==='armed_vacation'?'buzz-orange':''}" data-idx="${idx}" data-action="vacation">${this._modeButtonIcon('vacation')}<span>${t('btn_vacation')}</span></button>
               <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm">${this._modeButtonIcon('disarm')}<span>${t('btn_disarmed')}</span></button>
-              <button class="btn-sos" data-action="${panicActive ? 'stop-sos' : 'sos'}" data-idx="${idx}">${this._modeButtonIcon('sos')}<span>${panicActive ? t('sos_stop') : t('btn_sos')}</span></button>
+              ${this._permissions?.sos !== false ? `<button class="btn-sos" data-action="${panicActive ? 'stop-sos' : 'sos'}" data-idx="${idx}">${this._modeButtonIcon('sos')}<span>${panicActive ? t('sos_stop') : t('btn_sos')}</span></button>` : ''}
             </div>
             <div class="entry-icon">
               ${this._getIntelligentSVG(state, weatherState, isNight, triggered)}
@@ -3563,8 +3524,8 @@ class ArgusPanel extends HTMLElement {
                   return `<div class="sensor-chip ${isOpen ? 'sensor-chip--open' + (triggered ? ' sensor-chip--triggered' : '') : 'sensor-chip--closed'}">
                     <span class="sensor-chip-dot"></span>
                     <div class="sensor-chip-text">
-                      <span class="sensor-chip-name">${escapeHtml(shortName)}</span>
-                      <span class="sensor-chip-state">${escapeHtml(isOpen ? t('status_open') : t('status_closed'))}</span>
+                      <span class="sensor-chip-name">${this._escapeHtml(shortName)}</span>
+                      <span class="sensor-chip-state">${this._escapeHtml(isOpen ? t('status_open') : t('status_closed'))}</span>
                     </div>
                     ${battery !== null ? `<span class="sensor-chip-battery${batteryClass}">🔋 ${battery}%</span>` : ''}
                   </div>`;
@@ -3592,7 +3553,7 @@ class ArgusPanel extends HTMLElement {
       btn.addEventListener('click', ev => this._toggleFullscreen(ev.currentTarget.closest('.entry')));
     });
     el.querySelectorAll('.wx-webgl').forEach(canvas => this._initWeatherWebGL(canvas));
-    this._bindSOS(); // v0.9.33 Fix #5: re-bind SOS slider despues de cada re-render del DOM
+    this._bindSOS();
   }
 
   _toggleFullscreen(targetEl) {
@@ -3697,132 +3658,6 @@ class ArgusPanel extends HTMLElement {
 
   _getWeatherBg(ws, isNight) {
     return this._renderAtmosphere(ws, isNight);
-    /* Legacy SVG renderer retained below temporarily for backwards source compatibility. */
-    const has = s => ws.includes(s);
-    const isRain = has('pouring') || has('rain') || has('drizzle') || has('shower');
-    const isStorm = has('thunder') || has('lightning') || has('storm');
-    const isSnow = has('snow') || has('hail') || has('sleet') || has('blizzard');
-    const isFog = has('fog') || has('mist') || has('hazy');
-    const isCloudy = has('cloud') || has('overcast');
-    const isPartly = has('partly');
-    const season = this._season();
-    const eclipse = this._eclipseEvent();
-
-    const moonPhase = this._moonPhase();
-
-    // Adaptive Sky Colors (Gradients)
-    let topC = '#4facfe', botC = '#00f2fe'; // Sunny Default
-    if (isNight) {
-      if (isStorm) { topC = '#0f172a'; botC = '#1e293b'; }
-      else if (isCloudy) { topC = '#1e293b'; botC = '#334155'; }
-      else { topC = '#0b192c'; botC = '#1a365d'; }
-    } else {
-      if (isStorm) { topC = '#334155'; botC = '#475569'; }
-      else if (isRain) { topC = '#64748b'; botC = '#94a3b8'; }
-      else if (isSnow) { topC = '#94a3b8'; botC = '#cbd5e1'; }
-      else if (isFog) { topC = '#cbd5e1'; botC = '#e2e8f0'; }
-      else if (isCloudy && !isPartly) { topC = '#7dd3fc'; botC = '#bae6fd'; }
-    }
-
-    // Landscape & Tree Colors
-    let m1 = '#60a5fa', m2 = '#3b82f6', m3 = '#2563eb', g1 = '#1d4ed8';
-    if (!isNight && !isRain && !isSnow && !isStorm && !isFog) { // Sunny with green trees
-      m1 = '#86efac'; m2 = '#4ade80'; m3 = '#22c55e'; g1 = '#16a34a';
-    } else if (isNight) {
-      m1 = '#1e3a8a'; m2 = '#172554'; m3 = '#0f172a'; g1 = '#020617';
-    } else if (isSnow) {
-      m1 = '#f1f5f9'; m2 = '#e2e8f0'; m3 = '#cbd5e1'; g1 = '#94a3b8';
-    } else if (isRain || isStorm || isFog) {
-      m1 = '#94a3b8'; m2 = '#64748b'; m3 = '#475569'; g1 = '#334155';
-    } else if (season === 'autumn') {
-      m1 = '#d69e4a'; m2 = '#b7791f'; m3 = '#744210'; g1 = '#8b4513';
-    } else if (season === 'spring') {
-      m1 = '#bbf7d0'; m2 = '#86efac'; m3 = '#4ade80'; g1 = '#3f8f53';
-    } else if (season === 'winter') {
-      m1 = '#dbeafe'; m2 = '#bfdbfe'; m3 = '#93c5fd'; g1 = '#64748b';
-    }
-
-    // Celestial Body (Sun/Moon with Phase)
-    let celestial = '';
-    if (isNight) {
-      if (moonPhase === 'new') {
-        celestial = `<circle cx="80%" cy="25%" r="35" fill="#ffffff" opacity="0.05" filter="blur(2px)"/>`;
-      } else {
-        const shadow = {
-          'waxing-crescent': ['82%', '25%', 31], 'first-quarter': ['80%', '25%', 25], 'waxing-gibbous': ['77%', '25%', 18],
-          'waning-gibbous': ['83%', '25%', 18], 'last-quarter': ['80%', '25%', 25], 'waning-crescent': ['78%', '25%', 31], full: ['80%', '25%', 0]
-        }[moonPhase] || ['80%', '25%', 0];
-        celestial = `<g filter="drop-shadow(0 0 20px #fef08a)">
-          <circle cx="80%" cy="25%" r="35" fill="#fef08a"/>
-          ${shadow[2] ? `<circle cx="${shadow[0]}" cy="${shadow[1]}" r="${shadow[2]}" fill="${topC}" opacity=".93"/>` : ''}
-          <circle cx="77%" cy="22%" r="8" fill="#000" opacity="0.06"/>
-          <circle cx="82%" cy="28%" r="12" fill="#000" opacity="0.04"/>
-        </g>`;
-      }
-    } else if (!isCloudy || isPartly) {
-      celestial = `
-        <circle cx="80%" cy="30%" r="45" fill="#fbbf24" filter="drop-shadow(0 0 35px #f59e0b)"/>
-        <circle cx="80%" cy="30%" r="55" fill="#fcd34d" opacity="0.35">
-          <animate attributeName="r" values="50;60;50" dur="5s" repeatCount="indefinite"/>
-        </circle>`;
-    }
-    if (eclipse === 'solar') {
-      celestial = `<g filter="drop-shadow(0 0 24px #ffd166)"><circle cx="80%" cy="25%" r="48" fill="#ffd166" opacity=".85"/><circle cx="80%" cy="25%" r="39" fill="#080c16"/><circle cx="76%" cy="21%" r="6" fill="#080c16" opacity=".9"/></g>`;
-    } else if (eclipse === 'lunar') {
-      celestial = `<g filter="drop-shadow(0 0 22px #ff7b72)"><circle cx="80%" cy="25%" r="35" fill="#d85c50"/><circle cx="77%" cy="22%" r="8" fill="#6d2225" opacity=".34"/><circle cx="84%" cy="29%" r="10" fill="#6d2225" opacity=".24"/></g>`;
-    }
-
-    // Dynamic Weather Elements (Lightning, Clouds, Rain, Snow)
-    let fx = '';
-    if (isStorm) {
-      fx += `<rect width="100%" height="100%" fill="#ffffff" opacity="0"><animate attributeName="opacity" values="0;0;0.7;0;0;0.4;0;0" dur="6s" repeatCount="indefinite"/></rect>
-             <path d="M 320 0 L 400 150 L 360 170 L 480 400" fill="none" stroke="#fff" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0;1;0;0;0.8;0;0" dur="6s" repeatCount="indefinite"/></path>`;
-    }
-
-    let cloudGroup = '';
-    if (isCloudy || isPartly || isRain || isSnow) {
-      const cCol = isNight ? '#334155' : (isStorm ? '#475569' : '#f8fafc');
-      cloudGroup = `<g fill="${cCol}" opacity="0.75" filter="blur(5px)">
-        <path d="M -50 60 Q 20 10 90 60 Q 160 20 230 70 Q 300 40 370 80 Q 180 120 0 120 Z"><animateTransform attributeName="transform" type="translate" values="-400 0; 900 0" dur="45s" repeatCount="indefinite"/></path>
-        <path d="M 50 110 Q 150 50 250 110 Q 350 40 450 130 Q 550 60 650 150 Q 350 200 50 200 Z" opacity="0.5"><animateTransform attributeName="transform" type="translate" values="-700 20; 900 20" dur="65s" repeatCount="indefinite"/></path>
-      </g>`;
-    }
-
-    let particles = '';
-    if (isRain || isStorm) {
-      const drops = Array.from({length: 60}, (_, i) => `<line x1="${(i*1.7)%100}%" y1="-10%" x2="${((i*1.7)%100)-4}%" y2="110%" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"><animate attributeName="y1" values="-10%;110%" dur="${0.4+(i%4)*0.1}s" begin="-${(i*0.1)%2}s" repeatCount="indefinite"/><animate attributeName="y2" values="0%;120%" dur="${0.4+(i%4)*0.1}s" begin="-${(i*0.1)%2}s" repeatCount="indefinite"/></line>`).join('');
-      particles = `<g>${drops}</g>`;
-    } else if (isSnow) {
-      const flakes = Array.from({length: 50}, (_, i) => `<circle cx="${(i*2.1)%100}%" cy="-10%" r="${2+(i%3)}" fill="rgba(255,255,255,0.8)"><animate attributeName="cy" values="-10%;110%" dur="${4+(i%5)}s" begin="-${(i*0.2)%5}s" repeatCount="indefinite"/><animate attributeName="cx" values="${(i*2.1)%100}%;${((i*2.1)%100)+3}%;${((i*2.1)%100)-3}%;${(i*2.1)%100}%" dur="${2+i%3}s" repeatCount="indefinite"/></circle>`).join('');
-      particles = `<g filter="blur(1px)">${flakes}</g>`;
-    }
-    const seasonalParticles = !isRain && !isStorm && !isSnow && (season === 'spring' || season === 'autumn')
-      ? `<g opacity=".72">${Array.from({length: 18}, (_, i) => {
-          const x = (i * 19) % 100, color = season === 'spring' ? '#ffd1dc' : '#f6ad55';
-          return `<ellipse cx="${x}%" cy="-${(i % 8) * 10}%" rx="2.5" ry="1.5" fill="${color}"><animate attributeName="cy" values="-8%;108%" dur="${7 + (i % 4)}s" begin="-${i % 6}s" repeatCount="indefinite"/><animate attributeName="cx" values="${x}%;${Math.min(100, x + 12)}%;${Math.max(0, x - 8)}%;${x}%" dur="${4 + (i % 3)}s" repeatCount="indefinite"/></ellipse>`;
-        }).join('')}</g>` : '';
-
-    const svg = `
-      <svg preserveAspectRatio="xMidYMax slice" viewBox="0 0 800 400" style="position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none;">
-        <defs><linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="${topC}"/><stop offset="100%" stop-color="${botC}"/></linearGradient></defs>
-        <rect width="100%" height="100%" fill="url(#sky)"/>
-        ${isNight && !isCloudy ? Array.from({length: 30}, (_, i) => `<circle cx="${(i*31.7)%100}%" cy="${(i*17.3)%60}%" r="${0.5+Math.random()*1.5}" fill="#fff"><animate attributeName="opacity" values="0.3;1;0.3" dur="${2+Math.random()*3}s" repeatCount="indefinite"/></circle>`).join('') : ''}
-        ${celestial}
-        ${fx}
-        <path d="M 0 350 L 150 200 L 300 320 L 500 150 L 700 280 L 800 200 L 800 400 L 0 400 Z" fill="${m1}" opacity="0.6"/>
-        <path d="M -50 400 L 100 250 L 250 380 L 400 220 L 600 350 L 850 220 L 850 400 Z" fill="${m2}" opacity="0.8"/>
-        <path d="M 0 400 Q 200 280 400 350 T 800 300 L 800 400 Z" fill="${m3}"/>
-        <g fill="${g1}">
-          <polygon points="50,400 75,290 100,400"/><polygon points="30,400 65,310 100,400"/><polygon points="80,400 110,310 140,400"/><polygon points="120,400 150,260 180,400"/>
-          <polygon points="350,400 390,290 430,400"/><polygon points="410,400 440,270 470,400"/><polygon points="650,400 690,250 730,400"/><polygon points="720,400 760,270 800,400"/>
-        </g>
-        ${cloudGroup}
-        ${particles}
-        ${seasonalParticles}
-        ${isFog ? `<rect width="100%" height="100%" fill="#fff" opacity="0.35" filter="blur(15px)"/>` : ''}
-      </svg>`;
-
-    return `<div class="wx wx-scenic">${svg}${this._renderEclipseOverlay(eclipse)}</div>`;
   }
 
 
@@ -4017,9 +3852,8 @@ class ArgusPanel extends HTMLElement {
     if (titleEl) titleEl.textContent = this._t('activity_log');
 
     try {
-      const sourceLog = Array.isArray(this._forensicTimeline) && this._forensicTimeline.length ? this._forensicTimeline : this._ui?.audit_log;
-      const log = Array.isArray(sourceLog)
-        ? sourceLog.filter(entry => entry && typeof entry === 'object' && !Array.isArray(entry))
+      const log = Array.isArray(this._ui?.audit_log)
+        ? this._ui.audit_log.filter(entry => entry && typeof entry === 'object' && !Array.isArray(entry))
         : [];
       if (!log.length) {
         el.innerHTML = `<div class="small" style="padding:8px 0;opacity:.55">${this._t('log_no_events')}</div>`;
@@ -4040,9 +3874,6 @@ class ArgusPanel extends HTMLElement {
           }
         }
 
-        // Audit entries are persisted by HA and can have been written in a
-        // different UI language.  Derive their display text from the stable
-        // action code every time the selected language changes.
         const detail = this._localizeActivityDetail(action, rawDetail);
 
         let icon = '<div class="glass-orb"></div>', badgeCls = '', badgeTxt = action, itemCls = '';
@@ -4062,7 +3893,6 @@ class ArgusPanel extends HTMLElement {
           itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('log_action_sos');
         }
 
-        // Attribute the action clearly
         let source = '';
         if (user && user !== 'Argus' && user !== 'system') {
           source = `👤 ${user}`;
@@ -4076,10 +3906,10 @@ class ArgusPanel extends HTMLElement {
           <div class="log-icon">${icon}</div>
           <div class="log-body">
             <div class="log-title">
-              <span class="log-badge ${badgeCls}">${escapeHtml(badgeTxt)}</span>
-              <span style="font-weight:500">${escapeHtml(detail)}</span>
+              <span class="log-badge ${badgeCls}">${this._escapeHtml(badgeTxt)}</span>
+              <span style="font-weight:500">${this._escapeHtml(detail)}</span>
             </div>
-            <div class="log-meta">${escapeHtml(ts)} &nbsp;·&nbsp; ${escapeHtml(source)}</div>
+            <div class="log-meta">${this._escapeHtml(ts)} &nbsp;·&nbsp; ${this._escapeHtml(source)}</div>
           </div>
         </div>`;
       }).join('');
@@ -4245,7 +4075,7 @@ class ArgusPanel extends HTMLElement {
     const instanceBlock = entries.length > 1 ? `
         <div class="mode-section-card">
           <div class="mode-section-title">${this._t('alarm_instance')}</div>
-          <select id="mode-instance-select" style="width:100%; padding:10px; border-radius:10px; background:rgba(255,255,255,0.05); color:inherit; border:1px solid rgba(255,255,255,0.1)">${entries.map(e => `<option value="${escapeHtml(e.entity_id)}" ${e.entity_id===activeEntityId ? 'selected' : ''}>${escapeHtml(e.title || e.entity_id)}</option>`).join('')}</select>
+          <select id="mode-instance-select" style="width:100%; padding:10px; border-radius:10px; background:rgba(255,255,255,0.05); color:inherit; border:1px solid rgba(255,255,255,0.1)">${entries.map(e => `<option value="${this._escapeHtml(e.entity_id)}" ${e.entity_id===activeEntityId ? 'selected' : ''}>${this._escapeHtml(e.title || e.entity_id)}</option>`).join('')}</select>
         </div>` : '';
 
     el.innerHTML = `
@@ -4344,8 +4174,6 @@ class ArgusPanel extends HTMLElement {
       powerHtml = `${power.mains ? '<span class="pill-power">🔌 AC</span>' : ''}${power.battery !== null ? `<span class="pill-power">🔋 ${power.battery}%</span>` : ''}`;
     }
 
-    // FIX v0.9.32 — Bug 3: sirenas parpadean rojo si el sistema está en triggered.
-    // Sensores abiertos también se marcan como triggered-sensor.
     const alarmTriggered = this._dashboard?.entries?.some(en =>
     this._hass?.states?.[en.entity_id]?.state === 'triggered'
     );
@@ -4357,7 +4185,7 @@ class ArgusPanel extends HTMLElement {
       <span class="sensor-pill${pillExtra}">
         ${dot}
         <span class="pill-content">
-          <span class="pill-name">${escapeHtml(name)}</span>
+          <span class="pill-name">${this._escapeHtml(name)}</span>
           ${stateLabel}
           ${powerHtml}
         </span>
@@ -4371,7 +4199,6 @@ class ArgusPanel extends HTMLElement {
     const [type, entityId] = value.split(':');
     const cfg = this._currentModeConfig();
     const key = type === 'sensor' ? 'sensors' : (type === 'bypass' ? 'bypassed_sensors' : (type === 'entry' ? 'entry_sensors' : 'sirens'));
-    // FIX #4/#5: write back into __by_entity__ structure, not flat modes[mode]
     let eId = this._modeEntryId;
     if (!eId || eId === 'default') {
       eId = this._dashboard?.entries?.[0]?.entity_id || 'default';
@@ -4390,17 +4217,12 @@ class ArgusPanel extends HTMLElement {
     const entDelay = this.shadowRoot.getElementById('mode-entry-delay');
     const mqttChk  = this.shadowRoot.getElementById('mode-mqtt-enabled');
 
-    // FIX v0.9.31 — Bug 2: leer require_closed del DOM en este preciso momento,
-    // ANTES de cualquier await, para garantizar que el valor más reciente del
-    // checkbox llega a cfg y se persiste correctamente en __by_entity__.
     if (chk)      cfg.require_closed = chk.checked;
     if (armTime)  cfg.arming_time  = armTime.value  ? parseInt(armTime.value)  : 0;
     if (entDelay) cfg.entry_delay  = entDelay.value ? parseInt(entDelay.value) : 0;
     if (mqttChk)  cfg.mqtt_enabled = mqttChk.checked;
 
     this._runWithPin(async () => {
-      // FIX-1: persistir en __by_entity__ ANTES del send para que el re-render
-      // muestre los valores correctos aunque el WS tarde o falle
       const _eid = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id || 'default';
       this._ui.modes = this._ui.modes || {};
       this._ui.modes.__by_entity__ = this._ui.modes.__by_entity__ || {};
@@ -4463,7 +4285,6 @@ class ArgusPanel extends HTMLElement {
           return;
       }
 
-      // Si ya consultamos pero aún no termina, mantenemos el UI de carga
       if (!this._relatedAutomationsFetched) return;
 
       const states = this._hass.states || {};
@@ -4483,10 +4304,10 @@ class ArgusPanel extends HTMLElement {
         return `
         <div class="list-item-card">
           <div>
-            <div style="font-weight:700">${escapeHtml(a.attributes?.friendly_name || a.entity_id)}</div>
+            <div style="font-weight:700">${this._escapeHtml(a.attributes?.friendly_name || a.entity_id)}</div>
             <div class="small" style="opacity:0.7;margin-top:4px">${a.attributes?.last_triggered ? new Date(a.attributes.last_triggered).toLocaleString(this._getLocale()) : this._t('never_triggered')}</div>
           </div>
-          <button class="ghost" style="padding:6px 12px;background:rgba(255,255,255,0.08);border-radius:8px" data-edit-auto="${escapeHtml(editId)}">✏️</button>
+          <button class="ghost" style="padding:6px 12px;background:rgba(255,255,255,0.08);border-radius:8px" data-edit-auto="${this._escapeHtml(editId)}">✏️</button>
         </div>`;
       }).join('')}</div>`;
 
@@ -4506,7 +4327,6 @@ class ArgusPanel extends HTMLElement {
     if (!sel) return;
     const services = this._hass?.services?.notify || {};
 
-    // Solo mostrar las de celular, quitando "notify" genérico o "persistent_notification"
     let opts = Object.keys(services).filter(k => k !== 'notify' && !k.includes('persistent_notification') && !this._notifTargets.includes(k));
 
     sel.innerHTML = opts.length
@@ -4514,7 +4334,7 @@ class ArgusPanel extends HTMLElement {
           let label = k;
           if (k.startsWith('mobile_app')) label = "📱 " + k.replace('mobile_app_', '').replace(/_/g, ' ');
           else label = "🔔 " + label.replace(/_/g, ' ');
-          return `<option value="${escapeHtml(k)}">${escapeHtml(label)}</option>`;
+          return `<option value="${this._escapeHtml(k)}">${this._escapeHtml(label)}</option>`;
         }).join('')
       : `<option value="">— Sin servicios móviles —</option>`;
   }
@@ -4532,8 +4352,8 @@ class ArgusPanel extends HTMLElement {
     const el = this.shadowRoot.getElementById('notif-targets');
     if (!el) return;
     el.innerHTML = this._notifTargets.map(t => `
-      <span class="notif-chip">📱 ${escapeHtml(t.replace(/_/g,' '))}
-        <button data-notif-remove="${escapeHtml(t)}">✕</button>
+      <span class="notif-chip">📱 ${this._escapeHtml(t.replace(/_/g,' '))}
+        <button data-notif-remove="${this._escapeHtml(t)}">✕</button>
       </span>`).join('') || `<span class="small" style="opacity:.5">—</span>`;
     el.querySelectorAll('[data-notif-remove]').forEach(btn =>
       btn.addEventListener('click', () => {
@@ -4593,15 +4413,15 @@ class ArgusPanel extends HTMLElement {
           }
           const expBadge = u.expiration_date
             ? (isExpired
-              ? `<span class="user-badge admin" style="background:rgba(229,57,53,0.12);color:#e53935;margin-left:5px">❌ ${escapeHtml(this._t('expired'))} (${escapeHtml(formattedDate)})</span>`
-              : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">⏳ ${escapeHtml(this._t('active_until'))}: ${escapeHtml(formattedDate)}</span>`)
+              ? `<span class="user-badge admin" style="background:rgba(229,57,53,0.12);color:#e53935;margin-left:5px">❌ ${this._escapeHtml(this._t('expired'))} (${this._escapeHtml(formattedDate)})</span>`
+              : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">⏳ ${this._escapeHtml(this._t('active_until'))}: ${this._escapeHtml(formattedDate)}</span>`)
             : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">♾️ ${this._t('exp_indefinite')}</span>`;
 
           return `
           <div class="user-card" style="display:flex;flex-direction:column;align-items:stretch;gap:8px">
             <div style="display:flex;justify-content:between;align-items:center;width:100%">
               <div style="flex:1">
-                <div style="font-weight:700">${escapeHtml(u.name || '')}</div>
+                <div style="font-weight:700">${this._escapeHtml(u.name || '')}</div>
                 <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
                   <span class="user-badge ${u.is_admin ? 'admin' : ''}">${u.is_admin ? '⭐ Admin' : '👤 User'}</span>
                   ${expBadge}
@@ -4626,7 +4446,6 @@ class ArgusPanel extends HTMLElement {
                     this._ui = resp.ui;
                   }
                   this._renderUsers();
-                  this._renderActivityLog();
                 } catch (e) {
                   alert(this._format('generic_error', { error: e.message }));
                 }
@@ -4715,15 +4534,12 @@ class ArgusPanel extends HTMLElement {
         }
         if (status) { status.textContent = '✓'; status.className = 'status ok'; }
         this._renderUsers();
-        this._renderActivityLog();
       } catch (e) {
         if (status) { status.textContent = e.message; status.className = 'status err'; }
         else { alert(this._format('generic_error', { error: e.message })); }
       }
     });
   }
-
-
 
   _populateTemperatureSources() {
     const sel = this.shadowRoot.getElementById('temp-source-select-standalone');
@@ -4741,7 +4557,7 @@ class ArgusPanel extends HTMLElement {
       if (seen.has(x.entity_id)) return false;
       seen.add(x.entity_id);
       return true;
-    }).map(x => `<option value="${escapeHtml(x.entity_id)}">${escapeHtml(x.name)}</option>`).join('');
+    }).map(x => `<option value="${this._escapeHtml(x.entity_id)}">${this._escapeHtml(x.name)}</option>`).join('');
   }
 
   _populateWeatherSources() {
@@ -4750,7 +4566,7 @@ class ArgusPanel extends HTMLElement {
     const previous = select.value || this._weatherSource || 'auto';
     const weather = Object.values(this._hass.states).filter(state => state.entity_id?.startsWith('weather.'));
     select.innerHTML = [{ entity_id: 'auto', name: this._t('weather_auto') }, ...weather.map(state => ({ entity_id: state.entity_id, name: state.attributes?.friendly_name || state.entity_id }))]
-      .map(item => `<option value="${escapeHtml(item.entity_id)}">${escapeHtml(item.name)}</option>`).join('');
+      .map(item => `<option value="${this._escapeHtml(item.entity_id)}">${this._escapeHtml(item.name)}</option>`).join('');
     select.value = [...select.options].some(option => option.value === previous) ? previous : 'auto';
   }
 
@@ -5035,18 +4851,18 @@ class ArgusPanel extends HTMLElement {
     listContainer.innerHTML = files
       .filter(file => !file.is_video)
       .map(file => `
-      <div class="file-card" data-filename="${escapeHtml(file.name)}">
+      <div class="file-card" data-filename="${this._escapeHtml(file.name)}">
         <div class="file-card-preview">
-          <img src="${escapeHtml(file.url)}" loading="lazy">
+          <img src="${this._escapeHtml(file.url)}" loading="lazy">
         </div>
-        <div class="file-card-name" title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</div>
+        <div class="file-card-name" title="${this._escapeHtml(file.name)}">${this._escapeHtml(file.name)}</div>
         <div class="file-card-meta">
-          <span>${escapeHtml(file.size_str)}</span>
-          <button class="file-card-btn-delete" data-filename="${escapeHtml(file.name)}" title="${escapeHtml(this._t('delete_btn_title'))}">🗑️</button>
+          <span>${this._escapeHtml(file.size_str)}</span>
+          <button class="file-card-btn-delete" data-filename="${this._escapeHtml(file.name)}" title="${this._escapeHtml(this._t('delete_btn_title'))}">🗑️</button>
         </div>
         <div class="file-card-actions">
-          <button class="file-card-btn use-for-panel" data-url="${escapeHtml(file.url)}">${escapeHtml(this._t('use_for_panel'))}</button>
-          <button class="file-card-btn use-for-hub" data-url="${escapeHtml(file.url)}">${escapeHtml(this._t('use_for_hub'))}</button>
+          <button class="file-card-btn use-for-panel" data-url="${this._escapeHtml(file.url)}">${this._escapeHtml(this._t('use_for_panel'))}</button>
+          <button class="file-card-btn use-for-hub" data-url="${this._escapeHtml(file.url)}">${this._escapeHtml(this._t('use_for_hub'))}</button>
         </div>
       </div>
     `).join('');
@@ -5234,7 +5050,7 @@ class ArgusPanel extends HTMLElement {
     container.innerHTML = outputs.length
       ? outputs.map(id => {
           const name = this._hass?.states?.[id]?.attributes?.friendly_name || id;
-          return `<span class="sensor-pill" title="${escapeHtml(name)}"><span>${escapeHtml(name)}</span></span>`;
+          return `<span class="sensor-pill" title="${this._escapeHtml(name)}"><span>${this._escapeHtml(name)}</span></span>`;
         }).join('')
       : `<div class="mode-sensor-none">${this._t('sos_no_outputs')}</div>`;
   }
@@ -5252,18 +5068,14 @@ class ArgusPanel extends HTMLElement {
     this._sosBusy = true;
     const modal = this.shadowRoot && this.shadowRoot.getElementById('sos-modal');
     if (modal) modal.classList.remove('open');
-    const targets = this._notifTargets || [];
-    const loc = this._homeName || this._t('home_default');
     const emergencyNumber = this._normaliseEmergencyNumber(this._emergencyNumber);
-    const idx = Number.isInteger(this._sosEntryIdx) ? this._sosEntryIdx : 0;
-    const eid = this._dashboard?.entries?.[idx]?.entity_id;
+    const idx = this._sosEntryIdx;
+    const entry = this._dashboard?.entries?.[idx];
+    const eid = entry?.entity_id;
     try {
       if (!this._hass || !eid) throw new Error(this._t('no_alarm_instance'));
-      await this._hass.callService('alarm_control_panel', 'alarm_trigger', { entity_id: eid });
-      this._writeLog('sos', `${this._t('sos_activated')} — ${loc}`, this._hass.user?.name || this._t('user_default'));
+      await this._send('argus/perform_alarm_action', { action: 'sos', entry_id: entry.entry_id });
       if (window.confirm(`${this._t('sos_activated')}. ${this._format('sos_call_confirm', { number: emergencyNumber })}`)) {
-        // A tel: URI is intentionally delegated to the device.  Phones/tablets
-        // can place the call; kiosks without a dialer keep the mobile alerts.
         window.location.href = `tel:${emergencyNumber}`;
       }
     } catch (err) {
@@ -5289,10 +5101,11 @@ class ArgusPanel extends HTMLElement {
     }
     const restore = async (pin) => {
       try {
-        await this._hass.callService('alarm_control_panel', restoreService, {
-          entity_id: entry.entity_id, ...(pin ? { code: pin } : {})
+        await this._send('argus/perform_alarm_action', {
+          action: restoreService.replace('alarm_', ''),
+          entry_id: entry.entry_id,
+          ...(pin ? { code: pin } : {})
         });
-        this._writeLog('sos_stopped', this._format('panic_stopped', { state: previous }), this._hass.user?.name || this._t('user_default'));
         await this._load();
         return true;
       } catch (err) {
@@ -5313,7 +5126,6 @@ class ArgusPanel extends HTMLElement {
   }
 
   async _persistPersonalization() {
-    const status = this.shadowRoot.getElementById('personalization-status');
     const background_mode = this.shadowRoot.getElementById('bg-mode-select-standalone')?.value || 'weather';
     const temperature_source = this.shadowRoot.getElementById('temp-source-select-standalone')?.value || 'auto';
     const weather_source = this.shadowRoot.getElementById('weather-source-select')?.value || 'auto';
@@ -5483,9 +5295,7 @@ class ArgusPanel extends HTMLElement {
     const status = this.shadowRoot.getElementById('pin-status');
     const pinErr = this.shadowRoot.getElementById('pin-error');
 
-    // 1. Verificar si el usuario es administrador en HA
     const isAdmin = this._hass?.user?.is_admin === true;
-    const currentUser = this._hass?.user?.name || this._t('user_default');
 
     if (!isAdmin) {
       const errMsg = this._t('pin_reset_admin_only');
@@ -5496,19 +5306,12 @@ class ArgusPanel extends HTMLElement {
       if (pinErr) {
         pinErr.textContent = errMsg;
       }
-      this._writeLog('pin_reset_failed', 'Intento no autorizado de restablecer el PIN maestro', currentUser);
       return;
     }
 
-    // 2. Confirmación
     if (confirm(this._t('pin_reset_confirm'))) {
       try {
         await this._send('argus/update_master_pin', { pin: '', force_reset: true });
-
-        // Log en auditoría
-        this._writeLog('pin_reset', 'PIN maestro restablecido por el administrador', currentUser);
-
-        // Mensaje de éxito
         const successMsg = '✓ PIN Maestro restablecido';
         if (status) {
           status.textContent = successMsg;
@@ -5519,12 +5322,10 @@ class ArgusPanel extends HTMLElement {
           pinErr.style.color = '#43a047';
         }
 
-        // Limpiar inputs
         if (this.shadowRoot.getElementById('current-pin')) this.shadowRoot.getElementById('current-pin').value = '';
         this.shadowRoot.getElementById('new-pin-1').value = '';
         this.shadowRoot.getElementById('new-pin-2').value = '';
 
-        // Cerrar modal de PIN si estuviera abierto
         setTimeout(() => {
           this._closePinModal();
           this._load();
@@ -5543,8 +5344,6 @@ class ArgusPanel extends HTMLElement {
   }
 
   _runWithPin(action) {
-    // Administrative settings are protected by Home Assistant server-side.
-    // The alarm service itself still validates a PIN when it is required.
     action();
   }
 
@@ -5560,7 +5359,6 @@ class ArgusPanel extends HTMLElement {
     }
     this._pinCallback = onConfirm;
 
-    // Check if in fullscreen
     const isFS = this.classList.contains('fullscreen-active');
     let fsEl = null;
     if (isFS) {
@@ -5696,12 +5494,9 @@ class ArgusPanel extends HTMLElement {
     const list   = this.shadowRoot.getElementById('selector-list');
     const selBox = this.shadowRoot.getElementById('selector-selected');
 
-    // For sensor type: only contact sensors (door/window/vibration/glass/opening),
-    // camera-linked motion sensors, and locks. Everything else is excluded.
     const INTRUSION_DC = ['door','window','motion','vibration','glass','opening','smoke','gas','tamper'];
     const items = this._available.filter(x => {
       if (this._selectorTarget === 'siren' || this._selectorTarget === 'panic') return ['siren','switch','light','fan','input_boolean','script'].includes(x.domain);
-      // sensor / bypass mode:
       if (x.domain === 'lock') return true;
       if (x.domain === 'binary_sensor') {
         const dc = this._hass?.states?.[x.entity_id]?.attributes?.device_class || '';
@@ -5715,22 +5510,19 @@ class ArgusPanel extends HTMLElement {
       const stateObj = this._hass?.states?.[x.entity_id];
       const facts = this._deviceFacts(x.entity_id, stateObj, true);
       return `<label class="pick-row">
-        <input type="checkbox" data-entity="${escapeHtml(x.entity_id)}" ${this._selected.includes(x.entity_id) ? 'checked' : ''}>
+        <input type="checkbox" data-entity="${this._escapeHtml(x.entity_id)}" ${this._selected.includes(x.entity_id) ? 'checked' : ''}>
         <div>
-          <div class="pick-row-name">${escapeHtml(x.name || x.entity_id)}</div>
-          <div class="pick-row-meta">${escapeHtml(x.entity_id)}${x.area ? ' · '+escapeHtml(x.area) : ''}</div>
-          <div class="device-facts">${facts.map(f => `<span class="device-fact ${f.className}">${escapeHtml(f.text)}</span>`).join('')}</div>
+          <div class="pick-row-name">${this._escapeHtml(x.name || x.entity_id)}</div>
+          <div class="pick-row-meta">${this._escapeHtml(x.entity_id)}${x.area ? ' · '+this._escapeHtml(x.area) : ''}</div>
+          <div class="device-facts">${facts.map(f => `<span class="device-fact ${f.className}">${this._escapeHtml(f.text)}</span>`).join('')}</div>
         </div>
       </label>`;
     }).join('') || `<div class="small" style="padding:10px">${this._t('no_results')}</div>`;
 
-    // FIX v0.9.31 — Bug 1: delegación en contenedor con { once:true }
-    // Evita acumulación de listeners en cada re-render que causaba
-    // que al seleccionar una sirena se disparara el listener de otra.
     list.addEventListener('change', e => {
-    const cb = e.target.closest('input[type=checkbox]');
-    if (!cb || !cb.dataset.entity) return;
-    const id = cb.dataset.entity;
+      const cb = e.target.closest('input[type=checkbox]');
+      if (!cb || !cb.dataset.entity) return;
+      const id = cb.dataset.entity;
       if (cb.checked) { if (!this._selected.includes(id)) this._selected.push(id); }
       else this._selected = this._selected.filter(v => v !== id);
       this._renderSelector();
@@ -5741,10 +5533,10 @@ class ArgusPanel extends HTMLElement {
       const facts = this._deviceFacts(id, stateObj, true);
       return `<div class="sel-right-item">
         <div style="min-width:0">
-          <div class="sel-right-name">${escapeHtml(stateObj?.attributes?.friendly_name || id)}</div>
-          <div class="sel-right-facts">${facts.map(f => `<span class="device-fact ${f.className}">${escapeHtml(f.text)}</span>`).join('')}</div>
+          <div class="sel-right-name">${this._escapeHtml(stateObj?.attributes?.friendly_name || id)}</div>
+          <div class="sel-right-facts">${facts.map(f => `<span class="device-fact ${f.className}">${this._escapeHtml(f.text)}</span>`).join('')}</div>
         </div>
-        <button class="ghost" style="padding:3px 8px;font-size:11px;flex-shrink:0;margin-left:6px" data-rm="${escapeHtml(id)}">✕</button>
+        <button class="ghost" style="padding:3px 8px;font-size:11px;flex-shrink:0;margin-left:6px" data-rm="${this._escapeHtml(id)}">✕</button>
       </div>`;
     }).join('') || `<div class="small" style="padding:10px;opacity:.5">${this._t('none_selected')}</div>`;
 
@@ -5817,9 +5609,12 @@ class ArgusPanel extends HTMLElement {
       const hasUsers = this._users && this._users.length > 0;
       const doDisarm = async (pin) => {
         try {
-          await this._hass.callService('alarm_control_panel', 'alarm_disarm',
-            { entity_id: e.entity_id, ...(pin ? { code: pin } : {}) });
-          this._writeLog('disarm', this._t('manual_disarm'), currentUser);
+          await this._send('argus/perform_alarm_action', {
+            action: 'disarm',
+            entry_id: e.entry_id,
+            ...(pin ? { code: pin } : {})
+          });
+
           this._sendHaNotif(`🔓 ${this._t('log_disarmed')}`, this._format('notification_disarmed', { user: currentUser }));
           // FIX v0.9.32 — Bug 1: al desarmar, forzar re-render inmediato para
           // quitar la clase siren-active/triggered-sensor de todas las píldoras.
@@ -5863,15 +5658,18 @@ class ArgusPanel extends HTMLElement {
       }
       if (openNames.length > 0) {
         this._showArmBlockedAlert(openNames);
-        this._writeLog('arm_rejected', `${this._t('open_sensors')}: ${openNames.join(', ')}`, currentUser);
+
         return;
       }
     }
 
     try {
-      await this._hass.callService('alarm_control_panel', service, { entity_id: e.entity_id });
+      await this._send('argus/perform_alarm_action', {
+        action: service.replace('alarm_', ''),
+        entry_id: e.entry_id
+      });
       const modeTxt = modeLabels[action] || action;
-      this._writeLog('arm', `${this._t('manual_arm')} (${modeTxt})`, currentUser);
+
       this._sendHaNotif(`🔒 ${this._t('log_armed')} — ${modeTxt}`, this._format('notification_armed', { user: currentUser, mode: modeTxt }));
       setTimeout(() => this._load(), 800);
     } catch (err) {
@@ -5895,17 +5693,130 @@ class ArgusPanel extends HTMLElement {
     );
   }
 
-  /* ── Audit log writer ────────────────────────────────────────────── */
-  _writeLog(action, detail, user = '') {
-    // Write to backend asynchronously – don't block UI
-    this._send('argus/write_log', { action, detail, user }).catch(() => {});
-    // Optimistically prepend to local log so it's visible immediately
-    if (!this._ui) this._ui = {};
-    if (!this._ui.audit_log) this._ui.audit_log = [];
-    this._ui.audit_log.unshift({ action, detail, user, ts: new Date().toISOString() });
-    this._ui.audit_log = this._ui.audit_log.slice(0, 50);
-    this._renderActivityLog();
+  /* ── Bootstrap Render Methods ─────────────────────────────────────── */
+  _renderFirstRunScreen() {
+    const overlay = this.shadowRoot.getElementById('bootstrap-overlay');
+    overlay.style.display = 'flex';
+    const defaultName = this._hass?.user?.name || "Admin";
+    overlay.innerHTML = `
+      <div class="argus-bootstrap-card liquid-glass">
+        <h1>Welcome to Argus</h1>
+        <p>Complete setup to secure your home.</p>
+        <div class="pin-prompt" style="margin-top: 15px; display: block; border: none; background: transparent; box-shadow: none;">
+          <input type="text" id="setup-admin-name" placeholder="Name" value="${defaultName}" style="margin-bottom: 10px;" />
+          <input type="password" id="setup-master-pin" placeholder="Master PIN (Optional)" style="margin-bottom: 10px;" />
+          <input type="password" id="setup-access-pin" placeholder="Access PIN (Optional)" style="margin-bottom: 20px;" />
+          <button id="btn-complete-setup" class="btn-start" style="width: 100%;">Start</button>
+        </div>
+      </div>
+    `;
+    this.shadowRoot.getElementById('btn-complete-setup').addEventListener('click', async () => {
+      const admin_name = this.shadowRoot.getElementById('setup-admin-name').value || defaultName;
+      const master_pin = this.shadowRoot.getElementById('setup-master-pin').value || undefined;
+      const access_pin = this.shadowRoot.getElementById('setup-access-pin').value || undefined;
+      try {
+        await this._send('argus/complete_first_run', { admin_name, master_pin, access_pin });
+        overlay.style.display = 'none';
+        this._load();
+      } catch (err) {
+        alert("Setup failed: " + err.message);
+      }
+    });
   }
+
+  _renderLegacyClaimScreen() {
+    const overlay = this.shadowRoot.getElementById('bootstrap-overlay');
+    overlay.style.display = 'flex';
+    overlay.innerHTML = `
+      <div class="argus-bootstrap-card liquid-glass">
+        <h1>Argus Security Update</h1>
+        <p>Your installation needs an administrator to claim access.</p>
+        <button id="btn-claim-admin" class="btn-claim">Claim Administration</button>
+      </div>
+    `;
+    this.shadowRoot.getElementById('btn-claim-admin').addEventListener('click', async () => {
+      try {
+        await this._send('argus/claim_legacy_administration');
+        overlay.style.display = 'none';
+        this._load();
+      } catch (err) {
+        alert("Claim failed: " + err.message);
+      }
+    });
+  }
+
+  _renderLoginScreen(bootstrap) {
+    const overlay = this.shadowRoot.getElementById('bootstrap-overlay');
+    overlay.style.display = 'flex';
+    let usersHtml = bootstrap.users.map(u => `
+      <div class="user-card" data-user-id="${escapeHtml(u.id)}" data-pin-required="${u.access_pin_configured ? 'true' : 'false'}">
+        <div class="user-avatar">${escapeHtml(u.name.substring(0, 2).toUpperCase())}</div>
+        <div class="user-name">${escapeHtml(u.name)}</div>
+        ${u.access_pin_configured ? '🔒' : ''}
+      </div>
+    `).join('');
+
+    overlay.innerHTML = `
+      <div class="argus-bootstrap-card liquid-glass">
+        <h1>Select Profile</h1>
+        <div class="user-selector-grid">
+          ${usersHtml}
+        </div>
+        <div id="pin-prompt" class="pin-prompt">
+          <input type="password" id="login-pin-input" placeholder="PIN" />
+          <br/>
+          <button id="btn-submit-login-pin" class="btn-start">Login</button>
+          <button id="btn-cancel-login" class="btn-cancel">Cancel</button>
+        </div>
+      </div>
+    `;
+
+    const pinPrompt = this.shadowRoot.getElementById('pin-prompt');
+    const pinInput = this.shadowRoot.getElementById('login-pin-input');
+    const grid = this.shadowRoot.querySelector('.user-selector-grid');
+    let selectedUserId = null;
+
+    this.shadowRoot.querySelectorAll('.user-card').forEach(el => {
+      el.addEventListener('click', async () => {
+        const userId = el.getAttribute('data-user-id');
+        const pinRequired = el.getAttribute('data-pin-required') === 'true';
+        if (pinRequired) {
+          selectedUserId = userId;
+          grid.style.display = 'none';
+          pinPrompt.style.display = 'block';
+          pinInput.focus();
+        } else {
+          try {
+            await this._send('argus/select_profile', { argus_user_id: userId });
+            overlay.style.display = 'none';
+            this._load();
+          } catch (err) {
+            alert("Selection failed: " + err.message);
+          }
+        }
+      });
+    });
+
+    this.shadowRoot.getElementById('btn-cancel-login').addEventListener('click', () => {
+      selectedUserId = null;
+      pinInput.value = '';
+      pinPrompt.style.display = 'none';
+      grid.style.display = 'grid';
+    });
+
+    this.shadowRoot.getElementById('btn-submit-login-pin').addEventListener('click', async () => {
+      if (!selectedUserId || !pinInput.value) return;
+      try {
+        await this._send('argus/verify_access_pin', { argus_user_id: selectedUserId, pin: pinInput.value });
+        overlay.style.display = 'none';
+        this._load();
+      } catch (err) {
+        alert("Login failed: " + err.message);
+        pinInput.value = '';
+      }
+    });
+  }
+
 
   /* ── HA Notifications helper ─────────────────────────────────────── */
   _sendHaNotif(title, message) {
