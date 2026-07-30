@@ -102,18 +102,36 @@ async def async_load_ui_data(hass: HomeAssistant, entry_id: str | None = None) -
         raw["first_run"] = False
     data = _merge_defaults(raw)
     changed = raw != data
-    # Recover the pre-isolation audit trail once for a single Argus instance.
-    # Never mix legacy events when multiple config entries exist.
+    # Recover the pre-isolation configuration for a single Argus instance.
+    # Never mix legacy configurations when multiple config entries exist.
     if (
         entry_id
         and len(hass.config_entries.async_entries(DOMAIN)) == 1
-        and not data.get("audit_log")
+        and not data.get("legacy_migration_complete")
     ):
         legacy_raw = await _store(hass).async_load()
-        legacy_log = legacy_raw.get("audit_log") if isinstance(legacy_raw, dict) else None
-        if isinstance(legacy_log, list) and legacy_log:
-            data["audit_log"] = copy.deepcopy(legacy_log[:AUDIT_LOG_MAX])
-            changed = True
+        if isinstance(legacy_raw, dict):
+            _LOGGER.info("Recovering legacy Argus configuration from argus.ui")
+            default_payload = _default_payload()
+            
+            # Special case for audit log
+            legacy_log = legacy_raw.get("audit_log")
+            if not data.get("audit_log") and isinstance(legacy_log, list) and legacy_log:
+                data["audit_log"] = copy.deepcopy(legacy_log[:AUDIT_LOG_MAX])
+            
+            # For each key in legacy_raw, if current data is default/empty, restore it
+            for key, val in legacy_raw.items():
+                if key == "audit_log":
+                    continue
+                # If current data for this key is exactly the default or empty, we can safely overwrite it
+                if key not in data or data.get(key) == default_payload.get(key) or (isinstance(data.get(key), (list, dict)) and not data.get(key)):
+                    data[key] = copy.deepcopy(val)
+                    
+            if "users" in data and isinstance(data["users"], list):
+                data["users"] = _sanitize_users(data["users"])
+                
+        data["legacy_migration_complete"] = True
+        changed = True
     for field, prefix in (("panel_bg_file", "panel_bg"), ("hub_bg_file", "hub_bg")):
         value = data.get(field, "")
         if isinstance(value, str) and value.startswith("data:"):

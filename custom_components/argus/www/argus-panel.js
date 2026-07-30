@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.9.8
+ * Argus Home Hub – v1.9.9
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1023,13 +1023,27 @@ const SETUP_REQUIRED_TEXTS = {
 };
 
 const UI_AUDIT_TEXTS = {
-  es: { github_title:'Apoya a Argus', github_desc:'Si te gusta este proyecto, considera darle una estrella en GitHub para apoyar su desarrollo.', github_action:'Dar estrella en GitHub', history_refresh:'Actualizar', history_unavailable:'No se pudo cargar el historial. Verifica el permiso «Ver historial» e inténtalo de nuevo.', user_no_pin:'Sin PIN', user_pin_action:'PIN', user_role_action:'Rol', notif_no_services:'Sin servicios móviles' },
-  en: { github_title:'Support Argus', github_desc:'If you like this project, consider starring it on GitHub to support its development.', github_action:'Star on GitHub', history_refresh:'Refresh', history_unavailable:'Activity history could not be loaded. Check the “View history” permission and try again.', user_no_pin:'No PIN', user_pin_action:'PIN', user_role_action:'Role', notif_no_services:'No mobile services' },
-  fr: { github_title:'Soutenez Argus', github_desc:'Si vous aimez ce projet, ajoutez une étoile sur GitHub pour soutenir son développement.', github_action:'Ajouter une étoile sur GitHub', history_refresh:'Actualiser', history_unavailable:'Impossible de charger l’historique. Vérifiez l’autorisation « Voir l’historique » et réessayez.', user_no_pin:'Sans PIN', user_pin_action:'PIN', user_role_action:'Rôle', notif_no_services:'Aucun service mobile' },
-  pt: { github_title:'Apoie o Argus', github_desc:'Se você gosta deste projeto, dê uma estrela no GitHub para apoiar o desenvolvimento.', github_action:'Dar estrela no GitHub', history_refresh:'Atualizar', history_unavailable:'Não foi possível carregar o histórico. Verifique a permissão “Ver histórico” e tente novamente.', user_no_pin:'Sem PIN', user_pin_action:'PIN', user_role_action:'Função', notif_no_services:'Sem serviços móveis' },
-  it: { github_title:'Sostieni Argus', github_desc:'Se ti piace questo progetto, aggiungi una stella su GitHub per sostenerne lo sviluppo.', github_action:'Aggiungi una stella su GitHub', history_refresh:'Aggiorna', history_unavailable:'Impossibile caricare la cronologia. Controlla il permesso “Visualizza cronologia” e riprova.', user_no_pin:'Senza PIN', user_pin_action:'PIN', user_role_action:'Ruolo', notif_no_services:'Nessun servizio mobile' },
-  zh: { github_title:'支持 Argus', github_desc:'如果您喜欢这个项目，请在 GitHub 上加星以支持其开发。', github_action:'在 GitHub 上加星', history_refresh:'刷新', history_unavailable:'无法加载活动历史。请检查“查看历史”权限后重试。', user_no_pin:'无 PIN', user_pin_action:'PIN', user_role_action:'角色', notif_no_services:'无移动服务' },
-  ru: { github_title:'Поддержите Argus', github_desc:'Если вам нравится проект, поставьте звезду на GitHub, чтобы поддержать разработку.', github_action:'Поставить звезду на GitHub', history_refresh:'Обновить', history_unavailable:'Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.', user_no_pin:'Без PIN', user_pin_action:'PIN', user_role_action:'Роль', notif_no_services:'Нет мобильных служб' },
+  es: { github_title:'Apoya a Argus', github_desc:'Si te gusta este proyecto, considera darle una estrella en GitHub para apoyar su desarrollo.', github_action:'Dar estrella en GitHub', history_refresh:'Actualizar', history_unavailable:'No se pudo cargar el historial. Verifica el permiso «Ver historial» e inténtalo de nuevo.', user_no_pin:'Sin PIN', user_pin_action:'PIN', user_role_action:'Rol', notif_no_services:'Sin servicios móviles',
+    log_action_user_logged_in:'Inicio de sesión', log_action_state_restored:'Estado restaurado', log_action_profile_selected:'Perfil seleccionado', log_action_schedule_applied:'Horario aplicado', log_action_mode_changed:'Modo cambiado', log_action_backup_created:'Copia de seguridad creada', log_action_backup_restored:'Configuración restaurada', log_action_access_pin_updated:'PIN de acceso actualizado',
+    modal_cancel:'Cancelar', modal_save:'Guardar', modal_confirm:'Confirmar', modal_pin_title:'PIN de acceso', modal_pin_help:'Deja en blanco para eliminar el PIN de acceso.', modal_edit_name:'Editar nombre', modal_add_user:'+ Agregar usuario manual', modal_name_label:'Nombre del perfil', modal_user_added:'Usuario creado.', modal_delete_confirm:'¿Eliminar este usuario? Esta acción no se puede deshacer.' },
+  en: { github_title:'Support Argus', github_desc:'If you like this project, consider starring it on GitHub to support its development.', github_action:'Star on GitHub', history_refresh:'Refresh', history_unavailable:'Activity history could not be loaded. Check the “View history” permission and try again.', user_no_pin:'No PIN', user_pin_action:'PIN', user_role_action:'Role', notif_no_services:'No mobile services',
+    log_action_user_logged_in:'User login', log_action_state_restored:'State restored', log_action_profile_selected:'Profile selected', log_action_schedule_applied:'Schedule applied', log_action_mode_changed:'Mode changed', log_action_backup_created:'Backup created', log_action_backup_restored:'Configuration restored', log_action_access_pin_updated:'Access PIN updated',
+    modal_cancel:'Cancel', modal_save:'Save', modal_confirm:'Confirm', modal_pin_title:'Access PIN', modal_pin_help:'Leave blank to remove the access PIN.', modal_edit_name:'Edit name', modal_add_user:'+ Add manual user', modal_name_label:'Profile name', modal_user_added:'User created.', modal_delete_confirm:'Delete this user? This action cannot be undone.' },
+  fr: { github_title:'Soutenez Argus', github_desc:'Si vous aimez ce projet, ajoutez une étoile sur GitHub pour soutenir son développement.', github_action:'Ajouter une étoile sur GitHub', history_refresh:'Actualiser', history_unavailable:'Impossible de charger l’historique. Vérifiez l’autorisation « Voir l’historique » et réessayez.', user_no_pin:'Sans PIN', user_pin_action:'PIN', user_role_action:'Rôle', notif_no_services:'Aucun service mobile',
+    log_action_user_logged_in:'Connexion', log_action_state_restored:'État restauré', log_action_profile_selected:'Profil sélectionné', log_action_schedule_applied:'Horaire appliqué', log_action_mode_changed:'Mode modifié', log_action_backup_created:'Sauvegarde créée', log_action_backup_restored:'Configuration restaurée', log_action_access_pin_updated:'PIN d’accès mis à jour',
+    modal_cancel:'Annuler', modal_save:'Enregistrer', modal_confirm:'Confirmer', modal_pin_title:'PIN d’accès', modal_pin_help:'Laissez vide pour supprimer le PIN.', modal_edit_name:'Modifier le nom', modal_add_user:'+ Ajouter un utilisateur', modal_name_label:'Nom du profil', modal_user_added:'Utilisateur créé.', modal_delete_confirm:'Supprimer cet utilisateur ?' },
+  pt: { github_title:'Apoie o Argus', github_desc:'Se você gosta deste projeto, dê uma estrela no GitHub para apoiar o desenvolvimento.', github_action:'Dar estrela no GitHub', history_refresh:'Atualizar', history_unavailable:'Não foi possível carregar o histórico. Verifique a permissão “Ver histórico” e tente novamente.', user_no_pin:'Sem PIN', user_pin_action:'PIN', user_role_action:'Função', notif_no_services:'Sem serviços móveis',
+    log_action_user_logged_in:'Login do usuário', log_action_state_restored:'Estado restaurado', log_action_profile_selected:'Perfil selecionado', log_action_schedule_applied:'Horário aplicado', log_action_mode_changed:'Modo alterado', log_action_backup_created:'Backup criado', log_action_backup_restored:'Configuração restaurada', log_action_access_pin_updated:'PIN de acesso atualizado',
+    modal_cancel:'Cancelar', modal_save:'Salvar', modal_confirm:'Confirmar', modal_pin_title:'PIN de acesso', modal_pin_help:'Deixe em branco para remover o PIN.', modal_edit_name:'Editar nome', modal_add_user:'+ Adicionar usuário', modal_name_label:'Nome do perfil', modal_user_added:'Usuário criado.', modal_delete_confirm:'Excluir este usuário?' },
+  it: { github_title:'Sostieni Argus', github_desc:'Se ti piace questo progetto, aggiungi una stella su GitHub per sostenerne lo sviluppo.', github_action:'Aggiungi una stella su GitHub', history_refresh:'Aggiorna', history_unavailable:'Impossibile caricare la cronologia. Controlla il permesso “Visualizza cronologia” e riprova.', user_no_pin:'Senza PIN', user_pin_action:'PIN', user_role_action:'Ruolo', notif_no_services:'Nessun servizio mobile',
+    log_action_user_logged_in:'Accesso utente', log_action_state_restored:'Stato ripristinato', log_action_profile_selected:'Profilo selezionato', log_action_schedule_applied:'Pianificazione applicata', log_action_mode_changed:'Modalità cambiata', log_action_backup_created:'Backup creato', log_action_backup_restored:'Configurazione ripristinata', log_action_access_pin_updated:'PIN di accesso aggiornato',
+    modal_cancel:'Annulla', modal_save:'Salva', modal_confirm:'Conferma', modal_pin_title:'PIN di accesso', modal_pin_help:'Lascia vuoto per rimuovere il PIN.', modal_edit_name:'Modifica nome', modal_add_user:'+ Aggiungi utente', modal_name_label:'Nome del profilo', modal_user_added:'Utente creato.', modal_delete_confirm:'Eliminare questo utente?' },
+  zh: { github_title:'支持 Argus', github_desc:'如果您喜欢这个项目，请在 GitHub 上加星以支持其开发。', github_action:'在 GitHub 上加星', history_refresh:'刷新', history_unavailable:'无法加载活动历史。请检查“查看历史”权限后重试。', user_no_pin:'无 PIN', user_pin_action:'PIN', user_role_action:'角色', notif_no_services:'无移动服务',
+    log_action_user_logged_in:'用户登录', log_action_state_restored:'状态已恢复', log_action_profile_selected:'已选择配置文件', log_action_schedule_applied:'已应用计划', log_action_mode_changed:'模式已更改', log_action_backup_created:'已创建备份', log_action_backup_restored:'配置已恢复', log_action_access_pin_updated:'访问 PIN 已更新',
+    modal_cancel:'取消', modal_save:'保存', modal_confirm:'确认', modal_pin_title:'访问 PIN', modal_pin_help:'留空以删除访问 PIN。', modal_edit_name:'编辑名称', modal_add_user:'+ 添加用户', modal_name_label:'配置文件名称', modal_user_added:'用户已创建。', modal_delete_confirm:'删除此用户？' },
+  ru: { github_title:'Поддержите Argus', github_desc:'Если вам нравится проект, поставьте звезду на GitHub, чтобы поддержать разработку.', github_action:'Поставить звезду на GitHub', history_refresh:'Обновить', history_unavailable:'Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.', user_no_pin:'Без PIN', user_pin_action:'PIN', user_role_action:'Роль', notif_no_services:'Нет мобильных служб',
+    log_action_user_logged_in:'Вход пользователя', log_action_state_restored:'Состояние восстановлено', log_action_profile_selected:'Профиль выбран', log_action_schedule_applied:'Расписание применено', log_action_mode_changed:'Режим изменён', log_action_backup_created:'Резервная копия создана', log_action_backup_restored:'Конфигурация восстановлена', log_action_access_pin_updated:'PIN доступа обновлён',
+    modal_cancel:'Отмена', modal_save:'Сохранить', modal_confirm:'Подтвердить', modal_pin_title:'PIN доступа', modal_pin_help:'Оставьте пустым, чтобы удалить PIN.', modal_edit_name:'Изменить имя', modal_add_user:'+ Добавить пользователя', modal_name_label:'Имя профиля', modal_user_added:'Пользователь создан.', modal_delete_confirm:'Удалить этого пользователя?' },
 };
 
 const FIRST_RUN_TEXTS = {
@@ -1533,7 +1547,7 @@ _tmpl.innerHTML = `
   .sensor-chip--open .sensor-chip-dot{background:#fff;box-shadow:0 0 8px rgba(255,255,255,.95)}
   .sensor-chip--triggered{background:linear-gradient(135deg,rgba(255,69,58,.96),rgba(190,30,35,.82));animation:chip-pulse .9s ease-in-out infinite}
   .sensor-chip--closed{background:rgba(15,23,32,.62);color:#eef8f1}
-  .sensor-chip--closed .sensor-chip-dot{background:#34c759;box-shadow:0 0 8px rgba(52,199,89,.9)}
+  .sensor-chip--closed .sensor-chip-dot{background:#34c759;box-shadow:0 0 8px rgba(52,1.9.99,.9)}
   .sensor-chip-battery.low{color:#ffd166;font-weight:900}
   .buzz-orange{position:relative;border-color:rgba(255,171,64,.92)!important;background:linear-gradient(135deg,rgba(255,149,0,.38),rgba(255,109,0,.16))!important;box-shadow:0 0 0 1px rgba(255,183,77,.45),0 0 25px rgba(255,145,0,.55),inset 0 1px 0 rgba(255,255,255,.3)!important;animation:buzz-orange 1.05s cubic-bezier(.36,.07,.19,.97) infinite}
   .buzz-orange::after{content:'⚠';margin-left:auto;color:#fff3d1;font-size:14px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.28))}
@@ -1744,7 +1758,7 @@ _tmpl.innerHTML = `
   .device-facts{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
   .device-fact{display:inline-flex;align-items:center;min-height:20px;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:750;line-height:1.1;white-space:nowrap}
   .device-fact.status-open{color:#ff8a80;background:rgba(255,82,82,.12)}
-  .device-fact.status-closed{color:#7ee2a8;background:rgba(52,199,89,.12)}
+  .device-fact.status-closed{color:#7ee2a8;background:rgba(52,1.9.99,.12)}
   .device-fact.power-low{color:#ffd166;background:rgba(255,183,77,.13)}
   .sel-right-item{display:flex;align-items:center;justify-content:space-between;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.09);background:rgba(255,255,255,0.055);font-size:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.06)}
   .sel-right-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
@@ -1763,7 +1777,7 @@ _tmpl.innerHTML = `
   .glass-orb{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 2px 4px rgba(255,255,255,0.5),0 2px 6px rgba(0,0,0,0.2);background:rgba(255,255,255,0.3)}
   .log-item.log-item--armed .log-icon{background:rgba(255,149,0,.16);border-color:rgba(255,183,77,.28)}
   .log-item.log-item--armed .glass-orb{background:linear-gradient(135deg,#ffb74d,#f57c00)}
-  .log-item.log-item--disarmed .log-icon{background:rgba(52,199,89,.14);border-color:rgba(105,219,139,.28)}
+  .log-item.log-item--disarmed .log-icon{background:rgba(52,1.9.99,.14);border-color:rgba(105,219,139,.28)}
   .log-item.log-item--disarmed .glass-orb{background:linear-gradient(135deg,#69db8b,#388e3c)}
   .log-item.log-item--triggered .log-icon{background:rgba(255,69,58,.16);border-color:rgba(255,139,131,.30)}
   .log-item.log-item--triggered .glass-orb{background:linear-gradient(135deg,#ff8b83,#d32f2f)}
@@ -1828,6 +1842,7 @@ _tmpl.innerHTML = `
     animation: liquidDropIn .48s cubic-bezier(.16,1.24,.32,1) both;
   }
   @keyframes liquidDropIn{0%{opacity:0;transform:translateY(18px) scale(.91);filter:blur(5px)}65%{opacity:1;transform:translateY(-3px) scale(1.018);filter:blur(0)}100%{transform:translateY(0) scale(1)}}
+  @keyframes argus-modal-in{0%{opacity:0;transform:scale(.94) translateY(8px)}100%{opacity:1;transform:scale(1) translateY(0)}}
   @media(max-width:700px){
     .personalize-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"home" "temp" "weather" "panel" "hub" "emergency"}
     .pf-emergency{grid-template-columns:minmax(0,1fr);grid-template-areas:"emergency-label" "emergency-input" "emergency-help"}
@@ -1928,7 +1943,7 @@ _tmpl.innerHTML = `
   font-weight:700; box-shadow:0 4px 12px rgba(0,0,0,0.08);
 }
 .sensor-pill:hover { background:var(--argus-pill-bg-hover, rgba(255,255,255,0.08)); border-color:rgba(255,255,255,0.25); transform:translateY(-1px); }
-.sensor-pill .pill-dot { width:10px; height:10px; border-radius:50%; background:#34c759; flex-shrink:0; box-shadow:0 0 10px rgba(52,199,89,0.5); }
+.sensor-pill .pill-dot { width:10px; height:10px; border-radius:50%; background:#34c759; flex-shrink:0; box-shadow:0 0 10px rgba(52,1.9.99,0.5); }
 .sensor-pill .pill-dot.open { background:#ff3b30; box-shadow:0 0 10px rgba(255,59,48,0.5); }
 .sensor-pill .pill-dot.unavailable { background:#999; }
 .sensor-pill button { background:none; border:none; color:var(--argus-pill-color, #fff); cursor:pointer; opacity:0.5; padding:4px; font-size:14px; transition:opacity 0.2s; }
@@ -4449,7 +4464,15 @@ class ArgusPanel extends HTMLElement {
 
     if (action === 'pin_reset') return this._t('log_detail_pin_reset');
     if (action === 'pin_reset_failed') return this._t('log_detail_pin_reset_failed');
-    if (action === 'state_restored') return raw || this._healthText().local;
+    if (action === 'state_restored') {
+      const stateMap = {
+        disarmed: this._t('disarmed'), armed_home: this._t('mode_home'), armed_away: this._t('mode_away'),
+        armed_night: this._t('mode_night'), armed_vacation: this._t('mode_vacation'), triggered: this._t('log_triggered'),
+      };
+      const translated = raw.replace(/\b(disarmed|armed_home|armed_away|armed_night|armed_vacation|triggered)\b/gi,
+        m => stateMap[m.toLowerCase()] || m);
+      return translated || this._t('log_action_state_restored');
+    }
     if (action === 'confirmation_pending') return raw;
     if (action === 'disarmed' || action === 'disarm') return this._t('log_detail_disarm');
     if (action === 'armed' || action === 'arm') {
@@ -4478,9 +4501,15 @@ class ArgusPanel extends HTMLElement {
     if (action.startsWith('ai_')) return this._t('log_action_analysis');
     if (action.includes('rejected')) return this._t('log_action_rejected');
     if (action === 'ui_configuration_updated') return this._t('settings');
-    if (action === 'user_logged_in') return this._t('activity_log');
+    if (action === 'user_logged_in') return this._t('log_action_user_logged_in');
+    if (action === 'profile_selected') return this._t('log_action_profile_selected');
+    if (action === 'schedule_applied') return this._t('log_action_schedule_applied');
+    if (action === 'mode_changed') return this._t('log_action_mode_changed');
     if (action === 'audit_log_cleared') return this._t('history_refresh');
-    if (action.includes('pin_updated')) return this._t('update_pin');
+    if (action.includes('pin_updated') || action.includes('access_pin_updated')) return this._t('update_pin');
+    const tKey = `log_action_${action}`;
+    const tVal = this._t(tKey);
+    if (tVal !== tKey) return tVal;
     return raw;
   }
 
@@ -5092,9 +5121,10 @@ class ArgusPanel extends HTMLElement {
                   ${expBadge}
                 </div>
               </div>
-              <div style="display:flex;gap:6px;align-items:center">
+              <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end">
                 ${this._isAdmin ? `
-                  <button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-pin="${i}" title="${this._escapeHtml(this._t('pin_placeholder'))}">🔑 ${this._escapeHtml(this._t('user_pin_action'))}</button>
+                  <button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-edit="${i}" title="${this._escapeHtml(this._t('modal_edit_name'))}">✏️ ${this._escapeHtml(this._t('modal_edit_name'))}</button>
+                  <button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-pin="${i}" title="${this._escapeHtml(this._t('modal_pin_title'))}">🔑 ${this._escapeHtml(this._t('user_pin_action'))}</button>
                   <button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-role-toggle="${i}" title="${this._escapeHtml(this._t('user_role_label'))}">⭐ ${this._escapeHtml(this._t('user_role_action'))}</button>
                   <button class="btn-danger danger" style="padding:6px 10px;font-size:12px;background:#e53935;color:white;border:none;border-radius:10px;cursor:pointer" title="${this._escapeHtml(this._t('delete_user_tooltip'))}" aria-label="${this._escapeHtml(this._t('delete_user_tooltip'))}" data-user-del="${i}">🗑️ ${this._escapeHtml(this._t('clear') || 'Borrar')}</button>
                 ` : ''}
@@ -5104,27 +5134,91 @@ class ArgusPanel extends HTMLElement {
         }).join('');
 
         if (this._isAdmin) {
-          // Edit access PIN
-          el.querySelectorAll('[data-user-pin]').forEach(btn => {
-            btn.addEventListener('click', () => {
-              const idx = Number(btn.dataset.userPin);
+          el.insertAdjacentHTML('beforeend', `
+            <div style="margin-top:10px">
+              <button class="secondary" style="width:100%;padding:10px;font-size:13px;border-radius:12px;cursor:pointer;border:1px dashed rgba(255,255,255,0.18);background:rgba(255,255,255,0.03)" id="btn-add-manual-user">➕ ${this._escapeHtml(this._t('modal_add_user'))}</button>
+            </div>`);
+        }
+
+        if (this._isAdmin) {
+          el.querySelectorAll('[data-user-edit]').forEach(btn => {
+            btn.addEventListener('click', async () => {
+              const idx = Number(btn.dataset.userEdit);
               const targetUser = this._users[idx];
               if (!targetUser) return;
-              const promptMsg = `${this._t('pin_placeholder')} — ${targetUser.name}\n(Dejar en blanco para borrar el PIN de acceso):`;
-              const newPin = window.prompt(promptMsg);
-              if (newPin === null) return;
+              const newName = await this._showArgusInputModal({
+                title: this._t('modal_edit_name'),
+                label: this._t('modal_name_label'),
+                placeholder: targetUser.name,
+                initialValue: targetUser.name,
+                type: 'text',
+              });
+              if (newName === null || newName.trim() === '') return;
               this._runWithPin(async () => {
                 try {
-                  await this._send('argus/save_user_access_pin', { argus_user_id: targetUser.id, pin: newPin.trim() });
-                  const dash = await this._send('argus/dashboard');
-                  if (dash && dash.users) {
-                    this._users = dash.users;
-                  }
+                  const nextUsers = this._users.map((u, k) => k === idx ? { ...u, name: newName.trim() } : u);
+                  const resp = await this._send('argus/save_ui', { users: nextUsers });
+                  if (resp && resp.ui) { this._ui = resp.ui; this._users = resp.ui.users || nextUsers; }
+                  else { this._users = nextUsers; }
                   this._renderUsers();
                 } catch (e) {
                   alert(e.message || this._format('generic_error', { error: e }));
                 }
               });
+            });
+          });
+
+          el.querySelectorAll('[data-user-pin]').forEach(btn => {
+            btn.addEventListener('click', async () => {
+              const idx = Number(btn.dataset.userPin);
+              const targetUser = this._users[idx];
+              if (!targetUser) return;
+              const newPin = await this._showArgusInputModal({
+                title: `${this._t('modal_pin_title')} — ${targetUser.name}`,
+                label: this._t('modal_pin_help'),
+                placeholder: '••••',
+                type: 'password',
+                numeric: true,
+              });
+              if (newPin === null) return;
+              this._runWithPin(async () => {
+                try {
+                  await this._send('argus/save_user_access_pin', { argus_user_id: targetUser.id, pin: newPin.trim() });
+                  const dash = await this._send('argus/dashboard');
+                  if (dash && dash.users) { this._users = dash.users; }
+                  this._renderUsers();
+                } catch (e) {
+                  alert(e.message || this._format('generic_error', { error: e }));
+                }
+              });
+            });
+          });
+
+          el.querySelector('#btn-add-manual-user')?.addEventListener('click', async () => {
+            const newName = await this._showArgusInputModal({
+              title: this._t('modal_add_user'),
+              label: this._t('modal_name_label'),
+              placeholder: this._t('user_default') || 'Usuario',
+              type: 'text',
+            });
+            if (!newName || !newName.trim()) return;
+            this._runWithPin(async () => {
+              try {
+                const newUser = {
+                  id: `argus_manual_${Date.now()}`,
+                  name: newName.trim(),
+                  role: 'standard',
+                  enabled: true,
+                  permissions: { view_status: true, arm: false, disarm: false, view_history: false },
+                };
+                const nextUsers = [...(this._users || []), newUser];
+                const resp = await this._send('argus/save_ui', { users: nextUsers });
+                if (resp && resp.ui) { this._ui = resp.ui; this._users = resp.ui.users || nextUsers; }
+                else { this._users = nextUsers; }
+                this._renderUsers();
+              } catch (e) {
+                alert(e.message || this._format('generic_error', { error: e }));
+              }
             });
           });
 
@@ -5153,7 +5247,6 @@ class ArgusPanel extends HTMLElement {
             });
           });
 
-          // Delete profile
           el.querySelectorAll('[data-user-del]').forEach(btn =>
             btn.addEventListener('click', async () => {
               const idx = Number(btn.dataset.userDel);
@@ -5161,7 +5254,11 @@ class ArgusPanel extends HTMLElement {
               if (!targetUser) return;
 
               const confirmMsg = this._format('delete_user_confirm', { name: targetUser.name || 'User' });
-              if (!window.confirm(confirmMsg)) return;
+              const confirmed = await this._showArgusConfirmModal(
+                this._t('modal_delete_confirm') || confirmMsg,
+                { confirmLabel: this._t('clear') || 'Delete', confirmStyle: 'background:#e53935;color:white;border:none' }
+              );
+              if (!confirmed) return;
 
               this._runWithPin(async () => {
                 const nextUsers = [...this._users];
@@ -5993,6 +6090,115 @@ class ArgusPanel extends HTMLElement {
         }
       }
     }
+  }
+
+  /* ── Liquid-glass input modal (replaces window.prompt) ───────────── */
+  _showArgusInputModal({ title = '', label = '', placeholder = '', initialValue = '', type = 'text', numeric = false } = {}) {
+    return new Promise(resolve => {
+      const id = `_aim_${Date.now()}`;
+      const overlay = document.createElement('div');
+      overlay.id = id;
+      overlay.setAttribute('role', 'dialog');
+      overlay.setAttribute('aria-modal', 'true');
+      overlay.style.cssText = [
+        'position:fixed;inset:0;z-index:9999999;display:flex;align-items:center;justify-content:center',
+        'background:rgba(0,0,0,0.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)',
+        'animation:argus-modal-in .18s ease',
+      ].join(';');
+
+      const safeLabel = label.replace(/'/g, '&#39;');
+      const safeTitle = title.replace(/'/g, '&#39;');
+      const safePlaceholder = placeholder.replace(/'/g, '&#39;');
+      const cancelLabel = this._t('modal_cancel') || 'Cancelar';
+      const saveLabel   = this._t('modal_save')   || 'Guardar';
+
+      overlay.innerHTML = `
+        <div style="background:rgba(30,30,45,0.82);border:1px solid rgba(255,255,255,0.14);border-radius:20px;
+          padding:28px 24px 22px;width:min(360px,90vw);box-shadow:0 24px 64px rgba(0,0,0,0.55);
+          display:flex;flex-direction:column;gap:14px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)">
+          <div style="font-size:16px;font-weight:700;color:#fff;letter-spacing:.01em">${safeTitle}</div>
+          ${safeLabel ? `<div style="font-size:13px;color:rgba(255,255,255,0.55);margin-top:-6px">${safeLabel}</div>` : ''}
+          <input id="aim-inp" type="${type === 'password' ? 'password' : 'text'}"
+            ${numeric ? 'inputmode="numeric" pattern="[0-9]*"' : ''}
+            placeholder="${safePlaceholder}"
+            value="${initialValue.replace(/"/g, '&quot;')}"
+            style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:12px;
+              padding:12px 14px;font-size:15px;color:#fff;outline:none;width:100%;box-sizing:border-box;
+              transition:border-color .2s;font-family:inherit"/>
+          <div style="display:flex;gap:10px;margin-top:4px">
+            <button id="aim-cancel" style="flex:1;padding:11px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);
+              background:rgba(255,255,255,0.06);color:#fff;font-size:14px;cursor:pointer;font-family:inherit">${cancelLabel}</button>
+            <button id="aim-ok" style="flex:1;padding:11px;border-radius:12px;border:none;
+              background:linear-gradient(135deg,#4a90d9,#7b5ea7);color:#fff;font-size:14px;font-weight:600;
+              cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(74,144,217,0.35)">${saveLabel}</button>
+          </div>
+        </div>`;
+
+      const root = this.shadowRoot || document.body;
+      root.appendChild(overlay);
+
+      const inp = overlay.querySelector('#aim-inp');
+      const okBtn = overlay.querySelector('#aim-ok');
+      const cancelBtn = overlay.querySelector('#aim-cancel');
+
+      setTimeout(() => inp?.focus(), 60);
+      inp?.addEventListener('focus', () => inp.style.borderColor = 'rgba(74,144,217,0.8)');
+      inp?.addEventListener('blur',  () => inp.style.borderColor = 'rgba(255,255,255,0.15)');
+
+      const cleanup = val => { overlay.remove(); resolve(val); };
+
+      okBtn.addEventListener('click', () => cleanup(inp.value));
+      cancelBtn.addEventListener('click', () => cleanup(null));
+      inp.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); cleanup(inp.value); }
+        if (e.key === 'Escape') { e.preventDefault(); cleanup(null); }
+      });
+      overlay.addEventListener('click', e => { if (e.target === overlay) cleanup(null); });
+    });
+  }
+
+  /* ── Liquid-glass confirm modal (replaces window.confirm) ─────────── */
+  _showArgusConfirmModal(message = '', { confirmLabel = '', confirmStyle = '', cancelLabel = '' } = {}) {
+    return new Promise(resolve => {
+      const overlay = document.createElement('div');
+      overlay.setAttribute('role', 'alertdialog');
+      overlay.setAttribute('aria-modal', 'true');
+      overlay.style.cssText = [
+        'position:fixed;inset:0;z-index:9999999;display:flex;align-items:center;justify-content:center',
+        'background:rgba(0,0,0,0.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)',
+        'animation:argus-modal-in .18s ease',
+      ].join(';');
+
+      const cl = confirmLabel || this._t('modal_confirm') || 'Confirmar';
+      const ccl = cancelLabel  || this._t('modal_cancel')  || 'Cancelar';
+      const cStyle = confirmStyle || 'background:linear-gradient(135deg,#4a90d9,#7b5ea7);border:none;box-shadow:0 4px 14px rgba(74,144,217,0.35)';
+
+      overlay.innerHTML = `
+        <div style="background:rgba(30,30,45,0.82);border:1px solid rgba(255,255,255,0.14);border-radius:20px;
+          padding:28px 24px 22px;width:min(340px,90vw);box-shadow:0 24px 64px rgba(0,0,0,0.55);
+          display:flex;flex-direction:column;gap:18px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)">
+          <div style="font-size:15px;color:rgba(255,255,255,0.88);line-height:1.5;text-align:center">${message}</div>
+          <div style="display:flex;gap:10px">
+            <button id="acm-cancel" style="flex:1;padding:11px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);
+              background:rgba(255,255,255,0.06);color:#fff;font-size:14px;cursor:pointer;font-family:inherit">${ccl}</button>
+            <button id="acm-ok" style="flex:1;padding:11px;border-radius:12px;color:#fff;font-size:14px;font-weight:600;
+              cursor:pointer;font-family:inherit;${cStyle}">${cl}</button>
+          </div>
+        </div>`;
+
+      const root = this.shadowRoot || document.body;
+      root.appendChild(overlay);
+
+      const cleanup = val => { overlay.remove(); resolve(val); };
+      overlay.querySelector('#acm-ok').addEventListener('click', () => cleanup(true));
+      overlay.querySelector('#acm-cancel').addEventListener('click', () => cleanup(false));
+      overlay.addEventListener('click', e => { if (e.target === overlay) cleanup(false); });
+      overlay.addEventListener('keydown', e => {
+        if (e.key === 'Enter') cleanup(true);
+        if (e.key === 'Escape') cleanup(false);
+      });
+      setTimeout(() => overlay.querySelector('#acm-ok')?.focus(), 60);
+    });
   }
 
   _runWithPin(action) {
