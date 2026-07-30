@@ -2139,8 +2139,8 @@ _tmpl.innerHTML = `
 }
 
 .argus-bootstrap-layer {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
+  position: fixed;
+  inset: 0;
   background: rgba(0,0,0,0.4);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -4507,7 +4507,8 @@ class ArgusPanel extends HTMLElement {
     if (action === 'mode_changed') return this._t('log_action_mode_changed');
     if (action === 'audit_log_cleared') return this._t('history_refresh');
     if (action.includes('pin_updated') || action.includes('access_pin_updated')) return this._t('update_pin');
-    const tKey = `log_action_${action}`;
+    const lowerAction = String(action).toLowerCase();
+    const tKey = `log_action_${lowerAction}`;
     const tVal = this._t(tKey);
     if (tVal !== tKey) return tVal;
     return raw;
@@ -5162,7 +5163,7 @@ class ArgusPanel extends HTMLElement {
                   else { this._users = nextUsers; }
                   this._renderUsers();
                 } catch (e) {
-                  alert(e.message || this._format('generic_error', { error: e }));
+                  this._showArgusConfirmModal(e.message || this._format('generic_error', { error: e }), { confirmLabel: 'OK' });
                 }
               });
             });
@@ -5188,7 +5189,7 @@ class ArgusPanel extends HTMLElement {
                   if (dash && dash.users) { this._users = dash.users; }
                   this._renderUsers();
                 } catch (e) {
-                  alert(e.message || this._format('generic_error', { error: e }));
+                  this._showArgusConfirmModal(e.message || this._format('generic_error', { error: e }), { confirmLabel: 'OK' });
                 }
               });
             });
@@ -5217,7 +5218,7 @@ class ArgusPanel extends HTMLElement {
                 else { this._users = nextUsers; }
                 this._renderUsers();
               } catch (e) {
-                alert(e.message || this._format('generic_error', { error: e }));
+                this._showArgusConfirmModal(e.message || this._format('generic_error', { error: e }), { confirmLabel: 'OK' });
               }
             });
           });
@@ -5241,7 +5242,7 @@ class ArgusPanel extends HTMLElement {
                   }
                   this._renderUsers();
                 } catch (e) {
-                  alert(e.message || this._format('generic_error', { error: e }));
+                  this._showArgusConfirmModal(e.message || this._format('generic_error', { error: e }), { confirmLabel: 'OK' });
                 }
               });
             });
@@ -5273,7 +5274,7 @@ class ArgusPanel extends HTMLElement {
                   }
                   this._renderUsers();
                 } catch (e) {
-                  alert(e.message || this._format('generic_error', { error: e }));
+                  this._showArgusConfirmModal(e.message || this._format('generic_error', { error: e }), { confirmLabel: 'OK' });
                 }
               });
             })
