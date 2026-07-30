@@ -1,6 +1,8 @@
 {
   "name": "Argus Home Hub",
   "content_in_root": false,
+  "zip_release": true,
+  "filename": "argus.zip",
   "render_readme": true,
   "homeassistant": "2024.7.0"
 }

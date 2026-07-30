@@ -24,14 +24,16 @@ async def async_register_panel(hass: HomeAssistant) -> None:
     if not hass.data[DOMAIN].get(_STATIC_REGISTERED_KEY):
         www_path = Path(__file__).parent / "www"
         await hass.http.async_register_static_paths([
-            StaticPathConfig(f"/api/{DOMAIN}_static", str(www_path), cache_headers=True)
+            StaticPathConfig(f"/api/{DOMAIN}_static", str(www_path), cache_headers=False)
         ])
         hass.data[DOMAIN][_STATIC_REGISTERED_KEY] = True
 
     if not hass.data[DOMAIN].get(_PANEL_REGISTERED_KEY):
         await panel_custom.async_register_panel(
             hass,
-            webcomponent_name="argus-panel",
+            # Version the element name as well as the module URL. Browsers
+            # cannot redefine a custom element that an older panel registered.
+            webcomponent_name=f"argus-panel-v{VERSION.replace('.', '')}",
             frontend_url_path=DOMAIN,
             module_url=f"/api/{DOMAIN}_static/argus-bootstrap.js?v={VERSION}",
             sidebar_title="Argus Home Hub",

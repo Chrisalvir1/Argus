@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.9.4
+ * Argus Home Hub – v1.9.5
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1006,13 +1006,13 @@ const EXTRA_TEXTS = {
 };
 
 const SETUP_REQUIRED_TEXTS = {
-  es: { setup_required_title:'Falta configurar Argus', setup_required_desc:'Argus está instalado, pero todavía no existe una instancia. Añádela en Integraciones y luego vuelve a este panel.', setup_required_action:'Configurar Argus en Integraciones', welcome_profile:'Bienvenido/a, {name}' },
-  en: { setup_required_title:'Argus setup required', setup_required_desc:'Argus is installed, but no instance exists yet. Add it in Integrations, then return to this panel.', setup_required_action:'Configure Argus in Integrations', welcome_profile:'Welcome, {name}' },
-  fr: { setup_required_title:'Configuration d’Argus requise', setup_required_desc:'Argus est installé, mais aucune instance n’existe encore. Ajoutez-la dans Intégrations, puis revenez à ce panneau.', setup_required_action:'Configurer Argus dans Intégrations', welcome_profile:'Bienvenue, {name}' },
-  pt: { setup_required_title:'É necessário configurar o Argus', setup_required_desc:'O Argus está instalado, mas ainda não existe uma instância. Adicione-a em Integrações e volte a este painel.', setup_required_action:'Configurar Argus em Integrações', welcome_profile:'Bem-vindo(a), {name}' },
-  it: { setup_required_title:'Configurazione di Argus necessaria', setup_required_desc:'Argus è installato, ma non esiste ancora un’istanza. Aggiungila in Integrazioni, poi torna a questo pannello.', setup_required_action:'Configura Argus in Integrazioni', welcome_profile:'Benvenuto/a, {name}' },
-  zh: { setup_required_title:'需要配置 Argus', setup_required_desc:'Argus 已安装，但尚未创建实例。请在“集成”中添加，然后返回此面板。', setup_required_action:'在集成中配置 Argus', welcome_profile:'欢迎，{name}' },
-  ru: { setup_required_title:'Требуется настройка Argus', setup_required_desc:'Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.', setup_required_action:'Настроить Argus в интеграциях', welcome_profile:'Добро пожаловать, {name}' },
+  es: { setup_required_title:'Falta configurar Argus', setup_required_desc:'Argus está instalado, pero todavía no existe una instancia. Añádela en Integraciones y luego vuelve a este panel.', setup_required_action:'Configurar Argus en Integraciones', welcome_profile:'Bienvenido/a, {name}', initialization_error_title:'Argus no pudo iniciar', initialization_error_desc:'No se pudo conectar con el backend autenticado de Home Assistant.', retry_action:'Reintentar' },
+  en: { setup_required_title:'Argus setup required', setup_required_desc:'Argus is installed, but no instance exists yet. Add it in Integrations, then return to this panel.', setup_required_action:'Configure Argus in Integrations', welcome_profile:'Welcome, {name}', initialization_error_title:'Argus could not start', initialization_error_desc:'The authenticated Home Assistant backend connection could not be established.', retry_action:'Retry' },
+  fr: { setup_required_title:'Configuration d’Argus requise', setup_required_desc:'Argus est installé, mais aucune instance n’existe encore. Ajoutez-la dans Intégrations, puis revenez à ce panneau.', setup_required_action:'Configurer Argus dans Intégrations', welcome_profile:'Bienvenue, {name}', initialization_error_title:'Argus n’a pas pu démarrer', initialization_error_desc:'La connexion authentifiée au backend Home Assistant a échoué.', retry_action:'Réessayer' },
+  pt: { setup_required_title:'É necessário configurar o Argus', setup_required_desc:'O Argus está instalado, mas ainda não existe uma instância. Adicione-a em Integrações e volte a este painel.', setup_required_action:'Configurar Argus em Integrações', welcome_profile:'Bem-vindo(a), {name}', initialization_error_title:'O Argus não pôde iniciar', initialization_error_desc:'Não foi possível conectar ao backend autenticado do Home Assistant.', retry_action:'Tentar novamente' },
+  it: { setup_required_title:'Configurazione di Argus necessaria', setup_required_desc:'Argus è installato, ma non esiste ancora un’istanza. Aggiungila in Integrazioni, poi torna a questo pannello.', setup_required_action:'Configura Argus in Integrazioni', welcome_profile:'Benvenuto/a, {name}', initialization_error_title:'Argus non si è avviato', initialization_error_desc:'Impossibile connettersi al backend autenticato di Home Assistant.', retry_action:'Riprova' },
+  zh: { setup_required_title:'需要配置 Argus', setup_required_desc:'Argus 已安装，但尚未创建实例。请在“集成”中添加，然后返回此面板。', setup_required_action:'在集成中配置 Argus', welcome_profile:'欢迎，{name}', initialization_error_title:'Argus 无法启动', initialization_error_desc:'无法连接到 Home Assistant 的已认证后端。', retry_action:'重试' },
+  ru: { setup_required_title:'Требуется настройка Argus', setup_required_desc:'Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.', setup_required_action:'Настроить Argus в интеграциях', welcome_profile:'Добро пожаловать, {name}', initialization_error_title:'Не удалось запустить Argus', initialization_error_desc:'Не удалось подключиться к авторизованному backend Home Assistant.', retry_action:'Повторить' },
 };
 
 for (const language of Object.keys(TEXTS)) {
@@ -3210,7 +3210,7 @@ class ArgusPanel extends HTMLElement {
     if (this._clockInterval) clearInterval(this._clockInterval);
     this._clockInterval = setInterval(() => {
       const now = new Date();
-      if (now.getSeconds() === 0 || !this._lastClockUpdate) {
+      if (this._dashboard && (now.getSeconds() === 0 || !this._lastClockUpdate)) {
          this._lastClockUpdate = Date.now();
          this._renderEntries();
       }
@@ -3225,7 +3225,7 @@ class ArgusPanel extends HTMLElement {
       .catch(err => {
         console.error('Argus initialization failed:', err);
         if (this.isConnected) {
-          this._initRetryTimer = setTimeout(() => this._ensureInitialized(), 5000);
+          this._renderInitializationError(err);
         }
       })
       .finally(() => { this._initPromise = null; });
@@ -3554,49 +3554,20 @@ class ArgusPanel extends HTMLElement {
   }
 
   /* ── WebSocket ───────────────────────────────────────────────────── */
-  _connect() {
-    return new Promise((resolve, reject) => {
-      const proto = location.protocol === 'https:' ? 'wss' : 'ws';
-      this._pending = {};
-      this._socket = new WebSocket(`${proto}://${location.host}/api/websocket`);
-      this._socket.addEventListener('message', ev => {
-        let msg;
-        try { msg = JSON.parse(ev.data); }
-        catch (_) { return; }
-        if (msg.type === 'auth_required') {
-          const tok = this._hass?.auth?.data?.access_token;
-          if (!tok) { reject(new Error('no token')); return; }
-          this._socket.send(JSON.stringify({ type: 'auth', access_token: tok }));
-          return;
-        }
-        if (msg.type === 'auth_ok') { resolve(); return; }
-        if (msg.type === 'auth_invalid') { reject(new Error('auth invalid')); return; }
-        if (msg.type === 'result' && this._pending[msg.id]) {
-          this._pending[msg.id](msg.result ?? msg);
-          delete this._pending[msg.id];
-        }
-      });
-      this._socket.addEventListener('error', reject, { once: true });
-      this._socket.addEventListener('close', () => reject(new Error('websocket closed')), { once: true });
-    });
+  async _connect() {
+    // A custom panel already receives Home Assistant's authenticated
+    // connection. Opening a second socket and reading hass.auth.data used an
+    // internal token that modern HA versions no longer expose reliably.
+    if (typeof this._hass?.callWS !== 'function') {
+      throw new Error('Home Assistant authenticated WebSocket is unavailable');
+    }
   }
 
   _send(type, data = {}) {
-    if (!this._socket || this._socket.readyState !== WebSocket.OPEN) {
-      return Promise.reject(new Error('websocket not connected'));
+    if (typeof this._hass?.callWS !== 'function') {
+      return Promise.reject(new Error('Home Assistant authenticated WebSocket is unavailable'));
     }
-    const id = this._wsId++;
-    return new Promise((resolve, reject) => {
-      this._pending[id] = result => {
-        if (result?.success === false) reject(new Error(result.error?.message || 'failed'));
-        else resolve(result);
-      };
-      const payload = JSON.stringify({ id, type, ...data });
-      this._socket.send(payload);
-      // Dynamic timeout: 120 seconds for payloads > 1MB, 15 seconds otherwise
-      const timeoutMs = payload.length > 1000000 ? 120000 : 15000;
-      setTimeout(() => { if (this._pending[id]) { delete this._pending[id]; reject(new Error('timeout')); } }, timeoutMs);
-    });
+    return this._hass.callWS({ type, ...data });
   }
 
   /* ── Load dashboard ──────────────────────────────────────────────── */
@@ -6237,6 +6208,30 @@ class ArgusPanel extends HTMLElement {
   }
 
   /* ── Bootstrap Render Methods ─────────────────────────────────────── */
+  _renderInitializationError(error) {
+    const overlay = this.shadowRoot.getElementById('bootstrap-overlay');
+    overlay.style.display = 'flex';
+    overlay.innerHTML = `
+      <div class="argus-bootstrap-card liquid-glass">
+        <img src="/api/argus_static/argus_logo.png" alt="Argus"
+             style="height:72px;border-radius:18px;margin-bottom:16px">
+        <h1>${this._escapeHtml(this._t('initialization_error_title'))}</h1>
+        <p>${this._escapeHtml(this._t('initialization_error_desc'))}</p>
+        <div style="font-size:11px;opacity:.55;margin-bottom:16px;word-break:break-word">
+          ${this._escapeHtml(error?.message || 'unknown error')}
+        </div>
+        <button id="btn-retry-argus" class="btn-start" style="width:100%">
+          ${this._escapeHtml(this._t('retry_action'))}
+        </button>
+      </div>
+    `;
+    this.shadowRoot.getElementById('btn-retry-argus')?.addEventListener('click', () => {
+      overlay.style.display = 'none';
+      this._dashboard = null;
+      this._ensureInitialized();
+    });
+  }
+
   _renderMissingConfigurationScreen() {
     const overlay = this.shadowRoot.getElementById('bootstrap-overlay');
     overlay.style.display = 'flex';
@@ -6534,4 +6529,4 @@ class ArgusPanel extends HTMLElement {
 
 }
 
-customElements.define('argus-panel', ArgusPanel);
+customElements.define('argus-panel-v195', ArgusPanel);

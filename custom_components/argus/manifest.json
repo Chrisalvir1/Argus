@@ -10,5 +10,5 @@
   "issue_tracker": "https://github.com/Chrisalvir1/Argus/issues",
   "loggers": ["custom_components.argus"],
   "requirements": [],
-  "version": "1.9.4"
+  "version": "1.9.5"
 }

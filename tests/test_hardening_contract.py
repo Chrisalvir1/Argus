@@ -42,7 +42,7 @@ class TestHardeningContract(unittest.TestCase):
         self.assertNotIn("force_reset", security)
         self.assertIn("applySecurityClient", bootstrap)
         self.assertIn("argus-bootstrap.js", panel)
-        self.assertIn("cache_headers=True", panel)
+        self.assertIn("cache_headers=False", panel)
 
     def test_release_archive_path_is_verified(self) -> None:
         release = (ROOT / ".github" / "workflows" / "release.yml").read_text(encoding="utf-8")

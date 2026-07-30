@@ -43,6 +43,25 @@ class TestV194PanelFlow(unittest.TestCase):
     def test_standard_ha_users_can_open_panel(self) -> None:
         self.assertIn("require_admin=False", self.panel_registration)
 
+    def test_uses_home_assistant_authenticated_websocket(self) -> None:
+        self.assertIn("this._hass.callWS({ type, ...data })", self.panel)
+        self.assertNotIn("hass?.auth?.data?.access_token", self.panel)
+        self.assertNotIn("new WebSocket(", self.panel)
+
+    def test_empty_dashboard_is_not_rendered_before_initialization(self) -> None:
+        self.assertIn(
+            "if (this._dashboard && (now.getSeconds() === 0",
+            self.panel,
+        )
+        self.assertIn("_renderInitializationError(err)", self.panel)
+
+    def test_versioned_custom_element_prevents_stale_definition(self) -> None:
+        self.assertIn("customElements.define('argus-panel-v195'", self.panel)
+        self.assertIn(
+            'webcomponent_name=f"argus-panel-v{VERSION.replace(\'.\', \'\')}"',
+            self.panel_registration,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
