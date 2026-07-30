@@ -31,10 +31,14 @@ jobs:
           import re
           from pathlib import Path
 
-          path = Path('tests/test_v193_sync.py')
-          content = path.read_text(encoding='utf-8')
-          content = re.sub(r'1\.9\.\d+', os.environ['VERSION'], content)
-          path.write_text(content, encoding='utf-8')
+          version = os.environ['VERSION']
+          element_version = version.replace('.', '')
+          for path in Path('tests').glob('test_*.py'):
+              content = path.read_text(encoding='utf-8')
+              content = re.sub(r'v1\.9\.\d+', f'v{version}', content)
+              content = re.sub(r'(?<!v)1\.9\.\d+', version, content)
+              content = re.sub(r'argus-panel-v\d+', f'argus-panel-v{element_version}', content)
+              path.write_text(content, encoding='utf-8')
           PY
           python -m unittest discover -s tests -v
           for file in custom_components/argus/www/*.js; do
