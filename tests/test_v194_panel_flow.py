@@ -71,7 +71,7 @@ class TestV194PanelFlow(unittest.TestCase):
         self.assertIn("this._t('access_desc')", method)
 
     def test_profile_selector_does_not_block_home_assistant_navigation(self) -> None:
-        self.assertIn(".argus-bootstrap-layer {\n  position: absolute;", self.panel)
+        self.assertIn(".argus-bootstrap-layer {\n  position: fixed;", self.panel)
         self.assertIn('id="btn-exit-to-ha"', self.panel)
         self.assertIn("window.location.assign('/')", self.panel)
         for language in ("es", "en", "fr", "pt", "it", "zh", "ru"):
