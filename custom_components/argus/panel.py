@@ -36,7 +36,10 @@ async def async_register_panel(hass: HomeAssistant) -> None:
             module_url=f"/api/{DOMAIN}_static/argus-bootstrap.js?v={VERSION}",
             sidebar_title="Argus Home Hub",
             sidebar_icon="mdi:shield-lock-outline",
-            require_admin=True,
+            # Standard HA users must be able to open Argus and select their
+            # own profile. Sensitive operations remain protected by the
+            # WebSocket permission checks; first-run still requires HA admin.
+            require_admin=False,
             config={
                 "domain": DOMAIN,
                 "card_url": f"/api/{DOMAIN}_static/argus-card.js?v={VERSION}",

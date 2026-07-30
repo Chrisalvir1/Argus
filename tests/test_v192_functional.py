@@ -183,7 +183,8 @@ class TestV192Functional(unittest.IsolatedAsyncioTestCase):
         connection = MagicMock()
         connection.user.id = "ha_admin_001"
 
-        with patch("custom_components.argus.websocket_api.async_sync_ha_profiles", new_callable=AsyncMock), \
+        with patch("custom_components.argus.websocket_api._resolve_entry_id", return_value="entry1"), \
+             patch("custom_components.argus.websocket_api.async_sync_ha_profiles", new_callable=AsyncMock), \
              patch("custom_components.argus.websocket_api.async_load_ui_data", return_value=initial_ui_data), \
              patch("custom_components.argus.websocket_api.async_get_session_manager"):
             await ws_argus_login_bootstrap(hass, connection, {"id": 1, "type": "argus/login_bootstrap"})
@@ -209,7 +210,8 @@ class TestV192Functional(unittest.IsolatedAsyncioTestCase):
         updated_ui_data["users"] = new_users_data
 
         connection.reset_mock()
-        with patch("custom_components.argus.websocket_api.async_sync_ha_profiles", new_callable=AsyncMock), \
+        with patch("custom_components.argus.websocket_api._resolve_entry_id", return_value="entry1"), \
+             patch("custom_components.argus.websocket_api.async_sync_ha_profiles", new_callable=AsyncMock), \
              patch("custom_components.argus.websocket_api.async_load_ui_data", return_value=updated_ui_data), \
              patch("custom_components.argus.websocket_api.async_get_session_manager"):
             await ws_argus_login_bootstrap(hass, connection, {"id": 2, "type": "argus/login_bootstrap"})

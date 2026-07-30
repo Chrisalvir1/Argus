@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.9.3
+ * Argus Home Hub – v1.9.4
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1005,8 +1005,18 @@ const EXTRA_TEXTS = {
   ru: { use_ha_language:'Использовать язык Home Assistant', emergency_number_label:'🚨 Местный номер экстренной службы', emergency_help:'Настройте для местоположения дома (например, Коста-Рика: 911; Испания: 112). Номер будет включён в SOS-оповещения.', sos_actions:'🚨 Действия SOS', sos_select_outputs:'Выбрать свет, сирены или сценарии', sos_outputs_help:'Эти устройства всегда будут включаться при SOS, даже когда Argus снят с охраны.', sos_no_outputs:'Устройства не выбраны', sos_call_help:'Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.', sos_stop:'🛑 ОСТАНОВИТЬ ТРЕВОГУ', sos_activated:'SOS активирован', sos_call_confirm:'Позвонить в экстренную службу ({number})?', sos_error:'Не удалось активировать SOS: {error}', no_alarm_instance:'Нет доступного экземпляра сигнализации', panic_state_unknown:'Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.', panic_stopped:'Тревога остановлена; восстановлено состояние {state}', panic_stop_error:'Не удалось остановить тревогу: {error}', selector_panic:'🚨 Действия SOS', status_open:'Открыто', status_closed:'Закрыто', status_idle:'Ожидание', status_recording:'Запись', status_home:'Дома', status_away:'Вне дома', no_results:'Нет результатов', user_required:'Требуются имя и PIN', generic_error:'Ошибка: {error}', clear_history_confirm:'Удалить всю историю активности?', export_error:'Ошибка экспорта: {error}', invalid_config:'Недопустимый файл конфигурации.', import_success:'Конфигурация восстановлена. Перезагрузка…', import_error:'Ошибка импорта: {error}', file_read_error:'Не удалось прочитать файл.', reset_confirm:'Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.', reset_success:'Argus сброшен. У вас есть несколько секунд, чтобы отменить это.', reset_error:'Ошибка сброса: {error}', undo_success:'Сброс отменён.', undo_error:'Не удалось отменить сброс: {error}', url_placeholder:'URL фона…', loading:'Загрузка…', delete:'Удалить', fullscreen_title:'Полный экран', home_default:'Мой дом', home_fallback:'Дом', user_default:'Пользователь', temp_notification_title:'Argus — Температурное предупреждение', action_failed:'Не удалось выполнить действие', cannot_arm:'Невозможно поставить на охрану', open_sensors_explain:'Следующие датчики открыты:\n{names}\n\nЗакройте их перед постановкой на охрану или включите «Обход».', pin_disarm_error:'Неверный PIN или ошибка снятия с охраны', notification_disarmed:'{user} снял систему с охраны.', notification_armed:'{user} активировал режим {mode}.', upload_error:'Ошибка загрузки.', delete_file_error:'Не удалось удалить файл: {error}', file_choice:'«{file}»\n\nИспользовать как статичное изображение (ОК) или анимированное видео (Отмена)?', first_run_blocked_title:'Доступ запрещен', first_run_blocked_desc:'Для первой настройки Argus требуется администратор Home Assistant.', first_run_welcome:'Спасибо, что выбрали Argus Home Hub. Добро пожаловать.', first_run_desc:'Завершите настройку для безопасности вашего дома.', first_run_pin_expl:'PIN доступа открывает Argus. Мастер-PIN управляет постановкой и снятием с охраны.', first_run_skip:'Пропустить пока', first_run_start:'Начать с Argus' },
 };
 
+const SETUP_REQUIRED_TEXTS = {
+  es: { setup_required_title:'Falta configurar Argus', setup_required_desc:'Argus está instalado, pero todavía no existe una instancia. Añádela en Integraciones y luego vuelve a este panel.', setup_required_action:'Configurar Argus en Integraciones', welcome_profile:'Bienvenido/a, {name}' },
+  en: { setup_required_title:'Argus setup required', setup_required_desc:'Argus is installed, but no instance exists yet. Add it in Integrations, then return to this panel.', setup_required_action:'Configure Argus in Integrations', welcome_profile:'Welcome, {name}' },
+  fr: { setup_required_title:'Configuration d’Argus requise', setup_required_desc:'Argus est installé, mais aucune instance n’existe encore. Ajoutez-la dans Intégrations, puis revenez à ce panneau.', setup_required_action:'Configurer Argus dans Intégrations', welcome_profile:'Bienvenue, {name}' },
+  pt: { setup_required_title:'É necessário configurar o Argus', setup_required_desc:'O Argus está instalado, mas ainda não existe uma instância. Adicione-a em Integrações e volte a este painel.', setup_required_action:'Configurar Argus em Integrações', welcome_profile:'Bem-vindo(a), {name}' },
+  it: { setup_required_title:'Configurazione di Argus necessaria', setup_required_desc:'Argus è installato, ma non esiste ancora un’istanza. Aggiungila in Integrazioni, poi torna a questo pannello.', setup_required_action:'Configura Argus in Integrazioni', welcome_profile:'Benvenuto/a, {name}' },
+  zh: { setup_required_title:'需要配置 Argus', setup_required_desc:'Argus 已安装，但尚未创建实例。请在“集成”中添加，然后返回此面板。', setup_required_action:'在集成中配置 Argus', welcome_profile:'欢迎，{name}' },
+  ru: { setup_required_title:'Требуется настройка Argus', setup_required_desc:'Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.', setup_required_action:'Настроить Argus в интеграциях', welcome_profile:'Добро пожаловать, {name}' },
+};
+
 for (const language of Object.keys(TEXTS)) {
-  Object.assign(TEXTS[language], EXTRA_TEXTS[language]);
+  Object.assign(TEXTS[language], EXTRA_TEXTS[language], SETUP_REQUIRED_TEXTS[language]);
 }
 
 Object.assign(TEXTS.es, { expired:'Expirado', active_until:'Vigente hasta', exp_indefinite:'Indefinido' });
@@ -2622,6 +2632,7 @@ class ArgusPanel extends HTMLElement {
     this._hubBgSound = false;
     this._clockFormat = 'auto';
     this._profileSelectedThisMount = false;
+    this._welcomeShownThisMount = false;
     this._panicOutputs = undefined;
     this._initPromise = null;
     this._staticBound = false;
@@ -3181,6 +3192,14 @@ class ArgusPanel extends HTMLElement {
       this._socket.close();
       this._socket = null;
     }
+    // Home Assistant may reuse this panel element after navigating away.
+    // Authentication is per opening, so do not retain a dashboard/profile.
+    this._dashboard = null;
+    this._currentProfile = null;
+    this._profileSelectedThisMount = false;
+    this._welcomeShownThisMount = false;
+    this._loadState = null;
+    this._initPromise = null;
     if (this._onFsChange) {
       document.removeEventListener('fullscreenchange', this._onFsChange);
       document.removeEventListener('webkitfullscreenchange', this._onFsChange);
@@ -3279,7 +3298,9 @@ class ArgusPanel extends HTMLElement {
     await this._connect();
     this._applyTranslations();
     await this._load();
-    if (!this._dashboard) throw new Error('dashboard unavailable');
+    // Onboarding and login are valid initialized states, not failures that
+    // should spawn a new WebSocket/retry loop.
+    if (!this._dashboard) return;
     if (this._postLoadBound) return;
     this._postLoadBound = true;
     this.shadowRoot.getElementById('btn-clear-log')?.addEventListener('click', () => this._clearHistory());
@@ -3589,17 +3610,26 @@ class ArgusPanel extends HTMLElement {
     this._backgroundImages = bootstrap.background_images || [];
     this._updateCanvasBackground();
 
+    if (bootstrap.configuration_missing) {
+      this._loadState = 'configuration_missing';
+      this._renderMissingConfigurationScreen();
+      return;
+    }
+
     if (bootstrap.first_run) {
+      this._loadState = 'first_run';
       this._renderFirstRunScreen();
       return;
     }
 
     if (bootstrap.legacy_claim_needed) {
+      this._loadState = 'legacy_claim';
       this._renderLegacyClaimScreen();
       return;
     }
 
     if (!bootstrap.has_active_session || !this._profileSelectedThisMount) {
+      this._loadState = 'profile_selection';
       this._renderLoginScreen(bootstrap);
       return;
     }
@@ -3617,6 +3647,10 @@ class ArgusPanel extends HTMLElement {
     }
 
     this._dashboard = dashboard;
+    this._loadState = 'dashboard';
+    const bootstrapOverlay = this.shadowRoot.getElementById('bootstrap-overlay');
+    if (bootstrapOverlay) bootstrapOverlay.style.display = 'none';
+    this._currentProfile = dashboard.current_profile || null;
     this._available = dashboard.available_entities || [];
     this._ui = dashboard.ui || { modes: {}, dashboard: {} };
     this._notifTargets = dashboard.ui?.notif_targets || [];
@@ -3638,6 +3672,8 @@ class ArgusPanel extends HTMLElement {
     this._hubBgSound = Boolean(dashboard.ui?.hub_bg_sound);
     this._updateTheme();
     this._updateHomeNameDisplay();
+    this._updateProfileBadge();
+    this._showProfileWelcome();
 
     this._populateTemperatureSources();
     const tempSel = this.shadowRoot.getElementById('temp-source-select-standalone');
@@ -6201,6 +6237,52 @@ class ArgusPanel extends HTMLElement {
   }
 
   /* ── Bootstrap Render Methods ─────────────────────────────────────── */
+  _renderMissingConfigurationScreen() {
+    const overlay = this.shadowRoot.getElementById('bootstrap-overlay');
+    overlay.style.display = 'flex';
+    overlay.innerHTML = `
+      <div class="argus-bootstrap-card liquid-glass">
+        <img src="/api/argus_static/argus_logo.png" alt="Argus"
+             style="height:72px;border-radius:18px;margin-bottom:16px">
+        <h1>${this._escapeHtml(this._t('setup_required_title'))}</h1>
+        <p>${this._escapeHtml(this._t('setup_required_desc'))}</p>
+        <button id="btn-open-argus-integration" class="btn-start" style="width:100%">
+          ${this._escapeHtml(this._t('setup_required_action'))}
+        </button>
+      </div>
+    `;
+    this.shadowRoot.getElementById('btn-open-argus-integration')?.addEventListener('click', () => {
+      history.pushState(null, '', '/config/integrations/integration/argus');
+      window.dispatchEvent(new CustomEvent('location-changed'));
+    });
+  }
+
+  _showProfileWelcome() {
+    if (this._welcomeShownThisMount || !this._currentProfile?.name) return;
+    this._welcomeShownThisMount = true;
+    const overlay = this.shadowRoot.getElementById('bootstrap-overlay');
+    const message = this._format('welcome_profile', {
+      name: this._currentProfile.name,
+    });
+    overlay.style.display = 'flex';
+    overlay.innerHTML = `
+      <div class="argus-bootstrap-card liquid-glass" style="animation:cardSlideFadeIn .45s ease">
+        <img src="/api/argus_static/argus_logo.png" alt="Argus"
+             style="height:72px;border-radius:18px;margin-bottom:16px">
+        <h1>${this._escapeHtml(message)}</h1>
+        <p style="margin-bottom:0">Argus Home Hub</p>
+      </div>
+    `;
+    clearTimeout(this._welcomeTimer);
+    this._welcomeTimer = setTimeout(() => {
+      overlay.style.opacity = '0';
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        overlay.style.opacity = '';
+      }, 300);
+    }, 1200);
+  }
+
   _renderFirstRunScreen() {
     const overlay = this.shadowRoot.getElementById('bootstrap-overlay');
     overlay.style.display = 'flex';

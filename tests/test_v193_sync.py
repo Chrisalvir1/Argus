@@ -368,9 +368,9 @@ class TestV193FrontendContracts(unittest.TestCase):
         with open(panel_path, "r", encoding="utf-8") as f:
             self.content = f.read()
 
-    def test_version_updated_to_193(self):
-        """argus-panel.js header must reflect v1.9.3."""
-        self.assertIn("v1.9.3", self.content, "argus-panel.js must mention v1.9.3")
+    def test_version_updated_to_194(self):
+        """argus-panel.js header must reflect v1.9.4."""
+        self.assertIn("v1.9.4", self.content, "argus-panel.js must mention v1.9.4")
 
     def test_new_i18n_keys_all_languages(self):
         """All 7 language tables must contain all new v1.9.3 i18n keys."""
@@ -448,24 +448,24 @@ class TestV193FrontendContracts(unittest.TestCase):
 
 
 class TestV193ManifestVersion(unittest.TestCase):
-    def test_manifest_version_193(self):
+    def test_manifest_version_194(self):
         import json
         manifest_path = os.path.join(
             os.path.dirname(__file__), "..", "custom_components", "argus", "manifest.json"
         )
         with open(manifest_path) as f:
             manifest = json.load(f)
-        self.assertEqual(manifest["version"], "1.9.3", "manifest.json version must be 1.9.3")
+        self.assertEqual(manifest["version"], "1.9.4", "manifest.json version must be 1.9.4")
 
 
 class TestV193BootstrapCacheBust(unittest.TestCase):
-    def test_bootstrap_version_193(self):
+    def test_bootstrap_version_194(self):
         bootstrap_path = os.path.join(
             os.path.dirname(__file__), "..", "custom_components", "argus", "www", "argus-bootstrap.js"
         )
         with open(bootstrap_path) as f:
             content = f.read()
-        self.assertIn("1.9.3", content, "argus-bootstrap.js must reference version 1.9.3 for cache-busting")
+        self.assertIn("1.9.4", content, "argus-bootstrap.js must reference version 1.9.4 for cache-busting")
 
 
 class TestV193ScheduleAndDisarmProtection(unittest.IsolatedAsyncioTestCase):

@@ -805,6 +805,22 @@ async def ws_argus_login_bootstrap(hass, connection, msg) -> None:
     entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
 
     ha_user_id, _ = _get_ha_actor(connection)
+    if entry_id is None:
+        # The panel is registered before a config entry exists. Avoid falling
+        # back to legacy global storage when there is no alarm instance.
+        connection.send_result(msg["id"], {
+            "configuration_missing": True,
+            "first_run": False,
+            "legacy_claim_needed": False,
+            "users": [],
+            "has_active_session": False,
+            "active_argus_user_id": None,
+            "ha_user_id": ha_user_id,
+            "background_mode": "none",
+            "background_images": [],
+        })
+        return
+
     sm = async_get_session_manager(hass)
     session = sm.get_session(ha_user_id, entry_id)
 
