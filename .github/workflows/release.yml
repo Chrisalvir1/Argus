@@ -40,7 +40,11 @@ jobs:
               content = re.sub(r'argus-panel-v\d+', f'argus-panel-v{element_version}', content)
               path.write_text(content, encoding='utf-8')
           PY
-          python -m unittest discover -s tests -v
+          for test_file in tests/test_*.py; do
+            echo "::group::$test_file"
+            PYTHONPATH=. python "$test_file"
+            echo "::endgroup::"
+          done
           for file in custom_components/argus/www/*.js; do
             node --check "$file"
           done
