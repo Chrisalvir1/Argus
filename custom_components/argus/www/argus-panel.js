@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.9.10
+ * Argus Home Hub – v1.9.11
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1370,16 +1370,17 @@ _tmpl.innerHTML = `
   }
   .bounce-in { animation: bounceIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"instances activity" "instances modes" "access access" "automations backup";gap:24px;align-items:start}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"instances activity" "instances modes" "access access" "automations backup" "automations github";gap:24px;align-items:start}
   .grid > .stack{display:contents}
   .dashboard-instances{grid-area:instances}
   .activity-panel{grid-area:activity}
   .modes-panel{grid-area:modes}
   .access-panel{grid-area:access}
   .automations-panel{grid-area:automations;height:100%}
-  .backup-panel{grid-area:backup;height:100%}
+  .backup-panel{grid-area:backup}
+  .github-panel{grid-area:github}
   @media(max-width:900px){
-    .grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"instances" "activity" "modes" "access" "automations" "backup"}
+    .grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"instances" "activity" "modes" "access" "automations" "backup" "github"}
   }
   @media(max-width:750px){.hero{flex-direction:column;text-align:center}.hero-left{flex-direction:column}}
   @media(max-width:750px){.hero .lang-pill{align-self:center;margin-inline:auto}.hero-left{width:100%;align-items:center}}
@@ -1547,7 +1548,7 @@ _tmpl.innerHTML = `
   .sensor-chip--open .sensor-chip-dot{background:#fff;box-shadow:0 0 8px rgba(255,255,255,.95)}
   .sensor-chip--triggered{background:linear-gradient(135deg,rgba(255,69,58,.96),rgba(190,30,35,.82));animation:chip-pulse .9s ease-in-out infinite}
   .sensor-chip--closed{background:rgba(15,23,32,.62);color:#eef8f1}
-  .sensor-chip--closed .sensor-chip-dot{background:#34c759;box-shadow:0 0 8px rgba(52,1.9.109,.9)}
+  .sensor-chip--closed .sensor-chip-dot{background:#34c759;box-shadow:0 0 8px rgba(52,199,.9)}
   .sensor-chip-battery.low{color:#ffd166;font-weight:900}
   .buzz-orange{position:relative;border-color:rgba(255,171,64,.92)!important;background:linear-gradient(135deg,rgba(255,149,0,.38),rgba(255,109,0,.16))!important;box-shadow:0 0 0 1px rgba(255,183,77,.45),0 0 25px rgba(255,145,0,.55),inset 0 1px 0 rgba(255,255,255,.3)!important;animation:buzz-orange 1.05s cubic-bezier(.36,.07,.19,.97) infinite}
   .buzz-orange::after{content:'⚠';margin-left:auto;color:#fff3d1;font-size:14px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.28))}
@@ -1758,7 +1759,7 @@ _tmpl.innerHTML = `
   .device-facts{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
   .device-fact{display:inline-flex;align-items:center;min-height:20px;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:750;line-height:1.1;white-space:nowrap}
   .device-fact.status-open{color:#ff8a80;background:rgba(255,82,82,.12)}
-  .device-fact.status-closed{color:#7ee2a8;background:rgba(52,1.9.109,.12)}
+  .device-fact.status-closed{color:#7ee2a8;background:rgba(52,199,.12)}
   .device-fact.power-low{color:#ffd166;background:rgba(255,183,77,.13)}
   .sel-right-item{display:flex;align-items:center;justify-content:space-between;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.09);background:rgba(255,255,255,0.055);font-size:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.06)}
   .sel-right-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
@@ -1777,7 +1778,7 @@ _tmpl.innerHTML = `
   .glass-orb{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 2px 4px rgba(255,255,255,0.5),0 2px 6px rgba(0,0,0,0.2);background:rgba(255,255,255,0.3)}
   .log-item.log-item--armed .log-icon{background:rgba(255,149,0,.16);border-color:rgba(255,183,77,.28)}
   .log-item.log-item--armed .glass-orb{background:linear-gradient(135deg,#ffb74d,#f57c00)}
-  .log-item.log-item--disarmed .log-icon{background:rgba(52,1.9.109,.14);border-color:rgba(105,219,139,.28)}
+  .log-item.log-item--disarmed .log-icon{background:rgba(52,199,.14);border-color:rgba(105,219,139,.28)}
   .log-item.log-item--disarmed .glass-orb{background:linear-gradient(135deg,#69db8b,#388e3c)}
   .log-item.log-item--triggered .log-icon{background:rgba(255,69,58,.16);border-color:rgba(255,139,131,.30)}
   .log-item.log-item--triggered .glass-orb{background:linear-gradient(135deg,#ff8b83,#d32f2f)}
@@ -1943,7 +1944,7 @@ _tmpl.innerHTML = `
   font-weight:700; box-shadow:0 4px 12px rgba(0,0,0,0.08);
 }
 .sensor-pill:hover { background:var(--argus-pill-bg-hover, rgba(255,255,255,0.08)); border-color:rgba(255,255,255,0.25); transform:translateY(-1px); }
-.sensor-pill .pill-dot { width:10px; height:10px; border-radius:50%; background:#34c759; flex-shrink:0; box-shadow:0 0 10px rgba(52,1.9.109,0.5); }
+.sensor-pill .pill-dot { width:10px; height:10px; border-radius:50%; background:#34c759; flex-shrink:0; box-shadow:0 0 10px rgba(52,199,0.5); }
 .sensor-pill .pill-dot.open { background:#ff3b30; box-shadow:0 0 10px rgba(255,59,48,0.5); }
 .sensor-pill .pill-dot.unavailable { background:#999; }
 .sensor-pill button { background:none; border:none; color:var(--argus-pill-color, #fff); cursor:pointer; opacity:0.5; padding:4px; font-size:14px; transition:opacity 0.2s; }
@@ -2553,7 +2554,7 @@ _tmpl.innerHTML = `
       </section>
 
       <!-- GitHub Opt-In -->
-      <section class="glass panel liquid-glass" id="github-panel" style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); padding:16px;">
+      <section class="glass panel liquid-glass github-panel" id="github-panel" style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); padding:16px;">
         <div style="flex:1">
           <h3 id="github-title" style="margin:0; font-size:14px; font-weight:600"></h3>
           <p id="github-desc" style="margin:4px 0 0; font-size:12px; opacity:0.7"></p>
@@ -5223,13 +5224,24 @@ class ArgusPanel extends HTMLElement {
             });
           });
 
-          // Toggle Role (admin <-> standard)
+          // Change Role via Select Modal
           el.querySelectorAll('[data-user-role-toggle]').forEach(btn => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', async () => {
               const idx = Number(btn.dataset.userRoleToggle);
               const targetUser = this._users[idx];
               if (!targetUser) return;
-              const newRole = targetUser.role === 'admin' ? 'standard' : 'admin';
+              const newRole = await this._showArgusInputModal({
+                title: this._t('user_role_action') || 'Cambiar Rol',
+                label: this._t('user_role_label') || 'Selecciona el rol',
+                initialValue: targetUser.role === 'admin' ? 'admin' : 'standard',
+                type: 'select',
+                options: [
+                  { value: 'admin', label: this._t('role_argus_admin') || 'Administrador de Argus' },
+                  { value: 'standard', label: this._t('role_argus_standard') || 'Usuario estándar' }
+                ]
+              });
+              if (!newRole || newRole === targetUser.role) return;
+
               this._runWithPin(async () => {
                 const nextUsers = this._users.map((u, k) => k === idx ? { ...u, role: newRole } : u);
                 try {
@@ -6094,7 +6106,7 @@ class ArgusPanel extends HTMLElement {
   }
 
   /* ── Liquid-glass input modal (replaces window.prompt) ───────────── */
-  _showArgusInputModal({ title = '', label = '', placeholder = '', initialValue = '', type = 'text', numeric = false } = {}) {
+  _showArgusInputModal({ title = '', label = '', placeholder = '', initialValue = '', type = 'text', numeric = false, options = null } = {}) {
     return new Promise(resolve => {
       const id = `_aim_${Date.now()}`;
       const overlay = document.createElement('div');
@@ -6119,13 +6131,18 @@ class ArgusPanel extends HTMLElement {
           display:flex;flex-direction:column;gap:14px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)">
           <div style="font-size:16px;font-weight:700;color:#fff;letter-spacing:.01em">${safeTitle}</div>
           ${safeLabel ? `<div style="font-size:13px;color:rgba(255,255,255,0.55);margin-top:-6px">${safeLabel}</div>` : ''}
-          <input id="aim-inp" type="${type === 'password' ? 'password' : 'text'}"
+          ${type === 'select' && options
+            ? `<select id="aim-inp" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:12px 14px;font-size:15px;color:#fff;outline:none;width:100%;box-sizing:border-box;transition:border-color .2s;font-family:inherit">
+                 ${options.map(o => `<option value="${this._escapeHtml(o.value)}" ${o.value === initialValue ? 'selected' : ''}>${this._escapeHtml(o.label)}</option>`).join('')}
+               </select>`
+            : `<input id="aim-inp" type="${type === 'password' ? 'password' : 'text'}"
             ${numeric ? 'inputmode="numeric" pattern="[0-9]*"' : ''}
             placeholder="${safePlaceholder}"
             value="${initialValue.replace(/"/g, '&quot;')}"
             style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:12px;
               padding:12px 14px;font-size:15px;color:#fff;outline:none;width:100%;box-sizing:border-box;
-              transition:border-color .2s;font-family:inherit"/>
+              transition:border-color .2s;font-family:inherit"/>`
+          }
           <div style="display:flex;gap:10px;margin-top:4px">
             <button id="aim-cancel" style="flex:1;padding:11px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);
               background:rgba(255,255,255,0.06);color:#fff;font-size:14px;cursor:pointer;font-family:inherit">${cancelLabel}</button>
@@ -6882,4 +6899,4 @@ class ArgusPanel extends HTMLElement {
 
 }
 
-customElements.define('argus-panel-v1910', ArgusPanel);
+customElements.define('argus-panel-v1911', ArgusPanel);
