@@ -136,6 +136,7 @@ class TestV191Functional(unittest.IsolatedAsyncioTestCase):
         msg = {"id": 1, "type": "argus/login_bootstrap", "entry_id": "entry1"}
         
         with patch("custom_components.argus.websocket_api._resolve_entry_id", return_value="entry1"), \
+             patch("custom_components.argus.websocket_api.async_sync_ha_profiles", new_callable=AsyncMock), \
              patch("custom_components.argus.websocket_api.async_load_ui_data", return_value={"first_run": False, "users": []}):
             await ws_argus_login_bootstrap(hass, connection, msg)
             

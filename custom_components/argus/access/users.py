@@ -28,7 +28,7 @@ def sanitize_user_list(users: list[Any]) -> list[dict[str, Any]]:
                 raise ValueError("user object contains an invalid PIN")
             user["pin"] = hash_pin(str(pin))
         user.setdefault("enabled", True)
-        user.setdefault("role", "user")
+        user.setdefault("role", "standard")
         sanitized.append(user)
     return sanitized
 

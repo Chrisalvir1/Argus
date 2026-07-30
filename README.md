@@ -23,6 +23,8 @@ Argus reúne alarma, sensores, sirenas, SOS, usuarios, auditoría, MQTT y una in
 - Sensores por modo, sensores de entrada, bypass y requisito de cierre.
 - Sirenas por modo y SOS reversible con salidas independientes.
 - PIN maestro, usuarios temporales, invitado, `scrypt`/PBKDF2 y limitación de intentos administrativos.
+- **Sincronización automática de perfiles con cuentas humanas de Home Assistant** (v1.9.3).
+- Selector de perfiles con distinción visual del perfil propio; perfiles ajenos protegidos por PIN de acceso.
 - Auditoría, estadísticas de 30 días y línea temporal forense.
 - MQTT opcional con comandos JSON o texto.
 - Horarios locales y confirmación de intrusión mediante múltiples señales.
@@ -39,6 +41,7 @@ Argus 1.9 incorpora importantes mejoras de seguridad:
 - **Autorización Forense:** Exigencia de sesión + permiso específico `view_history` para el timeline forense.
 - **Onboarding Seguro:** Manejo estricto e independiente del PIN de acceso (hasheado) y el PIN maestro (opciones de configuración).
 - **Verificaciones Estrictas de Administrador:** Requiere privilegios de administrador de Home Assistant y Argus para consultar usuarios y personas.
+- **Sincronización segura de perfiles:** Los perfiles auto-creados tienen `managed_by_ha_sync: true` y permisos mínimos. Los perfiles manuales nunca se modifican automáticamente.
 
 *Anteriormente en 1.8:* Se eliminaron acciones TTS, análisis por IA, y controles Matter de terceros del runtime activo para maximizar la privacidad. HomeKit Bridge y rutinas locales deterministas continúan disponibles.
 
@@ -96,7 +99,7 @@ title: Seguridad
 5. Revisa automatizaciones antiguas y elimina acciones retiradas si venías de versiones previas.
 6. Verifica armado, desarmado, SOS, PIN, sirenas, medios y restauración.
 
-Consulta [las notas de 1.9.1](docs/RELEASE_NOTES_1.9.1.md).
+Consulta [las notas de 1.9.3](docs/RELEASE_NOTES_1.9.3.md).
 
 ## Desarrollo
 
@@ -104,6 +107,7 @@ Consulta [las notas de 1.9.1](docs/RELEASE_NOTES_1.9.1.md).
 python -m compileall -q custom_components/argus
 python -m unittest discover -s tests -v
 for file in custom_components/argus/www/*.js; do node --check "$file"; done
+git diff --check
 ```
 
 Consulta [la arquitectura](docs/ARCHITECTURE.md) y [CONTRIBUTING.md](CONTRIBUTING.md).

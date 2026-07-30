@@ -5,9 +5,12 @@ import asyncio
 import base64
 import copy
 import datetime
+import logging
 import os
 import re
 import uuid
+
+_LOGGER = logging.getLogger(__name__)
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.storage import Store
@@ -40,7 +43,7 @@ def _default_payload() -> dict:
         "automations": [], "notif_targets": [],
         "emergency_number": "911", "panic_outputs": [], "users": [],
         "home_name": "", "background_mode": "weather", "background_images": [],
-        "temperature_source": "auto", "weather_source": "auto",
+        "temperature_source": "auto", "weather_source": "auto", "clock_format": "auto",
         "intelligent_confirmation": {"enabled": False, "window_seconds": 15, "required_signals": 2},
         "state_schedule": [], "runtime": {"alarm_states": {}},
         "panel_bg_file": "", "panel_bg_sound": False,
@@ -56,6 +59,8 @@ def _merge_defaults(data: object) -> dict:
     if not isinstance(result.get("runtime"), dict):
         result["runtime"] = {"alarm_states": {}}
     result["runtime"].setdefault("alarm_states", {})
+    if result.get("clock_format") not in ["auto", "12h", "24h"]:
+        result["clock_format"] = "auto"
     return result
 
 
@@ -192,6 +197,10 @@ async def async_save_ui_data(
                 if isinstance(e_id, str) and "." in e_id and len(e_id.split(".")) == 2:
                     valid_outputs.append(e_id)
             safe_updates["panic_outputs"] = valid_outputs
+
+        if "clock_format" in safe_updates:
+            if safe_updates["clock_format"] not in ["auto", "12h", "24h"]:
+                safe_updates["clock_format"] = "auto"
 
         current.update(safe_updates)
         await _store(hass, entry_id).async_save(current)
@@ -356,3 +365,158 @@ async def async_save_alarm_runtime_state(
 async def async_get_alarm_runtime_state(hass: HomeAssistant, entry_id: str) -> dict:
     state = (await async_load_ui_data(hass, entry_id)).get("runtime", {}).get("alarm_states", {}).get(entry_id, {})
     return state if isinstance(state, dict) else {}
+
+
+# ── Default permissions by role ─────────────────────────────────────────────
+def _default_permissions_for_role(role: str) -> dict:
+    """Return explicit default permissions based on Argus role."""
+    if role == "admin":
+        return {
+            "view_status": True,
+            "view_history": True,
+            "arm": True,
+            "disarm": True,
+            "sos": True,
+        }
+    # standard
+    return {
+        "view_status": True,
+        "view_history": False,
+        "arm": False,
+        "disarm": False,
+        "sos": False,
+    }
+
+
+async def async_sync_ha_profiles(
+    hass: HomeAssistant, entry_id: str | None = None
+) -> list[dict]:
+    """Atomically synchronise Argus profiles with active human HA accounts.
+
+    Rules:
+    - Only active human HA accounts (not system_generated, is_active) get profiles.
+    - If an Argus profile with managed_by_ha_sync=True is enabled but the HA
+      account has become inactive/gone → set enabled=False (sync-disabled).
+    - If a sync-disabled profile (managed_by_ha_sync=True, sync_disabled=True)
+      sees its HA account re-appear as active → reactivate it.
+    - Profiles disabled manually (enabled=False without sync_disabled=True) are
+      NEVER touched.
+    - Already-existing profiles are NEVER modified (name, role, permissions, pin,
+      access_pin_hash are all preserved).
+    - Duplicate ha_user_id creation is prevented.
+    - Returns the final users list (after potential changes).
+    """
+    async with _storage_lock(hass):
+        data = await async_load_ui_data(hass, entry_id)
+
+        # Skip sync when first_run is still pending – no onboarding done yet.
+        if data.get("first_run", True):
+            return data.get("users", [])
+
+        # ── Fetch active human HA accounts ──────────────────────────────────
+        try:
+            raw_ha_users = await hass.auth.async_get_users()
+        except Exception:
+            _LOGGER.warning("Argus HA profile sync: could not retrieve HA users")
+            return data.get("users", [])
+
+        active_human: dict[str, object] = {}  # ha_user_id → HA user object
+        name_counts: dict[str, int] = {}
+        for u in raw_ha_users:
+            if getattr(u, "system_generated", False):
+                continue
+            if not getattr(u, "is_active", True):
+                continue
+            active_human[u.id] = u
+            name_counts[u.name] = name_counts.get(u.name, 0) + 1
+
+        # Build display name (disambiguate duplicates)
+        def _display_name(ha_u) -> str:
+            if name_counts.get(ha_u.name, 0) > 1 and len(ha_u.id) >= 6:
+                return f"{ha_u.name} (…{ha_u.id[-6:]})"
+            return ha_u.name
+
+        current_users: list[dict] = data.get("users", [])
+        changed = False
+
+        # ── Index existing profiles by ha_user_id ────────────────────────
+        # Enabled profiles take priority; keep first occurrence per ha_user_id.
+        by_ha_id: dict[str, dict] = {}
+        for u in current_users:
+            if not isinstance(u, dict):
+                continue
+            ha_id = u.get("ha_user_id")
+            if ha_id and ha_id not in by_ha_id:
+                by_ha_id[ha_id] = u
+
+        # ── Step 1: disable sync-managed profiles whose HA account left ──
+        for u in current_users:
+            if not isinstance(u, dict):
+                continue
+            if not u.get("managed_by_ha_sync"):
+                continue  # manually created profile – never touch
+            ha_id = u.get("ha_user_id")
+            if not ha_id:
+                continue
+            if ha_id not in active_human and u.get("enabled", True):
+                # HA account gone/inactive → sync-disable
+                u["enabled"] = False
+                u["sync_disabled"] = True
+                changed = True
+                _LOGGER.info("Argus sync: disabled profile '%s' (HA account inactive)", u.get("name"))
+
+        # ── Step 2: reactivate sync-disabled profiles whose HA account is back ──
+        for u in current_users:
+            if not isinstance(u, dict):
+                continue
+            if not u.get("managed_by_ha_sync"):
+                continue  # manually created profile – never touch
+            if not u.get("sync_disabled"):
+                continue  # not sync-disabled
+            ha_id = u.get("ha_user_id")
+            if ha_id and ha_id in active_human:
+                u["enabled"] = True
+                u.pop("sync_disabled", None)
+                changed = True
+                _LOGGER.info("Argus sync: reactivated profile '%s' (HA account active again)", u.get("name"))
+
+        # ── Step 3: create profiles for HA accounts with no Argus profile ──
+        # Build set of ha_user_ids already covered by an enabled profile.
+        covered_by_enabled: set[str] = {
+            u["ha_user_id"]
+            for u in current_users
+            if isinstance(u, dict) and u.get("ha_user_id") and u.get("enabled", True)
+        }
+
+        for ha_id, ha_user in active_human.items():
+            if ha_id in covered_by_enabled:
+                continue  # already has a profile – idempotent
+
+            # Check if there's a disabled profile we're intentionally not reactivating
+            existing = by_ha_id.get(ha_id)
+            if existing and existing.get("enabled") is False and not existing.get("sync_disabled"):
+                # Manually disabled – do not create a duplicate
+                continue
+
+            role = "admin" if getattr(ha_user, "is_admin", False) else "standard"
+            new_profile: dict = {
+                "id": str(uuid.uuid4()),
+                "name": _display_name(ha_user),
+                "ha_user_id": ha_id,
+                "role": role,
+                "enabled": True,
+                "managed_by_ha_sync": True,
+                "permissions": _default_permissions_for_role(role),
+                "shared_kiosk_profile": False,
+                # Explicitly NO pin, NO access_pin_hash
+            }
+            current_users.append(new_profile)
+            covered_by_enabled.add(ha_id)
+            changed = True
+            _LOGGER.info("Argus sync: created profile '%s' (role=%s)", new_profile["name"], role)
+
+        if changed:
+            data["users"] = current_users
+            await _store(hass, entry_id).async_save(data)
+
+        return current_users

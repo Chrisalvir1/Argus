@@ -517,6 +517,11 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         if not latest:
             return
         occurrence, state_value, schedule_id = latest
+
+        # SOS / manual panic requires explicit action — never disarm or change state via schedule
+        if getattr(self, "_panic_active", False):
+            return
+
         updated_at = runtime_state.get("updated_at")
         if updated_at:
             try:
@@ -531,10 +536,21 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             scheduled_state = AlarmControlPanelState(state_value)
         except ValueError:
             return
+
+        # If currently TRIGGERED, PENDING, or ARMING, allow EXCLUSIVELY a scheduled transition to DISARMED
+        if self._alarm_state in (
+            AlarmControlPanelState.TRIGGERED,
+            AlarmControlPanelState.PENDING,
+            AlarmControlPanelState.ARMING,
+        ):
+            if scheduled_state != AlarmControlPanelState.DISARMED:
+                return
+
         if self._alarm_state != scheduled_state:
             self._cancel_timers()
             if scheduled_state == AlarmControlPanelState.DISARMED or self._alarm_state == AlarmControlPanelState.TRIGGERED:
                 await self._async_siren(False)
+                persistent_notification.async_dismiss(self.hass, "argus_triggered")
                 self._triggered_by = None
                 self._triggered_mode = None
                 self._panic_active = False
@@ -1155,22 +1171,22 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         limiter_key = f"{DOMAIN}_pin_limiter_{self._config_entry.entry_id}"
         limiter = self.hass.data.setdefault(limiter_key, PinAttemptLimiter())
 
-        if limiter.is_blocked():
+        if limiter.is_blocked(user_id or "default"):
             _LOGGER.warning("Argus: Disarm rejected — too many failed PIN attempts")
             await async_append_audit_log(
                 self.hass, "disarm_blocked", "Too many failed attempts", user=user_id, entry_id=self._config_entry.entry_id
             )
             return
 
-        if self._code and code and not self._validate_code(code):
-            limiter.register_attempt(False)
-            _LOGGER.warning("Argus: Disarm rejected — invalid code")
+        if self._code and not self._validate_code(code):
+            limiter.record_failure(user_id or "default")
+            _LOGGER.warning("Argus: Disarm rejected — invalid or missing code")
             await async_append_audit_log(
-                self.hass, "disarm_rejected", "Invalid code", user=user_id, entry_id=self._config_entry.entry_id
+                self.hass, "disarm_rejected", "Invalid or missing code", user=user_id, entry_id=self._config_entry.entry_id
             )
             return
 
-        limiter.register_attempt(True)
+        limiter.reset(user_id or "default")
 
         # Check Duress PIN (PIN de Coacción)
         adv = self._ui_config.get("advanced", {})

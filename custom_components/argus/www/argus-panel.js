@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.3.3
+ * Argus Home Hub – v1.9.3
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -133,6 +133,53 @@ const TEXTS = {
     bg_panel_selected_from_history: 'Fondo de panel seleccionado desde historial.',
     bg_hub_selected_from_history: 'Fondo Argus seleccionado desde historial.',
     error_loading_uploaded_files: 'Error al cargar historial de archivos.',
+    select_profile_title: 'Selecciona tu perfil',
+    select_profile_subtitle: 'Accede a tus paneles e instancias de seguridad de Argus.',
+    role_argus_admin: 'Administrador de Argus',
+    role_argus_user: 'Usuario estándar',
+    ha_account_linked: 'Cuenta de Home Assistant: {name}',
+    ha_account_unavailable: 'Vinculación no disponible',
+    user_role_label: 'Rol Argus',
+    delete_user_tooltip: 'Eliminar perfil de usuario',
+    delete_user_confirm: '¿Estás seguro de que deseas eliminar a "{name}"?',
+    cannot_delete_last_admin: 'No se puede eliminar el último administrador vinculante.',
+    clock_format_label: 'Formato de hora',
+    clock_format_desc: 'Elige cómo se muestran las horas en el panel y el historial.',
+    clock_auto: 'Automático (Home Assistant)',
+    clock_12h: '12 horas (AM/PM)',
+    clock_24h: '24 horas',
+    unlock_kiosk: 'Desbloquear kiosco',
+    first_run_welcome: 'Gracias por elegir Argus Home Hub. Bienvenido/a.',
+    first_run_desc: 'Complete la configuración inicial para asegurar su hogar.',
+    first_run_pin_expl: 'El PIN de acceso abre Argus. El PIN maestro controla el armado y desarmado.',
+    first_run_skip: 'Omitir',
+    first_run_start: 'Comenzar con Argus',
+    first_run_blocked_title: 'Acceso denegado',
+    first_run_blocked_desc: 'Se requiere un administrador de Home Assistant para configurar Argus por primera vez.',
+    log_action_first_run_completed: 'Argus inicializado por {user}',
+    log_action_fullscreen_unlocked: 'Kiosco desbloqueado por {user}',
+    log_action_master_pin_rejected: 'Intento incorrecto de PIN maestro por {user}',
+    log_action_select_profile: 'Perfil seleccionado: {user}',
+    log_action_verify_access_pin: 'PIN de acceso verificado por {user}',
+    log_action_sos: 'Pánico SOS activado por {user}',
+    log_action_stop_sos: 'Pánico SOS detenido por {user}',
+    log_action_save_ui: 'Ajustes de UI guardados por {user}',
+    log_action_rejected: 'Acción rechazada',
+    unlinked_ha_accounts_title: 'Cuentas de Home Assistant sin perfil Argus',
+    btn_create_argus_profile: 'Crear perfil Argus',
+    no_unlinked_ha_accounts: 'Todas las cuentas de Home Assistant activas tienen perfil.',
+    profile_is_yours: 'Este es tu perfil',
+    profile_needs_pin: 'Perfil ajeno — introduce el PIN de acceso',
+    profile_no_pin_access: 'Este perfil no tiene PIN de acceso. No puedes abrirlo.',
+    ha_role_admin: 'Admin HA',
+    ha_role_standard: 'Usuario HA',
+    login_btn: 'Iniciar sesión',
+    cancel_btn: 'Cancelar',
+    pin_placeholder: 'PIN de acceso',
+    link_ha_user: 'Vincular a Usuario Home Assistant',
+    ha_admin_label: 'Home Assistant Admin',
+    ha_standard_user_label: 'Standard HA User',
+    role_argus_standard: 'Usuario estándar',
   },
   en: {
     hero_desc:'Alarm control, modes and automations.',
@@ -230,6 +277,53 @@ const TEXTS = {
     bg_panel_selected_from_history: 'Panel background selected from history.',
     bg_hub_selected_from_history: 'Argus background selected from history.',
     error_loading_uploaded_files: 'Error loading file history.',
+    select_profile_title: 'Select Your Profile',
+    select_profile_subtitle: 'Access your security panels and Argus instances.',
+    role_argus_admin: 'Argus Administrator',
+    role_argus_user: 'Standard User',
+    ha_account_linked: 'Home Assistant Account: {name}',
+    ha_account_unavailable: 'Binding unavailable',
+    user_role_label: 'Argus Role',
+    delete_user_tooltip: 'Delete user profile',
+    delete_user_confirm: 'Are you sure you want to delete "{name}"?',
+    cannot_delete_last_admin: 'Cannot delete the last binding administrator.',
+    clock_format_label: 'Time Format',
+    clock_format_desc: 'Choose how time is displayed across panels and logs.',
+    clock_auto: 'Automatic (Home Assistant)',
+    clock_12h: '12-hour (AM/PM)',
+    clock_24h: '24-hour',
+    unlock_kiosk: 'Unlock kiosk',
+    first_run_welcome: 'Thank you for choosing Argus Home Hub. Welcome.',
+    first_run_desc: 'Complete setup to secure your home.',
+    first_run_pin_expl: 'The access PIN opens Argus. The master PIN controls arming and disarming.',
+    first_run_skip: 'Skip',
+    first_run_start: 'Start with Argus',
+    first_run_blocked_title: 'Access Denied',
+    first_run_blocked_desc: 'A Home Assistant administrator is required to set up Argus for the first time.',
+    log_action_first_run_completed: 'Argus initialized by {user}',
+    log_action_fullscreen_unlocked: 'Kiosk unlocked by {user}',
+    log_action_master_pin_rejected: 'Incorrect master PIN attempt by {user}',
+    log_action_select_profile: 'Profile selected: {user}',
+    log_action_verify_access_pin: 'Access PIN verified by {user}',
+    log_action_sos: 'SOS Panic triggered by {user}',
+    log_action_stop_sos: 'SOS Panic stopped by {user}',
+    log_action_save_ui: 'UI Settings saved by {user}',
+    log_action_rejected: 'Action rejected',
+    unlinked_ha_accounts_title: 'Home Assistant accounts without Argus profile',
+    btn_create_argus_profile: 'Create Argus Profile',
+    no_unlinked_ha_accounts: 'All active Home Assistant accounts have a profile.',
+    profile_is_yours: 'This is your profile',
+    profile_needs_pin: 'Another person’s profile — enter the access PIN',
+    profile_no_pin_access: 'This profile has no access PIN. You cannot open it.',
+    ha_role_admin: 'HA Admin',
+    ha_role_standard: 'HA User',
+    login_btn: 'Login',
+    cancel_btn: 'Cancel',
+    pin_placeholder: 'Access PIN',
+    link_ha_user: 'Link to Home Assistant User',
+    ha_admin_label: 'Home Assistant Admin',
+    ha_standard_user_label: 'Standard HA User',
+    role_argus_standard: 'Standard User',
   },
   fr: {
     hero_desc:"Sécurité intégrée, contrôle d'accès, automatisations et HomeKit.",
@@ -316,6 +410,53 @@ const TEXTS = {
     bg_panel_selected_from_history: "Arrière-plan du panneau sélectionné depuis l'historique.",
     bg_hub_selected_from_history: "Arrière-plan Argus sélectionné depuis l'historique.",
     error_loading_uploaded_files: "Erreur lors du chargement de l'historique des fichiers.",
+    select_profile_title: 'Sélectionnez votre profil',
+    select_profile_subtitle: 'Accédez à vos panneaux de sécurité et instances Argus.',
+    role_argus_admin: 'Administrateur Argus',
+    role_argus_user: 'Utilisateur standard',
+    ha_account_linked: 'Compte Home Assistant : {name}',
+    ha_account_unavailable: 'Liaison indisponible',
+    user_role_label: 'Rôle Argus',
+    delete_user_tooltip: 'Supprimer le profil utilisateur',
+    delete_user_confirm: 'Voulez-vous vraiment supprimer « {name} » ?',
+    cannot_delete_last_admin: 'Impossible de supprimer le dernier administrateur.',
+    clock_format_label: 'Format d\'heure',
+    clock_format_desc: 'Choisissez l\'affichage de l\'heure.',
+    clock_auto: 'Automatique (Home Assistant)',
+    clock_12h: '12 heures (AM/PM)',
+    clock_24h: '24 heures',
+    unlock_kiosk: 'Déverrouiller le kiosque',
+    first_run_welcome: 'Merci d\'avoir choisi Argus Home Hub. Bienvenue.',
+    first_run_desc: 'Complétez la configuration initiale.',
+    first_run_pin_expl: 'Le PIN d\'accès ouvre Argus. Le PIN maître contrôle l\'armement.',
+    first_run_skip: 'Passer',
+    first_run_start: 'Démarrer avec Argus',
+    first_run_blocked_title: 'Accès refusé',
+    first_run_blocked_desc: 'Un administrateur Home Assistant est requis.',
+    log_action_first_run_completed: 'Argus initialisé par {user}',
+    log_action_fullscreen_unlocked: 'Kiosque déverrouillé par {user}',
+    log_action_master_pin_rejected: 'Tentative de PIN maître incorrecte par {user}',
+    log_action_select_profile: 'Profil sélectionné : {user}',
+    log_action_verify_access_pin: 'PIN d\'accès vérifié par {user}',
+    log_action_sos: 'Panique SOS déclenchée par {user}',
+    log_action_stop_sos: 'Panique SOS arrêtée par {user}',
+    log_action_save_ui: 'Paramètres UI enregistrés par {user}',
+    log_action_rejected: 'Action rejetée',
+    unlinked_ha_accounts_title: 'Comptes Home Assistant sans profil Argus',
+    btn_create_argus_profile: 'Créer un profil Argus',
+    no_unlinked_ha_accounts: 'Tous les comptes Home Assistant actifs ont un profil.',
+    profile_is_yours: 'C’est votre profil',
+    profile_needs_pin: 'Profil d’une autre personne — entrez le PIN d’accès',
+    profile_no_pin_access: 'Ce profil n’a pas de PIN d’accès. Vous ne pouvez pas l’ouvrir.',
+    ha_role_admin: 'Admin HA',
+    ha_role_standard: 'Utilisateur HA',
+    login_btn: 'Connexion',
+    cancel_btn: 'Annuler',
+    pin_placeholder: 'Code PIN d’accès',
+    link_ha_user: 'Lier à un utilisateur Home Assistant',
+    ha_admin_label: 'Admin Home Assistant',
+    ha_standard_user_label: 'Utilisateur HA standard',
+    role_argus_standard: 'Utilisateur standard',
   },
   pt: {
     hero_desc:'Segurança integrada, controle de acesso, automações e HomeKit.',
@@ -402,6 +543,53 @@ const TEXTS = {
     bg_panel_selected_from_history: 'Plano de fundo do painel selecionado a partir do histórico.',
     bg_hub_selected_from_history: 'Plano de fundo do Argus selecionado a partir do histórico.',
     error_loading_uploaded_files: 'Erro ao carregar o histórico de arquivos.',
+    select_profile_title: 'Selecione o seu perfil',
+    select_profile_subtitle: 'Acesse seus painéis de segurança e instâncias Argus.',
+    role_argus_admin: 'Administrador do Argus',
+    role_argus_user: 'Usuário padrão',
+    ha_account_linked: 'Conta do Home Assistant: {name}',
+    ha_account_unavailable: 'Vínculo indisponível',
+    user_role_label: 'Função Argus',
+    delete_user_tooltip: 'Excluir perfil de usuário',
+    delete_user_confirm: 'Tem certeza de que deseja excluir "{name}"?',
+    cannot_delete_last_admin: 'Não é possível excluir o último administrador.',
+    clock_format_label: 'Formato de hora',
+    clock_format_desc: 'Escolha como a hora é exibida.',
+    clock_auto: 'Automático (Home Assistant)',
+    clock_12h: '12 horas (AM/PM)',
+    clock_24h: '24 horas',
+    unlock_kiosk: 'Desbloquear quiosque',
+    first_run_welcome: 'Obrigado por escolher o Argus Home Hub. Bem-vindo(a).',
+    first_run_desc: 'Conclua a configuração inicial.',
+    first_run_pin_expl: 'O PIN de acesso abre o Argus. O PIN mestre controla o armamento.',
+    first_run_skip: 'Pular',
+    first_run_start: 'Começar com o Argus',
+    first_run_blocked_title: 'Acesso negado',
+    first_run_blocked_desc: 'É necessário um administrador do Home Assistant.',
+    log_action_first_run_completed: 'Argus inicializado por {user}',
+    log_action_fullscreen_unlocked: 'Quiosque desbloqueado por {user}',
+    log_action_master_pin_rejected: 'Tentativa incorreta de PIN mestre por {user}',
+    log_action_select_profile: 'Perfil selecionado: {user}',
+    log_action_verify_access_pin: 'PIN de acesso verificado por {user}',
+    log_action_sos: 'Pânico SOS acionado por {user}',
+    log_action_stop_sos: 'Pânico SOS interrompido por {user}',
+    log_action_save_ui: 'Configurações de UI salvas por {user}',
+    log_action_rejected: 'Ação rejeitada',
+    unlinked_ha_accounts_title: 'Contas do Home Assistant sem perfil Argus',
+    btn_create_argus_profile: 'Criar perfil Argus',
+    no_unlinked_ha_accounts: 'Todas as contas do Home Assistant ativas possuem perfil.',
+    profile_is_yours: 'Este é o seu perfil',
+    profile_needs_pin: 'Perfil de outra pessoa — insira o PIN de acesso',
+    profile_no_pin_access: 'Este perfil não tem PIN de acesso. Você não pode abri-lo.',
+    ha_role_admin: 'Admin HA',
+    ha_role_standard: 'Usuário HA',
+    login_btn: 'Entrar',
+    cancel_btn: 'Cancelar',
+    pin_placeholder: 'PIN de acesso',
+    link_ha_user: 'Vincular a Usuário do Home Assistant',
+    ha_admin_label: 'Administrador do Home Assistant',
+    ha_standard_user_label: 'Usuário padrão do HA',
+    role_argus_standard: 'Usuário padrão',
   },
   it: {
     hero_desc:'Sicurezza integrata, controllo accessi, automazioni e HomeKit.',
@@ -488,6 +676,53 @@ const TEXTS = {
     bg_panel_selected_from_history: 'Sfondo del pannello selezionato dalla cronologia.',
     bg_hub_selected_from_history: 'Sfondo di Argus selezionato dalla cronologia.',
     error_loading_uploaded_files: 'Errore durante il caricamento della cronologia dei file.',
+    select_profile_title: 'Seleziona il tuo profilo',
+    select_profile_subtitle: 'Accedi ai tuoi pannelli di sicurezza e istanze Argus.',
+    role_argus_admin: 'Amministratore Argus',
+    role_argus_user: 'Utente standard',
+    ha_account_linked: 'Account Home Assistant: {name}',
+    ha_account_unavailable: 'Collegamento non disponibile',
+    user_role_label: 'Ruolo Argus',
+    delete_user_tooltip: 'Elimina profilo utente',
+    delete_user_confirm: 'Sei sicuro di voler eliminare "{name}"?',
+    cannot_delete_last_admin: 'Impossibile eliminare l\'ultimo amministratore.',
+    clock_format_label: 'Formato ora',
+    clock_format_desc: 'Scegli come visualizzare l\'ora.',
+    clock_auto: 'Automatico (Home Assistant)',
+    clock_12h: '12 ore (AM/PM)',
+    clock_24h: '24 ore',
+    unlock_kiosk: 'Sblocca chiosco',
+    first_run_welcome: 'Grazie per aver scelto Argus Home Hub. Benvenuto/a.',
+    first_run_desc: 'Completa la configurazione.',
+    first_run_pin_expl: 'Il PIN di accesso apre Argus. Il PIN master controlla l\'armamento.',
+    first_run_skip: 'Salta',
+    first_run_start: 'Inizia con Argus',
+    first_run_blocked_title: 'Accesso negato',
+    first_run_blocked_desc: 'È richiesto un amministratore di Home Assistant.',
+    log_action_first_run_completed: 'Argus inizializzato da {user}',
+    log_action_fullscreen_unlocked: 'Chiosco sbloccato da {user}',
+    log_action_master_pin_rejected: 'Tentativo di PIN master errato da {user}',
+    log_action_select_profile: 'Profilo selezionato: {user}',
+    log_action_verify_access_pin: 'PIN di accesso verificato da {user}',
+    log_action_sos: 'Panico SOS attivato da {user}',
+    log_action_stop_sos: 'Panico SOS fermato da {user}',
+    log_action_save_ui: 'Impostazioni UI salvate da {user}',
+    log_action_rejected: 'Azione rifiutata',
+    unlinked_ha_accounts_title: 'Account Home Assistant senza profilo Argus',
+    btn_create_argus_profile: 'Crea profilo Argus',
+    no_unlinked_ha_accounts: 'Tutti gli account Home Assistant attivi hanno un profilo.',
+    profile_is_yours: 'Questo è il tuo profilo',
+    profile_needs_pin: 'Profilo di un’altra persona — inserisci il PIN di accesso',
+    profile_no_pin_access: 'Questo profilo non ha un PIN di accesso. Non puoi aprirlo.',
+    ha_role_admin: 'Admin HA',
+    ha_role_standard: 'Utente HA',
+    login_btn: 'Accedi',
+    cancel_btn: 'Annulla',
+    pin_placeholder: 'PIN di accesso',
+    link_ha_user: 'Collega all’utente Home Assistant',
+    ha_admin_label: 'Amministratore Home Assistant',
+    ha_standard_user_label: 'Utente HA standard',
+    role_argus_standard: 'Utente standard',
   },
   zh: {
     hero_desc:'集成安全、访问控制、自动化和HomeKit。',
@@ -574,6 +809,53 @@ const TEXTS = {
     bg_panel_selected_from_history: '已从历史记录中选择面板背景。',
     bg_hub_selected_from_history: '已从历史记录中选择Argus背景。',
     error_loading_uploaded_files: '加载文件历史记录出错。',
+    select_profile_title: '选择您的个人资料',
+    select_profile_subtitle: '访问您的安全面板和 Argus 实例。',
+    role_argus_admin: 'Argus 管理员',
+    role_argus_user: '标准用户',
+    ha_account_linked: 'Home Assistant 账户：{name}',
+    ha_account_unavailable: '绑定不可用',
+    user_role_label: 'Argus 角色',
+    delete_user_tooltip: '删除用户个人资料',
+    delete_user_confirm: '您确定要删除“{name}”吗？',
+    cannot_delete_last_admin: '无法删除最后一个管理员。',
+    clock_format_label: '时间格式',
+    clock_format_desc: '选择时间的显示方式。',
+    clock_auto: '自动（Home Assistant）',
+    clock_12h: '12 小时制 (AM/PM)',
+    clock_24h: '24 小时制',
+    unlock_kiosk: '解锁自助服务终端',
+    first_run_welcome: '感谢选择 Argus Home Hub。欢迎。',
+    first_run_desc: '完成设置以保护您的家。',
+    first_run_pin_expl: '访问 PIN 打开 Argus。主 PIN 控制撤防和布防。',
+    first_run_skip: '跳过',
+    first_run_start: '开始使用 Argus',
+    first_run_blocked_title: '拒绝访问',
+    first_run_blocked_desc: '首次设置 Argus 需要 Home Assistant 管理员。',
+    log_action_first_run_completed: 'Argus 已由 {user} 初始化',
+    log_action_fullscreen_unlocked: '自助服务终端已由 {user} 解锁',
+    log_action_master_pin_rejected: '{user} 的主 PIN 尝试不正确',
+    log_action_select_profile: '已选择个人资料：{user}',
+    log_action_verify_access_pin: '访问 PIN 已由 {user} 验证',
+    log_action_sos: 'SOS 紧急情况由 {user} 触发',
+    log_action_stop_sos: 'SOS 紧急情况由 {user} 停止',
+    log_action_save_ui: 'UI 设置已由 {user} 保存',
+    log_action_rejected: '操作已被拒绝',
+    unlinked_ha_accounts_title: '没有 Argus 个人资料的 Home Assistant 账户',
+    btn_create_argus_profile: '创建 Argus 个人资料',
+    no_unlinked_ha_accounts: '所有活跃的 Home Assistant 账户都有个人资料。',
+    profile_is_yours: '这是您的个人资料',
+    profile_needs_pin: '其他人的个人资料 — 请输入访问 PIN',
+    profile_no_pin_access: '该个人资料没有访问 PIN。您无法打开它。',
+    ha_role_admin: 'HA 管理员',
+    ha_role_standard: 'HA 用户',
+    login_btn: '登录',
+    cancel_btn: '取消',
+    pin_placeholder: '访问 PIN',
+    link_ha_user: '关联至 Home Assistant 用户',
+    ha_admin_label: 'Home Assistant 管理员',
+    ha_standard_user_label: '标准 HA 用户',
+    role_argus_standard: '标准用户',
   },
   ru: {
     hero_desc:'Комплексная безопасность, контроль доступа, автоматизация и HomeKit.',
@@ -660,6 +942,53 @@ const TEXTS = {
     bg_panel_selected_from_history: 'Фон панели выбран из истории.',
     bg_hub_selected_from_history: 'Фон Argus выбран из истории.',
     error_loading_uploaded_files: 'Ошибка при загрузке истории файлов.',
+    select_profile_title: 'Выберите ваш профиль',
+    select_profile_subtitle: 'Доступ к вашим панелям безопасности и экземплярам Argus.',
+    role_argus_admin: 'Администратор Argus',
+    role_argus_user: 'Стандартный пользователь',
+    ha_account_linked: 'Учетная запись Home Assistant: {name}',
+    ha_account_unavailable: 'Привязка недоступна',
+    user_role_label: 'Роль Argus',
+    delete_user_tooltip: 'Удалить профиль пользователя',
+    delete_user_confirm: 'Вы уверены, что хотите удалить "{name}"?',
+    cannot_delete_last_admin: 'Нельзя удалить последнего администратора.',
+    clock_format_label: 'Формат времени',
+    clock_format_desc: 'Выберите способ отображения времени.',
+    clock_auto: 'Автоматически (Home Assistant)',
+    clock_12h: '12-часовой (AM/PM)',
+    clock_24h: '24-часовой',
+    unlock_kiosk: 'Разблокировать киоск',
+    first_run_welcome: 'Спасибо за выбор Argus Home Hub. Добро пожаловать.',
+    first_run_desc: 'Завершите настройку для защиты вашего дома.',
+    first_run_pin_expl: 'PIN-код доступа открывает Argus. Мастер PIN-код управляет охраной.',
+    first_run_skip: 'Пропустить',
+    first_run_start: 'Начать работу с Argus',
+    first_run_blocked_title: 'Доступ запрещен',
+    first_run_blocked_desc: 'Для первичной настройки Argus требуется администратор Home Assistant.',
+    log_action_first_run_completed: 'Argus инициализирован пользователем {user}',
+    log_action_fullscreen_unlocked: 'Киоск разблокирован пользователем {user}',
+    log_action_master_pin_rejected: 'Неверная попытка ввода мастер-PIN {user}',
+    log_action_select_profile: 'Выбран профиль: {user}',
+    log_action_verify_access_pin: 'PIN-код доступа проверен {user}',
+    log_action_sos: 'SOS паника вызвана пользователем {user}',
+    log_action_stop_sos: 'SOS паника остановлена пользователем {user}',
+    log_action_save_ui: 'Настройки UI сохранены пользователем {user}',
+    log_action_rejected: 'Действие отклонено',
+    unlinked_ha_accounts_title: 'Учетные записи Home Assistant без профиля Argus',
+    btn_create_argus_profile: 'Создать профиль Argus',
+    no_unlinked_ha_accounts: 'Все активные учетные записи Home Assistant имеют профиль.',
+    profile_is_yours: 'Это ваш профиль',
+    profile_needs_pin: 'Профиль другого пользователя — введите PIN доступа',
+    profile_no_pin_access: 'У этого профиля нет PIN доступа. Вы не можете его открыть.',
+    ha_role_admin: 'Админ HA',
+    ha_role_standard: 'Пользователь HA',
+    login_btn: 'Войти',
+    cancel_btn: 'Отмена',
+    pin_placeholder: 'PIN доступа',
+    link_ha_user: 'Связать с пользователем Home Assistant',
+    ha_admin_label: 'Администратор Home Assistant',
+    ha_standard_user_label: 'Стандартный пользователь HA',
+    role_argus_standard: 'Стандартный пользователь',
   },
 };
 
@@ -1793,6 +2122,35 @@ _tmpl.innerHTML = `
   background: rgba(255,255,255,0.2);
   transform: translateY(-2px);
 }
+.user-card-own {
+  border-color: rgba(0, 122, 255, 0.55);
+  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.22), 0 8px 24px rgba(0,122,255,0.1);
+}
+.user-card-own:hover {
+  border-color: rgba(0, 122, 255, 0.8);
+}
+.profile-own-badge {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #007aff;
+  background: rgba(0, 122, 255, 0.12);
+  border-radius: 999px;
+  padding: 2px 8px;
+  margin-top: -4px;
+}
+.user-role-label {
+  font-size: 11px;
+  opacity: 0.55;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
 .user-avatar {
   width: 56px;
   height: 56px;
@@ -2067,35 +2425,6 @@ _tmpl.innerHTML = `
             <h3 id="h-users"></h3>
             <p class="small" id="p-admin-only" style="margin-bottom:14px;color:#fb8c00;font-weight:600"></p>
             <div id="users-list" style="display:grid;gap:12px;margin-bottom:16px"></div>
-            <div class="subsection collapsible collapsed" id="add-user-form">
-              <div class="subsection-title" id="t-add-user"></div>
-              <div class="field-group"><label id="l-username"></label><input type="text" id="new-user-name" autocomplete="off" class="glass-control"></div>
-              <div class="field-group"><label id="l-user-pin"></label><input type="password" id="new-user-pin" inputmode="numeric" pattern="[0-9]*" class="glass-control"></div>
-              <div class="field-group" style="margin-top:10px">
-                <label>Rol Argus</label>
-                <select id="new-user-role" class="glass-control">
-                  <option value="user">👤 Estándar (Usuario)</option>
-                  <option value="admin">⭐ Administrador</option>
-                </select>
-              </div>
-              <div class="field-group" style="margin-top:10px">
-                <label>Vincular a Usuario Home Assistant</label>
-                <select id="new-user-ha" class="glass-control"></select>
-              </div>
-              <div class="field-group" style="margin-top:10px">
-                <label id="l-user-exp-type">Vencimiento</label>
-                <select id="new-user-exp-type" class="glass-control">
-                  <option value="indefinite" id="opt-exp-indefinite">Indefinido</option>
-                  <option value="temporary" id="opt-exp-temporary">Temporal (Fecha/Hora)</option>
-                </select>
-              </div>
-              <div class="field-group collapsible collapsed" id="group-new-user-exp" style="margin-top:10px">
-                <label id="l-user-exp-date">Fecha/Hora de Vencimiento</label>
-                <input type="datetime-local" id="new-user-exp-date" class="glass-control">
-              </div>
-              <div class="save-row" style="margin-top:15px"><button class="primary" id="btn-save-user" style="width:100%"></button></div>
-              <div id="user-status" class="status" style="margin-top:8px; text-align:center; font-size:12px; font-weight:bold; min-height:18px;"></div>
-            </div>
           </div>
 
           <!-- Master PIN -->
@@ -2291,11 +2620,107 @@ class ArgusPanel extends HTMLElement {
     this._hubBgMode = 'default';
     this._hubBgFile = '';
     this._hubBgSound = false;
+    this._clockFormat = 'auto';
     this._profileSelectedThisMount = false;
     this._panicOutputs = undefined;
     this._initPromise = null;
     this._staticBound = false;
     this._postLoadBound = false;
+  }
+
+  _getTimeZone() {
+    return this._hass?.config?.time_zone || undefined;
+  }
+
+  _getClockFormat() {
+    const fmt = this._clockFormat || this._ui?.clock_format || this._dashboard?.clock_format || 'auto';
+    return ['auto', '12h', '24h'].includes(fmt) ? fmt : 'auto';
+  }
+
+  _formatTime(dateInput) {
+    if (!dateInput) return '';
+    const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
+    if (isNaN(date.getTime())) return '';
+
+    const formatSetting = this._getClockFormat();
+    const locale = this._getLocale();
+    const timeZone = this._getTimeZone();
+
+    const options = { hour: '2-digit', minute: '2-digit' };
+    if (timeZone) options.timeZone = timeZone;
+
+    if (formatSetting === '12h') {
+      options.hour12 = true;
+    } else if (formatSetting === '24h') {
+      options.hour12 = false;
+    } else {
+      const haFmt = this._hass?.locale?.time_format;
+      if (haFmt === '12' || haFmt === '12h') options.hour12 = true;
+      else if (haFmt === '24' || haFmt === '24h') options.hour12 = false;
+    }
+
+    try {
+      return new Intl.DateTimeFormat(locale, options).format(date);
+    } catch (e) {
+      return date.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
+    }
+  }
+
+  _formatDateTime(dateInput) {
+    if (!dateInput) return '';
+    const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
+    if (isNaN(date.getTime())) return '';
+
+    const formatSetting = this._getClockFormat();
+    const locale = this._getLocale();
+    const timeZone = this._getTimeZone();
+
+    const options = {
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    };
+    if (timeZone) options.timeZone = timeZone;
+
+    if (formatSetting === '12h') {
+      options.hour12 = true;
+    } else if (formatSetting === '24h') {
+      options.hour12 = false;
+    } else {
+      const haFmt = this._hass?.locale?.time_format;
+      if (haFmt === '12' || haFmt === '12h') options.hour12 = true;
+      else if (haFmt === '24' || haFmt === '24h') options.hour12 = false;
+    }
+
+    try {
+      return new Intl.DateTimeFormat(locale, options).format(date);
+    } catch (e) {
+      return date.toLocaleString(locale, options);
+    }
+  }
+
+  _updateProfileBadge() {
+    const pill = this.shadowRoot.getElementById('active-profile-pill');
+    const avatar = this.shadowRoot.getElementById('profile-avatar');
+    const nameEl = this.shadowRoot.getElementById('profile-name');
+    const roleEl = this.shadowRoot.getElementById('profile-role');
+    if (!pill || !avatar || !nameEl || !roleEl) return;
+
+    const prof = this._currentProfile;
+    if (!prof) {
+      pill.style.display = 'none';
+      return;
+    }
+
+    pill.style.display = 'flex';
+    const name = prof.name || 'User';
+    const initials = name.slice(0, 2).toUpperCase();
+    avatar.textContent = initials;
+    nameEl.textContent = name;
+
+    const roleKey = prof.role === 'admin' ? 'role_argus_admin' : 'role_argus_user';
+    roleEl.textContent = this._t(roleKey);
   }
 
   _getBrightness(src) {
@@ -3074,15 +3499,6 @@ class ArgusPanel extends HTMLElement {
 
     s('btn-add-notif')?.addEventListener('click', () => this._addNotifTarget());
     s('btn-save-notif')?.addEventListener('click', () => this._saveNotifications());
-    s('btn-save-user').addEventListener('click', () => this._saveUser());
-    s('new-user-exp-type')?.addEventListener('change', e => {
-      const group = this.shadowRoot.getElementById('group-new-user-exp');
-      if (e.target.value === 'temporary') {
-        group?.classList.remove('collapsed');
-      } else {
-        group?.classList.add('collapsed');
-      }
-    });
 
     // Home name edit (requires PIN)
     s('btn-edit-home-name-standalone')?.addEventListener('click', () => this._editHomeName());
@@ -4489,7 +4905,7 @@ class ArgusPanel extends HTMLElement {
             const dateObj = new Date(u.expiration_date);
             if (!isNaN(dateObj.getTime())) {
               try {
-                formattedDate = dateObj.toLocaleString(this._getLocale());
+                formattedDate = this._formatDateTime(dateObj);
               } catch (e) {
                 formattedDate = dateObj.toISOString();
               }
@@ -4501,38 +4917,120 @@ class ArgusPanel extends HTMLElement {
               : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">⏳ ${this._escapeHtml(this._t('active_until'))}: ${this._escapeHtml(formattedDate)}</span>`)
             : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">♾️ ${this._t('exp_indefinite')}</span>`;
 
+          const haAccountText = u.ha_user_id
+            ? (() => {
+                const haUser = (this._haUsersList || []).find(ha => ha.id === u.ha_user_id);
+                return haUser
+                  ? this._format('ha_account_linked', { name: haUser.name })
+                  : this._t('ha_account_unavailable');
+              })()
+            : this._t('ha_account_unavailable');
+
+          const roleText = u.role === 'admin'
+            ? '⭐ ' + this._escapeHtml(this._t('role_argus_admin'))
+            : '👤 ' + this._escapeHtml(this._t('role_argus_standard'));
+
+          const pinBadge = u.access_pin_configured
+            ? `<span class="user-badge" style="background:rgba(0,122,255,0.12);color:#007aff">🔒 PIN</span>`
+            : `<span class="user-badge" style="opacity:0.55">🔓 Sin PIN</span>`;
+
           return `
           <div class="user-card" style="display:flex;flex-direction:column;align-items:stretch;gap:8px">
-            <div style="display:flex;justify-content:between;align-items:center;width:100%">
+            <div style="display:flex;justify-content:space-between;align-items:center;width:100%">
               <div style="flex:1">
                 <div style="font-weight:700">${this._escapeHtml(u.name || '')}</div>
                 <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
-                  <span class="user-badge ${u.role === 'admin' ? 'admin' : ''}">Argus: ${u.role === 'admin' ? '⭐ Admin' : '👤 User'}</span>
-                  <span class="user-badge" style="background:#4a148c;color:white;margin-left:5px">HA: ${u.ha_user_id ? (this._haUsersList.find(ha => ha.id === u.ha_user_id)?.name || 'Vinculado') : 'Sin vincular'}</span>
+                  <span class="user-badge ${u.role === 'admin' ? 'admin' : ''}">${roleText}</span>
+                  <span class="user-badge" style="background:#4a148c;color:white;margin-left:5px">${this._escapeHtml(haAccountText)}</span>
+                  ${pinBadge}
                   ${expBadge}
                 </div>
               </div>
-              <div style="display:flex;gap:8px;align-items:center">
-                ${this._isAdmin ? `<button class="danger" style="padding:5px 10px" data-user-del="${i}">🗑</button>` : ''}
+              <div style="display:flex;gap:6px;align-items:center">
+                ${this._isAdmin ? `
+                  <button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-pin="${i}" title="${this._escapeHtml(this._t('pin_placeholder'))}">🔑 PIN</button>
+                  <button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-role-toggle="${i}" title="${this._escapeHtml(this._t('user_role_label'))}">⭐ Rol</button>
+                  <button class="btn-danger danger" style="padding:6px 10px;font-size:12px;background:#e53935;color:white;border:none;border-radius:10px;cursor:pointer" title="${this._escapeHtml(this._t('delete_user_tooltip'))}" aria-label="${this._escapeHtml(this._t('delete_user_tooltip'))}" data-user-del="${i}">🗑️ ${this._escapeHtml(this._t('clear') || 'Borrar')}</button>
+                ` : ''}
               </div>
             </div>
           </div>`;
         }).join('');
 
         if (this._isAdmin) {
-          el.querySelectorAll('[data-user-del]').forEach(btn =>
-            btn.addEventListener('click', async () => {
-              const idx = Number(btn.dataset.userDel);
+          // Edit access PIN
+          el.querySelectorAll('[data-user-pin]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const idx = Number(btn.dataset.userPin);
+              const targetUser = this._users[idx];
+              if (!targetUser) return;
+              const promptMsg = `${this._t('pin_placeholder')} — ${targetUser.name}\n(Dejar en blanco para borrar el PIN de acceso):`;
+              const newPin = window.prompt(promptMsg);
+              if (newPin === null) return;
               this._runWithPin(async () => {
-                this._users.splice(idx, 1);
                 try {
-                  const resp = await this._send('argus/save_ui', { users: this._users });
-                  if (resp && resp.ui) {
-                    this._ui = resp.ui;
+                  await this._send('argus/save_user_access_pin', { argus_user_id: targetUser.id, pin: newPin.trim() });
+                  const dash = await this._send('argus/dashboard');
+                  if (dash && dash.users) {
+                    this._users = dash.users;
                   }
                   this._renderUsers();
                 } catch (e) {
-                  alert(this._format('generic_error', { error: e.message }));
+                  alert(e.message || this._format('generic_error', { error: e }));
+                }
+              });
+            });
+          });
+
+          // Toggle Role (admin <-> standard)
+          el.querySelectorAll('[data-user-role-toggle]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const idx = Number(btn.dataset.userRoleToggle);
+              const targetUser = this._users[idx];
+              if (!targetUser) return;
+              const newRole = targetUser.role === 'admin' ? 'standard' : 'admin';
+              this._runWithPin(async () => {
+                const nextUsers = this._users.map((u, k) => k === idx ? { ...u, role: newRole } : u);
+                try {
+                  const resp = await this._send('argus/save_ui', { users: nextUsers });
+                  if (resp && resp.ui) {
+                    this._ui = resp.ui;
+                    this._users = resp.ui.users || nextUsers;
+                  } else {
+                    this._users = nextUsers;
+                  }
+                  this._renderUsers();
+                } catch (e) {
+                  alert(e.message || this._format('generic_error', { error: e }));
+                }
+              });
+            });
+          });
+
+          // Delete profile
+          el.querySelectorAll('[data-user-del]').forEach(btn =>
+            btn.addEventListener('click', async () => {
+              const idx = Number(btn.dataset.userDel);
+              const targetUser = this._users[idx];
+              if (!targetUser) return;
+
+              const confirmMsg = this._format('delete_user_confirm', { name: targetUser.name || 'User' });
+              if (!window.confirm(confirmMsg)) return;
+
+              this._runWithPin(async () => {
+                const nextUsers = [...this._users];
+                nextUsers.splice(idx, 1);
+                try {
+                  const resp = await this._send('argus/save_ui', { users: nextUsers });
+                  if (resp && resp.ui) {
+                    this._ui = resp.ui;
+                    this._users = resp.ui.users || nextUsers;
+                  } else {
+                    this._users = nextUsers;
+                  }
+                  this._renderUsers();
+                } catch (e) {
+                  alert(e.message || this._format('generic_error', { error: e }));
                 }
               });
             })
@@ -4544,95 +5042,7 @@ class ArgusPanel extends HTMLElement {
       el.innerHTML = `<div class="small">${this._t('no_users')}</div>`;
     }
 
-    // show/hide form based on admin
-    const form = this.shadowRoot.getElementById('add-user-form');
-    if (form) {
-      if (this._isAdmin) {
-        form.classList.remove('collapsed');
-        const haSel = this.shadowRoot.getElementById('new-user-ha');
-        if (haSel) {
-          haSel.innerHTML = '<option value="">— Ninguno —</option>' +
-            this._haUsersList.map(h => `<option value="${this._escapeHtml(h.id)}">${this._escapeHtml(h.name)} ${h.is_admin ? '(Admin)' : ''}</option>`).join('');
-        }
-      } else {
-        form.classList.add('collapsed');
-      }
-    }
     this._syncAccessSummary();
-  }
-
-  _toggleAccessSection(section) {
-    const workspace = this.shadowRoot.getElementById('access-workspace');
-    const users = this.shadowRoot.getElementById('access-users-section');
-    const pin = this.shadowRoot.getElementById('access-pin-section');
-    const usersButton = this.shadowRoot.getElementById('btn-access-users');
-    const pinButton = this.shadowRoot.getElementById('btn-access-pin');
-    const selected = section === 'users' ? users : pin;
-    const selectedButton = section === 'users' ? usersButton : pinButton;
-    const isOpen = selected?.classList.contains('open');
-
-    workspace?.classList.toggle('open', !isOpen);
-    users?.classList.toggle('open', !isOpen && section === 'users');
-    pin?.classList.toggle('open', !isOpen && section === 'pin');
-    usersButton?.classList.toggle('active', !isOpen && section === 'users');
-    pinButton?.classList.toggle('active', !isOpen && section === 'pin');
-    usersButton?.setAttribute('aria-expanded', String(!isOpen && section === 'users'));
-    pinButton?.setAttribute('aria-expanded', String(!isOpen && section === 'pin'));
-    if (!isOpen) selectedButton?.focus();
-  }
-
-  _syncAccessSummary() {
-    const summary = this.shadowRoot.getElementById('p-access-desc');
-    if (!summary) return;
-    const pinConfigured = this._dashboard?.entries?.[0]?.pin_configured === true;
-    const userCount = Array.isArray(this._users) ? this._users.filter(u => u && typeof u === 'object').length : 0;
-    const pinLabel = pinConfigured ? this._t('pin_active_yes') : this._t('pin_active_no');
-    const userForms = {
-      es:['usuario adicional','usuarios adicionales'],en:['additional user','additional users'],fr:['utilisateur supplémentaire','utilisateurs supplémentaires'],pt:['usuário adicional','usuários adicionais'],it:['utente aggiuntivo','utenti aggiuntivi'],zh:['个附加用户','个附加用户'],ru:['дополнительный пользователь','дополнительных пользователей']
-    }[this._getCurrentLangCode()] || ['additional user','additional users'];
-    const userLabel = `${userCount} ${userCount === 1 ? userForms[0] : userForms[1]}`;
-    summary.textContent = `${pinLabel} · ${userLabel}`;
-  }
-
-  async _saveUser() {
-    if (!this._isAdmin) return;
-    const name = this.shadowRoot.getElementById('new-user-name').value.trim();
-    const pin  = this.shadowRoot.getElementById('new-user-pin').value.trim();
-    const role = this.shadowRoot.getElementById('new-user-role').value;
-    const ha_user_id = this.shadowRoot.getElementById('new-user-ha').value || null;
-    const expType = this.shadowRoot.getElementById('new-user-exp-type').value;
-    const expDate = expType === 'temporary' ? this.shadowRoot.getElementById('new-user-exp-date').value : '';
-    const status = this.shadowRoot.getElementById('user-status');
-    if (!name || !pin) {
-      if (status) { status.textContent = this._t('user_required'); status.className = 'status err'; }
-      else { alert(this._t('user_required')); }
-      return;
-    }
-
-    this._runWithPin(async () => {
-      this._users.push({ name, pin, role, ha_user_id, expiration_date: expDate, enabled: true });
-      try {
-        const resp = await this._send('argus/save_ui', { users: this._users });
-        if (resp && resp.ui) {
-          this._ui = resp.ui;
-        }
-        this.shadowRoot.getElementById('new-user-name').value = '';
-        this.shadowRoot.getElementById('new-user-pin').value = '';
-        this.shadowRoot.getElementById('new-user-admin').checked = false;
-        if (this.shadowRoot.getElementById('new-user-exp-type')) {
-          this.shadowRoot.getElementById('new-user-exp-type').value = 'indefinite';
-        }
-        if (this.shadowRoot.getElementById('new-user-exp-date')) {
-          this.shadowRoot.getElementById('new-user-exp-date').value = '';
-          this.shadowRoot.getElementById('group-new-user-exp')?.classList.add('collapsed');
-        }
-        if (status) { status.textContent = '✓'; status.className = 'status ok'; }
-        this._renderUsers();
-      } catch (e) {
-        if (status) { status.textContent = e.message; status.className = 'status err'; }
-        else { alert(this._format('generic_error', { error: e.message })); }
-      }
-    });
   }
 
   _populateTemperatureSources() {
@@ -5883,75 +6293,152 @@ class ArgusPanel extends HTMLElement {
   _renderLoginScreen(bootstrap) {
     const overlay = this.shadowRoot.getElementById('bootstrap-overlay');
     overlay.style.display = 'flex';
-    let usersHtml = bootstrap.users.map(u => `
-      <div class="user-card" data-user-id="${escapeHtml(u.id)}" data-pin-required="${u.access_pin_configured ? 'true' : 'false'}">
-        <div class="user-avatar">${escapeHtml(u.name.substring(0, 2).toUpperCase())}</div>
-        <div class="user-name">${escapeHtml(u.name)}</div>
-        ${u.access_pin_configured ? '🔒' : ''}
-      </div>
-    `).join('');
+
+    const users = bootstrap.users || [];
+    const haUserId = bootstrap.ha_user_id || null;
+
+    // Build user cards — highlight own profile
+    const usersHtml = users.map(u => {
+      const isOwn = u.is_own_profile === true;
+      const ownBadge = isOwn
+        ? `<div class="profile-own-badge">${this._escapeHtml(this._t('profile_is_yours'))}</div>`
+        : '';
+      const lockIcon = u.access_pin_configured ? ' 🔒' : '';
+      const roleLabel = u.role === 'admin'
+        ? this._escapeHtml(this._t('role_argus_admin'))
+        : this._escapeHtml(this._t('role_argus_standard'));
+
+      const ariaStatus = isOwn
+        ? this._t('profile_is_yours')
+        : (u.access_pin_configured ? this._t('profile_needs_pin') : this._t('profile_no_pin_access'));
+      const ariaLabelText = `${u.name}, ${roleLabel}, ${ariaStatus}`;
+
+      return `
+        <div class="user-card${isOwn ? ' user-card-own' : ''}"
+             data-user-id="${this._escapeHtml(u.id)}"
+             data-is-own="${isOwn ? 'true' : 'false'}"
+             data-pin-required="${u.access_pin_configured ? 'true' : 'false'}"
+             tabindex="0"
+             role="button"
+             aria-label="${this._escapeHtml(ariaLabelText)}">
+          <div class="user-avatar">${this._escapeHtml(u.name.substring(0, 2).toUpperCase())}</div>
+          <div class="user-name">${this._escapeHtml(u.name)}${lockIcon}</div>
+          <div class="user-role-label">${roleLabel}</div>
+          ${ownBadge}
+        </div>
+      `;
+    }).join('');
 
     overlay.innerHTML = `
-      <div class="argus-bootstrap-card liquid-glass">
-        <h1>Select Profile</h1>
-        <div class="user-selector-grid">
+      <div class="argus-bootstrap-card liquid-glass" style="max-width:520px;width:92vw">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:4px">
+          <img src="/api/argus_static/argus_logo.png" alt="Argus" style="height:36px;border-radius:8px;flex-shrink:0">
+          <div>
+            <h1 style="margin:0;font-size:1.35rem;font-weight:900">${this._escapeHtml(this._t('select_profile_title'))}</h1>
+            <p style="margin:4px 0 0;font-size:0.82rem;opacity:0.65">${this._escapeHtml(this._t('select_profile_subtitle'))}</p>
+          </div>
+        </div>
+        <div class="user-selector-grid" style="margin-top:18px">
           ${usersHtml}
         </div>
-        <div id="pin-prompt" class="pin-prompt">
-          <input type="password" id="login-pin-input" placeholder="PIN" />
-          <br/>
-          <button id="btn-submit-login-pin" class="btn-start">Login</button>
-          <button id="btn-cancel-login" class="btn-cancel">Cancel</button>
+        <div id="pin-prompt" class="pin-prompt" style="display:none;margin-top:16px;animation:fadeIn .25s ease">
+          <div id="pin-prompt-label" style="font-size:13px;opacity:0.75;margin-bottom:8px;text-align:center"></div>
+          <input type="password" id="login-pin-input" placeholder="${this._escapeHtml(this._t('pin_placeholder'))}" inputmode="numeric" pattern="[0-9]*"
+                 style="width:100%;box-sizing:border-box;text-align:center;font-size:1.3rem;letter-spacing:0.25em;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.07);color:inherit;outline:none;margin-bottom:8px"/>
+          <div style="display:flex;gap:8px;justify-content:center">
+            <button id="btn-submit-login-pin" class="btn-start" style="flex:1">${this._escapeHtml(this._t('login_btn'))}</button>
+            <button id="btn-cancel-login" class="btn-cancel" style="flex:0.4">${this._escapeHtml(this._t('cancel_btn'))}</button>
+          </div>
+          <div id="login-pin-error" style="color:#ff453a;font-size:12px;min-height:18px;text-align:center;margin-top:6px"></div>
         </div>
       </div>
     `;
 
     const pinPrompt = this.shadowRoot.getElementById('pin-prompt');
     const pinInput = this.shadowRoot.getElementById('login-pin-input');
+    const pinLabel = this.shadowRoot.getElementById('pin-prompt-label');
+    const pinError = this.shadowRoot.getElementById('login-pin-error');
     const grid = this.shadowRoot.querySelector('.user-selector-grid');
     let selectedUserId = null;
+
+    const _showGrid = () => {
+      selectedUserId = null;
+      if (pinInput) pinInput.value = '';
+      if (pinError) pinError.textContent = '';
+      if (pinPrompt) pinPrompt.style.display = 'none';
+      if (grid) grid.style.display = 'grid';
+    };
+
+    const _showPinPrompt = (label) => {
+      if (pinLabel) pinLabel.textContent = label;
+      if (pinError) pinError.textContent = '';
+      if (pinPrompt) pinPrompt.style.display = 'block';
+      if (grid) grid.style.display = 'none';
+      if (pinInput) { pinInput.value = ''; pinInput.focus(); }
+    };
 
     this.shadowRoot.querySelectorAll('.user-card').forEach(el => {
       el.addEventListener('click', async () => {
         const userId = el.getAttribute('data-user-id');
+        const isOwn = el.getAttribute('data-is-own') === 'true';
         const pinRequired = el.getAttribute('data-pin-required') === 'true';
-        if (pinRequired) {
-          selectedUserId = userId;
-          grid.style.display = 'none';
-          pinPrompt.style.display = 'block';
-          pinInput.focus();
-        } else {
-          try {
-            await this._send('argus/select_profile', { argus_user_id: userId });
-            overlay.style.display = 'none';
-            this._profileSelectedThisMount = true;
-            this._load();
-          } catch (err) {
-            alert("Selection failed: " + err.message);
+
+        if (isOwn) {
+          // Own profile — direct select (no PIN needed unless configured)
+          if (pinRequired) {
+            selectedUserId = userId;
+            _showPinPrompt(this._t('profile_needs_pin'));
+          } else {
+            try {
+              await this._send('argus/select_profile', { argus_user_id: userId });
+              overlay.style.display = 'none';
+              this._profileSelectedThisMount = true;
+              this._load();
+            } catch (err) {
+              if (pinError) pinError.textContent = err.message || '❌';
+            }
           }
+        } else {
+          // Foreign profile
+          if (!pinRequired) {
+            // No PIN → reject client-side immediately (backend also rejects)
+            if (pinError) { pinError.textContent = this._t('profile_no_pin_access'); pinError.style.display = 'block'; }
+            el.style.animation = 'none';
+            el.offsetWidth; // reflow
+            el.style.animation = 'shake .3s ease';
+            return;
+          }
+          // Has PIN → prompt
+          selectedUserId = userId;
+          _showPinPrompt(this._t('profile_needs_pin'));
         }
       });
+
+      el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ' || e.code === 'Space') el.click(); });
     });
 
-    this.shadowRoot.getElementById('btn-cancel-login').addEventListener('click', () => {
-      selectedUserId = null;
-      pinInput.value = '';
-      pinPrompt.style.display = 'none';
-      grid.style.display = 'grid';
-    });
+    this.shadowRoot.getElementById('btn-cancel-login').addEventListener('click', _showGrid);
 
     this.shadowRoot.getElementById('btn-submit-login-pin').addEventListener('click', async () => {
       if (!selectedUserId || !pinInput.value) return;
+      if (pinError) pinError.textContent = '';
       try {
         await this._send('argus/verify_access_pin', { argus_user_id: selectedUserId, pin: pinInput.value });
         overlay.style.display = 'none';
         this._profileSelectedThisMount = true;
         this._load();
       } catch (err) {
-        alert("Login failed: " + err.message);
-        pinInput.value = '';
+        if (pinError) pinError.textContent = '❌ ' + (err.message || 'Error');
+        if (pinInput) { pinInput.value = ''; pinInput.focus(); }
       }
     });
+
+    // Allow Enter key in PIN input
+    if (pinInput) {
+      pinInput.addEventListener('keydown', e => {
+        if (e.key === 'Enter') this.shadowRoot.getElementById('btn-submit-login-pin').click();
+      });
+    }
   }
 
 

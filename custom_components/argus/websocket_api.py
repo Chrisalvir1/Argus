@@ -33,6 +33,7 @@ from .storage import (
     async_load_ui_data,
     async_restore_ui_data,
     async_save_ui_data,
+    async_sync_ha_profiles,
     _sanitize_users,
 )
 
@@ -355,6 +356,16 @@ def _resolve_alarm_entity_id(hass: HomeAssistant, config_entry_id: str) -> str |
     return None
 
 
+_PROFILE_ALLOWLIST = {"id", "name", "role", "enabled", "permissions", "shared_kiosk_profile"}
+
+def _redact_user_profile(profile: dict | None) -> dict | None:
+    """Redact user profile using a strict allowlist of fields."""
+    if not isinstance(profile, dict):
+        return None
+    return {k: copy.deepcopy(v) for k, v in profile.items() if k in _PROFILE_ALLOWLIST}
+
+
+
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/dashboard",
     vol.Optional("entry_id"): str,
@@ -388,7 +399,7 @@ async def ws_argus_dashboard(hass, connection, msg) -> None:
 
     connection.send_result(msg["id"], {
         "entries": entries,
-        "current_profile": profile,
+        "current_profile": _redact_user_profile(profile),
         "ui": _redact_ui_data(ui_data),
         "available_entities": _serialize_available_entities(hass),
     })
@@ -417,6 +428,7 @@ _SAVE_UI_SCHEMA = {
     vol.Optional("hub_bg_mode"): vol.In(["none", "image", "video"]),
     vol.Optional("hub_bg_file"): str,
     vol.Optional("hub_bg_sound"): bool,
+    vol.Optional("clock_format"): vol.In(["auto", "12h", "24h"]),
 }
 
 
@@ -791,11 +803,16 @@ async def ws_argus_verify_master_pin_for_screen_unlock(hass, connection, msg) ->
 @websocket_api.async_response
 async def ws_argus_login_bootstrap(hass, connection, msg) -> None:
     entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
-    ui_data = await async_load_ui_data(hass, entry_id)
 
     ha_user_id, _ = _get_ha_actor(connection)
     sm = async_get_session_manager(hass)
     session = sm.get_session(ha_user_id, entry_id)
+
+    # Atomically sync HA accounts to Argus profiles (idempotent, skips first_run)
+    await async_sync_ha_profiles(hass, entry_id)
+
+    # Re-load after potential sync changes
+    ui_data = await async_load_ui_data(hass, entry_id)
 
     public_users = []
     for u in ui_data.get("users", []):
@@ -806,6 +823,9 @@ async def ws_argus_login_bootstrap(hass, connection, msg) -> None:
                 "role": u["role"],
                 "shared_kiosk_profile": u.get("shared_kiosk_profile", False),
                 "access_pin_configured": bool(u.get("access_pin_hash")),
+                # Signal whether this profile belongs to the current HA user.
+                # Does NOT expose ha_user_id raw — only a boolean flag.
+                "is_own_profile": (u.get("ha_user_id") == ha_user_id),
             })
 
     has_real_admin = False
@@ -1144,7 +1164,22 @@ async def ws_argus_get_ha_users(hass, connection, msg) -> None:
         connection.send_error(msg["id"], err.code, err.message)
         return
 
-    users = [{"id": u.id, "name": u.name, "is_admin": u.is_admin} for u in await hass.auth.async_get_users()]
+    raw_users = await hass.auth.async_get_users()
+    filtered = [
+        u for u in raw_users
+        if not getattr(u, "system_generated", False) and getattr(u, "is_active", True)
+    ]
+    name_counts = {}
+    for u in filtered:
+        name_counts[u.name] = name_counts.get(u.name, 0) + 1
+
+    users = []
+    for u in filtered:
+        display_name = u.name
+        if name_counts.get(u.name, 0) > 1 and len(u.id) >= 6:
+            display_name = f"{u.name} (…{u.id[-6:]})"
+        users.append({"id": u.id, "name": display_name, "is_admin": u.is_admin})
+
     connection.send_result(msg["id"], {"ha_users": users})
 
 
