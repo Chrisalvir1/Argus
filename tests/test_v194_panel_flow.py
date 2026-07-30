@@ -56,7 +56,7 @@ class TestV194PanelFlow(unittest.TestCase):
         self.assertIn("_renderInitializationError(err)", self.panel)
 
     def test_versioned_custom_element_prevents_stale_definition(self) -> None:
-        self.assertIn("customElements.define('argus-panel-v197'", self.panel)
+        self.assertIn("customElements.define('argus-panel-v198'", self.panel)
         self.assertIn(
             'webcomponent_name=f"argus-panel-v{VERSION.replace(\'.\', \'\')}"',
             self.panel_registration,
@@ -80,7 +80,7 @@ class TestV194PanelFlow(unittest.TestCase):
 
     def test_activity_history_is_loaded_from_protected_timeline_endpoint(self) -> None:
         self.assertIn(
-            "await this._loadActivityTimeline(dashboard.entries?.[0]?.entry_id)",
+            "await this._loadActivityTimeline(dashboard.entry_id)",
             self.panel,
         )
         self.assertIn("async _loadActivityTimeline(entryId = null)", self.panel)
@@ -90,6 +90,44 @@ class TestV194PanelFlow(unittest.TestCase):
             "\n  }\n", 1
         )[0]
         self.assertIn("await this._loadActivityTimeline(entryId)", clear_method)
+        self.assertIn('"entry_id": entry_id', self.websocket)
+        self.assertIn("history_unavailable", self.panel)
+        self.assertIn('id="btn-refresh-history"', self.panel)
+
+    def test_access_sections_have_a_real_controller(self) -> None:
+        self.assertIn("_toggleAccessSection(section) {", self.panel)
+        method = self.panel.split("_toggleAccessSection(section) {", 1)[1].split(
+            "\n  }\n", 1
+        )[0]
+        self.assertIn("workspace.classList.toggle('open', shouldOpen)", method)
+        self.assertIn("usersSection.classList.toggle", method)
+        self.assertIn("pinSection.classList.toggle", method)
+        self.assertIn("button.setAttribute('aria-expanded'", method)
+
+    def test_github_and_dynamic_access_copy_are_reactive_i18n(self) -> None:
+        for element_id in ("github-title", "github-desc", "github-action"):
+            self.assertIn(f'id="{element_id}"', self.panel)
+            self.assertIn(f"set('{element_id}'", self.panel)
+        for key in (
+            "github_title",
+            "github_desc",
+            "github_action",
+            "history_refresh",
+            "history_unavailable",
+            "user_no_pin",
+            "user_role_action",
+            "notif_no_services",
+        ):
+            section = self.panel.split("const UI_AUDIT_TEXTS =", 1)[1].split(
+                "\n};", 1
+            )[0]
+            self.assertEqual(section.count(f"{key}:"), 7)
+
+    def test_access_and_github_controls_use_liquid_glass(self) -> None:
+        self.assertIn(".access-workspace.open {", self.panel)
+        self.assertIn("backdrop-filter:blur(22px)", self.panel)
+        self.assertIn('class="github-star-action"', self.panel)
+        self.assertIn(".github-star-action {", self.panel)
 
 
 if __name__ == "__main__":
