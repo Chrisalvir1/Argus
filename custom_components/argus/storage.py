@@ -160,6 +160,16 @@ async def async_save_ui_data(
         current = await async_load_ui_data(hass, entry_id)
         safe_updates = copy.deepcopy(updates or {})
         if "users" in safe_updates:
+            # Check for ha_user_id uniqueness
+            ha_users_seen = set()
+            for u in safe_updates["users"]:
+                if isinstance(u, dict) and u.get("enabled", True):
+                    ha_id = u.get("ha_user_id")
+                    if ha_id:
+                        if ha_id in ha_users_seen:
+                            raise ValueError(f"ha_user_id '{ha_id}' is already linked to another enabled Argus profile.")
+                        ha_users_seen.add(ha_id)
+
             # Check if this change would remove the last real HA admin
             current_users = current.get("users", [])
             new_users = safe_updates["users"]
@@ -173,6 +183,16 @@ async def async_save_ui_data(
             safe_updates["users"] = _preserve_redacted_user_pins(
                 current_users, new_users
             )
+
+        if "panic_outputs" in safe_updates:
+            if not isinstance(safe_updates["panic_outputs"], list):
+                safe_updates["panic_outputs"] = []
+            valid_outputs = []
+            for e_id in safe_updates["panic_outputs"]:
+                if isinstance(e_id, str) and "." in e_id and len(e_id.split(".")) == 2:
+                    valid_outputs.append(e_id)
+            safe_updates["panic_outputs"] = valid_outputs
+
         current.update(safe_updates)
         await _store(hass, entry_id).async_save(current)
         return current

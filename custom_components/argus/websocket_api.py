@@ -158,6 +158,7 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_argus_get_ha_persons)
     websocket_api.async_register_command(hass, ws_argus_save_user_access_pin)
     websocket_api.async_register_command(hass, ws_argus_sync_presence_rules)
+    websocket_api.async_register_command(hass, ws_argus_verify_master_pin_for_screen_unlock)
 
     # Existing endpoints
     websocket_api.async_register_command(hass, ws_argus_dashboard)
@@ -731,6 +732,56 @@ async def ws_argus_update_master_pin(hass, connection, msg) -> None:
     await hass.config_entries.async_reload(entry.entry_id)
     connection.send_result(msg["id"], {"success": True})
 
+
+
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/verify_master_pin_for_screen_unlock",
+    vol.Required("entry_id"): str,
+    vol.Required("pin"): str,
+})
+@websocket_api.async_response
+async def ws_argus_verify_master_pin_for_screen_unlock(hass, connection, msg) -> None:
+    entry = _entry_by_id(hass, msg["entry_id"])
+    if not entry:
+        connection.send_error(msg["id"], "not_found", "Argus config entry not found")
+        return
+
+    ha_user_id, actor = _get_ha_actor(connection)
+
+    key = f"kiosk:{ha_user_id}:{entry.entry_id}"
+    limiter = _limiter(hass, entry.entry_id)
+    if limiter.is_blocked(key):
+        connection.send_error(msg["id"], "rate_limited", "Too many failed attempts; try again later")
+        return
+
+    current = entry.options.get("code") or entry.data.get("code") or ""
+    if not current:
+        connection.send_error(msg["id"], "no_master_pin_configured", "Master PIN not configured")
+        return
+
+    if not verify_pin(msg["pin"], current):
+        blocked = limiter.record_failure(key)
+        await async_append_audit_log(
+            hass,
+            "master_pin_rejected",
+            user=actor,
+            severity="critical" if blocked else "warning",
+            metadata={"entry_id": entry.entry_id, "rate_limited": blocked, "reason": "kiosk_unlock"},
+            entry_id=entry.entry_id,
+        )
+        connection.send_error(msg["id"], "invalid_pin", "Incorrect PIN")
+        return
+
+    limiter.reset(key)
+    await async_append_audit_log(
+        hass,
+        "fullscreen_unlocked",
+        user=actor,
+        severity="info",
+        metadata={"entry_id": entry.entry_id},
+        entry_id=entry.entry_id,
+    )
+    connection.send_result(msg["id"], {"success": True})
 
 
 @websocket_api.websocket_command({
