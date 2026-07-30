@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.9.9
+ * Argus Home Hub – v1.9.10
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1547,7 +1547,7 @@ _tmpl.innerHTML = `
   .sensor-chip--open .sensor-chip-dot{background:#fff;box-shadow:0 0 8px rgba(255,255,255,.95)}
   .sensor-chip--triggered{background:linear-gradient(135deg,rgba(255,69,58,.96),rgba(190,30,35,.82));animation:chip-pulse .9s ease-in-out infinite}
   .sensor-chip--closed{background:rgba(15,23,32,.62);color:#eef8f1}
-  .sensor-chip--closed .sensor-chip-dot{background:#34c759;box-shadow:0 0 8px rgba(52,1.9.99,.9)}
+  .sensor-chip--closed .sensor-chip-dot{background:#34c759;box-shadow:0 0 8px rgba(52,1.9.109,.9)}
   .sensor-chip-battery.low{color:#ffd166;font-weight:900}
   .buzz-orange{position:relative;border-color:rgba(255,171,64,.92)!important;background:linear-gradient(135deg,rgba(255,149,0,.38),rgba(255,109,0,.16))!important;box-shadow:0 0 0 1px rgba(255,183,77,.45),0 0 25px rgba(255,145,0,.55),inset 0 1px 0 rgba(255,255,255,.3)!important;animation:buzz-orange 1.05s cubic-bezier(.36,.07,.19,.97) infinite}
   .buzz-orange::after{content:'⚠';margin-left:auto;color:#fff3d1;font-size:14px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.28))}
@@ -1758,7 +1758,7 @@ _tmpl.innerHTML = `
   .device-facts{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
   .device-fact{display:inline-flex;align-items:center;min-height:20px;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:750;line-height:1.1;white-space:nowrap}
   .device-fact.status-open{color:#ff8a80;background:rgba(255,82,82,.12)}
-  .device-fact.status-closed{color:#7ee2a8;background:rgba(52,1.9.99,.12)}
+  .device-fact.status-closed{color:#7ee2a8;background:rgba(52,1.9.109,.12)}
   .device-fact.power-low{color:#ffd166;background:rgba(255,183,77,.13)}
   .sel-right-item{display:flex;align-items:center;justify-content:space-between;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.09);background:rgba(255,255,255,0.055);font-size:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.06)}
   .sel-right-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
@@ -1777,7 +1777,7 @@ _tmpl.innerHTML = `
   .glass-orb{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 2px 4px rgba(255,255,255,0.5),0 2px 6px rgba(0,0,0,0.2);background:rgba(255,255,255,0.3)}
   .log-item.log-item--armed .log-icon{background:rgba(255,149,0,.16);border-color:rgba(255,183,77,.28)}
   .log-item.log-item--armed .glass-orb{background:linear-gradient(135deg,#ffb74d,#f57c00)}
-  .log-item.log-item--disarmed .log-icon{background:rgba(52,1.9.99,.14);border-color:rgba(105,219,139,.28)}
+  .log-item.log-item--disarmed .log-icon{background:rgba(52,1.9.109,.14);border-color:rgba(105,219,139,.28)}
   .log-item.log-item--disarmed .glass-orb{background:linear-gradient(135deg,#69db8b,#388e3c)}
   .log-item.log-item--triggered .log-icon{background:rgba(255,69,58,.16);border-color:rgba(255,139,131,.30)}
   .log-item.log-item--triggered .glass-orb{background:linear-gradient(135deg,#ff8b83,#d32f2f)}
@@ -1943,7 +1943,7 @@ _tmpl.innerHTML = `
   font-weight:700; box-shadow:0 4px 12px rgba(0,0,0,0.08);
 }
 .sensor-pill:hover { background:var(--argus-pill-bg-hover, rgba(255,255,255,0.08)); border-color:rgba(255,255,255,0.25); transform:translateY(-1px); }
-.sensor-pill .pill-dot { width:10px; height:10px; border-radius:50%; background:#34c759; flex-shrink:0; box-shadow:0 0 10px rgba(52,1.9.99,0.5); }
+.sensor-pill .pill-dot { width:10px; height:10px; border-radius:50%; background:#34c759; flex-shrink:0; box-shadow:0 0 10px rgba(52,1.9.109,0.5); }
 .sensor-pill .pill-dot.open { background:#ff3b30; box-shadow:0 0 10px rgba(255,59,48,0.5); }
 .sensor-pill .pill-dot.unavailable { background:#999; }
 .sensor-pill button { background:none; border:none; color:var(--argus-pill-color, #fff); cursor:pointer; opacity:0.5; padding:4px; font-size:14px; transition:opacity 0.2s; }
@@ -6881,4 +6881,4 @@ class ArgusPanel extends HTMLElement {
 
 }
 
-customElements.define('argus-panel-v199', ArgusPanel);
+customElements.define('argus-panel-v1910', ArgusPanel);
