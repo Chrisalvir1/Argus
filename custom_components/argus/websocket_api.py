@@ -398,6 +398,7 @@ async def ws_argus_dashboard(hass, connection, msg) -> None:
         profile = None
 
     connection.send_result(msg["id"], {
+        "entry_id": entry_id,
         "entries": entries,
         "current_profile": _redact_user_profile(profile),
         "ui": _redact_ui_data(ui_data),

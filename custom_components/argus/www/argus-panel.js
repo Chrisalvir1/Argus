@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.9.7
+ * Argus Home Hub – v1.9.8
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1022,8 +1022,28 @@ const SETUP_REQUIRED_TEXTS = {
   ru: { setup_required_title:'Требуется настройка Argus', setup_required_desc:'Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.', setup_required_action:'Настроить Argus в интеграциях', welcome_profile:'Добро пожаловать, {name}', initialization_error_title:'Не удалось запустить Argus', initialization_error_desc:'Не удалось подключиться к авторизованному backend Home Assistant.', retry_action:'Повторить' },
 };
 
+const UI_AUDIT_TEXTS = {
+  es: { github_title:'Apoya a Argus', github_desc:'Si te gusta este proyecto, considera darle una estrella en GitHub para apoyar su desarrollo.', github_action:'Dar estrella en GitHub', history_refresh:'Actualizar', history_unavailable:'No se pudo cargar el historial. Verifica el permiso «Ver historial» e inténtalo de nuevo.', user_no_pin:'Sin PIN', user_pin_action:'PIN', user_role_action:'Rol', notif_no_services:'Sin servicios móviles' },
+  en: { github_title:'Support Argus', github_desc:'If you like this project, consider starring it on GitHub to support its development.', github_action:'Star on GitHub', history_refresh:'Refresh', history_unavailable:'Activity history could not be loaded. Check the “View history” permission and try again.', user_no_pin:'No PIN', user_pin_action:'PIN', user_role_action:'Role', notif_no_services:'No mobile services' },
+  fr: { github_title:'Soutenez Argus', github_desc:'Si vous aimez ce projet, ajoutez une étoile sur GitHub pour soutenir son développement.', github_action:'Ajouter une étoile sur GitHub', history_refresh:'Actualiser', history_unavailable:'Impossible de charger l’historique. Vérifiez l’autorisation « Voir l’historique » et réessayez.', user_no_pin:'Sans PIN', user_pin_action:'PIN', user_role_action:'Rôle', notif_no_services:'Aucun service mobile' },
+  pt: { github_title:'Apoie o Argus', github_desc:'Se você gosta deste projeto, dê uma estrela no GitHub para apoiar o desenvolvimento.', github_action:'Dar estrela no GitHub', history_refresh:'Atualizar', history_unavailable:'Não foi possível carregar o histórico. Verifique a permissão “Ver histórico” e tente novamente.', user_no_pin:'Sem PIN', user_pin_action:'PIN', user_role_action:'Função', notif_no_services:'Sem serviços móveis' },
+  it: { github_title:'Sostieni Argus', github_desc:'Se ti piace questo progetto, aggiungi una stella su GitHub per sostenerne lo sviluppo.', github_action:'Aggiungi una stella su GitHub', history_refresh:'Aggiorna', history_unavailable:'Impossibile caricare la cronologia. Controlla il permesso “Visualizza cronologia” e riprova.', user_no_pin:'Senza PIN', user_pin_action:'PIN', user_role_action:'Ruolo', notif_no_services:'Nessun servizio mobile' },
+  zh: { github_title:'支持 Argus', github_desc:'如果您喜欢这个项目，请在 GitHub 上加星以支持其开发。', github_action:'在 GitHub 上加星', history_refresh:'刷新', history_unavailable:'无法加载活动历史。请检查“查看历史”权限后重试。', user_no_pin:'无 PIN', user_pin_action:'PIN', user_role_action:'角色', notif_no_services:'无移动服务' },
+  ru: { github_title:'Поддержите Argus', github_desc:'Если вам нравится проект, поставьте звезду на GitHub, чтобы поддержать разработку.', github_action:'Поставить звезду на GitHub', history_refresh:'Обновить', history_unavailable:'Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.', user_no_pin:'Без PIN', user_pin_action:'PIN', user_role_action:'Роль', notif_no_services:'Нет мобильных служб' },
+};
+
+const FIRST_RUN_TEXTS = {
+  es: { setup_admin_name:'Nombre del Administrador', setup_access_pin:'PIN de acceso al panel Argus (Opcional)', setup_master_pin:'PIN maestro para armar/desarmar (Opcional)', claim_title:'Argus Security Update', claim_desc:'Tu instalación requiere un administrador para reclamar el acceso.', claim_btn:'Reclamar Administración' },
+  en: { setup_admin_name:'Administrator Name', setup_access_pin:'Argus panel access PIN (Optional)', setup_master_pin:'Master PIN to arm/disarm (Optional)', claim_title:'Argus Security Update', claim_desc:'Your installation needs an administrator to claim access.', claim_btn:'Claim Administration' },
+  fr: { setup_admin_name:'Nom de l’administrateur', setup_access_pin:'PIN d’accès au panneau Argus (Optionnel)', setup_master_pin:'PIN maître pour armer/désarmer (Optionnel)', claim_title:'Mise à jour de sécurité Argus', claim_desc:'Votre installation nécessite un administrateur pour réclamer l’accès.', claim_btn:'Réclamer l’administration' },
+  pt: { setup_admin_name:'Nome do Administrador', setup_access_pin:'PIN de acesso ao painel Argus (Opcional)', setup_master_pin:'PIN mestre para armar/desarmar (Opcional)', claim_title:'Atualização de Segurança Argus', claim_desc:'Sua instalação precisa de um administrador para reivindicar o acesso.', claim_btn:'Reivindicar Administração' },
+  it: { setup_admin_name:'Nome dell’amministratore', setup_access_pin:'PIN di accesso al pannello Argus (Opzionale)', setup_master_pin:'PIN master per armare/disarmare (Opzionale)', claim_title:'Aggiornamento di sicurezza Argus', claim_desc:'La tua installazione richiede un amministratore per rivendicare l’accesso.', claim_btn:'Rivendica Amministrazione' },
+  zh: { setup_admin_name:'管理员名称', setup_access_pin:'Argus 面板访问 PIN (可选)', setup_master_pin:'布防/撤防主 PIN (可选)', claim_title:'Argus 安全更新', claim_desc:'您的安装需要管理员来声明访问权限。', claim_btn:'声明管理权限' },
+  ru: { setup_admin_name:'Имя администратора', setup_access_pin:'PIN доступа к панели Argus (Необязательно)', setup_master_pin:'Мастер-PIN для постановки/снятия с охраны (Необязательно)', claim_title:'Обновление безопасности Argus', claim_desc:'Вашей установке требуется администратор для получения доступа.', claim_btn:'Заявить права администратора' },
+};
+
 for (const language of Object.keys(TEXTS)) {
-  Object.assign(TEXTS[language], EXTRA_TEXTS[language], SETUP_REQUIRED_TEXTS[language]);
+  Object.assign(TEXTS[language], EXTRA_TEXTS[language], SETUP_REQUIRED_TEXTS[language], UI_AUDIT_TEXTS[language], FIRST_RUN_TEXTS[language]);
 }
 
 Object.assign(TEXTS.es, { expired:'Expirado', active_until:'Vigente hasta', exp_indefinite:'Indefinido' });
@@ -1368,6 +1388,28 @@ _tmpl.innerHTML = `
   .access-section.open { display:block; }
   .access-section h3 { font-size:12px; font-weight:900; opacity:.8; margin:0 0 10px; text-transform:uppercase; }
   .access-panel .user-card { padding:10px 12px; border-radius:12px; }
+  .access-workspace.open {
+    animation:iosGlassIn .35s cubic-bezier(.22,1.18,.36,1) both;
+    background:linear-gradient(135deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
+    border:1px solid var(--glass-border,rgba(255,255,255,.09));
+    border-radius:20px;
+    padding:18px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 12px 30px rgba(0,0,0,.10);
+    backdrop-filter:blur(22px) saturate(145%);
+    -webkit-backdrop-filter:blur(22px) saturate(145%);
+  }
+  .github-star-action {
+    display:inline-flex;align-items:center;justify-content:center;gap:7px;
+    min-height:42px;padding:9px 16px;border-radius:14px;text-decoration:none;
+    color:var(--primary-text-color,#fff);font-size:12px;font-weight:850;
+    background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.055));
+    border:1px solid rgba(255,255,255,.16);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 9px 24px rgba(0,0,0,.16);
+    backdrop-filter:blur(18px) saturate(150%);
+    -webkit-backdrop-filter:blur(18px) saturate(150%);
+    transition:transform .2s ease,background .2s ease,box-shadow .2s ease;
+  }
+  .github-star-action:hover { transform:translateY(-1px);background:rgba(255,255,255,.18);box-shadow:0 12px 28px rgba(0,0,0,.20); }
   @media(max-width:600px){ .access-panel{padding:20px}.access-actions{width:100%}.access-actions button{flex:1} }
 
   /* Personalization inside instances */
@@ -2409,7 +2451,7 @@ _tmpl.innerHTML = `
       <section class="glass panel liquid-glass activity-panel">
         <div class="panel-head">
           <h2 id="h-activity-log"></h2>
-          <div style="display:flex;gap:6px"><button class="ghost" id="btn-export-forensic" style="font-size:10px;padding:4px 8px;opacity:.7">JSON</button><button class="ghost" id="btn-clear-log" style="font-size:10px;padding:4px 8px;opacity:0.6">BORRAR</button></div>
+          <div style="display:flex;gap:6px"><button class="ghost" id="btn-refresh-history" style="font-size:10px;padding:4px 8px"></button><button class="ghost" id="btn-export-forensic" style="font-size:10px;padding:4px 8px;opacity:.7">JSON</button><button class="ghost" id="btn-clear-log" style="font-size:10px;padding:4px 8px;opacity:0.6">BORRAR</button></div>
         </div>
         <div id="activity-log" style="display:grid;gap:10px;height:280px;overflow-y:auto;margin-top:10px"></div>
       </section>
@@ -2498,10 +2540,10 @@ _tmpl.innerHTML = `
       <!-- GitHub Opt-In -->
       <section class="glass panel liquid-glass" id="github-panel" style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); padding:16px;">
         <div style="flex:1">
-          <h3 style="margin:0; font-size:14px; font-weight:600">Apoya a Argus</h3>
-          <p style="margin:4px 0 0; font-size:12px; opacity:0.7">Si te gusta este proyecto, considera darle una estrella en GitHub para apoyar su desarrollo.</p>
+          <h3 id="github-title" style="margin:0; font-size:14px; font-weight:600"></h3>
+          <p id="github-desc" style="margin:4px 0 0; font-size:12px; opacity:0.7"></p>
         </div>
-        <a href="https://github.com/Chrisalvir1/Argus" target="_blank" style="background:#24292e; color:white; padding:8px 16px; border-radius:8px; text-decoration:none; font-size:12px; font-weight:bold; margin-left:16px">⭐ Star on GitHub</a>
+        <a id="github-action" class="github-star-action" href="https://github.com/Chrisalvir1/Argus" target="_blank" rel="noopener noreferrer" style="margin-left:16px"></a>
       </section>
 
     </div>
@@ -3028,6 +3070,7 @@ class ArgusPanel extends HTMLElement {
     set('p-linked-rules', t('linked_rules'));
     set('h-settings',     t('settings'));
     set('h-activity-log', t('activity_log'));
+    set('btn-refresh-history', t('history_refresh'));
     set('t-change-pin',   t('change_pin'));
     set('l-current-pin-lbl', t('current_pin'));
     set('lnk-forgot-pin', t('forgot_pin'));
@@ -3101,6 +3144,9 @@ class ArgusPanel extends HTMLElement {
     set('btn-reset-config',     t('reset_btn'));
     set('btn-undo-reset',       t('undo_reset_btn'));
     set('btn-import-trigger',   t('import_btn'));
+    set('github-title',         t('github_title'));
+    set('github-desc',          t('github_desc'));
+    set('github-action',        `⭐ ${t('github_action')}`);
     set('sos-title-txt',        t('sos_confirm_title'));
     set('sos-text-txt',         t('sos_confirm_text'));
     set('sos-label',            t('sos_slide'));
@@ -3189,6 +3235,34 @@ class ArgusPanel extends HTMLElement {
       : this._t('no_users');
 
     summary.textContent = `${pinStatus} · ${usersStatus}`;
+  }
+
+  _toggleAccessSection(section) {
+    if (!['users', 'pin'].includes(section)) return;
+    const workspace = this.shadowRoot?.getElementById('access-workspace');
+    const usersSection = this.shadowRoot?.getElementById('access-users-section');
+    const pinSection = this.shadowRoot?.getElementById('access-pin-section');
+    const usersButton = this.shadowRoot?.getElementById('btn-access-users');
+    const pinButton = this.shadowRoot?.getElementById('btn-access-pin');
+    if (!workspace || !usersSection || !pinSection) return;
+
+    const target = section === 'users' ? usersSection : pinSection;
+    const shouldOpen = !target.classList.contains('open');
+    workspace.classList.toggle('open', shouldOpen);
+    usersSection.classList.toggle('open', shouldOpen && section === 'users');
+    pinSection.classList.toggle('open', shouldOpen && section === 'pin');
+
+    for (const [button, active] of [
+      [usersButton, shouldOpen && section === 'users'],
+      [pinButton, shouldOpen && section === 'pin'],
+    ]) {
+      if (!button) continue;
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-expanded', String(active));
+    }
+
+    if (shouldOpen && section === 'users') this._renderUsers();
+    if (shouldOpen && section === 'pin') this._syncAccessSummary();
   }
 
   /* ── Init ────────────────────────────────────────────────────────── */
@@ -3334,6 +3408,10 @@ class ArgusPanel extends HTMLElement {
     if (this._postLoadBound) return;
     this._postLoadBound = true;
     this.shadowRoot.getElementById('btn-clear-log')?.addEventListener('click', () => this._clearHistory());
+    this.shadowRoot.getElementById('btn-refresh-history')?.addEventListener('click', async () => {
+      await this._loadActivityTimeline(this._dashboard?.entry_id);
+      this._renderActivityLog();
+    });
     this.shadowRoot.getElementById('btn-export-forensic')?.addEventListener('click', () => this._exportForensicTimeline());
     this.shadowRoot.getElementById('btn-export-config')?.addEventListener('click', () => this._exportConfig());
     this.shadowRoot.getElementById('btn-import-trigger')?.addEventListener('click', () => this.shadowRoot.getElementById('import-config-file').click());
@@ -3350,7 +3428,7 @@ class ArgusPanel extends HTMLElement {
   async _clearHistory() {
     if (!confirm(this._t('clear_history_confirm'))) return;
     try {
-      const entryId = this._dashboard?.entries?.[0]?.entry_id;
+      const entryId = this._dashboard?.entry_id;
       await this._send('argus/clear_audit_log', entryId ? { entry_id: entryId } : {});
       await this._loadActivityTimeline(entryId);
       this._renderActivityLog();
@@ -3367,13 +3445,17 @@ class ArgusPanel extends HTMLElement {
         ? response.timeline.filter(entry => entry && typeof entry === 'object' && !Array.isArray(entry))
         : [];
       this._forensicTimeline = timeline;
+      this._activityTimelineError = null;
       this._ui.audit_log = timeline;
+      this._renderActivityLog();
     } catch (err) {
       // A profile without view_history may continue using the dashboard.
       // Preserve any audit data already present instead of erasing it.
       console.warn('Argus activity timeline unavailable:', err);
+      this._activityTimelineError = err?.message || String(err);
       this._forensicTimeline = null;
       if (!Array.isArray(this._ui.audit_log)) this._ui.audit_log = [];
+      this._renderActivityLog();
     }
   }
 
@@ -3673,7 +3755,7 @@ class ArgusPanel extends HTMLElement {
     this._currentProfile = dashboard.current_profile || null;
     this._available = dashboard.available_entities || [];
     this._ui = dashboard.ui || { modes: {}, dashboard: {} };
-    await this._loadActivityTimeline(dashboard.entries?.[0]?.entry_id);
+    await this._loadActivityTimeline(dashboard.entry_id);
     this._notifTargets = dashboard.ui?.notif_targets || [];
     this._users = Array.isArray(dashboard.ui?.users)
       ? dashboard.ui.users.filter(user => user && typeof user === 'object' && !Array.isArray(user))
@@ -4354,13 +4436,13 @@ class ArgusPanel extends HTMLElement {
   _localizeActivityDetail(action, rawDetail) {
     const raw = String(rawDetail || '').trim();
     const normalized = raw.toLocaleLowerCase();
+    const modes = {
+      home: ['en casa', 'home', 'casa', 'maison', 'em casa', 'дом', '在家'],
+      away: ['ausente', 'away', 'absent', 'fora', 'fuori', 'ушёл', '外出'],
+      night: ['noche', 'night', 'nuit', 'noite', 'notte', 'ночь', '夜间'],
+      vacation: ['vacaciones', 'vacation', 'vacances', 'férias', 'vacanza', 'отпуск', '度假'],
+    };
     const findMode = () => {
-      const modes = {
-        home: ['en casa', 'home', 'casa', 'maison', 'em casa', 'дом', '在家'],
-        away: ['ausente', 'away', 'absent', 'fora', 'fuori', 'ушёл', '外出'],
-        night: ['noche', 'night', 'nuit', 'noite', 'notte', 'ночь', '夜间'],
-        vacation: ['vacaciones', 'vacation', 'vacances', 'férias', 'vacanza', 'отпуск', '度假'],
-      };
       return Object.entries(modes).find(([, terms]) => terms.some(term => normalized.includes(term)))?.[0];
     };
     const mode = findMode();
@@ -4392,13 +4474,13 @@ class ArgusPanel extends HTMLElement {
     if (action === 'user_deleted') return this._t('log_action_user_deleted');
     if (action === 'sos') return this._t('log_action_sos');
     if (action === 'sos_stopped' || action === 'panic_stopped') return this._t('log_action_sos_stopped');
-    if (action.startsWith('auto_')) return this._t('log_action_automation');
+    if (action.startsWith('auto_') || action === 'automation_executed') return this._t('log_action_automation');
     if (action.startsWith('ai_')) return this._t('log_action_analysis');
-    if (action === 'disarm_rejected') return this._t('log_action_rejected');
-    if (action === 'arm_rejected') {
-      const sensors = raw.split(':').slice(1).join(':').trim();
-      return sensors ? `${this._t('open_sensors')}: ${sensors}` : this._t('log_action_rejected');
-    }
+    if (action.includes('rejected')) return this._t('log_action_rejected');
+    if (action === 'ui_configuration_updated') return this._t('settings');
+    if (action === 'user_logged_in') return this._t('activity_log');
+    if (action === 'audit_log_cleared') return this._t('history_refresh');
+    if (action.includes('pin_updated')) return this._t('update_pin');
     return raw;
   }
 
@@ -4413,7 +4495,10 @@ class ArgusPanel extends HTMLElement {
         ? this._ui.audit_log.filter(entry => entry && typeof entry === 'object' && !Array.isArray(entry))
         : [];
       if (!log.length) {
-        el.innerHTML = `<div class="small" style="padding:8px 0;opacity:.55">${this._t('log_no_events')}</div>`;
+        const message = this._activityTimelineError
+          ? this._t('history_unavailable')
+          : this._t('log_no_events');
+        el.innerHTML = `<div class="small" style="padding:8px 0;opacity:.72">${this._escapeHtml(message)}</div>`;
         return;
       }
 
@@ -4448,6 +4533,10 @@ class ArgusPanel extends HTMLElement {
           itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('badge_pin_reset_failed');
         } else if (action === 'sos' || action === 'sos_stopped' || action === 'panic_stopped') {
           itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('log_action_sos');
+        } else {
+          const tKey = `log_action_${action}`;
+          const tVal = this._t(tKey);
+          badgeTxt = tVal !== tKey ? tVal : (this._t(action) !== action ? this._t(action) : action);
         }
 
         let source = '';
@@ -4893,7 +4982,7 @@ class ArgusPanel extends HTMLElement {
           else label = "🔔 " + label.replace(/_/g, ' ');
           return `<option value="${this._escapeHtml(k)}">${this._escapeHtml(label)}</option>`;
         }).join('')
-      : `<option value="">— Sin servicios móviles —</option>`;
+      : `<option value="">— ${this._escapeHtml(this._t('notif_no_services'))} —</option>`;
   }
 
   _addNotifTarget() {
@@ -4989,7 +5078,7 @@ class ArgusPanel extends HTMLElement {
 
           const pinBadge = u.access_pin_configured
             ? `<span class="user-badge" style="background:rgba(0,122,255,0.12);color:#007aff">🔒 PIN</span>`
-            : `<span class="user-badge" style="opacity:0.55">🔓 Sin PIN</span>`;
+            : `<span class="user-badge" style="opacity:0.55">🔓 ${this._escapeHtml(this._t('user_no_pin'))}</span>`;
 
           return `
           <div class="user-card" style="display:flex;flex-direction:column;align-items:stretch;gap:8px">
@@ -5005,8 +5094,8 @@ class ArgusPanel extends HTMLElement {
               </div>
               <div style="display:flex;gap:6px;align-items:center">
                 ${this._isAdmin ? `
-                  <button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-pin="${i}" title="${this._escapeHtml(this._t('pin_placeholder'))}">🔑 PIN</button>
-                  <button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-role-toggle="${i}" title="${this._escapeHtml(this._t('user_role_label'))}">⭐ Rol</button>
+                  <button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-pin="${i}" title="${this._escapeHtml(this._t('pin_placeholder'))}">🔑 ${this._escapeHtml(this._t('user_pin_action'))}</button>
+                  <button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-role-toggle="${i}" title="${this._escapeHtml(this._t('user_role_label'))}">⭐ ${this._escapeHtml(this._t('user_role_action'))}</button>
                   <button class="btn-danger danger" style="padding:6px 10px;font-size:12px;background:#e53935;color:white;border:none;border-radius:10px;cursor:pointer" title="${this._escapeHtml(this._t('delete_user_tooltip'))}" aria-label="${this._escapeHtml(this._t('delete_user_tooltip'))}" data-user-del="${i}">🗑️ ${this._escapeHtml(this._t('clear') || 'Borrar')}</button>
                 ` : ''}
               </div>
@@ -5735,7 +5824,6 @@ class ArgusPanel extends HTMLElement {
       this._temperatureSource = temperature_source;
       this._weatherSource = weather_source;
       this._emergencyNumber = emergency_number;
-      this._panicOutputs = panic_outputs;
       this._panelBgFile = panel_bg_file;
       this._panelBgSound = panel_bg_sound;
       this._hubBgMode = selected_hub_bg_mode;
@@ -5749,7 +5837,7 @@ class ArgusPanel extends HTMLElement {
       this._ui.temperature_source = temperature_source;
       this._ui.weather_source = weather_source;
       this._ui.emergency_number = emergency_number;
-      this._ui.panic_outputs = panic_outputs;
+      this._ui.panic_outputs = this._panicOutputs;
       this._configureEmergencyCall();
       this._ui.panel_bg_file = panel_bg_file;
       this._ui.panel_bg_sound = panel_bg_sound;
@@ -6348,20 +6436,20 @@ class ArgusPanel extends HTMLElement {
         <h1>${this._t('first_run_welcome') || 'Gracias por elegir Argus Home Hub. Bienvenido/a.'}</h1>
         <p>${this._t('first_run_desc') || 'Complete setup to secure your home.'}</p>
         <div class="pin-prompt" style="margin-top: 15px; display: block; border: none; background: transparent; box-shadow: none;">
-          <label style="display:block;text-align:left;font-size:12px;opacity:0.8;margin-bottom:4px">Nombre del Administrador</label>
+          <label style="display:block;text-align:left;font-size:12px;opacity:0.8;margin-bottom:4px">${this._t('setup_admin_name') || 'Nombre del Administrador'}</label>
           <input type="text" id="setup-admin-name" placeholder="Name" value="${defaultName}" style="margin-bottom: 15px;width:100%" />
 
           <p style="font-size:12px; opacity:0.8; margin-bottom:10px; line-height:1.4">
             ${this._t('first_run_pin_expl') || 'El PIN de acceso abre Argus. El PIN maestro controla el armado y desarmado.'}
           </p>
 
-          <label style="display:block;text-align:left;font-size:12px;opacity:0.8;margin-bottom:4px">PIN de acceso al panel Argus (Opcional)</label>
+          <label style="display:block;text-align:left;font-size:12px;opacity:0.8;margin-bottom:4px">${this._t('setup_access_pin') || 'PIN de acceso al panel Argus (Opcional)'}</label>
           <div style="display:flex;gap:10px;margin-bottom:15px">
             <input type="password" id="setup-access-pin" placeholder="PIN (4-12)" style="flex:1" />
             <button id="skip-access-pin" class="btn-cancel" style="width:auto;padding:0 12px;font-size:11px">${this._t('first_run_skip') || 'Omitir'}</button>
           </div>
 
-          <label style="display:block;text-align:left;font-size:12px;opacity:0.8;margin-bottom:4px">PIN maestro para armar/desarmar (Opcional)</label>
+          <label style="display:block;text-align:left;font-size:12px;opacity:0.8;margin-bottom:4px">${this._t('setup_master_pin') || 'PIN maestro para armar/desarmar (Opcional)'}</label>
           <div style="display:flex;gap:10px;margin-bottom:25px">
             <input type="password" id="setup-master-pin" placeholder="PIN (4-12)" style="flex:1" />
             <button id="skip-master-pin" class="btn-cancel" style="width:auto;padding:0 12px;font-size:11px">${this._t('first_run_skip') || 'Omitir'}</button>
@@ -6400,9 +6488,9 @@ class ArgusPanel extends HTMLElement {
     overlay.style.display = 'flex';
     overlay.innerHTML = `
       <div class="argus-bootstrap-card liquid-glass">
-        <h1>Argus Security Update</h1>
-        <p>Your installation needs an administrator to claim access.</p>
-        <button id="btn-claim-admin" class="btn-claim">Claim Administration</button>
+        <h1>${this._t('claim_title') || 'Argus Security Update'}</h1>
+        <p>${this._t('claim_desc') || 'Your installation needs an administrator to claim access.'}</p>
+        <button id="btn-claim-admin" class="btn-claim">${this._t('claim_btn') || 'Claim Administration'}</button>
       </div>
     `;
     this.shadowRoot.getElementById('btn-claim-admin').addEventListener('click', async () => {
@@ -6587,4 +6675,4 @@ class ArgusPanel extends HTMLElement {
 
 }
 
-customElements.define('argus-panel-v197', ArgusPanel);
+customElements.define('argus-panel-v198', ArgusPanel);

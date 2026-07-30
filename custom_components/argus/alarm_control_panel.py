@@ -844,6 +844,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     async def _async_trigger(self):
         """Activate the alarm."""
+        if not self._panic_active and self._alarm_state not in ARMED_STATES and self._alarm_state != AlarmControlPanelState.PENDING:
+            return
+
         self._cancel_timers()
         
         # v0.9.33 Fix #1: si la alarma se dispara sin pasar por un sensor normal (ej. botón SOS manual),

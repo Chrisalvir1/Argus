@@ -102,6 +102,18 @@ async def async_load_ui_data(hass: HomeAssistant, entry_id: str | None = None) -
         raw["first_run"] = False
     data = _merge_defaults(raw)
     changed = raw != data
+    # Recover the pre-isolation audit trail once for a single Argus instance.
+    # Never mix legacy events when multiple config entries exist.
+    if (
+        entry_id
+        and len(hass.config_entries.async_entries(DOMAIN)) == 1
+        and not data.get("audit_log")
+    ):
+        legacy_raw = await _store(hass).async_load()
+        legacy_log = legacy_raw.get("audit_log") if isinstance(legacy_raw, dict) else None
+        if isinstance(legacy_log, list) and legacy_log:
+            data["audit_log"] = copy.deepcopy(legacy_log[:AUDIT_LOG_MAX])
+            changed = True
     for field, prefix in (("panel_bg_file", "panel_bg"), ("hub_bg_file", "hub_bg")):
         value = data.get(field, "")
         if isinstance(value, str) and value.startswith("data:"):
