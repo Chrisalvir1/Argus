@@ -2754,7 +2754,7 @@ class ArgusPanel extends HTMLElement {
   async _clearHistory() {
     if (!confirm(this._t('clear_history_confirm'))) return;
     try {
-      await this._send('argus/clear_activity_log');
+      await this._send('argus/clear_audit_log');
       if (this._ui) this._ui.audit_log = [];
       this._activityLog = [];
       this._forensicTimeline = [];

@@ -56,6 +56,21 @@ def _entry_by_id(hass: HomeAssistant, entry_id: str):
     return None
 
 
+def _resolve_entry_id(hass: HomeAssistant, entry_id: str | None) -> str | None:
+    """Return entry_id as-is if provided, or auto-resolve when there is exactly one Argus entry.
+
+    This ensures that WebSocket commands called without an explicit entry_id
+    (e.g. from the panel JS) still read/write the correct per-instance storage
+    instead of falling back to the legacy global key 'argus.ui'.
+    """
+    if entry_id:
+        return entry_id
+    entries = hass.config_entries.async_entries(DOMAIN)
+    if len(entries) == 1:
+        return entries[0].entry_id
+    return None
+
+
 def _redact_ui_data(data: dict) -> dict:
     """Return UI data without reusable credential hashes."""
     redacted = copy.deepcopy(data)
@@ -197,7 +212,7 @@ async def ws_argus_import_alarmo(hass, connection, msg) -> None:
 })
 @websocket_api.async_response
 async def ws_argus_get_forensic_timeline(hass, connection, msg) -> None:
-    entry_id = msg.get("entry_id")
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
     log = await async_get_audit_log(hass, entry_id)
     timeline = log[:msg["limit"]]
     connection.send_result(msg["id"], {"timeline": timeline})
@@ -209,7 +224,7 @@ async def ws_argus_get_forensic_timeline(hass, connection, msg) -> None:
 })
 @websocket_api.async_response
 async def ws_argus_get_health(hass, connection, msg) -> None:
-    entry_id = msg.get("entry_id")
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
     data = await async_load_ui_data(hass, entry_id)
 
     # Gather sensor and siren states
@@ -247,7 +262,7 @@ async def ws_argus_get_health(hass, connection, msg) -> None:
 })
 @websocket_api.async_response
 async def ws_argus_get_incidents(hass, connection, msg) -> None:
-    entry_id = msg.get("entry_id")
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
     data = await async_load_ui_data(hass, entry_id)
     incidents = data.get("incidents", [])
     connection.send_result(msg["id"], {"incidents": incidents})
@@ -262,7 +277,7 @@ async def ws_argus_get_incidents(hass, connection, msg) -> None:
 })
 @websocket_api.async_response
 async def ws_argus_update_incident(hass, connection, msg) -> None:
-    entry_id = msg.get("entry_id")
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
     action, incident_id = msg["action"], msg["incident_id"]
     _, actor = _actor(connection)
 
@@ -311,7 +326,7 @@ def _resolve_alarm_entity_id(hass: HomeAssistant, config_entry_id: str) -> str |
 })
 @websocket_api.async_response
 async def ws_argus_dashboard(hass, connection, msg) -> None:
-    entry_id = msg.get("entry_id")
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
     ui_data = await async_load_ui_data(hass, entry_id)
     entries = []
     for entry in hass.config_entries.async_entries(DOMAIN):
@@ -361,7 +376,7 @@ _SAVE_UI_SCHEMA = {
 @websocket_api.websocket_command(_SAVE_UI_SCHEMA)
 @websocket_api.async_response
 async def ws_argus_save_ui(hass, connection, msg) -> None:
-    entry_id = msg.get("entry_id")
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
     updates = {key: copy.deepcopy(value) for key, value in msg.items() if key not in {"id", "type", "entry_id"}}
     _, actor = _actor(connection)
     try:
@@ -385,7 +400,7 @@ async def ws_argus_save_ui(hass, connection, msg) -> None:
 })
 @websocket_api.async_response
 async def ws_argus_get_mode_config(hass, connection, msg) -> None:
-    entry_id = msg.get("entry_id")
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
     connection.send_result(msg["id"], (await async_load_ui_data(hass, entry_id)).get("modes", {}))
 
 
@@ -398,7 +413,7 @@ async def ws_argus_get_mode_config(hass, connection, msg) -> None:
 })
 @websocket_api.async_response
 async def ws_argus_save_mode_config(hass, connection, msg) -> None:
-    entry_id = msg.get("entry_id")
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
     data = await async_load_ui_data(hass, entry_id)
     modes = copy.deepcopy(data.get("modes", {}))
     mode, config, entity_id = msg["mode"], copy.deepcopy(msg["config"]), msg["entity_id"]
@@ -417,7 +432,7 @@ async def ws_argus_save_mode_config(hass, connection, msg) -> None:
 })
 @websocket_api.async_response
 async def ws_argus_get_audit_log(hass, connection, msg) -> None:
-    entry_id = msg.get("entry_id")
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
     connection.send_result(msg["id"], {"log": await async_get_audit_log(hass, entry_id)})
 
 
@@ -427,7 +442,7 @@ async def ws_argus_get_audit_log(hass, connection, msg) -> None:
 })
 @websocket_api.async_response
 async def ws_argus_get_stats(hass, connection, msg) -> None:
-    entry_id = msg.get("entry_id")
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
     log = await async_get_audit_log(hass, entry_id)
     cutoff = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=30)
     stats = {"total_events": len(log), "triggers_30d": 0, "armings_30d": 0, "top_sensors": {}}
@@ -455,7 +470,7 @@ async def ws_argus_get_stats(hass, connection, msg) -> None:
 })
 @websocket_api.async_response
 async def ws_argus_clear_audit_log(hass, connection, msg) -> None:
-    entry_id = msg.get("entry_id")
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
     _, actor = _actor(connection)
     await async_clear_audit_log(hass, actor=actor, entry_id=entry_id)
     connection.send_result(msg["id"], {"cleared": True})
@@ -468,7 +483,7 @@ async def ws_argus_clear_audit_log(hass, connection, msg) -> None:
 })
 @websocket_api.async_response
 async def ws_argus_restore_config(hass, connection, msg) -> None:
-    entry_id = msg.get("entry_id")
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
     _, actor = _actor(connection)
     try:
         restored = await async_restore_ui_data(hass, msg["config"], actor=actor, entry_id=entry_id)
@@ -486,7 +501,7 @@ async def ws_argus_restore_config(hass, connection, msg) -> None:
 })
 @websocket_api.async_response
 async def ws_argus_save_advanced_config(hass, connection, msg) -> None:
-    entry_id = msg.get("entry_id")
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
     config = copy.deepcopy(msg["config"])
     guest = config.get("guest_code")
     if guest and not str(guest).startswith("scrypt:"):
@@ -512,7 +527,7 @@ async def ws_argus_save_advanced_config(hass, connection, msg) -> None:
 })
 @websocket_api.async_response
 async def ws_argus_get_advanced_config(hass, connection, msg) -> None:
-    entry_id = msg.get("entry_id")
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
     advanced = copy.deepcopy((await async_load_ui_data(hass, entry_id)).get("advanced", {}))
     advanced["guest_code_configured"] = bool(advanced.get("guest_code"))
     advanced.pop("guest_code", None)
@@ -528,7 +543,7 @@ async def ws_argus_get_advanced_config(hass, connection, msg) -> None:
 })
 @websocket_api.async_response
 async def ws_argus_save_automations(hass, connection, msg) -> None:
-    entry_id = msg.get("entry_id")
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
     await async_save_ui_data(hass, {"automations": copy.deepcopy(msg["automations"])}, entry_id)
     async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED)
     connection.send_result(msg["id"], {"success": True})
@@ -540,7 +555,7 @@ async def ws_argus_save_automations(hass, connection, msg) -> None:
 })
 @websocket_api.async_response
 async def ws_argus_get_automations(hass, connection, msg) -> None:
-    entry_id = msg.get("entry_id")
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
     connection.send_result(msg["id"], (await async_load_ui_data(hass, entry_id)).get("automations", []))
 
 
@@ -612,7 +627,7 @@ async def ws_argus_update_master_pin(hass, connection, msg) -> None:
 })
 @websocket_api.async_response
 async def ws_argus_write_log(hass, connection, msg) -> None:
-    entry_id = msg.get("entry_id")
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
     _, actor = _actor(connection)
     await async_append_audit_log(hass, msg["action"], msg["detail"], user=actor, entry_id=entry_id)
     connection.send_result(msg["id"], {"written": True})

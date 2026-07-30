@@ -445,6 +445,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             await async_append_audit_log(
                 self.hass, "state_restored",
                 f"Estado local restaurado: {self._alarm_state.value}", user="Argus",
+                entry_id=self._config_entry.entry_id,
             )
 
         await self._async_reconcile_state_schedule(runtime_state)
@@ -545,6 +546,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         await async_append_audit_log(
             self.hass, "schedule_reconciled",
             f"Horario {schedule_id}: {state_value}", user="Argus",
+            entry_id=self._config_entry.entry_id,
         )
 
     @callback
@@ -658,7 +660,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                         await self._async_trigger()
                     else:
                         continue
-                    await async_append_audit_log(self.hass, "automation_executed", f"{event_type}: {action_type}", user="Argus", metadata={"sensor_entity_id": sensor_id})
+                    await async_append_audit_log(self.hass, "automation_executed", f"{event_type}: {action_type}", user="Argus", metadata={"sensor_entity_id": sensor_id}, entry_id=self._config_entry.entry_id)
                 except Exception:  # noqa: BLE001
                     _LOGGER.exception("Argus local automation failed")
 
@@ -729,6 +731,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self.hass, "confirmation_pending",
             f"Esperando confirmación: {entity_id} ({len(self._confirmation_events)}/{required})",
             user="Argus",
+            entry_id=self._config_entry.entry_id,
         ))
         if self._confirmation_listener:
             self._confirmation_listener()
@@ -906,7 +909,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         await async_append_audit_log(
             self.hass, "triggered",
             trigger_detail,
-            user="Argus"
+            user="Argus",
+            entry_id=self._config_entry.entry_id,
         )
 
         # An SOS is ended deliberately by the user.  It must never silently
@@ -1276,7 +1280,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         if self._code_arm_required and not restoring_panic and not self._validate_code(code):
             _LOGGER.warning("Argus: Arm rejected — invalid code")
-            await async_append_audit_log(self.hass, "arm_rejected", f"Invalid code for {target.value}", user="Argus")
+            await async_append_audit_log(self.hass, "arm_rejected", f"Invalid code for {target.value}", user="Argus", entry_id=self._config_entry.entry_id)
             return
 
         # Evaluate require_closed restrictions
@@ -1326,7 +1330,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                     msg = f"Sensores abiertos: {', '.join(open_names)}"
                     _LOGGER.warning("Argus: Arm rejected — %s", msg)
                     await async_append_audit_log(
-                        self.hass, "arm_rejected", msg, user="Argus"
+                        self.hass, "arm_rejected", msg, user="Argus",
+                        entry_id=self._config_entry.entry_id,
                     )
                     # Persistent notification → aparece en el panel de HA
                     persistent_notification.async_create(
@@ -1478,6 +1483,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             "panic_stopped",
             f"Pánico detenido; restaurado a {_MODE_LABELS.get(previous_state.value, previous_state.value)}",
             user=await self._get_context_user(),
+            entry_id=self._config_entry.entry_id,
         )
 
     @callback
