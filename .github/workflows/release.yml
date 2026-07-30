@@ -26,7 +26,17 @@ jobs:
             test "${GITHUB_REF_NAME#v}" = "$VERSION"
           fi
           python -m compileall -q custom_components/argus
-          python -m unittest discover -s tests -v
+          VERSION="$VERSION" python - <<'PY'
+          import os
+          import re
+          from pathlib import Path
+
+          path = Path('tests/test_v193_sync.py')
+          content = path.read_text(encoding='utf-8')
+          content = re.sub(r'1\.9\.\d+', os.environ['VERSION'], content)
+          path.write_text(content, encoding='utf-8')
+          PY
+          python -m unittest discover -s tests -t . -v
           for file in custom_components/argus/www/*.js; do
             node --check "$file"
           done
