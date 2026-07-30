@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v1.9.5
+ * Argus Home Hub – v1.9.6
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -3159,6 +3159,29 @@ class ArgusPanel extends HTMLElement {
     const hubUrl = s('hub-bg-url-input');
     if (hubUrl) hubUrl.placeholder = t('url_placeholder');
     this._syncAccessSummary();
+  }
+
+  _syncAccessSummary() {
+    const summary = this.shadowRoot?.getElementById('p-access-desc');
+    if (!summary) return;
+
+    // Translation runs before the dashboard bootstrap has necessarily
+    // completed. Keep the generic description until real access data exists.
+    if (!this._dashboard) {
+      summary.textContent = this._t('access_desc');
+      return;
+    }
+
+    const hasMasterPin = this._dashboard.entries?.[0]?.pin_configured === true;
+    const pinStatus = this._t(hasMasterPin ? 'pin_active_yes' : 'pin_active_no');
+    const userCount = Array.isArray(this._users)
+      ? this._users.filter(user => user?.enabled !== false).length
+      : 0;
+    const usersStatus = userCount > 0
+      ? `${this._t('users_title')}: ${userCount}`
+      : this._t('no_users');
+
+    summary.textContent = `${pinStatus} · ${usersStatus}`;
   }
 
   /* ── Init ────────────────────────────────────────────────────────── */
@@ -6529,4 +6552,4 @@ class ArgusPanel extends HTMLElement {
 
 }
 
-customElements.define('argus-panel-v195', ArgusPanel);
+customElements.define('argus-panel-v196', ArgusPanel);

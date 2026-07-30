@@ -99,7 +99,7 @@ title: Seguridad
 5. Revisa automatizaciones antiguas y elimina acciones retiradas si venías de versiones previas.
 6. Verifica armado, desarmado, SOS, PIN, sirenas, medios y restauración.
 
-Consulta [las notas de 1.9.5](docs/RELEASE_NOTES_1.9.5.md).
+Consulta [las notas de 1.9.6](docs/RELEASE_NOTES_1.9.6.md).
 
 ## Desarrollo
 

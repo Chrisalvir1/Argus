@@ -56,11 +56,19 @@ class TestV194PanelFlow(unittest.TestCase):
         self.assertIn("_renderInitializationError(err)", self.panel)
 
     def test_versioned_custom_element_prevents_stale_definition(self) -> None:
-        self.assertIn("customElements.define('argus-panel-v195'", self.panel)
+        self.assertIn("customElements.define('argus-panel-v196'", self.panel)
         self.assertIn(
             'webcomponent_name=f"argus-panel-v{VERSION.replace(\'.\', \'\')}"',
             self.panel_registration,
         )
+
+    def test_access_summary_called_during_bootstrap_is_implemented(self) -> None:
+        self.assertIn("_syncAccessSummary() {", self.panel)
+        method = self.panel.split("_syncAccessSummary() {", 1)[1].split(
+            "\n  }\n", 1
+        )[0]
+        self.assertIn("if (!this._dashboard)", method)
+        self.assertIn("this._t('access_desc')", method)
 
 
 if __name__ == "__main__":
