@@ -93,16 +93,15 @@ title: Seguridad
 - Reemplaza fondos históricos bajo `/local`, ya que esos archivos son públicos para clientes autenticados según la configuración de Home Assistant.
 - Reporta vulnerabilidades según [SECURITY.md](SECURITY.md).
 
-## Actualización a 1.9
+## Actualización a 2.0
 
 1. Crea un respaldo.
-2. Actualiza desde HACS.
+2. Actualiza desde HACS (busca Argus Home Hub).
 3. Reinicia Home Assistant.
 4. Recarga el navegador sin caché.
-5. Revisa automatizaciones antiguas y elimina acciones retiradas si venías de versiones previas.
-6. Verifica armado, desarmado, SOS, PIN, sirenas, medios y restauración.
+5. Verifica armado, desarmado, SOS, PIN, sirenas, medios y restauración.
 
-Consulta [las notas de 1.9.8](docs/RELEASE_NOTES_1.9.8.md).
+Consulta las notas de la versión [v2.0.0](https://github.com/Chrisalvir1/Argus/releases/tag/v2.0.0).
 
 ## Desarrollo
 
