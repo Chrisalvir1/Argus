@@ -6899,4 +6899,4 @@ class ArgusPanel extends HTMLElement {
 
 }
 
-customElements.define('argus-panel-v1911', ArgusPanel);
+customElements.define('argus-panel-v200', ArgusPanel);
