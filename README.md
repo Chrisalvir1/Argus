@@ -34,9 +34,9 @@ Argus reúne alarma, sensores, sirenas, SOS, usuarios, auditoría, MQTT y una in
 - Atmósfera WebGL procedimental para lluvia, tormenta con lluvia, tormenta eléctrica, nieve, niebla, nubes, sol, estrellas, luna, estaciones y eclipses respaldados por entidades reales.
 - Animaciones premium para paneles, opciones, guardado, sensores, botones y modales, con respeto por `prefers-reduced-motion`.
 
-## Seguridad y Privacidad 1.9
+## Seguridad y Privacidad 2.0
 
-Argus 1.9 incorpora importantes mejoras de seguridad:
+Argus 2.0 consolida nuestras estrictas políticas de seguridad:
 
 - **Zero-Leak Privacy:** Eliminación de los registros desde el cliente para prevenir fugas de PINs y hashes al navegador.
 - **Autorización Forense:** Exigencia de sesión + permiso específico `view_history` para el timeline forense.
@@ -44,7 +44,7 @@ Argus 1.9 incorpora importantes mejoras de seguridad:
 - **Verificaciones Estrictas de Administrador:** Requiere privilegios de administrador de Home Assistant y Argus para consultar usuarios y personas.
 - **Sincronización segura de perfiles:** Los perfiles auto-creados tienen `managed_by_ha_sync: true` y permisos mínimos. Los perfiles manuales nunca se modifican automáticamente.
 
-*Anteriormente en 1.8:* Se eliminaron acciones TTS, análisis por IA, y controles Matter de terceros del runtime activo para maximizar la privacidad. HomeKit Bridge y rutinas locales deterministas continúan disponibles.
+*Anteriormente en versiones previas:* Se eliminaron acciones TTS, análisis por IA, y controles Matter de terceros del runtime activo para maximizar la privacidad. HomeKit Bridge y rutinas locales deterministas continúan disponibles.
 
 ## Requisitos
 
