@@ -7,8 +7,9 @@
 
 [![Release](https://img.shields.io/github/v/release/Chrisalvir1/Argus)](https://github.com/Chrisalvir1/Argus/releases)
 [![Validate](https://github.com/Chrisalvir1/Argus/actions/workflows/validate.yml/badge.svg)](https://github.com/Chrisalvir1/Argus/actions/workflows/validate.yml)
-[![HACS](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://hacs.xyz/)
+[![HACS](https://img.shields.io/badge/HACS-Default-41BDF5.svg)](https://github.com/hacs/default)
 [![License](https://img.shields.io/github/license/Chrisalvir1/Argus)](LICENSE)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://paypal.me/CEstradaAlvir)
 </div>
 
 Argus reúne alarma, sensores, sirenas, SOS, usuarios, auditoría, MQTT y una interfaz cinematográfica en una integración local para Home Assistant.
@@ -54,10 +55,12 @@ Argus 1.9 incorpora importantes mejoras de seguridad:
 
 ## Instalación con HACS
 
-1. Abre **HACS → Integraciones → Repositorios personalizados**.
-2. Añade `https://github.com/Chrisalvir1/Argus` como **Integración**.
-3. Instala Argus, reinicia Home Assistant y añade la integración.
-4. Haz una recarga completa sin caché del navegador.
+1. Abre **HACS** en tu Home Assistant.
+2. Ve a **Integraciones** y haz clic en **Explorar y descargar repositorios** (+).
+3. Busca **Argus** (o **Argus Home Hub**).
+4. Selecciona la integración y haz clic en **Descargar**.
+5. Reinicia Home Assistant y añade la integración desde **Ajustes → Dispositivos y servicios**.
+6. Haz una recarga completa sin caché del navegador.
 
 ## Instalación manual
 
@@ -115,3 +118,23 @@ Consulta [la arquitectura](docs/ARCHITECTURE.md) y [CONTRIBUTING.md](CONTRIBUTIN
 ## Licencia
 
 MIT. Consulta [LICENSE](LICENSE).
+
+---
+
+## 💡 Sugerencias, Contacto y Comunidad
+
+Me encanta escuchar a la comunidad de Argus. Si tienes ideas de mejoras, encuentras algún error o simplemente quieres compartir cómo estás usando Argus en tu casa, ¡házmelo saber!
+
+- **GitHub:** [Abre un Issue](https://github.com/Chrisalvir1/Argus/issues) para sugerencias de código, nuevas funciones o reporte de bugs.
+- **Home Assistant Community:** Puedes enviarme tus inquietudes allí.
+- **Correo Electrónico:** [chrisalvir01@gmail.com](mailto:chrisalvir01@gmail.com)
+
+### Mis Redes Sociales Oficiales 🌐
+¡Sígueme para estar al tanto de las últimas actualizaciones y novedades en las que estoy trabajando!
+- **Facebook:** [Christopher Alvir](https://www.facebook.com/christopher.alvir)
+- **Instagram:** [@chrisalvir1](https://instagram.com/chrisalvir1)
+- **Threads:** [Chrisalvir1](https://www.threads.net/@chrisalvir1)
+- **Telegram:** [t.me/cea1410](https://t.me/cea1410)
+
+¿Te gusta Argus y te resulta útil? 
+**[❤️ Apoya mi trabajo en PayPal](https://paypal.me/CEstradaAlvir)**. ¡Cualquier aporte me ayuda enormemente a mantener y seguir mejorando este proyecto a lo grande!
