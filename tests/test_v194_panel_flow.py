@@ -1,5 +1,6 @@
 """Regression contracts for the Argus v1.9.4 panel entry flow."""
 from pathlib import Path
+import re
 import unittest
 
 
@@ -56,7 +57,15 @@ class TestV194PanelFlow(unittest.TestCase):
         self.assertIn("_renderInitializationError(err)", self.panel)
 
     def test_versioned_custom_element_prevents_stale_definition(self) -> None:
-        self.assertIn("customElements.define('argus-panel-v200'", self.panel)
+        version = re.search(
+            r'^VERSION = "([^"]+)"',
+            (ROOT / "custom_components" / "argus" / "const.py").read_text(encoding="utf-8"),
+            re.MULTILINE,
+        ).group(1).replace(".", "")
+        element_name = f"argus-panel-v{version}"
+        bootstrap = (ROOT / "custom_components" / "argus" / "www" / "argus-bootstrap.js").read_text(encoding="utf-8")
+        self.assertIn(f"customElements.define('{element_name}'", self.panel)
+        self.assertIn(f"customElements.get('{element_name}')", bootstrap)
         self.assertIn(
             'webcomponent_name=f"argus-panel-v{VERSION.replace(\'.\', \'\')}"',
             self.panel_registration,
