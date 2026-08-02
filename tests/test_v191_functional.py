@@ -3,6 +3,42 @@ import os
 from unittest.mock import AsyncMock, patch, MagicMock
 
 class TestV191Functional(unittest.IsolatedAsyncioTestCase):
+
+    async def test_first_run_restore_creates_admin_session(self):
+        """A HA admin can restore an encrypted Argus backup before any profile exists."""
+        from custom_components.argus.auth import ArgusAuthError
+        from custom_components.argus.websocket_api import ws_argus_restore_config
+
+        hass = MagicMock()
+        entry = MagicMock()
+        entry.options = {}
+        entry.data = {}
+        hass.config_entries.async_get_entry.return_value = entry
+        connection = MagicMock()
+        connection.user.id = "ha-admin"
+        connection.user.name = "HA Admin"
+        connection.user.is_admin = True
+        session_manager = MagicMock()
+
+        async def save_restored_data(_hass, updates, _entry_id):
+            return {"first_run": updates["first_run"], "users": updates["users"]}
+
+        with patch("custom_components.argus.websocket_api._resolve_entry_id", return_value="entry1"), \
+             patch("custom_components.argus.websocket_api.async_load_ui_data", new_callable=AsyncMock, return_value={"first_run": True}), \
+             patch("custom_components.argus.websocket_api._require_argus_admin", new_callable=AsyncMock, side_effect=ArgusAuthError("no_session", "No active session")), \
+             patch("custom_components.argus.websocket_api.async_restore_ui_data", new_callable=AsyncMock, return_value={"first_run": False, "users": []}), \
+             patch("custom_components.argus.websocket_api.async_save_ui_data", new_callable=AsyncMock, side_effect=save_restored_data) as save, \
+             patch("custom_components.argus.websocket_api.async_get_session_manager", return_value=session_manager):
+            await ws_argus_restore_config(hass, connection, {"id": 1, "type": "argus/restore_config", "config": {"first_run": False}})
+
+        connection.send_error.assert_not_called()
+        saved = save.await_args.args[1]
+        self.assertFalse(saved["first_run"])
+        self.assertEqual(saved["users"][0]["ha_user_id"], "ha-admin")
+        self.assertEqual(saved["users"][0]["role"], "admin")
+        session_manager.create_session.assert_called_once_with(
+            "ha-admin", "entry1", saved["users"][0]["id"], "first_run_restore"
+        )
     
     def test_github_star_contract(self):
         """Contract: Ensure chrisalvir/argus is not in argus-panel.js and Chrisalvir1/Argus is used."""
@@ -47,6 +83,20 @@ class TestV191Functional(unittest.IsolatedAsyncioTestCase):
         # 5. Dedicated unlock button rendered in restricted view
         self.assertIn("btn-unlock-kiosk", content, "Restricted view must render btn-unlock-kiosk button")
         self.assertIn("unlock-kiosk", content, "Restricted view must bind unlock-kiosk action")
+
+    def test_backup_export_and_first_run_restore_contract(self):
+        """Backups include protected credentials and fresh installs accept .argus files."""
+        panel_path = os.path.join(
+            os.path.dirname(__file__), "..", "custom_components", "argus", "www", "argus-panel.js"
+        )
+        with open(panel_path, "r") as f:
+            content = f.read()
+        self.assertIn("argus/export_config", content)
+        self.assertIn("accept=\".json,.argus,application/json\"", content)
+        api_path = os.path.join(os.path.dirname(__file__), "..", "custom_components", "argus", "websocket_api.py")
+        with open(api_path) as f:
+            api_source = f.read()
+        self.assertIn("is_online = is_current or p_state == \"home\"", api_source)
 
     async def test_pin_migration_keeps_legacy_pin(self):
         """Test that loading from v1.8 keeps `pin` and leaves `access_pin_hash` empty."""

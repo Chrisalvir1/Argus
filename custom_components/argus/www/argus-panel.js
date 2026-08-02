@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v2.0.0
+ * Argus Home Hub – v2.0.1
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1338,6 +1338,7 @@ _tmpl.innerHTML = `
   .glass{background:var(--glass-bg, rgba(255, 255, 255, 0.06));border:1px solid var(--glass-border, rgba(255, 255, 255, 0.09));border-radius:28px;box-shadow:var(--glass-shadow);backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2)}
   .hero{padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:var(--hero-bg, linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)));margin-bottom:12px}
   .hero-left{display:flex;align-items:center;gap:22px}
+  .hero-context{margin-left:auto;display:flex;align-items:center;gap:8px;min-width:0}.hero-clock{display:flex;flex-direction:column;align-items:flex-end;padding-right:14px;border-right:1px solid rgba(255,255,255,.14);line-height:1}.hero-clock strong{font-size:1.45rem;letter-spacing:-.05em}.hero-clock span{font-size:10px;opacity:.65;margin-top:5px;text-transform:uppercase;letter-spacing:.08em}.hero-pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.hero-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 10px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(7,16,29,.27);box-shadow:inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(14px);font-size:10px;font-weight:800;white-space:nowrap}.hero-pill .hero-live{width:7px;height:7px;border-radius:50%;background:#55df91;box-shadow:0 0 9px #55df91}
   .hero-icon{font-size:54px;line-height:1;filter:drop-shadow(0 0 20px rgba(255,255,255,0.15))}
   .hero h1{margin:0 0 4px;font-size:34px;font-weight:900;letter-spacing:-0.03em;background:var(--hero-gradient, linear-gradient(to right, #ffffff, #82b1ff));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
   .hero p{margin:0;font-size:16px;opacity:.7;font-weight:500}
@@ -1524,6 +1525,7 @@ _tmpl.innerHTML = `
   .time-field .input-label{min-height:34px;display:flex;align-items:flex-end;line-height:1.2;margin-bottom:6px;padding-bottom:2px}
   .time-field input{width:100%;height:44px!important;padding:8px 12px!important;border-radius:12px!important;box-sizing:border-box!important;margin:0!important;font-size:14px!important}
   .entry-sensor-list{min-height:44px;margin-top:12px!important;display:flex;flex-wrap:wrap;align-items:center;border:1px solid rgba(255,255,255,.10)!important;background:rgba(255,255,255,.03)!important;border-radius:12px!important;padding:10px;gap:8px}
+  .instance-activity-strip{display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr));gap:8px;align-items:center;margin:4px 0 16px;padding:10px 12px;border:1px solid rgba(255,255,255,.1);border-radius:18px;background:rgba(5,13,25,.25);backdrop-filter:blur(18px) saturate(135%);-webkit-backdrop-filter:blur(18px) saturate(135%)}.instance-activity-title{font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;opacity:.62;padding-right:6px}.instance-activity-item{min-width:0;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.86}.instance-activity-item time{opacity:.55;margin-right:4px;font-variant-numeric:tabular-nums}
   .mode-mqtt-row{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 14px!important;min-height:44px;border-radius:12px!important;background:rgba(255,255,255,.03)!important;border:1px solid rgba(255,255,255,.10)!important}
   .mode-mqtt-row input{margin:0;accent-color:var(--primary-color,#007aff)}
   :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .entry-sensor-list{border-color:rgba(0,0,0,.12)!important;background:rgba(0,0,0,.03)!important}
@@ -1532,6 +1534,11 @@ _tmpl.innerHTML = `
 
   /* Intelligent Entry Card */
   .entry{position:relative;overflow:hidden;border-radius:28px;border:1px solid rgba(255,255,255,0.08);margin-bottom:16px;min-height:220px;display:flex;flex-direction:column;transition:transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);box-shadow:0 12px 30px rgba(0,0,0,0.15)}
+  .entry:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 20px 48px rgba(0,0,0,.3)}
+  .entry::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:inherit;background:linear-gradient(120deg,rgba(255,255,255,.14),transparent 22%,transparent 74%,rgba(255,255,255,.05));mix-blend-mode:soft-light}
+  .entry-status-ribbon{position:absolute;top:20px;left:20px;z-index:5;display:flex;align-items:center;gap:9px;max-width:calc(100% - 260px);padding:8px 12px;border:1px solid color-mix(in srgb,var(--entry-accent) 55%,rgba(255,255,255,.2));border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--entry-accent) 28%,rgba(8,15,28,.76)),rgba(7,14,25,.56));box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 8px 24px color-mix(in srgb,var(--entry-accent) 22%,transparent);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);color:#fff}
+  .entry-status-orb{width:10px;height:10px;flex:0 0 auto;border-radius:50%;background:var(--entry-accent);box-shadow:0 0 12px var(--entry-accent)}
+  .entry-status-copy{display:flex;flex-direction:column;min-width:0}.entry-status-kicker{font-size:8px;line-height:1;text-transform:uppercase;letter-spacing:.12em;opacity:.72;font-weight:800}.entry-status-name{font-size:13px;line-height:1.2;font-weight:900;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.entry-status-event{font-size:9px;line-height:1.2;opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:290px}
   .entry-bg{position:absolute;inset:0;z-index:1;background-size:cover;background-position:center;transition:opacity 0.5s ease}
   .entry-bg img{width:100%;height:100%;object-fit:cover;opacity:0.6}
   .entry-content{position:relative;z-index:2;flex:1;padding:20px 140px 20px 20px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.2) 0%, transparent 60%)}
@@ -1598,7 +1605,10 @@ _tmpl.innerHTML = `
   /* Phone layout: controls must never sit below the HUD or be hidden behind
      the artwork. Sensor status becomes a readable section beneath the modes. */
   @media(max-width:700px){
+    .hero-context{width:100%;margin:6px 0 0;justify-content:space-between}.hero-clock{align-items:flex-start;border-right:0;padding-right:0}.hero-clock strong{font-size:1.25rem}.hero-pills{justify-content:flex-end}.hero-pill{padding:6px 8px;font-size:9px}
     .entry{min-height:0;border-radius:24px}
+    .instance-activity-strip{grid-template-columns:1fr;gap:5px;margin-bottom:12px;padding:10px}.instance-activity-item:nth-of-type(n+3){display:none}
+    .entry-status-ribbon{top:58px;left:14px;max-width:calc(100% - 28px);padding:6px 9px}.entry-status-name{font-size:11px}.entry-status-event{display:none}
     .entry-content{display:grid;grid-template-columns:minmax(0,1fr);padding:78px 14px 76px;gap:14px;align-items:start;background:linear-gradient(180deg,rgba(0,0,0,.32),rgba(0,0,0,.10) 45%,rgba(0,0,0,.28))}
     .liquid-stack{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%}
     .liquid-btn{min-height:52px;padding:10px 11px;justify-content:center;text-align:center;font-size:12px;line-height:1.1;letter-spacing:.25px;border-radius:16px}
@@ -2175,6 +2185,26 @@ _tmpl.innerHTML = `
   line-height: 1.5;
   margin-bottom: 32px;
 }
+@keyframes argusWelcomeCard {
+  from { opacity: 0; transform: translateY(18px) scale(.96); }
+  65% { opacity: 1; transform: translateY(-3px) scale(1.01); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes argusWelcomeLogo {
+  0%,100% { transform: translateY(0) scale(1); filter: drop-shadow(0 10px 18px rgba(32,145,255,.28)); }
+  50% { transform: translateY(-5px) scale(1.045); filter: drop-shadow(0 16px 26px rgba(32,145,255,.5)); }
+}
+@keyframes argusWelcomeCheck {
+  from { opacity: 0; transform: scale(.55) rotate(-16deg); }
+  70% { opacity: 1; transform: scale(1.1) rotate(4deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+.argus-first-run-card { animation: argusWelcomeCard .58s cubic-bezier(.22,1.2,.36,1) both; }
+.argus-first-run-logo { height:68px; width:68px; border-radius:19px; animation:argusWelcomeLogo 2.4s ease-in-out infinite; }
+.argus-first-run-brand { display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:20px; }
+.argus-first-run-brand h1 { margin:0; font-size:1.65rem; font-weight:850; letter-spacing:-.02em; }
+.argus-first-run-brand p { margin:0; font-size:.92rem; color:rgba(255,255,255,.7); }
+.argus-first-run-thank-icon { width:74px; height:74px; margin:0 auto 18px; display:grid; place-items:center; border-radius:50%; background:rgba(52,199,89,.18); border:1px solid rgba(52,199,89,.45); color:#58e37c; font-size:2.15rem; box-shadow:0 0 32px rgba(52,199,89,.22); animation:argusWelcomeCheck .5s cubic-bezier(.2,1.35,.35,1) both; }
 .user-selector-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
@@ -2348,6 +2378,13 @@ _tmpl.innerHTML = `
         <p id="p-hero-desc"></p>
       </div>
     </div>
+    <div class="hero-context" aria-live="polite">
+      <div class="hero-clock"><strong id="hero-clock-time">--:--</strong><span id="hero-clock-date"></span></div>
+      <div class="hero-pills">
+        <span class="hero-pill" id="hero-weather-pill">☀️ --</span>
+        <span class="hero-pill" id="hero-security-pill"><i class="hero-live"></i> Argus</span>
+      </div>
+    </div>
     <button class="lang-pill" id="btn-lang-picker" title="Language / Idioma">
       <span id="lang-pill-flag">🌐</span>
       <span id="lang-pill-label">Language</span>
@@ -2368,6 +2405,7 @@ _tmpl.innerHTML = `
           </div>
         </div>
         <div id="entries"></div>
+        <div id="instance-activity-strip" class="instance-activity-strip" aria-live="polite"></div>
         <!-- Personalization section -->
         <div class="personalize-section">
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--personalize-divider, rgba(255,255,255,0.08)); padding-bottom:10px; flex-wrap:wrap; gap:10px;">
@@ -3538,7 +3576,9 @@ class ArgusPanel extends HTMLElement {
       const password = await this._requestBackupPassword('encrypt');
       if (password === null) return;
       if (password.length < 8) { alert(this._backupText('weak')); return; }
-      const config = JSON.parse(JSON.stringify(this._ui || {}));
+      const exported = await this._send('argus/export_config');
+      const config = exported?.config;
+      if (typeof config !== 'object' || config === null) throw new Error(this._t('invalid_config'));
       // Runtime alarm state belongs to the current installation and must not
       // be imported as a command on another system.
       delete config.runtime;
@@ -4043,6 +4083,15 @@ class ArgusPanel extends HTMLElement {
 
     // Time
     const timeStr = new Date().toLocaleTimeString(this._getLocale(), { hour: '2-digit', minute: '2-digit' });
+    const now = new Date();
+    const heroClock = this.shadowRoot.getElementById('hero-clock-time');
+    const heroDate = this.shadowRoot.getElementById('hero-clock-date');
+    const heroWeather = this.shadowRoot.getElementById('hero-weather-pill');
+    const heroSecurity = this.shadowRoot.getElementById('hero-security-pill');
+    if (heroClock) heroClock.textContent = timeStr;
+    if (heroDate) heroDate.textContent = now.toLocaleDateString(this._getLocale(), { weekday: 'short', month: 'short', day: 'numeric' });
+    if (heroWeather) heroWeather.textContent = `${isNight ? '🌙' : '☀️'} ${String(weatherState).replace(/[_-]/g, ' ')}`;
+    if (heroSecurity) heroSecurity.innerHTML = `<i class="hero-live" style="background:${isArmed ? '#ffb54d' : '#55df91'};box-shadow:0 0 9px ${isArmed ? '#ffb54d' : '#55df91'}"></i>${this._escapeHtml(isArmed ? t('system_armed') : t('system_disarmed'))}`;
 
     // Surgical Update: Maintain article nodes to persist fullscreen state
     const existing = Array.from(el.querySelectorAll('article.entry'));
@@ -4060,6 +4109,18 @@ class ArgusPanel extends HTMLElement {
       const fullHudLoc = this._hass?.config?.location_name || this._homeName || t('home_fallback');
       const displayedTemperature = this._getDisplayedTemperature();
       const temperatures = this._getTemperatureReadings();
+      const stateMeta = {
+        disarmed: { label: t('disarmed'), accent: '#55df91' },
+        armed_home: { label: t('mode_home'), accent: '#ffb54d' },
+        armed_away: { label: t('mode_away'), accent: '#ff724f' },
+        armed_night: { label: t('mode_night'), accent: '#8ab9ff' },
+        armed_vacation: { label: t('mode_vacation'), accent: '#d59bff' },
+        triggered: { label: t('log_triggered'), accent: '#ff4d5d' },
+        pending: { label: t('system_armed'), accent: '#ffb54d' },
+      }[state] || { label: state.replace(/_/g, ' '), accent: '#9eb5cc' };
+      const weatherLabel = String(weatherState).replace(/[_-]/g, ' ');
+      const recent = Array.isArray(this._ui?.audit_log) ? this._ui.audit_log[0] : null;
+      const recentEvent = recent ? this._localizeActivityDetail(String(recent.action || ''), String(recent.detail || '')) : '';
 
       const mKey = state.replace('armed_', '');
       let eCfg = (this._ui?.modes?.__by_entity__?.[e.entity_id]?.[mKey])
@@ -4079,7 +4140,7 @@ class ArgusPanel extends HTMLElement {
       const sensorAlert = hasOpenSensor && (state.startsWith('armed') || state === 'pending') && !triggered;
 
       const isFS = this._fullscreenIdx === idx || (this._kioskLocked && (this._kioskEntryId === e.entry_id || entries.length === 1));
-      art.className = `entry ${isFS ? 'ios-fullscreen' : ''}`;
+      art.className = `entry cinematic-entry ${isFS ? 'ios-fullscreen' : ''}`;
       art.style.cssText = triggered ? 'border:3px solid #ff5252;box-shadow:0 0 30px rgba(255,82,82,.4)' : '';
       art.querySelectorAll('.wx-webgl').forEach(canvas => canvas._argusWebglStop?.());
 
@@ -4088,8 +4149,16 @@ class ArgusPanel extends HTMLElement {
           ${this._kioskLocked ? `<button class="btn-unlock-kiosk" data-action="unlock-kiosk" style="position:absolute;top:16px;right:16px;z-index:99;padding:8px 14px;background:rgba(220,38,38,0.85);color:white;border:none;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 12px rgba(0,0,0,0.4)">🔓 ${this._escapeHtml(t('unlock_kiosk') || 'Desbloquear kiosco')}</button>` : ''}
           <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>
           ${this._renderBatteryAlerts()}
+          <div class="entry-status-ribbon" style="--entry-accent:${stateMeta.accent}">
+            <span class="entry-status-orb"></span>
+            <span class="entry-status-copy">
+              <span class="entry-status-kicker">${this._escapeHtml(t('system_status') === 'system_status' ? 'Estado de seguridad' : t('system_status'))}</span>
+              <span class="entry-status-name">${this._escapeHtml(stateMeta.label)}</span>
+              ${recentEvent ? `<span class="entry-status-event">${this._escapeHtml(recentEvent)}</span>` : ''}
+            </span>
+          </div>
           <div class="hud">
-            <div class="hud-loc">${this._escapeHtml(fullHudLoc)}</div>
+            <div class="hud-loc">${this._escapeHtml(fullHudLoc)} · ${this._escapeHtml(weatherLabel)}</div>
             <div class="hud-data"><span>${this._escapeHtml(timeStr)}</span>${displayedTemperature ? `<i>🌡️ ${this._escapeHtml(displayedTemperature)}</i>` : ''}</div>
             ${temperatures.length ? `<div class="hud-temperatures">${temperatures.map(item => `<span class="hud-temperature">${this._escapeHtml(item.label)} ${this._escapeHtml(item.value)}</span>`).join('')}</div>` : ''}
           </div>
@@ -4151,6 +4220,18 @@ class ArgusPanel extends HTMLElement {
       btn.addEventListener('click', ev => this._toggleFullscreen(ev.currentTarget.closest('.entry')));
     });
     el.querySelectorAll('.wx-webgl').forEach(canvas => this._initWeatherWebGL(canvas));
+    const activityStrip = this.shadowRoot.getElementById('instance-activity-strip');
+    if (activityStrip) {
+      const events = Array.isArray(this._ui?.audit_log) ? this._ui.audit_log.slice(0, 3) : [];
+      const compact = events.map(event => {
+        const date = event?.ts ? new Date(event.ts) : null;
+        const stamp = date && !Number.isNaN(date.getTime())
+          ? date.toLocaleTimeString(this._getLocale(), { hour: '2-digit', minute: '2-digit' }) : '';
+        const detail = this._localizeActivityDetail(String(event?.action || ''), String(event?.detail || '')) || String(event?.action || '');
+        return `<span class="instance-activity-item"><time>${this._escapeHtml(stamp)}</time>${this._escapeHtml(detail)}</span>`;
+      }).join('');
+      activityStrip.innerHTML = `<span class="instance-activity-title">${this._escapeHtml(t('activity_log'))}</span>${compact || `<span class="instance-activity-item">${this._escapeHtml(t('log_no_events'))}</span>`}`;
+    }
     this._bindSOS();
   }
 
@@ -6655,55 +6736,180 @@ class ArgusPanel extends HTMLElement {
     }
 
     const defaultName = this._hass?.user?.name || "Admin";
+    const language = this._getCurrentLangCode();
+    const welcomeCopy = {
+      es: ['Bienvenido a Argus Home Hub', 'Protección inteligente para lo que más importa.'],
+      en: ['Welcome to Argus Home Hub', 'Smart protection for what matters most.'],
+      fr: ['Bienvenue dans Argus Home Hub', 'Une protection intelligente pour ce qui compte le plus.'],
+      pt: ['Bem-vindo ao Argus Home Hub', 'Proteção inteligente para o que mais importa.'],
+      it: ['Benvenuto in Argus Home Hub', 'Protezione intelligente per ciò che conta di più.'],
+      zh: ['欢迎使用 Argus Home Hub', '为重要事物提供智能保护。'],
+      ru: ['Добро пожаловать в Argus Home Hub', 'Умная защита самого важного.'],
+    }[language] || ['Welcome to Argus Home Hub', 'Smart protection for what matters most.'];
+    const finishFirstRun = () => {
+      overlay.innerHTML = `
+        <div class="argus-bootstrap-card liquid-glass argus-first-run-card" style="max-width:420px">
+          <div class="argus-first-run-thank-icon">✓</div>
+          <h1 style="margin-bottom:10px;font-weight:850">Gracias por usar Argus Home Hub</h1>
+          <p style="margin:0">Tu sistema está listo y protegido.</p>
+        </div>
+      `;
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        this._profileSelectedThisMount = true;
+        this._load();
+      }, 1500);
+    };
     overlay.innerHTML = `
-      <div class="argus-bootstrap-card liquid-glass">
-        <h1>${this._t('first_run_welcome') || 'Gracias por elegir Argus Home Hub. Bienvenido/a.'}</h1>
-        <p>${this._t('first_run_desc') || 'Complete setup to secure your home.'}</p>
-        <div class="pin-prompt" style="margin-top: 15px; display: block; border: none; background: transparent; box-shadow: none;">
-          <label style="display:block;text-align:left;font-size:12px;opacity:0.8;margin-bottom:4px">${this._t('setup_admin_name') || 'Nombre del Administrador'}</label>
-          <input type="text" id="setup-admin-name" placeholder="Name" value="${defaultName}" style="margin-bottom: 15px;width:100%" />
+      <div class="argus-bootstrap-card liquid-glass argus-first-run-card" style="max-width:540px;width:92vw">
+        <div class="argus-first-run-brand">
+          <img class="argus-first-run-logo" src="/api/argus_static/argus_logo.png" alt="Logotipo oficial de Argus">
+          <div>
+            <h1>${this._escapeHtml(welcomeCopy[0])}</h1>
+            <p>${this._escapeHtml(welcomeCopy[1])}</p>
+          </div>
+        </div>
 
-          <p style="font-size:12px; opacity:0.8; margin-bottom:10px; line-height:1.4">
-            ${this._t('first_run_pin_expl') || 'El PIN de acceso abre Argus. El PIN maestro controla el armado y desarmado.'}
+        <!-- Mode selector tabs -->
+        <div style="display:flex;gap:10px;margin-bottom:16px;background:rgba(255,255,255,0.05);padding:4px;border-radius:12px;border:1px solid rgba(255,255,255,0.08)">
+          <button id="tab-setup-fresh" style="flex:1;padding:10px;border-radius:10px;border:none;background:rgba(255,255,255,0.15);color:#fff;font-weight:700;font-size:13px;cursor:pointer">🚀 Configurar desde cero</button>
+          <button id="tab-setup-restore" style="flex:1;padding:10px;border-radius:10px;border:none;background:transparent;color:rgba(255,255,255,0.6);font-weight:600;font-size:13px;cursor:pointer">📁 Restaurar Backup</button>
+        </div>
+
+        <!-- Fresh Setup View -->
+        <div id="view-setup-fresh" class="pin-prompt" style="display:block;border:none;background:transparent;box-shadow:none;padding:0">
+          <label style="display:block;text-align:left;font-size:12px;opacity:0.8;margin-bottom:4px">${this._escapeHtml(this._t('setup_admin_name') || 'Nombre del Administrador')}</label>
+          <input type="text" id="setup-admin-name" placeholder="Name" value="${this._escapeHtml(defaultName)}" style="margin-bottom:15px;width:100%" />
+
+          <p style="font-size:12px;opacity:0.8;margin-bottom:10px;line-height:1.4">
+            ${this._escapeHtml(this._t('first_run_pin_expl') || 'El PIN de acceso abre Argus. El PIN maestro controla el armado y desarmado.')}
           </p>
 
-          <label style="display:block;text-align:left;font-size:12px;opacity:0.8;margin-bottom:4px">${this._t('setup_access_pin') || 'PIN de acceso al panel Argus (Opcional)'}</label>
+          <label style="display:block;text-align:left;font-size:12px;opacity:0.8;margin-bottom:4px">${this._escapeHtml(this._t('setup_access_pin') || 'PIN de acceso al panel Argus (Opcional)')}</label>
           <div style="display:flex;gap:10px;margin-bottom:15px">
             <input type="password" id="setup-access-pin" placeholder="PIN (4-12)" style="flex:1" />
-            <button id="skip-access-pin" class="btn-cancel" style="width:auto;padding:0 12px;font-size:11px">${this._t('first_run_skip') || 'Omitir'}</button>
+            <button id="skip-access-pin" class="btn-cancel" style="width:auto;padding:0 12px;font-size:11px">${this._escapeHtml(this._t('first_run_skip') || 'Omitir')}</button>
           </div>
 
-          <label style="display:block;text-align:left;font-size:12px;opacity:0.8;margin-bottom:4px">${this._t('setup_master_pin') || 'PIN maestro para armar/desarmar (Opcional)'}</label>
-          <div style="display:flex;gap:10px;margin-bottom:25px">
+          <label style="display:block;text-align:left;font-size:12px;opacity:0.8;margin-bottom:4px">${this._escapeHtml(this._t('setup_master_pin') || 'PIN maestro para armar/desarmar (Opcional)')}</label>
+          <div style="display:flex;gap:10px;margin-bottom:20px">
             <input type="password" id="setup-master-pin" placeholder="PIN (4-12)" style="flex:1" />
-            <button id="skip-master-pin" class="btn-cancel" style="width:auto;padding:0 12px;font-size:11px">${this._t('first_run_skip') || 'Omitir'}</button>
+            <button id="skip-master-pin" class="btn-cancel" style="width:auto;padding:0 12px;font-size:11px">${this._escapeHtml(this._t('first_run_skip') || 'Omitir')}</button>
           </div>
 
-          <button id="btn-complete-setup" class="btn-start" style="width: 100%;">${this._t('first_run_start') || 'Comenzar con Argus'}</button>
+          <button id="btn-complete-setup" class="btn-start" style="width:100%">${this._escapeHtml(this._t('first_run_start') || 'Comenzar con Argus')}</button>
+        </div>
+
+        <!-- Restore Backup View -->
+        <div id="view-setup-restore" style="display:none;padding:10px 0;text-align:center">
+          <p style="font-size:13px;opacity:0.8;margin-bottom:16px;line-height:1.4">
+            Suba un archivo de copia de seguridad de Argus (<code>.json</code>) para restaurar automáticamente todos sus perfiles, configuraciones, PINs y temas almacenados.
+          </p>
+          <input type="file" id="setup-restore-file" accept=".json,.argus,application/json" style="display:none" />
+          <button id="btn-trigger-restore" class="btn-start" style="width:100%;padding:14px;font-size:14px;display:flex;align-items:center;justify-content:center;gap:8px">
+            📁 Seleccionar copia de seguridad Argus (.json o .argus)
+          </button>
+          <div id="restore-status" style="margin-top:12px;font-size:12px;min-height:20px"></div>
         </div>
       </div>
     `;
 
-    this.shadowRoot.getElementById('skip-access-pin').addEventListener('click', () => {
+    const tabFresh = this.shadowRoot.getElementById('tab-setup-fresh');
+    const tabRestore = this.shadowRoot.getElementById('tab-setup-restore');
+    const viewFresh = this.shadowRoot.getElementById('view-setup-fresh');
+    const viewRestore = this.shadowRoot.getElementById('view-setup-restore');
+
+    tabFresh?.addEventListener('click', () => {
+      tabFresh.style.background = 'rgba(255,255,255,0.15)';
+      tabFresh.style.color = '#fff';
+      tabRestore.style.background = 'transparent';
+      tabRestore.style.color = 'rgba(255,255,255,0.6)';
+      viewFresh.style.display = 'block';
+      viewRestore.style.display = 'none';
+    });
+
+    tabRestore?.addEventListener('click', () => {
+      tabRestore.style.background = 'rgba(255,255,255,0.15)';
+      tabRestore.style.color = '#fff';
+      tabFresh.style.background = 'transparent';
+      tabFresh.style.color = 'rgba(255,255,255,0.6)';
+      viewRestore.style.display = 'block';
+      viewFresh.style.display = 'none';
+    });
+
+    this.shadowRoot.getElementById('skip-access-pin')?.addEventListener('click', () => {
       this.shadowRoot.getElementById('setup-access-pin').value = '';
     });
 
-    this.shadowRoot.getElementById('skip-master-pin').addEventListener('click', () => {
+    this.shadowRoot.getElementById('skip-master-pin')?.addEventListener('click', () => {
       this.shadowRoot.getElementById('setup-master-pin').value = '';
     });
 
-    this.shadowRoot.getElementById('btn-complete-setup').addEventListener('click', async () => {
+    this.shadowRoot.getElementById('btn-complete-setup')?.addEventListener('click', async () => {
       const admin_name = this.shadowRoot.getElementById('setup-admin-name').value || defaultName;
       const master_pin = this.shadowRoot.getElementById('setup-master-pin').value || undefined;
       const access_pin = this.shadowRoot.getElementById('setup-access-pin').value || undefined;
       try {
         await this._send('argus/complete_first_run', { admin_name, master_pin, access_pin });
-        overlay.style.display = 'none';
-        this._profileSelectedThisMount = true;
-        this._load();
+        finishFirstRun();
       } catch (err) {
         alert("Setup failed: " + err.message);
       }
+    });
+
+    // Handle Restore Backup File Upload
+    const restoreInput = this.shadowRoot.getElementById('setup-restore-file');
+    const restoreStatus = this.shadowRoot.getElementById('restore-status');
+
+    this.shadowRoot.getElementById('btn-trigger-restore')?.addEventListener('click', () => {
+      restoreInput?.click();
+    });
+
+    restoreInput?.addEventListener('change', (event) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      if (restoreStatus) restoreStatus.textContent = 'Procesando copia de seguridad...';
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          let config = JSON.parse(e.target.result);
+          if (config?.format === 'argus-encrypted-backup') {
+            const password = await this._showArgusInputModal({
+              title: 'Copia de seguridad cifrada',
+              label: 'Introduce la contraseña del backup:',
+              type: 'password'
+            });
+            if (!password) {
+              if (restoreStatus) restoreStatus.textContent = 'Restauración cancelada.';
+              return;
+            }
+            try {
+              const salt = this._base64ToBytes(config.salt);
+              const iv = this._base64ToBytes(config.iv);
+              const key = await this._backupKey(password, salt, ['decrypt']);
+              const plain = await crypto.subtle.decrypt({name:'AES-GCM',iv}, key, this._base64ToBytes(config.data));
+              config = JSON.parse(new TextDecoder().decode(plain));
+            } catch (_) {
+              throw new Error('Contraseña de copia de seguridad incorrecta.');
+            }
+          }
+
+          if (typeof config !== 'object' || config === null) {
+            throw new Error(this._t('invalid_config'));
+          }
+
+          await this._send('argus/restore_config', { config });
+
+          if (restoreStatus) restoreStatus.textContent = '✅ Copia de seguridad restaurada con éxito.';
+          finishFirstRun();
+        } catch (err) {
+          if (restoreStatus) restoreStatus.textContent = '❌ Error al restaurar: ' + (err.message || err);
+        }
+      };
+      reader.onerror = () => {
+        if (restoreStatus) restoreStatus.textContent = '❌ Error al leer el archivo.';
+      };
+      reader.readAsText(file);
     });
   }
 
@@ -6736,7 +6942,7 @@ class ArgusPanel extends HTMLElement {
     const users = bootstrap.users || [];
     const haUserId = bootstrap.ha_user_id || null;
 
-    // Build user cards — highlight own profile
+    // Build user cards — highlight own profile, render picture, and online status
     const usersHtml = users.map(u => {
       const isOwn = u.is_own_profile === true;
       const ownBadge = isOwn
@@ -6746,6 +6952,14 @@ class ArgusPanel extends HTMLElement {
       const roleLabel = u.role === 'admin'
         ? this._escapeHtml(this._t('role_argus_admin'))
         : this._escapeHtml(this._t('role_argus_standard'));
+
+      const avatarHtml = u.picture
+        ? `<img src="${this._escapeHtml(u.picture)}" alt="${this._escapeHtml(u.name)}" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.2);box-shadow:0 4px 12px rgba(0,0,0,0.3)"/>`
+        : `<div class="user-avatar">${this._escapeHtml(u.name.substring(0, 2).toUpperCase())}</div>`;
+
+      const statusDot = u.online !== false
+        ? `<span title="Online / Conectado" style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#34c759;box-shadow:0 0 8px #34c759;margin-right:5px"></span>`
+        : `<span title="Offline / Ausente" style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#ff9500;box-shadow:0 0 8px #ff9500;margin-right:5px"></span>`;
 
       const ariaStatus = isOwn
         ? this._t('profile_is_yours')
@@ -6760,10 +6974,11 @@ class ArgusPanel extends HTMLElement {
              tabindex="0"
              role="button"
              aria-label="${this._escapeHtml(ariaLabelText)}">
-          <div class="user-avatar">${this._escapeHtml(u.name.substring(0, 2).toUpperCase())}</div>
-          <div class="user-name">${this._escapeHtml(u.name)}${lockIcon}</div>
+          ${avatarHtml}
+          <div class="user-name" style="margin-top:6px;display:flex;align-items:center;justify-content:center">${statusDot}${this._escapeHtml(u.name)}${lockIcon}</div>
           <div class="user-role-label">${roleLabel}</div>
           ${ownBadge}
+          <a href="/config/person" target="_top" class="ha-person-link" style="font-size:10px;color:rgba(255,255,255,0.55);text-decoration:underline;margin-top:4px;display:inline-block" onclick="event.stopPropagation()">📷 Cambiar foto en HA ↗</a>
         </div>
       `;
     }).join('');
@@ -6785,12 +7000,27 @@ class ArgusPanel extends HTMLElement {
           ← ${this._escapeHtml(this._t('exit_to_ha'))}
         </button>
         <div id="pin-prompt" class="pin-prompt" style="display:none;margin-top:16px;animation:fadeIn .25s ease">
-          <div id="pin-prompt-label" style="font-size:13px;opacity:0.75;margin-bottom:8px;text-align:center"></div>
-          <input type="password" id="login-pin-input" placeholder="${this._escapeHtml(this._t('pin_placeholder'))}" inputmode="numeric" pattern="[0-9]*"
-                 style="width:100%;box-sizing:border-box;text-align:center;font-size:1.3rem;letter-spacing:0.25em;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.07);color:inherit;outline:none;margin-bottom:8px"/>
+          <div id="pin-prompt-label" style="font-size:13px;opacity:0.85;margin-bottom:8px;text-align:center;font-weight:600"></div>
+          <input type="password" id="login-pin-input" placeholder="${this._escapeHtml(this._t('pin_placeholder'))}" inputmode="numeric" pattern="[0-9]*" readonly
+                 style="width:100%;box-sizing:border-box;text-align:center;font-size:1.4rem;letter-spacing:0.3em;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.07);color:inherit;outline:none;margin-bottom:12px"/>
+
+          <div class="pin-grid" id="login-pin-pad" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px">
+            <button class="pin-btn-round" type="button" data-login-digit="1" style="padding:14px;font-size:1.2rem;border-radius:12px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:#fff;cursor:pointer">1</button>
+            <button class="pin-btn-round" type="button" data-login-digit="2" style="padding:14px;font-size:1.2rem;border-radius:12px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:#fff;cursor:pointer">2</button>
+            <button class="pin-btn-round" type="button" data-login-digit="3" style="padding:14px;font-size:1.2rem;border-radius:12px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:#fff;cursor:pointer">3</button>
+            <button class="pin-btn-round" type="button" data-login-digit="4" style="padding:14px;font-size:1.2rem;border-radius:12px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:#fff;cursor:pointer">4</button>
+            <button class="pin-btn-round" type="button" data-login-digit="5" style="padding:14px;font-size:1.2rem;border-radius:12px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:#fff;cursor:pointer">5</button>
+            <button class="pin-btn-round" type="button" data-login-digit="6" style="padding:14px;font-size:1.2rem;border-radius:12px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:#fff;cursor:pointer">6</button>
+            <button class="pin-btn-round" type="button" data-login-digit="7" style="padding:14px;font-size:1.2rem;border-radius:12px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:#fff;cursor:pointer">7</button>
+            <button class="pin-btn-round" type="button" data-login-digit="8" style="padding:14px;font-size:1.2rem;border-radius:12px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:#fff;cursor:pointer">8</button>
+            <button class="pin-btn-round" type="button" data-login-digit="9" style="padding:14px;font-size:1.2rem;border-radius:12px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:#fff;cursor:pointer">9</button>
+            <button class="pin-btn-round" type="button" id="btn-login-pin-backspace" style="padding:14px;font-size:1rem;border-radius:12px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,59,48,0.2);color:#ff453a;cursor:pointer">⌫</button>
+            <button class="pin-btn-round" type="button" data-login-digit="0" style="padding:14px;font-size:1.2rem;border-radius:12px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:#fff;cursor:pointer">0</button>
+            <button class="pin-btn-round" type="button" id="btn-submit-login-pin" style="padding:14px;font-size:1rem;border-radius:12px;border:1px solid rgba(52,199,89,0.3);background:rgba(52,199,89,0.25);color:#34c759;font-weight:700;cursor:pointer">✓</button>
+          </div>
+
           <div style="display:flex;gap:8px;justify-content:center">
-            <button id="btn-submit-login-pin" class="btn-start" style="flex:1">${this._escapeHtml(this._t('login_btn'))}</button>
-            <button id="btn-cancel-login" class="btn-cancel" style="flex:0.4">${this._escapeHtml(this._t('cancel_btn'))}</button>
+            <button id="btn-cancel-login" class="btn-cancel" style="width:100%">${this._escapeHtml(this._t('cancel_btn'))}</button>
           </div>
           <div id="login-pin-error" style="color:#ff453a;font-size:12px;min-height:18px;text-align:center;margin-top:6px"></div>
         </div>
@@ -6808,6 +7038,19 @@ class ArgusPanel extends HTMLElement {
       window.location.assign('/');
     });
 
+    // Wire numeric keypad dial buttons
+    this.shadowRoot.querySelectorAll('[data-login-digit]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (pinInput && pinInput.value.length < 8) {
+          pinInput.value += btn.getAttribute('data-login-digit');
+        }
+      });
+    });
+
+    this.shadowRoot.getElementById('btn-login-pin-backspace')?.addEventListener('click', () => {
+      if (pinInput) pinInput.value = pinInput.value.slice(0, -1);
+    });
+
     const _showGrid = () => {
       selectedUserId = null;
       if (pinInput) pinInput.value = '';
@@ -6821,7 +7064,7 @@ class ArgusPanel extends HTMLElement {
       if (pinError) pinError.textContent = '';
       if (pinPrompt) pinPrompt.style.display = 'block';
       if (grid) grid.style.display = 'none';
-      if (pinInput) { pinInput.value = ''; pinInput.focus(); }
+      if (pinInput) { pinInput.value = ''; }
     };
 
     this.shadowRoot.querySelectorAll('.user-card').forEach(el => {

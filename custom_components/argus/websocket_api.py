@@ -170,6 +170,7 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_argus_get_forensic_timeline)
     websocket_api.async_register_command(hass, ws_argus_get_stats)
     websocket_api.async_register_command(hass, ws_argus_clear_audit_log)
+    websocket_api.async_register_command(hass, ws_argus_export_config)
     websocket_api.async_register_command(hass, ws_argus_restore_config)
     websocket_api.async_register_command(hass, ws_argus_save_advanced_config)
     websocket_api.async_register_command(hass, ws_argus_get_advanced_config)
@@ -568,6 +569,34 @@ async def ws_argus_clear_audit_log(hass, connection, msg) -> None:
 
 
 @websocket_api.websocket_command({
+    vol.Required("type"): "argus/export_config",
+    vol.Optional("entry_id"): str,
+})
+@websocket_api.async_response
+async def ws_argus_export_config(hass, connection, msg) -> None:
+    """Return a complete backup payload to an authenticated Argus admin.
+
+    The panel encrypts this payload before downloading it. Credential hashes
+    are included here, but never in dashboard responses, so a backup can
+    restore both profile access and the master PIN on a fresh installation.
+    """
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
+    try:
+        await _require_argus_admin(hass, connection, entry_id)
+    except ArgusAuthError as err:
+        connection.send_error(msg["id"], err.code, err.message)
+        return
+
+    config = copy.deepcopy(await async_load_ui_data(hass, entry_id))
+    entry = hass.config_entries.async_get_entry(entry_id)
+    master_pin_hash = ""
+    if entry:
+        master_pin_hash = entry.options.get("code") or entry.data.get("code") or ""
+    config["_argus_backup"] = {"version": 1, "master_pin_hash": master_pin_hash}
+    connection.send_result(msg["id"], {"config": config})
+
+
+@websocket_api.websocket_command({
     vol.Required("type"): "argus/restore_config",
     vol.Optional("entry_id"): str,
     vol.Required("config"): dict,
@@ -575,14 +604,59 @@ async def ws_argus_clear_audit_log(hass, connection, msg) -> None:
 @websocket_api.async_response
 async def ws_argus_restore_config(hass, connection, msg) -> None:
     entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
+    current = await async_load_ui_data(hass, entry_id)
+    is_first_run = current.get("first_run", True)
+    restored_from_first_run = False
     try:
         profile, _ = await _require_argus_admin(hass, connection, entry_id)
+        actor = profile.get("name", "Unknown")
     except ArgusAuthError as err:
-        connection.send_error(msg["id"], err.code, err.message)
-        return
-    actor = profile.get("name", "Unknown")
+        # A fresh installation has no Argus profile or session yet. Its first
+        # restore is authorized by HA admin rights only; established installs
+        # still require an Argus administrator session.
+        if not is_first_run:
+            connection.send_error(msg["id"], err.code, err.message)
+            return
+        try:
+            _require_ha_admin(connection)
+        except ArgusAuthError as ha_err:
+            connection.send_error(msg["id"], ha_err.code, ha_err.message)
+            return
+        _, actor = _get_ha_actor(connection)
+        restored_from_first_run = True
+
+    backup_meta = msg["config"].get("_argus_backup", {})
+    master_pin_hash = backup_meta.get("master_pin_hash", "") if isinstance(backup_meta, dict) else ""
     try:
         restored = await async_restore_ui_data(hass, msg["config"], actor=actor, entry_id=entry_id)
+        if master_pin_hash and not needs_rehash(master_pin_hash):
+            entry = hass.config_entries.async_get_entry(entry_id)
+            if entry:
+                options = dict(entry.options)
+                options["code"] = master_pin_hash
+                hass.config_entries.async_update_entry(entry, options=options)
+
+        if restored_from_first_run:
+            ha_user_id, actor_name = _get_ha_actor(connection)
+            users = copy.deepcopy(restored.get("users", []))
+            restored_profile = next(
+                (user for user in users if user.get("ha_user_id") == ha_user_id and user.get("enabled", True)),
+                None,
+            )
+            if restored_profile is None:
+                restored_profile = {
+                    "id": str(uuid.uuid4()), "name": actor_name, "ha_user_id": ha_user_id,
+                    "role": "admin", "enabled": True,
+                    "permissions": {"view_status": True, "view_history": True, "arm": True, "disarm": True, "sos": True},
+                }
+                users.append(restored_profile)
+            else:
+                restored_profile["role"] = "admin"
+                restored_profile["permissions"] = {"view_status": True, "view_history": True, "arm": True, "disarm": True, "sos": True}
+            restored = await async_save_ui_data(hass, {"first_run": False, "users": users}, entry_id)
+            async_get_session_manager(hass).create_session(
+                ha_user_id, entry_id, restored_profile["id"], "first_run_restore"
+            )
     except ValueError as err:
         connection.send_error(msg["id"], "invalid_backup", str(err))
         return
@@ -831,18 +905,37 @@ async def ws_argus_login_bootstrap(hass, connection, msg) -> None:
     # Re-load after potential sync changes
     ui_data = await async_load_ui_data(hass, entry_id)
 
+    # Map HA person entity attributes to ha_user_ids
+    person_map: dict[str, dict] = {}
+    for state in hass.states.async_all("person"):
+        p_user_id = state.attributes.get("user_id")
+        if p_user_id:
+            person_map[p_user_id] = {
+                "picture": state.attributes.get("entity_picture"),
+                "state": state.state,
+            }
+
     public_users = []
     for u in ui_data.get("users", []):
         if u.get("enabled", True):
+            u_ha_id = u.get("ha_user_id")
+            p_info = person_map.get(u_ha_id, {}) if u_ha_id else {}
+            picture = u.get("picture") or p_info.get("picture")
+            is_current = (u_ha_id == ha_user_id) if u_ha_id else False
+            p_state = p_info.get("state")
+            # A person is present only when HA reports "home". The current
+            # authenticated WebSocket user is also active by definition.
+            is_online = is_current or p_state == "home"
+
             public_users.append({
                 "id": u["id"],
                 "name": u["name"],
                 "role": u["role"],
                 "shared_kiosk_profile": u.get("shared_kiosk_profile", False),
                 "access_pin_configured": bool(u.get("access_pin_hash")),
-                # Signal whether this profile belongs to the current HA user.
-                # Does NOT expose ha_user_id raw — only a boolean flag.
-                "is_own_profile": (u.get("ha_user_id") == ha_user_id),
+                "is_own_profile": is_current,
+                "picture": picture,
+                "online": is_online,
             })
 
     has_real_admin = False
