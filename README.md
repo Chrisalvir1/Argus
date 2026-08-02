@@ -30,8 +30,11 @@ Argus reúne alarma, sensores, sirenas, SOS, usuarios, auditoría, MQTT y una in
 - MQTT opcional con comandos JSON o texto.
 - Horarios locales y confirmación de intrusión mediante múltiples señales.
 - Medios privados firmados bajo `.storage`.
-- Panel completo y tarjeta Lovelace en siete idiomas.
-- Atmósfera WebGL procedimental para lluvia, tormenta con lluvia, tormenta eléctrica, nieve, niebla, nubes, sol, estrellas, luna, estaciones y eclipses respaldados por entidades reales.
+- Panel completo y tarjeta Lovelace en siete idiomas con **Onboarding Premium** y bienvenida inmersiva.
+- **Restauración de Backup Segura:** Restaura configuraciones encriptadas directamente desde el primer uso (exclusivo para administradores HA).
+- **Diseño Liquid Glass:** Elementos de UI y tarjetas de instancias activas rediseñados con estética premium de cristal líquido.
+- Atmósfera WebGL procedimental ultra-realista (motor mejorado) para lluvia, tormenta, nieve, niebla, nubes, sol, estrellas, luna y eclipses respaldados por entidades reales.
+- **Presencia HA:** Sincronización inteligente de estados de presencia directamente desde Home Assistant.
 - Animaciones premium para paneles, opciones, guardado, sensores, botones y modales, con respeto por `prefers-reduced-motion`.
 
 ## Seguridad y Privacidad 2.0
@@ -101,7 +104,7 @@ title: Seguridad
 4. Recarga el navegador sin caché.
 5. Verifica armado, desarmado, SOS, PIN, sirenas, medios y restauración.
 
-Consulta las notas de la versión [v2.0.0](https://github.com/Chrisalvir1/Argus/releases/tag/v2.0.0).
+Consulta las notas de la versión [v2.0.1](https://github.com/Chrisalvir1/Argus/releases/tag/v2.0.1).
 
 ## Desarrollo
 
