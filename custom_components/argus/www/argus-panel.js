@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v2.0.3
+ * Argus Home Hub – v2.0.4
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1544,11 +1544,11 @@ _tmpl.innerHTML = `
   .entry-content{position:relative;z-index:2;flex:1;padding:20px 140px 20px 20px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.2) 0%, transparent 60%)}
   /* The live instance is the console: real controls, real sensors and one
      clear disarm keypad. Decorative dashboard cards never sit above it. */
-  .security-console{grid-template-columns:minmax(190px,.78fr) minmax(300px,1.25fr) minmax(220px,.88fr);gap:24px;padding:104px 34px 34px;background:linear-gradient(90deg,rgba(3,10,20,.50),rgba(3,10,20,.12) 50%,rgba(3,10,20,.46))}
-  .security-console .liquid-stack{align-self:stretch;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.security-console .liquid-btn{min-height:62px;justify-content:center;text-align:center;padding:10px;font-size:12px}.security-console .btn-disarm,.security-console .btn-sos{grid-column:1/-1}
-  .console-sensors{display:grid;gap:10px;align-content:center}.console-sensor{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;padding:13px 16px;border:1px solid rgba(255,255,255,.15);border-radius:18px;background:linear-gradient(100deg,rgba(36,188,129,.22),rgba(10,27,38,.58));backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 8px 22px rgba(0,0,0,.22)}.console-sensor.open{background:linear-gradient(100deg,rgba(235,74,67,.30),rgba(34,14,23,.62));border-color:rgba(255,102,92,.7)}.console-sensor-icon{font-size:20px}.console-sensor-name{font-weight:850;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.console-sensor-state{font-size:11px;font-weight:900;text-transform:uppercase;color:#75f4b0}.console-sensor.open .console-sensor-state{color:#ff968b}.console-empty{padding:24px;text-align:center;border:1px dashed rgba(255,255,255,.22);border-radius:18px;opacity:.75}
-  .console-keypad{align-self:center;padding:18px;border-left:1px solid rgba(255,255,255,.16);display:grid;gap:12px}.console-keypad-title{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;text-align:center}.console-pin-display{width:100%;box-sizing:border-box;padding:11px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(4,14,26,.46);color:#fff;text-align:center;font-size:20px;letter-spacing:.35em}.console-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.console-pad button{min-height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:linear-gradient(145deg,rgba(165,220,255,.24),rgba(20,45,66,.62));color:#fff;font-size:17px;font-weight:800;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 6px 14px rgba(0,0,0,.25);cursor:pointer}.console-pad .console-enter{border-radius:16px;color:#7ff8c1;border-color:rgba(74,230,157,.65)}.console-keypad small{text-align:center;opacity:.7}
-  @media(max-width:950px){.grid{grid-template-columns:1fr;grid-template-areas:"instances" "activity" "modes" "access" "automations" "backup" "github"}.security-console{grid-template-columns:1fr;padding:94px 18px 24px}.security-console .liquid-stack{grid-template-columns:repeat(2,minmax(0,1fr))}.console-keypad{border-left:0;border-top:1px solid rgba(255,255,255,.16);max-width:360px;width:100%;justify-self:center}}
+  .security-console{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:28px;padding:94px 34px 34px;background:linear-gradient(90deg,rgba(3,10,20,.40),rgba(3,10,20,.08) 50%,rgba(3,10,20,.36))}
+  .security-console .liquid-stack{flex:1 1 200px;max-width:300px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.security-console .liquid-btn{min-height:62px;justify-content:center;text-align:center;padding:10px;font-size:12px}.security-console .btn-disarm,.security-console .btn-sos{grid-column:1/-1}
+  .console-sensors{flex:1 1 260px;max-width:400px;display:grid;gap:10px;align-content:center}.console-sensor{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;padding:13px 16px;border:1px solid rgba(255,255,255,.15);border-radius:18px;background:linear-gradient(100deg,rgba(36,188,129,.22),rgba(10,27,38,.58));backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 8px 22px rgba(0,0,0,.22)}.console-sensor.open{background:linear-gradient(100deg,rgba(235,74,67,.30),rgba(34,14,23,.62));border-color:rgba(255,102,92,.7)}.console-sensor-icon{font-size:20px}.console-sensor-name{font-weight:850;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.console-sensor-state{font-size:11px;font-weight:900;text-transform:uppercase;color:#75f4b0}.console-sensor.open .console-sensor-state{color:#ff968b}.console-empty{padding:24px;text-align:center;border:1px dashed rgba(255,255,255,.22);border-radius:18px;opacity:.75}
+  .console-keypad{flex:1 1 220px;max-width:280px;padding:18px;border:1px solid rgba(255,255,255,.16);border-radius:24px;background:rgba(5,15,30,0.4);backdrop-filter:blur(16px);display:grid;gap:12px}.console-keypad-title{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;text-align:center}.console-pin-display{width:100%;box-sizing:border-box;padding:11px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(4,14,26,.46);color:#fff;text-align:center;font-size:20px;letter-spacing:.35em}.console-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;place-items:center}.console-pad button{width:100%;aspect-ratio:1/1;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:linear-gradient(145deg,rgba(165,220,255,.24),rgba(20,45,66,.62));color:#fff;font-size:17px;font-weight:800;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 6px 14px rgba(0,0,0,.25);cursor:pointer;display:flex;align-items:center;justify-content:center}.console-pad .console-enter{border-radius:16px;aspect-ratio:auto;height:100%;color:#7ff8c1;border-color:rgba(74,230,157,.65)}.console-keypad small{text-align:center;opacity:.7}
+  @media(max-width:950px){.grid{grid-template-columns:1fr;grid-template-areas:"instances" "activity" "modes" "access" "automations" "backup" "github"}.security-console{flex-direction:column;padding:94px 18px 24px}.console-keypad{width:100%;max-width:320px}}
 
   /* Sensor column */
   .sensor-column{position:absolute;right:0;top:0;bottom:0;width:auto;max-width:40%;z-index:4;display:flex;flex-direction:column;gap:7px;align-items:flex-end;justify-content:center;padding:12px 12px 12px 0;pointer-events:none}
@@ -4172,20 +4172,16 @@ class ArgusPanel extends HTMLElement {
           ${this._kioskLocked ? `<button class="btn-unlock-kiosk" data-action="unlock-kiosk" style="position:absolute;top:16px;right:16px;z-index:99;padding:8px 14px;background:rgba(220,38,38,0.85);color:white;border:none;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 12px rgba(0,0,0,0.4)">🔓 ${this._escapeHtml(t('unlock_kiosk') || 'Desbloquear kiosco')}</button>` : ''}
           <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>
           ${this._renderBatteryAlerts()}
-          <div class="entry-status-ribbon" style="--entry-accent:${stateMeta.accent}">
-            <span class="entry-status-orb"></span>
-            <span class="entry-status-copy">
-              <span class="entry-status-kicker">${this._escapeHtml(t('system_status') === 'system_status' ? 'Estado de seguridad' : t('system_status'))}</span>
-              <span class="entry-status-name">${this._escapeHtml(stateMeta.label)}</span>
-              ${recentEvent ? `<span class="entry-status-event">${this._escapeHtml(recentEvent)}</span>` : ''}
-            </span>
-          </div>
+          <!-- Ribbon removed to restore central SVG -->
           <div class="hud">
             <div class="hud-loc">${this._escapeHtml(fullHudLoc)} · ${this._escapeHtml(weatherLabel)}</div>
             <div class="hud-data"><span>${this._escapeHtml(timeStr)}</span>${displayedTemperature ? `<i>🌡️ ${this._escapeHtml(displayedTemperature)}</i>` : ''}</div>
             ${temperatures.length ? `<div class="hud-temperatures">${temperatures.map(item => `<span class="hud-temperature">${this._escapeHtml(item.label)} ${this._escapeHtml(item.value)}</span>`).join('')}</div>` : ''}
           </div>
           <div class="entry-content security-console">
+            <div class="entry-icon" style="flex:1 1 100%;display:flex;justify-content:center;margin-bottom:10px;animation:float-icon 5s ease-in-out infinite;">
+              ${this._getIntelligentSVG(state, null, isNight, triggered)}
+            </div>
             <div class="liquid-stack">
               <button class="liquid-btn btn-home ${state==='armed_home'?'active':''} ${sensorAlert && state==='armed_home'?'buzz-orange':''}" data-idx="${idx}" data-action="home">${this._modeButtonIcon('home')}<span>${t('btn_home')}</span></button>
               <button class="liquid-btn btn-away ${state==='armed_away'?'active':''} ${sensorAlert && state==='armed_away'?'buzz-orange':''}" data-idx="${idx}" data-action="away">${this._modeButtonIcon('away')}<span>${t('btn_away')}</span></button>
@@ -5764,6 +5760,11 @@ class ArgusPanel extends HTMLElement {
         this._panelBgFile = url;
         const inp = this.shadowRoot.getElementById('panel-bg-url-input');
         if (inp) inp.value = url;
+        const bgMode = this.shadowRoot.getElementById('bg-mode-select-standalone');
+        if (bgMode) bgMode.value = url.endsWith('.mp4') || url.endsWith('.webm') ? 'video' : 'photo';
+        this._backgroundMode = bgMode?.value || 'photo';
+        this._updateBgFieldsVisibility();
+        this._savePersonalization();
         const help = this.shadowRoot.getElementById('bg-file-help');
         if (help) help.textContent = this._t('bg_panel_selected_from_history');
       });
@@ -5775,6 +5776,10 @@ class ArgusPanel extends HTMLElement {
         this._hubBgFile = url;
         const inp = this.shadowRoot.getElementById('hub-bg-url-input');
         if (inp) inp.value = url;
+        const hubMode = this.shadowRoot.getElementById('hub-bg-mode-select');
+        if (hubMode) hubMode.value = url.endsWith('.mp4') || url.endsWith('.webm') ? 'video' : 'photo';
+        this._updateBgFieldsVisibility();
+        this._savePersonalization();
         const help = this.shadowRoot.getElementById('hub-file-help');
         if (help) help.textContent = this._t('bg_hub_selected_from_history');
       });
@@ -7183,4 +7188,4 @@ class ArgusPanel extends HTMLElement {
 
 }
 
-customElements.define('argus-panel-v203', ArgusPanel);
+customElements.define('argus-panel-v204', ArgusPanel);
