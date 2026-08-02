@@ -71,6 +71,26 @@ class TestV194PanelFlow(unittest.TestCase):
             self.panel_registration,
         )
 
+    def test_dashboard_does_not_duplicate_activity_history_or_lock_fullscreen(self) -> None:
+        self.assertNotIn('id="instance-activity-strip"', self.panel)
+        self.assertIn("_exitFullscreenView() {", self.panel)
+        fullscreen = self.panel.split("_toggleFullscreen(targetEl) {", 1)[1].split(
+            "_initWeatherWebGL(canvas)", 1
+        )[0]
+        self.assertIn("this._kioskLocked = false", fullscreen)
+        self.assertIn("document.addEventListener('keydown', this._onEscape)", self.panel)
+
+    def test_live_console_keeps_real_controls_and_personal_disarm_pins(self) -> None:
+        alarm = (ROOT / "custom_components" / "argus" / "alarm_control_panel.py").read_text(encoding="utf-8")
+        api = (ROOT / "custom_components" / "argus" / "websocket_api.py").read_text(encoding="utf-8")
+        self.assertIn("security-console", self.panel)
+        self.assertIn("console-keypad", self.panel)
+        self.assertIn("_consoleDisarm(idx, input)", self.panel)
+        self.assertIn('"user_pin_configured": has_user_disarm_pin', api)
+        self.assertIn("def _matching_disarm_user(self, code)", alarm)
+        self.assertIn('("master_pin_hash", "pin", "access_pin_hash")', alarm)
+        self.assertIn('user.get("permissions", {}).get("disarm", False)', alarm)
+
     def test_access_summary_called_during_bootstrap_is_implemented(self) -> None:
         self.assertIn("_syncAccessSummary() {", self.panel)
         method = self.panel.split("_syncAccessSummary() {", 1)[1].split(

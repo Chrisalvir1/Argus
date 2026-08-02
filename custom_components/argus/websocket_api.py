@@ -91,6 +91,8 @@ def _redact_ui_data(data: dict) -> dict:
                 user.pop("pin", None)
                 user["access_pin_configured"] = bool(user.get("access_pin_hash"))
                 user.pop("access_pin_hash", None)
+                user["master_pin_configured"] = bool(user.get("master_pin_hash"))
+                user.pop("master_pin_hash", None)
     advanced = redacted.get("advanced")
     if isinstance(advanced, dict):
         advanced["guest_code_configured"] = bool(advanced.get("guest_code"))
@@ -381,6 +383,13 @@ async def ws_argus_dashboard(hass, connection, msg) -> None:
         return
 
     ui_data = await async_load_ui_data(hass, entry_id)
+    has_user_disarm_pin = any(
+        isinstance(user, dict)
+        and user.get("enabled", True)
+        and user.get("permissions", {}).get("disarm", False)
+        and (user.get("pin") or user.get("master_pin_hash") or user.get("access_pin_hash"))
+        for user in ui_data.get("users", [])
+    )
     entries = []
     for entry in hass.config_entries.async_entries(DOMAIN):
         entity_id = _resolve_alarm_entity_id(hass, entry.entry_id)
@@ -392,6 +401,7 @@ async def ws_argus_dashboard(hass, connection, msg) -> None:
             "state": state.state if state else "unavailable",
             "attributes": dict(state.attributes) if state else {},
             "pin_configured": bool(entry.options.get("code") or entry.data.get("code")),
+            "user_pin_configured": has_user_disarm_pin,
         })
     try:
         profile, _ = await _require_argus_session(hass, connection, entry_id)

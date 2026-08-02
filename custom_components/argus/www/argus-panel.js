@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v2.0.2
+ * Argus Home Hub – v2.0.3
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1345,14 +1345,14 @@ _tmpl.innerHTML = `
   @media(max-width:700px){.wrap{padding:14px;gap:14px}.glass{border-radius:22px}.hero{padding:22px;align-items:flex-start}.hero-icon{font-size:40px}.hero h1{font-size:27px}.hero p{font-size:14px}.entry-content{grid-template-columns:96px 1fr;padding:16px 105px 16px 14px;gap:10px}.sensor-column{width:98px}.sensor-chip{max-width:94px}.entry-icon{min-height:110px}.entry-icon svg{max-width:150px}.hud{top:12px;right:12px}.hud-data{font-size:15px;padding:5px 9px}.hud-loc{font-size:10px;padding:3px 8px}}
 
   /* Modern Mode Navigation & iOS Liquid Bubble Transition */
-  .tabs { position: relative; display: flex; min-height:72px; background: rgba(255, 255, 255, 0.03); padding: 6px; border-radius: 20px; gap: 6px; overflow: visible; scrollbar-width: none; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.06); z-index: 1; }
+  .tabs { position: relative; isolation:isolate; display: flex; min-height:72px; background: rgba(255, 255, 255, 0.03); padding: 6px; border-radius: 20px; gap: 6px; overflow: visible; scrollbar-width: none; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.06); z-index: 1; }
   .tabs::-webkit-scrollbar { display: none; }
-  .tab { position: relative; flex: 1; min-width: 55px; min-height:60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 14px; padding: 10px 4px; font-size: 11px; font-weight: 800; color: rgba(255, 255, 255, 0.55); transition: color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; border: none !important; outline: none; background: transparent !important; box-shadow: none !important; z-index: 3; }
+  .tab { position: relative; flex: 1; min-width: 55px; min-height:60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 14px; padding: 10px 4px; font-size: 11px; font-weight: 800; color: rgba(255, 255, 255, 0.55); transition: color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; border: none !important; outline: none; background: transparent !important; box-shadow: none !important; z-index: 1; }
   .tab:hover { color: #fff; }
   .tab:active:not(:disabled) { transform: scale(0.94); }
   .tab.active { color: #fff !important; background: transparent !important; box-shadow: none !important; transform: none !important; }
 
-  .tab-bubble { position: absolute; top: 6px; bottom: 6px; height: calc(100% - 12px); border-radius: 14px; z-index: 2; transform-origin: left center; transition: transform 0.45s cubic-bezier(0.25, 1.35, 0.4, 1.05), background 0.4s ease, box-shadow 0.4s ease; pointer-events: none; }
+  .tab-bubble { position: absolute; top: 6px; bottom: 6px; height: calc(100% - 12px); border-radius: 14px; z-index: 0; transform-origin: left center; transition: transform 0.45s cubic-bezier(0.25, 1.35, 0.4, 1.05), background 0.4s ease, box-shadow 0.4s ease; pointer-events: none; }
   .tab-bubble.bubble-disarmed { background: #43a047; box-shadow: 0 8px 24px rgba(67, 160, 71, 0.4); }
   .tab-bubble.bubble-home { background: #fb8c00; box-shadow: 0 8px 24px rgba(251, 140, 0, 0.4); }
   .tab-bubble.bubble-away { background: #e53935; box-shadow: 0 8px 24px rgba(229, 57, 53, 0.4); }
@@ -1371,7 +1371,7 @@ _tmpl.innerHTML = `
   }
   .bounce-in { animation: bounceIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"instances activity" "instances modes" "access access" "automations backup" "automations github";gap:24px;align-items:start}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"instances instances" "activity modes" "access access" "automations backup" "automations github";gap:24px;align-items:start}
   .grid > .stack{display:contents}
   .dashboard-instances{grid-area:instances}
   .activity-panel{grid-area:activity}
@@ -1542,6 +1542,13 @@ _tmpl.innerHTML = `
   .entry-bg{position:absolute;inset:0;z-index:1;background-size:cover;background-position:center;transition:opacity 0.5s ease}
   .entry-bg img{width:100%;height:100%;object-fit:cover;opacity:0.6}
   .entry-content{position:relative;z-index:2;flex:1;padding:20px 140px 20px 20px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.2) 0%, transparent 60%)}
+  /* The live instance is the console: real controls, real sensors and one
+     clear disarm keypad. Decorative dashboard cards never sit above it. */
+  .security-console{grid-template-columns:minmax(190px,.78fr) minmax(300px,1.25fr) minmax(220px,.88fr);gap:24px;padding:104px 34px 34px;background:linear-gradient(90deg,rgba(3,10,20,.50),rgba(3,10,20,.12) 50%,rgba(3,10,20,.46))}
+  .security-console .liquid-stack{align-self:stretch;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.security-console .liquid-btn{min-height:62px;justify-content:center;text-align:center;padding:10px;font-size:12px}.security-console .btn-disarm,.security-console .btn-sos{grid-column:1/-1}
+  .console-sensors{display:grid;gap:10px;align-content:center}.console-sensor{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;padding:13px 16px;border:1px solid rgba(255,255,255,.15);border-radius:18px;background:linear-gradient(100deg,rgba(36,188,129,.22),rgba(10,27,38,.58));backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 8px 22px rgba(0,0,0,.22)}.console-sensor.open{background:linear-gradient(100deg,rgba(235,74,67,.30),rgba(34,14,23,.62));border-color:rgba(255,102,92,.7)}.console-sensor-icon{font-size:20px}.console-sensor-name{font-weight:850;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.console-sensor-state{font-size:11px;font-weight:900;text-transform:uppercase;color:#75f4b0}.console-sensor.open .console-sensor-state{color:#ff968b}.console-empty{padding:24px;text-align:center;border:1px dashed rgba(255,255,255,.22);border-radius:18px;opacity:.75}
+  .console-keypad{align-self:center;padding:18px;border-left:1px solid rgba(255,255,255,.16);display:grid;gap:12px}.console-keypad-title{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;text-align:center}.console-pin-display{width:100%;box-sizing:border-box;padding:11px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(4,14,26,.46);color:#fff;text-align:center;font-size:20px;letter-spacing:.35em}.console-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.console-pad button{min-height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:linear-gradient(145deg,rgba(165,220,255,.24),rgba(20,45,66,.62));color:#fff;font-size:17px;font-weight:800;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 6px 14px rgba(0,0,0,.25);cursor:pointer}.console-pad .console-enter{border-radius:16px;color:#7ff8c1;border-color:rgba(74,230,157,.65)}.console-keypad small{text-align:center;opacity:.7}
+  @media(max-width:950px){.grid{grid-template-columns:1fr;grid-template-areas:"instances" "activity" "modes" "access" "automations" "backup" "github"}.security-console{grid-template-columns:1fr;padding:94px 18px 24px}.security-console .liquid-stack{grid-template-columns:repeat(2,minmax(0,1fr))}.console-keypad{border-left:0;border-top:1px solid rgba(255,255,255,.16);max-width:360px;width:100%;justify-self:center}}
 
   /* Sensor column */
   .sensor-column{position:absolute;right:0;top:0;bottom:0;width:auto;max-width:40%;z-index:4;display:flex;flex-direction:column;gap:7px;align-items:flex-end;justify-content:center;padding:12px 12px 12px 0;pointer-events:none}
@@ -2405,7 +2412,6 @@ _tmpl.innerHTML = `
           </div>
         </div>
         <div id="entries"></div>
-        <div id="instance-activity-strip" class="instance-activity-strip" aria-live="polite"></div>
         <!-- Personalization section -->
         <div class="personalize-section">
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--personalize-divider, rgba(255,255,255,0.08)); padding-bottom:10px; flex-wrap:wrap; gap:10px;">
@@ -3342,6 +3348,15 @@ class ArgusPanel extends HTMLElement {
     };
     document.addEventListener('fullscreenchange', this._onFsChange);
     document.addEventListener('webkitfullscreenchange', this._onFsChange);
+    this._onEscape = event => {
+      if (event.key !== 'Escape' || !this.classList.contains('fullscreen-active')) return;
+      // Native fullscreen emits fullscreenchange. This also covers the CSS
+      // fallback used by Safari, where Esc does not emit that event.
+      if (!(document.fullscreenElement || document.webkitFullscreenElement)) {
+        this._exitFullscreenView();
+      }
+    };
+    document.addEventListener('keydown', this._onEscape);
   }
   disconnectedCallback() {
     if (this._clockInterval) clearInterval(this._clockInterval);
@@ -3362,6 +3377,7 @@ class ArgusPanel extends HTMLElement {
       document.removeEventListener('fullscreenchange', this._onFsChange);
       document.removeEventListener('webkitfullscreenchange', this._onFsChange);
     }
+    if (this._onEscape) document.removeEventListener('keydown', this._onEscape);
   }
 
   _startClock() {
@@ -4143,6 +4159,13 @@ class ArgusPanel extends HTMLElement {
       art.className = `entry cinematic-entry ${isFS ? 'ios-fullscreen' : ''}`;
       art.style.cssText = triggered ? 'border:3px solid #ff5252;box-shadow:0 0 30px rgba(255,82,82,.4)' : '';
       art.querySelectorAll('.wx-webgl').forEach(canvas => canvas._argusWebglStop?.());
+      const sensorRows = activeSensors.map(sid => {
+        const sensor = this._hass?.states[sid];
+        if (!sensor) return '';
+        const isOpen = OPEN.includes(sensor.state);
+        const name = sensor.attributes?.friendly_name || sid.split('.')[1] || sid;
+        return `<div class="console-sensor ${isOpen ? 'open' : ''}"><span class="console-sensor-icon">${isOpen ? '⚠️' : '✓'}</span><span class="console-sensor-name">${this._escapeHtml(name)}</span><span class="console-sensor-state">${this._escapeHtml(isOpen ? t('status_open') : t('status_closed'))}</span></div>`;
+      }).join('');
 
       art.innerHTML = `
           ${this._renderEntryBackground(weatherState, isNight)}
@@ -4162,7 +4185,7 @@ class ArgusPanel extends HTMLElement {
             <div class="hud-data"><span>${this._escapeHtml(timeStr)}</span>${displayedTemperature ? `<i>🌡️ ${this._escapeHtml(displayedTemperature)}</i>` : ''}</div>
             ${temperatures.length ? `<div class="hud-temperatures">${temperatures.map(item => `<span class="hud-temperature">${this._escapeHtml(item.label)} ${this._escapeHtml(item.value)}</span>`).join('')}</div>` : ''}
           </div>
-          <div class="entry-content">
+          <div class="entry-content security-console">
             <div class="liquid-stack">
               <button class="liquid-btn btn-home ${state==='armed_home'?'active':''} ${sensorAlert && state==='armed_home'?'buzz-orange':''}" data-idx="${idx}" data-action="home">${this._modeButtonIcon('home')}<span>${t('btn_home')}</span></button>
               <button class="liquid-btn btn-away ${state==='armed_away'?'active':''} ${sensorAlert && state==='armed_away'?'buzz-orange':''}" data-idx="${idx}" data-action="away">${this._modeButtonIcon('away')}<span>${t('btn_away')}</span></button>
@@ -4171,29 +4194,16 @@ class ArgusPanel extends HTMLElement {
               <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm">${this._modeButtonIcon('disarm')}<span>${t('btn_disarmed')}</span></button>
               ${this._permissions?.sos !== false ? `<button class="btn-sos" data-action="${panicActive ? 'stop-sos' : 'sos'}" data-idx="${idx}">${this._modeButtonIcon('sos')}<span>${panicActive ? t('sos_stop') : t('btn_sos')}</span></button>` : ''}
             </div>
-            <div class="entry-icon">
-              ${this._getIntelligentSVG(state, weatherState, isNight, triggered)}
+            <div class="console-sensors">${sensorRows || `<div class="console-empty">${this._escapeHtml(t('log_no_events'))}</div>`}</div>
+            <div class="console-keypad">
+              <div class="console-keypad-title">${this._escapeHtml(t('disarmed'))} / PIN</div>
+              <input class="console-pin-display" id="entry-pin-${idx}" type="password" inputmode="numeric" autocomplete="off" readonly placeholder="••••">
+              <div class="console-pad">
+                ${[1,2,3,4,5,6,7,8,9].map(n => `<button type="button" data-console-pin="${idx}" data-key="${n}">${n}</button>`).join('')}
+                <button type="button" data-console-pin="${idx}" data-key="clear">⌫</button><button type="button" data-console-pin="${idx}" data-key="0">0</button><button type="button" class="console-enter" data-console-pin="${idx}" data-key="enter">Enter</button>
+              </div>
+              <small>${this._escapeHtml(t('pin_disarm_error') === 'pin_disarm_error' ? 'PIN de cualquier usuario autorizado' : t('pin_disarm_error'))}</small>
             </div>
-            ${activeSensors.length ? `
-              <div class="sensor-column">
-                ${activeSensors.map(sid => {
-                  const s = this._hass?.states[sid];
-                  if (!s) return '';
-                  const isOpen = OPEN.includes(s.state);
-                  const name = s.attributes?.friendly_name || sid.split('.')[1] || sid;
-                  const shortName = name.length > 16 ? name.slice(0, 15) + '…' : name;
-                  const battery = this._getSensorBattery(sid, s);
-                  const batteryClass = battery !== null && battery <= 20 ? ' low' : '';
-                  return `<div class="sensor-chip ${isOpen ? 'sensor-chip--open' + (triggered ? ' sensor-chip--triggered' : '') : 'sensor-chip--closed'}">
-                    <span class="sensor-chip-dot"></span>
-                    <div class="sensor-chip-text">
-                      <span class="sensor-chip-name">${this._escapeHtml(shortName)}</span>
-                      <span class="sensor-chip-state">${this._escapeHtml(isOpen ? t('status_open') : t('status_closed'))}</span>
-                    </div>
-                    ${battery !== null ? `<span class="sensor-chip-battery${batteryClass}">🔋 ${battery}%</span>` : ''}
-                  </div>`;
-                }).join('')}
-              </div>` : ''}
           </div>
       `;
     });
@@ -4219,20 +4229,49 @@ class ArgusPanel extends HTMLElement {
     el.querySelectorAll('button[data-fullscreen]').forEach(btn => {
       btn.addEventListener('click', ev => this._toggleFullscreen(ev.currentTarget.closest('.entry')));
     });
+    el.querySelectorAll('button[data-console-pin]').forEach(button => {
+      button.addEventListener('click', async () => {
+        const index = Number(button.dataset.consolePin);
+        const input = this.shadowRoot.getElementById(`entry-pin-${index}`);
+        if (!input) return;
+        const key = button.dataset.key;
+        if (key === 'clear') input.value = input.value.slice(0, -1);
+        else if (key === 'enter') await this._consoleDisarm(index, input);
+        else input.value = `${input.value || ''}${key}`.slice(0, 12);
+      });
+    });
     el.querySelectorAll('.wx-webgl').forEach(canvas => this._initWeatherWebGL(canvas));
-    const activityStrip = this.shadowRoot.getElementById('instance-activity-strip');
-    if (activityStrip) {
-      const events = Array.isArray(this._ui?.audit_log) ? this._ui.audit_log.slice(0, 3) : [];
-      const compact = events.map(event => {
-        const date = event?.ts ? new Date(event.ts) : null;
-        const stamp = date && !Number.isNaN(date.getTime())
-          ? date.toLocaleTimeString(this._getLocale(), { hour: '2-digit', minute: '2-digit' }) : '';
-        const detail = this._localizeActivityDetail(String(event?.action || ''), String(event?.detail || '')) || String(event?.action || '');
-        return `<span class="instance-activity-item"><time>${this._escapeHtml(stamp)}</time>${this._escapeHtml(detail)}</span>`;
-      }).join('');
-      activityStrip.innerHTML = `<span class="instance-activity-title">${this._escapeHtml(t('activity_log'))}</span>${compact || `<span class="instance-activity-item">${this._escapeHtml(t('log_no_events'))}</span>`}`;
-    }
     this._bindSOS();
+  }
+
+  async _consoleDisarm(idx, input) {
+    const entry = this._dashboard?.entries?.[Number(idx)];
+    if (!entry?.entry_id) return;
+    try {
+      await this._send('argus/perform_alarm_action', {
+        action: 'disarm', entry_id: entry.entry_id,
+        ...(input.value ? { code: input.value } : {})
+      });
+      input.value = '';
+      await this._load();
+    } catch (error) {
+      input.value = '';
+      input.placeholder = 'PIN incorrecto';
+      setTimeout(() => { if (input.isConnected) input.placeholder = '••••'; }, 1200);
+    }
+  }
+
+  _exitFullscreenView() {
+    const target = this._kioskTarget || this.shadowRoot.querySelector('.entry.ios-fullscreen');
+    target?.classList.remove('ios-fullscreen');
+    this.shadowRoot.querySelectorAll('.entry.ios-fullscreen').forEach(el => el.classList.remove('ios-fullscreen'));
+    this.classList.remove('fullscreen-active');
+    this._fullscreenIdx = -1;
+    this._kioskLocked = false;
+    this._kioskEntryId = null;
+    this._kioskTarget = null;
+    document.body.style.overflow = '';
+    this._renderEntries();
   }
 
   _requestKioskUnlock() {
@@ -4306,7 +4345,9 @@ class ArgusPanel extends HTMLElement {
 
     this._kioskEntryId = entry?.entry_id || null;
     this._kioskTarget = target;
-    this._kioskLocked = true;
+    // Fullscreen is a presentation action, not kiosk lock.  A kiosk lock
+    // must be enabled explicitly; otherwise Esc must always leave fullscreen.
+    this._kioskLocked = false;
     this._fullscreenIdx = validIdx;
     this.classList.add('fullscreen-active');
 
@@ -4334,8 +4375,8 @@ class ArgusPanel extends HTMLElement {
     const vertex = 'attribute vec2 p;varying vec2 uv;void main(){uv=(p+1.0)*.5;gl_Position=vec4(p,0.0,1.0);}';
     const fragment = `precision mediump float;varying vec2 uv;uniform float time,rain,snow,fog,storm;
       float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
-      float rainLayer(vec2 u,float t,float n){vec2 s=vec2(20.0+8.0*n,7.0+3.0*n);vec2 g=u*s;vec2 id=floor(g);vec2 q=fract(g);float sp=2.4+n*1.35+h(id)*1.2;q.y=fract(q.y-t*sp-h(id));float x=abs(q.x-(.54-q.y*.16));return (1.0-smoothstep(.003,.035-n*.006,x))*(1.0-smoothstep(.18,.98,q.y));}
-      float snowLayer(vec2 u,float t){vec2 g=u*vec2(17.0,10.0);vec2 id=floor(g);vec2 q=fract(g);q.y=fract(q.y-t*(.23+h(id)*.34)-h(id));q.x+=sin(t+h(id)*6.28)*.14;return 1.0-smoothstep(.012,.075,length(q-vec2(.5)));}
+      float rainLayer(vec2 u,float t,float n){vec2 s=vec2(20.0+8.0*n,7.0+3.0*n);vec2 g=u*s;vec2 id=floor(g);vec2 q=fract(g);float sp=2.4+n*1.35+h(id)*1.2;q.y=fract(q.y+t*sp+h(id));float x=abs(q.x-(.54-q.y*.16));return (1.0-smoothstep(.003,.035-n*.006,x))*(1.0-smoothstep(.18,.98,q.y));}
+      float snowLayer(vec2 u,float t){vec2 g=u*vec2(17.0,10.0);vec2 id=floor(g);vec2 q=fract(g);q.y=fract(q.y+t*(.23+h(id)*.34)+h(id));q.x+=sin(t+h(id)*6.28)*.14;return 1.0-smoothstep(.012,.075,length(q-vec2(.5)));}
       void main(){float t=time*.001;float r=rainLayer(uv,t,0.0)+rainLayer(uv,t,1.0)*.62+rainLayer(uv,t,2.0)*.34;float s=snowLayer(uv,t)+snowLayer(uv*1.6,t*.82)*.42;float mist=(sin(uv.y*33.0+t*.8)+sin(uv.y*18.0-t*.45))*0.025+0.045;float flash=step(.985,fract(t*.115))*storm*.42;vec3 col=vec3(.72,.88,1.0)*r*rain+vec3(1.0)*s*snow+vec3(.78,.88,.92)*mist*fog+vec3(1.0)*flash;float a=min(1.0,r*rain*.78+s*snow*.82+mist*fog+flash);gl_FragColor=vec4(col,a);}`;
     const compile = (type, source) => { const shader = gl.createShader(type); gl.shaderSource(shader, source); gl.compileShader(shader); return gl.getShaderParameter(shader, gl.COMPILE_STATUS) ? shader : null; };
     const vs = compile(gl.VERTEX_SHADER, vertex), fs = compile(gl.FRAGMENT_SHADER, fragment);
@@ -6562,8 +6603,8 @@ class ArgusPanel extends HTMLElement {
 
     if (action === 'disarm') {
       // FIX-4: sólo mostrar modal de PIN si hay código configurado
-      const masterPin = this._dashboard?.entries?.[0]?.pin_configured === true;
-      const hasUsers = this._users && this._users.length > 0;
+      const masterPin = e.pin_configured === true;
+      const hasUsers = e.user_pin_configured === true;
       const doDisarm = async (pin) => {
         try {
           await this._send('argus/perform_alarm_action', {
@@ -7142,4 +7183,4 @@ class ArgusPanel extends HTMLElement {
 
 }
 
-customElements.define('argus-panel-v202', ArgusPanel);
+customElements.define('argus-panel-v203', ArgusPanel);

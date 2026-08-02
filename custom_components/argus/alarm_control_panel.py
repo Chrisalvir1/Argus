@@ -1139,35 +1139,35 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             _LOGGER.warning("Argus: MQTT publish failed: %s", e)
 
     # ── Arm / Disarm ───────────────────────────────────────────────
+    def _matching_disarm_user(self, code):
+        """Return the enabled disarm-capable user matching a personal PIN."""
+        if not code:
+            return None
+        for user in self._ui_config.get("users", []):
+            if not user.get("enabled", True) or not user.get("permissions", {}).get("disarm", False):
+                continue
+            for key in ("master_pin_hash", "pin", "access_pin_hash"):
+                if user.get(key) and verify_pin(code, user[key]):
+                    expiry = user.get("expiration_date")
+                    if expiry:
+                        try:
+                            if datetime.now() > datetime.fromisoformat(expiry):
+                                break
+                        except (TypeError, ValueError):
+                            break
+                    return user
+        return None
+
     def _validate_code(self, code) -> bool:
-        """Validate code against main PIN, guest PIN, and dynamic users."""
-        if self._code is None:
-            return True
-        if verify_pin(code, self._code):
+        """Validate global, guest, or an authorised user's personal PIN."""
+        if self._code and verify_pin(code, self._code):
             return True
         # Check guest PIN
         adv = self._ui_config.get("advanced", {})
         if adv.get("guest_code_enabled") and adv.get("guest_code"):
             if verify_pin(code, adv["guest_code"]):
                 return True
-        # Check dynamic users
-        users = self._ui_config.get("users", [])
-        for u in users:
-            if u.get("pin") and verify_pin(code, u.get("pin")):
-                # Check expiration
-                exp_date = u.get("expiration_date")
-                if exp_date:
-                    from datetime import datetime
-                    try:
-                        dt = datetime.fromisoformat(exp_date)
-                        if datetime.now() > dt:
-                            _LOGGER.warning("Argus: User code for %s is expired", u.get("name"))
-                            continue
-                    except Exception as e:
-                        _LOGGER.error("Argus: Error parsing user %s expiration %s: %s", u.get("name"), exp_date, e)
-                        continue
-                return True
-        return False
+        return self._matching_disarm_user(code) is not None
 
     async def async_alarm_disarm(self, code=None) -> None:
         user_id = await self._get_context_user()
@@ -1181,7 +1181,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             )
             return
 
-        if self._code and not self._validate_code(code):
+        has_personal_pin = any(
+            user.get("enabled", True)
+            and user.get("permissions", {}).get("disarm", False)
+            and (user.get("master_pin_hash") or user.get("pin") or user.get("access_pin_hash"))
+            for user in self._ui_config.get("users", [])
+        )
+        if (self._code or has_personal_pin) and not self._validate_code(code):
             limiter.record_failure(user_id or "default")
             _LOGGER.warning("Argus: Disarm rejected — invalid or missing code")
             await async_append_audit_log(
@@ -1220,11 +1226,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 if adv.get("guest_code_enabled") and adv.get("guest_code") and verify_pin(code, adv["guest_code"]):
                     caller_name = "Invitado"
                 else:
-                    users = self._ui_config.get("users", [])
-                    for u in users:
-                        if u.get("pin") and verify_pin(code, u.get("pin")):
-                            caller_name = u.get("name")
-                            break
+                    matched_user = self._matching_disarm_user(code)
+                    if matched_user:
+                        caller_name = matched_user.get("name")
 
         if not caller_name:
             caller_name = user_id

@@ -68,25 +68,9 @@ export function applyPremiumExperience(ArgusPanel) {
   const proto = ArgusPanel?.prototype;
   if (!proto || proto.__argusPremiumExperience) return;
   proto.__argusPremiumExperience = true;
-  proto._renderAtmosphere = function(condition, isNight) {
-    const season = seasonFor(this._hass), phase = moonPhase(this._hass), eclipse = eclipseMode(this._hass);
-    return `<div class="wx argus-cinematic-weather"><canvas class="wx-webgl" aria-hidden="true" data-mode="${weatherMode(condition,isNight)}" data-night="${isNight?1:0}" data-season="${SEASONS.indexOf(season)}" data-phase="${phase}" data-eclipse="${eclipse}"></canvas><div class="argus-weather-vignette"></div></div>`;
-  };
-  proto._initWeatherWebGL = function(canvas) {
-    if (!canvas || canvas.__argusWebgl) return;
-    const gl = canvas.getContext('webgl', {alpha:false, antialias:false, powerPreference:'low-power'});
-    if (!gl) return;
-    try {
-      const program = gl.createProgram(), vs = shader(gl,gl.VERTEX_SHADER,VERTEX), fs = shader(gl,gl.FRAGMENT_SHADER,FRAGMENT);
-      gl.attachShader(program,vs);gl.attachShader(program,fs);gl.linkProgram(program);gl.deleteShader(vs);gl.deleteShader(fs);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(program));
-      const buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]),gl.STATIC_DRAW);gl.useProgram(program);const p=gl.getAttribLocation(program,'p');gl.enableVertexAttribArray(p);gl.vertexAttribPointer(p,2,gl.FLOAT,false,0,0);
-      const uniforms=Object.fromEntries(['r','t','m','n','s','e','phase'].map(key=>[key,gl.getUniformLocation(program,key)]));
-      const state={gl,program,buffer,frame:0,visible:true,onscreen:true,visibility:null,observer:null};
-      state.visibility=()=>{state.visible=!document.hidden;}; state.observer=new IntersectionObserver(entries=>{state.onscreen=entries[0]?.isIntersecting??false;},{threshold:0});state.observer.observe(canvas);document.addEventListener('visibilitychange',state.visibility);canvas.__argusWebgl=state;
-      const start=performance.now(),reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const draw=now=>{if(!canvas.isConnected){dispose(canvas);return;}if(state.visible&&state.onscreen){const dpr=Math.min(devicePixelRatio||1,1.5),w=Math.max(1,Math.floor(canvas.clientWidth*dpr)),h=Math.max(1,Math.floor(canvas.clientHeight*dpr));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;gl.viewport(0,0,w,h);}gl.uniform2f(uniforms.r,w,h);gl.uniform1f(uniforms.t,(now-start)/1000);for(const key of ['m','n','s','e','phase'])gl.uniform1f(uniforms[key],Number(canvas.dataset[{m:'mode',n:'night',s:'season',e:'eclipse',phase:'phase'}[key]]||0));gl.drawArrays(gl.TRIANGLES,0,6);}if(!reduced)state.frame=requestAnimationFrame(draw);};state.frame=requestAnimationFrame(draw);
-    } catch (error) { console.warn('Argus weather uses its CSS fallback.', error); dispose(canvas); }
-  };
+  // Keep the panel's native renderer. It contains the actual HA weather
+  // mapping, moon phases and accessible CSS fallback; replacing it here was
+  // what turned the weather into a generic shader scene.
   const connected=proto.connectedCallback;proto.connectedCallback=function(){const value=connected?.call(this);queueMicrotask(()=>{if(this.shadowRoot&&!this.shadowRoot.getElementById('argus-premium-style')){const style=document.createElement('style');style.id='argus-premium-style';style.textContent=CSS;this.shadowRoot.append(style);}});return value;};
   const disconnected=proto.disconnectedCallback;proto.disconnectedCallback=function(){this.shadowRoot?.querySelectorAll('.wx-webgl').forEach(dispose);return disconnected?.call(this);};
 }
