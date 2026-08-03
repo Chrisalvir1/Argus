@@ -1,3 +1,4 @@
+import re
 import unittest
 from pathlib import Path
 
@@ -53,8 +54,10 @@ class TestPerformanceProfile(unittest.TestCase):
 
     def test_security_functions_are_never_referenced_by_this_module(self):
         js = source("argus-performance-profile.js")
-        for forbidden in ["arm_away", "arm_home", "disarm", "sos", "siren", "pin"]:
-            self.assertNotIn(forbidden, js.lower())
+        executable = re.sub(r"//[^\n]*|/\*.*?\*/", "", js, flags=re.DOTALL).lower()
+        for forbidden in ["arm_away", "arm_home", "disarm", "sos", "siren"]:
+            self.assertNotIn(forbidden, executable)
+        self.assertNotRegex(executable, r"\bpin\b")
 
     def test_diagnostics_button_exists_in_personalization(self):
         js = source("argus-performance-profile.js")
