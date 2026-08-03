@@ -1599,8 +1599,8 @@ _tmpl.innerHTML = `
 
   .ios-fullscreen { position: fixed !important; inset: 0 !important; width: 100vw !important; height: 100vh !important; max-width: none !important; z-index: 999999 !important; margin: 0 !important; border-radius: 0 !important; display: flex !important; flex-direction: column !important; background: #000 !important; }
   .ios-fullscreen .entry-content { grid-template-columns: 320px 1fr !important; padding: 60px !important; gap: 60px !important; height: 100% !important; align-items: center !important; background: radial-gradient(circle at 20% 50%, rgba(0,0,0,0.5) 0%, transparent 80%) !important; }
-  .ios-fullscreen .liquid-btn { padding: 24px 32px !important; font-size: 20px !important; border-radius: 28px !important; gap: 24px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.4) !important; }
-  .ios-fullscreen .liquid-btn i { font-size: 28px !important; }
+  .ios-fullscreen .liquid-btn { padding: 16px 20px !important; font-size: 16px !important; border-radius: 20px !important; gap: 12px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.4) !important; }
+  .ios-fullscreen .liquid-btn i { font-size: 24px !important; }
   .ios-fullscreen .hud { top: 60px !important; right: 60px !important; scale: 1.4; transform-origin: top right; }
   .ios-fullscreen .sensor-column { max-width: 45% !important; padding-right: 60px !important; }
   .ios-fullscreen .sensor-chip { font-size: 14px !important; padding: 10px 16px !important; max-width: 260px !important; }
@@ -1662,8 +1662,8 @@ _tmpl.innerHTML = `
      must not redistribute the controls into empty corners. */
   .ios-fullscreen .entry-content.security-console{display:flex!important;flex-wrap:wrap!important;justify-content:center!important;align-content:center!important;gap:26px!important;padding:96px 56px 42px!important;overflow:auto!important}
   .ios-fullscreen .entry-content.security-console .entry-icon{flex:0 0 100%!important;min-height:130px!important;margin:0!important;display:flex!important}
-  .ios-fullscreen .entry-content.security-console .liquid-stack{flex:0 1 300px!important;max-width:300px!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
-  .ios-fullscreen .entry-content.security-console .console-sensors{flex:0 1 400px!important;max-width:400px!important}
+  .ios-fullscreen .entry-content.security-console .liquid-stack{flex:0 1 450px!important;max-width:450px!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .ios-fullscreen .entry-content.security-console .console-sensors{flex:0 1 450px!important;max-width:450px!important}
   .ios-fullscreen .entry-content.security-console .console-keypad{flex:0 0 260px!important;width:260px!important;max-width:260px!important}
   @media(max-width:700px){.ios-fullscreen .entry-content.security-console{padding:70px 16px 24px!important;gap:16px!important;align-content:start!important}.ios-fullscreen .entry-content.security-console .entry-icon{display:none!important}.ios-fullscreen .entry-content.security-console .liquid-stack,.ios-fullscreen .entry-content.security-console .console-sensors,.ios-fullscreen .entry-content.security-console .console-keypad{flex:0 0 100%!important;width:100%!important;max-width:360px!important}.ios-fullscreen .entry-content.security-console .console-keypad{padding:14px!important}}
 
@@ -4208,8 +4208,9 @@ class ArgusPanel extends HTMLElement {
       art.innerHTML = `
           ${this._renderEntryBackground(weatherState, isNight)}
           ${this._kioskLocked ? `<button class="btn-unlock-kiosk" data-action="unlock-kiosk" style="position:absolute;top:16px;right:16px;z-index:99;padding:8px 14px;background:rgba(220,38,38,0.85);color:white;border:none;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 12px rgba(0,0,0,0.4)">🔓 ${this._escapeHtml(t('unlock_kiosk') || 'Desbloquear kiosco')}</button>` : ''}
+          ${isFS ? `<div style="position:absolute;top:20px;left:50%;transform:translateX(-50%);z-index:100;padding:6px 12px;background:rgba(36,188,129,.2);border:1px solid rgba(36,188,129,.4);border-radius:20px;color:#75f4b0;font-size:12px;font-weight:700;backdrop-filter:blur(10px);box-shadow:0 4px 12px rgba(0,0,0,0.2);display:flex;align-items:center;gap:6px;"><div style="width:8px;height:8px;border-radius:50%;background:#75f4b0;box-shadow:0 0 8px #75f4b0;"></div>CONECTADO</div>` : ''}
           ${isFS ? `<button class="ghost entry-exit-fs" data-exit-fullscreen title="${this._escapeHtml(t('fullscreen_title'))}" aria-label="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;top:16px;left:16px;z-index:100;padding:9px 13px;font-size:18px;background:rgba(0,0,0,.55);backdrop-filter:blur(12px);border-radius:14px;color:white;border:1px solid rgba(255,255,255,.25);box-shadow:0 8px 20px rgba(0,0,0,.3)">×</button>` : ''}
-          <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>
+          ${!isFS ? `<button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>` : ''}
           ${this._renderBatteryAlerts()}
           <!-- Ribbon removed to restore central SVG -->
           <div class="hud">
@@ -4264,24 +4265,50 @@ class ArgusPanel extends HTMLElement {
   }
 
   async _exitFullscreenView() {
-    if (document.fullscreenElement || document.webkitFullscreenElement) {
-      try {
-        if (document.exitFullscreen) await document.exitFullscreen();
-        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-      } catch (_) {
-        // The CSS fallback below still returns the user to the normal panel.
+    const validIdx = this._fullscreenIdx >= 0 ? this._fullscreenIdx : 0;
+    const fsEntry = (this._dashboard?.entries || [])[validIdx];
+    const requiresPin = fsEntry && (fsEntry.pin_configured === true || fsEntry.user_pin_configured === true);
+
+    const doExit = async () => {
+      if (document.fullscreenElement || document.webkitFullscreenElement) {
+        try {
+          if (document.exitFullscreen) await document.exitFullscreen();
+          else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+        } catch (_) {}
       }
+      const target = this._kioskTarget || this.shadowRoot.querySelector('.entry.ios-fullscreen');
+      target?.classList.remove('ios-fullscreen');
+      this.shadowRoot.querySelectorAll('.entry.ios-fullscreen').forEach(el => el.classList.remove('ios-fullscreen'));
+      this.classList.remove('fullscreen-active');
+      this._fullscreenIdx = -1;
+      this._kioskLocked = false;
+      this._kioskEntryId = null;
+      this._kioskTarget = null;
+      document.body.style.overflow = '';
+      this._renderEntries();
+    };
+
+    if (!requiresPin) {
+      await doExit();
+      return;
     }
-    const target = this._kioskTarget || this.shadowRoot.querySelector('.entry.ios-fullscreen');
-    target?.classList.remove('ios-fullscreen');
-    this.shadowRoot.querySelectorAll('.entry.ios-fullscreen').forEach(el => el.classList.remove('ios-fullscreen'));
-    this.classList.remove('fullscreen-active');
-    this._fullscreenIdx = -1;
-    this._kioskLocked = false;
-    this._kioskEntryId = null;
-    this._kioskTarget = null;
-    document.body.style.overflow = '';
-    this._renderEntries();
+
+    this._showPinModal(async (pin) => {
+      try {
+        await this._send('argus/verify_master_pin_for_screen_unlock', {
+          entry_id: fsEntry.entry_id,
+          pin: pin || ""
+        });
+        this._closePinModal();
+        await doExit();
+      } catch (err) {
+        const pinErr = this.shadowRoot.getElementById('pin-error');
+        if (pinErr) {
+          pinErr.textContent = '❌ PIN incorrecto o error de acceso';
+          pinErr.style.color = '#ff4a4a';
+        }
+      }
+    });
   }
 
   _requestKioskUnlock() {
