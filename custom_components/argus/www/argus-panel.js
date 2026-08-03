@@ -1705,12 +1705,13 @@ _tmpl.innerHTML = `
   }
   /* The active console owns its fullscreen layout. Legacy entry grid rules
      must not redistribute the controls into empty corners. */
-  .ios-fullscreen .entry-content.security-console{display:flex!important;flex-wrap:wrap!important;justify-content:center!important;align-content:center!important;gap:26px!important;padding:96px 56px 42px!important;overflow:auto!important}
-  .ios-fullscreen .entry-content.security-console .entry-icon{flex:0 0 100%!important;min-height:130px!important;margin:0!important;display:flex!important}
-  .ios-fullscreen .entry-content.security-console .liquid-stack{flex:0 1 450px!important;max-width:450px!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
-  .ios-fullscreen .entry-content.security-console .console-sensors{flex:0 1 450px!important;max-width:450px!important}
-  .ios-fullscreen .entry-content.security-console .console-keypad{flex:0 0 260px!important;width:260px!important;max-width:260px!important}
-  @media(max-width:700px){.ios-fullscreen .entry-content.security-console{padding:70px 16px 24px!important;gap:16px!important;align-content:start!important}.ios-fullscreen .entry-content.security-console .entry-icon{display:none!important}.ios-fullscreen .entry-content.security-console .liquid-stack,.ios-fullscreen .entry-content.security-console .console-sensors,.ios-fullscreen .entry-content.security-console .console-keypad{flex:0 0 100%!important;width:100%!important;max-width:360px!important}.ios-fullscreen .entry-content.security-console .console-keypad{padding:14px!important}}
+  /* Fullscreen security-console: modos izquierda, escudo centro, sensores derecha */
+  .ios-fullscreen .entry-content.security-console{display:flex!important;flex-wrap:nowrap!important;justify-content:center!important;align-items:center!important;gap:32px!important;padding:50px 48px 36px!important;overflow:auto!important;height:100%!important;box-sizing:border-box!important}
+  .ios-fullscreen .entry-content.security-console .liquid-stack{order:1!important;flex:0 1 340px!important;min-width:240px!important;max-width:360px!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-self:center!important}
+  .ios-fullscreen .entry-content.security-console .entry-icon{order:2!important;flex:0 0 180px!important;min-height:160px!important;margin:0!important;display:flex!important;justify-content:center!important;align-items:center!important}
+  .ios-fullscreen .entry-content.security-console .console-sensors{order:3!important;flex:0 1 340px!important;min-width:220px!important;max-width:380px!important;align-self:center!important}
+  .ios-fullscreen .entry-content.security-console .console-keypad{order:4!important;flex:0 0 240px!important;width:240px!important;max-width:260px!important}
+  @media(max-width:900px){.ios-fullscreen .entry-content.security-console{flex-wrap:wrap!important;padding:80px 20px 24px!important;gap:18px!important;align-content:flex-start!important;overflow-y:auto!important}.ios-fullscreen .entry-content.security-console .entry-icon{order:1!important;flex:0 0 auto!important;min-height:110px!important;display:flex!important}.ios-fullscreen .entry-content.security-console .liquid-stack{order:2!important;flex:0 0 100%!important;width:100%!important;max-width:380px!important}.ios-fullscreen .entry-content.security-console .console-sensors{order:3!important;flex:0 0 100%!important;width:100%!important;max-width:380px!important}.ios-fullscreen .entry-content.security-console .console-keypad{order:4!important;flex:0 0 100%!important;width:100%!important;max-width:320px!important;padding:14px!important}}
 
   .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
   .badge.armed_away,.badge.armed_vacation{background:rgba(229,57,53,.12);color:var(--error-color,#e53935)}
@@ -2446,9 +2447,8 @@ _tmpl.innerHTML = `
         <span class="hero-pill" id="hero-security-pill"><i class="hero-live"></i> Argus</span>
       </div>
     </div>
-    <button class="lang-pill" id="btn-edit-widgets" title="Personalizar Dashboard">
-      <span id="edit-widgets-icon">⚙️</span>
-      <span id="edit-widgets-label">Personalizar</span>
+    <button class="lang-pill" id="btn-edit-widgets" title="Configurar Widgets del Dashboard">
+      <span id="edit-widgets-label">⚙️ Config. Widgets</span>
     </button>
     <button class="lang-pill" id="btn-lang-picker" title="Language / Idioma">
       <span id="lang-pill-flag">🌐</span>
@@ -2457,7 +2457,7 @@ _tmpl.innerHTML = `
   </div>
 
   <!-- TWO-COLUMN LAYOUT -->
-  <div class="grid">
+  <div class="grid" id="widget-grid">
 
     <!-- Instances -->
     <section class="glass panel liquid-glass dashboard-instances" id="w-instances" style="grid-column: 1 / -1;">
@@ -3260,7 +3260,7 @@ class ArgusPanel extends HTMLElement {
     set('s-panel-bg-sound-lbl', t('bg_sound_opt'));
     set('s-hub-bg-sound-lbl',   t('bg_sound_opt'));
     set('lbl-aesthetic-custom', '🎨 ' + t('lbl_aesthetic_custom') + ' (Avanzado)');
-    set('edit-widgets-label', this._widgetEditing ? t('done') : t('customize'));
+    set('edit-widgets-label', this._widgetEditing ? ('✓ ' + t('done')) : '⚙️ Config. Widgets');
     set('lbl-temperature-source', t('temp_displayed'));
     set('lbl-weather-source', t('weather_source'));
     set('lbl-panel-bg-upload',  t('lbl_load_file'));
