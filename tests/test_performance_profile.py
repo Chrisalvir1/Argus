@@ -46,7 +46,10 @@ class TestPerformanceProfile(unittest.TestCase):
         self.assertIn("_argusPerfPreference", js)
         self.assertIn("function setPreference", js)
 
-    def test_runtime_monitor_can_downgrade_but_never_touches_security", js)
+    def test_runtime_monitor_can_downgrade_but_never_touches_security(self):
+        js = source("argus-performance-profile.js")
+        self.assertIn("function startMonitor", js)
+        self.assertIn("MONITOR_COOLDOWN_MS", js)
 
     def test_security_functions_are_never_referenced_by_this_module(self):
         js = source("argus-performance-profile.js")
