@@ -1,9 +1,9 @@
-import './argus-panel.js?v=2.0.6';
-import { applyMediaClient } from './media-client.js?v=2.0.6';
-import { applyPremiumExperience } from './premium-experience.js?v=2.0.6';
-import { applySecurityClient } from './security-client.js?v=2.0.6';
+import './argus-panel.js?v=2.0.7';
+import { applyMediaClient } from './media-client.js?v=2.0.7';
+import { applyPremiumExperience } from './premium-experience.js?v=2.0.7';
+import { applySecurityClient } from './security-client.js?v=2.0.7';
 
-const ArgusPanel = customElements.get('argus-panel-v206');
+const ArgusPanel = customElements.get('argus-panel-v207');
 applySecurityClient(ArgusPanel);
 
 applyMediaClient(ArgusPanel);
