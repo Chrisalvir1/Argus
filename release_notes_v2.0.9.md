@@ -1,4 +1,4 @@
-# Argus v2.0.9 — UI Fixes: Widget Grid, Console Layout & HUD
+# Argus v2.0.10 — UI Fixes: Widget Grid, Console Layout & HUD
 
 ## What's New
 

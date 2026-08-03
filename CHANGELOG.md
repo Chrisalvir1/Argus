@@ -2,13 +2,20 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.10] - 2026-08-03
+
+### Fixed
+- **Interactividad de widgets corregida:** Eliminado el clonado de nodos DOM durante el binding de widgets que destruía los listeners de botones internos. Todos los botones de widgets (refresco de historial, exportación, gestión de usuarios, etc.) funcionan perfectamente.
+- **Personalización Estética desplegada por defecto:** La sección de personalización estética avanzada ahora inicia desplegada por defecto mostrando todas las opciones (fondos, fuentes de clima, temperaturas, números de emergencia y SOS). Se corrigió la sustitución de traducciones que destruía el botón/flecha de colapsado.
+- **Botón "Config. Widgets":** Vinculación directa y confiable en la barra superior.
+
 ## [2.0.9] - 2026-08-03
 
 ### Fixed
-- **Widget "Config. Widgets" no funcionaba:** El `<div>` del grid carecía de `id="widget-grid"`, por lo que todo el sistema de edición de widgets retornaba `null` al buscarlo. El botón de personalización era completamente inoperativo.
-- **Layout fullscreen horizontal roto:** El escudo, los modos y los sensores aparecían apilados verticalmente en vez de en fila. Ahora en pantallas ≥900px: Modos (izquierda) · Escudo (centro) · Sensores (derecha).
-- **HUD superpuesto a sensores:** La información flotante (nombre del hogar, hora, temperatura) se sobreponía a la lista de sensores haciéndola ilegible. Se ocultó el HUD absoluto dentro de la consola y se introdujo una barra `.console-hud` en el flujo flex.
-- **CONECTADO solo visible en fullscreen:** El indicador de conexión ahora aparece siempre en cada tarjeta de instancia activa.
+- **Widget "Config. Widgets" ID faltante:** Se añadió el `id="widget-grid"` faltante al contenedor del grid.
+- **Layout fullscreen horizontal:** Modos (izquierda) · Escudo (centro) · Sensores (derecha) en pantallas grandes.
+- **HUD superpuesto a sensores:** La barra `.console-hud` integrada reemplaza el HUD absoluto sobrepuesto.
+- **Indicador CONECTADO:** Visible permanentemente en cada instancia activa.
 
 ## [2.0.8] - 2026-08-03
 
