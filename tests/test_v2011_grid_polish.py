@@ -16,6 +16,11 @@ class TestGridPolish(unittest.TestCase):
             section=GRID.split(f'.panel[data-size="{size}"]',1)[1][:150]
             self.assertIn(f'grid-column:span {cols}',section)
             self.assertIn(f'grid-row:span {rows}',section)
+    def test_content_widgets_remain_readable_when_narrow(self):
+        self.assertIn('#w-activity[data-size="S"]', GRID)
+        self.assertIn('#w-automations[data-size="S"]', GRID)
+        self.assertIn('grid-row:span 2!important', GRID)
+        self.assertIn('scrollbar-gutter:stable', GRID)
     def test_modes_small_stays_horizontal(self):
         self.assertIn('#w-modes[data-size="S"] #mode-tabs',GRID)
         self.assertIn('grid-auto-flow:column',GRID)
