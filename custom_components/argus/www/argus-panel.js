@@ -1371,13 +1371,13 @@ _tmpl.innerHTML = `
   }
   .bounce-in { animation: bounceIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"instances instances" "activity modes" "access access" "automations backup" "automations github";gap:24px;align-items:start}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"instances instances" "activity modes" "access automations" "backup github";gap:24px;align-items:start}
   .grid > .stack{display:contents}
   .dashboard-instances{grid-area:instances}
   .activity-panel{grid-area:activity}
   .modes-panel{grid-area:modes}
   .access-panel{grid-area:access}
-  .automations-panel{grid-area:automations;height:100%}
+  .automations-panel{grid-area:automations}
   .backup-panel{grid-area:backup}
   .github-panel{grid-area:github}
   @media(max-width:900px){
@@ -1597,7 +1597,13 @@ _tmpl.innerHTML = `
   .btn-disarm{--btn-bg:rgba(67,160,71,0.15); margin-top:4px}
   .btn-disarm.active{--btn-bg:rgba(67,160,71,0.25);--btn-shadow:rgba(67,160,71,0.4);border-color:rgba(67,160,71,0.45)!important;box-shadow:0 8px 24px rgba(67,160,71,0.35)!important}
 
-  .ios-fullscreen { position: fixed !important; inset: 0 !important; width: 100vw !important; height: 100vh !important; max-width: none !important; z-index: 999999 !important; margin: 0 !important; border-radius: 0 !important; display: flex !important; flex-direction: column !important; background: #000 !important; }
+  .ios-fullscreen { position: fixed !important; z-index: 999999 !important; display: flex !important; flex-direction: column !important; background: #000 !important; }
+  @media(min-width:900px) {
+    .ios-fullscreen { inset: 3% !important; width: 94vw !important; height: 94vh !important; max-width: 1500px !important; margin: auto !important; border-radius: 36px !important; border: 1px solid rgba(255,255,255,0.12) !important; box-shadow: 0 40px 100px rgba(0,0,0,0.8) !important; overflow: hidden !important; }
+  }
+  @media(max-width:899px) {
+    .ios-fullscreen { inset: 0 !important; width: 100vw !important; height: 100vh !important; max-width: none !important; margin: 0 !important; border-radius: 0 !important; }
+  }
   .ios-fullscreen .entry-content { grid-template-columns: 320px 1fr !important; padding: 60px !important; gap: 60px !important; height: 100% !important; align-items: center !important; background: radial-gradient(circle at 20% 50%, rgba(0,0,0,0.5) 0%, transparent 80%) !important; }
   .ios-fullscreen .liquid-btn { padding: 16px 20px !important; font-size: 16px !important; border-radius: 20px !important; gap: 12px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.4) !important; }
   .ios-fullscreen .liquid-btn i { font-size: 24px !important; }
