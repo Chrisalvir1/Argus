@@ -2,7 +2,22 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
-## [1.8.10] - 2026-07-29
+## [2.0.9] - 2026-08-03
+
+### Fixed
+- **Widget "Config. Widgets" no funcionaba:** El `<div>` del grid carecía de `id="widget-grid"`, por lo que todo el sistema de edición de widgets retornaba `null` al buscarlo. El botón de personalización era completamente inoperativo.
+- **Layout fullscreen horizontal roto:** El escudo, los modos y los sensores aparecían apilados verticalmente en vez de en fila. Ahora en pantallas ≥900px: Modos (izquierda) · Escudo (centro) · Sensores (derecha).
+- **HUD superpuesto a sensores:** La información flotante (nombre del hogar, hora, temperatura) se sobreponía a la lista de sensores haciéndola ilegible. Se ocultó el HUD absoluto dentro de la consola y se introdujo una barra `.console-hud` en el flujo flex.
+- **CONECTADO solo visible en fullscreen:** El indicador de conexión ahora aparece siempre en cada tarjeta de instancia activa.
+
+## [2.0.8] - 2026-08-03
+
+### Added
+- **Dashboard de widgets interactivos estilo iOS:** Botón "Config. Widgets" en la barra superior que activa el modo edición con animación jiggle, arrastrar y soltar (mouse y táctil), redimensionado S/M/L/XL y visibilidad por widget — todo persistido en `localStorage`.
+- **Personalización Estética Avanzada colapsable:** La sección de personalización ahora se muestra oculta por defecto y se despliega con animación elástica de rebote al hacer clic.
+- **Layout en instancia activa mejorado:** Escudo centrado, modos a la izquierda y sensores a la derecha en pantalla grande. Reordenamiento fluido a columna en móvil.
+
+
 
 ### Fixed
 - **Bug crítico en el historial de actividad:** Todos los eventos del panel de alarma (`armed`, `disarmed`, `triggered`, `schedule_reconciled`, `state_restored`, `automation_executed`, `arm_rejected`, `confirmation_pending`, `panic_stopped`) se escribían sin `entry_id`, guardándose en la llave de storage global `argus.ui` en lugar de la correcta `argus.ui.{entry_id}`. El frontend los leía de la llave correcta, por lo que el historial aparecía siempre vacío. Solucionado añadiendo `entry_id=self._config_entry.entry_id` a cada llamada `async_append_audit_log` en `alarm_control_panel.py`.
