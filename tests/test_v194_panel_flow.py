@@ -91,6 +91,17 @@ class TestV194PanelFlow(unittest.TestCase):
         self.assertIn('("master_pin_hash", "pin", "access_pin_hash")', alarm)
         self.assertIn('user.get("permissions", {}).get("disarm", False)', alarm)
 
+    def test_console_feedback_weather_and_uploaded_backgrounds_are_stateful(self) -> None:
+        self.assertIn("_weatherPresentation(condition, isNight)", self.panel)
+        self.assertIn("const weather = this._weatherPresentation(weatherState, isNight)", self.panel)
+        self.assertIn("weather.icon} ${weather.label}", self.panel)
+        self.assertIn('id="entry-pin-status-${idx}"', self.panel)
+        self.assertIn("status.classList.add('visible')", self.panel)
+        self.assertIn("hubMode.value = 'image'", self.panel)
+        self.assertIn("this._hubBgMode = 'image'", self.panel)
+        self.assertIn("this._updateCanvasBackground()", self.panel)
+        self.assertIn(".ios-fullscreen .entry-content.security-console", self.panel)
+
     def test_access_summary_called_during_bootstrap_is_implemented(self) -> None:
         self.assertIn("_syncAccessSummary() {", self.panel)
         method = self.panel.split("_syncAccessSummary() {", 1)[1].split(

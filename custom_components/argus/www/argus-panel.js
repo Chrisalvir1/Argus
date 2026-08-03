@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v2.0.4
+ * Argus Home Hub – v2.0.5
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1545,9 +1545,9 @@ _tmpl.innerHTML = `
   /* The live instance is the console: real controls, real sensors and one
      clear disarm keypad. Decorative dashboard cards never sit above it. */
   .security-console{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:28px;padding:94px 34px 34px;background:linear-gradient(90deg,rgba(3,10,20,.40),rgba(3,10,20,.08) 50%,rgba(3,10,20,.36))}
-  .security-console .liquid-stack{flex:1 1 200px;max-width:300px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.security-console .liquid-btn{min-height:62px;justify-content:center;text-align:center;padding:10px;font-size:12px}.security-console .btn-disarm,.security-console .btn-sos{grid-column:1/-1}
+  .security-console .liquid-stack{flex:1 1 200px;max-width:300px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.security-console .liquid-btn{min-height:62px;justify-content:center;text-align:center;padding:10px;font-size:12px;gap:8px;white-space:nowrap}.security-console .liquid-btn span:last-child{min-width:0;overflow:hidden;text-overflow:ellipsis}.security-console .btn-disarm,.security-console .btn-sos{grid-column:1/-1}
   .console-sensors{flex:1 1 260px;max-width:400px;display:grid;gap:10px;align-content:center}.console-sensor{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;padding:13px 16px;border:1px solid rgba(255,255,255,.15);border-radius:18px;background:linear-gradient(100deg,rgba(36,188,129,.22),rgba(10,27,38,.58));backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 8px 22px rgba(0,0,0,.22)}.console-sensor.open{background:linear-gradient(100deg,rgba(235,74,67,.30),rgba(34,14,23,.62));border-color:rgba(255,102,92,.7)}.console-sensor-icon{font-size:20px}.console-sensor-name{font-weight:850;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.console-sensor-state{font-size:11px;font-weight:900;text-transform:uppercase;color:#75f4b0}.console-sensor.open .console-sensor-state{color:#ff968b}.console-empty{padding:24px;text-align:center;border:1px dashed rgba(255,255,255,.22);border-radius:18px;opacity:.75}
-  .console-keypad{flex:1 1 220px;max-width:280px;padding:18px;border:1px solid rgba(255,255,255,.16);border-radius:24px;background:rgba(5,15,30,0.4);backdrop-filter:blur(16px);display:grid;gap:12px}.console-keypad-title{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;text-align:center}.console-pin-display{width:100%;box-sizing:border-box;padding:11px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(4,14,26,.46);color:#fff;text-align:center;font-size:20px;letter-spacing:.35em}.console-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;place-items:center}.console-pad button{width:100%;aspect-ratio:1/1;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:linear-gradient(145deg,rgba(165,220,255,.24),rgba(20,45,66,.62));color:#fff;font-size:17px;font-weight:800;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 6px 14px rgba(0,0,0,.25);cursor:pointer;display:flex;align-items:center;justify-content:center}.console-pad .console-enter{border-radius:16px;aspect-ratio:auto;height:100%;color:#7ff8c1;border-color:rgba(74,230,157,.65)}.console-keypad small{text-align:center;opacity:.7}
+  .console-keypad{flex:1 1 220px;max-width:280px;padding:18px;border:1px solid rgba(255,255,255,.16);border-radius:24px;background:rgba(5,15,30,0.4);backdrop-filter:blur(16px);display:grid;gap:12px}.console-keypad-title{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;text-align:center}.console-pin-display{width:100%;box-sizing:border-box;padding:11px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(4,14,26,.46);color:#fff;text-align:center;font-size:20px;letter-spacing:.35em}.console-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;place-items:center}.console-pad button{width:100%;aspect-ratio:1/1;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:linear-gradient(145deg,rgba(165,220,255,.24),rgba(20,45,66,.62));color:#fff;font-size:17px;font-weight:800;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 6px 14px rgba(0,0,0,.25);cursor:pointer;display:flex;align-items:center;justify-content:center}.console-pad .console-enter{border-radius:16px;aspect-ratio:auto;height:100%;color:#7ff8c1;border-color:rgba(74,230,157,.65)}.console-keypad small{text-align:center;opacity:.7}.console-pin-status{min-height:1.2em;margin:0;color:#ffb4ac;opacity:0;transition:opacity .18s ease}.console-pin-status.visible{opacity:1}
   @media(max-width:950px){.grid{grid-template-columns:1fr;grid-template-areas:"instances" "activity" "modes" "access" "automations" "backup" "github"}.security-console{flex-direction:column;padding:94px 18px 24px}.console-keypad{width:100%;max-width:320px}}
 
   /* Sensor column */
@@ -1657,6 +1657,14 @@ _tmpl.innerHTML = `
     .ios-fullscreen .sensor-column{max-width: 40% !important;padding-right:16px!important;gap:5px!important}
     .ios-fullscreen .sensor-chip{max-width:180px!important;padding:6px 8px!important;font-size:10px!important}
   }
+  /* The active console owns its fullscreen layout. Legacy entry grid rules
+     must not redistribute the controls into empty corners. */
+  .ios-fullscreen .entry-content.security-console{display:flex!important;flex-wrap:wrap!important;justify-content:center!important;align-content:center!important;gap:26px!important;padding:96px 56px 42px!important;overflow:auto!important}
+  .ios-fullscreen .entry-content.security-console .entry-icon{flex:0 0 100%!important;min-height:130px!important;margin:0!important;display:flex!important}
+  .ios-fullscreen .entry-content.security-console .liquid-stack{flex:0 1 300px!important;max-width:300px!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .ios-fullscreen .entry-content.security-console .console-sensors{flex:0 1 400px!important;max-width:400px!important}
+  .ios-fullscreen .entry-content.security-console .console-keypad{flex:0 0 260px!important;width:260px!important;max-width:260px!important}
+  @media(max-width:700px){.ios-fullscreen .entry-content.security-console{padding:78px 16px 24px!important;gap:16px!important;align-content:start!important}.ios-fullscreen .entry-content.security-console .entry-icon{min-height:96px!important}.ios-fullscreen .entry-content.security-console .liquid-stack,.ios-fullscreen .entry-content.security-console .console-sensors,.ios-fullscreen .entry-content.security-console .console-keypad{flex:0 0 100%!important;width:100%!important;max-width:360px!important}.ios-fullscreen .entry-content.security-console .console-keypad{padding:14px!important}}
 
   .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
   .badge.armed_away,.badge.armed_vacation{background:rgba(229,57,53,.12);color:var(--error-color,#e53935)}
@@ -3054,6 +3062,27 @@ class ArgusPanel extends HTMLElement {
     }[this._getCurrentLangCode()] || 'en-US';
   }
 
+  _weatherPresentation(condition, isNight) {
+    const key = String(condition || 'sunny').toLowerCase().replace(/[\s-]+/g, '_');
+    const labels = {
+      es: { sunny:'Soleado', clear_night:'Noche despejada', partlycloudy:'Parcialmente nublado', cloudy:'Nublado', rainy:'Lluvioso', pouring:'Lluvia intensa', lightning:'Tormenta eléctrica', lightning_rainy:'Tormenta con lluvia', snowy:'Nevando', fog:'Niebla', windy:'Ventoso', exceptional:'Condiciones excepcionales' },
+      en: { sunny:'Sunny', clear_night:'Clear night', partlycloudy:'Partly cloudy', cloudy:'Cloudy', rainy:'Rainy', pouring:'Heavy rain', lightning:'Thunderstorm', lightning_rainy:'Thunderstorm with rain', snowy:'Snowing', fog:'Foggy', windy:'Windy', exceptional:'Exceptional conditions' },
+      fr: { sunny:'Ensoleillé', clear_night:'Nuit claire', partlycloudy:'Partiellement nuageux', cloudy:'Nuageux', rainy:'Pluvieux', pouring:'Forte pluie', lightning:'Orage', lightning_rainy:'Orage avec pluie', snowy:'Neige', fog:'Brouillard', windy:'Venteux', exceptional:'Conditions exceptionnelles' },
+      pt: { sunny:'Ensolarado', clear_night:'Noite limpa', partlycloudy:'Parcialmente nublado', cloudy:'Nublado', rainy:'Chuvoso', pouring:'Chuva forte', lightning:'Trovoada', lightning_rainy:'Trovoada com chuva', snowy:'Nevando', fog:'Neblina', windy:'Ventoso', exceptional:'Condições excepcionais' },
+      it: { sunny:'Soleggiato', clear_night:'Notte serena', partlycloudy:'Parzialmente nuvoloso', cloudy:'Nuvoloso', rainy:'Piovoso', pouring:'Pioggia intensa', lightning:'Temporale', lightning_rainy:'Temporale con pioggia', snowy:'Nevica', fog:'Nebbia', windy:'Ventoso', exceptional:'Condizioni eccezionali' },
+      zh: { sunny:'晴朗', clear_night:'晴夜', partlycloudy:'局部多云', cloudy:'多云', rainy:'有雨', pouring:'大雨', lightning:'雷暴', lightning_rainy:'雷雨', snowy:'下雪', fog:'有雾', windy:'有风', exceptional:'异常天气' },
+      ru: { sunny:'Солнечно', clear_night:'Ясная ночь', partlycloudy:'Переменная облачность', cloudy:'Облачно', rainy:'Дождливо', pouring:'Сильный дождь', lightning:'Гроза', lightning_rainy:'Гроза с дождём', snowy:'Снег', fog:'Туман', windy:'Ветрено', exceptional:'Исключительные условия' },
+    };
+    const icon = key.includes('lightning') ? '⛈️'
+      : key === 'pouring' || key.includes('rain') ? '🌧️'
+      : key.includes('snow') || key === 'hail' || key === 'sleet' ? '❄️'
+      : key === 'fog' ? '🌫️'
+      : key.includes('cloud') ? '☁️'
+      : isNight ? '🌙' : '☀️';
+    const language = this._getCurrentLangCode();
+    return { icon, label: labels[language]?.[key] || labels.en[key] || key.replace(/_/g, ' ') };
+  }
+
   _openLangModal() {
     const modal = this.shadowRoot.getElementById('lang-modal');
     if (!modal) return;
@@ -4096,6 +4125,13 @@ class ArgusPanel extends HTMLElement {
     const weatherEnt = this._getWeatherEntity();
     const weatherState = weatherEnt.state || 'sunny';
     const isNight = this._hass?.states?.['sun.sun']?.state === 'below_horizon';
+    const weather = this._weatherPresentation(weatherState, isNight);
+    const modeLabel = key => {
+      const str = String(t(key) || '').trim();
+      const firstSpace = str.indexOf(' ');
+      if (firstSpace > 0 && firstSpace <= 3) return str.substring(firstSpace + 1).trim();
+      return str;
+    };
 
     // Time
     const timeStr = new Date().toLocaleTimeString(this._getLocale(), { hour: '2-digit', minute: '2-digit' });
@@ -4106,7 +4142,7 @@ class ArgusPanel extends HTMLElement {
     const heroSecurity = this.shadowRoot.getElementById('hero-security-pill');
     if (heroClock) heroClock.textContent = timeStr;
     if (heroDate) heroDate.textContent = now.toLocaleDateString(this._getLocale(), { weekday: 'short', month: 'short', day: 'numeric' });
-    if (heroWeather) heroWeather.textContent = `${isNight ? '🌙' : '☀️'} ${String(weatherState).replace(/[_-]/g, ' ')}`;
+    if (heroWeather) heroWeather.textContent = `${weather.icon} ${weather.label}`;
     if (heroSecurity) heroSecurity.innerHTML = `<i class="hero-live" style="background:${isArmed ? '#ffb54d' : '#55df91'};box-shadow:0 0 9px ${isArmed ? '#ffb54d' : '#55df91'}"></i>${this._escapeHtml(isArmed ? t('system_armed') : t('system_disarmed'))}`;
 
     // Surgical Update: Maintain article nodes to persist fullscreen state
@@ -4134,7 +4170,7 @@ class ArgusPanel extends HTMLElement {
         triggered: { label: t('log_triggered'), accent: '#ff4d5d' },
         pending: { label: t('system_armed'), accent: '#ffb54d' },
       }[state] || { label: state.replace(/_/g, ' '), accent: '#9eb5cc' };
-      const weatherLabel = String(weatherState).replace(/[_-]/g, ' ');
+      const weatherLabel = weather.label;
       const recent = Array.isArray(this._ui?.audit_log) ? this._ui.audit_log[0] : null;
       const recentEvent = recent ? this._localizeActivityDetail(String(recent.action || ''), String(recent.detail || '')) : '';
 
@@ -4183,11 +4219,11 @@ class ArgusPanel extends HTMLElement {
               ${this._getIntelligentSVG(state, null, isNight, triggered)}
             </div>
             <div class="liquid-stack">
-              <button class="liquid-btn btn-home ${state==='armed_home'?'active':''} ${sensorAlert && state==='armed_home'?'buzz-orange':''}" data-idx="${idx}" data-action="home">${this._modeButtonIcon('home')}<span>${t('btn_home')}</span></button>
-              <button class="liquid-btn btn-away ${state==='armed_away'?'active':''} ${sensorAlert && state==='armed_away'?'buzz-orange':''}" data-idx="${idx}" data-action="away">${this._modeButtonIcon('away')}<span>${t('btn_away')}</span></button>
-              <button class="liquid-btn btn-night ${state==='armed_night'?'active':''} ${sensorAlert && state==='armed_night'?'buzz-orange':''}" data-idx="${idx}" data-action="night">${this._modeButtonIcon('night')}<span>${t('btn_night')}</span></button>
-              <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''} ${sensorAlert && state==='armed_vacation'?'buzz-orange':''}" data-idx="${idx}" data-action="vacation">${this._modeButtonIcon('vacation')}<span>${t('btn_vacation')}</span></button>
-              <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm">${this._modeButtonIcon('disarm')}<span>${t('btn_disarmed')}</span></button>
+              <button class="liquid-btn btn-home ${state==='armed_home'?'active':''} ${sensorAlert && state==='armed_home'?'buzz-orange':''}" data-idx="${idx}" data-action="home">${this._modeButtonIcon('home')}<span>${this._escapeHtml(modeLabel('btn_home'))}</span></button>
+              <button class="liquid-btn btn-away ${state==='armed_away'?'active':''} ${sensorAlert && state==='armed_away'?'buzz-orange':''}" data-idx="${idx}" data-action="away">${this._modeButtonIcon('away')}<span>${this._escapeHtml(modeLabel('btn_away'))}</span></button>
+              <button class="liquid-btn btn-night ${state==='armed_night'?'active':''} ${sensorAlert && state==='armed_night'?'buzz-orange':''}" data-idx="${idx}" data-action="night">${this._modeButtonIcon('night')}<span>${this._escapeHtml(modeLabel('btn_night'))}</span></button>
+              <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''} ${sensorAlert && state==='armed_vacation'?'buzz-orange':''}" data-idx="${idx}" data-action="vacation">${this._modeButtonIcon('vacation')}<span>${this._escapeHtml(modeLabel('btn_vacation'))}</span></button>
+              <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm">${this._modeButtonIcon('disarm')}<span>${this._escapeHtml(modeLabel('btn_disarmed'))}</span></button>
               ${this._permissions?.sos !== false ? `<button class="btn-sos" data-action="${panicActive ? 'stop-sos' : 'sos'}" data-idx="${idx}">${this._modeButtonIcon('sos')}<span>${panicActive ? t('sos_stop') : t('btn_sos')}</span></button>` : ''}
             </div>
             <div class="console-sensors">${sensorRows || `<div class="console-empty">${this._escapeHtml(t('log_no_events'))}</div>`}</div>
@@ -4198,7 +4234,7 @@ class ArgusPanel extends HTMLElement {
                 ${[1,2,3,4,5,6,7,8,9].map(n => `<button type="button" data-console-pin="${idx}" data-key="${n}">${n}</button>`).join('')}
                 <button type="button" data-console-pin="${idx}" data-key="clear">⌫</button><button type="button" data-console-pin="${idx}" data-key="0">0</button><button type="button" class="console-enter" data-console-pin="${idx}" data-key="enter">Enter</button>
               </div>
-              <small>${this._escapeHtml(t('pin_disarm_error') === 'pin_disarm_error' ? 'PIN de cualquier usuario autorizado' : t('pin_disarm_error'))}</small>
+              <small id="entry-pin-status-${idx}" class="console-pin-status" aria-live="polite"></small>
             </div>
           </div>
       `;
@@ -4229,11 +4265,16 @@ class ArgusPanel extends HTMLElement {
       button.addEventListener('click', async () => {
         const index = Number(button.dataset.consolePin);
         const input = this.shadowRoot.getElementById(`entry-pin-${index}`);
+        const status = this.shadowRoot.getElementById(`entry-pin-status-${index}`);
         if (!input) return;
         const key = button.dataset.key;
         if (key === 'clear') input.value = input.value.slice(0, -1);
         else if (key === 'enter') await this._consoleDisarm(index, input);
         else input.value = `${input.value || ''}${key}`.slice(0, 12);
+        if (key !== 'enter' && status) {
+          status.textContent = '';
+          status.classList.remove('visible');
+        }
       });
     });
     el.querySelectorAll('.wx-webgl').forEach(canvas => this._initWeatherWebGL(canvas));
@@ -4243,17 +4284,28 @@ class ArgusPanel extends HTMLElement {
   async _consoleDisarm(idx, input) {
     const entry = this._dashboard?.entries?.[Number(idx)];
     if (!entry?.entry_id) return;
+    const status = this.shadowRoot.getElementById(`entry-pin-status-${idx}`);
+    if (status) {
+      status.textContent = '';
+      status.classList.remove('visible');
+    }
+    let success = false;
     try {
       await this._send('argus/perform_alarm_action', {
         action: 'disarm', entry_id: entry.entry_id,
         ...(input.value ? { code: input.value } : {})
       });
-      input.value = '';
-      await this._load();
+      success = true;
     } catch (error) {
       input.value = '';
-      input.placeholder = 'PIN incorrecto';
-      setTimeout(() => { if (input.isConnected) input.placeholder = '••••'; }, 1200);
+      if (status) {
+        status.textContent = this._t('pin_disarm_error');
+        status.classList.add('visible');
+      }
+    }
+    if (success) {
+      input.value = '';
+      await this._load();
     }
   }
 
@@ -5761,9 +5813,12 @@ class ArgusPanel extends HTMLElement {
         const inp = this.shadowRoot.getElementById('panel-bg-url-input');
         if (inp) inp.value = url;
         const bgMode = this.shadowRoot.getElementById('bg-mode-select-standalone');
-        if (bgMode) bgMode.value = url.endsWith('.mp4') || url.endsWith('.webm') ? 'video' : 'photo';
-        this._backgroundMode = bgMode?.value || 'photo';
+        // This selector has no "video" value. Selecting it left the control
+        // blank and prevented the image from rendering until a reload.
+        if (bgMode) bgMode.value = 'photo';
+        this._backgroundMode = 'photo';
         this._updateBgFieldsVisibility();
+        this._renderEntries();
         this._savePersonalization();
         const help = this.shadowRoot.getElementById('bg-file-help');
         if (help) help.textContent = this._t('bg_panel_selected_from_history');
@@ -5777,8 +5832,12 @@ class ArgusPanel extends HTMLElement {
         const inp = this.shadowRoot.getElementById('hub-bg-url-input');
         if (inp) inp.value = url;
         const hubMode = this.shadowRoot.getElementById('hub-bg-mode-select');
-        if (hubMode) hubMode.value = url.endsWith('.mp4') || url.endsWith('.webm') ? 'video' : 'photo';
+        // The hub selector uses "image" (not "photo"). The old value made
+        // uploaded images impossible to select as the Argus-wide background.
+        if (hubMode) hubMode.value = 'image';
+        this._hubBgMode = 'image';
         this._updateBgFieldsVisibility();
+        this._updateCanvasBackground();
         this._savePersonalization();
         const help = this.shadowRoot.getElementById('hub-file-help');
         if (help) help.textContent = this._t('bg_hub_selected_from_history');
@@ -7188,4 +7247,4 @@ class ArgusPanel extends HTMLElement {
 
 }
 
-customElements.define('argus-panel-v204', ArgusPanel);
+customElements.define('argus-panel-v205', ArgusPanel);
