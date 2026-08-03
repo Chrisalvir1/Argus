@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v2.0.5
+ * Argus Home Hub – v2.0.6
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1544,10 +1544,11 @@ _tmpl.innerHTML = `
   .entry-content{position:relative;z-index:2;flex:1;padding:20px 140px 20px 20px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.2) 0%, transparent 60%)}
   /* The live instance is the console: real controls, real sensors and one
      clear disarm keypad. Decorative dashboard cards never sit above it. */
-  .security-console{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:28px;padding:94px 34px 34px;background:linear-gradient(90deg,rgba(3,10,20,.40),rgba(3,10,20,.08) 50%,rgba(3,10,20,.36))}
+  .security-console{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:20px;padding:32px 24px 24px;background:linear-gradient(90deg,rgba(3,10,20,.40),rgba(3,10,20,.08) 50%,rgba(3,10,20,.36))}
+  .security-console .entry-icon{flex:0 0 120px!important;min-height:110px!important;margin:0!important}.security-console .entry-icon svg{max-width:120px!important}
   .security-console .liquid-stack{flex:1 1 200px;max-width:300px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.security-console .liquid-btn{min-height:62px;justify-content:center;text-align:center;padding:10px;font-size:12px;gap:8px;white-space:nowrap}.security-console .liquid-btn span:last-child{min-width:0;overflow:hidden;text-overflow:ellipsis}.security-console .btn-disarm,.security-console .btn-sos{grid-column:1/-1}
   .console-sensors{flex:1 1 260px;max-width:400px;display:grid;gap:10px;align-content:center}.console-sensor{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;padding:13px 16px;border:1px solid rgba(255,255,255,.15);border-radius:18px;background:linear-gradient(100deg,rgba(36,188,129,.22),rgba(10,27,38,.58));backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 8px 22px rgba(0,0,0,.22)}.console-sensor.open{background:linear-gradient(100deg,rgba(235,74,67,.30),rgba(34,14,23,.62));border-color:rgba(255,102,92,.7)}.console-sensor-icon{font-size:20px}.console-sensor-name{font-weight:850;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.console-sensor-state{font-size:11px;font-weight:900;text-transform:uppercase;color:#75f4b0}.console-sensor.open .console-sensor-state{color:#ff968b}.console-empty{padding:24px;text-align:center;border:1px dashed rgba(255,255,255,.22);border-radius:18px;opacity:.75}
-  .console-keypad{flex:1 1 220px;max-width:280px;padding:18px;border:1px solid rgba(255,255,255,.16);border-radius:24px;background:rgba(5,15,30,0.4);backdrop-filter:blur(16px);display:grid;gap:12px}.console-keypad-title{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;text-align:center}.console-pin-display{width:100%;box-sizing:border-box;padding:11px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(4,14,26,.46);color:#fff;text-align:center;font-size:20px;letter-spacing:.35em}.console-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;place-items:center}.console-pad button{width:100%;aspect-ratio:1/1;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:linear-gradient(145deg,rgba(165,220,255,.24),rgba(20,45,66,.62));color:#fff;font-size:17px;font-weight:800;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 6px 14px rgba(0,0,0,.25);cursor:pointer;display:flex;align-items:center;justify-content:center}.console-pad .console-enter{border-radius:16px;aspect-ratio:auto;height:100%;color:#7ff8c1;border-color:rgba(74,230,157,.65)}.console-keypad small{text-align:center;opacity:.7}.console-pin-status{min-height:1.2em;margin:0;color:#ffb4ac;opacity:0;transition:opacity .18s ease}.console-pin-status.visible{opacity:1}
+  .console-keypad{flex:1 1 220px;max-width:280px;padding:18px;border:1px solid rgba(255,255,255,.16);border-radius:24px;background:rgba(5,15,30,0.4);backdrop-filter:blur(16px);display:grid;gap:12px}.console-keypad-title{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;text-align:center}.console-keypad-close{position:absolute;top:8px;right:10px;width:28px;height:28px;border:0;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;font-size:20px;line-height:1;cursor:pointer}.console-keypad{position:relative}.console-pin-display{width:100%;box-sizing:border-box;padding:11px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(4,14,26,.46);color:#fff;text-align:center;font-size:20px;letter-spacing:.35em}.console-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;place-items:center}.console-pad button{width:100%;aspect-ratio:1/1;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:linear-gradient(145deg,rgba(165,220,255,.24),rgba(20,45,66,.62));color:#fff;font-size:17px;font-weight:800;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 6px 14px rgba(0,0,0,.25);cursor:pointer;display:flex;align-items:center;justify-content:center}.console-pad .console-enter{border-radius:16px;aspect-ratio:auto;height:100%;color:#7ff8c1;border-color:rgba(74,230,157,.65)}.console-keypad small{text-align:center;opacity:.7}.console-pin-status{min-height:1.2em;margin:0;color:#ffb4ac;opacity:0;transition:opacity .18s ease}.console-pin-status.visible{opacity:1}
   @media(max-width:950px){.grid{grid-template-columns:1fr;grid-template-areas:"instances" "activity" "modes" "access" "automations" "backup" "github"}.security-console{flex-direction:column;padding:94px 18px 24px}.console-keypad{width:100%;max-width:320px}}
 
   /* Sensor column */
@@ -1664,7 +1665,7 @@ _tmpl.innerHTML = `
   .ios-fullscreen .entry-content.security-console .liquid-stack{flex:0 1 300px!important;max-width:300px!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
   .ios-fullscreen .entry-content.security-console .console-sensors{flex:0 1 400px!important;max-width:400px!important}
   .ios-fullscreen .entry-content.security-console .console-keypad{flex:0 0 260px!important;width:260px!important;max-width:260px!important}
-  @media(max-width:700px){.ios-fullscreen .entry-content.security-console{padding:78px 16px 24px!important;gap:16px!important;align-content:start!important}.ios-fullscreen .entry-content.security-console .entry-icon{min-height:96px!important}.ios-fullscreen .entry-content.security-console .liquid-stack,.ios-fullscreen .entry-content.security-console .console-sensors,.ios-fullscreen .entry-content.security-console .console-keypad{flex:0 0 100%!important;width:100%!important;max-width:360px!important}.ios-fullscreen .entry-content.security-console .console-keypad{padding:14px!important}}
+  @media(max-width:700px){.ios-fullscreen .entry-content.security-console{padding:70px 16px 24px!important;gap:16px!important;align-content:start!important}.ios-fullscreen .entry-content.security-console .entry-icon{display:none!important}.ios-fullscreen .entry-content.security-console .liquid-stack,.ios-fullscreen .entry-content.security-console .console-sensors,.ios-fullscreen .entry-content.security-console .console-keypad{flex:0 0 100%!important;width:100%!important;max-width:360px!important}.ios-fullscreen .entry-content.security-console .console-keypad{padding:14px!important}}
 
   .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
   .badge.armed_away,.badge.armed_vacation{background:rgba(229,57,53,.12);color:var(--error-color,#e53935)}
@@ -4158,6 +4159,7 @@ class ArgusPanel extends HTMLElement {
       const state = live || e.state || 'unavailable';
       const triggered = state === 'triggered';
       const panicActive = Boolean(this._hass?.states?.[e.entity_id]?.attributes?.argus_panic_active);
+      const requiresDisarmPin = e.pin_configured === true || e.user_pin_configured === true;
       const fullHudLoc = this._hass?.config?.location_name || this._homeName || t('home_fallback');
       const displayedTemperature = this._getDisplayedTemperature();
       const temperatures = this._getTemperatureReadings();
@@ -4206,6 +4208,7 @@ class ArgusPanel extends HTMLElement {
       art.innerHTML = `
           ${this._renderEntryBackground(weatherState, isNight)}
           ${this._kioskLocked ? `<button class="btn-unlock-kiosk" data-action="unlock-kiosk" style="position:absolute;top:16px;right:16px;z-index:99;padding:8px 14px;background:rgba(220,38,38,0.85);color:white;border:none;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 12px rgba(0,0,0,0.4)">🔓 ${this._escapeHtml(t('unlock_kiosk') || 'Desbloquear kiosco')}</button>` : ''}
+          ${isFS ? `<button class="ghost entry-exit-fs" data-exit-fullscreen title="${this._escapeHtml(t('fullscreen_title'))}" aria-label="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;top:16px;left:16px;z-index:100;padding:9px 13px;font-size:18px;background:rgba(0,0,0,.55);backdrop-filter:blur(12px);border-radius:14px;color:white;border:1px solid rgba(255,255,255,.25);box-shadow:0 8px 20px rgba(0,0,0,.3)">×</button>` : ''}
           <button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>
           ${this._renderBatteryAlerts()}
           <!-- Ribbon removed to restore central SVG -->
@@ -4215,7 +4218,7 @@ class ArgusPanel extends HTMLElement {
             ${temperatures.length ? `<div class="hud-temperatures">${temperatures.map(item => `<span class="hud-temperature">${this._escapeHtml(item.label)} ${this._escapeHtml(item.value)}</span>`).join('')}</div>` : ''}
           </div>
           <div class="entry-content security-console">
-            <div class="entry-icon" style="flex:1 1 100%;display:flex;justify-content:center;margin-bottom:10px;animation:float-icon 5s ease-in-out infinite;">
+            <div class="entry-icon" style="display:flex;justify-content:center;animation:float-icon 5s ease-in-out infinite;">
               ${this._getIntelligentSVG(state, null, isNight, triggered)}
             </div>
             <div class="liquid-stack">
@@ -4227,15 +4230,7 @@ class ArgusPanel extends HTMLElement {
               ${this._permissions?.sos !== false ? `<button class="btn-sos" data-action="${panicActive ? 'stop-sos' : 'sos'}" data-idx="${idx}">${this._modeButtonIcon('sos')}<span>${panicActive ? t('sos_stop') : t('btn_sos')}</span></button>` : ''}
             </div>
             <div class="console-sensors">${sensorRows || `<div class="console-empty">${this._escapeHtml(t('log_no_events'))}</div>`}</div>
-            <div class="console-keypad">
-              <div class="console-keypad-title">${this._escapeHtml(t('disarmed'))} / PIN</div>
-              <input class="console-pin-display" id="entry-pin-${idx}" type="password" inputmode="numeric" autocomplete="off" readonly placeholder="••••">
-              <div class="console-pad">
-                ${[1,2,3,4,5,6,7,8,9].map(n => `<button type="button" data-console-pin="${idx}" data-key="${n}">${n}</button>`).join('')}
-                <button type="button" data-console-pin="${idx}" data-key="clear">⌫</button><button type="button" data-console-pin="${idx}" data-key="0">0</button><button type="button" class="console-enter" data-console-pin="${idx}" data-key="enter">Enter</button>
-              </div>
-              <small id="entry-pin-status-${idx}" class="console-pin-status" aria-live="polite"></small>
-            </div>
+
           </div>
       `;
     });
@@ -4261,55 +4256,22 @@ class ArgusPanel extends HTMLElement {
     el.querySelectorAll('button[data-fullscreen]').forEach(btn => {
       btn.addEventListener('click', ev => this._toggleFullscreen(ev.currentTarget.closest('.entry')));
     });
-    el.querySelectorAll('button[data-console-pin]').forEach(button => {
-      button.addEventListener('click', async () => {
-        const index = Number(button.dataset.consolePin);
-        const input = this.shadowRoot.getElementById(`entry-pin-${index}`);
-        const status = this.shadowRoot.getElementById(`entry-pin-status-${index}`);
-        if (!input) return;
-        const key = button.dataset.key;
-        if (key === 'clear') input.value = input.value.slice(0, -1);
-        else if (key === 'enter') await this._consoleDisarm(index, input);
-        else input.value = `${input.value || ''}${key}`.slice(0, 12);
-        if (key !== 'enter' && status) {
-          status.textContent = '';
-          status.classList.remove('visible');
-        }
-      });
+    el.querySelectorAll('button[data-exit-fullscreen]').forEach(btn => {
+      btn.addEventListener('click', () => this._exitFullscreenView());
     });
     el.querySelectorAll('.wx-webgl').forEach(canvas => this._initWeatherWebGL(canvas));
     this._bindSOS();
   }
 
-  async _consoleDisarm(idx, input) {
-    const entry = this._dashboard?.entries?.[Number(idx)];
-    if (!entry?.entry_id) return;
-    const status = this.shadowRoot.getElementById(`entry-pin-status-${idx}`);
-    if (status) {
-      status.textContent = '';
-      status.classList.remove('visible');
-    }
-    let success = false;
-    try {
-      await this._send('argus/perform_alarm_action', {
-        action: 'disarm', entry_id: entry.entry_id,
-        ...(input.value ? { code: input.value } : {})
-      });
-      success = true;
-    } catch (error) {
-      input.value = '';
-      if (status) {
-        status.textContent = this._t('pin_disarm_error');
-        status.classList.add('visible');
+  async _exitFullscreenView() {
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+      try {
+        if (document.exitFullscreen) await document.exitFullscreen();
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      } catch (_) {
+        // The CSS fallback below still returns the user to the normal panel.
       }
     }
-    if (success) {
-      input.value = '';
-      await this._load();
-    }
-  }
-
-  _exitFullscreenView() {
     const target = this._kioskTarget || this.shadowRoot.querySelector('.entry.ios-fullscreen');
     target?.classList.remove('ios-fullscreen');
     this.shadowRoot.querySelectorAll('.entry.ios-fullscreen').forEach(el => el.classList.remove('ios-fullscreen'));
@@ -6689,6 +6651,8 @@ class ArgusPanel extends HTMLElement {
         }
       };
       if (masterPin || hasUsers) {
+        // Keep the compact panel intact. The touch/mouse keypad is rendered
+        // only after the user explicitly asks to disarm.
         this._showPinModal(async pin => { return await doDisarm(pin); });
       } else {
         await doDisarm(null);
@@ -7247,4 +7211,4 @@ class ArgusPanel extends HTMLElement {
 
 }
 
-customElements.define('argus-panel-v205', ArgusPanel);
+customElements.define('argus-panel-v206', ArgusPanel);

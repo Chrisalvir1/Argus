@@ -84,8 +84,8 @@ class TestV194PanelFlow(unittest.TestCase):
         alarm = (ROOT / "custom_components" / "argus" / "alarm_control_panel.py").read_text(encoding="utf-8")
         api = (ROOT / "custom_components" / "argus" / "websocket_api.py").read_text(encoding="utf-8")
         self.assertIn("security-console", self.panel)
-        self.assertIn("console-keypad", self.panel)
-        self.assertIn("_consoleDisarm(idx, input)", self.panel)
+        self.assertIn("this._showPinModal(async pin => { return await doDisarm(pin); });", self.panel)
+        self.assertIn("await doDisarm(null)", self.panel)
         self.assertIn('"user_pin_configured": has_user_disarm_pin', api)
         self.assertIn("def _matching_disarm_user(self, code)", alarm)
         self.assertIn('("master_pin_hash", "pin", "access_pin_hash")', alarm)
@@ -95,12 +95,17 @@ class TestV194PanelFlow(unittest.TestCase):
         self.assertIn("_weatherPresentation(condition, isNight)", self.panel)
         self.assertIn("const weather = this._weatherPresentation(weatherState, isNight)", self.panel)
         self.assertIn("weather.icon} ${weather.label}", self.panel)
-        self.assertIn('id="entry-pin-status-${idx}"', self.panel)
-        self.assertIn("status.classList.add('visible')", self.panel)
+        self.assertIn("pinErr.textContent = '❌ PIN incorrecto", self.panel)
         self.assertIn("hubMode.value = 'image'", self.panel)
         self.assertIn("this._hubBgMode = 'image'", self.panel)
         self.assertIn("this._updateCanvasBackground()", self.panel)
         self.assertIn(".ios-fullscreen .entry-content.security-console", self.panel)
+
+    def test_console_keypad_is_requested_and_fullscreen_has_a_visible_exit(self) -> None:
+        self.assertIn("this._showPinModal", self.panel)
+        self.assertIn('data-exit-fullscreen', self.panel)
+        self.assertIn("async _exitFullscreenView()", self.panel)
+        self.assertIn("await document.exitFullscreen()", self.panel)
 
     def test_access_summary_called_during_bootstrap_is_implemented(self) -> None:
         self.assertIn("_syncAccessSummary() {", self.panel)
