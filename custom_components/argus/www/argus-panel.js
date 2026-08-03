@@ -1371,7 +1371,7 @@ _tmpl.innerHTML = `
   }
   .bounce-in { animation: bounceIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"instances instances" "activity modes" "access automations" "backup github";gap:24px;align-items:start}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"instances instances" "activity modes" "automations access" "backup github";gap:24px;align-items:start}
   .grid > .stack{display:contents}
   .dashboard-instances{grid-area:instances}
   .activity-panel{grid-area:activity}
@@ -1381,7 +1381,7 @@ _tmpl.innerHTML = `
   .backup-panel{grid-area:backup}
   .github-panel{grid-area:github}
   @media(max-width:900px){
-    .grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"instances" "activity" "modes" "access" "automations" "backup" "github"}
+    .grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"instances" "activity" "modes" "automations" "access" "backup" "github"}
   }
   @media(max-width:750px){.hero{flex-direction:column;text-align:center}.hero-left{flex-direction:column}}
   @media(max-width:750px){.hero .lang-pill{align-self:center;margin-inline:auto}.hero-left{width:100%;align-items:center}}
@@ -4192,7 +4192,17 @@ class ArgusPanel extends HTMLElement {
           .find(config => (config?.sensors || []).some(id => ['on', 'open', 'unlocked', 'recording', 'active', 'motion'].includes(this._hass?.states?.[id]?.state)))
           || {};
       }
-      const sList = eCfg.sensors || [];
+      let sList = eCfg.sensors || [];
+      if (state === 'disarmed' || !sList.length) {
+        const modes = this._ui?.modes?.__by_entity__?.[e.entity_id] || this._ui?.modes || {};
+        const allSensors = new Set();
+        ['away', 'home', 'night', 'vacation'].forEach(m => {
+          if (modes[m]?.sensors) {
+            modes[m].sensors.forEach(s => allSensors.add(s));
+          }
+        });
+        sList = Array.from(allSensors);
+      }
       const sByps = eCfg.bypassed_sensors || [];
       const activeSensors = sList.filter(s => !sByps.includes(s));
       const OPEN = ['on', 'open', 'unlocked', 'recording', 'active', 'motion'];
