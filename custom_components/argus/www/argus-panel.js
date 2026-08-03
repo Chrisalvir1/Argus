@@ -2484,8 +2484,8 @@ _tmpl.innerHTML = `
         <div class="personalize-section">
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--personalize-divider, rgba(255,255,255,0.08)); padding-bottom:10px; flex-wrap:wrap; gap:10px;">
             <div id="lbl-aesthetic-custom" style="font-weight:900; font-size:14px; letter-spacing:-0.01em; cursor:pointer; display:flex; align-items:center; gap:8px; user-select:none;">
-              <span>🎨 Personalización Estética (Avanzado)</span>
-              <span id="personalize-chevron" style="transition: transform 0.3s ease; font-size: 11px;">▼</span>
+              <span id="lbl-aesthetic-text">🎨 Personalización Estética (Avanzado)</span>
+              <span id="personalize-chevron" style="transition: transform 0.3s ease; font-size: 11px; background: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 8px;">▲ Ocultar</span>
             </div>
             <div style="display:flex; gap:8px;">
               <button class="ghost" id="btn-edit-home-name-standalone" style="padding:6px 10px;font-size:11px;border-radius:10px;white-space:nowrap">✏️ Editar Nombre</button>
@@ -2493,7 +2493,7 @@ _tmpl.innerHTML = `
             </div>
           </div>
 
-          <div class="personalize-workspace collapsed" id="personalize-workspace">
+          <div class="personalize-workspace" id="personalize-workspace">
             <div class="personalize-grid">
             <!-- Column 1: Nombre y Fondos -->
             <div class="personalize-column">
@@ -3271,7 +3271,7 @@ class ArgusPanel extends HTMLElement {
     set('lbl-hub-bg-title',     t('bg_hub_title'));
     set('s-panel-bg-sound-lbl', t('bg_sound_opt'));
     set('s-hub-bg-sound-lbl',   t('bg_sound_opt'));
-    set('lbl-aesthetic-custom', '🎨 ' + t('lbl_aesthetic_custom') + ' (Avanzado)');
+    set('lbl-aesthetic-text', '🎨 ' + t('lbl_aesthetic_custom') + ' (Avanzado)');
     set('edit-widgets-label', this._widgetEditing ? ('✓ ' + t('done')) : '⚙️ Config. Widgets');
     set('lbl-temperature-source', t('temp_displayed'));
     set('lbl-weather-source', t('weather_source'));
@@ -3830,6 +3830,23 @@ class ArgusPanel extends HTMLElement {
     s('home-name-modal').addEventListener('click', e => { if (e.target.id === 'home-name-modal') this._closeHomeNameModal(); });
     s('home-name-save').addEventListener('click', () => this._saveHomeName());
     s('home-name-input').addEventListener('keydown', e => { if (e.key === 'Enter') this._saveHomeName(); });
+
+    // Edit widgets button
+    s('btn-edit-widgets')?.addEventListener('click', () => this._toggleWidgetEditing());
+
+    // Personalize section toggle
+    const toggleHeader = s('lbl-aesthetic-custom');
+    const personalizeWorkspace = s('personalize-workspace');
+    if (toggleHeader && personalizeWorkspace && !toggleHeader._boundToggle) {
+      toggleHeader._boundToggle = true;
+      toggleHeader.addEventListener('click', () => {
+        const isCollapsed = personalizeWorkspace.classList.toggle('collapsed');
+        const chevron = s('personalize-chevron');
+        if (chevron) {
+          chevron.textContent = isCollapsed ? '▼ Desplegar' : '▲ Ocultar';
+        }
+      });
+    }
 
     // Language picker
     s('btn-lang-picker')?.addEventListener('click', () => this._openLangModal());
@@ -7386,24 +7403,33 @@ class ArgusPanel extends HTMLElement {
     const grid = this.shadowRoot.getElementById('widget-grid');
     if (!grid) return;
 
-    const panels = grid.querySelectorAll('.panel:not(.dashboard-instances)');
+    const panels = Array.from(grid.children).filter(el =>
+      el.classList.contains('panel') && !el.classList.contains('dashboard-instances')
+    );
+
     panels.forEach(panel => {
       const wId = panel.id.replace('w-', '');
       if (!panel.querySelector('.panel-edit-overlay')) {
         const overlay = document.createElement('div');
         overlay.className = 'panel-edit-overlay';
-        
+
         const controls = document.createElement('div');
         controls.className = 'widget-controls';
-        
+
+        const title = document.createElement('div');
+        title.className = 'widget-controls-title';
+        const h2Text = panel.querySelector('h2')?.textContent;
+        title.textContent = h2Text ? `Widget: ${h2Text}` : `Widget: ${wId.toUpperCase()}`;
+        controls.appendChild(title);
+
         const dragHandle = document.createElement('div');
         dragHandle.className = 'widget-drag-handle';
-        dragHandle.innerHTML = '⋮⋮';
-        dragHandle.title = 'Arrastrar';
-        
+        dragHandle.innerHTML = '⋮⋮ Arrastrar';
+        dragHandle.title = 'Arrastrar para mover';
+
         const sizesDiv = document.createElement('div');
         sizesDiv.className = 'widget-sizes';
-        
+
         ['S', 'M', 'L', 'XL'].forEach(sz => {
           const btn = document.createElement('button');
           btn.className = 'widget-size-btn';
@@ -7411,6 +7437,7 @@ class ArgusPanel extends HTMLElement {
           btn.dataset.size = sz;
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
+            e.preventDefault();
             this._changeWidgetSize(wId, sz);
           });
           sizesDiv.appendChild(btn);
@@ -7421,9 +7448,10 @@ class ArgusPanel extends HTMLElement {
         toggleBtn.textContent = 'Ocultar';
         toggleBtn.addEventListener('click', (e) => {
           e.stopPropagation();
+          e.preventDefault();
           this._toggleWidgetVisibility(wId);
         });
-        
+
         controls.appendChild(dragHandle);
         controls.appendChild(sizesDiv);
         controls.appendChild(toggleBtn);
@@ -7433,27 +7461,22 @@ class ArgusPanel extends HTMLElement {
     });
 
     this._renderWidgetLayout();
-    this._bindWidgetDragEvents();
-
-    const btnEdit = this.shadowRoot.getElementById('btn-edit-widgets');
-    if (btnEdit && !btnEdit._bound) {
-      btnEdit._bound = true;
-      btnEdit.addEventListener('click', () => this._toggleWidgetEditing());
-    }
+    this._bindWidgetDragEvents(panels);
   }
 
   _renderWidgetLayout() {
     const grid = this.shadowRoot.getElementById('widget-grid');
     if (!grid) return;
 
-    const configMap = new Map(this._widgetConfig.map((w, idx) => [w.id, { ...w, idx }]));
-    const children = Array.from(grid.querySelectorAll('.panel:not(.dashboard-instances)'));
-    
+    const configMap = new Map((this._widgetConfig || []).map((w, idx) => [w.id, { ...w, idx }]));
+
+    const children = Array.from(grid.children).filter(el =>
+      el.classList.contains('panel') && !el.classList.contains('dashboard-instances')
+    );
+
     children.sort((a, b) => {
-      const aId = a.id.replace('w-', '');
-      const bId = b.id.replace('w-', '');
-      const aCfg = configMap.get(aId) || { idx: 99 };
-      const bCfg = configMap.get(bId) || { idx: 99 };
+      const aCfg = configMap.get(a.id.replace('w-', '')) || { idx: 99 };
+      const bCfg = configMap.get(b.id.replace('w-', '')) || { idx: 99 };
       return aCfg.idx - bCfg.idx;
     });
 
@@ -7464,11 +7487,10 @@ class ArgusPanel extends HTMLElement {
       if (cfg) {
         child.setAttribute('data-size', cfg.size);
         child.style.display = cfg.hidden ? 'none' : '';
-        
+
         const overlay = child.querySelector('.panel-edit-overlay');
         if (overlay) {
-          const btns = overlay.querySelectorAll('.widget-size-btn');
-          btns.forEach(btn => {
+          overlay.querySelectorAll('.widget-size-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.size === cfg.size);
           });
           const toggleBtn = overlay.querySelector('.widget-toggle-btn');
@@ -7483,134 +7505,71 @@ class ArgusPanel extends HTMLElement {
     grid.classList.toggle('editing', !!this._widgetEditing);
   }
 
-  _bindWidgetDragEvents() {
+  _bindWidgetDragEvents(panels) {
     const grid = this.shadowRoot.getElementById('widget-grid');
     if (!grid) return;
 
-    const panels = grid.querySelectorAll('.panel:not(.dashboard-instances)');
-    panels.forEach(panel => {
-      panel.setAttribute('draggable', this._widgetEditing ? 'true' : 'false');
-      
-      // Clean up previous event listeners just in case by cloning
-      const newPanel = panel.cloneNode(true);
-      panel.parentNode.replaceChild(newPanel, panel);
-      
-      newPanel.addEventListener('dragstart', (e) => {
-        if (!this._widgetEditing) {
-          e.preventDefault();
-          return;
-        }
-        newPanel.classList.add('dragging');
-        e.dataTransfer.setData('text/plain', newPanel.id);
+    const list = panels || Array.from(grid.children).filter(el =>
+      el.classList.contains('panel') && !el.classList.contains('dashboard-instances')
+    );
+
+    list.forEach(panel => {
+      if (panel._dragBound) return;
+      panel._dragBound = true;
+
+      panel.addEventListener('dragstart', (e) => {
+        if (!this._widgetEditing) { e.preventDefault(); return; }
+        panel.classList.add('dragging');
+        e.dataTransfer.setData('text/plain', panel.id);
         e.dataTransfer.effectAllowed = 'move';
       });
 
-      newPanel.addEventListener('dragend', () => {
-        newPanel.classList.remove('dragging');
+      panel.addEventListener('dragend', () => {
+        panel.classList.remove('dragging');
         this._saveWidgetLayout();
       });
 
-      newPanel.addEventListener('dragover', (e) => {
+      panel.addEventListener('dragover', (e) => {
         if (!this._widgetEditing) return;
         e.preventDefault();
-        
-        const draggingPanel = grid.querySelector('.dragging');
-        if (!draggingPanel || draggingPanel === newPanel) return;
-
-        const rect = newPanel.getBoundingClientRect();
-        const next = (e.clientY - rect.top) > (rect.height / 2);
-        
-        if (next) {
-          newPanel.after(draggingPanel);
+        const dragging = grid.querySelector('.dragging');
+        if (!dragging || dragging === panel) return;
+        const rect = panel.getBoundingClientRect();
+        if ((e.clientY - rect.top) > rect.height / 2) {
+          panel.after(dragging);
         } else {
-          newPanel.before(draggingPanel);
+          panel.before(dragging);
         }
       });
-      
-      newPanel.addEventListener('pointerdown', (e) => {
-        if (!this._widgetEditing) return;
-        if (e.target.closest('button')) return;
-        
-        newPanel.style.touchAction = 'none';
-        newPanel.setPointerCapture(e.pointerId);
-        
-        const onPointerMove = (moveEvent) => {
-          newPanel.classList.add('dragging');
-          const elementUnder = this.shadowRoot.elementFromPoint(moveEvent.clientX, moveEvent.clientY);
-          const targetPanel = elementUnder?.closest('.panel:not(.dashboard-instances)');
-          if (targetPanel && targetPanel !== newPanel) {
-            const rect = targetPanel.getBoundingClientRect();
-            const next = (moveEvent.clientY - rect.top) > (rect.height / 2);
-            if (next) {
-              targetPanel.after(newPanel);
-            } else {
-              targetPanel.before(newPanel);
-            }
-          }
-        };
-
-        const onPointerUp = (upEvent) => {
-          newPanel.classList.remove('dragging');
-          newPanel.releasePointerCapture(upEvent.pointerId);
-          newPanel.removeEventListener('pointermove', onPointerMove);
-          newPanel.removeEventListener('pointerup', onPointerUp);
-          this._saveWidgetLayout();
-        };
-
-        newPanel.addEventListener('pointermove', onPointerMove);
-        newPanel.addEventListener('pointerup', onPointerUp);
-      });
-      
-      // Re-bind overlay event listeners on cloned node
-      const wId = newPanel.id.replace('w-', '');
-      const overlay = newPanel.querySelector('.panel-edit-overlay');
-      if (overlay) {
-        const btns = overlay.querySelectorAll('.widget-size-btn');
-        btns.forEach(btn => {
-          const sz = btn.dataset.size;
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this._changeWidgetSize(wId, sz);
-          });
-        });
-        const toggleBtn = overlay.querySelector('.widget-toggle-btn');
-        if (toggleBtn) {
-          toggleBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this._toggleWidgetVisibility(wId);
-          });
-        }
-      }
     });
   }
 
   _saveWidgetLayout() {
     const grid = this.shadowRoot.getElementById('widget-grid');
     if (!grid) return;
-
-    const children = Array.from(grid.querySelectorAll('.panel:not(.dashboard-instances)'));
-    const newConfig = children.map(child => {
-      const wId = child.id.replace('w-', '');
-      const size = child.getAttribute('data-size') || 'M';
-      const hidden = child.style.display === 'none';
-      return { id: wId, size, hidden };
-    });
-
-    this._widgetConfig = newConfig;
-    try {
-      localStorage.setItem('argus-widgets-v1', JSON.stringify(newConfig));
-    } catch(e) {}
+    const children = Array.from(grid.children).filter(el =>
+      el.classList.contains('panel') && !el.classList.contains('dashboard-instances')
+    );
+    this._widgetConfig = children.map(child => ({
+      id: child.id.replace('w-', ''),
+      size: child.getAttribute('data-size') || 'M',
+      hidden: child.style.display === 'none'
+    }));
+    try { localStorage.setItem('argus-widgets-v1', JSON.stringify(this._widgetConfig)); } catch(e) {}
   }
 
   _toggleWidgetEditing() {
     this._widgetEditing = !this._widgetEditing;
+    const grid = this.shadowRoot.getElementById('widget-grid');
+    if (grid) {
+      this._initWidgetGrid();
+      this._renderWidgetLayout();
+    }
     this._applyTranslations();
-    this._renderWidgetLayout();
-    this._bindWidgetDragEvents();
   }
 
   _changeWidgetSize(id, size) {
-    const cfg = this._widgetConfig.find(w => w.id === id);
+    const cfg = (this._widgetConfig || []).find(w => w.id === id);
     if (cfg) {
       cfg.size = size;
       this._saveWidgetLayout();
@@ -7619,7 +7578,7 @@ class ArgusPanel extends HTMLElement {
   }
 
   _toggleWidgetVisibility(id) {
-    const cfg = this._widgetConfig.find(w => w.id === id);
+    const cfg = (this._widgetConfig || []).find(w => w.id === id);
     if (cfg) {
       cfg.hidden = !cfg.hidden;
       this._saveWidgetLayout();
