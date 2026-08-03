@@ -4202,7 +4202,25 @@ class ArgusPanel extends HTMLElement {
         if (!sensor) return '';
         const isOpen = OPEN.includes(sensor.state);
         const name = sensor.attributes?.friendly_name || sid.split('.')[1] || sid;
-        return `<div class="console-sensor ${isOpen ? 'open' : ''}"><span class="console-sensor-icon">${isOpen ? '⚠️' : '✓'}</span><span class="console-sensor-name">${this._escapeHtml(name)}</span><span class="console-sensor-state">${this._escapeHtml(isOpen ? t('status_open') : t('status_closed'))}</span></div>`;
+        const deviceClass = sensor.attributes?.device_class || (sid.startsWith('lock.') ? 'lock' : 'door');
+        
+        let iconHtml = '';
+        if (deviceClass === 'lock') {
+          iconHtml = isOpen ? `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>`
+                            : `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`;
+        } else if (deviceClass === 'window') {
+          iconHtml = isOpen ? `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14l16 0"></path><path d="M4 10l16 0"></path><rect x="4" y="4" width="16" height="16" rx="2"></rect></svg>`
+                            : `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"></rect><path d="M4 12h16M12 4v16"></path></svg>`;
+        } else if (deviceClass === 'motion') {
+          iconHtml = isOpen ? `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M4.93 4.93a10 10 0 0 1 14.14 0M4.93 19.07a10 10 0 0 0 14.14 0"></path></svg>`
+                            : `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle></svg>`;
+        } else {
+          // Default to door
+          iconHtml = isOpen ? `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22V2h12v20H4z"></path><path d="M16 4h4v18h-4"></path><circle cx="12" cy="12" r="1"></circle></svg>`
+                            : `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 22V2h12v20H6z"></path><circle cx="14" cy="12" r="1"></circle></svg>`;
+        }
+
+        return `<div class="console-sensor ${isOpen ? 'open' : ''}"><span class="console-sensor-icon" style="display:flex;align-items:center;justify-content:center;color:${isOpen?'#ff968b':'#75f4b0'};${isOpen?'animation:pulse 2s infinite;':''}">${iconHtml}</span><span class="console-sensor-name">${this._escapeHtml(name)}</span><span class="console-sensor-state" style="color:${isOpen?'#ff968b':'#75f4b0'}">${this._escapeHtml(isOpen ? t('status_open') : t('status_closed'))}</span></div>`;
       }).join('');
 
       art.innerHTML = `
@@ -4230,7 +4248,7 @@ class ArgusPanel extends HTMLElement {
               <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm">${this._modeButtonIcon('disarm')}<span>${this._escapeHtml(modeLabel('btn_disarmed'))}</span></button>
               ${this._permissions?.sos !== false ? `<button class="btn-sos" data-action="${panicActive ? 'stop-sos' : 'sos'}" data-idx="${idx}">${this._modeButtonIcon('sos')}<span>${panicActive ? t('sos_stop') : t('btn_sos')}</span></button>` : ''}
             </div>
-            <div class="console-sensors">${sensorRows || `<div class="console-empty">${this._escapeHtml(t('log_no_events'))}</div>`}</div>
+            <div class="console-sensors">${sensorRows || `<div class="console-empty">${this._escapeHtml(sList.length === 0 ? 'Sin sensores de intrusión configurados.' : 'Todos los sensores configurados están omitidos.')}</div>`}</div>
 
           </div>
       `;
