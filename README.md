@@ -104,7 +104,7 @@ title: Seguridad
 4. Recarga el navegador sin caché.
 5. Verifica armado, desarmado, SOS, PIN, sirenas, medios y restauración.
 
-Consulta las notas de la versión [v2.0.10](https://github.com/Chrisalvir1/Argus/releases/tag/v2.0.10).
+Consulta las notas de la versión [v2.0.11](https://github.com/Chrisalvir1/Argus/releases/tag/v2.0.11).
 
 ## Desarrollo
 
