@@ -12,7 +12,7 @@ class TestVisualContainerFixes(unittest.TestCase):
         cls.bootstrap = (WWW / "argus-bootstrap.js").read_text(encoding="utf-8")
 
     def test_visual_patch_is_loaded_last(self):
-        self.assertIn("argus-visual-container-fixes.js?v=2.0.13", self.bootstrap)
+        self.assertIn("argus-visual-container-fixes.js?v=2.0.14", self.bootstrap)
         self.assertGreater(
             self.bootstrap.rfind("applyVisualContainerFixes"),
             self.bootstrap.rfind("applyPerformanceProfile"),

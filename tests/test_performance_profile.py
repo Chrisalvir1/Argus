@@ -13,7 +13,7 @@ def source(name):
 class TestPerformanceProfile(unittest.TestCase):
     def test_bootstrap_loads_performance_profile_last(self):
         bootstrap = source("argus-bootstrap.js")
-        self.assertIn("argus-performance-profile.js?v=2.0.13", bootstrap)
+        self.assertIn("argus-performance-profile.js?v=2.0.14", bootstrap)
         self.assertTrue(
             bootstrap.rfind("applyPerformanceProfile")
             > bootstrap.rfind("applyV2012AuditFixes")
