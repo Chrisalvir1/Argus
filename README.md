@@ -17,6 +17,25 @@ Argus reúne alarma, sensores, sirenas, SOS, usuarios, auditoría, MQTT y una in
 > [!IMPORTANT]
 > Argus no sustituye una alarma certificada ni garantiza comunicación con servicios de emergencia. Prueba sensores, sirenas, PIN, SOS y respaldos antes de depender del sistema.
 
+## Antes de instalar: elige la experiencia adecuada para tu dispositivo
+
+Argus funciona igual de bien como integración de seguridad en cualquier equipo compatible con Home Assistant. Lo único que cambia según el hardware donde **visualices** el panel es la calidad de la presentación visual (clima animado, cristal líquido, transiciones). La función de seguridad del hogar (armado, desarmado, sensores, sirenas, SOS, PIN, notificaciones) **nunca se reduce**, sin importar el dispositivo.
+
+| Dispositivo de visualización | Experiencia esperada | Perfil recomendado |
+|---|---|---|
+| Raspberry Pi 5 | Completa: clima WebGL animado, cristal líquido, transiciones y 60 FPS | Completo |
+| Raspberry Pi 4 | Casi completa, con ajustes leves de partículas y resolución | Completo/Equilibrado |
+| Raspberry Pi 3 / 3B+ | Clima simplificado, menos partículas, blur reducido | Equilibrado/Ligero |
+| Raspberry Pi Zero 2 W | Animaciones CSS sencillas, WebGL limitado o desactivado | Ligero |
+| Raspberry Pi Zero (original) | Interfaz funcional sin efectos pesados, fondos estáticos | Esencial |
+| PC, tablet o teléfono moderno | Completa | Completo |
+
+Esto no es un problema de que Argus vaya a consumir CPU o RAM sin control: la diferencia está en la **GPU** y en cuántos procesos gráficos puede sostener cada equipo. En modelos anteriores a la Pi 4, Argus reduce automáticamente su presentación visual para mantenerse fluido, pero esto **no afecta su función de seguridad en el hogar**.
+
+Argus incluye un motor de **perfiles de rendimiento adaptable** que detecta las capacidades del navegador/dispositivo que muestra el panel (núcleos, memoria, WebGL disponible, resolución) y ejecuta un diagnóstico breve para recomendar automáticamente uno de estos perfiles: **Completo**, **Equilibrado**, **Ligero** o **Esencial**. El perfil se guarda por dispositivo (no por instancia de Home Assistant), por lo que un teléfono y una Raspberry Pi Zero que muestren el mismo panel pueden tener experiencias visuales distintas sin ningún ajuste manual.
+
+Puedes ver el diagnóstico detectado y forzar un perfil manualmente desde **Personalización estética avanzada → Rendimiento del dispositivo** dentro del panel de Argus.
+
 ## Funciones
 
 - Modos desarmado, casa, ausente, noche y vacaciones.
@@ -34,6 +53,7 @@ Argus reúne alarma, sensores, sirenas, SOS, usuarios, auditoría, MQTT y una in
 - **Restauración de Backup Segura:** Restaura configuraciones encriptadas directamente desde el primer uso (exclusivo para administradores HA).
 - **Diseño Liquid Glass:** Elementos de UI y tarjetas de instancias activas rediseñados con estética premium de cristal líquido.
 - Atmósfera WebGL procedimental ultra-realista (motor mejorado) para lluvia, tormenta, nieve, niebla, nubes, sol, estrellas, luna y eclipses respaldados por entidades reales.
+- **Perfiles de rendimiento adaptable:** detección automática de capacidades del dispositivo, benchmark breve y ajuste visual (Completo/Equilibrado/Ligero/Esencial) sin afectar las funciones de seguridad.
 - **Presencia HA:** Sincronización inteligente de estados de presencia directamente desde Home Assistant.
 - Animaciones premium para paneles, opciones, guardado, sensores, botones y modales, con respeto por `prefers-reduced-motion`.
 
@@ -52,7 +72,7 @@ Argus 2.0 consolida nuestras estrictas políticas de seguridad:
 ## Requisitos
 
 - Home Assistant **2024.7.0 o posterior**.
-- Navegador con WebGL para la atmósfera cinematográfica.
+- Navegador con WebGL para la atmósfera cinematográfica (opcional en perfiles Ligero/Esencial).
 - HACS recomendado.
 - Cuenta administradora para instalar y configurar.
 
