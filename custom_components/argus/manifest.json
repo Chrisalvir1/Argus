@@ -1,6 +1,6 @@
 {
   "domain": "argus",
-  "name": "Argus Smart Security",
+  "name": "Argus Home Hub",
   "after_dependencies": ["frontend", "http", "mqtt"],
   "codeowners": ["@Chrisalvir1"],
   "config_flow": true,
