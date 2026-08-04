@@ -79,7 +79,7 @@ En **Modos**, configura para Casa, Ausente, Noche o Vacaciones la opción **Sens
 
 El bypass/omitir se conserva estrictamente: un sensor listado en `bypassed_sensors` (o el formato heredado `bypassedSensors`) nunca bloquea, nunca aparece en la espera y nunca la detiene. Sus eventos, telemetría y automatizaciones existentes se mantienen.
 
-La política se guarda por instancia y por modo desde la UI de Argus; no añade una clave YAML obligatoria. Las exportaciones de configuración conservan el equivalente `open_sensors_policy` (`allow`, `block` o `pending`) dentro de la configuración del modo. Si no existe esa clave, `require_closed: true` equivale a `block` y `false` a `allow`.
+La política se guarda y se aplica por instancia y por modo desde la UI de Argus; no añade una clave YAML obligatoria. Las exportaciones de configuración conservan el equivalente `open_sensors_policy` (`allow`, `block` o `pending`) dentro de la configuración del modo. Si no existe esa clave, `require_closed: true` equivale a `block` y `false` a `allow`.
 
 Las solicitudes desde el panel, servicios de Home Assistant/HomeKit, MQTT, presencia y horarios usan el mismo flujo. En espera, un `arming_time` también debe terminar antes de armar. Desarmar, cambiar de modo, SOS/alarma, recargar la configuración, descargar la integración o un horario de desarmado cancelan la solicitud de forma segura; no se restaura una espera después de reiniciar.
 
@@ -138,7 +138,7 @@ title: Seguridad
 4. Recarga el navegador sin caché.
 5. Verifica armado, desarmado, SOS, PIN, sirenas, medios y restauración.
 
-Consulta las notas de la versión [v2.0.20](https://github.com/Chrisalvir1/Argus/releases/tag/v2.0.20).
+Consulta las notas de la versión [v2.0.21](https://github.com/Chrisalvir1/Argus/releases/tag/v2.0.21).
 
 ## Desarrollo
 

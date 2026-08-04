@@ -2,6 +2,12 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.21] - 2026-08-03
+
+### Fixed
+- Corregida la carga de la configuración de modos por instancia: Casa, Noche, Ausente y Vacaciones ahora leen su política de sensores abiertos desde el mismo `config entry` donde el panel la guarda.
+- `pending` vuelve a permanecer en `ARMING` hasta que cierre el último sensor configurado no omitido, también al armar desde Home Assistant, HomeKit, el panel o WebSocket.
+
 ## [2.0.20] - 2026-08-03
 
 ### Fixed

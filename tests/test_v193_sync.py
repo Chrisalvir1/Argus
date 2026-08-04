@@ -368,10 +368,10 @@ class TestV193FrontendContracts(unittest.TestCase):
         with open(panel_path, "r", encoding="utf-8") as f:
             self.content = f.read()
 
-    def test_version_updated_to_2020(self):
-        """argus-panel.js header must reflect v2.0.20."""
-        self.assertIn("v2.0.20", self.content, "argus-panel.js must mention v2.0.20")
-        self.assertIn("argus-panel-v2020", self.content, "customElements.define must use argus-panel-v2020")
+    def test_version_updated_to_2021(self):
+        """argus-panel.js header must reflect v2.0.21."""
+        self.assertIn("v2.0.21", self.content, "argus-panel.js must mention v2.0.21")
+        self.assertIn("argus-panel-v2021", self.content, "customElements.define must use argus-panel-v2021")
 
     def test_new_i18n_keys_all_languages(self):
         """All 7 language tables must contain all new v1.9.3 i18n keys."""
@@ -449,24 +449,24 @@ class TestV193FrontendContracts(unittest.TestCase):
 
 
 class TestV193ManifestVersion(unittest.TestCase):
-    def test_manifest_version_2020(self):
+    def test_manifest_version_2021(self):
         import json
         manifest_path = os.path.join(
             os.path.dirname(__file__), "..", "custom_components", "argus", "manifest.json"
         )
         with open(manifest_path) as f:
             manifest = json.load(f)
-        self.assertEqual(manifest["version"], "2.0.20", "manifest.json version must be 2.0.20")
+        self.assertEqual(manifest["version"], "2.0.21", "manifest.json version must be 2.0.21")
 
 
 class TestV193BootstrapCacheBust(unittest.TestCase):
-    def test_bootstrap_version_2020(self):
+    def test_bootstrap_version_2021(self):
         bootstrap_path = os.path.join(
             os.path.dirname(__file__), "..", "custom_components", "argus", "www", "argus-bootstrap.js"
         )
         with open(bootstrap_path) as f:
             content = f.read()
-        self.assertIn("2.0.20", content, "argus-bootstrap.js must reference version 2.0.20 for cache-busting")
+        self.assertIn("2.0.21", content, "argus-bootstrap.js must reference version 2.0.21 for cache-busting")
 
 
 class TestV193ScheduleAndDisarmProtection(unittest.IsolatedAsyncioTestCase):
@@ -613,5 +613,122 @@ class TestV193ScheduleAndDisarmProtection(unittest.IsolatedAsyncioTestCase):
             await panel.async_alarm_disarm(code=None)
 
         self.assertEqual(panel._alarm_state, AlarmControlPanelState.DISARMED, "Disarm without master PIN must succeed")
+
+
+class TestOpenSensorPolicyBehaviour(unittest.IsolatedAsyncioTestCase):
+    """Exercise the pending state machine with per-entry UI configuration."""
+
+    def _make_panel(self, mode, policy="pending", bypassed=None):
+        from custom_components.argus.alarm_control_panel import ArgusAlarmPanel
+        from homeassistant.components.alarm_control_panel import AlarmControlPanelState
+
+        class Target(str):
+            @property
+            def value(self):
+                return str(self)
+
+        panel = ArgusAlarmPanel.__new__(ArgusAlarmPanel)
+        panel.entity_id = "alarm_control_panel.argus_north"
+        panel._config_entry = MagicMock(entry_id="north-entry", data={}, options={})
+        panel.hass = MagicMock()
+        panel.hass.states.get = lambda entity_id: {
+            "binary_sensor.door_1": MagicMock(state="open", attributes={}),
+            "binary_sensor.door_2": MagicMock(state="open", attributes={}),
+            "binary_sensor.bypassed": MagicMock(state="open", attributes={}),
+        }.get(entity_id)
+        panel.hass.async_create_task = MagicMock()
+        panel._ui_config = {"modes": {"__by_entity__": {panel.entity_id: {
+            mode: {
+                "sensors": ["binary_sensor.door_1", "binary_sensor.door_2", "binary_sensor.bypassed"],
+                "bypassed_sensors": bypassed or ["binary_sensor.bypassed"],
+                "open_sensors_policy": policy,
+            }
+        }}}}
+        panel._alarm_state = AlarmControlPanelState.DISARMED
+        panel._arm_generation = 0
+        panel._arm_request = None
+        panel._arming_target = None
+        panel._arming_listener = None
+        panel._entry_listener = None
+        panel._trigger_listener = None
+        panel._confirmation_listener = None
+        panel._confirmation_events = {}
+        panel._arming_time = 0
+        panel._entry_delay = 0
+        panel._mqtt_enabled = False
+        panel._panic_active = False
+        panel._panic_previous_state = None
+        panel._triggered_by = None
+        panel._triggered_mode = None
+        panel._code_arm_required = False
+        panel._arm_lock_until = 0.0
+        panel._context = None
+        panel._cancel_timers = MagicMock()
+        panel.async_write_ha_state = MagicMock()
+        panel._async_mqtt_publish = AsyncMock()
+        panel._async_complete_arming = AsyncMock()
+        return panel, Target(f"armed_{mode}")
+
+    async def test_each_armed_mode_waits_for_all_non_bypassed_sensors(self):
+        """Pending stays ARMING until the last configured active sensor closes."""
+        from homeassistant.components.alarm_control_panel import AlarmControlPanelState
+
+        for mode in ("home", "night", "away", "vacation"):
+            panel, target = self._make_panel(mode)
+            states = {
+                "binary_sensor.door_1": MagicMock(state="open", attributes={}),
+                "binary_sensor.door_2": MagicMock(state="open", attributes={}),
+                "binary_sensor.bypassed": MagicMock(state="open", attributes={}),
+            }
+            panel.hass.states.get = states.get
+            with patch("custom_components.argus.alarm_control_panel.async_append_audit_log", new_callable=AsyncMock):
+                await panel._async_arm(target, origin="service")
+                self.assertEqual(panel._alarm_state, AlarmControlPanelState.ARMING, mode)
+                self.assertEqual(panel._arm_request["blocking_sensors"], ["binary_sensor.door_1", "binary_sensor.door_2"])
+                states["binary_sensor.door_1"].state = "off"
+                await panel._async_recheck_arm_request()
+                panel._async_complete_arming.assert_not_awaited()
+                states["binary_sensor.door_2"].state = "off"
+                await panel._async_recheck_arm_request()
+                panel._async_complete_arming.assert_awaited_once_with(target)
+
+    async def test_allow_and_block_keep_their_distinct_results(self):
+        """Open non-bypassed sensors arm immediately for allow and reject block."""
+        from homeassistant.components.alarm_control_panel import AlarmControlPanelState
+
+        allow, target = self._make_panel("night", policy="allow")
+        with patch("custom_components.argus.alarm_control_panel.async_append_audit_log", new_callable=AsyncMock):
+            await allow._async_arm(target)
+        allow._async_complete_arming.assert_awaited_once_with(target)
+
+        block, target = self._make_panel("night", policy="block")
+        with patch("custom_components.argus.alarm_control_panel.async_append_audit_log", new_callable=AsyncMock), \
+             patch("homeassistant.components.persistent_notification.async_create"):
+            await block._async_arm(target)
+        self.assertEqual(block._alarm_state, AlarmControlPanelState.DISARMED)
+        block._async_complete_arming.assert_not_awaited()
+
+    async def test_reload_reads_the_configuration_for_this_entry(self):
+        """A UI save is reloaded from argus.ui.<entry_id>, not argus.ui global."""
+        from custom_components.argus.alarm_control_panel import ArgusAlarmPanel
+
+        panel = ArgusAlarmPanel.__new__(ArgusAlarmPanel)
+        panel.hass = MagicMock()
+        panel._config_entry = MagicMock(entry_id="north-entry")
+        panel._alarm_state = "disarmed"
+        panel._arm_request = None
+        panel._async_cancel_arming_request = AsyncMock()
+        panel._unsub_sensors = None
+        panel._mqtt_enabled = False
+        panel._mqtt_unsub = None
+        panel._sensors_away = []
+        panel._sensors_home = []
+        panel._sensors_night = []
+        panel._sensors_vacation = []
+        panel._get_mode_val = MagicMock(return_value=False)
+        with patch("custom_components.argus.alarm_control_panel.async_load_ui_data", new_callable=AsyncMock, return_value={"modes": {}}) as load:
+            await panel._async_reload_config()
+        load.assert_awaited_once_with(panel.hass, "north-entry")
+
 if __name__ == "__main__":
     unittest.main()

@@ -442,7 +442,14 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         await super().async_added_to_hass()
 
         # Load dynamic mode configuration from storage
-        self._ui_config = await async_load_ui_data(self.hass)
+        # Mode configuration is stored per config entry.  Loading the global
+        # store here would silently discard a policy saved by this instance
+        # (including open_sensors_policy="pending").  The storage helper
+        # retains the single-instance legacy migration and the normal YAML
+        # fallback remains below in _sensors_for_state.
+        self._ui_config = await async_load_ui_data(
+            self.hass, self._config_entry.entry_id
+        )
 
         # Local-first recovery: prefer the last *committed* stable state.  We
         # never restore a countdown, an entry delay, or a triggered state, so
@@ -640,7 +647,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         # A saved configuration can change bypasses or the policy itself.  Do
         # not let an old request complete under a different configuration.
         await self._async_cancel_arming_request("config_reload", disarm=True)
-        self._ui_config = await async_load_ui_data(self.hass)
+        self._ui_config = await async_load_ui_data(
+            self.hass, self._config_entry.entry_id
+        )
         # Re-subscribe sensors (picks up newly added/removed sensors from UI)
         if self._unsub_sensors:
             self._unsub_sensors()
