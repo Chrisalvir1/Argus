@@ -504,6 +504,19 @@ async def ws_argus_save_mode_config(hass, connection, msg) -> None:
     data = await async_load_ui_data(hass, entry_id)
     modes = copy.deepcopy(data.get("modes", {}))
     mode, config, entity_id = msg["mode"], copy.deepcopy(msg["config"]), msg["entity_id"]
+    # `block` was briefly exposed as an open-sensor policy.  Blocking has
+    # always belonged to the established require_closed control, so preserve
+    # old exports while canonicalizing every newly saved configuration.
+    policy = config.get("open_sensors_policy") or config.get("openSensorsPolicy")
+    if "requireClosed" in config and "require_closed" not in config:
+        config["require_closed"] = bool(config["requireClosed"])
+    if policy == "block":
+        config["require_closed"] = True
+        config["open_sensors_policy"] = "allow"
+    elif policy in {"allow", "pending"}:
+        config["open_sensors_policy"] = policy
+    config.pop("openSensorsPolicy", None)
+    config.pop("requireClosed", None)
     if entity_id:
         modes.setdefault("__by_entity__", {}).setdefault(entity_id, {})[mode] = config
     else:

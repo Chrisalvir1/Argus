@@ -2,6 +2,17 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.22] - 2026-08-03
+
+### Added
+- El escudo SVG muestra el estado nativo **Perímetro en cierre** durante un armado pendiente: conserva la identidad del modo solicitado, enseña accesos abiertos y hasta dos nombres de sensores, y pasa brevemente al escudo armado cuando cierra el último.
+- La variante de retardo normal de `ARMING` se distingue con reloj y el texto localizado **Armado en curso**, sin confundirla con una espera por sensores.
+- Localización completa de esta experiencia y de la configuración de sensores abiertos en español, inglés, francés, portugués, italiano, chino y ruso.
+
+### Changed
+- **Bloquear si abiertos** vuelve a ser la única fuente visible de bloqueo. El selector de sensores abiertos sólo ofrece permitir el armado o esperar a que cierren.
+- Las exportaciones heredadas con `open_sensors_policy: block` siguen bloqueando mediante `require_closed: true` y se normalizan al guardarse de nuevo.
+
 ## [2.0.21] - 2026-08-03
 
 ### Fixed

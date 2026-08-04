@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v2.0.21
+ * Argus Home Hub – v2.0.22
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1081,13 +1081,27 @@ Object.assign(TEXTS.pt, { entry_delay_toggle:'Atraso de entrada (⏳) ou instant
 Object.assign(TEXTS.it, { entry_delay_toggle:'Ritardo di ingresso (⏳) o istantaneo (⚡)', saved:'✓ Salvato correttamente', pin_mismatch:'❌ Il nuovo PIN non corrisponde' });
 Object.assign(TEXTS.zh, { entry_delay_toggle:'进入延迟 (⏳) 或即时 (⚡)', saved:'✓ 已成功保存', pin_mismatch:'❌ 新 PIN 不匹配' });
 Object.assign(TEXTS.ru, { entry_delay_toggle:'Задержка входа (⏳) или мгновенно (⚡)', saved:'✓ Успешно сохранено', pin_mismatch:'❌ Новый PIN-код не совпадает' });
-Object.assign(TEXTS.es, { open_sensor_policy:'Sensores abiertos al armar', policy_allow:'Permitir armado', policy_block:'Bloquear armado', policy_pending:'Esperar a que cierren', arming_waiting:'Esperando el cierre de sensores: {names}' });
-Object.assign(TEXTS.en, { open_sensor_policy:'Open sensors when arming', policy_allow:'Allow arming', policy_block:'Block arming', policy_pending:'Wait until closed', arming_waiting:'Waiting for sensors to close: {names}' });
-Object.assign(TEXTS.fr, { open_sensor_policy:'Capteurs ouverts à l’armement', policy_allow:'Autoriser l’armement', policy_block:'Bloquer l’armement', policy_pending:'Attendre la fermeture', arming_waiting:'En attente de fermeture : {names}' });
-Object.assign(TEXTS.pt, { open_sensor_policy:'Sensores abertos ao armar', policy_allow:'Permitir armar', policy_block:'Bloquear armamento', policy_pending:'Aguardar fechamento', arming_waiting:'Aguardando sensores fecharem: {names}' });
-Object.assign(TEXTS.it, { open_sensor_policy:'Sensori aperti all’inserimento', policy_allow:'Consenti inserimento', policy_block:'Blocca inserimento', policy_pending:'Attendi chiusura', arming_waiting:'In attesa che i sensori si chiudano: {names}' });
-Object.assign(TEXTS.zh, { open_sensor_policy:'布防时打开的传感器', policy_allow:'允许布防', policy_block:'阻止布防', policy_pending:'等待关闭', arming_waiting:'等待传感器关闭：{names}' });
-Object.assign(TEXTS.ru, { open_sensor_policy:'Открытые датчики при постановке', policy_allow:'Разрешить постановку', policy_block:'Заблокировать постановку', policy_pending:'Ждать закрытия', arming_waiting:'Ожидание закрытия датчиков: {names}' });
+Object.assign(TEXTS.es, { open_sensor_policy:'Sensores abiertos al armar', policy_allow:'Permitir armado', policy_pending:'Esperar a que cierren', arming_waiting:'Esperando el cierre de sensores: {names}' });
+Object.assign(TEXTS.es, { perimeter_closing:'PERÍMETRO EN CIERRE', arming_in_progress:'ARMADO EN CURSO', accesses_open:'{count} ACCESOS ABIERTOS', access_to_secure:'1 ACCESO POR ASEGURAR', more_sensors:'+{count} más', arming_delay_marker:'Retardo activo' });
+Object.assign(TEXTS.en, { perimeter_closing:'PERIMETER CLOSING', arming_in_progress:'ARMING IN PROGRESS', accesses_open:'{count} OPEN ENTRIES', access_to_secure:'1 ENTRY TO SECURE', more_sensors:'+{count} more', arming_delay_marker:'Delay active' });
+Object.assign(TEXTS.fr, { perimeter_closing:'PÉRIMÈTRE EN FERMETURE', arming_in_progress:'ARMEMENT EN COURS', accesses_open:'{count} ACCÈS OUVERTS', access_to_secure:'1 ACCÈS À SÉCURISER', more_sensors:'+{count} autres', arming_delay_marker:'Délai actif' });
+Object.assign(TEXTS.pt, { perimeter_closing:'PERÍMETRO EM FECHAMENTO', arming_in_progress:'ARMANDO EM CURSO', accesses_open:'{count} ACESSOS ABERTOS', access_to_secure:'1 ACESSO A PROTEGER', more_sensors:'+{count} mais', arming_delay_marker:'Atraso ativo' });
+Object.assign(TEXTS.it, { perimeter_closing:'PERIMETRO IN CHIUSURA', arming_in_progress:'INSERIMENTO IN CORSO', accesses_open:'{count} ACCESSI APERTI', access_to_secure:'1 ACCESSO DA PROTEGGERE', more_sensors:'+{count} altri', arming_delay_marker:'Ritardo attivo' });
+Object.assign(TEXTS.zh, { perimeter_closing:'周界正在闭合', arming_in_progress:'正在布防', accesses_open:'{count} 个入口打开', access_to_secure:'还需确保 1 个入口', more_sensors:'+{count} 个', arming_delay_marker:'延迟生效中' });
+Object.assign(TEXTS.ru, { perimeter_closing:'ПЕРИМЕТР ЗАКРЫВАЕТСЯ', arming_in_progress:'ПОСТАНОВКА В ПРОЦЕССЕ', accesses_open:'ОТКРЫТО: {count}', access_to_secure:'ОСТАЛСЯ 1 ВХОД', more_sensors:'+ ещё {count}', arming_delay_marker:'Задержка активна' });
+Object.assign(TEXTS.en, { open_sensor_policy:'Open sensors when arming', policy_allow:'Allow arming', policy_pending:'Wait until closed', arming_waiting:'Waiting for sensors to close: {names}' });
+Object.assign(TEXTS.fr, { open_sensor_policy:'Capteurs ouverts à l’armement', policy_allow:'Autoriser l’armement', policy_pending:'Attendre la fermeture', arming_waiting:'En attente de fermeture : {names}' });
+Object.assign(TEXTS.pt, { open_sensor_policy:'Sensores abertos ao armar', policy_allow:'Permitir armar', policy_pending:'Aguardar fechamento', arming_waiting:'Aguardando sensores fecharem: {names}' });
+Object.assign(TEXTS.it, { open_sensor_policy:'Sensori aperti all’inserimento', policy_allow:'Consenti inserimento', policy_pending:'Attendi chiusura', arming_waiting:'In attesa che i sensori si chiudano: {names}' });
+Object.assign(TEXTS.zh, { open_sensor_policy:'布防时打开的传感器', policy_allow:'允许布防', policy_pending:'等待关闭', arming_waiting:'等待传感器关闭：{names}' });
+Object.assign(TEXTS.ru, { open_sensor_policy:'Открытые датчики при постановке', policy_allow:'Разрешить постановку', policy_pending:'Ждать закрытия', arming_waiting:'Ожидание закрытия датчиков: {names}' });
+Object.assign(TEXTS.es, { open_sensor_policy_hint:'Se aplica cuando “Bloquear si abiertos” está desactivado.' });
+Object.assign(TEXTS.en, { open_sensor_policy_hint:'Applies when “Block if open” is disabled.' });
+Object.assign(TEXTS.fr, { open_sensor_policy_hint:'S’applique si « Bloquer si ouverts » est désactivé.' });
+Object.assign(TEXTS.pt, { open_sensor_policy_hint:'Aplica-se quando “Bloquear se abertos” está desativado.' });
+Object.assign(TEXTS.it, { open_sensor_policy_hint:'Si applica quando “Blocca se aperti” è disattivato.' });
+Object.assign(TEXTS.zh, { open_sensor_policy_hint:'在“打开时阻止”关闭时适用。' });
+Object.assign(TEXTS.ru, { open_sensor_policy_hint:'Работает, когда «Блокировать при открытии» выключено.' });
 
 // Labels introduced after the original language dictionaries.  Keeping these
 // together makes the UI resilient when a newly-added static control is
@@ -1671,6 +1685,8 @@ _tmpl.innerHTML = `
 
   .entry-icon{display:flex;justify-content:center;align-items:center;perspective:1000px;min-height:160px}
   .entry-icon svg{width:100%;height:auto;max-width:280px;filter:drop-shadow(0 0 25px rgba(255,255,255,0.12));animation:float-icon 5s ease-in-out infinite;transition:max-width 0.4s ease}
+  .entry-icon .premium-armed-complete{animation:argus-armed-complete .25s ease-out both}
+  @keyframes argus-armed-complete{from{opacity:.52;transform:scale(.965)}to{opacity:1;transform:scale(1)}}
   .ios-fullscreen .entry-icon svg{max-width:650px;filter:drop-shadow(0 0 60px rgba(255,255,255,0.3))}
   @keyframes float-icon{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-12px) rotate(1deg)}}
 
@@ -3122,6 +3138,8 @@ class ArgusPanel extends HTMLElement {
   }
 
   _getLocale() {
+    const storedPolicy = cfg?.open_sensors_policy || cfg?.openSensorsPolicy;
+    const legacyBlockPolicy = storedPolicy === 'block';
     return {
       es: 'es-ES', en: 'en-US', fr: 'fr-FR', pt: 'pt-BR',
       it: 'it-IT', zh: 'zh-CN', ru: 'ru-RU',
@@ -4180,7 +4198,8 @@ class ArgusPanel extends HTMLElement {
     return `<svg class="mode-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[mode] || paths.disarm}</svg>`;
   }
 
-  _renderPremiumStatusIcon(state, triggered) {
+  _renderPremiumStatusIcon(state, triggered, arming = {}) {
+    if (state === 'arming') return this._renderArmingStatusIcon(arming);
     const mode = triggered ? 'triggered' : ({ armed_home:'home', armed_away:'away', armed_night:'night', armed_vacation:'vacation', disarmed:'disarm' }[state] || 'disarm');
     const accent = { home:'#ffad42', away:'#ff6464', night:'#7fb9ff', vacation:'#d69cff', disarm:'#6be295', triggered:'#ff424f' }[mode];
     const symbol = {
@@ -4191,11 +4210,29 @@ class ArgusPanel extends HTMLElement {
       disarm:'<path d="m76 104 16 16 34-39"/>',
       triggered:'<path d="M100 65 139 137H61z"/><path d="M100 90v23M100 124h.01"/>'
     }[mode];
-    return `<svg viewBox="0 0 200 200" width="100%" height="100%" style="filter:drop-shadow(0 18px 28px rgba(0,0,0,.34));max-width:180px;margin:auto;display:block" aria-label="${this._escapeHtml(mode)}"><defs><linearGradient id="premium-${mode}" x1="20%" y1="10%" x2="85%" y2="100%"><stop stop-color="#fff" stop-opacity=".38"/><stop offset=".25" stop-color="${accent}" stop-opacity=".78"/><stop offset="1" stop-color="${accent}" stop-opacity=".18"/></linearGradient><filter id="premium-glow-${mode}"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M100 22 157 46v42c0 42-23 69-57 87-34-18-57-45-57-87V46z" fill="url(#premium-${mode})" stroke="${accent}" stroke-width="3" filter="url(#premium-glow-${mode})"/><path d="M100 31 148 51" stroke="#fff" stroke-opacity=".45" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="105" r="43" fill="rgba(5,12,23,.3)" stroke="rgba(255,255,255,.22)" stroke-width="2"/><g fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" filter="url(#premium-glow-${mode})">${symbol}</g><circle cx="100" cy="105" r="55" fill="none" stroke="${accent}" stroke-opacity=".42" stroke-width="2"><animate attributeName="r" values="51;60;51" dur="3.5s" repeatCount="indefinite"/><animate attributeName="opacity" values=".6;.08;.6" dur="3.5s" repeatCount="indefinite"/></circle></svg>`;
+    return `<svg class="${arming.completed ? 'premium-armed-complete' : ''}" viewBox="0 0 200 200" width="100%" height="100%" style="filter:drop-shadow(0 18px 28px rgba(0,0,0,.34));max-width:180px;margin:auto;display:block" aria-label="${this._escapeHtml(mode)}"><defs><linearGradient id="premium-${mode}" x1="20%" y1="10%" x2="85%" y2="100%"><stop stop-color="#fff" stop-opacity=".38"/><stop offset=".25" stop-color="${accent}" stop-opacity=".78"/><stop offset="1" stop-color="${accent}" stop-opacity=".18"/></linearGradient><filter id="premium-glow-${mode}"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M100 22 157 46v42c0 42-23 69-57 87-34-18-57-45-57-87V46z" fill="url(#premium-${mode})" stroke="${accent}" stroke-width="3" filter="url(#premium-glow-${mode})"/><path d="M100 31 148 51" stroke="#fff" stroke-opacity=".45" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="105" r="43" fill="rgba(5,12,23,.3)" stroke="rgba(255,255,255,.22)" stroke-width="2"/><g fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" filter="url(#premium-glow-${mode})">${symbol}</g><circle cx="100" cy="105" r="55" fill="none" stroke="${accent}" stroke-opacity=".42" stroke-width="2"><animate attributeName="r" values="51;60;51" dur="3.5s" repeatCount="indefinite"/><animate attributeName="opacity" values=".6;.08;.6" dur="3.5s" repeatCount="indefinite"/></circle></svg>`;
   }
 
-  _getIntelligentSVG(state, w, isNight, triggered) {
-    return this._renderPremiumStatusIcon(state, triggered);
+  _renderArmingStatusIcon(arming = {}) {
+    const target = String(arming.target || '').replace('armed_', '');
+    const mode = ['home', 'away', 'night', 'vacation'].includes(target) ? target : 'away';
+    const accent = { home:'#ffad42', away:'#ff6464', night:'#7fb9ff', vacation:'#d69cff' }[mode];
+    const waiting = Boolean(arming.waiting);
+    const names = Array.isArray(arming.blockingNames) ? arming.blockingNames.slice(0, 2) : [];
+    const count = Number.isFinite(arming.blockingCount) ? arming.blockingCount : names.length;
+    const overflow = Math.max(0, count - names.length);
+    const modeLabel = (this._t(`mode_${mode}`) || mode).toUpperCase();
+    const detail = count === 1 ? this._t('access_to_secure') : this._format('accesses_open', { count });
+    const namesCopy = names.map(name => this._escapeHtml(name)).join(' · ') + (overflow ? ` ${this._escapeHtml(this._format('more_sensors', { count: overflow }))}` : '');
+    const core = waiting
+      ? `<g class="argus-perimeter-door" fill="none" stroke="#fff4d2" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"><path d="M78 132V78h35v54H78z"/><path d="M113 82h10v50h-10"/><circle cx="105" cy="106" r="2" fill="#fff4d2" stroke="none"/><animateTransform attributeName="transform" type="translate" values="0 0;2 0;0 0" dur="2.4s" repeatCount="indefinite"/></g><circle cx="100" cy="105" r="55" fill="none" stroke="#ffb54d" stroke-width="3" stroke-linecap="round" stroke-dasharray="250 96" transform="rotate(-90 100 105)"><animate attributeName="stroke-dashoffset" values="0;-36" dur="2.4s" repeatCount="indefinite"/></circle><text x="100" y="157" text-anchor="middle" fill="#fff4d2" font-family="Outfit,Inter,sans-serif" font-size="8.8" font-weight="800" letter-spacing=".8">${this._escapeHtml(this._t('perimeter_closing'))}</text><text x="100" y="170" text-anchor="middle" fill="#ffcf78" font-family="Outfit,Inter,sans-serif" font-size="7.2" font-weight="700">${this._escapeHtml(modeLabel)} · ${this._escapeHtml(detail)}</text>${namesCopy ? `<text x="100" y="182" text-anchor="middle" fill="rgba(255,255,255,.76)" font-family="Outfit,Inter,sans-serif" font-size="6.4" font-weight="600">${namesCopy}</text>` : ''}${arming.delay ? `<text x="100" y="193" text-anchor="middle" fill="rgba(255,207,120,.78)" font-family="Outfit,Inter,sans-serif" font-size="5.8">◷ ${this._escapeHtml(this._t('arming_delay_marker'))}</text>` : ''}`
+      : `<g fill="none" stroke="#fff4d2" stroke-width="4.5" stroke-linecap="round"><circle cx="100" cy="104" r="23"/><path d="M100 89v17l12 7"/></g><circle cx="100" cy="105" r="55" fill="none" stroke="${accent}" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="292 54" transform="rotate(-90 100 105)"><animate attributeName="stroke-dashoffset" values="0;-42" dur="2.2s" repeatCount="indefinite"/></circle><text x="100" y="157" text-anchor="middle" fill="#fff4d2" font-family="Outfit,Inter,sans-serif" font-size="8.8" font-weight="800" letter-spacing=".8">${this._escapeHtml(this._t('arming_in_progress'))}</text><text x="100" y="170" text-anchor="middle" fill="${accent}" font-family="Outfit,Inter,sans-serif" font-size="7.2" font-weight="700">${this._escapeHtml(modeLabel)}</text>`;
+    const complete = arming.completed ? '<animate attributeName="opacity" values=".55;1" dur=".25s" fill="freeze"/>' : '';
+    return `<svg class="premium-status-shield ${waiting ? 'perimeter-closing' : 'arming-delay'}" viewBox="0 0 200 200" width="100%" height="100%" style="filter:drop-shadow(0 18px 28px rgba(0,0,0,.34));max-width:180px;margin:auto;display:block" aria-label="${this._escapeHtml(waiting ? this._t('perimeter_closing') : this._t('arming_in_progress'))}">${complete}<defs><linearGradient id="premium-arming-${mode}" x1="20%" y1="10%" x2="85%" y2="100%"><stop stop-color="#fff" stop-opacity=".30"/><stop offset=".25" stop-color="${accent}" stop-opacity=".42"/><stop offset="1" stop-color="${accent}" stop-opacity=".12"/></linearGradient></defs><path d="M100 22 157 46v42c0 42-23 69-57 87-34-18-57-45-57-87V46z" fill="url(#premium-arming-${mode})" stroke="${accent}" stroke-width="3"/><path d="M100 31 148 51" stroke="#fff" stroke-opacity=".38" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="105" r="43" fill="rgba(5,12,23,.34)" stroke="rgba(255,255,255,.22)" stroke-width="2"/>${core}</svg>`;
+  }
+
+  _getIntelligentSVG(state, w, isNight, triggered, arming) {
+    return this._renderPremiumStatusIcon(state, triggered, arming);
   }
 
   _renderEntries() {
@@ -4248,8 +4285,25 @@ class ArgusPanel extends HTMLElement {
     const currentArticles = el.querySelectorAll('article.entry');
     entries.forEach((e, idx) => {
       const art = currentArticles[idx];
-      const live  = this._hass?.states[e.entity_id]?.state;
+      const liveState = this._hass?.states?.[e.entity_id];
+      const live  = liveState?.state;
       const state = live || e.state || 'unavailable';
+      const armingAttrs = liveState?.attributes || e.attributes || {};
+      const armingTarget = typeof armingAttrs.arming_target === 'string' ? armingAttrs.arming_target : '';
+      const blockingIds = Array.isArray(armingAttrs.arming_blocking_sensors) ? armingAttrs.arming_blocking_sensors : [];
+      const blockingNames = blockingIds.map(sensorId =>
+        this._hass?.states?.[sensorId]?.attributes?.friendly_name || sensorId.split('.').slice(1).join('.') || sensorId
+      );
+      const wasWaitingForSensors = Boolean(this._pending?.[e.entity_id]?.waiting);
+      const armingVisual = {
+        target: armingTarget,
+        waiting: Boolean(armingAttrs.arming_waiting_for_sensors),
+        blockingNames,
+        blockingCount: blockingIds.length,
+        delay: armingAttrs.delay,
+        completed: wasWaitingForSensors && state === armingTarget,
+      };
+      this._pending[e.entity_id] = { waiting: state === 'arming' && armingVisual.waiting };
       const triggered = state === 'triggered';
       const panicActive = Boolean(this._hass?.states?.[e.entity_id]?.attributes?.argus_panic_active);
       const requiresDisarmPin = e.pin_configured === true || e.user_pin_configured === true;
@@ -4264,12 +4318,13 @@ class ArgusPanel extends HTMLElement {
         armed_vacation: { label: t('mode_vacation'), accent: '#d59bff' },
         triggered: { label: t('log_triggered'), accent: '#ff4d5d' },
         pending: { label: t('system_armed'), accent: '#ffb54d' },
+        arming: { label: armingVisual.waiting ? t('perimeter_closing') : t('arming_in_progress'), accent: '#ffb54d' },
       }[state] || { label: state.replace(/_/g, ' '), accent: '#9eb5cc' };
       const weatherLabel = weather.label;
       const recent = Array.isArray(this._ui?.audit_log) ? this._ui.audit_log[0] : null;
       const recentEvent = recent ? this._localizeActivityDetail(String(recent.action || ''), String(recent.detail || '')) : '';
 
-      const mKey = state.replace('armed_', '');
+      const mKey = state === 'arming' && armingTarget ? armingTarget.replace('armed_', '') : state.replace('armed_', '');
       let eCfg = (this._ui?.modes?.__by_entity__?.[e.entity_id]?.[mKey])
                 || (this._ui?.modes?.[mKey]) || {};
       if (triggered && !(eCfg.sensors || []).length) {
@@ -4350,7 +4405,7 @@ class ArgusPanel extends HTMLElement {
               </div>
             </div>
             <div class="entry-icon" style="display:flex;justify-content:center;animation:float-icon 5s ease-in-out infinite;">
-              ${this._getIntelligentSVG(state, null, isNight, triggered)}
+              ${this._getIntelligentSVG(state, null, isNight, triggered, armingVisual)}
             </div>
             <div class="liquid-stack">
               <button class="liquid-btn btn-home ${state==='armed_home'?'active':''} ${sensorAlert && state==='armed_home'?'buzz-orange':''}" data-idx="${idx}" data-action="home">${this._modeButtonIcon('home')}<span>${this._escapeHtml(modeLabel('btn_home'))}</span></button>
@@ -5006,8 +5061,10 @@ class ArgusPanel extends HTMLElement {
       bypassed_sensors: Array.isArray(cfg?.bypassed_sensors) ? cfg.bypassed_sensors : [],
       sirens: Array.isArray(cfg?.sirens) ? cfg.sirens : [],
       entry_sensors: Array.isArray(cfg?.entry_sensors) ? cfg.entry_sensors : [],
-      require_closed: typeof cfg?.require_closed === 'boolean' ? cfg.require_closed : false,
-      open_sensors_policy: ['allow', 'block', 'pending'].includes(cfg?.open_sensors_policy) ? cfg.open_sensors_policy : null,
+      // A prior release exposed block in the new selector.  Present it through
+      // the established checkbox and normalize it to allow on the next save.
+      require_closed: (typeof cfg?.require_closed === 'boolean' ? cfg.require_closed : Boolean(cfg?.requireClosed)) || legacyBlockPolicy,
+      open_sensors_policy: ['allow', 'pending'].includes(storedPolicy) ? storedPolicy : 'allow',
       arming_time: (cfg?.arming_time !== undefined && cfg?.arming_time !== null) ? cfg.arming_time : null,
       entry_delay: (cfg?.entry_delay !== undefined && cfg?.entry_delay !== null) ? cfg.entry_delay : null,
       mqtt_enabled: (cfg?.mqtt_enabled !== undefined && cfg?.mqtt_enabled !== null) ? cfg.mqtt_enabled : null,
@@ -5065,10 +5122,10 @@ class ArgusPanel extends HTMLElement {
             <label class="input-group" style="display:block;margin-top:10px">
               <span class="input-label">${this._t('open_sensor_policy')}</span>
               <select id="mode-open-sensors-policy" style="width:100%;padding:8px;border-radius:8px;background:rgba(255,255,255,.03);color:inherit;border:1px solid rgba(255,255,255,.1)">
-                <option value="allow" ${(cfg.open_sensors_policy || (cfg.require_closed ? 'block' : 'allow')) === 'allow' ? 'selected' : ''}>${this._t('policy_allow')}</option>
-                <option value="block" ${(cfg.open_sensors_policy || (cfg.require_closed ? 'block' : 'allow')) === 'block' ? 'selected' : ''}>${this._t('policy_block')}</option>
-                <option value="pending" ${(cfg.open_sensors_policy || (cfg.require_closed ? 'block' : 'allow')) === 'pending' ? 'selected' : ''}>${this._t('policy_pending')}</option>
+                <option value="allow" ${cfg.open_sensors_policy === 'allow' ? 'selected' : ''}>${this._t('policy_allow')}</option>
+                <option value="pending" ${cfg.open_sensors_policy === 'pending' ? 'selected' : ''}>${this._t('policy_pending')}</option>
               </select>
+              <span class="setting-sublabel" style="margin-top:6px">${this._t('open_sensor_policy_hint')}</span>
             </label>
           `}
         </div>
@@ -6856,7 +6913,7 @@ class ArgusPanel extends HTMLElement {
 
     // The backend is authoritative. Only show the pending wait locally; do
     // not pre-reject it, otherwise it could never reach the canonical flow.
-    const configuredPolicy = modeCfg.open_sensors_policy || (modeCfg.require_closed ? 'block' : 'allow');
+    const configuredPolicy = modeCfg.require_closed ? 'block' : (modeCfg.open_sensors_policy || 'allow');
     if (configuredPolicy === 'pending') {
       const modeSensors = modeCfg.sensors || [];
       // Match the integration behaviour: bypassed sensors never block arming
@@ -6873,12 +6930,7 @@ class ArgusPanel extends HTMLElement {
         }
       }
       if (openNames.length > 0) {
-        if (configuredPolicy === 'pending') {
-          this._sendHaNotif(`⏳ ${this._t('arming')}`, this._format('arming_waiting', { names: openNames.join(', ') }));
-        } else if (configuredPolicy === 'block') {
-          this._showArmBlockedAlert(openNames);
-          return;
-        }
+        this._sendHaNotif(`⏳ ${this._t('arming')}`, this._format('arming_waiting', { names: openNames.join(', ') }));
       }
     }
 
@@ -7611,4 +7663,4 @@ class ArgusPanel extends HTMLElement {
 
 }
 
-customElements.define('argus-panel-v2021', ArgusPanel);
+customElements.define('argus-panel-v2022', ArgusPanel);

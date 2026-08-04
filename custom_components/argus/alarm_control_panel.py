@@ -430,12 +430,19 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         ]
 
     def _open_sensor_policy(self, mode_key: str) -> str:
-        """Resolve new policy, preserving the legacy require_closed behavior."""
+        """Resolve allow/pending while keeping blocking owned by require_closed."""
         config = self._mode_config(mode_key)
+        if config.get("require_closed") or config.get("requireClosed"):
+            return "block"
         policy = config.get("open_sensors_policy") or config.get("openSensorsPolicy")
-        if policy in {"allow", "block", "pending"}:
+        if policy in {"allow", "pending"}:
             return policy
-        return "block" if (config.get("require_closed") or config.get("requireClosed")) else "allow"
+        # Exports produced before the selector was simplified could encode
+        # block here.  Keep their behavior until the next UI/WebSocket save
+        # normalizes it into require_closed.
+        if policy == "block":
+            return "block"
+        return "allow"
 
     # ── Lifecycle ──────────────────────────────────────────────────
     async def async_added_to_hass(self) -> None:

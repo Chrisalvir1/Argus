@@ -369,9 +369,9 @@ class TestV193FrontendContracts(unittest.TestCase):
             self.content = f.read()
 
     def test_version_updated_to_2021(self):
-        """argus-panel.js header must reflect v2.0.21."""
-        self.assertIn("v2.0.21", self.content, "argus-panel.js must mention v2.0.21")
-        self.assertIn("argus-panel-v2021", self.content, "customElements.define must use argus-panel-v2021")
+        """argus-panel.js header must reflect v2.0.22."""
+        self.assertIn("v2.0.22", self.content, "argus-panel.js must mention v2.0.22")
+        self.assertIn("argus-panel-v2022", self.content, "customElements.define must use argus-panel-v2022")
 
     def test_new_i18n_keys_all_languages(self):
         """All 7 language tables must contain all new v1.9.3 i18n keys."""
@@ -456,7 +456,7 @@ class TestV193ManifestVersion(unittest.TestCase):
         )
         with open(manifest_path) as f:
             manifest = json.load(f)
-        self.assertEqual(manifest["version"], "2.0.21", "manifest.json version must be 2.0.21")
+        self.assertEqual(manifest["version"], "2.0.22", "manifest.json version must be 2.0.22")
 
 
 class TestV193BootstrapCacheBust(unittest.TestCase):
@@ -466,7 +466,7 @@ class TestV193BootstrapCacheBust(unittest.TestCase):
         )
         with open(bootstrap_path) as f:
             content = f.read()
-        self.assertIn("2.0.21", content, "argus-bootstrap.js must reference version 2.0.21 for cache-busting")
+        self.assertIn("2.0.22", content, "argus-bootstrap.js must reference version 2.0.22 for cache-busting")
 
 
 class TestV193ScheduleAndDisarmProtection(unittest.IsolatedAsyncioTestCase):
@@ -707,6 +707,18 @@ class TestOpenSensorPolicyBehaviour(unittest.IsolatedAsyncioTestCase):
             await block._async_arm(target)
         self.assertEqual(block._alarm_state, AlarmControlPanelState.DISARMED)
         block._async_complete_arming.assert_not_awaited()
+
+    async def test_require_closed_overrides_pending_and_legacy_block_is_preserved(self):
+        """The checkbox is authoritative; historical policy=block still blocks."""
+        from homeassistant.components.alarm_control_panel import AlarmControlPanelState
+
+        panel, target = self._make_panel("night", policy="pending")
+        panel._ui_config["modes"]["__by_entity__"][panel.entity_id]["night"]["require_closed"] = True
+        with patch("custom_components.argus.alarm_control_panel.async_append_audit_log", new_callable=AsyncMock), \
+             patch("homeassistant.components.persistent_notification.async_create"):
+            await panel._async_arm(target)
+        self.assertEqual(panel._alarm_state, AlarmControlPanelState.DISARMED)
+        panel._async_complete_arming.assert_not_awaited()
 
     async def test_reload_reads_the_configuration_for_this_entry(self):
         """A UI save is reloaded from argus.ui.<entry_id>, not argus.ui global."""
