@@ -175,6 +175,97 @@ export function applyBgSensorAvailabilityFixes(ArgusPanel) {
   ArgusPanel.__argusBgSensorAvailabilityFixes = true;
   const proto = ArgusPanel.prototype;
 
+  async function argusApplyProfileTheme(panel) {
+    if (!panel._currentProfile || !panel._currentProfile.id) return;
+    
+    try {
+      const res = await panel._send('argus/get_profile_theme');
+      if (res && res.theme && Object.keys(res.theme).length > 0) {
+        const t = res.theme;
+        
+        if (t.background_mode !== undefined) panel._backgroundMode = t.background_mode;
+        if (t.background_images !== undefined) panel._backgroundImages = t.background_images;
+        if (t.panel_bg_file !== undefined) panel._panelBgFile = t.panel_bg_file || '';
+        if (t.panel_bg_sound !== undefined) panel._panelBgSound = t.panel_bg_sound;
+        
+        if (t.hub_bg_mode !== undefined) {
+          panel._hubBgMode = (t.hub_bg_mode === 'none' || t.hub_bg_mode === 'default') ? 'default' : t.hub_bg_mode;
+        }
+        if (t.hub_bg_file !== undefined) panel._hubBgFile = t.hub_bg_file || '';
+        if (t.hub_bg_sound !== undefined) panel._hubBgSound = t.hub_bg_sound;
+        
+        if (!panel._ui) panel._ui = {};
+        panel._ui.background_mode = panel._backgroundMode;
+        panel._ui.background_images = panel._backgroundImages;
+        panel._ui.panel_bg_file = panel._panelBgFile;
+        panel._ui.panel_bg_sound = panel._panelBgSound;
+        panel._ui.hub_bg_mode = panel._hubBgMode;
+        panel._ui.hub_bg_file = panel._hubBgFile;
+        panel._ui.hub_bg_sound = panel._hubBgSound;
+        
+        const root = panel.shadowRoot;
+        if (root) {
+          const modeSel = root.getElementById('bg-mode-select-standalone');
+          if (modeSel) modeSel.value = panel._backgroundMode;
+          
+          const hubModeSel = root.getElementById('hub-bg-mode-select');
+          if (hubModeSel) hubModeSel.value = panel._hubBgMode;
+          
+          const panelUrl = root.getElementById('panel-bg-url-input');
+          if (panelUrl && (!panel._panelBgFile.startsWith('data:'))) {
+            panelUrl.value = panel._panelBgFile;
+          }
+          
+          const hubUrl = root.getElementById('hub-bg-url-input');
+          if (hubUrl && (!panel._hubBgFile.startsWith('data:'))) {
+            hubUrl.value = panel._hubBgFile;
+          }
+        }
+        
+        if (typeof panel._updateBgFieldsVisibility === 'function') panel._updateBgFieldsVisibility();
+        if (typeof panel._updateCanvasBackground === 'function') panel._updateCanvasBackground();
+        if (typeof panel._updateTheme === 'function') panel._updateTheme();
+        if (typeof panel._renderEntries === 'function') panel._renderEntries();
+      }
+    } catch (e) {
+      console.warn('Failed to load profile theme', e);
+    }
+  }
+
+  async function argusSaveProfileTheme(panel) {
+    if (!panel._currentProfile || !panel._currentProfile.id) return;
+    try {
+      const root = panel.shadowRoot;
+      let bgMode = panel._backgroundMode;
+      let hubBgMode = panel._hubBgMode;
+      
+      if (root) {
+         const modeSel = root.getElementById('bg-mode-select-standalone');
+         if (modeSel) bgMode = modeSel.value;
+         
+         const hubModeSel = root.getElementById('hub-bg-mode-select');
+         if (hubModeSel) hubBgMode = hubModeSel.value;
+      }
+      
+      const theme = {
+        background_mode: bgMode,
+        hub_bg_mode: hubBgMode === 'default' ? 'none' : hubBgMode,
+        panel_bg_file: ['photo', 'collage', 'video'].includes(bgMode) ? (panel._panelBgFile || '') : '',
+        hub_bg_file: hubBgMode === 'image' ? (panel._hubBgFile || '') : '',
+        background_images: panel._backgroundImages || [],
+        panel_bg_sound: !!panel._panelBgSound,
+        hub_bg_sound: !!panel._hubBgSound
+      };
+      
+      const res = await panel._send('argus/save_profile_theme', { theme });
+      if (res && res.theme) {
+         panel._currentProfile.theme = res.theme;
+      }
+    } catch (e) {
+      console.warn('Failed to save profile theme', e);
+    }
+  }
+
   // i18n for the new availability state.
   const originalT = proto._t;
   proto._t = function(key) {
@@ -190,7 +281,9 @@ export function applyBgSensorAvailabilityFixes(ArgusPanel) {
   const originalPersist = proto._persistPersonalization;
   proto._persistPersonalization = async function() {
     argusSanitizeBackgroundState(this);
-    return originalPersist.call(this);
+    const result = await originalPersist.call(this);
+    await argusSaveProfileTheme(this);
+    return result;
   };
 
   // Sensor pills (modes / bypass / entry lists): show "Sin conexión" + ❓.
@@ -242,6 +335,7 @@ export function applyBgSensorAvailabilityFixes(ArgusPanel) {
   const originalLoad = proto._load;
   proto._load = async function() {
     const result = await originalLoad?.call(this);
+    await argusApplyProfileTheme(this);
     argusInstallAvailabilityStyles(this);
     argusSyncBackgroundControls(this);
     return result;

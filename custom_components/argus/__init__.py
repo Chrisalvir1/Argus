@@ -6,7 +6,7 @@ import logging
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
-from . import const, websocket_api
+from . import const, personalization, websocket_api
 from .const import DOMAIN, PLATFORMS
 from .media_websocket import install as install_media_websocket
 from .panel import async_register_panel
@@ -27,6 +27,7 @@ def _async_register_websocket_once(hass: HomeAssistant) -> None:
         return
     install_media_websocket(websocket_api)
     websocket_api.async_register_websocket_api(hass)
+    personalization.async_register_personalization_api(hass)
     hass.data[DOMAIN][_WS_REGISTERED_KEY] = True
 
 
