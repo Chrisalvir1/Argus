@@ -41,6 +41,7 @@ from .const import (
     CONF_SENSORS_NIGHT,
     CONF_SENSORS_VACATION,
     CONF_ENTRY_SENSORS,
+    CONF_LINKED_ALARM_PANELS,
     CONF_SIREN_ENTITY,
     CONF_MQTT_ENABLED,
     CONF_MQTT_TOPIC_STATE,
@@ -908,7 +909,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             persistent_notification.async_create(
                 self.hass,
                 f"⚠️ Sensor: **{self._triggered_by or 'desconocido'}**\n\nModo activo: `{self._alarm_state.value}`",
-                title="🚨 Argus — Alarma Activada",
+                title="🚨 ARGUS — ALARMA DISPARADA",
                 notification_id="argus_triggered",
             )
         sensor_name = "desconocido"
@@ -932,6 +933,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             entry_id=self._config_entry.entry_id,
         )
 
+        await self._async_sync_external_panels("trigger")
+        await self._async_persist_stable_state("trigger")
+
         # An SOS is ended deliberately by the user.  It must never silently
         # disarm or return the system to normal because a timer expired.
         _tt = self._trigger_time if isinstance(self._trigger_time, int) else 0
@@ -939,6 +943,26 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self._trigger_listener = async_call_later(
                 self.hass, _tt, self._async_reset_triggered
             )
+
+    async def _async_sync_external_panels(self, action: str) -> None:
+        """Trigger or disarm linked external alarm panels (like camera sirens)."""
+        linked_panels = self._config_entry.options.get(CONF_LINKED_ALARM_PANELS, [])
+        if not linked_panels:
+            return
+            
+        service = "alarm_trigger" if action == "trigger" else "alarm_disarm"
+        for panel in linked_panels:
+            try:
+                # Do not trigger ourselves to prevent loops
+                if panel != self.entity_id:
+                    await self.hass.services.async_call(
+                        "alarm_control_panel",
+                        service,
+                        {"entity_id": panel},
+                        blocking=False,
+                    )
+            except Exception as e:
+                _LOGGER.warning("Argus: Failed to %s external panel %s: %s", service, panel, e)
 
     @callback
     def _async_reset_triggered(self, _now):
@@ -955,7 +979,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self.hass.async_create_task(_do_reset())
 
     @callback
-    def _async_finish_arming(self, _now):
+    def _async_finish_arming(self, _now) -> None:
         """Arming countdown finished — move to target armed state."""
         if self._alarm_state == AlarmControlPanelState.ARMING and self._arming_target:
             self._alarm_state = self._arming_target
@@ -1236,6 +1260,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._cancel_timers()
         await self._async_siren(False)
         persistent_notification.async_dismiss(self.hass, "argus_triggered")
+        
+        await self._async_sync_external_panels("disarm")
+
         self._panic_active = False
         self._panic_previous_state = None
         self._triggered_mode = None
@@ -1489,6 +1516,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._cancel_timers()
         await self._async_siren(False)
         persistent_notification.async_dismiss(self.hass, "argus_triggered")
+        
+        await self._async_sync_external_panels("disarm")
+
         self._panic_active = False
         self._panic_previous_state = None
         self._triggered_mode = None

@@ -42,10 +42,13 @@ Puedes ver el diagnóstico detectado y forzar un perfil manualmente desde **Pers
 - Retardos de entrada y salida, duración de alarma y restauración segura.
 - Sensores por modo, sensores de entrada, bypass y requisito de cierre.
 - Sirenas por modo y SOS reversible con salidas independientes.
+- **Sincronización Inteligente con Paneles Externos** (v2.0.25): Dispara y silencia automáticamente sirenas de cámaras u otras alarmas.
 - PIN maestro, usuarios temporales, invitado, `scrypt`/PBKDF2 y limitación de intentos administrativos.
 - **Sincronización automática de perfiles con cuentas humanas de Home Assistant** (v1.9.3).
+- **Fondos Personalizables Independientes por Perfil** (v2.0.25): Cada usuario puede tener su propio fondo.
 - Selector de perfiles con distinción visual del perfil propio; perfiles ajenos protegidos por PIN de acceso.
 - Auditoría, estadísticas de 30 días y línea temporal forense.
+- **Indicadores Inteligentes de Batería (Liquid Glass)**: Visualización en tiempo real con alertas críticas al 10% y estado de batería agotada.
 - MQTT opcional con comandos JSON o texto.
 - Horarios locales y confirmación de intrusión mediante múltiples señales.
 - Medios privados firmados bajo `.storage`.
