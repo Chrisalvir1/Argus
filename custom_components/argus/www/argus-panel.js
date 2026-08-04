@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v2.0.18
+ * Argus Home Hub – v2.0.19
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1081,6 +1081,13 @@ Object.assign(TEXTS.pt, { entry_delay_toggle:'Atraso de entrada (⏳) ou instant
 Object.assign(TEXTS.it, { entry_delay_toggle:'Ritardo di ingresso (⏳) o istantaneo (⚡)', saved:'✓ Salvato correttamente', pin_mismatch:'❌ Il nuovo PIN non corrisponde' });
 Object.assign(TEXTS.zh, { entry_delay_toggle:'进入延迟 (⏳) 或即时 (⚡)', saved:'✓ 已成功保存', pin_mismatch:'❌ 新 PIN 不匹配' });
 Object.assign(TEXTS.ru, { entry_delay_toggle:'Задержка входа (⏳) или мгновенно (⚡)', saved:'✓ Успешно сохранено', pin_mismatch:'❌ Новый PIN-код не совпадает' });
+Object.assign(TEXTS.es, { open_sensor_policy:'Sensores abiertos al armar', policy_allow:'Permitir armado', policy_block:'Bloquear armado', policy_pending:'Esperar a que cierren', arming_waiting:'Esperando el cierre de sensores: {names}' });
+Object.assign(TEXTS.en, { open_sensor_policy:'Open sensors when arming', policy_allow:'Allow arming', policy_block:'Block arming', policy_pending:'Wait until closed', arming_waiting:'Waiting for sensors to close: {names}' });
+Object.assign(TEXTS.fr, { open_sensor_policy:'Capteurs ouverts à l’armement', policy_allow:'Autoriser l’armement', policy_block:'Bloquer l’armement', policy_pending:'Attendre la fermeture', arming_waiting:'En attente de fermeture : {names}' });
+Object.assign(TEXTS.pt, { open_sensor_policy:'Sensores abertos ao armar', policy_allow:'Permitir armar', policy_block:'Bloquear armamento', policy_pending:'Aguardar fechamento', arming_waiting:'Aguardando sensores fecharem: {names}' });
+Object.assign(TEXTS.it, { open_sensor_policy:'Sensori aperti all’inserimento', policy_allow:'Consenti inserimento', policy_block:'Blocca inserimento', policy_pending:'Attendi chiusura', arming_waiting:'In attesa che i sensori si chiudano: {names}' });
+Object.assign(TEXTS.zh, { open_sensor_policy:'布防时打开的传感器', policy_allow:'允许布防', policy_block:'阻止布防', policy_pending:'等待关闭', arming_waiting:'等待传感器关闭：{names}' });
+Object.assign(TEXTS.ru, { open_sensor_policy:'Открытые датчики при постановке', policy_allow:'Разрешить постановку', policy_block:'Заблокировать постановку', policy_pending:'Ждать закрытия', arming_waiting:'Ожидание закрытия датчиков: {names}' });
 
 // Labels introduced after the original language dictionaries.  Keeping these
 // together makes the UI resilient when a newly-added static control is
@@ -4955,7 +4962,7 @@ class ArgusPanel extends HTMLElement {
     const emptyCfg = {
       sensors: [], bypassed_sensors: [], sirens: [],
       require_closed: false, arming_time: null, entry_delay: null,
-      mqtt_enabled: null, entry_sensors: []
+      mqtt_enabled: null, entry_sensors: [], open_sensors_policy: null
     };
     if (!this._ui || typeof this._ui !== 'object' || Array.isArray(this._ui)) {
       this._ui = { modes: {}, dashboard: {} };
@@ -5000,6 +5007,7 @@ class ArgusPanel extends HTMLElement {
       sirens: Array.isArray(cfg?.sirens) ? cfg.sirens : [],
       entry_sensors: Array.isArray(cfg?.entry_sensors) ? cfg.entry_sensors : [],
       require_closed: typeof cfg?.require_closed === 'boolean' ? cfg.require_closed : false,
+      open_sensors_policy: ['allow', 'block', 'pending'].includes(cfg?.open_sensors_policy) ? cfg.open_sensors_policy : null,
       arming_time: (cfg?.arming_time !== undefined && cfg?.arming_time !== null) ? cfg.arming_time : null,
       entry_delay: (cfg?.entry_delay !== undefined && cfg?.entry_delay !== null) ? cfg.entry_delay : null,
       mqtt_enabled: (cfg?.mqtt_enabled !== undefined && cfg?.mqtt_enabled !== null) ? cfg.mqtt_enabled : null,
@@ -5053,6 +5061,14 @@ class ArgusPanel extends HTMLElement {
             <label class="checkbox-label" style="display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05);font-size:12px">
               <input type="checkbox" id="mode-require-closed" ${cfg.require_closed ? 'checked' : ''}>
               <span style="font-size:12px;font-weight:600">${this._t('lock_if_open')}</span>
+            </label>
+            <label class="input-group" style="display:block;margin-top:10px">
+              <span class="input-label">${this._t('open_sensor_policy')}</span>
+              <select id="mode-open-sensors-policy" style="width:100%;padding:8px;border-radius:8px;background:rgba(255,255,255,.03);color:inherit;border:1px solid rgba(255,255,255,.1)">
+                <option value="allow" ${(cfg.open_sensors_policy || (cfg.require_closed ? 'block' : 'allow')) === 'allow' ? 'selected' : ''}>${this._t('policy_allow')}</option>
+                <option value="block" ${(cfg.open_sensors_policy || (cfg.require_closed ? 'block' : 'allow')) === 'block' ? 'selected' : ''}>${this._t('policy_block')}</option>
+                <option value="pending" ${(cfg.open_sensors_policy || (cfg.require_closed ? 'block' : 'allow')) === 'pending' ? 'selected' : ''}>${this._t('policy_pending')}</option>
+              </select>
             </label>
           `}
         </div>
@@ -5177,11 +5193,13 @@ class ArgusPanel extends HTMLElement {
     const armTime  = this.shadowRoot.getElementById('mode-arming-time');
     const entDelay = this.shadowRoot.getElementById('mode-entry-delay');
     const mqttChk  = this.shadowRoot.getElementById('mode-mqtt-enabled');
+    const policySel = this.shadowRoot.getElementById('mode-open-sensors-policy');
 
     if (chk)      cfg.require_closed = chk.checked;
     if (armTime)  cfg.arming_time  = armTime.value  ? parseInt(armTime.value)  : 0;
     if (entDelay) cfg.entry_delay  = entDelay.value ? parseInt(entDelay.value) : 0;
     if (mqttChk)  cfg.mqtt_enabled = mqttChk.checked;
+    if (policySel) cfg.open_sensors_policy = policySel.value;
 
     this._runWithPin(async () => {
       const _eid = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id || 'default';
@@ -6836,8 +6854,10 @@ class ArgusPanel extends HTMLElement {
                  || (this._ui?.modes?.[action])
                  || {};
 
-    // FIX-5: bloqueo require_closed con detalle de sensores abiertos
-    if (modeCfg.require_closed) {
+    // The backend is authoritative. Only show the pending wait locally; do
+    // not pre-reject it, otherwise it could never reach the canonical flow.
+    const configuredPolicy = modeCfg.open_sensors_policy || (modeCfg.require_closed ? 'block' : 'allow');
+    if (configuredPolicy === 'pending') {
       const modeSensors = modeCfg.sensors || [];
       // Match the integration behaviour: bypassed sensors never block arming
       // and never trigger the alarm in this specific mode.
@@ -6853,9 +6873,12 @@ class ArgusPanel extends HTMLElement {
         }
       }
       if (openNames.length > 0) {
-        this._showArmBlockedAlert(openNames);
-
-        return;
+        if (configuredPolicy === 'pending') {
+          this._sendHaNotif(`⏳ ${this._t('arming')}`, this._format('arming_waiting', { names: openNames.join(', ') }));
+        } else if (configuredPolicy === 'block') {
+          this._showArmBlockedAlert(openNames);
+          return;
+        }
       }
     }
 

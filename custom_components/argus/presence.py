@@ -6,7 +6,7 @@ from homeassistant.helpers.event import async_track_state_change_event
 from .storage import async_load_ui_data
 from .websocket_api import async_append_audit_log, _resolve_alarm_entity_id
 from homeassistant.const import STATE_UNAVAILABLE, STATE_UNKNOWN
-from .const import SIGNAL_CONFIG_UPDATED
+from .const import SIGNAL_CONFIG_UPDATED, DOMAIN, DATA_PANELS
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 
 _LOGGER = logging.getLogger(__name__)
@@ -175,8 +175,23 @@ class PresenceManager:
 
                 # Execute arming
                 arm_mode = rule.get("arm_mode", "away")
-                service = f"alarm_arm_{arm_mode}"
-                await self.hass.services.async_call("alarm_control_panel", service, {"entity_id": alarm_entity_id})
+                # Keep the source when presence creates a pending request.
+                # Fallback to HA's service route only while the panel is not
+                # available during startup/unload.
+                panel = self.hass.data.get(DOMAIN, {}).get(DATA_PANELS, {}).get(self.entry_id)
+                if panel is not None:
+                    from homeassistant.components.alarm_control_panel import AlarmControlPanelState
+                    targets = {
+                        "home": AlarmControlPanelState.ARMED_HOME,
+                        "away": AlarmControlPanelState.ARMED_AWAY,
+                        "night": AlarmControlPanelState.ARMED_NIGHT,
+                        "vacation": AlarmControlPanelState.ARMED_VACATION,
+                    }
+                    target = targets.get(arm_mode, AlarmControlPanelState.ARMED_AWAY)
+                    await panel._async_arm(target, origin="presence")
+                else:
+                    service = f"alarm_arm_{arm_mode}"
+                    await self.hass.services.async_call("alarm_control_panel", service, {"entity_id": alarm_entity_id})
                 
                 await async_append_audit_log(
                     self.hass, 

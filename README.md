@@ -40,7 +40,7 @@ Puedes ver el diagnóstico detectado y forzar un perfil manualmente desde **Pers
 
 - Modos desarmado, casa, ausente, noche y vacaciones.
 - Retardos de entrada y salida, duración de alarma y restauración segura.
-- Sensores por modo, sensores de entrada, bypass y requisito de cierre.
+- Sensores por modo, sensores de entrada, bypass y política de sensores abiertos: permitir, bloquear o esperar el cierre.
 - Sirenas por modo y SOS reversible con salidas independientes.
 - PIN maestro, usuarios temporales, invitado, `scrypt`/PBKDF2 y limitación de intentos administrativos.
 - **Sincronización automática de perfiles con cuentas humanas de Home Assistant** (v1.9.3).
@@ -68,6 +68,20 @@ Argus 2.0 consolida nuestras estrictas políticas de seguridad:
 - **Sincronización segura de perfiles:** Los perfiles auto-creados tienen `managed_by_ha_sync: true` y permisos mínimos. Los perfiles manuales nunca se modifican automáticamente.
 
 *Anteriormente en versiones previas:* Se eliminaron acciones TTS, análisis por IA, y controles Matter de terceros del runtime activo para maximizar la privacidad. HomeKit Bridge y rutinas locales deterministas continúan disponibles.
+
+## Sensores abiertos al armar
+
+En **Modos**, configura para Casa, Ausente, Noche o Vacaciones la opción **Sensores abiertos al armar**. No se aplica a Desarmado.
+
+- **Permitir:** arma de inmediato aunque haya sensores abiertos.
+- **Bloquear:** cancela el armado e informa los sensores abiertos. Es el comportamiento heredado cuando `require_closed` estaba activado.
+- **Esperar a que cierren:** Argus queda en `ARMING` para Home Assistant y HomeKit; muestra el destino y los sensores bloqueantes, y sólo declara el modo armado al cerrarse el último.
+
+El bypass/omitir se conserva estrictamente: un sensor listado en `bypassed_sensors` (o el formato heredado `bypassedSensors`) nunca bloquea, nunca aparece en la espera y nunca la detiene. Sus eventos, telemetría y automatizaciones existentes se mantienen.
+
+La política se guarda por instancia y por modo desde la UI de Argus; no añade una clave YAML obligatoria. Las exportaciones de configuración conservan el equivalente `open_sensors_policy` (`allow`, `block` o `pending`) dentro de la configuración del modo. Si no existe esa clave, `require_closed: true` equivale a `block` y `false` a `allow`.
+
+Las solicitudes desde el panel, servicios de Home Assistant/HomeKit, MQTT, presencia y horarios usan el mismo flujo. En espera, un `arming_time` también debe terminar antes de armar. Desarmar, cambiar de modo, SOS/alarma, recargar la configuración, descargar la integración o un horario de desarmado cancelan la solicitud de forma segura; no se restaura una espera después de reiniciar.
 
 ## Requisitos
 
@@ -124,7 +138,7 @@ title: Seguridad
 4. Recarga el navegador sin caché.
 5. Verifica armado, desarmado, SOS, PIN, sirenas, medios y restauración.
 
-Consulta las notas de la versión [v2.0.18](https://github.com/Chrisalvir1/Argus/releases/tag/v2.0.18).
+Consulta las notas de la versión [v2.0.19](https://github.com/Chrisalvir1/Argus/releases/tag/v2.0.19).
 
 ## Desarrollo
 

@@ -1,15 +1,15 @@
-import './argus-panel.js?v=2.0.18';
-import { applyUiAuditFixes } from './argus-ui-audit-fixes.js?v=2.0.18';
-import { applyGridPolish } from './argus-grid-polish.js?v=2.0.18';
-import { applyFullscreenPolish } from './argus-fullscreen-polish.js?v=2.0.18';
-import { applyMediaClient } from './media-client.js?v=2.0.18';
-import { applyPremiumExperience } from './premium-experience.js?v=2.0.18';
-import { applySecurityClient } from './security-client.js?v=2.0.18';
-import { applyV2012AuditFixes } from './argus-v2013-audit-fixes.js?v=2.0.18';
-import { applyPerformanceProfile } from './argus-performance-profile.js?v=2.0.18';
-import { applyVisualContainerFixes } from './argus-visual-container-fixes.js?v=2.0.18';
-import { applyCompleteContentFixes } from './argus-complete-content-fixes.js?v=2.0.18';
-import { applyRuntimeVisualFixes } from './argus-runtime-visual-fixes.js?v=2.0.18';
+import './argus-panel.js?v=2.0.19';
+import { applyUiAuditFixes } from './argus-ui-audit-fixes.js?v=2.0.19';
+import { applyGridPolish } from './argus-grid-polish.js?v=2.0.19';
+import { applyFullscreenPolish } from './argus-fullscreen-polish.js?v=2.0.19';
+import { applyMediaClient } from './media-client.js?v=2.0.19';
+import { applyPremiumExperience } from './premium-experience.js?v=2.0.19';
+import { applySecurityClient } from './security-client.js?v=2.0.19';
+import { applyV2012AuditFixes } from './argus-v2013-audit-fixes.js?v=2.0.19';
+import { applyPerformanceProfile } from './argus-performance-profile.js?v=2.0.19';
+import { applyVisualContainerFixes } from './argus-visual-container-fixes.js?v=2.0.19';
+import { applyCompleteContentFixes } from './argus-complete-content-fixes.js?v=2.0.19';
+import { applyRuntimeVisualFixes } from './argus-runtime-visual-fixes.js?v=2.0.19';
 
 const ArgusPanel = customElements.get('argus-panel-v2018');
 applyUiAuditFixes(ArgusPanel);

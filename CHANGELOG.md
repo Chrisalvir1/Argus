@@ -2,6 +2,21 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.19] - 2026-08-03
+
+### Added
+- Política por modo para sensores abiertos al armar: **permitir**, **bloquear** o **armado pendiente** para Casa, Ausente, Noche y Vacaciones.
+- Armado pendiente visible como `ARMING` en Home Assistant/HomeKit, con destino, origen y sensores bloqueantes como atributos.
+- Auditoría de espera, cancelación y finalización del armado, protegida contra callbacks tardíos.
+
+### Changed
+- Presencia, MQTT y horarios usan el flujo canónico de armado; los horarios ya no omiten la política de sensores.
+- La UI permite elegir la política y muestra la espera sin rechazar localmente un armado pendiente.
+
+### Compatibility
+- Se conservan `bypassed_sensors` y `bypassedSensors`: los sensores omitidos no bloquean ni participan en la espera.
+- Configuraciones existentes conservan su resultado: `require_closed: true` equivale a bloquear y `false` a permitir hasta que se guarde una política explícita.
+
 ## [2.0.18] - 2026-08-03
 
 ### Fixed
