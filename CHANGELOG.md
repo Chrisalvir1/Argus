@@ -2,6 +2,18 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.27] - 2026-08-04
+
+### Added
+- **Sincronización de Paneles Externos**: Nueva sección en la configuración de modos para seleccionar otros paneles de alarma que sincronizarán automáticamente su estado con Argus de forma bidireccional, manteniendo "Sirenas" solo para activación de alarma en pánico.
+- **Color de Sirenas (Luces RGB)**: Menú desplegable global en la configuración de Modos para seleccionar un color específico (Rojo, Azul, Verde, Morado, Predeterminado) para todas las luces integradas como sirena, respetando el dominio `light` y el servicio `turn_on` con `color_name`.
+- **Fondo Personalizado Independiente**: Al guardar imágenes personalizadas para el fondo de pantalla de la interfaz, estas ahora se guardan independientemente para cada usuario activo sin sobrescribir la personalización de otros.
+
+### Fixed
+- **Batería en Instancias Activas**: Añadido el medidor visual de batería dentro del panel principal al lado del estatus, empleando estilo liquid glass transparente que se torna rojo y avisa desconexión debajo del 10% de carga.
+- **Pico Blanco en Esquinas Redondeadas**: Implementación de máscara radial Webkit (`-webkit-mask-image: radial-gradient`) en el contenedor para asegurar que ninguna capa posterior sobresalga de la interfaz curveada.
+- **Scroll en Automatizaciones**: Implementación nativa de `overflow-y` en la vista móvil de automatizaciones en `argus-panel.js` para asegurar navegación óptima.
+
 ## [2.0.18] - 2026-08-03
 
 ### Fixed

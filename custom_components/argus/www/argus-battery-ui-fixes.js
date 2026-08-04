@@ -1,5 +1,5 @@
 /**
- * Argus v2.0.26 — Battery UI Fixes.
+ * Argus v2.0.27 — Battery UI Fixes.
  *
  * Implements real-time battery display for active sensors in the console.
  * Injects a battery badge and highlights it in orange if <= 20%.

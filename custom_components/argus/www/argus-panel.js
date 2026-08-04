@@ -58,7 +58,7 @@ const TEXTS = {
     disarmed:'Desarmado', armed_home:'En Casa', armed_away:'Ausente',
     armed_night:'Noche', armed_vacation:'Vacaciones', triggered:'¡ALARMA!',
     pending:'Cuenta regresiva', arming:'Armando', unavailable:'No disponible',
-    sensor_section:'Sensores de Intrusión', siren_section:'Sirenas', thermostat_alert_notif:'🌡️ Alerta de temperatura',
+    sync_panel_section:'Paneles Sincronizados', sync_panel_help:'Paneles de alarma que seguirán el mismo estado de Argus', sensor_section:'Sensores de Intrusión', siren_section:'Sirenas', thermostat_alert_notif:'🌡️ Alerta de temperatura',
     none_selected:'Ninguno seleccionado', search_select:'Buscar y seleccionar',
     save_mode:'💾 Guardar modo', details_notif:'Notificación de alarma',
     activity_log:'📋 Historial de Actividad',
@@ -1699,6 +1699,7 @@ _tmpl.innerHTML = `
     .ios-fullscreen .liquid-stack{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
     .ios-fullscreen .liquid-btn{min-height:50px!important;padding:10px!important;font-size:12px!important;border-radius:16px!important;gap:6px!important}
     .ios-fullscreen .liquid-stack .btn-disarm,.ios-fullscreen .liquid-stack .btn-sos{grid-column:1/-1}
+
     .ios-fullscreen .entry-icon{display:none!important}
     .ios-fullscreen .sensor-column{position:static!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;width:auto!important;padding:0!important;gap:8px!important}
     .ios-fullscreen .sensor-chip{max-width:none!important;padding:8px 9px!important;font-size:10px!important}
@@ -2443,6 +2444,7 @@ _tmpl.innerHTML = `
   .ios-fullscreen .console-hud{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;grid-template-areas:'location connection readings'!important}
   .ios-fullscreen .console-hud-loc,.ios-fullscreen .argus-connection-pill,.ios-fullscreen .console-hud-right{width:auto!important}
 }
+  .entry { overflow: hidden; border-radius: 28px; -webkit-mask-image: -webkit-radial-gradient(white, black); }
 </style>
 
 <!-- Bootstrap UI -->
@@ -3994,16 +3996,17 @@ class ArgusPanel extends HTMLElement {
     this._homeName = dashboard.ui?.home_name || '';
     this._emergencyNumber = dashboard.ui?.emergency_number || '911';
     this._panicOutputs = dashboard.ui?.panic_outputs || [];
-    this._backgroundMode = dashboard.ui?.background_mode || 'weather';
-    this._backgroundImages = dashboard.ui?.background_images || [];
+    const myProfile = this._users.find(u => u.id === this._myUserId) || {};
+    this._backgroundMode = myProfile.background_mode || dashboard.ui?.background_mode || 'weather';
+    this._backgroundImages = myProfile.background_images || dashboard.ui?.background_images || [];
     this._temperatureSource = dashboard.ui?.temperature_source || 'auto';
     this._weatherSource = dashboard.ui?.weather_source || 'auto';
-    this._panelBgFile = dashboard.ui?.panel_bg_file || '';
-    this._panelBgSound = Boolean(dashboard.ui?.panel_bg_sound);
-    const rawHubBgMode = dashboard.ui?.hub_bg_mode || 'none';
+    this._panelBgFile = myProfile.panel_bg_file !== undefined ? myProfile.panel_bg_file : (dashboard.ui?.panel_bg_file || '');
+    this._panelBgSound = Boolean(myProfile.panel_bg_sound !== undefined ? myProfile.panel_bg_sound : dashboard.ui?.panel_bg_sound);
+    const rawHubBgMode = myProfile.hub_bg_mode || dashboard.ui?.hub_bg_mode || 'none';
     this._hubBgMode = (rawHubBgMode === 'none' || rawHubBgMode === 'default') ? 'default' : rawHubBgMode;
-    this._hubBgFile = dashboard.ui?.hub_bg_file || '';
-    this._hubBgSound = Boolean(dashboard.ui?.hub_bg_sound);
+    this._hubBgFile = myProfile.hub_bg_file !== undefined ? myProfile.hub_bg_file : (dashboard.ui?.hub_bg_file || '');
+    this._hubBgSound = Boolean(myProfile.hub_bg_sound !== undefined ? myProfile.hub_bg_sound : dashboard.ui?.hub_bg_sound);
     this._updateTheme();
     this._updateHomeNameDisplay();
     this._updateProfileBadge();
@@ -4375,8 +4378,18 @@ class ArgusPanel extends HTMLElement {
           iconHtml = isOpen ? `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22V2h12v20H4z"></path><path d="M16 4h4v18h-4"></path><circle cx="12" cy="12" r="1"></circle></svg>`
                             : `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 22V2h12v20H6z"></path><circle cx="14" cy="12" r="1"></circle></svg>`;
         }
+        const power = this._getDevicePower(sid, sensor);
+        let batHtml = '';
+        if (power.battery !== null) {
+          const isDead = power.battery === 0;
+          const isLow = power.battery <= 10 && !isDead;
+          const batText = isDead ? '🔋 ❌' : `🔋 ${power.battery}%`;
+          if (isDead || isLow) {
+             batHtml = `<span style="margin-left:8px;font-size:10px;font-weight:700;color:#ff5252;background:rgba(255,255,255,0.1);backdrop-filter:blur(4px);padding:2px 6px;border-radius:10px;border:1px solid rgba(255,82,82,0.3);text-shadow:0 0 5px rgba(255,82,82,0.5);">${batText}</span>`;
+          }
+        }
 
-        return `<div class="console-sensor ${isOpen ? 'open' : ''}"><span class="console-sensor-icon" style="display:flex;align-items:center;justify-content:center;color:${isOpen?'#ff968b':'#75f4b0'};${isOpen?'animation:pulse 2s infinite;':''}">${iconHtml}</span><span class="console-sensor-name">${this._escapeHtml(name)}</span><span class="console-sensor-state" style="color:${isOpen?'#ff968b':'#75f4b0'}">${this._escapeHtml(isOpen ? t('status_open') : t('status_closed'))}</span></div>`;
+        return `<div class="console-sensor ${isOpen ? 'open' : ''}"><span class="console-sensor-icon" style="display:flex;align-items:center;justify-content:center;color:${isOpen?'#ff968b':'#75f4b0'};${isOpen?'animation:pulse 2s infinite;':''}">${iconHtml}</span><span class="console-sensor-name">${this._escapeHtml(name)}</span><span class="console-sensor-state" style="color:${isOpen?'#ff968b':'#75f4b0'}">${this._escapeHtml(isOpen ? t('status_open') : t('status_closed'))}${batHtml}</span></div>`;
       }).join('');
 
       art.innerHTML = `
@@ -5015,7 +5028,7 @@ class ArgusPanel extends HTMLElement {
     const emptyCfg = {
       sensors: [], bypassed_sensors: [], sirens: [],
       require_closed: false, arming_time: null, entry_delay: null,
-      mqtt_enabled: null, entry_sensors: []
+      mqtt_enabled: null, entry_sensors: [], sync_panels: []
     };
     if (!this._ui || typeof this._ui !== 'object' || Array.isArray(this._ui)) {
       this._ui = { modes: {}, dashboard: {} };
@@ -5059,9 +5072,11 @@ class ArgusPanel extends HTMLElement {
       bypassed_sensors: Array.isArray(cfg?.bypassed_sensors) ? cfg.bypassed_sensors : [],
       sirens: Array.isArray(cfg?.sirens) ? cfg.sirens : [],
       entry_sensors: Array.isArray(cfg?.entry_sensors) ? cfg.entry_sensors : [],
+      sync_panels: Array.isArray(cfg?.sync_panels) ? cfg.sync_panels : [],
       require_closed: typeof cfg?.require_closed === 'boolean' ? cfg.require_closed : false,
       arming_time: (cfg?.arming_time !== undefined && cfg?.arming_time !== null) ? cfg.arming_time : null,
       entry_delay: (cfg?.entry_delay !== undefined && cfg?.entry_delay !== null) ? cfg.entry_delay : null,
+      light_color: cfg?.light_color || '',
       mqtt_enabled: (cfg?.mqtt_enabled !== undefined && cfg?.mqtt_enabled !== null) ? cfg.mqtt_enabled : null,
     };
   }
@@ -5083,6 +5098,7 @@ class ArgusPanel extends HTMLElement {
     const sensors = cfg.sensors || [];
     const bypass  = cfg.bypassed_sensors || [];
     const sirens  = cfg.sirens  || [];
+    const syncPanels = cfg.sync_panels || [];
     const el = this.shadowRoot.getElementById('mode-view');
     if (el) {
       el.classList.remove('bounce-in');
@@ -5134,6 +5150,14 @@ class ArgusPanel extends HTMLElement {
         </div>
 
         <div class="mode-section-card">
+          <div class="mode-section-title" title="${this._t('sync_panel_help') || 'Paneles sincronizados'}">🔗 ${this._t('sync_panel_section') || 'Sync Panels'}</div>
+          <div class="mode-sensor-grid" id="sync-panel-chips">
+            ${syncPanels.map(x => this._chip(x, 'sync_panel')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
+          </div>
+          ${readonly ? '' : `<button class="ghost" data-open-selector="sync_panel" style="margin-top:12px; width:100%; justify-content:center; font-size:12px">${this._t('add_btn')}</button>`}
+        </div>
+
+        <div class="mode-section-card">
           <div class="mode-section-title">${this._t('times_section')}</div>
           <div class="times-grid">
             <div class="input-group time-field">
@@ -5143,6 +5167,16 @@ class ArgusPanel extends HTMLElement {
             <div class="input-group time-field">
               <span class="input-label">${this._t('disarm_time')}</span>
               <input type="number" id="mode-entry-delay" value="${cfg.entry_delay ?? ''}" placeholder="0" style="padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:inherit; font-size:13px">
+            </div>
+            <div class="input-group time-field" style="grid-column: 1 / -1">
+              <span class="input-label">Color de Luces (Sirena)</span>
+              <select id="mode-light-color" style="padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:inherit; font-size:13px; width: 100%">
+                <option value="" ${!cfg.light_color ? 'selected' : ''}>💡 Predeterminado (Blanco / Último color)</option>
+                <option value="red" ${cfg.light_color === 'red' ? 'selected' : ''}>🔴 Rojo (Alarma / Pánico)</option>
+                <option value="blue" ${cfg.light_color === 'blue' ? 'selected' : ''}>🔵 Azul (Emergencia)</option>
+                <option value="green" ${cfg.light_color === 'green' ? 'selected' : ''}>🟢 Verde</option>
+                <option value="purple" ${cfg.light_color === 'purple' ? 'selected' : ''}>🟣 Morado</option>
+              </select>
             </div>
           </div>
           <div class="mode-sensor-grid entry-sensor-list">
@@ -5245,11 +5279,13 @@ class ArgusPanel extends HTMLElement {
     const armTime  = this.shadowRoot.getElementById('mode-arming-time');
     const entDelay = this.shadowRoot.getElementById('mode-entry-delay');
     const mqttChk  = this.shadowRoot.getElementById('mode-mqtt-enabled');
+    const lightCol = this.shadowRoot.getElementById('mode-light-color');
 
     if (chk)      cfg.require_closed = chk.checked;
     if (armTime)  cfg.arming_time  = armTime.value  ? parseInt(armTime.value)  : 0;
     if (entDelay) cfg.entry_delay  = entDelay.value ? parseInt(entDelay.value) : 0;
     if (mqttChk)  cfg.mqtt_enabled = mqttChk.checked;
+    if (lightCol) cfg.light_color  = lightCol.value;
 
     this._runWithPin(async () => {
       const _eid = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id || 'default';
@@ -6277,41 +6313,46 @@ class ArgusPanel extends HTMLElement {
     const weather_source = this.shadowRoot.getElementById('weather-source-select')?.value || 'auto';
     const emergency_number = this._normaliseEmergencyNumber(this.shadowRoot.getElementById('emergency-number-input')?.value);
 
-    let panel_bg_file = '';
-    const panel_bg_url = this.shadowRoot.getElementById('panel-bg-url-input')?.value || '';
-    if (panel_bg_url) {
-      panel_bg_file = panel_bg_url;
-    } else if (this._panelBgFile) {
-      panel_bg_file = this._panelBgFile;
-    }
+    // FIX: Read directly from DOM, allowing empty strings when the user clears the URL
+    const panel_bg_file = this.shadowRoot.getElementById('panel-bg-url-input')?.value || '';
     const panel_bg_sound = Boolean(this.shadowRoot.getElementById('chk-panel-bg-sound')?.checked);
 
     const selected_hub_bg_mode = this.shadowRoot.getElementById('hub-bg-mode-select')?.value || 'default';
     const hub_bg_mode = selected_hub_bg_mode === 'default' ? 'none' : selected_hub_bg_mode;
-    let hub_bg_file = '';
-    const hub_bg_url = this.shadowRoot.getElementById('hub-bg-url-input')?.value || '';
-    if (hub_bg_url) {
-      hub_bg_file = hub_bg_url;
-    } else if (this._hubBgFile) {
-      hub_bg_file = this._hubBgFile;
-    }
+    const hub_bg_file = this.shadowRoot.getElementById('hub-bg-url-input')?.value || '';
     const hub_bg_sound = Boolean(this.shadowRoot.getElementById('chk-hub-bg-sound')?.checked);
 
     const payload = {
       home_name: this._homeName,
-      background_mode,
-      background_images: this._backgroundImages || [],
       temperature_source,
       weather_source,
-      emergency_number,
-      panel_bg_file,
-      panel_bg_sound,
-      hub_bg_mode,
-      hub_bg_file,
-      hub_bg_sound
+      emergency_number
     };
+    
     if (this._panicOutputs !== undefined) {
       payload.panic_outputs = this._panicOutputs;
+    }
+
+    const myProfile = (this._ui.users || []).find(u => u.id === this._myUserId);
+    if (myProfile) {
+      const users = JSON.parse(JSON.stringify(this._ui.users || []));
+      const user = users.find(u => u.id === this._myUserId);
+      user.background_mode = background_mode;
+      user.background_images = this._backgroundImages || [];
+      user.panel_bg_file = panel_bg_file;
+      user.panel_bg_sound = panel_bg_sound;
+      user.hub_bg_mode = hub_bg_mode;
+      user.hub_bg_file = hub_bg_file;
+      user.hub_bg_sound = hub_bg_sound;
+      payload.users = users;
+    } else {
+      payload.background_mode = background_mode;
+      payload.background_images = this._backgroundImages || [];
+      payload.panel_bg_file = panel_bg_file;
+      payload.panel_bg_sound = panel_bg_sound;
+      payload.hub_bg_mode = hub_bg_mode;
+      payload.hub_bg_file = hub_bg_file;
+      payload.hub_bg_sound = hub_bg_sound;
     }
 
     try {
@@ -6328,16 +6369,22 @@ class ArgusPanel extends HTMLElement {
       this._updateTheme();
 
       this._ui = this._ui || {};
-      this._ui.background_mode = background_mode;
-      this._ui.background_images = this._backgroundImages || [];
+      if (myProfile) {
+        this._ui.users = payload.users;
+      } else {
+        this._ui.background_mode = background_mode;
+        this._ui.background_images = this._backgroundImages || [];
+        this._ui.panel_bg_file = panel_bg_file;
+        this._ui.panel_bg_sound = panel_bg_sound;
+        this._ui.hub_bg_mode = hub_bg_mode;
+        this._ui.hub_bg_file = hub_bg_file;
+        this._ui.hub_bg_sound = hub_bg_sound;
+      }
       this._ui.temperature_source = temperature_source;
       this._ui.weather_source = weather_source;
       this._ui.emergency_number = emergency_number;
       this._ui.panic_outputs = this._panicOutputs;
       this._configureEmergencyCall();
-      this._ui.panel_bg_file = panel_bg_file;
-      this._ui.panel_bg_sound = panel_bg_sound;
-      this._ui.hub_bg_mode = hub_bg_mode;
       this._ui.hub_bg_file = hub_bg_file;
       this._ui.hub_bg_sound = hub_bg_sound;
 
@@ -6715,6 +6762,7 @@ class ArgusPanel extends HTMLElement {
     const q = (this.shadowRoot.getElementById('selector-search').value || '').toLowerCase().trim();
     const INTRUSION_DC = ['door','window','motion','vibration','glass','opening','smoke','gas','tamper'];
     const items = this._available.filter(x => {
+      if (this._selectorTarget === 'sync_panel') return x.domain === 'alarm_control_panel';
       if (this._selectorTarget === 'siren' || this._selectorTarget === 'panic') return ['siren','switch','light','fan','input_boolean','script','alarm_control_panel'].includes(x.domain);
       if (x.domain === 'lock') return true;
       if (x.domain === 'binary_sensor') {
@@ -6730,7 +6778,7 @@ class ArgusPanel extends HTMLElement {
   _openModal(type) {
     this._selectorTarget = type;
     const cfg = this._currentModeConfig();
-    const _srcKey = type === 'sensor' ? 'sensors' : (type === 'bypass' ? 'bypassed_sensors' : (type === 'entry' ? 'entry_sensors' : 'sirens'));
+    const _srcKey = type === 'sensor' ? 'sensors' : (type === 'bypass' ? 'bypassed_sensors' : (type === 'entry' ? 'entry_sensors' : (type === 'sync_panel' ? 'sync_panels' : 'sirens')));
     this._selected = type === 'panic'
       ? [...(this._panicOutputs || [])]
       : (Array.isArray(cfg[_srcKey]) ? [...cfg[_srcKey]] : []);
@@ -6739,6 +6787,7 @@ class ArgusPanel extends HTMLElement {
     else if (type === 'bypass') title.textContent = this._t('sensors_to_bypass');
     else if (type === 'entry') title.textContent = this._t('entry_sensors');
     else if (type === 'panic') title.textContent = this._t('selector_panic');
+    else if (type === 'sync_panel') title.textContent = this._t('sync_panel_section') || 'Paneles Sincronizados';
     else title.textContent = this._t('siren_section');
     this.shadowRoot.getElementById('selector-search').value = '';
     this._renderSelector();
@@ -6758,6 +6807,7 @@ class ArgusPanel extends HTMLElement {
 
     const INTRUSION_DC = ['door','window','motion','vibration','glass','opening','smoke','gas','tamper'];
     const items = this._available.filter(x => {
+      if (this._selectorTarget === 'sync_panel') return x.domain === 'alarm_control_panel';
       if (this._selectorTarget === 'siren' || this._selectorTarget === 'panic') return ['siren','switch','light','fan','input_boolean','script','alarm_control_panel'].includes(x.domain);
       if (x.domain === 'lock') return true;
       if (x.domain === 'binary_sensor') {

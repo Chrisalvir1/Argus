@@ -864,6 +864,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         await self._async_siren(True)
         await self._async_mqtt_publish()
         self.hass.async_create_task(self._evaluate_automations("triggered", sensor=self._triggered_by))
+        await self._async_sync_panels(AlarmControlPanelState.TRIGGERED)
 
         if self._panic_active:
             notif_targets = self._ui_config.get("notif_targets", [])
@@ -1055,6 +1056,16 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                             activate, self._alarm_state, self._triggered_mode)
             return
         service = "turn_on" if activate else "turn_off"
+        # Obtener el color de luz para el modo actual o SOS
+        light_color = None
+        if activate:
+            # Primero intentar obtenerlo del modo que disparó la alarma
+            if self._triggered_mode:
+                light_color = self._get_mode_val(self._triggered_mode, "light_color", None)
+            
+            # Si no hay color del modo (ej. SOS pánico), usar fallback o nada
+            # (SOS aún no tiene config de color propia en la UI, pero si la tuviera se leería aquí)
+            
         for entity_id in sirens:
             domain = entity_id.split(".")[0]
             _LOGGER.info("Argus: siren %s → %s (domain=%s)", entity_id, service, domain)
@@ -1063,6 +1074,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                     svc_data = {"entity_id": entity_id}
                     if activate:
                         svc_data["brightness_pct"] = 100
+                        if light_color:
+                            svc_data["color_name"] = light_color
                     await self.hass.services.async_call(
                         "light",
                         "turn_on" if activate else "turn_off",
@@ -1288,6 +1301,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         })
         await async_append_audit_log(self.hass, "disarmed", f"Sistema desarmado por {caller_name}", user=caller_name, entry_id=self._config_entry.entry_id)
         _LOGGER.info("Argus: Disarmed by %s", caller_name)
+        await self._async_sync_panels(AlarmControlPanelState.DISARMED)
 
     async def _async_arm(self, target: AlarmControlPanelState, code=None) -> None:
         import time as _time
@@ -1480,6 +1494,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         })
         await async_append_audit_log(self.hass, "armed", f"Modo: {_MODE_LABELS.get(target.value if hasattr(target, 'value') else str(target), target)}", user=user_name, entry_id=self._config_entry.entry_id)
         _LOGGER.info("Argus: Armado → %s", target)
+        await self._async_sync_panels(target)
 
     async def async_alarm_arm_home(self, code=None) -> None:
         await self._async_arm(AlarmControlPanelState.ARMED_HOME, code)
@@ -1554,3 +1569,55 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         async_dispatcher_send(self.hass, f"{DOMAIN}_state_changed")
         if self.hass.is_running:
             self.hass.async_create_task(self._async_mqtt_publish())
+    async def _async_sync_panels(self, state: AlarmControlPanelState) -> None:
+        """Sincroniza el estado de Argus con los paneles esclavos configurados."""
+        try:
+            modes = self._ui_config.get("modes", {})
+            by_entity = modes.get("__by_entity__", {}).get(self.entity_id, {})
+            
+            # Obtener todos los paneles sincronizados de todos los modos para el disarm/trigger
+            all_sync_panels = set()
+            for mode_key in ["home", "away", "night", "vacation"]:
+                cfg = by_entity.get(mode_key) or modes.get(mode_key) or {}
+                for p in (cfg.get("sync_panels") or []):
+                    all_sync_panels.add(p)
+            
+            panels_to_sync = []
+            service = "alarm_disarm"
+            
+            if state == AlarmControlPanelState.DISARMED:
+                panels_to_sync = list(all_sync_panels)
+                service = "alarm_disarm"
+            elif state == AlarmControlPanelState.TRIGGERED:
+                # Disparar solo los paneles sincronizados del modo actual, o todos si fue pánico
+                if self._triggered_mode:
+                    cfg = by_entity.get(self._triggered_mode) or modes.get(self._triggered_mode) or {}
+                    panels_to_sync = cfg.get("sync_panels", [])
+                else:
+                    panels_to_sync = list(all_sync_panels)
+                service = "alarm_trigger"
+            elif state in ARMED_STATES:
+                # Armar solo los paneles del modo correspondiente
+                _MODE_MAP = {
+                    AlarmControlPanelState.ARMED_HOME: ("home", "alarm_arm_home"),
+                    AlarmControlPanelState.ARMED_AWAY: ("away", "alarm_arm_away"),
+                    AlarmControlPanelState.ARMED_NIGHT: ("night", "alarm_arm_night"),
+                    AlarmControlPanelState.ARMED_VACATION: ("vacation", "alarm_arm_vacation"),
+                }
+                mode_key, service = _MODE_MAP.get(state, ("away", "alarm_arm_away"))
+                cfg = by_entity.get(mode_key) or modes.get(mode_key) or {}
+                panels_to_sync = cfg.get("sync_panels", [])
+            
+            if not panels_to_sync:
+                return
+
+            for panel in panels_to_sync:
+                _LOGGER.info("Argus Sync Panel: %s -> %s", panel, service)
+                await self.hass.services.async_call(
+                    "alarm_control_panel",
+                    service,
+                    {"entity_id": panel},
+                    blocking=False
+                )
+        except Exception as e:
+            _LOGGER.error("Argus: Error sincronizando paneles esclavos: %s", e)

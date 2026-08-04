@@ -1,7 +1,0 @@
-v2.0.26 - Inteligencia de Batería, Alarmas Externas y Personalización por Perfil
-
-Esta versión incluye:
-- Fondos de personalización INDEPENDIENTES POR PERFIL. Cada usuario puede configurar su propio fondo en Argus sin afectar la experiencia de los demás, sincronizándose perfectamente a través del WebSocket.
-- Visualización de batería en sensores (Estilo Liquid Glass). Los sensores activos muestran ahora la batería en las instancias activas. Se alerta con color rojo parpadeante al alcanzar el 10%, y cuando llega a 0% muestra el icono 🔋 ❌ indicando desconexión por batería agotada.
-- Sincronización inteligente con Paneles de Alarma Externos. Argus ahora puede configurarse (mediante la UI de opciones) para disparar sirenas de cámaras u otros paneles de seguridad en Home Assistant de manera automática en caso de intrusión o pánico (SOS). Argus también se encargará de apagarlos sincronizadamente cuando se desarme o se cancele el SOS.
-- Varias correcciones visuales de diseño móvil y UI trasladadas al núcleo de la interfaz.
