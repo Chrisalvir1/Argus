@@ -2,17 +2,21 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
-## [2.0.27] - 2026-08-04
+## [2.0.28] - 2026-08-04
 
 ### Added
+- **Binary Sensor de Bloqueo de Sensores:** Nueva integración `binary_sensor.py` que expone un estado de Home Assistant cuando Argus está "Esperando que se cierren los sensores bloqueantes" al intentar armar. Facilita crear automatizaciones nativas.
+- **Configuración Avanzada de Luces Sirena:** Renovación del selector de color para sirenas con soporte hexadecimal por color y modo de parpadeo suave (`gentle_flash`), ampliando la compatibilidad de colores RGB y efectos.
 - **Sincronización de Paneles Externos**: Nueva sección en la configuración de modos para seleccionar otros paneles de alarma que sincronizarán automáticamente su estado con Argus de forma bidireccional, manteniendo "Sirenas" solo para activación de alarma en pánico.
-- **Color de Sirenas (Luces RGB)**: Menú desplegable global en la configuración de Modos para seleccionar un color específico (Rojo, Azul, Verde, Morado, Predeterminado) para todas las luces integradas como sirena, respetando el dominio `light` y el servicio `turn_on` con `color_name`.
-- **Fondo Personalizado Independiente**: Al guardar imágenes personalizadas para el fondo de pantalla de la interfaz, estas ahora se guardan independientemente para cada usuario activo sin sobrescribir la personalización de otros.
 
 ### Fixed
+- **UI en Móviles y Safari:**
+  - Ajuste de dimensiones del `.console-sensor` para prevenir desbordes mediante modelo flexbox.
+  - Implementación de límite de altura y scroll nativo en las listas de sensores (entry/bypass).
+  - Refinamiento de renderizado de fondo (background) que presentaba corte de esquinas (`corner clipping`) en navegadores con WebKit/Safari.
+- **Personalización de Fondos de Pantalla:** Corrección del mecanismo de guardado de personalizaciones (wallpapers), que ahora persiste a nivel de instancia si el usuario no tiene perfil cargado, evitando el reinicio a 'Default'.
+- **Websocket API y Battery UI:** Solución de la detección de dispositivos mediante el `device_id` para mostrar correctamente baterías, arreglos de dominios faltantes en selectores y refinamiento modal.
 - **Batería en Instancias Activas**: Añadido el medidor visual de batería dentro del panel principal al lado del estatus, empleando estilo liquid glass transparente que se torna rojo y avisa desconexión debajo del 10% de carga.
-- **Pico Blanco en Esquinas Redondeadas**: Implementación de máscara radial Webkit (`-webkit-mask-image: radial-gradient`) en el contenedor para asegurar que ninguna capa posterior sobresalga de la interfaz curveada.
-- **Scroll en Automatizaciones**: Implementación nativa de `overflow-y` en la vista móvil de automatizaciones en `argus-panel.js` para asegurar navegación óptima.
 
 ## [2.0.18] - 2026-08-03
 

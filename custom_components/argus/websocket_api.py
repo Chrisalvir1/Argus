@@ -506,6 +506,17 @@ async def ws_argus_save_mode_config(hass, connection, msg) -> None:
     data = await async_load_ui_data(hass, entry_id)
     modes = copy.deepcopy(data.get("modes", {}))
     mode, config, entity_id = msg["mode"], copy.deepcopy(msg["config"]), msg["entity_id"]
+    # v2.0.28: external panels are outputs of the Sirens section.  Preserve
+    # old saves while normalising the canonical field on their next save.
+    legacy_panels = config.pop("sync_panels", [])
+    configured_panels = config.get("external_panels", [])
+    if not isinstance(configured_panels, list):
+        configured_panels = []
+    if isinstance(legacy_panels, list):
+        configured_panels.extend(panel for panel in legacy_panels if panel not in configured_panels)
+    legacy_alarm_sirens = [item for item in config.get("sirens", []) if str(item).startswith("alarm_control_panel.")]
+    config["sirens"] = [item for item in config.get("sirens", []) if not str(item).startswith("alarm_control_panel.")]
+    config["external_panels"] = list(dict.fromkeys(configured_panels + legacy_alarm_sirens))
     if entity_id:
         modes.setdefault("__by_entity__", {}).setdefault(entity_id, {})[mode] = config
     else:

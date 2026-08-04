@@ -1092,6 +1092,13 @@ Object.assign(TEXTS.pt, { temp_displayed:'🌡️ Temperatura exibida', weather_
 Object.assign(TEXTS.it, { temp_displayed:'🌡️ Temperatura visualizzata', weather_source:'☁️ Fonte meteo', weather_auto:'Automatico (prima entità meteo)', user_exp_type:'Scadenza', user_exp_date:'Data/ora di scadenza', exp_temporary:'Temporaneo (data/ora)', log_mode:'Modalità', log_action_user_added:'Utente aggiunto', log_action_user_deleted:'Utente eliminato', log_action_rejected:'Azione rifiutata', log_action_automation:'Automazione eseguita', log_action_analysis:'Analisi IA', log_action_sos:'SOS attivato', log_action_sos_stopped:'Panico interrotto' });
 Object.assign(TEXTS.zh, { temp_displayed:'🌡️ 显示的温度', weather_source:'☁️ 天气来源', weather_auto:'自动（第一个天气实体）', user_exp_type:'到期', user_exp_date:'到期日期/时间', exp_temporary:'临时（日期/时间）', log_mode:'模式', log_action_user_added:'已添加用户', log_action_user_deleted:'已删除用户', log_action_rejected:'操作被拒绝', log_action_automation:'自动化已执行', log_action_analysis:'AI 分析', log_action_sos:'SOS 已激活', log_action_sos_stopped:'紧急状态已停止' });
 Object.assign(TEXTS.ru, { temp_displayed:'🌡️ Отображаемая температура', weather_source:'☁️ Источник погоды', weather_auto:'Автоматически (первая погодная сущность)', user_exp_type:'Срок действия', user_exp_date:'Дата/время окончания', exp_temporary:'Временный (дата/время)', log_mode:'Режим', log_action_user_added:'Пользователь добавлен', log_action_user_deleted:'Пользователь удалён', log_action_rejected:'Действие отклонено', log_action_automation:'Автоматизация выполнена', log_action_analysis:'Анализ ИИ', log_action_sos:'SOS активирован', log_action_sos_stopped:'Тревога остановлена' });
+Object.assign(TEXTS.es, { external_panels:'Paneles de alarma externos', light_siren_color:'Color de alarma', light_siren_flash:'Destello suave si está disponible' });
+Object.assign(TEXTS.en, { external_panels:'External alarm panels', light_siren_color:'Alarm colour', light_siren_flash:'Gentle flash when available' });
+Object.assign(TEXTS.fr, { external_panels:'Panneaux d’alarme externes', light_siren_color:'Couleur d’alarme', light_siren_flash:'Clignotement doux si disponible' });
+Object.assign(TEXTS.pt, { external_panels:'Painéis de alarme externos', light_siren_color:'Cor do alarme', light_siren_flash:'Piscar suave quando disponível' });
+Object.assign(TEXTS.it, { external_panels:'Pannelli di allarme esterni', light_siren_color:'Colore allarme', light_siren_flash:'Lampeggio delicato se disponibile' });
+Object.assign(TEXTS.zh, { external_panels:'外部报警面板', light_siren_color:'警报颜色', light_siren_flash:'可用时柔和闪烁' });
+Object.assign(TEXTS.ru, { external_panels:'Внешние панели сигнализации', light_siren_color:'Цвет тревоги', light_siren_flash:'Мягкое мигание при наличии' });
 
 /* ── Template ─────────────────────────────────────────────────────────── */
 const _tmpl = document.createElement('template');
@@ -3132,7 +3139,7 @@ class ArgusPanel extends HTMLElement {
         this._renderModeView();
         this._renderAutomations();
         this._renderNotifications();
-        this._renderUsers();
+        if (this._activeAccessSection === 'users') this._renderUsers();
       }
     }
   }
@@ -3236,7 +3243,7 @@ class ArgusPanel extends HTMLElement {
     this._renderActivityLog();
     this._renderAutomations();
     this._renderNotifications();
-    this._renderUsers();
+    if (this._activeAccessSection === 'users') this._renderUsers();
     this._renderSosOutputs();
     this._configureEmergencyCall();
     this._updateHomeNameDisplay();
@@ -3442,6 +3449,7 @@ class ArgusPanel extends HTMLElement {
 
     const target = section === 'users' ? usersSection : pinSection;
     const shouldOpen = !target.classList.contains('open');
+    this._activeAccessSection = shouldOpen ? section : null;
     workspace.classList.toggle('open', shouldOpen);
     usersSection.classList.toggle('open', shouldOpen && section === 'users');
     pinSection.classList.toggle('open', shouldOpen && section === 'pin');
@@ -5028,7 +5036,7 @@ class ArgusPanel extends HTMLElement {
     const emptyCfg = {
       sensors: [], bypassed_sensors: [], sirens: [],
       require_closed: false, arming_time: null, entry_delay: null,
-      mqtt_enabled: null, entry_sensors: [], sync_panels: []
+      mqtt_enabled: null, entry_sensors: [], external_panels: [], light_siren_settings: {}
     };
     if (!this._ui || typeof this._ui !== 'object' || Array.isArray(this._ui)) {
       this._ui = { modes: {}, dashboard: {} };
@@ -5072,11 +5080,12 @@ class ArgusPanel extends HTMLElement {
       bypassed_sensors: Array.isArray(cfg?.bypassed_sensors) ? cfg.bypassed_sensors : [],
       sirens: Array.isArray(cfg?.sirens) ? cfg.sirens : [],
       entry_sensors: Array.isArray(cfg?.entry_sensors) ? cfg.entry_sensors : [],
-      sync_panels: Array.isArray(cfg?.sync_panels) ? cfg.sync_panels : [],
+      // sync_panels was the short-lived UI name; retain it only as a read fallback.
+      external_panels: Array.isArray(cfg?.external_panels) ? cfg.external_panels : (Array.isArray(cfg?.sync_panels) ? cfg.sync_panels : []),
       require_closed: typeof cfg?.require_closed === 'boolean' ? cfg.require_closed : false,
       arming_time: (cfg?.arming_time !== undefined && cfg?.arming_time !== null) ? cfg.arming_time : null,
       entry_delay: (cfg?.entry_delay !== undefined && cfg?.entry_delay !== null) ? cfg.entry_delay : null,
-      light_color: cfg?.light_color || '',
+      light_siren_settings: cfg?.light_siren_settings && typeof cfg.light_siren_settings === 'object' ? cfg.light_siren_settings : {},
       mqtt_enabled: (cfg?.mqtt_enabled !== undefined && cfg?.mqtt_enabled !== null) ? cfg.mqtt_enabled : null,
     };
   }
@@ -5098,7 +5107,7 @@ class ArgusPanel extends HTMLElement {
     const sensors = cfg.sensors || [];
     const bypass  = cfg.bypassed_sensors || [];
     const sirens  = cfg.sirens  || [];
-    const syncPanels = cfg.sync_panels || [];
+    const externalPanels = cfg.external_panels || [];
     const el = this.shadowRoot.getElementById('mode-view');
     if (el) {
       el.classList.remove('bounce-in');
@@ -5146,15 +5155,17 @@ class ArgusPanel extends HTMLElement {
           <div class="mode-sensor-grid" id="siren-chips">
             ${sirens.map(x => this._chip(x, 'siren')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
           </div>
-          ${readonly ? '' : `<button class="ghost" data-open-selector="siren" style="margin-top:12px; width:100%; justify-content:center; font-size:12px">${this._t('select_btn')}</button>`}
-        </div>
-
-        <div class="mode-section-card">
-          <div class="mode-section-title" title="${this._t('sync_panel_help') || 'Paneles sincronizados'}">🔗 ${this._t('sync_panel_section') || 'Sync Panels'}</div>
-          <div class="mode-sensor-grid" id="sync-panel-chips">
-            ${syncPanels.map(x => this._chip(x, 'sync_panel')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
+          ${sirens.filter(x => x.startsWith('light.')).map(x => {
+            const setting = cfg.light_siren_settings?.[x] || {};
+            const rgb = Array.isArray(setting.rgb_color) ? setting.rgb_color : [255, 0, 0];
+            const hex = '#' + rgb.map(v => Number(v).toString(16).padStart(2, '0')).join('');
+            return `<details class="light-siren-settings"><summary>⚙ ${this._escapeHtml(this._hass?.states?.[x]?.attributes?.friendly_name || x)}</summary><label>${this._t('light_siren_color') || 'Color'} <input type="color" data-light-siren-color="${this._escapeHtml(x)}" value="${hex}"></label><label class="checkbox-label"><input type="checkbox" data-light-siren-flash="${this._escapeHtml(x)}" ${setting.gentle_flash ? 'checked' : ''}> ${this._t('light_siren_flash') || 'Destello suave si está disponible'}</label></details>`;
+          }).join('')}
+          <div class="mode-section-title" style="margin-top:14px;font-size:12px">🔗 ${this._t('external_panels') || 'Paneles de alarma externos'}</div>
+          <div class="mode-sensor-grid" id="external-panel-chips">
+            ${externalPanels.map(x => this._chip(x, 'external_panel')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
           </div>
-          ${readonly ? '' : `<button class="ghost" data-open-selector="sync_panel" style="margin-top:12px; width:100%; justify-content:center; font-size:12px">${this._t('add_btn')}</button>`}
+          ${readonly ? '' : `<button class="ghost" data-open-selector="siren" style="margin-top:12px; width:100%; justify-content:center; font-size:12px">${this._t('select_btn')}</button><button class="ghost" data-open-selector="external_panel" style="margin-top:8px; width:100%; justify-content:center; font-size:12px">${this._t('add_btn')}</button>`}
         </div>
 
         <div class="mode-section-card">
@@ -5167,16 +5178,6 @@ class ArgusPanel extends HTMLElement {
             <div class="input-group time-field">
               <span class="input-label">${this._t('disarm_time')}</span>
               <input type="number" id="mode-entry-delay" value="${cfg.entry_delay ?? ''}" placeholder="0" style="padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:inherit; font-size:13px">
-            </div>
-            <div class="input-group time-field" style="grid-column: 1 / -1">
-              <span class="input-label">Color de Luces (Sirena)</span>
-              <select id="mode-light-color" style="padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:inherit; font-size:13px; width: 100%">
-                <option value="" ${!cfg.light_color ? 'selected' : ''}>💡 Predeterminado (Blanco / Último color)</option>
-                <option value="red" ${cfg.light_color === 'red' ? 'selected' : ''}>🔴 Rojo (Alarma / Pánico)</option>
-                <option value="blue" ${cfg.light_color === 'blue' ? 'selected' : ''}>🔵 Azul (Emergencia)</option>
-                <option value="green" ${cfg.light_color === 'green' ? 'selected' : ''}>🟢 Verde</option>
-                <option value="purple" ${cfg.light_color === 'purple' ? 'selected' : ''}>🟣 Morado</option>
-              </select>
             </div>
           </div>
           <div class="mode-sensor-grid entry-sensor-list">
@@ -5261,7 +5262,7 @@ class ArgusPanel extends HTMLElement {
     if (!this._isAdmin) return;
     const [type, entityId] = value.split(':');
     const cfg = this._currentModeConfig();
-    const key = type === 'sensor' ? 'sensors' : (type === 'bypass' ? 'bypassed_sensors' : (type === 'entry' ? 'entry_sensors' : 'sirens'));
+    const key = type === 'sensor' ? 'sensors' : (type === 'bypass' ? 'bypassed_sensors' : (type === 'entry' ? 'entry_sensors' : (type === 'external_panel' ? 'external_panels' : 'sirens')));
     let eId = this._modeEntryId;
     if (!eId || eId === 'default') {
       eId = this._dashboard?.entries?.[0]?.entity_id || 'default';
@@ -5279,13 +5280,19 @@ class ArgusPanel extends HTMLElement {
     const armTime  = this.shadowRoot.getElementById('mode-arming-time');
     const entDelay = this.shadowRoot.getElementById('mode-entry-delay');
     const mqttChk  = this.shadowRoot.getElementById('mode-mqtt-enabled');
-    const lightCol = this.shadowRoot.getElementById('mode-light-color');
 
     if (chk)      cfg.require_closed = chk.checked;
     if (armTime)  cfg.arming_time  = armTime.value  ? parseInt(armTime.value)  : 0;
     if (entDelay) cfg.entry_delay  = entDelay.value ? parseInt(entDelay.value) : 0;
     if (mqttChk)  cfg.mqtt_enabled = mqttChk.checked;
-    if (lightCol) cfg.light_color  = lightCol.value;
+    cfg.light_siren_settings = {};
+    this.shadowRoot.querySelectorAll('[data-light-siren-color]').forEach(input => {
+      const hex = input.value || '#ff0000';
+      cfg.light_siren_settings[input.dataset.lightSirenColor] = {
+        rgb_color: [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16)),
+        gentle_flash: Boolean(this.shadowRoot.querySelector(`[data-light-siren-flash="${CSS.escape(input.dataset.lightSirenColor)}"]`)?.checked),
+      };
+    });
 
     this._runWithPin(async () => {
       const _eid = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id || 'default';
@@ -6334,6 +6341,16 @@ class ArgusPanel extends HTMLElement {
     }
 
     const myProfile = (this._ui.users || []).find(u => u.id === this._myUserId);
+    // Background is an instance preference, not a profile-only override: that
+    // makes the Default choice survive a refresh for every administrator.
+    payload.background_mode = background_mode;
+    payload.background_images = this._backgroundImages || [];
+    payload.panel_bg_file = panel_bg_file;
+    payload.panel_bg_sound = panel_bg_sound;
+    payload.hub_bg_mode = hub_bg_mode;
+    payload.hub_bg_file = hub_bg_file;
+    payload.hub_bg_sound = hub_bg_sound;
+    payload.entry_id = this._dashboard?.entry_id || this._dashboard?.entries?.[0]?.entry_id;
     if (myProfile) {
       const users = JSON.parse(JSON.stringify(this._ui.users || []));
       const user = users.find(u => u.id === this._myUserId);
@@ -6345,14 +6362,6 @@ class ArgusPanel extends HTMLElement {
       user.hub_bg_file = hub_bg_file;
       user.hub_bg_sound = hub_bg_sound;
       payload.users = users;
-    } else {
-      payload.background_mode = background_mode;
-      payload.background_images = this._backgroundImages || [];
-      payload.panel_bg_file = panel_bg_file;
-      payload.panel_bg_sound = panel_bg_sound;
-      payload.hub_bg_mode = hub_bg_mode;
-      payload.hub_bg_file = hub_bg_file;
-      payload.hub_bg_sound = hub_bg_sound;
     }
 
     try {
@@ -6762,7 +6771,7 @@ class ArgusPanel extends HTMLElement {
     const q = (this.shadowRoot.getElementById('selector-search').value || '').toLowerCase().trim();
     const INTRUSION_DC = ['door','window','motion','vibration','glass','opening','smoke','gas','tamper'];
     const items = this._available.filter(x => {
-      if (this._selectorTarget === 'sync_panel') return x.domain === 'alarm_control_panel';
+      if (this._selectorTarget === 'external_panel') return x.domain === 'alarm_control_panel';
       if (this._selectorTarget === 'siren' || this._selectorTarget === 'panic') return ['siren','switch','light','fan','input_boolean','script','alarm_control_panel'].includes(x.domain);
       if (x.domain === 'lock') return true;
       if (x.domain === 'binary_sensor') {
@@ -6778,7 +6787,7 @@ class ArgusPanel extends HTMLElement {
   _openModal(type) {
     this._selectorTarget = type;
     const cfg = this._currentModeConfig();
-    const _srcKey = type === 'sensor' ? 'sensors' : (type === 'bypass' ? 'bypassed_sensors' : (type === 'entry' ? 'entry_sensors' : (type === 'sync_panel' ? 'sync_panels' : 'sirens')));
+    const _srcKey = type === 'sensor' ? 'sensors' : (type === 'bypass' ? 'bypassed_sensors' : (type === 'entry' ? 'entry_sensors' : (type === 'external_panel' ? 'external_panels' : 'sirens')));
     this._selected = type === 'panic'
       ? [...(this._panicOutputs || [])]
       : (Array.isArray(cfg[_srcKey]) ? [...cfg[_srcKey]] : []);
@@ -6787,7 +6796,7 @@ class ArgusPanel extends HTMLElement {
     else if (type === 'bypass') title.textContent = this._t('sensors_to_bypass');
     else if (type === 'entry') title.textContent = this._t('entry_sensors');
     else if (type === 'panic') title.textContent = this._t('selector_panic');
-    else if (type === 'sync_panel') title.textContent = this._t('sync_panel_section') || 'Paneles Sincronizados';
+    else if (type === 'external_panel') title.textContent = this._t('external_panels') || 'Paneles de alarma externos';
     else title.textContent = this._t('siren_section');
     this.shadowRoot.getElementById('selector-search').value = '';
     this._renderSelector();
@@ -6807,7 +6816,7 @@ class ArgusPanel extends HTMLElement {
 
     const INTRUSION_DC = ['door','window','motion','vibration','glass','opening','smoke','gas','tamper'];
     const items = this._available.filter(x => {
-      if (this._selectorTarget === 'sync_panel') return x.domain === 'alarm_control_panel';
+      if (this._selectorTarget === 'external_panel') return x.domain === 'alarm_control_panel';
       if (this._selectorTarget === 'siren' || this._selectorTarget === 'panic') return ['siren','switch','light','fan','input_boolean','script','alarm_control_panel'].includes(x.domain);
       if (x.domain === 'lock') return true;
       if (x.domain === 'binary_sensor') {
@@ -6880,8 +6889,8 @@ class ArgusPanel extends HTMLElement {
     }
     this._modeEntryId = _eid;
     if (!this._ui.modes.__by_entity__[_eid]) this._ui.modes.__by_entity__[_eid] = {};
-    const EMPTY = { sensors:[], bypassed_sensors:[], sirens:[], require_closed:false,
-                    arming_time:null, entry_delay:null, mqtt_enabled:null, entry_sensors:[] };
+    const EMPTY = { sensors:[], bypassed_sensors:[], sirens:[], external_panels:[], require_closed:false,
+                    arming_time:null, entry_delay:null, mqtt_enabled:null, entry_sensors:[], light_siren_settings:{} };
     // Partir de la config existente para no perder otros campos
     const existing = this._ui.modes.__by_entity__[_eid][this._mode] || {};
     const cfg = { ...EMPTY, ...existing };
@@ -6889,6 +6898,7 @@ class ArgusPanel extends HTMLElement {
     if (this._selectorTarget === 'siren')  cfg.sirens           = [...this._selected];
     if (this._selectorTarget === 'bypass') cfg.bypassed_sensors = [...this._selected];
     if (this._selectorTarget === 'entry')  cfg.entry_sensors    = [...this._selected];
+    if (this._selectorTarget === 'external_panel') cfg.external_panels = [...this._selected];
     // Escribir de vuelta en la ruta canónica
     this._ui.modes.__by_entity__[_eid][this._mode] = cfg;
     this._closeModal();

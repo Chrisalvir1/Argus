@@ -139,6 +139,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._entry_listener = None
         self._trigger_listener = None
         self._arming_target = None
+        self._arm_request: dict | None = None
+        self._arm_generation = 0
         self._triggered_mode: str | None = None  # modo activo al momento del disparo
         self._panic_active = False
         self._panic_previous_state: AlarmControlPanelState | None = None
@@ -211,6 +213,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         return self._name
 
     @property
+    def device_info(self) -> dict:
+        return {"identifiers": {(DOMAIN, self._config_entry.entry_id)}, "name": self._name, "manufacturer": "Argus", "model": "Argus Home Hub"}
+
+    @property
     def state(self) -> AlarmControlPanelState | None:
         """Return the state of the device."""
         return self._alarm_state
@@ -253,6 +259,11 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 else self._entry_delay
             )
             attrs["delay"] = delay
+        if self._arm_request:
+            attrs["arming_target"] = self._arm_request["target"].value
+            attrs["arming_origin"] = self._arm_request["origin"]
+            attrs["arming_blocking_sensors"] = list(self._arm_request["blocking_sensors"])
+            attrs["arming_waiting_for_sensors"] = bool(self._arm_request["wait_for_sensors"])
 
         # Spatial Model & Master Alarm Attributes
         from .core.spatial import Property, Building, Floor, Area, Room, MasterAlarm
@@ -390,12 +401,29 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         return list(s)
 
+    def _mode_config(self, mode_key: str) -> dict:
+        modes = self._ui_config.get("modes", {})
+        return modes.get("__by_entity__", {}).get(self.entity_id, {}).get(mode_key) or modes.get(mode_key) or {}
+
+    def _open_blocking_sensors(self, target: AlarmControlPanelState) -> list[str]:
+        config = self._mode_config(target.value.replace("armed_", ""))
+        sensors = config.get("sensors") or self._sensors_for_state(target)
+        bypassed = config.get("bypassed_sensors") or config.get("bypassedSensors") or []
+        return [sensor for sensor in sensors if sensor not in bypassed and (state := self.hass.states.get(sensor)) and state.state in _INTRUSION_ACTIVE_STATES]
+
+    def _open_sensor_policy(self, mode_key: str) -> str:
+        config = self._mode_config(mode_key)
+        if config.get("require_closed") or config.get("requireClosed"):
+            return "block"
+        policy = config.get("open_sensors_policy") or config.get("openSensorsPolicy")
+        return policy if policy in {"allow", "pending", "block"} else "allow"
+
     # ── Lifecycle ──────────────────────────────────────────────────
     async def async_added_to_hass(self) -> None:
         await super().async_added_to_hass()
 
         # Load dynamic mode configuration from storage
-        self._ui_config = await async_load_ui_data(self.hass)
+        self._ui_config = await async_load_ui_data(self.hass, self._config_entry.entry_id)
 
         # Local-first recovery: prefer the last *committed* stable state.  We
         # never restore a countdown, an entry delay, or a triggered state, so
@@ -547,7 +575,15 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             if scheduled_state != AlarmControlPanelState.DISARMED:
                 return
 
-        if self._alarm_state != scheduled_state:
+        scheduled_value = getattr(scheduled_state, "value", scheduled_state)
+        is_scheduled_arm = scheduled_value in {
+            "armed_home", "armed_away", "armed_night", "armed_vacation"
+        }
+        if self._alarm_state != scheduled_state and is_scheduled_arm:
+            # Schedules must take the same pending/bypass-aware path as every
+            # other arm request; never write an armed state directly.
+            await self._async_arm(scheduled_state, origin="schedule")
+        elif self._alarm_state != scheduled_state:
             self._cancel_timers()
             if scheduled_state == AlarmControlPanelState.DISARMED or self._alarm_state == AlarmControlPanelState.TRIGGERED:
                 await self._async_siren(False)
@@ -578,7 +614,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     async def _async_reload_config(self) -> None:
         """Reload UI config, re-subscribe sensors, and update MQTT subscriptions after panel saves configuration."""
-        self._ui_config = await async_load_ui_data(self.hass)
+        await self._async_cancel_arming_request("config_reload", disarm=True)
+        self._ui_config = await async_load_ui_data(self.hass, self._config_entry.entry_id)
         # Re-subscribe sensors (picks up newly added/removed sensors from UI)
         if self._unsub_sensors:
             self._unsub_sensors()
@@ -695,6 +732,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._cancel_timers()
 
     def _cancel_timers(self):
+        self._arm_generation += 1
         for attr in (
             "_arming_listener", "_entry_listener", "_trigger_listener",
             "_confirmation_listener",
@@ -704,7 +742,19 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 lst()
                 setattr(self, attr, None)
         self._arming_target = None
+        self._arm_request = None
         self._confirmation_events.clear()
+
+    async def _async_cancel_arming_request(self, reason: str, *, disarm: bool = False) -> None:
+        if not self._arm_request and self._alarm_state != AlarmControlPanelState.ARMING:
+            return
+        self._cancel_timers()
+        if disarm and self._alarm_state == AlarmControlPanelState.ARMING:
+            self._alarm_state = AlarmControlPanelState.DISARMED
+            self.async_write_ha_state()
+            await self._async_mqtt_publish()
+            await self._async_persist_stable_state(reason)
+        await async_append_audit_log(self.hass, "arming_cancelled", f"Armado cancelado: {reason}", user="Argus", metadata={"reason": reason}, entry_id=self._config_entry.entry_id)
 
     async def _async_persist_stable_state(self, source: str) -> None:
         """Record the state after a real transition, never during a timer."""
@@ -771,6 +821,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         """React when a monitored sensor changes state."""
         new_state = event.data.get("new_state")
         entity_id = event.data.get("entity_id")
+
+        if entity_id and self._arm_request:
+            self.hass.async_create_task(self._async_recheck_arm_request())
 
         if new_state is None or new_state.state not in _INTRUSION_ACTIVE_STATES:
             return
@@ -845,6 +898,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     async def _async_trigger(self):
         """Activate the alarm."""
+        if self._alarm_state == AlarmControlPanelState.ARMING and self._arm_request:
+            await self._async_cancel_arming_request("triggered", disarm=True)
         if not self._panic_active and self._alarm_state not in ARMED_STATES and self._alarm_state != AlarmControlPanelState.PENDING:
             return
 
@@ -934,7 +989,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             entry_id=self._config_entry.entry_id,
         )
 
-        await self._async_sync_external_panels("trigger")
+        await self._async_sync_panels(AlarmControlPanelState.TRIGGERED)
         await self._async_persist_stable_state("trigger")
 
         # An SOS is ended deliberately by the user.  It must never silently
@@ -1029,12 +1084,12 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 .get("sirens", [])
             )
             if pe_sirens:
-                return pe_sirens
+                return [entity for entity in pe_sirens if not entity.startswith("alarm_control_panel.")]
 
             # Priority 2: flat legacy config for the ACTIVE mode only
             flat_sirens = modes.get(mode_key, {}).get("sirens", [])
             if flat_sirens:
-                return flat_sirens
+                return [entity for entity in flat_sirens if not entity.startswith("alarm_control_panel.")]
 
         # Priority 3: single siren from initial YAML config (global fallback)
         if self._siren_entity:
@@ -1056,16 +1111,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                             activate, self._alarm_state, self._triggered_mode)
             return
         service = "turn_on" if activate else "turn_off"
-        # Obtener el color de luz para el modo actual o SOS
-        light_color = None
-        if activate:
-            # Primero intentar obtenerlo del modo que disparó la alarma
-            if self._triggered_mode:
-                light_color = self._get_mode_val(self._triggered_mode, "light_color", None)
-            
-            # Si no hay color del modo (ej. SOS pánico), usar fallback o nada
-            # (SOS aún no tiene config de color propia en la UI, pero si la tuviera se leería aquí)
-            
         for entity_id in sirens:
             domain = entity_id.split(".")[0]
             _LOGGER.info("Argus: siren %s → %s (domain=%s)", entity_id, service, domain)
@@ -1074,19 +1119,28 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                     svc_data = {"entity_id": entity_id}
                     if activate:
                         svc_data["brightness_pct"] = 100
-                        if light_color:
-                            svc_data["color_name"] = light_color
+                        mode_cfg = self._mode_config(self._triggered_mode) if self._triggered_mode else {}
+                        settings = (mode_cfg.get("light_siren_settings") or {}).get(entity_id, {})
+                        # Legacy global colour is retained as a safe fallback.
+                        legacy_color = mode_cfg.get("light_color")
+                        supported = (self.hass.states.get(entity_id).attributes.get("supported_color_modes", []) if self.hass.states.get(entity_id) else [])
+                        rgb = settings.get("rgb_color")
+                        hs = settings.get("hs_color")
+                        if rgb and "rgb" in supported:
+                            svc_data["rgb_color"] = rgb
+                        elif hs and "hs" in supported:
+                            svc_data["hs_color"] = hs
+                        elif legacy_color:
+                            svc_data["color_name"] = legacy_color
+                        effects = (self.hass.states.get(entity_id).attributes.get("effect_list", []) if self.hass.states.get(entity_id) else [])
+                        if settings.get("gentle_flash"):
+                            effect = next((item for item in effects if str(item).lower() in {"flash", "slow flash", "slow_flash", "blink"}), None)
+                            if effect:
+                                svc_data["effect"] = effect
                     await self.hass.services.async_call(
                         "light",
                         "turn_on" if activate else "turn_off",
                         svc_data,
-                        blocking=False,
-                    )
-                elif domain == "alarm_control_panel":
-                    await self.hass.services.async_call(
-                        "alarm_control_panel",
-                        "alarm_trigger" if activate else "alarm_disarm",
-                        {"entity_id": entity_id},
                         blocking=False,
                     )
                 else:
@@ -1281,7 +1335,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         await self._async_siren(False)
         persistent_notification.async_dismiss(self.hass, "argus_triggered")
         
-        await self._async_sync_external_panels("disarm")
+        await self._async_sync_panels(AlarmControlPanelState.DISARMED)
 
         self._panic_active = False
         self._panic_previous_state = None
@@ -1303,7 +1357,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         _LOGGER.info("Argus: Disarmed by %s", caller_name)
         await self._async_sync_panels(AlarmControlPanelState.DISARMED)
 
-    async def _async_arm(self, target: AlarmControlPanelState, code=None) -> None:
+    async def _async_arm(self, target: AlarmControlPanelState, code=None, *, origin: str = "service") -> None:
         import time as _time
         restoring_panic = (
             self._panic_active and target == self._panic_previous_state
@@ -1354,7 +1408,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             await async_append_audit_log(self.hass, "arm_rejected", f"Invalid code for {target.value}", user="Argus", entry_id=self._config_entry.entry_id)
             return
 
-        # Evaluate require_closed restrictions
+        # Every source shares the policy/bypass evaluator.
         _MODE_KEY_MAP = {
             AlarmControlPanelState.ARMED_HOME:     "home",
             AlarmControlPanelState.ARMED_AWAY:     "away",
@@ -1363,69 +1417,43 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         }
         mode_key = _MODE_KEY_MAP.get(target)
 
-        if mode_key:
-            modes = self._ui_config.get("modes", {})
-            # Priority: per-entity config > flat legacy config
-            by_entity  = modes.get("__by_entity__", {})
-            mode_config = (
-                by_entity.get(self.entity_id, {}).get(mode_key)
-                or modes.get(mode_key)
-                or {}
+        policy = self._open_sensor_policy(mode_key) if mode_key else "allow"
+        open_sensors = self._open_blocking_sensors(target) if mode_key else []
+        if open_sensors and policy == "block" and not restoring_panic:
+            open_names = [
+                self.hass.states.get(eid).attributes.get("friendly_name", eid)
+                if self.hass.states.get(eid) else eid
+                for eid in open_sensors
+            ]
+            msg = f"Sensores abiertos: {', '.join(open_names)}"
+            _LOGGER.warning("Argus: Arm rejected — %s", msg)
+            await async_append_audit_log(
+                self.hass, "arm_rejected", msg, user="Argus",
+                entry_id=self._config_entry.entry_id,
             )
-            # Support both camelCase (requireClosed, JS) and snake_case (require_closed, Python)
-            req_closed = (
-                mode_config.get("require_closed")
-                or mode_config.get("requireClosed")
-                or False
+            persistent_notification.async_create(
+                self.hass,
+                title="🔒 Argus — No se pudo armar",
+                message=(
+                    "El sistema **no se armó** porque los siguientes "
+                    "sensores están abiertos o activos:\n\n"
+                    + "\n".join(f"• {n}" for n in open_names)
+                    + "\n\nCiérralos o activa el bypass antes de armar."
+                ),
+                notification_id="argus_arm_blocked",
             )
-            if req_closed and not restoring_panic:
-                sensors = mode_config.get("sensors") or []
-                # Excluir sensores bypasseados — igual que _sensors_for_state
-                # FIX (v0.9.28 Bug #2): sin este filtro los bypassed bloqueaban
-                # el armado y el popup nunca aparecía para los realmente abiertos.
-                bypassed = (
-                    mode_config.get("bypassed_sensors")
-                    or mode_config.get("bypassedSensors")
-                    or []
-                )
-                active_sensors = [s for s in sensors if s not in bypassed]
-                OPEN_STATES = {"on", "open", "unlocked", "recording", "active", "motion"}
-                open_names = []
-                for eid in active_sensors:
-                    state_obj = self.hass.states.get(eid)
-                    if state_obj and state_obj.state in OPEN_STATES:
-                        open_names.append(
-                            state_obj.attributes.get("friendly_name", eid)
-                        )
-                if open_names:
-                    msg = f"Sensores abiertos: {', '.join(open_names)}"
-                    _LOGGER.warning("Argus: Arm rejected — %s", msg)
-                    await async_append_audit_log(
-                        self.hass, "arm_rejected", msg, user="Argus",
-                        entry_id=self._config_entry.entry_id,
-                    )
-                    # Persistent notification → aparece en el panel de HA
-                    persistent_notification.async_create(
-                        self.hass,
-                        title="🔒 Argus — No se pudo armar",
-                        message=(
-                            "El sistema **no se armó** porque los siguientes "
-                            "sensores están abiertos o activos:\n\n"
-                            + "\n".join(f"• {n}" for n in open_names)
-                            + "\n\nCiérralos o activa el bypass antes de armar."
-                        ),
-                        notification_id="argus_arm_blocked",
-                    )
-                    # Evento de bus → el frontend JS lo escucha para mostrar el popup
-                    self.hass.bus.async_fire(
-                        "argus_arm_blocked",
-                        {
-                            "entity_id": self.entity_id,
-                            "mode": mode_key,
-                            "open_sensors": open_names,
-                        },
-                    )
-                    return
+            self.hass.bus.async_fire(
+                "argus_arm_blocked",
+                {
+                    "entity_id": self.entity_id,
+                    "mode": mode_key,
+                    "open_sensors": open_names,
+                },
+            )
+            return
+
+        if self._alarm_state == AlarmControlPanelState.ARMING and self._arm_request:
+            await self._async_cancel_arming_request("replaced_by_new_arm", disarm=True)
 
         self._cancel_timers()
 
@@ -1446,27 +1474,51 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         except (TypeError, ValueError):
             arming_delay = 0
 
-        if arming_delay:
+        if arming_delay or (open_sensors and policy == "pending"):
             self._arming_target = target
+            self._arm_request = {"generation": self._arm_generation, "target": target, "origin": origin, "blocking_sensors": open_sensors, "wait_for_sensors": policy == "pending", "delay_elapsed": not bool(arming_delay)}
             self._alarm_state = AlarmControlPanelState.ARMING
             self.async_write_ha_state()
             await self._async_mqtt_publish()
-            self._arming_listener = async_call_later(
-                self.hass, arming_delay, self._async_finish_arming
-            )
+            if arming_delay:
+                self._arming_listener = async_call_later(self.hass, arming_delay, lambda now, generation=self._arm_generation: self._async_finish_arming(now, generation))
             _LOGGER.info("Argus: arming %s in %s seconds", target, arming_delay)
             return
 
         await self._async_complete_arming(target)
 
     @callback
-    def _async_finish_arming(self, _now) -> None:
+    def _async_finish_arming(self, _now, generation: int | None = None) -> None:
         """Finish an arming countdown unless it was cancelled by disarm."""
+        request = self._arm_request
+        if request and generation is not None and request["generation"] != generation:
+            return
+        if request:
+            request["delay_elapsed"] = True
+            self.hass.async_create_task(self._async_recheck_arm_request())
+            return
         target = self._arming_target
         self._arming_listener = None
         self._arming_target = None
         if target:
             self.hass.async_create_task(self._async_complete_arming(target))
+
+    async def _async_recheck_arm_request(self) -> None:
+        request = self._arm_request
+        if not request or self._alarm_state != AlarmControlPanelState.ARMING:
+            return
+        open_sensors = self._open_blocking_sensors(request["target"]) if request["wait_for_sensors"] else []
+        request["blocking_sensors"] = open_sensors
+        self.async_write_ha_state()
+        if open_sensors or not request["delay_elapsed"]:
+            return
+        # A stale callback must never complete a replacement/cancelled request.
+        if request is not self._arm_request or request["generation"] != self._arm_generation:
+            return
+        target = request["target"]
+        self._arm_request = None
+        self._arming_target = None
+        await self._async_complete_arming(target)
 
     async def _async_complete_arming(self, target: AlarmControlPanelState) -> None:
         """Commit an armed state and publish the completed transition."""
@@ -1539,7 +1591,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         await self._async_siren(False)
         persistent_notification.async_dismiss(self.hass, "argus_triggered")
         
-        await self._async_sync_external_panels("disarm")
+        await self._async_sync_panels(AlarmControlPanelState.DISARMED)
 
         self._panic_active = False
         self._panic_previous_state = None
@@ -1579,7 +1631,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             all_sync_panels = set()
             for mode_key in ["home", "away", "night", "vacation"]:
                 cfg = by_entity.get(mode_key) or modes.get(mode_key) or {}
-                for p in (cfg.get("sync_panels") or []):
+                for p in (cfg.get("external_panels") or cfg.get("sync_panels") or []):
                     all_sync_panels.add(p)
             
             panels_to_sync = []
@@ -1592,7 +1644,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 # Disparar solo los paneles sincronizados del modo actual, o todos si fue pánico
                 if self._triggered_mode:
                     cfg = by_entity.get(self._triggered_mode) or modes.get(self._triggered_mode) or {}
-                    panels_to_sync = cfg.get("sync_panels", [])
+                    panels_to_sync = cfg.get("external_panels") or cfg.get("sync_panels", [])
                 else:
                     panels_to_sync = list(all_sync_panels)
                 service = "alarm_trigger"
@@ -1606,18 +1658,20 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 }
                 mode_key, service = _MODE_MAP.get(state, ("away", "alarm_arm_away"))
                 cfg = by_entity.get(mode_key) or modes.get(mode_key) or {}
-                panels_to_sync = cfg.get("sync_panels", [])
+                panels_to_sync = cfg.get("external_panels") or cfg.get("sync_panels", [])
             
             if not panels_to_sync:
                 return
 
             for panel in panels_to_sync:
-                _LOGGER.info("Argus Sync Panel: %s -> %s", panel, service)
-                await self.hass.services.async_call(
-                    "alarm_control_panel",
-                    service,
-                    {"entity_id": panel},
-                    blocking=False
-                )
+                if panel == self.entity_id or not str(panel).startswith("alarm_control_panel."):
+                    continue
+                try:
+                    _LOGGER.info("Argus Sync Panel: %s -> %s", panel, service)
+                    await self.hass.services.async_call(
+                        "alarm_control_panel", service, {"entity_id": panel}, blocking=False
+                    )
+                except Exception as err:  # A third-party panel cannot interrupt Argus.
+                    _LOGGER.warning("Argus: external panel %s rejected %s: %s", panel, service, err)
         except Exception as e:
             _LOGGER.error("Argus: Error sincronizando paneles esclavos: %s", e)

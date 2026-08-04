@@ -1,6 +1,6 @@
-# Release Notes: Argus Home Hub v2.0.27
+# Release Notes: Argus Home Hub v2.0.28
 
-Version 2.0.27 includes several user interface refinements and robustness improvements for mobile devices, originally introduced as experimental fixes and now integrated natively into the core dashboard.
+Version 2.0.28 includes several user interface refinements and robustness improvements for mobile devices, originally introduced as experimental fixes and now integrated natively into the core dashboard.
 
 ## Improvements & Fixes
 - **Mobile Dashboard Polish**: The main dashboard hero section and security control layouts have been redesigned to adapt much better to small mobile screens, eliminating horizontal scroll and overlap issues.
