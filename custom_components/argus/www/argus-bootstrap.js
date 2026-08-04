@@ -10,6 +10,7 @@ import { applyPerformanceProfile } from './argus-performance-profile.js?v=2.0.25
 import { applyVisualContainerFixes } from './argus-visual-container-fixes.js?v=2.0.25';
 import { applyCompleteContentFixes } from './argus-complete-content-fixes.js?v=2.0.25';
 import { applyRuntimeVisualFixes } from './argus-runtime-visual-fixes.js?v=2.0.25';
+import { applyBgSensorAvailabilityFixes } from './argus-bg-sensor-availability-fixes.js?v=2.0.25';
 
 const ArgusPanel = customElements.get('argus-panel-v2018');
 applyUiAuditFixes(ArgusPanel);
@@ -23,3 +24,4 @@ applyPerformanceProfile(ArgusPanel);
 applyVisualContainerFixes(ArgusPanel);
 applyCompleteContentFixes(ArgusPanel);
 applyRuntimeVisualFixes(ArgusPanel);
+applyBgSensorAvailabilityFixes(ArgusPanel);
