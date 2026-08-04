@@ -1069,6 +1069,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                         svc_data,
                         blocking=False,
                     )
+                elif domain == "alarm_control_panel":
+                    await self.hass.services.async_call(
+                        "alarm_control_panel",
+                        "alarm_trigger" if activate else "alarm_disarm",
+                        {"entity_id": entity_id},
+                        blocking=False,
+                    )
                 else:
                     # Intento 1: dominio nativo (switch, siren, fan, input_boolean…)
                     await self.hass.services.async_call(

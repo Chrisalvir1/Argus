@@ -4179,7 +4179,7 @@ class ArgusPanel extends HTMLElement {
     const isOpen = ['on', 'unlocked', 'open', 'recording', 'active', 'motion'].includes(raw);
     const labels = { on:this._t('status_open'), off:this._t('status_closed'), locked:this._t('status_closed'), unlocked:this._t('status_open'), idle:this._t('status_idle'), recording:this._t('status_recording'), home:this._t('status_home'), not_home:this._t('status_away') };
     const domain = entityId.split('.')[0];
-    const isActuator = ['siren', 'switch', 'light', 'fan', 'input_boolean', 'script'].includes(domain);
+    const isActuator = ['siren', 'switch', 'light', 'fan', 'input_boolean', 'script', 'alarm_control_panel'].includes(domain);
     const power = this._getDevicePower(entityId, stateObj);
     const facts = [];
     if (includeStatus) facts.push({ text: isActuator ? raw.toUpperCase() : (labels[raw] || raw), className: isActuator ? '' : (isOpen ? 'status-open' : 'status-closed') });
@@ -5175,7 +5175,15 @@ class ArgusPanel extends HTMLElement {
       const stateObj = this._hass?.states?.[entityId];
       const power = this._getDevicePower(entityId, stateObj);
       stateLabel = `<span class="pill-status">${isTr ? this._t('status_open') : this._t('status_closed')}</span>`;
-      powerHtml = `${power.mains ? '<span class="pill-power">🔌 AC</span>' : ''}${power.battery !== null ? `<span class="pill-power">🔋 ${power.battery}%</span>` : ''}`;
+      
+      if (power.mains) powerHtml += '<span class="pill-power">🔌 AC</span>';
+      if (power.battery !== null) {
+        const isDead = power.battery === 0;
+        const isLow = power.battery <= 10 && !isDead;
+        const batText = isDead ? '🔋 ❌' : `🔋 ${power.battery}%`;
+        const cls = isDead ? 'dead' : (isLow ? 'low' : '');
+        powerHtml += `<span class="pill-power ${cls}">${batText}</span>`;
+      }
     }
 
     const alarmTriggered = this._dashboard?.entries?.some(en =>
@@ -6690,7 +6698,7 @@ class ArgusPanel extends HTMLElement {
     const q = (this.shadowRoot.getElementById('selector-search').value || '').toLowerCase().trim();
     const INTRUSION_DC = ['door','window','motion','vibration','glass','opening','smoke','gas','tamper'];
     const items = this._available.filter(x => {
-      if (this._selectorTarget === 'siren' || this._selectorTarget === 'panic') return ['siren','switch','light','fan','input_boolean','script'].includes(x.domain);
+      if (this._selectorTarget === 'siren' || this._selectorTarget === 'panic') return ['siren','switch','light','fan','input_boolean','script','alarm_control_panel'].includes(x.domain);
       if (x.domain === 'lock') return true;
       if (x.domain === 'binary_sensor') {
         const dc = this._hass?.states?.[x.entity_id]?.attributes?.device_class || '';
@@ -6733,7 +6741,7 @@ class ArgusPanel extends HTMLElement {
 
     const INTRUSION_DC = ['door','window','motion','vibration','glass','opening','smoke','gas','tamper'];
     const items = this._available.filter(x => {
-      if (this._selectorTarget === 'siren' || this._selectorTarget === 'panic') return ['siren','switch','light','fan','input_boolean','script'].includes(x.domain);
+      if (this._selectorTarget === 'siren' || this._selectorTarget === 'panic') return ['siren','switch','light','fan','input_boolean','script','alarm_control_panel'].includes(x.domain);
       if (x.domain === 'lock') return true;
       if (x.domain === 'binary_sensor') {
         const dc = this._hass?.states?.[x.entity_id]?.attributes?.device_class || '';
