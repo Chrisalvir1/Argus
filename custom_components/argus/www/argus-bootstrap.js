@@ -1,16 +1,16 @@
-import './argus-panel.js?v=2.0.16';
-import { applyUiAuditFixes } from './argus-ui-audit-fixes.js?v=2.0.16';
+import './argus-panel.js?v=2.0.17';
+import { applyUiAuditFixes } from './argus-ui-audit-fixes.js?v=2.0.17';
 import { applyGridPolish } from './argus-grid-polish.js?v=2.0.17';
-import { applyFullscreenPolish } from './argus-fullscreen-polish.js?v=2.0.16';
-import { applyMediaClient } from './media-client.js?v=2.0.16';
-import { applyPremiumExperience } from './premium-experience.js?v=2.0.16';
-import { applySecurityClient } from './security-client.js?v=2.0.16';
-import { applyV2012AuditFixes } from './argus-v2013-audit-fixes.js?v=2.0.16';
-import { applyPerformanceProfile } from './argus-performance-profile.js?v=2.0.16';
-import { applyVisualContainerFixes } from './argus-visual-container-fixes.js?v=2.0.16';
+import { applyFullscreenPolish } from './argus-fullscreen-polish.js?v=2.0.17';
+import { applyMediaClient } from './media-client.js?v=2.0.17';
+import { applyPremiumExperience } from './premium-experience.js?v=2.0.17';
+import { applySecurityClient } from './security-client.js?v=2.0.17';
+import { applyV2012AuditFixes } from './argus-v2013-audit-fixes.js?v=2.0.17';
+import { applyPerformanceProfile } from './argus-performance-profile.js?v=2.0.17';
+import { applyVisualContainerFixes } from './argus-visual-container-fixes.js?v=2.0.17';
 import { applyCompleteContentFixes } from './argus-complete-content-fixes.js?v=2.0.17';
 
-const ArgusPanel = customElements.get('argus-panel-v2016');
+const ArgusPanel = customElements.get('argus-panel-v2017');
 applyUiAuditFixes(ArgusPanel);
 applySecurityClient(ArgusPanel);
 applyMediaClient(ArgusPanel);
