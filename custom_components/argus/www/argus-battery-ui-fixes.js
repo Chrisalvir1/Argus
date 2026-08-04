@@ -42,7 +42,7 @@ function argusInjectBatteryUiStyles(panel) {
       50% { opacity: 0.6; }
       100% { opacity: 1; }
     }
-    .sensor-pill .pill-power {
+    .sensor-pill .pill-power, .device-fact.pill-power {
       font-size: 9px;
       font-weight: 800;
       padding: 2px 5px;
@@ -53,13 +53,13 @@ function argusInjectBatteryUiStyles(panel) {
       -webkit-backdrop-filter: blur(8px);
       color: #e2e8f0;
     }
-    .sensor-pill .pill-power.low {
+    .sensor-pill .pill-power.low, .device-fact.pill-power.low {
       background: rgba(239, 68, 68, 0.2) !important;
       border-color: rgba(239, 68, 68, 0.4) !important;
       color: #fca5a5 !important;
       animation: pulse 2s infinite;
     }
-    .sensor-pill .pill-power.dead {
+    .sensor-pill .pill-power.dead, .device-fact.pill-power.dead {
       background: rgba(220, 38, 38, 0.3) !important;
       border-color: rgba(220, 38, 38, 0.6) !important;
       color: #f87171 !important;

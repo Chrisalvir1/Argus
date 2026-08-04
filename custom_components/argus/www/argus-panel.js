@@ -4149,25 +4149,36 @@ class ArgusPanel extends HTMLElement {
       /(?:mains|ac|wired|line|external|toma|corriente)/.test(source);
 
     if (battery === null) {
-      // Prefer exact entity-id matches.  The prior loose first-match lookup
-      // could display another device's battery when several names overlapped.
-      const objectId = sensorId.split('.').slice(1).join('.').toLowerCase();
-      const base = objectId.replace(/_(contact|door|window|motion|occupancy|opening|sensor)$/i, '');
-      const companion = Object.values(this._hass?.states || {})
-        .map(state => {
-          const id = String(state.entity_id || '').toLowerCase();
-          const isBattery = state.attributes?.device_class === 'battery' || /_battery(?:_level|_percent(?:age)?)?$/i.test(id);
-          if (!isBattery) return { state, score: 0 };
-          const object = id.split('.').slice(1).join('.');
-          const score = object === `${objectId}_battery` ? 100
-            : object === `${base}_battery` ? 90
-            : object.startsWith(`${objectId}_battery`) ? 80
-            : object.startsWith(`${base}_battery`) ? 70
-            : 0;
-          return { state, score };
-        })
-        .filter(candidate => candidate.score > 0)
-        .sort((a, b) => b.score - a.score)[0]?.state;
+      let companion = null;
+      const avEntity = (this._available || []).find(e => e.entity_id === sensorId);
+      if (avEntity && avEntity.device_id) {
+         companion = (this._available || []).find(e => 
+           e.device_id === avEntity.device_id &&
+           (this._hass?.states?.[e.entity_id]?.attributes?.device_class === 'battery' || /_battery(?:_level|_percent(?:age)?)?$/i.test(e.entity_id))
+         );
+         if (companion) companion = { state: this._hass?.states?.[companion.entity_id]?.state };
+      }
+      
+      if (!companion) {
+        const objectId = sensorId.split('.').slice(1).join('.').toLowerCase();
+        const base = objectId.replace(/_(contact|door|window|motion|occupancy|opening|sensor)$/i, '');
+        companion = Object.values(this._hass?.states || {})
+          .map(state => {
+            const id = String(state.entity_id || '').toLowerCase();
+            const isBattery = state.attributes?.device_class === 'battery' || /_battery(?:_level|_percent(?:age)?)?$/i.test(id);
+            if (!isBattery) return { state, score: 0 };
+            const object = id.split('.').slice(1).join('.');
+            const score = object === `${objectId}_battery` ? 100
+              : object === `${base}_battery` ? 90
+              : object.startsWith(`${objectId}_battery`) ? 80
+              : object.startsWith(`${base}_battery`) ? 70
+              : 0;
+            return { state, score };
+          })
+          .filter(candidate => candidate.score > 0)
+          .sort((a, b) => b.score - a.score)[0];
+      }
+      
       const level = Number(companion?.state);
       if (Number.isFinite(level)) battery = Math.max(0, Math.min(100, Math.round(level)));
     }
@@ -4184,7 +4195,13 @@ class ArgusPanel extends HTMLElement {
     const facts = [];
     if (includeStatus) facts.push({ text: isActuator ? raw.toUpperCase() : (labels[raw] || raw), className: isActuator ? '' : (isOpen ? 'status-open' : 'status-closed') });
     if (power.mains) facts.push({ text: '🔌 AC', className: 'power-mains' });
-    if (power.battery !== null) facts.push({ text: `🔋 ${power.battery}%`, className: power.battery <= 20 ? 'power-low' : '' });
+    if (power.battery !== null) {
+      const isDead = power.battery === 0;
+      const isLow = power.battery <= 10 && !isDead;
+      const batText = isDead ? '🔋 ❌' : `🔋 ${power.battery}%`;
+      const cls = isDead ? 'dead' : (isLow ? 'low' : '');
+      facts.push({ text: batText, className: `pill-power ${cls}` });
+    }
     return facts;
   }
 

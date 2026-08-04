@@ -45,7 +45,8 @@ _ALLOWED_MEDIA_EXTENSIONS = {
 }
 _SUPPORTED_DOMAINS = {
     "binary_sensor", "camera", "climate", "cover", "light", "lock",
-    "media_player", "sensor", "siren", "switch",
+    "media_player", "sensor", "siren", "switch", "alarm_control_panel",
+    "input_boolean", "script", "fan",
 }
 
 
@@ -142,6 +143,7 @@ def _serialize_available_entities(hass: HomeAssistant) -> list[dict]:
             "state": state.state,
             "area": area_name,
             "icon": state.attributes.get("icon"),
+            "device_id": entry.device_id if entry else None,
         })
 
     return entities
