@@ -11,9 +11,9 @@ def source(name):
 
 
 class TestPerformanceProfile(unittest.TestCase):
-    def test_bootstrap_loads_performance_profile_last(self):
+    def test_bootstrap_loads_performance_profile_after_audit_fixes(self):
         bootstrap = source("argus-bootstrap.js")
-        self.assertIn("argus-performance-profile.js?v=2.0.17", bootstrap)
+        self.assertIn("argus-performance-profile.js?v=2.0.18", bootstrap)
         self.assertTrue(
             bootstrap.rfind("applyPerformanceProfile")
             > bootstrap.rfind("applyV2012AuditFixes")
@@ -25,6 +25,7 @@ class TestPerformanceProfile(unittest.TestCase):
         self.assertIn("deviceMemory", js)
         self.assertIn("webgl2", js)
         self.assertIn("function detectCapabilities", js)
+        self.assertIn("no identifica ni supone", js)
 
     def test_runs_a_short_safe_benchmark(self):
         js = source("argus-performance-profile.js")
