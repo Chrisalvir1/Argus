@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v2.0.22
+ * Argus Home Hub – v2.0.23
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -3138,8 +3138,6 @@ class ArgusPanel extends HTMLElement {
   }
 
   _getLocale() {
-    const storedPolicy = cfg?.open_sensors_policy || cfg?.openSensorsPolicy;
-    const legacyBlockPolicy = storedPolicy === 'block';
     return {
       es: 'es-ES', en: 'en-US', fr: 'fr-FR', pt: 'pt-BR',
       it: 'it-IT', zh: 'zh-CN', ru: 'ru-RU',
@@ -5052,6 +5050,8 @@ class ArgusPanel extends HTMLElement {
 
     const savedCfg = this._ui.modes.__by_entity__[entityId][this._mode];
     const cfg = savedCfg && typeof savedCfg === 'object' && !Array.isArray(savedCfg) ? savedCfg : emptyCfg;
+    const storedPolicy = cfg?.open_sensors_policy || cfg?.openSensorsPolicy;
+    const legacyBlockPolicy = storedPolicy === 'block';
     // Older stored UI data may contain a missing or malformed collection.
     // Never allow that to abort rendering the entire Modes section.
     return {
@@ -7663,4 +7663,4 @@ class ArgusPanel extends HTMLElement {
 
 }
 
-customElements.define('argus-panel-v2022', ArgusPanel);
+customElements.define('argus-panel-v2023', ArgusPanel);

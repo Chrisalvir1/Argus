@@ -48,6 +48,16 @@ class TestOpenSensorPolicyContract(unittest.TestCase):
         self.assertIn('config["require_closed"] = True', websocket)
         self.assertIn('config["open_sensors_policy"] = "allow"', websocket)
 
+    def test_policy_normalization_does_not_reference_cfg_during_panel_bootstrap(self):
+        """Config variables stay inside _currentModeConfig, so locale setup can start."""
+        locale_method = UI.split('  _getLocale() {', 1)[1].split('  _weatherPresentation(', 1)[0]
+        self.assertNotIn('cfg', locale_method)
+
+        mode_config = UI.split('  _currentModeConfig() {', 1)[1].split('  _toggleEntrySensor(', 1)[0]
+        cfg_declaration = mode_config.index('const cfg =')
+        policy_declaration = mode_config.index('const storedPolicy =')
+        self.assertLess(cfg_declaration, policy_declaration)
+
     def test_pending_shield_uses_backend_attributes_and_has_delay_variant(self):
         """The active-instance shield must render the canonical ARMING details."""
         for token in (

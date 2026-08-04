@@ -2,6 +2,11 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.23] - 2026-08-03
+
+### Fixed
+- Corregido el arranque del panel web: la normalización de configuración de sensores abiertos ya no referencia `cfg` fuera de alcance durante la inicialización de locale.
+
 ## [2.0.22] - 2026-08-03
 
 ### Added

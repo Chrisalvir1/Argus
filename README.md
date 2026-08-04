@@ -141,7 +141,7 @@ title: Seguridad
 4. Recarga el navegador sin caché.
 5. Verifica armado, desarmado, SOS, PIN, sirenas, medios y restauración.
 
-Consulta las notas de la versión [v2.0.22](https://github.com/Chrisalvir1/Argus/releases/tag/v2.0.22) y la guía de [sensores abiertos y armado pendiente](docs/OPEN_SENSOR_ARMING.md).
+Consulta las notas de la versión [v2.0.23](https://github.com/Chrisalvir1/Argus/releases/tag/v2.0.23) y la guía de [sensores abiertos y armado pendiente](docs/OPEN_SENSOR_ARMING.md).
 
 ## Desarrollo
 
