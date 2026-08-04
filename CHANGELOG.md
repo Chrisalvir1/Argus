@@ -2,6 +2,13 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.20] - 2026-08-03
+
+### Fixed
+- Alineados todos los contratos de versión, el cache busting del frontend y el registro del custom element con la versión publicada.
+- El panel se registra como `argus-panel-v2020`, evitando que un navegador reutilice una definición anterior después de actualizar.
+- Recuperada la ejecución completa de las validaciones de release y regresión estática.
+
 ## [2.0.19] - 2026-08-03
 
 ### Added
