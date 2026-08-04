@@ -1,11 +1,10 @@
 import './argus-panel.js?v=2.0.26';
 import { applyUiAuditFixes } from './argus-ui-audit-fixes.js?v=2.0.26';
-import { applyV2010UiAuditFixes } from './argus-v2010-ui-audit.js?v=2.0.26';
-import { applySecurityClient } from './argus-security-client.js?v=2.0.26';
-import { applyMediaClient } from './argus-media-client.js?v=2.0.26';
-import { applyPremiumExperience } from './argus-premium-experience.js?v=2.0.26';
-import { applyGridPolish } from './argus-v2011-grid-polish.js?v=2.0.26';
-import { applyFullscreenPolish } from './argus-v2011-fullscreen-polish.js?v=2.0.26';
+import { applyGridPolish } from './argus-grid-polish.js?v=2.0.26';
+import { applyFullscreenPolish } from './argus-fullscreen-polish.js?v=2.0.26';
+import { applyMediaClient } from './media-client.js?v=2.0.26';
+import { applyPremiumExperience } from './premium-experience.js?v=2.0.26';
+import { applySecurityClient } from './security-client.js?v=2.0.26';
 import { applyV2012AuditFixes } from './argus-v2013-audit-fixes.js?v=2.0.26';
 import { applyPerformanceProfile } from './argus-performance-profile.js?v=2.0.26';
 import { applyVisualContainerFixes } from './argus-visual-container-fixes.js?v=2.0.26';
