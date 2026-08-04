@@ -39,6 +39,21 @@ Con `pending`, Argus publica `ARMING` para Home Assistant y HomeKit. Si hay vari
 
 Las solicitudes desde el panel/WebSocket, servicios Home Assistant o HomeKit, MQTT, presencia y horarios pasan por el mismo flujo. Desarmar durante la espera la cancela definitivamente. Una nueva solicitud, cambio de modo, SOS/alarma, recarga de configuración, descarga de la integración y una programación de desarmado invalidan de forma segura la solicitud anterior. Las esperas no se persisten ni se reanudan después de reiniciar.
 
+## Condición para automatizaciones de Home Assistant
+
+Argus añade, por cada `config entry`, una entidad binaria al mismo dispositivo de Home Assistant: **Esperando que se cierren los sensores para armar** (el nombre se muestra en el idioma de Home Assistant). Se activa exclusivamente si Argus está en `ARMING` y `arming_waiting_for_sensors` es verdadero; se desactiva al cerrar el último sensor y terminar el armado, al desarmar o cancelar, al cambiar de modo y al descargar la integración. Un retardo normal de `arming_time` sin sensores pendientes no la activa.
+
+En el editor de automatizaciones, crea una condición, escoge el dispositivo de la instancia de Argus, selecciona la entidad **Esperando que se cierren los sensores para armar** y el estado **activado**. La alternativa YAML de una condición de estado es:
+
+```yaml
+condition:
+  - condition: state
+    entity_id: binary_sensor.argus_esperando_sensores_para_armar
+    state: "on"
+```
+
+Sustituye el `entity_id` por el que Home Assistant asigne a la instancia. La entidad expone `arming_target`, `blocking_sensor_count` y `blocking_sensors`, sin secretos ni códigos.
+
 ## Escudo y localización
 
 Mientras `arming_waiting_for_sensors` sea verdadero, el escudo SVG de una instancia activa presenta **Perímetro en cierre**: mantiene atenuada la identidad de Casa, Noche, Ausente o Vacaciones, usa un aro ámbar y una puerta asegurándose, e indica los accesos pendientes. Muestra como máximo dos nombres y un indicador de sensores restantes; al cerrarse el último hace una transición breve al modo armado.

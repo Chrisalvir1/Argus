@@ -3,6 +3,7 @@ import asyncio
 import unittest
 import sys
 import os
+from types import SimpleNamespace
 from unittest.mock import AsyncMock, MagicMock, patch
 
 # ── Mock homeassistant modules before any custom_components import ────────────
@@ -60,6 +61,14 @@ class CodeFormat:
     NUMBER = "number"
 acp_mock.CodeFormat = CodeFormat
 sys.modules["homeassistant.components.alarm_control_panel"] = acp_mock
+binary_sensor_mock = MagicMock()
+class DummyBinarySensorEntity:
+    pass
+class BinarySensorDeviceClass:
+    SAFETY = "safety"
+binary_sensor_mock.BinarySensorEntity = DummyBinarySensorEntity
+binary_sensor_mock.BinarySensorDeviceClass = BinarySensorDeviceClass
+sys.modules["homeassistant.components.binary_sensor"] = binary_sensor_mock
 restore_mock = MagicMock()
 restore_mock.RestoreEntity = DummyRestoreEntity
 sys.modules["homeassistant.helpers.restore_state"] = restore_mock
@@ -369,9 +378,9 @@ class TestV193FrontendContracts(unittest.TestCase):
             self.content = f.read()
 
     def test_version_updated_to_2021(self):
-        """argus-panel.js header must reflect v2.0.23."""
-        self.assertIn("v2.0.23", self.content, "argus-panel.js must mention v2.0.23")
-        self.assertIn("argus-panel-v2023", self.content, "customElements.define must use argus-panel-v2023")
+        """argus-panel.js header must reflect v2.0.24."""
+        self.assertIn("v2.0.24", self.content, "argus-panel.js must mention v2.0.24")
+        self.assertIn("argus-panel-v2024", self.content, "customElements.define must use argus-panel-v2024")
 
     def test_new_i18n_keys_all_languages(self):
         """All 7 language tables must contain all new v1.9.3 i18n keys."""
@@ -456,7 +465,7 @@ class TestV193ManifestVersion(unittest.TestCase):
         )
         with open(manifest_path) as f:
             manifest = json.load(f)
-        self.assertEqual(manifest["version"], "2.0.23", "manifest.json version must be 2.0.23")
+        self.assertEqual(manifest["version"], "2.0.24", "manifest.json version must be 2.0.24")
 
 
 class TestV193BootstrapCacheBust(unittest.TestCase):
@@ -466,7 +475,7 @@ class TestV193BootstrapCacheBust(unittest.TestCase):
         )
         with open(bootstrap_path) as f:
             content = f.read()
-        self.assertIn("2.0.23", content, "argus-bootstrap.js must reference version 2.0.23 for cache-busting")
+        self.assertIn("2.0.24", content, "argus-bootstrap.js must reference version 2.0.24 for cache-busting")
 
 
 class TestV193ScheduleAndDisarmProtection(unittest.IsolatedAsyncioTestCase):
@@ -741,6 +750,74 @@ class TestOpenSensorPolicyBehaviour(unittest.IsolatedAsyncioTestCase):
         with patch("custom_components.argus.alarm_control_panel.async_load_ui_data", new_callable=AsyncMock, return_value={"modes": {}}) as load:
             await panel._async_reload_config()
         load.assert_awaited_once_with(panel.hass, "north-entry")
+
+
+class TestPendingArmAutomationEntity(unittest.TestCase):
+    """The automation condition mirrors only sensor-gated ARMING per entry."""
+
+    def _sensor(self, entry_id, panel, panels):
+        from custom_components.argus.binary_sensor import ArgusWaitingForSensorsBinarySensor
+
+        entry = MagicMock(entry_id=entry_id, data={"name": f"Argus {entry_id}"})
+        hass = MagicMock()
+        hass.data = {"argus": {"panels": panels}}
+        return ArgusWaitingForSensorsBinarySensor(hass, entry)
+
+    def test_pending_transitions_and_attributes(self):
+        target = SimpleNamespace(value="armed_night")
+        panel = SimpleNamespace(
+            _alarm_state="arming",
+            _arm_request={
+                "target": target,
+                "wait_for_sensors": True,
+                "blocking_sensors": ["binary_sensor.front_door", "binary_sensor.garage"],
+            },
+        )
+        sensor = self._sensor("north", panel, {"north": panel})
+
+        self.assertTrue(sensor.is_on)
+        self.assertEqual(sensor.extra_state_attributes["arming_target"], "armed_night")
+        self.assertEqual(sensor.extra_state_attributes["blocking_sensor_count"], 2)
+        self.assertEqual(sensor.extra_state_attributes["blocking_sensors"], ["binary_sensor.front_door", "binary_sensor.garage"])
+        self.assertEqual(sensor.device_info["identifiers"], {("argus", "north")})
+
+        # Closing the last blocker completes the alarm and clears the request.
+        panel._alarm_state = "armed_night"
+        panel._arm_request = None
+        self.assertFalse(sensor.is_on)
+
+        # Disarm or an atomic cancellation must also clear this condition.
+        panel._alarm_state = "disarmed"
+        self.assertFalse(sensor.is_on)
+        panel._alarm_state = "arming"
+        panel._arm_request = None
+        self.assertFalse(sensor.is_on)
+
+    def test_delay_only_and_two_entries_are_isolated(self):
+        waiting = SimpleNamespace(
+            _alarm_state="arming",
+            _arm_request={
+                "target": SimpleNamespace(value="armed_home"),
+                "wait_for_sensors": True,
+                "blocking_sensors": ["binary_sensor.door"],
+            },
+        )
+        delay_only = SimpleNamespace(
+            _alarm_state="arming",
+            _arm_request={
+                "target": SimpleNamespace(value="armed_away"),
+                "wait_for_sensors": False,
+                "blocking_sensors": [],
+            },
+        )
+        panels = {"north": waiting, "south": delay_only}
+        north = self._sensor("north", waiting, panels)
+        south = self._sensor("south", delay_only, panels)
+
+        self.assertTrue(north.is_on)
+        self.assertFalse(south.is_on, "arming_time alone is not a sensor wait")
+        self.assertEqual(north.extra_state_attributes["blocking_sensors"], ["binary_sensor.door"])
+        self.assertEqual(south.extra_state_attributes["blocking_sensors"], [])
 
 if __name__ == "__main__":
     unittest.main()

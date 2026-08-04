@@ -7,7 +7,7 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DATA_PANELS, DOMAIN
+from .const import CONF_NAME, DATA_PANELS, DEFAULT_NAME, DOMAIN
 
 
 async def async_setup_entry(
@@ -37,6 +37,16 @@ class ArgusPanicSwitch(SwitchEntity):
         return self.hass.data.get(DOMAIN, {}).get(DATA_PANELS, {}).get(
             self._config_entry.entry_id
         )
+
+    @property
+    def device_info(self) -> dict:
+        """Attach the SOS control to its own Argus config-entry device."""
+        return {
+            "identifiers": {(DOMAIN, self._config_entry.entry_id)},
+            "name": self._config_entry.data.get(CONF_NAME, DEFAULT_NAME),
+            "manufacturer": "Argus",
+            "model": "Argus Home Hub",
+        }
 
     @property
     def is_on(self) -> bool:

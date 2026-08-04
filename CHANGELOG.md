@@ -2,6 +2,15 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.24] - 2026-08-03
+
+### Added
+- Nueva entidad binaria nativa por instancia para automatizaciones: **Esperando que se cierren los sensores para armar**. Se activa únicamente durante un armado pendiente que espera sensores y expone el destino y los sensores bloqueantes sin secretos.
+
+### Changed
+- Las entidades de alarma, SOS y espera se agrupan bajo el mismo dispositivo de Home Assistant por `config entry`, para que la condición se seleccione directamente desde el dispositivo correcto.
+- Un cambio de solicitud de armado o un SOS invalida y publica primero una espera anterior, evitando condiciones pendientes obsoletas.
+
 ## [2.0.23] - 2026-08-03
 
 ### Fixed

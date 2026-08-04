@@ -54,5 +54,12 @@
         }
       }
     }
+  },
+  "entity": {
+    "binary_sensor": {
+      "waiting_for_sensors_to_close": {
+        "name": "En attente de la fermeture des capteurs avant l’armement"
+      }
+    }
   }
 }

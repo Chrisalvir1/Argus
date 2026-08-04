@@ -54,5 +54,12 @@
         }
       }
     }
+  },
+  "entity": {
+    "binary_sensor": {
+      "waiting_for_sensors_to_close": {
+        "name": "正在等待传感器关闭后布防"
+      }
+    }
   }
 }

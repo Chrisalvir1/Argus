@@ -54,5 +54,12 @@
         }
       }
     }
+  },
+  "entity": {
+    "binary_sensor": {
+      "waiting_for_sensors_to_close": {
+        "name": "Waiting for sensors to close before arming"
+      }
+    }
   }
 }

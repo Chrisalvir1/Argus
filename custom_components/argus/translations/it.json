@@ -54,5 +54,12 @@
         }
       }
     }
+  },
+  "entity": {
+    "binary_sensor": {
+      "waiting_for_sensors_to_close": {
+        "name": "In attesa della chiusura dei sensori prima dell’inserimento"
+      }
+    }
   }
 }

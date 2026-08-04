@@ -5,6 +5,7 @@ Home Assistant is not installed.  They protect the routing and compatibility
 guarantees that must hold for every arming source.
 """
 from pathlib import Path
+import json
 import re
 import unittest
 
@@ -99,3 +100,18 @@ class TestOpenSensorPolicyContract(unittest.TestCase):
             line = next(line for line in UI.splitlines() if f"Object.assign(TEXTS.{language}, {{ perimeter_closing:" in line)
             template = re.search(r"accesses_open:'([^']+)'", line).group(1)
             self.assertNotIn("{count}", template.replace("{count}", "2"))
+
+    def test_pending_automation_entity_is_available_in_all_languages(self):
+        """HA can expose the condition with its native localized entity name."""
+        binary_sensor = (ROOT / "custom_components/argus/binary_sensor.py").read_text(encoding="utf-8")
+        self.assertIn('"binary_sensor"', (ROOT / "custom_components/argus/const.py").read_text(encoding="utf-8"))
+        for token in (
+            "ArgusWaitingForSensorsBinarySensor", "waiting_for_sensors_to_close",
+            "BinarySensorDeviceClass.SAFETY", "blocking_sensor_count",
+            "state_value == \"arming\"", 'request.get("wait_for_sensors") is True',
+        ):
+            self.assertIn(token, binary_sensor)
+        for language in ("es", "en", "fr", "pt", "it", "zh", "ru"):
+            translation = json.loads((ROOT / f"custom_components/argus/translations/{language}.json").read_text(encoding="utf-8"))
+            name = translation["entity"]["binary_sensor"]["waiting_for_sensors_to_close"]["name"]
+            self.assertTrue(name, f"{language} lacks the pending automation entity name")

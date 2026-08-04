@@ -54,5 +54,12 @@
         }
       }
     }
+  },
+  "entity": {
+    "binary_sensor": {
+      "waiting_for_sensors_to_close": {
+        "name": "Esperando que se cierren los sensores para armar"
+      }
+    }
   }
 }

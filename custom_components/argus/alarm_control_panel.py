@@ -214,6 +214,16 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         return self._name
 
     @property
+    def device_info(self) -> dict:
+        """Group every per-entry Argus entity under one HA device."""
+        return {
+            "identifiers": {(DOMAIN, self._config_entry.entry_id)},
+            "name": self._name,
+            "manufacturer": "Argus",
+            "model": "Argus Home Hub",
+        }
+
+    @property
     def state(self) -> AlarmControlPanelState | None:
         """Return the state of the device."""
         return self._alarm_state
@@ -949,6 +959,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     async def _async_trigger(self):
         """Activate the alarm."""
+        # SOS/trigger invalidates an unfinished arm before publishing the
+        # triggered state, so no pending automation condition can linger.
+        if self._alarm_state == AlarmControlPanelState.ARMING and self._arm_request:
+            await self._async_cancel_arming_request("triggered", disarm=True)
         if not self._panic_active and self._alarm_state not in ARMED_STATES and self._alarm_state != AlarmControlPanelState.PENDING:
             return
 
@@ -1386,6 +1400,12 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         if self._alarm_state == target:
             return
+
+        # A different arm request supersedes an in-memory wait/countdown.
+        # Publish the cancellation first so automation entities cannot retain
+        # a stale waiting-for-sensors condition when the new request blocks.
+        if self._alarm_state == AlarmControlPanelState.ARMING and self._arm_request:
+            await self._async_cancel_arming_request("replaced_by_new_arm", disarm=True)
 
         # STRICT AWAY/VACATION LOCK:
         # Prevent automations or accidental clicks from lowering the security state from Away/Vacation.

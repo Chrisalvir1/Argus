@@ -86,6 +86,19 @@ La política se guarda y se aplica por instancia y por modo desde la UI de Argus
 
 Las solicitudes desde el panel, servicios de Home Assistant/HomeKit, MQTT, presencia y horarios usan el mismo flujo. En espera, un `arming_time` también debe terminar antes de armar. Desarmar, cambiar de modo, SOS/alarma, recargar la configuración, descargar la integración o un horario de desarmado cancelan la solicitud de forma segura; no se restaura una espera después de reiniciar.
 
+### Automatizaciones de Home Assistant
+
+Cada instancia crea la entidad binaria localizada **Esperando que se cierren los sensores para armar**. Está activada únicamente durante un armado pendiente que espera sensores, y aparece en el dispositivo de esa instancia de Argus como condición de estado. En el editor de automatizaciones, elige el dispositivo **Argus Home Hub**, selecciona esa entidad/condición y configura **activada**. También puede usarse una condición de estado:
+
+```yaml
+condition:
+  - condition: state
+    entity_id: binary_sensor.argus_esperando_sensores_para_armar
+    state: "on"
+```
+
+El identificador concreto depende del nombre de la instancia. Sus atributos incluyen `arming_target`, `blocking_sensor_count` y `blocking_sensors`; no incluyen PIN ni credenciales.
+
 ## Requisitos
 
 - Home Assistant **2024.7.0 o posterior**.
@@ -141,7 +154,7 @@ title: Seguridad
 4. Recarga el navegador sin caché.
 5. Verifica armado, desarmado, SOS, PIN, sirenas, medios y restauración.
 
-Consulta las notas de la versión [v2.0.23](https://github.com/Chrisalvir1/Argus/releases/tag/v2.0.23) y la guía de [sensores abiertos y armado pendiente](docs/OPEN_SENSOR_ARMING.md).
+Consulta las notas de la versión [v2.0.24](https://github.com/Chrisalvir1/Argus/releases/tag/v2.0.24) y la guía de [sensores abiertos y armado pendiente](docs/OPEN_SENSOR_ARMING.md).
 
 ## Desarrollo
 
