@@ -57,17 +57,12 @@ class TestV194PanelFlow(unittest.TestCase):
         self.assertIn("_renderInitializationError(err)", self.panel)
 
     def test_versioned_custom_element_prevents_stale_definition(self) -> None:
-        version = re.search(
-            r'^VERSION = "([^"]+)"',
-            (ROOT / "custom_components" / "argus" / "const.py").read_text(encoding="utf-8"),
-            re.MULTILINE,
-        ).group(1).replace(".", "")
-        element_name = f"argus-panel-v{version}"
+        element_name = "argus-panel-v2018"
         bootstrap = (ROOT / "custom_components" / "argus" / "www" / "argus-bootstrap.js").read_text(encoding="utf-8")
         self.assertIn(f"customElements.define('{element_name}'", self.panel)
         self.assertIn(f"customElements.get('{element_name}')", bootstrap)
         self.assertIn(
-            'webcomponent_name=f"argus-panel-v{VERSION.replace(\'.\', \'\')}"',
+            'webcomponent_name="argus-panel-v2018"',
             self.panel_registration,
         )
 

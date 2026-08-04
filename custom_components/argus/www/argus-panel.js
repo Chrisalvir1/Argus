@@ -7631,4 +7631,4 @@ class ArgusPanel extends HTMLElement {
 
 }
 
-customElements.define('argus-panel-v2025', ArgusPanel);
+customElements.define('argus-panel-v2018', ArgusPanel);
