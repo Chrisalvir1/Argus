@@ -1,0 +1,17 @@
+npm warn deprecated react-grid-layout@1.5.2: Ships stray files that were never in the repo: an ip_fetcher binary and its curl-sample source (1.5.0-1.5.3), plus a yarn-error.log containing local paths (1.5.3). Upgrade to 1.5.4, which is byte-identical apart from removing them. See https://github.com/react-grid-layout/react-grid-layout/issues/2269
+
+added 117 packages, and audited 118 packages in 12s
+
+20 packages are looking for funding
+  run `npm fund` for details
+
+3 vulnerabilities (1 moderate, 1 high, 1 critical)
+
+To address all issues, run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+src/features/dashboard/index.tsx(1,96): error TS2307: Cannot find module 'react-grid-layout/css/styles.css?inline' or its corresponding type declarations.
+src/features/dashboard/index.tsx(1,159): error TS2307: Cannot find module 'react-resizable/css/styles.css?inline' or its corresponding type declarations.
+src/features/dashboard/index.tsx(1,219): error TS2307: Cannot find module './style.css?inline' or its corresponding type declarations.
+src/features/dashboard/index.tsx(1,404): error TS2664: Invalid module name in augmentation, module '*.css?inline' cannot be found.
