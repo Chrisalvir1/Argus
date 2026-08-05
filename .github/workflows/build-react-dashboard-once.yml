@@ -11,8 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: {node-version: '22', cache: npm}
+        with:
+          node-version: '22'
       - run: npm install
+      - run: npx tsc --noEmit
       - run: npm test
       - run: npm run build
       - name: Wire compiled module
@@ -30,6 +32,6 @@ jobs:
           git rm .github/workflows/build-react-dashboard-once.yml
           git config user.name Chrisalvir
           git config user.email chrisalvir01@gmail.com
-          git add package-lock.json custom_components/argus/www/react-dist custom_components/argus/www/argus-bootstrap.js docs/layout-dom-audit.tmp.md
+          git add -A
           git commit -m 'Compile React Grid Layout dashboard bundle'
           git push origin HEAD:feature/react-dashboard-layout
