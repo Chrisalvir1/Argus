@@ -1,0 +1,9 @@
+npm_ci=success
+production_audit=success
+typescript=success
+vitest=success
+vite_build=success
+bundle_reproducibility=success
+python_tests=failure
+javascript_syntax=success
+archive=success
