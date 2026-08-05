@@ -1,4 +1,4 @@
-name: Repair and release v2.0.33 once
+name: Diagnose corrected v2.0.33 release once
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 jobs:
-  repair-release:
+  diagnose-corrected-release:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
@@ -19,102 +19,97 @@ jobs:
         with:
           ref: fix/mobile-background-homekit-polish
           fetch-depth: 0
-
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
 
-      - name: Synchronize every release version contract
+      - id: sync
+        name: Synchronize release markers
+        continue-on-error: true
         run: |
           python - <<'PY'
           from pathlib import Path
-
           replacements = {
-              'custom_components/argus/const.py': [
-                  ('VERSION = "2.0.32"', 'VERSION = "2.0.33"'),
-              ],
-              'custom_components/argus/www/argus-card.js': [
-                  ("ARGUS_CARD_VERSION='2.0.32'", "ARGUS_CARD_VERSION='2.0.33'"),
-              ],
-              'custom_components/argus/www/argus-bootstrap.js': [
-                  ('2.0.32', '2.0.33'),
-              ],
-              'tests/test_architecture_contract.py': [
-                  ('2.0.32', '2.0.33'),
-              ],
-              'tests/test_security_contract.py': [
-                  ('2.0.32', '2.0.33'),
-              ],
+              'custom_components/argus/const.py': [('VERSION = "2.0.32"', 'VERSION = "2.0.33"')],
+              'custom_components/argus/www/argus-card.js': [("ARGUS_CARD_VERSION='2.0.32'", "ARGUS_CARD_VERSION='2.0.33'")],
+              'custom_components/argus/www/argus-bootstrap.js': [('2.0.32', '2.0.33')],
+              'tests/test_architecture_contract.py': [('2.0.32', '2.0.33')],
+              'tests/test_security_contract.py': [('2.0.32', '2.0.33')],
               'tests/test_v193_sync.py': [
                   ('2.0.32', '2.0.33'),
                   ('manifest.json version must be 2.0.18', 'manifest.json version must be 2.0.33'),
                   ('argus-bootstrap.js must reference version 2.0.18 for cache-busting', 'argus-bootstrap.js must reference version 2.0.33 for cache-busting'),
               ],
           }
-
           for file_name, changes in replacements.items():
               path = Path(file_name)
               text = path.read_text(encoding='utf-8')
               for old, new in changes:
                   if old not in text:
-                      raise SystemExit(f'Missing expected release marker in {file_name}: {old}')
+                      raise SystemExit(f'Missing marker in {file_name}: {old}')
                   text = text.replace(old, new)
               path.write_text(text, encoding='utf-8')
           PY
 
-      - name: Validate React and TypeScript 7 dashboard
+      - id: npmci
+        continue-on-error: true
+        run: npm ci
+      - id: audit
+        continue-on-error: true
+        run: npm audit --omit=dev --audit-level=high
+      - id: tsc
+        continue-on-error: true
+        run: npx tsc --noEmit
+      - id: vitest
+        continue-on-error: true
+        run: npm test
+      - id: build
+        continue-on-error: true
+        run: npm run build
+      - id: bundlediff
+        continue-on-error: true
+        run: git diff --exit-code -- custom_components/argus/www/react-dist/argus-dashboard-react.js
+      - id: python
+        continue-on-error: true
         run: |
-          set -euo pipefail
-          npm ci
-          test "$(node -p "require('./node_modules/typescript/package.json').version")" = "7.0.2"
-          npm audit --omit=dev --audit-level=high
-          npx tsc --noEmit
-          npm test
-          npm run build
-          git diff --exit-code -- custom_components/argus/www/react-dist/argus-dashboard-react.js
-
-      - name: Validate complete Argus suite
-        run: |
-          set -euo pipefail
           python -m compileall -q custom_components/argus
           python -m unittest discover -s tests -v
-          for file in custom_components/argus/www/*.js; do
-            node --check "$file"
-          done
-
-      - name: Build and verify v2.0.33 archive
+      - id: javascript
+        continue-on-error: true
         run: |
-          set -euo pipefail
-          test "$(python -c 'import json; print(json.load(open("custom_components/argus/manifest.json"))["version"])')" = "2.0.33"
+          for file in custom_components/argus/www/*.js; do node --check "$file"; done
+      - id: archive
+        continue-on-error: true
+        run: |
           cd custom_components/argus
           zip -qr ../../argus.zip . -x '__pycache__/*' '*.pyc'
           cd ../..
           test -s argus.zip
           unzip -tq argus.zip
-          test "$(unzip -p argus.zip manifest.json | python -c 'import json,sys; print(json.load(sys.stdin)["version"])')" = "2.0.33"
-          sha256sum argus.zip | tee argus.zip.sha256
 
-      - name: Commit corrected release, tag and publish
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Write outcomes
         run: |
-          set -euo pipefail
-          if git rev-parse -q --verify refs/tags/v2.0.33 >/dev/null; then
-            echo 'Tag v2.0.33 already exists' >&2
-            exit 1
-          fi
-          rm .github/workflows/release-v2.0.33-once.yml
-          rm -f docs/RELEASE_2.0.33_DIAGNOSTICS.txt
+          cat > docs/RELEASE_2.0.33_DIAGNOSTICS.txt <<'EOF'
+          version_sync=${{ steps.sync.outcome }}
+          npm_ci=${{ steps.npmci.outcome }}
+          production_audit=${{ steps.audit.outcome }}
+          typescript=${{ steps.tsc.outcome }}
+          vitest=${{ steps.vitest.outcome }}
+          vite_build=${{ steps.build.outcome }}
+          bundle_reproducibility=${{ steps.bundlediff.outcome }}
+          python_tests=${{ steps.python.outcome }}
+          javascript_syntax=${{ steps.javascript.outcome }}
+          archive=${{ steps.archive.outcome }}
+          EOF
+          cat docs/RELEASE_2.0.33_DIAGNOSTICS.txt
+
+      - name: Commit corrected-release diagnostics
+        run: |
           git config user.name 'Chrisalvir'
           git config user.email 'chrisalvir01@gmail.com'
-          git add -A
-          git commit -m 'Release Argus Home Hub v2.0.33'
-          git tag -a v2.0.33 -m 'Argus Home Hub v2.0.33'
+          git add docs/RELEASE_2.0.33_DIAGNOSTICS.txt
+          git commit -m 'chore: capture corrected v2.0.33 release diagnostics'
           git push origin HEAD:fix/mobile-background-homekit-polish
-          git push origin v2.0.33
-          gh release create v2.0.33 argus.zip argus.zip.sha256 --title 'Argus Home Hub v2.0.33' --notes-file docs/RELEASE_NOTES_2.0.33.md
-          gh release view v2.0.33
