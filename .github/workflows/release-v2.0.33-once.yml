@@ -1,4 +1,4 @@
-name: Diagnose corrected v2.0.33 release once
+name: Capture post-sync v2.0.33 failure once
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 jobs:
-  diagnose-corrected-release:
+  capture:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
@@ -19,16 +19,11 @@ jobs:
         with:
           ref: fix/mobile-background-homekit-polish
           fetch-depth: 0
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
 
-      - id: sync
-        name: Synchronize release markers
-        continue-on-error: true
+      - name: Apply intended v2.0.33 synchronization
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -54,62 +49,20 @@ jobs:
               path.write_text(text, encoding='utf-8')
           PY
 
-      - id: npmci
-        continue-on-error: true
-        run: npm ci
-      - id: audit
-        continue-on-error: true
-        run: npm audit --omit=dev --audit-level=high
-      - id: tsc
-        continue-on-error: true
-        run: npx tsc --noEmit
-      - id: vitest
-        continue-on-error: true
-        run: npm test
-      - id: build
-        continue-on-error: true
-        run: npm run build
-      - id: bundlediff
-        continue-on-error: true
-        run: git diff --exit-code -- custom_components/argus/www/react-dist/argus-dashboard-react.js
-      - id: python
-        continue-on-error: true
+      - name: Capture complete post-sync test output
         run: |
-          python -m compileall -q custom_components/argus
-          python -m unittest discover -s tests -v
-      - id: javascript
-        continue-on-error: true
-        run: |
-          for file in custom_components/argus/www/*.js; do node --check "$file"; done
-      - id: archive
-        continue-on-error: true
-        run: |
-          cd custom_components/argus
-          zip -qr ../../argus.zip . -x '__pycache__/*' '*.pyc'
-          cd ../..
-          test -s argus.zip
-          unzip -tq argus.zip
-
-      - name: Write outcomes
-        run: |
-          cat > docs/RELEASE_2.0.33_DIAGNOSTICS.txt <<'EOF'
-          version_sync=${{ steps.sync.outcome }}
-          npm_ci=${{ steps.npmci.outcome }}
-          production_audit=${{ steps.audit.outcome }}
-          typescript=${{ steps.tsc.outcome }}
-          vitest=${{ steps.vitest.outcome }}
-          vite_build=${{ steps.build.outcome }}
-          bundle_reproducibility=${{ steps.bundlediff.outcome }}
-          python_tests=${{ steps.python.outcome }}
-          javascript_syntax=${{ steps.javascript.outcome }}
-          archive=${{ steps.archive.outcome }}
-          EOF
+          set +e
+          python -m unittest discover -s tests -v > docs/RELEASE_2.0.33_DIAGNOSTICS.txt 2>&1
+          CODE=$?
+          echo >> docs/RELEASE_2.0.33_DIAGNOSTICS.txt
+          echo "UNITTEST_EXIT_CODE=$CODE" >> docs/RELEASE_2.0.33_DIAGNOSTICS.txt
           cat docs/RELEASE_2.0.33_DIAGNOSTICS.txt
+          exit 0
 
-      - name: Commit corrected-release diagnostics
+      - name: Commit post-sync diagnostics
         run: |
           git config user.name 'Chrisalvir'
           git config user.email 'chrisalvir01@gmail.com'
           git add docs/RELEASE_2.0.33_DIAGNOSTICS.txt
-          git commit -m 'chore: capture corrected v2.0.33 release diagnostics'
+          git commit -m 'chore: capture post-sync v2.0.33 failure'
           git push origin HEAD:fix/mobile-background-homekit-polish
