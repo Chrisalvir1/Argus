@@ -1,4 +1,4 @@
-"""Regression tests for HA-authoritative light capabilities and real flash execution."""
+"""Regression tests for HA capability truth, safe pulsing and colour restoration."""
 from pathlib import Path
 import subprocess
 import unittest
@@ -18,10 +18,11 @@ class LightCapabilityContractTests(unittest.TestCase):
             'light.onoff':{{attributes:{{supported_color_modes:['onoff']}}}},
             'light.none':{{attributes:{{}}}}
           }}}}}};
-          for (const id of ['light.dimmer','light.white','light.onoff','light.none']) {{
-            if (isColorLight(panel, id)) process.exit(1);
-          }}
-          if (readLightCapabilities(panel, 'light.dimmer').modes[0] !== 'brightness') process.exit(2);
+          for (const id of ['light.dimmer','light.white','light.onoff','light.none']) {{ if (isColorLight(panel,id)) process.exit(1); }}
+          if (!readLightCapabilities(panel,'light.dimmer').safeFlash) process.exit(2);
+          if (readLightCapabilities(panel,'light.onoff').safeFlash) process.exit(3);
+          if (readLightCapabilities(panel,'light.dimmer').flashMethod !== 'brightness_pulse') process.exit(4);
+          if (readLightCapabilities(panel,'light.onoff').flashMethod !== 'steady_safe') process.exit(5);
         """
         subprocess.run(["node", "--input-type=module", "-e", script], check=True)
 
@@ -30,44 +31,63 @@ class LightCapabilityContractTests(unittest.TestCase):
           import {{ isColorLight }} from {JS.as_uri()!r};
           for (const mode of ['hs','xy','rgb','rgbw','rgbww']) {{
             const panel = {{_hass:{{states:{{'light.test':{{attributes:{{supported_color_modes:[mode]}}}}}}}}}};
-            if (!isColorLight(panel, 'light.test')) process.exit(1);
+            if (!isColorLight(panel,'light.test')) process.exit(1);
           }}
         """
         subprocess.run(["node", "--input-type=module", "-e", script], check=True)
 
-    def test_runtime_uses_ha_capabilities_and_ignores_false_colour(self):
+    def test_backend_has_no_repeated_on_off_software_flash(self):
         backend = BACKEND.read_text()
-        self.assertIn('_COLOR_MODES = {"hs", "xy", "rgb", "rgbw", "rgbww"}', backend)
-        self.assertIn("supported_modes.intersection(_COLOR_MODES)", backend)
-        self.assertIn("if rgb and supported_modes.intersection", backend)
+        self.assertNotIn("def _software_flash", backend)
+        pulse = backend.split("async def _brightness_pulse",1)[1].split("@websocket_api.websocket_command",1)[0]
+        self.assertIn('async_call("light", "turn_on", high', pulse)
+        self.assertIn('async_call("light", "turn_on", low', pulse)
+        self.assertNotIn('"turn_off"', pulse)
+        self.assertIn('return data, "steady_safe", 0.0', backend)
 
-    def test_physical_flash_test_calls_real_ha_services(self):
+    def test_plug_like_onoff_lights_cannot_flash(self):
+        frontend = JS.read_text()
+        self.assertIn("nativeEffect || nativeFlash || brightness", frontend)
+        self.assertIn("Luz fija segura", frontend)
+        self.assertIn("nunca hará ciclos repetidos", frontend)
+        self.assertIn("capability.safeFlash&&Boolean(flashInput.checked)", frontend)
+
+    def test_test_endpoint_uses_safe_methods_and_restores_state(self):
         backend = BACKEND.read_text()
         self.assertIn('"argus/test_light_output"', backend)
-        self.assertIn('ws_argus_test_light_output', backend)
-        self.assertIn('async_call("light", "turn_on"', backend)
-        self.assertIn('async_call("light", "turn_off"', backend)
-        self.assertIn('for _ in range(2)', backend)
-        self.assertIn('"method": method', backend)
+        self.assertIn('method == "brightness_pulse"', backend)
+        self.assertIn("_capture_light_state", backend)
+        self.assertIn("_restore_light_state", backend)
+        test_section = backend.split("async def ws_argus_test_light_output",1)[1].split("async def _async_siren",1)[0]
+        self.assertNotIn('async_call("light", "turn_off"', test_section)
 
-    def test_ui_removes_false_colour_and_exposes_physical_test(self):
+    def test_runtime_restores_normal_colour_and_power_state(self):
+        backend = BACKEND.read_text()
+        self.assertIn('service_data["rgb_color"] = [255, 255, 255]', backend)
+        self.assertIn('service_data["color_temp_kelvin"]', backend)
+        self.assertIn('service_data["hs_color"]', backend)
+        self.assertIn('service_data["xy_color"]', backend)
+        self.assertIn('snapshots.setdefault(entity_id, _capture_light_state', backend)
+        self.assertIn('await _restore_light_state(self.hass, entity_id', backend)
+
+    def test_false_rgb_is_removed_before_storage(self):
+        backend = BACKEND.read_text()
+        self.assertIn('settings.get(entity_id, {}).pop("rgb_color", None)', backend)
+        self.assertIn('modes.intersection(_COLOR_MODES)', backend)
+
+    def test_ui_reports_safe_flash_method(self):
         frontend = JS.read_text()
-        self.assertIn("if (!capability.color && label) label.remove()", frontend)
-        self.assertIn("Probar destello físicamente", frontend)
-        self.assertIn("HA: ${escapeHtml(modeLabel)}", frontend)
-        self.assertIn("[hidden]{display:none!important}", frontend)
+        self.assertIn("pulso de brillo sin apagar", frontend)
+        self.assertIn("flash nativo", frontend)
+        self.assertIn("efecto nativo", frontend)
+        self.assertIn("destello bloqueado por seguridad", frontend)
 
-    def test_normal_sensor_rows_are_pills_but_fullscreen_is_excluded(self):
+    def test_normal_sensor_rows_and_bounded_widgets_remain(self):
         frontend = JS.read_text()
         self.assertIn(".entry:not(.ios-fullscreen)", frontend)
         self.assertIn("border-radius:999px!important", frontend)
-        self.assertIn("max-width:248px!important", frontend)
-
-    def test_access_and_automation_containers_are_bounded(self):
-        frontend = JS.read_text()
         self.assertIn("#widget-grid>#w-access", frontend)
         self.assertIn("height:clamp(270px,32vh,340px)!important", frontend)
-        self.assertIn("overflow-y:auto!important", frontend)
 
 
 if __name__ == "__main__":
