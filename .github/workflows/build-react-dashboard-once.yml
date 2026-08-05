@@ -13,13 +13,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm install
-      - run: npx tsc --noEmit
-      - run: npm test
-      - run: npm run build
-      - name: Wire compiled module
+      - name: Build and capture diagnostics
+        shell: bash
         run: |
-          python - <<'PY'
+          set +e
+          : > docs/react-build.log
+          npm install >> docs/react-build.log 2>&1
+          install_status=$?
+          if [ $install_status -eq 0 ]; then npx tsc --noEmit >> docs/react-build.log 2>&1; type_status=$?; else type_status=1; fi
+          if [ $type_status -eq 0 ]; then npm test >> docs/react-build.log 2>&1; test_status=$?; else test_status=1; fi
+          if [ $test_status -eq 0 ]; then npm run build >> docs/react-build.log 2>&1; build_status=$?; else build_status=1; fi
+          status=$((install_status || type_status || test_status || build_status))
+          if [ $status -eq 0 ]; then
+            python - <<'PY'
           from pathlib import Path
           p=Path('custom_components/argus/www/argus-bootstrap.js')
           s=p.read_text()
@@ -28,10 +34,12 @@ jobs:
           if 'applyReactDashboardLayout(ArgusPanel);' not in s:s+='\napplyReactDashboardLayout(ArgusPanel);\n'
           p.write_text(s)
           PY
-          rm -f docs/layout-dom-audit.tmp.md
-          git rm .github/workflows/build-react-dashboard-once.yml
+            rm -f docs/layout-dom-audit.tmp.md docs/react-build.log
+            git rm .github/workflows/build-react-dashboard-once.yml
+          fi
           git config user.name Chrisalvir
           git config user.email chrisalvir01@gmail.com
           git add -A
-          git commit -m 'Compile React Grid Layout dashboard bundle'
+          git commit -m "$( [ $status -eq 0 ] && echo 'Compile React Grid Layout dashboard bundle' || echo 'chore: capture React build failure' )"
           git push origin HEAD:feature/react-dashboard-layout
+          exit $status
