@@ -1,4 +1,4 @@
-/** Show colour controls only for genuinely colour-capable Home Assistant lights. */
+/** Home Assistant is the only source of truth for light capabilities. */
 const COLOR_MODES = new Set(['hs', 'xy', 'rgb', 'rgbw', 'rgbww']);
 
 function escapeHtml(value) {
@@ -7,9 +7,22 @@ function escapeHtml(value) {
   }[char]));
 }
 
+export function readLightCapabilities(panel, entityId) {
+  const state = panel?._hass?.states?.[entityId];
+  const rawModes = state?.attributes?.supported_color_modes;
+  const modes = Array.isArray(rawModes)
+    ? [...new Set(rawModes.map(mode => String(mode).toLowerCase()).filter(Boolean))]
+    : [];
+  return {
+    exists: Boolean(state),
+    isLight: Boolean(state) && String(entityId).startsWith('light.'),
+    modes,
+    color: Boolean(state) && String(entityId).startsWith('light.') && modes.some(mode => COLOR_MODES.has(mode)),
+  };
+}
+
 export function isColorLight(panel, entityId) {
-  const modes = panel._hass?.states?.[entityId]?.attributes?.supported_color_modes;
-  return Array.isArray(modes) && modes.some(mode => COLOR_MODES.has(String(mode).toLowerCase()));
+  return readLightCapabilities(panel, entityId).color;
 }
 
 function rgbToHex(rgb) {
@@ -17,7 +30,63 @@ function rgbToHex(rgb) {
   return `#${safe.map(value => Math.max(0, Math.min(255, Number(value) || 0)).toString(16).padStart(2, '0')).join('')}`;
 }
 
+function hexToRgb(value) {
+  const hex = /^#[0-9a-f]{6}$/i.test(value || '') ? value : '#ff0000';
+  return [1, 3, 5].map(index => parseInt(hex.slice(index, index + 2), 16));
+}
+
+function installTruthStyles(panel) {
+  const root = panel.shadowRoot;
+  if (!root || root.getElementById('argus-entity-truth-style')) return;
+  const style = document.createElement('style');
+  style.id = 'argus-entity-truth-style';
+  style.textContent = `
+[hidden]{display:none!important}
+.sos-output-row{grid-template-columns:minmax(0,1fr) auto!important;padding:6px 8px!important;border:1px solid rgba(255,255,255,.09);border-radius:16px;background:rgba(5,15,28,.16)}
+.sos-output-settings summary,.light-siren-settings summary{white-space:normal!important}
+.argus-ha-capability{display:inline-flex;margin-left:6px;padding:2px 6px;border-radius:999px;background:rgba(255,255,255,.08);font-size:8px;font-weight:750;opacity:.72;text-transform:none;letter-spacing:0}
+.argus-test-flash{width:100%;margin-top:8px;padding:7px 9px;border:1px solid rgba(255,255,255,.14);border-radius:10px;background:rgba(46,168,255,.12);color:inherit;font-size:10px;font-weight:850;cursor:pointer}
+.argus-test-flash:disabled{opacity:.55;cursor:wait}
+#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensors{flex:0 1 248px!important;width:248px!important;max-width:248px!important;min-width:205px!important;gap:6px!important;margin-inline:0!important}
+#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor{min-height:34px!important;padding:6px 10px!important;gap:7px!important;border-radius:999px!important;box-sizing:border-box!important}
+#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor-icon{font-size:16px!important}
+#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor-name{font-size:10px!important}
+#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor-state{font-size:8px!important}
+#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor-battery{font-size:9px!important;padding:2px 5px!important;border-radius:999px!important}
+#widget-grid>#w-access{align-self:start!important;height:max-content!important;min-height:0!important;max-height:none!important}
+#widget-grid>#w-access .access-workspace:not(.open){display:none!important}
+#widget-grid>#w-access .access-workspace.open{max-height:430px!important;overflow:auto!important;overscroll-behavior:contain}
+#widget-grid>#w-activity,#widget-grid>#w-automations{grid-row:span 1!important;height:clamp(270px,32vh,340px)!important;min-height:270px!important;max-height:340px!important;align-self:start!important}
+#widget-grid>#w-activity #activity-log,#widget-grid>#w-automations #auto-view,#widget-grid>#w-automations #auto-view>div{min-height:0!important;overflow-y:auto!important;overscroll-behavior:contain!important;scrollbar-gutter:stable!important}
+@media(max-width:760px){#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensors{width:min(100%,248px)!important;max-width:248px!important}#widget-grid>#w-activity,#widget-grid>#w-automations{height:360px!important;min-height:360px!important;max-height:360px!important}}
+`;
+  root.appendChild(style);
+}
+
+async function runPhysicalFlashTest(panel, button, entityId, flashMode, rgbColor) {
+  if (!entityId || flashMode === 'none') return;
+  const original = button.textContent;
+  button.disabled = true;
+  button.textContent = 'Probando en Home Assistant…';
+  try {
+    const payload = { entity_id: entityId, flash_mode: flashMode };
+    if (isColorLight(panel, entityId) && Array.isArray(rgbColor)) payload.rgb_color = rgbColor;
+    const result = await panel._send('argus/test_light_output', payload);
+    const method = {
+      software: 'destello temporizado Argus',
+      native_flash: 'flash nativo',
+      native_effect: 'efecto nativo',
+    }[result?.method] || 'servicio de luz';
+    button.textContent = `✓ Funcionó: ${method}`;
+  } catch (error) {
+    button.textContent = `✗ ${error?.message || 'No respondió la luz'}`;
+  } finally {
+    setTimeout(() => { button.disabled = false; button.textContent = original; }, 3500);
+  }
+}
+
 function renderCapabilityAwareSos(panel) {
+  installTruthStyles(panel);
   const container = panel.shadowRoot?.getElementById('sos-output-chips');
   if (!container) return;
   const outputs = Array.isArray(panel._panicOutputs) ? panel._panicOutputs : [];
@@ -25,24 +94,23 @@ function renderCapabilityAwareSos(panel) {
   container.innerHTML = outputs.length ? outputs.map(entityId => {
     const state = panel._hass?.states?.[entityId];
     const name = state?.attributes?.friendly_name || entityId;
-    const light = entityId.startsWith('light.');
-    const colorCapable = light && isColorLight(panel, entityId);
+    const capability = readLightCapabilities(panel, entityId);
     const setting = settings[entityId] || {};
     const flash = ['none', 'gentle', 'rapid'].includes(setting.flash_mode)
       ? setting.flash_mode : (setting.gentle_flash ? 'gentle' : 'none');
+    const modeLabel = capability.modes.length ? capability.modes.join(', ') : 'sin capacidad declarada';
     return `<div class="sos-output-row">
-      <span class="sensor-pill" title="${escapeHtml(name)}"><span>${escapeHtml(name)}</span></span>
+      <span class="sensor-pill" title="${escapeHtml(entityId)}"><span>${escapeHtml(name)}</span></span>
       <button type="button" class="sos-remove-output" data-remove-sos-output="${escapeHtml(entityId)}" aria-label="Eliminar">✕</button>
-      ${light ? `<details class="sos-output-settings">
-        <summary>${colorCapable ? '🎨 Color y destello' : '✨ Destello'}</summary>
-        <label ${colorCapable ? '' : 'hidden'}>Color
-          <input type="color" data-sos-output-color="${escapeHtml(entityId)}" value="${rgbToHex(setting.rgb_color)}">
-        </label>
+      ${capability.isLight ? `<details class="sos-output-settings">
+        <summary>${capability.color ? '🎨 Color y destello' : '✨ Destello'} — ${escapeHtml(name)} <span class="argus-ha-capability">HA: ${escapeHtml(modeLabel)}</span></summary>
+        ${capability.color ? `<label>Color <input type="color" data-sos-output-color="${escapeHtml(entityId)}" value="${rgbToHex(setting.rgb_color)}"></label>` : ''}
         <label>Destello <select data-sos-output-flash="${escapeHtml(entityId)}">
           <option value="none" ${flash === 'none' ? 'selected' : ''}>Sin destello</option>
           <option value="gentle" ${flash === 'gentle' ? 'selected' : ''}>Suave</option>
           <option value="rapid" ${flash === 'rapid' ? 'selected' : ''}>Rápido</option>
         </select></label>
+        <button type="button" class="argus-test-flash" data-test-sos-flash="${escapeHtml(entityId)}">Probar destello físicamente</button>
       </details>` : ''}
     </div>`;
   }).join('') : `<div class="mode-sensor-none">${escapeHtml(panel._t('sos_no_outputs'))}</div>`;
@@ -54,21 +122,86 @@ function renderCapabilityAwareSos(panel) {
       renderCapabilityAwareSos(panel);
     });
   });
+  container.querySelectorAll('[data-test-sos-flash]').forEach(button => {
+    button.addEventListener('click', () => {
+      const entityId = button.dataset.testSosFlash;
+      const details = button.closest('.sos-output-settings');
+      const flash = details?.querySelector('[data-sos-output-flash]')?.value || 'none';
+      const color = details?.querySelector('[data-sos-output-color]');
+      runPhysicalFlashTest(panel, button, entityId, flash, color ? hexToRgb(color.value) : null);
+    });
+  });
 }
 
 function gateModeColorControls(panel) {
+  installTruthStyles(panel);
   const root = panel.shadowRoot;
   if (!root) return;
   root.querySelectorAll('[data-light-siren-color]').forEach(input => {
     const entityId = input.dataset.lightSirenColor;
-    if (isColorLight(panel, entityId)) return;
-    const label = input.closest('label');
-    if (label) label.hidden = true;
+    const capability = readLightCapabilities(panel, entityId);
     const details = input.closest('.light-siren-settings');
+    const label = input.closest('label');
+    if (!capability.color && label) label.remove();
     const summary = details?.querySelector('summary');
-    if (summary) {
-      const name = panel._hass?.states?.[entityId]?.attributes?.friendly_name || entityId;
-      summary.textContent = `✨ ${name} — Destello`;
+    const name = panel._hass?.states?.[entityId]?.attributes?.friendly_name || entityId;
+    const modeLabel = capability.modes.length ? capability.modes.join(', ') : 'sin capacidad declarada';
+    if (summary) summary.innerHTML = `${capability.color ? '🎨 Color y destello' : '✨ Destello'} — ${escapeHtml(name)} <span class="argus-ha-capability">HA: ${escapeHtml(modeLabel)}</span>`;
+    if (details && !details.querySelector('[data-test-mode-flash]')) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'argus-test-flash';
+      button.dataset.testModeFlash = entityId;
+      button.textContent = 'Probar destello físicamente';
+      button.addEventListener('click', () => {
+        const checked = details.querySelector('[data-light-siren-flash]')?.checked;
+        const color = capability.color ? details.querySelector('[data-light-siren-color]') : null;
+        runPhysicalFlashTest(panel, button, entityId, checked ? 'gentle' : 'none', color ? hexToRgb(color.value) : null);
+      });
+      details.appendChild(button);
+    }
+  });
+}
+
+function saveModeWithTrueCapabilities(panel) {
+  const cfg = panel._currentModeConfig();
+  const root = panel.shadowRoot;
+  const chk = root.getElementById('mode-require-closed');
+  const armTime = root.getElementById('mode-arming-time');
+  const entDelay = root.getElementById('mode-entry-delay');
+  const mqttChk = root.getElementById('mode-mqtt-enabled');
+  if (chk) cfg.require_closed = chk.checked;
+  if (armTime) cfg.arming_time = armTime.value ? parseInt(armTime.value, 10) : 0;
+  if (entDelay) cfg.entry_delay = entDelay.value ? parseInt(entDelay.value, 10) : 0;
+  if (mqttChk) cfg.mqtt_enabled = mqttChk.checked;
+  cfg.light_siren_settings = {};
+  root.querySelectorAll('[data-light-siren-flash]').forEach(flashInput => {
+    const entityId = flashInput.dataset.lightSirenFlash;
+    const setting = {
+      gentle_flash: Boolean(flashInput.checked),
+      flash_mode: flashInput.checked ? 'gentle' : 'none',
+    };
+    if (isColorLight(panel, entityId)) {
+      const color = root.querySelector(`[data-light-siren-color="${CSS.escape(entityId)}"]`);
+      if (color) setting.rgb_color = hexToRgb(color.value);
+    }
+    cfg.light_siren_settings[entityId] = setting;
+  });
+
+  panel._runWithPin(async () => {
+    const entityId = panel._modeEntryId || panel._dashboard?.entries?.[0]?.entity_id || 'default';
+    panel._ui.modes ||= {};
+    panel._ui.modes.__by_entity__ ||= {};
+    panel._ui.modes.__by_entity__[entityId] ||= {};
+    panel._ui.modes.__by_entity__[entityId][panel._mode] = { ...cfg };
+    const status = root.getElementById('mode-status');
+    if (status) { status.textContent = '…'; status.className = 'status'; }
+    try {
+      await panel._send('argus/save_mode_config', { entity_id: entityId, mode: panel._mode, config: cfg });
+      if (status) { status.textContent = panel._t('saved'); status.className = 'status ok show'; }
+      setTimeout(() => { if (status) { status.textContent = ''; status.className = 'status'; } }, 3000);
+    } catch (error) {
+      if (status) { status.textContent = `✗ ${error?.message || 'Error'}`; status.className = 'status err show'; }
     }
   });
 }
@@ -78,17 +211,22 @@ export function applyLightCapabilityFixes(ArgusPanel) {
   ArgusPanel.__argusLightCapabilityFixes = true;
   const proto = ArgusPanel.prototype;
 
+  const previousConnected = proto.connectedCallback;
+  proto.connectedCallback = function() {
+    installTruthStyles(this);
+    return previousConnected?.call(this);
+  };
+
   const previousLoad = proto._load;
   proto._load = async function() {
     const result = await previousLoad.call(this);
+    installTruthStyles(this);
     renderCapabilityAwareSos(this);
     gateModeColorControls(this);
     return result;
   };
 
-  proto._renderSosOutputs = function() {
-    renderCapabilityAwareSos(this);
-  };
+  proto._renderSosOutputs = function() { renderCapabilityAwareSos(this); };
 
   const previousAcceptSelection = proto._acceptSelection;
   proto._acceptSelection = function() {
@@ -103,4 +241,13 @@ export function applyLightCapabilityFixes(ArgusPanel) {
     gateModeColorControls(this);
     return result;
   };
+
+  const previousRenderEntries = proto._renderEntries;
+  proto._renderEntries = function() {
+    const result = previousRenderEntries.call(this);
+    installTruthStyles(this);
+    return result;
+  };
+
+  proto._saveMode = function() { return saveModeWithTrueCapabilities(this); };
 }

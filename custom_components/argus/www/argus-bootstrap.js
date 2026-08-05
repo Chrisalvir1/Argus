@@ -13,7 +13,7 @@ import { applyRuntimeVisualFixes } from './argus-runtime-visual-fixes.js?v=2.0.3
 import { applyBgSensorAvailabilityFixes } from './argus-bg-sensor-availability-fixes.js?v=2.0.30';
 import { applyBatteryUiFixes } from './argus-battery-ui-fixes.js?v=2.0.30';
 import { applyDeepRepair } from './argus-deep-repair.js?v=2.0.30';
-import { applyLightCapabilityFixes } from './argus-light-capability-fixes.js?v=2.0.30';
+import { applyLightCapabilityFixes } from './argus-light-capability-fixes.js?v=2.0.30.1';
 
 const ArgusPanel = customElements.get('argus-panel-v2018');
 applyUiAuditFixes(ArgusPanel);

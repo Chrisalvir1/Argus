@@ -4,6 +4,7 @@ import asyncio
 import colorsys
 import copy
 import logging
+from types import SimpleNamespace
 from typing import Any
 import voluptuous as vol
 from homeassistant.components import websocket_api
@@ -16,6 +17,7 @@ from . import websocket_api as argus_ws
 _LOGGER = logging.getLogger(__name__)
 _ALLOWED_OUTPUT_DOMAINS = {"alarm_control_panel", "fan", "input_boolean", "light", "script", "siren", "switch"}
 _FLASH_MODES = {"none", "gentle", "rapid"}
+_COLOR_MODES = {"hs", "xy", "rgb", "rgbw", "rgbww"}
 def _valid_output(entity_id: object) -> bool:
     return isinstance(entity_id, str) and entity_id.count(".") == 1 and entity_id.split(".", 1)[0] in _ALLOWED_OUTPUT_DOMAINS
 def _normalise_rgb(value: object) -> list[int] | None:
@@ -42,6 +44,7 @@ def _normalise_settings(outputs: list[str], raw: object) -> dict[str, dict[str, 
     return result
 def async_register_output_profiles_api(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_argus_save_panic_output_profile)
+    websocket_api.async_register_command(hass, ws_argus_test_light_output)
 @websocket_api.websocket_command({vol.Required("type"): "argus/save_panic_output_profile", vol.Optional("entry_id"): str, vol.Required("outputs"): list, vol.Optional("settings", default={}): dict})
 @websocket_api.async_response
 async def ws_argus_save_panic_output_profile(hass, connection, msg) -> None:
@@ -59,9 +62,9 @@ def _light_service_data(panel, entity_id: str, settings: dict) -> tuple[dict, bo
     data = {"entity_id": entity_id, "brightness_pct": 100}
     state = panel.hass.states.get(entity_id)
     attrs = state.attributes if state else {}
-    supported_modes = set(attrs.get("supported_color_modes") or [])
+    supported_modes = {str(mode).lower() for mode in (attrs.get("supported_color_modes") or [])}
     rgb = _normalise_rgb(settings.get("rgb_color"))
-    if rgb and supported_modes.intersection({"hs", "xy", "rgb", "rgbw", "rgbww"}):
+    if rgb and supported_modes.intersection(_COLOR_MODES):
         if supported_modes == {"hs"}:
             red, green, blue = (part / 255 for part in rgb)
             hue, saturation, _ = colorsys.rgb_to_hsv(red, green, blue)
@@ -77,6 +80,48 @@ def _light_service_data(panel, entity_id: str, settings: dict) -> tuple[dict, bo
         elif int(attrs.get("supported_features") or 0) & 8: data["flash"] = "short" if flash_mode == "rapid" else "long"
         else: software_flash = True; interval = 0.35 if flash_mode == "rapid" else 0.8
     return data, software_flash, interval
+@websocket_api.websocket_command({vol.Required("type"): "argus/test_light_output", vol.Optional("entry_id"): str, vol.Required("entity_id"): str, vol.Required("flash_mode"): vol.In(["gentle", "rapid"]), vol.Optional("rgb_color"): list})
+@websocket_api.async_response
+async def ws_argus_test_light_output(hass, connection, msg) -> None:
+    """Physically exercise the selected HA light and report the real path used."""
+    entry_id = argus_ws._resolve_entry_id(hass, msg.get("entry_id"))
+    try:
+        await _require_argus_admin(hass, connection, entry_id)
+    except ArgusAuthError as err:
+        connection.send_error(msg["id"], err.code, err.message); return
+    entity_id = msg["entity_id"]
+    state = hass.states.get(entity_id)
+    if not entity_id.startswith("light.") or state is None:
+        connection.send_error(msg["id"], "invalid_light", "La entidad no es una luz disponible en Home Assistant"); return
+    if state.state in {"unknown", "unavailable"}:
+        connection.send_error(msg["id"], "light_unavailable", "La luz no está disponible en Home Assistant"); return
+    settings = {"flash_mode": msg["flash_mode"]}
+    rgb = _normalise_rgb(msg.get("rgb_color"))
+    if rgb is not None: settings["rgb_color"] = rgb
+    panel = SimpleNamespace(hass=hass)
+    data, software_flash, interval = _light_service_data(panel, entity_id, settings)
+    method = "software" if software_flash else ("native_effect" if "effect" in data else "native_flash" if "flash" in data else "service")
+    was_on = state.state == "on"
+    try:
+        if software_flash:
+            for _ in range(2):
+                await hass.services.async_call("light", "turn_on", copy.deepcopy(data), blocking=True)
+                await asyncio.sleep(interval)
+                await hass.services.async_call("light", "turn_off", {"entity_id": entity_id}, blocking=True)
+                await asyncio.sleep(interval)
+        else:
+            await hass.services.async_call("light", "turn_on", data, blocking=True)
+            await asyncio.sleep(2.5 if msg["flash_mode"] == "gentle" else 1.5)
+            await hass.services.async_call("light", "turn_off", {"entity_id": entity_id}, blocking=True)
+    except Exception as err:
+        _LOGGER.exception("Argus physical light test failed for %s", entity_id)
+        connection.send_error(msg["id"], "light_test_failed", str(err)); return
+    finally:
+        try:
+            await hass.services.async_call("light", "turn_on" if was_on else "turn_off", {"entity_id": entity_id}, blocking=False)
+        except Exception:
+            _LOGGER.warning("Could not restore %s after Argus flash test", entity_id)
+    connection.send_result(msg["id"], {"success": True, "entity_id": entity_id, "method": method, "color_applied": "rgb_color" in data or "hs_color" in data})
 async def _software_flash(panel, entity_id: str, service_data: dict, interval: float) -> None:
     try:
         while True:
