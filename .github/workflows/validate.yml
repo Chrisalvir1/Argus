@@ -27,6 +27,23 @@ jobs:
             node --check "$file"
           done
 
+  frontend-tests:
+    name: React, TypeScript and Vite
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm audit --omit=dev --audit-level=high
+      - run: npx tsc --noEmit
+      - run: npm test
+      - run: npm run build
+      - name: Verify committed frontend bundle
+        run: git diff --exit-code -- custom_components/argus/www/react-dist/argus-dashboard-react.js
+
   build-release-artifact:
     name: Build release artifact
     runs-on: ubuntu-latest
@@ -35,12 +52,16 @@ jobs:
       - run: |
           set -euo pipefail
           cd custom_components/argus
-          zip -r "../../argus.zip" . -x '__pycache__/*' '*.pyc'
+          zip -qr "../../argus.zip" . -x '__pycache__/*' '*/__pycache__/*' '*.pyc'
           cd ../..
           test -s argus.zip
-          unzip -t argus.zip
+          unzip -tq argus.zip
           unzip -l argus.zip | grep -q 'media.py'
           unzip -l argus.zip | grep -q 'www/media-client.js'
+          if unzip -l argus.zip | grep -Eq '(__pycache__|\.pyc$)'; then
+            echo 'Python cache artifacts found in release archive' >&2
+            exit 1
+          fi
 
   validate-hacs:
     name: Validate HACS
