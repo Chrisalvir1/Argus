@@ -1,0 +1,35 @@
+name: Build React dashboard once
+on:
+  push:
+    branches: [feature/react-dashboard-layout]
+    paths: [.github/workflows/build-react-dashboard-once.yml]
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22', cache: npm}
+      - run: npm install
+      - run: npm test
+      - run: npm run build
+      - name: Wire compiled module
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('custom_components/argus/www/argus-bootstrap.js')
+          s=p.read_text()
+          imp="import { applyReactDashboardLayout } from './react-dist/argus-dashboard-react.js?v=react-layout-1';\n"
+          if imp not in s:s=imp+s
+          if 'applyReactDashboardLayout(ArgusPanel);' not in s:s+='\napplyReactDashboardLayout(ArgusPanel);\n'
+          p.write_text(s)
+          PY
+          rm -f docs/layout-dom-audit.tmp.md
+          git rm .github/workflows/build-react-dashboard-once.yml
+          git config user.name Chrisalvir
+          git config user.email chrisalvir01@gmail.com
+          git add package-lock.json custom_components/argus/www/react-dist custom_components/argus/www/argus-bootstrap.js docs/layout-dom-audit.tmp.md
+          git commit -m 'Compile React Grid Layout dashboard bundle'
+          git push origin HEAD:feature/react-dashboard-layout

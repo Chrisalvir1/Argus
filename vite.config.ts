@@ -1,0 +1,1 @@
+import {defineConfig} from 'vite';import react from '@vitejs/plugin-react';export default defineConfig({plugins:[react()],build:{lib:{entry:'src/features/dashboard/index.tsx',formats:['es'],fileName:()=> 'argus-dashboard-react.js'},outDir:'custom_components/argus/www/react-dist',emptyOutDir:true,cssCodeSplit:false,rollupOptions:{output:{inlineDynamicImports:true}}}});
