@@ -18,5 +18,6 @@ Esta versión corrige la identificación de luces, incorpora verificación físi
 - Suite de pruebas de regresión.
 - Validación sintáctica de todos los archivos JavaScript.
 - HACS y hassfest aprobados antes de preparar la versión.
+- Tag `v2.0.31` y paquete publicado `argus.zip` verificados.
 
 > Después de actualizar, reinicia Home Assistant y realiza una recarga completa del navegador sin caché.
