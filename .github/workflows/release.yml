@@ -50,7 +50,7 @@ jobs:
           zip -qr "../../argus.zip" . -x '__pycache__/*' '*/__pycache__/*' '*.pyc'
           cd ../..
           test -s argus.zip
-          unzip -tq argus.zip
+          unzip -t argus.zip
           test "$(unzip -p argus.zip manifest.json | python -c 'import json,sys; print(json.load(sys.stdin)["version"])')" = "${GITHUB_REF_NAME#v}"
           if unzip -l argus.zip | grep -Eq '(__pycache__|\.pyc$)'; then
             echo 'Python cache artifacts found in release archive' >&2

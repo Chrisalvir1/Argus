@@ -18,42 +18,24 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: fix/mobile-background-homekit-polish
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: npm
-      - name: Capture Python and frontend diagnostics
+      - name: Capture npm audit
         run: |
           set +e
           {
-            echo '=== PYTHON TESTS ==='
-            python -m compileall -q custom_components/argus
-            python -m unittest discover -s tests -v
-            echo "PYTHON_EXIT=$?"
-            echo '=== NPM INSTALL ==='
             npm ci
-            echo "NPM_CI_EXIT=$?"
-            echo '=== TYPESCRIPT ==='
-            npx tsc --noEmit
-            echo "TSC_EXIT=$?"
-            echo '=== VITEST ==='
-            npm test
-            echo "VITEST_EXIT=$?"
-            echo '=== VITE BUILD ==='
-            npm run build
-            echo "BUILD_EXIT=$?"
-            echo '=== BUNDLE DIFF ==='
-            git diff -- custom_components/argus/www/react-dist/argus-dashboard-react.js
-            echo "BUNDLE_DIFF_EXIT=$?"
-          } > docs/CI_DIAGNOSTICS_2.0.34.txt 2>&1
-          cat docs/CI_DIAGNOSTICS_2.0.34.txt
+            echo '=== NPM AUDIT PRODUCTION ==='
+            npm audit --omit=dev
+            echo "NPM_AUDIT_EXIT=$?"
+          } > docs/NPM_AUDIT_2.0.34.txt 2>&1
+          cat docs/NPM_AUDIT_2.0.34.txt
       - name: Commit diagnostics
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add docs/CI_DIAGNOSTICS_2.0.34.txt
-          git commit -m 'chore: capture v2.0.34 diagnostics'
+          git add docs/NPM_AUDIT_2.0.34.txt
+          git commit -m 'chore: capture v2.0.34 npm audit'
           git push origin HEAD:fix/mobile-background-homekit-polish
