@@ -1,4 +1,3 @@
-import { applyReactDashboardLayout } from './react-dist/argus-dashboard-react.js?v=react-layout-1';
 import './argus-panel.js?v=2.0.35';
 import { applyUiAuditFixes } from './argus-ui-audit-fixes.js?v=2.0.35';
 import { applyGridPolish } from './argus-grid-polish.js?v=2.0.35';
@@ -35,4 +34,8 @@ applyDeepRepair(ArgusPanel);
 applyLightCapabilityFixes(ArgusPanel);
 applyPersonalizationToggleFix(ArgusPanel);
 
-applyReactDashboardLayout(ArgusPanel);
+// React enhances the native dashboard, but it must never prevent the native
+// Argus custom element from loading. A rejected optional bundle is isolated.
+import('./react-dist/argus-dashboard-react.js?v=react-layout-2')
+  .then(({ applyReactDashboardLayout }) => applyReactDashboardLayout(ArgusPanel))
+  .catch((error) => console.error('Argus optional dashboard enhancement failed', error));
