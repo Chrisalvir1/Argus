@@ -19,5 +19,6 @@ Versión de seguridad para el manejo de bombillos, destellos y restauración de 
 - Suite de pruebas de regresión actualizada.
 - Validación sintáctica de todos los archivos JavaScript.
 - HACS y hassfest aprobados antes de preparar la versión.
+- El paquete publicado `argus.zip` corresponde al tag `v2.0.32` y contiene el manifiesto `2.0.32`.
 
 > Después de actualizar, reinicia Home Assistant y realiza una recarga completa del navegador sin caché.
