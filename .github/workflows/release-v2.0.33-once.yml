@@ -1,5 +1,6 @@
 name: Release v2.0.33 once
 
+# The workflow file is updated once after creation so GitHub registers the push trigger.
 on:
   push:
     branches:
