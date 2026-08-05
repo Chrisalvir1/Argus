@@ -14,6 +14,7 @@ import { applyBgSensorAvailabilityFixes } from './argus-bg-sensor-availability-f
 import { applyBatteryUiFixes } from './argus-battery-ui-fixes.js?v=2.0.30';
 import { applyDeepRepair } from './argus-deep-repair.js?v=2.0.30';
 import { applyLightCapabilityFixes } from './argus-light-capability-fixes.js?v=2.0.30.1';
+import { applyPersonalizationToggleFix } from './argus-personalization-toggle-fix.js?v=2.0.30.1';
 
 const ArgusPanel = customElements.get('argus-panel-v2018');
 applyUiAuditFixes(ArgusPanel);
@@ -31,3 +32,4 @@ applyBgSensorAvailabilityFixes(ArgusPanel);
 applyBatteryUiFixes(ArgusPanel);
 applyDeepRepair(ArgusPanel);
 applyLightCapabilityFixes(ArgusPanel);
+applyPersonalizationToggleFix(ArgusPanel);
