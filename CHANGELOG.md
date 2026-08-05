@@ -2,6 +2,16 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.31] - 2026-08-04
+
+### Fixed
+- Detección estricta de capacidades de luces desde `supported_color_modes` de Home Assistant, sin inferencias por nombre o tipo aparente.
+- Los dimmers y luces `brightness`, `color_temp` u `onoff` ya no muestran ni guardan controles RGB.
+- Prueba física de destello desde SOS y Modos mediante servicios reales `light.turn_on` y `light.turn_off`, con flash nativo, efecto nativo o respaldo temporizado Argus.
+- Sensores compactos con diseño de píldora en vista normal, conservando el diseño de pantalla completa.
+- Contenedores de acceso, automatizaciones e historial ajustados con altura limitada y scroll interno.
+- Personalización estética avanzada cerrada por defecto y controlada por un único botón accesible, sin texto invertido ni doble evento.
+
 ## [2.0.30] - 2026-08-04
 
 ### Fixed

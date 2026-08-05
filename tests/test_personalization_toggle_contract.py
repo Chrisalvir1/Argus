@@ -9,7 +9,7 @@ WWW = ROOT / "custom_components/argus/www"
 class PersonalizationToggleContractTests(unittest.TestCase):
     def test_fix_loads_after_other_runtime_overlays(self):
         bootstrap = (WWW / "argus-bootstrap.js").read_text()
-        self.assertIn("argus-personalization-toggle-fix.js?v=2.0.30.1", bootstrap)
+        self.assertIn("argus-personalization-toggle-fix.js?v=2.0.31", bootstrap)
         self.assertGreater(
             bootstrap.index("applyPersonalizationToggleFix(ArgusPanel)"),
             bootstrap.index("applyLightCapabilityFixes(ArgusPanel)"),

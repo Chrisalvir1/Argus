@@ -10,7 +10,7 @@ def source(name):
 class TestV2013UiAudit(unittest.TestCase):
     def test_bootstrap_loads_v2013_audit_last(self):
         bootstrap = source("argus-bootstrap.js")
-        self.assertIn("argus-v2013-audit-fixes.js?v=2.0.30", bootstrap)
+        self.assertIn("argus-v2013-audit-fixes.js?v=2.0.31", bootstrap)
         self.assertTrue(bootstrap.rfind("applyV2012AuditFixes") > bootstrap.rfind("applyFullscreenPolish"))
 
     def test_widget_layout_has_local_and_server_persistence(self):
