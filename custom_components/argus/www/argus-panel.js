@@ -3949,8 +3949,24 @@ class ArgusPanel extends HTMLElement {
     catch (e) { console.error('Argus bootstrap load failed:', e); return; }
 
     this._bootstrap = bootstrap;
-    this._backgroundMode = bootstrap.background_mode || 'none';
-    this._backgroundImages = bootstrap.background_images || [];
+    
+    const userTheme = bootstrap.user_theme || { background_mode: "default", background_file: "" };
+    this._currentUserTheme = userTheme;
+    
+    if (userTheme.background_mode !== "default" && userTheme.background_file) {
+      this._backgroundMode = userTheme.background_mode;
+      this._panelBgFile = userTheme.background_file;
+      this._backgroundImages = [userTheme.background_file];
+    } else if (userTheme.background_mode !== "default" && userTheme.background_mode) {
+      this._backgroundMode = userTheme.background_mode;
+      this._panelBgFile = '';
+      this._backgroundImages = [];
+    } else {
+      this._backgroundMode = bootstrap.background_mode || 'none';
+      this._panelBgFile = '';
+      this._backgroundImages = bootstrap.background_images || [];
+    }
+    
     this._updateCanvasBackground();
 
     if (bootstrap.configuration_missing) {
@@ -6351,6 +6367,24 @@ class ArgusPanel extends HTMLElement {
     payload.hub_bg_file = hub_bg_file;
     payload.hub_bg_sound = hub_bg_sound;
     payload.entry_id = this._dashboard?.entry_id || this._dashboard?.entries?.[0]?.entry_id;
+
+    // Inject Theme Object per prompt requirements
+    let themeMode = "default";
+    let themeFile = "";
+    if (background_mode === "photo" && panel_bg_file) {
+        themeMode = "photo";
+        themeFile = panel_bg_file;
+    } else if (background_mode === "weather") {
+        themeMode = "weather";
+    } else if (background_mode === "none") {
+        themeMode = "none";
+    }
+    
+    payload.theme = {
+        background_mode: themeMode,
+        background_file: themeFile,
+    };
+
     if (myProfile) {
       const users = JSON.parse(JSON.stringify(this._ui.users || []));
       const user = users.find(u => u.id === this._myUserId);
@@ -6361,11 +6395,14 @@ class ArgusPanel extends HTMLElement {
       user.hub_bg_mode = hub_bg_mode;
       user.hub_bg_file = hub_bg_file;
       user.hub_bg_sound = hub_bg_sound;
+      // also save theme
+      user.theme = payload.theme;
       payload.users = users;
     }
 
     try {
       await this._send('argus/save_ui', payload);
+      this._currentUserTheme = payload.theme;
       this._backgroundMode = background_mode;
       this._temperatureSource = temperature_source;
       this._weatherSource = weather_source;
