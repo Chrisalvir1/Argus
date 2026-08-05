@@ -1,0 +1,87 @@
+name: Release v2.0.33 once
+
+on:
+  push:
+    branches:
+      - fix/mobile-background-homekit-polish
+    paths:
+      - .github/workflows/release-v2.0.33-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/mobile-background-homekit-polish
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Validate version and tag availability
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="$(python -c 'import json; print(json.load(open("custom_components/argus/manifest.json"))["version"])')"
+          test "$VERSION" = "2.0.33"
+          if git rev-parse -q --verify refs/tags/v2.0.33 >/dev/null; then
+            echo 'Tag v2.0.33 already exists' >&2
+            exit 1
+          fi
+
+      - name: Validate React dashboard
+        run: |
+          set -euo pipefail
+          npm ci
+          test "$(node -p "require('./node_modules/typescript/package.json').version")" = "7.0.2"
+          npm audit --omit=dev --audit-level=high
+          npx tsc --noEmit
+          npm test
+          npm run build
+          git diff --exit-code -- custom_components/argus/www/react-dist/argus-dashboard-react.js
+
+      - name: Validate Argus integration
+        run: |
+          set -euo pipefail
+          python -m compileall -q custom_components/argus
+          python -m unittest discover -s tests -v
+          for file in custom_components/argus/www/*.js; do
+            node --check "$file"
+          done
+
+      - name: Build release archive
+        run: |
+          set -euo pipefail
+          cd custom_components/argus
+          zip -r "../../argus.zip" . -x '__pycache__/*' '*.pyc'
+          cd ../..
+          test -s argus.zip
+          unzip -t argus.zip
+          unzip -p argus.zip manifest.json | python -c 'import json,sys; assert json.load(sys.stdin)["version"] == "2.0.33"'
+          sha256sum argus.zip | tee argus.zip.sha256
+
+      - name: Commit, tag and publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          rm .github/workflows/release-v2.0.33-once.yml
+          git config user.name 'Chrisalvir'
+          git config user.email 'chrisalvir01@gmail.com'
+          git add .github/workflows/release-v2.0.33-once.yml
+          git commit -m 'Release Argus Home Hub v2.0.33'
+          git tag -a v2.0.33 -m 'Argus Home Hub v2.0.33'
+          git push origin HEAD:fix/mobile-background-homekit-polish
+          git push origin v2.0.33
+          gh release create v2.0.33 argus.zip argus.zip.sha256 --title 'Argus Home Hub v2.0.33' --notes-file docs/RELEASE_NOTES_2.0.33.md
+          gh release view v2.0.33
