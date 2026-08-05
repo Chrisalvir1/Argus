@@ -18,13 +18,15 @@ class DeepRepairContractTests(unittest.TestCase):
         self.assertIn("_panelBgFile=\"\"", frontend)
         self.assertNotIn("payload.users", frontend)
 
-    def test_sos_profile_and_runtime_are_connected(self):
+    def test_sos_profile_and_safe_runtime_are_connected(self):
         frontend = (ROOT / "custom_components/argus/www/argus-deep-repair.js").read_text()
         backend = (ROOT / "custom_components/argus/output_profiles.py").read_text()
         init = (ROOT / "custom_components/argus/__init__.py").read_text()
         self.assertIn("argus/save_panic_output_profile", frontend)
         self.assertIn('"panic_output_settings"', backend)
-        self.assertIn("_software_flash", backend)
+        self.assertIn("_brightness_pulse", backend)
+        self.assertNotIn("def _software_flash", backend)
+        self.assertIn("_restore_light_state", backend)
         self.assertIn("rgb_color", backend)
         self.assertIn("install_output_profile_runtime", init)
 
