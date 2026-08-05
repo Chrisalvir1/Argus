@@ -12,7 +12,7 @@ import { applyCompleteContentFixes } from './argus-complete-content-fixes.js?v=2
 import { applyRuntimeVisualFixes } from './argus-runtime-visual-fixes.js?v=2.0.29';
 import { applyBgSensorAvailabilityFixes } from './argus-bg-sensor-availability-fixes.js?v=2.0.29';
 import { applyBatteryUiFixes } from './argus-battery-ui-fixes.js?v=2.0.29';
-
+import { applyDeepRepair } from './argus-deep-repair.js?v=2.0.29';
 const ArgusPanel = customElements.get('argus-panel-v2018');
 applyUiAuditFixes(ArgusPanel);
 applySecurityClient(ArgusPanel);
@@ -27,3 +27,4 @@ applyCompleteContentFixes(ArgusPanel);
 applyRuntimeVisualFixes(ArgusPanel);
 applyBgSensorAvailabilityFixes(ArgusPanel);
 applyBatteryUiFixes(ArgusPanel);
+applyDeepRepair(ArgusPanel);
