@@ -1,4 +1,4 @@
-name: Diagnose v2.0.33 release once
+name: Capture v2.0.33 Python failure once
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 jobs:
-  diagnose:
+  diagnose-python:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
@@ -20,88 +20,30 @@ jobs:
           ref: fix/mobile-background-homekit-polish
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
 
-      - id: npmci
-        name: npm ci
-        continue-on-error: true
-        run: npm ci
-
-      - id: audit
-        name: Production audit
-        continue-on-error: true
-        run: npm audit --omit=dev --audit-level=high
-
-      - id: tsc
-        name: TypeScript check
-        continue-on-error: true
-        run: npx tsc --noEmit
-
-      - id: vitest
-        name: Vitest
-        continue-on-error: true
-        run: npm test
-
-      - id: build
-        name: Vite build
-        continue-on-error: true
-        run: npm run build
-
-      - id: bundlediff
-        name: Bundle reproducibility
-        continue-on-error: true
-        run: git diff --exit-code -- custom_components/argus/www/react-dist/argus-dashboard-react.js
-
-      - id: python
-        name: Python tests
-        continue-on-error: true
+      - name: Capture Python unittest output
+        shell: bash
         run: |
-          python -m compileall -q custom_components/argus
-          python -m unittest discover -s tests -v
-
-      - id: javascript
-        name: JavaScript syntax
-        continue-on-error: true
-        run: |
-          for file in custom_components/argus/www/*.js; do
-            node --check "$file"
-          done
-
-      - id: archive
-        name: Archive validation
-        continue-on-error: true
-        run: |
-          cd custom_components/argus
-          zip -qr ../../argus.zip . -x '__pycache__/*' '*.pyc'
-          cd ../..
-          test -s argus.zip
-          unzip -tq argus.zip
-
-      - name: Write diagnostic outcomes
-        run: |
-          cat > docs/RELEASE_2.0.33_DIAGNOSTICS.txt <<'EOF'
-          npm_ci=${{ steps.npmci.outcome }}
-          production_audit=${{ steps.audit.outcome }}
-          typescript=${{ steps.tsc.outcome }}
-          vitest=${{ steps.vitest.outcome }}
-          vite_build=${{ steps.build.outcome }}
-          bundle_reproducibility=${{ steps.bundlediff.outcome }}
-          python_tests=${{ steps.python.outcome }}
-          javascript_syntax=${{ steps.javascript.outcome }}
-          archive=${{ steps.archive.outcome }}
-          EOF
+          set +e
+          python -m compileall -q custom_components/argus > docs/RELEASE_2.0.33_DIAGNOSTICS.txt 2>&1
+          COMPILE_CODE=$?
+          python -m unittest discover -s tests -v >> docs/RELEASE_2.0.33_DIAGNOSTICS.txt 2>&1
+          TEST_CODE=$?
+          {
+            echo
+            echo "COMPILE_EXIT_CODE=$COMPILE_CODE"
+            echo "UNITTEST_EXIT_CODE=$TEST_CODE"
+          } >> docs/RELEASE_2.0.33_DIAGNOSTICS.txt
           cat docs/RELEASE_2.0.33_DIAGNOSTICS.txt
+          exit 0
 
-      - name: Commit diagnostics
+      - name: Commit Python diagnostics
         run: |
           git config user.name 'Chrisalvir'
           git config user.email 'chrisalvir01@gmail.com'
           git add docs/RELEASE_2.0.33_DIAGNOSTICS.txt
-          git commit -m 'chore: capture v2.0.33 release diagnostics'
+          git commit -m 'chore: capture failing v2.0.33 Python test'
           git push origin HEAD:fix/mobile-background-homekit-polish
