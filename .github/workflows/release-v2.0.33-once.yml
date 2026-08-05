@@ -28,42 +28,78 @@ jobs:
         with:
           python-version: '3.13'
 
-      - name: Capture every release check
-        shell: bash
+      - id: npmci
+        name: npm ci
+        continue-on-error: true
+        run: npm ci
+
+      - id: audit
+        name: Production audit
+        continue-on-error: true
+        run: npm audit --omit=dev --audit-level=high
+
+      - id: tsc
+        name: TypeScript check
+        continue-on-error: true
+        run: npx tsc --noEmit
+
+      - id: vitest
+        name: Vitest
+        continue-on-error: true
+        run: npm test
+
+      - id: build
+        name: Vite build
+        continue-on-error: true
+        run: npm run build
+
+      - id: bundlediff
+        name: Bundle reproducibility
+        continue-on-error: true
+        run: git diff --exit-code -- custom_components/argus/www/react-dist/argus-dashboard-react.js
+
+      - id: python
+        name: Python tests
+        continue-on-error: true
         run: |
-          set -u
-          LOG='docs/RELEASE_2.0.33_DIAGNOSTICS.txt'
-          : > "$LOG"
-          run_check() {
-            local label="$1"
-            shift
-            {
-              echo
-              echo "===== $label ====="
-              "$@"
-              local code=$?
-              echo "EXIT_CODE=$code"
-              return 0
-            } >> "$LOG" 2>&1
-          }
-          run_check 'manifest version' python -c 'import json; print(json.load(open("custom_components/argus/manifest.json"))["version"])'
-          run_check 'npm ci' npm ci
-          run_check 'TypeScript package' node -p "require('./node_modules/typescript/package.json').version"
-          run_check 'npm production audit' npm audit --omit=dev --audit-level=high
-          run_check 'TypeScript strict check' npx tsc --noEmit
-          run_check 'Vitest' npm test
-          run_check 'Vite build' npm run build
-          run_check 'compiled bundle diff' git diff --exit-code -- custom_components/argus/www/react-dist/argus-dashboard-react.js
-          run_check 'Python compileall' python -m compileall -q custom_components/argus
-          run_check 'Python unittest discovery' python -m unittest discover -s tests -v
-          run_check 'JavaScript syntax' bash -lc 'for file in custom_components/argus/www/*.js; do node --check "$file" || exit 1; done'
-          run_check 'archive build' bash -lc 'cd custom_components/argus && zip -qr ../../argus.zip . -x "__pycache__/*" "*.pyc" && cd ../.. && test -s argus.zip && unzip -tq argus.zip'
-          run_check 'archive manifest' bash -lc 'unzip -p argus.zip manifest.json | python -c '"'"'import json,sys; print(json.load(sys.stdin)["version"])'"'"''
-          cat "$LOG"
+          python -m compileall -q custom_components/argus
+          python -m unittest discover -s tests -v
+
+      - id: javascript
+        name: JavaScript syntax
+        continue-on-error: true
+        run: |
+          for file in custom_components/argus/www/*.js; do
+            node --check "$file"
+          done
+
+      - id: archive
+        name: Archive validation
+        continue-on-error: true
+        run: |
+          cd custom_components/argus
+          zip -qr ../../argus.zip . -x '__pycache__/*' '*.pyc'
+          cd ../..
+          test -s argus.zip
+          unzip -tq argus.zip
+
+      - name: Write diagnostic outcomes
+        run: |
+          cat > docs/RELEASE_2.0.33_DIAGNOSTICS.txt <<'EOF'
+          npm_ci=${{ steps.npmci.outcome }}
+          production_audit=${{ steps.audit.outcome }}
+          typescript=${{ steps.tsc.outcome }}
+          vitest=${{ steps.vitest.outcome }}
+          vite_build=${{ steps.build.outcome }}
+          bundle_reproducibility=${{ steps.bundlediff.outcome }}
+          python_tests=${{ steps.python.outcome }}
+          javascript_syntax=${{ steps.javascript.outcome }}
+          archive=${{ steps.archive.outcome }}
+          EOF
+          cat docs/RELEASE_2.0.33_DIAGNOSTICS.txt
 
       - name: Commit diagnostics
         run: |
-          set -euo pipefail
           git config user.name 'Chrisalvir'
           git config user.email 'chrisalvir01@gmail.com'
           git add docs/RELEASE_2.0.33_DIAGNOSTICS.txt
