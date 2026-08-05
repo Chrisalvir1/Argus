@@ -2,6 +2,16 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.30] - 2026-08-04
+
+### Fixed
+- Sensores de instancias activas más compactos y proporcionados en escritorio, móvil y pantalla completa.
+- Persistencia autoritativa de fondos por perfil, incluyendo restauración real del fondo Argus predeterminado.
+- Edición de salidas SOS con eliminación, color y destello suave o rápido.
+- Aplicación fiable de color y destello en SOS y modos, con efecto nativo o respaldo temporizado.
+- El selector de color solo aparece para luces realmente compatibles con `hs`, `xy`, `rgb`, `rgbw` o `rgbww`; luces blancas, `color_temp` y `onoff` conservan únicamente destello.
+- Sensores `unknown` o `unavailable` se identifican como desconectados en lugar de cerrados.
+
 ## [2.0.29] - 2026-08-04
 
 ### Fixed
