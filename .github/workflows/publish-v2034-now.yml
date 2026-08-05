@@ -1,0 +1,72 @@
+name: Publish validated v2.0.34 now
+
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/publish-v2034-now.yml]
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Apply previously validated v2.0.34 transformation
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          root=Path('.')
+          files=[root/'custom_components/argus/manifest.json',root/'custom_components/argus/const.py',root/'custom_components/argus/www/argus-card.js',root/'custom_components/argus/www/argus-bootstrap.js',*sorted((root/'tests').glob('test_*.py'))]
+          for path in files:
+              path.write_text(path.read_text(encoding='utf-8').replace('2.0.33','2.0.34'),encoding='utf-8')
+          for path in (root/'custom_components/argus/www/argus-panel.js',root/'custom_components/argus/www/argus-bootstrap.js',root/'custom_components/argus/panel.py',root/'tests/test_v193_sync.py',root/'tests/test_v194_panel_flow.py'):
+              text=path.read_text(encoding='utf-8').replace('argus-panel-v2018','argus-panel-v2034')
+              if path.name in {'argus-panel.js','test_v193_sync.py'}:
+                  text=text.replace('v2.0.18','v2.0.34')
+              path.write_text(text,encoding='utf-8')
+          PY
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          find . -type f -name '*.pyc' -delete
+          rm -f argus.zip.sha256
+          test "$(python -c 'import json; print(json.load(open("custom_components/argus/manifest.json"))["version"])')" = "2.0.34"
+          grep -q 'webcomponent_name="argus-panel-v2034"' custom_components/argus/panel.py
+          grep -q "customElements.get('argus-panel-v2034')" custom_components/argus/www/argus-bootstrap.js
+          grep -q "customElements.define('argus-panel-v2034'" custom_components/argus/www/argus-panel.js
+      - name: Build verified HACS package
+        run: |
+          set -euo pipefail
+          cd custom_components/argus
+          zip -qr ../../argus.zip . -x '__pycache__/*' '*/__pycache__/*' '*.pyc'
+          cd ../..
+          unzip -t argus.zip
+          test "$(unzip -p argus.zip manifest.json | python -c 'import json,sys; print(json.load(sys.stdin)["version"])')" = "2.0.34"
+          if unzip -l argus.zip | grep -Eq '(__pycache__|\.pyc$)'; then exit 1; fi
+          sha256sum argus.zip > argus.zip.sha256
+      - name: Commit tag and publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if git ls-remote --exit-code --tags origin refs/tags/v2.0.34 >/dev/null 2>&1; then
+            exit 0
+          fi
+          rm -f .github/workflows/release-v2.0.34-once.yml
+          rm -f .github/workflows/release-v2.0.34-final.yml
+          rm -f .github/workflows/publish-v2034-now.yml
+          git config user.name 'Chrisalvir'
+          git config user.email 'chrisalvir01@gmail.com'
+          git add -A
+          git commit -m 'Release Argus Home Hub v2.0.34'
+          git tag -a v2.0.34 -m 'Argus Home Hub v2.0.34'
+          git push origin HEAD:main
+          git push origin v2.0.34
+          gh release create v2.0.34 argus.zip argus.zip.sha256 --title 'Argus Home Hub v2.0.34' --notes-file docs/RELEASE_NOTES_2.0.34.md
