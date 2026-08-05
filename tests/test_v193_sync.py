@@ -456,7 +456,7 @@ class TestV193ManifestVersion(unittest.TestCase):
         )
         with open(manifest_path) as f:
             manifest = json.load(f)
-        self.assertEqual(manifest["version"], "2.0.32", "manifest.json version must be 2.0.18")
+        self.assertEqual(manifest["version"], "2.0.33", "manifest.json version must be 2.0.33")
 
 
 class TestV193BootstrapCacheBust(unittest.TestCase):
@@ -466,7 +466,7 @@ class TestV193BootstrapCacheBust(unittest.TestCase):
         )
         with open(bootstrap_path) as f:
             content = f.read()
-        self.assertIn("2.0.32", content, "argus-bootstrap.js must reference version 2.0.18 for cache-busting")
+        self.assertIn("2.0.33", content, "argus-bootstrap.js must reference version 2.0.33 for cache-busting")
 
 
 class TestV193ScheduleAndDisarmProtection(unittest.IsolatedAsyncioTestCase):
