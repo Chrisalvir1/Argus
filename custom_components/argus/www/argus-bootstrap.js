@@ -1,3 +1,4 @@
+import { applyReactDashboardLayout } from './react-dist/argus-dashboard-react.js?v=react-layout-1';
 import './argus-panel.js?v=2.0.32';
 import { applyUiAuditFixes } from './argus-ui-audit-fixes.js?v=2.0.32';
 import { applyGridPolish } from './argus-grid-polish.js?v=2.0.32';
@@ -33,3 +34,5 @@ applyBatteryUiFixes(ArgusPanel);
 applyDeepRepair(ArgusPanel);
 applyLightCapabilityFixes(ArgusPanel);
 applyPersonalizationToggleFix(ArgusPanel);
+
+applyReactDashboardLayout(ArgusPanel);
