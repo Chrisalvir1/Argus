@@ -33,7 +33,7 @@ async def async_register_panel(hass: HomeAssistant) -> None:
             hass,
             # Version the element name as well as the module URL. Browsers
             # cannot redefine a custom element that an older panel registered.
-            webcomponent_name="argus-panel-v2034",
+            webcomponent_name="argus-panel-v2018",
             frontend_url_path=DOMAIN,
             module_url=f"/api/{DOMAIN}_static/argus-bootstrap.js?v={VERSION}",
             sidebar_title="Argus Home Hub",
