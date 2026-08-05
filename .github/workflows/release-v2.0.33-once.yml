@@ -1,6 +1,5 @@
-name: Release v2.0.33 once
+name: Diagnose v2.0.33 release once
 
-# The workflow file is updated once after creation so GitHub registers the push trigger.
 on:
   push:
     branches:
@@ -12,7 +11,7 @@ permissions:
   contents: write
 
 jobs:
-  release:
+  diagnose:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
@@ -29,60 +28,44 @@ jobs:
         with:
           python-version: '3.13'
 
-      - name: Validate version and tag availability
+      - name: Capture every release check
         shell: bash
         run: |
-          set -euo pipefail
-          VERSION="$(python -c 'import json; print(json.load(open("custom_components/argus/manifest.json"))["version"])')"
-          test "$VERSION" = "2.0.33"
-          if git rev-parse -q --verify refs/tags/v2.0.33 >/dev/null; then
-            echo 'Tag v2.0.33 already exists' >&2
-            exit 1
-          fi
+          set -u
+          LOG='docs/RELEASE_2.0.33_DIAGNOSTICS.txt'
+          : > "$LOG"
+          run_check() {
+            local label="$1"
+            shift
+            {
+              echo
+              echo "===== $label ====="
+              "$@"
+              local code=$?
+              echo "EXIT_CODE=$code"
+              return 0
+            } >> "$LOG" 2>&1
+          }
+          run_check 'manifest version' python -c 'import json; print(json.load(open("custom_components/argus/manifest.json"))["version"])'
+          run_check 'npm ci' npm ci
+          run_check 'TypeScript package' node -p "require('./node_modules/typescript/package.json').version"
+          run_check 'npm production audit' npm audit --omit=dev --audit-level=high
+          run_check 'TypeScript strict check' npx tsc --noEmit
+          run_check 'Vitest' npm test
+          run_check 'Vite build' npm run build
+          run_check 'compiled bundle diff' git diff --exit-code -- custom_components/argus/www/react-dist/argus-dashboard-react.js
+          run_check 'Python compileall' python -m compileall -q custom_components/argus
+          run_check 'Python unittest discovery' python -m unittest discover -s tests -v
+          run_check 'JavaScript syntax' bash -lc 'for file in custom_components/argus/www/*.js; do node --check "$file" || exit 1; done'
+          run_check 'archive build' bash -lc 'cd custom_components/argus && zip -qr ../../argus.zip . -x "__pycache__/*" "*.pyc" && cd ../.. && test -s argus.zip && unzip -tq argus.zip'
+          run_check 'archive manifest' bash -lc 'unzip -p argus.zip manifest.json | python -c '"'"'import json,sys; print(json.load(sys.stdin)["version"])'"'"''
+          cat "$LOG"
 
-      - name: Validate React dashboard
+      - name: Commit diagnostics
         run: |
           set -euo pipefail
-          npm ci
-          test "$(node -p "require('./node_modules/typescript/package.json').version")" = "7.0.2"
-          npm audit --omit=dev --audit-level=high
-          npx tsc --noEmit
-          npm test
-          npm run build
-          git diff --exit-code -- custom_components/argus/www/react-dist/argus-dashboard-react.js
-
-      - name: Validate Argus integration
-        run: |
-          set -euo pipefail
-          python -m compileall -q custom_components/argus
-          python -m unittest discover -s tests -v
-          for file in custom_components/argus/www/*.js; do
-            node --check "$file"
-          done
-
-      - name: Build release archive
-        run: |
-          set -euo pipefail
-          cd custom_components/argus
-          zip -r "../../argus.zip" . -x '__pycache__/*' '*.pyc'
-          cd ../..
-          test -s argus.zip
-          unzip -t argus.zip
-          unzip -p argus.zip manifest.json | python -c 'import json,sys; assert json.load(sys.stdin)["version"] == "2.0.33"'
-          sha256sum argus.zip | tee argus.zip.sha256
-
-      - name: Commit, tag and publish release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          rm .github/workflows/release-v2.0.33-once.yml
           git config user.name 'Chrisalvir'
           git config user.email 'chrisalvir01@gmail.com'
-          git add .github/workflows/release-v2.0.33-once.yml
-          git commit -m 'Release Argus Home Hub v2.0.33'
-          git tag -a v2.0.33 -m 'Argus Home Hub v2.0.33'
+          git add docs/RELEASE_2.0.33_DIAGNOSTICS.txt
+          git commit -m 'chore: capture v2.0.33 release diagnostics'
           git push origin HEAD:fix/mobile-background-homekit-polish
-          git push origin v2.0.33
-          gh release create v2.0.33 argus.zip argus.zip.sha256 --title 'Argus Home Hub v2.0.33' --notes-file docs/RELEASE_NOTES_2.0.33.md
-          gh release view v2.0.33
