@@ -3,9 +3,9 @@ from homeassistant.const import CONF_CODE, CONF_NAME
 
 DOMAIN = "argus"
 NAME = "Argus Home Hub"
-VERSION = "2.0.18"
+VERSION = "2.0.33"
 
-PLATFORMS = ["alarm_control_panel", "switch"]
+PLATFORMS = ["alarm_control_panel", "binary_sensor", "switch"]
 DATA_PANELS = "panels"
 
 CONF_ARMING_TIME = "arming_time"
@@ -17,6 +17,7 @@ CONF_SENSORS_HOME = "sensors_home"
 CONF_SENSORS_NIGHT = "sensors_night"
 CONF_SENSORS_VACATION = "sensors_vacation"
 CONF_ENTRY_SENSORS = "entry_sensors"
+CONF_LINKED_ALARM_PANELS = "linked_alarm_panels"
 CONF_LINKED_ALARM_ENTITY = "linked_alarm_entity"
 CONF_SIREN_ENTITY = "siren_entity"
 CONF_GUEST_CODE = "guest_code"

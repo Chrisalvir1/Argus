@@ -20,6 +20,7 @@ from .const import (
     CONF_SENSORS_NIGHT,
     CONF_SENSORS_VACATION,
     CONF_ENTRY_SENSORS,
+    CONF_LINKED_ALARM_PANELS,
     CONF_TRIGGER_TIME,
     DEFAULT_ARMING_TIME,
     DEFAULT_ENTRY_DELAY,
@@ -58,6 +59,7 @@ class ArgusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     CONF_SENSORS_NIGHT: [],
                     CONF_SENSORS_VACATION: [],
                     CONF_ENTRY_SENSORS: [],
+                    CONF_LINKED_ALARM_PANELS: [],
                     CONF_MQTT_ENABLED: False,
                     CONF_MQTT_TOPIC_STATE: DEFAULT_MQTT_TOPIC_STATE,
                     CONF_MQTT_TOPIC_COMMAND: DEFAULT_MQTT_TOPIC_COMMAND,
@@ -131,5 +133,11 @@ class ArgusOptionsFlow(config_entries.OptionsFlow):
                 CONF_CODE_ARM_REQUIRED,
                 default=bool(values.get(CONF_CODE_ARM_REQUIRED, False)),
             ): selector.BooleanSelector(),
+            vol.Optional(
+                CONF_LINKED_ALARM_PANELS,
+                default=values.get(CONF_LINKED_ALARM_PANELS, []),
+            ): selector.EntitySelector(
+                selector.EntitySelectorConfig(multiple=True, domain="alarm_control_panel")
+            ),
         })
         return self.async_show_form(step_id="init", data_schema=schema, errors=errors)

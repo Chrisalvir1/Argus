@@ -54,5 +54,6 @@
         }
       }
     }
-  }
+  },
+  "entity": {"binary_sensor": {"waiting_for_sensors_to_close": {"name": "Ожидание закрытия датчиков"}}}
 }

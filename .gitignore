@@ -1,2 +1,7 @@
 node_modules/
 argus.zip
+argus.zip.sha256
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.vitest/

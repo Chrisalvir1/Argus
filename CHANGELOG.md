@@ -2,6 +2,57 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.32] - 2026-08-04
+
+### Fixed
+- Eliminado el destello de respaldo basado en apagados y encendidos repetidos para evitar reinicios de bombillos Matter, bombillos convencionales inteligentes y plugs.
+- Luces regulables sin flash nativo ahora pulsan únicamente el brillo entre 25% y 100%, sin cortar la alimentación lógica.
+- Luces exclusivamente `onoff` y entidades similares a plugs se mantienen encendidas de forma fija y no ofrecen destello inseguro.
+- Argus captura y restaura estado, brillo, color RGB/HS/XY, temperatura de blanco y efecto después de SOS, alarmas y pruebas.
+- Si Home Assistant no conserva el color anterior, se restaura blanco neutro para impedir que el siguiente encendido manual permanezca en rojo.
+- Valores RGB falsos se eliminan antes de guardar configuraciones para luces sin capacidad de color.
+
+## [2.0.31] - 2026-08-04
+
+### Fixed
+- Detección estricta de capacidades de luces desde `supported_color_modes` de Home Assistant, sin inferencias por nombre o tipo aparente.
+- Los dimmers y luces `brightness`, `color_temp` u `onoff` ya no muestran ni guardan controles RGB.
+- Prueba física de destello desde SOS y Modos mediante servicios reales `light.turn_on` y `light.turn_off`, con flash nativo, efecto nativo o respaldo temporizado Argus.
+- Sensores compactos con diseño de píldora en vista normal, conservando el diseño de pantalla completa.
+- Contenedores de acceso, automatizaciones e historial ajustados con altura limitada y scroll interno.
+- Personalización estética avanzada cerrada por defecto y controlada por un único botón accesible, sin texto invertido ni doble evento.
+
+## [2.0.30] - 2026-08-04
+
+### Fixed
+- Sensores de instancias activas más compactos y proporcionados en escritorio, móvil y pantalla completa.
+- Persistencia autoritativa de fondos por perfil, incluyendo restauración real del fondo Argus predeterminado.
+- Edición de salidas SOS con eliminación, color y destello suave o rápido.
+- Aplicación fiable de color y destello en SOS y modos, con efecto nativo o respaldo temporizado.
+- El selector de color solo aparece para luces realmente compatibles con `hs`, `xy`, `rgb`, `rgbw` o `rgbww`; luces blancas, `color_temp` y `onoff` conservan únicamente destello.
+- Sensores `unknown` o `unavailable` se identifican como desconectados en lugar de cerrados.
+
+## [2.0.29] - 2026-08-04
+
+### Fixed
+- **Personalización por Perfil (Themes):** Se introdujo una reestructuración de la persistencia que empaqueta las preferencias estéticas (`background_mode` y `background_file`) dentro de la propiedad `theme` por usuario. Ahora cada perfil de Argus mantiene de forma confiable su propio fondo animado o estático independiente sin importar si refrescan la pestaña o entran desde otros dispositivos.
+
+## [2.0.28] - 2026-08-04
+
+### Added
+- **Binary Sensor de Bloqueo de Sensores:** Nueva integración `binary_sensor.py` que expone un estado de Home Assistant cuando Argus está "Esperando que se cierren los sensores bloqueantes" al intentar armar. Facilita crear automatizaciones nativas.
+- **Configuración Avanzada de Luces Sirena:** Renovación del selector de color para sirenas con soporte hexadecimal por color y modo de parpadeo suave (`gentle_flash`), ampliando la compatibilidad de colores RGB y efectos.
+- **Sincronización de Paneles Externos**: Nueva sección en la configuración de modos para seleccionar otros paneles de alarma que sincronizarán automáticamente su estado con Argus de forma bidireccional, manteniendo "Sirenas" solo para activación de alarma en pánico.
+
+### Fixed
+- **UI en Móviles y Safari:**
+  - Ajuste de dimensiones del `.console-sensor` para prevenir desbordes mediante modelo flexbox.
+  - Implementación de límite de altura y scroll nativo en las listas de sensores (entry/bypass).
+  - Refinamiento de renderizado de fondo (background) que presentaba corte de esquinas (`corner clipping`) en navegadores con WebKit/Safari.
+- **Personalización de Fondos de Pantalla:** Corrección del mecanismo de guardado de personalizaciones (wallpapers), que ahora persiste a nivel de instancia si el usuario no tiene perfil cargado, evitando el reinicio a 'Default'.
+- **Websocket API y Battery UI:** Solución de la detección de dispositivos mediante el `device_id` para mostrar correctamente baterías, arreglos de dominios faltantes en selectores y refinamiento modal.
+- **Batería en Instancias Activas**: Añadido el medidor visual de batería dentro del panel principal al lado del estatus, empleando estilo liquid glass transparente que se torna rojo y avisa desconexión debajo del 10% de carga.
+
 ## [2.0.18] - 2026-08-03
 
 ### Fixed

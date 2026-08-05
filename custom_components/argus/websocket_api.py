@@ -45,7 +45,8 @@ _ALLOWED_MEDIA_EXTENSIONS = {
 }
 _SUPPORTED_DOMAINS = {
     "binary_sensor", "camera", "climate", "cover", "light", "lock",
-    "media_player", "sensor", "siren", "switch",
+    "media_player", "sensor", "siren", "switch", "alarm_control_panel",
+    "input_boolean", "script", "fan",
 }
 
 
@@ -142,6 +143,7 @@ def _serialize_available_entities(hass: HomeAssistant) -> list[dict]:
             "state": state.state,
             "area": area_name,
             "icon": state.attributes.get("icon"),
+            "device_id": entry.device_id if entry else None,
         })
 
     return entities
@@ -429,6 +431,10 @@ _SAVE_UI_SCHEMA = {
     vol.Optional("home_name"): vol.All(str, vol.Length(max=128)),
     vol.Optional("background_mode"): vol.In(["weather", "none", "photo", "collage", "video"]),
     vol.Optional("background_images"): list,
+    vol.Optional("theme"): {
+        vol.Optional("background_mode"): vol.In(["default", "weather", "none", "photo", "collage", "video"]),
+        vol.Optional("background_file"): str,
+    },
     vol.Optional("temperature_source"): str,
     vol.Optional("weather_source"): str,
     vol.Optional("intelligent_confirmation"): dict,
@@ -504,6 +510,17 @@ async def ws_argus_save_mode_config(hass, connection, msg) -> None:
     data = await async_load_ui_data(hass, entry_id)
     modes = copy.deepcopy(data.get("modes", {}))
     mode, config, entity_id = msg["mode"], copy.deepcopy(msg["config"]), msg["entity_id"]
+    # v2.0.29: external panels are outputs of the Sirens section.  Preserve
+    # old saves while normalising the canonical field on their next save.
+    legacy_panels = config.pop("sync_panels", [])
+    configured_panels = config.get("external_panels", [])
+    if not isinstance(configured_panels, list):
+        configured_panels = []
+    if isinstance(legacy_panels, list):
+        configured_panels.extend(panel for panel in legacy_panels if panel not in configured_panels)
+    legacy_alarm_sirens = [item for item in config.get("sirens", []) if str(item).startswith("alarm_control_panel.")]
+    config["sirens"] = [item for item in config.get("sirens", []) if not str(item).startswith("alarm_control_panel.")]
+    config["external_panels"] = list(dict.fromkeys(configured_panels + legacy_alarm_sirens))
     if entity_id:
         modes.setdefault("__by_entity__", {}).setdefault(entity_id, {})[mode] = config
     else:
@@ -646,9 +663,21 @@ async def ws_argus_restore_config(hass, connection, msg) -> None:
                 options["code"] = master_pin_hash
                 hass.config_entries.async_update_entry(entry, options=options)
 
+        ha_user_id, actor_name = _get_ha_actor(connection)
+        users = copy.deepcopy(restored.get("users", []))
+        
+        if "theme" in msg.get("config", {}):
+            theme_data = msg["config"]["theme"]
+            for user in users:
+                if user.get("ha_user_id") == ha_user_id:
+                    user.setdefault("theme", {})
+                    user["theme"]["background_mode"] = theme_data.get("background_mode", "default")
+                    user["theme"]["background_file"] = theme_data.get("background_file", "")
+                    break
+            # Guardar enseguida
+            restored = await async_save_ui_data(hass, {"users": users}, entry_id)
+
         if restored_from_first_run:
-            ha_user_id, actor_name = _get_ha_actor(connection)
-            users = copy.deepcopy(restored.get("users", []))
             restored_profile = next(
                 (user for user in users if user.get("ha_user_id") == ha_user_id and user.get("enabled", True)),
                 None,
@@ -956,6 +985,12 @@ async def ws_argus_login_bootstrap(hass, connection, msg) -> None:
                 has_real_admin = True
                 break
 
+    user_theme = {"background_mode": "default", "background_file": ""}
+    for u in ui_data.get("users", []):
+        if u.get("ha_user_id") == ha_user_id:
+            user_theme = u.get("theme", user_theme)
+            break
+
     connection.send_result(msg["id"], {
         "first_run": ui_data.get("first_run", False),
         "legacy_claim_needed": not ui_data.get("first_run", False) and not has_real_admin,
@@ -965,6 +1000,7 @@ async def ws_argus_login_bootstrap(hass, connection, msg) -> None:
         "ha_user_id": ha_user_id,
         "background_mode": ui_data.get("background_mode"),
         "background_images": ui_data.get("background_images"),
+        "user_theme": user_theme,
     })
 
 

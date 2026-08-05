@@ -17,6 +17,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
       - name: Validate version and sources
         shell: bash
         run: |
@@ -30,18 +34,35 @@ jobs:
           for file in custom_components/argus/www/*.js; do
             node --check "$file"
           done
+      - name: Validate React dashboard
+        run: |
+          set -euo pipefail
+          npm ci
+          npm audit --omit=dev --audit-level=high
+          npx tsc --noEmit
+          npm test
+          npm run build
+          git diff --exit-code -- custom_components/argus/www/react-dist/argus-dashboard-react.js
       - name: Build HACS archive
         run: |
           set -euo pipefail
           cd custom_components/argus
-          zip -r "../../argus.zip" . -x '__pycache__/*' '*.pyc'
+          zip -qr "../../argus.zip" . -x '__pycache__/*' '*/__pycache__/*' '*.pyc'
           cd ../..
           test -s argus.zip
           unzip -t argus.zip
+          test "$(unzip -p argus.zip manifest.json | python -c 'import json,sys; print(json.load(sys.stdin)["version"])')" = "${GITHUB_REF_NAME#v}"
+          if unzip -l argus.zip | grep -Eq '(__pycache__|\.pyc$)'; then
+            echo 'Python cache artifacts found in release archive' >&2
+            exit 1
+          fi
+          sha256sum argus.zip > argus.zip.sha256
       - uses: actions/upload-artifact@v4
         with:
           name: argus
-          path: argus.zip
+          path: |
+            argus.zip
+            argus.zip.sha256
       - name: Publish GitHub release
         if: github.ref_type == 'tag'
         env:
@@ -50,9 +71,9 @@ jobs:
           VERSION="${GITHUB_REF_NAME#v}"
           NOTES="docs/RELEASE_NOTES_${VERSION}.md"
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            gh release upload "$GITHUB_REF_NAME" argus.zip --clobber
+            gh release upload "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 --clobber
           elif [[ -f "$NOTES" ]]; then
-            gh release create "$GITHUB_REF_NAME" argus.zip --title "Argus Home Hub $GITHUB_REF_NAME" --notes-file "$NOTES"
+            gh release create "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 --title "Argus Home Hub $GITHUB_REF_NAME" --notes-file "$NOTES"
           else
-            gh release create "$GITHUB_REF_NAME" argus.zip --title "Argus Home Hub $GITHUB_REF_NAME" --generate-notes
+            gh release create "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 --title "Argus Home Hub $GITHUB_REF_NAME" --generate-notes
           fi
