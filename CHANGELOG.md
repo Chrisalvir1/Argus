@@ -2,6 +2,16 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.32] - 2026-08-04
+
+### Fixed
+- Eliminado el destello de respaldo basado en apagados y encendidos repetidos para evitar reinicios de bombillos Matter, bombillos convencionales inteligentes y plugs.
+- Luces regulables sin flash nativo ahora pulsan únicamente el brillo entre 25% y 100%, sin cortar la alimentación lógica.
+- Luces exclusivamente `onoff` y entidades similares a plugs se mantienen encendidas de forma fija y no ofrecen destello inseguro.
+- Argus captura y restaura estado, brillo, color RGB/HS/XY, temperatura de blanco y efecto después de SOS, alarmas y pruebas.
+- Si Home Assistant no conserva el color anterior, se restaura blanco neutro para impedir que el siguiente encendido manual permanezca en rojo.
+- Valores RGB falsos se eliminan antes de guardar configuraciones para luces sin capacidad de color.
+
 ## [2.0.31] - 2026-08-04
 
 ### Fixed
