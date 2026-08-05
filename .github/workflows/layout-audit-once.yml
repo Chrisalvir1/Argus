@@ -1,0 +1,45 @@
+name: Layout DOM audit once
+
+on:
+  push:
+    branches: [feature/react-dashboard-layout]
+    paths: [.github/workflows/layout-audit-once.yml]
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract relevant dashboard source
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          source = Path('custom_components/argus/www/argus-panel.js').read_text(encoding='utf-8')
+          ids = sorted(set(re.findall(r'''(?:id=["']|getElementById\(["'])(w-[A-Za-z0-9_-]+|widget-grid|edit-widgets[A-Za-z0-9_-]*)''', source)))
+          keys = ['_initWidgetGrid', '_renderWidgetLayout', '_toggleWidgetEditing', '_saveWidgetLayout', '_changeWidgetSize', '_toggleWidgetVisibility', 'id="widget-grid"', "id='widget-grid'"]
+          parts = ['# Temporary Argus layout DOM audit', '', '## Widget identifiers', '']
+          parts.extend(f'- `{value}`' for value in ids)
+          for key in keys:
+              starts = [m.start() for m in re.finditer(re.escape(key), source)]
+              for index, start in enumerate(starts[:4], 1):
+                  lo = max(0, start - 2200)
+                  hi = min(len(source), start + 5200)
+                  snippet = source[lo:hi]
+                  parts.extend(['', f'## {key} occurrence {index}', '', '```js', snippet, '```'])
+          Path('docs/layout-dom-audit.tmp.md').write_text('\n'.join(parts), encoding='utf-8')
+          PY
+      - name: Commit audit and remove workflow
+        shell: bash
+        run: |
+          git config user.name 'Chrisalvir'
+          git config user.email 'chrisalvir01@gmail.com'
+          git add docs/layout-dom-audit.tmp.md
+          git rm .github/workflows/layout-audit-once.yml
+          git commit -m 'chore: capture dashboard layout audit'
+          git push origin HEAD:feature/react-dashboard-layout
