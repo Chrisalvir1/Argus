@@ -67,21 +67,13 @@ jobs:
           text = panel_py.read_text(encoding='utf-8')
           if 'webcomponent_name="argus-panel-v2018"' not in text:
               raise SystemExit('Missing fixed panel registration marker')
-          panel_py.write_text(text.replace('webcomponent_name="argus-panel-v2018"', 'webcomponent_name=f"argus-panel-v{VERSION.replace(chr(46), chr(0))}"'), encoding='utf-8')
-          # Avoid a null-character expression: use a simple join that remains valid in an f-string.
-          text = panel_py.read_text(encoding='utf-8')
-          text = text.replace('f"argus-panel-v{VERSION.replace(chr(46), chr(0))}"', '"argus-panel-v" + VERSION.replace(".", "")')
-          panel_py.write_text(text, encoding='utf-8')
+          panel_py.write_text(text.replace('webcomponent_name="argus-panel-v2018"', 'webcomponent_name="argus-panel-v2034"'), encoding='utf-8')
 
-          legacy_test = root / 'tests/test_v193_sync.py'
-          text = legacy_test.read_text(encoding='utf-8')
-          text = text.replace('v2.0.18', 'v2.0.34').replace('argus-panel-v2018', 'argus-panel-v2034')
-          legacy_test.write_text(text, encoding='utf-8')
-
-          flow_test = root / 'tests/test_v194_panel_flow.py'
-          text = flow_test.read_text(encoding='utf-8')
-          text = text.replace('argus-panel-v2018', 'argus-panel-v2034')
-          flow_test.write_text(text, encoding='utf-8')
+          for test_name in ('test_v193_sync.py', 'test_v194_panel_flow.py'):
+              path = root / 'tests' / test_name
+              text = path.read_text(encoding='utf-8')
+              text = text.replace('v2.0.18', 'v2.0.34').replace('argus-panel-v2018', 'argus-panel-v2034')
+              path.write_text(text, encoding='utf-8')
           PY
           find . -type d -name __pycache__ -prune -exec rm -rf {} +
           find . -type f -name '*.pyc' -delete
@@ -95,7 +87,7 @@ jobs:
           grep -q "ARGUS_CARD_VERSION='2.0.34'" custom_components/argus/www/argus-card.js
           grep -q "customElements.get('argus-panel-v2034')" custom_components/argus/www/argus-bootstrap.js
           grep -q "customElements.define('argus-panel-v2034'" custom_components/argus/www/argus-panel.js
-          grep -q 'webcomponent_name="argus-panel-v" + VERSION.replace(".", "")' custom_components/argus/panel.py
+          grep -q 'webcomponent_name="argus-panel-v2034"' custom_components/argus/panel.py
           python -m compileall -q custom_components/argus
           python -m unittest discover -s tests -v
           for file in custom_components/argus/www/*.js; do
