@@ -15,5 +15,6 @@ Esta versión consolida la reparación profunda de fondos, sensores y salidas de
 - Suite de pruebas de regresión.
 - Validación sintáctica de todos los archivos JavaScript.
 - Validaciones HACS y hassfest del PR aprobadas antes de preparar esta versión.
+- Tag `v2.0.30` y paquete `argus.zip` verificados después de la publicación.
 
 > Después de actualizar, reinicia Home Assistant y realiza una recarga completa del navegador sin caché.
