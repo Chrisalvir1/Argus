@@ -36,13 +36,14 @@
   "options": {
     "step": {
       "init": {
-        "title": "Opções de Tempo",
+        "title": "Alertas de voz inteligentes Argus",
         "data": {
           "arming_time": "Atraso de ativação (segundos)",
           "trigger_time": "Duração do disparo (segundos)",
           "entry_delay": "Atraso de entrada (segundos)",
           "arming_voice_message_triggered": "Mensagem do sensor que disparou o alarme",
-          "arming_voice_message_additional_triggered": "Mensagem de sensor disparado adicional"
+          "arming_voice_message_additional_triggered": "Mensagem de sensor disparado adicional",
+          "arming_voice_message_cancelled": "Mensagem de cancelamento manual"
         }
       },
       "sensors": {

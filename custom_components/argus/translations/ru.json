@@ -36,13 +36,14 @@
   "options": {
     "step": {
       "init": {
-        "title": "Параметры времени",
+        "title": "Интеллектуальные голосовые оповещения Argus",
         "data": {
           "arming_time": "Задержка постановки (секунды)",
           "trigger_time": "Длительность тревоги (секунды)",
           "entry_delay": "Задержка входа (секунды)",
           "arming_voice_message_triggered": "Сообщение датчика, вызвавшего тревогу",
-          "arming_voice_message_additional_triggered": "Сообщение дополнительного сработавшего датчика"
+          "arming_voice_message_additional_triggered": "Сообщение дополнительного сработавшего датчика",
+          "arming_voice_message_cancelled": "Сообщение ручной отмены постановки"
         }
       },
       "sensors": {

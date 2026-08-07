@@ -36,7 +36,7 @@
   "options": {
     "step": {
       "init": {
-        "title": "Opciones de Tiempos",
+        "title": "Avisos inteligentes de Argus",
         "data": {
           "arming_time": "Tiempo de armado (segundos)",
           "trigger_time": "Duración de activación (segundos)",
@@ -49,7 +49,8 @@
           "arming_voice_message_last": "Mensaje del último sensor",
           "arming_voice_message_complete": "Mensaje de todos cerrados",
           "arming_voice_message_triggered": "Mensaje del sensor que disparó la alarma",
-          "arming_voice_message_additional_triggered": "Mensaje de sensor disparado adicional"
+          "arming_voice_message_additional_triggered": "Mensaje de sensor disparado adicional",
+          "arming_voice_message_cancelled": "Mensaje de cancelación manual del armado"
         }
       },
       "sensors": {

@@ -5,7 +5,7 @@ WWW=ROOT/'custom_components'/'argus'/'www'
 class TestV2040DashboardContract(unittest.TestCase):
     def test_dashboard_fix_loads_last(self):
         bootstrap=(WWW/'argus-bootstrap.js').read_text(encoding='utf-8')
-        self.assertIn("argus-v2040-dashboard-fixes.js?v=2.0.45",bootstrap)
+        self.assertIn("argus-v2040-dashboard-fixes.js?v=2.0.46",bootstrap)
         self.assertGreater(bootstrap.rfind('applyV2040DashboardFixes'),bootstrap.rfind('applyPersonalizationToggleFix'))
     def test_layout_is_scoped_local_and_server_persisted(self):
         source=(WWW/'argus-v2040-dashboard-fixes.js').read_text(encoding='utf-8')
