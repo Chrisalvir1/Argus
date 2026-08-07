@@ -41,3 +41,4 @@ jobs:
           git tag -a v2.0.39 -m 'Argus Home Hub v2.0.39'
           git push origin HEAD:main
           git push origin v2.0.39
+# trigger-2
