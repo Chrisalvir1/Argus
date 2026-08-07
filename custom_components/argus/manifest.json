@@ -1,7 +1,7 @@
 {
   "domain": "argus",
   "name": "Argus Home Hub",
-  "after_dependencies": ["frontend", "http", "mqtt"],
+  "after_dependencies": ["frontend", "homekit", "http", "mqtt"],
   "codeowners": ["@Chrisalvir1"],
   "config_flow": true,
   "documentation": "https://github.com/Chrisalvir1/Argus",
