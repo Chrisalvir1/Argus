@@ -1,0 +1,64 @@
+name: Release Argus v2.0.41 deep audit
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/release-v2041-deep-audit.yml]
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.13'}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22', cache: npm}
+      - name: Wire audited repair and update version
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('custom_components/argus/www/argus-bootstrap.js');s=p.read_text(encoding='utf-8')
+          marker="import { applyV2040DashboardFixes } from './argus-v2040-dashboard-fixes.js?v=2.0.40';"
+          if marker not in s: raise SystemExit('v2040 import missing')
+          s=s.replace(marker,marker+"\nimport { applyV2041AuditRepair } from './argus-v2041-audit-repair.js?v=2.0.41';",1)
+          marker2='applyV2040DashboardFixes(ArgusPanel);'
+          if marker2 not in s: raise SystemExit('v2040 application missing')
+          s=s.replace(marker2,marker2+'\napplyV2041AuditRepair(ArgusPanel);',1)
+          p.write_text(s,encoding='utf-8')
+          targets=[Path('custom_components/argus/manifest.json'),Path('custom_components/argus/const.py'),*Path('custom_components/argus/www').glob('*.js'),*Path('tests').glob('test_*.py')]
+          for path in targets:
+              text=path.read_text(encoding='utf-8')
+              path.write_text(text.replace('2.0.40','2.0.41'),encoding='utf-8')
+          PY
+          rm -f .github/workflows/release-v2041-deep-audit.yml
+      - name: Python and contract validation
+        run: |
+          python -m compileall -q custom_components/argus
+          python -m unittest discover -s tests -v
+      - name: Frontend validation
+        run: |
+          npm ci
+          npm audit --omit=dev --audit-level=high
+          npx tsc --noEmit
+          npm test
+          npm run build
+          if grep -q 'process\.env' custom_components/argus/www/react-dist/argus-dashboard-react.js; then exit 1; fi
+          for file in custom_components/argus/www/*.js custom_components/argus/www/react-dist/*.js; do node --check "$file"; done
+      - name: Package and publish
+        env: {GH_TOKEN: '${{ github.token }}'}
+        run: |
+          set -euo pipefail
+          find custom_components/argus -type d -name __pycache__ -prune -exec rm -rf {} +
+          find custom_components/argus -type f -name '*.pyc' -delete
+          cd custom_components/argus && zip -qr ../../argus.zip . -x '__pycache__/*' '*/__pycache__/*' '*.pyc' && cd ../..
+          unzip -t argus.zip
+          test "$(unzip -p argus.zip manifest.json | python -c 'import json,sys; print(json.load(sys.stdin)["version"])')" = 2.0.41
+          sha256sum argus.zip > argus.zip.sha256
+          git config user.name Chrisalvir
+          git config user.email chrisalvir01@gmail.com
+          git add -A && git commit -m 'Release Argus Home Hub v2.0.41'
+          git tag -a v2.0.41 -m 'Argus Home Hub v2.0.41'
+          git push origin HEAD:main && git push origin v2.0.41
+          gh release create v2.0.41 argus.zip argus.zip.sha256 --title 'Argus Home Hub v2.0.41' --notes-file docs/RELEASE_NOTES_2.0.41.md
