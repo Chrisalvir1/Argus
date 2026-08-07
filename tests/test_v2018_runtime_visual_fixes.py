@@ -47,7 +47,7 @@ class TestV2018RuntimeVisualFixes(unittest.TestCase):
         self.assertIn('.hero-context', RUNTIME)
 
     def test_runtime_patch_loads_last(self):
-        self.assertIn('argus-runtime-visual-fixes.js?v=2.0.38', BOOTSTRAP)
+        self.assertIn('argus-runtime-visual-fixes.js?v=2.0.39', BOOTSTRAP)
         self.assertGreater(BOOTSTRAP.rfind('applyRuntimeVisualFixes'), BOOTSTRAP.rfind('applyCompleteContentFixes'))
 
 if __name__ == '__main__':
