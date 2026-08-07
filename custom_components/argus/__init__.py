@@ -4,6 +4,7 @@ import logging
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from . import const, output_profiles, personalization, websocket_api
+from .arming_voice import install_cancel_announcement
 from .const import DOMAIN, PLATFORMS
 from .media_websocket import install as install_media_websocket
 from .panel import async_register_panel
@@ -11,6 +12,7 @@ _LOGGER = logging.getLogger(__name__)
 _WS_REGISTERED_KEY = f"{DOMAIN}_ws_registered"
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     hass.data.setdefault(DOMAIN, {})
+    install_cancel_announcement()
     await async_register_panel(hass)
     _async_register_websocket_once(hass)
     return True
@@ -25,6 +27,7 @@ def _async_register_websocket_once(hass: HomeAssistant) -> None:
 from .presence import PresenceManager
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data.setdefault(DOMAIN, {})
+    install_cancel_announcement()
     pm = PresenceManager(hass, entry.entry_id)
     await pm.async_setup()
     hass.data[DOMAIN][entry.entry_id] = {"config": entry.data, "presence_manager": pm}
