@@ -15,8 +15,11 @@ argus:
     message_last: "Falta cerrar: {sensors}."
     message_complete: "Todos los sensores están cerrados. Armando en {mode}."
     message_cancelled: "El armado en {mode} fue cancelado manualmente."
+    message_triggered: "Alerta de seguridad. El sensor {sensor} disparó la alarma de Argus en modo {mode}."
 ```
 
-Variables disponibles: `{mode}`, `{home}`, `{count}`, `{total}`, `{sensors}`, `{closed}`, `{opened}` y `{source}` según el tipo de mensaje.
+Para `message_triggered` están disponibles `{sensor}`, `{sensor_entity_id}`, `{sensor_state}`, `{mode}`, `{home}`, `{source}` y `{triggered_by}`. `{sensor}` usa el título limpio del dispositivo, por ejemplo `Puerta Principal`, sin repetir el tipo “Puerta”.
+
+Las variables de espera incluyen `{mode}`, `{home}`, `{count}`, `{total}`, `{sensors}`, `{closed}`, `{opened}` y `{source}` según el mensaje.
 
 Después de editar YAML, valida la configuración y reinicia Home Assistant.
