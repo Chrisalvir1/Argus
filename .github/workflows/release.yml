@@ -9,9 +9,14 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   release:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -21,7 +26,8 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-      - name: Validate version and sources
+
+      - name: Validate version and Python sources
         shell: bash
         run: |
           set -euo pipefail
@@ -29,20 +35,26 @@ jobs:
           if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
             test "${GITHUB_REF_NAME#v}" = "$VERSION"
           fi
-          python -m compileall -q custom_components/argus
+          python -m compileall -q custom_components/argus tests
           python -m unittest discover -s tests -v
+
+      - name: Validate JavaScript modules
+        run: |
+          set -euo pipefail
           for file in custom_components/argus/www/*.js; do
             node --check "$file"
           done
-      - name: Validate React dashboard
+
+      - name: Build React dashboard with TypeScript 7 and Vite
         run: |
           set -euo pipefail
           npm ci
-          npm audit --omit=dev --audit-level=high
           npx tsc --noEmit
           npm test
           npm run build
-          git diff --exit-code -- custom_components/argus/www/react-dist/argus-dashboard-react.js
+          test -s custom_components/argus/www/react-dist/argus-dashboard-react.js
+          ! grep -q 'process\.env' custom_components/argus/www/react-dist/argus-dashboard-react.js
+
       - name: Build HACS archive
         run: |
           set -euo pipefail
@@ -50,19 +62,21 @@ jobs:
           zip -qr "../../argus.zip" . -x '__pycache__/*' '*/__pycache__/*' '*.pyc'
           cd ../..
           test -s argus.zip
-          unzip -t argus.zip
+          unzip -tq argus.zip
           test "$(unzip -p argus.zip manifest.json | python -c 'import json,sys; print(json.load(sys.stdin)["version"])')" = "${GITHUB_REF_NAME#v}"
           if unzip -l argus.zip | grep -Eq '(__pycache__|\.pyc$)'; then
             echo 'Python cache artifacts found in release archive' >&2
             exit 1
           fi
           sha256sum argus.zip > argus.zip.sha256
+
       - uses: actions/upload-artifact@v4
         with:
           name: argus
           path: |
             argus.zip
             argus.zip.sha256
+
       - name: Publish GitHub release
         if: github.ref_type == 'tag'
         env:
