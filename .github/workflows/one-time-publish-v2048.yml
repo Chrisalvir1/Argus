@@ -1,0 +1,127 @@
+name: One-time publish v2.0.48 HomeKit transition fix
+
+on:
+  push:
+    branches:
+      - fix/v2.0.47-stability-root-causes
+
+permissions:
+  contents: write
+
+concurrency:
+  group: one-time-publish-v2048
+  cancel-in-progress: false
+
+jobs:
+  publish-tested-build:
+    if: github.repository == 'Chrisalvir1/Argus'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      TARGET_SHA: 643299e0f19e9a7054077a8b57b3580628595293
+      TAG: v2.0.48
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TARGET_SHA }}
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Verify immutable target and version
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$TARGET_SHA"
+          VERSION="$(python -c 'import json; print(json.load(open("custom_components/argus/manifest.json"))["version"])')"
+          test "$VERSION" = "${TAG#v}"
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "$TAG already exists; refusing to move it" >&2
+            exit 1
+          fi
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists; refusing to overwrite it" >&2
+            exit 1
+          fi
+
+      - name: Validate Python and HomeKit adapter
+        run: |
+          set -euo pipefail
+          python -m compileall -q custom_components/argus tests
+          python -m unittest discover -s tests -v
+
+      - name: Validate JavaScript modules
+        run: |
+          set -euo pipefail
+          for file in custom_components/argus/www/*.js; do
+            node --check "$file"
+          done
+
+      - name: Build React dashboard with TypeScript 7 and Vite
+        run: |
+          set -euo pipefail
+          npm ci
+          npx tsc --noEmit
+          npm test
+          npm run build
+          test -s custom_components/argus/www/react-dist/argus-dashboard-react.js
+          ! grep -q 'process\.env' custom_components/argus/www/react-dist/argus-dashboard-react.js
+
+      - name: Validate HACS
+        uses: hacs/action@1ebf01c408f29afcb6406bd431bc98fd8cbb15aa
+        with:
+          category: integration
+
+      - name: Validate with hassfest
+        uses: home-assistant/actions/hassfest@f4ca6f671bd429efb108c0f2fa0ae8af0215986c
+
+      - name: Build and verify HACS archive
+        run: |
+          set -euo pipefail
+          cd custom_components/argus
+          zip -qr "../../argus.zip" . -x '__pycache__/*' '*/__pycache__/*' '*.pyc'
+          cd ../..
+          test -s argus.zip
+          unzip -tq argus.zip
+          test "$(unzip -p argus.zip manifest.json | python -c 'import json,sys; print(json.load(sys.stdin)["version"])')" = "${TAG#v}"
+          unzip -l argus.zip | grep -q 'homekit_runtime.py'
+          unzip -l argus.zip | grep -q 'www/react-dist/argus-dashboard-react.js'
+          if unzip -l argus.zip | grep -Eq '(__pycache__|\.pyc$)'; then
+            echo 'Python cache artifacts found in release archive' >&2
+            exit 1
+          fi
+          sha256sum argus.zip > argus.zip.sha256
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: argus-v2.0.48-homekit-validation
+          path: |
+            argus.zip
+            argus.zip.sha256
+
+      - name: Create immutable tag and GitHub release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git tag "$TAG" "$TARGET_SHA"
+          git push origin "refs/tags/$TAG"
+          if ! gh release create "$TAG" argus.zip argus.zip.sha256 \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$TARGET_SHA" \
+            --title "Argus Home Hub $TAG" \
+            --notes-file "docs/RELEASE_NOTES_2.0.48.md"; then
+            gh release delete "$TAG" --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag || \
+              git push origin ":refs/tags/$TAG"
+            exit 1
+          fi
