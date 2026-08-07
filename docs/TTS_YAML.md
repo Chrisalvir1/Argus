@@ -1,7 +1,5 @@
 # Configuración TTS de Argus por YAML
 
-La interfaz de opciones continúa disponible. Si existe este bloque en `configuration.yaml`, sus valores tienen prioridad:
-
 ```yaml
 argus:
   arming_voice:
@@ -15,11 +13,12 @@ argus:
     message_last: "Falta cerrar: {sensors}."
     message_complete: "Todos los sensores están cerrados. Armando en {mode}."
     message_cancelled: "El armado en {mode} fue cancelado manualmente."
-    message_triggered: "Alerta de seguridad. El sensor {sensor} disparó la alarma de Argus en modo {mode}."
+    message_triggered: "Alerta. La alarma fue disparada por: {sensors}. Modo {mode}."
+    message_additional_triggered: "Alerta adicional. También se activó {sensor}. Ya hay {count} sensores: {sensors}."
 ```
 
-Para `message_triggered` están disponibles `{sensor}`, `{sensor_entity_id}`, `{sensor_state}`, `{mode}`, `{home}`, `{source}` y `{triggered_by}`. `{sensor}` usa el título limpio del dispositivo, por ejemplo `Puerta Principal`, sin repetir el tipo “Puerta”.
+`message_triggered` anuncia el primer sensor o el conjunto correlacionado que inició la alarma. `message_additional_triggered` anuncia cada sensor nuevo que se abra mientras Argus continúe disparado.
 
-Las variables de espera incluyen `{mode}`, `{home}`, `{count}`, `{total}`, `{sensors}`, `{closed}`, `{opened}` y `{source}` según el mensaje.
+Variables: `{sensor}`, `{sensors}`, `{count}`, `{sensor_entity_id}`, `{sensor_state}`, `{mode}`, `{home}`, `{source}` y `{triggered_by}`. Los nombres usan el título limpio del dispositivo.
 
 Después de editar YAML, valida la configuración y reinicia Home Assistant.
