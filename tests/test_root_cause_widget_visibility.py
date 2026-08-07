@@ -30,7 +30,7 @@ class TestRootCauseWidgetVisibility(unittest.TestCase):
         self.assertIn("widget.setAttribute('data-size', size)", CONTENT)
 
     def test_complete_content_patch_loads_last(self):
-        self.assertIn("argus-complete-content-fixes.js?v=2.0.42", BOOTSTRAP)
+        self.assertIn("argus-complete-content-fixes.js?v=2.0.43", BOOTSTRAP)
         self.assertGreater(BOOTSTRAP.rfind("applyCompleteContentFixes"), BOOTSTRAP.rfind("applyVisualContainerFixes"))
 
     def test_render_cycle_never_reorders_grid(self):

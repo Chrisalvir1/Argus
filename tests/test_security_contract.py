@@ -71,11 +71,11 @@ class TestSecurityContract(unittest.TestCase):
     def test_current_release_contract(self) -> None:
         """Verify the version string is current and exact."""
         manifest = json.loads((COMPONENT / "manifest.json").read_text(encoding="utf-8"))
-        self.assertEqual(manifest["version"], "2.0.42")
+        self.assertEqual(manifest["version"], "2.0.43")
         self.assertEqual(manifest["integration_type"], "hub")
 
         const = (COMPONENT / "const.py").read_text(encoding="utf-8")
-        self.assertIn('VERSION = "2.0.42"', const)
+        self.assertIn('VERSION = "2.0.43"', const)
         self.assertIn('DEFAULT_MQTT_TOPIC_COMMAND = "argus/alarm/set"', const)
         self.assertIn("DEFAULT_NAME = NAME", const)
 
