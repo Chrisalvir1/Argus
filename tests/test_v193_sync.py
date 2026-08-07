@@ -369,8 +369,8 @@ class TestV193FrontendContracts(unittest.TestCase):
             self.content = f.read()
 
     def test_version_updated_to_195(self):
-        """argus-panel.js header must reflect v2.0.44."""
-        self.assertIn("v2.0.44", self.content, "argus-panel.js must mention v2.0.44")
+        """argus-panel.js header must reflect v2.0.45."""
+        self.assertIn("v2.0.45", self.content, "argus-panel.js must mention v2.0.45")
         self.assertIn("argus-panel-v2018", self.content, "customElements.define must use argus-panel-v2018")
 
     def test_new_i18n_keys_all_languages(self):
@@ -456,7 +456,7 @@ class TestV193ManifestVersion(unittest.TestCase):
         )
         with open(manifest_path) as f:
             manifest = json.load(f)
-        self.assertEqual(manifest["version"], "2.0.44", "manifest.json version must be 2.0.44")
+        self.assertEqual(manifest["version"], "2.0.45", "manifest.json version must be 2.0.45")
 
 
 class TestV193BootstrapCacheBust(unittest.TestCase):
@@ -466,7 +466,7 @@ class TestV193BootstrapCacheBust(unittest.TestCase):
         )
         with open(bootstrap_path) as f:
             content = f.read()
-        self.assertIn("2.0.44", content, "argus-bootstrap.js must reference version 2.0.44 for cache-busting")
+        self.assertIn("2.0.45", content, "argus-bootstrap.js must reference version 2.0.45 for cache-busting")
 
 
 class TestV193ScheduleAndDisarmProtection(unittest.IsolatedAsyncioTestCase):

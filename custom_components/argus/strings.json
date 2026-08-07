@@ -48,7 +48,8 @@
           "arming_voice_message_remaining": "Remaining sensors message",
           "arming_voice_message_last": "Last sensor message",
           "arming_voice_message_complete": "All sensors closed message",
-          "arming_voice_message_triggered": "Alarm-trigger sensor message"
+          "arming_voice_message_triggered": "Alarm-trigger sensor message",
+          "arming_voice_message_additional_triggered": "Additional triggered sensor message"
         }
       },
       "sensors": {

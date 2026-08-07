@@ -41,7 +41,8 @@
           "arming_time": "Ritardo di attivazione (secondi)",
           "trigger_time": "Durata attivazione (secondi)",
           "entry_delay": "Ritardo ingresso (secondi)",
-          "arming_voice_message_triggered": "Messaggio del sensore che ha attivato l’allarme"
+          "arming_voice_message_triggered": "Messaggio del sensore che ha attivato l’allarme",
+          "arming_voice_message_additional_triggered": "Messaggio sensore attivato aggiuntivo"
         }
       },
       "sensors": {

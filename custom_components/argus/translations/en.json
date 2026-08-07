@@ -41,7 +41,8 @@
           "arming_time": "Arming delay (seconds)",
           "trigger_time": "Trigger duration (seconds)",
           "entry_delay": "Entry delay (seconds)",
-          "arming_voice_message_triggered": "Alarm-trigger sensor message"
+          "arming_voice_message_triggered": "Alarm-trigger sensor message",
+          "arming_voice_message_additional_triggered": "Additional triggered sensor message"
         }
       },
       "sensors": {

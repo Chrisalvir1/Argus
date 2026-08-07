@@ -41,7 +41,8 @@
           "arming_time": "Délai d'armement (secondes)",
           "trigger_time": "Durée de déclenchement (secondes)",
           "entry_delay": "Délai d'entrée (secondes)",
-          "arming_voice_message_triggered": "Message du capteur ayant déclenché l’alarme"
+          "arming_voice_message_triggered": "Message du capteur ayant déclenché l’alarme",
+          "arming_voice_message_additional_triggered": "Message de capteur déclenché supplémentaire"
         }
       },
       "sensors": {
