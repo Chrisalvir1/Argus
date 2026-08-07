@@ -1,20 +1,21 @@
-import './argus-panel.js?v=2.0.39';
-import { applyUiAuditFixes } from './argus-ui-audit-fixes.js?v=2.0.39';
-import { applyGridPolish } from './argus-grid-polish.js?v=2.0.39';
-import { applyFullscreenPolish } from './argus-fullscreen-polish.js?v=2.0.39';
-import { applyMediaClient } from './media-client.js?v=2.0.39';
-import { applyPremiumExperience } from './premium-experience.js?v=2.0.39';
-import { applySecurityClient } from './security-client.js?v=2.0.39';
-import { applyV2012AuditFixes } from './argus-v2013-audit-fixes.js?v=2.0.39';
-import { applyPerformanceProfile } from './argus-performance-profile.js?v=2.0.39';
-import { applyVisualContainerFixes } from './argus-visual-container-fixes.js?v=2.0.39';
-import { applyCompleteContentFixes } from './argus-complete-content-fixes.js?v=2.0.39';
-import { applyRuntimeVisualFixes } from './argus-runtime-visual-fixes.js?v=2.0.39';
-import { applyBgSensorAvailabilityFixes } from './argus-bg-sensor-availability-fixes.js?v=2.0.39';
-import { applyBatteryUiFixes } from './argus-battery-ui-fixes.js?v=2.0.39';
-import { applyDeepRepair } from './argus-deep-repair.js?v=2.0.39';
-import { applyLightCapabilityFixes } from './argus-light-capability-fixes.js?v=2.0.39';
-import { applyPersonalizationToggleFix } from './argus-personalization-toggle-fix.js?v=2.0.39';
+import './argus-panel.js?v=2.0.40';
+import { applyUiAuditFixes } from './argus-ui-audit-fixes.js?v=2.0.40';
+import { applyGridPolish } from './argus-grid-polish.js?v=2.0.40';
+import { applyFullscreenPolish } from './argus-fullscreen-polish.js?v=2.0.40';
+import { applyMediaClient } from './media-client.js?v=2.0.40';
+import { applyPremiumExperience } from './premium-experience.js?v=2.0.40';
+import { applySecurityClient } from './security-client.js?v=2.0.40';
+import { applyV2012AuditFixes } from './argus-v2013-audit-fixes.js?v=2.0.40';
+import { applyPerformanceProfile } from './argus-performance-profile.js?v=2.0.40';
+import { applyVisualContainerFixes } from './argus-visual-container-fixes.js?v=2.0.40';
+import { applyCompleteContentFixes } from './argus-complete-content-fixes.js?v=2.0.40';
+import { applyRuntimeVisualFixes } from './argus-runtime-visual-fixes.js?v=2.0.40';
+import { applyBgSensorAvailabilityFixes } from './argus-bg-sensor-availability-fixes.js?v=2.0.40';
+import { applyBatteryUiFixes } from './argus-battery-ui-fixes.js?v=2.0.40';
+import { applyDeepRepair } from './argus-deep-repair.js?v=2.0.40';
+import { applyLightCapabilityFixes } from './argus-light-capability-fixes.js?v=2.0.40';
+import { applyPersonalizationToggleFix } from './argus-personalization-toggle-fix.js?v=2.0.40';
+import { applyV2040DashboardFixes } from './argus-v2040-dashboard-fixes.js?v=2.0.40';
 
 const ArgusPanel = customElements.get('argus-panel-v2018');
 applyUiAuditFixes(ArgusPanel);
@@ -33,6 +34,7 @@ applyBatteryUiFixes(ArgusPanel);
 applyDeepRepair(ArgusPanel);
 applyLightCapabilityFixes(ArgusPanel);
 applyPersonalizationToggleFix(ArgusPanel);
+applyV2040DashboardFixes(ArgusPanel);
 
 // React enhances the native dashboard, but it must never prevent the native
 // Argus custom element from loading. A rejected optional bundle is isolated.

@@ -1,5 +1,5 @@
 /**
- * Argus Home Hub – v2.0.39
+ * Argus Home Hub – v2.0.40
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
