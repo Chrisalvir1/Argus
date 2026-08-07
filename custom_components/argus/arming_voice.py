@@ -1,7 +1,6 @@
 """Dynamic TTS and event payloads for Argus sensor-wait arming."""
 from __future__ import annotations
 import logging
-from typing import Any
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import device_registry as dr, entity_registry as er
 from .const import DOMAIN, CONF_ARMING_VOICE_ENABLED, CONF_ARMING_VOICE_TTS, CONF_ARMING_VOICE_PLAYERS, CONF_ARMING_VOICE_MESSAGE_START, CONF_ARMING_VOICE_MESSAGE_REMAINING, CONF_ARMING_VOICE_MESSAGE_LAST, CONF_ARMING_VOICE_MESSAGE_COMPLETE, CONF_ARMING_VOICE_MESSAGE_CANCELLED, DEFAULT_ARMING_VOICE_MESSAGE_START, DEFAULT_ARMING_VOICE_MESSAGE_REMAINING, DEFAULT_ARMING_VOICE_MESSAGE_LAST, DEFAULT_ARMING_VOICE_MESSAGE_COMPLETE, DEFAULT_ARMING_VOICE_MESSAGE_CANCELLED
@@ -26,7 +25,7 @@ async def _async_speak(hass,options,message):
     if isinstance(players,str):players=[players]
     if not tts or not players or not message:return
     for player in dict.fromkeys(players):
-        try:await hass.services.async_call("tts","speak",{"entity_id":tts,"media_player_entity_id":player,"message":message,"cache":True},blocking=False)
+        try:await hass.services.async_call("tts", "speak", {"entity_id":tts,"media_player_entity_id":player,"message":message,"cache":True},blocking=False)
         except Exception:_LOGGER.exception("Argus could not announce on %s",player)
 async def async_announce_arming_wait_update(hass,config_entry,*,alarm_entity_id,target,previous_open,current_open):
     previous=list(dict.fromkeys(previous_open));current=list(dict.fromkeys(current_open))

@@ -6,7 +6,7 @@ class TestV2041SafetyContract(unittest.TestCase):
  def test_sensor_safety_defaults_to_pending(self):
   s=(COMP/'safety_runtime.py').read_text();self.assertIn('return "pending" if sensors',s);self.assertIn('STATE_UNAVAILABLE',s);self.assertIn('domain == "binary_sensor"',s)
  def test_yaml_voice_override(self):
-  s=(COMP/'arming_voice.py').read_text();self.assertIn('arming_voice_yaml',s);self.assertIn('merged.update',s);self.assertIn('tts","speak',s)
+  s=(COMP/'arming_voice.py').read_text();self.assertIn('arming_voice_yaml',s);self.assertIn('merged.update',s);self.assertIn('"tts", "speak"',s)
  def test_panel_repairs_load_last(self):
   b=(WWW/'argus-bootstrap.js').read_text();self.assertIn('argus-v2041-audit-repair.js?v=2.0.41',b);self.assertIn('applyV2041AuditRepair(ArgusPanel)',b)
  def test_disarm_scroll_and_layout(self):
