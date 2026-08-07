@@ -40,7 +40,8 @@
         "data": {
           "arming_time": "Задержка постановки (секунды)",
           "trigger_time": "Длительность тревоги (секунды)",
-          "entry_delay": "Задержка входа (секунды)"
+          "entry_delay": "Задержка входа (секунды)",
+          "arming_voice_message_triggered": "Сообщение датчика, вызвавшего тревогу"
         }
       },
       "sensors": {
@@ -55,5 +56,11 @@
       }
     }
   },
-  "entity": {"binary_sensor": {"waiting_for_sensors_to_close": {"name": "Ожидание закрытия датчиков"}}}
+  "entity": {
+    "binary_sensor": {
+      "waiting_for_sensors_to_close": {
+        "name": "Ожидание закрытия датчиков"
+      }
+    }
+  }
 }

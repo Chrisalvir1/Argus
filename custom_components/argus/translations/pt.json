@@ -40,7 +40,8 @@
         "data": {
           "arming_time": "Atraso de ativação (segundos)",
           "trigger_time": "Duração do disparo (segundos)",
-          "entry_delay": "Atraso de entrada (segundos)"
+          "entry_delay": "Atraso de entrada (segundos)",
+          "arming_voice_message_triggered": "Mensagem do sensor que disparou o alarme"
         }
       },
       "sensors": {
@@ -55,5 +56,11 @@
       }
     }
   },
-  "entity": {"binary_sensor": {"waiting_for_sensors_to_close": {"name": "Aguardando o fechamento dos sensores"}}}
+  "entity": {
+    "binary_sensor": {
+      "waiting_for_sensors_to_close": {
+        "name": "Aguardando o fechamento dos sensores"
+      }
+    }
+  }
 }

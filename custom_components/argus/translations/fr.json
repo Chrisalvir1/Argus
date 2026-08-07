@@ -40,7 +40,8 @@
         "data": {
           "arming_time": "Délai d'armement (secondes)",
           "trigger_time": "Durée de déclenchement (secondes)",
-          "entry_delay": "Délai d'entrée (secondes)"
+          "entry_delay": "Délai d'entrée (secondes)",
+          "arming_voice_message_triggered": "Message du capteur ayant déclenché l’alarme"
         }
       },
       "sensors": {
@@ -55,5 +56,11 @@
       }
     }
   },
-  "entity": {"binary_sensor": {"waiting_for_sensors_to_close": {"name": "En attente de fermeture des capteurs"}}}
+  "entity": {
+    "binary_sensor": {
+      "waiting_for_sensors_to_close": {
+        "name": "En attente de fermeture des capteurs"
+      }
+    }
+  }
 }

@@ -40,7 +40,8 @@
         "data": {
           "arming_time": "Ritardo di attivazione (secondi)",
           "trigger_time": "Durata attivazione (secondi)",
-          "entry_delay": "Ritardo ingresso (secondi)"
+          "entry_delay": "Ritardo ingresso (secondi)",
+          "arming_voice_message_triggered": "Messaggio del sensore che ha attivato l’allarme"
         }
       },
       "sensors": {
@@ -55,5 +56,11 @@
       }
     }
   },
-  "entity": {"binary_sensor": {"waiting_for_sensors_to_close": {"name": "In attesa della chiusura dei sensori"}}}
+  "entity": {
+    "binary_sensor": {
+      "waiting_for_sensors_to_close": {
+        "name": "In attesa della chiusura dei sensori"
+      }
+    }
+  }
 }

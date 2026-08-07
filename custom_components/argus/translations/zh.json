@@ -40,7 +40,8 @@
         "data": {
           "arming_time": "布防延迟（秒）",
           "trigger_time": "触发持续时间（秒）",
-          "entry_delay": "进入延迟（秒）"
+          "entry_delay": "进入延迟（秒）",
+          "arming_voice_message_triggered": "触发警报的传感器消息"
         }
       },
       "sensors": {
@@ -55,5 +56,11 @@
       }
     }
   },
-  "entity": {"binary_sensor": {"waiting_for_sensors_to_close": {"name": "等待传感器关闭"}}}
+  "entity": {
+    "binary_sensor": {
+      "waiting_for_sensors_to_close": {
+        "name": "等待传感器关闭"
+      }
+    }
+  }
 }
