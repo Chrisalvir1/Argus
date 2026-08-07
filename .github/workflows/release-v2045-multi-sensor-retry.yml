@@ -1,0 +1,66 @@
+name: Release verified Argus v2.0.45 multi-sensor
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/release-v2045-multi-sensor-retry.yml]
+permissions:
+  contents: write
+jobs:
+  verify-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.13'}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22', cache: npm}
+      - name: Finalize labels and version
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          labels={'strings.json':'Additional triggered sensor message','en.json':'Additional triggered sensor message','es.json':'Mensaje de sensor disparado adicional','fr.json':'Message de capteur déclenché supplémentaire','pt.json':'Mensagem de sensor disparado adicional','it.json':'Messaggio sensore attivato aggiuntivo','zh.json':'额外触发传感器消息','ru.json':'Сообщение дополнительного сработавшего датчика'}
+          for name,label in labels.items():
+              path=Path('custom_components/argus/strings.json') if name=='strings.json' else Path('custom_components/argus/translations')/name
+              data=json.loads(path.read_text(encoding='utf-8'));data.setdefault('options',{}).setdefault('step',{}).setdefault('init',{}).setdefault('data',{})['arming_voice_message_additional_triggered']=label
+              path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          targets=[Path('custom_components/argus/manifest.json'),Path('custom_components/argus/const.py'),*Path('custom_components/argus/www').glob('*.js'),*Path('tests').glob('test_*.py')]
+          for path in targets:path.write_text(path.read_text(encoding='utf-8').replace('2.0.44','2.0.45'),encoding='utf-8')
+          PY
+          rm -f .github/workflows/release-v2045-multi-sensor-retry.yml
+      - name: Verify multi-sensor backend and TTS
+        run: |
+          python -m compileall -q custom_components/argus
+          python -m unittest discover -s tests -v
+          grep -q 'triggered_sensors' custom_components/argus/trigger_voice.py
+          grep -q 'message_additional_triggered' custom_components/argus/__init__.py
+          grep -q 'CONF_ARMING_VOICE_MESSAGE_ADDITIONAL_TRIGGERED' custom_components/argus/config_flow.py
+          grep -q 'triggered_sensor_count' custom_components/argus/trigger_voice.py
+      - name: Verify orange alert frontend and modern dashboard
+        run: |
+          npm ci
+          npx tsc --noEmit
+          npm test
+          npm run build
+          grep -q 'applyV2045TriggerSensors' custom_components/argus/www/argus-bootstrap.js
+          grep -q '#ff8a1f' custom_components/argus/www/argus-v2045-trigger-sensors.js
+          grep -q 'applyReactDashboardLayout' custom_components/argus/www/react-dist/argus-dashboard-react.js
+          for file in custom_components/argus/www/*.js custom_components/argus/www/react-dist/*.js; do node --check "$file"; done
+          npm audit --omit=dev --audit-level=high
+      - name: Package and publish
+        env: {GH_TOKEN: '${{ github.token }}'}
+        run: |
+          set -euo pipefail
+          find custom_components/argus -type d -name __pycache__ -prune -exec rm -rf {} +
+          find custom_components/argus -type f -name '*.pyc' -delete
+          cd custom_components/argus && zip -qr ../../argus.zip . -x '__pycache__/*' '*/__pycache__/*' '*.pyc' && cd ../..
+          unzip -t argus.zip
+          test "$(unzip -p argus.zip manifest.json | python -c 'import json,sys; print(json.load(sys.stdin)["version"])')" = 2.0.45
+          sha256sum argus.zip > argus.zip.sha256
+          git config user.name Chrisalvir
+          git config user.email chrisalvir01@gmail.com
+          git add -A && git commit -m 'Release Argus Home Hub v2.0.45'
+          git tag -a v2.0.45 -m 'Argus Home Hub v2.0.45'
+          git push origin HEAD:main && git push origin v2.0.45
+          gh release create v2.0.45 argus.zip argus.zip.sha256 --title 'Argus Home Hub v2.0.45' --notes-file docs/RELEASE_NOTES_2.0.45.md
