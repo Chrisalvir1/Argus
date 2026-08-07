@@ -1,4 +1,4 @@
-"""Regression contracts for the v2.0.47 root-cause fixes."""
+"""Regression contracts retained and extended for the v2.0.48 HomeKit fix."""
 from pathlib import Path
 import unittest
 
@@ -7,19 +7,22 @@ COMPONENT = ROOT / "custom_components" / "argus"
 WWW = COMPONENT / "www"
 
 
-class TestV2047StabilityContract(unittest.TestCase):
-    def test_homekit_wait_publishes_exact_target_and_gates_triggering(self):
-        source = (COMPONENT / "safety_runtime.py").read_text(encoding="utf-8")
-        self.assertIn("self._alarm_state = target", source)
-        self.assertIn('request["published_target_state"] = target.value', source)
-        self.assertIn("waiting_safe_sensor_changed", source)
-        self.assertIn("if not request:", source)
-        waiting_block = source.split("def waiting_safe_sensor_changed", 1)[1].split("async def safe_disarm", 1)[0]
+class TestV2048StabilityContract(unittest.TestCase):
+    def test_homekit_wait_publishes_arming_and_gates_triggering(self):
+        safety = (COMPONENT / "safety_runtime.py").read_text(encoding="utf-8")
+        alarm = (COMPONENT / "alarm_control_panel.py").read_text(encoding="utf-8")
+        homekit = (COMPONENT / "homekit_runtime.py").read_text(encoding="utf-8")
+        lifecycle = (COMPONENT / "__init__.py").read_text(encoding="utf-8")
+
+        self.assertNotIn("self._alarm_state = target", safety)
+        self.assertIn("self._alarm_state = AlarmControlPanelState.ARMING", safety)
+        self.assertIn("self._alarm_state = AlarmControlPanelState.ARMING", alarm)
+        self.assertIn('attrs["argus_homekit_transition"]', alarm)
+        self.assertIn("resolve_argus_arming_target", homekit)
+        self.assertIn("install_homekit_runtime(hass)", lifecycle)
+        self.assertIn("waiting_safe_sensor_changed", safety)
+        waiting_block = safety.split("def waiting_safe_sensor_changed", 1)[1].split("async def safe_disarm", 1)[0]
         self.assertNotIn("_evaluate_automations", waiting_block)
-        self.assertNotIn(
-            "self._alarm_state=AlarmControlPanelState.ARMING",
-            source,
-        )
 
     def test_off_cancels_pending_request_before_pin_validation(self):
         source = (COMPONENT / "safety_runtime.py").read_text(encoding="utf-8")
