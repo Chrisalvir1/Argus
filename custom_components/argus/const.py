@@ -1,13 +1,10 @@
 """Constants for the Argus Home Hub integration."""
 from homeassistant.const import CONF_CODE, CONF_NAME
-
 DOMAIN = "argus"
 NAME = "Argus Home Hub"
 VERSION = "2.0.44"
-
 PLATFORMS = ["alarm_control_panel", "binary_sensor", "switch"]
 DATA_PANELS = "panels"
-
 CONF_ARMING_TIME = "arming_time"
 CONF_TRIGGER_TIME = "trigger_time"
 CONF_CODE_ARM_REQUIRED = "code_arm_required"
@@ -22,28 +19,23 @@ CONF_LINKED_ALARM_ENTITY = "linked_alarm_entity"
 CONF_SIREN_ENTITY = "siren_entity"
 CONF_GUEST_CODE = "guest_code"
 CONF_GUEST_CODE_ENABLED = "guest_code_enabled"
-
 CONF_MQTT_ENABLED = "mqtt_enabled"
 CONF_MQTT_TOPIC_STATE = "mqtt_topic_state"
 CONF_MQTT_TOPIC_COMMAND = "mqtt_topic_command"
-
 DEFAULT_NAME = NAME
 DEFAULT_ARMING_TIME = 0
 DEFAULT_TRIGGER_TIME = 120
 DEFAULT_ENTRY_DELAY = 60
 DEFAULT_MQTT_TOPIC_STATE = "argus/alarm/state"
 DEFAULT_MQTT_TOPIC_COMMAND = "argus/alarm/set"
-
 MQTT_COMMAND_DISARM = "DISARM"
 MQTT_COMMAND_ARM_HOME = "ARM_HOME"
 MQTT_COMMAND_ARM_AWAY = "ARM_AWAY"
 MQTT_COMMAND_ARM_NIGHT = "ARM_NIGHT"
 MQTT_COMMAND_ARM_VACATION = "ARM_VACATION"
-
 STORAGE_KEY = "argus_ui_data"
 STORAGE_VERSION = 1
 SIGNAL_CONFIG_UPDATED = f"{DOMAIN}_config_updated"
-
 CONF_ARMING_VOICE_ENABLED = "arming_voice_enabled"
 CONF_ARMING_VOICE_TTS = "arming_voice_tts"
 CONF_ARMING_VOICE_PLAYERS = "arming_voice_players"
@@ -53,9 +45,11 @@ CONF_ARMING_VOICE_MESSAGE_LAST = "arming_voice_message_last"
 CONF_ARMING_VOICE_MESSAGE_COMPLETE = "arming_voice_message_complete"
 CONF_ARMING_VOICE_MESSAGE_CANCELLED = "arming_voice_message_cancelled"
 CONF_ARMING_VOICE_MESSAGE_TRIGGERED = "arming_voice_message_triggered"
+CONF_ARMING_VOICE_MESSAGE_ADDITIONAL_TRIGGERED = "arming_voice_message_additional_triggered"
 DEFAULT_ARMING_VOICE_MESSAGE_START = "No puedo completar el armado. Hay {count} sensores abiertos: {sensors}."
 DEFAULT_ARMING_VOICE_MESSAGE_REMAINING = "{closed} se ha cerrado. Faltan {count} sensores por cerrar: {sensors}."
 DEFAULT_ARMING_VOICE_MESSAGE_LAST = "Falta un sensor por cerrar: {sensors}."
 DEFAULT_ARMING_VOICE_MESSAGE_COMPLETE = "Todos los sensores están cerrados. Argus continuará el armado en modo {mode}."
 DEFAULT_ARMING_VOICE_MESSAGE_CANCELLED = "El armado en modo {mode} fue cancelado manualmente."
-DEFAULT_ARMING_VOICE_MESSAGE_TRIGGERED = "Alerta de seguridad. El sensor {sensor} disparó la alarma de Argus en modo {mode}."
+DEFAULT_ARMING_VOICE_MESSAGE_TRIGGERED = "Alerta de seguridad. La alarma fue disparada por: {sensors}. Modo {mode}."
+DEFAULT_ARMING_VOICE_MESSAGE_ADDITIONAL_TRIGGERED = "Alerta adicional. También se activó {sensor}. Ya hay {count} sensores involucrados: {sensors}."
