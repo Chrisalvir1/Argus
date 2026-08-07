@@ -1,0 +1,76 @@
+name: One-time v2.0.47 contract alignment
+
+on:
+  push:
+    branches:
+      - fix/v2.0.47-stability-root-causes
+    paths:
+      - .github/workflows/one-time-v2047-contract-alignment.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: one-time-v2047-contract-alignment
+  cancel-in-progress: false
+
+jobs:
+  align:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/v2.0.47-stability-root-causes
+      - name: Align active version markers and regression contracts
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          exact = {
+              Path('custom_components/argus/www/argus-card.js'): [
+                  ("const ARGUS_CARD_VERSION='2.0.46';", "const ARGUS_CARD_VERSION='2.0.47';"),
+              ],
+              Path('custom_components/argus/www/argus-panel.js'): [
+                  ('Argus Home Hub – v2.0.46', 'Argus Home Hub – v2.0.47'),
+              ],
+              Path('tests/test_hardening_contract.py'): [
+                  ('unzip -t argus.zip', 'unzip -tq argus.zip'),
+                  ('Build release artifact', 'Build HACS artifact'),
+              ],
+          }
+
+          for path, replacements in exact.items():
+              text = path.read_text(encoding='utf-8')
+              for old, new in replacements:
+                  count = text.count(old)
+                  if count != 1:
+                      raise SystemExit(f'{path}: expected exactly one {old!r}, found {count}')
+                  text = text.replace(old, new, 1)
+              path.write_text(text, encoding='utf-8')
+
+          changed = 0
+          for path in sorted(Path('tests').glob('test_*.py')):
+              text = path.read_text(encoding='utf-8')
+              updated = text.replace('2.0.46', '2.0.47')
+              if updated != text:
+                  path.write_text(updated, encoding='utf-8')
+                  changed += 1
+          if changed < 5:
+              raise SystemExit(f'Expected at least five stale version contracts, found {changed}')
+          print(f'Updated {changed} version-contract files')
+          PY
+          git diff --check
+          node --check custom_components/argus/www/argus-card.js
+          node --check custom_components/argus/www/argus-panel.js
+          python -m compileall -q custom_components/argus tests
+      - name: Commit deterministic alignment
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add custom_components/argus/www/argus-card.js custom_components/argus/www/argus-panel.js tests
+          git diff --cached --quiet && { echo 'No alignment changes produced' >&2; exit 1; }
+          git commit -m 'test: align v2.0.47 version contracts'
+          git push origin HEAD:fix/v2.0.47-stability-root-causes
