@@ -1,26 +1,54 @@
-import './argus-panel.js?v=2.0.46';
-import { applyUiAuditFixes } from './argus-ui-audit-fixes.js?v=2.0.46';
-import { applyGridPolish } from './argus-grid-polish.js?v=2.0.46';
-import { applyFullscreenPolish } from './argus-fullscreen-polish.js?v=2.0.46';
-import { applyMediaClient } from './media-client.js?v=2.0.46';
-import { applyPremiumExperience } from './premium-experience.js?v=2.0.46';
-import { applySecurityClient } from './security-client.js?v=2.0.46';
-import { applyV2012AuditFixes } from './argus-v2013-audit-fixes.js?v=2.0.46';
-import { applyPerformanceProfile } from './argus-performance-profile.js?v=2.0.46';
-import { applyVisualContainerFixes } from './argus-visual-container-fixes.js?v=2.0.46';
-import { applyCompleteContentFixes } from './argus-complete-content-fixes.js?v=2.0.46';
-import { applyRuntimeVisualFixes } from './argus-runtime-visual-fixes.js?v=2.0.46';
-import { applyBgSensorAvailabilityFixes } from './argus-bg-sensor-availability-fixes.js?v=2.0.46';
-import { applyBatteryUiFixes } from './argus-battery-ui-fixes.js?v=2.0.46';
-import { applyDeepRepair } from './argus-deep-repair.js?v=2.0.46';
-import { applyLightCapabilityFixes } from './argus-light-capability-fixes.js?v=2.0.46';
-import { applyPersonalizationToggleFix } from './argus-personalization-toggle-fix.js?v=2.0.46';
-import { applyV2040DashboardFixes } from './argus-v2040-dashboard-fixes.js?v=2.0.46';
-import { applyV2041AuditRepair } from './argus-v2041-audit-repair.js?v=2.0.46';
-import { applyV2042Stability } from './argus-v2042-stability.js?v=2.0.46';
-import { applyV2043VisualFix } from './argus-v2043-visual-fix.js?v=2.0.46';
-import { applyV2045TriggerSensors } from './argus-v2045-trigger-sensors.js?v=2.0.46';
-import { applyV2046ActiveVisuals } from './argus-v2046-active-visuals.js?v=2.0.46';
+import './argus-panel.js?v=2.0.47';
+import { applyUiAuditFixes } from './argus-ui-audit-fixes.js?v=2.0.47';
+import { applyGridPolish } from './argus-grid-polish.js?v=2.0.47';
+import { applyFullscreenPolish } from './argus-fullscreen-polish.js?v=2.0.47';
+import { applyMediaClient } from './media-client.js?v=2.0.47';
+import { applyPremiumExperience } from './premium-experience.js?v=2.0.47';
+import { applySecurityClient } from './security-client.js?v=2.0.47';
+import { applyV2012AuditFixes } from './argus-v2013-audit-fixes.js?v=2.0.47';
+import { applyPerformanceProfile } from './argus-performance-profile.js?v=2.0.47';
+import { applyVisualContainerFixes } from './argus-visual-container-fixes.js?v=2.0.47';
+import { applyCompleteContentFixes } from './argus-complete-content-fixes.js?v=2.0.47';
+import { applyRuntimeVisualFixes } from './argus-runtime-visual-fixes.js?v=2.0.47';
+import { applyBgSensorAvailabilityFixes } from './argus-bg-sensor-availability-fixes.js?v=2.0.47';
+import { applyBatteryUiFixes } from './argus-battery-ui-fixes.js?v=2.0.47';
+import { applyDeepRepair } from './argus-deep-repair.js?v=2.0.47';
+import { applyLightCapabilityFixes } from './argus-light-capability-fixes.js?v=2.0.47';
+import { applyPersonalizationToggleFix } from './argus-personalization-toggle-fix.js?v=2.0.47';
+import { applyDashboardScrollFixes } from './argus-dashboard-scroll-fixes.js?v=2.0.47';
+import { applyV2041AuditRepair } from './argus-v2041-audit-repair.js?v=2.0.47';
+import { applyV2042Stability } from './argus-v2042-stability.js?v=2.0.47';
+import { applyV2043VisualFix } from './argus-v2043-visual-fix.js?v=2.0.47';
+import { applyV2045TriggerSensors } from './argus-v2045-trigger-sensors.js?v=2.0.47';
+import { applyV2046ActiveVisuals } from './argus-v2046-active-visuals.js?v=2.0.47';
+
 const ArgusPanel=customElements.get('argus-panel-v2018');
-applyUiAuditFixes(ArgusPanel);applySecurityClient(ArgusPanel);applyMediaClient(ArgusPanel);applyPremiumExperience(ArgusPanel);applyGridPolish(ArgusPanel);applyFullscreenPolish(ArgusPanel);applyV2012AuditFixes(ArgusPanel);applyPerformanceProfile(ArgusPanel);applyVisualContainerFixes(ArgusPanel);applyCompleteContentFixes(ArgusPanel);applyRuntimeVisualFixes(ArgusPanel);applyBgSensorAvailabilityFixes(ArgusPanel);applyBatteryUiFixes(ArgusPanel);applyDeepRepair(ArgusPanel);applyLightCapabilityFixes(ArgusPanel);applyPersonalizationToggleFix(ArgusPanel);applyV2040DashboardFixes(ArgusPanel);applyV2041AuditRepair(ArgusPanel);applyV2042Stability(ArgusPanel);applyV2043VisualFix(ArgusPanel);applyV2045TriggerSensors(ArgusPanel);applyV2046ActiveVisuals(ArgusPanel);
-import('./react-dist/argus-dashboard-react.js?v=react-layout-2').then(({applyReactDashboardLayout})=>applyReactDashboardLayout(ArgusPanel)).catch(error=>console.error('Argus optional dashboard enhancement failed',error));
+applyUiAuditFixes(ArgusPanel);
+applySecurityClient(ArgusPanel);
+applyMediaClient(ArgusPanel);
+applyPremiumExperience(ArgusPanel);
+applyGridPolish(ArgusPanel);
+applyFullscreenPolish(ArgusPanel);
+applyV2012AuditFixes(ArgusPanel);
+applyPerformanceProfile(ArgusPanel);
+applyVisualContainerFixes(ArgusPanel);
+applyCompleteContentFixes(ArgusPanel);
+applyRuntimeVisualFixes(ArgusPanel);
+applyBgSensorAvailabilityFixes(ArgusPanel);
+applyBatteryUiFixes(ArgusPanel);
+applyDeepRepair(ArgusPanel);
+applyLightCapabilityFixes(ArgusPanel);
+applyPersonalizationToggleFix(ArgusPanel);
+applyDashboardScrollFixes(ArgusPanel);
+applyV2041AuditRepair(ArgusPanel);
+applyV2042Stability(ArgusPanel);
+applyV2043VisualFix(ArgusPanel);
+applyV2045TriggerSensors(ArgusPanel);
+applyV2046ActiveVisuals(ArgusPanel);
+
+// Vite + React + TypeScript dashboard is the sole widget editor. The legacy
+// v2.0.40 editor is intentionally not imported: it was a second layout writer
+// and could erase react_layout_v2 after an update.
+import('./react-dist/argus-dashboard-react.js?v=react-layout-3')
+  .then(({applyReactDashboardLayout})=>applyReactDashboardLayout(ArgusPanel))
+  .catch(error=>console.error('Argus React dashboard failed to load',error));
