@@ -265,6 +265,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             attrs["arming_origin"] = self._arm_request["origin"]
             attrs["arming_blocking_sensors"] = list(self._arm_request["blocking_sensors"])
             attrs["arming_waiting_for_sensors"] = bool(self._arm_request["wait_for_sensors"])
+            attrs["argus_homekit_transition"] = (
+                self._alarm_state == AlarmControlPanelState.ARMING
+            )
 
         # Spatial Model & Master Alarm Attributes
         from .core.spatial import Property, Building, Floor, Area, Room, MasterAlarm
@@ -1483,9 +1486,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         if arming_delay or (open_sensors and policy == "pending"):
             self._arming_target = target
             self._arm_request = {"generation": self._arm_generation, "target": target, "origin": origin, "blocking_sensors": open_sensors, "wait_for_sensors": policy == "pending", "delay_elapsed": not bool(arming_delay)}
-            # Home Assistant maps generic ARMING to Away in HomeKit. Keep the
-            # alarm target Off while pending and expose progress separately.
-            self._alarm_state = AlarmControlPanelState.DISARMED
+            # Publish the genuine transition. The Argus HomeKit adapter keeps
+            # the requested Casa/Ausente/Noche target while CurrentState remains
+            # disarmed, which is how Apple Home represents “Armando…”.
+            self._alarm_state = AlarmControlPanelState.ARMING
             self.async_write_ha_state()
             await self._async_mqtt_publish()
             if open_sensors and policy == "pending":

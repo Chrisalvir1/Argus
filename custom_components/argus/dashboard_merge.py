@@ -14,7 +14,7 @@ def merge_dashboard_patch(existing: object, patch: object) -> dict:
     Patch semantics: only keys present in ``patch`` are written; nested dicts
     merge recursively; any other value replaces the stored one.
 
-    Root cause fixed (v2.0.47): the ``dashboard`` storage key is shared by the
+    Root cause fixed (v2.0.48): the ``dashboard`` storage key is shared by the
     React editor (``react_layout_v2``) and legacy layers (``widget_layout``).
     The previous wholesale replace let whichever client saved last wipe every
     key it did not know about, so the widget board reset after updates.

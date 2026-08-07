@@ -10,7 +10,7 @@ class TestDashboardCompatibilityContract(unittest.TestCase):
         bootstrap = (WWW / "argus-bootstrap.js").read_text(encoding="utf-8")
         self.assertNotIn("argus-v2040-dashboard-fixes.js", bootstrap)
         self.assertNotIn("applyV2040DashboardFixes", bootstrap)
-        self.assertIn("argus-dashboard-scroll-fixes.js?v=2.0.47", bootstrap)
+        self.assertIn("argus-dashboard-scroll-fixes.js?v=2.0.48", bootstrap)
         self.assertIn("applyReactDashboardLayout(ArgusPanel)", bootstrap)
 
     def test_legacy_scroll_behavior_is_preserved_without_writes(self):

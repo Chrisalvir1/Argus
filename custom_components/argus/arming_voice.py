@@ -25,7 +25,7 @@ async def _async_speak(hass,options,message):
  players=[player for player in players if player]
  if not message:return
  if not tts or not players:
-  # v2.0.47: fail loudly and visibly. Before, an incomplete voice config was
+  # v2.0.48: fail loudly and visibly. Before, an incomplete voice config was
   # only written to the log, so announcements silently never played.
   _LOGGER.error("Argus: voice announcements enabled but incomplete (tts=%r, players=%r). Announcement skipped: %s",tts or None,players or None,message)
   persistent_notification.async_create(hass,"La voz de Argus está activada pero falta la entidad TTS o los reproductores de audio. Abrí Ajustes → Argus → Opciones, completá la configuración de voz y guardá.",title="Argus — Avisos de voz incompletos",notification_id="argus_voice_config_incomplete")

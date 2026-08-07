@@ -53,7 +53,7 @@ def _display_title(hass, entity_id, current):
 
 
 def install_safety_runtime():
-    """Install the v2.0.47 state-machine and persistence repairs once.
+    """Install the v2.0.48 state-machine and persistence repairs once.
 
     Home Assistant's HomeKit bridge maps ARMING to current=OFF and
     target=AWAY. Consequently ARMING can never preserve a requested HOME or
@@ -120,13 +120,18 @@ def install_safety_runtime():
         result = await original_arm(self, target, code, origin=origin)
         request = getattr(self, "_arm_request", None)
         if request:
-            # Publish the exact target. HomeKit otherwise maps ARMING to Away
-            # and loses Home/Night. Sensor callbacks are gated below until the
-            # request is genuinely completed.
             request["published_target_state"] = target.value
-            self._alarm_state = target
-            self.async_write_ha_state()
-            await self._async_mqtt_publish()
+            # Never publish ARMED_* before sensors and countdown finish. The
+            # HomeKit adapter reads arming_target and preserves the requested
+            # TargetState while the real entity state remains ARMING.
+            if self._alarm_state != AlarmControlPanelState.ARMING:
+                _LOGGER.error(
+                    "Argus arming invariant repaired: expected ARMING, got %s",
+                    self._alarm_state,
+                )
+                self._alarm_state = AlarmControlPanelState.ARMING
+                self.async_write_ha_state()
+                await self._async_mqtt_publish()
         return result
 
     def waiting_safe_sensor_changed(self, event):
@@ -134,8 +139,8 @@ def install_safety_runtime():
         if not request:
             return original_sensor_changed(self, event)
 
-        # During a waiting/countdown request the externally published ARMED_*
-        # state is only a HomeKit target. Never trigger the alarm yet.
+        # During a waiting/countdown request the entity is genuinely ARMING.
+        # Never trigger the alarm until _async_complete_arming commits ARMED_*.
         self.hass.async_create_task(self._async_recheck_arm_request())
         entity_id = event.data.get("entity_id")
         new_state = event.data.get("new_state")

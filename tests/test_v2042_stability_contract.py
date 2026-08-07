@@ -15,7 +15,7 @@ class TestV2042Stability(unittest.TestCase):
 
     def test_homekit_wait_keeps_target_and_is_cancelable(self):
         source = (COMP / "safety_runtime.py").read_text()
-        self.assertIn("self._alarm_state = target", source)
+        self.assertIn("self._alarm_state = AlarmControlPanelState.ARMING", source)
         self.assertIn("waiting_safe_sensor_changed", source)
         self.assertIn("cancelled_from_off", source)
 

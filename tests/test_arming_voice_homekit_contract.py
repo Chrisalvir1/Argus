@@ -9,7 +9,7 @@ class TestArmingVoiceHomeKitContract(unittest.TestCase):
     def test_homekit_wait_keeps_requested_mode_and_off_is_reliable(self):
         safety = (COMPONENT / "safety_runtime.py").read_text(encoding="utf-8")
         binary = (COMPONENT / "binary_sensor.py").read_text(encoding="utf-8")
-        self.assertIn("self._alarm_state = target", safety)
+        self.assertIn("self._alarm_state = AlarmControlPanelState.ARMING", safety)
         self.assertIn("waiting_safe_sensor_changed", safety)
         self.assertIn("cancelled_from_off", safety)
         self.assertIn("ArgusArmingInProgressBinarySensor", binary)
