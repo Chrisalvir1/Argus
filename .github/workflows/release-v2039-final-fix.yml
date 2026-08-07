@@ -1,0 +1,68 @@
+name: Release final corrected Argus v2.0.39
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/release-v2039-final-fix.yml]
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.13'}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22', cache: npm}
+      - name: Correct source and version contracts
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          panel=Path('custom_components/argus/alarm_control_panel.py')
+          source=panel.read_text(encoding='utf-8')
+          old='if self._arm_request and self._alarm_state == AlarmControlPanelState.DISARMED:'
+          new='if getattr(self, "_arm_request", None) and self._alarm_state == AlarmControlPanelState.DISARMED:'
+          if old not in source:
+              raise SystemExit('pending arming guard not found')
+          panel.write_text(source.replace(old,new,1),encoding='utf-8')
+          targets=[
+              Path('custom_components/argus/www/argus-card.js'),
+              Path('custom_components/argus/www/argus-bootstrap.js'),
+              Path('custom_components/argus/www/argus-panel.js'),
+              *Path('tests').glob('test_*.py'),
+          ]
+          for path in targets:
+              text=path.read_text(encoding='utf-8')
+              path.write_text(text.replace('2.0.38','2.0.39'),encoding='utf-8')
+          PY
+          rm -f .github/workflows/release-v2039-final-fix.yml
+      - name: Validate Python contracts
+        run: |
+          python -m compileall -q custom_components/argus
+          python -m unittest discover -s tests -v
+      - name: Validate frontend contracts
+        run: |
+          npm ci
+          npm audit --omit=dev --audit-level=high
+          npx tsc --noEmit
+          npm test
+          npm run build
+          if grep -q 'process\.env' custom_components/argus/www/react-dist/argus-dashboard-react.js; then exit 1; fi
+          for file in custom_components/argus/www/*.js custom_components/argus/www/react-dist/*.js; do node --check "$file"; done
+      - name: Commit tag and publish
+        env: {GH_TOKEN: '${{ github.token }}'}
+        run: |
+          set -euo pipefail
+          find custom_components/argus -type d -name __pycache__ -prune -exec rm -rf {} +
+          find custom_components/argus -type f -name '*.pyc' -delete
+          cd custom_components/argus && zip -qr ../../argus.zip . -x '__pycache__/*' '*/__pycache__/*' '*.pyc' && cd ../..
+          unzip -t argus.zip
+          test "$(unzip -p argus.zip manifest.json | python -c 'import json,sys; print(json.load(sys.stdin)["version"])')" = 2.0.39
+          sha256sum argus.zip > argus.zip.sha256
+          git config user.name Chrisalvir
+          git config user.email chrisalvir01@gmail.com
+          git add -A && git commit -m 'Release Argus Home Hub v2.0.39'
+          git tag -a v2.0.39 -m 'Argus Home Hub v2.0.39'
+          git push origin HEAD:main && git push origin v2.0.39
+          gh release create v2.0.39 argus.zip argus.zip.sha256 --title 'Argus Home Hub v2.0.39' --notes-file docs/RELEASE_NOTES_2.0.39.md
