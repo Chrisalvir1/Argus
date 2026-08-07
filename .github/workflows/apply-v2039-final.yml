@@ -1,0 +1,43 @@
+name: Apply final Argus v2.0.39 source
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/apply-v2039-final.yml]
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.13'}
+      - name: Connect cancellation announcement and normalize version
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('custom_components/argus/alarm_control_panel.py')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('from .arming_voice import async_announce_arming_wait_update', 'from .arming_voice import async_announce_arming_wait_update, async_announce_arming_cancelled')
+          old='''        if self._arm_request and self._alarm_state == AlarmControlPanelState.DISARMED:\n            await self._async_cancel_arming_request("cancelled_from_off", disarm=True)\n            return'''
+          new='''        if self._arm_request and self._alarm_state == AlarmControlPanelState.DISARMED:\n            request = self._arm_request\n            source = await self._get_context_user()\n            await async_announce_arming_cancelled(\n                self.hass, self._config_entry, alarm_entity_id=self.entity_id,\n                target=request["target"].value, source=source,\n            )\n            await self._async_cancel_arming_request("cancelled_from_off", disarm=True)\n            return'''
+          if old not in s: raise SystemExit('pending Off block not found')
+          s=s.replace(old,new)
+          p.write_text(s,encoding='utf-8')
+          for path in [Path('custom_components/argus/www/argus-card.js'),Path('custom_components/argus/www/argus-bootstrap.js'),Path('custom_components/argus/www/argus-panel.js'),*Path('tests').glob('test_*.py')]:
+              path.write_text(path.read_text(encoding='utf-8').replace('2.0.38','2.0.39'),encoding='utf-8')
+          PY
+          rm -f .github/workflows/publish-v2039-clean.yml .github/workflows/apply-v2039-final.yml
+          python -m compileall -q custom_components/argus
+          python -m unittest discover -s tests -v
+      - name: Commit source and tag
+        run: |
+          set -euo pipefail
+          git config user.name Chrisalvir
+          git config user.email chrisalvir01@gmail.com
+          git add -A
+          git commit -m 'Release Argus Home Hub v2.0.39'
+          git tag -a v2.0.39 -m 'Argus Home Hub v2.0.39'
+          git push origin HEAD:main
+          git push origin v2.0.39
