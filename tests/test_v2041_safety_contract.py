@@ -8,7 +8,7 @@ class TestV2041SafetyContract(unittest.TestCase):
  def test_yaml_voice_override(self):
   s=(COMP/'arming_voice.py').read_text();self.assertIn('arming_voice_yaml',s);self.assertIn('merged.update',s);self.assertIn('"tts", "speak"',s)
  def test_panel_repairs_load_last(self):
-  b=(WWW/'argus-bootstrap.js').read_text();self.assertIn('argus-v2041-audit-repair.js?v=2.0.41',b);self.assertIn('applyV2041AuditRepair(ArgusPanel)',b)
+  b=(WWW/'argus-bootstrap.js').read_text();self.assertIn('argus-v2041-audit-repair.js?v=2.0.42',b);self.assertIn('applyV2041AuditRepair(ArgusPanel)',b)
  def test_disarm_scroll_and_layout(self):
   s=(WWW/'argus-v2041-audit-repair.js').read_text();
   for token in ('DESARMAR / OFF','argus/perform_alarm_action','#w-access','overflow-y:auto','argus-widgets-v4','dragend'):self.assertIn(token,s)

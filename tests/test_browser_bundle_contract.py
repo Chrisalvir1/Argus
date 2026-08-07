@@ -11,7 +11,7 @@ class TestBrowserBundleContract(unittest.TestCase):
 
     def test_native_panel_loads_before_optional_react_enhancement(self):
         bootstrap = (WWW / 'argus-bootstrap.js').read_text(encoding='utf-8')
-        self.assertIn("import './argus-panel.js?v=2.0.41'", bootstrap)
+        self.assertIn("import './argus-panel.js?v=2.0.42'", bootstrap)
         self.assertIn("import('./react-dist/argus-dashboard-react.js?v=react-layout-2')", bootstrap)
         self.assertIn('.catch(', bootstrap)
         self.assertLess(bootstrap.index("customElements.get('argus-panel-v2018')"), bootstrap.index("import('./react-dist/"))
