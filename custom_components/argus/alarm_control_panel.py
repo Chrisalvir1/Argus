@@ -747,10 +747,11 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._confirmation_events.clear()
 
     async def _async_cancel_arming_request(self, reason: str, *, disarm: bool = False) -> None:
-        if not self._arm_request and self._alarm_state != AlarmControlPanelState.ARMING:
+        had_request = self._arm_request is not None
+        if not had_request and self._alarm_state != AlarmControlPanelState.ARMING:
             return
         self._cancel_timers()
-        if disarm and self._alarm_state == AlarmControlPanelState.ARMING:
+        if disarm and (had_request or self._alarm_state == AlarmControlPanelState.ARMING):
             self._alarm_state = AlarmControlPanelState.DISARMED
             self.async_write_ha_state()
             await self._async_mqtt_publish()
@@ -1269,6 +1270,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         return self._matching_disarm_user(code) is not None
 
     async def async_alarm_disarm(self, code=None) -> None:
+        # Off cancels a pending request without a PIN; the alarm is not armed yet.
+        if self._arm_request and self._alarm_state == AlarmControlPanelState.DISARMED:
+            await self._async_cancel_arming_request("cancelled_from_off", disarm=True)
+            return
         user_id = await self._get_context_user()
         limiter_key = f"{DOMAIN}_pin_limiter_{self._config_entry.entry_id}"
         limiter = self.hass.data.setdefault(limiter_key, PinAttemptLimiter())
