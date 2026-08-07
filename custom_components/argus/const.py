@@ -3,7 +3,7 @@ from homeassistant.const import CONF_CODE, CONF_NAME
 
 DOMAIN = "argus"
 NAME = "Argus Home Hub"
-VERSION = "2.0.38"
+VERSION = "2.0.39"
 
 PLATFORMS = ["alarm_control_panel", "binary_sensor", "switch"]
 DATA_PANELS = "panels"
@@ -51,7 +51,9 @@ CONF_ARMING_VOICE_MESSAGE_START = "arming_voice_message_start"
 CONF_ARMING_VOICE_MESSAGE_REMAINING = "arming_voice_message_remaining"
 CONF_ARMING_VOICE_MESSAGE_LAST = "arming_voice_message_last"
 CONF_ARMING_VOICE_MESSAGE_COMPLETE = "arming_voice_message_complete"
+CONF_ARMING_VOICE_MESSAGE_CANCELLED = "arming_voice_message_cancelled"
 DEFAULT_ARMING_VOICE_MESSAGE_START = "No puedo completar el armado. Hay {count} sensores abiertos: {sensors}."
 DEFAULT_ARMING_VOICE_MESSAGE_REMAINING = "{closed} se ha cerrado. Faltan {count} sensores por cerrar: {sensors}."
 DEFAULT_ARMING_VOICE_MESSAGE_LAST = "Falta un sensor por cerrar: {sensors}."
 DEFAULT_ARMING_VOICE_MESSAGE_COMPLETE = "Todos los sensores están cerrados. Argus continuará el armado en modo {mode}."
+DEFAULT_ARMING_VOICE_MESSAGE_CANCELLED = "El armado en modo {mode} fue cancelado manualmente."

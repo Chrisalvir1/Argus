@@ -7,42 +7,25 @@ from homeassistant.core import callback
 from homeassistant.helpers import selector
 
 from .const import (
-    CONF_ARMING_TIME,
-    CONF_CODE,
-    CONF_CODE_ARM_REQUIRED,
-    CONF_ENTRY_DELAY,
-    CONF_MQTT_ENABLED,
-    CONF_MQTT_TOPIC_COMMAND,
-    CONF_MQTT_TOPIC_STATE,
-    CONF_NAME,
-    CONF_SENSORS_AWAY,
-    CONF_SENSORS_HOME,
-    CONF_SENSORS_NIGHT,
-    CONF_SENSORS_VACATION,
-    CONF_ENTRY_SENSORS,
-    CONF_LINKED_ALARM_PANELS,
-    CONF_TRIGGER_TIME,
-    DEFAULT_ARMING_TIME,
-    DEFAULT_ENTRY_DELAY,
-    DEFAULT_MQTT_TOPIC_COMMAND,
-    DEFAULT_MQTT_TOPIC_STATE,
-    DEFAULT_NAME,
-    DEFAULT_TRIGGER_TIME,
-    DOMAIN,
+    CONF_ARMING_TIME, CONF_CODE, CONF_CODE_ARM_REQUIRED, CONF_ENTRY_DELAY,
+    CONF_MQTT_ENABLED, CONF_MQTT_TOPIC_COMMAND, CONF_MQTT_TOPIC_STATE, CONF_NAME,
+    CONF_SENSORS_AWAY, CONF_SENSORS_HOME, CONF_SENSORS_NIGHT, CONF_SENSORS_VACATION,
+    CONF_ENTRY_SENSORS, CONF_LINKED_ALARM_PANELS, CONF_TRIGGER_TIME,
+    DEFAULT_ARMING_TIME, DEFAULT_ENTRY_DELAY, DEFAULT_MQTT_TOPIC_COMMAND,
+    DEFAULT_MQTT_TOPIC_STATE, DEFAULT_NAME, DEFAULT_TRIGGER_TIME, DOMAIN,
     CONF_ARMING_VOICE_ENABLED, CONF_ARMING_VOICE_TTS, CONF_ARMING_VOICE_PLAYERS,
     CONF_ARMING_VOICE_MESSAGE_START, CONF_ARMING_VOICE_MESSAGE_REMAINING,
     CONF_ARMING_VOICE_MESSAGE_LAST, CONF_ARMING_VOICE_MESSAGE_COMPLETE,
+    CONF_ARMING_VOICE_MESSAGE_CANCELLED,
     DEFAULT_ARMING_VOICE_MESSAGE_START, DEFAULT_ARMING_VOICE_MESSAGE_REMAINING,
     DEFAULT_ARMING_VOICE_MESSAGE_LAST, DEFAULT_ARMING_VOICE_MESSAGE_COMPLETE,
+    DEFAULT_ARMING_VOICE_MESSAGE_CANCELLED,
 )
 from .security import hash_pin, validate_pin
 
 
 class ArgusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Create a local Argus alarm instance."""
-
-    # Keep v2 until a real async_migrate_entry implementation is required.
-    # Bumping this value alone can prevent existing config entries from loading.
     VERSION = 2
 
     async def async_step_user(self, user_input=None):
@@ -50,35 +33,20 @@ class ArgusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             name = str(user_input.get(CONF_NAME, DEFAULT_NAME)).strip() or DEFAULT_NAME
             await self.async_set_unique_id(name.lower())
             self._abort_if_unique_id_configured()
-            return self.async_create_entry(
-                title=name,
-                data={
-                    CONF_NAME: name,
-                    CONF_CODE: "",
-                    CONF_CODE_ARM_REQUIRED: False,
-                    CONF_ARMING_TIME: DEFAULT_ARMING_TIME,
-                    CONF_TRIGGER_TIME: DEFAULT_TRIGGER_TIME,
-                    CONF_ENTRY_DELAY: DEFAULT_ENTRY_DELAY,
-                    CONF_SENSORS_AWAY: [],
-                    CONF_SENSORS_HOME: [],
-                    CONF_SENSORS_NIGHT: [],
-                    CONF_SENSORS_VACATION: [],
-                    CONF_ENTRY_SENSORS: [],
-                    CONF_LINKED_ALARM_PANELS: [],
-                    CONF_MQTT_ENABLED: False,
-                    CONF_MQTT_TOPIC_STATE: DEFAULT_MQTT_TOPIC_STATE,
-                    CONF_MQTT_TOPIC_COMMAND: DEFAULT_MQTT_TOPIC_COMMAND,
-                },
-            )
-
-        return self.async_show_form(
-            step_id="user",
-            data_schema=vol.Schema({
-                vol.Required(CONF_NAME, default=DEFAULT_NAME): selector.TextSelector(
-                    selector.TextSelectorConfig(type=selector.TextSelectorType.TEXT)
-                ),
-            }),
-        )
+            return self.async_create_entry(title=name, data={
+                CONF_NAME: name, CONF_CODE: "", CONF_CODE_ARM_REQUIRED: False,
+                CONF_ARMING_TIME: DEFAULT_ARMING_TIME, CONF_TRIGGER_TIME: DEFAULT_TRIGGER_TIME,
+                CONF_ENTRY_DELAY: DEFAULT_ENTRY_DELAY, CONF_SENSORS_AWAY: [],
+                CONF_SENSORS_HOME: [], CONF_SENSORS_NIGHT: [], CONF_SENSORS_VACATION: [],
+                CONF_ENTRY_SENSORS: [], CONF_LINKED_ALARM_PANELS: [], CONF_MQTT_ENABLED: False,
+                CONF_MQTT_TOPIC_STATE: DEFAULT_MQTT_TOPIC_STATE,
+                CONF_MQTT_TOPIC_COMMAND: DEFAULT_MQTT_TOPIC_COMMAND,
+            })
+        return self.async_show_form(step_id="user", data_schema=vol.Schema({
+            vol.Required(CONF_NAME, default=DEFAULT_NAME): selector.TextSelector(
+                selector.TextSelectorConfig(type=selector.TextSelectorType.TEXT)
+            ),
+        }))
 
     @staticmethod
     @callback
@@ -87,13 +55,12 @@ class ArgusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
 
 class ArgusOptionsFlow(config_entries.OptionsFlow):
-    """Edit timers and master-PIN requirements safely."""
+    """Edit Argus options safely."""
 
     async def async_step_init(self, user_input=None):
         values = dict(self.config_entry.data)
         values.update(self.config_entry.options)
         errors: dict[str, str] = {}
-
         if user_input is not None:
             submitted = dict(user_input)
             new_pin = str(submitted.pop(CONF_CODE, "") or "")
@@ -105,51 +72,26 @@ class ArgusOptionsFlow(config_entries.OptionsFlow):
                     submitted[CONF_CODE] = hash_pin(new_pin)
             else:
                 submitted[CONF_CODE] = current_pin
-
             if not errors:
                 return self.async_create_entry(title="", data=submitted)
 
+        tts_marker = vol.Optional(CONF_ARMING_VOICE_TTS)
+        if values.get(CONF_ARMING_VOICE_TTS):
+            tts_marker = vol.Optional(CONF_ARMING_VOICE_TTS, description={"suggested_value": values[CONF_ARMING_VOICE_TTS]})
         schema = vol.Schema({
-            vol.Optional(
-                CONF_ARMING_TIME,
-                default=int(values.get(CONF_ARMING_TIME, DEFAULT_ARMING_TIME)),
-            ): selector.NumberSelector(selector.NumberSelectorConfig(
-                min=0, max=300, step=5, unit_of_measurement="s",
-                mode=selector.NumberSelectorMode.BOX,
-            )),
-            vol.Optional(
-                CONF_TRIGGER_TIME,
-                default=int(values.get(CONF_TRIGGER_TIME, DEFAULT_TRIGGER_TIME)),
-            ): selector.NumberSelector(selector.NumberSelectorConfig(
-                min=0, max=300, step=1, unit_of_measurement="s",
-                mode=selector.NumberSelectorMode.BOX,
-            )),
-            vol.Optional(
-                CONF_ENTRY_DELAY,
-                default=int(values.get(CONF_ENTRY_DELAY, DEFAULT_ENTRY_DELAY)),
-            ): selector.NumberSelector(selector.NumberSelectorConfig(
-                min=0, max=300, step=5, unit_of_measurement="s",
-                mode=selector.NumberSelectorMode.BOX,
-            )),
-            vol.Optional(CONF_CODE, default=""): selector.TextSelector(
-                selector.TextSelectorConfig(type=selector.TextSelectorType.PASSWORD)
-            ),
-            vol.Optional(
-                CONF_CODE_ARM_REQUIRED,
-                default=bool(values.get(CONF_CODE_ARM_REQUIRED, False)),
-            ): selector.BooleanSelector(),
-            vol.Optional(
-                CONF_LINKED_ALARM_PANELS,
-                default=values.get(CONF_LINKED_ALARM_PANELS, []),
-            ): selector.EntitySelector(
-                selector.EntitySelectorConfig(multiple=True, domain="alarm_control_panel")
-            ),
+            vol.Optional(CONF_ARMING_TIME, default=int(values.get(CONF_ARMING_TIME, DEFAULT_ARMING_TIME))): selector.NumberSelector(selector.NumberSelectorConfig(min=0, max=300, step=5, unit_of_measurement="s", mode=selector.NumberSelectorMode.BOX)),
+            vol.Optional(CONF_TRIGGER_TIME, default=int(values.get(CONF_TRIGGER_TIME, DEFAULT_TRIGGER_TIME))): selector.NumberSelector(selector.NumberSelectorConfig(min=0, max=300, step=1, unit_of_measurement="s", mode=selector.NumberSelectorMode.BOX)),
+            vol.Optional(CONF_ENTRY_DELAY, default=int(values.get(CONF_ENTRY_DELAY, DEFAULT_ENTRY_DELAY))): selector.NumberSelector(selector.NumberSelectorConfig(min=0, max=300, step=5, unit_of_measurement="s", mode=selector.NumberSelectorMode.BOX)),
+            vol.Optional(CONF_CODE, default=""): selector.TextSelector(selector.TextSelectorConfig(type=selector.TextSelectorType.PASSWORD)),
+            vol.Optional(CONF_CODE_ARM_REQUIRED, default=bool(values.get(CONF_CODE_ARM_REQUIRED, False))): selector.BooleanSelector(),
+            vol.Optional(CONF_LINKED_ALARM_PANELS, default=values.get(CONF_LINKED_ALARM_PANELS, [])): selector.EntitySelector(selector.EntitySelectorConfig(multiple=True, domain="alarm_control_panel")),
             vol.Optional(CONF_ARMING_VOICE_ENABLED, default=bool(values.get(CONF_ARMING_VOICE_ENABLED, False))): selector.BooleanSelector(),
-            vol.Optional(CONF_ARMING_VOICE_TTS, default=values.get(CONF_ARMING_VOICE_TTS, "")): selector.EntitySelector(selector.EntitySelectorConfig(domain="tts")),
+            tts_marker: selector.EntitySelector(selector.EntitySelectorConfig(domain="tts")),
             vol.Optional(CONF_ARMING_VOICE_PLAYERS, default=values.get(CONF_ARMING_VOICE_PLAYERS, [])): selector.EntitySelector(selector.EntitySelectorConfig(multiple=True, domain="media_player")),
             vol.Optional(CONF_ARMING_VOICE_MESSAGE_START, default=values.get(CONF_ARMING_VOICE_MESSAGE_START, DEFAULT_ARMING_VOICE_MESSAGE_START)): selector.TextSelector(selector.TextSelectorConfig(multiline=True)),
             vol.Optional(CONF_ARMING_VOICE_MESSAGE_REMAINING, default=values.get(CONF_ARMING_VOICE_MESSAGE_REMAINING, DEFAULT_ARMING_VOICE_MESSAGE_REMAINING)): selector.TextSelector(selector.TextSelectorConfig(multiline=True)),
             vol.Optional(CONF_ARMING_VOICE_MESSAGE_LAST, default=values.get(CONF_ARMING_VOICE_MESSAGE_LAST, DEFAULT_ARMING_VOICE_MESSAGE_LAST)): selector.TextSelector(selector.TextSelectorConfig(multiline=True)),
             vol.Optional(CONF_ARMING_VOICE_MESSAGE_COMPLETE, default=values.get(CONF_ARMING_VOICE_MESSAGE_COMPLETE, DEFAULT_ARMING_VOICE_MESSAGE_COMPLETE)): selector.TextSelector(selector.TextSelectorConfig(multiline=True)),
+            vol.Optional(CONF_ARMING_VOICE_MESSAGE_CANCELLED, default=values.get(CONF_ARMING_VOICE_MESSAGE_CANCELLED, DEFAULT_ARMING_VOICE_MESSAGE_CANCELLED)): selector.TextSelector(selector.TextSelectorConfig(multiline=True)),
         })
         return self.async_show_form(step_id="init", data_schema=schema, errors=errors)
