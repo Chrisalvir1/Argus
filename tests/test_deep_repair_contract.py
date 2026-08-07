@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 class DeepRepairContractTests(unittest.TestCase):
     def test_deep_repair_is_loaded_last(self):
         bootstrap = (ROOT / "custom_components/argus/www/argus-bootstrap.js").read_text()
-        self.assertIn("argus-deep-repair.js?v=2.0.36", bootstrap)
+        self.assertIn("argus-deep-repair.js?v=2.0.37", bootstrap)
         self.assertLess(bootstrap.index("applyBatteryUiFixes(ArgusPanel)"), bootstrap.index("applyDeepRepair(ArgusPanel)"))
 
     def test_profile_background_writer_is_authoritative(self):

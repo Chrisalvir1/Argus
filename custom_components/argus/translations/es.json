@@ -2,19 +2,19 @@
   "config": {
     "step": {
       "user": {
-        "title": "Configuraci\u00f3n de Argus",
+        "title": "Configuración de Argus",
         "description": "Configura tu panel de alarma Argus.",
         "data": {
           "name": "Nombre",
-          "code": "C\u00f3digo de alarma (opcional)",
-          "code_arm_required": "Requerir c\u00f3digo para armar",
+          "code": "Código de alarma (opcional)",
+          "code_arm_required": "Requerir código para armar",
           "arming_time": "Tiempo de armado (segundos)",
-          "trigger_time": "Duraci\u00f3n de activaci\u00f3n (segundos)",
+          "trigger_time": "Duración de activación (segundos)",
           "entry_delay": "Retardo de entrada (segundos)"
         }
-      } ,
+      },
       "sensors": {
-        "title": "Configuraci\u00f3n de Sensores y Sincronizaci\u00f3n",
+        "title": "Configuración de Sensores y Sincronización",
         "description": "Vincula Argus con HomeKit/Aqara y selecciona tus sensores.",
         "data": {
           "linked_alarm_entity": "Entidad de alarma vinculada (HomeKit/Aqara)",
@@ -27,10 +27,10 @@
       }
     },
     "error": {
-      "invalid_code": "C\u00f3digo de alarma incorrecto."
+      "invalid_code": "Código de alarma incorrecto."
     },
     "abort": {
-      "already_configured": "Argus ya est\u00e1 configurado."
+      "already_configured": "Argus ya está configurado."
     }
   },
   "options": {
@@ -39,8 +39,15 @@
         "title": "Opciones de Tiempos",
         "data": {
           "arming_time": "Tiempo de armado (segundos)",
-          "trigger_time": "Duraci\u00f3n de activaci\u00f3n (segundos)",
-          "entry_delay": "Retardo de entrada (segundos)"
+          "trigger_time": "Duración de activación (segundos)",
+          "entry_delay": "Retardo de entrada (segundos)",
+          "arming_voice_enabled": "Activar avisos inteligentes de armado",
+          "arming_voice_tts": "Motor TTS",
+          "arming_voice_players": "Reproductores multimedia",
+          "arming_voice_message_start": "Mensaje inicial de espera",
+          "arming_voice_message_remaining": "Mensaje de sensores restantes",
+          "arming_voice_message_last": "Mensaje del último sensor",
+          "arming_voice_message_complete": "Mensaje de todos cerrados"
         }
       },
       "sensors": {
@@ -55,5 +62,14 @@
       }
     }
   },
-  "entity": {"binary_sensor": {"waiting_for_sensors_to_close": {"name": "Esperando que se cierren los sensores"}}}
+  "entity": {
+    "binary_sensor": {
+      "waiting_for_sensors_to_close": {
+        "name": "Esperando que se cierren los sensores"
+      },
+      "arming_in_progress": {
+        "name": "Armado en progreso"
+      }
+    }
+  }
 }

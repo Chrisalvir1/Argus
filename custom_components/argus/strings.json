@@ -12,7 +12,7 @@
           "trigger_time": "Trigger duration (seconds)",
           "entry_delay": "Entry delay (seconds)"
         }
-      } ,
+      },
       "sensors": {
         "title": "Sensors and Sync Configuration",
         "description": "Link Argus with HomeKit/Aqara and select your sensors.",
@@ -40,7 +40,14 @@
         "data": {
           "arming_time": "Arming delay (seconds)",
           "trigger_time": "Trigger duration (seconds)",
-          "entry_delay": "Entry delay (seconds)"
+          "entry_delay": "Entry delay (seconds)",
+          "arming_voice_enabled": "Enable intelligent arming voice",
+          "arming_voice_tts": "TTS engine",
+          "arming_voice_players": "Media players",
+          "arming_voice_message_start": "Initial wait message",
+          "arming_voice_message_remaining": "Remaining sensors message",
+          "arming_voice_message_last": "Last sensor message",
+          "arming_voice_message_complete": "All sensors closed message"
         }
       },
       "sensors": {
@@ -57,7 +64,12 @@
   },
   "entity": {
     "binary_sensor": {
-      "waiting_for_sensors_to_close": {"name": "Waiting for sensors to close"}
+      "waiting_for_sensors_to_close": {
+        "name": "Waiting for sensors to close"
+      },
+      "arming_in_progress": {
+        "name": "Arming in progress"
+      }
     }
   }
 }

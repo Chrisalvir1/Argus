@@ -61,6 +61,7 @@ from .storage import (
     async_get_alarm_runtime_state, async_save_alarm_runtime_state,
 )
 from .security import PinAttemptLimiter, verify_pin
+from .arming_voice import async_announce_arming_wait_update
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -1037,7 +1038,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     @callback
     def _async_finish_arming(self, _now) -> None:
         """Arming countdown finished — move to target armed state."""
-        if self._alarm_state == AlarmControlPanelState.ARMING and self._arming_target:
+        if self._arm_request and self._arming_target:
             self._alarm_state = self._arming_target
             self._arming_listener = None
             self.async_write_ha_state()
@@ -1477,12 +1478,19 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         if arming_delay or (open_sensors and policy == "pending"):
             self._arming_target = target
             self._arm_request = {"generation": self._arm_generation, "target": target, "origin": origin, "blocking_sensors": open_sensors, "wait_for_sensors": policy == "pending", "delay_elapsed": not bool(arming_delay)}
-            self._alarm_state = AlarmControlPanelState.ARMING
+            # Home Assistant maps generic ARMING to Away in HomeKit. Keep the
+            # alarm target Off while pending and expose progress separately.
+            self._alarm_state = AlarmControlPanelState.DISARMED
             self.async_write_ha_state()
             await self._async_mqtt_publish()
+            if open_sensors and policy == "pending":
+                await async_announce_arming_wait_update(
+                    self.hass, self._config_entry, alarm_entity_id=self.entity_id,
+                    target=target.value, previous_open=[], current_open=open_sensors,
+                )
             if arming_delay:
                 self._arming_listener = async_call_later(self.hass, arming_delay, lambda now, generation=self._arm_generation: self._async_finish_arming(now, generation))
-            _LOGGER.info("Argus: arming %s in %s seconds", target, arming_delay)
+            _LOGGER.info("Argus: HomeKit-safe arming request %s in %s seconds", target, arming_delay)
             return
 
         await self._async_complete_arming(target)
@@ -1505,11 +1513,17 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     async def _async_recheck_arm_request(self) -> None:
         request = self._arm_request
-        if not request or self._alarm_state != AlarmControlPanelState.ARMING:
+        if not request:
             return
+        previous_open = list(request.get("blocking_sensors") or [])
         open_sensors = self._open_blocking_sensors(request["target"]) if request["wait_for_sensors"] else []
         request["blocking_sensors"] = open_sensors
         self.async_write_ha_state()
+        if request["wait_for_sensors"] and previous_open != open_sensors:
+            await async_announce_arming_wait_update(
+                self.hass, self._config_entry, alarm_entity_id=self.entity_id,
+                target=request["target"].value, previous_open=previous_open, current_open=open_sensors,
+            )
         if open_sensors or not request["delay_elapsed"]:
             return
         # A stale callback must never complete a replacement/cancelled request.

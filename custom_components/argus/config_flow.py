@@ -29,6 +29,11 @@ from .const import (
     DEFAULT_NAME,
     DEFAULT_TRIGGER_TIME,
     DOMAIN,
+    CONF_ARMING_VOICE_ENABLED, CONF_ARMING_VOICE_TTS, CONF_ARMING_VOICE_PLAYERS,
+    CONF_ARMING_VOICE_MESSAGE_START, CONF_ARMING_VOICE_MESSAGE_REMAINING,
+    CONF_ARMING_VOICE_MESSAGE_LAST, CONF_ARMING_VOICE_MESSAGE_COMPLETE,
+    DEFAULT_ARMING_VOICE_MESSAGE_START, DEFAULT_ARMING_VOICE_MESSAGE_REMAINING,
+    DEFAULT_ARMING_VOICE_MESSAGE_LAST, DEFAULT_ARMING_VOICE_MESSAGE_COMPLETE,
 )
 from .security import hash_pin, validate_pin
 
@@ -139,5 +144,12 @@ class ArgusOptionsFlow(config_entries.OptionsFlow):
             ): selector.EntitySelector(
                 selector.EntitySelectorConfig(multiple=True, domain="alarm_control_panel")
             ),
+            vol.Optional(CONF_ARMING_VOICE_ENABLED, default=bool(values.get(CONF_ARMING_VOICE_ENABLED, False))): selector.BooleanSelector(),
+            vol.Optional(CONF_ARMING_VOICE_TTS, default=values.get(CONF_ARMING_VOICE_TTS, "")): selector.EntitySelector(selector.EntitySelectorConfig(domain="tts")),
+            vol.Optional(CONF_ARMING_VOICE_PLAYERS, default=values.get(CONF_ARMING_VOICE_PLAYERS, [])): selector.EntitySelector(selector.EntitySelectorConfig(multiple=True, domain="media_player")),
+            vol.Optional(CONF_ARMING_VOICE_MESSAGE_START, default=values.get(CONF_ARMING_VOICE_MESSAGE_START, DEFAULT_ARMING_VOICE_MESSAGE_START)): selector.TextSelector(selector.TextSelectorConfig(multiline=True)),
+            vol.Optional(CONF_ARMING_VOICE_MESSAGE_REMAINING, default=values.get(CONF_ARMING_VOICE_MESSAGE_REMAINING, DEFAULT_ARMING_VOICE_MESSAGE_REMAINING)): selector.TextSelector(selector.TextSelectorConfig(multiline=True)),
+            vol.Optional(CONF_ARMING_VOICE_MESSAGE_LAST, default=values.get(CONF_ARMING_VOICE_MESSAGE_LAST, DEFAULT_ARMING_VOICE_MESSAGE_LAST)): selector.TextSelector(selector.TextSelectorConfig(multiline=True)),
+            vol.Optional(CONF_ARMING_VOICE_MESSAGE_COMPLETE, default=values.get(CONF_ARMING_VOICE_MESSAGE_COMPLETE, DEFAULT_ARMING_VOICE_MESSAGE_COMPLETE)): selector.TextSelector(selector.TextSelectorConfig(multiline=True)),
         })
         return self.async_show_form(step_id="init", data_schema=schema, errors=errors)

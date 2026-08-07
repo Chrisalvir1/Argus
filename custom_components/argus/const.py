@@ -3,7 +3,7 @@ from homeassistant.const import CONF_CODE, CONF_NAME
 
 DOMAIN = "argus"
 NAME = "Argus Home Hub"
-VERSION = "2.0.36"
+VERSION = "2.0.37"
 
 PLATFORMS = ["alarm_control_panel", "binary_sensor", "switch"]
 DATA_PANELS = "panels"
@@ -43,3 +43,15 @@ MQTT_COMMAND_ARM_VACATION = "ARM_VACATION"
 STORAGE_KEY = "argus_ui_data"
 STORAGE_VERSION = 1
 SIGNAL_CONFIG_UPDATED = f"{DOMAIN}_config_updated"
+
+CONF_ARMING_VOICE_ENABLED = "arming_voice_enabled"
+CONF_ARMING_VOICE_TTS = "arming_voice_tts"
+CONF_ARMING_VOICE_PLAYERS = "arming_voice_players"
+CONF_ARMING_VOICE_MESSAGE_START = "arming_voice_message_start"
+CONF_ARMING_VOICE_MESSAGE_REMAINING = "arming_voice_message_remaining"
+CONF_ARMING_VOICE_MESSAGE_LAST = "arming_voice_message_last"
+CONF_ARMING_VOICE_MESSAGE_COMPLETE = "arming_voice_message_complete"
+DEFAULT_ARMING_VOICE_MESSAGE_START = "No puedo completar el armado. Hay {count} sensores abiertos: {sensors}."
+DEFAULT_ARMING_VOICE_MESSAGE_REMAINING = "{closed} se ha cerrado. Faltan {count} sensores por cerrar: {sensors}."
+DEFAULT_ARMING_VOICE_MESSAGE_LAST = "Falta un sensor por cerrar: {sensors}."
+DEFAULT_ARMING_VOICE_MESSAGE_COMPLETE = "Todos los sensores están cerrados. Argus continuará el armado en modo {mode}."
