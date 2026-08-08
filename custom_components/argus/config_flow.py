@@ -32,16 +32,26 @@ class ArgusConfigFlow(config_entries.ConfigFlow,domain=DOMAIN):
  @callback
  def async_get_options_flow(config_entry):return ArgusOptionsFlow()
 class ArgusOptionsFlow(config_entries.OptionsFlow):
+ """Voice-only options screen.
+
+ v2.0.48: saving this screen no longer wipes stored voice settings. A key
+ that is absent from the submitted form keeps its stored value; only a field
+ the user explicitly emptied clears it. (The v2.0.46 flow popped every voice
+ key missing from the form, which silently deleted the TTS entity and the
+ media players on save and killed every voice announcement.)
+ """
  async def async_step_init(self,user_input=None):
   values=dict(self.config_entry.data);values.update(self.config_entry.options)
   if user_input is not None:
    submitted=dict(self.config_entry.options)
    for key in _VOICE_KEYS:
-    if key in user_input:submitted[key]=user_input[key]
-    else:submitted.pop(key,None)
+    if key not in user_input:continue
+    value=user_input[key]
+    if value in (None,"",[]):submitted.pop(key,None)
+    else:submitted[key]=value
    return self.async_create_entry(title="",data=submitted)
-  tts_marker=vol.Optional(CONF_ARMING_VOICE_TTS)
-  if values.get(CONF_ARMING_VOICE_TTS):tts_marker=vol.Optional(CONF_ARMING_VOICE_TTS,description={"suggested_value":values[CONF_ARMING_VOICE_TTS]})
+  tts_value=values.get(CONF_ARMING_VOICE_TTS)
+  tts_marker=vol.Optional(CONF_ARMING_VOICE_TTS,default=tts_value) if tts_value else vol.Optional(CONF_ARMING_VOICE_TTS)
   schema=vol.Schema({
    vol.Optional(CONF_ARMING_VOICE_ENABLED,default=bool(values.get(CONF_ARMING_VOICE_ENABLED,False))):selector.BooleanSelector(),
    tts_marker:selector.EntitySelector(selector.EntitySelectorConfig(domain="tts")),

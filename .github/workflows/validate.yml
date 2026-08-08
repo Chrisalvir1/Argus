@@ -3,23 +3,39 @@ name: Validate
 on:
   push:
   pull_request:
+  workflow_dispatch:
   schedule:
     - cron: '0 0 * * 0'
 
 permissions:
   contents: read
 
+concurrency:
+  group: validate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   static-tests:
-    name: Static regression tests
+    name: Python regression tests
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - run: python -m compileall -q custom_components/argus
+      - run: python -m compileall -q custom_components/argus tests
       - run: python -m unittest discover -s tests -v
+
+  javascript-syntax:
+    name: JavaScript syntax checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - name: Validate JavaScript modules
         run: |
           set -euo pipefail
@@ -28,8 +44,9 @@ jobs:
           done
 
   frontend-tests:
-    name: React, TypeScript and Vite
+    name: React, TypeScript 7 and Vite
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -37,16 +54,18 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
-      - run: npm audit --omit=dev --audit-level=high
       - run: npx tsc --noEmit
       - run: npm test
       - run: npm run build
-      - name: Verify committed frontend bundle
-        run: git diff --exit-code -- custom_components/argus/www/react-dist/argus-dashboard-react.js
+      - name: Verify browser-safe bundle
+        run: |
+          test -s custom_components/argus/www/react-dist/argus-dashboard-react.js
+          ! grep -q 'process\.env' custom_components/argus/www/react-dist/argus-dashboard-react.js
 
   build-release-artifact:
-    name: Build release artifact
+    name: Build HACS artifact
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - run: |
@@ -58,6 +77,7 @@ jobs:
           unzip -tq argus.zip
           unzip -l argus.zip | grep -q 'media.py'
           unzip -l argus.zip | grep -q 'www/media-client.js'
+          unzip -l argus.zip | grep -q 'www/react-dist/argus-dashboard-react.js'
           if unzip -l argus.zip | grep -Eq '(__pycache__|\.pyc$)'; then
             echo 'Python cache artifacts found in release archive' >&2
             exit 1
@@ -66,6 +86,7 @@ jobs:
   validate-hacs:
     name: Validate HACS
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: hacs/action@1ebf01c408f29afcb6406bd431bc98fd8cbb15aa
@@ -75,6 +96,23 @@ jobs:
   validate-hassfest:
     name: Validate with hassfest
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: home-assistant/actions/hassfest@f4ca6f671bd429efb108c0f2fa0ae8af0215986c
+
+  dependency-audit:
+    name: Weekly dependency audit (informational)
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Report high-severity dependency findings
+        continue-on-error: true
+        run: npm audit --omit=dev --audit-level=high

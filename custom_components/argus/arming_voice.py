@@ -1,6 +1,7 @@
 """Dynamic TTS and event payloads for Argus arming and alarm events."""
 from __future__ import annotations
 import logging
+from homeassistant.components import persistent_notification
 from homeassistant.helpers import device_registry as dr, entity_registry as er
 from .const import *
 _LOGGER=logging.getLogger(__name__);_MODE_NAMES={"armed_home":"En casa","armed_away":"Ausente","armed_night":"Noche","armed_vacation":"Vacaciones","home":"En casa","away":"Ausente","night":"Noche","vacation":"Vacaciones"}
@@ -21,10 +22,19 @@ async def _async_speak(hass,options,message):
  if not options.get(CONF_ARMING_VOICE_ENABLED,False):return
  tts=str(options.get(CONF_ARMING_VOICE_TTS,"") or "");players=options.get(CONF_ARMING_VOICE_PLAYERS,[])
  if isinstance(players,str):players=[players]
- if not tts or not players or not message:return
+ players=[player for player in players if player]
+ if not message:return
+ if not tts or not players:
+  # v2.0.48: fail loudly and visibly. Before, an incomplete voice config was
+  # only written to the log, so announcements silently never played.
+  _LOGGER.error("Argus: voice announcements enabled but incomplete (tts=%r, players=%r). Announcement skipped: %s",tts or None,players or None,message)
+  persistent_notification.async_create(hass,"La voz de Argus está activada pero falta la entidad TTS o los reproductores de audio. Abrí Ajustes → Argus → Opciones, completá la configuración de voz y guardá.",title="Argus — Avisos de voz incompletos",notification_id="argus_voice_config_incomplete")
+  return
  for player in dict.fromkeys(players):
   try:await hass.services.async_call("tts", "speak", {"entity_id":tts,"media_player_entity_id":player,"message":message,"cache":True},blocking=False)
-  except Exception:_LOGGER.exception("Argus could not announce on %s",player)
+  except Exception:
+   _LOGGER.exception("Argus could not announce on %s",player)
+   persistent_notification.async_create(hass,f"Argus no pudo reproducir un aviso de voz en {player}. Revisá el registro de Home Assistant para más detalles.",title="Argus — Error de TTS",notification_id=f"argus_voice_error_{player.replace('.', '_')}")
 async def async_announce_arming_wait_update(hass,config_entry,*,alarm_entity_id,target,previous_open,current_open):
  previous=list(dict.fromkeys(previous_open));current=list(dict.fromkeys(current_open))
  if previous==current:return
