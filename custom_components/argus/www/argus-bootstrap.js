@@ -21,34 +21,8 @@ import { applyV2042Stability } from './argus-v2042-stability.js?v=2.0.48';
 import { applyV2043VisualFix } from './argus-v2043-visual-fix.js?v=2.0.48';
 import { applyV2045TriggerSensors } from './argus-v2045-trigger-sensors.js?v=2.0.48';
 import { applyV2046ActiveVisuals } from './argus-v2046-active-visuals.js?v=2.0.48';
-
+import { applyV2049ResponsiveWidgets } from './argus-v2049-responsive-widgets.js?v=2.0.49';
 const ArgusPanel=customElements.get('argus-panel-v2018');
-applyUiAuditFixes(ArgusPanel);
-applySecurityClient(ArgusPanel);
-applyMediaClient(ArgusPanel);
-applyPremiumExperience(ArgusPanel);
-applyGridPolish(ArgusPanel);
-applyFullscreenPolish(ArgusPanel);
-applyV2012AuditFixes(ArgusPanel);
-applyPerformanceProfile(ArgusPanel);
-applyVisualContainerFixes(ArgusPanel);
-applyCompleteContentFixes(ArgusPanel);
-applyRuntimeVisualFixes(ArgusPanel);
-applyBgSensorAvailabilityFixes(ArgusPanel);
-applyBatteryUiFixes(ArgusPanel);
-applyDeepRepair(ArgusPanel);
-applyLightCapabilityFixes(ArgusPanel);
-applyPersonalizationToggleFix(ArgusPanel);
-applyDashboardScrollFixes(ArgusPanel);
-applyV2041AuditRepair(ArgusPanel);
-applyV2042Stability(ArgusPanel);
-applyV2043VisualFix(ArgusPanel);
-applyV2045TriggerSensors(ArgusPanel);
-applyV2046ActiveVisuals(ArgusPanel);
-
-// Vite + React + TypeScript dashboard is the sole widget editor. The legacy
-// v2.0.40 editor is intentionally not imported: it was a second layout writer
-// and could erase react_layout_v2 after an update.
-import('./react-dist/argus-dashboard-react.js?v=react-layout-3')
-  .then(({applyReactDashboardLayout})=>applyReactDashboardLayout(ArgusPanel))
-  .catch(error=>console.error('Argus React dashboard failed to load',error));
+applyUiAuditFixes(ArgusPanel);applySecurityClient(ArgusPanel);applyMediaClient(ArgusPanel);applyPremiumExperience(ArgusPanel);applyGridPolish(ArgusPanel);applyFullscreenPolish(ArgusPanel);applyV2012AuditFixes(ArgusPanel);applyPerformanceProfile(ArgusPanel);applyVisualContainerFixes(ArgusPanel);applyCompleteContentFixes(ArgusPanel);applyRuntimeVisualFixes(ArgusPanel);applyBgSensorAvailabilityFixes(ArgusPanel);applyBatteryUiFixes(ArgusPanel);applyDeepRepair(ArgusPanel);applyLightCapabilityFixes(ArgusPanel);applyPersonalizationToggleFix(ArgusPanel);applyDashboardScrollFixes(ArgusPanel);applyV2041AuditRepair(ArgusPanel);applyV2042Stability(ArgusPanel);applyV2043VisualFix(ArgusPanel);applyV2045TriggerSensors(ArgusPanel);applyV2046ActiveVisuals(ArgusPanel);applyV2049ResponsiveWidgets(ArgusPanel);
+// Vite + React + TypeScript dashboard remains the sole widget editor.
+import('./react-dist/argus-dashboard-react.js?v=react-layout-3').then(({applyReactDashboardLayout})=>applyReactDashboardLayout(ArgusPanel)).catch(error=>console.error('Argus React dashboard failed to load',error));
