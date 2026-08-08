@@ -1,4 +1,4 @@
-import './argus-panel.js?v=2.0.49';
+import './argus-panel.js?v=2.0.49.1';
 import { applyUiAuditFixes } from './argus-ui-audit-fixes.js?v=2.0.49';
 import { applyGridPolish } from './argus-grid-polish.js?v=2.0.49';
 import { applyFullscreenPolish } from './argus-fullscreen-polish.js?v=2.0.49';
