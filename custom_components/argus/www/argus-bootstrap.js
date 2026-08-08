@@ -21,6 +21,7 @@ import { applyV2042Stability } from './argus-v2042-stability.js?v=2.0.48';
 import { applyV2043VisualFix } from './argus-v2043-visual-fix.js?v=2.0.48';
 import { applyV2045TriggerSensors } from './argus-v2045-trigger-sensors.js?v=2.0.48';
 import { applyV2046ActiveVisuals } from './argus-v2046-active-visuals.js?v=2.0.48';
+import { applyV2048ResponsiveWidgets } from './argus-v2048-responsive-widgets.js?v=2.0.48';
 
 const ArgusPanel=customElements.get('argus-panel-v2018');
 applyUiAuditFixes(ArgusPanel);
@@ -45,10 +46,11 @@ applyV2042Stability(ArgusPanel);
 applyV2043VisualFix(ArgusPanel);
 applyV2045TriggerSensors(ArgusPanel);
 applyV2046ActiveVisuals(ArgusPanel);
+applyV2048ResponsiveWidgets(ArgusPanel);
 
 // Vite + React + TypeScript dashboard is the sole widget editor. The legacy
 // v2.0.40 editor is intentionally not imported: it was a second layout writer
 // and could erase react_layout_v2 after an update.
-import('./react-dist/argus-dashboard-react.js?v=react-layout-3')
+import('./react-dist/argus-dashboard-react.js?v=react-layout-4')
   .then(({applyReactDashboardLayout})=>applyReactDashboardLayout(ArgusPanel))
   .catch(error=>console.error('Argus React dashboard failed to load',error));
