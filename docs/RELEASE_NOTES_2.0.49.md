@@ -2,14 +2,24 @@
 
 ## Motivo
 
-La prueba física de v2.0.48 confirmó dos regresiones que no estaban cubiertas por CI: Apple Home deja de mostrar una espera prolongada como “Armando…” y tres widgets no se adaptan correctamente al tamaño configurado.
+La prueba física de v2.0.48 confirmó regresiones que no estaban cubiertas por CI: Apple Home deja de mostrar una espera prolongada como “Armando…”, los cambios de sensores pueden no completar el armado o disparar la alarma, y tres widgets no se adaptan correctamente.
 
 ## HomeKit
 
 - Mantiene intacta la máquina de estados: Argus continúa en `arming` mientras haya sensores bloqueadores y solo `Off` cancela la solicitud.
 - Añade un heartbeat exclusivo de Argus cada 15 segundos mientras existe `_arm_request`.
-- El heartbeat cambia únicamente el atributo `argus_homekit_keepalive`, provocando un evento nuevo de Home Assistant para que el adaptador HomeKit vuelva a publicar el modo objetivo.
-- El temporizador se elimina al cancelar, desarmar o completar el armado y nunca cierra sensores ni completa la transición.
+- El heartbeat cambia únicamente `argus_homekit_keepalive`, provocando un evento de Home Assistant para que el adaptador HomeKit vuelva a publicar el objetivo.
+- El temporizador se elimina al cancelar, desarmar o completar el armado.
+
+## Reconciliación autoritativa de sensores
+
+- El listener de Home Assistant sigue siendo la ruta inmediata.
+- Un watchdog local cada dos segundos recalcula los sensores bloqueadores mientras existe una solicitud de armado.
+- Cuando se cierra un sensor, actualiza la lista y vuelve a emitir el evento y anuncio correspondiente.
+- Al cerrar el último sensor, completa el armado si el conteo terminó.
+- Si el sistema ya está armado y un evento se pierde o se combina, el watchdog detecta cualquier sensor monitoreado activo y ejecuta la misma ruta real de disparo, sirena, evento y TTS.
+- La semántica cubre `binary_sensor`, cerraduras y cobertores, además de estados `opening`, `detected`, `wet`, `problem` y `unsafe`.
+- La reconciliación solo observa sensores seleccionados para el modo activo y no cambia configuración, bypass ni solicitudes.
 
 ## Control de acceso y usuarios
 
@@ -24,8 +34,10 @@ La prueba física de v2.0.48 confirmó dos regresiones que no estaban cubiertas 
 
 ## Validación requerida
 
-1. Esperar al menos dos minutos con un sensor abierto y confirmar que Apple Home conserva “Armando…”.
-2. Pulsar `Off` y confirmar `disarmed` sin heartbeat ni solicitud pendiente.
-3. Abrir Usuarios y recorrer toda la configuración con rueda y gesto táctil.
-4. Probar Control de acceso, Respaldo y restauración y Apoya a Argus en S, M, L y XL, escritorio y móvil.
-5. No publicar ni etiquetar v2.0.49 hasta completar prueba física y CI.
+1. Iniciar armado con dos sensores abiertos; cerrar uno y confirmar anuncio y reducción de bloqueadores.
+2. Cerrar el último y confirmar el modo armado en Argus y Apple Home.
+3. Esperar al menos dos minutos con un sensor abierto y confirmar que Apple Home conserva “Armando…”.
+4. Armar completamente cada modo, abrir cada tipo de sensor seleccionado y confirmar `triggered`, sirena, evento y TTS.
+5. Pulsar `Off` y confirmar `disarmed` sin heartbeat ni solicitud pendiente.
+6. Probar Usuarios y los tres widgets en escritorio, móvil y tamaños S, M, L y XL.
+7. No publicar ni etiquetar v2.0.49 hasta completar prueba física y CI.
