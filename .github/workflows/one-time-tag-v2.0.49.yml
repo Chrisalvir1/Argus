@@ -1,0 +1,30 @@
+name: One-time tag v2.0.49
+
+on:
+  push:
+    paths:
+      - '.github/workflows/one-time-tag-v2.0.49.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Create validated release tag
+        env:
+          RELEASE_SHA: a4b12e3a0da1fdcf63a055bd7870b646d4e881d5
+        run: |
+          set -euo pipefail
+          if git ls-remote --exit-code --tags origin refs/tags/v2.0.49 >/dev/null 2>&1; then
+            echo 'v2.0.49 already exists'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git tag -a v2.0.49 "$RELEASE_SHA" -m 'Argus Home Hub v2.0.49'
+          git push origin refs/tags/v2.0.49
