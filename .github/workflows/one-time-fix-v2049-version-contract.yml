@@ -44,12 +44,20 @@ jobs:
           PY
       - name: Validate repaired tree
         run: |
-          set -euo pipefail
+          set -o pipefail
           grep -q '"version": "2.0.49"' custom_components/argus/manifest.json
           grep -q 'VERSION = "2.0.49"' custom_components/argus/const.py
           grep -q "ARGUS_CARD_VERSION='2.0.49'" custom_components/argus/www/argus-card.js
           python -m compileall -q custom_components/argus tests
-          python -m unittest discover -s tests -v
+          if ! python -m unittest discover -s tests -v 2>&1 | tee /tmp/argus-tests.log; then
+            {
+              echo '## v2.0.49 unittest failure'
+              echo '```text'
+              tail -n 240 /tmp/argus-tests.log
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
           for file in custom_components/argus/www/*.js; do node --check "$file"; done
       - name: Commit repaired contracts
         run: |
