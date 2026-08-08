@@ -1,4 +1,4 @@
-import './argus-panel.js?v=2.0.49';
+import './argus-panel.js?v=2.0.49.1';
 import { applyUiAuditFixes } from './argus-ui-audit-fixes.js?v=2.0.49';
 import { applyGridPolish } from './argus-grid-polish.js?v=2.0.49';
 import { applyFullscreenPolish } from './argus-fullscreen-polish.js?v=2.0.49';
@@ -23,7 +23,8 @@ import { applyV2045TriggerSensors } from './argus-v2045-trigger-sensors.js?v=2.0
 import { applyV2046ActiveVisuals } from './argus-v2046-active-visuals.js?v=2.0.49';
 import { applyV2049ResponsiveWidgets } from './argus-v2049-responsive-widgets.js?v=2.0.49';
 import { applyMotionSystem } from './argus-motion-system.js?v=2.0.49';
+import { applyStableInstancesRender } from './argus-v2050-stable-render.js?v=2.0.49.1';
 const ArgusPanel=customElements.get('argus-panel-v2018');
-applyUiAuditFixes(ArgusPanel);applySecurityClient(ArgusPanel);applyMediaClient(ArgusPanel);applyPremiumExperience(ArgusPanel);applyGridPolish(ArgusPanel);applyFullscreenPolish(ArgusPanel);applyV2012AuditFixes(ArgusPanel);applyPerformanceProfile(ArgusPanel);applyVisualContainerFixes(ArgusPanel);applyCompleteContentFixes(ArgusPanel);applyRuntimeVisualFixes(ArgusPanel);applyBgSensorAvailabilityFixes(ArgusPanel);applyBatteryUiFixes(ArgusPanel);applyDeepRepair(ArgusPanel);applyLightCapabilityFixes(ArgusPanel);applyPersonalizationToggleFix(ArgusPanel);applyDashboardScrollFixes(ArgusPanel);applyV2041AuditRepair(ArgusPanel);applyV2042Stability(ArgusPanel);applyV2043VisualFix(ArgusPanel);applyV2045TriggerSensors(ArgusPanel);applyV2046ActiveVisuals(ArgusPanel);applyV2049ResponsiveWidgets(ArgusPanel);applyMotionSystem(ArgusPanel);
+applyUiAuditFixes(ArgusPanel);applySecurityClient(ArgusPanel);applyMediaClient(ArgusPanel);applyPremiumExperience(ArgusPanel);applyGridPolish(ArgusPanel);applyFullscreenPolish(ArgusPanel);applyV2012AuditFixes(ArgusPanel);applyPerformanceProfile(ArgusPanel);applyVisualContainerFixes(ArgusPanel);applyCompleteContentFixes(ArgusPanel);applyRuntimeVisualFixes(ArgusPanel);applyBgSensorAvailabilityFixes(ArgusPanel);applyBatteryUiFixes(ArgusPanel);applyDeepRepair(ArgusPanel);applyLightCapabilityFixes(ArgusPanel);applyPersonalizationToggleFix(ArgusPanel);applyDashboardScrollFixes(ArgusPanel);applyV2041AuditRepair(ArgusPanel);applyV2042Stability(ArgusPanel);applyV2043VisualFix(ArgusPanel);applyV2045TriggerSensors(ArgusPanel);applyV2046ActiveVisuals(ArgusPanel);applyV2049ResponsiveWidgets(ArgusPanel);applyMotionSystem(ArgusPanel);applyStableInstancesRender(ArgusPanel);
 // Vite + React + TypeScript dashboard remains the sole widget editor.
 import('./react-dist/argus-dashboard-react.js?v=react-layout-3').then(({applyReactDashboardLayout})=>applyReactDashboardLayout(ArgusPanel)).catch(error=>console.error('Argus React dashboard failed to load',error));
