@@ -48,8 +48,8 @@ class TestHardeningContract(unittest.TestCase):
         release = (ROOT / ".github" / "workflows" / "release.yml").read_text(encoding="utf-8")
         validate = (ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
         self.assertIn('"../../argus.zip"', release)
-        self.assertIn("unzip -t argus.zip", release)
-        self.assertIn("Build release artifact", validate)
+        self.assertIn("unzip -tq argus.zip", release)
+        self.assertIn("Build HACS artifact", validate)
 
 
 if __name__ == "__main__":
