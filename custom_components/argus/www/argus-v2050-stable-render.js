@@ -139,16 +139,18 @@ export function applyStableInstancesRender(ArgusPanel){
           const configured=new Set();
           const collect=v=>{if(!v||typeof v!=='object')return; if(Array.isArray(v.sensors))v.sensors.forEach(id=>configured.add(id)); Object.values(v).forEach(c=>{if(c&&typeof c==='object')collect(c)})};
           collect(this._ui?.modes);
+          const languageChanged=oldHass.language!==hass.language;
+          if(languageChanged&&!this._manualLang) this._refreshLocalizedUi?.();
           const alarmChanged=this._dashboard.entries.some(e=>e.entity_id&&oldHass.states[e.entity_id]?.state!==hass.states[e.entity_id]?.state);
           const sensorChanged=[...configured].some(id=>oldHass.states[id]?.state!==hass.states[id]?.state||oldHass.states[id]?.attributes?.battery_level!==hass.states[id]?.attributes?.battery_level||oldHass.states[id]?.attributes?.battery_percentage!==hass.states[id]?.attributes?.battery_percentage);
           const tempEntity=this._temperatureSource==='auto'?null:this._temperatureSource;
           const tempChanged=tempEntity&&oldHass.states[tempEntity]?.state!==hass.states[tempEntity]?.state;
           const weatherEnt=(this._weatherSource&&this._weatherSource!=='auto')?this._weatherSource:Object.values(hass.states).find(s=>s.entity_id?.startsWith('weather.'))?.entity_id;
           const weatherChanged=weatherEnt&&(oldHass.states[weatherEnt]?.state!==hass.states[weatherEnt]?.state||oldHass.states[weatherEnt]?.attributes?.temperature!==hass.states[weatherEnt]?.attributes?.temperature);
-          const relevant=alarmChanged||sensorChanged||tempChanged||weatherChanged;
+          const relevant=alarmChanged||sensorChanged||tempChanged||weatherChanged||languageChanged;
           this._hass=hass;
           this._updateTheme?.();
-          if(relevant){this._renderEntries?.(); this._renderActivityLog?.()}
+          if(relevant){this._renderEntries?.(languageChanged); this._renderActivityLog?.()}
           else {updateClocks(this)}
           return;
         }
