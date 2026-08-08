@@ -9,8 +9,13 @@ class TestV2049SensorStateRuntime(unittest.TestCase):
    self.assertIn(token,source)
  def test_armed_sensor_has_authoritative_trigger_fallback(self):
   source=(ARGUS/'sensor_state_runtime.py').read_text(encoding='utf-8')
-  for token in ('_ARMED_STATES','_sensors_for_state','_is_active','_triggered_by','_triggered_mode','await self._async_trigger()'):
+  for token in ('_ARMED_STATES','_sensors_for_state','_is_active','newly_active','_triggered_by','_triggered_mode','await self._async_trigger()'):
    self.assertIn(token,source)
+ def test_preexisting_open_sensor_is_only_a_baseline(self):
+  source=(ARGUS/'sensor_state_runtime.py').read_text(encoding='utf-8')
+  self.assertIn('_argus_last_active_sensors = active_for_state(self, self._alarm_state)',source)
+  self.assertIn('_argus_last_active_sensors = active_for_state(self, target)',source)
+  self.assertIn('active - previous',source)
  def test_extended_sensor_semantics_are_supported(self):
   source=(ARGUS/'sensor_state_runtime.py').read_text(encoding='utf-8')
   for token in ('binary_sensor','lock','cover','opening','detected','wet','problem','unsafe'):

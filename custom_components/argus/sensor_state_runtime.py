@@ -55,6 +55,16 @@ def install_sensor_state_runtime() -> None:
     original_added = ArgusAlarmPanel.async_added_to_hass
     original_remove = ArgusAlarmPanel.async_will_remove_from_hass
     original_sensor_changed = ArgusAlarmPanel._async_sensor_changed
+    original_complete = ArgusAlarmPanel._async_complete_arming
+
+    def active_for_state(self, state) -> set[str]:
+        if state not in _ARMED_STATES:
+            return set()
+        return {
+            entity_id
+            for entity_id in dict.fromkeys(self._sensors_for_state(state))
+            if _is_active(self.hass, entity_id)
+        }
 
     async def reconcile(self, source: str) -> None:
         lock = getattr(self, "_argus_sensor_reconcile_lock", None)
@@ -77,16 +87,21 @@ def install_sensor_state_runtime() -> None:
                 return
 
             if self._alarm_state not in _ARMED_STATES:
+                self._argus_last_active_sensors = set()
                 return
-            monitored = list(dict.fromkeys(self._sensors_for_state(self._alarm_state)))
-            entity_id = next((sensor for sensor in monitored if _is_active(self.hass, sensor)), None)
-            if not entity_id:
+
+            active = active_for_state(self, self._alarm_state)
+            previous = set(getattr(self, "_argus_last_active_sensors", set()))
+            self._argus_last_active_sensors = active
+            newly_active = active - previous
+            if not newly_active:
                 return
+            entity_id = sorted(newly_active)[0]
 
             # The normal listener should already have triggered. If it did not,
             # this is the safety fallback and follows the exact same trigger path.
             _LOGGER.warning(
-                "Argus sensor watchdog detected active monitored sensor %s while %s",
+                "Argus sensor watchdog detected newly active monitored sensor %s while %s",
                 entity_id, self._alarm_state,
             )
             self._triggered_by = entity_id
@@ -98,6 +113,9 @@ def install_sensor_state_runtime() -> None:
 
     async def added_with_reconciliation(self) -> None:
         await original_added(self)
+        # Restored armed installations establish a baseline instead of treating
+        # a sensor that was already open before startup as a fresh intrusion.
+        self._argus_last_active_sensors = active_for_state(self, self._alarm_state)
         existing = getattr(self, "_argus_sensor_watchdog_unsub", None)
         if existing:
             existing()
@@ -121,7 +139,14 @@ def install_sensor_state_runtime() -> None:
         schedule_reconcile(self, "state_change")
         return result
 
+    async def complete_with_baseline(self, target) -> None:
+        await original_complete(self, target)
+        # Completion requires all blocking sensors closed. Establishing this
+        # baseline makes the next real opening detectable by the watchdog.
+        self._argus_last_active_sensors = active_for_state(self, target)
+
     ArgusAlarmPanel.async_added_to_hass = added_with_reconciliation
     ArgusAlarmPanel.async_will_remove_from_hass = remove_with_reconciliation
     ArgusAlarmPanel._async_sensor_changed = sensor_changed_with_reconciliation
+    ArgusAlarmPanel._async_complete_arming = complete_with_baseline
     ArgusAlarmPanel._argus_sensor_state_runtime = True
