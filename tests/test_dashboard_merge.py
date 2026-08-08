@@ -1,4 +1,4 @@
-"""Functional tests for the v2.0.48 dashboard persistence fix.
+"""Functional tests for the v2.0.49 dashboard persistence fix.
 
 Loads dashboard_merge.py directly from its file path so the tests run without
 Home Assistant installed.
