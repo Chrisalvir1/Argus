@@ -12,7 +12,7 @@ class TestBrowserBundleContract(unittest.TestCase):
 
     def test_native_panel_loads_before_react_editor(self):
         bootstrap = (WWW / "argus-bootstrap.js").read_text(encoding="utf-8")
-        self.assertIn("import './argus-panel.js?v=2.0.49'", bootstrap)
+        self.assertIn("import './argus-panel.js?v=2.0.49.1'", bootstrap)
         self.assertIn(
             "import('./react-dist/argus-dashboard-react.js?v=react-layout-3')",
             bootstrap,
