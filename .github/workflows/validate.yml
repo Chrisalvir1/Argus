@@ -26,6 +26,16 @@ jobs:
           python-version: '3.13'
       - run: python -m compileall -q custom_components/argus tests
       - run: python -m unittest discover -s tests -v
+
+  javascript-syntax:
+    name: JavaScript syntax checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - name: Validate JavaScript modules
         run: |
           set -euo pipefail

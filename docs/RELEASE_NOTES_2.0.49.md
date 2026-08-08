@@ -32,6 +32,20 @@ La prueba física de v2.0.48 confirmó regresiones que no estaban cubiertas por 
 - Ambos widgets centran el contenido horizontal y verticalmente en S, M, L y XL.
 - Controles y botones se reorganizan en varias líneas, respetan el ancho disponible y no se recortan en móvil.
 
+## Sistema de movimiento y transiciones
+
+- Añade un módulo ESM idempotente aplicado al final de la cadena de parches visuales.
+- Coordina la transición perfil → PIN → carga → dashboard sin exponer un fotograma vacío entre el selector y el panel.
+- Mantiene el selector visible mientras `_load()` prepara el dashboard y solo lo oculta después de `transitionend`, con timeout de recuperación.
+- Evita selecciones duplicadas mientras se valida el perfil o PIN, sin modificar autorización, permisos ni comandos WebSocket.
+- Añade entradas breves para dashboard, modos, historial, usuarios, selectores, widgets, tarjetas y sensores nuevos.
+- El escalonado usa límite de elementos, deduplicación y `WeakSet` para no reanimar reloj, HUD, batería o sensores existentes.
+- El observador se limita al `shadowRoot`, procesa nodos añadidos y agrupa el trabajo con `requestAnimationFrame`.
+- Los observers, timers, RAF y listeners propios se eliminan al desconectar el panel.
+- Los cambios de fondo usan una capa ligera sin desenfocar, filtrar ni reiniciar canvas WebGL o video.
+- Ligero reduce duración y cantidad de elementos; Esencial elimina movimiento decorativo.
+- `prefers-reduced-motion` aplica un comportamiento equivalente o más estricto que Esencial.
+
 ## Validación requerida
 
 1. Iniciar armado con dos sensores abiertos; cerrar uno y confirmar anuncio y reducción de bloqueadores.
@@ -40,4 +54,10 @@ La prueba física de v2.0.48 confirmó regresiones que no estaban cubiertas por 
 4. Armar completamente cada modo, abrir cada tipo de sensor seleccionado y confirmar `triggered`, sirena, evento y TTS.
 5. Pulsar `Off` y confirmar `disarmed` sin heartbeat ni solicitud pendiente.
 6. Probar Usuarios y los tres widgets en escritorio, móvil y tamaños S, M, L y XL.
-7. No publicar ni etiquetar v2.0.49 hasta completar prueba física y CI.
+7. Seleccionar un perfil propio sin PIN y confirmar que el selector permanece visible hasta que el dashboard esté listo.
+8. Abrir un perfil con PIN, cancelar y volver a entrar; confirmar que no hay flash, bloqueo ni doble selección.
+9. Cambiar entre modos, historial, usuarios, ajustes, fullscreen y configuración de widgets.
+10. Cambiar fondo de panel y fondo del hub con clima WebGL, imagen y video.
+11. Repetir en iPhone/Safari y Android/Chrome con perfiles Completo, Ligero y Esencial.
+12. Activar “Reducir movimiento” y confirmar que no haya efectos decorativos ni parpadeos.
+13. No publicar ni etiquetar v2.0.49 hasta completar prueba física y CI.
