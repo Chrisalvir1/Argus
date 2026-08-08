@@ -2,6 +2,31 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.49] - 2026-08-08
+
+### Added
+- Sistema modular de movimiento para selector de perfiles, PIN, dashboard, vistas, widgets, tarjetas y sensores.
+- Entrada escalonada limitada para contenido nuevo renderizado dinámicamente.
+- Capa ligera de transición para cambios de fondo sin aplicar filtros al canvas WebGL ni al video.
+- API encapsulada por instancia para animar vistas, dashboard, contenido escalonado y cambios de fondo.
+
+### Fixed
+- Eliminado el fotograma vacío entre la selección del perfil y la carga del dashboard.
+- El selector permanece visible mientras el dashboard se prepara y se oculta al finalizar la transición, con timeout de recuperación.
+- Bloqueadas las selecciones duplicadas durante la validación visual de perfil o PIN sin alterar la lógica de seguridad.
+- Transiciones de PIN, bienvenida, modos, historial, usuarios, selectores y widgets suavizadas sin clonar ni reemplazar nodos.
+
+### Accessibility
+- Compatibilidad con `prefers-reduced-motion`.
+- El perfil Esencial elimina animaciones decorativas y conserva transiciones funcionales inmediatas.
+- El feedback táctil no interfiere con click, teclado, focus ni controles de seguridad.
+
+### Performance
+- Observer limitado exclusivamente al Shadow DOM de cada panel y configurado solo para nodos añadidos.
+- Mutaciones agrupadas mediante `requestAnimationFrame`, sin observar clases, estilos ni toda la página de Home Assistant.
+- Perfil Ligero limita el stagger y omite la transición de fondos.
+- Limpieza de observers, timers, RAF y listeners al desconectar el panel.
+
 ## [2.0.32] - 2026-08-04
 
 ### Fixed
@@ -74,8 +99,6 @@ Todos los cambios relevantes de Argus se documentan aquí. El historial anterior
 - **Dashboard de widgets interactivos estilo iOS:** Botón "Config. Widgets" en la barra superior que activa el modo edición con animación jiggle, arrastrar y soltar (mouse y táctil), redimensionado S/M/L/XL y visibilidad por widget — todo persistido en `localStorage`.
 - **Personalización Estética Avanzada colapsable:** La sección de personalización ahora se muestra oculta por defecto y se despliega con animación elástica de rebote al hacer clic.
 - **Layout en instancia activa mejorado:** Escudo centrado, modos a la izquierda y sensores a la derecha en pantalla grande. Reordenamiento fluido a columna en móvil.
-
-
 
 ### Fixed
 - **Bug crítico en el historial de actividad:** Todos los eventos del panel de alarma (`armed`, `disarmed`, `triggered`, `schedule_reconciled`, `state_restored`, `automation_executed`, `arm_rejected`, `confirmation_pending`, `panic_stopped`) se escribían sin `entry_id`, guardándose en la llave de storage global `argus.ui` en lugar de la correcta `argus.ui.{entry_id}`. El frontend los leía de la llave correcta, por lo que el historial aparecía siempre vacío. Solucionado añadiendo `entry_id=self._config_entry.entry_id` a cada llamada `async_append_audit_log` en `alarm_control_panel.py`.
