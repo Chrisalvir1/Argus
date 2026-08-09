@@ -1,0 +1,60 @@
+name: Publish verified v2.0.55 once
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: publish-v2055-once
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Verify exact release source
+        run: |
+          set -euo pipefail
+          VERSION="$(python -c 'import json; print(json.load(open("custom_components/argus/manifest.json"))["version"])')"
+          test "$VERSION" = "2.0.55"
+          python -m compileall -q custom_components/argus tests
+          python -m unittest discover -s tests -v
+          npm ci
+          test "$(npx tsc --version)" = "Version 7.0.2"
+          npx tsc --noEmit
+          npm test
+          npm run build
+          test -s custom_components/argus/www/react-dist/argus-frontend.js
+          ! grep -q 'process\.env' custom_components/argus/www/react-dist/argus-frontend.js
+      - name: Create tag and dispatch release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if git ls-remote --exit-code --tags origin refs/tags/v2.0.55 >/dev/null 2>&1; then
+            echo "v2.0.55 already exists; nothing to publish"
+            exit 0
+          fi
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git tag -a v2.0.55 "$GITHUB_SHA" -m "Argus Home Hub v2.0.55"
+          git push origin refs/tags/v2.0.55
+          gh workflow run release.yml --ref v2.0.55
