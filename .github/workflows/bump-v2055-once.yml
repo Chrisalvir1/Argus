@@ -28,30 +28,35 @@ jobs:
         with:
           node-version: '24'
           cache: npm
-      - name: Apply exact version synchronization
-        shell: python
+      - name: Synchronize active version references
+        shell: bash
         run: |
+          set -euo pipefail
+          python - <<'PY'
           from pathlib import Path
 
           old, new = "2.0.54", "2.0.55"
-          paths = [
-              "custom_components/argus/const.py",
-              "custom_components/argus/manifest.json",
-              "custom_components/argus/www/argus-bootstrap.js",
-              "src/legacy/argus-card.ts",
-              "src/legacy/argus-panel.ts",
-              "tests/test_architecture_contract.py",
-              "tests/test_security_contract.py",
-              "tests/test_v193_sync.py",
-              "tests/test_v2050_arming_complete.py",
-              "tests/test_v2052_version_contracts.py",
-          ]
-          for name in paths:
-              path = Path(name)
-              content = path.read_text(encoding="utf-8")
-              if old not in content:
-                  raise SystemExit(f"Expected {old} in {name}")
-              path.write_text(content.replace(old, new), encoding="utf-8")
+          excluded = {
+              Path("CHANGELOG.md"),
+              Path("docs/RELEASE_NOTES_2.0.54.md"),
+              Path(".github/workflows/bump-v2055-once.yml"),
+          }
+          changed = []
+          for root in (Path("custom_components"), Path("src"), Path("tests")):
+              for path in root.rglob("*"):
+                  if not path.is_file() or path in excluded:
+                      continue
+                  if path.suffix not in {".py", ".json", ".js", ".ts", ".tsx", ".md"}:
+                      continue
+                  content = path.read_text(encoding="utf-8")
+                  if old not in content:
+                      continue
+                  path.write_text(content.replace(old, new), encoding="utf-8")
+                  changed.append(str(path))
+          if not changed:
+              raise SystemExit("No active v2.0.54 references were found")
+          print("Updated active version references:")
+          print("\n".join(changed))
 
           changelog = Path("CHANGELOG.md")
           content = changelog.read_text(encoding="utf-8")
@@ -65,9 +70,10 @@ jobs:
           - **Pruebas ejecutables:** se valida `abierto → cierre parcial → último cierre → armado`.
 
           """
-          if marker not in content:
-              raise SystemExit("Missing v2.0.54 changelog marker")
-          changelog.write_text(content.replace(marker, section + marker, 1), encoding="utf-8")
+          if "## [2.0.55]" not in content:
+              if marker not in content:
+                  raise SystemExit("Missing v2.0.54 changelog marker")
+              changelog.write_text(content.replace(marker, section + marker, 1), encoding="utf-8")
 
           Path("docs/RELEASE_NOTES_2.0.55.md").write_text("""# Argus Home Hub 2.0.55
 
@@ -88,6 +94,7 @@ jobs:
               path = Path(temporary)
               if path.exists():
                   path.unlink()
+          PY
       - name: Verify synchronized source matrix
         run: |
           set -euo pipefail
@@ -105,7 +112,7 @@ jobs:
           set -euo pipefail
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add custom_components/argus/const.py custom_components/argus/manifest.json custom_components/argus/www/argus-bootstrap.js src/legacy/argus-card.ts src/legacy/argus-panel.ts tests/test_architecture_contract.py tests/test_security_contract.py tests/test_v193_sync.py tests/test_v2050_arming_complete.py tests/test_v2052_version_contracts.py CHANGELOG.md docs/RELEASE_NOTES_2.0.55.md
+          git add custom_components src tests CHANGELOG.md docs/RELEASE_NOTES_2.0.55.md
           git add -u patch_sensor_state.py test_errors.txt test_out.txt || true
           git commit -m "chore(release): v2.0.55 arming wait state machine"
           git push origin HEAD:refactor/v2.1.0-typescript-frontend
