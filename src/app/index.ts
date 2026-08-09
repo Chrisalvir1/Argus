@@ -20,6 +20,8 @@ export function applyArgusFrontend(value:CustomElementConstructor|undefined):voi
   applyMotionSystem(C);
   applyStableInstancesRender(C);
   applyV2050AlarmVisuals(C);
+  applyV2049ResponsiveWidgets(C);
+  applyV2050WidgetLayouts(C);
  applyLegacyAfterTypedClients(C);
  applyReactDashboardLayout(C);
 }

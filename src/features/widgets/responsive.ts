@@ -1,6 +1,28 @@
-const STYLE_ID='argus-v2049-responsive-widgets';
-const ACCESS_SCROLL='#w-access,.access-view,.access-content,.access-sections,.users-list,.user-list,.users-grid,[role="tabpanel"],.users-modal,.access-modal,.argus-users-modal';
-function installStyles(panel){const root=panel.shadowRoot;if(!root)return;let style=root.getElementById(STYLE_ID);if(!style){style=document.createElement('style');style.id=STYLE_ID;root.appendChild(style)}style.textContent=`
+import type { ArgusPanelConstructor, ArgusPanelHost } from '../../core/panel';
+
+const STYLE_ID = 'argus-v2049-responsive-widgets';
+const ACCESS_SCROLL = '#w-access,.access-view,.access-content,.access-sections,.users-list,.user-list,.users-grid,[role="tabpanel"],.users-modal,.access-modal,.argus-users-modal';
+
+type ResponsivePanel = ArgusPanelHost & {
+  __v2049ResponsiveWidgets?: boolean;
+  _v2049Observer?: MutationObserver | null;
+  _v2049Frame?: number;
+  _load?: (...args: any[]) => Promise<any>;
+  _renderEntries?: (...args: any[]) => any;
+  connectedCallback?: () => void;
+  disconnectedCallback?: () => void;
+};
+
+function installStyles(panel: ResponsivePanel) {
+  const root = panel.shadowRoot;
+  if (!root) return;
+  let style = root.getElementById(STYLE_ID);
+  if (!style) {
+    style = document.createElement('style');
+    style.id = STYLE_ID;
+    root.appendChild(style);
+  }
+  style.textContent = `
 #w-access{display:flex!important;flex-direction:column!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;box-sizing:border-box!important}
 #w-access>.panel-head,#w-access>.access-summary,#w-access>.tabs{flex:0 0 auto!important}
 #w-access :is(.panel-body,#access-view,.access-view,.access-content,.access-sections,.users-list,.user-list,.users-grid,[role="tabpanel"]){flex:1 1 auto!important;min-width:0!important;min-height:0!important;max-height:none!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;scrollbar-gutter:stable!important;box-sizing:border-box!important}
@@ -19,7 +41,68 @@ function installStyles(panel){const root=panel.shadowRoot;if(!root)return;let st
 #w-github :is(button,a,ha-button,mwc-button){width:auto!important;min-width:0!important;max-width:100%!important;margin:0!important;white-space:normal!important;text-align:center!important;justify-content:center!important;box-sizing:border-box!important}
 #w-backup .panel-edit-overlay,#w-github .panel-edit-overlay{position:absolute!important;inset:0!important;margin:0!important;max-width:none!important}
 @media(max-width:460px){#w-backup{grid-template-columns:1fr!important;overflow-y:auto!important}#w-backup :is(.panel-body,.actions,.backup-actions,.button-row,.controls){grid-template-columns:1fr!important}#w-backup :is(button,a,ha-button,mwc-button){font-size:13px!important}#w-github{padding:14px!important;row-gap:12px!important}}
-`;}
-function enableTouchScroll(panel){const root=panel.shadowRoot;if(!root)return;root.querySelectorAll(ACCESS_SCROLL).forEach(node=>{node.style.touchAction='pan-y';node.style.webkitOverflowScrolling='touch';if(node.scrollHeight>node.clientHeight)node.style.overflowY='auto'})}
-function repair(panel){installStyles(panel);enableTouchScroll(panel)}
-export function applyV2049ResponsiveWidgets(ArgusPanel){if(!ArgusPanel||ArgusPanel.__v2049ResponsiveWidgets)return;ArgusPanel.__v2049ResponsiveWidgets=true;const proto=ArgusPanel.prototype,connected=proto.connectedCallback,disconnected=proto.disconnectedCallback,load=proto._load,render=proto._renderEntries;proto.connectedCallback=function(){const result=connected?.call(this);repair(this);this._v2049Observer?.disconnect?.();this._v2049Frame=0;this._v2049Observer=new MutationObserver(()=>{if(this._v2049Frame)return;this._v2049Frame=requestAnimationFrame(()=>{this._v2049Frame=0;repair(this)})});if(this.shadowRoot)this._v2049Observer.observe(this.shadowRoot,{childList:true,subtree:true});return result};proto.disconnectedCallback=function(){this._v2049Observer?.disconnect?.();this._v2049Observer=null;if(this._v2049Frame)cancelAnimationFrame(this._v2049Frame);this._v2049Frame=0;return disconnected?.call(this)};proto._load=async function(...args){const result=await load?.apply(this,args);repair(this);return result};proto._renderEntries=function(...args){const result=render?.apply(this,args);repair(this);return result}}
+`;
+}
+
+function enableTouchScroll(panel: ResponsivePanel) {
+  const root = panel.shadowRoot;
+  if (!root) return;
+  root.querySelectorAll(ACCESS_SCROLL).forEach((node) => {
+    const el = node as HTMLElement;
+    el.style.touchAction = 'pan-y';
+    el.style.webkitOverflowScrolling = 'touch';
+    if (el.scrollHeight > el.clientHeight) el.style.overflowY = 'auto';
+  });
+}
+
+function repair(panel: ResponsivePanel) {
+  installStyles(panel);
+  enableTouchScroll(panel);
+}
+
+export function applyV2049ResponsiveWidgets(C: ArgusPanelConstructor | undefined): void {
+  const proto = C?.prototype as ResponsivePanel | undefined;
+  if (!proto || proto.__v2049ResponsiveWidgets) return;
+  proto.__v2049ResponsiveWidgets = true;
+  
+  const connected = proto.connectedCallback;
+  const disconnected = proto.disconnectedCallback;
+  const load = proto._load;
+  const render = proto._renderEntries;
+  
+  proto.connectedCallback = function (this: ResponsivePanel) {
+    const result = connected?.call(this);
+    repair(this);
+    this._v2049Observer?.disconnect?.();
+    this._v2049Frame = 0;
+    this._v2049Observer = new MutationObserver(() => {
+      if (this._v2049Frame) return;
+      this._v2049Frame = requestAnimationFrame(() => {
+        this._v2049Frame = 0;
+        repair(this);
+      });
+    });
+    if (this.shadowRoot) this._v2049Observer.observe(this.shadowRoot, { childList: true, subtree: true });
+    return result;
+  };
+  
+  proto.disconnectedCallback = function (this: ResponsivePanel) {
+    this._v2049Observer?.disconnect?.();
+    this._v2049Observer = null;
+    if (this._v2049Frame) cancelAnimationFrame(this._v2049Frame);
+    this._v2049Frame = 0;
+    return disconnected?.call(this);
+  };
+  
+  proto._load = async function (this: ResponsivePanel, ...args: any[]) {
+    const result = await load?.apply(this, args);
+    repair(this);
+    return result;
+  };
+  
+  proto._renderEntries = function (this: ResponsivePanel, ...args: any[]) {
+    const result = render?.apply(this, args);
+    repair(this);
+    return result;
+  };
+}
