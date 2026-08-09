@@ -1,5 +1,4 @@
 import{applyUiAuditFixes}from'../../custom_components/argus/www/argus-ui-audit-fixes.js';
-import{applyPremiumExperience}from'../../custom_components/argus/www/premium-experience.js';
 import{applyGridPolish}from'../../custom_components/argus/www/argus-grid-polish.js';
 import{applyFullscreenPolish}from'../../custom_components/argus/www/argus-fullscreen-polish.js';
 import{applyV2012AuditFixes}from'../../custom_components/argus/www/argus-v2013-audit-fixes.js';
@@ -27,5 +26,5 @@ import type{ArgusPanelConstructor}from'../core/panel';
 
 export function applyLegacyBeforeTypedClients(C:ArgusPanelConstructor):void{applyUiAuditFixes(C)}
 export function applyLegacyAfterTypedClients(C:ArgusPanelConstructor):void{
- applyPremiumExperience(C);applyGridPolish(C);applyFullscreenPolish(C);applyV2012AuditFixes(C);applyPerformanceProfile(C);applyVisualContainerFixes(C);applyCompleteContentFixes(C);applyRuntimeVisualFixes(C);applyBgSensorAvailabilityFixes(C);applyBatteryUiFixes(C);applyDeepRepair(C);applyLightCapabilityFixes(C);applyPersonalizationToggleFix(C);applyDashboardScrollFixes(C);applyV2041AuditRepair(C);applyV2042Stability(C);applyV2043VisualFix(C);applyV2045TriggerSensors(C);applyV2046ActiveVisuals(C);applyV2049ResponsiveWidgets(C);applyMotionSystem(C);applyStableInstancesRender(C);applyV2050AlarmVisuals(C);applyV2050WidgetLayouts(C);
+ applyGridPolish(C);applyFullscreenPolish(C);applyV2012AuditFixes(C);applyPerformanceProfile(C);applyVisualContainerFixes(C);applyCompleteContentFixes(C);applyRuntimeVisualFixes(C);applyBgSensorAvailabilityFixes(C);applyBatteryUiFixes(C);applyDeepRepair(C);applyLightCapabilityFixes(C);applyPersonalizationToggleFix(C);applyDashboardScrollFixes(C);applyV2041AuditRepair(C);applyV2042Stability(C);applyV2043VisualFix(C);applyV2045TriggerSensors(C);applyV2046ActiveVisuals(C);applyV2049ResponsiveWidgets(C);applyMotionSystem(C);applyStableInstancesRender(C);applyV2050AlarmVisuals(C);applyV2050WidgetLayouts(C);
 }

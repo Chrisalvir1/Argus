@@ -9745,7 +9745,39 @@ function Xh(r) {
     u ? (u.textContent = a, u.className = "status err") : window.alert(a);
   });
 }
-const Qh = [{ id: "activity", size: "M", hidden: !1 }, { id: "modes", size: "M", hidden: !1 }, { id: "automations", size: "M", hidden: !1 }, { id: "access", size: "M", hidden: !1 }, { id: "backup", size: "S", hidden: !1 }, { id: "github", size: "S", hidden: !1 }], Qd = { es: ["Configurar widgets", "Arrastrar", "Ocultar", "Mostrar", "Conectado", "Sin sensores configurados", "Todos los sensores están omitidos"], en: ["Configure widgets", "Drag", "Hide", "Show", "Connected", "No sensors configured", "All sensors are bypassed"], fr: ["Configurer les widgets", "Déplacer", "Masquer", "Afficher", "Connecté", "Aucun capteur configuré", "Tous les capteurs sont ignorés"], pt: ["Configurar widgets", "Arrastar", "Ocultar", "Mostrar", "Conectado", "Nenhum sensor configurado", "Todos os sensores estão ignorados"], it: ["Configura widget", "Trascina", "Nascondi", "Mostra", "Connesso", "Nessun sensore configurato", "Tutti i sensori sono esclusi"], zh: ["配置小组件", "拖动", "隐藏", "显示", "已连接", "未配置传感器", "所有传感器均已绕过"], ru: ["Настроить виджеты", "Перетащить", "Скрыть", "Показать", "Подключено", "Датчики не настроены", "Все датчики исключены"] }, Kh = (r) => {
+const Qh = `
+.argus-cinematic-weather{position:absolute;inset:0;overflow:hidden;background:linear-gradient(to bottom,#0c3159,#69a9d5 62%,#c9d4d5)}
+.argus-cinematic-weather canvas{width:100%;height:100%;display:block}.argus-weather-vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 56% 36%,transparent 16%,rgba(0,7,16,.1) 57%,rgba(0,4,12,.62) 100%)}
+@media(prefers-reduced-motion:reduce){.argus-cinematic-weather{background:#0f172a}}
+`;
+function Kh(r) {
+  const o = r.__argusWebgl;
+  if (!o) return;
+  cancelAnimationFrame(o.frame), o.observer?.disconnect(), document.removeEventListener("visibilitychange", o.visibility), o.gl.deleteBuffer(o.buffer), o.gl.deleteProgram(o.program);
+  const a = o.gl.getExtension("WEBGL_lose_context");
+  a && a.loseContext(), delete r.__argusWebgl;
+}
+function Zh(r) {
+  const o = r?.prototype;
+  if (!o || o.__argusPremiumExperience) return;
+  o.__argusPremiumExperience = !0;
+  const a = o.connectedCallback;
+  o.connectedCallback = function() {
+    const c = a?.call(this);
+    return queueMicrotask(() => {
+      if (this.shadowRoot && !this.shadowRoot.getElementById("argus-premium-style")) {
+        const f = document.createElement("style");
+        f.id = "argus-premium-style", f.textContent = Qh, this.shadowRoot.append(f);
+      }
+    }), c;
+  };
+  const u = o.disconnectedCallback;
+  o.disconnectedCallback = function() {
+    const c = this.shadowRoot;
+    return c && c.querySelectorAll(".wx-webgl").forEach(Kh), u?.call(this);
+  };
+}
+const Jh = [{ id: "activity", size: "M", hidden: !1 }, { id: "modes", size: "M", hidden: !1 }, { id: "automations", size: "M", hidden: !1 }, { id: "access", size: "M", hidden: !1 }, { id: "backup", size: "S", hidden: !1 }, { id: "github", size: "S", hidden: !1 }], Qd = { es: ["Configurar widgets", "Arrastrar", "Ocultar", "Mostrar", "Conectado", "Sin sensores configurados", "Todos los sensores están omitidos"], en: ["Configure widgets", "Drag", "Hide", "Show", "Connected", "No sensors configured", "All sensors are bypassed"], fr: ["Configurer les widgets", "Déplacer", "Masquer", "Afficher", "Connecté", "Aucun capteur configuré", "Tous les capteurs sont ignorés"], pt: ["Configurar widgets", "Arrastar", "Ocultar", "Mostrar", "Conectado", "Nenhum sensor configurado", "Todos os sensores estão ignorados"], it: ["Configura widget", "Trascina", "Nascondi", "Mostra", "Connesso", "Nessun sensore configurato", "Tutti i sensori sono esclusi"], zh: ["配置小组件", "拖动", "隐藏", "显示", "已连接", "未配置传感器", "所有传感器均已绕过"], ru: ["Настроить виджеты", "Перетащить", "Скрыть", "Показать", "Подключено", "Датчики не настроены", "Все датчики исключены"] }, eg = (r) => {
   const o = String(r._manualLang || r._hass?.language || "en").toLowerCase().split(/[-_]/)[0];
   return Qd[o] || Qd.en;
 }, Kd = (r) => [...r?.children || []].filter((o) => o.classList.contains("panel") && !o.classList.contains("dashboard-instances")), nl = (r, o) => {
@@ -9760,7 +9792,7 @@ function Zd(r) {
   o.id = "argus-ui-fix", o.textContent = ".grid.editing .panel.widget-hidden-preview{opacity:.48!important}.widget-drag-handle{min-height:44px;display:flex;align-items:center;justify-content:center}.ios-fullscreen .entry-content.security-console{display:grid!important;grid-template-columns:minmax(230px,340px) minmax(150px,1fr) minmax(230px,380px)!important;grid-template-rows:auto minmax(0,1fr)!important;grid-template-areas:'hud hud hud' 'modes icon sensors'!important;gap:20px 32px!important;padding:56px 48px 32px!important;overflow:hidden!important}.ios-fullscreen .console-hud{grid-area:hud!important}.ios-fullscreen .liquid-stack{grid-area:modes!important;width:100%!important}.ios-fullscreen .entry-icon{grid-area:icon!important}.ios-fullscreen .console-sensors{grid-area:sensors!important;max-height:60vh!important;overflow:auto!important}@media(max-width:900px){.ios-fullscreen .entry-content.security-console{grid-template-columns:1fr!important;grid-template-rows:auto auto auto auto!important;grid-template-areas:'hud' 'icon' 'modes' 'sensors'!important;padding:64px 18px 22px!important;overflow-y:auto!important}.ios-fullscreen .liquid-stack,.ios-fullscreen .console-sensors{max-width:420px!important;margin:auto!important}}", r.shadowRoot.appendChild(o);
 }
 function rl(r) {
-  const o = Kh(r), a = r.shadowRoot;
+  const o = eg(r), a = r.shadowRoot;
   if (!a) return;
   const u = a.getElementById("edit-widgets-label");
   u && (u.textContent = r._widgetEditing ? "✓ " + (r._t?.("done") || "Done") : "⚙️ " + o[0]), a.querySelectorAll(".widget-drag-handle").forEach((c) => c.textContent = "⋮⋮ " + o[1]), a.querySelectorAll(".widget-toggle-btn").forEach((c) => c.textContent = /mostrar|show|afficher|mostra|显示|показ/i.test(c.textContent) ? o[3] : o[2]), a.querySelectorAll(".console-empty").forEach((c) => c.textContent = /omit|bypass|ignor|exclu|绕过|исключ/i.test(c.textContent) ? o[6] : o[5]), a.querySelectorAll(".entry").forEach((c) => [...c.children].filter((f) => ["CONECTADO", "CONNECTED"].includes(f.textContent?.trim())).forEach((f) => {
@@ -9768,7 +9800,7 @@ function rl(r) {
     f.textContent = "", y && f.appendChild(y), f.append(o[4]);
   }));
 }
-function Zh(r) {
+function tg(r) {
   if (!r || r.__uiAudit) return;
   r.__uiAudit = !0;
   const o = r.prototype, a = o.connectedCallback, u = o._applyTranslations, c = o._renderEntries, f = o._initWidgetGrid, y = o._saveWidgetLayout;
@@ -9819,7 +9851,7 @@ function Zh(r) {
     })), rl(this);
   }, o._saveWidgetLayout = function() {
     y?.call(this);
-    const m = this._widgetConfig || Qh;
+    const m = this._widgetConfig || Jh;
     this._ui = this._ui || {};
     const h = { ...this._ui.dashboard || {}, widget_layout: m };
     this._ui.dashboard = h, clearTimeout(this._widgetSaveTimer), this._widgetSaveTimer = setTimeout(() => this._send("argus/save_ui", { dashboard: h }).catch((x) => console.error("Widget layout save failed", x)), 180);
@@ -9835,34 +9867,6 @@ function Zh(r) {
     h.hidden = !h.hidden;
     const x = this.shadowRoot?.getElementById("w-" + m);
     x && (x.classList.toggle("widget-hidden-preview", h.hidden && this._widgetEditing), x.style.display = h.hidden && !this._widgetEditing ? "none" : ""), this._renderWidgetLayout(), this._saveWidgetLayout();
-  };
-}
-const Jh = `
-.argus-cinematic-weather{position:absolute;inset:0;overflow:hidden;background:linear-gradient(to bottom,#0c3159,#69a9d5 62%,#c9d4d5)}
-.argus-cinematic-weather canvas{width:100%;height:100%;display:block}.argus-weather-vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 56% 36%,transparent 16%,rgba(0,7,16,.1) 57%,rgba(0,4,12,.62) 100%)}
-@media(prefers-reduced-motion:reduce){.argus-cinematic-weather{background:#0f172a}}
-`;
-function eg(r) {
-  const o = r?.__argusWebgl;
-  o && (cancelAnimationFrame(o.frame), o.observer?.disconnect(), document.removeEventListener("visibilitychange", o.visibility), o.gl.deleteBuffer(o.buffer), o.gl.deleteProgram(o.program), o.gl.getExtension("WEBGL_lose_context")?.loseContext(), delete r.__argusWebgl);
-}
-function tg(r) {
-  const o = r?.prototype;
-  if (!o || o.__argusPremiumExperience) return;
-  o.__argusPremiumExperience = !0;
-  const a = o.connectedCallback;
-  o.connectedCallback = function() {
-    const c = a?.call(this);
-    return queueMicrotask(() => {
-      if (this.shadowRoot && !this.shadowRoot.getElementById("argus-premium-style")) {
-        const f = document.createElement("style");
-        f.id = "argus-premium-style", f.textContent = Jh, this.shadowRoot.append(f);
-      }
-    }), c;
-  };
-  const u = o.disconnectedCallback;
-  o.disconnectedCallback = function() {
-    return this.shadowRoot?.querySelectorAll(".wx-webgl").forEach(eg), u?.call(this);
   };
 }
 function Jd(r) {
@@ -11961,14 +11965,14 @@ function zy(r) {
   };
 }
 function Oy(r) {
-  Zh(r);
+  tg(r);
 }
 function Py(r) {
-  tg(r), ng(r), sg(r), mg(r), Eg(r), Rg(r), zg(r), Ag(r), Fg(r), Wg(r), Ug(r), Kg(r), Zg(r), Jg(r), ny(r), iy(r), ay(r), sy(r), cy(r), my(r), _y(r), by(r), Ey(r), zy(r);
+  ng(r), sg(r), mg(r), Eg(r), Rg(r), zg(r), Ag(r), Fg(r), Wg(r), Ug(r), Kg(r), Zg(r), Jg(r), ny(r), iy(r), ay(r), sy(r), cy(r), my(r), _y(r), by(r), Ey(r), zy(r);
 }
 function Ny(r) {
   const o = r;
-  !o || o.__argusTypedFrontend || (o.__argusTypedFrontend = !0, Oy(o), Xh(o), Yh(o), Py(o), Gh(o));
+  !o || o.__argusTypedFrontend || (o.__argusTypedFrontend = !0, Oy(o), Xh(o), Yh(o), Zh(o), Py(o), Gh(o));
 }
 export {
   Ny as applyArgusFrontend

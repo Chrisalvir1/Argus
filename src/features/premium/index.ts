@@ -1,30 +1,52 @@
+import type { ArgusPanelConstructor, ArgusPanelHost } from '../../core/panel';
+
+type HassState = { entity_id: string; state: string };
+type HassMock = {
+  config?: { latitude?: number | string };
+  states?: Record<string, HassState>;
+};
+
+type WebGLState = {
+  frame: number;
+  gl: WebGLRenderingContext | WebGL2RenderingContext;
+  buffer: WebGLBuffer | null;
+  program: WebGLProgram | null;
+  observer?: MutationObserver;
+  visibility: () => void;
+};
+
 // Keep the weather scene semantic: a clear sky is not a cloudy sky with a
 // different tint. Each HA condition gets its own celestial and precipitation
 // treatment in the shader below.
-const WEATHER_MODE = Object.freeze({sunny:0,'clear-night':1,rainy:2,pouring:2,'lightning-rainy':3,lightning:4,snowy:5,fog:6,cloudy:7,partlycloudy:8,windy:8,windy_variably_cloudy:8,exceptional:4});
-const SEASONS = ['winter','spring','summer','autumn'];
+const WEATHER_MODE: Record<string, number> = Object.freeze({
+  sunny: 0, 'clear-night': 1, rainy: 2, pouring: 2, 'lightning-rainy': 3,
+  lightning: 4, snowy: 5, fog: 6, cloudy: 7, partlycloudy: 8,
+  windy: 8, windy_variably_cloudy: 8, exceptional: 4
+});
 
-function seasonFor(hass) {
+const SEASONS = ['winter', 'spring', 'summer', 'autumn'];
+
+export function seasonFor(hass?: HassMock): string {
   const month = new Date().getMonth();
   const latitude = Number(hass?.config?.latitude);
   const adjusted = Number.isFinite(latitude) && latitude < 0 ? (month + 6) % 12 : month;
   return SEASONS[Math.floor(((adjusted + 1) % 12) / 3)];
 }
 
-function weatherMode(value, isNight) {
+export function weatherMode(value: string | null | undefined, isNight: boolean): number {
   const condition = String(value || '').toLowerCase();
   if (Object.hasOwn(WEATHER_MODE, condition)) return WEATHER_MODE[condition];
   return isNight ? WEATHER_MODE['clear-night'] : WEATHER_MODE.sunny;
 }
 
-function moonPhase(hass) {
+export function moonPhase(hass?: HassMock): number {
   const state = Object.values(hass?.states || {}).find(item => item.entity_id === 'sensor.moon_phase')?.state;
-  const values = ['new_moon','waxing_crescent','first_quarter','waxing_gibbous','full_moon','waning_gibbous','last_quarter','waning_crescent'];
+  const values = ['new_moon', 'waxing_crescent', 'first_quarter', 'waxing_gibbous', 'full_moon', 'waning_gibbous', 'last_quarter', 'waning_crescent'];
   const index = values.indexOf(String(state || '').toLowerCase());
   return index < 0 ? -1 : index / 7;
 }
 
-function eclipseMode(hass) {
+export function eclipseMode(hass?: HassMock): number {
   const event = Object.values(hass?.states || {}).find(item => /eclipse/i.test(item.entity_id || ''))?.state?.toLowerCase();
   return event === 'solar' || event === 'solar_eclipse' ? 1 : event === 'lunar' || event === 'lunar_eclipse' ? 2 : 0;
 }
@@ -51,26 +73,64 @@ if(wet){float rain=drop(u,t*.0+0.)+drop(u*1.37+vec2(.23,.11),1.)*.58+drop(u*1.9+
 if(storm){float flash=pow(max(0.,sin(t*.73+h(vec2(floor(t*.73)))*4.)),58.);c+=flash*vec3(.65,.78,1.2);}
 if(m>5.5&&m<6.5)c=mix(c,vec3(.67,.74,.76),.24+cloud(u,.006)*.18);if(e>0.)c=mix(c,e<1.5?vec3(.08,.055,.025):vec3(.29,.045,.04),.48);gl_FragColor=vec4(c,1.);}`;
 
-function shader(gl, type, source) { const value = gl.createShader(type); gl.shaderSource(value, source); gl.compileShader(value); if (!gl.getShaderParameter(value, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(value)); return value; }
+export function shader(gl: WebGLRenderingContext | WebGL2RenderingContext, type: number, source: string): WebGLShader { 
+  const value = gl.createShader(type); 
+  if (!value) throw new Error('Could not create shader');
+  gl.shaderSource(value, source); 
+  gl.compileShader(value); 
+  if (!gl.getShaderParameter(value, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(value) || 'Shader compilation failed'); 
+  return value; 
+}
 
-function dispose(canvas) {
-  const state = canvas?.__argusWebgl;
+type CanvasWithWebgl = HTMLCanvasElement & {
+  __argusWebgl?: WebGLState;
+};
+
+export function dispose(canvas: CanvasWithWebgl): void {
+  const state = canvas.__argusWebgl;
   if (!state) return;
   cancelAnimationFrame(state.frame);
   state.observer?.disconnect();
   document.removeEventListener('visibilitychange', state.visibility);
-  state.gl.deleteBuffer(state.buffer); state.gl.deleteProgram(state.program);
-  state.gl.getExtension('WEBGL_lose_context')?.loseContext();
+  state.gl.deleteBuffer(state.buffer); 
+  state.gl.deleteProgram(state.program);
+  const ext = state.gl.getExtension('WEBGL_lose_context');
+  if (ext) ext.loseContext();
   delete canvas.__argusWebgl;
 }
 
-export function applyPremiumExperience(ArgusPanel) {
-  const proto = ArgusPanel?.prototype;
+type PremiumPrototype = ArgusPanelHost & {
+  __argusPremiumExperience?: boolean;
+  connectedCallback?: () => void;
+  disconnectedCallback?: () => void;
+};
+
+export function applyPremiumExperience(C: ArgusPanelConstructor | undefined): void {
+  const proto = C?.prototype as PremiumPrototype | undefined;
   if (!proto || proto.__argusPremiumExperience) return;
   proto.__argusPremiumExperience = true;
-  // Keep the panel's native renderer. It contains the actual HA weather
-  // mapping, moon phases and accessible CSS fallback; replacing it here was
-  // what turned the weather into a generic shader scene.
-  const connected=proto.connectedCallback;proto.connectedCallback=function(){const value=connected?.call(this);queueMicrotask(()=>{if(this.shadowRoot&&!this.shadowRoot.getElementById('argus-premium-style')){const style=document.createElement('style');style.id='argus-premium-style';style.textContent=CSS;this.shadowRoot.append(style);}});return value;};
-  const disconnected=proto.disconnectedCallback;proto.disconnectedCallback=function(){this.shadowRoot?.querySelectorAll('.wx-webgl').forEach(dispose);return disconnected?.call(this);};
+  
+  const connected = proto.connectedCallback;
+  proto.connectedCallback = function (this: ArgusPanelHost) {
+    const value = connected?.call(this);
+    queueMicrotask(() => {
+      if (this.shadowRoot && !this.shadowRoot.getElementById('argus-premium-style')) {
+        const style = document.createElement('style');
+        style.id = 'argus-premium-style';
+        style.textContent = CSS;
+        this.shadowRoot.append(style);
+      }
+    });
+    return value;
+  };
+  
+  const disconnected = proto.disconnectedCallback;
+  proto.disconnectedCallback = function (this: ArgusPanelHost) {
+    const root = this.shadowRoot;
+    if (root) {
+      const canvases = root.querySelectorAll('.wx-webgl') as NodeListOf<CanvasWithWebgl>;
+      canvases.forEach(dispose);
+    }
+    return disconnected?.call(this);
+  };
 }
