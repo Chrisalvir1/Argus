@@ -2,6 +2,14 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.55] - 2026-08-09
+
+### Fixed
+- **Armado en espera autoritativo:** al cerrar el último sensor, Argus anuncia el cierre y completa inmediatamente el modo solicitado sin depender de un temporizador obsoleto.
+- **Recuperación de `ARMING`:** el watchdog corrige generaciones desincronizadas y reconstruye solicitudes huérfanas.
+- **TTS por transición:** anuncia sensores cerrados, pendientes y confirmación final antes de armar.
+- **Pruebas ejecutables:** se valida `abierto → cierre parcial → último cierre → armado`.
+
 ## [2.0.54]
 
 ### Fixed

@@ -14,9 +14,9 @@ BOOTSTRAP = (ARGUS / "www" / "argus-bootstrap.js").read_text(encoding="utf-8")
 
 class TestV2050ArmingComplete(unittest.TestCase):
     def test_current_version_is_consistent(self):
-        self.assertIn('VERSION = "2.0.54"', CONST)
-        self.assertIn('"version": "2.0.54"', MANIFEST)
-        self.assertIn("2.0.54", BOOTSTRAP)
+        self.assertIn('VERSION = "2.0.55"', CONST)
+        self.assertIn('"version": "2.0.55"', MANIFEST)
+        self.assertIn("2.0.55", BOOTSTRAP)
 
     def test_runtime_uses_one_open_detection_function(self):
         self.assertIn("def is_sensor_active(", RUNTIME)
