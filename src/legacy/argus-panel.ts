@@ -1445,14 +1445,8 @@ _tmpl.innerHTML = `
   .access-actions { display:flex; gap:10px; flex-wrap:wrap; }
   .access-actions button { flex:0 1 auto; padding:8px 12px; font-size:11px; }
   .access-actions button.active { background:var(--primary-color,#007aff); color:#fff; border-color:transparent; }
-  .access-workspace { display:none; grid-template-columns:minmax(0,1fr); margin-top:16px; padding-top:18px; border-top:1px solid var(--glass-border,rgba(255,255,255,.09)); }
-  .access-workspace.open { display:grid; }
-  .access-section { display:none; min-width:0; }
-  .access-section.open { display:block; }
-  .access-section h3 { font-size:12px; font-weight:900; opacity:.8; margin:0 0 10px; text-transform:uppercase; }
-  .access-panel .user-card { padding:10px 12px; border-radius:12px; }
-  .access-workspace.open {
-    animation:iosGlassIn .35s cubic-bezier(.22,1.18,.36,1) both;
+  .access-workspace {
+    display:grid; grid-template-columns:minmax(0,1fr); margin-top:16px; gap:24px;
     background:linear-gradient(135deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
     border:1px solid var(--glass-border,rgba(255,255,255,.09));
     border-radius:20px;
@@ -1460,7 +1454,13 @@ _tmpl.innerHTML = `
     box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 12px 30px rgba(0,0,0,.10);
     backdrop-filter:blur(22px) saturate(145%);
     -webkit-backdrop-filter:blur(22px) saturate(145%);
+    max-height: 55vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
+  .access-section { display:block; min-width:0; }
+  .access-section h3 { font-size:12px; font-weight:900; opacity:.8; margin:0 0 10px; text-transform:uppercase; }
+  .access-panel .user-card { padding:10px 12px; border-radius:12px; }
   .github-star-action {
     display:inline-flex;align-items:center;justify-content:center;gap:7px;
     min-height:42px;padding:9px 16px;border-radius:14px;text-decoration:none;
@@ -2654,10 +2654,6 @@ _tmpl.innerHTML = `
             <h2 id="h-access-title">Control de Acceso y Usuarios</h2>
             <p class="access-summary" id="p-access-desc">PIN desactivado · Sin usuarios adicionales</p>
           </div>
-          <div class="access-actions">
-            <button class="ghost" id="btn-access-users" aria-expanded="false">👥 Usuarios</button>
-            <button class="ghost" id="btn-access-pin" aria-expanded="false">🔐 PIN Maestro</button>
-          </div>
         </div>
 
         <div class="access-workspace" id="access-workspace">
@@ -3440,32 +3436,7 @@ class ArgusPanel extends HTMLElement {
   }
 
   _toggleAccessSection(section) {
-    if (!['users', 'pin'].includes(section)) return;
-    const workspace = this.shadowRoot?.getElementById('access-workspace');
-    const usersSection = this.shadowRoot?.getElementById('access-users-section');
-    const pinSection = this.shadowRoot?.getElementById('access-pin-section');
-    const usersButton = this.shadowRoot?.getElementById('btn-access-users');
-    const pinButton = this.shadowRoot?.getElementById('btn-access-pin');
-    if (!workspace || !usersSection || !pinSection) return;
-
-    const target = section === 'users' ? usersSection : pinSection;
-    const shouldOpen = !target.classList.contains('open');
-    this._activeAccessSection = shouldOpen ? section : null;
-    workspace.classList.toggle('open', shouldOpen);
-    usersSection.classList.toggle('open', shouldOpen && section === 'users');
-    pinSection.classList.toggle('open', shouldOpen && section === 'pin');
-
-    for (const [button, active] of [
-      [usersButton, shouldOpen && section === 'users'],
-      [pinButton, shouldOpen && section === 'pin'],
-    ]) {
-      if (!button) continue;
-      button.classList.toggle('active', active);
-      button.setAttribute('aria-expanded', String(active));
-    }
-
-    if (shouldOpen && section === 'users') this._renderUsers();
-    if (shouldOpen && section === 'pin') this._syncAccessSummary();
+    // Nav toggling is removed. Sections are always visible.
   }
 
   /* ── Init ────────────────────────────────────────────────────────── */

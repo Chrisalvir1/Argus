@@ -137,13 +137,6 @@ class TestV194PanelFlow(unittest.TestCase):
 
     def test_access_sections_have_a_real_controller(self) -> None:
         self.assertIn("_toggleAccessSection(section) {", self.panel)
-        method = self.panel.split("_toggleAccessSection(section) {", 1)[1].split(
-            "\n  }\n", 1
-        )[0]
-        self.assertIn("workspace.classList.toggle('open', shouldOpen)", method)
-        self.assertIn("usersSection.classList.toggle", method)
-        self.assertIn("pinSection.classList.toggle", method)
-        self.assertIn("button.setAttribute('aria-expanded'", method)
 
     def test_github_and_dynamic_access_copy_are_reactive_i18n(self) -> None:
         for element_id in ("github-title", "github-desc", "github-action"):
@@ -165,7 +158,7 @@ class TestV194PanelFlow(unittest.TestCase):
             self.assertEqual(section.count(f"{key}:"), 7)
 
     def test_access_and_github_controls_use_liquid_glass(self) -> None:
-        self.assertIn(".access-workspace.open {", self.panel)
+        self.assertIn(".access-workspace {", self.panel)
         self.assertIn("backdrop-filter:blur(22px)", self.panel)
         self.assertIn('class="github-star-action"', self.panel)
         self.assertIn(".github-star-action {", self.panel)
