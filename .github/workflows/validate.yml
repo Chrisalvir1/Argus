@@ -16,27 +16,31 @@ concurrency:
 
 jobs:
   static-tests:
-    name: Python regression tests
+    name: Python 3.14 regression tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: '3.14'
+      - name: Verify Python runtime
+        run: python -c 'import sys; assert (3, 14, 2) <= sys.version_info < (3, 15); print(sys.version)'
       - run: python -m compileall -q custom_components/argus tests
       - run: python -m unittest discover -s tests -v
 
   javascript-syntax:
-    name: JavaScript syntax checks
+    name: JavaScript syntax checks (Node 24 LTS)
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
-      - name: Validate JavaScript modules
+          node-version: '24'
+      - name: Verify Node runtime
+        run: node -e "if (Number(process.versions.node.split('.')[0]) !== 24) process.exit(1); console.log(process.version)"
+      - name: Validate residual JavaScript modules
         run: |
           set -euo pipefail
           for file in custom_components/argus/www/*.js; do
@@ -44,16 +48,18 @@ jobs:
           done
 
   frontend-tests:
-    name: React, TypeScript 7 and Vite
+    name: React, TypeScript 7.0.2 and Vite
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
           cache: npm
       - run: npm ci
+      - name: Verify TypeScript compiler
+        run: test "$(npx tsc --version)" = "Version 7.0.2"
       - run: npx tsc --noEmit
       - run: npm test
       - run: npm run build
@@ -110,7 +116,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
           cache: npm
       - run: npm ci
       - name: Report high-severity dependency findings

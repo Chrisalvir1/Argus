@@ -21,16 +21,18 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: '3.14'
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
           cache: npm
 
-      - name: Validate version and Python sources
+      - name: Validate runtimes, version and Python sources
         shell: bash
         run: |
           set -euo pipefail
+          python -c 'import sys; assert (3, 14, 2) <= sys.version_info < (3, 15); print(sys.version)'
+          test "$(node -p "process.versions.node.split('.')[0]")" = "24"
           VERSION="$(python -c 'import json; print(json.load(open("custom_components/argus/manifest.json"))["version"])')"
           if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
             test "${GITHUB_REF_NAME#v}" = "$VERSION"
@@ -38,17 +40,18 @@ jobs:
           python -m compileall -q custom_components/argus tests
           python -m unittest discover -s tests -v
 
-      - name: Validate JavaScript modules
+      - name: Validate residual JavaScript modules
         run: |
           set -euo pipefail
           for file in custom_components/argus/www/*.js; do
             node --check "$file"
           done
 
-      - name: Build React dashboard with TypeScript 7 and Vite
+      - name: Build React dashboard with TypeScript 7.0.2 and Vite
         run: |
           set -euo pipefail
           npm ci
+          test "$(npx tsc --version)" = "Version 7.0.2"
           npx tsc --noEmit
           npm test
           npm run build
