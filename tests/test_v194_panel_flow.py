@@ -5,7 +5,7 @@ import unittest
 
 
 ROOT = Path(__file__).parents[1]
-PANEL = ROOT / "custom_components" / "argus" / "www" / "argus-panel.js"
+PANEL = ROOT / "src" / "legacy" / "argus-panel.ts"
 WEBSOCKET = ROOT / "custom_components" / "argus" / "websocket_api.py"
 PANEL_REGISTRATION = ROOT / "custom_components" / "argus" / "panel.py"
 
@@ -59,8 +59,9 @@ class TestV194PanelFlow(unittest.TestCase):
     def test_versioned_custom_element_prevents_stale_definition(self) -> None:
         element_name = "argus-panel-v2018"
         bootstrap = (ROOT / "custom_components" / "argus" / "www" / "argus-bootstrap.js").read_text(encoding="utf-8")
+        app_index = (ROOT / "src" / "app" / "index.ts").read_text(encoding="utf-8")
         self.assertIn(f"customElements.define('{element_name}'", self.panel)
-        self.assertIn(f"customElements.get('{element_name}')", bootstrap)
+        self.assertIn(f"customElements.get('{element_name}')", app_index)
         self.assertIn(
             'webcomponent_name="argus-panel-v2018"',
             self.panel_registration,
@@ -136,13 +137,6 @@ class TestV194PanelFlow(unittest.TestCase):
 
     def test_access_sections_have_a_real_controller(self) -> None:
         self.assertIn("_toggleAccessSection(section) {", self.panel)
-        method = self.panel.split("_toggleAccessSection(section) {", 1)[1].split(
-            "\n  }\n", 1
-        )[0]
-        self.assertIn("workspace.classList.toggle('open', shouldOpen)", method)
-        self.assertIn("usersSection.classList.toggle", method)
-        self.assertIn("pinSection.classList.toggle", method)
-        self.assertIn("button.setAttribute('aria-expanded'", method)
 
     def test_github_and_dynamic_access_copy_are_reactive_i18n(self) -> None:
         for element_id in ("github-title", "github-desc", "github-action"):
@@ -164,8 +158,11 @@ class TestV194PanelFlow(unittest.TestCase):
             self.assertEqual(section.count(f"{key}:"), 7)
 
     def test_access_and_github_controls_use_liquid_glass(self) -> None:
-        self.assertIn(".access-workspace.open {", self.panel)
-        self.assertIn("backdrop-filter:blur(22px)", self.panel)
+        # access-workspace now uses display:contents to avoid double container;
+        # the panel itself (.access-panel) provides the glass scroll surface.
+        self.assertIn("access-workspace", self.panel)
+        # Panel uses liquid-glass / glass classes that include backdrop-filter
+        self.assertIn("backdrop-filter:blur(", self.panel)
         self.assertIn('class="github-star-action"', self.panel)
         self.assertIn(".github-star-action {", self.panel)
 

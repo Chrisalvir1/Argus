@@ -41,14 +41,14 @@ class TestV191Functional(unittest.IsolatedAsyncioTestCase):
         )
     
     def test_github_star_contract(self):
-        """Contract: Ensure chrisalvir/argus is not in argus-panel.js and Chrisalvir1/Argus is used."""
+        """Contract: Ensure chrisalvir/argus is not in argus-panel.ts and Chrisalvir1/Argus is used."""
         panel_path = os.path.join(
-            os.path.dirname(__file__), "..", "custom_components", "argus", "www", "argus-panel.js"
+            os.path.dirname(__file__), "..", "src", "legacy", "argus-panel.ts"
         )
         with open(panel_path, "r") as f:
             content = f.read()
-        self.assertNotIn("chrisalvir/argus", content, "Old GitHub link found in argus-panel.js")
-        self.assertIn("Chrisalvir1/Argus", content, "New GitHub link not found in argus-panel.js")
+        self.assertNotIn("chrisalvir/argus", content, "Old GitHub link found in argus-panel.ts")
+        self.assertIn("Chrisalvir1/Argus", content, "New GitHub link not found in argus-panel.ts")
 
     def test_frontend_contracts_v191_pt2(self):
         """Verify frontend logic without executing JS:
@@ -59,7 +59,7 @@ class TestV191Functional(unittest.IsolatedAsyncioTestCase):
            - Restricted view renders a visible unlock-kiosk button.
         """
         panel_path = os.path.join(
-            os.path.dirname(__file__), "..", "custom_components", "argus", "www", "argus-panel.js"
+            os.path.dirname(__file__), "..", "src", "legacy", "argus-panel.ts"
         )
         with open(panel_path, "r") as f:
             content = f.read()
@@ -87,7 +87,7 @@ class TestV191Functional(unittest.IsolatedAsyncioTestCase):
     def test_backup_export_and_first_run_restore_contract(self):
         """Backups include protected credentials and fresh installs accept .argus files."""
         panel_path = os.path.join(
-            os.path.dirname(__file__), "..", "custom_components", "argus", "www", "argus-panel.js"
+            os.path.dirname(__file__), "..", "src", "legacy", "argus-panel.ts"
         )
         with open(panel_path, "r") as f:
             content = f.read()

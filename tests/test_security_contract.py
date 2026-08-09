@@ -23,13 +23,13 @@ class TestSecurityContract(unittest.TestCase):
         self.assertNotIn('"options": dict(entry.options)', source)
 
     def test_frontend_does_not_read_the_master_pin(self) -> None:
-        source = (COMPONENT / "www" / "argus-panel.js").read_text(encoding="utf-8")
+        source = (ROOT / "src" / "legacy" / "argus-panel.ts").read_text(encoding="utf-8")
         self.assertIn("pin_configured", source)
         self.assertNotIn("entries?.[0]?.options?.code", source)
 
     def test_sos_service_is_declared_and_bound_once(self) -> None:
         panel = (COMPONENT / "alarm_control_panel.py").read_text(encoding="utf-8")
-        frontend = (COMPONENT / "www" / "argus-panel.js").read_text(encoding="utf-8")
+        frontend = (ROOT / "src" / "legacy" / "argus-panel.ts").read_text(encoding="utf-8")
         self.assertIn("AlarmControlPanelEntityFeature.TRIGGER", panel)
         self.assertIn("if (this._sosBound) return;", frontend)
         self.assertIn("argus_panic_active", panel)
@@ -47,7 +47,7 @@ class TestSecurityContract(unittest.TestCase):
         self.assertIn("self._unsub_dispatcher = None", switch)
 
     def test_frontend_language_refresh_covers_all_supported_languages(self) -> None:
-        frontend = (COMPONENT / "www" / "argus-panel.js").read_text(encoding="utf-8")
+        frontend = (ROOT / "src" / "legacy" / "argus-panel.ts").read_text(encoding="utf-8")
         for language in ("es", "en", "fr", "pt", "it", "zh", "ru"):
             self.assertIn(f"{language}: {{", frontend)
         self.assertIn("use_ha_language", frontend)
@@ -71,11 +71,11 @@ class TestSecurityContract(unittest.TestCase):
     def test_current_release_contract(self) -> None:
         """Verify the version string is current and exact."""
         manifest = json.loads((COMPONENT / "manifest.json").read_text(encoding="utf-8"))
-        self.assertEqual(manifest["version"], "2.0.50")
+        self.assertEqual(manifest["version"], "2.0.55")
         self.assertEqual(manifest["integration_type"], "hub")
 
         const = (COMPONENT / "const.py").read_text(encoding="utf-8")
-        self.assertIn('VERSION = "2.0.50"', const)
+        self.assertIn('VERSION = "2.0.55"', const)
         self.assertIn('DEFAULT_MQTT_TOPIC_COMMAND = "argus/alarm/set"', const)
         self.assertIn("DEFAULT_NAME = NAME", const)
 
@@ -91,7 +91,7 @@ class TestSecurityContract(unittest.TestCase):
         self.assertIn("self.hass.async_create_task(self._async_mqtt_publish())", panel)
         self.assertIn("if not isinstance(entry_list, list):", panel)
 
-        frontend = (COMPONENT / "www" / "argus-panel.js").read_text(encoding="utf-8")
+        frontend = (ROOT / "src" / "legacy" / "argus-panel.ts").read_text(encoding="utf-8")
         self.assertIn("formattedDate", frontend)
         self.assertIn("toLocaleString(this._getLocale())", frontend)
 
@@ -99,7 +99,7 @@ class TestSecurityContract(unittest.TestCase):
         storage = (COMPONENT / "storage.py").read_text(encoding="utf-8")
         panel = (COMPONENT / "alarm_control_panel.py").read_text(encoding="utf-8")
         api = (COMPONENT / "websocket_api.py").read_text(encoding="utf-8")
-        frontend = (COMPONENT / "www" / "argus-panel.js").read_text(encoding="utf-8")
+        frontend = (ROOT / "src" / "legacy" / "argus-panel.ts").read_text(encoding="utf-8")
 
         self.assertIn("async_save_alarm_runtime_state", storage)
         self.assertIn("_async_reconcile_state_schedule", panel)

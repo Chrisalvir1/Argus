@@ -363,14 +363,14 @@ class TestV193FrontendContracts(unittest.TestCase):
 
     def setUp(self):
         panel_path = os.path.join(
-            os.path.dirname(__file__), "..", "custom_components", "argus", "www", "argus-panel.js"
+            os.path.dirname(__file__), "..", "src", "legacy", "argus-panel.ts"
         )
         with open(panel_path, "r", encoding="utf-8") as f:
             self.content = f.read()
 
     def test_version_updated_to_current(self):
-        """argus-panel.js header must carry a v2.0.x version marker."""
-        self.assertIn("Argus Home Hub – v2.0.", self.content, "argus-panel.js must carry a v2.0.x header version")
+        """argus-panel.ts header must carry a v2.0.x version marker."""
+        self.assertIn("Argus Home Hub – v2.0.", self.content, "argus-panel.ts must carry a v2.0.x header version")
         self.assertIn("argus-panel-v2018", self.content, "customElements.define must use argus-panel-v2018")
 
     def test_new_i18n_keys_all_languages(self):
@@ -413,8 +413,8 @@ class TestV193FrontendContracts(unittest.TestCase):
                     self.assertNotIn('role = "user"', text, f"Found 'role = user' in {file}")
 
     def test_no_new_user_admin_reference(self):
-        """Ensure new-user-admin does not exist in argus-panel.js."""
-        self.assertNotIn("new-user-admin", self.content, "Found 'new-user-admin' in argus-panel.js")
+        """Ensure new-user-admin does not exist in argus-panel.ts."""
+        self.assertNotIn("new-user-admin", self.content, "Found 'new-user-admin' in argus-panel.ts")
 
     def test_enter_space_select_user_card(self):
         """Ensure user cards in _renderLoginScreen listen to Enter and Space keys."""
@@ -456,7 +456,7 @@ class TestV193ManifestVersion(unittest.TestCase):
         )
         with open(manifest_path) as f:
             manifest = json.load(f)
-        self.assertEqual(manifest["version"], "2.0.50", "manifest.json version must be 2.0.50")
+        self.assertEqual(manifest["version"], "2.0.55", "manifest.json version must be 2.0.50")
 
 
 class TestV193BootstrapCacheBust(unittest.TestCase):
@@ -466,7 +466,7 @@ class TestV193BootstrapCacheBust(unittest.TestCase):
         )
         with open(bootstrap_path) as f:
             content = f.read()
-        self.assertIn("2.0.50", content, "argus-bootstrap.js must reference version 2.0.50 for cache-busting")
+        self.assertIn("2.0.55", content, "argus-bootstrap.js must reference version 2.0.50 for cache-busting")
 
 
 class TestV193ScheduleAndDisarmProtection(unittest.IsolatedAsyncioTestCase):

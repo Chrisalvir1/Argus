@@ -48,6 +48,7 @@ def _default_payload() -> dict:
         "state_schedule": [], "runtime": {"alarm_states": {}},
         "panel_bg_file": "", "panel_bg_sound": False,
         "hub_bg_mode": "none", "hub_bg_file": "", "hub_bg_sound": False,
+        "language": None,
     }
 
 

@@ -4,7 +4,7 @@ import subprocess
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-JS = ROOT / "custom_components/argus/www/argus-light-capability-fixes.js"
+JS = ROOT / "src/legacy/argus-light-capability-fixes.ts"
 BACKEND = ROOT / "custom_components/argus/output_profiles.py"
 
 

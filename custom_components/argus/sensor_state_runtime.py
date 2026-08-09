@@ -1,14 +1,8 @@
-"""Authoritative sensor reconciliation for pending and armed Argus states.
+"""Authoritative reconciliation for Argus pending and armed sensor states.
 
-State-change listeners remain the fast path. A small local watchdog is the
-safety net for integrations (Aqara/Zigbee hubs included) that coalesce, delay,
-or miss an event. It never changes configuration and only acts on sensors
-selected for the current mode.
-
-v2.0.50:
-- One active-state detector shared by arming wait and armed monitoring.
-- When every blocking sensor closes during arming wait, arming completes.
-- Re-arm while stuck in ARMING can force-complete if sensors are closed.
+State events are the fast path and a two-second watchdog is the recovery path.
+The same pure decision function controls both, preventing an event race from
+leaving Home Assistant or HomeKit permanently in ARMING.
 """
 from __future__ import annotations
 
@@ -17,8 +11,9 @@ import logging
 from datetime import timedelta
 
 from homeassistant.components.alarm_control_panel import AlarmControlPanelState
-from homeassistant.const import STATE_UNAVAILABLE, STATE_UNKNOWN
 from homeassistant.helpers.event import async_track_time_interval
+
+from .arming_state_machine import decide_arming_wait, is_active_sensor_state
 
 _LOGGER = logging.getLogger(__name__)
 _INTERVAL = timedelta(seconds=2)
@@ -28,48 +23,33 @@ _ARMED_STATES = {
     AlarmControlPanelState.ARMED_NIGHT,
     AlarmControlPanelState.ARMED_VACATION,
 }
-_ACTIVE = {
-    "on", "open", "opening", "unlocked", "active", "motion", "detected",
-    "wet", "problem", "unsafe", "recording",
-}
 
 
 def is_sensor_active(hass, entity_id: str) -> bool:
-    """Return True when a monitored sensor is currently blocking/open."""
+    """Return True only when the current entity state is active/open."""
     state = hass.states.get(entity_id)
-    if state is None:
-        return False
-    value = str(state.state).strip().lower()
-    if value in {STATE_UNKNOWN, STATE_UNAVAILABLE, "none", ""}:
-        return False
-    domain = entity_id.split(".", 1)[0]
-    if domain == "binary_sensor":
-        # HA binary sensors: on = open/active for door/window/motion.
-        return value == "on"
-    if domain == "lock":
-        return value not in {"locked", "locking"}
-    if domain == "cover":
-        return value not in {"closed", "closing"}
-    return value in _ACTIVE
+    return is_active_sensor_state(entity_id, state.state if state else None)
 
 
 def open_blocking_sensors(panel, target) -> list[str]:
-    """Canonical open-sensor list for arming decisions (Aqara-safe)."""
+    """Return the canonical, de-duplicated blocker list for a mode."""
     mode_key = target.value.replace("armed_", "")
     config = panel._mode_config(mode_key) if hasattr(panel, "_mode_config") else {}
     sensors = config.get("sensors") or panel._sensors_for_state(target)
-    bypassed = config.get("bypassed_sensors") or config.get("bypassedSensors") or []
-    open_ids: list[str] = []
-    for entity_id in dict.fromkeys(sensors):
-        if entity_id in bypassed:
-            continue
-        if is_sensor_active(panel.hass, entity_id):
-            open_ids.append(entity_id)
-    return open_ids
+    bypassed = set(
+        config.get("bypassed_sensors")
+        or config.get("bypassedSensors")
+        or []
+    )
+    return [
+        entity_id
+        for entity_id in dict.fromkeys(sensors)
+        if entity_id not in bypassed and is_sensor_active(panel.hass, entity_id)
+    ]
 
 
 def install_sensor_state_runtime() -> None:
-    """Install after safety, HomeKit keepalive, and trigger voice wrappers."""
+    """Install the single event/watchdog reconciliation owner once."""
     from .alarm_control_panel import ArgusAlarmPanel
 
     if getattr(ArgusAlarmPanel, "_argus_sensor_state_runtime", False):
@@ -79,9 +59,8 @@ def install_sensor_state_runtime() -> None:
     original_remove = ArgusAlarmPanel.async_will_remove_from_hass
     original_sensor_changed = ArgusAlarmPanel._async_sensor_changed
     original_complete = ArgusAlarmPanel._async_complete_arming
-    original_recheck = ArgusAlarmPanel._async_recheck_arm_request
     original_arm = ArgusAlarmPanel._async_arm
-    original_open = ArgusAlarmPanel._open_blocking_sensors
+    original_cancel = ArgusAlarmPanel._async_cancel_arming_request
 
     def active_for_state(self, state) -> set[str]:
         if state not in _ARMED_STATES:
@@ -95,104 +74,202 @@ def install_sensor_state_runtime() -> None:
     def open_blocking_override(self, target):
         return open_blocking_sensors(self, target)
 
-    async def recheck_with_completion(self) -> None:
-        """Recheck blockers; complete arming the moment every sensor is closed."""
-        request = self._arm_request
-        if not request:
+    async def announce_wait_change(self, target, previous_open, current_open) -> None:
+        if list(previous_open) == list(current_open):
             return
-        previous_open = list(request.get("blocking_sensors") or [])
-        open_sensors = (
-            open_blocking_sensors(self, request["target"])
-            if request.get("wait_for_sensors")
-            else []
-        )
-        request["blocking_sensors"] = open_sensors
-        # Always publish updated blocker list so HomeKit/UI stop showing stale waits.
-        self.async_write_ha_state()
+        try:
+            from .arming_voice import async_announce_arming_wait_update
 
-        if request.get("wait_for_sensors") and previous_open != open_sensors:
-            try:
-                from .arming_voice import async_announce_arming_wait_update
-
-                await async_announce_arming_wait_update(
-                    self.hass,
-                    self._config_entry,
-                    alarm_entity_id=self.entity_id,
-                    target=request["target"].value,
-                    previous_open=previous_open,
-                    current_open=open_sensors,
-                )
-            except Exception:  # noqa: BLE001
-                _LOGGER.exception("Argus arming voice update failed")
-
-        # Still waiting on sensors or countdown.
-        if open_sensors:
-            _LOGGER.debug(
-                "Argus arming wait still blocked by %s (states=%s)",
-                open_sensors,
-                {
-                    eid: getattr(self.hass.states.get(eid), "state", None)
-                    for eid in open_sensors
-                },
+            await async_announce_arming_wait_update(
+                self.hass,
+                self._config_entry,
+                alarm_entity_id=self.entity_id,
+                target=target.value,
+                previous_open=previous_open,
+                current_open=current_open,
             )
-            return
-        if not request.get("delay_elapsed", True):
-            return
-        if request is not self._arm_request or request.get("generation") != self._arm_generation:
-            return
+        except Exception:  # Voice can fail, but security state must continue.
+            _LOGGER.exception("Argus arming voice update failed")
 
-        target = request["target"]
-        _LOGGER.info(
-            "Argus arming wait cleared — completing arm to %s (origin=%s)",
-            target,
-            request.get("origin"),
-        )
-        self._arm_request = None
-        self._arming_target = None
-        if self._arming_listener:
+    async def recheck_with_completion(self) -> None:
+        """Publish blockers and atomically commit when the final one closes."""
+        lock = getattr(self, "_argus_recheck_lock", None)
+        if lock is None:
+            lock = self._argus_recheck_lock = asyncio.Lock()
+
+        async with lock:
+            request = getattr(self, "_arm_request", None)
+            if not request or request.get("completing"):
+                return
+
+            previous_open = list(request.get("blocking_sensors") or [])
+            current_open = (
+                open_blocking_sensors(self, request["target"])
+                if request.get("wait_for_sensors")
+                else []
+            )
+            request["blocking_sensors"] = current_open
+            self._argus_last_blocking_sensors = list(current_open)
+
+            decision = decide_arming_wait(
+                previous_open,
+                current_open,
+                sensor_wait_started=bool(request.get("sensor_wait_started")),
+                delay_elapsed=bool(request.get("delay_elapsed")),
+            )
+            self.async_write_ha_state()
+            await announce_wait_change(
+                self, request["target"], previous_open, current_open
+            )
+
+            if not decision.complete:
+                _LOGGER.debug(
+                    "Argus arming remains pending: reason=%s blockers=%s states=%s",
+                    decision.reason,
+                    current_open,
+                    {
+                        entity_id: getattr(
+                            self.hass.states.get(entity_id), "state", None
+                        )
+                        for entity_id in current_open
+                    },
+                )
+                return
+            if request is not getattr(self, "_arm_request", None):
+                return
+
+            # A live request is authoritative. A stale counter used to return
+            # forever here; repair it instead so the watchdog can finish.
+            if request.get("generation") != self._arm_generation:
+                _LOGGER.warning(
+                    "Argus repaired stale arming generation %s -> %s",
+                    request.get("generation"),
+                    self._arm_generation,
+                )
+                request["generation"] = self._arm_generation
+
+            request["completing"] = True
+            target = request["target"]
+            if self._arming_listener:
+                try:
+                    self._arming_listener()
+                except Exception:  # noqa: BLE001
+                    pass
+                self._arming_listener = None
+            self._arm_request = None
+            self._arming_target = None
+
+            _LOGGER.info(
+                "Argus arming wait completed: target=%s reason=%s origin=%s",
+                target,
+                decision.reason,
+                request.get("origin"),
+            )
             try:
-                self._arming_listener()
-            except Exception:  # noqa: BLE001
-                pass
-            self._arming_listener = None
-        await self._async_complete_arming(target)
+                await self._async_complete_arming(target)
+            except Exception:  # Preserve a request only if no state was committed.
+                if self._alarm_state == target:
+                    _LOGGER.exception(
+                        "Argus armed to %s but a post-commit action failed", target
+                    )
+                    return
+                request["completing"] = False
+                request["generation"] = self._arm_generation
+                self._arm_request = request
+                self._arming_target = target
+                self._alarm_state = AlarmControlPanelState.ARMING
+                self.async_write_ha_state()
+                raise
 
-    async def arm_with_stuck_recovery(self, target, code=None, *, origin: str = "service"):
-        """If already waiting and sensors are closed, complete instead of cancelling."""
+    async def recover_orphaned_arming(self) -> bool:
+        """Recover ARMING when another wrapper lost the request object."""
+        if (
+            self._alarm_state != AlarmControlPanelState.ARMING
+            or getattr(self, "_arm_request", None)
+        ):
+            return False
+        target = (
+            getattr(self, "_arming_target", None)
+            or getattr(self, "_argus_last_arming_target", None)
+        )
+        if target not in _ARMED_STATES:
+            _LOGGER.error(
+                "Argus found orphaned ARMING without a recoverable target"
+            )
+            return False
+
+        current_open = open_blocking_sensors(self, target)
+        previous_open = list(
+            getattr(self, "_argus_last_blocking_sensors", []) or []
+        )
+        if current_open:
+            _LOGGER.warning(
+                "Argus rebuilt orphaned arming request for %s; blockers=%s",
+                target,
+                current_open,
+            )
+            self._arm_request = {
+                "generation": self._arm_generation,
+                "target": target,
+                "origin": "watchdog_recovery",
+                "blocking_sensors": previous_open,
+                "wait_for_sensors": True,
+                "sensor_wait_started": True,
+                "delay_elapsed": True,
+            }
+            self._arming_target = target
+            await recheck_with_completion(self)
+            return True
+
+        await announce_wait_change(self, target, previous_open, [])
+        _LOGGER.warning(
+            "Argus recovered orphaned ARMING and completed %s", target
+        )
+        await self._async_complete_arming(target)
+        return True
+
+    async def arm_with_stuck_recovery(
+        self, target, code=None, *, origin: str = "service"
+    ):
+        """Refresh or complete an existing request instead of resetting it."""
+        self._argus_last_arming_target = target
         request = getattr(self, "_arm_request", None)
         if (
             request
             and self._alarm_state == AlarmControlPanelState.ARMING
             and request.get("target") == target
         ):
-            open_now = open_blocking_sensors(self, target) if request.get("wait_for_sensors") else []
-            request["blocking_sensors"] = open_now
-            if not open_now:
-                # Force delay elapsed so a second HomeKit/HA arm press completes.
+            if request.get("wait_for_sensors") and request.get("blocking_sensors"):
+                request["sensor_wait_started"] = True
+            current_open = open_blocking_sensors(self, target)
+            if not current_open and request.get("sensor_wait_started"):
                 request["delay_elapsed"] = True
-                _LOGGER.info(
-                    "Argus force-complete arming to %s after re-arm with sensors closed",
-                    target,
-                )
-                self._arm_request = None
-                self._arming_target = None
-                if self._arming_listener:
-                    try:
-                        self._arming_listener()
-                    except Exception:  # noqa: BLE001
-                        pass
-                    self._arming_listener = None
-                await self._async_complete_arming(target)
-                return
-            # Sensors still open: refresh UI and keep waiting (do not disarm).
-            self.async_write_ha_state()
-            _LOGGER.warning(
-                "Argus still waiting to arm %s; open sensors: %s",
-                target,
-                open_now,
-            )
+            await recheck_with_completion(self)
             return
-        return await original_arm(self, target, code, origin=origin)
+
+        result = await original_arm(self, target, code, origin=origin)
+        request = getattr(self, "_arm_request", None)
+        if request:
+            started_with_blockers = bool(
+                request.get("wait_for_sensors")
+                and request.get("blocking_sensors")
+            )
+            request["sensor_wait_started"] = started_with_blockers
+            self._argus_last_blocking_sensors = list(
+                request.get("blocking_sensors") or []
+            )
+            schedule_reconcile(self, "arm_request")
+        return result
+
+    async def cancel_with_reconciliation(
+        self, reason: str, *, disarm: bool = False
+    ) -> None:
+        try:
+            await original_cancel(self, reason, disarm=disarm)
+        finally:
+            if not getattr(self, "_arm_request", None):
+                self._argus_last_arming_target = None
+                self._argus_last_blocking_sensors = []
 
     async def reconcile(self, source: str) -> None:
         lock = getattr(self, "_argus_sensor_reconcile_lock", None)
@@ -200,16 +277,21 @@ def install_sensor_state_runtime() -> None:
             lock = self._argus_sensor_reconcile_lock = asyncio.Lock()
         if lock.locked():
             return
+
         async with lock:
             request = getattr(self, "_arm_request", None)
             if request:
                 before = list(request.get("blocking_sensors") or [])
                 await recheck_with_completion(self)
                 after_request = getattr(self, "_arm_request", None)
-                after = list(after_request.get("blocking_sensors") or []) if after_request else []
+                after = (
+                    list(after_request.get("blocking_sensors") or [])
+                    if after_request
+                    else []
+                )
                 if before != after or after_request is None:
                     _LOGGER.info(
-                        "Argus sensor reconciliation (%s): blockers %s -> %s; request=%s",
+                        "Argus reconciliation (%s): blockers %s -> %s; request=%s",
                         source,
                         before,
                         after,
@@ -217,20 +299,24 @@ def install_sensor_state_runtime() -> None:
                     )
                 return
 
+            if await recover_orphaned_arming(self):
+                return
+
             if self._alarm_state not in _ARMED_STATES:
                 self._argus_last_active_sensors = set()
                 return
 
             active = active_for_state(self, self._alarm_state)
-            previous = set(getattr(self, "_argus_last_active_sensors", set()))
+            previous = set(
+                getattr(self, "_argus_last_active_sensors", set())
+            )
             self._argus_last_active_sensors = active
             newly_active = active - previous
             if not newly_active:
                 return
             entity_id = sorted(newly_active)[0]
-
             _LOGGER.warning(
-                "Argus sensor watchdog detected newly active monitored sensor %s while %s",
+                "Argus watchdog detected newly active sensor %s while %s",
                 entity_id,
                 self._alarm_state,
             )
@@ -243,7 +329,9 @@ def install_sensor_state_runtime() -> None:
 
     async def added_with_reconciliation(self) -> None:
         await original_added(self)
-        self._argus_last_active_sensors = active_for_state(self, self._alarm_state)
+        self._argus_last_active_sensors = active_for_state(
+            self, self._alarm_state
+        )
         existing = getattr(self, "_argus_sensor_watchdog_unsub", None)
         if existing:
             existing()
@@ -269,14 +357,16 @@ def install_sensor_state_runtime() -> None:
     async def complete_with_baseline(self, target) -> None:
         await original_complete(self, target)
         self._argus_last_active_sensors = active_for_state(self, target)
+        self._argus_last_arming_target = None
+        self._argus_last_blocking_sensors = []
 
     ArgusAlarmPanel._open_blocking_sensors = open_blocking_override
     ArgusAlarmPanel._async_recheck_arm_request = recheck_with_completion
     ArgusAlarmPanel._async_arm = arm_with_stuck_recovery
+    ArgusAlarmPanel._async_cancel_arming_request = cancel_with_reconciliation
     ArgusAlarmPanel.async_added_to_hass = added_with_reconciliation
     ArgusAlarmPanel.async_will_remove_from_hass = remove_with_reconciliation
     ArgusAlarmPanel._async_sensor_changed = sensor_changed_with_reconciliation
     ArgusAlarmPanel._async_complete_arming = complete_with_baseline
     ArgusAlarmPanel._argus_sensor_state_runtime = True
-    # Keep reference so tests can assert the override is installed.
     ArgusAlarmPanel._argus_is_sensor_active = staticmethod(is_sensor_active)

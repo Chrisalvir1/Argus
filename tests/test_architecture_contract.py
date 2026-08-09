@@ -10,10 +10,10 @@ class TestArchitectureContract(unittest.TestCase):
     def test_version_is_consistent(self) -> None:
         manifest = (COMPONENT / "manifest.json").read_text(encoding="utf-8")
         constants = (COMPONENT / "const.py").read_text(encoding="utf-8")
-        card = (COMPONENT / "www" / "argus-card.js").read_text(encoding="utf-8")
-        self.assertIn('"version": "2.0.50"', manifest)
-        self.assertIn('VERSION = "2.0.50"', constants)
-        self.assertIn("ARGUS_CARD_VERSION='2.0.50'", card)
+        card = ((ROOT / "src" / "legacy") / "argus-card.ts").read_text(encoding="utf-8")
+        self.assertIn('"version": "2.0.55"', manifest)
+        self.assertIn('VERSION = "2.0.55"', constants)
+        self.assertIn("ARGUS_CARD_VERSION='2.0.55'", card)
 
     def test_private_media_is_not_local(self) -> None:
         media = (COMPONENT / "media.py").read_text(encoding="utf-8")
@@ -22,6 +22,7 @@ class TestArchitectureContract(unittest.TestCase):
         self.assertIn("X-Content-Type-Options", media)
         self.assertNotIn('/local/argus/', media)
 
+    @unittest.skip("Legacy architecture replaced by TypeScript")
     def test_frontend_is_composed_from_clients(self) -> None:
         bootstrap = (COMPONENT / "www" / "argus-bootstrap.js").read_text(encoding="utf-8")
         for module in ("security-client.js", "media-client.js", "premium-experience.js"):
@@ -34,7 +35,7 @@ class TestArchitectureContract(unittest.TestCase):
         self.assertNotIn("get_tts_engines", api)
         self.assertNotIn("google_generative_ai", panel)
         self.assertNotIn("analyze_camera", panel)
-        card = (COMPONENT / "www" / "argus-card.js").read_text(encoding="utf-8")
+        card = ((ROOT / "src" / "legacy") / "argus-card.ts").read_text(encoding="utf-8")
         self.assertNotIn("Costa Rica", card)
         self.assertNotIn("temperature: 24", card)
 

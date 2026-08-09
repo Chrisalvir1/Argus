@@ -11,5 +11,5 @@ class TestV2043EditorContract(unittest.TestCase):
  def test_layout_is_local_and_server_persisted(self):
   source=(SRC/'index.tsx').read_text();self.assertIn('react_layout_v2',source);self.assertIn("panel._send('argus/save_ui'",source);self.assertIn('LocalStorageDashboardLayoutStorage',source)
  def test_disarm_is_forced_green_and_full_width(self):
-  source=(WWW/'argus-v2043-visual-fix.js').read_text();self.assertIn("setProperty('background','#22a447','important')",source);self.assertIn("setProperty('grid-column','1 / -1','important')",source)
+  source=(ROOT/'src'/'legacy'/'argus-v2043-visual-fix.ts').read_text();self.assertIn("setProperty('background','#22a447','important')",source);self.assertIn("setProperty('grid-column','1 / -1','important')",source)
 if __name__=='__main__':unittest.main()
