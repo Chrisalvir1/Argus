@@ -1,4 +1,4 @@
-# Notas de la versión 2.0.53
+# Notas de la versión 2.0.54
 
 Esta versión mejora sustancialmente la experiencia del usuario con notificaciones nativas ricas y mejor gestión de permisos.
 

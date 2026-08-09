@@ -2,6 +2,11 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.54]
+
+### Fixed
+- Fix watchdog freezing arming state indefinitely when custom sensor components translate closed states like 'cerrado' or 'off'.
+
 ## [2.0.53] - 2026-08-09
 
 ### Added

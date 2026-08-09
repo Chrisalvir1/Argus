@@ -32,7 +32,9 @@ _ACTIVE = {
     "on", "open", "opening", "unlocked", "active", "motion", "detected",
     "wet", "problem", "unsafe", "recording",
 }
-
+_CLOSED = {
+    "off", "closed", "closing", "locked", "locking", "standby", "safe", "clear", "cerrado"
+}
 
 def is_sensor_active(hass, entity_id: str) -> bool:
     """Return True when a monitored sensor is currently blocking/open."""
@@ -42,6 +44,12 @@ def is_sensor_active(hass, entity_id: str) -> bool:
     value = str(state.state).strip().lower()
     if value in {STATE_UNKNOWN, STATE_UNAVAILABLE, "none", ""}:
         return False
+        
+    if value in _CLOSED:
+        return False
+    if value in _ACTIVE:
+        return True
+
     domain = entity_id.split(".", 1)[0]
     if domain == "binary_sensor":
         # HA binary sensors: on = open/active for door/window/motion.
