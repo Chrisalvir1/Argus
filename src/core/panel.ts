@@ -18,4 +18,5 @@ export interface ArgusPanelHost extends HTMLElement{
 export type ArgusPanelConstructor=CustomElementConstructor&{
  prototype:ArgusPanelHost&Record<string,unknown>;
  __argusReactDashboard?:boolean;
+ __argusTypedFrontend?:boolean;
 };
