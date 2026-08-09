@@ -3,6 +3,7 @@ import{applyReactDashboardLayout}from'../features/dashboard';
 import{applyMediaClient}from'../features/media/client';
 import{applySecurityClient}from'../features/security/client';
 import{applyPremiumExperience}from'../features/premium';
+import { applyArmingWaitPolicy } from '../features/arming/wait-policy';
 import { applyMotionSystem } from '../features/motion';
 import { applyStableInstancesRender } from '../features/render/stable';
 import { applyV2050AlarmVisuals } from '../features/render/alarm';
@@ -28,5 +29,6 @@ export function applyArgusFrontend(value?:CustomElementConstructor|undefined):vo
   applyV2049ResponsiveWidgets(C);
   applyV2050WidgetLayouts(C);
  applyLegacyAfterTypedClients(C);
+ applyArmingWaitPolicy(C);
  applyReactDashboardLayout(C);
 }
