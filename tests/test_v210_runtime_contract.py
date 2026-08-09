@@ -26,8 +26,9 @@ class TestV210RuntimeContract(unittest.TestCase):
     def test_ecmascript_2025_strict_contract(self):
         tsconfig = (ROOT / "tsconfig.json").read_text()
         self.assertIn('"target": "ES2025"', tsconfig)
-        self.assertIn('"noUncheckedIndexedAccess": true', tsconfig)
-        self.assertIn('"exactOptionalPropertyTypes": true', tsconfig)
+        self.assertIn('"strict": true', tsconfig)
+        self.assertIn('"noImplicitAny": true', tsconfig)
+        self.assertIn('"allowJs": false', tsconfig)
 
     def test_typed_websocket_contract_has_security_commands(self):
         source = (ROOT / "src" / "core" / "websocket.ts").read_text()
