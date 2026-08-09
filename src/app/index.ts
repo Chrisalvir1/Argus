@@ -7,6 +7,7 @@ import { applyArmingWaitPolicy } from '../features/arming/wait-policy';
 import { applyMotionSystem } from '../features/motion';
 import { applyStableInstancesRender } from '../features/render/stable';
 import { applyV2050AlarmVisuals } from '../features/render/alarm';
+import { applyRuntimeLifecycle } from '../features/runtime/lifecycle';
 import { applyV2049ResponsiveWidgets } from '../features/widgets/responsive';
 import { applyV2050WidgetLayouts } from '../features/widgets/layouts';
 
@@ -31,4 +32,5 @@ export function applyArgusFrontend(value?:CustomElementConstructor|undefined):vo
  applyLegacyAfterTypedClients(C);
  applyArmingWaitPolicy(C);
  applyReactDashboardLayout(C);
+ applyRuntimeLifecycle(C);
 }
