@@ -1,10 +1,17 @@
 """Executable policy tests for the frontend/backend arming-wait contract."""
+from __future__ import annotations
+
+import importlib.util
 from pathlib import Path
 import unittest
 
-from custom_components.argus.arming_policy_runtime import resolve_open_sensor_policy
-
 ROOT = Path(__file__).resolve().parents[1]
+MODULE_PATH = ROOT / "custom_components" / "argus" / "arming_policy_runtime.py"
+SPEC = importlib.util.spec_from_file_location("argus_arming_policy_runtime", MODULE_PATH)
+POLICY = importlib.util.module_from_spec(SPEC)
+assert SPEC and SPEC.loader
+SPEC.loader.exec_module(POLICY)
+resolve_open_sensor_policy = POLICY.resolve_open_sensor_policy
 
 
 class ArmingPolicyBehaviorTests(unittest.TestCase):
