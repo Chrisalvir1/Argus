@@ -55,8 +55,8 @@ jobs:
           npx tsc --noEmit
           npm test
           npm run build
-          test -s custom_components/argus/www/react-dist/argus-dashboard-react.js
-          ! grep -q 'process\.env' custom_components/argus/www/react-dist/argus-dashboard-react.js
+          test -s custom_components/argus/www/react-dist/argus-frontend.js
+          ! grep -q 'process\.env' custom_components/argus/www/react-dist/argus-frontend.js
 
       - name: Build HACS archive
         run: |

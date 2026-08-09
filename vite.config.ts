@@ -8,7 +8,7 @@ export default defineConfig({
     'process.env.DRAGGABLE_DEBUG': 'false',
   },
   build: {
-    target: 'es2025',
+    target: 'esnext',
     lib: {
       entry: 'src/app/index.ts',
       formats: ['es'],
