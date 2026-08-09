@@ -43,7 +43,7 @@ function touch(panel: LayoutsPanel) {
   root.querySelectorAll('#w-access,.access-content,.users-list,.user-list,[role=tabpanel],.users-modal,.access-modal').forEach((n) => {
     const el = n as HTMLElement;
     el.style.touchAction = 'pan-y';
-    el.style.webkitOverflowScrolling = 'touch';
+    el.style.setProperty('-webkit-overflow-scrolling', 'touch');
     if (el.scrollHeight > el.clientHeight) el.style.overflowY = 'auto';
   });
 }

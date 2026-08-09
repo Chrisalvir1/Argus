@@ -50,7 +50,7 @@ function enableTouchScroll(panel: ResponsivePanel) {
   root.querySelectorAll(ACCESS_SCROLL).forEach((node) => {
     const el = node as HTMLElement;
     el.style.touchAction = 'pan-y';
-    el.style.webkitOverflowScrolling = 'touch';
+    el.style.setProperty('-webkit-overflow-scrolling', 'touch');
     if (el.scrollHeight > el.clientHeight) el.style.overflowY = 'auto';
   });
 }
