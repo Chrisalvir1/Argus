@@ -17,6 +17,10 @@ class TestV2049HomeKitUiFollowup(unittest.TestCase):
    self.assertIn(token,source)
  def test_bootstrap_loads_followup(self):
   source=(WWW/'argus-bootstrap.js').read_text(encoding='utf-8')
-  self.assertIn('argus-v2049-responsive-widgets.js?v=2.0.49',source)
+  self.assertIn('argus-v2049-responsive-widgets.js?v=2.0.50',source)
   self.assertIn('applyV2049ResponsiveWidgets(ArgusPanel)',source)
+ def test_v2050_widget_layouts_layer(self):
+  source=(WWW/'argus-v2050-widget-layouts.js').read_text(encoding='utf-8')
+  for token in ('#w-access','#w-backup','#w-github','touch-action:pan-y','justify-content:center','align-items:center'):
+   self.assertIn(token,source)
 if __name__=='__main__':unittest.main()
