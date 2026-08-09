@@ -8,9 +8,16 @@ class TestV2049HomeKitUiFollowup(unittest.TestCase):
   source=(ARGUS/'homekit_keepalive.py').read_text(encoding='utf-8')
   for token in ('AlarmControlPanelState.ARMING','_arm_request','async_call_later','argus_homekit_keepalive','cancel_keepalive','_async_complete_arming'):
    self.assertIn(token,source)
- def test_keepalive_installs_after_safety_runtime(self):
+ def test_keepalive_installs_after_safety_and_canonical_policy_runtime(self):
   source=(ARGUS/'__init__.py').read_text(encoding='utf-8')
-  self.assertIn('install_safety_runtime();install_homekit_keepalive()',source)
+  sequence=(
+   'install_safety_runtime();',
+   'install_arming_policy_runtime();',
+   'install_homekit_keepalive();',
+   'install_sensor_state_runtime();',
+  )
+  positions=[source.index(token) for token in sequence]
+  self.assertEqual(positions,sorted(positions))
  @unittest.skip("Legacy architecture replaced by TypeScript")
  def test_access_scroll_and_widget_centering(self):
   source=((ROOT/'src'/'legacy')/'argus-v2049-responsive-widgets.ts').read_text(encoding='utf-8')
