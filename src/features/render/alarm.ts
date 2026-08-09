@@ -58,7 +58,7 @@ function apply(panel: AlarmPanel) {
   ensureStyles(panel);
   const entries = panel.shadowRoot.querySelectorAll('.entry');
   Array.from(entries).forEach((entry, index) => {
-    const item = panel._dashboard?.entries?.[index] || {};
+    const item: any = panel._dashboard?.entries?.[index] || {};
     const attrs = item.attributes || panel._hass?.states?.[item.entity_id!]?.attributes || {};
     const state = stateOf(panel, item);
     const blocking: string[] = attrs.arming_blocking_sensors || [];
@@ -117,7 +117,7 @@ function apply(panel: AlarmPanel) {
     }
     
     const triggered = new Set((attrs.triggered_sensors || []).map(String));
-    const names = new Set(blocking.map(id => String(panel._dashboard?.available_entities?.find((x: any) => x.entity_id === id)?.name || id).toLocaleLowerCase()));
+    const names = new Set(blocking.map(id => String((panel._dashboard as any)?.available_entities?.find((x: any) => x.entity_id === id)?.name || id).toLocaleLowerCase()));
     
     entry.querySelectorAll('.console-sensor').forEach(row => {
       const text = String(row.querySelector('.console-sensor-name')?.textContent || row.textContent || '').toLocaleLowerCase();

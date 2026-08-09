@@ -121,7 +121,7 @@ export function applyStableInstancesRender(C: ArgusPanelConstructor | undefined)
     if (!needFull) {
       let allSame = true;
       for (let idx = 0; idx < entries.length; idx++) {
-        const e = entries[idx];
+        const e: any = entries[idx];
         const live = this._hass?.states?.[e.entity_id!];
         const state = live?.state || e.state || 'unavailable';
         const attrs = live?.attributes || {};
@@ -153,7 +153,7 @@ export function applyStableInstancesRender(C: ArgusPanelConstructor | undefined)
       }
       
       if (allSame) {
-        const allStates = entries.map(e => this._hass?.states?.[e.entity_id!]?.state || 'unavailable');
+        const allStates = entries.map((e: any) => this._hass?.states?.[e.entity_id!]?.state || 'unavailable');
         const isArmed = allStates.some(s => String(s).startsWith('armed') || s === 'triggered' || s === 'pending');
         const globalStatusEl = root.getElementById('global-status');
         if (globalStatusEl) {
@@ -178,7 +178,7 @@ export function applyStableInstancesRender(C: ArgusPanelConstructor | undefined)
     const result = renderEntries?.call(this, force === true ? true : undefined);
     const after = [...el.querySelectorAll('article.entry')] as HTMLElement[];
     after.forEach((art, idx) => {
-      const e = entries[idx];
+      const e: any = entries[idx];
       if (!e) return;
       const live = this._hass?.states?.[e.entity_id!];
       const state = live?.state || e.state || 'unavailable';
@@ -233,10 +233,10 @@ export function applyStableInstancesRender(C: ArgusPanelConstructor | undefined)
           };
           collect(this._ui?.modes);
           
-          const languageChanged = oldHass.language !== hass.language;
+          const languageChanged = (oldHass as any).language !== (hass as any).language;
           if (languageChanged && !this._manualLang) this._refreshLocalizedUi?.();
           
-          const alarmChanged = this._dashboard.entries.some(e => e.entity_id && oldHass.states[e.entity_id]?.state !== hass.states[e.entity_id]?.state);
+          const alarmChanged = this._dashboard.entries.some((e: any) => e.entity_id && oldHass.states[e.entity_id]?.state !== hass.states[e.entity_id]?.state);
           const sensorChanged = [...configured].some(id => 
             oldHass.states[id]?.state !== hass.states[id]?.state ||
             oldHass.states[id]?.attributes?.battery_level !== hass.states[id]?.attributes?.battery_level ||
@@ -246,7 +246,7 @@ export function applyStableInstancesRender(C: ArgusPanelConstructor | undefined)
           const tempEntity = this._temperatureSource === 'auto' ? null : this._temperatureSource;
           const tempChanged = tempEntity && oldHass.states[tempEntity]?.state !== hass.states[tempEntity]?.state;
           
-          const weatherEnt = (this._weatherSource && this._weatherSource !== 'auto') ? this._weatherSource : Object.values(hass.states).find((s: any) => s.entity_id?.startsWith('weather.'))?.entity_id;
+          const weatherEnt = (this._weatherSource && this._weatherSource !== 'auto') ? this._weatherSource : (Object.values(hass.states) as any[]).find((s: any) => (s as any).entity_id?.startsWith('weather.'))?.entity_id;
           const weatherChanged = weatherEnt && (
             oldHass.states[weatherEnt]?.state !== hass.states[weatherEnt]?.state ||
             oldHass.states[weatherEnt]?.attributes?.temperature !== hass.states[weatherEnt]?.attributes?.temperature
