@@ -1,6 +1,7 @@
 """Track and announce every intrusion sensor involved in an Argus alarm."""
 from __future__ import annotations
 import re
+import asyncio
 from homeassistant.components.alarm_control_panel import AlarmControlPanelState
 from .arming_voice import async_announce_alarm_triggered
 _ACTIVE={"on","open","unlocked","active","motion","recording"}
@@ -26,19 +27,27 @@ def install_trigger_voice() -> None:
   sensors=list(dict.fromkeys(getattr(self,"_argus_triggered_sensors",[]) or []))
   await async_announce_alarm_triggered(self.hass,self._config_entry,alarm_entity_id=self.entity_id,sensor_entity_id=entity_id,triggered_sensor_ids=sensors,mode=getattr(self,"_triggered_mode",None),source=str(getattr(self,"_triggered_by","") or entity_id),additional=additional)
  async def wrapped_trigger(self):
-  was_triggered=self._alarm_state==AlarmControlPanelState.TRIGGERED
-  entity_id=_trigger_entity(self)
-  correlated=list(getattr(self,"_confirmation_events",{}).keys())
-  await original_trigger(self)
-  if not was_triggered and self._alarm_state==AlarmControlPanelState.TRIGGERED and not getattr(self,"_panic_active",False):
-   causes=[e for e in [*correlated,entity_id] if e and _is_active_monitored(self,e)]
-   self._argus_triggered_sensors=list(dict.fromkeys(causes))
-   self.async_write_ha_state()
-   if entity_id:await announce(self,entity_id,False)
+  lock = getattr(self, "_argus_trigger_lock", None)
+  if lock is None:
+      lock = self._argus_trigger_lock = asyncio.Lock()
+  async with lock:
+      was_triggered=self._alarm_state==AlarmControlPanelState.TRIGGERED
+      entity_id=_trigger_entity(self)
+      correlated=list(getattr(self,"_confirmation_events",{}).keys())
+      await original_trigger(self)
+      if not was_triggered and self._alarm_state==AlarmControlPanelState.TRIGGERED and not getattr(self,"_panic_active",False):
+       causes=[e for e in [*correlated,entity_id] if e and _is_active_monitored(self,e)]
+       self._argus_triggered_sensors=list(dict.fromkeys(causes))
+       self.async_write_ha_state()
+       if entity_id:await announce(self,entity_id,False)
  async def additional(self,entity_id):
-  sensors=list(getattr(self,"_argus_triggered_sensors",[]) or [])
-  if entity_id in sensors or not _is_active_monitored(self,entity_id):return
-  sensors.append(entity_id);self._argus_triggered_sensors=sensors;self.async_write_ha_state();await announce(self,entity_id,True)
+  lock = getattr(self, "_argus_trigger_lock", None)
+  if lock is None:
+      lock = self._argus_trigger_lock = asyncio.Lock()
+  async with lock:
+      sensors=list(getattr(self,"_argus_triggered_sensors",[]) or [])
+      if entity_id in sensors or not _is_active_monitored(self,entity_id):return
+      sensors.append(entity_id);self._argus_triggered_sensors=sensors;self.async_write_ha_state();await announce(self,entity_id,True)
  def wrapped_sensor(self,event):
   was_triggered=self._alarm_state==AlarmControlPanelState.TRIGGERED
   result=original_sensor(self,event)

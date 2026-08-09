@@ -97,65 +97,69 @@ def install_sensor_state_runtime() -> None:
 
     async def recheck_with_completion(self) -> None:
         """Recheck blockers; complete arming the moment every sensor is closed."""
-        request = self._arm_request
-        if not request:
-            return
-        previous_open = list(request.get("blocking_sensors") or [])
-        open_sensors = (
-            open_blocking_sensors(self, request["target"])
-            if request.get("wait_for_sensors")
-            else []
-        )
-        request["blocking_sensors"] = open_sensors
-        # Always publish updated blocker list so HomeKit/UI stop showing stale waits.
-        self.async_write_ha_state()
-
-        if request.get("wait_for_sensors") and previous_open != open_sensors:
-            try:
-                from .arming_voice import async_announce_arming_wait_update
-
-                await async_announce_arming_wait_update(
-                    self.hass,
-                    self._config_entry,
-                    alarm_entity_id=self.entity_id,
-                    target=request["target"].value,
-                    previous_open=previous_open,
-                    current_open=open_sensors,
-                )
-            except Exception:  # noqa: BLE001
-                _LOGGER.exception("Argus arming voice update failed")
-
-        # Still waiting on sensors or countdown.
-        if open_sensors:
-            _LOGGER.debug(
-                "Argus arming wait still blocked by %s (states=%s)",
-                open_sensors,
-                {
-                    eid: getattr(self.hass.states.get(eid), "state", None)
-                    for eid in open_sensors
-                },
+        lock = getattr(self, "_argus_recheck_lock", None)
+        if lock is None:
+            lock = self._argus_recheck_lock = asyncio.Lock()
+        async with lock:
+            request = self._arm_request
+            if not request:
+                return
+            previous_open = list(request.get("blocking_sensors") or [])
+            open_sensors = (
+                open_blocking_sensors(self, request["target"])
+                if request.get("wait_for_sensors")
+                else []
             )
-            return
-        if not request.get("delay_elapsed", True):
-            return
-        if request is not self._arm_request or request.get("generation") != self._arm_generation:
-            return
+            request["blocking_sensors"] = open_sensors
+            # Always publish updated blocker list so HomeKit/UI stop showing stale waits.
+            self.async_write_ha_state()
 
-        target = request["target"]
-        _LOGGER.info(
-            "Argus arming wait cleared — completing arm to %s (origin=%s)",
-            target,
-            request.get("origin"),
-        )
-        self._arm_request = None
-        self._arming_target = None
-        if self._arming_listener:
-            try:
-                self._arming_listener()
-            except Exception:  # noqa: BLE001
-                pass
-            self._arming_listener = None
-        await self._async_complete_arming(target)
+            if request.get("wait_for_sensors") and previous_open != open_sensors:
+                try:
+                    from .arming_voice import async_announce_arming_wait_update
+
+                    await async_announce_arming_wait_update(
+                        self.hass,
+                        self._config_entry,
+                        alarm_entity_id=self.entity_id,
+                        target=request["target"].value,
+                        previous_open=previous_open,
+                        current_open=open_sensors,
+                    )
+                except Exception:  # noqa: BLE001
+                    _LOGGER.exception("Argus arming voice update failed")
+
+            # Still waiting on sensors or countdown.
+            if open_sensors:
+                _LOGGER.debug(
+                    "Argus arming wait still blocked by %s (states=%s)",
+                    open_sensors,
+                    {
+                        eid: getattr(self.hass.states.get(eid), "state", None)
+                        for eid in open_sensors
+                    },
+                )
+                return
+            if not request.get("delay_elapsed", True):
+                return
+            if request is not self._arm_request or request.get("generation") != self._arm_generation:
+                return
+
+            target = request["target"]
+            _LOGGER.info(
+                "Argus arming wait cleared — completing arm to %s (origin=%s)",
+                target,
+                request.get("origin"),
+            )
+            self._arm_request = None
+            self._arming_target = None
+            if self._arming_listener:
+                try:
+                    self._arming_listener()
+                except Exception:  # noqa: BLE001
+                    pass
+                self._arming_listener = None
+            await self._async_complete_arming(target)
 
     async def arm_with_stuck_recovery(self, target, code=None, *, origin: str = "service"):
         """If already waiting and sensors are closed, complete instead of cancelling."""

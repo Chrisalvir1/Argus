@@ -1274,7 +1274,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     async def async_alarm_disarm(self, code=None) -> None:
         # Off cancels a pending request without a PIN; the alarm is not armed yet.
-        if getattr(self, "_arm_request", None) and self._alarm_state == AlarmControlPanelState.DISARMED:
+        if getattr(self, "_arm_request", None) and self._alarm_state in (AlarmControlPanelState.DISARMED, AlarmControlPanelState.ARMING):
             await self._async_cancel_arming_request("cancelled_from_off", disarm=True)
             return
         user_id = await self._get_context_user()
