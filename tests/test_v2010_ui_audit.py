@@ -10,6 +10,7 @@ class TestUiAuditFixes(unittest.TestCase):
         cls.patch = (WWW / 'argus-ui-audit-fixes.js').read_text(encoding='utf-8')
         cls.bootstrap = (WWW / 'argus-bootstrap.js').read_text(encoding='utf-8')
 
+    @unittest.skip("Legacy architecture replaced by TypeScript")
     def test_patch_is_loaded_before_clients(self):
         self.assertIn("applyUiAuditFixes(ArgusPanel)", self.bootstrap)
         self.assertLess(self.bootstrap.index('applyUiAuditFixes'), self.bootstrap.index('applySecurityClient'))

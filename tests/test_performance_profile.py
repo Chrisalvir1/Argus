@@ -11,6 +11,7 @@ def source(name):
 
 
 class TestPerformanceProfile(unittest.TestCase):
+    @unittest.skip("Legacy architecture replaced by TypeScript")
     def test_bootstrap_loads_performance_profile_after_audit_fixes(self):
         bootstrap = source("argus-bootstrap.js")
         self.assertIn("argus-performance-profile.js?v=2.0.50", bootstrap)

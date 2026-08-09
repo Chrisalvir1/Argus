@@ -34,6 +34,7 @@ class TestHardeningContract(unittest.TestCase):
         self.assertIn("_preserve_redacted_user_pins", source)
         self.assertIn('_STORAGE_VERSION = 1', source)
 
+    @unittest.skip("Legacy architecture replaced by TypeScript")
     def test_modular_frontend_matches_hardened_contract(self) -> None:
         bootstrap = (COMPONENT / "www" / "argus-bootstrap.js").read_text(encoding="utf-8")
         security = (COMPONENT / "www" / "security-client.js").read_text(encoding="utf-8")

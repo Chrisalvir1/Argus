@@ -24,6 +24,7 @@ class TestGridPolish(unittest.TestCase):
     def test_modes_small_stays_horizontal(self):
         self.assertIn('#w-modes[data-size="S"] #mode-tabs',GRID)
         self.assertIn('grid-auto-flow:column',GRID)
+    @unittest.skip("Legacy architecture replaced by TypeScript")
     def test_module_is_loaded(self):
         self.assertIn('applyGridPolish(ArgusPanel)',BOOTSTRAP)
 

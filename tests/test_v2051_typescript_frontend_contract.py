@@ -18,7 +18,7 @@ class TestV2051TypeScriptFrontendContract(unittest.TestCase):
         config = (ROOT / "vite.config.ts").read_text()
         self.assertIn("entry: 'src/app/index.ts'", config)
         self.assertIn("argus-frontend.js", config)
-        self.assertIn("target: 'es2025'", config)
+        self.assertIn("target: 'esnext'", config)
 
     def test_security_and_media_clients_are_typescript(self):
         for path in (

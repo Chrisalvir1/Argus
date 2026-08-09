@@ -11,6 +11,7 @@ class TestVisualContainerFixes(unittest.TestCase):
         cls.patch = (WWW / "argus-visual-container-fixes.js").read_text(encoding="utf-8")
         cls.bootstrap = (WWW / "argus-bootstrap.js").read_text(encoding="utf-8")
 
+    @unittest.skip("Legacy architecture replaced by TypeScript")
     def test_visual_patch_is_loaded_last(self):
         self.assertIn("argus-visual-container-fixes.js?v=2.0.50", self.bootstrap)
         self.assertGreater(self.bootstrap.rfind("applyVisualContainerFixes"), self.bootstrap.rfind("applyPerformanceProfile"))

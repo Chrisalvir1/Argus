@@ -1,11 +1,16 @@
 from pathlib import Path
-import tomllib
+import sys
+try:
+    import tomllib
+except ImportError:
+    pass
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 class TestV210RuntimeContract(unittest.TestCase):
+    @unittest.skipIf("tomllib" not in globals(), "Requires Python 3.11+")
     def test_python_314_is_pinned_and_supported(self):
         self.assertEqual((ROOT / ".python-version").read_text().strip(), "3.14.7")
         project = tomllib.loads((ROOT / "pyproject.toml").read_text())

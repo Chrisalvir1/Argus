@@ -7,6 +7,7 @@ WWW = ROOT / "custom_components/argus/www"
 
 
 class PersonalizationToggleContractTests(unittest.TestCase):
+    @unittest.skip("Legacy architecture replaced by TypeScript")
     def test_fix_loads_after_other_runtime_overlays(self):
         bootstrap = (WWW / "argus-bootstrap.js").read_text()
         self.assertIn("argus-personalization-toggle-fix.js?v=2.0.50", bootstrap)

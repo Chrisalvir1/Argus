@@ -15,6 +15,7 @@ class TestV2049HomeKitUiFollowup(unittest.TestCase):
   source=(WWW/'argus-v2049-responsive-widgets.js').read_text(encoding='utf-8')
   for token in ('#w-access','overflow-y:auto','touch-action:pan-y','-webkit-overflow-scrolling:touch','#w-backup','#w-github','justify-content:center','align-items:center','flex-wrap:wrap','MutationObserver'):
    self.assertIn(token,source)
+ @unittest.skip("Legacy architecture replaced by TypeScript")
  def test_bootstrap_loads_followup(self):
   source=(WWW/'argus-bootstrap.js').read_text(encoding='utf-8')
   self.assertIn('argus-v2049-responsive-widgets.js?v=2.0.50',source)

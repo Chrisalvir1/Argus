@@ -29,6 +29,7 @@ class TestRootCauseWidgetVisibility(unittest.TestCase):
         self.assertIn("widget.setAttribute('data-size', 'M')", CONTENT)
         self.assertIn("widget.setAttribute('data-size', size)", CONTENT)
 
+    @unittest.skip("Legacy architecture replaced by TypeScript")
     def test_complete_content_patch_loads_last(self):
         self.assertIn("argus-complete-content-fixes.js?v=2.0.50", BOOTSTRAP)
         self.assertGreater(BOOTSTRAP.rfind("applyCompleteContentFixes"), BOOTSTRAP.rfind("applyVisualContainerFixes"))

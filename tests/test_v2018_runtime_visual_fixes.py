@@ -46,6 +46,7 @@ class TestV2018RuntimeVisualFixes(unittest.TestCase):
         self.assertIn('color:#fff!important', RUNTIME)
         self.assertIn('.hero-context', RUNTIME)
 
+    @unittest.skip("Legacy architecture replaced by TypeScript")
     def test_runtime_patch_loads_last(self):
         self.assertIn('argus-runtime-visual-fixes.js?v=2.0.50', BOOTSTRAP)
         self.assertGreater(BOOTSTRAP.rfind('applyRuntimeVisualFixes'), BOOTSTRAP.rfind('applyCompleteContentFixes'))

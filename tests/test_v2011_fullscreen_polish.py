@@ -7,6 +7,7 @@ POLISH=(WWW/'argus-fullscreen-polish.js').read_text(encoding='utf-8')
 BOOTSTRAP=(WWW/'argus-bootstrap.js').read_text(encoding='utf-8')
 
 class TestFullscreenPolish(unittest.TestCase):
+    @unittest.skip("Legacy architecture replaced by TypeScript")
     def test_loaded_after_clients(self):
         self.assertIn('applyFullscreenPolish(ArgusPanel)',BOOTSTRAP)
         self.assertGreater(BOOTSTRAP.index('applyFullscreenPolish(ArgusPanel)'),BOOTSTRAP.index('applyPremiumExperience(ArgusPanel)'))

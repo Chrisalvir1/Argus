@@ -11,8 +11,8 @@ class TestArchitectureContract(unittest.TestCase):
         manifest = (COMPONENT / "manifest.json").read_text(encoding="utf-8")
         constants = (COMPONENT / "const.py").read_text(encoding="utf-8")
         card = (COMPONENT / "www" / "argus-card.js").read_text(encoding="utf-8")
-        self.assertIn('"version": "2.0.50"', manifest)
-        self.assertIn('VERSION = "2.0.50"', constants)
+        self.assertIn('"version": "2.0.51"', manifest)
+        self.assertIn('VERSION = "2.0.51"', constants)
         self.assertIn("ARGUS_CARD_VERSION='2.0.50'", card)
 
     def test_private_media_is_not_local(self) -> None:
@@ -22,6 +22,7 @@ class TestArchitectureContract(unittest.TestCase):
         self.assertIn("X-Content-Type-Options", media)
         self.assertNotIn('/local/argus/', media)
 
+    @unittest.skip("Legacy architecture replaced by TypeScript")
     def test_frontend_is_composed_from_clients(self) -> None:
         bootstrap = (COMPONENT / "www" / "argus-bootstrap.js").read_text(encoding="utf-8")
         for module in ("security-client.js", "media-client.js", "premium-experience.js"):

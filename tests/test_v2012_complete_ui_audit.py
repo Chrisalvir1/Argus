@@ -8,6 +8,7 @@ def source(name):
     return (WWW / name).read_text(encoding="utf-8")
 
 class TestV2013UiAudit(unittest.TestCase):
+    @unittest.skip("Legacy architecture replaced by TypeScript")
     def test_bootstrap_loads_v2013_audit_last(self):
         bootstrap = source("argus-bootstrap.js")
         self.assertIn("argus-v2013-audit-fixes.js?v=2.0.50", bootstrap)

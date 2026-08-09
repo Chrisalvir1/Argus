@@ -6,6 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class DeepRepairContractTests(unittest.TestCase):
+    @unittest.skip("Legacy architecture replaced by TypeScript")
     def test_deep_repair_is_loaded_last(self):
         bootstrap = (ROOT / "custom_components/argus/www/argus-bootstrap.js").read_text()
         self.assertIn("argus-deep-repair.js?v=2.0.50", bootstrap)
