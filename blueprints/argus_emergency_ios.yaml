@@ -1,0 +1,88 @@
+blueprint:
+  name: "Argus Security: Alertas con Video y Acciones"
+  description: >
+    Automatización completa para enviar notificaciones interactivas a la familia cuando Argus se dispara o falla al armarse.
+    Incluye grabación de video de 15 segundos y botones rápidos de iOS para desarmar, forzar armado, ver cámaras, o llamar a emergencias.
+  domain: automation
+  input:
+    argus_panel:
+      name: Panel de Argus
+      description: Tu entidad alarm_control_panel.argus
+      selector:
+        entity:
+          domain: alarm_control_panel
+    camera_entity:
+      name: Cámara de Seguridad
+      description: La cámara principal que grabará los 15 segundos del incidente.
+      selector:
+        entity:
+          domain: camera
+    notify_group:
+      name: Dispositivo o Grupo de Notificación
+      description: Entidad de notificación (ej. notify.familia o notify.mobile_app_iphone)
+      selector:
+        text:
+    emergency_number:
+      name: Número de Emergencia
+      description: Teléfono local al que se llamará al pulsar el botón SOS (ej. 911, 112)
+      default: "911"
+      selector:
+        text:
+
+trigger:
+  - platform: state
+    entity_id: !input argus_panel
+    to: "triggered"
+    id: "disparo"
+  - platform: event
+    event_type: argus_arming_cancelled
+    id: "fallo"
+
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: "disparo"
+        sequence:
+          - service: camera.record
+            target:
+              entity_id: !input camera_entity
+            data:
+              filename: /media/argus_trigger.mp4
+              duration: 15
+          - delay: "00:00:15"
+          - service: !input notify_group
+            data:
+              title: "🚨 ¡ARGUS DISPARADO!"
+              message: "Se ha detectado una intrusión. Revisa las cámaras de inmediato."
+              data:
+                image: /api/camera_proxy/{{ camera_entity }}
+                video: /media/local/argus_trigger.mp4
+                actions:
+                  - action: "URI"
+                    title: "🎥 Ver Cámaras"
+                    uri: "/lovelace/camaras"
+                  - action: "DESARMAR_ARGUS"
+                    title: "🔓 Desarmar"
+                    destructive: false
+                  - action: "URI"
+                    title: "📞 Llamar Emergencias"
+                    uri: "tel:{{ emergency_number }}"
+                  - action: "URI"
+                    title: "⚠️ Notificar Peligro"
+                    uri: "sms:?body=¡Peligro en casa, por favor envíen ayuda!"
+      - conditions:
+          - condition: trigger
+            id: "fallo"
+        sequence:
+          - service: !input notify_group
+            data:
+              title: "⚠️ Argus: Fallo de Armado"
+              message: "El sistema no pudo armarse porque hay sensores abiertos."
+              data:
+                actions:
+                  - action: "FORZAR_ARMADO"
+                    title: "🛡️ Volver a Armar"
+                  - action: "URI"
+                    title: "🔍 Ver Panel"
+                    uri: "/lovelace/argus"

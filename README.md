@@ -42,7 +42,9 @@ Puedes ver el diagnóstico detectado y forzar un perfil manualmente desde **Pers
 - Retardos de entrada y salida, duración de alarma y restauración segura.
 - Sensores por modo, sensores de entrada, bypass y requisito de cierre.
 - Sirenas por modo y SOS reversible con salidas independientes.
-- **Internacionalización y TTS Dinámico (v2.0.51)**: Argus ahora soporta 7 idiomas de forma nativa (Español, Inglés, Francés, Portugués, Italiano, Chino y Ruso). Las notificaciones de voz (TTS) se adaptan automáticamente al idioma que selecciones en tu interfaz web sin necesidad de modificar YAMLs.
+- **Internacionalización y TTS Dinámico (v2.0.51 - Mejorado en v2.0.53)**: Argus soporta 7 idiomas de forma nativa. Las notificaciones de voz (TTS) se adaptan automáticamente e informan con precisión los sensores bloqueantes y cierres instantáneos.
+- **Blueprints Nativos para Notificaciones (v2.0.53)**: Integra notificaciones móviles ricas (iOS) y bots de Telegram con video de 15 segundos y botones interactivos (Desarmar, Ver cámaras) listos para importar.
+- **Permisos de Usuarios Estándar Visibles (v2.0.53)**: Nuevo diseño de tarjetas de usuario que muestra en vivo insignias de permisos (Ver, Armar, Desarmar, Historial) y asigna acceso funcional a los nuevos perfiles manualmente.
 - **Sincronización Inteligente con Paneles Externos** (v2.0.29): Dispara y silencia automáticamente sirenas de cámaras u otras alarmas.
 - PIN maestro, usuarios temporales, invitado, `scrypt`/PBKDF2 y limitación de intentos administrativos.
 - **Sincronización automática de perfiles con cuentas humanas de Home Assistant** (v1.9.3).

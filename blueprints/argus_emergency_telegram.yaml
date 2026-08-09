@@ -1,0 +1,65 @@
+blueprint:
+  name: "Argus Security: Alertas Telegram con Video"
+  description: >
+    Automatización para enviar notificaciones interactivas a un Bot de Telegram cuando Argus se dispara o falla.
+    Incluye grabación de video de 15 segundos y botones integrados (inline keyboard) para acciones rápidas.
+  domain: automation
+  input:
+    argus_panel:
+      name: Panel de Argus
+      description: Tu entidad alarm_control_panel.argus
+      selector:
+        entity:
+          domain: alarm_control_panel
+    camera_entity:
+      name: Cámara de Seguridad
+      description: La cámara principal que grabará los 15 segundos del incidente.
+      selector:
+        entity:
+          domain: camera
+    telegram_target:
+      name: ID de Chat de Telegram
+      description: ID del grupo o usuario de Telegram (ej. -123456789)
+      selector:
+        text:
+
+trigger:
+  - platform: state
+    entity_id: !input argus_panel
+    to: "triggered"
+    id: "disparo"
+  - platform: event
+    event_type: argus_arming_cancelled
+    id: "fallo"
+
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: "disparo"
+        sequence:
+          - service: camera.record
+            target:
+              entity_id: !input camera_entity
+            data:
+              filename: /media/argus_trigger.mp4
+              duration: 15
+          - delay: "00:00:15"
+          - service: telegram_bot.send_video
+            data:
+              target: !input telegram_target
+              file: /media/local/argus_trigger.mp4
+              caption: "🚨 *¡ARGUS DISPARADO!*\nSe ha detectado una intrusión. Revisa las cámaras de inmediato."
+              inline_keyboard:
+                - "🔓 Desarmar:/argus_desarmar"
+                - "🎥 Ver Cámaras:/argus_camaras"
+      - conditions:
+          - condition: trigger
+            id: "fallo"
+        sequence:
+          - service: telegram_bot.send_message
+            data:
+              target: !input telegram_target
+              message: "⚠️ *Argus: Fallo de Armado*\nEl sistema no pudo armarse porque hay sensores abiertos."
+              inline_keyboard:
+                - "🛡️ Forzar Armado:/argus_forzar"

@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Home Hub – v2.0.49
+ * Argus Home Hub – v2.0.53
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -4334,8 +4334,10 @@ class ArgusPanel extends HTMLElement {
       const sByps = eCfg.bypassed_sensors || [];
       const activeSensors = sList.filter(s => !sByps.includes(s));
       const OPEN = ['on', 'open', 'unlocked', 'recording', 'active', 'motion'];
+      const isWaiting = Boolean(this._hass?.states?.[e.entity_id]?.attributes?.arming_waiting_for_sensors);
+      const blockingSensors = Array.isArray(this._hass?.states?.[e.entity_id]?.attributes?.arming_blocking_sensors) ? this._hass?.states?.[e.entity_id]?.attributes?.arming_blocking_sensors : [];
       const hasOpenSensor = activeSensors.some(sid => OPEN.includes(this._hass?.states?.[sid]?.state));
-      const sensorAlert = hasOpenSensor && (state.startsWith('armed') || state === 'pending') && !triggered;
+      const sensorAlert = hasOpenSensor && (state.startsWith('armed') || state === 'pending' || isWaiting) && !triggered;
 
       const isFS = this._fullscreenIdx === idx || (this._kioskLocked && (this._kioskEntryId === e.entry_id || entries.length === 1));
       art.className = `entry cinematic-entry ${isFS ? 'ios-fullscreen' : ''}`;
@@ -4374,7 +4376,8 @@ class ArgusPanel extends HTMLElement {
           }
         }
 
-        return `<div class="console-sensor ${isOpen ? 'open' : ''}"><span class="console-sensor-icon" style="display:flex;align-items:center;justify-content:center;color:${isOpen?'#ff968b':'#75f4b0'};${isOpen?'animation:pulse 2s infinite;':''}">${iconHtml}</span><span class="console-sensor-name">${this._escapeHtml(name)}</span><span class="console-sensor-state" style="color:${isOpen?'#ff968b':'#75f4b0'}">${this._escapeHtml(isOpen ? t('status_open') : t('status_closed'))}${batHtml}</span></div>`;
+        const isBlocking = isWaiting && blockingSensors.includes(sid);
+        return `<div class="console-sensor ${isOpen ? 'open' : ''}"><span class="console-sensor-icon" style="display:flex;align-items:center;justify-content:center;color:${isBlocking?'#ffd700':(isOpen?'#ff968b':'#75f4b0')};${isBlocking?'animation:pulse 1s infinite;':(isOpen?'animation:pulse 2s infinite;':'')}">${iconHtml}</span><span class="console-sensor-name" style="${isBlocking?'color:#ffd700':''}">${this._escapeHtml(name)}</span><span class="console-sensor-state" style="color:${isBlocking?'#ffd700':(isOpen?'#ff968b':'#75f4b0')}">${this._escapeHtml(isOpen ? t('status_open') : t('status_closed'))}${batHtml}</span></div>`;
       }).join('');
 
       art.innerHTML = `
@@ -4401,7 +4404,7 @@ class ArgusPanel extends HTMLElement {
               </div>
             </div>
             <div class="entry-icon" style="display:flex;justify-content:center;animation:float-icon 5s ease-in-out infinite;">
-              ${this._getIntelligentSVG(state, null, isNight, triggered)}
+              ${this._getIntelligentSVG(isWaiting ? 'pending' : state, null, isNight, triggered)}
             </div>
             <div class="liquid-stack">
               <button class="liquid-btn btn-home ${state==='armed_home'?'active':''} ${sensorAlert && state==='armed_home'?'buzz-orange':''}" data-idx="${idx}" data-action="home">${this._modeButtonIcon('home')}<span>${this._escapeHtml(modeLabel('btn_home'))}</span></button>
@@ -5526,6 +5529,14 @@ class ArgusPanel extends HTMLElement {
                   ${pinBadge}
                   ${expBadge}
                 </div>
+                ${u.role !== 'admin' && u.permissions ? `
+                <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px">
+                  <span class="user-badge" style="opacity:0.85;font-size:10px" title="Ver Panel">👁️ ${u.permissions.view_status ? 'Panel' : '---'}</span>
+                  <span class="user-badge" style="opacity:0.85;font-size:10px" title="Armar Sistema">🛡️ ${u.permissions.arm ? 'Armar' : '---'}</span>
+                  <span class="user-badge" style="opacity:0.85;font-size:10px" title="Desarmar Sistema">🔓 ${u.permissions.disarm ? 'Desarmar' : '---'}</span>
+                  <span class="user-badge" style="opacity:0.85;font-size:10px" title="Ver Historial">📜 ${u.permissions.view_history ? 'Historial' : '---'}</span>
+                </div>
+                ` : ''}
               </div>
               <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end">
                 ${this._isAdmin ? `
@@ -5615,7 +5626,7 @@ class ArgusPanel extends HTMLElement {
                   name: newName.trim(),
                   role: 'standard',
                   enabled: true,
-                  permissions: { view_status: true, arm: false, disarm: false, view_history: false },
+                  permissions: { view_status: true, arm: true, disarm: true, view_history: false },
                 };
                 const nextUsers = [...(this._users || []), newUser];
                 const resp = await this._send('argus/save_ui', { users: nextUsers });

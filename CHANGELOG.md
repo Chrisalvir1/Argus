@@ -2,6 +2,15 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.53] - 2026-08-09
+
+### Added
+- **Blueprints Nativos para Notificaciones**: Integración lista de notificaciones móviles ricas (iOS) y bots de Telegram con video y botones interactivos.
+- **Permisos de Usuarios Estándar Visibles**: Nuevo diseño que muestra insignias de permisos en vivo.
+
+### Fixed
+- **Internacionalización y TTS Dinámico Mejorado**: Reparada la lógica de TTS para cierres instantáneos y conteo de sensores bloqueantes.
+
 ## [2.0.52] - 2026-08-09
 
 ### Fixed

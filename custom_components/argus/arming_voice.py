@@ -83,20 +83,21 @@ async def async_announce_arming_wait_update(hass, config_entry, *, alarm_entity_
   options = _options(hass, config_entry)
   
   if not current:
-      template = options.get(CONF_ARMING_VOICE_MESSAGE_COMPLETE) or translate(lang, "msg_complete", **values)
+      template = options.get(CONF_ARMING_VOICE_MESSAGE_COMPLETE) or translate(lang, "msg_complete")
   elif len(current) == 1 and previous:
-      template = options.get(CONF_ARMING_VOICE_MESSAGE_LAST) or translate(lang, "msg_last", **values)
+      template = options.get(CONF_ARMING_VOICE_MESSAGE_LAST) or translate(lang, "msg_last")
   elif closed:
-      template = options.get(CONF_ARMING_VOICE_MESSAGE_REMAINING) or translate(lang, "msg_remaining", **values)
+      template = options.get(CONF_ARMING_VOICE_MESSAGE_REMAINING) or translate(lang, "msg_remaining")
   else:
-      template = options.get(CONF_ARMING_VOICE_MESSAGE_START) or translate(lang, "msg_start", **values)
+      template = options.get(CONF_ARMING_VOICE_MESSAGE_START) or translate(lang, "msg_start")
   
-  # if template is from yaml, we still format it
-  message = template if template == translate(lang, "msg_start", **values) or template == translate(lang, "msg_complete", **values) or template == translate(lang, "msg_last", **values) or template == translate(lang, "msg_remaining", **values) else translate(lang, "msg_start", **values)  # Fallback to formatting if custom
   if isinstance(template, str) and "{" in template:
       try:
-          message = template.format(**values)
-      except:
+          # We use safe mapping equivalent to i18n's logic to prevent crashes on missing keys in custom templates
+          class _SafeValues(dict):
+              def __missing__(self, key): return "{" + key + "}"
+          message = template.format_map(_SafeValues(values))
+      except Exception:
           message = template
   else:
       message = template

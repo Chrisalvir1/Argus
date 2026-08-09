@@ -11,10 +11,12 @@ def _trigger_entity(panel) -> str | None:
  if panel.hass.states.get(value):return value
  match=re.search(r"Sensor:\s*([a-z_]+\.[a-zA-Z0-9_]+)",value)
  return match.group(1) if match and panel.hass.states.get(match.group(1)) else None
+def _is_monitored(panel,entity_id):
+ mode_state=_MODE_STATES.get(getattr(panel,"_triggered_mode",None))
+ return bool(mode_state and entity_id in panel._sensors_for_state(mode_state))
 def _is_active_monitored(panel,entity_id):
  state=panel.hass.states.get(entity_id)
- mode_state=_MODE_STATES.get(getattr(panel,"_triggered_mode",None))
- return bool(state and state.state in _ACTIVE and mode_state and entity_id in panel._sensors_for_state(mode_state))
+ return bool(state and state.state in _ACTIVE and _is_monitored(panel,entity_id))
 def install_trigger_voice() -> None:
  from .alarm_control_panel import ArgusAlarmPanel
  if getattr(ArgusAlarmPanel,"__argus_trigger_voice__",False):return
@@ -36,7 +38,7 @@ def install_trigger_voice() -> None:
       correlated=list(getattr(self,"_confirmation_events",{}).keys())
       await original_trigger(self)
       if not was_triggered and self._alarm_state==AlarmControlPanelState.TRIGGERED and not getattr(self,"_panic_active",False):
-       causes=[e for e in [*correlated,entity_id] if e and _is_active_monitored(self,e)]
+       causes=[e for e in [*correlated,entity_id] if e and ((e == entity_id and _is_monitored(self, e)) or _is_active_monitored(self,e))]
        self._argus_triggered_sensors=list(dict.fromkeys(causes))
        self.async_write_ha_state()
        if entity_id:await announce(self,entity_id,False)
