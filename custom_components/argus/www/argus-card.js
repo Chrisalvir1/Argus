@@ -1,4 +1,4 @@
-const ARGUS_CARD_VERSION='2.0.49';
+const ARGUS_CARD_VERSION='2.0.50';
 const COPY={
   es:{title:'Seguridad',home:'EN CASA',away:'AUSENTE',night:'NOCHE',vacation:'VACACIONES',disarm:'DESARMAR',pin:'INTRODUCIR PIN',bad:'PIN incorrecto',unknown:'Ubicación no disponible'},
   en:{title:'Security',home:'HOME',away:'AWAY',night:'NIGHT',vacation:'VACATION',disarm:'DISARM',pin:'ENTER PIN',bad:'Incorrect PIN',unknown:'Location unavailable'},
@@ -8,7 +8,7 @@ const COPY={
   zh:{title:'安全',home:'在家',away:'外出',night:'夜间',vacation:'度假',disarm:'撤防',pin:'输入 PIN',bad:'PIN 错误',unknown:'位置不可用'},
   ru:{title:'Безопасность',home:'ДОМА',away:'УШЁЛ',night:'НОЧЬ',vacation:'ОТПУСК',disarm:'СНЯТЬ',pin:'ВВЕДИТЕ PIN',bad:'Неверный PIN',unknown:'Местоположение недоступно'}
 };
-const esc=value=>String(value??'').replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
+const esc=value=>String(value??'').replace(/[&<>'\"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[char]));
 console.info(`%c🛡️ ARGUS SECURITY %c v${ARGUS_CARD_VERSION} `, "color: white; background: #0f172a; font-weight: 700; padding: 4px 8px; border-radius: 4px 0 0 4px;", "color: #0f172a; background: #38bdf8; font-weight: 700; padding: 4px 8px; border-radius: 0 4px 4px 0;");
 
 class ArgusCard extends HTMLElement{
