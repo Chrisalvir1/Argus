@@ -1,0 +1,124 @@
+name: One-time verified v2.0.55 synchronization
+
+on:
+  push:
+    branches:
+      - refactor/v2.1.0-typescript-frontend
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bump-v2055-once
+  cancel-in-progress: false
+
+jobs:
+  bump:
+    if: github.actor != 'github-actions[bot]' && !contains(github.event.head_commit.message, 'chore(release): v2.0.55')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: refactor/v2.1.0-typescript-frontend
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Synchronize version and release documentation
+        shell: python
+        run: |
+          from pathlib import Path
+
+          old = "2.0.54"
+          new = "2.0.55"
+          paths = [
+              "custom_components/argus/const.py",
+              "custom_components/argus/manifest.json",
+              "custom_components/argus/www/argus-bootstrap.js",
+              "src/legacy/argus-card.ts",
+              "src/legacy/argus-panel.ts",
+              "tests/test_architecture_contract.py",
+              "tests/test_security_contract.py",
+              "tests/test_v193_sync.py",
+              "tests/test_v2050_arming_complete.py",
+              "tests/test_v2052_version_contracts.py",
+          ]
+          for name in paths:
+              path = Path(name)
+              content = path.read_text(encoding="utf-8")
+              if old not in content:
+                  raise SystemExit(f"Expected {old} in {name}")
+              path.write_text(content.replace(old, new), encoding="utf-8")
+
+          changelog = Path("CHANGELOG.md")
+          content = changelog.read_text(encoding="utf-8")
+          marker = "## [2.0.54]"
+          section = """## [2.0.55] - 2026-08-09
+
+          ### Fixed
+          - **Armado en espera reparado de forma autoritativa:** al cerrar el último sensor que bloqueaba una solicitud, Argus anuncia el cierre y completa inmediatamente el modo solicitado, sin depender de un temporizador obsoleto.
+          - **Recuperación del estado `ARMING`:** el watchdog corrige contadores de generación desincronizados y reconstruye solicitudes huérfanas en vez de quedar esperando indefinidamente.
+          - **TTS por transición real:** se conservan los sensores recién cerrados, los que faltan y el mensaje final de todos cerrados antes de confirmar el armado.
+          - **Pruebas ejecutables:** la secuencia Aqara `abierto → cierre parcial → último cierre → armado` ahora se valida mediante una máquina de estado pura, no mediante búsquedas de texto.
+
+          """
+          if marker not in content:
+              raise SystemExit("Missing v2.0.54 changelog marker")
+          changelog.write_text(content.replace(marker, section + marker, 1), encoding="utf-8")
+
+          Path("docs/RELEASE_NOTES_2.0.55.md").write_text("""# Argus Home Hub 2.0.55
+
+          ## Reparación definitiva del armado en espera
+
+          Esta versión sustituye la decisión fragmentada que podía mantener Argus y HomeKit en `ARMING` aunque todos los sensores ya estuvieran cerrados.
+
+          ### Comportamiento corregido
+
+          - Al solicitar un modo con sensores abiertos, Argus permanece en espera y publica la lista real de bloqueadores.
+          - Cada cierre actualiza inmediatamente la lista y el TTS anuncia qué sensor cerró y cuáles faltan.
+          - Al cerrar el último sensor, el TTS anuncia que todos están cerrados y Argus confirma inmediatamente el modo solicitado.
+          - El watchdog de dos segundos cubre eventos Aqara/Zigbee retrasados o perdidos.
+          - Una generación desincronizada ya no provoca un `return` permanente.
+          - Si otro wrapper deja `ARMING` sin solicitud, Argus reconstruye el objetivo y completa o continúa la espera de forma segura.
+          - Las solicitudes concurrentes se serializan para evitar doble TTS o doble armado.
+
+          ### Validación automatizada
+
+          - Python 3.14 y pruebas de regresión.
+          - Secuencia ejecutable abierto, cierre parcial y cierre final.
+          - TypeScript 7.0.2, React, Vitest y Vite.
+          - JavaScript residual, HACS, hassfest, ZIP y checksum.
+
+          La validación física con el hub Aqara y HomeKit debe realizarse después de instalar v2.0.55 y reiniciar Home Assistant.
+          """, encoding="utf-8")
+
+          for temporary in ("patch_sensor_state.py", "test_errors.txt", "test_out.txt"):
+              path = Path(temporary)
+              if path.exists():
+                  path.unlink()
+
+          Path(".github/workflows/bump-v2055-once.yml").unlink()
+      - name: Verify complete matrix before committing version
+        run: |
+          set -euo pipefail
+          python -m compileall -q custom_components/argus tests
+          python -m unittest discover -s tests -v
+          npm ci
+          test "$(npx tsc --version)" = "Version 7.0.2"
+          npx tsc --noEmit
+          npm test
+          npm run build
+          test -s custom_components/argus/www/react-dist/argus-frontend.js
+          ! grep -q 'process\.env' custom_components/argus/www/react-dist/argus-frontend.js
+      - name: Commit verified v2.0.55 synchronization
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -A
+          git commit -m "chore(release): v2.0.55 arming wait state machine"
+          git push origin HEAD:refactor/v2.1.0-typescript-frontend
