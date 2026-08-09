@@ -42,6 +42,7 @@ Puedes ver el diagnóstico detectado y forzar un perfil manualmente desde **Pers
 - Retardos de entrada y salida, duración de alarma y restauración segura.
 - Sensores por modo, sensores de entrada, bypass y requisito de cierre.
 - Sirenas por modo y SOS reversible con salidas independientes.
+- **Internacionalización y TTS Dinámico (v2.0.51)**: Argus ahora soporta 7 idiomas de forma nativa (Español, Inglés, Francés, Portugués, Italiano, Chino y Ruso). Las notificaciones de voz (TTS) se adaptan automáticamente al idioma que selecciones en tu interfaz web sin necesidad de modificar YAMLs.
 - **Sincronización Inteligente con Paneles Externos** (v2.0.29): Dispara y silencia automáticamente sirenas de cámaras u otras alarmas.
 - PIN maestro, usuarios temporales, invitado, `scrypt`/PBKDF2 y limitación de intentos administrativos.
 - **Sincronización automática de perfiles con cuentas humanas de Home Assistant** (v1.9.3).
@@ -60,6 +61,20 @@ Puedes ver el diagnóstico detectado y forzar un perfil manualmente desde **Pers
 - **Presencia HA:** Sincronización inteligente de estados de presencia directamente desde Home Assistant.
 - Animaciones premium para paneles, opciones, guardado, sensores, botones y modales, con respeto por `prefers-reduced-motion`.
 
+## Activación del Asistente de Voz (TTS)
+
+A partir de la versión **v2.0.51**, Argus incluye notificaciones habladas dinámicas para los eventos críticos de seguridad (armado, desarmado, disparos, cancelaciones) adaptándose automáticamente al idioma que hayas elegido en la interfaz visual.
+
+Para habilitarlo, simplemente define tu reproductor multimedia y tu proveedor de TTS en tu archivo `configuration.yaml` bajo la llave `argus`:
+
+```yaml
+argus:
+  arming_voice:
+    media_player: media_player.altavoces_casa
+    tts_service: tts.google_translate_say
+```
+**Nota**: El motor TTS tomará por defecto el idioma que configuraste tocando el icono 🌐 dentro del panel de Argus. No hace falta configurar las plantillas de mensaje en el YAML a menos que desees personalizar completamente la locución.
+
 ## Seguridad y Privacidad 2.0
 
 Argus 2.0 consolida nuestras estrictas políticas de seguridad:
@@ -69,8 +84,6 @@ Argus 2.0 consolida nuestras estrictas políticas de seguridad:
 - **Onboarding Seguro:** Manejo estricto e independiente del PIN de acceso (hasheado) y el PIN maestro (opciones de configuración).
 - **Verificaciones Estrictas de Administrador:** Requiere privilegios de administrador de Home Assistant y Argus para consultar usuarios y personas.
 - **Sincronización segura de perfiles:** Los perfiles auto-creados tienen `managed_by_ha_sync: true` y permisos mínimos. Los perfiles manuales nunca se modifican automáticamente.
-
-*Anteriormente en versiones previas:* Se eliminaron acciones TTS, análisis por IA, y controles Matter de terceros del runtime activo para maximizar la privacidad. HomeKit Bridge y rutinas locales deterministas continúan disponibles.
 
 ## Requisitos
 

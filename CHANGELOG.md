@@ -4,15 +4,19 @@ Todos los cambios relevantes de Argus se documentan aquí. El historial anterior
 
 ## [2.0.51] - 2026-08-09
 
-### Fixed
-- **Frontend Build:** Se resolvió el fallo de Vite al compilar con el target `ES2025` cambiando el target de esbuild a `esnext`, manteniendo TypeScript en `ES2025`.
-- **CI Duplicado:** Se eliminó la duplicación de flujos de trabajo de GitHub Actions al ejecutar validaciones tanto en `push` como en `pull_request`.
-- **Compatibilidad Residual:** Se eliminó el manifiesto de compatibilidad inactivo que engañaba a las pruebas de integración en `argus-bootstrap.js`.
-
 ### Added
+- **Internacionalización (i18n) Completa para TTS:** Argus ahora soporta y procesa 7 idiomas de forma nativa para todas las notificaciones por voz (eventos de seguridad, disparos, armados, etc.). El backend detecta automáticamente el idioma de la interfaz del usuario.
+- **Sincronización de Idioma UI-Servidor:** Al cambiar el idioma en la interfaz, se actualiza automáticamente el estado global en el servidor para que Home Assistant responda en el idioma correcto.
 - **TypeScript Entrypoint:** Un único punto de entrada real en `src/app/index.ts` para todo el frontend.
 - **WebSocket fuertemente tipado:** `src/core/websocket.ts` validado contra `websocket_api.py`.
 - **Clientes TS:** Implementación tipada para `security/client.ts` y `media/client.ts`.
+
+### Fixed
+- **Fallo WebGL iOS/Safari (Blur Fix):** Eliminada la propiedad `mix-blend-mode: screen` del canvas WebGL y aumentada la precisión de los shaders a `highp` para garantizar tormentas eléctricas y lluvia estables sin colapsar en pantallas móviles (que antes se quedaban en un fondo difuminado "blur").
+- **Protección de Cancelación (Master PIN):** Cancelar una alarma desde el estado "Arming Wait" ahora respeta correctamente y exige el PIN Maestro en la UI, sincronizado con el backend.
+- **Frontend Build:** Se resolvió el fallo de Vite al compilar con el target `ES2025` cambiando el target de esbuild a `esnext`, manteniendo TypeScript en `ES2025`.
+- **CI Duplicado:** Se eliminó la duplicación de flujos de trabajo de GitHub Actions al ejecutar validaciones tanto en `push` como en `pull_request`.
+- **Compatibilidad Residual:** Se eliminó el manifiesto de compatibilidad inactivo que engañaba a las pruebas de integración en `argus-bootstrap.js`.
 
 ## [2.0.50] - 2026-08-09
 

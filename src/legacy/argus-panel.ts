@@ -1948,7 +1948,7 @@ _tmpl.innerHTML = `
   .wx{position:absolute;inset:0;overflow:hidden;border-radius:inherit;z-index:1}
   /* Cinematic, data-driven atmosphere replacing the old illustrated landscape. */
   .wx-atmosphere{isolation:isolate;background:linear-gradient(180deg,var(--sky-top),var(--sky-mid) 58%,var(--sky-bottom));overflow:hidden}
-  .wx-webgl{position:absolute;inset:0;z-index:2;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;opacity:.92}
+  .wx-webgl{position:absolute;inset:0;z-index:2;width:100%;height:100%;pointer-events:none;opacity:.95}
   .wx-atmosphere.webgl-active .wx-precip,.wx-atmosphere.webgl-active .wx-lightning,.wx-atmosphere.webgl-active .wx-fog-real{opacity:0}
   .wx-atmosphere::before{content:'';position:absolute;inset:-20%;z-index:-1;background:radial-gradient(ellipse at 65% 20%,rgba(255,255,255,.18),transparent 30%),radial-gradient(ellipse at 50% 120%,rgba(0,0,0,.48),transparent 48%),linear-gradient(115deg,rgba(255,255,255,.07),transparent 42%);filter:blur(12px)}
   .wx-horizon{position:absolute;inset:auto -10% 0;height:38%;background:linear-gradient(180deg,transparent,rgba(4,10,18,.22) 18%,rgba(3,8,14,.72));filter:blur(1px)}
@@ -3224,10 +3224,12 @@ class ArgusPanel extends HTMLElement {
     if (code === 'auto') {
       this._manualLang = null;
       try { localStorage.removeItem('argus_lang'); } catch(e) {}
+      this._send('argus/save_ui', { language: null }).catch(console.error);
     } else {
       if (!TEXTS[code]) return;
       this._manualLang = code;
       try { localStorage.setItem('argus_lang', code); } catch(e) {}
+      this._send('argus/save_ui', { language: code }).catch(console.error);
     }
     this._refreshLocalizedUi();
   }
@@ -4602,7 +4604,7 @@ class ArgusPanel extends HTMLElement {
     const gl = canvas.getContext('webgl', { alpha: true, antialias: false, powerPreference: 'low-power' });
     if (!gl) return;
     const vertex = 'attribute vec2 p;varying vec2 uv;void main(){uv=(p+1.0)*.5;gl_Position=vec4(p,0.0,1.0);}';
-    const fragment = `precision mediump float;varying vec2 uv;uniform float time,rain,snow,fog,storm;
+    const fragment = `precision highp float;varying vec2 uv;uniform float time,rain,snow,fog,storm;
       float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
       float rainLayer(vec2 u,float t,float n){vec2 s=vec2(20.0+8.0*n,7.0+3.0*n);vec2 g=u*s;vec2 id=floor(g);vec2 q=fract(g);float sp=2.4+n*1.35+h(id)*1.2;q.y=fract(q.y+t*sp+h(id));float x=abs(q.x-(.54-q.y*.16));return (1.0-smoothstep(.003,.035-n*.006,x))*(1.0-smoothstep(.18,.98,q.y));}
       float snowLayer(vec2 u,float t){vec2 g=u*vec2(17.0,10.0);vec2 id=floor(g);vec2 q=fract(g);q.y=fract(q.y+t*(.23+h(id)*.34)+h(id));q.x+=sin(t+h(id)*6.28)*.14;return 1.0-smoothstep(.012,.075,length(q-vec2(.5)));}
