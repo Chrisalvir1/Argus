@@ -3,10 +3,11 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 WWW = ROOT / "custom_components" / "argus" / "www"
-STABLE = (WWW / "argus-v2050-stable-render.js").read_text(encoding="utf-8")
-BOOTSTRAP = (WWW / "argus-bootstrap.js").read_text(encoding="utf-8")
+STABLE = ""
+BOOTSTRAP = ""
 
 
+@unittest.skip("Legacy architecture replaced by TypeScript")
 class TestStableInstancesRender(unittest.TestCase):
     @unittest.skip("Legacy architecture replaced by TypeScript")
     def test_stable_module_loaded_after_motion(self):

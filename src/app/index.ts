@@ -2,6 +2,10 @@ import{applyReactDashboardLayout}from'../features/dashboard';
 import{applyMediaClient}from'../features/media/client';
 import{applySecurityClient}from'../features/security/client';
 import{applyPremiumExperience}from'../features/premium';
+import { applyMotionSystem } from '../features/motion';
+import { applyStableInstancesRender } from '../features/render/stable';
+import { applyV2050AlarmVisuals } from '../features/render/alarm';
+
 import{applyLegacyAfterTypedClients,applyLegacyBeforeTypedClients}from'../legacy/bridge';
 import type{ArgusPanelConstructor}from'../core/panel';
 
@@ -13,6 +17,9 @@ export function applyArgusFrontend(value:CustomElementConstructor|undefined):voi
  applySecurityClient(C);
  applyMediaClient(C);
  applyPremiumExperience(C);
+  applyMotionSystem(C);
+  applyStableInstancesRender(C);
+  applyV2050AlarmVisuals(C);
  applyLegacyAfterTypedClients(C);
  applyReactDashboardLayout(C);
 }

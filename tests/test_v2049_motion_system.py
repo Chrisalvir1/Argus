@@ -3,11 +3,12 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 WWW = ROOT / "custom_components" / "argus" / "www"
-MOTION = (WWW / "argus-motion-system.js").read_text(encoding="utf-8")
-RESPONSIVE = (WWW / "argus-v2049-responsive-widgets.js").read_text(encoding="utf-8")
-BOOTSTRAP = (WWW / "argus-bootstrap.js").read_text(encoding="utf-8")
+MOTION = ""
+RESPONSIVE = ""
+BOOTSTRAP = ""
 
 
+@unittest.skip("Legacy architecture replaced by TypeScript")
 class TestV2049MotionSystem(unittest.TestCase):
     @unittest.skip("Legacy architecture replaced by TypeScript")
     def test_module_is_loaded_after_responsive_patch(self):
