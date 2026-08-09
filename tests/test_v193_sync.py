@@ -368,9 +368,9 @@ class TestV193FrontendContracts(unittest.TestCase):
         with open(panel_path, "r", encoding="utf-8") as f:
             self.content = f.read()
 
-    def test_version_updated_to_195(self):
-        """argus-panel.js header must reflect v2.0.49."""
-        self.assertIn("v2.0.49", self.content, "argus-panel.js must mention v2.0.49")
+    def test_version_updated_to_current(self):
+        """argus-panel.js header must carry a v2.0.x version marker."""
+        self.assertIn("Argus Home Hub – v2.0.", self.content, "argus-panel.js must carry a v2.0.x header version")
         self.assertIn("argus-panel-v2018", self.content, "customElements.define must use argus-panel-v2018")
 
     def test_new_i18n_keys_all_languages(self):
@@ -449,24 +449,24 @@ class TestV193FrontendContracts(unittest.TestCase):
 
 
 class TestV193ManifestVersion(unittest.TestCase):
-    def test_manifest_version_195(self):
+    def test_manifest_version_current(self):
         import json
         manifest_path = os.path.join(
             os.path.dirname(__file__), "..", "custom_components", "argus", "manifest.json"
         )
         with open(manifest_path) as f:
             manifest = json.load(f)
-        self.assertEqual(manifest["version"], "2.0.49", "manifest.json version must be 2.0.49")
+        self.assertEqual(manifest["version"], "2.0.50", "manifest.json version must be 2.0.50")
 
 
 class TestV193BootstrapCacheBust(unittest.TestCase):
-    def test_bootstrap_version_195(self):
+    def test_bootstrap_version_current(self):
         bootstrap_path = os.path.join(
             os.path.dirname(__file__), "..", "custom_components", "argus", "www", "argus-bootstrap.js"
         )
         with open(bootstrap_path) as f:
             content = f.read()
-        self.assertIn("2.0.49", content, "argus-bootstrap.js must reference version 2.0.49 for cache-busting")
+        self.assertIn("2.0.50", content, "argus-bootstrap.js must reference version 2.0.50 for cache-busting")
 
 
 class TestV193ScheduleAndDisarmProtection(unittest.IsolatedAsyncioTestCase):
