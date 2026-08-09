@@ -1,4 +1,4 @@
-import './argus-panel.js?v=2.0.50';
+import './argus-panel.js?v=2.0.51';
 
 const ArgusPanel=customElements.get('argus-panel-v2018');
 import('./react-dist/argus-frontend.js?v=2.0.51')
