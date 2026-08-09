@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** Home Assistant is the only source of truth for light capabilities. */
 const COLOR_MODES = new Set(['hs', 'xy', 'rgb', 'rgbw', 'rgbww']);
 const NATIVE_EFFECTS = new Set(['flash', 'slow flash', 'slow_flash', 'blink', 'strobe', 'police']);

@@ -10,7 +10,7 @@ class TestArchitectureContract(unittest.TestCase):
     def test_version_is_consistent(self) -> None:
         manifest = (COMPONENT / "manifest.json").read_text(encoding="utf-8")
         constants = (COMPONENT / "const.py").read_text(encoding="utf-8")
-        card = (COMPONENT / "www" / "argus-card.js").read_text(encoding="utf-8")
+        card = ((ROOT / "src" / "legacy") / "argus-card.ts").read_text(encoding="utf-8")
         self.assertIn('"version": "2.0.51"', manifest)
         self.assertIn('VERSION = "2.0.51"', constants)
         self.assertIn("ARGUS_CARD_VERSION='2.0.50'", card)
@@ -35,7 +35,7 @@ class TestArchitectureContract(unittest.TestCase):
         self.assertNotIn("get_tts_engines", api)
         self.assertNotIn("google_generative_ai", panel)
         self.assertNotIn("analyze_camera", panel)
-        card = (COMPONENT / "www" / "argus-card.js").read_text(encoding="utf-8")
+        card = ((ROOT / "src" / "legacy") / "argus-card.ts").read_text(encoding="utf-8")
         self.assertNotIn("Costa Rica", card)
         self.assertNotIn("temperature: 24", card)
 

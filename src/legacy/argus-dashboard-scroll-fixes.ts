@@ -1,3 +1,4 @@
+// @ts-nocheck
 function installStyles(panel){
   if(panel.shadowRoot?.getElementById('argus-dashboard-scroll-fixes'))return;
   const style=document.createElement('style');

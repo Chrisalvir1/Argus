@@ -1,3 +1,4 @@
+import '../legacy/argus-panel';
 import{applyReactDashboardLayout}from'../features/dashboard';
 import{applyMediaClient}from'../features/media/client';
 import{applySecurityClient}from'../features/security/client';
@@ -12,7 +13,8 @@ import { applyV2050WidgetLayouts } from '../features/widgets/layouts';
 import{applyLegacyAfterTypedClients,applyLegacyBeforeTypedClients}from'../legacy/bridge';
 import type{ArgusPanelConstructor}from'../core/panel';
 
-export function applyArgusFrontend(value:CustomElementConstructor|undefined):void{
+export function applyArgusFrontend(value?:CustomElementConstructor|undefined):void{
+  if(!value) value = customElements.get('argus-panel-v2018');
  const C=value as ArgusPanelConstructor|undefined;
  if(!C||C.__argusTypedFrontend)return;
  C.__argusTypedFrontend=true;

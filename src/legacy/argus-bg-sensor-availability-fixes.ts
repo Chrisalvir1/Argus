@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Argus v2.0.25 — Background selector + sensor availability fixes.
  *

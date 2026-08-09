@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** Keep advanced personalization closed by default with one authoritative toggle. */
 function installPersonalizationToggle(panel) {
   const root = panel.shadowRoot;

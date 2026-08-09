@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Argus Home Hub – v2.0.49
  * Complete, self-contained custom element.

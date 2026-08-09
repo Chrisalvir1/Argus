@@ -34,7 +34,7 @@ class TestReactDashboardLayoutContract(unittest.TestCase):
     @unittest.skip("Legacy architecture replaced by TypeScript")
     def test_shadow_dom_styles_and_compiled_adapter_are_wired(self):
         self.assertIn('#widget-grid.grid{display:block!important',self.style)
-        self.assertIn("react-dist/argus-dashboard-react.js",self.bootstrap)
-        self.assertTrue((WWW/'react-dist'/'argus-dashboard-react.js').is_file())
+        self.assertIn("react-dist/argus-dashboard-react.ts",self.bootstrap)
+        self.assertTrue((WWW/'react-dist'/'argus-dashboard-react.ts').is_file())
 
 if __name__=='__main__': unittest.main()

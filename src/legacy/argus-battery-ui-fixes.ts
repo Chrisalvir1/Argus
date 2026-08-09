@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Argus v2.0.32 — Battery UI Fixes.
  *

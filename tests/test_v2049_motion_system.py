@@ -13,7 +13,7 @@ class TestV2049MotionSystem(unittest.TestCase):
     @unittest.skip("Legacy architecture replaced by TypeScript")
     def test_module_is_loaded_after_responsive_patch(self):
         self.assertIn("export function applyMotionSystem(ArgusPanel)", MOTION)
-        self.assertIn("argus-motion-system.js?v=2.0.50", BOOTSTRAP)
+        self.assertIn("argus-motion-system.ts?v=2.0.50", BOOTSTRAP)
         self.assertGreater(BOOTSTRAP.rfind("applyMotionSystem(ArgusPanel)"), BOOTSTRAP.rfind("applyV2049ResponsiveWidgets(ArgusPanel)"))
 
     def test_observer_is_child_list_only_and_cleaned(self):

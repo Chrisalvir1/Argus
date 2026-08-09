@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Stable visual containment and responsive fullscreen fixes.
 // Widget restoration runs once after dashboard loading; render cycles never
 // reorder or reinitialize the grid.

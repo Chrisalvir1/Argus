@@ -12,7 +12,7 @@ class TestStableInstancesRender(unittest.TestCase):
     @unittest.skip("Legacy architecture replaced by TypeScript")
     def test_stable_module_loaded_after_motion(self):
         self.assertIn("export function applyStableInstancesRender(ArgusPanel)", STABLE)
-        self.assertIn("argus-v2050-stable-render.js?v=2.0.50", BOOTSTRAP)
+        self.assertIn("argus-v2050-stable-render.ts?v=2.0.50", BOOTSTRAP)
         self.assertGreater(
             BOOTSTRAP.rfind("applyStableInstancesRender(ArgusPanel)"),
             BOOTSTRAP.rfind("applyMotionSystem(ArgusPanel)"),

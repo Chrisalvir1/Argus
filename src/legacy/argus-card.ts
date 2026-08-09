@@ -1,3 +1,4 @@
+// @ts-nocheck
 const ARGUS_CARD_VERSION='2.0.50';
 const COPY={
   es:{title:'Seguridad',home:'EN CASA',away:'AUSENTE',night:'NOCHE',vacation:'VACACIONES',disarm:'DESARMAR',pin:'INTRODUCIR PIN',bad:'PIN incorrecto',unknown:'Ubicación no disponible'},

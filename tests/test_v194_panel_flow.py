@@ -5,7 +5,7 @@ import unittest
 
 
 ROOT = Path(__file__).parents[1]
-PANEL = ROOT / "custom_components" / "argus" / "www" / "argus-panel.js"
+PANEL = ROOT / "src" / "legacy" / "argus-panel.ts"
 WEBSOCKET = ROOT / "custom_components" / "argus" / "websocket_api.py"
 PANEL_REGISTRATION = ROOT / "custom_components" / "argus" / "panel.py"
 
@@ -59,8 +59,9 @@ class TestV194PanelFlow(unittest.TestCase):
     def test_versioned_custom_element_prevents_stale_definition(self) -> None:
         element_name = "argus-panel-v2018"
         bootstrap = (ROOT / "custom_components" / "argus" / "www" / "argus-bootstrap.js").read_text(encoding="utf-8")
+        app_index = (ROOT / "src" / "app" / "index.ts").read_text(encoding="utf-8")
         self.assertIn(f"customElements.define('{element_name}'", self.panel)
-        self.assertIn(f"customElements.get('{element_name}')", bootstrap)
+        self.assertIn(f"customElements.get('{element_name}')", app_index)
         self.assertIn(
             'webcomponent_name="argus-panel-v2018"',
             self.panel_registration,

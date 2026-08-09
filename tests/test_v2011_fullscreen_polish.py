@@ -3,7 +3,7 @@ import unittest
 
 ROOT=Path(__file__).parents[1]
 WWW=ROOT/'custom_components'/'argus'/'www'
-POLISH=(WWW/'argus-fullscreen-polish.js').read_text(encoding='utf-8')
+POLISH=(ROOT/'src'/'legacy'/'argus-fullscreen-polish.ts').read_text(encoding='utf-8')
 BOOTSTRAP=(WWW/'argus-bootstrap.js').read_text(encoding='utf-8')
 
 class TestFullscreenPolish(unittest.TestCase):

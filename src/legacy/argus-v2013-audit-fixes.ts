@@ -1,3 +1,4 @@
+// @ts-nocheck
 const DEFAULT_LAYOUT=[{id:'activity',size:'M',hidden:false},{id:'modes',size:'M',hidden:false},{id:'automations',size:'M',hidden:false},{id:'access',size:'M',hidden:false},{id:'backup',size:'S',hidden:false},{id:'github',size:'S',hidden:false}];
 const VALID_SIZES=new Set(['S','M','L','XL']);
 const CLOCK_COPY={es:['Formato de hora','Automático (Home Assistant)','12 horas (AM/PM)','24 horas'],en:['Time format','Automatic (Home Assistant)','12-hour (AM/PM)','24-hour'],fr:["Format de l’heure",'Automatique (Home Assistant)','12 heures (AM/PM)','24 heures'],pt:['Formato de hora','Automático (Home Assistant)','12 horas (AM/PM)','24 horas'],it:['Formato ora','Automatico (Home Assistant)','12 ore (AM/PM)','24 ore'],zh:['时间格式','自动（Home Assistant）','12 小时（AM/PM）','24 小时'],ru:['Формат времени','Автоматически (Home Assistant)','12 часов (AM/PM)','24 часа']};

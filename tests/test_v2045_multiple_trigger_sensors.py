@@ -7,5 +7,5 @@ class TestMultipleTriggerSensors(unittest.TestCase):
  def test_voice_has_initial_and_additional_messages(self):
   s=(C/'arming_voice.py').read_text();self.assertIn('CONF_ARMING_VOICE_MESSAGE_ADDITIONAL_TRIGGERED',s);self.assertIn('"additional":additional',s);self.assertIn('"triggered_sensors":all_info',s)
  def test_active_instance_blinks_triggered_sensors_orange(self):
-  s=(W/'argus-v2045-trigger-sensors.js').read_text();self.assertIn('argus-triggered-sensor',s);self.assertIn('#ff8a1f',s);self.assertIn('argusTriggeredSensor',s);self.assertIn('triggered_sensors',s)
+  s=(R/'src'/'legacy'/'argus-v2045-trigger-sensors.ts').read_text();self.assertIn('argus-triggered-sensor',s);self.assertIn('#ff8a1f',s);self.assertIn('argusTriggeredSensor',s);self.assertIn('triggered_sensors',s)
 if __name__=='__main__':unittest.main()

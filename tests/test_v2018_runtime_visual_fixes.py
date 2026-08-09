@@ -3,9 +3,9 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 WWW = ROOT / 'custom_components' / 'argus' / 'www'
-RUNTIME = (WWW / 'argus-runtime-visual-fixes.js').read_text(encoding='utf-8')
-PERF = (WWW / 'argus-performance-profile.js').read_text(encoding='utf-8')
-GRID = (WWW / 'argus-grid-polish.js').read_text(encoding='utf-8')
+RUNTIME = (ROOT / 'src' / 'legacy' / 'argus-runtime-visual-fixes.ts').read_text(encoding='utf-8')
+PERF = (ROOT / 'src' / 'legacy' / 'argus-performance-profile.ts').read_text(encoding='utf-8')
+GRID = (ROOT / 'src' / 'legacy' / 'argus-grid-polish.ts').read_text(encoding='utf-8')
 BOOTSTRAP = (WWW / 'argus-bootstrap.js').read_text(encoding='utf-8')
 
 class TestV2018RuntimeVisualFixes(unittest.TestCase):
@@ -48,7 +48,7 @@ class TestV2018RuntimeVisualFixes(unittest.TestCase):
 
     @unittest.skip("Legacy architecture replaced by TypeScript")
     def test_runtime_patch_loads_last(self):
-        self.assertIn('argus-runtime-visual-fixes.js?v=2.0.50', BOOTSTRAP)
+        self.assertIn('argus-runtime-visual-fixes.ts?v=2.0.50', BOOTSTRAP)
         self.assertGreater(BOOTSTRAP.rfind('applyRuntimeVisualFixes'), BOOTSTRAP.rfind('applyCompleteContentFixes'))
 
 if __name__ == '__main__':

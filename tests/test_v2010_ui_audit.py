@@ -7,7 +7,7 @@ WWW = ROOT / 'custom_components' / 'argus' / 'www'
 class TestUiAuditFixes(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.patch = (WWW / 'argus-ui-audit-fixes.js').read_text(encoding='utf-8')
+        cls.patch = (ROOT / 'src' / 'legacy' / 'argus-ui-audit-fixes.ts').read_text(encoding='utf-8')
         cls.bootstrap = (WWW / 'argus-bootstrap.js').read_text(encoding='utf-8')
 
     @unittest.skip("Legacy architecture replaced by TypeScript")

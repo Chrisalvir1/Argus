@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Runtime presentation fixes for clock consistency, responsive usability and SVG glow bounds.
 const CLOCK_INTERVAL_MS = 15000;
 

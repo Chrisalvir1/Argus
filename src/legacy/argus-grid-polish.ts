@@ -1,3 +1,4 @@
+// @ts-nocheck
 function installGridPolish(panel){if(panel.shadowRoot?.getElementById('argus-grid-polish-style'))return;const style=document.createElement('style');style.id='argus-grid-polish-style';style.textContent=`
 #widget-grid.grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-template-rows:auto!important;grid-auto-flow:dense!important;grid-auto-rows:clamp(190px,22vw,280px)!important;align-items:stretch!important;gap:clamp(10px,1.5vw,20px)!important}
 #widget-grid>.panel:not(.dashboard-instances){min-width:0!important;min-height:0!important;height:auto!important;overflow:hidden!important;align-self:stretch!important}

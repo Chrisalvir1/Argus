@@ -1,3 +1,4 @@
+// @ts-nocheck
 const STATUS_TEXT={es:{on:'Conectado',off:'Argus desconectado · HA sin conexión'},en:{on:'Connected',off:'Argus disconnected · HA offline'},fr:{on:'Connecté',off:'Argus déconnecté · HA hors ligne'},pt:{on:'Conectado',off:'Argus desconectado · HA sem conexão'},it:{on:'Connesso',off:'Argus disconnesso · HA offline'},zh:{on:'已连接',off:'Argus 已断开 · HA 离线'},ru:{on:'Подключено',off:'Argus отключён · HA не в сети'}};
 const languageFor=panel=>{const raw=String(panel._manualLang||panel._hass?.language||panel._hass?.locale?.language||'en').toLowerCase().split(/[-_]/)[0];return STATUS_TEXT[raw]||STATUS_TEXT.en};
 function installStyles(panel){if(panel.shadowRoot?.getElementById('argus-fullscreen-polish-style'))return;const style=document.createElement('style');style.id='argus-fullscreen-polish-style';style.textContent=`

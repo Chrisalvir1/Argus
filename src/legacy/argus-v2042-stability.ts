@@ -1,3 +1,4 @@
+// @ts-nocheck
 const VALID=new Set(['S','M','L','XL']),KEY='argus-widgets-stable-v5';const clone=v=>JSON.parse(JSON.stringify(v));
 function norm(v){if(!Array.isArray(v))return null;const seen=new Set(),out=[];for(const x of v){const id=String(x?.id||'');if(!id||seen.has(id))continue;seen.add(id);out.push({id,size:VALID.has(x?.size)?x.size:'M',hidden:Boolean(x?.hidden)})}return out.length?out:null}
 function read(){try{return norm(JSON.parse(localStorage.getItem(KEY)||localStorage.getItem('argus-widgets-v4')||'null'))}catch(_){return null}}

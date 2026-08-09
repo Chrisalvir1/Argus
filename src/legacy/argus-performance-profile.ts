@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Adaptive visual performance profile engine. Capability values describe the
 // browser rendering this panel; they do not guess the Home Assistant host model.
 const PROFILES=['essential','light','balanced','full'];

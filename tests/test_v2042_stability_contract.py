@@ -20,7 +20,7 @@ class TestV2042Stability(unittest.TestCase):
         self.assertIn("cancelled_from_off", source)
 
     def test_classic_waiting_visuals_exist(self):
-        source = (WWW / "argus-v2042-stability.js").read_text()
+        source = (ROOT / "src" / "legacy" / "argus-v2042-stability.ts").read_text()
         for token in (
             "grid-column:1/-1", "argusWaitShield",
             "argusBlockingSensor", "insertBefore(btn,sos)",

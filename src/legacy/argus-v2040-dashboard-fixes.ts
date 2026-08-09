@@ -1,3 +1,4 @@
+// @ts-nocheck
 const DEFAULT_LAYOUT=[{id:'activity',size:'M',hidden:false},{id:'modes',size:'M',hidden:false},{id:'automations',size:'M',hidden:false},{id:'access',size:'M',hidden:false},{id:'backup',size:'S',hidden:false},{id:'github',size:'S',hidden:false}];
 const VALID_SIZES=new Set(['S','M','L','XL']);
 const clone=value=>JSON.parse(JSON.stringify(value));

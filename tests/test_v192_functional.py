@@ -34,14 +34,14 @@ class TestV192Functional(unittest.IsolatedAsyncioTestCase):
            - Unlinked HA accounts section present in frontend.
         """
         panel_path = os.path.join(
-            os.path.dirname(__file__), "..", "custom_components", "argus", "www", "argus-panel.js"
+            os.path.dirname(__file__), "..", "src", "legacy", "argus-panel.ts"
         )
         with open(panel_path, "r", encoding="utf-8") as f:
             content = f.read()
 
         # 1. Check all 7 languages declared
         for lang in ['es:', 'en:', 'fr:', 'pt:', 'it:', 'zh:', 'ru:']:
-            self.assertIn(lang, content, f"Missing language block {lang} in argus-panel.js")
+            self.assertIn(lang, content, f"Missing language block {lang} in argus-panel.ts")
 
         # 2. Check key elements
         self.assertIn("select_profile_title", content, "Missing select_profile_title i18n key")

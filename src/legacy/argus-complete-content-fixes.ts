@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Root-cause recovery for compact widgets.
 // Widget size controls geometry only; it must never discard history or automation rows.
 function renderCompleteContent(panel, widgetId, renderer, args) {
