@@ -85,7 +85,7 @@ const TEXTS = {
     searching_auto:'↻ Buscando automatizaciones...', no_auto_linked:'No hay automatizaciones vinculadas a Argus.',
     pin_remove_hint:'Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.',
     lbl_load_file:'Cargar archivo:', lbl_aesthetic_custom:'Personalización Estética', lbl_uploaded_files:'Archivos subidos en servidor',
-    bypass_lbl:'🚫 Omitir', lock_if_open:'Bloquear si abiertos',
+    bypass_lbl:'🚫 Omitir', lock_if_open:'Bloquear si abiertos', wait_if_open:'Esperar armado en espera',
     select_btn:'+ Seleccionar', add_btn:'+ Añadir',
     sensors_to_bypass:'Sensores a Omitir',
     no_instances:'No hay instancias. Agrega Argus desde Integraciones.',
@@ -230,7 +230,7 @@ const TEXTS = {
     searching_auto:'↻ Searching automations...', no_auto_linked:'No automations linked to Argus.',
     pin_remove_hint:'To remove PIN: Enter the current one and leave the fields below empty.',
     lbl_load_file:'Upload file:', lbl_aesthetic_custom:'Aesthetic Customization', lbl_uploaded_files:'Uploaded files on server',
-    bypass_lbl:'🚫 Bypass', lock_if_open:'Lock if open',
+    bypass_lbl:'🚫 Bypass', lock_if_open:'Lock if open', wait_if_open:'Wait for sensors to close',
     select_btn:'+ Select', add_btn:'+ Add',
     sensors_to_bypass:'Sensors to Bypass',
     no_instances:'No instances. Add Argus from Integrations.',
@@ -375,7 +375,7 @@ const TEXTS = {
     searching_auto:'↻ Recherche automatisations...', no_auto_linked:'Aucune automatisation liée à Argus.',
     pin_remove_hint:'Pour supprimer le PIN: entrez le PIN actuel et laissez les champs vides.',
     lbl_load_file:'Charger le fichier:', lbl_aesthetic_custom:'Personnalisation esthétique', lbl_uploaded_files:'Fichiers téléchargés sur le serveur',
-    bypass_lbl:'🚫 Ignorer', lock_if_open:'Bloquer si ouvert',
+    bypass_lbl:'🚫 Ignorer', lock_if_open:'Bloquer si ouvert', wait_if_open:'Attendre la fermeture des capteurs',
     select_btn:'+ Sélectionner', add_btn:'+ Ajouter',
     sensors_to_bypass:'Capteurs à ignorer', no_instances:'Aucune instance.',
     fullscreen_title:'Plein écran', sos_slide:'Glisser pour activer SOS',
@@ -509,7 +509,7 @@ const TEXTS = {
     searching_auto:'↻ Buscando automações...', no_auto_linked:'Nenhuma automação vinculada ao Argus.',
     pin_remove_hint:'Para remover o PIN: insira o atual e deixe os campos abaixo vazios.',
     lbl_load_file:'Carregar arquivo:', lbl_aesthetic_custom:'Personalização estética', lbl_uploaded_files:'Arquivos enviados no servidor',
-    bypass_lbl:'🚫 Ignorar', lock_if_open:'Bloquear se aberto',
+    bypass_lbl:'🚫 Ignorar', lock_if_open:'Bloquear se aberto', wait_if_open:'Aguardar fechamento dos sensores',
     select_btn:'+ Selecionar', add_btn:'+ Adicionar',
     sensors_to_bypass:'Sensores a ignorar', no_instances:'Nenhuma instância.',
     fullscreen_title:'Tela cheia', sos_slide:'Deslize para ativar SOS',
@@ -643,7 +643,7 @@ const TEXTS = {
     searching_auto:'↻ Ricerca automazioni...', no_auto_linked:'Nessuna automazione collegata ad Argus.',
     pin_remove_hint:'Per rimuovere il PIN: inserisci quello attuale e lascia vuoti i campi sottostanti.',
     lbl_load_file:'Carica file:', lbl_aesthetic_custom:'Personalizzazione estetica', lbl_uploaded_files:'File caricati sul server',
-    bypass_lbl:'🚫 Ignora', lock_if_open:'Blocca se aperto',
+    bypass_lbl:'🚫 Ignora', lock_if_open:'Blocca se aperto', wait_if_open:'Attendi chiusura sensori',
     select_btn:'+ Seleziona', add_btn:'+ Aggiungi',
     sensors_to_bypass:'Sensori da ignorare', no_instances:'Nessuna istanza.',
     fullscreen_title:'Schermo intero', sos_slide:'Scorri per attivare SOS',
@@ -777,7 +777,7 @@ const TEXTS = {
     searching_auto:'↻ 正在搜索自动化...', no_auto_linked:'没有链接到Argus的自动化。',
     pin_remove_hint:'删除PIN: 输入当前PIN并将下面字段留空。',
     lbl_load_file:'上传文件:', lbl_aesthetic_custom:'美学个性化', lbl_uploaded_files:'服务器上上传的文件',
-    bypass_lbl:'🚫 跳过', lock_if_open:'开启时锁定',
+    bypass_lbl:'🚫 跳过', lock_if_open:'开启时锁定', wait_if_open:'等待传感器关闭后布防',
     select_btn:'+ 选择', add_btn:'+ 添加',
     sensors_to_bypass:'跳过的传感器', no_instances:'没有实例。',
     fullscreen_title:'全屏', sos_slide:'滑动以激活SOS',
@@ -911,7 +911,7 @@ const TEXTS = {
     searching_auto:'↻ Поиск автоматизаций...', no_auto_linked:'Нет автоматизаций, связанных с Argus.',
     pin_remove_hint:'Для удаления PIN: введите текущий и оставьте поля пустыми.',
     lbl_load_file:'Загрузить файл:', lbl_aesthetic_custom:'Эстетическая персонализация', lbl_uploaded_files:'Загруженные файлы на сервере',
-    bypass_lbl:'🚫 Обход', lock_if_open:'Блокировать если открыто',
+    bypass_lbl:'🚫 Обход', lock_if_open:'Блокировать если открыто', wait_if_open:'Ждать закрытия датчиков',
     select_btn:'+ Выбрать', add_btn:'+ Добавить',
     sensors_to_bypass:'Датчики для обхода', no_instances:'Нет экземпляров.',
     fullscreen_title:'Полный экран', sos_slide:'Проведите для активации SOS',
@@ -1439,26 +1439,13 @@ _tmpl.innerHTML = `
   .panel h2{margin:0;font-size:14px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--primary-color,#007aff);opacity:0.95}
 
   /* Access settings stay quiet until the user needs to manage them. */
-  .access-panel { padding: 22px 24px; }
+  .access-panel { padding: 22px 24px; overflow-y:auto; max-height:60vh; -webkit-overflow-scrolling:touch; }
   .access-panel .panel-head { margin-bottom: 12px; }
   .access-summary { font-size: 12px; opacity: .72; }
   .access-actions { display:flex; gap:10px; flex-wrap:wrap; }
   .access-actions button { flex:0 1 auto; padding:8px 12px; font-size:11px; }
   .access-actions button.active { background:var(--primary-color,#007aff); color:#fff; border-color:transparent; }
-  .access-workspace {
-    display:grid; grid-template-columns:minmax(0,1fr); margin-top:16px; gap:24px;
-    background:linear-gradient(135deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
-    border:1px solid var(--glass-border,rgba(255,255,255,.09));
-    border-radius:20px;
-    padding:18px;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 12px 30px rgba(0,0,0,.10);
-    backdrop-filter:blur(22px) saturate(145%);
-    -webkit-backdrop-filter:blur(22px) saturate(145%);
-    max-height: 55vh;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  .access-section { display:block; min-width:0; }
+  .access-section { display:block; min-width:0; margin-bottom:24px; }
   .access-section h3 { font-size:12px; font-weight:900; opacity:.8; margin:0 0 10px; text-transform:uppercase; }
   .access-panel .user-card { padding:10px 12px; border-radius:12px; }
   .github-star-action {
@@ -2656,7 +2643,7 @@ _tmpl.innerHTML = `
           </div>
         </div>
 
-        <div class="access-workspace" id="access-workspace">
+        <div class="access-workspace" id="access-workspace" style="display:contents">
           <!-- Users -->
           <div class="access-section" id="access-users-section">
             <h3 id="h-users"></h3>
@@ -5025,7 +5012,7 @@ class ArgusPanel extends HTMLElement {
   _currentModeConfig() {
     const emptyCfg = {
       sensors: [], bypassed_sensors: [], sirens: [],
-      require_closed: false, arming_time: null, entry_delay: null,
+      require_closed: false, open_sensors_policy: 'allow', arming_time: null, entry_delay: null,
       mqtt_enabled: null, entry_sensors: [], external_panels: [], light_siren_settings: {}
     };
     if (!this._ui || typeof this._ui !== 'object' || Array.isArray(this._ui)) {
@@ -5073,6 +5060,7 @@ class ArgusPanel extends HTMLElement {
       // sync_panels was the short-lived UI name; retain it only as a read fallback.
       external_panels: Array.isArray(cfg?.external_panels) ? cfg.external_panels : (Array.isArray(cfg?.sync_panels) ? cfg.sync_panels : []),
       require_closed: typeof cfg?.require_closed === 'boolean' ? cfg.require_closed : false,
+      open_sensors_policy: (cfg?.open_sensors_policy === 'pending' || cfg?.open_sensors_policy === 'allow' || cfg?.open_sensors_policy === 'block') ? cfg.open_sensors_policy : (cfg?.require_closed ? 'block' : 'allow'),
       arming_time: (cfg?.arming_time !== undefined && cfg?.arming_time !== null) ? cfg.arming_time : null,
       entry_delay: (cfg?.entry_delay !== undefined && cfg?.entry_delay !== null) ? cfg.entry_delay : null,
       light_siren_settings: cfg?.light_siren_settings && typeof cfg.light_siren_settings === 'object' ? cfg.light_siren_settings : {},
@@ -5128,6 +5116,10 @@ class ArgusPanel extends HTMLElement {
             <label class="checkbox-label" style="display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05);font-size:12px">
               <input type="checkbox" id="mode-require-closed" ${cfg.require_closed ? 'checked' : ''}>
               <span style="font-size:12px;font-weight:600">${this._t('lock_if_open')}</span>
+            </label>
+            <label class="checkbox-label" style="display:flex;align-items:center;gap:8px;margin-top:8px;padding:8px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05);font-size:12px">
+              <input type="checkbox" id="mode-wait-if-open" ${cfg.open_sensors_policy === 'pending' ? 'checked' : ''}>
+              <span style="font-size:12px;font-weight:600">${this._t('wait_if_open')}</span>
             </label>
           `}
         </div>
@@ -5266,12 +5258,21 @@ class ArgusPanel extends HTMLElement {
 
   async _saveMode() {
     const cfg = this._currentModeConfig();
-    const chk      = this.shadowRoot.getElementById('mode-require-closed');
-    const armTime  = this.shadowRoot.getElementById('mode-arming-time');
-    const entDelay = this.shadowRoot.getElementById('mode-entry-delay');
-    const mqttChk  = this.shadowRoot.getElementById('mode-mqtt-enabled');
+    const chk      = this.shadowRoot.getElementById('mode-require-closed') as HTMLInputElement | null;
+    const waitChk  = this.shadowRoot.getElementById('mode-wait-if-open') as HTMLInputElement | null;
+    const armTime  = this.shadowRoot.getElementById('mode-arming-time') as HTMLInputElement | null;
+    const entDelay = this.shadowRoot.getElementById('mode-entry-delay') as HTMLInputElement | null;
+    const mqttChk  = this.shadowRoot.getElementById('mode-mqtt-enabled') as HTMLInputElement | null;
 
-    if (chk)      cfg.require_closed = chk.checked;
+    if (chk) cfg.require_closed = chk.checked;
+    // Derive open_sensors_policy: block wins if require_closed, then pending if wait checked, else allow
+    if (chk?.checked) {
+      cfg.open_sensors_policy = 'block';
+    } else if (waitChk?.checked) {
+      cfg.open_sensors_policy = 'pending';
+    } else {
+      cfg.open_sensors_policy = 'allow';
+    }
     if (armTime)  cfg.arming_time  = armTime.value  ? parseInt(armTime.value)  : 0;
     if (entDelay) cfg.entry_delay  = entDelay.value ? parseInt(entDelay.value) : 0;
     if (mqttChk)  cfg.mqtt_enabled = mqttChk.checked;

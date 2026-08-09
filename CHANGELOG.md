@@ -2,6 +2,14 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.52] - 2026-08-09
+
+### Fixed
+- **Control de Acceso — Doble contenedor eliminado:** El panel de usuarios y PIN maestro ya no muestra un cuadro gris anidado dentro del cuadro principal. Las secciones se muestran directamente con scroll nativo en el panel.
+- **Toggle "Esperar armado de sensores" restituido (todos los modos):** Se añadió el segundo checkbox "Esperar armado en espera" en la configuración de sensores de cada modo (Casa, Ausente, Noche, Vacaciones). Activa `open_sensors_policy: pending` — Argus espera a que todos los sensores seleccionados para ese modo se cierren antes de completar el armado, con TTS anunciando el conteo en tiempo real.
+- **Color RGB exacto en luces de alarma:** Las luces RGB ahora reciben el color seleccionado exacto. Se corrigió la lógica que convertía innecesariamente `rgb_color → hs_color` cuando la luz también acepta `rgb`, introduciendo error de tono.
+- **Rendimiento — Auto-detección silenciosa:** Eliminado el selector manual de perfil y el botón "Ejecutar diagnóstico". Argus detecta automáticamente el hardware del dispositivo de visualización (Pi Zero, Pi 3, Pi 4, Pi 5, PC, tablet) usando `navigator.hardwareConcurrency` + disponibilidad de WebGL, aplica el perfil óptimo en silencio y muestra solo un pequeño badge informativo (en el idioma activo) con el perfil detectado. La seguridad nunca se ve afectada.
+
 ## [2.0.51] - 2026-08-09
 
 ### Added

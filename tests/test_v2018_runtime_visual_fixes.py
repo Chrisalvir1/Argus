@@ -22,8 +22,8 @@ class TestV2018RuntimeVisualFixes(unittest.TestCase):
 
     def test_missing_memory_is_neutral_and_explained(self):
         self.assertIn("caps.memory?Math.min(caps.memory,8)*6:18", PERF)
-        self.assertIn("no expuesta por el navegador", PERF)
-        self.assertIn("no identifica ni supone", PERF)
+        # Spanish copy is now in PROFILE_LABELS badge (note field) instead of a readout string
+        self.assertIn("detectado autom\u00e1ticamente", PERF)
 
     def test_phone_grid_is_single_column_and_natural_height(self):
         phone = GRID.split('@media(max-width:760px)', 1)[1]

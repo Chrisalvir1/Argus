@@ -106,7 +106,14 @@ def _light_service_data(panel, entity_id: str, settings: dict) -> tuple[dict, st
 
     rgb = _normalise_rgb(settings.get("rgb_color"))
     if rgb and supported_modes.intersection(_COLOR_MODES):
-        if supported_modes == {"hs"}:
+        # Prefer rgb_color directly — it is exact and universal.
+        # Only convert to hs_color when the light exclusively supports hs
+        # and has no rgb/rgbw/rgbww support (conversion would otherwise
+        # introduce hue rounding errors and apply the wrong color).
+        rgb_modes = {"rgb", "rgbw", "rgbww"}
+        if supported_modes.intersection(rgb_modes):
+            data["rgb_color"] = rgb
+        elif supported_modes <= {"hs", "xy", "color_temp"} and "hs" in supported_modes:
             red, green, blue = (part / 255 for part in rgb)
             hue, saturation, _ = colorsys.rgb_to_hsv(red, green, blue)
             data["hs_color"] = [round(hue * 360, 2), round(saturation * 100, 2)]

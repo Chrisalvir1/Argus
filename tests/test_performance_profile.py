@@ -26,7 +26,8 @@ class TestPerformanceProfile(unittest.TestCase):
         self.assertIn("deviceMemory", js)
         self.assertIn("webgl2", js)
         self.assertIn("function detectCapabilities", js)
-        self.assertIn("no identifica ni supone", js)
+        # Spanish text now lives in the PROFILE_LABELS dict (badge copy)
+        self.assertIn("detectado automáticamente", js)
 
     def test_runs_a_short_safe_benchmark(self):
         js = ROOT.joinpath("src", "legacy", "argus-performance-profile.ts").read_text(encoding="utf-8")
@@ -45,9 +46,11 @@ class TestPerformanceProfile(unittest.TestCase):
         self.assertNotIn("argus/save_ui'", js)
 
     def test_manual_override_is_respected_over_auto_detection(self):
+        # Manual override removed — Argus now always auto-detects.
+        # The auto profile is stored per device fingerprint and reused.
         js = ROOT.joinpath("src", "legacy", "argus-performance-profile.ts").read_text(encoding="utf-8")
-        self.assertIn("_argusPerfPreference", js)
-        self.assertIn("function setPreference", js)
+        self.assertIn("function fingerprint", js)
+        self.assertIn("argus-performance-v1", js)
 
     def test_runtime_monitor_can_downgrade_but_never_touches_security(self):
         js = ROOT.joinpath("src", "legacy", "argus-performance-profile.ts").read_text(encoding="utf-8")
@@ -62,9 +65,11 @@ class TestPerformanceProfile(unittest.TestCase):
         self.assertNotRegex(executable, r"\bpin\b")
 
     def test_diagnostics_button_exists_in_personalization(self):
+        # Diagnostics button and manual select removed — profile is auto-only.
+        # An informational badge shows the detected profile.
         js = ROOT.joinpath("src", "legacy", "argus-performance-profile.ts").read_text(encoding="utf-8")
-        self.assertIn("argus-performance-diagnose", js)
-        self.assertIn("argus-performance-select", js)
+        self.assertIn("argus-perf-badge", js)
+        self.assertIn("function runDiagnostics", js)
 
     def test_manifest_uses_home_hub_name(self):
         manifest = (ROOT / "custom_components" / "argus" / "manifest.json").read_text(encoding="utf-8")
