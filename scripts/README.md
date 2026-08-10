@@ -1,14 +1,22 @@
 # Argus Developer & Maintenance Scripts
 
-Este directorio contiene las herramientas de automatización, publicación e inspección para los desarrolladores de Argus.
+Este directorio contiene herramientas de inspección mantenidas para desarrolladores de Argus.
 
 ## Herramientas
 
-### `scripts/publish.py`
-Script para validar el versionado, compilar archivos Python, ejecutar la suite de pruebas unitarias y verificar el estado del repositorio antes de publicar una versión.
-
 ### `scripts/check_syntax.py`
-Script rápido para validar la sintaxis de todos los archivos Python en `custom_components/argus/` mediante `ast.parse`.
 
-## Exclusión de Release
-Ningún archivo en este directorio forma parte de la distribución del paquete `custom_components/argus` para Home Assistant ni se incluye en la descarga de HACS.
+Valida mediante `ast.parse` la sintaxis de todos los archivos Python en `custom_components/argus/`.
+
+## Publicación segura
+
+La publicación oficial se realiza exclusivamente mediante:
+
+1. `.github/workflows/validate.yml` para la matriz previa a la fusión.
+2. `.github/workflows/release.yml` para construir y publicar un tag ya validado.
+
+No se deben mantener scripts que hagan `git add .`, push directo a `main`, creen tags antes de validar o reescriban versiones mediante reemplazos globales.
+
+## Exclusión de release
+
+Ningún archivo de este directorio forma parte de la distribución `custom_components/argus` que instala HACS.

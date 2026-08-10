@@ -1,4 +1,4 @@
-"""Architecture contracts for Argus 1.8."""
+"""Architecture contracts for the current Argus release."""
 from pathlib import Path
 import unittest
 
@@ -10,10 +10,8 @@ class TestArchitectureContract(unittest.TestCase):
     def test_version_is_consistent(self) -> None:
         manifest = (COMPONENT / "manifest.json").read_text(encoding="utf-8")
         constants = (COMPONENT / "const.py").read_text(encoding="utf-8")
-        card = ((ROOT / "src" / "legacy") / "argus-card.ts").read_text(encoding="utf-8")
-        self.assertIn('"version": "2.0.55"', manifest)
-        self.assertIn('VERSION = "2.0.55"', constants)
-        self.assertIn("ARGUS_CARD_VERSION='2.0.55'", card)
+        self.assertIn('"version": "2.0.56"', manifest)
+        self.assertIn('VERSION = "2.0.56"', constants)
 
     def test_private_media_is_not_local(self) -> None:
         media = (COMPONENT / "media.py").read_text(encoding="utf-8")
@@ -22,12 +20,13 @@ class TestArchitectureContract(unittest.TestCase):
         self.assertIn("X-Content-Type-Options", media)
         self.assertNotIn('/local/argus/', media)
 
-    @unittest.skip("Legacy architecture replaced by TypeScript")
-    def test_frontend_is_composed_from_clients(self) -> None:
+    def test_frontend_has_one_typed_entrypoint(self) -> None:
         bootstrap = (COMPONENT / "www" / "argus-bootstrap.js").read_text(encoding="utf-8")
-        for module in ("security-client.js", "media-client.js", "premium-experience.js"):
-            self.assertIn(module, bootstrap)
-            self.assertTrue((COMPONENT / "www" / module).is_file())
+        entrypoint = (ROOT / "src" / "app" / "index.ts").read_text(encoding="utf-8")
+        self.assertIn("applyArgusFrontend", bootstrap)
+        self.assertIn("applyLegacyBeforeTypedClients", entrypoint)
+        self.assertIn("applyRuntimeLifecycle", entrypoint)
+        self.assertFalse((ROOT / "src" / "legacy" / "argus-card.ts").exists())
 
     def test_removed_features_are_not_registered(self) -> None:
         api = (COMPONENT / "websocket_api.py").read_text(encoding="utf-8")
@@ -35,9 +34,6 @@ class TestArchitectureContract(unittest.TestCase):
         self.assertNotIn("get_tts_engines", api)
         self.assertNotIn("google_generative_ai", panel)
         self.assertNotIn("analyze_camera", panel)
-        card = ((ROOT / "src" / "legacy") / "argus-card.ts").read_text(encoding="utf-8")
-        self.assertNotIn("Costa Rica", card)
-        self.assertNotIn("temperature: 24", card)
 
     def test_legacy_websocket_uses_single_media_manager(self) -> None:
         init = (COMPONENT / "__init__.py").read_text(encoding="utf-8")

@@ -14,17 +14,14 @@ BOOTSTRAP = (ARGUS / "www" / "argus-bootstrap.js").read_text(encoding="utf-8")
 
 class TestV2050ArmingComplete(unittest.TestCase):
     def test_current_version_is_consistent(self):
-        self.assertIn('VERSION = "2.0.55"', CONST)
-        self.assertIn('"version": "2.0.55"', MANIFEST)
-        self.assertIn("2.0.55", BOOTSTRAP)
+        self.assertIn('VERSION = "2.0.56"', CONST)
+        self.assertIn('"version": "2.0.56"', MANIFEST)
+        self.assertIn("2.0.56", BOOTSTRAP)
 
     def test_runtime_uses_one_open_detection_function(self):
         self.assertIn("def is_sensor_active(", RUNTIME)
         self.assertIn("def open_blocking_sensors(", RUNTIME)
-        self.assertIn(
-            "ArgusAlarmPanel._open_blocking_sensors = open_blocking_override",
-            RUNTIME,
-        )
+        self.assertIn("ArgusAlarmPanel._open_blocking_sensors = open_blocking_override", RUNTIME)
         self.assertIn("is_active_sensor_state", RUNTIME)
         self.assertIn("binary_sensor", MACHINE)
         self.assertIn("opening", MACHINE)
