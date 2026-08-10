@@ -36,7 +36,11 @@ def unique_ids(values) -> tuple[str, ...]:
 def is_active_sensor_state(entity_id: str, state_value: object) -> bool:
     """Normalize common HA/Aqara contact, lock, and cover states."""
     value = "" if state_value is None else str(state_value).strip().lower()
-    if value in _UNAVAILABLE_VALUES or value in _CLOSED_VALUES:
+    # An unavailable or absent security sensor is an unknown condition, not a
+    # closed contact. Keep the arming request waiting instead of arming blind.
+    if value in _UNAVAILABLE_VALUES:
+        return True
+    if value in _CLOSED_VALUES:
         return False
     if value in _ACTIVE_VALUES:
         return True

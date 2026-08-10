@@ -213,7 +213,7 @@ async def ws_argus_import_alarmo(hass, connection, msg) -> None:
     await async_append_audit_log(
         hass, "alarmo_imported", f"Imported {argus_config['migrated_sensors_count']} sensors from Alarmo", user=actor, entry_id=entry_id
     )
-    async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED)
+    async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED, entry_id)
     connection.send_result(msg["id"], {
         "success": True,
         "preview": {
@@ -473,7 +473,7 @@ async def ws_argus_save_ui(hass, connection, msg) -> None:
     except ValueError as err:
         connection.send_error(msg["id"], "invalid_config", str(err))
         return
-    async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED)
+    async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED, entry_id)
     await async_append_audit_log(hass, "ui_configuration_updated", user=actor, entry_id=entry_id)
     connection.send_result(msg["id"], {"saved": True, "ui": _redact_ui_data(saved)})
 
@@ -527,7 +527,7 @@ async def ws_argus_save_mode_config(hass, connection, msg) -> None:
     else:
         modes[mode] = config
     await async_save_ui_data(hass, {"modes": modes}, entry_id)
-    async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED)
+    async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED, entry_id)
     connection.send_result(msg["id"], {"success": True, "modes": modes})
 
 
@@ -700,7 +700,7 @@ async def ws_argus_restore_config(hass, connection, msg) -> None:
     except ValueError as err:
         connection.send_error(msg["id"], "invalid_backup", str(err))
         return
-    async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED)
+    async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED, entry_id)
     connection.send_result(msg["id"], {"success": True, "ui": _redact_ui_data(restored)})
 
 
@@ -770,7 +770,7 @@ async def ws_argus_save_automations(hass, connection, msg) -> None:
         connection.send_error(msg["id"], err.code, err.message)
         return
     await async_save_ui_data(hass, {"automations": copy.deepcopy(msg["automations"])}, entry_id)
-    async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED)
+    async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED, entry_id)
     connection.send_result(msg["id"], {"success": True})
 
 
@@ -1427,5 +1427,5 @@ async def ws_argus_sync_presence_rules(hass, connection, msg) -> None:
 
     # Will be implemented in Phase 4
     await async_save_ui_data(hass, {"presence_rules": msg["rules"]}, entry_id)
-    async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED)
+    async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED, entry_id)
     connection.send_result(msg["id"], {"success": True})

@@ -90,7 +90,7 @@ async def ws_argus_save_panic_output_profile(hass, connection, msg) -> None:
         if not modes.intersection(_COLOR_MODES):
             settings.get(entity_id, {}).pop("rgb_color", None)
     saved = await async_save_ui_data(hass, {"panic_outputs": outputs, "panic_output_settings": settings}, entry_id)
-    async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED)
+    async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED, entry_id)
     connection.send_result(msg["id"], {"success": True, "outputs": saved.get("panic_outputs", []), "settings": saved.get("panic_output_settings", {})})
 
 

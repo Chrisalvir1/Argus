@@ -177,6 +177,57 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         language = str(getattr(self.hass.config, "language", "en")).split("-", 1)[0]
         return language if language in _SOS_TEXT else "en"
 
+    async def _async_notify_configured(self, title: str, message: str, data: dict | None = None) -> None:
+        """Send an Argus event to the notify services chosen in Access Control.
+
+        This runs in the alarm entity, rather than in the browser, so it covers
+        HomeKit, MQTT, services and the Argus panel equally.
+        """
+        targets = self._ui_config.get("notif_targets", [])
+        if not isinstance(targets, list):
+            return
+        sent: set[str] = set()
+        for raw_target in targets:
+            target = str(raw_target or "").strip()
+            entity_id = ""
+            if target.startswith("entity:notify."):
+                entity_id = target.removeprefix("entity:")
+            if entity_id:
+                if entity_id in sent:
+                    continue
+                sent.add(entity_id)
+                try:
+                    has_service = getattr(self.hass.services, "has_service", None)
+                    if callable(has_service) and not has_service("notify", "send_message"):
+                        _LOGGER.warning("Argus: notify.send_message is unavailable for %s", entity_id)
+                        continue
+                    payload = {"title": str(title)[:128], "message": str(message)[:2000]}
+                    if isinstance(data, dict):
+                        payload["data"] = data
+                    await self.hass.services.async_call(
+                        "notify", "send_message", payload,
+                        target={"entity_id": entity_id}, blocking=False,
+                    )
+                except Exception:  # noqa: BLE001
+                    _LOGGER.exception("Argus: notification error for %s", entity_id)
+                continue
+            if target.startswith("notify."):
+                target = target.split(".", 1)[1]
+            if not target or target in sent or not target.replace("_", "").isalnum():
+                continue
+            sent.add(target)
+            try:
+                has_service = getattr(self.hass.services, "has_service", None)
+                if callable(has_service) and not has_service("notify", target):
+                    _LOGGER.warning("Argus: configured notification service notify.%s is unavailable", target)
+                    continue
+                payload = {"title": str(title)[:128], "message": str(message)[:2000]}
+                if isinstance(data, dict):
+                    payload["data"] = data
+                await self.hass.services.async_call("notify", target, payload, blocking=False)
+            except Exception:  # noqa: BLE001
+                _LOGGER.exception("Argus: notification error for notify.%s", target)
+
     # ── Config loading ──────────────────────────────────────────────
     def _load_config(self):
         d = dict(self._config_entry.data)
@@ -616,8 +667,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             await self._async_reconcile_state_schedule(runtime)
         self.hass.async_create_task(_check())
 
-    async def _async_reload_config(self) -> None:
+    async def _async_reload_config(self, changed_entry_id: str | None = None) -> None:
         """Reload UI config, re-subscribe sensors, and update MQTT subscriptions after panel saves configuration."""
+        # A mode save in one Argus instance must never cancel an arming
+        # request in another instance.  Older dispatcher sends did not carry
+        # an entry id, so preserve that behaviour for compatibility.
+        if changed_entry_id and changed_entry_id != self._config_entry.entry_id:
+            return
         await self._async_cancel_arming_request("config_reload", disarm=True)
         self._ui_config = await async_load_ui_data(self.hass, self._config_entry.entry_id)
         # Re-subscribe sensors (picks up newly added/removed sensors from UI)
@@ -927,36 +983,26 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         await self._async_sync_panels(AlarmControlPanelState.TRIGGERED)
 
         if self._panic_active:
-            notif_targets = self._ui_config.get("notif_targets", [])
             emergency_number = self._ui_config.get("emergency_number", "911")
             loc = self._ui_config.get("home_name", "Mi Casa") or "Mi Casa"
             sos_title, sos_message, call_title = _SOS_TEXT[self._language()]
             sos_message = sos_message.format(home=loc)
-            for target in notif_targets:
-                try:
-                    await self.hass.services.async_call(
-                        "notify",
-                        target,
+            await self._async_notify_configured(
+                sos_title,
+                sos_message,
+                {
+                    "push": {"sound": "alarm.caf", "badge": 1},
+                    "priority": "high",
+                    "ttl": 0,
+                    "actions": [
                         {
-                            "message": sos_message,
-                            "title": sos_title,
-                            "data": {
-                                "push": {"sound": "alarm.caf", "badge": 1},
-                                "priority": "high",
-                                "ttl": 0,
-                                "actions": [
-                                    {
-                                        "action": "URI",
-                                        "title": call_title.format(number=emergency_number),
-                                        "uri": f"tel:{emergency_number}",
-                                    }
-                                ],
-                            },
-                        },
-                        blocking=False,
-                    )
-                except Exception as e:
-                    _LOGGER.warning("Argus: SOS notification error for %s: %s", target, e)
+                            "action": "URI",
+                            "title": call_title.format(number=emergency_number),
+                            "uri": f"tel:{emergency_number}",
+                        }
+                    ],
+                },
+            )
         # Persistent notification in HA
         if self._panic_active:
             sos_title, sos_message, _ = _SOS_TEXT[self._language()]
@@ -980,6 +1026,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 sensor_name = state_obj.attributes.get("friendly_name", self._triggered_by)
             else:
                 sensor_name = self._triggered_by
+
+        if not self._panic_active:
+            await self._async_notify_configured(
+                "🚨 ARGUS — ALARMA DISPARADA",
+                f"Sensor: {sensor_name}\nModo activo: {self._triggered_mode or 'desconocido'}",
+                {"priority": "high", "ttl": 0},
+            )
         
         mode_label = self._alarm_state.value.replace("armed_", "").capitalize()
         # If triggered by a rule, mention it
@@ -1363,6 +1416,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self.hass.bus.async_fire("argus_disarmed", {
             "entity_id": self.entity_id, "user": caller_name, "entry_id": self._config_entry.entry_id
         })
+        await self._async_notify_configured(
+            "🔓 ARGUS — Desarmado",
+            f"El sistema fue desarmado por {caller_name or 'Argus'}.",
+        )
         await async_append_audit_log(self.hass, "disarmed", f"Sistema desarmado por {caller_name}", user=caller_name, entry_id=self._config_entry.entry_id)
         _LOGGER.info("Argus: Disarmed by %s", caller_name)
         await self._async_sync_panels(AlarmControlPanelState.DISARMED)
@@ -1452,12 +1509,18 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 ),
                 notification_id="argus_arm_blocked",
             )
+            await self._async_notify_configured(
+                "🔒 ARGUS — No se pudo armar",
+                "El sistema no se armó porque estos sensores están abiertos o activos:\n"
+                + "\n".join(f"• {name}" for name in open_names),
+            )
             self.hass.bus.async_fire(
                 "argus_arm_blocked",
                 {
                     "entity_id": self.entity_id,
                     "mode": mode_key,
                     "open_sensors": open_names,
+                    "entry_id": self._config_entry.entry_id,
                 },
             )
             return
@@ -1494,10 +1557,16 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self.async_write_ha_state()
             await self._async_mqtt_publish()
             if open_sensors and policy == "pending":
-                await async_announce_arming_wait_update(
-                    self.hass, self._config_entry, alarm_entity_id=self.entity_id,
-                    target=target.value, previous_open=[], current_open=open_sensors,
-                )
+                # Voice feedback is helpful, never a prerequisite for the
+                # security state machine.  A temporary TTS/storage failure
+                # must not leave the request half-created in ARMING.
+                try:
+                    await async_announce_arming_wait_update(
+                        self.hass, self._config_entry, alarm_entity_id=self.entity_id,
+                        target=target.value, previous_open=[], current_open=open_sensors,
+                    )
+                except Exception:  # noqa: BLE001
+                    _LOGGER.exception("Argus initial arming voice update failed")
             if arming_delay:
                 self._arming_listener = async_call_later(self.hass, arming_delay, lambda now, generation=self._arm_generation: self._async_finish_arming(now, generation))
             _LOGGER.info("Argus: HomeKit-safe arming request %s in %s seconds", target, arming_delay)
@@ -1568,6 +1637,11 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self.hass.bus.async_fire("argus_armed", {
             "entity_id": self.entity_id, "mode": target.value if hasattr(target, "value") else str(target), "user": user_name, "entry_id": self._config_entry.entry_id
         })
+        mode = target.value if hasattr(target, "value") else str(target)
+        await self._async_notify_configured(
+            "🔒 ARGUS — Armado",
+            f"El sistema se armó en modo {_MODE_LABELS.get(mode, mode)}.",
+        )
         await async_append_audit_log(self.hass, "armed", f"Modo: {_MODE_LABELS.get(target.value if hasattr(target, 'value') else str(target), target)}", user=user_name, entry_id=self._config_entry.entry_id)
         _LOGGER.info("Argus: Armado → %s", target)
         await self._async_sync_panels(target)

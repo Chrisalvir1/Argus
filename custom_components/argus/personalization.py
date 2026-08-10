@@ -103,7 +103,7 @@ async def ws_argus_save_profile_theme(
         
         await argus_ws.async_save_ui_data(hass, {"users": users}, entry_id)
         
-        async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED)
+        async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED, entry_id)
         
         connection.send_result(msg["id"], {"success": True, "theme": current_theme})
         
