@@ -2651,6 +2651,21 @@ _tmpl.innerHTML = `
             <div id="users-list" style="display:grid;gap:12px;margin-bottom:16px"></div>
           </div>
 
+          <!-- Notifications -->
+          <div class="access-section" id="access-notifications-section">
+            <h3 id="h-notifications"></h3>
+            <p class="small" id="p-notif-desc" style="margin:0 0 12px;opacity:.72"></p>
+            <div id="notif-targets" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px"></div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <select id="notif-select" class="glass-control" style="flex:1;min-width:0"></select>
+              <button type="button" class="ghost" id="btn-add-notif" style="white-space:nowrap">＋</button>
+            </div>
+            <div class="save-row" style="margin-top:12px">
+              <button class="primary" id="btn-save-notif" style="width:100%"></button>
+            </div>
+            <div id="notif-status" class="status" style="margin-top:8px;text-align:center;font-size:12px;font-weight:bold;min-height:18px"></div>
+          </div>
+
           <!-- Master PIN -->
           <div class="access-section" id="access-pin-section">
             <h3 id="h-settings-pin">PIN Maestro</h3>
@@ -5397,16 +5412,16 @@ class ArgusPanel extends HTMLElement {
     const sel = this.shadowRoot.getElementById('notif-select');
     if (!sel) return;
     const services = this._hass?.services?.notify || {};
-
-    let opts = Object.keys(services).filter(k => k !== 'notify' && !k.includes('persistent_notification') && !this._notifTargets.includes(k));
+    const notifyEntities = Object.values(this._hass?.states || {})
+      .filter(state => state?.entity_id?.startsWith('notify.') && state.entity_id !== 'notify.persistent_notification')
+      .map(state => ({ value: `entity:${state.entity_id}`, label: state.attributes?.friendly_name || state.entity_id }));
+    const legacyServices = Object.keys(services)
+      .filter(k => !['notify', 'send_message', 'persistent_notification'].includes(k) && !this._notifTargets.includes(k))
+      .map(k => ({ value: k, label: k.replace(/_/g, ' ') }));
+    const opts = [...notifyEntities, ...legacyServices].filter(option => !this._notifTargets.includes(option.value));
 
     sel.innerHTML = opts.length
-      ? opts.map(k => {
-          let label = k;
-          if (k.startsWith('mobile_app')) label = "📱 " + k.replace('mobile_app_', '').replace(/_/g, ' ');
-          else label = "🔔 " + label.replace(/_/g, ' ');
-          return `<option value="${this._escapeHtml(k)}">${this._escapeHtml(label)}</option>`;
-        }).join('')
+      ? opts.map(({ value, label }) => `<option value="${this._escapeHtml(value)}">${this._escapeHtml(`🔔 ${label}`)}</option>`).join('')
       : `<option value="">— ${this._escapeHtml(this._t('notif_no_services'))} —</option>`;
   }
 
@@ -5423,7 +5438,7 @@ class ArgusPanel extends HTMLElement {
     const el = this.shadowRoot.getElementById('notif-targets');
     if (!el) return;
     el.innerHTML = this._notifTargets.map(t => `
-      <span class="notif-chip">📱 ${this._escapeHtml(t.replace(/_/g,' '))}
+      <span class="notif-chip">🔔 ${this._escapeHtml(t.replace(/^entity:notify\./, '').replace(/_/g,' '))}
         <button data-notif-remove="${this._escapeHtml(t)}">✕</button>
       </span>`).join('') || `<span class="small" style="opacity:.5">—</span>`;
     el.querySelectorAll('[data-notif-remove]').forEach(btn =>
@@ -5436,7 +5451,8 @@ class ArgusPanel extends HTMLElement {
   }
 
   _renderNotifications() {
-    return;
+    this._renderNotifChips();
+    this._populateNotifSelect();
   }
 
   async _saveNotifications() {
@@ -6960,7 +6976,6 @@ class ArgusPanel extends HTMLElement {
             ...(pin ? { code: pin } : {})
           });
 
-          this._sendHaNotif(`🔓 ${this._t('log_disarmed')}`, this._format('notification_disarmed', { user: currentUser }));
           // FIX v0.9.32 — Bug 1: al desarmar, forzar re-render inmediato para
           // quitar la clase siren-active/triggered-sensor de todas las píldoras.
           setTimeout(() => { this._renderModeView(); this._load(); }, 300);
@@ -7017,7 +7032,6 @@ class ArgusPanel extends HTMLElement {
       });
       const modeTxt = modeLabels[action] || action;
 
-      this._sendHaNotif(`🔒 ${this._t('log_armed')} — ${modeTxt}`, this._format('notification_armed', { user: currentUser, mode: modeTxt }));
       setTimeout(() => this._load(), 800);
     } catch (err) {
       // FIX-5: mostrar error real del backend al usuario
@@ -7518,15 +7532,6 @@ class ArgusPanel extends HTMLElement {
       pinInput.addEventListener('keydown', e => {
         if (e.key === 'Enter') this.shadowRoot.getElementById('btn-submit-login-pin').click();
       });
-    }
-  }
-
-
-  /* ── HA Notifications helper ─────────────────────────────────────── */
-  _sendHaNotif(title, message) {
-    if (!this._notifTargets.length) return;
-    for (const target of this._notifTargets) {
-      this._hass.callService('notify', target, { title, message }).catch(() => {});
     }
   }
 
