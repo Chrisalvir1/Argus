@@ -325,7 +325,14 @@ def install_sensor_state_runtime() -> None:
             await self._async_trigger()
 
     def schedule_reconcile(self, source: str) -> None:
-        self.hass.async_create_task(reconcile(self, source))
+        """Schedule from either HA's event loop or its watchdog worker.
+
+        ``async_track_time_interval`` may invoke its callback from a worker
+        thread.  ``async_create_task`` is loop-only and HA 2026 rejects that
+        call, which stopped the watchdog before it could observe a closed
+        sensor.  ``create_task`` is Home Assistant's thread-safe entry point.
+        """
+        self.hass.create_task(reconcile(self, source))
 
     async def added_with_reconciliation(self) -> None:
         await original_added(self)

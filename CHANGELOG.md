@@ -2,6 +2,11 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.57] - 2026-08-09
+
+### Fixed
+- Reconciliación de armado segura desde el watchdog de Home Assistant: cerrar el último sensor ya no deja Argus bloqueado en espera.
+
 ## [2.0.56]
 
 ### Fixed

@@ -69,6 +69,10 @@ class TestV2049SensorStateRuntime(unittest.TestCase):
             "install_trigger_voice();install_sensor_state_runtime()", source
         )
 
+    def test_watchdog_uses_thread_safe_task_scheduling(self):
+        self.assertIn("self.hass.create_task(reconcile(self, source))", RUNTIME)
+        self.assertNotIn("self.hass.async_create_task(reconcile(self, source))", RUNTIME)
+
 
 if __name__ == "__main__":
     unittest.main()
