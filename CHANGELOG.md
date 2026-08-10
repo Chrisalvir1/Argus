@@ -2,6 +2,16 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.56]
+
+### Fixed
+- El armado en espera usa una definición única y segura de sensor cerrado: `off`, `closed` y `cerrado` liberan el modo solicitado; sensores ausentes, `unknown` o `unavailable` mantienen el armado en espera.
+- Al cerrar parcialmente los sensores, el TTS informa tanto el sensor que cerró como el que queda pendiente. Un fallo puntual de TTS o almacenamiento ya no interrumpe la máquina de estados de armado.
+- Guardar la configuración de una instancia ya no cancela una solicitud de armado pendiente en otra instancia.
+
+### Removed
+- Se retiraron scripts y salidas temporales de publicación que podían reintroducir reemplazos de versión no verificados.
+
 ## [2.0.54]
 
 ### Fixed

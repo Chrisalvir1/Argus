@@ -40,10 +40,13 @@ def is_sensor_active(hass, entity_id: str) -> bool:
     """Return True when a monitored sensor is currently blocking/open."""
     state = hass.states.get(entity_id)
     if state is None:
-        return False
+        # A configured security sensor that HA cannot currently resolve is not
+        # evidence that the opening is closed.  Keep an armed/waiting request
+        # safe until a real closed value arrives.
+        return True
     value = str(state.state).strip().lower()
     if value in {STATE_UNKNOWN, STATE_UNAVAILABLE, "none", ""}:
-        return False
+        return True
         
     if value in _CLOSED:
         return False

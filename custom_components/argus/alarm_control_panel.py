@@ -616,8 +616,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             await self._async_reconcile_state_schedule(runtime)
         self.hass.async_create_task(_check())
 
-    async def _async_reload_config(self) -> None:
+    async def _async_reload_config(self, changed_entry_id: str | None = None) -> None:
         """Reload UI config, re-subscribe sensors, and update MQTT subscriptions after panel saves configuration."""
+        # A mode save in one Argus instance must never cancel an arming
+        # request in another instance.  Older dispatcher sends did not carry
+        # an entry id, so preserve that behaviour for compatibility.
+        if changed_entry_id and changed_entry_id != self._config_entry.entry_id:
+            return
         await self._async_cancel_arming_request("config_reload", disarm=True)
         self._ui_config = await async_load_ui_data(self.hass, self._config_entry.entry_id)
         # Re-subscribe sensors (picks up newly added/removed sensors from UI)
@@ -1494,10 +1499,16 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self.async_write_ha_state()
             await self._async_mqtt_publish()
             if open_sensors and policy == "pending":
-                await async_announce_arming_wait_update(
-                    self.hass, self._config_entry, alarm_entity_id=self.entity_id,
-                    target=target.value, previous_open=[], current_open=open_sensors,
-                )
+                # Voice feedback is helpful, never a prerequisite for the
+                # security state machine.  A temporary TTS/storage failure
+                # must not leave the request half-created in ARMING.
+                try:
+                    await async_announce_arming_wait_update(
+                        self.hass, self._config_entry, alarm_entity_id=self.entity_id,
+                        target=target.value, previous_open=[], current_open=open_sensors,
+                    )
+                except Exception:  # noqa: BLE001
+                    _LOGGER.exception("Argus initial arming voice update failed")
             if arming_delay:
                 self._arming_listener = async_call_later(self.hass, arming_delay, lambda now, generation=self._arm_generation: self._async_finish_arming(now, generation))
             _LOGGER.info("Argus: HomeKit-safe arming request %s in %s seconds", target, arming_delay)

@@ -84,10 +84,13 @@ async def async_announce_arming_wait_update(hass, config_entry, *, alarm_entity_
   
   if not current:
       template = options.get(CONF_ARMING_VOICE_MESSAGE_COMPLETE) or translate(lang, "msg_complete")
-  elif len(current) == 1 and previous:
-      template = options.get(CONF_ARMING_VOICE_MESSAGE_LAST) or translate(lang, "msg_last")
+  # A transition must always say what closed as well as what remains.  The
+  # former "last" branch hid the close event whenever exactly one sensor was
+  # left, which made the voice flow look stalled even while it was progressing.
   elif closed:
       template = options.get(CONF_ARMING_VOICE_MESSAGE_REMAINING) or translate(lang, "msg_remaining")
+  elif len(current) == 1 and previous:
+      template = options.get(CONF_ARMING_VOICE_MESSAGE_LAST) or translate(lang, "msg_last")
   else:
       template = options.get(CONF_ARMING_VOICE_MESSAGE_START) or translate(lang, "msg_start")
   
