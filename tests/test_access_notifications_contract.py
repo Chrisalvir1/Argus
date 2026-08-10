@@ -40,6 +40,14 @@ class TestAccessNotificationsContract(unittest.TestCase):
         self.assertIn('"🔒 ARGUS — No se pudo armar"', panel)
         self.assertIn('"🚨 ARGUS — ALARMA DISPARADA"', panel)
 
+    def test_sos_outputs_are_saved_when_selected(self) -> None:
+        bridge = (ROOT / "src" / "legacy" / "bridge.ts").read_text(encoding="utf-8")
+        runtime = (ROOT / "src" / "legacy" / "argus-sos-output-persistence.ts").read_text(encoding="utf-8")
+        self.assertIn("applySosOutputPersistence(C)", bridge)
+        self.assertIn("argus/save_panic_output_profile", runtime)
+        self.assertIn("this._selectorTarget!=='panic'", runtime)
+        self.assertIn("No se pudieron guardar las acciones SOS", runtime)
+
 
 if __name__ == "__main__":
     unittest.main()
