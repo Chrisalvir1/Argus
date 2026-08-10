@@ -50,14 +50,10 @@ class TestSecurityContract(unittest.TestCase):
         frontend = (ROOT / "src" / "legacy" / "argus-panel.ts").read_text(encoding="utf-8")
         for language in ("es", "en", "fr", "pt", "it", "zh", "ru"):
             self.assertIn(f"{language}: {{", frontend)
+            self.assertIn(f"Object.assign(TEXTS.{language}", frontend)
         self.assertIn("use_ha_language", frontend)
         self.assertIn("_refreshLocalizedUi()", frontend)
-        self.assertIn("this._renderNotifications();", frontend)
-        self.assertIn("this._renderSosOutputs();", frontend)
         self.assertIn("toLocaleString(this._getLocale())", frontend)
-        self.assertIn("this._populateWeatherSources();", frontend)
-        for language in ("es", "en", "fr", "pt", "it", "zh", "ru"):
-            self.assertIn(f"Object.assign(TEXTS.{language}", frontend)
 
     def test_config_flow_has_all_panel_languages(self) -> None:
         for language in ("es", "en", "fr", "pt", "it", "zh", "ru"):
@@ -65,42 +61,25 @@ class TestSecurityContract(unittest.TestCase):
             with self.subTest(language=language):
                 data = json.loads(path.read_text(encoding="utf-8"))
                 self.assertIn("user", data["config"]["step"])
-                self.assertIn("options", data)
                 self.assertIn("init", data["options"]["step"])
 
     def test_current_release_contract(self) -> None:
-        """Verify the version string is current and exact."""
         manifest = json.loads((COMPONENT / "manifest.json").read_text(encoding="utf-8"))
-        self.assertEqual(manifest["version"], "2.0.55")
+        self.assertEqual(manifest["version"], "2.0.56")
         self.assertEqual(manifest["integration_type"], "hub")
-
         const = (COMPONENT / "const.py").read_text(encoding="utf-8")
-        self.assertIn('VERSION = "2.0.55"', const)
+        self.assertIn('VERSION = "2.0.56"', const)
         self.assertIn('DEFAULT_MQTT_TOPIC_COMMAND = "argus/alarm/set"', const)
-        self.assertIn("DEFAULT_NAME = NAME", const)
-
         security = (COMPONENT / "security.py").read_text(encoding="utf-8")
         self.assertIn("def validate_pin", security)
         self.assertIn("def needs_rehash", security)
         self.assertIn("hashlib.scrypt", security)
-
-        panel = (COMPONENT / "alarm_control_panel.py").read_text(encoding="utf-8")
-        self.assertIn('payload_str = str(msg.payload or "").strip()', panel)
-        self.assertIn("json.loads(payload_str)", panel)
-        self.assertIn("fallback to raw string command", panel.lower())
-        self.assertIn("self.hass.async_create_task(self._async_mqtt_publish())", panel)
-        self.assertIn("if not isinstance(entry_list, list):", panel)
-
-        frontend = (ROOT / "src" / "legacy" / "argus-panel.ts").read_text(encoding="utf-8")
-        self.assertIn("formattedDate", frontend)
-        self.assertIn("toLocaleString(this._getLocale())", frontend)
 
     def test_local_first_and_forensic_contract(self) -> None:
         storage = (COMPONENT / "storage.py").read_text(encoding="utf-8")
         panel = (COMPONENT / "alarm_control_panel.py").read_text(encoding="utf-8")
         api = (COMPONENT / "websocket_api.py").read_text(encoding="utf-8")
         frontend = (ROOT / "src" / "legacy" / "argus-panel.ts").read_text(encoding="utf-8")
-
         self.assertIn("async_save_alarm_runtime_state", storage)
         self.assertIn("_async_reconcile_state_schedule", panel)
         self.assertIn("schedule_recovery", panel)

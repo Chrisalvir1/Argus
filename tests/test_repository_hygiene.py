@@ -8,13 +8,15 @@ ROOT = Path(__file__).parents[1]
 
 
 class TestRepositoryHygiene(unittest.TestCase):
-    def test_one_shot_publishers_and_patch_scripts_are_absent(self) -> None:
+    def test_one_shot_publishers_patch_scripts_and_dead_card_are_absent(self) -> None:
         forbidden = (
             ".github/workflows/publish-v2055-once.yml",
+            ".github/workflows/prepare-v2056-once.yml",
             "fix_changelog.py",
             "patch_js.py",
             "update_versions.py",
             "scripts/publish.py",
+            "src/legacy/argus-card.ts",
         )
         for relative in forbidden:
             with self.subTest(path=relative):
