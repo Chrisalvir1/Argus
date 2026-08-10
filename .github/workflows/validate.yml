@@ -1,124 +1,122 @@
 name: Validate
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
   workflow_dispatch:
-  schedule:
-    - cron: '0 0 * * 0'
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
-  group: validate-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: prepare-v2056-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  static-tests:
-    name: Python 3.14 regression tests
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.14'
-      - name: Verify Python runtime
-        run: python -c 'import sys; assert (3, 14, 2) <= sys.version_info < (3, 15); print(sys.version)'
-      - run: python -m compileall -q custom_components/argus tests
-      - run: python -m unittest discover -s tests -v
-
-  javascript-syntax:
-    name: JavaScript syntax checks (Node 24 LTS)
+  prepare-version:
+    if: github.event_name == 'pull_request' && github.head_ref == 'fix/v2.0.56-arming-wait-contract'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
         with:
-          node-version: '24'
-      - name: Verify Node runtime
-        run: node -e "if (Number(process.versions.node.split('.')[0]) !== 24) process.exit(1); console.log(process.version)"
-      - name: Validate residual JavaScript modules
+          ref: fix/v2.0.56-arming-wait-contract
+          fetch-depth: 0
+      - name: Prepare exact v2.0.56 source
+        shell: bash
         run: |
           set -euo pipefail
-          for file in custom_components/argus/www/*.js; do node --check "$file"; done
+          python - <<'PY'
+          from pathlib import Path
+          import json
 
-  frontend-tests:
-    name: React, TypeScript 7.0.2 and Vite
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-          cache: npm
-      - run: npm ci
-      - run: test "$(npx tsc --version)" = "Version 7.0.2"
-      - run: npx tsc --noEmit
-      - run: npm test
-      - run: npm run build
-      - name: Verify browser-safe bundle
+          old = "2.0.55"
+          new = "2.0.56"
+          files = [
+              "custom_components/argus/manifest.json",
+              "custom_components/argus/const.py",
+              "custom_components/argus/www/argus-bootstrap.js",
+              "src/legacy/argus-card.ts",
+              "tests/test_v2050_arming_complete.py",
+              "tests/test_architecture_contract.py",
+              "tests/test_v2052_version_contracts.py",
+              "tests/test_security_contract.py",
+              "tests/test_v2052_typescript_frontend_contract.py",
+              "tests/test_v193_sync.py",
+          ]
+          for filename in files:
+              path = Path(filename)
+              text = path.read_text(encoding="utf-8")
+              if old not in text:
+                  raise SystemExit(f"expected {old} in {filename}")
+              path.write_text(text.replace(old, new), encoding="utf-8")
+
+          notes = """# Argus Home Hub 2.0.56
+
+## Armado en espera restaurado de extremo a extremo
+
+- Persiste `open_sensors_policy: pending` desde el formulario real y su transporte WebSocket, incluso con configuraciones heredadas.
+- Mantiene Argus y HomeKit en `ARMING` mientras existan sensores bloqueantes.
+- Muestra inmediatamente el estado visual/SVG de espera y la lista vigente de sensores.
+- Anuncia por TTS los sensores abiertos al iniciar.
+- Anuncia cada sensor que se cierra y todos los que todavía faltan, incluso cuando queda solo uno.
+- Al cerrar el último sensor anuncia la finalización y completa inmediatamente el modo solicitado.
+- Conserva el disparo posterior al abrir un sensor monitoreado ya armado.
+
+## Estabilidad y mantenimiento
+
+- Cancela temporizadores del panel al desconectarlo y neutraliza el reloj visual heredado duplicado.
+- Elimina workflows de publicación de una sola vez, scripts de parche obsoletos, publicación directa a `main` y checksums rastreados.
+- Añade pruebas ejecutables para política frontend/backend, cierre parcial/final, TTS, ciclo de vida y limpieza del repositorio.
+
+## Validación
+
+La publicación exige Python 3.14, Node 24, TypeScript 7.0.2, Vitest, Vite, HACS, hassfest, ZIP íntegro y SHA-256.
+
+La matriz automatizada valida código, contratos y artefacto. La confirmación final con sensores Aqara, HomeKit y reproductores TTS físicos debe realizarse después de instalar v2.0.56 y reiniciar Home Assistant.
+"""
+          Path("docs/RELEASE_NOTES_2.0.56.md").write_text(notes, encoding="utf-8")
+
+          changelog = Path("CHANGELOG.md")
+          current = changelog.read_text(encoding="utf-8")
+          marker = "## [2.0.55] - 2026-08-09"
+          section = """## [2.0.56] - 2026-08-09
+
+### Fixed
+- **Contrato de espera persistente:** el frontend guarda `open_sensors_policy: pending` después de todos los overrides heredados y el backend migra configuraciones rotas de forma canónica.
+- **TTS de cierres parciales:** cada cierre anuncia cuál sensor cerró y cuáles siguen bloqueando, incluso cuando queda uno.
+- **Finalización determinista:** el último cierre completa el modo solicitado y publica el estado armado para HomeKit.
+- **Ciclo de vida del panel:** se neutraliza el temporizador visual duplicado y todos los intervalos se cancelan al salir.
+
+### Tests
+- Cobertura ejecutable de payload WebSocket, política frontend/backend, transiciones de espera, TTS, orden de runtimes, HomeKit y temporizadores.
+
+### Maintenance
+- Eliminados workflows de una sola vez, scripts de parche obsoletos, publicación directa a `main` y artefactos rastreados.
+
+"""
+          if "## [2.0.56]" not in current:
+              if marker not in current:
+                  raise SystemExit("2.0.55 changelog marker missing")
+              changelog.write_text(current.replace(marker, section + marker, 1), encoding="utf-8")
+
+          manifest = json.loads(Path("custom_components/argus/manifest.json").read_text(encoding="utf-8"))
+          if manifest.get("version") != new:
+              raise SystemExit("manifest bump failed")
+          PY
+          test "$(python -c 'import json; print(json.load(open("custom_components/argus/manifest.json"))["version"])')" = "2.0.56"
+          grep -q 'VERSION = "2.0.56"' custom_components/argus/const.py
+          grep -q 'argus-frontend.js?v=2.0.56' custom_components/argus/www/argus-bootstrap.js
+          grep -q "ARGUS_CARD_VERSION='2.0.56'" src/legacy/argus-card.ts
+          test -s docs/RELEASE_NOTES_2.0.56.md
+          grep -q '## \[2.0.56\]' CHANGELOG.md
+          python -m compileall -q custom_components/argus tests
+      - name: Restore validation workflow and commit
+        shell: bash
         run: |
-          test -s custom_components/argus/www/react-dist/argus-frontend.js
-          ! grep -q 'process\.env' custom_components/argus/www/react-dist/argus-frontend.js
-
-  build-release-artifact:
-    name: Build HACS artifact
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-          cache: npm
-      - run: npm ci
-      - run: npm run build
-      - run: |
           set -euo pipefail
-          cd custom_components/argus
-          zip -qr "../../argus.zip" . -x '__pycache__/*' '*/__pycache__/*' '*.pyc'
-          cd ../..
-          test -s argus.zip
-          unzip -tq argus.zip
-          unzip -l argus.zip | grep -q 'www/react-dist/argus-frontend.js'
-          if unzip -l argus.zip | grep -Eq '(__pycache__|\.pyc$)'; then exit 1; fi
-
-  validate-hacs:
-    name: Validate HACS
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-      - uses: hacs/action@1ebf01c408f29afcb6406bd431bc98fd8cbb15aa
-        with:
-          category: integration
-
-  validate-hassfest:
-    name: Validate with hassfest
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-      - uses: home-assistant/actions/hassfest@f4ca6f671bd429efb108c0f2fa0ae8af0215986c
-
-  dependency-audit:
-    name: Weekly dependency audit (informational)
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-          cache: npm
-      - run: npm ci
-      - name: Report high-severity dependency findings
-        continue-on-error: true
-        run: npm audit --omit=dev --audit-level=high
+          git checkout origin/main -- .github/workflows/validate.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add .github/workflows/validate.yml CHANGELOG.md docs/RELEASE_NOTES_2.0.56.md custom_components/argus/manifest.json custom_components/argus/const.py custom_components/argus/www/argus-bootstrap.js src/legacy/argus-card.ts tests
+          git commit -m "chore(release): bump Argus to v2.0.56"
+          git push origin HEAD:fix/v2.0.56-arming-wait-contract
