@@ -332,11 +332,11 @@ vec3 fireworksLayer(vec2 uv,float phase_){
   // 6 fireworks with staggered start times
   for(int i=0;i<6;i++){
     float fi=float(i);
-    float startOffset=hash(vec2(fi,99.))*2.0; // stagger 0-2s
+    float startOffset=hash(vec2(fi,99.))*2.0;
     float period_=2.8;
     float localT=mod(t*0.5+startOffset,period_);
     float hue=hash(vec2(fi+13.,7.));
-    col+=firework(uv,fi,localT-localT,localT,hue)*intensity; // trick: startT=0, age=localT
+    col+=firework(uv,fi,localT,hue)*intensity;
   }
   return col;
 }
@@ -558,7 +558,8 @@ export function startRender(
   // Compile shaders
   const vert = shader(gl, gl.VERTEX_SHADER, VERTEX);
   const frag = shader(gl, gl.FRAGMENT_SHADER, FRAGMENT);
-  const program = gl.createProgram()!;
+  const program = gl.createProgram();
+  if (!program) throw new Error('Could not create WebGL program');
   gl.attachShader(program, vert);
   gl.attachShader(program, frag);
   gl.linkProgram(program);
