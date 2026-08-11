@@ -18,16 +18,16 @@ concurrency:
 
 jobs:
   static-tests:
-    name: Python 3.13 regression tests
+    name: Python 3.14 regression tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: '3.14'
       - name: Verify Python runtime
-        run: python -c 'import sys; assert sys.version_info >= (3, 13); print(sys.version)'
+        run: python -c 'import sys; assert sys.version_info >= (3, 14, 2); print(sys.version)'
       - run: python -m compileall -q custom_components/argus tests
       - run: python -m unittest discover -s tests -v
 
