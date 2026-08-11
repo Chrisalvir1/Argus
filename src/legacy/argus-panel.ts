@@ -1340,7 +1340,7 @@ _tmpl.innerHTML = `
   @keyframes iosSelectPop{0%{transform:scale(.92);opacity:.45}60%{transform:scale(1.045);opacity:1}100%{transform:scale(1)}}
   .glass,.entry,.mode-section-card,.user-card,.file-card,.log-item{animation:iosGlassIn .5s cubic-bezier(.22,1.18,.36,1) both}
   .pick-row:has(input:checked),.tab.active,.liquid-btn.active{animation:iosSelectPop .34s cubic-bezier(.2,1.45,.35,1);box-shadow:0 0 0 1px color-mix(in srgb,var(--primary-color,#007aff) 45%,transparent),0 12px 30px color-mix(in srgb,var(--primary-color,#007aff) 18%,transparent)}
-  .glass.liquid-glass{backdrop-filter:blur(28px) saturate(150%)!important;-webkit-backdrop-filter:blur(28px) saturate(150%)!important;border-color:rgba(255,255,255,0.15)!important;box-shadow:0 8px 32px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.1)!important}
+  .glass.liquid-glass{background:var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)))!important;backdrop-filter:blur(28px) saturate(150%)!important;-webkit-backdrop-filter:blur(28px) saturate(150%)!important;border-color:rgba(255,255,255,0.15)!important;box-shadow:0 8px 32px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.1)!important}
   button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 70%,#fff);outline-offset:3px}
   button:disabled{cursor:not-allowed;opacity:.5;filter:saturate(.45)}
   @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
@@ -1939,6 +1939,8 @@ _tmpl.innerHTML = `
   .wx-atmosphere{isolation:isolate;background:linear-gradient(180deg,var(--sky-top),var(--sky-mid) 58%,var(--sky-bottom));overflow:hidden}
   .wx-webgl{position:absolute;inset:0;z-index:2;width:100%;height:100%;pointer-events:none;opacity:.95}
   .wx-atmosphere.webgl-active .wx-precip,.wx-atmosphere.webgl-active .wx-lightning,.wx-atmosphere.webgl-active .wx-fog-real,.wx-atmosphere.webgl-active .wx-starfield{opacity:0}
+  .wx-atmosphere.webgl-active .wx-cloudfield{opacity:0.25!important;filter:blur(3px)!important}
+  .wx-atmosphere.webgl-active .wx-sun-real,.wx-atmosphere.webgl-active .wx-moon-real{opacity:0.6!important}
   .wx-atmosphere::before{content:'';position:absolute;inset:-20%;z-index:-1;background:radial-gradient(ellipse at 65% 20%,rgba(255,255,255,.18),transparent 30%),radial-gradient(ellipse at 50% 120%,rgba(0,0,0,.48),transparent 48%),linear-gradient(115deg,rgba(255,255,255,.07),transparent 42%);filter:blur(12px)}
   .wx-horizon{position:absolute;inset:auto -10% 0;height:38%;background:linear-gradient(180deg,transparent,rgba(4,10,18,.22) 18%,rgba(3,8,14,.72));filter:blur(1px)}
   .wx-horizon::before{content:'';position:absolute;inset:26% 0 0;background:radial-gradient(ellipse at 12% 100%,rgba(0,0,0,.34) 0 18%,transparent 19%),radial-gradient(ellipse at 50% 100%,rgba(0,0,0,.29) 0 23%,transparent 24%),radial-gradient(ellipse at 89% 100%,rgba(0,0,0,.36) 0 20%,transparent 21%);filter:blur(10px)}
@@ -2924,8 +2926,8 @@ class ArgusPanel extends HTMLElement {
     const timeZone = this._getTimeZone();
 
     const options = {
-      month: 'short',
-      day: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
       hour: '2-digit',
       minute: '2-digit'
     };
@@ -4661,7 +4663,7 @@ void main(){float t=time*0.001;vec2 u=uv;if(temp>30.0){u.x+=sin(u.y*20.0+t*5.0)*
 vec3 col=vec3(0.0);float alpha=0.0;
 if(night>0.5&&rain==0.0&&snow==0.0&&fog==0.0){float st=h(floor(u*150.0));if(st>0.99){float tw=0.5+0.5*sin(t*3.0+st*100.0);col+=vec3(1.0)*tw*(st-0.99)*100.0;alpha=max(alpha,tw*0.5);}}
 if(night>0.5&&temp<5.0&&rain==0.0&&snow==0.0&&storm==0.0){float au=fbm(vec2(u.x*2.0+t*0.1,u.y*3.0-t*0.05)),au2=fbm(vec2(u.x*3.0-t*0.15,u.y*2.0+t*0.08));vec3 ac=mix(vec3(0.0,1.0,0.5),vec3(0.5,0.0,1.0),au);float intn=smoothstep(0.4,0.8,au*au2)*(1.0-u.y);col+=ac*intn*1.5;alpha=max(alpha,intn);}
-if(night<0.5&&rain==0.0&&fog==0.0&&snow==0.0){float gr=fbm(vec2(u.x*5.0-t*0.1,u.y*0.5))*(1.0-u.y);col+=vec3(1.0,0.95,0.8)*gr*0.3;alpha=max(alpha,gr*0.2);}
+if(night<0.5&&rain==0.0&&fog==0.0&&snow==0.0){float gr=fbm(vec2(u.x*5.0-t*0.1,u.y*0.5))*(1.0-u.y);col+=vec3(1.0,0.95,0.8)*gr*0.75;alpha=max(alpha,gr*0.55);}
 if(rain>0.0){float r=rainLayer(u,t,0.0)+rainLayer(u,t,1.0)*0.6+rainLayer(u,t,2.0)*0.4+rainLayer(u,t,3.0)*0.2;col+=vec3(0.7,0.8,0.9)*r*rain;alpha=max(alpha,min(1.0,r*rain));}
 if(snow>0.0){float s=snowLayer(u,t,0.0)+snowLayer(u,t,1.0)*0.7+snowLayer(u,t,2.0)*0.4;col+=vec3(1.0)*s*snow;alpha=max(alpha,min(1.0,s*snow));}
 if(fog>0.0){float f=fbm(vec2(u.x*3.0+t*0.2,u.y*4.0-t*0.1));col+=vec3(0.8,0.85,0.9)*f*fog*0.7;alpha=max(alpha,min(1.0,f*fog*0.8));}
@@ -6386,6 +6388,7 @@ gl_FragColor=vec4(col,alpha);}`;
   }
 
   async _persistPersonalization() {
+    this._ui = this._ui || {};
     const background_mode = this.shadowRoot.getElementById('bg-mode-select-standalone')?.value || 'weather';
     const temperature_source = this.shadowRoot.getElementById('temp-source-select-standalone')?.value || 'auto';
     const weather_source = this.shadowRoot.getElementById('weather-source-select')?.value || 'auto';
@@ -6975,6 +6978,7 @@ gl_FragColor=vec4(col,alpha);}`;
       this._panicOutputs = [...this._selected];
       this._renderSosOutputs();
       this._closeModal();
+      this._savePersonalization();
       return;
     }
     if (!this._ui.modes) this._ui.modes = {};

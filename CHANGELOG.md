@@ -2,6 +2,14 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.65] - 2026-08-11
+
+### Fixed
+- Corregido el guardado de ajustes de personalización que fallaba por inicialización nula de perfil (reloj, formato, fondo, etc).
+- Corregido el diseño opaco del contenedor de instancias activas (`.liquid-glass`) forzando el fondo con gradiente.
+- Corregido auto-guardado en el modal de selección de SOS para que los cambios se guarden de inmediato al presionar Listo.
+- Reducida significativamente la opacidad de las nubes estáticas e incrementados los rayos volumétricos para hacer evidente el funcionamiento del shader WebGL.
+- Ajustado formato de fecha (`_formatDateTime`) en el log de actividad a una versión numérica compacta más legible.
 ## [2.0.64] - 2026-08-11
 
 ### Fixed
