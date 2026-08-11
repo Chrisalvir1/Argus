@@ -1,0 +1,96 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Validate runtimes, version and Python sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -c 'import sys; assert (3, 14, 2) <= sys.version_info < (3, 15); print(sys.version)'
+          test "$(node -p "process.versions.node.split('.')[0]")" = "24"
+          VERSION="$(python -c 'import json; print(json.load(open("custom_components/argus/manifest.json"))["version"])')"
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            test "${GITHUB_REF_NAME#v}" = "$VERSION"
+          fi
+          python -m compileall -q custom_components/argus tests
+          python -m unittest discover -s tests -v
+
+      - name: Validate residual JavaScript modules
+        run: |
+          set -euo pipefail
+          for file in custom_components/argus/www/*.js; do
+            node --check "$file"
+          done
+
+      - name: Build React dashboard with TypeScript 7.0.2 and Vite
+        run: |
+          set -euo pipefail
+          npm ci
+          test "$(npx tsc --version)" = "Version 7.0.2"
+          npx tsc --noEmit
+          npm test
+          npm run build
+          test -s custom_components/argus/www/react-dist/argus-frontend.js
+          ! grep -q 'process\.env' custom_components/argus/www/react-dist/argus-frontend.js
+
+      - name: Build HACS archive
+        run: |
+          set -euo pipefail
+          cd custom_components/argus
+          zip -qr "../../argus.zip" . -x '__pycache__/*' '*/__pycache__/*' '*.pyc'
+          cd ../..
+          test -s argus.zip
+          unzip -tq argus.zip
+          test "$(unzip -p argus.zip manifest.json | python -c 'import json,sys; print(json.load(sys.stdin)["version"])')" = "${GITHUB_REF_NAME#v}"
+          if unzip -l argus.zip | grep -Eq '(__pycache__|\.pyc$)'; then
+            echo 'Python cache artifacts found in release archive' >&2
+            exit 1
+          fi
+          sha256sum argus.zip > argus.zip.sha256
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: argus
+          path: |
+            argus.zip
+            argus.zip.sha256
+
+      - name: Publish GitHub release
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          NOTES="docs/RELEASE_NOTES_${VERSION}.md"
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 --clobber
+          elif [[ -f "$NOTES" ]]; then
+            gh release create "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 --title "Argus Home Hub $GITHUB_REF_NAME" --notes-file "$NOTES"
+          else
+            gh release create "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 --title "Argus Home Hub $GITHUB_REF_NAME" --generate-notes
+          fi
