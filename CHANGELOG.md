@@ -2,6 +2,13 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.62] - 2026-08-11
+
+### Fixed
+- Resueltos errores de regresión en selectores de temperatura y clima, liquid glass y modal SOS.
+- Corregido bug en animación del escudo SVG de instancias activas (IDs de SVG deterministicos por índice).
+- Seguridad WebGL: guard de nulidad en ciclo de animación del shader premium.
+
 ## [2.0.57] - 2026-08-09
 
 ### Fixed

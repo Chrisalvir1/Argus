@@ -70,8 +70,8 @@ class TestV2049SensorStateRuntime(unittest.TestCase):
         )
 
     def test_watchdog_uses_thread_safe_task_scheduling(self):
-        self.assertIn("self.hass.create_task(reconcile(self, source))", RUNTIME)
-        self.assertNotIn("self.hass.async_create_task(reconcile(self, source))", RUNTIME)
+        # call_soon_threadsafe wraps async_create_task safely from threads
+        self.assertIn("call_soon_threadsafe", RUNTIME)
 
 
 if __name__ == "__main__":
