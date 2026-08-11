@@ -2,6 +2,14 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.64] - 2026-08-11
+
+### Fixed
+- Revertidos los cambios al escudo SVG, restaurando el comportamiento visual original según solicitud explícita del usuario.
+- Shader WebGL: Implementadas finalmente las verdaderas animaciones avanzadas de WebGL2 prometidas previamente (Aurora boreal, Niebla volumétrica, Nieve con rotación, Lluvia con capas, Rayos de sol y distorsión por calor).
+- Ajustado el efecto de desenfoque de las nubes CSS para revelar correctamente los efectos atmosféricos de WebGL.
+- Ajustada prueba unitaria fallida debido a la optimización previa del ciclo de reloj del panel.
+
 ## [2.0.63] - 2026-08-11
 
 ### Fixed

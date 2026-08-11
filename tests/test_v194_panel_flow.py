@@ -51,7 +51,7 @@ class TestV194PanelFlow(unittest.TestCase):
 
     def test_empty_dashboard_is_not_rendered_before_initialization(self) -> None:
         self.assertIn(
-            "if (this._dashboard && (now.getSeconds() === 0",
+            "if (this._dashboard) {",
             self.panel,
         )
         self.assertIn("_renderInitializationError(err)", self.panel)
