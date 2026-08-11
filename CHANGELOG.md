@@ -2,6 +2,18 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.63] - 2026-08-11
+
+### Fixed
+- Hero clock ahora respeta el formato 12h/24h configurado (`_formatTime()`).
+- `clock_format` se persiste correctamente al guardar y se carga al iniciar.
+- Selector de formato de hora añadido al panel de personalización.
+- Liquid Glass: efecto visual restaurado con blur 28px, saturación 180% y brillo correcto.
+
+### Enhanced
+- Animaciones WebGL de clima mejoradas: lluvia con viento, relámpagos asimétricos, nieve con rotación, niebla volumétrica, estrellas con twinkle, aurora boreal, rayos de sol (god rays), shimmer de calor.
+- Canvas de clima recibe `data-wind`, `data-temp`, `data-night` para efectos contextuales.
+
 ## [2.0.62] - 2026-08-11
 
 ### Fixed

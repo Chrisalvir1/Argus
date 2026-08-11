@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Home Hub – v2.0.62
+ * Argus Home Hub – v2.0.63
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1257,11 +1257,11 @@ _tmpl.innerHTML = `
   }
 
   .liquid-glass {
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px) saturate(120%);
-    -webkit-backdrop-filter: blur(12px) saturate(120%);
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
+    background: linear-gradient(135deg,color-mix(in srgb,rgba(255,255,255,0.18) 80%,transparent),rgba(255,255,255,0.04));
+    backdrop-filter: blur(28px) saturate(180%) brightness(1.08);
+    -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(1.08);
+    border: 1px solid rgba(255,255,255,0.22);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.25);
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
   }
   .wrap { position: relative; z-index: 1; transition: filter 0.35s ease, opacity 0.35s ease; }
@@ -1340,7 +1340,7 @@ _tmpl.innerHTML = `
   @keyframes iosSelectPop{0%{transform:scale(.92);opacity:.45}60%{transform:scale(1.045);opacity:1}100%{transform:scale(1)}}
   .glass,.entry,.mode-section-card,.user-card,.file-card,.log-item{animation:iosGlassIn .5s cubic-bezier(.22,1.18,.36,1) both}
   .pick-row:has(input:checked),.tab.active,.liquid-btn.active{animation:iosSelectPop .34s cubic-bezier(.2,1.45,.35,1);box-shadow:0 0 0 1px color-mix(in srgb,var(--primary-color,#007aff) 45%,transparent),0 12px 30px color-mix(in srgb,var(--primary-color,#007aff) 18%,transparent)}
-  .glass.liquid-glass{background:linear-gradient(135deg,color-mix(in srgb,var(--glass-bg) 86%,#fff 14%),var(--glass-bg));backdrop-filter:blur(24px) saturate(155%);-webkit-backdrop-filter:blur(24px) saturate(155%);border-color:color-mix(in srgb,var(--glass-border) 70%,#fff 30%)}
+  .glass.liquid-glass{background:linear-gradient(135deg,rgba(255,255,255,0.16) 0%,rgba(255,255,255,0.04) 100%);backdrop-filter:blur(28px) saturate(180%) brightness(1.08)!important;-webkit-backdrop-filter:blur(28px) saturate(180%) brightness(1.08)!important;border-color:rgba(255,255,255,0.22)!important;box-shadow:0 8px 32px rgba(0,0,0,0.28),inset 0 1px 0 rgba(255,255,255,0.25)!important}
   button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 70%,#fff);outline-offset:3px}
   button:disabled{cursor:not-allowed;opacity:.5;filter:saturate(.45)}
   @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
@@ -2585,6 +2585,14 @@ _tmpl.innerHTML = `
               <div class="personalize-field pf-weather">
                 <label class="setting-label" id="lbl-weather-source" for="weather-source-select" style="font-size:11px;font-weight:800;text-transform:uppercase;opacity:.6;margin-bottom:4px;">☁️ Fuente de clima</label>
                 <select id="weather-source-select" class="glass-control"></select>
+              </div>
+              <div class="personalize-field pf-clock">
+                <label class="setting-label" id="lbl-clock-format" for="argus-clock-format-select" style="font-size:11px;font-weight:800;text-transform:uppercase;opacity:.6;margin-bottom:4px;">🕐 Formato de hora</label>
+                <select id="argus-clock-format-select" class="glass-control">
+                  <option value="auto">Auto (Home Assistant)</option>
+                  <option value="12h">12 horas (AM/PM)</option>
+                  <option value="24h">24 horas</option>
+                </select>
               </div>
               <div class="personalize-field pf-emergency">
                 <label class="setting-label" id="lbl-emergency-number" for="emergency-number-input" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">🚨 Local emergency number</label>
@@ -4026,6 +4034,13 @@ class ArgusPanel extends HTMLElement {
       weatherSel.value = this._weatherSource || 'auto';
       if (!weatherSel.dataset.bound) { weatherSel.dataset.bound = '1'; weatherSel.addEventListener('change', () => this._savePersonalization()); }
     }
+    // Load & bind clock format selector
+    const clockSel = this.shadowRoot.getElementById('argus-clock-format-select');
+    if (clockSel) {
+      this._clockFormat = this._ui?.clock_format || this._dashboard?.clock_format || 'auto';
+      clockSel.value = this._clockFormat;
+      if (!clockSel.dataset.bound) { clockSel.dataset.bound = '1'; clockSel.addEventListener('change', () => this._savePersonalization()); }
+    }
     const emergencyInput = this.shadowRoot.getElementById('emergency-number-input');
     if (emergencyInput) emergencyInput.value = this._emergencyNumber;
     this._renderSosOutputs();
@@ -4291,9 +4306,9 @@ class ArgusPanel extends HTMLElement {
       return str;
     };
 
-    // Time
-    const timeStr = new Date().toLocaleTimeString(this._getLocale(), { hour: '2-digit', minute: '2-digit' });
+    // Time — use _formatTime so clock_format setting (12h/24h/auto) is respected
     const now = new Date();
+    const timeStr = this._formatTime(now);
     const heroClock = this.shadowRoot.getElementById('hero-clock-time');
     const heroDate = this.shadowRoot.getElementById('hero-clock-date');
     const heroWeather = this.shadowRoot.getElementById('hero-weather-pill');
@@ -4385,7 +4400,7 @@ class ArgusPanel extends HTMLElement {
                             : `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle></svg>`;
         } else {
           // Default to door
-          iconHtml = isOpen ? `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22V2h12v20H4z"></path><path d="M16 4h4v18h-4"></path><circle cx="12" cy="12" r="1"></circle></svg>`
+          iconHtml = isOpen ? `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22V2h12v20H4z"></path><path d="M16 4h4v18H4z"></path><circle cx="12" cy="12" r="1"></circle></svg>`
                             : `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 22V2h12v20H6z"></path><circle cx="14" cy="12" r="1"></circle></svg>`;
         }
         const power = this._getDevicePower(sid, sensor);
@@ -4410,7 +4425,6 @@ class ArgusPanel extends HTMLElement {
           ${isFS ? `<button class="ghost entry-exit-fs" data-exit-fullscreen title="${this._escapeHtml(t('fullscreen_title'))}" aria-label="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;top:16px;left:16px;z-index:100;padding:9px 13px;font-size:18px;background:rgba(0,0,0,.55);backdrop-filter:blur(12px);border-radius:14px;color:white;border:1px solid rgba(255,255,255,.25);box-shadow:0 8px 20px rgba(0,0,0,.3)">×</button>` : ''}
           ${!isFS ? `<button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>` : ''}
           ${this._renderBatteryAlerts()}
-          <!-- HUD hidden inside security-console — data shown in .console-hud instead -->
           <div class="hud">
             <div class="hud-loc">${this._escapeHtml(fullHudLoc)} · ${this._escapeHtml(weatherLabel)}</div>
             <div class="hud-data"><span>${this._escapeHtml(timeStr)}</span>${displayedTemperature ? `<i>🌡️ ${this._escapeHtml(displayedTemperature)}</i>` : ''}</div>
@@ -4686,7 +4700,7 @@ class ArgusPanel extends HTMLElement {
     }).join('') : '';
     const celestial = isNight ? `<div class="wx-celestial wx-moon-real ${this._moonPhase()}" style="--moon-shadow:${sky[0]}"></div>` : (!clouds || has('partly') ? '<div class="wx-celestial wx-sun-real"></div>' : '');
     return `<div class="wx wx-atmosphere ${isNight ? 'night' : 'day'} ${eclipse ? `eclipse-${eclipse}` : ''}" style="--sky-top:${sky[0]};--sky-mid:${sky[1]};--sky-bottom:${sky[2]};--cloud-color:${storm ? 'rgba(17,25,35,.84)' : (isNight ? 'rgba(38,52,68,.76)' : 'rgba(235,241,242,.68)')};--cloud-opacity:${clouds ? '.8' : '0'}">
-      <canvas class="wx-webgl" aria-hidden="true" data-rain="${rain || storm ? 1 : 0}" data-drizzle="${drizzle ? 1 : 0}" data-snow="${snow ? 1 : 0}" data-fog="${fog ? 1 : 0}" data-storm="${storm ? 1 : 0}"></canvas>${isNight ? '<div class="wx-starfield"></div>' : ''}${celestial}${clouds ? '<div class="wx-cloudfield"></div>' : ''}${precip ? `<div class="wx-precip ${precip}">${rainDrops}</div>` : ''}${storm ? '<div class="wx-lightning"></div>' : ''}${fog ? '<div class="wx-fog-real"></div>' : ''}${!rain && !drizzle && !storm && !snow && (season === 'spring' || season === 'autumn') ? `<div class="wx-seasonal ${season}"></div>` : ''}<div class="wx-horizon"></div>${this._renderEclipseOverlay(eclipse)}</div>`;
+      <canvas class="wx-webgl" aria-hidden="true" data-rain="${rain || storm ? 1 : 0}" data-drizzle="${drizzle ? 1 : 0}" data-snow="${snow ? 1 : 0}" data-fog="${fog ? 1 : 0}" data-storm="${storm ? 1 : 0}" data-wind="${has('wind') || has('breezy') || has('windy') ? 1.0 : 0.0}" data-temp="${this._lastTemp ?? 20}" data-night="${isNight ? 1 : 0}"></canvas>${isNight ? '<div class="wx-starfield"></div>' : ''}${celestial}${clouds ? '<div class="wx-cloudfield"></div>' : ''}${precip ? `<div class="wx-precip ${precip}">${rainDrops}</div>` : ''}${storm ? '<div class="wx-lightning"></div>' : ''}${fog ? '<div class="wx-fog-real"></div>' : ''}${!rain && !drizzle && !storm && !snow && (season === 'spring' || season === 'autumn') ? `<div class="wx-seasonal ${season}"></div>` : ''}<div class="wx-horizon"></div>${this._renderEclipseOverlay(eclipse)}</div>`;
   }
 
   _getWeatherBg(ws, isNight) {
@@ -6356,6 +6370,8 @@ class ArgusPanel extends HTMLElement {
     const background_mode = this.shadowRoot.getElementById('bg-mode-select-standalone')?.value || 'weather';
     const temperature_source = this.shadowRoot.getElementById('temp-source-select-standalone')?.value || 'auto';
     const weather_source = this.shadowRoot.getElementById('weather-source-select')?.value || 'auto';
+    const clock_format_val = this.shadowRoot.getElementById('argus-clock-format-select')?.value || 'auto';
+    this._clockFormat = ['auto','12h','24h'].includes(clock_format_val) ? clock_format_val : 'auto';
     const emergency_number = this._normaliseEmergencyNumber(this.shadowRoot.getElementById('emergency-number-input')?.value);
 
     // FIX: Read directly from DOM, allowing empty strings when the user clears the URL
@@ -6371,6 +6387,7 @@ class ArgusPanel extends HTMLElement {
       home_name: this._homeName,
       temperature_source,
       weather_source,
+      clock_format: this._clockFormat,
       emergency_number
     };
     
@@ -6450,6 +6467,7 @@ class ArgusPanel extends HTMLElement {
       }
       this._ui.temperature_source = temperature_source;
       this._ui.weather_source = weather_source;
+      this._ui.clock_format = this._clockFormat;
       this._ui.emergency_number = emergency_number;
       this._ui.panic_outputs = this._panicOutputs;
       this._configureEmergencyCall();
