@@ -4244,7 +4244,7 @@ class ArgusPanel extends HTMLElement {
     return `<svg class="mode-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[mode] || paths.disarm}</svg>`;
   }
 
-  _renderPremiumStatusIcon(state, triggered) {
+  _renderPremiumStatusIcon(state, triggered, uid = '0') {
     const mode = triggered ? 'triggered' : ({ armed_home:'home', armed_away:'away', armed_night:'night', armed_vacation:'vacation', disarmed:'disarm' }[state] || 'disarm');
     const accent = { home:'#ffad42', away:'#ff6464', night:'#7fb9ff', vacation:'#d69cff', disarm:'#6be295', triggered:'#ff424f' }[mode];
     const symbol = {
@@ -4255,12 +4255,11 @@ class ArgusPanel extends HTMLElement {
       disarm:'<path d="m76 104 16 16 34-39"/>',
       triggered:'<path d="M100 65 139 137H61z"/><path d="M100 90v23M100 124h.01"/>'
     }[mode];
-    const uid = Math.random().toString(36).slice(2, 9);
     return `<svg viewBox="0 0 200 200" width="100%" height="100%" style="filter:drop-shadow(0 18px 28px rgba(0,0,0,.34));max-width:180px;margin:auto;display:block;overflow:visible" aria-label="${this._escapeHtml(mode)}"><defs><linearGradient id="premium-${mode}-${uid}" x1="20%" y1="10%" x2="85%" y2="100%"><stop stop-color="#fff" stop-opacity=".38"/><stop offset=".25" stop-color="${accent}" stop-opacity=".78"/><stop offset="1" stop-color="${accent}" stop-opacity=".18"/></linearGradient><filter id="premium-glow-${mode}-${uid}" filterUnits="userSpaceOnUse" x="-80" y="-80" width="360" height="360" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M100 22 157 46v42c0 42-23 69-57 87-34-18-57-45-57-87V46z" fill="url(#premium-${mode}-${uid})" stroke="${accent}" stroke-width="3" filter="url(#premium-glow-${mode}-${uid})"/><path d="M100 31 148 51" stroke="#fff" stroke-opacity=".45" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="105" r="43" fill="rgba(5,12,23,.3)" stroke="rgba(255,255,255,.22)" stroke-width="2"/><g fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" filter="url(#premium-glow-${mode}-${uid})">${symbol}</g><circle cx="100" cy="105" r="55" fill="none" stroke="${accent}" stroke-opacity=".42" stroke-width="2"><animate attributeName="r" values="51;60;51" dur="3.5s" repeatCount="indefinite"/><animate attributeName="opacity" values=".6;.08;.6" dur="3.5s" repeatCount="indefinite"/></circle></svg>`;
   }
 
-  _getIntelligentSVG(state, w, isNight, triggered) {
-    return this._renderPremiumStatusIcon(state, triggered);
+  _getIntelligentSVG(state, w, isNight, triggered, idx = '0') {
+    return this._renderPremiumStatusIcon(state, triggered, idx);
   }
 
   _renderEntries() {
@@ -4428,7 +4427,7 @@ class ArgusPanel extends HTMLElement {
               </div>
             </div>
             <div class="entry-icon" style="display:flex;justify-content:center;animation:float-icon 5s ease-in-out infinite;">
-              ${this._getIntelligentSVG(isWaiting ? 'pending' : state, null, isNight, triggered)}
+              ${this._getIntelligentSVG(isWaiting ? 'pending' : state, null, isNight, triggered, idx)}
             </div>
             <div class="liquid-stack">
               <button class="liquid-btn btn-home ${state==='armed_home'?'active':''} ${sensorAlert && state==='armed_home'?'buzz-orange':''}" data-idx="${idx}" data-action="home">${this._modeButtonIcon('home')}<span>${this._escapeHtml(modeLabel('btn_home'))}</span></button>

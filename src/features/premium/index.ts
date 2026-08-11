@@ -603,6 +603,7 @@ export function startRender(
   let lastTs = performance.now();
 
   function loop(ts: number) {
+    if (!gl) return;
     const dt = Math.min((ts - lastTs) / 1000, 0.1); // cap dt at 100ms
     lastTs = ts;
 
