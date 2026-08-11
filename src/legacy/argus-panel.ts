@@ -1320,7 +1320,9 @@ _tmpl.innerHTML = `
   .btn-sos:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(255, 59, 48, 0.45); }
   .btn-sos:active { transform: scale(0.95); opacity: 0.92; }
   .ios-confirm-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 999999; backdrop-filter: blur(12px); }
-  .ios-confirm-backdrop.open { display: flex; }
+  .ios-confirm-backdrop.open { display: flex; pointer-events: auto !important; }
+  .ios-confirm-backdrop.open * { pointer-events: auto; }
+  .ios-confirm-backdrop.open .ios-slider-label { pointer-events: none !important; }
   .ios-confirm-card { width: min(100%, 420px); border-radius: 32px; padding: 24px; color: white; background: rgba(20,22,35,0.85); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 32px 80px rgba(0,0,0,0.6); }
   .ios-confirm-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 8px; text-align: center; }
   .ios-confirm-text { font-size: 0.98rem; opacity: 0.85; line-height: 1.45; text-align: center; margin-bottom: 20px; }
@@ -1338,7 +1340,7 @@ _tmpl.innerHTML = `
   @keyframes iosSelectPop{0%{transform:scale(.92);opacity:.45}60%{transform:scale(1.045);opacity:1}100%{transform:scale(1)}}
   .glass,.entry,.mode-section-card,.user-card,.file-card,.log-item{animation:iosGlassIn .5s cubic-bezier(.22,1.18,.36,1) both}
   .pick-row:has(input:checked),.tab.active,.liquid-btn.active{animation:iosSelectPop .34s cubic-bezier(.2,1.45,.35,1);box-shadow:0 0 0 1px color-mix(in srgb,var(--primary-color,#007aff) 45%,transparent),0 12px 30px color-mix(in srgb,var(--primary-color,#007aff) 18%,transparent)}
-  .liquid-glass{background:linear-gradient(135deg,color-mix(in srgb,var(--glass-bg) 86%,#fff 14%),var(--glass-bg));backdrop-filter:blur(24px) saturate(155%);-webkit-backdrop-filter:blur(24px) saturate(155%);border-color:color-mix(in srgb,var(--glass-border) 70%,#fff 30%)}
+  .glass.liquid-glass{background:linear-gradient(135deg,color-mix(in srgb,var(--glass-bg) 86%,#fff 14%),var(--glass-bg));backdrop-filter:blur(24px) saturate(155%);-webkit-backdrop-filter:blur(24px) saturate(155%);border-color:color-mix(in srgb,var(--glass-border) 70%,#fff 30%)}
   button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 70%,#fff);outline-offset:3px}
   button:disabled{cursor:not-allowed;opacity:.5;filter:saturate(.45)}
   @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
@@ -4014,10 +4016,16 @@ class ArgusPanel extends HTMLElement {
 
     this._populateTemperatureSources();
     const tempSel = this.shadowRoot.getElementById('temp-source-select-standalone');
-    if (tempSel) tempSel.value = this._temperatureSource || 'auto';
+    if (tempSel) {
+      tempSel.value = this._temperatureSource || 'auto';
+      if (!tempSel.dataset.bound) { tempSel.dataset.bound = '1'; tempSel.addEventListener('change', () => this._savePersonalization()); }
+    }
     this._populateWeatherSources();
     const weatherSel = this.shadowRoot.getElementById('weather-source-select');
-    if (weatherSel) weatherSel.value = this._weatherSource || 'auto';
+    if (weatherSel) {
+      weatherSel.value = this._weatherSource || 'auto';
+      if (!weatherSel.dataset.bound) { weatherSel.dataset.bound = '1'; weatherSel.addEventListener('change', () => this._savePersonalization()); }
+    }
     const emergencyInput = this.shadowRoot.getElementById('emergency-number-input');
     if (emergencyInput) emergencyInput.value = this._emergencyNumber;
     this._renderSosOutputs();
