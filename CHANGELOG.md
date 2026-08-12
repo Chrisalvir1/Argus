@@ -2,6 +2,10 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.69] - 2026-08-12
+
+### Fixed
+- Restaurado el efecto "Liquid Glass" translúcido en todos los contenedores de widgets del tablero (.argus-widget), aplicando el desenfoque de fondo y opacidad de cristal de manera impecable y desactivando fondos grises opacos.
 ## [2.0.68] - 2026-08-12
 
 ### Fixed
