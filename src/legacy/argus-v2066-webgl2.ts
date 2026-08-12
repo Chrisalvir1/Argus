@@ -373,6 +373,15 @@ function installStyles(panel){
 button,input,select,textarea,.glass-control{color:var(--v2066-text)!important;-webkit-text-fill-color:var(--v2066-text)!important;background-color:color-mix(in srgb,var(--card-background-color,#101827) 38%,transparent)!important;border-color:var(--v2066-border)!important}button{min-height:44px;touch-action:manipulation}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#2783de) 76%,white)!important;outline-offset:2px!important}
 select option {background-color:#101827 !important;color:#f7f9ff !important;-webkit-text-fill-color:#f7f9ff !important;}
 :host(.daytime-theme) select option {background-color:#ffffff !important;color:#172033 !important;-webkit-text-fill-color:#172033 !important;}
+.user-badge{display:inline-block!important;padding:4px 10px!important;border-radius:6px!important;font-size:10px!important;font-weight:800!important;letter-spacing:.04em!important;text-transform:uppercase!important;background:rgba(255,255,255,0.06)!important;color:var(--v2066-text)!important;border:1px solid var(--v2066-border)!important}
+.user-badge.admin{background:rgba(255,215,0,0.12)!important;color:#ffd700!important;border:1px solid rgba(255,215,0,0.25)!important}
+:host(.daytime-theme) .user-badge.admin{background:rgba(212,175,55,0.12)!important;color:#8b6508!important;border:1px solid rgba(212,175,55,0.3)!important}
+.user-badge[style*="background:#4a148c"]{background:rgba(147,112,219,0.12)!important;color:#b39ddb!important;border:1px solid rgba(147,112,219,0.25)!important}
+:host(.daytime-theme) .user-badge[style*="background:#4a148c"]{background:rgba(103,58,183,0.08)!important;color:#5e35b1!important;border:1px solid rgba(103,58,183,0.2)!important}
+.user-badge[style*="color:#007aff"]{background:rgba(39,131,222,0.12)!important;color:#4fc3f7!important;border:1px solid rgba(39,131,222,0.25)!important}
+:host(.daytime-theme) .user-badge[style*="color:#007aff"]{background:rgba(3,169,244,0.08)!important;color:#0288d1!important;border:1px solid rgba(3,169,244,0.2)!important}
+.user-badge[style*="color:#43a047"]{background:rgba(76,175,80,0.12)!important;color:#81c784!important;border:1px solid rgba(76,175,80,0.25)!important}
+:host(.daytime-theme) .user-badge[style*="color:#43a047"]{background:rgba(76,175,80,0.08)!important;color:#2e7d32!important;border:1px solid rgba(76,175,80,0.2)!important}
 .wx-atmosphere{position:absolute;inset:0;overflow:hidden;isolation:isolate;}
 .wx-celestial,.wx-cloudfield,.wx-precip,.wx-starfield,.wx-lightning,.wx-fog-real,.wx-seasonal,.wx-horizon{display:none!important}
 @media(prefers-color-scheme:light){:host:not(.daytime-theme){--v2066-glass:linear-gradient(135deg,rgba(255,255,255,.56),rgba(255,255,255,.24));--v2066-border:rgba(255,255,255,.72);--v2066-text:var(--primary-text-color,#172033);--v2066-muted:var(--secondary-text-color,#4c586d)}}`;

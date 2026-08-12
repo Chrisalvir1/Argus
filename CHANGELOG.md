@@ -2,6 +2,11 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.70] - 2026-08-12
+
+### Fixed
+- Corregida la visualización gris opaca en los widgets del tablero modificando directamente el archivo `style.css` de la compilación React para que el fondo de `.argus-widget` utilice las variables de cristal de Liquid Glass de manera nativa.
+- Mejorados visualmente los distintivos de usuario (`.user-badge`) en el Control de Acceso: ahora los roles de administrador, cuentas vinculadas de Home Assistant y estados de PIN/expiración tienen colores sumamente elegantes, serios, legibles y adaptativos según el contraste del fondo del cielo.
 ## [2.0.69] - 2026-08-12
 
 ### Fixed
