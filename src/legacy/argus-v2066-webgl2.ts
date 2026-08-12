@@ -366,7 +366,7 @@ function installStyles(panel){
  const s=document.createElement('style');s.id='argus-v2066-style';s.textContent=`
 :host{--v2066-glass:linear-gradient(135deg,color-mix(in srgb,var(--card-background-color,#101827) 34%,transparent),color-mix(in srgb,var(--card-background-color,#101827) 15%,transparent));--v2066-border:color-mix(in srgb,var(--primary-text-color,#fff) 22%,transparent);--v2066-text:var(--primary-text-color,#f7f9ff);--v2066-muted:var(--secondary-text-color,rgba(247,249,255,.72))}
 :host(.daytime-theme){--v2066-glass:linear-gradient(135deg,rgba(255,255,255,.3),rgba(255,255,255,.12));--v2066-border:rgba(0,0,0,.16);--v2066-text:#172033;--v2066-muted:#4c586d}
-:host *:not(.wx-webgl):not(.hero-profile-pill):not(#welcome-card):not(#welcome-avatar-flying):not(#welcome-name-flying):not(#fly-avatar):not(#fly-name):not(#bootstrap-overlay):not(.argus-bootstrap-card),:host *::before,:host *::after{animation:none!important;transition:none!important}
+:host *:not(.wx-webgl):not(.hero-profile-pill):not(.hero-profile-dropdown):not(#welcome-card):not(#welcome-avatar-flying):not(#welcome-name-flying):not(#fly-avatar):not(#fly-name):not(#bootstrap-overlay):not(.argus-bootstrap-card),:host *::before,:host *::after{animation:none!important;transition:none!important}
 .glass,.liquid-glass,.panel,.entry,.mode-section-card,.user-card,.file-card,.log-item,.personalize-section,.sos-configuration,.argus-widget{background:var(--v2066-glass)!important;border:1px solid var(--v2066-border)!important;box-shadow:inset 0 1px 0 color-mix(in srgb,var(--primary-text-color,#fff) 16%,transparent),0 14px 38px rgba(0,0,0,.16)!important;backdrop-filter:blur(24px) saturate(145%)!important;-webkit-backdrop-filter:blur(24px) saturate(145%)!important;color:var(--v2066-text)!important}
 .argus-widget .panel{background:transparent!important;border:none!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 .panel h1,.panel h2,.panel h3,.panel h4,.panel-title,.section-title,.setting-label,.mode-section-title,.widget-title,.settings-section-title,.access-section-title{color:var(--v2066-text)!important;opacity:1!important;text-shadow:none!important}.panel p,.panel small,.hint,.muted,.setting-help,.mode-sensor-none{color:var(--v2066-muted)!important;opacity:1!important}
@@ -382,11 +382,22 @@ select option {background-color:#101827 !important;color:#f7f9ff !important;-web
 :host(.daytime-theme) .user-badge[style*="color:#007aff"]{background:rgba(3,169,244,0.08)!important;color:#0288d1!important;border:1px solid rgba(3,169,244,0.2)!important}
 .user-badge[style*="color:#43a047"]{background:rgba(76,175,80,0.12)!important;color:#81c784!important;border:1px solid rgba(76,175,80,0.25)!important}
 :host(.daytime-theme) .user-badge[style*="color:#43a047"]{background:rgba(76,175,80,0.08)!important;color:#2e7d32!important;border:1px solid rgba(76,175,80,0.2)!important}
-#hero-profile-container {display: flex;align-items: center;justify-content: center;margin-inline: 20px;}
-@media(max-width:750px) {#hero-profile-container {margin: 12px 0 6px 0;}}
-.hero-profile-pill {display: flex;align-items: center;gap: 10px;padding: 6px 14px 6px 8px;border-radius: 999px;background: var(--v2066-glass);border: 1px solid var(--v2066-border);box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 12px rgba(0,0,0,0.12);backdrop-filter: blur(20px) saturate(140%);-webkit-backdrop-filter: blur(20px) saturate(140%);cursor: pointer;transition: transform 0.25s cubic-bezier(0.2, 1, 0.2, 1) !important;}
+#hero-profile-container {display: flex;align-items: center;justify-content: center;margin-inline: 14px;}
+@media(max-width:750px) {#hero-profile-container {margin: 8px 0 4px 0;}}
+.hero-profile-pill {display: flex;align-items: center;gap: 8px;padding: 5px 12px 5px 7px;border-radius: 999px;background: var(--v2066-glass);border: 1px solid var(--v2066-border);box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 12px rgba(0,0,0,0.12);backdrop-filter: blur(20px) saturate(140%);-webkit-backdrop-filter: blur(20px) saturate(140%);cursor: pointer;transition: transform 0.25s cubic-bezier(0.2, 1, 0.2, 1) !important;}
 .hero-profile-pill:hover {transform: translateY(-1px) !important;}
 .hero-profile-pill:active {transform: scale(0.96) !important;}
+.hero-profile-dropdown {position: absolute;top: 100%;right: 0;margin-top: 10px;width: 260px;background: var(--v2066-glass);border: 1px solid var(--v2066-border);box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 20px 48px rgba(0,0,0,0.32);backdrop-filter: blur(28px) saturate(160%);-webkit-backdrop-filter: blur(28px) saturate(160%);border-radius: 20px;padding: 16px;z-index: 100000;display: none;flex-direction: column;gap: 12px;transform-origin: top right;animation: iosPopIn 0.25s cubic-bezier(0.2, 1, 0.2, 1) both;}
+@keyframes iosPopIn {
+  from { transform: scale(0.9) translateY(-10px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+.personalize-section {padding: 14px 16px !important;gap: 12px !important;}
+.personalize-grid {gap: 10px 14px !important;}
+.personalize-field {margin-bottom: 6px !important;}
+.personalize-section button, .sos-configuration button {min-height: 32px !important;height: 32px !important;padding: 4px 12px !important;border-radius: 10px !important;font-size: 11px !important;font-weight: 800 !important;}
+.personalize-section select, .personalize-section input, .personalize-section .glass-control {padding: 6px 10px !important;border-radius: 10px !important;font-size: 12.5px !important;min-height: 32px !important;height: 32px !important;}
+.personalize-section input[type="file"] {height: auto !important;min-height: 0 !important;padding: 0 !important;}
 @keyframes springBounceIn {
   0% { transform: scale(0.85); opacity: 0; }
   50% { transform: scale(1.02); opacity: 0.8; }

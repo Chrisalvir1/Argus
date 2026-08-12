@@ -2,6 +2,19 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.72] - 2026-08-12
+
+### Added
+- Integrada la gestión de Idioma y de PINs directamente dentro del menú desplegable del perfil en la barra superior.
+- Creados diálogos y confirmaciones nativas para Cambiar/Quitar tanto el PIN de Acceso de usuario como el PIN Maestro de alarma.
+
+### Removed
+- Eliminadas las píldoras antiguas de "Sistema Desarmado" y "Nublado" de la barra superior.
+- Removido el botón de selección de idioma antiguo del header superior.
+
+### Fixed
+- Reubicado el distintivo de perfil a la derecha de la línea divisoria de la hora y la fecha, ajustando el espaciado para una presentación limpia y balanceada.
+- Compactado el diseño de la sección "Personalización Estética (Avanzado)": se redujo la altura y el relleno de todos los controles de selección, campos de texto y botones a 32px para maximizar el espacio de lectura.
 ## [2.0.71] - 2026-08-12
 
 ### Added

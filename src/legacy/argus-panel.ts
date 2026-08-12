@@ -2496,21 +2496,13 @@ _tmpl.innerHTML = `
         <p id="p-hero-desc"></p>
       </div>
     </div>
-    <div id="hero-profile-container"></div>
     <div class="hero-context" aria-live="polite">
       <div class="hero-clock"><strong id="hero-clock-time">--:--</strong><span id="hero-clock-date"></span></div>
-      <div class="hero-pills">
-        <span class="hero-pill" id="hero-weather-pill">☀️ --</span>
-        <span class="hero-pill" id="hero-security-pill"><i class="hero-live"></i> Argus</span>
-      </div>
+      <div id="hero-profile-container"></div>
+      <button class="lang-pill" id="btn-edit-widgets" title="Configurar Widgets del Dashboard" style="margin-left: 4px;">
+        <span id="edit-widgets-label">⚙️</span>
+      </button>
     </div>
-    <button class="lang-pill" id="btn-edit-widgets" title="Configurar Widgets del Dashboard">
-      <span id="edit-widgets-label">⚙️ Config. Widgets</span>
-    </button>
-    <button class="lang-pill" id="btn-lang-picker" title="Language / Idioma">
-      <span id="lang-pill-flag">🌐</span>
-      <span id="lang-pill-label">Language</span>
-    </button>
   </div>
 
   <!-- TWO-COLUMN LAYOUT -->
@@ -7184,24 +7176,225 @@ gl_FragColor=vec4(col,alpha);}`;
       return;
     }
     container.style.display = 'flex';
+    container.style.position = 'relative';
+
     const avatarHtml = prof.picture
-      ? `<img id="hero-profile-avatar" src="${this._escapeHtml(prof.picture)}" alt="${this._escapeHtml(prof.name)}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.20); box-shadow: 0 3px 8px rgba(0,0,0,0.2); flex-shrink: 0;" />`
-      : `<div id="hero-profile-avatar" class="user-avatar" style="width: 38px; height: 38px; border-radius: 50%; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.15); flex-shrink: 0;">${this._escapeHtml(prof.name.substring(0, 2).toUpperCase())}</div>`;
+      ? `<img id="hero-profile-avatar" src="${this._escapeHtml(prof.picture)}" alt="${this._escapeHtml(prof.name)}" style="width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.20); box-shadow: 0 3px 8px rgba(0,0,0,0.2); flex-shrink: 0;" />`
+      : `<div id="hero-profile-avatar" class="user-avatar" style="width: 34px; height: 34px; border-radius: 50%; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.15); flex-shrink: 0;">${this._escapeHtml(prof.name.substring(0, 2).toUpperCase())}</div>`;
       
+    const curLang = this._manualLang || 'auto';
+
     container.innerHTML = `
-      <div class="hero-profile-pill glass liquid-glass" style="display: flex; align-items: center; gap: 10px; padding: 6px 14px 6px 8px; border-radius: 999px;">
+      <div class="hero-profile-pill glass liquid-glass" style="display: flex; align-items: center; gap: 8px; padding: 5px 12px 5px 7px; border-radius: 999px;">
         ${avatarHtml}
-        <span id="hero-profile-name" style="font-size: 13px; font-weight: 800; color: var(--v2066-text, #f7f9ff); max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${this._escapeHtml(prof.name)}</span>
+        <div style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.15;">
+          <span id="hero-profile-name" style="font-size: 12.5px; font-weight: 800; color: var(--v2066-text, #f7f9ff); max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${this._escapeHtml(prof.name)}</span>
+          <span id="hero-profile-role" style="font-size: 8.5px; opacity: 0.65; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;">${prof.role === 'admin' ? 'Admin' : 'Estándar'}</span>
+        </div>
+        <span class="profile-chevron" style="font-size: 7.5px; opacity: 0.65; margin-left: 2px;">▼</span>
+      </div>
+
+      <!-- Dropdown Card -->
+      <div id="profile-dropdown" class="hero-profile-dropdown glass liquid-glass" style="display: none;">
+        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px; margin-bottom: 8px;">
+          <div style="display: flex; flex-direction: column;">
+            <span style="font-size: 10px; opacity: 0.5; font-weight: 700; text-transform: uppercase;">${this._t('profile_is_yours') || 'Perfil Activo'}</span>
+            <span style="font-size: 13.5px; font-weight: 800; color: var(--v2066-text);">${prof.name}</span>
+          </div>
+          <span class="user-badge ${prof.role === 'admin' ? 'admin' : ''}" style="font-size: 8px; padding: 2px 7px;">${prof.role === 'admin' ? 'Admin' : 'Estándar'}</span>
+        </div>
+
+        <!-- Language Selector -->
+        <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
+          <label style="font-size: 11px; font-weight: 700; opacity: 0.7; display: flex; align-items: center; gap: 5px;">⚙️ Idioma / Language</label>
+          <select id="dropdown-lang-select" class="glass-control" style="width: 100%; height: 36px; border-radius: 10px; padding: 0 10px; font-size: 12px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid var(--v2066-border); color: var(--v2066-text); outline: none; cursor: pointer;">
+            ${LANG_LIST.map(l => `<option value="${l.code}" ${l.code === curLang ? 'selected' : ''}>${l.flag} ${l.code === 'auto' ? 'Automático (HA)' : l.label}</option>`).join('')}
+          </select>
+        </div>
+
+        <!-- PIN management section -->
+        <div style="display: flex; flex-direction: column; gap: 6px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px;">
+          <span style="font-size: 11px; font-weight: 700; opacity: 0.7;">🔑 Gestión de Pines</span>
+          
+          <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 2px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 11px; opacity: 0.85;">PIN de Acceso</span>
+              <div style="display: flex; gap: 4px;">
+                <button id="btn-dropdown-change-access-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase;">Cambiar</button>
+                <button id="btn-dropdown-remove-access-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; color: #ff453a !important;">Quitar</button>
+              </div>
+            </div>
+            
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 11px; opacity: 0.85;">PIN Maestro</span>
+              <div style="display: flex; gap: 4px;">
+                <button id="btn-dropdown-change-master-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase;">Cambiar</button>
+                <button id="btn-dropdown-remove-master-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; color: #ff453a !important;">Quitar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Switch user button -->
+        <button id="btn-dropdown-switch-user" class="glass-control" style="width: 100%; min-height: 32px; padding: 6px; border-radius: 10px; font-size: 10.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 6px; background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); color: var(--v2066-text);">
+          👤 Cambiar de Perfil
+        </button>
       </div>
     `;
 
-    // Clicking the profile pill lets the user switch users quickly!
+    // Click handler for pill to toggle dropdown
     const pill = container.querySelector('.hero-profile-pill');
-    if (pill) {
+    const dropdown = container.querySelector('#profile-dropdown');
+    
+    if (pill && dropdown) {
+      pill.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = dropdown.style.display === 'flex';
+        dropdown.style.display = isOpen ? 'none' : 'flex';
+      });
+
+      // Close dropdown when clicking outside
+      const _closeOnClickOutside = (e) => {
+        if (!container.contains(e.target)) {
+          dropdown.style.display = 'none';
+          document.removeEventListener('click', _closeOnClickOutside);
+        }
+      };
       pill.addEventListener('click', () => {
-        this._switchProfile();
+        if (dropdown.style.display === 'flex') {
+          document.addEventListener('click', _closeOnClickOutside);
+        }
       });
     }
+
+    // Language dropdown change listener
+    const langSelect = container.querySelector('#dropdown-lang-select');
+    if (langSelect) {
+      langSelect.addEventListener('change', (e) => {
+        this._setLanguage(e.target.value);
+      });
+    }
+
+    // Action listeners inside dropdown:
+    // Switch profile:
+    container.querySelector('#btn-dropdown-switch-user')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this._switchProfile();
+    });
+
+    // Change Access PIN:
+    container.querySelector('#btn-dropdown-change-access-pin')?.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      dropdown.style.display = 'none';
+      const newPin = await this._showArgusInputModal({
+        title: `Actualizar PIN de Acceso`,
+        label: `Introduce el nuevo PIN numérico de acceso para el perfil ${prof.name}`,
+        placeholder: '••••',
+        type: 'password',
+        numeric: true,
+      });
+      if (newPin === null) return;
+      try {
+        await this._send('argus/save_user_access_pin', { argus_user_id: prof.id, pin: newPin.trim() });
+        this._showArgusConfirmModal('PIN de acceso actualizado con éxito.', { confirmLabel: 'Aceptar' });
+        this._load();
+      } catch (err) {
+        this._showArgusConfirmModal(err.message || 'Error', { confirmLabel: 'Aceptar' });
+      }
+    });
+
+    // Remove Access PIN:
+    container.querySelector('#btn-dropdown-remove-access-pin')?.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      dropdown.style.display = 'none';
+      const confirm = await this._showArgusConfirmModal(`¿Estás seguro de que quieres quitar el PIN de acceso para tu perfil? Cualquiera podrá ingresar a tu perfil sin contraseña.`, { confirmLabel: 'Quitar', cancelLabel: 'Cancelar' });
+      if (!confirm) return;
+      try {
+        await this._send('argus/save_user_access_pin', { argus_user_id: prof.id, pin: '' });
+        this._showArgusConfirmModal('PIN de acceso removido con éxito.', { confirmLabel: 'Aceptar' });
+        this._load();
+      } catch (err) {
+        this._showArgusConfirmModal(err.message || 'Error', { confirmLabel: 'Aceptar' });
+      }
+    });
+
+    // Change Master PIN:
+    container.querySelector('#btn-dropdown-change-master-pin')?.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      dropdown.style.display = 'none';
+      const pinConfigured = this._dashboard?.entries?.[0]?.pin_configured === true;
+      let currentPin = '';
+      if (pinConfigured) {
+        currentPin = await this._showArgusInputModal({
+          title: `Actualizar PIN Maestro`,
+          label: `Introduce el PIN Maestro actual para continuar:`,
+          placeholder: '••••',
+          type: 'password',
+          numeric: true,
+        });
+        if (currentPin === null) return;
+      }
+
+      const p1 = await this._showArgusInputModal({
+        title: `Actualizar PIN Maestro`,
+        label: `Introduce tu nuevo PIN Maestro (se usa para armar y desarmar la alarma):`,
+        placeholder: '••••',
+        type: 'password',
+        numeric: true,
+      });
+      if (p1 === null) return;
+
+      const p2 = await this._showArgusInputModal({
+        title: `Actualizar PIN Maestro`,
+        label: `Confirma tu nuevo PIN Maestro:`,
+        placeholder: '••••',
+        type: 'password',
+        numeric: true,
+      });
+      if (p2 === null) return;
+
+      if (p1 !== p2) {
+        this._showArgusConfirmModal('Los PINs introducidos no coinciden.', { confirmLabel: 'Aceptar' });
+        return;
+      }
+
+      try {
+        await this._send('argus/update_master_pin', { pin: p1.trim(), current_pin: currentPin.trim() });
+        if (this._dashboard?.entries?.[0]) this._dashboard.entries[0].pin_configured = Boolean(p1);
+        this._showArgusConfirmModal('PIN Maestro actualizado con éxito.', { confirmLabel: 'Aceptar' });
+        this._load();
+      } catch (err) {
+        this._showArgusConfirmModal(err.message || 'Error', { confirmLabel: 'Aceptar' });
+      }
+    });
+
+    // Remove Master PIN:
+    container.querySelector('#btn-dropdown-remove-master-pin')?.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      dropdown.style.display = 'none';
+      const pinConfigured = this._dashboard?.entries?.[0]?.pin_configured === true;
+      if (!pinConfigured) {
+        this._showArgusConfirmModal('No hay un PIN Maestro configurado.', { confirmLabel: 'Aceptar' });
+        return;
+      }
+      const currentPin = await this._showArgusInputModal({
+        title: `Remover PIN Maestro`,
+        label: `Introduce el PIN Maestro actual para confirmar la remoción:`,
+        placeholder: '••••',
+        type: 'password',
+        numeric: true,
+      });
+      if (currentPin === null) return;
+
+      try {
+        await this._send('argus/update_master_pin', { pin: '', current_pin: currentPin.trim() });
+        if (this._dashboard?.entries?.[0]) this._dashboard.entries[0].pin_configured = false;
+        this._showArgusConfirmModal('PIN Maestro removido con éxito.', { confirmLabel: 'Aceptar' });
+        this._load();
+      } catch (err) {
+        this._showArgusConfirmModal(err.message || 'Error', { confirmLabel: 'Aceptar' });
+      }
+    });
   }
 
   async _switchProfile() {
