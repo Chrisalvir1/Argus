@@ -2,6 +2,15 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.77] - 2026-08-12
+
+### Fixed
+- Reloj: sincronizada la lectura del formato de hora 12h/24h directamente desde la configuración guardada del panel.
+- Perfil: corregido el avatar en el badge del perfil para utilizar `prof.picture` si está cargada en vez de iniciales estáticas.
+- Control de Acceso: rediseñadas las etiquetas de roles (administrador y estándar) para eliminar los colores de estilo neón y utilizar transparencias suaves de alta legibilidad.
+- Clima Fallback: implementada una transición suave e inmediata con gradientes de fondo basados en Apple Weather antes de que inicialice WebGL.
+- Personalización: solucionado el bug al guardar el fondo predeterminado donde se vaciaba la URL del archivo de fondo personalizado, y garantizada la legibilidad del texto con sombras de texto adecuadas.
+
 ## [2.0.76] - 2026-08-12
 
 ### Fixed

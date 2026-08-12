@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Home Hub – v2.0.76
+ * Argus Home Hub – v2.0.77
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1179,6 +1179,26 @@ _tmpl.innerHTML = `
     --hud-bg: rgba(255,255,255,0.06);
   }
 
+  /* Garantiza legibilidad sobre cualquier fondo */
+  :host([data-bg-mode="default"]) .hero-top-bar,
+  :host([data-bg-mode="default"]) .entry-hud,
+  :host([data-bg-mode="default"]) .mode-btn,
+  :host([data-bg-mode="default"]) .sensor-pill {
+    text-shadow: 0 1px 4px rgba(0,0,0,0.7);
+  }
+
+  :host([data-bg-mode="default"]) .mode-btn {
+    background: rgba(255,255,255,0.10) !important;
+    border: 1px solid rgba(255,255,255,0.18) !important;
+    color: rgba(255,255,255,0.95) !important;
+    backdrop-filter: blur(12px);
+  }
+
+  :host([data-bg-mode="default"]) .subsection-title,
+  :host([data-bg-mode="default"]) .user-role-label {
+    color: rgba(255,255,255,0.60) !important;
+  }
+
   /* Fullscreen Active / Virtual Fullscreen CSS Overrides */
   :host(.fullscreen-active) {
     position: fixed !important;
@@ -1782,7 +1802,28 @@ _tmpl.innerHTML = `
   /* User card */
   .user-card{display:flex;align-items:center;justify-content:space-between;padding:14px;border-radius:16px;border:1px solid var(--user-card-border, rgba(255,255,255,0.06));background:var(--user-card-bg, rgba(255,255,255,0.02));box-shadow:0 4px 10px rgba(0,0,0,0.08)}
   .user-badge{display:inline-block;padding:3px 9px;border-radius:8px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;background:rgba(0,122,255,.12);color:var(--primary-color,#007aff)}
-  .user-badge.admin{background:rgba(251,140,0,.12);color:#fb8c00}
+  /* REEMPLAZA los colores neón por tokens legibles */
+  .user-badge.admin {
+    background: rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.92);
+    border: 1px solid rgba(255,255,255,0.18);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .user-badge.user {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.75);
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  /* Role label debajo del nombre */
+  .user-role-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);  /* muted, no neón */
+    margin-top: 2px;
+  }
   /* Notif target chip */
   .notif-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:rgba(67,160,71,.1);border:1px solid rgba(67,160,71,.2);font-size:12px;font-weight:700;color:var(--success-color,#43a047)}
   .notif-chip button{padding:0;border:0;background:none;cursor:pointer;opacity:.65}
@@ -2876,11 +2917,14 @@ class ArgusPanel extends HTMLElement {
   }
 
   _getClockFormat() {
-    const fmt = this._clockFormat || this._ui?.clock_format || this._dashboard?.clock_format || 'auto';
+    const fmt = this._ui?.clock_format 
+      ?? this._dashboard?.clock_format 
+      ?? 'auto';
     return ['auto', '12h', '24h'].includes(fmt) ? fmt : 'auto';
   }
 
   _formatTime(dateInput) {
+    console.log('[Argus clock_format]', this._ui?.clock_format, this._dashboard?.clock_format);
     if (!dateInput) return '';
     const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
     if (isNaN(date.getTime())) return '';
@@ -2951,17 +2995,21 @@ class ArgusPanel extends HTMLElement {
     if (!pill || !avatar || !nameEl || !roleEl) return;
 
     const prof = this._currentProfile;
-    if (!prof) {
-      pill.style.display = 'none';
-      return;
-    }
+    if (!prof) { pill.style.display = 'none'; return; }
 
     pill.style.display = 'flex';
     const name = prof.name || 'User';
-    const initials = name.slice(0, 2).toUpperCase();
-    avatar.textContent = initials;
-    nameEl.textContent = name;
 
+    // ← ESTE ES EL FIX: usa foto si existe
+    if (prof.picture) {
+      avatar.innerHTML = `<img src="${this._escapeHtml(prof.picture)}" 
+        style="width:100%;height:100%;border-radius:50%;object-fit:cover;" 
+        alt="${this._escapeHtml(name)}" />`;
+    } else {
+      avatar.textContent = name.slice(0, 2).toUpperCase();
+    }
+
+    nameEl.textContent = name;
     const roleKey = prof.role === 'admin' ? 'role_argus_admin' : 'role_argus_user';
     roleEl.textContent = this._t(roleKey);
   }
@@ -4655,8 +4703,39 @@ class ArgusPanel extends HTMLElement {
     }
   }
 
+  _getWeatherGradient(weather, rawKey = '') {
+    const map = {
+      sunny:          'linear-gradient(160deg, #4da6ff 0%, #89c4ff 60%, #c8e8ff 100%)',
+      clear:          'linear-gradient(160deg, #1a1a3e 0%, #2d2d6b 50%, #0f2557 100%)',
+      cloudy:         'linear-gradient(160deg, #6b7a8d 0%, #9aa5b1 60%, #c5cdd5 100%)',
+      partlycloudy:   'linear-gradient(160deg, #5b8fd4 0%, #7baee8 50%, #a8c8f0 100%)',
+      rainy:          'linear-gradient(160deg, #3d4f5c 0%, #5a6e7a 50%, #7a8e96 100%)',
+      snowy:          'linear-gradient(160deg, #a8bfcf 0%, #c5d8e8 60%, #e8f0f8 100%)',
+      stormy:         'linear-gradient(160deg, #1a1f2e 0%, #2d3244 50%, #3d4255 100%)',
+      fog:            'linear-gradient(160deg, #8a9099 0%, #adb5bd 60%, #ced4da 100%)',
+    };
+    const sKey = String(rawKey || weather.label || '').toLowerCase();
+    const key = Object.keys(map).find(k => sKey.includes(k)) 
+      || Object.keys(map).find(k => weather.label?.toLowerCase().includes(k)) 
+      || 'sunny';
+    return map[key];
+  }
+
   _initWeatherWebGL(canvas) {
     if (!canvas || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+
+    // Fallback inmediato mientras WebGL carga
+    const parent = canvas.parentElement;
+    if (parent) {
+      const weatherState = this._getWeatherEntity()?.state;
+      const isNight = this._hass?.states?.['sun.sun']?.state === 'below_horizon';
+      const key = String(weatherState || 'sunny').toLowerCase().replace(/[\s-]+/g, '_');
+      parent.style.background = this._getWeatherGradient(
+        this._weatherPresentation(weatherState, isNight),
+        key
+      );
+    }
+
     const gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: false, antialias: false, powerPreference: 'low-power' }) ||
                canvas.getContext('experimental-webgl', { alpha: true, premultipliedAlpha: false, antialias: false, powerPreference: 'low-power' });
     if (!gl) {
@@ -5659,7 +5738,7 @@ gl_FragColor=vec4(col,alpha);}`;
             <div class="user-card" style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 10px;flex-direction:row">
               <div style="font-weight:700">${this._escapeHtml(u.name || '')}</div>
               <div style="display:flex;gap:4px">
-                ${u.role === 'admin' ? '<span class="user-badge admin">⭐ Adm</span>' : '<span class="user-badge">👤 Std</span>'}
+                ${u.role === 'admin' ? '<span class="user-badge admin">⭐ Adm</span>' : '<span class="user-badge user">👤 Std</span>'}
                 ${u.access_pin_configured ? '<span class="user-badge" style="background:rgba(0,122,255,0.12);color:#007aff">🔒 PIN</span>' : ''}
               </div>
             </div>`;
@@ -5705,8 +5784,8 @@ gl_FragColor=vec4(col,alpha);}`;
               <div style="flex:1">
                 <div style="font-weight:700">${this._escapeHtml(u.name || '')}</div>
                 <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
-                  <span class="user-badge ${u.role === 'admin' ? 'admin' : ''}">${roleText}</span>
-                  <span class="user-badge" style="background:#4a148c;color:white;margin-left:5px">${this._escapeHtml(haAccountText)}</span>
+                  <span class="user-badge ${u.role === 'admin' ? 'admin' : 'user'}">${roleText}</span>
+                  <span class="user-badge" style="background:rgba(74,20,140,0.15);color:rgba(186,104,200,0.95);border:1px solid rgba(74,20,140,0.22);margin-left:5px">${this._escapeHtml(haAccountText)}</span>
                   ${pinBadge}
                   ${expBadge}
                 </div>
@@ -6540,7 +6619,8 @@ gl_FragColor=vec4(col,alpha);}`;
 
     const selected_hub_bg_mode = this.shadowRoot.getElementById('hub-bg-mode-select')?.value || 'default';
     const hub_bg_mode = selected_hub_bg_mode === 'default' ? 'none' : selected_hub_bg_mode;
-    const hub_bg_file = this.shadowRoot.getElementById('hub-bg-url-input')?.value || '';
+    // Preserve file even in default mode so switching back to image restores it
+    const hub_bg_file = this._hubBgFile || this.shadowRoot.getElementById('hub-bg-url-input')?.value || '';
     const hub_bg_sound = Boolean(this.shadowRoot.getElementById('chk-hub-bg-sound')?.checked);
 
     const payload = {
@@ -7428,7 +7508,7 @@ gl_FragColor=vec4(col,alpha);}`;
               📸 ${this._t('change_profile_picture') || 'Cambiar imagen'} ↗
             </a>
           </div>
-          <span class="user-badge ${prof.role === 'admin' ? 'admin' : ''}" style="font-size: 8.5px; padding: 3px 8px; font-weight: 800; border-radius: 6px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.03em;">${prof.role === 'admin' ? 'Admin' : 'Estándar'}</span>
+          <span class="user-badge ${prof.role === 'admin' ? 'admin' : 'user'}" style="font-size: 8.5px; padding: 3px 8px; font-weight: 800; border-radius: 6px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.03em;">${prof.role === 'admin' ? 'Admin' : 'Estándar'}</span>
         </div>
 
         <!-- Language Selector -->
