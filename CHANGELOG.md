@@ -2,6 +2,14 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.66] - 2026-08-11
+
+### Enhanced
+- Shader WebGL2 atmosférico con soporte puro para GLSL ES 3.00, logrando unificar cielo, nubes volumétricas, sol/luna, lluvia, nieve y auroras en un único canvas.
+- Nubes estáticas, soles, lunas y fondos antiguos basados en CSS fueron eliminados del renderizador, delegando el entorno completamente a la GPU.
+- Optimizaciones intensas de WebGL (IntersectionObserver, ResizeObserver) limitando a 24-30 FPS y pausando el dibujado cuando no es visible en pantalla.
+- Restructurado y resuelto por completo la retención de persistencia y UI al eliminar y añadir accesorios en el menú avanzado de SOS (Pánico).
+- Efecto Liquid Glass centralizado y perfeccionado para usar las variables nativas del tema y `color-mix`, logrando la compatibilidad perfecta del esmerilado translúcido en modos claro/oscuro.
 ## [2.0.65] - 2026-08-11
 
 ### Fixed
