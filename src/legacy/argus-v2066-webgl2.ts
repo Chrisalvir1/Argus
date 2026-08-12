@@ -1,6 +1,363 @@
 // @ts-nocheck
-const num=v=>Number.isFinite(Number(v))?Number(v):0;
-const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,num(v)));
+import { LitElement, html, css } from 'https://unpkg.com/lit@3.0.0/index.js?module';
+
+// ==========================================
+// 1. SHADERS WEBGL2
+// ==========================================
+
+const vsSource = `#version 300 es
+void main() {
+    float x = -1.0 + float((gl_VertexID & 1) << 2);
+    float y = -1.0 + float((gl_VertexID & 2) << 1);
+    gl_Position = vec4(x, y, 0.0, 1.0);
+}`;
+
+const fsSource = `#version 300 es
+precision highp float;
+
+uniform vec2 u_resolution;
+uniform float u_time;
+uniform vec3 u_sunPosition;
+uniform vec3 u_moonPosition;
+uniform float u_moonPhase;
+uniform vec4 u_weather;       // x: Nubes, y: Lluvia, z: Nieve, w: Relámpagos
+uniform vec2 u_cloudOffset;   // Offset acumulado del viento (calculado en JS)
+uniform vec2 u_parallax;      // Offset de paralaje (mouse/giroscopio)
+
+out vec4 FragColor;
+
+float hash(float n) { return fract(sin(n) * 43758.5453123); }
+float hash(vec2 p)  { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
+
+float noise(vec3 x) {
+    vec3 p = floor(x);
+    vec3 f = fract(x);
+    f = f * f * (3.0 - 2.0 * f);
+    float n = p.x + p.y * 57.0 + 113.0 * p.z;
+    return mix(
+        mix(mix(hash(n+0.0), hash(n+1.0), f.x), mix(hash(n+57.0), hash(n+58.0), f.x), f.y),
+        mix(mix(hash(n+113.0), hash(n+114.0), f.x), mix(hash(n+170.0), hash(n+171.0), f.x), f.y), f.z);
+}
+
+float fbm(vec3 p) {
+    float f = 0.0, w = 0.5;
+    for (int i = 0; i < 4; i++) { f += w * noise(p); p *= 2.02; w *= 0.5; }
+    return f;
+}
+
+vec3 ACESFilm(vec3 x) {
+    float a=2.51, b=0.03, c=2.43, d=0.59, e=0.14;
+    return clamp((x*(a*x+b))/(x*(c*x+d)+e), 0.0, 1.0);
+}
+
+void main() {
+    // Coordenadas corregidas con aspecto + paralaje
+    vec2 uv = (gl_FragCoord.xy - 0.5 * u_resolution.xy) / u_resolution.y;
+    uv += u_parallax * 0.03;
+    
+    // --- NUEVO: CAPA DE REFRACCIÓN (Gotas en el cristal) ---
+    vec2 dropDistortion = vec2(0.0);
+    float dropSpecular = 0.0;
+    
+    if (u_weather.y > 0.0) { 
+        vec2 dropUV = uv * vec2(12.0, 6.0);
+        dropUV.y += u_time * 0.4;
+        dropUV.x += u_cloudOffset.x * 2.0; 
+        
+        vec2 grid = fract(dropUV) - 0.5;
+        vec2 id = floor(dropUV);
+        
+        float rnd = hash(id * 123.45);
+        vec2 dropPos = grid - vec2(rnd * 0.4 - 0.2, fract(rnd * 34.5) * 0.4 - 0.2);
+        
+        float d = length(dropPos);
+        float dropShape = smoothstep(0.35, 0.05, d);
+        
+        dropDistortion = dropPos * dropShape * u_weather.y * 0.5; 
+        dropSpecular = smoothstep(0.1, 0.2, d) * dropShape * u_weather.y * 0.8;
+    }
+    
+    // Vista afectada por la distorsión
+    vec3 viewDir = normalize(vec3(uv + dropDistortion, -1.0));
+
+    vec3 sunDir  = normalize(u_sunPosition);
+    vec3 moonDir = normalize(u_moonPosition);
+
+    // --- DISPERSIÓN ATMOSFÉRICA (Rayleigh) ---
+    float cosThetaSun = dot(viewDir, sunDir);
+    float height      = max(0.0, viewDir.y);
+    float opticalDepth = exp(-height / 0.1) * 8e3;
+    vec3 rayleighCoeff = vec3(5.5e-6, 13.0e-6, 22.4e-6);
+    vec3 skyBase = 22.0 * (1.0 + cosThetaSun * cosThetaSun) * rayleighCoeff * opticalDepth;
+    skyBase = mix(skyBase, vec3(0.3, 0.35, 0.4) * 2.0, u_weather.x * 0.8);
+
+    // --- CIELO NOCTURNO (estrellas + luna) — sin branch, usando step() ---
+    float nightFactor = step(sunDir.y, 0.1);
+
+    float starNoise = hash(floor(uv * 200.0));
+    float starGlow  = smoothstep(0.98, 1.0, starNoise)
+                    * (0.5 + 0.5 * sin(u_time * 2.0 + starNoise * 10.0))
+                    * smoothstep(0.1, -0.1, sunDir.y);
+    vec3 nightSky = vec3(starGlow) * nightFactor;
+
+    float distMoon  = distance(viewDir, moonDir);
+    float moonBody  = (1.0 - smoothstep(0.04, 0.045, distMoon)) * nightFactor;
+    vec3  shadowOff = normalize(vec3(u_moonPhase - 0.5, 0.0, -1.0));
+    float moonShadow = smoothstep(0.03, 0.05, distance(viewDir, moonDir + shadowOff * 0.02));
+    nightSky += vec3(1.5, 1.5, 1.8) * moonBody * moonShadow;
+
+    // --- SOL ---
+    float sunGlow  = smoothstep(0.998, 1.0, cosThetaSun);
+    vec3  sunColor = vec3(25.0, 20.0, 15.0) * sunGlow;
+
+    vec3 skyColor = skyBase + sunColor + nightSky;
+
+    // --- NUBES FBM con offset de viento ---
+    vec3 cloudPos    = viewDir * 3.0 + vec3(u_time * 0.02 + u_cloudOffset.x, u_time * 0.01, u_cloudOffset.y);
+    float cloudDensity = smoothstep(0.3, 0.8, fbm(cloudPos) * u_weather.x);
+
+    vec3 lightDir    = sunDir.y > -0.1 ? sunDir : moonDir;
+    float cloudShadow = fbm(cloudPos + lightDir * 0.1);
+    vec3 cloudColor  = mix(vec3(0.2, 0.25, 0.3), vec3(1.2, 1.1, 1.0),
+                           smoothstep(0.2, 0.8, cloudDensity - cloudShadow));
+
+    // --- RELÁMPAGOS (sin branch GPU) ---
+    float flashTiming   = fract(sin(u_time * 10.0) * 43758.5);
+    float lightningFlash = smoothstep(0.95, 1.0, flashTiming) * u_weather.w * 50.0;
+    cloudColor += vec3(0.8, 0.9, 1.0) * lightningFlash;
+
+    vec3 hdrColor = mix(skyColor, cloudColor, cloudDensity);
+
+    // --- LLUVIA (rayas verticales) ---
+    vec2 rainUV = uv * vec2(10.0, 2.0) + vec2(0.0, u_time * 3.0);
+    float rain  = smoothstep(0.9, 1.0, hash(rainUV)) * u_weather.y;
+
+    // --- NIEVE (copos FBM lentos) ---
+    vec2 snowUV = uv * 5.0 + vec2(sin(u_time * 0.5), u_time * 0.5);
+    float snow  = smoothstep(0.8, 1.0, fbm(vec3(snowUV, u_time))) * u_weather.z;
+
+    hdrColor += vec3(0.5, 0.6, 0.7) * rain;
+    hdrColor += vec3(1.5) * snow;
+    
+    // --- ESPECULAR DE LAS GOTAS ---
+    hdrColor += vec3(1.0, 1.1, 1.2) * dropSpecular;
+
+    // --- HDR TONE MAPPING + GAMMA ---
+    vec3 ldrColor = ACESFilm(hdrColor);
+    ldrColor = pow(ldrColor, vec3(1.0 / 2.2));
+    FragColor = vec4(ldrColor, 1.0);
+}`;
+
+// ==========================================
+// 2. COMPONENTE LIT
+// ==========================================
+
+class ArgusWeatherPanel extends LitElement {
+
+  static properties = { hass: { attribute: false }, _config: { attribute: false } };
+
+  static styles = css`
+    :host { display: block; width: 100%; height: 100%; min-height: 300px; border-radius: 24px; overflow: hidden; background: #000; position: absolute; inset: 0; }
+    canvas { width: 100%; height: 100%; display: block; }
+  `;
+
+  constructor() {
+    super();
+    this.gl = null;
+    this.program = null;
+    this.uniforms = {};
+    this.startTime = performance.now();
+    this._animationFrame = null;
+    this._resizeObserver = null;
+    this._lastTime = null;
+    this._cloudOffset = { x: 0, y: 0 };
+    this._lastMouseTime = 0;
+    this.target  = { sunY: 0.5, nubes: 0, lluvia: 0, nieve: 0, relampagos: 0, moonPhase: 1.0, wind: { x: 0, y: 0 }, parallax: { x: 0, y: 0 } };
+    this.current = { sunY: 0.5, nubes: 0, lluvia: 0, nieve: 0, relampagos: 0, moonPhase: 1.0, parallax: { x: 0, y: 0 } };
+  }
+
+  setConfig(config) { this._config = config; }
+
+  render() { return html`<canvas id="weatherCanvas"></canvas>`; }
+
+  firstUpdated() {
+    const canvas = this.shadowRoot.getElementById('weatherCanvas');
+
+    // ResizeObserver — sin reflow en cada frame
+    this._resizeObserver = new ResizeObserver(entries => {
+      for (const e of entries) {
+        canvas.width  = Math.floor(e.contentRect.width  * 0.5);
+        canvas.height = Math.floor(e.contentRect.height * 0.5);
+        if (this.gl) this.gl.viewport(0, 0, canvas.width, canvas.height);
+      }
+    });
+    this._resizeObserver.observe(canvas);
+
+    // Eventos de paralaje
+    this.addEventListener('mousemove', this._onMouseMove.bind(this));
+    window.addEventListener('deviceorientation', this._onGyro.bind(this));
+
+    this._initWebGL(canvas);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this._animationFrame) cancelAnimationFrame(this._animationFrame);
+    this._resizeObserver?.disconnect();
+    this.removeEventListener('mousemove', this._onMouseMove);
+    window.removeEventListener('deviceorientation', this._onGyro);
+    // Limpiar contexto WebGL
+    if (this.gl && this.program) this.gl.deleteProgram(this.program);
+  }
+
+  updated(changedProperties) {
+    if (changedProperties.has('hass') && this.gl) this._updateTargets();
+  }
+
+  // Solo escribe this.target.* — nunca toca WebGL
+  _updateTargets() {
+    if (!this.hass) return;
+
+    const sun = this.hass.states['sun.sun'];
+    if (sun) {
+      this.target.sunY = (sun.attributes.elevation ?? 0) / 90.0;
+      this.target.wind = {
+        x: (sun.attributes.wind_speed ?? 0) * 0.001,
+        y: 0
+      };
+    }
+
+    const wxId = this._config?.weather_entity || 'weather.home';
+    const wx   = this.hass.states[wxId];
+    if (wx) {
+      const s = wx.state;
+      this.target.nubes      = ['cloudy','rainy','pouring','snowy','lightning','lightning-rainy','partlycloudy'].includes(s) ? (s === 'partlycloudy' ? 0.5 : 1.0) : 0.0;
+      this.target.lluvia     = s === 'pouring' ? 1.0 : (s === 'rainy' || s === 'lightning-rainy') ? 0.6 : 0.0;
+      this.target.nieve      = s === 'snowy' ? 1.0 : 0.0;
+      this.target.relampagos = (s === 'lightning' || s === 'lightning-rainy') ? 1.0 : 0.0;
+    }
+
+    const moon = this.hass.states['sensor.moon_phase'];
+    if (moon) {
+      const v = parseFloat(moon.state) || 100;
+      this.target.moonPhase = v > 1.0 ? v / 100.0 : v;
+    }
+  }
+
+  _onMouseMove(e) {
+    const now = Date.now();
+    if (now - this._lastMouseTime < 16) return;
+    this._lastMouseTime = now;
+    const rect = this.getBoundingClientRect();
+    this.target.parallax.x =  (e.clientX - rect.left) / rect.width  * 2.0 - 1.0;
+    this.target.parallax.y = -((e.clientY - rect.top)  / rect.height * 2.0 - 1.0);
+  }
+
+  _onGyro(e) {
+    this.target.parallax.x = (e.gamma ?? 0) / 45.0;
+    this.target.parallax.y = (e.beta  ?? 0) / 90.0;
+  }
+
+  // Lerp exponencial (damp) — se desacelera naturalmente como iOS
+  _damp(curr, tgt, lambda, dt) { return tgt + (curr - tgt) * Math.exp(-lambda * dt); }
+
+  _initWebGL(canvas) {
+    const gl = canvas.getContext('webgl2', { antialias: false });
+    if (!gl) { console.error('[Argus] WebGL2 no soportado'); return; }
+
+    gl.getExtension('EXT_color_buffer_float');
+    try { gl.drawingBufferColorSpace = 'display-p3'; gl.unpackColorSpace = 'display-p3'; } catch(e) {}
+    this.gl = gl;
+
+    const compile = (type, src) => {
+      const s = gl.createShader(type);
+      gl.shaderSource(s, src);
+      gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+        console.error('[Argus] Shader error:', gl.getShaderInfoLog(s));
+        gl.deleteShader(s); return null;
+      }
+      return s;
+    };
+
+    const vs = compile(gl.VERTEX_SHADER,   vsSource);
+    const fs = compile(gl.FRAGMENT_SHADER, fsSource);
+    if (!vs || !fs) return;
+
+    this.program = gl.createProgram();
+    gl.attachShader(this.program, vs);
+    gl.attachShader(this.program, fs);
+    gl.linkProgram(this.program);
+    if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
+      console.error('[Argus] Link error:', gl.getProgramInfoLog(this.program)); return;
+    }
+
+    this.uniforms = {
+      resolution:   gl.getUniformLocation(this.program, 'u_resolution'),
+      time:         gl.getUniformLocation(this.program, 'u_time'),
+      sunPosition:  gl.getUniformLocation(this.program, 'u_sunPosition'),
+      moonPosition: gl.getUniformLocation(this.program, 'u_moonPosition'),
+      moonPhase:    gl.getUniformLocation(this.program, 'u_moonPhase'),
+      weather:      gl.getUniformLocation(this.program, 'u_weather'),
+      cloudOffset:  gl.getUniformLocation(this.program, 'u_cloudOffset'),
+      parallax:     gl.getUniformLocation(this.program, 'u_parallax'),
+    };
+
+    // Valores default mientras llegan datos de HA
+    gl.useProgram(this.program);
+    gl.uniform3f(this.uniforms.sunPosition,  0.0, 0.5, -1.0);
+    gl.uniform3f(this.uniforms.moonPosition, 0.5, 0.3, -1.0);
+    gl.uniform1f(this.uniforms.moonPhase,    1.0);
+    gl.uniform4f(this.uniforms.weather,      0.0, 0.0, 0.0, 0.0);
+    gl.uniform2f(this.uniforms.cloudOffset,  0.0, 0.0);
+    gl.uniform2f(this.uniforms.parallax,     0.0, 0.0);
+
+    const loop = () => {
+      if (!this.isConnected) return;
+      const now = performance.now();
+      const dt  = Math.min((now - (this._lastTime || now)) / 1000, 0.1); // cap 100ms
+      this._lastTime = now;
+
+      // Interpolar todos los valores con damp exponencial
+      const c = this.current, t = this.target;
+      c.sunY      = this._damp(c.sunY,      t.sunY,      0.5,  dt); // lento = amanecer/atardecer
+      c.nubes     = this._damp(c.nubes,     t.nubes,     2.0,  dt);
+      c.lluvia    = this._damp(c.lluvia,    t.lluvia,    2.0,  dt);
+      c.nieve     = this._damp(c.nieve,     t.nieve,     2.0,  dt);
+      c.relampagos= this._damp(c.relampagos,t.relampagos,8.0,  dt); // rápido
+      c.moonPhase = this._damp(c.moonPhase, t.moonPhase, 1.0,  dt);
+      c.parallax.x= this._damp(c.parallax.x,t.parallax.x,6.0, dt);
+      c.parallax.y= this._damp(c.parallax.y,t.parallax.y,6.0, dt);
+
+      // Acumular offset de viento en cloudOffset
+      this._cloudOffset.x += (t.wind?.x || 0) * dt;
+      this._cloudOffset.y += (t.wind?.y || 0) * dt;
+
+      // Enviar uniforms — ÚNICO lugar donde se toca WebGL
+      gl.useProgram(this.program);
+      gl.uniform2f(this.uniforms.resolution,   canvas.width, canvas.height);
+      gl.uniform1f(this.uniforms.time,         (now - this.startTime) / 1000.0);
+      gl.uniform3f(this.uniforms.sunPosition,  0.0, c.sunY, -1.0);
+      gl.uniform3f(this.uniforms.moonPosition, 0.2, -c.sunY + 0.2, -1.0);
+      gl.uniform1f(this.uniforms.moonPhase,    c.moonPhase);
+      gl.uniform4f(this.uniforms.weather,      c.nubes, c.lluvia, c.nieve, c.relampagos);
+      gl.uniform2f(this.uniforms.cloudOffset,  this._cloudOffset.x, this._cloudOffset.y);
+      gl.uniform2f(this.uniforms.parallax,     c.parallax.x, c.parallax.y);
+
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      this._animationFrame = requestAnimationFrame(loop);
+    };
+    loop();
+  }
+}
+
+if (!customElements.get('argus-weather-panel')) {
+  customElements.define('argus-weather-panel', ArgusWeatherPanel);
+}
+
+// ==========================================
+// 3. BRIDGE Y UI OVERRIDES
+// ==========================================
 
 function installStyles(panel){
  if(panel.shadowRoot?.getElementById('argus-v2066-style'))return;
@@ -10,7 +367,7 @@ function installStyles(panel){
 .glass,.liquid-glass,.panel,.entry,.mode-section-card,.user-card,.file-card,.log-item,.personalize-section,.sos-configuration{background:var(--v2066-glass)!important;border:1px solid var(--v2066-border)!important;box-shadow:inset 0 1px 0 color-mix(in srgb,var(--primary-text-color,#fff) 16%,transparent),0 14px 38px rgba(0,0,0,.16)!important;backdrop-filter:blur(24px) saturate(145%)!important;-webkit-backdrop-filter:blur(24px) saturate(145%)!important;color:var(--v2066-text)!important}
 .panel h1,.panel h2,.panel h3,.panel h4,.panel-title,.section-title,.setting-label,.mode-section-title,.widget-title,.settings-section-title,.access-section-title{color:var(--v2066-text)!important;opacity:1!important;text-shadow:none!important}.panel p,.panel small,.hint,.muted,.setting-help,.mode-sensor-none{color:var(--v2066-muted)!important;opacity:1!important}
 button,input,select,textarea,.glass-control{color:var(--v2066-text)!important;-webkit-text-fill-color:var(--v2066-text)!important;background-color:color-mix(in srgb,var(--card-background-color,#101827) 38%,transparent)!important;border-color:var(--v2066-border)!important}button{min-height:44px;touch-action:manipulation}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#2783de) 76%,white)!important;outline-offset:2px!important}
-.wx-atmosphere{position:absolute;inset:0;overflow:hidden;isolation:isolate;background:linear-gradient(180deg,#4e9bd1,#b7d9e8)!important}.wx-atmosphere.night{background:linear-gradient(180deg,#030817,#102544)!important}.wx-webgl{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;opacity:1!important}
+.wx-atmosphere{position:absolute;inset:0;overflow:hidden;isolation:isolate;}
 .wx-celestial,.wx-cloudfield,.wx-precip,.wx-starfield,.wx-lightning,.wx-fog-real,.wx-seasonal,.wx-horizon{display:none!important}
 @media(prefers-color-scheme:light){:host{--v2066-glass:linear-gradient(135deg,rgba(255,255,255,.56),rgba(255,255,255,.24));--v2066-border:rgba(255,255,255,.72);--v2066-text:var(--primary-text-color,#172033);--v2066-muted:var(--secondary-text-color,#4c586d)}}`;
  panel.shadowRoot?.appendChild(s);
@@ -22,6 +379,7 @@ function openPanicSelector(panel){
  if(typeof panel._openEntitySelector==='function'){panel._openEntitySelector('panic');return true;}
  return false;
 }
+
 function bindSos(panel){
  const root=panel.shadowRoot;if(!root||root.__argusV2066SosBound)return;root.__argusV2066SosBound=true;
  root.addEventListener('click',event=>{const button=event.target?.closest?.('button');if(!button)return;const label=`${button.textContent||''} ${button.getAttribute('aria-label')||''} ${button.title||''}`.toLowerCase();const selector=button.matches('[data-select-sos-output],[data-action="select-panic-outputs"],#select-sos-outputs,#btn-select-sos-outputs')||(/seleccionar|select|añadir|add/.test(label)&&/luces|lights|sirenas|sirens|scripts|acciones sos|sos actions/.test(label));if(selector)queueMicrotask(()=>{if(!root.querySelector('.modal.open,.ios-confirm-backdrop.open,[role="dialog"][open]'))openPanicSelector(panel)});if(button.matches('[data-remove-sos-output]'))queueMicrotask(async()=>{const outputs=[...new Set(panel._panicOutputs||[])],settings={...(panel._panicOutputSettings||{})};Object.keys(settings).forEach(id=>{if(!outputs.includes(id))delete settings[id]});const entry_id=panel._dashboard?.entry_id||panel._dashboard?.entries?.[0]?.entry_id;try{await panel._send?.('argus/save_panic_output_profile',{...(entry_id?{entry_id}:{}),outputs,settings})}catch(error){console.error('Argus v2.0.66 SOS remove failed',error)}})},true);
@@ -29,19 +387,31 @@ function bindSos(panel){
 
 export function applyV2066Webgl2AndUi(C){
  if(!C||C.__argusV2066Webgl2AndUi)return;C.__argusV2066Webgl2AndUi=true;const p=C.prototype,connected=p.connectedCallback,render=p._renderEntries;
+ 
  p.connectedCallback=function(){installStyles(this);const value=connected?.call(this);bindSos(this);return value};
  p._renderEntries=function(){const value=render?.call(this);installStyles(this);bindSos(this);return value};
- p._renderAtmosphere=function(ws,isNight){const a=ws?.attributes||{},condition=[ws?.state,ws?.condition,a.condition,a.forecast?.[0]?.condition].filter(Boolean).join(' ').toLowerCase(),has=re=>re.test(condition),storm=has(/lightning|thunder|storm|tormenta/),drizzle=has(/drizzle|llovizna/),rain=storm||drizzle||has(/rain|pouring|shower|lluvia/),snow=has(/snow|snowy|sleet|hail|nieve|granizo/),fog=has(/fog|mist|haze|niebla|bruma/),clouds=storm||rain||snow||fog||has(/cloud|overcast|partly|nublado|nuboso/),wind=clamp(num(a.wind_speed??a.windSpeed??a.wind_gust_speed)/55+(has(/wind|breezy|ventoso/)?0.35:0),0,1.25),temp=num(this._lastTemp??a.temperature??20);return `<div class="wx wx-atmosphere ${isNight?'night':'day'}"><canvas class="wx-webgl" aria-hidden="true" data-rain="${rain?1:0}" data-drizzle="${drizzle?1:0}" data-snow="${snow?1:0}" data-fog="${fog?1:0}" data-storm="${storm?1:0}" data-clouds="${clouds?1:0}" data-wind="${wind.toFixed(3)}" data-temp="${temp}" data-night="${isNight?1:0}"></canvas></div>`};
- p._initWeatherWebGL=function(canvas){
-  canvas?._argusWebglStop?.();const gl=canvas?.getContext?.('webgl2',{alpha:false,antialias:false,depth:false,stencil:false,powerPreference:'low-power',preserveDrawingBuffer:false});if(!gl){canvas?.classList?.add('webgl-unavailable');return}
-  const vertex=`#version 300 es
-in vec2 p;out vec2 uv;void main(){uv=p*.5+.5;gl_Position=vec4(p,0.0,1.0);}`;
-  const fragment=`#version 300 es
-precision highp float;in vec2 uv;out vec4 FragColor;uniform float time,rain,snow,fog,storm,clouds,wind,temp,night;
-float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1)),f.x),f.y);}float fbm(vec2 p){float v=0.0,a=.5;for(int i=0;i<4;i++){v+=a*n(p);p=p*2.03+17.17;a*=.5;}return v;}
-float cm(vec2 p){return smoothstep(.48,.76,fbm(p)*.82+fbm(p*2.7+8.4)*.32);}vec4 cloud(vec2 q,float t){vec2 p=vec2(q.x*2.35,q.y*1.45)+vec2(t*(.018+.055*wind),-.08);float tr=1.0,li=0.0,de=0.0;for(int i=0;i<4;i++){float fi=float(i),d=cm(p+vec2(fi*.055,fi*.025));de+=d*.25;li+=d*tr*(.43+fi*.07);tr*=1.0-d*.22;}float a=clamp(de*1.75*smoothstep(.18,.42,q.y)*(1.0-smoothstep(.88,1.02,q.y))*clouds,0.0,.88);vec3 dc=mix(vec3(.48,.56,.64),vec3(1.0,.98,.94),clamp(li,0.0,1.0)),nc=mix(vec3(.055,.08,.14),vec3(.28,.37,.52),clamp(li,0.0,1.0));return vec4(mix(dc,nc,night)*a,a);}
-float stars(vec2 q,float t){vec2 g=q*vec2(190,105),id=floor(g),f=fract(g)-.5;float s=h(id);return step(.985,s)*(1.0-smoothstep(.015,.075,length(f)))*(.58+.42*sin(t*(1.5+s*2.0)+s*90.0));}float rl(vec2 q,float t,float l){q.x+=wind*q.y*.23;vec2 g=q*vec2(24.0+l*9.0,8.0+l*4.0),id=floor(g),f=fract(g);f.y=fract(f.y+t*(2.1+l*.8)+h(id));float x=abs(f.x-(.5-f.y*(.12+wind*.16)));return(1.0-smoothstep(.006,.035,x))*(1.0-smoothstep(.12,.96,f.y));}float sl(vec2 q,float t,float l){vec2 g=q*vec2(15.0+l*6.0,10.0+l*4.0),id=floor(g),f=fract(g)-.5;f.y=fract(f.y+t*(.13+l*.055)+h(id))-.5;f.x+=sin(t*.8+h(id)*6.283)*.18+wind*.12*sin(t);return 1.0-smoothstep(.035,.09+l*.012,length(f));}
-vec3 sky(vec2 q){return mix(mix(vec3(.66,.82,.91),vec3(.08,.38,.70),q.y),mix(vec3(.055,.12,.23),vec3(.006,.012,.045),q.y),night);}void main(){float t=time*.001;vec2 q=uv;vec3 col=sky(q);vec2 bp=mix(vec2(.77,.73),vec2(.72,.74),night);float d=length((q-bp)*vec2(1,1.55)),disk=1.0-smoothstep(.055,.068,d),glow=exp(-d*10.5);col+=mix(vec3(1,.74,.28),vec3(.82,.9,1),night)*(disk+glow*.34);if(night>.01)col+=vec3(.72,.83,1)*stars(q,t)*night*(1.0-clouds*.78);if(night>.5&&temp<9.0&&storm<.5){float band=pow(max(0.0,1.0-abs(q.y-(.63+sin(q.x*5.0+t*.12)*.08))/.28),3.0),au=fbm(vec2(q.x*3.2+t*.035,q.y*5.0));col+=mix(vec3(.02,.8,.48),vec3(.38,.12,.9),au)*band*au*.38*(1.0-fog*.65);}vec4 c=cloud(q,t);col=col*(1.0-c.a)+c.rgb;if(rain>0.0){float r=rl(q,t,0.0)+rl(q,t,1.0)*.62+rl(q,t,2.0)*.34;col+=vec3(.58,.76,.94)*r*rain*.78;col*=1.0-rain*.12;}if(snow>0.0){float s=sl(q,t,0.0)+sl(q,t,1.0)*.65+sl(q,t,2.0)*.35;col+=vec3(1)*s*snow*.88;}if(fog>0.0){float f=smoothstep(.28,.82,fbm(vec2(q.x*3.0+t*.035,q.y*5.0-t*.012)))*fog*.66;col=mix(col,mix(vec3(.72,.79,.83),vec3(.15,.2,.29),night),f);}if(storm>0.0){float pulse=pow(max(0.0,sin(t*.73+n(vec2(floor(t*.37),4.0))*6.283)),42.0),bolt=(1.0-smoothstep(.006,.025,abs(q.x-(.62+sin(q.y*19.0)*.035))))*smoothstep(.22,.78,q.y)*pulse;col+=vec3(.83,.9,1)*(pulse*.68+bolt*1.8)*storm;}col=col/(vec3(1)+col*.18);FragColor=vec4(col,1);}`;
-  const compile=(type,source)=>{const sh=gl.createShader(type);gl.shaderSource(sh,source);gl.compileShader(sh);if(!gl.getShaderParameter(sh,gl.COMPILE_STATUS)){console.error('Argus WebGL2 shader',gl.getShaderInfoLog(sh));gl.deleteShader(sh);return null}return sh},vs=compile(gl.VERTEX_SHADER,vertex),fs=compile(gl.FRAGMENT_SHADER,fragment);if(!vs||!fs)return;const program=gl.createProgram();gl.attachShader(program,vs);gl.attachShader(program,fs);gl.linkProgram(program);gl.deleteShader(vs);gl.deleteShader(fs);if(!gl.getProgramParameter(program,gl.LINK_STATUS)){console.error('Argus WebGL2 link',gl.getProgramInfoLog(program));return}const vao=gl.createVertexArray(),buffer=gl.createBuffer();gl.bindVertexArray(vao);gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);const pos=gl.getAttribLocation(program,'p');gl.enableVertexAttribArray(pos);gl.vertexAttribPointer(pos,2,gl.FLOAT,false,0,0);const names=['time','rain','snow','fog','storm','clouds','wind','temp','night'],loc=Object.fromEntries(names.map(x=>[x,gl.getUniformLocation(program,x)])),values={rain:Math.max(num(canvas.dataset.rain),num(canvas.dataset.drizzle)*.45),snow:num(canvas.dataset.snow),fog:num(canvas.dataset.fog),storm:num(canvas.dataset.storm),clouds:num(canvas.dataset.clouds),wind:num(canvas.dataset.wind),temp:num(canvas.dataset.temp||20),night:num(canvas.dataset.night)};let active=true,visible=true,frame=0,last=0;const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches,fps=matchMedia('(max-width:900px),(max-height:600px)').matches?24:30,resize=()=>{const dpr=Math.min(devicePixelRatio||1,matchMedia('(max-width:900px),(max-height:600px)').matches?1:1.25),w=Math.max(1,Math.round(canvas.clientWidth*dpr)),h=Math.max(1,Math.round(canvas.clientHeight*dpr));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;gl.viewport(0,0,w,h)}},draw=now=>{if(!active||!canvas.isConnected)return;frame=requestAnimationFrame(draw);if(!visible||document.hidden||(!reduced&&now-last<1000/fps))return;last=now;resize();gl.useProgram(program);gl.bindVertexArray(vao);gl.uniform1f(loc.time,reduced?0:now);for(const name of names.slice(1))gl.uniform1f(loc[name],values[name]);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);if(reduced){cancelAnimationFrame(frame);frame=0}};const io='IntersectionObserver'in window?new IntersectionObserver(e=>{visible=e[0]?.isIntersecting!==false},{rootMargin:'80px'}):null,ro='ResizeObserver'in window?new ResizeObserver(resize):null;io?.observe(canvas);ro?.observe(canvas);canvas._argusWebglStop=()=>{active=false;cancelAnimationFrame(frame);io?.disconnect();ro?.disconnect();gl.deleteBuffer(buffer);gl.deleteVertexArray(vao);gl.deleteProgram(program)};canvas.closest('.wx-atmosphere')?.classList.add('webgl-active');resize();frame=requestAnimationFrame(draw)
+ 
+ // El custom element renderiza todo
+ p._renderAtmosphere=function(ws,isNight){
+   return `<argus-weather-panel class="wx-atmosphere"></argus-weather-panel>`;
  };
+ 
+ // Inutilizamos el inicializador viejo
+ p._initWeatherWebGL=function(canvas){};
+
+ // Interceptamos el setter de hass para sincronizar el componente LitElement
+ const origHass = Object.getOwnPropertyDescriptor(p, 'hass');
+ Object.defineProperty(p, 'hass', {
+   set(hass) {
+     if (origHass?.set) origHass.set.call(this, hass);
+     const wp = this.shadowRoot?.querySelector('argus-weather-panel');
+     if (wp) {
+       wp.hass = hass;
+       wp.setConfig({ weather_entity: this._config?.weather_entity || 'weather.home' });
+     }
+   },
+   get() {
+     return origHass?.get ? origHass.get.call(this) : this._hass;
+   }
+ });
 }
