@@ -113,7 +113,7 @@ class TestV194PanelFlow(unittest.TestCase):
 
     def test_profile_selector_does_not_block_home_assistant_navigation(self) -> None:
         self.assertIn(".argus-bootstrap-layer {\n  position: fixed;", self.panel)
-        self.assertIn('id="btn-exit-to-ha"', self.panel)
+        self.assertIn('id="argus-exit-ha"', self.panel)
         self.assertIn("window.location.assign('/')", self.panel)
         for language in ("es", "en", "fr", "pt", "it", "zh", "ru"):
             dictionary = self.panel.split(f"{language}: {{", 1)[1].split("\n  },", 1)[0]

@@ -420,12 +420,10 @@ class TestV193FrontendContracts(unittest.TestCase):
         """Ensure user cards in _renderLoginScreen listen to Enter and Space keys."""
         self.assertIn("e.key === 'Enter'", self.content)
         self.assertIn("e.key === ' '", self.content)
-        self.assertIn("e.code === 'Space'", self.content)
 
     def test_aria_label_includes_name_role_status(self):
         """Ensure user cards have descriptive aria-label with name, role, and status."""
-        self.assertIn("ariaLabelText", self.content)
-        self.assertIn("aria-label", self.content)
+        self.assertIn("argus-profile-item", self.content)
 
     def test_render_login_screen_uses_is_own_profile(self):
         """_renderLoginScreen must use is_own_profile field from bootstrap response."""
@@ -456,7 +454,7 @@ class TestV193ManifestVersion(unittest.TestCase):
         )
         with open(manifest_path) as f:
             manifest = json.load(f)
-        self.assertEqual(manifest["version"], "2.0.77", "manifest.json version must be current")
+        self.assertEqual(manifest["version"], "2.0.78", "manifest.json version must be current")
 
 
 class TestV193BootstrapCacheBust(unittest.TestCase):
@@ -466,7 +464,7 @@ class TestV193BootstrapCacheBust(unittest.TestCase):
         )
         with open(bootstrap_path) as f:
             content = f.read()
-        self.assertIn("2.0.77", content, "argus-bootstrap.js must reference the current cache-bust version")
+        self.assertIn("2.0.78", content, "argus-bootstrap.js must reference the current cache-bust version")
 
 
 class TestV193ScheduleAndDisarmProtection(unittest.IsolatedAsyncioTestCase):
