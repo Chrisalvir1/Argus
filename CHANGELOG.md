@@ -2,6 +2,15 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.76] - 2026-08-12
+
+### Fixed
+- WebGL Fondo Climático: resuelto el problema de blob blanco estático al inicializar con `premultipliedAlpha: false` y limpiar con `gl.clearColor(0,0,0,0)`.
+- Loop de Animación: limpiado el buffer en cada frame con `gl.clear(gl.COLOR_BUFFER_BIT)`.
+- Fallback de WebGL: si falla WebGL, el canvas se oculta (`opacity: 0`) revelando los fondos y animaciones CSS originales.
+- Animación de Nublado: implementadas elipses blancas semitransparentes en movimiento lento horizontal para el clima nublado.
+- Memory Leaks: asegurado que todas las llamadas a `requestAnimationFrame` se cancelen con `cancelAnimationFrame` en `disconnectedCallback()`.
+
 ## [2.0.75] - 2026-08-12
 
 ### Fixed
