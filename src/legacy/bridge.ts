@@ -18,9 +18,10 @@ import{applyV2043VisualFix}from'./argus-v2043-visual-fix';
 import{applyV2045TriggerSensors}from'./argus-v2045-trigger-sensors';
 import{applyV2046ActiveVisuals}from'./argus-v2046-active-visuals';
 import{applySosOutputPersistence}from'./argus-sos-output-persistence';
+import{applyV2066Webgl2AndUi}from'./argus-v2066-webgl2';
 import type{ArgusPanelConstructor}from'../core/panel';
 
 export function applyLegacyBeforeTypedClients(C:ArgusPanelConstructor):void{applyUiAuditFixes(C)}
 export function applyLegacyAfterTypedClients(C:ArgusPanelConstructor):void{
- applyGridPolish(C);applyFullscreenPolish(C);applyV2012AuditFixes(C);applyPerformanceProfile(C);applyVisualContainerFixes(C);applyCompleteContentFixes(C);applyRuntimeVisualFixes(C);applyBgSensorAvailabilityFixes(C);applyBatteryUiFixes(C);applyDeepRepair(C);applyLightCapabilityFixes(C);applyPersonalizationToggleFix(C);applyDashboardScrollFixes(C);applyV2041AuditRepair(C);applyV2042Stability(C);applyV2043VisualFix(C);applyV2045TriggerSensors(C);applyV2046ActiveVisuals(C);applySosOutputPersistence(C);
+ applyGridPolish(C);applyFullscreenPolish(C);applyV2012AuditFixes(C);applyPerformanceProfile(C);applyVisualContainerFixes(C);applyCompleteContentFixes(C);applyRuntimeVisualFixes(C);applyBgSensorAvailabilityFixes(C);applyBatteryUiFixes(C);applyDeepRepair(C);applyLightCapabilityFixes(C);applyPersonalizationToggleFix(C);applyDashboardScrollFixes(C);applyV2041AuditRepair(C);applyV2042Stability(C);applyV2043VisualFix(C);applyV2045TriggerSensors(C);applyV2046ActiveVisuals(C);applySosOutputPersistence(C);applyV2066Webgl2AndUi(C);
 }
