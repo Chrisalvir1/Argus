@@ -2,6 +2,16 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.73] - 2026-08-12
+
+### Added
+- Nueva sección de Permisos detallados (`🛡️ Permisos`) para usuarios estándar, permitiendo a los administradores activar/desactivar el cambio de PIN de acceso y PIN maestro individualmente por usuario.
+- Redirección física interactiva: al hacer clic en Cambiar o Quitar PIN de acceso o PIN maestro desde la barra superior, la página se desplaza suavemente al widget de "Control de Acceso y Usuarios", enfocando e iluminando los controles correctos.
+- Invalidación de sesión al eliminar usuarios: cuando un administrador borra a un usuario, todas sus sesiones activas se invalidan de inmediato en el servidor Home Assistant y se borran sus credenciales para evitar accesos no autorizados.
+
+### Fixed
+- Visibilidad condicional de gestión de pines en el perfil activo: los usuarios estándar solo ven la sección "Gestión de Pines" si el administrador les ha otorgado explícitamente el permiso correspondiente.
+- Optimización y simplificación de botones de acción en la tarjeta de usuario, usando distintivos gráficos más pequeños y ordenados.
 ## [2.0.72] - 2026-08-12
 
 ### Added

@@ -463,6 +463,8 @@ async def ws_argus_save_ui(hass, connection, msg) -> None:
     actor = profile.get("name", "Unknown")
     updates = {key: copy.deepcopy(value) for key, value in msg.items() if key not in {"id", "type", "entry_id"}}
     _, actor = _actor(connection)
+    ui_data = await async_load_ui_data(hass, entry_id)
+    old_users = ui_data.get("users", [])
     try:
         if "users" in updates:
             updates["users"] = _sanitize_users(updates["users"])
@@ -470,6 +472,15 @@ async def ws_argus_save_ui(hass, connection, msg) -> None:
             from .core.floorplan import validate_floorplan_schema
             updates["floorplan"] = validate_floorplan_schema(updates["floorplan"])
         saved = await async_save_ui_data(hass, updates, entry_id)
+        
+        if "users" in updates:
+            new_user_ids = {u.get("id") for u in updates["users"]}
+            deleted_user_ids = [u.get("id") for u in old_users if u.get("id") and u.get("id") not in new_user_ids]
+            if deleted_user_ids:
+                from .session import async_get_session_manager
+                sm = async_get_session_manager(hass)
+                for uid in deleted_user_ids:
+                    sm.invalidate_all_for_argus_user(entry_id, uid)
     except ValueError as err:
         connection.send_error(msg["id"], "invalid_config", str(err))
         return

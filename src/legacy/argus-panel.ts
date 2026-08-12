@@ -5606,15 +5606,18 @@ gl_FragColor=vec4(col,alpha);}`;
                   <span class="user-badge" style="opacity:0.85;font-size:10px" title="Armar Sistema">🛡️ ${u.permissions.arm ? 'Armar' : '---'}</span>
                   <span class="user-badge" style="opacity:0.85;font-size:10px" title="Desarmar Sistema">🔓 ${u.permissions.disarm ? 'Desarmar' : '---'}</span>
                   <span class="user-badge" style="opacity:0.85;font-size:10px" title="Ver Historial">📜 ${u.permissions.view_history ? 'Historial' : '---'}</span>
+                  <span class="user-badge" style="opacity:0.85;font-size:10px;background:rgba(52,199,89,0.12);color:#34c759" title="Cambiar PIN Acceso">🔑 ${u.permissions.change_pin ? 'PIN Acceso' : '---'}</span>
+                  <span class="user-badge" style="opacity:0.85;font-size:10px;background:rgba(255,179,0,0.12);color:#ffb300" title="Cambiar PIN Maestro">🔑 ${u.permissions.change_master_pin ? 'PIN Maestro' : '---'}</span>
                 </div>
                 ` : ''}
               </div>
-              <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end">
+              <div style="display:flex;gap:4px;align-items:center;flex-wrap:wrap;justify-content:flex-end">
                 ${this._isAdmin ? `
-                  <button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-edit="${i}" title="${this._escapeHtml(this._t('modal_edit_name'))}">✏️ ${this._escapeHtml(this._t('modal_edit_name'))}</button>
-                  <button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-pin="${i}" title="${this._escapeHtml(this._t('modal_pin_title'))}">🔑 ${this._escapeHtml(this._t('user_pin_action'))}</button>
-                  <button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-role-toggle="${i}" title="${this._escapeHtml(this._t('user_role_label'))}">⭐ ${this._escapeHtml(this._t('user_role_action'))}</button>
-                  <button class="btn-danger danger" style="padding:6px 10px;font-size:12px;background:#e53935;color:white;border:none;border-radius:10px;cursor:pointer" title="${this._escapeHtml(this._t('delete_user_tooltip'))}" aria-label="${this._escapeHtml(this._t('delete_user_tooltip'))}" data-user-del="${i}">🗑️ ${this._escapeHtml(this._t('clear') || 'Borrar')}</button>
+                  <button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-edit="${i}" title="${this._escapeHtml(this._t('modal_edit_name'))}">✏️</button>
+                  <button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-pin="${i}" title="${this._escapeHtml(this._t('modal_pin_title'))}">🔑</button>
+                  ${u.role !== 'admin' ? `<button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-perms="${i}" title="Permisos">🛡️</button>` : ''}
+                  <button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-role-toggle="${i}" title="${this._escapeHtml(this._t('user_role_label'))}">⭐</button>
+                  <button class="btn-danger danger" style="padding:6px 10px;font-size:12px;background:#e53935;color:white;border:none;border-radius:10px;cursor:pointer" title="${this._escapeHtml(this._t('delete_user_tooltip'))}" aria-label="${this._escapeHtml(this._t('delete_user_tooltip'))}" data-user-del="${i}">🗑️</button>
                 ` : ''}
               </div>
             </div>
@@ -5777,6 +5780,31 @@ gl_FragColor=vec4(col,alpha);}`;
               });
             })
           );
+
+          el.querySelectorAll('[data-user-perms]').forEach(btn => {
+            btn.addEventListener('click', async () => {
+              const idx = Number(btn.dataset.userPerms);
+              const targetUser = this._users[idx];
+              if (!targetUser) return;
+              const newPerms = await this._showArgusPermissionsModal(targetUser);
+              if (newPerms === null) return;
+              this._runWithPin(async () => {
+                const nextUsers = this._users.map((u, k) => k === idx ? { ...u, permissions: { ...u.permissions, ...newPerms } } : u);
+                try {
+                  const resp = await this._send('argus/save_ui', { users: nextUsers });
+                  if (resp && resp.ui) {
+                    this._ui = resp.ui;
+                    this._users = resp.ui.users || nextUsers;
+                  } else {
+                    this._users = nextUsers;
+                  }
+                  this._renderUsers();
+                } catch (e) {
+                  this._showArgusConfirmModal(e.message || this._format('generic_error', { error: e }), { confirmLabel: 'OK' });
+                }
+              });
+            });
+          });
         }
       }
     } catch (err) {
@@ -6716,6 +6744,86 @@ gl_FragColor=vec4(col,alpha);}`;
     });
   }
 
+  _showArgusPermissionsModal(targetUser) {
+    return new Promise((resolve) => {
+      const overlay = document.createElement('div');
+      overlay.style.cssText = [
+        'position:fixed;inset:0;z-index:9999999;display:flex;align-items:center;justify-content:center',
+        'background:rgba(0,0,0,0.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)',
+        'animation:argus-modal-in .18s ease',
+      ].join(';');
+
+      const cancelLabel = this._t('modal_cancel') || 'Cancelar';
+      const saveLabel = this._t('modal_save') || 'Guardar';
+      const perms = targetUser.permissions || {};
+
+      overlay.innerHTML = `
+        <div style="background:rgba(30,30,45,0.85);border:1px solid rgba(255,255,255,0.14);border-radius:20px;
+          padding:28px 24px 22px;width:min(400px,90vw);box-shadow:0 24px 64px rgba(0,0,0,0.55);
+          display:flex;flex-direction:column;gap:14px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)">
+          <div style="font-size:16px;font-weight:700;color:#fff;letter-spacing:.01em">🛡️ Permisos de ${this._escapeHtml(targetUser.name)}</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.55);margin-top:-6px">Selecciona las acciones permitidas para este perfil estándar:</div>
+          
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:6px;max-height:280px;overflow-y:auto;padding-right:4px;">
+            <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
+              <input type="checkbox" id="chk-perm-view-status" ${perms.view_status ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;" />
+              <span>Ver Estado de Sensores / Panel</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
+              <input type="checkbox" id="chk-perm-arm" ${perms.arm ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;" />
+              <span>Armar Alarma</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
+              <input type="checkbox" id="chk-perm-disarm" ${perms.disarm ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;" />
+              <span>Desarmar Alarma</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
+              <input type="checkbox" id="chk-perm-view-history" ${perms.view_history ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;" />
+              <span>Ver Historial de Actividad</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
+              <input type="checkbox" id="chk-perm-change-pin" ${perms.change_pin ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;" />
+              <span style="color:#34c759;font-weight:700;">Permitir Cambiar su PIN de Acceso</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
+              <input type="checkbox" id="chk-perm-change-master-pin" ${perms.change_master_pin ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;" />
+              <span style="color:#ffb300;font-weight:700;">Permitir Cambiar el PIN Maestro</span>
+            </label>
+          </div>
+
+          <div style="display:flex;gap:10px;margin-top:10px">
+            <button id="apm-cancel" style="flex:1;padding:11px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);
+              background:rgba(255,255,255,0.06);color:#fff;font-size:14px;cursor:pointer;font-family:inherit">${cancelLabel}</button>
+            <button id="apm-ok" style="flex:1;padding:11px;border-radius:12px;border:none;
+              background:linear-gradient(135deg,#4a90d9,#7b5ea7);color:#fff;font-size:14px;font-weight:600;
+              cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(74,144,217,0.35)">${saveLabel}</button>
+          </div>
+        </div>`;
+
+      const root = this.shadowRoot || document.body;
+      root.appendChild(overlay);
+
+      const okBtn = overlay.querySelector('#apm-ok');
+      const cancelBtn = overlay.querySelector('#apm-cancel');
+
+      const cleanup = val => { overlay.remove(); resolve(val); };
+
+      okBtn.addEventListener('click', () => {
+        const nextPerms = {
+          view_status: overlay.querySelector('#chk-perm-view-status').checked,
+          arm: overlay.querySelector('#chk-perm-arm').checked,
+          disarm: overlay.querySelector('#chk-perm-disarm').checked,
+          view_history: overlay.querySelector('#chk-perm-view-history').checked,
+          change_pin: overlay.querySelector('#chk-perm-change-pin').checked,
+          change_master_pin: overlay.querySelector('#chk-perm-change-master-pin').checked,
+        };
+        cleanup(nextPerms);
+      });
+      cancelBtn.addEventListener('click', () => cleanup(null));
+      overlay.addEventListener('click', e => { if (e.target === overlay) cleanup(null); });
+    });
+  }
+
   /* ── Liquid-glass confirm modal (replaces window.confirm) ─────────── */
   _showArgusConfirmModal(message = '', { confirmLabel = '', confirmStyle = '', cancelLabel = '' } = {}) {
     return new Promise(resolve => {
@@ -7183,6 +7291,8 @@ gl_FragColor=vec4(col,alpha);}`;
       : `<div id="hero-profile-avatar" class="user-avatar" style="width: 34px; height: 34px; border-radius: 50%; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.15); flex-shrink: 0;">${this._escapeHtml(prof.name.substring(0, 2).toUpperCase())}</div>`;
       
     const curLang = this._manualLang || 'auto';
+    const canChangePin = prof.role === 'admin' || (prof.permissions && prof.permissions.change_pin);
+    const canChangeMasterPin = prof.role === 'admin' || (prof.permissions && prof.permissions.change_master_pin);
 
     container.innerHTML = `
       <div class="hero-profile-pill glass liquid-glass" style="display: flex; align-items: center; gap: 8px; padding: 5px 12px 5px 7px; border-radius: 999px;">
@@ -7213,10 +7323,12 @@ gl_FragColor=vec4(col,alpha);}`;
         </div>
 
         <!-- PIN management section -->
+        ${(canChangePin || canChangeMasterPin) ? `
         <div style="display: flex; flex-direction: column; gap: 6px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px;">
           <span style="font-size: 11px; font-weight: 700; opacity: 0.7;">🔑 Gestión de Pines</span>
           
           <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 2px;">
+            ${canChangePin ? `
             <div style="display: flex; align-items: center; justify-content: space-between;">
               <span style="font-size: 11px; opacity: 0.85;">PIN de Acceso</span>
               <div style="display: flex; gap: 4px;">
@@ -7224,7 +7336,9 @@ gl_FragColor=vec4(col,alpha);}`;
                 <button id="btn-dropdown-remove-access-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; color: #ff453a !important;">Quitar</button>
               </div>
             </div>
+            ` : ''}
             
+            ${canChangeMasterPin ? `
             <div style="display: flex; align-items: center; justify-content: space-between;">
               <span style="font-size: 11px; opacity: 0.85;">PIN Maestro</span>
               <div style="display: flex; gap: 4px;">
@@ -7232,8 +7346,10 @@ gl_FragColor=vec4(col,alpha);}`;
                 <button id="btn-dropdown-remove-master-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; color: #ff453a !important;">Quitar</button>
               </div>
             </div>
+            ` : ''}
           </div>
         </div>
+        ` : ''}
 
         <!-- Switch user button -->
         <button id="btn-dropdown-switch-user" class="glass-control" style="width: 100%; min-height: 32px; padding: 6px; border-radius: 10px; font-size: 10.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 6px; background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); color: var(--v2066-text);">
@@ -7282,117 +7398,85 @@ gl_FragColor=vec4(col,alpha);}`;
       this._switchProfile();
     });
 
-    // Change Access PIN:
-    container.querySelector('#btn-dropdown-change-access-pin')?.addEventListener('click', async (e) => {
+    // Redirect Access PIN change:
+    container.querySelector('#btn-dropdown-change-access-pin')?.addEventListener('click', (e) => {
       e.stopPropagation();
       dropdown.style.display = 'none';
-      const newPin = await this._showArgusInputModal({
-        title: `Actualizar PIN de Acceso`,
-        label: `Introduce el nuevo PIN numérico de acceso para el perfil ${prof.name}`,
-        placeholder: '••••',
-        type: 'password',
-        numeric: true,
-      });
-      if (newPin === null) return;
-      try {
-        await this._send('argus/save_user_access_pin', { argus_user_id: prof.id, pin: newPin.trim() });
-        this._showArgusConfirmModal('PIN de acceso actualizado con éxito.', { confirmLabel: 'Aceptar' });
-        this._load();
-      } catch (err) {
-        this._showArgusConfirmModal(err.message || 'Error', { confirmLabel: 'Aceptar' });
-      }
-    });
-
-    // Remove Access PIN:
-    container.querySelector('#btn-dropdown-remove-access-pin')?.addEventListener('click', async (e) => {
-      e.stopPropagation();
-      dropdown.style.display = 'none';
-      const confirm = await this._showArgusConfirmModal(`¿Estás seguro de que quieres quitar el PIN de acceso para tu perfil? Cualquiera podrá ingresar a tu perfil sin contraseña.`, { confirmLabel: 'Quitar', cancelLabel: 'Cancelar' });
-      if (!confirm) return;
-      try {
-        await this._send('argus/save_user_access_pin', { argus_user_id: prof.id, pin: '' });
-        this._showArgusConfirmModal('PIN de acceso removido con éxito.', { confirmLabel: 'Aceptar' });
-        this._load();
-      } catch (err) {
-        this._showArgusConfirmModal(err.message || 'Error', { confirmLabel: 'Aceptar' });
-      }
-    });
-
-    // Change Master PIN:
-    container.querySelector('#btn-dropdown-change-master-pin')?.addEventListener('click', async (e) => {
-      e.stopPropagation();
-      dropdown.style.display = 'none';
-      const pinConfigured = this._dashboard?.entries?.[0]?.pin_configured === true;
-      let currentPin = '';
-      if (pinConfigured) {
-        currentPin = await this._showArgusInputModal({
-          title: `Actualizar PIN Maestro`,
-          label: `Introduce el PIN Maestro actual para continuar:`,
-          placeholder: '••••',
-          type: 'password',
-          numeric: true,
+      const target = this.shadowRoot.getElementById('w-access');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.style.transition = 'box-shadow 0.5s ease-in-out';
+        target.style.boxShadow = '0 0 30px rgba(0, 122, 255, 0.6)';
+        setTimeout(() => { target.style.boxShadow = ''; }, 1500);
+        
+        // Find and highlight active user card:
+        const userCards = this.shadowRoot.querySelectorAll('#users-list .user-card');
+        userCards.forEach(card => {
+          if (card.textContent.includes(prof.name)) {
+            card.style.transition = 'background-color 0.5s ease';
+            card.style.backgroundColor = 'rgba(0, 122, 255, 0.15)';
+            setTimeout(() => { card.style.backgroundColor = ''; }, 2000);
+            const pinBtn = card.querySelector('[data-user-pin]');
+            if (pinBtn) pinBtn.focus();
+          }
         });
-        if (currentPin === null) return;
-      }
-
-      const p1 = await this._showArgusInputModal({
-        title: `Actualizar PIN Maestro`,
-        label: `Introduce tu nuevo PIN Maestro (se usa para armar y desarmar la alarma):`,
-        placeholder: '••••',
-        type: 'password',
-        numeric: true,
-      });
-      if (p1 === null) return;
-
-      const p2 = await this._showArgusInputModal({
-        title: `Actualizar PIN Maestro`,
-        label: `Confirma tu nuevo PIN Maestro:`,
-        placeholder: '••••',
-        type: 'password',
-        numeric: true,
-      });
-      if (p2 === null) return;
-
-      if (p1 !== p2) {
-        this._showArgusConfirmModal('Los PINs introducidos no coinciden.', { confirmLabel: 'Aceptar' });
-        return;
-      }
-
-      try {
-        await this._send('argus/update_master_pin', { pin: p1.trim(), current_pin: currentPin.trim() });
-        if (this._dashboard?.entries?.[0]) this._dashboard.entries[0].pin_configured = Boolean(p1);
-        this._showArgusConfirmModal('PIN Maestro actualizado con éxito.', { confirmLabel: 'Aceptar' });
-        this._load();
-      } catch (err) {
-        this._showArgusConfirmModal(err.message || 'Error', { confirmLabel: 'Aceptar' });
       }
     });
 
-    // Remove Master PIN:
-    container.querySelector('#btn-dropdown-remove-master-pin')?.addEventListener('click', async (e) => {
+    // Redirect Access PIN remove:
+    container.querySelector('#btn-dropdown-remove-access-pin')?.addEventListener('click', (e) => {
       e.stopPropagation();
       dropdown.style.display = 'none';
-      const pinConfigured = this._dashboard?.entries?.[0]?.pin_configured === true;
-      if (!pinConfigured) {
-        this._showArgusConfirmModal('No hay un PIN Maestro configurado.', { confirmLabel: 'Aceptar' });
-        return;
+      const target = this.shadowRoot.getElementById('w-access');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.style.transition = 'box-shadow 0.5s ease-in-out';
+        target.style.boxShadow = '0 0 30px rgba(0, 122, 255, 0.6)';
+        setTimeout(() => { target.style.boxShadow = ''; }, 1500);
+        
+        // Find and highlight active user card:
+        const userCards = this.shadowRoot.querySelectorAll('#users-list .user-card');
+        userCards.forEach(card => {
+          if (card.textContent.includes(prof.name)) {
+            card.style.transition = 'background-color 0.5s ease';
+            card.style.backgroundColor = 'rgba(255, 69, 58, 0.15)';
+            setTimeout(() => { card.style.backgroundColor = ''; }, 2000);
+            const pinBtn = card.querySelector('[data-user-pin]');
+            if (pinBtn) pinBtn.focus();
+          }
+        });
       }
-      const currentPin = await this._showArgusInputModal({
-        title: `Remover PIN Maestro`,
-        label: `Introduce el PIN Maestro actual para confirmar la remoción:`,
-        placeholder: '••••',
-        type: 'password',
-        numeric: true,
-      });
-      if (currentPin === null) return;
+    });
 
-      try {
-        await this._send('argus/update_master_pin', { pin: '', current_pin: currentPin.trim() });
-        if (this._dashboard?.entries?.[0]) this._dashboard.entries[0].pin_configured = false;
-        this._showArgusConfirmModal('PIN Maestro removido con éxito.', { confirmLabel: 'Aceptar' });
-        this._load();
-      } catch (err) {
-        this._showArgusConfirmModal(err.message || 'Error', { confirmLabel: 'Aceptar' });
+    // Redirect Master PIN change:
+    container.querySelector('#btn-dropdown-change-master-pin')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdown.style.display = 'none';
+      const target = this.shadowRoot.getElementById('w-access');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.style.transition = 'box-shadow 0.5s ease-in-out';
+        target.style.boxShadow = '0 0 30px rgba(255, 179, 0, 0.6)';
+        setTimeout(() => { target.style.boxShadow = ''; }, 1500);
+        
+        const pinInput = this.shadowRoot.getElementById('new-pin-1');
+        if (pinInput) pinInput.focus();
+      }
+    });
+
+    // Redirect Master PIN remove:
+    container.querySelector('#btn-dropdown-remove-master-pin')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdown.style.display = 'none';
+      const target = this.shadowRoot.getElementById('w-access');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.style.transition = 'box-shadow 0.5s ease-in-out';
+        target.style.boxShadow = '0 0 30px rgba(255, 179, 0, 0.6)';
+        setTimeout(() => { target.style.boxShadow = ''; }, 1500);
+        
+        const pinInput = this.shadowRoot.getElementById('current-pin');
+        if (pinInput) pinInput.focus();
       }
     });
   }

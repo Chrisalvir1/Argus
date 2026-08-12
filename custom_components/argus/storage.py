@@ -280,6 +280,8 @@ def _sanitize_users(users: object) -> list[dict]:
             "arm": bool(perms.get("arm", False)),
             "disarm": bool(perms.get("disarm", False)),
             "sos": bool(perms.get("sos", False)),
+            "change_pin": bool(perms.get("change_pin", False)),
+            "change_master_pin": bool(perms.get("change_master_pin", False)),
         }
 
         # Validate/Hash alarm pin
