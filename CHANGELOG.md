@@ -2,6 +2,15 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.71] - 2026-08-12
+
+### Added
+- Implementado el nuevo flujo de bienvenida con animación de resorte estilo iOS: al iniciar sesión o cargar la página, se muestra primero una tarjeta de bienvenida que rebota suavemente. Luego, la foto de perfil y el nombre vuelan en una transición de resorte fluida directamente hacia su destino en la barra superior.
+- Creado un widget/píldora de perfil activo en Liquid Glass en la barra superior (`hero`).
+- Añadido un atajo intuitivo: al hacer clic en el distintivo de perfil de la barra superior, se abre instantáneamente la pantalla de selección de perfiles para cambiar de usuario de forma rápida y sencilla.
+
+### Fixed
+- Reubicada y optimizada la información de la barra superior (`hero`) para calzar perfectamente con el nuevo distintivo de perfil adaptativo en pantallas móviles y de escritorio.
 ## [2.0.70] - 2026-08-12
 
 ### Fixed

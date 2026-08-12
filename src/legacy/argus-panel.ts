@@ -2496,6 +2496,7 @@ _tmpl.innerHTML = `
         <p id="p-hero-desc"></p>
       </div>
     </div>
+    <div id="hero-profile-container"></div>
     <div class="hero-context" aria-live="polite">
       <div class="hero-clock"><strong id="hero-clock-time">--:--</strong><span id="hero-clock-date"></span></div>
       <div class="hero-pills">
@@ -4003,9 +4004,16 @@ class ArgusPanel extends HTMLElement {
 
     this._dashboard = dashboard;
     this._loadState = 'dashboard';
-    const bootstrapOverlay = this.shadowRoot.getElementById('bootstrap-overlay');
-    if (bootstrapOverlay) bootstrapOverlay.style.display = 'none';
     this._currentProfile = dashboard.current_profile || null;
+    this._updateHeroProfileDisplay();
+    const bootstrapOverlay = this.shadowRoot.getElementById('bootstrap-overlay');
+    if (bootstrapOverlay) {
+      if (this._currentProfile && !this._welcomeShownThisMount) {
+        bootstrapOverlay.style.display = 'flex';
+      } else {
+        bootstrapOverlay.style.display = 'none';
+      }
+    }
     this._available = dashboard.available_entities || [];
     this._ui = dashboard.ui || { modes: {}, dashboard: {} };
     await this._loadActivityTimeline(dashboard.entry_id);
@@ -7163,27 +7171,177 @@ gl_FragColor=vec4(col,alpha);}`;
   _showProfileWelcome() {
     if (this._welcomeShownThisMount || !this._currentProfile?.name) return;
     this._welcomeShownThisMount = true;
-    const overlay = this.shadowRoot.getElementById('bootstrap-overlay');
-    const message = this._format('welcome_profile', {
-      name: this._currentProfile.name,
-    });
-    overlay.style.display = 'flex';
-    overlay.innerHTML = `
-      <div class="argus-bootstrap-card liquid-glass" style="animation:cardSlideFadeIn .45s ease">
-        <img src="/api/argus_static/argus_logo.png" alt="Argus"
-             style="height:72px;border-radius:18px;margin-bottom:16px">
-        <h1>${this._escapeHtml(message)}</h1>
-        <p style="margin-bottom:0">Argus Home Hub</p>
+    this._triggerWelcomeSpringAnimation(this._currentProfile);
+  }
+
+  _updateHeroProfileDisplay() {
+    const container = this.shadowRoot.getElementById('hero-profile-container');
+    if (!container) return;
+    const prof = this._currentProfile;
+    if (!prof) {
+      container.style.display = 'none';
+      container.innerHTML = '';
+      return;
+    }
+    container.style.display = 'flex';
+    const avatarHtml = prof.picture
+      ? `<img id="hero-profile-avatar" src="${this._escapeHtml(prof.picture)}" alt="${this._escapeHtml(prof.name)}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.20); box-shadow: 0 3px 8px rgba(0,0,0,0.2); flex-shrink: 0;" />`
+      : `<div id="hero-profile-avatar" class="user-avatar" style="width: 38px; height: 38px; border-radius: 50%; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.15); flex-shrink: 0;">${this._escapeHtml(prof.name.substring(0, 2).toUpperCase())}</div>`;
+      
+    container.innerHTML = `
+      <div class="hero-profile-pill glass liquid-glass" style="display: flex; align-items: center; gap: 10px; padding: 6px 14px 6px 8px; border-radius: 999px;">
+        ${avatarHtml}
+        <span id="hero-profile-name" style="font-size: 13px; font-weight: 800; color: var(--v2066-text, #f7f9ff); max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${this._escapeHtml(prof.name)}</span>
       </div>
     `;
-    clearTimeout(this._welcomeTimer);
-    this._welcomeTimer = setTimeout(() => {
-      overlay.style.opacity = '0';
+
+    // Clicking the profile pill lets the user switch users quickly!
+    const pill = container.querySelector('.hero-profile-pill');
+    if (pill) {
+      pill.addEventListener('click', () => {
+        this._switchProfile();
+      });
+    }
+  }
+
+  async _switchProfile() {
+    let bootstrap;
+    try {
+      bootstrap = await this._send('argus/bootstrap');
+      this._welcomeShownThisMount = false;
+      this._renderLoginScreen(bootstrap);
+    } catch (e) {
+      console.error('Switch profile bootstrap failed:', e);
+    }
+  }
+
+  _triggerWelcomeSpringAnimation(prof) {
+    const overlay = this.shadowRoot.getElementById('bootstrap-overlay');
+    if (!overlay) return;
+
+    const avatarHtml = prof.picture
+      ? `<img id="welcome-avatar-flying" src="${this._escapeHtml(prof.picture)}" alt="${this._escapeHtml(prof.name)}" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 2.5px solid rgba(255,255,255,0.25); box-shadow: 0 10px 30px rgba(0,0,0,0.35); flex-shrink: 0; transform-origin: center;" />`
+      : `<div id="welcome-avatar-flying" class="user-avatar" style="width: 90px; height: 90px; border-radius: 50%; font-size: 26px; font-weight: 800; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.12); border: 2.5px solid rgba(255,255,255,0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.35); flex-shrink: 0; transform-origin: center;">${this._escapeHtml(prof.name.substring(0, 2).toUpperCase())}</div>`;
+
+    const welcomeMsg = this._format('welcome_profile', { name: prof.name });
+
+    overlay.style.display = 'flex';
+    overlay.innerHTML = `
+      <div id="welcome-card" class="argus-bootstrap-card liquid-glass" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px; max-width: 440px; width: 90vw; animation: springBounceIn 0.6s cubic-bezier(0.25, 1.45, 0.35, 1) both;">
+        <div style="margin-bottom: 24px; position: relative;">
+          ${avatarHtml}
+        </div>
+        <h1 id="welcome-name-flying" style="margin: 0 0 8px 0; font-size: 1.8rem; font-weight: 900; color: #fff; letter-spacing: -0.02em; transform-origin: center;">${this._escapeHtml(welcomeMsg)}</h1>
+        <p style="margin: 0; font-size: 0.95rem; opacity: 0.65;">Argus Home Hub</p>
+      </div>
+    `;
+
+    this._updateHeroProfileDisplay();
+    
+    const destAvatar = this.shadowRoot.getElementById('hero-profile-avatar');
+    const destName = this.shadowRoot.getElementById('hero-profile-name');
+    const destPill = this.shadowRoot.querySelector('.hero-profile-pill');
+
+    if (destPill) destPill.style.opacity = '0';
+
+    setTimeout(() => {
+      const srcAvatarEl = this.shadowRoot.getElementById('welcome-avatar-flying');
+      const srcNameEl = this.shadowRoot.getElementById('welcome-name-flying');
+      const welcomeCard = this.shadowRoot.getElementById('welcome-card');
+
+      if (!srcAvatarEl || !srcNameEl || !destAvatar || !destName) {
+        overlay.style.transition = 'opacity 0.4s ease';
+        overlay.style.opacity = '0';
+        setTimeout(() => {
+          overlay.style.display = 'none';
+          overlay.style.opacity = '';
+          if (destPill) destPill.style.opacity = '1';
+        }, 400);
+        return;
+      }
+
+      const srcAvatarRect = srcAvatarEl.getBoundingClientRect();
+      const srcNameRect = srcNameEl.getBoundingClientRect();
+
+      welcomeCard.style.transition = 'opacity 0.3s ease';
+      welcomeCard.style.opacity = '0';
+
+      if (destPill) destPill.style.opacity = '0.001';
+      const destAvatarRect = destAvatar.getBoundingClientRect();
+      const destNameRect = destName.getBoundingClientRect();
+
+      const flyAvatar = srcAvatarEl.cloneNode(true);
+      const flyName = srcNameEl.cloneNode(true);
+
+      flyAvatar.id = 'fly-avatar';
+      flyName.id = 'fly-name';
+
+      Object.assign(flyAvatar.style, {
+        position: 'fixed',
+        left: `${srcAvatarRect.left}px`,
+        top: `${srcAvatarRect.top}px`,
+        width: `${srcAvatarRect.width}px`,
+        height: `${srcAvatarRect.height}px`,
+        margin: '0',
+        zIndex: '10000',
+        pointerEvents: 'none',
+        transformOrigin: 'top left',
+        transition: 'transform 0.75s cubic-bezier(0.25, 1.45, 0.35, 1), opacity 0.5s ease-out'
+      });
+
+      Object.assign(flyName.style, {
+        position: 'fixed',
+        left: `${srcNameRect.left}px`,
+        top: `${srcNameRect.top}px`,
+        width: `${srcNameRect.width}px`,
+        margin: '0',
+        zIndex: '10000',
+        pointerEvents: 'none',
+        transformOrigin: 'top left',
+        textAlign: 'center',
+        whiteSpace: 'nowrap',
+        transition: 'transform 0.75s cubic-bezier(0.25, 1.45, 0.35, 1), opacity 0.5s ease-out'
+      });
+
+      overlay.appendChild(flyAvatar);
+      overlay.appendChild(flyName);
+
+      flyAvatar.offsetHeight;
+      flyName.offsetHeight;
+
+      const avatarScale = destAvatarRect.width / srcAvatarRect.width;
+      const avatarTx = destAvatarRect.left - srcAvatarRect.left;
+      const avatarTy = destAvatarRect.top - srcAvatarRect.top;
+
+      const nameScale = 13 / parseFloat(window.getComputedStyle(srcNameEl).fontSize);
+      const nameTx = destNameRect.left - srcNameRect.left;
+      const nameTy = destNameRect.top - srcNameRect.top;
+
+      flyAvatar.style.transform = `translate(${avatarTx}px, ${avatarTy}px) scale(${avatarScale})`;
+      flyAvatar.style.borderWidth = '1.5px';
+
+      flyName.style.transform = `translate(${nameTx}px, ${nameTy}px) scale(${nameScale})`;
+      flyName.style.fontWeight = '800';
+
+      overlay.style.transition = 'background-color 0.75s ease, backdrop-filter 0.75s ease, -webkit-backdrop-filter 0.75s ease';
+      overlay.style.backgroundColor = 'transparent';
+      overlay.style.backdropFilter = 'none';
+      overlay.style.webkitBackdropFilter = 'none';
+
       setTimeout(() => {
+        flyAvatar.remove();
+        flyName.remove();
         overlay.style.display = 'none';
-        overlay.style.opacity = '';
-      }, 300);
-    }, 1200);
+        overlay.style.backgroundColor = '';
+        overlay.style.backdropFilter = '';
+        overlay.style.webkitBackdropFilter = '';
+        if (destPill) {
+          destPill.style.transition = 'opacity 0.25s ease';
+          destPill.style.opacity = '1';
+        }
+      }, 750);
+
+    }, 1400);
   }
 
   _renderFirstRunScreen() {
@@ -7546,7 +7704,6 @@ gl_FragColor=vec4(col,alpha);}`;
           } else {
             try {
               await this._send('argus/select_profile', { argus_user_id: userId });
-              overlay.style.display = 'none';
               this._profileSelectedThisMount = true;
               this._load();
             } catch (err) {
@@ -7579,7 +7736,6 @@ gl_FragColor=vec4(col,alpha);}`;
       if (pinError) pinError.textContent = '';
       try {
         await this._send('argus/verify_access_pin', { argus_user_id: selectedUserId, pin: pinInput.value });
-        overlay.style.display = 'none';
         this._profileSelectedThisMount = true;
         this._load();
       } catch (err) {
