@@ -2,6 +2,20 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.79] - 2026-08-12
+
+### Fixed
+- Triple tap en móvil: añadido touch-action: manipulation para eliminar el delay de 300ms de iOS.
+- Layout móvil portrait: grid de perfiles responde con columna única en pantallas estrechas (<480px portrait).
+- Nombre en bienvenida: usa display_name de Argus con fallback al nombre de HA.
+- Foto de perfil unificada: selector de perfiles y top bar comparten la misma fuente (u.picture del bootstrap).
+- Eliminado el overlay de bienvenida antiguo (_showProfileWelcome/_triggerWelcomeSpringAnimation).
+- Animación de bienvenida: el avatar vuela al top bar derecho (no a la izquierda).
+
+### Added
+- Modal de cambio de imagen: al tocar "Cambiar imagen" en el dropdown del perfil, se abre un picker con fotos de personas de HA.
+- Integración con personas de HA: lee entity_picture de los estados de las entidades person.* de Home Assistant.
+
 ## [2.0.78] - 2026-08-12
 
 ### Changed

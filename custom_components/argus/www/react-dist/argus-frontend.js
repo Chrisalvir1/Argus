@@ -189,6 +189,7 @@ const Bo = [
     bg_panel_selected_from_history: "Fondo de panel seleccionado desde historial.",
     bg_hub_selected_from_history: "Fondo Argus seleccionado desde historial.",
     error_loading_uploaded_files: "Error al cargar historial de archivos.",
+    welcome_greeting: "Bienvenido/a,",
     select_profile_title: "Selecciona tu perfil",
     select_profile_subtitle: "Accede a tus paneles e instancias de seguridad de Argus.",
     exit_to_ha: "Volver a Home Assistant",
@@ -416,6 +417,7 @@ const Bo = [
     bg_panel_selected_from_history: "Panel background selected from history.",
     bg_hub_selected_from_history: "Argus background selected from history.",
     error_loading_uploaded_files: "Error loading file history.",
+    welcome_greeting: "Welcome,",
     select_profile_title: "Select Your Profile",
     select_profile_subtitle: "Access your security panels and Argus instances.",
     exit_to_ha: "Back to Home Assistant",
@@ -637,6 +639,7 @@ const Bo = [
     bg_panel_selected_from_history: "Arrière-plan du panneau sélectionné depuis l'historique.",
     bg_hub_selected_from_history: "Arrière-plan Argus sélectionné depuis l'historique.",
     error_loading_uploaded_files: "Erreur lors du chargement de l'historique des fichiers.",
+    welcome_greeting: "Bienvenue,",
     select_profile_title: "Sélectionnez votre profil",
     select_profile_subtitle: "Accédez à vos panneaux de sécurité et instances Argus.",
     exit_to_ha: "Retour à Home Assistant",
@@ -858,6 +861,7 @@ const Bo = [
     bg_panel_selected_from_history: "Plano de fundo do painel selecionado a partir do histórico.",
     bg_hub_selected_from_history: "Plano de fundo do Argus selecionado a partir do histórico.",
     error_loading_uploaded_files: "Erro ao carregar o histórico de arquivos.",
+    welcome_greeting: "Bem-vindo/a,",
     select_profile_title: "Selecione o seu perfil",
     select_profile_subtitle: "Acesse seus painéis de segurança e instâncias Argus.",
     exit_to_ha: "Voltar ao Home Assistant",
@@ -3133,7 +3137,7 @@ Sp.innerHTML = `
 /* Grid de perfiles */
 .argus-profile-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   gap: 28px 24px;
   max-width: 520px;
   width: 100%;
@@ -3145,7 +3149,17 @@ Sp.innerHTML = `
 }
 
 /* Cada perfil */
+@media (max-width: 480px) and (orientation: portrait) {
+  .argus-profile-grid { 
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+  .argus-profile-item { width: 100%; }
+}
+
 .argus-profile-item {
+  touch-action: manipulation;
+  min-height: 44px;
   display: flex; flex-direction: column;
   align-items: center; gap: 10px;
   cursor: pointer;
@@ -4502,7 +4516,7 @@ class Kg extends HTMLElement {
     const c = this._users.find((j) => j.id === this._myUserId) || {};
     this._backgroundMode = c.background_mode || o.ui?.background_mode || "weather", this._backgroundImages = c.background_images || o.ui?.background_images || [], this._temperatureSource = o.ui?.temperature_source || "auto", this._weatherSource = o.ui?.weather_source || "auto", this._clockFormat = o.ui?.clock_format || "auto", this._panelBgFile = c.panel_bg_file !== void 0 ? c.panel_bg_file : o.ui?.panel_bg_file || "", this._panelBgSound = !!(c.panel_bg_sound !== void 0 ? c.panel_bg_sound : o.ui?.panel_bg_sound);
     const u = c.hub_bg_mode || o.ui?.hub_bg_mode || "none";
-    this._hubBgMode = u === "none" || u === "default" ? "default" : u, this._hubBgFile = c.hub_bg_file !== void 0 ? c.hub_bg_file : o.ui?.hub_bg_file || "", this._hubBgSound = !!(c.hub_bg_sound !== void 0 ? c.hub_bg_sound : o.ui?.hub_bg_sound), this._updateTheme(), this._updateHomeNameDisplay(), this._updateProfileBadge(), this._showProfileWelcome(), this._populateTemperatureSources();
+    this._hubBgMode = u === "none" || u === "default" ? "default" : u, this._hubBgFile = c.hub_bg_file !== void 0 ? c.hub_bg_file : o.ui?.hub_bg_file || "", this._hubBgSound = !!(c.hub_bg_sound !== void 0 ? c.hub_bg_sound : o.ui?.hub_bg_sound), this._updateTheme(), this._updateHomeNameDisplay(), this._updateProfileBadge(), this._populateTemperatureSources();
     const p = this.shadowRoot.getElementById("temp-source-select-standalone");
     p && (p.value = this._temperatureSource || "auto", p.dataset.bound || (p.dataset.bound = "1", p.addEventListener("change", () => this._savePersonalization()))), this._populateWeatherSources();
     const g = this.shadowRoot.getElementById("weather-source-select");
@@ -6580,9 +6594,6 @@ ${i}`);
       history.pushState(null, "", "/config/integrations/integration/argus"), window.dispatchEvent(new CustomEvent("location-changed"));
     });
   }
-  _showProfileWelcome() {
-    this._welcomeShownThisMount || !this._currentProfile?.name || (this._welcomeShownThisMount = !0, this._triggerWelcomeSpringAnimation(this._currentProfile));
-  }
   _updateHeroProfileDisplay() {
     const r = this.shadowRoot.getElementById("hero-profile-container");
     if (!r) return;
@@ -6610,9 +6621,9 @@ ${i}`);
           <div style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0; align-items: flex-start;">
             <span style="font-size: 9.5px; opacity: 0.5; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em;">${this._t("profile_is_yours") || "Perfil Activo"}</span>
             <span style="font-size: 14px; font-weight: 850; color: var(--v2066-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; text-align: left;">${this._escapeHtml(i.name)}</span>
-            <a href="/profile" style="font-size: 10.5px; font-weight: 700; color: #30d158; text-decoration: none; display: flex; align-items: center; gap: 3px; margin-top: 3px;" target="_blank">
-              📸 ${this._t("change_profile_picture") || "Cambiar imagen"} ↗
-            </a>
+            <button id="btn-change-profile-picture" style="font-size: 10.5px; font-weight: 700; color: #30d158; text-decoration: none; display: flex; align-items: center; gap: 3px; margin-top: 3px; background: none; border: none; padding: 0; cursor: pointer;">
+              📸 ${this._t("change_profile_picture") || "Cambiar imagen"}
+            </button>
           </div>
           <span class="user-badge ${i.role === "admin" ? "admin" : "user"}" style="font-size: 8.5px; padding: 3px 8px; font-weight: 800; border-radius: 6px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.03em;">${i.role === "admin" ? "Admin" : "Estándar"}</span>
         </div>
@@ -6677,6 +6688,8 @@ ${i}`);
     const _ = r.querySelector("#dropdown-lang-select");
     _ && _.addEventListener("change", (h) => {
       this._setLanguage(h.target.value);
+    }), r.querySelector("#btn-change-profile-picture")?.addEventListener("click", (h) => {
+      h.stopPropagation(), g.style.display = "none", this._showChangePictureModal();
     }), r.querySelector("#btn-dropdown-switch-user")?.addEventListener("click", (h) => {
       h.stopPropagation(), this._switchProfile();
     }), r.querySelector("#btn-dropdown-change-access-pin")?.addEventListener("click", (h) => {
@@ -6737,60 +6750,83 @@ ${i}`);
       console.error("Switch profile bootstrap failed:", i);
     }
   }
-  _triggerWelcomeSpringAnimation(r) {
-    const i = this.shadowRoot.getElementById("bootstrap-overlay");
-    if (!i) return;
-    const o = r.picture ? `<img id="welcome-avatar-flying" src="${this._escapeHtml(r.picture)}" alt="${this._escapeHtml(r.name)}" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 2.5px solid rgba(255,255,255,0.25); box-shadow: 0 10px 30px rgba(0,0,0,0.35); flex-shrink: 0; transform-origin: center;" />` : `<div id="welcome-avatar-flying" class="user-avatar" style="width: 90px; height: 90px; border-radius: 50%; font-size: 26px; font-weight: 800; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.12); border: 2.5px solid rgba(255,255,255,0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.35); flex-shrink: 0; transform-origin: center;">${this._escapeHtml(r.name.substring(0, 2).toUpperCase())}</div>`, l = this._format("welcome_profile", { name: r.name });
-    i.style.display = "flex", i.innerHTML = `
-      <div id="welcome-card" class="argus-bootstrap-card liquid-glass" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px; max-width: 440px; width: 90vw; animation: springBounceIn 0.6s cubic-bezier(0.25, 1.45, 0.35, 1) both;">
-        <div style="margin-bottom: 24px; position: relative;">
-          ${o}
-        </div>
-        <h1 id="welcome-name-flying" style="margin: 0 0 8px 0; font-size: 1.8rem; font-weight: 900; color: #fff; letter-spacing: -0.02em; transform-origin: center;">${this._escapeHtml(l)}</h1>
-        <p style="margin: 0; font-size: 0.95rem; opacity: 0.65;">Argus Home Hub</p>
+  async _showChangePictureModal() {
+    let r = [];
+    try {
+      r = ((await this._send("argus/get_ha_persons", {}))?.ha_persons ?? []).filter((p) => p.entity_id).map((p) => {
+        const g = this._hass?.states?.[p.entity_id];
+        return {
+          name: p.name || p.entity_id,
+          url: g?.attributes?.entity_picture || null
+        };
+      }).filter((p) => p.url);
+    } catch {
+    }
+    const i = document.createElement("div");
+    i.style.cssText = `
+      position: fixed; inset: 0; z-index: 10100;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: flex; align-items: center; justify-content: center;
+    `;
+    const o = r.map((c, u) => `
+      <div data-pic-url="${this._escapeHtml(c.url)}" data-pic-idx="${u}"
+           style="display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; padding:10px; border-radius:12px; border:2px solid transparent; transition:border-color 0.15s;"
+           class="ha-pic-option">
+        <img src="${this._escapeHtml(c.url)}" alt="${this._escapeHtml(c.name)}"
+             style="width:64px; height:64px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,0.15); box-shadow:0 4px 14px rgba(0,0,0,0.3);" />
+        <span style="font-size:10px; font-weight:700; color:rgba(255,255,255,0.7); max-width:72px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${this._escapeHtml(c.name)}</span>
       </div>
-    `, this._updateHeroProfileDisplay();
-    const c = this.shadowRoot.getElementById("hero-profile-avatar"), u = this.shadowRoot.getElementById("hero-profile-name"), p = this.shadowRoot.querySelector(".hero-profile-pill");
-    p && (p.style.opacity = "0"), setTimeout(() => {
-      const g = this.shadowRoot.getElementById("welcome-avatar-flying"), _ = this.shadowRoot.getElementById("welcome-name-flying"), h = this.shadowRoot.getElementById("welcome-card");
-      if (!g || !_ || !c || !u) {
-        i.style.transition = "opacity 0.4s ease", i.style.opacity = "0", setTimeout(() => {
-          i.style.display = "none", i.style.opacity = "", p && (p.style.opacity = "1");
-        }, 400);
-        return;
-      }
-      const f = g.getBoundingClientRect(), x = _.getBoundingClientRect();
-      h.style.transition = "opacity 0.3s ease", h.style.opacity = "0", p && (p.style.opacity = "0.001");
-      const C = c.getBoundingClientRect(), I = u.getBoundingClientRect(), R = g.cloneNode(!0), E = _.cloneNode(!0);
-      R.id = "fly-avatar", E.id = "fly-name", Object.assign(R.style, {
-        position: "fixed",
-        left: `${f.left}px`,
-        top: `${f.top}px`,
-        width: `${f.width}px`,
-        height: `${f.height}px`,
-        margin: "0",
-        zIndex: "10000",
-        pointerEvents: "none",
-        transformOrigin: "top left",
-        transition: "transform 0.45s cubic-bezier(0.25, 1.45, 0.35, 1), opacity 0.35s ease-out"
-      }), Object.assign(E.style, {
-        position: "fixed",
-        left: `${x.left}px`,
-        top: `${x.top}px`,
-        width: `${x.width}px`,
-        margin: "0",
-        zIndex: "10000",
-        pointerEvents: "none",
-        transformOrigin: "top left",
-        textAlign: "center",
-        whiteSpace: "nowrap",
-        transition: "transform 0.45s cubic-bezier(0.25, 1.45, 0.35, 1), opacity 0.35s ease-out"
-      }), i.appendChild(R), i.appendChild(E), R.offsetHeight, E.offsetHeight;
-      const S = C.width / f.width, b = C.left - f.left, w = C.top - f.top, y = 13 / parseFloat(window.getComputedStyle(_).fontSize), k = I.left - x.left, A = I.top - x.top;
-      R.style.transform = `translate(${b}px, ${w}px) scale(${S})`, R.style.borderWidth = "1.5px", E.style.transform = `translate(${k}px, ${A}px) scale(${y})`, E.style.fontWeight = "800", i.style.transition = "background-color 0.45s ease, backdrop-filter 0.45s ease, -webkit-backdrop-filter 0.45s ease", i.style.backgroundColor = "transparent", i.style.backdropFilter = "none", i.style.webkitBackdropFilter = "none", setTimeout(() => {
-        R.remove(), E.remove(), i.style.display = "none", i.style.backgroundColor = "", i.style.backdropFilter = "", i.style.webkitBackdropFilter = "", p && (p.style.transition = "opacity 0.25s ease", p.style.opacity = "1");
-      }, 450);
-    }, 650);
+    `).join("");
+    i.innerHTML = `
+      <div style="background:rgba(30,32,48,0.97); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:24px; width:min(380px,90vw); color:#fff;">
+        <h3 style="margin:0 0 4px; font-size:1.05rem; font-weight:800;">📸 Cambiar imagen de perfil</h3>
+        <p style="margin:0 0 16px; font-size:0.78rem; color:rgba(255,255,255,0.5);">Elige una foto de tus personas de HA o dirígete al perfil de HA para subir una nueva.</p>
+
+        ${r.length ? `
+          <div style="font-size:11px; font-weight:700; opacity:0.6; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:10px;">Personas de Home Assistant</div>
+          <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
+            ${o}
+          </div>
+        ` : `
+          <p style="font-size:12px; color:rgba(255,255,255,0.45); margin-bottom:16px;">No se encontraron personas con foto en HA. Abre HA para añadir una imagen a tu persona.</p>
+        `}
+
+        <div style="display:flex; gap:8px;">
+          <a href="/config/profile" target="_top"
+             style="flex:1; padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.07); color:#fff; font-size:12px; font-weight:700; text-decoration:none; text-align:center;">
+            Ir al Perfil HA ↗
+          </a>
+          <button id="modal-pic-cancel"
+                  style="flex:1; padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.6); font-size:12px; font-weight:700; cursor:pointer;">
+            Cancelar
+          </button>
+        </div>
+
+        <div id="pic-save-status" style="font-size:12px; margin-top:10px; min-height:16px; text-align:center;"></div>
+      </div>
+    `, this.shadowRoot.appendChild(i);
+    const l = i.querySelector("#pic-save-status");
+    i.querySelectorAll(".ha-pic-option").forEach((c) => {
+      c.addEventListener("mouseenter", () => c.style.borderColor = "rgba(255,255,255,0.4)"), c.addEventListener("mouseleave", () => c.style.borderColor = "transparent"), c.addEventListener("click", async () => {
+        const u = c.getAttribute("data-pic-url");
+        if (u) {
+          l.textContent = "⏳ Guardando...";
+          try {
+            await this._send("argus/save_ui", {
+              profile_picture: u
+            }), l.style.color = "#34c759", l.textContent = "✅ Imagen actualizada. Recarga para verla.", setTimeout(() => {
+              i.remove(), this._updateHeroProfileDisplay(), this._updateProfileBadge();
+            }, 1200);
+          } catch (p) {
+            l.style.color = "#ff453a", l.textContent = "❌ " + (p.message || "Error al guardar");
+          }
+        }
+      });
+    }), i.querySelector("#modal-pic-cancel").addEventListener("click", () => i.remove()), i.addEventListener("click", (c) => {
+      c.target === i && i.remove();
+    });
   }
   _renderFirstRunScreen() {
     const r = this.shadowRoot.getElementById("bootstrap-overlay");
@@ -6957,6 +6993,11 @@ ${i}`);
       o = this._config?.profiles ?? r?.users ?? [];
     }
     if (!o.length) return;
+    o = o.map((f) => ({
+      ...f,
+      display_name: f.display_name || f.name,
+      picture: f.picture || null
+    }));
     const l = this.shadowRoot.getElementById("bootstrap-overlay");
     l && (l.style.display = "none");
     const c = document.createElement("div");
@@ -7091,13 +7132,13 @@ ${i}`);
         ${o}
       </div>
       <div class="argus-welcome-text" id="welcome-text-anim">
-        <p class="greeting">${this._escapeHtml(this._t("welcome_profile") || "Bienvenido")}</p>
-        <h1 class="wname">${this._escapeHtml(r.name)}</h1>
+        <p class="greeting">${this._escapeHtml(this._t("welcome_greeting") || "Bienvenido,")}</p>
+        <h1 class="wname">${this._escapeHtml(r.display_name || r.name)}</h1>
       </div>
     `, this.shadowRoot.appendChild(i);
     const l = i.querySelector("#welcome-avatar-flying"), c = i.querySelector("#welcome-text-anim");
     l.style.transform = "scale(0.8)", l.style.opacity = "0", c.style.opacity = "0", c.style.transform = "translateY(15px)", await new Promise((f) => requestAnimationFrame(f)), l.style.transition = "transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease", l.style.transform = "scale(1)", l.style.opacity = "1", c.style.transition = "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, opacity 0.5s ease 0.15s", c.style.transform = "translateY(0)", c.style.opacity = "1", await new Promise((f) => setTimeout(f, 1500)), c.style.transition = "opacity 0.3s ease", c.style.opacity = "0";
-    const u = l.getBoundingClientRect(), p = 30, g = 20, _ = p - u.left - u.width / 2 + 20, h = g - u.top - u.height / 2 + 20;
+    const u = l.getBoundingClientRect(), p = window.innerWidth - 60, g = 20, _ = p - u.left - u.width / 2 + 20, h = g - u.top - u.height / 2 + 20;
     l.style.transition = "transform 0.5s cubic-bezier(0.5, 0, 0.2, 1), opacity 0.3s ease 0.2s", l.style.transform = `translate(${_}px, ${h}px) scale(0.3)`, i.style.transition = "background 0.5s ease, backdrop-filter 0.5s ease", i.style.background = "transparent", i.style.backdropFilter = "blur(0px)", await new Promise((f) => setTimeout(f, 500)), i.remove();
   }
   _initWidgetGrid() {

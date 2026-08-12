@@ -38,8 +38,9 @@ class TestV194PanelFlow(unittest.TestCase):
         self.assertIn(
             "this._currentProfile = dashboard.current_profile || null", self.panel
         )
-        self.assertIn("this._showProfileWelcome()", self.panel)
-        self.assertIn("welcome_profile", self.panel)
+        # Welcome animation is now handled by _runProfileWelcomeAnimation (tvOS style)
+        self.assertIn("_runProfileWelcomeAnimation", self.panel)
+        self.assertIn("welcome_greeting", self.panel)
 
     def test_standard_ha_users_can_open_panel(self) -> None:
         self.assertIn("require_admin=False", self.panel_registration)
