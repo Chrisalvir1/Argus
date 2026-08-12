@@ -360,21 +360,27 @@ if (!customElements.get('argus-weather-panel')) {
 // ==========================================
 
 function installStyles(panel){
+ const isNight = panel._hass?.states?.['sun.sun']?.state === 'below_horizon';
+ panel.classList.toggle('daytime-theme', !isNight);
  if(panel.shadowRoot?.getElementById('argus-v2066-style'))return;
  const s=document.createElement('style');s.id='argus-v2066-style';s.textContent=`
 :host{--v2066-glass:linear-gradient(135deg,color-mix(in srgb,var(--card-background-color,#101827) 34%,transparent),color-mix(in srgb,var(--card-background-color,#101827) 15%,transparent));--v2066-border:color-mix(in srgb,var(--primary-text-color,#fff) 22%,transparent);--v2066-text:var(--primary-text-color,#f7f9ff);--v2066-muted:var(--secondary-text-color,rgba(247,249,255,.72))}
+:host(.daytime-theme){--v2066-glass:linear-gradient(135deg,rgba(255,255,255,.3),rgba(255,255,255,.12));--v2066-border:rgba(0,0,0,.16);--v2066-text:#172033;--v2066-muted:#4c586d}
 :host *:not(.wx-webgl),:host *::before,:host *::after{animation:none!important;transition:none!important}
 .glass,.liquid-glass,.panel,.entry,.mode-section-card,.user-card,.file-card,.log-item,.personalize-section,.sos-configuration{background:var(--v2066-glass)!important;border:1px solid var(--v2066-border)!important;box-shadow:inset 0 1px 0 color-mix(in srgb,var(--primary-text-color,#fff) 16%,transparent),0 14px 38px rgba(0,0,0,.16)!important;backdrop-filter:blur(24px) saturate(145%)!important;-webkit-backdrop-filter:blur(24px) saturate(145%)!important;color:var(--v2066-text)!important}
 .panel h1,.panel h2,.panel h3,.panel h4,.panel-title,.section-title,.setting-label,.mode-section-title,.widget-title,.settings-section-title,.access-section-title{color:var(--v2066-text)!important;opacity:1!important;text-shadow:none!important}.panel p,.panel small,.hint,.muted,.setting-help,.mode-sensor-none{color:var(--v2066-muted)!important;opacity:1!important}
 button,input,select,textarea,.glass-control{color:var(--v2066-text)!important;-webkit-text-fill-color:var(--v2066-text)!important;background-color:color-mix(in srgb,var(--card-background-color,#101827) 38%,transparent)!important;border-color:var(--v2066-border)!important}button{min-height:44px;touch-action:manipulation}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#2783de) 76%,white)!important;outline-offset:2px!important}
+select option {background-color:#101827 !important;color:#f7f9ff !important;-webkit-text-fill-color:#f7f9ff !important;}
+:host(.daytime-theme) select option {background-color:#ffffff !important;color:#172033 !important;-webkit-text-fill-color:#172033 !important;}
 .wx-atmosphere{position:absolute;inset:0;overflow:hidden;isolation:isolate;}
 .wx-celestial,.wx-cloudfield,.wx-precip,.wx-starfield,.wx-lightning,.wx-fog-real,.wx-seasonal,.wx-horizon{display:none!important}
-@media(prefers-color-scheme:light){:host{--v2066-glass:linear-gradient(135deg,rgba(255,255,255,.56),rgba(255,255,255,.24));--v2066-border:rgba(255,255,255,.72);--v2066-text:var(--primary-text-color,#172033);--v2066-muted:var(--secondary-text-color,#4c586d)}}`;
+@media(prefers-color-scheme:light){:host:not(.daytime-theme){--v2066-glass:linear-gradient(135deg,rgba(255,255,255,.56),rgba(255,255,255,.24));--v2066-border:rgba(255,255,255,.72);--v2066-text:var(--primary-text-color,#172033);--v2066-muted:var(--secondary-text-color,#4c586d)}}`;
  panel.shadowRoot?.appendChild(s);
 }
 
 function openPanicSelector(panel){
  panel._selectorTarget='panic';panel._selected=Array.isArray(panel._panicOutputs)?[...panel._panicOutputs]:[];
+ if(typeof panel._openModal==='function'){panel._openModal('panic');return true;}
  if(typeof panel._openSelector==='function'){panel._openSelector('panic');return true;}
  if(typeof panel._openEntitySelector==='function'){panel._openEntitySelector('panic');return true;}
  return false;
@@ -404,6 +410,7 @@ export function applyV2066Webgl2AndUi(C){
  Object.defineProperty(p, 'hass', {
    set(hass) {
      if (origHass?.set) origHass.set.call(this, hass);
+     installStyles(this);
      const wp = this.shadowRoot?.querySelector('argus-weather-panel');
      if (wp) {
        wp.hass = hass;

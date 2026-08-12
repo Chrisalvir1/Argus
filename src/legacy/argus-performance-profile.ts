@@ -64,19 +64,7 @@ function updateBadge(panel){
   badge.innerHTML=`⚙️ <strong>${profileLabel}</strong>&nbsp;(${copy.auto})`;
   badge.title=copy.note;
 }
-function ensureField(panel){
-  const root=panel.shadowRoot,grid=root?.querySelector('.personalize-grid');if(!grid)return null;
-  let field=root.getElementById('argus-performance-field');
-  if(!field){
-    field=document.createElement('div');
-    field.id='argus-performance-field';
-    field.className='personalize-field pf-performance';
-    field.innerHTML='<span class="argus-perf-badge" id="argus-perf-badge" title=""></span>';
-    grid.appendChild(field);
-  }
-  updateBadge(panel);
-  return field;
-}
+function ensureField(panel){return null;}
 async function runDiagnostics(panel){
   const caps=detectCapabilities(),fps=await benchmark();
   panel._argusPerfCaps=caps;panel._argusPerfFps=fps;

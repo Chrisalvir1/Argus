@@ -2,6 +2,14 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.68] - 2026-08-12
+
+### Fixed
+- Corregida la legibilidad y contraste de textos adaptativamente: ahora los textos y etiquetas cambian a negro/gris oscuro bajo cielo diurno (claro) y se mantienen en blanco bajo cielo nocturno (oscuro).
+- Resuelto el solapamiento visual y doble renderizado del selector de formato de hora eliminando la inyección de control duplicada desde el script de legado.
+- Corregida la visibilidad de los elementos dentro de las opciones de selectores en navegadores WebKit/Blink forzando colores de fondo sólidos.
+- Reparado el botón de selección de accesorios SOS (Acciones de Pánico) permitiendo la apertura del modal selector de Home Assistant de manera exitosa.
+- Removido el indicador informativo del perfil de rendimiento ("Equilibrado / detectado automáticamente") a petición del usuario.
 ## [2.0.67] - 2026-08-12
 
 ### Refactor
