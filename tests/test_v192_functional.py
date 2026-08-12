@@ -65,6 +65,7 @@ class TestV192Functional(unittest.IsolatedAsyncioTestCase):
             "enabled": True,
             "permissions": {"view_status": True, "arm": True, "disarm": True},
             "shared_kiosk_profile": False,
+            "picture": "/path/to/pic.png",
             # Sensitive or unallowed fields:
             "ha_user_id": "ha_admin_123",
             "access_pin_hash": "scrypt:99999",
@@ -85,11 +86,10 @@ class TestV192Functional(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(redacted["shared_kiosk_profile"], False)
 
         # Verify exact set of keys matches allowlist
-        allowed_keys = {"id", "name", "role", "enabled", "permissions", "shared_kiosk_profile"}
+        allowed_keys = {"id", "name", "role", "enabled", "permissions", "shared_kiosk_profile", "picture", "ha_user_id"}
         self.assertEqual(set(redacted.keys()), allowed_keys)
 
         # Verify non-allowlisted / sensitive fields are stripped
-        self.assertNotIn("ha_user_id", redacted)
         self.assertNotIn("access_pin_hash", redacted)
         self.assertNotIn("pin", redacted)
         self.assertNotIn("master_pin", redacted)

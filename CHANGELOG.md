@@ -2,6 +2,15 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.74] - 2026-08-12
+
+### Fixed
+- Permisos granulares por usuario (cambio de PIN de acceso y PIN maestro) ahora visibles solo si el administrador los otorga explícitamente.
+- Gestión de PINs y selector de idioma integrados en el menú desplegable del perfil de la barra superior.
+- Animación de bienvenida estilo iOS: la foto de perfil y el nombre vuelan suavemente desde la tarjeta al distintivo de la barra superior.
+- Selector de formato de hora (`12h`/`24h`/`auto`) guardado y cargado correctamente desde la personalización.
+- Shader WebGL mejorado con aurora boreal, niebla volumétrica, lluvia con viento, distorsión de calor y twinkle de estrellas.
+
 ## [2.0.73] - 2026-08-12
 
 ### Added

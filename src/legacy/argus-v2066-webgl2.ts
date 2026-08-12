@@ -6,10 +6,9 @@ import { LitElement, html, css } from 'https://unpkg.com/lit@3.0.0/index.js?modu
 // ==========================================
 
 const vsSource = `#version 300 es
+in vec2 position;
 void main() {
-    float x = -1.0 + float((gl_VertexID & 1) << 2);
-    float y = -1.0 + float((gl_VertexID & 2) << 1);
-    gl_Position = vec4(x, y, 0.0, 1.0);
+    gl_Position = vec4(position, 0.0, 1.0);
 }`;
 
 const fsSource = `#version 300 es
@@ -71,7 +70,7 @@ void main() {
         vec2 dropPos = grid - vec2(rnd * 0.4 - 0.2, fract(rnd * 34.5) * 0.4 - 0.2);
         
         float d = length(dropPos);
-        float dropShape = smoothstep(0.35, 0.05, d);
+        float dropShape = 1.0 - smoothstep(0.05, 0.35, d);
         
         dropDistortion = dropPos * dropShape * u_weather.y * 0.5; 
         dropSpecular = smoothstep(0.1, 0.2, d) * dropShape * u_weather.y * 0.8;
@@ -97,7 +96,7 @@ void main() {
     float starNoise = hash(floor(uv * 200.0));
     float starGlow  = smoothstep(0.98, 1.0, starNoise)
                     * (0.5 + 0.5 * sin(u_time * 2.0 + starNoise * 10.0))
-                    * smoothstep(0.1, -0.1, sunDir.y);
+                    * (1.0 - smoothstep(-0.1, 0.1, sunDir.y));
     vec3 nightSky = vec3(starGlow) * nightFactor;
 
     float distMoon  = distance(viewDir, moonDir);
@@ -292,6 +291,18 @@ class ArgusWeatherPanel extends LitElement {
       console.error('[Argus] Link error:', gl.getProgramInfoLog(this.program)); return;
     }
 
+    const buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+      -1.0, -1.0,
+       3.0, -1.0,
+      -1.0,  3.0
+    ]), gl.STATIC_DRAW);
+
+    const posAttr = gl.getAttribLocation(this.program, 'position');
+    gl.enableVertexAttribArray(posAttr);
+    gl.vertexAttribPointer(posAttr, 2, gl.FLOAT, false, 0, 0);
+
     this.uniforms = {
       resolution:   gl.getUniformLocation(this.program, 'u_resolution'),
       time:         gl.getUniformLocation(this.program, 'u_time'),
@@ -335,6 +346,9 @@ class ArgusWeatherPanel extends LitElement {
 
       // Enviar uniforms — ÚNICO lugar donde se toca WebGL
       gl.useProgram(this.program);
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.enableVertexAttribArray(posAttr);
+      gl.vertexAttribPointer(posAttr, 2, gl.FLOAT, false, 0, 0);
       gl.uniform2f(this.uniforms.resolution,   canvas.width, canvas.height);
       gl.uniform1f(this.uniforms.time,         (now - this.startTime) / 1000.0);
       gl.uniform3f(this.uniforms.sunPosition,  0.0, c.sunY, -1.0);
@@ -366,8 +380,11 @@ function installStyles(panel){
  const s=document.createElement('style');s.id='argus-v2066-style';s.textContent=`
 :host{--v2066-glass:linear-gradient(135deg,color-mix(in srgb,var(--card-background-color,#101827) 34%,transparent),color-mix(in srgb,var(--card-background-color,#101827) 15%,transparent));--v2066-border:color-mix(in srgb,var(--primary-text-color,#fff) 22%,transparent);--v2066-text:var(--primary-text-color,#f7f9ff);--v2066-muted:var(--secondary-text-color,rgba(247,249,255,.72))}
 :host(.daytime-theme){--v2066-glass:linear-gradient(135deg,rgba(255,255,255,.3),rgba(255,255,255,.12));--v2066-border:rgba(0,0,0,.16);--v2066-text:#172033;--v2066-muted:#4c586d}
-:host *:not(.wx-webgl):not(.hero-profile-pill):not(.hero-profile-dropdown):not(#welcome-card):not(#welcome-avatar-flying):not(#welcome-name-flying):not(#fly-avatar):not(#fly-name):not(#bootstrap-overlay):not(.argus-bootstrap-card),:host *::before,:host *::after{animation:none!important;transition:none!important}
-.glass,.liquid-glass,.panel,.entry,.mode-section-card,.user-card,.file-card,.log-item,.personalize-section,.sos-configuration,.argus-widget{background:var(--v2066-glass)!important;border:1px solid var(--v2066-border)!important;box-shadow:inset 0 1px 0 color-mix(in srgb,var(--primary-text-color,#fff) 16%,transparent),0 14px 38px rgba(0,0,0,.16)!important;backdrop-filter:blur(24px) saturate(145%)!important;-webkit-backdrop-filter:blur(24px) saturate(145%)!important;color:var(--v2066-text)!important}
+:host *:not(.wx):not(.wx *):not(.hero-profile-pill):not(.hero-profile-dropdown):not(#welcome-card):not(#welcome-avatar-flying):not(#welcome-name-flying):not(#fly-avatar):not(#fly-name):not(#bootstrap-overlay):not(.argus-bootstrap-card),:host *::before,:host *::after{animation:none!important;transition:none!important}
+.glass,.liquid-glass,.panel,.entry,.argus-widget{background:var(--v2066-glass)!important;border:1px solid var(--v2066-border)!important;box-shadow:inset 0 1px 0 color-mix(in srgb,var(--primary-text-color,#fff) 16%,transparent),0 14px 38px rgba(0,0,0,.16)!important;backdrop-filter:blur(24px) saturate(145%)!important;-webkit-backdrop-filter:blur(24px) saturate(145%)!important;color:var(--v2066-text)!important}
+.hero{position:relative!important;z-index:1000!important;overflow:visible!important}
+.mode-section-card,.user-card,.file-card,.log-item,.personalize-section,.sos-configuration{background:rgba(255,255,255,0.035)!important;border:1px solid var(--v2066-border)!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;color:var(--v2066-text)!important}
+:host(.daytime-theme) .mode-section-card,:host(.daytime-theme) .user-card,:host(.daytime-theme) .file-card,:host(.daytime-theme) .log-item,:host(.daytime-theme) .personalize-section,:host(.daytime-theme) .sos-configuration{background:rgba(0,0,0,0.03)!important;}
 .argus-widget .panel{background:transparent!important;border:none!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 .panel h1,.panel h2,.panel h3,.panel h4,.panel-title,.section-title,.setting-label,.mode-section-title,.widget-title,.settings-section-title,.access-section-title{color:var(--v2066-text)!important;opacity:1!important;text-shadow:none!important}.panel p,.panel small,.hint,.muted,.setting-help,.mode-sensor-none{color:var(--v2066-muted)!important;opacity:1!important}
 button,input,select,textarea,.glass-control{color:var(--v2066-text)!important;-webkit-text-fill-color:var(--v2066-text)!important;background-color:color-mix(in srgb,var(--card-background-color,#101827) 38%,transparent)!important;border-color:var(--v2066-border)!important}button{min-height:44px;touch-action:manipulation}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#2783de) 76%,white)!important;outline-offset:2px!important}
@@ -405,7 +422,6 @@ select option {background-color:#101827 !important;color:#f7f9ff !important;-web
   100% { transform: scale(1); opacity: 1; }
 }
 .wx-atmosphere{position:absolute;inset:0;overflow:hidden;isolation:isolate;}
-.wx-celestial,.wx-cloudfield,.wx-precip,.wx-starfield,.wx-lightning,.wx-fog-real,.wx-seasonal,.wx-horizon{display:none!important}
 @media(prefers-color-scheme:light){:host:not(.daytime-theme){--v2066-glass:linear-gradient(135deg,rgba(255,255,255,.56),rgba(255,255,255,.24));--v2066-border:rgba(255,255,255,.72);--v2066-text:var(--primary-text-color,#172033);--v2066-muted:var(--secondary-text-color,#4c586d)}}`;
  panel.shadowRoot?.appendChild(s);
 }

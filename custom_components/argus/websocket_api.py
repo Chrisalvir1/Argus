@@ -361,7 +361,7 @@ def _resolve_alarm_entity_id(hass: HomeAssistant, config_entry_id: str) -> str |
     return None
 
 
-_PROFILE_ALLOWLIST = {"id", "name", "role", "enabled", "permissions", "shared_kiosk_profile"}
+_PROFILE_ALLOWLIST = {"id", "name", "role", "enabled", "permissions", "shared_kiosk_profile", "picture", "ha_user_id"}
 
 def _redact_user_profile(profile: dict | None) -> dict | None:
     """Redact user profile using a strict allowlist of fields."""
