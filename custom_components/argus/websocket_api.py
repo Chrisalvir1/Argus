@@ -185,6 +185,8 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_argus_update_incident)
     websocket_api.async_register_command(hass, ws_argus_get_health)
     websocket_api.async_register_command(hass, ws_argus_import_alarmo)
+    websocket_api.async_register_command(hass, ws_argus_get_profile_theme)
+    websocket_api.async_register_command(hass, ws_argus_save_profile_theme)
 
 
 @websocket_api.websocket_command({
@@ -1439,4 +1441,55 @@ async def ws_argus_sync_presence_rules(hass, connection, msg) -> None:
     # Will be implemented in Phase 4
     await async_save_ui_data(hass, {"presence_rules": msg["rules"]}, entry_id)
     async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED, entry_id)
+    connection.send_result(msg["id"], {"success": True})
+
+
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/get_profile_theme",
+    vol.Optional("entry_id"): str,
+})
+@websocket_api.async_response
+async def ws_argus_get_profile_theme(hass, connection, msg) -> None:
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
+    try:
+        profile, _ = await _require_argus_session(hass, connection, entry_id)
+    except ArgusAuthError as err:
+        connection.send_error(msg["id"], err.code, err.message)
+        return
+    
+    theme = profile.get("theme", {"background_mode": "default", "background_file": ""})
+    connection.send_result(msg["id"], {"theme": theme})
+
+
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/save_profile_theme",
+    vol.Required("theme"): dict,
+    vol.Optional("entry_id"): str,
+})
+@websocket_api.async_response
+async def ws_argus_save_profile_theme(hass, connection, msg) -> None:
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
+    try:
+        profile, _ = await _require_argus_session(hass, connection, entry_id)
+    except ArgusAuthError as err:
+        connection.send_error(msg["id"], err.code, err.message)
+        return
+    
+    ui_data = await async_load_ui_data(hass, entry_id)
+    users = ui_data.get("users", [])
+    
+    theme = msg["theme"]
+    for u in users:
+        if u.get("id") == profile.get("id"):
+            u["theme"] = theme
+            u["background_mode"] = theme.get("background_mode", "weather")
+            u["background_images"] = theme.get("background_images", [])
+            u["panel_bg_file"] = theme.get("panel_bg_file", "")
+            u["panel_bg_sound"] = bool(theme.get("panel_bg_sound", False))
+            u["hub_bg_mode"] = theme.get("hub_bg_mode", "none")
+            u["hub_bg_file"] = theme.get("hub_bg_file", "")
+            u["hub_bg_sound"] = bool(theme.get("hub_bg_sound", False))
+            break
+            
+    await async_save_ui_data(hass, {"users": users}, entry_id)
     connection.send_result(msg["id"], {"success": True})

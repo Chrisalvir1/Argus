@@ -3740,7 +3740,7 @@ class Xg extends HTMLElement {
           r = this._hass.themes ? this._hass.themes.darkMode === !0 : !1;
       }
     }
-    this.setAttribute("argus-dark-mode", r ? "true" : "false");
+    this.setAttribute("argus-dark-mode", r ? "true" : "false"), r ? this.classList.remove("daytime-theme") : this.classList.add("daytime-theme");
   }
   set hass(r) {
     const i = this._hass;
@@ -4231,7 +4231,7 @@ class Xg extends HTMLElement {
     const l = this.shadowRoot.getElementById("bootstrap-overlay");
     l && (this._currentProfile && !this._welcomeShownThisMount ? l.style.display = "flex" : l.style.display = "none"), this._available = a.available_entities || [], this._ui = a.ui || { modes: {}, dashboard: {} }, await this._loadActivityTimeline(a.entry_id), this._notifTargets = a.ui?.notif_targets || [], this._users = Array.isArray(a.ui?.users) ? a.ui.users.filter((F) => F && typeof F == "object" && !Array.isArray(F)) : [], this._homeName = a.ui?.home_name || "", this._emergencyNumber = a.ui?.emergency_number || "911", this._panicOutputs = a.ui?.panic_outputs || [];
     const c = this._users.find((F) => F.id === this._myUserId) || {};
-    this._backgroundMode = c.background_mode || a.ui?.background_mode || "weather", this._backgroundImages = c.background_images || a.ui?.background_images || [], this._temperatureSource = a.ui?.temperature_source || "auto", this._weatherSource = a.ui?.weather_source || "auto", this._panelBgFile = c.panel_bg_file !== void 0 ? c.panel_bg_file : a.ui?.panel_bg_file || "", this._panelBgSound = !!(c.panel_bg_sound !== void 0 ? c.panel_bg_sound : a.ui?.panel_bg_sound);
+    this._backgroundMode = c.background_mode || a.ui?.background_mode || "weather", this._backgroundImages = c.background_images || a.ui?.background_images || [], this._temperatureSource = a.ui?.temperature_source || "auto", this._weatherSource = a.ui?.weather_source || "auto", this._clockFormat = a.ui?.clock_format || "auto", this._panelBgFile = c.panel_bg_file !== void 0 ? c.panel_bg_file : a.ui?.panel_bg_file || "", this._panelBgSound = !!(c.panel_bg_sound !== void 0 ? c.panel_bg_sound : a.ui?.panel_bg_sound);
     const u = c.hub_bg_mode || a.ui?.hub_bg_mode || "none";
     this._hubBgMode = u === "none" || u === "default" ? "default" : u, this._hubBgFile = c.hub_bg_file !== void 0 ? c.hub_bg_file : a.ui?.hub_bg_file || "", this._hubBgSound = !!(c.hub_bg_sound !== void 0 ? c.hub_bg_sound : a.ui?.hub_bg_sound), this._updateTheme(), this._updateHomeNameDisplay(), this._updateProfileBadge(), this._showProfileWelcome(), this._populateTemperatureSources();
     const p = this.shadowRoot.getElementById("temp-source-select-standalone");
@@ -6252,12 +6252,16 @@ ${i}`);
 
       <!-- Dropdown Card -->
       <div id="profile-dropdown" class="hero-profile-dropdown glass liquid-glass" style="display: none;">
-        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px; margin-bottom: 8px;">
-          <div style="display: flex; flex-direction: column;">
-            <span style="font-size: 10px; opacity: 0.5; font-weight: 700; text-transform: uppercase;">${this._t("profile_is_yours") || "Perfil Activo"}</span>
-            <span style="font-size: 13.5px; font-weight: 800; color: var(--v2066-text);">${i.name}</span>
+        <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px; margin-bottom: 8px; width: 100%;">
+          ${i.picture ? `<img src="${this._escapeHtml(i.picture)}" alt="${this._escapeHtml(i.name)}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.20); box-shadow: 0 4px 10px rgba(0,0,0,0.25); flex-shrink: 0;" />` : `<div class="user-avatar" style="width: 44px; height: 44px; border-radius: 50%; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.15); box-shadow: 0 4px 10px rgba(0,0,0,0.25); flex-shrink: 0;">${this._escapeHtml(i.name.substring(0, 2).toUpperCase())}</div>`}
+          <div style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0; align-items: flex-start;">
+            <span style="font-size: 9.5px; opacity: 0.5; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em;">${this._t("profile_is_yours") || "Perfil Activo"}</span>
+            <span style="font-size: 14px; font-weight: 850; color: var(--v2066-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; text-align: left;">${this._escapeHtml(i.name)}</span>
+            <a href="/profile" style="font-size: 10.5px; font-weight: 700; color: #30d158; text-decoration: none; display: flex; align-items: center; gap: 3px; margin-top: 3px;" target="_blank">
+              📸 ${this._t("change_profile_picture") || "Cambiar imagen"} ↗
+            </a>
           </div>
-          <span class="user-badge ${i.role === "admin" ? "admin" : ""}" style="font-size: 8px; padding: 2px 7px;">${i.role === "admin" ? "Admin" : "Estándar"}</span>
+          <span class="user-badge ${i.role === "admin" ? "admin" : ""}" style="font-size: 8.5px; padding: 3px 8px; font-weight: 800; border-radius: 6px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.03em;">${i.role === "admin" ? "Admin" : "Estándar"}</span>
         </div>
 
         <!-- Language Selector -->
@@ -6415,7 +6419,7 @@ ${i}`);
         zIndex: "10000",
         pointerEvents: "none",
         transformOrigin: "top left",
-        transition: "transform 0.75s cubic-bezier(0.25, 1.45, 0.35, 1), opacity 0.5s ease-out"
+        transition: "transform 0.45s cubic-bezier(0.25, 1.45, 0.35, 1), opacity 0.35s ease-out"
       }), Object.assign(E.style, {
         position: "fixed",
         left: `${x.left}px`,
@@ -6427,13 +6431,13 @@ ${i}`);
         transformOrigin: "top left",
         textAlign: "center",
         whiteSpace: "nowrap",
-        transition: "transform 0.75s cubic-bezier(0.25, 1.45, 0.35, 1), opacity 0.5s ease-out"
+        transition: "transform 0.45s cubic-bezier(0.25, 1.45, 0.35, 1), opacity 0.35s ease-out"
       }), i.appendChild(R), i.appendChild(E), R.offsetHeight, E.offsetHeight;
       const S = C.width / h.width, b = C.left - h.left, w = C.top - h.top, y = 13 / parseFloat(window.getComputedStyle(_).fontSize), k = P.left - x.left, A = P.top - x.top;
-      R.style.transform = `translate(${b}px, ${w}px) scale(${S})`, R.style.borderWidth = "1.5px", E.style.transform = `translate(${k}px, ${A}px) scale(${y})`, E.style.fontWeight = "800", i.style.transition = "background-color 0.75s ease, backdrop-filter 0.75s ease, -webkit-backdrop-filter 0.75s ease", i.style.backgroundColor = "transparent", i.style.backdropFilter = "none", i.style.webkitBackdropFilter = "none", setTimeout(() => {
+      R.style.transform = `translate(${b}px, ${w}px) scale(${S})`, R.style.borderWidth = "1.5px", E.style.transform = `translate(${k}px, ${A}px) scale(${y})`, E.style.fontWeight = "800", i.style.transition = "background-color 0.45s ease, backdrop-filter 0.45s ease, -webkit-backdrop-filter 0.45s ease", i.style.backgroundColor = "transparent", i.style.backdropFilter = "none", i.style.webkitBackdropFilter = "none", setTimeout(() => {
         R.remove(), E.remove(), i.style.display = "none", i.style.backgroundColor = "", i.style.backdropFilter = "", i.style.webkitBackdropFilter = "", p && (p.style.transition = "opacity 0.25s ease", p.style.opacity = "1");
-      }, 750);
-    }, 1400);
+      }, 450);
+    }, 650);
   }
   _renderFirstRunScreen() {
     const r = this.shadowRoot.getElementById("bootstrap-overlay");
@@ -19078,7 +19082,7 @@ function bl(o) {
   i.id = "argus-v2066-style", i.textContent = `
 :host{--v2066-glass:linear-gradient(135deg,color-mix(in srgb,var(--card-background-color,#101827) 34%,transparent),color-mix(in srgb,var(--card-background-color,#101827) 15%,transparent));--v2066-border:color-mix(in srgb,var(--primary-text-color,#fff) 22%,transparent);--v2066-text:var(--primary-text-color,#f7f9ff);--v2066-muted:var(--secondary-text-color,rgba(247,249,255,.72))}
 :host(.daytime-theme){--v2066-glass:linear-gradient(135deg,rgba(255,255,255,.3),rgba(255,255,255,.12));--v2066-border:rgba(0,0,0,.16);--v2066-text:#172033;--v2066-muted:#4c586d}
-:host *:not(.wx):not(.wx *):not(.hero-profile-pill):not(.hero-profile-dropdown):not(#welcome-card):not(#welcome-avatar-flying):not(#welcome-name-flying):not(#fly-avatar):not(#fly-name):not(#bootstrap-overlay):not(.argus-bootstrap-card),:host *::before,:host *::after{animation:none!important;transition:none!important}
+:host *:not(.wx):not(.wx *):not(.hero-profile-pill):not(.hero-profile-dropdown):not(#welcome-card):not(#welcome-avatar-flying):not(#welcome-name-flying):not(#fly-avatar):not(#fly-name):not(#bootstrap-overlay):not(.argus-bootstrap-card):not(.entry-icon):not(.entry-icon *):not(.liquid-btn):not(.liquid-btn *):not(.btn-sos):not(.btn-sos *):not(.mode-btn-icon):not(.mode-btn-icon *):not(.console-sensor-icon):not(.console-sensor-icon *),:host *::before,:host *::after{animation:none!important;transition:none!important}
 .glass,.liquid-glass,.panel,.entry,.argus-widget{background:var(--v2066-glass)!important;border:1px solid var(--v2066-border)!important;box-shadow:inset 0 1px 0 color-mix(in srgb,var(--primary-text-color,#fff) 16%,transparent),0 14px 38px rgba(0,0,0,.16)!important;backdrop-filter:blur(24px) saturate(145%)!important;-webkit-backdrop-filter:blur(24px) saturate(145%)!important;color:var(--v2066-text)!important}
 .hero{position:relative!important;z-index:1000!important;overflow:visible!important}
 .mode-section-card,.user-card,.file-card,.log-item,.personalize-section,.sos-configuration{background:rgba(255,255,255,0.035)!important;border:1px solid var(--v2066-border)!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;color:var(--v2066-text)!important}
@@ -19086,23 +19090,34 @@ function bl(o) {
 .argus-widget .panel{background:transparent!important;border:none!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 .panel h1,.panel h2,.panel h3,.panel h4,.panel-title,.section-title,.setting-label,.mode-section-title,.widget-title,.settings-section-title,.access-section-title{color:var(--v2066-text)!important;opacity:1!important;text-shadow:none!important}.panel p,.panel small,.hint,.muted,.setting-help,.mode-sensor-none{color:var(--v2066-muted)!important;opacity:1!important}
 button,input,select,textarea,.glass-control{color:var(--v2066-text)!important;-webkit-text-fill-color:var(--v2066-text)!important;background-color:color-mix(in srgb,var(--card-background-color,#101827) 38%,transparent)!important;border-color:var(--v2066-border)!important}button{min-height:44px;touch-action:manipulation}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#2783de) 76%,white)!important;outline-offset:2px!important}
+button.primary, button#selector-accept {background-color:var(--primary-color,#007aff)!important;background:var(--primary-color,#007aff)!important;color:#fff!important;-webkit-text-fill-color:#fff!important;border:1px solid rgba(0,122,255,0.2)!important;box-shadow:0 4px 12px rgba(0,122,255,0.25)!important}
+button.primary:hover, button#selector-accept:hover {background-color:#0062cc!important;background:#0062cc!important}
+:host(.daytime-theme) button:not(.primary):not(#selector-accept),:host(.daytime-theme) select,:host(.daytime-theme) input,:host(.daytime-theme) textarea,:host(.daytime-theme) .glass-control{background-color:rgba(0,0,0,0.05)!important;color:#172033!important;-webkit-text-fill-color:#172033!important;border-color:rgba(0,0,0,0.12)!important}
 select option {background-color:#101827 !important;color:#f7f9ff !important;-webkit-text-fill-color:#f7f9ff !important;}
 :host(.daytime-theme) select option {background-color:#ffffff !important;color:#172033 !important;-webkit-text-fill-color:#172033 !important;}
-.user-badge{display:inline-block!important;padding:4px 10px!important;border-radius:6px!important;font-size:10px!important;font-weight:800!important;letter-spacing:.04em!important;text-transform:uppercase!important;background:rgba(255,255,255,0.06)!important;color:var(--v2066-text)!important;border:1px solid var(--v2066-border)!important}
-.user-badge.admin{background:rgba(255,215,0,0.12)!important;color:#ffd700!important;border:1px solid rgba(255,215,0,0.25)!important}
-:host(.daytime-theme) .user-badge.admin{background:rgba(212,175,55,0.12)!important;color:#8b6508!important;border:1px solid rgba(212,175,55,0.3)!important}
-.user-badge[style*="background:#4a148c"]{background:rgba(147,112,219,0.12)!important;color:#b39ddb!important;border:1px solid rgba(147,112,219,0.25)!important}
-:host(.daytime-theme) .user-badge[style*="background:#4a148c"]{background:rgba(103,58,183,0.08)!important;color:#5e35b1!important;border:1px solid rgba(103,58,183,0.2)!important}
-.user-badge[style*="color:#007aff"]{background:rgba(39,131,222,0.12)!important;color:#4fc3f7!important;border:1px solid rgba(39,131,222,0.25)!important}
-:host(.daytime-theme) .user-badge[style*="color:#007aff"]{background:rgba(3,169,244,0.08)!important;color:#0288d1!important;border:1px solid rgba(3,169,244,0.2)!important}
-.user-badge[style*="color:#43a047"]{background:rgba(76,175,80,0.12)!important;color:#81c784!important;border:1px solid rgba(76,175,80,0.25)!important}
-:host(.daytime-theme) .user-badge[style*="color:#43a047"]{background:rgba(76,175,80,0.08)!important;color:#2e7d32!important;border:1px solid rgba(76,175,80,0.2)!important}
+.user-badge{display:inline-block!important;padding:4px 10px!important;border-radius:6px!important;font-size:10px!important;font-weight:800!important;letter-spacing:.04em!important;text-transform:uppercase!important;background:rgba(142,142,147,0.2)!important;color:#d1d1d6!important;border:1px solid rgba(142,142,147,0.35)!important}
+:host(.daytime-theme) .user-badge{background:rgba(142,142,147,0.1)!important;color:#6e6e73!important;border:1px solid rgba(142,142,147,0.2)!important}
+.user-badge.admin{background:rgba(255,159,10,0.2)!important;color:#ffca7a!important;border:1px solid rgba(255,159,10,0.35)!important}
+:host(.daytime-theme) .user-badge.admin{background:rgba(255,149,0,0.1)!important;color:#b25900!important;border:1px solid rgba(255,149,0,0.2)!important}
+.user-badge[style*="background:#4a148c"]{background:rgba(147,112,219,0.22)!important;color:#dcd0ff!important;border:1px solid rgba(147,112,219,0.4)!important}
+:host(.daytime-theme) .user-badge[style*="background:#4a148c"]{background:rgba(74,20,140,0.1)!important;color:#4a148c!important;border:1px solid rgba(74,20,140,0.2)!important}
+.user-badge[style*="color:#007aff"]{background:rgba(0,122,255,0.2)!important;color:#9bc5ff!important;border:1px solid rgba(0,122,255,0.35)!important}
+:host(.daytime-theme) .user-badge[style*="color:#007aff"]{background:rgba(0,122,255,0.1)!important;color:#007aff!important;border:1px solid rgba(0,122,255,0.2)!important}
+.user-badge[style*="color:#43a047"]{background:rgba(48,209,88,0.2)!important;color:#a4f6be!important;border:1px solid rgba(48,209,88,0.35)!important}
+:host(.daytime-theme) .user-badge[style*="color:#43a047"]{background:rgba(52,199,89,0.1)!important;color:#248a3d!important;border:1px solid rgba(52,199,89,0.2)!important}
 #hero-profile-container {display: flex;align-items: center;justify-content: center;margin-inline: 14px;}
 @media(max-width:750px) {#hero-profile-container {margin: 8px 0 4px 0;}}
 .hero-profile-pill {display: flex;align-items: center;gap: 8px;padding: 5px 12px 5px 7px;border-radius: 999px;background: var(--v2066-glass);border: 1px solid var(--v2066-border);box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 12px rgba(0,0,0,0.12);backdrop-filter: blur(20px) saturate(140%);-webkit-backdrop-filter: blur(20px) saturate(140%);cursor: pointer;transition: transform 0.25s cubic-bezier(0.2, 1, 0.2, 1) !important;}
 .hero-profile-pill:hover {transform: translateY(-1px) !important;}
 .hero-profile-pill:active {transform: scale(0.96) !important;}
-.hero-profile-dropdown {position: absolute;top: 100%;right: 0;margin-top: 10px;width: 260px;background: var(--v2066-glass);border: 1px solid var(--v2066-border);box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 20px 48px rgba(0,0,0,0.32);backdrop-filter: blur(28px) saturate(160%);-webkit-backdrop-filter: blur(28px) saturate(160%);border-radius: 20px;padding: 16px;z-index: 100000;display: none;flex-direction: column;gap: 12px;transform-origin: top right;animation: iosPopIn 0.25s cubic-bezier(0.2, 1, 0.2, 1) both;}
+.hero-profile-dropdown {position: absolute;top: 100%;right: 0;margin-top: 10px;width: 280px;border-radius: 20px;padding: 16px;z-index: 100000;display: none;flex-direction: column;gap: 12px;transform-origin: top right;animation: iosPopIn 0.25s cubic-bezier(0.2, 1, 0.2, 1) both;backdrop-filter: blur(30px) saturate(180%) !important;-webkit-backdrop-filter: blur(30px) saturate(180%) !important;}
+:host([argus-dark-mode="true"]) .hero-profile-dropdown {background:rgba(20,26,38,0.94)!important;border:1.5px solid rgba(255,255,255,0.12)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,0.1), 0 20px 48px rgba(0,0,0,0.5)!important;color:#f1f5f9!important}
+:host(.daytime-theme) .hero-profile-dropdown, :host([argus-dark-mode="false"]) .hero-profile-dropdown {background:rgba(255,255,255,0.97)!important;border:1.5px solid rgba(0,0,0,0.12)!important;box-shadow:0 20px 48px rgba(0,0,0,0.15)!important;color:#1e293b!important}
+.hero-profile-dropdown .user-badge.admin {background:#ffb300!important;color:#000!important;font-weight:800!important;border:none!important}
+.hero-profile-dropdown .user-badge:not(.admin) {background:rgba(255,255,255,0.15)!important;color:var(--v2066-text)!important;font-weight:800!important}
+:host(.daytime-theme) .hero-profile-dropdown .user-badge:not(.admin),:host([argus-dark-mode="false"]) .hero-profile-dropdown .user-badge:not(.admin){background:rgba(0,0,0,0.08)!important;color:#1e293b!important}
+.hero-profile-dropdown label,.hero-profile-dropdown span:not(.user-badge) {color:inherit!important}
+.hero-profile-dropdown select,.hero-profile-dropdown button {font-family:inherit} 1, 0.2, 1) both;}
 @keyframes iosPopIn {
   from { transform: scale(0.9) translateY(-10px); opacity: 0; }
   to { transform: scale(1) translateY(0); opacity: 1; }

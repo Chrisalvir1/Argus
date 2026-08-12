@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Home Hub – v2.0.74
+ * Argus Home Hub – v2.0.75
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -3070,6 +3070,11 @@ class ArgusPanel extends HTMLElement {
     }
 
     this.setAttribute('argus-dark-mode', isDark ? 'true' : 'false');
+    if (isDark) {
+      this.classList.remove('daytime-theme');
+    } else {
+      this.classList.add('daytime-theme');
+    }
   }
 
   set hass(hass) {
@@ -4021,6 +4026,7 @@ class ArgusPanel extends HTMLElement {
     this._backgroundImages = myProfile.background_images || dashboard.ui?.background_images || [];
     this._temperatureSource = dashboard.ui?.temperature_source || 'auto';
     this._weatherSource = dashboard.ui?.weather_source || 'auto';
+    this._clockFormat = dashboard.ui?.clock_format || 'auto';
     this._panelBgFile = myProfile.panel_bg_file !== undefined ? myProfile.panel_bg_file : (dashboard.ui?.panel_bg_file || '');
     this._panelBgSound = Boolean(myProfile.panel_bg_sound !== undefined ? myProfile.panel_bg_sound : dashboard.ui?.panel_bg_sound);
     const rawHubBgMode = myProfile.hub_bg_mode || dashboard.ui?.hub_bg_mode || 'none';
@@ -7306,12 +7312,19 @@ gl_FragColor=vec4(col,alpha);}`;
 
       <!-- Dropdown Card -->
       <div id="profile-dropdown" class="hero-profile-dropdown glass liquid-glass" style="display: none;">
-        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px; margin-bottom: 8px;">
-          <div style="display: flex; flex-direction: column;">
-            <span style="font-size: 10px; opacity: 0.5; font-weight: 700; text-transform: uppercase;">${this._t('profile_is_yours') || 'Perfil Activo'}</span>
-            <span style="font-size: 13.5px; font-weight: 800; color: var(--v2066-text);">${prof.name}</span>
+        <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px; margin-bottom: 8px; width: 100%;">
+          ${prof.picture
+            ? `<img src="${this._escapeHtml(prof.picture)}" alt="${this._escapeHtml(prof.name)}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.20); box-shadow: 0 4px 10px rgba(0,0,0,0.25); flex-shrink: 0;" />`
+            : `<div class="user-avatar" style="width: 44px; height: 44px; border-radius: 50%; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.15); box-shadow: 0 4px 10px rgba(0,0,0,0.25); flex-shrink: 0;">${this._escapeHtml(prof.name.substring(0, 2).toUpperCase())}</div>`
+          }
+          <div style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0; align-items: flex-start;">
+            <span style="font-size: 9.5px; opacity: 0.5; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em;">${this._t('profile_is_yours') || 'Perfil Activo'}</span>
+            <span style="font-size: 14px; font-weight: 850; color: var(--v2066-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; text-align: left;">${this._escapeHtml(prof.name)}</span>
+            <a href="/profile" style="font-size: 10.5px; font-weight: 700; color: #30d158; text-decoration: none; display: flex; align-items: center; gap: 3px; margin-top: 3px;" target="_blank">
+              📸 ${this._t('change_profile_picture') || 'Cambiar imagen'} ↗
+            </a>
           </div>
-          <span class="user-badge ${prof.role === 'admin' ? 'admin' : ''}" style="font-size: 8px; padding: 2px 7px;">${prof.role === 'admin' ? 'Admin' : 'Estándar'}</span>
+          <span class="user-badge ${prof.role === 'admin' ? 'admin' : ''}" style="font-size: 8.5px; padding: 3px 8px; font-weight: 800; border-radius: 6px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.03em;">${prof.role === 'admin' ? 'Admin' : 'Estándar'}</span>
         </div>
 
         <!-- Language Selector -->
@@ -7563,7 +7576,7 @@ gl_FragColor=vec4(col,alpha);}`;
         zIndex: '10000',
         pointerEvents: 'none',
         transformOrigin: 'top left',
-        transition: 'transform 0.75s cubic-bezier(0.25, 1.45, 0.35, 1), opacity 0.5s ease-out'
+        transition: 'transform 0.45s cubic-bezier(0.25, 1.45, 0.35, 1), opacity 0.35s ease-out'
       });
 
       Object.assign(flyName.style, {
@@ -7577,7 +7590,7 @@ gl_FragColor=vec4(col,alpha);}`;
         transformOrigin: 'top left',
         textAlign: 'center',
         whiteSpace: 'nowrap',
-        transition: 'transform 0.75s cubic-bezier(0.25, 1.45, 0.35, 1), opacity 0.5s ease-out'
+        transition: 'transform 0.45s cubic-bezier(0.25, 1.45, 0.35, 1), opacity 0.35s ease-out'
       });
 
       overlay.appendChild(flyAvatar);
@@ -7600,7 +7613,7 @@ gl_FragColor=vec4(col,alpha);}`;
       flyName.style.transform = `translate(${nameTx}px, ${nameTy}px) scale(${nameScale})`;
       flyName.style.fontWeight = '800';
 
-      overlay.style.transition = 'background-color 0.75s ease, backdrop-filter 0.75s ease, -webkit-backdrop-filter 0.75s ease';
+      overlay.style.transition = 'background-color 0.45s ease, backdrop-filter 0.45s ease, -webkit-backdrop-filter 0.45s ease';
       overlay.style.backgroundColor = 'transparent';
       overlay.style.backdropFilter = 'none';
       overlay.style.webkitBackdropFilter = 'none';
@@ -7616,9 +7629,9 @@ gl_FragColor=vec4(col,alpha);}`;
           destPill.style.transition = 'opacity 0.25s ease';
           destPill.style.opacity = '1';
         }
-      }, 750);
+      }, 450);
 
-    }, 1400);
+    }, 650);
   }
 
   _renderFirstRunScreen() {

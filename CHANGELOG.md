@@ -2,6 +2,16 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.75] - 2026-08-12
+
+### Fixed
+- Legibilidad e Inteligencia visual: el host ahora alterna correctamente la clase `.daytime-theme` según la claridad del fondo.
+- Menú del perfil: muestra la foto de perfil en la cabecera y añade un enlace directo a `/profile` para cambiar la imagen.
+- Animación de instancia activa: el escudo SVG y los botones se excluyen de la restricción de animación general para recuperar su movimiento original.
+- Botones de acción SOS: restaurado el contraste de color para "Limpiar" y "Aceptar" en fondos oscuros y claros.
+- Contraste general de insignias: sustituidas las insignias de cuenta de HA de tonos neón por colores suaves de alta legibilidad.
+- Transición más rápida: se reduce la espera de vuelo de bienvenida a 650ms y el vuelo a 450ms.
+
 ## [2.0.74] - 2026-08-12
 
 ### Fixed
