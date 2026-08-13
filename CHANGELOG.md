@@ -2,6 +2,15 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.87] - 2026-08-12
+
+### Fixed
+- **Animación de bienvenida:** se eliminó el parpadeo blanco al finalizar la animación iniciando la carga de `_load()` en la fase de fade-out en vez de esperar a que terminara la animación completa.
+- **Top Bar Profile:** La imagen de perfil en el top bar (hero) ahora hace _fallback_ automático al `entity_picture` de la entidad `person` asociada en HA, mostrando la foto real si está disponible en Home Assistant.
+- **Botón Cambiar Imagen:** el dropdown de perfil ahora navega nativamente a `/config/person` de Home Assistant al seleccionar "Ir a Personas de HA ↗", reemplazando el antiguo modal obsoleto.
+- **Selector de Idiomas:** solucionado el bug donde los menús desplegables (como el selector de idiomas) no se cerraban al hacer clic fuera de ellos en navegadores con encapsulamiento estricto (Shadow DOM y `composedPath`).
+- **WebGL Weather:** corrección en `_initWeatherWebGL` para pantallas con inicialización diferida o en _layout_ asíncrono (tamaño inicial 0x0), forzando `fallback` al tamaño del contenedor y activando correctamente los efectos.
+
 ## [2.0.86] - 2026-08-12
 
 ### Fixed

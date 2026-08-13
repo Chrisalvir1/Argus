@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Home Hub – v2.0.86
+ * Argus Home Hub – v2.0.87
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -5120,6 +5120,19 @@ gl_FragColor=vec4(col,alpha);}`;
     });
 
     let frame = 0, active = true;
+    
+    // Force initial size fallback immediately if layout isn't ready
+    if (canvas.width === 0 || canvas.height === 0 || canvas.clientWidth === 0 || canvas.clientHeight === 0) {
+      const parent = canvas.parentElement;
+      if (parent && parent.offsetWidth > 0) {
+        canvas.width = Math.floor(parent.offsetWidth * (window.devicePixelRatio || 1)) || 300;
+        canvas.height = Math.floor(parent.offsetHeight * (window.devicePixelRatio || 1)) || 200;
+      } else {
+        canvas.width = 600;
+        canvas.height = 400;
+      }
+    }
+
     const draw = now => {
       if (!active || !canvas.isConnected) return;
       gl.clear(gl.COLOR_BUFFER_BIT);
@@ -7759,6 +7772,22 @@ gl_FragColor=vec4(col,alpha);}`;
     container.style.display = 'flex';
     container.style.position = 'relative';
 
+    // Resolve picture: prefer stored picture, fallback to HA person entity_picture
+    let resolvedPicture = prof.picture || null;
+    if (!resolvedPicture && this._hass?.states) {
+      // Try to find a person entity matching this user
+      const personEntities = Object.values(this._hass.states).filter(
+        s => s.entity_id?.startsWith('person.') && 
+        (s.attributes?.friendly_name?.toLowerCase() === prof.name?.toLowerCase() ||
+         s.attributes?.user_id === prof.ha_user_id)
+      );
+      if (personEntities.length > 0) {
+        const pic = personEntities[0].attributes?.entity_picture;
+        if (pic) resolvedPicture = pic;
+      }
+    }
+    prof.picture = resolvedPicture;
+
     const avatarHtml = prof.picture
       ? `<img id="hero-profile-avatar" src="${this._escapeHtml(prof.picture)}" alt="${this._escapeHtml(prof.name)}" style="width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.20); box-shadow: 0 3px 8px rgba(0,0,0,0.2); flex-shrink: 0;" />`
       : `<div id="hero-profile-avatar" class="user-avatar" style="width: 34px; height: 34px; border-radius: 50%; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.15); flex-shrink: 0;">${this._escapeHtml(prof.name.substring(0, 2).toUpperCase())}</div>`;
@@ -7788,7 +7817,7 @@ gl_FragColor=vec4(col,alpha);}`;
             <span style="font-size: 9.5px; opacity: 0.5; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em;">${this._t('profile_is_yours') || 'Perfil Activo'}</span>
             <span style="font-size: 14px; font-weight: 850; color: var(--v2066-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; text-align: left;">${this._escapeHtml(prof.name)}</span>
             <button id="btn-change-profile-picture" style="font-size: 10.5px; font-weight: 700; color: #30d158; text-decoration: none; display: flex; align-items: center; gap: 3px; margin-top: 3px; background: none; border: none; padding: 0; cursor: pointer;">
-              📸 ${this._t('change_profile_picture') || 'Cambiar imagen'}
+              👤 ${this._t('change_profile_picture') || 'Ir a Personas de HA ↗'}
             </button>
           </div>
           <span class="user-badge ${prof.role === 'admin' ? 'admin' : 'user'}" style="font-size: 8.5px; padding: 3px 8px; font-weight: 800; border-radius: 6px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.03em;">${prof.role === 'admin' ? 'Admin' : 'Estándar'}</span>
@@ -7851,15 +7880,21 @@ gl_FragColor=vec4(col,alpha);}`;
 
       // Close dropdown when clicking outside
       const _closeOnClickOutside = (e) => {
-        if (!container.contains(e.target)) {
+        // In Shadow DOM, e.target is the host element at document level.
+        // Use composedPath() to get the actual inner target.
+        const path = e.composedPath ? e.composedPath() : [e.target];
+        const insideContainer = path.some(el => el === container || (el.closest && el.closest?.('#profile-dropdown')));
+        if (!insideContainer) {
           dropdown.style.display = 'none';
-          document.removeEventListener('click', _closeOnClickOutside);
+          document.removeEventListener('click', _closeOnClickOutside, true);
         }
       };
       pill.addEventListener('click', () => {
-        if (dropdown.style.display === 'flex') {
-          document.addEventListener('click', _closeOnClickOutside);
-        }
+        setTimeout(() => {
+          if (dropdown.style.display === 'flex') {
+            document.addEventListener('click', _closeOnClickOutside, true);
+          }
+        }, 10);
       });
     }
 
@@ -7871,11 +7906,18 @@ gl_FragColor=vec4(col,alpha);}`;
       });
     }
 
-    // Change profile picture:
+    // Change profile picture → navigate to HA Persons page
     container.querySelector('#btn-change-profile-picture')?.addEventListener('click', (e) => {
       e.stopPropagation();
       dropdown.style.display = 'none';
-      this._showChangePictureModal();
+      // Navigate to HA Persons configuration page
+      // Use window.top to escape iframes; /config/person is the HA persons page
+      try {
+        window.history.pushState(null, '', '/config/person');
+        window.dispatchEvent(new PopStateEvent('popstate', { state: null }));
+      } catch (_) {
+        window.location.href = '/config/person';
+      }
     });
 
     // Action listeners inside dropdown:
@@ -8429,9 +8471,8 @@ gl_FragColor=vec4(col,alpha);}`;
             try {
               await this._send('argus/select_profile', { argus_user_id: userId });
               overlay.remove();
-              await this._runProfileWelcomeAnimation(userObj);
               this._profileSelectedThisMount = true;
-              this._load();
+              await this._runProfileWelcomeAnimation(userObj);
             } catch (err) {
               overlay.dataset.processing = '';
               alert(err.message || 'Error seleccionando perfil');
@@ -8526,9 +8567,8 @@ gl_FragColor=vec4(col,alpha);}`;
         });
         overlay.remove();
         
-        await this._runProfileWelcomeAnimation(user);
         this._profileSelectedThisMount = true;
-        this._load();
+        await this._runProfileWelcomeAnimation(user);
       } catch (err) {
         overlay.dataset.processing = '';
         pinError.textContent = err.message || t('invalid_pin_msg');
@@ -8599,6 +8639,11 @@ gl_FragColor=vec4(col,alpha);}`;
     overlay.style.transition = 'opacity 0.5s ease';
     overlay.style.opacity = '0';
     
+    // Start loading dashboard during fade-out to eliminate blank flash
+    if (!this._dashboardLoading) {
+      this._dashboardLoading = true;
+      this._load().finally(() => { this._dashboardLoading = false; });
+    }
     await new Promise(r => setTimeout(r, 520));
     // Force hard removal — do NOT animate backdrop-filter, just kill the node
     this._nukeAllLoginOverlays();
