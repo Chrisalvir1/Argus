@@ -1109,9 +1109,18 @@ Object.assign(TEXTS.ru, { external_panels:'Внешние панели сигн�
 const _tmpl = document.createElement('template');
 _tmpl.innerHTML = `
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+#widget-grid.hide-legacy > section.panel:not(#w-instances) { display: none !important; }
+
+@keyframes heroSpringSlideIn {
+  0% { transform: translateX(-50px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
 
   /* Modern Premium Liquid Glass & iOS Wobble Styles */
   :host {
+    font-family: 'Inter', sans-serif !important;
     --glass-bg: var(--argus-glass-bg, rgba(255, 255, 255, 0.07));
     --glass-border: var(--argus-glass-border, rgba(255, 255, 255, 0.09));
     --glass-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.35),
@@ -1370,7 +1379,7 @@ _tmpl.innerHTML = `
   @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
   .wrap{max-width:1400px;margin:0 auto;padding:24px;display:grid;gap:24px}
   .glass{background:var(--glass-bg, rgba(255, 255, 255, 0.06));border:1px solid var(--glass-border, rgba(255, 255, 255, 0.09));border-radius:28px;box-shadow:var(--glass-shadow);backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2)}
-  .hero{padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:var(--hero-bg, linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)));margin-bottom:12px}
+  .hero{padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:var(--hero-bg, linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)));margin-bottom:12px;will-change:transform,opacity;animation:heroSpringSlideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both}
   .hero-left{display:flex;align-items:center;gap:22px}
   .hero-context{margin-left:auto;display:flex;align-items:center;gap:8px;min-width:0}.hero-clock{display:flex;flex-direction:column;align-items:flex-end;padding-right:14px;border-right:1px solid rgba(255,255,255,.14);line-height:1}.hero-clock strong{font-size:1.45rem;letter-spacing:-.05em}.hero-clock span{font-size:10px;opacity:.65;margin-top:5px;text-transform:uppercase;letter-spacing:.08em}.hero-pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.hero-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 10px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(7,16,29,.27);box-shadow:inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(14px);font-size:10px;font-weight:800;white-space:nowrap}.hero-pill .hero-live{width:7px;height:7px;border-radius:50%;background:#55df91;box-shadow:0 0 9px #55df91}
   .hero-icon{font-size:54px;line-height:1;filter:drop-shadow(0 0 20px rgba(255,255,255,0.15))}
@@ -2772,7 +2781,7 @@ _tmpl.innerHTML = `
   </div>
 
   <!-- TWO-COLUMN LAYOUT -->
-  <div class="grid" id="widget-grid">
+  <div class="grid hide-legacy" id="widget-grid">
 
     <!-- Instances -->
     <section class="glass panel liquid-glass dashboard-instances" id="w-instances" style="grid-column: 1 / -1;">
@@ -3443,7 +3452,7 @@ class ArgusPanel extends HTMLElement {
   }
 
   _getCurrentLangCode() {
-    const candidate = this._manualLang || (this._hass?.language || 'en').split('-')[0];
+    const candidate = this._manualLang || this._ui?.language || (this._hass?.language || 'en').split('-')[0];
     return TEXTS[candidate] ? candidate : 'en';
   }
 
@@ -3471,8 +3480,14 @@ class ArgusPanel extends HTMLElement {
       : key === 'fog' ? '🌫️'
       : key.includes('cloud') ? '☁️'
       : isNight ? '🌙' : '☀️';
+    let svg = 'env_day.svg';
+    if (isNight && (key === 'sunny' || key === 'clear_night')) svg = 'env_night.svg';
+    else if (isNight && key.includes('cloud')) svg = 'env_night_starry.svg';
+    else if (key.includes('lightning') || key === 'pouring' || key.includes('rain')) svg = 'env_rain.svg';
+    else if (key.includes('snow') || key === 'hail' || key === 'sleet') svg = 'env_snow.svg';
+    else if (key.includes('cloud') || key === 'fog') svg = 'env_clouds.svg';
     const language = this._getCurrentLangCode();
-    return { icon, label: labels[language]?.[key] || labels.en[key] || key.replace(/_/g, ' ') };
+    return { icon, svg, label: labels[language]?.[key] || labels.en[key] || key.replace(/_/g, ' ') };
   }
 
   _openLangModal() {
@@ -3731,6 +3746,12 @@ class ArgusPanel extends HTMLElement {
     try { this._manualLang = localStorage.getItem('argus_lang') || null; } catch(e) {}
     this._ensureInitialized();
     this._startClock();
+    
+    // Failsafe if React fails to move the widgets
+    setTimeout(() => {
+      const grid = this.shadowRoot?.querySelector('#widget-grid');
+      if (grid) grid.classList.remove('hide-legacy');
+    }, 1500);
     
     // Safety check: If we think we are in fullscreen, but the browser is not, and we are not a kiosk, reset it.
     // This prevents the 'X' button getting stuck when returning to a cached component state.
@@ -4235,6 +4256,9 @@ class ArgusPanel extends HTMLElement {
       this._panelBgFile = '';
       this._backgroundImages = bootstrap.background_images || [];
     }
+    if (bootstrap.weather_source) this._weatherSource = bootstrap.weather_source;
+    if (bootstrap.temperature_source) this._temperatureSource = bootstrap.temperature_source;
+    if (bootstrap.language) this._manualLang = bootstrap.language;
     
     this._updateCanvasBackground();
 
@@ -4610,7 +4634,7 @@ class ArgusPanel extends HTMLElement {
     const heroSecurity = this.shadowRoot.getElementById('hero-security-pill');
     if (heroClock) heroClock.textContent = timeStr;
     if (heroDate) heroDate.textContent = now.toLocaleDateString(this._getLocale(), { weekday: 'short', month: 'short', day: 'numeric' });
-    if (heroWeather) heroWeather.textContent = `${weather.icon} ${weather.label}`;
+    if (heroWeather) heroWeather.innerHTML = `<img src="/api/argus_static/${weather.svg}" style="width:20px;height:20px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.2))"> <span>${this._escapeHtml(weather.label)}</span>`;
     if (heroSecurity) heroSecurity.innerHTML = `<i class="hero-live" style="background:${isArmed ? '#ffb54d' : '#55df91'};box-shadow:0 0 9px ${isArmed ? '#ffb54d' : '#55df91'}"></i>${this._escapeHtml(isArmed ? t('system_armed') : t('system_disarmed'))}`;
 
     // Surgical Update: Maintain article nodes to persist fullscreen state

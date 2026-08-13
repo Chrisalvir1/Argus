@@ -946,6 +946,9 @@ async def ws_argus_login_bootstrap(hass, connection, msg) -> None:
             "ha_user_id": ha_user_id,
             "background_mode": "none",
             "background_images": [],
+            "weather_source": None,
+            "temperature_source": None,
+            "language": None,
         })
         return
 
@@ -1014,6 +1017,9 @@ async def ws_argus_login_bootstrap(hass, connection, msg) -> None:
         "ha_user_id": ha_user_id,
         "background_mode": ui_data.get("background_mode"),
         "background_images": ui_data.get("background_images"),
+        "weather_source": ui_data.get("weather_source"),
+        "temperature_source": ui_data.get("temperature_source"),
+        "language": ui_data.get("language"),
         "user_theme": user_theme,
     })
 
