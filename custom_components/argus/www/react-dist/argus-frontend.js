@@ -7025,25 +7025,28 @@ ${i}`);
     });
   }
   async _renderLoginScreen(r) {
-    const i = (f) => this._t(f);
-    let o = [];
-    try {
-      const f = await this._send("argus/get_profiles", {});
-      o = f?.profiles ?? f?.users ?? r?.users ?? [];
-    } catch {
-      o = this._config?.profiles ?? r?.users ?? [];
-    }
-    if (!o.length) return;
-    o = o.map((f) => ({
-      ...f,
-      display_name: f.display_name || f.name,
-      picture: f.picture || null
-    }));
-    const l = this.shadowRoot.getElementById("bootstrap-overlay");
-    l && (l.style.display = "none");
-    const c = document.createElement("div");
-    c.className = "argus-profile-overlay";
-    const u = `
+    if (!this._isRenderingLogin) {
+      this._isRenderingLogin = !0;
+      try {
+        const i = (f) => this._t(f);
+        let o = [];
+        try {
+          const f = await this._send("argus/get_profiles", {});
+          o = f?.profiles ?? f?.users ?? r?.users ?? [];
+        } catch {
+          o = this._config?.profiles ?? r?.users ?? [];
+        }
+        if (!o.length) return;
+        o = o.map((f) => ({
+          ...f,
+          display_name: f.display_name || f.name,
+          picture: f.picture || null
+        }));
+        const l = this.shadowRoot.getElementById("bootstrap-overlay");
+        l && (l.style.display = "none"), this.shadowRoot.querySelectorAll(".argus-profile-overlay, .argus-welcome-screen").forEach((f) => f.remove());
+        const c = document.createElement("div");
+        c.className = "argus-profile-overlay";
+        const u = `
       <div class="argus-profile-header">
         <h2>${this._escapeHtml(i("select_profile_title"))}</h2>
         <p>${this._escapeHtml(i("select_profile_subtitle"))}</p>
@@ -7051,8 +7054,8 @@ ${i}`);
     `, g = `
       <div class="argus-profile-grid">
         ${o.map((f) => {
-      const x = f.is_own_profile === !0, C = f.access_pin_configured === !0, I = f.role === "admin" ? i("role_argus_admin") : i("role_argus_standard"), R = f.picture ? `<img src="${this._escapeHtml(f.picture)}" alt="" />` : this._escapeHtml(f.name.substring(0, 2).toUpperCase()), E = C ? '<div class="lock-badge">🔒</div>' : "";
-      return `
+          const x = f.is_own_profile === !0, C = f.access_pin_configured === !0, I = f.role === "admin" ? i("role_argus_admin") : i("role_argus_standard"), R = f.picture ? `<img src="${this._escapeHtml(f.picture)}" alt="" />` : this._escapeHtml(f.name.substring(0, 2).toUpperCase()), E = C ? '<div class="lock-badge">🔒</div>' : "";
+          return `
         <div class="argus-profile-item" tabindex="0"
              data-user-id="${this._escapeHtml(f.id)}"
              data-is-own="${x ? "true" : "false"}"
@@ -7068,7 +7071,7 @@ ${i}`);
           </div>
         </div>
       `;
-    }).join("")}
+        }).join("")}
       </div>
     `, _ = `
       <button id="argus-exit-ha" style="
@@ -7080,40 +7083,44 @@ ${i}`);
         ← ${this._escapeHtml(i("exit_to_ha"))}
       </button>
     `;
-    c.innerHTML = `
+        c.innerHTML = `
       <div style="display:flex; flex-direction:column; align-items:center;">
         ${u}
         ${g}
       </div>
       ${_}
     `, this.shadowRoot.appendChild(c), c.querySelector("#argus-exit-ha").addEventListener("click", () => {
-      window.location.assign("/");
-    }), c.querySelectorAll(".argus-profile-item").forEach((f) => {
-      f.addEventListener("click", async () => {
-        if (c.dataset.processing) return;
-        c.dataset.processing = "1";
-        const x = f.getAttribute("data-user-id"), C = f.getAttribute("data-is-own") === "true", I = f.getAttribute("data-requires-pin") === "true", R = o.find((E) => E.id === x);
-        if (C)
-          if (I)
-            c.remove(), this._showTvOSPinPrompt(R);
-          else
-            try {
-              await this._send("argus/select_profile", { argus_user_id: x }), c.remove(), await this._runProfileWelcomeAnimation(R), this._profileSelectedThisMount = !0, this._load();
-            } catch (E) {
-              c.dataset.processing = "", alert(E.message || "Error seleccionando perfil");
+          window.location.assign("/");
+        }), c.querySelectorAll(".argus-profile-item").forEach((f) => {
+          f.addEventListener("click", async () => {
+            if (c.dataset.processing) return;
+            c.dataset.processing = "1";
+            const x = f.getAttribute("data-user-id"), C = f.getAttribute("data-is-own") === "true", I = f.getAttribute("data-requires-pin") === "true", R = o.find((E) => E.id === x);
+            if (C)
+              if (I)
+                c.remove(), this._showTvOSPinPrompt(R);
+              else
+                try {
+                  await this._send("argus/select_profile", { argus_user_id: x }), c.remove(), await this._runProfileWelcomeAnimation(R), this._profileSelectedThisMount = !0, this._load();
+                } catch (E) {
+                  c.dataset.processing = "", alert(E.message || "Error seleccionando perfil");
+                }
+            else {
+              if (!I) {
+                const E = f;
+                E.style.animation = "none", E.offsetHeight, E.style.animation = "argus-shake 0.3s ease", c.dataset.processing = "";
+                return;
+              }
+              c.remove(), this._showTvOSPinPrompt(R);
             }
-        else {
-          if (!I) {
-            const E = f;
-            E.style.animation = "none", E.offsetHeight, E.style.animation = "argus-shake 0.3s ease", c.dataset.processing = "";
-            return;
-          }
-          c.remove(), this._showTvOSPinPrompt(R);
-        }
-      }), f.addEventListener("keydown", (x) => {
-        (x.key === "Enter" || x.key === " ") && f.dispatchEvent(new Event("click"));
-      });
-    });
+          }), f.addEventListener("keydown", (x) => {
+            (x.key === "Enter" || x.key === " ") && f.dispatchEvent(new Event("click"));
+          });
+        });
+      } finally {
+        this._isRenderingLogin = !1;
+      }
+    }
   }
   async _showTvOSPinPrompt(r) {
     const i = (_) => this._t(_), o = document.createElement("div");

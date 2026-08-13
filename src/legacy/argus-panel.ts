@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Home Hub – v2.0.83
+ * Argus Home Hub – v2.0.84
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -8296,17 +8296,21 @@ gl_FragColor=vec4(col,alpha);}`;
 
 
   async _renderLoginScreen(bootstrap) {
-    const t = (k) => this._t(k);
-
-    // ── Obtener perfiles ──────────────────────────────────────────
-    let users = [];
+    if (this._isRenderingLogin) return;
+    this._isRenderingLogin = true;
+    
     try {
-      const resp = await this._send('argus/get_profiles', {});
-      users = resp?.profiles ?? resp?.users ?? bootstrap?.users ?? [];
-    } catch (_) {
-      users = this._config?.profiles ?? bootstrap?.users ?? [];
-    }
-    if (!users.length) return;
+      const t = (k) => this._t(k);
+
+      // ── Obtener perfiles ──────────────────────────────────────────
+      let users = [];
+      try {
+        const resp = await this._send('argus/get_profiles', {});
+        users = resp?.profiles ?? resp?.users ?? bootstrap?.users ?? [];
+      } catch (_) {
+        users = this._config?.profiles ?? bootstrap?.users ?? [];
+      }
+      if (!users.length) return;
 
     // ── Enriquecer con photos de HA Persons si faltan ─────────────
     // La foto de HA Person entity ya viene del bootstrap (picture field),
@@ -8325,6 +8329,9 @@ gl_FragColor=vec4(col,alpha);}`;
     if (bootOverlay) {
         bootOverlay.style.display = 'none';
     }
+    
+    // Limpiar overlays anteriores por si acaso
+    this.shadowRoot.querySelectorAll('.argus-profile-overlay, .argus-welcome-screen').forEach(el => el.remove());
 
     // ── Render Fase 1 (Selector grid tvOS) ────────────────────────
     const overlay = document.createElement('div');
@@ -8448,6 +8455,9 @@ gl_FragColor=vec4(col,alpha);}`;
         if (e.key === 'Enter' || e.key === ' ') item.dispatchEvent(new Event('click'));
       });
     });
+    } finally {
+      this._isRenderingLogin = false;
+    }
   }
 
   async _showTvOSPinPrompt(user) {

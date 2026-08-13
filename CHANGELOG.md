@@ -2,6 +2,11 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.84] - 2026-08-12
+
+### Fixed
+- **UI congelada en Blur / Múltiples clicks en selector de perfiles**: Se solucionó un problema crítico (concurrencia de carga de Home Assistant) donde si la interfaz inicializaba repetidas veces en el primer segundo, se apilaban múltiples "pantallas de selección de perfil" una sobre otra. Esto causaba que el usuario tuviera que dar varios clicks, e incluso al lograr entrar, las capas extras fantasma se quedaban en la pantalla manteniendo todo el dashboard con el filtro borroso (`backdrop-filter`).
+
 ## [2.0.83] - 2026-08-12
 
 ### Fixed
