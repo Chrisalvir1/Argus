@@ -1,3 +1,9 @@
+## [2.1.0] - 2026-08-13
+
+### Added
+- Liquid Gooey components (AlarmFAB, ProfileSelector, GooeyNav, QuickActions)
+- ShadowGooeyPortal for Shadow DOM SVG filter support
+
 ## [2.0.99] - 2026-08-13
 
 ### Fixed / Improved

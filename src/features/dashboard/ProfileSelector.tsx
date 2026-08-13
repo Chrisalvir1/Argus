@@ -38,7 +38,7 @@ export function ProfileSelector({ currentProfile, profiles, onSelectProfile }: P
   };
 
   return (
-    <Liquid filterId="argus-profile-gooey" blur={8} contrast={20}>
+    <Liquid blur={8} contrast={20}>
       <div style={{ position: 'relative', display: 'flex', flexDirection: 'row-reverse', alignItems: 'center' }}>
         
         {/* Main active profile */}
@@ -53,8 +53,7 @@ export function ProfileSelector({ currentProfile, profiles, onSelectProfile }: P
         {others.map((p, index) => (
           <Liquid.Item
             key={p.id}
-            active={open}
-            config={{ type: 'spring', stiffness: 250, damping: 20 }}
+            transition={{ stiffness: 250, damping: 20 }}
             delay={index * 40}
             style={{ position: 'absolute', right: `${54 + (index * 54)}px` }}
           >

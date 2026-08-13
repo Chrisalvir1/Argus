@@ -16586,17 +16586,19 @@ function hf() {
 var dp = hf(), Ui = Wi();
 function oa({ id: i = "argus-gooey", blur: r = 6, contrast: n = 18 }) {
   const a = Ae.useRef(null);
-  return Ae.useEffect(() => {
-    const s = a.current;
-    s && s.getRootNode();
-  }, []), /* @__PURE__ */ K.jsx("svg", { ref: a, style: { position: "absolute", width: 0, height: 0, pointerEvents: "none" }, "aria-hidden": "true", children: /* @__PURE__ */ K.jsx("defs", { children: /* @__PURE__ */ K.jsxs("filter", { id: i, children: [
+  Ae.useEffect(() => {
+    const d = a.current;
+    d && d.getRootNode();
+  }, []);
+  const c = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ? 14 : n;
+  return /* @__PURE__ */ K.jsx("svg", { ref: a, style: { position: "absolute", width: 0, height: 0, pointerEvents: "none" }, "aria-hidden": "true", children: /* @__PURE__ */ K.jsx("defs", { children: /* @__PURE__ */ K.jsxs("filter", { id: i, children: [
     /* @__PURE__ */ K.jsx("feGaussianBlur", { in: "SourceGraphic", stdDeviation: r, result: "blur" }),
     /* @__PURE__ */ K.jsx(
       "feColorMatrix",
       {
         in: "blur",
         mode: "matrix",
-        values: `1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 ${n} -${n - 1}`,
+        values: `1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 ${c} -${c - 1}`,
         result: "gooey"
       }
     ),
@@ -17796,7 +17798,7 @@ function jf({ state: i, onArmHome: r, onArmAway: n, onArmNight: a, onArmVacation
         return "rgba(255, 255, 255, 0.15)";
     }
   }, f = () => i === "triggered" ? "🚨" : (i.startsWith("armed_"), "🛡️");
-  return /* @__PURE__ */ K.jsx("div", { style: { position: "fixed", bottom: "24px", right: "24px", zIndex: 1e4, pointerEvents: "auto" }, children: /* @__PURE__ */ K.jsx(or, { filterId: "argus-alarm-gooey", blur: 6, contrast: 18, children: /* @__PURE__ */ K.jsxs("div", { style: { position: "relative", width: "60px", height: "60px" }, children: [
+  return /* @__PURE__ */ K.jsx("div", { style: { position: "fixed", bottom: "24px", right: "24px", zIndex: 1e4, pointerEvents: "auto" }, children: /* @__PURE__ */ K.jsx(or, { blur: 6, contrast: 18, children: /* @__PURE__ */ K.jsxs("div", { style: { position: "relative", width: "60px", height: "60px" }, children: [
     /* @__PURE__ */ K.jsx(
       "button",
       {
@@ -17827,8 +17829,7 @@ function jf({ state: i, onArmHome: r, onArmAway: n, onArmNight: a, onArmVacation
     /* @__PURE__ */ K.jsx(
       or.Item,
       {
-        active: u,
-        config: { type: "spring", stiffness: 300, damping: 20 },
+        transition: { stiffness: 300, damping: 20 },
         delay: 0,
         style: { position: "absolute", bottom: "70px", right: "0" },
         children: /* @__PURE__ */ K.jsx("button", { onClick: () => {
@@ -17839,8 +17840,7 @@ function jf({ state: i, onArmHome: r, onArmAway: n, onArmNight: a, onArmVacation
     /* @__PURE__ */ K.jsx(
       or.Item,
       {
-        active: u,
-        config: { type: "spring", stiffness: 300, damping: 20 },
+        transition: { stiffness: 300, damping: 20 },
         delay: 40,
         style: { position: "absolute", bottom: "130px", right: "0" },
         children: /* @__PURE__ */ K.jsx("button", { onClick: () => {
@@ -17851,8 +17851,7 @@ function jf({ state: i, onArmHome: r, onArmAway: n, onArmNight: a, onArmVacation
     /* @__PURE__ */ K.jsx(
       or.Item,
       {
-        active: u,
-        config: { type: "spring", stiffness: 300, damping: 20 },
+        transition: { stiffness: 300, damping: 20 },
         delay: 80,
         style: { position: "absolute", bottom: "190px", right: "0" },
         children: /* @__PURE__ */ K.jsx("button", { onClick: () => {
@@ -17863,8 +17862,7 @@ function jf({ state: i, onArmHome: r, onArmAway: n, onArmNight: a, onArmVacation
     /* @__PURE__ */ K.jsx(
       or.Item,
       {
-        active: u,
-        config: { type: "spring", stiffness: 300, damping: 20 },
+        transition: { stiffness: 300, damping: 20 },
         delay: 120,
         style: { position: "absolute", bottom: "70px", right: "60px" },
         children: /* @__PURE__ */ K.jsx("button", { onClick: () => {
@@ -17892,7 +17890,7 @@ function Ff({ currentProfile: i, profiles: r, onSelectProfile: n }) {
     padding: 0,
     overflow: "hidden"
   };
-  return /* @__PURE__ */ K.jsx(or, { filterId: "argus-profile-gooey", blur: 8, contrast: 20, children: /* @__PURE__ */ K.jsxs("div", { style: { position: "relative", display: "flex", flexDirection: "row-reverse", alignItems: "center" }, children: [
+  return /* @__PURE__ */ K.jsx(or, { blur: 8, contrast: 20, children: /* @__PURE__ */ K.jsxs("div", { style: { position: "relative", display: "flex", flexDirection: "row-reverse", alignItems: "center" }, children: [
     /* @__PURE__ */ K.jsx(
       "button",
       {
@@ -17904,8 +17902,7 @@ function Ff({ currentProfile: i, profiles: r, onSelectProfile: n }) {
     c.map((m, _) => /* @__PURE__ */ K.jsx(
       or.Item,
       {
-        active: a,
-        config: { type: "spring", stiffness: 250, damping: 20 },
+        transition: { stiffness: 250, damping: 20 },
         delay: _ * 40,
         style: { position: "absolute", right: `${54 + _ * 54}px` },
         children: /* @__PURE__ */ K.jsx(
@@ -18055,14 +18052,14 @@ function Wf() {
       onPointerOut: (m) => {
         n.current && clearTimeout(n.current), n.current = window.setTimeout(() => r(null), 300);
       },
-      children: /* @__PURE__ */ K.jsx(or, { filterId: "argus-widget-quick-gooey", blur: 5, contrast: 16, children: /* @__PURE__ */ K.jsxs("div", { style: { position: "absolute", left: c, top: d, width: 0, height: 0 }, children: [
-        /* @__PURE__ */ K.jsx(or.Item, { active: !0, config: { type: "spring", stiffness: 300, damping: 20 }, delay: 0, style: { position: "absolute", left: "-22px", top: "-70px" }, children: /* @__PURE__ */ K.jsx("button", { onClick: (m) => {
+      children: /* @__PURE__ */ K.jsx(or, { blur: 5, contrast: 16, children: /* @__PURE__ */ K.jsxs("div", { style: { position: "absolute", left: c, top: d, width: 0, height: 0 }, children: [
+        /* @__PURE__ */ K.jsx(or.Item, { transition: { stiffness: 300, damping: 20 }, delay: 0, style: { position: "absolute", left: "-22px", top: "-70px" }, children: /* @__PURE__ */ K.jsx("button", { onClick: (m) => {
           m.stopPropagation(), a("turn_on");
         }, style: s, children: "ON" }) }),
-        /* @__PURE__ */ K.jsx(or.Item, { active: !0, config: { type: "spring", stiffness: 300, damping: 20 }, delay: 40, style: { position: "absolute", left: "-70px", top: "-10px" }, children: /* @__PURE__ */ K.jsx("button", { onClick: (m) => {
+        /* @__PURE__ */ K.jsx(or.Item, { transition: { stiffness: 300, damping: 20 }, delay: 40, style: { position: "absolute", left: "-70px", top: "-10px" }, children: /* @__PURE__ */ K.jsx("button", { onClick: (m) => {
           m.stopPropagation(), a("turn_off");
         }, style: s, children: "OFF" }) }),
-        u && /* @__PURE__ */ K.jsx(or.Item, { active: !0, config: { type: "spring", stiffness: 300, damping: 20 }, delay: 80, style: { position: "absolute", left: "26px", top: "-10px" }, children: /* @__PURE__ */ K.jsx("button", { onClick: (m) => {
+        u && /* @__PURE__ */ K.jsx(or.Item, { transition: { stiffness: 300, damping: 20 }, delay: 80, style: { position: "absolute", left: "26px", top: "-10px" }, children: /* @__PURE__ */ K.jsx("button", { onClick: (m) => {
           m.stopPropagation(), a("toggle");
         }, style: s, children: "DIM" }) })
       ] }) })

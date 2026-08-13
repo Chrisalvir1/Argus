@@ -33,7 +33,7 @@ export function AlarmFAB({ state, onArmHome, onArmAway, onArmNight, onArmVacatio
 
   return (
     <div style={{ position: 'fixed', bottom: '24px', right: '24px', zIndex: 10000, pointerEvents: 'auto' }}>
-      <Liquid filterId="argus-alarm-gooey" blur={6} contrast={18}>
+      <Liquid blur={6} contrast={18}>
         <div style={{ position: 'relative', width: '60px', height: '60px' }}>
           
           {/* Main FAB */}
@@ -62,8 +62,7 @@ export function AlarmFAB({ state, onArmHome, onArmAway, onArmNight, onArmVacatio
 
           {/* Sub-buttons */}
           <Liquid.Item
-            active={open}
-            config={{ type: 'spring', stiffness: 300, damping: 20 }}
+            transition={{ stiffness: 300, damping: 20 }}
             delay={0}
             style={{ position: 'absolute', bottom: '70px', right: '0' }}
           >
@@ -73,8 +72,7 @@ export function AlarmFAB({ state, onArmHome, onArmAway, onArmNight, onArmVacatio
           </Liquid.Item>
 
           <Liquid.Item
-            active={open}
-            config={{ type: 'spring', stiffness: 300, damping: 20 }}
+            transition={{ stiffness: 300, damping: 20 }}
             delay={40}
             style={{ position: 'absolute', bottom: '130px', right: '0' }}
           >
@@ -84,8 +82,7 @@ export function AlarmFAB({ state, onArmHome, onArmAway, onArmNight, onArmVacatio
           </Liquid.Item>
 
           <Liquid.Item
-            active={open}
-            config={{ type: 'spring', stiffness: 300, damping: 20 }}
+            transition={{ stiffness: 300, damping: 20 }}
             delay={80}
             style={{ position: 'absolute', bottom: '190px', right: '0' }}
           >
@@ -95,8 +92,7 @@ export function AlarmFAB({ state, onArmHome, onArmAway, onArmNight, onArmVacatio
           </Liquid.Item>
           
           <Liquid.Item
-            active={open}
-            config={{ type: 'spring', stiffness: 300, damping: 20 }}
+            transition={{ stiffness: 300, damping: 20 }}
             delay={120}
             style={{ position: 'absolute', bottom: '70px', right: '60px' }}
           >

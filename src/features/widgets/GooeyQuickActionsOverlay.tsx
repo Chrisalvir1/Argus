@@ -115,19 +115,19 @@ export function GooeyQuickActionsOverlay() {
         hoverTimer.current = window.setTimeout(() => setActive(null), 300);
       }}
     >
-      <Liquid filterId="argus-widget-quick-gooey" blur={5} contrast={16}>
+      <Liquid blur={5} contrast={16}>
         <div style={{ position: 'absolute', left: cx, top: cy, width: 0, height: 0 }}>
           
-          <Liquid.Item active={true} config={{ type: 'spring', stiffness: 300, damping: 20 }} delay={0} style={{ position: 'absolute', left: '-22px', top: '-70px' }}>
+          <Liquid.Item transition={{ stiffness: 300, damping: 20 }} delay={0} style={{ position: 'absolute', left: '-22px', top: '-70px' }}>
             <button onClick={(e) => { e.stopPropagation(); sendAction('turn_on'); }} style={btnStyle}>ON</button>
           </Liquid.Item>
           
-          <Liquid.Item active={true} config={{ type: 'spring', stiffness: 300, damping: 20 }} delay={40} style={{ position: 'absolute', left: '-70px', top: '-10px' }}>
+          <Liquid.Item transition={{ stiffness: 300, damping: 20 }} delay={40} style={{ position: 'absolute', left: '-70px', top: '-10px' }}>
             <button onClick={(e) => { e.stopPropagation(); sendAction('turn_off'); }} style={btnStyle}>OFF</button>
           </Liquid.Item>
 
           {isLight && (
-            <Liquid.Item active={true} config={{ type: 'spring', stiffness: 300, damping: 20 }} delay={80} style={{ position: 'absolute', left: '26px', top: '-10px' }}>
+            <Liquid.Item transition={{ stiffness: 300, damping: 20 }} delay={80} style={{ position: 'absolute', left: '26px', top: '-10px' }}>
               <button onClick={(e) => { e.stopPropagation(); sendAction('toggle'); }} style={btnStyle}>DIM</button>
             </Liquid.Item>
           )}
