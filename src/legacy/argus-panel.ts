@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Home Hub – v2.0.84
+ * Argus Home Hub – v2.0.85
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -2355,9 +2355,9 @@ _tmpl.innerHTML = `
 /* ─── tvOS Profile Selector ─── */
 .argus-profile-overlay {
   position: fixed; inset: 0;
-  background: rgba(0, 0, 0, 0.72);
-  backdrop-filter: blur(28px) saturate(1.4);
-  -webkit-backdrop-filter: blur(28px) saturate(1.4);
+  background: rgba(0,0,0,0.85);
+  /* NO backdrop-filter: causes orphaned compositor layers in WebKit when removed.
+     High-opacity background achieves same visual effect safely. */
   display: flex; align-items: center; justify-content: center;
   z-index: 9999;
   animation: argus-overlay-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -2482,9 +2482,9 @@ _tmpl.innerHTML = `
 /* ─── Welcome Screen (Fase 2) ─── */
 .argus-welcome-screen {
   position: fixed; inset: 0;
-  background: rgba(0,0,0,0.82);
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
+  background: rgba(0,0,0,0.88);
+  /* NO backdrop-filter: Safari/WebKit compositor bug causes blur to persist
+     after element.remove(). Use opaque background instead. */
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   z-index: 10000;
@@ -4302,6 +4302,9 @@ class ArgusPanel extends HTMLElement {
       this._renderLoginScreen(bootstrap);
       return;
     }
+
+    // Always nuke any leftover login/profile overlays before showing dashboard
+    this._nukeAllLoginOverlays();
 
     // Now we have a session, load dashboard
     let dashboard;
@@ -8542,6 +8545,9 @@ gl_FragColor=vec4(col,alpha);}`;
   }
 
   async _runProfileWelcomeAnimation(user) {
+    // Kill any stale overlays first
+    this._nukeAllLoginOverlays();
+
     const overlay = document.createElement('div');
     overlay.className = 'argus-welcome-screen';
 
@@ -8560,7 +8566,6 @@ gl_FragColor=vec4(col,alpha);}`;
     `;
     this.shadowRoot.appendChild(overlay);
 
-    // Pequeño zoom de entrada
     const avatar = overlay.querySelector('#welcome-avatar-flying');
     const textGroup = overlay.querySelector('#welcome-text-anim');
     avatar.style.transform = 'scale(0.8)';
@@ -8578,33 +8583,38 @@ gl_FragColor=vec4(col,alpha);}`;
     textGroup.style.transform = 'translateY(0)';
     textGroup.style.opacity = '1';
 
-    // Mantener la pantalla visible 1.5s
     await new Promise(r => setTimeout(r, 1500));
 
-    // Desvanecer el texto
     textGroup.style.transition = 'opacity 0.3s ease';
     textGroup.style.opacity = '0';
 
-    // Volar el avatar hacia arriba (simulando ir al TopBar)
     const rect = avatar.getBoundingClientRect();
-    const destX = window.innerWidth - 60; // Posición apróx del badge de perfil en TopBar derecho
+    const destX = window.innerWidth - 60;
     const destY = 20;
-
     const moveX = destX - rect.left - (rect.width/2) + 20;
     const moveY = destY - rect.top - (rect.height/2) + 20;
 
     avatar.style.transition = 'transform 0.5s cubic-bezier(0.5, 0, 0.2, 1), opacity 0.3s ease 0.2s';
     avatar.style.transform = `translate(${moveX}px, ${moveY}px) scale(0.3)`;
-    
-    // WebKit bug fix: fading backdrop-filter and removing element causes orphaned blur planes.
-    // Animate opacity instead, which cleanly fades the entire compositor layer.
     overlay.style.transition = 'opacity 0.5s ease';
     overlay.style.opacity = '0';
     
-    await new Promise(r => setTimeout(r, 500));
-    overlay.style.display = 'none'; // Force compositing update before removal
-    await new Promise(r => requestAnimationFrame(r));
-    overlay.remove();
+    await new Promise(r => setTimeout(r, 520));
+    // Force hard removal — do NOT animate backdrop-filter, just kill the node
+    this._nukeAllLoginOverlays();
+  }
+
+  _nukeAllLoginOverlays() {
+    // Hard-destroy all profile/welcome overlays. No animations.
+    // This is critical: any leftover overlay causes a permanent blur on the UI.
+    this.shadowRoot
+      .querySelectorAll('.argus-profile-overlay, .argus-welcome-screen, .argus-pin-prompt')
+      .forEach(el => {
+        el.style.transition = 'none';
+        el.style.opacity = '0';
+        el.style.display = 'none';
+        el.remove();
+      });
   }
 
   _initWidgetGrid() {

@@ -2,6 +2,12 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.85] - 2026-08-12
+
+### Fixed
+- **Blur permanente eliminado definitivamente**: Causa raiz identificada: `backdrop-filter:blur` en un elemento `position:fixed` dentro de un Shadow DOM crea una capa separada en el compositor WebKit. Cuando el elemento se destruye con `.remove()`, WebKit puede dejar la capa del compositor "huérfana" y visible de forma permanente. Solución: se eliminó `backdrop-filter` de `.argus-profile-overlay` y `.argus-welcome-screen`. El fondo oscuro (`rgba 0.85+`) logra el mismo efecto visual sin tocar el compositor.
+- **Función `_nukeAllLoginOverlays()` añadida**: Destrucción forzada de todos los overlays de login/perfil/bienvenida en un solo método. Se invoca al inicio de la animación de bienvenida, al final de la misma, y al inicio de `_load()` para garantizar que ningún overlay residual bloquee el dashboard.
+
 ## [2.0.84] - 2026-08-12
 
 ### Fixed
