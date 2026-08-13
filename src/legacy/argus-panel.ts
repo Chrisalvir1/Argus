@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Home Hub – v2.0.85
+ * Argus Home Hub – v2.0.86
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -2298,9 +2298,9 @@ _tmpl.innerHTML = `
 .argus-bootstrap-layer {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(0,0,0,0.88);
+  /* NO backdrop-filter: element is permanently in DOM (display:none toggle).
+     WebKit compositor leak bug — opaque background is visually equivalent. */
   z-index: 9999;
   display: flex;
   flex-direction: column;
@@ -8615,6 +8615,16 @@ gl_FragColor=vec4(col,alpha);}`;
         el.style.display = 'none';
         el.remove();
       });
+    // Also force-hide the persistent #bootstrap-overlay (stays in DOM via display:none toggle).
+    // Even display:none + backdrop-filter can leave compositor artifacts in WebKit.
+    const boot = this.shadowRoot?.getElementById('bootstrap-overlay');
+    if (boot) {
+      boot.style.backdropFilter = 'none';
+      boot.style.webkitBackdropFilter = 'none';
+      boot.style.display = 'none';
+      boot.style.opacity = '0';
+      boot.style.pointerEvents = 'none';
+    }
   }
 
   _initWidgetGrid() {

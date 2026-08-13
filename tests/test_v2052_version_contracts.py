@@ -5,7 +5,7 @@ import unittest
 class TestVersionContracts(unittest.TestCase):
     def setUp(self):
         self.project_root = os.path.dirname(os.path.dirname(__file__))
-        self.version = "2.0.85"
+        self.version = "2.0.86"
 
     def test_manifest_version(self):
         manifest_path = os.path.join(self.project_root, "custom_components", "argus", "manifest.json")

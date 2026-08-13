@@ -2,6 +2,11 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.86] - 2026-08-12
+
+### Fixed
+- **Blur permanente: causa raiz final**: El elemento `#bootstrap-overlay` (clase `.argus-bootstrap-layer`) tiene `backdrop-filter:blur(20px)` y `position:fixed`, y NUNCA se elimina del DOM — solo se oculta con `display:none`. En WebKit, un elemento con `backdrop-filter` y `position:fixed` crea una capa en el compositor gráfico que **puede persistir incluso con `display:none`** en ciertas condiciones de render. Solución: eliminado `backdrop-filter` del CSS de `.argus-bootstrap-layer`, y `_nukeAllLoginOverlays()` ahora también limpia explícitamente el `backdropFilter` del elemento via JS.
+
 ## [2.0.85] - 2026-08-12
 
 ### Fixed

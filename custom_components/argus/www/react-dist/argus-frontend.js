@@ -3073,9 +3073,9 @@ Sp.innerHTML = `
 .argus-bootstrap-layer {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(0,0,0,0.88);
+  /* NO backdrop-filter: element is permanently in DOM (display:none toggle).
+     WebKit compositor leak bug — opaque background is visually equivalent. */
   z-index: 9999;
   display: flex;
   flex-direction: column;
@@ -7199,9 +7199,11 @@ ${i}`);
     l.style.transition = "transform 0.5s cubic-bezier(0.5, 0, 0.2, 1), opacity 0.3s ease 0.2s", l.style.transform = `translate(${_}px, ${h}px) scale(0.3)`, i.style.transition = "opacity 0.5s ease", i.style.opacity = "0", await new Promise((f) => setTimeout(f, 520)), this._nukeAllLoginOverlays();
   }
   _nukeAllLoginOverlays() {
-    this.shadowRoot.querySelectorAll(".argus-profile-overlay, .argus-welcome-screen, .argus-pin-prompt").forEach((r) => {
-      r.style.transition = "none", r.style.opacity = "0", r.style.display = "none", r.remove();
+    this.shadowRoot.querySelectorAll(".argus-profile-overlay, .argus-welcome-screen, .argus-pin-prompt").forEach((i) => {
+      i.style.transition = "none", i.style.opacity = "0", i.style.display = "none", i.remove();
     });
+    const r = this.shadowRoot?.getElementById("bootstrap-overlay");
+    r && (r.style.backdropFilter = "none", r.style.webkitBackdropFilter = "none", r.style.display = "none", r.style.opacity = "0", r.style.pointerEvents = "none");
   }
   _initWidgetGrid() {
     try {
