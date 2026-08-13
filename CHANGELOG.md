@@ -2,6 +2,14 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.80] - 2026-08-12
+
+### Fixed
+- **Fullscreen móvil/tablet**: Usa `position:fixed` + `inset:0` + `100dvh` + `env(safe-area-inset-*)` para cubrir pantalla completa sin clipping en iOS/Android.
+- **Animación climática**: Nubes WebGL con falloff gaussiano suavizado (sin blobs blancos duros). Lluvia más visible (+20% intensidad). Brillo solar mejorado.
+- **Canvas WebGL en móvil**: Inicialización mediante `ResizeObserver` para garantizar que el canvas tenga dimensiones antes de compilar el shader.
+- **GitHub Actions**: Flexibilizado requerimiento de Python a ≥3.11 (era exacto 3.14.2 lo que causaba el fallo del workflow Release).
+
 ## [2.0.79] - 2026-08-12
 
 ### Fixed

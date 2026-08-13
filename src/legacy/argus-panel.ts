@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Home Hub – v2.0.79
+ * Argus Home Hub – v2.0.80
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1669,12 +1669,39 @@ _tmpl.innerHTML = `
   .btn-disarm{--btn-bg:rgba(67,160,71,0.15); margin-top:4px}
   .btn-disarm.active{--btn-bg:rgba(67,160,71,0.25);--btn-shadow:rgba(67,160,71,0.4);border-color:rgba(67,160,71,0.45)!important;box-shadow:0 8px 24px rgba(67,160,71,0.35)!important}
 
-  .ios-fullscreen { position: fixed !important; z-index: 999999 !important; display: flex !important; flex-direction: column !important; background: #000 !important; }
-  @media(min-width:900px) {
-    .ios-fullscreen { inset: 3% !important; width: 94vw !important; height: 94vh !important; max-width: 1500px !important; margin: auto !important; border-radius: 36px !important; border: 1px solid rgba(255,255,255,0.12) !important; box-shadow: 0 40px 100px rgba(0,0,0,0.8) !important; overflow: hidden !important; -webkit-mask-image: -webkit-radial-gradient(white, black) !important; }
+  /* ── iOS/Android Fullscreen: cubre pantalla completa sin clipping ── */
+  .ios-fullscreen {
+    position: fixed !important;
+    inset: 0 !important;
+    left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important;
+    width: 100vw !important; height: 100dvh !important;
+    max-width: 100vw !important; max-height: 100dvh !important;
+    min-height: 100dvh !important;
+    margin: 0 !important; border-radius: 0 !important;
+    z-index: 999999 !important;
+    display: flex !important; flex-direction: column !important;
+    background: #000 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    /* Notch / home-indicator safe areas (iOS/Android) */
+    padding-top: env(safe-area-inset-top, 0px) !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+    padding-left: env(safe-area-inset-left, 0px) !important;
+    padding-right: env(safe-area-inset-right, 0px) !important;
   }
-  @media(max-width:899px) {
-    .ios-fullscreen { inset: 0 !important; width: 100vw !important; height: 100vh !important; max-width: none !important; margin: 0 !important; border-radius: 0 !important; }
+  @media(min-width:900px) {
+    .ios-fullscreen {
+      inset: 3% !important;
+      left: 3% !important; right: 3% !important; top: 3% !important; bottom: 3% !important;
+      width: 94vw !important; height: 94vh !important;
+      max-width: 1500px !important;
+      margin: auto !important; border-radius: 36px !important;
+      border: 1px solid rgba(255,255,255,0.12) !important;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.8) !important;
+      overflow: hidden !important;
+      -webkit-mask-image: -webkit-radial-gradient(white, black) !important;
+      padding: 0 !important;
+    }
   }
   .ios-fullscreen .entry-content { grid-template-columns: 320px 1fr !important; padding: 60px !important; gap: 60px !important; height: 100% !important; align-items: center !important; background: radial-gradient(circle at 20% 50%, rgba(0,0,0,0.5) 0%, transparent 80%) !important; }
   .ios-fullscreen .liquid-btn { padding: 16px 20px !important; font-size: 16px !important; border-radius: 20px !important; gap: 12px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.4) !important; }
@@ -1714,7 +1741,7 @@ _tmpl.innerHTML = `
   }
 
   /* Fullscreen on phones has its own compact layouts for both orientations. */
-  .ios-fullscreen{height:100dvh!important;min-height:100dvh!important}
+  /* dvh handled in base .ios-fullscreen rule */
   @media(max-width:700px) and (orientation:portrait){
     .ios-fullscreen .entry-content{grid-template-columns:minmax(0,1fr)!important;padding:76px 16px 22px!important;gap:14px!important;overflow-y:auto!important;align-content:start!important}
     .ios-fullscreen .liquid-stack{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
@@ -1740,12 +1767,12 @@ _tmpl.innerHTML = `
   /* The active console owns its fullscreen layout. Legacy entry grid rules
      must not redistribute the controls into empty corners. */
   /* Fullscreen security-console: modos izquierda, escudo centro, sensores derecha */
-  .ios-fullscreen .entry-content.security-console{display:flex!important;flex-wrap:nowrap!important;justify-content:center!important;align-items:center!important;gap:32px!important;padding:50px 48px 36px!important;overflow:auto!important;height:100%!important;box-sizing:border-box!important}
+  .ios-fullscreen .entry-content.security-console{display:flex!important;flex-wrap:nowrap!important;justify-content:center!important;align-items:center!important;gap:32px!important;padding:50px 48px 36px!important;overflow:auto!important;height:100%!important;max-height:100vh!important;max-height:100dvh!important;box-sizing:border-box!important;-webkit-overflow-scrolling:touch!important}
   .ios-fullscreen .entry-content.security-console .liquid-stack{order:1!important;flex:0 1 340px!important;min-width:240px!important;max-width:360px!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-self:center!important}
   .ios-fullscreen .entry-content.security-console .entry-icon{order:2!important;flex:0 0 180px!important;min-height:160px!important;margin:0!important;display:flex!important;justify-content:center!important;align-items:center!important}
   .ios-fullscreen .entry-content.security-console .console-sensors{order:3!important;flex:0 1 340px!important;min-width:220px!important;max-width:380px!important;align-self:center!important}
   .ios-fullscreen .entry-content.security-console .console-keypad{order:4!important;flex:0 0 240px!important;width:240px!important;max-width:260px!important}
-  @media(max-width:900px){.ios-fullscreen .entry-content.security-console{flex-wrap:wrap!important;padding:80px 20px 24px!important;gap:18px!important;align-content:flex-start!important;overflow-y:auto!important}.ios-fullscreen .entry-content.security-console .entry-icon{order:1!important;flex:0 0 auto!important;min-height:110px!important;display:flex!important}.ios-fullscreen .entry-content.security-console .liquid-stack{order:2!important;flex:0 0 100%!important;width:100%!important;max-width:380px!important}.ios-fullscreen .entry-content.security-console .console-sensors{order:3!important;flex:0 0 100%!important;width:100%!important;max-width:380px!important}.ios-fullscreen .entry-content.security-console .console-keypad{order:4!important;flex:0 0 100%!important;width:100%!important;max-width:320px!important;padding:14px!important}}
+  @media(max-width:900px){.ios-fullscreen .entry-content.security-console{flex-wrap:wrap!important;padding:80px 20px 24px!important;gap:18px!important;align-content:flex-start!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important}.ios-fullscreen .entry-content.security-console .entry-icon{order:1!important;flex:0 0 auto!important;min-height:110px!important;display:flex!important}.ios-fullscreen .entry-content.security-console .liquid-stack{order:2!important;flex:0 0 100%!important;width:100%!important;max-width:380px!important}.ios-fullscreen .entry-content.security-console .console-sensors{order:3!important;flex:0 0 100%!important;width:100%!important;max-width:380px!important}.ios-fullscreen .entry-content.security-console .console-keypad{order:4!important;flex:0 0 100%!important;width:100%!important;max-width:320px!important;padding:14px!important}}
 
   .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
   .badge.armed_away,.badge.armed_vacation{background:rgba(229,57,53,.12);color:var(--error-color,#e53935)}
@@ -1984,7 +2011,7 @@ _tmpl.innerHTML = `
   .wx-atmosphere{isolation:isolate;background:linear-gradient(180deg,var(--sky-top),var(--sky-mid) 58%,var(--sky-bottom));overflow:hidden}
   .wx-webgl{position:absolute;inset:0;z-index:2;width:100%;height:100%;pointer-events:none;opacity:.95}
   .wx-atmosphere.webgl-active .wx-precip,.wx-atmosphere.webgl-active .wx-lightning,.wx-atmosphere.webgl-active .wx-fog-real,.wx-atmosphere.webgl-active .wx-starfield{opacity:0}
-  .wx-atmosphere.webgl-active .wx-cloudfield{opacity:0.25!important;filter:blur(3px)!important}
+  .wx-atmosphere.webgl-active .wx-cloudfield{opacity:0!important}
   .wx-atmosphere.webgl-active .wx-sun-real,.wx-atmosphere.webgl-active .wx-moon-real{opacity:0.6!important}
   .wx-atmosphere::before{content:'';position:absolute;inset:-20%;z-index:-1;background:radial-gradient(ellipse at 65% 20%,rgba(255,255,255,.18),transparent 30%),radial-gradient(ellipse at 50% 120%,rgba(0,0,0,.48),transparent 48%),linear-gradient(115deg,rgba(255,255,255,.07),transparent 42%);filter:blur(12px)}
   .wx-horizon{position:absolute;inset:auto -10% 0;height:38%;background:linear-gradient(180deg,transparent,rgba(4,10,18,.22) 18%,rgba(3,8,14,.72));filter:blur(1px)}
@@ -1995,7 +2022,7 @@ _tmpl.innerHTML = `
   .wx-moon-real::after{content:'';position:absolute;inset:-5px;background:var(--moon-shadow,#0a1428);border-radius:50%;transform:translateX(var(--moon-offset,0));box-shadow:0 0 0 1px rgba(0,0,0,.06)}
   .wx-moon-real.full::after{display:none}.wx-moon-real.new{opacity:.14}.wx-moon-real.new::after{display:block;transform:none}.wx-moon-real.waxing-crescent{--moon-offset:42px}.wx-moon-real.first-quarter{--moon-offset:31px}.wx-moon-real.waxing-gibbous{--moon-offset:17px}.wx-moon-real.waning-gibbous{--moon-offset:-17px}.wx-moon-real.last-quarter{--moon-offset:-31px}.wx-moon-real.waning-crescent{--moon-offset:-42px}
   .wx-starfield{position:absolute;inset:0;background-image:radial-gradient(circle at 12% 16%,#fff 0 1px,transparent 1.5px),radial-gradient(circle at 33% 31%,rgba(255,255,255,.8) 0 1px,transparent 1.5px),radial-gradient(circle at 56% 11%,#fff 0 1px,transparent 1.5px),radial-gradient(circle at 73% 38%,rgba(255,255,255,.7) 0 1px,transparent 1.5px),radial-gradient(circle at 91% 20%,#fff 0 1px,transparent 1.5px);opacity:.78;animation:wxStarDrift 16s ease-in-out infinite alternate}
-  .wx-cloudfield{position:absolute;inset:-15% -20%;background:radial-gradient(ellipse at 14% 31%,var(--cloud-color) 0 9%,transparent 22%),radial-gradient(ellipse at 43% 18%,var(--cloud-color) 0 12%,transparent 28%),radial-gradient(ellipse at 74% 35%,var(--cloud-color) 0 10%,transparent 24%),radial-gradient(ellipse at 92% 13%,var(--cloud-color) 0 12%,transparent 27%);filter:blur(8px);opacity:var(--cloud-opacity,.72);animation:wxCloudDrift 45s ease-in-out infinite alternate}
+  .wx-cloudfield{position:absolute;inset:-15% -20%;background:radial-gradient(ellipse at 14% 28%,var(--cloud-color) 0 11%,transparent 26%),radial-gradient(ellipse at 43% 16%,var(--cloud-color) 0 14%,transparent 32%),radial-gradient(ellipse at 67% 32%,var(--cloud-color) 0 10%,transparent 24%),radial-gradient(ellipse at 88% 12%,var(--cloud-color) 0 13%,transparent 30%),radial-gradient(ellipse at 31% 45%,var(--cloud-color) 0 7%,transparent 20%),radial-gradient(ellipse at 76% 50%,var(--cloud-color) 0 8%,transparent 20%);filter:blur(18px);opacity:var(--cloud-opacity,.72);animation:wxCloudDrift 45s ease-in-out infinite alternate}
   .wx-precip{position:absolute;inset:-20% -10%;opacity:.78;pointer-events:none;overflow:hidden}.wx-precip.rain,.wx-precip.drizzle{background:none;animation:none}.wx-rain-drop{position:absolute;top:-20%;left:var(--x);width:var(--w);height:var(--h);border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(211,237,255,.92));box-shadow:0 0 3px rgba(195,230,255,.38);opacity:var(--o);transform:rotate(17deg);animation:wxDropReal var(--fall) linear var(--delay) infinite}.wx-precip.drizzle .wx-rain-drop{width:1px;opacity:.42;animation-duration:1.35s}.wx-precip.snow{background-image:radial-gradient(circle,rgba(255,255,255,.92) 0 1.6px,transparent 2px);background-size:42px 42px;animation:wxSnowReal 8s linear infinite}
   .wx-lightning{position:absolute;inset:0;background:rgba(238,247,255,0);animation:wxLightningReal 8s ease-in-out infinite;mix-blend-mode:screen}.wx-lightning::after{content:'';position:absolute;top:-5%;left:63%;width:13%;height:72%;background:linear-gradient(115deg,transparent 43%,rgba(255,255,235,.95) 44% 47%,transparent 48%) center/100% 100%;clip-path:polygon(43% 0,75% 0,51% 38%,82% 38%,21% 100%,43% 55%,13% 55%);opacity:0;animation:wxBoltReal 8s ease-in-out infinite;filter:drop-shadow(0 0 8px #fff6bd)}
   .wx-fog-real{position:absolute;inset:20% -40%;background:repeating-linear-gradient(180deg,transparent 0 48px,rgba(235,244,247,.17) 52px 76px,transparent 82px 132px);filter:blur(14px);animation:wxFogReal 18s ease-in-out infinite alternate}
@@ -4787,15 +4814,25 @@ class ArgusPanel extends HTMLElement {
       btn.addEventListener('click', () => this._exitFullscreenView());
     });
     el.querySelectorAll('.wx-webgl').forEach(canvas => {
-      if (canvas.clientWidth > 0) {
-        this._initWeatherWebGL(canvas);
-      } else {
+      // Use ResizeObserver for reliable initialization on mobile/tablet
+      if (canvas._argusRO) canvas._argusRO.disconnect();
+      const initOnce = () => {
+        if (canvas._argusWebglInit) return;
+        if ((canvas.clientWidth > 0 || canvas.offsetWidth > 0) && canvas.isConnected) {
+          canvas._argusWebglInit = true;
+          this._initWeatherWebGL(canvas);
+        }
+      };
+      if (typeof ResizeObserver !== 'undefined') {
+        canvas._argusRO = new ResizeObserver(() => { initOnce(); canvas._argusRO?.disconnect(); });
+        canvas._argusRO.observe(canvas.parentElement || canvas);
+      }
+      // Fallback chain
+      if (canvas.clientWidth > 0) { initOnce(); }
+      else {
         requestAnimationFrame(() => {
-          if (canvas.clientWidth > 0) {
-            this._initWeatherWebGL(canvas);
-          } else {
-            setTimeout(() => this._initWeatherWebGL(canvas), 150);
-          }
+          if (canvas.clientWidth > 0) { initOnce(); }
+          else { setTimeout(() => initOnce(), 200); }
         });
       }
     });
@@ -5000,20 +5037,28 @@ float clAlpha=0.0;
 if(cloudy>0.0){
   for(int i=0;i<6;i++){
     vec2 center=cloudPositions[i];
-    vec2 size=cloudSizes[i];
+    vec2 size=cloudSizes[i]*1.6;
     vec2 d=(u-center)/size;
     float dist=dot(d,d);
     if(dist<1.0){
-      float intensity=1.0-dist;
-      clAlpha=max(clAlpha,cloudAlphas[i]*intensity);
+      // Soft gaussian-like falloff + fbm noise for fluffy edges
+      float base=exp(-dist*3.5);
+      float edge=noise(u*8.0+vec2(t*0.05))*0.35;
+      float intensity=clamp(base+edge*base,0.0,1.0);
+      clAlpha=max(clAlpha,cloudAlphas[i]*intensity*0.65);
     }
   }
 }
-if(clAlpha>0.0){col=mix(col,vec3(1.0),clAlpha);alpha=max(alpha,clAlpha);}
+if(clAlpha>0.0){
+  // Clouds: white with slight blue tint for realism
+  vec3 cloudColor=mix(vec3(0.85,0.90,0.98),vec3(1.0),clAlpha);
+  col=mix(col,cloudColor,clAlpha);
+  alpha=max(alpha,clAlpha*0.7);
+}
 if(night>0.5&&rain==0.0&&snow==0.0&&fog==0.0){float st=h(floor(u*150.0));if(st>0.99){float tw=0.5+0.5*sin(t*3.0+st*100.0);col+=vec3(1.0)*tw*(st-0.99)*100.0;alpha=max(alpha,tw*0.5);}}
 if(night>0.5&&temp<5.0&&rain==0.0&&snow==0.0&&storm==0.0){float au=fbm(vec2(u.x*2.0+t*0.1,u.y*3.0-t*0.05)),au2=fbm(vec2(u.x*3.0-t*0.15,u.y*2.0+t*0.08));vec3 ac=mix(vec3(0.0,1.0,0.5),vec3(0.5,0.0,1.0),au);float intn=smoothstep(0.4,0.8,au*au2)*(1.0-u.y);col+=ac*intn*1.5;alpha=max(alpha,intn);}
-if(night<0.5&&rain==0.0&&fog==0.0&&snow==0.0){float gr=fbm(vec2(u.x*5.0-t*0.1,u.y*0.5))*(1.0-u.y);col+=vec3(1.0,0.95,0.8)*gr*0.75;alpha=max(alpha,gr*0.55);}
-if(rain>0.0){float r=rainLayer(u,t,0.0)+rainLayer(u,t,1.0)*0.6+rainLayer(u,t,2.0)*0.4+rainLayer(u,t,3.0)*0.2;col+=vec3(0.7,0.8,0.9)*r*rain;alpha=max(alpha,min(1.0,r*rain));}
+if(night<0.5&&rain==0.0&&fog==0.0&&snow==0.0){float gr=fbm(vec2(u.x*4.0-t*0.08,u.y*0.4))*(1.0-u.y*0.8);float sunGlow=smoothstep(0.3,0.7,gr);col+=vec3(1.0,0.92,0.72)*sunGlow*0.65;alpha=max(alpha,sunGlow*0.45);}
+if(rain>0.0){float r=rainLayer(u,t,0.0)+rainLayer(u,t,1.0)*0.65+rainLayer(u,t,2.0)*0.45+rainLayer(u,t,3.0)*0.25;col+=vec3(0.75,0.88,1.0)*r*rain*1.2;alpha=max(alpha,min(1.0,r*rain*1.1));}
 if(snow>0.0){float s=snowLayer(u,t,0.0)+snowLayer(u,t,1.0)*0.7+snowLayer(u,t,2.0)*0.4;col+=vec3(1.0)*s*snow;alpha=max(alpha,min(1.0,s*snow));}
 if(fog>0.0){float f=fbm(vec2(u.x*3.0+t*0.2,u.y*4.0-t*0.1));col+=vec3(0.8,0.85,0.9)*f*fog*0.7;alpha=max(alpha,min(1.0,f*fog*0.8));}
 if(storm>0.0){float fl=step(0.98,fract(t*0.1+fbm(u*5.0+t)))*(0.8+0.2*noise(vec2(t*50.0)));col+=vec3(1.0,0.95,1.0)*fl*storm;alpha=max(alpha,fl*storm*0.8);}
