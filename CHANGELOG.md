@@ -1,3 +1,9 @@
+## [2.0.90] - 2026-08-13
+
+### Fixed
+- Reparada inicialización del clima animado (WebGL) en segundo plano usando ResizeObserver.
+- Solucionado bloqueo completo de la interfaz de carga tras seleccionar perfil (se removió destrucción prematura del overlay de login).
+
 ## [2.0.89] - 2026-08-13
 
 ### Fixed

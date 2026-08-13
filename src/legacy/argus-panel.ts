@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Home Hub – v2.0.89
+ * Argus Home Hub – v2.0.90
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -6723,8 +6723,25 @@ gl_FragColor=vec4(col,alpha);}`;
       if (bgContainer) {
         bgContainer.innerHTML = `<canvas class="wx-webgl" style="position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none;"></canvas>`;
         this.shadowRoot.querySelectorAll('.wx-webgl').forEach(canvas => {
-          if (canvas.clientWidth > 0) this._initWeatherWebGL(canvas);
-          else requestAnimationFrame(() => this._initWeatherWebGL(canvas));
+          if (canvas._argusRO) canvas._argusRO.disconnect();
+          const initOnce = () => {
+            if (canvas._argusWebglInit) return;
+            if ((canvas.clientWidth > 0 || canvas.offsetWidth > 0) && canvas.isConnected) {
+              canvas._argusWebglInit = true;
+              this._initWeatherWebGL(canvas);
+            }
+          };
+          if (typeof ResizeObserver !== 'undefined') {
+            canvas._argusRO = new ResizeObserver(() => { initOnce(); canvas._argusRO?.disconnect(); });
+            canvas._argusRO.observe(canvas.parentElement || canvas);
+          }
+          if (canvas.clientWidth > 0) { initOnce(); }
+          else {
+            requestAnimationFrame(() => {
+              if (canvas.clientWidth > 0) initOnce();
+              else setTimeout(initOnce, 200);
+            });
+          }
         });
       }
       return;
@@ -8551,9 +8568,6 @@ gl_FragColor=vec4(col,alpha);}`;
   }
 
   async _runProfileWelcomeAnimation(user) {
-    // Kill any stale overlays first
-    this._nukeAllLoginOverlays();
-
     const overlay = this.shadowRoot.querySelector('.argus-profile-overlay');
     if (!overlay) return;
 
