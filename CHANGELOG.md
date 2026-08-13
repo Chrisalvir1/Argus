@@ -1,3 +1,11 @@
+## [2.0.97] - 2026-08-13
+
+### Fixed
+- Disabled experimental React Dashboard layer to restore legacy stability and prevent UI wipes during profile load.
+- Corrected CSS contrast bug causing black text on dark Argus panels when users run HA Light Theme.
+- Fixed aesthetic customization persistence (background image, sound) by updating login bootstrap payload.
+- Reverted animated weather SVGs to stable emoji presentation for improved compatibility.
+
 ## [2.0.96] - 2026-08-13
 
 ### Changed

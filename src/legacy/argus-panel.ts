@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Home Hub – v2.0.95
+ * Argus Home Hub – v2.0.97
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1110,8 +1110,6 @@ const _tmpl = document.createElement('template');
 _tmpl.innerHTML = `
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
-#widget-grid.hide-legacy > section.panel:not(#w-instances) { display: none !important; }
 
 @keyframes heroSpringSlideIn {
   0% { transform: translateX(-50px); opacity: 0; }
@@ -2781,7 +2779,7 @@ _tmpl.innerHTML = `
   </div>
 
   <!-- TWO-COLUMN LAYOUT -->
-  <div class="grid hide-legacy" id="widget-grid">
+  <div class="grid" id="widget-grid">
 
     <!-- Instances -->
     <section class="glass panel liquid-glass dashboard-instances" id="w-instances" style="grid-column: 1 / -1;">
@@ -3480,14 +3478,8 @@ class ArgusPanel extends HTMLElement {
       : key === 'fog' ? '🌫️'
       : key.includes('cloud') ? '☁️'
       : isNight ? '🌙' : '☀️';
-    let svg = 'env_day.svg';
-    if (isNight && (key === 'sunny' || key === 'clear_night')) svg = 'env_night.svg';
-    else if (isNight && key.includes('cloud')) svg = 'env_night_starry.svg';
-    else if (key.includes('lightning') || key === 'pouring' || key.includes('rain')) svg = 'env_rain.svg';
-    else if (key.includes('snow') || key === 'hail' || key === 'sleet') svg = 'env_snow.svg';
-    else if (key.includes('cloud') || key === 'fog') svg = 'env_clouds.svg';
     const language = this._getCurrentLangCode();
-    return { icon, svg, label: labels[language]?.[key] || labels.en[key] || key.replace(/_/g, ' ') };
+    return { icon, label: labels[language]?.[key] || labels.en[key] || key.replace(/_/g, ' ') };
   }
 
   _openLangModal() {
@@ -3746,12 +3738,6 @@ class ArgusPanel extends HTMLElement {
     try { this._manualLang = localStorage.getItem('argus_lang') || null; } catch(e) {}
     this._ensureInitialized();
     this._startClock();
-    
-    // Failsafe if React fails to move the widgets
-    setTimeout(() => {
-      const grid = this.shadowRoot?.querySelector('#widget-grid');
-      if (grid) grid.classList.remove('hide-legacy');
-    }, 1500);
     
     // Safety check: If we think we are in fullscreen, but the browser is not, and we are not a kiosk, reset it.
     // This prevents the 'X' button getting stuck when returning to a cached component state.
@@ -4634,7 +4620,7 @@ class ArgusPanel extends HTMLElement {
     const heroSecurity = this.shadowRoot.getElementById('hero-security-pill');
     if (heroClock) heroClock.textContent = timeStr;
     if (heroDate) heroDate.textContent = now.toLocaleDateString(this._getLocale(), { weekday: 'short', month: 'short', day: 'numeric' });
-    if (heroWeather) heroWeather.innerHTML = `<img src="/api/argus_static/${weather.svg}" style="width:20px;height:20px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.2))"> <span>${this._escapeHtml(weather.label)}</span>`;
+    if (heroWeather) heroWeather.textContent = `${weather.icon} ${weather.label}`;
     if (heroSecurity) heroSecurity.innerHTML = `<i class="hero-live" style="background:${isArmed ? '#ffb54d' : '#55df91'};box-shadow:0 0 9px ${isArmed ? '#ffb54d' : '#55df91'}"></i>${this._escapeHtml(isArmed ? t('system_armed') : t('system_disarmed'))}`;
 
     // Surgical Update: Maintain article nodes to persist fullscreen state

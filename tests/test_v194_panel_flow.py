@@ -91,7 +91,7 @@ class TestV194PanelFlow(unittest.TestCase):
     def test_console_feedback_weather_and_uploaded_backgrounds_are_stateful(self) -> None:
         self.assertIn("_weatherPresentation(condition, isNight)", self.panel)
         self.assertIn("const weather = this._weatherPresentation(weatherState, isNight)", self.panel)
-        self.assertIn("${weather.svg}", self.panel)
+        self.assertIn("${weather.icon}", self.panel)
         self.assertIn("pinErr.textContent = '❌ PIN incorrecto", self.panel)
         self.assertIn("hubMode.value = 'image'", self.panel)
         self.assertIn("this._hubBgMode = 'image'", self.panel)

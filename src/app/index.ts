@@ -13,20 +13,19 @@ import { applyV2050WidgetLayouts } from '../features/widgets/layouts';
 import{applyLegacyAfterTypedClients,applyLegacyBeforeTypedClients}from'../legacy/bridge';
 import type{ArgusPanelConstructor}from'../core/panel';
 
-export function applyArgusFrontend(value?:CustomElementConstructor|undefined):void{
-  if(!value) value = customElements.get('argus-panel-v2018');
- const C=value as ArgusPanelConstructor|undefined;
- if(!C||C.__argusTypedFrontend)return;
- C.__argusTypedFrontend=true;
- applyLegacyBeforeTypedClients(C);
- applySecurityClient(C);
- applyMediaClient(C);
- applyPremiumExperience(C);
-  applyMotionSystem(C);
-  applyStableInstancesRender(C);
-  applyV2050AlarmVisuals(C);
-  applyV2049ResponsiveWidgets(C);
-  applyV2050WidgetLayouts(C);
- applyLegacyAfterTypedClients(C);
- applyReactDashboardLayout(C);
-}
+ export function applyArgusFrontend(value?:CustomElementConstructor|undefined):void{
+   if(!value) value = customElements.get('argus-panel-v2018');
+  const C=value as ArgusPanelConstructor|undefined;
+  if(!C||C.__argusTypedFrontend)return;
+  C.__argusTypedFrontend=true;
+  applyLegacyBeforeTypedClients(C);
+  applySecurityClient(C);
+  applyMediaClient(C);
+  applyPremiumExperience(C);
+   applyMotionSystem(C);
+   applyStableInstancesRender(C);
+   applyV2050AlarmVisuals(C);
+   applyV2049ResponsiveWidgets(C);
+   applyV2050WidgetLayouts(C);
+  applyLegacyAfterTypedClients(C);
+ }
