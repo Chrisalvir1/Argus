@@ -84,7 +84,7 @@ const TEXTS = {
     pin_incorrect:'❌ PIN actual incorrecto', pin_updated:'✓ PIN Actualizado', pin_deleted:'✓ PIN Eliminado',
     searching_auto:'↻ Buscando automatizaciones...', no_auto_linked:'No hay automatizaciones vinculadas a Argus.',
     pin_remove_hint:'Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.',
-    lbl_load_file:'Cargar archivo:', lbl_aesthetic_custom:'Personalización Estética', lbl_uploaded_files:'Archivos subidos en servidor',
+    lbl_load_file:'Cargar archivo:', lbl_aesthetic_custom:'Más Ajustes / SOS', lbl_uploaded_files:'Archivos subidos en servidor',
     bypass_lbl:'🚫 Omitir', lock_if_open:'Bloquear si abiertos', wait_if_open:'Esperar armado en espera',
     select_btn:'+ Seleccionar', add_btn:'+ Añadir',
     sensors_to_bypass:'Sensores a Omitir',
@@ -183,7 +183,7 @@ const TEXTS = {
     ha_admin_label: 'Home Assistant Admin',
     ha_standard_user_label: 'Standard HA User',
     role_argus_standard: 'Usuario estándar',
-    select_btn: '+ Seleccionar', add_btn: '+ Añadir', save_config: 'Guardar configuración', edit_dashboard: 'Editar tablero',
+    save_config: 'Guardar configuración', edit_dashboard: 'Editar tablero',
   },
   en: {
     hero_desc:'Alarm control, modes and automations.',
@@ -465,7 +465,7 @@ const TEXTS = {
     ha_admin_label: 'Admin Home Assistant',
     ha_standard_user_label: 'Utilisateur HA standard',
     role_argus_standard: 'Utilisateur standard',
-    select_btn: '+ Sélectionner', add_btn: '+ Ajouter', save_config: 'Enregistrer la configuration', edit_dashboard: 'Modifier le tableau de bord',
+    save_config: 'Enregistrer la configuration', edit_dashboard: 'Modifier le tableau de bord',
   },
   pt: {
     hero_desc:'Segurança integrada, controle de acesso, automações e HomeKit.',
@@ -601,7 +601,7 @@ const TEXTS = {
     ha_admin_label: 'Administrador do Home Assistant',
     ha_standard_user_label: 'Usuário padrão do HA',
     role_argus_standard: 'Usuário padrão',
-    select_btn: '+ Selecionar', add_btn: '+ Adicionar', save_config: 'Salvar configuração', edit_dashboard: 'Editar painel',
+    save_config: 'Salvar configuração', edit_dashboard: 'Editar painel',
   },
   it: {
     hero_desc:'Sicurezza integrata, controllo accessi, automazioni e HomeKit.',
@@ -736,7 +736,7 @@ const TEXTS = {
     ha_admin_label: 'Amministratore Home Assistant',
     ha_standard_user_label: 'Utente HA standard',
     role_argus_standard: 'Utente standard',
-    select_btn: '+ Seleziona', add_btn: '+ Aggiungi', save_config: 'Salva configurazione', edit_dashboard: 'Modifica dashboard',
+    save_config: 'Salva configurazione', edit_dashboard: 'Modifica dashboard',
   },
   zh: {
     hero_desc:'集成安全、访问控制、自动化和HomeKit。',
@@ -871,7 +871,7 @@ const TEXTS = {
     ha_admin_label: 'Home Assistant 管理员',
     ha_standard_user_label: '标准 HA 用户',
     role_argus_standard: '标准用户',
-    select_btn: '+ 选择', add_btn: '+ 添加', save_config: '保存配置', edit_dashboard: '编辑仪表板',
+    save_config: '保存配置', edit_dashboard: '编辑仪表板',
   },
   ru: {
     hero_desc:'Комплексная безопасность, контроль доступа, автоматизация и HomeKit.',
@@ -1006,7 +1006,7 @@ const TEXTS = {
     ha_admin_label: 'Администратор Home Assistant',
     ha_standard_user_label: 'Стандартный пользователь HA',
     role_argus_standard: 'Стандартный пользователь',
-    select_btn: '+ Выбрать', add_btn: '+ Добавить', save_config: 'Сохранить конфигурацию', edit_dashboard: 'Редактировать панель',
+    save_config: 'Сохранить конфигурацию', edit_dashboard: 'Редактировать панель',
   },
 };
 
@@ -1155,43 +1155,7 @@ _tmpl.innerHTML = `
     --input-border: rgba(255, 255, 255, 0.12);
   }
 
-  /* Detect light mode via HA variables and adjust glass */
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) {
-    --argus-glass-bg: rgba(255, 255, 255, 0.25);
-    --argus-glass-border: rgba(0, 0, 0, 0.08);
-    --glass-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.08),
-                    0 10px 20px -10px rgba(0, 122, 255, 0.05),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.5);
-    --text-shadow: none;
-    --hud-bg: rgba(0,0,0,0.04);
-    --hero-gradient: linear-gradient(135deg, #0052d4, #4364f7, #6fb1fc);
-    --card-title-color: #0052d4;
-    --pill-bg: rgba(0,0,0,0.03);
-    --pill-border: rgba(0,0,0,0.08);
-    --pill-text: #1d1d1f;
-    --argus-pill-bg: rgba(0,0,0,0.04);
-    --argus-pill-bg-hover: rgba(0,0,0,0.08);
-    --argus-pill-border: rgba(0,0,0,0.12);
-    --argus-pill-color: #1d1d1f;
-    --argus-pill-color-muted: rgba(0,0,0,0.6);
-    --primary-color: #007aff;
-    --personalize-bg: rgba(0, 0, 0, 0.02);
-    --personalize-border: rgba(0, 0, 0, 0.05);
-    --personalize-divider: rgba(0, 0, 0, 0.08);
-    --bg-inputs-bg: rgba(0, 0, 0, 0.03);
-    --bg-inputs-border: rgba(0, 0, 0, 0.07);
-    --input-bg-darker: rgba(0, 0, 0, 0.04);
-    --input-border-darker: rgba(0, 0, 0, 0.12);
-    --hero-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
-    --log-item-bg: rgba(0, 0, 0, 0.02);
-    --log-item-border: rgba(0, 0, 0, 0.05);
-    --user-card-bg: rgba(0, 0, 0, 0.02);
-    --user-card-border: rgba(0, 0, 0, 0.06);
-    --primary-text-color: #1d1d1f;
-    --secondary-text-color: rgba(0, 0, 0, 0.7);
-    --input-bg: rgba(0, 0, 0, 0.04);
-    --input-border: rgba(0, 0, 0, 0.12);
-  }
+  
 
   :host {
     --hud-text-color: #fff;
@@ -1345,10 +1309,10 @@ _tmpl.innerHTML = `
   ::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.25);
   }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) ::-webkit-scrollbar-thumb {
+  .x-never-match ::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.08);
   }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) ::-webkit-scrollbar-thumb:hover {
+  .x-never-match ::-webkit-scrollbar-thumb:hover {
     background: rgba(0, 0, 0, 0.18);
   }
 
@@ -1408,10 +1372,6 @@ _tmpl.innerHTML = `
   .tab-bubble.bubble-night { background: #1e88e5; box-shadow: 0 8px 24px rgba(30, 136, 229, 0.4); }
   .tab-bubble.bubble-vacation { background: #9c27b0; box-shadow: 0 8px 24px rgba(156, 39, 176, 0.4); }
 
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .tabs { background: rgba(0, 0, 0, 0.03); border-color: rgba(0, 0, 0, 0.06); }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .tab { color: rgba(0, 0, 0, 0.55); }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .tab:hover { color: #000; }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .tab.active { color: #fff !important; }
 
   @keyframes bounceIn {
     0% { transform: scale(0.96); opacity: 0; }
@@ -1506,28 +1466,22 @@ _tmpl.innerHTML = `
 
   /* Personalization inside instances */
   .personalize-row { display: flex; gap: 14px; align-items: center; margin-top: 18px; padding: 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 18px; flex-wrap: wrap; }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .personalize-row { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.05); }
   .personalize-row .setting-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-bottom: 4px; }
 
   /* Mode Reorganization Styles — HORIZONTAL */
   .mode-grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
   @media(max-width:900px){ .mode-grid-layout { grid-template-columns: 1fr; } }
   .mode-section-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 18px; transition: all 0.3s ease; }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .mode-section-card { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.05); }
   .mode-section-card:hover { border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .mode-section-card:hover { border-color: rgba(0,0,0,0.10); background: rgba(0,0,0,0.04); }
   .mode-section-title { font-size: 13px; font-weight: 800; color: var(--primary-color, #007aff); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
   .mode-sensor-grid { color: var(--primary-text-color, #fff); }
   .mode-sensor-none { color: var(--primary-text-color, rgba(255,255,255,0.5)); opacity: 0.6; font-size: 13px; }
   .mode-section-card span, .mode-section-card label, .mode-section-card .input-label { color: var(--primary-text-color, #fff); }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .mode-section-card span, :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .mode-section-card label, :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .mode-section-card .input-label { color: var(--primary-text-color, #1d1d1f); }
 
   .sensor-pill { background: var(--pill-bg, rgba(255,255,255,0.06)); color: var(--pill-text, #fff); border: 1px solid var(--pill-border, rgba(255,255,255,0.1)); padding: 8px 14px; border-radius: 14px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; transition: all 0.2s; max-width: 100%; box-sizing: border-box; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
   @keyframes argus-blink-red { 0%,100%{box-shadow:0 0 0 0 rgba(255,50,50,0);background:var(--pill-bg,rgba(255,255,255,0.06))} 50%{box-shadow:0 0 0 6px rgba(255,50,50,0.25);background:rgba(255,50,50,0.15)} }
   .sensor-pill.siren-active   { animation: argus-blink-red 1.2s ease-in-out infinite; border-color: rgba(255,82,82,0.5) !important; }
   .sensor-pill.triggered-sensor { animation: argus-blink-red 0.9s ease-in-out infinite; border-color: rgba(255,82,82,0.6) !important; }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .sensor-pill        { color: var(--pill-text, #1d1d1f); }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .sensor-pill button { color: #1d1d1f; }
   .icon-btn { background: none; border: none; padding: 4px; color: inherit; opacity: 0.6; cursor: pointer; transition: opacity 0.2s, transform 0.15s; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
   .icon-btn:active { transform: scale(0.9); }
 
@@ -1536,62 +1490,6 @@ _tmpl.innerHTML = `
   #mode-status.ok  { color: #4caf50; }
   #mode-status.err { color: #f44336; }
 
-  /* Light Mode Modal Overrides */
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .modal {
-    background: rgba(255,255,255,0.97) !important;
-    border: 1px solid rgba(0,0,0,0.08) !important;
-    color: #1d1d1f !important;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.15) !important;
-  }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .modal * {
-    color: #1d1d1f !important;
-  }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .modal input[type="search"],
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .modal input[type="text"],
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .modal input[type="number"],
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .modal select {
-    background: rgba(0,0,0,0.03) !important;
-    border-color: rgba(0,0,0,0.10) !important;
-    color: #1d1d1f !important;
-  }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .pick-row {
-    background: rgba(0,0,0,0.02) !important;
-    border-color: rgba(0,0,0,0.05) !important;
-    color: #1d1d1f !important;
-  }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .pick-row:hover {
-    background: rgba(0,122,255,0.06) !important;
-    border-color: rgba(0,122,255,0.2) !important;
-  }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .pick-row-name,
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .pick-row-meta {
-    color: #1d1d1f !important;
-  }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .pick-row-meta {
-    opacity: 0.6 !important;
-  }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .sel-right-item {
-    background: rgba(0,0,0,0.03) !important;
-    border-color: rgba(0,0,0,0.06) !important;
-    color: #1d1d1f !important;
-  }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .sel-right-item button {
-    color: #1d1d1f !important;
-  }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .modal h3,
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) #selector-title {
-    color: #1d1d1f !important;
-  }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) #selector-count {
-    color: rgba(0,0,0,0.6) !important;
-  }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .sel-actions button {
-    color: #1d1d1f !important;
-    border-color: rgba(0,0,0,0.08) !important;
-  }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .modal-back {
-    background: rgba(0,0,0,0.3) !important;
-  }
   .icon-btn:hover { opacity: 1; background: rgba(255,255,255,0.08); }
   .icon-btn.active { color: #fb8c00; opacity: 1; }
 
@@ -1604,8 +1502,6 @@ _tmpl.innerHTML = `
   .instance-activity-strip{display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr));gap:8px;align-items:center;margin:4px 0 16px;padding:10px 12px;border:1px solid rgba(255,255,255,.1);border-radius:18px;background:rgba(5,13,25,.25);backdrop-filter:blur(18px) saturate(135%);-webkit-backdrop-filter:blur(18px) saturate(135%)}.instance-activity-title{font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;opacity:.62;padding-right:6px}.instance-activity-item{min-width:0;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.86}.instance-activity-item time{opacity:.55;margin-right:4px;font-variant-numeric:tabular-nums}
   .mode-mqtt-row{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 14px!important;min-height:44px;border-radius:12px!important;background:rgba(255,255,255,.03)!important;border:1px solid rgba(255,255,255,.10)!important}
   .mode-mqtt-row input{margin:0;accent-color:var(--primary-color,#007aff)}
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .entry-sensor-list{border-color:rgba(0,0,0,.12)!important;background:rgba(0,0,0,.03)!important}
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .mode-mqtt-row{background:rgba(0,0,0,.03)!important;border-color:rgba(0,0,0,.12)!important}
   .input-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-left: 4px; }
 
   /* Intelligent Entry Card */
@@ -1814,8 +1710,6 @@ _tmpl.innerHTML = `
   button.primary:hover{background:#0062cc}
   button.ghost{background:rgba(255, 255, 255, 0.05);border:1px solid rgba(255, 255, 255, 0.08);color:var(--primary-text-color)}
   button.ghost:hover{background:rgba(255, 255, 255, 0.1)}
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) button.ghost { background:rgba(0,0,0,0.03); border-color:rgba(0,0,0,0.08); }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) button.ghost:hover { background:rgba(0,0,0,0.06); }
 
 
   /* FS button */
@@ -1831,23 +1725,16 @@ _tmpl.innerHTML = `
   .modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:15px}
   /* PIN modal */
   .pm .modal{max-width:340px;min-height:unset;grid-template-rows:auto auto auto;background:rgba(22, 24, 38, 0.82) !important;backdrop-filter:blur(16px) saturate(140%) !important;-webkit-backdrop-filter:blur(16px) saturate(140%) !important;border:1px solid rgba(255, 255, 255, 0.12) !important;box-shadow:0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;border-radius:36px;padding:28px;display:flex;flex-direction:column;align-items:center;gap:16px}
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .pm .modal{background:rgba(255, 255, 255, 0.85) !important;border:1px solid rgba(0, 0, 0, 0.08) !important;box-shadow:0 20px 50px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;color:#1d1d1f !important}
   .pin-input{font-size:28px;letter-spacing:10px;text-align:center;padding:12px;border-radius:16px;border:none;background:rgba(255,255,255,0.02);color:inherit;width:100%;outline:none;box-shadow:inset 0 1px 3px rgba(0,0,0,0.2)}
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .pin-input{background:rgba(0,0,0,0.03)}
   .pin-error{color:var(--error-color,#e53935);font-size:13px;min-height:18px;text-align:center}
   .pin-grid{display:grid;grid-template-columns:repeat(3,68px);gap:16px;justify-content:center;margin-top:10px}
   .pin-btn-round{width:68px;height:68px;border-radius:50% !important;border:1px solid rgba(255,255,255,0.1) !important;background:rgba(255,255,255,0.04) !important;color:#fff !important;font-size:24px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.2s, transform 0.15s, border-color 0.2s;box-shadow:0 4px 10px rgba(0,0,0,0.15);padding:0 !important;outline:none}
   .pin-btn-round:hover{background:rgba(255,255,255,0.12) !important;border-color:rgba(255,255,255,0.2) !important}
   .pin-btn-round:active{transform:scale(0.92) !important;background:rgba(255,255,255,0.2) !important}
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .pin-btn-round{background:rgba(0,0,0,0.03) !important;border-color:rgba(0,0,0,0.08) !important;color:#1d1d1f !important}
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .pin-btn-round:hover{background:rgba(0,0,0,0.08) !important}
   .pin-btn-round.action-key{font-size:12px;font-weight:700;letter-spacing:0.3px;text-transform:uppercase;border-color:transparent !important;background:transparent !important;box-shadow:none}
   .pin-btn-round.action-key:hover{background:rgba(255,255,255,0.05) !important}
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .pin-btn-round.action-key:hover{background:rgba(0,0,0,0.04) !important}
   .pin-btn-round.action-key.enter-key{color:#34c759 !important}
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .pin-btn-round.action-key.enter-key{color:#28a745 !important}
   .pin-btn-round.action-key.delete-key{color:#ff3b30 !important}
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .pin-btn-round.action-key.delete-key{color:#dc3545 !important}
   /* User card */
   .user-card{display:flex;align-items:center;justify-content:space-between;padding:14px;border-radius:16px;border:1px solid var(--user-card-border, rgba(255,255,255,0.06));background:var(--user-card-bg, rgba(255,255,255,0.02));box-shadow:0 4px 10px rgba(0,0,0,0.08)}
   .user-badge{display:inline-block;padding:3px 9px;border-radius:8px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;background:rgba(0,122,255,.12);color:var(--primary-color,#007aff)}
@@ -1900,13 +1787,13 @@ _tmpl.innerHTML = `
     border-color: rgba(112, 188, 255, 0.78);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.23), 0 0 0 4px rgba(0, 122, 255, 0.14), 0 10px 28px rgba(0, 0, 0, 0.16);
   }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) input[type="text"],
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) input[type="password"],
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) input[type="number"],
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) input[type="search"],
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) select,
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) input[type="datetime-local"],
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .glass-control {
+  .x-never-match input[type="text"],
+  .x-never-match input[type="password"],
+  .x-never-match input[type="number"],
+  .x-never-match input[type="search"],
+  .x-never-match select,
+  .x-never-match input[type="datetime-local"],
+  .x-never-match .glass-control {
     background: rgba(255, 255, 255, 0.52);
     border-color: rgba(0, 0, 0, 0.10);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 6px 16px rgba(0, 0, 0, 0.05);
@@ -1942,8 +1829,6 @@ _tmpl.innerHTML = `
   .mode-sensor-grid .sensor-pill .pill-status{font-size:10px;font-weight:800;opacity:.78;white-space:nowrap}
   .mode-sensor-grid .sensor-pill .pill-power{font-size:10px;font-weight:700;opacity:.82;white-space:nowrap}
   .sel-panel-inner::-webkit-scrollbar{width:7px}.sel-panel-inner::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.18);border-radius:99px}
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .sel-panel{background:rgba(0,0,0,0.025);border-color:rgba(0,0,0,0.08)}
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .sel-right-item{background:rgba(255,255,255,0.58);border-color:rgba(0,0,0,0.09)}
   /* Activity log */
   .log-item{display:flex;align-items:flex-start;gap:12px;padding:13px;border-radius:18px;border:1px solid var(--log-item-border, rgba(255,255,255,.05));background:linear-gradient(135deg,color-mix(in srgb,var(--log-item-bg,rgba(255,255,255,.02)) 84%,#fff 16%),var(--log-item-bg,rgba(255,255,255,.02)));color:var(--primary-text-color,#fff);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 7px 18px rgba(0,0,0,.10)}
   .log-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:13px;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 5px 12px rgba(0,0,0,.12)}
@@ -2002,7 +1887,7 @@ _tmpl.innerHTML = `
     transform: translateY(-2px);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 16px 36px rgba(255, 59, 48, 0.10), 0 12px 24px rgba(0, 0, 0, 0.16);
   }
-  :host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .sos-configuration {
+  .x-never-match .sos-configuration {
     border-color: rgba(255, 59, 48, 0.3);
     background: linear-gradient(135deg, rgba(255, 59, 48, 0.08), rgba(0, 0, 0, 0.01));
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 10px 24px rgba(255, 59, 48, 0.05);
@@ -2083,7 +1968,6 @@ _tmpl.innerHTML = `
 .mode-sensor-none { grid-column:1/-1; padding:30px; text-align:center; background:var(--argus-pill-bg,rgba(255,255,255,0.03)); border:2px dashed var(--argus-pill-border,rgba(255,255,255,0.1)); border-radius:20px; color:var(--argus-pill-color-muted,rgba(255,255,255,0.4)); font-size:14px; font-weight:600; }
 .subsection-title { font-size:12px; font-weight:900; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px; color:var(--argus-pill-color-muted,rgba(255,255,255,0.5)); display:block; }
 
-:host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .list-item-card * { color: #1e1e2d; }
 
 /* ── Language Picker ───────────────────────────────────── */
 .lang-pill {
@@ -2099,10 +1983,9 @@ _tmpl.innerHTML = `
   white-space:nowrap; flex-shrink:0;
 }
 .lang-pill:hover { background:rgba(255,255,255,0.22); transform:translateY(-1px); }
-:host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .lang-pill {
+.x-never-match .lang-pill {
   background:rgba(0,0,0,0.07); border-color:rgba(0,0,0,0.15); color:#1e1e2d;
 }
-:host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .lang-pill:hover { background:rgba(0,0,0,0.12); }
 
 /* Language modal */
 .lang-modal-back { position:fixed; inset:0; background:rgba(0,0,0,0.55); display:none; align-items:center; justify-content:center; z-index:999998; backdrop-filter:blur(4px); }
@@ -2117,7 +2000,7 @@ _tmpl.innerHTML = `
   color:#fff;
   animation: langBounceIn 0.38s cubic-bezier(0.175,0.885,0.32,1.275) forwards;
 }
-:host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .lang-modal-card {
+.x-never-match .lang-modal-card {
   background:rgba(255,255,255,0.96); color:#1e1e2d;
   border-color:rgba(0,0,0,0.12); box-shadow:0 20px 60px rgba(0,0,0,0.25);
 }
@@ -2150,10 +2033,6 @@ _tmpl.innerHTML = `
   background:rgba(3,169,244,0.30); border-color:rgba(76,201,255,0.82);
   box-shadow:0 0 18px rgba(3,169,244,0.25);
 }
-:host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .lang-option { background:rgba(0,0,0,0.04); border-color:rgba(0,0,0,0.1); color:#18212f !important; text-shadow:none; }
-:host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .lang-option span:not(.lang-flag) { color:#18212f !important; }
-:host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .lang-option:hover { background:rgba(0,0,0,0.09); }
-:host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .lang-option.active { background:rgba(3,169,244,0.12); border-color:rgba(3,169,244,0.4); }
 .lang-flag { font-size:22px; line-height:1; }
 .lang-close-row { display:flex; justify-content:center; margin-top:18px; }
 .lang-close-btn {
@@ -2162,7 +2041,6 @@ _tmpl.innerHTML = `
   color:#fff; font-size:13px; font-weight:700; cursor:pointer;
   transition:background 0.18s;
 }
-:host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .lang-close-btn { background:rgba(0,0,0,0.07); border-color:rgba(0,0,0,0.14); color:#1e1e2d; }
 .lang-close-btn:hover { background:rgba(255,255,255,0.2); }
 
 /* Background File Manager Styles */
@@ -2184,12 +2062,12 @@ _tmpl.innerHTML = `
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
-:host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .file-card {
+.x-never-match .file-card {
   background: rgba(0, 0, 0, 0.02);
   border-color: rgba(0, 0, 0, 0.07);
   color: #1c1c1e;
 }
-:host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .file-card:hover {
+.x-never-match .file-card:hover {
   background: rgba(0, 0, 0, 0.05) !important;
   border-color: rgba(0, 0, 0, 0.12) !important;
 }
@@ -2245,11 +2123,11 @@ _tmpl.innerHTML = `
   background: rgba(255, 255, 255, 0.15);
   border-color: rgba(255, 255, 255, 0.3);
 }
-:host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .file-card-btn {
+.x-never-match .file-card-btn {
   border-color: rgba(0, 0, 0, 0.12);
   background: rgba(0, 0, 0, 0.02);
 }
-:host([argus-dark-mode="false"]:not([data-bg-mode="default"])) .file-card-btn:hover {
+.x-never-match .file-card-btn:hover {
   background: rgba(0, 0, 0, 0.08);
   border-color: rgba(0, 0, 0, 0.25);
 }
@@ -2328,7 +2206,7 @@ _tmpl.innerHTML = `
 /* ─── tvOS Profile Selector ─── */
 .argus-profile-overlay {
   position: fixed; inset: 0;
-  background: rgba(0,0,0,0.85);
+  background: rgba(0,0,0,0.4); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
   /* NO backdrop-filter: causes orphaned compositor layers in WebKit when removed.
      High-opacity background achieves same visual effect safely. */
   display: flex; align-items: center; justify-content: center;
@@ -3301,6 +3179,7 @@ class ArgusPanel extends HTMLElement {
     const oldHass = this._hass;
     this._hass = hass;
     this._updateTheme();
+    if (this._loadState === 'profile_selection' || this._loadState === 'legacy_claim') return;
     if (!this._dashboard?.entries?.length) {
       this._ensureInitialized();
       return;
@@ -3608,7 +3487,8 @@ class ArgusPanel extends HTMLElement {
         <option value="collage">${t('bg_collage')}</option>
       `;
       if (v) bgMode.value = v;
-    }
+        this._renderEntries();
+}
 
     const hubBgSelect = s('hub-bg-mode-select');
     if (hubBgSelect) {
@@ -4234,6 +4114,11 @@ class ArgusPanel extends HTMLElement {
     this._dashboard = dashboard;
     this._loadState = 'dashboard';
     this._currentProfile = dashboard.current_profile || null;
+    this._renderEntries();
+    this._renderModeTabs();
+    this._renderModeView();
+    this._renderAutomations();
+    this._renderNotifications();
     this._updateHeroProfileDisplay();
     const bootstrapOverlay = this.shadowRoot.getElementById('bootstrap-overlay');
     if (bootstrapOverlay) {
@@ -4675,13 +4560,13 @@ class ArgusPanel extends HTMLElement {
           ${!isFS ? `<button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>` : ''}
           ${this._renderBatteryAlerts()}
           <div class="hud">
-            <div class="hud-loc">${this._escapeHtml(fullHudLoc)} · ${this._escapeHtml(weatherLabel)}</div>
+            <div class="hud-loc">${this._escapeHtml(fullHudLoc)}</div>
             <div class="hud-data"></div>
           </div>
           <div class="entry-content security-console">
             <!-- Compact HUD bar at top of console — replaces overlapping absolute hud -->
             <div class="console-hud">
-              <span class="console-hud-loc">🏡 ${this._escapeHtml(fullHudLoc)} · ${this._escapeHtml(weatherLabel)}</span>
+              <span class="console-hud-loc">🏡 ${this._escapeHtml(fullHudLoc)}</span>
               <div class="console-hud-right">
               </div>
             </div>
@@ -4689,11 +4574,11 @@ class ArgusPanel extends HTMLElement {
               ${this._getIntelligentSVG(isWaiting ? 'pending' : state, null, isNight, triggered, idx)}
             </div>
             <div class="liquid-stack">
-              <button class="liquid-btn btn-home ${state==='armed_home'?'active':''} ${sensorAlert && state==='armed_home'?'buzz-orange':''}" data-idx="${idx}" data-action="home">${this._modeButtonIcon('home')}<span>${this._escapeHtml(modeLabel('armed_home'))}</span></button>
-              <button class="liquid-btn btn-away ${state==='armed_away'?'active':''} ${sensorAlert && state==='armed_away'?'buzz-orange':''}" data-idx="${idx}" data-action="away">${this._modeButtonIcon('away')}<span>${this._escapeHtml(modeLabel('armed_away'))}</span></button>
-              <button class="liquid-btn btn-night ${state==='armed_night'?'active':''} ${sensorAlert && state==='armed_night'?'buzz-orange':''}" data-idx="${idx}" data-action="night">${this._modeButtonIcon('night')}<span>${this._escapeHtml(modeLabel('armed_night'))}</span></button>
-              <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''} ${sensorAlert && state==='armed_vacation'?'buzz-orange':''}" data-idx="${idx}" data-action="vacation">${this._modeButtonIcon('vacation')}<span>${this._escapeHtml(modeLabel('armed_vacation'))}</span></button>
-              <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm">${this._modeButtonIcon('disarm')}<span>${this._escapeHtml(modeLabel('disarmed'))}</span></button>
+              <button class="liquid-btn btn-home ${state==='armed_home'?'active':''} ${sensorAlert && state==='armed_home'?'buzz-orange':''}" data-idx="${idx}" data-action="home">${this._modeButtonIcon('home')}<span>${this._escapeHtml(modeLabel('btn_home'))}</span></button>
+              <button class="liquid-btn btn-away ${state==='armed_away'?'active':''} ${sensorAlert && state==='armed_away'?'buzz-orange':''}" data-idx="${idx}" data-action="away">${this._modeButtonIcon('away')}<span>${this._escapeHtml(modeLabel('btn_away'))}</span></button>
+              <button class="liquid-btn btn-night ${state==='armed_night'?'active':''} ${sensorAlert && state==='armed_night'?'buzz-orange':''}" data-idx="${idx}" data-action="night">${this._modeButtonIcon('night')}<span>${this._escapeHtml(modeLabel('btn_night'))}</span></button>
+              <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''} ${sensorAlert && state==='armed_vacation'?'buzz-orange':''}" data-idx="${idx}" data-action="vacation">${this._modeButtonIcon('vacation')}<span>${this._escapeHtml(modeLabel('btn_vacation'))}</span></button>
+              <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm">${this._modeButtonIcon('disarm')}<span>${this._escapeHtml(modeLabel('btn_disarmed'))}</span></button>
               ${this._permissions?.sos !== false ? `<button class="btn-sos" data-action="${panicActive ? 'stop-sos' : 'sos'}" data-idx="${idx}">${this._modeButtonIcon('sos')}<span>${panicActive ? t('sos_stop') : t('btn_sos')}</span></button>` : ''}
             </div>
             <div class="console-sensors">${sensorRows || `<div class="console-empty">${this._escapeHtml(sList.length === 0 ? 'Sin sensores de intrusión configurados.' : 'Todos los sensores configurados están omitidos.')}</div>`}</div>
@@ -8039,7 +7924,12 @@ gl_FragColor=vec4(col,alpha);}`;
           statusEl.textContent = '✅ Imagen actualizada. Recarga para verla.';
           setTimeout(() => {
             modal.remove();
-            this._updateHeroProfileDisplay();
+            this._renderEntries();
+    this._renderModeTabs();
+    this._renderModeView();
+    this._renderAutomations();
+    this._renderNotifications();
+    this._updateHeroProfileDisplay();
             this._updateProfileBadge();
           }, 1200);
         } catch (err) {
@@ -8357,7 +8247,7 @@ gl_FragColor=vec4(col,alpha);}`;
     const actionsHtml = `
       <button id="argus-exit-ha" style="
         position: absolute; bottom: 40px;
-        background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+        background: rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.4); color: #fff;
         padding: 12px 24px; border-radius: 20px; color: #fff; cursor: pointer;
         font-size: 0.9rem; font-weight: 600; transition: background 0.2s;
       ">
@@ -8568,6 +8458,7 @@ gl_FragColor=vec4(col,alpha);}`;
     textGroup.style.opacity = '1';
 
     await new Promise(r => setTimeout(r, 1500));
+    await dashboardPromise;
 
     textGroup.style.transition = 'opacity 0.3s ease';
     textGroup.style.opacity = '0';
@@ -8617,6 +8508,8 @@ gl_FragColor=vec4(col,alpha);}`;
       .querySelectorAll('.argus-profile-overlay, .argus-welcome-screen, .argus-pin-prompt')
       .forEach(el => {
         el.style.transition = 'none';
+        el.style.backdropFilter = 'none';
+        el.style.webkitBackdropFilter = 'none';
         el.style.opacity = '0';
         el.style.display = 'none';
         el.remove();
