@@ -3827,7 +3827,7 @@ class Yg extends HTMLElement {
           r = this._hass.themes ? this._hass.themes.darkMode === !0 : !1;
       }
     }
-    this.setAttribute("argus-dark-mode", r ? "true" : "false"), r ? this.classList.remove("daytime-theme") : this.classList.add("daytime-theme");
+    this.setAttribute("argus-dark-mode", r ? "true" : "false");
   }
   set hass(r) {
     const i = this._hass;
@@ -19364,38 +19364,24 @@ class B_ extends HTMLElement {
 }
 customElements.get("argus-weather-panel") || customElements.define("argus-weather-panel", B_);
 function bl(a) {
-  const r = a._ui?.color_scheme || a._dashboard?.ui?.color_scheme || a._currentUserTheme?.color_scheme, i = r === "light";
-  if (a.classList.toggle("daytime-theme", i), !r && a._hass?.states?.["sun.sun"]) {
-    const l = a._hass.states["sun.sun"].state === "above_horizon";
-    a.classList.toggle("daytime-theme", l);
-  }
-  if (a.shadowRoot?.getElementById("argus-v2066-style")) return;
-  const o = document.createElement("style");
-  o.id = "argus-v2066-style", o.textContent = `
+  if (!(a._ui?.color_scheme || a._dashboard?.ui?.color_scheme || a._currentUserTheme?.color_scheme) && a._hass?.states?.["sun.sun"] && a._hass.states["sun.sun"].state, a.shadowRoot?.getElementById("argus-v2066-style")) return;
+  const i = document.createElement("style");
+  i.id = "argus-v2066-style", i.textContent = `
 :host{--v2066-glass:linear-gradient(135deg,color-mix(in srgb,var(--card-background-color,#101827) 34%,transparent),color-mix(in srgb,var(--card-background-color,#101827) 15%,transparent));--v2066-border:color-mix(in srgb,var(--primary-text-color,#fff) 22%,transparent);--v2066-text:#fff;--v2066-muted:rgba(255,255,255,0.72)}
-:host(.daytime-theme){--v2066-glass:linear-gradient(135deg,rgba(255,255,255,.3),rgba(255,255,255,.12));--v2066-border:rgba(0,0,0,.16);--v2066-text:#172033;--v2066-muted:#4c586d}
 .glass,.liquid-glass,.panel,.entry,.argus-widget{background:var(--v2066-glass)!important;border:1px solid var(--v2066-border)!important;box-shadow:inset 0 1px 0 color-mix(in srgb,var(--primary-text-color,#fff) 16%,transparent),0 14px 38px rgba(0,0,0,.16)!important;backdrop-filter:blur(24px) saturate(145%)!important;-webkit-backdrop-filter:blur(24px) saturate(145%)!important;color:var(--v2066-text)!important}
 .hero{position:relative!important;z-index:1000!important;overflow:visible!important}
 .mode-section-card,.user-card,.file-card,.log-item,.personalize-section,.sos-configuration{background:rgba(255,255,255,0.035)!important;border:1px solid var(--v2066-border)!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;color:var(--v2066-text)!important}
-:host(.daytime-theme) .mode-section-card,:host(.daytime-theme) .user-card,:host(.daytime-theme) .file-card,:host(.daytime-theme) .log-item,:host(.daytime-theme) .personalize-section,:host(.daytime-theme) .sos-configuration{background:rgba(0,0,0,0.03)!important;}
 .argus-widget .panel{background:transparent!important;border:none!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 .panel h1,.panel h2,.panel h3,.panel h4,.panel-title,.section-title,.setting-label,.mode-section-title,.widget-title,.settings-section-title,.access-section-title{color:var(--v2066-text)!important;opacity:1!important;text-shadow:none!important}.panel p,.panel small,.hint,.muted,.setting-help,.mode-sensor-none{color:var(--v2066-muted)!important;opacity:1!important}
 button,input,select,textarea,.glass-control{color:var(--v2066-text)!important;-webkit-text-fill-color:var(--v2066-text)!important;background-color:color-mix(in srgb,var(--card-background-color,#101827) 38%,transparent)!important;border-color:var(--v2066-border)!important}button{min-height:44px;touch-action:manipulation}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#2783de) 76%,white)!important;outline-offset:2px!important}
 button.primary,button#selector-accept{background-color:var(--primary-color,#007aff)!important;background:var(--primary-color,#007aff)!important;color:#fff!important;-webkit-text-fill-color:#fff!important;border:1px solid rgba(0,122,255,0.2)!important;box-shadow:0 4px 12px rgba(0,122,255,0.25)!important}
 button.primary:hover,button#selector-accept:hover{background-color:#0062cc!important;background:#0062cc!important}
-:host(.daytime-theme) button:not(.primary):not(#selector-accept),:host(.daytime-theme) select,:host(.daytime-theme) input,:host(.daytime-theme) textarea,:host(.daytime-theme) .glass-control{background-color:rgba(0,0,0,0.05)!important;color:#172033!important;-webkit-text-fill-color:#172033!important;border-color:rgba(0,0,0,0.12)!important}
 select option{background-color:#101827!important;color:#f7f9ff!important;-webkit-text-fill-color:#f7f9ff!important}
-:host(.daytime-theme) select option{background-color:#ffffff!important;color:#172033!important;-webkit-text-fill-color:#172033!important}
 .user-badge{display:inline-block!important;padding:4px 10px!important;border-radius:6px!important;font-size:10px!important;font-weight:800!important;letter-spacing:.04em!important;text-transform:uppercase!important;background:rgba(142,142,147,0.2)!important;color:#d1d1d6!important;border:1px solid rgba(142,142,147,0.35)!important}
-:host(.daytime-theme) .user-badge{background:rgba(142,142,147,0.1)!important;color:#6e6e73!important;border:1px solid rgba(142,142,147,0.2)!important}
 .user-badge.admin{background:rgba(255,159,10,0.2)!important;color:#ffca7a!important;border:1px solid rgba(255,159,10,0.35)!important}
-:host(.daytime-theme) .user-badge.admin{background:rgba(255,149,0,0.1)!important;color:#b25900!important;border:1px solid rgba(255,149,0,0.2)!important}
 .user-badge[style*="background:#4a148c"]{background:rgba(147,112,219,0.22)!important;color:#dcd0ff!important;border:1px solid rgba(147,112,219,0.4)!important}
-:host(.daytime-theme) .user-badge[style*="background:#4a148c"]{background:rgba(74,20,140,0.1)!important;color:#4a148c!important;border:1px solid rgba(74,20,140,0.2)!important}
 .user-badge[style*="color:#007aff"]{background:rgba(0,122,255,0.2)!important;color:#9bc5ff!important;border:1px solid rgba(0,122,255,0.35)!important}
-:host(.daytime-theme) .user-badge[style*="color:#007aff"]{background:rgba(0,122,255,0.1)!important;color:#007aff!important;border:1px solid rgba(0,122,255,0.2)!important}
 .user-badge[style*="color:#43a047"]{background:rgba(48,209,88,0.2)!important;color:#a4f6be!important;border:1px solid rgba(48,209,88,0.35)!important}
-:host(.daytime-theme) .user-badge[style*="color:#43a047"]{background:rgba(52,199,89,0.1)!important;color:#248a3d!important;border:1px solid rgba(52,199,89,0.2)!important}
 #hero-profile-container{display:flex;align-items:center;justify-content:center;margin-inline:14px}
 @media(max-width:750px){#hero-profile-container{margin:8px 0 4px 0}}
 .hero-profile-pill{display:flex;align-items:center;gap:8px;padding:5px 12px 5px 7px;border-radius:999px;background:var(--v2066-glass);border:1px solid var(--v2066-border);box-shadow:inset 0 1px 0 rgba(255,255,255,0.1),0 4px 12px rgba(0,0,0,0.12);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);cursor:pointer;transition:transform 0.25s cubic-bezier(0.2,1,0.2,1)!important}
@@ -19403,10 +19389,8 @@ select option{background-color:#101827!important;color:#f7f9ff!important;-webkit
 .hero-profile-pill:active{transform:scale(0.96)!important}
 .hero-profile-dropdown{position:absolute;top:100%;right:0;margin-top:10px;width:280px;border-radius:20px;padding:16px;z-index:100000;display:none;flex-direction:column;gap:12px;transform-origin:top right;animation:iosPopIn 0.25s cubic-bezier(0.2,1,0.2,1) both;backdrop-filter:blur(30px) saturate(180%)!important;-webkit-backdrop-filter:blur(30px) saturate(180%)!important}
 :host([argus-dark-mode="true"]) .hero-profile-dropdown{background:rgba(20,26,38,0.94)!important;border:1.5px solid rgba(255,255,255,0.12)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,0.1),0 20px 48px rgba(0,0,0,0.5)!important;color:#f1f5f9!important}
-:host(.daytime-theme) .hero-profile-dropdown,:host([argus-dark-mode="false"]) .hero-profile-dropdown{background:rgba(255,255,255,0.97)!important;border:1.5px solid rgba(0,0,0,0.12)!important;box-shadow:0 20px 48px rgba(0,0,0,0.15)!important;color:#1e293b!important}
 .hero-profile-dropdown .user-badge.admin{background:#ffb300!important;color:#000!important;font-weight:800!important;border:none!important}
 .hero-profile-dropdown .user-badge:not(.admin){background:rgba(255,255,255,0.15)!important;color:var(--v2066-text)!important;font-weight:800!important}
-:host(.daytime-theme) .hero-profile-dropdown .user-badge:not(.admin),:host([argus-dark-mode="false"]) .hero-profile-dropdown .user-badge:not(.admin){background:rgba(0,0,0,0.08)!important;color:#1e293b!important}
 .hero-profile-dropdown label,.hero-profile-dropdown span:not(.user-badge){color:inherit!important}
 .personalize-section{padding:14px 16px!important;gap:12px!important}
 .personalize-grid{gap:10px 14px!important}
@@ -19418,7 +19402,7 @@ select option{background-color:#101827!important;color:#f7f9ff!important;-webkit
 @keyframes springBounceIn{0%{transform:scale(0.85);opacity:0}50%{transform:scale(1.02);opacity:0.8}75%{transform:scale(0.98);opacity:0.95}100%{transform:scale(1);opacity:1}}
 @keyframes argusWelcomeFly{0%{opacity:0;transform:translate(-50%,-50%) scale(0.6)}30%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}60%{opacity:1;transform:translate(-50%,-50%) scale(0.98)}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
 .wx-atmosphere{position:absolute;inset:0;overflow:hidden;isolation:isolate}
-`, a.shadowRoot?.appendChild(o);
+`, a.shadowRoot?.appendChild(i);
 }
 function kp(a) {
   const r = a.shadowRoot;

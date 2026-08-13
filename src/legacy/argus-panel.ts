@@ -3169,9 +3169,7 @@ class ArgusPanel extends HTMLElement {
 
     this.setAttribute('argus-dark-mode', isDark ? 'true' : 'false');
     if (isDark) {
-      this.classList.remove('daytime-theme');
     } else {
-      this.classList.add('daytime-theme');
     }
   }
 
