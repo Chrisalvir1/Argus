@@ -2,6 +2,11 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.82] - 2026-08-12
+
+### Fixed
+- **Protección contra multi-tap**: Se añadió una bandera (`dataset.processing`) al selector de perfiles de tvOS y al prompt del PIN. Esto previene que se despachen múltiples eventos al tocar rápidamente, evitando pantallas desenfocadas estancadas.
+
 ## [2.0.81] - 2026-08-12
 
 ### Fixed

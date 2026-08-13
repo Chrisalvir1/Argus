@@ -7090,6 +7090,8 @@ ${i}`);
       window.location.assign("/");
     }), c.querySelectorAll(".argus-profile-item").forEach((f) => {
       f.addEventListener("click", async () => {
+        if (c.dataset.processing) return;
+        c.dataset.processing = "1";
         const x = f.getAttribute("data-user-id"), C = f.getAttribute("data-is-own") === "true", I = f.getAttribute("data-requires-pin") === "true", R = o.find((E) => E.id === x);
         if (C)
           if (I)
@@ -7098,12 +7100,12 @@ ${i}`);
             try {
               await this._send("argus/select_profile", { argus_user_id: x }), c.remove(), await this._runProfileWelcomeAnimation(R), this._profileSelectedThisMount = !0, this._load();
             } catch (E) {
-              alert(E.message || "Error seleccionando perfil");
+              c.dataset.processing = "", alert(E.message || "Error seleccionando perfil");
             }
         else {
           if (!I) {
             const E = f;
-            E.style.animation = "none", E.offsetHeight, E.style.animation = "argus-shake 0.3s ease";
+            E.style.animation = "none", E.offsetHeight, E.style.animation = "argus-shake 0.3s ease", c.dataset.processing = "";
             return;
           }
           c.remove(), this._showTvOSPinPrompt(R);
@@ -7150,15 +7152,20 @@ ${i}`);
       o.remove(), this._renderLoginScreen({ users: this._config?.profiles || [] });
     });
     const g = async () => {
-      if (l.value)
+      if (!o.dataset.processing) {
+        if (o.dataset.processing = "1", !l.value) {
+          o.dataset.processing = "";
+          return;
+        }
         try {
           await this._send("argus/verify_access_pin", {
             argus_user_id: r.id,
             pin: l.value
           }), o.remove(), await this._runProfileWelcomeAnimation(r), this._profileSelectedThisMount = !0, this._load();
         } catch (_) {
-          c.textContent = _.message || i("invalid_pin_msg"), u.style.animation = "none", u.offsetHeight, u.style.animation = "argus-shake 0.3s ease", l.value = "";
+          o.dataset.processing = "", c.textContent = _.message || i("invalid_pin_msg"), u.style.animation = "none", u.offsetHeight, u.style.animation = "argus-shake 0.3s ease", l.value = "";
         }
+      }
     };
     l.addEventListener("keydown", (_) => {
       _.key === "Enter" && g();

@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Home Hub – v2.0.81
+ * Argus Home Hub – v2.0.82
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -8402,6 +8402,9 @@ gl_FragColor=vec4(col,alpha);}`;
     const items = overlay.querySelectorAll('.argus-profile-item');
     items.forEach(item => {
       item.addEventListener('click', async () => {
+        if (overlay.dataset.processing) return;
+        overlay.dataset.processing = '1';
+        
         const userId = item.getAttribute('data-user-id');
         const isOwn = item.getAttribute('data-is-own') === 'true';
         const requiresPin = item.getAttribute('data-requires-pin') === 'true';
@@ -8420,6 +8423,7 @@ gl_FragColor=vec4(col,alpha);}`;
               this._profileSelectedThisMount = true;
               this._load();
             } catch (err) {
+              overlay.dataset.processing = '';
               alert(err.message || 'Error seleccionando perfil');
             }
           }
@@ -8431,6 +8435,7 @@ gl_FragColor=vec4(col,alpha);}`;
             el.style.animation = 'none';
             el.offsetHeight; // reflow
             el.style.animation = 'argus-shake 0.3s ease';
+            overlay.dataset.processing = '';
             return;
           }
           // Tiene PIN -> pedimos
@@ -8497,7 +8502,10 @@ gl_FragColor=vec4(col,alpha);}`;
     });
 
     const submitPin = async () => {
-      if (!pinInput.value) return;
+      if (overlay.dataset.processing) return;
+      overlay.dataset.processing = '1';
+      
+      if (!pinInput.value) { overlay.dataset.processing = ''; return; }
       try {
         await this._send('argus/verify_access_pin', {
           argus_user_id: user.id,
@@ -8509,6 +8517,7 @@ gl_FragColor=vec4(col,alpha);}`;
         this._profileSelectedThisMount = true;
         this._load();
       } catch (err) {
+        overlay.dataset.processing = '';
         pinError.textContent = err.message || t('invalid_pin_msg');
         pinCard.style.animation = 'none';
         pinCard.offsetHeight; // reflow
