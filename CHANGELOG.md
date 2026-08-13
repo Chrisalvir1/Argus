@@ -1,3 +1,8 @@
+## [2.0.93] - 2026-08-13
+
+### Fixed
+- Solucionado conflicto en el pipeline de CI/CD al remover la configuración redundante de python-version en setup-python.
+
 ## [2.0.91] - 2026-08-13
 
 ### Fixed
