@@ -1,4 +1,4 @@
-# Argus v2.0.94 — Patch Release
+# Argus v2.0.95 — Patch Release
 
 ## Fixed
 - **Flasheo de Interfaz:** Resuelto el parpadeo inicial en la carga del dashboard (`#widget-grid`) que mostraba widgets legacy antes de que React se montara.
