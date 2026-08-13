@@ -1,3 +1,10 @@
+## [2.1.4] - 2026-08-13
+
+### Fixed
+- Real-time history translations for roles, modes, and settings.
+- Mathematical scaling of RGB values for light pulses (preventing color washout).
+- Hiding dashboard wrap during session validation to eliminate UI load flicker.
+
 ## [2.1.3] - 2026-08-13
 
 ### Added

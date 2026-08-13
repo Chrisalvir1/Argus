@@ -101,14 +101,16 @@ def _light_service_data(panel, entity_id: str, settings: dict) -> tuple[dict, st
     supported_modes = _supported_modes(attrs)
     supports_brightness = _supports_brightness(attrs, supported_modes)
     data: dict[str, Any] = {"entity_id": entity_id}
-    if supports_brightness:
-        data["brightness_pct"] = 100
 
     rgb = _normalise_rgb(settings.get("rgb_color"))
-    if rgb and supported_modes.intersection(_COLOR_MODES):
+    has_color = bool(rgb and supported_modes.intersection(_COLOR_MODES))
+
+    if has_color:
         # Prefer rgb_color directly — it is exact and universal.
         # Home Assistant Core automatically translates rgb_color to hs, xy, or color_temp natively for all integrations.
         data["rgb_color"] = rgb
+    elif supports_brightness:
+        data["brightness_pct"] = 100
 
     flash_mode = str(settings.get("flash_mode") or ("gentle" if settings.get("gentle_flash") else "none"))
     if flash_mode == "none":
@@ -194,8 +196,13 @@ async def _brightness_pulse(panel, entity_id: str, service_data: dict, interval:
     """Pulse brightness without any repeated off/on power cycle."""
     high = copy.deepcopy(service_data)
     low = copy.deepcopy(service_data)
-    high["brightness_pct"] = 100
-    low["brightness_pct"] = 25
+    if "rgb_color" in service_data:
+        high.pop("brightness_pct", None)
+        low.pop("brightness_pct", None)
+        low["rgb_color"] = [max(1, int(c * 0.25)) for c in service_data["rgb_color"]]
+    else:
+        high["brightness_pct"] = 100
+        low["brightness_pct"] = 25
     try:
         while True:
             await panel.hass.services.async_call("light", "turn_on", high, blocking=False)
@@ -238,8 +245,13 @@ async def ws_argus_test_light_output(hass, connection, msg) -> None:
         if method == "brightness_pulse":
             high = copy.deepcopy(data)
             low = copy.deepcopy(data)
-            high["brightness_pct"] = 100
-            low["brightness_pct"] = 25
+            if "rgb_color" in data:
+                high.pop("brightness_pct", None)
+                low.pop("brightness_pct", None)
+                low["rgb_color"] = [max(1, int(c * 0.25)) for c in data["rgb_color"]]
+            else:
+                high["brightness_pct"] = 100
+                low["brightness_pct"] = 25
             for _ in range(2):
                 await hass.services.async_call("light", "turn_on", high, blocking=True)
                 await asyncio.sleep(interval)

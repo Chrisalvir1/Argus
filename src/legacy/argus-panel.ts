@@ -1261,7 +1261,8 @@ _tmpl.innerHTML = `
     box-shadow: 0 8px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.25);
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
   }
-  .wrap { position: relative; z-index: 1; transition: filter 0.35s ease, opacity 0.35s ease; }
+  .wrap { position: relative; z-index: 1; transition: filter 0.35s ease, opacity 0.35s ease; opacity: 0; pointer-events: none; }
+  .wrap.wrap-ready { opacity: 1; pointer-events: auto; }
   .wrap.wrap-blurred { filter: blur(15px); opacity: 0.45; pointer-events: none; }
   @keyframes dialElasticIn {
     0% { transform: scale(0.8) translateY(20px); opacity: 0; }
@@ -2234,10 +2235,11 @@ _tmpl.innerHTML = `
 /* Grid de perfiles */
 .argus-profile-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 28px 24px;
-  max-width: 800px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 36px 24px;
+  max-width: 900px;
   width: 100%;
+  justify-content: center;
   animation: argus-grid-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
 }
 @keyframes argus-grid-in {
@@ -2246,10 +2248,17 @@ _tmpl.innerHTML = `
 }
 
 /* Cada perfil */
-@media (max-width: 480px) {
+@media (max-width: 950px) and (orientation: landscape) {
+  .argus-profile-grid { 
+    grid-template-columns: repeat(4, 1fr);
+    padding: 16px;
+  }
+}
+@media (max-width: 600px) and (orientation: portrait) {
   .argus-profile-grid { 
     grid-template-columns: repeat(2, 1fr);
     padding: 16px;
+    gap: 20px 16px;
   }
 }
 @media (max-width: 380px) and (orientation: portrait) {
@@ -2286,17 +2295,29 @@ _tmpl.innerHTML = `
 
 /* Círculo avatar */
 .argus-profile-circle {
-  width: 76px; height: 76px;
+  width: 120px; height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2.5px solid rgba(255,255,255,0.18);
+  border: 3px solid rgba(255,255,255,0.18);
   box-shadow: 0 4px 20px rgba(0,0,0,0.35);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.22s;
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.5rem; font-weight: 800;
+  font-size: 2.5rem; font-weight: 800;
   color: #fff; overflow: hidden; flex-shrink: 0;
   background: rgba(255,255,255,0.1);
   position: relative;
+}
+@media (max-width: 600px) and (orientation: portrait) {
+  .argus-profile-circle {
+    width: 76px; height: 76px;
+    font-size: 1.5rem; border-width: 2.5px;
+  }
+}
+@media (max-width: 950px) and (orientation: landscape) {
+  .argus-profile-circle {
+    width: 84px; height: 84px;
+    font-size: 1.8rem; border-width: 2.5px;
+  }
 }
 .argus-profile-item:hover .argus-profile-circle {
   border-color: rgba(255,255,255,0.55);
@@ -2307,27 +2328,39 @@ _tmpl.innerHTML = `
 }
 .argus-profile-circle .lock-badge {
   position: absolute; bottom: 0; right: 0;
-  width: 22px; height: 22px; border-radius: 50%;
-  background: rgba(0,0,0,0.7); display: flex;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(0,0,0,0.75); display: flex;
   align-items: center; justify-content: center;
-  font-size: 11px; border: 1.5px solid rgba(255,255,255,0.2);
+  font-size: 14px; border: 2px solid rgba(255,255,255,0.2);
+}
+@media (max-width: 600px) {
+  .argus-profile-circle .lock-badge {
+    width: 22px; height: 22px; font-size: 11px; border-width: 1.5px;
+  }
 }
 
 /* Nombre y rol */
 .argus-profile-label {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .argus-profile-label .p-name {
-  font-size: 0.82rem; font-weight: 700;
+  font-size: 1rem; font-weight: 700;
   color: #fff; line-height: 1.2;
-  max-width: 80px; overflow: hidden;
+  max-width: 140px; overflow: hidden;
   text-overflow: ellipsis; white-space: nowrap;
 }
 .argus-profile-label .p-role {
-  font-size: 0.68rem; font-weight: 500;
-  color: rgba(255,255,255,0.5);
-  margin-top: 2px;
+  font-size: 0.72rem; font-weight: 600;
+  color: rgba(255,255,255,0.6);
+  margin-top: 4px;
   text-transform: uppercase; letter-spacing: 0.04em;
+}
+@media (max-width: 600px) {
+  .argus-profile-label .p-name { font-size: 0.82rem; max-width: 80px; }
+  .argus-profile-label .p-role { font-size: 0.65rem; margin-top: 2px; }
 }
 
 /* ─── Welcome Screen (Fase 2) ─── */
@@ -2979,25 +3012,24 @@ class ArgusPanel extends HTMLElement {
     const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
     if (isNaN(date.getTime())) return '';
 
-    const formatSetting = 'auto';
     const locale = this._getLocale();
     const timeZone = this._getTimeZone();
-
     const options = { hour: '2-digit', minute: '2-digit' };
     if (timeZone) options.timeZone = timeZone;
 
-    if (formatSetting === '12h') {
+    const haFmt = this._hass?.locale?.time_format;
+    if (haFmt === '12' || haFmt === '12h') {
       options.hour12 = true;
-    } else if (formatSetting === '24h') {
+    } else if (haFmt === '24' || haFmt === '24h') {
       options.hour12 = false;
     } else {
-      const haFmt = this._hass?.locale?.time_format;
-      if (haFmt === '12' || haFmt === '12h') options.hour12 = true;
-      else if (haFmt === '24' || haFmt === '24h') options.hour12 = false;
+      // For 'language' or 'system', defer to the browser locale default
     }
 
     try {
-      return new Intl.DateTimeFormat(locale, options).format(date);
+      let result = new Intl.DateTimeFormat(locale, options).format(date);
+      // Clean up weird spaces or dots in some locales (e.g. p. m. -> PM)
+      return result.replace(/p\.\s*m\./gi, 'PM').replace(/a\.\s*m\./gi, 'AM').toUpperCase();
     } catch (e) {
       return date.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
     }
@@ -4042,6 +4074,7 @@ class ArgusPanel extends HTMLElement {
 
   /* ── Load dashboard ──────────────────────────────────────────────── */
   async _load() {
+    this.shadowRoot.querySelector('.wrap')?.classList.remove('wrap-ready');
     let bootstrap;
     try { bootstrap = await this._send('argus/login_bootstrap'); }
     catch (e) { console.error('Argus bootstrap load failed:', e); return; }
@@ -4094,8 +4127,9 @@ class ArgusPanel extends HTMLElement {
       return;
     }
 
-    // Always nuke any leftover login/profile overlays before showing dashboard
-    this._nukeAllLoginOverlays();
+    // Always nuke any leftover login/profile overlays before showing dashboard,
+    // but NEVER destroy the welcome screen since it might be mid-animation.
+    this.shadowRoot.querySelectorAll('.argus-profile-overlay, .argus-pin-prompt').forEach(el => el.remove());
 
     // Now we have a session, load dashboard
     let dashboard;
@@ -4111,6 +4145,7 @@ class ArgusPanel extends HTMLElement {
 
     this._dashboard = dashboard;
     this._loadState = 'dashboard';
+    this.shadowRoot.querySelector('.wrap')?.classList.add('wrap-ready');
     this._currentProfile = dashboard.current_profile || null;
     this._renderEntries();
     this._renderModeTabs();
@@ -5202,7 +5237,33 @@ gl_FragColor=vec4(col,alpha);}`;
     const tKey = `log_action_${lowerAction}`;
     const tVal = this._t(tKey);
     if (tVal !== tKey) return tVal;
-    return raw;
+
+    // Apply real-time dynamic translation for any hardcoded strings that leak into the history log
+    let translatedRaw = raw;
+    const dynamicMap = {
+      'Administrador de Argus': this._t('role_argus_admin'),
+      'Administrador': this._t('role_argus_admin'),
+      'Usuario estándar': this._t('role_argus_standard'),
+      'Cuenta de Home Assistant': (this._t('ha_account_linked') || '').split(':')[0] || 'Home Assistant',
+      'Sin PIN': this._t('user_no_pin'),
+      'Sin pin': this._t('user_no_pin'),
+      'Indefinido': this._t('exp_indefinite'),
+      'En casa': this._t('mode_home'),
+      'Ausente': this._t('mode_away'),
+      'Noche': this._t('mode_night'),
+      'Vacaciones': this._t('mode_vacation'),
+      'Desarmado': this._t('disarmed'),
+      'Ajustes': this._t('settings')
+    };
+    
+    for (const [esKey, localizedValue] of Object.entries(dynamicMap)) {
+      if (localizedValue && localizedValue !== esKey) {
+        const regex = new RegExp(`\\b${esKey}\\b`, 'gi');
+        translatedRaw = translatedRaw.replace(regex, localizedValue);
+      }
+    }
+
+    return translatedRaw;
   }
 
   _renderActivityLog() {
@@ -8402,8 +8463,6 @@ gl_FragColor=vec4(col,alpha);}`;
   }
 
   async _runProfileWelcomeAnimation(user) {
-    this._nukeAllLoginOverlays();
-
     const overlay = document.createElement('div');
     overlay.className = 'argus-welcome-screen active-anim';
     overlay.style.position = 'fixed';
@@ -8430,6 +8489,12 @@ gl_FragColor=vec4(col,alpha);}`;
       </div>
     `;
     this.shadowRoot.appendChild(overlay);
+
+    // Wait 1 frame so the overlay covers the screen instantly
+    await new Promise(r => requestAnimationFrame(r));
+    // NOW it is safe to nuke the login screens beneath without a black blink!
+    // We explicitly avoid removing .argus-welcome-screen so we don't destroy ourselves.
+    this.shadowRoot.querySelectorAll('.argus-profile-overlay, .argus-pin-prompt').forEach(el => el.remove());
 
     // Start loading dashboard in the background so it's ready when animation finishes
     let dashboardPromise = Promise.resolve();
