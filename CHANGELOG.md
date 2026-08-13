@@ -1,4 +1,4 @@
-## [2.1.2] - 2026-08-13
+## [2.1.3] - 2026-08-13
 
 ### Added
 - Liquid Gooey components (AlarmFAB, ProfileSelector, GooeyNav, QuickActions)
