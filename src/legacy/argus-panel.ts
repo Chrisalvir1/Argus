@@ -1143,7 +1143,7 @@ _tmpl.innerHTML = `
     --log-item-border: rgba(255, 255, 255, 0.05);
     --user-card-bg: rgba(255, 255, 255, 0.02);
     --user-card-border: rgba(255, 255, 255, 0.06);
-    --primary-text-color: #ffffff;
+    --primary-text-color: #fff !important;
     --secondary-text-color: rgba(255, 255, 255, 0.7);
     --input-bg: rgba(255, 255, 255, 0.04);
     --input-border: rgba(255, 255, 255, 0.12);
@@ -2234,9 +2234,9 @@ _tmpl.innerHTML = `
 /* Grid de perfiles */
 .argus-profile-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 28px 24px;
-  max-width: 520px;
+  max-width: 800px;
   width: 100%;
   animation: argus-grid-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
 }
@@ -2246,7 +2246,13 @@ _tmpl.innerHTML = `
 }
 
 /* Cada perfil */
-@media (max-width: 480px) and (orientation: portrait) {
+@media (max-width: 480px) {
+  .argus-profile-grid { 
+    grid-template-columns: repeat(2, 1fr);
+    padding: 16px;
+  }
+}
+@media (max-width: 380px) and (orientation: portrait) {
   .argus-profile-grid { 
     grid-template-columns: 1fr;
     padding: 16px;

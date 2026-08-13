@@ -371,7 +371,7 @@ function installStyles(panel){
   }
   if(panel.shadowRoot?.getElementById('argus-v2066-style'))return;
   const s=document.createElement('style');s.id='argus-v2066-style';s.textContent=`
-:host{--v2066-glass:linear-gradient(135deg,color-mix(in srgb,var(--card-background-color,#101827) 34%,transparent),color-mix(in srgb,var(--card-background-color,#101827) 15%,transparent));--v2066-border:color-mix(in srgb,var(--primary-text-color,#fff) 22%,transparent);--v2066-text:var(--primary-text-color,#f7f9ff);--v2066-muted:var(--secondary-text-color,rgba(247,249,255,.72))}
+:host{--v2066-glass:linear-gradient(135deg,color-mix(in srgb,var(--card-background-color,#101827) 34%,transparent),color-mix(in srgb,var(--card-background-color,#101827) 15%,transparent));--v2066-border:color-mix(in srgb,var(--primary-text-color,#fff) 22%,transparent);--v2066-text:#fff;--v2066-muted:rgba(255,255,255,0.72)}
 :host(.daytime-theme){--v2066-glass:linear-gradient(135deg,rgba(255,255,255,.3),rgba(255,255,255,.12));--v2066-border:rgba(0,0,0,.16);--v2066-text:#172033;--v2066-muted:#4c586d}
 .glass,.liquid-glass,.panel,.entry,.argus-widget{background:var(--v2066-glass)!important;border:1px solid var(--v2066-border)!important;box-shadow:inset 0 1px 0 color-mix(in srgb,var(--primary-text-color,#fff) 16%,transparent),0 14px 38px rgba(0,0,0,.16)!important;backdrop-filter:blur(24px) saturate(145%)!important;-webkit-backdrop-filter:blur(24px) saturate(145%)!important;color:var(--v2066-text)!important}
 .hero{position:relative!important;z-index:1000!important;overflow:visible!important}
@@ -417,7 +417,7 @@ select option{background-color:#101827!important;color:#f7f9ff!important;-webkit
 @keyframes springBounceIn{0%{transform:scale(0.85);opacity:0}50%{transform:scale(1.02);opacity:0.8}75%{transform:scale(0.98);opacity:0.95}100%{transform:scale(1);opacity:1}}
 @keyframes argusWelcomeFly{0%{opacity:0;transform:translate(-50%,-50%) scale(0.6)}30%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}60%{opacity:1;transform:translate(-50%,-50%) scale(0.98)}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
 .wx-atmosphere{position:absolute;inset:0;overflow:hidden;isolation:isolate}
-@media(prefers-color-scheme:light){:host:not(.daytime-theme){--v2066-glass:linear-gradient(135deg,rgba(255,255,255,.56),rgba(255,255,255,.24));--v2066-border:rgba(255,255,255,.72);--v2066-text:var(--primary-text-color,#172033);--v2066-muted:var(--secondary-text-color,#4c586d)}}`;
+`;
   panel.shadowRoot?.appendChild(s);
 }
 
