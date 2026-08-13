@@ -2,6 +2,15 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.81] - 2026-08-12
+
+### Fixed
+- **Shader WebGL2**: Se solucionó la baja resolución del canvas en pantallas Retina/OLED usando `devicePixelRatio`.
+- **Dimensiones del panel de clima**: Se añadió un contenedor relativo al `<argus-weather-panel>` para evitar que el canvas colapse a 0px height.
+- **Transición inicial WebGL2**: Se saltó el interpolador exponencial (damp) en el primer frame para evitar un fundido de 1.5s desde cielo despejado.
+- **ResizeObserver**: Se añadió inicialización forzada por `requestAnimationFrame` para evitar que no se renderice en el primer mount si las dimensiones iniciales son 0x0.
+- **GitHub Actions**: Tests y manifestos adaptados a Python 3.12 (por fallo de availability de 3.14 exacto).
+
 ## [2.0.80] - 2026-08-12
 
 ### Fixed

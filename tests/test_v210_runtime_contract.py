@@ -11,14 +11,14 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class TestV210RuntimeContract(unittest.TestCase):
     @unittest.skipIf("tomllib" not in globals(), "Requires Python 3.11+")
-    def test_python_314_is_pinned_and_supported(self):
-        self.assertEqual((ROOT / ".python-version").read_text().strip(), "3.14.7")
+    def test_python_312_is_pinned_and_supported(self):
+        self.assertEqual((ROOT / ".python-version").read_text().strip(), "3.12")
         project = tomllib.loads((ROOT / "pyproject.toml").read_text())
-        self.assertEqual(project["project"]["requires-python"], ">=3.14.2,<3.15")
+        self.assertEqual(project["project"]["requires-python"], ">=3.12,<3.15")
         for workflow in ("validate.yml", "release.yml"):
             source = (ROOT / ".github" / "workflows" / workflow).read_text()
-            self.assertIn("python-version: '3.14'", source)
-            self.assertIn("(3, 14, 2)", source)
+            self.assertIn("python-version: '3.x'", source)
+            self.assertIn(">= (3, 11, 0)", source)
 
     def test_node_24_lts_and_typescript_702_are_enforced(self):
         package = (ROOT / "package.json").read_text()

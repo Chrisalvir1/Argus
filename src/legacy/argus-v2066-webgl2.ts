@@ -182,15 +182,38 @@ class ArgusWeatherPanel extends LitElement {
   firstUpdated() {
     const canvas = this.shadowRoot.getElementById('weatherCanvas');
 
+    const resizeCanvas = (w, h) => {
+        if (w === 0 || h === 0) return;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2.0);
+        const newW = Math.floor(w * dpr);
+        const newH = Math.floor(h * dpr);
+        if (canvas.width !== newW || canvas.height !== newH) {
+            canvas.width = newW;
+            canvas.height = newH;
+            if (this.gl) this.gl.viewport(0, 0, canvas.width, canvas.height);
+        }
+    };
+
     // ResizeObserver — sin reflow en cada frame
     this._resizeObserver = new ResizeObserver(entries => {
       for (const e of entries) {
-        canvas.width  = Math.floor(e.contentRect.width  * 0.5);
-        canvas.height = Math.floor(e.contentRect.height * 0.5);
-        if (this.gl) this.gl.viewport(0, 0, canvas.width, canvas.height);
+        let w = e.contentRect.width;
+        let h = e.contentRect.height;
+        if (w === 0 || h === 0) {
+            w = canvas.clientWidth || this.clientWidth;
+            h = canvas.clientHeight || this.clientHeight;
+        }
+        resizeCanvas(w, h);
       }
     });
     this._resizeObserver.observe(canvas);
+
+    // Forzar inicialización si el observer no dispara en el primer frame
+    requestAnimationFrame(() => {
+        if (canvas.width === 0 || canvas.height === 0) {
+            resizeCanvas(canvas.clientWidth || this.clientWidth || 100, canvas.clientHeight || this.clientHeight || 100);
+        }
+    });
 
     // Eventos de paralaje
     this.addEventListener('mousemove', this._onMouseMove.bind(this));
@@ -331,12 +354,19 @@ class ArgusWeatherPanel extends LitElement {
 
       // Interpolar todos los valores con damp exponencial
       const c = this.current, t = this.target;
-      c.sunY      = this._damp(c.sunY,      t.sunY,      0.5,  dt); // lento = amanecer/atardecer
-      c.nubes     = this._damp(c.nubes,     t.nubes,     2.0,  dt);
-      c.lluvia    = this._damp(c.lluvia,    t.lluvia,    2.0,  dt);
-      c.nieve     = this._damp(c.nieve,     t.nieve,     2.0,  dt);
-      c.relampagos= this._damp(c.relampagos,t.relampagos,8.0,  dt); // rápido
-      c.moonPhase = this._damp(c.moonPhase, t.moonPhase, 1.0,  dt);
+      
+      // En el primer frame, saltar el damp para que inicie inmediatamente sin delay (como Apple Weather)
+      if (this._firstFrame === undefined) {
+        this._firstFrame = false;
+        c.sunY = t.sunY; c.nubes = t.nubes; c.lluvia = t.lluvia; c.nieve = t.nieve; c.relampagos = t.relampagos; c.moonPhase = t.moonPhase;
+      } else {
+        c.sunY      = this._damp(c.sunY,      t.sunY,      0.5,  dt); // lento = amanecer/atardecer
+        c.nubes     = this._damp(c.nubes,     t.nubes,     5.0,  dt); // más rápido
+        c.lluvia    = this._damp(c.lluvia,    t.lluvia,    5.0,  dt);
+        c.nieve     = this._damp(c.nieve,     t.nieve,     5.0,  dt);
+        c.relampagos= this._damp(c.relampagos,t.relampagos,8.0,  dt); // muy rápido
+        c.moonPhase = this._damp(c.moonPhase, t.moonPhase, 1.0,  dt);
+      }
       c.parallax.x= this._damp(c.parallax.x,t.parallax.x,6.0, dt);
       c.parallax.y= this._damp(c.parallax.y,t.parallax.y,6.0, dt);
 
@@ -456,9 +486,9 @@ export function applyV2066Webgl2AndUi(C){
  p.connectedCallback=function(){installStyles(this);const value=connected?.call(this);bindSos(this);return value};
  p._renderEntries=function(){const value=render?.call(this);installStyles(this);bindSos(this);return value};
  
- // El custom element renderiza todo
+ // El custom element renderiza todo dentro de un contenedor relativo
  p._renderAtmosphere=function(ws,isNight){
-   return `<argus-weather-panel class="wx-atmosphere"></argus-weather-panel>`;
+   return `<div class="wx wx-atmosphere" style="position:relative; width:100%; height:100%; display:block;"><argus-weather-panel></argus-weather-panel></div>`;
  };
  
  // Inutilizamos el inicializador viejo

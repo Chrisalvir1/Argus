@@ -19449,11 +19449,19 @@ class D_ extends Fg {
     return Wg`<canvas id="weatherCanvas"></canvas>`;
   }
   firstUpdated() {
-    const r = this.shadowRoot.getElementById("weatherCanvas");
-    this._resizeObserver = new ResizeObserver((i) => {
-      for (const o of i)
-        r.width = Math.floor(o.contentRect.width * 0.5), r.height = Math.floor(o.contentRect.height * 0.5), this.gl && this.gl.viewport(0, 0, r.width, r.height);
-    }), this._resizeObserver.observe(r), this.addEventListener("mousemove", this._onMouseMove.bind(this)), window.addEventListener("deviceorientation", this._onGyro.bind(this)), this._initWebGL(r);
+    const r = this.shadowRoot.getElementById("weatherCanvas"), i = (o, l) => {
+      if (o === 0 || l === 0) return;
+      const c = Math.min(window.devicePixelRatio || 1, 2), u = Math.floor(o * c), p = Math.floor(l * c);
+      (r.width !== u || r.height !== p) && (r.width = u, r.height = p, this.gl && this.gl.viewport(0, 0, r.width, r.height));
+    };
+    this._resizeObserver = new ResizeObserver((o) => {
+      for (const l of o) {
+        let c = l.contentRect.width, u = l.contentRect.height;
+        (c === 0 || u === 0) && (c = r.clientWidth || this.clientWidth, u = r.clientHeight || this.clientHeight), i(c, u);
+      }
+    }), this._resizeObserver.observe(r), requestAnimationFrame(() => {
+      (r.width === 0 || r.height === 0) && i(r.clientWidth || this.clientWidth || 100, r.clientHeight || this.clientHeight || 100);
+    }), this.addEventListener("mousemove", this._onMouseMove.bind(this)), window.addEventListener("deviceorientation", this._onGyro.bind(this)), this._initWebGL(r);
   }
   disconnectedCallback() {
     super.disconnectedCallback(), this._animationFrame && cancelAnimationFrame(this._animationFrame), this._resizeObserver?.disconnect(), this.removeEventListener("mousemove", this._onMouseMove), window.removeEventListener("deviceorientation", this._onGyro), this.gl && this.program && this.gl.deleteProgram(this.program);
@@ -19540,7 +19548,7 @@ class D_ extends Fg {
       const _ = performance.now(), h = Math.min((_ - (this._lastTime || _)) / 1e3, 0.1);
       this._lastTime = _;
       const f = this.current, x = this.target;
-      f.sunY = this._damp(f.sunY, x.sunY, 0.5, h), f.nubes = this._damp(f.nubes, x.nubes, 2, h), f.lluvia = this._damp(f.lluvia, x.lluvia, 2, h), f.nieve = this._damp(f.nieve, x.nieve, 2, h), f.relampagos = this._damp(f.relampagos, x.relampagos, 8, h), f.moonPhase = this._damp(f.moonPhase, x.moonPhase, 1, h), f.parallax.x = this._damp(f.parallax.x, x.parallax.x, 6, h), f.parallax.y = this._damp(f.parallax.y, x.parallax.y, 6, h), this._cloudOffset.x += (x.wind?.x || 0) * h, this._cloudOffset.y += (x.wind?.y || 0) * h, i.useProgram(this.program), i.bindBuffer(i.ARRAY_BUFFER, u), i.enableVertexAttribArray(p), i.vertexAttribPointer(p, 2, i.FLOAT, !1, 0, 0), i.uniform2f(this.uniforms.resolution, r.width, r.height), i.uniform1f(this.uniforms.time, (_ - this.startTime) / 1e3), i.uniform3f(this.uniforms.sunPosition, 0, f.sunY, -1), i.uniform3f(this.uniforms.moonPosition, 0.2, -f.sunY + 0.2, -1), i.uniform1f(this.uniforms.moonPhase, f.moonPhase), i.uniform4f(this.uniforms.weather, f.nubes, f.lluvia, f.nieve, f.relampagos), i.uniform2f(this.uniforms.cloudOffset, this._cloudOffset.x, this._cloudOffset.y), i.uniform2f(this.uniforms.parallax, f.parallax.x, f.parallax.y), i.drawArrays(i.TRIANGLES, 0, 3), this._animationFrame = requestAnimationFrame(g);
+      this._firstFrame === void 0 ? (this._firstFrame = !1, f.sunY = x.sunY, f.nubes = x.nubes, f.lluvia = x.lluvia, f.nieve = x.nieve, f.relampagos = x.relampagos, f.moonPhase = x.moonPhase) : (f.sunY = this._damp(f.sunY, x.sunY, 0.5, h), f.nubes = this._damp(f.nubes, x.nubes, 5, h), f.lluvia = this._damp(f.lluvia, x.lluvia, 5, h), f.nieve = this._damp(f.nieve, x.nieve, 5, h), f.relampagos = this._damp(f.relampagos, x.relampagos, 8, h), f.moonPhase = this._damp(f.moonPhase, x.moonPhase, 1, h)), f.parallax.x = this._damp(f.parallax.x, x.parallax.x, 6, h), f.parallax.y = this._damp(f.parallax.y, x.parallax.y, 6, h), this._cloudOffset.x += (x.wind?.x || 0) * h, this._cloudOffset.y += (x.wind?.y || 0) * h, i.useProgram(this.program), i.bindBuffer(i.ARRAY_BUFFER, u), i.enableVertexAttribArray(p), i.vertexAttribPointer(p, 2, i.FLOAT, !1, 0, 0), i.uniform2f(this.uniforms.resolution, r.width, r.height), i.uniform1f(this.uniforms.time, (_ - this.startTime) / 1e3), i.uniform3f(this.uniforms.sunPosition, 0, f.sunY, -1), i.uniform3f(this.uniforms.moonPosition, 0.2, -f.sunY + 0.2, -1), i.uniform1f(this.uniforms.moonPhase, f.moonPhase), i.uniform4f(this.uniforms.weather, f.nubes, f.lluvia, f.nieve, f.relampagos), i.uniform2f(this.uniforms.cloudOffset, this._cloudOffset.x, this._cloudOffset.y), i.uniform2f(this.uniforms.parallax, f.parallax.x, f.parallax.y), i.drawArrays(i.TRIANGLES, 0, 3), this._animationFrame = requestAnimationFrame(g);
     };
     g();
   }
@@ -19645,7 +19653,7 @@ function j_(a) {
     const c = o?.call(this);
     return bl(this), kp(this), c;
   }, r._renderAtmosphere = function(c, u) {
-    return '<argus-weather-panel class="wx-atmosphere"></argus-weather-panel>';
+    return '<div class="wx wx-atmosphere" style="position:relative; width:100%; height:100%; display:block;"><argus-weather-panel></argus-weather-panel></div>';
   }, r._initWeatherWebGL = function(c) {
   };
   const l = Object.getOwnPropertyDescriptor(r, "hass");
