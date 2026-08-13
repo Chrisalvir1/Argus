@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Home Hub – v2.0.98
+ * Argus Home Hub – v2.0.99
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -183,6 +183,7 @@ const TEXTS = {
     ha_admin_label: 'Home Assistant Admin',
     ha_standard_user_label: 'Standard HA User',
     role_argus_standard: 'Usuario estándar',
+    select_btn: '+ Seleccionar', add_btn: '+ Añadir', save_config: 'Guardar configuración', edit_dashboard: 'Editar tablero',
   },
   en: {
     hero_desc:'Alarm control, modes and automations.',
@@ -464,6 +465,7 @@ const TEXTS = {
     ha_admin_label: 'Admin Home Assistant',
     ha_standard_user_label: 'Utilisateur HA standard',
     role_argus_standard: 'Utilisateur standard',
+    select_btn: '+ Sélectionner', add_btn: '+ Ajouter', save_config: 'Enregistrer la configuration', edit_dashboard: 'Modifier le tableau de bord',
   },
   pt: {
     hero_desc:'Segurança integrada, controle de acesso, automações e HomeKit.',
@@ -599,6 +601,7 @@ const TEXTS = {
     ha_admin_label: 'Administrador do Home Assistant',
     ha_standard_user_label: 'Usuário padrão do HA',
     role_argus_standard: 'Usuário padrão',
+    select_btn: '+ Selecionar', add_btn: '+ Adicionar', save_config: 'Salvar configuração', edit_dashboard: 'Editar painel',
   },
   it: {
     hero_desc:'Sicurezza integrata, controllo accessi, automazioni e HomeKit.',
@@ -733,6 +736,7 @@ const TEXTS = {
     ha_admin_label: 'Amministratore Home Assistant',
     ha_standard_user_label: 'Utente HA standard',
     role_argus_standard: 'Utente standard',
+    select_btn: '+ Seleziona', add_btn: '+ Aggiungi', save_config: 'Salva configurazione', edit_dashboard: 'Modifica dashboard',
   },
   zh: {
     hero_desc:'集成安全、访问控制、自动化和HomeKit。',
@@ -867,6 +871,7 @@ const TEXTS = {
     ha_admin_label: 'Home Assistant 管理员',
     ha_standard_user_label: '标准 HA 用户',
     role_argus_standard: '标准用户',
+    select_btn: '+ 选择', add_btn: '+ 添加', save_config: '保存配置', edit_dashboard: '编辑仪表板',
   },
   ru: {
     hero_desc:'Комплексная безопасность, контроль доступа, автоматизация и HomeKit.',
@@ -1001,6 +1006,7 @@ const TEXTS = {
     ha_admin_label: 'Администратор Home Assistant',
     ha_standard_user_label: 'Стандартный пользователь HA',
     role_argus_standard: 'Стандартный пользователь',
+    select_btn: '+ Выбрать', add_btn: '+ Добавить', save_config: 'Сохранить конфигурацию', edit_dashboard: 'Редактировать панель',
   },
 };
 
@@ -1367,7 +1373,7 @@ _tmpl.innerHTML = `
   .ios-confirm-cancel:hover { background: rgba(255,255,255,0.14); }
   .ios-confirm-cancel:active { transform: scale(0.96); }
 
-  :host{display:block;min-height:100vh;box-sizing:border-box;color:var(--primary-text-color);background:var(--lovelace-background,var(--primary-background-color));font-family:'Outfit',Inter,system-ui,sans-serif}
+  :host{display:block;min-height:100vh;box-sizing:border-box;--primary-text-color:#ffffff!important;--secondary-text-color:rgba(255,255,255,0.7)!important;color:#ffffff!important;background:var(--lovelace-background,var(--primary-background-color));font-family:'Outfit',Inter,system-ui,sans-serif}
   *{box-sizing:border-box}
   @keyframes iosGlassIn{0%{opacity:0;transform:translateY(14px) scale(.965)}65%{opacity:1;transform:translateY(-2px) scale(1.008)}100%{transform:translateY(0) scale(1)}}
   @keyframes iosSelectPop{0%{transform:scale(.92);opacity:.45}60%{transform:scale(1.045);opacity:1}100%{transform:scale(1)}}
@@ -2793,7 +2799,7 @@ _tmpl.innerHTML = `
         <div class="personalize-section">
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--personalize-divider, rgba(255,255,255,0.08)); padding-bottom:10px; flex-wrap:wrap; gap:10px;">
             <div id="lbl-aesthetic-custom" style="font-weight:900; font-size:14px; letter-spacing:-0.01em; cursor:pointer; display:flex; align-items:center; gap:8px; user-select:none;">
-              <span id="lbl-aesthetic-text">🎨 Personalización Estética (Avanzado)</span>
+              <span id="lbl-mas-ajustes">⚙️ Más Ajustes / SOS</span>
               <span id="personalize-chevron" style="transition: transform 0.3s ease; font-size: 11px; background: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 8px;">▲ Ocultar</span>
             </div>
             <div style="display:flex; gap:8px;">
@@ -3095,7 +3101,7 @@ class ArgusPanel extends HTMLElement {
     const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
     if (isNaN(date.getTime())) return '';
 
-    const formatSetting = this._getClockFormat();
+    const formatSetting = 'auto';
     const locale = this._getLocale();
     const timeZone = this._getTimeZone();
 
@@ -3124,7 +3130,7 @@ class ArgusPanel extends HTMLElement {
     const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
     if (isNaN(date.getTime())) return '';
 
-    const formatSetting = this._getClockFormat();
+    const formatSetting = 'auto';
     const locale = this._getLocale();
     const timeZone = this._getTimeZone();
 
@@ -3461,6 +3467,9 @@ class ArgusPanel extends HTMLElement {
   }
 
   _refreshLocalizedUi() {
+    (window as any)._argusDashboardReadyBtn = this._t('edit_dashboard_done') || '✓ Listo';
+    (window as any)._argusDashboardEditBtn = '✥ ' + (this._t('edit_dashboard') || 'Editar tablero');
+    (window as any)._argusDashboardResetBtn = this._t('reset_dashboard') || 'Restablecer diseño';
     this._applyTranslations();
     this._renderEntries();
     this._renderModeTabs();
@@ -3548,7 +3557,7 @@ class ArgusPanel extends HTMLElement {
     set('lbl-hub-bg-title',     t('bg_hub_title'));
     set('s-panel-bg-sound-lbl', t('bg_sound_opt'));
     set('s-hub-bg-sound-lbl',   t('bg_sound_opt'));
-    set('lbl-aesthetic-text', '🎨 ' + t('lbl_aesthetic_custom') + ' (Avanzado)');
+    set('lbl-mas-ajustes', '🎨 ' + t('lbl_aesthetic_custom') + ' (Avanzado)');
     set('edit-widgets-label', this._widgetEditing ? ('✓ ' + t('done')) : '⚙️ Config. Widgets');
     set('lbl-temperature-source', t('temp_displayed'));
     set('lbl-weather-source', t('weather_source'));
@@ -4667,28 +4676,24 @@ class ArgusPanel extends HTMLElement {
           ${this._renderBatteryAlerts()}
           <div class="hud">
             <div class="hud-loc">${this._escapeHtml(fullHudLoc)} · ${this._escapeHtml(weatherLabel)}</div>
-            <div class="hud-data"><span>${this._escapeHtml(timeStr)}</span>${displayedTemperature ? `<i>🌡️ ${this._escapeHtml(displayedTemperature)}</i>` : ''}</div>
-            ${temperatures.length ? `<div class="hud-temperatures">${temperatures.map(item => `<span class="hud-temperature">${this._escapeHtml(item.label)} ${this._escapeHtml(item.value)}</span>`).join('')}</div>` : ''}
+            <div class="hud-data"></div>
           </div>
           <div class="entry-content security-console">
             <!-- Compact HUD bar at top of console — replaces overlapping absolute hud -->
             <div class="console-hud">
               <span class="console-hud-loc">🏡 ${this._escapeHtml(fullHudLoc)} · ${this._escapeHtml(weatherLabel)}</span>
               <div class="console-hud-right">
-                <span class="console-hud-time">${this._escapeHtml(timeStr)}</span>
-                ${displayedTemperature ? `<span class="console-hud-temp">🌡️ ${this._escapeHtml(displayedTemperature)}</span>` : ''}
-                ${temperatures.length ? `<div class="console-hud-temps">${temperatures.map(item => `<span class="console-hud-tpill">${this._escapeHtml(item.label)} ${this._escapeHtml(item.value)}</span>`).join('')}</div>` : ''}
               </div>
             </div>
             <div class="entry-icon" style="display:flex;justify-content:center;animation:float-icon 5s ease-in-out infinite;">
               ${this._getIntelligentSVG(isWaiting ? 'pending' : state, null, isNight, triggered, idx)}
             </div>
             <div class="liquid-stack">
-              <button class="liquid-btn btn-home ${state==='armed_home'?'active':''} ${sensorAlert && state==='armed_home'?'buzz-orange':''}" data-idx="${idx}" data-action="home">${this._modeButtonIcon('home')}<span>${this._escapeHtml(modeLabel('btn_home'))}</span></button>
-              <button class="liquid-btn btn-away ${state==='armed_away'?'active':''} ${sensorAlert && state==='armed_away'?'buzz-orange':''}" data-idx="${idx}" data-action="away">${this._modeButtonIcon('away')}<span>${this._escapeHtml(modeLabel('btn_away'))}</span></button>
-              <button class="liquid-btn btn-night ${state==='armed_night'?'active':''} ${sensorAlert && state==='armed_night'?'buzz-orange':''}" data-idx="${idx}" data-action="night">${this._modeButtonIcon('night')}<span>${this._escapeHtml(modeLabel('btn_night'))}</span></button>
-              <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''} ${sensorAlert && state==='armed_vacation'?'buzz-orange':''}" data-idx="${idx}" data-action="vacation">${this._modeButtonIcon('vacation')}<span>${this._escapeHtml(modeLabel('btn_vacation'))}</span></button>
-              <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm">${this._modeButtonIcon('disarm')}<span>${this._escapeHtml(modeLabel('btn_disarmed'))}</span></button>
+              <button class="liquid-btn btn-home ${state==='armed_home'?'active':''} ${sensorAlert && state==='armed_home'?'buzz-orange':''}" data-idx="${idx}" data-action="home">${this._modeButtonIcon('home')}<span>${this._escapeHtml(modeLabel('armed_home'))}</span></button>
+              <button class="liquid-btn btn-away ${state==='armed_away'?'active':''} ${sensorAlert && state==='armed_away'?'buzz-orange':''}" data-idx="${idx}" data-action="away">${this._modeButtonIcon('away')}<span>${this._escapeHtml(modeLabel('armed_away'))}</span></button>
+              <button class="liquid-btn btn-night ${state==='armed_night'?'active':''} ${sensorAlert && state==='armed_night'?'buzz-orange':''}" data-idx="${idx}" data-action="night">${this._modeButtonIcon('night')}<span>${this._escapeHtml(modeLabel('armed_night'))}</span></button>
+              <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''} ${sensorAlert && state==='armed_vacation'?'buzz-orange':''}" data-idx="${idx}" data-action="vacation">${this._modeButtonIcon('vacation')}<span>${this._escapeHtml(modeLabel('armed_vacation'))}</span></button>
+              <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm">${this._modeButtonIcon('disarm')}<span>${this._escapeHtml(modeLabel('disarmed'))}</span></button>
               ${this._permissions?.sos !== false ? `<button class="btn-sos" data-action="${panicActive ? 'stop-sos' : 'sos'}" data-idx="${idx}">${this._modeButtonIcon('sos')}<span>${panicActive ? t('sos_stop') : t('btn_sos')}</span></button>` : ''}
             </div>
             <div class="console-sensors">${sensorRows || `<div class="console-empty">${this._escapeHtml(sList.length === 0 ? 'Sin sensores de intrusión configurados.' : 'Todos los sensores configurados están omitidos.')}</div>`}</div>

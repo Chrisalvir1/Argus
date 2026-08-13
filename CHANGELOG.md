@@ -1,3 +1,8 @@
+## [2.0.99] - 2026-08-13
+
+### Fixed / Improved
+- Final UI Polish: Enforced global white text CSS, removed instances clock/temperature, completed missing translations for settings and buttons, fixed React dashboard button translations, and fixed clock format switching.
+
 ## [2.0.98] - 2026-08-13
 
 ### Changed / Fixed
