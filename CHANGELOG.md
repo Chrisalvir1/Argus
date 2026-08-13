@@ -1,3 +1,8 @@
+## [2.0.91] - 2026-08-13
+
+### Fixed
+- Solucionado bloqueo del inicio de sesión donde la pantalla de bienvenida retornaba prematuramente debido a la eliminación del overlay de perfiles.
+
 ## [2.0.90] - 2026-08-13
 
 ### Fixed

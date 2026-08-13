@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Home Hub – v2.0.90
+ * Argus Home Hub – v2.0.91
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -8568,8 +8568,19 @@ gl_FragColor=vec4(col,alpha);}`;
   }
 
   async _runProfileWelcomeAnimation(user) {
-    const overlay = this.shadowRoot.querySelector('.argus-profile-overlay');
-    if (!overlay) return;
+    this._nukeAllLoginOverlays();
+
+    const overlay = document.createElement('div');
+    overlay.className = 'argus-welcome-screen active-anim';
+    overlay.style.position = 'fixed';
+    overlay.style.inset = '0';
+    overlay.style.background = 'rgba(0,0,0,0.88)';
+    overlay.style.display = 'flex';
+    overlay.style.flexDirection = 'column';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+    overlay.style.zIndex = '10000';
+    overlay.style.pointerEvents = 'none';
 
     const avatarHtml = user.picture
       ? `<img src="${this._escapeHtml(user.picture)}" alt="" />`
@@ -8584,6 +8595,7 @@ gl_FragColor=vec4(col,alpha);}`;
         <h1 class="wname">${this._escapeHtml(user.display_name || user.name)}</h1>
       </div>
     `;
+    this.shadowRoot.appendChild(overlay);
 
     // Start loading dashboard in the background so it's ready when animation finishes
     let dashboardPromise = Promise.resolve();
@@ -8656,7 +8668,7 @@ gl_FragColor=vec4(col,alpha);}`;
     // Hard-destroy all profile/welcome overlays. No animations.
     // This is critical: any leftover overlay causes a permanent blur on the UI.
     this.shadowRoot
-      .querySelectorAll('.argus-profile-overlay, .argus-welcome-screen:not(.active-anim), .argus-pin-prompt')
+      .querySelectorAll('.argus-profile-overlay, .argus-welcome-screen, .argus-pin-prompt')
       .forEach(el => {
         el.style.transition = 'none';
         el.style.opacity = '0';
