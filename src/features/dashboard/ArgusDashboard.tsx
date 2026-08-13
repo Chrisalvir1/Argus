@@ -1,5 +1,13 @@
 import React,{useEffect,useLayoutEffect,useMemo,useRef,useState}from'react';
 import{Responsive,WidthProvider,type Layout,type Layouts}from'react-grid-layout';
+
+import { createPortal } from 'react-dom';
+import { ShadowGooeyPortal } from '../../core/shadow-gooey';
+import { AlarmFAB } from '../security/AlarmFAB';
+import { ProfileSelector } from './ProfileSelector';
+import { GooeyNav } from './GooeyNav';
+import { GooeyQuickActionsOverlay } from '../widgets/GooeyQuickActionsOverlay';
+
 import type{ArgusBreakpoint,ArgusWidgetDefinition,ArgusWidgetSize,DashboardLayoutStorage}from'./types';
 import{BREAKPOINTS,COLS,clampSizeForBreakpoint,defaultLayouts,firstFreePosition,getClosestWidgetSize,hasCollision,mergeLayouts,snapLayoutItemToSize}from'./layout';
 const ResponsiveGridLayout=WidthProvider(Responsive);type EditorSetter=(value:boolean)=>void;
@@ -21,8 +29,78 @@ export function ArgusDashboard({widgets,nodes,storage,userId,dashboardId,onEditi
  const resetWidget=(id:string)=>{const base=(defaultLayouts[bp]||[]).find(x=>x.i===id);if(base)replaceItem(id,{...base},'Widget restablecido')};
  const resize=(_layout:Layout[],_old:Layout,value:Layout)=>{const snapped=snapLayoutItemToSize(value,COLS[bp]);replaceItem(value.i,snapped,`Tamaño ${getClosestWidgetSize(snapped.w,snapped.h,COLS[bp])}`)};
  const reset=async()=>{if(!confirm('¿Restablecer únicamente posiciones, tamaños y visibilidad del tablero?'))return;await storage.reset(userId,dashboardId);const clean=mergeLayouts(null);setVisibility(defaults);save(clean,true);setMessage('Diseño predeterminado restaurado')};
- const currentLayout=layouts[bp]||[];
+ 
+  const [profileContainer, setProfileContainer] = useState<HTMLElement | null>(null);
+  const [navContainer, setNavContainer] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const root = document.querySelector('argus-panel')?.shadowRoot;
+    if (root) {
+      setProfileContainer(root.getElementById('hero-profile-container'));
+      setNavContainer(root.querySelector('.argus-mode-tabs'));
+    }
+  }, [hydrated]);
+
+  // Mock handlers
+  const handleAlarm = (action: string) => {
+    const panel = document.querySelector('argus-panel') as any;
+    if (panel?._send) panel._send('argus/alarm', { action });
+  };
+  
+  // Replace current profile selector with Gooey
+  const profiles = [
+    { id: userId, name: userId, is_own_profile: true },
+    { id: 'home', name: 'Casa' },
+    { id: 'away', name: 'Afuera' }
+  ];
+
+  const currentLayout=layouts[bp]||[];
  if(!hydrated)return <section className="argus-dashboard"><div className="argus-dashboard__feedback" aria-live="polite">Cargando tablero…</div></section>;
- return <section className={`argus-dashboard ${editing?'argus-dashboard--editing':''}`}><div className="argus-dashboard__feedback" aria-live="polite">{message}</div><ResponsiveGridLayout className="argus-dashboard-grid" layouts={layouts} breakpoints={BREAKPOINTS} cols={COLS} rowHeight={92} margin={[16,16]} containerPadding={[16,16]} compactType={null} preventCollision={true} allowOverlap={false} isBounded={true} isDraggable={editing} isResizable={editing} draggableHandle=".argus-widget__drag-handle" resizeHandles={['se']} onBreakpointChange={value=>setBp(value as ArgusBreakpoint)} onLayoutChange={(_,all)=>{if(editing){setLayouts(all);lastValid.current=all}}} onResizeStop={resize} onDragStop={(_,__,value)=>{const others=(lastValid.current[bp]||[]).filter(x=>x.i!==value.i);if(hasCollision(others,value)){setLayouts({...lastValid.current});setMessage('Posición bloqueada por colisión');return}replaceItem(value.i,value,'Posición guardada')}} useCSSTransforms={true}>{widgets.filter(w=>visibility[w.id]!==false&&nodes.has(w.id)).map(w=>{const item=currentLayout.find(x=>x.i===w.id);const size=item?getClosestWidgetSize(item.w,item.h,COLS[bp]):w.size;return <div key={w.id}><Host widget={w} node={nodes.get(w.id)!} editing={editing} size={size} onSize={value=>chooseSize(w.id,value)} onHide={()=>setVisible(w.id,false)} onReset={()=>resetWidget(w.id)}/></div>})}</ResponsiveGridLayout><nav className="argus-dashboard__toolbar" aria-label="Edición del tablero"><button type="button" onClick={()=>setEditing(v=>!v)}>{editing?(window as any)._argusDashboardReadyBtn || '✓ Listo':(window as any)._argusDashboardEditBtn || '✥ Editar tablero'}</button>{editing&&<><button type="button" onClick={reset}>{ (window as any)._argusDashboardResetBtn || 'Restablecer diseño' }</button><div className="argus-dashboard__visibility" aria-label="Widgets ocultos">{widgets.filter(w=>visibility[w.id]===false).map(w=><button type="button" key={w.id} onClick={()=>setVisible(w.id,true)}>Mostrar {w.title}</button>)}</div></>}</nav></section>
+ return <section className={`argus-dashboard ${editing?'argus-dashboard--editing':''}`}><div className="argus-dashboard__feedback" aria-live="polite">{message}</div><ResponsiveGridLayout className="argus-dashboard-grid" layouts={layouts} breakpoints={BREAKPOINTS} cols={COLS} rowHeight={92} margin={[16,16]} containerPadding={[16,16]} compactType={null} preventCollision={true} allowOverlap={false} isBounded={true} isDraggable={editing} isResizable={editing} draggableHandle=".argus-widget__drag-handle" resizeHandles={['se']} onBreakpointChange={value=>setBp(value as ArgusBreakpoint)} onLayoutChange={(_,all)=>{if(editing){setLayouts(all);lastValid.current=all}}} onResizeStop={resize} onDragStop={(_,__,value)=>{const others=(lastValid.current[bp]||[]).filter(x=>x.i!==value.i);if(hasCollision(others,value)){setLayouts({...lastValid.current});setMessage('Posición bloqueada por colisión');return}replaceItem(value.i,value,'Posición guardada')}} useCSSTransforms={true}>{widgets.filter(w=>visibility[w.id]!==false&&nodes.has(w.id)).map(w=>{const item=currentLayout.find(x=>x.i===w.id);const size=item?getClosestWidgetSize(item.w,item.h,COLS[bp]):w.size;return <div key={w.id}><Host widget={w} node={nodes.get(w.id)!} editing={editing} size={size} onSize={value=>chooseSize(w.id,value)} onHide={()=>setVisible(w.id,false)} onReset={()=>resetWidget(w.id)}/></div>})}</ResponsiveGridLayout>
+
+      {/* Liquid Gooey Portals and Overlays */}
+      <ShadowGooeyPortal id="argus-alarm-gooey" blur={6} contrast={18} />
+      <ShadowGooeyPortal id="argus-profile-gooey" blur={8} contrast={20} />
+      <ShadowGooeyPortal id="argus-widget-quick-gooey" blur={5} contrast={16} />
+      <ShadowGooeyPortal id="argus-nav-gooey" blur={10} contrast={20} />
+      
+      <AlarmFAB 
+        state="disarmed" 
+        onArmHome={() => handleAlarm('arm_home')}
+        onArmAway={() => handleAlarm('arm_away')}
+        onArmNight={() => handleAlarm('arm_night')}
+        onArmVacation={() => handleAlarm('arm_vacation')}
+        onDisarm={() => handleAlarm('disarm')}
+        onSOS={() => handleAlarm('sos')}
+      />
+      
+      <GooeyQuickActionsOverlay />
+
+      {profileContainer && createPortal(
+        <ProfileSelector 
+          currentProfile={profiles[0]} 
+          profiles={profiles} 
+          onSelectProfile={(id) => {
+            const panel = document.querySelector('argus-panel') as any;
+            if (panel) panel.setProfile(id);
+          }} 
+        />, 
+        profileContainer
+      )}
+
+      {navContainer && createPortal(
+        <GooeyNav 
+          tabs={[
+            { id: 'history', label: 'Historial', icon: '🕘' },
+            { id: 'automations', label: 'Automaciones', icon: '⚡' },
+            { id: 'access', label: 'Accesos', icon: '🔑' },
+            { id: 'modes', label: 'Modos', icon: '🛡️' }
+          ]} 
+          activeTab="history" 
+          onSelectTab={(id) => console.log('Tab selected', id)} 
+        />, 
+        navContainer
+      )}
+<nav className="argus-dashboard__toolbar" aria-label="Edición del tablero"><button type="button" onClick={()=>setEditing(v=>!v)}>{editing?(window as any)._argusDashboardReadyBtn || '✓ Listo':(window as any)._argusDashboardEditBtn || '✥ Editar tablero'}</button>{editing&&<><button type="button" onClick={reset}>{ (window as any)._argusDashboardResetBtn || 'Restablecer diseño' }</button><div className="argus-dashboard__visibility" aria-label="Widgets ocultos">{widgets.filter(w=>visibility[w.id]===false).map(w=><button type="button" key={w.id} onClick={()=>setVisible(w.id,true)}>Mostrar {w.title}</button>)}</div></>}</nav></section>
 }
 export default ArgusDashboard;

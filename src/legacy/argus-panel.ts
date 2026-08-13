@@ -183,8 +183,7 @@ const TEXTS = {
     ha_admin_label: 'Home Assistant Admin',
     ha_standard_user_label: 'Standard HA User',
     role_argus_standard: 'Usuario estándar',
-    save_config: 'Guardar configuración', edit_dashboard: 'Editar tablero',
-  },
+      },
   en: {
     hero_desc:'Alarm control, modes and automations.',
     instances:'Active Instances', modes:'Modes', automations:'⚡ Automations',
@@ -465,8 +464,7 @@ const TEXTS = {
     ha_admin_label: 'Admin Home Assistant',
     ha_standard_user_label: 'Utilisateur HA standard',
     role_argus_standard: 'Utilisateur standard',
-    save_config: 'Enregistrer la configuration', edit_dashboard: 'Modifier le tableau de bord',
-  },
+      },
   pt: {
     hero_desc:'Segurança integrada, controle de acesso, automações e HomeKit.',
     instances:'Instâncias ativas', modes:'Modos', automations:'⚡ Automações',
@@ -601,8 +599,7 @@ const TEXTS = {
     ha_admin_label: 'Administrador do Home Assistant',
     ha_standard_user_label: 'Usuário padrão do HA',
     role_argus_standard: 'Usuário padrão',
-    save_config: 'Salvar configuração', edit_dashboard: 'Editar painel',
-  },
+      },
   it: {
     hero_desc:'Sicurezza integrata, controllo accessi, automazioni e HomeKit.',
     instances:'Istanze attive', modes:'Modi', automations:'⚡ Automazioni',
@@ -736,8 +733,7 @@ const TEXTS = {
     ha_admin_label: 'Amministratore Home Assistant',
     ha_standard_user_label: 'Utente HA standard',
     role_argus_standard: 'Utente standard',
-    save_config: 'Salva configurazione', edit_dashboard: 'Modifica dashboard',
-  },
+      },
   zh: {
     hero_desc:'集成安全、访问控制、自动化和HomeKit。',
     instances:'活跃实例', modes:'模式', automations:'⚡ 自动化',
@@ -871,8 +867,7 @@ const TEXTS = {
     ha_admin_label: 'Home Assistant 管理员',
     ha_standard_user_label: '标准 HA 用户',
     role_argus_standard: '标准用户',
-    save_config: '保存配置', edit_dashboard: '编辑仪表板',
-  },
+      },
   ru: {
     hero_desc:'Комплексная безопасность, контроль доступа, автоматизация и HomeKit.',
     instances:'Активные экземпляры', modes:'Режимы', automations:'⚡ Автоматизации',
@@ -1006,8 +1001,7 @@ const TEXTS = {
     ha_admin_label: 'Администратор Home Assistant',
     ha_standard_user_label: 'Стандартный пользователь HA',
     role_argus_standard: 'Стандартный пользователь',
-    save_config: 'Сохранить конфигурацию', edit_dashboard: 'Редактировать панель',
-  },
+      },
 };
 
 // Text that is shared by controls created dynamically. Keeping this separate
