@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Home Hub – v2.0.87
+ * Argus Home Hub – v2.0.88
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1674,7 +1674,8 @@ _tmpl.innerHTML = `
   .ios-fullscreen {
     position: fixed !important;
     inset: 0 !important;
-    left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important;
+    left: var(--fs-left, 0) !important;
+    top: var(--fs-top, 0) !important;
     width: 100vw !important; height: 100dvh !important;
     max-width: 100vw !important; max-height: 100dvh !important;
     min-height: 100dvh !important;
@@ -2006,87 +2007,42 @@ _tmpl.innerHTML = `
     .sos-configuration{display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:14px;border-radius:24px}
     .sos-configuration #lbl-sos-actions{white-space:normal}.sos-configuration #btn-select-sos-outputs{width:100%!important}.sos-configuration #sos-output-help{max-width:none}
   }
-  /* ── Weather Animated Backgrounds ────────────────────────────────── */
-  .wx{position:absolute;inset:0;overflow:hidden;border-radius:inherit;z-index:1}
-  /* Cinematic, data-driven atmosphere replacing the old illustrated landscape. */
-  .wx-atmosphere{isolation:isolate;background:linear-gradient(180deg,var(--sky-top),var(--sky-mid) 58%,var(--sky-bottom));overflow:hidden}
-  .wx-webgl{position:absolute;inset:0;z-index:2;width:100%;height:100%;pointer-events:none;opacity:.95}
-  .wx-atmosphere.webgl-active .wx-precip,.wx-atmosphere.webgl-active .wx-lightning,.wx-atmosphere.webgl-active .wx-fog-real,.wx-atmosphere.webgl-active .wx-starfield{opacity:0}
-  .wx-atmosphere.webgl-active .wx-cloudfield{opacity:0!important}
-  .wx-atmosphere.webgl-active .wx-sun-real,.wx-atmosphere.webgl-active .wx-moon-real{opacity:0.6!important}
-  .wx-atmosphere::before{content:'';position:absolute;inset:-20%;z-index:-1;background:radial-gradient(ellipse at 65% 20%,rgba(255,255,255,.18),transparent 30%),radial-gradient(ellipse at 50% 120%,rgba(0,0,0,.48),transparent 48%),linear-gradient(115deg,rgba(255,255,255,.07),transparent 42%);filter:blur(12px)}
-  .wx-horizon{position:absolute;inset:auto -10% 0;height:38%;background:linear-gradient(180deg,transparent,rgba(4,10,18,.22) 18%,rgba(3,8,14,.72));filter:blur(1px)}
   .wx-horizon::before{content:'';position:absolute;inset:26% 0 0;background:radial-gradient(ellipse at 12% 100%,rgba(0,0,0,.34) 0 18%,transparent 19%),radial-gradient(ellipse at 50% 100%,rgba(0,0,0,.29) 0 23%,transparent 24%),radial-gradient(ellipse at 89% 100%,rgba(0,0,0,.36) 0 20%,transparent 21%);filter:blur(10px)}
-  .wx-celestial{position:absolute;top:11%;right:12%;width:70px;height:70px;border-radius:50%;z-index:1}
-  .wx-sun-real{background:radial-gradient(circle at 36% 35%,#fffdf2 0 8%,#fff7b2 24%,#ffc94c 58%,rgba(255,166,30,.65) 100%);box-shadow:0 0 24px 7px rgba(255,196,58,.42),0 0 70px 22px rgba(255,190,48,.18);animation:wxSunBreathe 8s ease-in-out infinite}
-  .wx-moon-real{background:radial-gradient(circle at 34% 28%,#fffdf4 0 8%,#e9e4d5 42%,#a8a394 100%);box-shadow:0 0 20px 4px rgba(236,236,222,.28),inset -9px -7px 12px rgba(48,50,60,.22);overflow:hidden}
-  .wx-moon-real::after{content:'';position:absolute;inset:-5px;background:var(--moon-shadow,#0a1428);border-radius:50%;transform:translateX(var(--moon-offset,0));box-shadow:0 0 0 1px rgba(0,0,0,.06)}
-  .wx-moon-real.full::after{display:none}.wx-moon-real.new{opacity:.14}.wx-moon-real.new::after{display:block;transform:none}.wx-moon-real.waxing-crescent{--moon-offset:42px}.wx-moon-real.first-quarter{--moon-offset:31px}.wx-moon-real.waxing-gibbous{--moon-offset:17px}.wx-moon-real.waning-gibbous{--moon-offset:-17px}.wx-moon-real.last-quarter{--moon-offset:-31px}.wx-moon-real.waning-crescent{--moon-offset:-42px}
-  .wx-starfield{position:absolute;inset:0;background-image:radial-gradient(circle at 12% 16%,#fff 0 1px,transparent 1.5px),radial-gradient(circle at 33% 31%,rgba(255,255,255,.8) 0 1px,transparent 1.5px),radial-gradient(circle at 56% 11%,#fff 0 1px,transparent 1.5px),radial-gradient(circle at 73% 38%,rgba(255,255,255,.7) 0 1px,transparent 1.5px),radial-gradient(circle at 91% 20%,#fff 0 1px,transparent 1.5px);opacity:.78;animation:wxStarDrift 16s ease-in-out infinite alternate}
-  .wx-cloudfield{position:absolute;inset:-15% -20%;background:radial-gradient(ellipse at 14% 28%,var(--cloud-color) 0 11%,transparent 26%),radial-gradient(ellipse at 43% 16%,var(--cloud-color) 0 14%,transparent 32%),radial-gradient(ellipse at 67% 32%,var(--cloud-color) 0 10%,transparent 24%),radial-gradient(ellipse at 88% 12%,var(--cloud-color) 0 13%,transparent 30%),radial-gradient(ellipse at 31% 45%,var(--cloud-color) 0 7%,transparent 20%),radial-gradient(ellipse at 76% 50%,var(--cloud-color) 0 8%,transparent 20%);filter:blur(18px);opacity:var(--cloud-opacity,.72);animation:wxCloudDrift 45s ease-in-out infinite alternate}
-  .wx-precip{position:absolute;inset:-20% -10%;opacity:.78;pointer-events:none;overflow:hidden}.wx-precip.rain,.wx-precip.drizzle{background:none;animation:none}.wx-rain-drop{position:absolute;top:-20%;left:var(--x);width:var(--w);height:var(--h);border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(211,237,255,.92));box-shadow:0 0 3px rgba(195,230,255,.38);opacity:var(--o);transform:rotate(17deg);animation:wxDropReal var(--fall) linear var(--delay) infinite}.wx-precip.drizzle .wx-rain-drop{width:1px;opacity:.42;animation-duration:1.35s}.wx-precip.snow{background-image:radial-gradient(circle,rgba(255,255,255,.92) 0 1.6px,transparent 2px);background-size:42px 42px;animation:wxSnowReal 8s linear infinite}
-  .wx-lightning{position:absolute;inset:0;background:rgba(238,247,255,0);animation:wxLightningReal 8s ease-in-out infinite;mix-blend-mode:screen}.wx-lightning::after{content:'';position:absolute;top:-5%;left:63%;width:13%;height:72%;background:linear-gradient(115deg,transparent 43%,rgba(255,255,235,.95) 44% 47%,transparent 48%) center/100% 100%;clip-path:polygon(43% 0,75% 0,51% 38%,82% 38%,21% 100%,43% 55%,13% 55%);opacity:0;animation:wxBoltReal 8s ease-in-out infinite;filter:drop-shadow(0 0 8px #fff6bd)}
-  .wx-fog-real{position:absolute;inset:20% -40%;background:repeating-linear-gradient(180deg,transparent 0 48px,rgba(235,244,247,.17) 52px 76px,transparent 82px 132px);filter:blur(14px);animation:wxFogReal 18s ease-in-out infinite alternate}
-  .wx-seasonal{position:absolute;inset:-20% 0;pointer-events:none;opacity:.62}.wx-seasonal.spring{background-image:radial-gradient(ellipse,rgba(255,204,220,.9) 0 2px,transparent 2.8px);background-size:54px 68px;animation:wxPetals 12s linear infinite}.wx-seasonal.autumn{background-image:radial-gradient(ellipse,rgba(229,142,57,.88) 0 2px,transparent 3px);background-size:66px 80px;animation:wxPetals 10s linear infinite}
-  .wx-atmosphere.eclipse-solar .wx-celestial{background:#090d15!important;box-shadow:0 0 0 7px #fff2ad,0 0 24px 12px #ffc75a,0 0 70px 30px rgba(255,195,80,.32)!important}.wx-atmosphere.eclipse-lunar .wx-celestial{background:radial-gradient(circle at 35% 28%,#f08c7c,#a43c3a 60%,#5e232a)!important;box-shadow:0 0 28px 8px rgba(230,86,72,.35)!important}
-  @keyframes wxSunBreathe{50%{transform:scale(1.045);filter:brightness(1.08)}}@keyframes wxStarDrift{to{transform:translateY(5px);opacity:.5}}@keyframes wxCloudDrift{to{transform:translateX(9%) translateY(3%)}}@keyframes wxDropReal{to{transform:translate(-14vw,145vh) rotate(17deg)}}@keyframes wxSnowReal{to{transform:translate(30px,90px)}}@keyframes wxLightningReal{0%,71%,74%,100%{background:transparent}72%,73%{background:rgba(238,247,255,.33)}}@keyframes wxBoltReal{0%,71%,74%,100%{opacity:0}72%,73%{opacity:1}}@keyframes wxFogReal{to{transform:translateX(12%)}}@keyframes wxPetals{to{transform:translate(12%,105%) rotate(180deg)}}
-  .wx-sunny{background:linear-gradient(175deg,#0055cc 0%,#1976d2 25%,#42a5f5 55%,#b3e5fc 100%)}
-  .wx-partly{background:linear-gradient(175deg,#0d47a1 0%,#1565c0 30%,#5b97cc 60%,#90caf9 100%)}
-  .wx-cloudy{background:linear-gradient(175deg,#546e7a 0%,#607d8b 40%,#90a4ae 70%,#b0bec5 100%)}
-  .wx-rain{background:linear-gradient(175deg,#1a2e40 0%,#263238 35%,#37474f 65%,#455a64 100%)}
-  .wx-storm{background:linear-gradient(175deg,#05080e 0%,#0b1420 40%,#111e30 75%,#1a2a40 100%)}
-  .wx-snow{background:linear-gradient(175deg,#455a64 0%,#607d8b 35%,#90a4ae 65%,#cfd8dc 100%)}
-  .wx-fog{background:linear-gradient(175deg,#6d8b96 0%,#8faab3 40%,#b0c4cc 70%,#cdd8dc 100%)}
-  .wx-night{background:linear-gradient(175deg,#020613 0%,#05103a 30%,#0a1850 60%,#152060 100%)}
-  .wx-night-cloudy{background:linear-gradient(175deg,#080810 0%,#0f1020 40%,#181828 70%,#222234 100%)}
-  /* sun */
-  .wx-sun{position:absolute;top:9%;right:13%;width:64px;height:64px}
-  .wx-sun-core{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 38% 32%,#fff9e3 5%,#fff176 35%,#fdd835 65%,#fbc02d 85%);box-shadow:0 0 0 7px rgba(255,235,59,.22),0 0 0 16px rgba(255,235,59,.1),0 0 45px 10px rgba(255,210,0,.42);animation:wxSunPulse 4s ease-in-out infinite}
-  .wx-sun-rays{position:absolute;inset:-24px;border-radius:50%;background:repeating-conic-gradient(rgba(255,230,60,.18) 0deg 7deg,transparent 7deg 18deg);animation:wxSunRotate 18s linear infinite}
-  @keyframes wxSunPulse{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.06);filter:brightness(1.1)}}
-  @keyframes wxSunRotate{to{transform:rotate(360deg)}}
-  /* clouds */
-  .wx-cloud{position:absolute;background:rgba(255,255,255,.85);border-radius:60px}
-  .wx-cloud::before,.wx-cloud::after{content:'';position:absolute;background:inherit;border-radius:50%}
-  .wx-cloud::before{width:54%;height:160%;top:-64%;left:17%}
-  .wx-cloud::after{width:40%;height:130%;top:-50%;right:14%}
-  .wx-cloud.gray{background:rgba(118,138,148,.72)}.wx-cloud.gray::before,.wx-cloud.gray::after{background:inherit}
-  .wx-cloud.dark{background:rgba(48,62,76,.84)}.wx-cloud.dark::before,.wx-cloud.dark::after{background:inherit}
-  .wx-cl1{width:130px;height:42px;top:22%;left:-160px;animation:wxDr1 22s linear infinite}
-  .wx-cl2{width:90px;height:30px;top:37%;left:-110px;animation:wxDr2 30s linear infinite 6s}
-  .wx-cl3{width:160px;height:50px;top:15%;left:-190px;animation:wxDr1 28s linear infinite 10s}
-  .wx-cl4{width:110px;height:36px;top:30%;left:-135px;animation:wxDr2 18s linear infinite 2s}
-  @keyframes wxDr1{to{transform:translateX(calc(100vw + 360px))}}
-  @keyframes wxDr2{to{transform:translateX(calc(100vw + 300px))}}
-  /* raindrops */
-  .wx-drop{position:absolute;width:1.5px;background:linear-gradient(to bottom,transparent,rgba(145,200,235,.75));border-radius:1px;animation:wxDropFall linear infinite}
-  @keyframes wxDropFall{0%{top:-5%;opacity:0}15%{opacity:1}85%{opacity:.7}100%{top:108%;opacity:0}}
-  /* lightning */
-  .wx-bolt{position:absolute;top:0;left:44%;width:8px;height:60%;background:rgba(255,255,180,0);clip-path:polygon(42% 0%,78% 0%,52% 44%,82% 44%,22% 100%,48% 52%,12% 52%);animation:wxBolt 7s ease-in-out infinite}
-  .wx-flash{position:absolute;inset:0;background:rgba(255,255,255,0);animation:wxFlash 7s ease-in-out infinite;border-radius:inherit}
-  @keyframes wxBolt{0%,81%,84%,100%{background:rgba(255,255,180,0)}82%,83%{background:linear-gradient(to bottom,#fff9c4,#ffee58,#fff176)}}
-  @keyframes wxFlash{0%,81%,84%,100%{background:rgba(255,255,255,0)}82%,83%{background:rgba(255,255,255,.07)}}
-  /* snowflakes */
-  .wx-flake{position:absolute;color:rgba(255,255,255,.82);animation:wxFlakeFall linear infinite;user-select:none;pointer-events:none}
-  @keyframes wxFlakeFall{0%{top:-8%;opacity:0;transform:translateX(0) rotate(0deg)}10%{opacity:.9}85%{opacity:.65}100%{top:108%;opacity:0;transform:translateX(var(--wx-d,20px)) rotate(540deg)}}
-  /* stars */
-  .wx-star{position:absolute;background:#fff;border-radius:50%;animation:wxStarBlink ease-in-out infinite;pointer-events:none}
-  @keyframes wxStarBlink{0%,100%{opacity:.1;transform:scale(.6)}50%{opacity:1;transform:scale(1.15)}}
-  /* moon */
-  .wx-moon{position:absolute;top:9%;right:13%;width:48px;height:48px}
-  .wx-moon-disc{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 37% 32%,#fffde7 0%,#fff9c4 35%,#fff176 65%,#ffee58 85%);box-shadow:0 0 0 3px rgba(255,238,88,.18),0 0 22px 5px rgba(255,238,88,.22),0 0 48px 12px rgba(255,238,88,.1);animation:wxMoonPulse 6s ease-in-out infinite}
-  .wx-moon-shadow{position:absolute;top:-4%;left:18%;width:90%;height:90%;border-radius:50%;background:radial-gradient(circle,rgba(0,0,0,0) 40%,rgba(8,12,35,.55) 82%)}
-  @keyframes wxMoonPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03);filter:brightness(1.07)}}
-  /* fog */
-  .wx-fog-strip{position:absolute;width:250%;height:44px;background:linear-gradient(90deg,transparent 5%,rgba(175,200,210,.35) 25%,rgba(192,212,218,.44) 50%,rgba(175,200,210,.35) 75%,transparent 95%);animation:wxFogMove linear infinite alternate;border-radius:50px}
-  @keyframes wxFogMove{0%{transform:translateX(-40%)}100%{transform:translateX(10%)}}
-  .wx-static{background:linear-gradient(180deg,rgba(22,28,42,.92),rgba(35,44,67,.95))}
-  .wx-photo,.wx-collage{background:#10141d}
-  .wx-photo::before{content:"";position:absolute;inset:0;background:var(--bg-image) center/cover no-repeat;filter:saturate(1.05) contrast(1.05)}
-  .wx-photo::after,.wx-collage::after,.wx-static::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,8,12,.18),rgba(5,8,12,.5))}
+  /* ── Weather Animated Backgrounds (Apple Weather Premium) ────────────────────────────────── */
+  .scene{position:absolute;inset:0;z-index:0;overflow:hidden;background:linear-gradient(165deg,#2c86c7,#8fc7dc 62%,#d7c7aa);transition:background 1.5s ease;border-radius:inherit}
+  .scene.sunny{background:linear-gradient(180deg,#1b60d0,#40a0ff 40%,#90d0ff)}
+  .scene.partlycloudy{background:linear-gradient(180deg,#3073d8,#6bb5ff 50%,#b8e0ff)}
+  .scene.cloudy{background:linear-gradient(180deg,#5b6976,#80909c 50%,#a4b3be)}
+  .scene.fog{background:linear-gradient(180deg,#6c767c,#9ca6ac 50%,#ccd1d4)}
+  .scene.rain,.scene.storm{background:linear-gradient(180deg,#303d49,#495a69 50%,#687985)}
+  .scene.snow{background:linear-gradient(180deg,#627f94,#92b1c7 50%,#d8eaf5)}
+  .scene.night{background:linear-gradient(180deg,#020513 0%,#0a1130 50%,#152248 100%)!important}
+  .scene.sunny::after,.scene.partlycloudy::after{content:'';position:absolute;inset:-50%;background:radial-gradient(circle at 50% 50%,#fff 0%,rgba(255,255,255,0.8) 5%,transparent 15%),radial-gradient(circle at 50% 50%,rgba(255,220,100,0.4) 0%,transparent 30%),conic-gradient(from 0deg at 50% 50%,transparent 0deg,rgba(255,255,255,0.15) 15deg,transparent 30deg,rgba(255,255,255,0.1) 45deg,transparent 60deg,rgba(255,255,255,0.2) 90deg,transparent 120deg,rgba(255,255,255,0.1) 180deg,transparent 240deg,rgba(255,255,255,0.15) 300deg,transparent 360deg);animation:rotate-sun 120s linear infinite;mix-blend-mode:screen;transform-origin:center;left:30%;top:-20%}
+  .scene.night.clear::after,.scene.night.partlycloudy::after{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,#fff 0 1px,transparent 1.5px);background-size:80px 73px;opacity:0.8;animation:stars 12s ease-in-out infinite alternate}
+  .scene.night.clear::before,.scene.night.partlycloudy::before{content:'';position:absolute;right:15%;top:15%;width:50px;height:50px;background:transparent;border-radius:50%;box-shadow:inset -10px -10px 0 0 #ffffe0;filter:drop-shadow(0 0 15px rgba(255,255,180,0.5))}
+  .scene.night.clear.eclipse::before{box-shadow:inset 0 0 0 25px rgba(0,0,0,0.9),0 0 20px 5px rgba(255,100,50,0.8)}
+  .scene.partlycloudy::before,.scene.cloudy::before{content:'';position:absolute;inset:-30%;background:radial-gradient(ellipse at 10% 20%,rgba(255,255,255,0.4) 0%,transparent 25%),radial-gradient(ellipse at 80% 30%,rgba(255,255,255,0.3) 0%,transparent 35%),radial-gradient(ellipse at 40% 50%,rgba(255,255,255,0.2) 0%,transparent 40%);filter:blur(25px);animation:clouds 40s linear infinite alternate}
+  .scene.night.cloudy::before,.scene.night.partlycloudy::before{background:radial-gradient(ellipse at 10% 20%,rgba(100,110,130,0.4) 0%,transparent 25%),radial-gradient(ellipse at 80% 30%,rgba(80,90,120,0.4) 0%,transparent 35%)}
+  .scene.rain::after,.scene.storm::after{content:'';position:absolute;inset:-50%;background:repeating-linear-gradient(108deg,transparent 0,transparent 20px,rgba(200,220,240,0.2) 21px,transparent 22px),repeating-linear-gradient(110deg,transparent 0,transparent 45px,rgba(200,220,240,0.4) 46px,transparent 48px);background-size:100% 200%;animation:rain 1.2s linear infinite;opacity:0.8}
+  .scene.snow::after{content:'';position:absolute;inset:-30%;background-image:radial-gradient(circle,rgba(255,255,255,0.8) 0 2px,transparent 3px),radial-gradient(circle,rgba(255,255,255,0.4) 0 4px,transparent 5px);background-size:45px 52px,90px 110px;background-position:0 0,20px 30px;animation:snow 8s linear infinite}
+  .scene.fog::before{content:'';position:absolute;inset:-20%;background:repeating-linear-gradient(0deg,transparent 0 40px,rgba(240,245,250,0.4) 50px 80px,transparent 90px 140px);filter:blur(18px);animation:fog 20s ease-in-out infinite alternate}
+  .scene.night.fog::before{background:repeating-linear-gradient(0deg,transparent 0 40px,rgba(120,130,150,0.4) 50px 80px,transparent 90px 140px)}
+  .scene.storm{animation:lightning 12s infinite}
+  @keyframes rotate-sun{to{transform:rotate(1turn)}}
+  @keyframes clouds{0%{transform:translate(-5%,-5%) scale(1)}100%{transform:translate(10%,10%) scale(1.1)}}
+  @keyframes stars{0%{opacity:0.4}100%{opacity:1}}
+  @keyframes rain{0%{background-position:0 0,0 0}100%{background-position:-150px 300px,-200px 400px}}
+  @keyframes snow{0%{background-position:0 0,20px 30px}100%{background-position:90px 300px,-45px 400px}}
+  @keyframes fog{0%{transform:translateY(0) scale(1);opacity:0.6}100%{transform:translateY(-50px) scale(1.2);opacity:0.9}}
+  @keyframes lightning{0%,93%,95%,100%{filter:none}94%{filter:brightness(2.5) contrast(1.5) saturate(0.5)}}
+  
+  .wx-static{background:linear-gradient(180deg,rgba(22,28,42,.92),rgba(35,44,67,.95));position:absolute;inset:0;z-index:0;border-radius:inherit}
+  .wx-photo,.wx-collage{background:#10141d;position:absolute;inset:0;z-index:0;border-radius:inherit}
+  .wx-photo::before{content:"";position:absolute;inset:0;background:var(--bg-image) center/cover no-repeat;filter:saturate(1.05) contrast(1.05);border-radius:inherit}
+  .wx-photo::after,.wx-collage::after,.wx-static::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,8,12,.18),rgba(5,8,12,.5));border-radius:inherit}
   .wx-collage-grid{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4px;padding:4px}
   .wx-collage-cell{border-radius:18px;background:center/cover no-repeat;min-height:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
-  .wx-video{position:absolute;inset:0;overflow:hidden;border-radius:inherit;z-index:1;background:#10141d}
+  .wx-video{position:absolute;inset:0;overflow:hidden;border-radius:inherit;z-index:0;background:#10141d}
   .wx-video::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,8,12,.18),rgba(5,8,12,.5));z-index:2}
   #argus-canvas-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background-size:cover;background-position:center;background-repeat:no-repeat}
   #argus-canvas-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.3) 100%);z-index:1;pointer-events:none}
@@ -3774,6 +3730,16 @@ class ArgusPanel extends HTMLElement {
     try { this._manualLang = localStorage.getItem('argus_lang') || null; } catch(e) {}
     this._ensureInitialized();
     this._startClock();
+    
+    // Safety check: If we think we are in fullscreen, but the browser is not, and we are not a kiosk, reset it.
+    // This prevents the 'X' button getting stuck when returning to a cached component state.
+    if (this._fullscreenIdx >= 0 && !this._kioskLocked) {
+      const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+      if (!fsEl) {
+        this._fullscreenIdx = -1;
+        this.classList.remove('fullscreen-active');
+      }
+    }
 
     // Listen to fullscreen changes to handle native escape key / exit
     this._onFsChange = () => {
@@ -3943,15 +3909,7 @@ class ArgusPanel extends HTMLElement {
     this.shadowRoot.getElementById('btn-undo-reset')?.addEventListener('click', () => this._undoResetConfig());
 
     this.shadowRoot.getElementById('btn-save-personalization-standalone')?.addEventListener('click', () => this._savePersonalization());
-    const toggleHeader = this.shadowRoot.getElementById('lbl-aesthetic-custom');
-    const personalizeWorkspace = this.shadowRoot.getElementById('personalize-workspace');
-    toggleHeader?.addEventListener('click', () => {
-      const isCollapsed = personalizeWorkspace.classList.toggle('collapsed');
-      const chevron = this.shadowRoot.getElementById('personalize-chevron');
-      if (chevron) {
-        chevron.style.transform = isCollapsed ? 'rotate(0deg)' : 'rotate(-180deg)';
-      }
-    });
+    // Toggle header logic moved to _localize to prevent duplicate bindings
     this.shadowRoot.getElementById('btn-select-sos-outputs')?.addEventListener('click', () => this._openModal('panic'));
 
     this._configureEmergencyCall();
@@ -4340,7 +4298,7 @@ class ArgusPanel extends HTMLElement {
     this._homeName = dashboard.ui?.home_name || '';
     this._emergencyNumber = dashboard.ui?.emergency_number || '911';
     this._panicOutputs = dashboard.ui?.panic_outputs || [];
-    const myProfile = this._users.find(u => u.id === this._myUserId) || {};
+    const myProfile = this._users.find(u => u.id === this._currentProfile?.id) || {};
     this._backgroundMode = myProfile.background_mode || dashboard.ui?.background_mode || 'weather';
     this._backgroundImages = myProfile.background_images || dashboard.ui?.background_images || [];
     this._temperatureSource = dashboard.ui?.temperature_source || 'auto';
@@ -4967,19 +4925,25 @@ class ArgusPanel extends HTMLElement {
     this.classList.add('fullscreen-active');
 
     const requestFS = target?.requestFullscreen || target?.webkitRequestFullscreen;
+    
+    const applyIosFullscreen = () => {
+      if (target) {
+        const rect = target.getBoundingClientRect();
+        target.style.setProperty('--fs-left', `-${rect.left}px`);
+        target.style.setProperty('--fs-top', `-${rect.top}px`);
+        target.classList.add('ios-fullscreen');
+      }
+      document.body.style.overflow = 'hidden';
+      this._renderEntries();
+    };
+
     if (requestFS) {
       requestFS.call(target).then(() => {
         document.body.style.overflow = 'hidden';
         this._renderEntries();
-      }).catch(() => {
-        if (target) target.classList.add('ios-fullscreen');
-        document.body.style.overflow = 'hidden';
-        this._renderEntries();
-      });
+      }).catch(applyIosFullscreen);
     } else {
-      if (target) target.classList.add('ios-fullscreen');
-      document.body.style.overflow = 'hidden';
-      this._renderEntries();
+      applyIosFullscreen();
     }
   }
 
@@ -5187,29 +5151,22 @@ gl_FragColor=vec4(col,alpha);}`;
     const drizzle = has('drizzle') || has('shower');
     const rain = !drizzle && (has('rain') || has('pouring'));
     const fog = has('fog') || has('mist') || has('hazy');
-    const clouds = has('cloud') || has('overcast') || has('partly') || rain || drizzle || storm || snow;
+    const cloud = has('cloud') || has('overcast');
+    
+    let base = 'clear';
+    if (storm) base = 'storm';
+    else if (rain || drizzle) base = 'rain';
+    else if (snow) base = 'snow';
+    else if (fog) base = 'fog';
+    else if (has('partly')) base = 'partlycloudy';
+    else if (cloud) base = 'cloudy';
+    else if (has('sunny')) base = 'sunny';
+    
+    const night = isNight ? 'night' : 'day';
     const eclipse = this._eclipseEvent();
-    const season = this._season();
-    let sky = isNight ? ['#050a16', '#0b1930', '#14233a'] : ['#2e6e9e', '#79a9c7', '#c9d0ca'];
-    if (storm) sky = isNight ? ['#05070e', '#101827', '#202b36'] : ['#293946', '#506573', '#83929a'];
-    else if (rain || drizzle) sky = isNight ? ['#07111f', '#17283a', '#344556'] : ['#526878', '#879aa6', '#b8c1c2'];
-    else if (snow) sky = isNight ? ['#101827', '#26384d', '#506271'] : ['#8ea0ad', '#c5d0d4', '#e5ebea'];
-    else if (fog) sky = isNight ? ['#19212a', '#3b4750', '#627078'] : ['#aab7bd', '#d1dadd', '#e3e5e0'];
-    else if (has('sunny')) sky = isNight ? sky : ['#0b4675', '#4c94bd', '#d4c99e'];
-    const precip = snow ? 'snow' : (drizzle ? 'drizzle' : ((rain || storm) ? 'rain' : ''));
-    const rainDrops = (precip === 'rain' || precip === 'drizzle') ? Array.from({ length: storm ? 56 : (precip === 'rain' ? 38 : 22) }, (_, index) => {
-      const x = (index * 37) % 112 - 6;
-      const height = 15 + (index % 5) * 8;
-      const width = index % 7 === 0 ? 2 : 1;
-      const opacity = 0.28 + (index % 6) * 0.1;
-      const fall = 0.48 + (index % 5) * 0.11;
-      const delay = -((index * 0.17) % 1.8);
-      return `<span class="wx-rain-drop" style="--x:${x}%;--h:${height}px;--w:${width}px;--o:${opacity};--fall:${fall}s;--delay:${delay}s"></span>`;
-    }).join('') : '';
-    const celestial = isNight ? `<div class="wx-celestial wx-moon-real ${this._moonPhase()}" style="--moon-shadow:${sky[0]}"></div>` : (!clouds || has('partly') ? '<div class="wx-celestial wx-sun-real"></div>' : '');
-    const cloudy = (clouds && !rain && !drizzle && !snow && !storm) ? 1 : 0;
-    return `<div class="wx wx-atmosphere ${isNight ? 'night' : 'day'} ${eclipse ? `eclipse-${eclipse}` : ''}" style="position: relative; overflow: hidden; --sky-top:${sky[0]};--sky-mid:${sky[1]};--sky-bottom:${sky[2]};--cloud-color:${storm ? 'rgba(17,25,35,.84)' : (isNight ? 'rgba(38,52,68,.76)' : 'rgba(235,241,242,.68)')};--cloud-opacity:${clouds ? '.8' : '0'}">
-      <canvas class="wx-webgl" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;" aria-hidden="true" data-rain="${rain || storm ? 1 : 0}" data-drizzle="${drizzle ? 1 : 0}" data-snow="${snow ? 1 : 0}" data-fog="${fog ? 1 : 0}" data-storm="${storm ? 1 : 0}" data-wind="${has('wind') || has('breezy') || has('windy') ? 1.0 : 0.0}" data-temp="${this._lastTemp ?? 20}" data-night="${isNight ? 1 : 0}" data-cloudy="${cloudy}"></canvas>${isNight ? '<div class="wx-starfield"></div>' : ''}${celestial}${clouds ? '<div class="wx-cloudfield"></div>' : ''}${precip ? `<div class="wx-precip ${precip}">${rainDrops}</div>` : ''}${storm ? '<div class="wx-lightning"></div>' : ''}${fog ? '<div class="wx-fog-real"></div>' : ''}${!rain && !drizzle && !storm && !snow && (season === 'spring' || season === 'autumn') ? `<div class="wx-seasonal ${season}"></div>' : ''}<div class="wx-horizon"></div>${this._renderEclipseOverlay(eclipse)}</div>`;
+    const eclipseClass = eclipse ? `eclipse` : '';
+    
+    return `<div class="scene ${night} ${base} ${eclipseClass}"></div>`;
   }
 
   _getWeatherBg(ws, isNight) {
@@ -6934,7 +6891,7 @@ gl_FragColor=vec4(col,alpha);}`;
       payload.panic_outputs = this._panicOutputs;
     }
 
-    const myProfile = (this._ui.users || []).find(u => u.id === this._myUserId);
+    const myProfile = (this._ui.users || []).find(u => u.id === this._currentProfile?.id);
     // Background is an instance preference, not a profile-only override: that
     // makes the Default choice survive a refresh for every administrator.
     payload.background_mode = background_mode;
@@ -6965,7 +6922,7 @@ gl_FragColor=vec4(col,alpha);}`;
 
     if (myProfile) {
       const users = JSON.parse(JSON.stringify(this._ui.users || []));
-      const user = users.find(u => u.id === this._myUserId);
+      const user = users.find(u => u.id === this._currentProfile?.id);
       user.background_mode = background_mode;
       user.background_images = this._backgroundImages || [];
       user.panel_bg_file = panel_bg_file;
@@ -8629,24 +8586,43 @@ gl_FragColor=vec4(col,alpha);}`;
     textGroup.style.opacity = '0';
 
     const rect = avatar.getBoundingClientRect();
-    const destX = window.innerWidth - 60;
-    const destY = 20;
-    const moveX = destX - rect.left - (rect.width/2) + 20;
-    const moveY = destY - rect.top - (rect.height/2) + 20;
-
-    avatar.style.transition = 'transform 0.5s cubic-bezier(0.5, 0, 0.2, 1), opacity 0.3s ease 0.2s';
-    avatar.style.transform = `translate(${moveX}px, ${moveY}px) scale(0.3)`;
-    overlay.style.transition = 'opacity 0.5s ease';
+    
+    // Find the destination profile avatar in the header
+    const destEl = this.shadowRoot.querySelector('#hero-profile-container .user-avatar');
+    let destX, destY, targetScale = 0.5;
+    
+    if (destEl) {
+      const destRect = destEl.getBoundingClientRect();
+      destX = destRect.left + destRect.width / 2;
+      destY = destRect.top + destRect.height / 2;
+      targetScale = destRect.width / rect.width;
+    } else {
+      // Fallback if not found (e.g. mobile or different layout)
+      destX = window.innerWidth - 60;
+      destY = 30 + 28;
+    }
+    
+    // Calculate translate values from the center of the welcome avatar
+    const moveX = destX - (rect.left + rect.width / 2);
+    const moveY = destY - (rect.top + rect.height / 2);
+    
+    // Apply a bounce curve and translate to exact top-bar coordinates
+    avatar.style.transition = 'transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.45s ease 0.2s';
+    avatar.style.transform = `translate(${moveX}px, ${moveY}px) scale(${targetScale})`;
+    overlay.style.transition = 'opacity 0.6s ease 0.1s';
     overlay.style.opacity = '0';
     
-    // Start loading dashboard during fade-out to eliminate blank flash
+    // Wait for animation to finish completely
+    await new Promise(r => setTimeout(r, 700));
+    
+    // Force hard removal
+    this._nukeAllLoginOverlays();
+    
+    // Now load the dashboard, AFTER the overlay is gone so there's no weird blink underneath
     if (!this._dashboardLoading) {
       this._dashboardLoading = true;
       this._load().finally(() => { this._dashboardLoading = false; });
     }
-    await new Promise(r => setTimeout(r, 520));
-    // Force hard removal — do NOT animate backdrop-filter, just kill the node
-    this._nukeAllLoginOverlays();
   }
 
   _nukeAllLoginOverlays() {

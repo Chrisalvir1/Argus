@@ -2,7 +2,7 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
-## [2.0.87] - 2026-08-12
+## [2.0.88] - 2026-08-12
 
 ### Fixed
 - **Animación de bienvenida:** se eliminó el parpadeo blanco al finalizar la animación iniciando la carga de `_load()` en la fase de fade-out en vez de esperar a que terminara la animación completa.
