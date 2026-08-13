@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Home Hub – v2.0.82
+ * Argus Home Hub – v2.0.83
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -8585,11 +8585,15 @@ gl_FragColor=vec4(col,alpha);}`;
 
     avatar.style.transition = 'transform 0.5s cubic-bezier(0.5, 0, 0.2, 1), opacity 0.3s ease 0.2s';
     avatar.style.transform = `translate(${moveX}px, ${moveY}px) scale(0.3)`;
-    overlay.style.transition = 'background 0.5s ease, backdrop-filter 0.5s ease';
-    overlay.style.background = 'transparent';
-    overlay.style.backdropFilter = 'blur(0px)';
+    
+    // WebKit bug fix: fading backdrop-filter and removing element causes orphaned blur planes.
+    // Animate opacity instead, which cleanly fades the entire compositor layer.
+    overlay.style.transition = 'opacity 0.5s ease';
+    overlay.style.opacity = '0';
     
     await new Promise(r => setTimeout(r, 500));
+    overlay.style.display = 'none'; // Force compositing update before removal
+    await new Promise(r => requestAnimationFrame(r));
     overlay.remove();
   }
 

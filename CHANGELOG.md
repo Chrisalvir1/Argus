@@ -2,6 +2,11 @@
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
+## [2.0.83] - 2026-08-12
+
+### Fixed
+- **WebKit Blur Bug**: Se solucionó un error persistente en iOS/Safari donde el `backdrop-filter` de la pantalla de bienvenida se quedaba "huérfano" y permanentemente estancado en pantalla como una capa borrosa debido al motor de renderizado de Safari. La animación de salida ahora desvanece la opacidad en lugar del filtro.
+
 ## [2.0.82] - 2026-08-12
 
 ### Fixed

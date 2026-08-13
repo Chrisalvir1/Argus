@@ -7187,7 +7187,7 @@ ${i}`);
     const l = i.querySelector("#welcome-avatar-flying"), c = i.querySelector("#welcome-text-anim");
     l.style.transform = "scale(0.8)", l.style.opacity = "0", c.style.opacity = "0", c.style.transform = "translateY(15px)", await new Promise((f) => requestAnimationFrame(f)), l.style.transition = "transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease", l.style.transform = "scale(1)", l.style.opacity = "1", c.style.transition = "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, opacity 0.5s ease 0.15s", c.style.transform = "translateY(0)", c.style.opacity = "1", await new Promise((f) => setTimeout(f, 1500)), c.style.transition = "opacity 0.3s ease", c.style.opacity = "0";
     const u = l.getBoundingClientRect(), p = window.innerWidth - 60, g = 20, _ = p - u.left - u.width / 2 + 20, h = g - u.top - u.height / 2 + 20;
-    l.style.transition = "transform 0.5s cubic-bezier(0.5, 0, 0.2, 1), opacity 0.3s ease 0.2s", l.style.transform = `translate(${_}px, ${h}px) scale(0.3)`, i.style.transition = "background 0.5s ease, backdrop-filter 0.5s ease", i.style.background = "transparent", i.style.backdropFilter = "blur(0px)", await new Promise((f) => setTimeout(f, 500)), i.remove();
+    l.style.transition = "transform 0.5s cubic-bezier(0.5, 0, 0.2, 1), opacity 0.3s ease 0.2s", l.style.transform = `translate(${_}px, ${h}px) scale(0.3)`, i.style.transition = "opacity 0.5s ease", i.style.opacity = "0", await new Promise((f) => setTimeout(f, 500)), i.style.display = "none", await new Promise((f) => requestAnimationFrame(f)), i.remove();
   }
   _initWidgetGrid() {
     try {
