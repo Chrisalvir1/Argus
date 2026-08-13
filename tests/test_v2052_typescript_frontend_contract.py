@@ -10,7 +10,7 @@ class TestV2051TypeScriptFrontendContract(unittest.TestCase):
     def test_bootstrap_has_one_runtime_bundle(self):
         source = (WWW / "argus-bootstrap.js").read_text()
         executable = source.split("/*", 1)[0]
-        self.assertIn("argus-frontend.js?v=2.0.97", executable)
+        self.assertIn("argus-frontend.js?v=2.0.98", executable)
         self.assertIn("import { applyArgusFrontend }", executable)
         self.assertNotIn("from './argus-", executable)
 

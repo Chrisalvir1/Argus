@@ -28,4 +28,5 @@ import type{ArgusPanelConstructor}from'../core/panel';
    applyV2049ResponsiveWidgets(C);
    applyV2050WidgetLayouts(C);
   applyLegacyAfterTypedClients(C);
+  applyReactDashboardLayout(C);
  }

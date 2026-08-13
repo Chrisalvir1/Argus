@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Home Hub – v2.0.97
+ * Argus Home Hub – v2.0.98
  * Complete, self-contained custom element.
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
@@ -1110,6 +1110,8 @@ const _tmpl = document.createElement('template');
 _tmpl.innerHTML = `
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+#widget-grid.hide-legacy > section.panel:not(#w-instances) { display: none !important; }
 
 @keyframes heroSpringSlideIn {
   0% { transform: translateX(-50px); opacity: 0; }
@@ -2772,14 +2774,11 @@ _tmpl.innerHTML = `
     <div class="hero-context" aria-live="polite">
       <div class="hero-clock"><strong id="hero-clock-time">--:--</strong><span id="hero-clock-date"></span></div>
       <div id="hero-profile-container"></div>
-      <button class="lang-pill" id="btn-edit-widgets" title="Configurar Widgets del Dashboard" style="margin-left: 4px;">
-        <span id="edit-widgets-label">⚙️</span>
-      </button>
     </div>
   </div>
 
   <!-- TWO-COLUMN LAYOUT -->
-  <div class="grid" id="widget-grid">
+  <div class="grid hide-legacy" id="widget-grid">
 
     <!-- Instances -->
     <section class="glass panel liquid-glass dashboard-instances" id="w-instances" style="grid-column: 1 / -1;">
@@ -2805,91 +2804,27 @@ _tmpl.innerHTML = `
 
           <div class="personalize-workspace" id="personalize-workspace">
             <div class="personalize-grid">
-            <!-- Column 1: Nombre y Fondos -->
-            <div class="personalize-column">
-              <div class="personalize-field pf-home">
-                <div class="setting-label" id="lbl-home-name-hdr" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6;">Nombre del Hogar</div>
-                <div id="lbl-home-name-prominent" style="font-size:18px;font-weight:900;margin-top:2px">Mi Casa</div>
-              </div>
-              <div class="personalize-field pf-panel">
-                <div class="setting-label" id="lbl-panel-bg-title" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">Fondo para Panel</div>
-                <select id="bg-mode-select-standalone" class="glass-control"></select>
-                <div id="panel-custom-bg-inputs" class="background-custom-inputs" style="display:none;">
-                  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
-                    <span id="lbl-panel-bg-upload" style="font-size:11px; opacity:0.8;">Cargar archivo:</span>
-                    <input type="file" id="panel-bg-file-input" accept="image/*,video/*,.gif,.heic,.heif" style="font-size:10px; max-width:180px;">
-                  </div>
-                  <div style="font-size:10px; opacity:0.5; text-align:right;" id="bg-file-help"></div>
-                  <input type="text" id="panel-bg-url-input" class="glass-control" placeholder="Background URL…">
-                  <label id="lbl-panel-bg-sound" style="display:none; align-items:center; gap:8px; font-size:11px; cursor:pointer;">
-                    <input type="checkbox" id="chk-panel-bg-sound"> <span id="s-panel-bg-sound-lbl">Sonido de video</span>
-                  </label>
+              <div class="personalize-column">
+                <div class="personalize-field pf-home">
+                  <div class="setting-label" id="lbl-home-name-hdr" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6;">Nombre del Hogar</div>
+                  <div id="lbl-home-name-prominent" style="font-size:18px;font-weight:900;margin-top:2px">Mi Casa</div>
                 </div>
               </div>
-              <div class="personalize-field pf-hub">
-                <div class="setting-label" id="lbl-hub-bg-title" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">Fondo Argus</div>
-                <select id="hub-bg-mode-select" class="glass-control"></select>
-                <!-- Argus Background Custom Inputs (shown dynamically) -->
-                <div id="hub-custom-bg-inputs" class="background-custom-inputs" style="display:none;">
-                  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
-                    <span id="lbl-hub-bg-upload" style="font-size:11px; opacity:0.8;">Cargar archivo:</span>
-                    <input type="file" id="hub-bg-file-input" accept="image/*,video/*,.gif,.heic,.heif" style="font-size:10px; max-width:180px;">
-                  </div>
-                  <div style="font-size:10px; opacity:0.5; text-align:right;" id="hub-file-help"></div>
-                  <input type="text" id="hub-bg-url-input" class="glass-control" placeholder="Background URL…">
-                  <label id="lbl-hub-bg-sound" style="display:none; align-items:center; gap:8px; font-size:11px; cursor:pointer;">
-                    <input type="checkbox" id="chk-hub-bg-sound"> <span id="s-hub-bg-sound-lbl">Sonido de video</span>
-                  </label>
+              <div class="personalize-column">
+                <div class="personalize-field pf-emergency">
+                  <label class="setting-label" id="lbl-emergency-number" for="emergency-number-input" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">🚨 Local emergency number</label>
+                  <input id="emergency-number-input" class="glass-control" inputmode="tel" maxlength="16" value="911" aria-describedby="emergency-number-help">
+                  <div id="emergency-number-help" class="small" style="margin-top:5px;opacity:.65;line-height:1.35">Configure it for the home location. It will be included in SOS alerts.</div>
                 </div>
               </div>
             </div>
 
-            <!-- Column 2: Sensores, Emergencias y SOS -->
-            <div class="personalize-column">
-              <div class="personalize-field pf-temp">
-                <label class="setting-label" id="lbl-temperature-source" for="temp-source-select-standalone" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">🌡️ Temperatura mostrada</label>
-                <select id="temp-source-select-standalone" class="glass-control"></select>
-              </div>
-              <div class="personalize-field pf-weather">
-                <label class="setting-label" id="lbl-weather-source" for="weather-source-select" style="font-size:11px;font-weight:800;text-transform:uppercase;opacity:.6;margin-bottom:4px;">☁️ Fuente de clima</label>
-                <select id="weather-source-select" class="glass-control"></select>
-              </div>
-              <div class="personalize-field pf-clock">
-                <label class="setting-label" id="lbl-clock-format" for="argus-clock-format-select" style="font-size:11px;font-weight:800;text-transform:uppercase;opacity:.6;margin-bottom:4px;">🕐 Formato de hora</label>
-                <select id="argus-clock-format-select" class="glass-control">
-                  <option value="auto">Auto (Home Assistant)</option>
-                  <option value="12h">12 horas (AM/PM)</option>
-                  <option value="24h">24 horas</option>
-                </select>
-              </div>
-              <div class="personalize-field pf-emergency">
-                <label class="setting-label" id="lbl-emergency-number" for="emergency-number-input" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">🚨 Local emergency number</label>
-                <input id="emergency-number-input" class="glass-control" inputmode="tel" maxlength="16" value="911" aria-describedby="emergency-number-help">
-                <div id="emergency-number-help" class="small" style="margin-top:5px;opacity:.65;line-height:1.35">Configure it for the home location. It will be included in SOS alerts.</div>
-              </div>
+            <div class="sos-configuration">
+              <div class="setting-label" id="lbl-sos-actions" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:6px;">🚨 SOS actions</div>
+              <div id="sos-output-chips" class="mode-sensor-grid" style="margin-bottom:8px"></div>
+              <button class="ghost" id="btn-select-sos-outputs" style="width:100%;justify-content:center;font-size:12px">Select lights, sirens, or scripts</button>
+              <div class="small" id="sos-output-help" style="margin-top:5px;opacity:.65;line-height:1.35">These devices will always activate when SOS is used, even while Argus is disarmed.</div>
             </div>
-          </div>
-
-          <div class="sos-configuration">
-            <div class="setting-label" id="lbl-sos-actions" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:6px;">🚨 SOS actions</div>
-            <div id="sos-output-chips" class="mode-sensor-grid" style="margin-bottom:8px"></div>
-            <button class="ghost" id="btn-select-sos-outputs" style="width:100%;justify-content:center;font-size:12px">Select lights, sirens, or scripts</button>
-            <div class="small" id="sos-output-help" style="margin-top:5px;opacity:.65;line-height:1.35">These devices will always activate when SOS is used, even while Argus is disarmed.</div>
-          </div>
-
-          <!-- Historial de Archivos Subidos -->
-          <div style="border-top:1px solid var(--personalize-divider, rgba(255,255,255,0.08)); padding-top:14px; margin-top:6px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:6px;">
-              <div style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; display:flex; align-items:center; gap:6px;">
-                📁 <span id="lbl-uploaded-files-title">Archivos Subidos en Servidor</span>
-              </div>
-              <span id="storage-files-count" style="font-size:10px; opacity:0.5;">Loading…</span>
-            </div>
-            <div id="uploaded-files-list" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr)); gap:10px; max-height:220px; overflow-y:auto; padding:5px 0;">
-              <!-- Los archivos se renderizan aquí dinámicamente -->
-            </div>
-          </div>
-
           </div>
         </div>
       </section>
@@ -7893,11 +7828,7 @@ gl_FragColor=vec4(col,alpha);}`;
     const langSelect = container.querySelector('#dropdown-lang-select');
     if (langSelect) {
       langSelect.addEventListener('change', (e) => {
-        if (e.target.value === 'auto') {
-          this._setLangAuto();
-        } else {
-          this._setLangManual(e.target.value);
-        }
+        this._setLanguage(e.target.value);
       });
     }
 

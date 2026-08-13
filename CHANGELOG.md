@@ -1,3 +1,8 @@
+## [2.0.98] - 2026-08-13
+
+### Changed / Fixed
+- Massive UI simplification: Re-enabled React layout permanently, forced text to white for legibility, removed complex aesthetic customization UI, fixed language dropdown selector in profile menu.
+
 ## [2.0.97] - 2026-08-13
 
 ### Fixed
