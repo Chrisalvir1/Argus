@@ -8546,7 +8546,7 @@ gl_FragColor=vec4(col,alpha);}`;
     this._nukeAllLoginOverlays();
 
     const overlay = document.createElement('div');
-    overlay.className = 'argus-welcome-screen';
+    overlay.className = 'argus-welcome-screen active-anim';
 
     const avatarHtml = user.picture
       ? `<img src="${this._escapeHtml(user.picture)}" alt="" />`
@@ -8562,6 +8562,13 @@ gl_FragColor=vec4(col,alpha);}`;
       </div>
     `;
     this.shadowRoot.appendChild(overlay);
+
+    // Start loading dashboard in the background so it's ready when animation finishes
+    let dashboardPromise = Promise.resolve();
+    if (!this._dashboardLoading) {
+      this._dashboardLoading = true;
+      dashboardPromise = this._load().catch(e => console.error("Load error during animation:", e)).finally(() => { this._dashboardLoading = false; });
+    }
 
     const avatar = overlay.querySelector('#welcome-avatar-flying');
     const textGroup = overlay.querySelector('#welcome-text-anim');
@@ -8615,21 +8622,19 @@ gl_FragColor=vec4(col,alpha);}`;
     // Wait for animation to finish completely
     await new Promise(r => setTimeout(r, 700));
     
-    // Force hard removal
-    this._nukeAllLoginOverlays();
+    // Ensure dashboard is fully loaded in case of slow network
+    await dashboardPromise;
     
-    // Now load the dashboard, AFTER the overlay is gone so there's no weird blink underneath
-    if (!this._dashboardLoading) {
-      this._dashboardLoading = true;
-      this._load().finally(() => { this._dashboardLoading = false; });
-    }
+    // Force hard removal
+    overlay.classList.remove('active-anim');
+    this._nukeAllLoginOverlays();
   }
 
   _nukeAllLoginOverlays() {
     // Hard-destroy all profile/welcome overlays. No animations.
     // This is critical: any leftover overlay causes a permanent blur on the UI.
     this.shadowRoot
-      .querySelectorAll('.argus-profile-overlay, .argus-welcome-screen, .argus-pin-prompt')
+      .querySelectorAll('.argus-profile-overlay, .argus-welcome-screen:not(.active-anim), .argus-pin-prompt')
       .forEach(el => {
         el.style.transition = 'none';
         el.style.opacity = '0';
