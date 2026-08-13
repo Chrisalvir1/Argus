@@ -1449,8 +1449,9 @@ _tmpl.innerHTML = `
   .panel[data-size="S"] #github-desc{display:none}
 
   /* Collapsible Personalization with Bounce expansion */
-  .personalize-workspace{overflow:hidden;max-height:0;opacity:0;pointer-events:none;transition:max-height 0.6s cubic-bezier(0.175,0.885,0.32,1.275),opacity 0.4s ease}
-  .personalize-workspace:not(.collapsed){max-height:1000px;opacity:1;pointer-events:auto;margin-top:16px;animation:bounceExpand 0.55s cubic-bezier(0.175,0.885,0.32,1.275) forwards}
+  .personalize-workspace{display:grid;grid-template-rows:0fr;opacity:0;pointer-events:none;transition:grid-template-rows 0.6s cubic-bezier(0.175,0.885,0.32,1.275),opacity 0.4s ease,margin-top 0.4s ease}
+  .personalize-workspace > div { overflow:hidden; min-height:0; }
+  .personalize-workspace:not(.collapsed){grid-template-rows:1fr;opacity:1;pointer-events:auto;margin-top:16px;animation:bounceExpand 0.55s cubic-bezier(0.175,0.885,0.32,1.275) forwards}
   @keyframes bounceExpand{
     0%{transform:scale(0.96) translateY(-8px);opacity:0}
     70%{transform:scale(1.01) translateY(2px);opacity:0.9}
@@ -3191,7 +3192,6 @@ class ArgusPanel extends HTMLElement {
   }
 
   _formatTime(dateInput) {
-    console.log('[Argus clock_format]', this._ui?.clock_format, this._dashboard?.clock_format);
     if (!dateInput) return '';
     const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
     if (isNaN(date.getTime())) return '';
@@ -3506,7 +3506,7 @@ class ArgusPanel extends HTMLElement {
       pt: { sunny:'Ensolarado', clear_night:'Noite limpa', partlycloudy:'Parcialmente nublado', cloudy:'Nublado', rainy:'Chuvoso', pouring:'Chuva forte', lightning:'Trovoada', lightning_rainy:'Trovoada com chuva', snowy:'Nevando', fog:'Neblina', windy:'Ventoso', exceptional:'Condições excepcionais' },
       it: { sunny:'Soleggiato', clear_night:'Notte serena', partlycloudy:'Parzialmente nuvoloso', cloudy:'Nuvoloso', rainy:'Piovoso', pouring:'Pioggia intensa', lightning:'Temporale', lightning_rainy:'Temporale con pioggia', snowy:'Nevica', fog:'Nebbia', windy:'Ventoso', exceptional:'Condizioni eccezionali' },
       zh: { sunny:'晴朗', clear_night:'晴夜', partlycloudy:'局部多云', cloudy:'多云', rainy:'有雨', pouring:'大雨', lightning:'雷暴', lightning_rainy:'雷雨', snowy:'下雪', fog:'有雾', windy:'有风', exceptional:'异常天气' },
-      ru: { sunny:'Солнечно', clear_night:'Ясная ночь', partlycloudy:'Переменная облачность', cloudy:'Облачно', rainy:'Дождливо', pouring:'Сильный дождь', lightning:'Гроза', lightning_rainy:'Гроза с дождём', snowy:'Снег', fog:'Туман', windy:'Ветрено', exceptional:'Исключительные условия' },
+      ru: { sunny:'Солнечно', clear_night:'Ясная ночь', partlycloudy:'Переменная облачность', cloudy:'Облачно', rainy:'Дождливо', pouring:'Сильныйдь', lightning:'Гроза', lightning_rainy:'Гроза с дождём', snowy:'Снег', fog:'Туман', windy:'Ветрено', exceptional:'Исключительные условия' },
     };
     const icon = key.includes('lightning') ? '⛈️'
       : key === 'pouring' || key.includes('rain') ? '🌧️'
@@ -5044,23 +5044,21 @@ if(cloudy>0.0){
     vec2 d=(u-center)/size;
     float dist=dot(d,d);
     if(dist<1.0){
-      // Soft gaussian-like falloff + fbm noise for fluffy edges
       float base=exp(-dist*3.5);
       float edge=noise(u*8.0+vec2(t*0.05))*0.35;
       float intensity=clamp(base+edge*base,0.0,1.0);
-      clAlpha=max(clAlpha,cloudAlphas[i]*intensity*0.65);
+      clAlpha=max(clAlpha,cloudAlphas[i]*intensity*0.45);
     }
   }
 }
 if(clAlpha>0.0){
-  // Clouds: white with slight blue tint for realism
-  vec3 cloudColor=mix(vec3(0.85,0.90,0.98),vec3(1.0),clAlpha);
+  vec3 cloudColor=mix(vec3(0.85,0.90,0.95),vec3(1.0),clAlpha);
   col=mix(col,cloudColor,clAlpha);
   alpha=max(alpha,clAlpha*0.7);
 }
 if(night>0.5&&rain==0.0&&snow==0.0&&fog==0.0){float st=h(floor(u*150.0));if(st>0.99){float tw=0.5+0.5*sin(t*3.0+st*100.0);col+=vec3(1.0)*tw*(st-0.99)*100.0;alpha=max(alpha,tw*0.5);}}
 if(night>0.5&&temp<5.0&&rain==0.0&&snow==0.0&&storm==0.0){float au=fbm(vec2(u.x*2.0+t*0.1,u.y*3.0-t*0.05)),au2=fbm(vec2(u.x*3.0-t*0.15,u.y*2.0+t*0.08));vec3 ac=mix(vec3(0.0,1.0,0.5),vec3(0.5,0.0,1.0),au);float intn=smoothstep(0.4,0.8,au*au2)*(1.0-u.y);col+=ac*intn*1.5;alpha=max(alpha,intn);}
-if(night<0.5&&rain==0.0&&fog==0.0&&snow==0.0){float gr=fbm(vec2(u.x*4.0-t*0.08,u.y*0.4))*(1.0-u.y*0.8);float sunGlow=smoothstep(0.3,0.7,gr);col+=vec3(1.0,0.92,0.72)*sunGlow*0.65;alpha=max(alpha,sunGlow*0.45);}
+if(night<0.5&&rain==0.0&&fog==0.0&&snow==0.0&&cloudy==0.0){float gr=fbm(vec2(u.x*4.0-t*0.08,u.y*0.4))*(1.0-u.y*0.8);float sunGlow=smoothstep(0.3,0.7,gr);col+=vec3(1.0,0.92,0.72)*sunGlow*0.65;alpha=max(alpha,sunGlow*0.45);}
 if(rain>0.0){float r=rainLayer(u,t,0.0)+rainLayer(u,t,1.0)*0.65+rainLayer(u,t,2.0)*0.45+rainLayer(u,t,3.0)*0.25;col+=vec3(0.75,0.88,1.0)*r*rain*1.2;alpha=max(alpha,min(1.0,r*rain*1.1));}
 if(snow>0.0){float s=snowLayer(u,t,0.0)+snowLayer(u,t,1.0)*0.7+snowLayer(u,t,2.0)*0.4;col+=vec3(1.0)*s*snow;alpha=max(alpha,min(1.0,s*snow));}
 if(fog>0.0){float f=fbm(vec2(u.x*3.0+t*0.2,u.y*4.0-t*0.1));col+=vec3(0.8,0.85,0.9)*f*fog*0.7;alpha=max(alpha,min(1.0,f*fog*0.8));}
@@ -5211,7 +5209,7 @@ gl_FragColor=vec4(col,alpha);}`;
     const celestial = isNight ? `<div class="wx-celestial wx-moon-real ${this._moonPhase()}" style="--moon-shadow:${sky[0]}"></div>` : (!clouds || has('partly') ? '<div class="wx-celestial wx-sun-real"></div>' : '');
     const cloudy = (clouds && !rain && !drizzle && !snow && !storm) ? 1 : 0;
     return `<div class="wx wx-atmosphere ${isNight ? 'night' : 'day'} ${eclipse ? `eclipse-${eclipse}` : ''}" style="position: relative; overflow: hidden; --sky-top:${sky[0]};--sky-mid:${sky[1]};--sky-bottom:${sky[2]};--cloud-color:${storm ? 'rgba(17,25,35,.84)' : (isNight ? 'rgba(38,52,68,.76)' : 'rgba(235,241,242,.68)')};--cloud-opacity:${clouds ? '.8' : '0'}">
-      <canvas class="wx-webgl" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;" aria-hidden="true" data-rain="${rain || storm ? 1 : 0}" data-drizzle="${drizzle ? 1 : 0}" data-snow="${snow ? 1 : 0}" data-fog="${fog ? 1 : 0}" data-storm="${storm ? 1 : 0}" data-wind="${has('wind') || has('breezy') || has('windy') ? 1.0 : 0.0}" data-temp="${this._lastTemp ?? 20}" data-night="${isNight ? 1 : 0}" data-cloudy="${cloudy}"></canvas>${isNight ? '<div class="wx-starfield"></div>' : ''}${celestial}${clouds ? '<div class="wx-cloudfield"></div>' : ''}${precip ? `<div class="wx-precip ${precip}">${rainDrops}</div>` : ''}${storm ? '<div class="wx-lightning"></div>' : ''}${fog ? '<div class="wx-fog-real"></div>' : ''}${!rain && !drizzle && !storm && !snow && (season === 'spring' || season === 'autumn') ? `<div class="wx-seasonal ${season}"></div>` : ''}<div class="wx-horizon"></div>${this._renderEclipseOverlay(eclipse)}</div>`;
+      <canvas class="wx-webgl" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;" aria-hidden="true" data-rain="${rain || storm ? 1 : 0}" data-drizzle="${drizzle ? 1 : 0}" data-snow="${snow ? 1 : 0}" data-fog="${fog ? 1 : 0}" data-storm="${storm ? 1 : 0}" data-wind="${has('wind') || has('breezy') || has('windy') ? 1.0 : 0.0}" data-temp="${this._lastTemp ?? 20}" data-night="${isNight ? 1 : 0}" data-cloudy="${cloudy}"></canvas>${isNight ? '<div class="wx-starfield"></div>' : ''}${celestial}${clouds ? '<div class="wx-cloudfield"></div>' : ''}${precip ? `<div class="wx-precip ${precip}">${rainDrops}</div>` : ''}${storm ? '<div class="wx-lightning"></div>' : ''}${fog ? '<div class="wx-fog-real"></div>' : ''}${!rain && !drizzle && !storm && !snow && (season === 'spring' || season === 'autumn') ? `<div class="wx-seasonal ${season}"></div>' : ''}<div class="wx-horizon"></div>${this._renderEclipseOverlay(eclipse)}</div>`;
   }
 
   _getWeatherBg(ws, isNight) {
@@ -5226,7 +5224,7 @@ gl_FragColor=vec4(col,alpha);}`;
       en:{title:'Health center',healthy:'System healthy',warning:'Attention required',critical:'Devices offline',devices:'configured devices',offline:'offline',low:'low batteries',battery:'Battery',none:'No devices are selected in the modes.',local:'Local-first active',confirm:'Intelligent confirmation',help:'Requires independent signals within a window. Smoke, gas, CO and safety always trigger immediately.',save:'Save',saved:'Saved'},
       fr:{title:'Centre de santé',healthy:'Système sain',warning:'Attention requise',critical:'Appareils hors ligne',devices:'appareils configurés',offline:'hors ligne',low:'batteries faibles',battery:'Batterie',none:'Aucun appareil n\u2019est sélectionné dans les modes.',local:'Local-first actif',confirm:'Confirmation intelligente',help:'Exige des signaux indépendants. Fumée, gaz, CO et sécurité déclenchent toujours immédiatement.',save:'Enregistrer',saved:'Enregistré'},
       pt:{title:'Centro de saúde',healthy:'Sistema saudável',warning:'Requer atenção',critical:'Dispositivos offline',devices:'dispositivos configurados',offline:'offline',low:'baterias fracas',battery:'Bateria',none:'Nenhum dispositivo foi selecionado nos modos.',local:'Local-first ativo',confirm:'Confirmação inteligente',help:'Exige sinais independentes. Fumaça, gás, CO e segurança sempre disparam imediatamente.',save:'Salvar',saved:'Salvo'},
-      it:{title:'Centro salute',healthy:'Sistema integro',warning:'Richiede attenzione',critical:'Dispositivi offline',devices:'dispositivi configurati',offline:'offline',low:'batterie scariche',battery:'Batteria',none:'Nessun dispositivo è selezionato nelle modalità.',local:'Local-first attivo',confirm:'Conferma intelligente',help:'Richiede segnali indipendenti. Fumo, gas, CO e sicurezza scattano sempre subito.',save:'Salva',saved:'Salvato'},
+      it:{title:'Centro salute',healthy:'Sistema integro',warning:'Richiede attenzione',critical:'Dispositivi offline',devices:'dispositivi configurati',offline:'offline',low:'batterie scariche',batteria:'Batteria',none:'Nessun dispositivo è selezionato nelle modalità.',local:'Local-first attivo',confirm:'Conferma intelligente',help:'Richiede segnali indipendenti. Fumo, gas, CO e sicurezza scattano sempre subito.',save:'Salva',saved:'Salvato'},
       zh:{title:'健康中心',healthy:'系统健康',warning:'需要注意',critical:'设备离线',devices:'已配置设备',offline:'离线',low:'低电量',battery:'电池',none:'模式中未选择设备。',local:'本地优先已启用',confirm:'智能确认',help:'需要在时间窗口内收到独立信号。烟雾、燃气、一氧化碳和安全传感器始终立即触发。',save:'保存',saved:'已保存'},
       ru:{title:'Центр здоровья',healthy:'Система исправна',warning:'Требуется внимание',critical:'Устройства не в сети',devices:'настроенных устройств',offline:'не в сети',low:'низкий заряд',battery:'Батарея',none:'В режимах не выбраны устройства.',local:'Local-first активен',confirm:'Умное подтверждение',help:'Требует независимых сигналов. Дым, газ, CO и безопасность всегда срабатывают сразу.',save:'Сохранить',saved:'Сохранено'},
     };
@@ -5253,7 +5251,7 @@ gl_FragColor=vec4(col,alpha);}`;
     this._renderStateSchedule();
     if (!el) return;
     const health = this._systemHealth;
-    if (!health) { el.innerHTML = `<div class="small" style="opacity:.6">${this._escapeHtml(text.none)}</div>`; return; }
+    if (!health) { el.innerHTML = `<div class="small" style="padding:10px">${this._escapeHtml(text.none)}</div>`; return; }
     const batteries = Array.isArray(health.batteries) ? health.batteries : [];
     const low = batteries.filter(item => item.low);
     const offline = Array.isArray(health.unavailable) ? health.unavailable : [];
@@ -7902,7 +7900,11 @@ gl_FragColor=vec4(col,alpha);}`;
     const langSelect = container.querySelector('#dropdown-lang-select');
     if (langSelect) {
       langSelect.addEventListener('change', (e) => {
-        this._setLanguage(e.target.value);
+        if (e.target.value === 'auto') {
+          this._setLangAuto();
+        } else {
+          this._setLangManual(e.target.value);
+        }
       });
     }
 
@@ -7910,11 +7912,9 @@ gl_FragColor=vec4(col,alpha);}`;
     container.querySelector('#btn-change-profile-picture')?.addEventListener('click', (e) => {
       e.stopPropagation();
       dropdown.style.display = 'none';
-      // Navigate to HA Persons configuration page
-      // Use window.top to escape iframes; /config/person is the HA persons page
       try {
         window.history.pushState(null, '', '/config/person');
-        window.dispatchEvent(new PopStateEvent('popstate', { state: null }));
+        window.dispatchEvent(new CustomEvent('location-changed'));
       } catch (_) {
         window.location.href = '/config/person';
       }
