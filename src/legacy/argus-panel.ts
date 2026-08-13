@@ -1674,8 +1674,8 @@ _tmpl.innerHTML = `
   .ios-fullscreen {
     position: fixed !important;
     inset: 0 !important;
-    left: var(--fs-left, 0) !important;
-    top: var(--fs-top, 0) !important;
+    left: 0 !important;
+    top: 0 !important;
     width: 100vw !important; height: 100dvh !important;
     max-width: 100vw !important; max-height: 100dvh !important;
     min-height: 100dvh !important;
@@ -1693,11 +1693,12 @@ _tmpl.innerHTML = `
   }
   @media(min-width:900px) {
     .ios-fullscreen {
-      inset: 3% !important;
-      left: 3% !important; right: 3% !important; top: 3% !important; bottom: 3% !important;
-      width: 94vw !important; height: 94vh !important;
-      max-width: 1500px !important;
-      margin: auto !important; border-radius: 36px !important;
+      /* Remove floating modal override so it is truly fullscreen on iPad/Tablet */
+      inset: 0 !important;
+      left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important;
+      width: 100vw !important; height: 100vh !important;
+      max-width: 100vw !important;
+      margin: 0 !important; border-radius: 0 !important;
       border: 1px solid rgba(255,255,255,0.12) !important;
       box-shadow: 0 40px 100px rgba(0,0,0,0.8) !important;
       overflow: hidden !important;
@@ -4355,6 +4356,7 @@ class ArgusPanel extends HTMLElement {
       hubBgSelect.innerHTML = `
         <option value="default">${this._t('bg_hub_default')}</option>
         <option value="image">${this._t('bg_image_opt')}</option>
+        <option value="weather">Clima animado</option>
       `;
       hubBgSelect.value = this._hubBgMode || 'default';
     }
@@ -4928,9 +4930,6 @@ class ArgusPanel extends HTMLElement {
     
     const applyIosFullscreen = () => {
       if (target) {
-        const rect = target.getBoundingClientRect();
-        target.style.setProperty('--fs-left', `-${rect.left}px`);
-        target.style.setProperty('--fs-top', `-${rect.top}px`);
         target.classList.add('ios-fullscreen');
       }
       document.body.style.overflow = 'hidden';
@@ -6720,6 +6719,16 @@ gl_FragColor=vec4(col,alpha);}`;
     if (mode === 'none') {
       return;
     }
+    if (mode === 'weather') {
+      if (bgContainer) {
+        bgContainer.innerHTML = `<canvas class="wx-webgl" style="position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none;"></canvas>`;
+        this.shadowRoot.querySelectorAll('.wx-webgl').forEach(canvas => {
+          if (canvas.clientWidth > 0) this._initWeatherWebGL(canvas);
+          else requestAnimationFrame(() => this._initWeatherWebGL(canvas));
+        });
+      }
+      return;
+    }
 
     const imgSrc = (mode === 'default')
       ? '/api/argus_static/argus-default-bg.jpg'
@@ -6751,7 +6760,7 @@ gl_FragColor=vec4(col,alpha);}`;
         </video>
       </div>`;
     }
-    return this._getWeatherBg(ws, isNight);
+    return `<canvas class="wx-webgl" style="position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; border-radius:inherit;"></canvas>`;
   }
 
   _updateHomeNameDisplay() {
@@ -8545,8 +8554,8 @@ gl_FragColor=vec4(col,alpha);}`;
     // Kill any stale overlays first
     this._nukeAllLoginOverlays();
 
-    const overlay = document.createElement('div');
-    overlay.className = 'argus-welcome-screen active-anim';
+    const overlay = this.shadowRoot.querySelector('.argus-profile-overlay');
+    if (!overlay) return;
 
     const avatarHtml = user.picture
       ? `<img src="${this._escapeHtml(user.picture)}" alt="" />`
@@ -8561,7 +8570,6 @@ gl_FragColor=vec4(col,alpha);}`;
         <h1 class="wname">${this._escapeHtml(user.display_name || user.name)}</h1>
       </div>
     `;
-    this.shadowRoot.appendChild(overlay);
 
     // Start loading dashboard in the background so it's ready when animation finishes
     let dashboardPromise = Promise.resolve();
@@ -8616,8 +8624,10 @@ gl_FragColor=vec4(col,alpha);}`;
     // Apply a bounce curve and translate to exact top-bar coordinates
     avatar.style.transition = 'transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.45s ease 0.2s';
     avatar.style.transform = `translate(${moveX}px, ${moveY}px) scale(${targetScale})`;
-    overlay.style.transition = 'opacity 0.6s ease 0.1s';
-    overlay.style.opacity = '0';
+    
+    // Fade out the overlay's background separately so the avatar remains visible
+    overlay.style.transition = 'background-color 0.6s ease 0.1s';
+    overlay.style.backgroundColor = 'transparent';
     
     // Wait for animation to finish completely
     await new Promise(r => setTimeout(r, 700));
@@ -8625,8 +8635,6 @@ gl_FragColor=vec4(col,alpha);}`;
     // Ensure dashboard is fully loaded in case of slow network
     await dashboardPromise;
     
-    // Force hard removal
-    overlay.classList.remove('active-anim');
     this._nukeAllLoginOverlays();
   }
 

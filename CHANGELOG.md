@@ -1,3 +1,11 @@
+## [2.0.89] - 2026-08-13
+
+### Fixed
+- Solucionado layout cortado de fullscreen en dispositivos con transformaciones (Lovelace) como iPads/tablets.
+- Reparada la animacion de contracción del overlay de perfiles hacia el avatar de la barra superior.
+- Removida la conversión manual de color RGB a favor de la nativa de HA Core para sincronizar luces correctamente.
+- Recuperada compatibilidad del clima animado (WebGL) y agregado como opción para el fondo general del panel.
+
 # Changelog
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
