@@ -17,7 +17,7 @@ class TestV210RuntimeContract(unittest.TestCase):
         self.assertEqual(project["project"]["requires-python"], ">=3.12,<3.15")
         for workflow in ("validate.yml", "release.yml"):
             source = (ROOT / ".github" / "workflows" / workflow).read_text()
-            self.assertIn("python-version: '3.x'", source)
+            self.assertIn("python-version-file: '.python-version'", source)
             self.assertIn(">= (3, 11, 0)", source)
 
     def test_node_24_lts_and_typescript_702_are_enforced(self):
