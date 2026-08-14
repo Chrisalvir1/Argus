@@ -3250,6 +3250,7 @@ class ArgusPanel extends HTMLElement {
         || previous?.attributes?.battery_level !== current?.attributes?.battery_level
         || previous?.attributes?.battery_percentage !== current?.attributes?.battery_percentage;
     });
+
     const batteryChanged = Boolean(oldHass) && Object.values(hass.states).some(current => {
       const id = current.entity_id || '';
       const isBattery = current.attributes?.device_class === 'battery' || /_battery$/i.test(id);
@@ -3549,6 +3550,43 @@ class ArgusPanel extends HTMLElement {
     if (panelUrl) panelUrl.placeholder = t('url_placeholder');
     const hubUrl = s('hub-bg-url-input');
     if (hubUrl) hubUrl.placeholder = t('url_placeholder');
+
+    // Real-time live update of all entry buttons, disarm button & global status badge
+    const root = this.shadowRoot;
+    if (root) {
+      const modeLabel = key => {
+        const str = String(this._t(key) || '').trim();
+        const firstSpace = str.indexOf(' ');
+        if (firstSpace > 0 && firstSpace <= 3) return str.substring(firstSpace + 1).trim();
+        return str;
+      };
+      root.querySelectorAll('.entry').forEach(entry => {
+        const homeSpan = entry.querySelector('.btn-home span');
+        if (homeSpan) homeSpan.textContent = modeLabel('btn_home');
+        const awaySpan = entry.querySelector('.btn-away span');
+        if (awaySpan) awaySpan.textContent = modeLabel('btn_away');
+        const nightSpan = entry.querySelector('.btn-night span');
+        if (nightSpan) nightSpan.textContent = modeLabel('btn_night');
+        const vacationSpan = entry.querySelector('.btn-vacation span');
+        if (vacationSpan) vacationSpan.textContent = modeLabel('btn_vacation');
+        const disarmSpan = entry.querySelector('.btn-disarm span, .argus-disarm-btn b');
+        if (disarmSpan) disarmSpan.textContent = modeLabel('btn_disarmed');
+        const sosSpan = entry.querySelector('.btn-sos span');
+        if (sosSpan) {
+          const isPanicActive = entry.querySelector('.btn-sos[data-action="stop-sos"]');
+          sosSpan.textContent = isPanicActive ? this._t('sos_stop') : this._t('btn_sos');
+        }
+      });
+      const globalStatus = root.getElementById('global-status');
+      if (globalStatus) {
+        const badge = globalStatus.querySelector('.badge');
+        if (badge) {
+          const isArmed = badge.classList.contains('armed_away');
+          badge.textContent = isArmed ? this._t('system_armed') : this._t('system_disarmed');
+        }
+      }
+    }
+
     this._syncAccessSummary();
   }
 

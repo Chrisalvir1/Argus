@@ -2,16 +2,17 @@ import type { ArgusPanelConstructor, ArgusPanelHost } from '../../core/panel';
 
 const STYLE_ID = 'argus-v2050-alarm-visuals';
 const ACTIVE: Record<string, RegExp> = {
-  armed_home: /EN CASA|HOME/i,
-  armed_away: /AUSENTE|AWAY/i,
-  armed_night: /NOCHE|NIGHT/i,
-  armed_vacation: /VACACIONES|VACATION/i
+  armed_home: /EN CASA|HOME|MAISON|EM CASA|CASA|在家|ДОМА/i,
+  armed_away: /AUSENTE|AWAY|ABSENT|ASSENTE|外出|УШЁЛ/i,
+  armed_night: /NOCHE|NIGHT|NUIT|NOITE|NOTTE|夜间|НОЧЬ/i,
+  armed_vacation: /VACACIONES|VACATION|VACANCES|FÉRIAS|VACANZE|度假|ОТПУСК/i
 };
 
 type AlarmPanel = ArgusPanelHost & {
   __v2050AlarmVisuals?: boolean;
   _load?: (...args: any[]) => Promise<any>;
   _renderEntries?: (...args: any[]) => any;
+  _t?: (key: string) => string;
   connectedCallback?: () => void;
 };
 
@@ -83,12 +84,13 @@ function apply(panel: AlarmPanel) {
     
     const stack = entry.querySelector('.liquid-stack');
     if (stack) {
+      const disarmLabel = panel._t?.('btn_disarmed') || 'DESARMAR / OFF';
       let btn = stack.querySelector('.argus-disarm-btn') as HTMLButtonElement | null;
       if (!btn) {
         btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'liquid-btn argus-disarm-btn';
-        btn.innerHTML = '<span>⏻</span><b>DESARMAR / OFF</b>';
+        btn.innerHTML = `<span>⏻</span><b>${disarmLabel}</b>`;
         btn.onclick = async () => {
           if (!item.entry_id) return;
           btn!.disabled = true;
@@ -99,16 +101,19 @@ function apply(panel: AlarmPanel) {
             btn!.disabled = false;
           }
         };
-        const sos = Array.from(stack.children).find(x => /SOS|PÁNICO|PANIC/i.test(x.textContent || ''));
+        const sos = Array.from(stack.children).find(x => /SOS|PÁNICO|PANIC|PANIQUE|PÂNICO|PANICO|紧急|ПАНИКА/i.test(x.textContent || ''));
         if (sos) stack.insertBefore(btn, sos);
         else stack.appendChild(btn);
+      } else {
+        const bold = btn.querySelector('b');
+        if (bold && bold.textContent !== disarmLabel) bold.textContent = disarmLabel;
       }
       
       Array.from(stack.querySelectorAll('.liquid-btn,button')).forEach(b => {
         const el = b as HTMLElement;
         const text = String(el.textContent || '');
-        if (/SOS|PÁNICO|PANIC/i.test(text)) paint(el, 'sos', Boolean(attrs.argus_panic_active));
-        else if (/DESARMAR|DISARM|OFF/i.test(text)) paint(el, 'disarm', state === 'disarmed');
+        if (/SOS|PÁNICO|PANIC|PANIQUE|PÂNICO|PANICO|紧急|ПАНИКА/i.test(text)) paint(el, 'sos', Boolean(attrs.argus_panic_active));
+        else if (/DESARMAR|DISARM|DESARMADO|DISARMED|DÉSARMER|DÉSARMÉ|OFF/i.test(text)) paint(el, 'disarm', state === 'disarmed');
         else {
           const match = Object.entries(ACTIVE).find(([, rx]) => rx.test(text));
           if (match) paint(el, match[0], state === match[0]);

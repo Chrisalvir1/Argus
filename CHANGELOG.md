@@ -1,3 +1,11 @@
+## [2.1.7] - 2026-08-13
+
+### Fixed
+- **Exact Physical Color & Flash:** Prevented smart light preset scenes (like Govee/Wiz green effects or hardware flash defaults) from overriding user-selected RGB colors when testing or activating alarm and SOS lights.
+- **Pure RGB Brightness Pulsing:** When an RGB color is chosen, brightness pulses cleanly between 100% and 20% retaining pure, saturated colors (e.g. vivid Red) without distortion.
+- **Immediate Real-Time Mode Buttons Translation:** Language changes instantly update active instance mode buttons (`EN CASA`, `AUSENTE`, `NOCHE`, `VACACIONES`, `DESARMAR / OFF`, `SISTEMA DESARMADO`) across all instances without requiring page refresh.
+- **Eliminated Startup Crash:** Removed top-level module template references preventing blank/black screen on startup.
+
 ## [2.1.6] - 2026-08-13
 
 ### Fixed

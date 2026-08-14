@@ -65,7 +65,7 @@ function signature(panel: StablePanel, entry: any, state: string, attrs: any, se
     panel._hass?.states?.['sun.sun']?.state || '',
     panel._getDisplayedTemperature?.() || '',
     panel._homeName || '', panel._kioskLocked ? '1' : '0',
-    String((panel as any)._manualLang || (panel as any)._ui?.language || '')
+    String((panel as any)._getCurrentLangCode?.() || (panel as any)._manualLang || (panel as any)._ui?.language || (panel as any)._hass?.language || '')
   ].join('|');
 }
 

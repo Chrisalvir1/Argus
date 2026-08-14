@@ -454,17 +454,16 @@ class TestV193ManifestVersion(unittest.TestCase):
         )
         with open(manifest_path) as f:
             manifest = json.load(f)
-        self.assertEqual(manifest["version"], "2.1.6", "manifest.json version must be current")
+        self.assertEqual(manifest["version"], "2.1.7", "manifest.json version must be current")
 
-
-class TestV193BootstrapCacheBust(unittest.TestCase):
-    def test_bootstrap_version_current(self):
+    def test_bootstrap_cache_bust_version_is_current(self):
+        """argus-bootstrap.js must import argus-frontend.js with current version query parameter."""
         bootstrap_path = os.path.join(
             os.path.dirname(__file__), "..", "custom_components", "argus", "www", "argus-bootstrap.js"
         )
-        with open(bootstrap_path) as f:
+        with open(bootstrap_path, "r", encoding="utf-8") as f:
             content = f.read()
-        self.assertIn("2.1.6", content, "argus-bootstrap.js must reference the current cache-bust version")
+        self.assertIn("2.1.7", content, "argus-bootstrap.js must reference the current cache-bust version")
 
 
 class TestV193ScheduleAndDisarmProtection(unittest.IsolatedAsyncioTestCase):

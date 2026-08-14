@@ -103,18 +103,26 @@ def _light_service_data(panel, entity_id: str, settings: dict) -> tuple[dict, st
     data: dict[str, Any] = {"entity_id": entity_id}
 
     rgb = _normalise_rgb(settings.get("rgb_color"))
-    has_color = bool(rgb and supported_modes.intersection(_COLOR_MODES))
+    has_color = bool(rgb and (supported_modes.intersection(_COLOR_MODES) or not supported_modes))
 
     if has_color:
-        # Prefer rgb_color directly — it is exact and universal.
-        # Home Assistant Core automatically translates rgb_color to hs, xy, or color_temp natively for all integrations.
+        # Exact RGB requested by user
         data["rgb_color"] = rgb
+        if supports_brightness:
+            data["brightness_pct"] = 100
     elif supports_brightness:
         data["brightness_pct"] = 100
 
     flash_mode = str(settings.get("flash_mode") or ("gentle" if settings.get("gentle_flash") else "none"))
     if flash_mode == "none":
         return data, "steady", 0.0
+
+    # If the user chose a specific color, NEVER apply native scene effects or flash flags.
+    # Third-party integrations (Govee, Wiz, Tuya) override the user color with their preset hardware scene (often green) when an effect is passed.
+    if has_color:
+        if supports_brightness:
+            return data, "brightness_pulse", 0.35 if flash_mode == "rapid" else 0.8
+        return data, "steady_safe", 0.0
 
     effects = list(attrs.get("effect_list") or [])
     requested_effect = settings.get("effect")

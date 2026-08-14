@@ -1181,17 +1181,19 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                         settings = (mode_cfg.get("light_siren_settings") or {}).get(entity_id, {})
                         # Legacy global colour is retained as a safe fallback.
                         legacy_color = mode_cfg.get("light_color")
-                        supported = (self.hass.states.get(entity_id).attributes.get("supported_color_modes", []) if self.hass.states.get(entity_id) else [])
+                        state_obj = self.hass.states.get(entity_id)
+                        attrs = state_obj.attributes if state_obj else {}
+                        supported = set(attrs.get("supported_color_modes") or [])
                         rgb = settings.get("rgb_color")
                         hs = settings.get("hs_color")
-                        if rgb and "rgb" in supported:
+                        if rgb and (supported.intersection(_COLOR_MODES) or not supported or "rgb" in supported):
                             svc_data["rgb_color"] = rgb
-                        elif hs and "hs" in supported:
+                        elif hs and ("hs" in supported or not supported):
                             svc_data["hs_color"] = hs
                         elif legacy_color:
                             svc_data["color_name"] = legacy_color
-                        effects = (self.hass.states.get(entity_id).attributes.get("effect_list", []) if self.hass.states.get(entity_id) else [])
-                        if settings.get("gentle_flash"):
+                        if not rgb and settings.get("gentle_flash"):
+                            effects = list(attrs.get("effect_list") or [])
                             effect = next((item for item in effects if str(item).lower() in {"flash", "slow flash", "slow_flash", "blink"}), None)
                             if effect:
                                 svc_data["effect"] = effect
