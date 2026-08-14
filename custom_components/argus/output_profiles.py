@@ -193,16 +193,11 @@ async def _restore_light_state(hass: HomeAssistant, entity_id: str, snapshot: di
 
 
 async def _brightness_pulse(panel, entity_id: str, service_data: dict, interval: float) -> None:
-    """Pulse brightness without any repeated off/on power cycle."""
+    """Pulse brightness without modifying or distorting the chosen RGB color."""
     high = copy.deepcopy(service_data)
     low = copy.deepcopy(service_data)
-    if "rgb_color" in service_data:
-        high.pop("brightness_pct", None)
-        low.pop("brightness_pct", None)
-        low["rgb_color"] = [max(1, int(c * 0.25)) for c in service_data["rgb_color"]]
-    else:
-        high["brightness_pct"] = 100
-        low["brightness_pct"] = 25
+    high["brightness_pct"] = 100
+    low["brightness_pct"] = 20
     try:
         while True:
             await panel.hass.services.async_call("light", "turn_on", high, blocking=False)
@@ -245,13 +240,8 @@ async def ws_argus_test_light_output(hass, connection, msg) -> None:
         if method == "brightness_pulse":
             high = copy.deepcopy(data)
             low = copy.deepcopy(data)
-            if "rgb_color" in data:
-                high.pop("brightness_pct", None)
-                low.pop("brightness_pct", None)
-                low["rgb_color"] = [max(1, int(c * 0.25)) for c in data["rgb_color"]]
-            else:
-                high["brightness_pct"] = 100
-                low["brightness_pct"] = 25
+            high["brightness_pct"] = 100
+            low["brightness_pct"] = 20
             for _ in range(2):
                 await hass.services.async_call("light", "turn_on", high, blocking=True)
                 await asyncio.sleep(interval)

@@ -40,13 +40,13 @@ function updateClocks(panel: StablePanel) {
   const root = panel.shadowRoot;
   if (!root) return;
   const now = new Date();
-  const timeStr = now.toLocaleTimeString(panel._getLocale?.() || undefined, { hour: '2-digit', minute: '2-digit' });
+  const timeStr = panel._formatTime ? panel._formatTime(now) : now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   const dateStr = now.toLocaleDateString(panel._getLocale?.() || undefined, { weekday: 'short', month: 'short', day: 'numeric' });
   const heroClock = root.getElementById('hero-clock-time');
   const heroDate = root.getElementById('hero-clock-date');
   if (heroClock && heroClock.textContent !== timeStr) heroClock.textContent = timeStr;
   if (heroDate && heroDate.textContent !== dateStr) heroDate.textContent = dateStr;
-  root.querySelectorAll('.console-hud-time,.hud-data>span:first-child').forEach(n => {
+  root.querySelectorAll('.console-hud-time,.hud-data>span:first-child').forEach((n: any) => {
     if (n && n.textContent !== timeStr) n.textContent = timeStr;
   });
 }
@@ -62,7 +62,8 @@ function signature(panel: StablePanel, entry: any, state: string, attrs: any, se
     panel._getWeatherEntity?.()?.state || '',
     panel._hass?.states?.['sun.sun']?.state || '',
     panel._getDisplayedTemperature?.() || '',
-    panel._homeName || '', panel._kioskLocked ? '1' : '0'
+    panel._homeName || '', panel._kioskLocked ? '1' : '0',
+    String((panel as any)._manualLang || (panel as any)._ui?.language || '')
   ].join('|');
 }
 

@@ -1,3 +1,13 @@
+## [2.1.6] - 2026-08-13
+
+### Fixed
+- **Instant Real-Time UI Localization:** Language switching updates all UI elements, mode buttons, and instance badges instantly without refresh.
+- **Deterministic 12h Clock Format:** Unified 12h/24h time formatting across all languages and prevented ticker override resets.
+- **Physical Light Colors:** Preserved exact Home Assistant RGB color values during light flashing and SOS pulses.
+- **Mode Sirens Color Controls:** Exposed full color picker, flash options, and test button for siren lights in all modes.
+- **Spacious SOS Layout:** Compacted emergency number field and enlarged SOS device cards to `minmax(280px, 1fr)` for legibility.
+- **Full-Screen Edit Modals:** Fixed backdrop and positioning of user edit and permission dialogs to eliminate clipping.
+
 ## [2.1.5] - 2026-08-13
 
 ### Fixed

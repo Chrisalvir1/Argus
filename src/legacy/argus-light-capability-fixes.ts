@@ -33,20 +33,23 @@ function hexToRgb(value) { const hex=/^#[0-9a-f]{6}$/i.test(value||'')?value:'#f
 function installTruthStyles(panel) {
   const root=panel.shadowRoot; if(!root||root.getElementById('argus-entity-truth-style'))return;
   const style=document.createElement('style'); style.id='argus-entity-truth-style'; style.textContent=`
-[hidden]{display:none!important}.sos-output-row{display:flex;flex-direction:column;gap:12px;padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:16px;background:rgba(0,0,0,.15);margin-bottom:8px}
+[hidden]{display:none!important}
+#sos-output-chips{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))!important;gap:12px!important;width:100%!important}
+.sos-output-row{display:flex;flex-direction:column;gap:10px;padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:16px;background:rgba(0,0,0,.2);box-sizing:border-box;width:100%}
 .sos-output-header{display:flex;justify-content:space-between;align-items:center;width:100%}
-.sos-output-settings,.light-siren-settings{display:flex;flex-direction:column;gap:10px;margin-top:2px}
-.sos-output-settings summary,.light-siren-settings summary{display:none}
+.sos-output-settings,.light-siren-settings{display:flex;flex-direction:column;gap:8px;margin-top:2px}
+.light-siren-settings{margin-top:10px;padding:12px;border:1px solid rgba(255,255,255,.1);border-radius:14px;background:rgba(0,0,0,.25)}
+.light-siren-settings summary{display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:12px;font-weight:700;color:#fff;margin-bottom:6px}
 .argus-ha-capability{display:inline-flex;margin-left:6px;padding:2px 6px;border-radius:999px;background:rgba(255,255,255,.08);font-size:8px;font-weight:750;opacity:.72;text-transform:none;letter-spacing:0}
 .argus-safe-note{margin-top:4px;padding:8px;border-radius:10px;background:rgba(255,183,77,.10);font-size:10px;line-height:1.35;opacity:.85;color:#ffb74d}
-.argus-test-flash{width:100%;padding:10px;border:none;border-radius:12px;background:rgba(46,168,255,.15);color:#70bfff;font-size:11px;font-weight:850;cursor:pointer;transition:background 0.2s}
+.argus-test-flash{width:100%;padding:9px;border:none;border-radius:10px;background:rgba(46,168,255,.15);color:#70bfff;font-size:11px;font-weight:850;cursor:pointer;transition:background 0.2s}
 .argus-test-flash:hover{background:rgba(46,168,255,.25)}
 .argus-test-flash:disabled{opacity:.55;cursor:wait}
-.sos-output-settings label,.light-siren-settings label{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:600;color:rgba(255,255,255,0.85);padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:12px}
-.sos-output-settings input[type="color"],.light-siren-settings input[type="color"]{width:36px;height:36px;padding:0;border:none;border-radius:8px;background:transparent;cursor:pointer}
-.sos-output-settings input[type="color"]::-webkit-color-swatch-wrapper{padding:0}
-.sos-output-settings input[type="color"]::-webkit-color-swatch{border:none;border-radius:8px}
-.sos-output-settings select,.light-siren-settings select{padding:6px 12px;border-radius:8px;background:rgba(0,0,0,0.3);color:#fff;border:1px solid rgba(255,255,255,0.1);font-size:12px;outline:none;cursor:pointer}
+.sos-output-settings label,.light-siren-settings label{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:600;color:rgba(255,255,255,0.85);padding:6px 10px;background:rgba(255,255,255,0.04);border-radius:10px;margin:0}
+.sos-output-settings input[type="color"],.light-siren-settings input[type="color"]{width:36px;height:32px;padding:0;border:none;border-radius:8px;background:transparent;cursor:pointer}
+.sos-output-settings input[type="color"]::-webkit-color-swatch-wrapper,.light-siren-settings input[type="color"]::-webkit-color-swatch-wrapper{padding:0}
+.sos-output-settings input[type="color"]::-webkit-color-swatch,.light-siren-settings input[type="color"]::-webkit-color-swatch{border:none;border-radius:8px}
+.sos-output-settings select,.light-siren-settings select{padding:6px 10px;border-radius:8px;background:rgba(0,0,0,0.4);color:#fff;border:1px solid rgba(255,255,255,0.15);font-size:12px;outline:none;cursor:pointer}
 #entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensors{flex:0 1 248px!important;width:248px!important;max-width:248px!important;min-width:205px!important;gap:6px!important;margin-inline:0!important}#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor{min-height:34px!important;padding:6px 10px!important;gap:7px!important;border-radius:999px!important;box-sizing:border-box!important}#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor-icon{font-size:16px!important}#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor-name{font-size:10px!important}#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor-state{font-size:8px!important}#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor-battery{font-size:9px!important;padding:2px 5px!important;border-radius:999px!important}
 #widget-grid>#w-access{align-self:start!important;height:max-content!important;min-height:0!important;max-height:none!important}#widget-grid>#w-access .access-workspace:not(.open){display:none!important}#widget-grid>#w-access .access-workspace.open{max-height:430px!important;overflow:auto!important;overscroll-behavior:contain}#widget-grid>#w-activity,#widget-grid>#w-automations{grid-row:span 1!important;height:clamp(270px,32vh,340px)!important;min-height:270px!important;max-height:340px!important;align-self:start!important}#widget-grid>#w-activity #activity-log,#widget-grid>#w-automations #auto-view,#widget-grid>#w-automations #auto-view>div{min-height:0!important;overflow-y:auto!important;overscroll-behavior:contain!important;scrollbar-gutter:stable!important}@media(max-width:760px){#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensors{width:min(100%,248px)!important;max-width:248px!important}#widget-grid>#w-activity,#widget-grid>#w-automations{height:360px!important;min-height:360px!important;max-height:360px!important}}`;
   root.appendChild(style);

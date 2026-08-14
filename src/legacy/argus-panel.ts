@@ -2723,27 +2723,24 @@ _tmpl.innerHTML = `
           </div>
 
           <div class="personalize-workspace" id="personalize-workspace">
-            <div class="personalize-grid">
-              <div class="personalize-column">
-                <div class="personalize-field pf-home">
-                  <div class="setting-label" id="lbl-home-name-hdr" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6;">Nombre del Hogar</div>
-                  <div id="lbl-home-name-prominent" style="font-size:18px;font-weight:900;margin-top:2px">Mi Casa</div>
-                </div>
+            <div class="personalize-top-row" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.08)">
+              <div>
+                <div class="setting-label" id="lbl-home-name-hdr" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6;">${this._t('home_name') || 'Nombre del Hogar'}</div>
+                <div id="lbl-home-name-prominent" style="font-size:18px;font-weight:900;margin-top:2px">${this._escapeHtml(this._homeName || 'Mi Casa')}</div>
               </div>
-              <div class="personalize-column">
-                <div class="personalize-field pf-emergency">
-                  <label class="setting-label" id="lbl-emergency-number" for="emergency-number-input" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:4px;">🚨 Local emergency number</label>
-                  <input id="emergency-number-input" class="glass-control" inputmode="tel" maxlength="16" value="911" aria-describedby="emergency-number-help">
-                  <div id="emergency-number-help" class="small" style="margin-top:5px;opacity:.65;line-height:1.35">Configure it for the home location. It will be included in SOS alerts.</div>
-                </div>
+              <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);padding:8px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.08)">
+                <label class="setting-label" id="lbl-emergency-number" for="emergency-number-input" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.8; margin-bottom:0; white-space:nowrap;">🚨 ${this._t('emergency_number') || 'Teléfono SOS'}:</label>
+                <input id="emergency-number-input" class="glass-control" inputmode="tel" maxlength="16" value="${this._escapeHtml(this._emergencyNumber || '911')}" style="width:80px;min-height:28px;padding:4px 8px;font-size:13px;font-weight:800;text-align:center;border-radius:8px;background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.15)">
               </div>
             </div>
 
             <div class="sos-configuration">
-              <div class="setting-label" id="lbl-sos-actions" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6; margin-bottom:6px;">🚨 SOS actions</div>
-              <div id="sos-output-chips" class="mode-sensor-grid" style="margin-bottom:8px"></div>
-              <button class="ghost" id="btn-select-sos-outputs" style="width:100%;justify-content:center;font-size:12px">Select lights, sirens, or scripts</button>
-              <div class="small" id="sos-output-help" style="margin-top:5px;opacity:.65;line-height:1.35">These devices will always activate when SOS is used, even while Argus is disarmed.</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap">
+                <div class="setting-label" id="lbl-sos-actions" style="font-size:12px; font-weight:800; text-transform:uppercase; opacity:0.8;">🚨 ${this._t('sos_actions') || 'Acciones SOS'}</div>
+                <button class="ghost" id="btn-select-sos-outputs" style="padding:6px 14px;font-size:12px;font-weight:700;border-radius:10px;background:rgba(255,255,255,0.06);">${this._t('select_sos_outputs') || 'Seleccionar luces, sirenas o scripts'}</button>
+              </div>
+              <div id="sos-output-chips" class="sos-output-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-bottom:8px"></div>
+              <div class="small" id="sos-output-help" style="margin-top:5px;opacity:.65;line-height:1.35">${this._t('sos_help') || 'Estos dispositivos se activarán siempre al usar SOS, incluso con Argus desarmado.'}</div>
             </div>
           </div>
         </div>
@@ -3016,30 +3013,21 @@ class ArgusPanel extends HTMLElement {
     const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
     if (isNaN(date.getTime())) return '';
 
-    const locale = this._getLocale();
-    const timeZone = this._getTimeZone();
-    const options: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: '2-digit' };
-    if (timeZone) options.timeZone = timeZone;
-
     const clockPref = this._getClockFormat();
     const haFmt = String(this._hass?.locale?.time_format || '').toLowerCase();
+    const is12h = clockPref === '12h' || (clockPref === 'auto' && (haFmt.includes('12') || haFmt.includes('am')));
 
-    if (clockPref === '12h') {
-      options.hour12 = true;
-    } else if (clockPref === '24h') {
-      options.hour12 = false;
-    } else if (haFmt.includes('12') || haFmt.includes('am')) {
-      options.hour12 = true;
-    } else if (haFmt.includes('24')) {
-      options.hour12 = false;
-    }
-
-    try {
-      let result = new Intl.DateTimeFormat(locale, options).format(date);
-      // Clean up Spanish/French AM/PM abbreviations (e.g. "6:44 p. m." -> "6:44 PM")
-      return result.replace(/p\.\s*m\./gi, 'PM').replace(/a\.\s*m\./gi, 'AM').trim();
-    } catch (e) {
-      return date.toLocaleTimeString(locale, options);
+    if (is12h) {
+      let hours = date.getHours();
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      return `${hours}:${minutes} ${ampm}`;
+    } else {
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      return `${hours}:${minutes}`;
     }
   }
 
@@ -3048,31 +3036,25 @@ class ArgusPanel extends HTMLElement {
     const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
     if (isNaN(date.getTime())) return '';
 
-    const locale = this._getLocale();
-    const timeZone = this._getTimeZone();
-
-    const options: Intl.DateTimeFormatOptions = {
-      month: '2-digit',
-      day: '2-digit',
-      hour: 'numeric',
-      minute: '2-digit'
-    };
-    if (timeZone) options.timeZone = timeZone;
-
     const clockPref = this._getClockFormat();
     const haFmt = String(this._hass?.locale?.time_format || '').toLowerCase();
+    const is12h = clockPref === '12h' || (clockPref === 'auto' && (haFmt.includes('12') || haFmt.includes('am')));
 
-    if (clockPref === '12h' || (clockPref === 'auto' && (haFmt.includes('12') || haFmt.includes('am')))) {
-      options.hour12 = true;
-    } else if (clockPref === '24h' || (clockPref === 'auto' && haFmt.includes('24'))) {
-      options.hour12 = false;
-    }
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
 
-    try {
-      let result = new Intl.DateTimeFormat(locale, options).format(date);
-      return result.replace(/p\.\s*m\./gi, 'PM').replace(/a\.\s*m\./gi, 'AM').trim();
-    } catch (e) {
-      return date.toLocaleString(locale, options);
+    if (is12h) {
+      let hours = date.getHours();
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      return `${day}/${month}/${year}, ${hours}:${minutes} ${ampm}`;
+    } else {
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      return `${day}/${month}/${year}, ${hours}:${minutes}`;
     }
   }
 
@@ -3379,6 +3361,7 @@ class ArgusPanel extends HTMLElement {
       try { localStorage.setItem('argus_lang', code); } catch(e) {}
       this._send('argus/save_ui', { language: code }).catch(console.error);
     }
+    this._instanceSignatures?.clear();
     this._refreshLocalizedUi();
   }
 
@@ -3389,7 +3372,8 @@ class ArgusPanel extends HTMLElement {
     this._applyTranslations();
     this._updateHeroProfileDisplay();
     this._updateHeroClock();
-    this._renderEntries();
+    this._instanceSignatures?.clear();
+    this._renderEntries(true);
     this._renderModeTabs();
     this._renderModeView();
     this._renderActivityLog();
@@ -7058,8 +7042,8 @@ gl_FragColor=vec4(col,alpha);}`;
       overlay.setAttribute('role', 'dialog');
       overlay.setAttribute('aria-modal', 'true');
       overlay.style.cssText = [
-        'position:fixed;inset:0;z-index:9999999;display:flex;align-items:center;justify-content:center',
-        'background:rgba(0,0,0,0.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)',
+        'position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;margin:0;padding:0;box-sizing:border-box;z-index:999999999;display:flex;align-items:center;justify-content:center',
+        'background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)',
         'animation:argus-modal-in .18s ease',
       ].join(';');
 
@@ -7070,11 +7054,11 @@ gl_FragColor=vec4(col,alpha);}`;
       const saveLabel   = this._t('modal_save')   || 'Guardar';
 
       overlay.innerHTML = `
-        <div style="background:rgba(30,30,45,0.82);border:1px solid rgba(255,255,255,0.14);border-radius:20px;
-          padding:28px 24px 22px;width:min(360px,90vw);box-shadow:0 24px 64px rgba(0,0,0,0.55);
-          display:flex;flex-direction:column;gap:14px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)">
+        <div style="background:rgba(30,30,45,0.92);border:1px solid rgba(255,255,255,0.18);border-radius:20px;
+          padding:28px 24px 22px;width:min(380px,90vw);box-shadow:0 24px 64px rgba(0,0,0,0.7);
+          display:flex;flex-direction:column;gap:14px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)">
           <div style="font-size:16px;font-weight:700;color:#fff;letter-spacing:.01em">${safeTitle}</div>
-          ${safeLabel ? `<div style="font-size:13px;color:rgba(255,255,255,0.55);margin-top:-6px">${safeLabel}</div>` : ''}
+          ${safeLabel ? `<div style="font-size:13px;color:rgba(255,255,255,0.65);margin-top:-6px">${safeLabel}</div>` : ''}
           ${type === 'select' && options
             ? `<select id="aim-inp" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:12px 14px;font-size:15px;color:#fff;outline:none;width:100%;box-sizing:border-box;transition:border-color .2s;font-family:inherit">
                  ${options.map(o => `<option value="${this._escapeHtml(o.value)}" ${o.value === initialValue ? 'selected' : ''}>${this._escapeHtml(o.label)}</option>`).join('')}
@@ -7096,7 +7080,7 @@ gl_FragColor=vec4(col,alpha);}`;
           </div>
         </div>`;
 
-      const root = this.shadowRoot || document.body;
+      const root = document.body || this.shadowRoot;
       root.appendChild(overlay);
 
       const inp = overlay.querySelector('#aim-inp');
@@ -7123,8 +7107,8 @@ gl_FragColor=vec4(col,alpha);}`;
     return new Promise((resolve) => {
       const overlay = document.createElement('div');
       overlay.style.cssText = [
-        'position:fixed;inset:0;z-index:9999999;display:flex;align-items:center;justify-content:center',
-        'background:rgba(0,0,0,0.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)',
+        'position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;margin:0;padding:0;box-sizing:border-box;z-index:999999999;display:flex;align-items:center;justify-content:center',
+        'background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)',
         'animation:argus-modal-in .18s ease',
       ].join(';');
 
@@ -7133,11 +7117,11 @@ gl_FragColor=vec4(col,alpha);}`;
       const perms = targetUser.permissions || {};
 
       overlay.innerHTML = `
-        <div style="background:rgba(30,30,45,0.85);border:1px solid rgba(255,255,255,0.14);border-radius:20px;
-          padding:28px 24px 22px;width:min(400px,90vw);box-shadow:0 24px 64px rgba(0,0,0,0.55);
-          display:flex;flex-direction:column;gap:14px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)">
+        <div style="background:rgba(30,30,45,0.92);border:1px solid rgba(255,255,255,0.18);border-radius:20px;
+          padding:28px 24px 22px;width:min(420px,90vw);box-shadow:0 24px 64px rgba(0,0,0,0.7);
+          display:flex;flex-direction:column;gap:14px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)">
           <div style="font-size:16px;font-weight:700;color:#fff;letter-spacing:.01em">🛡️ Permisos de ${this._escapeHtml(targetUser.name)}</div>
-          <div style="font-size:13px;color:rgba(255,255,255,0.55);margin-top:-6px">Selecciona las acciones permitidas para este perfil estándar:</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.65);margin-top:-6px">Selecciona las acciones permitidas para este perfil estándar:</div>
           
           <div style="display:flex;flex-direction:column;gap:10px;margin-top:6px;max-height:280px;overflow-y:auto;padding-right:4px;">
             <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
@@ -7175,7 +7159,7 @@ gl_FragColor=vec4(col,alpha);}`;
           </div>
         </div>`;
 
-      const root = this.shadowRoot || document.body;
+      const root = document.body || this.shadowRoot;
       root.appendChild(overlay);
 
       const okBtn = overlay.querySelector('#apm-ok');
@@ -7206,8 +7190,8 @@ gl_FragColor=vec4(col,alpha);}`;
       overlay.setAttribute('role', 'alertdialog');
       overlay.setAttribute('aria-modal', 'true');
       overlay.style.cssText = [
-        'position:fixed;inset:0;z-index:9999999;display:flex;align-items:center;justify-content:center',
-        'background:rgba(0,0,0,0.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)',
+        'position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;margin:0;padding:0;box-sizing:border-box;z-index:999999999;display:flex;align-items:center;justify-content:center',
+        'background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)',
         'animation:argus-modal-in .18s ease',
       ].join(';');
 
@@ -7216,10 +7200,10 @@ gl_FragColor=vec4(col,alpha);}`;
       const cStyle = confirmStyle || 'background:linear-gradient(135deg,#4a90d9,#7b5ea7);border:none;box-shadow:0 4px 14px rgba(74,144,217,0.35)';
 
       overlay.innerHTML = `
-        <div style="background:rgba(30,30,45,0.82);border:1px solid rgba(255,255,255,0.14);border-radius:20px;
-          padding:28px 24px 22px;width:min(340px,90vw);box-shadow:0 24px 64px rgba(0,0,0,0.55);
-          display:flex;flex-direction:column;gap:18px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)">
-          <div style="font-size:15px;color:rgba(255,255,255,0.88);line-height:1.5;text-align:center">${message}</div>
+        <div style="background:rgba(30,30,45,0.92);border:1px solid rgba(255,255,255,0.18);border-radius:20px;
+          padding:28px 24px 22px;width:min(360px,90vw);box-shadow:0 24px 64px rgba(0,0,0,0.7);
+          display:flex;flex-direction:column;gap:18px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)">
+          <div style="font-size:15px;color:rgba(255,255,255,0.92);line-height:1.5;text-align:center">${message}</div>
           <div style="display:flex;gap:10px">
             <button id="acm-cancel" style="flex:1;padding:11px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);
               background:rgba(255,255,255,0.06);color:#fff;font-size:14px;cursor:pointer;font-family:inherit">${ccl}</button>
@@ -7228,7 +7212,7 @@ gl_FragColor=vec4(col,alpha);}`;
           </div>
         </div>`;
 
-      const root = this.shadowRoot || document.body;
+      const root = document.body || this.shadowRoot;
       root.appendChild(overlay);
 
       const cleanup = val => { overlay.remove(); resolve(val); };
