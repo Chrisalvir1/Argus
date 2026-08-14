@@ -3499,22 +3499,22 @@ Ap.innerHTML = `
           <div class="personalize-workspace" id="personalize-workspace">
             <div class="personalize-top-row" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.08)">
               <div>
-                <div class="setting-label" id="lbl-home-name-hdr" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6;">${(void 0)._t("home_name") || "Nombre del Hogar"}</div>
-                <div id="lbl-home-name-prominent" style="font-size:18px;font-weight:900;margin-top:2px">${(void 0)._escapeHtml((void 0)._homeName || "Mi Casa")}</div>
+                <div class="setting-label" id="lbl-home-name-hdr" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6;">Nombre del Hogar</div>
+                <div id="lbl-home-name-prominent" style="font-size:18px;font-weight:900;margin-top:2px">Mi Casa</div>
               </div>
               <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);padding:8px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.08)">
-                <label class="setting-label" id="lbl-emergency-number" for="emergency-number-input" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.8; margin-bottom:0; white-space:nowrap;">🚨 ${(void 0)._t("emergency_number") || "Teléfono SOS"}:</label>
-                <input id="emergency-number-input" class="glass-control" inputmode="tel" maxlength="16" value="${(void 0)._escapeHtml((void 0)._emergencyNumber || "911")}" style="width:80px;min-height:28px;padding:4px 8px;font-size:13px;font-weight:800;text-align:center;border-radius:8px;background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.15)">
+                <label class="setting-label" id="lbl-emergency-number" for="emergency-number-input" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.8; margin-bottom:0; white-space:nowrap;">🚨 Teléfono SOS:</label>
+                <input id="emergency-number-input" class="glass-control" inputmode="tel" maxlength="16" value="911" style="width:80px;min-height:28px;padding:4px 8px;font-size:13px;font-weight:800;text-align:center;border-radius:8px;background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.15)">
               </div>
             </div>
 
             <div class="sos-configuration">
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap">
-                <div class="setting-label" id="lbl-sos-actions" style="font-size:12px; font-weight:800; text-transform:uppercase; opacity:0.8;">🚨 ${(void 0)._t("sos_actions") || "Acciones SOS"}</div>
-                <button class="ghost" id="btn-select-sos-outputs" style="padding:6px 14px;font-size:12px;font-weight:700;border-radius:10px;background:rgba(255,255,255,0.06);">${(void 0)._t("select_sos_outputs") || "Seleccionar luces, sirenas o scripts"}</button>
+                <div class="setting-label" id="lbl-sos-actions" style="font-size:12px; font-weight:800; text-transform:uppercase; opacity:0.8;">🚨 Acciones SOS</div>
+                <button class="ghost" id="btn-select-sos-outputs" style="padding:6px 14px;font-size:12px;font-weight:700;border-radius:10px;background:rgba(255,255,255,0.06);">Seleccionar luces, sirenas o scripts</button>
               </div>
               <div id="sos-output-chips" class="sos-output-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-bottom:8px"></div>
-              <div class="small" id="sos-output-help" style="margin-top:5px;opacity:.65;line-height:1.35">${(void 0)._t("sos_help") || "Estos dispositivos se activarán siempre al usar SOS, incluso con Argus desarmado."}</div>
+              <div class="small" id="sos-output-help" style="margin-top:5px;opacity:.65;line-height:1.35">Estos dispositivos se activarán siempre al usar SOS, incluso con Argus desarmado.</div>
             </div>
           </div>
         </div>
