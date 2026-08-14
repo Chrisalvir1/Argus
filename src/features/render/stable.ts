@@ -33,6 +33,8 @@ type StablePanel = ArgusPanelHost & {
   _refreshLocalizedUi?: () => void;
   _updateTheme?: () => void;
   _renderActivityLog?: () => void;
+  _formatTime?: (date: Date) => string;
+  _formatDateTime?: (date: Date) => string;
   connectedCallback?: () => void;
 };
 
