@@ -1,3 +1,11 @@
+## [2.1.5] - 2026-08-13
+
+### Fixed
+- **Profile Avatar Flight & Settle Animation:** Animated avatar lands precisely inside the top-bar profile container with empty socket reveal on landing across all desktop and mobile screen orientations.
+- **Mobile Clock Centering:** Centered the hero clock and date in mobile portrait view.
+- **12-Hour Clock Format:** Strict detection of Home Assistant AM/PM 12h locale format settings and user preferences.
+- **Complete Real-Time i18n:** Fully localized active instance badges, sensor empty notices, SOS modals, and profile dropdown menus without reload.
+
 ## [2.1.4] - 2026-08-13
 
 ### Fixed

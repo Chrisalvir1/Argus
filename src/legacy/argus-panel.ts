@@ -1008,13 +1008,13 @@ const TEXTS = {
 // from the original dictionaries makes it much harder for a new UI feature to
 // accidentally ship in only one language.
 const EXTRA_TEXTS = {
-  es: { use_ha_language:'Usar idioma de Home Assistant', emergency_number_label:'🚨 Número local de emergencias', emergency_help:'Configúralo según la ubicación del hogar (p. ej., Costa Rica: 911; España: 112). Se incluirá en las alertas SOS.', sos_actions:'🚨 Acciones SOS', sos_select_outputs:'Seleccionar luces, sirenas o scripts', sos_outputs_help:'Estos dispositivos se activarán siempre al usar SOS, incluso con Argus desarmado.', sos_no_outputs:'Sin dispositivos seleccionados', sos_call_help:'Si este equipo no admite llamadas, Argus enviará una alerta urgente a los dispositivos móviles configurados.', sos_stop:'🛑 DETENER PÁNICO', customize:'Personalizar', done:'Listo', sos_activated:'SOS activado', sos_call_confirm:'¿Quieres llamar ahora a emergencias ({number})?', sos_error:'No se pudo activar el SOS: {error}', no_alarm_instance:'No hay una instancia de alarma disponible', panic_state_unknown:'No se pudo determinar el estado anterior del pánico. Desarma o rearma manualmente.', panic_stopped:'Pánico detenido; restaurado a {state}', panic_stop_error:'No se pudo detener el pánico: {error}', selector_panic:'🚨 Acciones SOS', status_open:'Abierto', status_closed:'Cerrado', status_idle:'En reposo', status_recording:'Grabando', status_home:'En casa', status_away:'Fuera', no_results:'Sin resultados', user_required:'Nombre y PIN requeridos', generic_error:'Error: {error}', clear_history_confirm:'¿Seguro que quieres borrar todo el historial?', export_error:'Error al exportar: {error}', invalid_config:'Archivo de configuración no válido.', import_success:'Configuración restaurada con éxito. Recargando...', import_error:'Error al importar: {error}', file_read_error:'No se pudo leer el archivo.', reset_confirm:'¿Estás seguro de que deseas restablecer Argus a sus valores de fábrica? Perderás todas tus configuraciones, PINs y modos.', reset_success:'Argus restablecido. Tienes unos segundos para deshacer si cambias de opinión, o simplemente recarga la página para aplicar los cambios.', reset_error:'Error al restablecer: {error}', undo_success:'Restablecimiento deshecho con éxito.', undo_error:'Error al deshacer: {error}', url_placeholder:'URL del fondo...', loading:'Cargando...', delete:'Borrar', fullscreen_title:'Pantalla completa', home_default:'Mi Casa', home_fallback:'Hogar', user_default:'Usuario', temp_notification_title:'Argus — Alerta de Temperatura', action_failed:'No se pudo realizar la acción', cannot_arm:'No se puede armar', open_sensors_explain:'Los siguientes sensores están abiertos:\n{names}\n\nCiérralos antes de armar, o activa \u201cOmitir\u201d en el sensor.', pin_disarm_error:'PIN incorrecto o error al desarmar', notification_disarmed:'{user} desarmó el sistema.', notification_armed:'{user} activó el modo {mode}.', upload_error:'Falló la subida.', delete_file_error:'No se pudo eliminar el archivo: {error}', file_choice:'\u201c{file}\u201d\n\n¿Usar como imagen estática (Aceptar) o como video animado (Cancelar)?\n\n• Aceptar → Imagen estática\n• Cancelar → Video animado', first_run_blocked_title:'Acceso denegado', first_run_blocked_desc:'Se requiere un administrador de Home Assistant para configurar Argus por primera vez.', first_run_welcome:'Gracias por elegir Argus Home Hub. Bienvenido/a.', first_run_desc:'Complete la configuración para proteger su hogar.', first_run_pin_expl:'El PIN de acceso abre Argus. El PIN maestro controla el armado y desarmado.', first_run_skip:'Omitir por ahora', first_run_start:'Comenzar con Argus' },
-  en: { use_ha_language:'Use Home Assistant language', emergency_number_label:'🚨 Local emergency number', emergency_help:'Configure it for the home location (e.g., Costa Rica: 911; Spain: 112). It will be included in SOS alerts.', sos_actions:'🚨 SOS actions', sos_select_outputs:'Select lights, sirens, or scripts', sos_outputs_help:'These devices will always activate when SOS is used, even while Argus is disarmed.', sos_no_outputs:'No devices selected', sos_call_help:'If this device cannot place calls, Argus will send an urgent alert to the configured mobile devices.', sos_stop:'🛑 STOP PANIC', customize:'Customize', done:'Done', sos_activated:'SOS activated', sos_call_confirm:'Call emergency services now ({number})?', sos_error:'Could not activate SOS: {error}', no_alarm_instance:'No alarm instance is available', panic_state_unknown:'The prior panic state could not be determined. Disarm or arm manually.', panic_stopped:'Panic stopped; restored to {state}', panic_stop_error:'Could not stop panic: {error}', selector_panic:'🚨 SOS actions', status_open:'Open', status_closed:'Closed', status_idle:'Idle', status_recording:'Recording', status_home:'Home', status_away:'Away', no_results:'No results', user_required:'Name and PIN are required', generic_error:'Error: {error}', clear_history_confirm:'Delete the entire activity history?', export_error:'Export failed: {error}', invalid_config:'Invalid configuration file.', import_success:'Configuration restored successfully. Reloading…', import_error:'Import failed: {error}', file_read_error:'Could not read the file.', reset_confirm:'Reset Argus to factory settings? All configurations, PINs, and modes will be lost.', reset_success:'Argus was reset. You have a few seconds to undo it, or reload the page to apply the changes.', reset_error:'Reset failed: {error}', undo_success:'Reset undone successfully.', undo_error:'Could not undo reset: {error}', url_placeholder:'Background URL…', loading:'Loading…', delete:'Delete', fullscreen_title:'Full screen', home_default:'My Home', home_fallback:'Home', user_default:'User', temp_notification_title:'Argus — Temperature Alert', action_failed:'Action could not be completed', cannot_arm:'Cannot arm', open_sensors_explain:'The following sensors are open:\n{names}\n\nClose them before arming, or enable \u201cBypass\u201d on the sensor.', pin_disarm_error:'Incorrect PIN or error while disarming', notification_disarmed:'{user} disarmed the system.', notification_armed:'{user} activated {mode} mode.', upload_error:'Upload failed.', delete_file_error:'Could not delete the file: {error}', file_choice:'\u201c{file}\u201d\n\nUse as a static image (OK) or an animated video (Cancel)?\n\n• OK → Static image\n• Cancel → Animated video', first_run_blocked_title:'Access Denied', first_run_blocked_desc:'A Home Assistant administrator is required to configure Argus for the first time.', first_run_welcome:'Thank you for choosing Argus Home Hub. Welcome.', first_run_desc:'Complete setup to secure your home.', first_run_pin_expl:'The access PIN opens Argus. The master PIN controls arming and disarming.', first_run_skip:'Skip for now', first_run_start:'Start with Argus' },
-  fr: { use_ha_language:'Utiliser la langue de Home Assistant', emergency_number_label:'🚨 Numéro d\u2019urgence local', emergency_help:'Configurez-le pour le domicile (ex. Costa Rica : 911 ; Espagne : 112). Il sera inclus dans les alertes SOS.', sos_actions:'🚨 Actions SOS', sos_select_outputs:'Sélectionner lumières, sirènes ou scripts', sos_outputs_help:'Ces appareils s\u2019activeront toujours avec SOS, même si Argus est désarmé.', sos_no_outputs:'Aucun appareil sélectionné', sos_call_help:'Si cet appareil ne peut pas appeler, Argus enverra une alerte urgente aux appareils mobiles configurés.', sos_stop:'🛑 ARRÊTER LA PANIQUE', customize:'Personnaliser', done:'Terminé', sos_activated:'SOS activé', sos_call_confirm:'Appeler les urgences maintenant ({number}) ?', sos_error:'Impossible d\u2019activer SOS : {error}', no_alarm_instance:'Aucune instance d\u2019alarme disponible', panic_state_unknown:'L\u2019état antérieur de la panique est inconnu. Armez ou désarmez manuellement.', panic_stopped:'Panique arrêtée ; rétablie à {state}', panic_stop_error:'Impossible d\u2019arrêter la panique : {error}', selector_panic:'🚨 Actions SOS', status_open:'Ouvert', status_closed:'Fermé', status_idle:'Au repos', status_recording:'Enregistrement', status_home:'Maison', status_away:'Absent', no_results:'Aucun résultat', user_required:'Nom et PIN requis', generic_error:'Erreur : {error}', clear_history_confirm:'Supprimer tout l\u2019historique d\u2019activité ?', export_error:'Échec de l\u2019exportation : {error}', invalid_config:'Fichier de configuration invalide.', import_success:'Configuration restaurée. Rechargement…', import_error:'Échec de l\u2019importation : {error}', file_read_error:'Impossible de lire le fichier.', reset_confirm:'Réinitialiser Argus ? Toutes les configurations, PIN et modes seront perdus.', reset_success:'Argus a été réinitialisé. Vous avez quelques secondes pour annuler.', reset_error:'Échec de la réinitialisation : {error}', undo_success:'Réinitialisation annulée.', undo_error:'Impossible d\u2019annuler : {error}', url_placeholder:'URL de l\u2019arrière-plan…', loading:'Chargement…', delete:'Supprimer', fullscreen_title:'Plein écran', home_default:'Ma maison', home_fallback:'Maison', user_default:'Utilisateur', temp_notification_title:'Argus — Alerte de température', action_failed:'Action impossible', cannot_arm:'Impossible d\u2019armer', open_sensors_explain:'Les capteurs suivants sont ouverts :\n{names}\n\nFermez-les avant d\u2019armer ou activez « Ignorer ». ', pin_disarm_error:'PIN incorrect ou erreur de désarmement', notification_disarmed:'{user} a désarmé le système.', notification_armed:'{user} a activé le mode {mode}.', upload_error:'Échec du téléversement.', delete_file_error:'Impossible de supprimer le fichier : {error}', file_choice:'« {file} »\n\nUtiliser comme image fixe (OK) ou vidéo animée (Annuler) ?', first_run_blocked_title:'Accès refusé', first_run_blocked_desc:'Un administrateur Home Assistant est requis pour configurer Argus pour la première fois.', first_run_welcome:'Merci d\'avoir choisi Argus Home Hub. Bienvenue.', first_run_desc:'Terminez la configuration pour sécuriser votre domicile.', first_run_pin_expl:'Le code d\'accès ouvre Argus. Le code maître contrôle l\'armement.', first_run_skip:'Ignorer pour l\'instant', first_run_start:'Commencer avec Argus' },
-  pt: { use_ha_language:'Usar idioma do Home Assistant', emergency_number_label:'🚨 Número local de emergência', emergency_help:'Configure para a localização da casa (ex.: Costa Rica: 911; Espanha: 112). Será incluído nos alertas SOS.', sos_actions:'🚨 Ações SOS', sos_select_outputs:'Selecionar luzes, sirenes ou scripts', sos_outputs_help:'Estes dispositivos sempre serão ativados ao usar SOS, mesmo com Argus desarmado.', sos_no_outputs:'Nenhum dispositivo selecionado', sos_call_help:'Se este dispositivo não puder ligar, o Argus enviará um alerta urgente aos dispositivos móveis configurados.', sos_stop:'🛑 PARAR PÂNICO', customize:'Personalizar', done:'Concluído', sos_activated:'SOS ativado', sos_call_confirm:'Ligar para emergência agora ({number})?', sos_error:'Não foi possível ativar SOS: {error}', no_alarm_instance:'Nenhuma instância de alarme disponível', panic_state_unknown:'Não foi possível determinar o estado anterior do pânico. Arme ou desarme manualmente.', panic_stopped:'Pânico parado; restaurado para {state}', panic_stop_error:'Não foi possível parar o pânico: {error}', selector_panic:'🚨 Ações SOS', status_open:'Aberto', status_closed:'Fechado', status_idle:'Em repouso', status_recording:'Gravando', status_home:'Em casa', status_away:'Fora', no_results:'Sem resultados', user_required:'Nome e PIN são obrigatórios', generic_error:'Erro: {error}', clear_history_confirm:'Excluir todo o histórico de atividade?', export_error:'Erro ao exportar: {error}', invalid_config:'Arquivo de configuração inválido.', import_success:'Configuração restaurada. Recarregando…', import_error:'Erro ao importar: {error}', file_read_error:'Não foi possível ler o arquivo.', reset_confirm:'Restaurar Argus aos padrões de fábrica? Todas as configurações, PINs e modos serão perdidos.', reset_success:'Argus foi restaurado. Você tem alguns segundos para desfazer.', reset_error:'Erro ao restaurar: {error}', undo_success:'Restauração desfeita.', undo_error:'Erro ao desfazer: {error}', url_placeholder:'URL do fundo…', loading:'Carregando…', delete:'Excluir', fullscreen_title:'Tela cheia', home_default:'Minha Casa', home_fallback:'Casa', user_default:'Usuário', temp_notification_title:'Argus — Alerta de Temperatura', action_failed:'Não foi possível realizar a ação', cannot_arm:'Não é possível armar', open_sensors_explain:'Os seguintes sensores estão abertos:\n{names}\n\nFeche-os antes de armar ou ative \u201cIgnorar\u201d.', pin_disarm_error:'PIN incorreto ou erro ao desarmar', notification_disarmed:'{user} desarmou o sistema.', notification_armed:'{user} ativou o modo {mode}.', upload_error:'Falha no envio.', delete_file_error:'Não foi possível excluir o arquivo: {error}', file_choice:'\u201c{file}\u201d\n\nUsar como imagem estática (OK) ou vídeo animado (Cancelar)?', first_run_blocked_title:'Acesso negado', first_run_blocked_desc:'É necessário um administrador do Home Assistant para configurar o Argus pela primeira vez.', first_run_welcome:'Obrigado por escolher o Argus Home Hub. Bem-vindo(a).', first_run_desc:'Conclua a configuração para proteger sua casa.', first_run_pin_expl:'O PIN de acesso abre o Argus. O PIN mestre controla armar e desarmar.', first_run_skip:'Ignorar por agora', first_run_start:'Começar com Argus' },
-  it: { use_ha_language:'Usa la lingua di Home Assistant', emergency_number_label:'🚨 Numero di emergenza locale', emergency_help:'Configurarlo per la posizione della casa (es. Costa Rica: 911; Spagna: 112). Sarà incluso negli avvisi SOS.', sos_actions:'🚨 Azioni SOS', sos_select_outputs:'Seleziona luci, sirene o script', sos_outputs_help:'Questi dispositivi saranno sempre attivati con SOS, anche se Argus è disarmato.', sos_no_outputs:'Nessun dispositivo selezionato', sos_call_help:'Se questo dispositivo non può effettuare chiamate, Argus invierà un avviso urgente ai dispositivi mobili configurati.', sos_stop:'🛑 FERMA PANICO', customize:'Personalizza', done:'Fine', sos_activated:'SOS attivato', sos_call_confirm:'Chiamare ora i servizi di emergenza ({number})?', sos_error:'Impossibile attivare SOS: {error}', no_alarm_instance:'Nessuna istanza di allarme disponibile', panic_state_unknown:'Impossibile determinare lo stato precedente del panico. Armare o disarmare manualmente.', panic_stopped:'Panico fermato; ripristinato a {state}', panic_stop_error:'Impossibile fermare il panico: {error}', selector_panic:'🚨 Azioni SOS', status_open:'Aperto', status_closed:'Chiuso', status_idle:'Inattivo', status_recording:'Registrazione', status_home:'Casa', status_away:'Fuori', no_results:'Nessun risultato', user_required:'Nome e PIN obbligatori', generic_error:'Errore: {error}', clear_history_confirm:'Eliminare tutta la cronologia attività?', export_error:'Esportazione non riuscita: {error}', invalid_config:'File di configurazione non valido.', import_success:'Configurazione ripristinata. Ricaricamento…', import_error:'Importazione non riuscita: {error}', file_read_error:'Impossibile leggere il file.', reset_confirm:'Ripristinare Argus alle impostazioni di fabbrica? Configurazioni, PIN e modalità saranno persi.', reset_success:'Argus è stato ripristinato. Hai alcuni secondi per annullare.', reset_error:'Ripristino non riuscito: {error}', undo_success:'Ripristino annullato.', undo_error:'Impossibile annullare: {error}', url_placeholder:'URL dello sfondo…', loading:'Caricamento…', delete:'Elimina', fullscreen_title:'Schermo intero', home_default:'Casa mia', home_fallback:'Casa', user_default:'Utente', temp_notification_title:'Argus — Avviso temperatura', action_failed:'Impossibile eseguire l\u2019azione', cannot_arm:'Impossibile armare', open_sensors_explain:'I seguenti sensori sono aperti:\n{names}\n\nChiudili prima di armare o abilita \u201cIgnora\u201d.', pin_disarm_error:'PIN errato o errore durante il disarmo', notification_disarmed:'{user} ha disarmato il sistema.', notification_armed:'{user} ha attivato la modalità {mode}.', upload_error:'Caricamento non riuscito.', delete_file_error:'Impossibile eliminare il file: {error}', file_choice:'\u201c{file}\u201d\n\nUsare come immagine statica (OK) o video animato (Annulla)?', first_run_blocked_title:'Accesso negato', first_run_blocked_desc:'È necessario un amministratore di Home Assistant per configurare Argus per la prima volta.', first_run_welcome:'Grazie per aver scelto Argus Home Hub. Benvenuto/a.', first_run_desc:'Completa la configurazione per proteggere la tua casa.', first_run_pin_expl:'Il PIN di accesso apre Argus. Il PIN master controlla l\'inserimento e il disinserimento.', first_run_skip:'Salta per ora', first_run_start:'Inizia con Argus' },
-  zh: { use_ha_language:'使用 Home Assistant 语言', emergency_number_label:'🚨 本地紧急号码', emergency_help:'请按家庭所在地设置（例如哥斯达黎加：911；西班牙：112）。该号码将包含在 SOS 警报中。', sos_actions:'🚨 SOS 操作', sos_select_outputs:'选择灯、警报器或脚本', sos_outputs_help:'即使 Argus 已撤防，使用 SOS 时这些设备也会始终启动。', sos_no_outputs:'未选择设备', sos_call_help:'如果该设备无法拨号，Argus 将向已配置的移动设备发送紧急警报。', sos_stop:'🛑 停止紧急状态', customize:'自定义', done:'完成', sos_activated:'SOS 已激活', sos_call_confirm:'现在拨打紧急服务电话 ({number})？', sos_error:'无法激活 SOS：{error}', no_alarm_instance:'没有可用的警报实例', panic_state_unknown:'无法确定紧急状态之前的状态。请手动布防或撤防。', panic_stopped:'紧急状态已停止；恢复为 {state}', panic_stop_error:'无法停止紧急状态：{error}', selector_panic:'🚨 SOS 操作', status_open:'打开', status_closed:'关闭', status_idle:'空闲', status_recording:'录制中', status_home:'在家', status_away:'离家', no_results:'无结果', user_required:'需要姓名和 PIN', generic_error:'错误：{error}', clear_history_confirm:'删除全部活动历史记录？', export_error:'导出失败：{error}', invalid_config:'配置文件无效。', import_success:'配置已恢复。正在重新加载…', import_error:'导入失败：{error}', file_read_error:'无法读取文件。', reset_confirm:'将 Argus 恢复为出厂设置？所有配置、PIN 和模式将丢失。', reset_success:'Argus 已重置。你有几秒钟可以撤销。', reset_error:'重置失败：{error}', undo_success:'已撤销重置。', undo_error:'无法撤销重置：{error}', url_placeholder:'背景 URL…', loading:'正在加载…', delete:'删除', fullscreen_title:'全屏', home_default:'我的家', home_fallback:'家', user_default:'用户', temp_notification_title:'Argus — 温度警报', action_failed:'无法完成操作', cannot_arm:'无法布防', open_sensors_explain:'以下传感器处于打开状态：\n{names}\n\n请在布防前关闭它们，或启用\u201c跳过\u201d。', pin_disarm_error:'PIN 错误或撤防时出错', notification_disarmed:'{user} 已撤防系统。', notification_armed:'{user} 已激活 {mode} 模式。', upload_error:'上传失败。', delete_file_error:'无法删除文件：{error}', file_choice:'\u201c{file}\u201d\n\n用作静态图片（确定）还是动画视频（取消）？', first_run_blocked_title:'拒绝访问', first_run_blocked_desc:'首次配置 Argus 需要 Home Assistant 管理员。', first_run_welcome:'感谢您选择 Argus Home Hub。欢迎。', first_run_desc:'完成设置以保护您的家庭。', first_run_pin_expl:'访问 PIN 用于打开 Argus。主 PIN 控制布防和撤防。', first_run_skip:'暂时跳过', first_run_start:'开始使用 Argus' },
-  ru: { use_ha_language:'Использовать язык Home Assistant', emergency_number_label:'🚨 Местный номер экстренной службы', emergency_help:'Настройте для местоположения дома (например, Коста-Рика: 911; Испания: 112). Номер будет включён в SOS-оповещения.', sos_actions:'🚨 Действия SOS', sos_select_outputs:'Выбрать свет, сирены или сценарии', sos_outputs_help:'Эти устройства всегда будут включаться при SOS, даже когда Argus снят с охраны.', sos_no_outputs:'Устройства не выбраны', sos_call_help:'Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.', sos_stop:'🛑 ОСТАНОВИТЬ ТРЕВОГУ', customize:'Настроить', done:'Готово', sos_activated:'SOS активирован', sos_call_confirm:'Позвонить в экстренную службу ({number})?', sos_error:'Не удалось активировать SOS: {error}', no_alarm_instance:'Нет доступного экземпляра сигнализации', panic_state_unknown:'Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.', panic_stopped:'Тревога остановлена; восстановлено состояние {state}', panic_stop_error:'Не удалось остановить тревогу: {error}', selector_panic:'🚨 Действия SOS', status_open:'Открыто', status_closed:'Закрыто', status_idle:'Ожидание', status_recording:'Запись', status_home:'Дома', status_away:'Вне дома', no_results:'Нет результатов', user_required:'Требуются имя и PIN', generic_error:'Ошибка: {error}', clear_history_confirm:'Удалить всю историю активности?', export_error:'Ошибка экспорта: {error}', invalid_config:'Недопустимый файл конфигурации.', import_success:'Конфигурация восстановлена. Перезагрузка…', import_error:'Ошибка импорта: {error}', file_read_error:'Не удалось прочитать файл.', reset_confirm:'Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.', reset_success:'Argus сброшен. У вас есть несколько секунд, чтобы отменить это.', reset_error:'Ошибка сброса: {error}', undo_success:'Сброс отменён.', undo_error:'Не удалось отменить сброс: {error}', url_placeholder:'URL фона…', loading:'Загрузка…', delete:'Удалить', fullscreen_title:'Полный экран', home_default:'Мой дом', home_fallback:'Дом', user_default:'Пользователь', temp_notification_title:'Argus — Температурное предупреждение', action_failed:'Не удалось выполнить действие', cannot_arm:'Невозможно поставить на охрану', open_sensors_explain:'Следующие датчики открыты:\n{names}\n\nЗакройте их перед постановкой на охрану или включите «Обход».', pin_disarm_error:'Неверный PIN или ошибка снятия с охраны', notification_disarmed:'{user} снял систему с охраны.', notification_armed:'{user} активировал режим {mode}.', upload_error:'Ошибка загрузки.', delete_file_error:'Не удалось удалить файл: {error}', file_choice:'«{file}»\n\nИспользовать как статичное изображение (ОК) или анимированное видео (Отмена)?', first_run_blocked_title:'Доступ запрещен', first_run_blocked_desc:'Для первой настройки Argus требуется администратор Home Assistant.', first_run_welcome:'Спасибо, что выбрали Argus Home Hub. Добро пожаловать.', first_run_desc:'Завершите настройку для безопасности вашего дома.', first_run_pin_expl:'PIN доступа открывает Argus. Мастер-PIN управляет постановкой и снятием с охраны.', first_run_skip:'Пропустить пока', first_run_start:'Начать с Argus' },
+  es: { connected:'CONECTADO', no_sensors_configured:'Sin sensores de intrusión configurados.', all_sensors_bypassed:'Todos los sensores configurados están omitidos.', active_profile:'Perfil Activo', change_profile_picture:'Ir a Personas de HA ↗', pin_management:'🔑 Gestión de Pines', access_pin_lbl:'PIN de Acceso', master_pin_lbl:'PIN Maestro', switch_profile_btn:'👤 Cambiar de Perfil', lang_selector_lbl:'⚙️ Idioma / Language', change_btn:'Cambiar', remove_btn:'Quitar', role_argus_admin_short:'Admin', role_argus_user_short:'Estándar', use_ha_language:'Usar idioma de Home Assistant', emergency_number_label:'🚨 Número local de emergencias', emergency_help:'Configúralo según la ubicación del hogar (p. ej., Costa Rica: 911; España: 112). Se incluirá en las alertas SOS.', sos_actions:'🚨 Acciones SOS', sos_select_outputs:'Seleccionar luces, sirenas o scripts', sos_outputs_help:'Estos dispositivos se activarán siempre al usar SOS, incluso con Argus desarmado.', sos_no_outputs:'Sin dispositivos seleccionados', sos_call_help:'Si este equipo no admite llamadas, Argus enviará una alerta urgente a los dispositivos móviles configurados.', sos_stop:'🛑 DETENER PÁNICO', customize:'Personalizar', done:'Listo', sos_activated:'SOS activado', sos_call_confirm:'¿Quieres llamar ahora a emergencias ({number})?', sos_error:'No se pudo activar el SOS: {error}', no_alarm_instance:'No hay una instancia de alarma disponible', panic_state_unknown:'No se pudo determinar el estado anterior del pánico. Desarma o rearma manualmente.', panic_stopped:'Pánico detenido; restaurado a {state}', panic_stop_error:'No se pudo detener el pánico: {error}', selector_panic:'🚨 Acciones SOS', status_open:'Abierto', status_closed:'Cerrado', status_idle:'En reposo', status_recording:'Grabando', status_home:'En casa', status_away:'Fuera', no_results:'Sin resultados', user_required:'Nombre y PIN requeridos', generic_error:'Error: {error}', clear_history_confirm:'¿Seguro que quieres borrar todo el historial?', export_error:'Error al exportar: {error}', invalid_config:'Archivo de configuración no válido.', import_success:'Configuración restaurada con éxito. Recargando...', import_error:'Error al importar: {error}', file_read_error:'No se pudo leer el archivo.', reset_confirm:'¿Estás seguro de que deseas restablecer Argus a sus valores de fábrica? Perderás todas tus configuraciones, PINs y modos.', reset_success:'Argus restablecido. Tienes unos segundos para deshacer si cambias de opinión, o simplemente recarga la página para aplicar los cambios.', reset_error:'Error al restablecer: {error}', undo_success:'Restablecimiento deshecho con éxito.', undo_error:'Error al deshacer: {error}', url_placeholder:'URL del fondo...', loading:'Cargando...', delete:'Borrar', fullscreen_title:'Pantalla completa', home_default:'Mi Casa', home_fallback:'Hogar', user_default:'Usuario', temp_notification_title:'Argus — Alerta de Temperatura', action_failed:'No se pudo realizar la acción', cannot_arm:'No se puede armar', open_sensors_explain:'Los siguientes sensores están abiertos:\n{names}\n\nCiérralos antes de armar, o activa \u201cOmitir\u201d en el sensor.', pin_disarm_error:'PIN incorrecto o error al desarmar', notification_disarmed:'{user} desarmó el sistema.', notification_armed:'{user} activó el modo {mode}.', upload_error:'Falló la subida.', delete_file_error:'No se pudo eliminar el archivo: {error}', file_choice:'\u201c{file}\u201d\n\n¿Usar como imagen estática (Aceptar) o como video animado (Cancelar)?\n\n• Aceptar → Imagen estática\n• Cancelar → Video animado', first_run_blocked_title:'Acceso denegado', first_run_blocked_desc:'Se requiere un administrador de Home Assistant para configurar Argus por primera vez.', first_run_welcome:'Gracias por elegir Argus Home Hub. Bienvenido/a.', first_run_desc:'Complete la configuración para proteger su hogar.', first_run_pin_expl:'El PIN de acceso abre Argus. El PIN maestro controla el armado y desarmado.', first_run_skip:'Omitir por ahora', first_run_start:'Comenzar con Argus' },
+  en: { connected:'CONNECTED', no_sensors_configured:'No intrusion sensors configured.', all_sensors_bypassed:'All configured sensors are bypassed.', active_profile:'Active Profile', change_profile_picture:'Go to HA Persons ↗', pin_management:'🔑 PIN Management', access_pin_lbl:'Access PIN', master_pin_lbl:'Master PIN', switch_profile_btn:'👤 Switch Profile', lang_selector_lbl:'⚙️ Language / Idioma', change_btn:'Change', remove_btn:'Remove', role_argus_admin_short:'Admin', role_argus_user_short:'Standard', use_ha_language:'Use Home Assistant language', emergency_number_label:'🚨 Local emergency number', emergency_help:'Configure it for the home location (e.g., Costa Rica: 911; Spain: 112). It will be included in SOS alerts.', sos_actions:'🚨 SOS actions', sos_select_outputs:'Select lights, sirens, or scripts', sos_outputs_help:'These devices will always activate when SOS is used, even while Argus is disarmed.', sos_no_outputs:'No devices selected', sos_call_help:'If this device cannot place calls, Argus will send an urgent alert to the configured mobile devices.', sos_stop:'🛑 STOP PANIC', customize:'Customize', done:'Done', sos_activated:'SOS activated', sos_call_confirm:'Call emergency services now ({number})?', sos_error:'Could not activate SOS: {error}', no_alarm_instance:'No alarm instance is available', panic_state_unknown:'The prior panic state could not be determined. Disarm or arm manually.', panic_stopped:'Panic stopped; restored to {state}', panic_stop_error:'Could not stop panic: {error}', selector_panic:'🚨 SOS actions', status_open:'Open', status_closed:'Closed', status_idle:'Idle', status_recording:'Recording', status_home:'Home', status_away:'Away', no_results:'No results', user_required:'Name and PIN are required', generic_error:'Error: {error}', clear_history_confirm:'Delete the entire activity history?', export_error:'Export failed: {error}', invalid_config:'Invalid configuration file.', import_success:'Configuration restored successfully. Reloading…', import_error:'Import failed: {error}', file_read_error:'Could not read the file.', reset_confirm:'Reset Argus to factory settings? All configurations, PINs, and modes will be lost.', reset_success:'Argus was reset. You have a few seconds to undo it, or reload the page to apply the changes.', reset_error:'Reset failed: {error}', undo_success:'Reset undone successfully.', undo_error:'Could not undo reset: {error}', url_placeholder:'Background URL…', loading:'Loading…', delete:'Delete', fullscreen_title:'Full screen', home_default:'My Home', home_fallback:'Home', user_default:'User', temp_notification_title:'Argus — Temperature Alert', action_failed:'Action could not be completed', cannot_arm:'Cannot arm', open_sensors_explain:'The following sensors are open:\n{names}\n\nClose them before arming, or enable \u201cBypass\u201d on the sensor.', pin_disarm_error:'Incorrect PIN or error while disarming', notification_disarmed:'{user} disarmed the system.', notification_armed:'{user} activated {mode} mode.', upload_error:'Upload failed.', delete_file_error:'Could not delete the file: {error}', file_choice:'\u201c{file}\u201d\n\nUse as a static image (OK) or an animated video (Cancel)?\n\n• OK → Static image\n• Cancel → Animated video', first_run_blocked_title:'Access Denied', first_run_blocked_desc:'A Home Assistant administrator is required to configure Argus for the first time.', first_run_welcome:'Thank you for choosing Argus Home Hub. Welcome.', first_run_desc:'Complete setup to secure your home.', first_run_pin_expl:'The access PIN opens Argus. The master PIN controls arming and disarming.', first_run_skip:'Skip for now', first_run_start:'Start with Argus' },
+  fr: { connected:'CONNECTÉ', no_sensors_configured:'Aucun capteur configuré.', all_sensors_bypassed:'Tous les capteurs configurés sont contournés.', active_profile:'Profil actif', change_profile_picture:'Aller à Personnes HA ↗', pin_management:'🔑 Gestion des PINs', access_pin_lbl:'PIN d\u2019accès', master_pin_lbl:'PIN Maître', switch_profile_btn:'👤 Changer de profil', lang_selector_lbl:'⚙️ Langue', change_btn:'Modifier', remove_btn:'Supprimer', role_argus_admin_short:'Admin', role_argus_user_short:'Standard', use_ha_language:'Utiliser la langue de Home Assistant', emergency_number_label:'🚨 Numéro d\u2019urgence local', emergency_help:'Configurez-le pour le domicile (ex. Costa Rica : 911 ; Espagne : 112). Il sera inclus dans les alertes SOS.', sos_actions:'🚨 Actions SOS', sos_select_outputs:'Sélectionner lumières, sirènes ou scripts', sos_outputs_help:'Ces appareils s\u2019activeront toujours avec SOS, même si Argus est désarmé.', sos_no_outputs:'Aucun appareil sélectionné', sos_call_help:'Si cet appareil ne peut pas appeler, Argus enverra une alerte urgente aux appareils mobiles configurés.', sos_stop:'🛑 ARRÊTER LA PANIQUE', customize:'Personnaliser', done:'Terminé', sos_activated:'SOS activé', sos_call_confirm:'Appeler les urgences maintenant ({number}) ?', sos_error:'Impossible d\u2019activer SOS : {error}', no_alarm_instance:'Aucune instance d\u2019alarme disponible', panic_state_unknown:'L\u2019état antérieur de la panique est inconnu. Armez ou désarmez manuellement.', panic_stopped:'Panique arrêtée ; rétablie à {state}', panic_stop_error:'Impossible d\u2019arrêter la panique : {error}', selector_panic:'🚨 Actions SOS', status_open:'Ouvert', status_closed:'Fermé', status_idle:'Au repos', status_recording:'Enregistrement', status_home:'Maison', status_away:'Absent', no_results:'Aucun résultat', user_required:'Nom et PIN requis', generic_error:'Erreur : {error}', clear_history_confirm:'Supprimer tout l\u2019historique d\u2019activité ?', export_error:'Échec de l\u2019exportation : {error}', invalid_config:'Fichier de configuration invalide.', import_success:'Configuration restaurée. Rechargement…', import_error:'Échec de l\u2019importation : {error}', file_read_error:'Impossible de lire le fichier.', reset_confirm:'Réinitialiser Argus ? Toutes les configurations, PIN et modes seront perdus.', reset_success:'Argus a été réinitialisé. Vous avez quelques secondes pour annuler.', reset_error:'Échec de la réinitialisation : {error}', undo_success:'Réinitialisation annulée.', undo_error:'Impossible d\u2019annuler : {error}', url_placeholder:'URL de l\u2019arrière-plan…', loading:'Chargement…', delete:'Supprimer', fullscreen_title:'Plein écran', home_default:'Ma maison', home_fallback:'Maison', user_default:'Utilisateur', temp_notification_title:'Argus — Alerte de température', action_failed:'Action impossible', cannot_arm:'Impossible d\u2019armer', open_sensors_explain:'Les capteurs suivants sont ouverts :\n{names}\n\nFermez-les avant d\u2019armer ou activez « Ignorer ». ', pin_disarm_error:'PIN incorrect ou erreur de désarmement', notification_disarmed:'{user} a désarmé le système.', notification_armed:'{user} a activé le mode {mode}.', upload_error:'Échec du téléversement.', delete_file_error:'Impossible de supprimer le fichier : {error}', file_choice:'« {file} »\n\nUtiliser comme image fixe (OK) ou vidéo animée (Annuler) ?', first_run_blocked_title:'Accès refusé', first_run_blocked_desc:'Un administrateur Home Assistant est requis pour configurer Argus pour la première fois.', first_run_welcome:'Merci d\'avoir choisi Argus Home Hub. Bienvenue.', first_run_desc:'Terminez la configuration pour sécuriser votre domicile.', first_run_pin_expl:'Le code d\'accès ouvre Argus. Le code maître contrôle l\'armement.', first_run_skip:'Ignorer pour l\'instant', first_run_start:'Commencer avec Argus' },
+  pt: { connected:'CONECTADO', no_sensors_configured:'Sem sensores configurados.', all_sensors_bypassed:'Todos os sensores configurados estão ignorados.', active_profile:'Perfil ativo', change_profile_picture:'Ir para Pessoas do HA ↗', pin_management:'🔑 Gerenciamento de PINs', access_pin_lbl:'PIN de Acesso', master_pin_lbl:'PIN Mestre', switch_profile_btn:'👤 Trocar de perfil', lang_selector_lbl:'⚙️ Idioma', change_btn:'Alterar', remove_btn:'Remover', role_argus_admin_short:'Admin', role_argus_user_short:'Padrão', use_ha_language:'Usar idioma do Home Assistant', emergency_number_label:'🚨 Número local de emergência', emergency_help:'Configure para a localização da casa (ex.: Costa Rica: 911; Espanha: 112). Será incluído nos alertas SOS.', sos_actions:'🚨 Ações SOS', sos_select_outputs:'Selecionar luzes, sirenes ou scripts', sos_outputs_help:'Estes dispositivos sempre serão ativados ao usar SOS, mesmo com Argus desarmado.', sos_no_outputs:'Nenhum dispositivo selecionado', sos_call_help:'Se este dispositivo não puder ligar, o Argus enviará um alerta urgente aos dispositivos móveis configurados.', sos_stop:'🛑 PARAR PÂNICO', customize:'Personalizar', done:'Concluído', sos_activated:'SOS ativado', sos_call_confirm:'Ligar para emergência agora ({number})?', sos_error:'Não foi possível ativar SOS: {error}', no_alarm_instance:'Nenhuma instância de alarme disponível', panic_state_unknown:'Não foi possível determinar o estado anterior do pânico. Arme ou desarme manualmente.', panic_stopped:'Pânico parado; restaurado para {state}', panic_stop_error:'Não foi possível parar o pânico: {error}', selector_panic:'🚨 Ações SOS', status_open:'Aberto', status_closed:'Fechado', status_idle:'Em repouso', status_recording:'Gravando', status_home:'Em casa', status_away:'Fora', no_results:'Sem resultados', user_required:'Nome e PIN são obrigatórios', generic_error:'Erro: {error}', clear_history_confirm:'Excluir todo o histórico de atividade?', export_error:'Erro ao exportar: {error}', invalid_config:'Arquivo de configuração inválido.', import_success:'Configuração restaurada. Recarregando…', import_error:'Erro ao importar: {error}', file_read_error:'Não foi possível ler o arquivo.', reset_confirm:'Restaurar Argus aos padrões de fábrica? Todas as configurações, PINs e modos serão perdidos.', reset_success:'Argus foi restaurado. Você tem alguns segundos para desfazer.', reset_error:'Erro ao restaurar: {error}', undo_success:'Restauração desfeita.', undo_error:'Erro ao desfazer: {error}', url_placeholder:'URL do fundo…', loading:'Carregando…', delete:'Excluir', fullscreen_title:'Tela cheia', home_default:'Minha Casa', home_fallback:'Casa', user_default:'Usuário', temp_notification_title:'Argus — Alerta de Temperatura', action_failed:'Não foi possível realizar a ação', cannot_arm:'Não é possível armar', open_sensors_explain:'Os seguintes sensores estão abertos:\n{names}\n\nFeche-os antes de armar ou ative \u201cIgnorar\u201d.', pin_disarm_error:'PIN incorreto ou erro ao desarmar', notification_disarmed:'{user} desarmou o sistema.', notification_armed:'{user} ativou o modo {mode}.', upload_error:'Falha no envio.', delete_file_error:'Não foi possível excluir o arquivo: {error}', file_choice:'\u201c{file}\u201d\n\nUsar como imagem estática (OK) ou vídeo animado (Cancelar)?', first_run_blocked_title:'Acesso negado', first_run_blocked_desc:'É necessário um administrador do Home Assistant para configurar o Argus pela primeira vez.', first_run_welcome:'Obrigado por escolher o Argus Home Hub. Bem-vindo(a).', first_run_desc:'Conclua a configuração para proteger sua casa.', first_run_pin_expl:'O PIN de acesso abre o Argus. O PIN mestre controla armar e desarmar.', first_run_skip:'Ignorar por agora', first_run_start:'Começar com Argus' },
+  it: { connected:'CONNESSO', no_sensors_configured:'Nessun sensore configurato.', all_sensors_bypassed:'Tutti i sensori configurati sono ignorati.', active_profile:'Profilo attivo', change_profile_picture:'Vai a Persone HA ↗', pin_management:'🔑 Gestione PIN', access_pin_lbl:'PIN di Accesso', master_pin_lbl:'PIN Maestro', switch_profile_btn:'👤 Cambia profilo', lang_selector_lbl:'⚙️ Lingua', change_btn:'Modifica', remove_btn:'Rimuovi', role_argus_admin_short:'Admin', role_argus_user_short:'Standard', use_ha_language:'Usa la lingua di Home Assistant', emergency_number_label:'🚨 Numero di emergenza locale', emergency_help:'Configurarlo per la posizione della casa (es. Costa Rica: 911; Spagna: 112). Sarà incluso negli avvisi SOS.', sos_actions:'🚨 Azioni SOS', sos_select_outputs:'Seleziona luci, sirene o script', sos_outputs_help:'Questi dispositivi saranno sempre attivati con SOS, anche se Argus è disarmato.', sos_no_outputs:'Nessun dispositivo selezionato', sos_call_help:'Se questo dispositivo non può effettuare chiamate, Argus invierà un avviso urgente ai dispositivi mobili configurati.', sos_stop:'🛑 FERMA PANICO', customize:'Personalizza', done:'Fine', sos_activated:'SOS attivato', sos_call_confirm:'Chiamare ora i servizi di emergenza ({number})?', sos_error:'Impossibile attivare SOS: {error}', no_alarm_instance:'Nessuna istanza di allarme disponibile', panic_state_unknown:'Impossibile determinare lo stato precedente del panico. Armare o disarmare manualmente.', panic_stopped:'Panico fermato; ripristinato a {state}', panic_stop_error:'Impossibile fermare il panico: {error}', selector_panic:'🚨 Azioni SOS', status_open:'Aperto', status_closed:'Chiuso', status_idle:'Inattivo', status_recording:'Registrazione', status_home:'Casa', status_away:'Fuori', no_results:'Nessun risultato', user_required:'Nome e PIN obbligatori', generic_error:'Errore: {error}', clear_history_confirm:'Eliminare tutta la cronologia attività?', export_error:'Esportazione non riuscita: {error}', invalid_config:'File di configurazione non valido.', import_success:'Configurazione ripristinata. Ricaricamento…', import_error:'Importazione non riuscita: {error}', file_read_error:'Impossibile leggere il file.', reset_confirm:'Ripristinare Argus alle impostazioni di fabbrica? Configurazioni, PIN e modalità saranno persi.', reset_success:'Argus è stato ripristinato. Hai alcuni secondi per annullare.', reset_error:'Ripristino non riuscito: {error}', undo_success:'Ripristino annullato.', undo_error:'Impossibile annullare: {error}', url_placeholder:'URL dello sfondo…', loading:'Caricamento…', delete:'Elimina', fullscreen_title:'Schermo intero', home_default:'Casa mia', home_fallback:'Casa', user_default:'Utente', temp_notification_title:'Argus — Avviso temperatura', action_failed:'Impossibile eseguire l\u2019azione', cannot_arm:'Impossibile armare', open_sensors_explain:'I seguenti sensori sono aperti:\n{names}\n\nChiudili prima di armare o abilita \u201cIgnora\u201d.', pin_disarm_error:'PIN errato o errore durante il disarmo', notification_disarmed:'{user} ha disarmato il sistema.', notification_armed:'{user} ha attivato la modalità {mode}.', upload_error:'Caricamento non riuscito.', delete_file_error:'Impossibile eliminare il file: {error}', file_choice:'\u201c{file}\u201d\n\nUsare come immagine statica (OK) o video animato (Annulla)?', first_run_blocked_title:'Accesso negato', first_run_blocked_desc:'È necessario un amministratore di Home Assistant per configurare Argus per la prima volta.', first_run_welcome:'Grazie per aver scelto Argus Home Hub. Benvenuto/a.', first_run_desc:'Completa la configurazione per proteggere la tua casa.', first_run_pin_expl:'Il PIN di accesso apre Argus. Il PIN master controlla l\'inserimento e il disinserimento.', first_run_skip:'Salta per ora', first_run_start:'Inizia con Argus' },
+  zh: { connected:'已连接', no_sensors_configured:'未配置入侵传感器。', all_sensors_bypassed:'所有配置的传感器均已旁路。', active_profile:'当前个人资料', change_profile_picture:'转到 HA 人员设置 ↗', pin_management:'🔑 PIN 码管理', access_pin_lbl:'访问 PIN', master_pin_lbl:'主 PIN', switch_profile_btn:'👤 切换配置文件', lang_selector_lbl:'⚙️ 语言', change_btn:'更改', remove_btn:'移除', role_argus_admin_short:'管理员', role_argus_user_short:'标准', use_ha_language:'使用 Home Assistant 语言', emergency_number_label:'🚨 本地紧急号码', emergency_help:'请按家庭所在地设置（例如哥斯达黎加：911；西班牙：112）。该号码将包含在 SOS 警报中。', sos_actions:'🚨 SOS 操作', sos_select_outputs:'选择灯、警报器或脚本', sos_outputs_help:'即使 Argus 已撤防，使用 SOS 时这些设备也会始终启动。', sos_no_outputs:'未选择设备', sos_call_help:'如果该设备无法拨号，Argus 将向已配置的移动设备发送紧急警报。', sos_stop:'🛑 停止紧急状态', customize:'自定义', done:'完成', sos_activated:'SOS 已激活', sos_call_confirm:'现在拨打紧急服务电话 ({number})？', sos_error:'无法激活 SOS：{error}', no_alarm_instance:'没有可用的警报实例', panic_state_unknown:'无法确定紧急状态之前的状态。请手动布防或撤防。', panic_stopped:'紧急状态已停止；恢复为 {state}', panic_stop_error:'无法停止紧急状态：{error}', selector_panic:'🚨 SOS 操作', status_open:'打开', status_closed:'关闭', status_idle:'空闲', status_recording:'录制中', status_home:'在家', status_away:'离家', no_results:'无结果', user_required:'需要姓名和 PIN', generic_error:'错误：{error}', clear_history_confirm:'删除全部活动历史记录？', export_error:'导出失败：{error}', invalid_config:'配置文件无效。', import_success:'配置已恢复。正在重新加载…', import_error:'导入失败：{error}', file_read_error:'无法读取文件。', reset_confirm:'将 Argus 恢复为出厂设置？所有配置、PIN 和模式将丢失。', reset_success:'Argus 已重置。你有几秒钟可以撤销。', reset_error:'重置失败：{error}', undo_success:'已撤销重置。', undo_error:'无法撤销重置：{error}', url_placeholder:'背景 URL…', loading:'正在加载…', delete:'删除', fullscreen_title:'全屏', home_default:'我的家', home_fallback:'家', user_default:'用户', temp_notification_title:'Argus — 温度警报', action_failed:'无法完成操作', cannot_arm:'无法布防', open_sensors_explain:'以下传感器处于打开状态：\n{names}\n\n请在布防前关闭它们，或启用\u201c跳过\u201d。', pin_disarm_error:'PIN 错误或撤防时出错', notification_disarmed:'{user} 已撤防系统。', notification_armed:'{user} 已激活 {mode} 模式。', upload_error:'上传失败。', delete_file_error:'无法删除文件：{error}', file_choice:'\u201c{file}\u201d\n\n用作静态图片（确定）还是动画视频（取消）？', first_run_blocked_title:'拒绝访问', first_run_blocked_desc:'首次配置 Argus 需要 Home Assistant 管理员。', first_run_welcome:'感谢您选择 Argus Home Hub。欢迎。', first_run_desc:'完成设置以保护您的家庭。', first_run_pin_expl:'访问 PIN 用于打开 Argus。主 PIN 控制布防和撤防。', first_run_skip:'暂时跳过', first_run_start:'开始使用 Argus' },
+  ru: { connected:'ПОДКЛЮЧЕНО', no_sensors_configured:'Датчики не настроены.', all_sensors_bypassed:'Все настроенные датчики пропущены.', active_profile:'Активный профиль', change_profile_picture:'Перейти к профилям HA ↗', pin_management:'🔑 Управление PIN', access_pin_lbl:'PIN доступа', master_pin_lbl:'Мастер-PIN', switch_profile_btn:'👤 Сменить профиль', lang_selector_lbl:'⚙️ Язык', change_btn:'Изменить', remove_btn:'Удалить', role_argus_admin_short:'Админ', role_argus_user_short:'Стандарт', use_ha_language:'Использовать язык Home Assistant', emergency_number_label:'🚨 Местный номер экстренной службы', emergency_help:'Настройте для местоположения дома (например, Коста-Рика: 911; Испания: 112). Номер будет включён в SOS-оповещения.', sos_actions:'🚨 Действия SOS', sos_select_outputs:'Выбрать свет, сирены или сценарии', sos_outputs_help:'Эти устройства всегда будут включаться при SOS, даже когда Argus снят с охраны.', sos_no_outputs:'Устройства не выбраны', sos_call_help:'Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.', sos_stop:'🛑 ОСТАНОВИТЬ ТРЕВОГУ', customize:'Настроить', done:'Готово', sos_activated:'SOS активирован', sos_call_confirm:'Позвонить в экстренную службу ({number})?', sos_error:'Не удалось активировать SOS: {error}', no_alarm_instance:'Нет доступного экземпляра сигнализации', panic_state_unknown:'Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.', panic_stopped:'Тревога остановлена; восстановлено состояние {state}', panic_stop_error:'Не удалось остановить тревогу: {error}', selector_panic:'🚨 Действия SOS', status_open:'Открыто', status_closed:'Закрыто', status_idle:'Ожидание', status_recording:'Запись', status_home:'Дома', status_away:'Вне дома', no_results:'Нет результатов', user_required:'Требуются имя и PIN', generic_error:'Ошибка: {error}', clear_history_confirm:'Удалить всю историю активности?', export_error:'Ошибка экспорта: {error}', invalid_config:'Недопустимый файл конфигурации.', import_success:'Конфигурация восстановлена. Перезагрузка…', import_error:'Ошибка импорта: {error}', file_read_error:'Не удалось прочитать файл.', reset_confirm:'Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.', reset_success:'Argus сброшен. У вас есть несколько секунд, чтобы отменить это.', reset_error:'Ошибка сброса: {error}', undo_success:'Сброс отменён.', undo_error:'Не удалось отменить сброс: {error}', url_placeholder:'URL фона…', loading:'Загрузка…', delete:'Удалить', fullscreen_title:'Полный экран', home_default:'Мой дом', home_fallback:'Дом', user_default:'Пользователь', temp_notification_title:'Argus — Температурное предупреждение', action_failed:'Не удалось выполнить действие', cannot_arm:'Невозможно поставить на охрану', open_sensors_explain:'Следующие датчики открыты:\n{names}\n\nЗакройте их перед постановкой на охрану или включите «Обход».', pin_disarm_error:'Неверный PIN или ошибка снятия с охраны', notification_disarmed:'{user} снял систему с охраны.', notification_armed:'{user} активировал режим {mode}.', upload_error:'Ошибка загрузки.', delete_file_error:'Не удалось удалить файл: {error}', file_choice:'«{file}»\n\nИспользовать как статичное изображение (ОК) или анимированное видео (Отмена)?', first_run_blocked_title:'Доступ запрещен', first_run_blocked_desc:'Для первой настройки Argus требуется администратор Home Assistant.', first_run_welcome:'Спасибо, что выбрали Argus Home Hub. Добро пожаловать.', first_run_desc:'Завершите настройку для безопасности вашего дома.', first_run_pin_expl:'PIN доступа открывает Argus. Мастер-PIN управляет постановкой и снятием с охраны.', first_run_skip:'Пропустить пока', first_run_start:'Начать с Argus' },
 };
 
 const SETUP_REQUIRED_TEXTS = {
@@ -1627,7 +1627,7 @@ _tmpl.innerHTML = `
   /* Phone layout: controls must never sit below the HUD or be hidden behind
      the artwork. Sensor status becomes a readable section beneath the modes. */
   @media(max-width:700px){
-    .hero-context{width:100%;margin:6px 0 0;justify-content:space-between}.hero-clock{align-items:flex-start;border-right:0;padding-right:0}.hero-clock strong{font-size:1.25rem}.hero-pills{justify-content:flex-end}.hero-pill{padding:6px 8px;font-size:9px}
+    .hero-context{width:100%;margin:6px 0 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}.hero-clock{align-items:center;justify-content:center;text-align:center;border-right:0;padding-right:0}.hero-clock strong{font-size:1.35rem;text-align:center}.hero-clock span{text-align:center}.hero-pills{justify-content:center}.hero-pill{padding:6px 8px;font-size:9px}
     .entry{min-height:0;border-radius:24px}
     .instance-activity-strip{grid-template-columns:1fr;gap:5px;margin-bottom:12px;padding:10px}.instance-activity-item:nth-of-type(n+3){display:none}
     .entry-status-ribbon{top:58px;left:14px;max-width:calc(100% - 28px);padding:6px 9px}.entry-status-name{font-size:11px}.entry-status-event{display:none}
@@ -2604,11 +2604,14 @@ _tmpl.innerHTML = `
 #w-activity,.activity-log{max-height:min(58vh,520px)!important;overflow-y:auto!important;overscroll-behavior:contain!important;scrollbar-gutter:stable!important}
 #w-activity .panel-body,.activity-log .panel-body{max-height:inherit!important;overflow-y:auto!important}
 @media(max-width:760px){
-  .hero{display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;gap:14px!important;padding:18px 14px!important}
-  .hero-left{width:100%!important;min-width:0!important;align-items:center!important}
-  .hero-context{display:grid!important;grid-template-columns:minmax(0,1fr)!important;width:100%!important;margin:4px 0 0!important;justify-items:center!important;align-items:center!important;gap:10px!important}
-  .hero-clock{width:100%!important;min-width:0!important;padding:0!important;border:0!important;display:grid!important;grid-template-columns:1fr!important;justify-items:center!important;align-items:center!important;gap:3px!important;line-height:1.12!important}
-  .hero-clock strong,.hero-clock span{width:auto!important;max-width:100%!important;text-align:center!important;margin:0!important;line-height:1.12!important}
+  .hero{display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;gap:12px!important;padding:18px 14px!important}
+  .hero-left{width:100%!important;min-width:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:8px!important}
+  .hero-left>div{text-align:center!important;display:flex!important;flex-direction:column!important;align-items:center!important}
+  .hero-left h1,.hero-left p{text-align:center!important;margin:0 auto!important}
+  .hero-context{display:flex!important;flex-direction:column!important;width:100%!important;margin:4px 0 0!important;align-items:center!important;justify-content:center!important;gap:8px!important}
+  .hero-clock{width:100%!important;min-width:0!important;padding:0!important;border:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:3px!important;line-height:1.12!important}
+  .hero-clock strong,.hero-clock span,#hero-clock-time,#hero-clock-date{width:100%!important;max-width:100%!important;text-align:center!important;display:block!important;margin:0 auto!important;line-height:1.12!important}
+  #hero-profile-container{display:flex!important;justify-content:center!important;align-items:center!important;width:100%!important;margin:2px auto 0!important}
   .hero-pills{display:grid!important;grid-template-columns:minmax(0,1fr)!important;width:100%!important;min-width:0!important;justify-items:center!important;align-items:center!important;gap:8px!important}
   .hero-pill{width:min(100%,360px)!important;max-width:100%!important;white-space:normal!important;text-align:center!important;justify-content:center!important;align-items:center!important;line-height:1.25!important;margin:0 auto!important}
   .dashboard-instances>.panel-head{flex-direction:column!important;align-items:stretch!important;gap:10px!important}
@@ -3001,7 +3004,8 @@ class ArgusPanel extends HTMLElement {
   }
 
   _getClockFormat() {
-    const fmt = this._ui?.clock_format 
+    const fmt = this._ui?.personalization?.clock_format
+      ?? this._ui?.clock_format 
       ?? this._dashboard?.clock_format 
       ?? 'auto';
     return ['auto', '12h', '24h'].includes(fmt) ? fmt : 'auto';
@@ -3014,24 +3018,28 @@ class ArgusPanel extends HTMLElement {
 
     const locale = this._getLocale();
     const timeZone = this._getTimeZone();
-    const options = { hour: '2-digit', minute: '2-digit' };
+    const options: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: '2-digit' };
     if (timeZone) options.timeZone = timeZone;
 
-    const haFmt = this._hass?.locale?.time_format;
-    if (haFmt === '12' || haFmt === '12h') {
+    const clockPref = this._getClockFormat();
+    const haFmt = String(this._hass?.locale?.time_format || '').toLowerCase();
+
+    if (clockPref === '12h') {
       options.hour12 = true;
-    } else if (haFmt === '24' || haFmt === '24h') {
+    } else if (clockPref === '24h') {
       options.hour12 = false;
-    } else {
-      // For 'language' or 'system', defer to the browser locale default
+    } else if (haFmt.includes('12') || haFmt.includes('am')) {
+      options.hour12 = true;
+    } else if (haFmt.includes('24')) {
+      options.hour12 = false;
     }
 
     try {
       let result = new Intl.DateTimeFormat(locale, options).format(date);
-      // Clean up weird spaces or dots in some locales (e.g. p. m. -> PM)
-      return result.replace(/p\.\s*m\./gi, 'PM').replace(/a\.\s*m\./gi, 'AM').toUpperCase();
+      // Clean up Spanish/French AM/PM abbreviations (e.g. "6:44 p. m." -> "6:44 PM")
+      return result.replace(/p\.\s*m\./gi, 'PM').replace(/a\.\s*m\./gi, 'AM').trim();
     } catch (e) {
-      return date.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
+      return date.toLocaleTimeString(locale, options);
     }
   }
 
@@ -3040,30 +3048,29 @@ class ArgusPanel extends HTMLElement {
     const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
     if (isNaN(date.getTime())) return '';
 
-    const formatSetting = 'auto';
     const locale = this._getLocale();
     const timeZone = this._getTimeZone();
 
-    const options = {
+    const options: Intl.DateTimeFormatOptions = {
       month: '2-digit',
       day: '2-digit',
-      hour: '2-digit',
+      hour: 'numeric',
       minute: '2-digit'
     };
     if (timeZone) options.timeZone = timeZone;
 
-    if (formatSetting === '12h') {
+    const clockPref = this._getClockFormat();
+    const haFmt = String(this._hass?.locale?.time_format || '').toLowerCase();
+
+    if (clockPref === '12h' || (clockPref === 'auto' && (haFmt.includes('12') || haFmt.includes('am')))) {
       options.hour12 = true;
-    } else if (formatSetting === '24h') {
+    } else if (clockPref === '24h' || (clockPref === 'auto' && haFmt.includes('24'))) {
       options.hour12 = false;
-    } else {
-      const haFmt = this._hass?.locale?.time_format;
-      if (haFmt === '12' || haFmt === '12h') options.hour12 = true;
-      else if (haFmt === '24' || haFmt === '24h') options.hour12 = false;
     }
 
     try {
-      return new Intl.DateTimeFormat(locale, options).format(date);
+      let result = new Intl.DateTimeFormat(locale, options).format(date);
+      return result.replace(/p\.\s*m\./gi, 'PM').replace(/a\.\s*m\./gi, 'AM').trim();
     } catch (e) {
       return date.toLocaleString(locale, options);
     }
@@ -3380,6 +3387,8 @@ class ArgusPanel extends HTMLElement {
     (window as any)._argusDashboardEditBtn = '✥ ' + (this._t('edit_dashboard') || 'Editar tablero');
     (window as any)._argusDashboardResetBtn = this._t('reset_dashboard') || 'Restablecer diseño';
     this._applyTranslations();
+    this._updateHeroProfileDisplay();
+    this._updateHeroClock();
     this._renderEntries();
     this._renderModeTabs();
     this._renderModeView();
@@ -4588,7 +4597,7 @@ class ArgusPanel extends HTMLElement {
       art.innerHTML = `
           ${this._renderEntryBackground(weatherState, isNight)}
           ${this._kioskLocked ? `<button class="btn-unlock-kiosk" data-action="unlock-kiosk" style="position:absolute;top:16px;right:16px;z-index:99;padding:8px 14px;background:rgba(220,38,38,0.85);color:white;border:none;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 12px rgba(0,0,0,0.4)">🔓 ${this._escapeHtml(t('unlock_kiosk') || 'Desbloquear kiosco')}</button>` : ''}
-          <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:100;padding:5px 12px;background:rgba(36,188,129,.2);border:1px solid rgba(36,188,129,.4);border-radius:20px;color:#75f4b0;font-size:11px;font-weight:700;backdrop-filter:blur(10px);box-shadow:0 4px 12px rgba(0,0,0,0.2);display:flex;align-items:center;gap:6px;white-space:nowrap;"><div style="width:7px;height:7px;border-radius:50%;background:#75f4b0;box-shadow:0 0 8px #75f4b0;"></div>CONECTADO</div>
+          <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:100;padding:5px 12px;background:rgba(36,188,129,.2);border:1px solid rgba(36,188,129,.4);border-radius:20px;color:#75f4b0;font-size:11px;font-weight:700;backdrop-filter:blur(10px);box-shadow:0 4px 12px rgba(0,0,0,0.2);display:flex;align-items:center;gap:6px;white-space:nowrap;"><div style="width:7px;height:7px;border-radius:50%;background:#75f4b0;box-shadow:0 0 8px #75f4b0;"></div>${this._escapeHtml(t('connected') || 'CONECTADO')}</div>
           ${isFS ? `<button class="ghost entry-exit-fs" data-exit-fullscreen title="${this._escapeHtml(t('fullscreen_title'))}" aria-label="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;top:16px;left:16px;z-index:100;padding:9px 13px;font-size:18px;background:rgba(0,0,0,.55);backdrop-filter:blur(12px);border-radius:14px;color:white;border:1px solid rgba(255,255,255,.25);box-shadow:0 8px 20px rgba(0,0,0,.3)">×</button>` : ''}
           ${!isFS ? `<button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>` : ''}
           ${this._renderBatteryAlerts()}
@@ -4614,7 +4623,7 @@ class ArgusPanel extends HTMLElement {
               <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm">${this._modeButtonIcon('disarm')}<span>${this._escapeHtml(modeLabel('btn_disarmed'))}</span></button>
               ${this._permissions?.sos !== false ? `<button class="btn-sos" data-action="${panicActive ? 'stop-sos' : 'sos'}" data-idx="${idx}">${this._modeButtonIcon('sos')}<span>${panicActive ? t('sos_stop') : t('btn_sos')}</span></button>` : ''}
             </div>
-            <div class="console-sensors">${sensorRows || `<div class="console-empty">${this._escapeHtml(sList.length === 0 ? 'Sin sensores de intrusión configurados.' : 'Todos los sensores configurados están omitidos.')}</div>`}</div>
+            <div class="console-sensors">${sensorRows || `<div class="console-empty">${this._escapeHtml(sList.length === 0 ? (t('no_sensors_configured') || 'Sin sensores de intrusión configurados.') : (t('all_sensors_bypassed') || 'Todos los sensores configurados están omitidos.'))}</div>`}</div>
 
           </div>
       `;
@@ -7664,19 +7673,22 @@ gl_FragColor=vec4(col,alpha);}`;
     prof.picture = resolvedPicture;
 
     const avatarHtml = prof.picture
-      ? `<img id="hero-profile-avatar" src="${this._escapeHtml(prof.picture)}" alt="${this._escapeHtml(prof.name)}" style="width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.20); box-shadow: 0 3px 8px rgba(0,0,0,0.2); flex-shrink: 0;" />`
-      : `<div id="hero-profile-avatar" class="user-avatar" style="width: 34px; height: 34px; border-radius: 50%; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.15); flex-shrink: 0;">${this._escapeHtml(prof.name.substring(0, 2).toUpperCase())}</div>`;
+      ? `<img id="hero-profile-avatar" class="user-avatar" src="${this._escapeHtml(prof.picture)}" alt="${this._escapeHtml(prof.name)}" style="width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.20); box-shadow: 0 3px 8px rgba(0,0,0,0.2); flex-shrink: 0; transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);" />`
+      : `<div id="hero-profile-avatar" class="user-avatar" style="width: 34px; height: 34px; border-radius: 50%; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.15); flex-shrink: 0; transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">${this._escapeHtml(prof.name.substring(0, 2).toUpperCase())}</div>`;
       
     const curLang = this._manualLang || 'auto';
     const canChangePin = prof.role === 'admin' || (prof.permissions && prof.permissions.change_pin);
     const canChangeMasterPin = prof.role === 'admin' || (prof.permissions && prof.permissions.change_master_pin);
+    const roleLabel = prof.role === 'admin' 
+      ? (this._t('role_argus_admin_short') || 'Admin') 
+      : (this._t('role_argus_user_short') || 'Estándar');
 
     container.innerHTML = `
       <div class="hero-profile-pill glass liquid-glass" style="display: flex; align-items: center; gap: 8px; padding: 5px 12px 5px 7px; border-radius: 999px;">
         ${avatarHtml}
         <div style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.15;">
           <span id="hero-profile-name" style="font-size: 12.5px; font-weight: 800; color: var(--v2066-text, #f7f9ff); max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${this._escapeHtml(prof.name)}</span>
-          <span id="hero-profile-role" style="font-size: 8.5px; opacity: 0.65; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;">${prof.role === 'admin' ? 'Admin' : 'Estándar'}</span>
+          <span id="hero-profile-role" style="font-size: 8.5px; opacity: 0.65; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;">${this._escapeHtml(roleLabel)}</span>
         </div>
         <span class="profile-chevron" style="font-size: 7.5px; opacity: 0.65; margin-left: 2px;">▼</span>
       </div>
@@ -7689,45 +7701,45 @@ gl_FragColor=vec4(col,alpha);}`;
             : `<div class="user-avatar" style="width: 44px; height: 44px; border-radius: 50%; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.15); box-shadow: 0 4px 10px rgba(0,0,0,0.25); flex-shrink: 0;">${this._escapeHtml(prof.name.substring(0, 2).toUpperCase())}</div>`
           }
           <div style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0; align-items: flex-start;">
-            <span style="font-size: 9.5px; opacity: 0.5; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em;">${this._t('profile_is_yours') || 'Perfil Activo'}</span>
+            <span style="font-size: 9.5px; opacity: 0.5; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em;">${this._t('profile_is_yours') || this._t('active_profile') || 'Perfil Activo'}</span>
             <span style="font-size: 14px; font-weight: 850; color: var(--v2066-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; text-align: left;">${this._escapeHtml(prof.name)}</span>
             <button id="btn-change-profile-picture" style="font-size: 10.5px; font-weight: 700; color: #30d158; text-decoration: none; display: flex; align-items: center; gap: 3px; margin-top: 3px; background: none; border: none; padding: 0; cursor: pointer;">
               👤 ${this._t('change_profile_picture') || 'Ir a Personas de HA ↗'}
             </button>
           </div>
-          <span class="user-badge ${prof.role === 'admin' ? 'admin' : 'user'}" style="font-size: 8.5px; padding: 3px 8px; font-weight: 800; border-radius: 6px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.03em;">${prof.role === 'admin' ? 'Admin' : 'Estándar'}</span>
+          <span class="user-badge ${prof.role === 'admin' ? 'admin' : 'user'}" style="font-size: 8.5px; padding: 3px 8px; font-weight: 800; border-radius: 6px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.03em;">${this._escapeHtml(roleLabel)}</span>
         </div>
 
         <!-- Language Selector -->
         <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
-          <label style="font-size: 11px; font-weight: 700; opacity: 0.7; display: flex; align-items: center; gap: 5px;">⚙️ Idioma / Language</label>
+          <label style="font-size: 11px; font-weight: 700; opacity: 0.7; display: flex; align-items: center; gap: 5px;">${this._t('lang_selector_lbl') || '⚙️ Idioma / Language'}</label>
           <select id="dropdown-lang-select" class="glass-control" style="width: 100%; height: 36px; border-radius: 10px; padding: 0 10px; font-size: 12px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid var(--v2066-border); color: var(--v2066-text); outline: none; cursor: pointer;">
-            ${LANG_LIST.map(l => `<option value="${l.code}" ${l.code === curLang ? 'selected' : ''}>${l.flag} ${l.code === 'auto' ? 'Automático (HA)' : l.label}</option>`).join('')}
+            ${LANG_LIST.map(l => `<option value="${l.code}" ${l.code === curLang ? 'selected' : ''}>${l.flag} ${l.code === 'auto' ? (this._t('use_ha_language') || 'Automático (HA)') : l.label}</option>`).join('')}
           </select>
         </div>
 
         <!-- PIN management section -->
         ${(canChangePin || canChangeMasterPin) ? `
         <div style="display: flex; flex-direction: column; gap: 6px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px;">
-          <span style="font-size: 11px; font-weight: 700; opacity: 0.7;">🔑 Gestión de Pines</span>
+          <span style="font-size: 11px; font-weight: 700; opacity: 0.7;">${this._t('pin_management') || '🔑 Gestión de Pines'}</span>
           
           <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 2px;">
             ${canChangePin ? `
             <div style="display: flex; align-items: center; justify-content: space-between;">
-              <span style="font-size: 11px; opacity: 0.85;">PIN de Acceso</span>
+              <span style="font-size: 11px; opacity: 0.85;">${this._t('access_pin_lbl') || 'PIN de Acceso'}</span>
               <div style="display: flex; gap: 4px;">
-                <button id="btn-dropdown-change-access-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase;">Cambiar</button>
-                <button id="btn-dropdown-remove-access-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; color: #ff453a !important;">Quitar</button>
+                <button id="btn-dropdown-change-access-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase;">${this._t('change_btn') || 'Cambiar'}</button>
+                <button id="btn-dropdown-remove-access-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; color: #ff453a !important;">${this._t('remove_btn') || 'Quitar'}</button>
               </div>
             </div>
             ` : ''}
             
             ${canChangeMasterPin ? `
             <div style="display: flex; align-items: center; justify-content: space-between;">
-              <span style="font-size: 11px; opacity: 0.85;">PIN Maestro</span>
+              <span style="font-size: 11px; opacity: 0.85;">${this._t('master_pin_lbl') || 'PIN Maestro'}</span>
               <div style="display: flex; gap: 4px;">
-                <button id="btn-dropdown-change-master-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase;">Cambiar</button>
-                <button id="btn-dropdown-remove-master-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; color: #ff453a !important;">Quitar</button>
+                <button id="btn-dropdown-change-master-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase;">${this._t('change_btn') || 'Cambiar'}</button>
+                <button id="btn-dropdown-remove-master-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; color: #ff453a !important;">${this._t('remove_btn') || 'Quitar'}</button>
               </div>
             </div>
             ` : ''}
@@ -7737,7 +7749,7 @@ gl_FragColor=vec4(col,alpha);}`;
 
         <!-- Switch user button -->
         <button id="btn-dropdown-switch-user" class="glass-control" style="width: 100%; min-height: 32px; padding: 6px; border-radius: 10px; font-size: 10.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 6px; background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); color: var(--v2066-text);">
-          👤 Cambiar de Perfil
+          ${this._t('switch_profile_btn') || '👤 Cambiar de Perfil'}
         </button>
       </div>
     `;
@@ -8463,6 +8475,24 @@ gl_FragColor=vec4(col,alpha);}`;
   }
 
   async _runProfileWelcomeAnimation(user) {
+    // Set profile and initialize hero display immediately so the target element is mounted in DOM
+    this._currentProfile = user;
+    this._updateHeroProfileDisplay();
+
+    // Prepare target destination avatar with initial empty opacity state
+    const destEl: HTMLElement | null = this.shadowRoot.getElementById('hero-profile-avatar') 
+      || this.shadowRoot.querySelector('#hero-profile-container .user-avatar')
+      || this.shadowRoot.querySelector('#hero-profile-container img')
+      || this.shadowRoot.querySelector('#hero-profile-container .hero-profile-pill');
+    
+    if (destEl) {
+      destEl.style.opacity = '0';
+      destEl.style.transition = 'opacity 0.25s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    }
+
+    // Ensure dashboard wrap is ready under the overlay
+    this.shadowRoot.querySelector('.wrap')?.classList.add('wrap-ready');
+
     const overlay = document.createElement('div');
     overlay.className = 'argus-welcome-screen active-anim';
     overlay.style.position = 'fixed';
@@ -8476,7 +8506,7 @@ gl_FragColor=vec4(col,alpha);}`;
     overlay.style.pointerEvents = 'none';
 
     const avatarHtml = user.picture
-      ? `<img src="${this._escapeHtml(user.picture)}" alt="" />`
+      ? `<img src="${this._escapeHtml(user.picture)}" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />`
       : this._escapeHtml(user.name.substring(0, 2).toUpperCase());
 
     overlay.innerHTML = `
@@ -8492,8 +8522,7 @@ gl_FragColor=vec4(col,alpha);}`;
 
     // Wait 1 frame so the overlay covers the screen instantly
     await new Promise(r => requestAnimationFrame(r));
-    // NOW it is safe to nuke the login screens beneath without a black blink!
-    // We explicitly avoid removing .argus-welcome-screen so we don't destroy ourselves.
+    // Remove login screens beneath
     this.shadowRoot.querySelectorAll('.argus-profile-overlay, .argus-pin-prompt').forEach(el => el.remove());
 
     // Start loading dashboard in the background so it's ready when animation finishes
@@ -8503,62 +8532,71 @@ gl_FragColor=vec4(col,alpha);}`;
       dashboardPromise = this._load().catch(e => console.error("Load error during animation:", e)).finally(() => { this._dashboardLoading = false; });
     }
 
-    const avatar = overlay.querySelector('#welcome-avatar-flying');
-    const textGroup = overlay.querySelector('#welcome-text-anim');
-    avatar.style.transform = 'scale(0.8)';
-    avatar.style.opacity = '0';
-    textGroup.style.opacity = '0';
-    textGroup.style.transform = 'translateY(15px)';
+    const avatar = overlay.querySelector('#welcome-avatar-flying') as HTMLElement;
+    const textGroup = overlay.querySelector('#welcome-text-anim') as HTMLElement;
+    if (avatar && textGroup) {
+      avatar.style.transform = 'scale(0.8)';
+      avatar.style.opacity = '0';
+      textGroup.style.opacity = '0';
+      textGroup.style.transform = 'translateY(15px)';
 
-    await new Promise(r => requestAnimationFrame(r));
-    
-    avatar.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease';
-    avatar.style.transform = 'scale(1)';
-    avatar.style.opacity = '1';
-    
-    textGroup.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, opacity 0.5s ease 0.15s';
-    textGroup.style.transform = 'translateY(0)';
-    textGroup.style.opacity = '1';
+      await new Promise(r => requestAnimationFrame(r));
+      
+      avatar.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease';
+      avatar.style.transform = 'scale(1)';
+      avatar.style.opacity = '1';
+      
+      textGroup.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, opacity 0.5s ease 0.15s';
+      textGroup.style.transform = 'translateY(0)';
+      textGroup.style.opacity = '1';
 
-    await new Promise(r => setTimeout(r, 1500));
-    await dashboardPromise;
+      await new Promise(r => setTimeout(r, 1300));
+      await dashboardPromise;
 
-    textGroup.style.transition = 'opacity 0.3s ease';
-    textGroup.style.opacity = '0';
+      textGroup.style.transition = 'opacity 0.25s ease';
+      textGroup.style.opacity = '0';
 
-    const rect = avatar.getBoundingClientRect();
-    
-    // Find the destination profile avatar in the header
-    const destEl = this.shadowRoot.querySelector('#hero-profile-container .user-avatar');
-    let destX, destY, targetScale = 0.5;
-    
-    if (destEl) {
-      const destRect = destEl.getBoundingClientRect();
-      destX = destRect.left + destRect.width / 2;
-      destY = destRect.top + destRect.height / 2;
-      targetScale = destRect.width / rect.width;
-    } else {
-      // Fallback if not found (e.g. mobile or different layout)
-      destX = window.innerWidth - 60;
-      destY = 30 + 28;
+      const rect = avatar.getBoundingClientRect();
+      
+      // Accurately measure destination profile avatar position
+      const liveDestEl: HTMLElement | null = this.shadowRoot.getElementById('hero-profile-avatar') 
+        || this.shadowRoot.querySelector('#hero-profile-container .user-avatar')
+        || this.shadowRoot.querySelector('#hero-profile-container img')
+        || this.shadowRoot.querySelector('#hero-profile-container .hero-profile-pill');
+
+      let destX = window.innerWidth / 2, destY = 60, targetScale = 0.35;
+      
+      if (liveDestEl) {
+        const destRect = liveDestEl.getBoundingClientRect();
+        if (destRect.width > 0 && destRect.height > 0) {
+          destX = destRect.left + destRect.width / 2;
+          destY = destRect.top + destRect.height / 2;
+          targetScale = Math.max(0.2, destRect.width / rect.width);
+        }
+      }
+      
+      // Calculate translate values from the center of the welcome avatar
+      const moveX = destX - (rect.left + rect.width / 2);
+      const moveY = destY - (rect.top + rect.height / 2);
+      
+      // Smooth elastic transition to exact top-bar coordinates
+      avatar.style.transition = 'transform 0.65s cubic-bezier(0.25, 1.25, 0.5, 1), opacity 0.35s ease 0.45s';
+      avatar.style.transform = `translate(${moveX}px, ${moveY}px) scale(${targetScale})`;
+      
+      overlay.style.transition = 'background-color 0.55s ease 0.1s';
+      overlay.style.backgroundColor = 'transparent';
+      
+      await new Promise(r => setTimeout(r, 650));
+      
+      // Reveal real top-bar avatar on landing with an elastic bounce
+      if (liveDestEl) {
+        liveDestEl.style.opacity = '1';
+        liveDestEl.style.transform = 'scale(1.1)';
+        setTimeout(() => { if (liveDestEl) liveDestEl.style.transform = 'scale(1)'; }, 180);
+      }
     }
-    
-    // Calculate translate values from the center of the welcome avatar
-    const moveX = destX - (rect.left + rect.width / 2);
-    const moveY = destY - (rect.top + rect.height / 2);
-    
-    // Apply a bounce curve and translate to exact top-bar coordinates
-    avatar.style.transition = 'transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.45s ease 0.2s';
-    avatar.style.transform = `translate(${moveX}px, ${moveY}px) scale(${targetScale})`;
-    
-    // Fade out the overlay's background separately so the avatar remains visible
-    overlay.style.transition = 'background-color 0.6s ease 0.1s';
-    overlay.style.backgroundColor = 'transparent';
-    
-    // Wait for animation to finish completely
-    await new Promise(r => setTimeout(r, 700));
-    
-    // Ensure dashboard is fully loaded in case of slow network
+
+    await new Promise(r => setTimeout(r, 120));
     await dashboardPromise;
     
     this._nukeAllLoginOverlays();
