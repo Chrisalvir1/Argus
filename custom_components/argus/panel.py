@@ -42,7 +42,10 @@ async def async_register_panel(hass: HomeAssistant) -> None:
             # own profile. Sensitive operations remain protected by the
             # WebSocket permission checks; first-run still requires HA admin.
             require_admin=False,
-            config={"domain": DOMAIN},
+            config={
+                "domain": DOMAIN,
+                "card_url": f"/api/{DOMAIN}_static/argus-card.js?v={VERSION}",
+            },
         )
         hass.data[DOMAIN][_PANEL_REGISTERED_KEY] = True
         _LOGGER.info("Argus: architectural frontend registered")

@@ -16,11 +16,6 @@ def compute_event_hash(event: dict[str, Any], prev_hash: str = "") -> str:
         "severity": event.get("severity"),
         "prev_hash": prev_hash,
     }
-    # Add semantic presentation fields only when present so historical chains
-    # created before i18n metadata remain verifiable.
-    if "message_key" in event:
-        payload["message_key"] = event.get("message_key")
-        payload["message_params"] = event.get("message_params", {})
     serialized = json.dumps(payload, sort_keys=True)
     return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
 

@@ -67,13 +67,13 @@ def _entry_by_id(hass: HomeAssistant, entry_id: str):
 
 
 def _resolve_entry_id(hass: HomeAssistant, entry_id: str | None) -> str | None:
-    """Resolve an explicit Argus entry, never the legacy global store.
+    """Return entry_id as-is if provided, or auto-resolve when there is exactly one Argus entry.
 
-    New clients must send ``entry_id``.  The single-entry fallback remains only
-    for older third-party cards during their migration; it is deliberately
-    unavailable as soon as the installation contains multiple Argus entries.
+    This ensures that WebSocket commands called without an explicit entry_id
+    (e.g. from the panel JS) still read/write the correct per-instance storage
+    instead of falling back to the legacy global key 'argus.ui'.
     """
-    if entry_id and _entry_by_id(hass, entry_id):
+    if entry_id:
         return entry_id
     entries = hass.config_entries.async_entries(DOMAIN)
     if len(entries) == 1:
@@ -149,37 +149,9 @@ def _serialize_available_entities(hass: HomeAssistant) -> list[dict]:
     return entities
 
 
-@websocket_api.websocket_command({
-    vol.Required("type"): "argus/list_entries",
-})
-@websocket_api.async_response
-async def ws_argus_list_entries(hass, connection, msg) -> None:
-    """List selectable Argus instances before a profile session is opened.
-
-    This is intentionally the only unscoped panel command.  It returns no UI
-    data, profiles, or configuration; its sole purpose is to let the browser
-    choose an explicit ``entry_id`` for every subsequent command.
-    """
-    if not getattr(connection, "user", None):
-        connection.send_error(msg["id"], "unauthorized", "Unauthenticated Home Assistant connection")
-        return
-    entries = []
-    for entry in hass.config_entries.async_entries(DOMAIN):
-        entity_id = _resolve_alarm_entity_id(hass, entry.entry_id)
-        state = hass.states.get(entity_id) if entity_id else None
-        entries.append({
-            "entry_id": entry.entry_id,
-            "title": entry.title,
-            "entity_id": entity_id,
-            "state": state.state if state else "unavailable",
-        })
-    connection.send_result(msg["id"], {"entries": entries})
-
-
 @callback
 def async_register_websocket_api(hass: HomeAssistant) -> None:
     # New endpoints
-    websocket_api.async_register_command(hass, ws_argus_list_entries)
     websocket_api.async_register_command(hass, ws_argus_login_bootstrap)
     websocket_api.async_register_command(hass, ws_argus_complete_first_run)
     websocket_api.async_register_command(hass, ws_argus_claim_legacy_administration)
@@ -206,6 +178,8 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_argus_restore_config)
     websocket_api.async_register_command(hass, ws_argus_save_advanced_config)
     websocket_api.async_register_command(hass, ws_argus_get_advanced_config)
+    websocket_api.async_register_command(hass, ws_argus_save_automations)
+    websocket_api.async_register_command(hass, ws_argus_get_automations)
     websocket_api.async_register_command(hass, ws_argus_get_media_players)
     websocket_api.async_register_command(hass, ws_argus_update_master_pin)
     websocket_api.async_register_command(hass, ws_argus_update_incident)
@@ -218,7 +192,7 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/import_alarmo",
     vol.Required("alarmo_data"): dict,
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
 })
 @websocket_api.async_response
 async def ws_argus_import_alarmo(hass, connection, msg) -> None:
@@ -255,7 +229,7 @@ async def ws_argus_import_alarmo(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/get_forensic_timeline",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
     vol.Optional("limit", default=100): int,
 })
 @websocket_api.async_response
@@ -274,7 +248,7 @@ async def ws_argus_get_forensic_timeline(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/get_health",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
 })
 @websocket_api.async_response
 async def ws_argus_get_health(hass, connection, msg) -> None:
@@ -317,7 +291,7 @@ async def ws_argus_get_health(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/get_incidents",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
 })
 @websocket_api.async_response
 async def ws_argus_get_incidents(hass, connection, msg) -> None:
@@ -337,7 +311,7 @@ async def ws_argus_get_incidents(hass, connection, msg) -> None:
     vol.Required("incident_id"): str,
     vol.Required("action"): vol.In(["confirm", "false_alarm", "silence_siren", "resolve"]),
     vol.Optional("reason", default=""): str,
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
 })
 @websocket_api.async_response
 async def ws_argus_update_incident(hass, connection, msg) -> None:
@@ -401,14 +375,11 @@ def _redact_user_profile(profile: dict | None) -> dict | None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/dashboard",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
 })
 @websocket_api.async_response
 async def ws_argus_dashboard(hass, connection, msg) -> None:
     entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
-    if not entry_id:
-        connection.send_error(msg["id"], "entry_required", "A valid Argus instance is required")
-        return
     try:
         await _require_permission(hass, connection, entry_id, "view_status")
     except ArgusAuthError as err:
@@ -423,21 +394,19 @@ async def ws_argus_dashboard(hass, connection, msg) -> None:
         and (user.get("pin") or user.get("master_pin_hash") or user.get("access_pin_hash"))
         for user in ui_data.get("users", [])
     )
-    entry = _entry_by_id(hass, entry_id)
-    if not entry:
-        connection.send_error(msg["id"], "entry_required", "A valid Argus instance is required")
-        return
-    entity_id = _resolve_alarm_entity_id(hass, entry.entry_id)
-    state = hass.states.get(entity_id) if entity_id else None
-    entries = [{
-        "entry_id": entry.entry_id,
-        "title": entry.title,
-        "entity_id": entity_id,
-        "state": state.state if state else "unavailable",
-        "attributes": dict(state.attributes) if state else {},
-        "pin_configured": bool(entry.options.get("code") or entry.data.get("code")),
-        "user_pin_configured": has_user_disarm_pin,
-    }]
+    entries = []
+    for entry in hass.config_entries.async_entries(DOMAIN):
+        entity_id = _resolve_alarm_entity_id(hass, entry.entry_id)
+        state = hass.states.get(entity_id) if entity_id else None
+        entries.append({
+            "entry_id": entry.entry_id,
+            "title": entry.title,
+            "entity_id": entity_id,
+            "state": state.state if state else "unavailable",
+            "attributes": dict(state.attributes) if state else {},
+            "pin_configured": bool(entry.options.get("code") or entry.data.get("code")),
+            "user_pin_configured": has_user_disarm_pin,
+        })
     try:
         profile, _ = await _require_argus_session(hass, connection, entry_id)
     except ArgusAuthError:
@@ -454,7 +423,7 @@ async def ws_argus_dashboard(hass, connection, msg) -> None:
 
 _SAVE_UI_SCHEMA = {
     vol.Required("type"): "argus/save_ui",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
     vol.Optional("zones"): list,
     vol.Optional("dashboard"): dict,
     vol.Optional("notif_targets"): list,
@@ -462,10 +431,23 @@ _SAVE_UI_SCHEMA = {
     vol.Optional("panic_outputs"): list,
     vol.Optional("users"): list,
     vol.Optional("home_name"): vol.All(str, vol.Length(max=128)),
+    vol.Optional("background_mode"): vol.In(["weather", "none", "photo", "collage", "video"]),
+    vol.Optional("background_images"): list,
+    vol.Optional("theme"): {
+        vol.Optional("background_mode"): vol.In(["default", "weather", "none", "photo", "collage", "video"]),
+        vol.Optional("background_file"): str,
+    },
+    vol.Optional("temperature_source"): str,
+    vol.Optional("weather_source"): str,
     vol.Optional("intelligent_confirmation"): dict,
     vol.Optional("state_schedule"): list,
     vol.Optional("temp_alert_min"): vol.Any(None, vol.Coerce(float)),
     vol.Optional("temp_alert_max"): vol.Any(None, vol.Coerce(float)),
+    vol.Optional("panel_bg_file"): str,
+    vol.Optional("panel_bg_sound"): bool,
+    vol.Optional("hub_bg_mode"): vol.In(["none", "image", "video"]),
+    vol.Optional("hub_bg_file"): str,
+    vol.Optional("hub_bg_sound"): bool,
     vol.Optional("clock_format"): vol.In(["auto", "12h", "24h"]),
     vol.Optional("language"): vol.Any(None, str),
 }
@@ -475,9 +457,6 @@ _SAVE_UI_SCHEMA = {
 @websocket_api.async_response
 async def ws_argus_save_ui(hass, connection, msg) -> None:
     entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
-    if not entry_id:
-        connection.send_error(msg["id"], "entry_required", "A valid Argus instance is required")
-        return
     try:
         profile, _ = await _require_argus_admin(hass, connection, entry_id)
     except ArgusAuthError as err:
@@ -514,7 +493,7 @@ async def ws_argus_save_ui(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/get_mode_config",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
 })
 @websocket_api.async_response
 async def ws_argus_get_mode_config(hass, connection, msg) -> None:
@@ -531,7 +510,7 @@ async def ws_argus_get_mode_config(hass, connection, msg) -> None:
     vol.Required("type"): "argus/save_mode_config",
     vol.Required("mode"): vol.In(["disarmed", "home", "away", "night", "vacation"]),
     vol.Optional("entity_id", default=""): str,
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
     vol.Required("config"): dict,
 })
 @websocket_api.async_response
@@ -567,7 +546,7 @@ async def ws_argus_save_mode_config(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/get_audit_log",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
 })
 @websocket_api.async_response
 async def ws_argus_get_audit_log(hass, connection, msg) -> None:
@@ -582,7 +561,7 @@ async def ws_argus_get_audit_log(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/get_stats",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
 })
 @websocket_api.async_response
 async def ws_argus_get_stats(hass, connection, msg) -> None:
@@ -615,7 +594,7 @@ async def ws_argus_get_stats(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/clear_audit_log",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
 })
 @websocket_api.async_response
 async def ws_argus_clear_audit_log(hass, connection, msg) -> None:
@@ -632,7 +611,7 @@ async def ws_argus_clear_audit_log(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/export_config",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
 })
 @websocket_api.async_response
 async def ws_argus_export_config(hass, connection, msg) -> None:
@@ -660,7 +639,7 @@ async def ws_argus_export_config(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/restore_config",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
     vol.Required("config"): dict,
 })
 @websocket_api.async_response
@@ -740,7 +719,7 @@ async def ws_argus_restore_config(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/save_advanced_config",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
     vol.Required("config"): dict,
 })
 @websocket_api.async_response
@@ -772,7 +751,7 @@ async def ws_argus_save_advanced_config(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/get_advanced_config",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
 })
 @websocket_api.async_response
 async def ws_argus_get_advanced_config(hass, connection, msg) -> None:
@@ -791,14 +770,41 @@ async def ws_argus_get_advanced_config(hass, connection, msg) -> None:
 
 
 @websocket_api.websocket_command({
-    vol.Required("type"): "argus/get_media_players",
-    vol.Required("entry_id"): str,
+    vol.Required("type"): "argus/save_automations",
+    vol.Optional("entry_id"): str,
+    vol.Required("automations"): list,
 })
 @websocket_api.async_response
-async def ws_argus_get_media_players(hass, connection, msg) -> None:
-    if not _resolve_entry_id(hass, msg.get("entry_id")):
-        connection.send_error(msg["id"], "entry_required", "A valid Argus instance is required")
+async def ws_argus_save_automations(hass, connection, msg) -> None:
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
+    try:
+        await _require_argus_admin(hass, connection, entry_id)
+    except ArgusAuthError as err:
+        connection.send_error(msg["id"], err.code, err.message)
         return
+    await async_save_ui_data(hass, {"automations": copy.deepcopy(msg["automations"])}, entry_id)
+    async_dispatcher_send(hass, SIGNAL_CONFIG_UPDATED, entry_id)
+    connection.send_result(msg["id"], {"success": True})
+
+
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/get_automations",
+    vol.Optional("entry_id"): str,
+})
+@websocket_api.async_response
+async def ws_argus_get_automations(hass, connection, msg) -> None:
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
+    try:
+        await _require_argus_admin(hass, connection, entry_id)
+    except ArgusAuthError as err:
+        connection.send_error(msg["id"], err.code, err.message)
+        return
+    connection.send_result(msg["id"], (await async_load_ui_data(hass, entry_id)).get("automations", []))
+
+
+@websocket_api.websocket_command({vol.Required("type"): "argus/get_media_players"})
+@websocket_api.async_response
+async def ws_argus_get_media_players(hass, connection, msg) -> None:
     try:
         _require_ha_admin(connection)
     except ArgusAuthError as err:
@@ -920,7 +926,7 @@ async def ws_argus_verify_master_pin_for_screen_unlock(hass, connection, msg) ->
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/login_bootstrap",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
 })
 @websocket_api.async_response
 async def ws_argus_login_bootstrap(hass, connection, msg) -> None:
@@ -928,7 +934,22 @@ async def ws_argus_login_bootstrap(hass, connection, msg) -> None:
 
     ha_user_id, _ = _get_ha_actor(connection)
     if entry_id is None:
-        connection.send_error(msg["id"], "entry_required", "A valid Argus instance is required")
+        # The panel is registered before a config entry exists. Avoid falling
+        # back to legacy global storage when there is no alarm instance.
+        connection.send_result(msg["id"], {
+            "configuration_missing": True,
+            "first_run": False,
+            "legacy_claim_needed": False,
+            "users": [],
+            "has_active_session": False,
+            "active_argus_user_id": None,
+            "ha_user_id": ha_user_id,
+            "background_mode": "none",
+            "background_images": [],
+            "weather_source": None,
+            "temperature_source": None,
+            "language": None,
+        })
         return
 
     sm = async_get_session_manager(hass)
@@ -981,9 +1002,11 @@ async def ws_argus_login_bootstrap(hass, connection, msg) -> None:
                 has_real_admin = True
                 break
 
-    # The React panel intentionally has one fixed background.  Do not expose
-    # stored wallpaper, weather, or per-profile theme data to a new client.
     user_theme = {"background_mode": "default", "background_file": ""}
+    for u in ui_data.get("users", []):
+        if u.get("ha_user_id") == ha_user_id:
+            user_theme = u.get("theme", user_theme)
+            break
 
     connection.send_result(msg["id"], {
         "first_run": ui_data.get("first_run", False),
@@ -992,6 +1015,15 @@ async def ws_argus_login_bootstrap(hass, connection, msg) -> None:
         "has_active_session": bool(session),
         "active_argus_user_id": session.argus_user_id if session else None,
         "ha_user_id": ha_user_id,
+        "background_mode": ui_data.get("background_mode"),
+        "background_images": ui_data.get("background_images"),
+        "panel_bg_file": ui_data.get("panel_bg_file"),
+        "panel_bg_sound": ui_data.get("panel_bg_sound"),
+        "hub_bg_mode": ui_data.get("hub_bg_mode"),
+        "hub_bg_file": ui_data.get("hub_bg_file"),
+        "hub_bg_sound": ui_data.get("hub_bg_sound"),
+        "weather_source": ui_data.get("weather_source"),
+        "temperature_source": ui_data.get("temperature_source"),
         "language": ui_data.get("language"),
         "user_theme": user_theme,
     })
@@ -999,7 +1031,7 @@ async def ws_argus_login_bootstrap(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/complete_first_run",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
     vol.Required("admin_name"): str,
     vol.Optional("master_pin"): str,
     vol.Optional("access_pin"): str,
@@ -1064,7 +1096,7 @@ async def ws_argus_complete_first_run(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/claim_legacy_administration",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
 })
 @websocket_api.async_response
 async def ws_argus_claim_legacy_administration(hass, connection, msg) -> None:
@@ -1129,7 +1161,7 @@ async def ws_argus_claim_legacy_administration(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/verify_access_pin",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
     vol.Required("argus_user_id"): str,
     vol.Required("pin"): str,
 })
@@ -1182,7 +1214,7 @@ async def ws_argus_verify_access_pin(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/select_profile",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
     vol.Required("argus_user_id"): str,
 })
 @websocket_api.async_response
@@ -1228,7 +1260,7 @@ async def ws_argus_select_profile(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/logout_profile",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
 })
 @websocket_api.async_response
 async def ws_argus_logout_profile(hass, connection, msg) -> None:
@@ -1245,7 +1277,7 @@ async def ws_argus_logout_profile(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/perform_alarm_action",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
     vol.Required("action"): vol.In(["arm_home", "arm_away", "arm_night", "arm_vacation", "disarm", "sos"]),
     vol.Optional("code"): str,
 })
@@ -1301,7 +1333,7 @@ async def ws_argus_perform_alarm_action(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/get_ha_users",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
 })
 @websocket_api.async_response
 async def ws_argus_get_ha_users(hass, connection, msg) -> None:
@@ -1334,7 +1366,7 @@ async def ws_argus_get_ha_users(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/get_ha_persons",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
 })
 @websocket_api.async_response
 async def ws_argus_get_ha_persons(hass, connection, msg) -> None:
@@ -1358,7 +1390,7 @@ async def ws_argus_get_ha_persons(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/save_user_access_pin",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
     vol.Required("argus_user_id"): str,
     vol.Required("pin"): str,
 })
@@ -1405,7 +1437,7 @@ async def ws_argus_save_user_access_pin(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/sync_presence_rules",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
     vol.Required("rules"): list,
 })
 @websocket_api.async_response
@@ -1425,7 +1457,7 @@ async def ws_argus_sync_presence_rules(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/get_profile_theme",
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
 })
 @websocket_api.async_response
 async def ws_argus_get_profile_theme(hass, connection, msg) -> None:
@@ -1436,13 +1468,14 @@ async def ws_argus_get_profile_theme(hass, connection, msg) -> None:
         connection.send_error(msg["id"], err.code, err.message)
         return
     
-    connection.send_result(msg["id"], {"theme": {"background_mode": "default", "background_file": ""}})
+    theme = profile.get("theme", {"background_mode": "default", "background_file": ""})
+    connection.send_result(msg["id"], {"theme": theme})
 
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/save_profile_theme",
     vol.Required("theme"): dict,
-    vol.Required("entry_id"): str,
+    vol.Optional("entry_id"): str,
 })
 @websocket_api.async_response
 async def ws_argus_save_profile_theme(hass, connection, msg) -> None:
@@ -1453,4 +1486,21 @@ async def ws_argus_save_profile_theme(hass, connection, msg) -> None:
         connection.send_error(msg["id"], err.code, err.message)
         return
     
-    connection.send_error(msg["id"], "unsupported", "Argus uses a fixed default background")
+    ui_data = await async_load_ui_data(hass, entry_id)
+    users = ui_data.get("users", [])
+    
+    theme = msg["theme"]
+    for u in users:
+        if u.get("id") == profile.get("id"):
+            u["theme"] = theme
+            u["background_mode"] = theme.get("background_mode", "weather")
+            u["background_images"] = theme.get("background_images", [])
+            u["panel_bg_file"] = theme.get("panel_bg_file", "")
+            u["panel_bg_sound"] = bool(theme.get("panel_bg_sound", False))
+            u["hub_bg_mode"] = theme.get("hub_bg_mode", "none")
+            u["hub_bg_file"] = theme.get("hub_bg_file", "")
+            u["hub_bg_sound"] = bool(theme.get("hub_bg_sound", False))
+            break
+            
+    await async_save_ui_data(hass, {"users": users}, entry_id)
+    connection.send_result(msg["id"], {"success": True})

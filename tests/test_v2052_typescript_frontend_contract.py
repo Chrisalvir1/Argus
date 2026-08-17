@@ -29,14 +29,10 @@ class TestV2051TypeScriptFrontendContract(unittest.TestCase):
             self.assertTrue(path.is_file(), path)
             self.assertNotIn(":any", path.read_text().replace(" ", ""))
 
-    def test_react_is_the_only_runtime_layout_layer(self):
-        app = (SRC / "app" / "index.ts").read_text()
-        self.assertFalse((SRC / "legacy" / "bridge.ts").exists())
-        self.assertIn("customElements.define('argus-panel-v2018',ArgusReactPanel)", app)
-        self.assertNotIn("legacy/argus-panel", app)
-        self.assertNotIn("legacy/bridge", app)
-        self.assertNotIn("applyLegacyBeforeTypedClients", app)
-        self.assertNotIn("applyLegacyAfterTypedClients", app)
+    def test_legacy_modules_are_centralized_in_one_bridge(self):
+        bridge = (SRC / "legacy" / "bridge.ts").read_text()
+        self.assertIn("applyLegacyBeforeTypedClients", bridge)
+        self.assertIn("applyLegacyAfterTypedClients", bridge)
         executable = (WWW / "argus-bootstrap.js").read_text().split("/*", 1)[0]
         self.assertNotIn("applyMotionSystem", executable)
         self.assertNotIn("applyStableInstancesRender", executable)

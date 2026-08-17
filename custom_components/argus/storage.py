@@ -340,8 +340,7 @@ async def async_restore_ui_data(
 
 async def async_append_audit_log(
     hass: HomeAssistant, action: str, detail: str = "", user: str = "Argus",
-    *, severity: str = "info", metadata: dict | None = None, message_key: str | None = None,
-    message_params: dict | None = None, entry_id: str | None = None
+    *, severity: str = "info", metadata: dict | None = None, entry_id: str | None = None
 ) -> None:
     async with _storage_lock(hass):
         current = await async_load_ui_data(hass, entry_id)
@@ -357,10 +356,6 @@ async def async_append_audit_log(
             "user": str(user)[:128],
             "severity": severity if severity in {"info", "warning", "critical"} else "info",
             "metadata": copy.deepcopy(metadata or {}),
-            # Keep presentation semantic. `detail` remains an immutable forensic
-            # record and is only a legacy/secondary fallback in the frontend.
-            "message_key": str(message_key or f"activity.{action}")[:96],
-            "message_params": copy.deepcopy(message_params or {}),
         }
         entry_data["hash"] = compute_event_hash(entry_data, prev_hash)
         log.insert(0, entry_data)

@@ -21,40 +21,12 @@ components_mock = MagicMock()
 components_mock.websocket_api = ws_mock
 sys.modules["homeassistant.components"] = components_mock
 sys.modules["homeassistant.components.http"] = ha_mock
-alarm_panel_mock = MagicMock()
-alarm_panel_mock.AlarmControlPanelState = MagicMock()
-sys.modules["homeassistant.components.alarm_control_panel"] = alarm_panel_mock
 sys.modules["voluptuous"] = ha_mock
 sys.modules["aiohttp"] = ha_mock
 sys.modules["aiohttp.web"] = ha_mock
 
 
 class TestV190Functional(unittest.IsolatedAsyncioTestCase):
-
-    async def test_sos_output_profile_saves_selected_outputs_for_active_entry(self):
-        """The SOS picker sends its explicit entry and persists valid outputs."""
-        from custom_components.argus.output_profiles import ws_argus_save_panic_output_profile
-
-        hass = MagicMock()
-        hass.states.get.return_value = None
-        connection = MagicMock()
-        saved = {"panic_outputs": ["light.hall"], "panic_output_settings": {"light.hall": {"flash_mode": "none"}}}
-        with patch("custom_components.argus.output_profiles.argus_ws._resolve_entry_id", return_value="entry-active"), \
-             patch("custom_components.argus.output_profiles._require_permission", new_callable=AsyncMock) as require, \
-             patch("custom_components.argus.output_profiles.async_save_ui_data", new_callable=AsyncMock, return_value=saved) as save, \
-             patch("custom_components.argus.output_profiles.async_dispatcher_send"):
-            await ws_argus_save_panic_output_profile(hass, connection, {
-                "id": 17, "type": "argus/save_panic_output_profile", "entry_id": "entry-active",
-                "outputs": ["light.hall", "sensor.invalid"], "settings": {"light.hall": {"flash_mode": "none"}},
-            })
-
-        require.assert_awaited_once_with(hass, connection, "entry-active", "manage_sos")
-        self.assertEqual(save.await_args.args[1]["panic_outputs"], ["light.hall"])
-        self.assertEqual(save.await_args.args[2], "entry-active")
-        connection.send_result.assert_called_once_with(17, {
-            "success": True, "outputs": ["light.hall"],
-            "settings": {"light.hall": {"flash_mode": "none"}},
-        })
     
     @patch("custom_components.argus.websocket_api._resolve_entry_id")
     @patch("custom_components.argus.websocket_api._require_permission", new_callable=AsyncMock)
@@ -158,10 +130,9 @@ class TestV190Functional(unittest.IsolatedAsyncioTestCase):
         # Verify track state change was called
         mock_track.assert_called_once_with(hass, ["person.john"], pm._async_state_changed)
 
-    @patch("custom_components.argus.websocket_api._resolve_entry_id", return_value="test_entry")
     @patch("custom_components.argus.websocket_api._require_ha_admin")
     @patch("custom_components.argus.websocket_api._require_argus_admin", new_callable=AsyncMock)
-    async def test_get_ha_users_persons_auth(self, mock_require_argus, mock_require_ha, mock_resolve):
+    async def test_get_ha_users_persons_auth(self, mock_require_argus, mock_require_ha):
         """Test get_ha_users and get_ha_persons require HA and Argus admin."""
         from custom_components.argus.websocket_api import ws_argus_get_ha_users, ws_argus_get_ha_persons, ArgusAuthError
         
@@ -221,12 +192,11 @@ class TestV190Functional(unittest.IsolatedAsyncioTestCase):
         await ws_argus_get_ha_persons(hass, connection, msg)
         connection.send_result.assert_called_with(13, {"ha_persons": [{"entity_id": "person.john", "name": "John Doe", "user_id": None}]})
 
-    @patch("custom_components.argus.websocket_api._resolve_entry_id", return_value="test_entry")
     @patch("custom_components.argus.websocket_api._require_argus_session", new_callable=AsyncMock)
     @patch("custom_components.argus.websocket_api._require_permission", new_callable=AsyncMock)
     @patch("custom_components.argus.websocket_api._resolve_alarm_entity_id")
     @patch("custom_components.argus.websocket_api.async_append_audit_log", new_callable=AsyncMock)
-    async def test_perform_alarm_action(self, mock_audit, mock_resolve_alarm, mock_require_perm, mock_require_session, mock_resolve_entry):
+    async def test_perform_alarm_action(self, mock_audit, mock_resolve_alarm, mock_require_perm, mock_require_session):
         from custom_components.argus.websocket_api import ws_argus_perform_alarm_action
         hass = AsyncMock()
         connection = MagicMock()
