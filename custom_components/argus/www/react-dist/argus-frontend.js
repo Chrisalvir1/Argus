@@ -2425,10 +2425,103 @@ Ep.innerHTML = `
   .liquid-btn:active:not(:disabled) { transform: scale(0.96); }
   .liquid-btn i{font-size:16px}
 
-  .btn-home.active{--btn-bg:rgba(251,140,0,0.22); --btn-shadow:rgba(251,140,0,0.3)}
-  .btn-away.active{--btn-bg:rgba(229,57,53,0.22); --btn-shadow:rgba(229,57,53,0.3)}
-  .btn-night.active{--btn-bg:rgba(30,136,229,0.22); --btn-shadow:rgba(30,136,229,0.3)}
-  .btn-vacation.active{--btn-bg:rgba(156,39,176,0.22); --btn-shadow:rgba(156,39,176,0.3)}
+  .btn-home {
+    background: linear-gradient(135deg, rgba(251, 140, 0, 0.20) 0%, rgba(251, 140, 0, 0.06) 100%) !important;
+    border: 1px solid rgba(251, 140, 0, 0.38) !important;
+    color: #ffe0b2 !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  }
+  .btn-home.active {
+    background: linear-gradient(135deg, #fb8c00 0%, #d97706 100%) !important;
+    border: 1px solid rgba(254, 215, 170, 0.85) !important;
+    box-shadow: 0 14px 36px rgba(251, 140, 0, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+  }
+
+  .btn-away {
+    background: linear-gradient(135deg, rgba(229, 57, 53, 0.20) 0%, rgba(229, 57, 53, 0.06) 100%) !important;
+    border: 1px solid rgba(229, 57, 53, 0.38) !important;
+    color: #ffcdd2 !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  }
+  .btn-away.active {
+    background: linear-gradient(135deg, #e53935 0%, #b91c1c 100%) !important;
+    border: 1px solid rgba(254, 202, 202, 0.85) !important;
+    box-shadow: 0 14px 36px rgba(229, 57, 53, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+  }
+
+  .btn-night {
+    background: linear-gradient(135deg, rgba(30, 136, 229, 0.20) 0%, rgba(30, 136, 229, 0.06) 100%) !important;
+    border: 1px solid rgba(30, 136, 229, 0.38) !important;
+    color: #bbdefb !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  }
+  .btn-night.active {
+    background: linear-gradient(135deg, #1e88e5 0%, #1d4ed8 100%) !important;
+    border: 1px solid rgba(191, 219, 254, 0.85) !important;
+    box-shadow: 0 14px 36px rgba(30, 136, 229, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+  }
+
+  .btn-vacation {
+    background: linear-gradient(135deg, rgba(156, 39, 176, 0.20) 0%, rgba(156, 39, 176, 0.06) 100%) !important;
+    border: 1px solid rgba(156, 39, 176, 0.38) !important;
+    color: #e1bee7 !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  }
+  .btn-vacation.active {
+    background: linear-gradient(135deg, #9c27b0 0%, #7e22ce 100%) !important;
+    border: 1px solid rgba(245, 208, 254, 0.85) !important;
+    box-shadow: 0 14px 36px rgba(156, 39, 176, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+  }
+
+  .btn-disarm {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(16, 185, 129, 0.05) 100%) !important;
+    border: 1px solid rgba(16, 185, 129, 0.35) !important;
+    color: #a7f3d0 !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+    margin-top: 4px;
+  }
+  .btn-disarm.active {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    border: 1px solid rgba(167, 243, 208, 0.85) !important;
+    box-shadow: 0 14px 36px rgba(16, 185, 129, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+  }
+
+  .btn-sos {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.22) 0%, rgba(185, 28, 28, 0.08) 100%) !important;
+    border: 1px solid rgba(252, 165, 165, 0.35) !important;
+    color: #fca5a5 !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  }
+  .btn-sos.active, .btn-sos.flashing {
+    animation: sosFlashingPulse 0.8s infinite ease-in-out !important;
+  }
+
+  @keyframes sosFlashingPulse {
+    0%, 100% {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+      border-color: #fca5a5 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 32px rgba(239, 68, 68, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+      transform: scale(1.02);
+    }
+    50% {
+      background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%) !important;
+      border-color: rgba(239, 68, 68, 0.5) !important;
+      color: rgba(255, 255, 255, 0.8) !important;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+      transform: scale(0.98);
+    }
+  }
   .btn-disarm {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
     border: 1px solid rgba(167, 243, 208, 0.75) !important;
@@ -4744,7 +4837,7 @@ class Kg extends HTMLElement {
               <button class="liquid-btn btn-night ${D === "armed_night" ? "active" : ""} ${W && D === "armed_night" ? "buzz-orange" : ""}" data-idx="${w}" data-action="night">${this._modeButtonIcon("night")}<span>${this._escapeHtml(h("btn_night"))}</span></button>
               <button class="liquid-btn btn-vacation ${D === "armed_vacation" ? "active" : ""} ${W && D === "armed_vacation" ? "buzz-orange" : ""}" data-idx="${w}" data-action="vacation">${this._modeButtonIcon("vacation")}<span>${this._escapeHtml(h("btn_vacation"))}</span></button>
               <button class="liquid-btn btn-disarm ${D === "disarmed" ? "active" : ""}" data-idx="${w}" data-action="disarm">${this._modeButtonIcon("disarm")}<span>${this._escapeHtml(h("btn_disarmed"))}</span></button>
-              ${this._permissions?.sos !== !1 ? `<button class="btn-sos" data-action="${X ? "stop-sos" : "sos"}" data-idx="${w}">${this._modeButtonIcon("sos")}<span>${l(X ? "sos_stop" : "btn_sos")}</span></button>` : ""}
+              ${this._permissions?.sos !== !1 ? `<button class="liquid-btn btn-sos ${X || H ? "active flashing" : ""}" data-action="${X ? "stop-sos" : "sos"}" data-idx="${w}">${this._modeButtonIcon("sos")}<span>${l(X ? "sos_stop" : "btn_sos")}</span></button>` : ""}
             </div>
             <div class="console-sensors">${ke || `<div class="console-empty">${this._escapeHtml(Y.length === 0 ? l("no_sensors_configured") || "Sin sensores de intrusión configurados." : l("all_sensors_bypassed") || "Todos los sensores configurados están omitidos.")}</div>`}</div>
 
@@ -17474,9 +17567,7 @@ function df(a, r) {
   return String(r?.state || r?.alarm_state || r?.attributes?.state || a._hass?.states?.[i]?.state || "").toLowerCase();
 }
 function sl(a, r, i) {
-  a.classList.toggle("argus-action-active", i), a.dataset.argusAction = r;
-  const o = r === "sos" ? "linear-gradient(110deg,#ff453a,#ff2d55)" : r === "disarm" ? "linear-gradient(110deg,#34c759,#16863a)" : "linear-gradient(110deg,rgba(67,180,255,.72),rgba(52,120,212,.68))";
-  a.style.setProperty("background", i ? o : "rgba(255,255,255,.105)", "important"), a.style.setProperty("background-image", i ? o : "linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.055))", "important"), a.style.setProperty("border", i ? "1px solid rgba(255,255,255,.38)" : "1px solid rgba(255,255,255,.14)", "important"), a.style.setProperty("box-shadow", i ? "0 8px 24px rgba(0,0,0,.24)" : "inset 0 1px 0 rgba(255,255,255,.08)", "important");
+  a.classList.toggle("active", i), a.classList.toggle("argus-action-active", i), a.dataset.argusAction = r, r === "sos" && a.classList.toggle("flashing", i);
 }
 function uf(a) {
   const r = a.shadowRoot;
