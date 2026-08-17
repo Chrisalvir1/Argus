@@ -1121,6 +1121,20 @@ Object.assign(TEXTS.it, {"connected": "CONNESSO", "instances": "Istanze Attive",
 Object.assign(TEXTS.zh, {"connected": "已连接", "instances": "活动实例", "modes": "警报模式", "automations": "自动化", "linked_rules": "关联到 Argus 的自动化规则", "settings": "设置", "activity_log": "活动日志", "history_refresh": "刷新", "users_title": "访问控制与用户", "access_title": "访问控制与用户", "access_desc": "全局安全管理、主 PIN 码与管理员。", "role_argus_admin": "Argus 管理员", "role_argus_standard": "标准用户", "role_argus_admin_short": "管理员", "role_argus_user_short": "标准", "ha_account_linked": "Home Assistant 账户：{name}", "ha_account_unavailable": "未关联 HA 账户", "user_no_pin": "无 PIN", "exp_indefinite": "无限期", "exp_temporary": "临时", "active_until": "有效期至", "expired": "已过期", "disarmed": "已撤防", "armed_home": "在家", "armed_away": "离家", "armed_night": "夜间", "armed_vacation": "度假", "mode_home": "在家", "mode_away": "离家", "mode_night": "夜间", "mode_vacation": "度假", "btn_home": "🏠 在家", "btn_away": "🔒 离家", "btn_night": "🌙 夜间", "btn_vacation": "✈️ 度假", "btn_disarmed": "已撤防", "btn_sos": "🚨 SOS / 紧急求助", "system_armed": "系统已布防", "system_disarmed": "系统已撤防", "home_name_lbl": "房屋名称", "sensor_section": "入侵传感器", "siren_section": "警报器", "bypass_lbl": "🚫 旁路", "times_section": "⏱️ 时间与延迟", "lock_if_open": "打开时阻止布防", "wait_if_open": "等待传感器关闭", "none_selected": "未选择", "select_btn": "+ 选择", "add_btn": "+ 添加", "status_open": "打开", "status_closed": "关闭", "status_idle": "就绪", "status_recording": "录制中", "status_home": "在家", "status_away": "离家", "log_detail_pin_reset": "主 PIN 码已由 HA 管理员重置", "log_detail_pin_reset_failed": "PIN 重置请求已被拒绝", "log_detail_disarm": "系统已撤防", "log_detail_triggered": "警报已触发", "log_sensor": "传感器", "log_mode": "模式", "log_action_user_added": "用户已添加", "log_action_user_deleted": "用户已删除", "log_action_sos": "SOS 警报已激活", "log_action_sos_stopped": "SOS 警报已停止", "log_action_automation": "自动化已执行", "log_action_analysis": "安全分析", "log_action_rejected": "操作被拒绝", "log_action_user_logged_in": "用户登录", "log_action_profile_selected": "配置文件已选择", "log_action_schedule_applied": "计划已应用", "log_action_mode_changed": "模式已更改", "log_action_state_restored": "本地状态已恢复", "manual_arm": "手动布防", "waiting_sensors": "正在等待传感器", "waiting_sensors_count": "正在等待 {count} 个传感器", "lbl_aesthetic_custom": "更多设置 / SOS", "external_panels": "外部报警面板", "light_siren_color": "警报颜色", "light_siren_flash": "可用时柔和闪烁", "select_entry_sensors": "选择进入传感器", "entry_sensors": "进入传感器", "arm_time": "布防时间 (秒)", "disarm_time": "进入延迟 (秒)"});
 
 Object.assign(TEXTS.ru, {"connected": "ПОДКЛЮЧЕНО", "instances": "Активные экземпляры", "modes": "Режимы охраны", "automations": "Автоматизации", "linked_rules": "Правила автоматизации Argus", "settings": "Настройки", "activity_log": "Журнал активности", "history_refresh": "Обновить", "users_title": "Контроль доступа и пользователи", "access_title": "Контроль доступа и пользователи", "access_desc": "Глобальное управление безопасностью, мастер-PIN и администраторы.", "role_argus_admin": "Администратор Argus", "role_argus_standard": "Стандартный пользователь", "role_argus_admin_short": "Админ", "role_argus_user_short": "Стандарт", "ha_account_linked": "Учетная запись HA: {name}", "ha_account_unavailable": "Без привязки к HA", "user_no_pin": "Без PIN", "exp_indefinite": "Бессрочно", "exp_temporary": "Временно", "active_until": "Действителен до", "expired": "Истёк", "disarmed": "Снято с охраны", "armed_home": "Дома", "armed_away": "Вне дома", "armed_night": "Ночь", "armed_vacation": "Отпуск", "mode_home": "Дома", "mode_away": "Вне дома", "mode_night": "Ночь", "mode_vacation": "Отпуск", "btn_home": "🏠 ДОМА", "btn_away": "🔒 ВНЕ ДОМА", "btn_night": "🌙 НОЧЬ", "btn_vacation": "✈️ ОТПУСК", "btn_disarmed": "СНЯТО С ОХРАНЫ", "btn_sos": "🚨 SOS / ТРЕВОГА", "system_armed": "СИСТЕМА НА ОХРАНЕ", "system_disarmed": "СИСТЕМА СНЯТА С ОХРАНЫ", "home_name_lbl": "Имя дома", "sensor_section": "Датчики проникновения", "siren_section": "Сирены", "bypass_lbl": "🚫 Обход", "times_section": "⏱️ Таймеры и задержки", "lock_if_open": "Блокировать при открытии", "wait_if_open": "Ожидать закрытия датчиков", "none_selected": "Не выбрано", "select_btn": "+ Выбрать", "add_btn": "+ Добавить", "status_open": "Открыто", "status_closed": "Закрыто", "status_idle": "Готов", "status_recording": "Запись", "status_home": "Дома", "status_away": "Вне дома", "log_detail_pin_reset": "Мастер-PIN сброшен администратором HA", "log_detail_pin_reset_failed": "Попытка сброса PIN отклонена", "log_detail_disarm": "Система снята с охраны", "log_detail_triggered": "Тревога сработала", "log_sensor": "Датчик", "log_mode": "Режим", "log_action_user_added": "Пользователь добавлен", "log_action_user_deleted": "Пользователь удален", "log_action_sos": "Тревога SOS активирована", "log_action_sos_stopped": "Тревога SOS остановлена", "log_action_automation": "Автоматизация выполнена", "log_action_analysis": "Анализ безопасности", "log_action_rejected": "Действие отклонено", "log_action_user_logged_in": "Вход пользователя", "log_action_profile_selected": "Профиль выбран", "log_action_schedule_applied": "Расписание применено", "log_action_mode_changed": "Режим изменен", "log_action_state_restored": "Локальное состояние восстановлено", "manual_arm": "Ручная постановка", "waiting_sensors": "ОЖИДАНИЕ ДАТЧИКОВ", "waiting_sensors_count": "ОЖИДАНИЕ {count} ДАТЧИК(ОВ)", "lbl_aesthetic_custom": "Настройки / SOS", "external_panels": "Внешние панели сигнализации", "light_siren_color": "Цвет тревоги", "light_siren_flash": "Мягкое мигание при наличии", "select_entry_sensors": "Выбрать датчики входа", "entry_sensors": "Датчики входа", "arm_time": "Время охраны (с)", "disarm_time": "Задержка входа (с)"});
+
+Object.assign(TEXTS.es = TEXTS.es || {}, {"light_steady_safe": "Luz fija segura", "light_color_and_flash": "Color y destello seguro", "light_safe_flash": "Destello seguro", "test_safe_flash": "Probar destello seguro", "testing_safe_flash": "Probando de forma segura…", "light_onoff_only_safe_note": "Esta luz solo admite encendido/apagado. Argus la mantendrá encendida de forma fija por seguridad (sin ciclos de energía).", "no_flash": "Sin destello", "flash_gentle": "Suave", "flash_rapid": "Rápido", "flash_label": "Destello", "color_label": "Color", "size": "Tamaño", "reset_widget": "Restablecer widget", "hide_widget": "Ocultar widget", "show": "Mostrar", "edit_dashboard": "Editar tablero", "edit_dashboard_done": "✓ Listo", "reset_dashboard": "Restablecer diseño", "support_title": "Estado y soporte"});
+
+Object.assign(TEXTS.en = TEXTS.en || {}, {"light_steady_safe": "Safe Steady Light", "light_color_and_flash": "Safe Color & Flash", "light_safe_flash": "Safe Flash", "test_safe_flash": "Test safe flash", "testing_safe_flash": "Testing safely…", "light_onoff_only_safe_note": "This light only supports on/off. Argus will keep it steady for safety (no power cycling).", "no_flash": "No flash", "flash_gentle": "Gentle", "flash_rapid": "Rapid", "flash_label": "Flash", "color_label": "Color", "size": "Size", "reset_widget": "Reset widget", "hide_widget": "Hide widget", "show": "Show", "edit_dashboard": "Edit dashboard", "edit_dashboard_done": "✓ Done", "reset_dashboard": "Reset layout", "support_title": "Status & Support"});
+
+Object.assign(TEXTS.zh = TEXTS.zh || {}, {"light_steady_safe": "安全常亮", "light_color_and_flash": "安全色彩与闪烁", "light_safe_flash": "安全闪烁", "test_safe_flash": "测试安全闪烁", "testing_safe_flash": "正在安全测试…", "light_onoff_only_safe_note": "此灯具仅支持开/关。出于安全保护，Argus 将保持常亮（不进行频繁通断电）。", "no_flash": "不闪烁", "flash_gentle": "柔和", "flash_rapid": "快速", "flash_label": "闪烁模式", "color_label": "颜色", "size": "尺寸", "reset_widget": "重置小部件", "hide_widget": "隐藏小部件", "show": "显示", "edit_dashboard": "编辑仪表板", "edit_dashboard_done": "✓ 完成", "reset_dashboard": "重置布局", "support_title": "状态与支持"});
+
+Object.assign(TEXTS.fr = TEXTS.fr || {}, {"light_steady_safe": "Lumière fixe sécurisée", "light_color_and_flash": "Couleur et clignotement sécurisé", "light_safe_flash": "Clignotement sécurisé", "test_safe_flash": "Tester clignotement sécurisé", "testing_safe_flash": "Test en cours…", "light_onoff_only_safe_note": "Cette lumière ne gère que marche/arrêt. Argus la maintiendra allumée en continu par sécurité.", "no_flash": "Sans clignotement", "flash_gentle": "Doux", "flash_rapid": "Rapide", "flash_label": "Clignotement", "color_label": "Couleur", "size": "Taille", "reset_widget": "Réinitialiser widget", "hide_widget": "Masquer widget", "show": "Afficher", "edit_dashboard": "Modifier tableau", "edit_dashboard_done": "✓ Terminé", "reset_dashboard": "Réinitialiser disposition", "support_title": "État & Support"});
+
+Object.assign(TEXTS.pt = TEXTS.pt || {}, {"light_steady_safe": "Luz fixa segura", "light_color_and_flash": "Cor e piscar seguro", "light_safe_flash": "Piscar seguro", "test_safe_flash": "Testar piscar seguro", "testing_safe_flash": "Testando com segurança…", "light_onoff_only_safe_note": "Esta luz suporta apenas ligar/desligar. O Argus a manterá acesa de forma fixa por segurança.", "no_flash": "Sem piscar", "flash_gentle": "Suave", "flash_rapid": "Rápido", "flash_label": "Piscar", "color_label": "Cor", "size": "Tamanho", "reset_widget": "Redefinir widget", "hide_widget": "Ocultar widget", "show": "Mostrar", "edit_dashboard": "Editar painel", "edit_dashboard_done": "✓ Pronto", "reset_dashboard": "Redefinir layout", "support_title": "Status & Suporte"});
+
+Object.assign(TEXTS.it = TEXTS.it || {}, {"light_steady_safe": "Luce fissa sicura", "light_color_and_flash": "Colore e lampeggio sicuro", "light_safe_flash": "Lampeggio sicuro", "test_safe_flash": "Prova lampeggio sicuro", "testing_safe_flash": "Test in corso…", "light_onoff_only_safe_note": "Questa luce supporta solo accensione/spegnimento. Argus la manterrà accesa fissa per sicurezza.", "no_flash": "Nessun lampeggio", "flash_gentle": "Delicato", "flash_rapid": "Rapido", "flash_label": "Lampeggio", "color_label": "Colore", "size": "Dimensione", "reset_widget": "Reimposta widget", "hide_widget": "Nascondi widget", "show": "Mostra", "edit_dashboard": "Modifica dashboard", "edit_dashboard_done": "✓ Fatto", "reset_dashboard": "Reimposta layout", "support_title": "Stato & Supporto"});
+
+Object.assign(TEXTS.ru = TEXTS.ru || {}, {"light_steady_safe": "Безопасный постоянный свет", "light_color_and_flash": "Цвет и безопасное мигание", "light_safe_flash": "Безопасное мигание", "test_safe_flash": "Тест безопасного мигания", "testing_safe_flash": "Проверка…", "light_onoff_only_safe_note": "Этот свет поддерживает только вкл/выкл. Argus оставит его включенным для безопасности.", "no_flash": "Без мигания", "flash_gentle": "Мягкое", "flash_rapid": "Быстрое", "flash_label": "Мигание", "color_label": "Цвет", "size": "Размер", "reset_widget": "Сбросить виджет", "hide_widget": "Скрыть виджет", "show": "Показать", "edit_dashboard": "Редактировать панель", "edit_dashboard_done": "✓ Готово", "reset_dashboard": "Сбросить макет", "support_title": "Статус и поддержка"});
 /* ── Template ─────────────────────────────────────────────────────────── */
 const _tmpl = document.createElement('template');
 _tmpl.innerHTML = `
@@ -1531,7 +1545,21 @@ _tmpl.innerHTML = `
   .input-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-left: 4px; }
 
   /* Intelligent Entry Card */
-  .entry{position:relative;overflow:hidden;border-radius:28px;border:1px solid rgba(255,255,255,0.08);margin-bottom:16px;min-height:220px;display:flex;flex-direction:column;transition:transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);box-shadow:0 12px 30px rgba(0,0,0,0.15)}
+  .entry {
+    position: relative;
+    overflow: hidden;
+    border-radius: 28px !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%) !important;
+    backdrop-filter: blur(32px) saturate(170%) brightness(1.08) !important;
+    -webkit-backdrop-filter: blur(32px) saturate(170%) brightness(1.08) !important;
+    margin-bottom: 16px;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
   .entry:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 20px 48px rgba(0,0,0,.3)}
   .entry::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:inherit;background:linear-gradient(120deg,rgba(255,255,255,.14),transparent 22%,transparent 74%,rgba(255,255,255,.05));mix-blend-mode:soft-light}
   .entry-status-ribbon{position:absolute;top:20px;left:20px;z-index:5;display:flex;align-items:center;gap:9px;max-width:calc(100% - 260px);padding:8px 12px;border:1px solid color-mix(in srgb,var(--entry-accent) 55%,rgba(255,255,255,.2));border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--entry-accent) 28%,rgba(8,15,28,.76)),rgba(7,14,25,.56));box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 8px 24px color-mix(in srgb,var(--entry-accent) 22%,transparent);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);color:#fff}
@@ -1591,7 +1619,42 @@ _tmpl.innerHTML = `
 
   /* Liquid Glass Buttons */
   .liquid-stack{display:grid;gap:10px}
-  .liquid-btn{border:none;background:rgba(255,255,255,0.06);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);color:#fff;padding:14px 18px;border-radius:18px;font-size:13.5px;font-weight:800;display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;transition:all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);border:1px solid rgba(255,255,255,0.08);text-shadow:0 1px 2px rgba(0,0,0,0.3);letter-spacing:0.5px}
+  .liquid-btn {
+    border: 1px solid rgba(255, 255, 255, 0.20) !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.04) 100%) !important;
+    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;
+    color: #ffffff !important;
+    padding: 14px 18px;
+    border-radius: 18px !important;
+    font-size: 13.5px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
+    transition: all 0.22s cubic-bezier(0.25, 0.8, 0.25, 1);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    letter-spacing: 0.5px;
+  }
+  .liquid-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.08) 100%) !important;
+    border-color: rgba(255, 255, 255, 0.36) !important;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+    transform: translateY(-2px);
+  }
+  .btn-sos {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.32) 0%, rgba(185, 28, 28, 0.45) 100%) !important;
+    border: 1px solid rgba(252, 165, 165, 0.45) !important;
+    box-shadow: 0 10px 28px rgba(239, 68, 68, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+  }
+  .btn-sos:hover {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.48) 0%, rgba(185, 28, 28, 0.65) 100%) !important;
+    box-shadow: 0 14px 34px rgba(239, 68, 68, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+    transform: translateY(-2px);
+  }
   .mode-btn-icon{width:26px;height:26px;padding:5px;border-radius:10px;flex:0 0 auto;background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 4px 10px rgba(0,0,0,.16);filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}
   .liquid-btn.active .mode-btn-icon{background:linear-gradient(135deg,rgba(255,255,255,.36),rgba(255,255,255,.12));border-color:rgba(255,255,255,.42)}
   .btn-sos .mode-btn-icon{width:28px;height:28px;border-radius:11px;background:rgba(255,255,255,.17)}
