@@ -14,7 +14,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 
 from . import websocket_api as argus_ws
-from .auth import ArgusAuthError, _require_argus_admin
+from .auth import ArgusAuthError, _require_argus_admin, _require_permission
 from .const import SIGNAL_CONFIG_UPDATED
 from .storage import async_save_ui_data
 
@@ -73,12 +73,12 @@ def async_register_output_profiles_api(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_argus_test_light_output)
 
 
-@websocket_api.websocket_command({vol.Required("type"): "argus/save_panic_output_profile", vol.Optional("entry_id"): str, vol.Required("outputs"): list, vol.Optional("settings", default={}): dict})
+@websocket_api.websocket_command({vol.Required("type"): "argus/save_panic_output_profile", vol.Required("entry_id"): str, vol.Required("outputs"): list, vol.Optional("settings", default={}): dict})
 @websocket_api.async_response
 async def ws_argus_save_panic_output_profile(hass, connection, msg) -> None:
     entry_id = argus_ws._resolve_entry_id(hass, msg.get("entry_id"))
     try:
-        await _require_argus_admin(hass, connection, entry_id)
+        await _require_permission(hass, connection, entry_id, "manage_sos")
     except ArgusAuthError as err:
         connection.send_error(msg["id"], err.code, err.message)
         return
@@ -218,7 +218,7 @@ async def _brightness_pulse(panel, entity_id: str, service_data: dict, interval:
         _LOGGER.exception("Argus brightness pulse failed for %s", entity_id)
 
 
-@websocket_api.websocket_command({vol.Required("type"): "argus/test_light_output", vol.Optional("entry_id"): str, vol.Required("entity_id"): str, vol.Required("flash_mode"): vol.In(["gentle", "rapid"]), vol.Optional("rgb_color"): list})
+@websocket_api.websocket_command({vol.Required("type"): "argus/test_light_output", vol.Required("entry_id"): str, vol.Required("entity_id"): str, vol.Required("flash_mode"): vol.In(["gentle", "rapid"]), vol.Optional("rgb_color"): list})
 @websocket_api.async_response
 async def ws_argus_test_light_output(hass, connection, msg) -> None:
     """Physically test only native flash/effects or safe brightness pulsing."""

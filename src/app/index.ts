@@ -1,32 +1,19 @@
-import '../legacy/argus-panel';
-import{applyReactDashboardLayout}from'../features/dashboard';
-import{applyMediaClient}from'../features/media/client';
-import{applySecurityClient}from'../features/security/client';
-import{applyPremiumExperience}from'../features/premium';
-import { applyMotionSystem } from '../features/motion';
-import { applyStableInstancesRender } from '../features/render/stable';
-import { applyV2050AlarmVisuals } from '../features/render/alarm';
-import { applyV2049ResponsiveWidgets } from '../features/widgets/responsive';
-import { applyV2050WidgetLayouts } from '../features/widgets/layouts';
+import {createElement} from 'react';
+import {createRoot,type Root} from 'react-dom/client';
+import {ArgusApp} from './ArgusApp';
+import {I18nProvider} from './i18n';
+import type {HomeAssistant} from '../core/home-assistant';
 
+class ArgusReactPanel extends HTMLElement{
+ private root?:Root;
+ private value?:HomeAssistant;
+ set hass(value:HomeAssistant){this.value=value;this.render()}
+ get hass(){return this.value}
+ connectedCallback(){this.render()}
+ disconnectedCallback(){this.root?.unmount();this.root=undefined}
+ private render(){if(!this.isConnected||!this.value)return;const mount=this.shadowRoot||this.attachShadow({mode:'open'});this.root??=createRoot(mount);this.root.render(createElement(I18nProvider,{hass:this.value},createElement(ArgusApp,{hass:this.value})))}
+}
 
-import{applyLegacyAfterTypedClients,applyLegacyBeforeTypedClients}from'../legacy/bridge';
-import type{ArgusPanelConstructor}from'../core/panel';
-
- export function applyArgusFrontend(value?:CustomElementConstructor|undefined):void{
-   if(!value) value = customElements.get('argus-panel-v2018');
-  const C=value as ArgusPanelConstructor|undefined;
-  if(!C||C.__argusTypedFrontend)return;
-  C.__argusTypedFrontend=true;
-  applyLegacyBeforeTypedClients(C);
-  applySecurityClient(C);
-  applyMediaClient(C);
-  applyPremiumExperience(C);
-   applyMotionSystem(C);
-   applyStableInstancesRender(C);
-   applyV2050AlarmVisuals(C);
-   applyV2049ResponsiveWidgets(C);
-   applyV2050WidgetLayouts(C);
-  applyLegacyAfterTypedClients(C);
-  applyReactDashboardLayout(C);
- }
+export function applyArgusFrontend():void{
+ if(!customElements.get('argus-panel-v2018'))customElements.define('argus-panel-v2018',ArgusReactPanel);
+}

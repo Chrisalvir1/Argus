@@ -3,178 +3,155 @@
 
 # Argus Home Hub
 
-**Seguridad residencial local, visual y verificable para Home Assistant**
+**Sistema de seguridad residencial local, multiinstancia y verificable para Home Assistant**
 
 [![Release](https://img.shields.io/github/v/release/Chrisalvir1/Argus)](https://github.com/Chrisalvir1/Argus/releases)
+[![Version](https://img.shields.io/badge/version-2.2.0-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
 [![Validate](https://github.com/Chrisalvir1/Argus/actions/workflows/validate.yml/badge.svg)](https://github.com/Chrisalvir1/Argus/actions/workflows/validate.yml)
-[![HACS](https://img.shields.io/badge/HACS-Default-41BDF5.svg)](https://github.com/hacs/default)
+[![HACS](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/default)
 [![License](https://img.shields.io/github/license/Chrisalvir1/Argus)](LICENSE)
-[![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://paypal.me/CEstradaAlvir)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-00457C.svg)](https://paypal.me/CEstradaAlvir)
 </div>
 
-Argus reúne alarma, sensores, sirenas, SOS, usuarios, auditoría, MQTT y una interfaz cinematográfica en una integración local para Home Assistant.
+Argus reúne alarma, sensores, sirenas, salidas SOS, gestión de usuarios, auditoría forense, MQTT y una interfaz fluida en una integración 100% local construida sobre **React 19 + TypeScript + Vite**.
 
 > [!IMPORTANT]
-> Argus no sustituye una alarma certificada ni garantiza comunicación con servicios de emergencia. Prueba sensores, sirenas, PIN, SOS y respaldos antes de depender del sistema.
+> Argus no sustituye una alarma certificada ni garantiza comunicación con servicios de emergencia gubernamentales. Prueba sensores, sirenas, PIN, acciones SOS y respaldos antes de depender del sistema en producción.
 
-## Antes de instalar: elige la experiencia adecuada para tu dispositivo
+---
 
-Argus funciona igual de bien como integración de seguridad en cualquier equipo compatible con Home Assistant. Lo único que cambia según el hardware donde **visualices** el panel es la calidad de la presentación visual (clima animado, cristal líquido, transiciones). La función de seguridad del hogar (armado, desarmado, sensores, sirenas, SOS, PIN, notificaciones) **nunca se reduce**, sin importar el dispositivo.
+## 🚀 Arquitectura y Novedades de la Versión 2.2.0
 
-| Dispositivo de visualización | Experiencia esperada | Perfil recomendado |
-|---|---|---|
-| Raspberry Pi 5 | Completa: clima WebGL animado, cristal líquido, transiciones y 60 FPS | Completo |
-| Raspberry Pi 4 | Casi completa, con ajustes leves de partículas y resolución | Completo/Equilibrado |
-| Raspberry Pi 3 / 3B+ | Clima simplificado, menos partículas, blur reducido | Equilibrado/Ligero |
-| Raspberry Pi Zero 2 W | Animaciones CSS sencillas, WebGL limitado o desactivado | Ligero |
-| Raspberry Pi Zero (original) | Interfaz funcional sin efectos pesados, fondos estáticos | Esencial |
-| PC, tablet o teléfono moderno | Completa | Completo |
+### ⚛️ Interfaz 100% React 19 + TypeScript
+- **Runtime único:** Toda la interfaz corre de forma nativa en React 19 compilado con Vite.
+- **Cero código legado:** Se eliminó físicamente todo el código de parches DOM, librerías antiguas y puentes de traducción antiguos (`src/legacy`).
+- **Respuesta instantánea:** Carga rápida, fluidez a 60 FPS y consumo mínimo de recursos de CPU/RAM.
 
-Esto no es un problema de que Argus vaya a consumir CPU o RAM sin control: la diferencia está en la **GPU** y en cuántos procesos gráficos puede sostener cada equipo. En modelos anteriores a la Pi 4, Argus reduce automáticamente su presentación visual para mantenerse fluido, pero esto **no afecta su función de seguridad en el hogar**.
+### 🏢 Aislamiento Estricto Multiinstancia
+- Soporte para múltiples particiones o instancias independientes de Argus en el mismo Home Assistant.
+- Cada consulta WebSocket y acción de panel exige y propaga un `entry_id` explícito.
+- Persistencia de instancia seleccionada por usuario en el navegador (`localStorage`) para evitar mezclas involuntarias de datos.
 
-Argus incluye un motor de **perfiles de rendimiento adaptable** que detecta las capacidades del navegador/dispositivo que muestra el panel (núcleos, memoria, WebGL disponible, resolución) y ejecuta un diagnóstico breve para recomendar automáticamente uno de estos perfiles: **Completo**, **Equilibrado**, **Ligero** o **Esencial**. El perfil se guarda por dispositivo (no por instancia de Home Assistant), por lo que un teléfono y una Raspberry Pi Zero que muestren el mismo panel pueden tener experiencias visuales distintas sin ningún ajuste manual.
+### ⚡ Estabilidad Visual y Rendimiento Superior
+- **Fondo Fijo Optimizado:** Se eliminaron las personalizaciones de fondos pesados por usuario y los sombreadores dinámicos de clima WebGL. Esto garantiza que el panel de seguridad responda de inmediato en cualquier dispositivo (Raspberry Pi, tablets de pared, móviles y PCs) sin caídas de cuadros ni saturación gráfica.
+- **Widgets Reorganizados:** Tablero interactivo con redimensionamiento y reposicionamiento responsivo guardado local y remotamente.
 
-Puedes ver el diagnóstico detectado y forzar un perfil manualmente desde **Personalización estética avanzada → Rendimiento del dispositivo** dentro del panel de Argus.
+### 🔗 Integración con Automatizaciones de Home Assistant
+- Visualización de las automatizaciones de Home Assistant relacionadas con cada instancia en modo **solo lectura**.
+- Enlace directo al editor nativo de automatizaciones de Home Assistant sin duplicar lógica ni crear discrepancias de configuración.
 
-## Funciones
+### 🚨 Gestor de Salidas de Emergencia SOS
+- Configuración granular de salidas SOS (luces estroboscópicas, sirenas de respaldo, conmutadores) por instancia.
+- Control de acceso protegido con el permiso `manage_sos`.
 
-- Modos desarmado, casa, ausente, noche y vacaciones.
-- Retardos de entrada y salida, duración de alarma y restauración segura.
-- Sensores por modo, sensores de entrada, bypass y requisito de cierre.
-- Sirenas por modo y SOS reversible con salidas independientes.
-- **Internacionalización y TTS Dinámico (v2.0.51 - Mejorado en v2.0.53)**: Argus soporta 7 idiomas de forma nativa. Las notificaciones de voz (TTS) se adaptan automáticamente e informan con precisión los sensores bloqueantes y cierres instantáneos.
-- **Blueprints Nativos para Notificaciones (v2.0.53)**: Integra notificaciones móviles ricas (iOS) y bots de Telegram con video de 15 segundos y botones interactivos (Desarmar, Ver cámaras) listos para importar.
-- **Permisos de Usuarios Estándar Visibles (v2.0.53)**: Nuevo diseño de tarjetas de usuario que muestra en vivo insignias de permisos (Ver, Armar, Desarmar, Historial) y asigna acceso funcional a los nuevos perfiles manualmente.
-- **Sincronización Inteligente con Paneles Externos** (v2.0.29): Dispara y silencia automáticamente sirenas de cámaras u otras alarmas.
-- PIN maestro, usuarios temporales, invitado, `scrypt`/PBKDF2 y limitación de intentos administrativos.
-- **Sincronización automática de perfiles con cuentas humanas de Home Assistant** (v1.9.3).
-- **Fondos Personalizables Independientes por Perfil** (v2.0.29): Cada usuario puede tener su propio fondo.
-- Selector de perfiles con distinción visual del perfil propio; perfiles ajenos protegidos por PIN de acceso.
-- Auditoría, estadísticas de 30 días y línea temporal forense.
-- **Indicadores Inteligentes de Batería (Liquid Glass)**: Visualización en tiempo real con alertas críticas al 10% y estado de batería agotada.
-- MQTT opcional con comandos JSON o texto.
-- Horarios locales y confirmación de intrusión mediante múltiples señales.
-- Medios privados firmados bajo `.storage`.
-- Panel completo y tarjeta Lovelace en siete idiomas con **Onboarding Premium** y bienvenida inmersiva.
-- **Restauración de Backup Segura:** Restaura configuraciones encriptadas directamente desde el primer uso (exclusivo para administradores HA).
-- **Diseño Liquid Glass:** Elementos de UI y tarjetas de instancias activas rediseñados con estética premium de cristal líquido.
-- Atmósfera WebGL procedimental ultra-realista (motor mejorado) para lluvia, tormenta, nieve, niebla, nubes, sol, estrellas, luna y eclipses respaldados por entidades reales.
-- **Perfiles de rendimiento adaptable:** detección automática de capacidades del dispositivo, benchmark breve y ajuste visual (Completo/Equilibrado/Ligero/Esencial) sin afectar las funciones de seguridad.
-- **Presencia HA:** Sincronización inteligente de estados de presencia directamente desde Home Assistant.
-- Animaciones premium para paneles, opciones, guardado, sensores, botones y modales, con respeto por `prefers-reduced-motion`.
+---
 
-## Activación del Asistente de Voz (TTS)
+## 🔊 Activación y Configuración del Asistente de Voz (TTS)
 
-A partir de la versión **v2.0.51**, Argus incluye notificaciones habladas dinámicas para los eventos críticos de seguridad (armado, desarmado, disparos, cancelaciones) adaptándose automáticamente al idioma que hayas elegido en la interfaz visual.
+Argus cuenta con un motor de notificaciones habladas dinámicas para los eventos críticos de seguridad (armado en casa, armado fuera, desarmado, intentos bloqueados por sensores abiertos y disparos de alarma).
 
-Para habilitarlo, simplemente define tu reproductor multimedia y tu proveedor de TTS en tu archivo `configuration.yaml` bajo la llave `argus`:
+### 1. Habilitar TTS en Home Assistant
+Para activarlo, define el reproductor multimedia y tu proveedor de TTS en tu archivo `configuration.yaml` bajo la llave `argus`:
 
 ```yaml
 argus:
   arming_voice:
-    media_player: media_player.altavoces_casa
+    media_player: media_player.altavoces_salon
     tts_service: tts.google_translate_say
 ```
-**Nota**: El motor TTS tomará por defecto el idioma que configuraste tocando el icono 🌐 dentro del panel de Argus. No hace falta configurar las plantillas de mensaje en el YAML a menos que desees personalizar completamente la locución.
 
-## Seguridad y Privacidad 2.0
+### 2. Comportamiento Inteligente
+- **Sincronización de idioma:** Las locuciones se adaptan automáticamente al idioma activo seleccionado en el panel.
+- **Detalle de sensores:** Cuando un sensor impide el armado, el asistente anuncia por voz el nombre del sensor específico (ej. *"Armado bloqueado: Ventana principal abierta"*).
+- **Anuncios de retardo:** Notificaciones habladas automáticas al iniciar el retardo de salida o de entrada.
 
-Argus 2.0 consolida nuestras estrictas políticas de seguridad:
+---
 
-- **Zero-Leak Privacy:** Eliminación de los registros desde el cliente para prevenir fugas de PINs y hashes al navegador.
-- **Autorización Forense:** Exigencia de sesión + permiso específico `view_history` para el timeline forense.
-- **Onboarding Seguro:** Manejo estricto e independiente del PIN de acceso (hasheado) y el PIN maestro (opciones de configuración).
-- **Verificaciones Estrictas de Administrador:** Requiere privilegios de administrador de Home Assistant y Argus para consultar usuarios y personas.
-- **Sincronización segura de perfiles:** Los perfiles auto-creados tienen `managed_by_ha_sync: true` y permisos mínimos. Los perfiles manuales nunca se modifican automáticamente.
+## 🌐 Soporte Multilingüe (12 Idiomas)
 
-## Requisitos
+Argus cuenta con un sistema de internacionalización nativo con soporte completo para 12 idiomas:
 
-- Home Assistant **2024.7.0 o posterior**.
-- Navegador con WebGL para la atmósfera cinematográfica (opcional en perfiles Ligero/Esencial).
-- HACS recomendado.
-- Cuenta administradora para instalar y configurar.
+| Código | Idioma | Estado |
+|---|---|---|
+| `es` | Español | Base nativa |
+| `en` | English | Base nativa |
+| `fr` | Français | Fase de pruebas / Preview |
+| `pt` | Português | Fase de pruebas / Preview |
+| `it` | Italiano | Fase de pruebas / Preview |
+| `zh-Hans` | 简体中文 (Simplified Chinese) | Fase de pruebas / Preview |
+| `zh-Hant` | 繁體中文 (Traditional Chinese) | Fase de pruebas / Preview |
+| `hi` | हिन्दी (Hindi) | Fase de pruebas / Preview |
+| `ar` | العربية (Arabic - RTL Nativo) | Fase de pruebas / Preview |
+| `ko` | 한국어 (Korean) | Fase de pruebas / Preview |
+| `ja` | 日本語 (Japanese) | Fase de pruebas / Preview |
+| `uk` | Українська (Ukrainian) | Fase de pruebas / Preview |
 
-## Instalación con HACS
+*Nota: Los nuevos idiomas añadidos en la v2.2.0 se encuentran en fase de pruebas activas para mejora continua.*
+
+---
+
+## 📦 Instalación
+
+### Método 1: Mediante HACS (Recomendado)
 
 1. Abre **HACS** en tu Home Assistant.
-2. Ve a **Integraciones** y haz clic en **Explorar y descargar repositorios** (+).
-3. Busca **Argus** (o **Argus Home Hub**).
-4. Selecciona la integración y haz clic en **Descargar**.
-5. Reinicia Home Assistant y añade la integración desde **Ajustes → Dispositivos y servicios**.
-6. Haz una recarga completa sin caché del navegador.
+2. Ve a **Integraciones** y pulsa en los 3 puntos de la esquina superior derecha → **Repositorios personalizados**.
+3. Añade la URL: `https://github.com/Chrisalvir1/Argus` con categoría **Integration**.
+4. Haz clic en **Descargar**.
+5. Reinicia Home Assistant.
+6. Ve a **Ajustes → Dispositivos y servicios → Añadir integración** y busca **Argus**.
+7. Realiza una recarga limpia de la caché del navegador (`Ctrl + Shift + R` o `Cmd + Shift + R`).
 
-## Instalación manual
+### Método 2: Instalación Manual
 
-1. Descarga `argus.zip` desde la última release.
-2. Copia su contenido a `custom_components/argus`.
-3. Reinicia Home Assistant y añade la integración.
+1. Descarga el archivo `argus.zip` desde la última [Release de GitHub](https://github.com/Chrisalvir1/Argus/releases).
+2. Descomprime y copia la carpeta `argus` dentro de `custom_components/` en tu directorio de configuración de Home Assistant.
+3. Reinicia Home Assistant y configura la integración desde la interfaz web.
 
-## Lovelace
+---
 
-```yaml
-type: custom:argus-card
-entity: alarm_control_panel.argus
-title: Seguridad
-```
+## 🎛️ Tarjeta Lovelace
 
-Opcionalmente puedes fijar la fuente meteorológica:
+Puedes agregar la tarjeta de Argus directamente en tus tableros de Lovelace:
 
 ```yaml
 type: custom:argus-card
 entity: alarm_control_panel.argus
-weather_entity: weather.home
-title: Seguridad
+title: Seguridad del Hogar
 ```
 
-## Seguridad
+---
 
-- Usa un PIN único de 4–12 dígitos.
-- No compartas respaldos, tokens ni URL firmadas.
-- Las cargas nuevas se guardan en `/config/.storage/argus_media`.
-- Reemplaza fondos históricos bajo `/local`, ya que esos archivos son públicos para clientes autenticados según la configuración de Home Assistant.
-- Reporta vulnerabilidades según [SECURITY.md](SECURITY.md).
+## 🔒 Seguridad y Privacidad
 
-## Actualización a 2.0
+- **Almacenamiento Local:** Todos los estados, registros y códigos se procesan dentro de tu red local en Home Assistant.
+- **Protección de Códigos:** Los PINs maestros y de usuario se almacenan con algoritmos de hashing seguro (`scrypt`/PBKDF2) y nunca se exponen al frontend.
+- **Control de Permisos:** Los usuarios estándar sólo tienen acceso a las áreas y acciones asignadas por el administrador.
+- **Auditoría Forense:** Registro inmutable de eventos con opción de exportación y restauración segura de configuración en formato JSON.
 
-1. Crea un respaldo.
-2. Actualiza desde HACS (busca Argus Home Hub).
-3. Reinicia Home Assistant.
-4. Recarga el navegador sin caché.
-5. Verifica armado, desarmado, SOS, PIN, sirenas, medios y restauración.
+---
 
-Consulta las notas de la versión [v2.0.18](https://github.com/Chrisalvir1/Argus/releases/tag/v2.0.18).
+## ☕ Apoyo y Donaciones
 
-## Desarrollo
+El desarrollo de Argus requiere incontables horas de trabajo y dedicación para ofrecerte una solución de seguridad moderna, libre y de código abierto.
 
-```bash
-python -m compileall -q custom_components/argus
-python -m unittest discover -s tests -v
-for file in custom_components/argus/www/*.js; do node --check "$file"; done
-git diff --check
-```
+Si Argus te resulta útil y quieres apoyar el mantenimiento del proyecto:
 
-Consulta [la arquitectura](docs/ARCHITECTURE.md) y [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## Licencia
-
-MIT. Consulta [LICENSE](LICENSE).
+- 🌟 **Dale una estrella al repositorio en GitHub:** [Chrisalvir1/Argus](https://github.com/Chrisalvir1/Argus)
+- ☕ **Donación mediante PayPal:** [paypal.me/CEstradaAlvir](https://paypal.me/CEstradaAlvir)
 
 ---
 
 ## 💡 Sugerencias, Contacto y Comunidad
 
-Me encanta escuchar a la comunidad de Argus. Si tienes ideas de mejoras, encuentras algún error o simplemente quieres compartir cómo estás usando Argus en tu casa, ¡házmelo saber!
-
-- **GitHub:** [Abre un Issue](https://github.com/Chrisalvir1/Argus/issues) para sugerencias de código, nuevas funciones o reporte de bugs.
-- **Home Assistant Community:** Puedes enviarme tus inquietudes allí.
+- **GitHub Issues:** [Abre un Issue](https://github.com/Chrisalvir1/Argus/issues) para reportar errores o solicitar nuevas funciones.
 - **Correo Electrónico:** [chrisalvir01@gmail.com](mailto:chrisalvir01@gmail.com)
-
-### Mis Redes Sociales Oficiales 🌐
-¡Sígueme para estar al tanto de las últimas actualizaciones y novedades en las que estoy trabajando!
-- **Facebook:** [Christopher Alvir](https://www.facebook.com/christopher.alvir)
+- **Telegram:** [@cea1410](https://t.me/cea1410)
 - **Instagram:** [@chrisalvir1](https://instagram.com/chrisalvir1)
-- **Threads:** [Chrisalvir1](https://www.threads.net/@chrisalvir1)
-- **Telegram:** [t.me/cea1410](https://t.me/cea1410)
+- **Threads:** [@chrisalvir1](https://www.threads.net/@chrisalvir1)
 
-¿Te gusta Argus y te resulta útil? 
-**[❤️ Apoya mi trabajo en PayPal](https://paypal.me/CEstradaAlvir)**. ¡Cualquier aporte me ayuda enormemente a mantener y seguir mejorando este proyecto a lo grande!
+---
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia **MIT**. Consulta el archivo [LICENSE](LICENSE) para más detalles.

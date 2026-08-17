@@ -1,3 +1,14 @@
+## [2.2.0] - 2026-08-17
+
+### Added
+- **React UI Runtime & Modern Architecture:** Complete migration to React + TypeScript + Vite as the sole interface runtime layer, completely replacing and physically removing `src/legacy` and the legacy patch bridge.
+- **Multi-Instance Isolation:** Enforced explicit `entry_id` propagation across all panel operations and WebSocket endpoints; added persistent per-user active instance routing and multi-instance data separation.
+- **Visual Stability & Performance:** Consolidated visual design with a fixed default background, zero layout flicker, static Liquid Glass surfaces without per-widget `backdrop-filter` overhead, and full `prefers-reduced-motion` compliance.
+- **Typed React Administration Workspace:** Migrated user profiles, roles, HA account bindings, PIN management, presence rules, modes, sensors, sirens, external panels, alarm lights, incident tracking, forensics, and advanced configuration to native React components.
+- **Read-Only Home Assistant Automations:** Structured display of related Home Assistant automations scoped to the active instance with direct links to native Home Assistant editors.
+- **SOS Configuration & Permission Decoupling:** Staged draft output selections with active instance scoping, domain validation, and proper backend/frontend permission enforcement using `manage_sos`.
+- **Semantic Activity Logging & i18n Foundation:** Semantic keys and parameter storage for audit logs with client-side localization, locale-aware date/time formatting, and declarative catalog foundation across 12 supported locales (RTL support for Arabic).
+
 ## [2.1.7] - 2026-08-13
 
 ### Fixed

@@ -36,4 +36,5 @@ export interface HomeAssistant {
     service: string,
     data?: Readonly<Record<string, unknown>>,
   ): Promise<unknown>;
+  navigate?(path: string): void;
 }
