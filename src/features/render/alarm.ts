@@ -44,7 +44,7 @@ function ensureStyles(panel: AlarmPanel) {
   }
   style.textContent = `
 .entry .liquid-stack .liquid-btn{border-radius:13px!important;color:rgba(255,255,255,.92)!important}
-.argus-disarm-btn{grid-column:1/-1!important;width:100%!important;min-height:54px!important;background:linear-gradient(110deg,#34c759,#16863a)!important;border:1px solid rgba(134,239,172,.78)!important;color:#fff!important}
+.argus-disarm-btn{grid-column:1/-1!important;width:100%!important;min-height:54px!important;background:linear-gradient(135deg,#10b981,#059669)!important;border:1px solid rgba(167,243,208,0.7)!important;color:#fff!important;box-shadow:0 10px 28px rgba(16,185,129,0.38),inset 0 1px 0 rgba(255,255,255,0.38)!important;border-radius:18px!important;font-weight:900!important;backdrop-filter:blur(20px)!important}
 .entry.argus-arming .entry-icon>svg,.entry.argus-waiting .entry-icon>svg{transform-origin:center!important;animation:argusArmingShield 1.05s ease-in-out infinite!important;filter:drop-shadow(0 0 26px rgba(255,184,57,.95)) saturate(1.35)!important}
 .argus-shield-status{display:block;margin:7px auto 0;padding:5px 10px;width:max-content;max-width:180px;border:1px solid rgba(255,184,57,.45);border-radius:999px;background:rgba(255,149,0,.13);color:#ffd27a;font-size:9px;font-weight:800;letter-spacing:.12em;text-align:center;animation:argusArmingLabel 1.05s ease-in-out infinite}
 .entry .console-sensor.argus-blocking,.entry .console-sensor.argus-triggered-sensor{border-color:#ff8a1f!important;background:linear-gradient(135deg,rgba(249,115,22,.32),rgba(194,65,12,.18))!important;animation:argusTriggeredSensor .72s ease-in-out infinite!important}
@@ -77,7 +77,9 @@ function apply(panel: AlarmPanel) {
         label.className = 'argus-shield-status';
         icon.insertAdjacentElement('afterend', label);
       }
-      label.textContent = blocking.length ? `ESPERANDO ${blocking.length} SENSOR(ES)` : (state === 'arming' ? 'ARMANDO…' : 'ESPERANDO SENSORES');
+      const waitCountTpl = panel._t?.('waiting_sensors_count') || 'ESPERANDO {count} SENSOR(ES)';
+      const waitCountTxt = waitCountTpl.replace('{count}', String(blocking.length));
+      label.textContent = blocking.length ? waitCountTxt : (state === 'arming' ? (panel._t?.('arming') || 'ARMANDO…') : (panel._t?.('waiting_sensors') || 'ESPERANDO SENSORES'));
     } else {
       label?.remove();
     }
