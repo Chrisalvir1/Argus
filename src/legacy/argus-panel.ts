@@ -1658,7 +1658,7 @@ _tmpl.innerHTML = `
   .mode-btn-icon{width:26px;height:26px;padding:5px;border-radius:10px;flex:0 0 auto;background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 4px 10px rgba(0,0,0,.16);filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}
   .liquid-btn.active .mode-btn-icon{background:linear-gradient(135deg,rgba(255,255,255,.36),rgba(255,255,255,.12));border-color:rgba(255,255,255,.42)}
   .btn-sos .mode-btn-icon{width:28px;height:28px;border-radius:11px;background:rgba(255,255,255,.17)}
-  .liquid-btn:hover{background:rgba(255,255,255,0.14);transform:translateX(4px);border-color:rgba(255,255,255,0.2)}
+  .liquid-btn:not(.btn-home):not(.btn-away):not(.btn-night):not(.btn-vacation):not(.btn-disarm):not(.btn-sos):hover{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.2)}
   .liquid-btn.active{background:var(--btn-bg, rgba(255,255,255,0.2));border-color:rgba(255,255,255,0.4);box-shadow:0 8px 24px var(--btn-shadow, rgba(255,255,255,0.12))}
   .liquid-btn:active:not(:disabled) { transform: scale(0.96); }
   .liquid-btn i{font-size:16px}
@@ -1760,21 +1760,7 @@ _tmpl.innerHTML = `
       transform: scale(0.98);
     }
   }
-  .btn-disarm {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-    border: 1px solid rgba(167, 243, 208, 0.75) !important;
-    color: #ffffff !important;
-    box-shadow: 0 12px 32px rgba(16, 185, 129, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
-    border-radius: 18px !important;
-    font-weight: 900 !important;
-    margin-top: 4px;
-    backdrop-filter: blur(20px) !important;
-  }
-  .btn-disarm:hover {
-    background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
-    box-shadow: 0 16px 40px rgba(16, 185, 129, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
-    transform: translateY(-2px) !important;
-  }
+  /* btn-disarm visual is handled by .btn-disarm and .btn-disarm.active above */
 
   /* ── iOS/Android Fullscreen: cubre pantalla completa sin clipping ── */
   .ios-fullscreen {
