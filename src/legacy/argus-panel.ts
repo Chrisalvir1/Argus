@@ -1482,7 +1482,22 @@ _tmpl.innerHTML = `
   /* Mode Reorganization Styles — HORIZONTAL */
   .mode-grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
   @media(max-width:900px){ .mode-grid-layout { grid-template-columns: 1fr; } }
-  .mode-section-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 18px; transition: all 0.3s ease; }
+  .mode-section-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.025) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    border-radius: 20px !important;
+    padding: 18px !important;
+    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+  }
+  .mode-section-card:hover {
+    border-color: rgba(255, 255, 255, 0.26) !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.04) 100%) !important;
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
+    transform: translateY(-2px) !important;
+  }
   .mode-section-card:hover { border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); }
   .mode-section-title { font-size: 13px; font-weight: 800; color: var(--primary-color, #007aff); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
   .mode-sensor-grid { color: var(--primary-text-color, #fff); }
@@ -1589,8 +1604,21 @@ _tmpl.innerHTML = `
   .btn-away.active{--btn-bg:rgba(229,57,53,0.22); --btn-shadow:rgba(229,57,53,0.3)}
   .btn-night.active{--btn-bg:rgba(30,136,229,0.22); --btn-shadow:rgba(30,136,229,0.3)}
   .btn-vacation.active{--btn-bg:rgba(156,39,176,0.22); --btn-shadow:rgba(156,39,176,0.3)}
-  .btn-disarm{--btn-bg:rgba(67,160,71,0.15); margin-top:4px}
-  .btn-disarm.active{--btn-bg:rgba(67,160,71,0.25);--btn-shadow:rgba(67,160,71,0.4);border-color:rgba(67,160,71,0.45)!important;box-shadow:0 8px 24px rgba(67,160,71,0.35)!important}
+  .btn-disarm {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    border: 1px solid rgba(167, 243, 208, 0.75) !important;
+    color: #ffffff !important;
+    box-shadow: 0 12px 32px rgba(16, 185, 129, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+    border-radius: 18px !important;
+    font-weight: 900 !important;
+    margin-top: 4px;
+    backdrop-filter: blur(20px) !important;
+  }
+  .btn-disarm:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+    box-shadow: 0 16px 40px rgba(16, 185, 129, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+    transform: translateY(-2px) !important;
+  }
 
   /* ── iOS/Android Fullscreen: cubre pantalla completa sin clipping ── */
   .ios-fullscreen {
@@ -1747,7 +1775,25 @@ _tmpl.innerHTML = `
   .pin-btn-round.action-key.enter-key{color:#34c759 !important}
   .pin-btn-round.action-key.delete-key{color:#ff3b30 !important}
   /* User card */
-  .user-card{display:flex;align-items:center;justify-content:space-between;padding:14px;border-radius:16px;border:1px solid var(--user-card-border, rgba(255,255,255,0.06));background:var(--user-card-bg, rgba(255,255,255,0.02));box-shadow:0 4px 10px rgba(0,0,0,0.08)}
+  .user-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.025) 100%) !important;
+    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.20) !important;
+    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  .user-card:hover {
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%) !important;
+    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+    transform: translateY(-2px);
+  }
   .user-badge{display:inline-block;padding:3px 9px;border-radius:8px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;background:rgba(0,122,255,.12);color:var(--primary-color,#007aff)}
   /* REEMPLAZA los colores neón por tokens legibles */
   .user-badge.admin {
@@ -2730,7 +2776,7 @@ _tmpl.innerHTML = `
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--personalize-divider, rgba(255,255,255,0.08)); padding-bottom:10px; flex-wrap:wrap; gap:10px;">
             <div id="lbl-aesthetic-custom" style="font-weight:900; font-size:14px; letter-spacing:-0.01em; cursor:pointer; display:flex; align-items:center; gap:8px; user-select:none;">
               <span id="lbl-mas-ajustes">⚙️ Más Ajustes / SOS</span>
-              <span id="personalize-chevron" style="transition: transform 0.3s ease; font-size: 11px; background: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 8px;">▲ Ocultar</span>
+              <span id="personalize-chevron" style="transition: transform 0.3s ease; font-size: 11px; background: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 8px;">▲</span>
             </div>
             <div style="display:flex; gap:8px;">
               <button class="ghost" id="btn-edit-home-name-standalone" style="padding:6px 10px;font-size:11px;border-radius:10px;white-space:nowrap">✏️ Editar Nombre</button>
@@ -3401,7 +3447,7 @@ class ArgusPanel extends HTMLElement {
       try { localStorage.setItem('argus_lang', code); } catch(e) {}
       this._send('argus/save_ui', { language: code, manual_lang: code, ...(entry_id ? { entry_id } : {}) }).catch(console.error);
     }
-    this._instanceSignatures?.clear();
+    if (this._instanceSignatures) this._instanceSignatures.clear();
     this._refreshLocalizedUi();
   }
 
@@ -3412,7 +3458,7 @@ class ArgusPanel extends HTMLElement {
     this._applyTranslations();
     this._updateHeroProfileDisplay();
     this._updateHeroClock();
-    this._instanceSignatures?.clear();
+    if (this._instanceSignatures) this._instanceSignatures.clear();
     this._renderEntries(true);
     this._renderModeTabs();
     this._renderModeView();
@@ -3502,7 +3548,7 @@ class ArgusPanel extends HTMLElement {
     set('lbl-hub-bg-title',     t('bg_hub_title'));
     set('s-panel-bg-sound-lbl', t('bg_sound_opt'));
     set('s-hub-bg-sound-lbl',   t('bg_sound_opt'));
-    set('lbl-mas-ajustes', '🎨 ' + t('lbl_aesthetic_custom') + ' (Avanzado)');
+    set('lbl-mas-ajustes', '🎨 ' + t('lbl_aesthetic_custom'));
     set('edit-widgets-label', this._widgetEditing ? ('✓ ' + t('done')) : '⚙️ Config. Widgets');
     set('lbl-temperature-source', t('temp_displayed'));
     set('lbl-weather-source', t('weather_source'));
@@ -4099,7 +4145,7 @@ class ArgusPanel extends HTMLElement {
         const isCollapsed = personalizeWorkspace.classList.toggle('collapsed');
         const chevron = s('personalize-chevron');
         if (chevron) {
-          chevron.textContent = isCollapsed ? '▼ Desplegar' : '▲ Ocultar';
+          chevron.textContent = isCollapsed ? '▼' : '▲';
         }
       });
     }
@@ -5272,12 +5318,22 @@ gl_FragColor=vec4(col,alpha);}`;
     if (action === 'pin_reset_failed') return this._t('log_detail_pin_reset_failed');
     if (action === 'state_restored') {
       const stateMap = {
-        disarmed: this._t('disarmed'), armed_home: this._t('mode_home'), armed_away: this._t('mode_away'),
-        armed_night: this._t('mode_night'), armed_vacation: this._t('mode_vacation'), triggered: this._t('log_triggered'),
+        disarmed: this._t('disarmed'),
+        armed_home: this._t('mode_home'),
+        armed_away: this._t('mode_away'),
+        armed_night: this._t('mode_night'),
+        armed_vacation: this._t('mode_vacation'),
+        triggered: this._t('log_triggered'),
       };
-      const translated = raw.replace(/\b(disarmed|armed_home|armed_away|armed_night|armed_vacation|triggered)\b/gi,
-        m => stateMap[m.toLowerCase()] || m);
-      return translated || this._t('log_action_state_restored');
+      let foundMode = this._t('disarmed');
+      const lower = raw.toLowerCase();
+      for (const [k, v] of Object.entries(stateMap)) {
+        if (lower.includes(k) || lower.includes(v.toLowerCase())) {
+          foundMode = v;
+          break;
+        }
+      }
+      return `${this._t('log_action_state_restored')}: ${foundMode}`;
     }
     if (action === 'confirmation_pending') return raw;
     if (action === 'disarmed' || action === 'disarm') return this._t('log_detail_disarm');
@@ -5467,39 +5523,22 @@ gl_FragColor=vec4(col,alpha);}`;
       vacation: this._t('mode_vacation'),
     };
 
-    let bubble = tabs.querySelector('.tab-bubble');
-    // A frontend resource update can leave an existing custom element with a
-    // stale, partial tab DOM (only the visual bubble). Rebuild it whenever
-    // its five mode controls are not all present.
-    if (!bubble || tabs.querySelectorAll('[data-mode]').length !== modes.length) {
-      tabs.className = 'tabs';
-      tabs.innerHTML = `
-        <div class="tab-bubble"></div>
-        ${modes.map(m => `
-          <button type="button" class="tab" data-mode="${m}">
-            <span class="tab-icon" style="font-size: 20px;">${icons[m]}</span>
-            <span class="tab-label">${lbls[m]}</span>
-          </button>
-        `).join('')}
-      `;
-      bubble = tabs.querySelector('.tab-bubble');
-
-      tabs.querySelectorAll('[data-mode]').forEach(t => t.addEventListener('click', () => {
-        this._mode = t.dataset.mode;
-        this._renderModeTabs();
-        this._renderModeView();
-      }));
-    } else {
-      modes.forEach(m => {
-        const btn = tabs.querySelector(`[data-mode="${m}"]`);
-        if (btn) {
-          const iconSpan = btn.querySelector('.tab-icon');
-          const labelSpan = btn.querySelector('.tab-label');
-          if (iconSpan) iconSpan.textContent = icons[m];
-          if (labelSpan) labelSpan.textContent = lbls[m];
-        }
-      });
-    }
+    tabs.className = 'tabs';
+    tabs.innerHTML = `
+      <div class="tab-bubble"></div>
+      ${modes.map(m => `
+        <button type="button" class="tab ${m === this._mode ? 'active' : ''}" data-mode="${m}">
+          <span class="tab-icon" style="font-size: 20px;">${icons[m]}</span>
+          <span class="tab-label">${lbls[m]}</span>
+        </button>
+      `).join('')}
+    `;
+    const bubble = tabs.querySelector('.tab-bubble');
+    tabs.querySelectorAll('[data-mode]').forEach(t => t.addEventListener('click', () => {
+      this._mode = t.dataset.mode;
+      this._renderModeTabs();
+      this._renderModeView();
+    }));
 
     const buttons = tabs.querySelectorAll('.tab');
     let activeBtn = null;

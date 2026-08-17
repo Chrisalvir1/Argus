@@ -44,7 +44,6 @@ function ensureStyles(panel: AlarmPanel) {
   }
   style.textContent = `
 .entry .liquid-stack .liquid-btn{border-radius:13px!important;color:rgba(255,255,255,.92)!important}
-.argus-disarm-btn{grid-column:1/-1!important;width:100%!important;min-height:54px!important;background:linear-gradient(135deg,#10b981,#059669)!important;border:1px solid rgba(167,243,208,0.7)!important;color:#fff!important;box-shadow:0 10px 28px rgba(16,185,129,0.38),inset 0 1px 0 rgba(255,255,255,0.38)!important;border-radius:18px!important;font-weight:900!important;backdrop-filter:blur(20px)!important}
 .entry.argus-arming .entry-icon>svg,.entry.argus-waiting .entry-icon>svg{transform-origin:center!important;animation:argusArmingShield 1.05s ease-in-out infinite!important;filter:drop-shadow(0 0 26px rgba(255,184,57,.95)) saturate(1.35)!important}
 .argus-shield-status{display:block;margin:7px auto 0;padding:5px 10px;width:max-content;max-width:180px;border:1px solid rgba(255,184,57,.45);border-radius:999px;background:rgba(255,149,0,.13);color:#ffd27a;font-size:9px;font-weight:800;letter-spacing:.12em;text-align:center;animation:argusArmingLabel 1.05s ease-in-out infinite}
 .entry .console-sensor.argus-blocking,.entry .console-sensor.argus-triggered-sensor{border-color:#ff8a1f!important;background:linear-gradient(135deg,rgba(249,115,22,.32),rgba(194,65,12,.18))!important;animation:argusTriggeredSensor .72s ease-in-out infinite!important}
@@ -86,36 +85,11 @@ function apply(panel: AlarmPanel) {
     
     const stack = entry.querySelector('.liquid-stack');
     if (stack) {
-      const disarmLabel = panel._t?.('btn_disarmed') || 'DESARMAR / OFF';
-      let btn = stack.querySelector('.argus-disarm-btn') as HTMLButtonElement | null;
-      if (!btn) {
-        btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'liquid-btn argus-disarm-btn';
-        btn.innerHTML = `<span>⏻</span><b>${disarmLabel}</b>`;
-        btn.onclick = async () => {
-          if (!item.entry_id) return;
-          btn!.disabled = true;
-          try {
-            await panel._send?.('argus/perform_alarm_action', { entry_id: item.entry_id, action: 'disarm' });
-            await panel._load?.();
-          } finally {
-            btn!.disabled = false;
-          }
-        };
-        const sos = Array.from(stack.children).find(x => /SOS|PÁNICO|PANIC|PANIQUE|PÂNICO|PANICO|紧急|ПАНИКА/i.test(x.textContent || ''));
-        if (sos) stack.insertBefore(btn, sos);
-        else stack.appendChild(btn);
-      } else {
-        const bold = btn.querySelector('b');
-        if (bold && bold.textContent !== disarmLabel) bold.textContent = disarmLabel;
-      }
-      
       Array.from(stack.querySelectorAll('.liquid-btn,button')).forEach(b => {
         const el = b as HTMLElement;
         const text = String(el.textContent || '');
         if (/SOS|PÁNICO|PANIC|PANIQUE|PÂNICO|PANICO|紧急|ПАНИКА/i.test(text)) paint(el, 'sos', Boolean(attrs.argus_panic_active));
-        else if (/DESARMAR|DISARM|DESARMADO|DISARMED|DÉSARMER|DÉSARMÉ|OFF/i.test(text)) paint(el, 'disarm', state === 'disarmed');
+        else if (/DESARMAR|DISARM|DESARMADO|DISARMED|DÉSARMER|DÉSARMÉ|OFF|已撤防|СНЯТО/i.test(text)) paint(el, 'disarm', state === 'disarmed');
         else {
           const match = Object.entries(ACTIVE).find(([, rx]) => rx.test(text));
           if (match) paint(el, match[0], state === match[0]);
@@ -151,14 +125,14 @@ export function applyV2050AlarmVisuals(C: ArgusPanelConstructor | undefined): vo
     return r;
   };
   
-  p._load = async function (this: AlarmPanel, ...a: any[]) {
-    const r = await load?.apply(this, a);
+  p._load = async function (this: AlarmPanel, ...args: any[]) {
+    const r = await load?.apply(this, args);
     apply(this);
     return r;
   };
   
-  p._renderEntries = function (this: AlarmPanel, ...a: any[]) {
-    const r = render?.apply(this, a);
+  p._renderEntries = function (this: AlarmPanel, ...args: any[]) {
+    const r = render?.apply(this, args);
     apply(this);
     return r;
   };
