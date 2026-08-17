@@ -6,6 +6,7 @@ import{applyPremiumExperience}from'../features/premium';
 import { applyMotionSystem } from '../features/motion';
 import { applyStableInstancesRender } from '../features/render/stable';
 import { applyV2050AlarmVisuals } from '../features/render/alarm';
+import { applySlideToAction } from '../features/safety/slide-action';
 import { applyV2049ResponsiveWidgets } from '../features/widgets/responsive';
 import { applyV2050WidgetLayouts } from '../features/widgets/layouts';
 
@@ -25,6 +26,7 @@ import type{ArgusPanelConstructor}from'../core/panel';
    applyMotionSystem(C);
    applyStableInstancesRender(C);
    applyV2050AlarmVisuals(C);
+   applySlideToAction(C);
    applyV2049ResponsiveWidgets(C);
    applyV2050WidgetLayouts(C);
   applyLegacyAfterTypedClients(C);

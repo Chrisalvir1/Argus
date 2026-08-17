@@ -1,4 +1,23 @@
+## [2.2.1] - 2026-08-17
+
+### Added
+- **Slide-to-Action Child Lock (Protección de Niños):** Replaced the direct-tap disarm and SOS buttons with iOS-style slide-to-unlock controls. The slider only appears when the button is tapped, preventing accidental activations by children or pets. Slide-to-disarm with a master PIN configured shows a secure code input after the gesture. Slide-to-SOS requires a deliberate drag gesture to activate emergency mode.
+- **13-language Slide Labels:** All slide-to-action labels are fully localized in Spanish, English, French, Portuguese, Italian, 中文, 繁體中文, Russian, हिन्दी, العربية, 한국어, 日本語, and Ukrainian.
+- **Bounce-spring Animation:** Thumb snaps back with a spring ease `cubic-bezier(0.34, 1.56, 0.64, 1)` when gesture is not completed.
+- **Pulsating SOS Thumb:** When SOS is active, the slider thumb pulses red rhythmically (`sosThumbPulse 0.8s infinite`).
+- **Liquid Glass Slider Design:** Slider track and thumb use pure translucent Liquid Glass with `backdrop-filter: blur(24px) saturate(160%)`, colored borders, specular highlights, and deep shadows.
+- **Dynamic Mode Button Colors:** Each mode button (En Casa/amber, Ausente/red, Noche/blue, Vacaciones/purple, Disarmed/emerald) now has a distinct hue in both idle and active states with vibrant glow when selected.
+- **SOS Light Chip i18n:** All SOS light output card labels (steady safe, safe flash, on/off note, test button, flash options) are now fully translated across all 12 languages.
+- **React Dashboard Widget i18n:** Widget headers now dynamically reflect the active language via `panel._t(...)` instead of static Spanish strings.
+
+### Fixed
+- Disarm active state now correctly illuminates green emerald only when system is disarmed; all other mode colors turn off immediately.
+- SOS button uses the `flashing` class for pulsing animation when panic is active.
+- React Dashboard feedback message (`Tamaño S`) no longer shows permanently; only displays during active editing.
+- Removed hardcoded Spanish strings from `argus-light-capability-fixes.ts`.
+
 ## [2.2.0] - 2026-08-17
+
 
 ### Added
 - **React UI Runtime & Modern Architecture:** Complete migration to React + TypeScript + Vite as the sole interface runtime layer, completely replacing and physically removing `src/legacy` and the legacy patch bridge.
