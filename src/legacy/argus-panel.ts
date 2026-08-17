@@ -3299,7 +3299,14 @@ class ArgusPanel extends HTMLElement {
   }
 
   _getCurrentLangCode() {
-    const raw = String(this._manualLang || this._ui?.language || this._hass?.language || 'en').trim();
+    let raw = this._manualLang;
+    if (!raw) {
+      try { raw = localStorage.getItem('argus_lang'); } catch(e) {}
+    }
+    if (!raw || raw === 'auto') {
+      raw = this._ui?.manual_lang || this._ui?.language || this._hass?.language || 'en';
+    }
+    raw = String(raw || 'en').trim();
     if (TEXTS[raw]) return raw;
     if (/^zh-(hant|tw|hk)/i.test(raw)) return 'zh-Hant';
     if (/^zh/i.test(raw)) return 'zh';
@@ -3373,15 +3380,16 @@ class ArgusPanel extends HTMLElement {
   }
 
   _setLanguage(code) {
+    const entry_id = this._dashboard?.entry_id || this._dashboard?.entries?.[0]?.entry_id;
     if (code === 'auto') {
       this._manualLang = null;
-      try { localStorage.removeItem('argus_lang'); } catch(e) {}
-      this._send('argus/save_ui', { language: null }).catch(console.error);
+      try { localStorage.setItem('argus_lang', 'auto'); } catch(e) {}
+      this._send('argus/save_ui', { language: 'auto', manual_lang: 'auto', ...(entry_id ? { entry_id } : {}) }).catch(console.error);
     } else {
       if (!TEXTS[code]) return;
       this._manualLang = code;
       try { localStorage.setItem('argus_lang', code); } catch(e) {}
-      this._send('argus/save_ui', { language: code }).catch(console.error);
+      this._send('argus/save_ui', { language: code, manual_lang: code, ...(entry_id ? { entry_id } : {}) }).catch(console.error);
     }
     this._instanceSignatures?.clear();
     this._refreshLocalizedUi();
@@ -3401,11 +3409,14 @@ class ArgusPanel extends HTMLElement {
     this._renderActivityLog();
     this._renderAutomations();
     this._renderNotifications();
-    if (this._activeAccessSection === 'users') this._renderUsers();
+    this._renderUsers();
     this._renderSosOutputs();
     this._configureEmergencyCall();
     this._updateHomeNameDisplay();
     this._renderUploadedFiles();
+    const cur = this._manualLang || 'auto';
+    const sel = this.shadowRoot.getElementById('dropdown-lang-select') as HTMLSelectElement | null;
+    if (sel && sel.value !== cur) sel.value = cur;
   }
 
   _applyTranslations() {
@@ -4151,7 +4162,14 @@ class ArgusPanel extends HTMLElement {
     }
     if (bootstrap.weather_source) this._weatherSource = bootstrap.weather_source;
     if (bootstrap.temperature_source) this._temperatureSource = bootstrap.temperature_source;
-    if (bootstrap.language) this._manualLang = bootstrap.language;
+    try {
+      const stored = localStorage.getItem('argus_lang');
+      if (stored && stored !== 'auto') {
+        this._manualLang = stored;
+      } else if (bootstrap.language) {
+        this._manualLang = bootstrap.language;
+      }
+    } catch(e) {}
     
     this._updateCanvasBackground();
 
@@ -6644,86 +6662,29 @@ gl_FragColor=vec4(col,alpha);}`;
 
   _updateCanvasBackground() {
     const bgContainer = this.shadowRoot.getElementById('argus-canvas-bg');
-    const mode = this._hubBgMode || 'default';
-    const file = this._hubBgFile || '';
-
-    this.setAttribute('data-bg-mode', mode);
-
-    // Reset inline host background styling
-    this.style.backgroundImage = '';
-    this.style.backgroundSize = '';
-    this.style.backgroundPosition = '';
-    this.style.backgroundRepeat = '';
-    this.style.backgroundAttachment = '';
-    this.style.background = ''; // restore CSS stylesheet default
+    this.setAttribute('data-bg-mode', 'default');
 
     if (bgContainer) {
       bgContainer.innerHTML = '';
       bgContainer.style.backgroundImage = '';
     }
 
-    if (mode === 'none') {
-      return;
-    }
-    if (mode === 'weather') {
-      if (bgContainer) {
-        bgContainer.innerHTML = `<canvas class="wx-webgl" style="position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none;"></canvas>`;
-        this.shadowRoot.querySelectorAll('.wx-webgl').forEach(canvas => {
-          if (canvas._argusRO) canvas._argusRO.disconnect();
-          const initOnce = () => {
-            if (canvas._argusWebglInit) return;
-            if ((canvas.clientWidth > 0 || canvas.offsetWidth > 0) && canvas.isConnected) {
-              canvas._argusWebglInit = true;
-              this._initWeatherWebGL(canvas);
-            }
-          };
-          if (typeof ResizeObserver !== 'undefined') {
-            canvas._argusRO = new ResizeObserver(() => { initOnce(); canvas._argusRO?.disconnect(); });
-            canvas._argusRO.observe(canvas.parentElement || canvas);
-          }
-          if (canvas.clientWidth > 0) { initOnce(); }
-          else {
-            requestAnimationFrame(() => {
-              if (canvas.clientWidth > 0) initOnce();
-              else setTimeout(initOnce, 200);
-            });
-          }
-        });
-      }
-      return;
-    }
+    // Stop and remove any WebGL canvas loops to guarantee liquid-smooth rendering
+    this.shadowRoot.querySelectorAll('.wx-webgl').forEach(canvas => {
+      if ((canvas as any)._argusRO) (canvas as any)._argusRO.disconnect();
+      if ((canvas as any)._argusWebglStop) (canvas as any)._argusWebglStop();
+      canvas.remove();
+    });
 
-    const imgSrc = (mode === 'default')
-      ? '/api/argus_static/argus-default-bg.jpg'
-      : (mode === 'image' && file ? file : '');
-
-    if (imgSrc) {
-      // Apply background directly to :host to prevent browser/Safari z-index Shadow DOM rendering issues
-      this.style.backgroundImage = `url('${imgSrc.replace(/'/g, "%27")}')`;
-      this.style.backgroundSize = 'cover';
-      this.style.backgroundPosition = 'center';
-      this.style.backgroundRepeat = 'no-repeat';
-      this.style.backgroundAttachment = 'fixed';
-    }
+    this.style.backgroundImage = `url('/api/argus_static/argus-default-bg.jpg')`;
+    this.style.backgroundSize = 'cover';
+    this.style.backgroundPosition = 'center';
+    this.style.backgroundRepeat = 'no-repeat';
+    this.style.backgroundAttachment = 'fixed';
   }
 
   _renderEntryBackground(ws, isNight) {
-    const mode = this._backgroundMode || 'weather', imgs = this._backgroundImages || [];
-    if (mode === 'none') return `<div class="wx wx-static"></div>`;
-    if (mode === 'photo' && (this._panelBgFile || imgs[0])) {
-      const bgImg = this._panelBgFile || imgs[0];
-      return `<div class="wx wx-photo" style="--bg-image:url('${bgImg.replace(/'/g, "%27")}')"></div>`;
-    }
-    if (mode === 'collage' && imgs.length) return `<div class="wx wx-collage"><div class="wx-collage-grid">${imgs.slice(0,4).map(src => `<div class="wx-collage-cell" style="background-image:url('${src.replace(/'/g, "%27")}')"></div>`).join('')}</div></div>`;
-    if (mode === 'video' && this._panelBgFile) {
-      const sound = this._panelBgSound;
-      return `<div class="wx wx-video">
-        <video autoplay loop playsinline ${sound ? '' : 'muted'} style="width:100%; height:100%; object-fit:cover; pointer-events:none; position:absolute; inset:0; z-index:1;">
-          <source src="${this._panelBgFile}">
-        </video>
-      </div>`;
-    }
-    return `<canvas class="wx-webgl" style="position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; border-radius:inherit;"></canvas>`;
+    return `<div class="wx wx-liquid-glass" style="position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; border-radius:inherit; background:radial-gradient(circle at 50% 20%, rgba(255,255,255,0.06), transparent 70%);"></div>`;
   }
 
   _updateHomeNameDisplay() {

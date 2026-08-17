@@ -415,23 +415,18 @@ function bindLanguageSelector(panel) {
   root.addEventListener('change', event => {
     const target = event.target;
     if (!target) return;
-    // Match any select that is the language selector in the profile dropdown
     const isLangSelect = target.matches(
-      '#hero-lang-select, select[data-lang], .lang-selector, [name="language"], [id*="lang"]'
-    ) || (target.tagName === 'SELECT' && target.closest?.('.hero-profile-dropdown'));
+      '#dropdown-lang-select, #hero-lang-select, select[data-lang], .lang-selector, [name="language"], [id*="lang"]'
+    ) || (target.tagName === 'SELECT' && target.closest?.('.hero-profile-dropdown, #profile-dropdown'));
     if (!isLangSelect) return;
-    const newLang = target.value || null;
-    panel._manualLang = newLang;
-    // Persist to HA backend
-    const entry_id = panel._dashboard?.entry_id || panel._dashboard?.entries?.[0]?.entry_id;
-    panel._send?.('argus/save_ui', {
-      ...(entry_id ? { entry_id } : {}),
-      manual_lang: newLang
-    }).catch(err => console.error('Argus lang save failed', err));
-    // Apply immediately
-    panel._refreshLocalizedUi?.();
-    panel._applyTranslations?.();
-    panel._renderEntries?.();
+    const newLang = target.value || 'auto';
+    if (typeof panel._setLanguage === 'function') {
+      panel._setLanguage(newLang);
+    } else {
+      panel._manualLang = (newLang === 'auto' ? null : newLang);
+      try { localStorage.setItem('argus_lang', newLang); } catch(e) {}
+      panel._refreshLocalizedUi?.();
+    }
   }, true);
 }
 
