@@ -8,7 +8,7 @@ class ArgusReactPanel extends HTMLElement{
  private root?:Root;
  private value?:HomeAssistant;
  set hass(value:HomeAssistant){this.value=value;this.render()}
- get hass(){return this.value}
+ get hass():HomeAssistant|undefined{return this.value}
  connectedCallback(){this.render()}
  disconnectedCallback(){this.root?.unmount();this.root=undefined}
  private render(){if(!this.isConnected||!this.value)return;const mount=this.shadowRoot||this.attachShadow({mode:'open'});this.root??=createRoot(mount);this.root.render(createElement(I18nProvider,{hass:this.value},createElement(ArgusApp,{hass:this.value})))}
