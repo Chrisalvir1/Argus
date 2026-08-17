@@ -7,7 +7,13 @@ const COPY={
   pt:{title:'Segurança',home:'EM CASA',away:'AUSENTE',night:'NOITE',vacation:'FÉRIAS',disarm:'DESARMAR',pin:'DIGITE O PIN',bad:'PIN incorreto',unknown:'Local indisponível'},
   it:{title:'Sicurezza',home:'CASA',away:'ASSENTE',night:'NOTTE',vacation:'VACANZA',disarm:'DISARMA',pin:'INSERISCI PIN',bad:'PIN errato',unknown:'Posizione non disponibile'},
   zh:{title:'安全',home:'在家',away:'外出',night:'夜间',vacation:'度假',disarm:'撤防',pin:'输入 PIN',bad:'PIN 错误',unknown:'位置不可用'},
-  ru:{title:'Безопасность',home:'ДОМА',away:'УШЁЛ',night:'НОЧЬ',vacation:'ОТПУСК',disarm:'СНЯТЬ',pin:'ВВЕДИТЕ PIN',bad:'Неверный PIN',unknown:'Местоположение недоступно'}
+  'zh-Hant':{title:'安全',home:'在家',away:'離家',night:'夜間',vacation:'度假',disarm:'撤防',pin:'輸入 PIN',bad:'PIN 錯誤',unknown:'位置不可用'},
+  ru:{title:'Безопасность',home:'ДОМА',away:'УШЁЛ',night:'НОЧЬ',vacation:'ОТПУСК',disarm:'СНЯТЬ',pin:'ВВЕДИТЕ PIN',bad:'Неверный PIN',unknown:'Местоположение недоступно'},
+  hi:{title:'सुरक्षा',home:'घर पर',away:'बाहर',night:'रात',vacation:'छुट्टी',disarm:'डिसआर्म',pin:'पिन दर्ज करें',bad:'गलत पिन',unknown:'स्थान अनुपलब्ध'},
+  ar:{title:'الأمان',home:'في المنزل',away:'بالخارج',night:'ليلي',vacation:'إجازة',disarm:'تعطيل',pin:'أدخل رمز PIN',bad:'رمز PIN خاطئ',unknown:'الموقع غير متاح'},
+  ko:{title:'보안',home:'재실',away:'외출',night:'야간',vacation:'휴가',disarm:'해제',pin:'PIN 입력',bad:'잘못된 PIN',unknown:'위치 사용 불가'},
+  ja:{title:'セキュリティ',home:'在宅',away:'外出',night:'夜間',vacation:'休暇',disarm:'解除',pin:'PINを入力',bad:'PINが正しくありません',unknown:'位置情報利用不可'},
+  uk:{title:'Безпека',home:'ВДОМА',away:'НЕМАЄ ВДОМА',night:'НІЧ',vacation:'ВІДПУСТКА',disarm:'ЗНЯТИ',pin:'ВВЕДІТЬ PIN',bad:'Невірний PIN',unknown:'Розташування недоступне'}
 };
 const esc=value=>String(value??'').replace(/[&<>'\"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[char]));
 console.info(`%c🛡️ ARGUS SECURITY %c v${ARGUS_CARD_VERSION} `, "color: white; background: #0f172a; font-weight: 700; padding: 4px 8px; border-radius: 4px 0 0 4px;", "color: #0f172a; background: #38bdf8; font-weight: 700; padding: 4px 8px; border-radius: 0 4px 4px 0;");

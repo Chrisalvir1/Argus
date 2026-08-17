@@ -5,9 +5,15 @@ const Bo = [
   { code: "fr", flag: "🇫🇷", label: "Français" },
   { code: "pt", flag: "🇧🇷", label: "Português" },
   { code: "it", flag: "🇮🇹", label: "Italiano" },
-  { code: "zh", flag: "🇨🇳", label: "中文" },
-  { code: "ru", flag: "🇷🇺", label: "Русский" }
-], Ne = {
+  { code: "zh", flag: "🇨🇳", label: "中文 (简体)" },
+  { code: "zh-Hant", flag: "🇭🇰", label: "中文 (繁體)" },
+  { code: "ru", flag: "🇷🇺", label: "Русский" },
+  { code: "hi", flag: "🇮🇳", label: "हिन्दी" },
+  { code: "ar", flag: "🇸🇦", label: "العربية" },
+  { code: "ko", flag: "🇰🇷", label: "한국어" },
+  { code: "ja", flag: "🇯🇵", label: "日本語" },
+  { code: "uk", flag: "🇺🇦", label: "Українська" }
+], Re = {
   es: {
     hero_desc: "Sistema integral de seguridad, control de acceso, automatizaciones y HomeKit.",
     instances: "Instancias activas",
@@ -1843,43 +1849,43 @@ Usare come immagine statica (OK) o video animato (Annulla)?`, first_run_blocked_
   zh: { setup_admin_name: "管理员名称", setup_access_pin: "Argus 面板访问 PIN (可选)", setup_master_pin: "布防/撤防主 PIN (可选)", claim_title: "Argus 安全更新", claim_desc: "您的安装需要管理员来声明访问权限。", claim_btn: "声明管理权限" },
   ru: { setup_admin_name: "Имя администратора", setup_access_pin: "PIN доступа к панели Argus (Необязательно)", setup_master_pin: "Мастер-PIN для постановки/снятия с охраны (Необязательно)", claim_title: "Обновление безопасности Argus", claim_desc: "Вашей установке требуется администратор для получения доступа.", claim_btn: "Заявить права администратора" }
 };
-for (const a of Object.keys(Ne))
-  Object.assign(Ne[a], Wg[a], Vg[a], Gg[a], Yg[a]);
-Object.assign(Ne.es, { expired: "Expirado", active_until: "Vigente hasta", exp_indefinite: "Indefinido" });
-Object.assign(Ne.en, { expired: "Expired", active_until: "Valid until", exp_indefinite: "Indefinite" });
-Object.assign(Ne.fr, { expired: "Expiré", active_until: "Expire", exp_indefinite: "Indéfini" });
-Object.assign(Ne.pt, { expired: "Expirado", active_until: "Expira", exp_indefinite: "Indefinido" });
-Object.assign(Ne.it, { expired: "Scaduto", active_until: "Scade", exp_indefinite: "Indefinito" });
-Object.assign(Ne.zh, { expired: "已过期", active_until: "到期", exp_indefinite: "无限期" });
-Object.assign(Ne.ru, { expired: "Истёк", active_until: "Действует до", exp_indefinite: "Бессрочно" });
-Object.assign(Ne.es, { entry_sensors: "Sensores con retraso de entrada", select_entry_sensors: "Seleccionar sensores de entrada" });
-Object.assign(Ne.en, { entry_sensors: "Entry-delay sensors", select_entry_sensors: "Select entry sensors" });
-Object.assign(Ne.fr, { entry_sensors: "Capteurs avec délai d’entrée", select_entry_sensors: "Sélectionner les capteurs d’entrée" });
-Object.assign(Ne.pt, { entry_sensors: "Sensores com atraso de entrada", select_entry_sensors: "Selecionar sensores de entrada" });
-Object.assign(Ne.it, { entry_sensors: "Sensori con ritardo di ingresso", select_entry_sensors: "Seleziona sensori di ingresso" });
-Object.assign(Ne.zh, { entry_sensors: "具有进入延迟的传感器", select_entry_sensors: "选择进入传感器" });
-Object.assign(Ne.ru, { entry_sensors: "Датчики с задержкой входа", select_entry_sensors: "Выбрать датчики входа" });
-Object.assign(Ne.es, { entry_delay_toggle: "Retraso de entrada (⏳) o instantáneo (⚡)", saved: "✓ Guardado correctamente", pin_mismatch: "❌ El nuevo PIN no coincide" });
-Object.assign(Ne.en, { entry_delay_toggle: "Entry delay (⏳) or instant (⚡)", saved: "✓ Saved successfully", pin_mismatch: "❌ New PIN does not match" });
-Object.assign(Ne.fr, { entry_delay_toggle: "Délai d’entrée (⏳) ou instantané (⚡)", saved: "✓ Enregistré", pin_mismatch: "❌ Le nouveau code PIN ne correspond pas" });
-Object.assign(Ne.pt, { entry_delay_toggle: "Atraso de entrada (⏳) ou instantâneo (⚡)", saved: "✓ Salvo com sucesso", pin_mismatch: "❌ O novo PIN não coincide" });
-Object.assign(Ne.it, { entry_delay_toggle: "Ritardo di ingresso (⏳) o istantaneo (⚡)", saved: "✓ Salvato correttamente", pin_mismatch: "❌ Il nuovo PIN non corrisponde" });
-Object.assign(Ne.zh, { entry_delay_toggle: "进入延迟 (⏳) 或即时 (⚡)", saved: "✓ 已成功保存", pin_mismatch: "❌ 新 PIN 不匹配" });
-Object.assign(Ne.ru, { entry_delay_toggle: "Задержка входа (⏳) или мгновенно (⚡)", saved: "✓ Успешно сохранено", pin_mismatch: "❌ Новый PIN-код не совпадает" });
-Object.assign(Ne.es, { temp_displayed: "🌡️ Temperatura mostrada", weather_source: "☁️ Fuente de clima", weather_auto: "Automático (primera entidad de clima)", user_exp_type: "Vencimiento", user_exp_date: "Fecha/Hora de vencimiento", exp_temporary: "Temporal (fecha/hora)", log_mode: "Modo", log_action_user_added: "Usuario añadido", log_action_user_deleted: "Usuario eliminado", log_action_rejected: "Acción rechazada", log_action_automation: "Automatización ejecutada", log_action_analysis: "Análisis de IA", log_action_sos: "SOS activado", log_action_sos_stopped: "Pánico detenido" });
-Object.assign(Ne.en, { temp_displayed: "🌡️ Displayed temperature", weather_source: "☁️ Weather source", weather_auto: "Automatic (first weather entity)", user_exp_type: "Expiration", user_exp_date: "Expiration date/time", exp_temporary: "Temporary (date/time)", log_mode: "Mode", log_action_user_added: "User added", log_action_user_deleted: "User deleted", log_action_rejected: "Action rejected", log_action_automation: "Automation executed", log_action_analysis: "AI analysis", log_action_sos: "SOS activated", log_action_sos_stopped: "Panic stopped" });
-Object.assign(Ne.fr, { temp_displayed: "🌡️ Température affichée", weather_source: "☁️ Source météo", weather_auto: "Automatique (première entité météo)", user_exp_type: "Expiration", user_exp_date: "Date/heure d’expiration", exp_temporary: "Temporaire (date/heure)", log_mode: "Mode", log_action_user_added: "Utilisateur ajouté", log_action_user_deleted: "Utilisateur supprimé", log_action_rejected: "Action refusée", log_action_automation: "Automatisation exécutée", log_action_analysis: "Analyse IA", log_action_sos: "SOS activé", log_action_sos_stopped: "Panique arrêtée" });
-Object.assign(Ne.pt, { temp_displayed: "🌡️ Temperatura exibida", weather_source: "☁️ Fonte de clima", weather_auto: "Automático (primeira entidade meteorológica)", user_exp_type: "Expiração", user_exp_date: "Data/hora de expiração", exp_temporary: "Temporário (data/hora)", log_mode: "Modo", log_action_user_added: "Usuário adicionado", log_action_user_deleted: "Usuário removido", log_action_rejected: "Ação recusada", log_action_automation: "Automação executada", log_action_analysis: "Análise de IA", log_action_sos: "SOS ativado", log_action_sos_stopped: "Pânico interrompido" });
-Object.assign(Ne.it, { temp_displayed: "🌡️ Temperatura visualizzata", weather_source: "☁️ Fonte meteo", weather_auto: "Automatico (prima entità meteo)", user_exp_type: "Scadenza", user_exp_date: "Data/ora di scadenza", exp_temporary: "Temporaneo (data/ora)", log_mode: "Modalità", log_action_user_added: "Utente aggiunto", log_action_user_deleted: "Utente eliminato", log_action_rejected: "Azione rifiutata", log_action_automation: "Automazione eseguita", log_action_analysis: "Analisi IA", log_action_sos: "SOS attivato", log_action_sos_stopped: "Panico interrotto" });
-Object.assign(Ne.zh, { temp_displayed: "🌡️ 显示的温度", weather_source: "☁️ 天气来源", weather_auto: "自动（第一个天气实体）", user_exp_type: "到期", user_exp_date: "到期日期/时间", exp_temporary: "临时（日期/时间）", log_mode: "模式", log_action_user_added: "已添加用户", log_action_user_deleted: "已删除用户", log_action_rejected: "操作被拒绝", log_action_automation: "自动化已执行", log_action_analysis: "AI 分析", log_action_sos: "SOS 已激活", log_action_sos_stopped: "紧急状态已停止" });
-Object.assign(Ne.ru, { temp_displayed: "🌡️ Отображаемая температура", weather_source: "☁️ Источник погоды", weather_auto: "Автоматически (первая погодная сущность)", user_exp_type: "Срок действия", user_exp_date: "Дата/время окончания", exp_temporary: "Временный (дата/время)", log_mode: "Режим", log_action_user_added: "Пользователь добавлен", log_action_user_deleted: "Пользователь удалён", log_action_rejected: "Действие отклонено", log_action_automation: "Автоматизация выполнена", log_action_analysis: "Анализ ИИ", log_action_sos: "SOS активирован", log_action_sos_stopped: "Тревога остановлена" });
-Object.assign(Ne.es, { external_panels: "Paneles de alarma externos", light_siren_color: "Color de alarma", light_siren_flash: "Destello suave si está disponible" });
-Object.assign(Ne.en, { external_panels: "External alarm panels", light_siren_color: "Alarm colour", light_siren_flash: "Gentle flash when available" });
-Object.assign(Ne.fr, { external_panels: "Panneaux d’alarme externes", light_siren_color: "Couleur d’alarme", light_siren_flash: "Clignotement doux si disponible" });
-Object.assign(Ne.pt, { external_panels: "Painéis de alarme externos", light_siren_color: "Cor do alarme", light_siren_flash: "Piscar suave quando disponível" });
-Object.assign(Ne.it, { external_panels: "Pannelli di allarme esterni", light_siren_color: "Colore allarme", light_siren_flash: "Lampeggio delicato se disponibile" });
-Object.assign(Ne.zh, { external_panels: "外部报警面板", light_siren_color: "警报颜色", light_siren_flash: "可用时柔和闪烁" });
-Object.assign(Ne.ru, { external_panels: "Внешние панели сигнализации", light_siren_color: "Цвет тревоги", light_siren_flash: "Мягкое мигание при наличии" });
+for (const a of Object.keys(Re))
+  Re[a] = Object.assign({}, Re.en, Re.es, Re[a], Wg[a] || {}, Vg[a] || {}, Gg[a] || {}, Yg[a] || {});
+Object.assign(Re.es, { expired: "Expirado", active_until: "Vigente hasta", exp_indefinite: "Indefinido" });
+Object.assign(Re.en, { expired: "Expired", active_until: "Valid until", exp_indefinite: "Indefinite" });
+Object.assign(Re.fr, { expired: "Expiré", active_until: "Expire", exp_indefinite: "Indéfini" });
+Object.assign(Re.pt, { expired: "Expirado", active_until: "Expira", exp_indefinite: "Indefinido" });
+Object.assign(Re.it, { expired: "Scaduto", active_until: "Scade", exp_indefinite: "Indefinito" });
+Object.assign(Re.zh, { expired: "已过期", active_until: "到期", exp_indefinite: "无限期" });
+Object.assign(Re.ru, { expired: "Истёк", active_until: "Действует до", exp_indefinite: "Бессрочно" });
+Object.assign(Re.es, { entry_sensors: "Sensores con retraso de entrada", select_entry_sensors: "Seleccionar sensores de entrada" });
+Object.assign(Re.en, { entry_sensors: "Entry-delay sensors", select_entry_sensors: "Select entry sensors" });
+Object.assign(Re.fr, { entry_sensors: "Capteurs avec délai d’entrée", select_entry_sensors: "Sélectionner les capteurs d’entrée" });
+Object.assign(Re.pt, { entry_sensors: "Sensores com atraso de entrada", select_entry_sensors: "Selecionar sensores de entrada" });
+Object.assign(Re.it, { entry_sensors: "Sensori con ritardo di ingresso", select_entry_sensors: "Seleziona sensori di ingresso" });
+Object.assign(Re.zh, { entry_sensors: "具有进入延迟的传感器", select_entry_sensors: "选择进入传感器" });
+Object.assign(Re.ru, { entry_sensors: "Датчики с задержкой входа", select_entry_sensors: "Выбрать датчики входа" });
+Object.assign(Re.es, { entry_delay_toggle: "Retraso de entrada (⏳) o instantáneo (⚡)", saved: "✓ Guardado correctamente", pin_mismatch: "❌ El nuevo PIN no coincide" });
+Object.assign(Re.en, { entry_delay_toggle: "Entry delay (⏳) or instant (⚡)", saved: "✓ Saved successfully", pin_mismatch: "❌ New PIN does not match" });
+Object.assign(Re.fr, { entry_delay_toggle: "Délai d’entrée (⏳) ou instantané (⚡)", saved: "✓ Enregistré", pin_mismatch: "❌ Le nouveau code PIN ne correspond pas" });
+Object.assign(Re.pt, { entry_delay_toggle: "Atraso de entrada (⏳) ou instantâneo (⚡)", saved: "✓ Salvo com sucesso", pin_mismatch: "❌ O novo PIN não coincide" });
+Object.assign(Re.it, { entry_delay_toggle: "Ritardo di ingresso (⏳) o istantaneo (⚡)", saved: "✓ Salvato correttamente", pin_mismatch: "❌ Il nuovo PIN non corrisponde" });
+Object.assign(Re.zh, { entry_delay_toggle: "进入延迟 (⏳) 或即时 (⚡)", saved: "✓ 已成功保存", pin_mismatch: "❌ 新 PIN 不匹配" });
+Object.assign(Re.ru, { entry_delay_toggle: "Задержка входа (⏳) или мгновенно (⚡)", saved: "✓ Успешно сохранено", pin_mismatch: "❌ Новый PIN-код не совпадает" });
+Object.assign(Re.es, { temp_displayed: "🌡️ Temperatura mostrada", weather_source: "☁️ Fuente de clima", weather_auto: "Automático (primera entidad de clima)", user_exp_type: "Vencimiento", user_exp_date: "Fecha/Hora de vencimiento", exp_temporary: "Temporal (fecha/hora)", log_mode: "Modo", log_action_user_added: "Usuario añadido", log_action_user_deleted: "Usuario eliminado", log_action_rejected: "Acción rechazada", log_action_automation: "Automatización ejecutada", log_action_analysis: "Análisis de IA", log_action_sos: "SOS activado", log_action_sos_stopped: "Pánico detenido" });
+Object.assign(Re.en, { temp_displayed: "🌡️ Displayed temperature", weather_source: "☁️ Weather source", weather_auto: "Automatic (first weather entity)", user_exp_type: "Expiration", user_exp_date: "Expiration date/time", exp_temporary: "Temporary (date/time)", log_mode: "Mode", log_action_user_added: "User added", log_action_user_deleted: "User deleted", log_action_rejected: "Action rejected", log_action_automation: "Automation executed", log_action_analysis: "AI analysis", log_action_sos: "SOS activated", log_action_sos_stopped: "Panic stopped" });
+Object.assign(Re.fr, { temp_displayed: "🌡️ Température affichée", weather_source: "☁️ Source météo", weather_auto: "Automatique (première entité météo)", user_exp_type: "Expiration", user_exp_date: "Date/heure d’expiration", exp_temporary: "Temporaire (date/heure)", log_mode: "Mode", log_action_user_added: "Utilisateur ajouté", log_action_user_deleted: "Utilisateur supprimé", log_action_rejected: "Action refusée", log_action_automation: "Automatisation exécutée", log_action_analysis: "Analyse IA", log_action_sos: "SOS activé", log_action_sos_stopped: "Panique arrêtée" });
+Object.assign(Re.pt, { temp_displayed: "🌡️ Temperatura exibida", weather_source: "☁️ Fonte de clima", weather_auto: "Automático (primeira entidade meteorológica)", user_exp_type: "Expiração", user_exp_date: "Data/hora de expiração", exp_temporary: "Temporário (data/hora)", log_mode: "Modo", log_action_user_added: "Usuário adicionado", log_action_user_deleted: "Usuário removido", log_action_rejected: "Ação recusada", log_action_automation: "Automação executada", log_action_analysis: "Análise de IA", log_action_sos: "SOS ativado", log_action_sos_stopped: "Pânico interrompido" });
+Object.assign(Re.it, { temp_displayed: "🌡️ Temperatura visualizzata", weather_source: "☁️ Fonte meteo", weather_auto: "Automatico (prima entità meteo)", user_exp_type: "Scadenza", user_exp_date: "Data/ora di scadenza", exp_temporary: "Temporaneo (data/ora)", log_mode: "Modalità", log_action_user_added: "Utente aggiunto", log_action_user_deleted: "Utente eliminato", log_action_rejected: "Azione rifiutata", log_action_automation: "Automazione eseguita", log_action_analysis: "Analisi IA", log_action_sos: "SOS attivato", log_action_sos_stopped: "Panico interrotto" });
+Object.assign(Re.zh, { temp_displayed: "🌡️ 显示的温度", weather_source: "☁️ 天气来源", weather_auto: "自动（第一个天气实体）", user_exp_type: "到期", user_exp_date: "到期日期/时间", exp_temporary: "临时（日期/时间）", log_mode: "模式", log_action_user_added: "已添加用户", log_action_user_deleted: "已删除用户", log_action_rejected: "操作被拒绝", log_action_automation: "自动化已执行", log_action_analysis: "AI 分析", log_action_sos: "SOS 已激活", log_action_sos_stopped: "紧急状态已停止" });
+Object.assign(Re.ru, { temp_displayed: "🌡️ Отображаемая температура", weather_source: "☁️ Источник погоды", weather_auto: "Автоматически (первая погодная сущность)", user_exp_type: "Срок действия", user_exp_date: "Дата/время окончания", exp_temporary: "Временный (дата/время)", log_mode: "Режим", log_action_user_added: "Пользователь добавлен", log_action_user_deleted: "Пользователь удалён", log_action_rejected: "Действие отклонено", log_action_automation: "Автоматизация выполнена", log_action_analysis: "Анализ ИИ", log_action_sos: "SOS активирован", log_action_sos_stopped: "Тревога остановлена" });
+Object.assign(Re.es, { external_panels: "Paneles de alarma externos", light_siren_color: "Color de alarma", light_siren_flash: "Destello suave si está disponible" });
+Object.assign(Re.en, { external_panels: "External alarm panels", light_siren_color: "Alarm colour", light_siren_flash: "Gentle flash when available" });
+Object.assign(Re.fr, { external_panels: "Panneaux d’alarme externes", light_siren_color: "Couleur d’alarme", light_siren_flash: "Clignotement doux si disponible" });
+Object.assign(Re.pt, { external_panels: "Painéis de alarme externos", light_siren_color: "Cor do alarme", light_siren_flash: "Piscar suave quando disponível" });
+Object.assign(Re.it, { external_panels: "Pannelli di allarme esterni", light_siren_color: "Colore allarme", light_siren_flash: "Lampeggio delicato se disponibile" });
+Object.assign(Re.zh, { external_panels: "外部报警面板", light_siren_color: "警报颜色", light_siren_flash: "可用时柔和闪烁" });
+Object.assign(Re.ru, { external_panels: "Внешние панели сигнализации", light_siren_color: "Цвет тревоги", light_siren_flash: "Мягкое мигание при наличии" });
 const Ap = document.createElement("template");
 Ap.innerHTML = `
 <style>
@@ -3888,7 +3894,7 @@ class Kg extends HTMLElement {
   /* ── Translation ─────────────────────────────────────────────────── */
   _t(r) {
     const i = this._getCurrentLangCode();
-    return Ne[i]?.[r] || Ne.en[r] || r;
+    return Re[i]?.[r] || Re.en[r] || r;
   }
   _format(r, i = {}) {
     return this._t(r).replace(/\{(\w+)\}/g, (o, l) => String(i[l] ?? `{${l}}`));
@@ -3903,8 +3909,12 @@ class Kg extends HTMLElement {
     })[i]);
   }
   _getCurrentLangCode() {
-    const r = this._manualLang || this._ui?.language || (this._hass?.language || "en").split("-")[0];
-    return Ne[r] ? r : "en";
+    const r = String(this._manualLang || this._ui?.language || this._hass?.language || "en").trim();
+    if (Re[r]) return r;
+    if (/^zh-(hant|tw|hk)/i.test(r)) return "zh-Hant";
+    if (/^zh/i.test(r)) return "zh";
+    const i = r.split(/[-_]/)[0].toLowerCase();
+    return Re[i] ? i : "en";
   }
   _getLocale() {
     return {
@@ -3914,7 +3924,13 @@ class Kg extends HTMLElement {
       pt: "pt-BR",
       it: "it-IT",
       zh: "zh-CN",
-      ru: "ru-RU"
+      "zh-Hant": "zh-TW",
+      ru: "ru-RU",
+      hi: "hi-IN",
+      ar: "ar-SA",
+      ko: "ko-KR",
+      ja: "ja-JP",
+      uk: "uk-UA"
     }[this._getCurrentLangCode()] || "en-US";
   }
   _weatherPresentation(r, i) {
@@ -3925,7 +3941,13 @@ class Kg extends HTMLElement {
       pt: { sunny: "Ensolarado", clear_night: "Noite limpa", partlycloudy: "Parcialmente nublado", cloudy: "Nublado", rainy: "Chuvoso", pouring: "Chuva forte", lightning: "Trovoada", lightning_rainy: "Trovoada com chuva", snowy: "Nevando", fog: "Neblina", windy: "Ventoso", exceptional: "Condições excepcionais" },
       it: { sunny: "Soleggiato", clear_night: "Notte serena", partlycloudy: "Parzialmente nuvoloso", cloudy: "Nuvoloso", rainy: "Piovoso", pouring: "Pioggia intensa", lightning: "Temporale", lightning_rainy: "Temporale con pioggia", snowy: "Nevica", fog: "Nebbia", windy: "Ventoso", exceptional: "Condizioni eccezionali" },
       zh: { sunny: "晴朗", clear_night: "晴夜", partlycloudy: "局部多云", cloudy: "多云", rainy: "有雨", pouring: "大雨", lightning: "雷暴", lightning_rainy: "雷雨", snowy: "下雪", fog: "有雾", windy: "有风", exceptional: "异常天气" },
-      ru: { sunny: "Солнечно", clear_night: "Ясная ночь", partlycloudy: "Переменная облачность", cloudy: "Облачно", rainy: "Дождливо", pouring: "Сильныйдь", lightning: "Гроза", lightning_rainy: "Гроза с дождём", snowy: "Снег", fog: "Туман", windy: "Ветрено", exceptional: "Исключительные условия" }
+      "zh-Hant": { sunny: "晴朗", clear_night: "晴夜", partlycloudy: "局部多雲", cloudy: "多雲", rainy: "有雨", pouring: "大雨", lightning: "雷暴", lightning_rainy: "雷雨", snowy: "下雪", fog: "有霧", windy: "有風", exceptional: "異常天氣" },
+      ru: { sunny: "Солнечно", clear_night: "Ясная ночь", partlycloudy: "Переменная облачность", cloudy: "Облачно", rainy: "Дождливо", pouring: "Сильный дождь", lightning: "Гроза", lightning_rainy: "Гроза с дождём", snowy: "Снег", fog: "Туман", windy: "Ветрено", exceptional: "Исключительные условия" },
+      hi: { sunny: "धूप", clear_night: "साफ़ रात", partlycloudy: "आंशिक बादल", cloudy: "बादल", rainy: "बारिश", pouring: "भारी बारिश", lightning: "तूफ़ान", lightning_rainy: "तूफ़ानी बारिश", snowy: "बर्फ़बारी", fog: "कोहरा", windy: "हवादार", exceptional: "असाधारण स्थिति" },
+      ar: { sunny: "مشمس", clear_night: "ليلة صافية", partlycloudy: "غائم جزئياً", cloudy: "غائم", rainy: "ماطر", pouring: "أمطار غزيرة", lightning: "عاصفة رعدية", lightning_rainy: "عاصفة مع مطر", snowy: "مثلج", fog: "ضباب", windy: "عاصف", exceptional: "ظروف استثنائية" },
+      ko: { sunny: "맑음", clear_night: "맑은 밤", partlycloudy: "구름 조금", cloudy: "흐림", rainy: "비", pouring: "폭우", lightning: "뇌우", lightning_rainy: "비 동반 뇌우", snowy: "눈", fog: "안개", windy: "바람", exceptional: "특이 기상" },
+      ja: { sunny: "晴れ", clear_night: "快晴（夜）", partlycloudy: "一部曇り", cloudy: "曇り", rainy: "雨", pouring: "大雨", lightning: "雷雨", lightning_rainy: "雨を伴う雷雨", snowy: "雪", fog: "霧", windy: "強風", exceptional: "異常気象" },
+      uk: { sunny: "Сонячно", clear_night: "Ясна ніч", partlycloudy: "Мінлива хмарність", cloudy: "Хмарно", rainy: "Дощ", pouring: "Злива", lightning: "Гроза", lightning_rainy: "Гроза з дощем", snowy: "Сніг", fog: "Туман", windy: "Вітряно", exceptional: "Особливі умови" }
     }, c = o.includes("lightning") ? "⛈️" : o === "pouring" || o.includes("rain") ? "🌧️" : o.includes("snow") || o === "hail" || o === "sleet" ? "❄️" : o === "fog" ? "🌫️" : o.includes("cloud") ? "☁️" : i ? "🌙" : "☀️", u = this._getCurrentLangCode();
     return { icon: c, label: l[u]?.[o] || l.en[o] || o.replace(/_/g, " ") };
   }
@@ -3959,7 +3981,7 @@ class Kg extends HTMLElement {
       }
       this._send("argus/save_ui", { language: null }).catch(console.error);
     } else {
-      if (!Ne[r]) return;
+      if (!Re[r]) return;
       this._manualLang = r;
       try {
         localStorage.setItem("argus_lang", r);
@@ -8093,7 +8115,7 @@ function rh() {
     if (t.dangerouslySetInnerHTML != null) throw Error(i(91));
     return ne({}, t, { value: void 0, defaultValue: void 0, children: "" + e._wrapperState.initialValue });
   }
-  function Re(e, t) {
+  function Ne(e, t) {
     var n = t.value;
     if (n == null) {
       if (n = t.children, t = t.defaultValue, n != null) {
@@ -10970,7 +10992,7 @@ Error generating stack: ` + m.message + `
                 s._wrapperState = { wasMultiple: !!m.multiple }, Ye("invalid", s);
                 break;
               case "textarea":
-                Re(s, m), Ye("invalid", s);
+                Ne(s, m), Ye("invalid", s);
             }
             mt(n, m), d = null;
             for (var x in m) if (m.hasOwnProperty(x)) {
@@ -11036,7 +11058,7 @@ Error generating stack: ` + m.message + `
                   e._wrapperState = { wasMultiple: !!s.multiple }, d = ne({}, s, { value: void 0 }), Ye("invalid", e);
                   break;
                 case "textarea":
-                  Re(e, s), d = Ce(e, s), Ye("invalid", e);
+                  Ne(e, s), d = Ce(e, s), Ye("invalid", e);
                   break;
                 default:
                   d = s;
@@ -12967,8 +12989,8 @@ function zl() {
           var ve = Array.isArray(D), Ce = Array.isArray(K);
           if (ve || Ce)
             return ve === Ce && pe(D, K, L, de);
-          var Re = y.call(D);
-          return Re !== y.call(K) ? !1 : Re === h ? ke(D, K, L, de) : Re === v ? Me(D, K, L, de) : Re === C ? Ie(D, K, L, de) : Re === E ? Fe(D, K, L, de) : Re === z || Re === _ ? p(D) || p(K) ? !1 : Le(D, K, L, de) : Re === f || Re === R || Re === k ? g(D.valueOf(), K.valueOf()) : !1;
+          var Ne = y.call(D);
+          return Ne !== y.call(K) ? !1 : Ne === h ? ke(D, K, L, de) : Ne === v ? Me(D, K, L, de) : Ne === C ? Ie(D, K, L, de) : Ne === E ? Fe(D, K, L, de) : Ne === z || Ne === _ ? p(D) || p(K) ? !1 : Le(D, K, L, de) : Ne === f || Ne === R || Ne === k ? g(D.valueOf(), K.valueOf()) : !1;
         }
         return B;
       }
@@ -13216,12 +13238,12 @@ function En() {
   function E(L, B, D, K) {
     const de = H(L);
     let ve = g(de);
-    const Ce = Z(L, B), Re = Array(L.length);
+    const Ce = Z(L, B), Ne = Array(L.length);
     for (let Oe = 0, Ve = Ce.length; Oe < Ve; Oe++) {
       let Xe = v(Ce[Oe]);
-      Xe.static || (Xe = S(de, Xe, B, D, Ce, K, ve), ve = Math.max(ve, Xe.y + Xe.h), de.push(Xe)), Re[L.indexOf(Ce[Oe])] = Xe, Xe.moved = !1;
+      Xe.static || (Xe = S(de, Xe, B, D, Ce, K, ve), ve = Math.max(ve, Xe.y + Xe.h), de.push(Xe)), Ne[L.indexOf(Ce[Oe])] = Xe, Xe.moved = !1;
     }
-    return Re;
+    return Ne;
   }
   const k = {
     x: "w",
@@ -13232,17 +13254,17 @@ function En() {
     B[K] += 1;
     const ve = L.map((Ce) => Ce.i).indexOf(B.i);
     for (let Ce = ve + 1; Ce < L.length; Ce++) {
-      const Re = L[Ce];
-      if (!Re.static) {
-        if (Re.y > B.y + B.h) break;
-        z(B, Re) && y(L, Re, D + B[de], K);
+      const Ne = L[Ce];
+      if (!Ne.static) {
+        if (Ne.y > B.y + B.h) break;
+        z(B, Ne) && y(L, Ne, D + B[de], K);
       }
     }
     B[K] = D;
   }
   function S(L, B, D, K, de, ve, Ce) {
-    const Re = D === "vertical", Oe = D === "horizontal";
-    if (Re)
+    const Ne = D === "vertical", Oe = D === "horizontal";
+    if (Ne)
       for (typeof Ce == "number" ? B.y = Math.min(Ce, B.y) : B.y = Math.min(g(L), B.y); B.y > 0 && !A(L, B); )
         B.y--;
     else if (Oe)
@@ -13280,7 +13302,7 @@ function En() {
   function H(L) {
     return L.filter((B) => B.static);
   }
-  function $(L, B, D, K, de, ve, Ce, Re, Oe) {
+  function $(L, B, D, K, de, ve, Ce, Ne, Oe) {
     if (B.static && B.isDraggable !== !0 || B.y === K && B.x === D) return L;
     "Moving element ".concat(B.i, " to [").concat(String(D), ",").concat(String(K), "] from [").concat(B.x, ",").concat(B.y, "]");
     const Ve = B.x, Xe = B.y;
@@ -13299,27 +13321,27 @@ function En() {
     return L;
   }
   function X(L, B, D, K, de, ve) {
-    const Ce = de === "horizontal", Re = de === "vertical", Oe = B.static;
+    const Ce = de === "horizontal", Ne = de === "vertical", Oe = B.static;
     if (K) {
       K = !1;
       const lt = {
         x: Ce ? Math.max(B.x - D.w, 0) : D.x,
-        y: Re ? Math.max(B.y - D.h, 0) : D.y,
+        y: Ne ? Math.max(B.y - D.h, 0) : D.y,
         w: D.w,
         h: D.h,
         i: "-1"
       }, I = A(L, lt), q = I && I.y + I.h > B.y, G = I && B.x + B.w > I.x;
       if (I) {
-        if (q && Re)
+        if (q && Ne)
           return $(L, D, void 0, D.y + 1, K, Oe, de);
         if (q && de == null)
           return B.y = D.y, D.y = D.y + D.h, L;
         if (G && Ce)
           return $(L, B, D.x, void 0, K, Oe, de);
-      } else return "Doing reverse collision on ".concat(D.i, " up to [").concat(lt.x, ",").concat(lt.y, "]."), $(L, D, Ce ? lt.x : void 0, Re ? lt.y : void 0, K, Oe, de);
+      } else return "Doing reverse collision on ".concat(D.i, " up to [").concat(lt.x, ",").concat(lt.y, "]."), $(L, D, Ce ? lt.x : void 0, Ne ? lt.y : void 0, K, Oe, de);
     }
-    const Ve = Ce ? D.x + 1 : void 0, Xe = Re ? D.y + 1 : void 0;
-    return Ve == null && Xe == null ? L : $(L, D, Ce ? D.x + 1 : void 0, Re ? D.y + 1 : void 0, K, Oe, de);
+    const Ve = Ce ? D.x + 1 : void 0, Xe = Ne ? D.y + 1 : void 0;
+    return Ve == null && Xe == null ? L : $(L, D, Ce ? D.x + 1 : void 0, Ne ? D.y + 1 : void 0, K, Oe, de);
   }
   function J(L) {
     return L * 100 + "%";
@@ -13448,17 +13470,17 @@ function En() {
   function Ie(L, B, D, K, de) {
     L = L || [];
     const ve = [];
-    r.default.Children.forEach(B, (Re) => {
-      if (Re?.key == null) return;
-      const Oe = w(L, String(Re.key)), Ve = Re.props["data-grid"];
+    r.default.Children.forEach(B, (Ne) => {
+      if (Ne?.key == null) return;
+      const Oe = w(L, String(Ne.key)), Ve = Ne.props["data-grid"];
       Oe && Ve == null ? ve.push(v(Oe)) : Ve ? ve.push(v(l(l({}, Ve), {}, {
-        i: Re.key
+        i: Ne.key
       }))) : ve.push(v({
         w: 1,
         h: 1,
         x: 0,
         y: g(ve),
-        i: String(Re.key)
+        i: String(Ne.key)
       }));
     });
     const Ce = b(ve, {
@@ -13473,9 +13495,9 @@ function En() {
     for (let K = 0, de = L.length; K < de; K++) {
       const ve = L[K];
       for (let Ce = 0; Ce < D.length; Ce++) {
-        const Re = D[Ce], Oe = ve[Re];
+        const Ne = D[Ce], Oe = ve[Ne];
         if (typeof Oe != "number" || Number.isNaN(Oe))
-          throw new Error("ReactGridLayout: ".concat(B, "[").concat(K, "].").concat(Re, " must be a number! Received: ").concat(Oe, " (").concat(typeof Oe, ")"));
+          throw new Error("ReactGridLayout: ".concat(B, "[").concat(K, "].").concat(Ne, " must be a number! Received: ").concat(Oe, " (").concat(typeof Oe, ")"));
       }
       if (typeof ve.i < "u" && typeof ve.i != "string")
         throw new Error("ReactGridLayout: ".concat(B, "[").concat(K, "].i must be a string! Received: ").concat(ve.i, " (").concat(typeof ve.i, ")"));
@@ -13877,7 +13899,7 @@ function ph() {
     return q;
   }
   var K = g(zt()), de = g(/* @__PURE__ */ Rr()), ve = g(Zo()), Ce = function() {
-  }, Re = Ce, Oe = {
+  }, Ne = Ce, Oe = {
     touch: {
       start: "touchstart",
       move: "touchmove",
@@ -13904,7 +13926,7 @@ function ph() {
         const me = Fe(I, ae, this);
         if (me == null) return;
         const { x: Be, y: He } = me, Qe = Ze(this, Be, He);
-        Re("calling", this.props.onStart), !(this.props.onStart(I, Qe) === !1 || this.mounted === !1) && (this.props.enableUserSelectHack && be(G, this.props.nonce), this.dragging = !0, this.lastX = Be, this.lastY = He, se(G, Ve.move, this.handleDrag), se(G, Ve.stop, this.handleDragStop));
+        Ne("calling", this.props.onStart), !(this.props.onStart(I, Qe) === !1 || this.mounted === !1) && (this.props.enableUserSelectHack && be(G, this.props.nonce), this.dragging = !0, this.lastX = Be, this.lastY = He, se(G, Ve.move, this.handleDrag), se(G, Ve.stop, this.handleDragStop));
       }, this.handleDrag = (I) => {
         const q = Fe(I, this.touchIdentifier, this);
         if (q == null) return;
@@ -17649,7 +17671,21 @@ function kf(a) {
     return sp(this), l;
   };
 }
-const lp = { es: { on: "Conectado", off: "Argus desconectado · HA sin conexión" }, en: { on: "Connected", off: "Argus disconnected · HA offline" }, fr: { on: "Connecté", off: "Argus déconnecté · HA hors ligne" }, pt: { on: "Conectado", off: "Argus desconectado · HA sem conexão" }, it: { on: "Connesso", off: "Argus disconnesso · HA offline" }, zh: { on: "已连接", off: "Argus 已断开 · HA 离线" }, ru: { on: "Подключено", off: "Argus отключён · HA не в сети" } }, Sf = (a) => {
+const lp = {
+  es: { on: "Conectado", off: "Argus desconectado · HA sin conexión" },
+  en: { on: "Connected", off: "Argus disconnected · HA offline" },
+  fr: { on: "Connecté", off: "Argus déconnecté · HA hors ligne" },
+  pt: { on: "Conectado", off: "Argus desconectado · HA sem conexão" },
+  it: { on: "Connesso", off: "Argus disconnesso · HA offline" },
+  zh: { on: "已连接", off: "Argus 已断开 · HA 离线" },
+  "zh-hant": { on: "已連線", off: "Argus 已中斷 · HA 離線" },
+  ru: { on: "Подключено", off: "Argus отключён · HA не в сети" },
+  hi: { on: "सक्रिय", off: "Argus डिस्कनेक्ट · HA ऑफ़लाइन" },
+  ar: { on: "متصل", off: "Argus غير متصل · HA غير متصل" },
+  ko: { on: "연결됨", off: "Argus 연결 끊김 · HA 오프라인" },
+  ja: { on: "接続済み", off: "Argus 未接続 · HA オフライン" },
+  uk: { on: "Підключено", off: "Argus відключено · HA офлайн" }
+}, Sf = (a) => {
   const r = String(a._manualLang || a._hass?.language || a._hass?.locale?.language || "en").toLowerCase().split(/[-_]/)[0];
   return lp[r] || lp.en;
 };

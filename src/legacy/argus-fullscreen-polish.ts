@@ -1,5 +1,19 @@
 // @ts-nocheck
-const STATUS_TEXT={es:{on:'Conectado',off:'Argus desconectado · HA sin conexión'},en:{on:'Connected',off:'Argus disconnected · HA offline'},fr:{on:'Connecté',off:'Argus déconnecté · HA hors ligne'},pt:{on:'Conectado',off:'Argus desconectado · HA sem conexão'},it:{on:'Connesso',off:'Argus disconnesso · HA offline'},zh:{on:'已连接',off:'Argus 已断开 · HA 离线'},ru:{on:'Подключено',off:'Argus отключён · HA не в сети'}};
+const STATUS_TEXT={
+  es:{on:'Conectado',off:'Argus desconectado · HA sin conexión'},
+  en:{on:'Connected',off:'Argus disconnected · HA offline'},
+  fr:{on:'Connecté',off:'Argus déconnecté · HA hors ligne'},
+  pt:{on:'Conectado',off:'Argus desconectado · HA sem conexão'},
+  it:{on:'Connesso',off:'Argus disconnesso · HA offline'},
+  zh:{on:'已连接',off:'Argus 已断开 · HA 离线'},
+  'zh-hant':{on:'已連線',off:'Argus 已中斷 · HA 離線'},
+  ru:{on:'Подключено',off:'Argus отключён · HA не в сети'},
+  hi:{on:'सक्रिय',off:'Argus डिस्कनेक्ट · HA ऑफ़लाइन'},
+  ar:{on:'متصل',off:'Argus غير متصل · HA غير متصل'},
+  ko:{on:'연결됨',off:'Argus 연결 끊김 · HA 오프라인'},
+  ja:{on:'接続済み',off:'Argus 未接続 · HA オフライン'},
+  uk:{on:'Підключено',off:'Argus відключено · HA офлайн'}
+};
 const languageFor=panel=>{const raw=String(panel._manualLang||panel._hass?.language||panel._hass?.locale?.language||'en').toLowerCase().split(/[-_]/)[0];return STATUS_TEXT[raw]||STATUS_TEXT.en};
 function installStyles(panel){if(panel.shadowRoot?.getElementById('argus-fullscreen-polish-style'))return;const style=document.createElement('style');style.id='argus-fullscreen-polish-style';style.textContent=`
 .console-hud{display:grid!important;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;align-items:center!important;gap:12px!important;padding:0!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;overflow:visible!important}

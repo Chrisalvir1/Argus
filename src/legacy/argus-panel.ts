@@ -28,8 +28,14 @@ const LANG_LIST = [
   { code:'fr', flag:'🇫🇷', label:'Français' },
   { code:'pt', flag:'🇧🇷', label:'Português' },
   { code:'it', flag:'🇮🇹', label:'Italiano' },
-  { code:'zh', flag:'🇨🇳', label:'中文' },
+  { code:'zh', flag:'🇨🇳', label:'中文 (简体)' },
+  { code:'zh-Hant', flag:'🇭🇰', label:'中文 (繁體)' },
   { code:'ru', flag:'🇷🇺', label:'Русский' },
+  { code:'hi', flag:'🇮🇳', label:'हिन्दी' },
+  { code:'ar', flag:'🇸🇦', label:'العربية' },
+  { code:'ko', flag:'🇰🇷', label:'한국어' },
+  { code:'ja', flag:'🇯🇵', label:'日本語' },
+  { code:'uk', flag:'🇺🇦', label:'Українська' },
 ];
 
 // Values received from Home Assistant or persisted storage must never become
@@ -1062,7 +1068,7 @@ const FIRST_RUN_TEXTS = {
 };
 
 for (const language of Object.keys(TEXTS)) {
-  Object.assign(TEXTS[language], EXTRA_TEXTS[language], SETUP_REQUIRED_TEXTS[language], UI_AUDIT_TEXTS[language], FIRST_RUN_TEXTS[language]);
+  TEXTS[language] = Object.assign({}, TEXTS.en, TEXTS.es, TEXTS[language], EXTRA_TEXTS[language] || {}, SETUP_REQUIRED_TEXTS[language] || {}, UI_AUDIT_TEXTS[language] || {}, FIRST_RUN_TEXTS[language] || {});
 }
 
 Object.assign(TEXTS.es, { expired:'Expirado', active_until:'Vigente hasta', exp_indefinite:'Indefinido' });
@@ -3293,27 +3299,39 @@ class ArgusPanel extends HTMLElement {
   }
 
   _getCurrentLangCode() {
-    const candidate = this._manualLang || this._ui?.language || (this._hass?.language || 'en').split('-')[0];
-    return TEXTS[candidate] ? candidate : 'en';
+    const raw = String(this._manualLang || this._ui?.language || this._hass?.language || 'en').trim();
+    if (TEXTS[raw]) return raw;
+    if (/^zh-(hant|tw|hk)/i.test(raw)) return 'zh-Hant';
+    if (/^zh/i.test(raw)) return 'zh';
+    const short = raw.split(/[-_]/)[0].toLowerCase();
+    if (TEXTS[short]) return short;
+    return 'en';
   }
 
   _getLocale() {
     return {
       es: 'es-ES', en: 'en-US', fr: 'fr-FR', pt: 'pt-BR',
-      it: 'it-IT', zh: 'zh-CN', ru: 'ru-RU',
+      it: 'it-IT', zh: 'zh-CN', 'zh-Hant': 'zh-TW', ru: 'ru-RU',
+      hi: 'hi-IN', ar: 'ar-SA', ko: 'ko-KR', ja: 'ja-JP', uk: 'uk-UA',
     }[this._getCurrentLangCode()] || 'en-US';
   }
 
   _weatherPresentation(condition, isNight) {
     const key = String(condition || 'sunny').toLowerCase().replace(/[\s-]+/g, '_');
-    const labels = {
+    const labels: Record<string, Record<string, string>> = {
       es: { sunny:'Soleado', clear_night:'Noche despejada', partlycloudy:'Parcialmente nublado', cloudy:'Nublado', rainy:'Lluvioso', pouring:'Lluvia intensa', lightning:'Tormenta eléctrica', lightning_rainy:'Tormenta con lluvia', snowy:'Nevando', fog:'Niebla', windy:'Ventoso', exceptional:'Condiciones excepcionales' },
       en: { sunny:'Sunny', clear_night:'Clear night', partlycloudy:'Partly cloudy', cloudy:'Cloudy', rainy:'Rainy', pouring:'Heavy rain', lightning:'Thunderstorm', lightning_rainy:'Thunderstorm with rain', snowy:'Snowing', fog:'Foggy', windy:'Windy', exceptional:'Exceptional conditions' },
       fr: { sunny:'Ensoleillé', clear_night:'Nuit claire', partlycloudy:'Partiellement nuageux', cloudy:'Nuageux', rainy:'Pluvieux', pouring:'Forte pluie', lightning:'Orage', lightning_rainy:'Orage avec pluie', snowy:'Neige', fog:'Brouillard', windy:'Venteux', exceptional:'Conditions exceptionnelles' },
       pt: { sunny:'Ensolarado', clear_night:'Noite limpa', partlycloudy:'Parcialmente nublado', cloudy:'Nublado', rainy:'Chuvoso', pouring:'Chuva forte', lightning:'Trovoada', lightning_rainy:'Trovoada com chuva', snowy:'Nevando', fog:'Neblina', windy:'Ventoso', exceptional:'Condições excepcionais' },
       it: { sunny:'Soleggiato', clear_night:'Notte serena', partlycloudy:'Parzialmente nuvoloso', cloudy:'Nuvoloso', rainy:'Piovoso', pouring:'Pioggia intensa', lightning:'Temporale', lightning_rainy:'Temporale con pioggia', snowy:'Nevica', fog:'Nebbia', windy:'Ventoso', exceptional:'Condizioni eccezionali' },
       zh: { sunny:'晴朗', clear_night:'晴夜', partlycloudy:'局部多云', cloudy:'多云', rainy:'有雨', pouring:'大雨', lightning:'雷暴', lightning_rainy:'雷雨', snowy:'下雪', fog:'有雾', windy:'有风', exceptional:'异常天气' },
-      ru: { sunny:'Солнечно', clear_night:'Ясная ночь', partlycloudy:'Переменная облачность', cloudy:'Облачно', rainy:'Дождливо', pouring:'Сильныйдь', lightning:'Гроза', lightning_rainy:'Гроза с дождём', snowy:'Снег', fog:'Туман', windy:'Ветрено', exceptional:'Исключительные условия' },
+      'zh-Hant': { sunny:'晴朗', clear_night:'晴夜', partlycloudy:'局部多雲', cloudy:'多雲', rainy:'有雨', pouring:'大雨', lightning:'雷暴', lightning_rainy:'雷雨', snowy:'下雪', fog:'有霧', windy:'有風', exceptional:'異常天氣' },
+      ru: { sunny:'Солнечно', clear_night:'Ясная ночь', partlycloudy:'Переменная облачность', cloudy:'Облачно', rainy:'Дождливо', pouring:'Сильный дождь', lightning:'Гроза', lightning_rainy:'Гроза с дождём', snowy:'Снег', fog:'Туман', windy:'Ветрено', exceptional:'Исключительные условия' },
+      hi: { sunny:'धूप', clear_night:'साफ़ रात', partlycloudy:'आंशिक बादल', cloudy:'बादल', rainy:'बारिश', pouring:'भारी बारिश', lightning:'तूफ़ान', lightning_rainy:'तूफ़ानी बारिश', snowy:'बर्फ़बारी', fog:'कोहरा', windy:'हवादार', exceptional:'असाधारण स्थिति' },
+      ar: { sunny:'مشمس', clear_night:'ليلة صافية', partlycloudy:'غائم جزئياً', cloudy:'غائم', rainy:'ماطر', pouring:'أمطار غزيرة', lightning:'عاصفة رعدية', lightning_rainy:'عاصفة مع مطر', snowy:'مثلج', fog:'ضباب', windy:'عاصف', exceptional:'ظروف استثنائية' },
+      ko: { sunny:'맑음', clear_night:'맑은 밤', partlycloudy:'구름 조금', cloudy:'흐림', rainy:'비', pouring:'폭우', lightning:'뇌우', lightning_rainy:'비 동반 뇌우', snowy:'눈', fog:'안개', windy:'바람', exceptional:'특이 기상' },
+      ja: { sunny:'晴れ', clear_night:'快晴（夜）', partlycloudy:'一部曇り', cloudy:'曇り', rainy:'雨', pouring:'大雨', lightning:'雷雨', lightning_rainy:'雨を伴う雷雨', snowy:'雪', fog:'霧', windy:'強風', exceptional:'異常気象' },
+      uk: { sunny:'Сонячно', clear_night:'Ясна ніч', partlycloudy:'Мінлива хмарність', cloudy:'Хмарно', rainy:'Дощ', pouring:'Злива', lightning:'Гроза', lightning_rainy:'Гроза з дощем', snowy:'Сніг', fog:'Туман', windy:'Вітряно', exceptional:'Особливі умови' },
     };
     const icon = key.includes('lightning') ? '⛈️'
       : key === 'pouring' || key.includes('rain') ? '🌧️'

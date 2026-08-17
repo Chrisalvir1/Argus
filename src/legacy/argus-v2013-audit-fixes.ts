@@ -1,7 +1,21 @@
 // @ts-nocheck
 const DEFAULT_LAYOUT=[{id:'activity',size:'M',hidden:false},{id:'modes',size:'M',hidden:false},{id:'automations',size:'M',hidden:false},{id:'access',size:'M',hidden:false},{id:'backup',size:'S',hidden:false},{id:'github',size:'S',hidden:false}];
 const VALID_SIZES=new Set(['S','M','L','XL']);
-const CLOCK_COPY={es:['Formato de hora','Automático (Home Assistant)','12 horas (AM/PM)','24 horas'],en:['Time format','Automatic (Home Assistant)','12-hour (AM/PM)','24-hour'],fr:["Format de l'heure",'Automatique (Home Assistant)','12 heures (AM/PM)','24 heures'],pt:['Formato de hora','Automático (Home Assistant)','12 horas (AM/PM)','24 horas'],it:['Formato ora','Automatico (Home Assistant)','12 ore (AM/PM)','24 ore'],zh:['时间格式','自动（Home Assistant）','12 小时（AM/PM）','24 小时'],ru:['Формат времени','Автоматически (Home Assistant)','12 часов (AM/PM)','24 часа']};
+const CLOCK_COPY={
+  es:['Formato de hora','Automático (Home Assistant)','12 horas (AM/PM)','24 horas'],
+  en:['Time format','Automatic (Home Assistant)','12-hour (AM/PM)','24-hour'],
+  fr:["Format de l'heure",'Automatique (Home Assistant)','12 heures (AM/PM)','24 heures'],
+  pt:['Formato de hora','Automático (Home Assistant)','12 horas (AM/PM)','24 horas'],
+  it:['Formato ora','Automatico (Home Assistant)','12 ore (AM/PM)','24 ore'],
+  zh:['时间格式','自动（Home Assistant）','12 小时（AM/PM）','24 小时'],
+  'zh-hant':['時間格式','自動（Home Assistant）','12 小時（AM/PM）','24 小時'],
+  ru:['Формат времени','Автоматически (Home Assistant)','12 часов (AM/PM)','24 часа'],
+  hi:['समय प्रारूप','स्वचालित (Home Assistant)','12 घंटे (AM/PM)','24 घंटे'],
+  ar:['تنسيق الوقت','تلقائي (Home Assistant)','12 ساعة (AM/PM)','24 ساعة'],
+  ko:['시간 형식','자동 (Home Assistant)','12시간 (AM/PM)','24시간'],
+  ja:['時刻の形式','自動（Home Assistant）','12時間（AM/PM）','24時間'],
+  uk:['Формат часу','Автоматично (Home Assistant)','12 годин (AM/PM)','24 години']
+};
 const VALID_CLOCK_FORMATS=new Set(['auto','12h','24h']);
 const lang=p=>String(p._manualLang||p._hass?.language||p._hass?.locale?.language||'en').toLowerCase().split(/[-_]/)[0];
 const clone=v=>JSON.parse(JSON.stringify(v));
