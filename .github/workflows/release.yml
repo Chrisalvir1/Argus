@@ -93,9 +93,9 @@ jobs:
           VERSION="${GITHUB_REF_NAME#v}"
           NOTES="docs/RELEASE_NOTES_${VERSION}.md"
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            gh release upload "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 --clobber
+            gh release upload "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 --clobber || gh release upload "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 || true
           elif [[ -f "$NOTES" ]]; then
-            gh release create "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 --title "Argus Home Hub $GITHUB_REF_NAME" --notes-file "$NOTES"
+            gh release create "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 --title "Argus Home Hub $GITHUB_REF_NAME" --notes-file "$NOTES" || true
           else
-            gh release create "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 --title "Argus Home Hub $GITHUB_REF_NAME" --generate-notes
+            gh release create "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 --title "Argus Home Hub $GITHUB_REF_NAME" --generate-notes || true
           fi
