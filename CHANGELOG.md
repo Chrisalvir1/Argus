@@ -1,4 +1,4 @@
-## [2.2.16] - 2026-08-18
+## [2.2.17] - 2026-08-18
 - CRITICAL FIX: Fixed missing closing brace in CSS that caused Argus Panel and Dashboard to render completely unstyled.
 
 ## [2.2.15] - 2026-08-18
