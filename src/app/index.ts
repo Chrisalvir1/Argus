@@ -1,37 +1,53 @@
-import '../legacy/argus-panel';
-import '../legacy/argus-card';
-import{applyReactDashboardLayout}from'../features/dashboard';
-import{applyMediaClient}from'../features/media/client';
-import{applySecurityClient}from'../features/security/client';
-import{applyPremiumExperience}from'../features/premium';
-import { applyMotionSystem } from '../features/motion';
-import { applyStableInstancesRender } from '../features/render/stable';
-import { applyV2050AlarmVisuals } from '../features/render/alarm';
-import { applySlideToAction } from '../features/safety/slide-action';
-import { applyV2049ResponsiveWidgets } from '../features/widgets/responsive';
-import { applyV2050WidgetLayouts } from '../features/widgets/layouts';
-import { applyMoreInfoHook } from '../features/more-info/hook';
+import { createRoot } from 'react-dom/client';
+import React from 'react';
+import { ArgusApp } from '../features/dashboard/ArgusApp';
 
+// Eliminamos todo el código legacy e iniciamos la pizarra en blanco pura de React.
 
-import{applyLegacyAfterTypedClients,applyLegacyBeforeTypedClients}from'../legacy/bridge';
-import type{ArgusPanelConstructor}from'../core/panel';
+class ArgusReactRoot extends HTMLElement {
+  private root: any = null;
+  private _hass: any = null;
+  private _config: any = null;
 
- export function applyArgusFrontend(value?:CustomElementConstructor|undefined):void{
-   if(!value) value = customElements.get('argus-panel-v2018');
-  const C=value as ArgusPanelConstructor|undefined;
-  if(!C||C.__argusTypedFrontend)return;
-  C.__argusTypedFrontend=true;
-  applyLegacyBeforeTypedClients(C);
-  applySecurityClient(C);
-  applyMediaClient(C);
-  applyPremiumExperience(C);
-   applyMotionSystem(C);
-   applyStableInstancesRender(C);
-   applyV2050AlarmVisuals(C);
-   applySlideToAction(C);
-   applyV2049ResponsiveWidgets(C);
-   applyV2050WidgetLayouts(C);
-   applyMoreInfoHook(C);
-  applyLegacyAfterTypedClients(C);
-  applyReactDashboardLayout(C);
- }
+  set hass(value: any) {
+    this._hass = value;
+    this.render();
+  }
+
+  setConfig(config: any) {
+    this._config = config;
+    this.render();
+  }
+
+  connectedCallback() {
+    if (!this.root) {
+      this.root = createRoot(this);
+    }
+    this.render();
+  }
+
+  disconnectedCallback() {
+    if (this.root) {
+      this.root.unmount();
+      this.root = null;
+    }
+  }
+
+  private render() {
+    if (this.root) {
+      this.root.render(
+        React.createElement(ArgusApp, {
+          hass: this._hass,
+          config: this._config,
+        })
+      );
+    }
+  }
+}
+
+export function applyArgusFrontend(value?: CustomElementConstructor | undefined): void {
+  // Registrar el nuevo elemento raíz si no existe
+  if (!customElements.get('argus-panel')) {
+    customElements.define('argus-panel', ArgusReactRoot);
+  }
+}
