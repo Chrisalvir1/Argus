@@ -1,172 +1,450 @@
-import React, { useMemo } from 'react';
+import React, { useState } from 'react';
 
 interface ActiveInstancesProps {
   hass: any;
 }
 
 export function ActiveInstances({ hass }: ActiveInstancesProps) {
+  const [sosConfirm, setSosConfirm] = useState(false);
+
   const entities = hass?.states || {};
-  const sensors = Object.values(entities).filter((e: any) => 
-    e.entity_id.startsWith('binary_sensor.') && 
-    (e.attributes.device_class === 'door' || e.attributes.device_class === 'window' || e.attributes.device_class === 'motion')
-  ).slice(0, 4);
 
-  // Determinar el estado general de la alarma usando el primer panel disponible, o 'disarmed' por defecto
-  const alarmPanel: any = Object.values(entities).find((e: any) => e.entity_id.startsWith('alarm_control_panel.argus'));
-  const alarmState = alarmPanel?.state || 'disarmed';
+  // Alarm panel
+  const alarmPanel: any = Object.values(entities).find(
+    (e: any) => e.entity_id?.startsWith('alarm_control_panel.argus')
+  );
+  const alarmState: string = alarmPanel?.state || 'disarmed';
+  const instanceName: string =
+    alarmPanel?.attributes?.friendly_name?.toUpperCase() ||
+    (hass?.config?.location_name?.toUpperCase()) ||
+    'MI HOGAR';
 
+  const isDisarmed = alarmState === 'disarmed';
   const isTriggered = alarmState === 'triggered';
   const isArming = alarmState === 'arming' || alarmState === 'pending';
+  const isArmed = !isDisarmed && !isTriggered && !isArming;
 
-  // Componente de Escudo Premium Original (Liquid Glass v2.2.13)
+  const connected = !!hass;
+
+  // Sensors — door / window / motion
+  const sensors = Object.values(entities)
+    .filter(
+      (e: any) =>
+        e.entity_id.startsWith('binary_sensor.') &&
+        ['door', 'window', 'motion', 'garage_door'].includes(
+          e.attributes.device_class
+        )
+    )
+    .slice(0, 5);
+
+  // System status badge
+  const systemBadge = (() => {
+    switch (alarmState) {
+      case 'disarmed':    return { text: 'SISTEMA DESARMADO',   color: '#43A047', bg: 'rgba(67,160,71,0.2)',   border: 'rgba(67,160,71,0.5)' };
+      case 'armed_home':  return { text: 'SISTEMA ARMADO · EN CASA',  color: '#F5A623', bg: 'rgba(245,166,35,0.2)',  border: 'rgba(245,166,35,0.5)' };
+      case 'armed_away':  return { text: 'SISTEMA ARMADO · AUSENTE',  color: '#E53935', bg: 'rgba(229,57,53,0.2)',   border: 'rgba(229,57,53,0.5)' };
+      case 'armed_night': return { text: 'SISTEMA ARMADO · NOCHE',    color: '#8E24AA', bg: 'rgba(142,36,170,0.2)',  border: 'rgba(142,36,170,0.5)' };
+      case 'armed_vacation': return { text: 'SISTEMA ARMADO · VACACIONES', color: '#00897B', bg: 'rgba(0,137,123,0.2)', border: 'rgba(0,137,123,0.5)' };
+      case 'triggered':   return { text: '¡ALARMA DISPARADA!',  color: '#FF3B30', bg: 'rgba(255,59,48,0.2)',   border: 'rgba(255,59,48,0.5)' };
+      case 'arming':
+      case 'pending':     return { text: 'ARMANDO...',           color: '#F5B041', bg: 'rgba(245,176,65,0.2)',  border: 'rgba(245,176,65,0.5)' };
+      default:            return { text: 'ESTADO DESCONOCIDO',   color: 'rgba(255,255,255,0.5)', bg: 'rgba(255,255,255,0.05)', border: 'rgba(255,255,255,0.15)' };
+    }
+  })();
+
+  const modes = [
+    { id: 'armed_home',     service: 'alarm_arm_home',     icon: '🏠', label: 'EN CASA',    color: '#1E88E5' },
+    { id: 'armed_away',     service: 'alarm_arm_away',     icon: '🔒', label: 'AUSENTE',    color: '#E53935' },
+    { id: 'armed_night',    service: 'alarm_arm_night',    icon: '🌙', label: 'NOCHE',      color: '#8E24AA' },
+    { id: 'armed_vacation', service: 'alarm_arm_vacation', icon: '✈️', label: 'VACACIONES', color: '#00897B' },
+  ];
+
+  const callAlarm = (service: string) => {
+    if (hass && alarmPanel) {
+      hass.callService('alarm_control_panel', service, {
+        entity_id: alarmPanel.entity_id,
+      });
+    }
+  };
+
+  const handleSOS = () => {
+    if (sosConfirm) {
+      if (hass && alarmPanel) {
+        hass.callService('alarm_control_panel', 'alarm_trigger', {
+          entity_id: alarmPanel.entity_id,
+        });
+      }
+      setSosConfirm(false);
+    } else {
+      setSosConfirm(true);
+      setTimeout(() => setSosConfirm(false), 3000);
+    }
+  };
+
+  // ── Shield SVG ──────────────────────────────────────────────────────────────
+  const shieldColor = isTriggered ? '#FF3B30' : isArming ? '#F5B041' : isArmed ? '#F5A623' : '#43A047';
   const ShieldSVG = () => (
-    <svg viewBox="0 0 200 200" width="100%" height="100%" style={{ filter: 'drop-shadow(0 18px 28px rgba(0,0,0,.34))', maxWidth: '140px', margin: 'auto', display: 'block', overflow: 'visible' }}>
+    <svg
+      viewBox="0 0 200 220"
+      width="100%"
+      height="100%"
+      style={{
+        filter: `drop-shadow(0 12px 28px ${shieldColor}55)`,
+        maxWidth: '130px',
+        maxHeight: '150px',
+        margin: 'auto',
+        display: 'block',
+        overflow: 'visible',
+      }}
+    >
       <defs>
-        <linearGradient id="premium-shield" x1="20%" y1="10%" x2="85%" y2="100%">
-          <stop stopColor="#fff" stopOpacity=".38" />
-          <stop offset=".25" stopColor={isArming ? '#f5b041' : '#43A047'} stopOpacity=".78" />
-          <stop offset="1" stopColor={isArming ? '#f5b041' : '#43A047'} stopOpacity=".18" />
+        <linearGradient id="sg" x1="20%" y1="5%" x2="85%" y2="100%">
+          <stop stopColor="#fff" stopOpacity=".32" />
+          <stop offset=".28" stopColor={shieldColor} stopOpacity=".82" />
+          <stop offset="1"   stopColor={shieldColor} stopOpacity=".18" />
         </linearGradient>
-        <filter id="premium-glow" filterUnits="userSpaceOnUse" x="-80" y="-80" width="360" height="360" colorInterpolationFilters="sRGB">
-          <feGaussianBlur stdDeviation="4" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
+        <filter id="sglow" filterUnits="userSpaceOnUse" x="-60" y="-60" width="320" height="340">
+          <feGaussianBlur stdDeviation="5" result="b" />
+          <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
         </filter>
       </defs>
-      <path d="M100 22 157 46v42c0 42-23 69-57 87-34-18-57-45-57-87V46z" fill="url(#premium-shield)" stroke={isArming ? '#f5b041' : '#43A047'} strokeWidth="3" filter="url(#premium-glow)" />
-      <path d="M100 31 148 51" stroke="#fff" strokeOpacity=".45" strokeWidth="3" strokeLinecap="round" />
-      <circle cx="100" cy="105" r="43" fill="rgba(5,12,23,.3)" stroke="rgba(255,255,255,.22)" strokeWidth="2" />
-      <g fill="none" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" filter="url(#premium-glow)">
-        {isArming ? (
-          <path d="M100 80 v25 l15 15" />
+      <path
+        d="M100 18 L158 44 v46 c0 46-26 73-58 91 C68 163 42 136 42 90 V44 z"
+        fill="url(#sg)"
+        stroke={shieldColor}
+        strokeWidth="3"
+        filter="url(#sglow)"
+      />
+      <path d="M100 28 L150 50" stroke="#fff" strokeOpacity=".4" strokeWidth="2.5" strokeLinecap="round" />
+      <circle cx="100" cy="108" r="44" fill="rgba(0,8,20,.3)" stroke="rgba(255,255,255,.18)" strokeWidth="1.5" />
+      <g fill="none" stroke="#fff" strokeWidth="5.5" strokeLinecap="round" strokeLinejoin="round" filter="url(#sglow)">
+        {isTriggered ? (
+          <path d="M88 96 L112 120 M112 96 L88 120" />
+        ) : isArming ? (
+          <path d="M100 88 v22 l14 14" />
+        ) : isArmed ? (
+          <path d="M100 88 v22 l14 14" />
         ) : (
-          <path d="M85 105 l10 10 l20 -20" />
+          <path d="M84 108 l12 12 l22-22" />
         )}
       </g>
-      <circle cx="100" cy="105" r="55" fill="none" stroke={isArming ? '#f5b041' : '#43A047'} strokeOpacity=".42" strokeWidth="2">
-        <animate attributeName="r" values="51;60;51" dur="3.5s" repeatCount="indefinite" />
-        <animate attributeName="opacity" values=".6;.08;.6" dur="3.5s" repeatCount="indefinite" />
-      </circle>
+      {!isTriggered && (
+        <circle cx="100" cy="108" r="56" fill="none" stroke={shieldColor} strokeOpacity=".38" strokeWidth="2">
+          <animate attributeName="r" values="50;65;50" dur="3.5s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values=".6;.06;.6" dur="3.5s" repeatCount="indefinite" />
+        </circle>
+      )}
+      {isTriggered && (
+        <>
+          <circle cx="100" cy="108" r="55" fill="none" stroke="#FF3B30" strokeWidth="3.5">
+            <animate attributeName="r" values="40;90" dur="0.75s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.8;0" dur="0.75s" repeatCount="indefinite" />
+          </circle>
+          <circle cx="100" cy="108" r="55" fill="none" stroke="#FF3B30" strokeWidth="3.5">
+            <animate attributeName="r" values="40;90" dur="0.75s" begin="0.375s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.8;0" dur="0.75s" begin="0.375s" repeatCount="indefinite" />
+          </circle>
+        </>
+      )}
     </svg>
   );
 
-  // Nueva Sirena Roja SVG (Para estado Triggered o SOS)
-  const SirenSVG = () => (
-    <svg viewBox="0 0 200 200" width="100%" height="100%" style={{ filter: 'drop-shadow(0 18px 30px rgba(255, 0, 0, 0.6))', maxWidth: '140px', margin: 'auto', display: 'block', overflow: 'visible' }}>
-      <defs>
-        <linearGradient id="siren-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop stopColor="#ff4b4b" offset="0%" />
-          <stop stopColor="#c62828" offset="100%" />
-        </linearGradient>
-        <filter id="siren-glow">
-          <feGaussianBlur stdDeviation="8" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
-      
-      {/* Base */}
-      <path d="M60 140 h80 v15 c0 8 -8 15 -15 15 h-50 c-7 0 -15 -7 -15 -15 z" fill="#333" stroke="#222" strokeWidth="2"/>
-      
-      {/* Cúpula de la sirena */}
-      <path d="M70 140 v-30 c0 -30 15 -45 30 -45 c15 0 30 15 30 45 v30 z" fill="url(#siren-grad)" stroke="#ff8a8a" strokeWidth="2" filter="url(#siren-glow)">
-        <animate attributeName="opacity" values="0.4;1;0.4" dur="0.8s" repeatCount="indefinite" />
-      </path>
-      
-      {/* Reflejos internos */}
-      <path d="M85 130 v-20 c0 -10 5 -15 15 -15" fill="none" stroke="#fff" strokeOpacity="0.6" strokeWidth="4" strokeLinecap="round">
-        <animate attributeName="opacity" values="0.2;0.8;0.2" dur="0.8s" repeatCount="indefinite" />
-      </path>
+  // ── Sensor row ──────────────────────────────────────────────────────────────
+  const SensorRow = ({ sensor }: { sensor: any }) => {
+    const isOpen = sensor.state === 'on';
+    const battery = sensor.attributes?.battery_level ?? sensor.attributes?.battery ?? null;
+    const dc = sensor.attributes?.device_class;
+    const icon = dc === 'motion' ? '🏃‍♂️' : dc === 'window' ? '🪟' : dc === 'garage_door' ? '🚘' : '🚪';
+    const name: string = (sensor.attributes?.friendly_name || sensor.entity_id)
+      .toUpperCase()
+      .replace('BINARY_SENSOR.', '')
+      .slice(0, 20);
 
-      {/* Ondas expansivas rojas */}
-      <circle cx="100" cy="100" r="50" fill="none" stroke="#ff0000" strokeWidth="4">
-        <animate attributeName="r" values="40;90" dur="0.8s" repeatCount="indefinite" />
-        <animate attributeName="opacity" values="0.8;0" dur="0.8s" repeatCount="indefinite" />
-      </circle>
-      <circle cx="100" cy="100" r="50" fill="none" stroke="#ff0000" strokeWidth="4">
-        <animate attributeName="r" values="40;90" dur="0.8s" begin="0.4s" repeatCount="indefinite" />
-        <animate attributeName="opacity" values="0.8;0" dur="0.8s" begin="0.4s" repeatCount="indefinite" />
-      </circle>
-    </svg>
-  );
+    return (
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          padding: '7px 10px',
+          borderRadius: '12px',
+          background: isOpen ? 'rgba(229,57,53,0.13)' : 'rgba(255,255,255,0.04)',
+          border: `1px solid ${isOpen ? 'rgba(229,57,53,0.35)' : 'rgba(255,255,255,0.08)'}`,
+          transition: 'background 0.3s',
+        }}
+      >
+        <span style={{ fontSize: '16px', flexShrink: 0 }}>{icon}</span>
+        <span
+          style={{
+            flex: 1,
+            fontSize: '11px',
+            fontWeight: 700,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            letterSpacing: '0.02em',
+          }}
+        >
+          {name}
+        </span>
+        {battery !== null && (
+          <span style={{ fontSize: '10px', fontWeight: 700, opacity: 0.6 }}>
+            🔋{battery}%
+          </span>
+        )}
+        <span
+          style={{
+            fontSize: '9px',
+            fontWeight: 900,
+            padding: '2px 6px',
+            borderRadius: '6px',
+            background: isOpen ? 'rgba(229,57,53,0.25)' : 'rgba(67,160,71,0.2)',
+            color: isOpen ? '#FF6B6B' : '#66BB6A',
+            letterSpacing: '0.04em',
+          }}
+        >
+          {isOpen ? 'ABIERTO' : 'CERRADO'}
+        </span>
+      </div>
+    );
+  };
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '16px', boxSizing: 'border-box' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-        <span style={{ fontSize: '15px', fontWeight: 800, letterSpacing: '-0.01em' }}>Instancias Activas</span>
+    <div
+      style={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '14px 16px',
+        boxSizing: 'border-box',
+        gap: '12px',
+      }}
+    >
+      {/* ── Header ──────────────────────────────────────────────────────────── */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          flexShrink: 0,
+          flexWrap: 'wrap',
+        }}
+      >
+        <span
+          style={{
+            fontSize: '12px',
+            fontWeight: 800,
+            letterSpacing: '0.05em',
+            textTransform: 'uppercase',
+            opacity: 0.9,
+          }}
+        >
+          🏠 {instanceName}
+        </span>
+        <span
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '5px',
+            fontSize: '11px',
+            fontWeight: 700,
+            color: connected ? '#66BB6A' : '#EF5350',
+            background: connected ? 'rgba(67,160,71,0.12)' : 'rgba(229,57,53,0.12)',
+            padding: '3px 8px',
+            borderRadius: '20px',
+          }}
+        >
+          <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: connected ? '#66BB6A' : '#EF5350', display: 'inline-block' }} />
+          {connected ? 'Conectado' : 'Desconectado'}
+        </span>
+        <div style={{ marginLeft: 'auto' }}>
+          <span
+            style={{
+              fontSize: '11px',
+              fontWeight: 900,
+              padding: '4px 10px',
+              borderRadius: '8px',
+              background: systemBadge.bg,
+              color: systemBadge.color,
+              border: `1px solid ${systemBadge.border}`,
+              letterSpacing: '0.03em',
+            }}
+          >
+            {systemBadge.text}
+          </span>
+        </div>
       </div>
-      
-      <div style={{ display: 'flex', flex: 1, gap: '20px' }}>
-        {/* Lado izquierdo: Escudo / Sirena */}
-        <div style={{ flex: '0 0 160px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-          {isTriggered ? <SirenSVG /> : <ShieldSVG />}
-          
-          <div style={{ 
-            marginTop: '16px', 
-            fontSize: '12px', 
-            fontWeight: 800, 
-            textAlign: 'center',
-            color: isTriggered ? '#ff4b4b' : (isArming ? '#f5b041' : '#43A047'),
-            background: isTriggered ? 'rgba(255, 75, 75, 0.15)' : (isArming ? 'rgba(245, 176, 65, 0.15)' : 'rgba(67, 160, 71, 0.15)'),
-            padding: '6px 12px',
-            borderRadius: '12px'
-          }}>
-            {isTriggered ? '¡ALARMA DISPARADA!' : (isArming ? 'ESPERANDO SENSORES...' : 'SISTEMA PROTEGIDO')}
+
+      {/* ── Body: 3 columns ─────────────────────────────────────────────────── */}
+      <div style={{ flex: 1, display: 'flex', gap: '14px', overflow: 'hidden', minHeight: 0 }}>
+
+        {/* Left: mode buttons + action buttons */}
+        <div
+          style={{
+            flexShrink: 0,
+            width: '190px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+          }}
+        >
+          {/* 2×2 mode grid */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '8px',
+              flex: 1,
+            }}
+          >
+            {modes.map(mode => {
+              const active = alarmState === mode.id;
+              return (
+                <button
+                  key={mode.id}
+                  type="button"
+                  onClick={() => callAlarm(mode.service)}
+                  style={{
+                    background: active ? `${mode.color}22` : 'rgba(255,255,255,0.06)',
+                    border: `1.5px solid ${active ? mode.color : 'rgba(255,255,255,0.12)'}`,
+                    borderRadius: '14px',
+                    color: 'white',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '5px',
+                    padding: '10px 6px',
+                    transition: 'all 0.2s cubic-bezier(0.175,0.885,0.32,1.275)',
+                    position: 'relative',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.05)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
+                >
+                  {active && (
+                    <span
+                      style={{
+                        position: 'absolute',
+                        top: '6px',
+                        right: '6px',
+                        width: '7px',
+                        height: '7px',
+                        borderRadius: '50%',
+                        background: mode.color,
+                      }}
+                    />
+                  )}
+                  <span style={{ fontSize: '22px', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}>{mode.icon}</span>
+                  <span style={{ fontSize: '10px', fontWeight: 900, letterSpacing: '0.04em', color: active ? mode.color : 'rgba(255,255,255,0.8)' }}>
+                    {mode.label}
+                  </span>
+                </button>
+              );
+            })}
           </div>
+
+          {/* Disarm / status button */}
+          <button
+            type="button"
+            onClick={() => callAlarm('alarm_disarm')}
+            style={{
+              background: isDisarmed
+                ? 'rgba(67,160,71,0.15)'
+                : 'linear-gradient(135deg, #2E7D32 0%, #43A047 100%)',
+              border: `1px solid ${isDisarmed ? 'rgba(67,160,71,0.3)' : 'rgba(67,160,71,0.6)'}`,
+              borderRadius: '14px',
+              color: isDisarmed ? 'rgba(255,255,255,0.5)' : '#fff',
+              fontSize: '12px',
+              fontWeight: 900,
+              padding: '11px 10px',
+              cursor: isDisarmed ? 'default' : 'pointer',
+              letterSpacing: '0.04em',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              transition: 'all 0.25s ease',
+            }}
+            disabled={isDisarmed}
+          >
+            <span style={{ fontSize: '14px' }}>{isDisarmed ? '🔓' : '🔒'}</span>
+            {isDisarmed ? 'DESARMADO' : 'Desliza para desarmar'}
+          </button>
+
+          {/* SOS button */}
+          <button
+            type="button"
+            onClick={handleSOS}
+            style={{
+              background: sosConfirm
+                ? 'linear-gradient(135deg, #B71C1C 0%, #E53935 100%)'
+                : 'rgba(20,15,25,0.7)',
+              border: `1px solid ${sosConfirm ? 'rgba(229,57,53,0.8)' : 'rgba(255,255,255,0.15)'}`,
+              borderRadius: '14px',
+              color: sosConfirm ? '#fff' : 'rgba(255,255,255,0.85)',
+              fontSize: '12px',
+              fontWeight: 900,
+              padding: '11px 10px',
+              cursor: 'pointer',
+              letterSpacing: '0.04em',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              transition: 'all 0.25s ease',
+              boxShadow: sosConfirm ? '0 0 20px rgba(229,57,53,0.5)' : 'none',
+            }}
+          >
+            <span style={{ fontSize: '14px' }}>⚠️</span>
+            {sosConfirm ? '¡CONFIRMAR SOS!' : '🔴 SOS / PÁNICO'}
+          </button>
         </div>
 
-        {/* Lado derecho: Grid de sensores */}
-        <div style={{ 
-          flex: 1,
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', 
-          gap: '12px',
-          overflowY: 'auto',
-          alignContent: 'start'
-        }}>
+        {/* Center: shield */}
+        <div
+          style={{
+            flexShrink: 0,
+            width: '140px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <ShieldSVG />
+        </div>
+
+        {/* Right: sensors */}
+        <div
+          style={{
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '6px',
+            overflowY: 'auto',
+            paddingRight: '2px',
+          }}
+        >
           {sensors.length === 0 ? (
-            <div style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', opacity: 0.5, fontSize: '13px', fontWeight: 600 }}>
+            <div
+              style={{
+                flex: 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                opacity: 0.4,
+                fontSize: '12px',
+                fontWeight: 600,
+                textAlign: 'center',
+                flexDirection: 'column',
+                gap: '8px',
+              }}
+            >
+              <span style={{ fontSize: '24px' }}>🔍</span>
               No hay sensores detectados
             </div>
           ) : (
-            sensors.map((sensor: any) => {
-              const isOpen = sensor.state === 'on';
-              return (
-                <div key={sensor.entity_id} style={{
-                  background: isOpen ? 'rgba(255, 138, 31, 0.15)' : 'rgba(255, 255, 255, 0.08)',
-                  border: `1px solid ${isOpen ? 'rgba(255, 138, 31, 0.4)' : 'rgba(255, 255, 255, 0.1)'}`,
-                  borderRadius: '16px',
-                  padding: '14px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '8px',
-                  transition: 'all 0.3s ease'
-                }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '20px' }}>
-                      {sensor.attributes.device_class === 'motion' ? '🏃‍♂️' : '🚪'}
-                    </span>
-                    <span style={{ 
-                      fontSize: '10px', 
-                      fontWeight: 900, 
-                      padding: '2px 6px', 
-                      borderRadius: '6px',
-                      background: isOpen ? 'rgba(255, 138, 31, 0.2)' : 'rgba(255, 255, 255, 0.1)',
-                      color: isOpen ? '#ff8a1f' : 'rgba(255,255,255,0.7)'
-                    }}>
-                      {isOpen ? 'ABIERTO' : 'CERRADO'}
-                    </span>
-                  </div>
-                  <span style={{ fontSize: '13px', fontWeight: 700, lineHeight: 1.2 }}>
-                    {sensor.attributes.friendly_name || sensor.entity_id}
-                  </span>
-                </div>
-              );
-            })
+            sensors.map((s: any) => <SensorRow key={s.entity_id} sensor={s} />)
           )}
         </div>
       </div>

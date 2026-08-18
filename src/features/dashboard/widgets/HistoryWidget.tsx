@@ -1,91 +1,204 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 
 interface HistoryWidgetProps {
   hass: any;
 }
 
-export function HistoryWidget({ hass }: HistoryWidgetProps) {
-  // Ejemplos mockeados para simular el historial de Argus, ya que no tenemos acceso real al logbook de HA desde aquí
-  const mockHistory = [
-    { id: '1', time: '12:05 PM', action: 'Alarma disparada por Sensor Puerta Principal', type: 'triggered', icon: '🚨' },
-    { id: '2', time: '12:00 PM', action: 'Armando sistema (Ausente)...', type: 'pending', icon: '⏳' },
-    { id: '3', time: '11:30 AM', action: 'Sistema desarmado por Chris', type: 'disarmed', icon: '🔓' },
-    { id: '4', time: '10:00 AM', action: 'Configuración de PIN guardada', type: 'config', icon: '⚙️' }
+type HistoryEntry = {
+  id: string;
+  type: string;
+  title: string;
+  detail: string;
+  time: string;
+  source: string;
+};
+
+const TYPE_STYLES: Record<string, { color: string; bg: string; icon: string }> = {
+  triggered:  { color: '#FF6B6B', bg: 'rgba(229,57,53,0.18)',  icon: '🚨' },
+  armed_away: { color: '#EF5350', bg: 'rgba(229,57,53,0.15)',  icon: '🔒' },
+  armed_home: { color: '#42A5F5', bg: 'rgba(30,136,229,0.15)', icon: '🏠' },
+  armed_night:{ color: '#AB47BC', bg: 'rgba(142,36,170,0.15)', icon: '🌙' },
+  disarmed:   { color: '#66BB6A', bg: 'rgba(67,160,71,0.18)',  icon: '🔓' },
+  login:      { color: 'rgba(255,255,255,0.6)', bg: 'rgba(255,255,255,0.06)', icon: '👤' },
+  config:     { color: 'rgba(255,255,255,0.6)', bg: 'rgba(255,255,255,0.06)', icon: '⚙️' },
+  restored:   { color: '#66BB6A', bg: 'rgba(67,160,71,0.15)',  icon: '♻️' },
+  default:    { color: 'rgba(255,255,255,0.5)', bg: 'rgba(255,255,255,0.05)', icon: '📋' },
+};
+
+function styleFor(type: string) {
+  return TYPE_STYLES[type] || TYPE_STYLES.default;
+}
+
+function buildMockHistory(hass: any): HistoryEntry[] {
+  const entities = hass?.states || {};
+  const panel: any = Object.values(entities).find((e: any) => e.entity_id?.startsWith('alarm_control_panel.argus'));
+  const state = panel?.state || 'disarmed';
+  const user = hass?.user?.name || 'Chris';
+  const now = new Date();
+  const fmt = (d: Date) =>
+    d.toLocaleString('es', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+  const baseEntries: HistoryEntry[] = [
+    {
+      id: '1',
+      type: 'login',
+      title: 'CONEXIÓN USUARIO',
+      detail: 'Conexión usuario',
+      time: fmt(new Date(now.getTime() - 2 * 60000)),
+      source: user,
+    },
+    {
+      id: '2',
+      type: 'restored',
+      title: 'ESTADO LOCAL RESTAURADO',
+      detail: `Estado local restaurado: ${
+        state === 'disarmed' ? 'Desarmado' : state.replace('armed_', '').toUpperCase()
+      }`,
+      time: fmt(new Date(now.getTime() - 5 * 60000)),
+      source: 'Argus',
+    },
   ];
 
-  const getColorForType = (type: string) => {
-    switch (type) {
-      case 'disarmed': return '#43A047'; // Verde
-      case 'triggered': return '#E53935'; // Rojo
-      case 'pending': return '#F5B041'; // Naranja
-      case 'config': return 'rgba(255, 255, 255, 0.4)'; // Sin color dominante
-      default: return 'rgba(255, 255, 255, 0.4)';
-    }
-  };
+  if (state !== 'disarmed') {
+    baseEntries.unshift({
+      id: '0',
+      type: state,
+      title: 'CAMBIO DE ESTADO',
+      detail: `Sistema ${state.replace('armed_', 'armado · ').replace('_', ' ')}`,
+      time: fmt(new Date(now.getTime() - 1 * 60000)),
+      source: user,
+    });
+  }
 
-  const getBackgroundForType = (type: string) => {
-    switch (type) {
-      case 'disarmed': return 'rgba(67, 160, 71, 0.15)'; 
-      case 'triggered': return 'rgba(229, 57, 53, 0.15)'; 
-      case 'pending': return 'rgba(245, 176, 65, 0.15)'; 
-      case 'config': return 'rgba(255, 255, 255, 0.05)';
-      default: return 'rgba(255, 255, 255, 0.05)';
+  return baseEntries;
+}
+
+export function HistoryWidget({ hass }: HistoryWidgetProps) {
+  const [history, setHistory] = useState<HistoryEntry[]>(() => buildMockHistory(hass));
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setHistory(buildMockHistory(hass));
+      setRefreshing(false);
+    }, 600);
+  }, [hass]);
+
+  const handleClear = useCallback(() => {
+    if (confirm('¿Limpiar el historial local?')) {
+      setHistory([]);
     }
+  }, []);
+
+  const handleJSON = useCallback(() => {
+    const blob = new Blob([JSON.stringify(history, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'argus-history.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [history]);
+
+  const BtnStyle: React.CSSProperties = {
+    background: 'rgba(255,255,255,0.08)',
+    border: '1px solid rgba(255,255,255,0.14)',
+    borderRadius: '10px',
+    color: 'white',
+    fontSize: '11px',
+    fontWeight: 800,
+    padding: '5px 10px',
+    cursor: 'pointer',
+    letterSpacing: '0.03em',
+    transition: 'background 0.2s',
   };
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '16px', boxSizing: 'border-box' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-        <span style={{ fontSize: '15px', fontWeight: 800, letterSpacing: '-0.01em' }}>Historial de Actividad</span>
-        <button 
-          type="button" 
-          style={{
-            background: 'rgba(255,255,255,0.1)',
-            border: 'none',
-            borderRadius: '12px',
-            padding: '6px 12px',
-            color: 'white',
-            fontSize: '12px',
-            fontWeight: 700,
-            cursor: 'pointer'
-          }}
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '14px 16px', boxSizing: 'border-box', gap: '12px' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0, flexWrap: 'wrap' }}>
+        <span style={{ fontSize: '13px', fontWeight: 900, letterSpacing: '0.04em', textTransform: 'uppercase', flex: 1 }}>
+          📋 Historial de Actividad
+        </span>
+        <button
+          type="button"
+          onClick={handleRefresh}
+          style={BtnStyle}
+          title="Actualizar"
         >
-          🔄 Actualizar
+          {refreshing ? '⏳' : '🔄'} Actualizar
+        </button>
+        <button type="button" onClick={handleJSON} style={BtnStyle} title="Exportar JSON">
+          JSON
+        </button>
+        <button
+          type="button"
+          onClick={handleClear}
+          style={{ ...BtnStyle, color: '#EF5350', borderColor: 'rgba(229,57,53,0.3)' }}
+          title="Borrar historial"
+        >
+          BORRAR
         </button>
       </div>
 
-      <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px', paddingRight: '4px' }}>
-        {mockHistory.map((item) => (
-          <div key={item.id} style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '16px', 
-            background: 'rgba(255,255,255,0.02)', 
-            border: '1px solid rgba(255,255,255,0.05)',
-            padding: '12px', 
-            borderRadius: '16px' 
-          }}>
-            <div style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              background: getBackgroundForType(item.type),
-              color: getColorForType(item.type),
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '18px',
-              boxShadow: `0 0 10px ${getBackgroundForType(item.type)}`
-            }}>
-              {item.icon}
-            </div>
-            
-            <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-              <span style={{ fontSize: '13px', fontWeight: 700, lineHeight: 1.3 }}>{item.action}</span>
-              <span style={{ fontSize: '11px', opacity: 0.5, marginTop: '2px', fontWeight: 600 }}>{item.time}</span>
-            </div>
+      {/* Entries */}
+      <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '7px', paddingRight: '2px' }}>
+        {history.length === 0 ? (
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.4, fontSize: '13px', fontWeight: 600 }}>
+            Sin entradas de historial
           </div>
-        ))}
+        ) : (
+          history.map(entry => {
+            const s = styleFor(entry.type);
+            return (
+              <div
+                key={entry.id}
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '12px',
+                  background: 'rgba(255,255,255,0.03)',
+                  border: '1px solid rgba(255,255,255,0.06)',
+                  padding: '11px 12px',
+                  borderRadius: '14px',
+                }}
+              >
+                {/* Icon circle */}
+                <div
+                  style={{
+                    width: '38px',
+                    height: '38px',
+                    borderRadius: '50%',
+                    background: s.bg,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '17px',
+                    flexShrink: 0,
+                    boxShadow: `0 0 10px ${s.bg}`,
+                  }}
+                >
+                  {s.icon}
+                </div>
+
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '2px', minWidth: 0 }}>
+                  <span style={{ fontSize: '11px', fontWeight: 900, color: s.color, letterSpacing: '0.04em' }}>
+                    {entry.title}
+                  </span>
+                  <span style={{ fontSize: '12px', fontWeight: 600, opacity: 0.85, lineHeight: 1.3 }}>
+                    {entry.detail}
+                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
+                    <span style={{ fontSize: '10px', fontWeight: 600, opacity: 0.45 }}>{entry.time}</span>
+                    <span style={{ fontSize: '10px', opacity: 0.3 }}>·</span>
+                    <span style={{ fontSize: '10px', fontWeight: 700, opacity: 0.55 }}>👤 {entry.source}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );

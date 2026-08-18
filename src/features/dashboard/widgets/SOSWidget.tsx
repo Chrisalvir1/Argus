@@ -1,121 +1,153 @@
 import React, { useState } from 'react';
-import { GlassModal } from '../components/GlassModal';
 
 interface SOSWidgetProps {
   hass: any;
 }
 
 export function SOSWidget({ hass }: SOSWidgetProps) {
-  const [isConfigOpen, setConfigOpen] = useState(false);
+  const [stage, setStage] = useState<'idle' | 'confirm' | 'activated'>('idle');
 
-  const handleSOSClick = () => {
-    // Aquí iría la lógica para activar el SOS real (ej. llamar servicio de Home Assistant)
-    if (confirm('¿Estás seguro de que quieres activar el pánico SOS? Las sirenas se dispararán inmediatamente.')) {
-      console.log('SOS Activado');
+  const entities = hass?.states || {};
+  const alarmPanel: any = Object.values(entities).find(
+    (e: any) => e.entity_id?.startsWith('alarm_control_panel.argus')
+  );
+
+  const handleClick = () => {
+    if (stage === 'idle') {
+      setStage('confirm');
+      setTimeout(() => setStage('idle'), 4000);
+    } else if (stage === 'confirm') {
+      if (hass && alarmPanel) {
+        hass.callService('alarm_control_panel', 'alarm_trigger', {
+          entity_id: alarmPanel.entity_id,
+        });
+      }
+      setStage('activated');
+      setTimeout(() => setStage('idle'), 5000);
     }
   };
 
+  const btnStyle: React.CSSProperties =
+    stage === 'activated'
+      ? {
+          background: 'linear-gradient(135deg, #B71C1C 0%, #E53935 100%)',
+          border: '1px solid rgba(229,57,53,0.8)',
+          boxShadow: '0 0 32px rgba(229,57,53,0.55)',
+          color: '#fff',
+        }
+      : stage === 'confirm'
+      ? {
+          background: 'linear-gradient(135deg, #D32F2F 0%, #F44336 100%)',
+          border: '1px solid rgba(244,67,54,0.9)',
+          boxShadow: '0 0 24px rgba(244,67,54,0.5)',
+          color: '#fff',
+          animation: 'argus-sos-pulse 0.6s infinite alternate',
+        }
+      : {
+          background: 'rgba(10,8,18,0.8)',
+          border: '1px solid rgba(255,255,255,0.15)',
+          boxShadow: '0 4px 24px rgba(0,0,0,0.4)',
+          color: 'rgba(255,255,255,0.85)',
+        };
+
   return (
-    <>
-      <div style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '16px', boxSizing: 'border-box' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-          <span style={{ fontSize: '15px', fontWeight: 800, letterSpacing: '-0.01em' }}>Acciones SOS</span>
-          <button 
-            type="button" 
-            onClick={() => setConfigOpen(true)}
+    <div
+      style={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '14px 16px',
+        boxSizing: 'border-box',
+        gap: '12px',
+      }}
+    >
+      {/* Header */}
+      <span
+        style={{
+          fontSize: '13px',
+          fontWeight: 900,
+          letterSpacing: '0.04em',
+          textTransform: 'uppercase',
+          flexShrink: 0,
+        }}
+      >
+        ⚡ Acciones SOS
+      </span>
+
+      {/* Main SOS button — matches v2.2.13 dark slider style */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '12px' }}>
+        <button
+          type="button"
+          onClick={handleClick}
+          style={{
+            ...btnStyle,
+            borderRadius: '18px',
+            width: '100%',
+            padding: '20px 16px',
+            fontSize: '15px',
+            fontWeight: 900,
+            letterSpacing: '0.06em',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '10px',
+            transition: 'all 0.3s cubic-bezier(0.175,0.885,0.32,1.275)',
+          }}
+          onMouseDown={e => { e.currentTarget.style.transform = 'scale(0.97)'; }}
+          onMouseUp={e => { e.currentTarget.style.transform = 'scale(1)'; }}
+        >
+          <span style={{ fontSize: '22px' }}>
+            {stage === 'activated' ? '🚨' : stage === 'confirm' ? '⚠️' : '🔴'}
+          </span>
+          <span>
+            {stage === 'activated'
+              ? '¡SOS ACTIVADO!'
+              : stage === 'confirm'
+              ? '¡CONFIRMAR SOS PÁNICO!'
+              : 'SOS / PÁNICO'}
+          </span>
+        </button>
+
+        {stage === 'confirm' && (
+          <p
             style={{
-              background: 'rgba(255,255,255,0.1)',
-              border: 'none',
-              borderRadius: '12px',
-              padding: '6px 12px',
-              color: 'white',
+              margin: 0,
+              textAlign: 'center',
               fontSize: '12px',
               fontWeight: 700,
-              cursor: 'pointer'
+              color: '#EF5350',
+              opacity: 0.9,
+              letterSpacing: '0.02em',
             }}
           >
-            ⚙️ Configurar
-          </button>
-        </div>
-        
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <button
-            type="button"
-            onClick={handleSOSClick}
+            Toca de nuevo para confirmar. Se cancela solo en 4 seg.
+          </p>
+        )}
+
+        {stage === 'idle' && (
+          <p
             style={{
-              background: 'linear-gradient(135deg, #FF3B30 0%, #D32F2F 100%)',
-              border: '1px solid rgba(255,255,255,0.2)',
-              boxShadow: '0 8px 32px rgba(255, 59, 48, 0.4), inset 0 2px 0 rgba(255,255,255,0.2)',
-              borderRadius: '24px',
-              color: 'white',
-              width: '100%',
-              padding: '24px',
-              fontSize: '20px',
-              fontWeight: 900,
-              letterSpacing: '1px',
-              cursor: 'pointer',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '12px',
-              transition: 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+              margin: 0,
+              textAlign: 'center',
+              fontSize: '12px',
+              fontWeight: 600,
+              opacity: 0.45,
+              lineHeight: 1.4,
             }}
-            onMouseDown={e => e.currentTarget.style.transform = 'scale(0.95)'}
-            onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
           >
-            <span style={{ fontSize: '40px', filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.3))' }}>🚨</span>
-            ACTIVAR PÁNICO
-          </button>
-        </div>
+            Activa el pánico. Las sirenas y alarmas se disparan de inmediato.
+          </p>
+        )}
       </div>
 
-      <GlassModal 
-        isOpen={isConfigOpen} 
-        onClose={() => setConfigOpen(false)}
-        title="Configuración SOS"
-      >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <p style={{ margin: 0, fontSize: '14px', opacity: 0.8, lineHeight: 1.5 }}>
-            Aquí puedes configurar qué acciones ocurren cuando presionas el botón de pánico en el dashboard.
-          </p>
-
-          <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '16px', padding: '16px' }}>
-            <h4 style={{ margin: '0 0 12px 0', fontSize: '14px', color: '#ff8a1f' }}>Acciones Automáticas</h4>
-            
-            <label style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px', cursor: 'pointer' }}>
-              <input type="checkbox" defaultChecked style={{ width: '18px', height: '18px' }} />
-              <span style={{ fontSize: '14px', fontWeight: 600 }}>Disparar todas las sirenas</span>
-            </label>
-            
-            <label style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px', cursor: 'pointer' }}>
-              <input type="checkbox" defaultChecked style={{ width: '18px', height: '18px' }} />
-              <span style={{ fontSize: '14px', fontWeight: 600 }}>Parpadear luces rojas</span>
-            </label>
-            
-            <label style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
-              <input type="checkbox" style={{ width: '18px', height: '18px' }} />
-              <span style={{ fontSize: '14px', fontWeight: 600 }}>Notificar administradores</span>
-            </label>
-          </div>
-
-          <button
-            onClick={() => setConfigOpen(false)}
-            style={{
-              background: '#1E88E5',
-              border: 'none',
-              borderRadius: '12px',
-              padding: '14px',
-              color: 'white',
-              fontSize: '14px',
-              fontWeight: 800,
-              cursor: 'pointer',
-              marginTop: '8px'
-            }}
-          >
-            Guardar Configuración
-          </button>
-        </div>
-      </GlassModal>
-    </>
+      {/* Keyframe for pulse animation */}
+      <style>{`
+        @keyframes argus-sos-pulse {
+          from { box-shadow: 0 0 20px rgba(244,67,54,0.4); }
+          to   { box-shadow: 0 0 40px rgba(244,67,54,0.85); }
+        }
+      `}</style>
+    </div>
   );
 }

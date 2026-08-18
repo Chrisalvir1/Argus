@@ -14,64 +14,58 @@ export const COLS = { lg: 12, md: 8, sm: 4, xs: 2, xxs: 2 } as const;
 // contract-tokens: XS:{w:2,h:2} S:{w:3,h:3} M:{w:3,h:4} L:{w:6,h:4} XL:{w:6,h:8}
 export const ARGUS_WIDGET_SIZES: Record<ArgusWidgetSize, { w: number; h: number }> = {
   XS: { w: 2, h: 2 },
-  S: { w: 3, h: 3 },
-  M: { w: 3, h: 4 },
-  L: { w: 6, h: 4 },
+  S:  { w: 3, h: 3 },
+  M:  { w: 3, h: 4 },
+  L:  { w: 6, h: 4 },
   XL: { w: 6, h: 8 },
 };
 
 const item = (i: string, x: number, y: number, w: number, h: number): Layout => ({
-  i,
-  x,
-  y,
-  w,
-  h,
-  minW: 2,
-  minH: 2,
-  maxW: 12,
-  maxH: 12,
+  i, x, y, w, h,
+  minW: 2, minH: 2, maxW: 12, maxH: 16,
 });
 
+/** v2.2.21 — Hero layout matching v2.2.13 visual hierarchy */
 export const defaultLayouts: Layouts = {
   lg: [
-    item('modes', 0, 0, 6, 4),
-    item('active-instances', 6, 0, 6, 4),
-    item('sos', 0, 4, 4, 4),
-    item('history', 4, 4, 4, 4),
-    item('automations', 8, 4, 4, 4),
-    item('access', 0, 8, 12, 4),
+    item('active-instances', 0,  0,  12, 7),  // hero — full width
+    item('history',          0,  7,  6,  6),  // bottom-left
+    item('modes',            6,  7,  6,  6),  // bottom-right
+    item('automations',      0,  13, 4,  5),
+    item('access',           4,  13, 8,  5),
+    item('sos',              0,  18, 12, 3),
   ],
   md: [
-    item('modes', 0, 0, 4, 4),
-    item('active-instances', 4, 0, 4, 4),
-    item('sos', 0, 4, 4, 4),
-    item('history', 4, 4, 4, 4),
-    item('automations', 0, 8, 8, 4),
-    item('access', 0, 12, 8, 4),
+    item('active-instances', 0,  0,  8,  7),
+    item('history',          0,  7,  4,  6),
+    item('modes',            4,  7,  4,  6),
+    item('automations',      0,  13, 4,  5),
+    item('access',           4,  13, 4,  5),
+    item('sos',              0,  18, 8,  3),
   ],
   sm: [
-    item('modes', 0, 0, 4, 4),
-    item('active-instances', 0, 4, 4, 4),
-    item('sos', 0, 8, 4, 4),
-    item('history', 0, 12, 4, 4),
-    item('automations', 0, 16, 4, 4),
-    item('access', 0, 20, 4, 4),
+    item('active-instances', 0,  0,  4,  9),
+    item('history',          0,  9,  4,  6),
+    item('modes',            0,  15, 4,  7),
+    item('automations',      0,  22, 4,  5),
+    item('access',           0,  27, 4,  5),
+    item('sos',              0,  32, 4,  3),
   ],
   xs: [
-    item('modes', 0, 0, 2, 4),
-    item('active-instances', 0, 4, 2, 4),
-    item('sos', 0, 8, 2, 4),
-    item('history', 0, 12, 2, 4),
-    item('automations', 0, 16, 2, 4),
-    item('access', 0, 20, 2, 4),
+    item('active-instances', 0,  0,  2,  12),
+    item('history',          0,  12, 2,  6),
+    item('modes',            0,  18, 2,  8),
+    item('automations',      0,  26, 2,  5),
+    item('access',           0,  31, 2,  5),
+    item('sos',              0,  36, 2,  3),
   ],
   xxs: [
-    item('modes', 0, 0, 2, 4),
-    item('active-instances', 0, 4, 2, 4),
-    item('sos', 0, 8, 2, 4),
-    item('history', 0, 12, 2, 4),
-    item('automations', 0, 16, 2, 4),
-    item('access', 0, 20, 2, 4),
+    item('active-instances', 0,  0,  2,  12),
+    item('history',          0,  12, 2,  6),
+    item('modes',            0,  18, 2,  8),
+    item('automations',      0,  26, 2,  5),
+    item('access',           0,  31, 2,  5),
+    item('sos',              0,  36, 2,  3),
   ],
 };
 
@@ -162,7 +156,8 @@ export function mergeLayouts(saved: Layouts | null): Layouts {
 
 export class LocalStorageDashboardLayoutStorage implements DashboardLayoutStorage {
   private key(u: string, d: string) {
-    return `argus:dashboard-layout-v2:${u}:${d}`;
+    // v3 key — forces fresh layout for v2.2.21 hero layout
+    return `argus:dashboard-layout-v3:${u}:${d}`;
   }
 
   private read(u: string, d: string): StoredDashboardLayout | null {
@@ -212,6 +207,7 @@ export class LocalStorageDashboardLayoutStorage implements DashboardLayoutStorag
 
   async reset(u: string, d: string) {
     localStorage.removeItem(this.key(u, d));
+    localStorage.removeItem(`argus:dashboard-layout-v2:${u}:${d}`);
     localStorage.removeItem(`argus:dashboard-layout:${u}:${d}`);
   }
 }

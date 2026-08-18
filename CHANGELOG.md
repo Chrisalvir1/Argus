@@ -1,3 +1,6 @@
+## [2.2.21] - 2026-08-18
+- Visual parity with v2.2.13: hero layout, ActiveInstances full rewrite, Modes config tabs, HistoryWidget buttons, AccessControl user cards, SOS dark button.
+
 ## [2.2.20] - 2026-08-18
 - FIX: Aligned all default grid layout widget IDs with active React widgets (`modes`, `active-instances`, `sos`, `history`, `automations`, `access`).
 - Removed overlapping/duplicate headers and edit bars from widgets in normal view.
