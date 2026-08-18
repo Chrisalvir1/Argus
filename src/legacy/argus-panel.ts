@@ -3876,13 +3876,7 @@ class ArgusPanel extends HTMLElement {
         }
       });
       const globalStatus = root.getElementById('global-status');
-      if (globalStatus) {
-        const badge = globalStatus.querySelector('.badge');
-        if (badge) {
-          const isArmed = badge.classList.contains('armed_away');
-          badge.textContent = isArmed ? this._t('system_armed') : this._t('system_disarmed');
-        }
-      }
+      if (globalStatus) globalStatus.innerHTML = '';
     }
 
     this._syncAccessSummary();
@@ -4792,10 +4786,8 @@ class ArgusPanel extends HTMLElement {
       return;
     }
 
-    // Determine global status
-    const allStates = entries.map(e => this._hass?.states[e.entity_id]?.state || 'unavailable');
-    const isArmed = allStates.some(s => s.startsWith('armed') || s === 'triggered' || s === 'pending');
-    globalStatusEl.innerHTML = `<span class="badge ${isArmed ? 'armed_away' : 'disarmed'}">${isArmed ? t('system_armed') : t('system_disarmed')}</span>`;
+    // Global status is rendered inside the console-hud in each entry
+    if (globalStatusEl) globalStatusEl.innerHTML = '';
 
     // Weather
     const weatherEnt = this._getWeatherEntity();
