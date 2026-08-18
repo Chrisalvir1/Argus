@@ -17,9 +17,9 @@ export function SOSWidget({ hass }: SOSWidgetProps) {
 
   return (
     <>
-      <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: 'rgba(255,255,255,0.03)', borderRadius: '24px', padding: '20px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 800 }}>Acciones SOS</h3>
+      <div style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '16px', boxSizing: 'border-box' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+          <span style={{ fontSize: '15px', fontWeight: 800, letterSpacing: '-0.01em' }}>Acciones SOS</span>
           <button 
             type="button" 
             onClick={() => setConfigOpen(true)}

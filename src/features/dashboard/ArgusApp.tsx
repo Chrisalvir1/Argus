@@ -19,6 +19,7 @@ const storage = new LocalStorageDashboardLayoutStorage();
 
 export function ArgusApp({ hass, config }: ArgusAppProps) {
   const [time, setTime] = useState(new Date());
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
@@ -108,11 +109,12 @@ export function ArgusApp({ hass, config }: ArgusAppProps) {
               </span>
             </div>
             
-            {/* Settings Button */}
+            {/* Edit / Settings Button */}
             <button 
               type="button"
+              onClick={() => setIsEditing(v => !v)}
               style={{
-                background: 'rgba(255,255,255,0.1)',
+                background: isEditing ? '#1E88E5' : 'rgba(255,255,255,0.1)',
                 border: '1px solid rgba(255,255,255,0.15)',
                 borderRadius: '12px',
                 padding: '8px',
@@ -121,12 +123,19 @@ export function ArgusApp({ hass, config }: ArgusAppProps) {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                transition: 'background 0.2s ease'
+                transition: 'all 0.2s ease'
               }}
+              title={isEditing ? "Guardar y salir de edición" : "Editar tablero"}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 20h9"></path>
-                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                {isEditing ? (
+                  <path d="M20 6L9 17l-5-5"></path>
+                ) : (
+                  <>
+                    <path d="M12 20h9"></path>
+                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                  </>
+                )}
               </svg>
             </button>
           </div>
@@ -140,7 +149,9 @@ export function ArgusApp({ hass, config }: ArgusAppProps) {
             storage={storage}
             userId={hass?.user?.id || 'default_user'}
             dashboardId="main"
-            onEditing={() => {}}
+            isEditing={isEditing}
+            onToggleEditing={() => setIsEditing(v => !v)}
+            onEditing={setIsEditing}
             registerEditor={() => {}}
           />
         </main>

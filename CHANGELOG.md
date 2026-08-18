@@ -1,3 +1,9 @@
+## [2.2.20] - 2026-08-18
+- FIX: Aligned all default grid layout widget IDs with active React widgets (`modes`, `active-instances`, `sos`, `history`, `automations`, `access`).
+- Removed overlapping/duplicate headers and edit bars from widgets in normal view.
+- Added interactive top bar edit toggle button (Pencil) to switch seamlessly between viewing and grid editing mode.
+- Connected real Home Assistant alarm service calls (`arm_home`, `arm_away`, `arm_night`, `arm_vacation`, `alarm_disarm`) directly to the Modes widget.
+
 ## [2.2.19] - 2026-08-18
 - FIX: Register all webcomponent aliases (`argus-panel-v2018`, `argus-panel`, `argus-card`) to resolve blank panel rendering in Home Assistant.
 - Inject full liquid glass global stylesheet and grid layout styles directly into document head.

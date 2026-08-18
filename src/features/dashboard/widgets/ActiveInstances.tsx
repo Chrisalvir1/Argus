@@ -95,8 +95,10 @@ export function ActiveInstances({ hass }: ActiveInstancesProps) {
   );
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: 'rgba(255,255,255,0.03)', borderRadius: '24px', padding: '20px' }}>
-      <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: 800 }}>Instancias Activas</h3>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '16px', boxSizing: 'border-box' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+        <span style={{ fontSize: '15px', fontWeight: 800, letterSpacing: '-0.01em' }}>Instancias Activas</span>
+      </div>
       
       <div style={{ display: 'flex', flex: 1, gap: '20px' }}>
         {/* Lado izquierdo: Escudo / Sirena */}
