@@ -359,7 +359,7 @@ function attachDrag(panel, kind, track, fill, thumb, label, pin, onDone) {
     if (doCheckPin(panel, code)) {
       pin.classList.remove('open');
       input.value = ''; errDiv.textContent = '';
-      onDone();
+      onDone(code);
     } else {
       input.classList.add('pin-shake');
       errDiv.textContent = t(panel, 'wrong_pin');
@@ -409,10 +409,10 @@ function mountOnEntry(panel, entry, idx) {
   const { wrap: dWrap, track: dTrack, fill: dFill, thumb: dThumb, label: dLabel, pin: dPin } =
     buildTrack('disarm', t(panel, 'slide_disarm'), ICON_DISARM);
 
-  attachDrag(panel, 'disarm', dTrack, dFill, dThumb, dLabel, dPin, () => {
+  attachDrag(panel, 'disarm', dTrack, dFill, dThumb, dLabel, dPin, (pin) => {
     const eid = entityId || panel._dashboard?.entries?.[0]?.entity_id;
     if (typeof panel._send === 'function') {
-      panel._send('argus/set_mode', { mode: 'disarmed', entity_id: eid }).catch(() => {});
+      panel._send('argus/perform_alarm_action', { action: 'disarm', entry_id: eid, ...(pin ? { code: pin } : {}) }).catch(() => {});
     }
   });
 
@@ -424,7 +424,7 @@ function mountOnEntry(panel, entry, idx) {
     const panicNow = getPanic();
     const eid = entityId || panel._dashboard?.entries?.[0]?.entity_id;
     if (typeof panel._send === 'function') {
-      panel._send('argus/sos', { entity_id: eid, active: !panicNow }).catch(() => {});
+      panel._send('argus/perform_alarm_action', { action: panicNow ? 'stop_sos' : 'sos', entry_id: eid }).catch(() => {});
     }
   });
 
