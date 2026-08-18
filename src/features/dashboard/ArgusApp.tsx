@@ -3,6 +3,8 @@ import { ArgusDashboard } from './ArgusDashboard';
 import { LocalStorageDashboardLayoutStorage } from './layout';
 import { ActiveInstances } from './widgets/ActiveInstances';
 import { Modes } from './widgets/Modes';
+import { SOSWidget } from './widgets/SOSWidget';
+import { AccessControlWidget } from './widgets/AccessControlWidget';
 
 interface ArgusAppProps {
   hass: any;
@@ -32,9 +34,9 @@ export function ArgusApp({ hass, config }: ArgusAppProps) {
   const widgetComponents = {
     'modes': <Modes hass={hass} />,
     'active-instances': <ActiveInstances hass={hass} />,
-    'sos': <div style={{ padding: '20px' }}>Botón de Pánico</div>,
+    'sos': <SOSWidget hass={hass} />,
     'history': <div style={{ padding: '20px' }}>Registro de Actividad</div>,
-    'access': <div style={{ padding: '20px' }}>Usuarios y PIN Maestro</div>
+    'access': <AccessControlWidget hass={hass} />
   };
 
   return (
