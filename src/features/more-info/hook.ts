@@ -2,11 +2,6 @@
 /**
  * Argus More-Info Dialog Hook — v2.2.3
  * Automatically overrides Home Assistant's default more-info dialog for Argus entities.
- *
- * When the user taps on "Argus Alarm Card" in "Favoritos", "Resúmenes", or any standard HA dashboard:
- * - Intercepts the more-info dialog for alarm_control_panel.argus*
- * - Renders the real Argus active instance security console (Liquid Glass, Slide to Disarm, Slide to SOS, Sensors)
- * - Beautiful Liquid Glass styling for the dialog container
  */
 
 const HOOK_ID = 'argus-more-info-hook-installed';
@@ -21,7 +16,8 @@ function isArgusEntity(entityId, hass) {
 }
 
 function injectDialogStyles(doc) {
-  if (doc.getElementById(STYLE_ID)) return;
+  if (!doc) return;
+  if (typeof doc.getElementById === 'function' && doc.getElementById(STYLE_ID)) return;
   const s = doc.createElement('style');
   s.id = STYLE_ID;
   s.textContent = `
@@ -50,7 +46,7 @@ function injectDialogStyles(doc) {
       width: 100%;
     }
   `;
-  (doc.head || doc).appendChild(s);
+  (doc.head || doc.body || doc).appendChild(s);
 }
 
 function handleDialog(dialog, hass) {
@@ -77,13 +73,14 @@ function handleDialog(dialog, hass) {
     container = document.createElement('div');
     container.className = 'argus-more-info-container';
 
-    const panelTag = customElements.get('argus-panel-v2018') ? 'argus-panel-v2018' : null;
+    const panelTag = customElements.get('argus-card') ? 'argus-card' : (customElements.get('argus-panel-v2018') ? 'argus-panel-v2018' : null);
     if (panelTag) {
-      const panel = document.createElement('argus-panel-v2018');
-      panel.setConfig({
-        entity: entityId,
-        compact: true,
-      });
+      const panel = document.createElement(panelTag);
+      if (typeof panel.setConfig === 'function') {
+        try {
+          panel.setConfig({ entity: entityId, compact: true });
+        } catch (_) {}
+      }
       panel.hass = hass;
       container.appendChild(panel);
     }
@@ -99,7 +96,7 @@ function handleDialog(dialog, hass) {
     }
   } else {
     // Update existing panel
-    const panel = container.querySelector('argus-panel-v2018');
+    const panel = container.querySelector('argus-card') || container.querySelector('argus-panel-v2018');
     if (panel) {
       panel.hass = hass;
     }
@@ -107,39 +104,50 @@ function handleDialog(dialog, hass) {
 }
 
 export function applyMoreInfoHook(ArgusPanel) {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   if (window[HOOK_ID]) return;
   window[HOOK_ID] = true;
 
-  injectDialogStyles(document);
+  try {
+    injectDialogStyles(document);
+  } catch (_) {}
 
   // Listen for the hass-more-info event on window/document
   const onMoreInfo = (e) => {
     const entityId = e.detail?.entityId;
     if (!entityId) return;
 
-    // Small delay to let HA create/open the dialog in DOM
     requestAnimationFrame(() => {
-      const ha = document.querySelector('home-assistant');
-      const dialog = ha?.shadowRoot?.querySelector('ha-more-info-dialog')
-        || document.querySelector('ha-more-info-dialog');
-      if (dialog) {
-        handleDialog(dialog, ha?.hass);
-      }
+      try {
+        const ha = document.querySelector('home-assistant');
+        const dialog = ha?.shadowRoot?.querySelector('ha-more-info-dialog')
+          || document.querySelector('ha-more-info-dialog');
+        if (dialog) {
+          handleDialog(dialog, ha?.hass);
+        }
+      } catch (_) {}
     });
   };
 
-  window.addEventListener('hass-more-info', onMoreInfo, { passive: true });
-  document.addEventListener('hass-more-info', onMoreInfo, { passive: true });
+  try {
+    window.addEventListener('hass-more-info', onMoreInfo, { passive: true });
+    document.addEventListener('hass-more-info', onMoreInfo, { passive: true });
+  } catch (_) {}
 
-  // Also observe DOM additions for ha-more-info-dialog
-  const observer = new MutationObserver(() => {
-    const ha = document.querySelector('home-assistant');
-    const dialog = ha?.shadowRoot?.querySelector('ha-more-info-dialog')
-      || document.querySelector('ha-more-info-dialog');
-    if (dialog) {
-      handleDialog(dialog, ha?.hass);
+  // Also observe DOM additions for ha-more-info-dialog safely
+  try {
+    if (typeof MutationObserver !== 'undefined' && document.body) {
+      const observer = new MutationObserver(() => {
+        try {
+          const ha = document.querySelector('home-assistant');
+          const dialog = ha?.shadowRoot?.querySelector('ha-more-info-dialog')
+            || document.querySelector('ha-more-info-dialog');
+          if (dialog) {
+            handleDialog(dialog, ha?.hass);
+          }
+        } catch (_) {}
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
     }
-  });
-
-  observer.observe(document.body, { childList: true, subtree: true });
+  } catch (_) {}
 }

@@ -19098,7 +19098,7 @@ function Df(o, n) {
   return !!(r?.attributes?.argus_version || r?.attributes?.argus_entry_id);
 }
 function $f(o) {
-  if (o.getElementById(mp)) return;
+  if (!o || typeof o.getElementById == "function" && o.getElementById(mp)) return;
   const n = o.createElement("style");
   n.id = mp, n.textContent = `
     ha-more-info-dialog:has(.argus-more-info-active) ha-dialog,
@@ -19125,7 +19125,7 @@ function $f(o) {
       display: block;
       width: 100%;
     }
-  `, (o.head || o).appendChild(n);
+  `, (o.head || o.body || o).appendChild(n);
 }
 function hp(o, n) {
   if (!o) return;
@@ -19138,33 +19138,54 @@ function hp(o, n) {
   o.classList.add("argus-more-info-active");
   let c = s.querySelector(".argus-more-info-container");
   if (c) {
-    const u = c.querySelector("argus-panel-v2018");
+    const u = c.querySelector("argus-card") || c.querySelector("argus-panel-v2018");
     u && (u.hass = n);
   } else {
-    if (c = document.createElement("div"), c.className = "argus-more-info-container", customElements.get("argus-panel-v2018") ? "argus-panel-v2018" : null) {
-      const m = document.createElement("argus-panel-v2018");
-      m.setConfig({
-        entity: r,
-        compact: !0
-      }), m.hass = n, c.appendChild(m);
+    c = document.createElement("div"), c.className = "argus-more-info-container";
+    const u = customElements.get("argus-card") ? "argus-card" : customElements.get("argus-panel-v2018") ? "argus-panel-v2018" : null;
+    if (u) {
+      const m = document.createElement(u);
+      if (typeof m.setConfig == "function")
+        try {
+          m.setConfig({ entity: r, compact: !0 });
+        } catch {
+        }
+      m.hass = n, c.appendChild(m);
     }
     const p = s.querySelector("more-info-alarm_control_panel") || s.querySelector("more-info-content");
     p && p !== c ? (p.style.display = "none", p.parentNode?.insertBefore(c, p)) : a.appendChild(c);
   }
 }
 function Ff(o) {
-  if (window[_p]) return;
-  window[_p] = !0, $f(document);
-  const n = (s) => {
-    s.detail?.entityId && requestAnimationFrame(() => {
-      const c = document.querySelector("home-assistant"), u = c?.shadowRoot?.querySelector("ha-more-info-dialog") || document.querySelector("ha-more-info-dialog");
-      u && hp(u, c?.hass);
+  if (typeof window > "u" || typeof document > "u" || window[_p]) return;
+  window[_p] = !0;
+  try {
+    $f(document);
+  } catch {
+  }
+  const n = (r) => {
+    r.detail?.entityId && requestAnimationFrame(() => {
+      try {
+        const a = document.querySelector("home-assistant"), c = a?.shadowRoot?.querySelector("ha-more-info-dialog") || document.querySelector("ha-more-info-dialog");
+        c && hp(c, a?.hass);
+      } catch {
+      }
     });
   };
-  window.addEventListener("hass-more-info", n, { passive: !0 }), document.addEventListener("hass-more-info", n, { passive: !0 }), new MutationObserver(() => {
-    const s = document.querySelector("home-assistant"), a = s?.shadowRoot?.querySelector("ha-more-info-dialog") || document.querySelector("ha-more-info-dialog");
-    a && hp(a, s?.hass);
-  }).observe(document.body, { childList: !0, subtree: !0 });
+  try {
+    window.addEventListener("hass-more-info", n, { passive: !0 }), document.addEventListener("hass-more-info", n, { passive: !0 });
+  } catch {
+  }
+  try {
+    typeof MutationObserver < "u" && document.body && new MutationObserver(() => {
+      try {
+        const s = document.querySelector("home-assistant"), a = s?.shadowRoot?.querySelector("ha-more-info-dialog") || document.querySelector("ha-more-info-dialog");
+        a && hp(a, s?.hass);
+      } catch {
+      }
+    }).observe(document.body, { childList: !0, subtree: !0 });
+  } catch {
+  }
 }
 const qf = [{ id: "activity", size: "M", hidden: !1 }, { id: "modes", size: "M", hidden: !1 }, { id: "automations", size: "M", hidden: !1 }, { id: "access", size: "M", hidden: !1 }, { id: "backup", size: "S", hidden: !1 }, { id: "github", size: "S", hidden: !1 }], fp = { es: ["Configurar widgets", "Arrastrar", "Ocultar", "Mostrar", "Conectado", "Sin sensores configurados", "Todos los sensores están omitidos"], en: ["Configure widgets", "Drag", "Hide", "Show", "Connected", "No sensors configured", "All sensors are bypassed"], fr: ["Configurer les widgets", "Déplacer", "Masquer", "Afficher", "Connecté", "Aucun capteur configuré", "Tous les capteurs sont ignorés"], pt: ["Configurar widgets", "Arrastar", "Ocultar", "Mostrar", "Conectado", "Nenhum sensor configurado", "Todos os sensores estão ignorados"], it: ["Configura widget", "Trascina", "Nascondi", "Mostra", "Connesso", "Nessun sensore configurato", "Tutti i sensori sono esclusi"], zh: ["配置小组件", "拖动", "隐藏", "显示", "已连接", "未配置传感器", "所有传感器均已绕过"], ru: ["Настроить виджеты", "Перетащить", "Скрыть", "Показать", "Подключено", "Датчики не настроены", "Все датчики исключены"] }, jf = (o) => {
   const n = String(o._manualLang || o._hass?.language || "en").toLowerCase().split(/[-_]/)[0];
