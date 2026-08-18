@@ -1,3 +1,6 @@
+## [2.2.7] - 2026-08-17
+- Fix UI scaling, slider persistence, and payload mapping.
+
 ## [2.2.4] - 2026-08-17
 
 ### Fixed
