@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Panel & Alarm Card — v2.2.3
+ * Argus Panel & Alarm Card — v2.2.4
  * Auto-discovering Lovelace card for Home Assistant.
  *
  * View Modes:
@@ -13,7 +13,7 @@
  *    Renders the classic compact card with animated weather backdrop and PIN keypad.
  */
 
-const ARGUS_CARD_VERSION='2.2.3';
+const ARGUS_CARD_VERSION='2.2.4';
 
 console.info(
   `%c🛡️ ARGUS ALARM CARD %c v${ARGUS_CARD_VERSION} `,
