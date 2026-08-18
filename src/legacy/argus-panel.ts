@@ -1363,6 +1363,60 @@ _tmpl.innerHTML = `
   .ios-confirm-cancel:active { transform: scale(0.96); }
 
   :host{display:block;min-height:100vh;box-sizing:border-box;--primary-text-color:#ffffff!important;--secondary-text-color:rgba(255,255,255,0.7)!important;color:#ffffff!important;background:var(--lovelace-background,var(--primary-background-color));font-family:'Outfit',Inter,system-ui,sans-serif}
+  :host([compact]), :host(.argus-compact) {
+    min-height: auto !important;
+    background: transparent !important;
+  }
+  :host([compact]) .wrap, :host(.argus-compact) .wrap {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    gap: 0 !important;
+  }
+  :host([compact]) .hero, :host(.argus-compact) .hero {
+    display: none !important;
+  }
+  :host([compact]) #argus-canvas-bg, :host(.argus-compact) #argus-canvas-bg {
+    display: none !important;
+  }
+  :host([compact]) .tabs, :host(.argus-compact) .tabs {
+    display: none !important;
+  }
+  :host([compact]) .dashboard-instances .panel-head, :host(.argus-compact) .dashboard-instances .panel-head {
+    display: none !important;
+  }
+  :host([compact]) .personalize-section, :host(.argus-compact) .personalize-section {
+    display: none !important;
+  }
+  :host([compact]) .glass.panel:not(#w-instances), :host(.argus-compact) .glass.panel:not(#w-instances) {
+    display: none !important;
+  }
+  :host([compact]) .argus-widget:not(:has(#w-instances)), :host(.argus-compact) .argus-widget:not(:has(#w-instances)) {
+    display: none !important;
+  }
+  :host([compact]) .argus-dashboard__toolbar, :host(.argus-compact) .argus-dashboard__toolbar {
+    display: none !important;
+  }
+  :host([compact]) #widget-grid, :host(.argus-compact) #widget-grid {
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important;
+  }
+  :host([compact]) #w-instances, :host(.argus-compact) #w-instances {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  :host([compact]) .entry, :host(.argus-compact) .entry {
+    margin-bottom: 0 !important;
+    border-radius: 24px !important;
+  }
+  :host([compact]) .argus-widget__content, :host(.argus-compact) .argus-widget__content {
+    height: auto !important;
+    overflow: visible !important;
+  }
   *{box-sizing:border-box}
   @keyframes iosGlassIn{0%{opacity:0;transform:translateY(14px) scale(.965)}65%{opacity:1;transform:translateY(-2px) scale(1.008)}100%{transform:translateY(0) scale(1)}}
   @keyframes iosSelectPop{0%{transform:scale(.92);opacity:.45}60%{transform:scale(1.045);opacity:1}100%{transform:scale(1)}}
@@ -3273,6 +3327,17 @@ class ArgusPanel extends HTMLElement {
 
   _getTimeZone() {
     return this._hass?.config?.time_zone || undefined;
+  }
+
+  setConfig(config) {
+    this._cardConfig = config;
+    if (config?.compact) {
+      this.setAttribute('compact', '');
+      this.classList.add('argus-compact');
+    } else {
+      this.removeAttribute('compact');
+      this.classList.remove('argus-compact');
+    }
   }
 
   _getClockFormat() {
