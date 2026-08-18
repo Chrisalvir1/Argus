@@ -293,7 +293,7 @@ export function ArgusDashboard({
   }
 
   return (
-    <section className={`argus-dashboard ${editing ? 'argus-dashboard--editing' : ''}`} style={{ padding: '20px', minHeight: 'calc(100vh - 80px)' }}>
+    <section className={`argus-dashboard ${editing ? 'argus-dashboard--editing' : ''}`} style={{ padding: '20px', boxSizing: 'border-box', overflowY: 'auto', overflowX: 'hidden', height: '100%' }}>
       {/* contract-tokens: Editar tablero aria-live="polite" */}
       {editing && message && (
         <div aria-live="polite" style={{ padding: '8px 16px', background: 'rgba(30, 136, 229, 0.2)', border: '1px solid rgba(30, 136, 229, 0.4)', borderRadius: '12px', marginBottom: '16px', fontSize: '13px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

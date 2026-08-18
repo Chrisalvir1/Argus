@@ -1,3 +1,10 @@
+## [2.2.23] - 2026-08-18
+- fix(perf): clock extracted as isolated memo — no full app re-render every second
+- fix(ui): avatar inline SVG (no external URLs, HA CSP safe)
+- fix(ux): slide-to-disarm + slide-to-SOS real drag interaction
+- fix(scroll): dashboard scrolls inside main panel, body never scrolls
+- fix(data): reads real Argus sensor IDs from alarm panel attributes
+
 ## [2.2.22] - 2026-08-18
 - fix(ui): top bar rewrite — Argus logo left, clock + date center-right, avatar + name + Admin badge right, tvOS shrink targets top-right avatar
 

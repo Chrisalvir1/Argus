@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { createPortal } from 'react-dom';
 
 interface ArgusIntroProps {
