@@ -1421,8 +1421,8 @@ _tmpl.innerHTML = `
     82% { transform: scale(1.02, 0.98) translateY(-1px); }
     100% { transform: scale(1, 1) translateY(0); opacity: 1; }
   }
-  .modal-back.open .modal.jelly-modal, .jelly-modal {
-    animation: jellyBounce 0.52s cubic-bezier(0.34, 1.56, 0.64, 1) both !important;
+  .modal-back.open .modal.jelly-modal {
+    animation: jellyBounce 0.52s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
   }
 
   /* Collapsible Personalization with Bounce expansion */
@@ -6136,6 +6136,8 @@ gl_FragColor=vec4(col,alpha);}`;
     if (modal) {
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
+      modal.style.setProperty('display', 'flex', 'important');
+      modal.style.setProperty('visibility', 'visible', 'important');
     }
     this._renderModeView();
   }
@@ -6145,6 +6147,8 @@ gl_FragColor=vec4(col,alpha);}`;
     if (modal) {
       modal.classList.remove('open');
       modal.setAttribute('aria-hidden', 'true');
+      modal.style.display = '';
+      modal.style.visibility = '';
     }
     this._renderModeView();
   }
