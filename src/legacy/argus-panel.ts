@@ -4424,11 +4424,14 @@ class ArgusPanel extends HTMLElement {
     const s = id => this.shadowRoot.getElementById(id);
     s('selector-close').addEventListener('click', () => this._closeModal());
     s('selector-accept').addEventListener('click', () => this._acceptSelection());
-    s('selector-clear').addEventListener('click', () => { this._selected = []; this._renderSelector(); });
-    s('selector-search').addEventListener('input', () => this._renderSelector());
+    s('selector-clear').addEventListener('click', () => { this._selected = []; this._renderSelector(true); });
+    s('selector-search').addEventListener('input', () => {
+      clearTimeout(this._searchDebounce);
+      this._searchDebounce = setTimeout(() => this._renderSelector(true), 120);
+    });
     s('selector-modal').addEventListener('click', e => { if (e.target.id === 'selector-modal') this._closeModal(); });
     s('selector-select-all').addEventListener('click', () => this._selectAll());
-    s('selector-deselect-all').addEventListener('click', () => { this._selected = []; this._renderSelector(); });
+    s('selector-deselect-all').addEventListener('click', () => { this._selected = []; this._renderSelector(true); });
 
     s('btn-new-auto').addEventListener('click', () => {
       history.pushState(null, '', '/config/automation/edit/new');
@@ -4827,39 +4830,42 @@ class ArgusPanel extends HTMLElement {
     const mains = attributes.mains_powered === true || attributes.is_mains_powered === true || attributes.wired === true ||
       /(?:mains|ac|wired|line|external|toma|corriente)/.test(source);
 
-    if (battery === null) {
-      let companion = null;
-      const avEntity = (this._available || []).find(e => e.entity_id === sensorId);
-      if (avEntity && avEntity.device_id) {
-         companion = (this._available || []).find(e => 
-           e.device_id === avEntity.device_id &&
-           (this._hass?.states?.[e.entity_id]?.attributes?.device_class === 'battery' || /_battery(?:_level|_percent(?:age)?)?$/i.test(e.entity_id))
-         );
-         if (companion) companion = { state: this._hass?.states?.[companion.entity_id]?.state };
+    const domain = sensorId ? sensorId.split('.')[0] : '';
+    if (['switch', 'light', 'fan', 'script', 'input_boolean', 'siren'].includes(domain) && battery === null) {
+      return { battery: null, mains: true };
+    }
+
+    if (battery === null && this._hass?.states) {
+      if (!this._powerCache) this._powerCache = new Map();
+      if (this._powerCache.has(sensorId)) return this._powerCache.get(sensorId);
+
+      let companionState = null;
+      const objectId = sensorId.split('.').slice(1).join('.').toLowerCase();
+      const base = objectId.replace(/_(contact|door|window|motion|occupancy|opening|sensor)$/i, '');
+
+      const directCandidate = this._hass.states[`sensor.${objectId}_battery`]
+        || this._hass.states[`sensor.${base}_battery`]
+        || this._hass.states[`sensor.${objectId}_battery_level`]
+        || this._hass.states[`sensor.${base}_battery_level`];
+
+      if (directCandidate) {
+        companionState = directCandidate.state;
+      } else {
+        const avEntity = (this._available || []).find(e => e.entity_id === sensorId);
+        if (avEntity && avEntity.device_id) {
+           const companion = (this._available || []).find(e => 
+             e.device_id === avEntity.device_id &&
+             (this._hass?.states?.[e.entity_id]?.attributes?.device_class === 'battery' || /_battery(?:_level|_percent(?:age)?)?$/i.test(e.entity_id))
+           );
+           if (companion) companionState = this._hass?.states?.[companion.entity_id]?.state;
+        }
       }
-      
-      if (!companion) {
-        const objectId = sensorId.split('.').slice(1).join('.').toLowerCase();
-        const base = objectId.replace(/_(contact|door|window|motion|occupancy|opening|sensor)$/i, '');
-        companion = Object.values(this._hass?.states || {})
-          .map(state => {
-            const id = String(state.entity_id || '').toLowerCase();
-            const isBattery = state.attributes?.device_class === 'battery' || /_battery(?:_level|_percent(?:age)?)?$/i.test(id);
-            if (!isBattery) return { state, score: 0 };
-            const object = id.split('.').slice(1).join('.');
-            const score = object === `${objectId}_battery` ? 100
-              : object === `${base}_battery` ? 90
-              : object.startsWith(`${objectId}_battery`) ? 80
-              : object.startsWith(`${base}_battery`) ? 70
-              : 0;
-            return { state, score };
-          })
-          .filter(candidate => candidate.score > 0)
-          .sort((a, b) => b.score - a.score)[0];
-      }
-      
-      const level = Number(companion?.state);
+
+      const level = Number(companionState);
       if (Number.isFinite(level)) battery = Math.max(0, Math.min(100, Math.round(level)));
+      const res = { battery, mains };
+      this._powerCache.set(sensorId, res);
+      return res;
     }
     return { battery, mains };
   }
@@ -7797,9 +7803,9 @@ gl_FragColor=vec4(col,alpha);}`;
 
   /* ── Selector modal ──────────────────────────────────────────────── */
   _selectAll() {
-    const q = (this.shadowRoot.getElementById('selector-search').value || '').toLowerCase().trim();
+    const q = (this.shadowRoot.getElementById('selector-search')?.value || '').toLowerCase().trim();
     const INTRUSION_DC = ['door','window','motion','vibration','glass','opening','smoke','gas','tamper'];
-    const items = this._available.filter(x => {
+    const items = (this._available || []).filter(x => {
       if (this._selectorTarget === 'external_panel') return x.domain === 'alarm_control_panel';
       if (this._selectorTarget === 'siren' || this._selectorTarget === 'panic') return ['siren','switch','light','fan','input_boolean','script','alarm_control_panel'].includes(x.domain);
       if (x.domain === 'lock') return true;
@@ -7810,7 +7816,7 @@ gl_FragColor=vec4(col,alpha);}`;
       return false;
     }).filter(x => !q || [x.entity_id, x.name, x.area].filter(Boolean).join(' ').toLowerCase().includes(q));
     items.forEach(x => { if (!this._selected.includes(x.entity_id)) this._selected.push(x.entity_id); });
-    this._renderSelector();
+    this._renderSelector(true);
   }
 
   _openModal(type) {
@@ -7827,8 +7833,9 @@ gl_FragColor=vec4(col,alpha);}`;
     else if (type === 'panic') title.textContent = this._t('selector_panic');
     else if (type === 'external_panel') title.textContent = this._t('external_panels') || 'Paneles de alarma externos';
     else title.textContent = this._t('siren_section');
-    this.shadowRoot.getElementById('selector-search').value = '';
-    this._renderSelector();
+    const searchInput = this.shadowRoot.getElementById('selector-search');
+    if (searchInput) searchInput.value = '';
+    this._renderSelector(true);
     const m = this.shadowRoot.getElementById('selector-modal');
     m.classList.add('open'); m.setAttribute('aria-hidden', 'false');
   }
@@ -7838,46 +7845,9 @@ gl_FragColor=vec4(col,alpha);}`;
     m.classList.remove('open'); m.setAttribute('aria-hidden', 'true');
   }
 
-  _renderSelector() {
-    const q = (this.shadowRoot.getElementById('selector-search').value || '').toLowerCase().trim();
-    const list   = this.shadowRoot.getElementById('selector-list');
+  _renderSelectedBox() {
     const selBox = this.shadowRoot.getElementById('selector-selected');
-
-    const INTRUSION_DC = ['door','window','motion','vibration','glass','opening','smoke','gas','tamper'];
-    const items = this._available.filter(x => {
-      if (this._selectorTarget === 'external_panel') return x.domain === 'alarm_control_panel';
-      if (this._selectorTarget === 'siren' || this._selectorTarget === 'panic') return ['siren','switch','light','fan','input_boolean','script','alarm_control_panel'].includes(x.domain);
-      if (x.domain === 'lock') return true;
-      if (x.domain === 'binary_sensor') {
-        const dc = this._hass?.states?.[x.entity_id]?.attributes?.device_class || '';
-        return INTRUSION_DC.includes(dc);
-      }
-      return false;
-    }).filter(x => !q || [x.entity_id, x.name, x.area, x.entity_id.split('.')[1]].filter(Boolean).join(' ').toLowerCase().includes(q));
-
-    list.innerHTML = items.map(x => {
-      const raw   = this._hass?.states?.[x.entity_id]?.state || 'unknown';
-      const stateObj = this._hass?.states?.[x.entity_id];
-      const facts = this._deviceFacts(x.entity_id, stateObj, true);
-      return `<label class="pick-row">
-        <input type="checkbox" data-entity="${this._escapeHtml(x.entity_id)}" ${this._selected.includes(x.entity_id) ? 'checked' : ''}>
-        <div>
-          <div class="pick-row-name">${this._escapeHtml(x.name || x.entity_id)}</div>
-          <div class="pick-row-meta">${this._escapeHtml(x.entity_id)}${x.area ? ' · '+this._escapeHtml(x.area) : ''}</div>
-          <div class="device-facts">${facts.map(f => `<span class="device-fact ${f.className}">${this._escapeHtml(f.text)}</span>`).join('')}</div>
-        </div>
-      </label>`;
-    }).join('') || `<div class="small" style="padding:10px">${this._t('no_results')}</div>`;
-
-    list.addEventListener('change', e => {
-      const cb = e.target.closest('input[type=checkbox]');
-      if (!cb || !cb.dataset.entity) return;
-      const id = cb.dataset.entity;
-      if (cb.checked) { if (!this._selected.includes(id)) this._selected.push(id); }
-      else this._selected = this._selected.filter(v => v !== id);
-      this._renderSelector();
-    }, { once: true });
-
+    if (!selBox) return;
     selBox.innerHTML = this._selected.map(id => {
       const stateObj = this._hass?.states?.[id];
       const facts = this._deviceFacts(id, stateObj, true);
@@ -7890,14 +7860,74 @@ gl_FragColor=vec4(col,alpha);}`;
       </div>`;
     }).join('') || `<div class="small" style="padding:10px;opacity:.5">${this._t('none_selected')}</div>`;
 
-    selBox.querySelectorAll('[data-rm]').forEach(b =>
-      b.addEventListener('click', () => {
-        this._selected = this._selected.filter(v => v !== b.dataset.rm);
-        this._renderSelector();
-      })
-    );
-    this.shadowRoot.getElementById('selector-count').textContent =
-      `${this._selected.length} ${this._t('selected_lbl').toLowerCase()}`;
+    const countEl = this.shadowRoot.getElementById('selector-count');
+    if (countEl) {
+      countEl.textContent = `${this._selected.length} ${this._t('selected_lbl').toLowerCase()}`;
+    }
+  }
+
+  _renderSelector(rebuildList = true) {
+    const list = this.shadowRoot.getElementById('selector-list');
+    const selBox = this.shadowRoot.getElementById('selector-selected');
+    if (!list || !selBox) return;
+
+    if (!list._boundSelectorChange) {
+      list._boundSelectorChange = true;
+      list.addEventListener('change', e => {
+        const cb = e.target.closest('input[type=checkbox]');
+        if (!cb || !cb.dataset.entity) return;
+        const id = cb.dataset.entity;
+        if (cb.checked) {
+          if (!this._selected.includes(id)) this._selected.push(id);
+        } else {
+          this._selected = this._selected.filter(v => v !== id);
+        }
+        this._renderSelectedBox();
+      });
+    }
+
+    if (!selBox._boundSelectorRm) {
+      selBox._boundSelectorRm = true;
+      selBox.addEventListener('click', e => {
+        const btn = e.target.closest('[data-rm]');
+        if (!btn || !btn.dataset.rm) return;
+        const id = btn.dataset.rm;
+        this._selected = this._selected.filter(v => v !== id);
+        const cb = list.querySelector(`input[type=checkbox][data-entity="${id}"]`);
+        if (cb) cb.checked = false;
+        this._renderSelectedBox();
+      });
+    }
+
+    if (rebuildList) {
+      const q = (this.shadowRoot.getElementById('selector-search')?.value || '').toLowerCase().trim();
+      const INTRUSION_DC = ['door','window','motion','vibration','glass','opening','smoke','gas','tamper'];
+      const items = (this._available || []).filter(x => {
+        if (this._selectorTarget === 'external_panel') return x.domain === 'alarm_control_panel';
+        if (this._selectorTarget === 'siren' || this._selectorTarget === 'panic') return ['siren','switch','light','fan','input_boolean','script','alarm_control_panel'].includes(x.domain);
+        if (x.domain === 'lock') return true;
+        if (x.domain === 'binary_sensor') {
+          const dc = this._hass?.states?.[x.entity_id]?.attributes?.device_class || '';
+          return INTRUSION_DC.includes(dc);
+        }
+        return false;
+      }).filter(x => !q || [x.entity_id, x.name, x.area, x.entity_id.split('.')[1]].filter(Boolean).join(' ').toLowerCase().includes(q));
+
+      list.innerHTML = items.map(x => {
+        const stateObj = this._hass?.states?.[x.entity_id];
+        const facts = this._deviceFacts(x.entity_id, stateObj, true);
+        return `<label class="pick-row">
+          <input type="checkbox" data-entity="${this._escapeHtml(x.entity_id)}" ${this._selected.includes(x.entity_id) ? 'checked' : ''}>
+          <div>
+            <div class="pick-row-name">${this._escapeHtml(x.name || x.entity_id)}</div>
+            <div class="pick-row-meta">${this._escapeHtml(x.entity_id)}${x.area ? ' · '+this._escapeHtml(x.area) : ''}</div>
+            <div class="device-facts">${facts.map(f => `<span class="device-fact ${f.className}">${this._escapeHtml(f.text)}</span>`).join('')}</div>
+          </div>
+        </label>`;
+      }).join('') || `<div class="small" style="padding:10px">${this._t('no_results')}</div>`;
+    }
+
+    this._renderSelectedBox();
   }
 
   _acceptSelection() {

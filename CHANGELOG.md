@@ -1,3 +1,6 @@
+## [2.2.13] - 2026-08-18
+- Optimize entity selector modal to O(1) cached lookup and eliminate UI freezing.
+
 ## [2.2.12] - 2026-08-17
 - Fix mobile card height clipping and allow vertical auto-expansion.
 
