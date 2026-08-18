@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Slide-to-Action — v2.2.3
+ * Argus Slide-to-Action — v2.2.7
  * iOS "slide to power off" style — exact visual match.
  * - Large circular glass thumb on the LEFT, drags RIGHT to complete
  * - Very dark glass pill track
@@ -410,9 +410,9 @@ function mountOnEntry(panel, entry, idx) {
     buildTrack('disarm', t(panel, 'slide_disarm'), ICON_DISARM);
 
   attachDrag(panel, 'disarm', dTrack, dFill, dThumb, dLabel, dPin, (pin) => {
-    const eid = entityId || panel._dashboard?.entries?.[0]?.entity_id;
+    const realEntryId = panel._dashboard?.entries?.[idx]?.entry_id || '';
     if (typeof panel._send === 'function') {
-      panel._send('argus/perform_alarm_action', { action: 'disarm', entry_id: eid, ...(pin ? { code: pin } : {}) }).catch(() => {});
+      panel._send('argus/perform_alarm_action', { action: 'disarm', entry_id: realEntryId, ...(pin ? { code: pin } : {}) }).catch(() => {});
     }
   });
 
@@ -421,10 +421,9 @@ function mountOnEntry(panel, entry, idx) {
     buildTrack('sos', t(panel, 'slide_sos'), ICON_SOS);
 
   attachDrag(panel, 'sos', sTrack, sFill, sThumb, sLabel, sPin, () => {
-    const panicNow = getPanic();
-    const eid = entityId || panel._dashboard?.entries?.[0]?.entity_id;
+    const realEntryId = panel._dashboard?.entries?.[idx]?.entry_id || '';
     if (typeof panel._send === 'function') {
-      panel._send('argus/perform_alarm_action', { action: panicNow ? 'stop_sos' : 'sos', entry_id: eid }).catch(() => {});
+      panel._send('argus/perform_alarm_action', { action: 'sos', entry_id: realEntryId }).catch(() => {});
     }
   });
 
@@ -497,7 +496,10 @@ export function applySlideToAction(ArgusPanel) {
   const prevRender = proto._renderEntries;
   proto._renderEntries = function (...a) {
     const r = prevRender?.call(this, ...a);
-    requestAnimationFrame(() => applyToAllEntries(this));
+    requestAnimationFrame(() => {
+      applyToAllEntries(this);
+      setTimeout(() => applyToAllEntries(this), 100); // Fail-safe for delayed renders
+    });
     return r;
   };
 

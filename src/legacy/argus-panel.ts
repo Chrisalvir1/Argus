@@ -1423,6 +1423,9 @@ _tmpl.innerHTML = `
     display: flex !important;
     flex-direction: column !important;
     flex: 1 !important;
+    background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;
+    backdrop-filter: blur(28px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(150%) !important;
   }
   :host([compact]) .entry, :host(.argus-compact) .entry {
     margin-bottom: 0 !important;
@@ -1433,6 +1436,9 @@ _tmpl.innerHTML = `
     display: flex !important;
     flex-direction: column !important;
     flex: 1 !important;
+    background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;
+    backdrop-filter: blur(28px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(150%) !important;
   }
   :host([compact]) #bootstrap-overlay, :host(.argus-compact) #bootstrap-overlay,
   :host([compact]) .argus-profile-overlay, :host(.argus-compact) .argus-profile-overlay,
@@ -1463,7 +1469,7 @@ _tmpl.innerHTML = `
     .security-console .console-sensors { order: 4 !important; width: 100% !important; max-width: 360px !important; display: flex !important; flex-direction: column !important; }
     .sensor-column { position: static !important; max-width: 100% !important; width: 100% !important; align-items: stretch !important; padding: 0 !important; gap: 10px !important; }
     .sensor-chip { max-width: none !important; }
-    .entry-content { padding: 20px !important; display: flex !important; flex-direction: column !important; align-items: center !important; background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, transparent 60%) !important; }
+    .entry-content { padding: 20px !important; display: flex !important; flex-direction: column !important; align-items: center !important;  }
     .liquid-stack { display: flex !important; flex-direction: column !important; align-items: stretch !important; gap: 8px !important; }
   }
   @keyframes iosGlassIn{0%{opacity:0;transform:translateY(14px) scale(.965)}65%{opacity:1;transform:translateY(-2px) scale(1.008)}100%{transform:translateY(0) scale(1)}}

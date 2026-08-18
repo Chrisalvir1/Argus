@@ -147,6 +147,8 @@ class ArgusPanelCard extends HTMLElement {
           overflow: hidden;
           border-radius: 24px;
           background: transparent !important;
+          border: none !important;
+          box-shadow: none !important;
           color: #fff;
           box-shadow: 0 20px 60px rgba(0,0,0,.38);
           position: relative;

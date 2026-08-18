@@ -1579,7 +1579,7 @@ const Do = [
     ha_standard_user_label: "Стандартный пользователь HA",
     role_argus_standard: "Стандартный пользователь"
   }
-}, ah = {
+}, sh = {
   es: { connected: "CONECTADO", no_sensors_configured: "Sin sensores de intrusión configurados.", all_sensors_bypassed: "Todos los sensores configurados están omitidos.", active_profile: "Perfil Activo", change_profile_picture: "Ir a Personas de HA ↗", pin_management: "🔑 Gestión de Pines", access_pin_lbl: "PIN de Acceso", master_pin_lbl: "PIN Maestro", switch_profile_btn: "👤 Cambiar de Perfil", lang_selector_lbl: "⚙️ Idioma / Language", change_btn: "Cambiar", remove_btn: "Quitar", role_argus_admin_short: "Admin", role_argus_user_short: "Estándar", use_ha_language: "Usar idioma de Home Assistant", emergency_number_label: "🚨 Número local de emergencias", emergency_help: "Configúralo según la ubicación del hogar (p. ej., Costa Rica: 911; España: 112). Se incluirá en las alertas SOS.", sos_actions: "🚨 Acciones SOS", sos_select_outputs: "Seleccionar luces, sirenas o scripts", sos_outputs_help: "Estos dispositivos se activarán siempre al usar SOS, incluso con Argus desarmado.", sos_no_outputs: "Sin dispositivos seleccionados", sos_call_help: "Si este equipo no admite llamadas, Argus enviará una alerta urgente a los dispositivos móviles configurados.", sos_stop: "🛑 DETENER PÁNICO", customize: "Personalizar", done: "Listo", sos_activated: "SOS activado", sos_call_confirm: "¿Quieres llamar ahora a emergencias ({number})?", sos_error: "No se pudo activar el SOS: {error}", no_alarm_instance: "No hay una instancia de alarma disponible", panic_state_unknown: "No se pudo determinar el estado anterior del pánico. Desarma o rearma manualmente.", panic_stopped: "Pánico detenido; restaurado a {state}", panic_stop_error: "No se pudo detener el pánico: {error}", selector_panic: "🚨 Acciones SOS", status_open: "Abierto", status_closed: "Cerrado", status_idle: "En reposo", status_recording: "Grabando", status_home: "En casa", status_away: "Fuera", no_results: "Sin resultados", user_required: "Nombre y PIN requeridos", generic_error: "Error: {error}", clear_history_confirm: "¿Seguro que quieres borrar todo el historial?", export_error: "Error al exportar: {error}", invalid_config: "Archivo de configuración no válido.", import_success: "Configuración restaurada con éxito. Recargando...", import_error: "Error al importar: {error}", file_read_error: "No se pudo leer el archivo.", reset_confirm: "¿Estás seguro de que deseas restablecer Argus a sus valores de fábrica? Perderás todas tus configuraciones, PINs y modos.", reset_success: "Argus restablecido. Tienes unos segundos para deshacer si cambias de opinión, o simplemente recarga la página para aplicar los cambios.", reset_error: "Error al restablecer: {error}", undo_success: "Restablecimiento deshecho con éxito.", undo_error: "Error al deshacer: {error}", url_placeholder: "URL del fondo...", loading: "Cargando...", delete: "Borrar", fullscreen_title: "Pantalla completa", home_default: "Mi Casa", home_fallback: "Hogar", user_default: "Usuario", temp_notification_title: "Argus — Alerta de Temperatura", action_failed: "No se pudo realizar la acción", cannot_arm: "No se puede armar", open_sensors_explain: `Los siguientes sensores están abiertos:
 {names}
 
@@ -1628,7 +1628,7 @@ Usare come immagine statica (OK) o video animato (Annulla)?`, first_run_blocked_
 Закройте их перед постановкой на охрану или включите «Обход».`, pin_disarm_error: "Неверный PIN или ошибка снятия с охраны", notification_disarmed: "{user} снял систему с охраны.", notification_armed: "{user} активировал режим {mode}.", upload_error: "Ошибка загрузки.", delete_file_error: "Не удалось удалить файл: {error}", file_choice: `«{file}»
 
 Использовать как статичное изображение (ОК) или анимированное видео (Отмена)?`, first_run_blocked_title: "Доступ запрещен", first_run_blocked_desc: "Для первой настройки Argus требуется администратор Home Assistant.", first_run_welcome: "Спасибо, что выбрали Argus Home Hub. Добро пожаловать.", first_run_desc: "Завершите настройку для безопасности вашего дома.", first_run_pin_expl: "PIN доступа открывает Argus. Мастер-PIN управляет постановкой и снятием с охраны.", first_run_skip: "Пропустить пока", first_run_start: "Начать с Argus" }
-}, sh = {
+}, lh = {
   es: { setup_required_title: "Falta configurar Argus", setup_required_desc: "Argus está instalado, pero todavía no existe una instancia. Añádela en Integraciones y luego vuelve a este panel.", setup_required_action: "Configurar Argus en Integraciones", welcome_profile: "Bienvenido/a, {name}", initialization_error_title: "Argus no pudo iniciar", initialization_error_desc: "No se pudo conectar con el backend autenticado de Home Assistant.", retry_action: "Reintentar" },
   en: { setup_required_title: "Argus setup required", setup_required_desc: "Argus is installed, but no instance exists yet. Add it in Integrations, then return to this panel.", setup_required_action: "Configure Argus in Integrations", welcome_profile: "Welcome, {name}", initialization_error_title: "Argus could not start", initialization_error_desc: "The authenticated Home Assistant backend connection could not be established.", retry_action: "Retry" },
   fr: { setup_required_title: "Configuration d’Argus requise", setup_required_desc: "Argus est installé, mais aucune instance n’existe encore. Ajoutez-la dans Intégrations, puis revenez à ce panneau.", setup_required_action: "Configurer Argus dans Intégrations", welcome_profile: "Bienvenue, {name}", initialization_error_title: "Argus n’a pas pu démarrer", initialization_error_desc: "La connexion authentifiée au backend Home Assistant a échoué.", retry_action: "Réessayer" },
@@ -1636,7 +1636,7 @@ Usare come immagine statica (OK) o video animato (Annulla)?`, first_run_blocked_
   it: { setup_required_title: "Configurazione di Argus necessaria", setup_required_desc: "Argus è installato, ma non esiste ancora un’istanza. Aggiungila in Integrazioni, poi torna a questo pannello.", setup_required_action: "Configura Argus in Integrazioni", welcome_profile: "Benvenuto/a, {name}", initialization_error_title: "Argus non si è avviato", initialization_error_desc: "Impossibile connettersi al backend autenticato di Home Assistant.", retry_action: "Riprova" },
   zh: { setup_required_title: "需要配置 Argus", setup_required_desc: "Argus 已安装，但尚未创建实例。请在“集成”中添加，然后返回此面板。", setup_required_action: "在集成中配置 Argus", welcome_profile: "欢迎，{name}", initialization_error_title: "Argus 无法启动", initialization_error_desc: "无法连接到 Home Assistant 的已认证后端。", retry_action: "重试" },
   ru: { setup_required_title: "Требуется настройка Argus", setup_required_desc: "Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.", setup_required_action: "Настроить Argus в интеграциях", welcome_profile: "Добро пожаловать, {name}", initialization_error_title: "Не удалось запустить Argus", initialization_error_desc: "Не удалось подключиться к авторизованному backend Home Assistant.", retry_action: "Повторить" }
-}, lh = {
+}, ch = {
   es: {
     github_title: "Apoya a Argus",
     github_desc: "Si te gusta este proyecto, considera darle una estrella en GitHub para apoyar su desarrollo.",
@@ -1840,7 +1840,7 @@ Usare come immagine statica (OK) o video animato (Annulla)?`, first_run_blocked_
     modal_user_added: "Пользователь создан.",
     modal_delete_confirm: "Удалить этого пользователя?"
   }
-}, ch = {
+}, dh = {
   es: { setup_admin_name: "Nombre del Administrador", setup_access_pin: "PIN de acceso al panel Argus (Opcional)", setup_master_pin: "PIN maestro para armar/desarmar (Opcional)", claim_title: "Argus Security Update", claim_desc: "Tu instalación requiere un administrador para reclamar el acceso.", claim_btn: "Reclamar Administración" },
   en: { setup_admin_name: "Administrator Name", setup_access_pin: "Argus panel access PIN (Optional)", setup_master_pin: "Master PIN to arm/disarm (Optional)", claim_title: "Argus Security Update", claim_desc: "Your installation needs an administrator to claim access.", claim_btn: "Claim Administration" },
   fr: { setup_admin_name: "Nom de l’administrateur", setup_access_pin: "PIN d’accès au panneau Argus (Optionnel)", setup_master_pin: "PIN maître pour armer/désarmer (Optionnel)", claim_title: "Mise à jour de sécurité Argus", claim_desc: "Votre installation nécessite un administrateur pour réclamer l’accès.", claim_btn: "Réclamer l’administration" },
@@ -1850,7 +1850,7 @@ Usare come immagine statica (OK) o video animato (Annulla)?`, first_run_blocked_
   ru: { setup_admin_name: "Имя администратора", setup_access_pin: "PIN доступа к панели Argus (Необязательно)", setup_master_pin: "Мастер-PIN для постановки/снятия с охраны (Необязательно)", claim_title: "Обновление безопасности Argus", claim_desc: "Вашей установке требуется администратор для получения доступа.", claim_btn: "Заявить права администратора" }
 };
 for (const o of Object.keys(be))
-  be[o] = Object.assign({}, be.en, be[o], ah[o] || {}, sh[o] || {}, lh[o] || {}, ch[o] || {});
+  be[o] = Object.assign({}, be.en, be[o], sh[o] || {}, lh[o] || {}, ch[o] || {}, dh[o] || {});
 Object.assign(be.es, { expired: "Expirado", active_until: "Vigente hasta", exp_indefinite: "Indefinido" });
 Object.assign(be.en, { expired: "Expired", active_until: "Valid until", exp_indefinite: "Indefinite" });
 Object.assign(be.fr, { expired: "Expiré", active_until: "Expire", exp_indefinite: "Indéfini" });
@@ -1898,8 +1898,8 @@ Object.assign(be.fr = be.fr || {}, { light_steady_safe: "Lumière fixe sécuris�
 Object.assign(be.pt = be.pt || {}, { light_steady_safe: "Luz fixa segura", light_color_and_flash: "Cor e piscar seguro", light_safe_flash: "Piscar seguro", test_safe_flash: "Testar piscar seguro", testing_safe_flash: "Testando com segurança…", light_onoff_only_safe_note: "Esta luz suporta apenas ligar/desligar. O Argus a manterá acesa de forma fixa por segurança.", no_flash: "Sem piscar", flash_gentle: "Suave", flash_rapid: "Rápido", flash_label: "Piscar", color_label: "Cor", size: "Tamanho", reset_widget: "Redefinir widget", hide_widget: "Ocultar widget", show: "Mostrar", edit_dashboard: "Editar painel", edit_dashboard_done: "✓ Pronto", reset_dashboard: "Redefinir layout", support_title: "Status & Suporte" });
 Object.assign(be.it = be.it || {}, { light_steady_safe: "Luce fissa sicura", light_color_and_flash: "Colore e lampeggio sicuro", light_safe_flash: "Lampeggio sicuro", test_safe_flash: "Prova lampeggio sicuro", testing_safe_flash: "Test in corso…", light_onoff_only_safe_note: "Questa luce supporta solo accensione/spegnimento. Argus la manterrà accesa fissa per sicurezza.", no_flash: "Nessun lampeggio", flash_gentle: "Delicato", flash_rapid: "Rapido", flash_label: "Lampeggio", color_label: "Colore", size: "Dimensione", reset_widget: "Reimposta widget", hide_widget: "Nascondi widget", show: "Mostra", edit_dashboard: "Modifica dashboard", edit_dashboard_done: "✓ Fatto", reset_dashboard: "Reimposta layout", support_title: "Stato & Supporto" });
 Object.assign(be.ru = be.ru || {}, { light_steady_safe: "Безопасный постоянный свет", light_color_and_flash: "Цвет и безопасное мигание", light_safe_flash: "Безопасное мигание", test_safe_flash: "Тест безопасного мигания", testing_safe_flash: "Проверка…", light_onoff_only_safe_note: "Этот свет поддерживает только вкл/выкл. Argus оставит его включенным для безопасности.", no_flash: "Без мигания", flash_gentle: "Мягкое", flash_rapid: "Быстрое", flash_label: "Мигание", color_label: "Цвет", size: "Размер", reset_widget: "Сбросить виджет", hide_widget: "Скрыть виджет", show: "Показать", edit_dashboard: "Редактировать панель", edit_dashboard_done: "✓ Готово", reset_dashboard: "Сбросить макет", support_title: "Статус и поддержка" });
-const Bp = document.createElement("template");
-Bp.innerHTML = `
+const Hp = document.createElement("template");
+Hp.innerHTML = `
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
@@ -1984,7 +1984,7 @@ Bp.innerHTML = `
     margin: 0 !important;
     max-width: none !important;
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
   }
   :host(.fullscreen-active) .hero {
     display: none !important;
@@ -1992,7 +1992,7 @@ Bp.innerHTML = `
   :host(.fullscreen-active) .grid {
     display: block !important;
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
     margin: 0 !important;
     gap: 0 !important;
   }
@@ -2001,7 +2001,7 @@ Bp.innerHTML = `
   }
   :host(.fullscreen-active) .grid > .stack:first-child {
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
   }
@@ -2015,7 +2015,7 @@ Bp.innerHTML = `
     padding: 0 !important;
     margin: 0 !important;
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
     border-radius: 0 !important;
     display: flex !important;
     flex-direction: column !important;
@@ -2028,7 +2028,7 @@ Bp.innerHTML = `
   }
   :host(.fullscreen-active) #entries {
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
   }
@@ -2039,7 +2039,7 @@ Bp.innerHTML = `
     position: fixed !important;
     inset: 0 !important;
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
     margin: 0 !important;
     border-radius: 0 !important;
     z-index: 100 !important;
@@ -2133,9 +2133,15 @@ Bp.innerHTML = `
     padding: 0 !important;
     margin: 0 !important;
     max-width: 100% !important;
+    width: 100% !important;
     height: 100% !important;
     min-height: 380px !important;
     gap: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
+    container-type: inline-size;
+    container-name: argus-compact-wrap;
   }
   :host([compact]) .hero, :host(.argus-compact) .hero {
     display: none !important;
@@ -2165,7 +2171,7 @@ Bp.innerHTML = `
     padding: 0 !important;
     margin: 0 !important;
     display: block !important;
-    height: 100% !important;
+    height: auto !important;
   }
   :host([compact]) #w-instances, :host(.argus-compact) #w-instances {
     background: transparent !important;
@@ -2174,13 +2180,27 @@ Bp.innerHTML = `
     padding: 0 !important;
     margin: 0 !important;
     height: 100% !important;
+    width: 100% !important;
     min-height: 380px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
+    background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;
+    backdrop-filter: blur(28px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(150%) !important;
   }
   :host([compact]) .entry, :host(.argus-compact) .entry {
     margin-bottom: 0 !important;
     border-radius: 24px !important;
     height: 100% !important;
+    width: 100% !important;
     min-height: 380px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
+    background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;
+    backdrop-filter: blur(28px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(150%) !important;
   }
   :host([compact]) #bootstrap-overlay, :host(.argus-compact) #bootstrap-overlay,
   :host([compact]) .argus-profile-overlay, :host(.argus-compact) .argus-profile-overlay,
@@ -2189,9 +2209,31 @@ Bp.innerHTML = `
   }
   :host([compact]) .argus-widget__content, :host(.argus-compact) .argus-widget__content {
     height: 100% !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
     overflow: visible !important;
   }
+  :host([compact]) #entries, :host(.argus-compact) #entries {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
+    height: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
   *{box-sizing:border-box}
+  @container argus-compact-wrap (max-width: 800px) {
+    .security-console { flex-direction: column !important; padding: 20px 18px 24px !important; gap: 20px !important; align-items: center !important; justify-content: center !important; }
+    .security-console .entry-icon { order: 2 !important; flex: 0 0 auto !important; min-height: 130px !important; margin: 0 auto !important; }
+    .security-console .liquid-stack { order: 3 !important; width: 100% !important; max-width: 360px !important; }
+    .security-console .console-sensors { order: 4 !important; width: 100% !important; max-width: 360px !important; display: flex !important; flex-direction: column !important; }
+    .sensor-column { position: static !important; max-width: 100% !important; width: 100% !important; align-items: stretch !important; padding: 0 !important; gap: 10px !important; }
+    .sensor-chip { max-width: none !important; }
+    .entry-content { padding: 20px !important; display: flex !important; flex-direction: column !important; align-items: center !important;  }
+    .liquid-stack { display: flex !important; flex-direction: column !important; align-items: stretch !important; gap: 8px !important; }
+  }
   @keyframes iosGlassIn{0%{opacity:0;transform:translateY(14px) scale(.965)}65%{opacity:1;transform:translateY(-2px) scale(1.008)}100%{transform:translateY(0) scale(1)}}
   @keyframes iosSelectPop{0%{transform:scale(.92);opacity:.45}60%{transform:scale(1.045);opacity:1}100%{transform:scale(1)}}
   .glass,.entry,.mode-section-card,.user-card,.file-card,.log-item{animation:iosGlassIn .5s cubic-bezier(.22,1.18,.36,1) both}
@@ -2694,7 +2736,7 @@ Bp.innerHTML = `
       padding: 0 !important;
     }
   }
-  .ios-fullscreen .entry-content { grid-template-columns: 320px 1fr !important; padding: 60px !important; gap: 60px !important; height: 100% !important; align-items: center !important; background: radial-gradient(circle at 20% 50%, rgba(0,0,0,0.5) 0%, transparent 80%) !important; }
+  .ios-fullscreen .entry-content { grid-template-columns: 320px 1fr !important; padding: 60px !important; gap: 60px !important; height: auto !important; align-items: center !important; background: radial-gradient(circle at 20% 50%, rgba(0,0,0,0.5) 0%, transparent 80%) !important; }
   .ios-fullscreen .liquid-btn { padding: 16px 20px !important; font-size: 16px !important; border-radius: 20px !important; gap: 12px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.4) !important; }
   .ios-fullscreen .liquid-btn i { font-size: 24px !important; }
   .ios-fullscreen .hud { top: 60px !important; right: 60px !important; scale: 1.4; transform-origin: top right; }
@@ -4054,9 +4096,9 @@ Bp.innerHTML = `
   </div>
 </div>
 `;
-class dh extends HTMLElement {
+class uh extends HTMLElement {
   constructor() {
-    super(), this._showSosConfirm = !1, this._sosEntryIdx = null, this._sosBusy = !1, this._sosSliding = !1, this._sosStartX = 0, this._sosOffsetX = 0, this._sosConfirmed = !1, this.attachShadow({ mode: "open" }).appendChild(Bp.content.cloneNode(!0)), this._wsId = 1, this._socket = null, this._dashboard = null, this._ui = null, this._available = [], this._mode = "home", this._modeEntryId = null, this._selected = [], this._selectorTarget = null, this._hass = null, this._prevStates = {}, this._notifTargets = [], this._users = [], this._haUsersList = [], this._isAdmin = !0, this._pinCallback = null, this._homeName = "", this._backgroundMode = "weather", this._backgroundImages = [], this._temperatureSource = "auto", this._weatherSource = "auto", this._pending = {}, this._lastClockUpdate = 0, this._manualLang = null, this._fullscreenIdx = -1, this._cachedBgUrl = null, this._cachedBgBrightness = void 0, this._hubBgMode = "default", this._hubBgFile = "", this._hubBgSound = !1, this._clockFormat = "auto", this._profileSelectedThisMount = !1, this._welcomeShownThisMount = !1, this._panicOutputs = void 0, this._initPromise = null, this._staticBound = !1, this._postLoadBound = !1;
+    super(), this._showSosConfirm = !1, this._sosEntryIdx = null, this._sosBusy = !1, this._sosSliding = !1, this._sosStartX = 0, this._sosOffsetX = 0, this._sosConfirmed = !1, this.attachShadow({ mode: "open" }).appendChild(Hp.content.cloneNode(!0)), this._wsId = 1, this._socket = null, this._dashboard = null, this._ui = null, this._available = [], this._mode = "home", this._modeEntryId = null, this._selected = [], this._selectorTarget = null, this._hass = null, this._prevStates = {}, this._notifTargets = [], this._users = [], this._haUsersList = [], this._isAdmin = !0, this._pinCallback = null, this._homeName = "", this._backgroundMode = "weather", this._backgroundImages = [], this._temperatureSource = "auto", this._weatherSource = "auto", this._pending = {}, this._lastClockUpdate = 0, this._manualLang = null, this._fullscreenIdx = -1, this._cachedBgUrl = null, this._cachedBgBrightness = void 0, this._hubBgMode = "default", this._hubBgFile = "", this._hubBgSound = !1, this._clockFormat = "auto", this._profileSelectedThisMount = !1, this._welcomeShownThisMount = !1, this._panicOutputs = void 0, this._initPromise = null, this._staticBound = !1, this._postLoadBound = !1;
   }
   _getTimeZone() {
     return this._hass?.config?.time_zone || void 0;
@@ -7631,10 +7673,10 @@ ${i}`);
     i && (i.hidden = !i.hidden, this._saveWidgetLayout(), this._renderWidgetLayout());
   }
 }
-customElements.define("argus-panel-v2018", dh);
-const Hp = "2.2.3";
+customElements.define("argus-panel-v2018", uh);
+const Dp = "2.2.4";
 console.info(
-  `%c🛡️ ARGUS ALARM CARD %c v${Hp} `,
+  `%c🛡️ ARGUS ALARM CARD %c v${Dp} `,
   "color:white;background:#0a1628;font-weight:700;padding:4px 8px;border-radius:4px 0 0 4px;",
   "color:#0a1628;background:#38bdf8;font-weight:700;padding:4px 8px;border-radius:0 4px 4px 0;"
 );
@@ -7660,7 +7702,7 @@ const bu = {
   ja: { title: "セキュリティ", home: "在宅", away: "外出", night: "夜間", vacation: "休暇", disarm: "解除", pin: "PINを入力", bad: "PINが正しくありません", unknown: "位置情報利用不可" },
   uk: { title: "Безпека", home: "ВДОМА", away: "НЕМАЄ ВДОМА", night: "НІЧ", vacation: "ВІДПУСТКА", disarm: "ЗНЯТИ", pin: "ВВЕДІТЬ PIN", bad: "Невірний PIN", unknown: "Розташування недоступне" }
 }, yi = (o) => String(o ?? "").replace(/[&<>'"]/g, (r) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[r]);
-class uh extends HTMLElement {
+class ph extends HTMLElement {
   setConfig(r) {
     this._config = r;
   }
@@ -7711,8 +7753,8 @@ class uh extends HTMLElement {
     }));
   }
 }
-customElements.define("argus-panel-card-editor", uh);
-class Dp extends HTMLElement {
+customElements.define("argus-panel-card-editor", ph);
+class $p extends HTMLElement {
   static getStubConfig(r) {
     return { entity: _u(r) || "alarm_control_panel.argus", mode: "compact", title: "Argus Security" };
   }
@@ -7732,18 +7774,25 @@ class Dp extends HTMLElement {
     const r = this.attachShadow({ mode: "open" });
     r.innerHTML = `
       <style>
-        :host { display: block; }
+        :host { display: block; height: 100%; }
         ha-card {
           overflow: hidden;
           border-radius: 24px;
-          background: #07111f;
+          background: transparent !important;
+          border: none !important;
+          box-shadow: none !important;
           color: #fff;
           box-shadow: 0 20px 60px rgba(0,0,0,.38);
           position: relative;
           --ha-card-border-radius: 24px;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
         }
         .argus-panel-host {
-          display: block;
+          display: flex;
+          flex-direction: column;
+          flex: 1;
           min-height: 380px;
           width: 100%;
           overflow: hidden;
@@ -7874,7 +7923,7 @@ class Dp extends HTMLElement {
           </div>
           <div class="basic-shield">${s === "triggered" ? "🚨" : "🛡️"}</div>
         </div>
-        <div class="basic-title">${yi(v)} · v${Hp}</div>
+        <div class="basic-title">${yi(v)} · v${Dp}</div>
       </div>
     `, this._panelHost.querySelectorAll("[data-service]").forEach((k) => {
       k.onclick = async () => {
@@ -7896,26 +7945,26 @@ class Dp extends HTMLElement {
     return 6;
   }
 }
-customElements.get("argus-panel-card") || customElements.define("argus-panel-card", Dp);
-customElements.get("argus-card") || customElements.define("argus-card", class extends Dp {
+customElements.get("argus-panel-card") || customElements.define("argus-panel-card", $p);
+customElements.get("argus-card") || customElements.define("argus-card", class extends $p {
 });
 window.customCards = window.customCards || [];
-const $p = new Set(window.customCards.map((o) => o.type));
-$p.has("argus-panel-card") || window.customCards.push({
+const jp = new Set(window.customCards.map((o) => o.type));
+jp.has("argus-panel-card") || window.customCards.push({
   type: "argus-panel-card",
   name: "Argus Security Panel",
   description: "Panel de seguridad Argus — consola Liquid Glass de Instancias Activas, dashboard e historial.",
   preview: !0,
   documentationURL: "https://github.com/Chrisalvir1/Argus"
 });
-$p.has("argus-card") || window.customCards.push({
+jp.has("argus-card") || window.customCards.push({
   type: "argus-card",
   name: "Argus Alarm Card",
   description: "Tarjeta de seguridad Argus — consola interactiva de Instancia Activa con Liquid Glass y pantalla completa.",
   preview: !0,
   documentationURL: "https://github.com/Chrisalvir1/Argus"
 });
-function ph(o) {
+function mh(o) {
   if (o.__esModule) return o;
   var r = o.default;
   if (typeof r == "function") {
@@ -7945,7 +7994,7 @@ var Ys = { exports: {} }, un = {}, Ks = { exports: {} }, Oe = {};
  * LICENSE file in the root directory of this source tree.
  */
 var yu;
-function mh() {
+function gh() {
   if (yu) return Oe;
   yu = 1;
   var o = Symbol.for("react.element"), r = Symbol.for("react.portal"), i = Symbol.for("react.fragment"), a = Symbol.for("react.strict_mode"), s = Symbol.for("react.profiler"), c = Symbol.for("react.provider"), u = Symbol.for("react.context"), p = Symbol.for("react.forward_ref"), g = Symbol.for("react.suspense"), _ = Symbol.for("react.memo"), f = Symbol.for("react.lazy"), h = Symbol.iterator;
@@ -8141,7 +8190,7 @@ function mh() {
 }
 var vu;
 function It() {
-  return vu || (vu = 1, Ks.exports = mh()), Ks.exports;
+  return vu || (vu = 1, Ks.exports = gh()), Ks.exports;
 }
 /**
  * @license React
@@ -8153,7 +8202,7 @@ function It() {
  * LICENSE file in the root directory of this source tree.
  */
 var xu;
-function gh() {
+function hh() {
   if (xu) return un;
   xu = 1;
   var o = It(), r = Symbol.for("react.element"), i = Symbol.for("react.fragment"), a = Object.prototype.hasOwnProperty, s = o.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner, c = { key: !0, ref: !0, __self: !0, __source: !0 };
@@ -8167,10 +8216,10 @@ function gh() {
   return un.Fragment = i, un.jsx = u, un.jsxs = u, un;
 }
 var wu;
-function hh() {
-  return wu || (wu = 1, Ys.exports = gh()), Ys.exports;
+function fh() {
+  return wu || (wu = 1, Ys.exports = hh()), Ys.exports;
 }
-var $e = hh(), $o = {}, Xs = { exports: {} }, zt = {}, Qs = { exports: {} }, Js = {};
+var $e = fh(), $o = {}, Xs = { exports: {} }, zt = {}, Qs = { exports: {} }, Js = {};
 /**
  * @license React
  * scheduler.production.min.js
@@ -8181,7 +8230,7 @@ var $e = hh(), $o = {}, Xs = { exports: {} }, zt = {}, Qs = { exports: {} }, Js 
  * LICENSE file in the root directory of this source tree.
  */
 var ku;
-function fh() {
+function _h() {
   return ku || (ku = 1, function(o) {
     function r(G, ce) {
       var oe = G.length;
@@ -8381,8 +8430,8 @@ function fh() {
   }(Js)), Js;
 }
 var Su;
-function _h() {
-  return Su || (Su = 1, Qs.exports = fh()), Qs.exports;
+function bh() {
+  return Su || (Su = 1, Qs.exports = _h()), Qs.exports;
 }
 /**
  * @license React
@@ -8394,10 +8443,10 @@ function _h() {
  * LICENSE file in the root directory of this source tree.
  */
 var Eu;
-function bh() {
+function yh() {
   if (Eu) return zt;
   Eu = 1;
-  var o = It(), r = _h();
+  var o = It(), r = bh();
   function i(e) {
     for (var t = "https://reactjs.org/docs/error-decoder.html?invariant=" + e, n = 1; n < arguments.length; n++) t += "&args[]=" + encodeURIComponent(arguments[n]);
     return "Minified React error #" + e + "; visit " + t + " for the full message or use the non-minified dev environment for full errors and additional helpful warnings.";
@@ -8992,7 +9041,7 @@ function bh() {
   } catch {
     pa = !1;
   }
-  function pm(e, t, n, l, d, m, x, P, L) {
+  function mm(e, t, n, l, d, m, x, P, L) {
     var U = Array.prototype.slice.call(arguments, 3);
     try {
       t.apply(n, U);
@@ -9000,14 +9049,14 @@ function bh() {
       this.onError(te);
     }
   }
-  var Pi = !1, Nn = null, Rn = !1, ma = null, mm = { onError: function(e) {
+  var Pi = !1, Nn = null, Rn = !1, ma = null, gm = { onError: function(e) {
     Pi = !0, Nn = e;
   } };
-  function gm(e, t, n, l, d, m, x, P, L) {
-    Pi = !1, Nn = null, pm.apply(mm, arguments);
-  }
   function hm(e, t, n, l, d, m, x, P, L) {
-    if (gm.apply(this, arguments), Pi) {
+    Pi = !1, Nn = null, mm.apply(gm, arguments);
+  }
+  function fm(e, t, n, l, d, m, x, P, L) {
+    if (hm.apply(this, arguments), Pi) {
       if (Pi) {
         var U = Nn;
         Pi = !1, Nn = null;
@@ -9036,7 +9085,7 @@ function bh() {
   function jl(e) {
     if (Or(e) !== e) throw Error(i(188));
   }
-  function fm(e) {
+  function _m(e) {
     var t = e.alternate;
     if (!t) {
       if (t = Or(e), t === null) throw Error(i(188));
@@ -9095,7 +9144,7 @@ function bh() {
     return n.stateNode.current === n ? e : t;
   }
   function ql(e) {
-    return e = fm(e), e !== null ? Fl(e) : null;
+    return e = _m(e), e !== null ? Fl(e) : null;
   }
   function Fl(e) {
     if (e.tag === 5 || e.tag === 6) return e;
@@ -9106,16 +9155,16 @@ function bh() {
     }
     return null;
   }
-  var Ul = r.unstable_scheduleCallback, Wl = r.unstable_cancelCallback, _m = r.unstable_shouldYield, bm = r.unstable_requestPaint, it = r.unstable_now, ym = r.unstable_getCurrentPriorityLevel, ga = r.unstable_ImmediatePriority, Vl = r.unstable_UserBlockingPriority, Ln = r.unstable_NormalPriority, vm = r.unstable_LowPriority, Gl = r.unstable_IdlePriority, On = null, Kt = null;
-  function xm(e) {
+  var Ul = r.unstable_scheduleCallback, Wl = r.unstable_cancelCallback, bm = r.unstable_shouldYield, ym = r.unstable_requestPaint, it = r.unstable_now, vm = r.unstable_getCurrentPriorityLevel, ga = r.unstable_ImmediatePriority, Vl = r.unstable_UserBlockingPriority, Ln = r.unstable_NormalPriority, xm = r.unstable_LowPriority, Gl = r.unstable_IdlePriority, On = null, Kt = null;
+  function wm(e) {
     if (Kt && typeof Kt.onCommitFiberRoot == "function") try {
       Kt.onCommitFiberRoot(On, e, void 0, (e.current.flags & 128) === 128);
     } catch {
     }
   }
-  var jt = Math.clz32 ? Math.clz32 : Sm, wm = Math.log, km = Math.LN2;
-  function Sm(e) {
-    return e >>>= 0, e === 0 ? 32 : 31 - (wm(e) / km | 0) | 0;
+  var jt = Math.clz32 ? Math.clz32 : Em, km = Math.log, Sm = Math.LN2;
+  function Em(e) {
+    return e >>>= 0, e === 0 ? 32 : 31 - (km(e) / Sm | 0) | 0;
   }
   var Tn = 64, Mn = 4194304;
   function Ni(e) {
@@ -9180,7 +9229,7 @@ function bh() {
     if (l & 4 && (l |= n & 16), t = e.entangledLanes, t !== 0) for (e = e.entanglements, t &= l; 0 < t; ) n = 31 - jt(t), d = 1 << n, l |= e[n], t &= ~d;
     return l;
   }
-  function Em(e, t) {
+  function Am(e, t) {
     switch (e) {
       case 1:
       case 2:
@@ -9221,10 +9270,10 @@ function bh() {
         return -1;
     }
   }
-  function Am(e, t) {
+  function Cm(e, t) {
     for (var n = e.suspendedLanes, l = e.pingedLanes, d = e.expirationTimes, m = e.pendingLanes; 0 < m; ) {
       var x = 31 - jt(m), P = 1 << x, L = d[x];
-      L === -1 ? (!(P & n) || P & l) && (d[x] = Em(P, t)) : L <= t && (e.expiredLanes |= P), m &= ~P;
+      L === -1 ? (!(P & n) || P & l) && (d[x] = Am(P, t)) : L <= t && (e.expiredLanes |= P), m &= ~P;
     }
   }
   function ha(e) {
@@ -9241,7 +9290,7 @@ function bh() {
   function Ri(e, t, n) {
     e.pendingLanes |= t, t !== 536870912 && (e.suspendedLanes = 0, e.pingedLanes = 0), e = e.eventTimes, t = 31 - jt(t), e[t] = n;
   }
-  function Cm(e, t) {
+  function zm(e, t) {
     var n = e.pendingLanes & ~t;
     e.pendingLanes = t, e.suspendedLanes = 0, e.pingedLanes = 0, e.expiredLanes &= t, e.mutableReadLanes &= t, e.entangledLanes &= t, t = e.entanglements;
     var l = e.eventTimes;
@@ -9261,7 +9310,7 @@ function bh() {
   function Kl(e) {
     return e &= -e, 1 < e ? 4 < e ? e & 268435455 ? 16 : 536870912 : 4 : 1;
   }
-  var Xl, ba, Ql, Jl, Zl, ya = !1, Hn = [], pr = null, mr = null, gr = null, Li = /* @__PURE__ */ new Map(), Oi = /* @__PURE__ */ new Map(), hr = [], zm = "mousedown mouseup touchcancel touchend touchstart auxclick dblclick pointercancel pointerdown pointerup dragend dragstart drop compositionend compositionstart keydown keypress keyup input textInput copy cut paste click change contextmenu reset submit".split(" ");
+  var Xl, ba, Ql, Jl, Zl, ya = !1, Hn = [], pr = null, mr = null, gr = null, Li = /* @__PURE__ */ new Map(), Oi = /* @__PURE__ */ new Map(), hr = [], Im = "mousedown mouseup touchcancel touchend touchstart auxclick dblclick pointercancel pointerdown pointerup dragend dragstart drop compositionend compositionstart keydown keypress keyup input textInput copy cut paste click change contextmenu reset submit".split(" ");
   function ec(e, t) {
     switch (e) {
       case "focusin":
@@ -9288,7 +9337,7 @@ function bh() {
   function Ti(e, t, n, l, d, m) {
     return e === null || e.nativeEvent !== m ? (e = { blockedOn: t, domEventName: n, eventSystemFlags: l, nativeEvent: m, targetContainers: [d] }, t !== null && (t = Ki(t), t !== null && ba(t)), e) : (e.eventSystemFlags |= l, t = e.targetContainers, d !== null && t.indexOf(d) === -1 && t.push(d), e);
   }
-  function Im(e, t, n, l, d) {
+  function Pm(e, t, n, l, d) {
     switch (t) {
       case "focusin":
         return pr = Ti(pr, e, t, n, l, d), !0;
@@ -9340,11 +9389,11 @@ function bh() {
   function rc(e, t, n) {
     Dn(e) && n.delete(t);
   }
-  function Pm() {
+  function Nm() {
     ya = !1, pr !== null && Dn(pr) && (pr = null), mr !== null && Dn(mr) && (mr = null), gr !== null && Dn(gr) && (gr = null), Li.forEach(rc), Oi.forEach(rc);
   }
   function Mi(e, t) {
-    e.blockedOn === t && (e.blockedOn = null, ya || (ya = !0, r.unstable_scheduleCallback(r.unstable_NormalPriority, Pm)));
+    e.blockedOn === t && (e.blockedOn = null, ya || (ya = !0, r.unstable_scheduleCallback(r.unstable_NormalPriority, Nm)));
   }
   function Bi(e) {
     function t(d) {
@@ -9361,7 +9410,7 @@ function bh() {
     for (; 0 < hr.length && (n = hr[0], n.blockedOn === null); ) tc(n), n.blockedOn === null && hr.shift();
   }
   var Qr = b.ReactCurrentBatchConfig, $n = !0;
-  function Nm(e, t, n, l) {
+  function Rm(e, t, n, l) {
     var d = We, m = Qr.transition;
     Qr.transition = null;
     try {
@@ -9370,7 +9419,7 @@ function bh() {
       We = d, Qr.transition = m;
     }
   }
-  function Rm(e, t, n, l) {
+  function Lm(e, t, n, l) {
     var d = We, m = Qr.transition;
     Qr.transition = null;
     try {
@@ -9383,8 +9432,8 @@ function bh() {
     if ($n) {
       var d = xa(e, t, n, l);
       if (d === null) Ha(e, t, l, jn, n), ec(e, l);
-      else if (Im(d, e, t, n, l)) l.stopPropagation();
-      else if (ec(e, l), t & 4 && -1 < zm.indexOf(e)) {
+      else if (Pm(d, e, t, n, l)) l.stopPropagation();
+      else if (ec(e, l), t & 4 && -1 < Im.indexOf(e)) {
         for (; d !== null; ) {
           var m = Ki(d);
           if (m !== null && Xl(m), m = xa(e, t, n, l), m === null && Ha(e, t, l, jn, n), m === d) break;
@@ -9481,13 +9530,13 @@ function bh() {
       case "pointerleave":
         return 4;
       case "message":
-        switch (ym()) {
+        switch (vm()) {
           case ga:
             return 1;
           case Vl:
             return 4;
           case Ln:
-          case vm:
+          case xm:
             return 16;
           case Gl:
             return 536870912;
@@ -9535,15 +9584,15 @@ function bh() {
   }
   var Jr = { eventPhase: 0, bubbles: 0, cancelable: 0, timeStamp: function(e) {
     return e.timeStamp || Date.now();
-  }, defaultPrevented: 0, isTrusted: 0 }, ka = Pt(Jr), Hi = oe({}, Jr, { view: 0, detail: 0 }), Lm = Pt(Hi), Sa, Ea, Di, Wn = oe({}, Hi, { screenX: 0, screenY: 0, clientX: 0, clientY: 0, pageX: 0, pageY: 0, ctrlKey: 0, shiftKey: 0, altKey: 0, metaKey: 0, getModifierState: Ca, button: 0, buttons: 0, relatedTarget: function(e) {
+  }, defaultPrevented: 0, isTrusted: 0 }, ka = Pt(Jr), Hi = oe({}, Jr, { view: 0, detail: 0 }), Om = Pt(Hi), Sa, Ea, Di, Wn = oe({}, Hi, { screenX: 0, screenY: 0, clientX: 0, clientY: 0, pageX: 0, pageY: 0, ctrlKey: 0, shiftKey: 0, altKey: 0, metaKey: 0, getModifierState: Ca, button: 0, buttons: 0, relatedTarget: function(e) {
     return e.relatedTarget === void 0 ? e.fromElement === e.srcElement ? e.toElement : e.fromElement : e.relatedTarget;
   }, movementX: function(e) {
     return "movementX" in e ? e.movementX : (e !== Di && (Di && e.type === "mousemove" ? (Sa = e.screenX - Di.screenX, Ea = e.screenY - Di.screenY) : Ea = Sa = 0, Di = e), Sa);
   }, movementY: function(e) {
     return "movementY" in e ? e.movementY : Ea;
-  } }), ac = Pt(Wn), Om = oe({}, Wn, { dataTransfer: 0 }), Tm = Pt(Om), Mm = oe({}, Hi, { relatedTarget: 0 }), Aa = Pt(Mm), Bm = oe({}, Jr, { animationName: 0, elapsedTime: 0, pseudoElement: 0 }), Hm = Pt(Bm), Dm = oe({}, Jr, { clipboardData: function(e) {
+  } }), ac = Pt(Wn), Tm = oe({}, Wn, { dataTransfer: 0 }), Mm = Pt(Tm), Bm = oe({}, Hi, { relatedTarget: 0 }), Aa = Pt(Bm), Hm = oe({}, Jr, { animationName: 0, elapsedTime: 0, pseudoElement: 0 }), Dm = Pt(Hm), $m = oe({}, Jr, { clipboardData: function(e) {
     return "clipboardData" in e ? e.clipboardData : window.clipboardData;
-  } }), $m = Pt(Dm), jm = oe({}, Jr, { data: 0 }), sc = Pt(jm), qm = {
+  } }), jm = Pt($m), qm = oe({}, Jr, { data: 0 }), sc = Pt(qm), Fm = {
     Esc: "Escape",
     Spacebar: " ",
     Left: "ArrowLeft",
@@ -9556,7 +9605,7 @@ function bh() {
     Apps: "ContextMenu",
     Scroll: "ScrollLock",
     MozPrintableKey: "Unidentified"
-  }, Fm = {
+  }, Um = {
     8: "Backspace",
     9: "Tab",
     12: "Clear",
@@ -9593,27 +9642,27 @@ function bh() {
     144: "NumLock",
     145: "ScrollLock",
     224: "Meta"
-  }, Um = { Alt: "altKey", Control: "ctrlKey", Meta: "metaKey", Shift: "shiftKey" };
-  function Wm(e) {
+  }, Wm = { Alt: "altKey", Control: "ctrlKey", Meta: "metaKey", Shift: "shiftKey" };
+  function Vm(e) {
     var t = this.nativeEvent;
-    return t.getModifierState ? t.getModifierState(e) : (e = Um[e]) ? !!t[e] : !1;
+    return t.getModifierState ? t.getModifierState(e) : (e = Wm[e]) ? !!t[e] : !1;
   }
   function Ca() {
-    return Wm;
+    return Vm;
   }
-  var Vm = oe({}, Hi, { key: function(e) {
+  var Gm = oe({}, Hi, { key: function(e) {
     if (e.key) {
-      var t = qm[e.key] || e.key;
+      var t = Fm[e.key] || e.key;
       if (t !== "Unidentified") return t;
     }
-    return e.type === "keypress" ? (e = Fn(e), e === 13 ? "Enter" : String.fromCharCode(e)) : e.type === "keydown" || e.type === "keyup" ? Fm[e.keyCode] || "Unidentified" : "";
+    return e.type === "keypress" ? (e = Fn(e), e === 13 ? "Enter" : String.fromCharCode(e)) : e.type === "keydown" || e.type === "keyup" ? Um[e.keyCode] || "Unidentified" : "";
   }, code: 0, location: 0, ctrlKey: 0, shiftKey: 0, altKey: 0, metaKey: 0, repeat: 0, locale: 0, getModifierState: Ca, charCode: function(e) {
     return e.type === "keypress" ? Fn(e) : 0;
   }, keyCode: function(e) {
     return e.type === "keydown" || e.type === "keyup" ? e.keyCode : 0;
   }, which: function(e) {
     return e.type === "keypress" ? Fn(e) : e.type === "keydown" || e.type === "keyup" ? e.keyCode : 0;
-  } }), Gm = Pt(Vm), Ym = oe({}, Wn, { pointerId: 0, width: 0, height: 0, pressure: 0, tangentialPressure: 0, tiltX: 0, tiltY: 0, twist: 0, pointerType: 0, isPrimary: 0 }), lc = Pt(Ym), Km = oe({}, Hi, { touches: 0, targetTouches: 0, changedTouches: 0, altKey: 0, metaKey: 0, ctrlKey: 0, shiftKey: 0, getModifierState: Ca }), Xm = Pt(Km), Qm = oe({}, Jr, { propertyName: 0, elapsedTime: 0, pseudoElement: 0 }), Jm = Pt(Qm), Zm = oe({}, Wn, {
+  } }), Ym = Pt(Gm), Km = oe({}, Wn, { pointerId: 0, width: 0, height: 0, pressure: 0, tangentialPressure: 0, tiltX: 0, tiltY: 0, twist: 0, pointerType: 0, isPrimary: 0 }), lc = Pt(Km), Xm = oe({}, Hi, { touches: 0, targetTouches: 0, changedTouches: 0, altKey: 0, metaKey: 0, ctrlKey: 0, shiftKey: 0, getModifierState: Ca }), Qm = Pt(Xm), Jm = oe({}, Jr, { propertyName: 0, elapsedTime: 0, pseudoElement: 0 }), Zm = Pt(Jm), eg = oe({}, Wn, {
     deltaX: function(e) {
       return "deltaX" in e ? e.deltaX : "wheelDeltaX" in e ? -e.wheelDeltaX : 0;
     },
@@ -9622,13 +9671,13 @@ function bh() {
     },
     deltaZ: 0,
     deltaMode: 0
-  }), eg = Pt(Zm), tg = [9, 13, 27, 32], za = p && "CompositionEvent" in window, $i = null;
+  }), tg = Pt(eg), rg = [9, 13, 27, 32], za = p && "CompositionEvent" in window, $i = null;
   p && "documentMode" in document && ($i = document.documentMode);
-  var rg = p && "TextEvent" in window && !$i, cc = p && (!za || $i && 8 < $i && 11 >= $i), dc = " ", uc = !1;
+  var ig = p && "TextEvent" in window && !$i, cc = p && (!za || $i && 8 < $i && 11 >= $i), dc = " ", uc = !1;
   function pc(e, t) {
     switch (e) {
       case "keyup":
-        return tg.indexOf(t.keyCode) !== -1;
+        return rg.indexOf(t.keyCode) !== -1;
       case "keydown":
         return t.keyCode !== 229;
       case "keypress":
@@ -9643,7 +9692,7 @@ function bh() {
     return e = e.detail, typeof e == "object" && "data" in e ? e.data : null;
   }
   var Zr = !1;
-  function ig(e, t) {
+  function ng(e, t) {
     switch (e) {
       case "compositionend":
         return mc(t);
@@ -9655,7 +9704,7 @@ function bh() {
         return null;
     }
   }
-  function ng(e, t) {
+  function og(e, t) {
     if (Zr) return e === "compositionend" || !za && pc(e, t) ? (e = nc(), qn = wa = fr = null, Zr = !1, e) : null;
     switch (e) {
       case "paste":
@@ -9672,23 +9721,23 @@ function bh() {
         return null;
     }
   }
-  var og = { color: !0, date: !0, datetime: !0, "datetime-local": !0, email: !0, month: !0, number: !0, password: !0, range: !0, search: !0, tel: !0, text: !0, time: !0, url: !0, week: !0 };
+  var ag = { color: !0, date: !0, datetime: !0, "datetime-local": !0, email: !0, month: !0, number: !0, password: !0, range: !0, search: !0, tel: !0, text: !0, time: !0, url: !0, week: !0 };
   function gc(e) {
     var t = e && e.nodeName && e.nodeName.toLowerCase();
-    return t === "input" ? !!og[e.type] : t === "textarea";
+    return t === "input" ? !!ag[e.type] : t === "textarea";
   }
   function hc(e, t, n, l) {
     Ci(l), t = Xn(t, "onChange"), 0 < t.length && (n = new ka("onChange", "change", null, n, l), e.push({ event: n, listeners: t }));
   }
   var ji = null, qi = null;
-  function ag(e) {
+  function sg(e) {
     Lc(e, 0);
   }
   function Vn(e) {
     var t = ni(e);
     if (Re(t)) return e;
   }
-  function sg(e, t) {
+  function lg(e, t) {
     if (e === "change") return t;
   }
   var fc = !1;
@@ -9710,25 +9759,25 @@ function bh() {
   function yc(e) {
     if (e.propertyName === "value" && Vn(qi)) {
       var t = [];
-      hc(t, qi, e, Rr(e)), Dl(ag, t);
+      hc(t, qi, e, Rr(e)), Dl(sg, t);
     }
   }
-  function lg(e, t, n) {
+  function cg(e, t, n) {
     e === "focusin" ? (bc(), ji = t, qi = n, ji.attachEvent("onpropertychange", yc)) : e === "focusout" && bc();
   }
-  function cg(e) {
+  function dg(e) {
     if (e === "selectionchange" || e === "keyup" || e === "keydown") return Vn(qi);
   }
-  function dg(e, t) {
+  function ug(e, t) {
     if (e === "click") return Vn(t);
   }
-  function ug(e, t) {
+  function pg(e, t) {
     if (e === "input" || e === "change") return Vn(t);
   }
-  function pg(e, t) {
+  function mg(e, t) {
     return e === t && (e !== 0 || 1 / e === 1 / t) || e !== e && t !== t;
   }
-  var qt = typeof Object.is == "function" ? Object.is : pg;
+  var qt = typeof Object.is == "function" ? Object.is : mg;
   function Fi(e, t) {
     if (qt(e, t)) return !0;
     if (typeof e != "object" || e === null || typeof t != "object" || t === null) return !1;
@@ -9785,7 +9834,7 @@ function bh() {
     var t = e && e.nodeName && e.nodeName.toLowerCase();
     return t && (t === "input" && (e.type === "text" || e.type === "search" || e.type === "tel" || e.type === "url" || e.type === "password") || t === "textarea" || e.contentEditable === "true");
   }
-  function mg(e) {
+  function gg(e) {
     var t = kc(), n = e.focusedElem, l = e.selectionRange;
     if (t !== n && n && n.ownerDocument && wc(n.ownerDocument.documentElement, n)) {
       if (l !== null && Na(n)) {
@@ -9805,7 +9854,7 @@ function bh() {
       for (typeof n.focus == "function" && n.focus(), n = 0; n < t.length; n++) e = t[n], e.element.scrollLeft = e.left, e.element.scrollTop = e.top;
     }
   }
-  var gg = p && "documentMode" in document && 11 >= document.documentMode, ei = null, Ra = null, Ui = null, La = !1;
+  var hg = p && "documentMode" in document && 11 >= document.documentMode, ei = null, Ra = null, Ui = null, La = !1;
   function Sc(e, t, n) {
     var l = n.window === n ? n.document : n.nodeType === 9 ? n : n.ownerDocument;
     La || ei == null || ei !== Me(l) || (l = ei, "selectionStart" in l && Na(l) ? l = { start: l.selectionStart, end: l.selectionEnd } : (l = (l.ownerDocument && l.ownerDocument.defaultView || window).getSelection(), l = { anchorNode: l.anchorNode, anchorOffset: l.anchorOffset, focusNode: l.focusNode, focusOffset: l.focusOffset }), Ui && Fi(Ui, l) || (Ui = l, l = Xn(Ra, "onSelect"), 0 < l.length && (t = new ka("onSelect", "select", null, t, n), e.push({ event: t, listeners: l }), t.target = ei)));
@@ -9828,14 +9877,14 @@ function bh() {
     Pc.set(e, t), c(t, [e]);
   }
   for (var Ta = 0; Ta < Nc.length; Ta++) {
-    var Ma = Nc[Ta], hg = Ma.toLowerCase(), fg = Ma[0].toUpperCase() + Ma.slice(1);
-    _r(hg, "on" + fg);
+    var Ma = Nc[Ta], fg = Ma.toLowerCase(), _g = Ma[0].toUpperCase() + Ma.slice(1);
+    _r(fg, "on" + _g);
   }
   _r(Ac, "onAnimationEnd"), _r(Cc, "onAnimationIteration"), _r(zc, "onAnimationStart"), _r("dblclick", "onDoubleClick"), _r("focusin", "onFocus"), _r("focusout", "onBlur"), _r(Ic, "onTransitionEnd"), u("onMouseEnter", ["mouseout", "mouseover"]), u("onMouseLeave", ["mouseout", "mouseover"]), u("onPointerEnter", ["pointerout", "pointerover"]), u("onPointerLeave", ["pointerout", "pointerover"]), c("onChange", "change click focusin focusout input keydown keyup selectionchange".split(" ")), c("onSelect", "focusout contextmenu dragend focusin keydown keyup mousedown mouseup selectionchange".split(" ")), c("onBeforeInput", ["compositionend", "keypress", "textInput", "paste"]), c("onCompositionEnd", "compositionend focusout keydown keypress keyup mousedown".split(" ")), c("onCompositionStart", "compositionstart focusout keydown keypress keyup mousedown".split(" ")), c("onCompositionUpdate", "compositionupdate focusout keydown keypress keyup mousedown".split(" "));
-  var Wi = "abort canplay canplaythrough durationchange emptied encrypted ended error loadeddata loadedmetadata loadstart pause play playing progress ratechange resize seeked seeking stalled suspend timeupdate volumechange waiting".split(" "), _g = new Set("cancel close invalid load scroll toggle".split(" ").concat(Wi));
+  var Wi = "abort canplay canplaythrough durationchange emptied encrypted ended error loadeddata loadedmetadata loadstart pause play playing progress ratechange resize seeked seeking stalled suspend timeupdate volumechange waiting".split(" "), bg = new Set("cancel close invalid load scroll toggle".split(" ").concat(Wi));
   function Rc(e, t, n) {
     var l = e.type || "unknown-event";
-    e.currentTarget = n, hm(l, t, void 0, e), e.currentTarget = null;
+    e.currentTarget = n, fm(l, t, void 0, e), e.currentTarget = null;
   }
   function Lc(e, t) {
     t = (t & 4) !== 0;
@@ -9871,7 +9920,7 @@ function bh() {
   function Vi(e) {
     if (!e[Kn]) {
       e[Kn] = !0, a.forEach(function(n) {
-        n !== "selectionchange" && (_g.has(n) || Ba(n, !1, e), Ba(n, !0, e));
+        n !== "selectionchange" && (bg.has(n) || Ba(n, !1, e), Ba(n, !0, e));
       });
       var t = e.nodeType === 9 ? e : e.ownerDocument;
       t === null || t[Kn] || (t[Kn] = !0, Ba("selectionchange", !1, t));
@@ -9880,10 +9929,10 @@ function bh() {
   function Oc(e, t, n, l) {
     switch (ic(t)) {
       case 1:
-        var d = Nm;
+        var d = Rm;
         break;
       case 4:
-        d = Rm;
+        d = Lm;
         break;
       default:
         d = va;
@@ -9925,7 +9974,7 @@ function bh() {
               if (Fn(n) === 0) break e;
             case "keydown":
             case "keyup":
-              ge = Gm;
+              ge = Ym;
               break;
             case "focusin":
               _e = "focus", ge = Aa;
@@ -9957,32 +10006,32 @@ function bh() {
             case "dragover":
             case "dragstart":
             case "drop":
-              ge = Tm;
+              ge = Mm;
               break;
             case "touchcancel":
             case "touchend":
             case "touchmove":
             case "touchstart":
-              ge = Xm;
+              ge = Qm;
               break;
             case Ac:
             case Cc:
             case zc:
-              ge = Hm;
+              ge = Dm;
               break;
             case Ic:
-              ge = Jm;
+              ge = Zm;
               break;
             case "scroll":
-              ge = Lm;
+              ge = Om;
               break;
             case "wheel":
-              ge = eg;
+              ge = tg;
               break;
             case "copy":
             case "cut":
             case "paste":
-              ge = $m;
+              ge = jm;
               break;
             case "gotpointercapture":
             case "lostpointercapture":
@@ -10025,13 +10074,13 @@ function bh() {
           }
         }
         e: {
-          if (J = U ? ni(U) : window, ge = J.nodeName && J.nodeName.toLowerCase(), ge === "select" || ge === "input" && J.type === "file") var we = sg;
-          else if (gc(J)) if (fc) we = ug;
+          if (J = U ? ni(U) : window, ge = J.nodeName && J.nodeName.toLowerCase(), ge === "select" || ge === "input" && J.type === "file") var we = lg;
+          else if (gc(J)) if (fc) we = pg;
           else {
-            we = cg;
-            var Ae = lg;
+            we = dg;
+            var Ae = cg;
           }
-          else (ge = J.nodeName) && ge.toLowerCase() === "input" && (J.type === "checkbox" || J.type === "radio") && (we = dg);
+          else (ge = J.nodeName) && ge.toLowerCase() === "input" && (J.type === "checkbox" || J.type === "radio") && (we = ug);
           if (we && (we = we(e, U))) {
             hc(ae, we, n, te);
             break e;
@@ -10054,7 +10103,7 @@ function bh() {
             La = !1, Sc(ae, n, te);
             break;
           case "selectionchange":
-            if (gg) break;
+            if (hg) break;
           case "keydown":
           case "keyup":
             Sc(ae, n, te);
@@ -10075,7 +10124,7 @@ function bh() {
           Ie = void 0;
         }
         else Zr ? pc(e, n) && (Ie = "onCompositionEnd") : e === "keydown" && n.keyCode === 229 && (Ie = "onCompositionStart");
-        Ie && (cc && n.locale !== "ko" && (Zr || Ie !== "onCompositionStart" ? Ie === "onCompositionEnd" && Zr && (Ce = nc()) : (fr = te, wa = "value" in fr ? fr.value : fr.textContent, Zr = !0)), Ae = Xn(U, Ie), 0 < Ae.length && (Ie = new sc(Ie, e, null, n, te), ae.push({ event: Ie, listeners: Ae }), Ce ? Ie.data = Ce : (Ce = mc(n), Ce !== null && (Ie.data = Ce)))), (Ce = rg ? ig(e, n) : ng(e, n)) && (U = Xn(U, "onBeforeInput"), 0 < U.length && (te = new sc("onBeforeInput", "beforeinput", null, n, te), ae.push({ event: te, listeners: U }), te.data = Ce));
+        Ie && (cc && n.locale !== "ko" && (Zr || Ie !== "onCompositionStart" ? Ie === "onCompositionEnd" && Zr && (Ce = nc()) : (fr = te, wa = "value" in fr ? fr.value : fr.textContent, Zr = !0)), Ae = Xn(U, Ie), 0 < Ae.length && (Ie = new sc(Ie, e, null, n, te), ae.push({ event: Ie, listeners: Ae }), Ce ? Ie.data = Ce : (Ce = mc(n), Ce !== null && (Ie.data = Ce)))), (Ce = ig ? ng(e, n) : og(e, n)) && (U = Xn(U, "onBeforeInput"), 0 < U.length && (te = new sc("onBeforeInput", "beforeinput", null, n, te), ae.push({ event: te, listeners: U }), te.data = Ce));
       }
       Lc(ae, t);
     });
@@ -10105,10 +10154,10 @@ function bh() {
     }
     x.length !== 0 && e.push({ event: t, listeners: x });
   }
-  var bg = /\r\n?/g, yg = /\u0000|\uFFFD/g;
+  var yg = /\r\n?/g, vg = /\u0000|\uFFFD/g;
   function Mc(e) {
-    return (typeof e == "string" ? e : "" + e).replace(bg, `
-`).replace(yg, "");
+    return (typeof e == "string" ? e : "" + e).replace(yg, `
+`).replace(vg, "");
   }
   function Qn(e, t, n) {
     if (t = Mc(t), Mc(e) !== t && n) throw Error(i(425));
@@ -10119,10 +10168,10 @@ function bh() {
   function ja(e, t) {
     return e === "textarea" || e === "noscript" || typeof t.children == "string" || typeof t.children == "number" || typeof t.dangerouslySetInnerHTML == "object" && t.dangerouslySetInnerHTML !== null && t.dangerouslySetInnerHTML.__html != null;
   }
-  var qa = typeof setTimeout == "function" ? setTimeout : void 0, vg = typeof clearTimeout == "function" ? clearTimeout : void 0, Bc = typeof Promise == "function" ? Promise : void 0, xg = typeof queueMicrotask == "function" ? queueMicrotask : typeof Bc < "u" ? function(e) {
-    return Bc.resolve(null).then(e).catch(wg);
+  var qa = typeof setTimeout == "function" ? setTimeout : void 0, xg = typeof clearTimeout == "function" ? clearTimeout : void 0, Bc = typeof Promise == "function" ? Promise : void 0, wg = typeof queueMicrotask == "function" ? queueMicrotask : typeof Bc < "u" ? function(e) {
+    return Bc.resolve(null).then(e).catch(kg);
   } : qa;
-  function wg(e) {
+  function kg(e) {
     setTimeout(function() {
       throw e;
     });
@@ -10167,7 +10216,7 @@ function bh() {
     }
     return null;
   }
-  var ii = Math.random().toString(36).slice(2), Xt = "__reactFiber$" + ii, Yi = "__reactProps$" + ii, tr = "__reactContainer$" + ii, Ua = "__reactEvents$" + ii, kg = "__reactListeners$" + ii, Sg = "__reactHandles$" + ii;
+  var ii = Math.random().toString(36).slice(2), Xt = "__reactFiber$" + ii, Yi = "__reactProps$" + ii, tr = "__reactContainer$" + ii, Ua = "__reactEvents$" + ii, Sg = "__reactListeners$" + ii, Eg = "__reactHandles$" + ii;
   function Tr(e) {
     var t = e[Xt];
     if (t) return t;
@@ -10242,7 +10291,7 @@ function bh() {
   function qc(e) {
     rr === null ? rr = [e] : rr.push(e);
   }
-  function Eg(e) {
+  function Ag(e) {
     ro = !0, qc(e);
   }
   function xr() {
@@ -10369,7 +10418,7 @@ function bh() {
   function Qa(e) {
     Ft === null ? Ft = [e] : Ft.push(e);
   }
-  var Ag = b.ReactCurrentBatchConfig;
+  var Cg = b.ReactCurrentBatchConfig;
   function Xi(e, t, n) {
     if (e = n.ref, e !== null && typeof e != "function" && typeof e != "object") {
       if (n._owner) {
@@ -10532,8 +10581,8 @@ function bh() {
         return Je && Hr($, Ie), we;
       }
       for (Ce = l($, Ce); !qe.done; Ie++, qe = q.next()) qe = ge(Ce, $, Ie, qe.value, le), qe !== null && (e && qe.alternate !== null && Ce.delete(qe.key === null ? Ie : qe.key), M = m(qe, M, Ie), Ae === null ? we = qe : Ae.sibling = qe, Ae = qe);
-      return e && Ce.forEach(function(oh) {
-        return t($, oh);
+      return e && Ce.forEach(function(ah) {
+        return t($, ah);
       }), Je && Hr($, Ie), we;
     }
     function nt($, M, q, le) {
@@ -10791,7 +10840,7 @@ function bh() {
     for (var e = 0; e < as.length; e++) as[e]._workInProgressVersionPrimary = null;
     as.length = 0;
   }
-  var mo = b.ReactCurrentDispatcher, ls = b.ReactCurrentBatchConfig, jr = 0, tt = null, at = null, ct = null, go = !1, en = !1, tn = 0, Cg = 0;
+  var mo = b.ReactCurrentDispatcher, ls = b.ReactCurrentBatchConfig, jr = 0, tt = null, at = null, ct = null, go = !1, en = !1, tn = 0, zg = 0;
   function bt() {
     throw Error(i(321));
   }
@@ -10801,11 +10850,11 @@ function bh() {
     return !0;
   }
   function ds(e, t, n, l, d, m) {
-    if (jr = m, tt = t, t.memoizedState = null, t.updateQueue = null, t.lanes = 0, mo.current = e === null || e.memoizedState === null ? Ng : Rg, e = n(l, d), en) {
+    if (jr = m, tt = t, t.memoizedState = null, t.updateQueue = null, t.lanes = 0, mo.current = e === null || e.memoizedState === null ? Rg : Lg, e = n(l, d), en) {
       m = 0;
       do {
         if (en = !1, tn = 0, 25 <= m) throw Error(i(301));
-        m += 1, ct = at = null, t.updateQueue = null, mo.current = Lg, e = n(l, d);
+        m += 1, ct = at = null, t.updateQueue = null, mo.current = Og, e = n(l, d);
       } while (en);
     }
     if (mo.current = _o, t = at !== null && at.next !== null, jr = 0, ct = at = tt = null, go = !1, t) throw Error(i(300));
@@ -10927,7 +10976,7 @@ function bh() {
   }
   function cd(e) {
     var t = Jt();
-    return typeof e == "function" && (e = e()), t.memoizedState = t.baseState = e, e = { pending: null, interleaved: null, lanes: 0, dispatch: null, lastRenderedReducer: rn, lastRenderedState: e }, t.queue = e, e = e.dispatch = Pg.bind(null, tt, e), [t.memoizedState, e];
+    return typeof e == "function" && (e = e()), t.memoizedState = t.baseState = e, e = { pending: null, interleaved: null, lanes: 0, dispatch: null, lastRenderedReducer: rn, lastRenderedState: e }, t.queue = e, e = e.dispatch = Ng.bind(null, tt, e), [t.memoizedState, e];
   }
   function nn(e, t, n, l) {
     return e = { tag: e, create: t, destroy: n, deps: l, next: null }, t = tt.updateQueue, t === null ? (t = { lastEffect: null, stores: null }, tt.updateQueue = t, t.lastEffect = e.next = e) : (n = t.lastEffect, n === null ? t.lastEffect = e.next = e : (l = n.next, n.next = e, e.next = l, t.lastEffect = e)), e;
@@ -10992,7 +11041,7 @@ function bh() {
   function bd(e, t, n) {
     return jr & 21 ? (qt(n, t) || (n = Yl(), tt.lanes |= n, qr |= n, e.baseState = !0), t) : (e.baseState && (e.baseState = !1, Et = !0), e.memoizedState = n);
   }
-  function zg(e, t) {
+  function Ig(e, t) {
     var n = We;
     We = n !== 0 && 4 > n ? n : 4, e(!0);
     var l = ls.transition;
@@ -11006,7 +11055,7 @@ function bh() {
   function yd() {
     return Bt().memoizedState;
   }
-  function Ig(e, t, n) {
+  function Pg(e, t, n) {
     var l = Cr(e);
     if (n = { lane: l, action: n, hasEagerState: !1, eagerState: null, next: null }, vd(e)) xd(t, n);
     else if (n = Qc(e, t, n, l), n !== null) {
@@ -11014,7 +11063,7 @@ function bh() {
       Gt(n, e, l, d), wd(n, t, l);
     }
   }
-  function Pg(e, t, n) {
+  function Ng(e, t, n) {
     var l = Cr(e), d = { lane: l, action: n, hasEagerState: !1, eagerState: null, next: null };
     if (vd(e)) xd(t, d);
     else {
@@ -11047,7 +11096,7 @@ function bh() {
       l &= e.pendingLanes, n |= l, t.lanes = n, _a(e, n);
     }
   }
-  var _o = { readContext: Mt, useCallback: bt, useContext: bt, useEffect: bt, useImperativeHandle: bt, useInsertionEffect: bt, useLayoutEffect: bt, useMemo: bt, useReducer: bt, useRef: bt, useState: bt, useDebugValue: bt, useDeferredValue: bt, useTransition: bt, useMutableSource: bt, useSyncExternalStore: bt, useId: bt, unstable_isNewReconciler: !1 }, Ng = { readContext: Mt, useCallback: function(e, t) {
+  var _o = { readContext: Mt, useCallback: bt, useContext: bt, useEffect: bt, useImperativeHandle: bt, useInsertionEffect: bt, useLayoutEffect: bt, useMemo: bt, useReducer: bt, useRef: bt, useState: bt, useDebugValue: bt, useDeferredValue: bt, useTransition: bt, useMutableSource: bt, useSyncExternalStore: bt, useId: bt, unstable_isNewReconciler: !1 }, Rg = { readContext: Mt, useCallback: function(e, t) {
     return Jt().memoizedState = [e, t === void 0 ? null : t], e;
   }, useContext: Mt, useEffect: ud, useImperativeHandle: function(e, t, n) {
     return n = n != null ? n.concat([e]) : null, ho(
@@ -11065,7 +11114,7 @@ function bh() {
     return t = t === void 0 ? null : t, e = e(), n.memoizedState = [e, t], e;
   }, useReducer: function(e, t, n) {
     var l = Jt();
-    return t = n !== void 0 ? n(t) : t, l.memoizedState = l.baseState = t, e = { pending: null, interleaved: null, lanes: 0, dispatch: null, lastRenderedReducer: e, lastRenderedState: t }, l.queue = e, e = e.dispatch = Ig.bind(null, tt, e), [l.memoizedState, e];
+    return t = n !== void 0 ? n(t) : t, l.memoizedState = l.baseState = t, e = { pending: null, interleaved: null, lanes: 0, dispatch: null, lastRenderedReducer: e, lastRenderedState: t }, l.queue = e, e = e.dispatch = Pg.bind(null, tt, e), [l.memoizedState, e];
   }, useRef: function(e) {
     var t = Jt();
     return e = { current: e }, t.memoizedState = e;
@@ -11073,7 +11122,7 @@ function bh() {
     return Jt().memoizedState = e;
   }, useTransition: function() {
     var e = cd(!1), t = e[0];
-    return e = zg.bind(null, e[1]), Jt().memoizedState = e, [t, e];
+    return e = Ig.bind(null, e[1]), Jt().memoizedState = e, [t, e];
   }, useMutableSource: function() {
   }, useSyncExternalStore: function(e, t, n) {
     var l = tt, d = Jt();
@@ -11097,9 +11146,9 @@ function bh() {
     if (Je) {
       var n = nr, l = ir;
       n = (l & ~(1 << 32 - jt(l) - 1)).toString(32) + n, t = ":" + t + "R" + n, n = tn++, 0 < n && (t += "H" + n.toString(32)), t += ":";
-    } else n = Cg++, t = ":" + t + "r" + n.toString(32) + ":";
+    } else n = zg++, t = ":" + t + "r" + n.toString(32) + ":";
     return e.memoizedState = t;
-  }, unstable_isNewReconciler: !1 }, Rg = {
+  }, unstable_isNewReconciler: !1 }, Lg = {
     readContext: Mt,
     useCallback: fd,
     useContext: Mt,
@@ -11126,7 +11175,7 @@ function bh() {
     useSyncExternalStore: id,
     useId: yd,
     unstable_isNewReconciler: !1
-  }, Lg = { readContext: Mt, useCallback: fd, useContext: Mt, useEffect: gs, useImperativeHandle: hd, useInsertionEffect: pd, useLayoutEffect: md, useMemo: _d, useReducer: ms, useRef: dd, useState: function() {
+  }, Og = { readContext: Mt, useCallback: fd, useContext: Mt, useEffect: gs, useImperativeHandle: hd, useInsertionEffect: pd, useLayoutEffect: md, useMemo: _d, useReducer: ms, useRef: dd, useState: function() {
     return ms(rn);
   }, useDebugValue: hs, useDeferredValue: function(e) {
     var t = Bt();
@@ -11203,7 +11252,7 @@ Error generating stack: ` + m.message + `
       });
     }
   }
-  var Og = typeof WeakMap == "function" ? WeakMap : Map;
+  var Tg = typeof WeakMap == "function" ? WeakMap : Map;
   function Ad(e, t, n) {
     n = ar(-1, n), n.tag = 3, n.payload = { element: null };
     var l = t.value;
@@ -11232,11 +11281,11 @@ Error generating stack: ` + m.message + `
   function zd(e, t, n) {
     var l = e.pingCache;
     if (l === null) {
-      l = e.pingCache = new Og();
+      l = e.pingCache = new Tg();
       var d = /* @__PURE__ */ new Set();
       l.set(t, d);
     } else d = l.get(t), d === void 0 && (d = /* @__PURE__ */ new Set(), l.set(t, d));
-    d.has(n) || (d.add(n), e = Yg.bind(null, e, t, n), t.then(e, e));
+    d.has(n) || (d.add(n), e = Kg.bind(null, e, t, n), t.then(e, e));
   }
   function Id(e) {
     do {
@@ -11249,7 +11298,7 @@ Error generating stack: ` + m.message + `
   function Pd(e, t, n, l, d) {
     return e.mode & 1 ? (e.flags |= 65536, e.lanes = d, e) : (e === t ? e.flags |= 65536 : (e.flags |= 128, n.flags |= 131072, n.flags &= -52805, n.tag === 1 && (n.alternate === null ? n.tag = 17 : (t = ar(-1, 1), t.tag = 2, kr(n, t, 1))), n.lanes |= 1), e);
   }
-  var Tg = b.ReactCurrentOwner, Et = !1;
+  var Mg = b.ReactCurrentOwner, Et = !1;
   function xt(e, t, n, l) {
     t.child = e === null ? Xc(t, null, n, l) : di(t, e.child, n, l);
   }
@@ -11323,7 +11372,7 @@ Error generating stack: ` + m.message + `
     Td(e, t);
     var x = (t.flags & 128) !== 0;
     if (!l && !x) return d && jc(t, n, !1), sr(e, t, m);
-    l = t.stateNode, Tg.current = t;
+    l = t.stateNode, Mg.current = t;
     var P = x && typeof n.getDerivedStateFromError != "function" ? null : l.render();
     return t.flags |= 1, e !== null && x ? (t.child = di(t, e.child, null, m), t.child = di(t, null, P, m)) : xt(e, t, P, m), t.memoizedState = l.state, d && jc(t, n, !0), t.child;
   }
@@ -11342,7 +11391,7 @@ Error generating stack: ` + m.message + `
     var l = t.pendingProps, d = et.current, m = !1, x = (t.flags & 128) !== 0, P;
     if ((P = x) || (P = e !== null && e.memoizedState === null ? !1 : (d & 2) !== 0), P ? (m = !0, t.flags &= -129) : (e === null || e.memoizedState !== null) && (d |= 1), Ge(et, d & 1), e === null)
       return Xa(t), e = t.memoizedState, e !== null && (e = e.dehydrated, e !== null) ? (t.mode & 1 ? e.data === "$!" ? t.lanes = 8 : t.lanes = 1073741824 : t.lanes = 1, null) : (x = l.children, e = l.fallback, m ? (l = t.mode, m = t.child, x = { mode: "hidden", children: x }, !(l & 1) && m !== null ? (m.childLanes = 0, m.pendingProps = x) : m = Ro(x, l, 0, null), e = Vr(e, l, n, null), m.return = t, e.return = t, m.sibling = e, t.child = m, t.child.memoizedState = ks(n), t.memoizedState = ws, e) : Ss(t, x));
-    if (d = e.memoizedState, d !== null && (P = d.dehydrated, P !== null)) return Mg(e, t, x, l, P, d, n);
+    if (d = e.memoizedState, d !== null && (P = d.dehydrated, P !== null)) return Bg(e, t, x, l, P, d, n);
     if (m) {
       m = l.fallback, x = t.mode, d = e.child, P = d.sibling;
       var L = { mode: "hidden", children: l.children };
@@ -11356,7 +11405,7 @@ Error generating stack: ` + m.message + `
   function yo(e, t, n, l) {
     return l !== null && Qa(l), di(t, e.child, null, n), e = Ss(t, t.pendingProps.children), e.flags |= 2, t.memoizedState = null, e;
   }
-  function Mg(e, t, n, l, d, m, x) {
+  function Bg(e, t, n, l, d, m, x) {
     if (n)
       return t.flags & 256 ? (t.flags &= -257, l = bs(Error(i(422))), yo(e, t, x, l)) : t.memoizedState !== null ? (t.child = e.child, t.flags |= 128, null) : (m = l.fallback, d = t.mode, l = Ro({ mode: "visible", children: l.children }, d, 0, null), m = Vr(m, d, x, null), m.flags |= 2, l.return = t, m.return = t, l.sibling = m, t.child = l, t.mode & 1 && di(t, e.child, null, x), t.child.memoizedState = ks(x), t.memoizedState = ws, m);
     if (!(t.mode & 1)) return yo(e, t, x, null);
@@ -11406,7 +11455,7 @@ Error generating stack: ` + m.message + `
       }
       return $s(), l = bs(Error(i(421))), yo(e, t, x, l);
     }
-    return d.data === "$?" ? (t.flags |= 128, t.child = e.child, t = Kg.bind(null, e), d._reactRetry = t, null) : (e = m.treeContext, Rt = br(d.nextSibling), Nt = t, Je = !0, Ft = null, e !== null && (Ot[Tt++] = ir, Ot[Tt++] = nr, Ot[Tt++] = Br, ir = e.id, nr = e.overflow, Br = t), t = Ss(t, l.children), t.flags |= 4096, t);
+    return d.data === "$?" ? (t.flags |= 128, t.child = e.child, t = Xg.bind(null, e), d._reactRetry = t, null) : (e = m.treeContext, Rt = br(d.nextSibling), Nt = t, Je = !0, Ft = null, e !== null && (Ot[Tt++] = ir, Ot[Tt++] = nr, Ot[Tt++] = Br, ir = e.id, nr = e.overflow, Br = t), t = Ss(t, l.children), t.flags |= 4096, t);
   }
   function $d(e, t, n) {
     e.lanes |= t;
@@ -11473,7 +11522,7 @@ Error generating stack: ` + m.message + `
     }
     return t.child;
   }
-  function Bg(e, t, n) {
+  function Hg(e, t, n) {
     switch (t.tag) {
       case 3:
         Bd(t), ci();
@@ -11587,7 +11636,7 @@ Error generating stack: ` + m.message + `
     else for (d = e.child; d !== null; ) n |= d.lanes | d.childLanes, l |= d.subtreeFlags, l |= d.flags, d.return = e, d = d.sibling;
     return e.subtreeFlags |= l, e.childLanes = n, t;
   }
-  function Hg(e, t, n) {
+  function Dg(e, t, n) {
     var l = t.pendingProps;
     switch (Ya(t), t.tag) {
       case 2:
@@ -11833,7 +11882,7 @@ Error generating stack: ` + m.message + `
     }
     throw Error(i(156, t.tag));
   }
-  function Dg(e, t) {
+  function $g(e, t) {
     switch (Ya(t), t.tag) {
       case 1:
         return St(t.type) && eo(), e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
@@ -11862,7 +11911,7 @@ Error generating stack: ` + m.message + `
         return null;
     }
   }
-  var xo = !1, vt = !1, $g = typeof WeakSet == "function" ? WeakSet : Set, fe = null;
+  var xo = !1, vt = !1, jg = typeof WeakSet == "function" ? WeakSet : Set, fe = null;
   function hi(e, t) {
     var n = e.ref;
     if (n !== null) if (typeof n == "function") try {
@@ -11880,7 +11929,7 @@ Error generating stack: ` + m.message + `
     }
   }
   var Wd = !1;
-  function jg(e, t) {
+  function qg(e, t) {
     if (Da = $n, e = kc(), Na(e)) {
       if ("selectionStart" in e) var n = { start: e.selectionStart, end: e.selectionEnd };
       else e: {
@@ -11992,7 +12041,7 @@ Error generating stack: ` + m.message + `
   }
   function Vd(e) {
     var t = e.alternate;
-    t !== null && (e.alternate = null, Vd(t)), e.child = null, e.deletions = null, e.sibling = null, e.tag === 5 && (t = e.stateNode, t !== null && (delete t[Xt], delete t[Yi], delete t[Ua], delete t[kg], delete t[Sg])), e.stateNode = null, e.return = null, e.dependencies = null, e.memoizedProps = null, e.memoizedState = null, e.pendingProps = null, e.stateNode = null, e.updateQueue = null;
+    t !== null && (e.alternate = null, Vd(t)), e.child = null, e.deletions = null, e.sibling = null, e.tag === 5 && (t = e.stateNode, t !== null && (delete t[Xt], delete t[Yi], delete t[Ua], delete t[Sg], delete t[Eg])), e.stateNode = null, e.return = null, e.dependencies = null, e.memoizedProps = null, e.memoizedState = null, e.pendingProps = null, e.stateNode = null, e.updateQueue = null;
   }
   function Gd(e) {
     return e.tag === 5 || e.tag === 3 || e.tag === 4;
@@ -12078,8 +12127,8 @@ Error generating stack: ` + m.message + `
     if (t !== null) {
       e.updateQueue = null;
       var n = e.stateNode;
-      n === null && (n = e.stateNode = new $g()), t.forEach(function(l) {
-        var d = Xg.bind(null, e, l);
+      n === null && (n = e.stateNode = new jg()), t.forEach(function(l) {
+        var d = Qg.bind(null, e, l);
         n.has(l) || (n.add(l), l.then(d, d));
       });
     }
@@ -12316,7 +12365,7 @@ Error generating stack: ` + m.message + `
     }
     t & 4096 && (e.flags &= -4097);
   }
-  function qg(e, t, n) {
+  function Fg(e, t, n) {
     fe = e, Jd(e);
   }
   function Jd(e, t, n) {
@@ -12502,12 +12551,12 @@ Error generating stack: ` + m.message + `
       fe = t.return;
     }
   }
-  var Fg = Math.ceil, ko = b.ReactCurrentDispatcher, Ns = b.ReactCurrentOwner, Ht = b.ReactCurrentBatchConfig, je = 0, dt = null, ot = null, ht = 0, Lt = 0, fi = yr(0), st = 0, sn = null, qr = 0, So = 0, Rs = 0, ln = null, At = null, Ls = 0, _i = 1 / 0, lr = null, Eo = !1, Os = null, Er = null, Ao = !1, Ar = null, Co = 0, cn = 0, Ts = null, zo = -1, Io = 0;
+  var Ug = Math.ceil, ko = b.ReactCurrentDispatcher, Ns = b.ReactCurrentOwner, Ht = b.ReactCurrentBatchConfig, je = 0, dt = null, ot = null, ht = 0, Lt = 0, fi = yr(0), st = 0, sn = null, qr = 0, So = 0, Rs = 0, ln = null, At = null, Ls = 0, _i = 1 / 0, lr = null, Eo = !1, Os = null, Er = null, Ao = !1, Ar = null, Co = 0, cn = 0, Ts = null, zo = -1, Io = 0;
   function wt() {
     return je & 6 ? it() : zo !== -1 ? zo : zo = it();
   }
   function Cr(e) {
-    return e.mode & 1 ? je & 2 && ht !== 0 ? ht & -ht : Ag.transition !== null ? (Io === 0 && (Io = Yl()), Io) : (e = We, e !== 0 || (e = window.event, e = e === void 0 ? 16 : ic(e.type)), e) : 1;
+    return e.mode & 1 ? je & 2 && ht !== 0 ? ht & -ht : Cg.transition !== null ? (Io === 0 && (Io = Yl()), Io) : (e = We, e !== 0 || (e = window.event, e = e === void 0 ? 16 : ic(e.type)), e) : 1;
   }
   function Gt(e, t, n, l) {
     if (50 < cn) throw cn = 0, Ts = null, Error(i(185));
@@ -12515,11 +12564,11 @@ Error generating stack: ` + m.message + `
   }
   function Ct(e, t) {
     var n = e.callbackNode;
-    Am(e, t);
+    Cm(e, t);
     var l = Bn(e, e === dt ? ht : 0);
     if (l === 0) n !== null && Wl(n), e.callbackNode = null, e.callbackPriority = 0;
     else if (t = l & -l, e.callbackPriority !== t) {
-      if (n != null && Wl(n), t === 1) e.tag === 0 ? Eg(iu.bind(null, e)) : qc(iu.bind(null, e)), xg(function() {
+      if (n != null && Wl(n), t === 1) e.tag === 0 ? Ag(iu.bind(null, e)) : qc(iu.bind(null, e)), wg(function() {
         !(je & 6) && xr();
       }), n = null;
       else {
@@ -12559,7 +12608,7 @@ Error generating stack: ` + m.message + `
       (dt !== e || ht !== t) && (lr = null, _i = it() + 500, Ur(e, t));
       do
         try {
-          Vg();
+          Gg();
           break;
         } catch (P) {
           nu(e, P);
@@ -12571,7 +12620,7 @@ Error generating stack: ` + m.message + `
       if (t === 2 && (d = ha(e), d !== 0 && (l = d, t = Ms(e, d))), t === 1) throw n = sn, Ur(e, 0), zr(e, l), Ct(e, it()), n;
       if (t === 6) zr(e, l);
       else {
-        if (d = e.current.alternate, !(l & 30) && !Ug(d) && (t = Po(e, l), t === 2 && (m = ha(e), m !== 0 && (l = m, t = Ms(e, m))), t === 1)) throw n = sn, Ur(e, 0), zr(e, l), Ct(e, it()), n;
+        if (d = e.current.alternate, !(l & 30) && !Wg(d) && (t = Po(e, l), t === 2 && (m = ha(e), m !== 0 && (l = m, t = Ms(e, m))), t === 1)) throw n = sn, Ur(e, 0), zr(e, l), Ct(e, it()), n;
         switch (e.finishedWork = d, e.finishedLanes = l, t) {
           case 0:
           case 1:
@@ -12597,7 +12646,7 @@ Error generating stack: ` + m.message + `
               var x = 31 - jt(l);
               m = 1 << x, x = t[x], x > d && (d = x), l &= ~m;
             }
-            if (l = d, l = it() - l, l = (120 > l ? 120 : 480 > l ? 480 : 1080 > l ? 1080 : 1920 > l ? 1920 : 3e3 > l ? 3e3 : 4320 > l ? 4320 : 1960 * Fg(l / 1960)) - l, 10 < l) {
+            if (l = d, l = it() - l, l = (120 > l ? 120 : 480 > l ? 480 : 1080 > l ? 1080 : 1920 > l ? 1920 : 3e3 > l ? 3e3 : 4320 > l ? 4320 : 1960 * Ug(l / 1960)) - l, 10 < l) {
               e.timeoutHandle = qa(Wr.bind(null, e, At, lr), l);
               break;
             }
@@ -12620,7 +12669,7 @@ Error generating stack: ` + m.message + `
   function Bs(e) {
     At === null ? At = e : At.push.apply(At, e);
   }
-  function Ug(e) {
+  function Wg(e) {
     for (var t = e; ; ) {
       if (t.flags & 16384) {
         var n = t.updateQueue;
@@ -12692,7 +12741,7 @@ Error generating stack: ` + m.message + `
   function Ur(e, t) {
     e.finishedWork = null, e.finishedLanes = 0;
     var n = e.timeoutHandle;
-    if (n !== -1 && (e.timeoutHandle = -1, vg(n)), ot !== null) for (n = ot.return; n !== null; ) {
+    if (n !== -1 && (e.timeoutHandle = -1, xg(n)), ot !== null) for (n = ot.return; n !== null; ) {
       var l = n;
       switch (Ya(l), l.tag) {
         case 1:
@@ -12825,7 +12874,7 @@ Error generating stack: ` + m.message + `
     (dt !== e || ht !== t) && (lr = null, Ur(e, t));
     do
       try {
-        Wg();
+        Vg();
         break;
       } catch (d) {
         nu(e, d);
@@ -12834,11 +12883,11 @@ Error generating stack: ` + m.message + `
     if (Za(), je = n, ko.current = l, ot !== null) throw Error(i(261));
     return dt = null, ht = 0, st;
   }
-  function Wg() {
+  function Vg() {
     for (; ot !== null; ) au(ot);
   }
-  function Vg() {
-    for (; ot !== null && !_m(); ) au(ot);
+  function Gg() {
+    for (; ot !== null && !bm(); ) au(ot);
   }
   function au(e) {
     var t = du(e.alternate, e, Lt);
@@ -12849,7 +12898,7 @@ Error generating stack: ` + m.message + `
     do {
       var n = t.alternate;
       if (e = t.return, t.flags & 32768) {
-        if (n = Dg(n, t), n !== null) {
+        if (n = $g(n, t), n !== null) {
           n.flags &= 32767, ot = n;
           return;
         }
@@ -12858,7 +12907,7 @@ Error generating stack: ` + m.message + `
           st = 6, ot = null;
           return;
         }
-      } else if (n = Hg(n, t, Lt), n !== null) {
+      } else if (n = Dg(n, t, Lt), n !== null) {
         ot = n;
         return;
       }
@@ -12873,13 +12922,13 @@ Error generating stack: ` + m.message + `
   function Wr(e, t, n) {
     var l = We, d = Ht.transition;
     try {
-      Ht.transition = null, We = 1, Gg(e, t, n, l);
+      Ht.transition = null, We = 1, Yg(e, t, n, l);
     } finally {
       Ht.transition = d, We = l;
     }
     return null;
   }
-  function Gg(e, t, n, l) {
+  function Yg(e, t, n, l) {
     do
       bi();
     while (Ar !== null);
@@ -12890,16 +12939,16 @@ Error generating stack: ` + m.message + `
     if (e.finishedWork = null, e.finishedLanes = 0, n === e.current) throw Error(i(177));
     e.callbackNode = null, e.callbackPriority = 0;
     var m = n.lanes | n.childLanes;
-    if (Cm(e, m), e === dt && (ot = dt = null, ht = 0), !(n.subtreeFlags & 2064) && !(n.flags & 2064) || Ao || (Ao = !0, uu(Ln, function() {
+    if (zm(e, m), e === dt && (ot = dt = null, ht = 0), !(n.subtreeFlags & 2064) && !(n.flags & 2064) || Ao || (Ao = !0, uu(Ln, function() {
       return bi(), null;
     })), m = (n.flags & 15990) !== 0, n.subtreeFlags & 15990 || m) {
       m = Ht.transition, Ht.transition = null;
       var x = We;
       We = 1;
       var P = je;
-      je |= 4, Ns.current = null, jg(e, n), Qd(n, e), mg($a), $n = !!Da, $a = Da = null, e.current = n, qg(n), bm(), je = P, We = x, Ht.transition = m;
+      je |= 4, Ns.current = null, qg(e, n), Qd(n, e), gg($a), $n = !!Da, $a = Da = null, e.current = n, Fg(n), ym(), je = P, We = x, Ht.transition = m;
     } else e.current = n;
-    if (Ao && (Ao = !1, Ar = e, Co = d), m = e.pendingLanes, m === 0 && (Er = null), xm(n.stateNode), Ct(e, it()), t !== null) for (l = e.onRecoverableError, n = 0; n < t.length; n++) d = t[n], l(d.value, { componentStack: d.stack, digest: d.digest });
+    if (Ao && (Ao = !1, Ar = e, Co = d), m = e.pendingLanes, m === 0 && (Er = null), wm(n.stateNode), Ct(e, it()), t !== null) for (l = e.onRecoverableError, n = 0; n < t.length; n++) d = t[n], l(d.value, { componentStack: d.stack, digest: d.digest });
     if (Eo) throw Eo = !1, e = Os, Os = null, e;
     return Co & 1 && e.tag !== 0 && bi(), m = e.pendingLanes, m & 1 ? e === Ts ? cn++ : (cn = 0, Ts = e) : cn = 0, xr(), null;
   }
@@ -13033,7 +13082,7 @@ Error generating stack: ` + m.message + `
       t = t.return;
     }
   }
-  function Yg(e, t, n) {
+  function Kg(e, t, n) {
     var l = e.pingCache;
     l !== null && l.delete(t), t = wt(), e.pingedLanes |= e.suspendedLanes & n, dt === e && (ht & n) === n && (st === 4 || st === 3 && (ht & 130023424) === ht && 500 > it() - Ls ? Ur(e, 0) : Rs |= n), Ct(e, t);
   }
@@ -13042,11 +13091,11 @@ Error generating stack: ` + m.message + `
     var n = wt();
     e = or(e, t), e !== null && (Ri(e, t, n), Ct(e, n));
   }
-  function Kg(e) {
+  function Xg(e) {
     var t = e.memoizedState, n = 0;
     t !== null && (n = t.retryLane), cu(e, n);
   }
-  function Xg(e, t) {
+  function Qg(e, t) {
     var n = 0;
     switch (e.tag) {
       case 13:
@@ -13065,7 +13114,7 @@ Error generating stack: ` + m.message + `
   du = function(e, t, n) {
     if (e !== null) if (e.memoizedProps !== t.pendingProps || kt.current) Et = !0;
     else {
-      if (!(e.lanes & n) && !(t.flags & 128)) return Et = !1, Bg(e, t, n);
+      if (!(e.lanes & n) && !(t.flags & 128)) return Et = !1, Hg(e, t, n);
       Et = !!(e.flags & 131072);
     }
     else Et = !1, Je && t.flags & 1048576 && Fc(t, no, t.index);
@@ -13080,7 +13129,7 @@ Error generating stack: ` + m.message + `
       case 16:
         l = t.elementType;
         e: {
-          switch (vo(e, t), e = t.pendingProps, d = l._init, l = d(l._payload), t.type = l, d = t.tag = Jg(l), e = Ut(l, e), d) {
+          switch (vo(e, t), e = t.pendingProps, d = l._init, l = d(l._payload), t.type = l, d = t.tag = Zg(l), e = Ut(l, e), d) {
             case 0:
               t = vs(null, t, l, e, n);
               break e;
@@ -13214,16 +13263,16 @@ Error generating stack: ` + m.message + `
   function uu(e, t) {
     return Ul(e, t);
   }
-  function Qg(e, t, n, l) {
+  function Jg(e, t, n, l) {
     this.tag = e, this.key = n, this.sibling = this.child = this.return = this.stateNode = this.type = this.elementType = null, this.index = 0, this.ref = null, this.pendingProps = t, this.dependencies = this.memoizedState = this.updateQueue = this.memoizedProps = null, this.mode = l, this.subtreeFlags = this.flags = 0, this.deletions = null, this.childLanes = this.lanes = 0, this.alternate = null;
   }
   function Dt(e, t, n, l) {
-    return new Qg(e, t, n, l);
+    return new Jg(e, t, n, l);
   }
   function js(e) {
     return e = e.prototype, !(!e || !e.isReactComponent);
   }
-  function Jg(e) {
+  function Zg(e) {
     if (typeof e == "function") return js(e) ? 1 : 0;
     if (e != null) {
       if (e = e.$$typeof, e === re) return 11;
@@ -13287,13 +13336,13 @@ Error generating stack: ` + m.message + `
   function Fs(e, t, n) {
     return t = Dt(4, e.children !== null ? e.children : [], e.key, t), t.lanes = n, t.stateNode = { containerInfo: e.containerInfo, pendingChildren: null, implementation: e.implementation }, t;
   }
-  function Zg(e, t, n, l, d) {
+  function eh(e, t, n, l, d) {
     this.tag = t, this.containerInfo = e, this.finishedWork = this.pingCache = this.current = this.pendingChildren = null, this.timeoutHandle = -1, this.callbackNode = this.pendingContext = this.context = null, this.callbackPriority = 0, this.eventTimes = fa(0), this.expirationTimes = fa(-1), this.entangledLanes = this.finishedLanes = this.mutableReadLanes = this.expiredLanes = this.pingedLanes = this.suspendedLanes = this.pendingLanes = 0, this.entanglements = fa(0), this.identifierPrefix = l, this.onRecoverableError = d, this.mutableSourceEagerHydrationData = null;
   }
   function Us(e, t, n, l, d, m, x, P, L) {
-    return e = new Zg(e, t, n, P, L), t === 1 ? (t = 1, m === !0 && (t |= 8)) : t = 0, m = Dt(3, null, null, t), e.current = m, m.stateNode = e, m.memoizedState = { element: l, isDehydrated: n, cache: null, transitions: null, pendingSuspenseBoundaries: null }, is(m), e;
+    return e = new eh(e, t, n, P, L), t === 1 ? (t = 1, m === !0 && (t |= 8)) : t = 0, m = Dt(3, null, null, t), e.current = m, m.stateNode = e, m.memoizedState = { element: l, isDehydrated: n, cache: null, transitions: null, pendingSuspenseBoundaries: null }, is(m), e;
   }
-  function eh(e, t, n) {
+  function th(e, t, n) {
     var l = 3 < arguments.length && arguments[3] !== void 0 ? arguments[3] : null;
     return { $$typeof: C, key: l == null ? null : "" + l, children: e, containerInfo: t, implementation: n };
   }
@@ -13349,7 +13398,7 @@ Error generating stack: ` + m.message + `
   function Ws(e, t) {
     gu(e, t), (e = e.alternate) && gu(e, t);
   }
-  function th() {
+  function rh() {
     return null;
   }
   var hu = typeof reportError == "function" ? reportError : function(e) {
@@ -13391,7 +13440,7 @@ Error generating stack: ` + m.message + `
   }
   function fu() {
   }
-  function rh(e, t, n, l, d) {
+  function ih(e, t, n, l, d) {
     if (d) {
       if (typeof l == "function") {
         var m = l;
@@ -13428,7 +13477,7 @@ Error generating stack: ` + m.message + `
         };
       }
       Lo(t, x, e, d);
-    } else x = rh(n, t, e, d, l);
+    } else x = ih(n, t, e, d, l);
     return Oo(x);
   }
   Xl = function(e) {
@@ -13498,20 +13547,20 @@ Error generating stack: ` + m.message + `
         t = n.value, t != null && ve(e, !!n.multiple, t, !1);
     }
   }, Pn = Hs, Hl = Fr;
-  var ih = { usingClientEntryPoint: !1, Events: [Ki, ni, Zn, Ci, Xr, Hs] }, dn = { findFiberByHostInstance: Tr, bundleType: 0, version: "18.3.1", rendererPackageName: "react-dom" }, nh = { bundleType: dn.bundleType, version: dn.version, rendererPackageName: dn.rendererPackageName, rendererConfig: dn.rendererConfig, overrideHookState: null, overrideHookStateDeletePath: null, overrideHookStateRenamePath: null, overrideProps: null, overridePropsDeletePath: null, overridePropsRenamePath: null, setErrorHandler: null, setSuspenseHandler: null, scheduleUpdate: null, currentDispatcherRef: b.ReactCurrentDispatcher, findHostInstanceByFiber: function(e) {
+  var nh = { usingClientEntryPoint: !1, Events: [Ki, ni, Zn, Ci, Xr, Hs] }, dn = { findFiberByHostInstance: Tr, bundleType: 0, version: "18.3.1", rendererPackageName: "react-dom" }, oh = { bundleType: dn.bundleType, version: dn.version, rendererPackageName: dn.rendererPackageName, rendererConfig: dn.rendererConfig, overrideHookState: null, overrideHookStateDeletePath: null, overrideHookStateRenamePath: null, overrideProps: null, overridePropsDeletePath: null, overridePropsRenamePath: null, setErrorHandler: null, setSuspenseHandler: null, scheduleUpdate: null, currentDispatcherRef: b.ReactCurrentDispatcher, findHostInstanceByFiber: function(e) {
     return e = ql(e), e === null ? null : e.stateNode;
-  }, findFiberByHostInstance: dn.findFiberByHostInstance || th, findHostInstancesForRefresh: null, scheduleRefresh: null, scheduleRoot: null, setRefreshHandler: null, getCurrentFiber: null, reconcilerVersion: "18.3.1-next-f1338f8080-20240426" };
+  }, findFiberByHostInstance: dn.findFiberByHostInstance || rh, findHostInstancesForRefresh: null, scheduleRefresh: null, scheduleRoot: null, setRefreshHandler: null, getCurrentFiber: null, reconcilerVersion: "18.3.1-next-f1338f8080-20240426" };
   if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u") {
     var Ho = __REACT_DEVTOOLS_GLOBAL_HOOK__;
     if (!Ho.isDisabled && Ho.supportsFiber) try {
-      On = Ho.inject(nh), Kt = Ho;
+      On = Ho.inject(oh), Kt = Ho;
     } catch {
     }
   }
-  return zt.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ih, zt.createPortal = function(e, t) {
+  return zt.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = nh, zt.createPortal = function(e, t) {
     var n = 2 < arguments.length && arguments[2] !== void 0 ? arguments[2] : null;
     if (!Gs(t)) throw Error(i(200));
-    return eh(e, t, null, n);
+    return th(e, t, null, n);
   }, zt.createRoot = function(e, t) {
     if (!Gs(e)) throw Error(i(299));
     var n = !1, l = "", d = hu;
@@ -13564,17 +13613,17 @@ function ta() {
         console.error(r);
       }
   }
-  return o(), Xs.exports = bh(), Xs.exports;
+  return o(), Xs.exports = yh(), Xs.exports;
 }
 var Cu;
-function yh() {
+function vh() {
   if (Cu) return $o;
   Cu = 1;
   var o = ta();
   return $o.createRoot = o.createRoot, $o.hydrateRoot = o.hydrateRoot, $o;
 }
-var vh = yh();
-const xh = '.react-grid-layout{position:relative;transition:height .2s ease}.react-grid-item{transition:all .2s ease;transition-property:left,top,width,height}.react-grid-item img{pointer-events:none;user-select:none}.react-grid-item.cssTransforms{transition-property:transform,width,height}.react-grid-item.resizing{transition:none;z-index:1;will-change:width,height}.react-grid-item.react-draggable-dragging{transition:none;z-index:3;will-change:transform}.react-grid-item.dropping{visibility:hidden}.react-grid-item.react-grid-placeholder{background:red;opacity:.2;transition-duration:.1s;z-index:2;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none}.react-grid-item.react-grid-placeholder.placeholder-resizing{transition:none}.react-grid-item>.react-resizable-handle{position:absolute;width:20px;height:20px}.react-grid-item>.react-resizable-handle:after{content:"";position:absolute;right:3px;bottom:3px;width:5px;height:5px;border-right:2px solid rgba(0,0,0,.4);border-bottom:2px solid rgba(0,0,0,.4)}.react-resizable-hide>.react-resizable-handle{display:none}.react-grid-item>.react-resizable-handle.react-resizable-handle-sw{bottom:0;left:0;cursor:sw-resize;transform:rotate(90deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-se{bottom:0;right:0;cursor:se-resize}.react-grid-item>.react-resizable-handle.react-resizable-handle-nw{top:0;left:0;cursor:nw-resize;transform:rotate(180deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-ne{top:0;right:0;cursor:ne-resize;transform:rotate(270deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-w,.react-grid-item>.react-resizable-handle.react-resizable-handle-e{top:50%;margin-top:-10px;cursor:ew-resize}.react-grid-item>.react-resizable-handle.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-n,.react-grid-item>.react-resizable-handle.react-resizable-handle-s{left:50%;margin-left:-10px;cursor:ns-resize}.react-grid-item>.react-resizable-handle.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}', wh = ".react-resizable{position:relative}.react-resizable-handle{position:absolute;width:20px;height:20px;background-repeat:no-repeat;background-origin:content-box;box-sizing:border-box;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMDAwMDAiLz48L2c+PC9zdmc+);background-position:bottom right;padding:0 3px 3px 0}.react-resizable-handle-sw{bottom:0;left:0;cursor:sw-resize;transform:rotate(90deg)}.react-resizable-handle-se{bottom:0;right:0;cursor:se-resize}.react-resizable-handle-nw{top:0;left:0;cursor:nw-resize;transform:rotate(180deg)}.react-resizable-handle-ne{top:0;right:0;cursor:ne-resize;transform:rotate(270deg)}.react-resizable-handle-w,.react-resizable-handle-e{top:50%;margin-top:-10px;cursor:ew-resize}.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-resizable-handle-n,.react-resizable-handle-s{left:50%;margin-left:-10px;cursor:ns-resize}.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}", kh = "#widget-grid.grid{display:block!important;grid-template-columns:none!important;grid-auto-flow:initial!important}.argus-dashboard{min-height:100%}.argus-dashboard__toolbar{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px;padding:12px 16px}.argus-dashboard__toolbar button,.argus-widget__drag-handle,.argus-widget__options summary,.argus-widget__menu button{border:1px solid rgba(255,255,255,.12);border-radius:12px;color:#fff!important;background:#ffffff14;padding:9px 13px}.argus-dashboard__toolbar button:focus-visible,.argus-widget__drag-handle:focus-visible,.argus-widget__options summary:focus-visible,.argus-widget__menu button:focus-visible{outline:3px solid #76b7ff;outline-offset:2px}.argus-dashboard__feedback{min-height:20px;padding:0 18px;color:#b9d9ff;text-align:right;font-size:12px}.argus-dashboard__visibility{display:flex;flex-wrap:wrap;gap:6px}.argus-dashboard-grid .react-grid-item{transition:transform .18s cubic-bezier(.2,.8,.2,1),width .18s cubic-bezier(.2,.8,.2,1),height .18s cubic-bezier(.2,.8,.2,1)}.argus-dashboard-grid .react-grid-item.react-draggable-dragging{z-index:100;opacity:.98;transition:none}.argus-dashboard-grid .react-grid-placeholder{border:2px solid rgb(94 168 255 / 78%);border-radius:24px;background:linear-gradient(135deg,#5ea8ff33,#8468ff1f);box-shadow:inset 0 0 0 1px #ffffff14,0 12px 35px #0000002e}.argus-widget{position:relative;width:100%;height:100%;overflow:hidden;border:1px solid var(--v2066-border,rgba(255,255,255,.08))!important;border-radius:24px;background:var(--v2066-glass,rgba(255,255,255,.06))!important;box-shadow:0 14px 34px #0000002e,inset 0 1px #ffffff0f;backdrop-filter:blur(24px) saturate(145%)!important;-webkit-backdrop-filter:blur(24px) saturate(145%)!important}.argus-widget .panel{background:transparent!important;border:none!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}.argus-widget__edit-header{display:none;align-items:center;gap:10px;padding:8px 12px}.argus-dashboard--editing .argus-widget__edit-header{display:flex}.argus-widget__edit-header>strong{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.argus-widget__drag-handle{width:44px;height:40px;cursor:grab;touch-action:none}.argus-widget__options{position:relative}.argus-widget__options summary{display:grid;width:38px;height:38px;box-sizing:border-box;place-items:center;cursor:pointer;list-style:none}.argus-widget__options summary::-webkit-details-marker{display:none}.argus-widget__menu{position:absolute;right:0;top:44px;z-index:140;display:grid;min-width:210px;gap:8px;padding:12px;border:1px solid rgba(255,255,255,.14);border-radius:16px;background:#0f1623f5;box-shadow:0 18px 46px #00000061}.argus-widget__menu>div{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.argus-widget__menu button{padding:7px}.argus-widget__menu button.active{background:#3478d4}.argus-widget__content{height:100%;overflow:auto}.argus-dashboard--editing .argus-widget__content{height:calc(100% - 56px)}.argus-widget__content>.panel{display:block!important;width:100%!important;height:100%!important;box-sizing:border-box!important;grid-column:auto!important;grid-row:auto!important}.argus-dashboard-grid .react-resizable-handle{display:none!important;width:34px;height:34px;right:8px;bottom:8px;border:1px solid rgba(255,255,255,.18);border-radius:10px;background:#131925db}.argus-dashboard--editing .react-resizable-handle{display:block!important}.argus-dashboard--editing .react-resizable-handle:after{width:10px;height:10px;right:9px;bottom:9px;border-color:#9bc7ff}.alarm-configuration-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:16px}@media (max-width:760px){.alarm-configuration-grid{grid-template-columns:minmax(0,1fr)}.argus-dashboard__toolbar{justify-content:stretch}.argus-dashboard__toolbar>button{flex:1}.argus-widget__menu{position:fixed;inset:auto 16px 16px}}@media (prefers-reduced-motion:reduce){.argus-dashboard-grid .react-grid-item,.argus-dashboard-grid .react-resizable-handle{transition:none!important}}";
+var xh = vh();
+const wh = '.react-grid-layout{position:relative;transition:height .2s ease}.react-grid-item{transition:all .2s ease;transition-property:left,top,width,height}.react-grid-item img{pointer-events:none;user-select:none}.react-grid-item.cssTransforms{transition-property:transform,width,height}.react-grid-item.resizing{transition:none;z-index:1;will-change:width,height}.react-grid-item.react-draggable-dragging{transition:none;z-index:3;will-change:transform}.react-grid-item.dropping{visibility:hidden}.react-grid-item.react-grid-placeholder{background:red;opacity:.2;transition-duration:.1s;z-index:2;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none}.react-grid-item.react-grid-placeholder.placeholder-resizing{transition:none}.react-grid-item>.react-resizable-handle{position:absolute;width:20px;height:20px}.react-grid-item>.react-resizable-handle:after{content:"";position:absolute;right:3px;bottom:3px;width:5px;height:5px;border-right:2px solid rgba(0,0,0,.4);border-bottom:2px solid rgba(0,0,0,.4)}.react-resizable-hide>.react-resizable-handle{display:none}.react-grid-item>.react-resizable-handle.react-resizable-handle-sw{bottom:0;left:0;cursor:sw-resize;transform:rotate(90deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-se{bottom:0;right:0;cursor:se-resize}.react-grid-item>.react-resizable-handle.react-resizable-handle-nw{top:0;left:0;cursor:nw-resize;transform:rotate(180deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-ne{top:0;right:0;cursor:ne-resize;transform:rotate(270deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-w,.react-grid-item>.react-resizable-handle.react-resizable-handle-e{top:50%;margin-top:-10px;cursor:ew-resize}.react-grid-item>.react-resizable-handle.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-n,.react-grid-item>.react-resizable-handle.react-resizable-handle-s{left:50%;margin-left:-10px;cursor:ns-resize}.react-grid-item>.react-resizable-handle.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}', kh = ".react-resizable{position:relative}.react-resizable-handle{position:absolute;width:20px;height:20px;background-repeat:no-repeat;background-origin:content-box;box-sizing:border-box;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMDAwMDAiLz48L2c+PC9zdmc+);background-position:bottom right;padding:0 3px 3px 0}.react-resizable-handle-sw{bottom:0;left:0;cursor:sw-resize;transform:rotate(90deg)}.react-resizable-handle-se{bottom:0;right:0;cursor:se-resize}.react-resizable-handle-nw{top:0;left:0;cursor:nw-resize;transform:rotate(180deg)}.react-resizable-handle-ne{top:0;right:0;cursor:ne-resize;transform:rotate(270deg)}.react-resizable-handle-w,.react-resizable-handle-e{top:50%;margin-top:-10px;cursor:ew-resize}.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-resizable-handle-n,.react-resizable-handle-s{left:50%;margin-left:-10px;cursor:ns-resize}.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}", Sh = "#widget-grid.grid{display:block!important;grid-template-columns:none!important;grid-auto-flow:initial!important}.argus-dashboard{min-height:100%}.argus-dashboard__toolbar{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px;padding:12px 16px}.argus-dashboard__toolbar button,.argus-widget__drag-handle,.argus-widget__options summary,.argus-widget__menu button{border:1px solid rgba(255,255,255,.12);border-radius:12px;color:#fff!important;background:#ffffff14;padding:9px 13px}.argus-dashboard__toolbar button:focus-visible,.argus-widget__drag-handle:focus-visible,.argus-widget__options summary:focus-visible,.argus-widget__menu button:focus-visible{outline:3px solid #76b7ff;outline-offset:2px}.argus-dashboard__feedback{min-height:20px;padding:0 18px;color:#b9d9ff;text-align:right;font-size:12px}.argus-dashboard__visibility{display:flex;flex-wrap:wrap;gap:6px}.argus-dashboard-grid .react-grid-item{transition:transform .18s cubic-bezier(.2,.8,.2,1),width .18s cubic-bezier(.2,.8,.2,1),height .18s cubic-bezier(.2,.8,.2,1)}.argus-dashboard-grid .react-grid-item.react-draggable-dragging{z-index:100;opacity:.98;transition:none}.argus-dashboard-grid .react-grid-placeholder{border:2px solid rgb(94 168 255 / 78%);border-radius:24px;background:linear-gradient(135deg,#5ea8ff33,#8468ff1f);box-shadow:inset 0 0 0 1px #ffffff14,0 12px 35px #0000002e}.argus-widget{position:relative;width:100%;height:100%;overflow:hidden;border:1px solid var(--v2066-border,rgba(255,255,255,.08))!important;border-radius:24px;background:var(--v2066-glass,rgba(255,255,255,.06))!important;box-shadow:0 14px 34px #0000002e,inset 0 1px #ffffff0f;backdrop-filter:blur(24px) saturate(145%)!important;-webkit-backdrop-filter:blur(24px) saturate(145%)!important}.argus-widget .panel{background:transparent!important;border:none!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}.argus-widget__edit-header{display:none;align-items:center;gap:10px;padding:8px 12px}.argus-dashboard--editing .argus-widget__edit-header{display:flex}.argus-widget__edit-header>strong{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.argus-widget__drag-handle{width:44px;height:40px;cursor:grab;touch-action:none}.argus-widget__options{position:relative}.argus-widget__options summary{display:grid;width:38px;height:38px;box-sizing:border-box;place-items:center;cursor:pointer;list-style:none}.argus-widget__options summary::-webkit-details-marker{display:none}.argus-widget__menu{position:absolute;right:0;top:44px;z-index:140;display:grid;min-width:210px;gap:8px;padding:12px;border:1px solid rgba(255,255,255,.14);border-radius:16px;background:#0f1623f5;box-shadow:0 18px 46px #00000061}.argus-widget__menu>div{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.argus-widget__menu button{padding:7px}.argus-widget__menu button.active{background:#3478d4}.argus-widget__content{height:100%;overflow:auto}.argus-dashboard--editing .argus-widget__content{height:calc(100% - 56px)}.argus-widget__content>.panel{display:block!important;width:100%!important;height:100%!important;box-sizing:border-box!important;grid-column:auto!important;grid-row:auto!important}.argus-dashboard-grid .react-resizable-handle{display:none!important;width:34px;height:34px;right:8px;bottom:8px;border:1px solid rgba(255,255,255,.18);border-radius:10px;background:#131925db}.argus-dashboard--editing .react-resizable-handle{display:block!important}.argus-dashboard--editing .react-resizable-handle:after{width:10px;height:10px;right:9px;bottom:9px;border-color:#9bc7ff}.alarm-configuration-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:16px}@media (max-width:760px){.alarm-configuration-grid{grid-template-columns:minmax(0,1fr)}.argus-dashboard__toolbar{justify-content:stretch}.argus-dashboard__toolbar>button{flex:1}.argus-widget__menu{position:fixed;inset:auto 16px 16px}}@media (prefers-reduced-motion:reduce){.argus-dashboard-grid .react-grid-item,.argus-dashboard-grid .react-resizable-handle{transition:none!important}}";
 var pt = It();
 class zu extends pt.Component {
   state = {
@@ -13595,12 +13644,12 @@ class zu extends pt.Component {
     ] }) : this.props.children;
   }
 }
-var Zs = { exports: {} }, pn = {}, kn = { exports: {} }, Sh = kn.exports, Iu;
+var Zs = { exports: {} }, pn = {}, kn = { exports: {} }, Eh = kn.exports, Iu;
 function Nl() {
   return Iu || (Iu = 1, function(o, r) {
     (function(i, a) {
       a(r);
-    })(Sh, function(i) {
+    })(Eh, function(i) {
       function a(ee) {
         return function(Ee, Pe, Re, Me, Ue, Ze, O) {
           return ee(Ee, Pe, O);
@@ -13789,7 +13838,7 @@ function la() {
   return jo.exports = r, jo.exports.clsx = r, jo.exports;
 }
 var De = {}, el, Nu;
-function Eh() {
+function Ah() {
   return Nu || (Nu = 1, el = function(r, i, a) {
     return r === i ? !0 : r.className === i.className && a(r.style, i.style) && r.width === i.width && r.autoSize === i.autoSize && r.cols === i.cols && r.draggableCancel === i.draggableCancel && r.draggableHandle === i.draggableHandle && a(r.verticalCompact, i.verticalCompact) && a(r.compactType, i.compactType) && a(r.layout, i.layout) && a(r.margin, i.margin) && a(r.containerPadding, i.containerPadding) && r.rowHeight === i.rowHeight && r.maxRows === i.maxRows && r.isBounded === i.isBounded && r.isDraggable === i.isDraggable && r.isResizable === i.isResizable && r.allowOverlap === i.allowOverlap && r.preventCollision === i.preventCollision && r.useCSSTransforms === i.useCSSTransforms && r.transformScale === i.transformScale && r.isDroppable === i.isDroppable && a(r.resizeHandles, i.resizeHandles) && a(r.resizeHandle, i.resizeHandle) && r.onLayoutChange === i.onLayoutChange && r.onDragStart === i.onDragStart && r.onDrag === i.onDrag && r.onDragStop === i.onDragStop && r.onResizeStart === i.onResizeStart && r.onResize === i.onResize && r.onResizeStop === i.onResizeStop && r.onDrop === i.onDrop && a(r.droppingItem, i.droppingItem) && a(r.innerRef, i.innerRef);
   }), el;
@@ -13887,7 +13936,7 @@ function Ei() {
   function A(O, B) {
     return (0, o.deepEqual)(r.default.Children.map(O, (D) => D?.key), r.default.Children.map(B, (D) => D?.key)) && (0, o.deepEqual)(r.default.Children.map(O, (D) => D?.props["data-grid"]), r.default.Children.map(B, (D) => D?.props["data-grid"]));
   }
-  De.fastRGLPropsEqual = Eh();
+  De.fastRGLPropsEqual = Ah();
   function R(O, B) {
     return O.left === B.left && O.top === B.top && O.width === B.width && O.height === B.height;
   }
@@ -14234,17 +14283,17 @@ function Rl() {
   return cr;
 }
 var mn = {}, tl = { exports: {} }, rl, Ou;
-function Ah() {
+function Ch() {
   if (Ou) return rl;
   Ou = 1;
   var o = "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED";
   return rl = o, rl;
 }
 var il, Tu;
-function Ch() {
+function zh() {
   if (Tu) return il;
   Tu = 1;
-  var o = /* @__PURE__ */ Ah();
+  var o = /* @__PURE__ */ Ch();
   function r() {
   }
   function i() {
@@ -14290,10 +14339,10 @@ function Ch() {
 }
 var Mu;
 function Nr() {
-  return Mu || (Mu = 1, tl.exports = /* @__PURE__ */ Ch()()), tl.exports;
+  return Mu || (Mu = 1, tl.exports = /* @__PURE__ */ zh()()), tl.exports;
 }
 var gn = { exports: {} }, nl, Bu;
-function zh() {
+function Ih() {
   if (Bu) return nl;
   Bu = 1;
   var o = Object.create, r = Object.defineProperty, i = Object.getOwnPropertyDescriptor, a = Object.getOwnPropertyNames, s = Object.getPrototypeOf, c = Object.prototype.hasOwnProperty, u = (N, j) => {
@@ -15041,11 +15090,11 @@ var Hu;
 function Ll() {
   if (Hu) return gn.exports;
   Hu = 1;
-  const o = zh(), r = o.DraggableCore, i = o.default || o;
+  const o = Ih(), r = o.DraggableCore, i = o.default || o;
   return gn.exports = i, gn.exports.default = i, gn.exports.DraggableCore = r, gn.exports;
 }
 var hn = { exports: {} }, fn = {}, qo = {}, Du;
-function Ih() {
+function Ph() {
   if (Du) return qo;
   Du = 1, qo.__esModule = !0, qo.cloneElement = p;
   var o = r(It());
@@ -15096,7 +15145,7 @@ function Ih() {
   return qo;
 }
 var _n = {}, $u;
-function jp() {
+function qp() {
   if ($u) return _n;
   $u = 1, _n.__esModule = !0, _n.resizableProps = void 0;
   var o = r(/* @__PURE__ */ Nr());
@@ -15212,10 +15261,10 @@ function jp() {
   return _n.resizableProps = i, _n;
 }
 var ju;
-function qp() {
+function Fp() {
   if (ju) return fn;
   ju = 1, fn.__esModule = !0, fn.default = void 0;
-  var o = u(It()), r = Ll(), i = Ih(), a = jp(), s = ["children", "className", "draggableOpts", "width", "height", "handle", "handleSize", "lockAspectRatio", "axis", "minConstraints", "maxConstraints", "onResize", "onResizeStop", "onResizeStart", "resizeHandles", "transformScale"];
+  var o = u(It()), r = Ll(), i = Ph(), a = qp(), s = ["children", "className", "draggableOpts", "width", "height", "handle", "handleSize", "lockAspectRatio", "axis", "minConstraints", "maxConstraints", "onResize", "onResizeStop", "onResizeStart", "resizeHandles", "transformScale"];
   function c(S) {
     if (typeof WeakMap != "function") return null;
     var y = /* @__PURE__ */ new WeakMap(), w = /* @__PURE__ */ new WeakMap();
@@ -15402,10 +15451,10 @@ function qp() {
   }, fn;
 }
 var bn = {}, qu;
-function Ph() {
+function Nh() {
   if (qu) return bn;
   qu = 1, bn.__esModule = !0, bn.default = void 0;
-  var o = p(It()), r = c(/* @__PURE__ */ Nr()), i = c(qp()), a = jp(), s = ["handle", "handleSize", "onResize", "onResizeStart", "onResizeStop", "draggableOpts", "minConstraints", "maxConstraints", "lockAspectRatio", "axis", "width", "height", "resizeHandles", "style", "transformScale"];
+  var o = p(It()), r = c(/* @__PURE__ */ Nr()), i = c(Fp()), a = qp(), s = ["handle", "handleSize", "onResize", "onResizeStart", "onResizeStop", "draggableOpts", "minConstraints", "maxConstraints", "lockAspectRatio", "axis", "width", "height", "resizeHandles", "style", "transformScale"];
   function c(y) {
     return y && y.__esModule ? y : { default: y };
   }
@@ -15555,13 +15604,13 @@ function Ph() {
   }), bn;
 }
 var Fu;
-function Nh() {
+function Rh() {
   return Fu || (Fu = 1, hn.exports = function() {
     throw new Error("Don't instantiate Resizable directly! Use require('react-resizable').Resizable");
-  }, hn.exports.Resizable = qp().default, hn.exports.ResizableBox = Ph().default), hn.exports;
+  }, hn.exports.Resizable = Fp().default, hn.exports.ResizableBox = Nh().default), hn.exports;
 }
 var dr = {}, Uu;
-function Fp() {
+function Up() {
   if (Uu) return dr;
   Uu = 1, Object.defineProperty(dr, "__esModule", {
     value: !0
@@ -15679,12 +15728,12 @@ function Fp() {
   }, dr;
 }
 var Wu;
-function Rh() {
+function Lh() {
   if (Wu) return mn;
   Wu = 1, Object.defineProperty(mn, "__esModule", {
     value: !0
   }), mn.default = void 0;
-  var o = _(It()), r = ta(), i = _(/* @__PURE__ */ Nr()), a = Ll(), s = Nh(), c = Ei(), u = Rl(), p = Fp(), g = _(la());
+  var o = _(It()), r = ta(), i = _(/* @__PURE__ */ Nr()), a = Ll(), s = Rh(), c = Ei(), u = Rl(), p = Up(), g = _(la());
   function _(E) {
     return E && E.__esModule ? E : { default: E };
   }
@@ -16137,12 +16186,12 @@ function Rh() {
   }), mn;
 }
 var Vu;
-function Up() {
+function Wp() {
   if (Vu) return pn;
   Vu = 1, Object.defineProperty(pn, "__esModule", {
     value: !0
   }), pn.default = void 0;
-  var o = g(It()), r = /* @__PURE__ */ Nl(), i = p(la()), a = Ei(), s = Rl(), c = p(Rh()), u = p(Fp());
+  var o = g(It()), r = /* @__PURE__ */ Nl(), i = p(la()), a = Ei(), s = Rl(), c = p(Lh()), u = p(Up());
   function p(S) {
     return S && S.__esModule ? S : { default: S };
   }
@@ -16671,7 +16720,7 @@ function Up() {
   }), pn;
 }
 var yn = {}, Gr = {}, Gu;
-function Wp() {
+function Vp() {
   if (Gu) return Gr;
   Gu = 1, Object.defineProperty(Gr, "__esModule", {
     value: !0
@@ -16714,12 +16763,12 @@ function Wp() {
   return Gr;
 }
 var Yu;
-function Lh() {
+function Oh() {
   if (Yu) return yn;
   Yu = 1, Object.defineProperty(yn, "__esModule", {
     value: !0
   }), yn.default = void 0;
-  var o = g(It()), r = p(/* @__PURE__ */ Nr()), i = /* @__PURE__ */ Nl(), a = Ei(), s = Wp(), c = p(Up());
+  var o = g(It()), r = p(/* @__PURE__ */ Nr()), i = /* @__PURE__ */ Nl(), a = Ei(), s = Vp(), c = p(Wp());
   const u = ["breakpoint", "breakpoints", "cols", "layouts", "margin", "containerPadding", "onBreakpointChange", "onLayoutChange", "onWidthChange"];
   function p(b) {
     return b && b.__esModule ? b : { default: b };
@@ -16965,7 +17014,7 @@ function Lh() {
     onWidthChange: a.noop
   }), yn;
 }
-var Fo = {}, Vp = function() {
+var Fo = {}, Gp = function() {
   if (typeof Map < "u")
     return Map;
   function o(r, i) {
@@ -17013,25 +17062,25 @@ var Fo = {}, Vp = function() {
   );
 }(), wl = typeof window < "u" && typeof document < "u" && window.document === document, ra = function() {
   return typeof global < "u" && global.Math === Math ? global : typeof self < "u" && self.Math === Math ? self : typeof window < "u" && window.Math === Math ? window : Function("return this")();
-}(), Oh = function() {
+}(), Th = function() {
   return typeof requestAnimationFrame == "function" ? requestAnimationFrame.bind(ra) : function(o) {
     return setTimeout(function() {
       return o(Date.now());
     }, 1e3 / 60);
   };
-}(), Th = 2;
-function Mh(o, r) {
+}(), Mh = 2;
+function Bh(o, r) {
   var i = !1, a = !1, s = 0;
   function c() {
     i && (i = !1, o()), a && p();
   }
   function u() {
-    Oh(c);
+    Th(c);
   }
   function p() {
     var g = Date.now();
     if (i) {
-      if (g - s < Th)
+      if (g - s < Mh)
         return;
       a = !0;
     } else
@@ -17040,11 +17089,11 @@ function Mh(o, r) {
   }
   return p;
 }
-var Bh = 20, Hh = ["top", "right", "bottom", "left", "width", "height", "size", "weight"], Dh = typeof MutationObserver < "u", $h = (
+var Hh = 20, Dh = ["top", "right", "bottom", "left", "width", "height", "size", "weight"], $h = typeof MutationObserver < "u", jh = (
   /** @class */
   function() {
     function o() {
-      this.connected_ = !1, this.mutationEventsAdded_ = !1, this.mutationsObserver_ = null, this.observers_ = [], this.onTransitionEnd_ = this.onTransitionEnd_.bind(this), this.refresh = Mh(this.refresh.bind(this), Bh);
+      this.connected_ = !1, this.mutationEventsAdded_ = !1, this.mutationsObserver_ = null, this.observers_ = [], this.onTransitionEnd_ = this.onTransitionEnd_.bind(this), this.refresh = Bh(this.refresh.bind(this), Hh);
     }
     return o.prototype.addObserver = function(r) {
       ~this.observers_.indexOf(r) || this.observers_.push(r), this.connected_ || this.connect_();
@@ -17062,7 +17111,7 @@ var Bh = 20, Hh = ["top", "right", "bottom", "left", "width", "height", "size", 
         return i.broadcastActive();
       }), r.length > 0;
     }, o.prototype.connect_ = function() {
-      !wl || this.connected_ || (document.addEventListener("transitionend", this.onTransitionEnd_), window.addEventListener("resize", this.refresh), Dh ? (this.mutationsObserver_ = new MutationObserver(this.refresh), this.mutationsObserver_.observe(document, {
+      !wl || this.connected_ || (document.addEventListener("transitionend", this.onTransitionEnd_), window.addEventListener("resize", this.refresh), $h ? (this.mutationsObserver_ = new MutationObserver(this.refresh), this.mutationsObserver_.observe(document, {
         attributes: !0,
         childList: !0,
         characterData: !0,
@@ -17071,7 +17120,7 @@ var Bh = 20, Hh = ["top", "right", "bottom", "left", "width", "height", "size", 
     }, o.prototype.disconnect_ = function() {
       !wl || !this.connected_ || (document.removeEventListener("transitionend", this.onTransitionEnd_), window.removeEventListener("resize", this.refresh), this.mutationsObserver_ && this.mutationsObserver_.disconnect(), this.mutationEventsAdded_ && document.removeEventListener("DOMSubtreeModified", this.refresh), this.mutationsObserver_ = null, this.mutationEventsAdded_ = !1, this.connected_ = !1);
     }, o.prototype.onTransitionEnd_ = function(r) {
-      var i = r.propertyName, a = i === void 0 ? "" : i, s = Hh.some(function(c) {
+      var i = r.propertyName, a = i === void 0 ? "" : i, s = Dh.some(function(c) {
         return !!~a.indexOf(c);
       });
       s && this.refresh();
@@ -17079,7 +17128,7 @@ var Bh = 20, Hh = ["top", "right", "bottom", "left", "width", "height", "size", 
       return this.instance_ || (this.instance_ = new o()), this.instance_;
     }, o.instance_ = null, o;
   }()
-), Gp = function(o, r) {
+), Yp = function(o, r) {
   for (var i = 0, a = Object.keys(r); i < a.length; i++) {
     var s = a[i];
     Object.defineProperty(o, s, {
@@ -17093,7 +17142,7 @@ var Bh = 20, Hh = ["top", "right", "bottom", "left", "width", "height", "size", 
 }, ki = function(o) {
   var r = o && o.ownerDocument && o.ownerDocument.defaultView;
   return r || ra;
-}, Yp = ca(0, 0, 0, 0);
+}, Kp = ca(0, 0, 0, 0);
 function ia(o) {
   return parseFloat(o) || 0;
 }
@@ -17105,44 +17154,44 @@ function Ku(o) {
     return a + ia(c);
   }, 0);
 }
-function jh(o) {
+function qh(o) {
   for (var r = ["top", "right", "bottom", "left"], i = {}, a = 0, s = r; a < s.length; a++) {
     var c = s[a], u = o["padding-" + c];
     i[c] = ia(u);
   }
   return i;
 }
-function qh(o) {
+function Fh(o) {
   var r = o.getBBox();
   return ca(0, 0, r.width, r.height);
 }
-function Fh(o) {
+function Uh(o) {
   var r = o.clientWidth, i = o.clientHeight;
   if (!r && !i)
-    return Yp;
-  var a = ki(o).getComputedStyle(o), s = jh(a), c = s.left + s.right, u = s.top + s.bottom, p = ia(a.width), g = ia(a.height);
-  if (a.boxSizing === "border-box" && (Math.round(p + c) !== r && (p -= Ku(a, "left", "right") + c), Math.round(g + u) !== i && (g -= Ku(a, "top", "bottom") + u)), !Wh(o)) {
+    return Kp;
+  var a = ki(o).getComputedStyle(o), s = qh(a), c = s.left + s.right, u = s.top + s.bottom, p = ia(a.width), g = ia(a.height);
+  if (a.boxSizing === "border-box" && (Math.round(p + c) !== r && (p -= Ku(a, "left", "right") + c), Math.round(g + u) !== i && (g -= Ku(a, "top", "bottom") + u)), !Vh(o)) {
     var _ = Math.round(p + c) - r, f = Math.round(g + u) - i;
     Math.abs(_) !== 1 && (p -= _), Math.abs(f) !== 1 && (g -= f);
   }
   return ca(s.left, s.top, p, g);
 }
-var Uh = /* @__PURE__ */ function() {
+var Wh = /* @__PURE__ */ function() {
   return typeof SVGGraphicsElement < "u" ? function(o) {
     return o instanceof ki(o).SVGGraphicsElement;
   } : function(o) {
     return o instanceof ki(o).SVGElement && typeof o.getBBox == "function";
   };
 }();
-function Wh(o) {
+function Vh(o) {
   return o === ki(o).document.documentElement;
 }
-function Vh(o) {
-  return wl ? Uh(o) ? qh(o) : Fh(o) : Yp;
-}
 function Gh(o) {
+  return wl ? Wh(o) ? Fh(o) : Uh(o) : Kp;
+}
+function Yh(o) {
   var r = o.x, i = o.y, a = o.width, s = o.height, c = typeof DOMRectReadOnly < "u" ? DOMRectReadOnly : Object, u = Object.create(c.prototype);
-  return Gp(u, {
+  return Yp(u, {
     x: r,
     y: i,
     width: a,
@@ -17156,34 +17205,34 @@ function Gh(o) {
 function ca(o, r, i, a) {
   return { x: o, y: r, width: i, height: a };
 }
-var Yh = (
+var Kh = (
   /** @class */
   function() {
     function o(r) {
       this.broadcastWidth = 0, this.broadcastHeight = 0, this.contentRect_ = ca(0, 0, 0, 0), this.target = r;
     }
     return o.prototype.isActive = function() {
-      var r = Vh(this.target);
+      var r = Gh(this.target);
       return this.contentRect_ = r, r.width !== this.broadcastWidth || r.height !== this.broadcastHeight;
     }, o.prototype.broadcastRect = function() {
       var r = this.contentRect_;
       return this.broadcastWidth = r.width, this.broadcastHeight = r.height, r;
     }, o;
   }()
-), Kh = (
+), Xh = (
   /** @class */
   /* @__PURE__ */ function() {
     function o(r, i) {
-      var a = Gh(i);
-      Gp(this, { target: r, contentRect: a });
+      var a = Yh(i);
+      Yp(this, { target: r, contentRect: a });
     }
     return o;
   }()
-), Xh = (
+), Qh = (
   /** @class */
   function() {
     function o(r, i, a) {
-      if (this.activeObservations_ = [], this.observations_ = new Vp(), typeof r != "function")
+      if (this.activeObservations_ = [], this.observations_ = new Gp(), typeof r != "function")
         throw new TypeError("The callback provided as parameter 1 is not a function.");
       this.callback_ = r, this.controller_ = i, this.callbackCtx_ = a;
     }
@@ -17194,7 +17243,7 @@ var Yh = (
         if (!(r instanceof ki(r).Element))
           throw new TypeError('parameter 1 is not of type "Element".');
         var i = this.observations_;
-        i.has(r) || (i.set(r, new Yh(r)), this.controller_.addObserver(this), this.controller_.refresh());
+        i.has(r) || (i.set(r, new Kh(r)), this.controller_.addObserver(this), this.controller_.refresh());
       }
     }, o.prototype.unobserve = function(r) {
       if (!arguments.length)
@@ -17215,7 +17264,7 @@ var Yh = (
     }, o.prototype.broadcastActive = function() {
       if (this.hasActive()) {
         var r = this.callbackCtx_, i = this.activeObservations_.map(function(a) {
-          return new Kh(a.target, a.broadcastRect());
+          return new Xh(a.target, a.broadcastRect());
         });
         this.callback_.call(r, i, r), this.clearActive();
       }
@@ -17225,7 +17274,7 @@ var Yh = (
       return this.activeObservations_.length > 0;
     }, o;
   }()
-), Kp = typeof WeakMap < "u" ? /* @__PURE__ */ new WeakMap() : new Vp(), Xp = (
+), Xp = typeof WeakMap < "u" ? /* @__PURE__ */ new WeakMap() : new Gp(), Qp = (
   /** @class */
   /* @__PURE__ */ function() {
     function o(r) {
@@ -17233,8 +17282,8 @@ var Yh = (
         throw new TypeError("Cannot call a class as a function.");
       if (!arguments.length)
         throw new TypeError("1 argument required, but only 0 present.");
-      var i = $h.getInstance(), a = new Xh(r, i, this);
-      Kp.set(this, a);
+      var i = jh.getInstance(), a = new Qh(r, i, this);
+      Xp.set(this, a);
     }
     return o;
   }()
@@ -17244,25 +17293,25 @@ var Yh = (
   "unobserve",
   "disconnect"
 ].forEach(function(o) {
-  Xp.prototype[o] = function() {
+  Qp.prototype[o] = function() {
     var r;
-    return (r = Kp.get(this))[o].apply(r, arguments);
+    return (r = Xp.get(this))[o].apply(r, arguments);
   };
 });
-var Qh = function() {
-  return typeof ra.ResizeObserver < "u" ? ra.ResizeObserver : Xp;
+var Jh = function() {
+  return typeof ra.ResizeObserver < "u" ? ra.ResizeObserver : Qp;
 }();
-const Jh = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const Zh = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Qh
-}, Symbol.toStringTag, { value: "Module" })), Zh = /* @__PURE__ */ ph(Jh);
+  default: Jh
+}, Symbol.toStringTag, { value: "Module" })), ef = /* @__PURE__ */ mh(Zh);
 var Xu;
-function ef() {
+function tf() {
   if (Xu) return Fo;
   Xu = 1, Object.defineProperty(Fo, "__esModule", {
     value: !0
   }), Fo.default = R;
-  var o = u(It()), r = c(/* @__PURE__ */ Nr()), i = c(Zh), a = c(la());
+  var o = u(It()), r = c(/* @__PURE__ */ Nr()), i = c(ef), a = c(la());
   const s = ["measureBeforeMount"];
   function c(z) {
     return z && z.__esModule ? z : { default: z };
@@ -17374,28 +17423,28 @@ function ef() {
   return Fo;
 }
 var Qu;
-function tf() {
+function rf() {
   return Qu || (Qu = 1, function(o) {
-    o.exports = Up().default, o.exports.utils = Ei(), o.exports.calculateUtils = Rl(), o.exports.Responsive = Lh().default, o.exports.Responsive.utils = Wp(), o.exports.WidthProvider = ef().default;
+    o.exports = Wp().default, o.exports.utils = Ei(), o.exports.calculateUtils = Rl(), o.exports.Responsive = Oh().default, o.exports.Responsive.utils = Vp(), o.exports.WidthProvider = tf().default;
   }(Zs)), Zs.exports;
 }
-var Ju = tf();
-const rf = { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }, ur = { lg: 12, md: 8, sm: 4, xs: 2, xxs: 2 }, Qp = { S: { w: 3, h: 3 }, M: { w: 3, h: 4 }, L: { w: 6, h: 4 }, XL: { w: 6, h: 8 } }, Fe = (o, r, i, a, s) => ({ i: o, x: r, y: i, w: a, h: s, minW: Math.min(a, 3), minH: 2, maxW: 12, maxH: 12 }), Ko = { lg: [Fe("activity-history", 0, 0, 3, 4), Fe("automations", 3, 0, 3, 4), Fe("backup-restore", 6, 0, 3, 4), Fe("security-status", 9, 0, 3, 3), Fe("access-control", 0, 5, 6, 3), Fe("alarm-configuration", 6, 4, 6, 8)], md: [Fe("activity-history", 0, 0, 4, 4), Fe("automations", 4, 0, 4, 4), Fe("backup-restore", 0, 4, 4, 4), Fe("access-control", 4, 4, 4, 3), Fe("alarm-configuration", 0, 8, 8, 8), Fe("security-status", 0, 16, 4, 3)], sm: [Fe("activity-history", 0, 0, 4, 4), Fe("automations", 0, 4, 4, 4), Fe("backup-restore", 0, 8, 4, 4), Fe("access-control", 0, 12, 4, 3), Fe("alarm-configuration", 0, 15, 4, 8), Fe("security-status", 0, 23, 4, 3)], xs: [Fe("activity-history", 0, 0, 2, 4), Fe("automations", 0, 4, 2, 4), Fe("backup-restore", 0, 8, 2, 4), Fe("access-control", 0, 12, 2, 3), Fe("alarm-configuration", 0, 15, 2, 8), Fe("security-status", 0, 23, 2, 3)], xxs: [Fe("activity-history", 0, 0, 2, 4), Fe("automations", 0, 4, 2, 4), Fe("backup-restore", 0, 8, 2, 4), Fe("access-control", 0, 12, 2, 3), Fe("alarm-configuration", 0, 15, 2, 8), Fe("security-status", 0, 23, 2, 3)] };
+var Ju = rf();
+const nf = { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }, ur = { lg: 12, md: 8, sm: 4, xs: 2, xxs: 2 }, Jp = { S: { w: 3, h: 3 }, M: { w: 3, h: 4 }, L: { w: 6, h: 4 }, XL: { w: 6, h: 8 } }, Fe = (o, r, i, a, s) => ({ i: o, x: r, y: i, w: a, h: s, minW: Math.min(a, 3), minH: 2, maxW: 12, maxH: 12 }), Ko = { lg: [Fe("activity-history", 0, 0, 3, 4), Fe("automations", 3, 0, 3, 4), Fe("backup-restore", 6, 0, 3, 4), Fe("security-status", 9, 0, 3, 3), Fe("access-control", 0, 5, 6, 3), Fe("alarm-configuration", 6, 4, 6, 8)], md: [Fe("activity-history", 0, 0, 4, 4), Fe("automations", 4, 0, 4, 4), Fe("backup-restore", 0, 4, 4, 4), Fe("access-control", 4, 4, 4, 3), Fe("alarm-configuration", 0, 8, 8, 8), Fe("security-status", 0, 16, 4, 3)], sm: [Fe("activity-history", 0, 0, 4, 4), Fe("automations", 0, 4, 4, 4), Fe("backup-restore", 0, 8, 4, 4), Fe("access-control", 0, 12, 4, 3), Fe("alarm-configuration", 0, 15, 4, 8), Fe("security-status", 0, 23, 4, 3)], xs: [Fe("activity-history", 0, 0, 2, 4), Fe("automations", 0, 4, 2, 4), Fe("backup-restore", 0, 8, 2, 4), Fe("access-control", 0, 12, 2, 3), Fe("alarm-configuration", 0, 15, 2, 8), Fe("security-status", 0, 23, 2, 3)], xxs: [Fe("activity-history", 0, 0, 2, 4), Fe("automations", 0, 4, 2, 4), Fe("backup-restore", 0, 8, 2, 4), Fe("access-control", 0, 12, 2, 3), Fe("alarm-configuration", 0, 15, 2, 8), Fe("security-status", 0, 23, 2, 3)] };
 function kl(o, r, i) {
-  return Object.entries(Qp).map(([a, s]) => ({ size: a, distance: Math.abs(Math.min(s.w, i) - o) + Math.abs(s.h - r) })).sort((a, s) => a.distance - s.distance)[0]?.size ?? "S";
+  return Object.entries(Jp).map(([a, s]) => ({ size: a, distance: Math.abs(Math.min(s.w, i) - o) + Math.abs(s.h - r) })).sort((a, s) => a.distance - s.distance)[0]?.size ?? "S";
 }
-function Jp(o, r) {
-  const i = Qp[o];
+function Zp(o, r) {
+  const i = Jp[o];
   return { w: Math.min(i.w, r), h: i.h };
 }
-function nf(o, r) {
-  const i = kl(o.w, o.h, r), a = Jp(i, r);
+function of(o, r) {
+  const i = kl(o.w, o.h, r), a = Zp(i, r);
   return { ...o, w: a.w, h: a.h, x: Math.max(0, Math.min(o.x, r - a.w)), size: i };
 }
 function Sl(o, r) {
   return o.some((i) => i.i !== r.i && r.x < i.x + i.w && r.x + r.w > i.x && r.y < i.y + i.h && r.y + r.h > i.y);
 }
-function of(o, r, i) {
+function af(o, r, i) {
   for (let a = 0; a < 240; a++) for (let s = 0; s <= i - r.w; s++) {
     const c = { ...r, x: s, y: a };
     if (!Sl(o, c)) return c;
@@ -17414,7 +17463,7 @@ function Si(o) {
     r[i] = [...u, ...g];
   }), r;
 }
-class af {
+class sf {
   key(r, i) {
     return `argus:dashboard-layout:${r}:${i}`;
   }
@@ -17448,8 +17497,8 @@ class af {
     localStorage.removeItem(this.key(r, i));
   }
 }
-const sf = Ju.WidthProvider(Ju.Responsive);
-function lf({ widget: o, node: r, editing: i, size: a, onSize: s, onHide: c, onReset: u }) {
+const lf = Ju.WidthProvider(Ju.Responsive);
+function cf({ widget: o, node: r, editing: i, size: a, onSize: s, onHide: c, onReset: u }) {
   const p = pt.useRef(null);
   return pt.useLayoutEffect(() => {
     p.current?.appendChild(r), r.draggable = !1, r.querySelector(":scope > .panel-edit-overlay")?.remove(), i ? r.setAttribute("inert", "") : r.removeAttribute("inert");
@@ -17470,7 +17519,7 @@ function lf({ widget: o, node: r, editing: i, size: a, onSize: s, onHide: c, onR
     /* @__PURE__ */ $e.jsx("div", { className: `argus-widget__content${o.kind === "access-control" ? " argus-widget__content--access" : ""}`, ref: p })
   ] });
 }
-function cf({ widgets: o, nodes: r, storage: i, userId: a, dashboardId: s, onEditing: c, registerEditor: u }) {
+function df({ widgets: o, nodes: r, storage: i, userId: a, dashboardId: s, onEditing: c, registerEditor: u }) {
   const p = pt.useMemo(() => Object.fromEntries(o.map((K) => [K.id, K.visible])), [o]), [g, _] = pt.useState(Ko), [f, h] = pt.useState(p), [v, A] = pt.useState(!1), [R, z] = pt.useState(!1), [E, S] = pt.useState("lg"), [y, w] = pt.useState(""), b = pt.useRef(Ko), k = pt.useRef(), C = pt.useRef(!1);
   pt.useEffect(() => {
     u(A);
@@ -17497,18 +17546,18 @@ function cf({ widgets: o, nodes: r, storage: i, userId: a, dashboardId: s, onEdi
     const ie = { ...f, [K]: Z };
     h(ie), i.saveVisibility?.(a, s, ie), w(Z ? "Widget visible" : "Widget oculto");
   }, F = (K, Z, ie) => {
-    const G = b.current, ce = G[E] || [], oe = ce.filter((xe) => xe.i !== K), T = Sl(oe, Z) ? of(oe, Z, ur[E]) : Z, W = { ...G, [E]: ce.map((xe) => xe.i === K ? T : xe) };
+    const G = b.current, ce = G[E] || [], oe = ce.filter((xe) => xe.i !== K), T = Sl(oe, Z) ? af(oe, Z, ur[E]) : Z, W = { ...G, [E]: ce.map((xe) => xe.i === K ? T : xe) };
     I(W, !0), w(ie);
   }, V = (K, Z) => {
     const ie = (b.current[E] || []).find((ce) => ce.i === K);
     if (!ie) return;
-    const G = Jp(Z, ur[E]);
+    const G = Zp(Z, ur[E]);
     F(K, { ...ie, ...G, x: Math.max(0, Math.min(ie.x, ur[E] - G.w)) }, `Tamaño ${Z}`);
   }, Q = (K) => {
     const Z = (Ko[E] || []).find((ie) => ie.i === K);
     Z && F(K, { ...Z }, "Widget restablecido");
   }, re = (K, Z, ie) => {
-    const G = nf(ie, ur[E]);
+    const G = of(ie, ur[E]);
     F(ie.i, G, `Tamaño ${kl(G.w, G.h, ur[E])}`);
   }, ne = async () => {
     if (!confirm("¿Restablecer únicamente posiciones, tamaños y visibilidad del tablero?")) return;
@@ -17518,7 +17567,7 @@ function cf({ widgets: o, nodes: r, storage: i, userId: a, dashboardId: s, onEdi
   }, pe = g[E] || [];
   return R ? /* @__PURE__ */ $e.jsxs("section", { className: `argus-dashboard ${v ? "argus-dashboard--editing" : ""}`, children: [
     /* @__PURE__ */ $e.jsx("div", { className: "argus-dashboard__feedback", "aria-live": "polite", children: v ? y : "" }),
-    /* @__PURE__ */ $e.jsx(zu, { children: /* @__PURE__ */ $e.jsx(sf, { className: "argus-dashboard-grid", layouts: g, breakpoints: rf, cols: ur, rowHeight: 92, margin: [16, 16], containerPadding: [16, 16], compactType: null, preventCollision: !0, allowOverlap: !1, isBounded: !0, isDraggable: v, isResizable: v, draggableHandle: ".argus-widget__drag-handle", resizeHandles: ["se"], onBreakpointChange: (K) => S(K), onLayoutChange: (K, Z) => {
+    /* @__PURE__ */ $e.jsx(zu, { children: /* @__PURE__ */ $e.jsx(lf, { className: "argus-dashboard-grid", layouts: g, breakpoints: nf, cols: ur, rowHeight: 92, margin: [16, 16], containerPadding: [16, 16], compactType: null, preventCollision: !0, allowOverlap: !1, isBounded: !0, isDraggable: v, isResizable: v, draggableHandle: ".argus-widget__drag-handle", resizeHandles: ["se"], onBreakpointChange: (K) => S(K), onLayoutChange: (K, Z) => {
       v && (_(Z), b.current = Z);
     }, onResizeStop: re, onDragStop: (K, Z, ie) => {
       const G = (b.current[E] || []).filter((ce) => ce.i !== ie.i);
@@ -17529,7 +17578,7 @@ function cf({ widgets: o, nodes: r, storage: i, userId: a, dashboardId: s, onEdi
       F(ie.i, ie, "Posición guardada");
     }, useCSSTransforms: !0, children: o.filter((K) => f[K.id] !== !1 && r.has(K.id)).map((K) => {
       const Z = pe.find((G) => G.i === K.id), ie = Z ? kl(Z.w, Z.h, ur[E]) : K.size;
-      return /* @__PURE__ */ $e.jsx("div", { children: /* @__PURE__ */ $e.jsx(zu, { children: /* @__PURE__ */ $e.jsx(lf, { widget: K, node: r.get(K.id), editing: v, size: ie, onSize: (G) => V(K.id, G), onHide: () => H(K.id, !1), onReset: () => Q(K.id) }) }) }, K.id);
+      return /* @__PURE__ */ $e.jsx("div", { children: /* @__PURE__ */ $e.jsx(zu, { children: /* @__PURE__ */ $e.jsx(cf, { widget: K, node: r.get(K.id), editing: v, size: ie, onSize: (G) => V(K.id, G), onHide: () => H(K.id, !1), onReset: () => Q(K.id) }) }) }, K.id);
     }) }) }),
     /* @__PURE__ */ $e.jsxs("nav", { className: "argus-dashboard__toolbar", "aria-label": "Edición del tablero", children: [
       /* @__PURE__ */ $e.jsx("button", { type: "button", onClick: () => A((K) => !K), children: v ? window._argusDashboardReadyBtn || "✓ Listo" : window._argusDashboardEditBtn || "✥ Editar tablero" }),
@@ -17543,7 +17592,7 @@ function cf({ widgets: o, nodes: r, storage: i, userId: a, dashboardId: s, onEdi
     ] })
   ] }) : /* @__PURE__ */ $e.jsx("section", { className: "argus-dashboard", children: /* @__PURE__ */ $e.jsx("div", { className: "argus-dashboard__feedback", "aria-live": "polite", children: "Cargando tablero…" }) });
 }
-function Zp(o) {
+function em(o) {
   const r = (i) => o._t?.(i) || i;
   return [
     { id: "activity-history", nativeId: "w-activity", kind: "activity-history", title: r("activity_log") || "Historial de actividad", size: "M", visible: !0, t: r },
@@ -17554,8 +17603,8 @@ function Zp(o) {
     { id: "security-status", nativeId: "w-github", kind: "security-status", title: r("support_title") || "Estado y soporte", size: "S", visible: !0, t: r }
   ];
 }
-Zp({});
-class df extends af {
+em({});
+class uf extends sf {
   constructor(r) {
     super(), this.panel = r;
   }
@@ -17584,45 +17633,45 @@ class df extends af {
     await super.reset(r, i), await this.remote({ layouts: Si(null), visibility: {} });
   }
 }
-function em(o) {
+function tm(o) {
   const r = o.shadowRoot?.getElementById("edit-widgets-label");
   (r?.closest("button") || r)?.remove(), o.shadowRoot?.querySelectorAll(".panel-edit-overlay,.widget-drag-handle").forEach((a) => a.remove());
   let i = o.shadowRoot?.getElementById("argus-react-editor-only");
   i || (i = document.createElement("style"), i.id = "argus-react-editor-only", i.textContent = "#edit-widgets-label,.panel-edit-overlay,.widget-drag-handle{display:none!important}", o.shadowRoot.appendChild(i));
 }
-function uf(o) {
-  em(o);
+function pf(o) {
+  tm(o);
   const r = o.shadowRoot?.getElementById("widget-grid"), i = o._dashboard?.entry_id || o._dashboard?.entries?.[0]?.entry_id;
   if (!r || !i || o._argusReactRoot) return;
   let a = o.shadowRoot.getElementById("argus-react-dashboard-style");
-  if (a || (a = document.createElement("style"), a.id = "argus-react-dashboard-style", a.textContent = xh + wh + kh, o.shadowRoot.appendChild(a)), !o.shadowRoot.getElementById("argus-access-scroll-fix")) {
+  if (a || (a = document.createElement("style"), a.id = "argus-react-dashboard-style", a.textContent = wh + kh + Sh, o.shadowRoot.appendChild(a)), !o.shadowRoot.getElementById("argus-access-scroll-fix")) {
     const g = document.createElement("style");
     g.id = "argus-access-scroll-fix", g.textContent = ".argus-widget__content--access{display:flex;min-height:0;overflow:hidden}.argus-widget__content--access>#w-access{display:flex!important;flex-direction:column!important;width:100%!important;height:100%!important;min-height:0!important;max-height:none!important;overflow:hidden!important}.argus-widget__content--access>#w-access>.panel-head{flex:0 0 auto!important}.argus-widget__content--access>#w-access>#access-workspace{display:block!important;flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;padding-right:4px}", o.shadowRoot.appendChild(g);
   }
-  const s = Zp(o), c = /* @__PURE__ */ new Map();
+  const s = em(o), c = /* @__PURE__ */ new Map();
   s.forEach((g) => {
     const _ = o.shadowRoot.getElementById(g.nativeId);
     _ && c.set(g.id, _);
   });
   const u = document.createElement("div");
   u.id = "argus-react-dashboard-root", r.appendChild(u);
-  const p = vh.createRoot(u);
-  o._argusReactRoot = p, p.render(/* @__PURE__ */ $e.jsx(cf, { widgets: s, nodes: c, storage: new df(o), userId: o._currentProfile?.id || o._hass?.user?.id || "anonymous", dashboardId: i, onEditing: (g) => {
+  const p = xh.createRoot(u);
+  o._argusReactRoot = p, p.render(/* @__PURE__ */ $e.jsx(df, { widgets: s, nodes: c, storage: new uf(o), userId: o._currentProfile?.id || o._hass?.user?.id || "anonymous", dashboardId: i, onEditing: (g) => {
     o._widgetEditing = g, r.classList.toggle("editing", g);
   }, registerEditor: (g) => {
     o._argusReactSetEditing = g;
   } }));
 }
-function pf(o) {
+function mf(o) {
   if (!o || o.__argusReactDashboard) return;
   o.__argusReactDashboard = !0;
   const r = o.prototype, i = r.connectedCallback, a = r._load;
   r.connectedCallback = function() {
     const s = i?.call(this);
-    return em(this), s;
+    return tm(this), s;
   }, r._load = async function() {
     const s = await a?.call(this);
-    return uf(this), s;
+    return pf(this), s;
   }, r._toggleWidgetEditing = function() {
     this._argusReactSetEditing?.(!this._widgetEditing);
   };
@@ -17631,7 +17680,7 @@ function Zu(o) {
   const r = o._hass?.auth?.accessToken;
   return r ? { Authorization: `Bearer ${r}` } : {};
 }
-function mf(o) {
+function gf(o) {
   const r = o?.prototype;
   !r || r.__argusMediaClient || (r.__argusMediaClient = !0, r._loadUploadedFiles = async function() {
     try {
@@ -17661,7 +17710,7 @@ function mf(o) {
   });
 }
 const Uo = (o, r) => o.getElementById(r), Wo = (o, r, i) => o._t?.(r) ?? i;
-function gf(o) {
+function hf(o) {
   const r = o?.prototype;
   !r || r.__argusSecurityClient || (r.__argusSecurityClient = !0, r._savePin = async function() {
     const i = this.shadowRoot.getElementById("pin-status"), s = this._dashboard?.entries?.[0], c = Uo(this.shadowRoot, "current-pin")?.value ?? "", u = Uo(this.shadowRoot, "new-pin-1")?.value ?? "", p = Uo(this.shadowRoot, "new-pin-2")?.value ?? "", g = (_) => {
@@ -17689,21 +17738,21 @@ function gf(o) {
     a ? (a.textContent = i, a.className = "status err") : window.alert(i);
   });
 }
-const hf = `
+const ff = `
 .argus-cinematic-weather{position:absolute;inset:0;overflow:hidden;background:linear-gradient(to bottom,#0c3159,#69a9d5 62%,#c9d4d5)}
 .argus-cinematic-weather canvas{width:100%;height:100%;display:block;image-rendering:auto}
 .argus-weather-vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 56% 36%,transparent 16%,rgba(0,7,16,.1) 57%,rgba(0,4,12,.62) 100%)}
 .argus-overlay{position:absolute;inset:0;pointer-events:none}
 @media(prefers-reduced-motion:reduce){.argus-cinematic-weather{background:#0f172a}}
 `;
-function ff(o) {
+function _f(o) {
   const r = o.__argusWebgl;
   if (!r) return;
   cancelAnimationFrame(r.frame), r.observer?.disconnect(), document.removeEventListener("visibilitychange", r.visibility), r.gl.deleteBuffer(r.buffer), r.gl.deleteProgram(r.program);
   const i = r.gl.getExtension("WEBGL_lose_context");
   i && i.loseContext(), r.overlay?.remove(), delete o.__argusWebgl;
 }
-function _f(o) {
+function bf(o) {
   const r = o?.prototype;
   if (!r || r.__argusPremiumExperience) return;
   r.__argusPremiumExperience = !0;
@@ -17713,14 +17762,14 @@ function _f(o) {
     return queueMicrotask(() => {
       if (this.shadowRoot && !this.shadowRoot.getElementById("argus-premium-style")) {
         const c = document.createElement("style");
-        c.id = "argus-premium-style", c.textContent = hf, this.shadowRoot.append(c);
+        c.id = "argus-premium-style", c.textContent = ff, this.shadowRoot.append(c);
       }
     }), s;
   };
   const a = r.disconnectedCallback;
   r.disconnectedCallback = function() {
     const s = this.shadowRoot;
-    return s && s.querySelectorAll(".wx-webgl").forEach(ff), a?.call(this);
+    return s && s.querySelectorAll(".wx-webgl").forEach(_f), a?.call(this);
   };
 }
 const El = "argus-motion-system-v2049", Xo = "__argusMotionV2049", ep = ".user-card,.liquid-btn,.mode-btn,.lang-pill,.entry-fs,.fs-btn,.file-card-btn,.pick-row,.widget-size-btn,.widget-toggle-btn,.argus-disarm-btn,[data-login-digit],#btn-submit-login-pin,#btn-cancel-login,#btn-complete-setup,#btn-claim-admin", ol = `
@@ -17733,7 +17782,7 @@ const El = "argus-motion-system-v2049", Xo = "__argusMotionV2049", ep = ".user-c
 :host(.argus-perf-essential) .argus-motion-press{transition:none!important;transform:none!important}
 @media(prefers-reduced-motion:reduce){.argus-motion-press{transition:none!important;transform:none!important}}
 `;
-function bf(o) {
+function yf(o) {
   if (window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches) return "essential";
   const r = String(o._argusPerfProfile || o.dataset?.argusPerf || "").toLowerCase();
   return r === "essential" || o.classList.contains("argus-perf-essential") ? "essential" : r === "light" ? "light" : "full";
@@ -17754,7 +17803,7 @@ function tp(o) {
   };
   return Object.defineProperty(o, Xo, { value: r, writable: !0, configurable: !0 }), r;
 }
-function yf(o, r) {
+function vf(o, r) {
   const i = requestAnimationFrame(() => {
     o.rafs.delete(i), o.active && r();
   });
@@ -17775,21 +17824,21 @@ function zn(o) {
 function rp(o, r) {
   zn(o), o.profileControl = r, r?.classList.add("is-entering"), o.panel.shadowRoot?.getElementById("bootstrap-overlay")?.setAttribute("aria-busy", "true");
 }
-function vf(o) {
+function xf(o) {
   o.observer || !o.panel.shadowRoot || (o.observer = new MutationObserver((r) => {
-    r.some((i) => [...i.addedNodes].some((a) => a instanceof Element && a.id !== El)) && (o.observerFrame || (o.observerFrame = yf(o, () => {
+    r.some((i) => [...i.addedNodes].some((a) => a instanceof Element && a.id !== El)) && (o.observerFrame || (o.observerFrame = vf(o, () => {
       o.observerFrame = 0, Ol(o.panel);
     })));
   }), o.observer.observe(o.panel.shadowRoot, { childList: !0, subtree: !0, attributes: !1 }));
 }
-function xf(o) {
+function wf(o) {
   const r = o.panel.shadowRoot;
   if (!r) return;
   const i = (a) => {
     a && (a.classList.remove("argus-motion-press"), o.pressed.delete(a));
   };
   al(o, r, "pointerdown", (a) => {
-    if (bf(o.panel) === "essential") return;
+    if (yf(o.panel) === "essential") return;
     const c = a.target?.closest?.(ep);
     !c || c.disabled || (c.classList.add("argus-motion-press"), o.pressed.add(c));
   }, !0), ["pointerup", "pointercancel", "pointerleave"].forEach((a) => al(o, r, a, (s) => {
@@ -17801,16 +17850,16 @@ function xf(o) {
   }, !0);
 }
 function sl(o) {
-  o.active || !o.panel.shadowRoot || (o.active = !0, Ol(o.panel), xf(o), vf(o), o.api = Object.freeze({ animateView: () => {
+  o.active || !o.panel.shadowRoot || (o.active = !0, Ol(o.panel), wf(o), xf(o), o.api = Object.freeze({ animateView: () => {
   }, stagger: () => {
   }, transitionBackground: () => () => {
   }, animateDashboard: () => {
   } }));
 }
-function wf(o) {
+function kf(o) {
   o.active = !1, o.observer?.disconnect(), o.observer = null, o.observerFrame && cancelAnimationFrame(o.observerFrame), o.observerFrame = 0, o.rafs.forEach(cancelAnimationFrame), o.rafs.clear(), o.timers.forEach(clearTimeout), o.timers.clear(), o.cleanups.forEach((r) => r()), o.cleanups.clear(), o.pressed.forEach((r) => r.classList.remove("argus-motion-press")), o.pressed.clear(), zn(o);
 }
-function kf(o) {
+function Sf(o) {
   const r = o?.prototype;
   if (!r || r.__argusMotionSystemV2049) return;
   r.__argusMotionSystemV2049 = !0;
@@ -17820,7 +17869,7 @@ function kf(o) {
     return this.shadowRoot ? sl(u) : queueMicrotask(() => sl(u)), c;
   }, r.disconnectedCallback = function() {
     const c = this[Xo];
-    return c && wf(c), a?.call(this);
+    return c && kf(c), a?.call(this);
   }, r._load = async function(...c) {
     const u = tp(this);
     try {
@@ -17891,7 +17940,7 @@ function ll(o, r) {
     _?.dataset?.idx != null && _?.dataset?.action && o._handleAction?.(_.dataset.idx, _.dataset.action);
   }));
 }
-function Sf(o) {
+function Ef(o) {
   const r = o?.prototype;
   if (!r || r[ip]) return;
   r[ip] = !0;
@@ -17995,20 +18044,20 @@ function Sf(o) {
     return this._startClock?.(), p;
   };
 }
-const op = "argus-v2050-alarm-visuals", Ef = {
+const op = "argus-v2050-alarm-visuals", Af = {
   armed_home: /EN CASA|HOME|MAISON|EM CASA|CASA|在家|ДОМА/i,
   armed_away: /AUSENTE|AWAY|ABSENT|ASSENTE|外出|УШЁЛ/i,
   armed_night: /NOCHE|NIGHT|NUIT|NOITE|NOTTE|夜间|НОЧЬ/i,
   armed_vacation: /VACACIONES|VACATION|VACANCES|FÉRIAS|VACANZE|度假|ОТПУСК/i
 };
-function Af(o, r) {
+function Cf(o, r) {
   const i = r?.entity_id || r?.alarm_entity_id;
   return String(r?.state || r?.alarm_state || r?.attributes?.state || o._hass?.states?.[i]?.state || "").toLowerCase();
 }
 function cl(o, r, i) {
   o.classList.toggle("active", i), o.classList.toggle("argus-action-active", i), o.dataset.argusAction = r, r === "sos" && o.classList.toggle("flashing", i);
 }
-function Cf(o) {
+function zf(o) {
   const r = o.shadowRoot;
   if (!r) return;
   let i = r.getElementById(op);
@@ -18024,10 +18073,10 @@ function Cf(o) {
 }
 function dl(o) {
   if (!o.shadowRoot) return;
-  Cf(o);
+  zf(o);
   const r = o.shadowRoot.querySelectorAll(".entry");
   Array.from(r).forEach((i, a) => {
-    const s = o._dashboard?.entries?.[a] || {}, c = s.attributes || o._hass?.states?.[s.entity_id]?.attributes || {}, u = Af(o, s), p = c.arming_blocking_sensors || [], g = u === "arming" || !!c.arming_waiting_for_sensors || !!p.length;
+    const s = o._dashboard?.entries?.[a] || {}, c = s.attributes || o._hass?.states?.[s.entity_id]?.attributes || {}, u = Cf(o, s), p = c.arming_blocking_sensors || [], g = u === "arming" || !!c.arming_waiting_for_sensors || !!p.length;
     i.classList.toggle("argus-arming", g), i.classList.toggle("argus-waiting", g);
     const _ = i.querySelector(".entry-icon");
     let f = i.querySelector(".argus-shield-status");
@@ -18043,7 +18092,7 @@ function dl(o) {
       if (/SOS|PÁNICO|PANIC|PANIQUE|PÂNICO|PANICO|紧急|ПАНИКА/i.test(E)) cl(z, "sos", !!c.argus_panic_active);
       else if (/DESARMAR|DISARM|DESARMADO|DISARMED|DÉSARMER|DÉSARMÉ|OFF|已撤防|СНЯТО/i.test(E)) cl(z, "disarm", u === "disarmed");
       else {
-        const S = Object.entries(Ef).find(([, y]) => y.test(E));
+        const S = Object.entries(Af).find(([, y]) => y.test(E));
         S && cl(z, S[0], u === S[0]);
       }
     });
@@ -18054,7 +18103,7 @@ function dl(o) {
     });
   });
 }
-function zf(o) {
+function If(o) {
   const r = o?.prototype;
   if (!r || r.__v2050AlarmVisuals) return;
   r.__v2050AlarmVisuals = !0;
@@ -18089,8 +18138,8 @@ function Sn(o, r) {
   const i = (o._lang || o._manualLang || o._hass?.language || "es").toLowerCase().split(/[-_]/)[0];
   return (ul[i] || ul.es)[r] || ul.es[r] || r;
 }
-const If = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>', sp = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>', Pf = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>';
-function Nf(o) {
+const Pf = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>', sp = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>', Nf = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>';
+function Rf(o) {
   const r = o.shadowRoot;
   if (!r || r.getElementById(ap)) return;
   const i = document.createElement("style");
@@ -18344,7 +18393,7 @@ function cp(o, r, i, a, s, c, u, p) {
     _ && (h = R(I - f));
   }
   function y() {
-    _ && (_ = !1, s.style.cursor = "grab", h >= v * 0.8 ? r === "disarm" && Rf(o) ? (w(), z()) : (p(), z()) : z(), h = 0);
+    _ && (_ = !1, s.style.cursor = "grab", h >= v * 0.8 ? r === "disarm" && Lf(o) ? (w(), z()) : (p(), z()) : z(), h = 0);
   }
   s.addEventListener("mousedown", (I) => {
     I.preventDefault(), E(I.clientX);
@@ -18365,7 +18414,7 @@ function cp(o, r, i, a, s, c, u, p) {
   const b = u.querySelector("input"), k = u.querySelector(".pin-err");
   function C() {
     const I = b.value;
-    Lf(o, I) ? (u.classList.remove("open"), b.value = "", k.textContent = "", p()) : (b.classList.add("pin-shake"), k.textContent = Sn(o, "wrong_pin"), setTimeout(() => {
+    Of(o, I) ? (u.classList.remove("open"), b.value = "", k.textContent = "", p(I)) : (b.classList.add("pin-shake"), k.textContent = Sn(o, "wrong_pin"), setTimeout(() => {
       b.classList.remove("pin-shake"), k.textContent = "", b.value = "";
     }, 700));
   }
@@ -18375,14 +18424,14 @@ function cp(o, r, i, a, s, c, u, p) {
     u.classList.remove("open"), b.value = "", k.textContent = "";
   });
 }
-function Rf(o) {
+function Lf(o) {
   return !!(o._entries?.[0]?.pin_configured || o._dashboard?.entries?.[0]?.pin_configured || o._ui?.master_pin_configured || o._pinConfigured);
 }
-function Lf(o, r) {
+function Of(o, r) {
   return typeof o._verifyPin == "function" ? o._verifyPin(r) : typeof o._checkMasterPin == "function" ? o._checkMasterPin(r) : !1;
 }
-function Of(o, r, i) {
-  if (r.dataset.staInstalled) return;
+function Tf(o, r, i) {
+  if (r.querySelector(".argus-sta-wrap")) return;
   r.dataset.staInstalled = "1";
   const a = r.dataset.entityId || o._dashboard?.entries?.[i]?.entity_id || "";
   function s() {
@@ -18391,16 +18440,16 @@ function Of(o, r, i) {
   function c() {
     return !!o._hass?.states?.[a]?.attributes?.argus_panic_active;
   }
-  const { wrap: u, track: p, fill: g, thumb: _, label: f, pin: h } = lp("disarm", Sn(o, "slide_disarm"), If);
-  cp(o, "disarm", p, g, _, f, h, () => {
-    const C = a || o._dashboard?.entries?.[0]?.entity_id;
-    typeof o._send == "function" && o._send("argus/set_mode", { mode: "disarmed", entity_id: C }).catch(() => {
+  const { wrap: u, track: p, fill: g, thumb: _, label: f, pin: h } = lp("disarm", Sn(o, "slide_disarm"), Pf);
+  cp(o, "disarm", p, g, _, f, h, (C) => {
+    const I = o._dashboard?.entries?.[i]?.entry_id || "";
+    typeof o._send == "function" && o._send("argus/perform_alarm_action", { action: "disarm", entry_id: I, ...C ? { code: C } : {} }).catch(() => {
     });
   });
   const { wrap: v, track: A, fill: R, thumb: z, label: E, pin: S } = lp("sos", Sn(o, "slide_sos"), sp);
   cp(o, "sos", A, R, z, E, S, () => {
-    const C = c(), I = a || o._dashboard?.entries?.[0]?.entity_id;
-    typeof o._send == "function" && o._send("argus/sos", { entity_id: I, active: !C }).catch(() => {
+    const C = o._dashboard?.entries?.[i]?.entry_id || "";
+    typeof o._send == "function" && o._send("argus/perform_alarm_action", { action: "sos", entry_id: C }).catch(() => {
     });
   });
   const y = r.querySelector(".liquid-stack");
@@ -18409,19 +18458,19 @@ function Of(o, r, i) {
   w ? (w.parentNode.insertBefore(u, w.nextSibling), w.style.display = "none") : y.appendChild(u), b ? (b.parentNode.insertBefore(v, b.nextSibling), b.style.display = "none") : y.appendChild(v);
   function k() {
     const C = s(), I = c(), H = C !== "disarmed" && C !== "unavailable";
-    u.classList.toggle("sta-armed", H), A.classList.toggle("sos-pulsing", I), E.textContent = I ? Sn(o, "slide_sos_stop") : Sn(o, "slide_sos"), z.innerHTML = I ? Pf : sp;
+    u.classList.toggle("sta-armed", H), A.classList.toggle("sos-pulsing", I), E.textContent = I ? Sn(o, "slide_sos_stop") : Sn(o, "slide_sos"), z.innerHTML = I ? Nf : sp;
   }
   k(), r._staRefresh = k;
 }
-function Tf(o) {
-  Nf(o);
+function dp(o) {
+  Rf(o);
   const r = o.shadowRoot;
   r && r.querySelectorAll(".entry").forEach((i, a) => {
     if (!i.dataset.entityId) {
       const s = o._dashboard?.entries?.[a]?.entity_id;
       s && (i.dataset.entityId = s);
     }
-    Of(o, i, a), i._staRefresh?.();
+    Tf(o, i, a), i._staRefresh?.();
   });
 }
 function Mf(o) {
@@ -18430,7 +18479,9 @@ function Mf(o) {
   const r = o.prototype, i = r._renderEntries;
   if (r._renderEntries = function(...s) {
     const c = i?.call(this, ...s);
-    return requestAnimationFrame(() => Tf(this)), c;
+    return requestAnimationFrame(() => {
+      dp(this), setTimeout(() => dp(this), 100);
+    }), c;
   }, Object.getOwnPropertyDescriptor(r, "_hass")?.set || r.set_hass) {
     const s = r.set_hass;
     r.set_hass = function(c) {
@@ -18438,12 +18489,12 @@ function Mf(o) {
     };
   }
 }
-const dp = "argus-v2049-responsive-widgets", Bf = '#w-access,.access-view,.access-content,.access-sections,.users-list,.user-list,.users-grid,[role="tabpanel"],.users-modal,.access-modal,.argus-users-modal';
+const up = "argus-v2049-responsive-widgets", Bf = '#w-access,.access-view,.access-content,.access-sections,.users-list,.user-list,.users-grid,[role="tabpanel"],.users-modal,.access-modal,.argus-users-modal';
 function Hf(o) {
   const r = o.shadowRoot;
   if (!r) return;
-  let i = r.getElementById(dp);
-  i || (i = document.createElement("style"), i.id = dp, r.appendChild(i)), i.textContent = `
+  let i = r.getElementById(up);
+  i || (i = document.createElement("style"), i.id = up, r.appendChild(i)), i.textContent = `
 #w-access{display:flex!important;flex-direction:column!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;box-sizing:border-box!important}
 #w-access>.panel-head,#w-access>.access-summary,#w-access>.tabs{flex:0 0 auto!important}
 #w-access :is(.panel-body,#access-view,.access-view,.access-content,.access-sections,.users-list,.user-list,.users-grid,[role="tabpanel"]){flex:1 1 auto!important;min-width:0!important;min-height:0!important;max-height:none!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;scrollbar-gutter:stable!important;box-sizing:border-box!important}
@@ -18496,12 +18547,12 @@ function $f(o) {
     return Vo(this), p;
   };
 }
-const up = "argus-v2050-widget-layouts";
+const pp = "argus-v2050-widget-layouts";
 function jf(o) {
   const r = o.shadowRoot;
   if (!r) return;
-  let i = r.getElementById(up);
-  i || (i = document.createElement("style"), i.id = up, r.appendChild(i)), i.textContent = `
+  let i = r.getElementById(pp);
+  i || (i = document.createElement("style"), i.id = pp, r.appendChild(i)), i.textContent = `
 #w-access{display:flex!important;flex-direction:column!important;min-width:0!important;min-height:0!important;height:100%!important;overflow:hidden!important}
 #w-access .panel-body,#w-access #access-view,#w-access .access-view,#w-access .access-content,#w-access .users-list,#w-access .user-list{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;overscroll-behavior:contain!important}
 #w-backup{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:14px!important;padding:16px!important;box-sizing:border-box!important;height:100%!important;min-height:0!important;overflow:hidden!important;text-align:center!important}
@@ -18548,7 +18599,7 @@ function Ff(o) {
     return Go(this), p;
   };
 }
-const pp = "argus-more-info-hook-installed", mp = "argus-more-info-dialog-styles";
+const mp = "argus-more-info-hook-installed", gp = "argus-more-info-dialog-styles";
 function Uf(o, r) {
   if (!o || !o.startsWith("alarm_control_panel.")) return !1;
   if (o.includes("argus")) return !0;
@@ -18556,9 +18607,9 @@ function Uf(o, r) {
   return !!(i?.attributes?.argus_version || i?.attributes?.argus_entry_id);
 }
 function Wf(o) {
-  if (o.getElementById(mp)) return;
+  if (o.getElementById(gp)) return;
   const r = o.createElement("style");
-  r.id = mp, r.textContent = `
+  r.id = gp, r.textContent = `
     ha-more-info-dialog:has(.argus-more-info-active) ha-dialog,
     ha-more-info-dialog:has(.argus-more-info-active) .mdc-dialog__surface {
       --ha-dialog-border-radius: 28px !important;
@@ -18585,7 +18636,7 @@ function Wf(o) {
     }
   `, (o.head || o).appendChild(r);
 }
-function gp(o, r) {
+function hp(o, r) {
   if (!o) return;
   const i = o._entityId || o.entityId || o.params?.entityId;
   if (!Uf(i, r)) return;
@@ -18611,29 +18662,29 @@ function gp(o, r) {
   }
 }
 function Vf(o) {
-  if (window[pp]) return;
-  window[pp] = !0, Wf(document);
+  if (window[mp]) return;
+  window[mp] = !0, Wf(document);
   const r = (a) => {
     a.detail?.entityId && requestAnimationFrame(() => {
       const c = document.querySelector("home-assistant"), u = c?.shadowRoot?.querySelector("ha-more-info-dialog") || document.querySelector("ha-more-info-dialog");
-      u && gp(u, c?.hass);
+      u && hp(u, c?.hass);
     });
   };
   window.addEventListener("hass-more-info", r, { passive: !0 }), document.addEventListener("hass-more-info", r, { passive: !0 }), new MutationObserver(() => {
     const a = document.querySelector("home-assistant"), s = a?.shadowRoot?.querySelector("ha-more-info-dialog") || document.querySelector("ha-more-info-dialog");
-    s && gp(s, a?.hass);
+    s && hp(s, a?.hass);
   }).observe(document.body, { childList: !0, subtree: !0 });
 }
-const Gf = [{ id: "activity", size: "M", hidden: !1 }, { id: "modes", size: "M", hidden: !1 }, { id: "automations", size: "M", hidden: !1 }, { id: "access", size: "M", hidden: !1 }, { id: "backup", size: "S", hidden: !1 }, { id: "github", size: "S", hidden: !1 }], hp = { es: ["Configurar widgets", "Arrastrar", "Ocultar", "Mostrar", "Conectado", "Sin sensores configurados", "Todos los sensores están omitidos"], en: ["Configure widgets", "Drag", "Hide", "Show", "Connected", "No sensors configured", "All sensors are bypassed"], fr: ["Configurer les widgets", "Déplacer", "Masquer", "Afficher", "Connecté", "Aucun capteur configuré", "Tous les capteurs sont ignorés"], pt: ["Configurar widgets", "Arrastar", "Ocultar", "Mostrar", "Conectado", "Nenhum sensor configurado", "Todos os sensores estão ignorados"], it: ["Configura widget", "Trascina", "Nascondi", "Mostra", "Connesso", "Nessun sensore configurato", "Tutti i sensori sono esclusi"], zh: ["配置小组件", "拖动", "隐藏", "显示", "已连接", "未配置传感器", "所有传感器均已绕过"], ru: ["Настроить виджеты", "Перетащить", "Скрыть", "Показать", "Подключено", "Датчики не настроены", "Все датчики исключены"] }, Yf = (o) => {
+const Gf = [{ id: "activity", size: "M", hidden: !1 }, { id: "modes", size: "M", hidden: !1 }, { id: "automations", size: "M", hidden: !1 }, { id: "access", size: "M", hidden: !1 }, { id: "backup", size: "S", hidden: !1 }, { id: "github", size: "S", hidden: !1 }], fp = { es: ["Configurar widgets", "Arrastrar", "Ocultar", "Mostrar", "Conectado", "Sin sensores configurados", "Todos los sensores están omitidos"], en: ["Configure widgets", "Drag", "Hide", "Show", "Connected", "No sensors configured", "All sensors are bypassed"], fr: ["Configurer les widgets", "Déplacer", "Masquer", "Afficher", "Connecté", "Aucun capteur configuré", "Tous les capteurs sont ignorés"], pt: ["Configurar widgets", "Arrastar", "Ocultar", "Mostrar", "Conectado", "Nenhum sensor configurado", "Todos os sensores estão ignorados"], it: ["Configura widget", "Trascina", "Nascondi", "Mostra", "Connesso", "Nessun sensore configurato", "Tutti i sensori sono esclusi"], zh: ["配置小组件", "拖动", "隐藏", "显示", "已连接", "未配置传感器", "所有传感器均已绕过"], ru: ["Настроить виджеты", "Перетащить", "Скрыть", "Показать", "Подключено", "Датчики не настроены", "Все датчики исключены"] }, Yf = (o) => {
   const r = String(o._manualLang || o._hass?.language || "en").toLowerCase().split(/[-_]/)[0];
-  return hp[r] || hp.en;
-}, fp = (o) => [...o?.children || []].filter((r) => r.classList.contains("panel") && !r.classList.contains("dashboard-instances")), pl = (o, r) => {
+  return fp[r] || fp.en;
+}, _p = (o) => [...o?.children || []].filter((r) => r.classList.contains("panel") && !r.classList.contains("dashboard-instances")), pl = (o, r) => {
   if (!o) return;
   const i = o.querySelector("[data-fullscreen]");
   let a = o.querySelector("[data-exit-fullscreen]");
   a || (a = document.createElement("button"), a.className = "ghost entry-exit-fs", a.dataset.exitFullscreen = "", a.textContent = "×", a.style.cssText = "position:absolute;top:16px;left:16px;z-index:100;padding:9px 13px;font-size:18px;background:rgba(0,0,0,.55);border-radius:14px;color:white;border:1px solid rgba(255,255,255,.25)", a.onclick = () => o.getRootNode().host._exitFullscreenView(), o.appendChild(a)), i && (i.style.display = r ? "none" : "block"), a.style.display = r ? "block" : "none";
 };
-function _p(o) {
+function bp(o) {
   if (o.shadowRoot?.getElementById("argus-ui-fix")) return;
   const r = document.createElement("style");
   r.id = "argus-ui-fix", r.textContent = ".grid.editing .panel.widget-hidden-preview{opacity:.48!important}.widget-drag-handle{min-height:44px;display:flex;align-items:center;justify-content:center}.ios-fullscreen .entry-content.security-console{display:grid!important;grid-template-columns:minmax(230px,340px) minmax(150px,1fr) minmax(230px,380px)!important;grid-template-rows:auto minmax(0,1fr)!important;grid-template-areas:'hud hud hud' 'modes icon sensors'!important;gap:20px 32px!important;padding:56px 48px 32px!important;overflow:hidden!important}.ios-fullscreen .console-hud{grid-area:hud!important}.ios-fullscreen .liquid-stack{grid-area:modes!important;width:100%!important}.ios-fullscreen .entry-icon{grid-area:icon!important}.ios-fullscreen .console-sensors{grid-area:sensors!important;max-height:60vh!important;overflow:auto!important}@media(max-width:900px){.ios-fullscreen .entry-content.security-console{grid-template-columns:1fr!important;grid-template-rows:auto auto auto auto!important;grid-template-areas:'hud' 'icon' 'modes' 'sensors'!important;padding:64px 18px 22px!important;overflow-y:auto!important}.ios-fullscreen .liquid-stack,.ios-fullscreen .console-sensors{max-width:420px!important;margin:auto!important}}", o.shadowRoot.appendChild(r);
@@ -18652,13 +18703,13 @@ function Kf(o) {
   o.__uiAudit = !0;
   const r = o.prototype, i = r.connectedCallback, a = r._applyTranslations, s = r._renderEntries, c = r._initWidgetGrid, u = r._saveWidgetLayout;
   r.connectedCallback = function() {
-    return _p(this), i?.call(this);
+    return bp(this), i?.call(this);
   }, r._applyTranslations = function() {
     const p = a?.call(this);
     return ml(this), p;
   }, r._renderEntries = function() {
     const p = s?.call(this);
-    return _p(this), this.shadowRoot?.querySelectorAll(".entry").forEach((g, _) => pl(g, this._fullscreenIdx === _ || g.classList.contains("ios-fullscreen"))), ml(this), p;
+    return bp(this), this.shadowRoot?.querySelectorAll(".entry").forEach((g, _) => pl(g, this._fullscreenIdx === _ || g.classList.contains("ios-fullscreen"))), ml(this), p;
   }, r._toggleFullscreen = function(p) {
     if (p = p || this.shadowRoot?.querySelector(".entry"), !p) return;
     this._fullscreenIdx = Number(p.querySelector("[data-fullscreen]")?.dataset.fullscreen || 0), this._kioskLocked = !1, this._kioskTarget = p, this.classList.add("fullscreen-active"), p.classList.add("ios-fullscreen"), pl(p, !0), document.body.style.overflow = "hidden", (p.requestFullscreen || p.webkitRequestFullscreen)?.call(p).catch?.(() => {
@@ -18682,13 +18733,13 @@ function Kf(o) {
     }
     c?.call(this);
     const p = this.shadowRoot?.getElementById("widget-grid");
-    fp(p).forEach((g) => g.draggable = !!this._widgetEditing), p && !p._auditDrag && (p._auditDrag = !0, p.addEventListener("dragover", (g) => {
+    _p(p).forEach((g) => g.draggable = !!this._widgetEditing), p && !p._auditDrag && (p._auditDrag = !0, p.addEventListener("dragover", (g) => {
       if (!this._widgetEditing) return;
       g.preventDefault();
       const _ = p.querySelector(".dragging");
       if (!_) return;
       let f = null, h = 1 / 0;
-      if (fp(p).filter((v) => v !== _).forEach((v) => {
+      if (_p(p).filter((v) => v !== _).forEach((v) => {
         const A = v.getBoundingClientRect(), R = Math.hypot(g.clientX - A.x - A.width / 2, g.clientY - A.y - A.height / 2);
         R < h && (h = R, f = v);
       }), f) {
@@ -18716,7 +18767,7 @@ function Kf(o) {
     _ && (_.classList.toggle("widget-hidden-preview", g.hidden && this._widgetEditing), _.style.display = g.hidden && !this._widgetEditing ? "none" : ""), this._renderWidgetLayout(), this._saveWidgetLayout();
   };
 }
-function bp(o) {
+function yp(o) {
   if (o.shadowRoot?.getElementById("argus-grid-polish-style")) return;
   const r = document.createElement("style");
   r.id = "argus-grid-polish-style", r.textContent = `
@@ -18750,13 +18801,13 @@ function Xf(o) {
   o.__gridPolish = !0;
   const r = o.prototype, i = r.connectedCallback, a = r._initWidgetGrid;
   r.connectedCallback = function() {
-    return bp(this), i?.call(this);
+    return yp(this), i?.call(this);
   }, r._initWidgetGrid = function() {
     const s = a?.call(this);
-    return bp(this), s;
+    return yp(this), s;
   };
 }
-const yp = {
+const vp = {
   es: { on: "Conectado", off: "Argus desconectado · HA sin conexión" },
   en: { on: "Connected", off: "Argus disconnected · HA offline" },
   fr: { on: "Connecté", off: "Argus déconnecté · HA hors ligne" },
@@ -18772,7 +18823,7 @@ const yp = {
   uk: { on: "Підключено", off: "Argus відключено · HA офлайн" }
 }, Qf = (o) => {
   const r = String(o._manualLang || o._hass?.language || o._hass?.locale?.language || "en").toLowerCase().split(/[-_]/)[0];
-  return yp[r] || yp.en;
+  return vp[r] || vp.en;
 };
 function Jf(o) {
   if (o.shadowRoot?.getElementById("argus-fullscreen-polish-style")) return;
@@ -18820,7 +18871,7 @@ function Qo(o) {
     u.className = "argus-connection-label", u.textContent = i ? r.on : r.off, s.append(c, u);
   });
 }
-function vp(o) {
+function xp(o) {
   Jf(o), Qo(o);
 }
 function t_(o) {
@@ -18829,12 +18880,12 @@ function t_(o) {
   const r = o.prototype, i = r.connectedCallback, a = r.disconnectedCallback, s = r._renderEntries, c = Object.getOwnPropertyDescriptor(r, "hass");
   r.connectedCallback = function() {
     const u = i?.call(this);
-    return this._argusOnlineHandler = () => Qo(this), window.addEventListener("online", this._argusOnlineHandler), window.addEventListener("offline", this._argusOnlineHandler), clearInterval(this._argusConnectivityTimer), this._argusConnectivityTimer = setInterval(() => Qo(this), 2500), queueMicrotask(() => vp(this)), u;
+    return this._argusOnlineHandler = () => Qo(this), window.addEventListener("online", this._argusOnlineHandler), window.addEventListener("offline", this._argusOnlineHandler), clearInterval(this._argusConnectivityTimer), this._argusConnectivityTimer = setInterval(() => Qo(this), 2500), queueMicrotask(() => xp(this)), u;
   }, r.disconnectedCallback = function() {
     return window.removeEventListener("online", this._argusOnlineHandler), window.removeEventListener("offline", this._argusOnlineHandler), clearInterval(this._argusConnectivityTimer), a?.call(this);
   }, r._renderEntries = function() {
     const u = s?.call(this);
-    return vp(this), u;
+    return xp(this), u;
   }, c?.set && Object.defineProperty(r, "hass", { configurable: !0, enumerable: c.enumerable, get: c.get, set(u) {
     c.set.call(this, u), queueMicrotask(() => Qo(this));
   } });
@@ -18857,14 +18908,14 @@ function r_() {
     return null;
   }
 }
-function tm(o) {
+function rm(o) {
   try {
     const r = JSON.stringify(o);
     localStorage.setItem("argus-widgets-v2", r), localStorage.setItem("argus-widgets-v1", r);
   } catch {
   }
 }
-function xp(o) {
+function wp(o) {
   if (o.shadowRoot?.getElementById("argus-v2012-audit-style")) return;
   const r = document.createElement("style");
   r.id = "argus-v2012-audit-style", r.textContent = `
@@ -18905,7 +18956,7 @@ function o_(o) {
   return oa(a) || In(na);
 }
 function a_(o, r) {
-  o._widgetConfig = In(r), tm(r), o._ui = o._ui || {};
+  o._widgetConfig = In(r), rm(r), o._ui = o._ui || {};
   const i = { ...o._ui.dashboard || {}, widget_layout: In(r) };
   o._ui.dashboard = i;
   const a = { dashboard: i };
@@ -18921,7 +18972,7 @@ function s_(o) {
   o.__v2012AuditFixes = !0;
   const r = o.prototype, i = r.connectedCallback, a = r.disconnectedCallback, s = r._load, c = r._renderEntries, u = r._initWidgetGrid, p = r._saveWidgetLayout, g = r._persistPersonalization, _ = r._applyTranslations, f = r._exitFullscreenView;
   r.connectedCallback = function() {
-    xp(this);
+    wp(this);
     const h = i?.call(this);
     return this._argusExitCapture = (v) => {
       this._argusExiting && v.stopImmediatePropagation();
@@ -18935,10 +18986,10 @@ function s_(o) {
     return _?.call(this);
   }, r._renderEntries = function() {
     const h = i_(this), v = c?.call(this);
-    return xp(this), requestAnimationFrame(() => n_(this, h)), v;
+    return wp(this), requestAnimationFrame(() => n_(this, h)), v;
   }, r._initWidgetGrid = function() {
     const h = oa(this._ui?.dashboard?.widget_layout), v = r_();
-    this._widgetConfig = In(h || v || na), tm(this._widgetConfig), this._widgetConfigLoaded = !0;
+    this._widgetConfig = In(h || v || na), rm(this._widgetConfig), this._widgetConfigLoaded = !0;
     const A = u?.call(this);
     return this._renderWidgetLayout?.(), A;
   }, r._saveWidgetLayout = function() {
@@ -18962,8 +19013,8 @@ function s_(o) {
     }
   };
 }
-const aa = ["essential", "light", "balanced", "full"], rm = "argus-performance-v1", l_ = 6e3, c_ = 18, d_ = 3, u_ = 25e3;
-function im() {
+const aa = ["essential", "light", "balanced", "full"], im = "argus-performance-v1", l_ = 6e3, c_ = 18, d_ = 3, u_ = 25e3;
+function nm() {
   try {
     const o = navigator.userAgent || "", r = navigator.platform || "", i = navigator.hardwareConcurrency || 0, a = navigator.deviceMemory || 0;
     let s = 0;
@@ -18974,16 +19025,16 @@ function im() {
     return "default";
   }
 }
-function nm() {
+function om() {
   try {
-    return JSON.parse(localStorage.getItem(rm) || "{}");
+    return JSON.parse(localStorage.getItem(im) || "{}");
   } catch {
     return {};
   }
 }
 function p_(o) {
   try {
-    localStorage.setItem(rm, JSON.stringify(o));
+    localStorage.setItem(im, JSON.stringify(o));
   } catch {
   }
 }
@@ -19041,11 +19092,11 @@ function Tl(o, r, i) {
 async function b_(o) {
   const r = m_(), i = await g_();
   o._argusPerfCaps = r, o._argusPerfFps = i, o._argusPerfAuto = h_(r, i);
-  const a = nm(), s = im();
+  const a = om(), s = nm();
   a[s] = { ...a[s] || {}, auto: o._argusPerfAuto, checkedAt: Date.now() }, p_(a), Tl(o, o._argusPerfAuto, "auto");
 }
 function y_(o) {
-  om(o);
+  am(o);
   let r = performance.now(), i = r, a = 0, s = 0;
   function c(u) {
     const p = u - i;
@@ -19060,7 +19111,7 @@ function y_(o) {
   }
   o._argusPerfMonitorFrame = requestAnimationFrame(c);
 }
-function om(o) {
+function am(o) {
   o._argusPerfMonitorFrame && (cancelAnimationFrame(o._argusPerfMonitorFrame), o._argusPerfMonitorFrame = null);
 }
 function v_(o) {
@@ -19069,19 +19120,19 @@ function v_(o) {
   const r = o.prototype, i = r.connectedCallback, a = r.disconnectedCallback, s = r._load, c = r._applyTranslations;
   r.connectedCallback = function() {
     __(this);
-    const u = nm()[im()] || {};
+    const u = om()[nm()] || {};
     this._argusPerfAuto = f_(u.auto) || "balanced", Tl(this, this._argusPerfAuto, "auto");
     const p = i?.call(this);
     return b_(this), y_(this), p;
   }, r.disconnectedCallback = function() {
-    return om(this), a?.call(this);
+    return am(this), a?.call(this);
   }, r._load = async function() {
     return await s?.call(this);
   }, r._applyTranslations = function() {
     return c?.call(this);
   };
 }
-function wp(o) {
+function kp(o) {
   if (o.shadowRoot?.getElementById("argus-visual-container-fixes")) return;
   const r = document.createElement("style");
   r.id = "argus-visual-container-fixes", r.textContent = `
@@ -19187,20 +19238,20 @@ function w_(o) {
   o.__argusVisualContainerFixes = !0;
   const r = o.prototype, i = r.connectedCallback, a = r._load, s = r._renderEntries, c = r._toggleWidgetEditing;
   r.connectedCallback = function() {
-    return wp(this), i?.call(this);
+    return kp(this), i?.call(this);
   }, r._load = async function() {
     this._argusWidgetLayoutRestored = !1;
     const u = await a?.call(this);
     return x_(this), Jo(this), u;
   }, r._renderEntries = function() {
     const u = s?.call(this);
-    return wp(this), Jo(this), u;
+    return kp(this), Jo(this), u;
   }, r._toggleWidgetEditing = function() {
     const u = c?.call(this);
     return Jo(this), u;
   };
 }
-function kp(o, r, i, a) {
+function Sp(o, r, i, a) {
   const s = o.shadowRoot?.getElementById(r), c = s?.getAttribute("data-size");
   if (c !== "S") return i?.apply(o, a);
   s.setAttribute("data-size", "M");
@@ -19215,9 +19266,9 @@ function k_(o) {
   o.__argusCompleteContentFixes = !0;
   const r = o.prototype, i = r._renderActivityLog, a = r._renderAutomations;
   r._renderActivityLog = function(...s) {
-    return kp(this, "w-activity", i, s);
+    return Sp(this, "w-activity", i, s);
   }, r._renderAutomations = function(...s) {
-    return kp(this, "w-automations", a, s);
+    return Sp(this, "w-automations", a, s);
   };
 }
 const S_ = 15e3;
@@ -19337,7 +19388,7 @@ function N_(o) {
     return Cl(this), p;
   };
 }
-const R_ = /* @__PURE__ */ new Set(["unavailable", "unknown"]), Sp = {
+const R_ = /* @__PURE__ */ new Set(["unavailable", "unknown"]), Ep = {
   es: { status_unavailable: "Sin conexión", status_unavailable_hint: "El dispositivo perdió conexión en Home Assistant y necesita revisión." },
   en: { status_unavailable: "Unavailable", status_unavailable_hint: "The device lost connection in Home Assistant and needs review." },
   fr: { status_unavailable: "Indisponible", status_unavailable_hint: "L'appareil a perdu la connexion dans Home Assistant et doit être vérifié." },
@@ -19358,7 +19409,7 @@ function vn(o) {
     '"': "&quot;"
   })[r]);
 }
-function Ep(o) {
+function Ap(o) {
   const r = o.shadowRoot;
   if (!r) return;
   const i = r.getElementById("bg-mode-select-standalone");
@@ -19393,7 +19444,7 @@ function L_(o) {
     s && (s.value = "");
   }
 }
-function Ap(o) {
+function Cp(o) {
   const r = o.shadowRoot;
   if (!r || r.getElementById("argus-availability-style")) return;
   const i = document.createElement("style");
@@ -19492,7 +19543,7 @@ function T_(o) {
   r._t = function(f) {
     if (f === "status_unavailable" || f === "status_unavailable_hint") {
       const h = String(this._getLocale?.() || this._hass?.language || "en").split("-")[0];
-      return (Sp[h] || Sp.en)[f];
+      return (Ep[h] || Ep.en)[f];
     }
     return s.call(this, f);
   };
@@ -19530,12 +19581,12 @@ function T_(o) {
   const g = r._renderEntries;
   r._renderEntries = function() {
     const f = g.call(this);
-    return Ap(this), O_(this), Ep(this), f;
+    return Cp(this), O_(this), Ap(this), f;
   };
   const _ = r._load;
   r._load = async function() {
     const f = await _?.call(this);
-    return await i(this), Ap(this), Ep(this), f;
+    return await i(this), Cp(this), Ap(this), f;
   };
 }
 function M_(o) {
@@ -19649,7 +19700,7 @@ function D_(o) {
   const r = /^#[0-9a-f]{6}$/i.test(o || "") ? o : "#ff0000";
   return [1, 3, 5].map((i) => parseInt(r.slice(i, i + 2), 16));
 }
-function Cp(o) {
+function zp(o) {
   const r = o.shadowRoot;
   if (!r || r.getElementById("argus-deep-repair-style")) return;
   const i = document.createElement("style");
@@ -19660,7 +19711,7 @@ function Cp(o) {
 .light-siren-settings,.sos-output-settings{margin-top:8px;padding:9px 10px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:rgba(0,0,0,.12)}.light-siren-settings summary,.sos-output-settings summary{cursor:pointer;font-size:11px;font-weight:850}.light-siren-settings label,.sos-output-settings label{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:9px;font-size:11px}.sos-output-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;align-items:start}.sos-output-row>.sensor-pill{width:100%!important;justify-content:flex-start!important}.sos-remove-output{border:0;border-radius:9px;padding:7px 9px;background:rgba(239,68,68,.18);color:#fca5a5;cursor:pointer}.sos-output-settings{grid-column:1/-1;margin-top:0}.sos-output-settings input[type=color]{width:44px;height:28px;padding:1px;border:0;border-radius:8px;background:transparent}.sos-output-settings select{min-width:120px;padding:6px;border-radius:8px;background:rgba(10,20,34,.8);color:inherit;border:1px solid rgba(255,255,255,.14)}
 @media(max-width:950px){.security-console .console-sensors{width:min(100%,292px)!important;max-width:292px!important;min-width:0!important}}.ios-fullscreen .entry-content.security-console .console-sensors{flex-basis:292px!important;max-width:310px!important;min-width:220px!important}@media(max-width:900px){.ios-fullscreen .entry-content.security-console .console-sensors{width:min(100%,310px)!important;max-width:310px!important}}`, r.appendChild(i);
 }
-function zp(o = {}, r = {}) {
+function Ip(o = {}, r = {}) {
   const i = r?.background_mode, a = r?.background_file || "";
   let s = o.background_mode;
   sa.has(s) || (s = sa.has(i) ? i : "weather");
@@ -19671,12 +19722,12 @@ function zp(o = {}, r = {}) {
   let p = String(o.hub_bg_file || "");
   return u !== "image" && (p = ""), { background_mode: s, background_images: Array.isArray(o.background_images) ? o.background_images : c ? [c] : [], panel_bg_file: c, panel_bg_sound: !!o.panel_bg_sound, hub_bg_mode: u, hub_bg_file: p, hub_bg_sound: !!o.hub_bg_sound };
 }
-function Ip(o, r) {
+function Pp(o, r) {
   o._backgroundMode = r.background_mode, o._backgroundImages = r.background_images, o._panelBgFile = r.panel_bg_file, o._panelBgSound = r.panel_bg_sound, o._hubBgMode = r.hub_bg_mode, o._hubBgFile = r.hub_bg_file, o._hubBgSound = r.hub_bg_sound;
   const i = o.shadowRoot, a = i?.getElementById("bg-mode-select-standalone"), s = i?.getElementById("panel-bg-url-input"), c = i?.getElementById("chk-panel-bg-sound"), u = i?.getElementById("hub-bg-mode-select"), p = i?.getElementById("hub-bg-url-input"), g = i?.getElementById("chk-hub-bg-sound");
   a && (a.value = r.background_mode), s && (s.value = r.panel_bg_file), c && (c.checked = r.panel_bg_sound), u && (u.value = r.hub_bg_mode), p && (p.value = r.hub_bg_file), g && (g.checked = r.hub_bg_sound), o._updateBgFieldsVisibility?.(), o._updateCanvasBackground?.(), o._updateTheme?.(), o._renderEntries?.();
 }
-function Pp(o) {
+function Np(o) {
   const r = o.shadowRoot;
   if (!r) return;
   const i = (a, s, c) => {
@@ -19724,18 +19775,18 @@ function $_(o) {
   const r = o.prototype, i = r._load;
   r._load = async function() {
     const p = await i.call(this);
-    if (Cp(this), this._panicOutputSettings = this._dashboard?.ui?.panic_output_settings || {}, this._currentProfile?.id) try {
+    if (zp(this), this._panicOutputSettings = this._dashboard?.ui?.panic_output_settings || {}, this._currentProfile?.id) try {
       const g = await this._send("argus/get_profile_theme");
-      Ip(this, zp(g?.theme || {}, this._currentUserTheme || {}));
+      Pp(this, Ip(g?.theme || {}, this._currentUserTheme || {}));
     } catch (g) {
       console.warn("Argus profile theme load failed:", g);
     }
-    return Pp(this), Zo(this), p;
+    return Np(this), Zo(this), p;
   };
   const a = r._renderEntries;
   r._renderEntries = function() {
     const p = a.call(this);
-    return Cp(this), Pp(this), p;
+    return zp(this), Np(this), p;
   }, r._renderSosOutputs = function() {
     Zo(this);
   };
@@ -19771,7 +19822,7 @@ function $_(o) {
           w[k] = { ...w[k] || {}, rgb_color: D_(b.value), flash_mode: y.shadowRoot.querySelector(`[data-sos-output-flash="${CSS.escape(k)}"]`)?.value || "none" };
         }), y._panicOutputSettings = Object.fromEntries((y._panicOutputs || []).map((b) => [b, w[b] || { flash_mode: "none" }])), y._panicOutputSettings;
       }(this);
-      await this._send("argus/save_profile_theme", { ...A ? { entry_id: A } : {}, theme: v }), await this._send("argus/save_panic_output_profile", { ...A ? { entry_id: A } : {}, outputs: this._panicOutputs || [], settings: E }), await this._send("argus/save_ui", z), Ip(this, zp(v)), this._temperatureSource = z.temperature_source, this._weatherSource = z.weather_source, this._emergencyNumber = R, this._configureEmergencyCall?.();
+      await this._send("argus/save_profile_theme", { ...A ? { entry_id: A } : {}, theme: v }), await this._send("argus/save_panic_output_profile", { ...A ? { entry_id: A } : {}, outputs: this._panicOutputs || [], settings: E }), await this._send("argus/save_ui", z), Pp(this, Ip(v)), this._temperatureSource = z.temperature_source, this._weatherSource = z.weather_source, this._emergencyNumber = R, this._configureEmergencyCall?.();
       const S = p?.getElementById("btn-save-personalization-standalone");
       if (S) {
         const y = S.textContent;
@@ -19837,7 +19888,7 @@ function En(o) {
 #entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensors{flex:0 1 248px!important;width:248px!important;max-width:248px!important;min-width:205px!important;gap:6px!important;margin-inline:0!important}#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor{min-height:34px!important;padding:6px 10px!important;gap:7px!important;border-radius:999px!important;box-sizing:border-box!important}#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor-icon{font-size:16px!important}#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor-name{font-size:10px!important}#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor-state{font-size:8px!important}#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor-battery{font-size:9px!important;padding:2px 5px!important;border-radius:999px!important}
 #widget-grid>#w-access{align-self:start!important;height:max-content!important;min-height:0!important;max-height:none!important}#widget-grid>#w-access .access-workspace:not(.open){display:none!important}#widget-grid>#w-access .access-workspace.open{max-height:430px!important;overflow:auto!important;overscroll-behavior:contain}#widget-grid>#w-activity,#widget-grid>#w-automations{grid-row:span 1!important;height:clamp(270px,32vh,340px)!important;min-height:270px!important;max-height:340px!important;align-self:start!important}#widget-grid>#w-activity #activity-log,#widget-grid>#w-automations #auto-view,#widget-grid>#w-automations #auto-view>div{min-height:0!important;overflow-y:auto!important;overscroll-behavior:contain!important;scrollbar-gutter:stable!important}@media(max-width:760px){#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensors{width:min(100%,248px)!important;max-width:248px!important}#widget-grid>#w-activity,#widget-grid>#w-automations{height:360px!important;min-height:360px!important;max-height:360px!important}}`, r.appendChild(i);
 }
-async function am(o, r, i, a, s) {
+async function sm(o, r, i, a, s) {
   if (!i || a === "none") return;
   const c = r.textContent;
   r.disabled = !0, r.textContent = o._t?.("testing_safe_flash") || "Probando de forma segura…";
@@ -19854,7 +19905,7 @@ async function am(o, r, i, a, s) {
     }, 4e3);
   }
 }
-function sm(o, r, i) {
+function lm(o, r, i) {
   const a = (s) => o?._t?.(s) || s;
   return r.safeFlash ? `${r.color ? "🎨 " + a("light_color_and_flash") : "✨ " + a("light_safe_flash")} — ${ft(i)}` : `💡 ${a("light_steady_safe")} — ${ft(i)}`;
 }
@@ -19865,22 +19916,22 @@ function ea(o) {
   const i = Array.isArray(o._panicOutputs) ? o._panicOutputs : [], a = o._panicOutputSettings || {};
   r.innerHTML = i.length ? i.map((s) => {
     const u = o._hass?.states?.[s]?.attributes?.friendly_name || s, p = da(o, s), g = a[s] || {}, _ = p.safeFlash && ["none", "gentle", "rapid"].includes(g.flash_mode) ? g.flash_mode : p.safeFlash && g.gentle_flash ? "gentle" : "none";
-    return p.modes.length && p.modes.join(", "), `<div class="sos-output-row"><div class="sos-output-header"><span class="sensor-pill" style="font-size:12px;font-weight:700" title="${ft(s)}"><span>${sm(o, p, u)}</span></span><button type="button" class="sos-remove-output" style="border:0;border-radius:9px;padding:6px 10px;background:rgba(239,68,68,.15);color:#fca5a5;cursor:pointer;font-weight:700" data-remove-sos-output="${ft(s)}" aria-label="Eliminar">✕</button></div>${p.isLight ? `<div class="sos-output-settings">${p.color ? `<label>${ft(o._t?.("color_label") || "Color")} <input type="color" data-sos-output-color="${ft(s)}" value="${U_(g.rgb_color)}"></label>` : `<input type="hidden" data-sos-output-color="${ft(s)}" value="#ffffff">`}${p.safeFlash ? `<label>${ft(o._t?.("flash_label") || "Destello")} <select data-sos-output-flash="${ft(s)}"><option value="none" ${_ === "none" ? "selected" : ""}>${ft(o._t?.("no_flash") || "Sin destello")}</option><option value="gentle" ${_ === "gentle" ? "selected" : ""}>${ft(o._t?.("flash_gentle") || "Suave")}</option><option value="rapid" ${_ === "rapid" ? "selected" : ""}>${ft(o._t?.("flash_rapid") || "Rápido")}</option></select></label><button type="button" class="argus-test-flash" data-test-sos-flash="${ft(s)}">${ft(o._t?.("test_safe_flash") || "Probar destello seguro")}</button>` : `<div class="argus-safe-note">${ft(o._t?.("light_onoff_only_safe_note") || "Esta luz solo admite encendido/apagado.")}</div>`}</div>` : ""}</div>`;
+    return p.modes.length && p.modes.join(", "), `<div class="sos-output-row"><div class="sos-output-header"><span class="sensor-pill" style="font-size:12px;font-weight:700" title="${ft(s)}"><span>${lm(o, p, u)}</span></span><button type="button" class="sos-remove-output" style="border:0;border-radius:9px;padding:6px 10px;background:rgba(239,68,68,.15);color:#fca5a5;cursor:pointer;font-weight:700" data-remove-sos-output="${ft(s)}" aria-label="Eliminar">✕</button></div>${p.isLight ? `<div class="sos-output-settings">${p.color ? `<label>${ft(o._t?.("color_label") || "Color")} <input type="color" data-sos-output-color="${ft(s)}" value="${U_(g.rgb_color)}"></label>` : `<input type="hidden" data-sos-output-color="${ft(s)}" value="#ffffff">`}${p.safeFlash ? `<label>${ft(o._t?.("flash_label") || "Destello")} <select data-sos-output-flash="${ft(s)}"><option value="none" ${_ === "none" ? "selected" : ""}>${ft(o._t?.("no_flash") || "Sin destello")}</option><option value="gentle" ${_ === "gentle" ? "selected" : ""}>${ft(o._t?.("flash_gentle") || "Suave")}</option><option value="rapid" ${_ === "rapid" ? "selected" : ""}>${ft(o._t?.("flash_rapid") || "Rápido")}</option></select></label><button type="button" class="argus-test-flash" data-test-sos-flash="${ft(s)}">${ft(o._t?.("test_safe_flash") || "Probar destello seguro")}</button>` : `<div class="argus-safe-note">${ft(o._t?.("light_onoff_only_safe_note") || "Esta luz solo admite encendido/apagado.")}</div>`}</div>` : ""}</div>`;
   }).join("") : `<div class="mode-sensor-none">${ft(o._t("sos_no_outputs"))}</div>`, r.querySelectorAll("[data-remove-sos-output]").forEach((s) => s.addEventListener("click", () => {
     o._panicOutputs = i.filter((c) => c !== s.dataset.removeSosOutput), delete o._panicOutputSettings?.[s.dataset.removeSosOutput], ea(o);
   })), r.querySelectorAll("[data-test-sos-flash]").forEach((s) => s.addEventListener("click", () => {
     const c = s.dataset.testSosFlash, u = s.closest(".sos-output-settings"), p = u?.querySelector("[data-sos-output-flash]")?.value || "none", g = u?.querySelector('input[type="color"][data-sos-output-color]');
-    am(o, s, c, p, g ? Bl(g.value) : null);
+    sm(o, s, c, p, g ? Bl(g.value) : null);
   }));
 }
-function Np(o) {
+function Rp(o) {
   En(o);
   const r = o.shadowRoot;
   r && r.querySelectorAll("[data-light-siren-color]").forEach((i) => {
     const a = i.dataset.lightSirenColor, s = da(o, a), c = i.closest(".light-siren-settings"), u = i.closest("label");
     !s.color && u && u.remove();
     const p = c?.querySelector("summary"), g = o._hass?.states?.[a]?.attributes?.friendly_name || a, _ = s.modes.length ? s.modes.join(", ") : "sin capacidad declarada";
-    p && (p.innerHTML = `${sm(o, s, g)} <span class="argus-ha-capability">HA: ${ft(_)}</span>`);
+    p && (p.innerHTML = `${lm(o, s, g)} <span class="argus-ha-capability">HA: ${ft(_)}</span>`);
     const f = c?.querySelector("[data-light-siren-flash]");
     if (!s.safeFlash && f) {
       f.checked = !1, f.disabled = !0;
@@ -19891,7 +19942,7 @@ function Np(o) {
       const h = document.createElement("button");
       h.type = "button", h.className = "argus-test-flash", h.dataset.testModeFlash = a, h.textContent = "Probar destello seguro", h.addEventListener("click", () => {
         const v = c.querySelector("[data-light-siren-flash]")?.checked, A = s.color ? c.querySelector("[data-light-siren-color]") : null;
-        am(o, h, a, v ? "gentle" : "none", A ? Bl(A.value) : null);
+        sm(o, h, a, v ? "gentle" : "none", A ? Bl(A.value) : null);
       }), c.appendChild(h);
     }
   });
@@ -19929,7 +19980,7 @@ function V_(o) {
   const a = r._load;
   r._load = async function() {
     const p = await a.call(this);
-    return En(this), ea(this), Np(this), p;
+    return En(this), ea(this), Rp(this), p;
   }, r._renderSosOutputs = function() {
     ea(this);
   };
@@ -19941,7 +19992,7 @@ function V_(o) {
   const c = r._renderModeView;
   r._renderModeView = function() {
     const p = c.call(this);
-    return Np(this), p;
+    return Rp(this), p;
   };
   const u = r._renderEntries;
   r._renderEntries = function() {
@@ -19951,7 +20002,7 @@ function V_(o) {
     return W_(this);
   };
 }
-function Rp(o) {
+function Lp(o) {
   const r = o.shadowRoot, i = r?.getElementById("lbl-aesthetic-custom"), a = r?.getElementById("personalize-workspace");
   if (!r || !i || !a || i.dataset.argusPersonalizationToggle === "1") return;
   const s = i.cloneNode(!0);
@@ -19973,12 +20024,12 @@ function G_(o) {
   const r = o.prototype, i = r.connectedCallback;
   r.connectedCallback = function() {
     const s = i?.call(this);
-    return queueMicrotask(() => Rp(this)), s;
+    return queueMicrotask(() => Lp(this)), s;
   };
   const a = r._load;
   r._load = async function() {
     const s = await a?.call(this);
-    return Rp(this), s;
+    return Lp(this), s;
   };
 }
 function fl(o) {
@@ -20011,17 +20062,17 @@ function Y_(o) {
     return fl(this), c;
   };
 }
-const lm = /* @__PURE__ */ new Set(["S", "M", "L", "XL"]), An = (o) => JSON.parse(JSON.stringify(o));
+const cm = /* @__PURE__ */ new Set(["S", "M", "L", "XL"]), An = (o) => JSON.parse(JSON.stringify(o));
 function Il(o) {
   if (!Array.isArray(o)) return null;
   const r = /* @__PURE__ */ new Set(), i = [];
   for (const a of o) {
     const s = String(a?.id || "");
-    !s || r.has(s) || (r.add(s), i.push({ id: s, size: lm.has(a?.size) ? a.size : "M", hidden: !!a?.hidden }));
+    !s || r.has(s) || (r.add(s), i.push({ id: s, size: cm.has(a?.size) ? a.size : "M", hidden: !!a?.hidden }));
   }
   return i.length ? i : null;
 }
-function Lp(o) {
+function Op(o) {
   try {
     return Il(JSON.parse(localStorage.getItem("argus-widgets-v4") || localStorage.getItem("argus-widgets-v2") || "null"));
   } catch {
@@ -20032,10 +20083,10 @@ function K_(o) {
   const r = o.shadowRoot?.getElementById("widget-grid"), i = new Map((o._widgetConfig || []).map((a) => [a.id, a]));
   return Il(r ? [...r.children].filter((a) => a.classList.contains("panel") && !a.classList.contains("dashboard-instances")).map((a) => {
     const s = a.id.replace(/^w-/, "");
-    return { id: s, size: lm.has(a.dataset.size) ? a.dataset.size : i.get(s)?.size || "M", hidden: !!i.get(s)?.hidden };
+    return { id: s, size: cm.has(a.dataset.size) ? a.dataset.size : i.get(s)?.size || "M", hidden: !!i.get(s)?.hidden };
   }) : o._widgetConfig);
 }
-function cm(o) {
+function dm(o) {
   const r = K_(o);
   if (!r) return;
   o._widgetConfig = An(r), localStorage.setItem("argus-widgets-v4", JSON.stringify(r)), o._ui = o._ui || {};
@@ -20066,7 +20117,7 @@ function xn(o) {
   if (i && !i._v2041) {
     i._v2041 = !0;
     for (const a of ["drop", "dragend"]) i.addEventListener(a, () => {
-      o._widgetEditing && setTimeout(() => cm(o), 0);
+      o._widgetEditing && setTimeout(() => dm(o), 0);
     }, !0);
   }
 }
@@ -20082,34 +20133,34 @@ function Q_(o) {
       clearTimeout(g), g = setTimeout(() => xn(this), 80);
     }), this._v2041Observer.observe(this.shadowRoot, { childList: !0 }), p;
   }, r._initWidgetGrid = function() {
-    const p = Lp();
+    const p = Op();
     p && (this._ui = this._ui || {}, this._ui.dashboard = { ...this._ui.dashboard || {}, widget_layout: An(p) });
     const g = u?.call(this);
     return p && (this._widgetConfig = An(p), this._renderWidgetLayout?.()), xn(this), g;
   }, r._load = async function() {
-    const p = await a?.call(this), g = Lp();
+    const p = await a?.call(this), g = Op();
     return g && (this._widgetConfig = An(g), this._renderWidgetLayout?.()), xn(this), p;
   }, r._renderEntries = function() {
     const p = s?.call(this);
     return xn(this), p;
   }, r._saveWidgetLayout = function() {
     const p = c?.call(this);
-    return setTimeout(() => cm(this), 0), p;
+    return setTimeout(() => dm(this), 0), p;
   };
 }
-const dm = /* @__PURE__ */ new Set(["S", "M", "L", "XL"]), um = "argus-widgets-stable-v5", xi = (o) => JSON.parse(JSON.stringify(o));
+const um = /* @__PURE__ */ new Set(["S", "M", "L", "XL"]), pm = "argus-widgets-stable-v5", xi = (o) => JSON.parse(JSON.stringify(o));
 function Pl(o) {
   if (!Array.isArray(o)) return null;
   const r = /* @__PURE__ */ new Set(), i = [];
   for (const a of o) {
     const s = String(a?.id || "");
-    !s || r.has(s) || (r.add(s), i.push({ id: s, size: dm.has(a?.size) ? a.size : "M", hidden: !!a?.hidden }));
+    !s || r.has(s) || (r.add(s), i.push({ id: s, size: um.has(a?.size) ? a.size : "M", hidden: !!a?.hidden }));
   }
   return i.length ? i : null;
 }
-function Op() {
+function Tp() {
   try {
-    return Pl(JSON.parse(localStorage.getItem(um) || localStorage.getItem("argus-widgets-v4") || "null"));
+    return Pl(JSON.parse(localStorage.getItem(pm) || localStorage.getItem("argus-widgets-v4") || "null"));
   } catch {
     return null;
   }
@@ -20118,12 +20169,12 @@ function wi(o) {
   const r = o.shadowRoot?.getElementById("widget-grid"), i = new Map((o._widgetConfig || []).map((a) => [a.id, a]));
   return Pl(r ? [...r.children].filter((a) => a.classList.contains("panel") && !a.classList.contains("dashboard-instances")).map((a) => {
     const s = a.id.replace(/^w-/, "");
-    return { id: s, size: dm.has(a.dataset.size) ? a.dataset.size : i.get(s)?.size || "M", hidden: !!i.get(s)?.hidden };
+    return { id: s, size: um.has(a.dataset.size) ? a.dataset.size : i.get(s)?.size || "M", hidden: !!i.get(s)?.hidden };
   }) : o._widgetConfig);
 }
 function Cn(o, r = wi(o)) {
   if (!r) return;
-  localStorage.setItem(um, JSON.stringify(r)), o._widgetConfig = xi(r), o._ui = o._ui || {};
+  localStorage.setItem(pm, JSON.stringify(r)), o._widgetConfig = xi(r), o._ui = o._ui || {};
   const i = { ...o._ui.dashboard || {}, widget_layout: xi(r) };
   o._ui.dashboard = i;
   const a = o._dashboard?.entry_id || o._dashboard?.entries?.[0]?.entry_id, s = { dashboard: i, ...a ? { entry_id: a } : {} };
@@ -20200,12 +20251,12 @@ function Z_(o) {
     const g = i?.call(this);
     return wn(this), g;
   }, r._initWidgetGrid = function() {
-    const g = Op();
+    const g = Tp();
     g && (this._ui = this._ui || {}, this._ui.dashboard = { ...this._ui.dashboard || {}, widget_layout: xi(g) });
     const _ = c?.call(this);
     return g && (this._widgetConfig = xi(g), this._renderWidgetLayout?.()), wn(this), _;
   }, r._load = async function() {
-    const g = await a?.call(this), _ = Op();
+    const g = await a?.call(this), _ = Tp();
     return _ && (this._widgetConfig = xi(_), this._renderWidgetLayout?.(), requestAnimationFrame(() => {
       this._widgetConfig = xi(_), this._renderWidgetLayout?.();
     })), wn(this), g;
@@ -20668,7 +20719,7 @@ select option{background-color:#101827!important;color:#f7f9ff!important;-webkit
 .wx-atmosphere{position:absolute;inset:0;overflow:hidden;isolation:isolate}
 `, o.shadowRoot?.appendChild(i);
 }
-function Tp(o) {
+function Mp(o) {
   const r = o.shadowRoot;
   !r || r.__argusLangSelectorBound || (r.__argusLangSelectorBound = !0, r.addEventListener("change", (i) => {
     const a = i.target;
@@ -20691,7 +20742,7 @@ function Tp(o) {
 function pb(o) {
   return o._selectorTarget = "panic", o._selected = Array.isArray(o._panicOutputs) ? [...o._panicOutputs] : [], typeof o._openModal == "function" ? (o._openModal("panic"), !0) : typeof o._openSelector == "function" ? (o._openSelector("panic"), !0) : typeof o._openEntitySelector == "function" ? (o._openEntitySelector("panic"), !0) : !1;
 }
-function Mp(o) {
+function Bp(o) {
   const r = o.shadowRoot;
   !r || r.__argusV2066SosBound || (r.__argusV2066SosBound = !0, r.addEventListener("click", (i) => {
     const a = i.target?.closest?.("button");
@@ -20720,12 +20771,12 @@ function mb(o) {
   r.connectedCallback = function() {
     xl(this);
     const c = i?.call(this);
-    Mp(this), Tp(this);
+    Bp(this), Mp(this);
     const u = this._ui?.manual_lang || this._dashboard?.ui?.manual_lang;
     return u && !this._manualLang && (this._manualLang = u), c;
   }, r._renderEntries = function() {
     const c = a?.call(this);
-    return xl(this), Mp(this), Tp(this), c;
+    return xl(this), Bp(this), Mp(this), c;
   }, r._renderAtmosphere = function(c, u) {
     return '<div class="wx wx-atmosphere" style="position:relative;width:100%;height:100%;display:block;"><argus-weather-panel></argus-weather-panel></div>';
   }, r._initWeatherWebGL = function(c) {
@@ -20751,7 +20802,7 @@ function hb(o) {
 function vb(o) {
   o || (o = customElements.get("argus-panel-v2018"));
   const r = o;
-  !r || r.__argusTypedFrontend || (r.__argusTypedFrontend = !0, gb(r), gf(r), mf(r), _f(r), kf(r), Sf(r), zf(r), Mf(r), $f(r), Ff(r), Vf(), hb(r), pf(r));
+  !r || r.__argusTypedFrontend || (r.__argusTypedFrontend = !0, gb(r), hf(r), gf(r), bf(r), Sf(r), Ef(r), If(r), Mf(r), $f(r), Ff(r), Vf(), hb(r), mf(r));
 }
 export {
   vb as applyArgusFrontend
