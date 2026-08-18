@@ -1,3 +1,8 @@
+## [2.2.14] - 2026-08-18
+- Add XS widget size support, compact fit for GitHub and Backup widgets without empty gray space.
+- Add Modes configuration jelly water-drop bounce modal.
+- Remove automatic silent saving; provide clear multi-language "✓ Guardado exitosamente" confirmation on save buttons.
+
 ## [2.2.13] - 2026-08-18
 - Optimize entity selector modal to O(1) cached lookup and eliminate UI freezing.
 

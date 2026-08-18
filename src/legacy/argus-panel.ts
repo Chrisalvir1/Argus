@@ -1085,11 +1085,11 @@ Object.assign(TEXTS.pt, { entry_sensors:'Sensores com atraso de entrada', select
 Object.assign(TEXTS.it, { entry_sensors:'Sensori con ritardo di ingresso', select_entry_sensors:'Seleziona sensori di ingresso' });
 Object.assign(TEXTS.zh, { entry_sensors:'具有进入延迟的传感器', select_entry_sensors:'选择进入传感器' });
 Object.assign(TEXTS.ru, { entry_sensors:'Датчики с задержкой входа', select_entry_sensors:'Выбрать датчики входа' });
-Object.assign(TEXTS.es, { entry_delay_toggle:'Retraso de entrada (⏳) o instantáneo (⚡)', saved:'✓ Guardado correctamente', pin_mismatch:'❌ El nuevo PIN no coincide' });
+Object.assign(TEXTS.es, { entry_delay_toggle:'Retraso de entrada (⏳) o instantáneo (⚡)', saved:'✓ Guardado exitosamente', pin_mismatch:'❌ El nuevo PIN no coincide' });
 Object.assign(TEXTS.en, { entry_delay_toggle:'Entry delay (⏳) or instant (⚡)', saved:'✓ Saved successfully', pin_mismatch:'❌ New PIN does not match' });
-Object.assign(TEXTS.fr, { entry_delay_toggle:'Délai d\u2019entrée (⏳) ou instantané (⚡)', saved:'✓ Enregistré', pin_mismatch:'❌ Le nouveau code PIN ne correspond pas' });
+Object.assign(TEXTS.fr, { entry_delay_toggle:'Délai d\u2019entrée (⏳) ou instantané (⚡)', saved:'✓ Enregistré avec succès', pin_mismatch:'❌ Le nouveau code PIN ne correspond pas' });
 Object.assign(TEXTS.pt, { entry_delay_toggle:'Atraso de entrada (⏳) ou instantâneo (⚡)', saved:'✓ Salvo com sucesso', pin_mismatch:'❌ O novo PIN não coincide' });
-Object.assign(TEXTS.it, { entry_delay_toggle:'Ritardo di ingresso (⏳) o istantaneo (⚡)', saved:'✓ Salvato correttamente', pin_mismatch:'❌ Il nuovo PIN non corrisponde' });
+Object.assign(TEXTS.it, { entry_delay_toggle:'Ritardo di ingresso (⏳) o istantaneo (⚡)', saved:'✓ Salvato con successo', pin_mismatch:'❌ Il nuovo PIN non corrisponde' });
 Object.assign(TEXTS.zh, { entry_delay_toggle:'进入延迟 (⏳) 或即时 (⚡)', saved:'✓ 已成功保存', pin_mismatch:'❌ 新 PIN 不匹配' });
 Object.assign(TEXTS.ru, { entry_delay_toggle:'Задержка входа (⏳) или мгновенно (⚡)', saved:'✓ Успешно сохранено', pin_mismatch:'❌ Новый PIN-код не совпадает' });
 
@@ -1311,54 +1311,93 @@ _tmpl.innerHTML = `
   .collapsible.collapsed {
     max-height: 0 !important;
     opacity: 0 !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    border: none !important;
-    pointer-events: none;
+     .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;align-items:start;position:relative}
+  .panel{transition:transform .3s ease,box-shadow .3s ease,grid-column .3s ease,grid-row .3s ease;position:relative}
+  .panel[data-size="XS"]{grid-column:span 1;grid-row:span 1;height:auto!important;min-height:fit-content!important;padding:12px 14px!important;align-self:start!important}
+  .panel[data-size="S"]{grid-column:span 1;grid-row:span 1;height:auto!important;min-height:fit-content!important;align-self:start!important}
+  .panel[data-size="M"]{grid-column:span 2;grid-row:span 1}
+  .panel[data-size="L"]{grid-column:span 2;grid-row:span 2}
+  .panel[data-size="XL"]{grid-column:span 4;grid-row:span 2}
+  .dashboard-instances{grid-column:1 / -1}
+  
+  /* Edit Mode Styles */
+  .grid.editing .panel{animation:jiggle .3s infinite ease-in-out;cursor:grab}
+  .grid.editing .panel:nth-child(even){animation-duration:.27s;animation-direction:reverse}
+  .grid.editing .panel:nth-child(3n){animation-duration:.32s;animation-delay:.05s}
+  .grid.editing .panel.dragging{opacity:.5;animation:none;cursor:grabbing}
+  
+  .panel-edit-overlay{position:absolute;inset:0;background:rgba(5,15,30,.82);backdrop-filter:blur(10px);border-radius:inherit;z-index:90;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;opacity:0;pointer-events:none;transition:opacity .25s ease}
+  .grid.editing .panel:not(.dashboard-instances) .panel-edit-overlay{opacity:1;pointer-events:auto}
+  
+   .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;align-items:start;position:relative}
+  .panel{transition:transform .3s ease,box-shadow .3s ease,grid-column .3s ease,grid-row .3s ease;position:relative}
+  .panel[data-size="XS"]{grid-column:span 1;grid-row:span 1;height:auto!important;min-height:fit-content!important;padding:12px 14px!important;align-self:start!important}
+  .panel[data-size="S"]{grid-column:span 1;grid-row:span 1;height:auto!important;min-height:fit-content!important;align-self:start!important}
+  .panel[data-size="M"]{grid-column:span 2;grid-row:span 1}
+  .panel[data-size="L"]{grid-column:span 2;grid-row:span 2}
+  .panel[data-size="XL"]{grid-column:span 4;grid-row:span 2}
+  .dashboard-instances{grid-column:1 / -1}
+  
+  /* Edit Mode Styles */
+  .grid.editing .panel{animation:jiggle .3s infinite ease-in-out;cursor:grab}
+  .grid.editing .panel:nth-child(even){animation-duration:.27s;animation-direction:reverse}
+  .grid.editing .panel:nth-child(3n){animation-duration:.32s;animation-delay:.05s}
+  .grid.editing .panel.dragging{opacity:.5;animation:none;cursor:grabbing}
+  
+  .panel-edit-overlay{position:absolute;inset:0;background:rgba(5,15,30,.82);backdrop-filter:blur(10px);border-radius:inherit;z-index:90;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;opacity:0;pointer-events:none;transition:opacity .25s ease}
+  .grid.editing .panel:not(.dashboard-instances) .panel-edit-overlay{opacity:1;pointer-events:auto}
+  
+  .widget-controls{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:18px;backdrop-filter:blur(8px)}
+  .widget-controls-title{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;opacity:.7}
+  .widget-sizes{display:flex;gap:5px;flex-wrap:wrap;justify-content:center}
+  .widget-size-btn{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#fff;border-radius:8px;padding:5px 8px;font-size:11px;font-weight:800;cursor:pointer;transition:all .2s}
+  .widget-size-btn:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3)}
+  .widget-size-btn.active{background:#007aff;border-color:#007aff;box-shadow:0 0 10px rgba(0,122,255,.4)}
+  .widget-drag-handle{font-size:22px;color:rgba(255,255,255,.6);cursor:grab;padding:4px}
+  .widget-toggle-btn{background:rgba(220,38,38,.85);color:white;border:none;border-radius:8px;padding:6px 12px;font-size:10px;font-weight:800;cursor:pointer}
+  
+  @keyframes jiggle{
+    0%{transform:rotate(-0.5deg)}
+    50%{transform:rotate(0.5deg)}
+    100%{transform:rotate(-0.5deg)}
+  }
+  @media(max-width:900px){
+    .grid{grid-template-columns:minmax(0,1fr)}
+    .panel[data-size="XS"],.panel[data-size="S"],.panel[data-size="M"],.panel[data-size="L"],.panel[data-size="XL"]{grid-column:1 / -1;grid-row:auto}
+    .grid.editing .panel{animation:none !important}
+  }
+  
+  /* Adaptivity styles for size XS and S widgets */
+  .panel[data-size="XS"] .tab-label, .panel[data-size="S"] .tab-label{display:none}
+  .panel[data-size="XS"] .tab-icon{font-size:18px !important}
+  .panel[data-size="S"] .tab-icon{font-size:24px !important}
+  .panel[data-size="XS"] #p-backup-desc, .panel[data-size="S"] #p-backup-desc{display:none}
+  .panel[data-size="XS"] #github-desc, .panel[data-size="S"] #github-desc{display:none}
+  .panel[data-size="XS"] h2, .panel[data-size="XS"] h3{font-size:13px !important;margin:0 0 4px !important}
+  .panel[data-size="XS"] .panel-body, .panel[data-size="XS"] #mode-view{max-height:220px !important;overflow-y:auto !important;scrollbar-gutter:stable}
+  #w-backup[data-size="XS"], #w-backup[data-size="S"], #w-github[data-size="XS"], #w-github[data-size="S"]{height:auto !important;min-height:fit-content !important;align-self:start !important}
+
+  /* Jelly water-drop bounce animation for modals */
+  @keyframes jellyBounce {
+    0% { transform: scale(0.65) translateY(40px); opacity: 0; }
+    45% { transform: scale(1.08, 0.92) translateY(-8px); opacity: 0.95; }
+    65% { transform: scale(0.95, 1.05) translateY(3px); opacity: 1; }
+    82% { transform: scale(1.02, 0.98) translateY(-1px); }
+    100% { transform: scale(1, 1) translateY(0); opacity: 1; }
+  }
+  .modal-back.open .modal.jelly-modal, .jelly-modal {
+    animation: jellyBounce 0.52s cubic-bezier(0.34, 1.56, 0.64, 1) both !important;
   }
 
-  /* Scrollbar aesthetics */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.12);
-    border-radius: 999px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.25);
-  }
-  .x-never-match ::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.08);
-  }
-  .x-never-match ::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.18);
-  }
-
-  .battery-alert { margin: 0 0 16px 0; padding: 14px 18px; border-radius: 20px; background: rgba(255, 149, 0, 0.12); border: 1px solid rgba(255, 149, 0, 0.22); color: #ffe3b3; font-weight: 700; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); text-align: left; box-shadow: 0 4px 15px rgba(255,149,0,0.1); }
-
-  /* SOS Slider redesign */
-  .btn-sos { width: 100%; min-height: 56px; border: 0; border-radius: 20px; background: var(--sos-red); color: white; font-size: 1.05rem; font-weight: 800; letter-spacing: 0.02em; cursor: pointer; box-shadow: 0 10px 25px rgba(255, 59, 48, 0.35); transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, opacity 0.2s; margin-top: 8px; display:flex;align-items:center;justify-content:center;gap:10px; }
-  .btn-sos:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(255, 59, 48, 0.45); }
-  .btn-sos:active { transform: scale(0.95); opacity: 0.92; }
-  .ios-confirm-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 999999; backdrop-filter: blur(12px); }
-  .ios-confirm-backdrop.open { display: flex; pointer-events: auto !important; }
-  .ios-confirm-backdrop.open * { pointer-events: auto; }
-  .ios-confirm-backdrop.open .ios-slider-label { pointer-events: none !important; }
-  .ios-confirm-card { width: min(100%, 420px); border-radius: 32px; padding: 24px; color: white; background: rgba(20,22,35,0.85); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 32px 80px rgba(0,0,0,0.6); }
-  .ios-confirm-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 8px; text-align: center; }
-  .ios-confirm-text { font-size: 0.98rem; opacity: 0.85; line-height: 1.45; text-align: center; margin-bottom: 20px; }
-  .ios-slider-shell { padding: 4px 0 16px; }
-  .ios-slider-track { position: relative; height: 66px; border-radius: 999px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); overflow: hidden; }
-  .ios-slider-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 82px; font-size: 0.95rem; font-weight: 700; color: rgba(255, 255, 255, 0.85); pointer-events: none; text-align: center; }
-  .ios-slider-thumb { position: absolute; top: 6px; left: 6px; width: 52px; height: 52px; border-radius: 50%; background: var(--ios-thumb); color: #ff3b30; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 900; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25); touch-action: none; user-select: none; cursor: grab; transition: transform 0.1s ease-out; }
-  .ios-confirm-cancel { width: 100%; min-height: 50px; border: 0; border-radius: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.05); color: white; font-weight: 700; cursor: pointer; transition: background 0.2s, transform 0.15s; }
+  /* Collapsible Personalization with Bounce expansion */
+  .personalize-workspace{display:grid;grid-template-rows:0fr;opacity:0;pointer-events:none;transition:grid-template-rows 0.6s cubic-bezier(0.175,0.885,0.32,1.275),opacity 0.4s ease,margin-top 0.4s ease}
+  .personalize-workspace > div { overflow:hidden; min-height:0; }
+  .personalize-workspace:not(.collapsed){grid-template-rows:1fr;opacity:1;pointer-events:auto;margin-top:16px;animation:bounceExpand 0.55s cubic-bezier(0.175,0.885,0.32,1.275) forwards}
+  @keyframes bounceExpand{
+    0%{transform:scale(0.96) translateY(-8px);opacity:0}
+    70%{transform:scale(1.01) translateY(2px);opacity:0.9}
+    100%{transform:scale(1) translateY(0);opacity:1}
+  }rm 0.15s; }
   .ios-confirm-cancel:hover { background: rgba(255,255,255,0.14); }
   .ios-confirm-cancel:active { transform: scale(0.96); }
 
@@ -3126,6 +3165,10 @@ _tmpl.innerHTML = `
               </div>
               <div id="sos-output-chips" class="sos-output-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-bottom:8px"></div>
               <div class="small" id="sos-output-help" style="margin-top:5px;opacity:.65;line-height:1.35">Estos dispositivos se activarán siempre al usar SOS, incluso con Argus desarmado.</div>
+              <div style="margin-top:14px;display:flex;align-items:center;gap:12px">
+                <button class="primary" id="btn-save-sos" style="padding:8px 18px;font-size:12px;border-radius:10px;font-weight:700">Guardar</button>
+                <span id="sos-status" style="font-size:13px;font-weight:700;min-height:18px;transition:opacity .35s;color:#10b981;opacity:0"></span>
+              </div>
             </div>
           </div>
         </div>
@@ -3142,10 +3185,11 @@ _tmpl.innerHTML = `
 
       <!-- Modes -->
       <section class="glass panel liquid-glass modes-panel" id="w-modes">
-        <div class="panel-head">
+        <div class="panel-head" style="display:flex; justify-content:space-between; align-items:center;">
            <h2 id="h-modes"></h2>
+           <button class="ghost" id="btn-open-mode-modal" style="padding:4px 10px; font-size:12px; font-weight:700; border-radius:10px;">⚙️ Configurar</button>
         </div>
-        <div class="tabs" id="mode-tabs" style="margin-bottom:15px"></div>
+        <div class="tabs" id="mode-tabs" style="margin-bottom:12px"></div>
         <div id="mode-view"></div>
       </section>
 
@@ -3280,6 +3324,18 @@ _tmpl.innerHTML = `
         <button class="primary" id="selector-accept"></button>
       </div>
     </div>
+  </div>
+<!-- Mode Config Modal with Jelly Bounce -->
+<div class="modal-back" id="mode-modal" aria-hidden="true">
+  <div class="modal jelly-modal" style="width:min(860px,96vw);max-height:min(90dvh,820px);display:flex;flex-direction:column">
+    <div class="modal-head">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span id="mode-modal-icon" style="font-size:22px">🛡️</span>
+        <h3 id="mode-modal-title" style="margin:0;font-size:17px;font-weight:800">Modo</h3>
+      </div>
+      <button class="ghost" id="mode-modal-close" style="font-size:16px;padding:4px 10px">✕</button>
+    </div>
+    <div class="modal-body" id="mode-modal-body" style="overflow-y:auto;flex:1;padding:16px;overscroll-behavior:contain"></div>
   </div>
 </div>
 
@@ -4463,6 +4519,12 @@ class ArgusPanel extends HTMLElement {
     s('home-name-modal').addEventListener('click', e => { if (e.target.id === 'home-name-modal') this._closeHomeNameModal(); });
     s('home-name-save').addEventListener('click', () => this._saveHomeName());
     s('home-name-input').addEventListener('keydown', e => { if (e.key === 'Enter') this._saveHomeName(); });
+
+    // Mode Modal
+    s('mode-modal-close')?.addEventListener('click', () => this._closeModeModal());
+    s('mode-modal')?.addEventListener('click', e => { if ((e.target as HTMLElement)?.id === 'mode-modal') this._closeModeModal(); });
+    s('btn-open-mode-modal')?.addEventListener('click', () => this._openModeModal(this._mode));
+    s('btn-save-sos')?.addEventListener('click', () => this._savePersonalization());
 
     // Edit widgets button
     s('btn-edit-widgets')?.addEventListener('click', () => this._toggleWidgetEditing());
@@ -5911,9 +5973,13 @@ gl_FragColor=vec4(col,alpha);}`;
     `;
     const bubble = tabs.querySelector('.tab-bubble');
     tabs.querySelectorAll('[data-mode]').forEach(t => t.addEventListener('click', () => {
+      const isCurrent = (this._mode === t.dataset.mode);
       this._mode = t.dataset.mode;
       this._renderModeTabs();
       this._renderModeView();
+      if (isCurrent || this.shadowRoot.getElementById('w-modes')?.getAttribute('data-size') === 'XS' || this.shadowRoot.getElementById('w-modes')?.getAttribute('data-size') === 'S') {
+        this._openModeModal(this._mode);
+      }
     }));
 
     const buttons = tabs.querySelectorAll('.tab');
@@ -5937,6 +6003,38 @@ gl_FragColor=vec4(col,alpha);}`;
         bubble.style.left = '0';
       });
     }
+  }
+
+  _openModeModal(mode) {
+    if (mode) this._mode = mode;
+    const icons = { disarmed:'🔓', home:'🏠', away:'🔴', night:'🌙', vacation:'✈️' };
+    const lbls  = {
+      disarmed: this._t('disarmed'),
+      home:     this._t('mode_home'),
+      away:     this._t('mode_away'),
+      night:    this._t('mode_night'),
+      vacation: this._t('mode_vacation'),
+    };
+    const titleEl = this.shadowRoot.getElementById('mode-modal-title');
+    const iconEl = this.shadowRoot.getElementById('mode-modal-icon');
+    if (titleEl) titleEl.textContent = `${this._t('mode_lbl') || 'Modo'}: ${lbls[this._mode] || this._mode}`;
+    if (iconEl) iconEl.textContent = icons[this._mode] || '🛡️';
+
+    const modal = this.shadowRoot.getElementById('mode-modal');
+    if (modal) {
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+    this._renderModeView();
+  }
+
+  _closeModeModal() {
+    const modal = this.shadowRoot.getElementById('mode-modal');
+    if (modal) {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+    this._renderModeView();
   }
 
   _currentModeConfig() {
@@ -5978,8 +6076,6 @@ gl_FragColor=vec4(col,alpha);}`;
 
     const savedCfg = this._ui.modes.__by_entity__[entityId][this._mode];
     const cfg = savedCfg && typeof savedCfg === 'object' && !Array.isArray(savedCfg) ? savedCfg : emptyCfg;
-    // Older stored UI data may contain a missing or malformed collection.
-    // Never allow that to abort rendering the entire Modes section.
     return {
       ...emptyCfg,
       ...cfg,
@@ -5987,7 +6083,6 @@ gl_FragColor=vec4(col,alpha);}`;
       bypassed_sensors: Array.isArray(cfg?.bypassed_sensors) ? cfg.bypassed_sensors : [],
       sirens: Array.isArray(cfg?.sirens) ? cfg.sirens : [],
       entry_sensors: Array.isArray(cfg?.entry_sensors) ? cfg.entry_sensors : [],
-      // sync_panels was the short-lived UI name; retain it only as a read fallback.
       external_panels: Array.isArray(cfg?.external_panels) ? cfg.external_panels : (Array.isArray(cfg?.sync_panels) ? cfg.sync_panels : []),
       require_closed: typeof cfg?.require_closed === 'boolean' ? cfg.require_closed : false,
       open_sensors_policy: (cfg?.open_sensors_policy === 'pending' || cfg?.open_sensors_policy === 'allow' || cfg?.open_sensors_policy === 'block') ? cfg.open_sensors_policy : (cfg?.require_closed ? 'block' : 'allow'),
@@ -6016,12 +6111,6 @@ gl_FragColor=vec4(col,alpha);}`;
     const bypass  = cfg.bypassed_sensors || [];
     const sirens  = cfg.sirens  || [];
     const externalPanels = cfg.external_panels || [];
-    const el = this.shadowRoot.getElementById('mode-view');
-    if (el) {
-      el.classList.remove('bounce-in');
-      void el.offsetWidth; // force reflow
-      el.classList.add('bounce-in');
-    }
     const readonly = !this._isAdmin;
     const entries = this._dashboard?.entries || [];
     const activeEntityId = this._modeEntryId || entries[0]?.entity_id || '';
@@ -6029,26 +6118,26 @@ gl_FragColor=vec4(col,alpha);}`;
     const instanceBlock = entries.length > 1 ? `
         <div class="mode-section-card">
           <div class="mode-section-title">${this._t('alarm_instance')}</div>
-          <select id="mode-instance-select" style="width:100%; padding:10px; border-radius:10px; background:rgba(255,255,255,0.05); color:inherit; border:1px solid rgba(255,255,255,0.1)">${entries.map(e => `<option value="${this._escapeHtml(e.entity_id)}" ${e.entity_id===activeEntityId ? 'selected' : ''}>${this._escapeHtml(e.title || e.entity_id)}</option>`).join('')}</select>
+          <select class="mode-instance-select" style="width:100%; padding:10px; border-radius:10px; background:rgba(255,255,255,0.05); color:inherit; border:1px solid rgba(255,255,255,0.1)">${entries.map(e => `<option value="${this._escapeHtml(e.entity_id)}" ${e.entity_id===activeEntityId ? 'selected' : ''}>${this._escapeHtml(e.title || e.entity_id)}</option>`).join('')}</select>
         </div>` : '';
 
-    el.innerHTML = `
+    const contentHtml = (isModal = false) => `
       <div class="mode-grid-layout">
         ${instanceBlock}
 
         <div class="mode-section-card">
           <div class="mode-section-title">🛡️ ${this._t('sensor_section')}</div>
-          <div class="mode-sensor-grid" id="sensor-chips">
+          <div class="mode-sensor-grid">
             ${sensors.map(x => this._chip(x, 'sensor')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
           </div>
           ${readonly ? '' : `
             <button class="ghost" data-open-selector="sensor" style="margin-top:12px; width:100%; justify-content:center; font-size:12px">${this._t('select_btn')}</button>
             <label class="checkbox-label" style="display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05);font-size:12px">
-              <input type="checkbox" id="mode-require-closed" ${cfg.require_closed ? 'checked' : ''}>
+              <input type="checkbox" class="mode-require-closed-inp" ${cfg.require_closed ? 'checked' : ''}>
               <span style="font-size:12px;font-weight:600">${this._t('lock_if_open')}</span>
             </label>
             <label class="checkbox-label" style="display:flex;align-items:center;gap:8px;margin-top:8px;padding:8px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05);font-size:12px">
-              <input type="checkbox" id="mode-wait-if-open" ${cfg.open_sensors_policy === 'pending' ? 'checked' : ''}>
+              <input type="checkbox" class="mode-wait-if-open-inp" ${cfg.open_sensors_policy === 'pending' ? 'checked' : ''}>
               <span style="font-size:12px;font-weight:600">${this._t('wait_if_open')}</span>
             </label>
           `}
@@ -6056,7 +6145,7 @@ gl_FragColor=vec4(col,alpha);}`;
 
         <div class="mode-section-card">
           <div class="mode-section-title">${this._t('bypass_lbl')}</div>
-          <div class="mode-sensor-grid" id="bypass-chips">
+          <div class="mode-sensor-grid">
             ${bypass.map(x => this._chip(x, 'bypass')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
           </div>
           ${readonly ? '' : `<button class="ghost" data-open-selector="bypass" style="margin-top:12px; width:100%; justify-content:center; font-size:12px">${this._t('add_btn')}</button>`}
@@ -6064,7 +6153,7 @@ gl_FragColor=vec4(col,alpha);}`;
 
         <div class="mode-section-card">
           <div class="mode-section-title">📢 ${this._t('siren_section')}</div>
-          <div class="mode-sensor-grid" id="siren-chips">
+          <div class="mode-sensor-grid">
             ${sirens.map(x => this._chip(x, 'siren')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
           </div>
           ${sirens.filter(x => x.startsWith('light.')).map(x => {
@@ -6074,7 +6163,7 @@ gl_FragColor=vec4(col,alpha);}`;
             return `<details class="light-siren-settings"><summary>⚙ ${this._escapeHtml(this._hass?.states?.[x]?.attributes?.friendly_name || x)}</summary><label>${this._t('light_siren_color') || 'Color'} <input type="color" data-light-siren-color="${this._escapeHtml(x)}" value="${hex}"></label><label class="checkbox-label"><input type="checkbox" data-light-siren-flash="${this._escapeHtml(x)}" ${setting.gentle_flash ? 'checked' : ''}> ${this._t('light_siren_flash') || 'Destello suave si está disponible'}</label></details>`;
           }).join('')}
           <div class="mode-section-title" style="margin-top:14px;font-size:12px">🔗 ${this._t('external_panels') || 'Paneles de alarma externos'}</div>
-          <div class="mode-sensor-grid" id="external-panel-chips">
+          <div class="mode-sensor-grid">
             ${externalPanels.map(x => this._chip(x, 'external_panel')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
           </div>
           ${readonly ? '' : `<button class="ghost" data-open-selector="siren" style="margin-top:12px; width:100%; justify-content:center; font-size:12px">${this._t('select_btn')}</button><button class="ghost" data-open-selector="external_panel" style="margin-top:8px; width:100%; justify-content:center; font-size:12px">${this._t('add_btn')}</button>`}
@@ -6085,11 +6174,11 @@ gl_FragColor=vec4(col,alpha);}`;
           <div class="times-grid">
             <div class="input-group time-field">
               <span class="input-label">${this._t('arm_time')}</span>
-              <input type="number" id="mode-arming-time" value="${cfg.arming_time ?? ''}" placeholder="0" style="padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:inherit; font-size:13px">
+              <input type="number" class="mode-arming-time-inp" value="${cfg.arming_time ?? ''}" placeholder="0" style="padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:inherit; font-size:13px">
             </div>
             <div class="input-group time-field">
               <span class="input-label">${this._t('disarm_time')}</span>
-              <input type="number" id="mode-entry-delay" value="${cfg.entry_delay ?? ''}" placeholder="0" style="padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:inherit; font-size:13px">
+              <input type="number" class="mode-entry-delay-inp" value="${cfg.entry_delay ?? ''}" placeholder="0" style="padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:inherit; font-size:13px">
             </div>
           </div>
           <div class="mode-sensor-grid entry-sensor-list">
@@ -6097,29 +6186,45 @@ gl_FragColor=vec4(col,alpha);}`;
           </div>
           ${readonly ? '' : `<button class="ghost" data-open-selector="entry" style="margin-top:10px;width:100%;justify-content:center;font-size:12px">${this._t('select_entry_sensors')}</button>`}
           <label class="checkbox-label mode-mqtt-row">
-            <input type="checkbox" id="mode-mqtt-enabled" ${cfg.mqtt_enabled === true ? 'checked' : ''}>
+            <input type="checkbox" class="mode-mqtt-enabled-inp" ${cfg.mqtt_enabled === true ? 'checked' : ''}>
             <span style="font-size:12px;font-weight:600">${this._t('mqtt_label')}</span>
           </label>
         </div>
       </div>
-      ${readonly ? '' : `<div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;"><button class="primary" id="save-mode" style="width:100%;height:48px;font-size:14px;box-shadow:0 8px 20px rgba(0,0,0,0.2)">${this._t('save_config')}</button><span id="mode-status" style="display:block;text-align:center;font-size:13px;font-weight:700;min-height:20px;transition:opacity .4s;opacity:1;color:var(--primary-color,#03a9f4)"></span></div>`}
+      ${readonly ? '' : `<div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;"><button class="primary mode-save-btn" id="${isModal ? 'save-mode-modal' : 'save-mode'}" style="width:100%;height:48px;font-size:14px;box-shadow:0 8px 20px rgba(0,0,0,0.2);font-weight:800">${this._t('save_config')}</button><span id="${isModal ? 'mode-modal-status' : 'mode-status'}" style="display:block;text-align:center;font-size:13px;font-weight:700;min-height:20px;transition:opacity .4s;opacity:1;color:var(--primary-color,#03a9f4)"></span></div>`}
     `;
 
-    el.querySelector('#mode-instance-select')?.addEventListener('change', ev => {
-      this._modeEntryId = ev.target.value;
-      this._renderModeView();
-    });
-    if (!readonly) {
-      el.querySelectorAll('[data-open-selector]').forEach(btn =>
-        btn.addEventListener('click', () => this._openModal(btn.dataset.openSelector))
-      );
-      el.querySelectorAll('[data-remove]').forEach(btn =>
-        btn.addEventListener('click', () => this._removeChip(btn.dataset.remove))
-      );
-      el.querySelectorAll('[data-toggle-delay]').forEach(btn =>
-        btn.addEventListener('click', () => this._toggleEntrySensor(btn.dataset.toggleDelay))
-      );
-      el.querySelector('#save-mode')?.addEventListener('click', () => this._saveMode());
+    const bindScope = (scope) => {
+      if (!scope) return;
+      scope.querySelector('.mode-instance-select')?.addEventListener('change', ev => {
+        this._modeEntryId = ev.target.value;
+        this._renderModeView();
+      });
+      if (!readonly) {
+        scope.querySelectorAll('[data-open-selector]').forEach(btn =>
+          btn.addEventListener('click', () => this._openModal(btn.dataset.openSelector))
+        );
+        scope.querySelectorAll('[data-remove]').forEach(btn =>
+          btn.addEventListener('click', () => this._removeChip(btn.dataset.remove))
+        );
+        scope.querySelectorAll('[data-toggle-delay]').forEach(btn =>
+          btn.addEventListener('click', () => this._toggleEntrySensor(btn.dataset.toggleDelay))
+        );
+        scope.querySelector('.mode-save-btn')?.addEventListener('click', () => this._saveMode(scope));
+      }
+    };
+
+    const inlineEl = this.shadowRoot.getElementById('mode-view');
+    if (inlineEl) {
+      inlineEl.innerHTML = contentHtml(false);
+      bindScope(inlineEl);
+    }
+
+    const modalBody = this.shadowRoot.getElementById('mode-modal-body');
+    const modalEl = this.shadowRoot.getElementById('mode-modal');
+    if (modalBody && modalEl?.classList.contains('open')) {
+      modalBody.innerHTML = contentHtml(true);
+      bindScope(modalBody);
     }
   }
 
@@ -6186,16 +6291,16 @@ gl_FragColor=vec4(col,alpha);}`;
     this._renderModeView();
   }
 
-  async _saveMode() {
+  async _saveMode(scopeEl?: HTMLElement) {
     const cfg = this._currentModeConfig();
-    const chk      = this.shadowRoot.getElementById('mode-require-closed') as HTMLInputElement | null;
-    const waitChk  = this.shadowRoot.getElementById('mode-wait-if-open') as HTMLInputElement | null;
-    const armTime  = this.shadowRoot.getElementById('mode-arming-time') as HTMLInputElement | null;
-    const entDelay = this.shadowRoot.getElementById('mode-entry-delay') as HTMLInputElement | null;
-    const mqttChk  = this.shadowRoot.getElementById('mode-mqtt-enabled') as HTMLInputElement | null;
+    const root = scopeEl || this.shadowRoot;
+    const chk      = root.querySelector('.mode-require-closed-inp') as HTMLInputElement | null;
+    const waitChk  = root.querySelector('.mode-wait-if-open-inp') as HTMLInputElement | null;
+    const armTime  = root.querySelector('.mode-arming-time-inp') as HTMLInputElement | null;
+    const entDelay = root.querySelector('.mode-entry-delay-inp') as HTMLInputElement | null;
+    const mqttChk  = root.querySelector('.mode-mqtt-enabled-inp') as HTMLInputElement | null;
 
     if (chk) cfg.require_closed = chk.checked;
-    // Derive open_sensors_policy: block wins if require_closed, then pending if wait checked, else allow
     if (chk?.checked) {
       cfg.open_sensors_policy = 'block';
     } else if (waitChk?.checked) {
@@ -6207,11 +6312,11 @@ gl_FragColor=vec4(col,alpha);}`;
     if (entDelay) cfg.entry_delay  = entDelay.value ? parseInt(entDelay.value) : 0;
     if (mqttChk)  cfg.mqtt_enabled = mqttChk.checked;
     cfg.light_siren_settings = {};
-    this.shadowRoot.querySelectorAll('[data-light-siren-color]').forEach(input => {
-      const hex = input.value || '#ff0000';
-      cfg.light_siren_settings[input.dataset.lightSirenColor] = {
+    root.querySelectorAll('[data-light-siren-color]').forEach(input => {
+      const hex = (input as HTMLInputElement).value || '#ff0000';
+      cfg.light_siren_settings[(input as HTMLElement).dataset.lightSirenColor] = {
         rgb_color: [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16)),
-        gentle_flash: Boolean(this.shadowRoot.querySelector(`[data-light-siren-flash="${CSS.escape(input.dataset.lightSirenColor)}"]`)?.checked),
+        gentle_flash: Boolean(root.querySelector(`[data-light-siren-flash="${CSS.escape((input as HTMLElement).dataset.lightSirenColor)}"]`)?.checked),
       };
     });
 
@@ -6223,17 +6328,39 @@ gl_FragColor=vec4(col,alpha);}`;
       this._ui.modes.__by_entity__[_eid][this._mode] = { ...cfg };
 
       const status = this.shadowRoot.getElementById('mode-status');
+      const modalStatus = this.shadowRoot.getElementById('mode-modal-status');
+      const saveBtns = this.shadowRoot.querySelectorAll('.mode-save-btn');
+      saveBtns.forEach(b => { (b as HTMLButtonElement).disabled = true; });
+
       if (status) { status.textContent = '…'; status.className = 'status'; }
+      if (modalStatus) { modalStatus.textContent = '…'; modalStatus.className = 'status'; }
       try {
         await this._send('argus/save_mode_config', {
           entity_id: _eid,
           mode: this._mode,
           config: cfg,
         });
-        if (status) { status.textContent = this._t('saved'); status.className = 'status ok show'; }
-        setTimeout(() => { if (status) { status.textContent = ''; status.className = 'status'; } }, 3000);
+        const successMsg = this._t('saved') || '✓ Guardado exitosamente';
+        if (status) { status.textContent = successMsg; status.className = 'status ok show'; }
+        if (modalStatus) { modalStatus.textContent = successMsg; modalStatus.className = 'status ok show'; }
+        saveBtns.forEach(b => {
+          b.textContent = successMsg;
+          (b as HTMLElement).style.background = 'linear-gradient(135deg, #10b981, #059669)';
+        });
+        setTimeout(() => {
+          if (status) { status.textContent = ''; status.className = 'status'; }
+          if (modalStatus) { modalStatus.textContent = ''; modalStatus.className = 'status'; }
+          saveBtns.forEach(b => {
+            b.textContent = this._t('save_config') || 'GUARDAR CONFIGURACIÓN';
+            (b as HTMLElement).style.background = '';
+            (b as HTMLButtonElement).disabled = false;
+          });
+        }, 3000);
       } catch (err) {
-        if (status) { status.textContent = '✗ ' + (err.message || this._t('generic_error').replace(': {error}', '')); status.className = 'status err show'; }
+        const errMsg = '✗ ' + (err.message || this._t('generic_error').replace(': {error}', ''));
+        if (status) { status.textContent = errMsg; status.className = 'status err show'; }
+        if (modalStatus) { modalStatus.textContent = errMsg; modalStatus.className = 'status err show'; }
+        saveBtns.forEach(b => { (b as HTMLButtonElement).disabled = false; });
       }
     });
   }
@@ -7167,9 +7294,23 @@ gl_FragColor=vec4(col,alpha);}`;
     container.innerHTML = outputs.length
       ? outputs.map(id => {
           const name = this._hass?.states?.[id]?.attributes?.friendly_name || id;
-          return `<span class="sensor-pill" title="${this._escapeHtml(name)}"><span>${this._escapeHtml(name)}</span></span>`;
+          return `<span class="sensor-pill" title="${this._escapeHtml(name)}" style="display:inline-flex;align-items:center;justify-content:space-between;gap:6px;padding:6px 10px;">
+            <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${this._escapeHtml(name)}</span>
+            <button type="button" class="ghost" data-remove-sos="${this._escapeHtml(id)}" style="padding:0 4px;font-size:11px;line-height:1;opacity:.65;cursor:pointer;border:none;background:transparent;color:inherit;" title="Eliminar">✕</button>
+          </span>`;
         }).join('')
       : `<div class="mode-sensor-none">${this._t('sos_no_outputs')}</div>`;
+
+    container.querySelectorAll('[data-remove-sos]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = (btn as HTMLElement).dataset.removeSos;
+        if (id) {
+          this._panicOutputs = (this._panicOutputs || []).filter(x => x !== id);
+          this._renderSosOutputs();
+        }
+      });
+    });
   }
 
   _configureEmergencyCall() {
@@ -7355,12 +7496,27 @@ gl_FragColor=vec4(col,alpha);}`;
       this._renderEntries();
       this._updateCanvasBackground();
 
+      const successMsg = this._t('saved') || '✓ Guardado exitosamente';
       const btn = this.shadowRoot.getElementById('btn-save-personalization-standalone');
       if (btn) {
         const oldText = btn.textContent;
-        btn.textContent = this._t('saved');
-        btn.style.background = '#43a047';
+        btn.textContent = successMsg;
+        btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
         setTimeout(() => { btn.textContent = oldText; btn.style.background = ''; }, 3000);
+      }
+
+      const sosBtn = this.shadowRoot.getElementById('btn-save-sos');
+      const sosStatus = this.shadowRoot.getElementById('sos-status');
+      if (sosBtn) {
+        const oldSos = sosBtn.textContent;
+        sosBtn.textContent = successMsg;
+        sosBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+        setTimeout(() => { sosBtn.textContent = oldSos; sosBtn.style.background = ''; }, 3000);
+      }
+      if (sosStatus) {
+        sosStatus.textContent = successMsg;
+        sosStatus.style.opacity = '1';
+        setTimeout(() => { sosStatus.textContent = ''; sosStatus.style.opacity = '0'; }, 3000);
       }
     } catch (e) { alert(this._format('generic_error', { error: e.message })); }
   }
@@ -7938,7 +8094,6 @@ gl_FragColor=vec4(col,alpha);}`;
       this._panicOutputs = [...this._selected];
       this._renderSosOutputs();
       this._closeModal();
-      this._savePersonalization();
       return;
     }
     if (!this._ui.modes) this._ui.modes = {};
@@ -9158,7 +9313,7 @@ gl_FragColor=vec4(col,alpha);}`;
         const sizesDiv = document.createElement('div');
         sizesDiv.className = 'widget-sizes';
 
-        ['S', 'M', 'L', 'XL'].forEach(sz => {
+        ['XS', 'S', 'M', 'L', 'XL'].forEach(sz => {
           const btn = document.createElement('button');
           btn.className = 'widget-size-btn';
           btn.textContent = sz;

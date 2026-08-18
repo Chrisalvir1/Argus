@@ -1,5 +1,5 @@
 // @ts-nocheck
-const VALID=new Set(['S','M','L','XL']),KEY='argus-widgets-stable-v5';const clone=v=>JSON.parse(JSON.stringify(v));
+const VALID=new Set(['XS','S','M','L','XL']),KEY='argus-widgets-stable-v5';const clone=v=>JSON.parse(JSON.stringify(v));
 function norm(v){if(!Array.isArray(v))return null;const seen=new Set(),out=[];for(const x of v){const id=String(x?.id||'');if(!id||seen.has(id))continue;seen.add(id);out.push({id,size:VALID.has(x?.size)?x.size:'M',hidden:Boolean(x?.hidden)})}return out.length?out:null}
 function read(){try{return norm(JSON.parse(localStorage.getItem(KEY)||localStorage.getItem('argus-widgets-v4')||'null'))}catch(_){return null}}
 function snapshot(p){const g=p.shadowRoot?.getElementById('widget-grid'),old=new Map((p._widgetConfig||[]).map(x=>[x.id,x]));if(!g)return norm(p._widgetConfig);return norm([...g.children].filter(x=>x.classList.contains('panel')&&!x.classList.contains('dashboard-instances')).map(x=>{const id=x.id.replace(/^w-/,'');return{id,size:VALID.has(x.dataset.size)?x.dataset.size:(old.get(id)?.size||'M'),hidden:Boolean(old.get(id)?.hidden)}}))}
