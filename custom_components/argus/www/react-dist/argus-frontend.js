@@ -1,4 +1,4 @@
-const Do = [
+const $o = [
   { code: "auto", flag: "🏠", label: "Home Assistant" },
   { code: "es", flag: "🇪🇸", label: "Español" },
   { code: "en", flag: "🇬🇧", label: "English" },
@@ -13,13 +13,13 @@ const Do = [
   { code: "ko", flag: "🇰🇷", label: "한국어" },
   { code: "ja", flag: "🇯🇵", label: "日本語" },
   { code: "uk", flag: "🇺🇦", label: "Українська" }
-], di = {
+], ui = {
   es: {
     accept: "Aceptar",
     access_desc: "Gestión global de seguridad, PIN maestro y administradores.",
-    access_pin_lbl: "PIN de Acceso",
+    access_pin_lbl: "PIN доступа",
     access_title: "Control de Acceso y Usuarios",
-    action_failed: "No se pudo realizar la acción",
+    action_failed: "Не удалось выполнить действие",
     active_profile: "Perfil Activo",
     active_until: "Vence",
     activity_log: "📋 Historial de Actividad",
@@ -35,7 +35,7 @@ const Do = [
     armed_night: "Noche",
     armed_vacation: "Vacaciones",
     arming: "Armando",
-    automations: "⚡ Automatizaciones",
+    automations: "Automatizaciones",
     available: "Disponibles",
     background_lbl: "Fondo",
     backup_desc: "Guarda una copia de seguridad de tus ajustes o restaura una anterior.",
@@ -60,28 +60,27 @@ const Do = [
     bridge_not_desc: "Activa la integración HomeKit Bridge en Home Assistant e incluye la entidad <code>alarm_control_panel.argus_*</code> para generar un código QR de emparejamiento.",
     bridge_paired: "Puente configurado",
     bridge_paired_desc: "El puente <b>{bridge}</b> está configurado en Home Assistant. Home Assistant no permite comprobar desde aquí si fue añadido a Apple Home ni conocer su nombre.",
-    btn_away: "🔒 AUSENTE",
+    btn_away: "🔴 Ausente",
     btn_create_argus_profile: "Crear perfil Argus",
     btn_disarmed: "DESARMADO",
-    btn_home: "🏠 EN CASA",
-    btn_night: "🌙 NOCHE",
+    btn_home: "🏠 En Casa",
+    btn_night: "🌙 Noche",
     btn_sos: "🚨 SOS / PÁNICO",
-    btn_vacation: "✈️ VACACIONES",
+    btn_vacation: "✈️ Vacaciones",
     bypass_lbl: "🚫 Omitir",
     cancel: "Cancelar",
     cancel_btn: "Cancelar",
     cannot_arm: "Невозможно поставить на охрану",
     cannot_delete_last_admin: "No se puede eliminar el último administrador vinculante.",
-    change_btn: "Cambiar",
+    change_btn: "Изменить",
     change_pin: "PIN Maestro",
     change_profile_picture: "Cambiar foto en Personas de HA ↗",
-    change_user_pin: "Cambiar PIN",
     claim_btn: "Заявить права администратора",
     claim_desc: "Вашей установке требуется администратор для получения доступа.",
     claim_title: "Обновление безопасности Argus",
     clear: "Limpiar",
     clear_history_confirm: "Удалить всю историю активности?",
-    clear_log_btn: "BORRAR",
+    clear_log_btn: "🗑️ Limpiar historial",
     clock_12h: "12 horas (AM/PM)",
     clock_24h: "24 horas",
     clock_auto: "Automático (Home Assistant)",
@@ -97,7 +96,6 @@ const Do = [
     delete: "Удалить",
     delete_btn_title: "Borrar de almacenamiento",
     delete_file_error: "Не удалось удалить файл: {error}",
-    delete_user: "Eliminar usuario",
     delete_user_confirm: '¿Estás seguro de que deseas eliminar a "{name}"?',
     delete_user_tooltip: "Eliminar perfil de usuario",
     deselect_all: "☐ Ninguno",
@@ -109,8 +107,8 @@ const Do = [
     edit_btn: "✏️ Editar",
     edit_dashboard: "Editar tablero",
     edit_dashboard_done: "✓ Listo",
-    emergency_help: "Número telefónico marcado en caso de emergencia.",
-    emergency_number_label: "Número de Emergencia",
+    emergency_help: "Настройте для местоположения дома (например, Коста-Рика: 911; Испания: 112). Номер будет включён в SOS-оповещения.",
+    emergency_number_label: "🚨 Местный номер экстренной службы",
     error_loading_uploaded_files: "Error al cargar historial de archivos.",
     exit_to_ha: "Volver a Home Assistant",
     exp_indefinite: "Indefinido",
@@ -118,6 +116,7 @@ const Do = [
     expired: "Expirado",
     export_btn: "📤 Descargar",
     export_error: "Ошибка экспорта: {error}",
+    external_panels: "Paneles de alarma externos",
     file_choice: `«{file}»
 
 Использовать как статичное изображение (ОК) или анимированное видео (Отмена)?`,
@@ -144,11 +143,12 @@ const Do = [
     ha_role_admin: "Admin HA",
     ha_role_standard: "Usuario HA",
     ha_standard_user_label: "Standard HA User",
-    hero_desc: "Sistema integral de seguridad, control de acceso, automatizaciones y HomeKit.",
+    hero_desc: "Sistema de seguridad inteligente para el hogar",
+    hide_widget: "Ocultar widget",
     history_refresh: "🔄 Actualizar",
     history_unavailable: "Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.",
     home_default: "Мой дом",
-    home_fallback: "Дом",
+    home_fallback: "Mi Hogar",
     home_name_label: "Nombre del Hogar",
     home_name_lbl: "Nombre del Hogar",
     home_name_modal_desc: "Este nombre aparece en el panel de instancias y en pantalla completa.",
@@ -163,7 +163,7 @@ const Do = [
     import_success: "Конфигурация восстановлена. Перезагрузка…",
     initialization_error_desc: "Не удалось подключиться к авторизованному backend Home Assistant.",
     initialization_error_title: "Не удалось запустить Argus",
-    instances: "Instancias activas",
+    instances: "Instancias Activas",
     introduce_pin: "Introduce tu PIN",
     invalid_config: "Недопустимый файл конфигурации.",
     is_admin: "Administrador",
@@ -173,11 +173,15 @@ const Do = [
     lbl_aesthetic_custom: "Más Ajustes / SOS",
     lbl_load_file: "Cargar archivo:",
     lbl_uploaded_files: "Archivos subidos en servidor",
+    light_siren_color: "Color",
+    light_siren_flash: "Destello suave si está disponible",
     link_ha_user: "Vincular a Usuario Home Assistant",
     linked_rules: "Reglas vinculadas a Argus",
     loading: "Загрузка…",
     lock_if_open: "Bloquear si abiertos",
     log_action_access_pin_updated: "PIN доступа обновлён",
+    log_action_analysis: "Análisis de Seguridad",
+    log_action_automation: "Automatización Ejecutada",
     log_action_backup_created: "Резервная копия создана",
     log_action_backup_restored: "Конфигурация восстановлена",
     log_action_first_run_completed: "Argus inicializado por {user}",
@@ -190,8 +194,11 @@ const Do = [
     log_action_schedule_applied: "Расписание применено",
     log_action_select_profile: "Perfil seleccionado: {user}",
     log_action_sos: "Pánico SOS activado por {user}",
+    log_action_sos_stopped: "SOS Detenido",
     log_action_state_restored: "Состояние восстановлено",
     log_action_stop_sos: "Pánico SOS detenido por {user}",
+    log_action_user_added: "Usuario Creado",
+    log_action_user_deleted: "Usuario Eliminado",
     log_action_user_logged_in: "Вход пользователя",
     log_action_verify_access_pin: "PIN de acceso verificado por {user}",
     log_armed: "Armado",
@@ -202,13 +209,14 @@ const Do = [
     log_detail_pin_reset_failed: "Intento no autorizado de restablecer el PIN maestro",
     log_detail_triggered: "Activación automática",
     log_disarmed: "Desarmado",
+    log_mode: "Modo",
     log_no_events: "Sin eventos recientes.",
     log_sensor: "Sensor",
     log_triggered: "¡Disparado!",
     login_btn: "Iniciar sesión",
-    manual_arm: "Manual",
-    manual_disarm: "Manual (Desarmado)",
-    master_pin_lbl: "PIN Maestro",
+    manual_arm: "Armado manual",
+    manual_disarm: "Desarmado manual",
+    master_pin_lbl: "Мастер-PIN",
     modal_add_user: "+ Добавить пользователя",
     modal_cancel: "Отмена",
     modal_confirm: "Подтвердить",
@@ -269,29 +277,32 @@ const Do = [
     profile_is_yours: "Este es tu perfil",
     profile_needs_pin: "Perfil ajeno — introduce el PIN de acceso",
     profile_no_pin_access: "Este perfil no tiene PIN de acceso. No puedes abrirlo.",
-    remove_btn: "Quitar",
+    remove_btn: "Удалить",
     reset_btn: "⚠️ Restablecer",
     reset_confirm: "Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.",
     reset_dashboard: "Restablecer diseño",
     reset_error: "Ошибка сброса: {error}",
     reset_success: "Argus сброшен. У вас есть несколько секунд, чтобы отменить это.",
+    reset_widget: "Restablecer widget",
     retry_action: "Повторить",
     role_argus_admin: "Administrador de Argus",
     role_argus_admin_short: "Adm",
-    role_argus_standard: "Usuario estándar",
+    role_argus_standard: "Usuario Estándar",
     role_argus_user: "Usuario estándar",
     role_argus_user_short: "Std",
     rules_tip: "",
     save_btn: "Guardar",
-    save_config: "GUARDAR CONFIGURACIÓN",
+    save_config: "💾 Guardar Modo",
     save_mode: "💾 Guardar modo",
     save_notif: "Guardar",
     save_user: "Guardar",
+    saved: "✓ Guardado",
     search_placeholder: "Buscar por nombre, área o entity_id",
     search_select: "Buscar y seleccionar",
     searching_auto: "↻ Buscando automatizaciones...",
     select_all: "☑ Todos",
     select_btn: "+ Seleccionar",
+    select_entry_sensors: "+ Seleccionar sensores de entrada",
     select_profile_subtitle: "Accede a tus paneles e instancias de seguridad de Argus.",
     select_profile_title: "Selecciona tu perfil",
     selected_lbl: "Seleccionadas",
@@ -306,31 +317,36 @@ const Do = [
     setup_required_desc: "Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.",
     setup_required_title: "Требуется настройка Argus",
     siren_section: "Sirenas",
-    sos_actions: "Acciones Automáticas de SOS",
+    size: "Tamaño",
+    slide_disarm: "Desliza para desarmar",
+    slide_sos: "Desliza para activar SOS",
+    slide_sos_stop: "Desliza para detener SOS",
+    sos_actions: "🚨 Действия SOS",
     sos_activated: "SOS активирован",
     sos_call: "📞 Llamar a Emergencias",
     sos_call_confirm: "Позвонить в экстренную службу ({number})?",
     sos_call_help: "Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.",
     sos_confirm_text: "Desliza para disparar la alarma inmediatamente.",
-    sos_confirm_title: "Confirmar pánico",
+    sos_confirm_title: "🚨 ¿Activar Alarma de Emergencia?",
     sos_error: "Не удалось активировать SOS: {error}",
     sos_no_outputs: "Устройства не выбраны",
-    sos_outputs_help: "Dispositivos activados al disparar el SOS.",
-    sos_select_outputs: "Seleccionar salidas de pánico",
+    sos_outputs_help: "Эти устройства всегда будут включаться при SOS, даже когда Argus снят с охраны.",
+    sos_select_outputs: "Выбрать свет, сирены или сценарии",
     sos_slide: "Desliza para activar SOS",
     sos_stop: "DETENER SOS",
-    status_away: "FUERA",
+    status_away: "Вне дома",
     status_closed: "CERRADO",
-    status_home: "EN CASA",
-    status_idle: "INACTIVO",
+    status_home: "Дома",
+    status_idle: "Ожидание",
     status_open: "ABIERTO",
-    status_recording: "GRABANDO",
+    status_recording: "Запись",
+    support_title: "Estado y Soporte",
     switch_profile_btn: "👤 Cambiar de Perfil",
     sync_panel_help: "Paneles de alarma que seguirán el mismo estado de Argus",
     sync_panel_section: "Paneles Sincronizados",
     system_armed: "SISTEMA ARMADO",
     system_disarmed: "SISTEMA DESARMADO",
-    system_triggered: "¡ALARMA DISPARADA!",
+    system_triggered: "¡ALARMA ACTIVADA!",
     temp_auto: "Automático (sensor local / termostato / clima)",
     temp_notification_title: "Argus — Температурное предупреждение",
     temp_thermostat: "(termostato)",
@@ -359,7 +375,7 @@ const Do = [
     user_role_action: "Роль",
     user_role_label: "Rol Argus",
     username: "Nombre de Usuario",
-    users_title: "👥 Usuarios y Control de Acceso",
+    users_title: "👥 Control de Acceso y Usuarios",
     wait_if_open: "Esperar armado en espera",
     waiting_sensors: "ESPERANDO SENSORES",
     welcome_greeting: "Bienvenido/a,",
@@ -368,17 +384,17 @@ const Do = [
   en: {
     accept: "Accept",
     access_desc: "Global security management, master PIN and administrators.",
-    access_pin_lbl: "PIN de Acceso",
+    access_pin_lbl: "PIN доступа",
     access_title: "Access Control & Users",
-    action_failed: "No se pudo realizar la acción",
-    active_profile: "Perfil Activo",
+    action_failed: "Не удалось выполнить действие",
+    active_profile: "Active Profile",
     active_until: "Expires",
     activity_log: "📋 Activity Log",
     add_btn: "+ Add",
-    add_user: "Add User",
+    add_user: "Add user",
     admin_only: "Only administrators can modify this section.",
     alarm_instance: "Alarm Instance",
-    all_sensors_bypassed: "Todos los sensores configurados están omitidos.",
+    all_sensors_bypassed: "All configured sensors are bypassed.",
     arm_time: "Arming delay (s)",
     arm_time_label: "Arm time (s)",
     armed_away: "Away",
@@ -386,7 +402,7 @@ const Do = [
     armed_night: "Night",
     armed_vacation: "Vacation",
     arming: "Arming",
-    automations: "⚡ Automations",
+    automations: "Automations",
     available: "Available",
     background_lbl: "Background",
     backup_desc: "Save a backup of your settings or restore a previous one.",
@@ -411,28 +427,27 @@ const Do = [
     bridge_not_desc: "Enable the HomeKit Bridge integration in Home Assistant and include the entity <code>alarm_control_panel.argus_*</code> to generate a pairing QR code.",
     bridge_paired: "Bridge configured",
     bridge_paired_desc: "The <b>{bridge}</b> bridge is configured in Home Assistant. Home Assistant cannot verify from here whether it was added to Apple Home or report its name.",
-    btn_away: "🔒 AWAY",
+    btn_away: "🔴 Away",
     btn_create_argus_profile: "Create Argus Profile",
     btn_disarmed: "DISARMED",
-    btn_home: "🏠 HOME",
-    btn_night: "🌙 NIGHT",
+    btn_home: "🏠 Home",
+    btn_night: "🌙 Night",
     btn_sos: "🚨 SOS / PANIC",
-    btn_vacation: "✈️ VACATION",
+    btn_vacation: "✈️ Vacation",
     bypass_lbl: "🚫 Bypass",
     cancel: "Cancel",
     cancel_btn: "Cancel",
     cannot_arm: "Невозможно поставить на охрану",
     cannot_delete_last_admin: "Cannot delete the last binding administrator.",
-    change_btn: "Cambiar",
+    change_btn: "Изменить",
     change_pin: "Master PIN",
-    change_profile_picture: "Cambiar foto en Personas de HA ↗",
-    change_user_pin: "Cambiar PIN",
+    change_profile_picture: "Change photo in HA Persons ↗",
     claim_btn: "Заявить права администратора",
     claim_desc: "Вашей установке требуется администратор для получения доступа.",
     claim_title: "Обновление безопасности Argus",
     clear: "Clear",
     clear_history_confirm: "Удалить всю историю активности?",
-    clear_log_btn: "CLEAR",
+    clear_log_btn: "🗑️ Clear Log",
     clock_12h: "12-hour (AM/PM)",
     clock_24h: "24-hour",
     clock_auto: "Automatic (Home Assistant)",
@@ -448,7 +463,6 @@ const Do = [
     delete: "Удалить",
     delete_btn_title: "Delete from storage",
     delete_file_error: "Не удалось удалить файл: {error}",
-    delete_user: "Eliminar usuario",
     delete_user_confirm: 'Are you sure you want to delete "{name}"?',
     delete_user_tooltip: "Delete user profile",
     deselect_all: "☐ None",
@@ -460,8 +474,8 @@ const Do = [
     edit_btn: "✏️ Edit",
     edit_dashboard: "Edit Dashboard",
     edit_dashboard_done: "✓ Done",
-    emergency_help: "Número telefónico marcado en caso de emergencia.",
-    emergency_number_label: "Número de Emergencia",
+    emergency_help: "Настройте для местоположения дома (например, Коста-Рика: 911; Испания: 112). Номер будет включён в SOS-оповещения.",
+    emergency_number_label: "🚨 Местный номер экстренной службы",
     error_loading_uploaded_files: "Error loading file history.",
     exit_to_ha: "Back to Home Assistant",
     exp_indefinite: "Indefinite",
@@ -469,6 +483,7 @@ const Do = [
     expired: "Expired",
     export_btn: "📤 Download",
     export_error: "Ошибка экспорта: {error}",
+    external_panels: "External Alarm Panels",
     file_choice: `«{file}»
 
 Использовать как статичное изображение (ОК) или анимированное видео (Отмена)?`,
@@ -495,11 +510,12 @@ const Do = [
     ha_role_admin: "HA Admin",
     ha_role_standard: "HA User",
     ha_standard_user_label: "Standard HA User",
-    hero_desc: "Comprehensive security system, access control, automations, and HomeKit.",
+    hero_desc: "Intelligent home security system",
+    hide_widget: "Hide widget",
     history_refresh: "🔄 Refresh",
     history_unavailable: "Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.",
     home_default: "Мой дом",
-    home_fallback: "Дом",
+    home_fallback: "My Home",
     home_name_label: "Home Name",
     home_name_lbl: "Home Name",
     home_name_modal_desc: "This name appears in the instances panel and in full screen.",
@@ -524,11 +540,15 @@ const Do = [
     lbl_aesthetic_custom: "Aesthetic Customization",
     lbl_load_file: "Upload file:",
     lbl_uploaded_files: "Uploaded files on server",
+    light_siren_color: "Color",
+    light_siren_flash: "Gentle flash if available",
     link_ha_user: "Link to Home Assistant User",
     linked_rules: "Rules linked to Argus",
     loading: "Загрузка…",
-    lock_if_open: "Lock if open",
+    lock_if_open: "Block if open",
     log_action_access_pin_updated: "PIN доступа обновлён",
+    log_action_analysis: "Security Analysis",
+    log_action_automation: "Automation Executed",
     log_action_backup_created: "Резервная копия создана",
     log_action_backup_restored: "Конфигурация восстановлена",
     log_action_first_run_completed: "Argus initialized by {user}",
@@ -541,8 +561,11 @@ const Do = [
     log_action_schedule_applied: "Расписание применено",
     log_action_select_profile: "Profile selected: {user}",
     log_action_sos: "SOS Panic triggered by {user}",
+    log_action_sos_stopped: "SOS Stopped",
     log_action_state_restored: "Состояние восстановлено",
     log_action_stop_sos: "SOS Panic stopped by {user}",
+    log_action_user_added: "User Created",
+    log_action_user_deleted: "User Deleted",
     log_action_user_logged_in: "Вход пользователя",
     log_action_verify_access_pin: "Access PIN verified by {user}",
     log_armed: "Armed",
@@ -553,13 +576,14 @@ const Do = [
     log_detail_pin_reset_failed: "Unauthorized attempt to reset master PIN",
     log_detail_triggered: "Automatic activation",
     log_disarmed: "Disarmed",
+    log_mode: "Mode",
     log_no_events: "No recent events.",
     log_sensor: "Sensor",
     log_triggered: "Triggered!",
     login_btn: "Login",
-    manual_arm: "Manual",
-    manual_disarm: "Manual (Disarmed)",
-    master_pin_lbl: "PIN Maestro",
+    manual_arm: "Manual arming",
+    manual_disarm: "Manual disarm",
+    master_pin_lbl: "Мастер-PIN",
     modal_add_user: "+ Добавить пользователя",
     modal_cancel: "Отмена",
     modal_confirm: "Подтвердить",
@@ -585,11 +609,11 @@ const Do = [
     no_instances: "No instances. Add Argus from Integrations.",
     no_results: "Нет результатов",
     no_rules: "",
-    no_sensors_configured: "Sin sensores configurados",
+    no_sensors_configured: "No sensors configured",
     no_unlinked_ha_accounts: "All active Home Assistant accounts have a profile.",
     no_users: "No additional users configured.",
     none_selected: "None selected",
-    notif_desc: "Select mobile devices registered in HA that will receive Argus alerts.",
+    notif_desc: "Select the mobile devices registered in HA that will receive Argus alerts.",
     notif_no_services: "Нет мобильных служб",
     notification_armed: "{user} активировал режим {mode}.",
     notification_disarmed: "{user} снял систему с охраны.",
@@ -609,7 +633,7 @@ const Do = [
     pin_desc: "Numeric code to arm and disarm.",
     pin_disarm_error: "Неверный PIN или ошибка снятия с охраны",
     pin_incorrect: "❌ Incorrect current PIN",
-    pin_management: "🔑 Gestión de Pines",
+    pin_management: "🔑 PIN Management",
     pin_master_title: "Master PIN",
     pin_modal_desc: "Numeric PIN to disarm Argus",
     pin_placeholder: "Access PIN",
@@ -620,29 +644,32 @@ const Do = [
     profile_is_yours: "This is your profile",
     profile_needs_pin: "Another person’s profile — enter the access PIN",
     profile_no_pin_access: "This profile has no access PIN. You cannot open it.",
-    remove_btn: "Quitar",
+    remove_btn: "Удалить",
     reset_btn: "⚠️ Factory Reset",
     reset_confirm: "Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.",
     reset_dashboard: "Reset Layout",
     reset_error: "Ошибка сброса: {error}",
     reset_success: "Argus сброшен. У вас есть несколько секунд, чтобы отменить это.",
+    reset_widget: "Reset widget",
     retry_action: "Повторить",
     role_argus_admin: "Argus Administrator",
-    role_argus_admin_short: "Adm",
+    role_argus_admin_short: "Admin",
     role_argus_standard: "Standard User",
     role_argus_user: "Standard User",
-    role_argus_user_short: "Std",
+    role_argus_user_short: "User",
     rules_tip: "",
     save_btn: "Save",
-    save_config: "SAVE CONFIGURATION",
-    save_mode: "💾 Save Mode",
+    save_config: "💾 Save Mode",
+    save_mode: "💾 Save mode",
     save_notif: "Save",
     save_user: "Save",
+    saved: "✓ Saved",
     search_placeholder: "Search by name, area or entity_id",
     search_select: "Search & select",
     searching_auto: "↻ Searching automations...",
     select_all: "☑ All",
     select_btn: "+ Select",
+    select_entry_sensors: "+ Select Entry Sensors",
     select_profile_subtitle: "Access your security panels and Argus instances.",
     select_profile_title: "Select Your Profile",
     selected_lbl: "Selected",
@@ -657,31 +684,36 @@ const Do = [
     setup_required_desc: "Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.",
     setup_required_title: "Требуется настройка Argus",
     siren_section: "Sirens",
-    sos_actions: "Acciones Automáticas de SOS",
+    size: "Size",
+    slide_disarm: "Slide to disarm",
+    slide_sos: "Slide to trigger SOS",
+    slide_sos_stop: "Slide to stop SOS",
+    sos_actions: "🚨 Действия SOS",
     sos_activated: "SOS активирован",
     sos_call: "📞 Call Emergency Services",
     sos_call_confirm: "Позвонить в экстренную службу ({number})?",
     sos_call_help: "Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.",
     sos_confirm_text: "Slide to trigger the alarm immediately.",
-    sos_confirm_title: "Confirm panic",
+    sos_confirm_title: "🚨 Trigger Emergency Alarm?",
     sos_error: "Не удалось активировать SOS: {error}",
     sos_no_outputs: "Устройства не выбраны",
-    sos_outputs_help: "Dispositivos activados al disparar el SOS.",
-    sos_select_outputs: "Seleccionar salidas de pánico",
-    sos_slide: "Slide to activate SOS",
-    sos_stop: "DETENER SOS",
-    status_away: "FUERA",
+    sos_outputs_help: "Эти устройства всегда будут включаться при SOS, даже когда Argus снят с охраны.",
+    sos_select_outputs: "Выбрать свет, сирены или сценарии",
+    sos_slide: "Slide to trigger SOS",
+    sos_stop: "STOP SOS",
+    status_away: "Вне дома",
     status_closed: "CLOSED",
-    status_home: "EN CASA",
-    status_idle: "INACTIVO",
+    status_home: "Дома",
+    status_idle: "Ожидание",
     status_open: "OPEN",
-    status_recording: "GRABANDO",
+    status_recording: "Запись",
+    support_title: "Status & Support",
     switch_profile_btn: "👤 Switch Profile",
     sync_panel_help: "Paneles de alarma que seguirán el mismo estado de Argus",
     sync_panel_section: "Paneles Sincronizados",
     system_armed: "SYSTEM ARMED",
     system_disarmed: "SYSTEM DISARMED",
-    system_triggered: "¡ALARMA DISPARADA!",
+    system_triggered: "ALARM TRIGGERED!",
     temp_auto: "Automatic (local sensor / thermostat / climate)",
     temp_notification_title: "Argus — Температурное предупреждение",
     temp_thermostat: "(thermostat)",
@@ -703,7 +735,7 @@ const Do = [
     user_default: "Пользователь",
     user_exp_date: "Expiration Date/Time",
     user_exp_type: "Expiration",
-    user_no_pin: "Sin PIN de acceso",
+    user_no_pin: "No access PIN",
     user_pin: "User PIN",
     user_pin_action: "PIN",
     user_required: "Требуются имя и PIN",
@@ -712,32 +744,32 @@ const Do = [
     username: "Username",
     users_title: "👥 Users & Access Control",
     wait_if_open: "Wait for sensors to close",
-    waiting_sensors: "ESPERANDO SENSORES",
+    waiting_sensors: "WAITING FOR SENSORS",
     welcome_greeting: "Welcome,",
     welcome_profile: "Добро пожаловать, {name}"
   },
   fr: {
     accept: "Accepter",
     access_desc: "Gestion globale de la sécurité, PIN maître et administrateurs.",
-    access_pin_lbl: "PIN de Acceso",
+    access_pin_lbl: "PIN доступа",
     access_title: "Contrôle d'accès & Utilisateurs",
-    action_failed: "No se pudo realizar la acción",
-    active_profile: "Perfil Activo",
+    action_failed: "Не удалось выполнить действие",
+    active_profile: "Profil Actif",
     active_until: "Expire le",
     activity_log: "📋 Journal d'activité",
     add_btn: "+ Ajouter",
     add_user: "Ajouter un utilisateur",
     admin_only: "Seuls les administrateurs peuvent modifier cette section.",
     alarm_instance: "Instance d'alarme",
-    all_sensors_bypassed: "Todos los sensores configurados están omitidos.",
+    all_sensors_bypassed: "Tous les capteurs configurés sont contournés.",
     arm_time: "Délai d'armement (s)",
     arm_time_label: "Temps armement (s)",
     armed_away: "Absent",
-    armed_home: "Maison",
+    armed_home: "À la maison",
     armed_night: "Nuit",
     armed_vacation: "Vacances",
     arming: "Armement",
-    automations: "⚡ Automatisations",
+    automations: "Automatisations",
     available: "Disponibles",
     background_lbl: "Fond",
     backup_desc: "Enregistrez une sauvegarde ou restaurez une précédente.",
@@ -762,28 +794,27 @@ const Do = [
     bridge_not_desc: "Activez l'intégration HomeKit Bridge dans Home Assistant et incluez l'entité <code>alarm_control_panel.argus_*</code> pour générer un QR d'appairage.",
     bridge_paired: "Pont configuré",
     bridge_paired_desc: "Le pont <b>{bridge}</b> est configuré dans Home Assistant. Home Assistant ne peut pas vérifier ici son ajout à Apple Home ni fournir son nom.",
-    btn_away: "🔒 ABSENT",
+    btn_away: "🔴 Absent",
     btn_create_argus_profile: "Créer un profil Argus",
     btn_disarmed: "DÉSARMÉ",
-    btn_home: "🏠 MAISON",
-    btn_night: "🌙 NUIT",
+    btn_home: "🏠 Maison",
+    btn_night: "🌙 Nuit",
     btn_sos: "🚨 SOS / PANIQUE",
-    btn_vacation: "✈️ VACANCES",
-    bypass_lbl: "🚫 Ignorer",
+    btn_vacation: "✈️ Vacances",
+    bypass_lbl: "🚫 Contourner",
     cancel: "Annuler",
     cancel_btn: "Annuler",
     cannot_arm: "Невозможно поставить на охрану",
     cannot_delete_last_admin: "Impossible de supprimer le dernier administrateur.",
-    change_btn: "Cambiar",
-    change_pin: "Code PIN Maître",
-    change_profile_picture: "Cambiar foto en Personas de HA ↗",
-    change_user_pin: "Cambiar PIN",
+    change_btn: "Изменить",
+    change_pin: "PIN maître",
+    change_profile_picture: "Changer la photo dans Personnes HA ↗",
     claim_btn: "Заявить права администратора",
     claim_desc: "Вашей установке требуется администратор для получения доступа.",
     claim_title: "Обновление безопасности Argus",
     clear: "Effacer",
     clear_history_confirm: "Удалить всю историю активности?",
-    clear_log_btn: "EFFACER",
+    clear_log_btn: "🗑️ Effacer l'historique",
     clock_12h: "12 heures (AM/PM)",
     clock_24h: "24 heures",
     clock_auto: "Automatique (Home Assistant)",
@@ -791,7 +822,7 @@ const Do = [
     clock_format_label: "Format d'heure",
     close: "Fermer",
     confirm: "✓ Confirmer",
-    confirm_pin: "Confirmer le PIN",
+    confirm_pin: "Confirmer PIN",
     connected: "CONNECTÉ",
     create_ha: "+ Créer dans HA",
     current_pin: "PIN actuel",
@@ -799,7 +830,6 @@ const Do = [
     delete: "Удалить",
     delete_btn_title: "Supprimer du stockage",
     delete_file_error: "Не удалось удалить файл: {error}",
-    delete_user: "Eliminar usuario",
     delete_user_confirm: "Voulez-vous vraiment supprimer « {name} » ?",
     delete_user_tooltip: "Supprimer le profil utilisateur",
     deselect_all: "☐ Aucun",
@@ -811,8 +841,8 @@ const Do = [
     edit_btn: "✏️ Modifier",
     edit_dashboard: "Modifier le tableau",
     edit_dashboard_done: "✓ Terminé",
-    emergency_help: "Número telefónico marcado en caso de emergencia.",
-    emergency_number_label: "Número de Emergencia",
+    emergency_help: "Настройте для местоположения дома (например, Коста-Рика: 911; Испания: 112). Номер будет включён в SOS-оповещения.",
+    emergency_number_label: "🚨 Местный номер экстренной службы",
     error_loading_uploaded_files: "Erreur lors du chargement de l'historique des fichiers.",
     exit_to_ha: "Retour à Home Assistant",
     exp_indefinite: "Indéfini",
@@ -820,6 +850,7 @@ const Do = [
     expired: "Expiré",
     export_btn: "📤 Télécharger",
     export_error: "Ошибка экспорта: {error}",
+    external_panels: "Panneaux d'alarme externes",
     file_choice: `«{file}»
 
 Использовать как статичное изображение (ОК) или анимированное видео (Отмена)?`,
@@ -846,13 +877,14 @@ const Do = [
     ha_role_admin: "Admin HA",
     ha_role_standard: "Utilisateur HA",
     ha_standard_user_label: "Utilisateur HA standard",
-    hero_desc: "Système de sécurité complet, contrôle d'accès, automatisations et HomeKit.",
+    hero_desc: "Système de sécurité résidentiel intelligent",
+    hide_widget: "Masquer le widget",
     history_refresh: "🔄 Actualiser",
     history_unavailable: "Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.",
     home_default: "Мой дом",
-    home_fallback: "Дом",
+    home_fallback: "Mon Foyer",
     home_name_label: "Nom du domicile",
-    home_name_lbl: "Nom du domicile",
+    home_name_lbl: "Nom du Foyer",
     home_name_modal_desc: "Ce nom apparaît dans le panneau des instances et en plein écran.",
     home_name_modal_title: "🏡 Nom du domicile",
     home_name_placeholder: "Ma maison",
@@ -865,7 +897,7 @@ const Do = [
     import_success: "Конфигурация восстановлена. Перезагрузка…",
     initialization_error_desc: "Не удалось подключиться к авторизованному backend Home Assistant.",
     initialization_error_title: "Не удалось запустить Argus",
-    instances: "Instances actives",
+    instances: "Instances Actives",
     introduce_pin: "Entrez votre PIN",
     invalid_config: "Недопустимый файл конфигурации.",
     is_admin: "Administrateur",
@@ -875,11 +907,15 @@ const Do = [
     lbl_aesthetic_custom: "Personnalisation esthétique",
     lbl_load_file: "Charger le fichier:",
     lbl_uploaded_files: "Fichiers téléchargés sur le serveur",
+    light_siren_color: "Couleur",
+    light_siren_flash: "Clignotement doux si disponible",
     link_ha_user: "Lier à un utilisateur Home Assistant",
-    linked_rules: "Règles liées à Argus",
+    linked_rules: "Règles associées à Argus",
     loading: "Загрузка…",
     lock_if_open: "Bloquer si ouvert",
     log_action_access_pin_updated: "PIN доступа обновлён",
+    log_action_analysis: "Analyse de Sécurité",
+    log_action_automation: "Automatisation Exécutée",
     log_action_backup_created: "Резервная копия создана",
     log_action_backup_restored: "Конфигурация восстановлена",
     log_action_first_run_completed: "Argus initialisé par {user}",
@@ -892,8 +928,11 @@ const Do = [
     log_action_schedule_applied: "Расписание применено",
     log_action_select_profile: "Profil sélectionné : {user}",
     log_action_sos: "Panique SOS déclenchée par {user}",
+    log_action_sos_stopped: "SOS Arrêté",
     log_action_state_restored: "Состояние восстановлено",
     log_action_stop_sos: "Panique SOS arrêtée par {user}",
+    log_action_user_added: "Utilisateur Créé",
+    log_action_user_deleted: "Utilisateur Supprimé",
     log_action_user_logged_in: "Вход пользователя",
     log_action_verify_access_pin: "PIN d'accès vérifié par {user}",
     log_armed: "Armé",
@@ -904,13 +943,14 @@ const Do = [
     log_detail_pin_reset_failed: "Tentative non autorisée de réinitialiser le code PIN maître",
     log_detail_triggered: "Activation automatique",
     log_disarmed: "Désarmé",
+    log_mode: "Mode",
     log_no_events: "Aucun événement récent.",
     log_sensor: "Capteur",
     log_triggered: "Déclenché!",
     login_btn: "Connexion",
-    manual_arm: "Manuel",
-    manual_disarm: "Manuel (Désarmé)",
-    master_pin_lbl: "PIN Maestro",
+    manual_arm: "Armement manuel",
+    manual_disarm: "Désarmement manuel",
+    master_pin_lbl: "Мастер-PIN",
     modal_add_user: "+ Добавить пользователя",
     modal_cancel: "Отмена",
     modal_confirm: "Подтвердить",
@@ -936,11 +976,11 @@ const Do = [
     no_instances: "Aucune instance.",
     no_results: "Нет результатов",
     no_rules: "",
-    no_sensors_configured: "Sin sensores configurados",
+    no_sensors_configured: "Aucun capteur configuré",
     no_unlinked_ha_accounts: "Tous les comptes Home Assistant actifs ont un profil.",
     no_users: "Aucun utilisateur supplémentaire configuré.",
     none_selected: "Aucun sélectionné",
-    notif_desc: "Sélectionnez les appareils mobiles enregistrés dans HA qui recevront les alertes Argus.",
+    notif_desc: "Sélectionnez les appareils mobiles enregistrés dans HA pour recevoir les alertes Argus.",
     notif_no_services: "Нет мобильных служб",
     notification_armed: "{user} активировал режим {mode}.",
     notification_disarmed: "{user} снял систему с охраны.",
@@ -960,7 +1000,7 @@ const Do = [
     pin_desc: "Code numérique pour armer et désarmer.",
     pin_disarm_error: "Неверный PIN или ошибка снятия с охраны",
     pin_incorrect: "❌ PIN actuel incorrect",
-    pin_management: "🔑 Gestión de Pines",
+    pin_management: "🔑 Gestion des codes PIN",
     pin_master_title: "PIN Maître",
     pin_modal_desc: "PIN numérique pour désarmer Argus",
     pin_placeholder: "Code PIN d’accès",
@@ -971,29 +1011,32 @@ const Do = [
     profile_is_yours: "C’est votre profil",
     profile_needs_pin: "Profil d’une autre personne — entrez le PIN d’accès",
     profile_no_pin_access: "Ce profil n’a pas de PIN d’accès. Vous ne pouvez pas l’ouvrir.",
-    remove_btn: "Quitar",
+    remove_btn: "Удалить",
     reset_btn: "⚠️ Réinitialiser",
     reset_confirm: "Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.",
     reset_dashboard: "Réinitialiser la disposition",
     reset_error: "Ошибка сброса: {error}",
     reset_success: "Argus сброшен. У вас есть несколько секунд, чтобы отменить это.",
+    reset_widget: "Réinitialiser le widget",
     retry_action: "Повторить",
     role_argus_admin: "Administrateur Argus",
-    role_argus_admin_short: "Adm",
-    role_argus_standard: "Utilisateur standard",
+    role_argus_admin_short: "Admin",
+    role_argus_standard: "Utilisateur Standard",
     role_argus_user: "Utilisateur standard",
-    role_argus_user_short: "Std",
+    role_argus_user_short: "Utilisateur",
     rules_tip: "",
     save_btn: "Enregistrer",
-    save_config: "ENREGISTRER LA CONFIGURATION",
-    save_mode: "💾 Enregistrer le mode",
+    save_config: "💾 Enregistrer le Mode",
+    save_mode: "💾 Enregistrer mode",
     save_notif: "Enregistrer",
     save_user: "Enregistrer",
+    saved: "✓ Enregistré",
     search_placeholder: "Rechercher par nom, zone ou entity_id",
     search_select: "Rechercher & sélectionner",
     searching_auto: "↻ Recherche automatisations...",
     select_all: "☑ Tous",
     select_btn: "+ Sélectionner",
+    select_entry_sensors: "+ Sélectionner les capteurs d'entrée",
     select_profile_subtitle: "Accédez à vos panneaux de sécurité et instances Argus.",
     select_profile_title: "Sélectionnez votre profil",
     selected_lbl: "Sélectionnés",
@@ -1008,44 +1051,49 @@ const Do = [
     setup_required_desc: "Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.",
     setup_required_title: "Требуется настройка Argus",
     siren_section: "Sirènes",
-    sos_actions: "Acciones Automáticas de SOS",
+    size: "Taille",
+    slide_disarm: "Glisser pour désarmer",
+    slide_sos: "Glisser pour déclencher SOS",
+    slide_sos_stop: "Glisser pour arrêter SOS",
+    sos_actions: "🚨 Действия SOS",
     sos_activated: "SOS активирован",
     sos_call: "📞 Appeler les urgences",
     sos_call_confirm: "Позвонить в экстренную службу ({number})?",
     sos_call_help: "Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.",
     sos_confirm_text: "Glissez pour déclencher l'alarme immédiatement.",
-    sos_confirm_title: "Confirmer la panique",
+    sos_confirm_title: "🚨 Déclencher l'alarme d'urgence ?",
     sos_error: "Не удалось активировать SOS: {error}",
     sos_no_outputs: "Устройства не выбраны",
-    sos_outputs_help: "Dispositivos activados al disparar el SOS.",
-    sos_select_outputs: "Seleccionar salidas de pánico",
-    sos_slide: "Glisser pour activer le SOS",
-    sos_stop: "DETENER SOS",
-    status_away: "FUERA",
+    sos_outputs_help: "Эти устройства всегда будут включаться при SOS, даже когда Argus снят с охраны.",
+    sos_select_outputs: "Выбрать свет, сирены или сценарии",
+    sos_slide: "Glisser pour déclencher SOS",
+    sos_stop: "ARRÊTER SOS",
+    status_away: "Вне дома",
     status_closed: "FERMÉ",
-    status_home: "EN CASA",
-    status_idle: "INACTIVO",
+    status_home: "Дома",
+    status_idle: "Ожидание",
     status_open: "OUVERT",
-    status_recording: "GRABANDO",
-    switch_profile_btn: "👤 Changer de profil",
+    status_recording: "Запись",
+    support_title: "État & Assistance",
+    switch_profile_btn: "👤 Changer de Profil",
     sync_panel_help: "Paneles de alarma que seguirán el mismo estado de Argus",
     sync_panel_section: "Paneles Sincronizados",
     system_armed: "SYSTÈME ARMÉ",
     system_disarmed: "SYSTÈME DÉSARMÉ",
-    system_triggered: "¡ALARMA DISPARADA!",
+    system_triggered: "ALARME DÉCLENCHÉE !",
     temp_auto: "Automatique (capteur local / thermostat / climat)",
     temp_notification_title: "Argus — Температурное предупреждение",
     temp_thermostat: "(thermostat)",
     thermostat_alert_notif: "🌡️ Alerte de température",
-    times_section: "⏱️ Minuteries",
-    triggered: "ALARME !",
+    times_section: "⏱️ Délais",
+    triggered: "ALARME!",
     unavailable: "Indisponible",
     undo_error: "Не удалось отменить сброс: {error}",
     undo_reset_btn: "↩️ Annuler la réinitialisation",
     undo_success: "Сброс отменён.",
     unlinked_ha_accounts_title: "Comptes Home Assistant sans profil Argus",
     unlock_kiosk: "Déverrouiller le kiosque",
-    update_pin: "Mettre à jour le PIN",
+    update_pin: "Mettre à jour PIN",
     upload_error: "Ошибка загрузки.",
     url_placeholder: "URL фона…",
     use_for_hub: "Argus",
@@ -1054,7 +1102,7 @@ const Do = [
     user_default: "Пользователь",
     user_exp_date: "Expiration Date/Time",
     user_exp_type: "Expiration",
-    user_no_pin: "Sin PIN de acceso",
+    user_no_pin: "Pas de code PIN",
     user_pin: "PIN utilisateur",
     user_pin_action: "PIN",
     user_required: "Требуются имя и PIN",
@@ -1063,32 +1111,32 @@ const Do = [
     username: "Nom d'utilisateur",
     users_title: "👥 Utilisateurs et Contrôle d'accès",
     wait_if_open: "Attendre la fermeture",
-    waiting_sensors: "ESPERANDO SENSORES",
+    waiting_sensors: "EN ATTENTE DES CAPTEURS",
     welcome_greeting: "Bienvenue,",
     welcome_profile: "Добро пожаловать, {name}"
   },
   pt: {
     accept: "Aceitar",
     access_desc: "Gerenciamento global, PIN mestre e administradores.",
-    access_pin_lbl: "PIN de Acceso",
+    access_pin_lbl: "PIN доступа",
     access_title: "Controle de Acesso & Usuários",
-    action_failed: "No se pudo realizar la acción",
-    active_profile: "Perfil Activo",
+    action_failed: "Не удалось выполнить действие",
+    active_profile: "Perfil Ativo",
     active_until: "Expira em",
     activity_log: "📋 Histórico de Atividades",
     add_btn: "+ Adicionar",
     add_user: "Adicionar usuário",
-    admin_only: "Apenas administradores podem modificar esta seção.",
+    admin_only: "Somente administradores podem modificar esta seção.",
     alarm_instance: "Instância do alarme",
-    all_sensors_bypassed: "Todos los sensores configurados están omitidos.",
-    arm_time: "Atraso de armação (s)",
+    all_sensors_bypassed: "Todos os sensores configurados estão ignorados.",
+    arm_time: "Atraso de armamento (s)",
     arm_time_label: "Tempo armado (s)",
     armed_away: "Ausente",
     armed_home: "Em Casa",
     armed_night: "Noite",
     armed_vacation: "Férias",
     arming: "Armando",
-    automations: "⚡ Automações",
+    automations: "Automações",
     available: "Disponíveis",
     background_lbl: "Fundo",
     backup_desc: "Salve um backup ou restaure um anterior.",
@@ -1113,28 +1161,27 @@ const Do = [
     bridge_not_desc: "Ative a integração HomeKit Bridge no Home Assistant e inclua a entidade <code>alarm_control_panel.argus_*</code> para gerar um QR de emparelhamento.",
     bridge_paired: "Ponte configurada",
     bridge_paired_desc: "A ponte <b>{bridge}</b> está configurada no Home Assistant. Não é possível verificar daqui se foi adicionada ao Apple Home nem informar seu nome.",
-    btn_away: "🔒 AUSENTE",
+    btn_away: "🔴 Ausente",
     btn_create_argus_profile: "Criar perfil Argus",
     btn_disarmed: "DESARMADO",
-    btn_home: "🏠 EM CASA",
-    btn_night: "🌙 NOITE",
+    btn_home: "🏠 Em Casa",
+    btn_night: "🌙 Noite",
     btn_sos: "🚨 SOS / PÂNICO",
-    btn_vacation: "✈️ FÉRIAS",
+    btn_vacation: "✈️ Férias",
     bypass_lbl: "🚫 Ignorar",
     cancel: "Cancelar",
     cancel_btn: "Cancelar",
     cannot_arm: "Невозможно поставить на охрану",
     cannot_delete_last_admin: "Não é possível excluir o último administrador.",
-    change_btn: "Cambiar",
+    change_btn: "Изменить",
     change_pin: "PIN Mestre",
-    change_profile_picture: "Cambiar foto en Personas de HA ↗",
-    change_user_pin: "Cambiar PIN",
+    change_profile_picture: "Alterar foto em Pessoas do HA ↗",
     claim_btn: "Заявить права администратора",
     claim_desc: "Вашей установке требуется администратор для получения доступа.",
     claim_title: "Обновление безопасности Argus",
     clear: "Limpar",
     clear_history_confirm: "Удалить всю историю активности?",
-    clear_log_btn: "LIMPAR",
+    clear_log_btn: "🗑️ Limpar histórico",
     clock_12h: "12 horas (AM/PM)",
     clock_24h: "24 horas",
     clock_auto: "Automático (Home Assistant)",
@@ -1150,7 +1197,6 @@ const Do = [
     delete: "Удалить",
     delete_btn_title: "Excluir do armazenamento",
     delete_file_error: "Не удалось удалить файл: {error}",
-    delete_user: "Eliminar usuario",
     delete_user_confirm: 'Tem certeza de que deseja excluir "{name}"?',
     delete_user_tooltip: "Excluir perfil de usuário",
     deselect_all: "☐ Nenhum",
@@ -1162,8 +1208,8 @@ const Do = [
     edit_btn: "✏️ Editar",
     edit_dashboard: "Editar painel",
     edit_dashboard_done: "✓ Concluído",
-    emergency_help: "Número telefónico marcado en caso de emergencia.",
-    emergency_number_label: "Número de Emergencia",
+    emergency_help: "Настройте для местоположения дома (например, Коста-Рика: 911; Испания: 112). Номер будет включён в SOS-оповещения.",
+    emergency_number_label: "🚨 Местный номер экстренной службы",
     error_loading_uploaded_files: "Erro ao carregar o histórico de arquivos.",
     exit_to_ha: "Voltar ao Home Assistant",
     exp_indefinite: "Indefinido",
@@ -1171,6 +1217,7 @@ const Do = [
     expired: "Expirado",
     export_btn: "📤 Baixar",
     export_error: "Ошибка экспорта: {error}",
+    external_panels: "Painéis de alarme externos",
     file_choice: `«{file}»
 
 Использовать как статичное изображение (ОК) или анимированное видео (Отмена)?`,
@@ -1197,13 +1244,14 @@ const Do = [
     ha_role_admin: "Admin HA",
     ha_role_standard: "Usuário HA",
     ha_standard_user_label: "Usuário padrão do HA",
-    hero_desc: "Sistema de segurança abrangente, controle de acesso, automações e HomeKit.",
+    hero_desc: "Sistema de segurança residencial inteligente",
+    hide_widget: "Ocultar widget",
     history_refresh: "🔄 Atualizar",
     history_unavailable: "Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.",
     home_default: "Мой дом",
-    home_fallback: "Дом",
+    home_fallback: "Meu Lar",
     home_name_label: "Nome do lar",
-    home_name_lbl: "Nome do lar",
+    home_name_lbl: "Nome da Residência",
     home_name_modal_desc: "Este nome aparece no painel de instâncias e em tela cheia.",
     home_name_modal_title: "🏡 Nome do lar",
     home_name_placeholder: "Minha Casa",
@@ -1216,7 +1264,7 @@ const Do = [
     import_success: "Конфигурация восстановлена. Перезагрузка…",
     initialization_error_desc: "Не удалось подключиться к авторизованному backend Home Assistant.",
     initialization_error_title: "Не удалось запустить Argus",
-    instances: "Instâncias ativas",
+    instances: "Instâncias Ativas",
     introduce_pin: "Digite seu PIN",
     invalid_config: "Недопустимый файл конфигурации.",
     is_admin: "Administrador",
@@ -1226,11 +1274,15 @@ const Do = [
     lbl_aesthetic_custom: "Personalização estética",
     lbl_load_file: "Carregar arquivo:",
     lbl_uploaded_files: "Arquivos enviados no servidor",
+    light_siren_color: "Cor",
+    light_siren_flash: "Piscar suave se disponível",
     link_ha_user: "Vincular a Usuário do Home Assistant",
     linked_rules: "Regras vinculadas ao Argus",
     loading: "Загрузка…",
     lock_if_open: "Bloquear se aberto",
     log_action_access_pin_updated: "PIN доступа обновлён",
+    log_action_analysis: "Análise de Segurança",
+    log_action_automation: "Automação Executada",
     log_action_backup_created: "Резервная копия создана",
     log_action_backup_restored: "Конфигурация восстановлена",
     log_action_first_run_completed: "Argus inicializado por {user}",
@@ -1243,8 +1295,11 @@ const Do = [
     log_action_schedule_applied: "Расписание применено",
     log_action_select_profile: "Perfil selecionado: {user}",
     log_action_sos: "Pânico SOS acionado por {user}",
+    log_action_sos_stopped: "SOS Interrompido",
     log_action_state_restored: "Состояние восстановлено",
     log_action_stop_sos: "Pânico SOS interrompido por {user}",
+    log_action_user_added: "Usuário Criado",
+    log_action_user_deleted: "Usuário Excluído",
     log_action_user_logged_in: "Вход пользователя",
     log_action_verify_access_pin: "PIN de acesso verificado por {user}",
     log_armed: "Armado",
@@ -1255,13 +1310,14 @@ const Do = [
     log_detail_pin_reset_failed: "Tentativa não autorizada de redefinir o PIN mestre",
     log_detail_triggered: "Ativação automática",
     log_disarmed: "Desarmado",
+    log_mode: "Modo",
     log_no_events: "Nenhum evento recente.",
     log_sensor: "Sensor",
     log_triggered: "Disparado!",
     login_btn: "Entrar",
-    manual_arm: "Manual",
-    manual_disarm: "Manual (Desarmado)",
-    master_pin_lbl: "PIN Maestro",
+    manual_arm: "Armamento manual",
+    manual_disarm: "Desarme manual",
+    master_pin_lbl: "Мастер-PIN",
     modal_add_user: "+ Добавить пользователя",
     modal_cancel: "Отмена",
     modal_confirm: "Подтвердить",
@@ -1287,7 +1343,7 @@ const Do = [
     no_instances: "Nenhuma instância.",
     no_results: "Нет результатов",
     no_rules: "",
-    no_sensors_configured: "Sin sensores configurados",
+    no_sensors_configured: "Nenhum sensor configurado",
     no_unlinked_ha_accounts: "Todas as contas do Home Assistant ativas possuem perfil.",
     no_users: "Nenhum usuário adicional configurado.",
     none_selected: "Nenhum selecionado",
@@ -1311,7 +1367,7 @@ const Do = [
     pin_desc: "Código numérico para armar e desarmar.",
     pin_disarm_error: "Неверный PIN или ошибка снятия с охраны",
     pin_incorrect: "❌ PIN atual incorreto",
-    pin_management: "🔑 Gestión de Pines",
+    pin_management: "🔑 Gerenciamento de PINs",
     pin_master_title: "PIN Mestre",
     pin_modal_desc: "PIN numérico para desarmar o Argus",
     pin_placeholder: "PIN de acesso",
@@ -1322,29 +1378,32 @@ const Do = [
     profile_is_yours: "Este é o seu perfil",
     profile_needs_pin: "Perfil de outra pessoa — insira o PIN de acesso",
     profile_no_pin_access: "Este perfil não tem PIN de acesso. Você não pode abri-lo.",
-    remove_btn: "Quitar",
+    remove_btn: "Удалить",
     reset_btn: "⚠️ Redefinir",
     reset_confirm: "Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.",
     reset_dashboard: "Redefinir layout",
     reset_error: "Ошибка сброса: {error}",
     reset_success: "Argus сброшен. У вас есть несколько секунд, чтобы отменить это.",
+    reset_widget: "Redefinir widget",
     retry_action: "Повторить",
     role_argus_admin: "Administrador do Argus",
-    role_argus_admin_short: "Adm",
-    role_argus_standard: "Usuário padrão",
+    role_argus_admin_short: "Admin",
+    role_argus_standard: "Usuário Padrão",
     role_argus_user: "Usuário padrão",
-    role_argus_user_short: "Std",
+    role_argus_user_short: "Usuário",
     rules_tip: "",
     save_btn: "Salvar",
-    save_config: "SALVAR CONFIGURAÇÃO",
+    save_config: "💾 Salvar Modo",
     save_mode: "💾 Salvar modo",
     save_notif: "Salvar",
     save_user: "Salvar",
-    search_placeholder: "Pesquisar por nome, área ou entity_id",
+    saved: "✓ Salvo",
+    search_placeholder: "Buscar por nome, área ou entity_id",
     search_select: "Buscar & selecionar",
     searching_auto: "↻ Buscando automações...",
     select_all: "☑ Todos",
     select_btn: "+ Selecionar",
+    select_entry_sensors: "+ Selecionar sensores de entrada",
     select_profile_subtitle: "Acesse seus painéis de segurança e instâncias Argus.",
     select_profile_title: "Selecione o seu perfil",
     selected_lbl: "Selecionados",
@@ -1359,31 +1418,36 @@ const Do = [
     setup_required_desc: "Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.",
     setup_required_title: "Требуется настройка Argus",
     siren_section: "Sirenes",
-    sos_actions: "Acciones Automáticas de SOS",
+    size: "Tamanho",
+    slide_disarm: "Deslize para desarmar",
+    slide_sos: "Deslize para acionar SOS",
+    slide_sos_stop: "Deslize para parar SOS",
+    sos_actions: "🚨 Действия SOS",
     sos_activated: "SOS активирован",
     sos_call: "📞 Chamar emergências",
     sos_call_confirm: "Позвонить в экстренную службу ({number})?",
     sos_call_help: "Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.",
-    sos_confirm_text: "Deslize para acionar o alarme imediatamente.",
-    sos_confirm_title: "Confirmar pânico",
+    sos_confirm_text: "Deslize para disparar o alarme imediatamente.",
+    sos_confirm_title: "🚨 Disparar Alarme de Emergência?",
     sos_error: "Не удалось активировать SOS: {error}",
     sos_no_outputs: "Устройства не выбраны",
-    sos_outputs_help: "Dispositivos activados al disparar el SOS.",
-    sos_select_outputs: "Seleccionar salidas de pánico",
-    sos_slide: "Deslize para ativar SOS",
-    sos_stop: "DETENER SOS",
-    status_away: "FUERA",
+    sos_outputs_help: "Эти устройства всегда будут включаться при SOS, даже когда Argus снят с охраны.",
+    sos_select_outputs: "Выбрать свет, сирены или сценарии",
+    sos_slide: "Deslize para acionar SOS",
+    sos_stop: "PARAR SOS",
+    status_away: "Вне дома",
     status_closed: "FECHADO",
-    status_home: "EN CASA",
-    status_idle: "INACTIVO",
+    status_home: "Дома",
+    status_idle: "Ожидание",
     status_open: "ABERTO",
-    status_recording: "GRABANDO",
-    switch_profile_btn: "👤 Alternar perfil",
+    status_recording: "Запись",
+    support_title: "Status & Suporte",
+    switch_profile_btn: "👤 Alternar Perfil",
     sync_panel_help: "Paneles de alarma que seguirán el mismo estado de Argus",
     sync_panel_section: "Paneles Sincronizados",
     system_armed: "SISTEMA ARMADO",
     system_disarmed: "SISTEMA DESARMADO",
-    system_triggered: "¡ALARMA DISPARADA!",
+    system_triggered: "ALARME DISPARADO!",
     temp_auto: "Automático (sensor local / termostato / clima)",
     temp_notification_title: "Argus — Температурное предупреждение",
     temp_thermostat: "(termostato)",
@@ -1405,7 +1469,7 @@ const Do = [
     user_default: "Пользователь",
     user_exp_date: "Expiration Date/Time",
     user_exp_type: "Expiration",
-    user_no_pin: "Sin PIN de acceso",
+    user_no_pin: "Sem PIN de acesso",
     user_pin: "PIN do usuário",
     user_pin_action: "PIN",
     user_required: "Требуются имя и PIN",
@@ -1414,32 +1478,32 @@ const Do = [
     username: "Nome de usuário",
     users_title: "👥 Usuários e Controle de Acesso",
     wait_if_open: "Aguardar fechamento",
-    waiting_sensors: "ESPERANDO SENSORES",
+    waiting_sensors: "AGUARDANDO SENSORES",
     welcome_greeting: "Bem-vindo/a,",
     welcome_profile: "Добро пожаловать, {name}"
   },
   it: {
     accept: "Accetta",
     access_desc: "Gestione globale della sicurezza, PIN principale e amministratori.",
-    access_pin_lbl: "PIN de Acceso",
+    access_pin_lbl: "PIN доступа",
     access_title: "Controllo Accessi & Utenti",
-    action_failed: "No se pudo realizar la acción",
-    active_profile: "Perfil Activo",
+    action_failed: "Не удалось выполнить действие",
+    active_profile: "Profilo Attivo",
     active_until: "Scade il",
     activity_log: "📋 Registro Attività",
     add_btn: "+ Aggiungi",
     add_user: "Aggiungi utente",
     admin_only: "Solo gli amministratori possono modificare questa sezione.",
     alarm_instance: "Istanza allarme",
-    all_sensors_bypassed: "Todos los sensores configurados están omitidos.",
+    all_sensors_bypassed: "Tutti i sensori configurati sono esclusi.",
     arm_time: "Ritardo inserimento (s)",
     arm_time_label: "Tempo armato (s)",
-    armed_away: "Fuori Casa",
+    armed_away: "Assente",
     armed_home: "In Casa",
     armed_night: "Notte",
-    armed_vacation: "Vacanza",
-    arming: "Inserimento",
-    automations: "⚡ Automazioni",
+    armed_vacation: "Vacanze",
+    arming: "Armamento",
+    automations: "Automazioni",
     available: "Disponibili",
     background_lbl: "Sfondo",
     backup_desc: "Salva un backup o ripristina uno precedente.",
@@ -1464,28 +1528,27 @@ const Do = [
     bridge_not_desc: "Abilita l'integrazione HomeKit Bridge in Home Assistant e includi l'entità <code>alarm_control_panel.argus_*</code> per generare un QR di abbinamento.",
     bridge_paired: "Ponte configurato",
     bridge_paired_desc: "Il ponte <b>{bridge}</b> è configurato in Home Assistant. Da qui non è possibile verificare se sia stato aggiunto ad Apple Home né conoscerne il nome.",
-    btn_away: "🔒 FUORI CASA",
+    btn_away: "🔴 Fuori",
     btn_create_argus_profile: "Crea profilo Argus",
-    btn_disarmed: "DISINSERITO",
-    btn_home: "🏠 IN CASA",
-    btn_night: "🌙 NOTTE",
+    btn_disarmed: "DISARMATO",
+    btn_home: "🏠 Casa",
+    btn_night: "🌙 Notte",
     btn_sos: "🚨 SOS / PANICO",
-    btn_vacation: "✈️ VACANZA",
+    btn_vacation: "✈️ Vacanza",
     bypass_lbl: "🚫 Escludi",
     cancel: "Annulla",
     cancel_btn: "Annulla",
     cannot_arm: "Невозможно поставить на охрану",
     cannot_delete_last_admin: "Impossibile eliminare l'ultimo amministratore.",
-    change_btn: "Cambiar",
+    change_btn: "Изменить",
     change_pin: "PIN Principale",
-    change_profile_picture: "Cambiar foto en Personas de HA ↗",
-    change_user_pin: "Cambiar PIN",
+    change_profile_picture: "Modifica foto in Persone HA ↗",
     claim_btn: "Заявить права администратора",
     claim_desc: "Вашей установке требуется администратор для получения доступа.",
     claim_title: "Обновление безопасности Argus",
     clear: "Cancella",
     clear_history_confirm: "Удалить всю историю активности?",
-    clear_log_btn: "CANCELLA",
+    clear_log_btn: "🗑️ Cancella registro",
     clock_12h: "12 ore (AM/PM)",
     clock_24h: "24 ore",
     clock_auto: "Automatico (Home Assistant)",
@@ -1501,7 +1564,6 @@ const Do = [
     delete: "Удалить",
     delete_btn_title: "Elimina dalla memoria",
     delete_file_error: "Не удалось удалить файл: {error}",
-    delete_user: "Eliminar usuario",
     delete_user_confirm: 'Sei sicuro di voler eliminare "{name}"?',
     delete_user_tooltip: "Elimina profilo utente",
     deselect_all: "☐ Nessuno",
@@ -1513,8 +1575,8 @@ const Do = [
     edit_btn: "✏️ Modifica",
     edit_dashboard: "Modifica dashboard",
     edit_dashboard_done: "✓ Fatto",
-    emergency_help: "Número telefónico marcado en caso de emergencia.",
-    emergency_number_label: "Número de Emergencia",
+    emergency_help: "Настройте для местоположения дома (например, Коста-Рика: 911; Испания: 112). Номер будет включён в SOS-оповещения.",
+    emergency_number_label: "🚨 Местный номер экстренной службы",
     error_loading_uploaded_files: "Errore durante il caricamento della cronologia dei file.",
     exit_to_ha: "Torna a Home Assistant",
     exp_indefinite: "Indefinito",
@@ -1522,6 +1584,7 @@ const Do = [
     expired: "Scaduto",
     export_btn: "📤 Scarica",
     export_error: "Ошибка экспорта: {error}",
+    external_panels: "Pannelli di allarme esterni",
     file_choice: `«{file}»
 
 Использовать как статичное изображение (ОК) или анимированное видео (Отмена)?`,
@@ -1548,13 +1611,14 @@ const Do = [
     ha_role_admin: "Admin HA",
     ha_role_standard: "Utente HA",
     ha_standard_user_label: "Utente HA standard",
-    hero_desc: "Sistema di sicurezza completo, controllo accessi, automazioni e HomeKit.",
+    hero_desc: "Sistema di sicurezza domestico intelligente",
+    hide_widget: "Nascondi widget",
     history_refresh: "🔄 Aggiorna",
     history_unavailable: "Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.",
     home_default: "Мой дом",
-    home_fallback: "Дом",
+    home_fallback: "La Mia Casa",
     home_name_label: "Nome della casa",
-    home_name_lbl: "Nome della casa",
+    home_name_lbl: "Nome della Casa",
     home_name_modal_desc: "Questo nome appare nel pannello delle istanze e a schermo intero.",
     home_name_modal_title: "🏡 Nome della casa",
     home_name_placeholder: "Casa mia",
@@ -1567,7 +1631,7 @@ const Do = [
     import_success: "Конфигурация восстановлена. Перезагрузка…",
     initialization_error_desc: "Не удалось подключиться к авторизованному backend Home Assistant.",
     initialization_error_title: "Не удалось запустить Argus",
-    instances: "Istanze attive",
+    instances: "Istanze Attive",
     introduce_pin: "Inserisci il tuo PIN",
     invalid_config: "Недопустимый файл конфигурации.",
     is_admin: "Amministratore",
@@ -1577,11 +1641,15 @@ const Do = [
     lbl_aesthetic_custom: "Personalizzazione estetica",
     lbl_load_file: "Carica file:",
     lbl_uploaded_files: "File caricati sul server",
+    light_siren_color: "Colore",
+    light_siren_flash: "Lampeggio delicato se disponibile",
     link_ha_user: "Collega all’utente Home Assistant",
     linked_rules: "Regole collegate ad Argus",
     loading: "Загрузка…",
     lock_if_open: "Blocca se aperto",
     log_action_access_pin_updated: "PIN доступа обновлён",
+    log_action_analysis: "Analisi di Sicurezza",
+    log_action_automation: "Automazione Eseguita",
     log_action_backup_created: "Резервная копия создана",
     log_action_backup_restored: "Конфигурация восстановлена",
     log_action_first_run_completed: "Argus inizializzato da {user}",
@@ -1594,25 +1662,29 @@ const Do = [
     log_action_schedule_applied: "Расписание применено",
     log_action_select_profile: "Profilo selezionato: {user}",
     log_action_sos: "Panico SOS attivato da {user}",
+    log_action_sos_stopped: "SOS Fermato",
     log_action_state_restored: "Состояние восстановлено",
     log_action_stop_sos: "Panico SOS fermato da {user}",
+    log_action_user_added: "Utente Creato",
+    log_action_user_deleted: "Utente Eliminato",
     log_action_user_logged_in: "Вход пользователя",
     log_action_verify_access_pin: "PIN di accesso verificato da {user}",
     log_armed: "Armato",
     log_by: "da",
     log_detail_armed: "Modalità",
-    log_detail_disarm: "Sistema disarmato",
+    log_detail_disarm: "Sistema disinserito",
     log_detail_pin_reset: "PIN principale reimpostato dall'amministratore",
     log_detail_pin_reset_failed: "Tentativo non autorizzato di reimpostare il PIN principale",
     log_detail_triggered: "Attivazione automatica",
     log_disarmed: "Disarmato",
+    log_mode: "Modalità",
     log_no_events: "Nessun evento recente.",
     log_sensor: "Sensore",
     log_triggered: "Attivato!",
     login_btn: "Accedi",
-    manual_arm: "Manuale",
-    manual_disarm: "Manuale (Disarmato)",
-    master_pin_lbl: "PIN Maestro",
+    manual_arm: "Inserimento manuale",
+    manual_disarm: "Disinserimento manuale",
+    master_pin_lbl: "Мастер-PIN",
     modal_add_user: "+ Добавить пользователя",
     modal_cancel: "Отмена",
     modal_confirm: "Подтвердить",
@@ -1623,10 +1695,10 @@ const Do = [
     modal_pin_title: "PIN доступа",
     modal_save: "Сохранить",
     modal_user_added: "Пользователь создан.",
-    mode_away: "Assente",
-    mode_home: "In Casa",
+    mode_away: "Fuori",
+    mode_home: "Casa",
     mode_night: "Notte",
-    mode_vacation: "Vacanze",
+    mode_vacation: "Vacanza",
     modes: "Modalità",
     mqtt_label: "MQTT",
     never_triggered: "Mai attivato",
@@ -1638,7 +1710,7 @@ const Do = [
     no_instances: "Nessuna istanza.",
     no_results: "Нет результатов",
     no_rules: "",
-    no_sensors_configured: "Sin sensores configurados",
+    no_sensors_configured: "Nessun sensore configurato",
     no_unlinked_ha_accounts: "Tutti gli account Home Assistant attivi hanno un profilo.",
     no_users: "Nessun utente aggiuntivo configurato.",
     none_selected: "Nessuno selezionato",
@@ -1659,12 +1731,12 @@ const Do = [
     pin_active_no: "PIN Attivo: No",
     pin_active_yes: "PIN Attivo: Sì",
     pin_deleted: "✓ PIN Eliminato",
-    pin_desc: "Codice numerico per inserire e disinserire.",
+    pin_desc: "Codice numerico per armare e disarmare.",
     pin_disarm_error: "Неверный PIN или ошибка снятия с охраны",
     pin_incorrect: "❌ PIN attuale errato",
-    pin_management: "🔑 Gestión de Pines",
-    pin_master_title: "PIN Principale",
-    pin_modal_desc: "PIN numerico per disinserire Argus",
+    pin_management: "🔑 Gestione PIN",
+    pin_master_title: "PIN Master",
+    pin_modal_desc: "PIN numerico per disarmare Argus",
     pin_placeholder: "PIN di accesso",
     pin_remove_hint: "Per rimuovere il PIN: inserisci quello attuale e lascia vuoti i campi sottostanti.",
     pin_reset_admin_only: "❌ Errore: Solo gli amministratori di Home Assistant possono reimpostare el PIN principale.",
@@ -1673,34 +1745,37 @@ const Do = [
     profile_is_yours: "Questo è il tuo profilo",
     profile_needs_pin: "Profilo di un’altra persona — inserisci il PIN di accesso",
     profile_no_pin_access: "Questo profilo non ha un PIN di accesso. Non puoi aprirlo.",
-    remove_btn: "Quitar",
+    remove_btn: "Удалить",
     reset_btn: "⚠️ Ripristina",
     reset_confirm: "Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.",
     reset_dashboard: "Ripristina layout",
     reset_error: "Ошибка сброса: {error}",
     reset_success: "Argus сброшен. У вас есть несколько секунд, чтобы отменить это.",
+    reset_widget: "Ripristina widget",
     retry_action: "Повторить",
     role_argus_admin: "Amministratore Argus",
-    role_argus_admin_short: "Adm",
-    role_argus_standard: "Utente standard",
+    role_argus_admin_short: "Admin",
+    role_argus_standard: "Utente Standard",
     role_argus_user: "Utente standard",
-    role_argus_user_short: "Std",
+    role_argus_user_short: "Utente",
     rules_tip: "",
     save_btn: "Salva",
-    save_config: "SALVA CONFIGURAZIONE",
+    save_config: "💾 Salva Modalità",
     save_mode: "💾 Salva modalità",
     save_notif: "Salva",
     save_user: "Salva",
+    saved: "✓ Salvato",
     search_placeholder: "Cerca per nome, area o entity_id",
     search_select: "Cerca & seleziona",
     searching_auto: "↻ Ricerca automazioni...",
     select_all: "☑ Tutti",
     select_btn: "+ Seleziona",
+    select_entry_sensors: "+ Seleziona sensori di ingresso",
     select_profile_subtitle: "Accedi ai tuoi pannelli di sicurezza e istanze Argus.",
     select_profile_title: "Seleziona il tuo profilo",
     selected_lbl: "Selezionati",
     selector_panic: "🚨 Действия SOS",
-    sensor_section: "Sensori di Intrusione",
+    sensor_section: "Sensori di intrusione",
     sensors_to_bypass: "Sensori da ignorare",
     settings: "⚙️ Impostazioni",
     setup_access_pin: "PIN доступа к панели Argus (Необязательно)",
@@ -1710,36 +1785,41 @@ const Do = [
     setup_required_desc: "Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.",
     setup_required_title: "Требуется настройка Argus",
     siren_section: "Sirene",
-    sos_actions: "Acciones Automáticas de SOS",
+    size: "Dimensione",
+    slide_disarm: "Scorri per disarmare",
+    slide_sos: "Scorri per attivare SOS",
+    slide_sos_stop: "Scorri per fermare SOS",
+    sos_actions: "🚨 Действия SOS",
     sos_activated: "SOS активирован",
     sos_call: "📞 Chiama i soccorsi",
     sos_call_confirm: "Позвонить в экстренную службу ({number})?",
     sos_call_help: "Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.",
-    sos_confirm_text: "Scorri per attivare immediatamente l'allarme.",
-    sos_confirm_title: "Conferma panico",
+    sos_confirm_text: "Scorri per attivare l'allarme immediatamente.",
+    sos_confirm_title: "🚨 Attivare Allarme di Emergenza?",
     sos_error: "Не удалось активировать SOS: {error}",
     sos_no_outputs: "Устройства не выбраны",
-    sos_outputs_help: "Dispositivos activados al disparar el SOS.",
-    sos_select_outputs: "Seleccionar salidas de pánico",
+    sos_outputs_help: "Эти устройства всегда будут включаться при SOS, даже когда Argus снят с охраны.",
+    sos_select_outputs: "Выбрать свет, сирены или сценарии",
     sos_slide: "Scorri per attivare SOS",
-    sos_stop: "DETENER SOS",
-    status_away: "FUERA",
+    sos_stop: "FERMA SOS",
+    status_away: "Вне дома",
     status_closed: "CHIUSO",
-    status_home: "EN CASA",
-    status_idle: "INACTIVO",
+    status_home: "Дома",
+    status_idle: "Ожидание",
     status_open: "APERTO",
-    status_recording: "GRABANDO",
-    switch_profile_btn: "👤 Cambia profilo",
+    status_recording: "Запись",
+    support_title: "Stato & Supporto",
+    switch_profile_btn: "👤 Cambia Profilo",
     sync_panel_help: "Paneles de alarma que seguirán el mismo estado de Argus",
     sync_panel_section: "Paneles Sincronizados",
     system_armed: "SISTEMA INSERITO",
     system_disarmed: "SISTEMA DISINSERITO",
-    system_triggered: "¡ALARMA DISPARADA!",
+    system_triggered: "ALLARME SCATTATO!",
     temp_auto: "Automatico (sensore locale / termostato / clima)",
     temp_notification_title: "Argus — Температурное предупреждение",
     temp_thermostat: "(termostato)",
     thermostat_alert_notif: "🌡️ Avviso temperatura",
-    times_section: "⏱️ Timer",
+    times_section: "⏱️ Tempi",
     triggered: "ALLARME!",
     unavailable: "Non disponibile",
     undo_error: "Не удалось отменить сброс: {error}",
@@ -1756,7 +1836,7 @@ const Do = [
     user_default: "Пользователь",
     user_exp_date: "Expiration Date/Time",
     user_exp_type: "Expiration",
-    user_no_pin: "Sin PIN de acceso",
+    user_no_pin: "Nessun PIN di accesso",
     user_pin: "PIN utente",
     user_pin_action: "PIN",
     user_required: "Требуются имя и PIN",
@@ -1764,33 +1844,33 @@ const Do = [
     user_role_label: "Ruolo Argus",
     username: "Nome utente",
     users_title: "👥 Utenti e Controllo Accessi",
-    wait_if_open: "Attendi chiusura sensori",
-    waiting_sensors: "ESPERANDO SENSORES",
+    wait_if_open: "Attendi chiusura",
+    waiting_sensors: "IN ATTESA DEI SENSORI",
     welcome_greeting: "Welcome,",
     welcome_profile: "Добро пожаловать, {name}"
   },
   zh: {
     accept: "接受",
     access_desc: "全局安全管理、主PIN码和管理员。",
-    access_pin_lbl: "PIN de Acceso",
+    access_pin_lbl: "PIN доступа",
     access_title: "访问控制和用户",
-    action_failed: "No se pudo realizar la acción",
-    active_profile: "Perfil Activo",
-    active_until: "有效期至",
+    action_failed: "Не удалось выполнить действие",
+    active_profile: "当前配置",
+    active_until: "过期时间",
     activity_log: "📋 活动记录",
     add_btn: "+ 添加",
     add_user: "添加用户",
-    admin_only: "仅管理员可修改此部分。",
+    admin_only: "只有管理员才能修改此部分。",
     alarm_instance: "报警实例",
-    all_sensors_bypassed: "Todos los sensores configurados están omitidos.",
-    arm_time: "布防延迟 (秒)",
+    all_sensors_bypassed: "所有已配置的传感器均已被绕过。",
+    arm_time: "布防延时 (秒)",
     arm_time_label: "布防延迟(s)",
-    armed_away: "离家",
+    armed_away: "外出",
     armed_home: "在家",
     armed_night: "夜间",
     armed_vacation: "度假",
-    arming: "正在布防",
-    automations: "⚡ 自动化",
+    arming: "布防中",
+    automations: "自动化",
     available: "可用",
     background_lbl: "背景",
     backup_desc: "保存设置备份或恢复之前的设置。",
@@ -1815,28 +1895,27 @@ const Do = [
     bridge_not_desc: "在Home Assistant中启用HomeKit Bridge集成并包含实体<code>alarm_control_panel.argus_*</code>以生成配对QR码。",
     bridge_paired: "桥接已配置",
     bridge_paired_desc: "桥接 <b>{bridge}</b> 已在 Home Assistant 中配置。Home Assistant 无法从这里验证它是否已添加到 Apple Home，也无法提供家庭名称。",
-    btn_away: "🔒 离家",
+    btn_away: "🔴 外出",
     btn_create_argus_profile: "创建 Argus 个人资料",
     btn_disarmed: "已撤防",
     btn_home: "🏠 在家",
     btn_night: "🌙 夜间",
-    btn_sos: "🚨 紧急求助 / 恐慌",
+    btn_sos: "🚨 紧急呼救 / SOS",
     btn_vacation: "✈️ 度假",
-    bypass_lbl: "🚫 旁路",
+    bypass_lbl: "🚫 绕过",
     cancel: "取消",
     cancel_btn: "取消",
     cannot_arm: "Невозможно поставить на охрану",
     cannot_delete_last_admin: "无法删除最后一个管理员。",
-    change_btn: "Cambiar",
-    change_pin: "主 PIN 码",
-    change_profile_picture: "Cambiar foto en Personas de HA ↗",
-    change_user_pin: "Cambiar PIN",
+    change_btn: "Изменить",
+    change_pin: "主PIN码",
+    change_profile_picture: "在 HA 用户中更改头像 ↗",
     claim_btn: "Заявить права администратора",
     claim_desc: "Вашей установке требуется администратор для получения доступа.",
     claim_title: "Обновление безопасности Argus",
     clear: "清除",
     clear_history_confirm: "Удалить всю историю активности?",
-    clear_log_btn: "清除",
+    clear_log_btn: "🗑️ 清除记录",
     clock_12h: "12 小时制 (AM/PM)",
     clock_24h: "24 小时制",
     clock_auto: "自动（Home Assistant）",
@@ -1844,35 +1923,35 @@ const Do = [
     clock_format_label: "时间格式",
     close: "关闭",
     confirm: "✓ 确认",
-    confirm_pin: "确认 PIN 码",
+    confirm_pin: "确认PIN码",
     connected: "已连接",
-    create_ha: "+ 在 HA 中创建",
-    current_pin: "当前 PIN 码",
+    create_ha: "+ 在HA中创建",
+    current_pin: "当前PIN码",
     customize: "Настроить",
     delete: "Удалить",
     delete_btn_title: "从存储中删除",
     delete_file_error: "Не удалось удалить файл: {error}",
-    delete_user: "Eliminar usuario",
     delete_user_confirm: "您确定要删除“{name}”吗？",
     delete_user_tooltip: "删除用户个人资料",
     deselect_all: "☐ 全不选",
     details_notif: "警报通知",
-    disarm_time: "进入延迟 (秒)",
+    disarm_time: "进入延时 (秒)",
     disarm_time_label: "进入延迟(s)",
     disarmed: "已撤防",
     done: "Готово",
     edit_btn: "✏️ 编辑",
     edit_dashboard: "编辑仪表板",
     edit_dashboard_done: "✓ 完成",
-    emergency_help: "Número telefónico marcado en caso de emergencia.",
-    emergency_number_label: "Número de Emergencia",
+    emergency_help: "Настройте для местоположения дома (например, Коста-Рика: 911; Испания: 112). Номер будет включён в SOS-оповещения.",
+    emergency_number_label: "🚨 Местный номер экстренной службы",
     error_loading_uploaded_files: "加载文件历史记录出错。",
     exit_to_ha: "返回 Home Assistant",
-    exp_indefinite: "无限期",
+    exp_indefinite: "永久有效",
     exp_temporary: "临时 (日期/时间)",
     expired: "已过期",
     export_btn: "📤 下载",
     export_error: "Ошибка экспорта: {error}",
+    external_panels: "外部报警面板",
     file_choice: `«{file}»
 
 Использовать как статичное изображение (ОК) или анимированное видео (Отмена)?`,
@@ -1899,11 +1978,12 @@ const Do = [
     ha_role_admin: "HA 管理员",
     ha_role_standard: "HA 用户",
     ha_standard_user_label: "标准 HA 用户",
-    hero_desc: "综合安全系统、门禁控制、自动化与 HomeKit。",
+    hero_desc: "智能家庭安防系统",
+    hide_widget: "隐藏小部件",
     history_refresh: "🔄 刷新",
     history_unavailable: "Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.",
     home_default: "Мой дом",
-    home_fallback: "Дом",
+    home_fallback: "我的家",
     home_name_label: "家庭名称",
     home_name_lbl: "家庭名称",
     home_name_modal_desc: "此名称显示在实例面板和全屏中。",
@@ -1918,8 +1998,8 @@ const Do = [
     import_success: "Конфигурация восстановлена. Перезагрузка…",
     initialization_error_desc: "Не удалось подключиться к авторизованному backend Home Assistant.",
     initialization_error_title: "Не удалось запустить Argus",
-    instances: "活动实例",
-    introduce_pin: "输入您的 PIN 码",
+    instances: "运行中实例",
+    introduce_pin: "输入您的PIN码",
     invalid_config: "Недопустимый файл конфигурации.",
     is_admin: "管理员",
     lang_select_title: "选择语言",
@@ -1928,11 +2008,15 @@ const Do = [
     lbl_aesthetic_custom: "美学个性化",
     lbl_load_file: "上传文件:",
     lbl_uploaded_files: "服务器上上传的文件",
+    light_siren_color: "颜色",
+    light_siren_flash: "柔和闪烁 (如果支持)",
     link_ha_user: "关联至 Home Assistant 用户",
-    linked_rules: "与 Argus 关联的规则",
+    linked_rules: "已关联到 Argus 的规则",
     loading: "Загрузка…",
-    lock_if_open: "打开时锁定",
+    lock_if_open: "如有开启则阻止",
     log_action_access_pin_updated: "PIN доступа обновлён",
+    log_action_analysis: "安全分析",
+    log_action_automation: "自动化已执行",
     log_action_backup_created: "Резервная копия создана",
     log_action_backup_restored: "Конфигурация восстановлена",
     log_action_first_run_completed: "Argus 已由 {user} 初始化",
@@ -1945,8 +2029,11 @@ const Do = [
     log_action_schedule_applied: "Расписание применено",
     log_action_select_profile: "已选择个人资料：{user}",
     log_action_sos: "SOS 紧急情况由 {user} 触发",
+    log_action_sos_stopped: "SOS 已停止",
     log_action_state_restored: "Состояние восстановлено",
     log_action_stop_sos: "SOS 紧急情况由 {user} 停止",
+    log_action_user_added: "用户已创建",
+    log_action_user_deleted: "用户已删除",
     log_action_user_logged_in: "Вход пользователя",
     log_action_verify_access_pin: "访问 PIN 已由 {user} 验证",
     log_armed: "已布防",
@@ -1955,15 +2042,16 @@ const Do = [
     log_detail_disarm: "系统已撤防",
     log_detail_pin_reset: "管理员已重置主PIN码",
     log_detail_pin_reset_failed: "未授权尝试重置主PIN码",
-    log_detail_triggered: "自动激活",
+    log_detail_triggered: "自动触发",
     log_disarmed: "已撤防",
+    log_mode: "模式",
     log_no_events: "没有最近事件。",
     log_sensor: "传感器",
     log_triggered: "已触发！",
     login_btn: "登录",
-    manual_arm: "手动",
-    manual_disarm: "手动(已撤防)",
-    master_pin_lbl: "PIN Maestro",
+    manual_arm: "手动布防",
+    manual_disarm: "手动撤防",
+    master_pin_lbl: "Мастер-PIN",
     modal_add_user: "+ Добавить пользователя",
     modal_cancel: "Отмена",
     modal_confirm: "Подтвердить",
@@ -1981,7 +2069,7 @@ const Do = [
     modes: "模式",
     mqtt_label: "MQTT",
     never_triggered: "从未触发",
-    new_pin: "新 PIN 码",
+    new_pin: "新PIN码",
     no_alarm_instance: "Нет доступного экземпляра сигнализации",
     no_auto_linked: "没有链接到Argus的自动化。",
     no_files_uploaded: "未上传文件。请使用上方控件上传背景。",
@@ -1989,11 +2077,11 @@ const Do = [
     no_instances: "没有实例。",
     no_results: "Нет результатов",
     no_rules: "",
-    no_sensors_configured: "Sin sensores configurados",
+    no_sensors_configured: "未配置传感器",
     no_unlinked_ha_accounts: "所有活跃的 Home Assistant 账户都有个人资料。",
-    no_users: "未配置其他用户。",
-    none_selected: "未选择任何项",
-    notif_desc: "选择在 HA 中注册以接收 Argus 警报的移动设备。",
+    no_users: "未配置额外用户。",
+    none_selected: "未选择",
+    notif_desc: "选择在HA中注册的移动设备以接收Argus警报。",
     notif_no_services: "Нет мобильных служб",
     notification_armed: "{user} активировал режим {mode}.",
     notification_disarmed: "{user} снял систему с охраны.",
@@ -2013,9 +2101,9 @@ const Do = [
     pin_desc: "用于布防和撤防的数字代码。",
     pin_disarm_error: "Неверный PIN или ошибка снятия с охраны",
     pin_incorrect: "❌ 当前PIN错误",
-    pin_management: "🔑 Gestión de Pines",
-    pin_master_title: "主PIN码",
-    pin_modal_desc: "用于撤防 Argus 的数字 PIN 码",
+    pin_management: "🔑 PIN 密码管理",
+    pin_master_title: "主 PIN 码",
+    pin_modal_desc: "撤防Argus的数字PIN码",
     pin_placeholder: "访问 PIN",
     pin_remove_hint: "删除PIN: 输入当前PIN并将下面字段留空。",
     pin_reset_admin_only: "❌ 错误：只有 Home Assistant 管理员可以重置主 PIN 码。",
@@ -2024,29 +2112,32 @@ const Do = [
     profile_is_yours: "这是您的个人资料",
     profile_needs_pin: "其他人的个人资料 — 请输入访问 PIN",
     profile_no_pin_access: "该个人资料没有访问 PIN。您无法打开它。",
-    remove_btn: "Quitar",
+    remove_btn: "Удалить",
     reset_btn: "⚠️ 恢复出厂",
     reset_confirm: "Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.",
     reset_dashboard: "重置布局",
     reset_error: "Ошибка сброса: {error}",
     reset_success: "Argus сброшен. У вас есть несколько секунд, чтобы отменить это.",
+    reset_widget: "重置小部件",
     retry_action: "Повторить",
     role_argus_admin: "Argus 管理员",
-    role_argus_admin_short: "Adm",
+    role_argus_admin_short: "管理",
     role_argus_standard: "标准用户",
     role_argus_user: "标准用户",
-    role_argus_user_short: "Std",
+    role_argus_user_short: "标准",
     rules_tip: "",
     save_btn: "保存",
-    save_config: "保存配置",
+    save_config: "💾 保存模式",
     save_mode: "💾 保存模式",
     save_notif: "保存",
     save_user: "保存",
-    search_placeholder: "按名称、区域或 entity_id 搜索",
+    saved: "✓ 已保存",
+    search_placeholder: "按名称、区域或entity_id搜索",
     search_select: "搜索并选择",
     searching_auto: "↻ 正在搜索自动化...",
     select_all: "☑ 全选",
     select_btn: "+ 选择",
+    select_entry_sensors: "+ 选择入口传感器",
     select_profile_subtitle: "访问您的安全面板和 Argus 实例。",
     select_profile_title: "选择您的个人资料",
     selected_lbl: "已选择",
@@ -2061,44 +2152,49 @@ const Do = [
     setup_required_desc: "Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.",
     setup_required_title: "Требуется настройка Argus",
     siren_section: "警报器",
-    sos_actions: "Acciones Automáticas de SOS",
+    size: "尺寸",
+    slide_disarm: "滑动撤防",
+    slide_sos: "滑动触发 SOS",
+    slide_sos_stop: "滑动停止 SOS",
+    sos_actions: "🚨 Действия SOS",
     sos_activated: "SOS активирован",
     sos_call: "📞 拨打紧急服务",
     sos_call_confirm: "Позвонить в экстренную службу ({number})?",
     sos_call_help: "Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.",
     sos_confirm_text: "滑动以立即触发警报。",
-    sos_confirm_title: "确认紧急",
+    sos_confirm_title: "🚨 触发紧急警报？",
     sos_error: "Не удалось активировать SOS: {error}",
     sos_no_outputs: "Устройства не выбраны",
-    sos_outputs_help: "Dispositivos activados al disparar el SOS.",
-    sos_select_outputs: "Seleccionar salidas de pánico",
-    sos_slide: "滑动以激活 SOS",
-    sos_stop: "DETENER SOS",
-    status_away: "FUERA",
+    sos_outputs_help: "Эти устройства всегда будут включаться при SOS, даже когда Argus снят с охраны.",
+    sos_select_outputs: "Выбрать свет, сирены или сценарии",
+    sos_slide: "滑动触发 SOS",
+    sos_stop: "停止 SOS",
+    status_away: "Вне дома",
     status_closed: "关闭",
-    status_home: "EN CASA",
-    status_idle: "INACTIVO",
+    status_home: "Дома",
+    status_idle: "Ожидание",
     status_open: "开启",
-    status_recording: "GRABANDO",
-    switch_profile_btn: "👤 切换个人资料",
+    status_recording: "Запись",
+    support_title: "状态与支持",
+    switch_profile_btn: "👤 切换配置文件",
     sync_panel_help: "Paneles de alarma que seguirán el mismo estado de Argus",
     sync_panel_section: "Paneles Sincronizados",
     system_armed: "系统已布防",
     system_disarmed: "系统已撤防",
-    system_triggered: "¡ALARMA DISPARADA!",
+    system_triggered: "警报已触发！",
     temp_auto: "自动（本地传感器 / 恒温器 / 气候）",
     temp_notification_title: "Argus — Температурное предупреждение",
     temp_thermostat: "(恒温器)",
     thermostat_alert_notif: "🌡️ 温度警报",
-    times_section: "⏱️ 计时器",
-    triggered: "警报触发！",
+    times_section: "⏱️ 计时延时",
+    triggered: "警报！",
     unavailable: "不可用",
     undo_error: "Не удалось отменить сброс: {error}",
     undo_reset_btn: "↩️ 撤销重置",
     undo_success: "Сброс отменён.",
     unlinked_ha_accounts_title: "没有 Argus 个人资料的 Home Assistant 账户",
     unlock_kiosk: "解锁自助服务终端",
-    update_pin: "更新 PIN 码",
+    update_pin: "更新PIN码",
     upload_error: "Ошибка загрузки.",
     url_placeholder: "URL фона…",
     use_for_hub: "Argus",
@@ -2107,45 +2203,45 @@ const Do = [
     user_default: "Пользователь",
     user_exp_date: "Expiration Date/Time",
     user_exp_type: "Expiration",
-    user_no_pin: "Sin PIN de acceso",
-    user_pin: "用户 PIN",
+    user_no_pin: "无访问 PIN",
+    user_pin: "用户PIN码",
     user_pin_action: "PIN",
     user_required: "Требуются имя и PIN",
     user_role_action: "Роль",
     user_role_label: "Argus 角色",
     username: "用户名",
     users_title: "👥 用户与门禁控制",
-    wait_if_open: "等待传感器关闭",
-    waiting_sensors: "ESPERANDO SENSORES",
+    wait_if_open: "等待感应器关闭",
+    waiting_sensors: "等待传感器关闭",
     welcome_greeting: "Welcome,",
     welcome_profile: "Добро пожаловать, {name}"
   },
   "zh-Hant": {
     accept: "接受",
     access_desc: "全局安全管理、主PIN码和管理员。",
-    access_pin_lbl: "PIN de Acceso",
+    access_pin_lbl: "PIN доступа",
     access_title: "访问控制和用户",
-    action_failed: "No se pudo realizar la acción",
-    active_profile: "Perfil Activo",
-    active_until: "有效期限至",
+    action_failed: "Не удалось выполнить действие",
+    active_profile: "當前設定檔",
+    active_until: "到期時間",
     activity_log: "📋 活動記錄",
-    add_btn: "+ 新增",
-    add_user: "新增使用者",
-    admin_only: "僅管理員可修改此部分。",
+    add_btn: "+ 添加",
+    add_user: "添加用户",
+    admin_only: "只有管理员才能修改此部分。",
     alarm_instance: "报警实例",
-    all_sensors_bypassed: "Todos los sensores configurados están omitidos.",
-    arm_time: "布防延遲 (秒)",
+    all_sensors_bypassed: "所有已設定的感應器皆已被略過。",
+    arm_time: "布防延時 (秒)",
     arm_time_label: "布防延迟(s)",
-    armed_away: "離家",
+    armed_away: "外出",
     armed_home: "在家",
-    armed_night: "夜間",
+    armed_night: "夜间",
     armed_vacation: "度假",
-    arming: "正在布防",
-    automations: "⚡ 自動化",
+    arming: "布防中",
+    automations: "自動化",
     available: "可用",
     background_lbl: "背景",
     backup_desc: "保存设置备份或恢复之前的设置。",
-    backup_title: "备份与恢复",
+    backup_title: "備份與還原",
     badge_pin_reset: "PIN已重置",
     badge_pin_reset_failed: "PIN重置失败",
     battery_low: "⚠️ 电池不足",
@@ -2166,64 +2262,63 @@ const Do = [
     bridge_not_desc: "在Home Assistant中启用HomeKit Bridge集成并包含实体<code>alarm_control_panel.argus_*</code>以生成配对QR码。",
     bridge_paired: "桥接已配置",
     bridge_paired_desc: "桥接 <b>{bridge}</b> 已在 Home Assistant 中配置。Home Assistant 无法从这里验证它是否已添加到 Apple Home，也无法提供家庭名称。",
-    btn_away: "🔒 離家",
+    btn_away: "🔴 離家",
     btn_create_argus_profile: "创建 Argus 个人资料",
     btn_disarmed: "已撤防",
     btn_home: "🏠 在家",
     btn_night: "🌙 夜間",
-    btn_sos: "🚨 緊急求助 / 恐慌",
+    btn_sos: "🚨 緊急求救 / SOS",
     btn_vacation: "✈️ 度假",
-    bypass_lbl: "🚫 旁路",
+    bypass_lbl: "🚫 略過",
     cancel: "取消",
     cancel_btn: "取消",
     cannot_arm: "Невозможно поставить на охрану",
     cannot_delete_last_admin: "无法删除最后一个管理员。",
-    change_btn: "Cambiar",
-    change_pin: "主 PIN 碼",
-    change_profile_picture: "Cambiar foto en Personas de HA ↗",
-    change_user_pin: "Cambiar PIN",
+    change_btn: "Изменить",
+    change_pin: "主PIN码",
+    change_profile_picture: "在 HA 使用者中變更大頭貼 ↗",
     claim_btn: "Заявить права администратора",
     claim_desc: "Вашей установке требуется администратор для получения доступа.",
     claim_title: "Обновление безопасности Argus",
     clear: "清除",
     clear_history_confirm: "Удалить всю историю активности?",
-    clear_log_btn: "清除",
+    clear_log_btn: "🗑️ 清除記錄",
     clock_12h: "12 小时制 (AM/PM)",
     clock_24h: "24 小时制",
     clock_auto: "自动（Home Assistant）",
     clock_format_desc: "选择时间的显示方式。",
     clock_format_label: "时间格式",
-    close: "關閉",
-    confirm: "✓ 確認",
-    confirm_pin: "確認 PIN 碼",
+    close: "关闭",
+    confirm: "✓ 确认",
+    confirm_pin: "确认PIN码",
     connected: "已連線",
-    create_ha: "+ 在 HA 中建立",
-    current_pin: "目前 PIN 碼",
+    create_ha: "+ 在HA中创建",
+    current_pin: "当前PIN码",
     customize: "Настроить",
     delete: "Удалить",
     delete_btn_title: "从存储中删除",
     delete_file_error: "Не удалось удалить файл: {error}",
-    delete_user: "Eliminar usuario",
     delete_user_confirm: "您确定要删除“{name}”吗？",
     delete_user_tooltip: "删除用户个人资料",
     deselect_all: "☐ 全不选",
     details_notif: "警报通知",
-    disarm_time: "進入延遲 (秒)",
+    disarm_time: "進入延時 (秒)",
     disarm_time_label: "进入延迟(s)",
     disarmed: "已撤防",
     done: "Готово",
     edit_btn: "✏️ 编辑",
     edit_dashboard: "編輯儀表板",
     edit_dashboard_done: "✓ 完成",
-    emergency_help: "Número telefónico marcado en caso de emergencia.",
-    emergency_number_label: "Número de Emergencia",
+    emergency_help: "Настройте для местоположения дома (например, Коста-Рика: 911; Испания: 112). Номер будет включён в SOS-оповещения.",
+    emergency_number_label: "🚨 Местный номер экстренной службы",
     error_loading_uploaded_files: "加载文件历史记录出错。",
     exit_to_ha: "返回 Home Assistant",
-    exp_indefinite: "無期限",
-    exp_temporary: "暫時 (日期/時間)",
+    exp_indefinite: "永久有效",
+    exp_temporary: "臨時 (日期/時間)",
     expired: "已過期",
     export_btn: "📤 下载",
     export_error: "Ошибка экспорта: {error}",
+    external_panels: "外部警報面板",
     file_choice: `«{file}»
 
 Использовать как статичное изображение (ОК) или анимированное видео (Отмена)?`,
@@ -2250,13 +2345,14 @@ const Do = [
     ha_role_admin: "HA 管理员",
     ha_role_standard: "HA 用户",
     ha_standard_user_label: "标准 HA 用户",
-    hero_desc: "綜合安全系統、門禁控制、自動化與 HomeKit。",
+    hero_desc: "智慧家庭安防系統",
+    hide_widget: "隱藏小工具",
     history_refresh: "🔄 重新整理",
     history_unavailable: "Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.",
     home_default: "Мой дом",
-    home_fallback: "Дом",
+    home_fallback: "我的家",
     home_name_label: "家庭名称",
-    home_name_lbl: "家庭名称",
+    home_name_lbl: "家庭名稱",
     home_name_modal_desc: "此名称显示在实例面板和全屏中。",
     home_name_modal_title: "🏡 家庭名称",
     home_name_placeholder: "我的家",
@@ -2269,21 +2365,25 @@ const Do = [
     import_success: "Конфигурация восстановлена. Перезагрузка…",
     initialization_error_desc: "Не удалось подключиться к авторизованному backend Home Assistant.",
     initialization_error_title: "Не удалось запустить Argus",
-    instances: "活動實例",
-    introduce_pin: "輸入您的 PIN 碼",
+    instances: "運行中實例",
+    introduce_pin: "输入您的PIN码",
     invalid_config: "Недопустимый файл конфигурации.",
-    is_admin: "管理員",
+    is_admin: "管理员",
     lang_select_title: "选择语言",
     lang_selector_lbl: "⚙️ 語言",
     language: "语言",
     lbl_aesthetic_custom: "美学个性化",
     lbl_load_file: "上传文件:",
     lbl_uploaded_files: "服务器上上传的文件",
+    light_siren_color: "顏色",
+    light_siren_flash: "柔和閃爍 (如果支援)",
     link_ha_user: "关联至 Home Assistant 用户",
-    linked_rules: "與 Argus 關聯的規則",
+    linked_rules: "已連結至 Argus 的規則",
     loading: "Загрузка…",
-    lock_if_open: "開啟時鎖定",
+    lock_if_open: "如有開啟則阻止",
     log_action_access_pin_updated: "PIN доступа обновлён",
+    log_action_analysis: "安全分析",
+    log_action_automation: "自動化已執行",
     log_action_backup_created: "Резервная копия создана",
     log_action_backup_restored: "Конфигурация восстановлена",
     log_action_first_run_completed: "Argus 已由 {user} 初始化",
@@ -2296,25 +2396,29 @@ const Do = [
     log_action_schedule_applied: "Расписание применено",
     log_action_select_profile: "已选择个人资料：{user}",
     log_action_sos: "SOS 紧急情况由 {user} 触发",
+    log_action_sos_stopped: "SOS 已停止",
     log_action_state_restored: "Состояние восстановлено",
     log_action_stop_sos: "SOS 紧急情况由 {user} 停止",
+    log_action_user_added: "使用者已建立",
+    log_action_user_deleted: "使用者已刪除",
     log_action_user_logged_in: "Вход пользователя",
     log_action_verify_access_pin: "访问 PIN 已由 {user} 验证",
     log_armed: "已布防",
     log_by: "由",
     log_detail_armed: "模式",
-    log_detail_disarm: "系统已撤防",
+    log_detail_disarm: "系統已撤防",
     log_detail_pin_reset: "管理员已重置主PIN码",
     log_detail_pin_reset_failed: "未授权尝试重置主PIN码",
-    log_detail_triggered: "自动激活",
+    log_detail_triggered: "自動觸發",
     log_disarmed: "已撤防",
+    log_mode: "模式",
     log_no_events: "没有最近事件。",
     log_sensor: "传感器",
     log_triggered: "已触发！",
     login_btn: "登录",
-    manual_arm: "手动",
-    manual_disarm: "手动(已撤防)",
-    master_pin_lbl: "PIN Maestro",
+    manual_arm: "手動布防",
+    manual_disarm: "手動撤防",
+    master_pin_lbl: "Мастер-PIN",
     modal_add_user: "+ Добавить пользователя",
     modal_cancel: "Отмена",
     modal_confirm: "Подтвердить",
@@ -2325,14 +2429,14 @@ const Do = [
     modal_pin_title: "PIN доступа",
     modal_save: "Сохранить",
     modal_user_added: "Пользователь создан.",
-    mode_away: "外出",
+    mode_away: "離家",
     mode_home: "在家",
-    mode_night: "夜间",
+    mode_night: "夜間",
     mode_vacation: "度假",
     modes: "模式",
     mqtt_label: "MQTT",
     never_triggered: "从未触发",
-    new_pin: "新 PIN 碼",
+    new_pin: "新PIN码",
     no_alarm_instance: "Нет доступного экземпляра сигнализации",
     no_auto_linked: "没有链接到Argus的自动化。",
     no_files_uploaded: "未上传文件。请使用上方控件上传背景。",
@@ -2340,11 +2444,11 @@ const Do = [
     no_instances: "没有实例。",
     no_results: "Нет результатов",
     no_rules: "",
-    no_sensors_configured: "Sin sensores configurados",
+    no_sensors_configured: "未設定感應器",
     no_unlinked_ha_accounts: "所有活跃的 Home Assistant 账户都有个人资料。",
-    no_users: "未設定其他使用者。",
-    none_selected: "未選擇任何項目",
-    notif_desc: "選擇在 HA 中註冊以接收 Argus 警報的行動裝置。",
+    no_users: "未配置额外用户。",
+    none_selected: "未选择",
+    notif_desc: "选择在HA中注册的移动设备以接收Argus警报。",
     notif_no_services: "Нет мобильных служб",
     notification_armed: "{user} активировал режим {mode}.",
     notification_disarmed: "{user} снял систему с охраны.",
@@ -2361,12 +2465,12 @@ const Do = [
     pin_active_no: "PIN激活: 否",
     pin_active_yes: "PIN激活: 是",
     pin_deleted: "✓ PIN已删除",
-    pin_desc: "用於布防和撤防的數字代碼。",
+    pin_desc: "用于布防和撤防的数字代码。",
     pin_disarm_error: "Неверный PIN или ошибка снятия с охраны",
     pin_incorrect: "❌ 当前PIN错误",
-    pin_management: "🔑 Gestión de Pines",
-    pin_master_title: "主PIN码",
-    pin_modal_desc: "用於撤防 Argus 的數字 PIN 碼",
+    pin_management: "🔑 PIN 密碼管理",
+    pin_master_title: "主 PIN 碼",
+    pin_modal_desc: "撤防Argus的数字PIN码",
     pin_placeholder: "访问 PIN",
     pin_remove_hint: "删除PIN: 输入当前PIN并将下面字段留空。",
     pin_reset_admin_only: "❌ 错误：只有 Home Assistant 管理员可以重置主 PIN 码。",
@@ -2375,34 +2479,37 @@ const Do = [
     profile_is_yours: "这是您的个人资料",
     profile_needs_pin: "其他人的个人资料 — 请输入访问 PIN",
     profile_no_pin_access: "该个人资料没有访问 PIN。您无法打开它。",
-    remove_btn: "Quitar",
+    remove_btn: "Удалить",
     reset_btn: "⚠️ 恢复出厂",
     reset_confirm: "Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.",
     reset_dashboard: "重設版面配置",
     reset_error: "Ошибка сброса: {error}",
     reset_success: "Argus сброшен. У вас есть несколько секунд, чтобы отменить это.",
+    reset_widget: "重設小工具",
     retry_action: "Повторить",
     role_argus_admin: "Argus 管理員",
-    role_argus_admin_short: "Adm",
+    role_argus_admin_short: "管理",
     role_argus_standard: "標準使用者",
     role_argus_user: "标准用户",
-    role_argus_user_short: "Std",
+    role_argus_user_short: "標準",
     rules_tip: "",
     save_btn: "保存",
-    save_config: "儲存設定",
-    save_mode: "💾 儲存模式",
-    save_notif: "儲存",
-    save_user: "儲存",
-    search_placeholder: "按名稱、區域或 entity_id 搜尋",
+    save_config: "💾 儲存模式",
+    save_mode: "💾 保存模式",
+    save_notif: "保存",
+    save_user: "保存",
+    saved: "✓ 已儲存",
+    search_placeholder: "按名称、区域或entity_id搜索",
     search_select: "搜索并选择",
     searching_auto: "↻ 正在搜索自动化...",
     select_all: "☑ 全选",
-    select_btn: "+ 選擇",
+    select_btn: "+ 选择",
+    select_entry_sensors: "+ 選擇入口感應器",
     select_profile_subtitle: "访问您的安全面板和 Argus 实例。",
     select_profile_title: "选择您的个人资料",
-    selected_lbl: "已選擇",
+    selected_lbl: "已选择",
     selector_panic: "🚨 Действия SOS",
-    sensor_section: "入侵感測器",
+    sensor_section: "入侵传感器",
     sensors_to_bypass: "跳过的传感器",
     settings: "⚙️ 設定",
     setup_access_pin: "PIN доступа к панели Argus (Необязательно)",
@@ -2412,44 +2519,49 @@ const Do = [
     setup_required_desc: "Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.",
     setup_required_title: "Требуется настройка Argus",
     siren_section: "警報器",
-    sos_actions: "Acciones Automáticas de SOS",
+    size: "尺寸",
+    slide_disarm: "滑動撤防",
+    slide_sos: "滑動觸發 SOS",
+    slide_sos_stop: "滑動停止 SOS",
+    sos_actions: "🚨 Действия SOS",
     sos_activated: "SOS активирован",
     sos_call: "📞 拨打紧急服务",
     sos_call_confirm: "Позвонить в экстренную службу ({number})?",
     sos_call_help: "Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.",
-    sos_confirm_text: "滑动以立即触发警报。",
-    sos_confirm_title: "确认紧急",
+    sos_confirm_text: "滑動以立即觸發警報。",
+    sos_confirm_title: "🚨 觸發緊急警報？",
     sos_error: "Не удалось активировать SOS: {error}",
     sos_no_outputs: "Устройства не выбраны",
-    sos_outputs_help: "Dispositivos activados al disparar el SOS.",
-    sos_select_outputs: "Seleccionar salidas de pánico",
-    sos_slide: "滑動以啟動 SOS",
-    sos_stop: "DETENER SOS",
-    status_away: "FUERA",
+    sos_outputs_help: "Эти устройства всегда будут включаться при SOS, даже когда Argus снят с охраны.",
+    sos_select_outputs: "Выбрать свет, сирены или сценарии",
+    sos_slide: "滑動觸發 SOS",
+    sos_stop: "停止 SOS",
+    status_away: "Вне дома",
     status_closed: "關閉",
-    status_home: "EN CASA",
-    status_idle: "INACTIVO",
+    status_home: "Дома",
+    status_idle: "Ожидание",
     status_open: "開啟",
-    status_recording: "GRABANDO",
+    status_recording: "Запись",
+    support_title: "狀態與支援",
     switch_profile_btn: "👤 切換設定檔",
     sync_panel_help: "Paneles de alarma que seguirán el mismo estado de Argus",
     sync_panel_section: "Paneles Sincronizados",
     system_armed: "系統已布防",
     system_disarmed: "系統已撤防",
-    system_triggered: "¡ALARMA DISPARADA!",
+    system_triggered: "警報已觸發！",
     temp_auto: "自动（本地传感器 / 恒温器 / 气候）",
     temp_notification_title: "Argus — Температурное предупреждение",
     temp_thermostat: "(恒温器)",
     thermostat_alert_notif: "🌡️ 温度警报",
-    times_section: "⏱️ 計時器",
-    triggered: "警報觸發！",
+    times_section: "⏱️ 計時延時",
+    triggered: "警报！",
     unavailable: "不可用",
     undo_error: "Не удалось отменить сброс: {error}",
     undo_reset_btn: "↩️ 撤销重置",
     undo_success: "Сброс отменён.",
     unlinked_ha_accounts_title: "没有 Argus 个人资料的 Home Assistant 账户",
     unlock_kiosk: "解锁自助服务终端",
-    update_pin: "更新 PIN 碼",
+    update_pin: "更新PIN码",
     upload_error: "Ошибка загрузки.",
     url_placeholder: "URL фона…",
     use_for_hub: "Argus",
@@ -2458,45 +2570,45 @@ const Do = [
     user_default: "Пользователь",
     user_exp_date: "Expiration Date/Time",
     user_exp_type: "Expiration",
-    user_no_pin: "Sin PIN de acceso",
-    user_pin: "使用者 PIN",
+    user_no_pin: "無訪問 PIN",
+    user_pin: "用户PIN码",
     user_pin_action: "PIN",
     user_required: "Требуются имя и PIN",
     user_role_action: "Роль",
     user_role_label: "Argus 角色",
-    username: "使用者名稱",
+    username: "用户名",
     users_title: "👥 使用者與門禁控制",
-    wait_if_open: "等待感測器關閉",
-    waiting_sensors: "ESPERANDO SENSORES",
+    wait_if_open: "等待感應器關閉",
+    waiting_sensors: "等待感應器關閉",
     welcome_greeting: "Welcome,",
     welcome_profile: "Добро пожаловать, {name}"
   },
   ru: {
     accept: "Принять",
     access_desc: "Глобальная безопасность, мастер PIN и администраторы.",
-    access_pin_lbl: "PIN de Acceso",
+    access_pin_lbl: "PIN доступа",
     access_title: "Контроль доступа и пользователи",
-    action_failed: "No se pudo realizar la acción",
-    active_profile: "Perfil Activo",
+    action_failed: "Не удалось выполнить действие",
+    active_profile: "Активный профиль",
     active_until: "Истекает",
     activity_log: "📋 Журнал активности",
     add_btn: "+ Добавить",
     add_user: "Добавить пользователя",
     admin_only: "Только администраторы могут изменять этот раздел.",
     alarm_instance: "Экземпляр тревоги",
-    all_sensors_bypassed: "Todos los sensores configurados están omitidos.",
+    all_sensors_bypassed: "Все настроенные датчики пропущены.",
     arm_time: "Задержка постановки (с)",
     arm_time_label: "Время взятия (с)",
-    armed_away: "Вне дома",
+    armed_away: "Ушёл",
     armed_home: "Дома",
     armed_night: "Ночь",
     armed_vacation: "Отпуск",
-    arming: "Постановка на охрану",
-    automations: "⚡ Автоматизации",
-    available: "Доступно",
+    arming: "Постановка",
+    automations: "Автоматизации",
+    available: "Доступные",
     background_lbl: "Фон",
     backup_desc: "Сохраните резервную копию или восстановите предыдущую.",
-    backup_title: "Резервная копия",
+    backup_title: "Резервное копирование и восстановление",
     badge_pin_reset: "PIN Сброшен",
     badge_pin_reset_failed: "Ошибка Сброса PIN",
     battery_low: "⚠️ Низкий заряд",
@@ -2517,28 +2629,27 @@ const Do = [
     bridge_not_desc: "Включите интеграцию HomeKit Bridge в Home Assistant и добавьте <code>alarm_control_panel.argus_*</code> для QR сопряжения.",
     bridge_paired: "Мост настроен",
     bridge_paired_desc: "Мост <b>{bridge}</b> настроен в Home Assistant. Здесь нельзя проверить, добавлен ли он в Apple Home, или узнать его название.",
-    btn_away: "🔒 ВНЕ ДОМА",
+    btn_away: "🔴 Вне дома",
     btn_create_argus_profile: "Создать профиль Argus",
-    btn_disarmed: "СНЯТО С ОХРАНЫ",
-    btn_home: "🏠 ДОМА",
-    btn_night: "🌙 НОЧЬ",
+    btn_disarmed: "СНЯТО",
+    btn_home: "🏠 Дома",
+    btn_night: "🌙 Ночь",
     btn_sos: "🚨 SOS / ПАНИКА",
-    btn_vacation: "✈️ ОТПУСК",
+    btn_vacation: "✈️ Отпуск",
     bypass_lbl: "🚫 Обход",
     cancel: "Отмена",
     cancel_btn: "Отмена",
     cannot_arm: "Невозможно поставить на охрану",
     cannot_delete_last_admin: "Нельзя удалить последнего администратора.",
-    change_btn: "Cambiar",
+    change_btn: "Изменить",
     change_pin: "Мастер PIN",
-    change_profile_picture: "Cambiar foto en Personas de HA ↗",
-    change_user_pin: "Cambiar PIN",
+    change_profile_picture: "Изменить фото в «Людях» HA ↗",
     claim_btn: "Заявить права администратора",
     claim_desc: "Вашей установке требуется администратор для получения доступа.",
     claim_title: "Обновление безопасности Argus",
     clear: "Очистить",
     clear_history_confirm: "Удалить всю историю активности?",
-    clear_log_btn: "ОЧИСТИТЬ",
+    clear_log_btn: "🗑️ Очистить журнал",
     clock_12h: "12-часовой (AM/PM)",
     clock_24h: "24-часовой",
     clock_auto: "Автоматически (Home Assistant)",
@@ -2546,7 +2657,7 @@ const Do = [
     clock_format_label: "Формат времени",
     close: "Закрыть",
     confirm: "✓ Подтвердить",
-    confirm_pin: "Подтвердите PIN",
+    confirm_pin: "Подтвердить PIN",
     connected: "ПОДКЛЮЧЕНО",
     create_ha: "+ Создать в HA",
     current_pin: "Текущий PIN",
@@ -2554,7 +2665,6 @@ const Do = [
     delete: "Удалить",
     delete_btn_title: "Удалить из хранилища",
     delete_file_error: "Не удалось удалить файл: {error}",
-    delete_user: "Eliminar usuario",
     delete_user_confirm: 'Вы уверены, что хотите удалить "{name}"?',
     delete_user_tooltip: "Удалить профиль пользователя",
     deselect_all: "☐ Ничего",
@@ -2566,15 +2676,16 @@ const Do = [
     edit_btn: "✏️ Редактировать",
     edit_dashboard: "Редактировать панель",
     edit_dashboard_done: "✓ Готово",
-    emergency_help: "Número telefónico marcado en caso de emergencia.",
-    emergency_number_label: "Número de Emergencia",
+    emergency_help: "Настройте для местоположения дома (например, Коста-Рика: 911; Испания: 112). Номер будет включён в SOS-оповещения.",
+    emergency_number_label: "🚨 Местный номер экстренной службы",
     error_loading_uploaded_files: "Ошибка при загрузке истории файлов.",
     exit_to_ha: "Вернуться в Home Assistant",
     exp_indefinite: "Бессрочно",
-    exp_temporary: "Временно (Дата/Время)",
-    expired: "Истек",
+    exp_temporary: "Временный (Дата/Время)",
+    expired: "Истёк",
     export_btn: "📤 Скачать",
     export_error: "Ошибка экспорта: {error}",
+    external_panels: "Внешние панели сигнализации",
     file_choice: `«{file}»
 
 Использовать как статичное изображение (ОК) или анимированное видео (Отмена)?`,
@@ -2601,11 +2712,12 @@ const Do = [
     ha_role_admin: "Админ HA",
     ha_role_standard: "Пользователь HA",
     ha_standard_user_label: "Стандартный пользователь HA",
-    hero_desc: "Комплексная система безопасности, контроль доступа, автоматизации и HomeKit.",
+    hero_desc: "Интеллектуальная система домашней безопасности",
+    hide_widget: "Скрыть виджет",
     history_refresh: "🔄 Обновить",
     history_unavailable: "Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.",
     home_default: "Мой дом",
-    home_fallback: "Дом",
+    home_fallback: "Мой Дом",
     home_name_label: "Название дома",
     home_name_lbl: "Название дома",
     home_name_modal_desc: "Это имя отображается в панели экземпляров и в полноекранном режиме.",
@@ -2621,7 +2733,7 @@ const Do = [
     initialization_error_desc: "Не удалось подключиться к авторизованному backend Home Assistant.",
     initialization_error_title: "Не удалось запустить Argus",
     instances: "Активные экземпляры",
-    introduce_pin: "Введите ваш PIN",
+    introduce_pin: "Введите PIN",
     invalid_config: "Недопустимый файл конфигурации.",
     is_admin: "Администратор",
     lang_select_title: "Выбрать язык",
@@ -2630,11 +2742,15 @@ const Do = [
     lbl_aesthetic_custom: "Эстетическая персонализация",
     lbl_load_file: "Загрузить файл:",
     lbl_uploaded_files: "Загруженные файлы на сервере",
+    light_siren_color: "Цвет",
+    light_siren_flash: "Мягкое мигание, если доступно",
     link_ha_user: "Связать с пользователем Home Assistant",
-    linked_rules: "Правила, связанные с Argus",
+    linked_rules: "Связанные с Argus правила",
     loading: "Загрузка…",
     lock_if_open: "Блокировать при открытии",
     log_action_access_pin_updated: "PIN доступа обновлён",
+    log_action_analysis: "Анализ безопасности",
+    log_action_automation: "Автоматизация выполнена",
     log_action_backup_created: "Резервная копия создана",
     log_action_backup_restored: "Конфигурация восстановлена",
     log_action_first_run_completed: "Argus инициализирован пользователем {user}",
@@ -2647,25 +2763,29 @@ const Do = [
     log_action_schedule_applied: "Расписание применено",
     log_action_select_profile: "Выбран профиль: {user}",
     log_action_sos: "SOS паника вызвана пользователем {user}",
+    log_action_sos_stopped: "SOS остановлен",
     log_action_state_restored: "Состояние восстановлено",
     log_action_stop_sos: "SOS паника остановлена пользователем {user}",
+    log_action_user_added: "Пользователь создан",
+    log_action_user_deleted: "Пользователь удалён",
     log_action_user_logged_in: "Вход пользователя",
     log_action_verify_access_pin: "PIN-код доступа проверен {user}",
     log_armed: "Поставлено",
     log_by: "от",
     log_detail_armed: "Режим",
-    log_detail_disarm: "Система снята",
+    log_detail_disarm: "Система снята с охраны",
     log_detail_pin_reset: "Мастер-PIN сброшен администратором",
     log_detail_pin_reset_failed: "Несанкционированная попытка сбросить мастер-PIN",
     log_detail_triggered: "Автоматическая активация",
     log_disarmed: "Снято",
+    log_mode: "Режим",
     log_no_events: "Нет последних событий.",
     log_sensor: "Датчик",
     log_triggered: "Сработало!",
     login_btn: "Войти",
-    manual_arm: "Вручную",
-    manual_disarm: "Вручную (Снято)",
-    master_pin_lbl: "PIN Maestro",
+    manual_arm: "Ручная постановка",
+    manual_disarm: "Ручное снятие",
+    master_pin_lbl: "Мастер-PIN",
     modal_add_user: "+ Добавить пользователя",
     modal_cancel: "Отмена",
     modal_confirm: "Подтвердить",
@@ -2676,7 +2796,7 @@ const Do = [
     modal_pin_title: "PIN доступа",
     modal_save: "Сохранить",
     modal_user_added: "Пользователь создан.",
-    mode_away: "Ушёл",
+    mode_away: "Вне дома",
     mode_home: "Дома",
     mode_night: "Ночь",
     mode_vacation: "Отпуск",
@@ -2691,11 +2811,11 @@ const Do = [
     no_instances: "Нет экземпляров.",
     no_results: "Нет результатов",
     no_rules: "",
-    no_sensors_configured: "Sin sensores configurados",
+    no_sensors_configured: "Датчики не настроены",
     no_unlinked_ha_accounts: "Все активные учетные записи Home Assistant имеют профиль.",
     no_users: "Дополнительные пользователи не настроены.",
-    none_selected: "Ничего не выбрано",
-    notif_desc: "Выберите мобильные устройства, зарегистрированные в HA, которые будут получать оповещения Argus.",
+    none_selected: "Не выбрано",
+    notif_desc: "Выберите мобильные устройства, зарегистрированные в HA для получения оповещений Argus.",
     notif_no_services: "Нет мобильных служб",
     notification_armed: "{user} активировал режим {mode}.",
     notification_disarmed: "{user} снял систему с охраны.",
@@ -2715,9 +2835,9 @@ const Do = [
     pin_desc: "Цифровой код для постановки и снятия с охраны.",
     pin_disarm_error: "Неверный PIN или ошибка снятия с охраны",
     pin_incorrect: "❌ Неверный текущий PIN",
-    pin_management: "🔑 Gestión de Pines",
-    pin_master_title: "Мастер PIN",
-    pin_modal_desc: "Цифровой PIN для снятия Argus с охраны",
+    pin_management: "🔑 Управление PIN-кодами",
+    pin_master_title: "Мастер-PIN",
+    pin_modal_desc: "Цифровой PIN для снятия с охраны Argus",
     pin_placeholder: "PIN доступа",
     pin_remove_hint: "Для удаления PIN: введите текущий и оставьте поля пустыми.",
     pin_reset_admin_only: "❌ Ошибка: Только администраторы Home Assistant могут сбросить мастер-PIN.",
@@ -2726,32 +2846,35 @@ const Do = [
     profile_is_yours: "Это ваш профиль",
     profile_needs_pin: "Профиль другого пользователя — введите PIN доступа",
     profile_no_pin_access: "У этого профиля нет PIN доступа. Вы не можете его открыть.",
-    remove_btn: "Quitar",
+    remove_btn: "Удалить",
     reset_btn: "⚠️ Сброс",
     reset_confirm: "Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.",
     reset_dashboard: "Сбросить макет",
     reset_error: "Ошибка сброса: {error}",
     reset_success: "Argus сброшен. У вас есть несколько секунд, чтобы отменить это.",
+    reset_widget: "Сбросить виджет",
     retry_action: "Повторить",
     role_argus_admin: "Администратор Argus",
-    role_argus_admin_short: "Adm",
-    role_argus_standard: "Обычный пользователь",
+    role_argus_admin_short: "Адм",
+    role_argus_standard: "Стандартный пользователь",
     role_argus_user: "Стандартный пользователь",
-    role_argus_user_short: "Std",
+    role_argus_user_short: "Польз",
     rules_tip: "",
     save_btn: "Сохранить",
-    save_config: "СОХРАНИТЬ КОНФИГУРАЦИЮ",
+    save_config: "💾 Сохранить режим",
     save_mode: "💾 Сохранить режим",
     save_notif: "Сохранить",
     save_user: "Сохранить",
-    search_placeholder: "Поиск по имени, области или entity_id",
+    saved: "✓ Сохранено",
+    search_placeholder: "Поиск по имени, зоне или entity_id",
     search_select: "Поиск и выбор",
     searching_auto: "↻ Поиск автоматизаций...",
     select_all: "☑ Все",
     select_btn: "+ Выбрать",
+    select_entry_sensors: "+ Выбрать входные датчики",
     select_profile_subtitle: "Доступ к вашим панелям безопасности и экземплярам Argus.",
     select_profile_title: "Выберите ваш профиль",
-    selected_lbl: "Выбрано",
+    selected_lbl: "Выбранные",
     selector_panic: "🚨 Действия SOS",
     sensor_section: "Датчики вторжения",
     sensors_to_bypass: "Датчики для обхода",
@@ -2763,31 +2886,36 @@ const Do = [
     setup_required_desc: "Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.",
     setup_required_title: "Требуется настройка Argus",
     siren_section: "Сирены",
-    sos_actions: "Acciones Automáticas de SOS",
+    size: "Размер",
+    slide_disarm: "Сдвиньте для снятия охраны",
+    slide_sos: "Сдвиньте для включения SOS",
+    slide_sos_stop: "Сдвиньте для остановки SOS",
+    sos_actions: "🚨 Действия SOS",
     sos_activated: "SOS активирован",
     sos_call: "📞 Вызвать экстренные службы",
     sos_call_confirm: "Позвонить в экстренную службу ({number})?",
     sos_call_help: "Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.",
-    sos_confirm_text: "Проведите для немедленной активации тревоги.",
-    sos_confirm_title: "Подтвердить тревогу",
+    sos_confirm_text: "Сдвиньте для немедленного включения тревоги.",
+    sos_confirm_title: "🚨 Запустить сигнал тревоги?",
     sos_error: "Не удалось активировать SOS: {error}",
     sos_no_outputs: "Устройства не выбраны",
-    sos_outputs_help: "Dispositivos activados al disparar el SOS.",
-    sos_select_outputs: "Seleccionar salidas de pánico",
-    sos_slide: "Проведите для активации SOS",
-    sos_stop: "DETENER SOS",
-    status_away: "FUERA",
+    sos_outputs_help: "Эти устройства всегда будут включаться при SOS, даже когда Argus снят с охраны.",
+    sos_select_outputs: "Выбрать свет, сирены или сценарии",
+    sos_slide: "Сдвиньте для включения SOS",
+    sos_stop: "ОСТАНОВИТЬ SOS",
+    status_away: "Вне дома",
     status_closed: "ЗАКРЫТО",
-    status_home: "EN CASA",
-    status_idle: "INACTIVO",
+    status_home: "Дома",
+    status_idle: "Ожидание",
     status_open: "ОТКРЫТО",
-    status_recording: "GRABANDO",
+    status_recording: "Запись",
+    support_title: "Состояние и поддержка",
     switch_profile_btn: "👤 Сменить профиль",
     sync_panel_help: "Paneles de alarma que seguirán el mismo estado de Argus",
     sync_panel_section: "Paneles Sincronizados",
     system_armed: "СИСТЕМА НА ОХРАНЕ",
     system_disarmed: "СИСТЕМА СНЯТА С ОХРАНЫ",
-    system_triggered: "¡ALARMA DISPARADA!",
+    system_triggered: "ТРЕВОГА СРАБОТАЛА!",
     temp_auto: "Авто (лок. датчик / термостат / климат)",
     temp_notification_title: "Argus — Температурное предупреждение",
     temp_thermostat: "(термостат)",
@@ -2809,7 +2937,7 @@ const Do = [
     user_default: "Пользователь",
     user_exp_date: "Expiration Date/Time",
     user_exp_type: "Expiration",
-    user_no_pin: "Sin PIN de acceso",
+    user_no_pin: "Без PIN-кода",
     user_pin: "PIN пользователя",
     user_pin_action: "PIN",
     user_required: "Требуются имя и PIN",
@@ -2817,37 +2945,37 @@ const Do = [
     user_role_label: "Роль Argus",
     username: "Имя пользователя",
     users_title: "👥 Пользователи и контроль доступа",
-    wait_if_open: "Ожидать закрытия датчиков",
-    waiting_sensors: "ESPERANDO SENSORES",
+    wait_if_open: "Ждать закрытия датчиков",
+    waiting_sensors: "ОЖИДАНИЕ ДАТЧИКОВ",
     welcome_greeting: "Welcome,",
     welcome_profile: "Добро пожаловать, {name}"
   },
   hi: {
-    accept: "स्वीकार करें",
+    accept: "Accept",
     access_desc: "Global security management, master PIN and administrators.",
-    access_pin_lbl: "PIN de Acceso",
+    access_pin_lbl: "PIN доступа",
     access_title: "Access Control & Users",
-    action_failed: "No se pudo realizar la acción",
-    active_profile: "Perfil Activo",
+    action_failed: "Не удалось выполнить действие",
+    active_profile: "सक्रिय प्रोफ़ाइल",
     active_until: "समाप्त होता है",
     activity_log: "📋 गतिविधि लॉग",
-    add_btn: "+ जोड़ें",
-    add_user: "उपयोगकर्ता जोड़ें",
-    admin_only: "केवल व्यवस्थापक ही इस अनुभाग को संशोधित कर सकते हैं।",
+    add_btn: "+ Add",
+    add_user: "Add user",
+    admin_only: "Only administrators can modify this section.",
     alarm_instance: "Alarm Instance",
-    all_sensors_bypassed: "Todos los sensores configurados están omitidos.",
-    arm_time: "आर्मिंग विलंब (सेकंड)",
+    all_sensors_bypassed: "सभी कॉन्फ़िगर किए गए सेंसर बायपास हैं।",
+    arm_time: "सशस्त्र करने में देरी (सेकंड)",
     arm_time_label: "Arm time (s)",
-    armed_away: "बाहर",
-    armed_home: "घर पर",
-    armed_night: "रात",
-    armed_vacation: "छुट्टियाँ",
-    arming: "सशस्त्र किया जा रहा है",
-    automations: "⚡ स्वचालन",
-    available: "उपलब्ध",
+    armed_away: "Away",
+    armed_home: "Home",
+    armed_night: "Night",
+    armed_vacation: "Vacation",
+    arming: "Arming",
+    automations: "स्वचालन",
+    available: "Available",
     background_lbl: "Background",
     backup_desc: "Save a backup of your settings or restore a previous one.",
-    backup_title: "Backup & Restore",
+    backup_title: "बैकअप और पुनर्स्थापना",
     badge_pin_reset: "PIN Reset",
     badge_pin_reset_failed: "PIN Reset Failed",
     battery_low: "⚠️ Low Battery",
@@ -2868,64 +2996,63 @@ const Do = [
     bridge_not_desc: "Enable the HomeKit Bridge integration in Home Assistant and include the entity <code>alarm_control_panel.argus_*</code> to generate a pairing QR code.",
     bridge_paired: "Bridge configured",
     bridge_paired_desc: "The <b>{bridge}</b> bridge is configured in Home Assistant. Home Assistant cannot verify from here whether it was added to Apple Home or report its name.",
-    btn_away: "🔒 बाहर",
+    btn_away: "🔴 बाहर",
     btn_create_argus_profile: "Create Argus Profile",
-    btn_disarmed: "निरस्त्र",
+    btn_disarmed: "DISARMED",
     btn_home: "🏠 घर पर",
     btn_night: "🌙 रात",
-    btn_sos: "🚨 आपातकालीन / पैनिक",
-    btn_vacation: "✈️ छुट्टियाँ",
+    btn_sos: "🚨 आपातकालीन / SOS",
+    btn_vacation: "✈️ छुट्टी",
     bypass_lbl: "🚫 बायपास",
-    cancel: "रद्द करें",
+    cancel: "Cancel",
     cancel_btn: "Cancel",
     cannot_arm: "Невозможно поставить на охрану",
     cannot_delete_last_admin: "Cannot delete the last binding administrator.",
-    change_btn: "Cambiar",
-    change_pin: "मास्टर पिन",
-    change_profile_picture: "Cambiar foto en Personas de HA ↗",
-    change_user_pin: "Cambiar PIN",
+    change_btn: "Изменить",
+    change_pin: "Master PIN",
+    change_profile_picture: "HA Persons में फ़ोटो बदलें ↗",
     claim_btn: "Заявить права администратора",
     claim_desc: "Вашей установке требуется администратор для получения доступа.",
     claim_title: "Обновление безопасности Argus",
-    clear: "साफ़ करें",
+    clear: "Clear",
     clear_history_confirm: "Удалить всю историю активности?",
-    clear_log_btn: "साफ़ करें",
+    clear_log_btn: "🗑️ लॉग साफ़ करें",
     clock_12h: "12-hour (AM/PM)",
     clock_24h: "24-hour",
     clock_auto: "Automatic (Home Assistant)",
     clock_format_desc: "Choose how time is displayed across panels and logs.",
     clock_format_label: "Time Format",
-    close: "बंद करें",
-    confirm: "✓ पुष्टि करें",
-    confirm_pin: "पिन की पुष्टि करें",
+    close: "Close",
+    confirm: "✓ Confirm",
+    confirm_pin: "Confirm PIN",
     connected: "जुड़ा हुआ",
-    create_ha: "+ HA में बनाएँ",
-    current_pin: "वर्तमान पिन",
+    create_ha: "+ Create in HA",
+    current_pin: "Current PIN",
     customize: "Настроить",
     delete: "Удалить",
     delete_btn_title: "Delete from storage",
     delete_file_error: "Не удалось удалить файл: {error}",
-    delete_user: "Eliminar usuario",
     delete_user_confirm: 'Are you sure you want to delete "{name}"?',
     delete_user_tooltip: "Delete user profile",
     deselect_all: "☐ None",
     details_notif: "Alarm notification",
-    disarm_time: "प्रवेश विलंब (सेकंड)",
+    disarm_time: "प्रवेश में देरी (सेकंड)",
     disarm_time_label: "Entry delay (s)",
     disarmed: "निरस्त्र",
     done: "Готово",
     edit_btn: "✏️ Edit",
     edit_dashboard: "डैशबोर्ड संपादित करें",
     edit_dashboard_done: "✓ संपन्न",
-    emergency_help: "Número telefónico marcado en caso de emergencia.",
-    emergency_number_label: "Número de Emergencia",
+    emergency_help: "Настройте для местоположения дома (например, Коста-Рика: 911; Испания: 112). Номер будет включён в SOS-оповещения.",
+    emergency_number_label: "🚨 Местный номер экстренной службы",
     error_loading_uploaded_files: "Error loading file history.",
     exit_to_ha: "Back to Home Assistant",
-    exp_indefinite: "अनिश्चित",
+    exp_indefinite: "अनिश्चितकालीन",
     exp_temporary: "अस्थायी (दिनांक/समय)",
-    expired: "समाप्त हो गया",
+    expired: "समाप्त हो चुका",
     export_btn: "📤 Download",
     export_error: "Ошибка экспорта: {error}",
+    external_panels: "बाहरी अलार्म पैनल",
     file_choice: `«{file}»
 
 Использовать как статичное изображение (ОК) или анимированное видео (Отмена)?`,
@@ -2952,13 +3079,14 @@ const Do = [
     ha_role_admin: "HA Admin",
     ha_role_standard: "HA User",
     ha_standard_user_label: "Standard HA User",
-    hero_desc: "व्यापक सुरक्षा प्रणाली, अभिगम नियंत्रण, स्वचालन और HomeKit।",
+    hero_desc: "स्मार्ट होम सुरक्षा प्रणाली",
+    hide_widget: "विजेट छिपाएँ",
     history_refresh: "🔄 रीफ्रेश करें",
     history_unavailable: "Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.",
     home_default: "Мой дом",
-    home_fallback: "Дом",
+    home_fallback: "मेरा घर",
     home_name_label: "Home Name",
-    home_name_lbl: "Home Name",
+    home_name_lbl: "घर का नाम",
     home_name_modal_desc: "This name appears in the instances panel and in full screen.",
     home_name_modal_title: "🏡 Home Name",
     home_name_placeholder: "My Home",
@@ -2972,20 +3100,24 @@ const Do = [
     initialization_error_desc: "Не удалось подключиться к авторизованному backend Home Assistant.",
     initialization_error_title: "Не удалось запустить Argus",
     instances: "सक्रिय उदाहरण",
-    introduce_pin: "अपना पिन दर्ज करें",
+    introduce_pin: "Enter your PIN",
     invalid_config: "Недопустимый файл конфигурации.",
-    is_admin: "व्यवस्थापक",
+    is_admin: "Administrator",
     lang_select_title: "Select Language",
     lang_selector_lbl: "⚙️ भाषा",
     language: "Language",
     lbl_aesthetic_custom: "Aesthetic Customization",
     lbl_load_file: "Upload file:",
     lbl_uploaded_files: "Uploaded files on server",
+    light_siren_color: "रंग",
+    light_siren_flash: "यदि उपलब्ध हो तो सौम्य फ़्लैश",
     link_ha_user: "Link to Home Assistant User",
     linked_rules: "Argus से जुड़े नियम",
     loading: "Загрузка…",
-    lock_if_open: "खुला होने पर लॉक करें",
+    lock_if_open: "खुले होने पर रोकें",
     log_action_access_pin_updated: "PIN доступа обновлён",
+    log_action_analysis: "सुरक्षा विश्लेषण",
+    log_action_automation: "स्वचालन निष्पादित",
     log_action_backup_created: "Резервная копия создана",
     log_action_backup_restored: "Конфигурация восстановлена",
     log_action_first_run_completed: "Argus initialized by {user}",
@@ -2998,25 +3130,29 @@ const Do = [
     log_action_schedule_applied: "Расписание применено",
     log_action_select_profile: "Profile selected: {user}",
     log_action_sos: "SOS Panic triggered by {user}",
+    log_action_sos_stopped: "SOS रोक दिया गया",
     log_action_state_restored: "Состояние восстановлено",
     log_action_stop_sos: "SOS Panic stopped by {user}",
+    log_action_user_added: "उपयोगकर्ता बनाया गया",
+    log_action_user_deleted: "उपयोगकर्ता हटाया गया",
     log_action_user_logged_in: "Вход пользователя",
     log_action_verify_access_pin: "Access PIN verified by {user}",
     log_armed: "Armed",
     log_by: "by",
     log_detail_armed: "Mode",
-    log_detail_disarm: "System disarmed",
+    log_detail_disarm: "सिस्टम निरस्त्र किया गया",
     log_detail_pin_reset: "Master PIN reset by administrator",
     log_detail_pin_reset_failed: "Unauthorized attempt to reset master PIN",
-    log_detail_triggered: "Automatic activation",
+    log_detail_triggered: "स्वचालित सक्रियण",
     log_disarmed: "Disarmed",
+    log_mode: "मोड",
     log_no_events: "No recent events.",
     log_sensor: "Sensor",
     log_triggered: "Triggered!",
     login_btn: "Login",
-    manual_arm: "Manual",
-    manual_disarm: "Manual (Disarmed)",
-    master_pin_lbl: "PIN Maestro",
+    manual_arm: "मैन्युअल आर्मिंग",
+    manual_disarm: "मैन्युअल डिसआर्म",
+    master_pin_lbl: "Мастер-PIN",
     modal_add_user: "+ Добавить пользователя",
     modal_cancel: "Отмена",
     modal_confirm: "Подтвердить",
@@ -3027,14 +3163,14 @@ const Do = [
     modal_pin_title: "PIN доступа",
     modal_save: "Сохранить",
     modal_user_added: "Пользователь создан.",
-    mode_away: "Away",
-    mode_home: "Home",
-    mode_night: "Night",
-    mode_vacation: "Vacation",
+    mode_away: "बाहर",
+    mode_home: "घर पर",
+    mode_night: "रात",
+    mode_vacation: "छुट्टी",
     modes: "मोड",
     mqtt_label: "MQTT",
     never_triggered: "Never triggered",
-    new_pin: "नया पिन",
+    new_pin: "New PIN",
     no_alarm_instance: "Нет доступного экземпляра сигнализации",
     no_auto_linked: "No automations linked to Argus.",
     no_files_uploaded: "No uploaded files. Upload a background using the controls above.",
@@ -3042,15 +3178,15 @@ const Do = [
     no_instances: "No instances. Add Argus from Integrations.",
     no_results: "Нет результатов",
     no_rules: "",
-    no_sensors_configured: "Sin sensores configurados",
+    no_sensors_configured: "कोई सेंसर कॉन्फ़िगर नहीं है",
     no_unlinked_ha_accounts: "All active Home Assistant accounts have a profile.",
-    no_users: "कोई अतिरिक्त उपयोगकर्ता कॉन्फ़िगर नहीं किया गया।",
-    none_selected: "कोई चयनित नहीं",
-    notif_desc: "HA में पंजीकृत उन मोबाइल उपकरणों का चयन करें जो Argus अलर्ट प्राप्त करेंगे।",
+    no_users: "No additional users configured.",
+    none_selected: "None selected",
+    notif_desc: "Select the mobile devices registered in HA that will receive Argus alerts.",
     notif_no_services: "Нет мобильных служб",
     notification_armed: "{user} активировал режим {mode}.",
     notification_disarmed: "{user} снял систему с охраны.",
-    notifications_title: "🔔 सूचनाएं",
+    notifications_title: "🔔 Notifications",
     open_sensors: "Open sensors",
     open_sensors_explain: `Следующие датчики открыты:
 {names}
@@ -3059,16 +3195,16 @@ const Do = [
     panic_state_unknown: "Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.",
     panic_stop_error: "Не удалось остановить тревогу: {error}",
     panic_stopped: "Тревога остановлена; восстановлено состояние {state}",
-    pending: "लंबित",
+    pending: "Pending",
     pin_active_no: "Master PIN: Deactivated",
     pin_active_yes: "Master PIN: Active",
     pin_deleted: "✓ PIN Deleted",
-    pin_desc: "आर्म और निरस्त्र करने के लिए संख्यात्मक कोड।",
+    pin_desc: "Numeric code to arm and disarm.",
     pin_disarm_error: "Неверный PIN или ошибка снятия с охраны",
     pin_incorrect: "❌ Incorrect current PIN",
-    pin_management: "🔑 Gestión de Pines",
-    pin_master_title: "Master PIN",
-    pin_modal_desc: "Argus को निरस्त्र करने के लिए संख्यात्मक पिन",
+    pin_management: "🔑 पिन प्रबंधन",
+    pin_master_title: "मास्टर पिन",
+    pin_modal_desc: "Numeric PIN to disarm Argus",
     pin_placeholder: "Access PIN",
     pin_remove_hint: "To remove PIN: Enter the current one and leave the fields below empty.",
     pin_reset_admin_only: "❌ Error: Only Home Assistant administrators can reset the master PIN.",
@@ -3077,34 +3213,37 @@ const Do = [
     profile_is_yours: "This is your profile",
     profile_needs_pin: "Another person’s profile — enter the access PIN",
     profile_no_pin_access: "This profile has no access PIN. You cannot open it.",
-    remove_btn: "Quitar",
+    remove_btn: "Удалить",
     reset_btn: "⚠️ Factory Reset",
     reset_confirm: "Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.",
     reset_dashboard: "लेआउट रीसेट करें",
     reset_error: "Ошибка сброса: {error}",
     reset_success: "Argus сброшен. У вас есть несколько секунд, чтобы отменить это.",
+    reset_widget: "विजेट रीसेट करें",
     retry_action: "Повторить",
     role_argus_admin: "Argus व्यवस्थापक",
-    role_argus_admin_short: "Adm",
+    role_argus_admin_short: "व्यवस्थापक",
     role_argus_standard: "मानक उपयोगकर्ता",
     role_argus_user: "Standard User",
-    role_argus_user_short: "Std",
+    role_argus_user_short: "उपयोगकर्ता",
     rules_tip: "",
     save_btn: "Save",
-    save_config: "कॉन्फ़िगरेशन सहेजें",
-    save_mode: "💾 मोड सहेजें",
-    save_notif: "सहेजें",
-    save_user: "सहेजें",
-    search_placeholder: "नाम, क्षेत्र या entity_id से खोजें",
+    save_config: "💾 मोड सहेजें",
+    save_mode: "💾 Save mode",
+    save_notif: "Save",
+    save_user: "Save",
+    saved: "✓ सहेजा गया",
+    search_placeholder: "Search by name, area or entity_id",
     search_select: "Search & select",
     searching_auto: "↻ Searching automations...",
     select_all: "☑ All",
-    select_btn: "+ चुनें",
+    select_btn: "+ Select",
+    select_entry_sensors: "+ प्रवेश सेंसर चुनें",
     select_profile_subtitle: "Access your security panels and Argus instances.",
     select_profile_title: "Select Your Profile",
-    selected_lbl: "चयनित",
+    selected_lbl: "Selected",
     selector_panic: "🚨 Действия SOS",
-    sensor_section: "घुसपैठ सेंसर",
+    sensor_section: "Intrusion Sensors",
     sensors_to_bypass: "Sensors to Bypass",
     settings: "⚙️ सेटिंग्स",
     setup_access_pin: "PIN доступа к панели Argus (Необязательно)",
@@ -3114,44 +3253,49 @@ const Do = [
     setup_required_desc: "Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.",
     setup_required_title: "Требуется настройка Argus",
     siren_section: "सायरन",
-    sos_actions: "Acciones Automáticas de SOS",
+    size: "आकार",
+    slide_disarm: "निरस्त करने के लिए स्लाइड करें",
+    slide_sos: "SOS के लिए स्लाइड करें",
+    slide_sos_stop: "SOS रोकने के लिए स्लाइड करें",
+    sos_actions: "🚨 Действия SOS",
     sos_activated: "SOS активирован",
     sos_call: "📞 Call Emergency Services",
     sos_call_confirm: "Позвонить в экстренную службу ({number})?",
     sos_call_help: "Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.",
-    sos_confirm_text: "Slide to trigger the alarm immediately.",
-    sos_confirm_title: "Confirm panic",
+    sos_confirm_text: "तुरंत अलार्म बजाने के लिए स्लाइड करें।",
+    sos_confirm_title: "🚨 आपातकालीन अलार्म चालू करें?",
     sos_error: "Не удалось активировать SOS: {error}",
     sos_no_outputs: "Устройства не выбраны",
-    sos_outputs_help: "Dispositivos activados al disparar el SOS.",
-    sos_select_outputs: "Seleccionar salidas de pánico",
-    sos_slide: "SOS सक्रिय करने के लिए स्लाइड करें",
-    sos_stop: "DETENER SOS",
-    status_away: "FUERA",
+    sos_outputs_help: "Эти устройства всегда будут включаться при SOS, даже когда Argus снят с охраны.",
+    sos_select_outputs: "Выбрать свет, сирены или сценарии",
+    sos_slide: "SOS के लिए स्लाइड करें",
+    sos_stop: "SOS रोकें",
+    status_away: "Вне дома",
     status_closed: "बंद",
-    status_home: "EN CASA",
-    status_idle: "INACTIVO",
+    status_home: "Дома",
+    status_idle: "Ожидание",
     status_open: "खुला",
-    status_recording: "GRABANDO",
+    status_recording: "Запись",
+    support_title: "स्थिति और सहायता",
     switch_profile_btn: "👤 प्रोफ़ाइल बदलें",
     sync_panel_help: "Paneles de alarma que seguirán el mismo estado de Argus",
     sync_panel_section: "Paneles Sincronizados",
     system_armed: "सिस्टम सशस्त्र है",
     system_disarmed: "सिस्टम निरस्त्र है",
-    system_triggered: "¡ALARMA DISPARADA!",
+    system_triggered: "अलार्म बज उठा!",
     temp_auto: "Automatic (local sensor / thermostat / climate)",
     temp_notification_title: "Argus — Температурное предупреждение",
     temp_thermostat: "(thermostat)",
     thermostat_alert_notif: "🌡️ Temperature alert",
     times_section: "⏱️ टाइमर",
-    triggered: "अलार्म!",
+    triggered: "ALARM!",
     unavailable: "Unavailable",
     undo_error: "Не удалось отменить сброс: {error}",
     undo_reset_btn: "↩️ Undo Reset",
     undo_success: "Сброс отменён.",
     unlinked_ha_accounts_title: "Home Assistant accounts without Argus profile",
     unlock_kiosk: "Unlock kiosk",
-    update_pin: "पिन अपडेट करें",
+    update_pin: "Update PIN",
     upload_error: "Ошибка загрузки.",
     url_placeholder: "URL фона…",
     use_for_hub: "Argus",
@@ -3160,45 +3304,45 @@ const Do = [
     user_default: "Пользователь",
     user_exp_date: "Expiration Date/Time",
     user_exp_type: "Expiration",
-    user_no_pin: "Sin PIN de acceso",
-    user_pin: "उपयोगकर्ता पिन",
+    user_no_pin: "कोई एक्सेस पिन नहीं",
+    user_pin: "User PIN",
     user_pin_action: "PIN",
     user_required: "Требуются имя и PIN",
     user_role_action: "Роль",
     user_role_label: "Argus Role",
-    username: "उपयोगकर्ता नाम",
+    username: "Username",
     users_title: "👥 उपयोगकर्ता और अभिगम नियंत्रण",
     wait_if_open: "सेंसर बंद होने की प्रतीक्षा करें",
-    waiting_sensors: "ESPERANDO SENSORES",
+    waiting_sensors: "सेंसर की प्रतीक्षा है",
     welcome_greeting: "Welcome,",
     welcome_profile: "Добро пожаловать, {name}"
   },
   ar: {
-    accept: "قبول",
+    accept: "Accept",
     access_desc: "Global security management, master PIN and administrators.",
-    access_pin_lbl: "PIN de Acceso",
+    access_pin_lbl: "PIN доступа",
     access_title: "Access Control & Users",
-    action_failed: "No se pudo realizar la acción",
-    active_profile: "Perfil Activo",
+    action_failed: "Не удалось выполнить действие",
+    active_profile: "الملف النشط",
     active_until: "ينتهي في",
     activity_log: "📋 سجل الأنشطة",
-    add_btn: "+ إضافة",
-    add_user: "إضافة مستخدم",
-    admin_only: "يمكن للمسؤولين فقط تعديل هذا القسم.",
+    add_btn: "+ Add",
+    add_user: "Add user",
+    admin_only: "Only administrators can modify this section.",
     alarm_instance: "Alarm Instance",
-    all_sensors_bypassed: "Todos los sensores configurados están omitidos.",
+    all_sensors_bypassed: "تم تجاوز جميع المستشعرات المكونة.",
     arm_time: "تأخير التسليح (ثانية)",
     arm_time_label: "Arm time (s)",
-    armed_away: "بالخارج",
-    armed_home: "في المنزل",
-    armed_night: "ليلاً",
-    armed_vacation: "إجازة",
-    arming: "جاري التسليح",
-    automations: "⚡ الأتمتة",
-    available: "متاح",
+    armed_away: "Away",
+    armed_home: "Home",
+    armed_night: "Night",
+    armed_vacation: "Vacation",
+    arming: "Arming",
+    automations: "الأتمتة",
+    available: "Available",
     background_lbl: "Background",
     backup_desc: "Save a backup of your settings or restore a previous one.",
-    backup_title: "Backup & Restore",
+    backup_title: "النسخ الاحتياطي والاستعادة",
     badge_pin_reset: "PIN Reset",
     badge_pin_reset_failed: "PIN Reset Failed",
     battery_low: "⚠️ Low Battery",
@@ -3219,57 +3363,55 @@ const Do = [
     bridge_not_desc: "Enable the HomeKit Bridge integration in Home Assistant and include the entity <code>alarm_control_panel.argus_*</code> to generate a pairing QR code.",
     bridge_paired: "Bridge configured",
     bridge_paired_desc: "The <b>{bridge}</b> bridge is configured in Home Assistant. Home Assistant cannot verify from here whether it was added to Apple Home or report its name.",
-    btn_away: "🔒 بالخارج",
+    btn_away: "🔴 بالخارج",
     btn_create_argus_profile: "Create Argus Profile",
-    btn_disarmed: "تم نزع السلاح",
+    btn_disarmed: "DISARMED",
     btn_home: "🏠 في المنزل",
-    btn_night: "🌙 ليلاً",
-    btn_sos: "🚨 استغاثة / ذعر",
+    btn_night: "🌙 ليلي",
+    btn_sos: "🚨 نداء استغاثة / SOS",
     btn_vacation: "✈️ إجازة",
     bypass_lbl: "🚫 تجاوز",
-    cancel: "إلغاء",
+    cancel: "Cancel",
     cancel_btn: "Cancel",
     cannot_arm: "Невозможно поставить на охрану",
     cannot_delete_last_admin: "Cannot delete the last binding administrator.",
-    change_btn: "Cambiar",
-    change_pin: "رمز PIN الرئيسي",
-    change_profile_picture: "Cambiar foto en Personas de HA ↗",
-    change_user_pin: "Cambiar PIN",
+    change_btn: "Изменить",
+    change_pin: "Master PIN",
+    change_profile_picture: "تغيير الصورة في أشخاص HA ↗",
     claim_btn: "Заявить права администратора",
     claim_desc: "Вашей установке требуется администратор для получения доступа.",
     claim_title: "Обновление безопасности Argus",
-    clear: "مسح",
+    clear: "Clear",
     clear_history_confirm: "Удалить всю историю активности?",
-    clear_log_btn: "مسح",
+    clear_log_btn: "🗑️ مسح السجل",
     clock_12h: "12-hour (AM/PM)",
     clock_24h: "24-hour",
     clock_auto: "Automatic (Home Assistant)",
     clock_format_desc: "Choose how time is displayed across panels and logs.",
     clock_format_label: "Time Format",
-    close: "إغلاق",
-    confirm: "✓ تأكيد",
-    confirm_pin: "تأكيد رمز PIN",
+    close: "Close",
+    confirm: "✓ Confirm",
+    confirm_pin: "Confirm PIN",
     connected: "متصل",
-    create_ha: "+ إنشاء في HA",
-    current_pin: "رمز PIN الحالي",
+    create_ha: "+ Create in HA",
+    current_pin: "Current PIN",
     customize: "Настроить",
     delete: "Удалить",
     delete_btn_title: "Delete from storage",
     delete_file_error: "Не удалось удалить файл: {error}",
-    delete_user: "Eliminar usuario",
     delete_user_confirm: 'Are you sure you want to delete "{name}"?',
     delete_user_tooltip: "Delete user profile",
     deselect_all: "☐ None",
     details_notif: "Alarm notification",
     disarm_time: "تأخير الدخول (ثانية)",
     disarm_time_label: "Entry delay (s)",
-    disarmed: "تم نزع السلاح",
+    disarmed: "منزوع السلاح",
     done: "Готово",
     edit_btn: "✏️ Edit",
     edit_dashboard: "تعديل لوحة المعلومات",
     edit_dashboard_done: "✓ تم",
-    emergency_help: "Número telefónico marcado en caso de emergencia.",
-    emergency_number_label: "Número de Emergencia",
+    emergency_help: "Настройте для местоположения дома (например, Коста-Рика: 911; Испания: 112). Номер будет включён в SOS-оповещения.",
+    emergency_number_label: "🚨 Местный номер экстренной службы",
     error_loading_uploaded_files: "Error loading file history.",
     exit_to_ha: "Back to Home Assistant",
     exp_indefinite: "غير محدد",
@@ -3277,6 +3419,7 @@ const Do = [
     expired: "منتهي الصلاحية",
     export_btn: "📤 Download",
     export_error: "Ошибка экспорта: {error}",
+    external_panels: "لوحات الإنذار الخارجية",
     file_choice: `«{file}»
 
 Использовать как статичное изображение (ОК) или анимированное видео (Отмена)?`,
@@ -3303,13 +3446,14 @@ const Do = [
     ha_role_admin: "HA Admin",
     ha_role_standard: "HA User",
     ha_standard_user_label: "Standard HA User",
-    hero_desc: "نظام أمان شامل، والتحكم في الوصول، والأتمتة، وHomeKit.",
+    hero_desc: "نظام أمان منزلي ذكي",
+    hide_widget: "إخفاء الأداة",
     history_refresh: "🔄 تحديث",
     history_unavailable: "Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.",
     home_default: "Мой дом",
-    home_fallback: "Дом",
+    home_fallback: "منزلي",
     home_name_label: "Home Name",
-    home_name_lbl: "Home Name",
+    home_name_lbl: "اسم المنزل",
     home_name_modal_desc: "This name appears in the instances panel and in full screen.",
     home_name_modal_title: "🏡 Home Name",
     home_name_placeholder: "My Home",
@@ -3323,20 +3467,24 @@ const Do = [
     initialization_error_desc: "Не удалось подключиться к авторизованному backend Home Assistant.",
     initialization_error_title: "Не удалось запустить Argus",
     instances: "المثيلات النشطة",
-    introduce_pin: "أدخل رمز PIN الخاص بك",
+    introduce_pin: "Enter your PIN",
     invalid_config: "Недопустимый файл конфигурации.",
-    is_admin: "مسؤول",
+    is_admin: "Administrator",
     lang_select_title: "Select Language",
     lang_selector_lbl: "⚙️ اللغة",
     language: "Language",
     lbl_aesthetic_custom: "Aesthetic Customization",
     lbl_load_file: "Upload file:",
     lbl_uploaded_files: "Uploaded files on server",
+    light_siren_color: "اللون",
+    light_siren_flash: "وميض لطيف إن وجد",
     link_ha_user: "Link to Home Assistant User",
     linked_rules: "القواعد المرتبطة بـ Argus",
     loading: "Загрузка…",
-    lock_if_open: "قفل إذا كان مفتوحًا",
+    lock_if_open: "حظر التسليح إذا كانت مفتوحة",
     log_action_access_pin_updated: "PIN доступа обновлён",
+    log_action_analysis: "تحليل الأمان",
+    log_action_automation: "تم تنفيذ الأتمتة",
     log_action_backup_created: "Резервная копия создана",
     log_action_backup_restored: "Конфигурация восстановлена",
     log_action_first_run_completed: "Argus initialized by {user}",
@@ -3349,25 +3497,29 @@ const Do = [
     log_action_schedule_applied: "Расписание применено",
     log_action_select_profile: "Profile selected: {user}",
     log_action_sos: "SOS Panic triggered by {user}",
+    log_action_sos_stopped: "تم إيقاف SOS",
     log_action_state_restored: "Состояние восстановлено",
     log_action_stop_sos: "SOS Panic stopped by {user}",
+    log_action_user_added: "تم إنشاء المستخدم",
+    log_action_user_deleted: "تم حذف المستخدم",
     log_action_user_logged_in: "Вход пользователя",
     log_action_verify_access_pin: "Access PIN verified by {user}",
     log_armed: "Armed",
     log_by: "by",
     log_detail_armed: "Mode",
-    log_detail_disarm: "System disarmed",
+    log_detail_disarm: "تم نزع سلاح النظام",
     log_detail_pin_reset: "Master PIN reset by administrator",
     log_detail_pin_reset_failed: "Unauthorized attempt to reset master PIN",
-    log_detail_triggered: "Automatic activation",
+    log_detail_triggered: "تنشيط تلقائي",
     log_disarmed: "Disarmed",
+    log_mode: "الوضع",
     log_no_events: "No recent events.",
     log_sensor: "Sensor",
     log_triggered: "Triggered!",
     login_btn: "Login",
-    manual_arm: "Manual",
-    manual_disarm: "Manual (Disarmed)",
-    master_pin_lbl: "PIN Maestro",
+    manual_arm: "تسليح يدوي",
+    manual_disarm: "نزع السلاح يدوياً",
+    master_pin_lbl: "Мастер-PIN",
     modal_add_user: "+ Добавить пользователя",
     modal_cancel: "Отмена",
     modal_confirm: "Подтвердить",
@@ -3378,14 +3530,14 @@ const Do = [
     modal_pin_title: "PIN доступа",
     modal_save: "Сохранить",
     modal_user_added: "Пользователь создан.",
-    mode_away: "Away",
-    mode_home: "Home",
-    mode_night: "Night",
-    mode_vacation: "Vacation",
+    mode_away: "بالخارج",
+    mode_home: "في المنزل",
+    mode_night: "ليلي",
+    mode_vacation: "إجازة",
     modes: "الأوضاع",
     mqtt_label: "MQTT",
     never_triggered: "Never triggered",
-    new_pin: "رمز PIN جديد",
+    new_pin: "New PIN",
     no_alarm_instance: "Нет доступного экземпляра сигнализации",
     no_auto_linked: "No automations linked to Argus.",
     no_files_uploaded: "No uploaded files. Upload a background using the controls above.",
@@ -3393,15 +3545,15 @@ const Do = [
     no_instances: "No instances. Add Argus from Integrations.",
     no_results: "Нет результатов",
     no_rules: "",
-    no_sensors_configured: "Sin sensores configurados",
+    no_sensors_configured: "لم يتم تكوين مستشعرات",
     no_unlinked_ha_accounts: "All active Home Assistant accounts have a profile.",
-    no_users: "لم يتم تكوين مستخدمين إضافيين.",
-    none_selected: "لم يتم تحديد أي منها",
-    notif_desc: "حدد الأجهزة المحمولة المسجلة في HA والتي ستتلقى تنبيهات Argus.",
+    no_users: "No additional users configured.",
+    none_selected: "None selected",
+    notif_desc: "Select the mobile devices registered in HA that will receive Argus alerts.",
     notif_no_services: "Нет мобильных служб",
     notification_armed: "{user} активировал режим {mode}.",
     notification_disarmed: "{user} снял систему с охраны.",
-    notifications_title: "🔔 الإشعارات",
+    notifications_title: "🔔 Notifications",
     open_sensors: "Open sensors",
     open_sensors_explain: `Следующие датчики открыты:
 {names}
@@ -3410,16 +3562,16 @@ const Do = [
     panic_state_unknown: "Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.",
     panic_stop_error: "Не удалось остановить тревогу: {error}",
     panic_stopped: "Тревога остановлена; восстановлено состояние {state}",
-    pending: "قيد الانتظار",
+    pending: "Pending",
     pin_active_no: "Master PIN: Deactivated",
     pin_active_yes: "Master PIN: Active",
     pin_deleted: "✓ PIN Deleted",
-    pin_desc: "رمز رقمي للتسليح ونزع السلاح.",
+    pin_desc: "Numeric code to arm and disarm.",
     pin_disarm_error: "Неверный PIN или ошибка снятия с охраны",
     pin_incorrect: "❌ Incorrect current PIN",
-    pin_management: "🔑 Gestión de Pines",
-    pin_master_title: "Master PIN",
-    pin_modal_desc: "رمز PIN رقمي لنزع سلاح Argus",
+    pin_management: "🔑 إدارة الرموز السرية",
+    pin_master_title: "الرمز الرئيسي",
+    pin_modal_desc: "Numeric PIN to disarm Argus",
     pin_placeholder: "Access PIN",
     pin_remove_hint: "To remove PIN: Enter the current one and leave the fields below empty.",
     pin_reset_admin_only: "❌ Error: Only Home Assistant administrators can reset the master PIN.",
@@ -3428,34 +3580,37 @@ const Do = [
     profile_is_yours: "This is your profile",
     profile_needs_pin: "Another person’s profile — enter the access PIN",
     profile_no_pin_access: "This profile has no access PIN. You cannot open it.",
-    remove_btn: "Quitar",
+    remove_btn: "Удалить",
     reset_btn: "⚠️ Factory Reset",
     reset_confirm: "Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.",
     reset_dashboard: "إعادة تعيين التخطيط",
     reset_error: "Ошибка сброса: {error}",
     reset_success: "Argus сброшен. У вас есть несколько секунд, чтобы отменить это.",
+    reset_widget: "إعادة تعيين الأداة",
     retry_action: "Повторить",
     role_argus_admin: "مسؤول Argus",
-    role_argus_admin_short: "Adm",
-    role_argus_standard: "مستخدم قياسي",
+    role_argus_admin_short: "مشرف",
+    role_argus_standard: "مستخدم عادي",
     role_argus_user: "Standard User",
-    role_argus_user_short: "Std",
+    role_argus_user_short: "مستخدم",
     rules_tip: "",
     save_btn: "Save",
-    save_config: "حفظ التكوين",
-    save_mode: "💾 حفظ الوضع",
-    save_notif: "حفظ",
-    save_user: "حفظ",
-    search_placeholder: "البحث بالاسم أو المنطقة أو entity_id",
+    save_config: "💾 حفظ الوضع",
+    save_mode: "💾 Save mode",
+    save_notif: "Save",
+    save_user: "Save",
+    saved: "✓ تم الحفظ",
+    search_placeholder: "Search by name, area or entity_id",
     search_select: "Search & select",
     searching_auto: "↻ Searching automations...",
     select_all: "☑ All",
-    select_btn: "+ تحديد",
+    select_btn: "+ Select",
+    select_entry_sensors: "+ حدد مستشعرات المدخل",
     select_profile_subtitle: "Access your security panels and Argus instances.",
     select_profile_title: "Select Your Profile",
-    selected_lbl: "محدد",
+    selected_lbl: "Selected",
     selector_panic: "🚨 Действия SOS",
-    sensor_section: "أجهزة استشعار التسلل",
+    sensor_section: "Intrusion Sensors",
     sensors_to_bypass: "Sensors to Bypass",
     settings: "⚙️ الإعدادات",
     setup_access_pin: "PIN доступа к панели Argus (Необязательно)",
@@ -3465,44 +3620,49 @@ const Do = [
     setup_required_desc: "Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.",
     setup_required_title: "Требуется настройка Argus",
     siren_section: "صافرات الإنذار",
-    sos_actions: "Acciones Automáticas de SOS",
+    size: "الحجم",
+    slide_disarm: "اسحب لنزع التسليح",
+    slide_sos: "اسحب لتشغيل نداء الاستغاثة",
+    slide_sos_stop: "اسحب لإيقاف SOS",
+    sos_actions: "🚨 Действия SOS",
     sos_activated: "SOS активирован",
     sos_call: "📞 Call Emergency Services",
     sos_call_confirm: "Позвонить в экстренную службу ({number})?",
     sos_call_help: "Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.",
-    sos_confirm_text: "Slide to trigger the alarm immediately.",
-    sos_confirm_title: "Confirm panic",
+    sos_confirm_text: "اسحب لتشغيل الإنذار فوراً.",
+    sos_confirm_title: "🚨 تشغيل إنذار الطوارئ؟",
     sos_error: "Не удалось активировать SOS: {error}",
     sos_no_outputs: "Устройства не выбраны",
-    sos_outputs_help: "Dispositivos activados al disparar el SOS.",
-    sos_select_outputs: "Seleccionar salidas de pánico",
-    sos_slide: "مرر لتفعيل SOS",
-    sos_stop: "DETENER SOS",
-    status_away: "FUERA",
+    sos_outputs_help: "Эти устройства всегда будут включаться при SOS, даже когда Argus снят с охраны.",
+    sos_select_outputs: "Выбрать свет, сирены или сценарии",
+    sos_slide: "اسحب لتشغيل SOS",
+    sos_stop: "إيقاف SOS",
+    status_away: "Вне дома",
     status_closed: "مغلق",
-    status_home: "EN CASA",
-    status_idle: "INACTIVO",
+    status_home: "Дома",
+    status_idle: "Ожидание",
     status_open: "مفتوح",
-    status_recording: "GRABANDO",
+    status_recording: "Запись",
+    support_title: "الحالة والدعم",
     switch_profile_btn: "👤 تبديل الملف الشخصي",
     sync_panel_help: "Paneles de alarma que seguirán el mismo estado de Argus",
     sync_panel_section: "Paneles Sincronizados",
     system_armed: "النظام مسلح",
     system_disarmed: "النظام منزوع السلاح",
-    system_triggered: "¡ALARMA DISPARADA!",
+    system_triggered: "تم إطلاق الإنذار!",
     temp_auto: "Automatic (local sensor / thermostat / climate)",
     temp_notification_title: "Argus — Температурное предупреждение",
     temp_thermostat: "(thermostat)",
     thermostat_alert_notif: "🌡️ Temperature alert",
-    times_section: "⏱️ المؤقتات",
-    triggered: "إنذار!",
+    times_section: "⏱️ التوقيتات",
+    triggered: "ALARM!",
     unavailable: "Unavailable",
     undo_error: "Не удалось отменить сброс: {error}",
     undo_reset_btn: "↩️ Undo Reset",
     undo_success: "Сброс отменён.",
     unlinked_ha_accounts_title: "Home Assistant accounts without Argus profile",
     unlock_kiosk: "Unlock kiosk",
-    update_pin: "تحديث رمز PIN",
+    update_pin: "Update PIN",
     upload_error: "Ошибка загрузки.",
     url_placeholder: "URL фона…",
     use_for_hub: "Argus",
@@ -3511,45 +3671,45 @@ const Do = [
     user_default: "Пользователь",
     user_exp_date: "Expiration Date/Time",
     user_exp_type: "Expiration",
-    user_no_pin: "Sin PIN de acceso",
-    user_pin: "رمز PIN للمستخدم",
+    user_no_pin: "بدون رمز PIN",
+    user_pin: "User PIN",
     user_pin_action: "PIN",
     user_required: "Требуются имя и PIN",
     user_role_action: "Роль",
     user_role_label: "Argus Role",
-    username: "اسم المستخدم",
+    username: "Username",
     users_title: "👥 المستخدمون والتحكم في الوصول",
-    wait_if_open: "انتظر حتى تغلق أجهزة الاستشعار",
-    waiting_sensors: "ESPERANDO SENSORES",
+    wait_if_open: "انتظار إغلاق المستشعرات",
+    waiting_sensors: "في انتظار المستشعرات",
     welcome_greeting: "Welcome,",
     welcome_profile: "Добро пожаловать, {name}"
   },
   ko: {
-    accept: "수락",
+    accept: "Accept",
     access_desc: "Global security management, master PIN and administrators.",
-    access_pin_lbl: "PIN de Acceso",
+    access_pin_lbl: "PIN доступа",
     access_title: "Access Control & Users",
-    action_failed: "No se pudo realizar la acción",
-    active_profile: "Perfil Activo",
+    action_failed: "Не удалось выполнить действие",
+    active_profile: "활성 프로필",
     active_until: "만료일",
     activity_log: "📋 활동 로그",
-    add_btn: "+ 추가",
-    add_user: "사용자 추가",
-    admin_only: "관리자만 이 섹션을 수정할 수 있습니다.",
+    add_btn: "+ Add",
+    add_user: "Add user",
+    admin_only: "Only administrators can modify this section.",
     alarm_instance: "Alarm Instance",
-    all_sensors_bypassed: "Todos los sensores configurados están omitidos.",
-    arm_time: "설정 지연 (초)",
+    all_sensors_bypassed: "구성된 모든 센서가 우회되었습니다.",
+    arm_time: "설정 지연 시간 (초)",
     arm_time_label: "Arm time (s)",
-    armed_away: "외출",
-    armed_home: "재택",
-    armed_night: "야간",
-    armed_vacation: "휴가",
-    arming: "설정 중",
-    automations: "⚡ 자동화",
-    available: "사용 가능",
+    armed_away: "Away",
+    armed_home: "Home",
+    armed_night: "Night",
+    armed_vacation: "Vacation",
+    arming: "Arming",
+    automations: "자동화",
+    available: "Available",
     background_lbl: "Background",
     backup_desc: "Save a backup of your settings or restore a previous one.",
-    backup_title: "Backup & Restore",
+    backup_title: "백업 및 복원",
     badge_pin_reset: "PIN Reset",
     badge_pin_reset_failed: "PIN Reset Failed",
     battery_low: "⚠️ Low Battery",
@@ -3570,57 +3730,55 @@ const Do = [
     bridge_not_desc: "Enable the HomeKit Bridge integration in Home Assistant and include the entity <code>alarm_control_panel.argus_*</code> to generate a pairing QR code.",
     bridge_paired: "Bridge configured",
     bridge_paired_desc: "The <b>{bridge}</b> bridge is configured in Home Assistant. Home Assistant cannot verify from here whether it was added to Apple Home or report its name.",
-    btn_away: "🔒 외출",
+    btn_away: "🔴 외출",
     btn_create_argus_profile: "Create Argus Profile",
-    btn_disarmed: "해제됨",
-    btn_home: "🏠 재택",
+    btn_disarmed: "DISARMED",
+    btn_home: "🏠 재실",
     btn_night: "🌙 야간",
-    btn_sos: "🚨 SOS / 패닉",
+    btn_sos: "🚨 비상 / SOS",
     btn_vacation: "✈️ 휴가",
-    bypass_lbl: "🚫 바이패스",
-    cancel: "취소",
+    bypass_lbl: "🚫 우회",
+    cancel: "Cancel",
     cancel_btn: "Cancel",
     cannot_arm: "Невозможно поставить на охрану",
     cannot_delete_last_admin: "Cannot delete the last binding administrator.",
-    change_btn: "Cambiar",
-    change_pin: "마스터 PIN",
-    change_profile_picture: "Cambiar foto en Personas de HA ↗",
-    change_user_pin: "Cambiar PIN",
+    change_btn: "Изменить",
+    change_pin: "Master PIN",
+    change_profile_picture: "HA 사용자 설정에서 사진 변경 ↗",
     claim_btn: "Заявить права администратора",
     claim_desc: "Вашей установке требуется администратор для получения доступа.",
     claim_title: "Обновление безопасности Argus",
-    clear: "지우기",
+    clear: "Clear",
     clear_history_confirm: "Удалить всю историю активности?",
-    clear_log_btn: "지우기",
+    clear_log_btn: "🗑️ 로그 지우기",
     clock_12h: "12-hour (AM/PM)",
     clock_24h: "24-hour",
     clock_auto: "Automatic (Home Assistant)",
     clock_format_desc: "Choose how time is displayed across panels and logs.",
     clock_format_label: "Time Format",
-    close: "닫기",
-    confirm: "✓ 확인",
-    confirm_pin: "PIN 확인",
+    close: "Close",
+    confirm: "✓ Confirm",
+    confirm_pin: "Confirm PIN",
     connected: "연결됨",
-    create_ha: "+ HA에서 생성",
-    current_pin: "현재 PIN",
+    create_ha: "+ Create in HA",
+    current_pin: "Current PIN",
     customize: "Настроить",
     delete: "Удалить",
     delete_btn_title: "Delete from storage",
     delete_file_error: "Не удалось удалить файл: {error}",
-    delete_user: "Eliminar usuario",
     delete_user_confirm: 'Are you sure you want to delete "{name}"?',
     delete_user_tooltip: "Delete user profile",
     deselect_all: "☐ None",
     details_notif: "Alarm notification",
-    disarm_time: "진입 지연 (초)",
+    disarm_time: "진입 지연 시간 (초)",
     disarm_time_label: "Entry delay (s)",
     disarmed: "해제됨",
     done: "Готово",
     edit_btn: "✏️ Edit",
     edit_dashboard: "대시보드 편집",
     edit_dashboard_done: "✓ 완료",
-    emergency_help: "Número telefónico marcado en caso de emergencia.",
-    emergency_number_label: "Número de Emergencia",
+    emergency_help: "Настройте для местоположения дома (например, Коста-Рика: 911; Испания: 112). Номер будет включён в SOS-оповещения.",
+    emergency_number_label: "🚨 Местный номер экстренной службы",
     error_loading_uploaded_files: "Error loading file history.",
     exit_to_ha: "Back to Home Assistant",
     exp_indefinite: "무기한",
@@ -3628,6 +3786,7 @@ const Do = [
     expired: "만료됨",
     export_btn: "📤 Download",
     export_error: "Ошибка экспорта: {error}",
+    external_panels: "외부 알람 패널",
     file_choice: `«{file}»
 
 Использовать как статичное изображение (ОК) или анимированное видео (Отмена)?`,
@@ -3654,13 +3813,14 @@ const Do = [
     ha_role_admin: "HA Admin",
     ha_role_standard: "HA User",
     ha_standard_user_label: "Standard HA User",
-    hero_desc: "종합 보안 시스템, 출입 제어, 자동화 및 HomeKit.",
+    hero_desc: "지능형 홈 보안 시스템",
+    hide_widget: "위젯 숨기기",
     history_refresh: "🔄 새로고침",
     history_unavailable: "Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.",
     home_default: "Мой дом",
-    home_fallback: "Дом",
+    home_fallback: "우리 집",
     home_name_label: "Home Name",
-    home_name_lbl: "Home Name",
+    home_name_lbl: "홈 이름",
     home_name_modal_desc: "This name appears in the instances panel and in full screen.",
     home_name_modal_title: "🏡 Home Name",
     home_name_placeholder: "My Home",
@@ -3674,20 +3834,24 @@ const Do = [
     initialization_error_desc: "Не удалось подключиться к авторизованному backend Home Assistant.",
     initialization_error_title: "Не удалось запустить Argus",
     instances: "활성 인스턴스",
-    introduce_pin: "PIN을 입력하세요",
+    introduce_pin: "Enter your PIN",
     invalid_config: "Недопустимый файл конфигурации.",
-    is_admin: "관리자",
+    is_admin: "Administrator",
     lang_select_title: "Select Language",
     lang_selector_lbl: "⚙️ 언어",
     language: "Language",
     lbl_aesthetic_custom: "Aesthetic Customization",
     lbl_load_file: "Upload file:",
     lbl_uploaded_files: "Uploaded files on server",
+    light_siren_color: "색상",
+    light_siren_flash: "가능한 경우 부드러운 깜빡임",
     link_ha_user: "Link to Home Assistant User",
-    linked_rules: "Argus 연결 규칙",
+    linked_rules: "Argus에 연결된 규칙",
     loading: "Загрузка…",
-    lock_if_open: "열려 있으면 잠금",
+    lock_if_open: "열려 있으면 차단",
     log_action_access_pin_updated: "PIN доступа обновлён",
+    log_action_analysis: "보안 분석",
+    log_action_automation: "자동화 실행됨",
     log_action_backup_created: "Резервная копия создана",
     log_action_backup_restored: "Конфигурация восстановлена",
     log_action_first_run_completed: "Argus initialized by {user}",
@@ -3700,25 +3864,29 @@ const Do = [
     log_action_schedule_applied: "Расписание применено",
     log_action_select_profile: "Profile selected: {user}",
     log_action_sos: "SOS Panic triggered by {user}",
+    log_action_sos_stopped: "SOS 중지됨",
     log_action_state_restored: "Состояние восстановлено",
     log_action_stop_sos: "SOS Panic stopped by {user}",
+    log_action_user_added: "사용자 생성됨",
+    log_action_user_deleted: "사용자 삭제됨",
     log_action_user_logged_in: "Вход пользователя",
     log_action_verify_access_pin: "Access PIN verified by {user}",
     log_armed: "Armed",
     log_by: "by",
     log_detail_armed: "Mode",
-    log_detail_disarm: "System disarmed",
+    log_detail_disarm: "시스템 해제됨",
     log_detail_pin_reset: "Master PIN reset by administrator",
     log_detail_pin_reset_failed: "Unauthorized attempt to reset master PIN",
-    log_detail_triggered: "Automatic activation",
+    log_detail_triggered: "자동 작동",
     log_disarmed: "Disarmed",
+    log_mode: "모드",
     log_no_events: "No recent events.",
     log_sensor: "Sensor",
     log_triggered: "Triggered!",
     login_btn: "Login",
-    manual_arm: "Manual",
-    manual_disarm: "Manual (Disarmed)",
-    master_pin_lbl: "PIN Maestro",
+    manual_arm: "수동 설정",
+    manual_disarm: "수동 해제",
+    master_pin_lbl: "Мастер-PIN",
     modal_add_user: "+ Добавить пользователя",
     modal_cancel: "Отмена",
     modal_confirm: "Подтвердить",
@@ -3729,14 +3897,14 @@ const Do = [
     modal_pin_title: "PIN доступа",
     modal_save: "Сохранить",
     modal_user_added: "Пользователь создан.",
-    mode_away: "Away",
-    mode_home: "Home",
-    mode_night: "Night",
-    mode_vacation: "Vacation",
+    mode_away: "외출",
+    mode_home: "재실",
+    mode_night: "야간",
+    mode_vacation: "휴가",
     modes: "모드",
     mqtt_label: "MQTT",
     never_triggered: "Never triggered",
-    new_pin: "새 PIN",
+    new_pin: "New PIN",
     no_alarm_instance: "Нет доступного экземпляра сигнализации",
     no_auto_linked: "No automations linked to Argus.",
     no_files_uploaded: "No uploaded files. Upload a background using the controls above.",
@@ -3744,15 +3912,15 @@ const Do = [
     no_instances: "No instances. Add Argus from Integrations.",
     no_results: "Нет результатов",
     no_rules: "",
-    no_sensors_configured: "Sin sensores configurados",
+    no_sensors_configured: "구성된 센서가 없습니다",
     no_unlinked_ha_accounts: "All active Home Assistant accounts have a profile.",
-    no_users: "구성된 추가 사용자가 없습니다.",
-    none_selected: "선택된 항목 없음",
-    notif_desc: "Argus 알림을 수신할 HA 등록 모바일 기기를 선택하세요.",
+    no_users: "No additional users configured.",
+    none_selected: "None selected",
+    notif_desc: "Select the mobile devices registered in HA that will receive Argus alerts.",
     notif_no_services: "Нет мобильных служб",
     notification_armed: "{user} активировал режим {mode}.",
     notification_disarmed: "{user} снял систему с охраны.",
-    notifications_title: "🔔 알림",
+    notifications_title: "🔔 Notifications",
     open_sensors: "Open sensors",
     open_sensors_explain: `Следующие датчики открыты:
 {names}
@@ -3761,16 +3929,16 @@ const Do = [
     panic_state_unknown: "Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.",
     panic_stop_error: "Не удалось остановить тревогу: {error}",
     panic_stopped: "Тревога остановлена; восстановлено состояние {state}",
-    pending: "대기 중",
+    pending: "Pending",
     pin_active_no: "Master PIN: Deactivated",
     pin_active_yes: "Master PIN: Active",
     pin_deleted: "✓ PIN Deleted",
-    pin_desc: "설정 및 해제를 위한 숫자 코드입니다.",
+    pin_desc: "Numeric code to arm and disarm.",
     pin_disarm_error: "Неверный PIN или ошибка снятия с охраны",
     pin_incorrect: "❌ Incorrect current PIN",
-    pin_management: "🔑 Gestión de Pines",
-    pin_master_title: "Master PIN",
-    pin_modal_desc: "Argus 해제를 위한 숫자 PIN",
+    pin_management: "🔑 PIN 관리",
+    pin_master_title: "마스터 PIN",
+    pin_modal_desc: "Numeric PIN to disarm Argus",
     pin_placeholder: "Access PIN",
     pin_remove_hint: "To remove PIN: Enter the current one and leave the fields below empty.",
     pin_reset_admin_only: "❌ Error: Only Home Assistant administrators can reset the master PIN.",
@@ -3779,34 +3947,37 @@ const Do = [
     profile_is_yours: "This is your profile",
     profile_needs_pin: "Another person’s profile — enter the access PIN",
     profile_no_pin_access: "This profile has no access PIN. You cannot open it.",
-    remove_btn: "Quitar",
+    remove_btn: "Удалить",
     reset_btn: "⚠️ Factory Reset",
     reset_confirm: "Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.",
     reset_dashboard: "레이아웃 재설정",
     reset_error: "Ошибка сброса: {error}",
     reset_success: "Argus сброшен. У вас есть несколько секунд, чтобы отменить это.",
+    reset_widget: "위젯 재설정",
     retry_action: "Повторить",
     role_argus_admin: "Argus 관리자",
-    role_argus_admin_short: "Adm",
-    role_argus_standard: "표준 사용자",
+    role_argus_admin_short: "관리자",
+    role_argus_standard: "일반 사용자",
     role_argus_user: "Standard User",
-    role_argus_user_short: "Std",
+    role_argus_user_short: "사용자",
     rules_tip: "",
     save_btn: "Save",
-    save_config: "구성 저장",
-    save_mode: "💾 모드 저장",
-    save_notif: "저장",
-    save_user: "저장",
-    search_placeholder: "이름, 영역 또는 entity_id로 검색",
+    save_config: "💾 모드 저장",
+    save_mode: "💾 Save mode",
+    save_notif: "Save",
+    save_user: "Save",
+    saved: "✓ 저장됨",
+    search_placeholder: "Search by name, area or entity_id",
     search_select: "Search & select",
     searching_auto: "↻ Searching automations...",
     select_all: "☑ All",
-    select_btn: "+ 선택",
+    select_btn: "+ Select",
+    select_entry_sensors: "+ 출입 센서 선택",
     select_profile_subtitle: "Access your security panels and Argus instances.",
     select_profile_title: "Select Your Profile",
-    selected_lbl: "선택됨",
+    selected_lbl: "Selected",
     selector_panic: "🚨 Действия SOS",
-    sensor_section: "침입 센서",
+    sensor_section: "Intrusion Sensors",
     sensors_to_bypass: "Sensors to Bypass",
     settings: "⚙️ 설정",
     setup_access_pin: "PIN доступа к панели Argus (Необязательно)",
@@ -3816,44 +3987,49 @@ const Do = [
     setup_required_desc: "Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.",
     setup_required_title: "Требуется настройка Argus",
     siren_section: "사이렌",
-    sos_actions: "Acciones Automáticas de SOS",
+    size: "크기",
+    slide_disarm: "밀어서 해제",
+    slide_sos: "밀어서 SOS 활성화",
+    slide_sos_stop: "밀어서 SOS 중지",
+    sos_actions: "🚨 Действия SOS",
     sos_activated: "SOS активирован",
     sos_call: "📞 Call Emergency Services",
     sos_call_confirm: "Позвонить в экстренную службу ({number})?",
     sos_call_help: "Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.",
-    sos_confirm_text: "Slide to trigger the alarm immediately.",
-    sos_confirm_title: "Confirm panic",
+    sos_confirm_text: "알람을 즉시 작동하려면 미세요.",
+    sos_confirm_title: "🚨 긴급 알람을 작동하시겠습니까?",
     sos_error: "Не удалось активировать SOS: {error}",
     sos_no_outputs: "Устройства не выбраны",
-    sos_outputs_help: "Dispositivos activados al disparar el SOS.",
-    sos_select_outputs: "Seleccionar salidas de pánico",
-    sos_slide: "SOS 활성화를 위해 슬라이드",
-    sos_stop: "DETENER SOS",
-    status_away: "FUERA",
+    sos_outputs_help: "Эти устройства всегда будут включаться при SOS, даже когда Argus снят с охраны.",
+    sos_select_outputs: "Выбрать свет, сирены или сценарии",
+    sos_slide: "밀어서 SOS 활성화",
+    sos_stop: "SOS 중지",
+    status_away: "Вне дома",
     status_closed: "닫힘",
-    status_home: "EN CASA",
-    status_idle: "INACTIVO",
+    status_home: "Дома",
+    status_idle: "Ожидание",
     status_open: "열림",
-    status_recording: "GRABANDO",
+    status_recording: "Запись",
+    support_title: "상태 및 지원",
     switch_profile_btn: "👤 프로필 전환",
     sync_panel_help: "Paneles de alarma que seguirán el mismo estado de Argus",
     sync_panel_section: "Paneles Sincronizados",
     system_armed: "시스템 설정됨",
     system_disarmed: "시스템 해제됨",
-    system_triggered: "¡ALARMA DISPARADA!",
+    system_triggered: "알람 작동됨!",
     temp_auto: "Automatic (local sensor / thermostat / climate)",
     temp_notification_title: "Argus — Температурное предупреждение",
     temp_thermostat: "(thermostat)",
     thermostat_alert_notif: "🌡️ Temperature alert",
     times_section: "⏱️ 타이머",
-    triggered: "경보!",
+    triggered: "ALARM!",
     unavailable: "Unavailable",
     undo_error: "Не удалось отменить сброс: {error}",
     undo_reset_btn: "↩️ Undo Reset",
     undo_success: "Сброс отменён.",
     unlinked_ha_accounts_title: "Home Assistant accounts without Argus profile",
     unlock_kiosk: "Unlock kiosk",
-    update_pin: "PIN 업데이트",
+    update_pin: "Update PIN",
     upload_error: "Ошибка загрузки.",
     url_placeholder: "URL фона…",
     use_for_hub: "Argus",
@@ -3862,45 +4038,45 @@ const Do = [
     user_default: "Пользователь",
     user_exp_date: "Expiration Date/Time",
     user_exp_type: "Expiration",
-    user_no_pin: "Sin PIN de acceso",
-    user_pin: "사용자 PIN",
+    user_no_pin: "액세스 PIN 없음",
+    user_pin: "User PIN",
     user_pin_action: "PIN",
     user_required: "Требуются имя и PIN",
     user_role_action: "Роль",
     user_role_label: "Argus Role",
-    username: "사용자 이름",
+    username: "Username",
     users_title: "👥 사용자 및 출입 제어",
-    wait_if_open: "센서가 닫힐 때까지 대기",
-    waiting_sensors: "ESPERANDO SENSORES",
+    wait_if_open: "센서 닫힐 때까지 대기",
+    waiting_sensors: "센서 닫힘 대기 중",
     welcome_greeting: "Welcome,",
     welcome_profile: "Добро пожаловать, {name}"
   },
   ja: {
-    accept: "適用",
+    accept: "Accept",
     access_desc: "Global security management, master PIN and administrators.",
-    access_pin_lbl: "PIN de Acceso",
+    access_pin_lbl: "PIN доступа",
     access_title: "Access Control & Users",
-    action_failed: "No se pudo realizar la acción",
-    active_profile: "Perfil Activo",
+    action_failed: "Не удалось выполнить действие",
+    active_profile: "アクティブなプロファイル",
     active_until: "有効期限",
     activity_log: "📋 アクティビティ ログ",
-    add_btn: "+ 追加",
-    add_user: "ユーザーを追加",
-    admin_only: "管理者のみがこのセクションを変更できます。",
+    add_btn: "+ Add",
+    add_user: "Add user",
+    admin_only: "Only administrators can modify this section.",
     alarm_instance: "Alarm Instance",
-    all_sensors_bypassed: "Todos los sensores configurados están omitidos.",
-    arm_time: "警戒設定遅延 (秒)",
+    all_sensors_bypassed: "設定されたすべてのセンサーがバイパスされています。",
+    arm_time: "警戒遅延 (秒)",
     arm_time_label: "Arm time (s)",
-    armed_away: "外出",
-    armed_home: "在宅",
-    armed_night: "夜間",
-    armed_vacation: "休暇",
-    arming: "警戒設定中",
-    automations: "⚡ 自動化",
-    available: "利用可能",
+    armed_away: "Away",
+    armed_home: "Home",
+    armed_night: "Night",
+    armed_vacation: "Vacation",
+    arming: "Arming",
+    automations: "自動化",
+    available: "Available",
     background_lbl: "Background",
     backup_desc: "Save a backup of your settings or restore a previous one.",
-    backup_title: "Backup & Restore",
+    backup_title: "バックアップと復元",
     badge_pin_reset: "PIN Reset",
     badge_pin_reset_failed: "PIN Reset Failed",
     battery_low: "⚠️ Low Battery",
@@ -3921,44 +4097,42 @@ const Do = [
     bridge_not_desc: "Enable the HomeKit Bridge integration in Home Assistant and include the entity <code>alarm_control_panel.argus_*</code> to generate a pairing QR code.",
     bridge_paired: "Bridge configured",
     bridge_paired_desc: "The <b>{bridge}</b> bridge is configured in Home Assistant. Home Assistant cannot verify from here whether it was added to Apple Home or report its name.",
-    btn_away: "🔒 外出",
+    btn_away: "🔴 外出",
     btn_create_argus_profile: "Create Argus Profile",
-    btn_disarmed: "警戒解除",
+    btn_disarmed: "DISARMED",
     btn_home: "🏠 在宅",
     btn_night: "🌙 夜間",
-    btn_sos: "🚨 SOS / パニック",
+    btn_sos: "🚨 緊急 / SOS",
     btn_vacation: "✈️ 休暇",
     bypass_lbl: "🚫 バイパス",
-    cancel: "キャンセル",
+    cancel: "Cancel",
     cancel_btn: "Cancel",
     cannot_arm: "Невозможно поставить на охрану",
     cannot_delete_last_admin: "Cannot delete the last binding administrator.",
-    change_btn: "Cambiar",
-    change_pin: "マスター PIN",
-    change_profile_picture: "Cambiar foto en Personas de HA ↗",
-    change_user_pin: "Cambiar PIN",
+    change_btn: "Изменить",
+    change_pin: "Master PIN",
+    change_profile_picture: "HA の人物設定で写真を変更 ↗",
     claim_btn: "Заявить права администратора",
     claim_desc: "Вашей установке требуется администратор для получения доступа.",
     claim_title: "Обновление безопасности Argus",
-    clear: "クリア",
+    clear: "Clear",
     clear_history_confirm: "Удалить всю историю активности?",
-    clear_log_btn: "クリア",
+    clear_log_btn: "🗑️ ログを消去",
     clock_12h: "12-hour (AM/PM)",
     clock_24h: "24-hour",
     clock_auto: "Automatic (Home Assistant)",
     clock_format_desc: "Choose how time is displayed across panels and logs.",
     clock_format_label: "Time Format",
-    close: "閉じる",
-    confirm: "✓ 確認",
-    confirm_pin: "PIN を確認",
+    close: "Close",
+    confirm: "✓ Confirm",
+    confirm_pin: "Confirm PIN",
     connected: "接続済み",
-    create_ha: "+ HA で作成",
-    current_pin: "現在の PIN",
+    create_ha: "+ Create in HA",
+    current_pin: "Current PIN",
     customize: "Настроить",
     delete: "Удалить",
     delete_btn_title: "Delete from storage",
     delete_file_error: "Не удалось удалить файл: {error}",
-    delete_user: "Eliminar usuario",
     delete_user_confirm: 'Are you sure you want to delete "{name}"?',
     delete_user_tooltip: "Delete user profile",
     deselect_all: "☐ None",
@@ -3970,8 +4144,8 @@ const Do = [
     edit_btn: "✏️ Edit",
     edit_dashboard: "ダッシュボードを編集",
     edit_dashboard_done: "✓ 完了",
-    emergency_help: "Número telefónico marcado en caso de emergencia.",
-    emergency_number_label: "Número de Emergencia",
+    emergency_help: "Настройте для местоположения дома (например, Коста-Рика: 911; Испания: 112). Номер будет включён в SOS-оповещения.",
+    emergency_number_label: "🚨 Местный номер экстренной службы",
     error_loading_uploaded_files: "Error loading file history.",
     exit_to_ha: "Back to Home Assistant",
     exp_indefinite: "無期限",
@@ -3979,6 +4153,7 @@ const Do = [
     expired: "期限切れ",
     export_btn: "📤 Download",
     export_error: "Ошибка экспорта: {error}",
+    external_panels: "外部アラーム パネル",
     file_choice: `«{file}»
 
 Использовать как статичное изображение (ОК) или анимированное видео (Отмена)?`,
@@ -4005,13 +4180,14 @@ const Do = [
     ha_role_admin: "HA Admin",
     ha_role_standard: "HA User",
     ha_standard_user_label: "Standard HA User",
-    hero_desc: "総合セキュリティシステム、アクセス制御、自動化、HomeKit。",
+    hero_desc: "インテリジェント ホーム セキュリティ システム",
+    hide_widget: "ウィジェットを非表示",
     history_refresh: "🔄 更新",
     history_unavailable: "Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.",
     home_default: "Мой дом",
-    home_fallback: "Дом",
+    home_fallback: "マイホーム",
     home_name_label: "Home Name",
-    home_name_lbl: "Home Name",
+    home_name_lbl: "ホーム名",
     home_name_modal_desc: "This name appears in the instances panel and in full screen.",
     home_name_modal_title: "🏡 Home Name",
     home_name_placeholder: "My Home",
@@ -4025,20 +4201,24 @@ const Do = [
     initialization_error_desc: "Не удалось подключиться к авторизованному backend Home Assistant.",
     initialization_error_title: "Не удалось запустить Argus",
     instances: "アクティブなインスタンス",
-    introduce_pin: "PIN を入力",
+    introduce_pin: "Enter your PIN",
     invalid_config: "Недопустимый файл конфигурации.",
-    is_admin: "管理者",
+    is_admin: "Administrator",
     lang_select_title: "Select Language",
     lang_selector_lbl: "⚙️ 言語",
     language: "Language",
     lbl_aesthetic_custom: "Aesthetic Customization",
     lbl_load_file: "Upload file:",
     lbl_uploaded_files: "Uploaded files on server",
+    light_siren_color: "色",
+    light_siren_flash: "利用可能な場合は穏やかに点滅",
     link_ha_user: "Link to Home Assistant User",
-    linked_rules: "Argus にリンクされたルール",
+    linked_rules: "Argus に関連付けられたルール",
     loading: "Загрузка…",
-    lock_if_open: "開いている場合はロック",
+    lock_if_open: "開いている場合はブロック",
     log_action_access_pin_updated: "PIN доступа обновлён",
+    log_action_analysis: "セキュリティ分析",
+    log_action_automation: "自動化が実行されました",
     log_action_backup_created: "Резервная копия создана",
     log_action_backup_restored: "Конфигурация восстановлена",
     log_action_first_run_completed: "Argus initialized by {user}",
@@ -4051,25 +4231,29 @@ const Do = [
     log_action_schedule_applied: "Расписание применено",
     log_action_select_profile: "Profile selected: {user}",
     log_action_sos: "SOS Panic triggered by {user}",
+    log_action_sos_stopped: "SOS を停止しました",
     log_action_state_restored: "Состояние восстановлено",
     log_action_stop_sos: "SOS Panic stopped by {user}",
+    log_action_user_added: "ユーザーを作成しました",
+    log_action_user_deleted: "ユーザーを削除しました",
     log_action_user_logged_in: "Вход пользователя",
     log_action_verify_access_pin: "Access PIN verified by {user}",
     log_armed: "Armed",
     log_by: "by",
     log_detail_armed: "Mode",
-    log_detail_disarm: "System disarmed",
+    log_detail_disarm: "システムが警戒解除されました",
     log_detail_pin_reset: "Master PIN reset by administrator",
     log_detail_pin_reset_failed: "Unauthorized attempt to reset master PIN",
-    log_detail_triggered: "Automatic activation",
+    log_detail_triggered: "自動作動",
     log_disarmed: "Disarmed",
+    log_mode: "モード",
     log_no_events: "No recent events.",
     log_sensor: "Sensor",
     log_triggered: "Triggered!",
     login_btn: "Login",
-    manual_arm: "Manual",
-    manual_disarm: "Manual (Disarmed)",
-    master_pin_lbl: "PIN Maestro",
+    manual_arm: "手動警戒",
+    manual_disarm: "手動解除",
+    master_pin_lbl: "Мастер-PIN",
     modal_add_user: "+ Добавить пользователя",
     modal_cancel: "Отмена",
     modal_confirm: "Подтвердить",
@@ -4080,14 +4264,14 @@ const Do = [
     modal_pin_title: "PIN доступа",
     modal_save: "Сохранить",
     modal_user_added: "Пользователь создан.",
-    mode_away: "Away",
-    mode_home: "Home",
-    mode_night: "Night",
-    mode_vacation: "Vacation",
+    mode_away: "外出",
+    mode_home: "在宅",
+    mode_night: "夜間",
+    mode_vacation: "休暇",
     modes: "モード",
     mqtt_label: "MQTT",
     never_triggered: "Never triggered",
-    new_pin: "新しい PIN",
+    new_pin: "New PIN",
     no_alarm_instance: "Нет доступного экземпляра сигнализации",
     no_auto_linked: "No automations linked to Argus.",
     no_files_uploaded: "No uploaded files. Upload a background using the controls above.",
@@ -4095,15 +4279,15 @@ const Do = [
     no_instances: "No instances. Add Argus from Integrations.",
     no_results: "Нет результатов",
     no_rules: "",
-    no_sensors_configured: "Sin sensores configurados",
+    no_sensors_configured: "センサーが設定されていません",
     no_unlinked_ha_accounts: "All active Home Assistant accounts have a profile.",
-    no_users: "追加のユーザーは構成されていません。",
-    none_selected: "未選択",
-    notif_desc: "Argus アラートを受信する HA 登録モバイル デバイスを選択します。",
+    no_users: "No additional users configured.",
+    none_selected: "None selected",
+    notif_desc: "Select the mobile devices registered in HA that will receive Argus alerts.",
     notif_no_services: "Нет мобильных служб",
     notification_armed: "{user} активировал режим {mode}.",
     notification_disarmed: "{user} снял систему с охраны.",
-    notifications_title: "🔔 通知",
+    notifications_title: "🔔 Notifications",
     open_sensors: "Open sensors",
     open_sensors_explain: `Следующие датчики открыты:
 {names}
@@ -4112,16 +4296,16 @@ const Do = [
     panic_state_unknown: "Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.",
     panic_stop_error: "Не удалось остановить тревогу: {error}",
     panic_stopped: "Тревога остановлена; восстановлено состояние {state}",
-    pending: "保留中",
+    pending: "Pending",
     pin_active_no: "Master PIN: Deactivated",
     pin_active_yes: "Master PIN: Active",
     pin_deleted: "✓ PIN Deleted",
-    pin_desc: "警戒および解除用の数字コード。",
+    pin_desc: "Numeric code to arm and disarm.",
     pin_disarm_error: "Неверный PIN или ошибка снятия с охраны",
     pin_incorrect: "❌ Incorrect current PIN",
-    pin_management: "🔑 Gestión de Pines",
-    pin_master_title: "Master PIN",
-    pin_modal_desc: "Argus を解除するための数字 PIN",
+    pin_management: "🔑 PIN 管理",
+    pin_master_title: "マスター PIN",
+    pin_modal_desc: "Numeric PIN to disarm Argus",
     pin_placeholder: "Access PIN",
     pin_remove_hint: "To remove PIN: Enter the current one and leave the fields below empty.",
     pin_reset_admin_only: "❌ Error: Only Home Assistant administrators can reset the master PIN.",
@@ -4130,34 +4314,37 @@ const Do = [
     profile_is_yours: "This is your profile",
     profile_needs_pin: "Another person’s profile — enter the access PIN",
     profile_no_pin_access: "This profile has no access PIN. You cannot open it.",
-    remove_btn: "Quitar",
+    remove_btn: "Удалить",
     reset_btn: "⚠️ Factory Reset",
     reset_confirm: "Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.",
     reset_dashboard: "レイアウトをリセット",
     reset_error: "Ошибка сброса: {error}",
     reset_success: "Argus сброшен. У вас есть несколько секунд, чтобы отменить это.",
+    reset_widget: "ウィジェットをリセット",
     retry_action: "Повторить",
     role_argus_admin: "Argus 管理者",
-    role_argus_admin_short: "Adm",
+    role_argus_admin_short: "管理者",
     role_argus_standard: "標準ユーザー",
     role_argus_user: "Standard User",
-    role_argus_user_short: "Std",
+    role_argus_user_short: "一般",
     rules_tip: "",
     save_btn: "Save",
-    save_config: "構成を保存",
-    save_mode: "💾 モードを保存",
-    save_notif: "保存",
-    save_user: "保存",
-    search_placeholder: "名前、エリア、または entity_id で検索",
+    save_config: "💾 モードを保存",
+    save_mode: "💾 Save mode",
+    save_notif: "Save",
+    save_user: "Save",
+    saved: "✓ 保存しました",
+    search_placeholder: "Search by name, area or entity_id",
     search_select: "Search & select",
     searching_auto: "↻ Searching automations...",
     select_all: "☑ All",
-    select_btn: "+ 選択",
+    select_btn: "+ Select",
+    select_entry_sensors: "+ エントリセンサーを選択",
     select_profile_subtitle: "Access your security panels and Argus instances.",
     select_profile_title: "Select Your Profile",
-    selected_lbl: "選択済み",
+    selected_lbl: "Selected",
     selector_panic: "🚨 Действия SOS",
-    sensor_section: "侵入センサー",
+    sensor_section: "Intrusion Sensors",
     sensors_to_bypass: "Sensors to Bypass",
     settings: "⚙️ 設定",
     setup_access_pin: "PIN доступа к панели Argus (Необязательно)",
@@ -4167,44 +4354,49 @@ const Do = [
     setup_required_desc: "Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.",
     setup_required_title: "Требуется настройка Argus",
     siren_section: "サイレン",
-    sos_actions: "Acciones Automáticas de SOS",
+    size: "サイズ",
+    slide_disarm: "スライドして解除",
+    slide_sos: "スライドしてSOS作動",
+    slide_sos_stop: "スライドしてSOS停止",
+    sos_actions: "🚨 Действия SOS",
     sos_activated: "SOS активирован",
     sos_call: "📞 Call Emergency Services",
     sos_call_confirm: "Позвонить в экстренную службу ({number})?",
     sos_call_help: "Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.",
-    sos_confirm_text: "Slide to trigger the alarm immediately.",
-    sos_confirm_title: "Confirm panic",
+    sos_confirm_text: "スライドして今すぐ警報を作動させます。",
+    sos_confirm_title: "🚨 緊急警報を作動しますか？",
     sos_error: "Не удалось активировать SOS: {error}",
     sos_no_outputs: "Устройства не выбраны",
-    sos_outputs_help: "Dispositivos activados al disparar el SOS.",
-    sos_select_outputs: "Seleccionar salidas de pánico",
-    sos_slide: "スライドして SOS を起動",
-    sos_stop: "DETENER SOS",
-    status_away: "FUERA",
+    sos_outputs_help: "Эти устройства всегда будут включаться при SOS, даже когда Argus снят с охраны.",
+    sos_select_outputs: "Выбрать свет, сирены или сценарии",
+    sos_slide: "スライドしてSOS作動",
+    sos_stop: "SOSを停止",
+    status_away: "Вне дома",
     status_closed: "閉",
-    status_home: "EN CASA",
-    status_idle: "INACTIVO",
+    status_home: "Дома",
+    status_idle: "Ожидание",
     status_open: "開",
-    status_recording: "GRABANDO",
-    switch_profile_btn: "👤 プロファイルを切り替え",
+    status_recording: "Запись",
+    support_title: "ステータスとサポート",
+    switch_profile_btn: "👤 プロファイルの切り替え",
     sync_panel_help: "Paneles de alarma que seguirán el mismo estado de Argus",
     sync_panel_section: "Paneles Sincronizados",
     system_armed: "システム警戒中",
     system_disarmed: "システム警戒解除",
-    system_triggered: "¡ALARMA DISPARADA!",
+    system_triggered: "警報が作動しました！",
     temp_auto: "Automatic (local sensor / thermostat / climate)",
     temp_notification_title: "Argus — Температурное предупреждение",
     temp_thermostat: "(thermostat)",
     thermostat_alert_notif: "🌡️ Temperature alert",
     times_section: "⏱️ タイマー",
-    triggered: "アラーム！",
+    triggered: "ALARM!",
     unavailable: "Unavailable",
     undo_error: "Не удалось отменить сброс: {error}",
     undo_reset_btn: "↩️ Undo Reset",
     undo_success: "Сброс отменён.",
     unlinked_ha_accounts_title: "Home Assistant accounts without Argus profile",
     unlock_kiosk: "Unlock kiosk",
-    update_pin: "PIN を更新",
+    update_pin: "Update PIN",
     upload_error: "Ошибка загрузки.",
     url_placeholder: "URL фона…",
     use_for_hub: "Argus",
@@ -4213,45 +4405,45 @@ const Do = [
     user_default: "Пользователь",
     user_exp_date: "Expiration Date/Time",
     user_exp_type: "Expiration",
-    user_no_pin: "Sin PIN de acceso",
-    user_pin: "ユーザー PIN",
+    user_no_pin: "アクセス PIN なし",
+    user_pin: "User PIN",
     user_pin_action: "PIN",
     user_required: "Требуются имя и PIN",
     user_role_action: "Роль",
     user_role_label: "Argus Role",
-    username: "ユーザー名",
+    username: "Username",
     users_title: "👥 ユーザーとアクセス制御",
     wait_if_open: "センサーが閉じるのを待つ",
-    waiting_sensors: "ESPERANDO SENSORES",
+    waiting_sensors: "センサーの待機中",
     welcome_greeting: "Welcome,",
     welcome_profile: "Добро пожаловать, {name}"
   },
   uk: {
-    accept: "Прийняти",
+    accept: "Accept",
     access_desc: "Global security management, master PIN and administrators.",
-    access_pin_lbl: "PIN de Acceso",
+    access_pin_lbl: "PIN доступа",
     access_title: "Access Control & Users",
-    action_failed: "No se pudo realizar la acción",
-    active_profile: "Perfil Activo",
+    action_failed: "Не удалось выполнить действие",
+    active_profile: "Активний профіль",
     active_until: "Діє до",
     activity_log: "📋 Журнал активності",
-    add_btn: "+ Додати",
-    add_user: "Додати користувача",
-    admin_only: "Лише адміністратори можуть змінювати цей розділ.",
+    add_btn: "+ Add",
+    add_user: "Add user",
+    admin_only: "Only administrators can modify this section.",
     alarm_instance: "Alarm Instance",
-    all_sensors_bypassed: "Todos los sensores configurados están omitidos.",
-    arm_time: "Затримка встановлення (с)",
+    all_sensors_bypassed: "Усі налаштовані датчики пропущені.",
+    arm_time: "Затримка постановки (с)",
     arm_time_label: "Arm time (s)",
-    armed_away: "Не вдома",
-    armed_home: "Вдома",
-    armed_night: "Ніч",
-    armed_vacation: "Відпустка",
-    arming: "Встановлення на охорону",
-    automations: "⚡ Автоматизація",
-    available: "Доступні",
+    armed_away: "Away",
+    armed_home: "Home",
+    armed_night: "Night",
+    armed_vacation: "Vacation",
+    arming: "Arming",
+    automations: "Автоматизація",
+    available: "Available",
     background_lbl: "Background",
     backup_desc: "Save a backup of your settings or restore a previous one.",
-    backup_title: "Backup & Restore",
+    backup_title: "Резервне копіювання та відновлення",
     badge_pin_reset: "PIN Reset",
     badge_pin_reset_failed: "PIN Reset Failed",
     battery_low: "⚠️ Low Battery",
@@ -4272,44 +4464,42 @@ const Do = [
     bridge_not_desc: "Enable the HomeKit Bridge integration in Home Assistant and include the entity <code>alarm_control_panel.argus_*</code> to generate a pairing QR code.",
     bridge_paired: "Bridge configured",
     bridge_paired_desc: "The <b>{bridge}</b> bridge is configured in Home Assistant. Home Assistant cannot verify from here whether it was added to Apple Home or report its name.",
-    btn_away: "🔒 НЕ ВДОМА",
+    btn_away: "🔴 Поза домом",
     btn_create_argus_profile: "Create Argus Profile",
-    btn_disarmed: "ЗНЯТО З ОХОРОНИ",
-    btn_home: "🏠 ВДОМА",
-    btn_night: "🌙 НІЧ",
+    btn_disarmed: "DISARMED",
+    btn_home: "🏠 Вдома",
+    btn_night: "🌙 Ніч",
     btn_sos: "🚨 SOS / ПАНІКА",
-    btn_vacation: "✈️ ВІДПУСТКА",
+    btn_vacation: "✈️ Відпустка",
     bypass_lbl: "🚫 Обхід",
-    cancel: "Скасувати",
+    cancel: "Cancel",
     cancel_btn: "Cancel",
     cannot_arm: "Невозможно поставить на охрану",
     cannot_delete_last_admin: "Cannot delete the last binding administrator.",
-    change_btn: "Cambiar",
-    change_pin: "Головний PIN",
-    change_profile_picture: "Cambiar foto en Personas de HA ↗",
-    change_user_pin: "Cambiar PIN",
+    change_btn: "Изменить",
+    change_pin: "Master PIN",
+    change_profile_picture: "Змінити фото в Особах HA ↗",
     claim_btn: "Заявить права администратора",
     claim_desc: "Вашей установке требуется администратор для получения доступа.",
     claim_title: "Обновление безопасности Argus",
-    clear: "Очистити",
+    clear: "Clear",
     clear_history_confirm: "Удалить всю историю активности?",
-    clear_log_btn: "ОЧИСТИТИ",
+    clear_log_btn: "🗑️ Очистити журнал",
     clock_12h: "12-hour (AM/PM)",
     clock_24h: "24-hour",
     clock_auto: "Automatic (Home Assistant)",
     clock_format_desc: "Choose how time is displayed across panels and logs.",
     clock_format_label: "Time Format",
-    close: "Закрити",
-    confirm: "✓ Підтвердити",
-    confirm_pin: "Підтвердіть PIN",
+    close: "Close",
+    confirm: "✓ Confirm",
+    confirm_pin: "Confirm PIN",
     connected: "ПІДКЛЮЧЕНО",
-    create_ha: "+ Створити в HA",
-    current_pin: "Поточний PIN",
+    create_ha: "+ Create in HA",
+    current_pin: "Current PIN",
     customize: "Настроить",
     delete: "Удалить",
     delete_btn_title: "Delete from storage",
     delete_file_error: "Не удалось удалить файл: {error}",
-    delete_user: "Eliminar usuario",
     delete_user_confirm: 'Are you sure you want to delete "{name}"?',
     delete_user_tooltip: "Delete user profile",
     deselect_all: "☐ None",
@@ -4321,15 +4511,16 @@ const Do = [
     edit_btn: "✏️ Edit",
     edit_dashboard: "Редагувати панель",
     edit_dashboard_done: "✓ Готово",
-    emergency_help: "Número telefónico marcado en caso de emergencia.",
-    emergency_number_label: "Número de Emergencia",
+    emergency_help: "Настройте для местоположения дома (например, Коста-Рика: 911; Испания: 112). Номер будет включён в SOS-оповещения.",
+    emergency_number_label: "🚨 Местный номер экстренной службы",
     error_loading_uploaded_files: "Error loading file history.",
     exit_to_ha: "Back to Home Assistant",
     exp_indefinite: "Безстроково",
-    exp_temporary: "Тимчасово (Дата/Час)",
-    expired: "Вичерпано",
+    exp_temporary: "Тимчасовий (Дата/Час)",
+    expired: "Прострочено",
     export_btn: "📤 Download",
     export_error: "Ошибка экспорта: {error}",
+    external_panels: "Зовнішні панелі сигналізації",
     file_choice: `«{file}»
 
 Использовать как статичное изображение (ОК) или анимированное видео (Отмена)?`,
@@ -4356,13 +4547,14 @@ const Do = [
     ha_role_admin: "HA Admin",
     ha_role_standard: "HA User",
     ha_standard_user_label: "Standard HA User",
-    hero_desc: "Комплексна система безпеки, контроль доступу, автоматизація та HomeKit.",
+    hero_desc: "Інтелектуальна система домашньої безпеки",
+    hide_widget: "Сховати віджет",
     history_refresh: "🔄 Оновити",
     history_unavailable: "Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.",
     home_default: "Мой дом",
-    home_fallback: "Дом",
+    home_fallback: "Мій Дім",
     home_name_label: "Home Name",
-    home_name_lbl: "Home Name",
+    home_name_lbl: "Назва дому",
     home_name_modal_desc: "This name appears in the instances panel and in full screen.",
     home_name_modal_title: "🏡 Home Name",
     home_name_placeholder: "My Home",
@@ -4376,20 +4568,24 @@ const Do = [
     initialization_error_desc: "Не удалось подключиться к авторизованному backend Home Assistant.",
     initialization_error_title: "Не удалось запустить Argus",
     instances: "Активні екземпляри",
-    introduce_pin: "Введіть свій PIN",
+    introduce_pin: "Enter your PIN",
     invalid_config: "Недопустимый файл конфигурации.",
-    is_admin: "Адміністратор",
+    is_admin: "Administrator",
     lang_select_title: "Select Language",
     lang_selector_lbl: "⚙️ Мова",
     language: "Language",
     lbl_aesthetic_custom: "Aesthetic Customization",
     lbl_load_file: "Upload file:",
     lbl_uploaded_files: "Uploaded files on server",
+    light_siren_color: "Колір",
+    light_siren_flash: "М'яке блимання, якщо доступно",
     link_ha_user: "Link to Home Assistant User",
     linked_rules: "Правила, пов'язані з Argus",
     loading: "Загрузка…",
     lock_if_open: "Блокувати, якщо відкрито",
     log_action_access_pin_updated: "PIN доступа обновлён",
+    log_action_analysis: "Аналіз безпеки",
+    log_action_automation: "Автоматизацію виконано",
     log_action_backup_created: "Резервная копия создана",
     log_action_backup_restored: "Конфигурация восстановлена",
     log_action_first_run_completed: "Argus initialized by {user}",
@@ -4402,25 +4598,29 @@ const Do = [
     log_action_schedule_applied: "Расписание применено",
     log_action_select_profile: "Profile selected: {user}",
     log_action_sos: "SOS Panic triggered by {user}",
+    log_action_sos_stopped: "SOS зупинено",
     log_action_state_restored: "Состояние восстановлено",
     log_action_stop_sos: "SOS Panic stopped by {user}",
+    log_action_user_added: "Користувача створено",
+    log_action_user_deleted: "Користувача видалено",
     log_action_user_logged_in: "Вход пользователя",
     log_action_verify_access_pin: "Access PIN verified by {user}",
     log_armed: "Armed",
     log_by: "by",
     log_detail_armed: "Mode",
-    log_detail_disarm: "System disarmed",
+    log_detail_disarm: "Систему знято з охорони",
     log_detail_pin_reset: "Master PIN reset by administrator",
     log_detail_pin_reset_failed: "Unauthorized attempt to reset master PIN",
-    log_detail_triggered: "Automatic activation",
+    log_detail_triggered: "Автоматична активація",
     log_disarmed: "Disarmed",
+    log_mode: "Режим",
     log_no_events: "No recent events.",
     log_sensor: "Sensor",
     log_triggered: "Triggered!",
     login_btn: "Login",
-    manual_arm: "Manual",
-    manual_disarm: "Manual (Disarmed)",
-    master_pin_lbl: "PIN Maestro",
+    manual_arm: "Ручна постановка",
+    manual_disarm: "Ручне зняття",
+    master_pin_lbl: "Мастер-PIN",
     modal_add_user: "+ Добавить пользователя",
     modal_cancel: "Отмена",
     modal_confirm: "Подтвердить",
@@ -4431,14 +4631,14 @@ const Do = [
     modal_pin_title: "PIN доступа",
     modal_save: "Сохранить",
     modal_user_added: "Пользователь создан.",
-    mode_away: "Away",
-    mode_home: "Home",
-    mode_night: "Night",
-    mode_vacation: "Vacation",
+    mode_away: "Поза домом",
+    mode_home: "Вдома",
+    mode_night: "Ніч",
+    mode_vacation: "Відпустка",
     modes: "Режими",
     mqtt_label: "MQTT",
     never_triggered: "Never triggered",
-    new_pin: "Новий PIN",
+    new_pin: "New PIN",
     no_alarm_instance: "Нет доступного экземпляра сигнализации",
     no_auto_linked: "No automations linked to Argus.",
     no_files_uploaded: "No uploaded files. Upload a background using the controls above.",
@@ -4446,15 +4646,15 @@ const Do = [
     no_instances: "No instances. Add Argus from Integrations.",
     no_results: "Нет результатов",
     no_rules: "",
-    no_sensors_configured: "Sin sensores configurados",
+    no_sensors_configured: "Датчики не налаштовано",
     no_unlinked_ha_accounts: "All active Home Assistant accounts have a profile.",
-    no_users: "Додаткових користувачів не налаштовано.",
-    none_selected: "Нічого не вибрано",
-    notif_desc: "Виберіть мобільні пристрої, зареєстровані в HA, які отримуватимуть сповіщення Argus.",
+    no_users: "No additional users configured.",
+    none_selected: "None selected",
+    notif_desc: "Select the mobile devices registered in HA that will receive Argus alerts.",
     notif_no_services: "Нет мобильных служб",
     notification_armed: "{user} активировал режим {mode}.",
     notification_disarmed: "{user} снял систему с охраны.",
-    notifications_title: "🔔 Сповіщення",
+    notifications_title: "🔔 Notifications",
     open_sensors: "Open sensors",
     open_sensors_explain: `Следующие датчики открыты:
 {names}
@@ -4463,16 +4663,16 @@ const Do = [
     panic_state_unknown: "Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.",
     panic_stop_error: "Не удалось остановить тревогу: {error}",
     panic_stopped: "Тревога остановлена; восстановлено состояние {state}",
-    pending: "Очікування",
+    pending: "Pending",
     pin_active_no: "Master PIN: Deactivated",
     pin_active_yes: "Master PIN: Active",
     pin_deleted: "✓ PIN Deleted",
-    pin_desc: "Числовий код для встановлення та зняття з охорони.",
+    pin_desc: "Numeric code to arm and disarm.",
     pin_disarm_error: "Неверный PIN или ошибка снятия с охраны",
     pin_incorrect: "❌ Incorrect current PIN",
-    pin_management: "🔑 Gestión de Pines",
-    pin_master_title: "Master PIN",
-    pin_modal_desc: "Числовий PIN для зняття Argus з охорони",
+    pin_management: "🔑 Керування PIN-кодами",
+    pin_master_title: "Майстер-PIN",
+    pin_modal_desc: "Numeric PIN to disarm Argus",
     pin_placeholder: "Access PIN",
     pin_remove_hint: "To remove PIN: Enter the current one and leave the fields below empty.",
     pin_reset_admin_only: "❌ Error: Only Home Assistant administrators can reset the master PIN.",
@@ -4481,34 +4681,37 @@ const Do = [
     profile_is_yours: "This is your profile",
     profile_needs_pin: "Another person’s profile — enter the access PIN",
     profile_no_pin_access: "This profile has no access PIN. You cannot open it.",
-    remove_btn: "Quitar",
+    remove_btn: "Удалить",
     reset_btn: "⚠️ Factory Reset",
     reset_confirm: "Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.",
     reset_dashboard: "Скинути макет",
     reset_error: "Ошибка сброса: {error}",
     reset_success: "Argus сброшен. У вас есть несколько секунд, чтобы отменить это.",
+    reset_widget: "Скинути віджет",
     retry_action: "Повторить",
     role_argus_admin: "Адміністратор Argus",
-    role_argus_admin_short: "Adm",
+    role_argus_admin_short: "Адм",
     role_argus_standard: "Звичайний користувач",
     role_argus_user: "Standard User",
-    role_argus_user_short: "Std",
+    role_argus_user_short: "Корист",
     rules_tip: "",
     save_btn: "Save",
-    save_config: "ЗБЕРЕГТИ КОНФІГУРАЦІЮ",
-    save_mode: "💾 Зберегти режим",
-    save_notif: "Зберегти",
-    save_user: "Зберегти",
-    search_placeholder: "Шукати за назвою, областю або entity_id",
+    save_config: "💾 Зберегти режим",
+    save_mode: "💾 Save mode",
+    save_notif: "Save",
+    save_user: "Save",
+    saved: "✓ Збережено",
+    search_placeholder: "Search by name, area or entity_id",
     search_select: "Search & select",
     searching_auto: "↻ Searching automations...",
     select_all: "☑ All",
-    select_btn: "+ Вибрати",
+    select_btn: "+ Select",
+    select_entry_sensors: "+ Вибрати вхідні датчики",
     select_profile_subtitle: "Access your security panels and Argus instances.",
     select_profile_title: "Select Your Profile",
-    selected_lbl: "Вибрано",
+    selected_lbl: "Selected",
     selector_panic: "🚨 Действия SOS",
-    sensor_section: "Датчики проникнення",
+    sensor_section: "Intrusion Sensors",
     sensors_to_bypass: "Sensors to Bypass",
     settings: "⚙️ Налаштування",
     setup_access_pin: "PIN доступа к панели Argus (Необязательно)",
@@ -4518,44 +4721,49 @@ const Do = [
     setup_required_desc: "Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.",
     setup_required_title: "Требуется настройка Argus",
     siren_section: "Сирени",
-    sos_actions: "Acciones Automáticas de SOS",
+    size: "Розмір",
+    slide_disarm: "Посуньте для зняття охорони",
+    slide_sos: "Посуньте для ввімкнення SOS",
+    slide_sos_stop: "Посуньте щоб зупинити SOS",
+    sos_actions: "🚨 Действия SOS",
     sos_activated: "SOS активирован",
     sos_call: "📞 Call Emergency Services",
     sos_call_confirm: "Позвонить в экстренную службу ({number})?",
     sos_call_help: "Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.",
-    sos_confirm_text: "Slide to trigger the alarm immediately.",
-    sos_confirm_title: "Confirm panic",
+    sos_confirm_text: "Посуньте для негайного запуску тривоги.",
+    sos_confirm_title: "🚨 Запустити сигнал тривоги?",
     sos_error: "Не удалось активировать SOS: {error}",
     sos_no_outputs: "Устройства не выбраны",
-    sos_outputs_help: "Dispositivos activados al disparar el SOS.",
-    sos_select_outputs: "Seleccionar salidas de pánico",
-    sos_slide: "Проведіть для активації SOS",
-    sos_stop: "DETENER SOS",
-    status_away: "FUERA",
+    sos_outputs_help: "Эти устройства всегда будут включаться при SOS, даже когда Argus снят с охраны.",
+    sos_select_outputs: "Выбрать свет, сирены или сценарии",
+    sos_slide: "Посуньте для активації SOS",
+    sos_stop: "ЗУПИНИТИ SOS",
+    status_away: "Вне дома",
     status_closed: "ЗАКРИТО",
-    status_home: "EN CASA",
-    status_idle: "INACTIVO",
+    status_home: "Дома",
+    status_idle: "Ожидание",
     status_open: "ВІДКРИТО",
-    status_recording: "GRABANDO",
+    status_recording: "Запись",
+    support_title: "Стан і підтримка",
     switch_profile_btn: "👤 Змінити профіль",
     sync_panel_help: "Paneles de alarma que seguirán el mismo estado de Argus",
     sync_panel_section: "Paneles Sincronizados",
     system_armed: "СИСТЕМА НА ОХОРОНІ",
     system_disarmed: "СИСТЕМА ЗНЯТА З ОХОРОНИ",
-    system_triggered: "¡ALARMA DISPARADA!",
+    system_triggered: "ТРИВОГА СПРАЦЮВАЛА!",
     temp_auto: "Automatic (local sensor / thermostat / climate)",
     temp_notification_title: "Argus — Температурное предупреждение",
     temp_thermostat: "(thermostat)",
     thermostat_alert_notif: "🌡️ Temperature alert",
     times_section: "⏱️ Таймери",
-    triggered: "ТРИВОГА!",
+    triggered: "ALARM!",
     unavailable: "Unavailable",
     undo_error: "Не удалось отменить сброс: {error}",
     undo_reset_btn: "↩️ Undo Reset",
     undo_success: "Сброс отменён.",
     unlinked_ha_accounts_title: "Home Assistant accounts without Argus profile",
     unlock_kiosk: "Unlock kiosk",
-    update_pin: "Оновити PIN",
+    update_pin: "Update PIN",
     upload_error: "Ошибка загрузки.",
     url_placeholder: "URL фона…",
     use_for_hub: "Argus",
@@ -4564,21 +4772,21 @@ const Do = [
     user_default: "Пользователь",
     user_exp_date: "Expiration Date/Time",
     user_exp_type: "Expiration",
-    user_no_pin: "Sin PIN de acceso",
-    user_pin: "PIN користувача",
+    user_no_pin: "Без PIN-коду",
+    user_pin: "User PIN",
     user_pin_action: "PIN",
     user_required: "Требуются имя и PIN",
     user_role_action: "Роль",
     user_role_label: "Argus Role",
-    username: "Ім'я користувача",
+    username: "Username",
     users_title: "👥 Користувачі та контроль доступу",
-    wait_if_open: "Очікувати закриття датчиків",
-    waiting_sensors: "ESPERANDO SENSORES",
+    wait_if_open: "Чекати закриття датчиків",
+    waiting_sensors: "ОЧІКУВАННЯ ДАТЧИКІВ",
     welcome_greeting: "Welcome,",
     welcome_profile: "Добро пожаловать, {name}"
   }
-}, Bp = document.createElement("template");
-Bp.innerHTML = `
+}, qp = document.createElement("template");
+qp.innerHTML = `
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
@@ -6779,9 +6987,9 @@ Bp.innerHTML = `
   </div>
 </div>
 `;
-class Dp extends HTMLElement {
+class jp extends HTMLElement {
   constructor() {
-    super(), this._showSosConfirm = !1, this._sosEntryIdx = null, this._sosBusy = !1, this._sosSliding = !1, this._sosStartX = 0, this._sosOffsetX = 0, this._sosConfirmed = !1, this.attachShadow({ mode: "open" }).appendChild(Bp.content.cloneNode(!0)), this._wsId = 1, this._socket = null, this._dashboard = null, this._ui = null, this._available = [], this._mode = "home", this._modeEntryId = null, this._selected = [], this._selectorTarget = null, this._hass = null, this._prevStates = {}, this._notifTargets = [], this._users = [], this._haUsersList = [], this._isAdmin = !0, this._pinCallback = null, this._homeName = "", this._backgroundMode = "weather", this._backgroundImages = [], this._temperatureSource = "auto", this._weatherSource = "auto", this._pending = {}, this._lastClockUpdate = 0, this._manualLang = null, this._fullscreenIdx = -1, this._cachedBgUrl = null, this._cachedBgBrightness = void 0, this._hubBgMode = "default", this._hubBgFile = "", this._hubBgSound = !1, this._clockFormat = "auto", this._profileSelectedThisMount = !1, this._welcomeShownThisMount = !1, this._panicOutputs = void 0, this._initPromise = null, this._staticBound = !1, this._postLoadBound = !1;
+    super(), this._showSosConfirm = !1, this._sosEntryIdx = null, this._sosBusy = !1, this._sosSliding = !1, this._sosStartX = 0, this._sosOffsetX = 0, this._sosConfirmed = !1, this.attachShadow({ mode: "open" }).appendChild(qp.content.cloneNode(!0)), this._wsId = 1, this._socket = null, this._dashboard = null, this._ui = null, this._available = [], this._mode = "home", this._modeEntryId = null, this._selected = [], this._selectorTarget = null, this._hass = null, this._prevStates = {}, this._notifTargets = [], this._users = [], this._haUsersList = [], this._isAdmin = !0, this._pinCallback = null, this._homeName = "", this._backgroundMode = "weather", this._backgroundImages = [], this._temperatureSource = "auto", this._weatherSource = "auto", this._pending = {}, this._lastClockUpdate = 0, this._manualLang = null, this._fullscreenIdx = -1, this._cachedBgUrl = null, this._cachedBgBrightness = void 0, this._hubBgMode = "default", this._hubBgFile = "", this._hubBgSound = !1, this._clockFormat = "auto", this._profileSelectedThisMount = !1, this._welcomeShownThisMount = !1, this._panicOutputs = void 0, this._initPromise = null, this._staticBound = !1, this._postLoadBound = !1;
   }
   _getTimeZone() {
     return this._hass?.config?.time_zone || void 0;
@@ -6813,12 +7021,12 @@ class Dp extends HTMLElement {
     if (isNaN(n.getTime())) return "";
     const a = this._getClockFormat(), s = String(this._hass?.locale?.time_format || "").toLowerCase(), c = a === "12h" || a === "auto" && (s.includes("12") || s.includes("am")), u = String(n.getDate()).padStart(2, "0"), p = String(n.getMonth() + 1).padStart(2, "0"), g = n.getFullYear();
     if (c) {
-      let _ = n.getHours();
-      const f = String(n.getMinutes()).padStart(2, "0"), h = _ >= 12 ? "PM" : "AM";
-      return _ = _ % 12, _ = _ || 12, `${u}/${p}/${g}, ${_}:${f} ${h}`;
+      let f = n.getHours();
+      const _ = String(n.getMinutes()).padStart(2, "0"), h = f >= 12 ? "PM" : "AM";
+      return f = f % 12, f = f || 12, `${u}/${p}/${g}, ${f}:${_} ${h}`;
     } else {
-      const _ = String(n.getHours()).padStart(2, "0"), f = String(n.getMinutes()).padStart(2, "0");
-      return `${u}/${p}/${g}, ${_}:${f}`;
+      const f = String(n.getHours()).padStart(2, "0"), _ = String(n.getMinutes()).padStart(2, "0");
+      return `${u}/${p}/${g}, ${f}:${_}`;
     }
   }
   _updateProfileBadge() {
@@ -6855,10 +7063,10 @@ class Dp extends HTMLElement {
           }
           c.drawImage(a, 0, 0, 10, 10);
           const u = c.getImageData(0, 0, 10, 10).data;
-          let p = 0, g = 0, _ = 0, f = 0;
+          let p = 0, g = 0, f = 0, _ = 0;
           for (let v = 0; v < u.length; v += 4)
-            p += u[v], g += u[v + 1], _ += u[v + 2], f++;
-          const h = (0.299 * p + 0.587 * g + 0.114 * _) / f;
+            p += u[v], g += u[v + 1], f += u[v + 2], _++;
+          const h = (0.299 * p + 0.587 * g + 0.114 * f) / _;
           n(h);
         } catch {
           n(128);
@@ -6922,7 +7130,7 @@ class Dp extends HTMLElement {
     n?.language !== r.language && !this._manualLang && this._refreshLocalizedUi();
     const u = this._dashboard.entries.some(
       (I) => I.entity_id && n?.states[I.entity_id]?.state !== r.states[I.entity_id]?.state
-    ), p = this._temperatureSource === "auto" ? null : this._temperatureSource, g = p && n?.states[p]?.state !== r.states[p]?.state, _ = this._weatherSource !== "auto" ? this._weatherSource : Object.values(r.states).find((I) => I.entity_id.startsWith("weather."))?.entity_id, f = _ && (n?.states[_]?.state !== r.states[_]?.state || n?.states[_]?.attributes?.temperature !== r.states[_]?.attributes?.temperature || n?.states[_]?.attributes?.temperature_unit !== r.states[_]?.attributes?.temperature_unit), h = /* @__PURE__ */ new Set(), v = (I) => {
+    ), p = this._temperatureSource === "auto" ? null : this._temperatureSource, g = p && n?.states[p]?.state !== r.states[p]?.state, f = this._weatherSource !== "auto" ? this._weatherSource : Object.values(r.states).find((I) => I.entity_id.startsWith("weather."))?.entity_id, _ = f && (n?.states[f]?.state !== r.states[f]?.state || n?.states[f]?.attributes?.temperature !== r.states[f]?.attributes?.temperature || n?.states[f]?.attributes?.temperature_unit !== r.states[f]?.attributes?.temperature_unit), h = /* @__PURE__ */ new Set(), v = (I) => {
       !I || typeof I != "object" || (Array.isArray(I.sensors) && I.sensors.forEach((A) => h.add(A)), Object.values(I).forEach((A) => {
         A && typeof A == "object" && v(A);
       }));
@@ -6935,7 +7143,7 @@ class Dp extends HTMLElement {
       const A = I.entity_id || "", S = I.attributes?.device_class === "battery" || /_battery$/i.test(A), y = n.states[A];
       return S && y?.state !== I.state;
     });
-    (u || P || R || g || s || f || !n) && (this._renderEntries(), this._renderActivityLog(), n || (this._renderModeTabs(), this._renderModeView(), this._renderAutomations(), this._renderNotifications(), this._activeAccessSection === "users" && this._renderUsers()));
+    (u || P || R || g || s || _ || !n) && (this._renderEntries(), this._renderActivityLog(), n || (this._renderModeTabs(), this._renderModeView(), this._renderAutomations(), this._renderNotifications(), this._activeAccessSection === "users" && this._renderUsers()));
   }
   get hass() {
     return this._hass;
@@ -6943,7 +7151,7 @@ class Dp extends HTMLElement {
   /* ── Translation ─────────────────────────────────────────────────── */
   _t(r) {
     const n = this._getCurrentLangCode();
-    return di[n]?.[r] || di.en[r] || r;
+    return ui[n]?.[r] || ui.en[r] || r;
   }
   _format(r, n = {}) {
     return this._t(r).replace(/\{(\w+)\}/g, (a, s) => String(n[s] ?? `{${s}}`));
@@ -6964,11 +7172,11 @@ class Dp extends HTMLElement {
         r = localStorage.getItem("argus_lang");
       } catch {
       }
-    if ((!r || r === "auto") && (r = this._ui?.manual_lang || this._ui?.language || this._hass?.language || "en"), r = String(r || "en").trim(), di[r]) return r;
+    if ((!r || r === "auto") && (r = this._ui?.manual_lang || this._ui?.language || this._hass?.language || "en"), r = String(r || "en").trim(), ui[r]) return r;
     if (/^zh-(hant|tw|hk)/i.test(r)) return "zh-Hant";
     if (/^zh/i.test(r)) return "zh";
     const n = r.split(/[-_]/)[0].toLowerCase();
-    return di[n] ? n : "en";
+    return ui[n] ? n : "en";
   }
   _getLocale() {
     return {
@@ -7009,7 +7217,7 @@ class Dp extends HTMLElement {
     const r = this.shadowRoot.getElementById("lang-modal");
     if (!r) return;
     const n = this.shadowRoot.getElementById("lang-grid"), a = this._manualLang || "auto";
-    n && (n.innerHTML = Do.map((u) => `
+    n && (n.innerHTML = $o.map((u) => `
         <button class="lang-option${u.code === a ? " active" : ""}" data-lang="${u.code}">
           <span class="lang-flag">${u.flag}</span>
           <span>${u.code === "auto" ? this._t("use_ha_language") : u.label}</span>
@@ -7036,7 +7244,7 @@ class Dp extends HTMLElement {
       }
       this._send("argus/save_ui", { language: "auto", manual_lang: "auto", ...n ? { entry_id: n } : {} }).catch(console.error);
     } else {
-      if (!di[r]) return;
+      if (!ui[r]) return;
       this._manualLang = r;
       try {
         localStorage.setItem("argus_lang", r);
@@ -7055,12 +7263,12 @@ class Dp extends HTMLElement {
     const r = (b) => this._t(b), n = (b) => this.shadowRoot.getElementById(b), a = (b, k) => {
       const E = n(b);
       E && (E.textContent = k);
-    }, s = this._manualLang || "auto", c = Do.find((b) => b.code === s) || Do[1], u = n("lang-pill-flag"), p = n("lang-pill-label");
+    }, s = this._manualLang || "auto", c = $o.find((b) => b.code === s) || $o[1], u = n("lang-pill-flag"), p = n("lang-pill-label");
     u && (u.textContent = c.flag), p && (p.textContent = s === "auto" ? this._t("use_ha_language") : c.label), a("p-hero-desc", r("hero_desc")), a("h-instances", r("instances")), a("h-modes", r("modes")), a("h-automations", r("automations")), a("p-linked-rules", r("linked_rules")), a("h-settings", r("settings")), a("h-activity-log", r("activity_log")), a("btn-refresh-history", r("history_refresh")), a("t-change-pin", r("change_pin")), a("l-current-pin-lbl", r("current_pin")), a("lnk-forgot-pin", r("forgot_pin")), a("pin-forgot-link", r("forgot_pin")), a("btn-save-pin", r("update_pin")), a("l-new-pin", r("new_pin")), a("l-confirm-pin", r("confirm_pin")), a("h-notifications", r("notifications_title")), a("p-notif-desc", r("notif_desc")), a("h-users", r("users_title")), a("p-admin-only", r("admin_only")), a("t-add-user", r("add_user")), a("l-username", r("username")), a("l-user-pin", r("user_pin")), a("s-is-admin", r("is_admin")), a("l-user-exp-type", r("user_exp_type")), a("l-user-exp-date", r("user_exp_date"));
     const g = n("opt-exp-indefinite");
     g && (g.textContent = r("exp_indefinite"));
-    const _ = n("opt-exp-temporary");
-    _ && (_.textContent = r("exp_temporary")), a("selector-select-all", r("select_all")), a("selector-deselect-all", r("deselect_all")), a("l-available", r("available")), a("l-selected-lbl", r("selected_lbl")), a("l-introduce-pin", `🔒 ${r("introduce_pin")}`), a("l-pin-modal-desc", r("pin_modal_desc")), ((b) => {
+    const f = n("opt-exp-temporary");
+    f && (f.textContent = r("exp_temporary")), a("selector-select-all", r("select_all")), a("selector-deselect-all", r("deselect_all")), a("l-available", r("available")), a("l-selected-lbl", r("selected_lbl")), a("l-introduce-pin", `🔒 ${r("introduce_pin")}`), a("l-pin-modal-desc", r("pin_modal_desc")), ((b) => {
       const k = n(b);
       k && (k.placeholder = r("search_placeholder"));
     })("selector-search");
@@ -7109,12 +7317,12 @@ class Dp extends HTMLElement {
     const w = this.shadowRoot;
     if (w) {
       const b = (E) => {
-        const N = String(this._t(E) || "").trim(), D = N.indexOf(" ");
-        return D > 0 && D <= 3 ? N.substring(D + 1).trim() : N;
+        const C = String(this._t(E) || "").trim(), D = C.indexOf(" ");
+        return D > 0 && D <= 3 ? C.substring(D + 1).trim() : C;
       };
       w.querySelectorAll(".entry").forEach((E) => {
-        const N = E.querySelector(".btn-home span");
-        N && (N.textContent = b("btn_home"));
+        const C = E.querySelector(".btn-home span");
+        C && (C.textContent = b("btn_home"));
         const D = E.querySelector(".btn-away span");
         D && (D.textContent = b("btn_away"));
         const F = E.querySelector(".btn-night span");
@@ -7201,15 +7409,15 @@ class Dp extends HTMLElement {
       if (!a) return;
       c = Math.max(0, Math.min(h.clientX - s, u())), r.style.left = 6 + c + "px";
       const v = c / u();
-      n.style.background = "rgba(217,4,41," + (0.15 + v * 0.55) + ")", v >= 0.98 && f(!0);
-    }, _ = (h) => {
-      a && f(!1);
+      n.style.background = "rgba(217,4,41," + (0.15 + v * 0.55) + ")", v >= 0.98 && _(!0);
     }, f = (h) => {
+      a && _(!1);
+    }, _ = (h) => {
       a = !1, r.style.transition = "all 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28)", r.style.cursor = "grab", h ? (this._triggerSOS(), c = 0, setTimeout(() => {
         r.style.left = "6px", n.style.background = "rgba(217,4,41,0.15)";
       }, 600)) : (c = 0, r.style.left = "6px", n.style.background = "rgba(217,4,41,0.15)");
     };
-    r.addEventListener("pointerdown", p), r.addEventListener("pointermove", g), r.addEventListener("pointerup", _), r.addEventListener("pointercancel", _), this._sosBound = !0;
+    r.addEventListener("pointerdown", p), r.addEventListener("pointermove", g), r.addEventListener("pointerup", f), r.addEventListener("pointercancel", f), this._sosBound = !0;
   }
   async _init() {
     this._mode = "disarmed", this._staticBound || (this._bindStatic(), this._staticBound = !0), await this._connect(), this._applyTranslations(), await this._load(), this._dashboard && (this._initWidgetGrid(), !this._postLoadBound && (this._postLoadBound = !0, this.shadowRoot.getElementById("btn-clear-log")?.addEventListener("click", () => this._clearHistory()), this.shadowRoot.getElementById("btn-refresh-history")?.addEventListener("click", async () => {
@@ -7305,8 +7513,8 @@ class Dp extends HTMLElement {
         salt: this._bytesToBase64(s),
         iv: this._bytesToBase64(c),
         data: this._bytesToBase64(new Uint8Array(p))
-      }, _ = new Blob([JSON.stringify(g)], { type: "application/json" }), f = URL.createObjectURL(_), h = document.createElement("a");
-      h.href = f, h.download = `argus_backup_${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}.argus`, h.click(), setTimeout(() => URL.revokeObjectURL(f), 5e3);
+      }, f = new Blob([JSON.stringify(g)], { type: "application/json" }), _ = URL.createObjectURL(f), h = document.createElement("a");
+      h.href = _, h.download = `argus_backup_${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}.argus`, h.click(), setTimeout(() => URL.revokeObjectURL(_), 5e3);
     } catch (r) {
       alert(this._format("export_error", { error: r.message }));
     }
@@ -7323,8 +7531,8 @@ class Dp extends HTMLElement {
           const u = await this._requestBackupPassword("decrypt");
           if (u === null) return;
           try {
-            const p = this._base64ToBytes(c.salt), g = this._base64ToBytes(c.iv), _ = await this._backupKey(u, p, ["decrypt"]), f = await crypto.subtle.decrypt({ name: "AES-GCM", iv: g }, _, this._base64ToBytes(c.data));
-            c = JSON.parse(new TextDecoder().decode(f));
+            const p = this._base64ToBytes(c.salt), g = this._base64ToBytes(c.iv), f = await this._backupKey(u, p, ["decrypt"]), _ = await crypto.subtle.decrypt({ name: "AES-GCM", iv: g }, f, this._base64ToBytes(c.data));
+            c = JSON.parse(new TextDecoder().decode(_));
           } catch {
             throw new Error(this._backupText("bad"));
           }
@@ -7488,10 +7696,10 @@ class Dp extends HTMLElement {
     this._hubBgMode = p === "none" || p === "default" ? "default" : p, this._hubBgFile = u.hub_bg_file !== void 0 ? u.hub_bg_file : s.ui?.hub_bg_file || "", this._hubBgSound = !!(u.hub_bg_sound !== void 0 ? u.hub_bg_sound : s.ui?.hub_bg_sound), this._updateTheme(), this._updateHomeNameDisplay(), this._updateProfileBadge(), this._populateTemperatureSources();
     const g = this.shadowRoot.getElementById("temp-source-select-standalone");
     g && (g.value = this._temperatureSource || "auto", g.dataset.bound || (g.dataset.bound = "1", g.addEventListener("change", () => this._savePersonalization()))), this._populateWeatherSources();
-    const _ = this.shadowRoot.getElementById("weather-source-select");
-    _ && (_.value = this._weatherSource || "auto", _.dataset.bound || (_.dataset.bound = "1", _.addEventListener("change", () => this._savePersonalization())));
-    const f = this.shadowRoot.getElementById("argus-clock-format-select");
-    f && (this._clockFormat = this._ui?.clock_format || this._dashboard?.clock_format || "auto", f.value = this._clockFormat, f.dataset.bound || (f.dataset.bound = "1", f.addEventListener("change", () => this._savePersonalization())));
+    const f = this.shadowRoot.getElementById("weather-source-select");
+    f && (f.value = this._weatherSource || "auto", f.dataset.bound || (f.dataset.bound = "1", f.addEventListener("change", () => this._savePersonalization())));
+    const _ = this.shadowRoot.getElementById("argus-clock-format-select");
+    _ && (this._clockFormat = this._ui?.clock_format || this._dashboard?.clock_format || "auto", _.value = this._clockFormat, _.dataset.bound || (_.dataset.bound = "1", _.addEventListener("change", () => this._savePersonalization())));
     const h = this.shadowRoot.getElementById("emergency-number-input");
     h && (h.value = this._emergencyNumber), this._renderSosOutputs(), this._configureEmergencyCall();
     const v = this.shadowRoot.getElementById("bg-mode-select-standalone");
@@ -7527,8 +7735,8 @@ class Dp extends HTMLElement {
     b && (b.textContent = w ? this._t("pin_active_yes") : this._t("pin_active_no")), k && (w ? k.classList.remove("collapsed") : k.classList.add("collapsed"));
     const E = this.shadowRoot.getElementById("lnk-forgot-pin");
     E && (E.style.display = w ? "inline" : "none");
-    const N = this.shadowRoot.getElementById("pin-forgot-link");
-    N && (N.style.display = w ? "inline" : "none"), [
+    const C = this.shadowRoot.getElementById("pin-forgot-link");
+    C && (C.style.display = w ? "inline" : "none"), [
       ["instances", () => this._renderEntries()],
       ["activity log", () => this._renderActivityLog()],
       ["mode tabs", () => this._renderModeTabs()],
@@ -7555,27 +7763,27 @@ class Dp extends HTMLElement {
   // Read only values that Home Assistant exposes.  In particular, do not use a
   // lightning icon or assume 100% just because an entity has no battery sensor.
   _getDevicePower(r, n) {
-    const a = n?.attributes || {}, s = [a.battery_level, a.battery, a.battery_percentage].find((_) => Number.isFinite(Number(_)));
+    const a = n?.attributes || {}, s = [a.battery_level, a.battery, a.battery_percentage].find((f) => Number.isFinite(Number(f)));
     let c = s === void 0 ? null : Math.max(0, Math.min(100, Math.round(Number(s))));
     const u = String(a.power_source || a.power_supply || a.power_type || "").toLowerCase(), p = a.mains_powered === !0 || a.is_mains_powered === !0 || a.wired === !0 || /(?:mains|ac|wired|line|external|toma|corriente)/.test(u), g = r ? r.split(".")[0] : "";
     if (["switch", "light", "fan", "script", "input_boolean", "siren"].includes(g) && c === null)
       return { battery: null, mains: !0 };
     if (c === null && this._hass?.states) {
       if (this._powerCache || (this._powerCache = /* @__PURE__ */ new Map()), this._powerCache.has(r)) return this._powerCache.get(r);
-      let _ = null;
-      const f = r.split(".").slice(1).join(".").toLowerCase(), h = f.replace(/_(contact|door|window|motion|occupancy|opening|sensor)$/i, ""), v = this._hass.states[`sensor.${f}_battery`] || this._hass.states[`sensor.${h}_battery`] || this._hass.states[`sensor.${f}_battery_level`] || this._hass.states[`sensor.${h}_battery_level`];
+      let f = null;
+      const _ = r.split(".").slice(1).join(".").toLowerCase(), h = _.replace(/_(contact|door|window|motion|occupancy|opening|sensor)$/i, ""), v = this._hass.states[`sensor.${_}_battery`] || this._hass.states[`sensor.${h}_battery`] || this._hass.states[`sensor.${_}_battery_level`] || this._hass.states[`sensor.${h}_battery_level`];
       if (v)
-        _ = v.state;
+        f = v.state;
       else {
         const I = (this._available || []).find((A) => A.entity_id === r);
         if (I && I.device_id) {
           const A = (this._available || []).find(
             (S) => S.device_id === I.device_id && (this._hass?.states?.[S.entity_id]?.attributes?.device_class === "battery" || /_battery(?:_level|_percent(?:age)?)?$/i.test(S.entity_id))
           );
-          A && (_ = this._hass?.states?.[A.entity_id]?.state);
+          A && (f = this._hass?.states?.[A.entity_id]?.state);
         }
       }
-      const P = Number(_);
+      const P = Number(f);
       Number.isFinite(P) && (c = Math.max(0, Math.min(100, Math.round(P))));
       const R = { battery: c, mains: p };
       return this._powerCache.set(r, R), R;
@@ -7583,12 +7791,12 @@ class Dp extends HTMLElement {
     return { battery: c, mains: p };
   }
   _deviceFacts(r, n, a = !0) {
-    const s = n?.state || "unknown", c = ["on", "unlocked", "open", "recording", "active", "motion"].includes(s), u = { on: this._t("status_open"), off: this._t("status_closed"), locked: this._t("status_closed"), unlocked: this._t("status_open"), idle: this._t("status_idle"), recording: this._t("status_recording"), home: this._t("status_home"), not_home: this._t("status_away") }, p = r.split(".")[0], g = ["siren", "switch", "light", "fan", "input_boolean", "script", "alarm_control_panel"].includes(p), _ = this._getDevicePower(r, n), f = [];
-    if (a && f.push({ text: g ? s.toUpperCase() : u[s] || s, className: g ? "" : c ? "status-open" : "status-closed" }), _.mains && f.push({ text: "🔌 AC", className: "power-mains" }), _.battery !== null) {
-      const h = _.battery === 0, v = _.battery <= 10 && !h, P = h ? "🔋 ❌" : `🔋 ${_.battery}%`, R = h ? "dead" : v ? "low" : "";
-      f.push({ text: P, className: `pill-power ${R}` });
+    const s = n?.state || "unknown", c = ["on", "unlocked", "open", "recording", "active", "motion"].includes(s), u = { on: this._t("status_open"), off: this._t("status_closed"), locked: this._t("status_closed"), unlocked: this._t("status_open"), idle: this._t("status_idle"), recording: this._t("status_recording"), home: this._t("status_home"), not_home: this._t("status_away") }, p = r.split(".")[0], g = ["siren", "switch", "light", "fan", "input_boolean", "script", "alarm_control_panel"].includes(p), f = this._getDevicePower(r, n), _ = [];
+    if (a && _.push({ text: g ? s.toUpperCase() : u[s] || s, className: g ? "" : c ? "status-open" : "status-closed" }), f.mains && _.push({ text: "🔌 AC", className: "power-mains" }), f.battery !== null) {
+      const h = f.battery === 0, v = f.battery <= 10 && !h, P = h ? "🔋 ❌" : `🔋 ${f.battery}%`, R = h ? "dead" : v ? "low" : "";
+      _.push({ text: P, className: `pill-power ${R}` });
     }
-    return f;
+    return _;
   }
   _renderBatteryAlerts() {
     if (!this._hass?.states) return "";
@@ -7635,17 +7843,17 @@ class Dp extends HTMLElement {
       return;
     }
     n && (n.innerHTML = "");
-    const u = this._getWeatherEntity().state || "sunny", p = this._hass?.states?.["sun.sun"]?.state === "below_horizon", g = this._weatherPresentation(u, p), _ = (w) => {
+    const u = this._getWeatherEntity().state || "sunny", p = this._hass?.states?.["sun.sun"]?.state === "below_horizon", g = this._weatherPresentation(u, p), f = (w) => {
       const b = String(s(w) || "").trim(), k = b.indexOf(" ");
       return k > 0 && k <= 3 ? b.substring(k + 1).trim() : b;
-    }, f = /* @__PURE__ */ new Date(), h = this._formatTime(f), v = this.shadowRoot.getElementById("hero-clock-time"), P = this.shadowRoot.getElementById("hero-clock-date"), R = this.shadowRoot.getElementById("hero-weather-pill"), I = this.shadowRoot.getElementById("hero-security-pill"), A = a.some((w) => {
+    }, _ = /* @__PURE__ */ new Date(), h = this._formatTime(_), v = this.shadowRoot.getElementById("hero-clock-time"), P = this.shadowRoot.getElementById("hero-clock-date"), R = this.shadowRoot.getElementById("hero-weather-pill"), I = this.shadowRoot.getElementById("hero-security-pill"), A = a.some((w) => {
       const b = this._hass?.states[w.entity_id]?.state || w.state;
       return String(b).startsWith("armed") || b === "triggered" || b === "pending";
     });
-    v && (v.textContent = h), P && (P.textContent = f.toLocaleDateString(this._getLocale(), { weekday: "short", month: "short", day: "numeric" })), R && (R.textContent = `${g.icon} ${g.label}`), I && (I.innerHTML = `<i class="hero-live" style="background:${A ? "#ffb54d" : "#55df91"};box-shadow:0 0 9px ${A ? "#ffb54d" : "#55df91"}"></i>${this._escapeHtml(s(A ? "system_armed" : "system_disarmed"))}`), Array.from(r.querySelectorAll("article.entry")).length !== a.length && (r.innerHTML = a.map((w, b) => `<article class="entry" data-idx="${b}"></article>`).join(""));
+    v && (v.textContent = h), P && (P.textContent = _.toLocaleDateString(this._getLocale(), { weekday: "short", month: "short", day: "numeric" })), R && (R.textContent = `${g.icon} ${g.label}`), I && (I.innerHTML = `<i class="hero-live" style="background:${A ? "#ffb54d" : "#55df91"};box-shadow:0 0 9px ${A ? "#ffb54d" : "#55df91"}"></i>${this._escapeHtml(s(A ? "system_armed" : "system_disarmed"))}`), Array.from(r.querySelectorAll("article.entry")).length !== a.length && (r.innerHTML = a.map((w, b) => `<article class="entry" data-idx="${b}"></article>`).join(""));
     const y = r.querySelectorAll("article.entry");
     a.forEach((w, b) => {
-      const k = y[b], N = this._hass?.states[w.entity_id]?.state || w.state || "unavailable", D = N === "triggered";
+      const k = y[b], C = this._hass?.states[w.entity_id]?.state || w.state || "unavailable", D = C === "triggered";
       this._hass?.states?.[w.entity_id]?.attributes?.argus_panic_active, w.pin_configured === !0 || w.user_pin_configured;
       const F = this._hass?.config?.location_name || this._homeName || s("home_fallback");
       this._getDisplayedTemperature(), this._getTemperatureReadings(), {
@@ -7656,38 +7864,38 @@ class Dp extends HTMLElement {
         armed_vacation: { label: s("mode_vacation"), accent: "#d59bff" },
         triggered: { label: s("log_triggered"), accent: "#ff4d5d" },
         pending: { label: s("system_armed"), accent: "#ffb54d" }
-      }[N] || N.replace(/_/g, " "), g.label;
+      }[C] || C.replace(/_/g, " "), g.label;
       const V = Array.isArray(this._ui?.audit_log) ? this._ui.audit_log[0] : null;
       V && this._localizeActivityDetail(String(V.action || ""), String(V.detail || ""));
-      const Q = N.replace("armed_", "");
+      const Q = C.replace("armed_", "");
       let ie = this._ui?.modes?.__by_entity__?.[w.entity_id]?.[Q] || this._ui?.modes?.[Q] || {};
       if (D && !(ie.sensors || []).length) {
         const me = this._ui?.modes?.__by_entity__?.[w.entity_id] || this._ui?.modes || {};
-        ie = ["away", "home", "night", "vacation"].map((_e) => me[_e]).find((_e) => (_e?.sensors || []).some((we) => ["on", "open", "unlocked", "recording", "active", "motion"].includes(this._hass?.states?.[we]?.state))) || {};
+        ie = ["away", "home", "night", "vacation"].map((fe) => me[fe]).find((fe) => (fe?.sensors || []).some((we) => ["on", "open", "unlocked", "recording", "active", "motion"].includes(this._hass?.states?.[we]?.state))) || {};
       }
       let oe = ie.sensors || [];
-      if (N === "disarmed" || !oe.length) {
-        const me = this._ui?.modes?.__by_entity__?.[w.entity_id] || this._ui?.modes || {}, _e = /* @__PURE__ */ new Set();
+      if (C === "disarmed" || !oe.length) {
+        const me = this._ui?.modes?.__by_entity__?.[w.entity_id] || this._ui?.modes || {}, fe = /* @__PURE__ */ new Set();
         ["away", "home", "night", "vacation"].forEach((we) => {
-          me[we]?.sensors && me[we].sensors.forEach((Ne) => _e.add(Ne));
-        }), oe = Array.from(_e);
+          me[we]?.sensors && me[we].sensors.forEach((Ce) => fe.add(Ce));
+        }), oe = Array.from(fe);
       }
-      const pe = ie.bypassed_sensors || [], K = oe.filter((me) => !pe.includes(me)), te = ["on", "open", "unlocked", "recording", "active", "motion"], ee = !!this._hass?.states?.[w.entity_id]?.attributes?.arming_waiting_for_sensors, G = Array.isArray(this._hass?.states?.[w.entity_id]?.attributes?.arming_blocking_sensors) ? this._hass?.states?.[w.entity_id]?.attributes?.arming_blocking_sensors : [], re = K.some((me) => te.includes(this._hass?.states?.[me]?.state)) && (N.startsWith("armed") || N === "pending" || ee) && !D, T = this._fullscreenIdx === b || this._kioskLocked && (this._kioskEntryId === w.entry_id || a.length === 1);
+      const pe = ie.bypassed_sensors || [], K = oe.filter((me) => !pe.includes(me)), te = ["on", "open", "unlocked", "recording", "active", "motion"], ee = !!this._hass?.states?.[w.entity_id]?.attributes?.arming_waiting_for_sensors, G = Array.isArray(this._hass?.states?.[w.entity_id]?.attributes?.arming_blocking_sensors) ? this._hass?.states?.[w.entity_id]?.attributes?.arming_blocking_sensors : [], re = K.some((me) => te.includes(this._hass?.states?.[me]?.state)) && (C.startsWith("armed") || C === "pending" || ee) && !D, T = this._fullscreenIdx === b || this._kioskLocked && (this._kioskEntryId === w.entry_id || a.length === 1);
       k.className = `entry cinematic-entry ${T ? "ios-fullscreen" : ""}`, k.style.cssText = D ? "border:3px solid #ff5252;box-shadow:0 0 30px rgba(255,82,82,.4)" : "", k.querySelectorAll(".wx-webgl").forEach((me) => me._argusWebglStop?.());
       const W = K.map((me) => {
-        const _e = this._hass?.states[me];
-        if (!_e) return "";
-        const we = te.includes(_e.state), Ne = _e.attributes?.friendly_name || me.split(".")[1] || me, Oe = _e.attributes?.device_class || (me.startsWith("lock.") ? "lock" : "door");
+        const fe = this._hass?.states[me];
+        if (!fe) return "";
+        const we = te.includes(fe.state), Ce = fe.attributes?.friendly_name || me.split(".")[1] || me, Oe = fe.attributes?.device_class || (me.startsWith("lock.") ? "lock" : "door");
         let J = "";
         Oe === "lock" ? J = we ? '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>' : '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>' : Oe === "window" ? J = we ? '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14l16 0"></path><path d="M4 10l16 0"></path><rect x="4" y="4" width="16" height="16" rx="2"></rect></svg>' : '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"></rect><path d="M4 12h16M12 4v16"></path></svg>' : Oe === "motion" ? J = we ? '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M4.93 4.93a10 10 0 0 1 14.14 0M4.93 19.07a10 10 0 0 0 14.14 0"></path></svg>' : '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle></svg>' : J = we ? '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22V2h12v20H4z"></path><path d="M16 4h4v18H4z"></path><circle cx="12" cy="12" r="1"></circle></svg>' : '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 22V2h12v20H6z"></path><circle cx="14" cy="12" r="1"></circle></svg>';
-        const ue = this._getDevicePower(me, _e);
+        const ue = this._getDevicePower(me, fe);
         let Ee = "";
         if (ue.battery !== null) {
           const ze = ue.battery === 0, $e = ue.battery <= 10 && !ze, Fe = ze ? "🔋 ❌" : `🔋 ${ue.battery}%`;
           (ze || $e) && (Ee = `<span style="margin-left:8px;font-size:10px;font-weight:700;color:#ff5252;background:rgba(255,255,255,0.1);backdrop-filter:blur(4px);padding:2px 6px;border-radius:10px;border:1px solid rgba(255,82,82,0.3);text-shadow:0 0 5px rgba(255,82,82,0.5);">${Fe}</span>`);
         }
         const Ie = ee && G.includes(me);
-        return `<div class="console-sensor ${we ? "open" : ""}"><span class="console-sensor-icon" style="display:flex;align-items:center;justify-content:center;color:${Ie ? "#ffd700" : we ? "#ff968b" : "#75f4b0"};${Ie ? "animation:pulse 1s infinite;" : we ? "animation:pulse 2s infinite;" : ""}">${J}</span><span class="console-sensor-name" style="${Ie ? "color:#ffd700" : ""}">${this._escapeHtml(Ne)}</span><span class="console-sensor-state" style="color:${Ie ? "#ffd700" : we ? "#ff968b" : "#75f4b0"}">${this._escapeHtml(s(we ? "status_open" : "status_closed"))}${Ee}</span></div>`;
+        return `<div class="console-sensor ${we ? "open" : ""}"><span class="console-sensor-icon" style="display:flex;align-items:center;justify-content:center;color:${Ie ? "#ffd700" : we ? "#ff968b" : "#75f4b0"};${Ie ? "animation:pulse 1s infinite;" : we ? "animation:pulse 2s infinite;" : ""}">${J}</span><span class="console-sensor-name" style="${Ie ? "color:#ffd700" : ""}">${this._escapeHtml(Ce)}</span><span class="console-sensor-state" style="color:${Ie ? "#ffd700" : we ? "#ff968b" : "#75f4b0"}">${this._escapeHtml(s(we ? "status_open" : "status_closed"))}${Ee}</span></div>`;
       }).join("");
       k.innerHTML = `
           ${this._renderEntryBackground(u, p)}
@@ -7705,19 +7913,19 @@ class Dp extends HTMLElement {
             <div class="console-hud">
               <span class="console-hud-loc">🏡 ${this._escapeHtml(F)}</span>
               <div class="console-hud-right">
-                <span class="console-system-badge console-system-badge--${D ? "triggered" : N}">${this._escapeHtml(
-        D ? s("system_triggered") || "ALARMA ACTIVADA" : ee ? s("waiting_sensors") || "ESPERANDO SENSORES" : N === "disarmed" ? s("system_disarmed") : N === "armed_home" ? s("system_armed") + " · " + (s("mode_home") || "CASA") : N === "armed_away" ? s("system_armed") + " · " + (s("mode_away") || "AUSENTE") : N === "armed_night" ? s("system_armed") + " · " + (s("mode_night") || "NOCHE") : N === "armed_vacation" ? s("system_armed") + " · " + (s("mode_vacation") || "VACACIONES") : s("system_armed")
+                <span class="console-system-badge console-system-badge--${D ? "triggered" : C}">${this._escapeHtml(
+        D ? s("system_triggered") || "ALARMA ACTIVADA" : ee ? s("waiting_sensors") || "ESPERANDO SENSORES" : C === "disarmed" ? s("system_disarmed") : C === "armed_home" ? s("system_armed") + " · " + (s("mode_home") || "CASA") : C === "armed_away" ? s("system_armed") + " · " + (s("mode_away") || "AUSENTE") : C === "armed_night" ? s("system_armed") + " · " + (s("mode_night") || "NOCHE") : C === "armed_vacation" ? s("system_armed") + " · " + (s("mode_vacation") || "VACACIONES") : s("system_armed")
       )}</span>
               </div>
             </div>
             <div class="entry-icon" style="display:flex;justify-content:center;animation:float-icon 5s ease-in-out infinite;">
-              ${this._getIntelligentSVG(ee ? "pending" : N, null, p, D, b)}
+              ${this._getIntelligentSVG(ee ? "pending" : C, null, p, D, b)}
             </div>
             <div class="liquid-stack">
-              <button class="liquid-btn btn-home ${N === "armed_home" ? "active" : ""} ${re && N === "armed_home" ? "buzz-orange" : ""}" data-idx="${b}" data-action="home">${this._modeButtonIcon("home")}<span>${this._escapeHtml(_("btn_home"))}</span></button>
-              <button class="liquid-btn btn-away ${N === "armed_away" ? "active" : ""} ${re && N === "armed_away" ? "buzz-orange" : ""}" data-idx="${b}" data-action="away">${this._modeButtonIcon("away")}<span>${this._escapeHtml(_("btn_away"))}</span></button>
-              <button class="liquid-btn btn-night ${N === "armed_night" ? "active" : ""} ${re && N === "armed_night" ? "buzz-orange" : ""}" data-idx="${b}" data-action="night">${this._modeButtonIcon("night")}<span>${this._escapeHtml(_("btn_night"))}</span></button>
-              <button class="liquid-btn btn-vacation ${N === "armed_vacation" ? "active" : ""} ${re && N === "armed_vacation" ? "buzz-orange" : ""}" data-idx="${b}" data-action="vacation">${this._modeButtonIcon("vacation")}<span>${this._escapeHtml(_("btn_vacation"))}</span></button>
+              <button class="liquid-btn btn-home ${C === "armed_home" ? "active" : ""} ${re && C === "armed_home" ? "buzz-orange" : ""}" data-idx="${b}" data-action="home">${this._modeButtonIcon("home")}<span>${this._escapeHtml(f("btn_home"))}</span></button>
+              <button class="liquid-btn btn-away ${C === "armed_away" ? "active" : ""} ${re && C === "armed_away" ? "buzz-orange" : ""}" data-idx="${b}" data-action="away">${this._modeButtonIcon("away")}<span>${this._escapeHtml(f("btn_away"))}</span></button>
+              <button class="liquid-btn btn-night ${C === "armed_night" ? "active" : ""} ${re && C === "armed_night" ? "buzz-orange" : ""}" data-idx="${b}" data-action="night">${this._modeButtonIcon("night")}<span>${this._escapeHtml(f("btn_night"))}</span></button>
+              <button class="liquid-btn btn-vacation ${C === "armed_vacation" ? "active" : ""} ${re && C === "armed_vacation" ? "buzz-orange" : ""}" data-idx="${b}" data-action="vacation">${this._modeButtonIcon("vacation")}<span>${this._escapeHtml(f("btn_vacation"))}</span></button>
             </div>
             <div class="console-sensors">${W || `<div class="console-empty">${this._escapeHtml(oe.length === 0 ? s("no_sensors_configured") || "Sin sensores de intrusión configurados." : s("all_sensors_bypassed") || "Todos los sensores configurados están omitidos.")}</div>`}</div>
 
@@ -7891,14 +8099,14 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
       r.style.opacity = "0";
       return;
     }
-    const _ = a.createProgram();
-    if (a.attachShader(_, p), a.attachShader(_, g), a.linkProgram(_), !a.getProgramParameter(_, a.LINK_STATUS)) {
+    const f = a.createProgram();
+    if (a.attachShader(f, p), a.attachShader(f, g), a.linkProgram(f), !a.getProgramParameter(f, a.LINK_STATUS)) {
       r.style.opacity = "0";
       return;
     }
-    const f = a.createBuffer();
-    a.bindBuffer(a.ARRAY_BUFFER, f), a.bufferData(a.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), a.STATIC_DRAW);
-    const h = (b) => a.getUniformLocation(_, b), v = a.getAttribLocation(_, "p"), P = {
+    const _ = a.createBuffer();
+    a.bindBuffer(a.ARRAY_BUFFER, _), a.bufferData(a.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), a.STATIC_DRAW);
+    const h = (b) => a.getUniformLocation(f, b), v = a.getAttribLocation(f, "p"), P = {
       time: h("time"),
       rain: h("rain"),
       snow: h("snow"),
@@ -7936,14 +8144,14 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
     const w = (b) => {
       if (!y || !r.isConnected) return;
       a.clear(a.COLOR_BUFFER_BIT);
-      const k = Math.min(window.devicePixelRatio || 1, 1.5), E = Math.max(1, Math.round(r.clientWidth * k)), N = Math.max(1, Math.round(r.clientHeight * k));
-      (r.width !== E || r.height !== N) && (r.width = E, r.height = N, a.viewport(0, 0, E, N)), R.cloudy > 0 && A.forEach((Q) => {
-        Q.x -= Q.speed, Q.x + Q.rx < 0 && (Q.x = E + Q.rx, Q.y = 50 + Math.random() * (N - 100));
+      const k = Math.min(window.devicePixelRatio || 1, 1.5), E = Math.max(1, Math.round(r.clientWidth * k)), C = Math.max(1, Math.round(r.clientHeight * k));
+      (r.width !== E || r.height !== C) && (r.width = E, r.height = C, a.viewport(0, 0, E, C)), R.cloudy > 0 && A.forEach((Q) => {
+        Q.x -= Q.speed, Q.x + Q.rx < 0 && (Q.x = E + Q.rx, Q.y = 50 + Math.random() * (C - 100));
       });
       const D = [], F = [], V = [];
       A.forEach((Q) => {
-        D.push(Q.x / E, Q.y / N), F.push(Q.rx / E, Q.ry / N), V.push(R.cloudy > 0 ? Q.alpha : 0);
-      }), a.useProgram(_), a.enable(a.BLEND), a.blendFunc(a.SRC_ALPHA, a.ONE_MINUS_SRC_ALPHA), a.bindBuffer(a.ARRAY_BUFFER, f), a.enableVertexAttribArray(v), a.vertexAttribPointer(v, 2, a.FLOAT, !1, 0, 0), P.time && a.uniform1f(P.time, b), P.rain && a.uniform1f(P.rain, R.rain), P.snow && a.uniform1f(P.snow, R.snow), P.fog && a.uniform1f(P.fog, R.fog), P.storm && a.uniform1f(P.storm, R.storm), P.wind && a.uniform1f(P.wind, R.wind), P.temp && a.uniform1f(P.temp, R.temp), P.night && a.uniform1f(P.night, R.night), P.cloudy && a.uniform1f(P.cloudy, R.cloudy), P.cloudPositions && a.uniform2fv(P.cloudPositions, D), P.cloudSizes && a.uniform2fv(P.cloudSizes, F), P.cloudAlphas && a.uniform1fv(P.cloudAlphas, V), a.drawArrays(a.TRIANGLE_STRIP, 0, 4), S = requestAnimationFrame(w);
+        D.push(Q.x / E, Q.y / C), F.push(Q.rx / E, Q.ry / C), V.push(R.cloudy > 0 ? Q.alpha : 0);
+      }), a.useProgram(f), a.enable(a.BLEND), a.blendFunc(a.SRC_ALPHA, a.ONE_MINUS_SRC_ALPHA), a.bindBuffer(a.ARRAY_BUFFER, _), a.enableVertexAttribArray(v), a.vertexAttribPointer(v, 2, a.FLOAT, !1, 0, 0), P.time && a.uniform1f(P.time, b), P.rain && a.uniform1f(P.rain, R.rain), P.snow && a.uniform1f(P.snow, R.snow), P.fog && a.uniform1f(P.fog, R.fog), P.storm && a.uniform1f(P.storm, R.storm), P.wind && a.uniform1f(P.wind, R.wind), P.temp && a.uniform1f(P.temp, R.temp), P.night && a.uniform1f(P.night, R.night), P.cloudy && a.uniform1f(P.cloudy, R.cloudy), P.cloudPositions && a.uniform2fv(P.cloudPositions, D), P.cloudSizes && a.uniform2fv(P.cloudSizes, F), P.cloudAlphas && a.uniform1fv(P.cloudAlphas, V), a.drawArrays(a.TRIANGLE_STRIP, 0, 4), S = requestAnimationFrame(w);
     };
     r._argusWebglStop = () => {
       y = !1, cancelAnimationFrame(S), a.getExtension("WEBGL_lose_context")?.loseContext();
@@ -7951,9 +8159,9 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
   }
   /* ── Inline CSS Weather Backgrounds ─────────────────────────── */
   _renderAtmosphere(r, n) {
-    const a = String(r || "").toLowerCase(), s = (I) => a.includes(I), c = s("thunder") || s("lightning") || s("storm"), u = s("snow") || s("hail") || s("sleet") || s("blizzard"), p = s("drizzle") || s("shower"), g = !p && (s("rain") || s("pouring")), _ = s("fog") || s("mist") || s("hazy"), f = s("cloud") || s("overcast");
+    const a = String(r || "").toLowerCase(), s = (I) => a.includes(I), c = s("thunder") || s("lightning") || s("storm"), u = s("snow") || s("hail") || s("sleet") || s("blizzard"), p = s("drizzle") || s("shower"), g = !p && (s("rain") || s("pouring")), f = s("fog") || s("mist") || s("hazy"), _ = s("cloud") || s("overcast");
     let h = "clear";
-    c ? h = "storm" : g || p ? h = "rain" : u ? h = "snow" : _ ? h = "fog" : s("partly") ? h = "partlycloudy" : f ? h = "cloudy" : s("sunny") && (h = "sunny");
+    c ? h = "storm" : g || p ? h = "rain" : u ? h = "snow" : f ? h = "fog" : s("partly") ? h = "partlycloudy" : _ ? h = "cloudy" : s("sunny") && (h = "sunny");
     const v = n ? "night" : "day", R = this._eclipseEvent() ? "eclipse" : "";
     return `<div class="scene ${v} ${h} ${R}"></div>`;
   }
@@ -7967,9 +8175,15 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
       en: { title: "Health center", healthy: "System healthy", warning: "Attention required", critical: "Devices offline", devices: "configured devices", offline: "offline", low: "low batteries", battery: "Battery", none: "No devices are selected in the modes.", local: "Local-first active", confirm: "Intelligent confirmation", help: "Requires independent signals within a window. Smoke, gas, CO and safety always trigger immediately.", save: "Save", saved: "Saved" },
       fr: { title: "Centre de santé", healthy: "Système sain", warning: "Attention requise", critical: "Appareils hors ligne", devices: "appareils configurés", offline: "hors ligne", low: "batteries faibles", battery: "Batterie", none: "Aucun appareil n’est sélectionné dans les modes.", local: "Local-first actif", confirm: "Confirmation intelligente", help: "Exige des signaux indépendants. Fumée, gaz, CO et sécurité déclenchent toujours immédiatement.", save: "Enregistrer", saved: "Enregistré" },
       pt: { title: "Centro de saúde", healthy: "Sistema saudável", warning: "Requer atenção", critical: "Dispositivos offline", devices: "dispositivos configurados", offline: "offline", low: "baterias fracas", battery: "Bateria", none: "Nenhum dispositivo foi selecionado nos modos.", local: "Local-first ativo", confirm: "Confirmação inteligente", help: "Exige sinais independentes. Fumaça, gás, CO e segurança sempre disparam imediatamente.", save: "Salvar", saved: "Salvo" },
-      it: { title: "Centro salute", healthy: "Sistema integro", warning: "Richiede attenzione", critical: "Dispositivi offline", devices: "dispositivi configurati", offline: "offline", low: "batterie scariche", batteria: "Batteria", none: "Nessun dispositivo è selezionato nelle modalità.", local: "Local-first attivo", confirm: "Conferma intelligente", help: "Richiede segnali indipendenti. Fumo, gas, CO e sicurezza scattano sempre subito.", save: "Salva", saved: "Salvato" },
+      it: { title: "Centro salute", healthy: "Sistema integro", warning: "Richiede attenzione", critical: "Dispositivi offline", devices: "dispositivi configurati", offline: "offline", low: "batterie scariche", battery: "Batteria", none: "Nessun dispositivo è selezionato nelle modalità.", local: "Local-first attivo", confirm: "Conferma intelligente", help: "Richiede segnali indipendenti. Fumo, gas, CO e sicurezza scattano sempre subito.", save: "Salva", saved: "Salvato" },
       zh: { title: "健康中心", healthy: "系统健康", warning: "需要注意", critical: "设备离线", devices: "已配置设备", offline: "离线", low: "低电量", battery: "电池", none: "模式中未选择设备。", local: "本地优先已启用", confirm: "智能确认", help: "需要在时间窗口内收到独立信号。烟雾、燃气、一氧化碳和安全传感器始终立即触发。", save: "保存", saved: "已保存" },
-      ru: { title: "Центр здоровья", healthy: "Система исправна", warning: "Требуется внимание", critical: "Устройства не в сети", devices: "настроенных устройств", offline: "не в сети", low: "низкий заряд", battery: "Батарея", none: "В режимах не выбраны устройства.", local: "Local-first активен", confirm: "Умное подтверждение", help: "Требует независимых сигналов. Дым, газ, CO и безопасность всегда срабатывают сразу.", save: "Сохранить", saved: "Сохранено" }
+      "zh-Hant": { title: "健康中心", healthy: "系統健康", warning: "需要注意", critical: "設備離線", devices: "已設定設備", offline: "離線", low: "低電量", battery: "電池", none: "模式中未選擇設備。", local: "本地優先已啟用", confirm: "智慧確認", help: "需要在時間窗口內收到獨立信號。煙霧、燃氣、一氧化碳和安全感應器始終立即觸發。", save: "儲存", saved: "已儲存" },
+      ru: { title: "Центр здоровья", healthy: "Система исправна", warning: "Требуется внимание", critical: "Устройства не в сети", devices: "настроенных устройств", offline: "не в сети", low: "низкий заряд", battery: "Батарея", none: "В режимах не выбраны устройства.", local: "Local-first активен", confirm: "Умное подтверждение", help: "Требует независимых сигналов. Дым, газ, CO и безопасность всегда срабатывают сразу.", save: "Сохранить", saved: "Сохранено" },
+      hi: { title: "स्वास्थ्य केंद्र", healthy: "सिस्टम स्वस्थ है", warning: "ध्यान आवश्यक है", critical: "डिवाइस ऑफ़लाइन हैं", devices: "कॉन्फ़िगर किए गए डिवाइस", offline: "ऑफ़लाइन", low: "कम बैटरी", battery: "बैटरी", none: "मोड में कोई डिवाइस चयनित नहीं है।", local: "लोकल-फर्स्ट सक्रिय", confirm: "स्मार्ट पुष्टि", help: "समय विंडो के भीतर स्वतंत्र संकेतों की आवश्यकता होती है। धुआं, गैस, CO और सुरक्षा हमेशा तुरंत ट्रिगर होते हैं।", save: "सहेजें", saved: "सहेजा गया" },
+      ar: { title: "مركز الصحة", healthy: "النظام سليم", warning: "يتطلب الانتباه", critical: "أجهزة غير متصلة", devices: "الأجهزة المكونة", offline: "غير متصل", low: "بطاريات منخفضة", battery: "البطارية", none: "لم يتم تحديد أي أجهزة في الأوضاع.", local: "الأولوية المحلية نشطة", confirm: "تأكيد ذكي", help: "يتطلب إشارات مستقلة ضمن نافذة زمنية. الدخان والغاز والـ CO والأمان يتم تفعيلها دائماً على الفور.", save: "حفظ", saved: "تم الحفظ" },
+      ko: { title: "상태 센터", healthy: "시스템 정상", warning: "주의 필요", critical: "오프라인 장치", devices: "구성된 장치", offline: "오프라인", low: "배터리 부족", battery: "배터리", none: "모드에서 선택된 장치가 없습니다.", local: "로컬 우선 활성", confirm: "스마트 확인", help: "시간 창 내 독립적인 신호가 필요합니다. 연기, 가스, CO 및 안전 센서는 항상 즉시 작동합니다.", save: "저장", saved: "저장됨" },
+      ja: { title: "ヘルスセンター", healthy: "システムは正常です", warning: "注意が必要です", critical: "オフラインのデバイス", devices: "設定されたデバイス", offline: "オフライン", low: "バッテリー残量低下", battery: "バッテリー", none: "モードでデバイスが選択されていません。", local: "ローカルファースト有効", confirm: "インテリジェント確認", help: "時間枠内に独立した信号が必要です。煙、ガス、CO、安全センサーは常に即座に作動します。", save: "保存", saved: "保存済み" },
+      uk: { title: "Центр здоров’я", healthy: "Система в нормі", warning: "Потрібна увага", critical: "Пристрої не в мережі", devices: "налаштованих пристроїв", offline: "не в мережі", low: "низький заряд", battery: "Батарея", none: "У режимах не вибрано пристроїв.", local: "Local-first активний", confirm: "Розумне підтвердження", help: "Вимагає незалежних сигналів у вікні. Дим, газ, CO та безпека завжди спрацьовують негайно.", save: "Зберегти", saved: "Збережено" }
     };
     return r[this._getCurrentLangCode()] || r.en;
   }
@@ -7978,10 +8192,10 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
     n && (n.textContent = r.title), a && (a.textContent = r.local);
     const c = this._ui?.intelligent_confirmation || { enabled: !1, window_seconds: 15, required_signals: 2 }, u = this.shadowRoot.getElementById("confirm-enabled"), p = this.shadowRoot.getElementById("confirm-signals"), g = this.shadowRoot.getElementById("confirm-window");
     u && (u.checked = !!c.enabled), p && (p.value = String(c.required_signals || 2)), g && (g.value = String(c.window_seconds || 15));
-    const _ = this.shadowRoot.getElementById("confirm-label");
-    _ && (_.textContent = r.confirm);
-    const f = this.shadowRoot.getElementById("confirm-help");
-    f && (f.textContent = r.help);
+    const f = this.shadowRoot.getElementById("confirm-label");
+    f && (f.textContent = r.confirm);
+    const _ = this.shadowRoot.getElementById("confirm-help");
+    _ && (_.textContent = r.help);
     const h = this.shadowRoot.getElementById("btn-save-confirmation");
     if (h && h.dataset.saved !== "1" && (h.textContent = r.save), this._renderStateSchedule(), !s) return;
     const v = this._systemHealth;
@@ -7990,8 +8204,8 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
       return;
     }
     const P = Array.isArray(v.batteries) ? v.batteries : [], R = P.filter((b) => b.low), I = Array.isArray(v.unavailable) ? v.unavailable : [], A = Array.isArray(v.configured_devices) ? v.configured_devices : [], S = v.status === "critical" ? r.critical : v.status === "warning" ? r.warning : r.healthy, y = new Map(P.map((b) => [b.entity_id, b])), w = A.map((b) => {
-      const k = y.get(b.entity_id), E = b.state === "unknown" || b.state === "unavailable", N = [E ? r.offline : b.state];
-      return k?.value !== null && k?.value !== void 0 && N.push(`${k.value}${k.unit || "%"}`), { name: b.name, value: N.join(" · "), alert: E || !!k?.low };
+      const k = y.get(b.entity_id), E = b.state === "unknown" || b.state === "unavailable", C = [E ? r.offline : b.state];
+      return k?.value !== null && k?.value !== void 0 && C.push(`${k.value}${k.unit || "%"}`), { name: b.name, value: C.join(" · "), alert: E || !!k?.low };
     });
     s.innerHTML = `<div class="health-summary">
       <div class="health-score" style="--score:${Number(v.score) || 0}" aria-label="${Number(v.score) || 0}%">${Number(v.score) || 0}</div>
@@ -8035,17 +8249,17 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
     n && (n.textContent = r.title);
     const a = this.shadowRoot.getElementById("schedule-state"), s = this.shadowRoot.getElementById("schedule-days");
     if (a) {
-      const f = a.value;
-      a.innerHTML = `<option value="disarmed">${r.disarmed}</option><option value="armed_home">${r.home}</option><option value="armed_away">${r.away}</option><option value="armed_night">${r.night}</option><option value="armed_vacation">${r.vacation}</option>`, a.value = f || "armed_night";
+      const _ = a.value;
+      a.innerHTML = `<option value="disarmed">${r.disarmed}</option><option value="armed_home">${r.home}</option><option value="armed_away">${r.away}</option><option value="armed_night">${r.night}</option><option value="armed_vacation">${r.vacation}</option>`, a.value = _ || "armed_night";
     }
     if (s) {
-      const f = s.value;
-      s.innerHTML = `<option value="all">${r.all}</option><option value="weekdays">${r.weekdays}</option><option value="weekend">${r.weekend}</option>`, s.value = f || "all";
+      const _ = s.value;
+      s.innerHTML = `<option value="all">${r.all}</option><option value="weekdays">${r.weekdays}</option><option value="weekend">${r.weekend}</option>`, s.value = _ || "all";
     }
     const c = this.shadowRoot.getElementById("schedule-list");
     if (!c) return;
-    const u = Array.isArray(this._ui?.state_schedule) ? this._ui.state_schedule : [], p = { es: "Eliminar horario", en: "Delete schedule", fr: "Supprimer l’horaire", pt: "Excluir horário", it: "Elimina programma", zh: "删除计划", ru: "Удалить расписание" }[this._getCurrentLangCode()] || "Delete schedule", g = (f) => ({ disarmed: r.disarmed, armed_home: r.home, armed_away: r.away, armed_night: r.night, armed_vacation: r.vacation })[f] || f, _ = (f) => f?.length === 2 ? r.weekend : f?.length === 5 ? r.weekdays : r.all;
-    c.innerHTML = u.length ? u.map((f) => `<div class="schedule-row"><span><strong>${this._escapeHtml(f.time || "")}</strong> · ${this._escapeHtml(g(f.state))} · ${this._escapeHtml(_(f.days))}</span><button class="ghost" data-schedule-delete="${this._escapeHtml(f.id)}" aria-label="${this._escapeHtml(p)}">×</button></div>`).join("") : `<div class="small" style="opacity:.55">${this._escapeHtml(r.empty)}</div>`, c.querySelectorAll("[data-schedule-delete]").forEach((f) => f.addEventListener("click", () => this._deleteStateSchedule(f.dataset.scheduleDelete)));
+    const u = Array.isArray(this._ui?.state_schedule) ? this._ui.state_schedule : [], p = { es: "Eliminar horario", en: "Delete schedule", fr: "Supprimer l’horaire", pt: "Excluir horário", it: "Elimina programma", zh: "删除计划", ru: "Удалить расписание" }[this._getCurrentLangCode()] || "Delete schedule", g = (_) => ({ disarmed: r.disarmed, armed_home: r.home, armed_away: r.away, armed_night: r.night, armed_vacation: r.vacation })[_] || _, f = (_) => _?.length === 2 ? r.weekend : _?.length === 5 ? r.weekdays : r.all;
+    c.innerHTML = u.length ? u.map((_) => `<div class="schedule-row"><span><strong>${this._escapeHtml(_.time || "")}</strong> · ${this._escapeHtml(g(_.state))} · ${this._escapeHtml(f(_.days))}</span><button class="ghost" data-schedule-delete="${this._escapeHtml(_.id)}" aria-label="${this._escapeHtml(p)}">×</button></div>`).join("") : `<div class="small" style="opacity:.55">${this._escapeHtml(r.empty)}</div>`, c.querySelectorAll("[data-schedule-delete]").forEach((_) => _.addEventListener("click", () => this._deleteStateSchedule(_.dataset.scheduleDelete)));
   }
   async _addStateSchedule() {
     const r = this.shadowRoot.getElementById("schedule-state")?.value, n = this.shadowRoot.getElementById("schedule-time")?.value, a = this.shadowRoot.getElementById("schedule-days")?.value || "all";
@@ -8120,8 +8334,8 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
     if (r === "mode_changed") return this._t("log_action_mode_changed");
     if (r === "audit_log_cleared") return this._t("history_refresh");
     if (r.includes("pin_updated") || r.includes("access_pin_updated")) return this._t("update_pin");
-    const _ = `log_action_${String(r).toLowerCase()}`, f = this._t(_);
-    if (f !== _) return f;
+    const f = `log_action_${String(r).toLowerCase()}`, _ = this._t(f);
+    if (_ !== f) return _;
     let h = a;
     const v = {
       "Administrador de Argus": this._t("role_argus_admin"),
@@ -8182,13 +8396,13 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
         }
         const s = n.closest(".panel"), c = s && s.getAttribute("data-size") === "S";
         n.innerHTML = a.slice(0, c ? 1 : 30).map((u) => {
-          const p = String(u.action || ""), g = String(u.detail || ""), _ = String(u.user || u.actor || ""), f = u.ts ? new Date(u.ts) : null;
+          const p = String(u.action || ""), g = String(u.detail || ""), f = String(u.user || u.actor || ""), _ = u.ts ? new Date(u.ts) : null;
           let h = "";
-          if (f && !Number.isNaN(f.getTime()))
+          if (_ && !Number.isNaN(_.getTime()))
             try {
-              h = f.toLocaleString(this._getLocale());
+              h = _.toLocaleString(this._getLocale());
             } catch {
-              h = f.toISOString();
+              h = _.toISOString();
             }
           const v = this._localizeActivityDetail(p, g);
           let P = '<div class="glass-orb"></div>', R = "", I = p, A = "";
@@ -8211,7 +8425,7 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
             I = w !== y ? w : this._t(p) !== p ? this._t(p) : p;
           }
           let S = "";
-          return _ && _ !== "Argus" && _ !== "system" ? S = `👤 ${_}` : p.toLowerCase().includes("homekit") || v.toLowerCase().includes("homekit") ? S = "🍎 HomeKit" : S = "🤖 Argus", `<div class="log-item ${A}">
+          return f && f !== "Argus" && f !== "system" ? S = `👤 ${f}` : p.toLowerCase().includes("homekit") || v.toLowerCase().includes("homekit") ? S = "🍎 HomeKit" : S = "🤖 Argus", `<div class="log-item ${A}">
           <div class="log-icon">${P}</div>
           <div class="log-body">
             <div class="log-title">
@@ -8256,8 +8470,8 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
     u.forEach((g) => {
       g.dataset.mode === this._mode ? (g.classList.add("active"), p = g) : g.classList.remove("active");
     }), c && p && (c.className = `tab-bubble bubble-${this._mode}`, requestAnimationFrame(() => {
-      const g = p.offsetLeft, _ = p.offsetWidth;
-      c.style.transform = `translate3d(${g}px, 0, 0) scaleX(${_ / 100})`, c.style.width = "100px", c.style.left = "0";
+      const g = p.offsetLeft, f = p.offsetWidth;
+      c.style.transform = `translate3d(${g}px, 0, 0) scaleX(${f / 100})`, c.style.width = "100px", c.style.left = "0";
     }));
   }
   _currentModeConfig() {
@@ -8306,14 +8520,14 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
   _renderModeView() {
     const r = this._currentModeConfig(), n = r.sensors || [], a = r.bypassed_sensors || [], s = r.sirens || [], c = r.external_panels || [], u = this.shadowRoot.getElementById("mode-view");
     u && (u.classList.remove("bounce-in"), u.offsetWidth, u.classList.add("bounce-in"));
-    const p = !this._isAdmin, g = this._dashboard?.entries || [], _ = this._modeEntryId || g[0]?.entity_id || "", f = g.length > 1 ? `
+    const p = !this._isAdmin, g = this._dashboard?.entries || [], f = this._modeEntryId || g[0]?.entity_id || "", _ = g.length > 1 ? `
         <div class="mode-section-card">
           <div class="mode-section-title">${this._t("alarm_instance")}</div>
-          <select id="mode-instance-select" style="width:100%; padding:10px; border-radius:10px; background:rgba(255,255,255,0.05); color:inherit; border:1px solid rgba(255,255,255,0.1)">${g.map((h) => `<option value="${this._escapeHtml(h.entity_id)}" ${h.entity_id === _ ? "selected" : ""}>${this._escapeHtml(h.title || h.entity_id)}</option>`).join("")}</select>
+          <select id="mode-instance-select" style="width:100%; padding:10px; border-radius:10px; background:rgba(255,255,255,0.05); color:inherit; border:1px solid rgba(255,255,255,0.1)">${g.map((h) => `<option value="${this._escapeHtml(h.entity_id)}" ${h.entity_id === f ? "selected" : ""}>${this._escapeHtml(h.title || h.entity_id)}</option>`).join("")}</select>
         </div>` : "";
     u.innerHTML = `
       <div class="mode-grid-layout">
-        ${f}
+        ${_}
 
         <div class="mode-section-card">
           <div class="mode-section-title">🛡️ ${this._t("sensor_section")}</div>
@@ -8392,25 +8606,25 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
   }
   _chip(r, n) {
     const a = this._hass?.states?.[r]?.state, s = ["on", "unlocked", "open", "recording", "active", "motion"].includes(a), c = this._hass?.states?.[r]?.attributes?.friendly_name || r, u = !this._isAdmin, p = n === "sensor" || n === "bypass" ? `<span class="pill-dot ${s ? "open" : ""}" title="${a}"></span>` : "";
-    let g = "", _ = "";
+    let g = "", f = "";
     if (n === "sensor" || n === "bypass" || n === "entry") {
       const v = this._hass?.states?.[r], P = this._getDevicePower(r, v);
-      if (g = `<span class="pill-status">${s ? this._t("status_open") : this._t("status_closed")}</span>`, P.mains && (_ += '<span class="pill-power">🔌 AC</span>'), P.battery !== null) {
+      if (g = `<span class="pill-status">${s ? this._t("status_open") : this._t("status_closed")}</span>`, P.mains && (f += '<span class="pill-power">🔌 AC</span>'), P.battery !== null) {
         const R = P.battery === 0, I = P.battery <= 10 && !R, A = R ? "🔋 ❌" : `🔋 ${P.battery}%`;
-        _ += `<span class="pill-power ${R ? "dead" : I ? "low" : ""}">${A}</span>`;
+        f += `<span class="pill-power ${R ? "dead" : I ? "low" : ""}">${A}</span>`;
       }
     }
-    const f = this._dashboard?.entries?.some(
+    const _ = this._dashboard?.entries?.some(
       (v) => this._hass?.states?.[v.entity_id]?.state === "triggered"
     );
     let h = "";
-    return n === "siren" && f && (h = " siren-active"), (n === "sensor" || n === "bypass" || n === "entry") && f && s && (h = " triggered-sensor"), `
+    return n === "siren" && _ && (h = " siren-active"), (n === "sensor" || n === "bypass" || n === "entry") && _ && s && (h = " triggered-sensor"), `
       <span class="sensor-pill${h}">
         ${p}
         <span class="pill-content">
           <span class="pill-name">${this._escapeHtml(c)}</span>
           ${g}
-          ${_}
+          ${f}
         </span>
         ${u ? "" : `<button data-remove="${n}:${r}" style="background:none; border:none; color:inherit; opacity:0.5; padding:0 4px; cursor:pointer; flex-shrink:0;">✕</button>`}
       </span>
@@ -8427,7 +8641,7 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
     n && (r.require_closed = n.checked), n?.checked ? r.open_sensors_policy = "block" : a?.checked ? r.open_sensors_policy = "pending" : r.open_sensors_policy = "allow", s && (r.arming_time = s.value ? parseInt(s.value) : 0), c && (r.entry_delay = c.value ? parseInt(c.value) : 0), u && (r.mqtt_enabled = u.checked), r.light_siren_settings = {}, this.shadowRoot.querySelectorAll("[data-light-siren-color]").forEach((p) => {
       const g = p.value || "#ff0000";
       r.light_siren_settings[p.dataset.lightSirenColor] = {
-        rgb_color: [1, 3, 5].map((_) => parseInt(g.slice(_, _ + 2), 16)),
+        rgb_color: [1, 3, 5].map((f) => parseInt(g.slice(f, f + 2), 16)),
         gentle_flash: !!this.shadowRoot.querySelector(`[data-light-siren-flash="${CSS.escape(p.dataset.lightSirenColor)}"]`)?.checked
       };
     }), this._runWithPin(async () => {
@@ -8443,8 +8657,8 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
         }), g && (g.textContent = this._t("saved"), g.className = "status ok show"), setTimeout(() => {
           g && (g.textContent = "", g.className = "status");
         }, 3e3);
-      } catch (_) {
-        g && (g.textContent = "✗ " + (_.message || this._t("generic_error").replace(": {error}", "")), g.className = "status err show");
+      } catch (f) {
+        g && (g.textContent = "✗ " + (f.message || this._t("generic_error").replace(": {error}", "")), g.className = "status err show");
       }
     });
   }
@@ -8462,10 +8676,10 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
             try {
               let p = [];
               for (const g of this._dashboard.entries) {
-                const _ = await this._hass.callWS({ type: "search/related", item_type: "entity", item_id: g.entity_id });
-                if (_ && (_.automation && p.push(..._.automation), _.device && _.device.length))
-                  for (const f of _.device) {
-                    const h = await this._hass.callWS({ type: "search/related", item_type: "device", item_id: f });
+                const f = await this._hass.callWS({ type: "search/related", item_type: "entity", item_id: g.entity_id });
+                if (f && (f.automation && p.push(...f.automation), f.device && f.device.length))
+                  for (const _ of f.device) {
+                    const h = await this._hass.callWS({ type: "search/related", item_type: "device", item_id: _ });
                     h && h.automation && p.push(...h.automation);
                   }
               }
@@ -8490,12 +8704,12 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
         }
         const s = r.closest(".panel"), c = s && s.getAttribute("data-size") === "S", u = a.slice(0, c ? 1 : 15);
         r.innerHTML = `<div style="display:flex;flex-direction:column;gap:12px;max-height:300px;overflow-y:auto;padding-right:8px">${u.map((p) => {
-          const g = p.attributes?.id || p.entity_id.replace("automation.", ""), _ = p.attributes?.last_triggered ? new Date(p.attributes.last_triggered).toLocaleString(this._getLocale()) : this._t("never_triggered"), f = c ? "" : `<div class="small" style="opacity:0.7;margin-top:4px">${this._escapeHtml(_)}</div>`;
+          const g = p.attributes?.id || p.entity_id.replace("automation.", ""), f = p.attributes?.last_triggered ? new Date(p.attributes.last_triggered).toLocaleString(this._getLocale()) : this._t("never_triggered"), _ = c ? "" : `<div class="small" style="opacity:0.7;margin-top:4px">${this._escapeHtml(f)}</div>`;
           return `
         <div class="list-item-card">
           <div>
             <div style="font-weight:700">${this._escapeHtml(p.attributes?.friendly_name || p.entity_id)}</div>
-            ${f}
+            ${_}
           </div>
           <button class="ghost" style="padding:6px 12px;background:rgba(255,255,255,0.08);border-radius:8px" data-edit-auto="${this._escapeHtml(g)}">✏️</button>
         </div>`;
@@ -8562,18 +8776,18 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
                 ${p.access_pin_configured ? '<span class="user-badge" style="background:rgba(0,122,255,0.12);color:#007aff">🔒 PIN</span>' : ""}
               </div>
             </div>`;
-        const _ = p.expiration_date && new Date(p.expiration_date) < /* @__PURE__ */ new Date();
-        let f = "";
+        const f = p.expiration_date && new Date(p.expiration_date) < /* @__PURE__ */ new Date();
+        let _ = "";
         if (p.expiration_date) {
           const I = new Date(p.expiration_date);
           if (!isNaN(I.getTime()))
             try {
-              f = this._formatDateTime(I);
+              _ = this._formatDateTime(I);
             } catch {
-              f = I.toISOString();
+              _ = I.toISOString();
             }
         }
-        const h = p.expiration_date ? _ ? `<span class="user-badge admin" style="background:rgba(229,57,53,0.12);color:#e53935;margin-left:5px">❌ ${this._escapeHtml(this._t("expired"))} (${this._escapeHtml(f)})</span>` : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">⏳ ${this._escapeHtml(this._t("active_until"))}: ${this._escapeHtml(f)}</span>` : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">♾️ ${this._t("exp_indefinite")}</span>`, v = p.ha_user_id ? (() => {
+        const h = p.expiration_date ? f ? `<span class="user-badge admin" style="background:rgba(229,57,53,0.12);color:#e53935;margin-left:5px">❌ ${this._escapeHtml(this._t("expired"))} (${this._escapeHtml(_)})</span>` : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">⏳ ${this._escapeHtml(this._t("active_until"))}: ${this._escapeHtml(_)}</span>` : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">♾️ ${this._t("exp_indefinite")}</span>`, v = p.ha_user_id ? (() => {
           const I = (this._haUsersList || []).find((A) => A.id === p.ha_user_id);
           return I ? this._format("ha_account_linked", { name: I.name }) : this._t("ha_account_unavailable");
         })() : this._t("ha_account_unavailable"), P = p.role === "admin" ? "⭐ " + this._escapeHtml(this._t("role_argus_admin")) : "👤 " + this._escapeHtml(this._t("role_argus_standard")), R = p.access_pin_configured ? '<span class="user-badge" style="background:rgba(0,122,255,0.12);color:#007aff">🔒 PIN</span>' : `<span class="user-badge" style="opacity:0.55">🔓 ${this._escapeHtml(this._t("user_no_pin"))}</span>`;
@@ -8615,18 +8829,18 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
               <button class="secondary" style="width:100%;padding:10px;font-size:13px;border-radius:12px;cursor:pointer;border:1px dashed rgba(255,255,255,0.18);background:rgba(255,255,255,0.03)" id="btn-add-manual-user">➕ ${this._escapeHtml(this._t("modal_add_user"))}</button>
             </div>`), this._isAdmin && (r.querySelectorAll("[data-user-edit]").forEach((p) => {
         p.addEventListener("click", async () => {
-          const g = Number(p.dataset.userEdit), _ = this._users[g];
-          if (!_) return;
-          const f = await this._showArgusInputModal({
+          const g = Number(p.dataset.userEdit), f = this._users[g];
+          if (!f) return;
+          const _ = await this._showArgusInputModal({
             title: this._t("modal_edit_name"),
             label: this._t("modal_name_label"),
-            placeholder: _.name,
-            initialValue: _.name,
+            placeholder: f.name,
+            initialValue: f.name,
             type: "text"
           });
-          f === null || f.trim() === "" || this._runWithPin(async () => {
+          _ === null || _.trim() === "" || this._runWithPin(async () => {
             try {
-              const h = this._users.map((P, R) => R === g ? { ...P, name: f.trim() } : P), v = await this._send("argus/save_ui", { users: h });
+              const h = this._users.map((P, R) => R === g ? { ...P, name: _.trim() } : P), v = await this._send("argus/save_ui", { users: h });
               v && v.ui ? (this._ui = v.ui, this._users = v.ui.users || h) : this._users = h, this._renderUsers();
             } catch (h) {
               this._showArgusConfirmModal(h.message || this._format("generic_error", { error: h }), { confirmLabel: "OK" });
@@ -8635,18 +8849,18 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
         });
       }), r.querySelectorAll("[data-user-pin]").forEach((p) => {
         p.addEventListener("click", async () => {
-          const g = Number(p.dataset.userPin), _ = this._users[g];
-          if (!_) return;
-          const f = await this._showArgusInputModal({
-            title: `${this._t("modal_pin_title")} — ${_.name}`,
+          const g = Number(p.dataset.userPin), f = this._users[g];
+          if (!f) return;
+          const _ = await this._showArgusInputModal({
+            title: `${this._t("modal_pin_title")} — ${f.name}`,
             label: this._t("modal_pin_help"),
             placeholder: "••••",
             type: "password",
             numeric: !0
           });
-          f !== null && this._runWithPin(async () => {
+          _ !== null && this._runWithPin(async () => {
             try {
-              await this._send("argus/save_user_access_pin", { argus_user_id: _.id, pin: f.trim() });
+              await this._send("argus/save_user_access_pin", { argus_user_id: f.id, pin: _.trim() });
               const h = await this._send("argus/dashboard");
               h && h.users && (this._users = h.users), this._renderUsers();
             } catch (h) {
@@ -8669,28 +8883,28 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
               role: "standard",
               enabled: !0,
               permissions: { view_status: !0, arm: !0, disarm: !0, view_history: !1 }
-            }, _ = [...this._users || [], g], f = await this._send("argus/save_ui", { users: _ });
-            f && f.ui ? (this._ui = f.ui, this._users = f.ui.users || _) : this._users = _, this._renderUsers();
+            }, f = [...this._users || [], g], _ = await this._send("argus/save_ui", { users: f });
+            _ && _.ui ? (this._ui = _.ui, this._users = _.ui.users || f) : this._users = f, this._renderUsers();
           } catch (g) {
             this._showArgusConfirmModal(g.message || this._format("generic_error", { error: g }), { confirmLabel: "OK" });
           }
         });
       }), r.querySelectorAll("[data-user-role-toggle]").forEach((p) => {
         p.addEventListener("click", async () => {
-          const g = Number(p.dataset.userRoleToggle), _ = this._users[g];
-          if (!_) return;
-          const f = await this._showArgusInputModal({
+          const g = Number(p.dataset.userRoleToggle), f = this._users[g];
+          if (!f) return;
+          const _ = await this._showArgusInputModal({
             title: this._t("user_role_action") || "Cambiar Rol",
             label: this._t("user_role_label") || "Selecciona el rol",
-            initialValue: _.role === "admin" ? "admin" : "standard",
+            initialValue: f.role === "admin" ? "admin" : "standard",
             type: "select",
             options: [
               { value: "admin", label: this._t("role_argus_admin") || "Administrador de Argus" },
               { value: "standard", label: this._t("role_argus_standard") || "Usuario estándar" }
             ]
           });
-          !f || f === _.role || this._runWithPin(async () => {
-            const h = this._users.map((v, P) => P === g ? { ...v, role: f } : v);
+          !_ || _ === f.role || this._runWithPin(async () => {
+            const h = this._users.map((v, P) => P === g ? { ...v, role: _ } : v);
             try {
               const v = await this._send("argus/save_ui", { users: h });
               v && v.ui ? (this._ui = v.ui, this._users = v.ui.users || h) : this._users = h, this._renderUsers();
@@ -8701,11 +8915,11 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
         });
       }), r.querySelectorAll("[data-user-del]").forEach(
         (p) => p.addEventListener("click", async () => {
-          const g = Number(p.dataset.userDel), _ = this._users[g];
-          if (!_) return;
-          const f = this._format("delete_user_confirm", { name: _.name || "User" });
+          const g = Number(p.dataset.userDel), f = this._users[g];
+          if (!f) return;
+          const _ = this._format("delete_user_confirm", { name: f.name || "User" });
           await this._showArgusConfirmModal(
-            this._t("modal_delete_confirm") || f,
+            this._t("modal_delete_confirm") || _,
             { confirmLabel: this._t("clear") || "Delete", confirmStyle: "background:#e53935;color:white;border:none" }
           ) && this._runWithPin(async () => {
             const v = [...this._users];
@@ -8720,11 +8934,11 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
         })
       ), r.querySelectorAll("[data-user-perms]").forEach((p) => {
         p.addEventListener("click", async () => {
-          const g = Number(p.dataset.userPerms), _ = this._users[g];
-          if (!_) return;
-          const f = await this._showArgusPermissionsModal(_);
-          f !== null && this._runWithPin(async () => {
-            const h = this._users.map((v, P) => P === g ? { ...v, permissions: { ...v.permissions, ...f } } : v);
+          const g = Number(p.dataset.userPerms), f = this._users[g];
+          if (!f) return;
+          const _ = await this._showArgusPermissionsModal(f);
+          _ !== null && this._runWithPin(async () => {
+            const h = this._users.map((v, P) => P === g ? { ...v, permissions: { ...v.permissions, ..._ } } : v);
             try {
               const v = await this._send("argus/save_ui", { users: h });
               v && v.ui ? (this._ui = v.ui, this._users = v.ui.users || h) : this._users = h, this._renderUsers();
@@ -8750,8 +8964,8 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
         continue;
       }
       if (!c.startsWith("sensor.")) continue;
-      const p = String(u.device_class || "").toLowerCase(), g = String(u.unit_of_measurement || u.native_unit_of_measurement || "").toLowerCase(), _ = Number(s.state);
-      Number.isFinite(_) && (p === "temperature" || ["°c", "°f", "c", "f"].includes(g)) && n.push({ entity_id: c, name: `🌡️ ${u.friendly_name || c}` });
+      const p = String(u.device_class || "").toLowerCase(), g = String(u.unit_of_measurement || u.native_unit_of_measurement || "").toLowerCase(), f = Number(s.state);
+      Number.isFinite(f) && (p === "temperature" || ["°c", "°f", "c", "f"].includes(g)) && n.push({ entity_id: c, name: `🌡️ ${u.friendly_name || c}` });
     }
     const a = /* @__PURE__ */ new Set();
     r.innerHTML = n.filter((s) => a.has(s.entity_id) ? !1 : (a.add(s.entity_id), !0)).map((s) => `<option value="${this._escapeHtml(s.entity_id)}">${this._escapeHtml(s.name)}</option>`).join("");
@@ -8980,10 +9194,10 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
         this._panelBgFile = p;
         const g = this.shadowRoot.getElementById("panel-bg-url-input");
         g && (g.value = p);
-        const _ = this.shadowRoot.getElementById("bg-mode-select-standalone");
-        _ && (_.value = "photo"), this._backgroundMode = "photo", this._updateBgFieldsVisibility(), this._renderEntries(), this._savePersonalization();
-        const f = this.shadowRoot.getElementById("bg-file-help");
-        f && (f.textContent = this._t("bg_panel_selected_from_history"));
+        const f = this.shadowRoot.getElementById("bg-mode-select-standalone");
+        f && (f.value = "photo"), this._backgroundMode = "photo", this._updateBgFieldsVisibility(), this._renderEntries(), this._savePersonalization();
+        const _ = this.shadowRoot.getElementById("bg-file-help");
+        _ && (_.textContent = this._t("bg_panel_selected_from_history"));
       });
     }), r.querySelectorAll(".use-for-hub").forEach((u) => {
       u.addEventListener("click", () => {
@@ -8991,10 +9205,10 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
         this._hubBgFile = p;
         const g = this.shadowRoot.getElementById("hub-bg-url-input");
         g && (g.value = p);
-        const _ = this.shadowRoot.getElementById("hub-bg-mode-select");
-        _ && (_.value = "image"), this._hubBgMode = "image", this._updateBgFieldsVisibility(), this._updateCanvasBackground(), this._savePersonalization();
-        const f = this.shadowRoot.getElementById("hub-file-help");
-        f && (f.textContent = this._t("bg_hub_selected_from_history"));
+        const f = this.shadowRoot.getElementById("hub-bg-mode-select");
+        f && (f.value = "image"), this._hubBgMode = "image", this._updateBgFieldsVisibility(), this._updateCanvasBackground(), this._savePersonalization();
+        const _ = this.shadowRoot.getElementById("hub-file-help");
+        _ && (_.textContent = this._t("bg_hub_selected_from_history"));
       });
     });
   }
@@ -9114,9 +9328,9 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
           entry_id: n.entry_id,
           ...g ? { code: g } : {}
         }), await this._load(), !0;
-      } catch (_) {
-        const f = this.shadowRoot.getElementById("pin-error");
-        return f ? f.textContent = `❌ ${this._format("panic_stop_error", { error: "" }).replace(/:\s*$/, "")}` : alert(this._format("panic_stop_error", { error: _?.message || _ })), !1;
+      } catch (f) {
+        const _ = this.shadowRoot.getElementById("pin-error");
+        return _ ? _.textContent = `❌ ${this._format("panic_stop_error", { error: "" }).replace(/:\s*$/, "")}` : alert(this._format("panic_stop_error", { error: f?.message || f })), !1;
       }
     };
     n.pin_configured === !0 || (this._users || []).length > 0 ? this._showPinModal(u) : await u(null);
@@ -9128,7 +9342,7 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
     this._ui = this._ui || {};
     const r = this.shadowRoot.getElementById("bg-mode-select-standalone")?.value || "weather", n = this.shadowRoot.getElementById("temp-source-select-standalone")?.value || "auto", a = this.shadowRoot.getElementById("weather-source-select")?.value || "auto", s = this.shadowRoot.getElementById("argus-clock-format-select")?.value || "auto";
     this._clockFormat = ["auto", "12h", "24h"].includes(s) ? s : "auto";
-    const c = this._normaliseEmergencyNumber(this.shadowRoot.getElementById("emergency-number-input")?.value), u = this.shadowRoot.getElementById("panel-bg-url-input")?.value || "", p = !!this.shadowRoot.getElementById("chk-panel-bg-sound")?.checked, g = this.shadowRoot.getElementById("hub-bg-mode-select")?.value || "default", _ = g === "default" ? "none" : g, f = this._hubBgFile || this.shadowRoot.getElementById("hub-bg-url-input")?.value || "", h = !!this.shadowRoot.getElementById("chk-hub-bg-sound")?.checked, v = {
+    const c = this._normaliseEmergencyNumber(this.shadowRoot.getElementById("emergency-number-input")?.value), u = this.shadowRoot.getElementById("panel-bg-url-input")?.value || "", p = !!this.shadowRoot.getElementById("chk-panel-bg-sound")?.checked, g = this.shadowRoot.getElementById("hub-bg-mode-select")?.value || "default", f = g === "default" ? "none" : g, _ = this._hubBgFile || this.shadowRoot.getElementById("hub-bg-url-input")?.value || "", h = !!this.shadowRoot.getElementById("chk-hub-bg-sound")?.checked, v = {
       home_name: this._homeName,
       temperature_source: n,
       weather_source: a,
@@ -9137,17 +9351,17 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
     };
     this._panicOutputs !== void 0 && (v.panic_outputs = this._panicOutputs);
     const P = (this._ui.users || []).find((A) => A.id === this._currentProfile?.id);
-    v.background_mode = r, v.background_images = this._backgroundImages || [], v.panel_bg_file = u, v.panel_bg_sound = p, v.hub_bg_mode = _, v.hub_bg_file = f, v.hub_bg_sound = h, v.entry_id = this._dashboard?.entry_id || this._dashboard?.entries?.[0]?.entry_id;
+    v.background_mode = r, v.background_images = this._backgroundImages || [], v.panel_bg_file = u, v.panel_bg_sound = p, v.hub_bg_mode = f, v.hub_bg_file = _, v.hub_bg_sound = h, v.entry_id = this._dashboard?.entry_id || this._dashboard?.entries?.[0]?.entry_id;
     let R = "default", I = "";
     if (r === "photo" && u ? (R = "photo", I = u) : r === "weather" ? R = "weather" : r === "none" && (R = "none"), v.theme = {
       background_mode: R,
       background_file: I
     }, P) {
       const A = JSON.parse(JSON.stringify(this._ui.users || [])), S = A.find((y) => y.id === this._currentProfile?.id);
-      S.background_mode = r, S.background_images = this._backgroundImages || [], S.panel_bg_file = u, S.panel_bg_sound = p, S.hub_bg_mode = _, S.hub_bg_file = f, S.hub_bg_sound = h, S.theme = v.theme, v.users = A;
+      S.background_mode = r, S.background_images = this._backgroundImages || [], S.panel_bg_file = u, S.panel_bg_sound = p, S.hub_bg_mode = f, S.hub_bg_file = _, S.hub_bg_sound = h, S.theme = v.theme, v.users = A;
     }
     try {
-      await this._send("argus/save_ui", v), this._currentUserTheme = v.theme, this._backgroundMode = r, this._temperatureSource = n, this._weatherSource = a, this._emergencyNumber = c, this._panelBgFile = u, this._panelBgSound = p, this._hubBgMode = g, this._hubBgFile = f, this._hubBgSound = h, this._updateTheme(), this._ui = this._ui || {}, P ? this._ui.users = v.users : (this._ui.background_mode = r, this._ui.background_images = this._backgroundImages || [], this._ui.panel_bg_file = u, this._ui.panel_bg_sound = p, this._ui.hub_bg_mode = _, this._ui.hub_bg_file = f, this._ui.hub_bg_sound = h), this._ui.temperature_source = n, this._ui.weather_source = a, this._ui.clock_format = this._clockFormat, this._ui.emergency_number = c, this._ui.panic_outputs = this._panicOutputs, this._configureEmergencyCall(), this._ui.hub_bg_file = f, this._ui.hub_bg_sound = h, this._renderEntries(), this._updateCanvasBackground();
+      await this._send("argus/save_ui", v), this._currentUserTheme = v.theme, this._backgroundMode = r, this._temperatureSource = n, this._weatherSource = a, this._emergencyNumber = c, this._panelBgFile = u, this._panelBgSound = p, this._hubBgMode = g, this._hubBgFile = _, this._hubBgSound = h, this._updateTheme(), this._ui = this._ui || {}, P ? this._ui.users = v.users : (this._ui.background_mode = r, this._ui.background_images = this._backgroundImages || [], this._ui.panel_bg_file = u, this._ui.panel_bg_sound = p, this._ui.hub_bg_mode = f, this._ui.hub_bg_file = _, this._ui.hub_bg_sound = h), this._ui.temperature_source = n, this._ui.weather_source = a, this._ui.clock_format = this._clockFormat, this._ui.emergency_number = c, this._ui.panic_outputs = this._panicOutputs, this._configureEmergencyCall(), this._ui.hub_bg_file = _, this._ui.hub_bg_sound = h, this._renderEntries(), this._updateCanvasBackground();
       const A = this.shadowRoot.getElementById("btn-save-personalization-standalone");
       if (A) {
         const S = A.textContent;
@@ -9219,14 +9433,14 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
   /* ── Liquid-glass input modal (replaces window.prompt) ───────────── */
   _showArgusInputModal({ title: r = "", label: n = "", placeholder: a = "", initialValue: s = "", type: c = "text", numeric: u = !1, options: p = null } = {}) {
     return new Promise((g) => {
-      const _ = `_aim_${Date.now()}`, f = document.createElement("div");
-      f.id = _, f.setAttribute("role", "dialog"), f.setAttribute("aria-modal", "true"), f.style.cssText = [
+      const f = `_aim_${Date.now()}`, _ = document.createElement("div");
+      _.id = f, _.setAttribute("role", "dialog"), _.setAttribute("aria-modal", "true"), _.style.cssText = [
         "position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;margin:0;padding:0;box-sizing:border-box;z-index:999999999;display:flex;align-items:center;justify-content:center",
         "background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)",
         "animation:argus-modal-in .18s ease"
       ].join(";");
       const h = n.replace(/'/g, "&#39;"), v = r.replace(/'/g, "&#39;"), P = a.replace(/'/g, "&#39;"), R = this._t("modal_cancel") || "Cancelar", I = this._t("modal_save") || "Guardar";
-      f.innerHTML = `
+      _.innerHTML = `
         <div style="background:rgba(30,30,45,0.92);border:1px solid rgba(255,255,255,0.18);border-radius:20px;
           padding:28px 24px 22px;width:min(380px,90vw);box-shadow:0 24px 64px rgba(0,0,0,0.7);
           display:flex;flex-direction:column;gap:14px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)">
@@ -9248,16 +9462,16 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
               background:linear-gradient(135deg,#4a90d9,#7b5ea7);color:#fff;font-size:14px;font-weight:600;
               cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(74,144,217,0.35)">${I}</button>
           </div>
-        </div>`, (document.body || this.shadowRoot).appendChild(f);
-      const S = f.querySelector("#aim-inp"), y = f.querySelector("#aim-ok"), w = f.querySelector("#aim-cancel");
+        </div>`, (document.body || this.shadowRoot).appendChild(_);
+      const S = _.querySelector("#aim-inp"), y = _.querySelector("#aim-ok"), w = _.querySelector("#aim-cancel");
       setTimeout(() => S?.focus(), 60), S?.addEventListener("focus", () => S.style.borderColor = "rgba(74,144,217,0.8)"), S?.addEventListener("blur", () => S.style.borderColor = "rgba(255,255,255,0.15)");
       const b = (k) => {
-        f.remove(), g(k);
+        _.remove(), g(k);
       };
       y.addEventListener("click", () => b(S.value)), w.addEventListener("click", () => b(null)), S.addEventListener("keydown", (k) => {
         k.key === "Enter" && (k.preventDefault(), b(S.value)), k.key === "Escape" && (k.preventDefault(), b(null));
-      }), f.addEventListener("click", (k) => {
-        k.target === f && b(null);
+      }), _.addEventListener("click", (k) => {
+        k.target === _ && b(null);
       });
     });
   }
@@ -9312,7 +9526,7 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
               cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(74,144,217,0.35)">${c}</button>
           </div>
         </div>`, (document.body || this.shadowRoot).appendChild(a);
-      const g = a.querySelector("#apm-ok"), _ = a.querySelector("#apm-cancel"), f = (h) => {
+      const g = a.querySelector("#apm-ok"), f = a.querySelector("#apm-cancel"), _ = (h) => {
         a.remove(), n(h);
       };
       g.addEventListener("click", () => {
@@ -9324,9 +9538,9 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
           change_pin: a.querySelector("#chk-perm-change-pin").checked,
           change_master_pin: a.querySelector("#chk-perm-change-master-pin").checked
         };
-        f(h);
-      }), _.addEventListener("click", () => f(null)), a.addEventListener("click", (h) => {
-        h.target === a && f(null);
+        _(h);
+      }), f.addEventListener("click", () => _(null)), a.addEventListener("click", (h) => {
+        h.target === a && _(null);
       });
     });
   }
@@ -9339,7 +9553,7 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
         "background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)",
         "animation:argus-modal-in .18s ease"
       ].join(";");
-      const p = n || this._t("modal_confirm") || "Confirmar", g = s || this._t("modal_cancel") || "Cancelar", _ = a || "background:linear-gradient(135deg,#4a90d9,#7b5ea7);border:none;box-shadow:0 4px 14px rgba(74,144,217,0.35)";
+      const p = n || this._t("modal_confirm") || "Confirmar", g = s || this._t("modal_cancel") || "Cancelar", f = a || "background:linear-gradient(135deg,#4a90d9,#7b5ea7);border:none;box-shadow:0 4px 14px rgba(74,144,217,0.35)";
       u.innerHTML = `
         <div style="background:rgba(30,30,45,0.92);border:1px solid rgba(255,255,255,0.18);border-radius:20px;
           padding:28px 24px 22px;width:min(360px,90vw);box-shadow:0 24px 64px rgba(0,0,0,0.7);
@@ -9349,7 +9563,7 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
             <button id="acm-cancel" style="flex:1;padding:11px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);
               background:rgba(255,255,255,0.06);color:#fff;font-size:14px;cursor:pointer;font-family:inherit">${g}</button>
             <button id="acm-ok" style="flex:1;padding:11px;border-radius:12px;color:#fff;font-size:14px;font-weight:600;
-              cursor:pointer;font-family:inherit;${_}">${p}</button>
+              cursor:pointer;font-family:inherit;${f}">${p}</button>
           </div>
         </div>`, (document.body || this.shadowRoot).appendChild(u);
       const h = (v) => {
@@ -9484,13 +9698,13 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
           return !1;
         }).filter((p) => !s || [p.entity_id, p.name, p.area, p.entity_id.split(".")[1]].filter(Boolean).join(" ").toLowerCase().includes(s));
         n.innerHTML = u.map((p) => {
-          const g = this._hass?.states?.[p.entity_id], _ = this._deviceFacts(p.entity_id, g, !0);
+          const g = this._hass?.states?.[p.entity_id], f = this._deviceFacts(p.entity_id, g, !0);
           return `<label class="pick-row">
           <input type="checkbox" data-entity="${this._escapeHtml(p.entity_id)}" ${this._selected.includes(p.entity_id) ? "checked" : ""}>
           <div>
             <div class="pick-row-name">${this._escapeHtml(p.name || p.entity_id)}</div>
             <div class="pick-row-meta">${this._escapeHtml(p.entity_id)}${p.area ? " · " + this._escapeHtml(p.area) : ""}</div>
-            <div class="device-facts">${_.map((f) => `<span class="device-fact ${f.className}">${this._escapeHtml(f.text)}</span>`).join("")}</div>
+            <div class="device-facts">${f.map((_) => `<span class="device-fact ${_.className}">${this._escapeHtml(_.text)}</span>`).join("")}</div>
           </div>
         </label>`;
         }).join("") || `<div class="small" style="padding:10px">${this._t("no_results")}</div>`;
@@ -9541,7 +9755,7 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
     }, p = c[n];
     if (!p) return;
     if (this._hass?.user?.name || this._t("user_default"), n === "disarm") {
-      const f = a.pin_configured === !0, h = a.user_pin_configured === !0, v = async (P) => {
+      const _ = a.pin_configured === !0, h = a.user_pin_configured === !0, v = async (P) => {
         try {
           return await this._send("argus/perform_alarm_action", {
             action: "disarm",
@@ -9555,15 +9769,15 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
           return I && (I.textContent = "❌ PIN incorrecto o error al desarmar"), !1;
         }
       };
-      f || h ? this._showPinModal(async (P) => await v(P)) : await v(null);
+      _ || h ? this._showPinModal(async (P) => await v(P)) : await v(null);
       return;
     }
-    const g = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id, _ = this._ui?.modes?.__by_entity__?.[g]?.[n] || this._ui?.modes?.[n] || {};
-    if (_.require_closed) {
-      const f = _.sensors || [], h = new Set(
-        _.bypassed_sensors || _.bypassedSensors || []
+    const g = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id, f = this._ui?.modes?.__by_entity__?.[g]?.[n] || this._ui?.modes?.[n] || {};
+    if (f.require_closed) {
+      const _ = f.sensors || [], h = new Set(
+        f.bypassed_sensors || f.bypassedSensors || []
       ), v = [];
-      for (const P of f) {
+      for (const P of _) {
         if (h.has(P)) continue;
         const R = this._hass.states[P]?.state;
         ["on", "open", "unlocked", "active", "motion", "recording"].includes(R) && v.push(this._hass.states[P]?.attributes?.friendly_name || P);
@@ -9578,11 +9792,11 @@ gl_FragColor=vec4(col,alpha);}`, u = (b, k) => {
         action: p.replace("alarm_", ""),
         entry_id: a.entry_id
       });
-      const f = u[n] || n;
+      const _ = u[n] || n;
       setTimeout(() => this._load(), 800);
-    } catch (f) {
-      const h = f?.message || (typeof f == "string" ? f : JSON.stringify(f));
-      this._showArmBlockedAlert([], h), console.error("Argus action failed", f);
+    } catch (_) {
+      const h = _?.message || (typeof _ == "string" ? _ : JSON.stringify(_));
+      this._showArmBlockedAlert([], h), console.error("Argus action failed", _);
     }
   }
   _showArmBlockedAlert(r = [], n = "") {
@@ -9685,7 +9899,7 @@ ${n}`);
         <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
           <label style="font-size: 11px; font-weight: 700; opacity: 0.7; display: flex; align-items: center; gap: 5px;">${this._t("lang_selector_lbl") || "⚙️ Idioma / Language"}</label>
           <select id="dropdown-lang-select" class="glass-control" style="width: 100%; height: 36px; border-radius: 10px; padding: 0 10px; font-size: 12px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid var(--v2066-border); color: var(--v2066-text); outline: none; cursor: pointer;">
-            ${Do.map((v) => `<option value="${v.code}" ${v.code === c ? "selected" : ""}>${v.flag} ${v.code === "auto" ? this._t("use_ha_language") || "Automático (HA)" : v.label}</option>`).join("")}
+            ${$o.map((v) => `<option value="${v.code}" ${v.code === c ? "selected" : ""}>${v.flag} ${v.code === "auto" ? this._t("use_ha_language") || "Automático (HA)" : v.label}</option>`).join("")}
           </select>
         </div>
 
@@ -9724,19 +9938,19 @@ ${n}`);
         </button>
       </div>
     `;
-    const _ = r.querySelector(".hero-profile-pill"), f = r.querySelector("#profile-dropdown");
-    if (_ && f) {
-      _.addEventListener("click", (P) => {
+    const f = r.querySelector(".hero-profile-pill"), _ = r.querySelector("#profile-dropdown");
+    if (f && _) {
+      f.addEventListener("click", (P) => {
         P.stopPropagation();
-        const R = f.style.display === "flex";
-        f.style.display = R ? "none" : "flex";
+        const R = _.style.display === "flex";
+        _.style.display = R ? "none" : "flex";
       });
       const v = (P) => {
-        (P.composedPath ? P.composedPath() : [P.target]).some((A) => A === r || A.closest && A.closest?.("#profile-dropdown")) || (f.style.display = "none", document.removeEventListener("click", v, !0));
+        (P.composedPath ? P.composedPath() : [P.target]).some((A) => A === r || A.closest && A.closest?.("#profile-dropdown")) || (_.style.display = "none", document.removeEventListener("click", v, !0));
       };
-      _.addEventListener("click", () => {
+      f.addEventListener("click", () => {
         setTimeout(() => {
-          f.style.display === "flex" && document.addEventListener("click", v, !0);
+          _.style.display === "flex" && document.addEventListener("click", v, !0);
         }, 10);
       });
     }
@@ -9744,7 +9958,7 @@ ${n}`);
     h && h.addEventListener("change", (v) => {
       this._setLanguage(v.target.value);
     }), r.querySelector("#btn-change-profile-picture")?.addEventListener("click", (v) => {
-      v.stopPropagation(), f.style.display = "none";
+      v.stopPropagation(), _.style.display = "none";
       try {
         window.history.pushState(null, "", "/config/person"), window.dispatchEvent(new CustomEvent("location-changed"));
       } catch {
@@ -9753,7 +9967,7 @@ ${n}`);
     }), r.querySelector("#btn-dropdown-switch-user")?.addEventListener("click", (v) => {
       v.stopPropagation(), this._switchProfile();
     }), r.querySelector("#btn-dropdown-change-access-pin")?.addEventListener("click", (v) => {
-      v.stopPropagation(), f.style.display = "none";
+      v.stopPropagation(), _.style.display = "none";
       const P = this.shadowRoot.getElementById("w-access");
       P && (P.scrollIntoView({ behavior: "smooth", block: "center" }), P.style.transition = "box-shadow 0.5s ease-in-out", P.style.boxShadow = "0 0 30px rgba(0, 122, 255, 0.6)", setTimeout(() => {
         P.style.boxShadow = "";
@@ -9767,7 +9981,7 @@ ${n}`);
         }
       }));
     }), r.querySelector("#btn-dropdown-remove-access-pin")?.addEventListener("click", (v) => {
-      v.stopPropagation(), f.style.display = "none";
+      v.stopPropagation(), _.style.display = "none";
       const P = this.shadowRoot.getElementById("w-access");
       P && (P.scrollIntoView({ behavior: "smooth", block: "center" }), P.style.transition = "box-shadow 0.5s ease-in-out", P.style.boxShadow = "0 0 30px rgba(0, 122, 255, 0.6)", setTimeout(() => {
         P.style.boxShadow = "";
@@ -9781,7 +9995,7 @@ ${n}`);
         }
       }));
     }), r.querySelector("#btn-dropdown-change-master-pin")?.addEventListener("click", (v) => {
-      v.stopPropagation(), f.style.display = "none";
+      v.stopPropagation(), _.style.display = "none";
       const P = this.shadowRoot.getElementById("w-access");
       if (P) {
         P.scrollIntoView({ behavior: "smooth", block: "center" }), P.style.transition = "box-shadow 0.5s ease-in-out", P.style.boxShadow = "0 0 30px rgba(255, 179, 0, 0.6)", setTimeout(() => {
@@ -9791,7 +10005,7 @@ ${n}`);
         R && R.focus();
       }
     }), r.querySelector("#btn-dropdown-remove-master-pin")?.addEventListener("click", (v) => {
-      v.stopPropagation(), f.style.display = "none";
+      v.stopPropagation(), _.style.display = "none";
       const P = this.shadowRoot.getElementById("w-access");
       if (P) {
         P.scrollIntoView({ behavior: "smooth", block: "center" }), P.style.transition = "box-shadow 0.5s ease-in-out", P.style.boxShadow = "0 0 30px rgba(255, 179, 0, 0.6)", setTimeout(() => {
@@ -9971,11 +10185,11 @@ ${n}`);
         </div>
       </div>
     `;
-    const u = this.shadowRoot.getElementById("tab-setup-fresh"), p = this.shadowRoot.getElementById("tab-setup-restore"), g = this.shadowRoot.getElementById("view-setup-fresh"), _ = this.shadowRoot.getElementById("view-setup-restore");
+    const u = this.shadowRoot.getElementById("tab-setup-fresh"), p = this.shadowRoot.getElementById("tab-setup-restore"), g = this.shadowRoot.getElementById("view-setup-fresh"), f = this.shadowRoot.getElementById("view-setup-restore");
     u?.addEventListener("click", () => {
-      u.style.background = "rgba(255,255,255,0.15)", u.style.color = "#fff", p.style.background = "transparent", p.style.color = "rgba(255,255,255,0.6)", g.style.display = "block", _.style.display = "none";
+      u.style.background = "rgba(255,255,255,0.15)", u.style.color = "#fff", p.style.background = "transparent", p.style.color = "rgba(255,255,255,0.6)", g.style.display = "block", f.style.display = "none";
     }), p?.addEventListener("click", () => {
-      p.style.background = "rgba(255,255,255,0.15)", p.style.color = "#fff", u.style.background = "transparent", u.style.color = "rgba(255,255,255,0.6)", _.style.display = "block", g.style.display = "none";
+      p.style.background = "rgba(255,255,255,0.15)", p.style.color = "#fff", u.style.background = "transparent", u.style.color = "rgba(255,255,255,0.6)", f.style.display = "block", g.style.display = "none";
     }), this.shadowRoot.getElementById("skip-access-pin")?.addEventListener("click", () => {
       this.shadowRoot.getElementById("setup-access-pin").value = "";
     }), this.shadowRoot.getElementById("skip-master-pin")?.addEventListener("click", () => {
@@ -9988,10 +10202,10 @@ ${n}`);
         alert("Setup failed: " + I.message);
       }
     });
-    const f = this.shadowRoot.getElementById("setup-restore-file"), h = this.shadowRoot.getElementById("restore-status");
+    const _ = this.shadowRoot.getElementById("setup-restore-file"), h = this.shadowRoot.getElementById("restore-status");
     this.shadowRoot.getElementById("btn-trigger-restore")?.addEventListener("click", () => {
-      f?.click();
-    }), f?.addEventListener("change", (v) => {
+      _?.click();
+    }), _?.addEventListener("change", (v) => {
       const P = v.target.files?.[0];
       if (!P) return;
       h && (h.textContent = "Procesando copia de seguridad...");
@@ -10092,7 +10306,7 @@ ${n}`);
       `;
         }).join("")}
       </div>
-    `, _ = `
+    `, f = `
       <button id="argus-exit-ha" style="
         position: absolute; bottom: 40px;
         background: rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.4); color: #fff;
@@ -10107,7 +10321,7 @@ ${n}`);
         ${u}
         ${g}
       </div>
-      ${_}
+      ${f}
     `, this.shadowRoot.appendChild(c), c.querySelector("#argus-exit-ha").addEventListener("click", () => {
           window.location.assign("/");
         }), c.querySelectorAll(".argus-profile-item").forEach((h) => {
@@ -10142,7 +10356,7 @@ ${n}`);
     }
   }
   async _showTvOSPinPrompt(r) {
-    const n = (_) => this._t(_), a = document.createElement("div");
+    const n = (f) => this._t(f), a = document.createElement("div");
     a.className = "argus-pin-prompt", a.innerHTML = `
       <div class="argus-pin-card">
         <h3>${this._escapeHtml(n("profile_needs_pin"))}</h3>
@@ -10152,7 +10366,7 @@ ${n}`);
                placeholder="••••" inputmode="numeric" />
                
         <div class="argus-numpad">
-          ${[1, 2, 3, 4, 5, 6, 7, 8, 9].map((_) => `<button data-digit="${_}">${_}</button>`).join("")}
+          ${[1, 2, 3, 4, 5, 6, 7, 8, 9].map((f) => `<button data-digit="${f}">${f}</button>`).join("")}
           <button id="pin-cancel" style="font-size:0.8rem; background:rgba(255,59,48,0.15); color:#ff453a; border-color:rgba(255,59,48,0.2);">X</button>
           <button data-digit="0">0</button>
           <button id="pin-del" style="font-size:1.1rem; color:#ff9f0a;">⌫</button>
@@ -10167,10 +10381,10 @@ ${n}`);
       </div>
     `, this.shadowRoot.appendChild(a);
     const s = a.querySelector("#pin-input"), c = a.querySelector("#pin-error"), u = a.querySelector(".argus-pin-card"), p = a.querySelector(".argus-numpad");
-    p.querySelectorAll("[data-digit]").forEach((_) => {
-      const f = _.getAttribute("data-digit");
-      _.addEventListener("click", () => {
-        s.value.length < 8 && (s.value += f);
+    p.querySelectorAll("[data-digit]").forEach((f) => {
+      const _ = f.getAttribute("data-digit");
+      f.addEventListener("click", () => {
+        s.value.length < 8 && (s.value += _);
       });
     }), p.querySelector("#pin-del").addEventListener("click", () => {
       s.value = s.value.slice(0, -1);
@@ -10188,13 +10402,13 @@ ${n}`);
             argus_user_id: r.id,
             pin: s.value
           }), a.remove(), this._profileSelectedThisMount = !0, await this._runProfileWelcomeAnimation(r);
-        } catch (_) {
-          a.dataset.processing = "", c.textContent = _.message || n("invalid_pin_msg"), u.style.animation = "none", u.offsetHeight, u.style.animation = "argus-shake 0.3s ease", s.value = "";
+        } catch (f) {
+          a.dataset.processing = "", c.textContent = f.message || n("invalid_pin_msg"), u.style.animation = "none", u.offsetHeight, u.style.animation = "argus-shake 0.3s ease", s.value = "";
         }
       }
     };
-    s.addEventListener("keydown", (_) => {
-      _.key === "Enter" && g();
+    s.addEventListener("keydown", (f) => {
+      f.key === "Enter" && g();
     });
   }
   async _runProfileWelcomeAnimation(r) {
@@ -10220,15 +10434,15 @@ ${n}`);
     const u = a.querySelector("#welcome-avatar-flying"), p = a.querySelector("#welcome-text-anim");
     if (u && p) {
       u.style.transform = "scale(0.8)", u.style.opacity = "0", p.style.opacity = "0", p.style.transform = "translateY(15px)", await new Promise((I) => requestAnimationFrame(I)), u.style.transition = "transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease", u.style.transform = "scale(1)", u.style.opacity = "1", p.style.transition = "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, opacity 0.5s ease 0.15s", p.style.transform = "translateY(0)", p.style.opacity = "1", await new Promise((I) => setTimeout(I, 1300)), await c, p.style.transition = "opacity 0.25s ease", p.style.opacity = "0";
-      const g = u.getBoundingClientRect(), _ = this.shadowRoot.getElementById("hero-profile-avatar") || this.shadowRoot.querySelector("#hero-profile-container .user-avatar") || this.shadowRoot.querySelector("#hero-profile-container img") || this.shadowRoot.querySelector("#hero-profile-container .hero-profile-pill");
-      let f = window.innerWidth / 2, h = 60, v = 0.35;
-      if (_) {
-        const I = _.getBoundingClientRect();
-        I.width > 0 && I.height > 0 && (f = I.left + I.width / 2, h = I.top + I.height / 2, v = Math.max(0.2, I.width / g.width));
+      const g = u.getBoundingClientRect(), f = this.shadowRoot.getElementById("hero-profile-avatar") || this.shadowRoot.querySelector("#hero-profile-container .user-avatar") || this.shadowRoot.querySelector("#hero-profile-container img") || this.shadowRoot.querySelector("#hero-profile-container .hero-profile-pill");
+      let _ = window.innerWidth / 2, h = 60, v = 0.35;
+      if (f) {
+        const I = f.getBoundingClientRect();
+        I.width > 0 && I.height > 0 && (_ = I.left + I.width / 2, h = I.top + I.height / 2, v = Math.max(0.2, I.width / g.width));
       }
-      const P = f - (g.left + g.width / 2), R = h - (g.top + g.height / 2);
-      u.style.transition = "transform 0.65s cubic-bezier(0.25, 1.25, 0.5, 1), opacity 0.35s ease 0.45s", u.style.transform = `translate(${P}px, ${R}px) scale(${v})`, a.style.transition = "background-color 0.55s ease 0.1s", a.style.backgroundColor = "transparent", await new Promise((I) => setTimeout(I, 650)), _ && (_.style.opacity = "1", _.style.transform = "scale(1.1)", setTimeout(() => {
-        _ && (_.style.transform = "scale(1)");
+      const P = _ - (g.left + g.width / 2), R = h - (g.top + g.height / 2);
+      u.style.transition = "transform 0.65s cubic-bezier(0.25, 1.25, 0.5, 1), opacity 0.35s ease 0.45s", u.style.transform = `translate(${P}px, ${R}px) scale(${v})`, a.style.transition = "background-color 0.55s ease 0.1s", a.style.backgroundColor = "transparent", await new Promise((I) => setTimeout(I, 650)), f && (f.style.opacity = "1", f.style.transform = "scale(1.1)", setTimeout(() => {
+        f && (f.style.transform = "scale(1)");
       }, 180));
     }
     await new Promise((g) => setTimeout(g, 120)), await c, this._nukeAllLoginOverlays();
@@ -10276,19 +10490,19 @@ ${n}`);
         p.className = "widget-controls-title";
         const g = a.querySelector("h2")?.textContent;
         p.textContent = g ? `Widget: ${g}` : `Widget: ${s.toUpperCase()}`, u.appendChild(p);
-        const _ = document.createElement("div");
-        _.className = "widget-drag-handle", _.innerHTML = "⋮⋮ Arrastrar", _.title = "Arrastrar para mover";
         const f = document.createElement("div");
-        f.className = "widget-sizes", ["S", "M", "L", "XL"].forEach((v) => {
+        f.className = "widget-drag-handle", f.innerHTML = "⋮⋮ Arrastrar", f.title = "Arrastrar para mover";
+        const _ = document.createElement("div");
+        _.className = "widget-sizes", ["S", "M", "L", "XL"].forEach((v) => {
           const P = document.createElement("button");
           P.className = "widget-size-btn", P.textContent = v, P.dataset.size = v, P.addEventListener("click", (R) => {
             R.stopPropagation(), R.preventDefault(), this._changeWidgetSize(s, v);
-          }), f.appendChild(P);
+          }), _.appendChild(P);
         });
         const h = document.createElement("button");
         h.className = "widget-toggle-btn", h.textContent = "Ocultar", h.addEventListener("click", (v) => {
           v.stopPropagation(), v.preventDefault(), this._toggleWidgetVisibility(s);
-        }), u.appendChild(_), u.appendChild(f), u.appendChild(h), c.appendChild(u), a.appendChild(c);
+        }), u.appendChild(f), u.appendChild(_), u.appendChild(h), c.appendChild(u), a.appendChild(c);
       }
     }), this._renderWidgetLayout(), this._bindWidgetDragEvents(n);
   }
@@ -10308,8 +10522,8 @@ ${n}`);
         s.setAttribute("data-size", u.size), s.style.display = u.hidden ? "none" : "";
         const p = s.querySelector(".panel-edit-overlay");
         if (p) {
-          p.querySelectorAll(".widget-size-btn").forEach((_) => {
-            _.classList.toggle("active", _.dataset.size === u.size);
+          p.querySelectorAll(".widget-size-btn").forEach((f) => {
+            f.classList.toggle("active", f.dataset.size === u.size);
           });
           const g = p.querySelector(".widget-toggle-btn");
           g && (g.textContent = u.hidden ? "Mostrar" : "Ocultar", g.style.background = u.hidden ? "rgba(52,199,89,.85)" : "rgba(220,38,38,.85)");
@@ -10369,25 +10583,25 @@ ${n}`);
     n && (n.hidden = !n.hidden, this._saveWidgetLayout(), this._renderWidgetLayout());
   }
 }
-customElements.define("argus-panel-v2018", Dp);
+customElements.define("argus-panel-v2018", jp);
 try {
-  customElements.get("argus-panel") || customElements.define("argus-panel", Dp);
+  customElements.get("argus-panel") || customElements.define("argus-panel", jp);
 } catch {
 }
-const $p = "2.2.13";
+const Fp = "2.2.13";
 console.info(
-  `%c🛡️ ARGUS ALARM CARD %c v${$p} `,
+  `%c🛡️ ARGUS ALARM CARD %c v${Fp} `,
   "color:white;background:#0a1628;font-weight:700;padding:4px 8px;border-radius:4px 0 0 4px;",
   "color:#0a1628;background:#38bdf8;font-weight:700;padding:4px 8px;border-radius:0 4px 4px 0;"
 );
-function _u(o) {
+function bu(o) {
   if (!o?.states) return null;
   const r = Object.values(o.states);
   return (r.find(
     (a) => a.entity_id?.startsWith("alarm_control_panel.") && (a.attributes?.argus_version || a.attributes?.argus_entry_id || a.entity_id.includes("argus"))
   ) || r.find((a) => a.entity_id?.startsWith("alarm_control_panel.")))?.entity_id || null;
 }
-const bu = {
+const yu = {
   es: { title: "Seguridad", home: "EN CASA", away: "AUSENTE", night: "NOCHE", vacation: "VACACIONES", disarm: "DESARMAR", pin: "INTRODUCIR PIN", bad: "PIN incorrecto", unknown: "Ubicación no disponible" },
   en: { title: "Security", home: "HOME", away: "AWAY", night: "NIGHT", vacation: "VACATION", disarm: "DISARM", pin: "ENTER PIN", bad: "Incorrect PIN", unknown: "Location unavailable" },
   fr: { title: "Sécurité", home: "MAISON", away: "ABSENT", night: "NUIT", vacation: "VACANCES", disarm: "DÉSARMER", pin: "SAISIR LE PIN", bad: "PIN incorrect", unknown: "Emplacement indisponible" },
@@ -10402,7 +10616,7 @@ const bu = {
   ja: { title: "セキュリティ", home: "在宅", away: "外出", night: "夜間", vacation: "休暇", disarm: "解除", pin: "PINを入力", bad: "PINが正しくありません", unknown: "位置情報利用不可" },
   uk: { title: "Безпека", home: "ВДОМА", away: "НЕМАЄ ВДОМА", night: "НІЧ", vacation: "ВІДПУСТКА", disarm: "ЗНЯТИ", pin: "ВВЕДІТЬ PIN", bad: "Невірний PIN", unknown: "Розташування недоступне" }
 }, yn = (o) => String(o ?? "").replace(/[&<>'"]/g, (r) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[r]);
-class lh extends HTMLElement {
+class dh extends HTMLElement {
   setConfig(r) {
     this._config = r;
   }
@@ -10453,10 +10667,10 @@ class lh extends HTMLElement {
     }));
   }
 }
-customElements.define("argus-panel-card-editor", lh);
-class qp extends HTMLElement {
+customElements.define("argus-panel-card-editor", dh);
+class Up extends HTMLElement {
   static getStubConfig(r) {
-    return { entity: _u(r) || "alarm_control_panel.argus", mode: "compact", title: "Argus Security" };
+    return { entity: bu(r) || "alarm_control_panel.argus", mode: "compact", title: "Argus Security" };
   }
   static getConfigElement() {
     return document.createElement("argus-panel-card-editor");
@@ -10550,7 +10764,7 @@ class qp extends HTMLElement {
   }
   set hass(r) {
     if (this._hass = r, !this._config.entity || this._config.entity === "alarm_control_panel.argus") {
-      const n = _u(r);
+      const n = bu(r);
       n && (this._config.entity = n);
     }
     if (this._config.mode === "basic")
@@ -10582,14 +10796,14 @@ class qp extends HTMLElement {
   _renderBasicCard() {
     if (!this._panelHost || !this._hass) return;
     this._panelMounted = !1;
-    const r = String(this._hass?.language || "en").split("-")[0], n = bu[r] || bu.en, s = this._hass.states[this._config.entity]?.state || "unavailable", c = Object.values(this._hass?.states || {}), u = this._config.weather_entity ? this._hass.states[this._config.weather_entity] : c.find((k) => k.entity_id?.startsWith("weather.") && !["unknown", "unavailable"].includes(k.state)), p = Number(u?.attributes?.temperature), g = {
+    const r = String(this._hass?.language || "en").split("-")[0], n = yu[r] || yu.en, s = this._hass.states[this._config.entity]?.state || "unavailable", c = Object.values(this._hass?.states || {}), u = this._config.weather_entity ? this._hass.states[this._config.weather_entity] : c.find((k) => k.entity_id?.startsWith("weather.") && !["unknown", "unavailable"].includes(k.state)), p = Number(u?.attributes?.temperature), g = {
       state: String(u?.state || "unavailable").toLowerCase(),
       temp: Number.isFinite(p) ? Math.round(p) : "—",
       unit: Number.isFinite(p) ? String(u?.attributes?.temperature_unit || "") : "",
       night: this._hass?.states?.["sun.sun"]?.state === "below_horizon"
-    }, _ = this._hass?.config || {}, f = [];
-    _.location_name && !/^(home|casa|hogar)$/i.test(_.location_name) && f.push(_.location_name), _.country && f.push(_.country);
-    const h = f.length ? f.join(", ") : n.unknown, v = this._config.title || n.title, P = g.state, R = /thunder|storm|lightning/.test(P), I = /rain|pouring|drizzle|shower/.test(P), A = /snow/.test(P), S = /fog|mist|hazy/.test(P), y = /cloud|overcast/.test(P), w = [g.night ? "night" : "day", R ? "storm" : I ? "rain" : A ? "snow" : S ? "fog" : y ? "cloud" : "clear"].join(" "), b = new Intl.DateTimeFormat(this._hass.language || void 0, { hour: "2-digit", minute: "2-digit" }).format(/* @__PURE__ */ new Date());
+    }, f = this._hass?.config || {}, _ = [];
+    f.location_name && !/^(home|casa|hogar)$/i.test(f.location_name) && _.push(f.location_name), f.country && _.push(f.country);
+    const h = _.length ? _.join(", ") : n.unknown, v = this._config.title || n.title, P = g.state, R = /thunder|storm|lightning/.test(P), I = /rain|pouring|drizzle|shower/.test(P), A = /snow/.test(P), S = /fog|mist|hazy/.test(P), y = /cloud|overcast/.test(P), w = [g.night ? "night" : "day", R ? "storm" : I ? "rain" : A ? "snow" : S ? "fog" : y ? "cloud" : "clear"].join(" "), b = new Intl.DateTimeFormat(this._hass.language || void 0, { hour: "2-digit", minute: "2-digit" }).format(/* @__PURE__ */ new Date());
     this._panelHost.innerHTML = `
       <style>
         .basic-card{position:relative;min-height:330px;isolation:isolate;overflow:hidden;font-family:'Outfit',Inter,system-ui,sans-serif}
@@ -10621,7 +10835,7 @@ class qp extends HTMLElement {
           </div>
           <div class="basic-shield">${s === "triggered" ? "🚨" : "🛡️"}</div>
         </div>
-        <div class="basic-title">${yn(v)} · v${$p}</div>
+        <div class="basic-title">${yn(v)} · v${Fp}</div>
       </div>
     `, this._panelHost.querySelectorAll("[data-service]").forEach((k) => {
       k.onclick = async () => {
@@ -10643,26 +10857,26 @@ class qp extends HTMLElement {
     return 6;
   }
 }
-customElements.get("argus-panel-card") || customElements.define("argus-panel-card", qp);
-customElements.get("argus-card") || customElements.define("argus-card", class extends qp {
+customElements.get("argus-panel-card") || customElements.define("argus-panel-card", Up);
+customElements.get("argus-card") || customElements.define("argus-card", class extends Up {
 });
 window.customCards = window.customCards || [];
-const jp = new Set(window.customCards.map((o) => o.type));
-jp.has("argus-panel-card") || window.customCards.push({
+const Wp = new Set(window.customCards.map((o) => o.type));
+Wp.has("argus-panel-card") || window.customCards.push({
   type: "argus-panel-card",
   name: "Argus Security Panel",
   description: "Panel de seguridad Argus — consola Liquid Glass de Instancias Activas, dashboard e historial.",
   preview: !0,
   documentationURL: "https://github.com/Chrisalvir1/Argus"
 });
-jp.has("argus-card") || window.customCards.push({
+Wp.has("argus-card") || window.customCards.push({
   type: "argus-card",
   name: "Argus Alarm Card",
   description: "Tarjeta de seguridad Argus — consola interactiva de Instancia Activa con Liquid Glass y pantalla completa.",
   preview: !0,
   documentationURL: "https://github.com/Chrisalvir1/Argus"
 });
-function ch(o) {
+function uh(o) {
   if (o.__esModule) return o;
   var r = o.default;
   if (typeof r == "function") {
@@ -10681,7 +10895,7 @@ function ch(o) {
     });
   }), n;
 }
-var Ys = { exports: {} }, ui = {}, Ks = { exports: {} }, Le = {};
+var Ks = { exports: {} }, pi = {}, Xs = { exports: {} }, Le = {};
 /**
  * @license React
  * react.production.min.js
@@ -10691,11 +10905,11 @@ var Ys = { exports: {} }, ui = {}, Ks = { exports: {} }, Le = {};
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var yu;
-function dh() {
-  if (yu) return Le;
-  yu = 1;
-  var o = Symbol.for("react.element"), r = Symbol.for("react.portal"), n = Symbol.for("react.fragment"), a = Symbol.for("react.strict_mode"), s = Symbol.for("react.profiler"), c = Symbol.for("react.provider"), u = Symbol.for("react.context"), p = Symbol.for("react.forward_ref"), g = Symbol.for("react.suspense"), _ = Symbol.for("react.memo"), f = Symbol.for("react.lazy"), h = Symbol.iterator;
+var vu;
+function ph() {
+  if (vu) return Le;
+  vu = 1;
+  var o = Symbol.for("react.element"), r = Symbol.for("react.portal"), n = Symbol.for("react.fragment"), a = Symbol.for("react.strict_mode"), s = Symbol.for("react.profiler"), c = Symbol.for("react.provider"), u = Symbol.for("react.context"), p = Symbol.for("react.forward_ref"), g = Symbol.for("react.suspense"), f = Symbol.for("react.memo"), _ = Symbol.for("react.lazy"), h = Symbol.iterator;
   function v(T) {
     return T === null || typeof T != "object" ? null : (T = h && T[h] || T["@@iterator"], typeof T == "function" ? T : null);
   }
@@ -10722,18 +10936,18 @@ function dh() {
   }
   var w = y.prototype = new S();
   w.constructor = y, R(w, A.prototype), w.isPureReactComponent = !0;
-  var b = Array.isArray, k = Object.prototype.hasOwnProperty, E = { current: null }, N = { key: !0, ref: !0, __self: !0, __source: !0 };
+  var b = Array.isArray, k = Object.prototype.hasOwnProperty, E = { current: null }, C = { key: !0, ref: !0, __self: !0, __source: !0 };
   function D(T, W, me) {
-    var _e, we = {}, Ne = null, Oe = null;
-    if (W != null) for (_e in W.ref !== void 0 && (Oe = W.ref), W.key !== void 0 && (Ne = "" + W.key), W) k.call(W, _e) && !N.hasOwnProperty(_e) && (we[_e] = W[_e]);
+    var fe, we = {}, Ce = null, Oe = null;
+    if (W != null) for (fe in W.ref !== void 0 && (Oe = W.ref), W.key !== void 0 && (Ce = "" + W.key), W) k.call(W, fe) && !C.hasOwnProperty(fe) && (we[fe] = W[fe]);
     var J = arguments.length - 2;
     if (J === 1) we.children = me;
     else if (1 < J) {
       for (var ue = Array(J), Ee = 0; Ee < J; Ee++) ue[Ee] = arguments[Ee + 2];
       we.children = ue;
     }
-    if (T && T.defaultProps) for (_e in J = T.defaultProps, J) we[_e] === void 0 && (we[_e] = J[_e]);
-    return { $$typeof: o, type: T, key: Ne, ref: Oe, props: we, _owner: E.current };
+    if (T && T.defaultProps) for (fe in J = T.defaultProps, J) we[fe] === void 0 && (we[fe] = J[fe]);
+    return { $$typeof: o, type: T, key: Ce, ref: Oe, props: we, _owner: E.current };
   }
   function F(T, W) {
     return { $$typeof: o, type: T.type, key: W, ref: T.ref, props: T.props, _owner: T._owner };
@@ -10751,12 +10965,12 @@ function dh() {
   function oe(T, W) {
     return typeof T == "object" && T !== null && T.key != null ? Q("" + T.key) : W.toString(36);
   }
-  function pe(T, W, me, _e, we) {
-    var Ne = typeof T;
-    (Ne === "undefined" || Ne === "boolean") && (T = null);
+  function pe(T, W, me, fe, we) {
+    var Ce = typeof T;
+    (Ce === "undefined" || Ce === "boolean") && (T = null);
     var Oe = !1;
     if (T === null) Oe = !0;
-    else switch (Ne) {
+    else switch (Ce) {
       case "string":
       case "number":
         Oe = !0;
@@ -10768,24 +10982,24 @@ function dh() {
             Oe = !0;
         }
     }
-    if (Oe) return Oe = T, we = we(Oe), T = _e === "" ? "." + oe(Oe, 0) : _e, b(we) ? (me = "", T != null && (me = T.replace(ie, "$&/") + "/"), pe(we, W, me, "", function(Ee) {
+    if (Oe) return Oe = T, we = we(Oe), T = fe === "" ? "." + oe(Oe, 0) : fe, b(we) ? (me = "", T != null && (me = T.replace(ie, "$&/") + "/"), pe(we, W, me, "", function(Ee) {
       return Ee;
     })) : we != null && (V(we) && (we = F(we, me + (!we.key || Oe && Oe.key === we.key ? "" : ("" + we.key).replace(ie, "$&/") + "/") + T)), W.push(we)), 1;
-    if (Oe = 0, _e = _e === "" ? "." : _e + ":", b(T)) for (var J = 0; J < T.length; J++) {
-      Ne = T[J];
-      var ue = _e + oe(Ne, J);
-      Oe += pe(Ne, W, me, ue, we);
+    if (Oe = 0, fe = fe === "" ? "." : fe + ":", b(T)) for (var J = 0; J < T.length; J++) {
+      Ce = T[J];
+      var ue = fe + oe(Ce, J);
+      Oe += pe(Ce, W, me, ue, we);
     }
-    else if (ue = v(T), typeof ue == "function") for (T = ue.call(T), J = 0; !(Ne = T.next()).done; ) Ne = Ne.value, ue = _e + oe(Ne, J++), Oe += pe(Ne, W, me, ue, we);
-    else if (Ne === "object") throw W = String(T), Error("Objects are not valid as a React child (found: " + (W === "[object Object]" ? "object with keys {" + Object.keys(T).join(", ") + "}" : W) + "). If you meant to render a collection of children, use an array instead.");
+    else if (ue = v(T), typeof ue == "function") for (T = ue.call(T), J = 0; !(Ce = T.next()).done; ) Ce = Ce.value, ue = fe + oe(Ce, J++), Oe += pe(Ce, W, me, ue, we);
+    else if (Ce === "object") throw W = String(T), Error("Objects are not valid as a React child (found: " + (W === "[object Object]" ? "object with keys {" + Object.keys(T).join(", ") + "}" : W) + "). If you meant to render a collection of children, use an array instead.");
     return Oe;
   }
   function K(T, W, me) {
     if (T == null) return T;
-    var _e = [], we = 0;
-    return pe(T, _e, "", "", function(Ne) {
-      return W.call(me, Ne, we++);
-    }), _e;
+    var fe = [], we = 0;
+    return pe(T, fe, "", "", function(Ce) {
+      return W.call(me, Ce, we++);
+    }), fe;
   }
   function te(T) {
     if (T._status === -1) {
@@ -10821,19 +11035,19 @@ function dh() {
     return T;
   } }, Le.Component = A, Le.Fragment = n, Le.Profiler = s, Le.PureComponent = y, Le.StrictMode = a, Le.Suspense = g, Le.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ce, Le.act = re, Le.cloneElement = function(T, W, me) {
     if (T == null) throw Error("React.cloneElement(...): The argument must be a React element, but you passed " + T + ".");
-    var _e = R({}, T.props), we = T.key, Ne = T.ref, Oe = T._owner;
+    var fe = R({}, T.props), we = T.key, Ce = T.ref, Oe = T._owner;
     if (W != null) {
-      if (W.ref !== void 0 && (Ne = W.ref, Oe = E.current), W.key !== void 0 && (we = "" + W.key), T.type && T.type.defaultProps) var J = T.type.defaultProps;
-      for (ue in W) k.call(W, ue) && !N.hasOwnProperty(ue) && (_e[ue] = W[ue] === void 0 && J !== void 0 ? J[ue] : W[ue]);
+      if (W.ref !== void 0 && (Ce = W.ref, Oe = E.current), W.key !== void 0 && (we = "" + W.key), T.type && T.type.defaultProps) var J = T.type.defaultProps;
+      for (ue in W) k.call(W, ue) && !C.hasOwnProperty(ue) && (fe[ue] = W[ue] === void 0 && J !== void 0 ? J[ue] : W[ue]);
     }
     var ue = arguments.length - 2;
-    if (ue === 1) _e.children = me;
+    if (ue === 1) fe.children = me;
     else if (1 < ue) {
       J = Array(ue);
       for (var Ee = 0; Ee < ue; Ee++) J[Ee] = arguments[Ee + 2];
-      _e.children = J;
+      fe.children = J;
     }
-    return { $$typeof: o, type: T.type, key: we, ref: Ne, props: _e, _owner: Oe };
+    return { $$typeof: o, type: T.type, key: we, ref: Ce, props: fe, _owner: Oe };
   }, Le.createContext = function(T) {
     return T = { $$typeof: u, _currentValue: T, _currentValue2: T, _threadCount: 0, Provider: null, Consumer: null, _defaultValue: null, _globalName: null }, T.Provider = { $$typeof: c, _context: T }, T.Consumer = T;
   }, Le.createElement = D, Le.createFactory = function(T) {
@@ -10844,9 +11058,9 @@ function dh() {
   }, Le.forwardRef = function(T) {
     return { $$typeof: p, render: T };
   }, Le.isValidElement = V, Le.lazy = function(T) {
-    return { $$typeof: f, _payload: { _status: -1, _result: T }, _init: te };
+    return { $$typeof: _, _payload: { _status: -1, _result: T }, _init: te };
   }, Le.memo = function(T, W) {
-    return { $$typeof: _, type: T, compare: W === void 0 ? null : W };
+    return { $$typeof: f, type: T, compare: W === void 0 ? null : W };
   }, Le.startTransition = function(T) {
     var W = G.transition;
     G.transition = {};
@@ -10886,9 +11100,9 @@ function dh() {
     return ee.current.useTransition();
   }, Le.version = "18.3.1", Le;
 }
-var vu;
+var xu;
 function It() {
-  return vu || (vu = 1, Ks.exports = dh()), Ks.exports;
+  return xu || (xu = 1, Xs.exports = ph()), Xs.exports;
 }
 /**
  * @license React
@@ -10899,25 +11113,25 @@ function It() {
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var xu;
-function uh() {
-  if (xu) return ui;
-  xu = 1;
+var wu;
+function mh() {
+  if (wu) return pi;
+  wu = 1;
   var o = It(), r = Symbol.for("react.element"), n = Symbol.for("react.fragment"), a = Object.prototype.hasOwnProperty, s = o.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner, c = { key: !0, ref: !0, __self: !0, __source: !0 };
-  function u(p, g, _) {
-    var f, h = {}, v = null, P = null;
-    _ !== void 0 && (v = "" + _), g.key !== void 0 && (v = "" + g.key), g.ref !== void 0 && (P = g.ref);
-    for (f in g) a.call(g, f) && !c.hasOwnProperty(f) && (h[f] = g[f]);
-    if (p && p.defaultProps) for (f in g = p.defaultProps, g) h[f] === void 0 && (h[f] = g[f]);
+  function u(p, g, f) {
+    var _, h = {}, v = null, P = null;
+    f !== void 0 && (v = "" + f), g.key !== void 0 && (v = "" + g.key), g.ref !== void 0 && (P = g.ref);
+    for (_ in g) a.call(g, _) && !c.hasOwnProperty(_) && (h[_] = g[_]);
+    if (p && p.defaultProps) for (_ in g = p.defaultProps, g) h[_] === void 0 && (h[_] = g[_]);
     return { $$typeof: r, type: p, key: v, ref: P, props: h, _owner: s.current };
   }
-  return ui.Fragment = n, ui.jsx = u, ui.jsxs = u, ui;
+  return pi.Fragment = n, pi.jsx = u, pi.jsxs = u, pi;
 }
-var wu;
-function ph() {
-  return wu || (wu = 1, Ys.exports = uh()), Ys.exports;
+var ku;
+function gh() {
+  return ku || (ku = 1, Ks.exports = mh()), Ks.exports;
 }
-var Be = ph(), $o = {}, Xs = { exports: {} }, Pt = {}, Qs = { exports: {} }, Js = {};
+var Te = gh(), qo = {}, Qs = { exports: {} }, Pt = {}, Js = { exports: {} }, Zs = {};
 /**
  * @license React
  * scheduler.production.min.js
@@ -10927,9 +11141,9 @@ var Be = ph(), $o = {}, Xs = { exports: {} }, Pt = {}, Qs = { exports: {} }, Js 
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var ku;
-function mh() {
-  return ku || (ku = 1, function(o) {
+var Su;
+function hh() {
+  return Su || (Su = 1, function(o) {
     function r(G, ce) {
       var re = G.length;
       G.push(ce);
@@ -10948,9 +11162,9 @@ function mh() {
       if (re !== ce) {
         G[0] = re;
         e: for (var T = 0, W = G.length, me = W >>> 1; T < me; ) {
-          var _e = 2 * (T + 1) - 1, we = G[_e], Ne = _e + 1, Oe = G[Ne];
-          if (0 > s(we, re)) Ne < W && 0 > s(Oe, we) ? (G[T] = Oe, G[Ne] = re, T = Ne) : (G[T] = we, G[_e] = re, T = _e);
-          else if (Ne < W && 0 > s(Oe, re)) G[T] = Oe, G[Ne] = re, T = Ne;
+          var fe = 2 * (T + 1) - 1, we = G[fe], Ce = fe + 1, Oe = G[Ce];
+          if (0 > s(we, re)) Ce < W && 0 > s(Oe, we) ? (G[T] = Oe, G[Ce] = re, T = Ce) : (G[T] = we, G[fe] = re, T = fe);
+          else if (Ce < W && 0 > s(Oe, re)) G[T] = Oe, G[Ce] = re, T = Ce;
           else break e;
         }
       }
@@ -10971,20 +11185,20 @@ function mh() {
         return u.now() - p;
       };
     }
-    var g = [], _ = [], f = 1, h = null, v = 3, P = !1, R = !1, I = !1, A = typeof setTimeout == "function" ? setTimeout : null, S = typeof clearTimeout == "function" ? clearTimeout : null, y = typeof setImmediate < "u" ? setImmediate : null;
+    var g = [], f = [], _ = 1, h = null, v = 3, P = !1, R = !1, I = !1, A = typeof setTimeout == "function" ? setTimeout : null, S = typeof clearTimeout == "function" ? clearTimeout : null, y = typeof setImmediate < "u" ? setImmediate : null;
     typeof navigator < "u" && navigator.scheduling !== void 0 && navigator.scheduling.isInputPending !== void 0 && navigator.scheduling.isInputPending.bind(navigator.scheduling);
     function w(G) {
-      for (var ce = n(_); ce !== null; ) {
-        if (ce.callback === null) a(_);
-        else if (ce.startTime <= G) a(_), ce.sortIndex = ce.expirationTime, r(g, ce);
+      for (var ce = n(f); ce !== null; ) {
+        if (ce.callback === null) a(f);
+        else if (ce.startTime <= G) a(f), ce.sortIndex = ce.expirationTime, r(g, ce);
         else break;
-        ce = n(_);
+        ce = n(f);
       }
     }
     function b(G) {
       if (I = !1, w(G), !R) if (n(g) !== null) R = !0, te(k);
       else {
-        var ce = n(_);
+        var ce = n(f);
         ce !== null && ee(b, ce.startTime - G);
       }
     }
@@ -11003,27 +11217,27 @@ function mh() {
         }
         if (h !== null) var me = !0;
         else {
-          var _e = n(_);
-          _e !== null && ee(b, _e.startTime - ce), me = !1;
+          var fe = n(f);
+          fe !== null && ee(b, fe.startTime - ce), me = !1;
         }
         return me;
       } finally {
         h = null, v = re, P = !1;
       }
     }
-    var E = !1, N = null, D = -1, F = 5, V = -1;
+    var E = !1, C = null, D = -1, F = 5, V = -1;
     function Q() {
       return !(o.unstable_now() - V < F);
     }
     function ie() {
-      if (N !== null) {
+      if (C !== null) {
         var G = o.unstable_now();
         V = G;
         var ce = !0;
         try {
-          ce = N(!0, G);
+          ce = C(!0, G);
         } finally {
-          ce ? oe() : (E = !1, N = null);
+          ce ? oe() : (E = !1, C = null);
         }
       } else E = !1;
     }
@@ -11040,7 +11254,7 @@ function mh() {
       A(ie, 0);
     };
     function te(G) {
-      N = G, E || (E = !0, oe());
+      C = G, E || (E = !0, oe());
     }
     function ee(G, ce) {
       D = A(function() {
@@ -11112,7 +11326,7 @@ function mh() {
         default:
           W = 5e3;
       }
-      return W = re + W, G = { id: f++, callback: ce, priorityLevel: G, startTime: re, expirationTime: W, sortIndex: -1 }, re > T ? (G.sortIndex = re, r(_, G), n(g) === null && G === n(_) && (I ? (S(D), D = -1) : I = !0, ee(b, re - T))) : (G.sortIndex = W, r(g, G), R || P || (R = !0, te(k))), G;
+      return W = re + W, G = { id: _++, callback: ce, priorityLevel: G, startTime: re, expirationTime: W, sortIndex: -1 }, re > T ? (G.sortIndex = re, r(f, G), n(g) === null && G === n(f) && (I ? (S(D), D = -1) : I = !0, ee(b, re - T))) : (G.sortIndex = W, r(g, G), R || P || (R = !0, te(k))), G;
     }, o.unstable_shouldYield = Q, o.unstable_wrapCallback = function(G) {
       var ce = v;
       return function() {
@@ -11125,11 +11339,11 @@ function mh() {
         }
       };
     };
-  }(Js)), Js;
+  }(Zs)), Zs;
 }
-var Su;
-function gh() {
-  return Su || (Su = 1, Qs.exports = mh()), Qs.exports;
+var Au;
+function _h() {
+  return Au || (Au = 1, Js.exports = hh()), Js.exports;
 }
 /**
  * @license React
@@ -11140,11 +11354,11 @@ function gh() {
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var Au;
-function hh() {
-  if (Au) return Pt;
-  Au = 1;
-  var o = It(), r = gh();
+var Eu;
+function fh() {
+  if (Eu) return Pt;
+  Eu = 1;
+  var o = It(), r = _h();
   function n(e) {
     for (var t = "https://reactjs.org/docs/error-decoder.html?invariant=" + e, i = 1; i < arguments.length; i++) t += "&args[]=" + encodeURIComponent(arguments[i]);
     return "Minified React error #" + e + "; visit " + t + " for the full message or use the non-minified dev environment for full errors and additional helpful warnings.";
@@ -11156,9 +11370,9 @@ function hh() {
   function u(e, t) {
     for (s[e] = t, e = 0; e < t.length; e++) a.add(t[e]);
   }
-  var p = !(typeof window > "u" || typeof window.document > "u" || typeof window.document.createElement > "u"), g = Object.prototype.hasOwnProperty, _ = /^[:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD][:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\-.0-9\u00B7\u0300-\u036F\u203F-\u2040]*$/, f = {}, h = {};
+  var p = !(typeof window > "u" || typeof window.document > "u" || typeof window.document.createElement > "u"), g = Object.prototype.hasOwnProperty, f = /^[:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD][:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\-.0-9\u00B7\u0300-\u036F\u203F-\u2040]*$/, _ = {}, h = {};
   function v(e) {
-    return g.call(h, e) ? !0 : g.call(f, e) ? !1 : _.test(e) ? h[e] = !0 : (f[e] = !0, !1);
+    return g.call(h, e) ? !0 : g.call(_, e) ? !1 : f.test(e) ? h[e] = !0 : (_[e] = !0, !1);
   }
   function P(e, t, i, l) {
     if (i !== null && i.type === 0) return !1;
@@ -11236,7 +11450,7 @@ function hh() {
     var d = A.hasOwnProperty(t) ? A[t] : null;
     (d !== null ? d.type !== 0 : l || !(2 < t.length) || t[0] !== "o" && t[0] !== "O" || t[1] !== "n" && t[1] !== "N") && (R(t, i, d, l) && (i = null), l || d === null ? v(t) && (i === null ? e.removeAttribute(t) : e.setAttribute(t, "" + i)) : d.mustUseProperty ? e[d.propertyName] = i === null ? d.type === 3 ? !1 : "" : i : (t = d.attributeName, l = d.attributeNamespace, i === null ? e.removeAttribute(t) : (d = d.type, i = d === 3 || d === 4 && i === !0 ? "" : "" + i, l ? e.setAttributeNS(l, t, i) : e.setAttribute(t, i))));
   }
-  var b = o.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED, k = Symbol.for("react.element"), E = Symbol.for("react.portal"), N = Symbol.for("react.fragment"), D = Symbol.for("react.strict_mode"), F = Symbol.for("react.profiler"), V = Symbol.for("react.provider"), Q = Symbol.for("react.context"), ie = Symbol.for("react.forward_ref"), oe = Symbol.for("react.suspense"), pe = Symbol.for("react.suspense_list"), K = Symbol.for("react.memo"), te = Symbol.for("react.lazy"), ee = Symbol.for("react.offscreen"), G = Symbol.iterator;
+  var b = o.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED, k = Symbol.for("react.element"), E = Symbol.for("react.portal"), C = Symbol.for("react.fragment"), D = Symbol.for("react.strict_mode"), F = Symbol.for("react.profiler"), V = Symbol.for("react.provider"), Q = Symbol.for("react.context"), ie = Symbol.for("react.forward_ref"), oe = Symbol.for("react.suspense"), pe = Symbol.for("react.suspense_list"), K = Symbol.for("react.memo"), te = Symbol.for("react.lazy"), ee = Symbol.for("react.offscreen"), G = Symbol.iterator;
   function ce(e) {
     return e === null || typeof e != "object" ? null : (e = G && e[G] || e["@@iterator"], typeof e == "function" ? e : null);
   }
@@ -11252,7 +11466,7 @@ function hh() {
 ` + T + e;
   }
   var me = !1;
-  function _e(e, t) {
+  function fe(e, t) {
     if (!e || me) return "";
     me = !0;
     var i = Error.prepareStackTrace;
@@ -11289,16 +11503,16 @@ function hh() {
       if (U && l && typeof U.stack == "string") {
         for (var d = U.stack.split(`
 `), m = l.stack.split(`
-`), x = d.length - 1, C = m.length - 1; 1 <= x && 0 <= C && d[x] !== m[C]; ) C--;
-        for (; 1 <= x && 0 <= C; x--, C--) if (d[x] !== m[C]) {
-          if (x !== 1 || C !== 1)
+`), x = d.length - 1, N = m.length - 1; 1 <= x && 0 <= N && d[x] !== m[N]; ) N--;
+        for (; 1 <= x && 0 <= N; x--, N--) if (d[x] !== m[N]) {
+          if (x !== 1 || N !== 1)
             do
-              if (x--, C--, 0 > C || d[x] !== m[C]) {
+              if (x--, N--, 0 > N || d[x] !== m[N]) {
                 var L = `
 ` + d[x].replace(" at new ", " at ");
                 return e.displayName && L.includes("<anonymous>") && (L = L.replace("<anonymous>", e.displayName)), L;
               }
-            while (1 <= x && 0 <= C);
+            while (1 <= x && 0 <= N);
           break;
         }
       }
@@ -11320,21 +11534,21 @@ function hh() {
       case 0:
       case 2:
       case 15:
-        return e = _e(e.type, !1), e;
+        return e = fe(e.type, !1), e;
       case 11:
-        return e = _e(e.type.render, !1), e;
+        return e = fe(e.type.render, !1), e;
       case 1:
-        return e = _e(e.type, !0), e;
+        return e = fe(e.type, !0), e;
       default:
         return "";
     }
   }
-  function Ne(e) {
+  function Ce(e) {
     if (e == null) return null;
     if (typeof e == "function") return e.displayName || e.name || null;
     if (typeof e == "string") return e;
     switch (e) {
-      case N:
+      case C:
         return "Fragment";
       case E:
         return "Portal";
@@ -11356,11 +11570,11 @@ function hh() {
         var t = e.render;
         return e = e.displayName, e || (e = t.displayName || t.name || "", e = e !== "" ? "ForwardRef(" + e + ")" : "ForwardRef"), e;
       case K:
-        return t = e.displayName || null, t !== null ? t : Ne(e.type) || "Memo";
+        return t = e.displayName || null, t !== null ? t : Ce(e.type) || "Memo";
       case te:
         t = e._payload, e = e._init;
         try {
-          return Ne(e(t));
+          return Ce(e(t));
         } catch {
         }
     }
@@ -11390,7 +11604,7 @@ function hh() {
       case 6:
         return "Text";
       case 16:
-        return Ne(t);
+        return Ce(t);
       case 8:
         return t === D ? "StrictMode" : "Mode";
       case 22:
@@ -11521,7 +11735,7 @@ function hh() {
     if (t.dangerouslySetInnerHTML != null) throw Error(n(91));
     return re({}, t, { value: void 0, defaultValue: void 0, children: "" + e._wrapperState.initialValue });
   }
-  function Ce(e, t) {
+  function Ne(e, t) {
     var i = t.value;
     if (i == null) {
       if (i = t.children, t = t.defaultValue, i != null) {
@@ -11630,13 +11844,13 @@ function hh() {
       t = t + e.charAt(0).toUpperCase() + e.substring(1), se[t] = se[e];
     });
   });
-  function Te(e, t, i) {
+  function Me(e, t, i) {
     return t == null || typeof t == "boolean" || t === "" ? "" : i || typeof t != "number" || t === 0 || se.hasOwnProperty(e) && se[e] ? ("" + t).trim() : t + "px";
   }
-  function Me(e, t) {
+  function He(e, t) {
     e = e.style;
     for (var i in t) if (t.hasOwnProperty(i)) {
-      var l = i.indexOf("--") === 0, d = Te(i, t[i], l);
+      var l = i.indexOf("--") === 0, d = Me(i, t[i], l);
       i === "float" && (i = "cssFloat"), l ? e.setProperty(i, d) : e[i] = d;
     }
   }
@@ -11672,41 +11886,41 @@ function hh() {
     return e = e.target || e.srcElement || window, e.correspondingUseElement && (e = e.correspondingUseElement), e.nodeType === 3 ? e.parentNode : e;
   }
   var Yr = null, Rr = null, Zt = null;
-  function En(e) {
-    if (e = Kn(e)) {
+  function Pn(e) {
+    if (e = Xn(e)) {
       if (typeof Yr != "function") throw Error(n(280));
       var t = e.stateNode;
-      t && (t = Zi(t), Yr(e.stateNode, e.type, t));
+      t && (t = eo(t), Yr(e.stateNode, e.type, t));
     }
   }
-  function Pn(e) {
+  function In(e) {
     Rr ? Zt ? Zt.push(e) : Zt = [e] : Rr = e;
   }
   function Kr() {
     if (Rr) {
       var e = Rr, t = Zt;
-      if (Zt = Rr = null, En(e), t) for (e = 0; e < t.length; e++) En(t[e]);
+      if (Zt = Rr = null, Pn(e), t) for (e = 0; e < t.length; e++) Pn(t[e]);
     }
   }
-  function Ci(e, t) {
+  function zi(e, t) {
     return e(t);
   }
-  function Bl() {
+  function Dl() {
   }
-  var ua = !1;
-  function Dl(e, t, i) {
-    if (ua) return e(t, i);
-    ua = !0;
+  var pa = !1;
+  function $l(e, t, i) {
+    if (pa) return e(t, i);
+    pa = !0;
     try {
-      return Ci(e, t, i);
+      return zi(e, t, i);
     } finally {
-      ua = !1, (Rr !== null || Zt !== null) && (Bl(), Kr());
+      pa = !1, (Rr !== null || Zt !== null) && (Dl(), Kr());
     }
   }
-  function In(e, t) {
+  function Cn(e, t) {
     var i = e.stateNode;
     if (i === null) return null;
-    var l = Zi(i);
+    var l = eo(i);
     if (l === null) return null;
     i = l[t];
     e: switch (t) {
@@ -11730,16 +11944,16 @@ function hh() {
     if (i && typeof i != "function") throw Error(n(231, t, typeof i));
     return i;
   }
-  var pa = !1;
+  var ma = !1;
   if (p) try {
     var Nn = {};
     Object.defineProperty(Nn, "passive", { get: function() {
-      pa = !0;
+      ma = !0;
     } }), window.addEventListener("test", Nn, Nn), window.removeEventListener("test", Nn, Nn);
   } catch {
-    pa = !1;
+    ma = !1;
   }
-  function gm(e, t, i, l, d, m, x, C, L) {
+  function _m(e, t, i, l, d, m, x, N, L) {
     var U = Array.prototype.slice.call(arguments, 3);
     try {
       t.apply(i, U);
@@ -11747,19 +11961,19 @@ function hh() {
       this.onError(ne);
     }
   }
-  var Cn = !1, zi = null, Ri = !1, ma = null, hm = { onError: function(e) {
-    Cn = !0, zi = e;
+  var zn = !1, Ri = null, Li = !1, ga = null, fm = { onError: function(e) {
+    zn = !0, Ri = e;
   } };
-  function fm(e, t, i, l, d, m, x, C, L) {
-    Cn = !1, zi = null, gm.apply(hm, arguments);
+  function bm(e, t, i, l, d, m, x, N, L) {
+    zn = !1, Ri = null, _m.apply(fm, arguments);
   }
-  function _m(e, t, i, l, d, m, x, C, L) {
-    if (fm.apply(this, arguments), Cn) {
-      if (Cn) {
-        var U = zi;
-        Cn = !1, zi = null;
+  function ym(e, t, i, l, d, m, x, N, L) {
+    if (bm.apply(this, arguments), zn) {
+      if (zn) {
+        var U = Ri;
+        zn = !1, Ri = null;
       } else throw Error(n(198));
-      Ri || (Ri = !0, ma = U);
+      Li || (Li = !0, ga = U);
     }
   }
   function Lr(e) {
@@ -11773,17 +11987,17 @@ function hh() {
     }
     return t.tag === 3 ? i : null;
   }
-  function $l(e) {
+  function ql(e) {
     if (e.tag === 13) {
       var t = e.memoizedState;
       if (t === null && (e = e.alternate, e !== null && (t = e.memoizedState)), t !== null) return t.dehydrated;
     }
     return null;
   }
-  function ql(e) {
+  function jl(e) {
     if (Lr(e) !== e) throw Error(n(188));
   }
-  function bm(e) {
+  function vm(e) {
     var t = e.alternate;
     if (!t) {
       if (t = Lr(e), t === null) throw Error(n(188));
@@ -11802,36 +12016,36 @@ function hh() {
       }
       if (d.child === m.child) {
         for (m = d.child; m; ) {
-          if (m === i) return ql(d), e;
-          if (m === l) return ql(d), t;
+          if (m === i) return jl(d), e;
+          if (m === l) return jl(d), t;
           m = m.sibling;
         }
         throw Error(n(188));
       }
       if (i.return !== l.return) i = d, l = m;
       else {
-        for (var x = !1, C = d.child; C; ) {
-          if (C === i) {
+        for (var x = !1, N = d.child; N; ) {
+          if (N === i) {
             x = !0, i = d, l = m;
             break;
           }
-          if (C === l) {
+          if (N === l) {
             x = !0, l = d, i = m;
             break;
           }
-          C = C.sibling;
+          N = N.sibling;
         }
         if (!x) {
-          for (C = m.child; C; ) {
-            if (C === i) {
+          for (N = m.child; N; ) {
+            if (N === i) {
               x = !0, i = m, l = d;
               break;
             }
-            if (C === l) {
+            if (N === l) {
               x = !0, l = m, i = d;
               break;
             }
-            C = C.sibling;
+            N = N.sibling;
           }
           if (!x) throw Error(n(189));
         }
@@ -11841,31 +12055,31 @@ function hh() {
     if (i.tag !== 3) throw Error(n(188));
     return i.stateNode.current === i ? e : t;
   }
-  function jl(e) {
-    return e = bm(e), e !== null ? Fl(e) : null;
-  }
   function Fl(e) {
+    return e = vm(e), e !== null ? Ul(e) : null;
+  }
+  function Ul(e) {
     if (e.tag === 5 || e.tag === 6) return e;
     for (e = e.child; e !== null; ) {
-      var t = Fl(e);
+      var t = Ul(e);
       if (t !== null) return t;
       e = e.sibling;
     }
     return null;
   }
-  var Ul = r.unstable_scheduleCallback, Wl = r.unstable_cancelCallback, ym = r.unstable_shouldYield, vm = r.unstable_requestPaint, rt = r.unstable_now, xm = r.unstable_getCurrentPriorityLevel, ga = r.unstable_ImmediatePriority, Vl = r.unstable_UserBlockingPriority, Li = r.unstable_NormalPriority, wm = r.unstable_LowPriority, Gl = r.unstable_IdlePriority, Oi = null, Yt = null;
-  function km(e) {
+  var Wl = r.unstable_scheduleCallback, Vl = r.unstable_cancelCallback, xm = r.unstable_shouldYield, wm = r.unstable_requestPaint, rt = r.unstable_now, km = r.unstable_getCurrentPriorityLevel, ha = r.unstable_ImmediatePriority, Gl = r.unstable_UserBlockingPriority, Oi = r.unstable_NormalPriority, Sm = r.unstable_LowPriority, Yl = r.unstable_IdlePriority, Ti = null, Yt = null;
+  function Am(e) {
     if (Yt && typeof Yt.onCommitFiberRoot == "function") try {
-      Yt.onCommitFiberRoot(Oi, e, void 0, (e.current.flags & 128) === 128);
+      Yt.onCommitFiberRoot(Ti, e, void 0, (e.current.flags & 128) === 128);
     } catch {
     }
   }
-  var $t = Math.clz32 ? Math.clz32 : Em, Sm = Math.log, Am = Math.LN2;
-  function Em(e) {
-    return e >>>= 0, e === 0 ? 32 : 31 - (Sm(e) / Am | 0) | 0;
+  var $t = Math.clz32 ? Math.clz32 : Im, Em = Math.log, Pm = Math.LN2;
+  function Im(e) {
+    return e >>>= 0, e === 0 ? 32 : 31 - (Em(e) / Pm | 0) | 0;
   }
-  var Ti = 64, Mi = 4194304;
-  function zn(e) {
+  var Mi = 64, Hi = 4194304;
+  function Rn(e) {
     switch (e & -e) {
       case 1:
         return 1;
@@ -11914,20 +12128,20 @@ function hh() {
         return e;
     }
   }
-  function Hi(e, t) {
+  function Bi(e, t) {
     var i = e.pendingLanes;
     if (i === 0) return 0;
     var l = 0, d = e.suspendedLanes, m = e.pingedLanes, x = i & 268435455;
     if (x !== 0) {
-      var C = x & ~d;
-      C !== 0 ? l = zn(C) : (m &= x, m !== 0 && (l = zn(m)));
-    } else x = i & ~d, x !== 0 ? l = zn(x) : m !== 0 && (l = zn(m));
+      var N = x & ~d;
+      N !== 0 ? l = Rn(N) : (m &= x, m !== 0 && (l = Rn(m)));
+    } else x = i & ~d, x !== 0 ? l = Rn(x) : m !== 0 && (l = Rn(m));
     if (l === 0) return 0;
     if (t !== 0 && t !== l && !(t & d) && (d = l & -l, m = t & -t, d >= m || d === 16 && (m & 4194240) !== 0)) return t;
     if (l & 4 && (l |= i & 16), t = e.entangledLanes, t !== 0) for (e = e.entanglements, t &= l; 0 < t; ) i = 31 - $t(t), d = 1 << i, l |= e[i], t &= ~d;
     return l;
   }
-  function Pm(e, t) {
+  function Cm(e, t) {
     switch (e) {
       case 1:
       case 2:
@@ -11968,27 +12182,27 @@ function hh() {
         return -1;
     }
   }
-  function Im(e, t) {
+  function Nm(e, t) {
     for (var i = e.suspendedLanes, l = e.pingedLanes, d = e.expirationTimes, m = e.pendingLanes; 0 < m; ) {
-      var x = 31 - $t(m), C = 1 << x, L = d[x];
-      L === -1 ? (!(C & i) || C & l) && (d[x] = Pm(C, t)) : L <= t && (e.expiredLanes |= C), m &= ~C;
+      var x = 31 - $t(m), N = 1 << x, L = d[x];
+      L === -1 ? (!(N & i) || N & l) && (d[x] = Cm(N, t)) : L <= t && (e.expiredLanes |= N), m &= ~N;
     }
   }
-  function ha(e) {
+  function _a(e) {
     return e = e.pendingLanes & -1073741825, e !== 0 ? e : e & 1073741824 ? 1073741824 : 0;
   }
-  function Yl() {
-    var e = Ti;
-    return Ti <<= 1, !(Ti & 4194240) && (Ti = 64), e;
+  function Kl() {
+    var e = Mi;
+    return Mi <<= 1, !(Mi & 4194240) && (Mi = 64), e;
   }
   function fa(e) {
     for (var t = [], i = 0; 31 > i; i++) t.push(e);
     return t;
   }
-  function Rn(e, t, i) {
+  function Ln(e, t, i) {
     e.pendingLanes |= t, t !== 536870912 && (e.suspendedLanes = 0, e.pingedLanes = 0), e = e.eventTimes, t = 31 - $t(t), e[t] = i;
   }
-  function Nm(e, t) {
+  function zm(e, t) {
     var i = e.pendingLanes & ~t;
     e.pendingLanes = t, e.suspendedLanes = 0, e.pingedLanes = 0, e.expiredLanes &= t, e.mutableReadLanes &= t, e.entangledLanes &= t, t = e.entanglements;
     var l = e.eventTimes;
@@ -11997,7 +12211,7 @@ function hh() {
       t[d] = 0, l[d] = -1, e[d] = -1, i &= ~m;
     }
   }
-  function _a(e, t) {
+  function ba(e, t) {
     var i = e.entangledLanes |= t;
     for (e = e.entanglements; i; ) {
       var l = 31 - $t(i), d = 1 << l;
@@ -12005,11 +12219,11 @@ function hh() {
     }
   }
   var Ue = 0;
-  function Kl(e) {
+  function Xl(e) {
     return e &= -e, 1 < e ? 4 < e ? e & 268435455 ? 16 : 536870912 : 4 : 1;
   }
-  var Xl, ba, Ql, Jl, Zl, ya = !1, Bi = [], ur = null, pr = null, mr = null, Ln = /* @__PURE__ */ new Map(), On = /* @__PURE__ */ new Map(), gr = [], Cm = "mousedown mouseup touchcancel touchend touchstart auxclick dblclick pointercancel pointerdown pointerup dragend dragstart drop compositionend compositionstart keydown keypress keyup input textInput copy cut paste click change contextmenu reset submit".split(" ");
-  function ec(e, t) {
+  var Ql, ya, Jl, Zl, ec, va = !1, Di = [], ur = null, pr = null, mr = null, On = /* @__PURE__ */ new Map(), Tn = /* @__PURE__ */ new Map(), gr = [], Rm = "mousedown mouseup touchcancel touchend touchstart auxclick dblclick pointercancel pointerdown pointerup dragend dragstart drop compositionend compositionstart keydown keypress keyup input textInput copy cut paste click change contextmenu reset submit".split(" ");
+  function tc(e, t) {
     switch (e) {
       case "focusin":
       case "focusout":
@@ -12025,41 +12239,41 @@ function hh() {
         break;
       case "pointerover":
       case "pointerout":
-        Ln.delete(t.pointerId);
+        On.delete(t.pointerId);
         break;
       case "gotpointercapture":
       case "lostpointercapture":
-        On.delete(t.pointerId);
+        Tn.delete(t.pointerId);
     }
   }
-  function Tn(e, t, i, l, d, m) {
-    return e === null || e.nativeEvent !== m ? (e = { blockedOn: t, domEventName: i, eventSystemFlags: l, nativeEvent: m, targetContainers: [d] }, t !== null && (t = Kn(t), t !== null && ba(t)), e) : (e.eventSystemFlags |= l, t = e.targetContainers, d !== null && t.indexOf(d) === -1 && t.push(d), e);
+  function Mn(e, t, i, l, d, m) {
+    return e === null || e.nativeEvent !== m ? (e = { blockedOn: t, domEventName: i, eventSystemFlags: l, nativeEvent: m, targetContainers: [d] }, t !== null && (t = Xn(t), t !== null && ya(t)), e) : (e.eventSystemFlags |= l, t = e.targetContainers, d !== null && t.indexOf(d) === -1 && t.push(d), e);
   }
-  function zm(e, t, i, l, d) {
+  function Lm(e, t, i, l, d) {
     switch (t) {
       case "focusin":
-        return ur = Tn(ur, e, t, i, l, d), !0;
+        return ur = Mn(ur, e, t, i, l, d), !0;
       case "dragenter":
-        return pr = Tn(pr, e, t, i, l, d), !0;
+        return pr = Mn(pr, e, t, i, l, d), !0;
       case "mouseover":
-        return mr = Tn(mr, e, t, i, l, d), !0;
+        return mr = Mn(mr, e, t, i, l, d), !0;
       case "pointerover":
         var m = d.pointerId;
-        return Ln.set(m, Tn(Ln.get(m) || null, e, t, i, l, d)), !0;
+        return On.set(m, Mn(On.get(m) || null, e, t, i, l, d)), !0;
       case "gotpointercapture":
-        return m = d.pointerId, On.set(m, Tn(On.get(m) || null, e, t, i, l, d)), !0;
+        return m = d.pointerId, Tn.set(m, Mn(Tn.get(m) || null, e, t, i, l, d)), !0;
     }
     return !1;
   }
-  function tc(e) {
+  function rc(e) {
     var t = Or(e.target);
     if (t !== null) {
       var i = Lr(t);
       if (i !== null) {
         if (t = i.tag, t === 13) {
-          if (t = $l(i), t !== null) {
-            e.blockedOn = t, Zl(e.priority, function() {
-              Ql(i);
+          if (t = ql(i), t !== null) {
+            e.blockedOn = t, ec(e.priority, function() {
+              Jl(i);
             });
             return;
           }
@@ -12071,89 +12285,89 @@ function hh() {
     }
     e.blockedOn = null;
   }
-  function Di(e) {
+  function $i(e) {
     if (e.blockedOn !== null) return !1;
     for (var t = e.targetContainers; 0 < t.length; ) {
-      var i = xa(e.domEventName, e.eventSystemFlags, t[0], e.nativeEvent);
+      var i = wa(e.domEventName, e.eventSystemFlags, t[0], e.nativeEvent);
       if (i === null) {
         i = e.nativeEvent;
         var l = new i.constructor(i.type, i);
         Gt = l, i.target.dispatchEvent(l), Gt = null;
-      } else return t = Kn(i), t !== null && ba(t), e.blockedOn = i, !1;
+      } else return t = Xn(i), t !== null && ya(t), e.blockedOn = i, !1;
       t.shift();
     }
     return !0;
   }
-  function rc(e, t, i) {
-    Di(e) && i.delete(t);
+  function nc(e, t, i) {
+    $i(e) && i.delete(t);
   }
-  function Rm() {
-    ya = !1, ur !== null && Di(ur) && (ur = null), pr !== null && Di(pr) && (pr = null), mr !== null && Di(mr) && (mr = null), Ln.forEach(rc), On.forEach(rc);
+  function Om() {
+    va = !1, ur !== null && $i(ur) && (ur = null), pr !== null && $i(pr) && (pr = null), mr !== null && $i(mr) && (mr = null), On.forEach(nc), Tn.forEach(nc);
   }
-  function Mn(e, t) {
-    e.blockedOn === t && (e.blockedOn = null, ya || (ya = !0, r.unstable_scheduleCallback(r.unstable_NormalPriority, Rm)));
+  function Hn(e, t) {
+    e.blockedOn === t && (e.blockedOn = null, va || (va = !0, r.unstable_scheduleCallback(r.unstable_NormalPriority, Om)));
   }
-  function Hn(e) {
+  function Bn(e) {
     function t(d) {
-      return Mn(d, e);
+      return Hn(d, e);
     }
-    if (0 < Bi.length) {
-      Mn(Bi[0], e);
-      for (var i = 1; i < Bi.length; i++) {
-        var l = Bi[i];
+    if (0 < Di.length) {
+      Hn(Di[0], e);
+      for (var i = 1; i < Di.length; i++) {
+        var l = Di[i];
         l.blockedOn === e && (l.blockedOn = null);
       }
     }
-    for (ur !== null && Mn(ur, e), pr !== null && Mn(pr, e), mr !== null && Mn(mr, e), Ln.forEach(t), On.forEach(t), i = 0; i < gr.length; i++) l = gr[i], l.blockedOn === e && (l.blockedOn = null);
-    for (; 0 < gr.length && (i = gr[0], i.blockedOn === null); ) tc(i), i.blockedOn === null && gr.shift();
+    for (ur !== null && Hn(ur, e), pr !== null && Hn(pr, e), mr !== null && Hn(mr, e), On.forEach(t), Tn.forEach(t), i = 0; i < gr.length; i++) l = gr[i], l.blockedOn === e && (l.blockedOn = null);
+    for (; 0 < gr.length && (i = gr[0], i.blockedOn === null); ) rc(i), i.blockedOn === null && gr.shift();
   }
-  var Xr = b.ReactCurrentBatchConfig, $i = !0;
-  function Lm(e, t, i, l) {
+  var Xr = b.ReactCurrentBatchConfig, qi = !0;
+  function Tm(e, t, i, l) {
     var d = Ue, m = Xr.transition;
     Xr.transition = null;
     try {
-      Ue = 1, va(e, t, i, l);
+      Ue = 1, xa(e, t, i, l);
     } finally {
       Ue = d, Xr.transition = m;
     }
   }
-  function Om(e, t, i, l) {
+  function Mm(e, t, i, l) {
     var d = Ue, m = Xr.transition;
     Xr.transition = null;
     try {
-      Ue = 4, va(e, t, i, l);
+      Ue = 4, xa(e, t, i, l);
     } finally {
       Ue = d, Xr.transition = m;
     }
   }
-  function va(e, t, i, l) {
-    if ($i) {
-      var d = xa(e, t, i, l);
-      if (d === null) Ba(e, t, l, qi, i), ec(e, l);
-      else if (zm(d, e, t, i, l)) l.stopPropagation();
-      else if (ec(e, l), t & 4 && -1 < Cm.indexOf(e)) {
+  function xa(e, t, i, l) {
+    if (qi) {
+      var d = wa(e, t, i, l);
+      if (d === null) Da(e, t, l, ji, i), tc(e, l);
+      else if (Lm(d, e, t, i, l)) l.stopPropagation();
+      else if (tc(e, l), t & 4 && -1 < Rm.indexOf(e)) {
         for (; d !== null; ) {
-          var m = Kn(d);
-          if (m !== null && Xl(m), m = xa(e, t, i, l), m === null && Ba(e, t, l, qi, i), m === d) break;
+          var m = Xn(d);
+          if (m !== null && Ql(m), m = wa(e, t, i, l), m === null && Da(e, t, l, ji, i), m === d) break;
           d = m;
         }
         d !== null && l.stopPropagation();
-      } else Ba(e, t, l, null, i);
+      } else Da(e, t, l, null, i);
     }
   }
-  var qi = null;
-  function xa(e, t, i, l) {
-    if (qi = null, e = zr(l), e = Or(e), e !== null) if (t = Lr(e), t === null) e = null;
+  var ji = null;
+  function wa(e, t, i, l) {
+    if (ji = null, e = zr(l), e = Or(e), e !== null) if (t = Lr(e), t === null) e = null;
     else if (i = t.tag, i === 13) {
-      if (e = $l(t), e !== null) return e;
+      if (e = ql(t), e !== null) return e;
       e = null;
     } else if (i === 3) {
       if (t.stateNode.current.memoizedState.isDehydrated) return t.tag === 3 ? t.stateNode.containerInfo : null;
       e = null;
     } else t !== e && (e = null);
-    return qi = e, null;
+    return ji = e, null;
   }
-  function nc(e) {
+  function ic(e) {
     switch (e) {
       case "cancel":
       case "click":
@@ -12228,15 +12442,15 @@ function hh() {
       case "pointerleave":
         return 4;
       case "message":
-        switch (xm()) {
-          case ga:
+        switch (km()) {
+          case ha:
             return 1;
-          case Vl:
-            return 4;
-          case Li:
-          case wm:
-            return 16;
           case Gl:
+            return 4;
+          case Oi:
+          case Sm:
+            return 16;
+          case Yl:
             return 536870912;
           default:
             return 16;
@@ -12245,52 +12459,52 @@ function hh() {
         return 16;
     }
   }
-  var hr = null, wa = null, ji = null;
-  function ic() {
-    if (ji) return ji;
-    var e, t = wa, i = t.length, l, d = "value" in hr ? hr.value : hr.textContent, m = d.length;
+  var hr = null, ka = null, Fi = null;
+  function oc() {
+    if (Fi) return Fi;
+    var e, t = ka, i = t.length, l, d = "value" in hr ? hr.value : hr.textContent, m = d.length;
     for (e = 0; e < i && t[e] === d[e]; e++) ;
     var x = i - e;
     for (l = 1; l <= x && t[i - l] === d[m - l]; l++) ;
-    return ji = d.slice(e, 1 < l ? 1 - l : void 0);
+    return Fi = d.slice(e, 1 < l ? 1 - l : void 0);
   }
-  function Fi(e) {
+  function Ui(e) {
     var t = e.keyCode;
     return "charCode" in e ? (e = e.charCode, e === 0 && t === 13 && (e = 13)) : e = t, e === 10 && (e = 13), 32 <= e || e === 13 ? e : 0;
   }
-  function Ui() {
+  function Wi() {
     return !0;
   }
-  function oc() {
+  function ac() {
     return !1;
   }
-  function Nt(e) {
+  function Ct(e) {
     function t(i, l, d, m, x) {
       this._reactName = i, this._targetInst = d, this.type = l, this.nativeEvent = m, this.target = x, this.currentTarget = null;
-      for (var C in e) e.hasOwnProperty(C) && (i = e[C], this[C] = i ? i(m) : m[C]);
-      return this.isDefaultPrevented = (m.defaultPrevented != null ? m.defaultPrevented : m.returnValue === !1) ? Ui : oc, this.isPropagationStopped = oc, this;
+      for (var N in e) e.hasOwnProperty(N) && (i = e[N], this[N] = i ? i(m) : m[N]);
+      return this.isDefaultPrevented = (m.defaultPrevented != null ? m.defaultPrevented : m.returnValue === !1) ? Wi : ac, this.isPropagationStopped = ac, this;
     }
     return re(t.prototype, { preventDefault: function() {
       this.defaultPrevented = !0;
       var i = this.nativeEvent;
-      i && (i.preventDefault ? i.preventDefault() : typeof i.returnValue != "unknown" && (i.returnValue = !1), this.isDefaultPrevented = Ui);
+      i && (i.preventDefault ? i.preventDefault() : typeof i.returnValue != "unknown" && (i.returnValue = !1), this.isDefaultPrevented = Wi);
     }, stopPropagation: function() {
       var i = this.nativeEvent;
-      i && (i.stopPropagation ? i.stopPropagation() : typeof i.cancelBubble != "unknown" && (i.cancelBubble = !0), this.isPropagationStopped = Ui);
+      i && (i.stopPropagation ? i.stopPropagation() : typeof i.cancelBubble != "unknown" && (i.cancelBubble = !0), this.isPropagationStopped = Wi);
     }, persist: function() {
-    }, isPersistent: Ui }), t;
+    }, isPersistent: Wi }), t;
   }
   var Qr = { eventPhase: 0, bubbles: 0, cancelable: 0, timeStamp: function(e) {
     return e.timeStamp || Date.now();
-  }, defaultPrevented: 0, isTrusted: 0 }, ka = Nt(Qr), Bn = re({}, Qr, { view: 0, detail: 0 }), Tm = Nt(Bn), Sa, Aa, Dn, Wi = re({}, Bn, { screenX: 0, screenY: 0, clientX: 0, clientY: 0, pageX: 0, pageY: 0, ctrlKey: 0, shiftKey: 0, altKey: 0, metaKey: 0, getModifierState: Pa, button: 0, buttons: 0, relatedTarget: function(e) {
+  }, defaultPrevented: 0, isTrusted: 0 }, Sa = Ct(Qr), Dn = re({}, Qr, { view: 0, detail: 0 }), Hm = Ct(Dn), Aa, Ea, $n, Vi = re({}, Dn, { screenX: 0, screenY: 0, clientX: 0, clientY: 0, pageX: 0, pageY: 0, ctrlKey: 0, shiftKey: 0, altKey: 0, metaKey: 0, getModifierState: Ia, button: 0, buttons: 0, relatedTarget: function(e) {
     return e.relatedTarget === void 0 ? e.fromElement === e.srcElement ? e.toElement : e.fromElement : e.relatedTarget;
   }, movementX: function(e) {
-    return "movementX" in e ? e.movementX : (e !== Dn && (Dn && e.type === "mousemove" ? (Sa = e.screenX - Dn.screenX, Aa = e.screenY - Dn.screenY) : Aa = Sa = 0, Dn = e), Sa);
+    return "movementX" in e ? e.movementX : (e !== $n && ($n && e.type === "mousemove" ? (Aa = e.screenX - $n.screenX, Ea = e.screenY - $n.screenY) : Ea = Aa = 0, $n = e), Aa);
   }, movementY: function(e) {
-    return "movementY" in e ? e.movementY : Aa;
-  } }), ac = Nt(Wi), Mm = re({}, Wi, { dataTransfer: 0 }), Hm = Nt(Mm), Bm = re({}, Bn, { relatedTarget: 0 }), Ea = Nt(Bm), Dm = re({}, Qr, { animationName: 0, elapsedTime: 0, pseudoElement: 0 }), $m = Nt(Dm), qm = re({}, Qr, { clipboardData: function(e) {
+    return "movementY" in e ? e.movementY : Ea;
+  } }), sc = Ct(Vi), Bm = re({}, Vi, { dataTransfer: 0 }), Dm = Ct(Bm), $m = re({}, Dn, { relatedTarget: 0 }), Pa = Ct($m), qm = re({}, Qr, { animationName: 0, elapsedTime: 0, pseudoElement: 0 }), jm = Ct(qm), Fm = re({}, Qr, { clipboardData: function(e) {
     return "clipboardData" in e ? e.clipboardData : window.clipboardData;
-  } }), jm = Nt(qm), Fm = re({}, Qr, { data: 0 }), sc = Nt(Fm), Um = {
+  } }), Um = Ct(Fm), Wm = re({}, Qr, { data: 0 }), lc = Ct(Wm), Vm = {
     Esc: "Escape",
     Spacebar: " ",
     Left: "ArrowLeft",
@@ -12303,7 +12517,7 @@ function hh() {
     Apps: "ContextMenu",
     Scroll: "ScrollLock",
     MozPrintableKey: "Unidentified"
-  }, Wm = {
+  }, Gm = {
     8: "Backspace",
     9: "Tab",
     12: "Clear",
@@ -12340,27 +12554,27 @@ function hh() {
     144: "NumLock",
     145: "ScrollLock",
     224: "Meta"
-  }, Vm = { Alt: "altKey", Control: "ctrlKey", Meta: "metaKey", Shift: "shiftKey" };
-  function Gm(e) {
+  }, Ym = { Alt: "altKey", Control: "ctrlKey", Meta: "metaKey", Shift: "shiftKey" };
+  function Km(e) {
     var t = this.nativeEvent;
-    return t.getModifierState ? t.getModifierState(e) : (e = Vm[e]) ? !!t[e] : !1;
+    return t.getModifierState ? t.getModifierState(e) : (e = Ym[e]) ? !!t[e] : !1;
   }
-  function Pa() {
-    return Gm;
+  function Ia() {
+    return Km;
   }
-  var Ym = re({}, Bn, { key: function(e) {
+  var Xm = re({}, Dn, { key: function(e) {
     if (e.key) {
-      var t = Um[e.key] || e.key;
+      var t = Vm[e.key] || e.key;
       if (t !== "Unidentified") return t;
     }
-    return e.type === "keypress" ? (e = Fi(e), e === 13 ? "Enter" : String.fromCharCode(e)) : e.type === "keydown" || e.type === "keyup" ? Wm[e.keyCode] || "Unidentified" : "";
-  }, code: 0, location: 0, ctrlKey: 0, shiftKey: 0, altKey: 0, metaKey: 0, repeat: 0, locale: 0, getModifierState: Pa, charCode: function(e) {
-    return e.type === "keypress" ? Fi(e) : 0;
+    return e.type === "keypress" ? (e = Ui(e), e === 13 ? "Enter" : String.fromCharCode(e)) : e.type === "keydown" || e.type === "keyup" ? Gm[e.keyCode] || "Unidentified" : "";
+  }, code: 0, location: 0, ctrlKey: 0, shiftKey: 0, altKey: 0, metaKey: 0, repeat: 0, locale: 0, getModifierState: Ia, charCode: function(e) {
+    return e.type === "keypress" ? Ui(e) : 0;
   }, keyCode: function(e) {
     return e.type === "keydown" || e.type === "keyup" ? e.keyCode : 0;
   }, which: function(e) {
-    return e.type === "keypress" ? Fi(e) : e.type === "keydown" || e.type === "keyup" ? e.keyCode : 0;
-  } }), Km = Nt(Ym), Xm = re({}, Wi, { pointerId: 0, width: 0, height: 0, pressure: 0, tangentialPressure: 0, tiltX: 0, tiltY: 0, twist: 0, pointerType: 0, isPrimary: 0 }), lc = Nt(Xm), Qm = re({}, Bn, { touches: 0, targetTouches: 0, changedTouches: 0, altKey: 0, metaKey: 0, ctrlKey: 0, shiftKey: 0, getModifierState: Pa }), Jm = Nt(Qm), Zm = re({}, Qr, { propertyName: 0, elapsedTime: 0, pseudoElement: 0 }), eg = Nt(Zm), tg = re({}, Wi, {
+    return e.type === "keypress" ? Ui(e) : e.type === "keydown" || e.type === "keyup" ? e.keyCode : 0;
+  } }), Qm = Ct(Xm), Jm = re({}, Vi, { pointerId: 0, width: 0, height: 0, pressure: 0, tangentialPressure: 0, tiltX: 0, tiltY: 0, twist: 0, pointerType: 0, isPrimary: 0 }), cc = Ct(Jm), Zm = re({}, Dn, { touches: 0, targetTouches: 0, changedTouches: 0, altKey: 0, metaKey: 0, ctrlKey: 0, shiftKey: 0, getModifierState: Ia }), eg = Ct(Zm), tg = re({}, Qr, { propertyName: 0, elapsedTime: 0, pseudoElement: 0 }), rg = Ct(tg), ng = re({}, Vi, {
     deltaX: function(e) {
       return "deltaX" in e ? e.deltaX : "wheelDeltaX" in e ? -e.wheelDeltaX : 0;
     },
@@ -12369,13 +12583,13 @@ function hh() {
     },
     deltaZ: 0,
     deltaMode: 0
-  }), rg = Nt(tg), ng = [9, 13, 27, 32], Ia = p && "CompositionEvent" in window, $n = null;
-  p && "documentMode" in document && ($n = document.documentMode);
-  var ig = p && "TextEvent" in window && !$n, cc = p && (!Ia || $n && 8 < $n && 11 >= $n), dc = " ", uc = !1;
-  function pc(e, t) {
+  }), ig = Ct(ng), og = [9, 13, 27, 32], Ca = p && "CompositionEvent" in window, qn = null;
+  p && "documentMode" in document && (qn = document.documentMode);
+  var ag = p && "TextEvent" in window && !qn, dc = p && (!Ca || qn && 8 < qn && 11 >= qn), uc = " ", pc = !1;
+  function mc(e, t) {
     switch (e) {
       case "keyup":
-        return ng.indexOf(t.keyCode) !== -1;
+        return og.indexOf(t.keyCode) !== -1;
       case "keydown":
         return t.keyCode !== 229;
       case "keypress":
@@ -12386,24 +12600,24 @@ function hh() {
         return !1;
     }
   }
-  function mc(e) {
+  function gc(e) {
     return e = e.detail, typeof e == "object" && "data" in e ? e.data : null;
   }
   var Jr = !1;
-  function og(e, t) {
+  function sg(e, t) {
     switch (e) {
       case "compositionend":
-        return mc(t);
+        return gc(t);
       case "keypress":
-        return t.which !== 32 ? null : (uc = !0, dc);
+        return t.which !== 32 ? null : (pc = !0, uc);
       case "textInput":
-        return e = t.data, e === dc && uc ? null : e;
+        return e = t.data, e === uc && pc ? null : e;
       default:
         return null;
     }
   }
-  function ag(e, t) {
-    if (Jr) return e === "compositionend" || !Ia && pc(e, t) ? (e = ic(), ji = wa = hr = null, Jr = !1, e) : null;
+  function lg(e, t) {
+    if (Jr) return e === "compositionend" || !Ca && mc(e, t) ? (e = oc(), Fi = ka = hr = null, Jr = !1, e) : null;
     switch (e) {
       case "paste":
         return null;
@@ -12414,69 +12628,69 @@ function hh() {
         }
         return null;
       case "compositionend":
-        return cc && t.locale !== "ko" ? null : t.data;
+        return dc && t.locale !== "ko" ? null : t.data;
       default:
         return null;
     }
   }
-  var sg = { color: !0, date: !0, datetime: !0, "datetime-local": !0, email: !0, month: !0, number: !0, password: !0, range: !0, search: !0, tel: !0, text: !0, time: !0, url: !0, week: !0 };
-  function gc(e) {
+  var cg = { color: !0, date: !0, datetime: !0, "datetime-local": !0, email: !0, month: !0, number: !0, password: !0, range: !0, search: !0, tel: !0, text: !0, time: !0, url: !0, week: !0 };
+  function hc(e) {
     var t = e && e.nodeName && e.nodeName.toLowerCase();
-    return t === "input" ? !!sg[e.type] : t === "textarea";
+    return t === "input" ? !!cg[e.type] : t === "textarea";
   }
-  function hc(e, t, i, l) {
-    Pn(l), t = Xi(t, "onChange"), 0 < t.length && (i = new ka("onChange", "change", null, i, l), e.push({ event: i, listeners: t }));
+  function _c(e, t, i, l) {
+    In(l), t = Qi(t, "onChange"), 0 < t.length && (i = new Sa("onChange", "change", null, i, l), e.push({ event: i, listeners: t }));
   }
-  var qn = null, jn = null;
-  function lg(e) {
-    Lc(e, 0);
+  var jn = null, Fn = null;
+  function dg(e) {
+    Oc(e, 0);
   }
-  function Vi(e) {
+  function Gi(e) {
     var t = nn(e);
     if (ze(t)) return e;
   }
-  function cg(e, t) {
+  function ug(e, t) {
     if (e === "change") return t;
   }
   var fc = !1;
   if (p) {
     var Na;
     if (p) {
-      var Ca = "oninput" in document;
-      if (!Ca) {
-        var _c = document.createElement("div");
-        _c.setAttribute("oninput", "return;"), Ca = typeof _c.oninput == "function";
+      var za = "oninput" in document;
+      if (!za) {
+        var bc = document.createElement("div");
+        bc.setAttribute("oninput", "return;"), za = typeof bc.oninput == "function";
       }
-      Na = Ca;
+      Na = za;
     } else Na = !1;
     fc = Na && (!document.documentMode || 9 < document.documentMode);
   }
-  function bc() {
-    qn && (qn.detachEvent("onpropertychange", yc), jn = qn = null);
+  function yc() {
+    jn && (jn.detachEvent("onpropertychange", vc), Fn = jn = null);
   }
-  function yc(e) {
-    if (e.propertyName === "value" && Vi(jn)) {
+  function vc(e) {
+    if (e.propertyName === "value" && Gi(Fn)) {
       var t = [];
-      hc(t, jn, e, zr(e)), Dl(lg, t);
+      _c(t, Fn, e, zr(e)), $l(dg, t);
     }
   }
-  function dg(e, t, i) {
-    e === "focusin" ? (bc(), qn = t, jn = i, qn.attachEvent("onpropertychange", yc)) : e === "focusout" && bc();
+  function pg(e, t, i) {
+    e === "focusin" ? (yc(), jn = t, Fn = i, jn.attachEvent("onpropertychange", vc)) : e === "focusout" && yc();
   }
-  function ug(e) {
-    if (e === "selectionchange" || e === "keyup" || e === "keydown") return Vi(jn);
-  }
-  function pg(e, t) {
-    if (e === "click") return Vi(t);
-  }
-  function mg(e, t) {
-    if (e === "input" || e === "change") return Vi(t);
+  function mg(e) {
+    if (e === "selectionchange" || e === "keyup" || e === "keydown") return Gi(Fn);
   }
   function gg(e, t) {
+    if (e === "click") return Gi(t);
+  }
+  function hg(e, t) {
+    if (e === "input" || e === "change") return Gi(t);
+  }
+  function _g(e, t) {
     return e === t && (e !== 0 || 1 / e === 1 / t) || e !== e && t !== t;
   }
-  var qt = typeof Object.is == "function" ? Object.is : gg;
-  function Fn(e, t) {
+  var qt = typeof Object.is == "function" ? Object.is : _g;
+  function Un(e, t) {
     if (qt(e, t)) return !0;
     if (typeof e != "object" || e === null || typeof t != "object" || t === null) return !1;
     var i = Object.keys(e), l = Object.keys(t);
@@ -12487,12 +12701,12 @@ function hh() {
     }
     return !0;
   }
-  function vc(e) {
+  function xc(e) {
     for (; e && e.firstChild; ) e = e.firstChild;
     return e;
   }
-  function xc(e, t) {
-    var i = vc(e);
+  function wc(e, t) {
+    var i = xc(e);
     e = 0;
     for (var l; i; ) {
       if (i.nodeType === 3) {
@@ -12509,13 +12723,13 @@ function hh() {
         }
         i = void 0;
       }
-      i = vc(i);
+      i = xc(i);
     }
   }
-  function wc(e, t) {
-    return e && t ? e === t ? !0 : e && e.nodeType === 3 ? !1 : t && t.nodeType === 3 ? wc(e, t.parentNode) : "contains" in e ? e.contains(t) : e.compareDocumentPosition ? !!(e.compareDocumentPosition(t) & 16) : !1 : !1;
+  function kc(e, t) {
+    return e && t ? e === t ? !0 : e && e.nodeType === 3 ? !1 : t && t.nodeType === 3 ? kc(e, t.parentNode) : "contains" in e ? e.contains(t) : e.compareDocumentPosition ? !!(e.compareDocumentPosition(t) & 16) : !1 : !1;
   }
-  function kc() {
+  function Sc() {
     for (var e = window, t = $e(); t instanceof e.HTMLIFrameElement; ) {
       try {
         var i = typeof t.contentWindow.location.href == "string";
@@ -12528,20 +12742,20 @@ function hh() {
     }
     return t;
   }
-  function za(e) {
+  function Ra(e) {
     var t = e && e.nodeName && e.nodeName.toLowerCase();
     return t && (t === "input" && (e.type === "text" || e.type === "search" || e.type === "tel" || e.type === "url" || e.type === "password") || t === "textarea" || e.contentEditable === "true");
   }
-  function hg(e) {
-    var t = kc(), i = e.focusedElem, l = e.selectionRange;
-    if (t !== i && i && i.ownerDocument && wc(i.ownerDocument.documentElement, i)) {
-      if (l !== null && za(i)) {
+  function fg(e) {
+    var t = Sc(), i = e.focusedElem, l = e.selectionRange;
+    if (t !== i && i && i.ownerDocument && kc(i.ownerDocument.documentElement, i)) {
+      if (l !== null && Ra(i)) {
         if (t = l.start, e = l.end, e === void 0 && (e = t), "selectionStart" in i) i.selectionStart = t, i.selectionEnd = Math.min(e, i.value.length);
         else if (e = (t = i.ownerDocument || document) && t.defaultView || window, e.getSelection) {
           e = e.getSelection();
           var d = i.textContent.length, m = Math.min(l.start, d);
-          l = l.end === void 0 ? m : Math.min(l.end, d), !e.extend && m > l && (d = l, l = m, m = d), d = xc(i, m);
-          var x = xc(
+          l = l.end === void 0 ? m : Math.min(l.end, d), !e.extend && m > l && (d = l, l = m, m = d), d = wc(i, m);
+          var x = wc(
             i,
             l
           );
@@ -12552,39 +12766,39 @@ function hh() {
       for (typeof i.focus == "function" && i.focus(), i = 0; i < t.length; i++) e = t[i], e.element.scrollLeft = e.left, e.element.scrollTop = e.top;
     }
   }
-  var fg = p && "documentMode" in document && 11 >= document.documentMode, Zr = null, Ra = null, Un = null, La = !1;
-  function Sc(e, t, i) {
+  var bg = p && "documentMode" in document && 11 >= document.documentMode, Zr = null, La = null, Wn = null, Oa = !1;
+  function Ac(e, t, i) {
     var l = i.window === i ? i.document : i.nodeType === 9 ? i : i.ownerDocument;
-    La || Zr == null || Zr !== $e(l) || (l = Zr, "selectionStart" in l && za(l) ? l = { start: l.selectionStart, end: l.selectionEnd } : (l = (l.ownerDocument && l.ownerDocument.defaultView || window).getSelection(), l = { anchorNode: l.anchorNode, anchorOffset: l.anchorOffset, focusNode: l.focusNode, focusOffset: l.focusOffset }), Un && Fn(Un, l) || (Un = l, l = Xi(Ra, "onSelect"), 0 < l.length && (t = new ka("onSelect", "select", null, t, i), e.push({ event: t, listeners: l }), t.target = Zr)));
+    Oa || Zr == null || Zr !== $e(l) || (l = Zr, "selectionStart" in l && Ra(l) ? l = { start: l.selectionStart, end: l.selectionEnd } : (l = (l.ownerDocument && l.ownerDocument.defaultView || window).getSelection(), l = { anchorNode: l.anchorNode, anchorOffset: l.anchorOffset, focusNode: l.focusNode, focusOffset: l.focusOffset }), Wn && Un(Wn, l) || (Wn = l, l = Qi(La, "onSelect"), 0 < l.length && (t = new Sa("onSelect", "select", null, t, i), e.push({ event: t, listeners: l }), t.target = Zr)));
   }
-  function Gi(e, t) {
+  function Yi(e, t) {
     var i = {};
     return i[e.toLowerCase()] = t.toLowerCase(), i["Webkit" + e] = "webkit" + t, i["Moz" + e] = "moz" + t, i;
   }
-  var en = { animationend: Gi("Animation", "AnimationEnd"), animationiteration: Gi("Animation", "AnimationIteration"), animationstart: Gi("Animation", "AnimationStart"), transitionend: Gi("Transition", "TransitionEnd") }, Oa = {}, Ac = {};
-  p && (Ac = document.createElement("div").style, "AnimationEvent" in window || (delete en.animationend.animation, delete en.animationiteration.animation, delete en.animationstart.animation), "TransitionEvent" in window || delete en.transitionend.transition);
-  function Yi(e) {
-    if (Oa[e]) return Oa[e];
+  var en = { animationend: Yi("Animation", "AnimationEnd"), animationiteration: Yi("Animation", "AnimationIteration"), animationstart: Yi("Animation", "AnimationStart"), transitionend: Yi("Transition", "TransitionEnd") }, Ta = {}, Ec = {};
+  p && (Ec = document.createElement("div").style, "AnimationEvent" in window || (delete en.animationend.animation, delete en.animationiteration.animation, delete en.animationstart.animation), "TransitionEvent" in window || delete en.transitionend.transition);
+  function Ki(e) {
+    if (Ta[e]) return Ta[e];
     if (!en[e]) return e;
     var t = en[e], i;
-    for (i in t) if (t.hasOwnProperty(i) && i in Ac) return Oa[e] = t[i];
+    for (i in t) if (t.hasOwnProperty(i) && i in Ec) return Ta[e] = t[i];
     return e;
   }
-  var Ec = Yi("animationend"), Pc = Yi("animationiteration"), Ic = Yi("animationstart"), Nc = Yi("transitionend"), Cc = /* @__PURE__ */ new Map(), zc = "abort auxClick cancel canPlay canPlayThrough click close contextMenu copy cut drag dragEnd dragEnter dragExit dragLeave dragOver dragStart drop durationChange emptied encrypted ended error gotPointerCapture input invalid keyDown keyPress keyUp load loadedData loadedMetadata loadStart lostPointerCapture mouseDown mouseMove mouseOut mouseOver mouseUp paste pause play playing pointerCancel pointerDown pointerMove pointerOut pointerOver pointerUp progress rateChange reset resize seeked seeking stalled submit suspend timeUpdate touchCancel touchEnd touchStart volumeChange scroll toggle touchMove waiting wheel".split(" ");
-  function fr(e, t) {
-    Cc.set(e, t), c(t, [e]);
+  var Pc = Ki("animationend"), Ic = Ki("animationiteration"), Cc = Ki("animationstart"), Nc = Ki("transitionend"), zc = /* @__PURE__ */ new Map(), Rc = "abort auxClick cancel canPlay canPlayThrough click close contextMenu copy cut drag dragEnd dragEnter dragExit dragLeave dragOver dragStart drop durationChange emptied encrypted ended error gotPointerCapture input invalid keyDown keyPress keyUp load loadedData loadedMetadata loadStart lostPointerCapture mouseDown mouseMove mouseOut mouseOver mouseUp paste pause play playing pointerCancel pointerDown pointerMove pointerOut pointerOver pointerUp progress rateChange reset resize seeked seeking stalled submit suspend timeUpdate touchCancel touchEnd touchStart volumeChange scroll toggle touchMove waiting wheel".split(" ");
+  function _r(e, t) {
+    zc.set(e, t), c(t, [e]);
   }
-  for (var Ta = 0; Ta < zc.length; Ta++) {
-    var Ma = zc[Ta], _g = Ma.toLowerCase(), bg = Ma[0].toUpperCase() + Ma.slice(1);
-    fr(_g, "on" + bg);
+  for (var Ma = 0; Ma < Rc.length; Ma++) {
+    var Ha = Rc[Ma], yg = Ha.toLowerCase(), vg = Ha[0].toUpperCase() + Ha.slice(1);
+    _r(yg, "on" + vg);
   }
-  fr(Ec, "onAnimationEnd"), fr(Pc, "onAnimationIteration"), fr(Ic, "onAnimationStart"), fr("dblclick", "onDoubleClick"), fr("focusin", "onFocus"), fr("focusout", "onBlur"), fr(Nc, "onTransitionEnd"), u("onMouseEnter", ["mouseout", "mouseover"]), u("onMouseLeave", ["mouseout", "mouseover"]), u("onPointerEnter", ["pointerout", "pointerover"]), u("onPointerLeave", ["pointerout", "pointerover"]), c("onChange", "change click focusin focusout input keydown keyup selectionchange".split(" ")), c("onSelect", "focusout contextmenu dragend focusin keydown keyup mousedown mouseup selectionchange".split(" ")), c("onBeforeInput", ["compositionend", "keypress", "textInput", "paste"]), c("onCompositionEnd", "compositionend focusout keydown keypress keyup mousedown".split(" ")), c("onCompositionStart", "compositionstart focusout keydown keypress keyup mousedown".split(" ")), c("onCompositionUpdate", "compositionupdate focusout keydown keypress keyup mousedown".split(" "));
-  var Wn = "abort canplay canplaythrough durationchange emptied encrypted ended error loadeddata loadedmetadata loadstart pause play playing progress ratechange resize seeked seeking stalled suspend timeupdate volumechange waiting".split(" "), yg = new Set("cancel close invalid load scroll toggle".split(" ").concat(Wn));
-  function Rc(e, t, i) {
+  _r(Pc, "onAnimationEnd"), _r(Ic, "onAnimationIteration"), _r(Cc, "onAnimationStart"), _r("dblclick", "onDoubleClick"), _r("focusin", "onFocus"), _r("focusout", "onBlur"), _r(Nc, "onTransitionEnd"), u("onMouseEnter", ["mouseout", "mouseover"]), u("onMouseLeave", ["mouseout", "mouseover"]), u("onPointerEnter", ["pointerout", "pointerover"]), u("onPointerLeave", ["pointerout", "pointerover"]), c("onChange", "change click focusin focusout input keydown keyup selectionchange".split(" ")), c("onSelect", "focusout contextmenu dragend focusin keydown keyup mousedown mouseup selectionchange".split(" ")), c("onBeforeInput", ["compositionend", "keypress", "textInput", "paste"]), c("onCompositionEnd", "compositionend focusout keydown keypress keyup mousedown".split(" ")), c("onCompositionStart", "compositionstart focusout keydown keypress keyup mousedown".split(" ")), c("onCompositionUpdate", "compositionupdate focusout keydown keypress keyup mousedown".split(" "));
+  var Vn = "abort canplay canplaythrough durationchange emptied encrypted ended error loadeddata loadedmetadata loadstart pause play playing progress ratechange resize seeked seeking stalled suspend timeupdate volumechange waiting".split(" "), xg = new Set("cancel close invalid load scroll toggle".split(" ").concat(Vn));
+  function Lc(e, t, i) {
     var l = e.type || "unknown-event";
-    e.currentTarget = i, _m(l, t, void 0, e), e.currentTarget = null;
+    e.currentTarget = i, ym(l, t, void 0, e), e.currentTarget = null;
   }
-  function Lc(e, t) {
+  function Oc(e, t) {
     t = (t & 4) !== 0;
     for (var i = 0; i < e.length; i++) {
       var l = e[i], d = l.event;
@@ -12592,97 +12806,97 @@ function hh() {
       e: {
         var m = void 0;
         if (t) for (var x = l.length - 1; 0 <= x; x--) {
-          var C = l[x], L = C.instance, U = C.currentTarget;
-          if (C = C.listener, L !== m && d.isPropagationStopped()) break e;
-          Rc(d, C, U), m = L;
+          var N = l[x], L = N.instance, U = N.currentTarget;
+          if (N = N.listener, L !== m && d.isPropagationStopped()) break e;
+          Lc(d, N, U), m = L;
         }
         else for (x = 0; x < l.length; x++) {
-          if (C = l[x], L = C.instance, U = C.currentTarget, C = C.listener, L !== m && d.isPropagationStopped()) break e;
-          Rc(d, C, U), m = L;
+          if (N = l[x], L = N.instance, U = N.currentTarget, N = N.listener, L !== m && d.isPropagationStopped()) break e;
+          Lc(d, N, U), m = L;
         }
       }
     }
-    if (Ri) throw e = ma, Ri = !1, ma = null, e;
+    if (Li) throw e = ga, Li = !1, ga = null, e;
   }
   function Ge(e, t) {
-    var i = t[Ua];
-    i === void 0 && (i = t[Ua] = /* @__PURE__ */ new Set());
+    var i = t[Wa];
+    i === void 0 && (i = t[Wa] = /* @__PURE__ */ new Set());
     var l = e + "__bubble";
-    i.has(l) || (Oc(t, e, 2, !1), i.add(l));
+    i.has(l) || (Tc(t, e, 2, !1), i.add(l));
   }
-  function Ha(e, t, i) {
+  function Ba(e, t, i) {
     var l = 0;
-    t && (l |= 4), Oc(i, e, l, t);
+    t && (l |= 4), Tc(i, e, l, t);
   }
-  var Ki = "_reactListening" + Math.random().toString(36).slice(2);
-  function Vn(e) {
-    if (!e[Ki]) {
-      e[Ki] = !0, a.forEach(function(i) {
-        i !== "selectionchange" && (yg.has(i) || Ha(i, !1, e), Ha(i, !0, e));
+  var Xi = "_reactListening" + Math.random().toString(36).slice(2);
+  function Gn(e) {
+    if (!e[Xi]) {
+      e[Xi] = !0, a.forEach(function(i) {
+        i !== "selectionchange" && (xg.has(i) || Ba(i, !1, e), Ba(i, !0, e));
       });
       var t = e.nodeType === 9 ? e : e.ownerDocument;
-      t === null || t[Ki] || (t[Ki] = !0, Ha("selectionchange", !1, t));
+      t === null || t[Xi] || (t[Xi] = !0, Ba("selectionchange", !1, t));
     }
   }
-  function Oc(e, t, i, l) {
-    switch (nc(t)) {
+  function Tc(e, t, i, l) {
+    switch (ic(t)) {
       case 1:
-        var d = Lm;
+        var d = Tm;
         break;
       case 4:
-        d = Om;
+        d = Mm;
         break;
       default:
-        d = va;
+        d = xa;
     }
-    i = d.bind(null, t, i, e), d = void 0, !pa || t !== "touchstart" && t !== "touchmove" && t !== "wheel" || (d = !0), l ? d !== void 0 ? e.addEventListener(t, i, { capture: !0, passive: d }) : e.addEventListener(t, i, !0) : d !== void 0 ? e.addEventListener(t, i, { passive: d }) : e.addEventListener(t, i, !1);
+    i = d.bind(null, t, i, e), d = void 0, !ma || t !== "touchstart" && t !== "touchmove" && t !== "wheel" || (d = !0), l ? d !== void 0 ? e.addEventListener(t, i, { capture: !0, passive: d }) : e.addEventListener(t, i, !0) : d !== void 0 ? e.addEventListener(t, i, { passive: d }) : e.addEventListener(t, i, !1);
   }
-  function Ba(e, t, i, l, d) {
+  function Da(e, t, i, l, d) {
     var m = l;
     if (!(t & 1) && !(t & 2) && l !== null) e: for (; ; ) {
       if (l === null) return;
       var x = l.tag;
       if (x === 3 || x === 4) {
-        var C = l.stateNode.containerInfo;
-        if (C === d || C.nodeType === 8 && C.parentNode === d) break;
+        var N = l.stateNode.containerInfo;
+        if (N === d || N.nodeType === 8 && N.parentNode === d) break;
         if (x === 4) for (x = l.return; x !== null; ) {
           var L = x.tag;
           if ((L === 3 || L === 4) && (L = x.stateNode.containerInfo, L === d || L.nodeType === 8 && L.parentNode === d)) return;
           x = x.return;
         }
-        for (; C !== null; ) {
-          if (x = Or(C), x === null) return;
+        for (; N !== null; ) {
+          if (x = Or(N), x === null) return;
           if (L = x.tag, L === 5 || L === 6) {
             l = m = x;
             continue e;
           }
-          C = C.parentNode;
+          N = N.parentNode;
         }
       }
       l = l.return;
     }
-    Dl(function() {
+    $l(function() {
       var U = m, ne = zr(i), ae = [];
       e: {
-        var Z = Cc.get(e);
+        var Z = zc.get(e);
         if (Z !== void 0) {
-          var he = ka, be = e;
+          var he = Sa, be = e;
           switch (e) {
             case "keypress":
-              if (Fi(i) === 0) break e;
+              if (Ui(i) === 0) break e;
             case "keydown":
             case "keyup":
-              he = Km;
+              he = Qm;
               break;
             case "focusin":
-              be = "focus", he = Ea;
+              be = "focus", he = Pa;
               break;
             case "focusout":
-              be = "blur", he = Ea;
+              be = "blur", he = Pa;
               break;
             case "beforeblur":
             case "afterblur":
-              he = Ea;
+              he = Pa;
               break;
             case "click":
               if (i.button === 2) break e;
@@ -12694,7 +12908,7 @@ function hh() {
             case "mouseout":
             case "mouseover":
             case "contextmenu":
-              he = ac;
+              he = sc;
               break;
             case "drag":
             case "dragend":
@@ -12704,32 +12918,32 @@ function hh() {
             case "dragover":
             case "dragstart":
             case "drop":
-              he = Hm;
+              he = Dm;
               break;
             case "touchcancel":
             case "touchend":
             case "touchmove":
             case "touchstart":
-              he = Jm;
-              break;
-            case Ec:
-            case Pc:
-            case Ic:
-              he = $m;
-              break;
-            case Nc:
               he = eg;
               break;
+            case Pc:
+            case Ic:
+            case Cc:
+              he = jm;
+              break;
+            case Nc:
+              he = rg;
+              break;
             case "scroll":
-              he = Tm;
+              he = Hm;
               break;
             case "wheel":
-              he = rg;
+              he = ig;
               break;
             case "copy":
             case "cut":
             case "paste":
-              he = jm;
+              he = Um;
               break;
             case "gotpointercapture":
             case "lostpointercapture":
@@ -12739,14 +12953,14 @@ function hh() {
             case "pointerout":
             case "pointerover":
             case "pointerup":
-              he = lc;
+              he = cc;
           }
           var ye = (t & 4) !== 0, nt = !ye && e === "scroll", $ = ye ? Z !== null ? Z + "Capture" : null : Z;
           ye = [];
           for (var M = U, j; M !== null; ) {
             j = M;
             var le = j.stateNode;
-            if (j.tag === 5 && le !== null && (j = le, $ !== null && (le = In(M, $), le != null && ye.push(Gn(M, le, j)))), nt) break;
+            if (j.tag === 5 && le !== null && (j = le, $ !== null && (le = Cn(M, $), le != null && ye.push(Yn(M, le, j)))), nt) break;
             M = M.return;
           }
           0 < ye.length && (Z = new he(Z, be, null, i, ne), ae.push({ event: Z, listeners: ye }));
@@ -12756,7 +12970,7 @@ function hh() {
         e: {
           if (Z = e === "mouseover" || e === "pointerover", he = e === "mouseout" || e === "pointerout", Z && i !== Gt && (be = i.relatedTarget || i.fromElement) && (Or(be) || be[er])) break e;
           if ((he || Z) && (Z = ne.window === ne ? ne : (Z = ne.ownerDocument) ? Z.defaultView || Z.parentWindow : window, he ? (be = i.relatedTarget || i.toElement, he = U, be = be ? Or(be) : null, be !== null && (nt = Lr(be), be !== nt || be.tag !== 5 && be.tag !== 6) && (be = null)) : (he = null, be = U), he !== be)) {
-            if (ye = ac, le = "onMouseLeave", $ = "onMouseEnter", M = "mouse", (e === "pointerout" || e === "pointerover") && (ye = lc, le = "onPointerLeave", $ = "onPointerEnter", M = "pointer"), nt = he == null ? Z : nn(he), j = be == null ? Z : nn(be), Z = new ye(le, M + "leave", he, i, ne), Z.target = nt, Z.relatedTarget = j, le = null, Or(ne) === U && (ye = new ye($, M + "enter", be, i, ne), ye.target = j, ye.relatedTarget = nt, le = ye), nt = le, he && be) t: {
+            if (ye = sc, le = "onMouseLeave", $ = "onMouseEnter", M = "mouse", (e === "pointerout" || e === "pointerover") && (ye = cc, le = "onPointerLeave", $ = "onPointerEnter", M = "pointer"), nt = he == null ? Z : nn(he), j = be == null ? Z : nn(be), Z = new ye(le, M + "leave", he, i, ne), Z.target = nt, Z.relatedTarget = j, le = null, Or(ne) === U && (ye = new ye($, M + "enter", be, i, ne), ye.target = j, ye.relatedTarget = nt, le = ye), nt = le, he && be) t: {
               for (ye = he, $ = be, M = 0, j = ye; j; j = tn(j)) M++;
               for (j = 0, le = $; le; le = tn(le)) j++;
               for (; 0 < M - j; ) ye = tn(ye), M--;
@@ -12768,46 +12982,46 @@ function hh() {
               ye = null;
             }
             else ye = null;
-            he !== null && Tc(ae, Z, he, ye, !1), be !== null && nt !== null && Tc(ae, nt, be, ye, !0);
+            he !== null && Mc(ae, Z, he, ye, !1), be !== null && nt !== null && Mc(ae, nt, be, ye, !0);
           }
         }
         e: {
-          if (Z = U ? nn(U) : window, he = Z.nodeName && Z.nodeName.toLowerCase(), he === "select" || he === "input" && Z.type === "file") var xe = cg;
-          else if (gc(Z)) if (fc) xe = mg;
+          if (Z = U ? nn(U) : window, he = Z.nodeName && Z.nodeName.toLowerCase(), he === "select" || he === "input" && Z.type === "file") var xe = ug;
+          else if (hc(Z)) if (fc) xe = hg;
           else {
-            xe = ug;
-            var ke = dg;
+            xe = mg;
+            var ke = pg;
           }
-          else (he = Z.nodeName) && he.toLowerCase() === "input" && (Z.type === "checkbox" || Z.type === "radio") && (xe = pg);
+          else (he = Z.nodeName) && he.toLowerCase() === "input" && (Z.type === "checkbox" || Z.type === "radio") && (xe = gg);
           if (xe && (xe = xe(e, U))) {
-            hc(ae, xe, i, ne);
+            _c(ae, xe, i, ne);
             break e;
           }
           ke && ke(e, Z, U), e === "focusout" && (ke = Z._wrapperState) && ke.controlled && Z.type === "number" && X(Z, "number", Z.value);
         }
         switch (ke = U ? nn(U) : window, e) {
           case "focusin":
-            (gc(ke) || ke.contentEditable === "true") && (Zr = ke, Ra = U, Un = null);
+            (hc(ke) || ke.contentEditable === "true") && (Zr = ke, La = U, Wn = null);
             break;
           case "focusout":
-            Un = Ra = Zr = null;
+            Wn = La = Zr = null;
             break;
           case "mousedown":
-            La = !0;
+            Oa = !0;
             break;
           case "contextmenu":
           case "mouseup":
           case "dragend":
-            La = !1, Sc(ae, i, ne);
+            Oa = !1, Ac(ae, i, ne);
             break;
           case "selectionchange":
-            if (fg) break;
+            if (bg) break;
           case "keydown":
           case "keyup":
-            Sc(ae, i, ne);
+            Ac(ae, i, ne);
         }
         var Se;
-        if (Ia) e: {
+        if (Ca) e: {
           switch (e) {
             case "compositionstart":
               var Pe = "onCompositionStart";
@@ -12821,19 +13035,19 @@ function hh() {
           }
           Pe = void 0;
         }
-        else Jr ? pc(e, i) && (Pe = "onCompositionEnd") : e === "keydown" && i.keyCode === 229 && (Pe = "onCompositionStart");
-        Pe && (cc && i.locale !== "ko" && (Jr || Pe !== "onCompositionStart" ? Pe === "onCompositionEnd" && Jr && (Se = ic()) : (hr = ne, wa = "value" in hr ? hr.value : hr.textContent, Jr = !0)), ke = Xi(U, Pe), 0 < ke.length && (Pe = new sc(Pe, e, null, i, ne), ae.push({ event: Pe, listeners: ke }), Se ? Pe.data = Se : (Se = mc(i), Se !== null && (Pe.data = Se)))), (Se = ig ? og(e, i) : ag(e, i)) && (U = Xi(U, "onBeforeInput"), 0 < U.length && (ne = new sc("onBeforeInput", "beforeinput", null, i, ne), ae.push({ event: ne, listeners: U }), ne.data = Se));
+        else Jr ? mc(e, i) && (Pe = "onCompositionEnd") : e === "keydown" && i.keyCode === 229 && (Pe = "onCompositionStart");
+        Pe && (dc && i.locale !== "ko" && (Jr || Pe !== "onCompositionStart" ? Pe === "onCompositionEnd" && Jr && (Se = oc()) : (hr = ne, ka = "value" in hr ? hr.value : hr.textContent, Jr = !0)), ke = Qi(U, Pe), 0 < ke.length && (Pe = new lc(Pe, e, null, i, ne), ae.push({ event: Pe, listeners: ke }), Se ? Pe.data = Se : (Se = gc(i), Se !== null && (Pe.data = Se)))), (Se = ag ? sg(e, i) : lg(e, i)) && (U = Qi(U, "onBeforeInput"), 0 < U.length && (ne = new lc("onBeforeInput", "beforeinput", null, i, ne), ae.push({ event: ne, listeners: U }), ne.data = Se));
       }
-      Lc(ae, t);
+      Oc(ae, t);
     });
   }
-  function Gn(e, t, i) {
+  function Yn(e, t, i) {
     return { instance: e, listener: t, currentTarget: i };
   }
-  function Xi(e, t) {
+  function Qi(e, t) {
     for (var i = t + "Capture", l = []; e !== null; ) {
       var d = e, m = d.stateNode;
-      d.tag === 5 && m !== null && (d = m, m = In(e, i), m != null && l.unshift(Gn(e, m, d)), m = In(e, t), m != null && l.push(Gn(e, m, d))), e = e.return;
+      d.tag === 5 && m !== null && (d = m, m = Cn(e, i), m != null && l.unshift(Yn(e, m, d)), m = Cn(e, t), m != null && l.push(Yn(e, m, d))), e = e.return;
     }
     return l;
   }
@@ -12844,52 +13058,52 @@ function hh() {
     while (e && e.tag !== 5);
     return e || null;
   }
-  function Tc(e, t, i, l, d) {
+  function Mc(e, t, i, l, d) {
     for (var m = t._reactName, x = []; i !== null && i !== l; ) {
-      var C = i, L = C.alternate, U = C.stateNode;
+      var N = i, L = N.alternate, U = N.stateNode;
       if (L !== null && L === l) break;
-      C.tag === 5 && U !== null && (C = U, d ? (L = In(i, m), L != null && x.unshift(Gn(i, L, C))) : d || (L = In(i, m), L != null && x.push(Gn(i, L, C)))), i = i.return;
+      N.tag === 5 && U !== null && (N = U, d ? (L = Cn(i, m), L != null && x.unshift(Yn(i, L, N))) : d || (L = Cn(i, m), L != null && x.push(Yn(i, L, N)))), i = i.return;
     }
     x.length !== 0 && e.push({ event: t, listeners: x });
   }
-  var vg = /\r\n?/g, xg = /\u0000|\uFFFD/g;
-  function Mc(e) {
-    return (typeof e == "string" ? e : "" + e).replace(vg, `
-`).replace(xg, "");
+  var wg = /\r\n?/g, kg = /\u0000|\uFFFD/g;
+  function Hc(e) {
+    return (typeof e == "string" ? e : "" + e).replace(wg, `
+`).replace(kg, "");
   }
-  function Qi(e, t, i) {
-    if (t = Mc(t), Mc(e) !== t && i) throw Error(n(425));
+  function Ji(e, t, i) {
+    if (t = Hc(t), Hc(e) !== t && i) throw Error(n(425));
   }
-  function Ji() {
+  function Zi() {
   }
-  var Da = null, $a = null;
-  function qa(e, t) {
+  var $a = null, qa = null;
+  function ja(e, t) {
     return e === "textarea" || e === "noscript" || typeof t.children == "string" || typeof t.children == "number" || typeof t.dangerouslySetInnerHTML == "object" && t.dangerouslySetInnerHTML !== null && t.dangerouslySetInnerHTML.__html != null;
   }
-  var ja = typeof setTimeout == "function" ? setTimeout : void 0, wg = typeof clearTimeout == "function" ? clearTimeout : void 0, Hc = typeof Promise == "function" ? Promise : void 0, kg = typeof queueMicrotask == "function" ? queueMicrotask : typeof Hc < "u" ? function(e) {
-    return Hc.resolve(null).then(e).catch(Sg);
-  } : ja;
-  function Sg(e) {
+  var Fa = typeof setTimeout == "function" ? setTimeout : void 0, Sg = typeof clearTimeout == "function" ? clearTimeout : void 0, Bc = typeof Promise == "function" ? Promise : void 0, Ag = typeof queueMicrotask == "function" ? queueMicrotask : typeof Bc < "u" ? function(e) {
+    return Bc.resolve(null).then(e).catch(Eg);
+  } : Fa;
+  function Eg(e) {
     setTimeout(function() {
       throw e;
     });
   }
-  function Fa(e, t) {
+  function Ua(e, t) {
     var i = t, l = 0;
     do {
       var d = i.nextSibling;
       if (e.removeChild(i), d && d.nodeType === 8) if (i = d.data, i === "/$") {
         if (l === 0) {
-          e.removeChild(d), Hn(t);
+          e.removeChild(d), Bn(t);
           return;
         }
         l--;
       } else i !== "$" && i !== "$?" && i !== "$!" || l++;
       i = d;
     } while (i);
-    Hn(t);
+    Bn(t);
   }
-  function _r(e) {
+  function fr(e) {
     for (; e != null; e = e.nextSibling) {
       var t = e.nodeType;
       if (t === 1 || t === 3) break;
@@ -12900,7 +13114,7 @@ function hh() {
     }
     return e;
   }
-  function Bc(e) {
+  function Dc(e) {
     e = e.previousSibling;
     for (var t = 0; e; ) {
       if (e.nodeType === 8) {
@@ -12914,15 +13128,15 @@ function hh() {
     }
     return null;
   }
-  var rn = Math.random().toString(36).slice(2), Kt = "__reactFiber$" + rn, Yn = "__reactProps$" + rn, er = "__reactContainer$" + rn, Ua = "__reactEvents$" + rn, Ag = "__reactListeners$" + rn, Eg = "__reactHandles$" + rn;
+  var rn = Math.random().toString(36).slice(2), Kt = "__reactFiber$" + rn, Kn = "__reactProps$" + rn, er = "__reactContainer$" + rn, Wa = "__reactEvents$" + rn, Pg = "__reactListeners$" + rn, Ig = "__reactHandles$" + rn;
   function Or(e) {
     var t = e[Kt];
     if (t) return t;
     for (var i = e.parentNode; i; ) {
       if (t = i[er] || i[Kt]) {
-        if (i = t.alternate, t.child !== null || i !== null && i.child !== null) for (e = Bc(e); e !== null; ) {
+        if (i = t.alternate, t.child !== null || i !== null && i.child !== null) for (e = Dc(e); e !== null; ) {
           if (i = e[Kt]) return i;
-          e = Bc(e);
+          e = Dc(e);
         }
         return t;
       }
@@ -12930,27 +13144,27 @@ function hh() {
     }
     return null;
   }
-  function Kn(e) {
+  function Xn(e) {
     return e = e[Kt] || e[er], !e || e.tag !== 5 && e.tag !== 6 && e.tag !== 13 && e.tag !== 3 ? null : e;
   }
   function nn(e) {
     if (e.tag === 5 || e.tag === 6) return e.stateNode;
     throw Error(n(33));
   }
-  function Zi(e) {
-    return e[Yn] || null;
+  function eo(e) {
+    return e[Kn] || null;
   }
-  var Wa = [], on = -1;
+  var Va = [], on = -1;
   function br(e) {
     return { current: e };
   }
   function Ye(e) {
-    0 > on || (e.current = Wa[on], Wa[on] = null, on--);
+    0 > on || (e.current = Va[on], Va[on] = null, on--);
   }
   function Ve(e, t) {
-    on++, Wa[on] = e.current, e.current = t;
+    on++, Va[on] = e.current, e.current = t;
   }
-  var yr = {}, ft = br(yr), wt = br(!1), Tr = yr;
+  var yr = {}, _t = br(yr), wt = br(!1), Tr = yr;
   function an(e, t) {
     var i = e.type.contextTypes;
     if (!i) return yr;
@@ -12963,38 +13177,38 @@ function hh() {
   function kt(e) {
     return e = e.childContextTypes, e != null;
   }
-  function eo() {
-    Ye(wt), Ye(ft);
-  }
-  function Dc(e, t, i) {
-    if (ft.current !== yr) throw Error(n(168));
-    Ve(ft, t), Ve(wt, i);
+  function to() {
+    Ye(wt), Ye(_t);
   }
   function $c(e, t, i) {
+    if (_t.current !== yr) throw Error(n(168));
+    Ve(_t, t), Ve(wt, i);
+  }
+  function qc(e, t, i) {
     var l = e.stateNode;
     if (t = t.childContextTypes, typeof l.getChildContext != "function") return i;
     l = l.getChildContext();
     for (var d in l) if (!(d in t)) throw Error(n(108, Oe(e) || "Unknown", d));
     return re({}, i, l);
   }
-  function to(e) {
-    return e = (e = e.stateNode) && e.__reactInternalMemoizedMergedChildContext || yr, Tr = ft.current, Ve(ft, e), Ve(wt, wt.current), !0;
+  function ro(e) {
+    return e = (e = e.stateNode) && e.__reactInternalMemoizedMergedChildContext || yr, Tr = _t.current, Ve(_t, e), Ve(wt, wt.current), !0;
   }
-  function qc(e, t, i) {
+  function jc(e, t, i) {
     var l = e.stateNode;
     if (!l) throw Error(n(169));
-    i ? (e = $c(e, t, Tr), l.__reactInternalMemoizedMergedChildContext = e, Ye(wt), Ye(ft), Ve(ft, e)) : Ye(wt), Ve(wt, i);
+    i ? (e = qc(e, t, Tr), l.__reactInternalMemoizedMergedChildContext = e, Ye(wt), Ye(_t), Ve(_t, e)) : Ye(wt), Ve(wt, i);
   }
-  var tr = null, ro = !1, Va = !1;
-  function jc(e) {
+  var tr = null, no = !1, Ga = !1;
+  function Fc(e) {
     tr === null ? tr = [e] : tr.push(e);
   }
-  function Pg(e) {
-    ro = !0, jc(e);
+  function Cg(e) {
+    no = !0, Fc(e);
   }
   function vr() {
-    if (!Va && tr !== null) {
-      Va = !0;
+    if (!Ga && tr !== null) {
+      Ga = !0;
       var e = 0, t = Ue;
       try {
         var i = tr;
@@ -13004,20 +13218,20 @@ function hh() {
             l = l(!0);
           while (l !== null);
         }
-        tr = null, ro = !1;
+        tr = null, no = !1;
       } catch (d) {
-        throw tr !== null && (tr = tr.slice(e + 1)), Ul(ga, vr), d;
+        throw tr !== null && (tr = tr.slice(e + 1)), Wl(ha, vr), d;
       } finally {
-        Ue = t, Va = !1;
+        Ue = t, Ga = !1;
       }
     }
     return null;
   }
-  var sn = [], ln = 0, no = null, io = 0, Lt = [], Ot = 0, Mr = null, rr = 1, nr = "";
+  var sn = [], ln = 0, io = null, oo = 0, Lt = [], Ot = 0, Mr = null, rr = 1, nr = "";
   function Hr(e, t) {
-    sn[ln++] = io, sn[ln++] = no, no = e, io = t;
+    sn[ln++] = oo, sn[ln++] = io, io = e, oo = t;
   }
-  function Fc(e, t, i) {
+  function Uc(e, t, i) {
     Lt[Ot++] = rr, Lt[Ot++] = nr, Lt[Ot++] = Mr, Mr = e;
     var l = rr;
     e = nr;
@@ -13029,64 +13243,64 @@ function hh() {
       m = (l & (1 << x) - 1).toString(32), l >>= x, d -= x, rr = 1 << 32 - $t(t) + d | i << d | l, nr = m + e;
     } else rr = 1 << m | i << d | l, nr = e;
   }
-  function Ga(e) {
-    e.return !== null && (Hr(e, 1), Fc(e, 1, 0));
-  }
   function Ya(e) {
-    for (; e === no; ) no = sn[--ln], sn[ln] = null, io = sn[--ln], sn[ln] = null;
+    e.return !== null && (Hr(e, 1), Uc(e, 1, 0));
+  }
+  function Ka(e) {
+    for (; e === io; ) io = sn[--ln], sn[ln] = null, oo = sn[--ln], sn[ln] = null;
     for (; e === Mr; ) Mr = Lt[--Ot], Lt[Ot] = null, nr = Lt[--Ot], Lt[Ot] = null, rr = Lt[--Ot], Lt[Ot] = null;
   }
-  var Ct = null, zt = null, Qe = !1, jt = null;
-  function Uc(e, t) {
+  var Nt = null, zt = null, Qe = !1, jt = null;
+  function Wc(e, t) {
     var i = Bt(5, null, null, 0);
     i.elementType = "DELETED", i.stateNode = t, i.return = e, t = e.deletions, t === null ? (e.deletions = [i], e.flags |= 16) : t.push(i);
   }
-  function Wc(e, t) {
+  function Vc(e, t) {
     switch (e.tag) {
       case 5:
         var i = e.type;
-        return t = t.nodeType !== 1 || i.toLowerCase() !== t.nodeName.toLowerCase() ? null : t, t !== null ? (e.stateNode = t, Ct = e, zt = _r(t.firstChild), !0) : !1;
+        return t = t.nodeType !== 1 || i.toLowerCase() !== t.nodeName.toLowerCase() ? null : t, t !== null ? (e.stateNode = t, Nt = e, zt = fr(t.firstChild), !0) : !1;
       case 6:
-        return t = e.pendingProps === "" || t.nodeType !== 3 ? null : t, t !== null ? (e.stateNode = t, Ct = e, zt = null, !0) : !1;
+        return t = e.pendingProps === "" || t.nodeType !== 3 ? null : t, t !== null ? (e.stateNode = t, Nt = e, zt = null, !0) : !1;
       case 13:
-        return t = t.nodeType !== 8 ? null : t, t !== null ? (i = Mr !== null ? { id: rr, overflow: nr } : null, e.memoizedState = { dehydrated: t, treeContext: i, retryLane: 1073741824 }, i = Bt(18, null, null, 0), i.stateNode = t, i.return = e, e.child = i, Ct = e, zt = null, !0) : !1;
+        return t = t.nodeType !== 8 ? null : t, t !== null ? (i = Mr !== null ? { id: rr, overflow: nr } : null, e.memoizedState = { dehydrated: t, treeContext: i, retryLane: 1073741824 }, i = Bt(18, null, null, 0), i.stateNode = t, i.return = e, e.child = i, Nt = e, zt = null, !0) : !1;
       default:
         return !1;
     }
   }
-  function Ka(e) {
+  function Xa(e) {
     return (e.mode & 1) !== 0 && (e.flags & 128) === 0;
   }
-  function Xa(e) {
+  function Qa(e) {
     if (Qe) {
       var t = zt;
       if (t) {
         var i = t;
-        if (!Wc(e, t)) {
-          if (Ka(e)) throw Error(n(418));
-          t = _r(i.nextSibling);
-          var l = Ct;
-          t && Wc(e, t) ? Uc(l, i) : (e.flags = e.flags & -4097 | 2, Qe = !1, Ct = e);
+        if (!Vc(e, t)) {
+          if (Xa(e)) throw Error(n(418));
+          t = fr(i.nextSibling);
+          var l = Nt;
+          t && Vc(e, t) ? Wc(l, i) : (e.flags = e.flags & -4097 | 2, Qe = !1, Nt = e);
         }
       } else {
-        if (Ka(e)) throw Error(n(418));
-        e.flags = e.flags & -4097 | 2, Qe = !1, Ct = e;
+        if (Xa(e)) throw Error(n(418));
+        e.flags = e.flags & -4097 | 2, Qe = !1, Nt = e;
       }
     }
   }
-  function Vc(e) {
+  function Gc(e) {
     for (e = e.return; e !== null && e.tag !== 5 && e.tag !== 3 && e.tag !== 13; ) e = e.return;
-    Ct = e;
+    Nt = e;
   }
-  function oo(e) {
-    if (e !== Ct) return !1;
-    if (!Qe) return Vc(e), Qe = !0, !1;
+  function ao(e) {
+    if (e !== Nt) return !1;
+    if (!Qe) return Gc(e), Qe = !0, !1;
     var t;
-    if ((t = e.tag !== 3) && !(t = e.tag !== 5) && (t = e.type, t = t !== "head" && t !== "body" && !qa(e.type, e.memoizedProps)), t && (t = zt)) {
-      if (Ka(e)) throw Gc(), Error(n(418));
-      for (; t; ) Uc(e, t), t = _r(t.nextSibling);
+    if ((t = e.tag !== 3) && !(t = e.tag !== 5) && (t = e.type, t = t !== "head" && t !== "body" && !ja(e.type, e.memoizedProps)), t && (t = zt)) {
+      if (Xa(e)) throw Yc(), Error(n(418));
+      for (; t; ) Wc(e, t), t = fr(t.nextSibling);
     }
-    if (Vc(e), e.tag === 13) {
+    if (Gc(e), e.tag === 13) {
       if (e = e.memoizedState, e = e !== null ? e.dehydrated : null, !e) throw Error(n(317));
       e: {
         for (e = e.nextSibling, t = 0; e; ) {
@@ -13094,7 +13308,7 @@ function hh() {
             var i = e.data;
             if (i === "/$") {
               if (t === 0) {
-                zt = _r(e.nextSibling);
+                zt = fr(e.nextSibling);
                 break e;
               }
               t--;
@@ -13104,20 +13318,20 @@ function hh() {
         }
         zt = null;
       }
-    } else zt = Ct ? _r(e.stateNode.nextSibling) : null;
+    } else zt = Nt ? fr(e.stateNode.nextSibling) : null;
     return !0;
   }
-  function Gc() {
-    for (var e = zt; e; ) e = _r(e.nextSibling);
+  function Yc() {
+    for (var e = zt; e; ) e = fr(e.nextSibling);
   }
   function cn() {
-    zt = Ct = null, Qe = !1;
+    zt = Nt = null, Qe = !1;
   }
-  function Qa(e) {
+  function Ja(e) {
     jt === null ? jt = [e] : jt.push(e);
   }
-  var Ig = b.ReactCurrentBatchConfig;
-  function Xn(e, t, i) {
+  var Ng = b.ReactCurrentBatchConfig;
+  function Qn(e, t, i) {
     if (e = i.ref, e !== null && typeof e != "function" && typeof e != "object") {
       if (i._owner) {
         if (i = i._owner, i) {
@@ -13127,8 +13341,8 @@ function hh() {
         if (!l) throw Error(n(147, e));
         var d = l, m = "" + e;
         return t !== null && t.ref !== null && typeof t.ref == "function" && t.ref._stringRef === m ? t.ref : (t = function(x) {
-          var C = d.refs;
-          x === null ? delete C[m] : C[m] = x;
+          var N = d.refs;
+          x === null ? delete N[m] : N[m] = x;
         }, t._stringRef = m, t);
       }
       if (typeof e != "string") throw Error(n(284));
@@ -13136,14 +13350,14 @@ function hh() {
     }
     return e;
   }
-  function ao(e, t) {
+  function so(e, t) {
     throw e = Object.prototype.toString.call(t), Error(n(31, e === "[object Object]" ? "object with keys {" + Object.keys(t).join(", ") + "}" : e));
   }
-  function Yc(e) {
+  function Kc(e) {
     var t = e._init;
     return t(e._payload);
   }
-  function Kc(e) {
+  function Xc(e) {
     function t($, M) {
       if (e) {
         var j = $.deletions;
@@ -13168,39 +13382,39 @@ function hh() {
     function x($) {
       return e && $.alternate === null && ($.flags |= 2), $;
     }
-    function C($, M, j, le) {
-      return M === null || M.tag !== 6 ? (M = js(j, $.mode, le), M.return = $, M) : (M = d(M, j), M.return = $, M);
+    function N($, M, j, le) {
+      return M === null || M.tag !== 6 ? (M = Fs(j, $.mode, le), M.return = $, M) : (M = d(M, j), M.return = $, M);
     }
     function L($, M, j, le) {
       var xe = j.type;
-      return xe === N ? ne($, M, j.props.children, le, j.key) : M !== null && (M.elementType === xe || typeof xe == "object" && xe !== null && xe.$$typeof === te && Yc(xe) === M.type) ? (le = d(M, j.props), le.ref = Xn($, M, j), le.return = $, le) : (le = zo(j.type, j.key, j.props, null, $.mode, le), le.ref = Xn($, M, j), le.return = $, le);
+      return xe === C ? ne($, M, j.props.children, le, j.key) : M !== null && (M.elementType === xe || typeof xe == "object" && xe !== null && xe.$$typeof === te && Kc(xe) === M.type) ? (le = d(M, j.props), le.ref = Qn($, M, j), le.return = $, le) : (le = Ro(j.type, j.key, j.props, null, $.mode, le), le.ref = Qn($, M, j), le.return = $, le);
     }
     function U($, M, j, le) {
-      return M === null || M.tag !== 4 || M.stateNode.containerInfo !== j.containerInfo || M.stateNode.implementation !== j.implementation ? (M = Fs(j, $.mode, le), M.return = $, M) : (M = d(M, j.children || []), M.return = $, M);
+      return M === null || M.tag !== 4 || M.stateNode.containerInfo !== j.containerInfo || M.stateNode.implementation !== j.implementation ? (M = Us(j, $.mode, le), M.return = $, M) : (M = d(M, j.children || []), M.return = $, M);
     }
     function ne($, M, j, le, xe) {
       return M === null || M.tag !== 7 ? (M = Wr(j, $.mode, le, xe), M.return = $, M) : (M = d(M, j), M.return = $, M);
     }
     function ae($, M, j) {
-      if (typeof M == "string" && M !== "" || typeof M == "number") return M = js("" + M, $.mode, j), M.return = $, M;
+      if (typeof M == "string" && M !== "" || typeof M == "number") return M = Fs("" + M, $.mode, j), M.return = $, M;
       if (typeof M == "object" && M !== null) {
         switch (M.$$typeof) {
           case k:
-            return j = zo(M.type, M.key, M.props, null, $.mode, j), j.ref = Xn($, null, M), j.return = $, j;
+            return j = Ro(M.type, M.key, M.props, null, $.mode, j), j.ref = Qn($, null, M), j.return = $, j;
           case E:
-            return M = Fs(M, $.mode, j), M.return = $, M;
+            return M = Us(M, $.mode, j), M.return = $, M;
           case te:
             var le = M._init;
             return ae($, le(M._payload), j);
         }
         if (de(M) || ce(M)) return M = Wr(M, $.mode, j, null), M.return = $, M;
-        ao($, M);
+        so($, M);
       }
       return null;
     }
     function Z($, M, j, le) {
       var xe = M !== null ? M.key : null;
-      if (typeof j == "string" && j !== "" || typeof j == "number") return xe !== null ? null : C($, M, "" + j, le);
+      if (typeof j == "string" && j !== "" || typeof j == "number") return xe !== null ? null : N($, M, "" + j, le);
       if (typeof j == "object" && j !== null) {
         switch (j.$$typeof) {
           case k:
@@ -13216,12 +13430,12 @@ function hh() {
             );
         }
         if (de(j) || ce(j)) return xe !== null ? null : ne($, M, j, le, null);
-        ao($, j);
+        so($, j);
       }
       return null;
     }
     function he($, M, j, le, xe) {
-      if (typeof le == "string" && le !== "" || typeof le == "number") return $ = $.get(j) || null, C(M, $, "" + le, xe);
+      if (typeof le == "string" && le !== "" || typeof le == "number") return $ = $.get(j) || null, N(M, $, "" + le, xe);
       if (typeof le == "object" && le !== null) {
         switch (le.$$typeof) {
           case k:
@@ -13233,7 +13447,7 @@ function hh() {
             return he($, M, j, ke(le._payload), xe);
         }
         if (de(le) || ce(le)) return $ = $.get(j) || null, ne(M, $, le, xe, null);
-        ao(M, le);
+        so(M, le);
       }
       return null;
     }
@@ -13253,8 +13467,8 @@ function hh() {
         return Qe && Hr($, Pe), xe;
       }
       for (Se = l($, Se); Pe < j.length; Pe++) dt = he(Se, $, Pe, j[Pe], le), dt !== null && (e && dt.alternate !== null && Se.delete(dt.key === null ? Pe : dt.key), M = m(dt, M, Pe), ke === null ? xe = dt : ke.sibling = dt, ke = dt);
-      return e && Se.forEach(function(Nr) {
-        return t($, Nr);
+      return e && Se.forEach(function(Cr) {
+        return t($, Cr);
       }), Qe && Hr($, Pe), xe;
     }
     function ye($, M, j, le) {
@@ -13263,12 +13477,12 @@ function hh() {
       if (j = xe.call(j), j == null) throw Error(n(151));
       for (var ke = xe = null, Se = M, Pe = M = 0, dt = null, qe = j.next(); Se !== null && !qe.done; Pe++, qe = j.next()) {
         Se.index > Pe ? (dt = Se, Se = null) : dt = Se.sibling;
-        var Nr = Z($, Se, qe.value, le);
-        if (Nr === null) {
+        var Cr = Z($, Se, qe.value, le);
+        if (Cr === null) {
           Se === null && (Se = dt);
           break;
         }
-        e && Se && Nr.alternate === null && t($, Se), M = m(Nr, M, Pe), ke === null ? xe = Nr : ke.sibling = Nr, ke = Nr, Se = dt;
+        e && Se && Cr.alternate === null && t($, Se), M = m(Cr, M, Pe), ke === null ? xe = Cr : ke.sibling = Cr, ke = Cr, Se = dt;
       }
       if (qe.done) return i(
         $,
@@ -13279,24 +13493,24 @@ function hh() {
         return Qe && Hr($, Pe), xe;
       }
       for (Se = l($, Se); !qe.done; Pe++, qe = j.next()) qe = he(Se, $, Pe, qe.value, le), qe !== null && (e && qe.alternate !== null && Se.delete(qe.key === null ? Pe : qe.key), M = m(qe, M, Pe), ke === null ? xe = qe : ke.sibling = qe, ke = qe);
-      return e && Se.forEach(function(sh) {
-        return t($, sh);
+      return e && Se.forEach(function(ch) {
+        return t($, ch);
       }), Qe && Hr($, Pe), xe;
     }
     function nt($, M, j, le) {
-      if (typeof j == "object" && j !== null && j.type === N && j.key === null && (j = j.props.children), typeof j == "object" && j !== null) {
+      if (typeof j == "object" && j !== null && j.type === C && j.key === null && (j = j.props.children), typeof j == "object" && j !== null) {
         switch (j.$$typeof) {
           case k:
             e: {
               for (var xe = j.key, ke = M; ke !== null; ) {
                 if (ke.key === xe) {
-                  if (xe = j.type, xe === N) {
+                  if (xe = j.type, xe === C) {
                     if (ke.tag === 7) {
                       i($, ke.sibling), M = d(ke, j.props.children), M.return = $, $ = M;
                       break e;
                     }
-                  } else if (ke.elementType === xe || typeof xe == "object" && xe !== null && xe.$$typeof === te && Yc(xe) === ke.type) {
-                    i($, ke.sibling), M = d(ke, j.props), M.ref = Xn($, ke, j), M.return = $, $ = M;
+                  } else if (ke.elementType === xe || typeof xe == "object" && xe !== null && xe.$$typeof === te && Kc(xe) === ke.type) {
+                    i($, ke.sibling), M = d(ke, j.props), M.ref = Qn($, ke, j), M.return = $, $ = M;
                     break e;
                   }
                   i($, ke);
@@ -13304,7 +13518,7 @@ function hh() {
                 } else t($, ke);
                 ke = ke.sibling;
               }
-              j.type === N ? (M = Wr(j.props.children, $.mode, le, j.key), M.return = $, $ = M) : (le = zo(j.type, j.key, j.props, null, $.mode, le), le.ref = Xn($, M, j), le.return = $, $ = le);
+              j.type === C ? (M = Wr(j.props.children, $.mode, le, j.key), M.return = $, $ = M) : (le = Ro(j.type, j.key, j.props, null, $.mode, le), le.ref = Qn($, M, j), le.return = $, $ = le);
             }
             return x($);
           case E:
@@ -13320,7 +13534,7 @@ function hh() {
                 else t($, M);
                 M = M.sibling;
               }
-              M = Fs(j, $.mode, le), M.return = $, $ = M;
+              M = Us(j, $.mode, le), M.return = $, $ = M;
             }
             return x($);
           case te:
@@ -13328,21 +13542,21 @@ function hh() {
         }
         if (de(j)) return be($, M, j, le);
         if (ce(j)) return ye($, M, j, le);
-        ao($, j);
+        so($, j);
       }
-      return typeof j == "string" && j !== "" || typeof j == "number" ? (j = "" + j, M !== null && M.tag === 6 ? (i($, M.sibling), M = d(M, j), M.return = $, $ = M) : (i($, M), M = js(j, $.mode, le), M.return = $, $ = M), x($)) : i($, M);
+      return typeof j == "string" && j !== "" || typeof j == "number" ? (j = "" + j, M !== null && M.tag === 6 ? (i($, M.sibling), M = d(M, j), M.return = $, $ = M) : (i($, M), M = Fs(j, $.mode, le), M.return = $, $ = M), x($)) : i($, M);
     }
     return nt;
   }
-  var dn = Kc(!0), Xc = Kc(!1), so = br(null), lo = null, un = null, Ja = null;
-  function Za() {
-    Ja = un = lo = null;
+  var dn = Xc(!0), Qc = Xc(!1), lo = br(null), co = null, un = null, Za = null;
+  function es() {
+    Za = un = co = null;
   }
-  function es(e) {
-    var t = so.current;
-    Ye(so), e._currentValue = t;
+  function ts(e) {
+    var t = lo.current;
+    Ye(lo), e._currentValue = t;
   }
-  function ts(e, t, i) {
+  function rs(e, t, i) {
     for (; e !== null; ) {
       var l = e.alternate;
       if ((e.childLanes & t) !== t ? (e.childLanes |= t, l !== null && (l.childLanes |= t)) : l !== null && (l.childLanes & t) !== t && (l.childLanes |= t), e === i) break;
@@ -13350,23 +13564,23 @@ function hh() {
     }
   }
   function pn(e, t) {
-    lo = e, Ja = un = null, e = e.dependencies, e !== null && e.firstContext !== null && (e.lanes & t && (St = !0), e.firstContext = null);
+    co = e, Za = un = null, e = e.dependencies, e !== null && e.firstContext !== null && (e.lanes & t && (St = !0), e.firstContext = null);
   }
   function Tt(e) {
     var t = e._currentValue;
-    if (Ja !== e) if (e = { context: e, memoizedValue: t, next: null }, un === null) {
-      if (lo === null) throw Error(n(308));
-      un = e, lo.dependencies = { lanes: 0, firstContext: e };
+    if (Za !== e) if (e = { context: e, memoizedValue: t, next: null }, un === null) {
+      if (co === null) throw Error(n(308));
+      un = e, co.dependencies = { lanes: 0, firstContext: e };
     } else un = un.next = e;
     return t;
   }
   var Br = null;
-  function rs(e) {
+  function ns(e) {
     Br === null ? Br = [e] : Br.push(e);
   }
-  function Qc(e, t, i, l) {
+  function Jc(e, t, i, l) {
     var d = t.interleaved;
-    return d === null ? (i.next = i, rs(t)) : (i.next = d.next, d.next = i), t.interleaved = i, ir(e, l);
+    return d === null ? (i.next = i, ns(t)) : (i.next = d.next, d.next = i), t.interleaved = i, ir(e, l);
   }
   function ir(e, t) {
     e.lanes |= t;
@@ -13375,10 +13589,10 @@ function hh() {
     return i.tag === 3 ? i.stateNode : null;
   }
   var xr = !1;
-  function ns(e) {
+  function is(e) {
     e.updateQueue = { baseState: e.memoizedState, firstBaseUpdate: null, lastBaseUpdate: null, shared: { pending: null, interleaved: null, lanes: 0 }, effects: null };
   }
-  function Jc(e, t) {
+  function Zc(e, t) {
     e = e.updateQueue, t.updateQueue === e && (t.updateQueue = { baseState: e.baseState, firstBaseUpdate: e.firstBaseUpdate, lastBaseUpdate: e.lastBaseUpdate, shared: e.shared, effects: e.effects });
   }
   function or(e, t) {
@@ -13391,15 +13605,15 @@ function hh() {
       var d = l.pending;
       return d === null ? t.next = t : (t.next = d.next, d.next = t), l.pending = t, ir(e, i);
     }
-    return d = l.interleaved, d === null ? (t.next = t, rs(l)) : (t.next = d.next, d.next = t), l.interleaved = t, ir(e, i);
+    return d = l.interleaved, d === null ? (t.next = t, ns(l)) : (t.next = d.next, d.next = t), l.interleaved = t, ir(e, i);
   }
-  function co(e, t, i) {
+  function uo(e, t, i) {
     if (t = t.updateQueue, t !== null && (t = t.shared, (i & 4194240) !== 0)) {
       var l = t.lanes;
-      l &= e.pendingLanes, i |= l, t.lanes = i, _a(e, i);
+      l &= e.pendingLanes, i |= l, t.lanes = i, ba(e, i);
     }
   }
-  function Zc(e, t) {
+  function ed(e, t) {
     var i = e.updateQueue, l = e.alternate;
     if (l !== null && (l = l.updateQueue, i === l)) {
       var d = null, m = null;
@@ -13415,33 +13629,33 @@ function hh() {
     }
     e = i.lastBaseUpdate, e === null ? i.firstBaseUpdate = t : e.next = t, i.lastBaseUpdate = t;
   }
-  function uo(e, t, i, l) {
+  function po(e, t, i, l) {
     var d = e.updateQueue;
     xr = !1;
-    var m = d.firstBaseUpdate, x = d.lastBaseUpdate, C = d.shared.pending;
-    if (C !== null) {
+    var m = d.firstBaseUpdate, x = d.lastBaseUpdate, N = d.shared.pending;
+    if (N !== null) {
       d.shared.pending = null;
-      var L = C, U = L.next;
+      var L = N, U = L.next;
       L.next = null, x === null ? m = U : x.next = U, x = L;
       var ne = e.alternate;
-      ne !== null && (ne = ne.updateQueue, C = ne.lastBaseUpdate, C !== x && (C === null ? ne.firstBaseUpdate = U : C.next = U, ne.lastBaseUpdate = L));
+      ne !== null && (ne = ne.updateQueue, N = ne.lastBaseUpdate, N !== x && (N === null ? ne.firstBaseUpdate = U : N.next = U, ne.lastBaseUpdate = L));
     }
     if (m !== null) {
       var ae = d.baseState;
-      x = 0, ne = U = L = null, C = m;
+      x = 0, ne = U = L = null, N = m;
       do {
-        var Z = C.lane, he = C.eventTime;
+        var Z = N.lane, he = N.eventTime;
         if ((l & Z) === Z) {
           ne !== null && (ne = ne.next = {
             eventTime: he,
             lane: 0,
-            tag: C.tag,
-            payload: C.payload,
-            callback: C.callback,
+            tag: N.tag,
+            payload: N.payload,
+            callback: N.callback,
             next: null
           });
           e: {
-            var be = e, ye = C;
+            var be = e, ye = N;
             switch (Z = t, he = i, ye.tag) {
               case 1:
                 if (be = ye.payload, typeof be == "function") {
@@ -13460,11 +13674,11 @@ function hh() {
                 xr = !0;
             }
           }
-          C.callback !== null && C.lane !== 0 && (e.flags |= 64, Z = d.effects, Z === null ? d.effects = [C] : Z.push(C));
-        } else he = { eventTime: he, lane: Z, tag: C.tag, payload: C.payload, callback: C.callback, next: null }, ne === null ? (U = ne = he, L = ae) : ne = ne.next = he, x |= Z;
-        if (C = C.next, C === null) {
-          if (C = d.shared.pending, C === null) break;
-          Z = C, C = Z.next, Z.next = null, d.lastBaseUpdate = Z, d.shared.pending = null;
+          N.callback !== null && N.lane !== 0 && (e.flags |= 64, Z = d.effects, Z === null ? d.effects = [N] : Z.push(N));
+        } else he = { eventTime: he, lane: Z, tag: N.tag, payload: N.payload, callback: N.callback, next: null }, ne === null ? (U = ne = he, L = ae) : ne = ne.next = he, x |= Z;
+        if (N = N.next, N === null) {
+          if (N = d.shared.pending, N === null) break;
+          Z = N, N = Z.next, Z.next = null, d.lastBaseUpdate = Z, d.shared.pending = null;
         }
       } while (!0);
       if (ne === null && (L = ae), d.baseState = L, d.firstBaseUpdate = U, d.lastBaseUpdate = ne, t = d.shared.interleaved, t !== null) {
@@ -13476,7 +13690,7 @@ function hh() {
       qr |= x, e.lanes = x, e.memoizedState = ae;
     }
   }
-  function ed(e, t, i) {
+  function td(e, t, i) {
     if (e = t.effects, t.effects = null, e !== null) for (t = 0; t < e.length; t++) {
       var l = e[t], d = l.callback;
       if (d !== null) {
@@ -13485,13 +13699,13 @@ function hh() {
       }
     }
   }
-  var Qn = {}, Xt = br(Qn), Jn = br(Qn), Zn = br(Qn);
+  var Jn = {}, Xt = br(Jn), Zn = br(Jn), ei = br(Jn);
   function Dr(e) {
-    if (e === Qn) throw Error(n(174));
+    if (e === Jn) throw Error(n(174));
     return e;
   }
-  function is(e, t) {
-    switch (Ve(Zn, t), Ve(Jn, e), Ve(Xt, Qn), e = t.nodeType, e) {
+  function os(e, t) {
+    switch (Ve(ei, t), Ve(Zn, e), Ve(Xt, Jn), e = t.nodeType, e) {
       case 9:
       case 11:
         t = (t = t.documentElement) ? t.namespaceURI : st(null, "");
@@ -13502,18 +13716,18 @@ function hh() {
     Ye(Xt), Ve(Xt, t);
   }
   function mn() {
-    Ye(Xt), Ye(Jn), Ye(Zn);
+    Ye(Xt), Ye(Zn), Ye(ei);
   }
-  function td(e) {
-    Dr(Zn.current);
+  function rd(e) {
+    Dr(ei.current);
     var t = Dr(Xt.current), i = st(t, e.type);
-    t !== i && (Ve(Jn, e), Ve(Xt, i));
+    t !== i && (Ve(Zn, e), Ve(Xt, i));
   }
-  function os(e) {
-    Jn.current === e && (Ye(Xt), Ye(Jn));
+  function as(e) {
+    Zn.current === e && (Ye(Xt), Ye(Zn));
   }
   var Je = br(0);
-  function po(e) {
+  function mo(e) {
     for (var t = e; t !== null; ) {
       if (t.tag === 13) {
         var i = t.memoizedState;
@@ -13533,34 +13747,34 @@ function hh() {
     }
     return null;
   }
-  var as = [];
-  function ss() {
-    for (var e = 0; e < as.length; e++) as[e]._workInProgressVersionPrimary = null;
-    as.length = 0;
+  var ss = [];
+  function ls() {
+    for (var e = 0; e < ss.length; e++) ss[e]._workInProgressVersionPrimary = null;
+    ss.length = 0;
   }
-  var mo = b.ReactCurrentDispatcher, ls = b.ReactCurrentBatchConfig, $r = 0, Ze = null, ot = null, lt = null, go = !1, ei = !1, ti = 0, Ng = 0;
-  function _t() {
+  var go = b.ReactCurrentDispatcher, cs = b.ReactCurrentBatchConfig, $r = 0, Ze = null, ot = null, lt = null, ho = !1, ti = !1, ri = 0, zg = 0;
+  function ft() {
     throw Error(n(321));
   }
-  function cs(e, t) {
+  function ds(e, t) {
     if (t === null) return !1;
     for (var i = 0; i < t.length && i < e.length; i++) if (!qt(e[i], t[i])) return !1;
     return !0;
   }
-  function ds(e, t, i, l, d, m) {
-    if ($r = m, Ze = t, t.memoizedState = null, t.updateQueue = null, t.lanes = 0, mo.current = e === null || e.memoizedState === null ? Lg : Og, e = i(l, d), ei) {
+  function us(e, t, i, l, d, m) {
+    if ($r = m, Ze = t, t.memoizedState = null, t.updateQueue = null, t.lanes = 0, go.current = e === null || e.memoizedState === null ? Tg : Mg, e = i(l, d), ti) {
       m = 0;
       do {
-        if (ei = !1, ti = 0, 25 <= m) throw Error(n(301));
-        m += 1, lt = ot = null, t.updateQueue = null, mo.current = Tg, e = i(l, d);
-      } while (ei);
+        if (ti = !1, ri = 0, 25 <= m) throw Error(n(301));
+        m += 1, lt = ot = null, t.updateQueue = null, go.current = Hg, e = i(l, d);
+      } while (ti);
     }
-    if (mo.current = _o, t = ot !== null && ot.next !== null, $r = 0, lt = ot = Ze = null, go = !1, t) throw Error(n(300));
+    if (go.current = bo, t = ot !== null && ot.next !== null, $r = 0, lt = ot = Ze = null, ho = !1, t) throw Error(n(300));
     return e;
   }
-  function us() {
-    var e = ti !== 0;
-    return ti = 0, e;
+  function ps() {
+    var e = ri !== 0;
+    return ri = 0, e;
   }
   function Qt() {
     var e = { memoizedState: null, baseState: null, baseQueue: null, queue: null, next: null };
@@ -13579,10 +13793,10 @@ function hh() {
     }
     return lt;
   }
-  function ri(e, t) {
+  function ni(e, t) {
     return typeof t == "function" ? t(e) : t;
   }
-  function ps(e) {
+  function ms(e) {
     var t = Mt(), i = t.queue;
     if (i === null) throw Error(n(311));
     i.lastRenderedReducer = e;
@@ -13596,7 +13810,7 @@ function hh() {
     }
     if (d !== null) {
       m = d.next, l = l.baseState;
-      var C = x = null, L = null, U = m;
+      var N = x = null, L = null, U = m;
       do {
         var ne = U.lane;
         if (($r & ne) === ne) L !== null && (L = L.next = { lane: 0, action: U.action, hasEagerState: U.hasEagerState, eagerState: U.eagerState, next: null }), l = U.hasEagerState ? U.eagerState : e(l, U.action);
@@ -13608,11 +13822,11 @@ function hh() {
             eagerState: U.eagerState,
             next: null
           };
-          L === null ? (C = L = ae, x = l) : L = L.next = ae, Ze.lanes |= ne, qr |= ne;
+          L === null ? (N = L = ae, x = l) : L = L.next = ae, Ze.lanes |= ne, qr |= ne;
         }
         U = U.next;
       } while (U !== null && U !== m);
-      L === null ? x = l : L.next = C, qt(l, t.memoizedState) || (St = !0), t.memoizedState = l, t.baseState = x, t.baseQueue = L, i.lastRenderedState = l;
+      L === null ? x = l : L.next = N, qt(l, t.memoizedState) || (St = !0), t.memoizedState = l, t.baseState = x, t.baseQueue = L, i.lastRenderedState = l;
     }
     if (e = i.interleaved, e !== null) {
       d = e;
@@ -13622,7 +13836,7 @@ function hh() {
     } else d === null && (i.lanes = 0);
     return [t.memoizedState, i.dispatch];
   }
-  function ms(e) {
+  function gs(e) {
     var t = Mt(), i = t.queue;
     if (i === null) throw Error(n(311));
     i.lastRenderedReducer = e;
@@ -13637,28 +13851,28 @@ function hh() {
     }
     return [m, l];
   }
-  function rd() {
+  function nd() {
   }
-  function nd(e, t) {
+  function id(e, t) {
     var i = Ze, l = Mt(), d = t(), m = !qt(l.memoizedState, d);
-    if (m && (l.memoizedState = d, St = !0), l = l.queue, gs(ad.bind(null, i, l, e), [e]), l.getSnapshot !== t || m || lt !== null && lt.memoizedState.tag & 1) {
-      if (i.flags |= 2048, ni(9, od.bind(null, i, l, d, t), void 0, null), ct === null) throw Error(n(349));
-      $r & 30 || id(i, t, d);
+    if (m && (l.memoizedState = d, St = !0), l = l.queue, hs(sd.bind(null, i, l, e), [e]), l.getSnapshot !== t || m || lt !== null && lt.memoizedState.tag & 1) {
+      if (i.flags |= 2048, ii(9, ad.bind(null, i, l, d, t), void 0, null), ct === null) throw Error(n(349));
+      $r & 30 || od(i, t, d);
     }
     return d;
   }
-  function id(e, t, i) {
+  function od(e, t, i) {
     e.flags |= 16384, e = { getSnapshot: t, value: i }, t = Ze.updateQueue, t === null ? (t = { lastEffect: null, stores: null }, Ze.updateQueue = t, t.stores = [e]) : (i = t.stores, i === null ? t.stores = [e] : i.push(e));
   }
-  function od(e, t, i, l) {
-    t.value = i, t.getSnapshot = l, sd(t) && ld(e);
+  function ad(e, t, i, l) {
+    t.value = i, t.getSnapshot = l, ld(t) && cd(e);
   }
-  function ad(e, t, i) {
+  function sd(e, t, i) {
     return i(function() {
-      sd(t) && ld(e);
+      ld(t) && cd(e);
     });
   }
-  function sd(e) {
+  function ld(e) {
     var t = e.getSnapshot;
     e = e.value;
     try {
@@ -13668,23 +13882,23 @@ function hh() {
       return !0;
     }
   }
-  function ld(e) {
+  function cd(e) {
     var t = ir(e, 1);
     t !== null && Vt(t, e, 1, -1);
   }
-  function cd(e) {
+  function dd(e) {
     var t = Qt();
-    return typeof e == "function" && (e = e()), t.memoizedState = t.baseState = e, e = { pending: null, interleaved: null, lanes: 0, dispatch: null, lastRenderedReducer: ri, lastRenderedState: e }, t.queue = e, e = e.dispatch = Rg.bind(null, Ze, e), [t.memoizedState, e];
+    return typeof e == "function" && (e = e()), t.memoizedState = t.baseState = e, e = { pending: null, interleaved: null, lanes: 0, dispatch: null, lastRenderedReducer: ni, lastRenderedState: e }, t.queue = e, e = e.dispatch = Og.bind(null, Ze, e), [t.memoizedState, e];
   }
-  function ni(e, t, i, l) {
+  function ii(e, t, i, l) {
     return e = { tag: e, create: t, destroy: i, deps: l, next: null }, t = Ze.updateQueue, t === null ? (t = { lastEffect: null, stores: null }, Ze.updateQueue = t, t.lastEffect = e.next = e) : (i = t.lastEffect, i === null ? t.lastEffect = e.next = e : (l = i.next, i.next = e, e.next = l, t.lastEffect = e)), e;
   }
-  function dd() {
+  function ud() {
     return Mt().memoizedState;
   }
-  function ho(e, t, i, l) {
+  function _o(e, t, i, l) {
     var d = Qt();
-    Ze.flags |= e, d.memoizedState = ni(1 | t, i, void 0, l === void 0 ? null : l);
+    Ze.flags |= e, d.memoizedState = ii(1 | t, i, void 0, l === void 0 ? null : l);
   }
   function fo(e, t, i, l) {
     var d = Mt();
@@ -13692,26 +13906,26 @@ function hh() {
     var m = void 0;
     if (ot !== null) {
       var x = ot.memoizedState;
-      if (m = x.destroy, l !== null && cs(l, x.deps)) {
-        d.memoizedState = ni(t, i, m, l);
+      if (m = x.destroy, l !== null && ds(l, x.deps)) {
+        d.memoizedState = ii(t, i, m, l);
         return;
       }
     }
-    Ze.flags |= e, d.memoizedState = ni(1 | t, i, m, l);
-  }
-  function ud(e, t) {
-    return ho(8390656, 8, e, t);
-  }
-  function gs(e, t) {
-    return fo(2048, 8, e, t);
+    Ze.flags |= e, d.memoizedState = ii(1 | t, i, m, l);
   }
   function pd(e, t) {
-    return fo(4, 2, e, t);
+    return _o(8390656, 8, e, t);
+  }
+  function hs(e, t) {
+    return fo(2048, 8, e, t);
   }
   function md(e, t) {
-    return fo(4, 4, e, t);
+    return fo(4, 2, e, t);
   }
   function gd(e, t) {
+    return fo(4, 4, e, t);
+  }
+  function hd(e, t) {
     if (typeof t == "function") return e = e(), t(e), function() {
       t(null);
     };
@@ -13719,108 +13933,108 @@ function hh() {
       t.current = null;
     };
   }
-  function hd(e, t, i) {
-    return i = i != null ? i.concat([e]) : null, fo(4, 4, gd.bind(null, t, e), i);
+  function _d(e, t, i) {
+    return i = i != null ? i.concat([e]) : null, fo(4, 4, hd.bind(null, t, e), i);
   }
-  function hs() {
+  function _s() {
   }
   function fd(e, t) {
     var i = Mt();
     t = t === void 0 ? null : t;
     var l = i.memoizedState;
-    return l !== null && t !== null && cs(t, l[1]) ? l[0] : (i.memoizedState = [e, t], e);
+    return l !== null && t !== null && ds(t, l[1]) ? l[0] : (i.memoizedState = [e, t], e);
   }
-  function _d(e, t) {
+  function bd(e, t) {
     var i = Mt();
     t = t === void 0 ? null : t;
     var l = i.memoizedState;
-    return l !== null && t !== null && cs(t, l[1]) ? l[0] : (e = e(), i.memoizedState = [e, t], e);
+    return l !== null && t !== null && ds(t, l[1]) ? l[0] : (e = e(), i.memoizedState = [e, t], e);
   }
-  function bd(e, t, i) {
-    return $r & 21 ? (qt(i, t) || (i = Yl(), Ze.lanes |= i, qr |= i, e.baseState = !0), t) : (e.baseState && (e.baseState = !1, St = !0), e.memoizedState = i);
+  function yd(e, t, i) {
+    return $r & 21 ? (qt(i, t) || (i = Kl(), Ze.lanes |= i, qr |= i, e.baseState = !0), t) : (e.baseState && (e.baseState = !1, St = !0), e.memoizedState = i);
   }
-  function Cg(e, t) {
+  function Rg(e, t) {
     var i = Ue;
     Ue = i !== 0 && 4 > i ? i : 4, e(!0);
-    var l = ls.transition;
-    ls.transition = {};
+    var l = cs.transition;
+    cs.transition = {};
     try {
       e(!1), t();
     } finally {
-      Ue = i, ls.transition = l;
+      Ue = i, cs.transition = l;
     }
   }
-  function yd() {
+  function vd() {
     return Mt().memoizedState;
   }
-  function zg(e, t, i) {
+  function Lg(e, t, i) {
     var l = Er(e);
-    if (i = { lane: l, action: i, hasEagerState: !1, eagerState: null, next: null }, vd(e)) xd(t, i);
-    else if (i = Qc(e, t, i, l), i !== null) {
+    if (i = { lane: l, action: i, hasEagerState: !1, eagerState: null, next: null }, xd(e)) wd(t, i);
+    else if (i = Jc(e, t, i, l), i !== null) {
       var d = xt();
-      Vt(i, e, l, d), wd(i, t, l);
+      Vt(i, e, l, d), kd(i, t, l);
     }
   }
-  function Rg(e, t, i) {
+  function Og(e, t, i) {
     var l = Er(e), d = { lane: l, action: i, hasEagerState: !1, eagerState: null, next: null };
-    if (vd(e)) xd(t, d);
+    if (xd(e)) wd(t, d);
     else {
       var m = e.alternate;
       if (e.lanes === 0 && (m === null || m.lanes === 0) && (m = t.lastRenderedReducer, m !== null)) try {
-        var x = t.lastRenderedState, C = m(x, i);
-        if (d.hasEagerState = !0, d.eagerState = C, qt(C, x)) {
+        var x = t.lastRenderedState, N = m(x, i);
+        if (d.hasEagerState = !0, d.eagerState = N, qt(N, x)) {
           var L = t.interleaved;
-          L === null ? (d.next = d, rs(t)) : (d.next = L.next, L.next = d), t.interleaved = d;
+          L === null ? (d.next = d, ns(t)) : (d.next = L.next, L.next = d), t.interleaved = d;
           return;
         }
       } catch {
       } finally {
       }
-      i = Qc(e, t, d, l), i !== null && (d = xt(), Vt(i, e, l, d), wd(i, t, l));
+      i = Jc(e, t, d, l), i !== null && (d = xt(), Vt(i, e, l, d), kd(i, t, l));
     }
   }
-  function vd(e) {
+  function xd(e) {
     var t = e.alternate;
     return e === Ze || t !== null && t === Ze;
   }
-  function xd(e, t) {
-    ei = go = !0;
+  function wd(e, t) {
+    ti = ho = !0;
     var i = e.pending;
     i === null ? t.next = t : (t.next = i.next, i.next = t), e.pending = t;
   }
-  function wd(e, t, i) {
+  function kd(e, t, i) {
     if (i & 4194240) {
       var l = t.lanes;
-      l &= e.pendingLanes, i |= l, t.lanes = i, _a(e, i);
+      l &= e.pendingLanes, i |= l, t.lanes = i, ba(e, i);
     }
   }
-  var _o = { readContext: Tt, useCallback: _t, useContext: _t, useEffect: _t, useImperativeHandle: _t, useInsertionEffect: _t, useLayoutEffect: _t, useMemo: _t, useReducer: _t, useRef: _t, useState: _t, useDebugValue: _t, useDeferredValue: _t, useTransition: _t, useMutableSource: _t, useSyncExternalStore: _t, useId: _t, unstable_isNewReconciler: !1 }, Lg = { readContext: Tt, useCallback: function(e, t) {
+  var bo = { readContext: Tt, useCallback: ft, useContext: ft, useEffect: ft, useImperativeHandle: ft, useInsertionEffect: ft, useLayoutEffect: ft, useMemo: ft, useReducer: ft, useRef: ft, useState: ft, useDebugValue: ft, useDeferredValue: ft, useTransition: ft, useMutableSource: ft, useSyncExternalStore: ft, useId: ft, unstable_isNewReconciler: !1 }, Tg = { readContext: Tt, useCallback: function(e, t) {
     return Qt().memoizedState = [e, t === void 0 ? null : t], e;
-  }, useContext: Tt, useEffect: ud, useImperativeHandle: function(e, t, i) {
-    return i = i != null ? i.concat([e]) : null, ho(
+  }, useContext: Tt, useEffect: pd, useImperativeHandle: function(e, t, i) {
+    return i = i != null ? i.concat([e]) : null, _o(
       4194308,
       4,
-      gd.bind(null, t, e),
+      hd.bind(null, t, e),
       i
     );
   }, useLayoutEffect: function(e, t) {
-    return ho(4194308, 4, e, t);
+    return _o(4194308, 4, e, t);
   }, useInsertionEffect: function(e, t) {
-    return ho(4, 2, e, t);
+    return _o(4, 2, e, t);
   }, useMemo: function(e, t) {
     var i = Qt();
     return t = t === void 0 ? null : t, e = e(), i.memoizedState = [e, t], e;
   }, useReducer: function(e, t, i) {
     var l = Qt();
-    return t = i !== void 0 ? i(t) : t, l.memoizedState = l.baseState = t, e = { pending: null, interleaved: null, lanes: 0, dispatch: null, lastRenderedReducer: e, lastRenderedState: t }, l.queue = e, e = e.dispatch = zg.bind(null, Ze, e), [l.memoizedState, e];
+    return t = i !== void 0 ? i(t) : t, l.memoizedState = l.baseState = t, e = { pending: null, interleaved: null, lanes: 0, dispatch: null, lastRenderedReducer: e, lastRenderedState: t }, l.queue = e, e = e.dispatch = Lg.bind(null, Ze, e), [l.memoizedState, e];
   }, useRef: function(e) {
     var t = Qt();
     return e = { current: e }, t.memoizedState = e;
-  }, useState: cd, useDebugValue: hs, useDeferredValue: function(e) {
+  }, useState: dd, useDebugValue: _s, useDeferredValue: function(e) {
     return Qt().memoizedState = e;
   }, useTransition: function() {
-    var e = cd(!1), t = e[0];
-    return e = Cg.bind(null, e[1]), Qt().memoizedState = e, [t, e];
+    var e = dd(!1), t = e[0];
+    return e = Rg.bind(null, e[1]), Qt().memoizedState = e, [t, e];
   }, useMutableSource: function() {
   }, useSyncExternalStore: function(e, t, i) {
     var l = Ze, d = Qt();
@@ -13829,59 +14043,59 @@ function hh() {
       i = i();
     } else {
       if (i = t(), ct === null) throw Error(n(349));
-      $r & 30 || id(l, t, i);
+      $r & 30 || od(l, t, i);
     }
     d.memoizedState = i;
     var m = { value: i, getSnapshot: t };
-    return d.queue = m, ud(ad.bind(
+    return d.queue = m, pd(sd.bind(
       null,
       l,
       m,
       e
-    ), [e]), l.flags |= 2048, ni(9, od.bind(null, l, m, i, t), void 0, null), i;
+    ), [e]), l.flags |= 2048, ii(9, ad.bind(null, l, m, i, t), void 0, null), i;
   }, useId: function() {
     var e = Qt(), t = ct.identifierPrefix;
     if (Qe) {
       var i = nr, l = rr;
-      i = (l & ~(1 << 32 - $t(l) - 1)).toString(32) + i, t = ":" + t + "R" + i, i = ti++, 0 < i && (t += "H" + i.toString(32)), t += ":";
-    } else i = Ng++, t = ":" + t + "r" + i.toString(32) + ":";
+      i = (l & ~(1 << 32 - $t(l) - 1)).toString(32) + i, t = ":" + t + "R" + i, i = ri++, 0 < i && (t += "H" + i.toString(32)), t += ":";
+    } else i = zg++, t = ":" + t + "r" + i.toString(32) + ":";
     return e.memoizedState = t;
-  }, unstable_isNewReconciler: !1 }, Og = {
+  }, unstable_isNewReconciler: !1 }, Mg = {
     readContext: Tt,
     useCallback: fd,
     useContext: Tt,
-    useEffect: gs,
-    useImperativeHandle: hd,
-    useInsertionEffect: pd,
-    useLayoutEffect: md,
-    useMemo: _d,
-    useReducer: ps,
-    useRef: dd,
+    useEffect: hs,
+    useImperativeHandle: _d,
+    useInsertionEffect: md,
+    useLayoutEffect: gd,
+    useMemo: bd,
+    useReducer: ms,
+    useRef: ud,
     useState: function() {
-      return ps(ri);
+      return ms(ni);
     },
-    useDebugValue: hs,
+    useDebugValue: _s,
     useDeferredValue: function(e) {
       var t = Mt();
-      return bd(t, ot.memoizedState, e);
+      return yd(t, ot.memoizedState, e);
     },
     useTransition: function() {
-      var e = ps(ri)[0], t = Mt().memoizedState;
+      var e = ms(ni)[0], t = Mt().memoizedState;
       return [e, t];
     },
-    useMutableSource: rd,
-    useSyncExternalStore: nd,
-    useId: yd,
+    useMutableSource: nd,
+    useSyncExternalStore: id,
+    useId: vd,
     unstable_isNewReconciler: !1
-  }, Tg = { readContext: Tt, useCallback: fd, useContext: Tt, useEffect: gs, useImperativeHandle: hd, useInsertionEffect: pd, useLayoutEffect: md, useMemo: _d, useReducer: ms, useRef: dd, useState: function() {
-    return ms(ri);
-  }, useDebugValue: hs, useDeferredValue: function(e) {
+  }, Hg = { readContext: Tt, useCallback: fd, useContext: Tt, useEffect: hs, useImperativeHandle: _d, useInsertionEffect: md, useLayoutEffect: gd, useMemo: bd, useReducer: gs, useRef: ud, useState: function() {
+    return gs(ni);
+  }, useDebugValue: _s, useDeferredValue: function(e) {
     var t = Mt();
-    return ot === null ? t.memoizedState = e : bd(t, ot.memoizedState, e);
+    return ot === null ? t.memoizedState = e : yd(t, ot.memoizedState, e);
   }, useTransition: function() {
-    var e = ms(ri)[0], t = Mt().memoizedState;
+    var e = gs(ni)[0], t = Mt().memoizedState;
     return [e, t];
-  }, useMutableSource: rd, useSyncExternalStore: nd, useId: yd, unstable_isNewReconciler: !1 };
+  }, useMutableSource: nd, useSyncExternalStore: id, useId: vd, unstable_isNewReconciler: !1 };
   function Ft(e, t) {
     if (e && e.defaultProps) {
       t = re({}, t), e = e.defaultProps;
@@ -13893,36 +14107,36 @@ function hh() {
   function fs(e, t, i, l) {
     t = e.memoizedState, i = i(l, t), i = i == null ? t : re({}, t, i), e.memoizedState = i, e.lanes === 0 && (e.updateQueue.baseState = i);
   }
-  var bo = { isMounted: function(e) {
+  var yo = { isMounted: function(e) {
     return (e = e._reactInternals) ? Lr(e) === e : !1;
   }, enqueueSetState: function(e, t, i) {
     e = e._reactInternals;
     var l = xt(), d = Er(e), m = or(l, d);
-    m.payload = t, i != null && (m.callback = i), t = wr(e, m, d), t !== null && (Vt(t, e, d, l), co(t, e, d));
+    m.payload = t, i != null && (m.callback = i), t = wr(e, m, d), t !== null && (Vt(t, e, d, l), uo(t, e, d));
   }, enqueueReplaceState: function(e, t, i) {
     e = e._reactInternals;
     var l = xt(), d = Er(e), m = or(l, d);
-    m.tag = 1, m.payload = t, i != null && (m.callback = i), t = wr(e, m, d), t !== null && (Vt(t, e, d, l), co(t, e, d));
+    m.tag = 1, m.payload = t, i != null && (m.callback = i), t = wr(e, m, d), t !== null && (Vt(t, e, d, l), uo(t, e, d));
   }, enqueueForceUpdate: function(e, t) {
     e = e._reactInternals;
     var i = xt(), l = Er(e), d = or(i, l);
-    d.tag = 2, t != null && (d.callback = t), t = wr(e, d, l), t !== null && (Vt(t, e, l, i), co(t, e, l));
+    d.tag = 2, t != null && (d.callback = t), t = wr(e, d, l), t !== null && (Vt(t, e, l, i), uo(t, e, l));
   } };
-  function kd(e, t, i, l, d, m, x) {
-    return e = e.stateNode, typeof e.shouldComponentUpdate == "function" ? e.shouldComponentUpdate(l, m, x) : t.prototype && t.prototype.isPureReactComponent ? !Fn(i, l) || !Fn(d, m) : !0;
+  function Sd(e, t, i, l, d, m, x) {
+    return e = e.stateNode, typeof e.shouldComponentUpdate == "function" ? e.shouldComponentUpdate(l, m, x) : t.prototype && t.prototype.isPureReactComponent ? !Un(i, l) || !Un(d, m) : !0;
   }
-  function Sd(e, t, i) {
+  function Ad(e, t, i) {
     var l = !1, d = yr, m = t.contextType;
-    return typeof m == "object" && m !== null ? m = Tt(m) : (d = kt(t) ? Tr : ft.current, l = t.contextTypes, m = (l = l != null) ? an(e, d) : yr), t = new t(i, m), e.memoizedState = t.state !== null && t.state !== void 0 ? t.state : null, t.updater = bo, e.stateNode = t, t._reactInternals = e, l && (e = e.stateNode, e.__reactInternalMemoizedUnmaskedChildContext = d, e.__reactInternalMemoizedMaskedChildContext = m), t;
+    return typeof m == "object" && m !== null ? m = Tt(m) : (d = kt(t) ? Tr : _t.current, l = t.contextTypes, m = (l = l != null) ? an(e, d) : yr), t = new t(i, m), e.memoizedState = t.state !== null && t.state !== void 0 ? t.state : null, t.updater = yo, e.stateNode = t, t._reactInternals = e, l && (e = e.stateNode, e.__reactInternalMemoizedUnmaskedChildContext = d, e.__reactInternalMemoizedMaskedChildContext = m), t;
   }
-  function Ad(e, t, i, l) {
-    e = t.state, typeof t.componentWillReceiveProps == "function" && t.componentWillReceiveProps(i, l), typeof t.UNSAFE_componentWillReceiveProps == "function" && t.UNSAFE_componentWillReceiveProps(i, l), t.state !== e && bo.enqueueReplaceState(t, t.state, null);
+  function Ed(e, t, i, l) {
+    e = t.state, typeof t.componentWillReceiveProps == "function" && t.componentWillReceiveProps(i, l), typeof t.UNSAFE_componentWillReceiveProps == "function" && t.UNSAFE_componentWillReceiveProps(i, l), t.state !== e && yo.enqueueReplaceState(t, t.state, null);
   }
-  function _s(e, t, i, l) {
+  function bs(e, t, i, l) {
     var d = e.stateNode;
-    d.props = i, d.state = e.memoizedState, d.refs = {}, ns(e);
+    d.props = i, d.state = e.memoizedState, d.refs = {}, is(e);
     var m = t.contextType;
-    typeof m == "object" && m !== null ? d.context = Tt(m) : (m = kt(t) ? Tr : ft.current, d.context = an(e, m)), d.state = e.memoizedState, m = t.getDerivedStateFromProps, typeof m == "function" && (fs(e, t, m, i), d.state = e.memoizedState), typeof t.getDerivedStateFromProps == "function" || typeof d.getSnapshotBeforeUpdate == "function" || typeof d.UNSAFE_componentWillMount != "function" && typeof d.componentWillMount != "function" || (t = d.state, typeof d.componentWillMount == "function" && d.componentWillMount(), typeof d.UNSAFE_componentWillMount == "function" && d.UNSAFE_componentWillMount(), t !== d.state && bo.enqueueReplaceState(d, d.state, null), uo(e, i, d, l), d.state = e.memoizedState), typeof d.componentDidMount == "function" && (e.flags |= 4194308);
+    typeof m == "object" && m !== null ? d.context = Tt(m) : (m = kt(t) ? Tr : _t.current, d.context = an(e, m)), d.state = e.memoizedState, m = t.getDerivedStateFromProps, typeof m == "function" && (fs(e, t, m, i), d.state = e.memoizedState), typeof t.getDerivedStateFromProps == "function" || typeof d.getSnapshotBeforeUpdate == "function" || typeof d.UNSAFE_componentWillMount != "function" && typeof d.componentWillMount != "function" || (t = d.state, typeof d.componentWillMount == "function" && d.componentWillMount(), typeof d.UNSAFE_componentWillMount == "function" && d.UNSAFE_componentWillMount(), t !== d.state && yo.enqueueReplaceState(d, d.state, null), po(e, i, d, l), d.state = e.memoizedState), typeof d.componentDidMount == "function" && (e.flags |= 4194308);
   }
   function gn(e, t) {
     try {
@@ -13938,10 +14152,10 @@ Error generating stack: ` + m.message + `
     }
     return { value: e, source: t, stack: d, digest: null };
   }
-  function bs(e, t, i) {
+  function ys(e, t, i) {
     return { value: e, source: null, stack: i ?? null, digest: t ?? null };
   }
-  function ys(e, t) {
+  function vs(e, t) {
     try {
       console.error(t.value);
     } catch (i) {
@@ -13950,15 +14164,15 @@ Error generating stack: ` + m.message + `
       });
     }
   }
-  var Mg = typeof WeakMap == "function" ? WeakMap : Map;
-  function Ed(e, t, i) {
+  var Bg = typeof WeakMap == "function" ? WeakMap : Map;
+  function Pd(e, t, i) {
     i = or(-1, i), i.tag = 3, i.payload = { element: null };
     var l = t.value;
     return i.callback = function() {
-      Ao || (Ao = !0, Os = l), ys(e, t);
+      Eo || (Eo = !0, Ts = l), vs(e, t);
     }, i;
   }
-  function Pd(e, t, i) {
+  function Id(e, t, i) {
     i = or(-1, i), i.tag = 3;
     var l = e.type.getDerivedStateFromError;
     if (typeof l == "function") {
@@ -13966,24 +14180,24 @@ Error generating stack: ` + m.message + `
       i.payload = function() {
         return l(d);
       }, i.callback = function() {
-        ys(e, t);
+        vs(e, t);
       };
     }
     var m = e.stateNode;
     return m !== null && typeof m.componentDidCatch == "function" && (i.callback = function() {
-      ys(e, t), typeof l != "function" && (Sr === null ? Sr = /* @__PURE__ */ new Set([this]) : Sr.add(this));
+      vs(e, t), typeof l != "function" && (Sr === null ? Sr = /* @__PURE__ */ new Set([this]) : Sr.add(this));
       var x = t.stack;
       this.componentDidCatch(t.value, { componentStack: x !== null ? x : "" });
     }), i;
   }
-  function Id(e, t, i) {
+  function Cd(e, t, i) {
     var l = e.pingCache;
     if (l === null) {
-      l = e.pingCache = new Mg();
+      l = e.pingCache = new Bg();
       var d = /* @__PURE__ */ new Set();
       l.set(t, d);
     } else d = l.get(t), d === void 0 && (d = /* @__PURE__ */ new Set(), l.set(t, d));
-    d.has(i) || (d.add(i), e = Xg.bind(null, e, t, i), t.then(e, e));
+    d.has(i) || (d.add(i), e = Jg.bind(null, e, t, i), t.then(e, e));
   }
   function Nd(e) {
     do {
@@ -13993,125 +14207,125 @@ Error generating stack: ` + m.message + `
     } while (e !== null);
     return null;
   }
-  function Cd(e, t, i, l, d) {
+  function zd(e, t, i, l, d) {
     return e.mode & 1 ? (e.flags |= 65536, e.lanes = d, e) : (e === t ? e.flags |= 65536 : (e.flags |= 128, i.flags |= 131072, i.flags &= -52805, i.tag === 1 && (i.alternate === null ? i.tag = 17 : (t = or(-1, 1), t.tag = 2, wr(i, t, 1))), i.lanes |= 1), e);
   }
-  var Hg = b.ReactCurrentOwner, St = !1;
+  var Dg = b.ReactCurrentOwner, St = !1;
   function vt(e, t, i, l) {
-    t.child = e === null ? Xc(t, null, i, l) : dn(t, e.child, i, l);
-  }
-  function zd(e, t, i, l, d) {
-    i = i.render;
-    var m = t.ref;
-    return pn(t, d), l = ds(e, t, i, l, m, d), i = us(), e !== null && !St ? (t.updateQueue = e.updateQueue, t.flags &= -2053, e.lanes &= ~d, ar(e, t, d)) : (Qe && i && Ga(t), t.flags |= 1, vt(e, t, l, d), t.child);
+    t.child = e === null ? Qc(t, null, i, l) : dn(t, e.child, i, l);
   }
   function Rd(e, t, i, l, d) {
+    i = i.render;
+    var m = t.ref;
+    return pn(t, d), l = us(e, t, i, l, m, d), i = ps(), e !== null && !St ? (t.updateQueue = e.updateQueue, t.flags &= -2053, e.lanes &= ~d, ar(e, t, d)) : (Qe && i && Ya(t), t.flags |= 1, vt(e, t, l, d), t.child);
+  }
+  function Ld(e, t, i, l, d) {
     if (e === null) {
       var m = i.type;
-      return typeof m == "function" && !qs(m) && m.defaultProps === void 0 && i.compare === null && i.defaultProps === void 0 ? (t.tag = 15, t.type = m, Ld(e, t, m, l, d)) : (e = zo(i.type, null, l, t, t.mode, d), e.ref = t.ref, e.return = t, t.child = e);
+      return typeof m == "function" && !js(m) && m.defaultProps === void 0 && i.compare === null && i.defaultProps === void 0 ? (t.tag = 15, t.type = m, Od(e, t, m, l, d)) : (e = Ro(i.type, null, l, t, t.mode, d), e.ref = t.ref, e.return = t, t.child = e);
     }
     if (m = e.child, !(e.lanes & d)) {
       var x = m.memoizedProps;
-      if (i = i.compare, i = i !== null ? i : Fn, i(x, l) && e.ref === t.ref) return ar(e, t, d);
+      if (i = i.compare, i = i !== null ? i : Un, i(x, l) && e.ref === t.ref) return ar(e, t, d);
     }
     return t.flags |= 1, e = Ir(m, l), e.ref = t.ref, e.return = t, t.child = e;
   }
-  function Ld(e, t, i, l, d) {
+  function Od(e, t, i, l, d) {
     if (e !== null) {
       var m = e.memoizedProps;
-      if (Fn(m, l) && e.ref === t.ref) if (St = !1, t.pendingProps = l = m, (e.lanes & d) !== 0) e.flags & 131072 && (St = !0);
+      if (Un(m, l) && e.ref === t.ref) if (St = !1, t.pendingProps = l = m, (e.lanes & d) !== 0) e.flags & 131072 && (St = !0);
       else return t.lanes = e.lanes, ar(e, t, d);
     }
-    return vs(e, t, i, l, d);
+    return xs(e, t, i, l, d);
   }
-  function Od(e, t, i) {
+  function Td(e, t, i) {
     var l = t.pendingProps, d = l.children, m = e !== null ? e.memoizedState : null;
-    if (l.mode === "hidden") if (!(t.mode & 1)) t.memoizedState = { baseLanes: 0, cachePool: null, transitions: null }, Ve(fn, Rt), Rt |= i;
+    if (l.mode === "hidden") if (!(t.mode & 1)) t.memoizedState = { baseLanes: 0, cachePool: null, transitions: null }, Ve(_n, Rt), Rt |= i;
     else {
-      if (!(i & 1073741824)) return e = m !== null ? m.baseLanes | i : i, t.lanes = t.childLanes = 1073741824, t.memoizedState = { baseLanes: e, cachePool: null, transitions: null }, t.updateQueue = null, Ve(fn, Rt), Rt |= e, null;
-      t.memoizedState = { baseLanes: 0, cachePool: null, transitions: null }, l = m !== null ? m.baseLanes : i, Ve(fn, Rt), Rt |= l;
+      if (!(i & 1073741824)) return e = m !== null ? m.baseLanes | i : i, t.lanes = t.childLanes = 1073741824, t.memoizedState = { baseLanes: e, cachePool: null, transitions: null }, t.updateQueue = null, Ve(_n, Rt), Rt |= e, null;
+      t.memoizedState = { baseLanes: 0, cachePool: null, transitions: null }, l = m !== null ? m.baseLanes : i, Ve(_n, Rt), Rt |= l;
     }
-    else m !== null ? (l = m.baseLanes | i, t.memoizedState = null) : l = i, Ve(fn, Rt), Rt |= l;
+    else m !== null ? (l = m.baseLanes | i, t.memoizedState = null) : l = i, Ve(_n, Rt), Rt |= l;
     return vt(e, t, d, i), t.child;
   }
-  function Td(e, t) {
+  function Md(e, t) {
     var i = t.ref;
     (e === null && i !== null || e !== null && e.ref !== i) && (t.flags |= 512, t.flags |= 2097152);
   }
-  function vs(e, t, i, l, d) {
-    var m = kt(i) ? Tr : ft.current;
-    return m = an(t, m), pn(t, d), i = ds(e, t, i, l, m, d), l = us(), e !== null && !St ? (t.updateQueue = e.updateQueue, t.flags &= -2053, e.lanes &= ~d, ar(e, t, d)) : (Qe && l && Ga(t), t.flags |= 1, vt(e, t, i, d), t.child);
+  function xs(e, t, i, l, d) {
+    var m = kt(i) ? Tr : _t.current;
+    return m = an(t, m), pn(t, d), i = us(e, t, i, l, m, d), l = ps(), e !== null && !St ? (t.updateQueue = e.updateQueue, t.flags &= -2053, e.lanes &= ~d, ar(e, t, d)) : (Qe && l && Ya(t), t.flags |= 1, vt(e, t, i, d), t.child);
   }
-  function Md(e, t, i, l, d) {
+  function Hd(e, t, i, l, d) {
     if (kt(i)) {
       var m = !0;
-      to(t);
+      ro(t);
     } else m = !1;
-    if (pn(t, d), t.stateNode === null) vo(e, t), Sd(t, i, l), _s(t, i, l, d), l = !0;
+    if (pn(t, d), t.stateNode === null) xo(e, t), Ad(t, i, l), bs(t, i, l, d), l = !0;
     else if (e === null) {
-      var x = t.stateNode, C = t.memoizedProps;
-      x.props = C;
+      var x = t.stateNode, N = t.memoizedProps;
+      x.props = N;
       var L = x.context, U = i.contextType;
-      typeof U == "object" && U !== null ? U = Tt(U) : (U = kt(i) ? Tr : ft.current, U = an(t, U));
+      typeof U == "object" && U !== null ? U = Tt(U) : (U = kt(i) ? Tr : _t.current, U = an(t, U));
       var ne = i.getDerivedStateFromProps, ae = typeof ne == "function" || typeof x.getSnapshotBeforeUpdate == "function";
-      ae || typeof x.UNSAFE_componentWillReceiveProps != "function" && typeof x.componentWillReceiveProps != "function" || (C !== l || L !== U) && Ad(t, x, l, U), xr = !1;
+      ae || typeof x.UNSAFE_componentWillReceiveProps != "function" && typeof x.componentWillReceiveProps != "function" || (N !== l || L !== U) && Ed(t, x, l, U), xr = !1;
       var Z = t.memoizedState;
-      x.state = Z, uo(t, l, x, d), L = t.memoizedState, C !== l || Z !== L || wt.current || xr ? (typeof ne == "function" && (fs(t, i, ne, l), L = t.memoizedState), (C = xr || kd(t, i, C, l, Z, L, U)) ? (ae || typeof x.UNSAFE_componentWillMount != "function" && typeof x.componentWillMount != "function" || (typeof x.componentWillMount == "function" && x.componentWillMount(), typeof x.UNSAFE_componentWillMount == "function" && x.UNSAFE_componentWillMount()), typeof x.componentDidMount == "function" && (t.flags |= 4194308)) : (typeof x.componentDidMount == "function" && (t.flags |= 4194308), t.memoizedProps = l, t.memoizedState = L), x.props = l, x.state = L, x.context = U, l = C) : (typeof x.componentDidMount == "function" && (t.flags |= 4194308), l = !1);
+      x.state = Z, po(t, l, x, d), L = t.memoizedState, N !== l || Z !== L || wt.current || xr ? (typeof ne == "function" && (fs(t, i, ne, l), L = t.memoizedState), (N = xr || Sd(t, i, N, l, Z, L, U)) ? (ae || typeof x.UNSAFE_componentWillMount != "function" && typeof x.componentWillMount != "function" || (typeof x.componentWillMount == "function" && x.componentWillMount(), typeof x.UNSAFE_componentWillMount == "function" && x.UNSAFE_componentWillMount()), typeof x.componentDidMount == "function" && (t.flags |= 4194308)) : (typeof x.componentDidMount == "function" && (t.flags |= 4194308), t.memoizedProps = l, t.memoizedState = L), x.props = l, x.state = L, x.context = U, l = N) : (typeof x.componentDidMount == "function" && (t.flags |= 4194308), l = !1);
     } else {
-      x = t.stateNode, Jc(e, t), C = t.memoizedProps, U = t.type === t.elementType ? C : Ft(t.type, C), x.props = U, ae = t.pendingProps, Z = x.context, L = i.contextType, typeof L == "object" && L !== null ? L = Tt(L) : (L = kt(i) ? Tr : ft.current, L = an(t, L));
+      x = t.stateNode, Zc(e, t), N = t.memoizedProps, U = t.type === t.elementType ? N : Ft(t.type, N), x.props = U, ae = t.pendingProps, Z = x.context, L = i.contextType, typeof L == "object" && L !== null ? L = Tt(L) : (L = kt(i) ? Tr : _t.current, L = an(t, L));
       var he = i.getDerivedStateFromProps;
-      (ne = typeof he == "function" || typeof x.getSnapshotBeforeUpdate == "function") || typeof x.UNSAFE_componentWillReceiveProps != "function" && typeof x.componentWillReceiveProps != "function" || (C !== ae || Z !== L) && Ad(t, x, l, L), xr = !1, Z = t.memoizedState, x.state = Z, uo(t, l, x, d);
+      (ne = typeof he == "function" || typeof x.getSnapshotBeforeUpdate == "function") || typeof x.UNSAFE_componentWillReceiveProps != "function" && typeof x.componentWillReceiveProps != "function" || (N !== ae || Z !== L) && Ed(t, x, l, L), xr = !1, Z = t.memoizedState, x.state = Z, po(t, l, x, d);
       var be = t.memoizedState;
-      C !== ae || Z !== be || wt.current || xr ? (typeof he == "function" && (fs(t, i, he, l), be = t.memoizedState), (U = xr || kd(t, i, U, l, Z, be, L) || !1) ? (ne || typeof x.UNSAFE_componentWillUpdate != "function" && typeof x.componentWillUpdate != "function" || (typeof x.componentWillUpdate == "function" && x.componentWillUpdate(l, be, L), typeof x.UNSAFE_componentWillUpdate == "function" && x.UNSAFE_componentWillUpdate(l, be, L)), typeof x.componentDidUpdate == "function" && (t.flags |= 4), typeof x.getSnapshotBeforeUpdate == "function" && (t.flags |= 1024)) : (typeof x.componentDidUpdate != "function" || C === e.memoizedProps && Z === e.memoizedState || (t.flags |= 4), typeof x.getSnapshotBeforeUpdate != "function" || C === e.memoizedProps && Z === e.memoizedState || (t.flags |= 1024), t.memoizedProps = l, t.memoizedState = be), x.props = l, x.state = be, x.context = L, l = U) : (typeof x.componentDidUpdate != "function" || C === e.memoizedProps && Z === e.memoizedState || (t.flags |= 4), typeof x.getSnapshotBeforeUpdate != "function" || C === e.memoizedProps && Z === e.memoizedState || (t.flags |= 1024), l = !1);
+      N !== ae || Z !== be || wt.current || xr ? (typeof he == "function" && (fs(t, i, he, l), be = t.memoizedState), (U = xr || Sd(t, i, U, l, Z, be, L) || !1) ? (ne || typeof x.UNSAFE_componentWillUpdate != "function" && typeof x.componentWillUpdate != "function" || (typeof x.componentWillUpdate == "function" && x.componentWillUpdate(l, be, L), typeof x.UNSAFE_componentWillUpdate == "function" && x.UNSAFE_componentWillUpdate(l, be, L)), typeof x.componentDidUpdate == "function" && (t.flags |= 4), typeof x.getSnapshotBeforeUpdate == "function" && (t.flags |= 1024)) : (typeof x.componentDidUpdate != "function" || N === e.memoizedProps && Z === e.memoizedState || (t.flags |= 4), typeof x.getSnapshotBeforeUpdate != "function" || N === e.memoizedProps && Z === e.memoizedState || (t.flags |= 1024), t.memoizedProps = l, t.memoizedState = be), x.props = l, x.state = be, x.context = L, l = U) : (typeof x.componentDidUpdate != "function" || N === e.memoizedProps && Z === e.memoizedState || (t.flags |= 4), typeof x.getSnapshotBeforeUpdate != "function" || N === e.memoizedProps && Z === e.memoizedState || (t.flags |= 1024), l = !1);
     }
-    return xs(e, t, i, l, m, d);
+    return ws(e, t, i, l, m, d);
   }
-  function xs(e, t, i, l, d, m) {
-    Td(e, t);
+  function ws(e, t, i, l, d, m) {
+    Md(e, t);
     var x = (t.flags & 128) !== 0;
-    if (!l && !x) return d && qc(t, i, !1), ar(e, t, m);
-    l = t.stateNode, Hg.current = t;
-    var C = x && typeof i.getDerivedStateFromError != "function" ? null : l.render();
-    return t.flags |= 1, e !== null && x ? (t.child = dn(t, e.child, null, m), t.child = dn(t, null, C, m)) : vt(e, t, C, m), t.memoizedState = l.state, d && qc(t, i, !0), t.child;
+    if (!l && !x) return d && jc(t, i, !1), ar(e, t, m);
+    l = t.stateNode, Dg.current = t;
+    var N = x && typeof i.getDerivedStateFromError != "function" ? null : l.render();
+    return t.flags |= 1, e !== null && x ? (t.child = dn(t, e.child, null, m), t.child = dn(t, null, N, m)) : vt(e, t, N, m), t.memoizedState = l.state, d && jc(t, i, !0), t.child;
   }
-  function Hd(e) {
+  function Bd(e) {
     var t = e.stateNode;
-    t.pendingContext ? Dc(e, t.pendingContext, t.pendingContext !== t.context) : t.context && Dc(e, t.context, !1), is(e, t.containerInfo);
+    t.pendingContext ? $c(e, t.pendingContext, t.pendingContext !== t.context) : t.context && $c(e, t.context, !1), os(e, t.containerInfo);
   }
-  function Bd(e, t, i, l, d) {
-    return cn(), Qa(d), t.flags |= 256, vt(e, t, i, l), t.child;
+  function Dd(e, t, i, l, d) {
+    return cn(), Ja(d), t.flags |= 256, vt(e, t, i, l), t.child;
   }
-  var ws = { dehydrated: null, treeContext: null, retryLane: 0 };
-  function ks(e) {
+  var ks = { dehydrated: null, treeContext: null, retryLane: 0 };
+  function Ss(e) {
     return { baseLanes: e, cachePool: null, transitions: null };
   }
-  function Dd(e, t, i) {
-    var l = t.pendingProps, d = Je.current, m = !1, x = (t.flags & 128) !== 0, C;
-    if ((C = x) || (C = e !== null && e.memoizedState === null ? !1 : (d & 2) !== 0), C ? (m = !0, t.flags &= -129) : (e === null || e.memoizedState !== null) && (d |= 1), Ve(Je, d & 1), e === null)
-      return Xa(t), e = t.memoizedState, e !== null && (e = e.dehydrated, e !== null) ? (t.mode & 1 ? e.data === "$!" ? t.lanes = 8 : t.lanes = 1073741824 : t.lanes = 1, null) : (x = l.children, e = l.fallback, m ? (l = t.mode, m = t.child, x = { mode: "hidden", children: x }, !(l & 1) && m !== null ? (m.childLanes = 0, m.pendingProps = x) : m = Ro(x, l, 0, null), e = Wr(e, l, i, null), m.return = t, e.return = t, m.sibling = e, t.child = m, t.child.memoizedState = ks(i), t.memoizedState = ws, e) : Ss(t, x));
-    if (d = e.memoizedState, d !== null && (C = d.dehydrated, C !== null)) return Bg(e, t, x, l, C, d, i);
+  function $d(e, t, i) {
+    var l = t.pendingProps, d = Je.current, m = !1, x = (t.flags & 128) !== 0, N;
+    if ((N = x) || (N = e !== null && e.memoizedState === null ? !1 : (d & 2) !== 0), N ? (m = !0, t.flags &= -129) : (e === null || e.memoizedState !== null) && (d |= 1), Ve(Je, d & 1), e === null)
+      return Qa(t), e = t.memoizedState, e !== null && (e = e.dehydrated, e !== null) ? (t.mode & 1 ? e.data === "$!" ? t.lanes = 8 : t.lanes = 1073741824 : t.lanes = 1, null) : (x = l.children, e = l.fallback, m ? (l = t.mode, m = t.child, x = { mode: "hidden", children: x }, !(l & 1) && m !== null ? (m.childLanes = 0, m.pendingProps = x) : m = Lo(x, l, 0, null), e = Wr(e, l, i, null), m.return = t, e.return = t, m.sibling = e, t.child = m, t.child.memoizedState = Ss(i), t.memoizedState = ks, e) : As(t, x));
+    if (d = e.memoizedState, d !== null && (N = d.dehydrated, N !== null)) return $g(e, t, x, l, N, d, i);
     if (m) {
-      m = l.fallback, x = t.mode, d = e.child, C = d.sibling;
+      m = l.fallback, x = t.mode, d = e.child, N = d.sibling;
       var L = { mode: "hidden", children: l.children };
-      return !(x & 1) && t.child !== d ? (l = t.child, l.childLanes = 0, l.pendingProps = L, t.deletions = null) : (l = Ir(d, L), l.subtreeFlags = d.subtreeFlags & 14680064), C !== null ? m = Ir(C, m) : (m = Wr(m, x, i, null), m.flags |= 2), m.return = t, l.return = t, l.sibling = m, t.child = l, l = m, m = t.child, x = e.child.memoizedState, x = x === null ? ks(i) : { baseLanes: x.baseLanes | i, cachePool: null, transitions: x.transitions }, m.memoizedState = x, m.childLanes = e.childLanes & ~i, t.memoizedState = ws, l;
+      return !(x & 1) && t.child !== d ? (l = t.child, l.childLanes = 0, l.pendingProps = L, t.deletions = null) : (l = Ir(d, L), l.subtreeFlags = d.subtreeFlags & 14680064), N !== null ? m = Ir(N, m) : (m = Wr(m, x, i, null), m.flags |= 2), m.return = t, l.return = t, l.sibling = m, t.child = l, l = m, m = t.child, x = e.child.memoizedState, x = x === null ? Ss(i) : { baseLanes: x.baseLanes | i, cachePool: null, transitions: x.transitions }, m.memoizedState = x, m.childLanes = e.childLanes & ~i, t.memoizedState = ks, l;
     }
     return m = e.child, e = m.sibling, l = Ir(m, { mode: "visible", children: l.children }), !(t.mode & 1) && (l.lanes = i), l.return = t, l.sibling = null, e !== null && (i = t.deletions, i === null ? (t.deletions = [e], t.flags |= 16) : i.push(e)), t.child = l, t.memoizedState = null, l;
   }
-  function Ss(e, t) {
-    return t = Ro({ mode: "visible", children: t }, e.mode, 0, null), t.return = e, e.child = t;
+  function As(e, t) {
+    return t = Lo({ mode: "visible", children: t }, e.mode, 0, null), t.return = e, e.child = t;
   }
-  function yo(e, t, i, l) {
-    return l !== null && Qa(l), dn(t, e.child, null, i), e = Ss(t, t.pendingProps.children), e.flags |= 2, t.memoizedState = null, e;
+  function vo(e, t, i, l) {
+    return l !== null && Ja(l), dn(t, e.child, null, i), e = As(t, t.pendingProps.children), e.flags |= 2, t.memoizedState = null, e;
   }
-  function Bg(e, t, i, l, d, m, x) {
+  function $g(e, t, i, l, d, m, x) {
     if (i)
-      return t.flags & 256 ? (t.flags &= -257, l = bs(Error(n(422))), yo(e, t, x, l)) : t.memoizedState !== null ? (t.child = e.child, t.flags |= 128, null) : (m = l.fallback, d = t.mode, l = Ro({ mode: "visible", children: l.children }, d, 0, null), m = Wr(m, d, x, null), m.flags |= 2, l.return = t, m.return = t, l.sibling = m, t.child = l, t.mode & 1 && dn(t, e.child, null, x), t.child.memoizedState = ks(x), t.memoizedState = ws, m);
-    if (!(t.mode & 1)) return yo(e, t, x, null);
+      return t.flags & 256 ? (t.flags &= -257, l = ys(Error(n(422))), vo(e, t, x, l)) : t.memoizedState !== null ? (t.child = e.child, t.flags |= 128, null) : (m = l.fallback, d = t.mode, l = Lo({ mode: "visible", children: l.children }, d, 0, null), m = Wr(m, d, x, null), m.flags |= 2, l.return = t, m.return = t, l.sibling = m, t.child = l, t.mode & 1 && dn(t, e.child, null, x), t.child.memoizedState = Ss(x), t.memoizedState = ks, m);
+    if (!(t.mode & 1)) return vo(e, t, x, null);
     if (d.data === "$!") {
-      if (l = d.nextSibling && d.nextSibling.dataset, l) var C = l.dgst;
-      return l = C, m = Error(n(419)), l = bs(m, l, void 0), yo(e, t, x, l);
+      if (l = d.nextSibling && d.nextSibling.dataset, l) var N = l.dgst;
+      return l = N, m = Error(n(419)), l = ys(m, l, void 0), vo(e, t, x, l);
     }
-    if (C = (x & e.childLanes) !== 0, St || C) {
+    if (N = (x & e.childLanes) !== 0, St || N) {
       if (l = ct, l !== null) {
         switch (x & -x) {
           case 4:
@@ -14151,26 +14365,26 @@ Error generating stack: ` + m.message + `
         }
         d = d & (l.suspendedLanes | x) ? 0 : d, d !== 0 && d !== m.retryLane && (m.retryLane = d, ir(e, d), Vt(l, e, d, -1));
       }
-      return $s(), l = bs(Error(n(421))), yo(e, t, x, l);
+      return qs(), l = ys(Error(n(421))), vo(e, t, x, l);
     }
-    return d.data === "$?" ? (t.flags |= 128, t.child = e.child, t = Qg.bind(null, e), d._reactRetry = t, null) : (e = m.treeContext, zt = _r(d.nextSibling), Ct = t, Qe = !0, jt = null, e !== null && (Lt[Ot++] = rr, Lt[Ot++] = nr, Lt[Ot++] = Mr, rr = e.id, nr = e.overflow, Mr = t), t = Ss(t, l.children), t.flags |= 4096, t);
+    return d.data === "$?" ? (t.flags |= 128, t.child = e.child, t = Zg.bind(null, e), d._reactRetry = t, null) : (e = m.treeContext, zt = fr(d.nextSibling), Nt = t, Qe = !0, jt = null, e !== null && (Lt[Ot++] = rr, Lt[Ot++] = nr, Lt[Ot++] = Mr, rr = e.id, nr = e.overflow, Mr = t), t = As(t, l.children), t.flags |= 4096, t);
   }
-  function $d(e, t, i) {
+  function qd(e, t, i) {
     e.lanes |= t;
     var l = e.alternate;
-    l !== null && (l.lanes |= t), ts(e.return, t, i);
+    l !== null && (l.lanes |= t), rs(e.return, t, i);
   }
-  function As(e, t, i, l, d) {
+  function Es(e, t, i, l, d) {
     var m = e.memoizedState;
     m === null ? e.memoizedState = { isBackwards: t, rendering: null, renderingStartTime: 0, last: l, tail: i, tailMode: d } : (m.isBackwards = t, m.rendering = null, m.renderingStartTime = 0, m.last = l, m.tail = i, m.tailMode = d);
   }
-  function qd(e, t, i) {
+  function jd(e, t, i) {
     var l = t.pendingProps, d = l.revealOrder, m = l.tail;
     if (vt(e, t, l.children, i), l = Je.current, l & 2) l = l & 1 | 2, t.flags |= 128;
     else {
       if (e !== null && e.flags & 128) e: for (e = t.child; e !== null; ) {
-        if (e.tag === 13) e.memoizedState !== null && $d(e, i, t);
-        else if (e.tag === 19) $d(e, i, t);
+        if (e.tag === 13) e.memoizedState !== null && qd(e, i, t);
+        else if (e.tag === 19) qd(e, i, t);
         else if (e.child !== null) {
           e.child.return = e, e = e.child;
           continue;
@@ -14187,28 +14401,28 @@ Error generating stack: ` + m.message + `
     if (Ve(Je, l), !(t.mode & 1)) t.memoizedState = null;
     else switch (d) {
       case "forwards":
-        for (i = t.child, d = null; i !== null; ) e = i.alternate, e !== null && po(e) === null && (d = i), i = i.sibling;
-        i = d, i === null ? (d = t.child, t.child = null) : (d = i.sibling, i.sibling = null), As(t, !1, d, i, m);
+        for (i = t.child, d = null; i !== null; ) e = i.alternate, e !== null && mo(e) === null && (d = i), i = i.sibling;
+        i = d, i === null ? (d = t.child, t.child = null) : (d = i.sibling, i.sibling = null), Es(t, !1, d, i, m);
         break;
       case "backwards":
         for (i = null, d = t.child, t.child = null; d !== null; ) {
-          if (e = d.alternate, e !== null && po(e) === null) {
+          if (e = d.alternate, e !== null && mo(e) === null) {
             t.child = d;
             break;
           }
           e = d.sibling, d.sibling = i, i = d, d = e;
         }
-        As(t, !0, i, null, m);
+        Es(t, !0, i, null, m);
         break;
       case "together":
-        As(t, !1, null, null, void 0);
+        Es(t, !1, null, null, void 0);
         break;
       default:
         t.memoizedState = null;
     }
     return t.child;
   }
-  function vo(e, t) {
+  function xo(e, t) {
     !(t.mode & 1) && e !== null && (e.alternate = null, t.alternate = null, t.flags |= 2);
   }
   function ar(e, t, i) {
@@ -14220,44 +14434,44 @@ Error generating stack: ` + m.message + `
     }
     return t.child;
   }
-  function Dg(e, t, i) {
+  function qg(e, t, i) {
     switch (t.tag) {
       case 3:
-        Hd(t), cn();
+        Bd(t), cn();
         break;
       case 5:
-        td(t);
+        rd(t);
         break;
       case 1:
-        kt(t.type) && to(t);
+        kt(t.type) && ro(t);
         break;
       case 4:
-        is(t, t.stateNode.containerInfo);
+        os(t, t.stateNode.containerInfo);
         break;
       case 10:
         var l = t.type._context, d = t.memoizedProps.value;
-        Ve(so, l._currentValue), l._currentValue = d;
+        Ve(lo, l._currentValue), l._currentValue = d;
         break;
       case 13:
         if (l = t.memoizedState, l !== null)
-          return l.dehydrated !== null ? (Ve(Je, Je.current & 1), t.flags |= 128, null) : i & t.child.childLanes ? Dd(e, t, i) : (Ve(Je, Je.current & 1), e = ar(e, t, i), e !== null ? e.sibling : null);
+          return l.dehydrated !== null ? (Ve(Je, Je.current & 1), t.flags |= 128, null) : i & t.child.childLanes ? $d(e, t, i) : (Ve(Je, Je.current & 1), e = ar(e, t, i), e !== null ? e.sibling : null);
         Ve(Je, Je.current & 1);
         break;
       case 19:
         if (l = (i & t.childLanes) !== 0, e.flags & 128) {
-          if (l) return qd(e, t, i);
+          if (l) return jd(e, t, i);
           t.flags |= 128;
         }
         if (d = t.memoizedState, d !== null && (d.rendering = null, d.tail = null, d.lastEffect = null), Ve(Je, Je.current), l) break;
         return null;
       case 22:
       case 23:
-        return t.lanes = 0, Od(e, t, i);
+        return t.lanes = 0, Td(e, t, i);
     }
     return ar(e, t, i);
   }
-  var jd, Es, Fd, Ud;
-  jd = function(e, t) {
+  var Fd, Ps, Ud, Wd;
+  Fd = function(e, t) {
     for (var i = t.child; i !== null; ) {
       if (i.tag === 5 || i.tag === 6) e.appendChild(i.stateNode);
       else if (i.tag !== 4 && i.child !== null) {
@@ -14271,8 +14485,8 @@ Error generating stack: ` + m.message + `
       }
       i.sibling.return = i.return, i = i.sibling;
     }
-  }, Es = function() {
-  }, Fd = function(e, t, i, l) {
+  }, Ps = function() {
+  }, Ud = function(e, t, i, l) {
     var d = e.memoizedProps;
     if (d !== l) {
       e = t.stateNode, Dr(Xt.current);
@@ -14288,34 +14502,34 @@ Error generating stack: ` + m.message + `
           d = Ae(e, d), l = Ae(e, l), m = [];
           break;
         default:
-          typeof d.onClick != "function" && typeof l.onClick == "function" && (e.onclick = Ji);
+          typeof d.onClick != "function" && typeof l.onClick == "function" && (e.onclick = Zi);
       }
       pt(i, l);
       var x;
       i = null;
       for (U in d) if (!l.hasOwnProperty(U) && d.hasOwnProperty(U) && d[U] != null) if (U === "style") {
-        var C = d[U];
-        for (x in C) C.hasOwnProperty(x) && (i || (i = {}), i[x] = "");
+        var N = d[U];
+        for (x in N) N.hasOwnProperty(x) && (i || (i = {}), i[x] = "");
       } else U !== "dangerouslySetInnerHTML" && U !== "children" && U !== "suppressContentEditableWarning" && U !== "suppressHydrationWarning" && U !== "autoFocus" && (s.hasOwnProperty(U) ? m || (m = []) : (m = m || []).push(U, null));
       for (U in l) {
         var L = l[U];
-        if (C = d?.[U], l.hasOwnProperty(U) && L !== C && (L != null || C != null)) if (U === "style") if (C) {
-          for (x in C) !C.hasOwnProperty(x) || L && L.hasOwnProperty(x) || (i || (i = {}), i[x] = "");
-          for (x in L) L.hasOwnProperty(x) && C[x] !== L[x] && (i || (i = {}), i[x] = L[x]);
+        if (N = d?.[U], l.hasOwnProperty(U) && L !== N && (L != null || N != null)) if (U === "style") if (N) {
+          for (x in N) !N.hasOwnProperty(x) || L && L.hasOwnProperty(x) || (i || (i = {}), i[x] = "");
+          for (x in L) L.hasOwnProperty(x) && N[x] !== L[x] && (i || (i = {}), i[x] = L[x]);
         } else i || (m || (m = []), m.push(
           U,
           i
         )), i = L;
-        else U === "dangerouslySetInnerHTML" ? (L = L ? L.__html : void 0, C = C ? C.__html : void 0, L != null && C !== L && (m = m || []).push(U, L)) : U === "children" ? typeof L != "string" && typeof L != "number" || (m = m || []).push(U, "" + L) : U !== "suppressContentEditableWarning" && U !== "suppressHydrationWarning" && (s.hasOwnProperty(U) ? (L != null && U === "onScroll" && Ge("scroll", e), m || C === L || (m = [])) : (m = m || []).push(U, L));
+        else U === "dangerouslySetInnerHTML" ? (L = L ? L.__html : void 0, N = N ? N.__html : void 0, L != null && N !== L && (m = m || []).push(U, L)) : U === "children" ? typeof L != "string" && typeof L != "number" || (m = m || []).push(U, "" + L) : U !== "suppressContentEditableWarning" && U !== "suppressHydrationWarning" && (s.hasOwnProperty(U) ? (L != null && U === "onScroll" && Ge("scroll", e), m || N === L || (m = [])) : (m = m || []).push(U, L));
       }
       i && (m = m || []).push("style", i);
       var U = m;
       (t.updateQueue = U) && (t.flags |= 4);
     }
-  }, Ud = function(e, t, i, l) {
+  }, Wd = function(e, t, i, l) {
     i !== l && (t.flags |= 4);
   };
-  function ii(e, t) {
+  function oi(e, t) {
     if (!Qe) switch (e.tailMode) {
       case "hidden":
         t = e.tail;
@@ -14334,9 +14548,9 @@ Error generating stack: ` + m.message + `
     else for (d = e.child; d !== null; ) i |= d.lanes | d.childLanes, l |= d.subtreeFlags, l |= d.flags, d.return = e, d = d.sibling;
     return e.subtreeFlags |= l, e.childLanes = i, t;
   }
-  function $g(e, t, i) {
+  function jg(e, t, i) {
     var l = t.pendingProps;
-    switch (Ya(t), t.tag) {
+    switch (Ka(t), t.tag) {
       case 2:
       case 16:
       case 15:
@@ -14349,22 +14563,22 @@ Error generating stack: ` + m.message + `
       case 14:
         return bt(t), null;
       case 1:
-        return kt(t.type) && eo(), bt(t), null;
+        return kt(t.type) && to(), bt(t), null;
       case 3:
-        return l = t.stateNode, mn(), Ye(wt), Ye(ft), ss(), l.pendingContext && (l.context = l.pendingContext, l.pendingContext = null), (e === null || e.child === null) && (oo(t) ? t.flags |= 4 : e === null || e.memoizedState.isDehydrated && !(t.flags & 256) || (t.flags |= 1024, jt !== null && (Hs(jt), jt = null))), Es(e, t), bt(t), null;
+        return l = t.stateNode, mn(), Ye(wt), Ye(_t), ls(), l.pendingContext && (l.context = l.pendingContext, l.pendingContext = null), (e === null || e.child === null) && (ao(t) ? t.flags |= 4 : e === null || e.memoizedState.isDehydrated && !(t.flags & 256) || (t.flags |= 1024, jt !== null && (Bs(jt), jt = null))), Ps(e, t), bt(t), null;
       case 5:
-        os(t);
-        var d = Dr(Zn.current);
-        if (i = t.type, e !== null && t.stateNode != null) Fd(e, t, i, l, d), e.ref !== t.ref && (t.flags |= 512, t.flags |= 2097152);
+        as(t);
+        var d = Dr(ei.current);
+        if (i = t.type, e !== null && t.stateNode != null) Ud(e, t, i, l, d), e.ref !== t.ref && (t.flags |= 512, t.flags |= 2097152);
         else {
           if (!l) {
             if (t.stateNode === null) throw Error(n(166));
             return bt(t), null;
           }
-          if (e = Dr(Xt.current), oo(t)) {
+          if (e = Dr(Xt.current), ao(t)) {
             l = t.stateNode, i = t.type;
             var m = t.memoizedProps;
-            switch (l[Kt] = t, l[Yn] = m, e = (t.mode & 1) !== 0, i) {
+            switch (l[Kt] = t, l[Kn] = m, e = (t.mode & 1) !== 0, i) {
               case "dialog":
                 Ge("cancel", l), Ge("close", l);
                 break;
@@ -14375,7 +14589,7 @@ Error generating stack: ` + m.message + `
                 break;
               case "video":
               case "audio":
-                for (d = 0; d < Wn.length; d++) Ge(Wn[d], l);
+                for (d = 0; d < Vn.length; d++) Ge(Vn[d], l);
                 break;
               case "source":
                 Ge("error", l);
@@ -14398,16 +14612,16 @@ Error generating stack: ` + m.message + `
                 l._wrapperState = { wasMultiple: !!m.multiple }, Ge("invalid", l);
                 break;
               case "textarea":
-                Ce(l, m), Ge("invalid", l);
+                Ne(l, m), Ge("invalid", l);
             }
             pt(i, m), d = null;
             for (var x in m) if (m.hasOwnProperty(x)) {
-              var C = m[x];
-              x === "children" ? typeof C == "string" ? l.textContent !== C && (m.suppressHydrationWarning !== !0 && Qi(l.textContent, C, e), d = ["children", C]) : typeof C == "number" && l.textContent !== "" + C && (m.suppressHydrationWarning !== !0 && Qi(
+              var N = m[x];
+              x === "children" ? typeof N == "string" ? l.textContent !== N && (m.suppressHydrationWarning !== !0 && Ji(l.textContent, N, e), d = ["children", N]) : typeof N == "number" && l.textContent !== "" + N && (m.suppressHydrationWarning !== !0 && Ji(
                 l.textContent,
-                C,
+                N,
                 e
-              ), d = ["children", "" + C]) : s.hasOwnProperty(x) && C != null && x === "onScroll" && Ge("scroll", l);
+              ), d = ["children", "" + N]) : s.hasOwnProperty(x) && N != null && x === "onScroll" && Ge("scroll", l);
             }
             switch (i) {
               case "input":
@@ -14420,11 +14634,11 @@ Error generating stack: ` + m.message + `
               case "option":
                 break;
               default:
-                typeof m.onClick == "function" && (l.onclick = Ji);
+                typeof m.onClick == "function" && (l.onclick = Zi);
             }
             l = d, t.updateQueue = l, l !== null && (t.flags |= 4);
           } else {
-            x = d.nodeType === 9 ? d : d.ownerDocument, e === "http://www.w3.org/1999/xhtml" && (e = Ke(i)), e === "http://www.w3.org/1999/xhtml" ? i === "script" ? (e = x.createElement("div"), e.innerHTML = "<script><\/script>", e = e.removeChild(e.firstChild)) : typeof l.is == "string" ? e = x.createElement(i, { is: l.is }) : (e = x.createElement(i), i === "select" && (x = e, l.multiple ? x.multiple = !0 : l.size && (x.size = l.size))) : e = x.createElementNS(e, i), e[Kt] = t, e[Yn] = l, jd(e, t, !1, !1), t.stateNode = e;
+            x = d.nodeType === 9 ? d : d.ownerDocument, e === "http://www.w3.org/1999/xhtml" && (e = Ke(i)), e === "http://www.w3.org/1999/xhtml" ? i === "script" ? (e = x.createElement("div"), e.innerHTML = "<script><\/script>", e = e.removeChild(e.firstChild)) : typeof l.is == "string" ? e = x.createElement(i, { is: l.is }) : (e = x.createElement(i), i === "select" && (x = e, l.multiple ? x.multiple = !0 : l.size && (x.size = l.size))) : e = x.createElementNS(e, i), e[Kt] = t, e[Kn] = l, Fd(e, t, !1, !1), t.stateNode = e;
             e: {
               switch (x = Dt(i, l), i) {
                 case "dialog":
@@ -14437,7 +14651,7 @@ Error generating stack: ` + m.message + `
                   break;
                 case "video":
                 case "audio":
-                  for (d = 0; d < Wn.length; d++) Ge(Wn[d], e);
+                  for (d = 0; d < Vn.length; d++) Ge(Vn[d], e);
                   d = l;
                   break;
                 case "source":
@@ -14464,15 +14678,15 @@ Error generating stack: ` + m.message + `
                   e._wrapperState = { wasMultiple: !!l.multiple }, d = re({}, l, { value: void 0 }), Ge("invalid", e);
                   break;
                 case "textarea":
-                  Ce(e, l), d = Ae(e, l), Ge("invalid", e);
+                  Ne(e, l), d = Ae(e, l), Ge("invalid", e);
                   break;
                 default:
                   d = l;
               }
-              pt(i, d), C = d;
-              for (m in C) if (C.hasOwnProperty(m)) {
-                var L = C[m];
-                m === "style" ? Me(e, L) : m === "dangerouslySetInnerHTML" ? (L = L ? L.__html : void 0, L != null && q(e, L)) : m === "children" ? typeof L == "string" ? (i !== "textarea" || L !== "") && Y(e, L) : typeof L == "number" && Y(e, "" + L) : m !== "suppressContentEditableWarning" && m !== "suppressHydrationWarning" && m !== "autoFocus" && (s.hasOwnProperty(m) ? L != null && m === "onScroll" && Ge("scroll", e) : L != null && w(e, m, L, x));
+              pt(i, d), N = d;
+              for (m in N) if (N.hasOwnProperty(m)) {
+                var L = N[m];
+                m === "style" ? He(e, L) : m === "dangerouslySetInnerHTML" ? (L = L ? L.__html : void 0, L != null && q(e, L)) : m === "children" ? typeof L == "string" ? (i !== "textarea" || L !== "") && Y(e, L) : typeof L == "number" && Y(e, "" + L) : m !== "suppressContentEditableWarning" && m !== "suppressHydrationWarning" && m !== "autoFocus" && (s.hasOwnProperty(m) ? L != null && m === "onScroll" && Ge("scroll", e) : L != null && w(e, m, L, x));
               }
               switch (i) {
                 case "input":
@@ -14493,7 +14707,7 @@ Error generating stack: ` + m.message + `
                   );
                   break;
                 default:
-                  typeof d.onClick == "function" && (e.onclick = Ji);
+                  typeof d.onClick == "function" && (e.onclick = Zi);
               }
               switch (i) {
                 case "button":
@@ -14515,16 +14729,16 @@ Error generating stack: ` + m.message + `
         }
         return bt(t), null;
       case 6:
-        if (e && t.stateNode != null) Ud(e, t, e.memoizedProps, l);
+        if (e && t.stateNode != null) Wd(e, t, e.memoizedProps, l);
         else {
           if (typeof l != "string" && t.stateNode === null) throw Error(n(166));
-          if (i = Dr(Zn.current), Dr(Xt.current), oo(t)) {
-            if (l = t.stateNode, i = t.memoizedProps, l[Kt] = t, (m = l.nodeValue !== i) && (e = Ct, e !== null)) switch (e.tag) {
+          if (i = Dr(ei.current), Dr(Xt.current), ao(t)) {
+            if (l = t.stateNode, i = t.memoizedProps, l[Kt] = t, (m = l.nodeValue !== i) && (e = Nt, e !== null)) switch (e.tag) {
               case 3:
-                Qi(l.nodeValue, i, (e.mode & 1) !== 0);
+                Ji(l.nodeValue, i, (e.mode & 1) !== 0);
                 break;
               case 5:
-                e.memoizedProps.suppressHydrationWarning !== !0 && Qi(l.nodeValue, i, (e.mode & 1) !== 0);
+                e.memoizedProps.suppressHydrationWarning !== !0 && Ji(l.nodeValue, i, (e.mode & 1) !== 0);
             }
             m && (t.flags |= 4);
           } else l = (i.nodeType === 9 ? i : i.ownerDocument).createTextNode(l), l[Kt] = t, t.stateNode = l;
@@ -14532,47 +14746,47 @@ Error generating stack: ` + m.message + `
         return bt(t), null;
       case 13:
         if (Ye(Je), l = t.memoizedState, e === null || e.memoizedState !== null && e.memoizedState.dehydrated !== null) {
-          if (Qe && zt !== null && t.mode & 1 && !(t.flags & 128)) Gc(), cn(), t.flags |= 98560, m = !1;
-          else if (m = oo(t), l !== null && l.dehydrated !== null) {
+          if (Qe && zt !== null && t.mode & 1 && !(t.flags & 128)) Yc(), cn(), t.flags |= 98560, m = !1;
+          else if (m = ao(t), l !== null && l.dehydrated !== null) {
             if (e === null) {
               if (!m) throw Error(n(318));
               if (m = t.memoizedState, m = m !== null ? m.dehydrated : null, !m) throw Error(n(317));
               m[Kt] = t;
             } else cn(), !(t.flags & 128) && (t.memoizedState = null), t.flags |= 4;
             bt(t), m = !1;
-          } else jt !== null && (Hs(jt), jt = null), m = !0;
+          } else jt !== null && (Bs(jt), jt = null), m = !0;
           if (!m) return t.flags & 65536 ? t : null;
         }
-        return t.flags & 128 ? (t.lanes = i, t) : (l = l !== null, l !== (e !== null && e.memoizedState !== null) && l && (t.child.flags |= 8192, t.mode & 1 && (e === null || Je.current & 1 ? at === 0 && (at = 3) : $s())), t.updateQueue !== null && (t.flags |= 4), bt(t), null);
+        return t.flags & 128 ? (t.lanes = i, t) : (l = l !== null, l !== (e !== null && e.memoizedState !== null) && l && (t.child.flags |= 8192, t.mode & 1 && (e === null || Je.current & 1 ? at === 0 && (at = 3) : qs())), t.updateQueue !== null && (t.flags |= 4), bt(t), null);
       case 4:
-        return mn(), Es(e, t), e === null && Vn(t.stateNode.containerInfo), bt(t), null;
+        return mn(), Ps(e, t), e === null && Gn(t.stateNode.containerInfo), bt(t), null;
       case 10:
-        return es(t.type._context), bt(t), null;
+        return ts(t.type._context), bt(t), null;
       case 17:
-        return kt(t.type) && eo(), bt(t), null;
+        return kt(t.type) && to(), bt(t), null;
       case 19:
         if (Ye(Je), m = t.memoizedState, m === null) return bt(t), null;
-        if (l = (t.flags & 128) !== 0, x = m.rendering, x === null) if (l) ii(m, !1);
+        if (l = (t.flags & 128) !== 0, x = m.rendering, x === null) if (l) oi(m, !1);
         else {
           if (at !== 0 || e !== null && e.flags & 128) for (e = t.child; e !== null; ) {
-            if (x = po(e), x !== null) {
-              for (t.flags |= 128, ii(m, !1), l = x.updateQueue, l !== null && (t.updateQueue = l, t.flags |= 4), t.subtreeFlags = 0, l = i, i = t.child; i !== null; ) m = i, e = l, m.flags &= 14680066, x = m.alternate, x === null ? (m.childLanes = 0, m.lanes = e, m.child = null, m.subtreeFlags = 0, m.memoizedProps = null, m.memoizedState = null, m.updateQueue = null, m.dependencies = null, m.stateNode = null) : (m.childLanes = x.childLanes, m.lanes = x.lanes, m.child = x.child, m.subtreeFlags = 0, m.deletions = null, m.memoizedProps = x.memoizedProps, m.memoizedState = x.memoizedState, m.updateQueue = x.updateQueue, m.type = x.type, e = x.dependencies, m.dependencies = e === null ? null : { lanes: e.lanes, firstContext: e.firstContext }), i = i.sibling;
+            if (x = mo(e), x !== null) {
+              for (t.flags |= 128, oi(m, !1), l = x.updateQueue, l !== null && (t.updateQueue = l, t.flags |= 4), t.subtreeFlags = 0, l = i, i = t.child; i !== null; ) m = i, e = l, m.flags &= 14680066, x = m.alternate, x === null ? (m.childLanes = 0, m.lanes = e, m.child = null, m.subtreeFlags = 0, m.memoizedProps = null, m.memoizedState = null, m.updateQueue = null, m.dependencies = null, m.stateNode = null) : (m.childLanes = x.childLanes, m.lanes = x.lanes, m.child = x.child, m.subtreeFlags = 0, m.deletions = null, m.memoizedProps = x.memoizedProps, m.memoizedState = x.memoizedState, m.updateQueue = x.updateQueue, m.type = x.type, e = x.dependencies, m.dependencies = e === null ? null : { lanes: e.lanes, firstContext: e.firstContext }), i = i.sibling;
               return Ve(Je, Je.current & 1 | 2), t.child;
             }
             e = e.sibling;
           }
-          m.tail !== null && rt() > _n && (t.flags |= 128, l = !0, ii(m, !1), t.lanes = 4194304);
+          m.tail !== null && rt() > fn && (t.flags |= 128, l = !0, oi(m, !1), t.lanes = 4194304);
         }
         else {
-          if (!l) if (e = po(x), e !== null) {
-            if (t.flags |= 128, l = !0, i = e.updateQueue, i !== null && (t.updateQueue = i, t.flags |= 4), ii(m, !0), m.tail === null && m.tailMode === "hidden" && !x.alternate && !Qe) return bt(t), null;
-          } else 2 * rt() - m.renderingStartTime > _n && i !== 1073741824 && (t.flags |= 128, l = !0, ii(m, !1), t.lanes = 4194304);
+          if (!l) if (e = mo(x), e !== null) {
+            if (t.flags |= 128, l = !0, i = e.updateQueue, i !== null && (t.updateQueue = i, t.flags |= 4), oi(m, !0), m.tail === null && m.tailMode === "hidden" && !x.alternate && !Qe) return bt(t), null;
+          } else 2 * rt() - m.renderingStartTime > fn && i !== 1073741824 && (t.flags |= 128, l = !0, oi(m, !1), t.lanes = 4194304);
           m.isBackwards ? (x.sibling = t.child, t.child = x) : (i = m.last, i !== null ? i.sibling = x : t.child = x, m.last = x);
         }
         return m.tail !== null ? (t = m.tail, m.rendering = t, m.tail = t.sibling, m.renderingStartTime = rt(), t.sibling = null, i = Je.current, Ve(Je, l ? i & 1 | 2 : i & 1), t) : (bt(t), null);
       case 22:
       case 23:
-        return Ds(), l = t.memoizedState !== null, e !== null && e.memoizedState !== null !== l && (t.flags |= 8192), l && t.mode & 1 ? Rt & 1073741824 && (bt(t), t.subtreeFlags & 6 && (t.flags |= 8192)) : bt(t), null;
+        return $s(), l = t.memoizedState !== null, e !== null && e.memoizedState !== null !== l && (t.flags |= 8192), l && t.mode & 1 ? Rt & 1073741824 && (bt(t), t.subtreeFlags & 6 && (t.flags |= 8192)) : bt(t), null;
       case 24:
         return null;
       case 25:
@@ -14580,14 +14794,14 @@ Error generating stack: ` + m.message + `
     }
     throw Error(n(156, t.tag));
   }
-  function qg(e, t) {
-    switch (Ya(t), t.tag) {
+  function Fg(e, t) {
+    switch (Ka(t), t.tag) {
       case 1:
-        return kt(t.type) && eo(), e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
+        return kt(t.type) && to(), e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
       case 3:
-        return mn(), Ye(wt), Ye(ft), ss(), e = t.flags, e & 65536 && !(e & 128) ? (t.flags = e & -65537 | 128, t) : null;
+        return mn(), Ye(wt), Ye(_t), ls(), e = t.flags, e & 65536 && !(e & 128) ? (t.flags = e & -65537 | 128, t) : null;
       case 5:
-        return os(t), null;
+        return as(t), null;
       case 13:
         if (Ye(Je), e = t.memoizedState, e !== null && e.dehydrated !== null) {
           if (t.alternate === null) throw Error(n(340));
@@ -14599,17 +14813,17 @@ Error generating stack: ` + m.message + `
       case 4:
         return mn(), null;
       case 10:
-        return es(t.type._context), null;
+        return ts(t.type._context), null;
       case 22:
       case 23:
-        return Ds(), null;
+        return $s(), null;
       case 24:
         return null;
       default:
         return null;
     }
   }
-  var xo = !1, yt = !1, jg = typeof WeakSet == "function" ? WeakSet : Set, fe = null;
+  var wo = !1, yt = !1, Ug = typeof WeakSet == "function" ? WeakSet : Set, _e = null;
   function hn(e, t) {
     var i = e.ref;
     if (i !== null) if (typeof i == "function") try {
@@ -14619,16 +14833,16 @@ Error generating stack: ` + m.message + `
     }
     else i.current = null;
   }
-  function Ps(e, t, i) {
+  function Is(e, t, i) {
     try {
       i();
     } catch (l) {
       et(e, t, l);
     }
   }
-  var Wd = !1;
-  function Fg(e, t) {
-    if (Da = $i, e = kc(), za(e)) {
+  var Vd = !1;
+  function Wg(e, t) {
+    if ($a = qi, e = Sc(), Ra(e)) {
       if ("selectionStart" in e) var i = { start: e.selectionStart, end: e.selectionEnd };
       else e: {
         i = (i = e.ownerDocument) && i.defaultView || window;
@@ -14643,25 +14857,25 @@ Error generating stack: ` + m.message + `
             i = null;
             break e;
           }
-          var x = 0, C = -1, L = -1, U = 0, ne = 0, ae = e, Z = null;
+          var x = 0, N = -1, L = -1, U = 0, ne = 0, ae = e, Z = null;
           t: for (; ; ) {
-            for (var he; ae !== i || d !== 0 && ae.nodeType !== 3 || (C = x + d), ae !== m || l !== 0 && ae.nodeType !== 3 || (L = x + l), ae.nodeType === 3 && (x += ae.nodeValue.length), (he = ae.firstChild) !== null; )
+            for (var he; ae !== i || d !== 0 && ae.nodeType !== 3 || (N = x + d), ae !== m || l !== 0 && ae.nodeType !== 3 || (L = x + l), ae.nodeType === 3 && (x += ae.nodeValue.length), (he = ae.firstChild) !== null; )
               Z = ae, ae = he;
             for (; ; ) {
               if (ae === e) break t;
-              if (Z === i && ++U === d && (C = x), Z === m && ++ne === l && (L = x), (he = ae.nextSibling) !== null) break;
+              if (Z === i && ++U === d && (N = x), Z === m && ++ne === l && (L = x), (he = ae.nextSibling) !== null) break;
               ae = Z, Z = ae.parentNode;
             }
             ae = he;
           }
-          i = C === -1 || L === -1 ? null : { start: C, end: L };
+          i = N === -1 || L === -1 ? null : { start: N, end: L };
         } else i = null;
       }
       i = i || { start: 0, end: 0 };
     } else i = null;
-    for ($a = { focusedElem: e, selectionRange: i }, $i = !1, fe = t; fe !== null; ) if (t = fe, e = t.child, (t.subtreeFlags & 1028) !== 0 && e !== null) e.return = t, fe = e;
-    else for (; fe !== null; ) {
-      t = fe;
+    for (qa = { focusedElem: e, selectionRange: i }, qi = !1, _e = t; _e !== null; ) if (t = _e, e = t.child, (t.subtreeFlags & 1028) !== 0 && e !== null) e.return = t, _e = e;
+    else for (; _e !== null; ) {
+      t = _e;
       try {
         var be = t.alternate;
         if (t.flags & 1024) switch (t.tag) {
@@ -14691,27 +14905,27 @@ Error generating stack: ` + m.message + `
         et(t, t.return, le);
       }
       if (e = t.sibling, e !== null) {
-        e.return = t.return, fe = e;
+        e.return = t.return, _e = e;
         break;
       }
-      fe = t.return;
+      _e = t.return;
     }
-    return be = Wd, Wd = !1, be;
+    return be = Vd, Vd = !1, be;
   }
-  function oi(e, t, i) {
+  function ai(e, t, i) {
     var l = t.updateQueue;
     if (l = l !== null ? l.lastEffect : null, l !== null) {
       var d = l = l.next;
       do {
         if ((d.tag & e) === e) {
           var m = d.destroy;
-          d.destroy = void 0, m !== void 0 && Ps(t, i, m);
+          d.destroy = void 0, m !== void 0 && Is(t, i, m);
         }
         d = d.next;
       } while (d !== l);
     }
   }
-  function wo(e, t) {
+  function ko(e, t) {
     if (t = t.updateQueue, t = t !== null ? t.lastEffect : null, t !== null) {
       var i = t = t.next;
       do {
@@ -14723,7 +14937,7 @@ Error generating stack: ` + m.message + `
       } while (i !== t);
     }
   }
-  function Is(e) {
+  function Cs(e) {
     var t = e.ref;
     if (t !== null) {
       var i = e.stateNode;
@@ -14737,17 +14951,17 @@ Error generating stack: ` + m.message + `
       typeof t == "function" ? t(e) : t.current = e;
     }
   }
-  function Vd(e) {
-    var t = e.alternate;
-    t !== null && (e.alternate = null, Vd(t)), e.child = null, e.deletions = null, e.sibling = null, e.tag === 5 && (t = e.stateNode, t !== null && (delete t[Kt], delete t[Yn], delete t[Ua], delete t[Ag], delete t[Eg])), e.stateNode = null, e.return = null, e.dependencies = null, e.memoizedProps = null, e.memoizedState = null, e.pendingProps = null, e.stateNode = null, e.updateQueue = null;
-  }
   function Gd(e) {
-    return e.tag === 5 || e.tag === 3 || e.tag === 4;
+    var t = e.alternate;
+    t !== null && (e.alternate = null, Gd(t)), e.child = null, e.deletions = null, e.sibling = null, e.tag === 5 && (t = e.stateNode, t !== null && (delete t[Kt], delete t[Kn], delete t[Wa], delete t[Pg], delete t[Ig])), e.stateNode = null, e.return = null, e.dependencies = null, e.memoizedProps = null, e.memoizedState = null, e.pendingProps = null, e.stateNode = null, e.updateQueue = null;
   }
   function Yd(e) {
+    return e.tag === 5 || e.tag === 3 || e.tag === 4;
+  }
+  function Kd(e) {
     e: for (; ; ) {
       for (; e.sibling === null; ) {
-        if (e.return === null || Gd(e.return)) return null;
+        if (e.return === null || Yd(e.return)) return null;
         e = e.return;
       }
       for (e.sibling.return = e.return, e = e.sibling; e.tag !== 5 && e.tag !== 6 && e.tag !== 18; ) {
@@ -14759,21 +14973,21 @@ Error generating stack: ` + m.message + `
   }
   function Ns(e, t, i) {
     var l = e.tag;
-    if (l === 5 || l === 6) e = e.stateNode, t ? i.nodeType === 8 ? i.parentNode.insertBefore(e, t) : i.insertBefore(e, t) : (i.nodeType === 8 ? (t = i.parentNode, t.insertBefore(e, i)) : (t = i, t.appendChild(e)), i = i._reactRootContainer, i != null || t.onclick !== null || (t.onclick = Ji));
+    if (l === 5 || l === 6) e = e.stateNode, t ? i.nodeType === 8 ? i.parentNode.insertBefore(e, t) : i.insertBefore(e, t) : (i.nodeType === 8 ? (t = i.parentNode, t.insertBefore(e, i)) : (t = i, t.appendChild(e)), i = i._reactRootContainer, i != null || t.onclick !== null || (t.onclick = Zi));
     else if (l !== 4 && (e = e.child, e !== null)) for (Ns(e, t, i), e = e.sibling; e !== null; ) Ns(e, t, i), e = e.sibling;
   }
-  function Cs(e, t, i) {
+  function zs(e, t, i) {
     var l = e.tag;
     if (l === 5 || l === 6) e = e.stateNode, t ? i.insertBefore(e, t) : i.appendChild(e);
-    else if (l !== 4 && (e = e.child, e !== null)) for (Cs(e, t, i), e = e.sibling; e !== null; ) Cs(e, t, i), e = e.sibling;
+    else if (l !== 4 && (e = e.child, e !== null)) for (zs(e, t, i), e = e.sibling; e !== null; ) zs(e, t, i), e = e.sibling;
   }
   var mt = null, Ut = !1;
   function kr(e, t, i) {
-    for (i = i.child; i !== null; ) Kd(e, t, i), i = i.sibling;
+    for (i = i.child; i !== null; ) Xd(e, t, i), i = i.sibling;
   }
-  function Kd(e, t, i) {
+  function Xd(e, t, i) {
     if (Yt && typeof Yt.onCommitFiberUnmount == "function") try {
-      Yt.onCommitFiberUnmount(Oi, i);
+      Yt.onCommitFiberUnmount(Ti, i);
     } catch {
     }
     switch (i.tag) {
@@ -14784,7 +14998,7 @@ Error generating stack: ` + m.message + `
         mt = null, kr(e, t, i), mt = l, Ut = d, mt !== null && (Ut ? (e = mt, i = i.stateNode, e.nodeType === 8 ? e.parentNode.removeChild(i) : e.removeChild(i)) : mt.removeChild(i.stateNode));
         break;
       case 18:
-        mt !== null && (Ut ? (e = mt, i = i.stateNode, e.nodeType === 8 ? Fa(e.parentNode, i) : e.nodeType === 1 && Fa(e, i), Hn(e)) : Fa(mt, i.stateNode));
+        mt !== null && (Ut ? (e = mt, i = i.stateNode, e.nodeType === 8 ? Ua(e.parentNode, i) : e.nodeType === 1 && Ua(e, i), Bn(e)) : Ua(mt, i.stateNode));
         break;
       case 4:
         l = mt, d = Ut, mt = i.stateNode.containerInfo, Ut = !0, kr(e, t, i), mt = l, Ut = d;
@@ -14797,7 +15011,7 @@ Error generating stack: ` + m.message + `
           d = l = l.next;
           do {
             var m = d, x = m.destroy;
-            m = m.tag, x !== void 0 && (m & 2 || m & 4) && Ps(i, t, x), d = d.next;
+            m = m.tag, x !== void 0 && (m & 2 || m & 4) && Is(i, t, x), d = d.next;
           } while (d !== l);
         }
         kr(e, t, i);
@@ -14805,8 +15019,8 @@ Error generating stack: ` + m.message + `
       case 1:
         if (!yt && (hn(i, t), l = i.stateNode, typeof l.componentWillUnmount == "function")) try {
           l.props = i.memoizedProps, l.state = i.memoizedState, l.componentWillUnmount();
-        } catch (C) {
-          et(i, t, C);
+        } catch (N) {
+          et(i, t, N);
         }
         kr(e, t, i);
         break;
@@ -14820,13 +15034,13 @@ Error generating stack: ` + m.message + `
         kr(e, t, i);
     }
   }
-  function Xd(e) {
+  function Qd(e) {
     var t = e.updateQueue;
     if (t !== null) {
       e.updateQueue = null;
       var i = e.stateNode;
-      i === null && (i = e.stateNode = new jg()), t.forEach(function(l) {
-        var d = Jg.bind(null, e, l);
+      i === null && (i = e.stateNode = new Ug()), t.forEach(function(l) {
+        var d = eh.bind(null, e, l);
         i.has(l) || (i.add(l), l.then(d, d));
       });
     }
@@ -14836,32 +15050,32 @@ Error generating stack: ` + m.message + `
     if (i !== null) for (var l = 0; l < i.length; l++) {
       var d = i[l];
       try {
-        var m = e, x = t, C = x;
-        e: for (; C !== null; ) {
-          switch (C.tag) {
+        var m = e, x = t, N = x;
+        e: for (; N !== null; ) {
+          switch (N.tag) {
             case 5:
-              mt = C.stateNode, Ut = !1;
+              mt = N.stateNode, Ut = !1;
               break e;
             case 3:
-              mt = C.stateNode.containerInfo, Ut = !0;
+              mt = N.stateNode.containerInfo, Ut = !0;
               break e;
             case 4:
-              mt = C.stateNode.containerInfo, Ut = !0;
+              mt = N.stateNode.containerInfo, Ut = !0;
               break e;
           }
-          C = C.return;
+          N = N.return;
         }
         if (mt === null) throw Error(n(160));
-        Kd(m, x, d), mt = null, Ut = !1;
+        Xd(m, x, d), mt = null, Ut = !1;
         var L = d.alternate;
         L !== null && (L.return = null), d.return = null;
       } catch (U) {
         et(d, t, U);
       }
     }
-    if (t.subtreeFlags & 12854) for (t = t.child; t !== null; ) Qd(t, e), t = t.sibling;
+    if (t.subtreeFlags & 12854) for (t = t.child; t !== null; ) Jd(t, e), t = t.sibling;
   }
-  function Qd(e, t) {
+  function Jd(e, t) {
     var i = e.alternate, l = e.flags;
     switch (e.tag) {
       case 0:
@@ -14870,12 +15084,12 @@ Error generating stack: ` + m.message + `
       case 15:
         if (Wt(t, e), Jt(e), l & 4) {
           try {
-            oi(3, e, e.return), wo(3, e);
+            ai(3, e, e.return), ko(3, e);
           } catch (ye) {
             et(e, e.return, ye);
           }
           try {
-            oi(5, e, e.return);
+            ai(5, e, e.return);
           } catch (ye) {
             et(e, e.return, ye);
           }
@@ -14894,15 +15108,15 @@ Error generating stack: ` + m.message + `
           }
         }
         if (l & 4 && (d = e.stateNode, d != null)) {
-          var m = e.memoizedProps, x = i !== null ? i.memoizedProps : m, C = e.type, L = e.updateQueue;
+          var m = e.memoizedProps, x = i !== null ? i.memoizedProps : m, N = e.type, L = e.updateQueue;
           if (e.updateQueue = null, L !== null) try {
-            C === "input" && m.type === "radio" && m.name != null && O(d, m), Dt(C, x);
-            var U = Dt(C, m);
+            N === "input" && m.type === "radio" && m.name != null && O(d, m), Dt(N, x);
+            var U = Dt(N, m);
             for (x = 0; x < L.length; x += 2) {
               var ne = L[x], ae = L[x + 1];
-              ne === "style" ? Me(d, ae) : ne === "dangerouslySetInnerHTML" ? q(d, ae) : ne === "children" ? Y(d, ae) : w(d, ne, ae, U);
+              ne === "style" ? He(d, ae) : ne === "dangerouslySetInnerHTML" ? q(d, ae) : ne === "children" ? Y(d, ae) : w(d, ne, ae, U);
             }
-            switch (C) {
+            switch (N) {
               case "input":
                 H(d, m);
                 break;
@@ -14920,7 +15134,7 @@ Error generating stack: ` + m.message + `
                   !0
                 ) : ve(d, !!m.multiple, m.multiple ? [] : "", !1));
             }
-            d[Yn] = m;
+            d[Kn] = m;
           } catch (ye) {
             et(e, e.return, ye);
           }
@@ -14939,7 +15153,7 @@ Error generating stack: ` + m.message + `
         break;
       case 3:
         if (Wt(t, e), Jt(e), l & 4 && i !== null && i.memoizedState.isDehydrated) try {
-          Hn(t.containerInfo);
+          Bn(t.containerInfo);
         } catch (ye) {
           et(e, e.return, ye);
         }
@@ -14948,18 +15162,18 @@ Error generating stack: ` + m.message + `
         Wt(t, e), Jt(e);
         break;
       case 13:
-        Wt(t, e), Jt(e), d = e.child, d.flags & 8192 && (m = d.memoizedState !== null, d.stateNode.isHidden = m, !m || d.alternate !== null && d.alternate.memoizedState !== null || (Ls = rt())), l & 4 && Xd(e);
+        Wt(t, e), Jt(e), d = e.child, d.flags & 8192 && (m = d.memoizedState !== null, d.stateNode.isHidden = m, !m || d.alternate !== null && d.alternate.memoizedState !== null || (Os = rt())), l & 4 && Qd(e);
         break;
       case 22:
         if (ne = i !== null && i.memoizedState !== null, e.mode & 1 ? (yt = (U = yt) || ne, Wt(t, e), yt = U) : Wt(t, e), Jt(e), l & 8192) {
-          if (U = e.memoizedState !== null, (e.stateNode.isHidden = U) && !ne && e.mode & 1) for (fe = e, ne = e.child; ne !== null; ) {
-            for (ae = fe = ne; fe !== null; ) {
-              switch (Z = fe, he = Z.child, Z.tag) {
+          if (U = e.memoizedState !== null, (e.stateNode.isHidden = U) && !ne && e.mode & 1) for (_e = e, ne = e.child; ne !== null; ) {
+            for (ae = _e = ne; _e !== null; ) {
+              switch (Z = _e, he = Z.child, Z.tag) {
                 case 0:
                 case 11:
                 case 14:
                 case 15:
-                  oi(4, Z, Z.return);
+                  ai(4, Z, Z.return);
                   break;
                 case 1:
                   hn(Z, Z.return);
@@ -14978,11 +15192,11 @@ Error generating stack: ` + m.message + `
                   break;
                 case 22:
                   if (Z.memoizedState !== null) {
-                    eu(ae);
+                    tu(ae);
                     continue;
                   }
               }
-              he !== null ? (he.return = Z, fe = he) : eu(ae);
+              he !== null ? (he.return = Z, _e = he) : tu(ae);
             }
             ne = ne.sibling;
           }
@@ -14991,7 +15205,7 @@ Error generating stack: ` + m.message + `
               if (ne === null) {
                 ne = ae;
                 try {
-                  d = ae.stateNode, U ? (m = d.style, typeof m.setProperty == "function" ? m.setProperty("display", "none", "important") : m.display = "none") : (C = ae.stateNode, L = ae.memoizedProps.style, x = L != null && L.hasOwnProperty("display") ? L.display : null, C.style.display = Te("display", x));
+                  d = ae.stateNode, U ? (m = d.style, typeof m.setProperty == "function" ? m.setProperty("display", "none", "important") : m.display = "none") : (N = ae.stateNode, L = ae.memoizedProps.style, x = L != null && L.hasOwnProperty("display") ? L.display : null, N.style.display = Me("display", x));
                 } catch (ye) {
                   et(e, e.return, ye);
                 }
@@ -15016,7 +15230,7 @@ Error generating stack: ` + m.message + `
         }
         break;
       case 19:
-        Wt(t, e), Jt(e), l & 4 && Xd(e);
+        Wt(t, e), Jt(e), l & 4 && Qd(e);
         break;
       case 21:
         break;
@@ -15033,7 +15247,7 @@ Error generating stack: ` + m.message + `
       try {
         e: {
           for (var i = e.return; i !== null; ) {
-            if (Gd(i)) {
+            if (Yd(i)) {
               var l = i;
               break e;
             }
@@ -15045,13 +15259,13 @@ Error generating stack: ` + m.message + `
           case 5:
             var d = l.stateNode;
             l.flags & 32 && (Y(d, ""), l.flags &= -33);
-            var m = Yd(e);
-            Cs(e, m, d);
+            var m = Kd(e);
+            zs(e, m, d);
             break;
           case 3:
           case 4:
-            var x = l.stateNode.containerInfo, C = Yd(e);
-            Ns(e, C, x);
+            var x = l.stateNode.containerInfo, N = Kd(e);
+            Ns(e, N, x);
             break;
           default:
             throw Error(n(161));
@@ -15063,29 +15277,29 @@ Error generating stack: ` + m.message + `
     }
     t & 4096 && (e.flags &= -4097);
   }
-  function Ug(e, t, i) {
-    fe = e, Jd(e);
+  function Vg(e, t, i) {
+    _e = e, Zd(e);
   }
-  function Jd(e, t, i) {
-    for (var l = (e.mode & 1) !== 0; fe !== null; ) {
-      var d = fe, m = d.child;
+  function Zd(e, t, i) {
+    for (var l = (e.mode & 1) !== 0; _e !== null; ) {
+      var d = _e, m = d.child;
       if (d.tag === 22 && l) {
-        var x = d.memoizedState !== null || xo;
+        var x = d.memoizedState !== null || wo;
         if (!x) {
-          var C = d.alternate, L = C !== null && C.memoizedState !== null || yt;
-          C = xo;
+          var N = d.alternate, L = N !== null && N.memoizedState !== null || yt;
+          N = wo;
           var U = yt;
-          if (xo = x, (yt = L) && !U) for (fe = d; fe !== null; ) x = fe, L = x.child, x.tag === 22 && x.memoizedState !== null ? tu(d) : L !== null ? (L.return = x, fe = L) : tu(d);
-          for (; m !== null; ) fe = m, Jd(m), m = m.sibling;
-          fe = d, xo = C, yt = U;
+          if (wo = x, (yt = L) && !U) for (_e = d; _e !== null; ) x = _e, L = x.child, x.tag === 22 && x.memoizedState !== null ? ru(d) : L !== null ? (L.return = x, _e = L) : ru(d);
+          for (; m !== null; ) _e = m, Zd(m), m = m.sibling;
+          _e = d, wo = N, yt = U;
         }
-        Zd(e);
-      } else d.subtreeFlags & 8772 && m !== null ? (m.return = d, fe = m) : Zd(e);
+        eu(e);
+      } else d.subtreeFlags & 8772 && m !== null ? (m.return = d, _e = m) : eu(e);
     }
   }
-  function Zd(e) {
-    for (; fe !== null; ) {
-      var t = fe;
+  function eu(e) {
+    for (; _e !== null; ) {
+      var t = _e;
       if (t.flags & 8772) {
         var i = t.alternate;
         try {
@@ -15093,7 +15307,7 @@ Error generating stack: ` + m.message + `
             case 0:
             case 11:
             case 15:
-              yt || wo(5, t);
+              yt || ko(5, t);
               break;
             case 1:
               var l = t.stateNode;
@@ -15103,7 +15317,7 @@ Error generating stack: ` + m.message + `
                 l.componentDidUpdate(d, i.memoizedState, l.__reactInternalSnapshotBeforeUpdate);
               }
               var m = t.updateQueue;
-              m !== null && ed(t, m, l);
+              m !== null && td(t, m, l);
               break;
             case 3:
               var x = t.updateQueue;
@@ -15115,13 +15329,13 @@ Error generating stack: ` + m.message + `
                   case 1:
                     i = t.child.stateNode;
                 }
-                ed(t, x, i);
+                td(t, x, i);
               }
               break;
             case 5:
-              var C = t.stateNode;
+              var N = t.stateNode;
               if (i === null && t.flags & 4) {
-                i = C;
+                i = N;
                 var L = t.memoizedProps;
                 switch (t.type) {
                   case "button":
@@ -15148,7 +15362,7 @@ Error generating stack: ` + m.message + `
                   var ne = U.memoizedState;
                   if (ne !== null) {
                     var ae = ne.dehydrated;
-                    ae !== null && Hn(ae);
+                    ae !== null && Bn(ae);
                   }
                 }
               }
@@ -15163,40 +15377,40 @@ Error generating stack: ` + m.message + `
             default:
               throw Error(n(163));
           }
-          yt || t.flags & 512 && Is(t);
+          yt || t.flags & 512 && Cs(t);
         } catch (Z) {
           et(t, t.return, Z);
         }
       }
       if (t === e) {
-        fe = null;
+        _e = null;
         break;
       }
       if (i = t.sibling, i !== null) {
-        i.return = t.return, fe = i;
+        i.return = t.return, _e = i;
         break;
       }
-      fe = t.return;
+      _e = t.return;
     }
   }
-  function eu(e) {
-    for (; fe !== null; ) {
-      var t = fe;
+  function tu(e) {
+    for (; _e !== null; ) {
+      var t = _e;
       if (t === e) {
-        fe = null;
+        _e = null;
         break;
       }
       var i = t.sibling;
       if (i !== null) {
-        i.return = t.return, fe = i;
+        i.return = t.return, _e = i;
         break;
       }
-      fe = t.return;
+      _e = t.return;
     }
   }
-  function tu(e) {
-    for (; fe !== null; ) {
-      var t = fe;
+  function ru(e) {
+    for (; _e !== null; ) {
+      var t = _e;
       try {
         switch (t.tag) {
           case 0:
@@ -15204,7 +15418,7 @@ Error generating stack: ` + m.message + `
           case 15:
             var i = t.return;
             try {
-              wo(4, t);
+              ko(4, t);
             } catch (L) {
               et(t, i, L);
             }
@@ -15221,7 +15435,7 @@ Error generating stack: ` + m.message + `
             }
             var m = t.return;
             try {
-              Is(t);
+              Cs(t);
             } catch (L) {
               et(t, m, L);
             }
@@ -15229,7 +15443,7 @@ Error generating stack: ` + m.message + `
           case 5:
             var x = t.return;
             try {
-              Is(t);
+              Cs(t);
             } catch (L) {
               et(t, x, L);
             }
@@ -15238,87 +15452,87 @@ Error generating stack: ` + m.message + `
         et(t, t.return, L);
       }
       if (t === e) {
-        fe = null;
+        _e = null;
         break;
       }
-      var C = t.sibling;
-      if (C !== null) {
-        C.return = t.return, fe = C;
+      var N = t.sibling;
+      if (N !== null) {
+        N.return = t.return, _e = N;
         break;
       }
-      fe = t.return;
+      _e = t.return;
     }
   }
-  var Wg = Math.ceil, ko = b.ReactCurrentDispatcher, zs = b.ReactCurrentOwner, Ht = b.ReactCurrentBatchConfig, De = 0, ct = null, it = null, gt = 0, Rt = 0, fn = br(0), at = 0, ai = null, qr = 0, So = 0, Rs = 0, si = null, At = null, Ls = 0, _n = 1 / 0, sr = null, Ao = !1, Os = null, Sr = null, Eo = !1, Ar = null, Po = 0, li = 0, Ts = null, Io = -1, No = 0;
+  var Gg = Math.ceil, So = b.ReactCurrentDispatcher, Rs = b.ReactCurrentOwner, Ht = b.ReactCurrentBatchConfig, De = 0, ct = null, it = null, gt = 0, Rt = 0, _n = br(0), at = 0, si = null, qr = 0, Ao = 0, Ls = 0, li = null, At = null, Os = 0, fn = 1 / 0, sr = null, Eo = !1, Ts = null, Sr = null, Po = !1, Ar = null, Io = 0, ci = 0, Ms = null, Co = -1, No = 0;
   function xt() {
-    return De & 6 ? rt() : Io !== -1 ? Io : Io = rt();
+    return De & 6 ? rt() : Co !== -1 ? Co : Co = rt();
   }
   function Er(e) {
-    return e.mode & 1 ? De & 2 && gt !== 0 ? gt & -gt : Ig.transition !== null ? (No === 0 && (No = Yl()), No) : (e = Ue, e !== 0 || (e = window.event, e = e === void 0 ? 16 : nc(e.type)), e) : 1;
+    return e.mode & 1 ? De & 2 && gt !== 0 ? gt & -gt : Ng.transition !== null ? (No === 0 && (No = Kl()), No) : (e = Ue, e !== 0 || (e = window.event, e = e === void 0 ? 16 : ic(e.type)), e) : 1;
   }
   function Vt(e, t, i, l) {
-    if (50 < li) throw li = 0, Ts = null, Error(n(185));
-    Rn(e, i, l), (!(De & 2) || e !== ct) && (e === ct && (!(De & 2) && (So |= i), at === 4 && Pr(e, gt)), Et(e, l), i === 1 && De === 0 && !(t.mode & 1) && (_n = rt() + 500, ro && vr()));
+    if (50 < ci) throw ci = 0, Ms = null, Error(n(185));
+    Ln(e, i, l), (!(De & 2) || e !== ct) && (e === ct && (!(De & 2) && (Ao |= i), at === 4 && Pr(e, gt)), Et(e, l), i === 1 && De === 0 && !(t.mode & 1) && (fn = rt() + 500, no && vr()));
   }
   function Et(e, t) {
     var i = e.callbackNode;
-    Im(e, t);
-    var l = Hi(e, e === ct ? gt : 0);
-    if (l === 0) i !== null && Wl(i), e.callbackNode = null, e.callbackPriority = 0;
+    Nm(e, t);
+    var l = Bi(e, e === ct ? gt : 0);
+    if (l === 0) i !== null && Vl(i), e.callbackNode = null, e.callbackPriority = 0;
     else if (t = l & -l, e.callbackPriority !== t) {
-      if (i != null && Wl(i), t === 1) e.tag === 0 ? Pg(nu.bind(null, e)) : jc(nu.bind(null, e)), kg(function() {
+      if (i != null && Vl(i), t === 1) e.tag === 0 ? Cg(iu.bind(null, e)) : Fc(iu.bind(null, e)), Ag(function() {
         !(De & 6) && vr();
       }), i = null;
       else {
-        switch (Kl(l)) {
+        switch (Xl(l)) {
           case 1:
-            i = ga;
+            i = ha;
             break;
           case 4:
-            i = Vl;
-            break;
-          case 16:
-            i = Li;
-            break;
-          case 536870912:
             i = Gl;
             break;
+          case 16:
+            i = Oi;
+            break;
+          case 536870912:
+            i = Yl;
+            break;
           default:
-            i = Li;
+            i = Oi;
         }
-        i = uu(i, ru.bind(null, e));
+        i = pu(i, nu.bind(null, e));
       }
       e.callbackPriority = t, e.callbackNode = i;
     }
   }
-  function ru(e, t) {
-    if (Io = -1, No = 0, De & 6) throw Error(n(327));
+  function nu(e, t) {
+    if (Co = -1, No = 0, De & 6) throw Error(n(327));
     var i = e.callbackNode;
     if (bn() && e.callbackNode !== i) return null;
-    var l = Hi(e, e === ct ? gt : 0);
+    var l = Bi(e, e === ct ? gt : 0);
     if (l === 0) return null;
-    if (l & 30 || l & e.expiredLanes || t) t = Co(e, l);
+    if (l & 30 || l & e.expiredLanes || t) t = zo(e, l);
     else {
       t = l;
       var d = De;
       De |= 2;
-      var m = ou();
-      (ct !== e || gt !== t) && (sr = null, _n = rt() + 500, Fr(e, t));
+      var m = au();
+      (ct !== e || gt !== t) && (sr = null, fn = rt() + 500, Fr(e, t));
       do
         try {
-          Yg();
+          Xg();
           break;
-        } catch (C) {
-          iu(e, C);
+        } catch (N) {
+          ou(e, N);
         }
       while (!0);
-      Za(), ko.current = m, De = d, it !== null ? t = 0 : (ct = null, gt = 0, t = at);
+      es(), So.current = m, De = d, it !== null ? t = 0 : (ct = null, gt = 0, t = at);
     }
     if (t !== 0) {
-      if (t === 2 && (d = ha(e), d !== 0 && (l = d, t = Ms(e, d))), t === 1) throw i = ai, Fr(e, 0), Pr(e, l), Et(e, rt()), i;
+      if (t === 2 && (d = _a(e), d !== 0 && (l = d, t = Hs(e, d))), t === 1) throw i = si, Fr(e, 0), Pr(e, l), Et(e, rt()), i;
       if (t === 6) Pr(e, l);
       else {
-        if (d = e.current.alternate, !(l & 30) && !Vg(d) && (t = Co(e, l), t === 2 && (m = ha(e), m !== 0 && (l = m, t = Ms(e, m))), t === 1)) throw i = ai, Fr(e, 0), Pr(e, l), Et(e, rt()), i;
+        if (d = e.current.alternate, !(l & 30) && !Yg(d) && (t = zo(e, l), t === 2 && (m = _a(e), m !== 0 && (l = m, t = Hs(e, m))), t === 1)) throw i = si, Fr(e, 0), Pr(e, l), Et(e, rt()), i;
         switch (e.finishedWork = d, e.finishedLanes = l, t) {
           case 0:
           case 1:
@@ -15327,13 +15541,13 @@ Error generating stack: ` + m.message + `
             Ur(e, At, sr);
             break;
           case 3:
-            if (Pr(e, l), (l & 130023424) === l && (t = Ls + 500 - rt(), 10 < t)) {
-              if (Hi(e, 0) !== 0) break;
+            if (Pr(e, l), (l & 130023424) === l && (t = Os + 500 - rt(), 10 < t)) {
+              if (Bi(e, 0) !== 0) break;
               if (d = e.suspendedLanes, (d & l) !== l) {
                 xt(), e.pingedLanes |= e.suspendedLanes & d;
                 break;
               }
-              e.timeoutHandle = ja(Ur.bind(null, e, At, sr), t);
+              e.timeoutHandle = Fa(Ur.bind(null, e, At, sr), t);
               break;
             }
             Ur(e, At, sr);
@@ -15344,8 +15558,8 @@ Error generating stack: ` + m.message + `
               var x = 31 - $t(l);
               m = 1 << x, x = t[x], x > d && (d = x), l &= ~m;
             }
-            if (l = d, l = rt() - l, l = (120 > l ? 120 : 480 > l ? 480 : 1080 > l ? 1080 : 1920 > l ? 1920 : 3e3 > l ? 3e3 : 4320 > l ? 4320 : 1960 * Wg(l / 1960)) - l, 10 < l) {
-              e.timeoutHandle = ja(Ur.bind(null, e, At, sr), l);
+            if (l = d, l = rt() - l, l = (120 > l ? 120 : 480 > l ? 480 : 1080 > l ? 1080 : 1920 > l ? 1920 : 3e3 > l ? 3e3 : 4320 > l ? 4320 : 1960 * Gg(l / 1960)) - l, 10 < l) {
+              e.timeoutHandle = Fa(Ur.bind(null, e, At, sr), l);
               break;
             }
             Ur(e, At, sr);
@@ -15358,16 +15572,16 @@ Error generating stack: ` + m.message + `
         }
       }
     }
-    return Et(e, rt()), e.callbackNode === i ? ru.bind(null, e) : null;
+    return Et(e, rt()), e.callbackNode === i ? nu.bind(null, e) : null;
   }
-  function Ms(e, t) {
-    var i = si;
-    return e.current.memoizedState.isDehydrated && (Fr(e, t).flags |= 256), e = Co(e, t), e !== 2 && (t = At, At = i, t !== null && Hs(t)), e;
+  function Hs(e, t) {
+    var i = li;
+    return e.current.memoizedState.isDehydrated && (Fr(e, t).flags |= 256), e = zo(e, t), e !== 2 && (t = At, At = i, t !== null && Bs(t)), e;
   }
-  function Hs(e) {
+  function Bs(e) {
     At === null ? At = e : At.push.apply(At, e);
   }
-  function Vg(e) {
+  function Yg(e) {
     for (var t = e; ; ) {
       if (t.flags & 16384) {
         var i = t.updateQueue;
@@ -15394,32 +15608,32 @@ Error generating stack: ` + m.message + `
     return !0;
   }
   function Pr(e, t) {
-    for (t &= ~Rs, t &= ~So, e.suspendedLanes |= t, e.pingedLanes &= ~t, e = e.expirationTimes; 0 < t; ) {
+    for (t &= ~Ls, t &= ~Ao, e.suspendedLanes |= t, e.pingedLanes &= ~t, e = e.expirationTimes; 0 < t; ) {
       var i = 31 - $t(t), l = 1 << i;
       e[i] = -1, t &= ~l;
     }
   }
-  function nu(e) {
+  function iu(e) {
     if (De & 6) throw Error(n(327));
     bn();
-    var t = Hi(e, 0);
+    var t = Bi(e, 0);
     if (!(t & 1)) return Et(e, rt()), null;
-    var i = Co(e, t);
+    var i = zo(e, t);
     if (e.tag !== 0 && i === 2) {
-      var l = ha(e);
-      l !== 0 && (t = l, i = Ms(e, l));
+      var l = _a(e);
+      l !== 0 && (t = l, i = Hs(e, l));
     }
-    if (i === 1) throw i = ai, Fr(e, 0), Pr(e, t), Et(e, rt()), i;
+    if (i === 1) throw i = si, Fr(e, 0), Pr(e, t), Et(e, rt()), i;
     if (i === 6) throw Error(n(345));
     return e.finishedWork = e.current.alternate, e.finishedLanes = t, Ur(e, At, sr), Et(e, rt()), null;
   }
-  function Bs(e, t) {
+  function Ds(e, t) {
     var i = De;
     De |= 1;
     try {
       return e(t);
     } finally {
-      De = i, De === 0 && (_n = rt() + 500, ro && vr());
+      De = i, De === 0 && (fn = rt() + 500, no && vr());
     }
   }
   function jr(e) {
@@ -15433,23 +15647,23 @@ Error generating stack: ` + m.message + `
       Ue = l, Ht.transition = i, De = t, !(De & 6) && vr();
     }
   }
-  function Ds() {
-    Rt = fn.current, Ye(fn);
+  function $s() {
+    Rt = _n.current, Ye(_n);
   }
   function Fr(e, t) {
     e.finishedWork = null, e.finishedLanes = 0;
     var i = e.timeoutHandle;
-    if (i !== -1 && (e.timeoutHandle = -1, wg(i)), it !== null) for (i = it.return; i !== null; ) {
+    if (i !== -1 && (e.timeoutHandle = -1, Sg(i)), it !== null) for (i = it.return; i !== null; ) {
       var l = i;
-      switch (Ya(l), l.tag) {
+      switch (Ka(l), l.tag) {
         case 1:
-          l = l.type.childContextTypes, l != null && eo();
+          l = l.type.childContextTypes, l != null && to();
           break;
         case 3:
-          mn(), Ye(wt), Ye(ft), ss();
+          mn(), Ye(wt), Ye(_t), ls();
           break;
         case 5:
-          os(l);
+          as(l);
           break;
         case 4:
           mn();
@@ -15461,15 +15675,15 @@ Error generating stack: ` + m.message + `
           Ye(Je);
           break;
         case 10:
-          es(l.type._context);
+          ts(l.type._context);
           break;
         case 22:
         case 23:
-          Ds();
+          $s();
       }
       i = i.return;
     }
-    if (ct = e, it = e = Ir(e.current, null), gt = Rt = t, at = 0, ai = null, Rs = So = qr = 0, At = si = null, Br !== null) {
+    if (ct = e, it = e = Ir(e.current, null), gt = Rt = t, at = 0, si = null, Ls = Ao = qr = 0, At = li = null, Br !== null) {
       for (t = 0; t < Br.length; t++) if (i = Br[t], l = i.interleaved, l !== null) {
         i.interleaved = null;
         var d = l.next, m = i.pending;
@@ -15483,32 +15697,32 @@ Error generating stack: ` + m.message + `
     }
     return e;
   }
-  function iu(e, t) {
+  function ou(e, t) {
     do {
       var i = it;
       try {
-        if (Za(), mo.current = _o, go) {
+        if (es(), go.current = bo, ho) {
           for (var l = Ze.memoizedState; l !== null; ) {
             var d = l.queue;
             d !== null && (d.pending = null), l = l.next;
           }
-          go = !1;
+          ho = !1;
         }
-        if ($r = 0, lt = ot = Ze = null, ei = !1, ti = 0, zs.current = null, i === null || i.return === null) {
-          at = 1, ai = t, it = null;
+        if ($r = 0, lt = ot = Ze = null, ti = !1, ri = 0, Rs.current = null, i === null || i.return === null) {
+          at = 1, si = t, it = null;
           break;
         }
         e: {
-          var m = e, x = i.return, C = i, L = t;
-          if (t = gt, C.flags |= 32768, L !== null && typeof L == "object" && typeof L.then == "function") {
-            var U = L, ne = C, ae = ne.tag;
+          var m = e, x = i.return, N = i, L = t;
+          if (t = gt, N.flags |= 32768, L !== null && typeof L == "object" && typeof L.then == "function") {
+            var U = L, ne = N, ae = ne.tag;
             if (!(ne.mode & 1) && (ae === 0 || ae === 11 || ae === 15)) {
               var Z = ne.alternate;
               Z ? (ne.updateQueue = Z.updateQueue, ne.memoizedState = Z.memoizedState, ne.lanes = Z.lanes) : (ne.updateQueue = null, ne.memoizedState = null);
             }
             var he = Nd(x);
             if (he !== null) {
-              he.flags &= -257, Cd(he, x, C, m, t), he.mode & 1 && Id(m, U, t), t = he, L = U;
+              he.flags &= -257, zd(he, x, N, m, t), he.mode & 1 && Cd(m, U, t), t = he, L = U;
               var be = t.updateQueue;
               if (be === null) {
                 var ye = /* @__PURE__ */ new Set();
@@ -15517,40 +15731,40 @@ Error generating stack: ` + m.message + `
               break e;
             } else {
               if (!(t & 1)) {
-                Id(m, U, t), $s();
+                Cd(m, U, t), qs();
                 break e;
               }
               L = Error(n(426));
             }
-          } else if (Qe && C.mode & 1) {
+          } else if (Qe && N.mode & 1) {
             var nt = Nd(x);
             if (nt !== null) {
-              !(nt.flags & 65536) && (nt.flags |= 256), Cd(nt, x, C, m, t), Qa(gn(L, C));
+              !(nt.flags & 65536) && (nt.flags |= 256), zd(nt, x, N, m, t), Ja(gn(L, N));
               break e;
             }
           }
-          m = L = gn(L, C), at !== 4 && (at = 2), si === null ? si = [m] : si.push(m), m = x;
+          m = L = gn(L, N), at !== 4 && (at = 2), li === null ? li = [m] : li.push(m), m = x;
           do {
             switch (m.tag) {
               case 3:
                 m.flags |= 65536, t &= -t, m.lanes |= t;
-                var $ = Ed(m, L, t);
-                Zc(m, $);
+                var $ = Pd(m, L, t);
+                ed(m, $);
                 break e;
               case 1:
-                C = L;
+                N = L;
                 var M = m.type, j = m.stateNode;
                 if (!(m.flags & 128) && (typeof M.getDerivedStateFromError == "function" || j !== null && typeof j.componentDidCatch == "function" && (Sr === null || !Sr.has(j)))) {
                   m.flags |= 65536, t &= -t, m.lanes |= t;
-                  var le = Pd(m, C, t);
-                  Zc(m, le);
+                  var le = Id(m, N, t);
+                  ed(m, le);
                   break e;
                 }
             }
             m = m.return;
           } while (m !== null);
         }
-        su(i);
+        lu(i);
       } catch (xe) {
         t = xe, it === i && i !== null && (it = i = i.return);
         continue;
@@ -15558,45 +15772,45 @@ Error generating stack: ` + m.message + `
       break;
     } while (!0);
   }
-  function ou() {
-    var e = ko.current;
-    return ko.current = _o, e === null ? _o : e;
+  function au() {
+    var e = So.current;
+    return So.current = bo, e === null ? bo : e;
   }
-  function $s() {
-    (at === 0 || at === 3 || at === 2) && (at = 4), ct === null || !(qr & 268435455) && !(So & 268435455) || Pr(ct, gt);
+  function qs() {
+    (at === 0 || at === 3 || at === 2) && (at = 4), ct === null || !(qr & 268435455) && !(Ao & 268435455) || Pr(ct, gt);
   }
-  function Co(e, t) {
+  function zo(e, t) {
     var i = De;
     De |= 2;
-    var l = ou();
+    var l = au();
     (ct !== e || gt !== t) && (sr = null, Fr(e, t));
     do
       try {
-        Gg();
+        Kg();
         break;
       } catch (d) {
-        iu(e, d);
+        ou(e, d);
       }
     while (!0);
-    if (Za(), De = i, ko.current = l, it !== null) throw Error(n(261));
+    if (es(), De = i, So.current = l, it !== null) throw Error(n(261));
     return ct = null, gt = 0, at;
   }
-  function Gg() {
-    for (; it !== null; ) au(it);
+  function Kg() {
+    for (; it !== null; ) su(it);
   }
-  function Yg() {
-    for (; it !== null && !ym(); ) au(it);
-  }
-  function au(e) {
-    var t = du(e.alternate, e, Rt);
-    e.memoizedProps = e.pendingProps, t === null ? su(e) : it = t, zs.current = null;
+  function Xg() {
+    for (; it !== null && !xm(); ) su(it);
   }
   function su(e) {
+    var t = uu(e.alternate, e, Rt);
+    e.memoizedProps = e.pendingProps, t === null ? lu(e) : it = t, Rs.current = null;
+  }
+  function lu(e) {
     var t = e;
     do {
       var i = t.alternate;
       if (e = t.return, t.flags & 32768) {
-        if (i = qg(i, t), i !== null) {
+        if (i = Fg(i, t), i !== null) {
           i.flags &= 32767, it = i;
           return;
         }
@@ -15605,7 +15819,7 @@ Error generating stack: ` + m.message + `
           at = 6, it = null;
           return;
         }
-      } else if (i = $g(i, t, Rt), i !== null) {
+      } else if (i = jg(i, t, Rt), i !== null) {
         it = i;
         return;
       }
@@ -15620,13 +15834,13 @@ Error generating stack: ` + m.message + `
   function Ur(e, t, i) {
     var l = Ue, d = Ht.transition;
     try {
-      Ht.transition = null, Ue = 1, Kg(e, t, i, l);
+      Ht.transition = null, Ue = 1, Qg(e, t, i, l);
     } finally {
       Ht.transition = d, Ue = l;
     }
     return null;
   }
-  function Kg(e, t, i, l) {
+  function Qg(e, t, i, l) {
     do
       bn();
     while (Ar !== null);
@@ -15637,56 +15851,56 @@ Error generating stack: ` + m.message + `
     if (e.finishedWork = null, e.finishedLanes = 0, i === e.current) throw Error(n(177));
     e.callbackNode = null, e.callbackPriority = 0;
     var m = i.lanes | i.childLanes;
-    if (Nm(e, m), e === ct && (it = ct = null, gt = 0), !(i.subtreeFlags & 2064) && !(i.flags & 2064) || Eo || (Eo = !0, uu(Li, function() {
+    if (zm(e, m), e === ct && (it = ct = null, gt = 0), !(i.subtreeFlags & 2064) && !(i.flags & 2064) || Po || (Po = !0, pu(Oi, function() {
       return bn(), null;
     })), m = (i.flags & 15990) !== 0, i.subtreeFlags & 15990 || m) {
       m = Ht.transition, Ht.transition = null;
       var x = Ue;
       Ue = 1;
-      var C = De;
-      De |= 4, zs.current = null, Fg(e, i), Qd(i, e), hg($a), $i = !!Da, $a = Da = null, e.current = i, Ug(i), vm(), De = C, Ue = x, Ht.transition = m;
+      var N = De;
+      De |= 4, Rs.current = null, Wg(e, i), Jd(i, e), fg(qa), qi = !!$a, qa = $a = null, e.current = i, Vg(i), wm(), De = N, Ue = x, Ht.transition = m;
     } else e.current = i;
-    if (Eo && (Eo = !1, Ar = e, Po = d), m = e.pendingLanes, m === 0 && (Sr = null), km(i.stateNode), Et(e, rt()), t !== null) for (l = e.onRecoverableError, i = 0; i < t.length; i++) d = t[i], l(d.value, { componentStack: d.stack, digest: d.digest });
-    if (Ao) throw Ao = !1, e = Os, Os = null, e;
-    return Po & 1 && e.tag !== 0 && bn(), m = e.pendingLanes, m & 1 ? e === Ts ? li++ : (li = 0, Ts = e) : li = 0, vr(), null;
+    if (Po && (Po = !1, Ar = e, Io = d), m = e.pendingLanes, m === 0 && (Sr = null), Am(i.stateNode), Et(e, rt()), t !== null) for (l = e.onRecoverableError, i = 0; i < t.length; i++) d = t[i], l(d.value, { componentStack: d.stack, digest: d.digest });
+    if (Eo) throw Eo = !1, e = Ts, Ts = null, e;
+    return Io & 1 && e.tag !== 0 && bn(), m = e.pendingLanes, m & 1 ? e === Ms ? ci++ : (ci = 0, Ms = e) : ci = 0, vr(), null;
   }
   function bn() {
     if (Ar !== null) {
-      var e = Kl(Po), t = Ht.transition, i = Ue;
+      var e = Xl(Io), t = Ht.transition, i = Ue;
       try {
         if (Ht.transition = null, Ue = 16 > e ? 16 : e, Ar === null) var l = !1;
         else {
-          if (e = Ar, Ar = null, Po = 0, De & 6) throw Error(n(331));
+          if (e = Ar, Ar = null, Io = 0, De & 6) throw Error(n(331));
           var d = De;
-          for (De |= 4, fe = e.current; fe !== null; ) {
-            var m = fe, x = m.child;
-            if (fe.flags & 16) {
-              var C = m.deletions;
-              if (C !== null) {
-                for (var L = 0; L < C.length; L++) {
-                  var U = C[L];
-                  for (fe = U; fe !== null; ) {
-                    var ne = fe;
+          for (De |= 4, _e = e.current; _e !== null; ) {
+            var m = _e, x = m.child;
+            if (_e.flags & 16) {
+              var N = m.deletions;
+              if (N !== null) {
+                for (var L = 0; L < N.length; L++) {
+                  var U = N[L];
+                  for (_e = U; _e !== null; ) {
+                    var ne = _e;
                     switch (ne.tag) {
                       case 0:
                       case 11:
                       case 15:
-                        oi(8, ne, m);
+                        ai(8, ne, m);
                     }
                     var ae = ne.child;
-                    if (ae !== null) ae.return = ne, fe = ae;
-                    else for (; fe !== null; ) {
-                      ne = fe;
+                    if (ae !== null) ae.return = ne, _e = ae;
+                    else for (; _e !== null; ) {
+                      ne = _e;
                       var Z = ne.sibling, he = ne.return;
-                      if (Vd(ne), ne === U) {
-                        fe = null;
+                      if (Gd(ne), ne === U) {
+                        _e = null;
                         break;
                       }
                       if (Z !== null) {
-                        Z.return = he, fe = Z;
+                        Z.return = he, _e = Z;
                         break;
                       }
-                      fe = he;
+                      _e = he;
                     }
                   }
                 }
@@ -15701,55 +15915,55 @@ Error generating stack: ` + m.message + `
                     } while (ye !== null);
                   }
                 }
-                fe = m;
+                _e = m;
               }
             }
-            if (m.subtreeFlags & 2064 && x !== null) x.return = m, fe = x;
-            else e: for (; fe !== null; ) {
-              if (m = fe, m.flags & 2048) switch (m.tag) {
+            if (m.subtreeFlags & 2064 && x !== null) x.return = m, _e = x;
+            else e: for (; _e !== null; ) {
+              if (m = _e, m.flags & 2048) switch (m.tag) {
                 case 0:
                 case 11:
                 case 15:
-                  oi(9, m, m.return);
+                  ai(9, m, m.return);
               }
               var $ = m.sibling;
               if ($ !== null) {
-                $.return = m.return, fe = $;
+                $.return = m.return, _e = $;
                 break e;
               }
-              fe = m.return;
+              _e = m.return;
             }
           }
           var M = e.current;
-          for (fe = M; fe !== null; ) {
-            x = fe;
+          for (_e = M; _e !== null; ) {
+            x = _e;
             var j = x.child;
-            if (x.subtreeFlags & 2064 && j !== null) j.return = x, fe = j;
-            else e: for (x = M; fe !== null; ) {
-              if (C = fe, C.flags & 2048) try {
-                switch (C.tag) {
+            if (x.subtreeFlags & 2064 && j !== null) j.return = x, _e = j;
+            else e: for (x = M; _e !== null; ) {
+              if (N = _e, N.flags & 2048) try {
+                switch (N.tag) {
                   case 0:
                   case 11:
                   case 15:
-                    wo(9, C);
+                    ko(9, N);
                 }
               } catch (xe) {
-                et(C, C.return, xe);
+                et(N, N.return, xe);
               }
-              if (C === x) {
-                fe = null;
+              if (N === x) {
+                _e = null;
                 break e;
               }
-              var le = C.sibling;
+              var le = N.sibling;
               if (le !== null) {
-                le.return = C.return, fe = le;
+                le.return = N.return, _e = le;
                 break e;
               }
-              fe = C.return;
+              _e = N.return;
             }
           }
           if (De = d, vr(), Yt && typeof Yt.onPostCommitFiberRoot == "function") try {
-            Yt.onPostCommitFiberRoot(Oi, e);
+            Yt.onPostCommitFiberRoot(Ti, e);
           } catch {
           }
           l = !0;
@@ -15761,39 +15975,39 @@ Error generating stack: ` + m.message + `
     }
     return !1;
   }
-  function lu(e, t, i) {
-    t = gn(i, t), t = Ed(e, t, 1), e = wr(e, t, 1), t = xt(), e !== null && (Rn(e, 1, t), Et(e, t));
+  function cu(e, t, i) {
+    t = gn(i, t), t = Pd(e, t, 1), e = wr(e, t, 1), t = xt(), e !== null && (Ln(e, 1, t), Et(e, t));
   }
   function et(e, t, i) {
-    if (e.tag === 3) lu(e, e, i);
+    if (e.tag === 3) cu(e, e, i);
     else for (; t !== null; ) {
       if (t.tag === 3) {
-        lu(t, e, i);
+        cu(t, e, i);
         break;
       } else if (t.tag === 1) {
         var l = t.stateNode;
         if (typeof t.type.getDerivedStateFromError == "function" || typeof l.componentDidCatch == "function" && (Sr === null || !Sr.has(l))) {
-          e = gn(i, e), e = Pd(t, e, 1), t = wr(t, e, 1), e = xt(), t !== null && (Rn(t, 1, e), Et(t, e));
+          e = gn(i, e), e = Id(t, e, 1), t = wr(t, e, 1), e = xt(), t !== null && (Ln(t, 1, e), Et(t, e));
           break;
         }
       }
       t = t.return;
     }
   }
-  function Xg(e, t, i) {
+  function Jg(e, t, i) {
     var l = e.pingCache;
-    l !== null && l.delete(t), t = xt(), e.pingedLanes |= e.suspendedLanes & i, ct === e && (gt & i) === i && (at === 4 || at === 3 && (gt & 130023424) === gt && 500 > rt() - Ls ? Fr(e, 0) : Rs |= i), Et(e, t);
+    l !== null && l.delete(t), t = xt(), e.pingedLanes |= e.suspendedLanes & i, ct === e && (gt & i) === i && (at === 4 || at === 3 && (gt & 130023424) === gt && 500 > rt() - Os ? Fr(e, 0) : Ls |= i), Et(e, t);
   }
-  function cu(e, t) {
-    t === 0 && (e.mode & 1 ? (t = Mi, Mi <<= 1, !(Mi & 130023424) && (Mi = 4194304)) : t = 1);
+  function du(e, t) {
+    t === 0 && (e.mode & 1 ? (t = Hi, Hi <<= 1, !(Hi & 130023424) && (Hi = 4194304)) : t = 1);
     var i = xt();
-    e = ir(e, t), e !== null && (Rn(e, t, i), Et(e, i));
+    e = ir(e, t), e !== null && (Ln(e, t, i), Et(e, i));
   }
-  function Qg(e) {
+  function Zg(e) {
     var t = e.memoizedState, i = 0;
-    t !== null && (i = t.retryLane), cu(e, i);
+    t !== null && (i = t.retryLane), du(e, i);
   }
-  function Jg(e, t) {
+  function eh(e, t) {
     var i = 0;
     switch (e.tag) {
       case 13:
@@ -15806,39 +16020,39 @@ Error generating stack: ` + m.message + `
       default:
         throw Error(n(314));
     }
-    l !== null && l.delete(t), cu(e, i);
+    l !== null && l.delete(t), du(e, i);
   }
-  var du;
-  du = function(e, t, i) {
+  var uu;
+  uu = function(e, t, i) {
     if (e !== null) if (e.memoizedProps !== t.pendingProps || wt.current) St = !0;
     else {
-      if (!(e.lanes & i) && !(t.flags & 128)) return St = !1, Dg(e, t, i);
+      if (!(e.lanes & i) && !(t.flags & 128)) return St = !1, qg(e, t, i);
       St = !!(e.flags & 131072);
     }
-    else St = !1, Qe && t.flags & 1048576 && Fc(t, io, t.index);
+    else St = !1, Qe && t.flags & 1048576 && Uc(t, oo, t.index);
     switch (t.lanes = 0, t.tag) {
       case 2:
         var l = t.type;
-        vo(e, t), e = t.pendingProps;
-        var d = an(t, ft.current);
-        pn(t, i), d = ds(null, t, l, e, d, i);
-        var m = us();
-        return t.flags |= 1, typeof d == "object" && d !== null && typeof d.render == "function" && d.$$typeof === void 0 ? (t.tag = 1, t.memoizedState = null, t.updateQueue = null, kt(l) ? (m = !0, to(t)) : m = !1, t.memoizedState = d.state !== null && d.state !== void 0 ? d.state : null, ns(t), d.updater = bo, t.stateNode = d, d._reactInternals = t, _s(t, l, e, i), t = xs(null, t, l, !0, m, i)) : (t.tag = 0, Qe && m && Ga(t), vt(null, t, d, i), t = t.child), t;
+        xo(e, t), e = t.pendingProps;
+        var d = an(t, _t.current);
+        pn(t, i), d = us(null, t, l, e, d, i);
+        var m = ps();
+        return t.flags |= 1, typeof d == "object" && d !== null && typeof d.render == "function" && d.$$typeof === void 0 ? (t.tag = 1, t.memoizedState = null, t.updateQueue = null, kt(l) ? (m = !0, ro(t)) : m = !1, t.memoizedState = d.state !== null && d.state !== void 0 ? d.state : null, is(t), d.updater = yo, t.stateNode = d, d._reactInternals = t, bs(t, l, e, i), t = ws(null, t, l, !0, m, i)) : (t.tag = 0, Qe && m && Ya(t), vt(null, t, d, i), t = t.child), t;
       case 16:
         l = t.elementType;
         e: {
-          switch (vo(e, t), e = t.pendingProps, d = l._init, l = d(l._payload), t.type = l, d = t.tag = eh(l), e = Ft(l, e), d) {
+          switch (xo(e, t), e = t.pendingProps, d = l._init, l = d(l._payload), t.type = l, d = t.tag = rh(l), e = Ft(l, e), d) {
             case 0:
-              t = vs(null, t, l, e, i);
+              t = xs(null, t, l, e, i);
               break e;
             case 1:
-              t = Md(null, t, l, e, i);
+              t = Hd(null, t, l, e, i);
               break e;
             case 11:
-              t = zd(null, t, l, e, i);
+              t = Rd(null, t, l, e, i);
               break e;
             case 14:
-              t = Rd(null, t, l, Ft(l.type, e), i);
+              t = Ld(null, t, l, Ft(l.type, e), i);
               break e;
           }
           throw Error(n(
@@ -15849,21 +16063,21 @@ Error generating stack: ` + m.message + `
         }
         return t;
       case 0:
-        return l = t.type, d = t.pendingProps, d = t.elementType === l ? d : Ft(l, d), vs(e, t, l, d, i);
+        return l = t.type, d = t.pendingProps, d = t.elementType === l ? d : Ft(l, d), xs(e, t, l, d, i);
       case 1:
-        return l = t.type, d = t.pendingProps, d = t.elementType === l ? d : Ft(l, d), Md(e, t, l, d, i);
+        return l = t.type, d = t.pendingProps, d = t.elementType === l ? d : Ft(l, d), Hd(e, t, l, d, i);
       case 3:
         e: {
-          if (Hd(t), e === null) throw Error(n(387));
-          l = t.pendingProps, m = t.memoizedState, d = m.element, Jc(e, t), uo(t, l, null, i);
+          if (Bd(t), e === null) throw Error(n(387));
+          l = t.pendingProps, m = t.memoizedState, d = m.element, Zc(e, t), po(t, l, null, i);
           var x = t.memoizedState;
           if (l = x.element, m.isDehydrated) if (m = { element: l, isDehydrated: !1, cache: x.cache, pendingSuspenseBoundaries: x.pendingSuspenseBoundaries, transitions: x.transitions }, t.updateQueue.baseState = m, t.memoizedState = m, t.flags & 256) {
-            d = gn(Error(n(423)), t), t = Bd(e, t, l, i, d);
+            d = gn(Error(n(423)), t), t = Dd(e, t, l, i, d);
             break e;
           } else if (l !== d) {
-            d = gn(Error(n(424)), t), t = Bd(e, t, l, i, d);
+            d = gn(Error(n(424)), t), t = Dd(e, t, l, i, d);
             break e;
-          } else for (zt = _r(t.stateNode.containerInfo.firstChild), Ct = t, Qe = !0, jt = null, i = Xc(t, null, l, i), t.child = i; i; ) i.flags = i.flags & -3 | 4096, i = i.sibling;
+          } else for (zt = fr(t.stateNode.containerInfo.firstChild), Nt = t, Qe = !0, jt = null, i = Qc(t, null, l, i), t.child = i; i; ) i.flags = i.flags & -3 | 4096, i = i.sibling;
           else {
             if (cn(), l === d) {
               t = ar(e, t, i);
@@ -15875,15 +16089,15 @@ Error generating stack: ` + m.message + `
         }
         return t;
       case 5:
-        return td(t), e === null && Xa(t), l = t.type, d = t.pendingProps, m = e !== null ? e.memoizedProps : null, x = d.children, qa(l, d) ? x = null : m !== null && qa(l, m) && (t.flags |= 32), Td(e, t), vt(e, t, x, i), t.child;
+        return rd(t), e === null && Qa(t), l = t.type, d = t.pendingProps, m = e !== null ? e.memoizedProps : null, x = d.children, ja(l, d) ? x = null : m !== null && ja(l, m) && (t.flags |= 32), Md(e, t), vt(e, t, x, i), t.child;
       case 6:
-        return e === null && Xa(t), null;
+        return e === null && Qa(t), null;
       case 13:
-        return Dd(e, t, i);
+        return $d(e, t, i);
       case 4:
-        return is(t, t.stateNode.containerInfo), l = t.pendingProps, e === null ? t.child = dn(t, null, l, i) : vt(e, t, l, i), t.child;
+        return os(t, t.stateNode.containerInfo), l = t.pendingProps, e === null ? t.child = dn(t, null, l, i) : vt(e, t, l, i), t.child;
       case 11:
-        return l = t.type, d = t.pendingProps, d = t.elementType === l ? d : Ft(l, d), zd(e, t, l, d, i);
+        return l = t.type, d = t.pendingProps, d = t.elementType === l ? d : Ft(l, d), Rd(e, t, l, d, i);
       case 7:
         return vt(e, t, t.pendingProps, i), t.child;
       case 8:
@@ -15892,16 +16106,16 @@ Error generating stack: ` + m.message + `
         return vt(e, t, t.pendingProps.children, i), t.child;
       case 10:
         e: {
-          if (l = t.type._context, d = t.pendingProps, m = t.memoizedProps, x = d.value, Ve(so, l._currentValue), l._currentValue = x, m !== null) if (qt(m.value, x)) {
+          if (l = t.type._context, d = t.pendingProps, m = t.memoizedProps, x = d.value, Ve(lo, l._currentValue), l._currentValue = x, m !== null) if (qt(m.value, x)) {
             if (m.children === d.children && !wt.current) {
               t = ar(e, t, i);
               break e;
             }
           } else for (m = t.child, m !== null && (m.return = t); m !== null; ) {
-            var C = m.dependencies;
-            if (C !== null) {
+            var N = m.dependencies;
+            if (N !== null) {
               x = m.child;
-              for (var L = C.firstContext; L !== null; ) {
+              for (var L = N.firstContext; L !== null; ) {
                 if (L.context === l) {
                   if (m.tag === 1) {
                     L = or(-1, i & -i), L.tag = 2;
@@ -15912,11 +16126,11 @@ Error generating stack: ` + m.message + `
                       ne === null ? L.next = L : (L.next = ne.next, ne.next = L), U.pending = L;
                     }
                   }
-                  m.lanes |= i, L = m.alternate, L !== null && (L.lanes |= i), ts(
+                  m.lanes |= i, L = m.alternate, L !== null && (L.lanes |= i), rs(
                     m.return,
                     i,
                     t
-                  ), C.lanes |= i;
+                  ), N.lanes |= i;
                   break;
                 }
                 L = L.next;
@@ -15924,7 +16138,7 @@ Error generating stack: ` + m.message + `
             } else if (m.tag === 10) x = m.type === t.type ? null : m.child;
             else if (m.tag === 18) {
               if (x = m.return, x === null) throw Error(n(341));
-              x.lanes |= i, C = x.alternate, C !== null && (C.lanes |= i), ts(x, i, t), x = m.sibling;
+              x.lanes |= i, N = x.alternate, N !== null && (N.lanes |= i), rs(x, i, t), x = m.sibling;
             } else x = m.child;
             if (x !== null) x.return = m;
             else for (x = m; x !== null; ) {
@@ -15946,32 +16160,32 @@ Error generating stack: ` + m.message + `
       case 9:
         return d = t.type, l = t.pendingProps.children, pn(t, i), d = Tt(d), l = l(d), t.flags |= 1, vt(e, t, l, i), t.child;
       case 14:
-        return l = t.type, d = Ft(l, t.pendingProps), d = Ft(l.type, d), Rd(e, t, l, d, i);
+        return l = t.type, d = Ft(l, t.pendingProps), d = Ft(l.type, d), Ld(e, t, l, d, i);
       case 15:
-        return Ld(e, t, t.type, t.pendingProps, i);
+        return Od(e, t, t.type, t.pendingProps, i);
       case 17:
-        return l = t.type, d = t.pendingProps, d = t.elementType === l ? d : Ft(l, d), vo(e, t), t.tag = 1, kt(l) ? (e = !0, to(t)) : e = !1, pn(t, i), Sd(t, l, d), _s(t, l, d, i), xs(null, t, l, !0, e, i);
+        return l = t.type, d = t.pendingProps, d = t.elementType === l ? d : Ft(l, d), xo(e, t), t.tag = 1, kt(l) ? (e = !0, ro(t)) : e = !1, pn(t, i), Ad(t, l, d), bs(t, l, d, i), ws(null, t, l, !0, e, i);
       case 19:
-        return qd(e, t, i);
+        return jd(e, t, i);
       case 22:
-        return Od(e, t, i);
+        return Td(e, t, i);
     }
     throw Error(n(156, t.tag));
   };
-  function uu(e, t) {
-    return Ul(e, t);
+  function pu(e, t) {
+    return Wl(e, t);
   }
-  function Zg(e, t, i, l) {
+  function th(e, t, i, l) {
     this.tag = e, this.key = i, this.sibling = this.child = this.return = this.stateNode = this.type = this.elementType = null, this.index = 0, this.ref = null, this.pendingProps = t, this.dependencies = this.memoizedState = this.updateQueue = this.memoizedProps = null, this.mode = l, this.subtreeFlags = this.flags = 0, this.deletions = null, this.childLanes = this.lanes = 0, this.alternate = null;
   }
   function Bt(e, t, i, l) {
-    return new Zg(e, t, i, l);
+    return new th(e, t, i, l);
   }
-  function qs(e) {
+  function js(e) {
     return e = e.prototype, !(!e || !e.isReactComponent);
   }
-  function eh(e) {
-    if (typeof e == "function") return qs(e) ? 1 : 0;
+  function rh(e) {
+    if (typeof e == "function") return js(e) ? 1 : 0;
     if (e != null) {
       if (e = e.$$typeof, e === ie) return 11;
       if (e === K) return 14;
@@ -15982,12 +16196,12 @@ Error generating stack: ` + m.message + `
     var i = e.alternate;
     return i === null ? (i = Bt(e.tag, t, e.key, e.mode), i.elementType = e.elementType, i.type = e.type, i.stateNode = e.stateNode, i.alternate = e, e.alternate = i) : (i.pendingProps = t, i.type = e.type, i.flags = 0, i.subtreeFlags = 0, i.deletions = null), i.flags = e.flags & 14680064, i.childLanes = e.childLanes, i.lanes = e.lanes, i.child = e.child, i.memoizedProps = e.memoizedProps, i.memoizedState = e.memoizedState, i.updateQueue = e.updateQueue, t = e.dependencies, i.dependencies = t === null ? null : { lanes: t.lanes, firstContext: t.firstContext }, i.sibling = e.sibling, i.index = e.index, i.ref = e.ref, i;
   }
-  function zo(e, t, i, l, d, m) {
+  function Ro(e, t, i, l, d, m) {
     var x = 2;
-    if (l = e, typeof e == "function") qs(e) && (x = 1);
+    if (l = e, typeof e == "function") js(e) && (x = 1);
     else if (typeof e == "string") x = 5;
     else e: switch (e) {
-      case N:
+      case C:
         return Wr(i.children, d, m, t);
       case D:
         x = 8, d |= 8;
@@ -15999,7 +16213,7 @@ Error generating stack: ` + m.message + `
       case pe:
         return e = Bt(19, i, t, d), e.elementType = pe, e.lanes = m, e;
       case ee:
-        return Ro(i, d, m, t);
+        return Lo(i, d, m, t);
       default:
         if (typeof e == "object" && e !== null) switch (e.$$typeof) {
           case V:
@@ -16025,26 +16239,26 @@ Error generating stack: ` + m.message + `
   function Wr(e, t, i, l) {
     return e = Bt(7, e, l, t), e.lanes = i, e;
   }
-  function Ro(e, t, i, l) {
+  function Lo(e, t, i, l) {
     return e = Bt(22, e, l, t), e.elementType = ee, e.lanes = i, e.stateNode = { isHidden: !1 }, e;
   }
-  function js(e, t, i) {
+  function Fs(e, t, i) {
     return e = Bt(6, e, null, t), e.lanes = i, e;
   }
-  function Fs(e, t, i) {
+  function Us(e, t, i) {
     return t = Bt(4, e.children !== null ? e.children : [], e.key, t), t.lanes = i, t.stateNode = { containerInfo: e.containerInfo, pendingChildren: null, implementation: e.implementation }, t;
   }
-  function th(e, t, i, l, d) {
+  function nh(e, t, i, l, d) {
     this.tag = t, this.containerInfo = e, this.finishedWork = this.pingCache = this.current = this.pendingChildren = null, this.timeoutHandle = -1, this.callbackNode = this.pendingContext = this.context = null, this.callbackPriority = 0, this.eventTimes = fa(0), this.expirationTimes = fa(-1), this.entangledLanes = this.finishedLanes = this.mutableReadLanes = this.expiredLanes = this.pingedLanes = this.suspendedLanes = this.pendingLanes = 0, this.entanglements = fa(0), this.identifierPrefix = l, this.onRecoverableError = d, this.mutableSourceEagerHydrationData = null;
   }
-  function Us(e, t, i, l, d, m, x, C, L) {
-    return e = new th(e, t, i, C, L), t === 1 ? (t = 1, m === !0 && (t |= 8)) : t = 0, m = Bt(3, null, null, t), e.current = m, m.stateNode = e, m.memoizedState = { element: l, isDehydrated: i, cache: null, transitions: null, pendingSuspenseBoundaries: null }, ns(m), e;
+  function Ws(e, t, i, l, d, m, x, N, L) {
+    return e = new nh(e, t, i, N, L), t === 1 ? (t = 1, m === !0 && (t |= 8)) : t = 0, m = Bt(3, null, null, t), e.current = m, m.stateNode = e, m.memoizedState = { element: l, isDehydrated: i, cache: null, transitions: null, pendingSuspenseBoundaries: null }, is(m), e;
   }
-  function rh(e, t, i) {
+  function ih(e, t, i) {
     var l = 3 < arguments.length && arguments[3] !== void 0 ? arguments[3] : null;
     return { $$typeof: E, key: l == null ? null : "" + l, children: e, containerInfo: t, implementation: i };
   }
-  function pu(e) {
+  function mu(e) {
     if (!e) return yr;
     e = e._reactInternals;
     e: {
@@ -16067,18 +16281,18 @@ Error generating stack: ` + m.message + `
     }
     if (e.tag === 1) {
       var i = e.type;
-      if (kt(i)) return $c(e, i, t);
+      if (kt(i)) return qc(e, i, t);
     }
     return t;
   }
-  function mu(e, t, i, l, d, m, x, C, L) {
-    return e = Us(i, l, !0, e, d, m, x, C, L), e.context = pu(null), i = e.current, l = xt(), d = Er(i), m = or(l, d), m.callback = t ?? null, wr(i, m, d), e.current.lanes = d, Rn(e, d, l), Et(e, l), e;
+  function gu(e, t, i, l, d, m, x, N, L) {
+    return e = Ws(i, l, !0, e, d, m, x, N, L), e.context = mu(null), i = e.current, l = xt(), d = Er(i), m = or(l, d), m.callback = t ?? null, wr(i, m, d), e.current.lanes = d, Ln(e, d, l), Et(e, l), e;
   }
-  function Lo(e, t, i, l) {
+  function Oo(e, t, i, l) {
     var d = t.current, m = xt(), x = Er(d);
-    return i = pu(i), t.context === null ? t.context = i : t.pendingContext = i, t = or(m, x), t.payload = { element: e }, l = l === void 0 ? null : l, l !== null && (t.callback = l), e = wr(d, t, x), e !== null && (Vt(e, d, x, m), co(e, d, x)), x;
+    return i = mu(i), t.context === null ? t.context = i : t.pendingContext = i, t = or(m, x), t.payload = { element: e }, l = l === void 0 ? null : l, l !== null && (t.callback = l), e = wr(d, t, x), e !== null && (Vt(e, d, x, m), uo(e, d, x)), x;
   }
-  function Oo(e) {
+  function To(e) {
     if (e = e.current, !e.child) return null;
     switch (e.child.tag) {
       case 5:
@@ -16087,104 +16301,104 @@ Error generating stack: ` + m.message + `
         return e.child.stateNode;
     }
   }
-  function gu(e, t) {
+  function hu(e, t) {
     if (e = e.memoizedState, e !== null && e.dehydrated !== null) {
       var i = e.retryLane;
       e.retryLane = i !== 0 && i < t ? i : t;
     }
   }
-  function Ws(e, t) {
-    gu(e, t), (e = e.alternate) && gu(e, t);
+  function Vs(e, t) {
+    hu(e, t), (e = e.alternate) && hu(e, t);
   }
-  function nh() {
+  function oh() {
     return null;
   }
-  var hu = typeof reportError == "function" ? reportError : function(e) {
+  var _u = typeof reportError == "function" ? reportError : function(e) {
     console.error(e);
   };
-  function Vs(e) {
+  function Gs(e) {
     this._internalRoot = e;
   }
-  To.prototype.render = Vs.prototype.render = function(e) {
+  Mo.prototype.render = Gs.prototype.render = function(e) {
     var t = this._internalRoot;
     if (t === null) throw Error(n(409));
-    Lo(e, t, null, null);
-  }, To.prototype.unmount = Vs.prototype.unmount = function() {
+    Oo(e, t, null, null);
+  }, Mo.prototype.unmount = Gs.prototype.unmount = function() {
     var e = this._internalRoot;
     if (e !== null) {
       this._internalRoot = null;
       var t = e.containerInfo;
       jr(function() {
-        Lo(null, e, null, null);
+        Oo(null, e, null, null);
       }), t[er] = null;
     }
   };
-  function To(e) {
+  function Mo(e) {
     this._internalRoot = e;
   }
-  To.prototype.unstable_scheduleHydration = function(e) {
+  Mo.prototype.unstable_scheduleHydration = function(e) {
     if (e) {
-      var t = Jl();
+      var t = Zl();
       e = { blockedOn: null, target: e, priority: t };
       for (var i = 0; i < gr.length && t !== 0 && t < gr[i].priority; i++) ;
-      gr.splice(i, 0, e), i === 0 && tc(e);
+      gr.splice(i, 0, e), i === 0 && rc(e);
     }
   };
-  function Gs(e) {
+  function Ys(e) {
     return !(!e || e.nodeType !== 1 && e.nodeType !== 9 && e.nodeType !== 11);
   }
-  function Mo(e) {
+  function Ho(e) {
     return !(!e || e.nodeType !== 1 && e.nodeType !== 9 && e.nodeType !== 11 && (e.nodeType !== 8 || e.nodeValue !== " react-mount-point-unstable "));
   }
   function fu() {
   }
-  function ih(e, t, i, l, d) {
+  function ah(e, t, i, l, d) {
     if (d) {
       if (typeof l == "function") {
         var m = l;
         l = function() {
-          var U = Oo(x);
+          var U = To(x);
           m.call(U);
         };
       }
-      var x = mu(t, l, e, 0, null, !1, !1, "", fu);
-      return e._reactRootContainer = x, e[er] = x.current, Vn(e.nodeType === 8 ? e.parentNode : e), jr(), x;
+      var x = gu(t, l, e, 0, null, !1, !1, "", fu);
+      return e._reactRootContainer = x, e[er] = x.current, Gn(e.nodeType === 8 ? e.parentNode : e), jr(), x;
     }
     for (; d = e.lastChild; ) e.removeChild(d);
     if (typeof l == "function") {
-      var C = l;
+      var N = l;
       l = function() {
-        var U = Oo(L);
-        C.call(U);
+        var U = To(L);
+        N.call(U);
       };
     }
-    var L = Us(e, 0, !1, null, null, !1, !1, "", fu);
-    return e._reactRootContainer = L, e[er] = L.current, Vn(e.nodeType === 8 ? e.parentNode : e), jr(function() {
-      Lo(t, L, i, l);
+    var L = Ws(e, 0, !1, null, null, !1, !1, "", fu);
+    return e._reactRootContainer = L, e[er] = L.current, Gn(e.nodeType === 8 ? e.parentNode : e), jr(function() {
+      Oo(t, L, i, l);
     }), L;
   }
-  function Ho(e, t, i, l, d) {
+  function Bo(e, t, i, l, d) {
     var m = i._reactRootContainer;
     if (m) {
       var x = m;
       if (typeof d == "function") {
-        var C = d;
+        var N = d;
         d = function() {
-          var L = Oo(x);
-          C.call(L);
+          var L = To(x);
+          N.call(L);
         };
       }
-      Lo(t, x, e, d);
-    } else x = ih(i, t, e, d, l);
-    return Oo(x);
+      Oo(t, x, e, d);
+    } else x = ah(i, t, e, d, l);
+    return To(x);
   }
-  Xl = function(e) {
+  Ql = function(e) {
     switch (e.tag) {
       case 3:
         var t = e.stateNode;
         if (t.current.memoizedState.isDehydrated) {
-          var i = zn(t.pendingLanes);
-          i !== 0 && (_a(t, i | 1), Et(t, rt()), !(De & 6) && (_n = rt() + 500, vr()));
+          var i = Rn(t.pendingLanes);
+          i !== 0 && (ba(t, i | 1), Et(t, rt()), !(De & 6) && (fn = rt() + 500, vr()));
         }
         break;
       case 13:
@@ -16194,29 +16408,29 @@ Error generating stack: ` + m.message + `
             var d = xt();
             Vt(l, e, 1, d);
           }
-        }), Ws(e, 1);
+        }), Vs(e, 1);
     }
-  }, ba = function(e) {
+  }, ya = function(e) {
     if (e.tag === 13) {
       var t = ir(e, 134217728);
       if (t !== null) {
         var i = xt();
         Vt(t, e, 134217728, i);
       }
-      Ws(e, 134217728);
+      Vs(e, 134217728);
     }
-  }, Ql = function(e) {
+  }, Jl = function(e) {
     if (e.tag === 13) {
       var t = Er(e), i = ir(e, t);
       if (i !== null) {
         var l = xt();
         Vt(i, e, t, l);
       }
-      Ws(e, t);
+      Vs(e, t);
     }
-  }, Jl = function() {
+  }, Zl = function() {
     return Ue;
-  }, Zl = function(e, t) {
+  }, ec = function(e, t) {
     var i = Ue;
     try {
       return Ue = e, t();
@@ -16231,7 +16445,7 @@ Error generating stack: ` + m.message + `
           for (i = i.querySelectorAll("input[name=" + JSON.stringify("" + t) + '][type="radio"]'), t = 0; t < i.length; t++) {
             var l = i[t];
             if (l !== e && l.form === e.form) {
-              var d = Zi(l);
+              var d = eo(l);
               if (!d) throw Error(n(90));
               ze(l), H(l, d);
             }
@@ -16244,65 +16458,65 @@ Error generating stack: ` + m.message + `
       case "select":
         t = i.value, t != null && ve(e, !!i.multiple, t, !1);
     }
-  }, Ci = Bs, Bl = jr;
-  var oh = { usingClientEntryPoint: !1, Events: [Kn, nn, Zi, Pn, Kr, Bs] }, ci = { findFiberByHostInstance: Or, bundleType: 0, version: "18.3.1", rendererPackageName: "react-dom" }, ah = { bundleType: ci.bundleType, version: ci.version, rendererPackageName: ci.rendererPackageName, rendererConfig: ci.rendererConfig, overrideHookState: null, overrideHookStateDeletePath: null, overrideHookStateRenamePath: null, overrideProps: null, overridePropsDeletePath: null, overridePropsRenamePath: null, setErrorHandler: null, setSuspenseHandler: null, scheduleUpdate: null, currentDispatcherRef: b.ReactCurrentDispatcher, findHostInstanceByFiber: function(e) {
-    return e = jl(e), e === null ? null : e.stateNode;
-  }, findFiberByHostInstance: ci.findFiberByHostInstance || nh, findHostInstancesForRefresh: null, scheduleRefresh: null, scheduleRoot: null, setRefreshHandler: null, getCurrentFiber: null, reconcilerVersion: "18.3.1-next-f1338f8080-20240426" };
+  }, zi = Ds, Dl = jr;
+  var sh = { usingClientEntryPoint: !1, Events: [Xn, nn, eo, In, Kr, Ds] }, di = { findFiberByHostInstance: Or, bundleType: 0, version: "18.3.1", rendererPackageName: "react-dom" }, lh = { bundleType: di.bundleType, version: di.version, rendererPackageName: di.rendererPackageName, rendererConfig: di.rendererConfig, overrideHookState: null, overrideHookStateDeletePath: null, overrideHookStateRenamePath: null, overrideProps: null, overridePropsDeletePath: null, overridePropsRenamePath: null, setErrorHandler: null, setSuspenseHandler: null, scheduleUpdate: null, currentDispatcherRef: b.ReactCurrentDispatcher, findHostInstanceByFiber: function(e) {
+    return e = Fl(e), e === null ? null : e.stateNode;
+  }, findFiberByHostInstance: di.findFiberByHostInstance || oh, findHostInstancesForRefresh: null, scheduleRefresh: null, scheduleRoot: null, setRefreshHandler: null, getCurrentFiber: null, reconcilerVersion: "18.3.1-next-f1338f8080-20240426" };
   if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u") {
-    var Bo = __REACT_DEVTOOLS_GLOBAL_HOOK__;
-    if (!Bo.isDisabled && Bo.supportsFiber) try {
-      Oi = Bo.inject(ah), Yt = Bo;
+    var Do = __REACT_DEVTOOLS_GLOBAL_HOOK__;
+    if (!Do.isDisabled && Do.supportsFiber) try {
+      Ti = Do.inject(lh), Yt = Do;
     } catch {
     }
   }
-  return Pt.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = oh, Pt.createPortal = function(e, t) {
+  return Pt.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = sh, Pt.createPortal = function(e, t) {
     var i = 2 < arguments.length && arguments[2] !== void 0 ? arguments[2] : null;
-    if (!Gs(t)) throw Error(n(200));
-    return rh(e, t, null, i);
+    if (!Ys(t)) throw Error(n(200));
+    return ih(e, t, null, i);
   }, Pt.createRoot = function(e, t) {
-    if (!Gs(e)) throw Error(n(299));
-    var i = !1, l = "", d = hu;
-    return t != null && (t.unstable_strictMode === !0 && (i = !0), t.identifierPrefix !== void 0 && (l = t.identifierPrefix), t.onRecoverableError !== void 0 && (d = t.onRecoverableError)), t = Us(e, 1, !1, null, null, i, !1, l, d), e[er] = t.current, Vn(e.nodeType === 8 ? e.parentNode : e), new Vs(t);
+    if (!Ys(e)) throw Error(n(299));
+    var i = !1, l = "", d = _u;
+    return t != null && (t.unstable_strictMode === !0 && (i = !0), t.identifierPrefix !== void 0 && (l = t.identifierPrefix), t.onRecoverableError !== void 0 && (d = t.onRecoverableError)), t = Ws(e, 1, !1, null, null, i, !1, l, d), e[er] = t.current, Gn(e.nodeType === 8 ? e.parentNode : e), new Gs(t);
   }, Pt.findDOMNode = function(e) {
     if (e == null) return null;
     if (e.nodeType === 1) return e;
     var t = e._reactInternals;
     if (t === void 0)
       throw typeof e.render == "function" ? Error(n(188)) : (e = Object.keys(e).join(","), Error(n(268, e)));
-    return e = jl(t), e = e === null ? null : e.stateNode, e;
+    return e = Fl(t), e = e === null ? null : e.stateNode, e;
   }, Pt.flushSync = function(e) {
     return jr(e);
   }, Pt.hydrate = function(e, t, i) {
-    if (!Mo(t)) throw Error(n(200));
-    return Ho(null, e, t, !0, i);
+    if (!Ho(t)) throw Error(n(200));
+    return Bo(null, e, t, !0, i);
   }, Pt.hydrateRoot = function(e, t, i) {
-    if (!Gs(e)) throw Error(n(405));
-    var l = i != null && i.hydratedSources || null, d = !1, m = "", x = hu;
-    if (i != null && (i.unstable_strictMode === !0 && (d = !0), i.identifierPrefix !== void 0 && (m = i.identifierPrefix), i.onRecoverableError !== void 0 && (x = i.onRecoverableError)), t = mu(t, null, e, 1, i ?? null, d, !1, m, x), e[er] = t.current, Vn(e), l) for (e = 0; e < l.length; e++) i = l[e], d = i._getVersion, d = d(i._source), t.mutableSourceEagerHydrationData == null ? t.mutableSourceEagerHydrationData = [i, d] : t.mutableSourceEagerHydrationData.push(
+    if (!Ys(e)) throw Error(n(405));
+    var l = i != null && i.hydratedSources || null, d = !1, m = "", x = _u;
+    if (i != null && (i.unstable_strictMode === !0 && (d = !0), i.identifierPrefix !== void 0 && (m = i.identifierPrefix), i.onRecoverableError !== void 0 && (x = i.onRecoverableError)), t = gu(t, null, e, 1, i ?? null, d, !1, m, x), e[er] = t.current, Gn(e), l) for (e = 0; e < l.length; e++) i = l[e], d = i._getVersion, d = d(i._source), t.mutableSourceEagerHydrationData == null ? t.mutableSourceEagerHydrationData = [i, d] : t.mutableSourceEagerHydrationData.push(
       i,
       d
     );
-    return new To(t);
+    return new Mo(t);
   }, Pt.render = function(e, t, i) {
-    if (!Mo(t)) throw Error(n(200));
-    return Ho(null, e, t, !1, i);
+    if (!Ho(t)) throw Error(n(200));
+    return Bo(null, e, t, !1, i);
   }, Pt.unmountComponentAtNode = function(e) {
-    if (!Mo(e)) throw Error(n(40));
+    if (!Ho(e)) throw Error(n(40));
     return e._reactRootContainer ? (jr(function() {
-      Ho(null, null, e, !1, function() {
+      Bo(null, null, e, !1, function() {
         e._reactRootContainer = null, e[er] = null;
       });
     }), !0) : !1;
-  }, Pt.unstable_batchedUpdates = Bs, Pt.unstable_renderSubtreeIntoContainer = function(e, t, i, l) {
-    if (!Mo(i)) throw Error(n(200));
+  }, Pt.unstable_batchedUpdates = Ds, Pt.unstable_renderSubtreeIntoContainer = function(e, t, i, l) {
+    if (!Ho(i)) throw Error(n(200));
     if (e == null || e._reactInternals === void 0) throw Error(n(38));
-    return Ho(e, t, i, !1, l);
+    return Bo(e, t, i, !1, l);
   }, Pt.version = "18.3.1-next-f1338f8080-20240426", Pt;
 }
-var Eu;
-function ta() {
-  if (Eu) return Xs.exports;
-  Eu = 1;
+var Pu;
+function ra() {
+  if (Pu) return Qs.exports;
+  Pu = 1;
   function o() {
     if (!(typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ > "u" || typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE != "function"))
       try {
@@ -16311,19 +16525,19 @@ function ta() {
         console.error(r);
       }
   }
-  return o(), Xs.exports = hh(), Xs.exports;
+  return o(), Qs.exports = fh(), Qs.exports;
 }
-var Pu;
-function fh() {
-  if (Pu) return $o;
-  Pu = 1;
-  var o = ta();
-  return $o.createRoot = o.createRoot, $o.hydrateRoot = o.hydrateRoot, $o;
+var Iu;
+function bh() {
+  if (Iu) return qo;
+  Iu = 1;
+  var o = ra();
+  return qo.createRoot = o.createRoot, qo.hydrateRoot = o.hydrateRoot, qo;
 }
-var _h = fh();
-const bh = '.react-grid-layout{position:relative;transition:height .2s ease}.react-grid-item{transition:all .2s ease;transition-property:left,top,width,height}.react-grid-item img{pointer-events:none;user-select:none}.react-grid-item.cssTransforms{transition-property:transform,width,height}.react-grid-item.resizing{transition:none;z-index:1;will-change:width,height}.react-grid-item.react-draggable-dragging{transition:none;z-index:3;will-change:transform}.react-grid-item.dropping{visibility:hidden}.react-grid-item.react-grid-placeholder{background:red;opacity:.2;transition-duration:.1s;z-index:2;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none}.react-grid-item.react-grid-placeholder.placeholder-resizing{transition:none}.react-grid-item>.react-resizable-handle{position:absolute;width:20px;height:20px}.react-grid-item>.react-resizable-handle:after{content:"";position:absolute;right:3px;bottom:3px;width:5px;height:5px;border-right:2px solid rgba(0,0,0,.4);border-bottom:2px solid rgba(0,0,0,.4)}.react-resizable-hide>.react-resizable-handle{display:none}.react-grid-item>.react-resizable-handle.react-resizable-handle-sw{bottom:0;left:0;cursor:sw-resize;transform:rotate(90deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-se{bottom:0;right:0;cursor:se-resize}.react-grid-item>.react-resizable-handle.react-resizable-handle-nw{top:0;left:0;cursor:nw-resize;transform:rotate(180deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-ne{top:0;right:0;cursor:ne-resize;transform:rotate(270deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-w,.react-grid-item>.react-resizable-handle.react-resizable-handle-e{top:50%;margin-top:-10px;cursor:ew-resize}.react-grid-item>.react-resizable-handle.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-n,.react-grid-item>.react-resizable-handle.react-resizable-handle-s{left:50%;margin-left:-10px;cursor:ns-resize}.react-grid-item>.react-resizable-handle.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}', yh = ".react-resizable{position:relative}.react-resizable-handle{position:absolute;width:20px;height:20px;background-repeat:no-repeat;background-origin:content-box;box-sizing:border-box;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMDAwMDAiLz48L2c+PC9zdmc+);background-position:bottom right;padding:0 3px 3px 0}.react-resizable-handle-sw{bottom:0;left:0;cursor:sw-resize;transform:rotate(90deg)}.react-resizable-handle-se{bottom:0;right:0;cursor:se-resize}.react-resizable-handle-nw{top:0;left:0;cursor:nw-resize;transform:rotate(180deg)}.react-resizable-handle-ne{top:0;right:0;cursor:ne-resize;transform:rotate(270deg)}.react-resizable-handle-w,.react-resizable-handle-e{top:50%;margin-top:-10px;cursor:ew-resize}.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-resizable-handle-n,.react-resizable-handle-s{left:50%;margin-left:-10px;cursor:ns-resize}.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}", vh = "#widget-grid.grid{display:block!important;grid-template-columns:none!important;grid-auto-flow:initial!important}.argus-dashboard{min-height:100%}.argus-dashboard__toolbar{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px;padding:12px 16px}.argus-dashboard__toolbar button,.argus-widget__drag-handle,.argus-widget__options summary,.argus-widget__menu button{border:1px solid rgba(255,255,255,.12);border-radius:12px;color:#fff!important;background:#ffffff14;padding:9px 13px}.argus-dashboard__toolbar button:focus-visible,.argus-widget__drag-handle:focus-visible,.argus-widget__options summary:focus-visible,.argus-widget__menu button:focus-visible{outline:3px solid #76b7ff;outline-offset:2px}.argus-dashboard__feedback{min-height:20px;padding:0 18px;color:#b9d9ff;text-align:right;font-size:12px}.argus-dashboard__visibility{display:flex;flex-wrap:wrap;gap:6px}.argus-dashboard-grid .react-grid-item{transition:transform .18s cubic-bezier(.2,.8,.2,1),width .18s cubic-bezier(.2,.8,.2,1),height .18s cubic-bezier(.2,.8,.2,1)}.argus-dashboard-grid .react-grid-item.react-draggable-dragging{z-index:100;opacity:.98;transition:none}.argus-dashboard-grid .react-grid-placeholder{border:2px solid rgb(94 168 255 / 78%);border-radius:24px;background:linear-gradient(135deg,#5ea8ff33,#8468ff1f);box-shadow:inset 0 0 0 1px #ffffff14,0 12px 35px #0000002e}.argus-widget{position:relative;width:100%;height:100%;overflow:hidden;border:1px solid var(--v2066-border,rgba(255,255,255,.08))!important;border-radius:24px;background:var(--v2066-glass,rgba(255,255,255,.06))!important;box-shadow:0 14px 34px #0000002e,inset 0 1px #ffffff0f;backdrop-filter:blur(24px) saturate(145%)!important;-webkit-backdrop-filter:blur(24px) saturate(145%)!important}.argus-widget .panel{background:transparent!important;border:none!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}.argus-widget__edit-header{display:none;align-items:center;gap:10px;padding:8px 12px}.argus-dashboard--editing .argus-widget__edit-header{display:flex}.argus-widget__edit-header>strong{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.argus-widget__drag-handle{width:44px;height:40px;cursor:grab;touch-action:none}.argus-widget__options{position:relative}.argus-widget__options summary{display:grid;width:38px;height:38px;box-sizing:border-box;place-items:center;cursor:pointer;list-style:none}.argus-widget__options summary::-webkit-details-marker{display:none}.argus-widget__menu{position:absolute;right:0;top:44px;z-index:140;display:grid;min-width:210px;gap:8px;padding:12px;border:1px solid rgba(255,255,255,.14);border-radius:16px;background:#0f1623f5;box-shadow:0 18px 46px #00000061}.argus-widget__menu>div{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.argus-widget__menu button{padding:7px}.argus-widget__menu button.active{background:#3478d4}.argus-widget__content{height:100%;overflow:auto}.argus-dashboard--editing .argus-widget__content{height:calc(100% - 56px)}.argus-widget__content>.panel{display:block!important;width:100%!important;height:100%!important;box-sizing:border-box!important;grid-column:auto!important;grid-row:auto!important}.argus-dashboard-grid .react-resizable-handle{display:none!important;width:34px;height:34px;right:8px;bottom:8px;border:1px solid rgba(255,255,255,.18);border-radius:10px;background:#131925db}.argus-dashboard--editing .react-resizable-handle{display:block!important}.argus-dashboard--editing .react-resizable-handle:after{width:10px;height:10px;right:9px;bottom:9px;border-color:#9bc7ff}.alarm-configuration-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:16px}@media (max-width:760px){.alarm-configuration-grid{grid-template-columns:minmax(0,1fr)}.argus-dashboard__toolbar{justify-content:stretch}.argus-dashboard__toolbar>button{flex:1}.argus-widget__menu{position:fixed;inset:auto 16px 16px}}@media (prefers-reduced-motion:reduce){.argus-dashboard-grid .react-grid-item,.argus-dashboard-grid .react-resizable-handle{transition:none!important}}";
+var yh = bh();
+const vh = '.react-grid-layout{position:relative;transition:height .2s ease}.react-grid-item{transition:all .2s ease;transition-property:left,top,width,height}.react-grid-item img{pointer-events:none;user-select:none}.react-grid-item.cssTransforms{transition-property:transform,width,height}.react-grid-item.resizing{transition:none;z-index:1;will-change:width,height}.react-grid-item.react-draggable-dragging{transition:none;z-index:3;will-change:transform}.react-grid-item.dropping{visibility:hidden}.react-grid-item.react-grid-placeholder{background:red;opacity:.2;transition-duration:.1s;z-index:2;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none}.react-grid-item.react-grid-placeholder.placeholder-resizing{transition:none}.react-grid-item>.react-resizable-handle{position:absolute;width:20px;height:20px}.react-grid-item>.react-resizable-handle:after{content:"";position:absolute;right:3px;bottom:3px;width:5px;height:5px;border-right:2px solid rgba(0,0,0,.4);border-bottom:2px solid rgba(0,0,0,.4)}.react-resizable-hide>.react-resizable-handle{display:none}.react-grid-item>.react-resizable-handle.react-resizable-handle-sw{bottom:0;left:0;cursor:sw-resize;transform:rotate(90deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-se{bottom:0;right:0;cursor:se-resize}.react-grid-item>.react-resizable-handle.react-resizable-handle-nw{top:0;left:0;cursor:nw-resize;transform:rotate(180deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-ne{top:0;right:0;cursor:ne-resize;transform:rotate(270deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-w,.react-grid-item>.react-resizable-handle.react-resizable-handle-e{top:50%;margin-top:-10px;cursor:ew-resize}.react-grid-item>.react-resizable-handle.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-n,.react-grid-item>.react-resizable-handle.react-resizable-handle-s{left:50%;margin-left:-10px;cursor:ns-resize}.react-grid-item>.react-resizable-handle.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}', xh = ".react-resizable{position:relative}.react-resizable-handle{position:absolute;width:20px;height:20px;background-repeat:no-repeat;background-origin:content-box;box-sizing:border-box;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMDAwMDAiLz48L2c+PC9zdmc+);background-position:bottom right;padding:0 3px 3px 0}.react-resizable-handle-sw{bottom:0;left:0;cursor:sw-resize;transform:rotate(90deg)}.react-resizable-handle-se{bottom:0;right:0;cursor:se-resize}.react-resizable-handle-nw{top:0;left:0;cursor:nw-resize;transform:rotate(180deg)}.react-resizable-handle-ne{top:0;right:0;cursor:ne-resize;transform:rotate(270deg)}.react-resizable-handle-w,.react-resizable-handle-e{top:50%;margin-top:-10px;cursor:ew-resize}.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-resizable-handle-n,.react-resizable-handle-s{left:50%;margin-left:-10px;cursor:ns-resize}.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}", wh = "#widget-grid.grid{display:block!important;grid-template-columns:none!important;grid-auto-flow:initial!important}.argus-dashboard{min-height:100%}.argus-dashboard__toolbar{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px;padding:12px 16px}.argus-dashboard__toolbar button,.argus-widget__drag-handle,.argus-widget__options summary,.argus-widget__menu button{border:1px solid rgba(255,255,255,.12);border-radius:12px;color:#fff!important;background:#ffffff14;padding:9px 13px}.argus-dashboard__toolbar button:focus-visible,.argus-widget__drag-handle:focus-visible,.argus-widget__options summary:focus-visible,.argus-widget__menu button:focus-visible{outline:3px solid #76b7ff;outline-offset:2px}.argus-dashboard__feedback{min-height:20px;padding:0 18px;color:#b9d9ff;text-align:right;font-size:12px}.argus-dashboard__visibility{display:flex;flex-wrap:wrap;gap:6px}.argus-dashboard-grid .react-grid-item{transition:transform .18s cubic-bezier(.2,.8,.2,1),width .18s cubic-bezier(.2,.8,.2,1),height .18s cubic-bezier(.2,.8,.2,1)}.argus-dashboard-grid .react-grid-item.react-draggable-dragging{z-index:100;opacity:.98;transition:none}.argus-dashboard-grid .react-grid-placeholder{border:2px solid rgb(94 168 255 / 78%);border-radius:24px;background:linear-gradient(135deg,#5ea8ff33,#8468ff1f);box-shadow:inset 0 0 0 1px #ffffff14,0 12px 35px #0000002e}.argus-widget{position:relative;width:100%;height:100%;overflow:hidden;border:1px solid var(--v2066-border,rgba(255,255,255,.08))!important;border-radius:24px;background:var(--v2066-glass,rgba(255,255,255,.06))!important;box-shadow:0 14px 34px #0000002e,inset 0 1px #ffffff0f;backdrop-filter:blur(24px) saturate(145%)!important;-webkit-backdrop-filter:blur(24px) saturate(145%)!important}.argus-widget .panel{background:transparent!important;border:none!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}.argus-widget__edit-header{display:none;align-items:center;gap:10px;padding:8px 12px}.argus-dashboard--editing .argus-widget__edit-header{display:flex}.argus-widget__edit-header>strong{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.argus-widget__drag-handle{width:44px;height:40px;cursor:grab;touch-action:none}.argus-widget__options{position:relative}.argus-widget__options summary{display:grid;width:38px;height:38px;box-sizing:border-box;place-items:center;cursor:pointer;list-style:none}.argus-widget__options summary::-webkit-details-marker{display:none}.argus-widget__menu{position:absolute;right:0;top:44px;z-index:140;display:grid;min-width:210px;gap:8px;padding:12px;border:1px solid rgba(255,255,255,.14);border-radius:16px;background:#0f1623f5;box-shadow:0 18px 46px #00000061}.argus-widget__menu>div{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.argus-widget__menu button{padding:7px}.argus-widget__menu button.active{background:#3478d4}.argus-widget__content{height:100%;overflow:auto}.argus-dashboard--editing .argus-widget__content{height:calc(100% - 56px)}.argus-widget__content>.panel{display:block!important;width:100%!important;height:100%!important;box-sizing:border-box!important;grid-column:auto!important;grid-row:auto!important}.argus-dashboard-grid .react-resizable-handle{display:none!important;width:34px;height:34px;right:8px;bottom:8px;border:1px solid rgba(255,255,255,.18);border-radius:10px;background:#131925db}.argus-dashboard--editing .react-resizable-handle{display:block!important}.argus-dashboard--editing .react-resizable-handle:after{width:10px;height:10px;right:9px;bottom:9px;border-color:#9bc7ff}.alarm-configuration-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:16px}@media (max-width:760px){.alarm-configuration-grid{grid-template-columns:minmax(0,1fr)}.argus-dashboard__toolbar{justify-content:stretch}.argus-dashboard__toolbar>button{flex:1}.argus-widget__menu{position:fixed;inset:auto 16px 16px}}@media (prefers-reduced-motion:reduce){.argus-dashboard-grid .react-grid-item,.argus-dashboard-grid .react-resizable-handle{transition:none!important}}";
 var ut = It();
-class Iu extends ut.Component {
+class Cu extends ut.Component {
   state = {
     hasError: !1,
     error: null
@@ -16335,19 +16549,19 @@ class Iu extends ut.Component {
     console.error("ArgusDashboard ErrorBoundary caught an error:", r, n);
   }
   render() {
-    return this.state.hasError ? this.props.fallback ? this.props.fallback : /* @__PURE__ */ Be.jsxs("div", { style: { padding: "20px", color: "#ff6b6b", background: "rgba(0,0,0,0.5)", borderRadius: "8px", margin: "10px" }, children: [
-      /* @__PURE__ */ Be.jsx("h2", { style: { fontSize: "16px", marginBottom: "8px" }, children: "⚠️ Error del Widget" }),
-      /* @__PURE__ */ Be.jsx("p", { style: { fontSize: "12px", opacity: 0.8 }, children: "Un componente falló al renderizar." }),
-      /* @__PURE__ */ Be.jsx("pre", { style: { fontSize: "10px", marginTop: "10px", whiteSpace: "pre-wrap", opacity: 0.6 }, children: this.state.error?.message })
+    return this.state.hasError ? this.props.fallback ? this.props.fallback : /* @__PURE__ */ Te.jsxs("div", { style: { padding: "20px", color: "#ff6b6b", background: "rgba(0,0,0,0.5)", borderRadius: "8px", margin: "10px" }, children: [
+      /* @__PURE__ */ Te.jsx("h2", { style: { fontSize: "16px", marginBottom: "8px" }, children: "⚠️ Error del Widget" }),
+      /* @__PURE__ */ Te.jsx("p", { style: { fontSize: "12px", opacity: 0.8 }, children: "Un componente falló al renderizar." }),
+      /* @__PURE__ */ Te.jsx("pre", { style: { fontSize: "10px", marginTop: "10px", whiteSpace: "pre-wrap", opacity: 0.6 }, children: this.state.error?.message })
     ] }) : this.props.children;
   }
 }
-var Zs = { exports: {} }, pi = {}, ki = { exports: {} }, xh = ki.exports, Nu;
-function zl() {
+var el = { exports: {} }, mi = {}, Si = { exports: {} }, kh = Si.exports, Nu;
+function Rl() {
   return Nu || (Nu = 1, function(o, r) {
     (function(n, a) {
       a(r);
-    })(xh, function(n) {
+    })(kh, function(n) {
       function a(J) {
         return function(Ee, Ie, ze, $e, Fe, tt, O) {
           return J(Ee, Ie, O);
@@ -16382,7 +16596,7 @@ function zl() {
       function g(J, ue) {
         return J === ue || J !== J && ue !== ue;
       }
-      var _ = "[object Arguments]", f = "[object Boolean]", h = "[object Date]", v = "[object RegExp]", P = "[object Map]", R = "[object Number]", I = "[object Object]", A = "[object Set]", S = "[object String]", y = Object.prototype.toString;
+      var f = "[object Arguments]", _ = "[object Boolean]", h = "[object Date]", v = "[object RegExp]", P = "[object Map]", R = "[object Number]", I = "[object Object]", A = "[object Set]", S = "[object String]", y = Object.prototype.toString;
       function w(J) {
         var ue = J.areArraysEqual, Ee = J.areDatesEqual, Ie = J.areMapsEqual, ze = J.areObjectsEqual, $e = J.areRegExpsEqual, Fe = J.areSetsEqual, tt = J.createIsNestedEqual, O = tt(H);
         function H(B, X, de) {
@@ -16395,8 +16609,8 @@ function zl() {
           var ve = Array.isArray(B), Ae = Array.isArray(X);
           if (ve || Ae)
             return ve === Ae && ue(B, X, O, de);
-          var Ce = y.call(B);
-          return Ce !== y.call(X) ? !1 : Ce === h ? Ee(B, X, O, de) : Ce === v ? $e(B, X, O, de) : Ce === P ? Ie(B, X, O, de) : Ce === A ? Fe(B, X, O, de) : Ce === I || Ce === _ ? p(B) || p(X) ? !1 : ze(B, X, O, de) : Ce === f || Ce === R || Ce === S ? g(B.valueOf(), X.valueOf()) : !1;
+          var Ne = y.call(B);
+          return Ne !== y.call(X) ? !1 : Ne === h ? Ee(B, X, O, de) : Ne === v ? $e(B, X, O, de) : Ne === P ? Ie(B, X, O, de) : Ne === A ? Fe(B, X, O, de) : Ne === I || Ne === f ? p(B) || p(X) ? !1 : ze(B, X, O, de) : Ne === _ || Ne === R || Ne === S ? g(B.valueOf(), X.valueOf()) : !1;
         }
         return H;
       }
@@ -16413,7 +16627,7 @@ function zl() {
       function E(J, ue) {
         return g(J.valueOf(), ue.valueOf());
       }
-      function N(J, ue, Ee, Ie) {
+      function C(J, ue, Ee, Ie) {
         var ze = J.size === ue.size;
         if (!ze)
           return !1;
@@ -16429,7 +16643,7 @@ function zl() {
           }
         }), ze;
       }
-      var D = s(N), F = "_owner", V = Object.prototype.hasOwnProperty;
+      var D = s(C), F = "_owner", V = Object.prototype.hasOwnProperty;
       function Q(J, ue, Ee, Ie) {
         var ze = Object.keys(J), $e = ze.length;
         if (Object.keys(ue).length !== $e)
@@ -16468,7 +16682,7 @@ function zl() {
       var K = s(pe), te = Object.freeze({
         areArraysEqual: b,
         areDatesEqual: E,
-        areMapsEqual: N,
+        areMapsEqual: C,
         areObjectsEqual: Q,
         areRegExpsEqual: oe,
         areSetsEqual: pe,
@@ -16495,15 +16709,15 @@ function zl() {
       function me(J, ue) {
         return W(J, ue, /* @__PURE__ */ new WeakMap());
       }
-      var _e = w(c(ee, {
+      var fe = w(c(ee, {
         createIsNestedEqual: function() {
           return g;
         }
       }));
       function we(J, ue) {
-        return _e(J, ue, /* @__PURE__ */ new WeakMap());
+        return fe(J, ue, /* @__PURE__ */ new WeakMap());
       }
-      function Ne(J) {
+      function Ce(J) {
         return w(c(te, J(te)));
       }
       function Oe(J) {
@@ -16512,14 +16726,14 @@ function zl() {
           return ze === void 0 && (ze = /* @__PURE__ */ new WeakMap()), ue(Ee, Ie, ze);
         };
       }
-      n.circularDeepEqual = me, n.circularShallowEqual = we, n.createCustomCircularEqual = Oe, n.createCustomEqual = Ne, n.deepEqual = ce, n.sameValueZeroEqual = g, n.shallowEqual = T, Object.defineProperty(n, "__esModule", { value: !0 });
+      n.circularDeepEqual = me, n.circularShallowEqual = we, n.createCustomCircularEqual = Oe, n.createCustomEqual = Ce, n.deepEqual = ce, n.sameValueZeroEqual = g, n.shallowEqual = T, Object.defineProperty(n, "__esModule", { value: !0 });
     });
-  }(ki, ki.exports)), ki.exports;
+  }(Si, Si.exports)), Si.exports;
 }
-var qo = { exports: {} }, Cu;
-function la() {
-  if (Cu) return qo.exports;
-  Cu = 1;
+var jo = { exports: {} }, zu;
+function ca() {
+  if (zu) return jo.exports;
+  zu = 1;
   function o(n) {
     var a, s, c = "";
     if (typeof n == "string" || typeof n == "number") c += n;
@@ -16533,21 +16747,21 @@ function la() {
     for (var n, a, s = 0, c = "", u = arguments.length; s < u; s++) (n = arguments[s]) && (a = o(n)) && (c && (c += " "), c += a);
     return c;
   }
-  return qo.exports = r, qo.exports.clsx = r, qo.exports;
+  return jo.exports = r, jo.exports.clsx = r, jo.exports;
 }
-var He = {}, el, zu;
-function wh() {
-  return zu || (zu = 1, el = function(r, n, a) {
+var Be = {}, tl, Ru;
+function Sh() {
+  return Ru || (Ru = 1, tl = function(r, n, a) {
     return r === n ? !0 : r.className === n.className && a(r.style, n.style) && r.width === n.width && r.autoSize === n.autoSize && r.cols === n.cols && r.draggableCancel === n.draggableCancel && r.draggableHandle === n.draggableHandle && a(r.verticalCompact, n.verticalCompact) && a(r.compactType, n.compactType) && a(r.layout, n.layout) && a(r.margin, n.margin) && a(r.containerPadding, n.containerPadding) && r.rowHeight === n.rowHeight && r.maxRows === n.maxRows && r.isBounded === n.isBounded && r.isDraggable === n.isDraggable && r.isResizable === n.isResizable && r.allowOverlap === n.allowOverlap && r.preventCollision === n.preventCollision && r.useCSSTransforms === n.useCSSTransforms && r.transformScale === n.transformScale && r.isDroppable === n.isDroppable && a(r.resizeHandles, n.resizeHandles) && a(r.resizeHandle, n.resizeHandle) && r.onLayoutChange === n.onLayoutChange && r.onDragStart === n.onDragStart && r.onDrag === n.onDrag && r.onDragStop === n.onDragStop && r.onResizeStart === n.onResizeStart && r.onResize === n.onResize && r.onResizeStop === n.onResizeStop && r.onDrop === n.onDrop && a(r.droppingItem, n.droppingItem) && a(r.innerRef, n.innerRef);
-  }), el;
+  }), tl;
 }
-var Ru;
-function An() {
-  if (Ru) return He;
-  Ru = 1, Object.defineProperty(He, "__esModule", {
+var Lu;
+function En() {
+  if (Lu) return Be;
+  Lu = 1, Object.defineProperty(Be, "__esModule", {
     value: !0
-  }), He.bottom = g, He.childrenEqual = P, He.cloneLayout = _, He.cloneLayoutItem = v, He.collides = I, He.compact = A, He.compactItem = w, He.compactType = $e, He.correctBounds = b, He.fastPositionEqual = R, He.fastRGLPropsEqual = void 0, He.getAllCollisions = N, He.getFirstCollision = E, He.getLayoutItem = k, He.getStatics = D, He.modifyLayout = f, He.moveElement = F, He.moveElementAwayFromCollision = V, He.noop = void 0, He.perc = Q, He.resizeItemInDirection = we, He.setTopLeft = Oe, He.setTransform = Ne, He.sortLayoutItems = J, He.sortLayoutItemsByColRow = Ee, He.sortLayoutItemsByRowCol = ue, He.synchronizeLayoutWithChildren = Ie, He.validateLayout = ze, He.withLayoutItem = h;
-  var o = /* @__PURE__ */ zl(), r = n(It());
+  }), Be.bottom = g, Be.childrenEqual = P, Be.cloneLayout = f, Be.cloneLayoutItem = v, Be.collides = I, Be.compact = A, Be.compactItem = w, Be.compactType = $e, Be.correctBounds = b, Be.fastPositionEqual = R, Be.fastRGLPropsEqual = void 0, Be.getAllCollisions = C, Be.getFirstCollision = E, Be.getLayoutItem = k, Be.getStatics = D, Be.modifyLayout = _, Be.moveElement = F, Be.moveElementAwayFromCollision = V, Be.noop = void 0, Be.perc = Q, Be.resizeItemInDirection = we, Be.setTopLeft = Oe, Be.setTransform = Ce, Be.sortLayoutItems = J, Be.sortLayoutItemsByColRow = Ee, Be.sortLayoutItemsByRowCol = ue, Be.synchronizeLayoutWithChildren = Ie, Be.validateLayout = ze, Be.withLayoutItem = h;
+  var o = /* @__PURE__ */ Rl(), r = n(It());
   function n(O) {
     return O && O.__esModule ? O : { default: O };
   }
@@ -16595,13 +16809,13 @@ function An() {
       B = O[X].y + O[X].h, B > H && (H = B);
     return H;
   }
-  function _(O) {
+  function f(O) {
     const H = Array(O.length);
     for (let B = 0, X = O.length; B < X; B++)
       H[B] = v(O[B]);
     return H;
   }
-  function f(O, H) {
+  function _(O, H) {
     const B = Array(O.length);
     for (let X = 0, de = O.length; X < de; X++)
       H.i === O[X].i ? B[X] = H : B[X] = O[X];
@@ -16609,7 +16823,7 @@ function An() {
   }
   function h(O, H, B) {
     let X = k(O, H);
-    return X ? (X = B(v(X)), O = f(O, X), [O, X]) : [O, null];
+    return X ? (X = B(v(X)), O = _(O, X), [O, X]) : [O, null];
   }
   function v(O) {
     return {
@@ -16634,7 +16848,7 @@ function An() {
   function P(O, H) {
     return (0, o.deepEqual)(r.default.Children.map(O, (B) => B?.key), r.default.Children.map(H, (B) => B?.key)) && (0, o.deepEqual)(r.default.Children.map(O, (B) => B?.props["data-grid"]), r.default.Children.map(H, (B) => B?.props["data-grid"]));
   }
-  He.fastRGLPropsEqual = wh();
+  Be.fastRGLPropsEqual = Sh();
   function R(O, H) {
     return O.left === H.left && O.top === H.top && O.width === H.width && O.height === H.height;
   }
@@ -16644,12 +16858,12 @@ function An() {
   function A(O, H, B, X) {
     const de = D(O);
     let ve = g(de);
-    const Ae = J(O, H), Ce = Array(O.length);
+    const Ae = J(O, H), Ne = Array(O.length);
     for (let Re = 0, We = Ae.length; Re < We; Re++) {
       let Ke = v(Ae[Re]);
-      Ke.static || (Ke = w(de, Ke, H, B, Ae, X, ve), ve = Math.max(ve, Ke.y + Ke.h), de.push(Ke)), Ce[O.indexOf(Ae[Re])] = Ke, Ke.moved = !1;
+      Ke.static || (Ke = w(de, Ke, H, B, Ae, X, ve), ve = Math.max(ve, Ke.y + Ke.h), de.push(Ke)), Ne[O.indexOf(Ae[Re])] = Ke, Ke.moved = !1;
     }
-    return Ce;
+    return Ne;
   }
   const S = {
     x: "w",
@@ -16660,17 +16874,17 @@ function An() {
     H[X] += 1;
     const ve = O.map((Ae) => Ae.i).indexOf(H.i);
     for (let Ae = ve + 1; Ae < O.length; Ae++) {
-      const Ce = O[Ae];
-      if (!Ce.static) {
-        if (Ce.y > H.y + H.h) break;
-        I(H, Ce) && y(O, Ce, B + H[de], X);
+      const Ne = O[Ae];
+      if (!Ne.static) {
+        if (Ne.y > H.y + H.h) break;
+        I(H, Ne) && y(O, Ne, B + H[de], X);
       }
     }
     H[X] = B;
   }
   function w(O, H, B, X, de, ve, Ae) {
-    const Ce = B === "vertical", Re = B === "horizontal";
-    if (Ce)
+    const Ne = B === "vertical", Re = B === "horizontal";
+    if (Ne)
       for (typeof Ae == "number" ? H.y = Math.min(Ae, H.y) : H.y = Math.min(g(O), H.y); H.y > 0 && !E(O, H); )
         H.y--;
     else if (Re)
@@ -16702,52 +16916,52 @@ function An() {
     for (let B = 0, X = O.length; B < X; B++)
       if (I(O[B], H)) return O[B];
   }
-  function N(O, H) {
+  function C(O, H) {
     return O.filter((B) => I(B, H));
   }
   function D(O) {
     return O.filter((H) => H.static);
   }
-  function F(O, H, B, X, de, ve, Ae, Ce, Re) {
+  function F(O, H, B, X, de, ve, Ae, Ne, Re) {
     if (H.static && H.isDraggable !== !0 || H.y === X && H.x === B) return O;
     "Moving element ".concat(H.i, " to [").concat(String(B), ",").concat(String(X), "] from [").concat(H.x, ",").concat(H.y, "]");
     const We = H.x, Ke = H.y;
     typeof B == "number" && (H.x = B), typeof X == "number" && (H.y = X), H.moved = !0;
     let st = J(O, Ae);
     (Ae === "vertical" && typeof X == "number" ? Ke >= X : Ae === "horizontal" && typeof B == "number" ? We >= B : !1) && (st = st.reverse());
-    const q = N(st, H), Y = q.length > 0;
+    const q = C(st, H), Y = q.length > 0;
     if (Y && Re)
-      return _(O);
+      return f(O);
     if (Y && ve)
       return "Collision prevented on ".concat(H.i, ", reverting."), H.x = We, H.y = Ke, H.moved = !1, O;
     for (let se = 0, ge = q.length; se < ge; se++) {
-      const Te = q[se];
-      "Resolving collision between ".concat(H.i, " at [").concat(H.x, ",").concat(H.y, "] and ").concat(Te.i, " at [").concat(Te.x, ",").concat(Te.y, "]"), !Te.moved && (Te.static ? O = V(O, Te, H, de, Ae) : O = V(O, H, Te, de, Ae));
+      const Me = q[se];
+      "Resolving collision between ".concat(H.i, " at [").concat(H.x, ",").concat(H.y, "] and ").concat(Me.i, " at [").concat(Me.x, ",").concat(Me.y, "]"), !Me.moved && (Me.static ? O = V(O, Me, H, de, Ae) : O = V(O, H, Me, de, Ae));
     }
     return O;
   }
   function V(O, H, B, X, de, ve) {
-    const Ae = de === "horizontal", Ce = de === "vertical", Re = H.static;
+    const Ae = de === "horizontal", Ne = de === "vertical", Re = H.static;
     if (X) {
       X = !1;
       const st = {
         x: Ae ? Math.max(H.x - B.w, 0) : B.x,
-        y: Ce ? Math.max(H.y - B.h, 0) : B.y,
+        y: Ne ? Math.max(H.y - B.h, 0) : B.y,
         w: B.w,
         h: B.h,
         i: "-1"
       }, z = E(O, st), q = z && z.y + z.h > H.y, Y = z && H.x + H.w > z.x;
       if (z) {
-        if (q && Ce)
+        if (q && Ne)
           return F(O, B, void 0, B.y + 1, X, Re, de);
         if (q && de == null)
           return H.y = B.y, B.y = B.y + B.h, O;
         if (Y && Ae)
           return F(O, H, B.x, void 0, X, Re, de);
-      } else return "Doing reverse collision on ".concat(B.i, " up to [").concat(st.x, ",").concat(st.y, "]."), F(O, B, Ae ? st.x : void 0, Ce ? st.y : void 0, X, Re, de);
+      } else return "Doing reverse collision on ".concat(B.i, " up to [").concat(st.x, ",").concat(st.y, "]."), F(O, B, Ae ? st.x : void 0, Ne ? st.y : void 0, X, Re, de);
     }
-    const We = Ae ? B.x + 1 : void 0, Ke = Ce ? B.y + 1 : void 0;
-    return We == null && Ke == null ? O : F(O, B, Ae ? B.x + 1 : void 0, Ce ? B.y + 1 : void 0, X, Re, de);
+    const We = Ae ? B.x + 1 : void 0, Ke = Ne ? B.y + 1 : void 0;
+    return We == null && Ke == null ? O : F(O, B, Ae ? B.x + 1 : void 0, Ne ? B.y + 1 : void 0, X, Re, de);
   }
   function Q(O) {
     return O * 100 + "%";
@@ -16804,7 +17018,7 @@ function An() {
       height: oe(X, O.height, ve),
       top: K(X)
     };
-  }, _e = {
+  }, fe = {
     n: te,
     ne: function() {
       return te(arguments.length <= 0 ? void 0 : arguments[0], ee(...arguments));
@@ -16823,10 +17037,10 @@ function An() {
     }
   };
   function we(O, H, B, X) {
-    const de = _e[O];
+    const de = fe[O];
     return de ? de(H, s(s({}, H), B), X) : B;
   }
-  function Ne(O) {
+  function Ce(O) {
     let {
       top: H,
       left: B,
@@ -16876,17 +17090,17 @@ function An() {
   function Ie(O, H, B, X, de) {
     O = O || [];
     const ve = [];
-    r.default.Children.forEach(H, (Ce) => {
-      if (Ce?.key == null) return;
-      const Re = k(O, String(Ce.key)), We = Ce.props["data-grid"];
+    r.default.Children.forEach(H, (Ne) => {
+      if (Ne?.key == null) return;
+      const Re = k(O, String(Ne.key)), We = Ne.props["data-grid"];
       Re && We == null ? ve.push(v(Re)) : We ? ve.push(v(s(s({}, We), {}, {
-        i: Ce.key
+        i: Ne.key
       }))) : ve.push(v({
         w: 1,
         h: 1,
         x: 0,
         y: g(ve),
-        i: String(Ce.key)
+        i: String(Ne.key)
       }));
     });
     const Ae = b(ve, {
@@ -16901,9 +17115,9 @@ function An() {
     for (let X = 0, de = O.length; X < de; X++) {
       const ve = O[X];
       for (let Ae = 0; Ae < B.length; Ae++) {
-        const Ce = B[Ae], Re = ve[Ce];
+        const Ne = B[Ae], Re = ve[Ne];
         if (typeof Re != "number" || Number.isNaN(Re))
-          throw new Error("ReactGridLayout: ".concat(H, "[").concat(X, "].").concat(Ce, " must be a number! Received: ").concat(Re, " (").concat(typeof Re, ")"));
+          throw new Error("ReactGridLayout: ".concat(H, "[").concat(X, "].").concat(Ne, " must be a number! Received: ").concat(Re, " (").concat(typeof Re, ")"));
       }
       if (typeof ve.i < "u" && typeof ve.i != "string")
         throw new Error("ReactGridLayout: ".concat(H, "[").concat(X, "].i must be a string! Received: ").concat(ve.i, " (").concat(typeof ve.i, ")"));
@@ -16920,35 +17134,35 @@ function An() {
   }
   const tt = () => {
   };
-  return He.noop = tt, He;
+  return Be.noop = tt, Be;
 }
-var lr = {}, Lu;
-function Rl() {
-  if (Lu) return lr;
-  Lu = 1, Object.defineProperty(lr, "__esModule", {
+var lr = {}, Ou;
+function Ll() {
+  if (Ou) return lr;
+  Ou = 1, Object.defineProperty(lr, "__esModule", {
     value: !0
   }), lr.calcGridColWidth = o, lr.calcGridItemPosition = n, lr.calcGridItemWHPx = r, lr.calcWH = s, lr.calcXY = a, lr.clamp = c;
   function o(u) {
     const {
       margin: p,
       containerPadding: g,
-      containerWidth: _,
-      cols: f
+      containerWidth: f,
+      cols: _
     } = u;
-    return (_ - p[0] * (f - 1) - g[0] * 2) / f;
+    return (f - p[0] * (_ - 1) - g[0] * 2) / _;
   }
   function r(u, p, g) {
     return Number.isFinite(u) ? Math.round(p * u + Math.max(0, u - 1) * g) : u;
   }
-  function n(u, p, g, _, f, h) {
+  function n(u, p, g, f, _, h) {
     const {
       margin: v,
       containerPadding: P,
       rowHeight: R
     } = u, I = o(u), A = {};
-    return h && h.resizing ? (A.width = Math.round(h.resizing.width), A.height = Math.round(h.resizing.height)) : (A.width = r(_, I, v[0]), A.height = r(f, R, v[1])), h && h.dragging ? (A.top = Math.round(h.dragging.top), A.left = Math.round(h.dragging.left)) : h && h.resizing && typeof h.resizing.top == "number" && typeof h.resizing.left == "number" ? (A.top = Math.round(h.resizing.top), A.left = Math.round(h.resizing.left)) : (A.top = Math.round((R + v[1]) * g + P[1]), A.left = Math.round((I + v[0]) * p + P[0])), A;
+    return h && h.resizing ? (A.width = Math.round(h.resizing.width), A.height = Math.round(h.resizing.height)) : (A.width = r(f, I, v[0]), A.height = r(_, R, v[1])), h && h.dragging ? (A.top = Math.round(h.dragging.top), A.left = Math.round(h.dragging.left)) : h && h.resizing && typeof h.resizing.top == "number" && typeof h.resizing.left == "number" ? (A.top = Math.round(h.resizing.top), A.left = Math.round(h.resizing.left)) : (A.top = Math.round((R + v[1]) * g + P[1]), A.left = Math.round((I + v[0]) * p + P[0])), A;
   }
-  function a(u, p, g, _, f) {
+  function a(u, p, g, f, _) {
     const {
       margin: h,
       containerPadding: v,
@@ -16957,19 +17171,19 @@ function Rl() {
       maxRows: I
     } = u, A = o(u);
     let S = Math.round((g - v[0]) / (A + h[0])), y = Math.round((p - v[1]) / (R + h[1]));
-    return S = c(S, 0, P - _), y = c(y, 0, I - f), {
+    return S = c(S, 0, P - f), y = c(y, 0, I - _), {
       x: S,
       y
     };
   }
-  function s(u, p, g, _, f, h) {
+  function s(u, p, g, f, _, h) {
     const {
       margin: v,
       maxRows: P,
       cols: R,
       rowHeight: I
     } = u, A = o(u);
-    let S = Math.round((p + v[0]) / (A + v[0])), y = Math.round((g + v[1]) / (I + v[1])), w = c(S, 0, R - _), b = c(y, 0, P - f);
+    let S = Math.round((p + v[0]) / (A + v[0])), y = Math.round((g + v[1]) / (I + v[1])), w = c(S, 0, R - f), b = c(y, 0, P - _);
     return ["sw", "w", "nw"].indexOf(h) !== -1 && (w = c(S, 0, R)), ["nw", "n", "ne"].indexOf(h) !== -1 && (b = c(y, 0, P)), {
       w,
       h: b
@@ -16980,24 +17194,24 @@ function Rl() {
   }
   return lr;
 }
-var mi = {}, tl = { exports: {} }, rl, Ou;
-function kh() {
-  if (Ou) return rl;
-  Ou = 1;
-  var o = "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED";
-  return rl = o, rl;
-}
-var nl, Tu;
-function Sh() {
+var gi = {}, rl = { exports: {} }, nl, Tu;
+function Ah() {
   if (Tu) return nl;
   Tu = 1;
-  var o = /* @__PURE__ */ kh();
+  var o = "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED";
+  return nl = o, nl;
+}
+var il, Mu;
+function Eh() {
+  if (Mu) return il;
+  Mu = 1;
+  var o = /* @__PURE__ */ Ah();
   function r() {
   }
   function n() {
   }
-  return n.resetWarningCache = r, nl = function() {
-    function a(u, p, g, _, f, h) {
+  return n.resetWarningCache = r, il = function() {
+    function a(u, p, g, f, _, h) {
       if (h !== o) {
         var v = new Error(
           "Calling PropTypes validators directly is not supported by the `prop-types` package. Use PropTypes.checkPropTypes() to call them. Read more at http://fb.me/use-check-prop-types"
@@ -17033,16 +17247,16 @@ function Sh() {
       resetWarningCache: r
     };
     return c.PropTypes = c, c;
-  }, nl;
+  }, il;
 }
-var Mu;
-function Cr() {
-  return Mu || (Mu = 1, tl.exports = /* @__PURE__ */ Sh()()), tl.exports;
+var Hu;
+function Nr() {
+  return Hu || (Hu = 1, rl.exports = /* @__PURE__ */ Eh()()), rl.exports;
 }
-var gi = { exports: {} }, il, Hu;
-function Ah() {
-  if (Hu) return il;
-  Hu = 1;
+var hi = { exports: {} }, ol, Bu;
+function Ph() {
+  if (Bu) return ol;
+  Bu = 1;
   var o = Object.create, r = Object.defineProperty, n = Object.getOwnPropertyDescriptor, a = Object.getOwnPropertyNames, s = Object.getPrototypeOf, c = Object.prototype.hasOwnProperty, u = (z, q) => {
     for (var Y in q)
       r(z, Y, { get: q[Y], enumerable: !0 });
@@ -17058,12 +17272,12 @@ function Ah() {
     // "default" to the CommonJS "module.exports" for node compatibility.
     !z || !z.__esModule ? r(Y, "default", { value: z, enumerable: !0 }) : Y,
     z
-  )), _ = (z) => p(r({}, "__esModule", { value: !0 }), z), f = {};
-  u(f, {
+  )), f = (z) => p(r({}, "__esModule", { value: !0 }), z), _ = {};
+  u(_, {
     DraggableCore: () => Ke,
     default: () => st
-  }), il = _(f);
-  var h = g(It()), v = g(/* @__PURE__ */ Cr()), P = g(ta()), R = la();
+  }), ol = f(_);
+  var h = g(It()), v = g(/* @__PURE__ */ Nr()), P = g(ra()), R = ca();
   function I(z, q) {
     for (let Y = 0, se = z.length; Y < se; Y++)
       if (q.apply(q, [z[Y], Y, z])) return z[Y];
@@ -17092,9 +17306,9 @@ function Ah() {
     return "";
   }
   function E(z, q) {
-    return q ? `${q}${N(z)}` : z;
+    return q ? `${q}${C(z)}` : z;
   }
-  function N(z) {
+  function C(z) {
     let q = "", Y = !0;
     for (let se = 0; se < z.length; se++)
       Y ? (q += z[se].toUpperCase(), Y = !1) : z[se] === "-" ? Y = !0 : q += z[se];
@@ -17126,13 +17340,13 @@ function Ah() {
   }
   function ie(z, q, Y, se) {
     if (!z) return;
-    const ge = { capture: !0, ...se }, Te = Y;
-    z.addEventListener ? z.addEventListener(q, Te, ge) : z.attachEvent ? z.attachEvent("on" + q, Te) : z["on" + q] = Te;
+    const ge = { capture: !0, ...se }, Me = Y;
+    z.addEventListener ? z.addEventListener(q, Me, ge) : z.attachEvent ? z.attachEvent("on" + q, Me) : z["on" + q] = Me;
   }
   function oe(z, q, Y, se) {
     if (!z) return;
-    const ge = { capture: !0, ...se }, Te = Y;
-    z.removeEventListener ? z.removeEventListener(q, Te, ge) : z.detachEvent ? z.detachEvent("on" + q, Te) : z["on" + q] = null;
+    const ge = { capture: !0, ...se }, Me = Y;
+    z.removeEventListener ? z.removeEventListener(q, Me, ge) : z.detachEvent ? z.detachEvent("on" + q, Me) : z["on" + q] = null;
   }
   function pe(z) {
     let q = z.clientHeight;
@@ -17155,8 +17369,8 @@ function Ah() {
     return q -= y(Y.paddingLeft), q -= y(Y.paddingRight), q;
   }
   function G(z, q, Y) {
-    const ge = q === q.ownerDocument.body ? { left: 0, top: 0 } : q.getBoundingClientRect(), Te = (z.clientX + q.scrollLeft - ge.left) / Y, Me = (z.clientY + q.scrollTop - ge.top) / Y;
-    return { x: Te, y: Me };
+    const ge = q === q.ownerDocument.body ? { left: 0, top: 0 } : q.getBoundingClientRect(), Me = (z.clientX + q.scrollLeft - ge.left) / Y, He = (z.clientY + q.scrollTop - ge.top) / Y;
+    return { x: Me, y: He };
   }
   function ce(z, q) {
     const Y = T(z, q, "px");
@@ -17168,8 +17382,8 @@ function Ah() {
   function T({ x: z, y: q }, Y, se) {
     let ge = `translate(${z}${se},${q}${se})`;
     if (Y) {
-      const Te = `${typeof Y.x == "string" ? Y.x : Y.x + se}`, Me = `${typeof Y.y == "string" ? Y.y : Y.y + se}`;
-      ge = `translate(${Te}, ${Me})` + ge;
+      const Me = `${typeof Y.x == "string" ? Y.x : Y.x + se}`, He = `${typeof Y.y == "string" ? Y.y : Y.y + se}`;
+      ge = `translate(${Me}, ${He})` + ge;
     }
     return ge;
   }
@@ -17180,7 +17394,7 @@ function Ah() {
     if (z.targetTouches && z.targetTouches[0]) return z.targetTouches[0].identifier;
     if (z.changedTouches && z.changedTouches[0]) return z.changedTouches[0].identifier;
   }
-  function _e() {
+  function fe() {
     return typeof __webpack_nonce__ < "u" ? __webpack_nonce__ : void 0;
   }
   function we(z, q) {
@@ -17188,14 +17402,14 @@ function Ah() {
     let Y = z.getElementById("react-draggable-style-el");
     if (!Y) {
       Y = z.createElement("style"), Y.type = "text/css", Y.id = "react-draggable-style-el";
-      const se = q ?? _e();
+      const se = q ?? fe();
       se && Y.setAttribute("nonce", se), Y.innerHTML = `.react-draggable-transparent-selection *::-moz-selection {all: inherit;}
 `, Y.innerHTML += `.react-draggable-transparent-selection *::selection {all: inherit;}
 `, z.getElementsByTagName("head")[0].appendChild(Y);
     }
     z.body && J(z.body, "react-draggable-transparent-selection");
   }
-  function Ne(z) {
+  function Ce(z) {
     window.requestAnimationFrame ? window.requestAnimationFrame(() => {
       Oe(z);
     }) : Oe(z);
@@ -17226,13 +17440,13 @@ function Ah() {
     se = typeof se == "string" ? se : H(se);
     const ge = B(z);
     if (typeof se == "string") {
-      const { ownerDocument: Te } = ge, Me = Te.defaultView;
-      if (!Me)
+      const { ownerDocument: Me } = ge, He = Me.defaultView;
+      if (!He)
         throw new Error("Cannot resolve the owner window of the draggable node.");
       let Xe;
-      if (se === "parent" ? Xe = ge.parentNode : Xe = ge.getRootNode().querySelector(se), !(Xe instanceof Me.HTMLElement))
+      if (se === "parent" ? Xe = ge.parentNode : Xe = ge.getRootNode().querySelector(se), !(Xe instanceof He.HTMLElement))
         throw new Error('Bounds selector "' + se + '" could not find an element.');
-      const pt = Xe, Dt = Me.getComputedStyle(ge), Gt = Me.getComputedStyle(pt);
+      const pt = Xe, Dt = He.getComputedStyle(ge), Gt = He.getComputedStyle(pt);
       se = {
         left: -ge.offsetLeft + y(Gt.paddingLeft) + y(Dt.marginLeft),
         top: -ge.offsetTop + y(Gt.paddingTop) + y(Dt.marginTop),
@@ -17255,8 +17469,8 @@ function Ah() {
   function Fe(z, q, Y) {
     const se = typeof q == "number" ? W(z, q) : null;
     if (typeof q == "number" && !se) return null;
-    const ge = B(Y), Te = Y.props.offsetParent || ge.offsetParent || ge.ownerDocument.body;
-    return G(se || z, Te, Y.props.scale);
+    const ge = B(Y), Me = Y.props.offsetParent || ge.offsetParent || ge.ownerDocument.body;
+    return G(se || z, Me, Y.props.scale);
   }
   function tt(z, q, Y) {
     const se = !S(z.lastX), ge = B(z);
@@ -17304,8 +17518,8 @@ function Ah() {
       throw new Error("<DraggableCore>: Unmounted during event!");
     return q;
   }
-  var X = g(It()), de = g(/* @__PURE__ */ Cr()), ve = g(ta()), Ae = function() {
-  }, Ce = Ae, Re = {
+  var X = g(It()), de = g(/* @__PURE__ */ Nr()), ve = g(ra()), Ae = function() {
+  }, Ne = Ae, Re = {
     touch: {
       start: "touchstart",
       move: "touchmove",
@@ -17331,24 +17545,24 @@ function Ah() {
         this.touchIdentifier = se;
         const ge = Fe(z, se, this);
         if (ge == null) return;
-        const { x: Te, y: Me } = ge, Xe = tt(this, Te, Me);
-        Ce("calling", this.props.onStart), !(this.props.onStart(z, Xe) === !1 || this.mounted === !1) && (this.props.enableUserSelectHack && we(Y, this.props.nonce), this.dragging = !0, this.lastX = Te, this.lastY = Me, ie(Y, We.move, this.handleDrag), ie(Y, We.stop, this.handleDragStop));
+        const { x: Me, y: He } = ge, Xe = tt(this, Me, He);
+        Ne("calling", this.props.onStart), !(this.props.onStart(z, Xe) === !1 || this.mounted === !1) && (this.props.enableUserSelectHack && we(Y, this.props.nonce), this.dragging = !0, this.lastX = Me, this.lastY = He, ie(Y, We.move, this.handleDrag), ie(Y, We.stop, this.handleDragStop));
       }, this.handleDrag = (z) => {
         const q = Fe(z, this.touchIdentifier, this);
         if (q == null) return;
         let { x: Y, y: se } = q;
         if (Array.isArray(this.props.grid)) {
-          let Me = Y - this.lastX, Xe = se - this.lastY;
-          if ([Me, Xe] = Ie(this.props.grid, Me, Xe), !Me && !Xe) return;
-          Y = this.lastX + Me, se = this.lastY + Xe;
+          let He = Y - this.lastX, Xe = se - this.lastY;
+          if ([He, Xe] = Ie(this.props.grid, He, Xe), !He && !Xe) return;
+          Y = this.lastX + He, se = this.lastY + Xe;
         }
         const ge = tt(this, Y, se);
         if (this.props.onDrag(z, ge) === !1 || this.mounted === !1) {
           try {
             this.handleDragStop(new MouseEvent("mouseup"));
           } catch {
-            const Me = document.createEvent("MouseEvents");
-            Me.initMouseEvent("mouseup", !0, !0, window, 0, 0, 0, 0, 0, !1, !1, !1, !1, 0, null), this.handleDragStop(Me);
+            const He = document.createEvent("MouseEvents");
+            He.initMouseEvent("mouseup", !0, !0, window, 0, 0, 0, 0, 0, !1, !1, !1, !1, 0, null), this.handleDragStop(He);
           }
           return;
         }
@@ -17364,8 +17578,8 @@ function Ah() {
         }
         const ge = tt(this, Y, se);
         if (this.props.onStop(z, ge) === !1 || this.mounted === !1) return !1;
-        const Me = this.findDOMNode();
-        Me && this.props.enableUserSelectHack && Ne(Me.ownerDocument), this.dragging = !1, this.lastX = NaN, this.lastY = NaN, Me && (oe(Me.ownerDocument, We.move, this.handleDrag), oe(Me.ownerDocument, We.stop, this.handleDragStop));
+        const He = this.findDOMNode();
+        He && this.props.enableUserSelectHack && Ce(He.ownerDocument), this.dragging = !1, this.lastX = NaN, this.lastY = NaN, He && (oe(He.ownerDocument, We.move, this.handleDrag), oe(He.ownerDocument, We.stop, this.handleDragStop));
       }, this.onMouseDown = (z) => (We = Re.mouse, this.handleDragStart(z)), this.onMouseUp = (z) => (We = Re.mouse, this.handleDragStop(z)), this.onTouchStart = (z) => (We = Re.touch, this.handleDragStart(z)), this.onTouchEnd = (z) => (We = Re.touch, this.handleDragStop(z));
     }
     componentDidMount() {
@@ -17378,7 +17592,7 @@ function Ah() {
       const z = this.findDOMNode();
       if (z) {
         const { ownerDocument: q } = z;
-        oe(q, Re.mouse.move, this.handleDrag), oe(q, Re.touch.move, this.handleDrag), oe(q, Re.mouse.stop, this.handleDragStop), oe(q, Re.touch.stop, this.handleDragStop), oe(z, Re.touch.start, this.onTouchStart, { passive: !1 }), this.props.enableUserSelectHack && Ne(q);
+        oe(q, Re.mouse.move, this.handleDrag), oe(q, Re.touch.move, this.handleDrag), oe(q, Re.mouse.stop, this.handleDragStop), oe(q, Re.touch.stop, this.handleDragStop), oe(z, Re.touch.start, this.onTouchStart, { passive: !1 }), this.props.enableUserSelectHack && Ce(q);
       }
     }
     // React 19 removed ReactDOM.findDOMNode, so nodeRef is now required.
@@ -17570,10 +17784,10 @@ function Ah() {
           slackY: 0
         };
         if (this.props.bounds) {
-          const { x: Me, y: Xe } = ge;
+          const { x: He, y: Xe } = ge;
           ge.x += this.state.slackX, ge.y += this.state.slackY;
           const [pt, Dt] = Ee(this, ge.x, ge.y);
-          ge.x = pt, ge.y = Dt, ge.slackX = this.state.slackX + (Me - ge.x), ge.slackY = this.state.slackY + (Xe - ge.y), se.x = ge.x, se.y = ge.y, se.deltaX = ge.x - this.state.x, se.deltaY = ge.y - this.state.y;
+          ge.x = pt, ge.y = Dt, ge.slackX = this.state.slackX + (He - ge.x), ge.slackY = this.state.slackY + (Xe - ge.y), se.x = ge.x, se.y = ge.y, se.deltaX = ge.x - this.state.x, se.deltaY = ge.y - this.state.y;
         }
         if (this.props.onDrag(q, se) === !1) return !1;
         this.setState(ge);
@@ -17585,8 +17799,8 @@ function Ah() {
           slackY: 0
         };
         if (!!this.props.position) {
-          const { x: Me, y: Xe } = this.props.position;
-          ge.x = Me, ge.y = Xe;
+          const { x: He, y: Xe } = this.props.position;
+          ge.x = He, ge.y = Xe;
         }
         this.setState(ge);
       }, this.state = {
@@ -17636,27 +17850,27 @@ function Ah() {
         children: Y,
         defaultPosition: se,
         defaultClassName: ge,
-        defaultClassNameDragging: Te,
-        defaultClassNameDragged: Me,
+        defaultClassNameDragging: Me,
+        defaultClassNameDragged: He,
         position: Xe,
         positionOffset: pt,
         scale: Dt,
         ...Gt
       } = this.props;
       let zr = {}, Yr = null;
-      const Zt = !!!Xe || this.state.dragging, En = Xe || se, Pn = {
+      const Zt = !!!Xe || this.state.dragging, Pn = Xe || se, In = {
         // Set left if horizontal drag is enabled
-        x: ze(this) && Zt ? this.state.x : En.x,
+        x: ze(this) && Zt ? this.state.x : Pn.x,
         // Set top if vertical drag is enabled
-        y: $e(this) && Zt ? this.state.y : En.y
+        y: $e(this) && Zt ? this.state.y : Pn.y
       };
-      this.state.isElementSVG ? Yr = re(Pn, pt) : zr = ce(Pn, pt);
-      const Kr = h.Children.only(Y), Ci = (0, R.clsx)(Kr.props.className || "", ge, {
-        [Te]: this.state.dragging,
-        [Me]: this.state.dragged
+      this.state.isElementSVG ? Yr = re(In, pt) : zr = ce(In, pt);
+      const Kr = h.Children.only(Y), zi = (0, R.clsx)(Kr.props.className || "", ge, {
+        [Me]: this.state.dragging,
+        [He]: this.state.dragged
       });
       return /* @__PURE__ */ h.createElement(Ke, { ...Gt, onStart: this.onDragStart, onDrag: this.onDrag, onStop: this.onDragStop }, h.cloneElement(Kr, {
-        className: Ci,
+        className: zi,
         style: { ...Kr.props.style, ...zr },
         transform: Yr
       }));
@@ -17782,72 +17996,72 @@ function Ah() {
     defaultClassNameDragged: "react-draggable-dragged",
     defaultPosition: { x: 0, y: 0 },
     scale: 1
-  }, il;
+  }, ol;
 }
-var Bu;
-function Ll() {
-  if (Bu) return gi.exports;
-  Bu = 1;
-  const o = Ah(), r = o.DraggableCore, n = o.default || o;
-  return gi.exports = n, gi.exports.default = n, gi.exports.DraggableCore = r, gi.exports;
+var Du;
+function Ol() {
+  if (Du) return hi.exports;
+  Du = 1;
+  const o = Ph(), r = o.DraggableCore, n = o.default || o;
+  return hi.exports = n, hi.exports.default = n, hi.exports.DraggableCore = r, hi.exports;
 }
-var hi = { exports: {} }, fi = {}, jo = {}, Du;
-function Eh() {
-  if (Du) return jo;
-  Du = 1, jo.__esModule = !0, jo.cloneElement = p;
+var _i = { exports: {} }, fi = {}, Fo = {}, $u;
+function Ih() {
+  if ($u) return Fo;
+  $u = 1, Fo.__esModule = !0, Fo.cloneElement = p;
   var o = r(It());
   function r(g) {
     return g && g.__esModule ? g : { default: g };
   }
-  function n(g, _) {
-    var f = Object.keys(g);
+  function n(g, f) {
+    var _ = Object.keys(g);
     if (Object.getOwnPropertySymbols) {
       var h = Object.getOwnPropertySymbols(g);
-      _ && (h = h.filter(function(v) {
+      f && (h = h.filter(function(v) {
         return Object.getOwnPropertyDescriptor(g, v).enumerable;
-      })), f.push.apply(f, h);
+      })), _.push.apply(_, h);
     }
-    return f;
+    return _;
   }
   function a(g) {
-    for (var _ = 1; _ < arguments.length; _++) {
-      var f = arguments[_] != null ? arguments[_] : {};
-      _ % 2 ? n(Object(f), !0).forEach(function(h) {
-        s(g, h, f[h]);
-      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(g, Object.getOwnPropertyDescriptors(f)) : n(Object(f)).forEach(function(h) {
-        Object.defineProperty(g, h, Object.getOwnPropertyDescriptor(f, h));
+    for (var f = 1; f < arguments.length; f++) {
+      var _ = arguments[f] != null ? arguments[f] : {};
+      f % 2 ? n(Object(_), !0).forEach(function(h) {
+        s(g, h, _[h]);
+      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(g, Object.getOwnPropertyDescriptors(_)) : n(Object(_)).forEach(function(h) {
+        Object.defineProperty(g, h, Object.getOwnPropertyDescriptor(_, h));
       });
     }
     return g;
   }
-  function s(g, _, f) {
-    return _ = c(_), _ in g ? Object.defineProperty(g, _, { value: f, enumerable: !0, configurable: !0, writable: !0 }) : g[_] = f, g;
+  function s(g, f, _) {
+    return f = c(f), f in g ? Object.defineProperty(g, f, { value: _, enumerable: !0, configurable: !0, writable: !0 }) : g[f] = _, g;
   }
   function c(g) {
-    var _ = u(g, "string");
-    return typeof _ == "symbol" ? _ : String(_);
+    var f = u(g, "string");
+    return typeof f == "symbol" ? f : String(f);
   }
-  function u(g, _) {
+  function u(g, f) {
     if (typeof g != "object" || g === null) return g;
-    var f = g[Symbol.toPrimitive];
-    if (f !== void 0) {
-      var h = f.call(g, _);
+    var _ = g[Symbol.toPrimitive];
+    if (_ !== void 0) {
+      var h = _.call(g, f);
       if (typeof h != "object") return h;
       throw new TypeError("@@toPrimitive must return a primitive value.");
     }
-    return (_ === "string" ? String : Number)(g);
+    return (f === "string" ? String : Number)(g);
   }
-  function p(g, _) {
-    return _.style && g.props.style && (_.style = a(a({}, g.props.style), _.style)), _.className && g.props.className && (_.className = g.props.className + " " + _.className), /* @__PURE__ */ o.default.cloneElement(g, _);
+  function p(g, f) {
+    return f.style && g.props.style && (f.style = a(a({}, g.props.style), f.style)), f.className && g.props.className && (f.className = g.props.className + " " + f.className), /* @__PURE__ */ o.default.cloneElement(g, f);
   }
-  return jo;
+  return Fo;
 }
-var _i = {}, $u;
-function Fp() {
-  if ($u) return _i;
-  $u = 1, _i.__esModule = !0, _i.resizableProps = void 0;
-  var o = r(/* @__PURE__ */ Cr());
-  Ll();
+var bi = {}, qu;
+function Vp() {
+  if (qu) return bi;
+  qu = 1, bi.__esModule = !0, bi.resizableProps = void 0;
+  var o = r(/* @__PURE__ */ Nr());
+  Ol();
   function r(a) {
     return a && a.__esModule ? a : { default: a };
   }
@@ -17956,13 +18170,13 @@ function Fp() {
       return o.default.number.apply(o.default, c);
     }
   };
-  return _i.resizableProps = n, _i;
+  return bi.resizableProps = n, bi;
 }
-var qu;
-function Up() {
-  if (qu) return fi;
-  qu = 1, fi.__esModule = !0, fi.default = void 0;
-  var o = u(It()), r = Ll(), n = Eh(), a = Fp(), s = ["children", "className", "draggableOpts", "width", "height", "handle", "handleSize", "lockAspectRatio", "axis", "minConstraints", "maxConstraints", "onResize", "onResizeStop", "onResizeStart", "resizeHandles", "transformScale"];
+var ju;
+function Gp() {
+  if (ju) return fi;
+  ju = 1, fi.__esModule = !0, fi.default = void 0;
+  var o = u(It()), r = Ol(), n = Ih(), a = Vp(), s = ["children", "className", "draggableOpts", "width", "height", "handle", "handleSize", "lockAspectRatio", "axis", "minConstraints", "maxConstraints", "onResize", "onResizeStop", "onResizeStart", "resizeHandles", "transformScale"];
   function c(S) {
     if (typeof WeakMap != "function") return null;
     var y = /* @__PURE__ */ new WeakMap(), w = /* @__PURE__ */ new WeakMap();
@@ -17981,8 +18195,8 @@ function Up() {
     var b = {}, k = Object.defineProperty && Object.getOwnPropertyDescriptor;
     for (var E in S)
       if (E !== "default" && Object.prototype.hasOwnProperty.call(S, E)) {
-        var N = k ? Object.getOwnPropertyDescriptor(S, E) : null;
-        N && (N.get || N.set) ? Object.defineProperty(b, E, N) : b[E] = S[E];
+        var C = k ? Object.getOwnPropertyDescriptor(S, E) : null;
+        C && (C.get || C.set) ? Object.defineProperty(b, E, C) : b[E] = S[E];
       }
     return b.default = S, w && w.set(S, b), b;
   }
@@ -18003,7 +18217,7 @@ function Up() {
       k = b[E], !(y.indexOf(k) >= 0) && (w[k] = S[k]);
     return w;
   }
-  function _(S, y) {
+  function f(S, y) {
     var w = Object.keys(S);
     if (Object.getOwnPropertySymbols) {
       var b = Object.getOwnPropertySymbols(S);
@@ -18013,12 +18227,12 @@ function Up() {
     }
     return w;
   }
-  function f(S) {
+  function _(S) {
     for (var y = 1; y < arguments.length; y++) {
       var w = arguments[y] != null ? arguments[y] : {};
-      y % 2 ? _(Object(w), !0).forEach(function(b) {
+      y % 2 ? f(Object(w), !0).forEach(function(b) {
         h(S, b, w[b]);
-      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(S, Object.getOwnPropertyDescriptors(w)) : _(Object(w)).forEach(function(b) {
+      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(S, Object.getOwnPropertyDescriptors(w)) : f(Object(w)).forEach(function(b) {
         Object.defineProperty(S, b, Object.getOwnPropertyDescriptor(w, b));
       });
     }
@@ -18052,8 +18266,8 @@ function Up() {
   var A = /* @__PURE__ */ function(S) {
     R(y, S);
     function y() {
-      for (var b, k = arguments.length, E = new Array(k), N = 0; N < k; N++)
-        E[N] = arguments[N];
+      for (var b, k = arguments.length, E = new Array(k), C = 0; C < k; C++)
+        E[C] = arguments[C];
       return b = S.call.apply(S, [this].concat(E)) || this, b.handleRefs = {}, b.lastHandleRect = null, b.slack = null, b;
     }
     var w = y.prototype;
@@ -18062,7 +18276,7 @@ function Up() {
     }, w.resetData = function() {
       this.lastHandleRect = this.slack = null;
     }, w.runConstraints = function(k, E) {
-      var N = this.props, D = N.minConstraints, F = N.maxConstraints, V = N.lockAspectRatio;
+      var C = this.props, D = C.minConstraints, F = C.maxConstraints, V = C.lockAspectRatio;
       if (!D && !F && !V) return [k, E];
       if (V) {
         var Q = this.props.width / this.props.height, ie = k - this.props.width, oe = E - this.props.height;
@@ -18071,61 +18285,61 @@ function Up() {
       var pe = k, K = E, te = this.slack || [0, 0], ee = te[0], G = te[1];
       return k += ee, E += G, D && (k = Math.max(D[0], k), E = Math.max(D[1], E)), F && (k = Math.min(F[0], k), E = Math.min(F[1], E)), this.slack = [ee + (pe - k), G + (K - E)], [k, E];
     }, w.resizeHandler = function(k, E) {
-      var N = this;
+      var C = this;
       return function(D, F) {
         var V = F.node, Q = F.deltaX, ie = F.deltaY;
-        k === "onResizeStart" && N.resetData();
-        var oe = (N.props.axis === "both" || N.props.axis === "x") && E !== "n" && E !== "s", pe = (N.props.axis === "both" || N.props.axis === "y") && E !== "e" && E !== "w";
+        k === "onResizeStart" && C.resetData();
+        var oe = (C.props.axis === "both" || C.props.axis === "x") && E !== "n" && E !== "s", pe = (C.props.axis === "both" || C.props.axis === "y") && E !== "e" && E !== "w";
         if (!(!oe && !pe)) {
           var K = E[0], te = E[E.length - 1], ee = V.getBoundingClientRect();
-          if (N.lastHandleRect != null) {
+          if (C.lastHandleRect != null) {
             if (te === "w") {
-              var G = ee.left - N.lastHandleRect.left;
+              var G = ee.left - C.lastHandleRect.left;
               Q += G;
             }
             if (K === "n") {
-              var ce = ee.top - N.lastHandleRect.top;
+              var ce = ee.top - C.lastHandleRect.top;
               ie += ce;
             }
           }
-          N.lastHandleRect = ee, te === "w" && (Q = -Q), K === "n" && (ie = -ie);
-          var re = N.props.width + (oe ? Q / N.props.transformScale : 0), T = N.props.height + (pe ? ie / N.props.transformScale : 0), W = N.runConstraints(re, T);
+          C.lastHandleRect = ee, te === "w" && (Q = -Q), K === "n" && (ie = -ie);
+          var re = C.props.width + (oe ? Q / C.props.transformScale : 0), T = C.props.height + (pe ? ie / C.props.transformScale : 0), W = C.runConstraints(re, T);
           re = W[0], T = W[1];
-          var me = re !== N.props.width || T !== N.props.height, _e = typeof N.props[k] == "function" ? N.props[k] : null, we = k === "onResize" && !me;
-          _e && !we && (D.persist == null || D.persist(), _e(D, {
+          var me = re !== C.props.width || T !== C.props.height, fe = typeof C.props[k] == "function" ? C.props[k] : null, we = k === "onResize" && !me;
+          fe && !we && (D.persist == null || D.persist(), fe(D, {
             node: V,
             size: {
               width: re,
               height: T
             },
             handle: E
-          })), k === "onResizeStop" && N.resetData();
+          })), k === "onResizeStop" && C.resetData();
         }
       };
     }, w.renderResizeHandle = function(k, E) {
-      var N = this.props.handle;
-      if (!N)
+      var C = this.props.handle;
+      if (!C)
         return /* @__PURE__ */ o.createElement("span", {
           className: "react-resizable-handle react-resizable-handle-" + k,
           ref: E
         });
-      if (typeof N == "function")
-        return N(k, E);
-      var D = typeof N.type == "string", F = f({
+      if (typeof C == "function")
+        return C(k, E);
+      var D = typeof C.type == "string", F = _({
         ref: E
       }, D ? {} : {
         handleAxis: k
       });
-      return /* @__PURE__ */ o.cloneElement(N, F);
+      return /* @__PURE__ */ o.cloneElement(C, F);
     }, w.render = function() {
-      var k = this, E = this.props, N = E.children, D = E.className, F = E.draggableOpts;
+      var k = this, E = this.props, C = E.children, D = E.className, F = E.draggableOpts;
       E.width, E.height, E.handle, E.handleSize, E.lockAspectRatio, E.axis, E.minConstraints, E.maxConstraints, E.onResize, E.onResizeStop, E.onResizeStart;
       var V = E.resizeHandles;
       E.transformScale;
       var Q = g(E, s);
-      return (0, n.cloneElement)(N, f(f({}, Q), {}, {
+      return (0, n.cloneElement)(C, _(_({}, Q), {}, {
         className: (D ? D + " " : "") + "react-resizable",
-        children: [].concat(N.props.children, V.map(function(ie) {
+        children: [].concat(C.props.children, V.map(function(ie) {
           var oe, pe = (oe = k.handleRefs[ie]) != null ? oe : k.handleRefs[ie] = /* @__PURE__ */ o.createRef();
           return /* @__PURE__ */ o.createElement(r.DraggableCore, p({}, F, {
             nodeRef: pe,
@@ -18148,11 +18362,11 @@ function Up() {
     transformScale: 1
   }, fi;
 }
-var bi = {}, ju;
-function Ph() {
-  if (ju) return bi;
-  ju = 1, bi.__esModule = !0, bi.default = void 0;
-  var o = p(It()), r = c(/* @__PURE__ */ Cr()), n = c(Up()), a = Fp(), s = ["handle", "handleSize", "onResize", "onResizeStart", "onResizeStop", "draggableOpts", "minConstraints", "maxConstraints", "lockAspectRatio", "axis", "width", "height", "resizeHandles", "style", "transformScale"];
+var yi = {}, Fu;
+function Ch() {
+  if (Fu) return yi;
+  Fu = 1, yi.__esModule = !0, yi.default = void 0;
+  var o = p(It()), r = c(/* @__PURE__ */ Nr()), n = c(Gp()), a = Vp(), s = ["handle", "handleSize", "onResize", "onResizeStart", "onResizeStop", "draggableOpts", "minConstraints", "maxConstraints", "lockAspectRatio", "axis", "width", "height", "resizeHandles", "style", "transformScale"];
   function c(y) {
     return y && y.__esModule ? y : { default: y };
   }
@@ -18172,10 +18386,10 @@ function Ph() {
     if (b && b.has(y))
       return b.get(y);
     var k = {}, E = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for (var N in y)
-      if (N !== "default" && Object.prototype.hasOwnProperty.call(y, N)) {
-        var D = E ? Object.getOwnPropertyDescriptor(y, N) : null;
-        D && (D.get || D.set) ? Object.defineProperty(k, N, D) : k[N] = y[N];
+    for (var C in y)
+      if (C !== "default" && Object.prototype.hasOwnProperty.call(y, C)) {
+        var D = E ? Object.getOwnPropertyDescriptor(y, C) : null;
+        D && (D.get || D.set) ? Object.defineProperty(k, C, D) : k[C] = y[C];
       }
     return k.default = y, b && b.set(y, k), k;
   }
@@ -18189,7 +18403,7 @@ function Ph() {
       return y;
     }, g.apply(this, arguments);
   }
-  function _(y, w) {
+  function f(y, w) {
     var b = Object.keys(y);
     if (Object.getOwnPropertySymbols) {
       var k = Object.getOwnPropertySymbols(y);
@@ -18199,12 +18413,12 @@ function Ph() {
     }
     return b;
   }
-  function f(y) {
+  function _(y) {
     for (var w = 1; w < arguments.length; w++) {
       var b = arguments[w] != null ? arguments[w] : {};
-      w % 2 ? _(Object(b), !0).forEach(function(k) {
+      w % 2 ? f(Object(b), !0).forEach(function(k) {
         h(y, k, b[k]);
-      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(y, Object.getOwnPropertyDescriptors(b)) : _(Object(b)).forEach(function(k) {
+      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(y, Object.getOwnPropertyDescriptors(b)) : f(Object(b)).forEach(function(k) {
         Object.defineProperty(y, k, Object.getOwnPropertyDescriptor(b, k));
       });
     }
@@ -18229,9 +18443,9 @@ function Ph() {
   }
   function R(y, w) {
     if (y == null) return {};
-    var b = {}, k = Object.keys(y), E, N;
-    for (N = 0; N < k.length; N++)
-      E = k[N], !(w.indexOf(E) >= 0) && (b[E] = y[E]);
+    var b = {}, k = Object.keys(y), E, C;
+    for (C = 0; C < k.length; C++)
+      E = k[C], !(w.indexOf(E) >= 0) && (b[E] = y[E]);
     return b;
   }
   function I(y, w) {
@@ -18245,9 +18459,9 @@ function Ph() {
   var S = /* @__PURE__ */ function(y) {
     I(w, y);
     function w() {
-      for (var k, E = arguments.length, N = new Array(E), D = 0; D < E; D++)
-        N[D] = arguments[D];
-      return k = y.call.apply(y, [this].concat(N)) || this, k.state = {
+      for (var k, E = arguments.length, C = new Array(E), D = 0; D < E; D++)
+        C[D] = arguments[D];
+      return k = y.call.apply(y, [this].concat(C)) || this, k.state = {
         width: k.props.width,
         height: k.props.height,
         propsWidth: k.props.width,
@@ -18259,8 +18473,8 @@ function Ph() {
         })) : k.setState(Q);
       }, k;
     }
-    w.getDerivedStateFromProps = function(E, N) {
-      return N.propsWidth !== E.width || N.propsHeight !== E.height ? {
+    w.getDerivedStateFromProps = function(E, C) {
+      return C.propsWidth !== E.width || C.propsHeight !== E.height ? {
         width: E.width,
         height: E.height,
         propsWidth: E.width,
@@ -18269,7 +18483,7 @@ function Ph() {
     };
     var b = w.prototype;
     return b.render = function() {
-      var E = this.props, N = E.handle, D = E.handleSize;
+      var E = this.props, C = E.handle, D = E.handleSize;
       E.onResize;
       var F = E.onResizeStart, V = E.onResizeStop, Q = E.draggableOpts, ie = E.minConstraints, oe = E.maxConstraints, pe = E.lockAspectRatio, K = E.axis;
       E.width, E.height;
@@ -18277,7 +18491,7 @@ function Ph() {
       return /* @__PURE__ */ o.createElement(n.default, {
         axis: K,
         draggableOpts: Q,
-        handle: N,
+        handle: C,
         handleSize: D,
         height: this.state.height,
         lockAspectRatio: pe,
@@ -18290,30 +18504,30 @@ function Ph() {
         transformScale: G,
         width: this.state.width
       }, /* @__PURE__ */ o.createElement("div", g({}, ce, {
-        style: f(f({}, ee), {}, {
+        style: _(_({}, ee), {}, {
           width: this.state.width + "px",
           height: this.state.height + "px"
         })
       })));
     }, w;
   }(o.Component);
-  return bi.default = S, S.propTypes = f(f({}, a.resizableProps), {}, {
+  return yi.default = S, S.propTypes = _(_({}, a.resizableProps), {}, {
     children: r.default.element
-  }), bi;
+  }), yi;
 }
-var Fu;
-function Ih() {
-  return Fu || (Fu = 1, hi.exports = function() {
+var Uu;
+function Nh() {
+  return Uu || (Uu = 1, _i.exports = function() {
     throw new Error("Don't instantiate Resizable directly! Use require('react-resizable').Resizable");
-  }, hi.exports.Resizable = Up().default, hi.exports.ResizableBox = Ph().default), hi.exports;
+  }, _i.exports.Resizable = Gp().default, _i.exports.ResizableBox = Ch().default), _i.exports;
 }
-var cr = {}, Uu;
-function Wp() {
-  if (Uu) return cr;
-  Uu = 1, Object.defineProperty(cr, "__esModule", {
+var cr = {}, Wu;
+function Yp() {
+  if (Wu) return cr;
+  Wu = 1, Object.defineProperty(cr, "__esModule", {
     value: !0
   }), cr.resizeHandleType = cr.resizeHandleAxesType = cr.default = void 0;
-  var o = n(/* @__PURE__ */ Cr()), r = n(It());
+  var o = n(/* @__PURE__ */ Nr()), r = n(It());
   function n(c) {
     return c && c.__esModule ? c : { default: c };
   }
@@ -18346,7 +18560,7 @@ function Wp() {
     // {x: Number, y: Number, w: Number, h: Number, i: String}
     layout: function(c) {
       var u = c.layout;
-      u !== void 0 && An().validateLayout(u, "layout");
+      u !== void 0 && En().validateLayout(u, "layout");
     },
     //
     // Grid Dimensions
@@ -18413,11 +18627,11 @@ function Wp() {
     // Children must not have duplicate keys.
     children: function(c, u) {
       const p = c[u], g = {};
-      r.default.Children.forEach(p, function(_) {
-        if (_?.key != null) {
-          if (g[_.key])
-            throw new Error('Duplicate child key "' + _.key + '" found! This will cause problems in ReactGridLayout.');
-          g[_.key] = !0;
+      r.default.Children.forEach(p, function(f) {
+        if (f?.key != null) {
+          if (g[f.key])
+            throw new Error('Duplicate child key "' + f.key + '" found! This will cause problems in ReactGridLayout.');
+          g[f.key] = !0;
         }
       });
     },
@@ -18425,17 +18639,17 @@ function Wp() {
     innerRef: o.default.any
   }, cr;
 }
-var Wu;
-function Nh() {
-  if (Wu) return mi;
-  Wu = 1, Object.defineProperty(mi, "__esModule", {
+var Vu;
+function zh() {
+  if (Vu) return gi;
+  Vu = 1, Object.defineProperty(gi, "__esModule", {
     value: !0
-  }), mi.default = void 0;
-  var o = _(It()), r = ta(), n = _(/* @__PURE__ */ Cr()), a = Ll(), s = Ih(), c = An(), u = Rl(), p = Wp(), g = _(la());
-  function _(A) {
+  }), gi.default = void 0;
+  var o = f(It()), r = ra(), n = f(/* @__PURE__ */ Nr()), a = Ol(), s = Nh(), c = En(), u = Ll(), p = Yp(), g = f(ca());
+  function f(A) {
     return A && A.__esModule ? A : { default: A };
   }
-  function f(A, S) {
+  function _(A, S) {
     var y = Object.keys(A);
     if (Object.getOwnPropertySymbols) {
       var w = Object.getOwnPropertySymbols(A);
@@ -18448,9 +18662,9 @@ function Nh() {
   function h(A) {
     for (var S = 1; S < arguments.length; S++) {
       var y = arguments[S] != null ? arguments[S] : {};
-      S % 2 ? f(Object(y), !0).forEach(function(w) {
+      S % 2 ? _(Object(y), !0).forEach(function(w) {
         v(A, w, y[w]);
-      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(A, Object.getOwnPropertyDescriptors(y)) : f(Object(y)).forEach(function(w) {
+      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(A, Object.getOwnPropertyDescriptors(y)) : _(Object(y)).forEach(function(w) {
         Object.defineProperty(A, w, Object.getOwnPropertyDescriptor(y, w));
       });
     }
@@ -18492,11 +18706,11 @@ function Nh() {
           top: 0,
           left: 0
         }, {
-          offsetParent: N
+          offsetParent: C
         } = w;
-        if (!N) return;
-        const D = N.getBoundingClientRect(), F = w.getBoundingClientRect(), V = F.left / k, Q = D.left / k, ie = F.top / k, oe = D.top / k;
-        E.left = V - Q + N.scrollLeft, E.top = ie - oe + N.scrollTop, this.setState({
+        if (!C) return;
+        const D = C.getBoundingClientRect(), F = w.getBoundingClientRect(), V = F.left / k, Q = D.left / k, ie = F.top / k, oe = D.top / k;
+        E.left = V - Q + C.scrollLeft, E.top = ie - oe + C.scrollTop, this.setState({
           dragging: E
         });
         const {
@@ -18515,9 +18729,9 @@ function Nh() {
           deltaY: E
         } = y;
         const {
-          onDrag: N
+          onDrag: C
         } = this.props;
-        if (!N) return;
+        if (!C) return;
         if (!this.state.dragging)
           throw new Error("onDrag called before onDragStart.");
         let D = this.state.dragging.top + E, F = this.state.dragging.left + k;
@@ -18538,8 +18752,8 @@ function Nh() {
               rowHeight: T
             } = this.props, W = ce.clientHeight - (0, u.calcGridItemWHPx)(oe, T, re[1]);
             D = (0, u.clamp)(D, 0, W);
-            const me = (0, u.calcGridColWidth)(K), _e = pe - (0, u.calcGridItemWHPx)(ie, me, re[0]);
-            F = (0, u.clamp)(F, 0, _e);
+            const me = (0, u.calcGridColWidth)(K), fe = pe - (0, u.calcGridItemWHPx)(ie, me, re[0]);
+            F = (0, u.clamp)(F, 0, fe);
           }
         }
         const te = {
@@ -18557,7 +18771,7 @@ function Nh() {
           x: ee,
           y: G
         } = (0, u.calcXY)(K, D, F, ie, oe);
-        return N.call(this, Q, ee, G, {
+        return C.call(this, Q, ee, G, {
           e: S,
           node: b,
           newPosition: te
@@ -18575,7 +18789,7 @@ function Nh() {
         const {
           w: k,
           h: E,
-          i: N
+          i: C
         } = this.props, {
           left: D,
           top: F
@@ -18590,7 +18804,7 @@ function Nh() {
           x: Q,
           y: ie
         } = (0, u.calcXY)(this.getPositionParams(), F, D, k, E);
-        return b.call(this, N, Q, ie, {
+        return b.call(this, C, Q, ie, {
           e: S,
           node: w,
           newPosition: V
@@ -18630,12 +18844,12 @@ function Nh() {
           deltaY: y.top
         });
       else if (E) {
-        const N = y.left - k.left, D = y.top - k.top;
+        const C = y.left - k.left, D = y.top - k.top;
         this.onDrag(
           y.e,
           {
             node: w,
-            deltaX: N,
+            deltaX: C,
             deltaY: D
           },
           !0
@@ -18711,12 +18925,12 @@ function Nh() {
         cols: b,
         minW: k,
         minH: E,
-        maxW: N,
+        maxW: C,
         maxH: D,
         transformScale: F,
         resizeHandles: V,
         resizeHandle: Q
-      } = this.props, ie = this.getPositionParams(), oe = (0, u.calcGridItemPosition)(ie, 0, 0, b, 0).width, pe = (0, u.calcGridItemPosition)(ie, 0, 0, k, E), K = (0, u.calcGridItemPosition)(ie, 0, 0, N, D), te = [pe.width, pe.height], ee = [Math.min(K.width, oe), Math.min(K.height, 1 / 0)];
+      } = this.props, ie = this.getPositionParams(), oe = (0, u.calcGridItemPosition)(ie, 0, 0, b, 0).width, pe = (0, u.calcGridItemPosition)(ie, 0, 0, k, E), K = (0, u.calcGridItemPosition)(ie, 0, 0, C, D), te = [pe.width, pe.height], ee = [Math.min(K.width, oe), Math.min(K.height, 1 / 0)];
       return /* @__PURE__ */ o.default.createElement(
         s.Resizable,
         {
@@ -18745,7 +18959,7 @@ function Nh() {
       let {
         node: k,
         size: E,
-        handle: N
+        handle: C
       } = y;
       const D = this.props[b];
       if (!D) return;
@@ -18761,7 +18975,7 @@ function Nh() {
         maxW: te
       } = this.props;
       let ee = E;
-      k && (ee = (0, c.resizeItemInDirection)(N, w, E, pe), (0, r.flushSync)(() => {
+      k && (ee = (0, c.resizeItemInDirection)(C, w, E, pe), (0, r.flushSync)(() => {
         this.setState({
           resizing: b === "onResizeStop" ? null : ee
         });
@@ -18769,12 +18983,12 @@ function Nh() {
       let {
         w: G,
         h: ce
-      } = (0, u.calcWH)(this.getPositionParams(), ee.width, ee.height, F, V, N);
+      } = (0, u.calcWH)(this.getPositionParams(), ee.width, ee.height, F, V, C);
       G = (0, u.clamp)(G, Math.max(K, 1), te), ce = (0, u.clamp)(ce, oe, ie), D.call(this, Q, G, ce, {
         e: S,
         node: k,
         size: ee,
-        handle: N
+        handle: C
       });
     }
     render() {
@@ -18785,7 +18999,7 @@ function Nh() {
         h: b,
         isDraggable: k,
         isResizable: E,
-        droppingPosition: N,
+        droppingPosition: C,
         useCSSTransforms: D
       } = this.props, F = (0, u.calcGridItemPosition)(this.getPositionParams(), S, y, w, b, this.state), V = o.default.Children.only(this.props.children);
       let Q = /* @__PURE__ */ o.default.cloneElement(V, {
@@ -18795,7 +19009,7 @@ function Nh() {
           resizing: !!this.state.resizing,
           "react-draggable": k,
           "react-draggable-dragging": !!this.state.dragging,
-          dropping: !!N,
+          dropping: !!C,
           cssTransforms: D
         }),
         // We can set the width and height on the child, but unfortunately we can't set the position.
@@ -18804,7 +19018,7 @@ function Nh() {
       return Q = this.mixinResizable(Q, F, E), Q = this.mixinDraggable(Q, k), Q;
     }
   };
-  return mi.default = I, v(I, "propTypes", {
+  return gi.default = I, v(I, "propTypes", {
     // Children must be only a single element
     children: n.default.element,
     // General grid attributes
@@ -18881,15 +19095,15 @@ function Nh() {
     maxH: 1 / 0,
     maxW: 1 / 0,
     transformScale: 1
-  }), mi;
+  }), gi;
 }
-var Vu;
-function Vp() {
-  if (Vu) return pi;
-  Vu = 1, Object.defineProperty(pi, "__esModule", {
+var Gu;
+function Kp() {
+  if (Gu) return mi;
+  Gu = 1, Object.defineProperty(mi, "__esModule", {
     value: !0
-  }), pi.default = void 0;
-  var o = g(It()), r = /* @__PURE__ */ zl(), n = p(la()), a = An(), s = Rl(), c = p(Nh()), u = p(Wp());
+  }), mi.default = void 0;
+  var o = g(It()), r = /* @__PURE__ */ Rl(), n = p(ca()), a = En(), s = Ll(), c = p(zh()), u = p(Yp());
   function p(S) {
     return S && S.__esModule ? S : { default: S };
   }
@@ -18897,17 +19111,17 @@ function Vp() {
     if (typeof WeakMap == "function") var w = /* @__PURE__ */ new WeakMap(), b = /* @__PURE__ */ new WeakMap();
     return (g = function(k, E) {
       if (!E && k && k.__esModule) return k;
-      var N, D, F = { __proto__: null, default: k };
+      var C, D, F = { __proto__: null, default: k };
       if (k === null || typeof k != "object" && typeof k != "function") return F;
-      if (N = E ? b : w) {
-        if (N.has(k)) return N.get(k);
-        N.set(k, F);
+      if (C = E ? b : w) {
+        if (C.has(k)) return C.get(k);
+        C.set(k, F);
       }
-      for (const V in k) V !== "default" && {}.hasOwnProperty.call(k, V) && ((D = (N = Object.defineProperty) && Object.getOwnPropertyDescriptor(k, V)) && (D.get || D.set) ? N(F, V, D) : F[V] = k[V]);
+      for (const V in k) V !== "default" && {}.hasOwnProperty.call(k, V) && ((D = (C = Object.defineProperty) && Object.getOwnPropertyDescriptor(k, V)) && (D.get || D.set) ? C(F, V, D) : F[V] = k[V]);
       return F;
     })(S, y);
   }
-  function _(S, y) {
+  function f(S, y) {
     var w = Object.keys(S);
     if (Object.getOwnPropertySymbols) {
       var b = Object.getOwnPropertySymbols(S);
@@ -18917,12 +19131,12 @@ function Vp() {
     }
     return w;
   }
-  function f(S) {
+  function _(S) {
     for (var y = 1; y < arguments.length; y++) {
       var w = arguments[y] != null ? arguments[y] : {};
-      y % 2 ? _(Object(w), !0).forEach(function(b) {
+      y % 2 ? f(Object(w), !0).forEach(function(b) {
         h(S, b, w[b]);
-      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(S, Object.getOwnPropertyDescriptors(w)) : _(Object(w)).forEach(function(b) {
+      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(S, Object.getOwnPropertyDescriptors(w)) : f(Object(w)).forEach(function(b) {
         Object.defineProperty(S, b, Object.getOwnPropertyDescriptor(w, b));
       });
     }
@@ -18973,7 +19187,7 @@ function Vp() {
       }), h(this, "dragEnterCounter", 0), h(this, "onDragStart", (y, w, b, k) => {
         let {
           e: E,
-          node: N
+          node: C
         } = k;
         const {
           layout: D
@@ -18991,11 +19205,11 @@ function Vp() {
           oldDragItem: (0, a.cloneLayoutItem)(F),
           oldLayout: D,
           activeDrag: V
-        }), this.props.onDragStart(D, F, F, null, E, N);
+        }), this.props.onDragStart(D, F, F, null, E, C);
       }), h(this, "onDrag", (y, w, b, k) => {
         let {
           e: E,
-          node: N
+          node: C
         } = k;
         const {
           oldDragItem: D
@@ -19017,14 +19231,14 @@ function Vp() {
           placeholder: !0,
           i: y
         };
-        F = (0, a.moveElement)(F, oe, w, b, !0, ie, (0, a.compactType)(this.props), V, Q), this.props.onDrag(F, D, oe, pe, E, N), this.setState({
+        F = (0, a.moveElement)(F, oe, w, b, !0, ie, (0, a.compactType)(this.props), V, Q), this.props.onDrag(F, D, oe, pe, E, C), this.setState({
           layout: Q ? F : (0, a.compact)(F, (0, a.compactType)(this.props), V),
           activeDrag: pe
         });
       }), h(this, "onDragStop", (y, w, b, k) => {
         let {
           e: E,
-          node: N
+          node: C
         } = k;
         if (!this.state.activeDrag) return;
         const {
@@ -19041,7 +19255,7 @@ function Vp() {
         if (!oe) return;
         F = (0, a.moveElement)(F, oe, w, b, !0, Q, (0, a.compactType)(this.props), V, ie);
         const K = ie ? F : (0, a.compact)(F, (0, a.compactType)(this.props), V);
-        this.props.onDragStop(K, D, oe, null, E, N);
+        this.props.onDragStop(K, D, oe, null, E, C);
         const {
           oldLayout: te
         } = this.state;
@@ -19054,7 +19268,7 @@ function Vp() {
       }), h(this, "onResizeStart", (y, w, b, k) => {
         let {
           e: E,
-          node: N
+          node: C
         } = k;
         const {
           layout: D
@@ -19063,11 +19277,11 @@ function Vp() {
           oldResizeItem: (0, a.cloneLayoutItem)(F),
           oldLayout: this.state.layout,
           resizing: !0
-        }), this.props.onResizeStart(D, F, F, null, E, N));
+        }), this.props.onResizeStart(D, F, F, null, E, C));
       }), h(this, "onResize", (y, w, b, k) => {
         let {
           e: E,
-          node: N,
+          node: C,
           size: D,
           handle: F
         } = k;
@@ -19083,7 +19297,7 @@ function Vp() {
         let K = !1, te, ee, G;
         const [ce, re] = (0, a.withLayoutItem)(Q, y, (W) => {
           let me;
-          return ee = W.x, G = W.y, ["sw", "w", "nw", "n", "ne"].indexOf(F) !== -1 && (["sw", "nw", "w"].indexOf(F) !== -1 && (ee = W.x + (W.w - w), w = W.x !== ee && ee < 0 ? W.w : w, ee = ee < 0 ? 0 : ee), ["ne", "n", "nw"].indexOf(F) !== -1 && (G = W.y + (W.h - b), b = W.y !== G && G < 0 ? W.h : b, G = G < 0 ? 0 : G), K = !0), oe && !pe && (me = (0, a.getAllCollisions)(Q, f(f({}, W), {}, {
+          return ee = W.x, G = W.y, ["sw", "w", "nw", "n", "ne"].indexOf(F) !== -1 && (["sw", "nw", "w"].indexOf(F) !== -1 && (ee = W.x + (W.w - w), w = W.x !== ee && ee < 0 ? W.w : w, ee = ee < 0 ? 0 : ee), ["ne", "n", "nw"].indexOf(F) !== -1 && (G = W.y + (W.h - b), b = W.y !== G && G < 0 ? W.h : b, G = G < 0 ? 0 : G), K = !0), oe && !pe && (me = (0, a.getAllCollisions)(Q, _(_({}, W), {}, {
             w,
             h: b,
             x: ee,
@@ -19100,14 +19314,14 @@ function Vp() {
           static: !0,
           i: y
         };
-        this.props.onResize(te, V, re, T, E, N), this.setState({
+        this.props.onResize(te, V, re, T, E, C), this.setState({
           layout: pe ? te : (0, a.compact)(te, (0, a.compactType)(this.props), ie),
           activeDrag: T
         });
       }), h(this, "onResizeStop", (y, w, b, k) => {
         let {
           e: E,
-          node: N
+          node: C
         } = k;
         const {
           layout: D,
@@ -19116,7 +19330,7 @@ function Vp() {
           cols: V,
           allowOverlap: Q
         } = this.props, ie = (0, a.getLayoutItem)(D, y), oe = Q ? D : (0, a.compact)(D, (0, a.compactType)(this.props), V);
-        this.props.onResizeStop(oe, F, ie, null, E, N);
+        this.props.onResizeStop(oe, F, ie, null, E, C);
         const {
           oldLayout: pe
         } = this.state;
@@ -19136,7 +19350,7 @@ function Vp() {
           droppingItem: b,
           onDropDragOver: k,
           margin: E,
-          cols: N,
+          cols: C,
           rowHeight: D,
           maxRows: F,
           width: V,
@@ -19145,7 +19359,7 @@ function Vp() {
         } = this.props, oe = k?.(y);
         if (oe === !1)
           return this.state.droppingDOMNode && this.removeDroppingPlaceholder(), !1;
-        const pe = f(f({}, b), oe), {
+        const pe = _(_({}, b), oe), {
           layout: K
         } = this.state, te = y.currentTarget.getBoundingClientRect(), ee = y.clientX - te.left, G = y.clientY - te.top, ce = {
           left: ee / ie,
@@ -19164,7 +19378,7 @@ function Vp() {
           }
         } else {
           const re = {
-            cols: N,
+            cols: C,
             margin: E,
             maxRows: F,
             rowHeight: D,
@@ -19176,7 +19390,7 @@ function Vp() {
               key: pe.i
             }),
             droppingPosition: ce,
-            layout: [...K, f(f({}, pe), {}, {
+            layout: [...K, _(_({}, pe), {}, {
               x: T.x,
               y: T.y,
               static: !1,
@@ -19267,7 +19481,7 @@ function Vp() {
         cols: b,
         margin: k,
         containerPadding: E,
-        rowHeight: N,
+        rowHeight: C,
         maxRows: D,
         useCSSTransforms: F,
         transformScale: V
@@ -19284,7 +19498,7 @@ function Vp() {
         margin: k,
         containerPadding: E || k,
         maxRows: D,
-        rowHeight: N,
+        rowHeight: C,
         isDraggable: !1,
         isResizable: !1,
         isBounded: !1,
@@ -19304,7 +19518,7 @@ function Vp() {
       const {
         width: k,
         cols: E,
-        margin: N,
+        margin: C,
         containerPadding: D,
         rowHeight: F,
         maxRows: V,
@@ -19320,12 +19534,12 @@ function Vp() {
       } = this.props, {
         mounted: re,
         droppingPosition: T
-      } = this.state, W = typeof b.isDraggable == "boolean" ? b.isDraggable : !b.static && Q, me = typeof b.isResizable == "boolean" ? b.isResizable : !b.static && ie, _e = b.resizeHandles || G, we = W && oe && b.isBounded !== !1;
+      } = this.state, W = typeof b.isDraggable == "boolean" ? b.isDraggable : !b.static && Q, me = typeof b.isResizable == "boolean" ? b.isResizable : !b.static && ie, fe = b.resizeHandles || G, we = W && oe && b.isBounded !== !1;
       return /* @__PURE__ */ o.createElement(c.default, {
         containerWidth: k,
         cols: E,
-        margin: N,
-        containerPadding: D || N,
+        margin: C,
+        containerPadding: D || C,
         maxRows: V,
         rowHeight: F,
         cancel: te,
@@ -19353,7 +19567,7 @@ function Vp() {
         maxW: b.maxW,
         static: b.static,
         droppingPosition: w ? T : void 0,
-        resizeHandles: _e,
+        resizeHandles: fe,
         resizeHandle: ce
       }, y);
     }
@@ -19363,13 +19577,13 @@ function Vp() {
         style: w,
         isDroppable: b,
         innerRef: k
-      } = this.props, E = (0, n.default)(R, y), N = f({
+      } = this.props, E = (0, n.default)(R, y), C = _({
         height: this.containerHeight()
       }, w);
       return /* @__PURE__ */ o.createElement("div", {
         ref: k,
         className: E,
-        style: N,
+        style: C,
         onDrop: b ? this.onDrop : a.noop,
         onDragLeave: b ? this.onDragLeave : a.noop,
         onDragEnter: b ? this.onDragEnter : a.noop,
@@ -19377,7 +19591,7 @@ function Vp() {
       }, o.Children.map(this.props.children, (D) => this.processGridItem(D)), b && this.state.droppingDOMNode && this.processGridItem(this.state.droppingDOMNode, !0), this.placeholder());
     }
   };
-  return pi.default = A, h(A, "displayName", "ReactGridLayout"), h(A, "propTypes", u.default), h(A, "defaultProps", {
+  return mi.default = A, h(A, "displayName", "ReactGridLayout"), h(A, "propTypes", u.default), h(A, "defaultProps", {
     autoSize: !0,
     cols: 12,
     className: "",
@@ -19415,20 +19629,20 @@ function Vp() {
     onResizeStop: a.noop,
     onDrop: a.noop,
     onDropDragOver: a.noop
-  }), pi;
+  }), mi;
 }
-var yi = {}, Vr = {}, Gu;
-function Gp() {
-  if (Gu) return Vr;
-  Gu = 1, Object.defineProperty(Vr, "__esModule", {
+var vi = {}, Vr = {}, Yu;
+function Xp() {
+  if (Yu) return Vr;
+  Yu = 1, Object.defineProperty(Vr, "__esModule", {
     value: !0
   }), Vr.findOrGenerateResponsiveLayout = a, Vr.getBreakpointFromWidth = r, Vr.getColsFromBreakpoint = n, Vr.sortBreakpoints = s;
-  var o = An();
+  var o = En();
   function r(c, u) {
     const p = s(c);
     let g = p[0];
-    for (let _ = 1, f = p.length; _ < f; _++) {
-      const h = p[_];
+    for (let f = 1, _ = p.length; f < _; f++) {
+      const h = p[f];
       u > c[h] && (g = h);
     }
     return g;
@@ -19438,7 +19652,7 @@ function Gp() {
       throw new Error("ResponsiveReactGridLayout: `cols` entry for breakpoint " + c + " is missing!");
     return u[c];
   }
-  function a(c, u, p, g, _, f) {
+  function a(c, u, p, g, f, _) {
     if (c[p]) return (0, o.cloneLayout)(c[p]);
     let h = c[g];
     const v = s(u), P = v.slice(v.indexOf(p));
@@ -19450,8 +19664,8 @@ function Gp() {
       }
     }
     return h = (0, o.cloneLayout)(h || []), (0, o.compact)((0, o.correctBounds)(h, {
-      cols: _
-    }), f, _);
+      cols: f
+    }), _, f);
   }
   function s(c) {
     return Object.keys(c).sort(function(p, g) {
@@ -19460,24 +19674,24 @@ function Gp() {
   }
   return Vr;
 }
-var Yu;
-function Ch() {
-  if (Yu) return yi;
-  Yu = 1, Object.defineProperty(yi, "__esModule", {
+var Ku;
+function Rh() {
+  if (Ku) return vi;
+  Ku = 1, Object.defineProperty(vi, "__esModule", {
     value: !0
-  }), yi.default = void 0;
-  var o = g(It()), r = p(/* @__PURE__ */ Cr()), n = /* @__PURE__ */ zl(), a = An(), s = Gp(), c = p(Vp());
+  }), vi.default = void 0;
+  var o = g(It()), r = p(/* @__PURE__ */ Nr()), n = /* @__PURE__ */ Rl(), a = En(), s = Xp(), c = p(Kp());
   const u = ["breakpoint", "breakpoints", "cols", "layouts", "margin", "containerPadding", "onBreakpointChange", "onLayoutChange", "onWidthChange"];
   function p(b) {
     return b && b.__esModule ? b : { default: b };
   }
   function g(b, k) {
-    if (typeof WeakMap == "function") var E = /* @__PURE__ */ new WeakMap(), N = /* @__PURE__ */ new WeakMap();
+    if (typeof WeakMap == "function") var E = /* @__PURE__ */ new WeakMap(), C = /* @__PURE__ */ new WeakMap();
     return (g = function(D, F) {
       if (!F && D && D.__esModule) return D;
       var V, Q, ie = { __proto__: null, default: D };
       if (D === null || typeof D != "object" && typeof D != "function") return ie;
-      if (V = F ? N : E) {
+      if (V = F ? C : E) {
         if (V.has(D)) return V.get(D);
         V.set(D, ie);
       }
@@ -19485,50 +19699,50 @@ function Ch() {
       return ie;
     })(b, k);
   }
-  function _() {
-    return _ = Object.assign ? Object.assign.bind() : function(b) {
+  function f() {
+    return f = Object.assign ? Object.assign.bind() : function(b) {
       for (var k = 1; k < arguments.length; k++) {
         var E = arguments[k];
-        for (var N in E) ({}).hasOwnProperty.call(E, N) && (b[N] = E[N]);
+        for (var C in E) ({}).hasOwnProperty.call(E, C) && (b[C] = E[C]);
       }
       return b;
-    }, _.apply(null, arguments);
+    }, f.apply(null, arguments);
   }
-  function f(b, k) {
+  function _(b, k) {
     if (b == null) return {};
-    var E, N, D = h(b, k);
+    var E, C, D = h(b, k);
     if (Object.getOwnPropertySymbols) {
       var F = Object.getOwnPropertySymbols(b);
-      for (N = 0; N < F.length; N++) E = F[N], k.indexOf(E) === -1 && {}.propertyIsEnumerable.call(b, E) && (D[E] = b[E]);
+      for (C = 0; C < F.length; C++) E = F[C], k.indexOf(E) === -1 && {}.propertyIsEnumerable.call(b, E) && (D[E] = b[E]);
     }
     return D;
   }
   function h(b, k) {
     if (b == null) return {};
     var E = {};
-    for (var N in b) if ({}.hasOwnProperty.call(b, N)) {
-      if (k.indexOf(N) !== -1) continue;
-      E[N] = b[N];
+    for (var C in b) if ({}.hasOwnProperty.call(b, C)) {
+      if (k.indexOf(C) !== -1) continue;
+      E[C] = b[C];
     }
     return E;
   }
   function v(b, k) {
     var E = Object.keys(b);
     if (Object.getOwnPropertySymbols) {
-      var N = Object.getOwnPropertySymbols(b);
-      k && (N = N.filter(function(D) {
+      var C = Object.getOwnPropertySymbols(b);
+      k && (C = C.filter(function(D) {
         return Object.getOwnPropertyDescriptor(b, D).enumerable;
-      })), E.push.apply(E, N);
+      })), E.push.apply(E, C);
     }
     return E;
   }
   function P(b) {
     for (var k = 1; k < arguments.length; k++) {
       var E = arguments[k] != null ? arguments[k] : {};
-      k % 2 ? v(Object(E), !0).forEach(function(N) {
-        R(b, N, E[N]);
-      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(b, Object.getOwnPropertyDescriptors(E)) : v(Object(E)).forEach(function(N) {
-        Object.defineProperty(b, N, Object.getOwnPropertyDescriptor(E, N));
+      k % 2 ? v(Object(E), !0).forEach(function(C) {
+        R(b, C, E[C]);
+      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(b, Object.getOwnPropertyDescriptors(E)) : v(Object(E)).forEach(function(C) {
+        Object.defineProperty(b, C, Object.getOwnPropertyDescriptor(E, C));
       });
     }
     return b;
@@ -19544,8 +19758,8 @@ function Ch() {
     if (typeof b != "object" || !b) return b;
     var E = b[Symbol.toPrimitive];
     if (E !== void 0) {
-      var N = E.call(b, k);
-      if (typeof N != "object") return N;
+      var C = E.call(b, k);
+      if (typeof C != "object") return C;
       throw new TypeError("@@toPrimitive must return a primitive value.");
     }
     return (k === "string" ? String : Number)(b);
@@ -19566,11 +19780,11 @@ function Ch() {
       const {
         width: k,
         breakpoints: E,
-        layouts: N,
+        layouts: C,
         cols: D
       } = this.props, F = (0, s.getBreakpointFromWidth)(E, k), V = (0, s.getColsFromBreakpoint)(F, D), Q = this.props.verticalCompact === !1 ? null : this.props.compactType;
       return {
-        layout: (0, s.findOrGenerateResponsiveLayout)(N, E, F, F, V, Q),
+        layout: (0, s.findOrGenerateResponsiveLayout)(C, E, F, F, V, Q),
         breakpoint: F,
         cols: V
       };
@@ -19578,11 +19792,11 @@ function Ch() {
     static getDerivedStateFromProps(k, E) {
       if (!(0, n.deepEqual)(k.layouts, E.layouts)) {
         const {
-          breakpoint: N,
+          breakpoint: C,
           cols: D
         } = E;
         return {
-          layout: (0, s.findOrGenerateResponsiveLayout)(k.layouts, k.breakpoints, N, N, D, k.compactType),
+          layout: (0, s.findOrGenerateResponsiveLayout)(k.layouts, k.breakpoints, C, C, D, k.compactType),
           layouts: k.layouts
         };
       }
@@ -19598,11 +19812,11 @@ function Ch() {
     onWidthChange(k) {
       const {
         breakpoints: E,
-        cols: N,
+        cols: C,
         layouts: D,
         compactType: F
-      } = this.props, V = this.props.breakpoint || (0, s.getBreakpointFromWidth)(this.props.breakpoints, this.props.width), Q = this.state.breakpoint, ie = (0, s.getColsFromBreakpoint)(V, N), oe = P({}, D);
-      if (Q !== V || k.breakpoints !== E || k.cols !== N) {
+      } = this.props, V = this.props.breakpoint || (0, s.getBreakpointFromWidth)(this.props.breakpoints, this.props.width), Q = this.state.breakpoint, ie = (0, s.getColsFromBreakpoint)(V, C), oe = P({}, D);
+      if (Q !== V || k.breakpoints !== E || k.cols !== C) {
         Q in oe || (oe[Q] = (0, a.cloneLayout)(this.state.layout));
         let te = (0, s.findOrGenerateResponsiveLayout)(oe, E, V, Q, ie, F);
         te = (0, a.synchronizeLayoutWithChildren)(te, this.props.children, ie, F, this.props.allowOverlap), oe[V] = te, this.props.onBreakpointChange(V, ie), this.props.onLayoutChange(te, oe), this.setState({
@@ -19617,7 +19831,7 @@ function Ch() {
     render() {
       const k = this.props, {
         breakpoint: E,
-        breakpoints: N,
+        breakpoints: C,
         cols: D,
         layouts: F,
         margin: V,
@@ -19625,8 +19839,8 @@ function Ch() {
         onBreakpointChange: ie,
         onLayoutChange: oe,
         onWidthChange: pe
-      } = k, K = f(k, u);
-      return /* @__PURE__ */ o.createElement(c.default, _({}, K, {
+      } = k, K = _(k, u);
+      return /* @__PURE__ */ o.createElement(c.default, f({}, K, {
         // $FlowIgnore should allow nullable here due to DefaultProps
         margin: y(V, this.state.breakpoint),
         containerPadding: y(Q, this.state.breakpoint),
@@ -19636,7 +19850,7 @@ function Ch() {
       }));
     }
   };
-  return yi.default = w, R(w, "propTypes", {
+  return vi.default = w, R(w, "propTypes", {
     //
     // Basic props
     //
@@ -19710,9 +19924,9 @@ function Ch() {
     onBreakpointChange: a.noop,
     onLayoutChange: a.noop,
     onWidthChange: a.noop
-  }), yi;
+  }), vi;
 }
-var Fo = {}, Yp = function() {
+var Uo = {}, Qp = function() {
   if (typeof Map < "u")
     return Map;
   function o(r, n) {
@@ -19758,27 +19972,27 @@ var Fo = {}, Yp = function() {
       }, r;
     }()
   );
-}(), wl = typeof window < "u" && typeof document < "u" && window.document === document, ra = function() {
+}(), kl = typeof window < "u" && typeof document < "u" && window.document === document, na = function() {
   return typeof global < "u" && global.Math === Math ? global : typeof self < "u" && self.Math === Math ? self : typeof window < "u" && window.Math === Math ? window : Function("return this")();
-}(), zh = function() {
-  return typeof requestAnimationFrame == "function" ? requestAnimationFrame.bind(ra) : function(o) {
+}(), Lh = function() {
+  return typeof requestAnimationFrame == "function" ? requestAnimationFrame.bind(na) : function(o) {
     return setTimeout(function() {
       return o(Date.now());
     }, 1e3 / 60);
   };
-}(), Rh = 2;
-function Lh(o, r) {
+}(), Oh = 2;
+function Th(o, r) {
   var n = !1, a = !1, s = 0;
   function c() {
     n && (n = !1, o()), a && p();
   }
   function u() {
-    zh(c);
+    Lh(c);
   }
   function p() {
     var g = Date.now();
     if (n) {
-      if (g - s < Rh)
+      if (g - s < Oh)
         return;
       a = !0;
     } else
@@ -19787,11 +20001,11 @@ function Lh(o, r) {
   }
   return p;
 }
-var Oh = 20, Th = ["top", "right", "bottom", "left", "width", "height", "size", "weight"], Mh = typeof MutationObserver < "u", Hh = (
+var Mh = 20, Hh = ["top", "right", "bottom", "left", "width", "height", "size", "weight"], Bh = typeof MutationObserver < "u", Dh = (
   /** @class */
   function() {
     function o() {
-      this.connected_ = !1, this.mutationEventsAdded_ = !1, this.mutationsObserver_ = null, this.observers_ = [], this.onTransitionEnd_ = this.onTransitionEnd_.bind(this), this.refresh = Lh(this.refresh.bind(this), Oh);
+      this.connected_ = !1, this.mutationEventsAdded_ = !1, this.mutationsObserver_ = null, this.observers_ = [], this.onTransitionEnd_ = this.onTransitionEnd_.bind(this), this.refresh = Th(this.refresh.bind(this), Mh);
     }
     return o.prototype.addObserver = function(r) {
       ~this.observers_.indexOf(r) || this.observers_.push(r), this.connected_ || this.connect_();
@@ -19809,16 +20023,16 @@ var Oh = 20, Th = ["top", "right", "bottom", "left", "width", "height", "size", 
         return n.broadcastActive();
       }), r.length > 0;
     }, o.prototype.connect_ = function() {
-      !wl || this.connected_ || (document.addEventListener("transitionend", this.onTransitionEnd_), window.addEventListener("resize", this.refresh), Mh ? (this.mutationsObserver_ = new MutationObserver(this.refresh), this.mutationsObserver_.observe(document, {
+      !kl || this.connected_ || (document.addEventListener("transitionend", this.onTransitionEnd_), window.addEventListener("resize", this.refresh), Bh ? (this.mutationsObserver_ = new MutationObserver(this.refresh), this.mutationsObserver_.observe(document, {
         attributes: !0,
         childList: !0,
         characterData: !0,
         subtree: !0
       })) : (document.addEventListener("DOMSubtreeModified", this.refresh), this.mutationEventsAdded_ = !0), this.connected_ = !0);
     }, o.prototype.disconnect_ = function() {
-      !wl || !this.connected_ || (document.removeEventListener("transitionend", this.onTransitionEnd_), window.removeEventListener("resize", this.refresh), this.mutationsObserver_ && this.mutationsObserver_.disconnect(), this.mutationEventsAdded_ && document.removeEventListener("DOMSubtreeModified", this.refresh), this.mutationsObserver_ = null, this.mutationEventsAdded_ = !1, this.connected_ = !1);
+      !kl || !this.connected_ || (document.removeEventListener("transitionend", this.onTransitionEnd_), window.removeEventListener("resize", this.refresh), this.mutationsObserver_ && this.mutationsObserver_.disconnect(), this.mutationEventsAdded_ && document.removeEventListener("DOMSubtreeModified", this.refresh), this.mutationsObserver_ = null, this.mutationEventsAdded_ = !1, this.connected_ = !1);
     }, o.prototype.onTransitionEnd_ = function(r) {
-      var n = r.propertyName, a = n === void 0 ? "" : n, s = Th.some(function(c) {
+      var n = r.propertyName, a = n === void 0 ? "" : n, s = Hh.some(function(c) {
         return !!~a.indexOf(c);
       });
       s && this.refresh();
@@ -19826,7 +20040,7 @@ var Oh = 20, Th = ["top", "right", "bottom", "left", "width", "height", "size", 
       return this.instance_ || (this.instance_ = new o()), this.instance_;
     }, o.instance_ = null, o;
   }()
-), Kp = function(o, r) {
+), Jp = function(o, r) {
   for (var n = 0, a = Object.keys(r); n < a.length; n++) {
     var s = a[n];
     Object.defineProperty(o, s, {
@@ -19837,59 +20051,59 @@ var Oh = 20, Th = ["top", "right", "bottom", "left", "width", "height", "size", 
     });
   }
   return o;
-}, kn = function(o) {
+}, Sn = function(o) {
   var r = o && o.ownerDocument && o.ownerDocument.defaultView;
-  return r || ra;
-}, Xp = ca(0, 0, 0, 0);
-function na(o) {
+  return r || na;
+}, Zp = da(0, 0, 0, 0);
+function ia(o) {
   return parseFloat(o) || 0;
 }
-function Ku(o) {
+function Xu(o) {
   for (var r = [], n = 1; n < arguments.length; n++)
     r[n - 1] = arguments[n];
   return r.reduce(function(a, s) {
     var c = o["border-" + s + "-width"];
-    return a + na(c);
+    return a + ia(c);
   }, 0);
 }
-function Bh(o) {
+function $h(o) {
   for (var r = ["top", "right", "bottom", "left"], n = {}, a = 0, s = r; a < s.length; a++) {
     var c = s[a], u = o["padding-" + c];
-    n[c] = na(u);
+    n[c] = ia(u);
   }
   return n;
 }
-function Dh(o) {
+function qh(o) {
   var r = o.getBBox();
-  return ca(0, 0, r.width, r.height);
+  return da(0, 0, r.width, r.height);
 }
-function $h(o) {
+function jh(o) {
   var r = o.clientWidth, n = o.clientHeight;
   if (!r && !n)
-    return Xp;
-  var a = kn(o).getComputedStyle(o), s = Bh(a), c = s.left + s.right, u = s.top + s.bottom, p = na(a.width), g = na(a.height);
-  if (a.boxSizing === "border-box" && (Math.round(p + c) !== r && (p -= Ku(a, "left", "right") + c), Math.round(g + u) !== n && (g -= Ku(a, "top", "bottom") + u)), !jh(o)) {
-    var _ = Math.round(p + c) - r, f = Math.round(g + u) - n;
-    Math.abs(_) !== 1 && (p -= _), Math.abs(f) !== 1 && (g -= f);
+    return Zp;
+  var a = Sn(o).getComputedStyle(o), s = $h(a), c = s.left + s.right, u = s.top + s.bottom, p = ia(a.width), g = ia(a.height);
+  if (a.boxSizing === "border-box" && (Math.round(p + c) !== r && (p -= Xu(a, "left", "right") + c), Math.round(g + u) !== n && (g -= Xu(a, "top", "bottom") + u)), !Uh(o)) {
+    var f = Math.round(p + c) - r, _ = Math.round(g + u) - n;
+    Math.abs(f) !== 1 && (p -= f), Math.abs(_) !== 1 && (g -= _);
   }
-  return ca(s.left, s.top, p, g);
+  return da(s.left, s.top, p, g);
 }
-var qh = /* @__PURE__ */ function() {
+var Fh = /* @__PURE__ */ function() {
   return typeof SVGGraphicsElement < "u" ? function(o) {
-    return o instanceof kn(o).SVGGraphicsElement;
+    return o instanceof Sn(o).SVGGraphicsElement;
   } : function(o) {
-    return o instanceof kn(o).SVGElement && typeof o.getBBox == "function";
+    return o instanceof Sn(o).SVGElement && typeof o.getBBox == "function";
   };
 }();
-function jh(o) {
-  return o === kn(o).document.documentElement;
-}
-function Fh(o) {
-  return wl ? qh(o) ? Dh(o) : $h(o) : Xp;
-}
 function Uh(o) {
+  return o === Sn(o).document.documentElement;
+}
+function Wh(o) {
+  return kl ? Fh(o) ? qh(o) : jh(o) : Zp;
+}
+function Vh(o) {
   var r = o.x, n = o.y, a = o.width, s = o.height, c = typeof DOMRectReadOnly < "u" ? DOMRectReadOnly : Object, u = Object.create(c.prototype);
-  return Kp(u, {
+  return Jp(u, {
     x: r,
     y: n,
     width: a,
@@ -19900,37 +20114,37 @@ function Uh(o) {
     left: r
   }), u;
 }
-function ca(o, r, n, a) {
+function da(o, r, n, a) {
   return { x: o, y: r, width: n, height: a };
 }
-var Wh = (
+var Gh = (
   /** @class */
   function() {
     function o(r) {
-      this.broadcastWidth = 0, this.broadcastHeight = 0, this.contentRect_ = ca(0, 0, 0, 0), this.target = r;
+      this.broadcastWidth = 0, this.broadcastHeight = 0, this.contentRect_ = da(0, 0, 0, 0), this.target = r;
     }
     return o.prototype.isActive = function() {
-      var r = Fh(this.target);
+      var r = Wh(this.target);
       return this.contentRect_ = r, r.width !== this.broadcastWidth || r.height !== this.broadcastHeight;
     }, o.prototype.broadcastRect = function() {
       var r = this.contentRect_;
       return this.broadcastWidth = r.width, this.broadcastHeight = r.height, r;
     }, o;
   }()
-), Vh = (
+), Yh = (
   /** @class */
   /* @__PURE__ */ function() {
     function o(r, n) {
-      var a = Uh(n);
-      Kp(this, { target: r, contentRect: a });
+      var a = Vh(n);
+      Jp(this, { target: r, contentRect: a });
     }
     return o;
   }()
-), Gh = (
+), Kh = (
   /** @class */
   function() {
     function o(r, n, a) {
-      if (this.activeObservations_ = [], this.observations_ = new Yp(), typeof r != "function")
+      if (this.activeObservations_ = [], this.observations_ = new Qp(), typeof r != "function")
         throw new TypeError("The callback provided as parameter 1 is not a function.");
       this.callback_ = r, this.controller_ = n, this.callbackCtx_ = a;
     }
@@ -19938,16 +20152,16 @@ var Wh = (
       if (!arguments.length)
         throw new TypeError("1 argument required, but only 0 present.");
       if (!(typeof Element > "u" || !(Element instanceof Object))) {
-        if (!(r instanceof kn(r).Element))
+        if (!(r instanceof Sn(r).Element))
           throw new TypeError('parameter 1 is not of type "Element".');
         var n = this.observations_;
-        n.has(r) || (n.set(r, new Wh(r)), this.controller_.addObserver(this), this.controller_.refresh());
+        n.has(r) || (n.set(r, new Gh(r)), this.controller_.addObserver(this), this.controller_.refresh());
       }
     }, o.prototype.unobserve = function(r) {
       if (!arguments.length)
         throw new TypeError("1 argument required, but only 0 present.");
       if (!(typeof Element > "u" || !(Element instanceof Object))) {
-        if (!(r instanceof kn(r).Element))
+        if (!(r instanceof Sn(r).Element))
           throw new TypeError('parameter 1 is not of type "Element".');
         var n = this.observations_;
         n.has(r) && (n.delete(r), n.size || this.controller_.removeObserver(this));
@@ -19962,7 +20176,7 @@ var Wh = (
     }, o.prototype.broadcastActive = function() {
       if (this.hasActive()) {
         var r = this.callbackCtx_, n = this.activeObservations_.map(function(a) {
-          return new Vh(a.target, a.broadcastRect());
+          return new Yh(a.target, a.broadcastRect());
         });
         this.callback_.call(r, n, r), this.clearActive();
       }
@@ -19972,7 +20186,7 @@ var Wh = (
       return this.activeObservations_.length > 0;
     }, o;
   }()
-), Qp = typeof WeakMap < "u" ? /* @__PURE__ */ new WeakMap() : new Yp(), Jp = (
+), em = typeof WeakMap < "u" ? /* @__PURE__ */ new WeakMap() : new Qp(), tm = (
   /** @class */
   /* @__PURE__ */ function() {
     function o(r) {
@@ -19980,8 +20194,8 @@ var Wh = (
         throw new TypeError("Cannot call a class as a function.");
       if (!arguments.length)
         throw new TypeError("1 argument required, but only 0 present.");
-      var n = Hh.getInstance(), a = new Gh(r, n, this);
-      Qp.set(this, a);
+      var n = Dh.getInstance(), a = new Kh(r, n, this);
+      em.set(this, a);
     }
     return o;
   }()
@@ -19991,25 +20205,25 @@ var Wh = (
   "unobserve",
   "disconnect"
 ].forEach(function(o) {
-  Jp.prototype[o] = function() {
+  tm.prototype[o] = function() {
     var r;
-    return (r = Qp.get(this))[o].apply(r, arguments);
+    return (r = em.get(this))[o].apply(r, arguments);
   };
 });
-var Yh = function() {
-  return typeof ra.ResizeObserver < "u" ? ra.ResizeObserver : Jp;
+var Xh = function() {
+  return typeof na.ResizeObserver < "u" ? na.ResizeObserver : tm;
 }();
-const Kh = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const Qh = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Yh
-}, Symbol.toStringTag, { value: "Module" })), Xh = /* @__PURE__ */ ch(Kh);
-var Xu;
-function Qh() {
-  if (Xu) return Fo;
-  Xu = 1, Object.defineProperty(Fo, "__esModule", {
+  default: Xh
+}, Symbol.toStringTag, { value: "Module" })), Jh = /* @__PURE__ */ uh(Qh);
+var Qu;
+function Zh() {
+  if (Qu) return Uo;
+  Qu = 1, Object.defineProperty(Uo, "__esModule", {
     value: !0
-  }), Fo.default = R;
-  var o = u(It()), r = c(/* @__PURE__ */ Cr()), n = c(Xh), a = c(la());
+  }), Uo.default = R;
+  var o = u(It()), r = c(/* @__PURE__ */ Nr()), n = c(Jh), a = c(ca());
   const s = ["measureBeforeMount"];
   function c(I) {
     return I && I.__esModule ? I : { default: I };
@@ -20018,14 +20232,14 @@ function Qh() {
     if (typeof WeakMap == "function") var S = /* @__PURE__ */ new WeakMap(), y = /* @__PURE__ */ new WeakMap();
     return (u = function(w, b) {
       if (!b && w && w.__esModule) return w;
-      var k, E, N = { __proto__: null, default: w };
-      if (w === null || typeof w != "object" && typeof w != "function") return N;
+      var k, E, C = { __proto__: null, default: w };
+      if (w === null || typeof w != "object" && typeof w != "function") return C;
       if (k = b ? y : S) {
         if (k.has(w)) return k.get(w);
-        k.set(w, N);
+        k.set(w, C);
       }
-      for (const D in w) D !== "default" && {}.hasOwnProperty.call(w, D) && ((E = (k = Object.defineProperty) && Object.getOwnPropertyDescriptor(w, D)) && (E.get || E.set) ? k(N, D, E) : N[D] = w[D]);
-      return N;
+      for (const D in w) D !== "default" && {}.hasOwnProperty.call(w, D) && ((E = (k = Object.defineProperty) && Object.getOwnPropertyDescriptor(w, D)) && (E.get || E.set) ? k(C, D, E) : C[D] = w[D]);
+      return C;
     })(I, A);
   }
   function p() {
@@ -20039,14 +20253,14 @@ function Qh() {
   }
   function g(I, A) {
     if (I == null) return {};
-    var S, y, w = _(I, A);
+    var S, y, w = f(I, A);
     if (Object.getOwnPropertySymbols) {
       var b = Object.getOwnPropertySymbols(I);
       for (y = 0; y < b.length; y++) S = b[y], A.indexOf(S) === -1 && {}.propertyIsEnumerable.call(I, S) && (w[S] = I[S]);
     }
     return w;
   }
-  function _(I, A) {
+  function f(I, A) {
     if (I == null) return {};
     var S = {};
     for (var y in I) if ({}.hasOwnProperty.call(I, y)) {
@@ -20055,7 +20269,7 @@ function Qh() {
     }
     return S;
   }
-  function f(I, A, S) {
+  function _(I, A, S) {
     return (A = h(A)) in I ? Object.defineProperty(I, A, { value: S, enumerable: !0, configurable: !0, writable: !0 }) : I[A] = S, I;
   }
   function h(I) {
@@ -20077,9 +20291,9 @@ function Qh() {
     var A;
     return A = class extends o.Component {
       constructor() {
-        super(...arguments), f(this, "state", {
+        super(...arguments), _(this, "state", {
           width: 1280
-        }), f(this, "elementRef", /* @__PURE__ */ o.createRef()), f(this, "mounted", !1), f(this, "resizeObserver", void 0);
+        }), _(this, "elementRef", /* @__PURE__ */ o.createRef()), _(this, "mounted", !1), _(this, "resizeObserver", void 0);
       }
       componentDidMount() {
         this.mounted = !0, this.resizeObserver = new n.default((w) => {
@@ -20110,58 +20324,58 @@ function Qh() {
           innerRef: this.elementRef
         }, b, this.state));
       }
-    }, f(A, "defaultProps", {
+    }, _(A, "defaultProps", {
       measureBeforeMount: !1
-    }), f(A, "propTypes", {
+    }), _(A, "propTypes", {
       // If true, will not render children until mounted. Useful for getting the exact width before
       // rendering, to prevent any unsightly resizing.
       measureBeforeMount: r.default.bool
     }), A;
   }
-  return Fo;
+  return Uo;
 }
-var Qu;
-function Jh() {
-  return Qu || (Qu = 1, function(o) {
-    o.exports = Vp().default, o.exports.utils = An(), o.exports.calculateUtils = Rl(), o.exports.Responsive = Ch().default, o.exports.Responsive.utils = Gp(), o.exports.WidthProvider = Qh().default;
-  }(Zs)), Zs.exports;
+var Ju;
+function e_() {
+  return Ju || (Ju = 1, function(o) {
+    o.exports = Kp().default, o.exports.utils = En(), o.exports.calculateUtils = Ll(), o.exports.Responsive = Rh().default, o.exports.Responsive.utils = Xp(), o.exports.WidthProvider = Zh().default;
+  }(el)), el.exports;
 }
-var Ju = Jh();
-const Zh = { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }, dr = { lg: 12, md: 8, sm: 4, xs: 2, xxs: 2 }, Zp = { S: { w: 3, h: 3 }, M: { w: 3, h: 4 }, L: { w: 6, h: 4 }, XL: { w: 6, h: 8 } }, je = (o, r, n, a, s) => ({ i: o, x: r, y: n, w: a, h: s, minW: Math.min(a, 3), minH: 2, maxW: 12, maxH: 12 }), Ko = { lg: [je("activity-history", 0, 0, 3, 4), je("automations", 3, 0, 3, 4), je("backup-restore", 6, 0, 3, 4), je("security-status", 9, 0, 3, 3), je("access-control", 0, 5, 6, 3), je("alarm-configuration", 6, 4, 6, 8)], md: [je("activity-history", 0, 0, 4, 4), je("automations", 4, 0, 4, 4), je("backup-restore", 0, 4, 4, 4), je("access-control", 4, 4, 4, 3), je("alarm-configuration", 0, 8, 8, 8), je("security-status", 0, 16, 4, 3)], sm: [je("activity-history", 0, 0, 4, 4), je("automations", 0, 4, 4, 4), je("backup-restore", 0, 8, 4, 4), je("access-control", 0, 12, 4, 3), je("alarm-configuration", 0, 15, 4, 8), je("security-status", 0, 23, 4, 3)], xs: [je("activity-history", 0, 0, 2, 4), je("automations", 0, 4, 2, 4), je("backup-restore", 0, 8, 2, 4), je("access-control", 0, 12, 2, 3), je("alarm-configuration", 0, 15, 2, 8), je("security-status", 0, 23, 2, 3)], xxs: [je("activity-history", 0, 0, 2, 4), je("automations", 0, 4, 2, 4), je("backup-restore", 0, 8, 2, 4), je("access-control", 0, 12, 2, 3), je("alarm-configuration", 0, 15, 2, 8), je("security-status", 0, 23, 2, 3)] };
-function kl(o, r, n) {
-  return Object.entries(Zp).map(([a, s]) => ({ size: a, distance: Math.abs(Math.min(s.w, n) - o) + Math.abs(s.h - r) })).sort((a, s) => a.distance - s.distance)[0]?.size ?? "S";
+var Zu = e_();
+const t_ = { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }, dr = { lg: 12, md: 8, sm: 4, xs: 2, xxs: 2 }, rm = { S: { w: 3, h: 3 }, M: { w: 3, h: 4 }, L: { w: 6, h: 4 }, XL: { w: 6, h: 8 } }, je = (o, r, n, a, s) => ({ i: o, x: r, y: n, w: a, h: s, minW: Math.min(a, 3), minH: 2, maxW: 12, maxH: 12 }), Xo = { lg: [je("activity-history", 0, 0, 3, 4), je("automations", 3, 0, 3, 4), je("backup-restore", 6, 0, 3, 4), je("security-status", 9, 0, 3, 3), je("access-control", 0, 5, 6, 3), je("alarm-configuration", 6, 4, 6, 8)], md: [je("activity-history", 0, 0, 4, 4), je("automations", 4, 0, 4, 4), je("backup-restore", 0, 4, 4, 4), je("access-control", 4, 4, 4, 3), je("alarm-configuration", 0, 8, 8, 8), je("security-status", 0, 16, 4, 3)], sm: [je("activity-history", 0, 0, 4, 4), je("automations", 0, 4, 4, 4), je("backup-restore", 0, 8, 4, 4), je("access-control", 0, 12, 4, 3), je("alarm-configuration", 0, 15, 4, 8), je("security-status", 0, 23, 4, 3)], xs: [je("activity-history", 0, 0, 2, 4), je("automations", 0, 4, 2, 4), je("backup-restore", 0, 8, 2, 4), je("access-control", 0, 12, 2, 3), je("alarm-configuration", 0, 15, 2, 8), je("security-status", 0, 23, 2, 3)], xxs: [je("activity-history", 0, 0, 2, 4), je("automations", 0, 4, 2, 4), je("backup-restore", 0, 8, 2, 4), je("access-control", 0, 12, 2, 3), je("alarm-configuration", 0, 15, 2, 8), je("security-status", 0, 23, 2, 3)] };
+function Sl(o, r, n) {
+  return Object.entries(rm).map(([a, s]) => ({ size: a, distance: Math.abs(Math.min(s.w, n) - o) + Math.abs(s.h - r) })).sort((a, s) => a.distance - s.distance)[0]?.size ?? "S";
 }
-function em(o, r) {
-  const n = Zp[o];
+function nm(o, r) {
+  const n = rm[o];
   return { w: Math.min(n.w, r), h: n.h };
 }
-function ef(o, r) {
-  const n = kl(o.w, o.h, r), a = em(n, r);
+function r_(o, r) {
+  const n = Sl(o.w, o.h, r), a = nm(n, r);
   return { ...o, w: a.w, h: a.h, x: Math.max(0, Math.min(o.x, r - a.w)), size: n };
 }
-function Sl(o, r) {
+function Al(o, r) {
   return o.some((n) => n.i !== r.i && r.x < n.x + n.w && r.x + r.w > n.x && r.y < n.y + n.h && r.y + r.h > n.y);
 }
-function tf(o, r, n) {
+function n_(o, r, n) {
   for (let a = 0; a < 240; a++) for (let s = 0; s <= n - r.w; s++) {
     const c = { ...r, x: s, y: a };
-    if (!Sl(o, c)) return c;
+    if (!Al(o, c)) return c;
   }
   return { ...r, x: 0, y: Math.max(0, ...o.map((a) => a.y + a.h)) };
 }
-function Sn(o) {
+function An(o) {
   const r = {};
   return Object.keys(dr).forEach((n) => {
-    const a = dr[n], s = Array.isArray(o?.[n]) ? o[n] : [], c = new Map(s.map((_) => [_.i, _])), u = (Ko[n] || []).map((_) => {
-      const f = c.get(_.i);
-      if (!f) return { ..._ };
-      const h = Math.min(Math.max(1, f.w), a);
-      return { ..._, ...f, w: h, x: Math.max(0, Math.min(f.x, a - h)), y: Math.max(0, f.y) };
-    }), p = new Set(u.map((_) => _.i)), g = s.filter((_) => !p.has(_.i)).map((_) => ({ ..._, w: Math.min(Math.max(1, _.w), a), x: Math.max(0, Math.min(_.x, a - Math.min(_.w, a))), y: Math.max(0, _.y) }));
+    const a = dr[n], s = Array.isArray(o?.[n]) ? o[n] : [], c = new Map(s.map((f) => [f.i, f])), u = (Xo[n] || []).map((f) => {
+      const _ = c.get(f.i);
+      if (!_) return { ...f };
+      const h = Math.min(Math.max(1, _.w), a);
+      return { ...f, ..._, w: h, x: Math.max(0, Math.min(_.x, a - h)), y: Math.max(0, _.y) };
+    }), p = new Set(u.map((f) => f.i)), g = s.filter((f) => !p.has(f.i)).map((f) => ({ ...f, w: Math.min(Math.max(1, f.w), a), x: Math.max(0, Math.min(f.x, a - Math.min(f.w, a))), y: Math.max(0, f.y) }));
     r[n] = [...u, ...g];
   }), r;
 }
-class rf {
+class i_ {
   key(r, n) {
     return `argus:dashboard-layout:${r}:${n}`;
   }
@@ -20178,7 +20392,7 @@ class rf {
   }
   async load(r, n) {
     const a = this.read(r, n);
-    return a ? Sn(a.layouts) : null;
+    return a ? An(a.layouts) : null;
   }
   async save(r, n, a) {
     const s = this.read(r, n);
@@ -20189,44 +20403,44 @@ class rf {
   }
   async saveVisibility(r, n, a) {
     const s = this.read(r, n);
-    this.write(r, n, { layoutVersion: 1, layouts: s?.layouts ?? Sn(null), visibility: a, updatedAt: (/* @__PURE__ */ new Date()).toISOString() });
+    this.write(r, n, { layoutVersion: 1, layouts: s?.layouts ?? An(null), visibility: a, updatedAt: (/* @__PURE__ */ new Date()).toISOString() });
   }
   async reset(r, n) {
     localStorage.removeItem(this.key(r, n));
   }
 }
-const nf = Ju.WidthProvider(Ju.Responsive);
-function of({ widget: o, node: r, editing: n, size: a, onSize: s, onHide: c, onReset: u }) {
+const o_ = Zu.WidthProvider(Zu.Responsive);
+function a_({ widget: o, node: r, editing: n, size: a, onSize: s, onHide: c, onReset: u }) {
   const p = ut.useRef(null);
   return ut.useLayoutEffect(() => {
     p.current?.appendChild(r), r.draggable = !1, r.querySelector(":scope > .panel-edit-overlay")?.remove(), n ? r.setAttribute("inert", "") : r.removeAttribute("inert");
-  }, [r, n]), /* @__PURE__ */ Be.jsxs("article", { className: "argus-widget", children: [
-    /* @__PURE__ */ Be.jsxs("header", { className: "argus-widget__edit-header", children: [
-      /* @__PURE__ */ Be.jsx("button", { type: "button", className: "argus-widget__drag-handle", "aria-label": `Mover ${o.title}`, title: "Arrastrar para mover", children: "⋮⋮" }),
-      /* @__PURE__ */ Be.jsx("strong", { children: o.title }),
-      /* @__PURE__ */ Be.jsxs("details", { className: "argus-widget__options", children: [
-        /* @__PURE__ */ Be.jsx("summary", { "aria-label": `Opciones de ${o.title}`, title: "Opciones", children: "•••" }),
-        /* @__PURE__ */ Be.jsxs("div", { className: "argus-widget__menu", children: [
-          /* @__PURE__ */ Be.jsx("span", { children: o.t?.("size") || "Tamaño" }),
-          /* @__PURE__ */ Be.jsx("div", { children: ["S", "M", "L", "XL"].map((g) => /* @__PURE__ */ Be.jsx("button", { type: "button", className: g === a ? "active" : "", onClick: () => s(g), children: g }, g)) }),
-          /* @__PURE__ */ Be.jsx("button", { type: "button", onClick: u, children: o.t?.("reset_widget") || "Restablecer widget" }),
-          /* @__PURE__ */ Be.jsx("button", { type: "button", onClick: c, children: o.t?.("hide_widget") || "Ocultar widget" })
+  }, [r, n]), /* @__PURE__ */ Te.jsxs("article", { className: "argus-widget", children: [
+    /* @__PURE__ */ Te.jsxs("header", { className: "argus-widget__edit-header", children: [
+      /* @__PURE__ */ Te.jsx("button", { type: "button", className: "argus-widget__drag-handle", "aria-label": `Mover ${o.title}`, title: "Arrastrar para mover", children: "⋮⋮" }),
+      /* @__PURE__ */ Te.jsx("strong", { children: o.title }),
+      /* @__PURE__ */ Te.jsxs("details", { className: "argus-widget__options", children: [
+        /* @__PURE__ */ Te.jsx("summary", { "aria-label": `Opciones de ${o.title}`, title: "Opciones", children: "•••" }),
+        /* @__PURE__ */ Te.jsxs("div", { className: "argus-widget__menu", children: [
+          /* @__PURE__ */ Te.jsx("span", { children: o.t?.("size") || "Tamaño" }),
+          /* @__PURE__ */ Te.jsx("div", { children: ["S", "M", "L", "XL"].map((g) => /* @__PURE__ */ Te.jsx("button", { type: "button", className: g === a ? "active" : "", onClick: () => s(g), children: g }, g)) }),
+          /* @__PURE__ */ Te.jsx("button", { type: "button", onClick: u, children: o.t?.("reset_widget") || "Restablecer widget" }),
+          /* @__PURE__ */ Te.jsx("button", { type: "button", onClick: c, children: o.t?.("hide_widget") || "Ocultar widget" })
         ] })
       ] })
     ] }),
-    /* @__PURE__ */ Be.jsx("div", { className: `argus-widget__content${o.kind === "access-control" ? " argus-widget__content--access" : ""}`, ref: p })
+    /* @__PURE__ */ Te.jsx("div", { className: `argus-widget__content${o.kind === "access-control" ? " argus-widget__content--access" : ""}`, ref: p })
   ] });
 }
-function af({ widgets: o, nodes: r, storage: n, userId: a, dashboardId: s, onEditing: c, registerEditor: u }) {
-  const p = ut.useMemo(() => Object.fromEntries(o.map((K) => [K.id, K.visible])), [o]), [g, _] = ut.useState(Ko), [f, h] = ut.useState(p), [v, P] = ut.useState(!1), [R, I] = ut.useState(!1), [A, S] = ut.useState("lg"), [y, w] = ut.useState(""), b = ut.useRef(Ko), k = ut.useRef(), E = ut.useRef(!1);
+function ep({ widgets: o, nodes: r, storage: n, userId: a, dashboardId: s, onEditing: c, registerEditor: u }) {
+  const p = ut.useMemo(() => Object.fromEntries(o.map((K) => [K.id, K.visible])), [o]), [g, f] = ut.useState(Xo), [_, h] = ut.useState(p), [v, P] = ut.useState(!1), [R, I] = ut.useState(!1), [A, S] = ut.useState("lg"), [y, w] = ut.useState(""), b = ut.useRef(Xo), k = ut.useRef(), E = ut.useRef(!1);
   ut.useEffect(() => {
     u(P);
   }, [u]), ut.useEffect(() => {
     let K = !0;
     return I(!1), Promise.all([n.load(a, s), n.loadVisibility?.(a, s)]).then(([te, ee]) => {
       if (!K) return;
-      const G = Sn(te);
-      _(G), b.current = G, ee && h({ ...p, ...ee }), I(!0);
+      const G = An(te);
+      f(G), b.current = G, ee && h({ ...p, ...ee }), I(!0);
     }), () => {
       K = !1;
     };
@@ -20238,59 +20452,59 @@ function af({ widgets: o, nodes: r, storage: n, userId: a, dashboardId: s, onEdi
     };
     return window.addEventListener("keydown", K), () => window.removeEventListener("keydown", K);
   }, [v]), ut.useEffect(() => () => clearTimeout(k.current), []);
-  const N = (K, te = !1) => {
-    _(K), b.current = K, clearTimeout(k.current), k.current = window.setTimeout(() => n.save(a, s, K), te ? 0 : 550);
+  const C = (K, te = !1) => {
+    f(K), b.current = K, clearTimeout(k.current), k.current = window.setTimeout(() => n.save(a, s, K), te ? 0 : 550);
   }, D = (K, te) => {
-    const ee = { ...f, [K]: te };
+    const ee = { ..._, [K]: te };
     h(ee), n.saveVisibility?.(a, s, ee), w(te ? "Widget visible" : "Widget oculto");
   }, F = (K, te, ee) => {
-    const G = b.current, ce = G[A] || [], re = ce.filter((me) => me.i !== K), T = Sl(re, te) ? tf(re, te, dr[A]) : te, W = { ...G, [A]: ce.map((me) => me.i === K ? T : me) };
-    N(W, !0), w(ee);
+    const G = b.current, ce = G[A] || [], re = ce.filter((me) => me.i !== K), T = Al(re, te) ? n_(re, te, dr[A]) : te, W = { ...G, [A]: ce.map((me) => me.i === K ? T : me) };
+    C(W, !0), w(ee);
   }, V = (K, te) => {
     const ee = (b.current[A] || []).find((ce) => ce.i === K);
     if (!ee) return;
-    const G = em(te, dr[A]);
+    const G = nm(te, dr[A]);
     F(K, { ...ee, ...G, x: Math.max(0, Math.min(ee.x, dr[A] - G.w)) }, `Tamaño ${te}`);
   }, Q = (K) => {
-    const te = (Ko[A] || []).find((ee) => ee.i === K);
+    const te = (Xo[A] || []).find((ee) => ee.i === K);
     te && F(K, { ...te }, "Widget restablecido");
   }, ie = (K, te, ee) => {
-    const G = ef(ee, dr[A]);
-    F(ee.i, G, `Tamaño ${kl(G.w, G.h, dr[A])}`);
+    const G = r_(ee, dr[A]);
+    F(ee.i, G, `Tamaño ${Sl(G.w, G.h, dr[A])}`);
   }, oe = async () => {
     if (!confirm("¿Restablecer únicamente posiciones, tamaños y visibilidad del tablero?")) return;
     await n.reset(a, s);
-    const K = Sn(null);
-    h(p), N(K, !0), w("Diseño predeterminado restaurado");
+    const K = An(null);
+    h(p), C(K, !0), w("Diseño predeterminado restaurado");
   }, pe = g[A] || [];
-  return R ? /* @__PURE__ */ Be.jsxs("section", { className: `argus-dashboard ${v ? "argus-dashboard--editing" : ""}`, children: [
-    /* @__PURE__ */ Be.jsx("div", { className: "argus-dashboard__feedback", "aria-live": "polite", children: v ? y : "" }),
-    /* @__PURE__ */ Be.jsx(Iu, { children: /* @__PURE__ */ Be.jsx(nf, { className: "argus-dashboard-grid", layouts: g, breakpoints: Zh, cols: dr, rowHeight: 92, margin: [16, 16], containerPadding: [16, 16], compactType: null, preventCollision: !0, allowOverlap: !1, isBounded: !0, isDraggable: v, isResizable: v, draggableHandle: ".argus-widget__drag-handle", resizeHandles: ["se"], onBreakpointChange: (K) => S(K), onLayoutChange: (K, te) => {
-      v && (_(te), b.current = te);
+  return R ? /* @__PURE__ */ Te.jsxs("section", { className: `argus-dashboard ${v ? "argus-dashboard--editing" : ""}`, children: [
+    /* @__PURE__ */ Te.jsx("div", { className: "argus-dashboard__feedback", "aria-live": "polite", children: v ? y : "" }),
+    /* @__PURE__ */ Te.jsx(Cu, { children: /* @__PURE__ */ Te.jsx(o_, { className: "argus-dashboard-grid", layouts: g, breakpoints: t_, cols: dr, rowHeight: 92, margin: [16, 16], containerPadding: [16, 16], compactType: null, preventCollision: !0, allowOverlap: !1, isBounded: !0, isDraggable: v, isResizable: v, draggableHandle: ".argus-widget__drag-handle", resizeHandles: ["se"], onBreakpointChange: (K) => S(K), onLayoutChange: (K, te) => {
+      v && (f(te), b.current = te);
     }, onResizeStop: ie, onDragStop: (K, te, ee) => {
       const G = (b.current[A] || []).filter((ce) => ce.i !== ee.i);
-      if (Sl(G, ee)) {
-        _({ ...b.current }), w("Posición bloqueada por colisión");
+      if (Al(G, ee)) {
+        f({ ...b.current }), w("Posición bloqueada por colisión");
         return;
       }
       F(ee.i, ee, "Posición guardada");
-    }, useCSSTransforms: !0, children: o.filter((K) => f[K.id] !== !1 && r.has(K.id)).map((K) => {
-      const te = pe.find((G) => G.i === K.id), ee = te ? kl(te.w, te.h, dr[A]) : K.size;
-      return /* @__PURE__ */ Be.jsx("div", { children: /* @__PURE__ */ Be.jsx(Iu, { children: /* @__PURE__ */ Be.jsx(of, { widget: K, node: r.get(K.id), editing: v, size: ee, onSize: (G) => V(K.id, G), onHide: () => D(K.id, !1), onReset: () => Q(K.id) }) }) }, K.id);
+    }, useCSSTransforms: !0, children: o.filter((K) => _[K.id] !== !1 && r.has(K.id)).map((K) => {
+      const te = pe.find((G) => G.i === K.id), ee = te ? Sl(te.w, te.h, dr[A]) : K.size;
+      return /* @__PURE__ */ Te.jsx("div", { children: /* @__PURE__ */ Te.jsx(Cu, { children: /* @__PURE__ */ Te.jsx(a_, { widget: K, node: r.get(K.id), editing: v, size: ee, onSize: (G) => V(K.id, G), onHide: () => D(K.id, !1), onReset: () => Q(K.id) }) }) }, K.id);
     }) }) }),
-    /* @__PURE__ */ Be.jsxs("nav", { className: "argus-dashboard__toolbar", "aria-label": "Edición del tablero", children: [
-      /* @__PURE__ */ Be.jsx("button", { type: "button", onClick: () => P((K) => !K), children: v ? window._argusDashboardReadyBtn || "✓ Listo" : window._argusDashboardEditBtn || "✥ Editar tablero" }),
-      v && /* @__PURE__ */ Be.jsxs(Be.Fragment, { children: [
-        /* @__PURE__ */ Be.jsx("button", { type: "button", onClick: oe, children: window._argusDashboardResetBtn || "Restablecer diseño" }),
-        /* @__PURE__ */ Be.jsx("div", { className: "argus-dashboard__visibility", "aria-label": "Widgets ocultos", children: o.filter((K) => f[K.id] === !1).map((K) => /* @__PURE__ */ Be.jsxs("button", { type: "button", onClick: () => D(K.id, !0), children: [
+    /* @__PURE__ */ Te.jsxs("nav", { className: "argus-dashboard__toolbar", "aria-label": "Edición del tablero", children: [
+      /* @__PURE__ */ Te.jsx("button", { type: "button", onClick: () => P((K) => !K), children: v ? window._argusDashboardReadyBtn || "✓ Listo" : window._argusDashboardEditBtn || "✥ Editar tablero" }),
+      v && /* @__PURE__ */ Te.jsxs(Te.Fragment, { children: [
+        /* @__PURE__ */ Te.jsx("button", { type: "button", onClick: oe, children: window._argusDashboardResetBtn || "Restablecer diseño" }),
+        /* @__PURE__ */ Te.jsx("div", { className: "argus-dashboard__visibility", "aria-label": "Widgets ocultos", children: o.filter((K) => _[K.id] === !1).map((K) => /* @__PURE__ */ Te.jsxs("button", { type: "button", onClick: () => D(K.id, !0), children: [
           "Mostrar ",
           K.title
         ] }, K.id)) })
       ] })
     ] })
-  ] }) : /* @__PURE__ */ Be.jsx("section", { className: "argus-dashboard", children: /* @__PURE__ */ Be.jsx("div", { className: "argus-dashboard__feedback", "aria-live": "polite", children: "Cargando tablero…" }) });
+  ] }) : /* @__PURE__ */ Te.jsx("section", { className: "argus-dashboard", children: /* @__PURE__ */ Te.jsx("div", { className: "argus-dashboard__feedback", "aria-live": "polite", children: "Cargando tablero…" }) });
 }
-function tm(o) {
+function s_(o) {
   const r = (n) => o._t?.(n) || n;
   return [
     { id: "activity-history", nativeId: "w-activity", kind: "activity-history", title: r("activity_log") || "Historial de actividad", size: "M", visible: !0, t: r },
@@ -20301,8 +20515,7 @@ function tm(o) {
     { id: "security-status", nativeId: "w-github", kind: "security-status", title: r("support_title") || "Estado y soporte", size: "S", visible: !0, t: r }
   ];
 }
-tm({});
-class sf extends rf {
+class tp extends i_ {
   constructor(r) {
     super(), this.panel = r;
   }
@@ -20316,7 +20529,7 @@ class sf extends rf {
   }
   async load(r, n) {
     const a = this.record().layouts;
-    return a ? Sn(a) : super.load(r, n);
+    return a ? An(a) : super.load(r, n);
   }
   async save(r, n, a) {
     await super.save(r, n, a), await this.remote({ layouts: a });
@@ -20328,61 +20541,97 @@ class sf extends rf {
     await super.saveVisibility(r, n, a), await this.remote({ visibility: a });
   }
   async reset(r, n) {
-    await super.reset(r, n), await this.remote({ layouts: Sn(null), visibility: {} });
+    await super.reset(r, n), await this.remote({ layouts: An(null), visibility: {} });
   }
 }
-function rm(o) {
+function im(o) {
   const r = o.shadowRoot?.getElementById("edit-widgets-label");
   (r?.closest("button") || r)?.remove(), o.shadowRoot?.querySelectorAll(".panel-edit-overlay,.widget-drag-handle").forEach((a) => a.remove());
   let n = o.shadowRoot?.getElementById("argus-react-editor-only");
   n || (n = document.createElement("style"), n.id = "argus-react-editor-only", n.textContent = "#edit-widgets-label,.panel-edit-overlay,.widget-drag-handle{display:none!important}", o.shadowRoot.appendChild(n));
 }
-function lf(o) {
-  rm(o);
+function rp(o) {
+  im(o);
   const r = o.shadowRoot?.getElementById("widget-grid"), n = o._dashboard?.entry_id || o._dashboard?.entries?.[0]?.entry_id;
-  if (!r || !n || o._argusReactRoot) return;
-  let a = o.shadowRoot.getElementById("argus-react-dashboard-style");
-  if (a || (a = document.createElement("style"), a.id = "argus-react-dashboard-style", a.textContent = bh + yh + vh, o.shadowRoot.appendChild(a)), !o.shadowRoot.getElementById("argus-access-scroll-fix")) {
+  if (!r || !n) return;
+  const a = s_(o), s = /* @__PURE__ */ new Map();
+  if (a.forEach((g) => {
+    const f = o.shadowRoot.getElementById(g.nativeId);
+    f && s.set(g.id, f);
+  }), o._argusReactRoot) {
+    o._argusReactRoot.render(
+      /* @__PURE__ */ Te.jsx(
+        ep,
+        {
+          widgets: a,
+          nodes: s,
+          storage: new tp(o),
+          userId: o._currentProfile?.id || o._hass?.user?.id || "anonymous",
+          dashboardId: n,
+          onEditing: (g) => {
+            o._widgetEditing = g, r.classList.toggle("editing", g);
+          },
+          registerEditor: (g) => {
+            o._argusReactSetEditing = g;
+          }
+        }
+      )
+    );
+    return;
+  }
+  let c = o.shadowRoot.getElementById("argus-react-dashboard-style");
+  if (c || (c = document.createElement("style"), c.id = "argus-react-dashboard-style", c.textContent = vh + xh + wh, o.shadowRoot.appendChild(c)), !o.shadowRoot.getElementById("argus-access-scroll-fix")) {
     const g = document.createElement("style");
     g.id = "argus-access-scroll-fix", g.textContent = ".argus-widget__content--access{display:flex;min-height:0;overflow:hidden}.argus-widget__content--access>#w-access{display:flex!important;flex-direction:column!important;width:100%!important;height:100%!important;min-height:0!important;max-height:none!important;overflow:hidden!important}.argus-widget__content--access>#w-access>.panel-head{flex:0 0 auto!important}.argus-widget__content--access>#w-access>#access-workspace{display:block!important;flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;padding-right:4px}", o.shadowRoot.appendChild(g);
   }
-  const s = tm(o), c = /* @__PURE__ */ new Map();
-  s.forEach((g) => {
-    const _ = o.shadowRoot.getElementById(g.nativeId);
-    _ && c.set(g.id, _);
-  });
   const u = document.createElement("div");
   u.id = "argus-react-dashboard-root", r.appendChild(u);
-  const p = _h.createRoot(u);
-  o._argusReactRoot = p, p.render(/* @__PURE__ */ Be.jsx(af, { widgets: s, nodes: c, storage: new sf(o), userId: o._currentProfile?.id || o._hass?.user?.id || "anonymous", dashboardId: n, onEditing: (g) => {
-    o._widgetEditing = g, r.classList.toggle("editing", g);
-  }, registerEditor: (g) => {
-    o._argusReactSetEditing = g;
-  } }));
+  const p = yh.createRoot(u);
+  o._argusReactRoot = p, p.render(
+    /* @__PURE__ */ Te.jsx(
+      ep,
+      {
+        widgets: a,
+        nodes: s,
+        storage: new tp(o),
+        userId: o._currentProfile?.id || o._hass?.user?.id || "anonymous",
+        dashboardId: n,
+        onEditing: (g) => {
+          o._widgetEditing = g, r.classList.toggle("editing", g);
+        },
+        registerEditor: (g) => {
+          o._argusReactSetEditing = g;
+        }
+      }
+    )
+  );
 }
-function cf(o) {
+function l_(o) {
   if (!o || o.__argusReactDashboard) return;
   o.__argusReactDashboard = !0;
-  const r = o.prototype, n = r.connectedCallback, a = r._load;
+  const r = o.prototype, n = r.connectedCallback, a = r._load, s = r._refreshLocalizedUi;
   r.connectedCallback = function() {
-    const s = n?.call(this);
-    return rm(this), s;
+    const c = n?.call(this);
+    return im(this), c;
   }, r._load = async function() {
-    const s = await a?.call(this);
-    return lf(this), s;
+    const c = await a?.call(this);
+    return rp(this), c;
+  }, r._refreshLocalizedUi = function() {
+    const c = s?.call(this);
+    return rp(this), c;
   }, r._toggleWidgetEditing = function() {
     this._argusReactSetEditing?.(!this._widgetEditing);
   };
 }
-function Zu(o) {
+function np(o) {
   const r = o._hass?.auth?.accessToken;
   return r ? { Authorization: `Bearer ${r}` } : {};
 }
-function df(o) {
+function c_(o) {
   const r = o?.prototype;
   !r || r.__argusMediaClient || (r.__argusMediaClient = !0, r._loadUploadedFiles = async function() {
     try {
-      const n = await fetch("/api/argus/media", { headers: Zu(this), credentials: "same-origin" });
+      const n = await fetch("/api/argus/media", { headers: np(this), credentials: "same-origin" });
       if (!n.ok) throw new Error(`HTTP ${n.status}`);
       const a = await n.json();
       this._uploadedFiles = Array.isArray(a.files) ? a.files : [];
@@ -20392,7 +20641,7 @@ function df(o) {
     this._renderUploadedFiles?.();
   }, r._deleteUploadedFile = async function(n) {
     try {
-      const a = await fetch(`/api/argus/media/${encodeURIComponent(n)}`, { method: "DELETE", headers: Zu(this), credentials: "same-origin" });
+      const a = await fetch(`/api/argus/media/${encodeURIComponent(n)}`, { method: "DELETE", headers: np(this), credentials: "same-origin" });
       if (!a.ok) throw new Error(`HTTP ${a.status}`);
       this._uploadedFiles = (this._uploadedFiles ?? []).filter((c) => c.name !== n);
       const s = [["panel-bg-url-input", "_panelBgFile"], ["hub-bg-url-input", "_hubBgFile"]];
@@ -20407,50 +20656,50 @@ function df(o) {
     }
   });
 }
-const Uo = (o, r) => o.getElementById(r), Wo = (o, r, n) => o._t?.(r) ?? n;
-function uf(o) {
+const Wo = (o, r) => o.getElementById(r), Vo = (o, r, n) => o._t?.(r) ?? n;
+function d_(o) {
   const r = o?.prototype;
   !r || r.__argusSecurityClient || (r.__argusSecurityClient = !0, r._savePin = async function() {
-    const n = this.shadowRoot.getElementById("pin-status"), s = this._dashboard?.entries?.[0], c = Uo(this.shadowRoot, "current-pin")?.value ?? "", u = Uo(this.shadowRoot, "new-pin-1")?.value ?? "", p = Uo(this.shadowRoot, "new-pin-2")?.value ?? "", g = (_) => {
-      n && (n.textContent = _, n.className = "status err");
+    const n = this.shadowRoot.getElementById("pin-status"), s = this._dashboard?.entries?.[0], c = Wo(this.shadowRoot, "current-pin")?.value ?? "", u = Wo(this.shadowRoot, "new-pin-1")?.value ?? "", p = Wo(this.shadowRoot, "new-pin-2")?.value ?? "", g = (f) => {
+      n && (n.textContent = f, n.className = "status err");
     };
     if (!s?.entry_id) return g("No Argus config entry is available");
-    if (s.pin_configured && !c) return g(Wo(this, "pin_incorrect", "PIN incorrecto"));
-    if (u !== p) return g(Wo(this, "pin_mismatch", "Los PIN no coinciden"));
+    if (s.pin_configured && !c) return g(Vo(this, "pin_incorrect", "PIN incorrecto"));
+    if (u !== p) return g(Vo(this, "pin_mismatch", "Los PIN no coinciden"));
     if (u && !/^\d{4,12}$/.test(u)) return g("PIN: se requieren entre 4 y 12 dígitos");
     if (!this._send) return g("Argus WebSocket is unavailable");
     try {
-      await this._send("argus/update_master_pin", { entry_id: s.entry_id, pin: u, current_pin: c }), s.pin_configured = !!u, n && (n.textContent = u ? Wo(this, "pin_updated", "PIN actualizado") : Wo(this, "pin_deleted", "PIN eliminado"), n.className = "status ok");
-      for (const _ of ["current-pin", "new-pin-1", "new-pin-2"]) {
-        const f = Uo(this.shadowRoot, _);
-        f && (f.value = "");
+      await this._send("argus/update_master_pin", { entry_id: s.entry_id, pin: u, current_pin: c }), s.pin_configured = !!u, n && (n.textContent = u ? Vo(this, "pin_updated", "PIN actualizado") : Vo(this, "pin_deleted", "PIN eliminado"), n.className = "status ok");
+      for (const f of ["current-pin", "new-pin-1", "new-pin-2"]) {
+        const _ = Wo(this.shadowRoot, f);
+        _ && (_.value = "");
       }
       this._syncAccessSummary?.(), window.setTimeout(() => {
         this._load?.();
       }, 800);
-    } catch (_) {
-      g(_ instanceof Error ? _.message : String(_));
+    } catch (f) {
+      g(f instanceof Error ? f.message : String(f));
     }
   }, r._handleForgotPin = function() {
     const n = "Restablece el PIN desde las opciones de la integración Argus o desde un respaldo confiable de Home Assistant.", a = this.shadowRoot.getElementById("pin-status");
     a ? (a.textContent = n, a.className = "status err") : window.alert(n);
   });
 }
-const pf = `
+const u_ = `
 .argus-cinematic-weather{position:absolute;inset:0;overflow:hidden;background:linear-gradient(to bottom,#0c3159,#69a9d5 62%,#c9d4d5)}
 .argus-cinematic-weather canvas{width:100%;height:100%;display:block;image-rendering:auto}
 .argus-weather-vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 56% 36%,transparent 16%,rgba(0,7,16,.1) 57%,rgba(0,4,12,.62) 100%)}
 .argus-overlay{position:absolute;inset:0;pointer-events:none}
 @media(prefers-reduced-motion:reduce){.argus-cinematic-weather{background:#0f172a}}
 `;
-function mf(o) {
+function p_(o) {
   const r = o.__argusWebgl;
   if (!r) return;
   cancelAnimationFrame(r.frame), r.observer?.disconnect(), document.removeEventListener("visibilitychange", r.visibility), r.gl.deleteBuffer(r.buffer), r.gl.deleteProgram(r.program);
   const n = r.gl.getExtension("WEBGL_lose_context");
   n && n.loseContext(), r.overlay?.remove(), delete o.__argusWebgl;
 }
-function gf(o) {
+function m_(o) {
   const r = o?.prototype;
   if (!r || r.__argusPremiumExperience) return;
   r.__argusPremiumExperience = !0;
@@ -20460,17 +20709,17 @@ function gf(o) {
     return queueMicrotask(() => {
       if (this.shadowRoot && !this.shadowRoot.getElementById("argus-premium-style")) {
         const c = document.createElement("style");
-        c.id = "argus-premium-style", c.textContent = pf, this.shadowRoot.append(c);
+        c.id = "argus-premium-style", c.textContent = u_, this.shadowRoot.append(c);
       }
     }), s;
   };
   const a = r.disconnectedCallback;
   r.disconnectedCallback = function() {
     const s = this.shadowRoot;
-    return s && s.querySelectorAll(".wx-webgl").forEach(mf), a?.call(this);
+    return s && s.querySelectorAll(".wx-webgl").forEach(p_), a?.call(this);
   };
 }
-const Al = "argus-motion-system-v2049", Xo = "__argusMotionV2049", ep = ".user-card,.liquid-btn,.mode-btn,.lang-pill,.entry-fs,.fs-btn,.file-card-btn,.pick-row,.widget-size-btn,.widget-toggle-btn,.argus-disarm-btn,[data-login-digit],#btn-submit-login-pin,#btn-cancel-login,#btn-complete-setup,#btn-claim-admin", ol = `
+const El = "argus-motion-system-v2049", Qo = "__argusMotionV2049", ip = ".user-card,.liquid-btn,.mode-btn,.lang-pill,.entry-fs,.fs-btn,.file-card-btn,.pick-row,.widget-size-btn,.widget-toggle-btn,.argus-disarm-btn,[data-login-digit],#btn-submit-login-pin,#btn-cancel-login,#btn-complete-setup,#btn-claim-admin", al = `
 :host{--argus-motion-fast:120ms;--argus-motion-ease:cubic-bezier(.22,.8,.25,1)}
 #widget-grid,.dashboard-instances,#widget-grid>.dashboard-instances,#widget-grid>.dashboard-instances>.entry{animation:none!important;transition:none!important;opacity:1!important;transform:none!important;visibility:visible!important}
 #widget-grid.argus-motion-dashboard-enter,.dashboard-instances.argus-motion-dashboard-enter,.argus-motion-dashboard-prep{animation:none!important;transition:none!important;opacity:1!important;transform:none!important}
@@ -20480,13 +20729,13 @@ const Al = "argus-motion-system-v2049", Xo = "__argusMotionV2049", ep = ".user-c
 :host(.argus-perf-essential) .argus-motion-press{transition:none!important;transform:none!important}
 @media(prefers-reduced-motion:reduce){.argus-motion-press{transition:none!important;transform:none!important}}
 `;
-function hf(o) {
+function g_(o) {
   if (window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches) return "essential";
   const r = String(o._argusPerfProfile || o.dataset?.argusPerf || "").toLowerCase();
   return r === "essential" || o.classList.contains("argus-perf-essential") ? "essential" : r === "light" ? "light" : "full";
 }
-function tp(o) {
-  if (o[Xo]) return o[Xo];
+function op(o) {
+  if (o[Qo]) return o[Qo];
   const r = {
     panel: o,
     active: !1,
@@ -20499,86 +20748,86 @@ function tp(o) {
     profileControl: null,
     api: null
   };
-  return Object.defineProperty(o, Xo, { value: r, writable: !0, configurable: !0 }), r;
+  return Object.defineProperty(o, Qo, { value: r, writable: !0, configurable: !0 }), r;
 }
-function ff(o, r) {
+function h_(o, r) {
   const n = requestAnimationFrame(() => {
     o.rafs.delete(n), o.active && r();
   });
   return o.rafs.add(n), n;
 }
-function al(o, r, n, a, s) {
+function sl(o, r, n, a, s) {
   r.addEventListener(n, a, s), o.cleanups.add(() => r.removeEventListener(n, a, s));
 }
-function Ol(o) {
+function Tl(o) {
   const r = o.shadowRoot;
   if (!r) return;
-  let n = r.getElementById(Al);
-  n ? n.textContent !== ol && (n.textContent = ol) : (n = document.createElement("style"), n.id = Al, n.textContent = ol, r.appendChild(n));
+  let n = r.getElementById(El);
+  n ? n.textContent !== al && (n.textContent = al) : (n = document.createElement("style"), n.id = El, n.textContent = al, r.appendChild(n));
 }
-function Ii(o) {
+function Ci(o) {
   o.profileControl?.classList.remove("is-entering"), o.profileControl = null, o.panel.shadowRoot?.getElementById("bootstrap-overlay")?.removeAttribute("aria-busy");
 }
-function rp(o, r) {
-  Ii(o), o.profileControl = r, r?.classList.add("is-entering"), o.panel.shadowRoot?.getElementById("bootstrap-overlay")?.setAttribute("aria-busy", "true");
+function ap(o, r) {
+  Ci(o), o.profileControl = r, r?.classList.add("is-entering"), o.panel.shadowRoot?.getElementById("bootstrap-overlay")?.setAttribute("aria-busy", "true");
 }
-function _f(o) {
+function __(o) {
   o.observer || !o.panel.shadowRoot || (o.observer = new MutationObserver((r) => {
-    r.some((n) => [...n.addedNodes].some((a) => a instanceof Element && a.id !== Al)) && (o.observerFrame || (o.observerFrame = ff(o, () => {
-      o.observerFrame = 0, Ol(o.panel);
+    r.some((n) => [...n.addedNodes].some((a) => a instanceof Element && a.id !== El)) && (o.observerFrame || (o.observerFrame = h_(o, () => {
+      o.observerFrame = 0, Tl(o.panel);
     })));
   }), o.observer.observe(o.panel.shadowRoot, { childList: !0, subtree: !0, attributes: !1 }));
 }
-function bf(o) {
+function f_(o) {
   const r = o.panel.shadowRoot;
   if (!r) return;
   const n = (a) => {
     a && (a.classList.remove("argus-motion-press"), o.pressed.delete(a));
   };
-  al(o, r, "pointerdown", (a) => {
-    if (hf(o.panel) === "essential") return;
-    const c = a.target?.closest?.(ep);
+  sl(o, r, "pointerdown", (a) => {
+    if (g_(o.panel) === "essential") return;
+    const c = a.target?.closest?.(ip);
     !c || c.disabled || (c.classList.add("argus-motion-press"), o.pressed.add(c));
-  }, !0), ["pointerup", "pointercancel", "pointerleave"].forEach((a) => al(o, r, a, (s) => {
+  }, !0), ["pointerup", "pointercancel", "pointerleave"].forEach((a) => sl(o, r, a, (s) => {
     const c = s.target;
-    n(c?.closest?.(ep));
-  }, !0)), al(o, r, "click", (a) => {
+    n(c?.closest?.(ip));
+  }, !0)), sl(o, r, "click", (a) => {
     const s = a.target, c = s?.closest?.(".user-card");
-    c && c.dataset.isOwn === "true" && c.dataset.pinRequired !== "true" && rp(o, c), s?.closest?.("#btn-submit-login-pin,#btn-complete-setup,#btn-claim-admin") && rp(o, s.closest("button")), s?.closest?.("#btn-cancel-login") && Ii(o);
+    c && c.dataset.isOwn === "true" && c.dataset.pinRequired !== "true" && ap(o, c), s?.closest?.("#btn-submit-login-pin,#btn-complete-setup,#btn-claim-admin") && ap(o, s.closest("button")), s?.closest?.("#btn-cancel-login") && Ci(o);
   }, !0);
 }
-function sl(o) {
-  o.active || !o.panel.shadowRoot || (o.active = !0, Ol(o.panel), bf(o), _f(o), o.api = Object.freeze({ animateView: () => {
+function ll(o) {
+  o.active || !o.panel.shadowRoot || (o.active = !0, Tl(o.panel), f_(o), __(o), o.api = Object.freeze({ animateView: () => {
   }, stagger: () => {
   }, transitionBackground: () => () => {
   }, animateDashboard: () => {
   } }));
 }
-function yf(o) {
-  o.active = !1, o.observer?.disconnect(), o.observer = null, o.observerFrame && cancelAnimationFrame(o.observerFrame), o.observerFrame = 0, o.rafs.forEach(cancelAnimationFrame), o.rafs.clear(), o.timers.forEach(clearTimeout), o.timers.clear(), o.cleanups.forEach((r) => r()), o.cleanups.clear(), o.pressed.forEach((r) => r.classList.remove("argus-motion-press")), o.pressed.clear(), Ii(o);
+function b_(o) {
+  o.active = !1, o.observer?.disconnect(), o.observer = null, o.observerFrame && cancelAnimationFrame(o.observerFrame), o.observerFrame = 0, o.rafs.forEach(cancelAnimationFrame), o.rafs.clear(), o.timers.forEach(clearTimeout), o.timers.clear(), o.cleanups.forEach((r) => r()), o.cleanups.clear(), o.pressed.forEach((r) => r.classList.remove("argus-motion-press")), o.pressed.clear(), Ci(o);
 }
-function vf(o) {
+function y_(o) {
   const r = o?.prototype;
   if (!r || r.__argusMotionSystemV2049) return;
   r.__argusMotionSystemV2049 = !0;
   const n = r.connectedCallback, a = r.disconnectedCallback, s = r._load;
   r.connectedCallback = function() {
-    const c = n?.call(this), u = tp(this);
-    return this.shadowRoot ? sl(u) : queueMicrotask(() => sl(u)), c;
+    const c = n?.call(this), u = op(this);
+    return this.shadowRoot ? ll(u) : queueMicrotask(() => ll(u)), c;
   }, r.disconnectedCallback = function() {
-    const c = this[Xo];
-    return c && yf(c), a?.call(this);
+    const c = this[Qo];
+    return c && b_(c), a?.call(this);
   }, r._load = async function(...c) {
-    const u = tp(this);
+    const u = op(this);
     try {
       const p = await s?.apply(this, c);
-      return !u.active && this.isConnected && sl(u), Ol(this), Ii(u), p;
+      return !u.active && this.isConnected && ll(u), Tl(this), Ci(u), p;
     } catch (p) {
-      throw Ii(u), p;
+      throw Ci(u), p;
     }
   };
 }
-const np = "__argusStableRenderV2050";
+const sp = "__argusStableRenderV2050";
 function Gr(o) {
   const r = o.shadowRoot;
   if (!r) return;
@@ -20587,7 +20836,7 @@ function Gr(o) {
     p && p.textContent !== a && (p.textContent = a);
   });
 }
-function ip(o, r, n, a, s, c, u) {
+function lp(o, r, n, a, s, c, u) {
   return [
     r?.entity_id || "",
     r?.entry_id || "",
@@ -20608,7 +20857,7 @@ function ip(o, r, n, a, s, c, u) {
     String(o._getCurrentLangCode?.() || o._manualLang || o._ui?.language || o._hass?.language || "")
   ].join("|");
 }
-function ll(o, r) {
+function cl(o, r) {
   !r || r._argusDelegated || (r._argusDelegated = !0, r.addEventListener("click", (n) => {
     const a = n.target;
     if (a.closest?.('button[data-action="unlock-kiosk"]')) {
@@ -20634,14 +20883,14 @@ function ll(o, r) {
       o._exitFullscreenView?.();
       return;
     }
-    const _ = a.closest?.('button[data-action]:not([data-action="sos"]):not([data-action="stop-sos"]):not([data-action="unlock-kiosk"])');
-    _?.dataset?.idx != null && _?.dataset?.action && o._handleAction?.(_.dataset.idx, _.dataset.action);
+    const f = a.closest?.('button[data-action]:not([data-action="sos"]):not([data-action="stop-sos"]):not([data-action="unlock-kiosk"])');
+    f?.dataset?.idx != null && f?.dataset?.action && o._handleAction?.(f.dataset.idx, f.dataset.action);
   }));
 }
-function xf(o) {
+function v_(o) {
   const r = o?.prototype;
-  if (!r || r[np]) return;
-  r[np] = !0;
+  if (!r || r[sp]) return;
+  r[sp] = !0;
   const n = r._renderEntries, a = Object.getOwnPropertyDescriptor(r, "hass") || Object.getOwnPropertyDescriptor(Object.getPrototypeOf(r), "hass");
   r._updateLiveClocks = function() {
     Gr(this);
@@ -20652,17 +20901,17 @@ function xf(o) {
   }, r._renderEntries = function(p = !1) {
     const g = this.shadowRoot;
     if (!g) return n?.call(this, p);
-    const _ = g.getElementById("entries"), f = this._dashboard?.entries || [];
-    if (this._instanceSignatures = this._instanceSignatures || /* @__PURE__ */ new Map(), !_ || !f.length) {
+    const f = g.getElementById("entries"), _ = this._dashboard?.entries || [];
+    if (this._instanceSignatures = this._instanceSignatures || /* @__PURE__ */ new Map(), !f || !_.length) {
       const I = n?.call(this, p);
-      return ll(this, g.getElementById("entries")), Gr(this), I;
+      return cl(this, g.getElementById("entries")), Gr(this), I;
     }
-    const h = [..._.querySelectorAll("article.entry")];
-    if (!(p || h.length !== f.length || !h.every((I) => I.querySelector(".entry-content")))) {
+    const h = [...f.querySelectorAll("article.entry")];
+    if (!(p || h.length !== _.length || !h.every((I) => I.querySelector(".entry-content")))) {
       let I = !0;
-      for (let A = 0; A < f.length; A++) {
-        const S = f[A], y = this._hass?.states?.[S.entity_id], w = y?.state || S.state || "unavailable", b = y?.attributes || {}, k = !!b.argus_panic_active, E = this._fullscreenIdx === A || !!this._kioskLocked && (this._kioskEntryId === S.entry_id || f.length === 1), N = String(w).replace("armed_", "");
-        let D = this._ui?.modes?.__by_entity__?.[S.entity_id]?.[N] || this._ui?.modes?.[N] || {}, F = D.sensors || [];
+      for (let A = 0; A < _.length; A++) {
+        const S = _[A], y = this._hass?.states?.[S.entity_id], w = y?.state || S.state || "unavailable", b = y?.attributes || {}, k = !!b.argus_panic_active, E = this._fullscreenIdx === A || !!this._kioskLocked && (this._kioskEntryId === S.entry_id || _.length === 1), C = String(w).replace("armed_", "");
+        let D = this._ui?.modes?.__by_entity__?.[S.entity_id]?.[C] || this._ui?.modes?.[C] || {}, F = D.sensors || [];
         if (w === "disarmed" || !F.length) {
           const pe = this._ui?.modes?.__by_entity__?.[S.entity_id] || this._ui?.modes || {}, K = /* @__PURE__ */ new Set();
           ["away", "home", "night", "vacation"].forEach((te) => {
@@ -20672,30 +20921,30 @@ function xf(o) {
         const V = D.bypassed_sensors || [], ie = F.filter((pe) => !V.includes(pe)).map((pe) => {
           const K = this._hass?.states?.[pe], te = K?.attributes?.battery_level ?? K?.attributes?.battery_percentage ?? "";
           return `${pe}:${K?.state || ""}:${te}`;
-        }).join(","), oe = ip(this, S, w, b, ie, k, E);
+        }).join(","), oe = lp(this, S, w, b, ie, k, E);
         if (this._instanceSignatures.get(A) !== oe) {
           I = !1;
           break;
         }
       }
       if (I) {
-        const S = f.map((b) => this._hass?.states?.[b.entity_id]?.state || "unavailable").some((b) => String(b).startsWith("armed") || b === "triggered" || b === "pending"), y = g.getElementById("global-status");
+        const S = _.map((b) => this._hass?.states?.[b.entity_id]?.state || "unavailable").some((b) => String(b).startsWith("armed") || b === "triggered" || b === "pending"), y = g.getElementById("global-status");
         y && (y.innerHTML = "");
         const w = g.getElementById("hero-security-pill");
         if (w) {
-          const b = (N) => this._t?.(N) || N, k = b(S ? "system_armed" : "system_disarmed"), E = `<i class="hero-live" style="background:${S ? "#ffb54d" : "#55df91"};box-shadow:0 0 9px ${S ? "#ffb54d" : "#55df91"}"></i>${this._escapeHtml?.(k) || k}`;
+          const b = (C) => this._t?.(C) || C, k = b(S ? "system_armed" : "system_disarmed"), E = `<i class="hero-live" style="background:${S ? "#ffb54d" : "#55df91"};box-shadow:0 0 9px ${S ? "#ffb54d" : "#55df91"}"></i>${this._escapeHtml?.(k) || k}`;
           w.innerHTML !== E && (w.innerHTML = E);
         }
-        Gr(this), ll(this, _);
+        Gr(this), cl(this, f);
         return;
       }
     }
     const P = n?.call(this, p === !0 ? !0 : void 0);
-    return [..._.querySelectorAll("article.entry")].forEach((I, A) => {
-      const S = f[A];
+    return [...f.querySelectorAll("article.entry")].forEach((I, A) => {
+      const S = _[A];
       if (!S) return;
-      const y = this._hass?.states?.[S.entity_id], w = y?.state || S.state || "unavailable", b = y?.attributes || {}, k = !!b.argus_panic_active, E = this._fullscreenIdx === A || !!this._kioskLocked && (this._kioskEntryId === S.entry_id || f.length === 1), N = String(w).replace("armed_", "");
-      let D = this._ui?.modes?.__by_entity__?.[S.entity_id]?.[N] || this._ui?.modes?.[N] || {}, F = D.sensors || [];
+      const y = this._hass?.states?.[S.entity_id], w = y?.state || S.state || "unavailable", b = y?.attributes || {}, k = !!b.argus_panic_active, E = this._fullscreenIdx === A || !!this._kioskLocked && (this._kioskEntryId === S.entry_id || _.length === 1), C = String(w).replace("armed_", "");
+      let D = this._ui?.modes?.__by_entity__?.[S.entity_id]?.[C] || this._ui?.modes?.[C] || {}, F = D.sensors || [];
       if (w === "disarmed" || !F.length) {
         const pe = this._ui?.modes?.__by_entity__?.[S.entity_id] || this._ui?.modes || {}, K = /* @__PURE__ */ new Set();
         ["away", "home", "night", "vacation"].forEach((te) => {
@@ -20705,9 +20954,9 @@ function xf(o) {
       const V = D.bypassed_sensors || [], ie = F.filter((pe) => !V.includes(pe)).map((pe) => {
         const K = this._hass?.states?.[pe], te = K?.attributes?.battery_level ?? K?.attributes?.battery_percentage ?? "";
         return `${pe}:${K?.state || ""}:${te}`;
-      }).join(","), oe = ip(this, S, w, b, ie, k, E);
+      }).join(","), oe = lp(this, S, w, b, ie, k, E);
       this._instanceSignatures.set(A, oe), I.dataset.renderSig = oe;
-    }), ll(this, _), Gr(this), P;
+    }), cl(this, f), Gr(this), P;
   };
   const s = a?.get, c = a?.set;
   c && Object.defineProperty(r, "hass", {
@@ -20719,15 +20968,15 @@ function xf(o) {
     set: function(p) {
       const g = this._hass;
       if (g && this._dashboard?.entries?.length) {
-        const _ = /* @__PURE__ */ new Set(), f = (w) => {
-          !w || typeof w != "object" || (Array.isArray(w.sensors) && w.sensors.forEach((b) => _.add(b)), Object.values(w).forEach((b) => {
-            b && typeof b == "object" && f(b);
+        const f = /* @__PURE__ */ new Set(), _ = (w) => {
+          !w || typeof w != "object" || (Array.isArray(w.sensors) && w.sensors.forEach((b) => f.add(b)), Object.values(w).forEach((b) => {
+            b && typeof b == "object" && _(b);
           }));
         };
-        f(this._ui?.modes);
+        _(this._ui?.modes);
         const h = g.language !== p.language;
         h && !this._manualLang && this._refreshLocalizedUi?.();
-        const v = this._dashboard.entries.some((w) => w.entity_id && g.states[w.entity_id]?.state !== p.states[w.entity_id]?.state), P = [..._].some(
+        const v = this._dashboard.entries.some((w) => w.entity_id && g.states[w.entity_id]?.state !== p.states[w.entity_id]?.state), P = [...f].some(
           (w) => g.states[w]?.state !== p.states[w]?.state || g.states[w]?.attributes?.battery_level !== p.states[w]?.attributes?.battery_level || g.states[w]?.attributes?.battery_percentage !== p.states[w]?.attributes?.battery_percentage
         ), R = this._temperatureSource === "auto" ? null : this._temperatureSource, I = R && g.states[R]?.state !== p.states[R]?.state, A = this._weatherSource && this._weatherSource !== "auto" ? this._weatherSource : Object.values(p.states).find((w) => w.entity_id?.startsWith("weather."))?.entity_id, S = A && (g.states[A]?.state !== p.states[A]?.state || g.states[A]?.attributes?.temperature !== p.states[A]?.attributes?.temperature), y = v || P || I || S || h;
         this._hass = p, this._updateTheme?.(), y ? (this._renderEntries?.(h), this._renderActivityLog?.()) : Gr(this);
@@ -20742,24 +20991,24 @@ function xf(o) {
     return this._startClock?.(), p;
   };
 }
-const op = "argus-v2050-alarm-visuals", wf = {
+const cp = "argus-v2050-alarm-visuals", x_ = {
   armed_home: /EN CASA|HOME|MAISON|EM CASA|CASA|在家|ДОМА/i,
   armed_away: /AUSENTE|AWAY|ABSENT|ASSENTE|外出|УШЁЛ/i,
   armed_night: /NOCHE|NIGHT|NUIT|NOITE|NOTTE|夜间|НОЧЬ/i,
   armed_vacation: /VACACIONES|VACATION|VACANCES|FÉRIAS|VACANZE|度假|ОТПУСК/i
 };
-function kf(o, r) {
+function w_(o, r) {
   const n = r?.entity_id || r?.alarm_entity_id, a = n ? o._hass?.states?.[n]?.state : void 0;
   return String(a || r?.state || r?.alarm_state || r?.attributes?.state || "").toLowerCase();
 }
-function cl(o, r, n) {
+function dl(o, r, n) {
   o.classList.toggle("active", n), o.classList.toggle("argus-action-active", n), o.dataset.argusAction = r, r === "sos" && o.classList.toggle("flashing", n);
 }
-function Sf(o) {
+function k_(o) {
   const r = o.shadowRoot;
   if (!r) return;
-  let n = r.getElementById(op);
-  n || (n = document.createElement("style"), n.id = op, r.appendChild(n)), n.textContent = `
+  let n = r.getElementById(cp);
+  n || (n = document.createElement("style"), n.id = cp, r.appendChild(n)), n.textContent = `
 .entry .liquid-stack .liquid-btn{border-radius:13px!important;color:rgba(255,255,255,.92)!important}
 .entry.argus-arming .entry-icon>svg,.entry.argus-waiting .entry-icon>svg{transform-origin:center!important;animation:argusArmingShield 1.05s ease-in-out infinite!important;filter:drop-shadow(0 0 26px rgba(255,184,57,.95)) saturate(1.35)!important}
 .argus-shield-status{display:block;margin:7px auto 0;padding:5px 10px;width:max-content;max-width:180px;border:1px solid rgba(255,184,57,.45);border-radius:999px;background:rgba(255,149,0,.13);color:#ffd27a;font-size:9px;font-weight:800;letter-spacing:.12em;text-align:center;animation:argusArmingLabel 1.05s ease-in-out infinite}
@@ -20769,29 +21018,29 @@ function Sf(o) {
 @keyframes argusTriggeredSensor{0%,100%{opacity:.62}50%{opacity:1}}
 `;
 }
-function dl(o) {
+function ul(o) {
   if (!o.shadowRoot) return;
-  Sf(o);
+  k_(o);
   const r = o.shadowRoot.querySelectorAll(".entry");
   Array.from(r).forEach((n, a) => {
-    const s = o._dashboard?.entries?.[a] || {}, c = s.attributes || o._hass?.states?.[s.entity_id]?.attributes || {}, u = kf(o, s), p = c.arming_blocking_sensors || [], g = u === "arming" || !!c.arming_waiting_for_sensors || !!p.length;
+    const s = o._dashboard?.entries?.[a] || {}, c = s.attributes || o._hass?.states?.[s.entity_id]?.attributes || {}, u = w_(o, s), p = c.arming_blocking_sensors || [], g = u === "arming" || !!c.arming_waiting_for_sensors || !!p.length;
     n.classList.toggle("argus-arming", g), n.classList.toggle("argus-waiting", g);
-    const _ = n.querySelector(".entry-icon");
-    let f = n.querySelector(".argus-shield-status");
-    if (g && _) {
-      f || (f = document.createElement("span"), f.className = "argus-shield-status", _.insertAdjacentElement("afterend", f));
+    const f = n.querySelector(".entry-icon");
+    let _ = n.querySelector(".argus-shield-status");
+    if (g && f) {
+      _ || (_ = document.createElement("span"), _.className = "argus-shield-status", f.insertAdjacentElement("afterend", _));
       const I = (o._t?.("waiting_sensors_count") || "ESPERANDO {count} SENSOR(ES)").replace("{count}", String(p.length));
-      f.textContent = p.length ? I : u === "arming" ? o._t?.("arming") || "ARMANDO…" : o._t?.("waiting_sensors") || "ESPERANDO SENSORES";
+      _.textContent = p.length ? I : u === "arming" ? o._t?.("arming") || "ARMANDO…" : o._t?.("waiting_sensors") || "ESPERANDO SENSORES";
     } else
-      f?.remove();
+      _?.remove();
     const h = n.querySelector(".liquid-stack");
     h && Array.from(h.querySelectorAll(".liquid-btn,button")).forEach((R) => {
       const I = R, A = String(I.textContent || "");
-      if (/SOS|PÁNICO|PANIC|PANIQUE|PÂNICO|PANICO|紧急|ПАНИКА/i.test(A)) cl(I, "sos", !!c.argus_panic_active);
-      else if (/DESARMAR|DISARM|DESARMADO|DISARMED|DÉSARMER|DÉSARMÉ|OFF|已撤防|СНЯТО/i.test(A)) cl(I, "disarm", u === "disarmed");
+      if (/SOS|PÁNICO|PANIC|PANIQUE|PÂNICO|PANICO|紧急|ПАНИКА/i.test(A)) dl(I, "sos", !!c.argus_panic_active);
+      else if (/DESARMAR|DISARM|DESARMADO|DISARMED|DÉSARMER|DÉSARMÉ|OFF|已撤防|СНЯТО/i.test(A)) dl(I, "disarm", u === "disarmed");
       else {
-        const S = Object.entries(wf).find(([, y]) => y.test(A));
-        S && cl(I, S[0], u === S[0]);
+        const S = Object.entries(x_).find(([, y]) => y.test(A));
+        S && dl(I, S[0], u === S[0]);
       }
     });
     const v = new Set((c.triggered_sensors || []).map(String)), P = new Set(p.map((R) => String(o._dashboard?.available_entities?.find((I) => I.entity_id === R)?.name || R).toLocaleLowerCase()));
@@ -20801,23 +21050,23 @@ function dl(o) {
     });
   });
 }
-function Af(o) {
+function S_(o) {
   const r = o?.prototype;
   if (!r || r.__v2050AlarmVisuals) return;
   r.__v2050AlarmVisuals = !0;
   const n = r.connectedCallback, a = r._load, s = r._renderEntries;
   r.connectedCallback = function() {
     const c = n?.call(this);
-    return dl(this), c;
+    return ul(this), c;
   }, r._load = async function(...c) {
     const u = await a?.apply(this, c);
-    return dl(this), u;
+    return ul(this), u;
   }, r._renderEntries = function(...c) {
     const u = s?.apply(this, c);
-    return dl(this), u;
+    return ul(this), u;
   };
 }
-const ap = "argus-slide-action-styles", ul = {
+const dp = "argus-slide-action-styles", Ai = {
   es: { slide_disarm: "Desliza para desarmar", slide_sos: "Desliza para activar SOS", slide_sos_stop: "Desliza para detener SOS", enter_pin: "Ingresa el PIN maestro", wrong_pin: "PIN incorrecto", cancel: "Cancelar" },
   en: { slide_disarm: "Slide to disarm", slide_sos: "Slide to trigger SOS", slide_sos_stop: "Slide to stop SOS", enter_pin: "Enter master PIN", wrong_pin: "Wrong PIN", cancel: "Cancel" },
   fr: { slide_disarm: "Glisser pour désarmer", slide_sos: "Glisser pour déclencher SOS", slide_sos_stop: "Glisser pour arrêter SOS", enter_pin: "Saisir PIN maître", wrong_pin: "PIN incorrect", cancel: "Annuler" },
@@ -20825,23 +21074,42 @@ const ap = "argus-slide-action-styles", ul = {
   it: { slide_disarm: "Scorri per disarmare", slide_sos: "Scorri per attivare SOS", slide_sos_stop: "Scorri per fermare SOS", enter_pin: "Inserisci PIN master", wrong_pin: "PIN errato", cancel: "Annulla" },
   zh: { slide_disarm: "滑动撤防", slide_sos: "滑动触发 SOS", slide_sos_stop: "滑动停止 SOS", enter_pin: "请输入主 PIN 码", wrong_pin: "PIN 错误", cancel: "取消" },
   "zh-Hant": { slide_disarm: "滑動撤防", slide_sos: "滑動觸發 SOS", slide_sos_stop: "滑動停止 SOS", enter_pin: "請輸入主 PIN 碼", wrong_pin: "PIN 錯誤", cancel: "取消" },
-  ru: { slide_disarm: "Сдвиньте для снятия охраны", slide_sos: "Сдвиньте для SOS", slide_sos_stop: "Сдвиньте для остановки SOS", enter_pin: "Введите мастер-PIN", wrong_pin: "Неверный PIN", cancel: "Отмена" },
+  ru: { slide_disarm: "Сдвиньте для снятия охраны", slide_sos: "Сдвиньте для включения SOS", slide_sos_stop: "Сдвиньте для остановки SOS", enter_pin: "Введите мастер-PIN", wrong_pin: "Неверный PIN", cancel: "Отмена" },
   hi: { slide_disarm: "निरस्त करने के लिए स्लाइड करें", slide_sos: "SOS के लिए स्लाइड करें", slide_sos_stop: "SOS रोकने के लिए स्लाइड करें", enter_pin: "मास्टर PIN दर्ज करें", wrong_pin: "गलत PIN", cancel: "रद्द करें" },
   ar: { slide_disarm: "اسحب لنزع التسليح", slide_sos: "اسحب لتشغيل نداء الاستغاثة", slide_sos_stop: "اسحب لإيقاف SOS", enter_pin: "أدخل الرمز الرئيسي", wrong_pin: "رمز خاطئ", cancel: "إلغاء" },
   ko: { slide_disarm: "밀어서 해제", slide_sos: "밀어서 SOS 활성화", slide_sos_stop: "밀어서 SOS 중지", enter_pin: "마스터 PIN 입력", wrong_pin: "잘못된 PIN", cancel: "취소" },
-  ja: { slide_disarm: "スライドして解除", slide_sos: "スライドしてSOS", slide_sos_stop: "スライドしてSOS停止", enter_pin: "マスターPINを入力", wrong_pin: "PINが違います", cancel: "キャンセル" },
-  uk: { slide_disarm: "Посуньте для зняття охорони", slide_sos: "Посуньте для SOS", slide_sos_stop: "Посуньте щоб зупинити SOS", enter_pin: "Введіть майстер-PIN", wrong_pin: "Неправильний PIN", cancel: "Скасувати" }
+  ja: { slide_disarm: "スライドして解除", slide_sos: "スライドしてSOS作動", slide_sos_stop: "スライドしてSOS停止", enter_pin: "マスターPINを入力", wrong_pin: "PINが違います", cancel: "キャンセル" },
+  uk: { slide_disarm: "Посуньте для зняття охорони", slide_sos: "Посуньте для ввімкнення SOS", slide_sos_stop: "Посуньте щоб зупинити SOS", enter_pin: "Введіть майстер-PIN", wrong_pin: "Неправильний PIN", cancel: "Скасувати" }
 };
-function Si(o, r) {
-  const n = (o._lang || o._manualLang || o._hass?.language || "es").toLowerCase().split(/[-_]/)[0];
-  return (ul[n] || ul.es)[r] || ul.es[r] || r;
+function A_(o) {
+  if (typeof o._getCurrentLangCode == "function")
+    return o._getCurrentLangCode();
+  let r = o._manualLang || o._lang;
+  if (!r)
+    try {
+      r = localStorage.getItem("argus_lang");
+    } catch {
+    }
+  if ((!r || r === "auto") && (r = o._ui?.manual_lang || o._ui?.language || o._hass?.language || "en"), r = String(r || "en").trim(), Ai[r]) return r;
+  if (/^zh-(hant|tw|hk)/i.test(r)) return "zh-Hant";
+  if (/^zh/i.test(r)) return "zh";
+  const n = r.split(/[-_]/)[0].toLowerCase();
+  return Ai[n] ? n : "en";
 }
-const Ef = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>', sp = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>', Pf = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>';
-function If(o) {
+function xn(o, r) {
+  const n = A_(o);
+  if (o._t) {
+    const a = o._t(r);
+    if (a && a !== r) return a;
+  }
+  return (Ai[n] || Ai.es)[r] || Ai.es[r] || r;
+}
+const E_ = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>', up = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>', P_ = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>';
+function I_(o) {
   const r = o.shadowRoot;
-  if (!r || r.getElementById(ap)) return;
+  if (!r || r.getElementById(dp)) return;
   const n = document.createElement("style");
-  n.id = ap, n.textContent = `
+  n.id = dp, n.textContent = `
 /* ── Slide-to-action base ─────────────────────────────────────────── */
 .argus-sta-wrap {
   width: 100%;
@@ -21048,7 +21316,7 @@ function If(o) {
 }
 `, r.appendChild(n);
 }
-function lp(o, r, n) {
+function pp(o, r, n) {
   const a = document.createElement("div");
   a.className = `argus-sta-wrap argus-sta-wrap--${o}`;
   const s = document.createElement("div");
@@ -21068,14 +21336,14 @@ function lp(o, r, n) {
       <button class="pin-ok" type="button">✓</button>
     </div>`, s.append(c, u, p, g), a.appendChild(s), { wrap: a, track: s, fill: c, thumb: u, label: p, pin: g };
 }
-function cp(o, r, n, a, s, c, u, p) {
-  let _ = !1, f = 0, h = 0, v = 0;
+function mp(o, r, n, a, s, c, u, p) {
+  let f = !1, _ = 0, h = 0, v = 0;
   function P() {
     return n.getBoundingClientRect().width - 56 - 4 * 2;
   }
-  function R(N) {
+  function R(C) {
     v = P();
-    const D = Math.max(0, Math.min(N, v));
+    const D = Math.max(0, Math.min(C, v));
     s.style.transform = `translateX(${D}px)`, a.style.width = `${D + 60}px`;
     const F = D / v;
     return c.style.opacity = String(Math.max(0, 1 - F * 1.8)), D;
@@ -21083,114 +21351,122 @@ function cp(o, r, n, a, s, c, u, p) {
   function I() {
     s.classList.add("argus-sta-thumb--snap"), R(0), c.style.opacity = "1", setTimeout(() => s.classList.remove("argus-sta-thumb--snap"), 520);
   }
-  function A(N) {
-    u.classList.contains("open") || (_ = !0, v = P(), f = N - h, s.style.cursor = "grabbing");
+  function A(C) {
+    u.classList.contains("open") || (f = !0, v = P(), _ = C - h, s.style.cursor = "grabbing");
   }
-  function S(N) {
-    _ && (h = R(N - f));
+  function S(C) {
+    f && (h = R(C - _));
   }
   function y() {
-    _ && (_ = !1, s.style.cursor = "grab", h >= v * 0.8 ? r === "disarm" && Nf(o) ? (w(), I()) : (p(), I()) : I(), h = 0);
+    f && (f = !1, s.style.cursor = "grab", h >= v * 0.8 ? r === "disarm" && C_(o) ? (w(), I()) : (p(), I()) : I(), h = 0);
   }
-  s.addEventListener("mousedown", (N) => {
-    N.preventDefault(), A(N.clientX);
-  }), window.addEventListener("mousemove", (N) => {
-    _ && S(N.clientX);
+  s.addEventListener("mousedown", (C) => {
+    C.preventDefault(), A(C.clientX);
+  }), window.addEventListener("mousemove", (C) => {
+    f && S(C.clientX);
   }), window.addEventListener("mouseup", () => {
-    _ && y();
-  }), s.addEventListener("touchstart", (N) => {
-    N.preventDefault(), A(N.touches[0].clientX);
-  }, { passive: !1 }), window.addEventListener("touchmove", (N) => {
-    _ && (N.preventDefault(), S(N.touches[0].clientX));
+    f && y();
+  }), s.addEventListener("touchstart", (C) => {
+    C.preventDefault(), A(C.touches[0].clientX);
+  }, { passive: !1 }), window.addEventListener("touchmove", (C) => {
+    f && (C.preventDefault(), S(C.touches[0].clientX));
   }, { passive: !1 }), window.addEventListener("touchend", () => {
-    _ && y();
+    f && y();
   });
   function w() {
     u.classList.add("open"), u.querySelector("input").focus();
   }
   const b = u.querySelector("input"), k = u.querySelector(".pin-err");
   function E() {
-    const N = b.value;
-    Cf(o, N) ? (u.classList.remove("open"), b.value = "", k.textContent = "", p(N)) : (b.classList.add("pin-shake"), k.textContent = Si(o, "wrong_pin"), setTimeout(() => {
+    const C = b.value;
+    N_(o, C) ? (u.classList.remove("open"), b.value = "", k.textContent = "", p(C)) : (b.classList.add("pin-shake"), k.textContent = xn(o, "wrong_pin"), setTimeout(() => {
       b.classList.remove("pin-shake"), k.textContent = "", b.value = "";
     }, 700));
   }
-  u.querySelector(".pin-ok").addEventListener("click", E), b.addEventListener("keydown", (N) => {
-    N.key === "Enter" && E();
+  u.querySelector(".pin-ok").addEventListener("click", E), b.addEventListener("keydown", (C) => {
+    C.key === "Enter" && E();
   }), u.querySelector(".pin-cancel").addEventListener("click", () => {
     u.classList.remove("open"), b.value = "", k.textContent = "";
   });
 }
-function Nf(o) {
+function C_(o) {
   return !!(o._entries?.[0]?.pin_configured || o._dashboard?.entries?.[0]?.pin_configured || o._ui?.master_pin_configured || o._pinConfigured);
 }
-function Cf(o, r) {
+function N_(o, r) {
   return typeof o._verifyPin == "function" ? o._verifyPin(r) : typeof o._checkMasterPin == "function" ? o._checkMasterPin(r) : !1;
 }
-function zf(o, r, n) {
-  if (r.querySelector(".argus-sta-wrap")) return;
+function z_(o, r, n) {
+  if (r.querySelector(".argus-sta-wrap")) {
+    r._staRefresh?.();
+    return;
+  }
   r.dataset.staInstalled = "1";
-  const a = r.dataset.entityId || o._dashboard?.entries?.[n]?.entity_id || "";
-  function s() {
-    return String(o._hass?.states?.[a]?.state || "disarmed").toLowerCase();
-  }
+  const s = r.dataset.entityId || o._dashboard?.entries?.[n]?.entity_id || "";
   function c() {
-    return !!o._hass?.states?.[a]?.attributes?.argus_panic_active;
+    return String(o._hass?.states?.[s]?.state || "disarmed").toLowerCase();
   }
-  const { wrap: u, track: p, fill: g, thumb: _, label: f, pin: h } = lp("disarm", Si(o, "slide_disarm"), Ef);
-  cp(o, "disarm", p, g, _, f, h, (b) => {
+  function u() {
+    return !!o._hass?.states?.[s]?.attributes?.argus_panic_active;
+  }
+  const { wrap: p, track: g, fill: f, thumb: _, label: h, pin: v } = pp("disarm", xn(o, "slide_disarm"), E_);
+  mp(o, "disarm", g, f, _, h, v, (k) => {
+    const E = o._dashboard?.entries?.[n]?.entry_id || "";
+    typeof o._send == "function" && o._send("argus/perform_alarm_action", { action: "disarm", entry_id: E, ...k ? { code: k } : {} }).catch(() => {
+    });
+  });
+  const { wrap: P, track: R, fill: I, thumb: A, label: S, pin: y } = pp("sos", xn(o, "slide_sos"), up);
+  mp(o, "sos", R, I, A, S, y, () => {
     const k = o._dashboard?.entries?.[n]?.entry_id || "";
-    typeof o._send == "function" && o._send("argus/perform_alarm_action", { action: "disarm", entry_id: k, ...b ? { code: b } : {} }).catch(() => {
+    typeof o._send == "function" && o._send("argus/perform_alarm_action", { action: "sos", entry_id: k }).catch(() => {
     });
   });
-  const { wrap: v, track: P, fill: R, thumb: I, label: A, pin: S } = lp("sos", Si(o, "slide_sos"), sp);
-  cp(o, "sos", P, R, I, A, S, () => {
-    const b = o._dashboard?.entries?.[n]?.entry_id || "";
-    typeof o._send == "function" && o._send("argus/perform_alarm_action", { action: "sos", entry_id: b }).catch(() => {
-    });
-  });
-  const y = r.querySelector(".liquid-stack");
-  if (!y) return;
-  y.querySelectorAll(".btn-disarm, .btn-sos, .argus-disarm-btn").forEach((b) => b.remove()), y.appendChild(u), y.appendChild(v);
-  function w() {
-    const b = s(), k = c(), E = b !== "disarmed" && b !== "unavailable";
-    u.classList.toggle("sta-armed", E), P.classList.toggle("sos-pulsing", k), A.textContent = k ? Si(o, "slide_sos_stop") : Si(o, "slide_sos"), I.innerHTML = k ? Pf : sp;
+  const w = r.querySelector(".liquid-stack");
+  if (!w) return;
+  w.querySelectorAll(".btn-disarm, .btn-sos, .argus-disarm-btn").forEach((k) => k.remove()), w.appendChild(p), w.appendChild(P);
+  function b() {
+    const k = c(), E = u(), C = k !== "disarmed" && k !== "unavailable";
+    p.classList.toggle("sta-armed", C), h.textContent = xn(o, "slide_disarm"), R.classList.toggle("sos-pulsing", E), S.textContent = E ? xn(o, "slide_sos_stop") : xn(o, "slide_sos"), A.innerHTML = E ? P_ : up;
   }
-  w(), r._staRefresh = w;
+  b(), r._staRefresh = b;
 }
-function dp(o) {
-  If(o);
+function pl(o) {
+  I_(o);
   const r = o.shadowRoot;
   r && r.querySelectorAll(".entry").forEach((n, a) => {
     if (!n.dataset.entityId) {
       const s = o._dashboard?.entries?.[a]?.entity_id;
       s && (n.dataset.entityId = s);
     }
-    zf(o, n, a), n._staRefresh?.();
+    z_(o, n, a), n._staRefresh?.();
   });
 }
-function Rf(o) {
+function R_(o) {
   if (!o || o.__argusSlideToAction) return;
   o.__argusSlideToAction = !0;
   const r = o.prototype, n = r._renderEntries;
-  if (r._renderEntries = function(...s) {
-    const c = n?.call(this, ...s);
+  r._renderEntries = function(...c) {
+    const u = n?.call(this, ...c);
     return requestAnimationFrame(() => {
-      dp(this), setTimeout(() => dp(this), 100);
-    }), c;
+      pl(this), setTimeout(() => pl(this), 100);
+    }), u;
+  };
+  const a = r._refreshLocalizedUi;
+  if (r._refreshLocalizedUi = function(...c) {
+    const u = a?.call(this, ...c);
+    return pl(this), u;
   }, Object.getOwnPropertyDescriptor(r, "_hass")?.set || r.set_hass) {
-    const s = r.set_hass;
-    r.set_hass = function(c) {
-      s?.call(this, c), this.shadowRoot?.querySelectorAll(".entry").forEach((u) => u._staRefresh?.());
+    const c = r.set_hass;
+    r.set_hass = function(u) {
+      c?.call(this, u), this.shadowRoot?.querySelectorAll(".entry").forEach((p) => p._staRefresh?.());
     };
   }
 }
-const up = "argus-v2049-responsive-widgets", Lf = '#w-access,.access-view,.access-content,.access-sections,.users-list,.user-list,.users-grid,[role="tabpanel"],.users-modal,.access-modal,.argus-users-modal';
-function Of(o) {
+const gp = "argus-v2049-responsive-widgets", L_ = '#w-access,.access-view,.access-content,.access-sections,.users-list,.user-list,.users-grid,[role="tabpanel"],.users-modal,.access-modal,.argus-users-modal';
+function O_(o) {
   const r = o.shadowRoot;
   if (!r) return;
-  let n = r.getElementById(up);
-  n || (n = document.createElement("style"), n.id = up, r.appendChild(n)), n.textContent = `
+  let n = r.getElementById(gp);
+  n || (n = document.createElement("style"), n.id = gp, r.appendChild(n)), n.textContent = `
 #w-access{display:flex!important;flex-direction:column!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;box-sizing:border-box!important}
 #w-access>.panel-head,#w-access>.access-summary,#w-access>.tabs{flex:0 0 auto!important}
 #w-access :is(.panel-body,#access-view,.access-view,.access-content,.access-sections,.users-list,.user-list,.users-grid,[role="tabpanel"]){flex:1 1 auto!important;min-width:0!important;min-height:0!important;max-height:none!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;scrollbar-gutter:stable!important;box-sizing:border-box!important}
@@ -21211,44 +21487,44 @@ function Of(o) {
 @media(max-width:460px){#w-backup{grid-template-columns:1fr!important;overflow-y:auto!important}#w-backup :is(.panel-body,.actions,.backup-actions,.button-row,.controls){grid-template-columns:1fr!important}#w-backup :is(button,a,ha-button,mwc-button){font-size:13px!important}#w-github{padding:14px!important;row-gap:12px!important}}
 `;
 }
-function Tf(o) {
+function T_(o) {
   const r = o.shadowRoot;
-  r && r.querySelectorAll(Lf).forEach((n) => {
+  r && r.querySelectorAll(L_).forEach((n) => {
     const a = n;
     a.style.touchAction = "pan-y", a.style.setProperty("-webkit-overflow-scrolling", "touch"), a.scrollHeight > a.clientHeight && (a.style.overflowY = "auto");
   });
 }
-function Vo(o) {
-  Of(o), Tf(o);
+function Go(o) {
+  O_(o), T_(o);
 }
-function Mf(o) {
+function M_(o) {
   const r = o?.prototype;
   if (!r || r.__v2049ResponsiveWidgets) return;
   r.__v2049ResponsiveWidgets = !0;
   const n = r.connectedCallback, a = r.disconnectedCallback, s = r._load, c = r._renderEntries;
   r.connectedCallback = function() {
     const u = n?.call(this);
-    return Vo(this), this._v2049Observer?.disconnect?.(), this._v2049Frame = 0, this._v2049Observer = new MutationObserver(() => {
+    return Go(this), this._v2049Observer?.disconnect?.(), this._v2049Frame = 0, this._v2049Observer = new MutationObserver(() => {
       this._v2049Frame || (this._v2049Frame = requestAnimationFrame(() => {
-        this._v2049Frame = 0, Vo(this);
+        this._v2049Frame = 0, Go(this);
       }));
     }), this.shadowRoot && this._v2049Observer.observe(this.shadowRoot, { childList: !0, subtree: !0 }), u;
   }, r.disconnectedCallback = function() {
     return this._v2049Observer?.disconnect?.(), this._v2049Observer = null, this._v2049Frame && cancelAnimationFrame(this._v2049Frame), this._v2049Frame = 0, a?.call(this);
   }, r._load = async function(...u) {
     const p = await s?.apply(this, u);
-    return Vo(this), p;
+    return Go(this), p;
   }, r._renderEntries = function(...u) {
     const p = c?.apply(this, u);
-    return Vo(this), p;
+    return Go(this), p;
   };
 }
-const pp = "argus-v2050-widget-layouts";
-function Hf(o) {
+const hp = "argus-v2050-widget-layouts";
+function H_(o) {
   const r = o.shadowRoot;
   if (!r) return;
-  let n = r.getElementById(pp);
-  n || (n = document.createElement("style"), n.id = pp, r.appendChild(n)), n.textContent = `
+  let n = r.getElementById(hp);
+  n || (n = document.createElement("style"), n.id = hp, r.appendChild(n)), n.textContent = `
 #w-access{display:flex!important;flex-direction:column!important;min-width:0!important;min-height:0!important;height:100%!important;overflow:hidden!important}
 #w-access .panel-body,#w-access #access-view,#w-access .access-view,#w-access .access-content,#w-access .users-list,#w-access .user-list{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;overscroll-behavior:contain!important}
 #w-backup{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:14px!important;padding:16px!important;box-sizing:border-box!important;height:100%!important;min-height:0!important;overflow:hidden!important;text-align:center!important}
@@ -21263,49 +21539,49 @@ function Hf(o) {
 @media(max-width:520px){#w-backup .panel-body,#w-backup .actions,#w-backup .backup-actions,#w-backup .button-row,#w-backup .controls{grid-template-columns:1fr!important}#w-backup{overflow-y:auto!important}}
 `;
 }
-function Bf(o) {
+function B_(o) {
   const r = o.shadowRoot;
   r && r.querySelectorAll("#w-access,.access-content,.users-list,.user-list,[role=tabpanel],.users-modal,.access-modal").forEach((n) => {
     const a = n;
     a.style.touchAction = "pan-y", a.style.setProperty("-webkit-overflow-scrolling", "touch"), a.scrollHeight > a.clientHeight && (a.style.overflowY = "auto");
   });
 }
-function Go(o) {
-  Hf(o), Bf(o);
+function Yo(o) {
+  H_(o), B_(o);
 }
-function Df(o) {
+function D_(o) {
   const r = o?.prototype;
   if (!r || r.__v2050WidgetLayouts) return;
   r.__v2050WidgetLayouts = !0;
   const n = r.connectedCallback, a = r.disconnectedCallback, s = r._load, c = r._renderEntries;
   r.connectedCallback = function() {
     const u = n?.call(this);
-    return Go(this), this._v2050LayoutObs?.disconnect?.(), this._v2050LayoutFrame = 0, this._v2050LayoutObs = new MutationObserver(() => {
+    return Yo(this), this._v2050LayoutObs?.disconnect?.(), this._v2050LayoutFrame = 0, this._v2050LayoutObs = new MutationObserver(() => {
       this._v2050LayoutFrame || (this._v2050LayoutFrame = requestAnimationFrame(() => {
-        this._v2050LayoutFrame = 0, Go(this);
+        this._v2050LayoutFrame = 0, Yo(this);
       }));
     }), this.shadowRoot && this._v2050LayoutObs.observe(this.shadowRoot, { childList: !0, subtree: !0 }), u;
   }, r.disconnectedCallback = function() {
     return this._v2050LayoutObs?.disconnect?.(), this._v2050LayoutObs = null, this._v2050LayoutFrame && cancelAnimationFrame(this._v2050LayoutFrame), this._v2050LayoutFrame = 0, a?.call(this);
   }, r._load = async function(...u) {
     const p = await s?.apply(this, u);
-    return Go(this), p;
+    return Yo(this), p;
   }, r._renderEntries = function(...u) {
     const p = c?.apply(this, u);
-    return Go(this), p;
+    return Yo(this), p;
   };
 }
-const mp = "argus-more-info-hook-installed", gp = "argus-more-info-dialog-styles";
-function $f(o, r) {
+const _p = "argus-more-info-hook-installed", fp = "argus-more-info-dialog-styles";
+function $_(o, r) {
   if (!o || !o.startsWith("alarm_control_panel.")) return !1;
   if (o.includes("argus")) return !0;
   const n = r?.states?.[o];
   return !!(n?.attributes?.argus_version || n?.attributes?.argus_entry_id);
 }
-function qf(o) {
-  if (!o || typeof o.getElementById == "function" && o.getElementById(gp)) return;
+function q_(o) {
+  if (!o || typeof o.getElementById == "function" && o.getElementById(fp)) return;
   const r = o.createElement("style");
-  r.id = gp, r.textContent = `
+  r.id = fp, r.textContent = `
     ha-more-info-dialog:has(.argus-more-info-active) ha-dialog,
     ha-more-info-dialog:has(.argus-more-info-active) .mdc-dialog__surface {
       --ha-dialog-border-radius: 28px !important;
@@ -21332,10 +21608,10 @@ function qf(o) {
     }
   `, (o.head || o.body || o).appendChild(r);
 }
-function hp(o, r) {
+function bp(o, r) {
   if (!o) return;
   const n = o._entityId || o.entityId || o.params?.entityId;
-  if (!$f(n, r)) return;
+  if (!$_(n, r)) return;
   const a = o.shadowRoot;
   if (!a) return;
   const s = a.querySelector("more-info-content") || a.querySelector("more-info-alarm_control_panel") || a.querySelector(".content") || a.querySelector("ha-dialog");
@@ -21361,18 +21637,18 @@ function hp(o, r) {
     p && p !== c ? (p.style.display = "none", p.parentNode?.insertBefore(c, p)) : s.appendChild(c);
   }
 }
-function jf(o) {
-  if (typeof window > "u" || typeof document > "u" || window[mp]) return;
-  window[mp] = !0;
+function j_(o) {
+  if (typeof window > "u" || typeof document > "u" || window[_p]) return;
+  window[_p] = !0;
   try {
-    qf(document);
+    q_(document);
   } catch {
   }
   const r = (n) => {
     n.detail?.entityId && requestAnimationFrame(() => {
       try {
         const s = document.querySelector("home-assistant"), c = s?.shadowRoot?.querySelector("ha-more-info-dialog") || document.querySelector("ha-more-info-dialog");
-        c && hp(c, s?.hass);
+        c && bp(c, s?.hass);
       } catch {
       }
     });
@@ -21385,29 +21661,29 @@ function jf(o) {
     typeof MutationObserver < "u" && document.body && new MutationObserver(() => {
       try {
         const a = document.querySelector("home-assistant"), s = a?.shadowRoot?.querySelector("ha-more-info-dialog") || document.querySelector("ha-more-info-dialog");
-        s && hp(s, a?.hass);
+        s && bp(s, a?.hass);
       } catch {
       }
     }).observe(document.body, { childList: !0, subtree: !0 });
   } catch {
   }
 }
-const Ff = [{ id: "activity", size: "M", hidden: !1 }, { id: "modes", size: "M", hidden: !1 }, { id: "automations", size: "M", hidden: !1 }, { id: "access", size: "M", hidden: !1 }, { id: "backup", size: "S", hidden: !1 }, { id: "github", size: "S", hidden: !1 }], fp = { es: ["Configurar widgets", "Arrastrar", "Ocultar", "Mostrar", "Conectado", "Sin sensores configurados", "Todos los sensores están omitidos"], en: ["Configure widgets", "Drag", "Hide", "Show", "Connected", "No sensors configured", "All sensors are bypassed"], fr: ["Configurer les widgets", "Déplacer", "Masquer", "Afficher", "Connecté", "Aucun capteur configuré", "Tous les capteurs sont ignorés"], pt: ["Configurar widgets", "Arrastar", "Ocultar", "Mostrar", "Conectado", "Nenhum sensor configurado", "Todos os sensores estão ignorados"], it: ["Configura widget", "Trascina", "Nascondi", "Mostra", "Connesso", "Nessun sensore configurato", "Tutti i sensori sono esclusi"], zh: ["配置小组件", "拖动", "隐藏", "显示", "已连接", "未配置传感器", "所有传感器均已绕过"], ru: ["Настроить виджеты", "Перетащить", "Скрыть", "Показать", "Подключено", "Датчики не настроены", "Все датчики исключены"] }, Uf = (o) => {
+const F_ = [{ id: "activity", size: "M", hidden: !1 }, { id: "modes", size: "M", hidden: !1 }, { id: "automations", size: "M", hidden: !1 }, { id: "access", size: "M", hidden: !1 }, { id: "backup", size: "S", hidden: !1 }, { id: "github", size: "S", hidden: !1 }], yp = { es: ["Configurar widgets", "Arrastrar", "Ocultar", "Mostrar", "Conectado", "Sin sensores configurados", "Todos los sensores están omitidos"], en: ["Configure widgets", "Drag", "Hide", "Show", "Connected", "No sensors configured", "All sensors are bypassed"], fr: ["Configurer les widgets", "Déplacer", "Masquer", "Afficher", "Connecté", "Aucun capteur configuré", "Tous les capteurs sont ignorés"], pt: ["Configurar widgets", "Arrastar", "Ocultar", "Mostrar", "Conectado", "Nenhum sensor configurado", "Todos os sensores estão ignorados"], it: ["Configura widget", "Trascina", "Nascondi", "Mostra", "Connesso", "Nessun sensore configurato", "Tutti i sensori sono esclusi"], zh: ["配置小组件", "拖动", "隐藏", "显示", "已连接", "未配置传感器", "所有传感器均已绕过"], ru: ["Настроить виджеты", "Перетащить", "Скрыть", "Показать", "Подключено", "Датчики не настроены", "Все датчики исключены"] }, U_ = (o) => {
   const r = String(o._manualLang || o._hass?.language || "en").toLowerCase().split(/[-_]/)[0];
-  return fp[r] || fp.en;
-}, _p = (o) => [...o?.children || []].filter((r) => r.classList.contains("panel") && !r.classList.contains("dashboard-instances")), pl = (o, r) => {
+  return yp[r] || yp.en;
+}, vp = (o) => [...o?.children || []].filter((r) => r.classList.contains("panel") && !r.classList.contains("dashboard-instances")), ml = (o, r) => {
   if (!o) return;
   const n = o.querySelector("[data-fullscreen]");
   let a = o.querySelector("[data-exit-fullscreen]");
   a || (a = document.createElement("button"), a.className = "ghost entry-exit-fs", a.dataset.exitFullscreen = "", a.textContent = "×", a.style.cssText = "position:absolute;top:16px;left:16px;z-index:100;padding:9px 13px;font-size:18px;background:rgba(0,0,0,.55);border-radius:14px;color:white;border:1px solid rgba(255,255,255,.25)", a.onclick = () => o.getRootNode().host._exitFullscreenView(), o.appendChild(a)), n && (n.style.display = r ? "none" : "block"), a.style.display = r ? "block" : "none";
 };
-function bp(o) {
+function xp(o) {
   if (o.shadowRoot?.getElementById("argus-ui-fix")) return;
   const r = document.createElement("style");
   r.id = "argus-ui-fix", r.textContent = ".grid.editing .panel.widget-hidden-preview{opacity:.48!important}.widget-drag-handle{min-height:44px;display:flex;align-items:center;justify-content:center}.ios-fullscreen .entry-content.security-console{display:grid!important;grid-template-columns:minmax(230px,340px) minmax(150px,1fr) minmax(230px,380px)!important;grid-template-rows:auto minmax(0,1fr)!important;grid-template-areas:'hud hud hud' 'modes icon sensors'!important;gap:20px 32px!important;padding:56px 48px 32px!important;overflow:hidden!important}.ios-fullscreen .console-hud{grid-area:hud!important}.ios-fullscreen .liquid-stack{grid-area:modes!important;width:100%!important}.ios-fullscreen .entry-icon{grid-area:icon!important}.ios-fullscreen .console-sensors{grid-area:sensors!important;max-height:60vh!important;overflow:auto!important}@media(max-width:900px){.ios-fullscreen .entry-content.security-console{grid-template-columns:1fr!important;grid-template-rows:auto auto auto auto!important;grid-template-areas:'hud' 'icon' 'modes' 'sensors'!important;padding:64px 18px 22px!important;overflow-y:auto!important}.ios-fullscreen .liquid-stack,.ios-fullscreen .console-sensors{max-width:420px!important;margin:auto!important}}", o.shadowRoot.appendChild(r);
 }
-function ml(o) {
-  const r = Uf(o), n = o.shadowRoot;
+function gl(o) {
+  const r = U_(o), n = o.shadowRoot;
   if (!n) return;
   const a = n.getElementById("edit-widgets-label");
   a && (a.textContent = o._widgetEditing ? "✓ " + (o._t?.("done") || "Done") : "⚙️ " + r[0]), n.querySelectorAll(".widget-drag-handle").forEach((s) => s.textContent = "⋮⋮ " + r[1]), n.querySelectorAll(".widget-toggle-btn").forEach((s) => s.textContent = /mostrar|show|afficher|mostra|显示|показ/i.test(s.textContent) ? r[3] : r[2]), n.querySelectorAll(".console-empty").forEach((s) => s.textContent = /omit|bypass|ignor|exclu|绕过|исключ/i.test(s.textContent) ? r[6] : r[5]), n.querySelectorAll(".entry").forEach((s) => [...s.children].filter((c) => ["CONECTADO", "CONNECTED"].includes(c.textContent?.trim())).forEach((c) => {
@@ -21415,21 +21691,21 @@ function ml(o) {
     c.textContent = "", u && c.appendChild(u), c.append(r[4]);
   }));
 }
-function Wf(o) {
+function W_(o) {
   if (!o || o.__uiAudit) return;
   o.__uiAudit = !0;
   const r = o.prototype, n = r.connectedCallback, a = r._applyTranslations, s = r._renderEntries, c = r._initWidgetGrid, u = r._saveWidgetLayout;
   r.connectedCallback = function() {
-    return bp(this), n?.call(this);
+    return xp(this), n?.call(this);
   }, r._applyTranslations = function() {
     const p = a?.call(this);
-    return ml(this), p;
+    return gl(this), p;
   }, r._renderEntries = function() {
     const p = s?.call(this);
-    return bp(this), this.shadowRoot?.querySelectorAll(".entry").forEach((g, _) => pl(g, this._fullscreenIdx === _ || g.classList.contains("ios-fullscreen"))), ml(this), p;
+    return xp(this), this.shadowRoot?.querySelectorAll(".entry").forEach((g, f) => ml(g, this._fullscreenIdx === f || g.classList.contains("ios-fullscreen"))), gl(this), p;
   }, r._toggleFullscreen = function(p) {
     if (p = p || this.shadowRoot?.querySelector(".entry"), !p) return;
-    this._fullscreenIdx = Number(p.querySelector("[data-fullscreen]")?.dataset.fullscreen || 0), this._kioskLocked = !1, this._kioskTarget = p, this.classList.add("fullscreen-active"), p.classList.add("ios-fullscreen"), pl(p, !0), document.body.style.overflow = "hidden", (p.requestFullscreen || p.webkitRequestFullscreen)?.call(p).catch?.(() => {
+    this._fullscreenIdx = Number(p.querySelector("[data-fullscreen]")?.dataset.fullscreen || 0), this._kioskLocked = !1, this._kioskTarget = p, this.classList.add("fullscreen-active"), p.classList.add("ios-fullscreen"), ml(p, !0), document.body.style.overflow = "hidden", (p.requestFullscreen || p.webkitRequestFullscreen)?.call(p).catch?.(() => {
     });
   }, r._exitFullscreenView = async function() {
     try {
@@ -21437,7 +21713,7 @@ function Wf(o) {
     } catch {
     }
     this.shadowRoot?.querySelectorAll(".entry.ios-fullscreen").forEach((p) => {
-      p.classList.remove("ios-fullscreen"), pl(p, !1);
+      p.classList.remove("ios-fullscreen"), ml(p, !1);
     }), this.classList.remove("fullscreen-active"), this._fullscreenIdx = -1, this._kioskLocked = !1, this._kioskTarget = null, document.body.style.overflow = "";
   }, r._initWidgetGrid = function() {
     if (!this._widgetConfigLoaded) {
@@ -21450,41 +21726,41 @@ function Wf(o) {
     }
     c?.call(this);
     const p = this.shadowRoot?.getElementById("widget-grid");
-    _p(p).forEach((g) => g.draggable = !!this._widgetEditing), p && !p._auditDrag && (p._auditDrag = !0, p.addEventListener("dragover", (g) => {
+    vp(p).forEach((g) => g.draggable = !!this._widgetEditing), p && !p._auditDrag && (p._auditDrag = !0, p.addEventListener("dragover", (g) => {
       if (!this._widgetEditing) return;
       g.preventDefault();
-      const _ = p.querySelector(".dragging");
-      if (!_) return;
-      let f = null, h = 1 / 0;
-      if (_p(p).filter((v) => v !== _).forEach((v) => {
+      const f = p.querySelector(".dragging");
+      if (!f) return;
+      let _ = null, h = 1 / 0;
+      if (vp(p).filter((v) => v !== f).forEach((v) => {
         const P = v.getBoundingClientRect(), R = Math.hypot(g.clientX - P.x - P.width / 2, g.clientY - P.y - P.height / 2);
-        R < h && (h = R, f = v);
-      }), f) {
-        const v = f.getBoundingClientRect();
-        f[g.clientX > v.x + v.width / 2 || g.clientY > v.y + v.height / 2 ? "after" : "before"](_);
+        R < h && (h = R, _ = v);
+      }), _) {
+        const v = _.getBoundingClientRect();
+        _[g.clientX > v.x + v.width / 2 || g.clientY > v.y + v.height / 2 ? "after" : "before"](f);
       }
-    })), ml(this);
+    })), gl(this);
   }, r._saveWidgetLayout = function() {
     u?.call(this);
-    const p = this._widgetConfig || Ff;
+    const p = this._widgetConfig || F_;
     this._ui = this._ui || {};
     const g = { ...this._ui.dashboard || {}, widget_layout: p };
-    this._ui.dashboard = g, clearTimeout(this._widgetSaveTimer), this._widgetSaveTimer = setTimeout(() => this._send("argus/save_ui", { dashboard: g }).catch((_) => console.error("Widget layout save failed", _)), 180);
+    this._ui.dashboard = g, clearTimeout(this._widgetSaveTimer), this._widgetSaveTimer = setTimeout(() => this._send("argus/save_ui", { dashboard: g }).catch((f) => console.error("Widget layout save failed", f)), 180);
   }, r._changeWidgetSize = function(p, g) {
-    const _ = (this._widgetConfig || []).find((h) => h.id === p);
-    if (!_) return;
-    _.size = g;
-    const f = this.shadowRoot?.getElementById("w-" + p);
-    f && (f.dataset.size = g), this._renderWidgetLayout(), this._saveWidgetLayout();
+    const f = (this._widgetConfig || []).find((h) => h.id === p);
+    if (!f) return;
+    f.size = g;
+    const _ = this.shadowRoot?.getElementById("w-" + p);
+    _ && (_.dataset.size = g), this._renderWidgetLayout(), this._saveWidgetLayout();
   }, r._toggleWidgetVisibility = function(p) {
-    const g = (this._widgetConfig || []).find((f) => f.id === p);
+    const g = (this._widgetConfig || []).find((_) => _.id === p);
     if (!g) return;
     g.hidden = !g.hidden;
-    const _ = this.shadowRoot?.getElementById("w-" + p);
-    _ && (_.classList.toggle("widget-hidden-preview", g.hidden && this._widgetEditing), _.style.display = g.hidden && !this._widgetEditing ? "none" : ""), this._renderWidgetLayout(), this._saveWidgetLayout();
+    const f = this.shadowRoot?.getElementById("w-" + p);
+    f && (f.classList.toggle("widget-hidden-preview", g.hidden && this._widgetEditing), f.style.display = g.hidden && !this._widgetEditing ? "none" : ""), this._renderWidgetLayout(), this._saveWidgetLayout();
   };
 }
-function yp(o) {
+function wp(o) {
   if (o.shadowRoot?.getElementById("argus-grid-polish-style")) return;
   const r = document.createElement("style");
   r.id = "argus-grid-polish-style", r.textContent = `
@@ -21513,18 +21789,18 @@ function yp(o) {
 @media(orientation:landscape) and (max-height:560px) and (max-width:950px){#widget-grid.grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-rows:auto!important}#widget-grid>.panel[data-size="S"]{grid-column:span 1!important}#widget-grid>.panel[data-size="M"],#widget-grid>.panel[data-size="L"],#widget-grid>.panel[data-size="XL"],#widget-grid>#w-activity,#widget-grid>#w-automations{grid-column:span 2!important}}
 `, o.shadowRoot?.appendChild(r);
 }
-function Vf(o) {
+function V_(o) {
   if (!o || o.__gridPolish) return;
   o.__gridPolish = !0;
   const r = o.prototype, n = r.connectedCallback, a = r._initWidgetGrid;
   r.connectedCallback = function() {
-    return yp(this), n?.call(this);
+    return wp(this), n?.call(this);
   }, r._initWidgetGrid = function() {
     const s = a?.call(this);
-    return yp(this), s;
+    return wp(this), s;
   };
 }
-const vp = {
+const kp = {
   es: { on: "Conectado", off: "Argus desconectado · HA sin conexión" },
   en: { on: "Connected", off: "Argus disconnected · HA offline" },
   fr: { on: "Connecté", off: "Argus déconnecté · HA hors ligne" },
@@ -21538,11 +21814,11 @@ const vp = {
   ko: { on: "연결됨", off: "Argus 연결 끊김 · HA 오프라인" },
   ja: { on: "接続済み", off: "Argus 未接続 · HA オフライン" },
   uk: { on: "Підключено", off: "Argus відключено · HA офлайн" }
-}, Gf = (o) => {
+}, G_ = (o) => {
   const r = String(o._manualLang || o._hass?.language || o._hass?.locale?.language || "en").toLowerCase().split(/[-_]/)[0];
-  return vp[r] || vp.en;
+  return kp[r] || kp.en;
 };
-function Yf(o) {
+function Y_(o) {
   if (o.shadowRoot?.getElementById("argus-fullscreen-polish-style")) return;
   const r = document.createElement("style");
   r.id = "argus-fullscreen-polish-style", r.textContent = `
@@ -21564,7 +21840,7 @@ function Yf(o) {
 @media(max-width:900px){.console-hud{grid-template-columns:minmax(0,1fr) auto!important;grid-template-areas:'location connection' 'readings readings'!important}.console-hud-loc{grid-area:location!important}.argus-connection-pill{grid-area:connection!important}.console-hud-right{grid-area:readings!important;justify-self:stretch!important;justify-content:flex-start!important;overflow-x:auto!important}.ios-fullscreen .entry-content.security-console .entry-icon{display:flex!important;min-height:190px!important}.ios-fullscreen .entry-content.security-console .entry-icon svg{display:block!important;width:clamp(180px,46vw,300px)!important;max-width:300px!important}.console-sensors{width:100%!important;max-width:460px!important;max-height:42vh!important}}
 `, o.shadowRoot?.appendChild(r);
 }
-function Kf(o) {
+function K_(o) {
   let r = o.querySelector(".argus-connection-pill");
   if (r) return r;
   if (r = [...o.children].find((s) => s.tagName === "DIV" && (s.getAttribute("style") || "").includes("left:50%") && (s.getAttribute("style") || "").includes("top:12px")), !r) return null;
@@ -21572,14 +21848,14 @@ function Kf(o) {
   const n = o.querySelector(".console-hud"), a = n?.querySelector(".console-hud-right");
   return n && n.insertBefore(r, a || null), r;
 }
-function Xf(o) {
+function X_(o) {
   const r = !!o._hass && o._hass?.connection?.connected !== !1;
   return navigator.onLine !== !1 && r;
 }
-function Qo(o) {
-  const r = Gf(o), n = Xf(o);
+function Jo(o) {
+  const r = G_(o), n = X_(o);
   o.shadowRoot?.querySelectorAll(".entry").forEach((a) => {
-    const s = Kf(a);
+    const s = K_(a);
     if (!s) return;
     s.dataset.online = String(n), s.setAttribute("role", "status"), s.setAttribute("aria-live", "polite"), s.replaceChildren();
     const c = document.createElement("i");
@@ -21588,51 +21864,51 @@ function Qo(o) {
     u.className = "argus-connection-label", u.textContent = n ? r.on : r.off, s.append(c, u);
   });
 }
-function xp(o) {
-  Yf(o), Qo(o);
+function Sp(o) {
+  Y_(o), Jo(o);
 }
-function Qf(o) {
+function Q_(o) {
   if (!o || o.__fullscreenPolish) return;
   o.__fullscreenPolish = !0;
   const r = o.prototype, n = r.connectedCallback, a = r.disconnectedCallback, s = r._renderEntries, c = Object.getOwnPropertyDescriptor(r, "hass");
   r.connectedCallback = function() {
     const u = n?.call(this);
-    return this._argusOnlineHandler = () => Qo(this), window.addEventListener("online", this._argusOnlineHandler), window.addEventListener("offline", this._argusOnlineHandler), clearInterval(this._argusConnectivityTimer), this._argusConnectivityTimer = setInterval(() => Qo(this), 2500), queueMicrotask(() => xp(this)), u;
+    return this._argusOnlineHandler = () => Jo(this), window.addEventListener("online", this._argusOnlineHandler), window.addEventListener("offline", this._argusOnlineHandler), clearInterval(this._argusConnectivityTimer), this._argusConnectivityTimer = setInterval(() => Jo(this), 2500), queueMicrotask(() => Sp(this)), u;
   }, r.disconnectedCallback = function() {
     return window.removeEventListener("online", this._argusOnlineHandler), window.removeEventListener("offline", this._argusOnlineHandler), clearInterval(this._argusConnectivityTimer), a?.call(this);
   }, r._renderEntries = function() {
     const u = s?.call(this);
-    return xp(this), u;
+    return Sp(this), u;
   }, c?.set && Object.defineProperty(r, "hass", { configurable: !0, enumerable: c.enumerable, get: c.get, set(u) {
-    c.set.call(this, u), queueMicrotask(() => Qo(this));
+    c.set.call(this, u), queueMicrotask(() => Jo(this));
   } });
 }
-const ia = [{ id: "activity", size: "M", hidden: !1 }, { id: "modes", size: "M", hidden: !1 }, { id: "automations", size: "M", hidden: !1 }, { id: "access", size: "M", hidden: !1 }, { id: "backup", size: "S", hidden: !1 }, { id: "github", size: "S", hidden: !1 }], El = /* @__PURE__ */ new Set(["S", "M", "L", "XL"]), gl = /* @__PURE__ */ new Set(["auto", "12h", "24h"]), Ni = (o) => JSON.parse(JSON.stringify(o));
-function oa(o) {
+const oa = [{ id: "activity", size: "M", hidden: !1 }, { id: "modes", size: "M", hidden: !1 }, { id: "automations", size: "M", hidden: !1 }, { id: "access", size: "M", hidden: !1 }, { id: "backup", size: "S", hidden: !1 }, { id: "github", size: "S", hidden: !1 }], Pl = /* @__PURE__ */ new Set(["S", "M", "L", "XL"]), hl = /* @__PURE__ */ new Set(["auto", "12h", "24h"]), Ni = (o) => JSON.parse(JSON.stringify(o));
+function aa(o) {
   if (!Array.isArray(o)) return null;
   const r = /* @__PURE__ */ new Set(), n = [];
   return o.forEach((a) => {
     const s = String(a?.id || "");
-    !s || r.has(s) || (r.add(s), n.push({ id: s, size: El.has(a?.size) ? a.size : "M", hidden: !!a?.hidden }));
-  }), ia.forEach((a) => {
+    !s || r.has(s) || (r.add(s), n.push({ id: s, size: Pl.has(a?.size) ? a.size : "M", hidden: !!a?.hidden }));
+  }), oa.forEach((a) => {
     r.has(a.id) || n.push({ ...a });
   }), n.length ? n : null;
 }
-function Jf() {
+function J_() {
   try {
-    return oa(JSON.parse(localStorage.getItem("argus-widgets-v2") || localStorage.getItem("argus-widgets-v1") || "null"));
+    return aa(JSON.parse(localStorage.getItem("argus-widgets-v2") || localStorage.getItem("argus-widgets-v1") || "null"));
   } catch {
     return null;
   }
 }
-function nm(o) {
+function om(o) {
   try {
     const r = JSON.stringify(o);
     localStorage.setItem("argus-widgets-v2", r), localStorage.setItem("argus-widgets-v1", r);
   } catch {
   }
 }
-function wp(o) {
+function Ap(o) {
   if (o.shadowRoot?.getElementById("argus-v2012-audit-style")) return;
   const r = document.createElement("style");
   r.id = "argus-v2012-audit-style", r.textContent = `
@@ -21649,10 +21925,10 @@ function wp(o) {
 @media(prefers-reduced-motion:reduce){.argus-old-shield{display:none!important}.entry-icon.argus-shield-changing>svg{animation:none!important}}
 `, o.shadowRoot.appendChild(r);
 }
-function Zf(o) {
+function Z_(o) {
   return [...o.shadowRoot?.querySelectorAll(".entry") || []].map((r) => r.querySelector(".entry-icon>svg")?.outerHTML || null);
 }
-function e_(o, r) {
+function ef(o, r) {
   o.shadowRoot?.querySelectorAll(".entry").forEach((n, a) => {
     const s = n.querySelector(".entry-icon"), c = s?.querySelector(":scope>svg"), u = r[a];
     if (!s || !c || !u || u === c.outerHTML) return;
@@ -21663,17 +21939,17 @@ function e_(o, r) {
     }, 560);
   });
 }
-function t_(o) {
+function tf(o) {
   const r = o.shadowRoot?.getElementById("widget-grid");
-  if (!r) return oa(o._widgetConfig) || Ni(ia);
+  if (!r) return aa(o._widgetConfig) || Ni(oa);
   const n = new Map((o._widgetConfig || []).map((s) => [s.id, s])), a = [...r.children].filter((s) => s.classList.contains("panel") && !s.classList.contains("dashboard-instances")).map((s) => {
     const c = s.id.replace(/^w-/, ""), u = n.get(c) || {};
-    return { id: c, size: El.has(s.dataset.size) ? s.dataset.size : El.has(u.size) ? u.size : "M", hidden: s.classList.contains("widget-hidden-preview") || s.style.display === "none" || !!u.hidden };
+    return { id: c, size: Pl.has(s.dataset.size) ? s.dataset.size : Pl.has(u.size) ? u.size : "M", hidden: s.classList.contains("widget-hidden-preview") || s.style.display === "none" || !!u.hidden };
   });
-  return oa(a) || Ni(ia);
+  return aa(a) || Ni(oa);
 }
-function r_(o, r) {
-  o._widgetConfig = Ni(r), nm(r), o._ui = o._ui || {};
+function rf(o, r) {
+  o._widgetConfig = Ni(r), om(r), o._ui = o._ui || {};
   const n = { ...o._ui.dashboard || {}, widget_layout: Ni(r) };
   o._ui.dashboard = n;
   const a = { dashboard: n };
@@ -21684,12 +21960,12 @@ function r_(o, r) {
     o.dataset.widgetSave = "local", console.error("Argus widget layout saved locally; server save failed", s);
   });
 }
-function n_(o) {
+function nf(o) {
   if (!o || o.__v2012AuditFixes) return;
   o.__v2012AuditFixes = !0;
-  const r = o.prototype, n = r.connectedCallback, a = r.disconnectedCallback, s = r._load, c = r._renderEntries, u = r._initWidgetGrid, p = r._saveWidgetLayout, g = r._persistPersonalization, _ = r._applyTranslations, f = r._exitFullscreenView;
+  const r = o.prototype, n = r.connectedCallback, a = r.disconnectedCallback, s = r._load, c = r._renderEntries, u = r._initWidgetGrid, p = r._saveWidgetLayout, g = r._persistPersonalization, f = r._applyTranslations, _ = r._exitFullscreenView;
   r.connectedCallback = function() {
-    wp(this);
+    Ap(this);
     const h = n?.call(this);
     return this._argusExitCapture = (v) => {
       this._argusExiting && v.stopImmediatePropagation();
@@ -21698,21 +21974,21 @@ function n_(o) {
     return document.removeEventListener("fullscreenchange", this._argusExitCapture, !0), document.removeEventListener("webkitfullscreenchange", this._argusExitCapture, !0), a?.call(this);
   }, r._load = async function() {
     const h = await s?.call(this);
-    return this._ui && (this._clockFormat = gl.has(this._ui.clock_format) ? this._ui.clock_format : "auto"), h;
+    return this._ui && (this._clockFormat = hl.has(this._ui.clock_format) ? this._ui.clock_format : "auto"), h;
   }, r._applyTranslations = function() {
-    return _?.call(this);
+    return f?.call(this);
   }, r._renderEntries = function() {
-    const h = Zf(this), v = c?.call(this);
-    return wp(this), requestAnimationFrame(() => e_(this, h)), v;
+    const h = Z_(this), v = c?.call(this);
+    return Ap(this), requestAnimationFrame(() => ef(this, h)), v;
   }, r._initWidgetGrid = function() {
-    const h = oa(this._ui?.dashboard?.widget_layout), v = Jf();
-    this._widgetConfig = Ni(h || v || ia), nm(this._widgetConfig), this._widgetConfigLoaded = !0;
+    const h = aa(this._ui?.dashboard?.widget_layout), v = J_();
+    this._widgetConfig = Ni(h || v || oa), om(this._widgetConfig), this._widgetConfigLoaded = !0;
     const P = u?.call(this);
     return this._renderWidgetLayout?.(), P;
   }, r._saveWidgetLayout = function() {
-    p?.call(this), r_(this, t_(this));
+    p?.call(this), rf(this, tf(this));
   }, r._persistPersonalization = async function() {
-    this._clockFormat = gl.has(this.shadowRoot?.getElementById("argus-clock-format-select")?.value) ? this.shadowRoot.getElementById("argus-clock-format-select").value : gl.has(this._clockFormat) ? this._clockFormat : "auto";
+    this._clockFormat = hl.has(this.shadowRoot?.getElementById("argus-clock-format-select")?.value) ? this.shadowRoot.getElementById("argus-clock-format-select").value : hl.has(this._clockFormat) ? this._clockFormat : "auto";
     const h = await g?.call(this);
     this._ui = this._ui || {}, this._ui.clock_format = this._clockFormat;
     const v = { clock_format: this._clockFormat };
@@ -21722,7 +21998,7 @@ function n_(o) {
   }, r._exitFullscreenView = async function() {
     this._argusExiting = !0, this.classList.add("argus-exiting-fullscreen");
     try {
-      return await f?.call(this);
+      return await _?.call(this);
     } finally {
       requestAnimationFrame(() => requestAnimationFrame(() => {
         this._argusExiting = !1, this.classList.remove("argus-exiting-fullscreen");
@@ -21730,8 +22006,8 @@ function n_(o) {
     }
   };
 }
-const aa = ["essential", "light", "balanced", "full"], im = "argus-performance-v1", i_ = 6e3, o_ = 18, a_ = 3, s_ = 25e3;
-function om() {
+const sa = ["essential", "light", "balanced", "full"], am = "argus-performance-v1", of = 6e3, af = 18, sf = 3, lf = 25e3;
+function sm() {
   try {
     const o = navigator.userAgent || "", r = navigator.platform || "", n = navigator.hardwareConcurrency || 0, a = navigator.deviceMemory || 0;
     let s = 0;
@@ -21742,20 +22018,20 @@ function om() {
     return "default";
   }
 }
-function am() {
+function lm() {
   try {
-    return JSON.parse(localStorage.getItem(im) || "{}");
+    return JSON.parse(localStorage.getItem(am) || "{}");
   } catch {
     return {};
   }
 }
-function l_(o) {
+function cf(o) {
   try {
-    localStorage.setItem(im, JSON.stringify(o));
+    localStorage.setItem(am, JSON.stringify(o));
   } catch {
   }
 }
-function c_() {
+function df() {
   const o = navigator.hardwareConcurrency || 2, r = navigator.deviceMemory || null, n = window.devicePixelRatio || 1, a = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches || !1;
   let s = !1, c = !1;
   try {
@@ -21769,7 +22045,7 @@ function c_() {
   }
   return { cores: o, memory: r, dpr: n, reducedMotion: a, webgl1: s, webgl2: c, width: window.innerWidth || 0, height: window.innerHeight || 0 };
 }
-function d_(o = 900) {
+function uf(o = 900) {
   return new Promise((r) => {
     let n = 0;
     const a = performance.now();
@@ -21779,14 +22055,14 @@ function d_(o = 900) {
     requestAnimationFrame(s);
   });
 }
-function u_(o, r) {
+function pf(o, r) {
   let n = 0;
   return n += Math.min(o.cores || 2, 8) * 8, n += o.memory ? Math.min(o.memory, 8) * 6 : 18, o.webgl2 ? n += 30 : o.webgl1 && (n += 14), n += Math.min(r, 60) * 1.2, r >= 55 && (o.cores || 0) >= 4 && (n += 8), o.reducedMotion && (n -= 20), Math.max(o.width, o.height) < 800 && (n -= 10), n >= 170 ? "full" : n >= 120 ? "balanced" : n >= 70 ? "light" : "essential";
 }
-function p_(o) {
-  return aa.includes(o) ? o : null;
+function mf(o) {
+  return sa.includes(o) ? o : null;
 }
-function m_(o) {
+function gf(o) {
   if (o.shadowRoot?.getElementById("argus-perf-style")) return;
   const r = document.createElement("style");
   r.id = "argus-perf-style", r.textContent = `
@@ -21803,53 +22079,53 @@ function m_(o) {
 @media(max-width:900px){.personalize-grid{grid-template-areas:'home' 'temp' 'weather' 'clock' 'performance' 'panel' 'hub' 'emergency'!important}}
 `, o.shadowRoot.appendChild(r);
 }
-function Tl(o, r, n) {
-  o._argusPerfProfile = r, o.dataset.argusPerf = r, o.dataset.argusPerfSource = n || "auto", aa.forEach((a) => o.classList.remove("argus-perf-" + a)), o.classList.add("argus-perf-" + r), o.dispatchEvent(new CustomEvent("argus-performance-profile", { bubbles: !0, composed: !0, detail: { profile: r, source: n || "auto", capabilities: o._argusPerfCaps || null, fps: o._argusPerfFps || null } }));
+function Ml(o, r, n) {
+  o._argusPerfProfile = r, o.dataset.argusPerf = r, o.dataset.argusPerfSource = n || "auto", sa.forEach((a) => o.classList.remove("argus-perf-" + a)), o.classList.add("argus-perf-" + r), o.dispatchEvent(new CustomEvent("argus-performance-profile", { bubbles: !0, composed: !0, detail: { profile: r, source: n || "auto", capabilities: o._argusPerfCaps || null, fps: o._argusPerfFps || null } }));
 }
-async function g_(o) {
-  const r = c_(), n = await d_();
-  o._argusPerfCaps = r, o._argusPerfFps = n, o._argusPerfAuto = u_(r, n);
-  const a = am(), s = om();
-  a[s] = { ...a[s] || {}, auto: o._argusPerfAuto, checkedAt: Date.now() }, l_(a), Tl(o, o._argusPerfAuto, "auto");
+async function hf(o) {
+  const r = df(), n = await uf();
+  o._argusPerfCaps = r, o._argusPerfFps = n, o._argusPerfAuto = pf(r, n);
+  const a = lm(), s = sm();
+  a[s] = { ...a[s] || {}, auto: o._argusPerfAuto, checkedAt: Date.now() }, cf(a), Ml(o, o._argusPerfAuto, "auto");
 }
-function h_(o) {
-  sm(o);
+function _f(o) {
+  cm(o);
   let r = performance.now(), n = r, a = 0, s = 0;
   function c(u) {
     const p = u - n;
     if (n = u, p > 0) {
       const g = 1e3 / p;
-      if (u - r >= i_ && (r = u, g < o_ ? a++ : a = 0, a >= a_ && u - s > s_)) {
-        const _ = Math.max(0, aa.indexOf(o._argusPerfProfile || "balanced") - 1), f = aa[_];
-        f && f !== o._argusPerfProfile && (o._argusPerfAuto = f, Tl(o, f, "auto-downgrade"), s = u), a = 0;
+      if (u - r >= of && (r = u, g < af ? a++ : a = 0, a >= sf && u - s > lf)) {
+        const f = Math.max(0, sa.indexOf(o._argusPerfProfile || "balanced") - 1), _ = sa[f];
+        _ && _ !== o._argusPerfProfile && (o._argusPerfAuto = _, Ml(o, _, "auto-downgrade"), s = u), a = 0;
       }
     }
     o._argusPerfMonitorFrame = requestAnimationFrame(c);
   }
   o._argusPerfMonitorFrame = requestAnimationFrame(c);
 }
-function sm(o) {
+function cm(o) {
   o._argusPerfMonitorFrame && (cancelAnimationFrame(o._argusPerfMonitorFrame), o._argusPerfMonitorFrame = null);
 }
-function f_(o) {
+function ff(o) {
   if (!o || o.__argusPerformanceProfile) return;
   o.__argusPerformanceProfile = !0;
   const r = o.prototype, n = r.connectedCallback, a = r.disconnectedCallback, s = r._load, c = r._applyTranslations;
   r.connectedCallback = function() {
-    m_(this);
-    const u = am()[om()] || {};
-    this._argusPerfAuto = p_(u.auto) || "balanced", Tl(this, this._argusPerfAuto, "auto");
+    gf(this);
+    const u = lm()[sm()] || {};
+    this._argusPerfAuto = mf(u.auto) || "balanced", Ml(this, this._argusPerfAuto, "auto");
     const p = n?.call(this);
-    return g_(this), h_(this), p;
+    return hf(this), _f(this), p;
   }, r.disconnectedCallback = function() {
-    return sm(this), a?.call(this);
+    return cm(this), a?.call(this);
   }, r._load = async function() {
     return await s?.call(this);
   }, r._applyTranslations = function() {
     return c?.call(this);
   };
 }
-function kp(o) {
+function Ep(o) {
   if (o.shadowRoot?.getElementById("argus-visual-container-fixes")) return;
   const r = document.createElement("style");
   r.id = "argus-visual-container-fixes", r.textContent = `
@@ -21943,32 +22219,32 @@ function kp(o) {
 @media (max-width:520px) and (orientation:portrait){:host{--argus-container-radius:24px}}
 `, o.shadowRoot.appendChild(r);
 }
-function Jo(o) {
+function Zo(o) {
   const r = o.shadowRoot?.querySelector(".dashboard-instances");
   r && (r.draggable = !1, r.removeAttribute("hidden"), r.classList.remove("widget-hidden-preview", "dragging"), r.querySelector(":scope > .panel-edit-overlay")?.remove(), r.style.setProperty("display", "block", "important"), r.style.setProperty("visibility", "visible", "important"), r.style.setProperty("opacity", "1", "important"));
 }
-function __(o) {
-  !o.shadowRoot?.getElementById("widget-grid") || o._argusWidgetLayoutRestored || (o._argusWidgetLayoutRestored = !0, o._widgetConfigLoaded ? o._renderWidgetLayout?.() : o._initWidgetGrid?.(), Jo(o));
+function bf(o) {
+  !o.shadowRoot?.getElementById("widget-grid") || o._argusWidgetLayoutRestored || (o._argusWidgetLayoutRestored = !0, o._widgetConfigLoaded ? o._renderWidgetLayout?.() : o._initWidgetGrid?.(), Zo(o));
 }
-function b_(o) {
+function yf(o) {
   if (!o || o.__argusVisualContainerFixes) return;
   o.__argusVisualContainerFixes = !0;
   const r = o.prototype, n = r.connectedCallback, a = r._load, s = r._renderEntries, c = r._toggleWidgetEditing;
   r.connectedCallback = function() {
-    return kp(this), n?.call(this);
+    return Ep(this), n?.call(this);
   }, r._load = async function() {
     this._argusWidgetLayoutRestored = !1;
     const u = await a?.call(this);
-    return __(this), Jo(this), u;
+    return bf(this), Zo(this), u;
   }, r._renderEntries = function() {
     const u = s?.call(this);
-    return kp(this), Jo(this), u;
+    return Ep(this), Zo(this), u;
   }, r._toggleWidgetEditing = function() {
     const u = c?.call(this);
-    return Jo(this), u;
+    return Zo(this), u;
   };
 }
-function Sp(o, r, n, a) {
+function Pp(o, r, n, a) {
   const s = o.shadowRoot?.getElementById(r), c = s?.getAttribute("data-size");
   if (c !== "S") return n?.apply(o, a);
   s.setAttribute("data-size", "M");
@@ -21978,18 +22254,18 @@ function Sp(o, r, n, a) {
     s.setAttribute("data-size", c);
   }
 }
-function y_(o) {
+function vf(o) {
   if (!o || o.__argusCompleteContentFixes) return;
   o.__argusCompleteContentFixes = !0;
   const r = o.prototype, n = r._renderActivityLog, a = r._renderAutomations;
   r._renderActivityLog = function(...s) {
-    return Sp(this, "w-activity", n, s);
+    return Pp(this, "w-activity", n, s);
   }, r._renderAutomations = function(...s) {
-    return Sp(this, "w-automations", a, s);
+    return Pp(this, "w-automations", a, s);
   };
 }
-const v_ = 15e3;
-function x_(o, r) {
+const xf = 15e3;
+function wf(o, r) {
   const n = o._getLocale?.() || void 0, a = o._getTimeZone?.(), s = { weekday: "short", month: "short", day: "numeric" };
   a && (s.timeZone = a);
   try {
@@ -21998,20 +22274,20 @@ function x_(o, r) {
     return r.toLocaleDateString(n, s);
   }
 }
-function Pl(o) {
+function Il(o) {
   const r = /* @__PURE__ */ new Date(), n = o._formatTime?.(r) || r.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }), a = o.shadowRoot?.getElementById("hero-clock-time"), s = o.shadowRoot?.getElementById("hero-clock-date");
-  a && (a.textContent = n), s && (s.textContent = x_(o, r)), o.shadowRoot?.querySelectorAll(".console-hud-time").forEach((c) => {
+  a && (a.textContent = n), s && (s.textContent = wf(o, r)), o.shadowRoot?.querySelectorAll(".console-hud-time").forEach((c) => {
     c.textContent = n;
   });
 }
-function w_(o) {
+function kf(o) {
   o.shadowRoot?.querySelectorAll(".entry-icon svg").forEach((r) => {
     r.style.overflow = "visible", r.querySelectorAll("filter").forEach((n) => {
       n.setAttribute("filterUnits", "userSpaceOnUse"), n.setAttribute("x", "-80"), n.setAttribute("y", "-80"), n.setAttribute("width", "360"), n.setAttribute("height", "360"), n.setAttribute("color-interpolation-filters", "sRGB");
     });
   });
 }
-function k_(o) {
+function Sf(o) {
   const r = o.shadowRoot;
   r && (r.querySelectorAll('input[type="file"]').forEach((n) => {
     n.setAttribute("accept", "image/*,video/*,.gif"), n.removeAttribute("capture");
@@ -22020,21 +22296,21 @@ function k_(o) {
     /predeterminado|default|argus/.test(a) && /fondo|background|argus/.test(a) && (n.dataset.argusDefaultBackground = "true");
   }));
 }
-function S_(o) {
+function Af(o) {
   const r = o.shadowRoot;
   if (!r) return;
   r.querySelectorAll("#w-activity .entry,#w-activity .log-entry,#w-activity li,.activity-log .entry,.activity-log li").forEach((a, s) => {
     s > 39 ? a.classList.add("argus-mobile-history-overflow-item") : a.classList.remove("argus-mobile-history-overflow-item");
   });
 }
-function A_(o) {
+function Ef(o) {
   const r = o.shadowRoot;
   r && r.querySelectorAll(".dashboard-instances .entry button,.dashboard-instances .entry .badge,.dashboard-instances .entry .status,.dashboard-instances .entry h3,.dashboard-instances .entry h4").forEach((n) => {
     const a = (n.textContent || "").trim().toLowerCase();
     /^(sistema\s+desarmado|system\s+disarmed|desarmado|disarmed)$/.test(a) && n.classList.add("argus-instance-duplicate-status");
   });
 }
-function E_(o) {
+function Pf(o) {
   if (o.shadowRoot?.getElementById("argus-runtime-visual-style")) return;
   const r = document.createElement("style");
   r.id = "argus-runtime-visual-style", r.textContent = `
@@ -22082,30 +22358,30 @@ function E_(o) {
 }
 `, o.shadowRoot?.appendChild(r);
 }
-function hl(o) {
-  E_(o), Pl(o), w_(o), k_(o), S_(o), A_(o);
+function _l(o) {
+  Pf(o), Il(o), kf(o), Sf(o), Af(o), Ef(o);
 }
-function P_(o) {
+function If(o) {
   if (!o || o.__argusRuntimeVisualFixes) return;
   o.__argusRuntimeVisualFixes = !0;
   const r = o.prototype, n = r.connectedCallback, a = r.disconnectedCallback, s = r._load, c = r._renderEntries, u = r._applyTranslations;
   r.connectedCallback = function() {
     const p = n?.call(this);
-    return clearInterval(this._argusClockTimer), this._argusClockTimer = setInterval(() => Pl(this), v_), queueMicrotask(() => hl(this)), p;
+    return clearInterval(this._argusClockTimer), this._argusClockTimer = setInterval(() => Il(this), xf), queueMicrotask(() => _l(this)), p;
   }, r.disconnectedCallback = function() {
     return clearInterval(this._argusClockTimer), this._argusClockTimer = null, a?.call(this);
   }, r._load = async function() {
     const p = await s?.call(this);
-    return hl(this), p;
+    return _l(this), p;
   }, r._renderEntries = function() {
     const p = c?.call(this);
-    return hl(this), p;
+    return _l(this), p;
   }, r._applyTranslations = function() {
     const p = u?.call(this);
-    return Pl(this), p;
+    return Il(this), p;
   };
 }
-const I_ = /* @__PURE__ */ new Set(["unavailable", "unknown"]), Ap = {
+const Cf = /* @__PURE__ */ new Set(["unavailable", "unknown"]), Ip = {
   es: { status_unavailable: "Sin conexión", status_unavailable_hint: "El dispositivo perdió conexión en Home Assistant y necesita revisión." },
   en: { status_unavailable: "Unavailable", status_unavailable_hint: "The device lost connection in Home Assistant and needs review." },
   fr: { status_unavailable: "Indisponible", status_unavailable_hint: "L'appareil a perdu la connexion dans Home Assistant et doit être vérifié." },
@@ -22114,10 +22390,10 @@ const I_ = /* @__PURE__ */ new Set(["unavailable", "unknown"]), Ap = {
   zh: { status_unavailable: "不可用", status_unavailable_hint: "设备在 Home Assistant 中失去连接，需要检查。" },
   ru: { status_unavailable: "Недоступно", status_unavailable_hint: "Устройство потеряло связь в Home Assistant и требует проверки." }
 };
-function Il(o) {
-  return o ? I_.has(String(o.state ?? "").toLowerCase()) : !0;
+function Cl(o) {
+  return o ? Cf.has(String(o.state ?? "").toLowerCase()) : !0;
 }
-function vi(o) {
+function xi(o) {
   return String(o ?? "").replace(/[&<>'"]/g, (r) => ({
     "&": "&amp;",
     "<": "&lt;",
@@ -22126,7 +22402,7 @@ function vi(o) {
     '"': "&quot;"
   })[r]);
 }
-function Ep(o) {
+function Cp(o) {
   const r = o.shadowRoot;
   if (!r) return;
   const n = r.getElementById("bg-mode-select-standalone");
@@ -22148,7 +22424,7 @@ function Ep(o) {
     o._updateBgFieldsVisibility?.(), o._updateCanvasBackground?.(), o._updateTheme?.();
   }));
 }
-function N_(o) {
+function Nf(o) {
   const r = o.shadowRoot, n = r?.getElementById("bg-mode-select-standalone")?.value ?? o._backgroundMode, a = r?.getElementById("hub-bg-mode-select")?.value ?? o._hubBgMode;
   if (!["photo", "collage", "video"].includes(n)) {
     o._panelBgFile = "";
@@ -22161,7 +22437,7 @@ function N_(o) {
     s && (s.value = "");
   }
 }
-function Pp(o) {
+function Np(o) {
   const r = o.shadowRoot;
   if (!r || r.getElementById("argus-availability-style")) return;
   const n = document.createElement("style");
@@ -22174,7 +22450,7 @@ function Pp(o) {
 .status-unavailable{color:#ffcf8a!important;font-weight:900!important}
 `, r.appendChild(n);
 }
-function C_(o) {
+function zf(o) {
   const r = o.shadowRoot;
   if (!r || !o._hass?.states) return;
   const n = o._dashboard?.entries || [];
@@ -22182,19 +22458,19 @@ function C_(o) {
     const c = n[s];
     if (!c) return;
     const u = o._hass.states[c.entity_id], p = String(u?.state || "disarmed"), g = p.replace("armed_", "");
-    let _ = o._ui?.modes?.__by_entity__?.[c.entity_id]?.[g] || o._ui?.modes?.[g] || {}, f = _.sensors || [];
-    if (p === "disarmed" || !f.length) {
+    let f = o._ui?.modes?.__by_entity__?.[c.entity_id]?.[g] || o._ui?.modes?.[g] || {}, _ = f.sensors || [];
+    if (p === "disarmed" || !_.length) {
       const R = o._ui?.modes?.__by_entity__?.[c.entity_id] || o._ui?.modes || {}, I = /* @__PURE__ */ new Set();
       ["away", "home", "night", "vacation"].forEach((A) => {
         R[A]?.sensors && R[A].sensors.forEach((S) => I.add(S));
-      }), f = Array.from(I);
+      }), _ = Array.from(I);
     }
-    const h = _.bypassed_sensors || [], v = f.filter((R) => !h.includes(R) && o._hass.states[R]), P = a.querySelectorAll(".console-sensors .console-sensor");
+    const h = f.bypassed_sensors || [], v = _.filter((R) => !h.includes(R) && o._hass.states[R]), P = a.querySelectorAll(".console-sensors .console-sensor");
     P.length && P.forEach((R, I) => {
       const A = v[I];
       if (!A) return;
       const S = o._hass.states[A];
-      if (!Il(S)) return;
+      if (!Cl(S)) return;
       R.classList.add("unavailable"), R.classList.remove("open"), R.title = o._t("status_unavailable_hint");
       const y = R.querySelector(".console-sensor-icon");
       y && (y.textContent = "❓", y.style.color = "#ffcf8a", y.style.animation = "none");
@@ -22203,39 +22479,39 @@ function C_(o) {
     });
   });
 }
-function z_(o) {
+function Rf(o) {
   if (!o || o.__argusBgSensorAvailabilityFixes) return;
   o.__argusBgSensorAvailabilityFixes = !0;
   const r = o.prototype;
-  async function n(f) {
-    if (!(!f._currentProfile || !f._currentProfile.id))
+  async function n(_) {
+    if (!(!_._currentProfile || !_._currentProfile.id))
       try {
-        const h = await f._send("argus/get_profile_theme");
+        const h = await _._send("argus/get_profile_theme");
         if (h && h.theme && Object.keys(h.theme).length > 0) {
           const v = h.theme;
-          v.background_mode !== void 0 && (f._backgroundMode = v.background_mode), v.background_images !== void 0 && (f._backgroundImages = v.background_images), v.panel_bg_file !== void 0 && (f._panelBgFile = v.panel_bg_file || ""), v.panel_bg_sound !== void 0 && (f._panelBgSound = v.panel_bg_sound), v.hub_bg_mode !== void 0 && (f._hubBgMode = v.hub_bg_mode === "none" || v.hub_bg_mode === "default" ? "default" : v.hub_bg_mode), v.hub_bg_file !== void 0 && (f._hubBgFile = v.hub_bg_file || ""), v.hub_bg_sound !== void 0 && (f._hubBgSound = v.hub_bg_sound), f._ui || (f._ui = {}), f._ui.background_mode = f._backgroundMode, f._ui.background_images = f._backgroundImages, f._ui.panel_bg_file = f._panelBgFile, f._ui.panel_bg_sound = f._panelBgSound, f._ui.hub_bg_mode = f._hubBgMode, f._ui.hub_bg_file = f._hubBgFile, f._ui.hub_bg_sound = f._hubBgSound;
-          const P = f.shadowRoot;
+          v.background_mode !== void 0 && (_._backgroundMode = v.background_mode), v.background_images !== void 0 && (_._backgroundImages = v.background_images), v.panel_bg_file !== void 0 && (_._panelBgFile = v.panel_bg_file || ""), v.panel_bg_sound !== void 0 && (_._panelBgSound = v.panel_bg_sound), v.hub_bg_mode !== void 0 && (_._hubBgMode = v.hub_bg_mode === "none" || v.hub_bg_mode === "default" ? "default" : v.hub_bg_mode), v.hub_bg_file !== void 0 && (_._hubBgFile = v.hub_bg_file || ""), v.hub_bg_sound !== void 0 && (_._hubBgSound = v.hub_bg_sound), _._ui || (_._ui = {}), _._ui.background_mode = _._backgroundMode, _._ui.background_images = _._backgroundImages, _._ui.panel_bg_file = _._panelBgFile, _._ui.panel_bg_sound = _._panelBgSound, _._ui.hub_bg_mode = _._hubBgMode, _._ui.hub_bg_file = _._hubBgFile, _._ui.hub_bg_sound = _._hubBgSound;
+          const P = _.shadowRoot;
           if (P) {
             const R = P.getElementById("bg-mode-select-standalone");
-            R && (R.value = f._backgroundMode);
+            R && (R.value = _._backgroundMode);
             const I = P.getElementById("hub-bg-mode-select");
-            I && (I.value = f._hubBgMode);
+            I && (I.value = _._hubBgMode);
             const A = P.getElementById("panel-bg-url-input");
-            A && !f._panelBgFile.startsWith("data:") && (A.value = f._panelBgFile);
+            A && !_._panelBgFile.startsWith("data:") && (A.value = _._panelBgFile);
             const S = P.getElementById("hub-bg-url-input");
-            S && !f._hubBgFile.startsWith("data:") && (S.value = f._hubBgFile);
+            S && !_._hubBgFile.startsWith("data:") && (S.value = _._hubBgFile);
           }
-          typeof f._updateBgFieldsVisibility == "function" && f._updateBgFieldsVisibility(), typeof f._updateCanvasBackground == "function" && f._updateCanvasBackground(), typeof f._updateTheme == "function" && f._updateTheme(), typeof f._renderEntries == "function" && f._renderEntries();
+          typeof _._updateBgFieldsVisibility == "function" && _._updateBgFieldsVisibility(), typeof _._updateCanvasBackground == "function" && _._updateCanvasBackground(), typeof _._updateTheme == "function" && _._updateTheme(), typeof _._renderEntries == "function" && _._renderEntries();
         }
       } catch (h) {
         console.warn("Failed to load profile theme", h);
       }
   }
-  async function a(f) {
-    if (!(!f._currentProfile || !f._currentProfile.id))
+  async function a(_) {
+    if (!(!_._currentProfile || !_._currentProfile.id))
       try {
-        const h = f.shadowRoot;
-        let v = f._backgroundMode, P = f._hubBgMode;
+        const h = _.shadowRoot;
+        let v = _._backgroundMode, P = _._hubBgMode;
         if (h) {
           const A = h.getElementById("bg-mode-select-standalone");
           A && (v = A.value);
@@ -22245,68 +22521,68 @@ function z_(o) {
         const R = {
           background_mode: v,
           hub_bg_mode: P === "default" ? "none" : P,
-          panel_bg_file: ["photo", "collage", "video"].includes(v) && f._panelBgFile || "",
-          hub_bg_file: P === "image" && f._hubBgFile || "",
-          background_images: f._backgroundImages || [],
-          panel_bg_sound: !!f._panelBgSound,
-          hub_bg_sound: !!f._hubBgSound
-        }, I = await f._send("argus/save_profile_theme", { theme: R });
-        I && I.theme && (f._currentProfile.theme = I.theme);
+          panel_bg_file: ["photo", "collage", "video"].includes(v) && _._panelBgFile || "",
+          hub_bg_file: P === "image" && _._hubBgFile || "",
+          background_images: _._backgroundImages || [],
+          panel_bg_sound: !!_._panelBgSound,
+          hub_bg_sound: !!_._hubBgSound
+        }, I = await _._send("argus/save_profile_theme", { theme: R });
+        I && I.theme && (_._currentProfile.theme = I.theme);
       } catch (h) {
         console.warn("Failed to save profile theme", h);
       }
   }
   const s = r._t;
-  r._t = function(f) {
-    if (f === "status_unavailable" || f === "status_unavailable_hint") {
+  r._t = function(_) {
+    if (_ === "status_unavailable" || _ === "status_unavailable_hint") {
       const h = String(this._getLocale?.() || this._hass?.language || "en").split("-")[0];
-      return (Ap[h] || Ap.en)[f];
+      return (Ip[h] || Ip.en)[_];
     }
-    return s.call(this, f);
+    return s.call(this, _);
   };
   const c = r._persistPersonalization;
   r._persistPersonalization = async function() {
-    N_(this);
-    const f = await c.call(this);
-    return await a(this), f;
+    Nf(this);
+    const _ = await c.call(this);
+    return await a(this), _;
   };
   const u = r._chip;
-  r._chip = function(f, h) {
-    const v = this._hass?.states?.[f];
-    if (!(h === "sensor" || h === "bypass" || h === "entry") || !Il(v))
-      return u.call(this, f, h);
-    const R = v?.attributes?.friendly_name || f, I = this._t("status_unavailable_hint");
+  r._chip = function(_, h) {
+    const v = this._hass?.states?.[_];
+    if (!(h === "sensor" || h === "bypass" || h === "entry") || !Cl(v))
+      return u.call(this, _, h);
+    const R = v?.attributes?.friendly_name || _, I = this._t("status_unavailable_hint");
     return `
-      <span class="sensor-pill sensor-unavailable" title="${vi(I)}">
+      <span class="sensor-pill sensor-unavailable" title="${xi(I)}">
         <span class="pill-dot"></span>
         <span class="pill-content">
-          <span class="pill-name">${vi(R)}</span>
-          <span class="pill-status">❓ ${vi(this._t("status_unavailable"))}</span>
+          <span class="pill-name">${xi(R)}</span>
+          <span class="pill-status">❓ ${xi(this._t("status_unavailable"))}</span>
         </span>
-        ${this._isAdmin ? `<button data-remove="${h}:${vi(f)}" title="${vi(I)}" style="background:none; border:none; color:inherit; opacity:0.5; padding:0 4px; cursor:pointer; flex-shrink:0;">✕</button>` : ""}
+        ${this._isAdmin ? `<button data-remove="${h}:${xi(_)}" title="${xi(I)}" style="background:none; border:none; color:inherit; opacity:0.5; padding:0 4px; cursor:pointer; flex-shrink:0;">✕</button>` : ""}
       </span>
     `;
   };
   const p = r._deviceFacts;
-  r._deviceFacts = function(f, h, v = !0) {
-    if (v && Il(h)) {
-      const P = [{ text: `❓ ${this._t("status_unavailable")}`, className: "status-unavailable" }], R = this._getDevicePower(f, h);
+  r._deviceFacts = function(_, h, v = !0) {
+    if (v && Cl(h)) {
+      const P = [{ text: `❓ ${this._t("status_unavailable")}`, className: "status-unavailable" }], R = this._getDevicePower(_, h);
       return R.mains && P.push({ text: "🔌 AC", className: "power-mains" }), R.battery !== null && P.push({ text: `🔋 ${R.battery}%`, className: R.battery <= 20 ? "power-low" : "" }), P;
     }
-    return p.call(this, f, h, v);
+    return p.call(this, _, h, v);
   };
   const g = r._renderEntries;
   r._renderEntries = function() {
-    const f = g.call(this);
-    return Pp(this), C_(this), Ep(this), f;
+    const _ = g.call(this);
+    return Np(this), zf(this), Cp(this), _;
   };
-  const _ = r._load;
+  const f = r._load;
   r._load = async function() {
-    const f = await _?.call(this);
-    return await n(this), Pp(this), Ep(this), f;
+    const _ = await f?.call(this);
+    return await n(this), Np(this), Cp(this), _;
   };
 }
-function R_(o) {
+function Lf(o) {
   const r = o.shadowRoot;
   if (!r || r.getElementById("argus-battery-ui-style")) return;
   const n = document.createElement("style");
@@ -22366,7 +22642,7 @@ function R_(o) {
     }
   `, r.appendChild(n);
 }
-function L_(o) {
+function Of(o) {
   const r = o.shadowRoot;
   if (!r || !o._hass?.states) return;
   const n = o._dashboard?.entries || [];
@@ -22374,14 +22650,14 @@ function L_(o) {
     const c = n[s];
     if (!c) return;
     const u = o._hass.states[c.entity_id], p = String(u?.state || "disarmed"), g = p.replace("armed_", "");
-    let _ = o._ui?.modes?.__by_entity__?.[c.entity_id]?.[g] || o._ui?.modes?.[g] || {}, f = _.sensors || [];
-    if (p === "disarmed" || !f.length) {
+    let f = o._ui?.modes?.__by_entity__?.[c.entity_id]?.[g] || o._ui?.modes?.[g] || {}, _ = f.sensors || [];
+    if (p === "disarmed" || !_.length) {
       const R = o._ui?.modes?.__by_entity__?.[c.entity_id] || o._ui?.modes || {}, I = /* @__PURE__ */ new Set();
       ["away", "home", "night", "vacation"].forEach((A) => {
         R[A]?.sensors && R[A].sensors.forEach((S) => I.add(S));
-      }), f = Array.from(I);
+      }), _ = Array.from(I);
     }
-    const h = _.bypassed_sensors || [], v = f.filter((R) => !h.includes(R) && o._hass.states[R]), P = a.querySelectorAll(".console-sensors .console-sensor");
+    const h = f.bypassed_sensors || [], v = _.filter((R) => !h.includes(R) && o._hass.states[R]), P = a.querySelectorAll(".console-sensors .console-sensor");
     P.length && P.forEach((R, I) => {
       const A = v[I];
       if (!A) return;
@@ -22400,24 +22676,24 @@ function L_(o) {
     });
   });
 }
-function O_(o) {
+function Tf(o) {
   if (!o || o.__argusBatteryUiFixes) return;
   o.__argusBatteryUiFixes = !0;
   const r = o.prototype, n = r._renderEntries;
   r._renderEntries = function() {
     const a = n.call(this);
-    return R_(this), L_(this), a;
+    return Lf(this), Of(this), a;
   };
 }
-const sa = /* @__PURE__ */ new Set(["weather", "none", "photo", "collage", "video"]), Ml = /* @__PURE__ */ new Set(["default", "image"]);
+const la = /* @__PURE__ */ new Set(["weather", "none", "photo", "collage", "video"]), Hl = /* @__PURE__ */ new Set(["default", "image"]);
 function vn(o) {
   return String(o ?? "").replace(/[&<>"']/g, (r) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[r]);
 }
-function T_(o) {
+function Mf(o) {
   const r = /^#[0-9a-f]{6}$/i.test(o || "") ? o : "#ff0000";
   return [1, 3, 5].map((n) => parseInt(r.slice(n, n + 2), 16));
 }
-function Ip(o) {
+function zp(o) {
   const r = o.shadowRoot;
   if (!r || r.getElementById("argus-deep-repair-style")) return;
   const n = document.createElement("style");
@@ -22428,30 +22704,30 @@ function Ip(o) {
 .light-siren-settings,.sos-output-settings{margin-top:8px;padding:9px 10px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:rgba(0,0,0,.12)}.light-siren-settings summary,.sos-output-settings summary{cursor:pointer;font-size:11px;font-weight:850}.light-siren-settings label,.sos-output-settings label{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:9px;font-size:11px}.sos-output-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;align-items:start}.sos-output-row>.sensor-pill{width:100%!important;justify-content:flex-start!important}.sos-remove-output{border:0;border-radius:9px;padding:7px 9px;background:rgba(239,68,68,.18);color:#fca5a5;cursor:pointer}.sos-output-settings{grid-column:1/-1;margin-top:0}.sos-output-settings input[type=color]{width:44px;height:28px;padding:1px;border:0;border-radius:8px;background:transparent}.sos-output-settings select{min-width:120px;padding:6px;border-radius:8px;background:rgba(10,20,34,.8);color:inherit;border:1px solid rgba(255,255,255,.14)}
 @media(max-width:950px){.security-console .console-sensors{width:min(100%,292px)!important;max-width:292px!important;min-width:0!important}}.ios-fullscreen .entry-content.security-console .console-sensors{flex-basis:292px!important;max-width:310px!important;min-width:220px!important}@media(max-width:900px){.ios-fullscreen .entry-content.security-console .console-sensors{width:min(100%,310px)!important;max-width:310px!important}}`, r.appendChild(n);
 }
-function Np(o = {}, r = {}) {
+function Rp(o = {}, r = {}) {
   const n = r?.background_mode, a = r?.background_file || "";
   let s = o.background_mode;
-  sa.has(s) || (s = sa.has(n) ? n : "weather");
+  la.has(s) || (s = la.has(n) ? n : "weather");
   let c = o.panel_bg_file;
   c === void 0 && (c = a), c = String(c || ""), ["photo", "collage", "video"].includes(s) || (c = "");
   let u = o.hub_bg_mode;
-  u = u === "none" ? "default" : u, Ml.has(u) || (u = "default");
+  u = u === "none" ? "default" : u, Hl.has(u) || (u = "default");
   let p = String(o.hub_bg_file || "");
   return u !== "image" && (p = ""), { background_mode: s, background_images: Array.isArray(o.background_images) ? o.background_images : c ? [c] : [], panel_bg_file: c, panel_bg_sound: !!o.panel_bg_sound, hub_bg_mode: u, hub_bg_file: p, hub_bg_sound: !!o.hub_bg_sound };
 }
-function Cp(o, r) {
+function Lp(o, r) {
   o._backgroundMode = r.background_mode, o._backgroundImages = r.background_images, o._panelBgFile = r.panel_bg_file, o._panelBgSound = r.panel_bg_sound, o._hubBgMode = r.hub_bg_mode, o._hubBgFile = r.hub_bg_file, o._hubBgSound = r.hub_bg_sound;
   const n = o.shadowRoot, a = n?.getElementById("bg-mode-select-standalone"), s = n?.getElementById("panel-bg-url-input"), c = n?.getElementById("chk-panel-bg-sound"), u = n?.getElementById("hub-bg-mode-select"), p = n?.getElementById("hub-bg-url-input"), g = n?.getElementById("chk-hub-bg-sound");
   a && (a.value = r.background_mode), s && (s.value = r.panel_bg_file), c && (c.checked = r.panel_bg_sound), u && (u.value = r.hub_bg_mode), p && (p.value = r.hub_bg_file), g && (g.checked = r.hub_bg_sound), o._updateBgFieldsVisibility?.(), o._updateCanvasBackground?.(), o._updateTheme?.(), o._renderEntries?.();
 }
-function zp(o) {
+function Op(o) {
   const r = o.shadowRoot;
   if (!r) return;
   const n = (a, s, c) => {
     a && !a.dataset[s] && (a.dataset[s] = "1", a.addEventListener("change", c));
   };
   n(r.getElementById("bg-mode-select-standalone"), "deepBg", (a) => {
-    const s = sa.has(a.target.value) ? a.target.value : "weather";
+    const s = la.has(a.target.value) ? a.target.value : "weather";
     if (o._backgroundMode = s, !["photo", "collage", "video"].includes(s)) {
       o._panelBgFile = "", o._backgroundImages = [];
       const c = r.getElementById("panel-bg-url-input");
@@ -22459,7 +22735,7 @@ function zp(o) {
     }
     o._updateBgFieldsVisibility?.(), o._updateTheme?.(), o._renderEntries?.();
   }), n(r.getElementById("hub-bg-mode-select"), "deepBg", (a) => {
-    const s = Ml.has(a.target.value) ? a.target.value : "default";
+    const s = Hl.has(a.target.value) ? a.target.value : "default";
     if (o._hubBgMode = s, s === "default") {
       o._hubBgFile = "";
       const c = r.getElementById("hub-bg-url-input");
@@ -22472,47 +22748,47 @@ function zp(o) {
     o._hubBgFile = String(a.target.value || "").trim(), o._updateCanvasBackground?.(), o._updateTheme?.();
   });
 }
-function Zo(o) {
+function ea(o) {
   const r = o.shadowRoot?.getElementById("sos-output-chips");
   if (!r) return;
   const n = Array.isArray(o._panicOutputs) ? o._panicOutputs : [], a = o._panicOutputSettings || {};
   r.innerHTML = n.length ? n.map((s) => {
-    const c = o._hass?.states?.[s], u = c?.attributes?.friendly_name || s, p = s.startsWith("light."), g = a[s] || {}, _ = ["none", "gentle", "rapid"].includes(g.flash_mode) ? g.flash_mode : g.gentle_flash ? "gentle" : "none";
-    return `<div class="sos-output-row"><span class="sensor-pill" title="${vn(u)}"><span>${vn(u)}</span></span><button type="button" class="sos-remove-output" data-remove-sos-output="${vn(s)}" aria-label="Eliminar">✕</button>${p ? `<details class="sos-output-settings"><summary>🎨 Color y destello</summary><label>Color <input type="color" data-sos-output-color="${vn(s)}" value="${f = g.rgb_color, `#${(Array.isArray(f) && f.length === 3 ? f : [255, 0, 0]).map((h) => Math.max(0, Math.min(255, Number(h) || 0)).toString(16).padStart(2, "0")).join("")}`}"></label><label>Destello <select data-sos-output-flash="${vn(s)}"><option value="none" ${_ === "none" ? "selected" : ""}>Sin destello</option><option value="gentle" ${_ === "gentle" ? "selected" : ""}>Suave</option><option value="rapid" ${_ === "rapid" ? "selected" : ""}>Rápido</option></select></label></details>` : ""}</div>`;
-    var f;
+    const c = o._hass?.states?.[s], u = c?.attributes?.friendly_name || s, p = s.startsWith("light."), g = a[s] || {}, f = ["none", "gentle", "rapid"].includes(g.flash_mode) ? g.flash_mode : g.gentle_flash ? "gentle" : "none";
+    return `<div class="sos-output-row"><span class="sensor-pill" title="${vn(u)}"><span>${vn(u)}</span></span><button type="button" class="sos-remove-output" data-remove-sos-output="${vn(s)}" aria-label="Eliminar">✕</button>${p ? `<details class="sos-output-settings"><summary>🎨 Color y destello</summary><label>Color <input type="color" data-sos-output-color="${vn(s)}" value="${_ = g.rgb_color, `#${(Array.isArray(_) && _.length === 3 ? _ : [255, 0, 0]).map((h) => Math.max(0, Math.min(255, Number(h) || 0)).toString(16).padStart(2, "0")).join("")}`}"></label><label>Destello <select data-sos-output-flash="${vn(s)}"><option value="none" ${f === "none" ? "selected" : ""}>Sin destello</option><option value="gentle" ${f === "gentle" ? "selected" : ""}>Suave</option><option value="rapid" ${f === "rapid" ? "selected" : ""}>Rápido</option></select></label></details>` : ""}</div>`;
+    var _;
   }).join("") : `<div class="mode-sensor-none">${vn(o._t("sos_no_outputs"))}</div>`, r.querySelectorAll("[data-remove-sos-output]").forEach((s) => {
     s.addEventListener("click", () => {
-      o._panicOutputs = n.filter((c) => c !== s.dataset.removeSosOutput), delete o._panicOutputSettings?.[s.dataset.removeSosOutput], Zo(o);
+      o._panicOutputs = n.filter((c) => c !== s.dataset.removeSosOutput), delete o._panicOutputSettings?.[s.dataset.removeSosOutput], ea(o);
     });
   });
 }
-function M_(o) {
+function Hf(o) {
   if (!o || o.__argusDeepRepair) return;
   o.__argusDeepRepair = !0;
   const r = o.prototype, n = r._load;
   r._load = async function() {
     const p = await n.call(this);
-    if (Ip(this), this._panicOutputSettings = this._dashboard?.ui?.panic_output_settings || {}, this._currentProfile?.id) try {
+    if (zp(this), this._panicOutputSettings = this._dashboard?.ui?.panic_output_settings || {}, this._currentProfile?.id) try {
       const g = await this._send("argus/get_profile_theme");
-      Cp(this, Np(g?.theme || {}, this._currentUserTheme || {}));
+      Lp(this, Rp(g?.theme || {}, this._currentUserTheme || {}));
     } catch (g) {
       console.warn("Argus profile theme load failed:", g);
     }
-    return zp(this), Zo(this), p;
+    return Op(this), ea(this), p;
   };
   const a = r._renderEntries;
   r._renderEntries = function() {
     const p = a.call(this);
-    return Ip(this), zp(this), p;
+    return zp(this), Op(this), p;
   }, r._renderSosOutputs = function() {
-    Zo(this);
+    ea(this);
   };
   const s = r._acceptSelection;
   r._acceptSelection = function() {
     if (this._selectorTarget !== "panic") return s.call(this);
     this._panicOutputs = [...new Set(this._selected || [])], this._panicOutputSettings = this._panicOutputSettings || {}, this._panicOutputs.forEach((p) => {
       this._panicOutputSettings[p] ||= { flash_mode: "none" };
-    }), Zo(this), this._closeModal?.();
+    }), ea(this), this._closeModal?.();
   };
   const c = r._handlePanelBgFile;
   r._handlePanelBgFile = async function(p) {
@@ -22530,16 +22806,16 @@ function M_(o) {
       g && (g.value = "image"), this._updateBgFieldsVisibility?.(), this._updateCanvasBackground?.(), this._updateTheme?.();
     }
   }, r._persistPersonalization = async function() {
-    const p = this.shadowRoot, g = sa.has(p?.getElementById("bg-mode-select-standalone")?.value) ? p.getElementById("bg-mode-select-standalone").value : "weather", _ = Ml.has(p?.getElementById("hub-bg-mode-select")?.value) ? p.getElementById("hub-bg-mode-select").value : "default", f = ["photo", "collage", "video"].includes(g) ? String(p?.getElementById("panel-bg-url-input")?.value || this._panelBgFile || "").trim() : "", h = _ === "image" ? String(p?.getElementById("hub-bg-url-input")?.value || this._hubBgFile || "").trim() : "", v = { background_mode: g, background_images: g === "collage" ? this._backgroundImages || [] : f ? [f] : [], panel_bg_file: f, panel_bg_sound: !!p?.getElementById("chk-panel-bg-sound")?.checked, hub_bg_mode: _ === "default" ? "none" : "image", hub_bg_file: h, hub_bg_sound: !!p?.getElementById("chk-hub-bg-sound")?.checked }, P = this._dashboard?.entry_id || this._dashboard?.entries?.[0]?.entry_id, R = this._normaliseEmergencyNumber(p?.getElementById("emergency-number-input")?.value), I = { ...P ? { entry_id: P } : {}, home_name: this._homeName, temperature_source: p?.getElementById("temp-source-select-standalone")?.value || "auto", weather_source: p?.getElementById("weather-source-select")?.value || "auto", emergency_number: R, panic_outputs: this._panicOutputs || [] };
+    const p = this.shadowRoot, g = la.has(p?.getElementById("bg-mode-select-standalone")?.value) ? p.getElementById("bg-mode-select-standalone").value : "weather", f = Hl.has(p?.getElementById("hub-bg-mode-select")?.value) ? p.getElementById("hub-bg-mode-select").value : "default", _ = ["photo", "collage", "video"].includes(g) ? String(p?.getElementById("panel-bg-url-input")?.value || this._panelBgFile || "").trim() : "", h = f === "image" ? String(p?.getElementById("hub-bg-url-input")?.value || this._hubBgFile || "").trim() : "", v = { background_mode: g, background_images: g === "collage" ? this._backgroundImages || [] : _ ? [_] : [], panel_bg_file: _, panel_bg_sound: !!p?.getElementById("chk-panel-bg-sound")?.checked, hub_bg_mode: f === "default" ? "none" : "image", hub_bg_file: h, hub_bg_sound: !!p?.getElementById("chk-hub-bg-sound")?.checked }, P = this._dashboard?.entry_id || this._dashboard?.entries?.[0]?.entry_id, R = this._normaliseEmergencyNumber(p?.getElementById("emergency-number-input")?.value), I = { ...P ? { entry_id: P } : {}, home_name: this._homeName, temperature_source: p?.getElementById("temp-source-select-standalone")?.value || "auto", weather_source: p?.getElementById("weather-source-select")?.value || "auto", emergency_number: R, panic_outputs: this._panicOutputs || [] };
     try {
       const A = function(y) {
         const w = { ...y._panicOutputSettings || {} };
         return y.shadowRoot?.querySelectorAll("[data-sos-output-color]").forEach((b) => {
           const k = b.dataset.sosOutputColor;
-          w[k] = { ...w[k] || {}, rgb_color: T_(b.value), flash_mode: y.shadowRoot.querySelector(`[data-sos-output-flash="${CSS.escape(k)}"]`)?.value || "none" };
+          w[k] = { ...w[k] || {}, rgb_color: Mf(b.value), flash_mode: y.shadowRoot.querySelector(`[data-sos-output-flash="${CSS.escape(k)}"]`)?.value || "none" };
         }), y._panicOutputSettings = Object.fromEntries((y._panicOutputs || []).map((b) => [b, w[b] || { flash_mode: "none" }])), y._panicOutputSettings;
       }(this);
-      await this._send("argus/save_profile_theme", { ...P ? { entry_id: P } : {}, theme: v }), await this._send("argus/save_panic_output_profile", { ...P ? { entry_id: P } : {}, outputs: this._panicOutputs || [], settings: A }), await this._send("argus/save_ui", I), Cp(this, Np(v)), this._temperatureSource = I.temperature_source, this._weatherSource = I.weather_source, this._emergencyNumber = R, this._configureEmergencyCall?.();
+      await this._send("argus/save_profile_theme", { ...P ? { entry_id: P } : {}, theme: v }), await this._send("argus/save_panic_output_profile", { ...P ? { entry_id: P } : {}, outputs: this._panicOutputs || [], settings: A }), await this._send("argus/save_ui", I), Lp(this, Rp(v)), this._temperatureSource = I.temperature_source, this._weatherSource = I.weather_source, this._emergencyNumber = R, this._configureEmergencyCall?.();
       const S = p?.getElementById("btn-save-personalization-standalone");
       if (S) {
         const y = S.textContent;
@@ -22552,35 +22828,35 @@ function M_(o) {
     }
   };
 }
-const H_ = /* @__PURE__ */ new Set(["hs", "xy", "rgb", "rgbw", "rgbww"]), B_ = /* @__PURE__ */ new Set(["flash", "slow flash", "slow_flash", "blink", "strobe", "police"]);
+const Bf = /* @__PURE__ */ new Set(["hs", "xy", "rgb", "rgbw", "rgbww"]), Df = /* @__PURE__ */ new Set(["flash", "slow flash", "slow_flash", "blink", "strobe", "police"]);
 function ht(o) {
   return String(o ?? "").replace(/[&<>"']/g, (r) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[r]);
 }
-function da(o, r) {
-  const n = o?._hass?.states?.[r], a = n?.attributes || {}, s = Array.isArray(a.supported_color_modes) ? [...new Set(a.supported_color_modes.map((f) => String(f).toLowerCase()).filter(Boolean))] : [], c = Array.isArray(a.effect_list) ? a.effect_list.map((f) => String(f).toLowerCase()) : [], u = !!n && String(r).startsWith("light."), p = u && (s.some((f) => f !== "onoff") || Number.isFinite(Number(a.brightness))), g = u && c.some((f) => B_.has(f)), _ = u && (Number(a.supported_features) & 8) === 8;
+function ua(o, r) {
+  const n = o?._hass?.states?.[r], a = n?.attributes || {}, s = Array.isArray(a.supported_color_modes) ? [...new Set(a.supported_color_modes.map((_) => String(_).toLowerCase()).filter(Boolean))] : [], c = Array.isArray(a.effect_list) ? a.effect_list.map((_) => String(_).toLowerCase()) : [], u = !!n && String(r).startsWith("light."), p = u && (s.some((_) => _ !== "onoff") || Number.isFinite(Number(a.brightness))), g = u && c.some((_) => Df.has(_)), f = u && (Number(a.supported_features) & 8) === 8;
   return {
     exists: !!n,
     isLight: u,
     modes: s,
-    color: u && s.some((f) => H_.has(f)),
+    color: u && s.some((_) => Bf.has(_)),
     brightness: p,
     nativeEffect: g,
-    nativeFlash: _,
-    safeFlash: g || _ || p,
-    flashMethod: g ? "native_effect" : _ ? "native_flash" : p ? "brightness_pulse" : "steady_safe"
+    nativeFlash: f,
+    safeFlash: g || f || p,
+    flashMethod: g ? "native_effect" : f ? "native_flash" : p ? "brightness_pulse" : "steady_safe"
   };
 }
-function D_(o, r) {
-  return da(o, r).color;
+function $f(o, r) {
+  return ua(o, r).color;
 }
-function $_(o) {
+function qf(o) {
   return `#${(Array.isArray(o) && o.length === 3 ? o : [255, 0, 0]).map((n) => Math.max(0, Math.min(255, Number(n) || 0)).toString(16).padStart(2, "0")).join("")}`;
 }
-function Hl(o) {
+function Bl(o) {
   const r = /^#[0-9a-f]{6}$/i.test(o || "") ? o : "#ff0000";
   return [1, 3, 5].map((n) => parseInt(r.slice(n, n + 2), 16));
 }
-function Ai(o) {
+function Ei(o) {
   const r = o.shadowRoot;
   if (!r || r.getElementById("argus-entity-truth-style")) return;
   const n = document.createElement("style");
@@ -22605,13 +22881,13 @@ function Ai(o) {
 #entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensors{flex:0 1 248px!important;width:248px!important;max-width:248px!important;min-width:205px!important;gap:6px!important;margin-inline:0!important}#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor{min-height:34px!important;padding:6px 10px!important;gap:7px!important;border-radius:999px!important;box-sizing:border-box!important}#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor-icon{font-size:16px!important}#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor-name{font-size:10px!important}#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor-state{font-size:8px!important}#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor-battery{font-size:9px!important;padding:2px 5px!important;border-radius:999px!important}
 #widget-grid>#w-access{align-self:start!important;height:max-content!important;min-height:0!important;max-height:none!important}#widget-grid>#w-access .access-workspace:not(.open){display:none!important}#widget-grid>#w-access .access-workspace.open{max-height:430px!important;overflow:auto!important;overscroll-behavior:contain}#widget-grid>#w-activity,#widget-grid>#w-automations{grid-row:span 1!important;height:clamp(270px,32vh,340px)!important;min-height:270px!important;max-height:340px!important;align-self:start!important}#widget-grid>#w-activity #activity-log,#widget-grid>#w-automations #auto-view,#widget-grid>#w-automations #auto-view>div{min-height:0!important;overflow-y:auto!important;overscroll-behavior:contain!important;scrollbar-gutter:stable!important}@media(max-width:760px){#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensors{width:min(100%,248px)!important;max-width:248px!important}#widget-grid>#w-activity,#widget-grid>#w-automations{height:360px!important;min-height:360px!important;max-height:360px!important}}`, r.appendChild(n);
 }
-async function lm(o, r, n, a, s) {
+async function dm(o, r, n, a, s) {
   if (!n || a === "none") return;
   const c = r.textContent;
   r.disabled = !0, r.textContent = o._t?.("testing_safe_flash") || "Probando de forma segura…";
   try {
     const u = { entity_id: n, flash_mode: a };
-    D_(o, n) && Array.isArray(s) && (u.rgb_color = s);
+    $f(o, n) && Array.isArray(s) && (u.rgb_color = s);
     const p = await o._send("argus/test_light_output", u), g = { brightness_pulse: "pulso de brillo sin apagar", native_flash: "flash nativo", native_effect: "efecto nativo", steady_safe: "luz fija; destello bloqueado por seguridad", steady: "luz fija" }[p?.method] || "servicio seguro de luz";
     r.textContent = `✓ ${g}`;
   } catch (u) {
@@ -22622,55 +22898,55 @@ async function lm(o, r, n, a, s) {
     }, 4e3);
   }
 }
-function cm(o, r, n) {
+function um(o, r, n) {
   const a = (s) => o?._t?.(s) || s;
   return r.safeFlash ? `${r.color ? "🎨 " + a("light_color_and_flash") : "✨ " + a("light_safe_flash")} — ${ht(n)}` : `💡 ${a("light_steady_safe")} — ${ht(n)}`;
 }
-function ea(o) {
-  Ai(o);
+function ta(o) {
+  Ei(o);
   const r = o.shadowRoot?.getElementById("sos-output-chips");
   if (!r) return;
   const n = Array.isArray(o._panicOutputs) ? o._panicOutputs : [], a = o._panicOutputSettings || {};
   r.innerHTML = n.length ? n.map((s) => {
-    const u = o._hass?.states?.[s]?.attributes?.friendly_name || s, p = da(o, s), g = a[s] || {}, _ = p.safeFlash && ["none", "gentle", "rapid"].includes(g.flash_mode) ? g.flash_mode : p.safeFlash && g.gentle_flash ? "gentle" : "none";
-    return p.modes.length && p.modes.join(", "), `<div class="sos-output-row"><div class="sos-output-header"><span class="sensor-pill" style="font-size:12px;font-weight:700" title="${ht(s)}"><span>${cm(o, p, u)}</span></span><button type="button" class="sos-remove-output" style="border:0;border-radius:9px;padding:6px 10px;background:rgba(239,68,68,.15);color:#fca5a5;cursor:pointer;font-weight:700" data-remove-sos-output="${ht(s)}" aria-label="Eliminar">✕</button></div>${p.isLight ? `<div class="sos-output-settings">${p.color ? `<label>${ht(o._t?.("color_label") || "Color")} <input type="color" data-sos-output-color="${ht(s)}" value="${$_(g.rgb_color)}"></label>` : `<input type="hidden" data-sos-output-color="${ht(s)}" value="#ffffff">`}${p.safeFlash ? `<label>${ht(o._t?.("flash_label") || "Destello")} <select data-sos-output-flash="${ht(s)}"><option value="none" ${_ === "none" ? "selected" : ""}>${ht(o._t?.("no_flash") || "Sin destello")}</option><option value="gentle" ${_ === "gentle" ? "selected" : ""}>${ht(o._t?.("flash_gentle") || "Suave")}</option><option value="rapid" ${_ === "rapid" ? "selected" : ""}>${ht(o._t?.("flash_rapid") || "Rápido")}</option></select></label><button type="button" class="argus-test-flash" data-test-sos-flash="${ht(s)}">${ht(o._t?.("test_safe_flash") || "Probar destello seguro")}</button>` : `<div class="argus-safe-note">${ht(o._t?.("light_onoff_only_safe_note") || "Esta luz solo admite encendido/apagado.")}</div>`}</div>` : ""}</div>`;
+    const u = o._hass?.states?.[s]?.attributes?.friendly_name || s, p = ua(o, s), g = a[s] || {}, f = p.safeFlash && ["none", "gentle", "rapid"].includes(g.flash_mode) ? g.flash_mode : p.safeFlash && g.gentle_flash ? "gentle" : "none";
+    return p.modes.length && p.modes.join(", "), `<div class="sos-output-row"><div class="sos-output-header"><span class="sensor-pill" style="font-size:12px;font-weight:700" title="${ht(s)}"><span>${um(o, p, u)}</span></span><button type="button" class="sos-remove-output" style="border:0;border-radius:9px;padding:6px 10px;background:rgba(239,68,68,.15);color:#fca5a5;cursor:pointer;font-weight:700" data-remove-sos-output="${ht(s)}" aria-label="Eliminar">✕</button></div>${p.isLight ? `<div class="sos-output-settings">${p.color ? `<label>${ht(o._t?.("color_label") || "Color")} <input type="color" data-sos-output-color="${ht(s)}" value="${qf(g.rgb_color)}"></label>` : `<input type="hidden" data-sos-output-color="${ht(s)}" value="#ffffff">`}${p.safeFlash ? `<label>${ht(o._t?.("flash_label") || "Destello")} <select data-sos-output-flash="${ht(s)}"><option value="none" ${f === "none" ? "selected" : ""}>${ht(o._t?.("no_flash") || "Sin destello")}</option><option value="gentle" ${f === "gentle" ? "selected" : ""}>${ht(o._t?.("flash_gentle") || "Suave")}</option><option value="rapid" ${f === "rapid" ? "selected" : ""}>${ht(o._t?.("flash_rapid") || "Rápido")}</option></select></label><button type="button" class="argus-test-flash" data-test-sos-flash="${ht(s)}">${ht(o._t?.("test_safe_flash") || "Probar destello seguro")}</button>` : `<div class="argus-safe-note">${ht(o._t?.("light_onoff_only_safe_note") || "Esta luz solo admite encendido/apagado.")}</div>`}</div>` : ""}</div>`;
   }).join("") : `<div class="mode-sensor-none">${ht(o._t("sos_no_outputs"))}</div>`, r.querySelectorAll("[data-remove-sos-output]").forEach((s) => s.addEventListener("click", () => {
-    o._panicOutputs = n.filter((c) => c !== s.dataset.removeSosOutput), delete o._panicOutputSettings?.[s.dataset.removeSosOutput], ea(o);
+    o._panicOutputs = n.filter((c) => c !== s.dataset.removeSosOutput), delete o._panicOutputSettings?.[s.dataset.removeSosOutput], ta(o);
   })), r.querySelectorAll("[data-test-sos-flash]").forEach((s) => s.addEventListener("click", () => {
     const c = s.dataset.testSosFlash, u = s.closest(".sos-output-settings"), p = u?.querySelector("[data-sos-output-flash]")?.value || "none", g = u?.querySelector('input[type="color"][data-sos-output-color]');
-    lm(o, s, c, p, g ? Hl(g.value) : null);
+    dm(o, s, c, p, g ? Bl(g.value) : null);
   }));
 }
-function Rp(o) {
-  Ai(o);
+function Tp(o) {
+  Ei(o);
   const r = o.shadowRoot;
   r && r.querySelectorAll("[data-light-siren-color]").forEach((n) => {
-    const a = n.dataset.lightSirenColor, s = da(o, a), c = n.closest(".light-siren-settings"), u = n.closest("label");
+    const a = n.dataset.lightSirenColor, s = ua(o, a), c = n.closest(".light-siren-settings"), u = n.closest("label");
     !s.color && u && u.remove();
-    const p = c?.querySelector("summary"), g = o._hass?.states?.[a]?.attributes?.friendly_name || a, _ = s.modes.length ? s.modes.join(", ") : "sin capacidad declarada";
-    p && (p.innerHTML = `${cm(o, s, g)} <span class="argus-ha-capability">HA: ${ht(_)}</span>`);
-    const f = c?.querySelector("[data-light-siren-flash]");
-    if (!s.safeFlash && f) {
-      f.checked = !1, f.disabled = !0;
-      const h = f.closest("label");
+    const p = c?.querySelector("summary"), g = o._hass?.states?.[a]?.attributes?.friendly_name || a, f = s.modes.length ? s.modes.join(", ") : "sin capacidad declarada";
+    p && (p.innerHTML = `${um(o, s, g)} <span class="argus-ha-capability">HA: ${ht(f)}</span>`);
+    const _ = c?.querySelector("[data-light-siren-flash]");
+    if (!s.safeFlash && _) {
+      _.checked = !1, _.disabled = !0;
+      const h = _.closest("label");
       h && (h.innerHTML = '<span class="argus-safe-note">Sin destello: luz fija para evitar ciclos de alimentación.</span>');
     }
     if (s.safeFlash && c && !c.querySelector("[data-test-mode-flash]")) {
       const h = document.createElement("button");
       h.type = "button", h.className = "argus-test-flash", h.dataset.testModeFlash = a, h.textContent = "Probar destello seguro", h.addEventListener("click", () => {
         const v = c.querySelector("[data-light-siren-flash]")?.checked, P = s.color ? c.querySelector("[data-light-siren-color]") : null;
-        lm(o, h, a, v ? "gentle" : "none", P ? Hl(P.value) : null);
+        dm(o, h, a, v ? "gentle" : "none", P ? Bl(P.value) : null);
       }), c.appendChild(h);
     }
   });
 }
-function q_(o) {
+function jf(o) {
   const r = o._currentModeConfig(), n = o.shadowRoot, a = n.getElementById("mode-require-closed"), s = n.getElementById("mode-arming-time"), c = n.getElementById("mode-entry-delay"), u = n.getElementById("mode-mqtt-enabled");
   a && (r.require_closed = a.checked), s && (r.arming_time = s.value ? parseInt(s.value, 10) : 0), c && (r.entry_delay = c.value ? parseInt(c.value, 10) : 0), u && (r.mqtt_enabled = u.checked), r.light_siren_settings = {}, n.querySelectorAll("[data-light-siren-flash]").forEach((p) => {
-    const g = p.dataset.lightSirenFlash, _ = da(o, g), f = _.safeFlash && !!p.checked, h = { gentle_flash: f, flash_mode: f ? "gentle" : "none" };
-    if (_.color) {
+    const g = p.dataset.lightSirenFlash, f = ua(o, g), _ = f.safeFlash && !!p.checked, h = { gentle_flash: _, flash_mode: _ ? "gentle" : "none" };
+    if (f.color) {
       const v = n.querySelector(`[data-light-siren-color="${CSS.escape(g)}"]`);
-      v && (h.rgb_color = Hl(v.value));
+      v && (h.rgb_color = Bl(v.value));
     }
     r.light_siren_settings[g] = h;
   }), o._runWithPin(async () => {
@@ -22682,71 +22958,71 @@ function q_(o) {
       await o._send("argus/save_mode_config", { entity_id: p, mode: o._mode, config: r }), g && (g.textContent = o._t("saved"), g.className = "status ok show"), setTimeout(() => {
         g && (g.textContent = "", g.className = "status");
       }, 3e3);
-    } catch (_) {
-      g && (g.textContent = `✗ ${_?.message || "Error"}`, g.className = "status err show");
+    } catch (f) {
+      g && (g.textContent = `✗ ${f?.message || "Error"}`, g.className = "status err show");
     }
   });
 }
-function j_(o) {
+function Ff(o) {
   if (!o || o.__argusLightCapabilityFixes) return;
   o.__argusLightCapabilityFixes = !0;
   const r = o.prototype, n = r.connectedCallback;
   r.connectedCallback = function() {
-    return Ai(this), n?.call(this);
+    return Ei(this), n?.call(this);
   };
   const a = r._load;
   r._load = async function() {
     const p = await a.call(this);
-    return Ai(this), ea(this), Rp(this), p;
+    return Ei(this), ta(this), Tp(this), p;
   }, r._renderSosOutputs = function() {
-    ea(this);
+    ta(this);
   };
   const s = r._acceptSelection;
   r._acceptSelection = function() {
     const p = s.call(this);
-    return this._selectorTarget === "panic" && ea(this), p;
+    return this._selectorTarget === "panic" && ta(this), p;
   };
   const c = r._renderModeView;
   r._renderModeView = function() {
     const p = c.call(this);
-    return Rp(this), p;
+    return Tp(this), p;
   };
   const u = r._renderEntries;
   r._renderEntries = function() {
     const p = u.call(this);
-    return Ai(this), p;
+    return Ei(this), p;
   }, r._saveMode = function() {
-    return q_(this);
+    return jf(this);
   };
 }
-function Lp(o) {
+function Mp(o) {
   const r = o.shadowRoot, n = r?.getElementById("lbl-aesthetic-custom"), a = r?.getElementById("personalize-workspace");
   if (!r || !n || !a || n.dataset.argusPersonalizationToggle === "1") return;
   const s = n.cloneNode(!0);
   n.replaceWith(s), s.dataset.argusPersonalizationToggle = "1", s.setAttribute("role", "button"), s.setAttribute("tabindex", "0");
-  const c = r.getElementById("btn-edit-home-name-standalone"), u = r.getElementById("btn-save-personalization-standalone"), p = (_) => {
-    a.hidden = !_, a.classList.toggle("collapsed", !_), s.setAttribute("aria-expanded", String(_));
-    const f = s.querySelector("#personalize-chevron");
-    f && (f.style.transform = "none", f.textContent = _ ? "▲ Ocultar" : "▼ Desplegar"), c && (c.hidden = !_), u && (u.hidden = !_);
+  const c = r.getElementById("btn-edit-home-name-standalone"), u = r.getElementById("btn-save-personalization-standalone"), p = (f) => {
+    a.hidden = !f, a.classList.toggle("collapsed", !f), s.setAttribute("aria-expanded", String(f));
+    const _ = s.querySelector("#personalize-chevron");
+    _ && (_.style.transform = "none", _.textContent = f ? "▲ Ocultar" : "▼ Desplegar"), c && (c.hidden = !f), u && (u.hidden = !f);
   };
   p(!1);
   const g = () => p(s.getAttribute("aria-expanded") !== "true");
-  s.addEventListener("click", g), s.addEventListener("keydown", (_) => {
-    _.key !== "Enter" && _.key !== " " || (_.preventDefault(), g());
+  s.addEventListener("click", g), s.addEventListener("keydown", (f) => {
+    f.key !== "Enter" && f.key !== " " || (f.preventDefault(), g());
   });
 }
-function F_(o) {
+function Uf(o) {
   if (!o || o.__argusPersonalizationToggleFix) return;
   o.__argusPersonalizationToggleFix = !0;
   const r = o.prototype, n = r.connectedCallback;
   r.connectedCallback = function() {
     const s = n?.call(this);
-    return queueMicrotask(() => Lp(this)), s;
+    return queueMicrotask(() => Mp(this)), s;
   };
   const a = r._load;
   r._load = async function() {
     const s = await a?.call(this);
-    return Lp(this), s;
+    return Mp(this), s;
   };
 }
 function fl(o) {
@@ -22765,7 +23041,7 @@ function fl(o) {
 @media(max-width:760px){#w-modes,#w-access{min-height:420px!important;max-height:70dvh!important}#w-modes #mode-view,#w-access #access-view,#w-access .access-content{padding-bottom:28px!important}}
 `, o.shadowRoot?.appendChild(r);
 }
-function U_(o) {
+function Wf(o) {
   if (!o || o.__argusDashboardScrollFixes) return;
   o.__argusDashboardScrollFixes = !0;
   const r = o.prototype, n = r.connectedCallback, a = r._load, s = r._renderEntries;
@@ -22779,41 +23055,41 @@ function U_(o) {
     return fl(this), c;
   };
 }
-const dm = /* @__PURE__ */ new Set(["S", "M", "L", "XL"]), Ei = (o) => JSON.parse(JSON.stringify(o));
+const pm = /* @__PURE__ */ new Set(["S", "M", "L", "XL"]), Pi = (o) => JSON.parse(JSON.stringify(o));
 function Nl(o) {
   if (!Array.isArray(o)) return null;
   const r = /* @__PURE__ */ new Set(), n = [];
   for (const a of o) {
     const s = String(a?.id || "");
-    !s || r.has(s) || (r.add(s), n.push({ id: s, size: dm.has(a?.size) ? a.size : "M", hidden: !!a?.hidden }));
+    !s || r.has(s) || (r.add(s), n.push({ id: s, size: pm.has(a?.size) ? a.size : "M", hidden: !!a?.hidden }));
   }
   return n.length ? n : null;
 }
-function Op(o) {
+function Hp(o) {
   try {
     return Nl(JSON.parse(localStorage.getItem("argus-widgets-v4") || localStorage.getItem("argus-widgets-v2") || "null"));
   } catch {
     return null;
   }
 }
-function W_(o) {
+function Vf(o) {
   const r = o.shadowRoot?.getElementById("widget-grid"), n = new Map((o._widgetConfig || []).map((a) => [a.id, a]));
   return Nl(r ? [...r.children].filter((a) => a.classList.contains("panel") && !a.classList.contains("dashboard-instances")).map((a) => {
     const s = a.id.replace(/^w-/, "");
-    return { id: s, size: dm.has(a.dataset.size) ? a.dataset.size : n.get(s)?.size || "M", hidden: !!n.get(s)?.hidden };
+    return { id: s, size: pm.has(a.dataset.size) ? a.dataset.size : n.get(s)?.size || "M", hidden: !!n.get(s)?.hidden };
   }) : o._widgetConfig);
 }
-function um(o) {
-  const r = W_(o);
+function mm(o) {
+  const r = Vf(o);
   if (!r) return;
-  o._widgetConfig = Ei(r), localStorage.setItem("argus-widgets-v4", JSON.stringify(r)), o._ui = o._ui || {};
-  const n = { ...o._ui.dashboard || {}, widget_layout: Ei(r) };
+  o._widgetConfig = Pi(r), localStorage.setItem("argus-widgets-v4", JSON.stringify(r)), o._ui = o._ui || {};
+  const n = { ...o._ui.dashboard || {}, widget_layout: Pi(r) };
   o._ui.dashboard = n;
   const a = o._dashboard?.entry_id || o._dashboard?.entries?.[0]?.entry_id, s = { dashboard: n, ...a ? { entry_id: a } : {} };
   o._v2041Save = (o._v2041Save || Promise.resolve()).catch(() => {
   }).then(() => o._send("argus/save_ui", s)).catch((c) => console.error("Argus layout save failed", c));
 }
-function V_(o) {
+function Gf(o) {
   if (o.shadowRoot?.getElementById("argus-v2041-audit-repair")) return;
   const r = document.createElement("style");
   r.id = "argus-v2041-audit-repair", r.textContent = `
@@ -22823,8 +23099,8 @@ function V_(o) {
 @media(max-width:760px){#w-modes,#w-access{min-height:440px!important;max-height:75dvh!important}}
 `, o.shadowRoot?.appendChild(r);
 }
-function xi(o) {
-  V_(o);
+function wi(o) {
+  Gf(o);
   const r = o.shadowRoot?.getElementById("w-access");
   if (r) {
     const a = r.querySelector(".panel-body,#access-view,.access-view,.access-content");
@@ -22834,71 +23110,71 @@ function xi(o) {
   if (n && !n._v2041) {
     n._v2041 = !0;
     for (const a of ["drop", "dragend"]) n.addEventListener(a, () => {
-      o._widgetEditing && setTimeout(() => um(o), 0);
+      o._widgetEditing && setTimeout(() => mm(o), 0);
     }, !0);
   }
 }
-function G_(o) {
+function Yf(o) {
   if (!o || o.__v2041AuditRepair) return;
   o.__v2041AuditRepair = !0;
   const r = o.prototype, n = r.connectedCallback, a = r._load, s = r._renderEntries, c = r._saveWidgetLayout, u = r._initWidgetGrid;
   r.connectedCallback = function() {
     const p = n?.call(this);
-    xi(this);
+    wi(this);
     let g;
     return this._v2041Observer = new MutationObserver(() => {
-      clearTimeout(g), g = setTimeout(() => xi(this), 80);
+      clearTimeout(g), g = setTimeout(() => wi(this), 80);
     }), this._v2041Observer.observe(this.shadowRoot, { childList: !0 }), p;
   }, r._initWidgetGrid = function() {
-    const p = Op();
-    p && (this._ui = this._ui || {}, this._ui.dashboard = { ...this._ui.dashboard || {}, widget_layout: Ei(p) });
+    const p = Hp();
+    p && (this._ui = this._ui || {}, this._ui.dashboard = { ...this._ui.dashboard || {}, widget_layout: Pi(p) });
     const g = u?.call(this);
-    return p && (this._widgetConfig = Ei(p), this._renderWidgetLayout?.()), xi(this), g;
+    return p && (this._widgetConfig = Pi(p), this._renderWidgetLayout?.()), wi(this), g;
   }, r._load = async function() {
-    const p = await a?.call(this), g = Op();
-    return g && (this._widgetConfig = Ei(g), this._renderWidgetLayout?.()), xi(this), p;
+    const p = await a?.call(this), g = Hp();
+    return g && (this._widgetConfig = Pi(g), this._renderWidgetLayout?.()), wi(this), p;
   }, r._renderEntries = function() {
     const p = s?.call(this);
-    return xi(this), p;
+    return wi(this), p;
   }, r._saveWidgetLayout = function() {
     const p = c?.call(this);
-    return setTimeout(() => um(this), 0), p;
+    return setTimeout(() => mm(this), 0), p;
   };
 }
-const pm = /* @__PURE__ */ new Set(["S", "M", "L", "XL"]), mm = "argus-widgets-stable-v5", xn = (o) => JSON.parse(JSON.stringify(o));
-function Cl(o) {
+const gm = /* @__PURE__ */ new Set(["S", "M", "L", "XL"]), hm = "argus-widgets-stable-v5", wn = (o) => JSON.parse(JSON.stringify(o));
+function zl(o) {
   if (!Array.isArray(o)) return null;
   const r = /* @__PURE__ */ new Set(), n = [];
   for (const a of o) {
     const s = String(a?.id || "");
-    !s || r.has(s) || (r.add(s), n.push({ id: s, size: pm.has(a?.size) ? a.size : "M", hidden: !!a?.hidden }));
+    !s || r.has(s) || (r.add(s), n.push({ id: s, size: gm.has(a?.size) ? a.size : "M", hidden: !!a?.hidden }));
   }
   return n.length ? n : null;
 }
-function Tp() {
+function Bp() {
   try {
-    return Cl(JSON.parse(localStorage.getItem(mm) || localStorage.getItem("argus-widgets-v4") || "null"));
+    return zl(JSON.parse(localStorage.getItem(hm) || localStorage.getItem("argus-widgets-v4") || "null"));
   } catch {
     return null;
   }
 }
-function wn(o) {
+function kn(o) {
   const r = o.shadowRoot?.getElementById("widget-grid"), n = new Map((o._widgetConfig || []).map((a) => [a.id, a]));
-  return Cl(r ? [...r.children].filter((a) => a.classList.contains("panel") && !a.classList.contains("dashboard-instances")).map((a) => {
+  return zl(r ? [...r.children].filter((a) => a.classList.contains("panel") && !a.classList.contains("dashboard-instances")).map((a) => {
     const s = a.id.replace(/^w-/, "");
-    return { id: s, size: pm.has(a.dataset.size) ? a.dataset.size : n.get(s)?.size || "M", hidden: !!n.get(s)?.hidden };
+    return { id: s, size: gm.has(a.dataset.size) ? a.dataset.size : n.get(s)?.size || "M", hidden: !!n.get(s)?.hidden };
   }) : o._widgetConfig);
 }
-function Pi(o, r = wn(o)) {
+function Ii(o, r = kn(o)) {
   if (!r) return;
-  localStorage.setItem(mm, JSON.stringify(r)), o._widgetConfig = xn(r), o._ui = o._ui || {};
-  const n = { ...o._ui.dashboard || {}, widget_layout: xn(r) };
+  localStorage.setItem(hm, JSON.stringify(r)), o._widgetConfig = wn(r), o._ui = o._ui || {};
+  const n = { ...o._ui.dashboard || {}, widget_layout: wn(r) };
   o._ui.dashboard = n;
   const a = o._dashboard?.entry_id || o._dashboard?.entries?.[0]?.entry_id, s = { dashboard: n, ...a ? { entry_id: a } : {} };
   o._stableSave = (o._stableSave || Promise.resolve()).catch(() => {
   }).then(() => o._send("argus/save_ui", s)).catch((c) => console.error("Argus server layout save failed; stable local layout retained", c));
 }
-function Y_(o) {
+function Kf(o) {
   if (o.shadowRoot?.getElementById("argus-v2042-stability")) return;
   const r = document.createElement("style");
   r.id = "argus-v2042-stability", r.textContent = `
@@ -22910,12 +23186,12 @@ function Y_(o) {
 @media(max-width:760px){#w-modes,#w-access{min-height:480px!important;max-height:78dvh!important}}
 `, o.shadowRoot?.appendChild(r);
 }
-function wi(o) {
-  Y_(o), [...o.shadowRoot?.querySelectorAll(".entry") || []].forEach((s, c) => {
-    const u = o._dashboard?.entries?.[c], p = u?.attributes || {}, g = p.arming_blocking_sensors || [], _ = !!(p.arming_waiting_for_sensors || g.length);
-    s.classList.toggle("argus-waiting", _);
-    const f = s.querySelector(".liquid-stack");
-    f && f.querySelectorAll(".argus-disarm-btn, .btn-disarm").forEach((v) => v.remove());
+function ki(o) {
+  Kf(o), [...o.shadowRoot?.querySelectorAll(".entry") || []].forEach((s, c) => {
+    const u = o._dashboard?.entries?.[c], p = u?.attributes || {}, g = p.arming_blocking_sensors || [], f = !!(p.arming_waiting_for_sensors || g.length);
+    s.classList.toggle("argus-waiting", f);
+    const _ = s.querySelector(".liquid-stack");
+    _ && _.querySelectorAll(".argus-disarm-btn, .btn-disarm").forEach((v) => v.remove());
     const h = new Set(g.map((v) => {
       const P = o._dashboard?.available_entities?.find?.((R) => R.entity_id === v);
       return String(P?.name || v).toLocaleLowerCase();
@@ -22932,42 +23208,42 @@ function wi(o) {
   }
   const a = o.shadowRoot?.getElementById("widget-grid");
   a && !a._stableLayout && (a._stableLayout = !0, a.addEventListener("dragend", () => {
-    o._widgetEditing && Pi(o, wn(o));
+    o._widgetEditing && Ii(o, kn(o));
   }, !0), a.addEventListener("drop", () => queueMicrotask(() => {
-    o._widgetEditing && Pi(o, wn(o));
+    o._widgetEditing && Ii(o, kn(o));
   }), !1), new MutationObserver(() => {
-    o._widgetEditing && (clearTimeout(o._stableMutation), o._stableMutation = setTimeout(() => Pi(o, wn(o)), 80));
+    o._widgetEditing && (clearTimeout(o._stableMutation), o._stableMutation = setTimeout(() => Ii(o, kn(o)), 80));
   }).observe(a, { childList: !0 }));
 }
-function K_(o) {
+function Xf(o) {
   if (!o || o.__v2042Stability) return;
   o.__v2042Stability = !0;
   const r = o.prototype, n = r.connectedCallback, a = r._load, s = r._renderEntries, c = r._initWidgetGrid, u = r._toggleWidgetEditing, p = r._saveWidgetLayout;
   r.connectedCallback = function() {
     const g = n?.call(this);
-    return wi(this), g;
+    return ki(this), g;
   }, r._initWidgetGrid = function() {
-    const g = Tp();
-    g && (this._ui = this._ui || {}, this._ui.dashboard = { ...this._ui.dashboard || {}, widget_layout: xn(g) });
-    const _ = c?.call(this);
-    return g && (this._widgetConfig = xn(g), this._renderWidgetLayout?.()), wi(this), _;
+    const g = Bp();
+    g && (this._ui = this._ui || {}, this._ui.dashboard = { ...this._ui.dashboard || {}, widget_layout: wn(g) });
+    const f = c?.call(this);
+    return g && (this._widgetConfig = wn(g), this._renderWidgetLayout?.()), ki(this), f;
   }, r._load = async function() {
-    const g = await a?.call(this), _ = Tp();
-    return _ && (this._widgetConfig = xn(_), this._renderWidgetLayout?.(), requestAnimationFrame(() => {
-      this._widgetConfig = xn(_), this._renderWidgetLayout?.();
-    })), wi(this), g;
+    const g = await a?.call(this), f = Bp();
+    return f && (this._widgetConfig = wn(f), this._renderWidgetLayout?.(), requestAnimationFrame(() => {
+      this._widgetConfig = wn(f), this._renderWidgetLayout?.();
+    })), ki(this), g;
   }, r._renderEntries = function() {
     const g = s?.call(this);
-    return wi(this), g;
+    return ki(this), g;
   }, r._toggleWidgetEditing = function() {
-    const g = this._widgetEditing, _ = g ? wn(this) : null, f = u?.call(this);
-    return g && _ && Pi(this, _), wi(this), f;
+    const g = this._widgetEditing, f = g ? kn(this) : null, _ = u?.call(this);
+    return g && f && Ii(this, f), ki(this), _;
   }, r._saveWidgetLayout = function() {
-    const g = wn(this), _ = p?.call(this);
-    return Pi(this, g), _;
+    const g = kn(this), f = p?.call(this);
+    return Ii(this, g), f;
   };
 }
-function X_(o) {
+function Qf(o) {
   if (o.shadowRoot?.getElementById("argus-v2043-visual-fix")) return;
   const r = document.createElement("style");
   r.id = "argus-v2043-visual-fix", r.textContent = `
@@ -22976,78 +23252,78 @@ function X_(o) {
 #w-modes .panel-body,#w-access .panel-body,#mode-view,#access-view,.access-view,.access-content,.access-sections,.access-body,.users-list,.user-list,.users-grid,[role=tabpanel]{min-height:0!important;max-height:none!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;overscroll-behavior:contain!important}
 `, o.shadowRoot.appendChild(r);
 }
-function _l(o) {
-  X_(o), o._t?.("btn_disarmed"), [...o.shadowRoot?.querySelectorAll(".entry") || []].forEach((r, n) => {
+function bl(o) {
+  Qf(o), o._t?.("btn_disarmed"), [...o.shadowRoot?.querySelectorAll(".entry") || []].forEach((r, n) => {
     const a = o._dashboard?.entries?.[n], s = a?.attributes || {}, c = s.arming_blocking_sensors || [], u = !!(s.arming_waiting_for_sensors || c.length);
     r.classList.toggle("argus-waiting", u);
     const p = r.querySelector(".liquid-stack");
     if (p) {
-      const _ = p.querySelector(".btn-disarm");
-      _ && (_.style.setProperty("grid-column", "1 / -1", "important"), _.style.setProperty("background", "#22a447", "important"));
+      const f = p.querySelector(".btn-disarm");
+      f && (f.style.setProperty("grid-column", "1 / -1", "important"), f.style.setProperty("background", "#22a447", "important"));
     }
-    const g = new Set(c.map((_) => String(o._dashboard?.available_entities?.find?.((f) => f.entity_id === _)?.name || _).toLocaleLowerCase()));
-    r.querySelectorAll(".console-sensor").forEach((_) => {
-      const f = String(_.querySelector(".console-sensor-name")?.textContent || _.textContent || "").toLocaleLowerCase();
-      _.classList.toggle("argus-blocking", [...g].some((h) => f.includes(h) || h.includes(f)));
+    const g = new Set(c.map((f) => String(o._dashboard?.available_entities?.find?.((_) => _.entity_id === f)?.name || f).toLocaleLowerCase()));
+    r.querySelectorAll(".console-sensor").forEach((f) => {
+      const _ = String(f.querySelector(".console-sensor-name")?.textContent || f.textContent || "").toLocaleLowerCase();
+      f.classList.toggle("argus-blocking", [...g].some((h) => _.includes(h) || h.includes(_)));
     });
   });
 }
-function Q_(o) {
+function Jf(o) {
   if (!o || o.__v2043VisualFix) return;
   o.__v2043VisualFix = !0;
   const r = o.prototype, n = r.connectedCallback, a = r._load, s = r._renderEntries;
   r.connectedCallback = function() {
     const c = n?.call(this);
-    return _l(this), c;
+    return bl(this), c;
   }, r._load = async function() {
     const c = await a?.call(this);
-    return _l(this), c;
+    return bl(this), c;
   }, r._renderEntries = function() {
     const c = s?.call(this);
-    return _l(this), c;
+    return bl(this), c;
   };
 }
-function Yo(o) {
+function Ko(o) {
   return String(o || "").trim().toLocaleLowerCase();
 }
-function bl(o) {
+function yl(o) {
   if (!o.shadowRoot) return;
   let r = o.shadowRoot.getElementById("argus-v2045-trigger-sensors");
   r || (r = document.createElement("style"), r.id = "argus-v2045-trigger-sensors", r.textContent = ".entry .console-sensor.argus-triggered-sensor{border-color:#ff8a1f!important;background:linear-gradient(135deg,rgba(249,115,22,.32),rgba(194,65,12,.18))!important;color:#fff!important;animation:argusTriggeredSensor .72s ease-in-out infinite!important;box-shadow:0 0 18px rgba(249,115,22,.55)!important}@keyframes argusTriggeredSensor{0%,100%{opacity:.62;box-shadow:0 0 8px rgba(249,115,22,.35)}50%{opacity:1;box-shadow:0 0 26px rgba(251,146,60,.9)}}", o.shadowRoot.appendChild(r)), [...o.shadowRoot.querySelectorAll(".entry") || []].forEach((n, a) => {
     const s = o._dashboard?.entries?.[a], c = s?.attributes || {}, u = c.triggered_sensors || [], p = new Set(u.flatMap((g) => {
-      const _ = o._dashboard?.available_entities?.find?.((f) => f.entity_id === g);
-      return [Yo(g), Yo(_?.name), Yo(_?.friendly_name)];
+      const f = o._dashboard?.available_entities?.find?.((_) => _.entity_id === g);
+      return [Ko(g), Ko(f?.name), Ko(f?.friendly_name)];
     }).filter(Boolean));
     n.querySelectorAll(".console-sensor").forEach((g) => {
-      const _ = Yo(g.querySelector(".console-sensor-name")?.textContent || g.textContent);
-      g.classList.toggle("argus-triggered-sensor", [...p].some((f) => _.includes(f) || f.includes(_)));
+      const f = Ko(g.querySelector(".console-sensor-name")?.textContent || g.textContent);
+      g.classList.toggle("argus-triggered-sensor", [...p].some((_) => f.includes(_) || _.includes(f)));
     });
   });
 }
-function J_(o) {
+function Zf(o) {
   if (!o || o.__v2045TriggerSensors) return;
   o.__v2045TriggerSensors = !0;
   const r = o.prototype, n = r.connectedCallback, a = r._load, s = r._renderEntries;
   r.connectedCallback = function() {
     const c = n?.call(this);
-    return bl(this), c;
+    return yl(this), c;
   }, r._load = async function() {
     const c = await a?.call(this);
-    return bl(this), c;
+    return yl(this), c;
   }, r._renderEntries = function() {
     const c = s?.call(this);
-    return bl(this), c;
+    return yl(this), c;
   };
 }
-const Z_ = { armed_home: /EN CASA|HOME|MAISON|EM CASA|IN CASA|在家|ДОМА|घर/i, armed_away: /AUSENTE|AWAY|ABSENT|FUORI|离家|ВНЕ ДОМА|दूर/i, armed_night: /NOCHE|NIGHT|NUIT|NOTTE|夜间|НОЧЬ|रात/i, armed_vacation: /VACACIONES|VACATION|VACANCES|VACANZA|FÉRIAS|度假|ОТПУСК|यात्रा/i };
-function eb(o, r) {
+const eb = { armed_home: /EN CASA|HOME|MAISON|EM CASA|IN CASA|在家|ДОМА|घर/i, armed_away: /AUSENTE|AWAY|ABSENT|FUORI|离家|ВНЕ ДОМА|दूर/i, armed_night: /NOCHE|NIGHT|NUIT|NOTTE|夜间|НОЧЬ|रात/i, armed_vacation: /VACACIONES|VACATION|VACANCES|VACANZA|FÉRIAS|度假|ОТПУСК|यात्रा/i };
+function tb(o, r) {
   const n = r?.entity_id || r?.alarm_entity_id, a = n ? o._hass?.states?.[n]?.state : void 0;
   return String(a || r?.state || r?.alarm_state || r?.attributes?.state || "").toLowerCase();
 }
-function yl(o, r, n) {
+function vl(o, r, n) {
   o.classList.toggle("active", n), o.classList.toggle("argus-action-active", n), o.dataset.argusAction = r, o.style.removeProperty("background"), o.style.removeProperty("background-image"), o.style.removeProperty("border"), o.style.removeProperty("box-shadow"), o.style.removeProperty("backdrop-filter"), o.style.removeProperty("-webkit-backdrop-filter");
 }
-function vl(o) {
+function xl(o) {
   if (!o.shadowRoot) return;
   let r = o.shadowRoot.getElementById("argus-v2046-active-visuals");
   r || (r = document.createElement("style"), r.id = "argus-v2046-active-visuals", r.textContent = `
@@ -23069,46 +23345,46 @@ function vl(o) {
       @keyframes argusArmingShield { 0%,100%{opacity:.55;transform:scale(.94)} 50%{opacity:1;transform:scale(1.07)} }
       @keyframes argusArmingLabel { 0%,100%{opacity:.62} 50%{opacity:1} }
     `, o.shadowRoot.appendChild(r)), [...o.shadowRoot.querySelectorAll(".entry") || []].forEach((n, a) => {
-    const s = o._dashboard?.entries?.[a] || {}, c = s.attributes || {}, u = eb(o, s), p = u === "arming" || !!c.arming_waiting_for_sensors || !!(c.arming_blocking_sensors || []).length;
+    const s = o._dashboard?.entries?.[a] || {}, c = s.attributes || {}, u = tb(o, s), p = u === "arming" || !!c.arming_waiting_for_sensors || !!(c.arming_blocking_sensors || []).length;
     n.classList.toggle("argus-arming", p);
     const g = n.querySelector(".entry-icon");
-    let _ = n.querySelector(".argus-shield-status");
-    p && g ? (_ || (_ = document.createElement("span"), _.className = "argus-shield-status", g.insertAdjacentElement("afterend", _)), _.textContent = (c.arming_blocking_sensors || []).length ? "ESPERANDO SENSORES" : "ARMANDO…") : _?.remove();
-    const f = n.querySelector(".liquid-stack");
-    f && [...f.querySelectorAll(".liquid-btn, button")].forEach((h) => {
+    let f = n.querySelector(".argus-shield-status");
+    p && g ? (f || (f = document.createElement("span"), f.className = "argus-shield-status", g.insertAdjacentElement("afterend", f)), f.textContent = (c.arming_blocking_sensors || []).length ? "ESPERANDO SENSORES" : "ARMANDO…") : f?.remove();
+    const _ = n.querySelector(".liquid-stack");
+    _ && [..._.querySelectorAll(".liquid-btn, button")].forEach((h) => {
       const v = String(h.textContent || "");
-      if (/SOS|PÁNICO|PANIC|PANIQUE|PÂNICO|PANICO|紧急|ПАНИКА/i.test(v)) yl(h, "sos", !!c.argus_panic_active);
-      else if (/DESARMAR|DISARM|DESARMADO|DISARMED|DÉSARMÉ|DÉSARMER|СНЯТО|已撤防/i.test(v)) yl(h, "disarm", u === "disarmed");
+      if (/SOS|PÁNICO|PANIC|PANIQUE|PÂNICO|PANICO|紧急|ПАНИКА/i.test(v)) vl(h, "sos", !!c.argus_panic_active);
+      else if (/DESARMAR|DISARM|DESARMADO|DISARMED|DÉSARMÉ|DÉSARMER|СНЯТО|已撤防/i.test(v)) vl(h, "disarm", u === "disarmed");
       else {
-        const P = Object.entries(Z_).find(([, R]) => R.test(v));
-        P && yl(h, P[0], u === P[0]);
+        const P = Object.entries(eb).find(([, R]) => R.test(v));
+        P && vl(h, P[0], u === P[0]);
       }
     });
   });
 }
-function tb(o) {
+function rb(o) {
   if (!o || o.__v2046ActiveVisuals) return;
   o.__v2046ActiveVisuals = !0;
   const r = o.prototype, n = r.connectedCallback, a = r._load, s = r._renderEntries;
   r.connectedCallback = function() {
     const c = n?.call(this);
-    return vl(this), c;
+    return xl(this), c;
   }, r._load = async function() {
     const c = await a?.call(this);
-    return vl(this), c;
+    return xl(this), c;
   }, r._renderEntries = function() {
     const c = s?.call(this);
-    return vl(this), c;
+    return xl(this), c;
   };
 }
-const rb = /* @__PURE__ */ new Set(["alarm_control_panel", "fan", "input_boolean", "light", "script", "siren", "switch"]), nb = (o) => typeof o == "string" && o.split(".").length === 2 && rb.has(o.split(".", 1)[0]);
-function ib(o) {
+const nb = /* @__PURE__ */ new Set(["alarm_control_panel", "fan", "input_boolean", "light", "script", "siren", "switch"]), ib = (o) => typeof o == "string" && o.split(".").length === 2 && nb.has(o.split(".", 1)[0]);
+function ob(o) {
   if (!o || o.__argusSosOutputPersistence) return;
   o.__argusSosOutputPersistence = !0;
   const r = o.prototype, n = r._acceptSelection;
   r._acceptSelection = async function() {
     if (this._selectorTarget !== "panic") return n?.call(this);
-    const a = Array.isArray(this._panicOutputs) ? [...this._panicOutputs] : [], s = { ...this._panicOutputSettings || {} }, c = [...new Set((this._selected || []).filter(nb))], u = { ...this._panicOutputSettings || {} };
+    const a = Array.isArray(this._panicOutputs) ? [...this._panicOutputs] : [], s = { ...this._panicOutputSettings || {} }, c = [...new Set((this._selected || []).filter(ib))], u = { ...this._panicOutputSettings || {} };
     Object.keys(u).forEach((g) => {
       c.includes(g) || delete u[g];
     }), c.forEach((g) => {
@@ -23123,11 +23399,11 @@ function ib(o) {
     }
   };
 }
-const ob = `#version 300 es
+const ab = `#version 300 es
 in vec2 position;
 void main() {
     gl_Position = vec4(position, 0.0, 1.0);
-}`, ab = `#version 300 es
+}`, sb = `#version 300 es
 precision highp float;
 
 uniform vec2 u_resolution;
@@ -23249,7 +23525,7 @@ void main() {
     ldrColor = pow(ldrColor, vec3(1.0 / 2.2));
     FragColor = vec4(ldrColor, 1.0);
 }`;
-class sb extends HTMLElement {
+class lb extends HTMLElement {
   constructor() {
     super(), this.attachShadow({ mode: "open" }), this._canvas = document.createElement("canvas"), this._canvas.style.cssText = "width:100%;height:100%;display:block;";
     const r = document.createElement("style");
@@ -23322,10 +23598,10 @@ class sb extends HTMLElement {
     } catch {
     }
     this.gl = n;
-    const a = (_, f) => {
-      const h = n.createShader(_);
-      return n.shaderSource(h, f), n.compileShader(h), n.getShaderParameter(h, n.COMPILE_STATUS) ? h : (console.error("[Argus] Shader error:", n.getShaderInfoLog(h)), n.deleteShader(h), null);
-    }, s = a(n.VERTEX_SHADER, ob), c = a(n.FRAGMENT_SHADER, ab);
+    const a = (f, _) => {
+      const h = n.createShader(f);
+      return n.shaderSource(h, _), n.compileShader(h), n.getShaderParameter(h, n.COMPILE_STATUS) ? h : (console.error("[Argus] Shader error:", n.getShaderInfoLog(h)), n.deleteShader(h), null);
+    }, s = a(n.VERTEX_SHADER, ab), c = a(n.FRAGMENT_SHADER, sb);
     if (!s || !c) return;
     if (this.program = n.createProgram(), n.attachShader(this.program, s), n.attachShader(this.program, c), n.linkProgram(this.program), !n.getProgramParameter(this.program, n.LINK_STATUS)) {
       console.error("[Argus] Link error:", n.getProgramInfoLog(this.program));
@@ -23346,16 +23622,16 @@ class sb extends HTMLElement {
     }, n.useProgram(this.program), n.uniform3f(this.uniforms.sunPosition, 0, 0.5, -1), n.uniform3f(this.uniforms.moonPosition, 0.5, 0.3, -1), n.uniform1f(this.uniforms.moonPhase, 1), n.uniform4f(this.uniforms.weather, 0, 0, 0, 0), n.uniform2f(this.uniforms.cloudOffset, 0, 0), n.uniform2f(this.uniforms.parallax, 0, 0);
     const g = () => {
       if (!this.isConnected) return;
-      const _ = performance.now(), f = Math.min((_ - (this._lastTime || _)) / 1e3, 0.1);
-      this._lastTime = _;
+      const f = performance.now(), _ = Math.min((f - (this._lastTime || f)) / 1e3, 0.1);
+      this._lastTime = f;
       const h = this.current, v = this.target;
-      this._firstFrame === void 0 ? (this._firstFrame = !1, h.sunY = v.sunY, h.nubes = v.nubes, h.lluvia = v.lluvia, h.nieve = v.nieve, h.relampagos = v.relampagos, h.moonPhase = v.moonPhase) : (h.sunY = this._damp(h.sunY, v.sunY, 0.5, f), h.nubes = this._damp(h.nubes, v.nubes, 5, f), h.lluvia = this._damp(h.lluvia, v.lluvia, 5, f), h.nieve = this._damp(h.nieve, v.nieve, 5, f), h.relampagos = this._damp(h.relampagos, v.relampagos, 8, f), h.moonPhase = this._damp(h.moonPhase, v.moonPhase, 1, f)), h.parallax.x = this._damp(h.parallax.x, v.parallax.x, 6, f), h.parallax.y = this._damp(h.parallax.y, v.parallax.y, 6, f), this._cloudOffset.x += (v.wind?.x || 0) * f, this._cloudOffset.y += (v.wind?.y || 0) * f, n.useProgram(this.program), n.bindBuffer(n.ARRAY_BUFFER, u), n.enableVertexAttribArray(p), n.vertexAttribPointer(p, 2, n.FLOAT, !1, 0, 0), n.uniform2f(this.uniforms.resolution, r.width, r.height), n.uniform1f(this.uniforms.time, (_ - this.startTime) / 1e3), n.uniform3f(this.uniforms.sunPosition, 0, h.sunY, -1), n.uniform3f(this.uniforms.moonPosition, 0.2, -h.sunY + 0.2, -1), n.uniform1f(this.uniforms.moonPhase, h.moonPhase), n.uniform4f(this.uniforms.weather, h.nubes, h.lluvia, h.nieve, h.relampagos), n.uniform2f(this.uniforms.cloudOffset, this._cloudOffset.x, this._cloudOffset.y), n.uniform2f(this.uniforms.parallax, h.parallax.x, h.parallax.y), n.drawArrays(n.TRIANGLES, 0, 3), this._animationFrame = requestAnimationFrame(g);
+      this._firstFrame === void 0 ? (this._firstFrame = !1, h.sunY = v.sunY, h.nubes = v.nubes, h.lluvia = v.lluvia, h.nieve = v.nieve, h.relampagos = v.relampagos, h.moonPhase = v.moonPhase) : (h.sunY = this._damp(h.sunY, v.sunY, 0.5, _), h.nubes = this._damp(h.nubes, v.nubes, 5, _), h.lluvia = this._damp(h.lluvia, v.lluvia, 5, _), h.nieve = this._damp(h.nieve, v.nieve, 5, _), h.relampagos = this._damp(h.relampagos, v.relampagos, 8, _), h.moonPhase = this._damp(h.moonPhase, v.moonPhase, 1, _)), h.parallax.x = this._damp(h.parallax.x, v.parallax.x, 6, _), h.parallax.y = this._damp(h.parallax.y, v.parallax.y, 6, _), this._cloudOffset.x += (v.wind?.x || 0) * _, this._cloudOffset.y += (v.wind?.y || 0) * _, n.useProgram(this.program), n.bindBuffer(n.ARRAY_BUFFER, u), n.enableVertexAttribArray(p), n.vertexAttribPointer(p, 2, n.FLOAT, !1, 0, 0), n.uniform2f(this.uniforms.resolution, r.width, r.height), n.uniform1f(this.uniforms.time, (f - this.startTime) / 1e3), n.uniform3f(this.uniforms.sunPosition, 0, h.sunY, -1), n.uniform3f(this.uniforms.moonPosition, 0.2, -h.sunY + 0.2, -1), n.uniform1f(this.uniforms.moonPhase, h.moonPhase), n.uniform4f(this.uniforms.weather, h.nubes, h.lluvia, h.nieve, h.relampagos), n.uniform2f(this.uniforms.cloudOffset, this._cloudOffset.x, this._cloudOffset.y), n.uniform2f(this.uniforms.parallax, h.parallax.x, h.parallax.y), n.drawArrays(n.TRIANGLES, 0, 3), this._animationFrame = requestAnimationFrame(g);
     };
     g();
   }
 }
-customElements.get("argus-weather-panel") || customElements.define("argus-weather-panel", sb);
-function xl(o) {
+customElements.get("argus-weather-panel") || customElements.define("argus-weather-panel", lb);
+function wl(o) {
   if (!(o._ui?.color_scheme || o._dashboard?.ui?.color_scheme || o._currentUserTheme?.color_scheme) && o._hass?.states?.["sun.sun"] && o._hass.states["sun.sun"].state, o.shadowRoot?.getElementById("argus-v2066-style")) return;
   const n = document.createElement("style");
   n.id = "argus-v2066-style", n.textContent = `
@@ -23396,7 +23672,7 @@ select option{background-color:#101827!important;color:#f7f9ff!important;-webkit
 .wx-atmosphere{position:absolute;inset:0;overflow:hidden;isolation:isolate}
 `, o.shadowRoot?.appendChild(n);
 }
-function Mp(o) {
+function Dp(o) {
   const r = o.shadowRoot;
   !r || r.__argusLangSelectorBound || (r.__argusLangSelectorBound = !0, r.addEventListener("change", (n) => {
     const a = n.target;
@@ -23416,44 +23692,44 @@ function Mp(o) {
     }
   }, !0));
 }
-function lb(o) {
+function cb(o) {
   return o._selectorTarget = "panic", o._selected = Array.isArray(o._panicOutputs) ? [...o._panicOutputs] : [], typeof o._openModal == "function" ? (o._openModal("panic"), !0) : typeof o._openSelector == "function" ? (o._openSelector("panic"), !0) : typeof o._openEntitySelector == "function" ? (o._openEntitySelector("panic"), !0) : !1;
 }
-function Hp(o) {
+function $p(o) {
   const r = o.shadowRoot;
   !r || r.__argusV2066SosBound || (r.__argusV2066SosBound = !0, r.addEventListener("click", (n) => {
     const a = n.target?.closest?.("button");
     if (!a) return;
     const s = `${a.textContent || ""} ${a.getAttribute("aria-label") || ""} ${a.title || ""}`.toLowerCase();
     (a.matches('[data-select-sos-output],[data-action="select-panic-outputs"],#select-sos-outputs,#btn-select-sos-outputs') || /seleccionar|select|a\u00f1adir|add/.test(s) && /luces|lights|sirenas|sirens|scripts|acciones sos|sos actions/.test(s)) && queueMicrotask(() => {
-      r.querySelector('.modal.open,.ios-confirm-backdrop.open,[role="dialog"][open]') || lb(o);
+      r.querySelector('.modal.open,.ios-confirm-backdrop.open,[role="dialog"][open]') || cb(o);
     }), a.matches("[data-remove-sos-output]") && queueMicrotask(async () => {
       const u = [...new Set(o._panicOutputs || [])], p = { ...o._panicOutputSettings || {} };
-      Object.keys(p).forEach((_) => {
-        u.includes(_) || delete p[_];
+      Object.keys(p).forEach((f) => {
+        u.includes(f) || delete p[f];
       });
       const g = o._dashboard?.entry_id || o._dashboard?.entries?.[0]?.entry_id;
       try {
         await o._send?.("argus/save_panic_output_profile", { ...g ? { entry_id: g } : {}, outputs: u, settings: p });
-      } catch (_) {
-        console.error("Argus v2.0.66 SOS remove failed", _);
+      } catch (f) {
+        console.error("Argus v2.0.66 SOS remove failed", f);
       }
     });
   }, !0));
 }
-function cb(o) {
+function db(o) {
   if (!o || o.__argusV2066Webgl2AndUi) return;
   o.__argusV2066Webgl2AndUi = !0;
   const r = o.prototype, n = r.connectedCallback, a = r._renderEntries;
   r.connectedCallback = function() {
-    xl(this);
+    wl(this);
     const c = n?.call(this);
-    Hp(this), Mp(this);
+    $p(this), Dp(this);
     const u = this._ui?.manual_lang || this._dashboard?.ui?.manual_lang;
     return u && !this._manualLang && (this._manualLang = u), c;
   }, r._renderEntries = function() {
     const c = a?.call(this);
-    return xl(this), Hp(this), Mp(this), c;
+    return wl(this), $p(this), Dp(this), c;
   }, r._renderAtmosphere = function(c, u) {
     return '<div class="wx wx-atmosphere" style="position:relative;width:100%;height:100%;display:block;"><argus-weather-panel></argus-weather-panel></div>';
   }, r._initWeatherWebGL = function(c) {
@@ -23461,7 +23737,7 @@ function cb(o) {
   const s = Object.getOwnPropertyDescriptor(r, "hass");
   Object.defineProperty(r, "hass", {
     set(c) {
-      s?.set && s.set.call(this, c), xl(this);
+      s?.set && s.set.call(this, c), wl(this);
       const u = this.shadowRoot?.querySelector("argus-weather-panel");
       u && (u.hass = c, u.setConfig({ weather_entity: this._config?.weather_entity || "weather.home" }));
     },
@@ -23470,16 +23746,16 @@ function cb(o) {
     }
   });
 }
-function db(o) {
-  Wf(o);
-}
 function ub(o) {
-  Vf(o), Qf(o), n_(o), f_(o), b_(o), y_(o), P_(o), z_(o), O_(o), M_(o), j_(o), F_(o), U_(o), G_(o), K_(o), Q_(o), J_(o), tb(o), ib(o), cb(o);
+  W_(o);
+}
+function pb(o) {
+  V_(o), Q_(o), nf(o), ff(o), yf(o), vf(o), If(o), Rf(o), Tf(o), Hf(o), Ff(o), Uf(o), Wf(o), Yf(o), Xf(o), Jf(o), Zf(o), rb(o), ob(o), db(o);
 }
 function fb(o) {
   o || (o = customElements.get("argus-panel-v2018"));
   const r = o;
-  !r || r.__argusTypedFrontend || (r.__argusTypedFrontend = !0, db(r), uf(r), df(r), gf(r), vf(r), xf(r), Af(r), Rf(r), Mf(r), Df(r), jf(), ub(r), cf(r));
+  !r || r.__argusTypedFrontend || (r.__argusTypedFrontend = !0, ub(r), d_(r), c_(r), m_(r), y_(r), v_(r), S_(r), R_(r), M_(r), D_(r), j_(), pb(r), l_(r));
 }
 export {
   fb as applyArgusFrontend

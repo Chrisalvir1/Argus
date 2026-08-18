@@ -1,3 +1,6 @@
+## [2.2.28] - 2026-08-18
+- Complete 100% 13-language translations and full real-time UI synchronization across all dashboard components, sliders, and views
+
 ## [2.2.27] - 2026-08-18
 - Restore template DOM element in panel custom element and enable 100% full 13-language translations
 

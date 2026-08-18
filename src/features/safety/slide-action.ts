@@ -1,13 +1,7 @@
 // @ts-nocheck
 /**
- * Argus Slide-to-Action — v2.2.13
- * iOS "slide to power off" style — exact visual match.
- * - Large circular glass thumb on the LEFT, drags RIGHT to complete
- * - Very dark glass pill track
- * - Text centered with gradient mask that fades where thumb passes
- * - Spring bounce-back animation when gesture incomplete
- * - SOS slider always visible; Disarm slider only when system is armed
- * - PIN prompt for disarm when PIN is configured
+ * Argus Slide-to-Action — v2.2.28
+ * iOS "slide to power off" style — 100% reactive 13-language i18n support.
  */
 
 const STYLE_ID = 'argus-slide-action-styles';
@@ -20,16 +14,39 @@ const SLIDE_I18N = {
   it: { slide_disarm: 'Scorri per disarmare', slide_sos: 'Scorri per attivare SOS', slide_sos_stop: 'Scorri per fermare SOS', enter_pin: 'Inserisci PIN master', wrong_pin: 'PIN errato', cancel: 'Annulla' },
   zh: { slide_disarm: '滑动撤防', slide_sos: '滑动触发 SOS', slide_sos_stop: '滑动停止 SOS', enter_pin: '请输入主 PIN 码', wrong_pin: 'PIN 错误', cancel: '取消' },
   'zh-Hant': { slide_disarm: '滑動撤防', slide_sos: '滑動觸發 SOS', slide_sos_stop: '滑動停止 SOS', enter_pin: '請輸入主 PIN 碼', wrong_pin: 'PIN 錯誤', cancel: '取消' },
-  ru: { slide_disarm: 'Сдвиньте для снятия охраны', slide_sos: 'Сдвиньте для SOS', slide_sos_stop: 'Сдвиньте для остановки SOS', enter_pin: 'Введите мастер-PIN', wrong_pin: 'Неверный PIN', cancel: 'Отмена' },
+  ru: { slide_disarm: 'Сдвиньте для снятия охраны', slide_sos: 'Сдвиньте для включения SOS', slide_sos_stop: 'Сдвиньте для остановки SOS', enter_pin: 'Введите мастер-PIN', wrong_pin: 'Неверный PIN', cancel: 'Отмена' },
   hi: { slide_disarm: 'निरस्त करने के लिए स्लाइड करें', slide_sos: 'SOS के लिए स्लाइड करें', slide_sos_stop: 'SOS रोकने के लिए स्लाइड करें', enter_pin: 'मास्टर PIN दर्ज करें', wrong_pin: 'गलत PIN', cancel: 'रद्द करें' },
   ar: { slide_disarm: 'اسحب لنزع التسليح', slide_sos: 'اسحب لتشغيل نداء الاستغاثة', slide_sos_stop: 'اسحب لإيقاف SOS', enter_pin: 'أدخل الرمز الرئيسي', wrong_pin: 'رمز خاطئ', cancel: 'إلغاء' },
   ko: { slide_disarm: '밀어서 해제', slide_sos: '밀어서 SOS 활성화', slide_sos_stop: '밀어서 SOS 중지', enter_pin: '마스터 PIN 입력', wrong_pin: '잘못된 PIN', cancel: '취소' },
-  ja: { slide_disarm: 'スライドして解除', slide_sos: 'スライドしてSOS', slide_sos_stop: 'スライドしてSOS停止', enter_pin: 'マスターPINを入力', wrong_pin: 'PINが違います', cancel: 'キャンセル' },
-  uk: { slide_disarm: 'Посуньте для зняття охорони', slide_sos: 'Посуньте для SOS', slide_sos_stop: 'Посуньте щоб зупинити SOS', enter_pin: 'Введіть майстер-PIN', wrong_pin: 'Неправильний PIN', cancel: 'Скасувати' },
+  ja: { slide_disarm: 'スライドして解除', slide_sos: 'スライドしてSOS作動', slide_sos_stop: 'スライドしてSOS停止', enter_pin: 'マスターPINを入力', wrong_pin: 'PINが違います', cancel: 'キャンセル' },
+  uk: { slide_disarm: 'Посуньте для зняття охорони', slide_sos: 'Посуньте для ввімкнення SOS', slide_sos_stop: 'Посуньте щоб зупинити SOS', enter_pin: 'Введіть майстер-PIN', wrong_pin: 'Неправильний PIN', cancel: 'Скасувати' },
 };
 
+function getActiveLang(panel) {
+  if (typeof panel._getCurrentLangCode === 'function') {
+    return panel._getCurrentLangCode();
+  }
+  let raw = panel._manualLang || panel._lang;
+  if (!raw) {
+    try { raw = localStorage.getItem('argus_lang'); } catch(_) {}
+  }
+  if (!raw || raw === 'auto') {
+    raw = panel._ui?.manual_lang || panel._ui?.language || panel._hass?.language || 'en';
+  }
+  raw = String(raw || 'en').trim();
+  if (SLIDE_I18N[raw]) return raw;
+  if (/^zh-(hant|tw|hk)/i.test(raw)) return 'zh-Hant';
+  if (/^zh/i.test(raw)) return 'zh';
+  const short = raw.split(/[-_]/)[0].toLowerCase();
+  return SLIDE_I18N[short] ? short : 'en';
+}
+
 function t(panel, key) {
-  const lang = (panel._lang || panel._manualLang || panel._hass?.language || 'es').toLowerCase().split(/[-_]/)[0];
+  const lang = getActiveLang(panel);
+  if (panel._t) {
+    const val = panel._t(key);
+    if (val && val !== key) return val;
+  }
   return (SLIDE_I18N[lang] || SLIDE_I18N.es)[key] || SLIDE_I18N.es[key] || key;
 }
 
@@ -296,7 +313,6 @@ function attachDrag(panel, kind, track, fill, thumb, label, pin, onDone) {
     const c = Math.max(0, Math.min(x, maxX));
     thumb.style.transform = `translateX(${c}px)`;
     fill.style.width = `${c + 60}px`;
-    // Fade the label away as thumb covers it
     const progress = c / maxX;
     label.style.opacity = String(Math.max(0, 1 - progress * 1.8));
     return c;
@@ -390,7 +406,11 @@ function doCheckPin(panel, code) {
 }
 
 function mountOnEntry(panel, entry, idx) {
-  if (entry.querySelector('.argus-sta-wrap')) return;
+  const existingWrap = entry.querySelector('.argus-sta-wrap');
+  if (existingWrap) {
+    entry._staRefresh?.();
+    return;
+  }
   entry.dataset.staInstalled = '1';
 
   const entityId = entry.dataset.entityId
@@ -426,39 +446,31 @@ function mountOnEntry(panel, entry, idx) {
     }
   });
 
-  // Find the liquid-stack and inject sliders at the bottom
   const stack = entry.querySelector('.liquid-stack');
   if (!stack) return;
 
-  // Remove any legacy disarm or SOS buttons completely from the DOM
   stack.querySelectorAll('.btn-disarm, .btn-sos, .argus-disarm-btn').forEach(btn => btn.remove());
-
-  // Directly append sliders to stack
   stack.appendChild(dWrap);
   stack.appendChild(sWrap);
 
-  // Update slider state reactively
   function refresh() {
     const state = getState();
     const panic = getPanic();
     const isArmed = state !== 'disarmed' && state !== 'unavailable';
 
-    // Disarm slider: only show when armed
     dWrap.classList.toggle('sta-armed', isArmed);
+    dLabel.textContent = t(panel, 'slide_disarm');
 
-    // SOS: update pulsing thumb and label
     sTrack.classList.toggle('sos-pulsing', panic);
     sLabel.textContent = panic ? t(panel, 'slide_sos_stop') : t(panel, 'slide_sos');
     sThumb.innerHTML = panic ? ICON_SOS_STOP : ICON_SOS;
   }
 
   refresh();
-
-  // Store refresh fn so hass updates can trigger it
   entry._staRefresh = refresh;
 }
 
-function applyToAllEntries(panel) {
+export function applyToAllEntries(panel) {
   injectStyles(panel);
   const root = panel.shadowRoot;
   if (!root) return;
@@ -468,7 +480,6 @@ function applyToAllEntries(panel) {
       if (eid) entry.dataset.entityId = eid;
     }
     mountOnEntry(panel, entry, idx);
-    // Refresh state if already installed
     entry._staRefresh?.();
   });
 }
@@ -478,18 +489,23 @@ export function applySlideToAction(ArgusPanel) {
   ArgusPanel.__argusSlideToAction = true;
   const proto = ArgusPanel.prototype;
 
-  // After entries render
   const prevRender = proto._renderEntries;
   proto._renderEntries = function (...a) {
     const r = prevRender?.call(this, ...a);
     requestAnimationFrame(() => {
       applyToAllEntries(this);
-      setTimeout(() => applyToAllEntries(this), 100); // Fail-safe for delayed renders
+      setTimeout(() => applyToAllEntries(this), 100);
     });
     return r;
   };
 
-  // After hass update — refresh SOS pulse state and armed/disarmed visibility
+  const prevRefresh = proto._refreshLocalizedUi;
+  proto._refreshLocalizedUi = function (...a) {
+    const r = prevRefresh?.call(this, ...a);
+    applyToAllEntries(this);
+    return r;
+  };
+
   const prevHass = Object.getOwnPropertyDescriptor(proto, '_hass')?.set || proto.set_hass;
   if (prevHass) {
     const prevSet = proto.set_hass;
