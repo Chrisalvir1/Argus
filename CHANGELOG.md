@@ -1,3 +1,9 @@
+## [2.2.18] - 2026-08-18
+- Single unified React architecture for the entire Argus frontend.
+- Apple tvOS style circular entrance animation with smooth spring bounce contraction to top profile.
+- Liquid Glass redesigned modals for SOS Actions, Access Control, and Active Instances (with animated shield & emergency siren).
+- Removed legacy duplicate DOM layers and unified full state rendering in React.
+
 ## [2.2.17] - 2026-08-18
 - CRITICAL FIX: Fixed missing closing brace in CSS that caused Argus Panel and Dashboard to render completely unstyled.
 
