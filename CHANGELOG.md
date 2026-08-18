@@ -1,3 +1,6 @@
+## [2.2.25] - 2026-08-18
+- Fix full i18n support across all 13 languages (ES, EN, FR, PT, IT, ZH, ZH-Hant, RU, HI, AR, KO, JA, UK) with complete real-time UI synchronization
+
 ## [2.2.24] - 2026-08-18
 - Restore exact 1:1 v2.2.13 complete engine, styles, device selectors, modals, and templates in modern React/Vite/TS7 bundle
 

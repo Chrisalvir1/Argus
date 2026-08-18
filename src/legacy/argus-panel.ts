@@ -44,3302 +44,4505 @@ const escapeHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, char => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;',
 }[char]));
 const TEXTS = {
-  es: {
-    hero_desc:'Sistema integral de seguridad, control de acceso, automatizaciones y HomeKit.',
-    instances:'Instancias activas', modes:'Modos', automations:'⚡ Automatizaciones',
-    linked_rules:'Reglas vinculadas a Argus', create_ha:'+ Crear en HA',
-    no_rules:'', rules_tip:'',
-    settings:'⚙️ Ajustes', change_pin:'PIN Maestro', pin_desc:'Código numérico para armar y desarmar.',
-    new_pin:'Nuevo PIN', confirm_pin:'Confirmar PIN', update_pin:'Actualizar PIN',
-    current_pin:'PIN actual', notifications_title:'🔔 Notificaciones',
-    notif_desc:'Selecciona los dispositivos móviles registrados en HA que recibirán alertas de Argus.',
-    save_notif:'Guardar', users_title:'👥 Usuarios y Control de Acceso',
-    admin_only:'Solo administradores pueden modificar esta sección.',
-    add_user:'Agregar usuario', username:'Nombre de Usuario', user_pin:'PIN de usuario',
-    is_admin:'Administrador', save_user:'Guardar', no_users:'Sin usuarios adicionales configurados.',
-    homekit_title:'🏠 HomeKit', close:'Cerrar',
-    search_placeholder:'Buscar por nombre, área o entity_id',
-    available:'Disponibles', selected_lbl:'Seleccionadas', clear:'Limpiar', accept:'Aceptar',
-    introduce_pin:'Introduce tu PIN', pin_modal_desc:'PIN numérico para desarmar Argus',
-    confirm:'✓ Confirmar', cancel:'Cancelar',
-    disarmed:'Desarmado', armed_home:'En Casa', armed_away:'Ausente',
-    armed_night:'Noche', armed_vacation:'Vacaciones', triggered:'¡ALARMA!',
-    pending:'Cuenta regresiva', arming:'Armando', unavailable:'No disponible',
-    sync_panel_section:'Paneles Sincronizados', sync_panel_help:'Paneles de alarma que seguirán el mismo estado de Argus', sensor_section:'Sensores de Intrusión', siren_section:'Sirenas', thermostat_alert_notif:'🌡️ Alerta de temperatura',
-    none_selected:'Ninguno seleccionado', search_select:'Buscar y seleccionar',
-    save_mode:'💾 Guardar modo', details_notif:'Notificación de alarma',
-    activity_log:'📋 Historial de Actividad',
-    log_armed:'Armado', log_disarmed:'Desarmado', log_triggered:'¡Disparado!',
-    log_by:'por', log_sensor:'Sensor', log_no_events:'Sin eventos recientes.',
-    mode_home:'En Casa', mode_away:'Ausente', mode_night:'Noche', mode_vacation:'Vacaciones',
-    homekit_bridge:'Puente HomeKit', homekit_not_paired:'No vinculado a ninguna casa.',
-    homekit_house:'Casa de Apple Home', language:'Idioma',
-    lang_select_title:'Seleccionar Idioma',
-    btn_home:'🏠 EN CASA', btn_away:'🔒 AUSENTE', btn_night:'🌙 NOCHE',
-    btn_vacation:'✈️ VACACIONES', btn_disarmed:'DESARMADO', btn_sos:'🚨 SOS / PÁNICO',
-    system_armed:'SISTEMA ARMADO', system_disarmed:'SISTEMA DESARMADO',
-    home_name_lbl:'Nombre del Hogar', background_lbl:'Fondo', edit_btn:'✏️ Editar',
-    save_btn:'Guardar', backup_title:'Respaldo y Restauración',
-    backup_desc:'Guarda una copia de seguridad de tus ajustes o restaura una anterior.',
-    export_btn:'📤 Descargar', import_btn:'📥 Restaurar', reset_btn:'⚠️ Restablecer', undo_reset_btn:'↩️ Deshacer Restablecimiento',
-    access_title:'Control de Acceso y Usuarios',
-    access_desc:'Gestión global de seguridad, PIN maestro y administradores.',
-    pin_master_title:'PIN Maestro', pin_active_yes:'PIN Maestro: Activo', pin_active_no:'PIN Maestro: Desactivado',
-    select_all:'☑ Todos', deselect_all:'☐ Ninguno', mqtt_label:'MQTT',
-    arm_time_label:'Tiempo armado (s)', disarm_time_label:'Retraso de entrada (s)',
-    pin_incorrect:'❌ PIN actual incorrecto', pin_updated:'✓ PIN Actualizado', pin_deleted:'✓ PIN Eliminado',
-    searching_auto:'↻ Buscando automatizaciones...', no_auto_linked:'No hay automatizaciones vinculadas a Argus.',
-    pin_remove_hint:'Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.',
-    lbl_load_file:'Cargar archivo:', lbl_aesthetic_custom:'Más Ajustes / SOS', lbl_uploaded_files:'Archivos subidos en servidor',
-    bypass_lbl:'🚫 Omitir', lock_if_open:'Bloquear si abiertos', wait_if_open:'Esperar armado en espera',
-    select_btn:'+ Seleccionar', add_btn:'+ Añadir',
-    sensors_to_bypass:'Sensores a Omitir',
-    no_instances:'No hay instancias. Agrega Argus desde Integraciones.',
-    fullscreen_title:'Pantalla completa',
-    sos_slide:'Desliza para activar SOS', sos_confirm_title:'Confirmar pánico',
-    sos_confirm_text:'Desliza para disparar la alarma inmediatamente.',
-    sos_call:'📞 Llamar a Emergencias',
-    home_name_modal_title:'🏡 Nombre del Hogar',
-    home_name_modal_desc:'Este nombre aparece en el panel de instancias y en pantalla completa.',
-    home_name_label:'Nombre del Hogar', home_name_placeholder:'Mi Casa',
-    clear_log_btn:'BORRAR',
-    bg_weather:'Clima animado', bg_none:'Predeterminado', bg_panel_none:'Sin fondo', bg_photo:'Una foto', bg_collage:'Collage', bg_video:'Video en loop', bg_panel_title:'Fondo para panel', bg_hub_title:'Fondo Argus', bg_sound_opt:'Sonido de video', bg_image_opt:'Imagen / GIF', bg_hub_default:'Predeterminado (Argus)',
-    forgot_pin:'¿Olvidaste tu PIN?', pin_reset_admin_only:'❌ Error: Solo los administradores de Home Assistant pueden restablecer el PIN maestro.', pin_reset_confirm:'¿Estás seguro de que deseas restablecer el PIN maestro? Se eliminará el PIN actual y se desactivará.',
-    temp_auto:'Automático (sensor local / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Batería baja',
-    times_section:'⏱️ Tiempos', arm_time:'Armado (s)', disarm_time:'Retraso de entrada (s)',
-    save_config:'GUARDAR CONFIGURACIÓN', never_triggered:'Nunca activada',
-    bridge_paired:'Puente configurado',
-    bridge_paired_desc:'El puente <b>{bridge}</b> está configurado en Home Assistant. Home Assistant no permite comprobar desde aquí si fue añadido a Apple Home ni conocer su nombre.',
-    bridge_not_connected:'Puente no configurado',
-    bridge_not_desc:'Activa la integración HomeKit Bridge en Home Assistant e incluye la entidad <code>alarm_control_panel.argus_*</code> para generar un código QR de emparejamiento.',
-    manual_disarm:'Manual (Desarmado)',
-    manual_arm:'Manual',
-    open_sensors:'Sensores abiertos',
-    log_detail_disarm:'Sistema desarmado',
-    alarm_instance:'Instancia de Alarma',
-    log_detail_armed:'Modo',
-    log_detail_triggered:'Activación automática',
-    user_exp_type: 'Vencimiento',
-    user_exp_date: 'Fecha/Hora de Vencimiento',
-    exp_indefinite: 'Indefinido',
-    exp_temporary: 'Temporal (Fecha/Hora)',
-    expired: 'Expirado',
-    active_until: 'Vence',
-    log_detail_pin_reset: 'PIN maestro restablecido por el administrador',
-    log_detail_pin_reset_failed: 'Intento no autorizado de restablecer el PIN maestro',
-    badge_pin_reset: 'PIN Restablecido',
-    badge_pin_reset_failed: 'Fallo Reset PIN',
-    no_files_uploaded: 'Sin archivos subidos. Carga un fondo usando los controles de arriba.',
-    no_files_uploaded_short: 'Sin archivos subidos.',
-    files_count: '{count} archivos',
-    files_count_short: '{count} arch.',
-    file_delete_confirm: '¿Seguro que deseas borrar "{filename}" permanentemente?',
-    use_for_panel: 'Panel',
-    use_for_hub: 'Argus',
-    delete_btn_title: 'Borrar de almacenamiento',
-    bg_panel_selected_from_history: 'Fondo de panel seleccionado desde historial.',
-    bg_hub_selected_from_history: 'Fondo Argus seleccionado desde historial.',
-    error_loading_uploaded_files: 'Error al cargar historial de archivos.',
-    welcome_greeting: 'Bienvenido/a,',
-    select_profile_title: 'Selecciona tu perfil',
-    select_profile_subtitle: 'Accede a tus paneles e instancias de seguridad de Argus.',
-    exit_to_ha: 'Volver a Home Assistant',
-    role_argus_admin: 'Administrador de Argus',
-    role_argus_user: 'Usuario estándar',
-    ha_account_linked: 'Cuenta de Home Assistant: {name}',
-    ha_account_unavailable: 'Vinculación no disponible',
-    user_role_label: 'Rol Argus',
-    delete_user_tooltip: 'Eliminar perfil de usuario',
-    delete_user_confirm: '¿Estás seguro de que deseas eliminar a "{name}"?',
-    cannot_delete_last_admin: 'No se puede eliminar el último administrador vinculante.',
-    clock_format_label: 'Formato de hora',
-    clock_format_desc: 'Elige cómo se muestran las horas en el panel y el historial.',
-    clock_auto: 'Automático (Home Assistant)',
-    clock_12h: '12 horas (AM/PM)',
-    clock_24h: '24 horas',
-    unlock_kiosk: 'Desbloquear kiosco',
-    first_run_welcome: 'Gracias por elegir Argus Home Hub. Bienvenido/a.',
-    first_run_desc: 'Complete la configuración inicial para asegurar su hogar.',
-    first_run_pin_expl: 'El PIN de acceso abre Argus. El PIN maestro controla el armado y desarmado.',
-    first_run_skip: 'Omitir',
-    first_run_start: 'Comenzar con Argus',
-    first_run_blocked_title: 'Acceso denegado',
-    first_run_blocked_desc: 'Se requiere un administrador de Home Assistant para configurar Argus por primera vez.',
-    log_action_first_run_completed: 'Argus inicializado por {user}',
-    log_action_fullscreen_unlocked: 'Kiosco desbloqueado por {user}',
-    log_action_master_pin_rejected: 'Intento incorrecto de PIN maestro por {user}',
-    log_action_select_profile: 'Perfil seleccionado: {user}',
-    log_action_verify_access_pin: 'PIN de acceso verificado por {user}',
-    log_action_sos: 'Pánico SOS activado por {user}',
-    log_action_stop_sos: 'Pánico SOS detenido por {user}',
-    log_action_save_ui: 'Ajustes de UI guardados por {user}',
-    log_action_rejected: 'Acción rechazada',
-    unlinked_ha_accounts_title: 'Cuentas de Home Assistant sin perfil Argus',
-    btn_create_argus_profile: 'Crear perfil Argus',
-    no_unlinked_ha_accounts: 'Todas las cuentas de Home Assistant activas tienen perfil.',
-    profile_is_yours: 'Este es tu perfil',
-    profile_needs_pin: 'Perfil ajeno — introduce el PIN de acceso',
-    profile_no_pin_access: 'Este perfil no tiene PIN de acceso. No puedes abrirlo.',
-    ha_role_admin: 'Admin HA',
-    ha_role_standard: 'Usuario HA',
-    login_btn: 'Iniciar sesión',
-    cancel_btn: 'Cancelar',
-    pin_placeholder: 'PIN de acceso',
-    link_ha_user: 'Vincular a Usuario Home Assistant',
-    ha_admin_label: 'Home Assistant Admin',
-    ha_standard_user_label: 'Standard HA User',
-    role_argus_standard: 'Usuario estándar',
-      },
-  en: {
-    hero_desc:'Alarm control, modes and automations.',
-    instances:'Active Instances', modes:'Modes', automations:'⚡ Automations',
-    linked_rules:'Argus-linked Rules', create_ha:'+ Create in HA',
-    no_rules:'', rules_tip:'',
-    settings:'⚙️ Settings', change_pin:'Master PIN', pin_desc:'Numeric code to arm and disarm.',
-    new_pin:'New PIN', confirm_pin:'Confirm PIN', update_pin:'Update PIN',
-    current_pin:'Current PIN', notifications_title:'🔔 Notifications',
-    notif_desc:'Select the mobile devices registered in HA that will receive Argus alerts.',
-    save_notif:'Save', users_title:'👥 Users & Access Control',
-    admin_only:'Only administrators can modify this section.',
-    add_user:'Add user', username:'Username', user_pin:'User PIN',
-    is_admin:'Administrator', save_user:'Save', no_users:'No additional users configured.',
-    homekit_title:'🏠 HomeKit', close:'Close',
-    search_placeholder:'Search by name, area or entity_id',
-    available:'Available', selected_lbl:'Selected', clear:'Clear', accept:'Accept',
-    introduce_pin:'Enter your PIN', pin_modal_desc:'Numeric PIN to disarm Argus',
-    confirm:'✓ Confirm', cancel:'Cancel',
-    disarmed:'Disarmed', armed_home:'Home', armed_away:'Away',
-    armed_night:'Night', armed_vacation:'Vacation', triggered:'ALARM!',
-    pending:'Pending', arming:'Arming', unavailable:'Unavailable',
-    sensor_section:'Intrusion Sensors', siren_section:'Sirens', thermostat_alert_notif:'🌡️ Temperature alert',
-    none_selected:'None selected', search_select:'Search & select',
-    save_mode:'💾 Save mode', details_notif:'Alarm notification',
-    activity_log:'📋 Activity Log',
-    log_armed:'Armed', log_disarmed:'Disarmed', log_triggered:'Triggered!',
-    log_by:'by', log_sensor:'Sensor', log_no_events:'No recent events.',
-    mode_home:'Home', mode_away:'Away', mode_night:'Night', mode_vacation:'Vacation',
-    homekit_bridge:'HomeKit Bridge', homekit_not_paired:'Not paired to any home.',
-    homekit_house:'Apple Home', language:'Language',
-    lang_select_title:'Select Language',
-    btn_home:'🏠 HOME', btn_away:'🔒 AWAY', btn_night:'🌙 NIGHT',
-    btn_vacation:'✈️ VACATION', btn_disarmed:'DISARMED', btn_sos:'🚨 SOS / PANIC',
-    system_armed:'SYSTEM ARMED', system_disarmed:'SYSTEM DISARMED',
-    home_name_lbl:'Home Name', background_lbl:'Background', edit_btn:'✏️ Edit',
-    save_btn:'Save', backup_title:'Backup & Restore',
-    backup_desc:'Save a backup of your settings or restore a previous one.',
-    export_btn:'📤 Download', import_btn:'📥 Restore', reset_btn:'⚠️ Factory Reset', undo_reset_btn:'↩️ Undo Reset',
-    access_title:'Access Control & Users',
-    access_desc:'Global security management, master PIN and administrators.',
-    pin_master_title:'Master PIN', pin_active_yes:'Master PIN: Active', pin_active_no:'Master PIN: Deactivated',
-    select_all:'☑ All', deselect_all:'☐ None', mqtt_label:'MQTT',
-    arm_time_label:'Arm time (s)', disarm_time_label:'Entry delay (s)',
-    pin_incorrect:'❌ Incorrect current PIN', pin_updated:'✓ PIN Updated', pin_deleted:'✓ PIN Deleted',
-    searching_auto:'↻ Searching automations...', no_auto_linked:'No automations linked to Argus.',
-    pin_remove_hint:'To remove PIN: Enter the current one and leave the fields below empty.',
-    lbl_load_file:'Upload file:', lbl_aesthetic_custom:'Aesthetic Customization', lbl_uploaded_files:'Uploaded files on server',
-    bypass_lbl:'🚫 Bypass', lock_if_open:'Lock if open', wait_if_open:'Wait for sensors to close',
-    select_btn:'+ Select', add_btn:'+ Add',
-    sensors_to_bypass:'Sensors to Bypass',
-    no_instances:'No instances. Add Argus from Integrations.',
-    fullscreen_title:'Full screen',
-    sos_slide:'Slide to activate SOS', sos_confirm_title:'Confirm panic',
-    sos_confirm_text:'Slide to trigger the alarm immediately.',
-    sos_call:'📞 Call Emergency Services',
-    home_name_modal_title:'🏡 Home Name',
-    home_name_modal_desc:'This name appears in the instances panel and in full screen.',
-    home_name_label:'Home Name', home_name_placeholder:'My Home',
-    clear_log_btn:'CLEAR',
-    bg_weather:'Animated weather', bg_none:'Default', bg_panel_none:'No background', bg_photo:'One photo', bg_collage:'Collage', bg_video:'Loop video', bg_panel_title:'Panel background', bg_hub_title:'Argus background', bg_sound_opt:'Video sound', bg_image_opt:'Image / GIF', bg_hub_default:'Default (Argus)',
-    forgot_pin:'Forgot PIN?', pin_reset_admin_only:'❌ Error: Only Home Assistant administrators can reset the master PIN.', pin_reset_confirm:'Are you sure you want to reset the master PIN? The current PIN will be removed and deactivated.',
-    temp_auto:'Automatic (local sensor / thermostat / climate)', temp_thermostat:'(thermostat)', battery_low:'⚠️ Low Battery',
-    times_section:'⏱️ Times', arm_time:'Arming (s)', disarm_time:'Entry delay (s)',
-    save_config:'SAVE CONFIGURATION', never_triggered:'Never triggered',
-    bridge_paired:'Bridge configured',
-    bridge_paired_desc:'The <b>{bridge}</b> bridge is configured in Home Assistant. Home Assistant cannot verify from here whether it was added to Apple Home or report its name.',
-    bridge_not_connected:'Bridge not configured',
-    bridge_not_desc:'Enable the HomeKit Bridge integration in Home Assistant and include the entity <code>alarm_control_panel.argus_*</code> to generate a pairing QR code.',
-    manual_disarm:'Manual (Disarmed)',
-    manual_arm:'Manual',
-    open_sensors:'Open sensors',
-    log_detail_disarm:'System disarmed',
-    alarm_instance:'Alarm Instance',
-    log_detail_armed:'Mode',
-    log_detail_triggered:'Automatic activation',
-    user_exp_type: 'Expiration',
-    user_exp_date: 'Expiration Date/Time',
-    exp_indefinite: 'Indefinite',
-    exp_temporary: 'Temporary (Date/Time)',
-    expired: 'Expired',
-    active_until: 'Expires',
-    log_detail_pin_reset: 'Master PIN reset by administrator',
-    log_detail_pin_reset_failed: 'Unauthorized attempt to reset master PIN',
-    badge_pin_reset: 'PIN Reset',
-    badge_pin_reset_failed: 'PIN Reset Failed',
-    no_files_uploaded: 'No uploaded files. Upload a background using the controls above.',
-    no_files_uploaded_short: 'No uploaded files.',
-    files_count: '{count} files',
-    files_count_short: '{count} files',
-    file_delete_confirm: 'Are you sure you want to permanently delete "{filename}"?',
-    use_for_panel: 'Panel',
-    use_for_hub: 'Argus',
-    delete_btn_title: 'Delete from storage',
-    bg_panel_selected_from_history: 'Panel background selected from history.',
-    bg_hub_selected_from_history: 'Argus background selected from history.',
-    error_loading_uploaded_files: 'Error loading file history.',
-    welcome_greeting: 'Welcome,',
-    select_profile_title: 'Select Your Profile',
-    select_profile_subtitle: 'Access your security panels and Argus instances.',
-    exit_to_ha: 'Back to Home Assistant',
-    role_argus_admin: 'Argus Administrator',
-    role_argus_user: 'Standard User',
-    ha_account_linked: 'Home Assistant Account: {name}',
-    ha_account_unavailable: 'Binding unavailable',
-    user_role_label: 'Argus Role',
-    delete_user_tooltip: 'Delete user profile',
-    delete_user_confirm: 'Are you sure you want to delete "{name}"?',
-    cannot_delete_last_admin: 'Cannot delete the last binding administrator.',
-    clock_format_label: 'Time Format',
-    clock_format_desc: 'Choose how time is displayed across panels and logs.',
-    clock_auto: 'Automatic (Home Assistant)',
-    clock_12h: '12-hour (AM/PM)',
-    clock_24h: '24-hour',
-    unlock_kiosk: 'Unlock kiosk',
-    first_run_welcome: 'Thank you for choosing Argus Home Hub. Welcome.',
-    first_run_desc: 'Complete setup to secure your home.',
-    first_run_pin_expl: 'The access PIN opens Argus. The master PIN controls arming and disarming.',
-    first_run_skip: 'Skip',
-    first_run_start: 'Start with Argus',
-    first_run_blocked_title: 'Access Denied',
-    first_run_blocked_desc: 'A Home Assistant administrator is required to set up Argus for the first time.',
-    log_action_first_run_completed: 'Argus initialized by {user}',
-    log_action_fullscreen_unlocked: 'Kiosk unlocked by {user}',
-    log_action_master_pin_rejected: 'Incorrect master PIN attempt by {user}',
-    log_action_select_profile: 'Profile selected: {user}',
-    log_action_verify_access_pin: 'Access PIN verified by {user}',
-    log_action_sos: 'SOS Panic triggered by {user}',
-    log_action_stop_sos: 'SOS Panic stopped by {user}',
-    log_action_save_ui: 'UI Settings saved by {user}',
-    log_action_rejected: 'Action rejected',
-    unlinked_ha_accounts_title: 'Home Assistant accounts without Argus profile',
-    btn_create_argus_profile: 'Create Argus Profile',
-    no_unlinked_ha_accounts: 'All active Home Assistant accounts have a profile.',
-    profile_is_yours: 'This is your profile',
-    profile_needs_pin: 'Another person\u2019s profile — enter the access PIN',
-    profile_no_pin_access: 'This profile has no access PIN. You cannot open it.',
-    ha_role_admin: 'HA Admin',
-    ha_role_standard: 'HA User',
-    login_btn: 'Login',
-    cancel_btn: 'Cancel',
-    pin_placeholder: 'Access PIN',
-    link_ha_user: 'Link to Home Assistant User',
-    ha_admin_label: 'Home Assistant Admin',
-    ha_standard_user_label: 'Standard HA User',
-    role_argus_standard: 'Standard User',
+  'es': {
+    'accept': 'Aceptar',
+    'access_desc': 'Gestión global de seguridad, PIN maestro y administradores.',
+    'access_pin_lbl': 'PIN de Acceso',
+    'access_title': 'Control de Acceso y Usuarios',
+    'action_failed': 'No se pudo realizar la acción',
+    'active_profile': 'Perfil Activo',
+    'active_until': 'Vence',
+    'activity_log': '📋 Historial de Actividad',
+    'add_btn': '+ Añadir',
+    'add_user': 'Agregar usuario',
+    'admin_only': 'Solo administradores pueden modificar esta sección.',
+    'alarm_instance': 'Instancia de Alarma',
+    'all_sensors_bypassed': 'Todos los sensores configurados están omitidos.',
+    'arm_time': 'Armado (s)',
+    'arm_time_label': 'Tiempo armado (s)',
+    'armed_away': 'Ausente',
+    'armed_home': 'En Casa',
+    'armed_night': 'Noche',
+    'armed_vacation': 'Vacaciones',
+    'arming': 'Armando',
+    'automations': '⚡ Automatizaciones',
+    'available': 'Disponibles',
+    'background_lbl': 'Fondo',
+    'backup_desc': 'Guarda una copia de seguridad de tus ajustes o restaura una anterior.',
+    'backup_title': 'Respaldo y Restauración',
+    'badge_pin_reset': 'PIN Restablecido',
+    'badge_pin_reset_failed': 'Fallo Reset PIN',
+    'battery_low': '⚠️ Batería baja',
+    'bg_collage': 'Collage',
+    'bg_hub_default': 'Predeterminado (Argus)',
+    'bg_hub_selected_from_history': 'Fondo Argus seleccionado desde historial.',
+    'bg_hub_title': 'Fondo Argus',
+    'bg_image_opt': 'Imagen / GIF',
+    'bg_none': 'Predeterminado',
+    'bg_panel_none': 'Sin fondo',
+    'bg_panel_selected_from_history': 'Fondo de panel seleccionado desde historial.',
+    'bg_panel_title': 'Fondo para panel',
+    'bg_photo': 'Una foto',
+    'bg_sound_opt': 'Sonido de video',
+    'bg_video': 'Video en loop',
+    'bg_weather': 'Clima animado',
+    'bridge_not_connected': 'Puente no configurado',
+    'bridge_not_desc': 'Activa la integración HomeKit Bridge en Home Assistant e incluye la entidad <code>alarm_control_panel.argus_*</code> para generar un código QR de emparejamiento.',
+    'bridge_paired': 'Puente configurado',
+    'bridge_paired_desc': 'El puente <b>{bridge}</b> está configurado en Home Assistant. Home Assistant no permite comprobar desde aquí si fue añadido a Apple Home ni conocer su nombre.',
+    'btn_away': '🔒 AUSENTE',
+    'btn_create_argus_profile': 'Crear perfil Argus',
+    'btn_disarmed': 'DESARMADO',
+    'btn_home': '🏠 EN CASA',
+    'btn_night': '🌙 NOCHE',
+    'btn_sos': '🚨 SOS / PÁNICO',
+    'btn_vacation': '✈️ VACACIONES',
+    'bypass_lbl': '🚫 Omitir',
+    'cancel': 'Cancelar',
+    'cancel_btn': 'Cancelar',
+    'cannot_arm': 'Невозможно поставить на охрану',
+    'cannot_delete_last_admin': 'No se puede eliminar el último administrador vinculante.',
+    'change_btn': 'Cambiar',
+    'change_pin': 'PIN Maestro',
+    'change_profile_picture': 'Cambiar foto en Personas de HA ↗',
+    'change_user_pin': 'Cambiar PIN',
+    'claim_btn': 'Заявить права администратора',
+    'claim_desc': 'Вашей установке требуется администратор для получения доступа.',
+    'claim_title': 'Обновление безопасности Argus',
+    'clear': 'Limpiar',
+    'clear_history_confirm': 'Удалить всю историю активности?',
+    'clear_log_btn': 'BORRAR',
+    'clock_12h': '12 horas (AM/PM)',
+    'clock_24h': '24 horas',
+    'clock_auto': 'Automático (Home Assistant)',
+    'clock_format_desc': 'Elige cómo se muestran las horas en el panel y el historial.',
+    'clock_format_label': 'Formato de hora',
+    'close': 'Cerrar',
+    'confirm': '✓ Confirmar',
+    'confirm_pin': 'Confirmar PIN',
+    'connected': 'CONECTADO',
+    'create_ha': '+ Crear en HA',
+    'current_pin': 'PIN actual',
+    'customize': 'Настроить',
+    'delete': 'Удалить',
+    'delete_btn_title': 'Borrar de almacenamiento',
+    'delete_file_error': 'Не удалось удалить файл: {error}',
+    'delete_user': 'Eliminar usuario',
+    'delete_user_confirm': '¿Estás seguro de que deseas eliminar a \"{name}\"?',
+    'delete_user_tooltip': 'Eliminar perfil de usuario',
+    'deselect_all': '☐ Ninguno',
+    'details_notif': 'Notificación de alarma',
+    'disarm_time': 'Retraso de entrada (s)',
+    'disarm_time_label': 'Retraso de entrada (s)',
+    'disarmed': 'Desarmado',
+    'done': 'Готово',
+    'edit_btn': '✏️ Editar',
+    'edit_dashboard': 'Editar tablero',
+    'edit_dashboard_done': '✓ Listo',
+    'emergency_help': 'Número telefónico marcado en caso de emergencia.',
+    'emergency_number_label': 'Número de Emergencia',
+    'error_loading_uploaded_files': 'Error al cargar historial de archivos.',
+    'exit_to_ha': 'Volver a Home Assistant',
+    'exp_indefinite': 'Indefinido',
+    'exp_temporary': 'Temporal (Fecha/Hora)',
+    'expired': 'Expirado',
+    'export_btn': '📤 Descargar',
+    'export_error': 'Ошибка экспорта: {error}',
+    'file_choice': '«{file}»\n\nИспользовать как статичное изображение (ОК) или анимированное видео (Отмена)?',
+    'file_delete_confirm': '¿Seguro que deseas borrar \"{filename}\" permanentemente?',
+    'file_read_error': 'Не удалось прочитать файл.',
+    'files_count': '{count} archivos',
+    'files_count_short': '{count} arch.',
+    'first_run_blocked_desc': 'Для первой настройки Argus требуется администратор Home Assistant.',
+    'first_run_blocked_title': 'Доступ запрещен',
+    'first_run_desc': 'Завершите настройку для безопасности вашего дома.',
+    'first_run_pin_expl': 'PIN доступа открывает Argus. Мастер-PIN управляет постановкой и снятием с охраны.',
+    'first_run_skip': 'Пропустить пока',
+    'first_run_start': 'Начать с Argus',
+    'first_run_welcome': 'Спасибо, что выбрали Argus Home Hub. Добро пожаловать.',
+    'forgot_pin': '¿Olvidaste tu PIN?',
+    'fullscreen_title': 'Полный экран',
+    'generic_error': 'Ошибка: {error}',
+    'github_action': 'Поставить звезду на GitHub',
+    'github_desc': 'Если вам нравится проект, поставьте звезду на GitHub, чтобы поддержать разработку.',
+    'github_title': 'Поддержите Argus',
+    'ha_account_linked': 'Cuenta de Home Assistant: {name}',
+    'ha_account_unavailable': 'Vinculación no disponible',
+    'ha_admin_label': 'Home Assistant Admin',
+    'ha_role_admin': 'Admin HA',
+    'ha_role_standard': 'Usuario HA',
+    'ha_standard_user_label': 'Standard HA User',
+    'hero_desc': 'Sistema integral de seguridad, control de acceso, automatizaciones y HomeKit.',
+    'history_refresh': '🔄 Actualizar',
+    'history_unavailable': 'Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.',
+    'home_default': 'Мой дом',
+    'home_fallback': 'Дом',
+    'home_name_label': 'Nombre del Hogar',
+    'home_name_lbl': 'Nombre del Hogar',
+    'home_name_modal_desc': 'Este nombre aparece en el panel de instancias y en pantalla completa.',
+    'home_name_modal_title': '🏡 Nombre del Hogar',
+    'home_name_placeholder': 'Mi Casa',
+    'homekit_bridge': 'Puente HomeKit',
+    'homekit_house': 'Casa de Apple Home',
+    'homekit_not_paired': 'No vinculado a ninguna casa.',
+    'homekit_title': '🏠 HomeKit',
+    'import_btn': '📥 Restaurar',
+    'import_error': 'Ошибка импорта: {error}',
+    'import_success': 'Конфигурация восстановлена. Перезагрузка…',
+    'initialization_error_desc': 'Не удалось подключиться к авторизованному backend Home Assistant.',
+    'initialization_error_title': 'Не удалось запустить Argus',
+    'instances': 'Instancias activas',
+    'introduce_pin': 'Introduce tu PIN',
+    'invalid_config': 'Недопустимый файл конфигурации.',
+    'is_admin': 'Administrador',
+    'lang_select_title': 'Seleccionar Idioma',
+    'lang_selector_lbl': '⚙️ Idioma / Language',
+    'language': 'Idioma',
+    'lbl_aesthetic_custom': 'Más Ajustes / SOS',
+    'lbl_load_file': 'Cargar archivo:',
+    'lbl_uploaded_files': 'Archivos subidos en servidor',
+    'link_ha_user': 'Vincular a Usuario Home Assistant',
+    'linked_rules': 'Reglas vinculadas a Argus',
+    'loading': 'Загрузка…',
+    'lock_if_open': 'Bloquear si abiertos',
+    'log_action_access_pin_updated': 'PIN доступа обновлён',
+    'log_action_backup_created': 'Резервная копия создана',
+    'log_action_backup_restored': 'Конфигурация восстановлена',
+    'log_action_first_run_completed': 'Argus inicializado por {user}',
+    'log_action_fullscreen_unlocked': 'Kiosco desbloqueado por {user}',
+    'log_action_master_pin_rejected': 'Intento incorrecto de PIN maestro por {user}',
+    'log_action_mode_changed': 'Режим изменён',
+    'log_action_profile_selected': 'Профиль выбран',
+    'log_action_rejected': 'Acción rechazada',
+    'log_action_save_ui': 'Ajustes de UI guardados por {user}',
+    'log_action_schedule_applied': 'Расписание применено',
+    'log_action_select_profile': 'Perfil seleccionado: {user}',
+    'log_action_sos': 'Pánico SOS activado por {user}',
+    'log_action_state_restored': 'Состояние восстановлено',
+    'log_action_stop_sos': 'Pánico SOS detenido por {user}',
+    'log_action_user_logged_in': 'Вход пользователя',
+    'log_action_verify_access_pin': 'PIN de acceso verificado por {user}',
+    'log_armed': 'Armado',
+    'log_by': 'por',
+    'log_detail_armed': 'Modo',
+    'log_detail_disarm': 'Sistema desarmado',
+    'log_detail_pin_reset': 'PIN maestro restablecido por el administrador',
+    'log_detail_pin_reset_failed': 'Intento no autorizado de restablecer el PIN maestro',
+    'log_detail_triggered': 'Activación automática',
+    'log_disarmed': 'Desarmado',
+    'log_no_events': 'Sin eventos recientes.',
+    'log_sensor': 'Sensor',
+    'log_triggered': '¡Disparado!',
+    'login_btn': 'Iniciar sesión',
+    'manual_arm': 'Manual',
+    'manual_disarm': 'Manual (Desarmado)',
+    'master_pin_lbl': 'PIN Maestro',
+    'modal_add_user': '+ Добавить пользователя',
+    'modal_cancel': 'Отмена',
+    'modal_confirm': 'Подтвердить',
+    'modal_delete_confirm': 'Удалить этого пользователя?',
+    'modal_edit_name': 'Изменить имя',
+    'modal_name_label': 'Имя профиля',
+    'modal_pin_help': 'Оставьте пустым, чтобы удалить PIN.',
+    'modal_pin_title': 'PIN доступа',
+    'modal_save': 'Сохранить',
+    'modal_user_added': 'Пользователь создан.',
+    'mode_away': 'Ausente',
+    'mode_home': 'En Casa',
+    'mode_night': 'Noche',
+    'mode_vacation': 'Vacaciones',
+    'modes': 'Modos',
+    'mqtt_label': 'MQTT',
+    'never_triggered': 'Nunca activada',
+    'new_pin': 'Nuevo PIN',
+    'no_alarm_instance': 'Нет доступного экземпляра сигнализации',
+    'no_auto_linked': 'No hay automatizaciones vinculadas a Argus.',
+    'no_files_uploaded': 'Sin archivos subidos. Carga un fondo usando los controles de arriba.',
+    'no_files_uploaded_short': 'Sin archivos subidos.',
+    'no_instances': 'No hay instancias. Agrega Argus desde Integraciones.',
+    'no_results': 'Нет результатов',
+    'no_rules': '',
+    'no_sensors_configured': 'Sin sensores configurados',
+    'no_unlinked_ha_accounts': 'Todas las cuentas de Home Assistant activas tienen perfil.',
+    'no_users': 'Sin usuarios adicionales configurados.',
+    'none_selected': 'Ninguno seleccionado',
+    'notif_desc': 'Selecciona los dispositivos móviles registrados en HA que recibirán alertas de Argus.',
+    'notif_no_services': 'Нет мобильных служб',
+    'notification_armed': '{user} активировал режим {mode}.',
+    'notification_disarmed': '{user} снял систему с охраны.',
+    'notifications_title': '🔔 Notificaciones',
+    'open_sensors': 'Sensores abiertos',
+    'open_sensors_explain': 'Следующие датчики открыты:\n{names}\n\nЗакройте их перед постановкой на охрану или включите «Обход».',
+    'panic_state_unknown': 'Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.',
+    'panic_stop_error': 'Не удалось остановить тревогу: {error}',
+    'panic_stopped': 'Тревога остановлена; восстановлено состояние {state}',
+    'pending': 'Cuenta regresiva',
+    'pin_active_no': 'PIN Maestro: Desactivado',
+    'pin_active_yes': 'PIN Maestro: Activo',
+    'pin_deleted': '✓ PIN Eliminado',
+    'pin_desc': 'Código numérico para armar y desarmar.',
+    'pin_disarm_error': 'Неверный PIN или ошибка снятия с охраны',
+    'pin_incorrect': '❌ PIN actual incorrecto',
+    'pin_management': '🔑 Gestión de Pines',
+    'pin_master_title': 'PIN Maestro',
+    'pin_modal_desc': 'PIN numérico para desarmar Argus',
+    'pin_placeholder': 'PIN de acceso',
+    'pin_remove_hint': 'Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.',
+    'pin_reset_admin_only': '❌ Error: Solo los administradores de Home Assistant pueden restablecer el PIN maestro.',
+    'pin_reset_confirm': '¿Estás seguro de que deseas restablecer el PIN maestro? Se eliminará el PIN actual y se desactivará.',
+    'pin_updated': '✓ PIN Actualizado',
+    'profile_is_yours': 'Este es tu perfil',
+    'profile_needs_pin': 'Perfil ajeno — introduce el PIN de acceso',
+    'profile_no_pin_access': 'Este perfil no tiene PIN de acceso. No puedes abrirlo.',
+    'remove_btn': 'Quitar',
+    'reset_btn': '⚠️ Restablecer',
+    'reset_confirm': 'Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.',
+    'reset_dashboard': 'Restablecer diseño',
+    'reset_error': 'Ошибка сброса: {error}',
+    'reset_success': 'Argus сброшен. У вас есть несколько секунд, чтобы отменить это.',
+    'retry_action': 'Повторить',
+    'role_argus_admin': 'Administrador de Argus',
+    'role_argus_admin_short': 'Adm',
+    'role_argus_standard': 'Usuario estándar',
+    'role_argus_user': 'Usuario estándar',
+    'role_argus_user_short': 'Std',
+    'rules_tip': '',
+    'save_btn': 'Guardar',
+    'save_config': 'GUARDAR CONFIGURACIÓN',
+    'save_mode': '💾 Guardar modo',
+    'save_notif': 'Guardar',
+    'save_user': 'Guardar',
+    'search_placeholder': 'Buscar por nombre, área o entity_id',
+    'search_select': 'Buscar y seleccionar',
+    'searching_auto': '↻ Buscando automatizaciones...',
+    'select_all': '☑ Todos',
+    'select_btn': '+ Seleccionar',
+    'select_profile_subtitle': 'Accede a tus paneles e instancias de seguridad de Argus.',
+    'select_profile_title': 'Selecciona tu perfil',
+    'selected_lbl': 'Seleccionadas',
+    'selector_panic': '🚨 Действия SOS',
+    'sensor_section': 'Sensores de Intrusión',
+    'sensors_to_bypass': 'Sensores a Omitir',
+    'settings': '⚙️ Ajustes',
+    'setup_access_pin': 'PIN доступа к панели Argus (Необязательно)',
+    'setup_admin_name': 'Имя администратора',
+    'setup_master_pin': 'Мастер-PIN для постановки/снятия с охраны (Необязательно)',
+    'setup_required_action': 'Настроить Argus в интеграциях',
+    'setup_required_desc': 'Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.',
+    'setup_required_title': 'Требуется настройка Argus',
+    'siren_section': 'Sirenas',
+    'sos_actions': 'Acciones Automáticas de SOS',
+    'sos_activated': 'SOS активирован',
+    'sos_call': '📞 Llamar a Emergencias',
+    'sos_call_confirm': 'Позвонить в экстренную службу ({number})?',
+    'sos_call_help': 'Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.',
+    'sos_confirm_text': 'Desliza para disparar la alarma inmediatamente.',
+    'sos_confirm_title': 'Confirmar pánico',
+    'sos_error': 'Не удалось активировать SOS: {error}',
+    'sos_no_outputs': 'Устройства не выбраны',
+    'sos_outputs_help': 'Dispositivos activados al disparar el SOS.',
+    'sos_select_outputs': 'Seleccionar salidas de pánico',
+    'sos_slide': 'Desliza para activar SOS',
+    'sos_stop': 'DETENER SOS',
+    'status_away': 'FUERA',
+    'status_closed': 'CERRADO',
+    'status_home': 'EN CASA',
+    'status_idle': 'INACTIVO',
+    'status_open': 'ABIERTO',
+    'status_recording': 'GRABANDO',
+    'switch_profile_btn': '👤 Cambiar de Perfil',
+    'sync_panel_help': 'Paneles de alarma que seguirán el mismo estado de Argus',
+    'sync_panel_section': 'Paneles Sincronizados',
+    'system_armed': 'SISTEMA ARMADO',
+    'system_disarmed': 'SISTEMA DESARMADO',
+    'system_triggered': '¡ALARMA DISPARADA!',
+    'temp_auto': 'Automático (sensor local / termostato / clima)',
+    'temp_notification_title': 'Argus — Температурное предупреждение',
+    'temp_thermostat': '(termostato)',
+    'thermostat_alert_notif': '🌡️ Alerta de temperatura',
+    'times_section': '⏱️ Tiempos',
+    'triggered': '¡ALARMA!',
+    'unavailable': 'No disponible',
+    'undo_error': 'Не удалось отменить сброс: {error}',
+    'undo_reset_btn': '↩️ Deshacer Restablecimiento',
+    'undo_success': 'Сброс отменён.',
+    'unlinked_ha_accounts_title': 'Cuentas de Home Assistant sin perfil Argus',
+    'unlock_kiosk': 'Desbloquear kiosco',
+    'update_pin': 'Actualizar PIN',
+    'upload_error': 'Ошибка загрузки.',
+    'url_placeholder': 'URL фона…',
+    'use_for_hub': 'Argus',
+    'use_for_panel': 'Panel',
+    'use_ha_language': 'Usar idioma de Home Assistant',
+    'user_default': 'Пользователь',
+    'user_exp_date': 'Fecha/Hora de Vencimiento',
+    'user_exp_type': 'Vencimiento',
+    'user_no_pin': 'Sin PIN de acceso',
+    'user_pin': 'PIN de usuario',
+    'user_pin_action': 'PIN',
+    'user_required': 'Требуются имя и PIN',
+    'user_role_action': 'Роль',
+    'user_role_label': 'Rol Argus',
+    'username': 'Nombre de Usuario',
+    'users_title': '👥 Usuarios y Control de Acceso',
+    'wait_if_open': 'Esperar armado en espera',
+    'waiting_sensors': 'ESPERANDO SENSORES',
+    'welcome_greeting': 'Bienvenido/a,',
+    'welcome_profile': 'Добро пожаловать, {name}',
   },
-  fr: {
-    hero_desc:"Sécurité intégrée, contrôle d'accès, automatisations et HomeKit.",
-    instances:'Instances actives', modes:'Modes', automations:'⚡ Automatisations',
-    linked_rules:'Règles liées à Argus', create_ha:'+ Créer dans HA',
-    no_rules:'', rules_tip:'',
-    settings:'⚙️ Paramètres', change_pin:'PIN maître', pin_desc:'Code numérique pour armer et désarmer.',
-    new_pin:'Nouveau PIN', confirm_pin:'Confirmer PIN', update_pin:'Mettre à jour PIN',
-    current_pin:'PIN actuel', notifications_title:'🔔 Notifications',
-    notif_desc:'Sélectionnez les appareils mobiles enregistrés dans HA pour recevoir les alertes Argus.',
-    save_notif:'Enregistrer', users_title:'👥 Utilisateurs & Contrôle d\'accès',
-    admin_only:'Seuls les administrateurs peuvent modifier cette section.',
-    add_user:'Ajouter un utilisateur', username:'Nom d\'utilisateur', user_pin:'PIN utilisateur',
-    is_admin:'Administrateur', save_user:'Enregistrer', no_users:'Aucun utilisateur supplémentaire configuré.',
-    homekit_title:'🏠 HomeKit', close:'Fermer',
-    search_placeholder:'Rechercher par nom, zone ou entity_id',
-    available:'Disponibles', selected_lbl:'Sélectionnés', clear:'Effacer', accept:'Accepter',
-    introduce_pin:'Entrez votre PIN', pin_modal_desc:'PIN numérique pour désarmer Argus',
-    confirm:'✓ Confirmer', cancel:'Annuler',
-    disarmed:'Désarmé', armed_home:'À la maison', armed_away:'Absent',
-    armed_night:'Nuit', armed_vacation:'Vacances', triggered:'ALARME!',
-    pending:'En attente', arming:'Armement', unavailable:'Indisponible',
-    sensor_section:'Capteurs d\'intrusion', siren_section:'Sirènes', thermostat_alert_notif:'🌡️ Alerte de température',
-    none_selected:'Aucun sélectionné', search_select:'Rechercher & sélectionner',
-    save_mode:'💾 Enregistrer mode', details_notif:'Notification d\'alarme',
-    activity_log:'📋 Journal d\'activité',
-    log_armed:'Armé', log_disarmed:'Désarmé', log_triggered:'Déclenché!',
-    log_by:'par', log_sensor:'Capteur', log_no_events:'Aucun événement récent.',
-    mode_home:'Maison', mode_away:'Absent', mode_night:'Nuit', mode_vacation:'Vacances',
-    homekit_bridge:'Pont HomeKit', homekit_not_paired:'Non associé à une maison.',
-    homekit_house:'Apple Home', language:'Langue',
-    lang_select_title:'Sélectionner la langue',
-    btn_home:'🏠 MAISON', btn_away:'🔒 ABSENT', btn_night:'🌙 NUIT',
-    btn_vacation:'✈️ VACANCES', btn_disarmed:'DÉSARMÉ', btn_sos:'🚨 SOS / PANIQUE',
-    system_armed:'SYSTÈME ARMÉ', system_disarmed:'SYSTÈME DÉSARMÉ',
-    home_name_lbl:'Nom du domicile', background_lbl:'Fond', edit_btn:'✏️ Modifier',
-    save_btn:'Enregistrer', backup_title:'Sauvegarde & Restauration',
-    backup_desc:'Enregistrez une sauvegarde ou restaurez une précédente.',
-    export_btn:'📤 Télécharger', import_btn:'📥 Restaurer', reset_btn:'⚠️ Réinitialiser', undo_reset_btn:'↩️ Annuler la réinitialisation',
-    access_title:'Contrôle d\'accès & Utilisateurs',
-    access_desc:'Gestion globale de la sécurité, PIN maître et administrateurs.',
-    pin_master_title:'PIN Maître', pin_active_yes:'PIN actif: Oui', pin_active_no:'PIN actif: Non',
-    select_all:'☑ Tous', deselect_all:'☐ Aucun', mqtt_label:'MQTT',
-    arm_time_label:'Temps armement (s)', disarm_time_label:'Délai d\'entrée (s)',
-    pin_incorrect:'❌ PIN actuel incorrect', pin_updated:'✓ PIN mis à jour', pin_deleted:'✓ PIN supprimé',
-    searching_auto:'↻ Recherche automatisations...', no_auto_linked:'Aucune automatisation liée à Argus.',
-    pin_remove_hint:'Pour supprimer le PIN: entrez le PIN actuel et laissez les champs vides.',
-    lbl_load_file:'Charger le fichier:', lbl_aesthetic_custom:'Personnalisation esthétique', lbl_uploaded_files:'Fichiers téléchargés sur le serveur',
-    bypass_lbl:'🚫 Ignorer', lock_if_open:'Bloquer si ouvert', wait_if_open:'Attendre la fermeture des capteurs',
-    select_btn:'+ Sélectionner', add_btn:'+ Ajouter',
-    sensors_to_bypass:'Capteurs à ignorer', no_instances:'Aucune instance.',
-    fullscreen_title:'Plein écran', sos_slide:'Glisser pour activer SOS',
-    sos_confirm_title:'Confirmer la panique', sos_confirm_text:'Glissez pour déclencher l\'alarme immédiatement.',
-    sos_call:'📞 Appeler les urgences',
-    home_name_modal_title:'🏡 Nom du domicile',
-    home_name_modal_desc:'Ce nom apparaît dans le panneau des instances et en plein écran.',
-    home_name_label:'Nom du domicile', home_name_placeholder:'Ma maison',
-    clear_log_btn:'EFFACER',
-    bg_weather:'Météo animée', bg_none:'Par défaut', bg_panel_none:'Sans fond', bg_photo:'Une photo', bg_collage:'Collage', bg_video:'Vidéo en boucle', bg_panel_title:'Fond du panneau', bg_hub_title:'Fond Argus', bg_sound_opt:'Son de la vidéo', bg_image_opt:'Image / GIF', bg_hub_default:'Par défaut (Argus)',
-    forgot_pin:'PIN oublié ?', pin_reset_admin_only:'❌ Erreur : Seuls les administrateurs de Home Assistant peuvent réinitialiser le PIN maître.', pin_reset_confirm:'Êtes-vous sûr de vouloir réinitialiser le PIN maître ? Le PIN actuel sera supprimé et désactivé.',
-    temp_auto:'Automatique (capteur local / thermostat / climat)', temp_thermostat:'(thermostat)', battery_low:'⚠️ Batterie faible',
-    times_section:'⏱️ Temps', arm_time:'Armé (s)', disarm_time:'Délai entrée (s)',
-    save_config:'ENREGISTRER LA CONFIGURATION', never_triggered:'Jamais déclenché',
-    bridge_paired:'Pont configuré',
-    bridge_paired_desc:'Le pont <b>{bridge}</b> est configuré dans Home Assistant. Home Assistant ne peut pas vérifier ici son ajout à Apple Home ni fournir son nom.',
-    bridge_not_connected:'Pont non configuré',
-    bridge_not_desc:'Activez l\'intégration HomeKit Bridge dans Home Assistant et incluez l\'entité <code>alarm_control_panel.argus_*</code> pour générer un QR d\'appairage.',
-    manual_disarm:'Manuel (Désarmé)', manual_arm:'Manuel',
-    open_sensors:'Capteurs ouverts', log_detail_disarm:'Système désarmé',
-    alarm_instance:"Instance d'alarme",
-    log_detail_armed:'Mode', log_detail_triggered:'Activation automatique',
-    log_detail_pin_reset: "Code PIN maître réinitialisé par l'administrateur",
-    log_detail_pin_reset_failed: "Tentative non autorisée de réinitialiser le code PIN maître",
-    badge_pin_reset: 'PIN Réinitialisé',
-    badge_pin_reset_failed: 'Échec Réinit. PIN',
-    no_files_uploaded: "Aucun fichier téléchargé. Téléchargez un arrière-plan à l'aide des commandes ci-dessus.",
-    no_files_uploaded_short: 'Aucun fichier téléchargé.',
-    files_count: '{count} fichiers',
-    files_count_short: '{count} fich.',
-    file_delete_confirm: 'Voulez-vous vraiment supprimer définitivement "{filename}" ?',
-    use_for_panel: 'Panneau',
-    use_for_hub: 'Argus',
-    delete_btn_title: 'Supprimer du stockage',
-    bg_panel_selected_from_history: "Arrière-plan du panneau sélectionné depuis l'historique.",
-    bg_hub_selected_from_history: "Arrière-plan Argus sélectionné depuis l'historique.",
-    error_loading_uploaded_files: "Erreur lors du chargement de l'historique des fichiers.",
-    welcome_greeting: 'Bienvenue,',
-    select_profile_title: 'Sélectionnez votre profil',
-    select_profile_subtitle: 'Accédez à vos panneaux de sécurité et instances Argus.',
-    exit_to_ha: 'Retour à Home Assistant',
-    role_argus_admin: 'Administrateur Argus',
-    role_argus_user: 'Utilisateur standard',
-    ha_account_linked: 'Compte Home Assistant : {name}',
-    ha_account_unavailable: 'Liaison indisponible',
-    user_role_label: 'Rôle Argus',
-    delete_user_tooltip: 'Supprimer le profil utilisateur',
-    delete_user_confirm: 'Voulez-vous vraiment supprimer « {name} » ?',
-    cannot_delete_last_admin: 'Impossible de supprimer le dernier administrateur.',
-    clock_format_label: 'Format d\'heure',
-    clock_format_desc: 'Choisissez l\'affichage de l\'heure.',
-    clock_auto: 'Automatique (Home Assistant)',
-    clock_12h: '12 heures (AM/PM)',
-    clock_24h: '24 heures',
-    unlock_kiosk: 'Déverrouiller le kiosque',
-    first_run_welcome: 'Merci d\'avoir choisi Argus Home Hub. Bienvenue.',
-    first_run_desc: 'Complétez la configuration initiale.',
-    first_run_pin_expl: 'Le PIN d\'accès ouvre Argus. Le PIN maître contrôle l\'armement.',
-    first_run_skip: 'Passer',
-    first_run_start: 'Démarrer avec Argus',
-    first_run_blocked_title: 'Accès refusé',
-    first_run_blocked_desc: 'Un administrateur Home Assistant est requis.',
-    log_action_first_run_completed: 'Argus initialisé par {user}',
-    log_action_fullscreen_unlocked: 'Kiosque déverrouillé par {user}',
-    log_action_master_pin_rejected: 'Tentative de PIN maître incorrecte par {user}',
-    log_action_select_profile: 'Profil sélectionné : {user}',
-    log_action_verify_access_pin: 'PIN d\'accès vérifié par {user}',
-    log_action_sos: 'Panique SOS déclenchée par {user}',
-    log_action_stop_sos: 'Panique SOS arrêtée par {user}',
-    log_action_save_ui: 'Paramètres UI enregistrés par {user}',
-    log_action_rejected: 'Action rejetée',
-    unlinked_ha_accounts_title: 'Comptes Home Assistant sans profil Argus',
-    btn_create_argus_profile: 'Créer un profil Argus',
-    no_unlinked_ha_accounts: 'Tous les comptes Home Assistant actifs ont un profil.',
-    profile_is_yours: 'C\u2019est votre profil',
-    profile_needs_pin: 'Profil d\u2019une autre personne — entrez le PIN d\u2019accès',
-    profile_no_pin_access: 'Ce profil n\u2019a pas de PIN d\u2019accès. Vous ne pouvez pas l\u2019ouvrir.',
-    ha_role_admin: 'Admin HA',
-    ha_role_standard: 'Utilisateur HA',
-    login_btn: 'Connexion',
-    cancel_btn: 'Annuler',
-    pin_placeholder: 'Code PIN d\u2019accès',
-    link_ha_user: 'Lier à un utilisateur Home Assistant',
-    ha_admin_label: 'Admin Home Assistant',
-    ha_standard_user_label: 'Utilisateur HA standard',
-    role_argus_standard: 'Utilisateur standard',
-      },
-  pt: {
-    hero_desc:'Segurança integrada, controle de acesso, automações e HomeKit.',
-    instances:'Instâncias ativas', modes:'Modos', automations:'⚡ Automações',
-    linked_rules:'Regras vinculadas ao Argus', create_ha:'+ Criar no HA',
-    no_rules:'', rules_tip:'',
-    settings:'⚙️ Configurações', change_pin:'PIN Mestre', pin_desc:'Código numérico para armar e desarmar.',
-    new_pin:'Novo PIN', confirm_pin:'Confirmar PIN', update_pin:'Atualizar PIN',
-    current_pin:'PIN atual', notifications_title:'🔔 Notificações',
-    notif_desc:'Selecione os dispositivos móveis registrados no HA que receberão alertas do Argus.',
-    save_notif:'Salvar', users_title:'👥 Usuários & Controle de Acesso',
-    admin_only:'Somente administradores podem modificar esta seção.',
-    add_user:'Adicionar usuário', username:'Nome de usuário', user_pin:'PIN do usuário',
-    is_admin:'Administrador', save_user:'Salvar', no_users:'Nenhum usuário adicional configurado.',
-    homekit_title:'🏠 HomeKit', close:'Fechar',
-    search_placeholder:'Buscar por nome, área ou entity_id',
-    available:'Disponíveis', selected_lbl:'Selecionados', clear:'Limpar', accept:'Aceitar',
-    introduce_pin:'Digite seu PIN', pin_modal_desc:'PIN numérico para desarmar o Argus',
-    confirm:'✓ Confirmar', cancel:'Cancelar',
-    disarmed:'Desarmado', armed_home:'Em Casa', armed_away:'Ausente',
-    armed_night:'Noite', armed_vacation:'Férias', triggered:'ALARME!',
-    pending:'Pendente', arming:'Armando', unavailable:'Indisponível',
-    sensor_section:'Sensores de Intrusão', siren_section:'Sirenes', thermostat_alert_notif:'🌡️ Alerta de temperatura',
-    none_selected:'Nenhum selecionado', search_select:'Buscar & selecionar',
-    save_mode:'💾 Salvar modo', details_notif:'Notificação de alarme',
-    activity_log:'📋 Registro de Atividade',
-    log_armed:'Armado', log_disarmed:'Desarmado', log_triggered:'Disparado!',
-    log_by:'por', log_sensor:'Sensor', log_no_events:'Nenhum evento recente.',
-    mode_home:'Em Casa', mode_away:'Ausente', mode_night:'Noite', mode_vacation:'Férias',
-    homekit_bridge:'Ponte HomeKit', homekit_not_paired:'Não associado a nenhuma casa.',
-    homekit_house:'Apple Home', language:'Idioma',
-    lang_select_title:'Selecionar Idioma',
-    btn_home:'🏠 EM CASA', btn_away:'🔒 AUSENTE', btn_night:'🌙 NOITE',
-    btn_vacation:'✈️ FÉRIAS', btn_disarmed:'DESARMADO', btn_sos:'🚨 SOS / PÂNICO',
-    system_armed:'SISTEMA ARMADO', system_disarmed:'SISTEMA DESARMADO',
-    home_name_lbl:'Nome do lar', background_lbl:'Fundo', edit_btn:'✏️ Editar',
-    save_btn:'Salvar', backup_title:'Backup & Restauração',
-    backup_desc:'Salve um backup ou restaure um anterior.',
-    export_btn:'📤 Baixar', import_btn:'📥 Restaurar', reset_btn:'⚠️ Redefinir', undo_reset_btn:'↩️ Desfazer Redefinição',
-    access_title:'Controle de Acesso & Usuários',
-    access_desc:'Gerenciamento global, PIN mestre e administradores.',
-    pin_master_title:'PIN Mestre', pin_active_yes:'PIN Ativo: Sim', pin_active_no:'PIN Ativo: Não',
-    select_all:'☑ Todos', deselect_all:'☐ Nenhum', mqtt_label:'MQTT',
-    arm_time_label:'Tempo armado (s)', disarm_time_label:'Atraso de entrada (s)',
-    pin_incorrect:'❌ PIN atual incorreto', pin_updated:'✓ PIN Atualizado', pin_deleted:'✓ PIN Removido',
-    searching_auto:'↻ Buscando automações...', no_auto_linked:'Nenhuma automação vinculada ao Argus.',
-    pin_remove_hint:'Para remover o PIN: insira o atual e deixe os campos abaixo vazios.',
-    lbl_load_file:'Carregar arquivo:', lbl_aesthetic_custom:'Personalização estética', lbl_uploaded_files:'Arquivos enviados no servidor',
-    bypass_lbl:'🚫 Ignorar', lock_if_open:'Bloquear se aberto', wait_if_open:'Aguardar fechamento dos sensores',
-    select_btn:'+ Selecionar', add_btn:'+ Adicionar',
-    sensors_to_bypass:'Sensores a ignorar', no_instances:'Nenhuma instância.',
-    fullscreen_title:'Tela cheia', sos_slide:'Deslize para ativar SOS',
-    sos_confirm_title:'Confirmar pânico', sos_confirm_text:'Deslize para acionar o alarme imediatamente.',
-    sos_call:'📞 Chamar emergências',
-    home_name_modal_title:'🏡 Nome do lar',
-    home_name_modal_desc:'Este nome aparece no painel de instâncias e em tela cheia.',
-    home_name_label:'Nome do lar', home_name_placeholder:'Minha Casa',
-    clear_log_btn:'LIMPAR',
-    bg_weather:'Clima animado', bg_none:'Padrão', bg_panel_none:'Sem fundo', bg_photo:'Uma foto', bg_collage:'Colagem', bg_video:'Vídeo em loop', bg_panel_title:'Fundo do painel', bg_hub_title:'Fundo Argus', bg_sound_opt:'Som do vídeo', bg_image_opt:'Imagem / GIF', bg_hub_default:'Padrão (Argus)',
-    forgot_pin:'Esqueceu o PIN?', pin_reset_admin_only:'❌ Erro: Apenas administradores do Home Assistant podem redefinir o PIN mestre.', pin_reset_confirm:'Tem certeza que deseja redefinir o PIN mestre? O PIN atual será removido e desativado.',
-    temp_auto:'Automático (sensor local / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Bateria fraca',
-    times_section:'⏱️ Tempos', arm_time:'Armado (s)', disarm_time:'Atraso de entrada (s)',
-    save_config:'SALVAR CONFIGURAÇÃO', never_triggered:'Nunca ativado',
-    bridge_paired:'Ponte configurada',
-    bridge_paired_desc:'A ponte <b>{bridge}</b> está configurada no Home Assistant. Não é possível verificar daqui se foi adicionada ao Apple Home nem informar seu nome.',
-    bridge_not_connected:'Ponte não configurada',
-    bridge_not_desc:'Ative a integração HomeKit Bridge no Home Assistant e inclua a entidade <code>alarm_control_panel.argus_*</code> para gerar um QR de emparelhamento.',
-    manual_disarm:'Manual (Desarmado)', manual_arm:'Manual',
-    open_sensors:'Sensores abertos', log_detail_disarm:'Sistema desarmado',
-    log_detail_armed:'Modo', log_detail_triggered:'Ativação automática',
-    alarm_instance:'Instância do alarme',
-    log_detail_pin_reset: 'PIN mestre redefinido pelo administrador',
-    log_detail_pin_reset_failed: 'Tentativa não autorizada de redefinir o PIN mestre',
-    badge_pin_reset: 'PIN Redefinido',
-    badge_pin_reset_failed: 'Falha ao Redefinir PIN',
-    no_files_uploaded: 'Nenhum arquivo enviado. Envie um plano de fundo usando os controles acima.',
-    no_files_uploaded_short: 'Nenhum arquivo enviado.',
-    files_count: '{count} arquivos',
-    files_count_short: '{count} arq.',
-    file_delete_confirm: 'Tem certeza de que deseja excluir "{filename}" permanentemente?',
-    use_for_panel: 'Painel',
-    use_for_hub: 'Argus',
-    delete_btn_title: 'Excluir do armazenamento',
-    bg_panel_selected_from_history: 'Plano de fundo do painel selecionado a partir do histórico.',
-    bg_hub_selected_from_history: 'Plano de fundo do Argus selecionado a partir do histórico.',
-    error_loading_uploaded_files: 'Erro ao carregar o histórico de arquivos.',
-    welcome_greeting: 'Bem-vindo/a,',
-    select_profile_title: 'Selecione o seu perfil',
-    select_profile_subtitle: 'Acesse seus painéis de segurança e instâncias Argus.',
-    exit_to_ha: 'Voltar ao Home Assistant',
-    role_argus_admin: 'Administrador do Argus',
-    role_argus_user: 'Usuário padrão',
-    ha_account_linked: 'Conta do Home Assistant: {name}',
-    ha_account_unavailable: 'Vínculo indisponível',
-    user_role_label: 'Função Argus',
-    delete_user_tooltip: 'Excluir perfil de usuário',
-    delete_user_confirm: 'Tem certeza de que deseja excluir "{name}"?',
-    cannot_delete_last_admin: 'Não é possível excluir o último administrador.',
-    clock_format_label: 'Formato de hora',
-    clock_format_desc: 'Escolha como a hora é exibida.',
-    clock_auto: 'Automático (Home Assistant)',
-    clock_12h: '12 horas (AM/PM)',
-    clock_24h: '24 horas',
-    unlock_kiosk: 'Desbloquear quiosque',
-    first_run_welcome: 'Obrigado por escolher o Argus Home Hub. Bem-vindo(a).',
-    first_run_desc: 'Conclua a configuração inicial.',
-    first_run_pin_expl: 'O PIN de acesso abre o Argus. O PIN mestre controla o armamento.',
-    first_run_skip: 'Pular',
-    first_run_start: 'Começar com o Argus',
-    first_run_blocked_title: 'Acesso negado',
-    first_run_blocked_desc: 'É necessário um administrador do Home Assistant.',
-    log_action_first_run_completed: 'Argus inicializado por {user}',
-    log_action_fullscreen_unlocked: 'Quiosque desbloqueado por {user}',
-    log_action_master_pin_rejected: 'Tentativa incorreta de PIN mestre por {user}',
-    log_action_select_profile: 'Perfil selecionado: {user}',
-    log_action_verify_access_pin: 'PIN de acesso verificado por {user}',
-    log_action_sos: 'Pânico SOS acionado por {user}',
-    log_action_stop_sos: 'Pânico SOS interrompido por {user}',
-    log_action_save_ui: 'Configurações de UI salvas por {user}',
-    log_action_rejected: 'Ação rejeitada',
-    unlinked_ha_accounts_title: 'Contas do Home Assistant sem perfil Argus',
-    btn_create_argus_profile: 'Criar perfil Argus',
-    no_unlinked_ha_accounts: 'Todas as contas do Home Assistant ativas possuem perfil.',
-    profile_is_yours: 'Este é o seu perfil',
-    profile_needs_pin: 'Perfil de outra pessoa — insira o PIN de acesso',
-    profile_no_pin_access: 'Este perfil não tem PIN de acesso. Você não pode abri-lo.',
-    ha_role_admin: 'Admin HA',
-    ha_role_standard: 'Usuário HA',
-    login_btn: 'Entrar',
-    cancel_btn: 'Cancelar',
-    pin_placeholder: 'PIN de acesso',
-    link_ha_user: 'Vincular a Usuário do Home Assistant',
-    ha_admin_label: 'Administrador do Home Assistant',
-    ha_standard_user_label: 'Usuário padrão do HA',
-    role_argus_standard: 'Usuário padrão',
-      },
-  it: {
-    hero_desc:'Sicurezza integrata, controllo accessi, automazioni e HomeKit.',
-    instances:'Istanze attive', modes:'Modi', automations:'⚡ Automazioni',
-    linked_rules:'Regole collegate ad Argus', create_ha:'+ Crea in HA',
-    no_rules:'', rules_tip:'',
-    settings:'⚙️ Impostazioni', change_pin:'PIN Principale', pin_desc:'Codice numerico per armare e disarmare.',
-    new_pin:'Nuovo PIN', confirm_pin:'Conferma PIN', update_pin:'Aggiorna PIN',
-    current_pin:'PIN attuale', notifications_title:'🔔 Notifiche',
-    notif_desc:'Seleziona i dispositivi mobili registrati in HA che riceveranno gli avvisi di Argus.',
-    save_notif:'Salva', users_title:'👥 Utenti & Controllo Accessi',
-    admin_only:'Solo gli amministratori possono modificare questa sezione.',
-    add_user:'Aggiungi utente', username:'Nome utente', user_pin:'PIN utente',
-    is_admin:'Amministratore', save_user:'Salva', no_users:'Nessun utente aggiuntivo configurato.',
-    homekit_title:'🏠 HomeKit', close:'Chiudi',
-    search_placeholder:'Cerca per nome, area o entity_id',
-    available:'Disponibili', selected_lbl:'Selezionati', clear:'Cancella', accept:'Accetta',
-    introduce_pin:'Inserisci il tuo PIN', pin_modal_desc:'PIN numerico per disarmare Argus',
-    confirm:'✓ Conferma', cancel:'Annulla',
-    disarmed:'Disarmato', armed_home:'In Casa', armed_away:'Assente',
-    armed_night:'Notte', armed_vacation:'Vacanze', triggered:'ALLARME!',
-    pending:'In attesa', arming:'Armamento', unavailable:'Non disponibile',
-    sensor_section:'Sensori di intrusione', siren_section:'Sirene', thermostat_alert_notif:'🌡️ Avviso temperatura',
-    none_selected:'Nessuno selezionato', search_select:'Cerca & seleziona',
-    save_mode:'💾 Salva modalità', details_notif:'Notifica allarme',
-    activity_log:'📋 Registro Attività',
-    log_armed:'Armato', log_disarmed:'Disarmato', log_triggered:'Attivato!',
-    log_by:'da', log_sensor:'Sensore', log_no_events:'Nessun evento recente.',
-    mode_home:'In Casa', mode_away:'Assente', mode_night:'Notte', mode_vacation:'Vacanze',
-    homekit_bridge:'Ponte HomeKit', homekit_not_paired:'Non associato a nessuna casa.',
-    homekit_house:'Apple Home', language:'Lingua',
-    lang_select_title:'Seleziona Lingua',
-    btn_home:'🏠 CASA', btn_away:'🔒 ASSENTE', btn_night:'🌙 NOTTE',
-    btn_vacation:'✈️ VACANZE', btn_disarmed:'DISARMATO', btn_sos:'🚨 SOS / PANICO',
-    system_armed:'SISTEMA ARMATO', system_disarmed:'SISTEMA DISARMATO',
-    home_name_lbl:'Nome della casa', background_lbl:'Sfondo', edit_btn:'✏️ Modifica',
-    save_btn:'Salva', backup_title:'Backup & Ripristino',
-    backup_desc:'Salva un backup o ripristina uno precedente.',
-    export_btn:'📤 Scarica', import_btn:'📥 Ripristina', reset_btn:'⚠️ Ripristina', undo_reset_btn:'↩️ Annulla Ripristino',
-    access_title:'Controllo Accessi & Utenti',
-    access_desc:'Gestione globale della sicurezza, PIN principale e amministratori.',
-    pin_master_title:'PIN Principale', pin_active_yes:'PIN Attivo: Sì', pin_active_no:'PIN Attivo: No',
-    select_all:'☑ Tutti', deselect_all:'☐ Nessuno', mqtt_label:'MQTT',
-    arm_time_label:'Tempo armato (s)', disarm_time_label:'Ritardo ingresso (s)',
-    pin_incorrect:'❌ PIN attuale errato', pin_updated:'✓ PIN Aggiornato', pin_deleted:'✓ PIN Eliminato',
-    searching_auto:'↻ Ricerca automazioni...', no_auto_linked:'Nessuna automazione collegata ad Argus.',
-    pin_remove_hint:'Per rimuovere il PIN: inserisci quello attuale e lascia vuoti i campi sottostanti.',
-    lbl_load_file:'Carica file:', lbl_aesthetic_custom:'Personalizzazione estetica', lbl_uploaded_files:'File caricati sul server',
-    bypass_lbl:'🚫 Ignora', lock_if_open:'Blocca se aperto', wait_if_open:'Attendi chiusura sensori',
-    select_btn:'+ Seleziona', add_btn:'+ Aggiungi',
-    sensors_to_bypass:'Sensori da ignorare', no_instances:'Nessuna istanza.',
-    fullscreen_title:'Schermo intero', sos_slide:'Scorri per attivare SOS',
-    sos_confirm_title:'Conferma panico', sos_confirm_text:'Scorri per attivare immediatamente l\'allarme.',
-    sos_call:'📞 Chiama i soccorsi',
-    home_name_modal_title:'🏡 Nome della casa',
-    home_name_modal_desc:'Questo nome appare nel pannello delle istanze e a schermo intero.',
-    home_name_label:'Nome della casa', home_name_placeholder:'Casa mia',
-    clear_log_btn:'CANCELLA',
-    bg_weather:'Meteo animato', bg_none:'Predefinito', bg_panel_none:'Nessuno sfondo', bg_photo:'Una foto', bg_collage:'Collage', bg_video:'Video in loop', bg_panel_title:'Sfondo pannello', bg_hub_title:'Sfondo Argus', bg_sound_opt:'Audio video', bg_image_opt:'Immagine / GIF', bg_hub_default:'Predefinito (Argus)',
-    forgot_pin:'PIN dimenticato?', pin_reset_admin_only:'❌ Errore: Solo gli amministratori di Home Assistant possono reimpostare el PIN principale.', pin_reset_confirm:'Sei sicuro di voler reimpostare il PIN principale? Il PIN attuale verrà rimosso e disattivato.',
-    temp_auto:'Automatico (sensore locale / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Batteria scarica',
-    times_section:'⏱️ Tempi', arm_time:'Armato (s)', disarm_time:'Ritardo entrata (s)',
-    save_config:'SALVA CONFIGURAZIONE', never_triggered:'Mai attivato',
-    bridge_paired:'Ponte configurato',
-    bridge_paired_desc:'Il ponte <b>{bridge}</b> è configurato in Home Assistant. Da qui non è possibile verificare se sia stato aggiunto ad Apple Home né conoscerne il nome.',
-    bridge_not_connected:'Ponte non configurato',
-    bridge_not_desc:"Abilita l'integrazione HomeKit Bridge in Home Assistant e includi l'entità <code>alarm_control_panel.argus_*</code> per generare un QR di abbinamento.",
-    manual_disarm:'Manuale (Disarmato)', manual_arm:'Manuale',
-    open_sensors:'Sensori aperti', log_detail_disarm:'Sistema disarmato',
-    alarm_instance:'Istanza allarme',
-    log_detail_armed:'Modalità', log_detail_triggered:'Attivazione automatica',
-    log_detail_pin_reset: "PIN principale reimpostato dall'amministratore",
-    log_detail_pin_reset_failed: 'Tentativo non autorizzato di reimpostare il PIN principale',
-    badge_pin_reset: 'PIN Reimpostato',
-    badge_pin_reset_failed: 'Reimpostazione PIN Fallita',
-    no_files_uploaded: 'Nessun file caricato. Carica uno sfondo usando i controlli sopra.',
-    no_files_uploaded_short: 'Nessun file caricato.',
-    files_count: '{count} file',
-    files_count_short: '{count} file',
-    file_delete_confirm: 'Sei sicuro di voler eliminare permanentemente "{filename}"?',
-    use_for_panel: 'Pannello',
-    use_for_hub: 'Argus',
-    delete_btn_title: 'Elimina dalla memoria',
-    bg_panel_selected_from_history: 'Sfondo del pannello selezionato dalla cronologia.',
-    bg_hub_selected_from_history: 'Sfondo di Argus selezionato dalla cronologia.',
-    error_loading_uploaded_files: 'Errore durante il caricamento della cronologia dei file.',
-    select_profile_title: 'Seleziona il tuo profilo',
-    select_profile_subtitle: 'Accedi ai tuoi pannelli di sicurezza e istanze Argus.',
-    exit_to_ha: 'Torna a Home Assistant',
-    role_argus_admin: 'Amministratore Argus',
-    role_argus_user: 'Utente standard',
-    ha_account_linked: 'Account Home Assistant: {name}',
-    ha_account_unavailable: 'Collegamento non disponibile',
-    user_role_label: 'Ruolo Argus',
-    delete_user_tooltip: 'Elimina profilo utente',
-    delete_user_confirm: 'Sei sicuro di voler eliminare "{name}"?',
-    cannot_delete_last_admin: 'Impossibile eliminare l\'ultimo amministratore.',
-    clock_format_label: 'Formato ora',
-    clock_format_desc: 'Scegli come visualizzare l\'ora.',
-    clock_auto: 'Automatico (Home Assistant)',
-    clock_12h: '12 ore (AM/PM)',
-    clock_24h: '24 ore',
-    unlock_kiosk: 'Sblocca chiosco',
-    first_run_welcome: 'Grazie per aver scelto Argus Home Hub. Benvenuto/a.',
-    first_run_desc: 'Completa la configurazione.',
-    first_run_pin_expl: 'Il PIN di accesso apre Argus. Il PIN master controlla l\'armamento.',
-    first_run_skip: 'Salta',
-    first_run_start: 'Inizia con Argus',
-    first_run_blocked_title: 'Accesso negato',
-    first_run_blocked_desc: 'È richiesto un amministratore di Home Assistant.',
-    log_action_first_run_completed: 'Argus inizializzato da {user}',
-    log_action_fullscreen_unlocked: 'Chiosco sbloccato da {user}',
-    log_action_master_pin_rejected: 'Tentativo di PIN master errato da {user}',
-    log_action_select_profile: 'Profilo selezionato: {user}',
-    log_action_verify_access_pin: 'PIN di accesso verificato da {user}',
-    log_action_sos: 'Panico SOS attivato da {user}',
-    log_action_stop_sos: 'Panico SOS fermato da {user}',
-    log_action_save_ui: 'Impostazioni UI salvate da {user}',
-    log_action_rejected: 'Azione rifiutata',
-    unlinked_ha_accounts_title: 'Account Home Assistant senza profilo Argus',
-    btn_create_argus_profile: 'Crea profilo Argus',
-    no_unlinked_ha_accounts: 'Tutti gli account Home Assistant attivi hanno un profilo.',
-    profile_is_yours: 'Questo è il tuo profilo',
-    profile_needs_pin: 'Profilo di un\u2019altra persona — inserisci il PIN di accesso',
-    profile_no_pin_access: 'Questo profilo non ha un PIN di accesso. Non puoi aprirlo.',
-    ha_role_admin: 'Admin HA',
-    ha_role_standard: 'Utente HA',
-    login_btn: 'Accedi',
-    cancel_btn: 'Annulla',
-    pin_placeholder: 'PIN di accesso',
-    link_ha_user: 'Collega all\u2019utente Home Assistant',
-    ha_admin_label: 'Amministratore Home Assistant',
-    ha_standard_user_label: 'Utente HA standard',
-    role_argus_standard: 'Utente standard',
-      },
-  zh: {
-    hero_desc:'集成安全、访问控制、自动化和HomeKit。',
-    instances:'活跃实例', modes:'模式', automations:'⚡ 自动化',
-    linked_rules:'Argus关联规则', create_ha:'+ 在HA中创建',
-    no_rules:'', rules_tip:'',
-    settings:'⚙️ 设置', change_pin:'主PIN码', pin_desc:'用于布防和撤防的数字代码。',
-    new_pin:'新PIN码', confirm_pin:'确认PIN码', update_pin:'更新PIN码',
-    current_pin:'当前PIN码', notifications_title:'🔔 通知',
-    notif_desc:'选择在HA中注册的移动设备以接收Argus警报。',
-    save_notif:'保存', users_title:'👥 用户和访问控制',
-    admin_only:'只有管理员才能修改此部分。',
-    add_user:'添加用户', username:'用户名', user_pin:'用户PIN码',
-    is_admin:'管理员', save_user:'保存', no_users:'未配置额外用户。',
-    homekit_title:'🏠 HomeKit', close:'关闭',
-    search_placeholder:'按名称、区域或entity_id搜索',
-    available:'可用', selected_lbl:'已选择', clear:'清除', accept:'接受',
-    introduce_pin:'输入您的PIN码', pin_modal_desc:'撤防Argus的数字PIN码',
-    confirm:'✓ 确认', cancel:'取消',
-    disarmed:'已撤防', armed_home:'在家', armed_away:'外出',
-    armed_night:'夜间', armed_vacation:'度假', triggered:'警报！',
-    pending:'等待中', arming:'布防中', unavailable:'不可用',
-    sensor_section:'入侵传感器', siren_section:'警报器', thermostat_alert_notif:'🌡️ 温度警报',
-    none_selected:'未选择', search_select:'搜索并选择',
-    save_mode:'💾 保存模式', details_notif:'警报通知',
-    activity_log:'📋 活动日志',
-    log_armed:'已布防', log_disarmed:'已撤防', log_triggered:'已触发！',
-    log_by:'由', log_sensor:'传感器', log_no_events:'没有最近事件。',
-    mode_home:'在家', mode_away:'外出', mode_night:'夜间', mode_vacation:'度假',
-    homekit_bridge:'HomeKit桥接', homekit_not_paired:'未与任何家庭关联。',
-    homekit_house:'Apple Home', language:'语言',
-    lang_select_title:'选择语言',
-    btn_home:'🏠 在家', btn_away:'🔒 外出', btn_night:'🌙 夜间',
-    btn_vacation:'✈️ 度假', btn_disarmed:'已撤防', btn_sos:'🚨 SOS / 紧急',
-    system_armed:'系统已布防', system_disarmed:'系统已撤防',
-    home_name_lbl:'家庭名称', background_lbl:'背景', edit_btn:'✏️ 编辑',
-    save_btn:'保存', backup_title:'备份与恢复',
-    backup_desc:'保存设置备份或恢复之前的设置。',
-    export_btn:'📤 下载', import_btn:'📥 恢复', reset_btn:'⚠️ 恢复出厂', undo_reset_btn:'↩️ 撤销重置',
-    access_title:'访问控制和用户',
-    access_desc:'全局安全管理、主PIN码和管理员。',
-    pin_master_title:'主PIN码', pin_active_yes:'PIN激活: 是', pin_active_no:'PIN激活: 否',
-    select_all:'☑ 全选', deselect_all:'☐ 全不选', mqtt_label:'MQTT',
-    arm_time_label:'布防延迟(s)', disarm_time_label:'进入延迟(s)',
-    pin_incorrect:'❌ 当前PIN错误', pin_updated:'✓ PIN已更新', pin_deleted:'✓ PIN已删除',
-    searching_auto:'↻ 正在搜索自动化...', no_auto_linked:'没有链接到Argus的自动化。',
-    pin_remove_hint:'删除PIN: 输入当前PIN并将下面字段留空。',
-    lbl_load_file:'上传文件:', lbl_aesthetic_custom:'美学个性化', lbl_uploaded_files:'服务器上上传的文件',
-    bypass_lbl:'🚫 跳过', lock_if_open:'开启时锁定', wait_if_open:'等待传感器关闭后布防',
-    select_btn:'+ 选择', add_btn:'+ 添加',
-    sensors_to_bypass:'跳过的传感器', no_instances:'没有实例。',
-    fullscreen_title:'全屏', sos_slide:'滑动以激活SOS',
-    sos_confirm_title:'确认紧急', sos_confirm_text:'滑动以立即触发警报。',
-    sos_call:'📞 拨打紧急服务',
-    home_name_modal_title:'🏡 家庭名称',
-    home_name_modal_desc:'此名称显示在实例面板和全屏中。',
-    home_name_label:'家庭名称', home_name_placeholder:'我的家',
-    clear_log_btn:'清除',
-    bg_weather:'动画天气', bg_none:'默认', bg_panel_none:'无背景', bg_photo:'单张照片', bg_collage:'拼贴画', bg_video:'循环视频', bg_panel_title:'面板背景', bg_hub_title:'Argus 背景', bg_sound_opt:'视频声音', bg_image_opt:'图片 / GIF', bg_hub_default:'默认 (Argus)',
-    forgot_pin:'忘记PIN码？', pin_reset_admin_only:'❌ 错误：只有 Home Assistant 管理员可以重置主 PIN 码。', pin_reset_confirm:'您确定要重置主 PIN 码吗？当前的 PIN 码将被删除并停用。',
-    temp_auto:'自动（本地传感器 / 恒温器 / 气候）', temp_thermostat:'(恒温器)', battery_low:'⚠️ 电池不足',
-    times_section:'⏱️ 时间', arm_time:'布防延迟(s)', disarm_time:'进入延迟(s)',
-    save_config:'保存配置', never_triggered:'从未触发',
-    bridge_paired:'桥接已配置',
-    bridge_paired_desc:'桥接 <b>{bridge}</b> 已在 Home Assistant 中配置。Home Assistant 无法从这里验证它是否已添加到 Apple Home，也无法提供家庭名称。',
-    bridge_not_connected:'桥接未配置',
-    bridge_not_desc:'在Home Assistant中启用HomeKit Bridge集成并包含实体<code>alarm_control_panel.argus_*</code>以生成配对QR码。',
-    manual_disarm:'手动(已撤防)', manual_arm:'手动',
-    open_sensors:'开启的传感器', log_detail_disarm:'系统已撤防',
-    alarm_instance:'报警实例',
-    log_detail_armed:'模式', log_detail_triggered:'自动激活',
-    log_detail_pin_reset: '管理员已重置主PIN码',
-    log_detail_pin_reset_failed: '未授权尝试重置主PIN码',
-    badge_pin_reset: 'PIN已重置',
-    badge_pin_reset_failed: 'PIN重置失败',
-    no_files_uploaded: '未上传文件。请使用上方控件上传背景。',
-    no_files_uploaded_short: '未上传文件。',
-    files_count: '{count} 个文件',
-    files_count_short: '{count} 文件',
-    file_delete_confirm: '您确定要永久删除 "{filename}" 吗？',
-    use_for_panel: '面板',
-    use_for_hub: 'Argus',
-    delete_btn_title: '从存储中删除',
-    bg_panel_selected_from_history: '已从历史记录中选择面板背景。',
-    bg_hub_selected_from_history: '已从历史记录中选择Argus背景。',
-    error_loading_uploaded_files: '加载文件历史记录出错。',
-    select_profile_title: '选择您的个人资料',
-    select_profile_subtitle: '访问您的安全面板和 Argus 实例。',
-    exit_to_ha: '返回 Home Assistant',
-    role_argus_admin: 'Argus 管理员',
-    role_argus_user: '标准用户',
-    ha_account_linked: 'Home Assistant 账户：{name}',
-    ha_account_unavailable: '绑定不可用',
-    user_role_label: 'Argus 角色',
-    delete_user_tooltip: '删除用户个人资料',
-    delete_user_confirm: '您确定要删除\u201c{name}\u201d吗？',
-    cannot_delete_last_admin: '无法删除最后一个管理员。',
-    clock_format_label: '时间格式',
-    clock_format_desc: '选择时间的显示方式。',
-    clock_auto: '自动（Home Assistant）',
-    clock_12h: '12 小时制 (AM/PM)',
-    clock_24h: '24 小时制',
-    unlock_kiosk: '解锁自助服务终端',
-    first_run_welcome: '感谢选择 Argus Home Hub。欢迎。',
-    first_run_desc: '完成设置以保护您的家。',
-    first_run_pin_expl: '访问 PIN 打开 Argus。主 PIN 控制撤防和布防。',
-    first_run_skip: '跳过',
-    first_run_start: '开始使用 Argus',
-    first_run_blocked_title: '拒绝访问',
-    first_run_blocked_desc: '首次设置 Argus 需要 Home Assistant 管理员。',
-    log_action_first_run_completed: 'Argus 已由 {user} 初始化',
-    log_action_fullscreen_unlocked: '自助服务终端已由 {user} 解锁',
-    log_action_master_pin_rejected: '{user} 的主 PIN 尝试不正确',
-    log_action_select_profile: '已选择个人资料：{user}',
-    log_action_verify_access_pin: '访问 PIN 已由 {user} 验证',
-    log_action_sos: 'SOS 紧急情况由 {user} 触发',
-    log_action_stop_sos: 'SOS 紧急情况由 {user} 停止',
-    log_action_save_ui: 'UI 设置已由 {user} 保存',
-    log_action_rejected: '操作已被拒绝',
-    unlinked_ha_accounts_title: '没有 Argus 个人资料的 Home Assistant 账户',
-    btn_create_argus_profile: '创建 Argus 个人资料',
-    no_unlinked_ha_accounts: '所有活跃的 Home Assistant 账户都有个人资料。',
-    profile_is_yours: '这是您的个人资料',
-    profile_needs_pin: '其他人的个人资料 — 请输入访问 PIN',
-    profile_no_pin_access: '该个人资料没有访问 PIN。您无法打开它。',
-    ha_role_admin: 'HA 管理员',
-    ha_role_standard: 'HA 用户',
-    login_btn: '登录',
-    cancel_btn: '取消',
-    pin_placeholder: '访问 PIN',
-    link_ha_user: '关联至 Home Assistant 用户',
-    ha_admin_label: 'Home Assistant 管理员',
-    ha_standard_user_label: '标准 HA 用户',
-    role_argus_standard: '标准用户',
-      },
-  ru: {
-    hero_desc:'Комплексная безопасность, контроль доступа, автоматизация и HomeKit.',
-    instances:'Активные экземпляры', modes:'Режимы', automations:'⚡ Автоматизации',
-    linked_rules:'Правила Argus', create_ha:'+ Создать в HA',
-    no_rules:'', rules_tip:'',
-    settings:'⚙️ Настройки', change_pin:'Мастер PIN', pin_desc:'Цифровой код для постановки и снятия с охраны.',
-    new_pin:'Новый PIN', confirm_pin:'Подтвердить PIN', update_pin:'Обновить PIN',
-    current_pin:'Текущий PIN', notifications_title:'🔔 Уведомления',
-    notif_desc:'Выберите мобильные устройства, зарегистрированные в HA для получения оповещений Argus.',
-    save_notif:'Сохранить', users_title:'👥 Пользователи и контроль доступа',
-    admin_only:'Только администраторы могут изменять этот раздел.',
-    add_user:'Добавить пользователя', username:'Имя пользователя', user_pin:'PIN пользователя',
-    is_admin:'Администратор', save_user:'Сохранить', no_users:'Дополнительные пользователи не настроены.',
-    homekit_title:'🏠 HomeKit', close:'Закрыть',
-    search_placeholder:'Поиск по имени, зоне или entity_id',
-    available:'Доступные', selected_lbl:'Выбранные', clear:'Очистить', accept:'Принять',
-    introduce_pin:'Введите PIN', pin_modal_desc:'Цифровой PIN для снятия с охраны Argus',
-    confirm:'✓ Подтвердить', cancel:'Отмена',
-    disarmed:'Снято с охраны', armed_home:'Дома', armed_away:'Ушёл',
-    armed_night:'Ночь', armed_vacation:'Отпуск', triggered:'ТРЕВОГА!',
-    pending:'Ожидание', arming:'Постановка', unavailable:'Недоступно',
-    sensor_section:'Датчики вторжения', siren_section:'Сирены', thermostat_alert_notif:'🌡️ Температурный сигнал',
-    none_selected:'Не выбрано', search_select:'Поиск и выбор',
-    save_mode:'💾 Сохранить режим', details_notif:'Уведомление тревоги',
-    activity_log:'📋 Журнал активности',
-    log_armed:'Поставлено', log_disarmed:'Снято', log_triggered:'Сработало!',
-    log_by:'от', log_sensor:'Датчик', log_no_events:'Нет последних событий.',
-    mode_home:'Дома', mode_away:'Ушёл', mode_night:'Ночь', mode_vacation:'Отпуск',
-    homekit_bridge:'Мост HomeKit', homekit_not_paired:'Не связано ни с каким домом.',
-    homekit_house:'Apple Home', language:'Язык',
-    lang_select_title:'Выбрать язык',
-    btn_home:'🏠 ДОМА', btn_away:'🔒 УШЁЛ', btn_night:'🌙 НОЧЬ',
-    btn_vacation:'✈️ ОТПУСК', btn_disarmed:'СНЯТО', btn_sos:'🚨 SOS / ТРЕВОГА',
-    system_armed:'СИСТЕМА ПОСТАВЛЕНА', system_disarmed:'СИСТЕМА СНЯТА',
-    home_name_lbl:'Название дома', background_lbl:'Фон', edit_btn:'✏️ Редактировать',
-    save_btn:'Сохранить', backup_title:'Резервная копия',
-    backup_desc:'Сохраните резервную копию или восстановите предыдущую.',
-    export_btn:'📤 Скачать', import_btn:'📥 Восстановить', reset_btn:'⚠️ Сброс', undo_reset_btn:'↩️ Отменить сброс',
-    access_title:'Контроль доступа и пользователи',
-    access_desc:'Глобальная безопасность, мастер PIN и администраторы.',
-    pin_master_title:'Мастер PIN', pin_active_yes:'PIN активен: Да', pin_active_no:'PIN активен: Нет',
-    select_all:'☑ Все', deselect_all:'☐ Ничего', mqtt_label:'MQTT',
-    arm_time_label:'Время взятия (с)', disarm_time_label:'Задержка входа (с)',
-    pin_incorrect:'❌ Неверный текущий PIN', pin_updated:'✓ PIN Обновлен', pin_deleted:'✓ PIN Удален',
-    searching_auto:'↻ Поиск автоматизаций...', no_auto_linked:'Нет автоматизаций, связанных с Argus.',
-    pin_remove_hint:'Для удаления PIN: введите текущий и оставьте поля пустыми.',
-    lbl_load_file:'Загрузить файл:', lbl_aesthetic_custom:'Эстетическая персонализация', lbl_uploaded_files:'Загруженные файлы на сервере',
-    bypass_lbl:'🚫 Обход', lock_if_open:'Блокировать если открыто', wait_if_open:'Ждать закрытия датчиков',
-    select_btn:'+ Выбрать', add_btn:'+ Добавить',
-    sensors_to_bypass:'Датчики для обхода', no_instances:'Нет экземпляров.',
-    fullscreen_title:'Полный экран', sos_slide:'Проведите для активации SOS',
-    sos_confirm_title:'Подтвердить тревогу', sos_confirm_text:'Проведите для немедленной активации тревоги.',
-    sos_call:'📞 Вызвать экстренные службы',
-    home_name_modal_title:'🏡 Название дома',
-    home_name_modal_desc:'Это имя отображается в панели экземпляров и в полноекранном режиме.',
-    home_name_label:'Название дома', home_name_placeholder:'Мой дом',
-    clear_log_btn:'ОЧИСТИТЬ',
-    bg_weather:'Анимированная погода', bg_none:'По умолчанию', bg_panel_none:'Без фона', bg_photo:'Одно фото', bg_collage:'Коллаж', bg_video:'Зацикленное видео', bg_panel_title:'Фон панели', bg_hub_title:'Фон Argus', bg_sound_opt:'Звук видео', bg_image_opt:'Изображение / GIF', bg_hub_default:'По умолчанию (Argus)',
-    forgot_pin:'Забыли PIN?', pin_reset_admin_only:'❌ Ошибка: Только администраторы Home Assistant могут сбросить мастер-PIN.', pin_reset_confirm:'Вы уверены, что хотите сбросить мастер-PIN? Текущий PIN-код будет удален и отключен.',
-    temp_auto:'Авто (лок. датчик / термостат / климат)', temp_thermostat:'(термостат)', battery_low:'⚠️ Низкий заряд',
-    times_section:'⏱️ Времена', arm_time:'Постановка (s)', disarm_time:'Задержка входа (s)',
-    save_config:'СОХРАНИТЬ КОНФИГУРАЦИЮ', never_triggered:'Никогда не срабатывало',
-    bridge_paired:'Мост настроен',
-    bridge_paired_desc:'Мост <b>{bridge}</b> настроен в Home Assistant. Здесь нельзя проверить, добавлен ли он в Apple Home, или узнать его название.',
-    bridge_not_connected:'Мост не настроен',
-    bridge_not_desc:'Включите интеграцию HomeKit Bridge в Home Assistant и добавьте <code>alarm_control_panel.argus_*</code> для QR сопряжения.',
-    manual_disarm:'Вручную (Снято)', manual_arm:'Вручную',
-    open_sensors:'Открытые датчики', log_detail_disarm:'Система снята',
-    alarm_instance:'Экземпляр тревоги',
-    log_detail_armed:'Режим', log_detail_triggered:'Автоматическая активация',
-    log_detail_pin_reset: 'Мастер-PIN сброшен администратором',
-    log_detail_pin_reset_failed: 'Несанкционированная попытка сбросить мастер-PIN',
-    badge_pin_reset: 'PIN Сброшен',
-    badge_pin_reset_failed: 'Ошибка Сброса PIN',
-    no_files_uploaded: 'Нет загруженных файлов. Загрузите фон с помощью элементов управления выше.',
-    no_files_uploaded_short: 'Нет загруженных файлов.',
-    files_count: '{count} файлов',
-    files_count_short: '{count} файл.',
-    file_delete_confirm: 'Вы уверены, что хотите навсегда удалить «{filename}»?',
-    use_for_panel: 'Панель',
-    use_for_hub: 'Argus',
-    delete_btn_title: 'Удалить из хранилища',
-    bg_panel_selected_from_history: 'Фон панели выбран из истории.',
-    bg_hub_selected_from_history: 'Фон Argus выбран из истории.',
-    error_loading_uploaded_files: 'Ошибка при загрузке истории файлов.',
-    select_profile_title: 'Выберите ваш профиль',
-    select_profile_subtitle: 'Доступ к вашим панелям безопасности и экземплярам Argus.',
-    exit_to_ha: 'Вернуться в Home Assistant',
-    role_argus_admin: 'Администратор Argus',
-    role_argus_user: 'Стандартный пользователь',
-    ha_account_linked: 'Учетная запись Home Assistant: {name}',
-    ha_account_unavailable: 'Привязка недоступна',
-    user_role_label: 'Роль Argus',
-    delete_user_tooltip: 'Удалить профиль пользователя',
-    delete_user_confirm: 'Вы уверены, что хотите удалить "{name}"?',
-    cannot_delete_last_admin: 'Нельзя удалить последнего администратора.',
-    clock_format_label: 'Формат времени',
-    clock_format_desc: 'Выберите способ отображения времени.',
-    clock_auto: 'Автоматически (Home Assistant)',
-    clock_12h: '12-часовой (AM/PM)',
-    clock_24h: '24-часовой',
-    unlock_kiosk: 'Разблокировать киоск',
-    first_run_welcome: 'Спасибо за выбор Argus Home Hub. Добро пожаловать.',
-    first_run_desc: 'Завершите настройку для защиты вашего дома.',
-    first_run_pin_expl: 'PIN-код доступа открывает Argus. Мастер PIN-код управляет охраной.',
-    first_run_skip: 'Пропустить',
-    first_run_start: 'Начать работу с Argus',
-    first_run_blocked_title: 'Доступ запрещен',
-    first_run_blocked_desc: 'Для первичной настройки Argus требуется администратор Home Assistant.',
-    log_action_first_run_completed: 'Argus инициализирован пользователем {user}',
-    log_action_fullscreen_unlocked: 'Киоск разблокирован пользователем {user}',
-    log_action_master_pin_rejected: 'Неверная попытка ввода мастер-PIN {user}',
-    log_action_select_profile: 'Выбран профиль: {user}',
-    log_action_verify_access_pin: 'PIN-код доступа проверен {user}',
-    log_action_sos: 'SOS паника вызвана пользователем {user}',
-    log_action_stop_sos: 'SOS паника остановлена пользователем {user}',
-    log_action_save_ui: 'Настройки UI сохранены пользователем {user}',
-    log_action_rejected: 'Действие отклонено',
-    unlinked_ha_accounts_title: 'Учетные записи Home Assistant без профиля Argus',
-    btn_create_argus_profile: 'Создать профиль Argus',
-    no_unlinked_ha_accounts: 'Все активные учетные записи Home Assistant имеют профиль.',
-    profile_is_yours: 'Это ваш профиль',
-    profile_needs_pin: 'Профиль другого пользователя — введите PIN доступа',
-    profile_no_pin_access: 'У этого профиля нет PIN доступа. Вы не можете его открыть.',
-    ha_role_admin: 'Админ HA',
-    ha_role_standard: 'Пользователь HA',
-    login_btn: 'Войти',
-    cancel_btn: 'Отмена',
-    pin_placeholder: 'PIN доступа',
-    link_ha_user: 'Связать с пользователем Home Assistant',
-    ha_admin_label: 'Администратор Home Assistant',
-    ha_standard_user_label: 'Стандартный пользователь HA',
-    role_argus_standard: 'Стандартный пользователь',
-      },
+  'en': {
+    'accept': 'Accept',
+    'access_desc': 'Global security management, master PIN and administrators.',
+    'access_pin_lbl': 'PIN de Acceso',
+    'access_title': 'Access Control & Users',
+    'action_failed': 'No se pudo realizar la acción',
+    'active_profile': 'Perfil Activo',
+    'active_until': 'Expires',
+    'activity_log': '📋 Activity Log',
+    'add_btn': '+ Add',
+    'add_user': 'Add User',
+    'admin_only': 'Only administrators can modify this section.',
+    'alarm_instance': 'Alarm Instance',
+    'all_sensors_bypassed': 'Todos los sensores configurados están omitidos.',
+    'arm_time': 'Arming delay (s)',
+    'arm_time_label': 'Arm time (s)',
+    'armed_away': 'Away',
+    'armed_home': 'Home',
+    'armed_night': 'Night',
+    'armed_vacation': 'Vacation',
+    'arming': 'Arming',
+    'automations': '⚡ Automations',
+    'available': 'Available',
+    'background_lbl': 'Background',
+    'backup_desc': 'Save a backup of your settings or restore a previous one.',
+    'backup_title': 'Backup & Restore',
+    'badge_pin_reset': 'PIN Reset',
+    'badge_pin_reset_failed': 'PIN Reset Failed',
+    'battery_low': '⚠️ Low Battery',
+    'bg_collage': 'Collage',
+    'bg_hub_default': 'Default (Argus)',
+    'bg_hub_selected_from_history': 'Argus background selected from history.',
+    'bg_hub_title': 'Argus background',
+    'bg_image_opt': 'Image / GIF',
+    'bg_none': 'Default',
+    'bg_panel_none': 'No background',
+    'bg_panel_selected_from_history': 'Panel background selected from history.',
+    'bg_panel_title': 'Panel background',
+    'bg_photo': 'One photo',
+    'bg_sound_opt': 'Video sound',
+    'bg_video': 'Loop video',
+    'bg_weather': 'Animated weather',
+    'bridge_not_connected': 'Bridge not configured',
+    'bridge_not_desc': 'Enable the HomeKit Bridge integration in Home Assistant and include the entity <code>alarm_control_panel.argus_*</code> to generate a pairing QR code.',
+    'bridge_paired': 'Bridge configured',
+    'bridge_paired_desc': 'The <b>{bridge}</b> bridge is configured in Home Assistant. Home Assistant cannot verify from here whether it was added to Apple Home or report its name.',
+    'btn_away': '🔒 AWAY',
+    'btn_create_argus_profile': 'Create Argus Profile',
+    'btn_disarmed': 'DISARMED',
+    'btn_home': '🏠 HOME',
+    'btn_night': '🌙 NIGHT',
+    'btn_sos': '🚨 SOS / PANIC',
+    'btn_vacation': '✈️ VACATION',
+    'bypass_lbl': '🚫 Bypass',
+    'cancel': 'Cancel',
+    'cancel_btn': 'Cancel',
+    'cannot_arm': 'Невозможно поставить на охрану',
+    'cannot_delete_last_admin': 'Cannot delete the last binding administrator.',
+    'change_btn': 'Cambiar',
+    'change_pin': 'Master PIN',
+    'change_profile_picture': 'Cambiar foto en Personas de HA ↗',
+    'change_user_pin': 'Cambiar PIN',
+    'claim_btn': 'Заявить права администратора',
+    'claim_desc': 'Вашей установке требуется администратор для получения доступа.',
+    'claim_title': 'Обновление безопасности Argus',
+    'clear': 'Clear',
+    'clear_history_confirm': 'Удалить всю историю активности?',
+    'clear_log_btn': 'CLEAR',
+    'clock_12h': '12-hour (AM/PM)',
+    'clock_24h': '24-hour',
+    'clock_auto': 'Automatic (Home Assistant)',
+    'clock_format_desc': 'Choose how time is displayed across panels and logs.',
+    'clock_format_label': 'Time Format',
+    'close': 'Close',
+    'confirm': '✓ Confirm',
+    'confirm_pin': 'Confirm PIN',
+    'connected': 'CONNECTED',
+    'create_ha': '+ Create in HA',
+    'current_pin': 'Current PIN',
+    'customize': 'Настроить',
+    'delete': 'Удалить',
+    'delete_btn_title': 'Delete from storage',
+    'delete_file_error': 'Не удалось удалить файл: {error}',
+    'delete_user': 'Eliminar usuario',
+    'delete_user_confirm': 'Are you sure you want to delete \"{name}\"?',
+    'delete_user_tooltip': 'Delete user profile',
+    'deselect_all': '☐ None',
+    'details_notif': 'Alarm notification',
+    'disarm_time': 'Entry delay (s)',
+    'disarm_time_label': 'Entry delay (s)',
+    'disarmed': 'Disarmed',
+    'done': 'Готово',
+    'edit_btn': '✏️ Edit',
+    'edit_dashboard': 'Edit Dashboard',
+    'edit_dashboard_done': '✓ Done',
+    'emergency_help': 'Número telefónico marcado en caso de emergencia.',
+    'emergency_number_label': 'Número de Emergencia',
+    'error_loading_uploaded_files': 'Error loading file history.',
+    'exit_to_ha': 'Back to Home Assistant',
+    'exp_indefinite': 'Indefinite',
+    'exp_temporary': 'Temporary (Date/Time)',
+    'expired': 'Expired',
+    'export_btn': '📤 Download',
+    'export_error': 'Ошибка экспорта: {error}',
+    'file_choice': '«{file}»\n\nИспользовать как статичное изображение (ОК) или анимированное видео (Отмена)?',
+    'file_delete_confirm': 'Are you sure you want to permanently delete \"{filename}\"?',
+    'file_read_error': 'Не удалось прочитать файл.',
+    'files_count': '{count} files',
+    'files_count_short': '{count} files',
+    'first_run_blocked_desc': 'A Home Assistant administrator is required to set up Argus for the first time.',
+    'first_run_blocked_title': 'Access Denied',
+    'first_run_desc': 'Complete setup to secure your home.',
+    'first_run_pin_expl': 'The access PIN opens Argus. The master PIN controls arming and disarming.',
+    'first_run_skip': 'Skip',
+    'first_run_start': 'Start with Argus',
+    'first_run_welcome': 'Thank you for choosing Argus Home Hub. Welcome.',
+    'forgot_pin': 'Forgot PIN?',
+    'fullscreen_title': 'Full screen',
+    'generic_error': 'Ошибка: {error}',
+    'github_action': 'Поставить звезду на GitHub',
+    'github_desc': 'Если вам нравится проект, поставьте звезду на GitHub, чтобы поддержать разработку.',
+    'github_title': 'Поддержите Argus',
+    'ha_account_linked': 'Home Assistant Account: {name}',
+    'ha_account_unavailable': 'Binding unavailable',
+    'ha_admin_label': 'Home Assistant Admin',
+    'ha_role_admin': 'HA Admin',
+    'ha_role_standard': 'HA User',
+    'ha_standard_user_label': 'Standard HA User',
+    'hero_desc': 'Comprehensive security system, access control, automations, and HomeKit.',
+    'history_refresh': '🔄 Refresh',
+    'history_unavailable': 'Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.',
+    'home_default': 'Мой дом',
+    'home_fallback': 'Дом',
+    'home_name_label': 'Home Name',
+    'home_name_lbl': 'Home Name',
+    'home_name_modal_desc': 'This name appears in the instances panel and in full screen.',
+    'home_name_modal_title': '🏡 Home Name',
+    'home_name_placeholder': 'My Home',
+    'homekit_bridge': 'HomeKit Bridge',
+    'homekit_house': 'Apple Home',
+    'homekit_not_paired': 'Not paired to any home.',
+    'homekit_title': '🏠 HomeKit',
+    'import_btn': '📥 Restore',
+    'import_error': 'Ошибка импорта: {error}',
+    'import_success': 'Конфигурация восстановлена. Перезагрузка…',
+    'initialization_error_desc': 'Не удалось подключиться к авторизованному backend Home Assistant.',
+    'initialization_error_title': 'Не удалось запустить Argus',
+    'instances': 'Active Instances',
+    'introduce_pin': 'Enter your PIN',
+    'invalid_config': 'Недопустимый файл конфигурации.',
+    'is_admin': 'Administrator',
+    'lang_select_title': 'Select Language',
+    'lang_selector_lbl': '⚙️ Language',
+    'language': 'Language',
+    'lbl_aesthetic_custom': 'Aesthetic Customization',
+    'lbl_load_file': 'Upload file:',
+    'lbl_uploaded_files': 'Uploaded files on server',
+    'link_ha_user': 'Link to Home Assistant User',
+    'linked_rules': 'Rules linked to Argus',
+    'loading': 'Загрузка…',
+    'lock_if_open': 'Lock if open',
+    'log_action_access_pin_updated': 'PIN доступа обновлён',
+    'log_action_backup_created': 'Резервная копия создана',
+    'log_action_backup_restored': 'Конфигурация восстановлена',
+    'log_action_first_run_completed': 'Argus initialized by {user}',
+    'log_action_fullscreen_unlocked': 'Kiosk unlocked by {user}',
+    'log_action_master_pin_rejected': 'Incorrect master PIN attempt by {user}',
+    'log_action_mode_changed': 'Режим изменён',
+    'log_action_profile_selected': 'Профиль выбран',
+    'log_action_rejected': 'Action rejected',
+    'log_action_save_ui': 'UI Settings saved by {user}',
+    'log_action_schedule_applied': 'Расписание применено',
+    'log_action_select_profile': 'Profile selected: {user}',
+    'log_action_sos': 'SOS Panic triggered by {user}',
+    'log_action_state_restored': 'Состояние восстановлено',
+    'log_action_stop_sos': 'SOS Panic stopped by {user}',
+    'log_action_user_logged_in': 'Вход пользователя',
+    'log_action_verify_access_pin': 'Access PIN verified by {user}',
+    'log_armed': 'Armed',
+    'log_by': 'by',
+    'log_detail_armed': 'Mode',
+    'log_detail_disarm': 'System disarmed',
+    'log_detail_pin_reset': 'Master PIN reset by administrator',
+    'log_detail_pin_reset_failed': 'Unauthorized attempt to reset master PIN',
+    'log_detail_triggered': 'Automatic activation',
+    'log_disarmed': 'Disarmed',
+    'log_no_events': 'No recent events.',
+    'log_sensor': 'Sensor',
+    'log_triggered': 'Triggered!',
+    'login_btn': 'Login',
+    'manual_arm': 'Manual',
+    'manual_disarm': 'Manual (Disarmed)',
+    'master_pin_lbl': 'PIN Maestro',
+    'modal_add_user': '+ Добавить пользователя',
+    'modal_cancel': 'Отмена',
+    'modal_confirm': 'Подтвердить',
+    'modal_delete_confirm': 'Удалить этого пользователя?',
+    'modal_edit_name': 'Изменить имя',
+    'modal_name_label': 'Имя профиля',
+    'modal_pin_help': 'Оставьте пустым, чтобы удалить PIN.',
+    'modal_pin_title': 'PIN доступа',
+    'modal_save': 'Сохранить',
+    'modal_user_added': 'Пользователь создан.',
+    'mode_away': 'Away',
+    'mode_home': 'Home',
+    'mode_night': 'Night',
+    'mode_vacation': 'Vacation',
+    'modes': 'Modes',
+    'mqtt_label': 'MQTT',
+    'never_triggered': 'Never triggered',
+    'new_pin': 'New PIN',
+    'no_alarm_instance': 'Нет доступного экземпляра сигнализации',
+    'no_auto_linked': 'No automations linked to Argus.',
+    'no_files_uploaded': 'No uploaded files. Upload a background using the controls above.',
+    'no_files_uploaded_short': 'No uploaded files.',
+    'no_instances': 'No instances. Add Argus from Integrations.',
+    'no_results': 'Нет результатов',
+    'no_rules': '',
+    'no_sensors_configured': 'Sin sensores configurados',
+    'no_unlinked_ha_accounts': 'All active Home Assistant accounts have a profile.',
+    'no_users': 'No additional users configured.',
+    'none_selected': 'None selected',
+    'notif_desc': 'Select mobile devices registered in HA that will receive Argus alerts.',
+    'notif_no_services': 'Нет мобильных служб',
+    'notification_armed': '{user} активировал режим {mode}.',
+    'notification_disarmed': '{user} снял систему с охраны.',
+    'notifications_title': '🔔 Notifications',
+    'open_sensors': 'Open sensors',
+    'open_sensors_explain': 'Следующие датчики открыты:\n{names}\n\nЗакройте их перед постановкой на охрану или включите «Обход».',
+    'panic_state_unknown': 'Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.',
+    'panic_stop_error': 'Не удалось остановить тревогу: {error}',
+    'panic_stopped': 'Тревога остановлена; восстановлено состояние {state}',
+    'pending': 'Pending',
+    'pin_active_no': 'Master PIN: Deactivated',
+    'pin_active_yes': 'Master PIN: Active',
+    'pin_deleted': '✓ PIN Deleted',
+    'pin_desc': 'Numeric code to arm and disarm.',
+    'pin_disarm_error': 'Неверный PIN или ошибка снятия с охраны',
+    'pin_incorrect': '❌ Incorrect current PIN',
+    'pin_management': '🔑 Gestión de Pines',
+    'pin_master_title': 'Master PIN',
+    'pin_modal_desc': 'Numeric PIN to disarm Argus',
+    'pin_placeholder': 'Access PIN',
+    'pin_remove_hint': 'To remove PIN: Enter the current one and leave the fields below empty.',
+    'pin_reset_admin_only': '❌ Error: Only Home Assistant administrators can reset the master PIN.',
+    'pin_reset_confirm': 'Are you sure you want to reset the master PIN? The current PIN will be removed and deactivated.',
+    'pin_updated': '✓ PIN Updated',
+    'profile_is_yours': 'This is your profile',
+    'profile_needs_pin': 'Another person’s profile — enter the access PIN',
+    'profile_no_pin_access': 'This profile has no access PIN. You cannot open it.',
+    'remove_btn': 'Quitar',
+    'reset_btn': '⚠️ Factory Reset',
+    'reset_confirm': 'Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.',
+    'reset_dashboard': 'Reset Layout',
+    'reset_error': 'Ошибка сброса: {error}',
+    'reset_success': 'Argus сброшен. У вас есть несколько секунд, чтобы отменить это.',
+    'retry_action': 'Повторить',
+    'role_argus_admin': 'Argus Administrator',
+    'role_argus_admin_short': 'Adm',
+    'role_argus_standard': 'Standard User',
+    'role_argus_user': 'Standard User',
+    'role_argus_user_short': 'Std',
+    'rules_tip': '',
+    'save_btn': 'Save',
+    'save_config': 'SAVE CONFIGURATION',
+    'save_mode': '💾 Save Mode',
+    'save_notif': 'Save',
+    'save_user': 'Save',
+    'search_placeholder': 'Search by name, area or entity_id',
+    'search_select': 'Search & select',
+    'searching_auto': '↻ Searching automations...',
+    'select_all': '☑ All',
+    'select_btn': '+ Select',
+    'select_profile_subtitle': 'Access your security panels and Argus instances.',
+    'select_profile_title': 'Select Your Profile',
+    'selected_lbl': 'Selected',
+    'selector_panic': '🚨 Действия SOS',
+    'sensor_section': 'Intrusion Sensors',
+    'sensors_to_bypass': 'Sensors to Bypass',
+    'settings': '⚙️ Settings',
+    'setup_access_pin': 'PIN доступа к панели Argus (Необязательно)',
+    'setup_admin_name': 'Имя администратора',
+    'setup_master_pin': 'Мастер-PIN для постановки/снятия с охраны (Необязательно)',
+    'setup_required_action': 'Настроить Argus в интеграциях',
+    'setup_required_desc': 'Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.',
+    'setup_required_title': 'Требуется настройка Argus',
+    'siren_section': 'Sirens',
+    'sos_actions': 'Acciones Automáticas de SOS',
+    'sos_activated': 'SOS активирован',
+    'sos_call': '📞 Call Emergency Services',
+    'sos_call_confirm': 'Позвонить в экстренную службу ({number})?',
+    'sos_call_help': 'Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.',
+    'sos_confirm_text': 'Slide to trigger the alarm immediately.',
+    'sos_confirm_title': 'Confirm panic',
+    'sos_error': 'Не удалось активировать SOS: {error}',
+    'sos_no_outputs': 'Устройства не выбраны',
+    'sos_outputs_help': 'Dispositivos activados al disparar el SOS.',
+    'sos_select_outputs': 'Seleccionar salidas de pánico',
+    'sos_slide': 'Slide to activate SOS',
+    'sos_stop': 'DETENER SOS',
+    'status_away': 'FUERA',
+    'status_closed': 'CLOSED',
+    'status_home': 'EN CASA',
+    'status_idle': 'INACTIVO',
+    'status_open': 'OPEN',
+    'status_recording': 'GRABANDO',
+    'switch_profile_btn': '👤 Switch Profile',
+    'sync_panel_help': 'Paneles de alarma que seguirán el mismo estado de Argus',
+    'sync_panel_section': 'Paneles Sincronizados',
+    'system_armed': 'SYSTEM ARMED',
+    'system_disarmed': 'SYSTEM DISARMED',
+    'system_triggered': '¡ALARMA DISPARADA!',
+    'temp_auto': 'Automatic (local sensor / thermostat / climate)',
+    'temp_notification_title': 'Argus — Температурное предупреждение',
+    'temp_thermostat': '(thermostat)',
+    'thermostat_alert_notif': '🌡️ Temperature alert',
+    'times_section': '⏱️ Timers',
+    'triggered': 'ALARM!',
+    'unavailable': 'Unavailable',
+    'undo_error': 'Не удалось отменить сброс: {error}',
+    'undo_reset_btn': '↩️ Undo Reset',
+    'undo_success': 'Сброс отменён.',
+    'unlinked_ha_accounts_title': 'Home Assistant accounts without Argus profile',
+    'unlock_kiosk': 'Unlock kiosk',
+    'update_pin': 'Update PIN',
+    'upload_error': 'Ошибка загрузки.',
+    'url_placeholder': 'URL фона…',
+    'use_for_hub': 'Argus',
+    'use_for_panel': 'Panel',
+    'use_ha_language': 'Use Home Assistant language',
+    'user_default': 'Пользователь',
+    'user_exp_date': 'Expiration Date/Time',
+    'user_exp_type': 'Expiration',
+    'user_no_pin': 'Sin PIN de acceso',
+    'user_pin': 'User PIN',
+    'user_pin_action': 'PIN',
+    'user_required': 'Требуются имя и PIN',
+    'user_role_action': 'Роль',
+    'user_role_label': 'Argus Role',
+    'username': 'Username',
+    'users_title': '👥 Users & Access Control',
+    'wait_if_open': 'Wait for sensors to close',
+    'waiting_sensors': 'ESPERANDO SENSORES',
+    'welcome_greeting': 'Welcome,',
+    'welcome_profile': 'Добро пожаловать, {name}',
+  },
+  'fr': {
+    'accept': 'Accepter',
+    'access_desc': 'Gestion globale de la sécurité, PIN maître et administrateurs.',
+    'access_pin_lbl': 'PIN de Acceso',
+    'access_title': 'Contrôle d\'accès & Utilisateurs',
+    'action_failed': 'No se pudo realizar la acción',
+    'active_profile': 'Perfil Activo',
+    'active_until': 'Expire le',
+    'activity_log': '📋 Journal d\'activité',
+    'add_btn': '+ Ajouter',
+    'add_user': 'Ajouter un utilisateur',
+    'admin_only': 'Seuls les administrateurs peuvent modifier cette section.',
+    'alarm_instance': 'Instance d\'alarme',
+    'all_sensors_bypassed': 'Todos los sensores configurados están omitidos.',
+    'arm_time': 'Délai d\'armement (s)',
+    'arm_time_label': 'Temps armement (s)',
+    'armed_away': 'Absent',
+    'armed_home': 'Maison',
+    'armed_night': 'Nuit',
+    'armed_vacation': 'Vacances',
+    'arming': 'Armement',
+    'automations': '⚡ Automatisations',
+    'available': 'Disponibles',
+    'background_lbl': 'Fond',
+    'backup_desc': 'Enregistrez une sauvegarde ou restaurez une précédente.',
+    'backup_title': 'Sauvegarde & Restauration',
+    'badge_pin_reset': 'PIN Réinitialisé',
+    'badge_pin_reset_failed': 'Échec Réinit. PIN',
+    'battery_low': '⚠️ Batterie faible',
+    'bg_collage': 'Collage',
+    'bg_hub_default': 'Par défaut (Argus)',
+    'bg_hub_selected_from_history': 'Arrière-plan Argus sélectionné depuis l\'historique.',
+    'bg_hub_title': 'Fond Argus',
+    'bg_image_opt': 'Image / GIF',
+    'bg_none': 'Par défaut',
+    'bg_panel_none': 'Sans fond',
+    'bg_panel_selected_from_history': 'Arrière-plan du panneau sélectionné depuis l\'historique.',
+    'bg_panel_title': 'Fond du panneau',
+    'bg_photo': 'Une photo',
+    'bg_sound_opt': 'Son de la vidéo',
+    'bg_video': 'Vidéo en boucle',
+    'bg_weather': 'Météo animée',
+    'bridge_not_connected': 'Pont non configuré',
+    'bridge_not_desc': 'Activez l\'intégration HomeKit Bridge dans Home Assistant et incluez l\'entité <code>alarm_control_panel.argus_*</code> pour générer un QR d\'appairage.',
+    'bridge_paired': 'Pont configuré',
+    'bridge_paired_desc': 'Le pont <b>{bridge}</b> est configuré dans Home Assistant. Home Assistant ne peut pas vérifier ici son ajout à Apple Home ni fournir son nom.',
+    'btn_away': '🔒 ABSENT',
+    'btn_create_argus_profile': 'Créer un profil Argus',
+    'btn_disarmed': 'DÉSARMÉ',
+    'btn_home': '🏠 MAISON',
+    'btn_night': '🌙 NUIT',
+    'btn_sos': '🚨 SOS / PANIQUE',
+    'btn_vacation': '✈️ VACANCES',
+    'bypass_lbl': '🚫 Ignorer',
+    'cancel': 'Annuler',
+    'cancel_btn': 'Annuler',
+    'cannot_arm': 'Невозможно поставить на охрану',
+    'cannot_delete_last_admin': 'Impossible de supprimer le dernier administrateur.',
+    'change_btn': 'Cambiar',
+    'change_pin': 'Code PIN Maître',
+    'change_profile_picture': 'Cambiar foto en Personas de HA ↗',
+    'change_user_pin': 'Cambiar PIN',
+    'claim_btn': 'Заявить права администратора',
+    'claim_desc': 'Вашей установке требуется администратор для получения доступа.',
+    'claim_title': 'Обновление безопасности Argus',
+    'clear': 'Effacer',
+    'clear_history_confirm': 'Удалить всю историю активности?',
+    'clear_log_btn': 'EFFACER',
+    'clock_12h': '12 heures (AM/PM)',
+    'clock_24h': '24 heures',
+    'clock_auto': 'Automatique (Home Assistant)',
+    'clock_format_desc': 'Choisissez l\'affichage de l\'heure.',
+    'clock_format_label': 'Format d\'heure',
+    'close': 'Fermer',
+    'confirm': '✓ Confirmer',
+    'confirm_pin': 'Confirmer le PIN',
+    'connected': 'CONNECTÉ',
+    'create_ha': '+ Créer dans HA',
+    'current_pin': 'PIN actuel',
+    'customize': 'Настроить',
+    'delete': 'Удалить',
+    'delete_btn_title': 'Supprimer du stockage',
+    'delete_file_error': 'Не удалось удалить файл: {error}',
+    'delete_user': 'Eliminar usuario',
+    'delete_user_confirm': 'Voulez-vous vraiment supprimer « {name} » ?',
+    'delete_user_tooltip': 'Supprimer le profil utilisateur',
+    'deselect_all': '☐ Aucun',
+    'details_notif': 'Notification d\'alarme',
+    'disarm_time': 'Délai d\'entrée (s)',
+    'disarm_time_label': 'Délai d\'entrée (s)',
+    'disarmed': 'Désarmé',
+    'done': 'Готово',
+    'edit_btn': '✏️ Modifier',
+    'edit_dashboard': 'Modifier le tableau',
+    'edit_dashboard_done': '✓ Terminé',
+    'emergency_help': 'Número telefónico marcado en caso de emergencia.',
+    'emergency_number_label': 'Número de Emergencia',
+    'error_loading_uploaded_files': 'Erreur lors du chargement de l\'historique des fichiers.',
+    'exit_to_ha': 'Retour à Home Assistant',
+    'exp_indefinite': 'Indéfini',
+    'exp_temporary': 'Temporaire (Date/Heure)',
+    'expired': 'Expiré',
+    'export_btn': '📤 Télécharger',
+    'export_error': 'Ошибка экспорта: {error}',
+    'file_choice': '«{file}»\n\nИспользовать как статичное изображение (ОК) или анимированное видео (Отмена)?',
+    'file_delete_confirm': 'Voulez-vous vraiment supprimer définitivement \"{filename}\" ?',
+    'file_read_error': 'Не удалось прочитать файл.',
+    'files_count': '{count} fichiers',
+    'files_count_short': '{count} fich.',
+    'first_run_blocked_desc': 'Un administrateur Home Assistant est requis.',
+    'first_run_blocked_title': 'Accès refusé',
+    'first_run_desc': 'Complétez la configuration initiale.',
+    'first_run_pin_expl': 'Le PIN d\'accès ouvre Argus. Le PIN maître contrôle l\'armement.',
+    'first_run_skip': 'Passer',
+    'first_run_start': 'Démarrer avec Argus',
+    'first_run_welcome': 'Merci d\'avoir choisi Argus Home Hub. Bienvenue.',
+    'forgot_pin': 'PIN oublié ?',
+    'fullscreen_title': 'Plein écran',
+    'generic_error': 'Ошибка: {error}',
+    'github_action': 'Поставить звезду на GitHub',
+    'github_desc': 'Если вам нравится проект, поставьте звезду на GitHub, чтобы поддержать разработку.',
+    'github_title': 'Поддержите Argus',
+    'ha_account_linked': 'Compte Home Assistant : {name}',
+    'ha_account_unavailable': 'Liaison indisponible',
+    'ha_admin_label': 'Admin Home Assistant',
+    'ha_role_admin': 'Admin HA',
+    'ha_role_standard': 'Utilisateur HA',
+    'ha_standard_user_label': 'Utilisateur HA standard',
+    'hero_desc': 'Système de sécurité complet, contrôle d\'accès, automatisations et HomeKit.',
+    'history_refresh': '🔄 Actualiser',
+    'history_unavailable': 'Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.',
+    'home_default': 'Мой дом',
+    'home_fallback': 'Дом',
+    'home_name_label': 'Nom du domicile',
+    'home_name_lbl': 'Nom du domicile',
+    'home_name_modal_desc': 'Ce nom apparaît dans le panneau des instances et en plein écran.',
+    'home_name_modal_title': '🏡 Nom du domicile',
+    'home_name_placeholder': 'Ma maison',
+    'homekit_bridge': 'Pont HomeKit',
+    'homekit_house': 'Apple Home',
+    'homekit_not_paired': 'Non associé à une maison.',
+    'homekit_title': '🏠 HomeKit',
+    'import_btn': '📥 Restaurer',
+    'import_error': 'Ошибка импорта: {error}',
+    'import_success': 'Конфигурация восстановлена. Перезагрузка…',
+    'initialization_error_desc': 'Не удалось подключиться к авторизованному backend Home Assistant.',
+    'initialization_error_title': 'Не удалось запустить Argus',
+    'instances': 'Instances actives',
+    'introduce_pin': 'Entrez votre PIN',
+    'invalid_config': 'Недопустимый файл конфигурации.',
+    'is_admin': 'Administrateur',
+    'lang_select_title': 'Sélectionner la langue',
+    'lang_selector_lbl': '⚙️ Langue',
+    'language': 'Langue',
+    'lbl_aesthetic_custom': 'Personnalisation esthétique',
+    'lbl_load_file': 'Charger le fichier:',
+    'lbl_uploaded_files': 'Fichiers téléchargés sur le serveur',
+    'link_ha_user': 'Lier à un utilisateur Home Assistant',
+    'linked_rules': 'Règles liées à Argus',
+    'loading': 'Загрузка…',
+    'lock_if_open': 'Bloquer si ouvert',
+    'log_action_access_pin_updated': 'PIN доступа обновлён',
+    'log_action_backup_created': 'Резервная копия создана',
+    'log_action_backup_restored': 'Конфигурация восстановлена',
+    'log_action_first_run_completed': 'Argus initialisé par {user}',
+    'log_action_fullscreen_unlocked': 'Kiosque déverrouillé par {user}',
+    'log_action_master_pin_rejected': 'Tentative de PIN maître incorrecte par {user}',
+    'log_action_mode_changed': 'Режим изменён',
+    'log_action_profile_selected': 'Профиль выбран',
+    'log_action_rejected': 'Action rejetée',
+    'log_action_save_ui': 'Paramètres UI enregistrés par {user}',
+    'log_action_schedule_applied': 'Расписание применено',
+    'log_action_select_profile': 'Profil sélectionné : {user}',
+    'log_action_sos': 'Panique SOS déclenchée par {user}',
+    'log_action_state_restored': 'Состояние восстановлено',
+    'log_action_stop_sos': 'Panique SOS arrêtée par {user}',
+    'log_action_user_logged_in': 'Вход пользователя',
+    'log_action_verify_access_pin': 'PIN d\'accès vérifié par {user}',
+    'log_armed': 'Armé',
+    'log_by': 'par',
+    'log_detail_armed': 'Mode',
+    'log_detail_disarm': 'Système désarmé',
+    'log_detail_pin_reset': 'Code PIN maître réinitialisé par l\'administrateur',
+    'log_detail_pin_reset_failed': 'Tentative non autorisée de réinitialiser le code PIN maître',
+    'log_detail_triggered': 'Activation automatique',
+    'log_disarmed': 'Désarmé',
+    'log_no_events': 'Aucun événement récent.',
+    'log_sensor': 'Capteur',
+    'log_triggered': 'Déclenché!',
+    'login_btn': 'Connexion',
+    'manual_arm': 'Manuel',
+    'manual_disarm': 'Manuel (Désarmé)',
+    'master_pin_lbl': 'PIN Maestro',
+    'modal_add_user': '+ Добавить пользователя',
+    'modal_cancel': 'Отмена',
+    'modal_confirm': 'Подтвердить',
+    'modal_delete_confirm': 'Удалить этого пользователя?',
+    'modal_edit_name': 'Изменить имя',
+    'modal_name_label': 'Имя профиля',
+    'modal_pin_help': 'Оставьте пустым, чтобы удалить PIN.',
+    'modal_pin_title': 'PIN доступа',
+    'modal_save': 'Сохранить',
+    'modal_user_added': 'Пользователь создан.',
+    'mode_away': 'Absent',
+    'mode_home': 'Maison',
+    'mode_night': 'Nuit',
+    'mode_vacation': 'Vacances',
+    'modes': 'Modes',
+    'mqtt_label': 'MQTT',
+    'never_triggered': 'Jamais déclenché',
+    'new_pin': 'Nouveau PIN',
+    'no_alarm_instance': 'Нет доступного экземпляра сигнализации',
+    'no_auto_linked': 'Aucune automatisation liée à Argus.',
+    'no_files_uploaded': 'Aucun fichier téléchargé. Téléchargez un arrière-plan à l\'aide des commandes ci-dessus.',
+    'no_files_uploaded_short': 'Aucun fichier téléchargé.',
+    'no_instances': 'Aucune instance.',
+    'no_results': 'Нет результатов',
+    'no_rules': '',
+    'no_sensors_configured': 'Sin sensores configurados',
+    'no_unlinked_ha_accounts': 'Tous les comptes Home Assistant actifs ont un profil.',
+    'no_users': 'Aucun utilisateur supplémentaire configuré.',
+    'none_selected': 'Aucun sélectionné',
+    'notif_desc': 'Sélectionnez les appareils mobiles enregistrés dans HA qui recevront les alertes Argus.',
+    'notif_no_services': 'Нет мобильных служб',
+    'notification_armed': '{user} активировал режим {mode}.',
+    'notification_disarmed': '{user} снял систему с охраны.',
+    'notifications_title': '🔔 Notifications',
+    'open_sensors': 'Capteurs ouverts',
+    'open_sensors_explain': 'Следующие датчики открыты:\n{names}\n\nЗакройте их перед постановкой на охрану или включите «Обход».',
+    'panic_state_unknown': 'Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.',
+    'panic_stop_error': 'Не удалось остановить тревогу: {error}',
+    'panic_stopped': 'Тревога остановлена; восстановлено состояние {state}',
+    'pending': 'En attente',
+    'pin_active_no': 'PIN actif: Non',
+    'pin_active_yes': 'PIN actif: Oui',
+    'pin_deleted': '✓ PIN supprimé',
+    'pin_desc': 'Code numérique pour armer et désarmer.',
+    'pin_disarm_error': 'Неверный PIN или ошибка снятия с охраны',
+    'pin_incorrect': '❌ PIN actuel incorrect',
+    'pin_management': '🔑 Gestión de Pines',
+    'pin_master_title': 'PIN Maître',
+    'pin_modal_desc': 'PIN numérique pour désarmer Argus',
+    'pin_placeholder': 'Code PIN d’accès',
+    'pin_remove_hint': 'Pour supprimer le PIN: entrez le PIN actuel et laissez les champs vides.',
+    'pin_reset_admin_only': '❌ Erreur : Seuls les administrateurs de Home Assistant peuvent réinitialiser le PIN maître.',
+    'pin_reset_confirm': 'Êtes-vous sûr de vouloir réinitialiser le PIN maître ? Le PIN actuel sera supprimé et désactivé.',
+    'pin_updated': '✓ PIN mis à jour',
+    'profile_is_yours': 'C’est votre profil',
+    'profile_needs_pin': 'Profil d’une autre personne — entrez le PIN d’accès',
+    'profile_no_pin_access': 'Ce profil n’a pas de PIN d’accès. Vous ne pouvez pas l’ouvrir.',
+    'remove_btn': 'Quitar',
+    'reset_btn': '⚠️ Réinitialiser',
+    'reset_confirm': 'Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.',
+    'reset_dashboard': 'Réinitialiser la disposition',
+    'reset_error': 'Ошибка сброса: {error}',
+    'reset_success': 'Argus сброшен. У вас есть несколько секунд, чтобы отменить это.',
+    'retry_action': 'Повторить',
+    'role_argus_admin': 'Administrateur Argus',
+    'role_argus_admin_short': 'Adm',
+    'role_argus_standard': 'Utilisateur standard',
+    'role_argus_user': 'Utilisateur standard',
+    'role_argus_user_short': 'Std',
+    'rules_tip': '',
+    'save_btn': 'Enregistrer',
+    'save_config': 'ENREGISTRER LA CONFIGURATION',
+    'save_mode': '💾 Enregistrer le mode',
+    'save_notif': 'Enregistrer',
+    'save_user': 'Enregistrer',
+    'search_placeholder': 'Rechercher par nom, zone ou entity_id',
+    'search_select': 'Rechercher & sélectionner',
+    'searching_auto': '↻ Recherche automatisations...',
+    'select_all': '☑ Tous',
+    'select_btn': '+ Sélectionner',
+    'select_profile_subtitle': 'Accédez à vos panneaux de sécurité et instances Argus.',
+    'select_profile_title': 'Sélectionnez votre profil',
+    'selected_lbl': 'Sélectionnés',
+    'selector_panic': '🚨 Действия SOS',
+    'sensor_section': 'Capteurs d\'intrusion',
+    'sensors_to_bypass': 'Capteurs à ignorer',
+    'settings': '⚙️ Paramètres',
+    'setup_access_pin': 'PIN доступа к панели Argus (Необязательно)',
+    'setup_admin_name': 'Имя администратора',
+    'setup_master_pin': 'Мастер-PIN для постановки/снятия с охраны (Необязательно)',
+    'setup_required_action': 'Настроить Argus в интеграциях',
+    'setup_required_desc': 'Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.',
+    'setup_required_title': 'Требуется настройка Argus',
+    'siren_section': 'Sirènes',
+    'sos_actions': 'Acciones Automáticas de SOS',
+    'sos_activated': 'SOS активирован',
+    'sos_call': '📞 Appeler les urgences',
+    'sos_call_confirm': 'Позвонить в экстренную службу ({number})?',
+    'sos_call_help': 'Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.',
+    'sos_confirm_text': 'Glissez pour déclencher l\'alarme immédiatement.',
+    'sos_confirm_title': 'Confirmer la panique',
+    'sos_error': 'Не удалось активировать SOS: {error}',
+    'sos_no_outputs': 'Устройства не выбраны',
+    'sos_outputs_help': 'Dispositivos activados al disparar el SOS.',
+    'sos_select_outputs': 'Seleccionar salidas de pánico',
+    'sos_slide': 'Glisser pour activer le SOS',
+    'sos_stop': 'DETENER SOS',
+    'status_away': 'FUERA',
+    'status_closed': 'FERMÉ',
+    'status_home': 'EN CASA',
+    'status_idle': 'INACTIVO',
+    'status_open': 'OUVERT',
+    'status_recording': 'GRABANDO',
+    'switch_profile_btn': '👤 Changer de profil',
+    'sync_panel_help': 'Paneles de alarma que seguirán el mismo estado de Argus',
+    'sync_panel_section': 'Paneles Sincronizados',
+    'system_armed': 'SYSTÈME ARMÉ',
+    'system_disarmed': 'SYSTÈME DÉSARMÉ',
+    'system_triggered': '¡ALARMA DISPARADA!',
+    'temp_auto': 'Automatique (capteur local / thermostat / climat)',
+    'temp_notification_title': 'Argus — Температурное предупреждение',
+    'temp_thermostat': '(thermostat)',
+    'thermostat_alert_notif': '🌡️ Alerte de température',
+    'times_section': '⏱️ Minuteries',
+    'triggered': 'ALARME !',
+    'unavailable': 'Indisponible',
+    'undo_error': 'Не удалось отменить сброс: {error}',
+    'undo_reset_btn': '↩️ Annuler la réinitialisation',
+    'undo_success': 'Сброс отменён.',
+    'unlinked_ha_accounts_title': 'Comptes Home Assistant sans profil Argus',
+    'unlock_kiosk': 'Déverrouiller le kiosque',
+    'update_pin': 'Mettre à jour le PIN',
+    'upload_error': 'Ошибка загрузки.',
+    'url_placeholder': 'URL фона…',
+    'use_for_hub': 'Argus',
+    'use_for_panel': 'Panneau',
+    'use_ha_language': 'Utiliser la langue de Home Assistant',
+    'user_default': 'Пользователь',
+    'user_exp_date': 'Expiration Date/Time',
+    'user_exp_type': 'Expiration',
+    'user_no_pin': 'Sin PIN de acceso',
+    'user_pin': 'PIN utilisateur',
+    'user_pin_action': 'PIN',
+    'user_required': 'Требуются имя и PIN',
+    'user_role_action': 'Роль',
+    'user_role_label': 'Rôle Argus',
+    'username': 'Nom d\'utilisateur',
+    'users_title': '👥 Utilisateurs et Contrôle d\'accès',
+    'wait_if_open': 'Attendre la fermeture',
+    'waiting_sensors': 'ESPERANDO SENSORES',
+    'welcome_greeting': 'Bienvenue,',
+    'welcome_profile': 'Добро пожаловать, {name}',
+  },
+  'pt': {
+    'accept': 'Aceitar',
+    'access_desc': 'Gerenciamento global, PIN mestre e administradores.',
+    'access_pin_lbl': 'PIN de Acceso',
+    'access_title': 'Controle de Acesso & Usuários',
+    'action_failed': 'No se pudo realizar la acción',
+    'active_profile': 'Perfil Activo',
+    'active_until': 'Expira em',
+    'activity_log': '📋 Histórico de Atividades',
+    'add_btn': '+ Adicionar',
+    'add_user': 'Adicionar usuário',
+    'admin_only': 'Apenas administradores podem modificar esta seção.',
+    'alarm_instance': 'Instância do alarme',
+    'all_sensors_bypassed': 'Todos los sensores configurados están omitidos.',
+    'arm_time': 'Atraso de armação (s)',
+    'arm_time_label': 'Tempo armado (s)',
+    'armed_away': 'Ausente',
+    'armed_home': 'Em Casa',
+    'armed_night': 'Noite',
+    'armed_vacation': 'Férias',
+    'arming': 'Armando',
+    'automations': '⚡ Automações',
+    'available': 'Disponíveis',
+    'background_lbl': 'Fundo',
+    'backup_desc': 'Salve um backup ou restaure um anterior.',
+    'backup_title': 'Backup & Restauração',
+    'badge_pin_reset': 'PIN Redefinido',
+    'badge_pin_reset_failed': 'Falha ao Redefinir PIN',
+    'battery_low': '⚠️ Bateria fraca',
+    'bg_collage': 'Colagem',
+    'bg_hub_default': 'Padrão (Argus)',
+    'bg_hub_selected_from_history': 'Plano de fundo do Argus selecionado a partir do histórico.',
+    'bg_hub_title': 'Fundo Argus',
+    'bg_image_opt': 'Imagem / GIF',
+    'bg_none': 'Padrão',
+    'bg_panel_none': 'Sem fundo',
+    'bg_panel_selected_from_history': 'Plano de fundo do painel selecionado a partir do histórico.',
+    'bg_panel_title': 'Fundo do painel',
+    'bg_photo': 'Uma foto',
+    'bg_sound_opt': 'Som do vídeo',
+    'bg_video': 'Vídeo em loop',
+    'bg_weather': 'Clima animado',
+    'bridge_not_connected': 'Ponte não configurada',
+    'bridge_not_desc': 'Ative a integração HomeKit Bridge no Home Assistant e inclua a entidade <code>alarm_control_panel.argus_*</code> para gerar um QR de emparelhamento.',
+    'bridge_paired': 'Ponte configurada',
+    'bridge_paired_desc': 'A ponte <b>{bridge}</b> está configurada no Home Assistant. Não é possível verificar daqui se foi adicionada ao Apple Home nem informar seu nome.',
+    'btn_away': '🔒 AUSENTE',
+    'btn_create_argus_profile': 'Criar perfil Argus',
+    'btn_disarmed': 'DESARMADO',
+    'btn_home': '🏠 EM CASA',
+    'btn_night': '🌙 NOITE',
+    'btn_sos': '🚨 SOS / PÂNICO',
+    'btn_vacation': '✈️ FÉRIAS',
+    'bypass_lbl': '🚫 Ignorar',
+    'cancel': 'Cancelar',
+    'cancel_btn': 'Cancelar',
+    'cannot_arm': 'Невозможно поставить на охрану',
+    'cannot_delete_last_admin': 'Não é possível excluir o último administrador.',
+    'change_btn': 'Cambiar',
+    'change_pin': 'PIN Mestre',
+    'change_profile_picture': 'Cambiar foto en Personas de HA ↗',
+    'change_user_pin': 'Cambiar PIN',
+    'claim_btn': 'Заявить права администратора',
+    'claim_desc': 'Вашей установке требуется администратор для получения доступа.',
+    'claim_title': 'Обновление безопасности Argus',
+    'clear': 'Limpar',
+    'clear_history_confirm': 'Удалить всю историю активности?',
+    'clear_log_btn': 'LIMPAR',
+    'clock_12h': '12 horas (AM/PM)',
+    'clock_24h': '24 horas',
+    'clock_auto': 'Automático (Home Assistant)',
+    'clock_format_desc': 'Escolha como a hora é exibida.',
+    'clock_format_label': 'Formato de hora',
+    'close': 'Fechar',
+    'confirm': '✓ Confirmar',
+    'confirm_pin': 'Confirmar PIN',
+    'connected': 'CONECTADO',
+    'create_ha': '+ Criar no HA',
+    'current_pin': 'PIN atual',
+    'customize': 'Настроить',
+    'delete': 'Удалить',
+    'delete_btn_title': 'Excluir do armazenamento',
+    'delete_file_error': 'Не удалось удалить файл: {error}',
+    'delete_user': 'Eliminar usuario',
+    'delete_user_confirm': 'Tem certeza de que deseja excluir \"{name}\"?',
+    'delete_user_tooltip': 'Excluir perfil de usuário',
+    'deselect_all': '☐ Nenhum',
+    'details_notif': 'Notificação de alarme',
+    'disarm_time': 'Atraso de entrada (s)',
+    'disarm_time_label': 'Atraso de entrada (s)',
+    'disarmed': 'Desarmado',
+    'done': 'Готово',
+    'edit_btn': '✏️ Editar',
+    'edit_dashboard': 'Editar painel',
+    'edit_dashboard_done': '✓ Concluído',
+    'emergency_help': 'Número telefónico marcado en caso de emergencia.',
+    'emergency_number_label': 'Número de Emergencia',
+    'error_loading_uploaded_files': 'Erro ao carregar o histórico de arquivos.',
+    'exit_to_ha': 'Voltar ao Home Assistant',
+    'exp_indefinite': 'Indefinido',
+    'exp_temporary': 'Temporário (Data/Hora)',
+    'expired': 'Expirado',
+    'export_btn': '📤 Baixar',
+    'export_error': 'Ошибка экспорта: {error}',
+    'file_choice': '«{file}»\n\nИспользовать как статичное изображение (ОК) или анимированное видео (Отмена)?',
+    'file_delete_confirm': 'Tem certeza de que deseja excluir \"{filename}\" permanentemente?',
+    'file_read_error': 'Не удалось прочитать файл.',
+    'files_count': '{count} arquivos',
+    'files_count_short': '{count} arq.',
+    'first_run_blocked_desc': 'É necessário um administrador do Home Assistant.',
+    'first_run_blocked_title': 'Acesso negado',
+    'first_run_desc': 'Conclua a configuração inicial.',
+    'first_run_pin_expl': 'O PIN de acesso abre o Argus. O PIN mestre controla o armamento.',
+    'first_run_skip': 'Pular',
+    'first_run_start': 'Começar com o Argus',
+    'first_run_welcome': 'Obrigado por escolher o Argus Home Hub. Bem-vindo(a).',
+    'forgot_pin': 'Esqueceu o PIN?',
+    'fullscreen_title': 'Tela cheia',
+    'generic_error': 'Ошибка: {error}',
+    'github_action': 'Поставить звезду на GitHub',
+    'github_desc': 'Если вам нравится проект, поставьте звезду на GitHub, чтобы поддержать разработку.',
+    'github_title': 'Поддержите Argus',
+    'ha_account_linked': 'Conta do Home Assistant: {name}',
+    'ha_account_unavailable': 'Vínculo indisponível',
+    'ha_admin_label': 'Administrador do Home Assistant',
+    'ha_role_admin': 'Admin HA',
+    'ha_role_standard': 'Usuário HA',
+    'ha_standard_user_label': 'Usuário padrão do HA',
+    'hero_desc': 'Sistema de segurança abrangente, controle de acesso, automações e HomeKit.',
+    'history_refresh': '🔄 Atualizar',
+    'history_unavailable': 'Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.',
+    'home_default': 'Мой дом',
+    'home_fallback': 'Дом',
+    'home_name_label': 'Nome do lar',
+    'home_name_lbl': 'Nome do lar',
+    'home_name_modal_desc': 'Este nome aparece no painel de instâncias e em tela cheia.',
+    'home_name_modal_title': '🏡 Nome do lar',
+    'home_name_placeholder': 'Minha Casa',
+    'homekit_bridge': 'Ponte HomeKit',
+    'homekit_house': 'Apple Home',
+    'homekit_not_paired': 'Não associado a nenhuma casa.',
+    'homekit_title': '🏠 HomeKit',
+    'import_btn': '📥 Restaurar',
+    'import_error': 'Ошибка импорта: {error}',
+    'import_success': 'Конфигурация восстановлена. Перезагрузка…',
+    'initialization_error_desc': 'Не удалось подключиться к авторизованному backend Home Assistant.',
+    'initialization_error_title': 'Не удалось запустить Argus',
+    'instances': 'Instâncias ativas',
+    'introduce_pin': 'Digite seu PIN',
+    'invalid_config': 'Недопустимый файл конфигурации.',
+    'is_admin': 'Administrador',
+    'lang_select_title': 'Selecionar Idioma',
+    'lang_selector_lbl': '⚙️ Idioma',
+    'language': 'Idioma',
+    'lbl_aesthetic_custom': 'Personalização estética',
+    'lbl_load_file': 'Carregar arquivo:',
+    'lbl_uploaded_files': 'Arquivos enviados no servidor',
+    'link_ha_user': 'Vincular a Usuário do Home Assistant',
+    'linked_rules': 'Regras vinculadas ao Argus',
+    'loading': 'Загрузка…',
+    'lock_if_open': 'Bloquear se aberto',
+    'log_action_access_pin_updated': 'PIN доступа обновлён',
+    'log_action_backup_created': 'Резервная копия создана',
+    'log_action_backup_restored': 'Конфигурация восстановлена',
+    'log_action_first_run_completed': 'Argus inicializado por {user}',
+    'log_action_fullscreen_unlocked': 'Quiosque desbloqueado por {user}',
+    'log_action_master_pin_rejected': 'Tentativa incorreta de PIN mestre por {user}',
+    'log_action_mode_changed': 'Режим изменён',
+    'log_action_profile_selected': 'Профиль выбран',
+    'log_action_rejected': 'Ação rejeitada',
+    'log_action_save_ui': 'Configurações de UI salvas por {user}',
+    'log_action_schedule_applied': 'Расписание применено',
+    'log_action_select_profile': 'Perfil selecionado: {user}',
+    'log_action_sos': 'Pânico SOS acionado por {user}',
+    'log_action_state_restored': 'Состояние восстановлено',
+    'log_action_stop_sos': 'Pânico SOS interrompido por {user}',
+    'log_action_user_logged_in': 'Вход пользователя',
+    'log_action_verify_access_pin': 'PIN de acesso verificado por {user}',
+    'log_armed': 'Armado',
+    'log_by': 'por',
+    'log_detail_armed': 'Modo',
+    'log_detail_disarm': 'Sistema desarmado',
+    'log_detail_pin_reset': 'PIN mestre redefinido pelo administrador',
+    'log_detail_pin_reset_failed': 'Tentativa não autorizada de redefinir o PIN mestre',
+    'log_detail_triggered': 'Ativação automática',
+    'log_disarmed': 'Desarmado',
+    'log_no_events': 'Nenhum evento recente.',
+    'log_sensor': 'Sensor',
+    'log_triggered': 'Disparado!',
+    'login_btn': 'Entrar',
+    'manual_arm': 'Manual',
+    'manual_disarm': 'Manual (Desarmado)',
+    'master_pin_lbl': 'PIN Maestro',
+    'modal_add_user': '+ Добавить пользователя',
+    'modal_cancel': 'Отмена',
+    'modal_confirm': 'Подтвердить',
+    'modal_delete_confirm': 'Удалить этого пользователя?',
+    'modal_edit_name': 'Изменить имя',
+    'modal_name_label': 'Имя профиля',
+    'modal_pin_help': 'Оставьте пустым, чтобы удалить PIN.',
+    'modal_pin_title': 'PIN доступа',
+    'modal_save': 'Сохранить',
+    'modal_user_added': 'Пользователь создан.',
+    'mode_away': 'Ausente',
+    'mode_home': 'Em Casa',
+    'mode_night': 'Noite',
+    'mode_vacation': 'Férias',
+    'modes': 'Modos',
+    'mqtt_label': 'MQTT',
+    'never_triggered': 'Nunca ativado',
+    'new_pin': 'Novo PIN',
+    'no_alarm_instance': 'Нет доступного экземпляра сигнализации',
+    'no_auto_linked': 'Nenhuma automação vinculada ao Argus.',
+    'no_files_uploaded': 'Nenhum arquivo enviado. Envie um plano de fundo usando os controles acima.',
+    'no_files_uploaded_short': 'Nenhum arquivo enviado.',
+    'no_instances': 'Nenhuma instância.',
+    'no_results': 'Нет результатов',
+    'no_rules': '',
+    'no_sensors_configured': 'Sin sensores configurados',
+    'no_unlinked_ha_accounts': 'Todas as contas do Home Assistant ativas possuem perfil.',
+    'no_users': 'Nenhum usuário adicional configurado.',
+    'none_selected': 'Nenhum selecionado',
+    'notif_desc': 'Selecione os dispositivos móveis registrados no HA que receberão alertas do Argus.',
+    'notif_no_services': 'Нет мобильных служб',
+    'notification_armed': '{user} активировал режим {mode}.',
+    'notification_disarmed': '{user} снял систему с охраны.',
+    'notifications_title': '🔔 Notificações',
+    'open_sensors': 'Sensores abertos',
+    'open_sensors_explain': 'Следующие датчики открыты:\n{names}\n\nЗакройте их перед постановкой на охрану или включите «Обход».',
+    'panic_state_unknown': 'Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.',
+    'panic_stop_error': 'Не удалось остановить тревогу: {error}',
+    'panic_stopped': 'Тревога остановлена; восстановлено состояние {state}',
+    'pending': 'Pendente',
+    'pin_active_no': 'PIN Ativo: Não',
+    'pin_active_yes': 'PIN Ativo: Sim',
+    'pin_deleted': '✓ PIN Removido',
+    'pin_desc': 'Código numérico para armar e desarmar.',
+    'pin_disarm_error': 'Неверный PIN или ошибка снятия с охраны',
+    'pin_incorrect': '❌ PIN atual incorreto',
+    'pin_management': '🔑 Gestión de Pines',
+    'pin_master_title': 'PIN Mestre',
+    'pin_modal_desc': 'PIN numérico para desarmar o Argus',
+    'pin_placeholder': 'PIN de acesso',
+    'pin_remove_hint': 'Para remover o PIN: insira o atual e deixe os campos abaixo vazios.',
+    'pin_reset_admin_only': '❌ Erro: Apenas administradores do Home Assistant podem redefinir o PIN mestre.',
+    'pin_reset_confirm': 'Tem certeza que deseja redefinir o PIN mestre? O PIN atual será removido e desativado.',
+    'pin_updated': '✓ PIN Atualizado',
+    'profile_is_yours': 'Este é o seu perfil',
+    'profile_needs_pin': 'Perfil de outra pessoa — insira o PIN de acesso',
+    'profile_no_pin_access': 'Este perfil não tem PIN de acesso. Você não pode abri-lo.',
+    'remove_btn': 'Quitar',
+    'reset_btn': '⚠️ Redefinir',
+    'reset_confirm': 'Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.',
+    'reset_dashboard': 'Redefinir layout',
+    'reset_error': 'Ошибка сброса: {error}',
+    'reset_success': 'Argus сброшен. У вас есть несколько секунд, чтобы отменить это.',
+    'retry_action': 'Повторить',
+    'role_argus_admin': 'Administrador do Argus',
+    'role_argus_admin_short': 'Adm',
+    'role_argus_standard': 'Usuário padrão',
+    'role_argus_user': 'Usuário padrão',
+    'role_argus_user_short': 'Std',
+    'rules_tip': '',
+    'save_btn': 'Salvar',
+    'save_config': 'SALVAR CONFIGURAÇÃO',
+    'save_mode': '💾 Salvar modo',
+    'save_notif': 'Salvar',
+    'save_user': 'Salvar',
+    'search_placeholder': 'Pesquisar por nome, área ou entity_id',
+    'search_select': 'Buscar & selecionar',
+    'searching_auto': '↻ Buscando automações...',
+    'select_all': '☑ Todos',
+    'select_btn': '+ Selecionar',
+    'select_profile_subtitle': 'Acesse seus painéis de segurança e instâncias Argus.',
+    'select_profile_title': 'Selecione o seu perfil',
+    'selected_lbl': 'Selecionados',
+    'selector_panic': '🚨 Действия SOS',
+    'sensor_section': 'Sensores de Intrusão',
+    'sensors_to_bypass': 'Sensores a ignorar',
+    'settings': '⚙️ Configurações',
+    'setup_access_pin': 'PIN доступа к панели Argus (Необязательно)',
+    'setup_admin_name': 'Имя администратора',
+    'setup_master_pin': 'Мастер-PIN для постановки/снятия с охраны (Необязательно)',
+    'setup_required_action': 'Настроить Argus в интеграциях',
+    'setup_required_desc': 'Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.',
+    'setup_required_title': 'Требуется настройка Argus',
+    'siren_section': 'Sirenes',
+    'sos_actions': 'Acciones Automáticas de SOS',
+    'sos_activated': 'SOS активирован',
+    'sos_call': '📞 Chamar emergências',
+    'sos_call_confirm': 'Позвонить в экстренную службу ({number})?',
+    'sos_call_help': 'Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.',
+    'sos_confirm_text': 'Deslize para acionar o alarme imediatamente.',
+    'sos_confirm_title': 'Confirmar pânico',
+    'sos_error': 'Не удалось активировать SOS: {error}',
+    'sos_no_outputs': 'Устройства не выбраны',
+    'sos_outputs_help': 'Dispositivos activados al disparar el SOS.',
+    'sos_select_outputs': 'Seleccionar salidas de pánico',
+    'sos_slide': 'Deslize para ativar SOS',
+    'sos_stop': 'DETENER SOS',
+    'status_away': 'FUERA',
+    'status_closed': 'FECHADO',
+    'status_home': 'EN CASA',
+    'status_idle': 'INACTIVO',
+    'status_open': 'ABERTO',
+    'status_recording': 'GRABANDO',
+    'switch_profile_btn': '👤 Alternar perfil',
+    'sync_panel_help': 'Paneles de alarma que seguirán el mismo estado de Argus',
+    'sync_panel_section': 'Paneles Sincronizados',
+    'system_armed': 'SISTEMA ARMADO',
+    'system_disarmed': 'SISTEMA DESARMADO',
+    'system_triggered': '¡ALARMA DISPARADA!',
+    'temp_auto': 'Automático (sensor local / termostato / clima)',
+    'temp_notification_title': 'Argus — Температурное предупреждение',
+    'temp_thermostat': '(termostato)',
+    'thermostat_alert_notif': '🌡️ Alerta de temperatura',
+    'times_section': '⏱️ Temporizadores',
+    'triggered': 'ALARME!',
+    'unavailable': 'Indisponível',
+    'undo_error': 'Не удалось отменить сброс: {error}',
+    'undo_reset_btn': '↩️ Desfazer Redefinição',
+    'undo_success': 'Сброс отменён.',
+    'unlinked_ha_accounts_title': 'Contas do Home Assistant sem perfil Argus',
+    'unlock_kiosk': 'Desbloquear quiosque',
+    'update_pin': 'Atualizar PIN',
+    'upload_error': 'Ошибка загрузки.',
+    'url_placeholder': 'URL фона…',
+    'use_for_hub': 'Argus',
+    'use_for_panel': 'Painel',
+    'use_ha_language': 'Usar idioma do Home Assistant',
+    'user_default': 'Пользователь',
+    'user_exp_date': 'Expiration Date/Time',
+    'user_exp_type': 'Expiration',
+    'user_no_pin': 'Sin PIN de acceso',
+    'user_pin': 'PIN do usuário',
+    'user_pin_action': 'PIN',
+    'user_required': 'Требуются имя и PIN',
+    'user_role_action': 'Роль',
+    'user_role_label': 'Função Argus',
+    'username': 'Nome de usuário',
+    'users_title': '👥 Usuários e Controle de Acesso',
+    'wait_if_open': 'Aguardar fechamento',
+    'waiting_sensors': 'ESPERANDO SENSORES',
+    'welcome_greeting': 'Bem-vindo/a,',
+    'welcome_profile': 'Добро пожаловать, {name}',
+  },
+  'it': {
+    'accept': 'Accetta',
+    'access_desc': 'Gestione globale della sicurezza, PIN principale e amministratori.',
+    'access_pin_lbl': 'PIN de Acceso',
+    'access_title': 'Controllo Accessi & Utenti',
+    'action_failed': 'No se pudo realizar la acción',
+    'active_profile': 'Perfil Activo',
+    'active_until': 'Scade il',
+    'activity_log': '📋 Registro Attività',
+    'add_btn': '+ Aggiungi',
+    'add_user': 'Aggiungi utente',
+    'admin_only': 'Solo gli amministratori possono modificare questa sezione.',
+    'alarm_instance': 'Istanza allarme',
+    'all_sensors_bypassed': 'Todos los sensores configurados están omitidos.',
+    'arm_time': 'Ritardo inserimento (s)',
+    'arm_time_label': 'Tempo armato (s)',
+    'armed_away': 'Fuori Casa',
+    'armed_home': 'In Casa',
+    'armed_night': 'Notte',
+    'armed_vacation': 'Vacanza',
+    'arming': 'Inserimento',
+    'automations': '⚡ Automazioni',
+    'available': 'Disponibili',
+    'background_lbl': 'Sfondo',
+    'backup_desc': 'Salva un backup o ripristina uno precedente.',
+    'backup_title': 'Backup & Ripristino',
+    'badge_pin_reset': 'PIN Reimpostato',
+    'badge_pin_reset_failed': 'Reimpostazione PIN Fallita',
+    'battery_low': '⚠️ Batteria scarica',
+    'bg_collage': 'Collage',
+    'bg_hub_default': 'Predefinito (Argus)',
+    'bg_hub_selected_from_history': 'Sfondo di Argus selezionato dalla cronologia.',
+    'bg_hub_title': 'Sfondo Argus',
+    'bg_image_opt': 'Immagine / GIF',
+    'bg_none': 'Predefinito',
+    'bg_panel_none': 'Nessuno sfondo',
+    'bg_panel_selected_from_history': 'Sfondo del pannello selezionato dalla cronologia.',
+    'bg_panel_title': 'Sfondo pannello',
+    'bg_photo': 'Una foto',
+    'bg_sound_opt': 'Audio video',
+    'bg_video': 'Video in loop',
+    'bg_weather': 'Meteo animato',
+    'bridge_not_connected': 'Ponte non configurato',
+    'bridge_not_desc': 'Abilita l\'integrazione HomeKit Bridge in Home Assistant e includi l\'entità <code>alarm_control_panel.argus_*</code> per generare un QR di abbinamento.',
+    'bridge_paired': 'Ponte configurato',
+    'bridge_paired_desc': 'Il ponte <b>{bridge}</b> è configurato in Home Assistant. Da qui non è possibile verificare se sia stato aggiunto ad Apple Home né conoscerne il nome.',
+    'btn_away': '🔒 FUORI CASA',
+    'btn_create_argus_profile': 'Crea profilo Argus',
+    'btn_disarmed': 'DISINSERITO',
+    'btn_home': '🏠 IN CASA',
+    'btn_night': '🌙 NOTTE',
+    'btn_sos': '🚨 SOS / PANICO',
+    'btn_vacation': '✈️ VACANZA',
+    'bypass_lbl': '🚫 Escludi',
+    'cancel': 'Annulla',
+    'cancel_btn': 'Annulla',
+    'cannot_arm': 'Невозможно поставить на охрану',
+    'cannot_delete_last_admin': 'Impossibile eliminare l\'ultimo amministratore.',
+    'change_btn': 'Cambiar',
+    'change_pin': 'PIN Principale',
+    'change_profile_picture': 'Cambiar foto en Personas de HA ↗',
+    'change_user_pin': 'Cambiar PIN',
+    'claim_btn': 'Заявить права администратора',
+    'claim_desc': 'Вашей установке требуется администратор для получения доступа.',
+    'claim_title': 'Обновление безопасности Argus',
+    'clear': 'Cancella',
+    'clear_history_confirm': 'Удалить всю историю активности?',
+    'clear_log_btn': 'CANCELLA',
+    'clock_12h': '12 ore (AM/PM)',
+    'clock_24h': '24 ore',
+    'clock_auto': 'Automatico (Home Assistant)',
+    'clock_format_desc': 'Scegli come visualizzare l\'ora.',
+    'clock_format_label': 'Formato ora',
+    'close': 'Chiudi',
+    'confirm': '✓ Conferma',
+    'confirm_pin': 'Conferma PIN',
+    'connected': 'CONNESSO',
+    'create_ha': '+ Crea in HA',
+    'current_pin': 'PIN attuale',
+    'customize': 'Настроить',
+    'delete': 'Удалить',
+    'delete_btn_title': 'Elimina dalla memoria',
+    'delete_file_error': 'Не удалось удалить файл: {error}',
+    'delete_user': 'Eliminar usuario',
+    'delete_user_confirm': 'Sei sicuro di voler eliminare \"{name}\"?',
+    'delete_user_tooltip': 'Elimina profilo utente',
+    'deselect_all': '☐ Nessuno',
+    'details_notif': 'Notifica allarme',
+    'disarm_time': 'Ritardo ingresso (s)',
+    'disarm_time_label': 'Ritardo ingresso (s)',
+    'disarmed': 'Disinserito',
+    'done': 'Готово',
+    'edit_btn': '✏️ Modifica',
+    'edit_dashboard': 'Modifica dashboard',
+    'edit_dashboard_done': '✓ Fatto',
+    'emergency_help': 'Número telefónico marcado en caso de emergencia.',
+    'emergency_number_label': 'Número de Emergencia',
+    'error_loading_uploaded_files': 'Errore durante il caricamento della cronologia dei file.',
+    'exit_to_ha': 'Torna a Home Assistant',
+    'exp_indefinite': 'Indefinito',
+    'exp_temporary': 'Temporaneo (Data/Ora)',
+    'expired': 'Scaduto',
+    'export_btn': '📤 Scarica',
+    'export_error': 'Ошибка экспорта: {error}',
+    'file_choice': '«{file}»\n\nИспользовать как статичное изображение (ОК) или анимированное видео (Отмена)?',
+    'file_delete_confirm': 'Sei sicuro di voler eliminare permanentemente \"{filename}\"?',
+    'file_read_error': 'Не удалось прочитать файл.',
+    'files_count': '{count} file',
+    'files_count_short': '{count} file',
+    'first_run_blocked_desc': 'È richiesto un amministratore di Home Assistant.',
+    'first_run_blocked_title': 'Accesso negato',
+    'first_run_desc': 'Completa la configurazione.',
+    'first_run_pin_expl': 'Il PIN di accesso apre Argus. Il PIN master controlla l\'armamento.',
+    'first_run_skip': 'Salta',
+    'first_run_start': 'Inizia con Argus',
+    'first_run_welcome': 'Grazie per aver scelto Argus Home Hub. Benvenuto/a.',
+    'forgot_pin': 'PIN dimenticato?',
+    'fullscreen_title': 'Schermo intero',
+    'generic_error': 'Ошибка: {error}',
+    'github_action': 'Поставить звезду на GitHub',
+    'github_desc': 'Если вам нравится проект, поставьте звезду на GitHub, чтобы поддержать разработку.',
+    'github_title': 'Поддержите Argus',
+    'ha_account_linked': 'Account Home Assistant: {name}',
+    'ha_account_unavailable': 'Collegamento non disponibile',
+    'ha_admin_label': 'Amministratore Home Assistant',
+    'ha_role_admin': 'Admin HA',
+    'ha_role_standard': 'Utente HA',
+    'ha_standard_user_label': 'Utente HA standard',
+    'hero_desc': 'Sistema di sicurezza completo, controllo accessi, automazioni e HomeKit.',
+    'history_refresh': '🔄 Aggiorna',
+    'history_unavailable': 'Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.',
+    'home_default': 'Мой дом',
+    'home_fallback': 'Дом',
+    'home_name_label': 'Nome della casa',
+    'home_name_lbl': 'Nome della casa',
+    'home_name_modal_desc': 'Questo nome appare nel pannello delle istanze e a schermo intero.',
+    'home_name_modal_title': '🏡 Nome della casa',
+    'home_name_placeholder': 'Casa mia',
+    'homekit_bridge': 'Ponte HomeKit',
+    'homekit_house': 'Apple Home',
+    'homekit_not_paired': 'Non associato a nessuna casa.',
+    'homekit_title': '🏠 HomeKit',
+    'import_btn': '📥 Ripristina',
+    'import_error': 'Ошибка импорта: {error}',
+    'import_success': 'Конфигурация восстановлена. Перезагрузка…',
+    'initialization_error_desc': 'Не удалось подключиться к авторизованному backend Home Assistant.',
+    'initialization_error_title': 'Не удалось запустить Argus',
+    'instances': 'Istanze attive',
+    'introduce_pin': 'Inserisci il tuo PIN',
+    'invalid_config': 'Недопустимый файл конфигурации.',
+    'is_admin': 'Amministratore',
+    'lang_select_title': 'Seleziona Lingua',
+    'lang_selector_lbl': '⚙️ Lingua',
+    'language': 'Lingua',
+    'lbl_aesthetic_custom': 'Personalizzazione estetica',
+    'lbl_load_file': 'Carica file:',
+    'lbl_uploaded_files': 'File caricati sul server',
+    'link_ha_user': 'Collega all’utente Home Assistant',
+    'linked_rules': 'Regole collegate ad Argus',
+    'loading': 'Загрузка…',
+    'lock_if_open': 'Blocca se aperto',
+    'log_action_access_pin_updated': 'PIN доступа обновлён',
+    'log_action_backup_created': 'Резервная копия создана',
+    'log_action_backup_restored': 'Конфигурация восстановлена',
+    'log_action_first_run_completed': 'Argus inizializzato da {user}',
+    'log_action_fullscreen_unlocked': 'Chiosco sbloccato da {user}',
+    'log_action_master_pin_rejected': 'Tentativo di PIN master errato da {user}',
+    'log_action_mode_changed': 'Режим изменён',
+    'log_action_profile_selected': 'Профиль выбран',
+    'log_action_rejected': 'Azione rifiutata',
+    'log_action_save_ui': 'Impostazioni UI salvate da {user}',
+    'log_action_schedule_applied': 'Расписание применено',
+    'log_action_select_profile': 'Profilo selezionato: {user}',
+    'log_action_sos': 'Panico SOS attivato da {user}',
+    'log_action_state_restored': 'Состояние восстановлено',
+    'log_action_stop_sos': 'Panico SOS fermato da {user}',
+    'log_action_user_logged_in': 'Вход пользователя',
+    'log_action_verify_access_pin': 'PIN di accesso verificato da {user}',
+    'log_armed': 'Armato',
+    'log_by': 'da',
+    'log_detail_armed': 'Modalità',
+    'log_detail_disarm': 'Sistema disarmato',
+    'log_detail_pin_reset': 'PIN principale reimpostato dall\'amministratore',
+    'log_detail_pin_reset_failed': 'Tentativo non autorizzato di reimpostare il PIN principale',
+    'log_detail_triggered': 'Attivazione automatica',
+    'log_disarmed': 'Disarmato',
+    'log_no_events': 'Nessun evento recente.',
+    'log_sensor': 'Sensore',
+    'log_triggered': 'Attivato!',
+    'login_btn': 'Accedi',
+    'manual_arm': 'Manuale',
+    'manual_disarm': 'Manuale (Disarmato)',
+    'master_pin_lbl': 'PIN Maestro',
+    'modal_add_user': '+ Добавить пользователя',
+    'modal_cancel': 'Отмена',
+    'modal_confirm': 'Подтвердить',
+    'modal_delete_confirm': 'Удалить этого пользователя?',
+    'modal_edit_name': 'Изменить имя',
+    'modal_name_label': 'Имя профиля',
+    'modal_pin_help': 'Оставьте пустым, чтобы удалить PIN.',
+    'modal_pin_title': 'PIN доступа',
+    'modal_save': 'Сохранить',
+    'modal_user_added': 'Пользователь создан.',
+    'mode_away': 'Assente',
+    'mode_home': 'In Casa',
+    'mode_night': 'Notte',
+    'mode_vacation': 'Vacanze',
+    'modes': 'Modalità',
+    'mqtt_label': 'MQTT',
+    'never_triggered': 'Mai attivato',
+    'new_pin': 'Nuovo PIN',
+    'no_alarm_instance': 'Нет доступного экземпляра сигнализации',
+    'no_auto_linked': 'Nessuna automazione collegata ad Argus.',
+    'no_files_uploaded': 'Nessun file caricato. Carica uno sfondo usando i controlli sopra.',
+    'no_files_uploaded_short': 'Nessun file caricato.',
+    'no_instances': 'Nessuna istanza.',
+    'no_results': 'Нет результатов',
+    'no_rules': '',
+    'no_sensors_configured': 'Sin sensores configurados',
+    'no_unlinked_ha_accounts': 'Tutti gli account Home Assistant attivi hanno un profilo.',
+    'no_users': 'Nessun utente aggiuntivo configurato.',
+    'none_selected': 'Nessuno selezionato',
+    'notif_desc': 'Seleziona i dispositivi mobili registrati in HA che riceveranno gli avvisi di Argus.',
+    'notif_no_services': 'Нет мобильных служб',
+    'notification_armed': '{user} активировал режим {mode}.',
+    'notification_disarmed': '{user} снял систему с охраны.',
+    'notifications_title': '🔔 Notifiche',
+    'open_sensors': 'Sensori aperti',
+    'open_sensors_explain': 'Следующие датчики открыты:\n{names}\n\nЗакройте их перед постановкой на охрану или включите «Обход».',
+    'panic_state_unknown': 'Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.',
+    'panic_stop_error': 'Не удалось остановить тревогу: {error}',
+    'panic_stopped': 'Тревога остановлена; восстановлено состояние {state}',
+    'pending': 'In attesa',
+    'pin_active_no': 'PIN Attivo: No',
+    'pin_active_yes': 'PIN Attivo: Sì',
+    'pin_deleted': '✓ PIN Eliminato',
+    'pin_desc': 'Codice numerico per inserire e disinserire.',
+    'pin_disarm_error': 'Неверный PIN или ошибка снятия с охраны',
+    'pin_incorrect': '❌ PIN attuale errato',
+    'pin_management': '🔑 Gestión de Pines',
+    'pin_master_title': 'PIN Principale',
+    'pin_modal_desc': 'PIN numerico per disinserire Argus',
+    'pin_placeholder': 'PIN di accesso',
+    'pin_remove_hint': 'Per rimuovere il PIN: inserisci quello attuale e lascia vuoti i campi sottostanti.',
+    'pin_reset_admin_only': '❌ Errore: Solo gli amministratori di Home Assistant possono reimpostare el PIN principale.',
+    'pin_reset_confirm': 'Sei sicuro di voler reimpostare il PIN principale? Il PIN attuale verrà rimosso e disattivato.',
+    'pin_updated': '✓ PIN Aggiornato',
+    'profile_is_yours': 'Questo è il tuo profilo',
+    'profile_needs_pin': 'Profilo di un’altra persona — inserisci il PIN di accesso',
+    'profile_no_pin_access': 'Questo profilo non ha un PIN di accesso. Non puoi aprirlo.',
+    'remove_btn': 'Quitar',
+    'reset_btn': '⚠️ Ripristina',
+    'reset_confirm': 'Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.',
+    'reset_dashboard': 'Ripristina layout',
+    'reset_error': 'Ошибка сброса: {error}',
+    'reset_success': 'Argus сброшен. У вас есть несколько секунд, чтобы отменить это.',
+    'retry_action': 'Повторить',
+    'role_argus_admin': 'Amministratore Argus',
+    'role_argus_admin_short': 'Adm',
+    'role_argus_standard': 'Utente standard',
+    'role_argus_user': 'Utente standard',
+    'role_argus_user_short': 'Std',
+    'rules_tip': '',
+    'save_btn': 'Salva',
+    'save_config': 'SALVA CONFIGURAZIONE',
+    'save_mode': '💾 Salva modalità',
+    'save_notif': 'Salva',
+    'save_user': 'Salva',
+    'search_placeholder': 'Cerca per nome, area o entity_id',
+    'search_select': 'Cerca & seleziona',
+    'searching_auto': '↻ Ricerca automazioni...',
+    'select_all': '☑ Tutti',
+    'select_btn': '+ Seleziona',
+    'select_profile_subtitle': 'Accedi ai tuoi pannelli di sicurezza e istanze Argus.',
+    'select_profile_title': 'Seleziona il tuo profilo',
+    'selected_lbl': 'Selezionati',
+    'selector_panic': '🚨 Действия SOS',
+    'sensor_section': 'Sensori di Intrusione',
+    'sensors_to_bypass': 'Sensori da ignorare',
+    'settings': '⚙️ Impostazioni',
+    'setup_access_pin': 'PIN доступа к панели Argus (Необязательно)',
+    'setup_admin_name': 'Имя администратора',
+    'setup_master_pin': 'Мастер-PIN для постановки/снятия с охраны (Необязательно)',
+    'setup_required_action': 'Настроить Argus в интеграциях',
+    'setup_required_desc': 'Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.',
+    'setup_required_title': 'Требуется настройка Argus',
+    'siren_section': 'Sirene',
+    'sos_actions': 'Acciones Automáticas de SOS',
+    'sos_activated': 'SOS активирован',
+    'sos_call': '📞 Chiama i soccorsi',
+    'sos_call_confirm': 'Позвонить в экстренную службу ({number})?',
+    'sos_call_help': 'Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.',
+    'sos_confirm_text': 'Scorri per attivare immediatamente l\'allarme.',
+    'sos_confirm_title': 'Conferma panico',
+    'sos_error': 'Не удалось активировать SOS: {error}',
+    'sos_no_outputs': 'Устройства не выбраны',
+    'sos_outputs_help': 'Dispositivos activados al disparar el SOS.',
+    'sos_select_outputs': 'Seleccionar salidas de pánico',
+    'sos_slide': 'Scorri per attivare SOS',
+    'sos_stop': 'DETENER SOS',
+    'status_away': 'FUERA',
+    'status_closed': 'CHIUSO',
+    'status_home': 'EN CASA',
+    'status_idle': 'INACTIVO',
+    'status_open': 'APERTO',
+    'status_recording': 'GRABANDO',
+    'switch_profile_btn': '👤 Cambia profilo',
+    'sync_panel_help': 'Paneles de alarma que seguirán el mismo estado de Argus',
+    'sync_panel_section': 'Paneles Sincronizados',
+    'system_armed': 'SISTEMA INSERITO',
+    'system_disarmed': 'SISTEMA DISINSERITO',
+    'system_triggered': '¡ALARMA DISPARADA!',
+    'temp_auto': 'Automatico (sensore locale / termostato / clima)',
+    'temp_notification_title': 'Argus — Температурное предупреждение',
+    'temp_thermostat': '(termostato)',
+    'thermostat_alert_notif': '🌡️ Avviso temperatura',
+    'times_section': '⏱️ Timer',
+    'triggered': 'ALLARME!',
+    'unavailable': 'Non disponibile',
+    'undo_error': 'Не удалось отменить сброс: {error}',
+    'undo_reset_btn': '↩️ Annulla Ripristino',
+    'undo_success': 'Сброс отменён.',
+    'unlinked_ha_accounts_title': 'Account Home Assistant senza profilo Argus',
+    'unlock_kiosk': 'Sblocca chiosco',
+    'update_pin': 'Aggiorna PIN',
+    'upload_error': 'Ошибка загрузки.',
+    'url_placeholder': 'URL фона…',
+    'use_for_hub': 'Argus',
+    'use_for_panel': 'Pannello',
+    'use_ha_language': 'Usa la lingua di Home Assistant',
+    'user_default': 'Пользователь',
+    'user_exp_date': 'Expiration Date/Time',
+    'user_exp_type': 'Expiration',
+    'user_no_pin': 'Sin PIN de acceso',
+    'user_pin': 'PIN utente',
+    'user_pin_action': 'PIN',
+    'user_required': 'Требуются имя и PIN',
+    'user_role_action': 'Роль',
+    'user_role_label': 'Ruolo Argus',
+    'username': 'Nome utente',
+    'users_title': '👥 Utenti e Controllo Accessi',
+    'wait_if_open': 'Attendi chiusura sensori',
+    'waiting_sensors': 'ESPERANDO SENSORES',
+    'welcome_greeting': 'Welcome,',
+    'welcome_profile': 'Добро пожаловать, {name}',
+  },
+  'zh': {
+    'accept': '接受',
+    'access_desc': '全局安全管理、主PIN码和管理员。',
+    'access_pin_lbl': 'PIN de Acceso',
+    'access_title': '访问控制和用户',
+    'action_failed': 'No se pudo realizar la acción',
+    'active_profile': 'Perfil Activo',
+    'active_until': '有效期至',
+    'activity_log': '📋 活动记录',
+    'add_btn': '+ 添加',
+    'add_user': '添加用户',
+    'admin_only': '仅管理员可修改此部分。',
+    'alarm_instance': '报警实例',
+    'all_sensors_bypassed': 'Todos los sensores configurados están omitidos.',
+    'arm_time': '布防延迟 (秒)',
+    'arm_time_label': '布防延迟(s)',
+    'armed_away': '离家',
+    'armed_home': '在家',
+    'armed_night': '夜间',
+    'armed_vacation': '度假',
+    'arming': '正在布防',
+    'automations': '⚡ 自动化',
+    'available': '可用',
+    'background_lbl': '背景',
+    'backup_desc': '保存设置备份或恢复之前的设置。',
+    'backup_title': '备份与恢复',
+    'badge_pin_reset': 'PIN已重置',
+    'badge_pin_reset_failed': 'PIN重置失败',
+    'battery_low': '⚠️ 电池不足',
+    'bg_collage': '拼贴画',
+    'bg_hub_default': '默认 (Argus)',
+    'bg_hub_selected_from_history': '已从历史记录中选择Argus背景。',
+    'bg_hub_title': 'Argus 背景',
+    'bg_image_opt': '图片 / GIF',
+    'bg_none': '默认',
+    'bg_panel_none': '无背景',
+    'bg_panel_selected_from_history': '已从历史记录中选择面板背景。',
+    'bg_panel_title': '面板背景',
+    'bg_photo': '单张照片',
+    'bg_sound_opt': '视频声音',
+    'bg_video': '循环视频',
+    'bg_weather': '动画天气',
+    'bridge_not_connected': '桥接未配置',
+    'bridge_not_desc': '在Home Assistant中启用HomeKit Bridge集成并包含实体<code>alarm_control_panel.argus_*</code>以生成配对QR码。',
+    'bridge_paired': '桥接已配置',
+    'bridge_paired_desc': '桥接 <b>{bridge}</b> 已在 Home Assistant 中配置。Home Assistant 无法从这里验证它是否已添加到 Apple Home，也无法提供家庭名称。',
+    'btn_away': '🔒 离家',
+    'btn_create_argus_profile': '创建 Argus 个人资料',
+    'btn_disarmed': '已撤防',
+    'btn_home': '🏠 在家',
+    'btn_night': '🌙 夜间',
+    'btn_sos': '🚨 紧急求助 / 恐慌',
+    'btn_vacation': '✈️ 度假',
+    'bypass_lbl': '🚫 旁路',
+    'cancel': '取消',
+    'cancel_btn': '取消',
+    'cannot_arm': 'Невозможно поставить на охрану',
+    'cannot_delete_last_admin': '无法删除最后一个管理员。',
+    'change_btn': 'Cambiar',
+    'change_pin': '主 PIN 码',
+    'change_profile_picture': 'Cambiar foto en Personas de HA ↗',
+    'change_user_pin': 'Cambiar PIN',
+    'claim_btn': 'Заявить права администратора',
+    'claim_desc': 'Вашей установке требуется администратор для получения доступа.',
+    'claim_title': 'Обновление безопасности Argus',
+    'clear': '清除',
+    'clear_history_confirm': 'Удалить всю историю активности?',
+    'clear_log_btn': '清除',
+    'clock_12h': '12 小时制 (AM/PM)',
+    'clock_24h': '24 小时制',
+    'clock_auto': '自动（Home Assistant）',
+    'clock_format_desc': '选择时间的显示方式。',
+    'clock_format_label': '时间格式',
+    'close': '关闭',
+    'confirm': '✓ 确认',
+    'confirm_pin': '确认 PIN 码',
+    'connected': '已连接',
+    'create_ha': '+ 在 HA 中创建',
+    'current_pin': '当前 PIN 码',
+    'customize': 'Настроить',
+    'delete': 'Удалить',
+    'delete_btn_title': '从存储中删除',
+    'delete_file_error': 'Не удалось удалить файл: {error}',
+    'delete_user': 'Eliminar usuario',
+    'delete_user_confirm': '您确定要删除“{name}”吗？',
+    'delete_user_tooltip': '删除用户个人资料',
+    'deselect_all': '☐ 全不选',
+    'details_notif': '警报通知',
+    'disarm_time': '进入延迟 (秒)',
+    'disarm_time_label': '进入延迟(s)',
+    'disarmed': '已撤防',
+    'done': 'Готово',
+    'edit_btn': '✏️ 编辑',
+    'edit_dashboard': '编辑仪表板',
+    'edit_dashboard_done': '✓ 完成',
+    'emergency_help': 'Número telefónico marcado en caso de emergencia.',
+    'emergency_number_label': 'Número de Emergencia',
+    'error_loading_uploaded_files': '加载文件历史记录出错。',
+    'exit_to_ha': '返回 Home Assistant',
+    'exp_indefinite': '无限期',
+    'exp_temporary': '临时 (日期/时间)',
+    'expired': '已过期',
+    'export_btn': '📤 下载',
+    'export_error': 'Ошибка экспорта: {error}',
+    'file_choice': '«{file}»\n\nИспользовать как статичное изображение (ОК) или анимированное видео (Отмена)?',
+    'file_delete_confirm': '您确定要永久删除 \"{filename}\" 吗？',
+    'file_read_error': 'Не удалось прочитать файл.',
+    'files_count': '{count} 个文件',
+    'files_count_short': '{count} 文件',
+    'first_run_blocked_desc': '首次设置 Argus 需要 Home Assistant 管理员。',
+    'first_run_blocked_title': '拒绝访问',
+    'first_run_desc': '完成设置以保护您的家。',
+    'first_run_pin_expl': '访问 PIN 打开 Argus。主 PIN 控制撤防和布防。',
+    'first_run_skip': '跳过',
+    'first_run_start': '开始使用 Argus',
+    'first_run_welcome': '感谢选择 Argus Home Hub。欢迎。',
+    'forgot_pin': '忘记PIN码？',
+    'fullscreen_title': '全屏',
+    'generic_error': 'Ошибка: {error}',
+    'github_action': 'Поставить звезду на GitHub',
+    'github_desc': 'Если вам нравится проект, поставьте звезду на GitHub, чтобы поддержать разработку.',
+    'github_title': 'Поддержите Argus',
+    'ha_account_linked': 'Home Assistant 账户：{name}',
+    'ha_account_unavailable': '绑定不可用',
+    'ha_admin_label': 'Home Assistant 管理员',
+    'ha_role_admin': 'HA 管理员',
+    'ha_role_standard': 'HA 用户',
+    'ha_standard_user_label': '标准 HA 用户',
+    'hero_desc': '综合安全系统、门禁控制、自动化与 HomeKit。',
+    'history_refresh': '🔄 刷新',
+    'history_unavailable': 'Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.',
+    'home_default': 'Мой дом',
+    'home_fallback': 'Дом',
+    'home_name_label': '家庭名称',
+    'home_name_lbl': '家庭名称',
+    'home_name_modal_desc': '此名称显示在实例面板和全屏中。',
+    'home_name_modal_title': '🏡 家庭名称',
+    'home_name_placeholder': '我的家',
+    'homekit_bridge': 'HomeKit桥接',
+    'homekit_house': 'Apple Home',
+    'homekit_not_paired': '未与任何家庭关联。',
+    'homekit_title': '🏠 HomeKit',
+    'import_btn': '📥 恢复',
+    'import_error': 'Ошибка импорта: {error}',
+    'import_success': 'Конфигурация восстановлена. Перезагрузка…',
+    'initialization_error_desc': 'Не удалось подключиться к авторизованному backend Home Assistant.',
+    'initialization_error_title': 'Не удалось запустить Argus',
+    'instances': '活动实例',
+    'introduce_pin': '输入您的 PIN 码',
+    'invalid_config': 'Недопустимый файл конфигурации.',
+    'is_admin': '管理员',
+    'lang_select_title': '选择语言',
+    'lang_selector_lbl': '⚙️ 语言',
+    'language': '语言',
+    'lbl_aesthetic_custom': '美学个性化',
+    'lbl_load_file': '上传文件:',
+    'lbl_uploaded_files': '服务器上上传的文件',
+    'link_ha_user': '关联至 Home Assistant 用户',
+    'linked_rules': '与 Argus 关联的规则',
+    'loading': 'Загрузка…',
+    'lock_if_open': '打开时锁定',
+    'log_action_access_pin_updated': 'PIN доступа обновлён',
+    'log_action_backup_created': 'Резервная копия создана',
+    'log_action_backup_restored': 'Конфигурация восстановлена',
+    'log_action_first_run_completed': 'Argus 已由 {user} 初始化',
+    'log_action_fullscreen_unlocked': '自助服务终端已由 {user} 解锁',
+    'log_action_master_pin_rejected': '{user} 的主 PIN 尝试不正确',
+    'log_action_mode_changed': 'Режим изменён',
+    'log_action_profile_selected': 'Профиль выбран',
+    'log_action_rejected': '操作已被拒绝',
+    'log_action_save_ui': 'UI 设置已由 {user} 保存',
+    'log_action_schedule_applied': 'Расписание применено',
+    'log_action_select_profile': '已选择个人资料：{user}',
+    'log_action_sos': 'SOS 紧急情况由 {user} 触发',
+    'log_action_state_restored': 'Состояние восстановлено',
+    'log_action_stop_sos': 'SOS 紧急情况由 {user} 停止',
+    'log_action_user_logged_in': 'Вход пользователя',
+    'log_action_verify_access_pin': '访问 PIN 已由 {user} 验证',
+    'log_armed': '已布防',
+    'log_by': '由',
+    'log_detail_armed': '模式',
+    'log_detail_disarm': '系统已撤防',
+    'log_detail_pin_reset': '管理员已重置主PIN码',
+    'log_detail_pin_reset_failed': '未授权尝试重置主PIN码',
+    'log_detail_triggered': '自动激活',
+    'log_disarmed': '已撤防',
+    'log_no_events': '没有最近事件。',
+    'log_sensor': '传感器',
+    'log_triggered': '已触发！',
+    'login_btn': '登录',
+    'manual_arm': '手动',
+    'manual_disarm': '手动(已撤防)',
+    'master_pin_lbl': 'PIN Maestro',
+    'modal_add_user': '+ Добавить пользователя',
+    'modal_cancel': 'Отмена',
+    'modal_confirm': 'Подтвердить',
+    'modal_delete_confirm': 'Удалить этого пользователя?',
+    'modal_edit_name': 'Изменить имя',
+    'modal_name_label': 'Имя профиля',
+    'modal_pin_help': 'Оставьте пустым, чтобы удалить PIN.',
+    'modal_pin_title': 'PIN доступа',
+    'modal_save': 'Сохранить',
+    'modal_user_added': 'Пользователь создан.',
+    'mode_away': '外出',
+    'mode_home': '在家',
+    'mode_night': '夜间',
+    'mode_vacation': '度假',
+    'modes': '模式',
+    'mqtt_label': 'MQTT',
+    'never_triggered': '从未触发',
+    'new_pin': '新 PIN 码',
+    'no_alarm_instance': 'Нет доступного экземпляра сигнализации',
+    'no_auto_linked': '没有链接到Argus的自动化。',
+    'no_files_uploaded': '未上传文件。请使用上方控件上传背景。',
+    'no_files_uploaded_short': '未上传文件。',
+    'no_instances': '没有实例。',
+    'no_results': 'Нет результатов',
+    'no_rules': '',
+    'no_sensors_configured': 'Sin sensores configurados',
+    'no_unlinked_ha_accounts': '所有活跃的 Home Assistant 账户都有个人资料。',
+    'no_users': '未配置其他用户。',
+    'none_selected': '未选择任何项',
+    'notif_desc': '选择在 HA 中注册以接收 Argus 警报的移动设备。',
+    'notif_no_services': 'Нет мобильных служб',
+    'notification_armed': '{user} активировал режим {mode}.',
+    'notification_disarmed': '{user} снял систему с охраны.',
+    'notifications_title': '🔔 通知',
+    'open_sensors': '开启的传感器',
+    'open_sensors_explain': 'Следующие датчики открыты:\n{names}\n\nЗакройте их перед постановкой на охрану или включите «Обход».',
+    'panic_state_unknown': 'Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.',
+    'panic_stop_error': 'Не удалось остановить тревогу: {error}',
+    'panic_stopped': 'Тревога остановлена; восстановлено состояние {state}',
+    'pending': '等待中',
+    'pin_active_no': 'PIN激活: 否',
+    'pin_active_yes': 'PIN激活: 是',
+    'pin_deleted': '✓ PIN已删除',
+    'pin_desc': '用于布防和撤防的数字代码。',
+    'pin_disarm_error': 'Неверный PIN или ошибка снятия с охраны',
+    'pin_incorrect': '❌ 当前PIN错误',
+    'pin_management': '🔑 Gestión de Pines',
+    'pin_master_title': '主PIN码',
+    'pin_modal_desc': '用于撤防 Argus 的数字 PIN 码',
+    'pin_placeholder': '访问 PIN',
+    'pin_remove_hint': '删除PIN: 输入当前PIN并将下面字段留空。',
+    'pin_reset_admin_only': '❌ 错误：只有 Home Assistant 管理员可以重置主 PIN 码。',
+    'pin_reset_confirm': '您确定要重置主 PIN 码吗？当前的 PIN 码将被删除并停用。',
+    'pin_updated': '✓ PIN已更新',
+    'profile_is_yours': '这是您的个人资料',
+    'profile_needs_pin': '其他人的个人资料 — 请输入访问 PIN',
+    'profile_no_pin_access': '该个人资料没有访问 PIN。您无法打开它。',
+    'remove_btn': 'Quitar',
+    'reset_btn': '⚠️ 恢复出厂',
+    'reset_confirm': 'Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.',
+    'reset_dashboard': '重置布局',
+    'reset_error': 'Ошибка сброса: {error}',
+    'reset_success': 'Argus сброшен. У вас есть несколько секунд, чтобы отменить это.',
+    'retry_action': 'Повторить',
+    'role_argus_admin': 'Argus 管理员',
+    'role_argus_admin_short': 'Adm',
+    'role_argus_standard': '标准用户',
+    'role_argus_user': '标准用户',
+    'role_argus_user_short': 'Std',
+    'rules_tip': '',
+    'save_btn': '保存',
+    'save_config': '保存配置',
+    'save_mode': '💾 保存模式',
+    'save_notif': '保存',
+    'save_user': '保存',
+    'search_placeholder': '按名称、区域或 entity_id 搜索',
+    'search_select': '搜索并选择',
+    'searching_auto': '↻ 正在搜索自动化...',
+    'select_all': '☑ 全选',
+    'select_btn': '+ 选择',
+    'select_profile_subtitle': '访问您的安全面板和 Argus 实例。',
+    'select_profile_title': '选择您的个人资料',
+    'selected_lbl': '已选择',
+    'selector_panic': '🚨 Действия SOS',
+    'sensor_section': '入侵传感器',
+    'sensors_to_bypass': '跳过的传感器',
+    'settings': '⚙️ 设置',
+    'setup_access_pin': 'PIN доступа к панели Argus (Необязательно)',
+    'setup_admin_name': 'Имя администратора',
+    'setup_master_pin': 'Мастер-PIN для постановки/снятия с охраны (Необязательно)',
+    'setup_required_action': 'Настроить Argus в интеграциях',
+    'setup_required_desc': 'Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.',
+    'setup_required_title': 'Требуется настройка Argus',
+    'siren_section': '警报器',
+    'sos_actions': 'Acciones Automáticas de SOS',
+    'sos_activated': 'SOS активирован',
+    'sos_call': '📞 拨打紧急服务',
+    'sos_call_confirm': 'Позвонить в экстренную службу ({number})?',
+    'sos_call_help': 'Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.',
+    'sos_confirm_text': '滑动以立即触发警报。',
+    'sos_confirm_title': '确认紧急',
+    'sos_error': 'Не удалось активировать SOS: {error}',
+    'sos_no_outputs': 'Устройства не выбраны',
+    'sos_outputs_help': 'Dispositivos activados al disparar el SOS.',
+    'sos_select_outputs': 'Seleccionar salidas de pánico',
+    'sos_slide': '滑动以激活 SOS',
+    'sos_stop': 'DETENER SOS',
+    'status_away': 'FUERA',
+    'status_closed': '关闭',
+    'status_home': 'EN CASA',
+    'status_idle': 'INACTIVO',
+    'status_open': '开启',
+    'status_recording': 'GRABANDO',
+    'switch_profile_btn': '👤 切换个人资料',
+    'sync_panel_help': 'Paneles de alarma que seguirán el mismo estado de Argus',
+    'sync_panel_section': 'Paneles Sincronizados',
+    'system_armed': '系统已布防',
+    'system_disarmed': '系统已撤防',
+    'system_triggered': '¡ALARMA DISPARADA!',
+    'temp_auto': '自动（本地传感器 / 恒温器 / 气候）',
+    'temp_notification_title': 'Argus — Температурное предупреждение',
+    'temp_thermostat': '(恒温器)',
+    'thermostat_alert_notif': '🌡️ 温度警报',
+    'times_section': '⏱️ 计时器',
+    'triggered': '警报触发！',
+    'unavailable': '不可用',
+    'undo_error': 'Не удалось отменить сброс: {error}',
+    'undo_reset_btn': '↩️ 撤销重置',
+    'undo_success': 'Сброс отменён.',
+    'unlinked_ha_accounts_title': '没有 Argus 个人资料的 Home Assistant 账户',
+    'unlock_kiosk': '解锁自助服务终端',
+    'update_pin': '更新 PIN 码',
+    'upload_error': 'Ошибка загрузки.',
+    'url_placeholder': 'URL фона…',
+    'use_for_hub': 'Argus',
+    'use_for_panel': '面板',
+    'use_ha_language': '使用 Home Assistant 语言',
+    'user_default': 'Пользователь',
+    'user_exp_date': 'Expiration Date/Time',
+    'user_exp_type': 'Expiration',
+    'user_no_pin': 'Sin PIN de acceso',
+    'user_pin': '用户 PIN',
+    'user_pin_action': 'PIN',
+    'user_required': 'Требуются имя и PIN',
+    'user_role_action': 'Роль',
+    'user_role_label': 'Argus 角色',
+    'username': '用户名',
+    'users_title': '👥 用户与门禁控制',
+    'wait_if_open': '等待传感器关闭',
+    'waiting_sensors': 'ESPERANDO SENSORES',
+    'welcome_greeting': 'Welcome,',
+    'welcome_profile': 'Добро пожаловать, {name}',
+  },
+  'zh-Hant': {
+    'accept': '接受',
+    'access_desc': '全局安全管理、主PIN码和管理员。',
+    'access_pin_lbl': 'PIN de Acceso',
+    'access_title': '访问控制和用户',
+    'action_failed': 'No se pudo realizar la acción',
+    'active_profile': 'Perfil Activo',
+    'active_until': '有效期限至',
+    'activity_log': '📋 活動記錄',
+    'add_btn': '+ 新增',
+    'add_user': '新增使用者',
+    'admin_only': '僅管理員可修改此部分。',
+    'alarm_instance': '报警实例',
+    'all_sensors_bypassed': 'Todos los sensores configurados están omitidos.',
+    'arm_time': '布防延遲 (秒)',
+    'arm_time_label': '布防延迟(s)',
+    'armed_away': '離家',
+    'armed_home': '在家',
+    'armed_night': '夜間',
+    'armed_vacation': '度假',
+    'arming': '正在布防',
+    'automations': '⚡ 自動化',
+    'available': '可用',
+    'background_lbl': '背景',
+    'backup_desc': '保存设置备份或恢复之前的设置。',
+    'backup_title': '备份与恢复',
+    'badge_pin_reset': 'PIN已重置',
+    'badge_pin_reset_failed': 'PIN重置失败',
+    'battery_low': '⚠️ 电池不足',
+    'bg_collage': '拼贴画',
+    'bg_hub_default': '默认 (Argus)',
+    'bg_hub_selected_from_history': '已从历史记录中选择Argus背景。',
+    'bg_hub_title': 'Argus 背景',
+    'bg_image_opt': '图片 / GIF',
+    'bg_none': '默认',
+    'bg_panel_none': '无背景',
+    'bg_panel_selected_from_history': '已从历史记录中选择面板背景。',
+    'bg_panel_title': '面板背景',
+    'bg_photo': '单张照片',
+    'bg_sound_opt': '视频声音',
+    'bg_video': '循环视频',
+    'bg_weather': '动画天气',
+    'bridge_not_connected': '桥接未配置',
+    'bridge_not_desc': '在Home Assistant中启用HomeKit Bridge集成并包含实体<code>alarm_control_panel.argus_*</code>以生成配对QR码。',
+    'bridge_paired': '桥接已配置',
+    'bridge_paired_desc': '桥接 <b>{bridge}</b> 已在 Home Assistant 中配置。Home Assistant 无法从这里验证它是否已添加到 Apple Home，也无法提供家庭名称。',
+    'btn_away': '🔒 離家',
+    'btn_create_argus_profile': '创建 Argus 个人资料',
+    'btn_disarmed': '已撤防',
+    'btn_home': '🏠 在家',
+    'btn_night': '🌙 夜間',
+    'btn_sos': '🚨 緊急求助 / 恐慌',
+    'btn_vacation': '✈️ 度假',
+    'bypass_lbl': '🚫 旁路',
+    'cancel': '取消',
+    'cancel_btn': '取消',
+    'cannot_arm': 'Невозможно поставить на охрану',
+    'cannot_delete_last_admin': '无法删除最后一个管理员。',
+    'change_btn': 'Cambiar',
+    'change_pin': '主 PIN 碼',
+    'change_profile_picture': 'Cambiar foto en Personas de HA ↗',
+    'change_user_pin': 'Cambiar PIN',
+    'claim_btn': 'Заявить права администратора',
+    'claim_desc': 'Вашей установке требуется администратор для получения доступа.',
+    'claim_title': 'Обновление безопасности Argus',
+    'clear': '清除',
+    'clear_history_confirm': 'Удалить всю историю активности?',
+    'clear_log_btn': '清除',
+    'clock_12h': '12 小时制 (AM/PM)',
+    'clock_24h': '24 小时制',
+    'clock_auto': '自动（Home Assistant）',
+    'clock_format_desc': '选择时间的显示方式。',
+    'clock_format_label': '时间格式',
+    'close': '關閉',
+    'confirm': '✓ 確認',
+    'confirm_pin': '確認 PIN 碼',
+    'connected': '已連線',
+    'create_ha': '+ 在 HA 中建立',
+    'current_pin': '目前 PIN 碼',
+    'customize': 'Настроить',
+    'delete': 'Удалить',
+    'delete_btn_title': '从存储中删除',
+    'delete_file_error': 'Не удалось удалить файл: {error}',
+    'delete_user': 'Eliminar usuario',
+    'delete_user_confirm': '您确定要删除“{name}”吗？',
+    'delete_user_tooltip': '删除用户个人资料',
+    'deselect_all': '☐ 全不选',
+    'details_notif': '警报通知',
+    'disarm_time': '進入延遲 (秒)',
+    'disarm_time_label': '进入延迟(s)',
+    'disarmed': '已撤防',
+    'done': 'Готово',
+    'edit_btn': '✏️ 编辑',
+    'edit_dashboard': '編輯儀表板',
+    'edit_dashboard_done': '✓ 完成',
+    'emergency_help': 'Número telefónico marcado en caso de emergencia.',
+    'emergency_number_label': 'Número de Emergencia',
+    'error_loading_uploaded_files': '加载文件历史记录出错。',
+    'exit_to_ha': '返回 Home Assistant',
+    'exp_indefinite': '無期限',
+    'exp_temporary': '暫時 (日期/時間)',
+    'expired': '已過期',
+    'export_btn': '📤 下载',
+    'export_error': 'Ошибка экспорта: {error}',
+    'file_choice': '«{file}»\n\nИспользовать как статичное изображение (ОК) или анимированное видео (Отмена)?',
+    'file_delete_confirm': '您确定要永久删除 \"{filename}\" 吗？',
+    'file_read_error': 'Не удалось прочитать файл.',
+    'files_count': '{count} 个文件',
+    'files_count_short': '{count} 文件',
+    'first_run_blocked_desc': '首次设置 Argus 需要 Home Assistant 管理员。',
+    'first_run_blocked_title': '拒绝访问',
+    'first_run_desc': '完成设置以保护您的家。',
+    'first_run_pin_expl': '访问 PIN 打开 Argus。主 PIN 控制撤防和布防。',
+    'first_run_skip': '跳过',
+    'first_run_start': '开始使用 Argus',
+    'first_run_welcome': '感谢选择 Argus Home Hub。欢迎。',
+    'forgot_pin': '忘记PIN码？',
+    'fullscreen_title': '全屏',
+    'generic_error': 'Ошибка: {error}',
+    'github_action': 'Поставить звезду на GitHub',
+    'github_desc': 'Если вам нравится проект, поставьте звезду на GitHub, чтобы поддержать разработку.',
+    'github_title': 'Поддержите Argus',
+    'ha_account_linked': 'Home Assistant 账户：{name}',
+    'ha_account_unavailable': '绑定不可用',
+    'ha_admin_label': 'Home Assistant 管理员',
+    'ha_role_admin': 'HA 管理员',
+    'ha_role_standard': 'HA 用户',
+    'ha_standard_user_label': '标准 HA 用户',
+    'hero_desc': '綜合安全系統、門禁控制、自動化與 HomeKit。',
+    'history_refresh': '🔄 重新整理',
+    'history_unavailable': 'Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.',
+    'home_default': 'Мой дом',
+    'home_fallback': 'Дом',
+    'home_name_label': '家庭名称',
+    'home_name_lbl': '家庭名称',
+    'home_name_modal_desc': '此名称显示在实例面板和全屏中。',
+    'home_name_modal_title': '🏡 家庭名称',
+    'home_name_placeholder': '我的家',
+    'homekit_bridge': 'HomeKit桥接',
+    'homekit_house': 'Apple Home',
+    'homekit_not_paired': '未与任何家庭关联。',
+    'homekit_title': '🏠 HomeKit',
+    'import_btn': '📥 恢复',
+    'import_error': 'Ошибка импорта: {error}',
+    'import_success': 'Конфигурация восстановлена. Перезагрузка…',
+    'initialization_error_desc': 'Не удалось подключиться к авторизованному backend Home Assistant.',
+    'initialization_error_title': 'Не удалось запустить Argus',
+    'instances': '活動實例',
+    'introduce_pin': '輸入您的 PIN 碼',
+    'invalid_config': 'Недопустимый файл конфигурации.',
+    'is_admin': '管理員',
+    'lang_select_title': '选择语言',
+    'lang_selector_lbl': '⚙️ 語言',
+    'language': '语言',
+    'lbl_aesthetic_custom': '美学个性化',
+    'lbl_load_file': '上传文件:',
+    'lbl_uploaded_files': '服务器上上传的文件',
+    'link_ha_user': '关联至 Home Assistant 用户',
+    'linked_rules': '與 Argus 關聯的規則',
+    'loading': 'Загрузка…',
+    'lock_if_open': '開啟時鎖定',
+    'log_action_access_pin_updated': 'PIN доступа обновлён',
+    'log_action_backup_created': 'Резервная копия создана',
+    'log_action_backup_restored': 'Конфигурация восстановлена',
+    'log_action_first_run_completed': 'Argus 已由 {user} 初始化',
+    'log_action_fullscreen_unlocked': '自助服务终端已由 {user} 解锁',
+    'log_action_master_pin_rejected': '{user} 的主 PIN 尝试不正确',
+    'log_action_mode_changed': 'Режим изменён',
+    'log_action_profile_selected': 'Профиль выбран',
+    'log_action_rejected': '操作已被拒绝',
+    'log_action_save_ui': 'UI 设置已由 {user} 保存',
+    'log_action_schedule_applied': 'Расписание применено',
+    'log_action_select_profile': '已选择个人资料：{user}',
+    'log_action_sos': 'SOS 紧急情况由 {user} 触发',
+    'log_action_state_restored': 'Состояние восстановлено',
+    'log_action_stop_sos': 'SOS 紧急情况由 {user} 停止',
+    'log_action_user_logged_in': 'Вход пользователя',
+    'log_action_verify_access_pin': '访问 PIN 已由 {user} 验证',
+    'log_armed': '已布防',
+    'log_by': '由',
+    'log_detail_armed': '模式',
+    'log_detail_disarm': '系统已撤防',
+    'log_detail_pin_reset': '管理员已重置主PIN码',
+    'log_detail_pin_reset_failed': '未授权尝试重置主PIN码',
+    'log_detail_triggered': '自动激活',
+    'log_disarmed': '已撤防',
+    'log_no_events': '没有最近事件。',
+    'log_sensor': '传感器',
+    'log_triggered': '已触发！',
+    'login_btn': '登录',
+    'manual_arm': '手动',
+    'manual_disarm': '手动(已撤防)',
+    'master_pin_lbl': 'PIN Maestro',
+    'modal_add_user': '+ Добавить пользователя',
+    'modal_cancel': 'Отмена',
+    'modal_confirm': 'Подтвердить',
+    'modal_delete_confirm': 'Удалить этого пользователя?',
+    'modal_edit_name': 'Изменить имя',
+    'modal_name_label': 'Имя профиля',
+    'modal_pin_help': 'Оставьте пустым, чтобы удалить PIN.',
+    'modal_pin_title': 'PIN доступа',
+    'modal_save': 'Сохранить',
+    'modal_user_added': 'Пользователь создан.',
+    'mode_away': '外出',
+    'mode_home': '在家',
+    'mode_night': '夜间',
+    'mode_vacation': '度假',
+    'modes': '模式',
+    'mqtt_label': 'MQTT',
+    'never_triggered': '从未触发',
+    'new_pin': '新 PIN 碼',
+    'no_alarm_instance': 'Нет доступного экземпляра сигнализации',
+    'no_auto_linked': '没有链接到Argus的自动化。',
+    'no_files_uploaded': '未上传文件。请使用上方控件上传背景。',
+    'no_files_uploaded_short': '未上传文件。',
+    'no_instances': '没有实例。',
+    'no_results': 'Нет результатов',
+    'no_rules': '',
+    'no_sensors_configured': 'Sin sensores configurados',
+    'no_unlinked_ha_accounts': '所有活跃的 Home Assistant 账户都有个人资料。',
+    'no_users': '未設定其他使用者。',
+    'none_selected': '未選擇任何項目',
+    'notif_desc': '選擇在 HA 中註冊以接收 Argus 警報的行動裝置。',
+    'notif_no_services': 'Нет мобильных служб',
+    'notification_armed': '{user} активировал режим {mode}.',
+    'notification_disarmed': '{user} снял систему с охраны.',
+    'notifications_title': '🔔 通知',
+    'open_sensors': '开启的传感器',
+    'open_sensors_explain': 'Следующие датчики открыты:\n{names}\n\nЗакройте их перед постановкой на охрану или включите «Обход».',
+    'panic_state_unknown': 'Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.',
+    'panic_stop_error': 'Не удалось остановить тревогу: {error}',
+    'panic_stopped': 'Тревога остановлена; восстановлено состояние {state}',
+    'pending': '等待中',
+    'pin_active_no': 'PIN激活: 否',
+    'pin_active_yes': 'PIN激活: 是',
+    'pin_deleted': '✓ PIN已删除',
+    'pin_desc': '用於布防和撤防的數字代碼。',
+    'pin_disarm_error': 'Неверный PIN или ошибка снятия с охраны',
+    'pin_incorrect': '❌ 当前PIN错误',
+    'pin_management': '🔑 Gestión de Pines',
+    'pin_master_title': '主PIN码',
+    'pin_modal_desc': '用於撤防 Argus 的數字 PIN 碼',
+    'pin_placeholder': '访问 PIN',
+    'pin_remove_hint': '删除PIN: 输入当前PIN并将下面字段留空。',
+    'pin_reset_admin_only': '❌ 错误：只有 Home Assistant 管理员可以重置主 PIN 码。',
+    'pin_reset_confirm': '您确定要重置主 PIN 码吗？当前的 PIN 码将被删除并停用。',
+    'pin_updated': '✓ PIN已更新',
+    'profile_is_yours': '这是您的个人资料',
+    'profile_needs_pin': '其他人的个人资料 — 请输入访问 PIN',
+    'profile_no_pin_access': '该个人资料没有访问 PIN。您无法打开它。',
+    'remove_btn': 'Quitar',
+    'reset_btn': '⚠️ 恢复出厂',
+    'reset_confirm': 'Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.',
+    'reset_dashboard': '重設版面配置',
+    'reset_error': 'Ошибка сброса: {error}',
+    'reset_success': 'Argus сброшен. У вас есть несколько секунд, чтобы отменить это.',
+    'retry_action': 'Повторить',
+    'role_argus_admin': 'Argus 管理員',
+    'role_argus_admin_short': 'Adm',
+    'role_argus_standard': '標準使用者',
+    'role_argus_user': '标准用户',
+    'role_argus_user_short': 'Std',
+    'rules_tip': '',
+    'save_btn': '保存',
+    'save_config': '儲存設定',
+    'save_mode': '💾 儲存模式',
+    'save_notif': '儲存',
+    'save_user': '儲存',
+    'search_placeholder': '按名稱、區域或 entity_id 搜尋',
+    'search_select': '搜索并选择',
+    'searching_auto': '↻ 正在搜索自动化...',
+    'select_all': '☑ 全选',
+    'select_btn': '+ 選擇',
+    'select_profile_subtitle': '访问您的安全面板和 Argus 实例。',
+    'select_profile_title': '选择您的个人资料',
+    'selected_lbl': '已選擇',
+    'selector_panic': '🚨 Действия SOS',
+    'sensor_section': '入侵感測器',
+    'sensors_to_bypass': '跳过的传感器',
+    'settings': '⚙️ 設定',
+    'setup_access_pin': 'PIN доступа к панели Argus (Необязательно)',
+    'setup_admin_name': 'Имя администратора',
+    'setup_master_pin': 'Мастер-PIN для постановки/снятия с охраны (Необязательно)',
+    'setup_required_action': 'Настроить Argus в интеграциях',
+    'setup_required_desc': 'Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.',
+    'setup_required_title': 'Требуется настройка Argus',
+    'siren_section': '警報器',
+    'sos_actions': 'Acciones Automáticas de SOS',
+    'sos_activated': 'SOS активирован',
+    'sos_call': '📞 拨打紧急服务',
+    'sos_call_confirm': 'Позвонить в экстренную службу ({number})?',
+    'sos_call_help': 'Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.',
+    'sos_confirm_text': '滑动以立即触发警报。',
+    'sos_confirm_title': '确认紧急',
+    'sos_error': 'Не удалось активировать SOS: {error}',
+    'sos_no_outputs': 'Устройства не выбраны',
+    'sos_outputs_help': 'Dispositivos activados al disparar el SOS.',
+    'sos_select_outputs': 'Seleccionar salidas de pánico',
+    'sos_slide': '滑動以啟動 SOS',
+    'sos_stop': 'DETENER SOS',
+    'status_away': 'FUERA',
+    'status_closed': '關閉',
+    'status_home': 'EN CASA',
+    'status_idle': 'INACTIVO',
+    'status_open': '開啟',
+    'status_recording': 'GRABANDO',
+    'switch_profile_btn': '👤 切換設定檔',
+    'sync_panel_help': 'Paneles de alarma que seguirán el mismo estado de Argus',
+    'sync_panel_section': 'Paneles Sincronizados',
+    'system_armed': '系統已布防',
+    'system_disarmed': '系統已撤防',
+    'system_triggered': '¡ALARMA DISPARADA!',
+    'temp_auto': '自动（本地传感器 / 恒温器 / 气候）',
+    'temp_notification_title': 'Argus — Температурное предупреждение',
+    'temp_thermostat': '(恒温器)',
+    'thermostat_alert_notif': '🌡️ 温度警报',
+    'times_section': '⏱️ 計時器',
+    'triggered': '警報觸發！',
+    'unavailable': '不可用',
+    'undo_error': 'Не удалось отменить сброс: {error}',
+    'undo_reset_btn': '↩️ 撤销重置',
+    'undo_success': 'Сброс отменён.',
+    'unlinked_ha_accounts_title': '没有 Argus 个人资料的 Home Assistant 账户',
+    'unlock_kiosk': '解锁自助服务终端',
+    'update_pin': '更新 PIN 碼',
+    'upload_error': 'Ошибка загрузки.',
+    'url_placeholder': 'URL фона…',
+    'use_for_hub': 'Argus',
+    'use_for_panel': '面板',
+    'use_ha_language': '使用 Home Assistant 語言',
+    'user_default': 'Пользователь',
+    'user_exp_date': 'Expiration Date/Time',
+    'user_exp_type': 'Expiration',
+    'user_no_pin': 'Sin PIN de acceso',
+    'user_pin': '使用者 PIN',
+    'user_pin_action': 'PIN',
+    'user_required': 'Требуются имя и PIN',
+    'user_role_action': 'Роль',
+    'user_role_label': 'Argus 角色',
+    'username': '使用者名稱',
+    'users_title': '👥 使用者與門禁控制',
+    'wait_if_open': '等待感測器關閉',
+    'waiting_sensors': 'ESPERANDO SENSORES',
+    'welcome_greeting': 'Welcome,',
+    'welcome_profile': 'Добро пожаловать, {name}',
+  },
+  'ru': {
+    'accept': 'Принять',
+    'access_desc': 'Глобальная безопасность, мастер PIN и администраторы.',
+    'access_pin_lbl': 'PIN de Acceso',
+    'access_title': 'Контроль доступа и пользователи',
+    'action_failed': 'No se pudo realizar la acción',
+    'active_profile': 'Perfil Activo',
+    'active_until': 'Истекает',
+    'activity_log': '📋 Журнал активности',
+    'add_btn': '+ Добавить',
+    'add_user': 'Добавить пользователя',
+    'admin_only': 'Только администраторы могут изменять этот раздел.',
+    'alarm_instance': 'Экземпляр тревоги',
+    'all_sensors_bypassed': 'Todos los sensores configurados están omitidos.',
+    'arm_time': 'Задержка постановки (с)',
+    'arm_time_label': 'Время взятия (с)',
+    'armed_away': 'Вне дома',
+    'armed_home': 'Дома',
+    'armed_night': 'Ночь',
+    'armed_vacation': 'Отпуск',
+    'arming': 'Постановка на охрану',
+    'automations': '⚡ Автоматизации',
+    'available': 'Доступно',
+    'background_lbl': 'Фон',
+    'backup_desc': 'Сохраните резервную копию или восстановите предыдущую.',
+    'backup_title': 'Резервная копия',
+    'badge_pin_reset': 'PIN Сброшен',
+    'badge_pin_reset_failed': 'Ошибка Сброса PIN',
+    'battery_low': '⚠️ Низкий заряд',
+    'bg_collage': 'Коллаж',
+    'bg_hub_default': 'По умолчанию (Argus)',
+    'bg_hub_selected_from_history': 'Фон Argus выбран из истории.',
+    'bg_hub_title': 'Фон Argus',
+    'bg_image_opt': 'Изображение / GIF',
+    'bg_none': 'По умолчанию',
+    'bg_panel_none': 'Без фона',
+    'bg_panel_selected_from_history': 'Фон панели выбран из истории.',
+    'bg_panel_title': 'Фон панели',
+    'bg_photo': 'Одно фото',
+    'bg_sound_opt': 'Звук видео',
+    'bg_video': 'Зацикленное видео',
+    'bg_weather': 'Анимированная погода',
+    'bridge_not_connected': 'Мост не настроен',
+    'bridge_not_desc': 'Включите интеграцию HomeKit Bridge в Home Assistant и добавьте <code>alarm_control_panel.argus_*</code> для QR сопряжения.',
+    'bridge_paired': 'Мост настроен',
+    'bridge_paired_desc': 'Мост <b>{bridge}</b> настроен в Home Assistant. Здесь нельзя проверить, добавлен ли он в Apple Home, или узнать его название.',
+    'btn_away': '🔒 ВНЕ ДОМА',
+    'btn_create_argus_profile': 'Создать профиль Argus',
+    'btn_disarmed': 'СНЯТО С ОХРАНЫ',
+    'btn_home': '🏠 ДОМА',
+    'btn_night': '🌙 НОЧЬ',
+    'btn_sos': '🚨 SOS / ПАНИКА',
+    'btn_vacation': '✈️ ОТПУСК',
+    'bypass_lbl': '🚫 Обход',
+    'cancel': 'Отмена',
+    'cancel_btn': 'Отмена',
+    'cannot_arm': 'Невозможно поставить на охрану',
+    'cannot_delete_last_admin': 'Нельзя удалить последнего администратора.',
+    'change_btn': 'Cambiar',
+    'change_pin': 'Мастер PIN',
+    'change_profile_picture': 'Cambiar foto en Personas de HA ↗',
+    'change_user_pin': 'Cambiar PIN',
+    'claim_btn': 'Заявить права администратора',
+    'claim_desc': 'Вашей установке требуется администратор для получения доступа.',
+    'claim_title': 'Обновление безопасности Argus',
+    'clear': 'Очистить',
+    'clear_history_confirm': 'Удалить всю историю активности?',
+    'clear_log_btn': 'ОЧИСТИТЬ',
+    'clock_12h': '12-часовой (AM/PM)',
+    'clock_24h': '24-часовой',
+    'clock_auto': 'Автоматически (Home Assistant)',
+    'clock_format_desc': 'Выберите способ отображения времени.',
+    'clock_format_label': 'Формат времени',
+    'close': 'Закрыть',
+    'confirm': '✓ Подтвердить',
+    'confirm_pin': 'Подтвердите PIN',
+    'connected': 'ПОДКЛЮЧЕНО',
+    'create_ha': '+ Создать в HA',
+    'current_pin': 'Текущий PIN',
+    'customize': 'Настроить',
+    'delete': 'Удалить',
+    'delete_btn_title': 'Удалить из хранилища',
+    'delete_file_error': 'Не удалось удалить файл: {error}',
+    'delete_user': 'Eliminar usuario',
+    'delete_user_confirm': 'Вы уверены, что хотите удалить \"{name}\"?',
+    'delete_user_tooltip': 'Удалить профиль пользователя',
+    'deselect_all': '☐ Ничего',
+    'details_notif': 'Уведомление тревоги',
+    'disarm_time': 'Задержка входа (с)',
+    'disarm_time_label': 'Задержка входа (с)',
+    'disarmed': 'Снято с охраны',
+    'done': 'Готово',
+    'edit_btn': '✏️ Редактировать',
+    'edit_dashboard': 'Редактировать панель',
+    'edit_dashboard_done': '✓ Готово',
+    'emergency_help': 'Número telefónico marcado en caso de emergencia.',
+    'emergency_number_label': 'Número de Emergencia',
+    'error_loading_uploaded_files': 'Ошибка при загрузке истории файлов.',
+    'exit_to_ha': 'Вернуться в Home Assistant',
+    'exp_indefinite': 'Бессрочно',
+    'exp_temporary': 'Временно (Дата/Время)',
+    'expired': 'Истек',
+    'export_btn': '📤 Скачать',
+    'export_error': 'Ошибка экспорта: {error}',
+    'file_choice': '«{file}»\n\nИспользовать как статичное изображение (ОК) или анимированное видео (Отмена)?',
+    'file_delete_confirm': 'Вы уверены, что хотите навсегда удалить «{filename}»?',
+    'file_read_error': 'Не удалось прочитать файл.',
+    'files_count': '{count} файлов',
+    'files_count_short': '{count} файл.',
+    'first_run_blocked_desc': 'Для первичной настройки Argus требуется администратор Home Assistant.',
+    'first_run_blocked_title': 'Доступ запрещен',
+    'first_run_desc': 'Завершите настройку для защиты вашего дома.',
+    'first_run_pin_expl': 'PIN-код доступа открывает Argus. Мастер PIN-код управляет охраной.',
+    'first_run_skip': 'Пропустить',
+    'first_run_start': 'Начать работу с Argus',
+    'first_run_welcome': 'Спасибо за выбор Argus Home Hub. Добро пожаловать.',
+    'forgot_pin': 'Забыли PIN?',
+    'fullscreen_title': 'Полный экран',
+    'generic_error': 'Ошибка: {error}',
+    'github_action': 'Поставить звезду на GitHub',
+    'github_desc': 'Если вам нравится проект, поставьте звезду на GitHub, чтобы поддержать разработку.',
+    'github_title': 'Поддержите Argus',
+    'ha_account_linked': 'Учетная запись Home Assistant: {name}',
+    'ha_account_unavailable': 'Привязка недоступна',
+    'ha_admin_label': 'Администратор Home Assistant',
+    'ha_role_admin': 'Админ HA',
+    'ha_role_standard': 'Пользователь HA',
+    'ha_standard_user_label': 'Стандартный пользователь HA',
+    'hero_desc': 'Комплексная система безопасности, контроль доступа, автоматизации и HomeKit.',
+    'history_refresh': '🔄 Обновить',
+    'history_unavailable': 'Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.',
+    'home_default': 'Мой дом',
+    'home_fallback': 'Дом',
+    'home_name_label': 'Название дома',
+    'home_name_lbl': 'Название дома',
+    'home_name_modal_desc': 'Это имя отображается в панели экземпляров и в полноекранном режиме.',
+    'home_name_modal_title': '🏡 Название дома',
+    'home_name_placeholder': 'Мой дом',
+    'homekit_bridge': 'Мост HomeKit',
+    'homekit_house': 'Apple Home',
+    'homekit_not_paired': 'Не связано ни с каким домом.',
+    'homekit_title': '🏠 HomeKit',
+    'import_btn': '📥 Восстановить',
+    'import_error': 'Ошибка импорта: {error}',
+    'import_success': 'Конфигурация восстановлена. Перезагрузка…',
+    'initialization_error_desc': 'Не удалось подключиться к авторизованному backend Home Assistant.',
+    'initialization_error_title': 'Не удалось запустить Argus',
+    'instances': 'Активные экземпляры',
+    'introduce_pin': 'Введите ваш PIN',
+    'invalid_config': 'Недопустимый файл конфигурации.',
+    'is_admin': 'Администратор',
+    'lang_select_title': 'Выбрать язык',
+    'lang_selector_lbl': '⚙️ Язык',
+    'language': 'Язык',
+    'lbl_aesthetic_custom': 'Эстетическая персонализация',
+    'lbl_load_file': 'Загрузить файл:',
+    'lbl_uploaded_files': 'Загруженные файлы на сервере',
+    'link_ha_user': 'Связать с пользователем Home Assistant',
+    'linked_rules': 'Правила, связанные с Argus',
+    'loading': 'Загрузка…',
+    'lock_if_open': 'Блокировать при открытии',
+    'log_action_access_pin_updated': 'PIN доступа обновлён',
+    'log_action_backup_created': 'Резервная копия создана',
+    'log_action_backup_restored': 'Конфигурация восстановлена',
+    'log_action_first_run_completed': 'Argus инициализирован пользователем {user}',
+    'log_action_fullscreen_unlocked': 'Киоск разблокирован пользователем {user}',
+    'log_action_master_pin_rejected': 'Неверная попытка ввода мастер-PIN {user}',
+    'log_action_mode_changed': 'Режим изменён',
+    'log_action_profile_selected': 'Профиль выбран',
+    'log_action_rejected': 'Действие отклонено',
+    'log_action_save_ui': 'Настройки UI сохранены пользователем {user}',
+    'log_action_schedule_applied': 'Расписание применено',
+    'log_action_select_profile': 'Выбран профиль: {user}',
+    'log_action_sos': 'SOS паника вызвана пользователем {user}',
+    'log_action_state_restored': 'Состояние восстановлено',
+    'log_action_stop_sos': 'SOS паника остановлена пользователем {user}',
+    'log_action_user_logged_in': 'Вход пользователя',
+    'log_action_verify_access_pin': 'PIN-код доступа проверен {user}',
+    'log_armed': 'Поставлено',
+    'log_by': 'от',
+    'log_detail_armed': 'Режим',
+    'log_detail_disarm': 'Система снята',
+    'log_detail_pin_reset': 'Мастер-PIN сброшен администратором',
+    'log_detail_pin_reset_failed': 'Несанкционированная попытка сбросить мастер-PIN',
+    'log_detail_triggered': 'Автоматическая активация',
+    'log_disarmed': 'Снято',
+    'log_no_events': 'Нет последних событий.',
+    'log_sensor': 'Датчик',
+    'log_triggered': 'Сработало!',
+    'login_btn': 'Войти',
+    'manual_arm': 'Вручную',
+    'manual_disarm': 'Вручную (Снято)',
+    'master_pin_lbl': 'PIN Maestro',
+    'modal_add_user': '+ Добавить пользователя',
+    'modal_cancel': 'Отмена',
+    'modal_confirm': 'Подтвердить',
+    'modal_delete_confirm': 'Удалить этого пользователя?',
+    'modal_edit_name': 'Изменить имя',
+    'modal_name_label': 'Имя профиля',
+    'modal_pin_help': 'Оставьте пустым, чтобы удалить PIN.',
+    'modal_pin_title': 'PIN доступа',
+    'modal_save': 'Сохранить',
+    'modal_user_added': 'Пользователь создан.',
+    'mode_away': 'Ушёл',
+    'mode_home': 'Дома',
+    'mode_night': 'Ночь',
+    'mode_vacation': 'Отпуск',
+    'modes': 'Режимы',
+    'mqtt_label': 'MQTT',
+    'never_triggered': 'Никогда не срабатывало',
+    'new_pin': 'Новый PIN',
+    'no_alarm_instance': 'Нет доступного экземпляра сигнализации',
+    'no_auto_linked': 'Нет автоматизаций, связанных с Argus.',
+    'no_files_uploaded': 'Нет загруженных файлов. Загрузите фон с помощью элементов управления выше.',
+    'no_files_uploaded_short': 'Нет загруженных файлов.',
+    'no_instances': 'Нет экземпляров.',
+    'no_results': 'Нет результатов',
+    'no_rules': '',
+    'no_sensors_configured': 'Sin sensores configurados',
+    'no_unlinked_ha_accounts': 'Все активные учетные записи Home Assistant имеют профиль.',
+    'no_users': 'Дополнительные пользователи не настроены.',
+    'none_selected': 'Ничего не выбрано',
+    'notif_desc': 'Выберите мобильные устройства, зарегистрированные в HA, которые будут получать оповещения Argus.',
+    'notif_no_services': 'Нет мобильных служб',
+    'notification_armed': '{user} активировал режим {mode}.',
+    'notification_disarmed': '{user} снял систему с охраны.',
+    'notifications_title': '🔔 Уведомления',
+    'open_sensors': 'Открытые датчики',
+    'open_sensors_explain': 'Следующие датчики открыты:\n{names}\n\nЗакройте их перед постановкой на охрану или включите «Обход».',
+    'panic_state_unknown': 'Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.',
+    'panic_stop_error': 'Не удалось остановить тревогу: {error}',
+    'panic_stopped': 'Тревога остановлена; восстановлено состояние {state}',
+    'pending': 'Ожидание',
+    'pin_active_no': 'PIN активен: Нет',
+    'pin_active_yes': 'PIN активен: Да',
+    'pin_deleted': '✓ PIN Удален',
+    'pin_desc': 'Цифровой код для постановки и снятия с охраны.',
+    'pin_disarm_error': 'Неверный PIN или ошибка снятия с охраны',
+    'pin_incorrect': '❌ Неверный текущий PIN',
+    'pin_management': '🔑 Gestión de Pines',
+    'pin_master_title': 'Мастер PIN',
+    'pin_modal_desc': 'Цифровой PIN для снятия Argus с охраны',
+    'pin_placeholder': 'PIN доступа',
+    'pin_remove_hint': 'Для удаления PIN: введите текущий и оставьте поля пустыми.',
+    'pin_reset_admin_only': '❌ Ошибка: Только администраторы Home Assistant могут сбросить мастер-PIN.',
+    'pin_reset_confirm': 'Вы уверены, что хотите сбросить мастер-PIN? Текущий PIN-код будет удален и отключен.',
+    'pin_updated': '✓ PIN Обновлен',
+    'profile_is_yours': 'Это ваш профиль',
+    'profile_needs_pin': 'Профиль другого пользователя — введите PIN доступа',
+    'profile_no_pin_access': 'У этого профиля нет PIN доступа. Вы не можете его открыть.',
+    'remove_btn': 'Quitar',
+    'reset_btn': '⚠️ Сброс',
+    'reset_confirm': 'Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.',
+    'reset_dashboard': 'Сбросить макет',
+    'reset_error': 'Ошибка сброса: {error}',
+    'reset_success': 'Argus сброшен. У вас есть несколько секунд, чтобы отменить это.',
+    'retry_action': 'Повторить',
+    'role_argus_admin': 'Администратор Argus',
+    'role_argus_admin_short': 'Adm',
+    'role_argus_standard': 'Обычный пользователь',
+    'role_argus_user': 'Стандартный пользователь',
+    'role_argus_user_short': 'Std',
+    'rules_tip': '',
+    'save_btn': 'Сохранить',
+    'save_config': 'СОХРАНИТЬ КОНФИГУРАЦИЮ',
+    'save_mode': '💾 Сохранить режим',
+    'save_notif': 'Сохранить',
+    'save_user': 'Сохранить',
+    'search_placeholder': 'Поиск по имени, области или entity_id',
+    'search_select': 'Поиск и выбор',
+    'searching_auto': '↻ Поиск автоматизаций...',
+    'select_all': '☑ Все',
+    'select_btn': '+ Выбрать',
+    'select_profile_subtitle': 'Доступ к вашим панелям безопасности и экземплярам Argus.',
+    'select_profile_title': 'Выберите ваш профиль',
+    'selected_lbl': 'Выбрано',
+    'selector_panic': '🚨 Действия SOS',
+    'sensor_section': 'Датчики вторжения',
+    'sensors_to_bypass': 'Датчики для обхода',
+    'settings': '⚙️ Настройки',
+    'setup_access_pin': 'PIN доступа к панели Argus (Необязательно)',
+    'setup_admin_name': 'Имя администратора',
+    'setup_master_pin': 'Мастер-PIN для постановки/снятия с охраны (Необязательно)',
+    'setup_required_action': 'Настроить Argus в интеграциях',
+    'setup_required_desc': 'Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.',
+    'setup_required_title': 'Требуется настройка Argus',
+    'siren_section': 'Сирены',
+    'sos_actions': 'Acciones Automáticas de SOS',
+    'sos_activated': 'SOS активирован',
+    'sos_call': '📞 Вызвать экстренные службы',
+    'sos_call_confirm': 'Позвонить в экстренную службу ({number})?',
+    'sos_call_help': 'Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.',
+    'sos_confirm_text': 'Проведите для немедленной активации тревоги.',
+    'sos_confirm_title': 'Подтвердить тревогу',
+    'sos_error': 'Не удалось активировать SOS: {error}',
+    'sos_no_outputs': 'Устройства не выбраны',
+    'sos_outputs_help': 'Dispositivos activados al disparar el SOS.',
+    'sos_select_outputs': 'Seleccionar salidas de pánico',
+    'sos_slide': 'Проведите для активации SOS',
+    'sos_stop': 'DETENER SOS',
+    'status_away': 'FUERA',
+    'status_closed': 'ЗАКРЫТО',
+    'status_home': 'EN CASA',
+    'status_idle': 'INACTIVO',
+    'status_open': 'ОТКРЫТО',
+    'status_recording': 'GRABANDO',
+    'switch_profile_btn': '👤 Сменить профиль',
+    'sync_panel_help': 'Paneles de alarma que seguirán el mismo estado de Argus',
+    'sync_panel_section': 'Paneles Sincronizados',
+    'system_armed': 'СИСТЕМА НА ОХРАНЕ',
+    'system_disarmed': 'СИСТЕМА СНЯТА С ОХРАНЫ',
+    'system_triggered': '¡ALARMA DISPARADA!',
+    'temp_auto': 'Авто (лок. датчик / термостат / климат)',
+    'temp_notification_title': 'Argus — Температурное предупреждение',
+    'temp_thermostat': '(термостат)',
+    'thermostat_alert_notif': '🌡️ Температурный сигнал',
+    'times_section': '⏱️ Таймеры',
+    'triggered': 'ТРЕВОГА!',
+    'unavailable': 'Недоступно',
+    'undo_error': 'Не удалось отменить сброс: {error}',
+    'undo_reset_btn': '↩️ Отменить сброс',
+    'undo_success': 'Сброс отменён.',
+    'unlinked_ha_accounts_title': 'Учетные записи Home Assistant без профиля Argus',
+    'unlock_kiosk': 'Разблокировать киоск',
+    'update_pin': 'Обновить PIN',
+    'upload_error': 'Ошибка загрузки.',
+    'url_placeholder': 'URL фона…',
+    'use_for_hub': 'Argus',
+    'use_for_panel': 'Панель',
+    'use_ha_language': 'Использовать язык Home Assistant',
+    'user_default': 'Пользователь',
+    'user_exp_date': 'Expiration Date/Time',
+    'user_exp_type': 'Expiration',
+    'user_no_pin': 'Sin PIN de acceso',
+    'user_pin': 'PIN пользователя',
+    'user_pin_action': 'PIN',
+    'user_required': 'Требуются имя и PIN',
+    'user_role_action': 'Роль',
+    'user_role_label': 'Роль Argus',
+    'username': 'Имя пользователя',
+    'users_title': '👥 Пользователи и контроль доступа',
+    'wait_if_open': 'Ожидать закрытия датчиков',
+    'waiting_sensors': 'ESPERANDO SENSORES',
+    'welcome_greeting': 'Welcome,',
+    'welcome_profile': 'Добро пожаловать, {name}',
+  },
+  'hi': {
+    'accept': 'स्वीकार करें',
+    'access_desc': 'Global security management, master PIN and administrators.',
+    'access_pin_lbl': 'PIN de Acceso',
+    'access_title': 'Access Control & Users',
+    'action_failed': 'No se pudo realizar la acción',
+    'active_profile': 'Perfil Activo',
+    'active_until': 'समाप्त होता है',
+    'activity_log': '📋 गतिविधि लॉग',
+    'add_btn': '+ जोड़ें',
+    'add_user': 'उपयोगकर्ता जोड़ें',
+    'admin_only': 'केवल व्यवस्थापक ही इस अनुभाग को संशोधित कर सकते हैं।',
+    'alarm_instance': 'Alarm Instance',
+    'all_sensors_bypassed': 'Todos los sensores configurados están omitidos.',
+    'arm_time': 'आर्मिंग विलंब (सेकंड)',
+    'arm_time_label': 'Arm time (s)',
+    'armed_away': 'बाहर',
+    'armed_home': 'घर पर',
+    'armed_night': 'रात',
+    'armed_vacation': 'छुट्टियाँ',
+    'arming': 'सशस्त्र किया जा रहा है',
+    'automations': '⚡ स्वचालन',
+    'available': 'उपलब्ध',
+    'background_lbl': 'Background',
+    'backup_desc': 'Save a backup of your settings or restore a previous one.',
+    'backup_title': 'Backup & Restore',
+    'badge_pin_reset': 'PIN Reset',
+    'badge_pin_reset_failed': 'PIN Reset Failed',
+    'battery_low': '⚠️ Low Battery',
+    'bg_collage': 'Collage',
+    'bg_hub_default': 'Default (Argus)',
+    'bg_hub_selected_from_history': 'Argus background selected from history.',
+    'bg_hub_title': 'Argus background',
+    'bg_image_opt': 'Image / GIF',
+    'bg_none': 'Default',
+    'bg_panel_none': 'No background',
+    'bg_panel_selected_from_history': 'Panel background selected from history.',
+    'bg_panel_title': 'Panel background',
+    'bg_photo': 'One photo',
+    'bg_sound_opt': 'Video sound',
+    'bg_video': 'Loop video',
+    'bg_weather': 'Animated weather',
+    'bridge_not_connected': 'Bridge not configured',
+    'bridge_not_desc': 'Enable the HomeKit Bridge integration in Home Assistant and include the entity <code>alarm_control_panel.argus_*</code> to generate a pairing QR code.',
+    'bridge_paired': 'Bridge configured',
+    'bridge_paired_desc': 'The <b>{bridge}</b> bridge is configured in Home Assistant. Home Assistant cannot verify from here whether it was added to Apple Home or report its name.',
+    'btn_away': '🔒 बाहर',
+    'btn_create_argus_profile': 'Create Argus Profile',
+    'btn_disarmed': 'निरस्त्र',
+    'btn_home': '🏠 घर पर',
+    'btn_night': '🌙 रात',
+    'btn_sos': '🚨 आपातकालीन / पैनिक',
+    'btn_vacation': '✈️ छुट्टियाँ',
+    'bypass_lbl': '🚫 बायपास',
+    'cancel': 'रद्द करें',
+    'cancel_btn': 'Cancel',
+    'cannot_arm': 'Невозможно поставить на охрану',
+    'cannot_delete_last_admin': 'Cannot delete the last binding administrator.',
+    'change_btn': 'Cambiar',
+    'change_pin': 'मास्टर पिन',
+    'change_profile_picture': 'Cambiar foto en Personas de HA ↗',
+    'change_user_pin': 'Cambiar PIN',
+    'claim_btn': 'Заявить права администратора',
+    'claim_desc': 'Вашей установке требуется администратор для получения доступа.',
+    'claim_title': 'Обновление безопасности Argus',
+    'clear': 'साफ़ करें',
+    'clear_history_confirm': 'Удалить всю историю активности?',
+    'clear_log_btn': 'साफ़ करें',
+    'clock_12h': '12-hour (AM/PM)',
+    'clock_24h': '24-hour',
+    'clock_auto': 'Automatic (Home Assistant)',
+    'clock_format_desc': 'Choose how time is displayed across panels and logs.',
+    'clock_format_label': 'Time Format',
+    'close': 'बंद करें',
+    'confirm': '✓ पुष्टि करें',
+    'confirm_pin': 'पिन की पुष्टि करें',
+    'connected': 'जुड़ा हुआ',
+    'create_ha': '+ HA में बनाएँ',
+    'current_pin': 'वर्तमान पिन',
+    'customize': 'Настроить',
+    'delete': 'Удалить',
+    'delete_btn_title': 'Delete from storage',
+    'delete_file_error': 'Не удалось удалить файл: {error}',
+    'delete_user': 'Eliminar usuario',
+    'delete_user_confirm': 'Are you sure you want to delete \"{name}\"?',
+    'delete_user_tooltip': 'Delete user profile',
+    'deselect_all': '☐ None',
+    'details_notif': 'Alarm notification',
+    'disarm_time': 'प्रवेश विलंब (सेकंड)',
+    'disarm_time_label': 'Entry delay (s)',
+    'disarmed': 'निरस्त्र',
+    'done': 'Готово',
+    'edit_btn': '✏️ Edit',
+    'edit_dashboard': 'डैशबोर्ड संपादित करें',
+    'edit_dashboard_done': '✓ संपन्न',
+    'emergency_help': 'Número telefónico marcado en caso de emergencia.',
+    'emergency_number_label': 'Número de Emergencia',
+    'error_loading_uploaded_files': 'Error loading file history.',
+    'exit_to_ha': 'Back to Home Assistant',
+    'exp_indefinite': 'अनिश्चित',
+    'exp_temporary': 'अस्थायी (दिनांक/समय)',
+    'expired': 'समाप्त हो गया',
+    'export_btn': '📤 Download',
+    'export_error': 'Ошибка экспорта: {error}',
+    'file_choice': '«{file}»\n\nИспользовать как статичное изображение (ОК) или анимированное видео (Отмена)?',
+    'file_delete_confirm': 'Are you sure you want to permanently delete \"{filename}\"?',
+    'file_read_error': 'Не удалось прочитать файл.',
+    'files_count': '{count} files',
+    'files_count_short': '{count} files',
+    'first_run_blocked_desc': 'A Home Assistant administrator is required to set up Argus for the first time.',
+    'first_run_blocked_title': 'Access Denied',
+    'first_run_desc': 'Complete setup to secure your home.',
+    'first_run_pin_expl': 'The access PIN opens Argus. The master PIN controls arming and disarming.',
+    'first_run_skip': 'Skip',
+    'first_run_start': 'Start with Argus',
+    'first_run_welcome': 'Thank you for choosing Argus Home Hub. Welcome.',
+    'forgot_pin': 'Forgot PIN?',
+    'fullscreen_title': 'Full screen',
+    'generic_error': 'Ошибка: {error}',
+    'github_action': 'Поставить звезду на GitHub',
+    'github_desc': 'Если вам нравится проект, поставьте звезду на GitHub, чтобы поддержать разработку.',
+    'github_title': 'Поддержите Argus',
+    'ha_account_linked': 'Home Assistant Account: {name}',
+    'ha_account_unavailable': 'Binding unavailable',
+    'ha_admin_label': 'Home Assistant Admin',
+    'ha_role_admin': 'HA Admin',
+    'ha_role_standard': 'HA User',
+    'ha_standard_user_label': 'Standard HA User',
+    'hero_desc': 'व्यापक सुरक्षा प्रणाली, अभिगम नियंत्रण, स्वचालन और HomeKit।',
+    'history_refresh': '🔄 रीफ्रेश करें',
+    'history_unavailable': 'Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.',
+    'home_default': 'Мой дом',
+    'home_fallback': 'Дом',
+    'home_name_label': 'Home Name',
+    'home_name_lbl': 'Home Name',
+    'home_name_modal_desc': 'This name appears in the instances panel and in full screen.',
+    'home_name_modal_title': '🏡 Home Name',
+    'home_name_placeholder': 'My Home',
+    'homekit_bridge': 'HomeKit Bridge',
+    'homekit_house': 'Apple Home',
+    'homekit_not_paired': 'Not paired to any home.',
+    'homekit_title': '🏠 HomeKit',
+    'import_btn': '📥 Restore',
+    'import_error': 'Ошибка импорта: {error}',
+    'import_success': 'Конфигурация восстановлена. Перезагрузка…',
+    'initialization_error_desc': 'Не удалось подключиться к авторизованному backend Home Assistant.',
+    'initialization_error_title': 'Не удалось запустить Argus',
+    'instances': 'सक्रिय उदाहरण',
+    'introduce_pin': 'अपना पिन दर्ज करें',
+    'invalid_config': 'Недопустимый файл конфигурации.',
+    'is_admin': 'व्यवस्थापक',
+    'lang_select_title': 'Select Language',
+    'lang_selector_lbl': '⚙️ भाषा',
+    'language': 'Language',
+    'lbl_aesthetic_custom': 'Aesthetic Customization',
+    'lbl_load_file': 'Upload file:',
+    'lbl_uploaded_files': 'Uploaded files on server',
+    'link_ha_user': 'Link to Home Assistant User',
+    'linked_rules': 'Argus से जुड़े नियम',
+    'loading': 'Загрузка…',
+    'lock_if_open': 'खुला होने पर लॉक करें',
+    'log_action_access_pin_updated': 'PIN доступа обновлён',
+    'log_action_backup_created': 'Резервная копия создана',
+    'log_action_backup_restored': 'Конфигурация восстановлена',
+    'log_action_first_run_completed': 'Argus initialized by {user}',
+    'log_action_fullscreen_unlocked': 'Kiosk unlocked by {user}',
+    'log_action_master_pin_rejected': 'Incorrect master PIN attempt by {user}',
+    'log_action_mode_changed': 'Режим изменён',
+    'log_action_profile_selected': 'Профиль выбран',
+    'log_action_rejected': 'Action rejected',
+    'log_action_save_ui': 'UI Settings saved by {user}',
+    'log_action_schedule_applied': 'Расписание применено',
+    'log_action_select_profile': 'Profile selected: {user}',
+    'log_action_sos': 'SOS Panic triggered by {user}',
+    'log_action_state_restored': 'Состояние восстановлено',
+    'log_action_stop_sos': 'SOS Panic stopped by {user}',
+    'log_action_user_logged_in': 'Вход пользователя',
+    'log_action_verify_access_pin': 'Access PIN verified by {user}',
+    'log_armed': 'Armed',
+    'log_by': 'by',
+    'log_detail_armed': 'Mode',
+    'log_detail_disarm': 'System disarmed',
+    'log_detail_pin_reset': 'Master PIN reset by administrator',
+    'log_detail_pin_reset_failed': 'Unauthorized attempt to reset master PIN',
+    'log_detail_triggered': 'Automatic activation',
+    'log_disarmed': 'Disarmed',
+    'log_no_events': 'No recent events.',
+    'log_sensor': 'Sensor',
+    'log_triggered': 'Triggered!',
+    'login_btn': 'Login',
+    'manual_arm': 'Manual',
+    'manual_disarm': 'Manual (Disarmed)',
+    'master_pin_lbl': 'PIN Maestro',
+    'modal_add_user': '+ Добавить пользователя',
+    'modal_cancel': 'Отмена',
+    'modal_confirm': 'Подтвердить',
+    'modal_delete_confirm': 'Удалить этого пользователя?',
+    'modal_edit_name': 'Изменить имя',
+    'modal_name_label': 'Имя профиля',
+    'modal_pin_help': 'Оставьте пустым, чтобы удалить PIN.',
+    'modal_pin_title': 'PIN доступа',
+    'modal_save': 'Сохранить',
+    'modal_user_added': 'Пользователь создан.',
+    'mode_away': 'Away',
+    'mode_home': 'Home',
+    'mode_night': 'Night',
+    'mode_vacation': 'Vacation',
+    'modes': 'मोड',
+    'mqtt_label': 'MQTT',
+    'never_triggered': 'Never triggered',
+    'new_pin': 'नया पिन',
+    'no_alarm_instance': 'Нет доступного экземпляра сигнализации',
+    'no_auto_linked': 'No automations linked to Argus.',
+    'no_files_uploaded': 'No uploaded files. Upload a background using the controls above.',
+    'no_files_uploaded_short': 'No uploaded files.',
+    'no_instances': 'No instances. Add Argus from Integrations.',
+    'no_results': 'Нет результатов',
+    'no_rules': '',
+    'no_sensors_configured': 'Sin sensores configurados',
+    'no_unlinked_ha_accounts': 'All active Home Assistant accounts have a profile.',
+    'no_users': 'कोई अतिरिक्त उपयोगकर्ता कॉन्फ़िगर नहीं किया गया।',
+    'none_selected': 'कोई चयनित नहीं',
+    'notif_desc': 'HA में पंजीकृत उन मोबाइल उपकरणों का चयन करें जो Argus अलर्ट प्राप्त करेंगे।',
+    'notif_no_services': 'Нет мобильных служб',
+    'notification_armed': '{user} активировал режим {mode}.',
+    'notification_disarmed': '{user} снял систему с охраны.',
+    'notifications_title': '🔔 सूचनाएं',
+    'open_sensors': 'Open sensors',
+    'open_sensors_explain': 'Следующие датчики открыты:\n{names}\n\nЗакройте их перед постановкой на охрану или включите «Обход».',
+    'panic_state_unknown': 'Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.',
+    'panic_stop_error': 'Не удалось остановить тревогу: {error}',
+    'panic_stopped': 'Тревога остановлена; восстановлено состояние {state}',
+    'pending': 'लंबित',
+    'pin_active_no': 'Master PIN: Deactivated',
+    'pin_active_yes': 'Master PIN: Active',
+    'pin_deleted': '✓ PIN Deleted',
+    'pin_desc': 'आर्म और निरस्त्र करने के लिए संख्यात्मक कोड।',
+    'pin_disarm_error': 'Неверный PIN или ошибка снятия с охраны',
+    'pin_incorrect': '❌ Incorrect current PIN',
+    'pin_management': '🔑 Gestión de Pines',
+    'pin_master_title': 'Master PIN',
+    'pin_modal_desc': 'Argus को निरस्त्र करने के लिए संख्यात्मक पिन',
+    'pin_placeholder': 'Access PIN',
+    'pin_remove_hint': 'To remove PIN: Enter the current one and leave the fields below empty.',
+    'pin_reset_admin_only': '❌ Error: Only Home Assistant administrators can reset the master PIN.',
+    'pin_reset_confirm': 'Are you sure you want to reset the master PIN? The current PIN will be removed and deactivated.',
+    'pin_updated': '✓ PIN Updated',
+    'profile_is_yours': 'This is your profile',
+    'profile_needs_pin': 'Another person’s profile — enter the access PIN',
+    'profile_no_pin_access': 'This profile has no access PIN. You cannot open it.',
+    'remove_btn': 'Quitar',
+    'reset_btn': '⚠️ Factory Reset',
+    'reset_confirm': 'Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.',
+    'reset_dashboard': 'लेआउट रीसेट करें',
+    'reset_error': 'Ошибка сброса: {error}',
+    'reset_success': 'Argus сброшен. У вас есть несколько секунд, чтобы отменить это.',
+    'retry_action': 'Повторить',
+    'role_argus_admin': 'Argus व्यवस्थापक',
+    'role_argus_admin_short': 'Adm',
+    'role_argus_standard': 'मानक उपयोगकर्ता',
+    'role_argus_user': 'Standard User',
+    'role_argus_user_short': 'Std',
+    'rules_tip': '',
+    'save_btn': 'Save',
+    'save_config': 'कॉन्फ़िगरेशन सहेजें',
+    'save_mode': '💾 मोड सहेजें',
+    'save_notif': 'सहेजें',
+    'save_user': 'सहेजें',
+    'search_placeholder': 'नाम, क्षेत्र या entity_id से खोजें',
+    'search_select': 'Search & select',
+    'searching_auto': '↻ Searching automations...',
+    'select_all': '☑ All',
+    'select_btn': '+ चुनें',
+    'select_profile_subtitle': 'Access your security panels and Argus instances.',
+    'select_profile_title': 'Select Your Profile',
+    'selected_lbl': 'चयनित',
+    'selector_panic': '🚨 Действия SOS',
+    'sensor_section': 'घुसपैठ सेंसर',
+    'sensors_to_bypass': 'Sensors to Bypass',
+    'settings': '⚙️ सेटिंग्स',
+    'setup_access_pin': 'PIN доступа к панели Argus (Необязательно)',
+    'setup_admin_name': 'Имя администратора',
+    'setup_master_pin': 'Мастер-PIN для постановки/снятия с охраны (Необязательно)',
+    'setup_required_action': 'Настроить Argus в интеграциях',
+    'setup_required_desc': 'Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.',
+    'setup_required_title': 'Требуется настройка Argus',
+    'siren_section': 'सायरन',
+    'sos_actions': 'Acciones Automáticas de SOS',
+    'sos_activated': 'SOS активирован',
+    'sos_call': '📞 Call Emergency Services',
+    'sos_call_confirm': 'Позвонить в экстренную службу ({number})?',
+    'sos_call_help': 'Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.',
+    'sos_confirm_text': 'Slide to trigger the alarm immediately.',
+    'sos_confirm_title': 'Confirm panic',
+    'sos_error': 'Не удалось активировать SOS: {error}',
+    'sos_no_outputs': 'Устройства не выбраны',
+    'sos_outputs_help': 'Dispositivos activados al disparar el SOS.',
+    'sos_select_outputs': 'Seleccionar salidas de pánico',
+    'sos_slide': 'SOS सक्रिय करने के लिए स्लाइड करें',
+    'sos_stop': 'DETENER SOS',
+    'status_away': 'FUERA',
+    'status_closed': 'बंद',
+    'status_home': 'EN CASA',
+    'status_idle': 'INACTIVO',
+    'status_open': 'खुला',
+    'status_recording': 'GRABANDO',
+    'switch_profile_btn': '👤 प्रोफ़ाइल बदलें',
+    'sync_panel_help': 'Paneles de alarma que seguirán el mismo estado de Argus',
+    'sync_panel_section': 'Paneles Sincronizados',
+    'system_armed': 'सिस्टम सशस्त्र है',
+    'system_disarmed': 'सिस्टम निरस्त्र है',
+    'system_triggered': '¡ALARMA DISPARADA!',
+    'temp_auto': 'Automatic (local sensor / thermostat / climate)',
+    'temp_notification_title': 'Argus — Температурное предупреждение',
+    'temp_thermostat': '(thermostat)',
+    'thermostat_alert_notif': '🌡️ Temperature alert',
+    'times_section': '⏱️ टाइमर',
+    'triggered': 'अलार्म!',
+    'unavailable': 'Unavailable',
+    'undo_error': 'Не удалось отменить сброс: {error}',
+    'undo_reset_btn': '↩️ Undo Reset',
+    'undo_success': 'Сброс отменён.',
+    'unlinked_ha_accounts_title': 'Home Assistant accounts without Argus profile',
+    'unlock_kiosk': 'Unlock kiosk',
+    'update_pin': 'पिन अपडेट करें',
+    'upload_error': 'Ошибка загрузки.',
+    'url_placeholder': 'URL фона…',
+    'use_for_hub': 'Argus',
+    'use_for_panel': 'Panel',
+    'use_ha_language': 'Home Assistant भाषा का उपयोग करें',
+    'user_default': 'Пользователь',
+    'user_exp_date': 'Expiration Date/Time',
+    'user_exp_type': 'Expiration',
+    'user_no_pin': 'Sin PIN de acceso',
+    'user_pin': 'उपयोगकर्ता पिन',
+    'user_pin_action': 'PIN',
+    'user_required': 'Требуются имя и PIN',
+    'user_role_action': 'Роль',
+    'user_role_label': 'Argus Role',
+    'username': 'उपयोगकर्ता नाम',
+    'users_title': '👥 उपयोगकर्ता और अभिगम नियंत्रण',
+    'wait_if_open': 'सेंसर बंद होने की प्रतीक्षा करें',
+    'waiting_sensors': 'ESPERANDO SENSORES',
+    'welcome_greeting': 'Welcome,',
+    'welcome_profile': 'Добро пожаловать, {name}',
+  },
+  'ar': {
+    'accept': 'قبول',
+    'access_desc': 'Global security management, master PIN and administrators.',
+    'access_pin_lbl': 'PIN de Acceso',
+    'access_title': 'Access Control & Users',
+    'action_failed': 'No se pudo realizar la acción',
+    'active_profile': 'Perfil Activo',
+    'active_until': 'ينتهي في',
+    'activity_log': '📋 سجل الأنشطة',
+    'add_btn': '+ إضافة',
+    'add_user': 'إضافة مستخدم',
+    'admin_only': 'يمكن للمسؤولين فقط تعديل هذا القسم.',
+    'alarm_instance': 'Alarm Instance',
+    'all_sensors_bypassed': 'Todos los sensores configurados están omitidos.',
+    'arm_time': 'تأخير التسليح (ثانية)',
+    'arm_time_label': 'Arm time (s)',
+    'armed_away': 'بالخارج',
+    'armed_home': 'في المنزل',
+    'armed_night': 'ليلاً',
+    'armed_vacation': 'إجازة',
+    'arming': 'جاري التسليح',
+    'automations': '⚡ الأتمتة',
+    'available': 'متاح',
+    'background_lbl': 'Background',
+    'backup_desc': 'Save a backup of your settings or restore a previous one.',
+    'backup_title': 'Backup & Restore',
+    'badge_pin_reset': 'PIN Reset',
+    'badge_pin_reset_failed': 'PIN Reset Failed',
+    'battery_low': '⚠️ Low Battery',
+    'bg_collage': 'Collage',
+    'bg_hub_default': 'Default (Argus)',
+    'bg_hub_selected_from_history': 'Argus background selected from history.',
+    'bg_hub_title': 'Argus background',
+    'bg_image_opt': 'Image / GIF',
+    'bg_none': 'Default',
+    'bg_panel_none': 'No background',
+    'bg_panel_selected_from_history': 'Panel background selected from history.',
+    'bg_panel_title': 'Panel background',
+    'bg_photo': 'One photo',
+    'bg_sound_opt': 'Video sound',
+    'bg_video': 'Loop video',
+    'bg_weather': 'Animated weather',
+    'bridge_not_connected': 'Bridge not configured',
+    'bridge_not_desc': 'Enable the HomeKit Bridge integration in Home Assistant and include the entity <code>alarm_control_panel.argus_*</code> to generate a pairing QR code.',
+    'bridge_paired': 'Bridge configured',
+    'bridge_paired_desc': 'The <b>{bridge}</b> bridge is configured in Home Assistant. Home Assistant cannot verify from here whether it was added to Apple Home or report its name.',
+    'btn_away': '🔒 بالخارج',
+    'btn_create_argus_profile': 'Create Argus Profile',
+    'btn_disarmed': 'تم نزع السلاح',
+    'btn_home': '🏠 في المنزل',
+    'btn_night': '🌙 ليلاً',
+    'btn_sos': '🚨 استغاثة / ذعر',
+    'btn_vacation': '✈️ إجازة',
+    'bypass_lbl': '🚫 تجاوز',
+    'cancel': 'إلغاء',
+    'cancel_btn': 'Cancel',
+    'cannot_arm': 'Невозможно поставить на охрану',
+    'cannot_delete_last_admin': 'Cannot delete the last binding administrator.',
+    'change_btn': 'Cambiar',
+    'change_pin': 'رمز PIN الرئيسي',
+    'change_profile_picture': 'Cambiar foto en Personas de HA ↗',
+    'change_user_pin': 'Cambiar PIN',
+    'claim_btn': 'Заявить права администратора',
+    'claim_desc': 'Вашей установке требуется администратор для получения доступа.',
+    'claim_title': 'Обновление безопасности Argus',
+    'clear': 'مسح',
+    'clear_history_confirm': 'Удалить всю историю активности?',
+    'clear_log_btn': 'مسح',
+    'clock_12h': '12-hour (AM/PM)',
+    'clock_24h': '24-hour',
+    'clock_auto': 'Automatic (Home Assistant)',
+    'clock_format_desc': 'Choose how time is displayed across panels and logs.',
+    'clock_format_label': 'Time Format',
+    'close': 'إغلاق',
+    'confirm': '✓ تأكيد',
+    'confirm_pin': 'تأكيد رمز PIN',
+    'connected': 'متصل',
+    'create_ha': '+ إنشاء في HA',
+    'current_pin': 'رمز PIN الحالي',
+    'customize': 'Настроить',
+    'delete': 'Удалить',
+    'delete_btn_title': 'Delete from storage',
+    'delete_file_error': 'Не удалось удалить файл: {error}',
+    'delete_user': 'Eliminar usuario',
+    'delete_user_confirm': 'Are you sure you want to delete \"{name}\"?',
+    'delete_user_tooltip': 'Delete user profile',
+    'deselect_all': '☐ None',
+    'details_notif': 'Alarm notification',
+    'disarm_time': 'تأخير الدخول (ثانية)',
+    'disarm_time_label': 'Entry delay (s)',
+    'disarmed': 'تم نزع السلاح',
+    'done': 'Готово',
+    'edit_btn': '✏️ Edit',
+    'edit_dashboard': 'تعديل لوحة المعلومات',
+    'edit_dashboard_done': '✓ تم',
+    'emergency_help': 'Número telefónico marcado en caso de emergencia.',
+    'emergency_number_label': 'Número de Emergencia',
+    'error_loading_uploaded_files': 'Error loading file history.',
+    'exit_to_ha': 'Back to Home Assistant',
+    'exp_indefinite': 'غير محدد',
+    'exp_temporary': 'مؤقت (التاريخ/الوقت)',
+    'expired': 'منتهي الصلاحية',
+    'export_btn': '📤 Download',
+    'export_error': 'Ошибка экспорта: {error}',
+    'file_choice': '«{file}»\n\nИспользовать как статичное изображение (ОК) или анимированное видео (Отмена)?',
+    'file_delete_confirm': 'Are you sure you want to permanently delete \"{filename}\"?',
+    'file_read_error': 'Не удалось прочитать файл.',
+    'files_count': '{count} files',
+    'files_count_short': '{count} files',
+    'first_run_blocked_desc': 'A Home Assistant administrator is required to set up Argus for the first time.',
+    'first_run_blocked_title': 'Access Denied',
+    'first_run_desc': 'Complete setup to secure your home.',
+    'first_run_pin_expl': 'The access PIN opens Argus. The master PIN controls arming and disarming.',
+    'first_run_skip': 'Skip',
+    'first_run_start': 'Start with Argus',
+    'first_run_welcome': 'Thank you for choosing Argus Home Hub. Welcome.',
+    'forgot_pin': 'Forgot PIN?',
+    'fullscreen_title': 'Full screen',
+    'generic_error': 'Ошибка: {error}',
+    'github_action': 'Поставить звезду на GitHub',
+    'github_desc': 'Если вам нравится проект, поставьте звезду на GitHub, чтобы поддержать разработку.',
+    'github_title': 'Поддержите Argus',
+    'ha_account_linked': 'Home Assistant Account: {name}',
+    'ha_account_unavailable': 'Binding unavailable',
+    'ha_admin_label': 'Home Assistant Admin',
+    'ha_role_admin': 'HA Admin',
+    'ha_role_standard': 'HA User',
+    'ha_standard_user_label': 'Standard HA User',
+    'hero_desc': 'نظام أمان شامل، والتحكم في الوصول، والأتمتة، وHomeKit.',
+    'history_refresh': '🔄 تحديث',
+    'history_unavailable': 'Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.',
+    'home_default': 'Мой дом',
+    'home_fallback': 'Дом',
+    'home_name_label': 'Home Name',
+    'home_name_lbl': 'Home Name',
+    'home_name_modal_desc': 'This name appears in the instances panel and in full screen.',
+    'home_name_modal_title': '🏡 Home Name',
+    'home_name_placeholder': 'My Home',
+    'homekit_bridge': 'HomeKit Bridge',
+    'homekit_house': 'Apple Home',
+    'homekit_not_paired': 'Not paired to any home.',
+    'homekit_title': '🏠 HomeKit',
+    'import_btn': '📥 Restore',
+    'import_error': 'Ошибка импорта: {error}',
+    'import_success': 'Конфигурация восстановлена. Перезагрузка…',
+    'initialization_error_desc': 'Не удалось подключиться к авторизованному backend Home Assistant.',
+    'initialization_error_title': 'Не удалось запустить Argus',
+    'instances': 'المثيلات النشطة',
+    'introduce_pin': 'أدخل رمز PIN الخاص بك',
+    'invalid_config': 'Недопустимый файл конфигурации.',
+    'is_admin': 'مسؤول',
+    'lang_select_title': 'Select Language',
+    'lang_selector_lbl': '⚙️ اللغة',
+    'language': 'Language',
+    'lbl_aesthetic_custom': 'Aesthetic Customization',
+    'lbl_load_file': 'Upload file:',
+    'lbl_uploaded_files': 'Uploaded files on server',
+    'link_ha_user': 'Link to Home Assistant User',
+    'linked_rules': 'القواعد المرتبطة بـ Argus',
+    'loading': 'Загрузка…',
+    'lock_if_open': 'قفل إذا كان مفتوحًا',
+    'log_action_access_pin_updated': 'PIN доступа обновлён',
+    'log_action_backup_created': 'Резервная копия создана',
+    'log_action_backup_restored': 'Конфигурация восстановлена',
+    'log_action_first_run_completed': 'Argus initialized by {user}',
+    'log_action_fullscreen_unlocked': 'Kiosk unlocked by {user}',
+    'log_action_master_pin_rejected': 'Incorrect master PIN attempt by {user}',
+    'log_action_mode_changed': 'Режим изменён',
+    'log_action_profile_selected': 'Профиль выбран',
+    'log_action_rejected': 'Action rejected',
+    'log_action_save_ui': 'UI Settings saved by {user}',
+    'log_action_schedule_applied': 'Расписание применено',
+    'log_action_select_profile': 'Profile selected: {user}',
+    'log_action_sos': 'SOS Panic triggered by {user}',
+    'log_action_state_restored': 'Состояние восстановлено',
+    'log_action_stop_sos': 'SOS Panic stopped by {user}',
+    'log_action_user_logged_in': 'Вход пользователя',
+    'log_action_verify_access_pin': 'Access PIN verified by {user}',
+    'log_armed': 'Armed',
+    'log_by': 'by',
+    'log_detail_armed': 'Mode',
+    'log_detail_disarm': 'System disarmed',
+    'log_detail_pin_reset': 'Master PIN reset by administrator',
+    'log_detail_pin_reset_failed': 'Unauthorized attempt to reset master PIN',
+    'log_detail_triggered': 'Automatic activation',
+    'log_disarmed': 'Disarmed',
+    'log_no_events': 'No recent events.',
+    'log_sensor': 'Sensor',
+    'log_triggered': 'Triggered!',
+    'login_btn': 'Login',
+    'manual_arm': 'Manual',
+    'manual_disarm': 'Manual (Disarmed)',
+    'master_pin_lbl': 'PIN Maestro',
+    'modal_add_user': '+ Добавить пользователя',
+    'modal_cancel': 'Отмена',
+    'modal_confirm': 'Подтвердить',
+    'modal_delete_confirm': 'Удалить этого пользователя?',
+    'modal_edit_name': 'Изменить имя',
+    'modal_name_label': 'Имя профиля',
+    'modal_pin_help': 'Оставьте пустым, чтобы удалить PIN.',
+    'modal_pin_title': 'PIN доступа',
+    'modal_save': 'Сохранить',
+    'modal_user_added': 'Пользователь создан.',
+    'mode_away': 'Away',
+    'mode_home': 'Home',
+    'mode_night': 'Night',
+    'mode_vacation': 'Vacation',
+    'modes': 'الأوضاع',
+    'mqtt_label': 'MQTT',
+    'never_triggered': 'Never triggered',
+    'new_pin': 'رمز PIN جديد',
+    'no_alarm_instance': 'Нет доступного экземпляра сигнализации',
+    'no_auto_linked': 'No automations linked to Argus.',
+    'no_files_uploaded': 'No uploaded files. Upload a background using the controls above.',
+    'no_files_uploaded_short': 'No uploaded files.',
+    'no_instances': 'No instances. Add Argus from Integrations.',
+    'no_results': 'Нет результатов',
+    'no_rules': '',
+    'no_sensors_configured': 'Sin sensores configurados',
+    'no_unlinked_ha_accounts': 'All active Home Assistant accounts have a profile.',
+    'no_users': 'لم يتم تكوين مستخدمين إضافيين.',
+    'none_selected': 'لم يتم تحديد أي منها',
+    'notif_desc': 'حدد الأجهزة المحمولة المسجلة في HA والتي ستتلقى تنبيهات Argus.',
+    'notif_no_services': 'Нет мобильных служб',
+    'notification_armed': '{user} активировал режим {mode}.',
+    'notification_disarmed': '{user} снял систему с охраны.',
+    'notifications_title': '🔔 الإشعارات',
+    'open_sensors': 'Open sensors',
+    'open_sensors_explain': 'Следующие датчики открыты:\n{names}\n\nЗакройте их перед постановкой на охрану или включите «Обход».',
+    'panic_state_unknown': 'Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.',
+    'panic_stop_error': 'Не удалось остановить тревогу: {error}',
+    'panic_stopped': 'Тревога остановлена; восстановлено состояние {state}',
+    'pending': 'قيد الانتظار',
+    'pin_active_no': 'Master PIN: Deactivated',
+    'pin_active_yes': 'Master PIN: Active',
+    'pin_deleted': '✓ PIN Deleted',
+    'pin_desc': 'رمز رقمي للتسليح ونزع السلاح.',
+    'pin_disarm_error': 'Неверный PIN или ошибка снятия с охраны',
+    'pin_incorrect': '❌ Incorrect current PIN',
+    'pin_management': '🔑 Gestión de Pines',
+    'pin_master_title': 'Master PIN',
+    'pin_modal_desc': 'رمز PIN رقمي لنزع سلاح Argus',
+    'pin_placeholder': 'Access PIN',
+    'pin_remove_hint': 'To remove PIN: Enter the current one and leave the fields below empty.',
+    'pin_reset_admin_only': '❌ Error: Only Home Assistant administrators can reset the master PIN.',
+    'pin_reset_confirm': 'Are you sure you want to reset the master PIN? The current PIN will be removed and deactivated.',
+    'pin_updated': '✓ PIN Updated',
+    'profile_is_yours': 'This is your profile',
+    'profile_needs_pin': 'Another person’s profile — enter the access PIN',
+    'profile_no_pin_access': 'This profile has no access PIN. You cannot open it.',
+    'remove_btn': 'Quitar',
+    'reset_btn': '⚠️ Factory Reset',
+    'reset_confirm': 'Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.',
+    'reset_dashboard': 'إعادة تعيين التخطيط',
+    'reset_error': 'Ошибка сброса: {error}',
+    'reset_success': 'Argus сброшен. У вас есть несколько секунд, чтобы отменить это.',
+    'retry_action': 'Повторить',
+    'role_argus_admin': 'مسؤول Argus',
+    'role_argus_admin_short': 'Adm',
+    'role_argus_standard': 'مستخدم قياسي',
+    'role_argus_user': 'Standard User',
+    'role_argus_user_short': 'Std',
+    'rules_tip': '',
+    'save_btn': 'Save',
+    'save_config': 'حفظ التكوين',
+    'save_mode': '💾 حفظ الوضع',
+    'save_notif': 'حفظ',
+    'save_user': 'حفظ',
+    'search_placeholder': 'البحث بالاسم أو المنطقة أو entity_id',
+    'search_select': 'Search & select',
+    'searching_auto': '↻ Searching automations...',
+    'select_all': '☑ All',
+    'select_btn': '+ تحديد',
+    'select_profile_subtitle': 'Access your security panels and Argus instances.',
+    'select_profile_title': 'Select Your Profile',
+    'selected_lbl': 'محدد',
+    'selector_panic': '🚨 Действия SOS',
+    'sensor_section': 'أجهزة استشعار التسلل',
+    'sensors_to_bypass': 'Sensors to Bypass',
+    'settings': '⚙️ الإعدادات',
+    'setup_access_pin': 'PIN доступа к панели Argus (Необязательно)',
+    'setup_admin_name': 'Имя администратора',
+    'setup_master_pin': 'Мастер-PIN для постановки/снятия с охраны (Необязательно)',
+    'setup_required_action': 'Настроить Argus в интеграциях',
+    'setup_required_desc': 'Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.',
+    'setup_required_title': 'Требуется настройка Argus',
+    'siren_section': 'صافرات الإنذار',
+    'sos_actions': 'Acciones Automáticas de SOS',
+    'sos_activated': 'SOS активирован',
+    'sos_call': '📞 Call Emergency Services',
+    'sos_call_confirm': 'Позвонить в экстренную службу ({number})?',
+    'sos_call_help': 'Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.',
+    'sos_confirm_text': 'Slide to trigger the alarm immediately.',
+    'sos_confirm_title': 'Confirm panic',
+    'sos_error': 'Не удалось активировать SOS: {error}',
+    'sos_no_outputs': 'Устройства не выбраны',
+    'sos_outputs_help': 'Dispositivos activados al disparar el SOS.',
+    'sos_select_outputs': 'Seleccionar salidas de pánico',
+    'sos_slide': 'مرر لتفعيل SOS',
+    'sos_stop': 'DETENER SOS',
+    'status_away': 'FUERA',
+    'status_closed': 'مغلق',
+    'status_home': 'EN CASA',
+    'status_idle': 'INACTIVO',
+    'status_open': 'مفتوح',
+    'status_recording': 'GRABANDO',
+    'switch_profile_btn': '👤 تبديل الملف الشخصي',
+    'sync_panel_help': 'Paneles de alarma que seguirán el mismo estado de Argus',
+    'sync_panel_section': 'Paneles Sincronizados',
+    'system_armed': 'النظام مسلح',
+    'system_disarmed': 'النظام منزوع السلاح',
+    'system_triggered': '¡ALARMA DISPARADA!',
+    'temp_auto': 'Automatic (local sensor / thermostat / climate)',
+    'temp_notification_title': 'Argus — Температурное предупреждение',
+    'temp_thermostat': '(thermostat)',
+    'thermostat_alert_notif': '🌡️ Temperature alert',
+    'times_section': '⏱️ المؤقتات',
+    'triggered': 'إنذار!',
+    'unavailable': 'Unavailable',
+    'undo_error': 'Не удалось отменить сброс: {error}',
+    'undo_reset_btn': '↩️ Undo Reset',
+    'undo_success': 'Сброс отменён.',
+    'unlinked_ha_accounts_title': 'Home Assistant accounts without Argus profile',
+    'unlock_kiosk': 'Unlock kiosk',
+    'update_pin': 'تحديث رمز PIN',
+    'upload_error': 'Ошибка загрузки.',
+    'url_placeholder': 'URL фона…',
+    'use_for_hub': 'Argus',
+    'use_for_panel': 'Panel',
+    'use_ha_language': 'استخدام لغة Home Assistant',
+    'user_default': 'Пользователь',
+    'user_exp_date': 'Expiration Date/Time',
+    'user_exp_type': 'Expiration',
+    'user_no_pin': 'Sin PIN de acceso',
+    'user_pin': 'رمز PIN للمستخدم',
+    'user_pin_action': 'PIN',
+    'user_required': 'Требуются имя и PIN',
+    'user_role_action': 'Роль',
+    'user_role_label': 'Argus Role',
+    'username': 'اسم المستخدم',
+    'users_title': '👥 المستخدمون والتحكم في الوصول',
+    'wait_if_open': 'انتظر حتى تغلق أجهزة الاستشعار',
+    'waiting_sensors': 'ESPERANDO SENSORES',
+    'welcome_greeting': 'Welcome,',
+    'welcome_profile': 'Добро пожаловать, {name}',
+  },
+  'ko': {
+    'accept': '수락',
+    'access_desc': 'Global security management, master PIN and administrators.',
+    'access_pin_lbl': 'PIN de Acceso',
+    'access_title': 'Access Control & Users',
+    'action_failed': 'No se pudo realizar la acción',
+    'active_profile': 'Perfil Activo',
+    'active_until': '만료일',
+    'activity_log': '📋 활동 로그',
+    'add_btn': '+ 추가',
+    'add_user': '사용자 추가',
+    'admin_only': '관리자만 이 섹션을 수정할 수 있습니다.',
+    'alarm_instance': 'Alarm Instance',
+    'all_sensors_bypassed': 'Todos los sensores configurados están omitidos.',
+    'arm_time': '설정 지연 (초)',
+    'arm_time_label': 'Arm time (s)',
+    'armed_away': '외출',
+    'armed_home': '재택',
+    'armed_night': '야간',
+    'armed_vacation': '휴가',
+    'arming': '설정 중',
+    'automations': '⚡ 자동화',
+    'available': '사용 가능',
+    'background_lbl': 'Background',
+    'backup_desc': 'Save a backup of your settings or restore a previous one.',
+    'backup_title': 'Backup & Restore',
+    'badge_pin_reset': 'PIN Reset',
+    'badge_pin_reset_failed': 'PIN Reset Failed',
+    'battery_low': '⚠️ Low Battery',
+    'bg_collage': 'Collage',
+    'bg_hub_default': 'Default (Argus)',
+    'bg_hub_selected_from_history': 'Argus background selected from history.',
+    'bg_hub_title': 'Argus background',
+    'bg_image_opt': 'Image / GIF',
+    'bg_none': 'Default',
+    'bg_panel_none': 'No background',
+    'bg_panel_selected_from_history': 'Panel background selected from history.',
+    'bg_panel_title': 'Panel background',
+    'bg_photo': 'One photo',
+    'bg_sound_opt': 'Video sound',
+    'bg_video': 'Loop video',
+    'bg_weather': 'Animated weather',
+    'bridge_not_connected': 'Bridge not configured',
+    'bridge_not_desc': 'Enable the HomeKit Bridge integration in Home Assistant and include the entity <code>alarm_control_panel.argus_*</code> to generate a pairing QR code.',
+    'bridge_paired': 'Bridge configured',
+    'bridge_paired_desc': 'The <b>{bridge}</b> bridge is configured in Home Assistant. Home Assistant cannot verify from here whether it was added to Apple Home or report its name.',
+    'btn_away': '🔒 외출',
+    'btn_create_argus_profile': 'Create Argus Profile',
+    'btn_disarmed': '해제됨',
+    'btn_home': '🏠 재택',
+    'btn_night': '🌙 야간',
+    'btn_sos': '🚨 SOS / 패닉',
+    'btn_vacation': '✈️ 휴가',
+    'bypass_lbl': '🚫 바이패스',
+    'cancel': '취소',
+    'cancel_btn': 'Cancel',
+    'cannot_arm': 'Невозможно поставить на охрану',
+    'cannot_delete_last_admin': 'Cannot delete the last binding administrator.',
+    'change_btn': 'Cambiar',
+    'change_pin': '마스터 PIN',
+    'change_profile_picture': 'Cambiar foto en Personas de HA ↗',
+    'change_user_pin': 'Cambiar PIN',
+    'claim_btn': 'Заявить права администратора',
+    'claim_desc': 'Вашей установке требуется администратор для получения доступа.',
+    'claim_title': 'Обновление безопасности Argus',
+    'clear': '지우기',
+    'clear_history_confirm': 'Удалить всю историю активности?',
+    'clear_log_btn': '지우기',
+    'clock_12h': '12-hour (AM/PM)',
+    'clock_24h': '24-hour',
+    'clock_auto': 'Automatic (Home Assistant)',
+    'clock_format_desc': 'Choose how time is displayed across panels and logs.',
+    'clock_format_label': 'Time Format',
+    'close': '닫기',
+    'confirm': '✓ 확인',
+    'confirm_pin': 'PIN 확인',
+    'connected': '연결됨',
+    'create_ha': '+ HA에서 생성',
+    'current_pin': '현재 PIN',
+    'customize': 'Настроить',
+    'delete': 'Удалить',
+    'delete_btn_title': 'Delete from storage',
+    'delete_file_error': 'Не удалось удалить файл: {error}',
+    'delete_user': 'Eliminar usuario',
+    'delete_user_confirm': 'Are you sure you want to delete \"{name}\"?',
+    'delete_user_tooltip': 'Delete user profile',
+    'deselect_all': '☐ None',
+    'details_notif': 'Alarm notification',
+    'disarm_time': '진입 지연 (초)',
+    'disarm_time_label': 'Entry delay (s)',
+    'disarmed': '해제됨',
+    'done': 'Готово',
+    'edit_btn': '✏️ Edit',
+    'edit_dashboard': '대시보드 편집',
+    'edit_dashboard_done': '✓ 완료',
+    'emergency_help': 'Número telefónico marcado en caso de emergencia.',
+    'emergency_number_label': 'Número de Emergencia',
+    'error_loading_uploaded_files': 'Error loading file history.',
+    'exit_to_ha': 'Back to Home Assistant',
+    'exp_indefinite': '무기한',
+    'exp_temporary': '임시 (날짜/시간)',
+    'expired': '만료됨',
+    'export_btn': '📤 Download',
+    'export_error': 'Ошибка экспорта: {error}',
+    'file_choice': '«{file}»\n\nИспользовать как статичное изображение (ОК) или анимированное видео (Отмена)?',
+    'file_delete_confirm': 'Are you sure you want to permanently delete \"{filename}\"?',
+    'file_read_error': 'Не удалось прочитать файл.',
+    'files_count': '{count} files',
+    'files_count_short': '{count} files',
+    'first_run_blocked_desc': 'A Home Assistant administrator is required to set up Argus for the first time.',
+    'first_run_blocked_title': 'Access Denied',
+    'first_run_desc': 'Complete setup to secure your home.',
+    'first_run_pin_expl': 'The access PIN opens Argus. The master PIN controls arming and disarming.',
+    'first_run_skip': 'Skip',
+    'first_run_start': 'Start with Argus',
+    'first_run_welcome': 'Thank you for choosing Argus Home Hub. Welcome.',
+    'forgot_pin': 'Forgot PIN?',
+    'fullscreen_title': 'Full screen',
+    'generic_error': 'Ошибка: {error}',
+    'github_action': 'Поставить звезду на GitHub',
+    'github_desc': 'Если вам нравится проект, поставьте звезду на GitHub, чтобы поддержать разработку.',
+    'github_title': 'Поддержите Argus',
+    'ha_account_linked': 'Home Assistant Account: {name}',
+    'ha_account_unavailable': 'Binding unavailable',
+    'ha_admin_label': 'Home Assistant Admin',
+    'ha_role_admin': 'HA Admin',
+    'ha_role_standard': 'HA User',
+    'ha_standard_user_label': 'Standard HA User',
+    'hero_desc': '종합 보안 시스템, 출입 제어, 자동화 및 HomeKit.',
+    'history_refresh': '🔄 새로고침',
+    'history_unavailable': 'Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.',
+    'home_default': 'Мой дом',
+    'home_fallback': 'Дом',
+    'home_name_label': 'Home Name',
+    'home_name_lbl': 'Home Name',
+    'home_name_modal_desc': 'This name appears in the instances panel and in full screen.',
+    'home_name_modal_title': '🏡 Home Name',
+    'home_name_placeholder': 'My Home',
+    'homekit_bridge': 'HomeKit Bridge',
+    'homekit_house': 'Apple Home',
+    'homekit_not_paired': 'Not paired to any home.',
+    'homekit_title': '🏠 HomeKit',
+    'import_btn': '📥 Restore',
+    'import_error': 'Ошибка импорта: {error}',
+    'import_success': 'Конфигурация восстановлена. Перезагрузка…',
+    'initialization_error_desc': 'Не удалось подключиться к авторизованному backend Home Assistant.',
+    'initialization_error_title': 'Не удалось запустить Argus',
+    'instances': '활성 인스턴스',
+    'introduce_pin': 'PIN을 입력하세요',
+    'invalid_config': 'Недопустимый файл конфигурации.',
+    'is_admin': '관리자',
+    'lang_select_title': 'Select Language',
+    'lang_selector_lbl': '⚙️ 언어',
+    'language': 'Language',
+    'lbl_aesthetic_custom': 'Aesthetic Customization',
+    'lbl_load_file': 'Upload file:',
+    'lbl_uploaded_files': 'Uploaded files on server',
+    'link_ha_user': 'Link to Home Assistant User',
+    'linked_rules': 'Argus 연결 규칙',
+    'loading': 'Загрузка…',
+    'lock_if_open': '열려 있으면 잠금',
+    'log_action_access_pin_updated': 'PIN доступа обновлён',
+    'log_action_backup_created': 'Резервная копия создана',
+    'log_action_backup_restored': 'Конфигурация восстановлена',
+    'log_action_first_run_completed': 'Argus initialized by {user}',
+    'log_action_fullscreen_unlocked': 'Kiosk unlocked by {user}',
+    'log_action_master_pin_rejected': 'Incorrect master PIN attempt by {user}',
+    'log_action_mode_changed': 'Режим изменён',
+    'log_action_profile_selected': 'Профиль выбран',
+    'log_action_rejected': 'Action rejected',
+    'log_action_save_ui': 'UI Settings saved by {user}',
+    'log_action_schedule_applied': 'Расписание применено',
+    'log_action_select_profile': 'Profile selected: {user}',
+    'log_action_sos': 'SOS Panic triggered by {user}',
+    'log_action_state_restored': 'Состояние восстановлено',
+    'log_action_stop_sos': 'SOS Panic stopped by {user}',
+    'log_action_user_logged_in': 'Вход пользователя',
+    'log_action_verify_access_pin': 'Access PIN verified by {user}',
+    'log_armed': 'Armed',
+    'log_by': 'by',
+    'log_detail_armed': 'Mode',
+    'log_detail_disarm': 'System disarmed',
+    'log_detail_pin_reset': 'Master PIN reset by administrator',
+    'log_detail_pin_reset_failed': 'Unauthorized attempt to reset master PIN',
+    'log_detail_triggered': 'Automatic activation',
+    'log_disarmed': 'Disarmed',
+    'log_no_events': 'No recent events.',
+    'log_sensor': 'Sensor',
+    'log_triggered': 'Triggered!',
+    'login_btn': 'Login',
+    'manual_arm': 'Manual',
+    'manual_disarm': 'Manual (Disarmed)',
+    'master_pin_lbl': 'PIN Maestro',
+    'modal_add_user': '+ Добавить пользователя',
+    'modal_cancel': 'Отмена',
+    'modal_confirm': 'Подтвердить',
+    'modal_delete_confirm': 'Удалить этого пользователя?',
+    'modal_edit_name': 'Изменить имя',
+    'modal_name_label': 'Имя профиля',
+    'modal_pin_help': 'Оставьте пустым, чтобы удалить PIN.',
+    'modal_pin_title': 'PIN доступа',
+    'modal_save': 'Сохранить',
+    'modal_user_added': 'Пользователь создан.',
+    'mode_away': 'Away',
+    'mode_home': 'Home',
+    'mode_night': 'Night',
+    'mode_vacation': 'Vacation',
+    'modes': '모드',
+    'mqtt_label': 'MQTT',
+    'never_triggered': 'Never triggered',
+    'new_pin': '새 PIN',
+    'no_alarm_instance': 'Нет доступного экземпляра сигнализации',
+    'no_auto_linked': 'No automations linked to Argus.',
+    'no_files_uploaded': 'No uploaded files. Upload a background using the controls above.',
+    'no_files_uploaded_short': 'No uploaded files.',
+    'no_instances': 'No instances. Add Argus from Integrations.',
+    'no_results': 'Нет результатов',
+    'no_rules': '',
+    'no_sensors_configured': 'Sin sensores configurados',
+    'no_unlinked_ha_accounts': 'All active Home Assistant accounts have a profile.',
+    'no_users': '구성된 추가 사용자가 없습니다.',
+    'none_selected': '선택된 항목 없음',
+    'notif_desc': 'Argus 알림을 수신할 HA 등록 모바일 기기를 선택하세요.',
+    'notif_no_services': 'Нет мобильных служб',
+    'notification_armed': '{user} активировал режим {mode}.',
+    'notification_disarmed': '{user} снял систему с охраны.',
+    'notifications_title': '🔔 알림',
+    'open_sensors': 'Open sensors',
+    'open_sensors_explain': 'Следующие датчики открыты:\n{names}\n\nЗакройте их перед постановкой на охрану или включите «Обход».',
+    'panic_state_unknown': 'Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.',
+    'panic_stop_error': 'Не удалось остановить тревогу: {error}',
+    'panic_stopped': 'Тревога остановлена; восстановлено состояние {state}',
+    'pending': '대기 중',
+    'pin_active_no': 'Master PIN: Deactivated',
+    'pin_active_yes': 'Master PIN: Active',
+    'pin_deleted': '✓ PIN Deleted',
+    'pin_desc': '설정 및 해제를 위한 숫자 코드입니다.',
+    'pin_disarm_error': 'Неверный PIN или ошибка снятия с охраны',
+    'pin_incorrect': '❌ Incorrect current PIN',
+    'pin_management': '🔑 Gestión de Pines',
+    'pin_master_title': 'Master PIN',
+    'pin_modal_desc': 'Argus 해제를 위한 숫자 PIN',
+    'pin_placeholder': 'Access PIN',
+    'pin_remove_hint': 'To remove PIN: Enter the current one and leave the fields below empty.',
+    'pin_reset_admin_only': '❌ Error: Only Home Assistant administrators can reset the master PIN.',
+    'pin_reset_confirm': 'Are you sure you want to reset the master PIN? The current PIN will be removed and deactivated.',
+    'pin_updated': '✓ PIN Updated',
+    'profile_is_yours': 'This is your profile',
+    'profile_needs_pin': 'Another person’s profile — enter the access PIN',
+    'profile_no_pin_access': 'This profile has no access PIN. You cannot open it.',
+    'remove_btn': 'Quitar',
+    'reset_btn': '⚠️ Factory Reset',
+    'reset_confirm': 'Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.',
+    'reset_dashboard': '레이아웃 재설정',
+    'reset_error': 'Ошибка сброса: {error}',
+    'reset_success': 'Argus сброшен. У вас есть несколько секунд, чтобы отменить это.',
+    'retry_action': 'Повторить',
+    'role_argus_admin': 'Argus 관리자',
+    'role_argus_admin_short': 'Adm',
+    'role_argus_standard': '표준 사용자',
+    'role_argus_user': 'Standard User',
+    'role_argus_user_short': 'Std',
+    'rules_tip': '',
+    'save_btn': 'Save',
+    'save_config': '구성 저장',
+    'save_mode': '💾 모드 저장',
+    'save_notif': '저장',
+    'save_user': '저장',
+    'search_placeholder': '이름, 영역 또는 entity_id로 검색',
+    'search_select': 'Search & select',
+    'searching_auto': '↻ Searching automations...',
+    'select_all': '☑ All',
+    'select_btn': '+ 선택',
+    'select_profile_subtitle': 'Access your security panels and Argus instances.',
+    'select_profile_title': 'Select Your Profile',
+    'selected_lbl': '선택됨',
+    'selector_panic': '🚨 Действия SOS',
+    'sensor_section': '침입 센서',
+    'sensors_to_bypass': 'Sensors to Bypass',
+    'settings': '⚙️ 설정',
+    'setup_access_pin': 'PIN доступа к панели Argus (Необязательно)',
+    'setup_admin_name': 'Имя администратора',
+    'setup_master_pin': 'Мастер-PIN для постановки/снятия с охраны (Необязательно)',
+    'setup_required_action': 'Настроить Argus в интеграциях',
+    'setup_required_desc': 'Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.',
+    'setup_required_title': 'Требуется настройка Argus',
+    'siren_section': '사이렌',
+    'sos_actions': 'Acciones Automáticas de SOS',
+    'sos_activated': 'SOS активирован',
+    'sos_call': '📞 Call Emergency Services',
+    'sos_call_confirm': 'Позвонить в экстренную службу ({number})?',
+    'sos_call_help': 'Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.',
+    'sos_confirm_text': 'Slide to trigger the alarm immediately.',
+    'sos_confirm_title': 'Confirm panic',
+    'sos_error': 'Не удалось активировать SOS: {error}',
+    'sos_no_outputs': 'Устройства не выбраны',
+    'sos_outputs_help': 'Dispositivos activados al disparar el SOS.',
+    'sos_select_outputs': 'Seleccionar salidas de pánico',
+    'sos_slide': 'SOS 활성화를 위해 슬라이드',
+    'sos_stop': 'DETENER SOS',
+    'status_away': 'FUERA',
+    'status_closed': '닫힘',
+    'status_home': 'EN CASA',
+    'status_idle': 'INACTIVO',
+    'status_open': '열림',
+    'status_recording': 'GRABANDO',
+    'switch_profile_btn': '👤 프로필 전환',
+    'sync_panel_help': 'Paneles de alarma que seguirán el mismo estado de Argus',
+    'sync_panel_section': 'Paneles Sincronizados',
+    'system_armed': '시스템 설정됨',
+    'system_disarmed': '시스템 해제됨',
+    'system_triggered': '¡ALARMA DISPARADA!',
+    'temp_auto': 'Automatic (local sensor / thermostat / climate)',
+    'temp_notification_title': 'Argus — Температурное предупреждение',
+    'temp_thermostat': '(thermostat)',
+    'thermostat_alert_notif': '🌡️ Temperature alert',
+    'times_section': '⏱️ 타이머',
+    'triggered': '경보!',
+    'unavailable': 'Unavailable',
+    'undo_error': 'Не удалось отменить сброс: {error}',
+    'undo_reset_btn': '↩️ Undo Reset',
+    'undo_success': 'Сброс отменён.',
+    'unlinked_ha_accounts_title': 'Home Assistant accounts without Argus profile',
+    'unlock_kiosk': 'Unlock kiosk',
+    'update_pin': 'PIN 업데이트',
+    'upload_error': 'Ошибка загрузки.',
+    'url_placeholder': 'URL фона…',
+    'use_for_hub': 'Argus',
+    'use_for_panel': 'Panel',
+    'use_ha_language': 'Home Assistant 언어 사용',
+    'user_default': 'Пользователь',
+    'user_exp_date': 'Expiration Date/Time',
+    'user_exp_type': 'Expiration',
+    'user_no_pin': 'Sin PIN de acceso',
+    'user_pin': '사용자 PIN',
+    'user_pin_action': 'PIN',
+    'user_required': 'Требуются имя и PIN',
+    'user_role_action': 'Роль',
+    'user_role_label': 'Argus Role',
+    'username': '사용자 이름',
+    'users_title': '👥 사용자 및 출입 제어',
+    'wait_if_open': '센서가 닫힐 때까지 대기',
+    'waiting_sensors': 'ESPERANDO SENSORES',
+    'welcome_greeting': 'Welcome,',
+    'welcome_profile': 'Добро пожаловать, {name}',
+  },
+  'ja': {
+    'accept': '適用',
+    'access_desc': 'Global security management, master PIN and administrators.',
+    'access_pin_lbl': 'PIN de Acceso',
+    'access_title': 'Access Control & Users',
+    'action_failed': 'No se pudo realizar la acción',
+    'active_profile': 'Perfil Activo',
+    'active_until': '有効期限',
+    'activity_log': '📋 アクティビティ ログ',
+    'add_btn': '+ 追加',
+    'add_user': 'ユーザーを追加',
+    'admin_only': '管理者のみがこのセクションを変更できます。',
+    'alarm_instance': 'Alarm Instance',
+    'all_sensors_bypassed': 'Todos los sensores configurados están omitidos.',
+    'arm_time': '警戒設定遅延 (秒)',
+    'arm_time_label': 'Arm time (s)',
+    'armed_away': '外出',
+    'armed_home': '在宅',
+    'armed_night': '夜間',
+    'armed_vacation': '休暇',
+    'arming': '警戒設定中',
+    'automations': '⚡ 自動化',
+    'available': '利用可能',
+    'background_lbl': 'Background',
+    'backup_desc': 'Save a backup of your settings or restore a previous one.',
+    'backup_title': 'Backup & Restore',
+    'badge_pin_reset': 'PIN Reset',
+    'badge_pin_reset_failed': 'PIN Reset Failed',
+    'battery_low': '⚠️ Low Battery',
+    'bg_collage': 'Collage',
+    'bg_hub_default': 'Default (Argus)',
+    'bg_hub_selected_from_history': 'Argus background selected from history.',
+    'bg_hub_title': 'Argus background',
+    'bg_image_opt': 'Image / GIF',
+    'bg_none': 'Default',
+    'bg_panel_none': 'No background',
+    'bg_panel_selected_from_history': 'Panel background selected from history.',
+    'bg_panel_title': 'Panel background',
+    'bg_photo': 'One photo',
+    'bg_sound_opt': 'Video sound',
+    'bg_video': 'Loop video',
+    'bg_weather': 'Animated weather',
+    'bridge_not_connected': 'Bridge not configured',
+    'bridge_not_desc': 'Enable the HomeKit Bridge integration in Home Assistant and include the entity <code>alarm_control_panel.argus_*</code> to generate a pairing QR code.',
+    'bridge_paired': 'Bridge configured',
+    'bridge_paired_desc': 'The <b>{bridge}</b> bridge is configured in Home Assistant. Home Assistant cannot verify from here whether it was added to Apple Home or report its name.',
+    'btn_away': '🔒 外出',
+    'btn_create_argus_profile': 'Create Argus Profile',
+    'btn_disarmed': '警戒解除',
+    'btn_home': '🏠 在宅',
+    'btn_night': '🌙 夜間',
+    'btn_sos': '🚨 SOS / パニック',
+    'btn_vacation': '✈️ 休暇',
+    'bypass_lbl': '🚫 バイパス',
+    'cancel': 'キャンセル',
+    'cancel_btn': 'Cancel',
+    'cannot_arm': 'Невозможно поставить на охрану',
+    'cannot_delete_last_admin': 'Cannot delete the last binding administrator.',
+    'change_btn': 'Cambiar',
+    'change_pin': 'マスター PIN',
+    'change_profile_picture': 'Cambiar foto en Personas de HA ↗',
+    'change_user_pin': 'Cambiar PIN',
+    'claim_btn': 'Заявить права администратора',
+    'claim_desc': 'Вашей установке требуется администратор для получения доступа.',
+    'claim_title': 'Обновление безопасности Argus',
+    'clear': 'クリア',
+    'clear_history_confirm': 'Удалить всю историю активности?',
+    'clear_log_btn': 'クリア',
+    'clock_12h': '12-hour (AM/PM)',
+    'clock_24h': '24-hour',
+    'clock_auto': 'Automatic (Home Assistant)',
+    'clock_format_desc': 'Choose how time is displayed across panels and logs.',
+    'clock_format_label': 'Time Format',
+    'close': '閉じる',
+    'confirm': '✓ 確認',
+    'confirm_pin': 'PIN を確認',
+    'connected': '接続済み',
+    'create_ha': '+ HA で作成',
+    'current_pin': '現在の PIN',
+    'customize': 'Настроить',
+    'delete': 'Удалить',
+    'delete_btn_title': 'Delete from storage',
+    'delete_file_error': 'Не удалось удалить файл: {error}',
+    'delete_user': 'Eliminar usuario',
+    'delete_user_confirm': 'Are you sure you want to delete \"{name}\"?',
+    'delete_user_tooltip': 'Delete user profile',
+    'deselect_all': '☐ None',
+    'details_notif': 'Alarm notification',
+    'disarm_time': '進入遅延 (秒)',
+    'disarm_time_label': 'Entry delay (s)',
+    'disarmed': '警戒解除',
+    'done': 'Готово',
+    'edit_btn': '✏️ Edit',
+    'edit_dashboard': 'ダッシュボードを編集',
+    'edit_dashboard_done': '✓ 完了',
+    'emergency_help': 'Número telefónico marcado en caso de emergencia.',
+    'emergency_number_label': 'Número de Emergencia',
+    'error_loading_uploaded_files': 'Error loading file history.',
+    'exit_to_ha': 'Back to Home Assistant',
+    'exp_indefinite': '無期限',
+    'exp_temporary': '一時的 (日時)',
+    'expired': '期限切れ',
+    'export_btn': '📤 Download',
+    'export_error': 'Ошибка экспорта: {error}',
+    'file_choice': '«{file}»\n\nИспользовать как статичное изображение (ОК) или анимированное видео (Отмена)?',
+    'file_delete_confirm': 'Are you sure you want to permanently delete \"{filename}\"?',
+    'file_read_error': 'Не удалось прочитать файл.',
+    'files_count': '{count} files',
+    'files_count_short': '{count} files',
+    'first_run_blocked_desc': 'A Home Assistant administrator is required to set up Argus for the first time.',
+    'first_run_blocked_title': 'Access Denied',
+    'first_run_desc': 'Complete setup to secure your home.',
+    'first_run_pin_expl': 'The access PIN opens Argus. The master PIN controls arming and disarming.',
+    'first_run_skip': 'Skip',
+    'first_run_start': 'Start with Argus',
+    'first_run_welcome': 'Thank you for choosing Argus Home Hub. Welcome.',
+    'forgot_pin': 'Forgot PIN?',
+    'fullscreen_title': 'Full screen',
+    'generic_error': 'Ошибка: {error}',
+    'github_action': 'Поставить звезду на GitHub',
+    'github_desc': 'Если вам нравится проект, поставьте звезду на GitHub, чтобы поддержать разработку.',
+    'github_title': 'Поддержите Argus',
+    'ha_account_linked': 'Home Assistant Account: {name}',
+    'ha_account_unavailable': 'Binding unavailable',
+    'ha_admin_label': 'Home Assistant Admin',
+    'ha_role_admin': 'HA Admin',
+    'ha_role_standard': 'HA User',
+    'ha_standard_user_label': 'Standard HA User',
+    'hero_desc': '総合セキュリティシステム、アクセス制御、自動化、HomeKit。',
+    'history_refresh': '🔄 更新',
+    'history_unavailable': 'Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.',
+    'home_default': 'Мой дом',
+    'home_fallback': 'Дом',
+    'home_name_label': 'Home Name',
+    'home_name_lbl': 'Home Name',
+    'home_name_modal_desc': 'This name appears in the instances panel and in full screen.',
+    'home_name_modal_title': '🏡 Home Name',
+    'home_name_placeholder': 'My Home',
+    'homekit_bridge': 'HomeKit Bridge',
+    'homekit_house': 'Apple Home',
+    'homekit_not_paired': 'Not paired to any home.',
+    'homekit_title': '🏠 HomeKit',
+    'import_btn': '📥 Restore',
+    'import_error': 'Ошибка импорта: {error}',
+    'import_success': 'Конфигурация восстановлена. Перезагрузка…',
+    'initialization_error_desc': 'Не удалось подключиться к авторизованному backend Home Assistant.',
+    'initialization_error_title': 'Не удалось запустить Argus',
+    'instances': 'アクティブなインスタンス',
+    'introduce_pin': 'PIN を入力',
+    'invalid_config': 'Недопустимый файл конфигурации.',
+    'is_admin': '管理者',
+    'lang_select_title': 'Select Language',
+    'lang_selector_lbl': '⚙️ 言語',
+    'language': 'Language',
+    'lbl_aesthetic_custom': 'Aesthetic Customization',
+    'lbl_load_file': 'Upload file:',
+    'lbl_uploaded_files': 'Uploaded files on server',
+    'link_ha_user': 'Link to Home Assistant User',
+    'linked_rules': 'Argus にリンクされたルール',
+    'loading': 'Загрузка…',
+    'lock_if_open': '開いている場合はロック',
+    'log_action_access_pin_updated': 'PIN доступа обновлён',
+    'log_action_backup_created': 'Резервная копия создана',
+    'log_action_backup_restored': 'Конфигурация восстановлена',
+    'log_action_first_run_completed': 'Argus initialized by {user}',
+    'log_action_fullscreen_unlocked': 'Kiosk unlocked by {user}',
+    'log_action_master_pin_rejected': 'Incorrect master PIN attempt by {user}',
+    'log_action_mode_changed': 'Режим изменён',
+    'log_action_profile_selected': 'Профиль выбран',
+    'log_action_rejected': 'Action rejected',
+    'log_action_save_ui': 'UI Settings saved by {user}',
+    'log_action_schedule_applied': 'Расписание применено',
+    'log_action_select_profile': 'Profile selected: {user}',
+    'log_action_sos': 'SOS Panic triggered by {user}',
+    'log_action_state_restored': 'Состояние восстановлено',
+    'log_action_stop_sos': 'SOS Panic stopped by {user}',
+    'log_action_user_logged_in': 'Вход пользователя',
+    'log_action_verify_access_pin': 'Access PIN verified by {user}',
+    'log_armed': 'Armed',
+    'log_by': 'by',
+    'log_detail_armed': 'Mode',
+    'log_detail_disarm': 'System disarmed',
+    'log_detail_pin_reset': 'Master PIN reset by administrator',
+    'log_detail_pin_reset_failed': 'Unauthorized attempt to reset master PIN',
+    'log_detail_triggered': 'Automatic activation',
+    'log_disarmed': 'Disarmed',
+    'log_no_events': 'No recent events.',
+    'log_sensor': 'Sensor',
+    'log_triggered': 'Triggered!',
+    'login_btn': 'Login',
+    'manual_arm': 'Manual',
+    'manual_disarm': 'Manual (Disarmed)',
+    'master_pin_lbl': 'PIN Maestro',
+    'modal_add_user': '+ Добавить пользователя',
+    'modal_cancel': 'Отмена',
+    'modal_confirm': 'Подтвердить',
+    'modal_delete_confirm': 'Удалить этого пользователя?',
+    'modal_edit_name': 'Изменить имя',
+    'modal_name_label': 'Имя профиля',
+    'modal_pin_help': 'Оставьте пустым, чтобы удалить PIN.',
+    'modal_pin_title': 'PIN доступа',
+    'modal_save': 'Сохранить',
+    'modal_user_added': 'Пользователь создан.',
+    'mode_away': 'Away',
+    'mode_home': 'Home',
+    'mode_night': 'Night',
+    'mode_vacation': 'Vacation',
+    'modes': 'モード',
+    'mqtt_label': 'MQTT',
+    'never_triggered': 'Never triggered',
+    'new_pin': '新しい PIN',
+    'no_alarm_instance': 'Нет доступного экземпляра сигнализации',
+    'no_auto_linked': 'No automations linked to Argus.',
+    'no_files_uploaded': 'No uploaded files. Upload a background using the controls above.',
+    'no_files_uploaded_short': 'No uploaded files.',
+    'no_instances': 'No instances. Add Argus from Integrations.',
+    'no_results': 'Нет результатов',
+    'no_rules': '',
+    'no_sensors_configured': 'Sin sensores configurados',
+    'no_unlinked_ha_accounts': 'All active Home Assistant accounts have a profile.',
+    'no_users': '追加のユーザーは構成されていません。',
+    'none_selected': '未選択',
+    'notif_desc': 'Argus アラートを受信する HA 登録モバイル デバイスを選択します。',
+    'notif_no_services': 'Нет мобильных служб',
+    'notification_armed': '{user} активировал режим {mode}.',
+    'notification_disarmed': '{user} снял систему с охраны.',
+    'notifications_title': '🔔 通知',
+    'open_sensors': 'Open sensors',
+    'open_sensors_explain': 'Следующие датчики открыты:\n{names}\n\nЗакройте их перед постановкой на охрану или включите «Обход».',
+    'panic_state_unknown': 'Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.',
+    'panic_stop_error': 'Не удалось остановить тревогу: {error}',
+    'panic_stopped': 'Тревога остановлена; восстановлено состояние {state}',
+    'pending': '保留中',
+    'pin_active_no': 'Master PIN: Deactivated',
+    'pin_active_yes': 'Master PIN: Active',
+    'pin_deleted': '✓ PIN Deleted',
+    'pin_desc': '警戒および解除用の数字コード。',
+    'pin_disarm_error': 'Неверный PIN или ошибка снятия с охраны',
+    'pin_incorrect': '❌ Incorrect current PIN',
+    'pin_management': '🔑 Gestión de Pines',
+    'pin_master_title': 'Master PIN',
+    'pin_modal_desc': 'Argus を解除するための数字 PIN',
+    'pin_placeholder': 'Access PIN',
+    'pin_remove_hint': 'To remove PIN: Enter the current one and leave the fields below empty.',
+    'pin_reset_admin_only': '❌ Error: Only Home Assistant administrators can reset the master PIN.',
+    'pin_reset_confirm': 'Are you sure you want to reset the master PIN? The current PIN will be removed and deactivated.',
+    'pin_updated': '✓ PIN Updated',
+    'profile_is_yours': 'This is your profile',
+    'profile_needs_pin': 'Another person’s profile — enter the access PIN',
+    'profile_no_pin_access': 'This profile has no access PIN. You cannot open it.',
+    'remove_btn': 'Quitar',
+    'reset_btn': '⚠️ Factory Reset',
+    'reset_confirm': 'Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.',
+    'reset_dashboard': 'レイアウトをリセット',
+    'reset_error': 'Ошибка сброса: {error}',
+    'reset_success': 'Argus сброшен. У вас есть несколько секунд, чтобы отменить это.',
+    'retry_action': 'Повторить',
+    'role_argus_admin': 'Argus 管理者',
+    'role_argus_admin_short': 'Adm',
+    'role_argus_standard': '標準ユーザー',
+    'role_argus_user': 'Standard User',
+    'role_argus_user_short': 'Std',
+    'rules_tip': '',
+    'save_btn': 'Save',
+    'save_config': '構成を保存',
+    'save_mode': '💾 モードを保存',
+    'save_notif': '保存',
+    'save_user': '保存',
+    'search_placeholder': '名前、エリア、または entity_id で検索',
+    'search_select': 'Search & select',
+    'searching_auto': '↻ Searching automations...',
+    'select_all': '☑ All',
+    'select_btn': '+ 選択',
+    'select_profile_subtitle': 'Access your security panels and Argus instances.',
+    'select_profile_title': 'Select Your Profile',
+    'selected_lbl': '選択済み',
+    'selector_panic': '🚨 Действия SOS',
+    'sensor_section': '侵入センサー',
+    'sensors_to_bypass': 'Sensors to Bypass',
+    'settings': '⚙️ 設定',
+    'setup_access_pin': 'PIN доступа к панели Argus (Необязательно)',
+    'setup_admin_name': 'Имя администратора',
+    'setup_master_pin': 'Мастер-PIN для постановки/снятия с охраны (Необязательно)',
+    'setup_required_action': 'Настроить Argus в интеграциях',
+    'setup_required_desc': 'Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.',
+    'setup_required_title': 'Требуется настройка Argus',
+    'siren_section': 'サイレン',
+    'sos_actions': 'Acciones Automáticas de SOS',
+    'sos_activated': 'SOS активирован',
+    'sos_call': '📞 Call Emergency Services',
+    'sos_call_confirm': 'Позвонить в экстренную службу ({number})?',
+    'sos_call_help': 'Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.',
+    'sos_confirm_text': 'Slide to trigger the alarm immediately.',
+    'sos_confirm_title': 'Confirm panic',
+    'sos_error': 'Не удалось активировать SOS: {error}',
+    'sos_no_outputs': 'Устройства не выбраны',
+    'sos_outputs_help': 'Dispositivos activados al disparar el SOS.',
+    'sos_select_outputs': 'Seleccionar salidas de pánico',
+    'sos_slide': 'スライドして SOS を起動',
+    'sos_stop': 'DETENER SOS',
+    'status_away': 'FUERA',
+    'status_closed': '閉',
+    'status_home': 'EN CASA',
+    'status_idle': 'INACTIVO',
+    'status_open': '開',
+    'status_recording': 'GRABANDO',
+    'switch_profile_btn': '👤 プロファイルを切り替え',
+    'sync_panel_help': 'Paneles de alarma que seguirán el mismo estado de Argus',
+    'sync_panel_section': 'Paneles Sincronizados',
+    'system_armed': 'システム警戒中',
+    'system_disarmed': 'システム警戒解除',
+    'system_triggered': '¡ALARMA DISPARADA!',
+    'temp_auto': 'Automatic (local sensor / thermostat / climate)',
+    'temp_notification_title': 'Argus — Температурное предупреждение',
+    'temp_thermostat': '(thermostat)',
+    'thermostat_alert_notif': '🌡️ Temperature alert',
+    'times_section': '⏱️ タイマー',
+    'triggered': 'アラーム！',
+    'unavailable': 'Unavailable',
+    'undo_error': 'Не удалось отменить сброс: {error}',
+    'undo_reset_btn': '↩️ Undo Reset',
+    'undo_success': 'Сброс отменён.',
+    'unlinked_ha_accounts_title': 'Home Assistant accounts without Argus profile',
+    'unlock_kiosk': 'Unlock kiosk',
+    'update_pin': 'PIN を更新',
+    'upload_error': 'Ошибка загрузки.',
+    'url_placeholder': 'URL фона…',
+    'use_for_hub': 'Argus',
+    'use_for_panel': 'Panel',
+    'use_ha_language': 'Home Assistant の言語を使用',
+    'user_default': 'Пользователь',
+    'user_exp_date': 'Expiration Date/Time',
+    'user_exp_type': 'Expiration',
+    'user_no_pin': 'Sin PIN de acceso',
+    'user_pin': 'ユーザー PIN',
+    'user_pin_action': 'PIN',
+    'user_required': 'Требуются имя и PIN',
+    'user_role_action': 'Роль',
+    'user_role_label': 'Argus Role',
+    'username': 'ユーザー名',
+    'users_title': '👥 ユーザーとアクセス制御',
+    'wait_if_open': 'センサーが閉じるのを待つ',
+    'waiting_sensors': 'ESPERANDO SENSORES',
+    'welcome_greeting': 'Welcome,',
+    'welcome_profile': 'Добро пожаловать, {name}',
+  },
+  'uk': {
+    'accept': 'Прийняти',
+    'access_desc': 'Global security management, master PIN and administrators.',
+    'access_pin_lbl': 'PIN de Acceso',
+    'access_title': 'Access Control & Users',
+    'action_failed': 'No se pudo realizar la acción',
+    'active_profile': 'Perfil Activo',
+    'active_until': 'Діє до',
+    'activity_log': '📋 Журнал активності',
+    'add_btn': '+ Додати',
+    'add_user': 'Додати користувача',
+    'admin_only': 'Лише адміністратори можуть змінювати цей розділ.',
+    'alarm_instance': 'Alarm Instance',
+    'all_sensors_bypassed': 'Todos los sensores configurados están omitidos.',
+    'arm_time': 'Затримка встановлення (с)',
+    'arm_time_label': 'Arm time (s)',
+    'armed_away': 'Не вдома',
+    'armed_home': 'Вдома',
+    'armed_night': 'Ніч',
+    'armed_vacation': 'Відпустка',
+    'arming': 'Встановлення на охорону',
+    'automations': '⚡ Автоматизація',
+    'available': 'Доступні',
+    'background_lbl': 'Background',
+    'backup_desc': 'Save a backup of your settings or restore a previous one.',
+    'backup_title': 'Backup & Restore',
+    'badge_pin_reset': 'PIN Reset',
+    'badge_pin_reset_failed': 'PIN Reset Failed',
+    'battery_low': '⚠️ Low Battery',
+    'bg_collage': 'Collage',
+    'bg_hub_default': 'Default (Argus)',
+    'bg_hub_selected_from_history': 'Argus background selected from history.',
+    'bg_hub_title': 'Argus background',
+    'bg_image_opt': 'Image / GIF',
+    'bg_none': 'Default',
+    'bg_panel_none': 'No background',
+    'bg_panel_selected_from_history': 'Panel background selected from history.',
+    'bg_panel_title': 'Panel background',
+    'bg_photo': 'One photo',
+    'bg_sound_opt': 'Video sound',
+    'bg_video': 'Loop video',
+    'bg_weather': 'Animated weather',
+    'bridge_not_connected': 'Bridge not configured',
+    'bridge_not_desc': 'Enable the HomeKit Bridge integration in Home Assistant and include the entity <code>alarm_control_panel.argus_*</code> to generate a pairing QR code.',
+    'bridge_paired': 'Bridge configured',
+    'bridge_paired_desc': 'The <b>{bridge}</b> bridge is configured in Home Assistant. Home Assistant cannot verify from here whether it was added to Apple Home or report its name.',
+    'btn_away': '🔒 НЕ ВДОМА',
+    'btn_create_argus_profile': 'Create Argus Profile',
+    'btn_disarmed': 'ЗНЯТО З ОХОРОНИ',
+    'btn_home': '🏠 ВДОМА',
+    'btn_night': '🌙 НІЧ',
+    'btn_sos': '🚨 SOS / ПАНІКА',
+    'btn_vacation': '✈️ ВІДПУСТКА',
+    'bypass_lbl': '🚫 Обхід',
+    'cancel': 'Скасувати',
+    'cancel_btn': 'Cancel',
+    'cannot_arm': 'Невозможно поставить на охрану',
+    'cannot_delete_last_admin': 'Cannot delete the last binding administrator.',
+    'change_btn': 'Cambiar',
+    'change_pin': 'Головний PIN',
+    'change_profile_picture': 'Cambiar foto en Personas de HA ↗',
+    'change_user_pin': 'Cambiar PIN',
+    'claim_btn': 'Заявить права администратора',
+    'claim_desc': 'Вашей установке требуется администратор для получения доступа.',
+    'claim_title': 'Обновление безопасности Argus',
+    'clear': 'Очистити',
+    'clear_history_confirm': 'Удалить всю историю активности?',
+    'clear_log_btn': 'ОЧИСТИТИ',
+    'clock_12h': '12-hour (AM/PM)',
+    'clock_24h': '24-hour',
+    'clock_auto': 'Automatic (Home Assistant)',
+    'clock_format_desc': 'Choose how time is displayed across panels and logs.',
+    'clock_format_label': 'Time Format',
+    'close': 'Закрити',
+    'confirm': '✓ Підтвердити',
+    'confirm_pin': 'Підтвердіть PIN',
+    'connected': 'ПІДКЛЮЧЕНО',
+    'create_ha': '+ Створити в HA',
+    'current_pin': 'Поточний PIN',
+    'customize': 'Настроить',
+    'delete': 'Удалить',
+    'delete_btn_title': 'Delete from storage',
+    'delete_file_error': 'Не удалось удалить файл: {error}',
+    'delete_user': 'Eliminar usuario',
+    'delete_user_confirm': 'Are you sure you want to delete \"{name}\"?',
+    'delete_user_tooltip': 'Delete user profile',
+    'deselect_all': '☐ None',
+    'details_notif': 'Alarm notification',
+    'disarm_time': 'Затримка входу (с)',
+    'disarm_time_label': 'Entry delay (s)',
+    'disarmed': 'Знято з охорони',
+    'done': 'Готово',
+    'edit_btn': '✏️ Edit',
+    'edit_dashboard': 'Редагувати панель',
+    'edit_dashboard_done': '✓ Готово',
+    'emergency_help': 'Número telefónico marcado en caso de emergencia.',
+    'emergency_number_label': 'Número de Emergencia',
+    'error_loading_uploaded_files': 'Error loading file history.',
+    'exit_to_ha': 'Back to Home Assistant',
+    'exp_indefinite': 'Безстроково',
+    'exp_temporary': 'Тимчасово (Дата/Час)',
+    'expired': 'Вичерпано',
+    'export_btn': '📤 Download',
+    'export_error': 'Ошибка экспорта: {error}',
+    'file_choice': '«{file}»\n\nИспользовать как статичное изображение (ОК) или анимированное видео (Отмена)?',
+    'file_delete_confirm': 'Are you sure you want to permanently delete \"{filename}\"?',
+    'file_read_error': 'Не удалось прочитать файл.',
+    'files_count': '{count} files',
+    'files_count_short': '{count} files',
+    'first_run_blocked_desc': 'A Home Assistant administrator is required to set up Argus for the first time.',
+    'first_run_blocked_title': 'Access Denied',
+    'first_run_desc': 'Complete setup to secure your home.',
+    'first_run_pin_expl': 'The access PIN opens Argus. The master PIN controls arming and disarming.',
+    'first_run_skip': 'Skip',
+    'first_run_start': 'Start with Argus',
+    'first_run_welcome': 'Thank you for choosing Argus Home Hub. Welcome.',
+    'forgot_pin': 'Forgot PIN?',
+    'fullscreen_title': 'Full screen',
+    'generic_error': 'Ошибка: {error}',
+    'github_action': 'Поставить звезду на GitHub',
+    'github_desc': 'Если вам нравится проект, поставьте звезду на GitHub, чтобы поддержать разработку.',
+    'github_title': 'Поддержите Argus',
+    'ha_account_linked': 'Home Assistant Account: {name}',
+    'ha_account_unavailable': 'Binding unavailable',
+    'ha_admin_label': 'Home Assistant Admin',
+    'ha_role_admin': 'HA Admin',
+    'ha_role_standard': 'HA User',
+    'ha_standard_user_label': 'Standard HA User',
+    'hero_desc': 'Комплексна система безпеки, контроль доступу, автоматизація та HomeKit.',
+    'history_refresh': '🔄 Оновити',
+    'history_unavailable': 'Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.',
+    'home_default': 'Мой дом',
+    'home_fallback': 'Дом',
+    'home_name_label': 'Home Name',
+    'home_name_lbl': 'Home Name',
+    'home_name_modal_desc': 'This name appears in the instances panel and in full screen.',
+    'home_name_modal_title': '🏡 Home Name',
+    'home_name_placeholder': 'My Home',
+    'homekit_bridge': 'HomeKit Bridge',
+    'homekit_house': 'Apple Home',
+    'homekit_not_paired': 'Not paired to any home.',
+    'homekit_title': '🏠 HomeKit',
+    'import_btn': '📥 Restore',
+    'import_error': 'Ошибка импорта: {error}',
+    'import_success': 'Конфигурация восстановлена. Перезагрузка…',
+    'initialization_error_desc': 'Не удалось подключиться к авторизованному backend Home Assistant.',
+    'initialization_error_title': 'Не удалось запустить Argus',
+    'instances': 'Активні екземпляри',
+    'introduce_pin': 'Введіть свій PIN',
+    'invalid_config': 'Недопустимый файл конфигурации.',
+    'is_admin': 'Адміністратор',
+    'lang_select_title': 'Select Language',
+    'lang_selector_lbl': '⚙️ Мова',
+    'language': 'Language',
+    'lbl_aesthetic_custom': 'Aesthetic Customization',
+    'lbl_load_file': 'Upload file:',
+    'lbl_uploaded_files': 'Uploaded files on server',
+    'link_ha_user': 'Link to Home Assistant User',
+    'linked_rules': 'Правила, пов\'язані з Argus',
+    'loading': 'Загрузка…',
+    'lock_if_open': 'Блокувати, якщо відкрито',
+    'log_action_access_pin_updated': 'PIN доступа обновлён',
+    'log_action_backup_created': 'Резервная копия создана',
+    'log_action_backup_restored': 'Конфигурация восстановлена',
+    'log_action_first_run_completed': 'Argus initialized by {user}',
+    'log_action_fullscreen_unlocked': 'Kiosk unlocked by {user}',
+    'log_action_master_pin_rejected': 'Incorrect master PIN attempt by {user}',
+    'log_action_mode_changed': 'Режим изменён',
+    'log_action_profile_selected': 'Профиль выбран',
+    'log_action_rejected': 'Action rejected',
+    'log_action_save_ui': 'UI Settings saved by {user}',
+    'log_action_schedule_applied': 'Расписание применено',
+    'log_action_select_profile': 'Profile selected: {user}',
+    'log_action_sos': 'SOS Panic triggered by {user}',
+    'log_action_state_restored': 'Состояние восстановлено',
+    'log_action_stop_sos': 'SOS Panic stopped by {user}',
+    'log_action_user_logged_in': 'Вход пользователя',
+    'log_action_verify_access_pin': 'Access PIN verified by {user}',
+    'log_armed': 'Armed',
+    'log_by': 'by',
+    'log_detail_armed': 'Mode',
+    'log_detail_disarm': 'System disarmed',
+    'log_detail_pin_reset': 'Master PIN reset by administrator',
+    'log_detail_pin_reset_failed': 'Unauthorized attempt to reset master PIN',
+    'log_detail_triggered': 'Automatic activation',
+    'log_disarmed': 'Disarmed',
+    'log_no_events': 'No recent events.',
+    'log_sensor': 'Sensor',
+    'log_triggered': 'Triggered!',
+    'login_btn': 'Login',
+    'manual_arm': 'Manual',
+    'manual_disarm': 'Manual (Disarmed)',
+    'master_pin_lbl': 'PIN Maestro',
+    'modal_add_user': '+ Добавить пользователя',
+    'modal_cancel': 'Отмена',
+    'modal_confirm': 'Подтвердить',
+    'modal_delete_confirm': 'Удалить этого пользователя?',
+    'modal_edit_name': 'Изменить имя',
+    'modal_name_label': 'Имя профиля',
+    'modal_pin_help': 'Оставьте пустым, чтобы удалить PIN.',
+    'modal_pin_title': 'PIN доступа',
+    'modal_save': 'Сохранить',
+    'modal_user_added': 'Пользователь создан.',
+    'mode_away': 'Away',
+    'mode_home': 'Home',
+    'mode_night': 'Night',
+    'mode_vacation': 'Vacation',
+    'modes': 'Режими',
+    'mqtt_label': 'MQTT',
+    'never_triggered': 'Never triggered',
+    'new_pin': 'Новий PIN',
+    'no_alarm_instance': 'Нет доступного экземпляра сигнализации',
+    'no_auto_linked': 'No automations linked to Argus.',
+    'no_files_uploaded': 'No uploaded files. Upload a background using the controls above.',
+    'no_files_uploaded_short': 'No uploaded files.',
+    'no_instances': 'No instances. Add Argus from Integrations.',
+    'no_results': 'Нет результатов',
+    'no_rules': '',
+    'no_sensors_configured': 'Sin sensores configurados',
+    'no_unlinked_ha_accounts': 'All active Home Assistant accounts have a profile.',
+    'no_users': 'Додаткових користувачів не налаштовано.',
+    'none_selected': 'Нічого не вибрано',
+    'notif_desc': 'Виберіть мобільні пристрої, зареєстровані в HA, які отримуватимуть сповіщення Argus.',
+    'notif_no_services': 'Нет мобильных служб',
+    'notification_armed': '{user} активировал режим {mode}.',
+    'notification_disarmed': '{user} снял систему с охраны.',
+    'notifications_title': '🔔 Сповіщення',
+    'open_sensors': 'Open sensors',
+    'open_sensors_explain': 'Следующие датчики открыты:\n{names}\n\nЗакройте их перед постановкой на охрану или включите «Обход».',
+    'panic_state_unknown': 'Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.',
+    'panic_stop_error': 'Не удалось остановить тревогу: {error}',
+    'panic_stopped': 'Тревога остановлена; восстановлено состояние {state}',
+    'pending': 'Очікування',
+    'pin_active_no': 'Master PIN: Deactivated',
+    'pin_active_yes': 'Master PIN: Active',
+    'pin_deleted': '✓ PIN Deleted',
+    'pin_desc': 'Числовий код для встановлення та зняття з охорони.',
+    'pin_disarm_error': 'Неверный PIN или ошибка снятия с охраны',
+    'pin_incorrect': '❌ Incorrect current PIN',
+    'pin_management': '🔑 Gestión de Pines',
+    'pin_master_title': 'Master PIN',
+    'pin_modal_desc': 'Числовий PIN для зняття Argus з охорони',
+    'pin_placeholder': 'Access PIN',
+    'pin_remove_hint': 'To remove PIN: Enter the current one and leave the fields below empty.',
+    'pin_reset_admin_only': '❌ Error: Only Home Assistant administrators can reset the master PIN.',
+    'pin_reset_confirm': 'Are you sure you want to reset the master PIN? The current PIN will be removed and deactivated.',
+    'pin_updated': '✓ PIN Updated',
+    'profile_is_yours': 'This is your profile',
+    'profile_needs_pin': 'Another person’s profile — enter the access PIN',
+    'profile_no_pin_access': 'This profile has no access PIN. You cannot open it.',
+    'remove_btn': 'Quitar',
+    'reset_btn': '⚠️ Factory Reset',
+    'reset_confirm': 'Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.',
+    'reset_dashboard': 'Скинути макет',
+    'reset_error': 'Ошибка сброса: {error}',
+    'reset_success': 'Argus сброшен. У вас есть несколько секунд, чтобы отменить это.',
+    'retry_action': 'Повторить',
+    'role_argus_admin': 'Адміністратор Argus',
+    'role_argus_admin_short': 'Adm',
+    'role_argus_standard': 'Звичайний користувач',
+    'role_argus_user': 'Standard User',
+    'role_argus_user_short': 'Std',
+    'rules_tip': '',
+    'save_btn': 'Save',
+    'save_config': 'ЗБЕРЕГТИ КОНФІГУРАЦІЮ',
+    'save_mode': '💾 Зберегти режим',
+    'save_notif': 'Зберегти',
+    'save_user': 'Зберегти',
+    'search_placeholder': 'Шукати за назвою, областю або entity_id',
+    'search_select': 'Search & select',
+    'searching_auto': '↻ Searching automations...',
+    'select_all': '☑ All',
+    'select_btn': '+ Вибрати',
+    'select_profile_subtitle': 'Access your security panels and Argus instances.',
+    'select_profile_title': 'Select Your Profile',
+    'selected_lbl': 'Вибрано',
+    'selector_panic': '🚨 Действия SOS',
+    'sensor_section': 'Датчики проникнення',
+    'sensors_to_bypass': 'Sensors to Bypass',
+    'settings': '⚙️ Налаштування',
+    'setup_access_pin': 'PIN доступа к панели Argus (Необязательно)',
+    'setup_admin_name': 'Имя администратора',
+    'setup_master_pin': 'Мастер-PIN для постановки/снятия с охраны (Необязательно)',
+    'setup_required_action': 'Настроить Argus в интеграциях',
+    'setup_required_desc': 'Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.',
+    'setup_required_title': 'Требуется настройка Argus',
+    'siren_section': 'Сирени',
+    'sos_actions': 'Acciones Automáticas de SOS',
+    'sos_activated': 'SOS активирован',
+    'sos_call': '📞 Call Emergency Services',
+    'sos_call_confirm': 'Позвонить в экстренную службу ({number})?',
+    'sos_call_help': 'Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.',
+    'sos_confirm_text': 'Slide to trigger the alarm immediately.',
+    'sos_confirm_title': 'Confirm panic',
+    'sos_error': 'Не удалось активировать SOS: {error}',
+    'sos_no_outputs': 'Устройства не выбраны',
+    'sos_outputs_help': 'Dispositivos activados al disparar el SOS.',
+    'sos_select_outputs': 'Seleccionar salidas de pánico',
+    'sos_slide': 'Проведіть для активації SOS',
+    'sos_stop': 'DETENER SOS',
+    'status_away': 'FUERA',
+    'status_closed': 'ЗАКРИТО',
+    'status_home': 'EN CASA',
+    'status_idle': 'INACTIVO',
+    'status_open': 'ВІДКРИТО',
+    'status_recording': 'GRABANDO',
+    'switch_profile_btn': '👤 Змінити профіль',
+    'sync_panel_help': 'Paneles de alarma que seguirán el mismo estado de Argus',
+    'sync_panel_section': 'Paneles Sincronizados',
+    'system_armed': 'СИСТЕМА НА ОХОРОНІ',
+    'system_disarmed': 'СИСТЕМА ЗНЯТА З ОХОРОНИ',
+    'system_triggered': '¡ALARMA DISPARADA!',
+    'temp_auto': 'Automatic (local sensor / thermostat / climate)',
+    'temp_notification_title': 'Argus — Температурное предупреждение',
+    'temp_thermostat': '(thermostat)',
+    'thermostat_alert_notif': '🌡️ Temperature alert',
+    'times_section': '⏱️ Таймери',
+    'triggered': 'ТРИВОГА!',
+    'unavailable': 'Unavailable',
+    'undo_error': 'Не удалось отменить сброс: {error}',
+    'undo_reset_btn': '↩️ Undo Reset',
+    'undo_success': 'Сброс отменён.',
+    'unlinked_ha_accounts_title': 'Home Assistant accounts without Argus profile',
+    'unlock_kiosk': 'Unlock kiosk',
+    'update_pin': 'Оновити PIN',
+    'upload_error': 'Ошибка загрузки.',
+    'url_placeholder': 'URL фона…',
+    'use_for_hub': 'Argus',
+    'use_for_panel': 'Panel',
+    'use_ha_language': 'Використовувати мову Home Assistant',
+    'user_default': 'Пользователь',
+    'user_exp_date': 'Expiration Date/Time',
+    'user_exp_type': 'Expiration',
+    'user_no_pin': 'Sin PIN de acceso',
+    'user_pin': 'PIN користувача',
+    'user_pin_action': 'PIN',
+    'user_required': 'Требуются имя и PIN',
+    'user_role_action': 'Роль',
+    'user_role_label': 'Argus Role',
+    'username': 'Ім\'я користувача',
+    'users_title': '👥 Користувачі та контроль доступу',
+    'wait_if_open': 'Очікувати закриття датчиків',
+    'waiting_sensors': 'ESPERANDO SENSORES',
+    'welcome_greeting': 'Welcome,',
+    'welcome_profile': 'Добро пожаловать, {name}',
+  },
 };
-
-// Text that is shared by controls created dynamically. Keeping this separate
-// from the original dictionaries makes it much harder for a new UI feature to
-// accidentally ship in only one language.
-const EXTRA_TEXTS = {
-  es: { connected:'CONECTADO', no_sensors_configured:'Sin sensores de intrusión configurados.', all_sensors_bypassed:'Todos los sensores configurados están omitidos.', active_profile:'Perfil Activo', change_profile_picture:'Ir a Personas de HA ↗', pin_management:'🔑 Gestión de Pines', access_pin_lbl:'PIN de Acceso', master_pin_lbl:'PIN Maestro', switch_profile_btn:'👤 Cambiar de Perfil', lang_selector_lbl:'⚙️ Idioma / Language', change_btn:'Cambiar', remove_btn:'Quitar', role_argus_admin_short:'Admin', role_argus_user_short:'Estándar', use_ha_language:'Usar idioma de Home Assistant', emergency_number_label:'🚨 Número local de emergencias', emergency_help:'Configúralo según la ubicación del hogar (p. ej., Costa Rica: 911; España: 112). Se incluirá en las alertas SOS.', sos_actions:'🚨 Acciones SOS', sos_select_outputs:'Seleccionar luces, sirenas o scripts', sos_outputs_help:'Estos dispositivos se activarán siempre al usar SOS, incluso con Argus desarmado.', sos_no_outputs:'Sin dispositivos seleccionados', sos_call_help:'Si este equipo no admite llamadas, Argus enviará una alerta urgente a los dispositivos móviles configurados.', sos_stop:'🛑 DETENER PÁNICO', customize:'Personalizar', done:'Listo', sos_activated:'SOS activado', sos_call_confirm:'¿Quieres llamar ahora a emergencias ({number})?', sos_error:'No se pudo activar el SOS: {error}', no_alarm_instance:'No hay una instancia de alarma disponible', panic_state_unknown:'No se pudo determinar el estado anterior del pánico. Desarma o rearma manualmente.', panic_stopped:'Pánico detenido; restaurado a {state}', panic_stop_error:'No se pudo detener el pánico: {error}', selector_panic:'🚨 Acciones SOS', status_open:'Abierto', status_closed:'Cerrado', status_idle:'En reposo', status_recording:'Grabando', status_home:'En casa', status_away:'Fuera', no_results:'Sin resultados', user_required:'Nombre y PIN requeridos', generic_error:'Error: {error}', clear_history_confirm:'¿Seguro que quieres borrar todo el historial?', export_error:'Error al exportar: {error}', invalid_config:'Archivo de configuración no válido.', import_success:'Configuración restaurada con éxito. Recargando...', import_error:'Error al importar: {error}', file_read_error:'No se pudo leer el archivo.', reset_confirm:'¿Estás seguro de que deseas restablecer Argus a sus valores de fábrica? Perderás todas tus configuraciones, PINs y modos.', reset_success:'Argus restablecido. Tienes unos segundos para deshacer si cambias de opinión, o simplemente recarga la página para aplicar los cambios.', reset_error:'Error al restablecer: {error}', undo_success:'Restablecimiento deshecho con éxito.', undo_error:'Error al deshacer: {error}', url_placeholder:'URL del fondo...', loading:'Cargando...', delete:'Borrar', fullscreen_title:'Pantalla completa', home_default:'Mi Casa', home_fallback:'Hogar', user_default:'Usuario', temp_notification_title:'Argus — Alerta de Temperatura', action_failed:'No se pudo realizar la acción', cannot_arm:'No se puede armar', open_sensors_explain:'Los siguientes sensores están abiertos:\n{names}\n\nCiérralos antes de armar, o activa \u201cOmitir\u201d en el sensor.', pin_disarm_error:'PIN incorrecto o error al desarmar', notification_disarmed:'{user} desarmó el sistema.', notification_armed:'{user} activó el modo {mode}.', upload_error:'Falló la subida.', delete_file_error:'No se pudo eliminar el archivo: {error}', file_choice:'\u201c{file}\u201d\n\n¿Usar como imagen estática (Aceptar) o como video animado (Cancelar)?\n\n• Aceptar → Imagen estática\n• Cancelar → Video animado', first_run_blocked_title:'Acceso denegado', first_run_blocked_desc:'Se requiere un administrador de Home Assistant para configurar Argus por primera vez.', first_run_welcome:'Gracias por elegir Argus Home Hub. Bienvenido/a.', first_run_desc:'Complete la configuración para proteger su hogar.', first_run_pin_expl:'El PIN de acceso abre Argus. El PIN maestro controla el armado y desarmado.', first_run_skip:'Omitir por ahora', first_run_start:'Comenzar con Argus' },
-  en: { connected:'CONNECTED', no_sensors_configured:'No intrusion sensors configured.', all_sensors_bypassed:'All configured sensors are bypassed.', active_profile:'Active Profile', change_profile_picture:'Go to HA Persons ↗', pin_management:'🔑 PIN Management', access_pin_lbl:'Access PIN', master_pin_lbl:'Master PIN', switch_profile_btn:'👤 Switch Profile', lang_selector_lbl:'⚙️ Language / Idioma', change_btn:'Change', remove_btn:'Remove', role_argus_admin_short:'Admin', role_argus_user_short:'Standard', use_ha_language:'Use Home Assistant language', emergency_number_label:'🚨 Local emergency number', emergency_help:'Configure it for the home location (e.g., Costa Rica: 911; Spain: 112). It will be included in SOS alerts.', sos_actions:'🚨 SOS actions', sos_select_outputs:'Select lights, sirens, or scripts', sos_outputs_help:'These devices will always activate when SOS is used, even while Argus is disarmed.', sos_no_outputs:'No devices selected', sos_call_help:'If this device cannot place calls, Argus will send an urgent alert to the configured mobile devices.', sos_stop:'🛑 STOP PANIC', customize:'Customize', done:'Done', sos_activated:'SOS activated', sos_call_confirm:'Call emergency services now ({number})?', sos_error:'Could not activate SOS: {error}', no_alarm_instance:'No alarm instance is available', panic_state_unknown:'The prior panic state could not be determined. Disarm or arm manually.', panic_stopped:'Panic stopped; restored to {state}', panic_stop_error:'Could not stop panic: {error}', selector_panic:'🚨 SOS actions', status_open:'Open', status_closed:'Closed', status_idle:'Idle', status_recording:'Recording', status_home:'Home', status_away:'Away', no_results:'No results', user_required:'Name and PIN are required', generic_error:'Error: {error}', clear_history_confirm:'Delete the entire activity history?', export_error:'Export failed: {error}', invalid_config:'Invalid configuration file.', import_success:'Configuration restored successfully. Reloading…', import_error:'Import failed: {error}', file_read_error:'Could not read the file.', reset_confirm:'Reset Argus to factory settings? All configurations, PINs, and modes will be lost.', reset_success:'Argus was reset. You have a few seconds to undo it, or reload the page to apply the changes.', reset_error:'Reset failed: {error}', undo_success:'Reset undone successfully.', undo_error:'Could not undo reset: {error}', url_placeholder:'Background URL…', loading:'Loading…', delete:'Delete', fullscreen_title:'Full screen', home_default:'My Home', home_fallback:'Home', user_default:'User', temp_notification_title:'Argus — Temperature Alert', action_failed:'Action could not be completed', cannot_arm:'Cannot arm', open_sensors_explain:'The following sensors are open:\n{names}\n\nClose them before arming, or enable \u201cBypass\u201d on the sensor.', pin_disarm_error:'Incorrect PIN or error while disarming', notification_disarmed:'{user} disarmed the system.', notification_armed:'{user} activated {mode} mode.', upload_error:'Upload failed.', delete_file_error:'Could not delete the file: {error}', file_choice:'\u201c{file}\u201d\n\nUse as a static image (OK) or an animated video (Cancel)?\n\n• OK → Static image\n• Cancel → Animated video', first_run_blocked_title:'Access Denied', first_run_blocked_desc:'A Home Assistant administrator is required to configure Argus for the first time.', first_run_welcome:'Thank you for choosing Argus Home Hub. Welcome.', first_run_desc:'Complete setup to secure your home.', first_run_pin_expl:'The access PIN opens Argus. The master PIN controls arming and disarming.', first_run_skip:'Skip for now', first_run_start:'Start with Argus' },
-  fr: { connected:'CONNECTÉ', no_sensors_configured:'Aucun capteur configuré.', all_sensors_bypassed:'Tous les capteurs configurés sont contournés.', active_profile:'Profil actif', change_profile_picture:'Aller à Personnes HA ↗', pin_management:'🔑 Gestion des PINs', access_pin_lbl:'PIN d\u2019accès', master_pin_lbl:'PIN Maître', switch_profile_btn:'👤 Changer de profil', lang_selector_lbl:'⚙️ Langue', change_btn:'Modifier', remove_btn:'Supprimer', role_argus_admin_short:'Admin', role_argus_user_short:'Standard', use_ha_language:'Utiliser la langue de Home Assistant', emergency_number_label:'🚨 Numéro d\u2019urgence local', emergency_help:'Configurez-le pour le domicile (ex. Costa Rica : 911 ; Espagne : 112). Il sera inclus dans les alertes SOS.', sos_actions:'🚨 Actions SOS', sos_select_outputs:'Sélectionner lumières, sirènes ou scripts', sos_outputs_help:'Ces appareils s\u2019activeront toujours avec SOS, même si Argus est désarmé.', sos_no_outputs:'Aucun appareil sélectionné', sos_call_help:'Si cet appareil ne peut pas appeler, Argus enverra une alerte urgente aux appareils mobiles configurés.', sos_stop:'🛑 ARRÊTER LA PANIQUE', customize:'Personnaliser', done:'Terminé', sos_activated:'SOS activé', sos_call_confirm:'Appeler les urgences maintenant ({number}) ?', sos_error:'Impossible d\u2019activer SOS : {error}', no_alarm_instance:'Aucune instance d\u2019alarme disponible', panic_state_unknown:'L\u2019état antérieur de la panique est inconnu. Armez ou désarmez manuellement.', panic_stopped:'Panique arrêtée ; rétablie à {state}', panic_stop_error:'Impossible d\u2019arrêter la panique : {error}', selector_panic:'🚨 Actions SOS', status_open:'Ouvert', status_closed:'Fermé', status_idle:'Au repos', status_recording:'Enregistrement', status_home:'Maison', status_away:'Absent', no_results:'Aucun résultat', user_required:'Nom et PIN requis', generic_error:'Erreur : {error}', clear_history_confirm:'Supprimer tout l\u2019historique d\u2019activité ?', export_error:'Échec de l\u2019exportation : {error}', invalid_config:'Fichier de configuration invalide.', import_success:'Configuration restaurée. Rechargement…', import_error:'Échec de l\u2019importation : {error}', file_read_error:'Impossible de lire le fichier.', reset_confirm:'Réinitialiser Argus ? Toutes les configurations, PIN et modes seront perdus.', reset_success:'Argus a été réinitialisé. Vous avez quelques secondes pour annuler.', reset_error:'Échec de la réinitialisation : {error}', undo_success:'Réinitialisation annulée.', undo_error:'Impossible d\u2019annuler : {error}', url_placeholder:'URL de l\u2019arrière-plan…', loading:'Chargement…', delete:'Supprimer', fullscreen_title:'Plein écran', home_default:'Ma maison', home_fallback:'Maison', user_default:'Utilisateur', temp_notification_title:'Argus — Alerte de température', action_failed:'Action impossible', cannot_arm:'Impossible d\u2019armer', open_sensors_explain:'Les capteurs suivants sont ouverts :\n{names}\n\nFermez-les avant d\u2019armer ou activez « Ignorer ». ', pin_disarm_error:'PIN incorrect ou erreur de désarmement', notification_disarmed:'{user} a désarmé le système.', notification_armed:'{user} a activé le mode {mode}.', upload_error:'Échec du téléversement.', delete_file_error:'Impossible de supprimer le fichier : {error}', file_choice:'« {file} »\n\nUtiliser comme image fixe (OK) ou vidéo animée (Annuler) ?', first_run_blocked_title:'Accès refusé', first_run_blocked_desc:'Un administrateur Home Assistant est requis pour configurer Argus pour la première fois.', first_run_welcome:'Merci d\'avoir choisi Argus Home Hub. Bienvenue.', first_run_desc:'Terminez la configuration pour sécuriser votre domicile.', first_run_pin_expl:'Le code d\'accès ouvre Argus. Le code maître contrôle l\'armement.', first_run_skip:'Ignorer pour l\'instant', first_run_start:'Commencer avec Argus' },
-  pt: { connected:'CONECTADO', no_sensors_configured:'Sem sensores configurados.', all_sensors_bypassed:'Todos os sensores configurados estão ignorados.', active_profile:'Perfil ativo', change_profile_picture:'Ir para Pessoas do HA ↗', pin_management:'🔑 Gerenciamento de PINs', access_pin_lbl:'PIN de Acesso', master_pin_lbl:'PIN Mestre', switch_profile_btn:'👤 Trocar de perfil', lang_selector_lbl:'⚙️ Idioma', change_btn:'Alterar', remove_btn:'Remover', role_argus_admin_short:'Admin', role_argus_user_short:'Padrão', use_ha_language:'Usar idioma do Home Assistant', emergency_number_label:'🚨 Número local de emergência', emergency_help:'Configure para a localização da casa (ex.: Costa Rica: 911; Espanha: 112). Será incluído nos alertas SOS.', sos_actions:'🚨 Ações SOS', sos_select_outputs:'Selecionar luzes, sirenes ou scripts', sos_outputs_help:'Estes dispositivos sempre serão ativados ao usar SOS, mesmo com Argus desarmado.', sos_no_outputs:'Nenhum dispositivo selecionado', sos_call_help:'Se este dispositivo não puder ligar, o Argus enviará um alerta urgente aos dispositivos móveis configurados.', sos_stop:'🛑 PARAR PÂNICO', customize:'Personalizar', done:'Concluído', sos_activated:'SOS ativado', sos_call_confirm:'Ligar para emergência agora ({number})?', sos_error:'Não foi possível ativar SOS: {error}', no_alarm_instance:'Nenhuma instância de alarme disponível', panic_state_unknown:'Não foi possível determinar o estado anterior do pânico. Arme ou desarme manualmente.', panic_stopped:'Pânico parado; restaurado para {state}', panic_stop_error:'Não foi possível parar o pânico: {error}', selector_panic:'🚨 Ações SOS', status_open:'Aberto', status_closed:'Fechado', status_idle:'Em repouso', status_recording:'Gravando', status_home:'Em casa', status_away:'Fora', no_results:'Sem resultados', user_required:'Nome e PIN são obrigatórios', generic_error:'Erro: {error}', clear_history_confirm:'Excluir todo o histórico de atividade?', export_error:'Erro ao exportar: {error}', invalid_config:'Arquivo de configuração inválido.', import_success:'Configuração restaurada. Recarregando…', import_error:'Erro ao importar: {error}', file_read_error:'Não foi possível ler o arquivo.', reset_confirm:'Restaurar Argus aos padrões de fábrica? Todas as configurações, PINs e modos serão perdidos.', reset_success:'Argus foi restaurado. Você tem alguns segundos para desfazer.', reset_error:'Erro ao restaurar: {error}', undo_success:'Restauração desfeita.', undo_error:'Erro ao desfazer: {error}', url_placeholder:'URL do fundo…', loading:'Carregando…', delete:'Excluir', fullscreen_title:'Tela cheia', home_default:'Minha Casa', home_fallback:'Casa', user_default:'Usuário', temp_notification_title:'Argus — Alerta de Temperatura', action_failed:'Não foi possível realizar a ação', cannot_arm:'Não é possível armar', open_sensors_explain:'Os seguintes sensores estão abertos:\n{names}\n\nFeche-os antes de armar ou ative \u201cIgnorar\u201d.', pin_disarm_error:'PIN incorreto ou erro ao desarmar', notification_disarmed:'{user} desarmou o sistema.', notification_armed:'{user} ativou o modo {mode}.', upload_error:'Falha no envio.', delete_file_error:'Não foi possível excluir o arquivo: {error}', file_choice:'\u201c{file}\u201d\n\nUsar como imagem estática (OK) ou vídeo animado (Cancelar)?', first_run_blocked_title:'Acesso negado', first_run_blocked_desc:'É necessário um administrador do Home Assistant para configurar o Argus pela primeira vez.', first_run_welcome:'Obrigado por escolher o Argus Home Hub. Bem-vindo(a).', first_run_desc:'Conclua a configuração para proteger sua casa.', first_run_pin_expl:'O PIN de acesso abre o Argus. O PIN mestre controla armar e desarmar.', first_run_skip:'Ignorar por agora', first_run_start:'Começar com Argus' },
-  it: { connected:'CONNESSO', no_sensors_configured:'Nessun sensore configurato.', all_sensors_bypassed:'Tutti i sensori configurati sono ignorati.', active_profile:'Profilo attivo', change_profile_picture:'Vai a Persone HA ↗', pin_management:'🔑 Gestione PIN', access_pin_lbl:'PIN di Accesso', master_pin_lbl:'PIN Maestro', switch_profile_btn:'👤 Cambia profilo', lang_selector_lbl:'⚙️ Lingua', change_btn:'Modifica', remove_btn:'Rimuovi', role_argus_admin_short:'Admin', role_argus_user_short:'Standard', use_ha_language:'Usa la lingua di Home Assistant', emergency_number_label:'🚨 Numero di emergenza locale', emergency_help:'Configurarlo per la posizione della casa (es. Costa Rica: 911; Spagna: 112). Sarà incluso negli avvisi SOS.', sos_actions:'🚨 Azioni SOS', sos_select_outputs:'Seleziona luci, sirene o script', sos_outputs_help:'Questi dispositivi saranno sempre attivati con SOS, anche se Argus è disarmato.', sos_no_outputs:'Nessun dispositivo selezionato', sos_call_help:'Se questo dispositivo non può effettuare chiamate, Argus invierà un avviso urgente ai dispositivi mobili configurati.', sos_stop:'🛑 FERMA PANICO', customize:'Personalizza', done:'Fine', sos_activated:'SOS attivato', sos_call_confirm:'Chiamare ora i servizi di emergenza ({number})?', sos_error:'Impossibile attivare SOS: {error}', no_alarm_instance:'Nessuna istanza di allarme disponibile', panic_state_unknown:'Impossibile determinare lo stato precedente del panico. Armare o disarmare manualmente.', panic_stopped:'Panico fermato; ripristinato a {state}', panic_stop_error:'Impossibile fermare il panico: {error}', selector_panic:'🚨 Azioni SOS', status_open:'Aperto', status_closed:'Chiuso', status_idle:'Inattivo', status_recording:'Registrazione', status_home:'Casa', status_away:'Fuori', no_results:'Nessun risultato', user_required:'Nome e PIN obbligatori', generic_error:'Errore: {error}', clear_history_confirm:'Eliminare tutta la cronologia attività?', export_error:'Esportazione non riuscita: {error}', invalid_config:'File di configurazione non valido.', import_success:'Configurazione ripristinata. Ricaricamento…', import_error:'Importazione non riuscita: {error}', file_read_error:'Impossibile leggere il file.', reset_confirm:'Ripristinare Argus alle impostazioni di fabbrica? Configurazioni, PIN e modalità saranno persi.', reset_success:'Argus è stato ripristinato. Hai alcuni secondi per annullare.', reset_error:'Ripristino non riuscito: {error}', undo_success:'Ripristino annullato.', undo_error:'Impossibile annullare: {error}', url_placeholder:'URL dello sfondo…', loading:'Caricamento…', delete:'Elimina', fullscreen_title:'Schermo intero', home_default:'Casa mia', home_fallback:'Casa', user_default:'Utente', temp_notification_title:'Argus — Avviso temperatura', action_failed:'Impossibile eseguire l\u2019azione', cannot_arm:'Impossibile armare', open_sensors_explain:'I seguenti sensori sono aperti:\n{names}\n\nChiudili prima di armare o abilita \u201cIgnora\u201d.', pin_disarm_error:'PIN errato o errore durante il disarmo', notification_disarmed:'{user} ha disarmato il sistema.', notification_armed:'{user} ha attivato la modalità {mode}.', upload_error:'Caricamento non riuscito.', delete_file_error:'Impossibile eliminare il file: {error}', file_choice:'\u201c{file}\u201d\n\nUsare come immagine statica (OK) o video animato (Annulla)?', first_run_blocked_title:'Accesso negato', first_run_blocked_desc:'È necessario un amministratore di Home Assistant per configurare Argus per la prima volta.', first_run_welcome:'Grazie per aver scelto Argus Home Hub. Benvenuto/a.', first_run_desc:'Completa la configurazione per proteggere la tua casa.', first_run_pin_expl:'Il PIN di accesso apre Argus. Il PIN master controlla l\'inserimento e il disinserimento.', first_run_skip:'Salta per ora', first_run_start:'Inizia con Argus' },
-  zh: { connected:'已连接', no_sensors_configured:'未配置入侵传感器。', all_sensors_bypassed:'所有配置的传感器均已旁路。', active_profile:'当前个人资料', change_profile_picture:'转到 HA 人员设置 ↗', pin_management:'🔑 PIN 码管理', access_pin_lbl:'访问 PIN', master_pin_lbl:'主 PIN', switch_profile_btn:'👤 切换配置文件', lang_selector_lbl:'⚙️ 语言', change_btn:'更改', remove_btn:'移除', role_argus_admin_short:'管理员', role_argus_user_short:'标准', use_ha_language:'使用 Home Assistant 语言', emergency_number_label:'🚨 本地紧急号码', emergency_help:'请按家庭所在地设置（例如哥斯达黎加：911；西班牙：112）。该号码将包含在 SOS 警报中。', sos_actions:'🚨 SOS 操作', sos_select_outputs:'选择灯、警报器或脚本', sos_outputs_help:'即使 Argus 已撤防，使用 SOS 时这些设备也会始终启动。', sos_no_outputs:'未选择设备', sos_call_help:'如果该设备无法拨号，Argus 将向已配置的移动设备发送紧急警报。', sos_stop:'🛑 停止紧急状态', customize:'自定义', done:'完成', sos_activated:'SOS 已激活', sos_call_confirm:'现在拨打紧急服务电话 ({number})？', sos_error:'无法激活 SOS：{error}', no_alarm_instance:'没有可用的警报实例', panic_state_unknown:'无法确定紧急状态之前的状态。请手动布防或撤防。', panic_stopped:'紧急状态已停止；恢复为 {state}', panic_stop_error:'无法停止紧急状态：{error}', selector_panic:'🚨 SOS 操作', status_open:'打开', status_closed:'关闭', status_idle:'空闲', status_recording:'录制中', status_home:'在家', status_away:'离家', no_results:'无结果', user_required:'需要姓名和 PIN', generic_error:'错误：{error}', clear_history_confirm:'删除全部活动历史记录？', export_error:'导出失败：{error}', invalid_config:'配置文件无效。', import_success:'配置已恢复。正在重新加载…', import_error:'导入失败：{error}', file_read_error:'无法读取文件。', reset_confirm:'将 Argus 恢复为出厂设置？所有配置、PIN 和模式将丢失。', reset_success:'Argus 已重置。你有几秒钟可以撤销。', reset_error:'重置失败：{error}', undo_success:'已撤销重置。', undo_error:'无法撤销重置：{error}', url_placeholder:'背景 URL…', loading:'正在加载…', delete:'删除', fullscreen_title:'全屏', home_default:'我的家', home_fallback:'家', user_default:'用户', temp_notification_title:'Argus — 温度警报', action_failed:'无法完成操作', cannot_arm:'无法布防', open_sensors_explain:'以下传感器处于打开状态：\n{names}\n\n请在布防前关闭它们，或启用\u201c跳过\u201d。', pin_disarm_error:'PIN 错误或撤防时出错', notification_disarmed:'{user} 已撤防系统。', notification_armed:'{user} 已激活 {mode} 模式。', upload_error:'上传失败。', delete_file_error:'无法删除文件：{error}', file_choice:'\u201c{file}\u201d\n\n用作静态图片（确定）还是动画视频（取消）？', first_run_blocked_title:'拒绝访问', first_run_blocked_desc:'首次配置 Argus 需要 Home Assistant 管理员。', first_run_welcome:'感谢您选择 Argus Home Hub。欢迎。', first_run_desc:'完成设置以保护您的家庭。', first_run_pin_expl:'访问 PIN 用于打开 Argus。主 PIN 控制布防和撤防。', first_run_skip:'暂时跳过', first_run_start:'开始使用 Argus' },
-  ru: { connected:'ПОДКЛЮЧЕНО', no_sensors_configured:'Датчики не настроены.', all_sensors_bypassed:'Все настроенные датчики пропущены.', active_profile:'Активный профиль', change_profile_picture:'Перейти к профилям HA ↗', pin_management:'🔑 Управление PIN', access_pin_lbl:'PIN доступа', master_pin_lbl:'Мастер-PIN', switch_profile_btn:'👤 Сменить профиль', lang_selector_lbl:'⚙️ Язык', change_btn:'Изменить', remove_btn:'Удалить', role_argus_admin_short:'Админ', role_argus_user_short:'Стандарт', use_ha_language:'Использовать язык Home Assistant', emergency_number_label:'🚨 Местный номер экстренной службы', emergency_help:'Настройте для местоположения дома (например, Коста-Рика: 911; Испания: 112). Номер будет включён в SOS-оповещения.', sos_actions:'🚨 Действия SOS', sos_select_outputs:'Выбрать свет, сирены или сценарии', sos_outputs_help:'Эти устройства всегда будут включаться при SOS, даже когда Argus снят с охраны.', sos_no_outputs:'Устройства не выбраны', sos_call_help:'Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.', sos_stop:'🛑 ОСТАНОВИТЬ ТРЕВОГУ', customize:'Настроить', done:'Готово', sos_activated:'SOS активирован', sos_call_confirm:'Позвонить в экстренную службу ({number})?', sos_error:'Не удалось активировать SOS: {error}', no_alarm_instance:'Нет доступного экземпляра сигнализации', panic_state_unknown:'Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.', panic_stopped:'Тревога остановлена; восстановлено состояние {state}', panic_stop_error:'Не удалось остановить тревогу: {error}', selector_panic:'🚨 Действия SOS', status_open:'Открыто', status_closed:'Закрыто', status_idle:'Ожидание', status_recording:'Запись', status_home:'Дома', status_away:'Вне дома', no_results:'Нет результатов', user_required:'Требуются имя и PIN', generic_error:'Ошибка: {error}', clear_history_confirm:'Удалить всю историю активности?', export_error:'Ошибка экспорта: {error}', invalid_config:'Недопустимый файл конфигурации.', import_success:'Конфигурация восстановлена. Перезагрузка…', import_error:'Ошибка импорта: {error}', file_read_error:'Не удалось прочитать файл.', reset_confirm:'Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.', reset_success:'Argus сброшен. У вас есть несколько секунд, чтобы отменить это.', reset_error:'Ошибка сброса: {error}', undo_success:'Сброс отменён.', undo_error:'Не удалось отменить сброс: {error}', url_placeholder:'URL фона…', loading:'Загрузка…', delete:'Удалить', fullscreen_title:'Полный экран', home_default:'Мой дом', home_fallback:'Дом', user_default:'Пользователь', temp_notification_title:'Argus — Температурное предупреждение', action_failed:'Не удалось выполнить действие', cannot_arm:'Невозможно поставить на охрану', open_sensors_explain:'Следующие датчики открыты:\n{names}\n\nЗакройте их перед постановкой на охрану или включите «Обход».', pin_disarm_error:'Неверный PIN или ошибка снятия с охраны', notification_disarmed:'{user} снял систему с охраны.', notification_armed:'{user} активировал режим {mode}.', upload_error:'Ошибка загрузки.', delete_file_error:'Не удалось удалить файл: {error}', file_choice:'«{file}»\n\nИспользовать как статичное изображение (ОК) или анимированное видео (Отмена)?', first_run_blocked_title:'Доступ запрещен', first_run_blocked_desc:'Для первой настройки Argus требуется администратор Home Assistant.', first_run_welcome:'Спасибо, что выбрали Argus Home Hub. Добро пожаловать.', first_run_desc:'Завершите настройку для безопасности вашего дома.', first_run_pin_expl:'PIN доступа открывает Argus. Мастер-PIN управляет постановкой и снятием с охраны.', first_run_skip:'Пропустить пока', first_run_start:'Начать с Argus' },
-};
-
-const SETUP_REQUIRED_TEXTS = {
-  es: { setup_required_title:'Falta configurar Argus', setup_required_desc:'Argus está instalado, pero todavía no existe una instancia. Añádela en Integraciones y luego vuelve a este panel.', setup_required_action:'Configurar Argus en Integraciones', welcome_profile:'Bienvenido/a, {name}', initialization_error_title:'Argus no pudo iniciar', initialization_error_desc:'No se pudo conectar con el backend autenticado de Home Assistant.', retry_action:'Reintentar' },
-  en: { setup_required_title:'Argus setup required', setup_required_desc:'Argus is installed, but no instance exists yet. Add it in Integrations, then return to this panel.', setup_required_action:'Configure Argus in Integrations', welcome_profile:'Welcome, {name}', initialization_error_title:'Argus could not start', initialization_error_desc:'The authenticated Home Assistant backend connection could not be established.', retry_action:'Retry' },
-  fr: { setup_required_title:'Configuration d\u2019Argus requise', setup_required_desc:'Argus est installé, mais aucune instance n\u2019existe encore. Ajoutez-la dans Intégrations, puis revenez à ce panneau.', setup_required_action:'Configurer Argus dans Intégrations', welcome_profile:'Bienvenue, {name}', initialization_error_title:'Argus n\u2019a pas pu démarrer', initialization_error_desc:'La connexion authentifiée au backend Home Assistant a échoué.', retry_action:'Réessayer' },
-  pt: { setup_required_title:'É necessário configurar o Argus', setup_required_desc:'O Argus está instalado, mas ainda não existe uma instância. Adicione-a em Integrações e volte a este painel.', setup_required_action:'Configurar Argus em Integrações', welcome_profile:'Bem-vindo(a), {name}', initialization_error_title:'O Argus não pôde iniciar', initialization_error_desc:'Não foi possível conectar ao backend autenticado do Home Assistant.', retry_action:'Tentar novamente' },
-  it: { setup_required_title:'Configurazione di Argus necessaria', setup_required_desc:'Argus è installato, ma non esiste ancora un\u2019istanza. Aggiungila in Integrazioni, poi torna a questo pannello.', setup_required_action:'Configura Argus in Integrazioni', welcome_profile:'Benvenuto/a, {name}', initialization_error_title:'Argus non si è avviato', initialization_error_desc:'Impossibile connettersi al backend autenticato di Home Assistant.', retry_action:'Riprova' },
-  zh: { setup_required_title:'需要配置 Argus', setup_required_desc:'Argus 已安装，但尚未创建实例。请在\u201c集成\u201d中添加，然后返回此面板。', setup_required_action:'在集成中配置 Argus', welcome_profile:'欢迎，{name}', initialization_error_title:'Argus 无法启动', initialization_error_desc:'无法连接到 Home Assistant 的已认证后端。', retry_action:'重试' },
-  ru: { setup_required_title:'Требуется настройка Argus', setup_required_desc:'Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.', setup_required_action:'Настроить Argus в интеграциях', welcome_profile:'Добро пожаловать, {name}', initialization_error_title:'Не удалось запустить Argus', initialization_error_desc:'Не удалось подключиться к авторизованному backend Home Assistant.', retry_action:'Повторить' },
-};
-
-const UI_AUDIT_TEXTS = {
-  es: { github_title:'Apoya a Argus', github_desc:'Si te gusta este proyecto, considera darle una estrella en GitHub para apoyar su desarrollo.', github_action:'Dar estrella en GitHub', history_refresh:'Actualizar', history_unavailable:'No se pudo cargar el historial. Verifica el permiso «Ver historial» e inténtalo de nuevo.', user_no_pin:'Sin PIN', user_pin_action:'PIN', user_role_action:'Rol', notif_no_services:'Sin servicios móviles',
-    log_action_user_logged_in:'Inicio de sesión', log_action_state_restored:'Estado restaurado', log_action_profile_selected:'Perfil seleccionado', log_action_schedule_applied:'Horario aplicado', log_action_mode_changed:'Modo cambiado', log_action_backup_created:'Copia de seguridad creada', log_action_backup_restored:'Configuración restaurada', log_action_access_pin_updated:'PIN de acceso actualizado',
-    modal_cancel:'Cancelar', modal_save:'Guardar', modal_confirm:'Confirmar', modal_pin_title:'PIN de acceso', modal_pin_help:'Deja en blanco para eliminar el PIN de acceso.', modal_edit_name:'Editar nombre', modal_add_user:'+ Agregar usuario manual', modal_name_label:'Nombre del perfil', modal_user_added:'Usuario creado.', modal_delete_confirm:'¿Eliminar este usuario? Esta acción no se puede deshacer.' },
-  en: { github_title:'Support Argus', github_desc:'If you like this project, consider starring it on GitHub to support its development.', github_action:'Star on GitHub', history_refresh:'Refresh', history_unavailable:'Activity history could not be loaded. Check the \u201cView history\u201d permission and try again.', user_no_pin:'No PIN', user_pin_action:'PIN', user_role_action:'Role', notif_no_services:'No mobile services',
-    log_action_user_logged_in:'User login', log_action_state_restored:'State restored', log_action_profile_selected:'Profile selected', log_action_schedule_applied:'Schedule applied', log_action_mode_changed:'Mode changed', log_action_backup_created:'Backup created', log_action_backup_restored:'Configuration restored', log_action_access_pin_updated:'Access PIN updated',
-    modal_cancel:'Cancel', modal_save:'Save', modal_confirm:'Confirm', modal_pin_title:'Access PIN', modal_pin_help:'Leave blank to remove the access PIN.', modal_edit_name:'Edit name', modal_add_user:'+ Add manual user', modal_name_label:'Profile name', modal_user_added:'User created.', modal_delete_confirm:'Delete this user? This action cannot be undone.' },
-  fr: { github_title:'Soutenez Argus', github_desc:'Si vous aimez ce projet, ajoutez une étoile sur GitHub pour soutenir son développement.', github_action:'Ajouter une étoile sur GitHub', history_refresh:'Actualiser', history_unavailable:'Impossible de charger l\u2019historique. Vérifiez l\u2019autorisation « Voir l\u2019historique » et réessayez.', user_no_pin:'Sans PIN', user_pin_action:'PIN', user_role_action:'Rôle', notif_no_services:'Aucun service mobile',
-    log_action_user_logged_in:'Connexion', log_action_state_restored:'État restauré', log_action_profile_selected:'Profil sélectionné', log_action_schedule_applied:'Horaire appliqué', log_action_mode_changed:'Mode modifié', log_action_backup_created:'Sauvegarde créée', log_action_backup_restored:'Configuration restaurée', log_action_access_pin_updated:'PIN d\u2019accès mis à jour',
-    modal_cancel:'Annuler', modal_save:'Enregistrer', modal_confirm:'Confirmer', modal_pin_title:'PIN d\u2019accès', modal_pin_help:'Laissez vide pour supprimer le PIN.', modal_edit_name:'Modifier le nom', modal_add_user:'+ Ajouter un utilisateur', modal_name_label:'Nom du profil', modal_user_added:'Utilisateur créé.', modal_delete_confirm:'Supprimer cet utilisateur ?' },
-  pt: { github_title:'Apoie o Argus', github_desc:'Se você gosta deste projeto, dê uma estrela no GitHub para apoiar o desenvolvimento.', github_action:'Dar estrela no GitHub', history_refresh:'Atualizar', history_unavailable:'Não foi possível carregar o histórico. Verifique a permissão \u201cVer histórico\u201d e tente novamente.', user_no_pin:'Sem PIN', user_pin_action:'PIN', user_role_action:'Função', notif_no_services:'Sem serviços móveis',
-    log_action_user_logged_in:'Login do usuário', log_action_state_restored:'Estado restaurado', log_action_profile_selected:'Perfil selecionado', log_action_schedule_applied:'Horário aplicado', log_action_mode_changed:'Modo alterado', log_action_backup_created:'Backup criado', log_action_backup_restored:'Configuração restaurada', log_action_access_pin_updated:'PIN de acesso atualizado',
-    modal_cancel:'Cancelar', modal_save:'Salvar', modal_confirm:'Confirmar', modal_pin_title:'PIN de acesso', modal_pin_help:'Deixe em branco para remover o PIN.', modal_edit_name:'Editar nome', modal_add_user:'+ Adicionar usuário', modal_name_label:'Nome do perfil', modal_user_added:'Usuário criado.', modal_delete_confirm:'Excluir este usuário?' },
-  it: { github_title:'Sostieni Argus', github_desc:'Se ti piace questo progetto, aggiungi una stella su GitHub per sostenerne lo sviluppo.', github_action:'Aggiungi una stella su GitHub', history_refresh:'Aggiorna', history_unavailable:'Impossibile caricare la cronologia. Controlla il permesso \u201cVisualizza cronologia\u201d e riprova.', user_no_pin:'Senza PIN', user_pin_action:'PIN', user_role_action:'Ruolo', notif_no_services:'Nessun servizio mobile',
-    log_action_user_logged_in:'Accesso utente', log_action_state_restored:'Stato ripristinato', log_action_profile_selected:'Profilo selezionato', log_action_schedule_applied:'Pianificazione applicata', log_action_mode_changed:'Modalità cambiata', log_action_backup_created:'Backup creato', log_action_backup_restored:'Configurazione ripristinata', log_action_access_pin_updated:'PIN di accesso aggiornato',
-    modal_cancel:'Annulla', modal_save:'Salva', modal_confirm:'Conferma', modal_pin_title:'PIN di accesso', modal_pin_help:'Lascia vuoto per rimuovere il PIN.', modal_edit_name:'Modifica nome', modal_add_user:'+ Aggiungi utente', modal_name_label:'Nome del profilo', modal_user_added:'Utente creato.', modal_delete_confirm:'Eliminare questo utente?' },
-  zh: { github_title:'支持 Argus', github_desc:'如果您喜欢这个项目，请在 GitHub 上加星以支持其开发。', github_action:'在 GitHub 上加星', history_refresh:'刷新', history_unavailable:'无法加载活动历史。请检查\u201c查看历史\u201d权限后重试。', user_no_pin:'无 PIN', user_pin_action:'PIN', user_role_action:'角色', notif_no_services:'无移动服务',
-    log_action_user_logged_in:'用户登录', log_action_state_restored:'状态已恢复', log_action_profile_selected:'已选择配置文件', log_action_schedule_applied:'已应用计划', log_action_mode_changed:'模式已更改', log_action_backup_created:'已创建备份', log_action_backup_restored:'配置已恢复', log_action_access_pin_updated:'访问 PIN 已更新',
-    modal_cancel:'取消', modal_save:'保存', modal_confirm:'确认', modal_pin_title:'访问 PIN', modal_pin_help:'留空以删除访问 PIN。', modal_edit_name:'编辑名称', modal_add_user:'+ 添加用户', modal_name_label:'配置文件名称', modal_user_added:'用户已创建。', modal_delete_confirm:'删除此用户？' },
-  ru: { github_title:'Поддержите Argus', github_desc:'Если вам нравится проект, поставьте звезду на GitHub, чтобы поддержать разработку.', github_action:'Поставить звезду на GitHub', history_refresh:'Обновить', history_unavailable:'Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.', user_no_pin:'Без PIN', user_pin_action:'PIN', user_role_action:'Роль', notif_no_services:'Нет мобильных служб',
-    log_action_user_logged_in:'Вход пользователя', log_action_state_restored:'Состояние восстановлено', log_action_profile_selected:'Профиль выбран', log_action_schedule_applied:'Расписание применено', log_action_mode_changed:'Режим изменён', log_action_backup_created:'Резервная копия создана', log_action_backup_restored:'Конфигурация восстановлена', log_action_access_pin_updated:'PIN доступа обновлён',
-    modal_cancel:'Отмена', modal_save:'Сохранить', modal_confirm:'Подтвердить', modal_pin_title:'PIN доступа', modal_pin_help:'Оставьте пустым, чтобы удалить PIN.', modal_edit_name:'Изменить имя', modal_add_user:'+ Добавить пользователя', modal_name_label:'Имя профиля', modal_user_added:'Пользователь создан.', modal_delete_confirm:'Удалить этого пользователя?' },
-};
-
-const FIRST_RUN_TEXTS = {
-  es: { setup_admin_name:'Nombre del Administrador', setup_access_pin:'PIN de acceso al panel Argus (Opcional)', setup_master_pin:'PIN maestro para armar/desarmar (Opcional)', claim_title:'Argus Security Update', claim_desc:'Tu instalación requiere un administrador para reclamar el acceso.', claim_btn:'Reclamar Administración' },
-  en: { setup_admin_name:'Administrator Name', setup_access_pin:'Argus panel access PIN (Optional)', setup_master_pin:'Master PIN to arm/disarm (Optional)', claim_title:'Argus Security Update', claim_desc:'Your installation needs an administrator to claim access.', claim_btn:'Claim Administration' },
-  fr: { setup_admin_name:'Nom de l\u2019administrateur', setup_access_pin:'PIN d\u2019accès au panneau Argus (Optionnel)', setup_master_pin:'PIN maître pour armer/désarmer (Optionnel)', claim_title:'Mise à jour de sécurité Argus', claim_desc:'Votre installation nécessite un administrateur pour réclamer l\u2019accès.', claim_btn:'Réclamer l\u2019administration' },
-  pt: { setup_admin_name:'Nome do Administrador', setup_access_pin:'PIN de acesso ao painel Argus (Opcional)', setup_master_pin:'PIN mestre para armar/desarmar (Opcional)', claim_title:'Atualização de Segurança Argus', claim_desc:'Sua instalação precisa de um administrador para reivindicar o acesso.', claim_btn:'Reivindicar Administração' },
-  it: { setup_admin_name:'Nome dell\u2019amministratore', setup_access_pin:'PIN di accesso al pannello Argus (Opzionale)', setup_master_pin:'PIN master per armare/disarmare (Opzionale)', claim_title:'Aggiornamento di sicurezza Argus', claim_desc:'La tua installazione richiede un amministratore per rivendicare l\u2019accesso.', claim_btn:'Rivendica Amministrazione' },
-  zh: { setup_admin_name:'管理员名称', setup_access_pin:'Argus 面板访问 PIN (可选)', setup_master_pin:'布防/撤防主 PIN (可选)', claim_title:'Argus 安全更新', claim_desc:'您的安装需要管理员来声明访问权限。', claim_btn:'声明管理权限' },
-  ru: { setup_admin_name:'Имя администратора', setup_access_pin:'PIN доступа к панели Argus (Необязательно)', setup_master_pin:'Мастер-PIN для постановки/снятия с охраны (Необязательно)', claim_title:'Обновление безопасности Argus', claim_desc:'Вашей установке требуется администратор для получения доступа.', claim_btn:'Заявить права администратора' },
-};
-
-for (const language of Object.keys(TEXTS)) {
-  TEXTS[language] = Object.assign({}, TEXTS.en, TEXTS[language], EXTRA_TEXTS[language] || {}, SETUP_REQUIRED_TEXTS[language] || {}, UI_AUDIT_TEXTS[language] || {}, FIRST_RUN_TEXTS[language] || {});
-}
-
-Object.assign(TEXTS.es, { expired:'Expirado', active_until:'Vigente hasta', exp_indefinite:'Indefinido' });
-Object.assign(TEXTS.en, { expired:'Expired', active_until:'Valid until', exp_indefinite:'Indefinite' });
-Object.assign(TEXTS.fr, { expired:'Expiré', active_until:'Expire', exp_indefinite:'Indéfini' });
-Object.assign(TEXTS.pt, { expired:'Expirado', active_until:'Expira', exp_indefinite:'Indefinido' });
-Object.assign(TEXTS.it, { expired:'Scaduto', active_until:'Scade', exp_indefinite:'Indefinito' });
-Object.assign(TEXTS.zh, { expired:'已过期', active_until:'到期', exp_indefinite:'无限期' });
-Object.assign(TEXTS.ru, { expired:'Истёк', active_until:'Действует до', exp_indefinite:'Бессрочно' });
-Object.assign(TEXTS.es, { entry_sensors:'Sensores con retraso de entrada', select_entry_sensors:'Seleccionar sensores de entrada' });
-Object.assign(TEXTS.en, { entry_sensors:'Entry-delay sensors', select_entry_sensors:'Select entry sensors' });
-Object.assign(TEXTS.fr, { entry_sensors:'Capteurs avec délai d\u2019entrée', select_entry_sensors:'Sélectionner les capteurs d\u2019entrée' });
-Object.assign(TEXTS.pt, { entry_sensors:'Sensores com atraso de entrada', select_entry_sensors:'Selecionar sensores de entrada' });
-Object.assign(TEXTS.it, { entry_sensors:'Sensori con ritardo di ingresso', select_entry_sensors:'Seleziona sensori di ingresso' });
-Object.assign(TEXTS.zh, { entry_sensors:'具有进入延迟的传感器', select_entry_sensors:'选择进入传感器' });
-Object.assign(TEXTS.ru, { entry_sensors:'Датчики с задержкой входа', select_entry_sensors:'Выбрать датчики входа' });
-Object.assign(TEXTS.es, { entry_delay_toggle:'Retraso de entrada (⏳) o instantáneo (⚡)', saved:'✓ Guardado correctamente', pin_mismatch:'❌ El nuevo PIN no coincide' });
-Object.assign(TEXTS.en, { entry_delay_toggle:'Entry delay (⏳) or instant (⚡)', saved:'✓ Saved successfully', pin_mismatch:'❌ New PIN does not match' });
-Object.assign(TEXTS.fr, { entry_delay_toggle:'Délai d\u2019entrée (⏳) ou instantané (⚡)', saved:'✓ Enregistré', pin_mismatch:'❌ Le nouveau code PIN ne correspond pas' });
-Object.assign(TEXTS.pt, { entry_delay_toggle:'Atraso de entrada (⏳) ou instantâneo (⚡)', saved:'✓ Salvo com sucesso', pin_mismatch:'❌ O novo PIN não coincide' });
-Object.assign(TEXTS.it, { entry_delay_toggle:'Ritardo di ingresso (⏳) o istantaneo (⚡)', saved:'✓ Salvato correttamente', pin_mismatch:'❌ Il nuovo PIN non corrisponde' });
-Object.assign(TEXTS.zh, { entry_delay_toggle:'进入延迟 (⏳) 或即时 (⚡)', saved:'✓ 已成功保存', pin_mismatch:'❌ 新 PIN 不匹配' });
-Object.assign(TEXTS.ru, { entry_delay_toggle:'Задержка входа (⏳) или мгновенно (⚡)', saved:'✓ Успешно сохранено', pin_mismatch:'❌ Новый PIN-код не совпадает' });
-
-// Labels introduced after the original language dictionaries.  Keeping these
-// together makes the UI resilient when a newly-added static control is
-// translated, rather than falling back to English (or its template text).
-Object.assign(TEXTS.es, { temp_displayed:'🌡️ Temperatura mostrada', weather_source:'☁️ Fuente de clima', weather_auto:'Automático (primera entidad de clima)', user_exp_type:'Vencimiento', user_exp_date:'Fecha/Hora de vencimiento', exp_temporary:'Temporal (fecha/hora)', log_mode:'Modo', log_action_user_added:'Usuario añadido', log_action_user_deleted:'Usuario eliminado', log_action_rejected:'Acción rechazada', log_action_automation:'Automatización ejecutada', log_action_analysis:'Análisis de IA', log_action_sos:'SOS activado', log_action_sos_stopped:'Pánico detenido' });
-Object.assign(TEXTS.en, { temp_displayed:'🌡️ Displayed temperature', weather_source:'☁️ Weather source', weather_auto:'Automatic (first weather entity)', user_exp_type:'Expiration', user_exp_date:'Expiration date/time', exp_temporary:'Temporary (date/time)', log_mode:'Mode', log_action_user_added:'User added', log_action_user_deleted:'User deleted', log_action_rejected:'Action rejected', log_action_automation:'Automation executed', log_action_analysis:'AI analysis', log_action_sos:'SOS activated', log_action_sos_stopped:'Panic stopped' });
-Object.assign(TEXTS.fr, { temp_displayed:'🌡️ Température affichée', weather_source:'☁️ Source météo', weather_auto:'Automatique (première entité météo)', user_exp_type:'Expiration', user_exp_date:"Date/heure d\u2019expiration", exp_temporary:'Temporaire (date/heure)', log_mode:'Mode', log_action_user_added:'Utilisateur ajouté', log_action_user_deleted:'Utilisateur supprimé', log_action_rejected:'Action refusée', log_action_automation:'Automatisation exécutée', log_action_analysis:'Analyse IA', log_action_sos:'SOS activé', log_action_sos_stopped:'Panique arrêtée' });
-Object.assign(TEXTS.pt, { temp_displayed:'🌡️ Temperatura exibida', weather_source:'☁️ Fonte de clima', weather_auto:'Automático (primeira entidade meteorológica)', user_exp_type:'Expiração', user_exp_date:'Data/hora de expiração', exp_temporary:'Temporário (data/hora)', log_mode:'Modo', log_action_user_added:'Usuário adicionado', log_action_user_deleted:'Usuário removido', log_action_rejected:'Ação recusada', log_action_automation:'Automação executada', log_action_analysis:'Análise de IA', log_action_sos:'SOS ativado', log_action_sos_stopped:'Pânico interrompido' });
-Object.assign(TEXTS.it, { temp_displayed:'🌡️ Temperatura visualizzata', weather_source:'☁️ Fonte meteo', weather_auto:'Automatico (prima entità meteo)', user_exp_type:'Scadenza', user_exp_date:'Data/ora di scadenza', exp_temporary:'Temporaneo (data/ora)', log_mode:'Modalità', log_action_user_added:'Utente aggiunto', log_action_user_deleted:'Utente eliminato', log_action_rejected:'Azione rifiutata', log_action_automation:'Automazione eseguita', log_action_analysis:'Analisi IA', log_action_sos:'SOS attivato', log_action_sos_stopped:'Panico interrotto' });
-Object.assign(TEXTS.zh, { temp_displayed:'🌡️ 显示的温度', weather_source:'☁️ 天气来源', weather_auto:'自动（第一个天气实体）', user_exp_type:'到期', user_exp_date:'到期日期/时间', exp_temporary:'临时（日期/时间）', log_mode:'模式', log_action_user_added:'已添加用户', log_action_user_deleted:'已删除用户', log_action_rejected:'操作被拒绝', log_action_automation:'自动化已执行', log_action_analysis:'AI 分析', log_action_sos:'SOS 已激活', log_action_sos_stopped:'紧急状态已停止' });
-Object.assign(TEXTS.ru, { temp_displayed:'🌡️ Отображаемая температура', weather_source:'☁️ Источник погоды', weather_auto:'Автоматически (первая погодная сущность)', user_exp_type:'Срок действия', user_exp_date:'Дата/время окончания', exp_temporary:'Временный (дата/время)', log_mode:'Режим', log_action_user_added:'Пользователь добавлен', log_action_user_deleted:'Пользователь удалён', log_action_rejected:'Действие отклонено', log_action_automation:'Автоматизация выполнена', log_action_analysis:'Анализ ИИ', log_action_sos:'SOS активирован', log_action_sos_stopped:'Тревога остановлена' });
-Object.assign(TEXTS.es, { external_panels:'Paneles de alarma externos', light_siren_color:'Color de alarma', light_siren_flash:'Destello suave si está disponible' });
-Object.assign(TEXTS.en, { external_panels:'External alarm panels', light_siren_color:'Alarm colour', light_siren_flash:'Gentle flash when available' });
-Object.assign(TEXTS.fr, { external_panels:'Panneaux d’alarme externes', light_siren_color:'Couleur d’alarme', light_siren_flash:'Clignotement doux si disponible' });
-Object.assign(TEXTS.pt, { external_panels:'Painéis de alarme externos', light_siren_color:'Cor do alarme', light_siren_flash:'Piscar suave quando disponível' });
-Object.assign(TEXTS.it, { external_panels:'Pannelli di allarme esterni', light_siren_color:'Colore allarme', light_siren_flash:'Lampeggio delicato se disponibile' });
-Object.assign(TEXTS.zh, { external_panels:'外部报警面板', light_siren_color:'警报颜色', light_siren_flash:'可用时柔和闪烁' });
-Object.assign(TEXTS.ru, { external_panels:'Внешние панели сигнализации', light_siren_color:'Цвет тревоги', light_siren_flash:'Мягкое мигание при наличии' });
-
-
-Object.assign(TEXTS.fr, {"connected": "CONNECTÉ", "instances": "Instances Actives", "modes": "Modes d'Alarme", "automations": "Automatisations", "linked_rules": "Règles d'automatisation liées à Argus", "settings": "Paramètres", "activity_log": "Journal d'Activité", "history_refresh": "Actualiser", "users_title": "Contrôle d'Accès & Utilisateurs", "access_title": "Contrôle d'Accès & Utilisateurs", "access_desc": "Gestion globale de la sécurité, PIN maître et administrateurs.", "role_argus_admin": "Administrateur Argus", "role_argus_standard": "Utilisateur Standard", "role_argus_admin_short": "Admin", "role_argus_user_short": "Standard", "ha_account_linked": "Compte Home Assistant : {name}", "ha_account_unavailable": "Sans compte HA lié", "user_no_pin": "Sans PIN", "exp_indefinite": "Indéfini", "exp_temporary": "Temporaire", "active_until": "Actif jusqu'au", "expired": "Expiré", "disarmed": "Désarmé", "armed_home": "Présent (Maison)", "armed_away": "Absent", "armed_night": "Nuit", "armed_vacation": "Vacances", "mode_home": "Maison", "mode_away": "Absent", "mode_night": "Nuit", "mode_vacation": "Vacances", "btn_home": "🏠 MAISON", "btn_away": "🔒 ABSENT", "btn_night": "🌙 NUIT", "btn_vacation": "✈️ VACANCES", "btn_disarmed": "DÉSARMÉ", "btn_sos": "🚨 SOS / PANIQUE", "system_armed": "SYSTÈME ARMÉ", "system_disarmed": "SYSTÈME DÉSARMÉ", "home_name_lbl": "Nom du Domicile", "sensor_section": "Capteurs d'intrusion", "siren_section": "Sirènes", "bypass_lbl": "🚫 Ignorer", "times_section": "⏱️ Délais & Minuteries", "lock_if_open": "Bloquer si ouverts", "wait_if_open": "Attendre fermeture des capteurs", "none_selected": "Aucun sélectionné", "select_btn": "+ Sélectionner", "add_btn": "+ Ajouter", "status_open": "Ouvert", "status_closed": "Fermé", "status_idle": "Au repos", "status_recording": "Enregistrement", "status_home": "Maison", "status_away": "Absent", "log_detail_pin_reset": "PIN maître réinitialisé par un administrateur HA", "log_detail_pin_reset_failed": "Tentative de réinitialisation du PIN refusée", "log_detail_disarm": "Système désarmé", "log_detail_triggered": "Alarme déclenchée", "log_sensor": "Capteur", "log_mode": "Mode", "log_action_user_added": "Utilisateur ajouté", "log_action_user_deleted": "Utilisateur supprimé", "log_action_sos": "Alarme SOS activée", "log_action_sos_stopped": "Alarme SOS arrêtée", "log_action_automation": "Automatisation exécutée", "log_action_analysis": "Analyse de sécurité", "log_action_rejected": "Action rejetée", "log_action_user_logged_in": "Connexion utilisateur", "log_action_profile_selected": "Profil sélectionné", "log_action_schedule_applied": "Planning appliqué", "log_action_mode_changed": "Mode modifié", "log_action_state_restored": "État local restauré", "manual_arm": "Armement manuel", "waiting_sensors": "EN ATTENTE DES CAPTEURS", "waiting_sensors_count": "EN ATTENTE DE {count} CAPTEUR(S)", "lbl_aesthetic_custom": "Plus de Réglages / SOS", "external_panels": "Panneaux d'alarme externes", "light_siren_color": "Couleur d'alarme", "light_siren_flash": "Clignotement doux si disponible", "select_entry_sensors": "Sélectionner capteurs d'entrée", "entry_sensors": "Capteurs d'entrée", "arm_time": "Armement (s)", "disarm_time": "Délai d'entrée (s)"});
-
-Object.assign(TEXTS.pt, {"connected": "CONECTADO", "instances": "Instâncias Ativas", "modes": "Modos de Alarme", "automations": "Automações", "linked_rules": "Regras de automação vinculadas ao Argus", "settings": "Configurações", "activity_log": "Registro de Atividades", "history_refresh": "Atualizar", "users_title": "Controle de Acesso & Usuários", "access_title": "Controle de Acesso & Usuários", "access_desc": "Gestão global de segurança, PIN mestre e administradores.", "role_argus_admin": "Administrador do Argus", "role_argus_standard": "Usuário Padrão", "role_argus_admin_short": "Admin", "role_argus_user_short": "Padrão", "ha_account_linked": "Conta do Home Assistant: {name}", "ha_account_unavailable": "Sem conta HA vinculada", "user_no_pin": "Sem PIN", "exp_indefinite": "Indefinido", "exp_temporary": "Temporário", "active_until": "Ativo até", "expired": "Expirado", "disarmed": "Desarmado", "armed_home": "Em Casa", "armed_away": "Ausente", "armed_night": "Noite", "armed_vacation": "Férias", "mode_home": "Em Casa", "mode_away": "Ausente", "mode_night": "Noite", "mode_vacation": "Férias", "btn_home": "🏠 EM CASA", "btn_away": "🔒 AUSENTE", "btn_night": "🌙 NOITE", "btn_vacation": "✈️ FÉRIAS", "btn_disarmed": "DESARMADO", "btn_sos": "🚨 SOS / PÂNICO", "system_armed": "SISTEMA ARMADO", "system_disarmed": "SISTEMA DESARMADO", "home_name_lbl": "Nome da Casa", "sensor_section": "Sensores de Intrusão", "siren_section": "Sirenes", "bypass_lbl": "🚫 Ignorar", "times_section": "⏱️ Tempos & Prazos", "lock_if_open": "Bloquear se aberto", "wait_if_open": "Aguardar fechamento dos sensores", "none_selected": "Nenhum selecionado", "select_btn": "+ Selecionar", "add_btn": "+ Adicionar", "status_open": "Aberto", "status_closed": "Fechado", "status_idle": "Em repouso", "status_recording": "Gravando", "status_home": "Em casa", "status_away": "Fora", "log_detail_pin_reset": "PIN mestre redefinido por administrador HA", "log_detail_pin_reset_failed": "Tentativa de redefinição de PIN negada", "log_detail_disarm": "Sistema desarmado", "log_detail_triggered": "Alarme disparado", "log_sensor": "Sensor", "log_mode": "Modo", "log_action_user_added": "Usuário adicionado", "log_action_user_deleted": "Usuário excluído", "log_action_sos": "Alarme SOS ativado", "log_action_sos_stopped": "Alarme SOS parado", "log_action_automation": "Automação executada", "log_action_analysis": "Análise de segurança", "log_action_rejected": "Ação rejeitada", "log_action_user_logged_in": "Início de sessão", "log_action_profile_selected": "Perfil selecionado", "log_action_schedule_applied": "Horário aplicado", "log_action_mode_changed": "Modo alterado", "log_action_state_restored": "Estado local restaurado", "manual_arm": "Arme manual", "waiting_sensors": "AGUARDANDO SENSORES", "waiting_sensors_count": "AGUARDANDO {count} SENSOR(ES)", "lbl_aesthetic_custom": "Mais Ajustes / SOS", "external_panels": "Painéis de alarme externos", "light_siren_color": "Cor do alarme", "light_siren_flash": "Piscar suave se disponível", "select_entry_sensors": "Selecionar sensores de entrada", "entry_sensors": "Sensores de entrada", "arm_time": "Armado (s)", "disarm_time": "Atraso de entrada (s)"});
-
-Object.assign(TEXTS.it, {"connected": "CONNESSO", "instances": "Istanze Attive", "modes": "Modalità Allarme", "automations": "Automazioni", "linked_rules": "Regole di automazione collegate ad Argus", "settings": "Impostazioni", "activity_log": "Registro Attività", "history_refresh": "Aggiorna", "users_title": "Controllo Accessi & Utenti", "access_title": "Controllo Accessi & Utenti", "access_desc": "Gestione globale della sicurezza, PIN master e amministratori.", "role_argus_admin": "Amministratore Argus", "role_argus_standard": "Utente Standard", "role_argus_admin_short": "Admin", "role_argus_user_short": "Standard", "ha_account_linked": "Account Home Assistant: {name}", "ha_account_unavailable": "Nessun account HA collegato", "user_no_pin": "Senza PIN", "exp_indefinite": "Indefinito", "exp_temporary": "Temporaneo", "active_until": "Attivo fino a", "expired": "Scaduto", "disarmed": "Disarmato", "armed_home": "In Casa", "armed_away": "Fuori Casa", "armed_night": "Notte", "armed_vacation": "Vacanza", "mode_home": "In Casa", "mode_away": "Fuori Casa", "mode_night": "Notte", "mode_vacation": "Vacanza", "btn_home": "🏠 IN CASA", "btn_away": "🔒 FUORI CASA", "btn_night": "🌙 NOTTE", "btn_vacation": "✈️ VACANZA", "btn_disarmed": "DISARMATO", "btn_sos": "🚨 SOS / PANICO", "system_armed": "SISTEMA ARMATO", "system_disarmed": "SISTEMA DISARMATO", "home_name_lbl": "Nome della Casa", "sensor_section": "Sensori di Intrusione", "siren_section": "Sirene", "bypass_lbl": "🚫 Escludi", "times_section": "⏱️ Timer & Ritardi", "lock_if_open": "Blocca se aperti", "wait_if_open": "Attendi chiusura sensori", "none_selected": "Nessuno selezionato", "select_btn": "+ Seleziona", "add_btn": "+ Aggiungi", "status_open": "Aperto", "status_closed": "Chiuso", "status_idle": "Inattivo", "status_recording": "Registrazione", "status_home": "A casa", "status_away": "Fuori", "log_detail_pin_reset": "PIN master reimpostato da amministratore HA", "log_detail_pin_reset_failed": "Tentativo di reimpostazione PIN negato", "log_detail_disarm": "Sistema disarmato", "log_detail_triggered": "Allarme attivato", "log_sensor": "Sensore", "log_mode": "Modalità", "log_action_user_added": "Utente aggiunto", "log_action_user_deleted": "Utente eliminato", "log_action_sos": "Allarme SOS attivato", "log_action_sos_stopped": "Allarme SOS fermato", "log_action_automation": "Automazione eseguita", "log_action_analysis": "Analisi di sicurezza", "log_action_rejected": "Azione rifiutata", "log_action_user_logged_in": "Accesso utente", "log_action_profile_selected": "Profilo selezionato", "log_action_schedule_applied": "Orario applicato", "log_action_mode_changed": "Modalità modificata", "log_action_state_restored": "Stato locale ripristinato", "manual_arm": "Armamento manuale", "waiting_sensors": "IN ATTESA DEI SENSORI", "waiting_sensors_count": "IN ATTESA DI {count} SENSORE/I", "lbl_aesthetic_custom": "Più Impostazioni / SOS", "external_panels": "Pannelli allarme esterni", "light_siren_color": "Colore allarme", "light_siren_flash": "Lampeggio delicato se disponibile", "select_entry_sensors": "Seleziona sensori di ingresso", "entry_sensors": "Sensori di ingresso", "arm_time": "Armato (s)", "disarm_time": "Ritardo di ingresso (s)"});
-
-Object.assign(TEXTS.zh, {"connected": "已连接", "instances": "活动实例", "modes": "警报模式", "automations": "自动化", "linked_rules": "关联到 Argus 的自动化规则", "settings": "设置", "activity_log": "活动日志", "history_refresh": "刷新", "users_title": "访问控制与用户", "access_title": "访问控制与用户", "access_desc": "全局安全管理、主 PIN 码与管理员。", "role_argus_admin": "Argus 管理员", "role_argus_standard": "标准用户", "role_argus_admin_short": "管理员", "role_argus_user_short": "标准", "ha_account_linked": "Home Assistant 账户：{name}", "ha_account_unavailable": "未关联 HA 账户", "user_no_pin": "无 PIN", "exp_indefinite": "无限期", "exp_temporary": "临时", "active_until": "有效期至", "expired": "已过期", "disarmed": "已撤防", "armed_home": "在家", "armed_away": "离家", "armed_night": "夜间", "armed_vacation": "度假", "mode_home": "在家", "mode_away": "离家", "mode_night": "夜间", "mode_vacation": "度假", "btn_home": "🏠 在家", "btn_away": "🔒 离家", "btn_night": "🌙 夜间", "btn_vacation": "✈️ 度假", "btn_disarmed": "已撤防", "btn_sos": "🚨 SOS / 紧急求助", "system_armed": "系统已布防", "system_disarmed": "系统已撤防", "home_name_lbl": "房屋名称", "sensor_section": "入侵传感器", "siren_section": "警报器", "bypass_lbl": "🚫 旁路", "times_section": "⏱️ 时间与延迟", "lock_if_open": "打开时阻止布防", "wait_if_open": "等待传感器关闭", "none_selected": "未选择", "select_btn": "+ 选择", "add_btn": "+ 添加", "status_open": "打开", "status_closed": "关闭", "status_idle": "就绪", "status_recording": "录制中", "status_home": "在家", "status_away": "离家", "log_detail_pin_reset": "主 PIN 码已由 HA 管理员重置", "log_detail_pin_reset_failed": "PIN 重置请求已被拒绝", "log_detail_disarm": "系统已撤防", "log_detail_triggered": "警报已触发", "log_sensor": "传感器", "log_mode": "模式", "log_action_user_added": "用户已添加", "log_action_user_deleted": "用户已删除", "log_action_sos": "SOS 警报已激活", "log_action_sos_stopped": "SOS 警报已停止", "log_action_automation": "自动化已执行", "log_action_analysis": "安全分析", "log_action_rejected": "操作被拒绝", "log_action_user_logged_in": "用户登录", "log_action_profile_selected": "配置文件已选择", "log_action_schedule_applied": "计划已应用", "log_action_mode_changed": "模式已更改", "log_action_state_restored": "本地状态已恢复", "manual_arm": "手动布防", "waiting_sensors": "正在等待传感器", "waiting_sensors_count": "正在等待 {count} 个传感器", "lbl_aesthetic_custom": "更多设置 / SOS", "external_panels": "外部报警面板", "light_siren_color": "警报颜色", "light_siren_flash": "可用时柔和闪烁", "select_entry_sensors": "选择进入传感器", "entry_sensors": "进入传感器", "arm_time": "布防时间 (秒)", "disarm_time": "进入延迟 (秒)"});
-
-Object.assign(TEXTS.ru, {"connected": "ПОДКЛЮЧЕНО", "instances": "Активные экземпляры", "modes": "Режимы охраны", "automations": "Автоматизации", "linked_rules": "Правила автоматизации Argus", "settings": "Настройки", "activity_log": "Журнал активности", "history_refresh": "Обновить", "users_title": "Контроль доступа и пользователи", "access_title": "Контроль доступа и пользователи", "access_desc": "Глобальное управление безопасностью, мастер-PIN и администраторы.", "role_argus_admin": "Администратор Argus", "role_argus_standard": "Стандартный пользователь", "role_argus_admin_short": "Админ", "role_argus_user_short": "Стандарт", "ha_account_linked": "Учетная запись HA: {name}", "ha_account_unavailable": "Без привязки к HA", "user_no_pin": "Без PIN", "exp_indefinite": "Бессрочно", "exp_temporary": "Временно", "active_until": "Действителен до", "expired": "Истёк", "disarmed": "Снято с охраны", "armed_home": "Дома", "armed_away": "Вне дома", "armed_night": "Ночь", "armed_vacation": "Отпуск", "mode_home": "Дома", "mode_away": "Вне дома", "mode_night": "Ночь", "mode_vacation": "Отпуск", "btn_home": "🏠 ДОМА", "btn_away": "🔒 ВНЕ ДОМА", "btn_night": "🌙 НОЧЬ", "btn_vacation": "✈️ ОТПУСК", "btn_disarmed": "СНЯТО С ОХРАНЫ", "btn_sos": "🚨 SOS / ТРЕВОГА", "system_armed": "СИСТЕМА НА ОХРАНЕ", "system_disarmed": "СИСТЕМА СНЯТА С ОХРАНЫ", "home_name_lbl": "Имя дома", "sensor_section": "Датчики проникновения", "siren_section": "Сирены", "bypass_lbl": "🚫 Обход", "times_section": "⏱️ Таймеры и задержки", "lock_if_open": "Блокировать при открытии", "wait_if_open": "Ожидать закрытия датчиков", "none_selected": "Не выбрано", "select_btn": "+ Выбрать", "add_btn": "+ Добавить", "status_open": "Открыто", "status_closed": "Закрыто", "status_idle": "Готов", "status_recording": "Запись", "status_home": "Дома", "status_away": "Вне дома", "log_detail_pin_reset": "Мастер-PIN сброшен администратором HA", "log_detail_pin_reset_failed": "Попытка сброса PIN отклонена", "log_detail_disarm": "Система снята с охраны", "log_detail_triggered": "Тревога сработала", "log_sensor": "Датчик", "log_mode": "Режим", "log_action_user_added": "Пользователь добавлен", "log_action_user_deleted": "Пользователь удален", "log_action_sos": "Тревога SOS активирована", "log_action_sos_stopped": "Тревога SOS остановлена", "log_action_automation": "Автоматизация выполнена", "log_action_analysis": "Анализ безопасности", "log_action_rejected": "Действие отклонено", "log_action_user_logged_in": "Вход пользователя", "log_action_profile_selected": "Профиль выбран", "log_action_schedule_applied": "Расписание применено", "log_action_mode_changed": "Режим изменен", "log_action_state_restored": "Локальное состояние восстановлено", "manual_arm": "Ручная постановка", "waiting_sensors": "ОЖИДАНИЕ ДАТЧИКОВ", "waiting_sensors_count": "ОЖИДАНИЕ {count} ДАТЧИК(ОВ)", "lbl_aesthetic_custom": "Настройки / SOS", "external_panels": "Внешние панели сигнализации", "light_siren_color": "Цвет тревоги", "light_siren_flash": "Мягкое мигание при наличии", "select_entry_sensors": "Выбрать датчики входа", "entry_sensors": "Датчики входа", "arm_time": "Время охраны (с)", "disarm_time": "Задержка входа (с)"});
-
-Object.assign(TEXTS.es = TEXTS.es || {}, {"light_steady_safe": "Luz fija segura", "light_color_and_flash": "Color y destello seguro", "light_safe_flash": "Destello seguro", "test_safe_flash": "Probar destello seguro", "testing_safe_flash": "Probando de forma segura…", "light_onoff_only_safe_note": "Esta luz solo admite encendido/apagado. Argus la mantendrá encendida de forma fija por seguridad (sin ciclos de energía).", "no_flash": "Sin destello", "flash_gentle": "Suave", "flash_rapid": "Rápido", "flash_label": "Destello", "color_label": "Color", "size": "Tamaño", "reset_widget": "Restablecer widget", "hide_widget": "Ocultar widget", "show": "Mostrar", "edit_dashboard": "Editar tablero", "edit_dashboard_done": "✓ Listo", "reset_dashboard": "Restablecer diseño", "support_title": "Estado y soporte"});
-
-Object.assign(TEXTS.en = TEXTS.en || {}, {"light_steady_safe": "Safe Steady Light", "light_color_and_flash": "Safe Color & Flash", "light_safe_flash": "Safe Flash", "test_safe_flash": "Test safe flash", "testing_safe_flash": "Testing safely…", "light_onoff_only_safe_note": "This light only supports on/off. Argus will keep it steady for safety (no power cycling).", "no_flash": "No flash", "flash_gentle": "Gentle", "flash_rapid": "Rapid", "flash_label": "Flash", "color_label": "Color", "size": "Size", "reset_widget": "Reset widget", "hide_widget": "Hide widget", "show": "Show", "edit_dashboard": "Edit dashboard", "edit_dashboard_done": "✓ Done", "reset_dashboard": "Reset layout", "support_title": "Status & Support"});
-
-Object.assign(TEXTS.zh = TEXTS.zh || {}, {"light_steady_safe": "安全常亮", "light_color_and_flash": "安全色彩与闪烁", "light_safe_flash": "安全闪烁", "test_safe_flash": "测试安全闪烁", "testing_safe_flash": "正在安全测试…", "light_onoff_only_safe_note": "此灯具仅支持开/关。出于安全保护，Argus 将保持常亮（不进行频繁通断电）。", "no_flash": "不闪烁", "flash_gentle": "柔和", "flash_rapid": "快速", "flash_label": "闪烁模式", "color_label": "颜色", "size": "尺寸", "reset_widget": "重置小部件", "hide_widget": "隐藏小部件", "show": "显示", "edit_dashboard": "编辑仪表板", "edit_dashboard_done": "✓ 完成", "reset_dashboard": "重置布局", "support_title": "状态与支持"});
-
-Object.assign(TEXTS.fr = TEXTS.fr || {}, {"light_steady_safe": "Lumière fixe sécurisée", "light_color_and_flash": "Couleur et clignotement sécurisé", "light_safe_flash": "Clignotement sécurisé", "test_safe_flash": "Tester clignotement sécurisé", "testing_safe_flash": "Test en cours…", "light_onoff_only_safe_note": "Cette lumière ne gère que marche/arrêt. Argus la maintiendra allumée en continu par sécurité.", "no_flash": "Sans clignotement", "flash_gentle": "Doux", "flash_rapid": "Rapide", "flash_label": "Clignotement", "color_label": "Couleur", "size": "Taille", "reset_widget": "Réinitialiser widget", "hide_widget": "Masquer widget", "show": "Afficher", "edit_dashboard": "Modifier tableau", "edit_dashboard_done": "✓ Terminé", "reset_dashboard": "Réinitialiser disposition", "support_title": "État & Support"});
-
-Object.assign(TEXTS.pt = TEXTS.pt || {}, {"light_steady_safe": "Luz fixa segura", "light_color_and_flash": "Cor e piscar seguro", "light_safe_flash": "Piscar seguro", "test_safe_flash": "Testar piscar seguro", "testing_safe_flash": "Testando com segurança…", "light_onoff_only_safe_note": "Esta luz suporta apenas ligar/desligar. O Argus a manterá acesa de forma fixa por segurança.", "no_flash": "Sem piscar", "flash_gentle": "Suave", "flash_rapid": "Rápido", "flash_label": "Piscar", "color_label": "Cor", "size": "Tamanho", "reset_widget": "Redefinir widget", "hide_widget": "Ocultar widget", "show": "Mostrar", "edit_dashboard": "Editar painel", "edit_dashboard_done": "✓ Pronto", "reset_dashboard": "Redefinir layout", "support_title": "Status & Suporte"});
-
-Object.assign(TEXTS.it = TEXTS.it || {}, {"light_steady_safe": "Luce fissa sicura", "light_color_and_flash": "Colore e lampeggio sicuro", "light_safe_flash": "Lampeggio sicuro", "test_safe_flash": "Prova lampeggio sicuro", "testing_safe_flash": "Test in corso…", "light_onoff_only_safe_note": "Questa luce supporta solo accensione/spegnimento. Argus la manterrà accesa fissa per sicurezza.", "no_flash": "Nessun lampeggio", "flash_gentle": "Delicato", "flash_rapid": "Rapido", "flash_label": "Lampeggio", "color_label": "Colore", "size": "Dimensione", "reset_widget": "Reimposta widget", "hide_widget": "Nascondi widget", "show": "Mostra", "edit_dashboard": "Modifica dashboard", "edit_dashboard_done": "✓ Fatto", "reset_dashboard": "Reimposta layout", "support_title": "Stato & Supporto"});
-
-Object.assign(TEXTS.ru = TEXTS.ru || {}, {"light_steady_safe": "Безопасный постоянный свет", "light_color_and_flash": "Цвет и безопасное мигание", "light_safe_flash": "Безопасное мигание", "test_safe_flash": "Тест безопасного мигания", "testing_safe_flash": "Проверка…", "light_onoff_only_safe_note": "Этот свет поддерживает только вкл/выкл. Argus оставит его включенным для безопасности.", "no_flash": "Без мигания", "flash_gentle": "Мягкое", "flash_rapid": "Быстрое", "flash_label": "Мигание", "color_label": "Цвет", "size": "Размер", "reset_widget": "Сбросить виджет", "hide_widget": "Скрыть виджет", "show": "Показать", "edit_dashboard": "Редактировать панель", "edit_dashboard_done": "✓ Готово", "reset_dashboard": "Сбросить макет", "support_title": "Статус и поддержка"});
-/* ── Template ─────────────────────────────────────────────────────────── */
-const _tmpl = document.createElement('template');
-_tmpl.innerHTML = `
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
-#widget-grid.hide-legacy > section.panel:not(#w-instances) { display: none !important; }
-
-@keyframes heroSpringSlideIn {
-  0% { transform: translateX(-50px); opacity: 0; }
-  100% { transform: translateX(0); opacity: 1; }
-}
-
-  /* Modern Premium Liquid Glass & iOS Wobble Styles */
-  :host {
-    font-family: 'Inter', sans-serif !important;
-    --glass-bg: var(--argus-glass-bg, rgba(255, 255, 255, 0.07));
-    --glass-border: var(--argus-glass-border, rgba(255, 255, 255, 0.09));
-    --glass-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.35),
-                    0 15px 30px -10px rgba(0, 122, 255, 0.12),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    --sos-red: linear-gradient(135deg, #ff3b30, #ff2d55);
-    --ios-track: rgba(0, 0, 0, 0.25);
-    --ios-thumb: linear-gradient(180deg, #ffffff, #f4f4f7);
-    --text-shadow: 0 1px 3px rgba(0,0,0,0.15);
-    --primary-color: #007aff;
-    --personalize-bg: rgba(255, 255, 255, 0.02);
-    --personalize-border: rgba(255, 255, 255, 0.06);
-    --personalize-divider: rgba(255, 255, 255, 0.08);
-    --bg-inputs-bg: rgba(0, 0, 0, 0.15);
-    --bg-inputs-border: rgba(255, 255, 255, 0.05);
-    --input-bg-darker: rgba(0, 0, 0, 0.25);
-    --input-border-darker: rgba(255, 255, 255, 0.12);
-    --hero-bg: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-    --log-item-bg: rgba(255, 255, 255, 0.02);
-    --log-item-border: rgba(255, 255, 255, 0.05);
-    --user-card-bg: rgba(255, 255, 255, 0.02);
-    --user-card-border: rgba(255, 255, 255, 0.06);
-    --primary-text-color: #fff !important;
-    --secondary-text-color: rgba(255, 255, 255, 0.7);
-    --input-bg: rgba(255, 255, 255, 0.04);
-    --input-border: rgba(255, 255, 255, 0.12);
-  }
-
-  
-
-  :host {
-    --hud-text-color: #fff;
-    --hud-bg: rgba(255,255,255,0.06);
-  }
-
-  /* Garantiza legibilidad sobre cualquier fondo */
-  :host([data-bg-mode="default"]) .hero-top-bar,
-  :host([data-bg-mode="default"]) .entry-hud,
-  :host([data-bg-mode="default"]) .mode-btn,
-  :host([data-bg-mode="default"]) .sensor-pill {
-    text-shadow: 0 1px 4px rgba(0,0,0,0.7);
-  }
-
-  :host([data-bg-mode="default"]) .mode-btn {
-    background: rgba(255,255,255,0.10) !important;
-    border: 1px solid rgba(255,255,255,0.18) !important;
-    color: rgba(255,255,255,0.95) !important;
-    backdrop-filter: blur(12px);
-  }
-
-  :host([data-bg-mode="default"]) .subsection-title,
-  :host([data-bg-mode="default"]) .user-role-label {
-    color: rgba(255,255,255,0.60) !important;
-  }
-
-  /* Fullscreen Active / Virtual Fullscreen CSS Overrides */
-  :host(.fullscreen-active) {
-    position: fixed !important;
-    inset: 0 !important;
-    z-index: 99999999 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    background: #000 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-  :host(.fullscreen-active) .wrap {
-    padding: 0 !important;
-    margin: 0 !important;
-    max-width: none !important;
-    width: 100% !important;
-    height: auto !important;
-  }
-  :host(.fullscreen-active) .hero {
-    display: none !important;
-  }
-  :host(.fullscreen-active) .grid {
-    display: block !important;
-    width: 100% !important;
-    height: auto !important;
-    margin: 0 !important;
-    gap: 0 !important;
-  }
-  :host(.fullscreen-active) .grid > .stack:not(:first-child) {
-    display: none !important;
-  }
-  :host(.fullscreen-active) .grid > .stack:first-child {
-    width: 100% !important;
-    height: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-  :host(.fullscreen-active) .grid > .stack:first-child > section:not(:first-child) {
-    display: none !important;
-  }
-  :host(.fullscreen-active) .grid > .stack:first-child > section:first-child {
-    background: none !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    width: 100% !important;
-    height: auto !important;
-    border-radius: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-  }
-  :host(.fullscreen-active) .grid > .stack:first-child > section:first-child .panel-head {
-    display: none !important;
-  }
-  :host(.fullscreen-active) .grid > .stack:first-child > section:first-child .personalize-section {
-    display: none !important;
-  }
-  :host(.fullscreen-active) #entries {
-    width: 100% !important;
-    height: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-  :host(.fullscreen-active) #entries > .entry:not(.ios-fullscreen) {
-    display: none !important;
-  }
-  :host(.fullscreen-active) #entries > .entry.ios-fullscreen {
-    position: fixed !important;
-    inset: 0 !important;
-    width: 100% !important;
-    height: auto !important;
-    margin: 0 !important;
-    border-radius: 0 !important;
-    z-index: 100 !important;
-  }
-
-  .liquid-glass {
-    background: linear-gradient(135deg,color-mix(in srgb,rgba(255,255,255,0.18) 80%,transparent),rgba(255,255,255,0.04));
-    backdrop-filter: blur(28px) saturate(180%) brightness(1.08);
-    -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(1.08);
-    border: 1px solid rgba(255,255,255,0.22);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.25);
-    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
-  }
-  .wrap { position: relative; z-index: 1; transition: filter 0.35s ease, opacity 0.35s ease; opacity: 0; pointer-events: none; }
-  .wrap.wrap-ready { opacity: 1; pointer-events: auto; }
-  .wrap.wrap-blurred { filter: blur(15px); opacity: 0.45; pointer-events: none; }
-  @keyframes dialElasticIn {
-    0% { transform: scale(0.8) translateY(20px); opacity: 0; }
-    60% { transform: scale(1.04) translateY(-4px); opacity: 0.9; }
-    85% { transform: scale(0.98) translateY(1px); opacity: 0.98; }
-    100% { transform: scale(1) translateY(0); opacity: 1; }
-  }
-  .dial-elastic { animation: dialElasticIn 0.5s cubic-bezier(0.25, 1.25, 0.5, 1) forwards; }
-
-  .collapsible {
-    transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease, margin 0.4s ease, padding 0.4s ease;
-    overflow: hidden;
-    max-height: 600px;
-    opacity: 1;
-  }
-  .collapsible.collapsed {
-    max-height: 0 !important;
-    opacity: 0 !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    border: none !important;
-    pointer-events: none;
-  }
-
-  /* Scrollbar aesthetics */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.12);
-    border-radius: 999px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.25);
-  }
-  .x-never-match ::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.08);
-  }
-  .x-never-match ::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.18);
-  }
-
-  .battery-alert { margin: 0 0 16px 0; padding: 14px 18px; border-radius: 20px; background: rgba(255, 149, 0, 0.12); border: 1px solid rgba(255, 149, 0, 0.22); color: #ffe3b3; font-weight: 700; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); text-align: left; box-shadow: 0 4px 15px rgba(255,149,0,0.1); }
-
-  /* SOS Slider redesign */
-  .btn-sos { width: 100%; min-height: 56px; border: 0; border-radius: 20px; background: var(--sos-red); color: white; font-size: 1.05rem; font-weight: 800; letter-spacing: 0.02em; cursor: pointer; box-shadow: 0 10px 25px rgba(255, 59, 48, 0.35); transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, opacity 0.2s; margin-top: 8px; display:flex;align-items:center;justify-content:center;gap:10px; }
-  .btn-sos:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(255, 59, 48, 0.45); }
-  .btn-sos:active { transform: scale(0.95); opacity: 0.92; }
-  .ios-confirm-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 999999; backdrop-filter: blur(12px); }
-  .ios-confirm-backdrop.open { display: flex; pointer-events: auto !important; }
-  .ios-confirm-backdrop.open * { pointer-events: auto; }
-  .ios-confirm-backdrop.open .ios-slider-label { pointer-events: none !important; }
-  .ios-confirm-card { width: min(100%, 420px); border-radius: 32px; padding: 24px; color: white; background: rgba(20,22,35,0.85); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 32px 80px rgba(0,0,0,0.6); }
-  .ios-confirm-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 8px; text-align: center; }
-  .ios-confirm-text { font-size: 0.98rem; opacity: 0.85; line-height: 1.45; text-align: center; margin-bottom: 20px; }
-  .ios-slider-shell { padding: 4px 0 16px; }
-  .ios-slider-track { position: relative; height: 66px; border-radius: 999px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); overflow: hidden; }
-  .ios-slider-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 82px; font-size: 0.95rem; font-weight: 700; color: rgba(255, 255, 255, 0.85); pointer-events: none; text-align: center; }
-  .ios-slider-thumb { position: absolute; top: 6px; left: 6px; width: 52px; height: 52px; border-radius: 50%; background: var(--ios-thumb); color: #ff3b30; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 900; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25); touch-action: none; user-select: none; cursor: grab; transition: transform 0.1s ease-out; }
-  .ios-confirm-cancel { width: 100%; min-height: 50px; border: 0; border-radius: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.05); color: white; font-weight: 700; cursor: pointer; transition: background 0.2s, transform 0.15s; }
-  .ios-confirm-cancel:hover { background: rgba(255,255,255,0.14); }
-  .ios-confirm-cancel:active { transform: scale(0.96); }
-
-  :host{display:block;min-height:100vh;box-sizing:border-box;--primary-text-color:#ffffff!important;--secondary-text-color:rgba(255,255,255,0.7)!important;color:#ffffff!important;background:var(--lovelace-background,var(--primary-background-color));font-family:'Outfit',Inter,system-ui,sans-serif}
-  :host([compact]), :host(.argus-compact) {
-    min-height: auto !important;
-    background: transparent !important;
-  }
-  :host([compact]) .wrap, :host(.argus-compact) .wrap {
-    padding: 0 !important;
-    margin: 0 !important;
-    max-width: 100% !important;
-    width: 100% !important;
-    height: auto !important;
-    min-height: fit-content !important;
-    gap: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    flex: 1 1 auto !important;
-    overflow: visible !important;
-    container-type: inline-size;
-    container-name: argus-compact-wrap;
-  }
-  :host([compact]) .hero, :host(.argus-compact) .hero {
-    display: none !important;
-  }
-  :host([compact]) #argus-canvas-bg, :host(.argus-compact) #argus-canvas-bg {
-    display: none !important;
-  }
-  :host([compact]) .tabs, :host(.argus-compact) .tabs {
-    display: none !important;
-  }
-  :host([compact]) .dashboard-instances .panel-head, :host(.argus-compact) .dashboard-instances .panel-head {
-    display: none !important;
-  }
-  :host([compact]) .personalize-section, :host(.argus-compact) .personalize-section {
-    display: none !important;
-  }
-  :host([compact]) .glass.panel:not(#w-instances), :host(.argus-compact) .glass.panel:not(#w-instances) {
-    display: none !important;
-  }
-  :host([compact]) .argus-widget:not(:has(#w-instances)), :host(.argus-compact) .argus-widget:not(:has(#w-instances)) {
-    display: none !important;
-  }
-  :host([compact]) .argus-dashboard__toolbar, :host(.argus-compact) .argus-dashboard__toolbar {
-    display: none !important;
-  }
-  :host([compact]) #widget-grid, :host(.argus-compact) #widget-grid {
-    padding: 0 !important;
-    margin: 0 !important;
-    display: block !important;
-    height: auto !important;
-  }
-  :host([compact]) #w-instances, :host(.argus-compact) #w-instances {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    height: auto !important;
-    width: 100% !important;
-    min-height: fit-content !important;
-    display: flex !important;
-    flex-direction: column !important;
-    flex: 1 1 auto !important;
-    overflow: visible !important;
-    background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;
-    backdrop-filter: blur(28px) saturate(150%) !important;
-    -webkit-backdrop-filter: blur(28px) saturate(150%) !important;
-  }
-  :host([compact]) .entry, :host(.argus-compact) .entry {
-    margin-bottom: 0 !important;
-    border-radius: 24px !important;
-    height: auto !important;
-    width: 100% !important;
-    min-height: fit-content !important;
-    display: flex !important;
-    flex-direction: column !important;
-    flex: 1 1 auto !important;
-    overflow: visible !important;
-    background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;
-    backdrop-filter: blur(28px) saturate(150%) !important;
-    -webkit-backdrop-filter: blur(28px) saturate(150%) !important;
-  }
-  :host([compact]) #bootstrap-overlay, :host(.argus-compact) #bootstrap-overlay,
-  :host([compact]) .argus-profile-overlay, :host(.argus-compact) .argus-profile-overlay,
-  :host([compact]) .argus-welcome-screen, :host(.argus-compact) .argus-welcome-screen {
-    display: none !important;
-  }
-  :host([compact]) .argus-widget__content, :host(.argus-compact) .argus-widget__content {
-    height: auto !important;
-    width: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
-    flex: 1 1 auto !important;
-    overflow: visible !important;
-  }
-  :host([compact]) #entries, :host(.argus-compact) #entries {
-    display: flex !important;
-    flex-direction: column !important;
-    flex: 1 1 auto !important;
-    height: auto !important;
-    width: 100% !important;
-    margin: 0 !important;
-    overflow: visible !important;
-  }
-  *{box-sizing:border-box}
-  @container argus-compact-wrap (max-width: 800px) {
-    .security-console { flex-direction: column !important; padding: 20px 18px 24px !important; gap: 20px !important; align-items: center !important; justify-content: center !important; }
-    .security-console .entry-icon { order: 2 !important; flex: 0 0 auto !important; min-height: 130px !important; margin: 0 auto !important; }
-    .security-console .liquid-stack { order: 3 !important; width: 100% !important; max-width: 360px !important; }
-    .security-console .console-sensors { order: 4 !important; width: 100% !important; max-width: 360px !important; display: flex !important; flex-direction: column !important; }
-    .sensor-column { position: static !important; max-width: 100% !important; width: 100% !important; align-items: stretch !important; padding: 0 !important; gap: 10px !important; }
-    .sensor-chip { max-width: none !important; }
-    .entry-content { padding: 20px !important; display: flex !important; flex-direction: column !important; align-items: center !important;  }
-    .liquid-stack { display: flex !important; flex-direction: column !important; align-items: stretch !important; gap: 8px !important; }
-  }
-  @keyframes iosGlassIn{0%{opacity:0;transform:translateY(14px) scale(.965)}65%{opacity:1;transform:translateY(-2px) scale(1.008)}100%{transform:translateY(0) scale(1)}}
-  @keyframes iosSelectPop{0%{transform:scale(.92);opacity:.45}60%{transform:scale(1.045);opacity:1}100%{transform:scale(1)}}
-  .glass,.entry,.mode-section-card,.user-card,.file-card,.log-item{animation:iosGlassIn .5s cubic-bezier(.22,1.18,.36,1) both}
-  .pick-row:has(input:checked),.tab.active,.liquid-btn.active{animation:iosSelectPop .34s cubic-bezier(.2,1.45,.35,1);box-shadow:0 0 0 1px color-mix(in srgb,var(--primary-color,#007aff) 45%,transparent),0 12px 30px color-mix(in srgb,var(--primary-color,#007aff) 18%,transparent)}
-  .glass.liquid-glass{background:var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)))!important;backdrop-filter:blur(28px) saturate(150%)!important;-webkit-backdrop-filter:blur(28px) saturate(150%)!important;border-color:rgba(255,255,255,0.15)!important;box-shadow:0 8px 32px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.1)!important}
-  button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 70%,#fff);outline-offset:3px}
-  button:disabled{cursor:not-allowed;opacity:.5;filter:saturate(.45)}
-  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
-  .wrap{max-width:1400px;margin:0 auto;padding:24px;display:grid;gap:24px}
-  .glass{background:var(--glass-bg, rgba(255, 255, 255, 0.06));border:1px solid var(--glass-border, rgba(255, 255, 255, 0.09));border-radius:28px;box-shadow:var(--glass-shadow);backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2)}
-  .hero{padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:var(--hero-bg, linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)));margin-bottom:12px;will-change:transform,opacity;animation:heroSpringSlideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both}
-  .hero-left{display:flex;align-items:center;gap:22px}
-  .hero-context{margin-left:auto;display:flex;align-items:center;gap:8px;min-width:0}.hero-clock{display:flex;flex-direction:column;align-items:flex-end;padding-right:14px;border-right:1px solid rgba(255,255,255,.14);line-height:1}.hero-clock strong{font-size:1.45rem;letter-spacing:-.05em}.hero-clock span{font-size:10px;opacity:.65;margin-top:5px;text-transform:uppercase;letter-spacing:.08em}.hero-pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.hero-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 10px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(7,16,29,.27);box-shadow:inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(14px);font-size:10px;font-weight:800;white-space:nowrap}.hero-pill .hero-live{width:7px;height:7px;border-radius:50%;background:#55df91;box-shadow:0 0 9px #55df91}
-  .hero-icon{font-size:54px;line-height:1;filter:drop-shadow(0 0 20px rgba(255,255,255,0.15))}
-  .hero h1{margin:0 0 4px;font-size:34px;font-weight:900;letter-spacing:-0.03em;background:var(--hero-gradient, linear-gradient(to right, #ffffff, #82b1ff));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  .hero p{margin:0;font-size:16px;opacity:.7;font-weight:500}
-  @media(max-width:700px){.wrap{padding:14px;gap:14px}.glass{border-radius:22px}.hero{padding:22px;align-items:flex-start}.hero-icon{font-size:40px}.hero h1{font-size:27px}.hero p{font-size:14px}.entry-content{grid-template-columns:96px 1fr;padding:16px 105px 16px 14px;gap:10px}.sensor-column{width:98px}.sensor-chip{max-width:94px}.entry-icon{min-height:110px}.entry-icon svg{max-width:150px}.hud{top:12px;right:12px}.hud-data{font-size:15px;padding:5px 9px}.hud-loc{font-size:10px;padding:3px 8px}}
-
-  /* Modern Mode Navigation & iOS Liquid Bubble Transition */
-  .tabs { position: relative; isolation:isolate; display: flex; min-height:72px; background: rgba(255, 255, 255, 0.03); padding: 6px; border-radius: 20px; gap: 6px; overflow: visible; scrollbar-width: none; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.06); z-index: 1; }
-  .tabs::-webkit-scrollbar { display: none; }
-  .tab { position: relative; flex: 1; min-width: 55px; min-height:60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 14px; padding: 10px 4px; font-size: 11px; font-weight: 800; color: rgba(255, 255, 255, 0.55); transition: color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; border: none !important; outline: none; background: transparent !important; box-shadow: none !important; z-index: 1; }
-  .tab:hover { color: #fff; }
-  .tab:active:not(:disabled) { transform: scale(0.94); }
-  .tab.active { color: #fff !important; background: transparent !important; box-shadow: none !important; transform: none !important; }
-
-  .tab-bubble { position: absolute; top: 6px; bottom: 6px; height: calc(100% - 12px); border-radius: 14px; z-index: 0; transform-origin: left center; transition: transform 0.45s cubic-bezier(0.25, 1.35, 0.4, 1.05), background 0.4s ease, box-shadow 0.4s ease; pointer-events: none; }
-  .tab-bubble.bubble-disarmed { background: #43a047; box-shadow: 0 8px 24px rgba(67, 160, 71, 0.4); }
-  .tab-bubble.bubble-home { background: #fb8c00; box-shadow: 0 8px 24px rgba(251, 140, 0, 0.4); }
-  .tab-bubble.bubble-away { background: #e53935; box-shadow: 0 8px 24px rgba(229, 57, 53, 0.4); }
-  .tab-bubble.bubble-night { background: #1e88e5; box-shadow: 0 8px 24px rgba(30, 136, 229, 0.4); }
-  .tab-bubble.bubble-vacation { background: #9c27b0; box-shadow: 0 8px 24px rgba(156, 39, 176, 0.4); }
-
-
-  @keyframes bounceIn {
-    0% { transform: scale(0.96); opacity: 0; }
-    50% { transform: scale(1.01); opacity: 1; }
-    100% { transform: scale(1); opacity: 1; }
-  }
-  .bounce-in { animation: bounceIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-
-  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;align-items:start;position:relative}
-  .panel{transition:transform .3s ease,box-shadow .3s ease,grid-column .3s ease,grid-row .3s ease;position:relative}
-  .panel[data-size="S"]{grid-column:span 1;grid-row:span 1}
-  .panel[data-size="M"]{grid-column:span 2;grid-row:span 1}
-  .panel[data-size="L"]{grid-column:span 2;grid-row:span 2}
-  .panel[data-size="XL"]{grid-column:span 4;grid-row:span 2}
-  .dashboard-instances{grid-column:1 / -1}
-  
-  /* Edit Mode Styles */
-  .grid.editing .panel{animation:jiggle .3s infinite ease-in-out;cursor:grab}
-  .grid.editing .panel:nth-child(even){animation-duration:.27s;animation-direction:reverse}
-  .grid.editing .panel:nth-child(3n){animation-duration:.32s;animation-delay:.05s}
-  .grid.editing .panel.dragging{opacity:.5;animation:none;cursor:grabbing}
-  
-  .panel-edit-overlay{position:absolute;inset:0;background:rgba(5,15,30,.82);backdrop-filter:blur(10px);border-radius:inherit;z-index:90;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;opacity:0;pointer-events:none;transition:opacity .25s ease}
-  .grid.editing .panel:not(.dashboard-instances) .panel-edit-overlay{opacity:1;pointer-events:auto}
-  
-  .widget-controls{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:18px;backdrop-filter:blur(8px)}
-  .widget-controls-title{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;opacity:.7}
-  .widget-sizes{display:flex;gap:6px}
-  .widget-size-btn{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#fff;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:800;cursor:pointer;transition:all .2s}
-  .widget-size-btn:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3)}
-  .widget-size-btn.active{background:#007aff;border-color:#007aff;box-shadow:0 0 10px rgba(0,122,255,.4)}
-  .widget-drag-handle{font-size:22px;color:rgba(255,255,255,.6);cursor:grab;padding:4px}
-  .widget-toggle-btn{background:rgba(220,38,38,.85);color:white;border:none;border-radius:8px;padding:6px 12px;font-size:10px;font-weight:800;cursor:pointer}
-  
-  @keyframes jiggle{
-    0%{transform:rotate(-0.5deg)}
-    50%{transform:rotate(0.5deg)}
-    100%{transform:rotate(-0.5deg)}
-  }
-  @media(max-width:900px){
-    .grid{grid-template-columns:minmax(0,1fr)}
-    .panel[data-size="S"],.panel[data-size="M"],.panel[data-size="L"],.panel[data-size="XL"]{grid-column:1 / -1;grid-row:auto}
-    .grid.editing .panel{animation:none !important}
-  }
-  
-  /* Adaptivity styles for size S widgets */
-  .panel[data-size="S"] .tab-label{display:none}
-  .panel[data-size="S"] .tab-icon{font-size:24px !important}
-  .panel[data-size="S"] #p-backup-desc{display:none}
-  .panel[data-size="S"] #github-desc{display:none}
-
-  /* Collapsible Personalization with Bounce expansion */
-  .personalize-workspace{display:grid;grid-template-rows:0fr;opacity:0;pointer-events:none;transition:grid-template-rows 0.6s cubic-bezier(0.175,0.885,0.32,1.275),opacity 0.4s ease,margin-top 0.4s ease}
-  .personalize-workspace > div { overflow:hidden; min-height:0; }
-  .personalize-workspace:not(.collapsed){grid-template-rows:1fr;opacity:1;pointer-events:auto;margin-top:16px;animation:bounceExpand 0.55s cubic-bezier(0.175,0.885,0.32,1.275) forwards}
-  @keyframes bounceExpand{
-    0%{transform:scale(0.96) translateY(-8px);opacity:0}
-    70%{transform:scale(1.01) translateY(2px);opacity:0.9}
-    100%{transform:scale(1) translateY(0);opacity:1}
-  }
-  @media(max-width:750px){.hero{flex-direction:column;text-align:center}.hero-left{flex-direction:column}}
-  @media(max-width:750px){.hero .lang-pill{align-self:center;margin-inline:auto}.hero-left{width:100%;align-items:center}}
-
-  .stack{display:grid;gap:24px}
-  .panel{padding:28px;position:relative;overflow:hidden}
-  .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-  .panel h2{margin:0;font-size:14px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--primary-color,#007aff);opacity:0.95}
-
-  /* Access settings stay quiet until the user needs to manage them. */
-  .access-panel { padding: 22px 24px; overflow-y:auto; max-height:60vh; -webkit-overflow-scrolling:touch; }
-  .access-panel .panel-head { margin-bottom: 12px; }
-  .access-summary { font-size: 12px; opacity: .72; }
-  .access-actions { display:flex; gap:10px; flex-wrap:wrap; }
-  .access-actions button { flex:0 1 auto; padding:8px 12px; font-size:11px; }
-  .access-actions button.active { background:var(--primary-color,#007aff); color:#fff; border-color:transparent; }
-  .access-section { display:block; min-width:0; margin-bottom:24px; }
-  .access-section h3 { font-size:12px; font-weight:900; opacity:.8; margin:0 0 10px; text-transform:uppercase; }
-  .access-panel .user-card { padding:10px 12px; border-radius:12px; }
-  .github-star-action {
-    display:inline-flex;align-items:center;justify-content:center;gap:7px;
-    min-height:42px;padding:9px 16px;border-radius:14px;text-decoration:none;
-    color:var(--primary-text-color,#fff);font-size:12px;font-weight:850;
-    background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.055));
-    border:1px solid rgba(255,255,255,.16);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 9px 24px rgba(0,0,0,.16);
-    backdrop-filter:blur(18px) saturate(150%);
-    -webkit-backdrop-filter:blur(18px) saturate(150%);
-    transition:transform .2s ease,background .2s ease,box-shadow .2s ease;
-  }
-  .github-star-action:hover { transform:translateY(-1px);background:rgba(255,255,255,.18);box-shadow:0 12px 28px rgba(0,0,0,.20); }
-  @media(max-width:600px){ .access-panel{padding:20px}.access-actions{width:100%}.access-actions button{flex:1} }
-
-  /* Personalization inside instances */
-  .personalize-row { display: flex; gap: 14px; align-items: center; margin-top: 18px; padding: 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 18px; flex-wrap: wrap; }
-  .personalize-row .setting-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-bottom: 4px; }
-
-  /* Mode Reorganization Styles — HORIZONTAL */
-  .mode-grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
-  @media(max-width:900px){ .mode-grid-layout { grid-template-columns: 1fr; } }
-  .mode-section-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.025) 100%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.16) !important;
-    border-radius: 20px !important;
-    padding: 18px !important;
-    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;
-    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;
-    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
-  }
-  .mode-section-card:hover {
-    border-color: rgba(255, 255, 255, 0.26) !important;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.04) 100%) !important;
-    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
-    transform: translateY(-2px) !important;
-  }
-  .mode-section-card:hover { border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); }
-  .mode-section-title { font-size: 13px; font-weight: 800; color: var(--primary-color, #007aff); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
-  .mode-sensor-grid { color: var(--primary-text-color, #fff); }
-  .mode-sensor-none { color: var(--primary-text-color, rgba(255,255,255,0.5)); opacity: 0.6; font-size: 13px; }
-  .mode-section-card span, .mode-section-card label, .mode-section-card .input-label { color: var(--primary-text-color, #fff); }
-
-  .sensor-pill { background: var(--pill-bg, rgba(255,255,255,0.06)); color: var(--pill-text, #fff); border: 1px solid var(--pill-border, rgba(255,255,255,0.1)); padding: 8px 14px; border-radius: 14px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; transition: all 0.2s; max-width: 100%; box-sizing: border-box; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-  @keyframes argus-blink-red { 0%,100%{box-shadow:0 0 0 0 rgba(255,50,50,0);background:var(--pill-bg,rgba(255,255,255,0.06))} 50%{box-shadow:0 0 0 6px rgba(255,50,50,0.25);background:rgba(255,50,50,0.15)} }
-  .sensor-pill.siren-active   { animation: argus-blink-red 1.2s ease-in-out infinite; border-color: rgba(255,82,82,0.5) !important; }
-  .sensor-pill.triggered-sensor { animation: argus-blink-red 0.9s ease-in-out infinite; border-color: rgba(255,82,82,0.6) !important; }
-  .icon-btn { background: none; border: none; padding: 4px; color: inherit; opacity: 0.6; cursor: pointer; transition: opacity 0.2s, transform 0.15s; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
-  .icon-btn:active { transform: scale(0.9); }
-
-  #mode-status { opacity: 0; transition: opacity .35s; }
-  #mode-status.show { opacity: 1; }
-  #mode-status.ok  { color: #4caf50; }
-  #mode-status.err { color: #f44336; }
-
-  .icon-btn:hover { opacity: 1; background: rgba(255,255,255,0.08); }
-  .icon-btn.active { color: #fb8c00; opacity: 1; }
-
-  .input-group { display: flex; flex-direction: column; gap: 6px; }
-  .times-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:end}
-  .time-field{min-width:0;display:flex;flex-direction:column;justify-content:flex-end;height:100%}
-  .time-field .input-label{min-height:34px;display:flex;align-items:flex-end;line-height:1.2;margin-bottom:6px;padding-bottom:2px}
-  .time-field input{width:100%;height:44px!important;padding:8px 12px!important;border-radius:12px!important;box-sizing:border-box!important;margin:0!important;font-size:14px!important}
-  .entry-sensor-list{min-height:44px;margin-top:12px!important;display:flex;flex-wrap:wrap;align-items:center;border:1px solid rgba(255,255,255,.10)!important;background:rgba(255,255,255,.03)!important;border-radius:12px!important;padding:10px;gap:8px}
-  .instance-activity-strip{display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr));gap:8px;align-items:center;margin:4px 0 16px;padding:10px 12px;border:1px solid rgba(255,255,255,.1);border-radius:18px;background:rgba(5,13,25,.25);backdrop-filter:blur(18px) saturate(135%);-webkit-backdrop-filter:blur(18px) saturate(135%)}.instance-activity-title{font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;opacity:.62;padding-right:6px}.instance-activity-item{min-width:0;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.86}.instance-activity-item time{opacity:.55;margin-right:4px;font-variant-numeric:tabular-nums}
-  .mode-mqtt-row{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 14px!important;min-height:44px;border-radius:12px!important;background:rgba(255,255,255,.03)!important;border:1px solid rgba(255,255,255,.10)!important}
-  .mode-mqtt-row input{margin:0;accent-color:var(--primary-color,#007aff)}
-  .input-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-left: 4px; }
-
-  /* Intelligent Entry Card */
-  .entry {
-    position: relative;
-    overflow: hidden;
-    border-radius: 28px !important;
-    border: 1px solid rgba(255, 255, 255, 0.18) !important;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%) !important;
-    backdrop-filter: blur(32px) saturate(170%) brightness(1.08) !important;
-    -webkit-backdrop-filter: blur(32px) saturate(170%) brightness(1.08) !important;
-    margin-bottom: 16px;
-    min-height: 220px;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
-    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  }
-  .entry:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 20px 48px rgba(0,0,0,.3)}
-  .entry::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:inherit;background:linear-gradient(120deg,rgba(255,255,255,.14),transparent 22%,transparent 74%,rgba(255,255,255,.05));mix-blend-mode:soft-light}
-  .entry-status-ribbon{position:absolute;top:20px;left:20px;z-index:5;display:flex;align-items:center;gap:9px;max-width:calc(100% - 260px);padding:8px 12px;border:1px solid color-mix(in srgb,var(--entry-accent) 55%,rgba(255,255,255,.2));border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--entry-accent) 28%,rgba(8,15,28,.76)),rgba(7,14,25,.56));box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 8px 24px color-mix(in srgb,var(--entry-accent) 22%,transparent);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);color:#fff}
-  .entry-status-orb{width:10px;height:10px;flex:0 0 auto;border-radius:50%;background:var(--entry-accent);box-shadow:0 0 12px var(--entry-accent)}
-  .entry-status-copy{display:flex;flex-direction:column;min-width:0}.entry-status-kicker{font-size:8px;line-height:1;text-transform:uppercase;letter-spacing:.12em;opacity:.72;font-weight:800}.entry-status-name{font-size:13px;line-height:1.2;font-weight:900;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.entry-status-event{font-size:9px;line-height:1.2;opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:290px}
-  .entry-bg{position:absolute;inset:0;z-index:1;background-size:cover;background-position:center;transition:opacity 0.5s ease}
-  .entry-bg img{width:100%;height:100%;object-fit:cover;opacity:0.6}
-  .entry-content{position:relative;z-index:2;flex:1;padding:20px 140px 20px 20px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.2) 0%, transparent 60%)}
-  /* The live instance is the console: real controls, real sensors and one
-     clear disarm keypad. Decorative dashboard cards never sit above it. */
-  .security-console{display:flex;flex-wrap:wrap;justify-content:space-around;align-items:center;gap:32px;padding:32px 24px 24px;background:linear-gradient(90deg,rgba(3,10,20,.40),rgba(3,10,20,.08) 50%,rgba(3,10,20,.36))}
-  .security-console .entry-icon{order:2;flex:0 0 160px!important;min-height:150px!important;margin:0!important;display:flex;justify-content:center;align-items:center;animation:float-icon 5s ease-in-out infinite}.security-console .entry-icon svg{max-width:150px!important;width:100%}
-  .security-console .liquid-stack{order:1;flex:1 1 250px;max-width:320px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.security-console .liquid-btn{min-height:62px;justify-content:center;text-align:center;padding:10px;font-size:12px;gap:8px;white-space:nowrap}.security-console .liquid-btn span:last-child{min-width:0;overflow:hidden;text-overflow:ellipsis}.security-console .btn-disarm,.security-console .btn-sos{grid-column:1/-1}
-  .console-sensors{order:3;flex:1 1 300px;max-width:400px;display:grid;gap:14px;align-content:center}.console-sensor{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;padding:13px 16px;border:1px solid rgba(255,255,255,.15);border-radius:18px;background:linear-gradient(100deg,rgba(36,188,129,.22),rgba(10,27,38,.58));backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 8px 22px rgba(0,0,0,.22)}.console-sensor.open{background:linear-gradient(100deg,rgba(235,74,67,.30),rgba(34,14,23,.62));border-color:rgba(255,102,92,.7)}.console-sensor-icon{font-size:20px}.console-sensor-name{font-weight:850;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.console-sensor-state{font-size:11px;font-weight:900;text-transform:uppercase;color:#75f4b0}.console-sensor.open .console-sensor-state{color:#ff968b}.console-empty{padding:24px;text-align:center;border:1px dashed rgba(255,255,255,.22);border-radius:18px;opacity:.75}
-  .console-keypad{flex:1 1 220px;max-width:280px;padding:18px;border:1px solid rgba(255,255,255,.16);border-radius:24px;background:rgba(5,15,30,0.4);backdrop-filter:blur(16px);display:grid;gap:12px}.console-keypad-title{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;text-align:center}.console-keypad-close{position:absolute;top:8px;right:10px;width:28px;height:28px;border:0;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;font-size:20px;line-height:1;cursor:pointer}.console-keypad{position:relative}.console-pin-display{width:100%;box-sizing:border-box;padding:11px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(4,14,26,.46);color:#fff;text-align:center;font-size:20px;letter-spacing:.35em}.console-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;place-items:center}.console-pad button{width:100%;aspect-ratio:1/1;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:linear-gradient(145deg,rgba(165,220,255,.24),rgba(20,45,66,.62));color:#fff;font-size:17px;font-weight:800;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 6px 14px rgba(0,0,0,.25);cursor:pointer;display:flex;align-items:center;justify-content:center}.console-pad .console-enter{border-radius:16px;aspect-ratio:auto;height:100%;color:#7ff8c1;border-color:rgba(74,230,157,.65)}.console-keypad small{text-align:center;opacity:.7}.console-pin-status{min-height:1.2em;margin:0;color:#ffb4ac;opacity:0;transition:opacity .18s ease}.console-pin-status.visible{opacity:1}
-  /* ── Console HUD header (inside the flex layout, not absolute) ──────── */
-  .console-hud{order:0;flex:0 0 100%;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(0,0,0,0.25);border-radius:14px;backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);gap:12px;flex-wrap:wrap}
-  .console-hud-loc{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:1.2px;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .console-hud-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
-
-  /* ── System Status Badge ─────────────────────────────── */
-  .console-system-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 5px 14px;
-    border-radius: 999px;
-    font-size: 10.5px;
-    font-weight: 900;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    white-space: nowrap;
-    backdrop-filter: blur(16px) saturate(160%);
-    -webkit-backdrop-filter: blur(16px) saturate(160%);
-    border: 1.5px solid currentColor;
-    transition: all 0.35s ease;
-  }
-  .console-system-badge--disarmed {
-    color: #6ee7b7;
-    background: rgba(16,185,129,0.18);
-    border-color: rgba(16,185,129,0.60);
-    box-shadow: 0 0 16px rgba(16,185,129,0.25), inset 0 1px 0 rgba(255,255,255,0.18);
-  }
-  .console-system-badge--armed_home {
-    color: #fde68a;
-    background: rgba(251,140,0,0.20);
-    border-color: rgba(251,140,0,0.60);
-    box-shadow: 0 0 16px rgba(251,140,0,0.25), inset 0 1px 0 rgba(255,255,255,0.18);
-  }
-  .console-system-badge--armed_away {
-    color: #fca5a5;
-    background: rgba(229,57,53,0.20);
-    border-color: rgba(229,57,53,0.60);
-    box-shadow: 0 0 16px rgba(229,57,53,0.25), inset 0 1px 0 rgba(255,255,255,0.18);
-  }
-  .console-system-badge--armed_night {
-    color: #bfdbfe;
-    background: rgba(30,136,229,0.20);
-    border-color: rgba(30,136,229,0.60);
-    box-shadow: 0 0 16px rgba(30,136,229,0.25), inset 0 1px 0 rgba(255,255,255,0.18);
-  }
-  .console-system-badge--armed_vacation {
-    color: #e9d5ff;
-    background: rgba(156,39,176,0.20);
-    border-color: rgba(156,39,176,0.60);
-    box-shadow: 0 0 16px rgba(156,39,176,0.25), inset 0 1px 0 rgba(255,255,255,0.18);
-  }
-  .console-system-badge--triggered {
-    color: #fff;
-    background: rgba(239,68,68,0.35);
-    border-color: rgba(239,68,68,0.80);
-    box-shadow: 0 0 24px rgba(239,68,68,0.60), inset 0 1px 0 rgba(255,255,255,0.25);
-    animation: badgeFlash 0.8s infinite ease-in-out;
-  }
-  @keyframes badgeFlash {
-    0%,100% { opacity:1; box-shadow:0 0 24px rgba(239,68,68,.8); }
-    50%      { opacity:0.7; box-shadow:0 0 8px rgba(239,68,68,.2); }
-  }
-  /* arming state reuses armed_home styling with pulsing */
-  .console-system-badge--arming {
-    color: #fde68a;
-    background: rgba(251,140,0,0.20);
-    border-color: rgba(251,140,0,0.60);
-    animation: badgeArming 1.05s ease-in-out infinite;
-  }
-  @keyframes badgeArming {
-    0%,100% { opacity:0.65; } 50% { opacity:1; }
-  }
-  .console-hud-time{font-size:16px;font-weight:800;letter-spacing:-.02em}
-  .console-hud-temp{font-size:11px;opacity:.8;font-weight:700}
-  .console-hud-temps{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-  .console-hud-tpill{font-size:10px;font-weight:800;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12)}
-  /* Hide the floating absolute HUD inside security-console to avoid overlap with sensor list */
-  .security-console .hud,.ios-fullscreen .entry-content.security-console ~ .hud,.entry-content.security-console + .hud{display:none!important}
-  /* The .hud inside the article gets hidden when the content is a security-console */
-  .entry:has(.security-console) .hud{display:none!important}
-  @media(max-width:950px){.grid{grid-template-columns:1fr;grid-template-areas:"instances" "activity" "modes" "access" "automations" "backup" "github"}.security-console{flex-direction:column;padding:10px 18px 24px;gap:20px}.security-console .entry-icon{order:2!important;flex:0 0 auto!important;min-height:130px!important}.security-console .liquid-stack{order:3!important;width:100%;max-width:320px}.security-console .console-sensors{order:4!important;width:100%;max-width:320px}.console-hud{order:1!important}.console-keypad{width:100%;max-width:320px}}
-
-  /* Sensor column */
-  .sensor-column{position:absolute;right:0;top:0;bottom:0;width:auto;max-width:40%;z-index:4;display:flex;flex-direction:column;gap:7px;align-items:flex-end;justify-content:center;padding:12px 12px 12px 0;pointer-events:none}
-  .sensor-chip{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:16px;font-size:10px;font-weight:800;letter-spacing:.2px;max-width:148px;backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 7px 18px rgba(0,0,0,.24);transition:transform .2s,box-shadow .2s}
-  .sensor-chip-text{display:flex;flex-direction:column;min-width:0;flex:1}
-  .sensor-chip-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .sensor-chip-state{font-size:8px;letter-spacing:.08em;text-transform:uppercase;opacity:.82;margin-top:2px}
-  .sensor-chip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-  .sensor-chip-battery{grid-column:1 / -1;margin-top:5px;padding-top:5px;border-top:1px solid currentColor;font-size:9px;line-height:1;opacity:.9}
-  .sensor-chip--open{background:linear-gradient(135deg,rgba(255,149,0,.9),rgba(255,96,0,.64));color:#fff}
-  .sensor-chip--open .sensor-chip-dot{background:#fff;box-shadow:0 0 8px rgba(255,255,255,.95)}
-  .sensor-chip--triggered{background:linear-gradient(135deg,rgba(255,69,58,.96),rgba(190,30,35,.82));animation:chip-pulse .9s ease-in-out infinite}
-  .sensor-chip--closed{background:rgba(15,23,32,.62);color:#eef8f1}
-  .sensor-chip--closed .sensor-chip-dot{background:#34c759;box-shadow:0 0 8px rgba(52,199,.9)}
-  .sensor-chip-battery.low{color:#ffd166;font-weight:900}
-  .buzz-orange{position:relative;border-color:rgba(255,171,64,.92)!important;background:linear-gradient(135deg,rgba(255,149,0,.38),rgba(255,109,0,.16))!important;box-shadow:0 0 0 1px rgba(255,183,77,.45),0 0 25px rgba(255,145,0,.55),inset 0 1px 0 rgba(255,255,255,.3)!important;animation:buzz-orange 1.05s cubic-bezier(.36,.07,.19,.97) infinite}
-  .buzz-orange::after{content:'⚠';margin-left:auto;color:#fff3d1;font-size:14px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.28))}
-  @keyframes buzz-orange{0%,100%{transform:translateX(0) rotate(0)}12%{transform:translateX(-2px) rotate(-.65deg)}25%{transform:translateX(3px) rotate(.8deg)}40%{transform:translateX(-3px) rotate(-.8deg)}55%{transform:translateX(2px) rotate(.55deg)}70%{transform:translateX(-1px) rotate(-.25deg)}}
-  @keyframes chip-pulse{0%,100%{opacity:1}50%{opacity:0.55}}
-
-  /* HUD Overlay */
-  .hud{position:absolute;top:20px;right:24px;text-align:right;z-index:3;color:var(--hud-text-color);text-shadow:var(--text-shadow);display:flex;flex-direction:column;gap:4px}
-  .hud-loc{font-size:13px;font-weight:900;text-transform:uppercase;opacity:1;letter-spacing:1.5px;background:var(--hud-bg);padding:4px 12px;border-radius:10px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.08);align-self:flex-end}
-  .hud-data{font-size:20px;font-weight:800;letter-spacing:-0.02em;background:var(--hud-bg);padding:6px 14px;border-radius:12px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.08);display:inline-flex;align-items:center;gap:8px;align-self:flex-end}
-  .hud-data i{font-size:14px;opacity:0.7;font-style:normal}
-  .hud-temperatures{display:flex;justify-content:flex-end;gap:5px;flex-wrap:wrap}
-  .hud-temperature{padding:4px 8px;border-radius:999px;background:var(--hud-bg);border:1px solid rgba(255,255,255,.09);font-size:10px;font-weight:800;backdrop-filter:blur(8px)}
-  .weather-eclipse{position:absolute;left:22px;bottom:18px;z-index:2;padding:7px 11px;border-radius:14px;background:rgba(18,10,28,.52);border:1px solid rgba(255,192,92,.36);backdrop-filter:blur(10px);font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.25);pointer-events:none}
-
-  /* Liquid Glass Buttons */
-  .liquid-stack{display:grid;gap:10px}
-  .liquid-btn {
-    border: 1px solid rgba(255, 255, 255, 0.20) !important;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.04) 100%) !important;
-    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;
-    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;
-    color: #ffffff !important;
-    padding: 14px 18px;
-    border-radius: 18px !important;
-    font-size: 13.5px;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-align: left;
-    cursor: pointer;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
-    transition: all 0.22s cubic-bezier(0.25, 0.8, 0.25, 1);
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-    letter-spacing: 0.5px;
-  }
-  .liquid-btn:hover {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.08) 100%) !important;
-    border-color: rgba(255, 255, 255, 0.36) !important;
-    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
-    transform: translateY(-2px);
-  }
-  .btn-sos {
-    background: linear-gradient(135deg, rgba(239, 68, 68, 0.32) 0%, rgba(185, 28, 28, 0.45) 100%) !important;
-    border: 1px solid rgba(252, 165, 165, 0.45) !important;
-    box-shadow: 0 10px 28px rgba(239, 68, 68, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
-  }
-  .btn-sos:hover {
-    background: linear-gradient(135deg, rgba(239, 68, 68, 0.48) 0%, rgba(185, 28, 28, 0.65) 100%) !important;
-    box-shadow: 0 14px 34px rgba(239, 68, 68, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
-    transform: translateY(-2px);
-  }
-  .mode-btn-icon{width:26px;height:26px;padding:5px;border-radius:10px;flex:0 0 auto;background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 4px 10px rgba(0,0,0,.16);filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}
-  .liquid-btn.active .mode-btn-icon{background:linear-gradient(135deg,rgba(255,255,255,.36),rgba(255,255,255,.12));border-color:rgba(255,255,255,.42)}
-  .btn-sos .mode-btn-icon{width:28px;height:28px;border-radius:11px;background:rgba(255,255,255,.17)}
-  .liquid-btn:not(.btn-home):not(.btn-away):not(.btn-night):not(.btn-vacation):not(.btn-disarm):not(.btn-sos):hover{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.2)}
-  .liquid-btn.active{background:var(--btn-bg, rgba(255,255,255,0.2));border-color:rgba(255,255,255,0.4);box-shadow:0 8px 24px var(--btn-shadow, rgba(255,255,255,0.12))}
-  .liquid-btn:active:not(:disabled) { transform: scale(0.96); }
-  .liquid-btn i{font-size:16px}
-
-  .btn-home {
-    background: linear-gradient(135deg, rgba(251, 140, 0, 0.20) 0%, rgba(251, 140, 0, 0.06) 100%) !important;
-    border: 1px solid rgba(251, 140, 0, 0.38) !important;
-    color: #ffe0b2 !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
-  }
-  .btn-home.active {
-    background: linear-gradient(135deg, #fb8c00 0%, #d97706 100%) !important;
-    border: 1px solid rgba(254, 215, 170, 0.85) !important;
-    box-shadow: 0 14px 36px rgba(251, 140, 0, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
-    color: #ffffff !important;
-    transform: translateY(-2px);
-  }
-
-  .btn-away {
-    background: linear-gradient(135deg, rgba(229, 57, 53, 0.20) 0%, rgba(229, 57, 53, 0.06) 100%) !important;
-    border: 1px solid rgba(229, 57, 53, 0.38) !important;
-    color: #ffcdd2 !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
-  }
-  .btn-away.active {
-    background: linear-gradient(135deg, #e53935 0%, #b91c1c 100%) !important;
-    border: 1px solid rgba(254, 202, 202, 0.85) !important;
-    box-shadow: 0 14px 36px rgba(229, 57, 53, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
-    color: #ffffff !important;
-    transform: translateY(-2px);
-  }
-
-  .btn-night {
-    background: linear-gradient(135deg, rgba(30, 136, 229, 0.20) 0%, rgba(30, 136, 229, 0.06) 100%) !important;
-    border: 1px solid rgba(30, 136, 229, 0.38) !important;
-    color: #bbdefb !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
-  }
-  .btn-night.active {
-    background: linear-gradient(135deg, #1e88e5 0%, #1d4ed8 100%) !important;
-    border: 1px solid rgba(191, 219, 254, 0.85) !important;
-    box-shadow: 0 14px 36px rgba(30, 136, 229, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
-    color: #ffffff !important;
-    transform: translateY(-2px);
-  }
-
-  .btn-vacation {
-    background: linear-gradient(135deg, rgba(156, 39, 176, 0.20) 0%, rgba(156, 39, 176, 0.06) 100%) !important;
-    border: 1px solid rgba(156, 39, 176, 0.38) !important;
-    color: #e1bee7 !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
-  }
-  .btn-vacation.active {
-    background: linear-gradient(135deg, #9c27b0 0%, #7e22ce 100%) !important;
-    border: 1px solid rgba(245, 208, 254, 0.85) !important;
-    box-shadow: 0 14px 36px rgba(156, 39, 176, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
-    color: #ffffff !important;
-    transform: translateY(-2px);
-  }
-
-  .btn-disarm {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(16, 185, 129, 0.05) 100%) !important;
-    border: 1px solid rgba(16, 185, 129, 0.35) !important;
-    color: #a7f3d0 !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
-    margin-top: 4px;
-  }
-  .btn-disarm.active {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-    border: 1px solid rgba(167, 243, 208, 0.85) !important;
-    box-shadow: 0 14px 36px rgba(16, 185, 129, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
-    color: #ffffff !important;
-    transform: translateY(-2px);
-  }
-
-  .btn-sos {
-    background: linear-gradient(135deg, rgba(239, 68, 68, 0.22) 0%, rgba(185, 28, 28, 0.08) 100%) !important;
-    border: 1px solid rgba(252, 165, 165, 0.35) !important;
-    color: #fca5a5 !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
-  }
-  .btn-sos.active, .btn-sos.flashing {
-    animation: sosFlashingPulse 0.8s infinite ease-in-out !important;
-  }
-
-  @keyframes sosFlashingPulse {
-    0%, 100% {
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
-      border-color: #fca5a5 !important;
-      color: #ffffff !important;
-      box-shadow: 0 0 32px rgba(239, 68, 68, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
-      transform: scale(1.02);
-    }
-    50% {
-      background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%) !important;
-      border-color: rgba(239, 68, 68, 0.5) !important;
-      color: rgba(255, 255, 255, 0.8) !important;
-      box-shadow: 0 0 10px rgba(239, 68, 68, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
-      transform: scale(0.98);
-    }
-  }
-  /* btn-disarm visual is handled by .btn-disarm and .btn-disarm.active above */
-
-  /* ── iOS/Android Fullscreen: cubre pantalla completa sin clipping ── */
-  .ios-fullscreen {
-    position: fixed !important;
-    inset: 0 !important;
-    left: 0 !important;
-    top: 0 !important;
-    width: 100vw !important; height: 100dvh !important;
-    max-width: 100vw !important; max-height: 100dvh !important;
-    min-height: 100dvh !important;
-    margin: 0 !important; border-radius: 0 !important;
-    z-index: 999999 !important;
-    display: flex !important; flex-direction: column !important;
-    background: #000 !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-    /* Notch / home-indicator safe areas (iOS/Android) */
-    padding-top: env(safe-area-inset-top, 0px) !important;
-    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
-    padding-left: env(safe-area-inset-left, 0px) !important;
-    padding-right: env(safe-area-inset-right, 0px) !important;
-  }
-  @media(min-width:900px) {
-    .ios-fullscreen {
-      /* Remove floating modal override so it is truly fullscreen on iPad/Tablet */
-      inset: 0 !important;
-      left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important;
-      width: 100vw !important; height: 100vh !important;
-      max-width: 100vw !important;
-      margin: 0 !important; border-radius: 0 !important;
-      border: 1px solid rgba(255,255,255,0.12) !important;
-      box-shadow: 0 40px 100px rgba(0,0,0,0.8) !important;
-      overflow: hidden !important;
-      -webkit-mask-image: -webkit-radial-gradient(white, black) !important;
-      padding: 0 !important;
-    }
-  }
-  .ios-fullscreen .entry-content { grid-template-columns: 320px 1fr !important; padding: 60px !important; gap: 60px !important; height: auto !important; align-items: center !important; background: radial-gradient(circle at 20% 50%, rgba(0,0,0,0.5) 0%, transparent 80%) !important; }
-  .ios-fullscreen .liquid-btn { padding: 16px 20px !important; font-size: 16px !important; border-radius: 20px !important; gap: 12px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.4) !important; }
-  .ios-fullscreen .liquid-btn i { font-size: 24px !important; }
-  .ios-fullscreen .hud { top: 60px !important; right: 60px !important; scale: 1.4; transform-origin: top right; }
-  .ios-fullscreen .sensor-column { max-width: 45% !important; padding-right: 60px !important; }
-  .ios-fullscreen .sensor-chip { font-size: 14px !important; padding: 10px 16px !important; max-width: 260px !important; }
-
-  .entry-icon{display:flex;justify-content:center;align-items:center;perspective:1000px;min-height:160px}
-  .entry-icon svg{width:100%;height:auto;max-width:280px;filter:drop-shadow(0 0 25px rgba(255,255,255,0.12));animation:float-icon 5s ease-in-out infinite;transition:max-width 0.4s ease}
-  .ios-fullscreen .entry-icon svg{max-width:650px;filter:drop-shadow(0 0 60px rgba(255,255,255,0.3))}
-  @keyframes float-icon{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-12px) rotate(1deg)}}
-
-  /* Phone layout: controls must never sit below the HUD or be hidden behind
-     the artwork. Sensor status becomes a readable section beneath the modes. */
-  @media(max-width:700px){
-    .hero-context{width:100%;margin:6px 0 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}.hero-clock{align-items:center;justify-content:center;text-align:center;border-right:0;padding-right:0}.hero-clock strong{font-size:1.35rem;text-align:center}.hero-clock span{text-align:center}.hero-pills{justify-content:center}.hero-pill{padding:6px 8px;font-size:9px}
-    .entry{min-height:0;border-radius:24px}
-    .instance-activity-strip{grid-template-columns:1fr;gap:5px;margin-bottom:12px;padding:10px}.instance-activity-item:nth-of-type(n+3){display:none}
-    .entry-status-ribbon{top:58px;left:14px;max-width:calc(100% - 28px);padding:6px 9px}.entry-status-name{font-size:11px}.entry-status-event{display:none}
-    .entry-content{display:grid;grid-template-columns:minmax(0,1fr);padding:78px 14px 76px;gap:14px;align-items:start;background:linear-gradient(180deg,rgba(0,0,0,.32),rgba(0,0,0,.10) 45%,rgba(0,0,0,.28))}
-    .liquid-stack{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%}
-    .liquid-btn{min-height:52px;padding:10px 11px;justify-content:center;text-align:center;font-size:12px;line-height:1.1;letter-spacing:.25px;border-radius:16px}
-    .liquid-stack .btn-disarm,.liquid-stack .btn-sos{grid-column:1/-1}
-    .liquid-stack .btn-sos{min-height:58px;margin-top:2px}
-    .entry-icon{display:none}
-    .hud{top:12px;left:14px;right:14px;display:flex;flex-direction:row;align-items:flex-start;justify-content:space-between;gap:8px;text-align:left}
-    .hud-loc{align-self:auto;max-width:58%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;letter-spacing:1px;padding:6px 9px}
-    .hud-data{align-self:auto;font-size:15px;padding:5px 9px;gap:5px}
-    .hud-data i{font-size:11px}
-    .hud-temperatures{justify-content:flex-start;position:absolute;top:42px;left:0}
-    .hud-temperature{font-size:9px;padding:3px 6px}
-    .weather-eclipse{left:14px;bottom:14px;padding:5px 7px;font-size:8px}
-    .sensor-column{position:static;grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;width:auto;padding:0;overflow:visible;pointer-events:auto;align-items:stretch}
-    .sensor-chip{max-width:none;min-width:0;padding:8px 9px;font-size:10px;border-radius:13px}
-    .entry-fs{bottom:14px!important;right:14px!important;padding:8px 11px!important;font-size:15px!important}
-  }
-
-  /* Fullscreen on phones has its own compact layouts for both orientations. */
-  /* dvh handled in base .ios-fullscreen rule */
-  @media(max-width:700px) and (orientation:portrait){
-    .ios-fullscreen .entry-content{grid-template-columns:minmax(0,1fr)!important;padding:76px 16px 22px!important;gap:14px!important;overflow-y:auto!important;align-content:start!important}
-    .ios-fullscreen .liquid-stack{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
-    .ios-fullscreen .liquid-btn{min-height:50px!important;padding:10px!important;font-size:12px!important;border-radius:16px!important;gap:6px!important}
-    .ios-fullscreen .liquid-stack .btn-disarm,.ios-fullscreen .liquid-stack .btn-sos{grid-column:1/-1}
-
-    .ios-fullscreen .entry-icon{display:none!important}
-    .ios-fullscreen .sensor-column{position:static!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;width:auto!important;padding:0!important;gap:8px!important}
-    .ios-fullscreen .sensor-chip{max-width:none!important;padding:8px 9px!important;font-size:10px!important}
-    .ios-fullscreen .hud{top:12px!important;left:16px!important;right:16px!important;scale:1!important;transform:none!important}
-  }
-  @media(max-width:900px) and (orientation:landscape){
-    .ios-fullscreen .entry-content{grid-template-columns:minmax(210px,34vw) minmax(0,1fr)!important;padding:54px 22px 18px!important;gap:20px!important;align-items:center!important}
-    .ios-fullscreen .liquid-stack{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
-    .ios-fullscreen .liquid-btn{min-height:42px!important;padding:8px!important;font-size:11px!important;border-radius:14px!important;gap:5px!important}
-    .ios-fullscreen .liquid-stack .btn-disarm,.ios-fullscreen .liquid-stack .btn-sos{grid-column:1/-1}
-    .ios-fullscreen .liquid-stack .btn-sos{min-height:46px!important}
-    .ios-fullscreen .entry-icon svg{max-width:min(42vw,300px)!important}
-    .ios-fullscreen .hud{top:10px!important;right:18px!important;scale:1!important}
-    .ios-fullscreen .sensor-column{max-width: 40% !important;padding-right:16px!important;gap:5px!important}
-    .ios-fullscreen .sensor-chip{max-width:180px!important;padding:6px 8px!important;font-size:10px!important}
-  }
-  /* The active console owns its fullscreen layout. Legacy entry grid rules
-     must not redistribute the controls into empty corners. */
-  /* Fullscreen security-console: modos izquierda, escudo centro, sensores derecha */
-  .ios-fullscreen .entry-content.security-console{display:flex!important;flex-wrap:nowrap!important;justify-content:center!important;align-items:center!important;gap:32px!important;padding:50px 48px 36px!important;overflow:auto!important;height:100%!important;max-height:100vh!important;max-height:100dvh!important;box-sizing:border-box!important;-webkit-overflow-scrolling:touch!important}
-  .ios-fullscreen .entry-content.security-console .liquid-stack{order:1!important;flex:0 1 340px!important;min-width:240px!important;max-width:360px!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-self:center!important}
-  .ios-fullscreen .entry-content.security-console .entry-icon{order:2!important;flex:0 0 180px!important;min-height:160px!important;margin:0!important;display:flex!important;justify-content:center!important;align-items:center!important}
-  .ios-fullscreen .entry-content.security-console .console-sensors{order:3!important;flex:0 1 340px!important;min-width:220px!important;max-width:380px!important;align-self:center!important}
-  .ios-fullscreen .entry-content.security-console .console-keypad{order:4!important;flex:0 0 240px!important;width:240px!important;max-width:260px!important}
-  @media(max-width:900px){.ios-fullscreen .entry-content.security-console{flex-wrap:wrap!important;padding:80px 20px 24px!important;gap:18px!important;align-content:flex-start!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important}.ios-fullscreen .entry-content.security-console .entry-icon{order:1!important;flex:0 0 auto!important;min-height:110px!important;display:flex!important}.ios-fullscreen .entry-content.security-console .liquid-stack{order:2!important;flex:0 0 100%!important;width:100%!important;max-width:380px!important}.ios-fullscreen .entry-content.security-console .console-sensors{order:3!important;flex:0 0 100%!important;width:100%!important;max-width:380px!important}.ios-fullscreen .entry-content.security-console .console-keypad{order:4!important;flex:0 0 100%!important;width:100%!important;max-width:320px!important;padding:14px!important}}
-
-  .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
-  .badge.armed_away,.badge.armed_vacation{background:rgba(229,57,53,.12);color:var(--error-color,#e53935)}
-  .badge.armed_home,.badge.armed_night{background:rgba(251,140,0,.12);color:#fb8c00}
-  .badge.disarmed{background:rgba(67,160,71,.12);color:var(--success-color,#43a047)}
-  .badge.triggered{background:rgba(229,57,53,.2);color:var(--error-color,#e53935);animation:pulse 1s ease-in-out infinite}
-
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-  .meta{font-size:12px;opacity:.5}
-  .setting-label{font-size:13px;font-weight:700;color:var(--primary-text-color);letter-spacing:0.01em;margin-bottom:2px;display:block}
-  .setting-sublabel{font-size:12px;font-weight:400;opacity:0.55;color:var(--primary-text-color);margin-bottom:6px;display:block}
-  .temp-alert-row{display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap}
-  .temp-alert-row input[type=number]{width:72px;padding:6px 8px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:inherit;font-size:13px;font-weight:700;text-align:center}
-  .temp-alert-status-ok{color:#43a047;font-size:12px}
-  .temp-alert-status-warn{color:#e53935;font-size:12px;font-weight:700}
-
-  /* Generic buttons */
-  button{border:0;border-radius:14px;padding:10px 18px;font:700 13px/1 'Outfit',Inter,system-ui,sans-serif;cursor:pointer;transition:background 0.2s,opacity .15s,transform .15s cubic-bezier(0.175, 0.885, 0.32, 1.275),box-shadow 0.2s}
-  button:active:not(:disabled){transform:scale(.94) translateY(1px)}
-  button.primary{background:var(--primary-color,#007aff);color:#fff;box-shadow:0 4px 12px rgba(0, 122, 255, 0.25)}
-  button.primary:hover{background:#0062cc}
-  button.ghost{background:rgba(255, 255, 255, 0.05);border:1px solid rgba(255, 255, 255, 0.08);color:var(--primary-text-color)}
-  button.ghost:hover{background:rgba(255, 255, 255, 0.1)}
-
-
-  /* FS button */
-  .fs-btn{background:rgba(255,255,255,0.05);padding:8px;border-radius:10px;font-size:16px}
-
-  /* Modal Fixes */
-  .modal-back{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;padding:20px;z-index:999999;backdrop-filter:blur(12px)}
-  .modal-back.open{display:flex}
-  .modal{width:min(400px,100%);max-height:85vh;overflow:hidden;display:grid;grid-template-rows:auto 1fr auto;gap:14px;padding:24px;border-radius:32px;background:rgba(22, 24, 38, 0.95);border:1px solid rgba(255,255,255,0.08);box-shadow:0 30px 100px rgba(0,0,0,0.6);backdrop-filter:blur(28px)}
-  .modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
-  .modal-head h3{margin:0;font-size:20px;font-weight:800}
-  .modal-body{overflow:auto;padding:5px}
-  .modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:15px}
-  /* PIN modal */
-  .pm .modal{max-width:340px;min-height:unset;grid-template-rows:auto auto auto;background:rgba(22, 24, 38, 0.82) !important;backdrop-filter:blur(16px) saturate(140%) !important;-webkit-backdrop-filter:blur(16px) saturate(140%) !important;border:1px solid rgba(255, 255, 255, 0.12) !important;box-shadow:0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;border-radius:36px;padding:28px;display:flex;flex-direction:column;align-items:center;gap:16px}
-  .pin-input{font-size:28px;letter-spacing:10px;text-align:center;padding:12px;border-radius:16px;border:none;background:rgba(255,255,255,0.02);color:inherit;width:100%;outline:none;box-shadow:inset 0 1px 3px rgba(0,0,0,0.2)}
-  .pin-error{color:var(--error-color,#e53935);font-size:13px;min-height:18px;text-align:center}
-  .pin-grid{display:grid;grid-template-columns:repeat(3,68px);gap:16px;justify-content:center;margin-top:10px}
-  .pin-btn-round{width:68px;height:68px;border-radius:50% !important;border:1px solid rgba(255,255,255,0.1) !important;background:rgba(255,255,255,0.04) !important;color:#fff !important;font-size:24px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.2s, transform 0.15s, border-color 0.2s;box-shadow:0 4px 10px rgba(0,0,0,0.15);padding:0 !important;outline:none}
-  .pin-btn-round:hover{background:rgba(255,255,255,0.12) !important;border-color:rgba(255,255,255,0.2) !important}
-  .pin-btn-round:active{transform:scale(0.92) !important;background:rgba(255,255,255,0.2) !important}
-  .pin-btn-round.action-key{font-size:12px;font-weight:700;letter-spacing:0.3px;text-transform:uppercase;border-color:transparent !important;background:transparent !important;box-shadow:none}
-  .pin-btn-round.action-key:hover{background:rgba(255,255,255,0.05) !important}
-  .pin-btn-round.action-key.enter-key{color:#34c759 !important}
-  .pin-btn-round.action-key.delete-key{color:#ff3b30 !important}
-  /* User card */
-  .user-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 18px;
-    border-radius: 18px;
-    border: 1px solid rgba(255, 255, 255, 0.16) !important;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.025) 100%) !important;
-    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;
-    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.20) !important;
-    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
-  }
-  .user-card:hover {
-    border-color: rgba(255, 255, 255, 0.25) !important;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%) !important;
-    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
-    transform: translateY(-2px);
-  }
-  .user-badge{display:inline-block;padding:3px 9px;border-radius:8px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;background:rgba(0,122,255,.12);color:var(--primary-color,#007aff)}
-  /* REEMPLAZA los colores neón por tokens legibles */
-  .user-badge.admin {
-    background: rgba(255,255,255,0.12);
-    color: rgba(255,255,255,0.92);
-    border: 1px solid rgba(255,255,255,0.18);
-    font-weight: 700;
-    letter-spacing: 0.04em;
-  }
-  .user-badge.user {
-    background: rgba(255,255,255,0.08);
-    color: rgba(255,255,255,0.75);
-    border: 1px solid rgba(255,255,255,0.12);
-  }
-  /* Role label debajo del nombre */
-  .user-role-label {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.55);  /* muted, no neón */
-    margin-top: 2px;
-  }
-  /* Notif target chip */
-  .notif-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:rgba(67,160,71,.1);border:1px solid rgba(67,160,71,.2);font-size:12px;font-weight:700;color:var(--success-color,#43a047)}
-  .notif-chip button{padding:0;border:0;background:none;cursor:pointer;opacity:.65}
-  /* Triggered box */
-  .trig-box{padding:12px 14px;border-radius:14px;background:rgba(229,57,53,.08);border:1px dashed var(--error-color,#e53935);font-size:12px;font-weight:600;color:var(--error-color,#e53935)}
-  /* inputs */
-  input[type="text"], input[type="password"], input[type="number"], input[type="search"], select, input[type="datetime-local"], .glass-control {
-    width: 100%;
-    padding: 11px 14px;
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.055));
-    color: var(--primary-text-color);
-    backdrop-filter: blur(18px) saturate(145%);
-    -webkit-backdrop-filter: blur(18px) saturate(145%);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 8px 22px rgba(0, 0, 0, 0.12);
-    font: 700 13px/1.2 'Outfit', Inter, system-ui, sans-serif;
-    outline: none;
-    transition: transform 0.34s cubic-bezier(0.18, 0.89, 0.32, 1.32), border-color 0.22s, box-shadow 0.22s;
-    display: block;
-    box-sizing: border-box;
-  }
-  input[type="text"]:focus, input[type="password"]:focus, input[type="number"]:focus, input[type="search"]:focus, select:focus, input[type="datetime-local"]:focus, .glass-control:focus {
-    transform: scale(1.018);
-    border-color: rgba(112, 188, 255, 0.78);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.23), 0 0 0 4px rgba(0, 122, 255, 0.14), 0 10px 28px rgba(0, 0, 0, 0.16);
-  }
-  .x-never-match input[type="text"],
-  .x-never-match input[type="password"],
-  .x-never-match input[type="number"],
-  .x-never-match input[type="search"],
-  .x-never-match select,
-  .x-never-match input[type="datetime-local"],
-  .x-never-match .glass-control {
-    background: rgba(255, 255, 255, 0.52);
-    border-color: rgba(0, 0, 0, 0.10);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 6px 16px rgba(0, 0, 0, 0.05);
-  }
-  /* search */
-  .search-wrap{display:flex;gap:10px;align-items:center}
-  .search-wrap input{flex:1;min-width:0}
-  /* ── Dual-panel selector modal ───────────────────────────────────────────────────── */
-  #selector-modal .modal{width:min(980px,96vw);height:min(780px,92vh);max-height:92vh;grid-template-rows:auto minmax(0,1fr) auto}
-  #selector-modal .modal-body{min-height:0;height:100%;padding:5px 0}
-  .sel-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;overflow:hidden;min-height:0;height:100%}
-  @media(max-width:600px){.sel-grid{grid-template-columns:1fr}}
-  .sel-panel{display:flex;flex-direction:column;gap:8px;overflow:hidden;min-width:0;min-height:0;padding:12px;border-radius:18px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.07)}
-  .sel-panel-inner{overflow-y:auto;overscroll-behavior:contain;flex:1;min-height:0;display:grid;gap:6px;align-content:start;padding-right:4px}
-  .sel-actions{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}
-  .pick-row{display:grid;grid-template-columns:20px minmax(0,1fr);align-items:start;gap:10px;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.025);cursor:pointer;transition:background .12s,border-color .12s}
-  .pick-row:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.16)}
-  .pick-row:has(input:checked){border-color:rgba(0,122,255,.58);background:rgba(0,122,255,.10)}
-  .pick-row input[type=checkbox]{width:16px;height:16px;cursor:pointer;accent-color:var(--primary-color,#007aff);margin-top:2px}
-  .pick-row-name{font-weight:750;font-size:13px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;line-height:1.25}
-  .pick-row-meta{font-size:11px;opacity:0.58;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .device-facts{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
-  .device-fact{display:inline-flex;align-items:center;min-height:20px;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:750;line-height:1.1;white-space:nowrap}
-  .device-fact.status-open{color:#ff8a80;background:rgba(255,82,82,.12)}
-  .device-fact.status-closed{color:#7ee2a8;background:rgba(52,199,.12)}
-  .device-fact.power-low{color:#ffd166;background:rgba(255,183,77,.13)}
-  .sel-right-item{display:flex;align-items:center;justify-content:space-between;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.09);background:rgba(255,255,255,0.055);font-size:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.06)}
-  .sel-right-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
-  .sel-right-facts{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
-  .mode-sensor-grid .sensor-pill{width:100%;min-width:0;padding:9px 10px;gap:7px}
-  .mode-sensor-grid .sensor-pill .pill-content{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:6px;min-width:0;flex:1}
-  .mode-sensor-grid .sensor-pill .pill-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .mode-sensor-grid .sensor-pill .pill-status{font-size:10px;font-weight:800;opacity:.78;white-space:nowrap}
-  .mode-sensor-grid .sensor-pill .pill-power{font-size:10px;font-weight:700;opacity:.82;white-space:nowrap}
-  .sel-panel-inner::-webkit-scrollbar{width:7px}.sel-panel-inner::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.18);border-radius:99px}
-  /* Activity log */
-  .log-item{display:flex;align-items:flex-start;gap:12px;padding:13px;border-radius:18px;border:1px solid var(--log-item-border, rgba(255,255,255,.05));background:linear-gradient(135deg,color-mix(in srgb,var(--log-item-bg,rgba(255,255,255,.02)) 84%,#fff 16%),var(--log-item-bg,rgba(255,255,255,.02)));color:var(--primary-text-color,#fff);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 7px 18px rgba(0,0,0,.10)}
-  .log-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:13px;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 5px 12px rgba(0,0,0,.12)}
-  .glass-orb{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 2px 4px rgba(255,255,255,0.5),0 2px 6px rgba(0,0,0,0.2);background:rgba(255,255,255,0.3)}
-  .log-item.log-item--armed .log-icon{background:rgba(255,149,0,.16);border-color:rgba(255,183,77,.28)}
-  .log-item.log-item--armed .glass-orb{background:linear-gradient(135deg,#ffb74d,#f57c00)}
-  .log-item.log-item--disarmed .log-icon{background:rgba(52,199,.14);border-color:rgba(105,219,139,.28)}
-  .log-item.log-item--disarmed .glass-orb{background:linear-gradient(135deg,#69db8b,#388e3c)}
-  .log-item.log-item--triggered .log-icon{background:rgba(255,69,58,.16);border-color:rgba(255,139,131,.30)}
-  .log-item.log-item--triggered .glass-orb{background:linear-gradient(135deg,#ff8b83,#d32f2f)}
-  .log-body{flex:1;min-width:0}
-  .log-title{font-weight:700;font-size:13px}
-  .log-meta{font-size:11px;opacity:.55;margin-top:2px}
-  .log-badge{display:inline-block;padding:2px 7px;border-radius:6px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-right:4px}
-  .log-badge.arm{background:rgba(251,140,0,.12);color:#fb8c00}
-  .log-badge.disarm{background:rgba(67,160,71,.12);color:var(--success-color,#43a047)}
-  .log-badge.trigger{background:rgba(229,57,53,.15);color:var(--error-color,#e53935)}
-  button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 72%,#fff);outline-offset:3px}
-  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}.wx canvas{display:none!important}}
-  /* Personalization section styles */
-  .personalize-section {
-    margin-top: 18px;
-    padding: 18px;
-    background: var(--personalize-bg, rgba(255,255,255,0.02));
-    border: 1px solid var(--personalize-border, rgba(255,255,255,0.06));
-    border-radius: 22px;
-    display: grid;
-    gap: 16px;
-  }
-  .personalize-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"home temp" "panel weather" "hub clock" "emergency emergency";gap:14px 16px;align-items:start}
-  .personalize-column{display:contents}
-  .personalize-field{min-width:0;align-self:stretch}
-  .pf-home{grid-area:home}.pf-temp{grid-area:temp}.pf-weather{grid-area:weather}.pf-panel{grid-area:panel}.pf-hub{grid-area:hub}.pf-emergency{grid-area:emergency}.pf-clock{grid-area:clock}
-  .pf-panel,.pf-hub{display:flex;flex-direction:column;gap:8px}
-  .pf-emergency{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"emergency-label emergency-label" "emergency-input emergency-help";gap:5px 16px;align-items:start;padding-top:2px}
-  .pf-emergency #lbl-emergency-number{grid-area:emergency-label}.pf-emergency #emergency-number-input{grid-area:emergency-input}.pf-emergency #emergency-number-help{grid-area:emergency-help;margin:0!important}
-  .sos-configuration {
-    padding: 18px;
-    border-radius: 24px;
-    border: 1px solid rgba(255, 59, 48, 0.25);
-    background: linear-gradient(135deg, rgba(255, 59, 48, 0.12), rgba(255, 255, 255, 0.02));
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 12px 28px rgba(255, 59, 48, 0.06), 0 8px 20px rgba(0, 0, 0, 0.12);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  /* SOS uses the full personalization width so outputs never create a tall,
-     narrow list with unused space beside it. */
-  .sos-configuration{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"title action" "outputs outputs" "help help";gap:12px 16px;align-items:center}
-  .sos-configuration #lbl-sos-actions{grid-area:title;margin:0!important;white-space:nowrap}
-  .sos-configuration #sos-output-chips{grid-area:outputs;margin:0!important;display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:7px;align-items:stretch;max-height:148px;overflow-y:auto;overflow-x:hidden;padding:2px 5px 2px 2px;overscroll-behavior:contain}
-  .sos-configuration #sos-output-chips .sensor-pill{width:100%;min-width:0;min-height:34px;justify-content:center;padding:7px 10px;font-size:11px;border-radius:12px}
-  .sos-configuration #sos-output-chips .sensor-pill > span{display:block;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
-  .sos-configuration #sos-output-chips .mode-sensor-none{grid-column:1/-1;padding:18px;min-height:54px}
-  .sos-configuration #btn-select-sos-outputs{grid-area:action;width:auto!important;max-width:230px;min-width:0;white-space:normal;overflow-wrap:anywhere;line-height:1.15}
-  .sos-configuration #sos-output-help{grid-area:help;margin:0!important;max-width:none}
-  .sos-configuration:hover {
-    transform: translateY(-2px);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 16px 36px rgba(255, 59, 48, 0.10), 0 12px 24px rgba(0, 0, 0, 0.16);
-  }
-  .x-never-match .sos-configuration {
-    border-color: rgba(255, 59, 48, 0.3);
-    background: linear-gradient(135deg, rgba(255, 59, 48, 0.08), rgba(0, 0, 0, 0.01));
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 10px 24px rgba(255, 59, 48, 0.05);
-  }
-  #sos-output-chips .sensor-pill{background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.06));border-color:rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 5px 14px rgba(0,0,0,.10)}
-  .background-custom-inputs{flex-direction:column;gap:8px;background:rgba(0,0,0,.15);padding:12px;border-radius:18px;border:1px solid rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
-  .modal-back.open .modal,
-  .lang-modal-back.open .lang-modal-card,
-  .ios-confirm-backdrop.open .ios-confirm-card {
-    animation: liquidDropIn .48s cubic-bezier(.16,1.24,.32,1) both;
-  }
-  @keyframes liquidDropIn{0%{opacity:0;transform:translateY(18px) scale(.91);filter:blur(5px)}65%{opacity:1;transform:translateY(-3px) scale(1.018);filter:blur(0)}100%{transform:translateY(0) scale(1)}}
-  @keyframes argus-modal-in{0%{opacity:0;transform:scale(.94) translateY(8px)}100%{opacity:1;transform:scale(1) translateY(0)}}
-  @media(max-width:700px){
-    .personalize-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"home" "temp" "weather" "panel" "hub" "clock" "emergency"}
-    .pf-emergency{grid-template-columns:minmax(0,1fr);grid-template-areas:"emergency-label" "emergency-input" "emergency-help"}
-    .personalize-section{padding:14px}
-    .sos-configuration{display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:14px;border-radius:24px}
-    .sos-configuration #lbl-sos-actions{white-space:normal}.sos-configuration #btn-select-sos-outputs{width:100%!important}.sos-configuration #sos-output-help{max-width:none}
-  }
-  .wx-horizon::before{content:'';position:absolute;inset:26% 0 0;background:radial-gradient(ellipse at 12% 100%,rgba(0,0,0,.34) 0 18%,transparent 19%),radial-gradient(ellipse at 50% 100%,rgba(0,0,0,.29) 0 23%,transparent 24%),radial-gradient(ellipse at 89% 100%,rgba(0,0,0,.36) 0 20%,transparent 21%);filter:blur(10px)}
-  /* ── Weather Animated Backgrounds (Apple Weather Premium) ────────────────────────────────── */
-  .scene{position:absolute;inset:0;z-index:0;overflow:hidden;background:linear-gradient(165deg,#2c86c7,#8fc7dc 62%,#d7c7aa);transition:background 1.5s ease;border-radius:inherit}
-  .scene.sunny{background:linear-gradient(180deg,#1b60d0,#40a0ff 40%,#90d0ff)}
-  .scene.partlycloudy{background:linear-gradient(180deg,#3073d8,#6bb5ff 50%,#b8e0ff)}
-  .scene.cloudy{background:linear-gradient(180deg,#5b6976,#80909c 50%,#a4b3be)}
-  .scene.fog{background:linear-gradient(180deg,#6c767c,#9ca6ac 50%,#ccd1d4)}
-  .scene.rain,.scene.storm{background:linear-gradient(180deg,#303d49,#495a69 50%,#687985)}
-  .scene.snow{background:linear-gradient(180deg,#627f94,#92b1c7 50%,#d8eaf5)}
-  .scene.night{background:linear-gradient(180deg,#020513 0%,#0a1130 50%,#152248 100%)!important}
-  .scene.sunny::after,.scene.partlycloudy::after{content:'';position:absolute;inset:-50%;background:radial-gradient(circle at 50% 50%,#fff 0%,rgba(255,255,255,0.8) 5%,transparent 15%),radial-gradient(circle at 50% 50%,rgba(255,220,100,0.4) 0%,transparent 30%),conic-gradient(from 0deg at 50% 50%,transparent 0deg,rgba(255,255,255,0.15) 15deg,transparent 30deg,rgba(255,255,255,0.1) 45deg,transparent 60deg,rgba(255,255,255,0.2) 90deg,transparent 120deg,rgba(255,255,255,0.1) 180deg,transparent 240deg,rgba(255,255,255,0.15) 300deg,transparent 360deg);animation:rotate-sun 120s linear infinite;mix-blend-mode:screen;transform-origin:center;left:30%;top:-20%}
-  .scene.night.clear::after,.scene.night.partlycloudy::after{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,#fff 0 1px,transparent 1.5px);background-size:80px 73px;opacity:0.8;animation:stars 12s ease-in-out infinite alternate}
-  .scene.night.clear::before,.scene.night.partlycloudy::before{content:'';position:absolute;right:15%;top:15%;width:50px;height:50px;background:transparent;border-radius:50%;box-shadow:inset -10px -10px 0 0 #ffffe0;filter:drop-shadow(0 0 15px rgba(255,255,180,0.5))}
-  .scene.night.clear.eclipse::before{box-shadow:inset 0 0 0 25px rgba(0,0,0,0.9),0 0 20px 5px rgba(255,100,50,0.8)}
-  .scene.partlycloudy::before,.scene.cloudy::before{content:'';position:absolute;inset:-30%;background:radial-gradient(ellipse at 10% 20%,rgba(255,255,255,0.4) 0%,transparent 25%),radial-gradient(ellipse at 80% 30%,rgba(255,255,255,0.3) 0%,transparent 35%),radial-gradient(ellipse at 40% 50%,rgba(255,255,255,0.2) 0%,transparent 40%);filter:blur(25px);animation:clouds 40s linear infinite alternate}
-  .scene.night.cloudy::before,.scene.night.partlycloudy::before{background:radial-gradient(ellipse at 10% 20%,rgba(100,110,130,0.4) 0%,transparent 25%),radial-gradient(ellipse at 80% 30%,rgba(80,90,120,0.4) 0%,transparent 35%)}
-  .scene.rain::after,.scene.storm::after{content:'';position:absolute;inset:-50%;background:repeating-linear-gradient(108deg,transparent 0,transparent 20px,rgba(200,220,240,0.2) 21px,transparent 22px),repeating-linear-gradient(110deg,transparent 0,transparent 45px,rgba(200,220,240,0.4) 46px,transparent 48px);background-size:100% 200%;animation:rain 1.2s linear infinite;opacity:0.8}
-  .scene.snow::after{content:'';position:absolute;inset:-30%;background-image:radial-gradient(circle,rgba(255,255,255,0.8) 0 2px,transparent 3px),radial-gradient(circle,rgba(255,255,255,0.4) 0 4px,transparent 5px);background-size:45px 52px,90px 110px;background-position:0 0,20px 30px;animation:snow 8s linear infinite}
-  .scene.fog::before{content:'';position:absolute;inset:-20%;background:repeating-linear-gradient(0deg,transparent 0 40px,rgba(240,245,250,0.4) 50px 80px,transparent 90px 140px);filter:blur(18px);animation:fog 20s ease-in-out infinite alternate}
-  .scene.night.fog::before{background:repeating-linear-gradient(0deg,transparent 0 40px,rgba(120,130,150,0.4) 50px 80px,transparent 90px 140px)}
-  .scene.storm{animation:lightning 12s infinite}
-  @keyframes rotate-sun{to{transform:rotate(1turn)}}
-  @keyframes clouds{0%{transform:translate(-5%,-5%) scale(1)}100%{transform:translate(10%,10%) scale(1.1)}}
-  @keyframes stars{0%{opacity:0.4}100%{opacity:1}}
-  @keyframes rain{0%{background-position:0 0,0 0}100%{background-position:-150px 300px,-200px 400px}}
-  @keyframes snow{0%{background-position:0 0,20px 30px}100%{background-position:90px 300px,-45px 400px}}
-  @keyframes fog{0%{transform:translateY(0) scale(1);opacity:0.6}100%{transform:translateY(-50px) scale(1.2);opacity:0.9}}
-  @keyframes lightning{0%,93%,95%,100%{filter:none}94%{filter:brightness(2.5) contrast(1.5) saturate(0.5)}}
-  
-  .wx-static{background:linear-gradient(180deg,rgba(22,28,42,.92),rgba(35,44,67,.95));position:absolute;inset:0;z-index:0;border-radius:inherit}
-  .wx-photo,.wx-collage{background:#10141d;position:absolute;inset:0;z-index:0;border-radius:inherit}
-  .wx-photo::before{content:"";position:absolute;inset:0;background:var(--bg-image) center/cover no-repeat;filter:saturate(1.05) contrast(1.05);border-radius:inherit}
-  .wx-photo::after,.wx-collage::after,.wx-static::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,8,12,.18),rgba(5,8,12,.5));border-radius:inherit}
-  .wx-collage-grid{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4px;padding:4px}
-  .wx-collage-cell{border-radius:18px;background:center/cover no-repeat;min-height:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
-  .wx-video{position:absolute;inset:0;overflow:hidden;border-radius:inherit;z-index:0;background:#10141d}
-  .wx-video::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,8,12,.18),rgba(5,8,12,.5));z-index:2}
-  #argus-canvas-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background-size:cover;background-position:center;background-repeat:no-repeat}
-  #argus-canvas-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.3) 100%);z-index:1;pointer-events:none}
-
-.sensor-pill {
-  display:inline-flex; align-items:center; gap:8px;
-  background:var(--argus-pill-bg, rgba(255,255,255,0.04));
-  border:1px solid var(--argus-pill-border, rgba(255,255,255,0.08));
-  border-radius:14px; padding:10px 14px;
-  font-size:13px; color:var(--argus-pill-color, rgba(255,255,255,0.95));
-  backdrop-filter:blur(10px); transition:all 0.2s cubic-bezier(0.4,0,0.2,1);
-  font-weight:700; box-shadow:0 4px 12px rgba(0,0,0,0.08);
-}
-.sensor-pill:hover { background:var(--argus-pill-bg-hover, rgba(255,255,255,0.08)); border-color:rgba(255,255,255,0.25); transform:translateY(-1px); }
-.sensor-pill .pill-dot { width:10px; height:10px; border-radius:50%; background:#34c759; flex-shrink:0; box-shadow:0 0 10px rgba(52,199,0.5); }
-.sensor-pill .pill-dot.open { background:#ff3b30; box-shadow:0 0 10px rgba(255,59,48,0.5); }
-.sensor-pill .pill-dot.unavailable { background:#999; }
-.sensor-pill button { background:none; border:none; color:var(--argus-pill-color, #fff); cursor:pointer; opacity:0.5; padding:4px; font-size:14px; transition:opacity 0.2s; }
-.sensor-pill button:hover { opacity:1; }
-
-.mode-sensor-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:12px; margin-top:12px; }
-.mode-sensor-none { grid-column:1/-1; padding:30px; text-align:center; background:var(--argus-pill-bg,rgba(255,255,255,0.03)); border:2px dashed var(--argus-pill-border,rgba(255,255,255,0.1)); border-radius:20px; color:var(--argus-pill-color-muted,rgba(255,255,255,0.4)); font-size:14px; font-weight:600; }
-.subsection-title { font-size:12px; font-weight:900; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px; color:var(--argus-pill-color-muted,rgba(255,255,255,0.5)); display:block; }
-
-
-/* ── Language Picker ───────────────────────────────────── */
-.lang-pill {
-  display:inline-flex; align-items:center; gap:6px;
-  padding:7px 14px; border-radius:999px;
-  background:rgba(255,255,255,0.10);
-  border:1px solid rgba(255,255,255,0.18);
-  backdrop-filter:blur(12px) saturate(120%);
-  -webkit-backdrop-filter:blur(12px) saturate(120%);
-  color:#fff; font-size:13px; font-weight:700;
-  cursor:pointer; transition:all 0.22s cubic-bezier(0.4,0,0.2,1);
-  box-shadow:0 4px 16px rgba(0,0,0,0.18);
-  white-space:nowrap; flex-shrink:0;
-}
-.lang-pill:hover { background:rgba(255,255,255,0.22); transform:translateY(-1px); }
-.x-never-match .lang-pill {
-  background:rgba(0,0,0,0.07); border-color:rgba(0,0,0,0.15); color:#1e1e2d;
-}
-
-/* Language modal */
-.lang-modal-back { position:fixed; inset:0; background:rgba(0,0,0,0.55); display:none; align-items:center; justify-content:center; z-index:999998; backdrop-filter:blur(4px); }
-.lang-modal-back.open { display:flex; }
-.lang-modal-card {
-  width:min(400px,92vw); border-radius:28px; padding:28px 24px 20px;
-  background:rgba(20,22,35,0.92);
-  border:1px solid rgba(255,255,255,0.14);
-  box-shadow:0 32px 80px rgba(0,0,0,0.55);
-  backdrop-filter:blur(12px) saturate(120%);
-  -webkit-backdrop-filter:blur(12px) saturate(120%);
-  color:#fff;
-  animation: langBounceIn 0.38s cubic-bezier(0.175,0.885,0.32,1.275) forwards;
-}
-.x-never-match .lang-modal-card {
-  background:rgba(255,255,255,0.96); color:#1e1e2d;
-  border-color:rgba(0,0,0,0.12); box-shadow:0 20px 60px rgba(0,0,0,0.25);
-}
-@keyframes langBounceIn {
-  0%   { transform:scale(0.82) translateY(20px); opacity:0; }
-  60%  { transform:scale(1.03) translateY(-4px); opacity:1; }
-  100% { transform:scale(1)    translateY(0);    opacity:1; }
-}
-.lang-modal-title {
-  font-size:18px; font-weight:900; letter-spacing:-0.01em;
-  margin-bottom:20px; text-align:center;
-}
-.lang-grid {
-  display:grid; grid-template-columns:1fr 1fr; gap:10px;
-}
-.lang-option {
-  display:flex; align-items:center; gap:10px;
-  padding:12px 14px; border-radius:16px;
-  background:rgba(255,255,255,0.10);
-  border:1.5px solid rgba(255,255,255,0.18);
-  /* Buttons do not inherit color reliably through the HA shadow DOM. */
-  color:rgba(255,255,255,0.98) !important;
-  text-shadow:0 1px 2px rgba(0,0,0,0.38);
-  cursor:pointer; transition:all 0.18s ease;
-  font-size:14px; font-weight:750;
-}
-.lang-option span:not(.lang-flag) { color:inherit !important; }
-.lang-option:hover { background:rgba(255,255,255,0.16); border-color:rgba(255,255,255,0.28); transform:translateY(-1px); }
-.lang-option.active {
-  background:rgba(3,169,244,0.30); border-color:rgba(76,201,255,0.82);
-  box-shadow:0 0 18px rgba(3,169,244,0.25);
-}
-.lang-flag { font-size:22px; line-height:1; }
-.lang-close-row { display:flex; justify-content:center; margin-top:18px; }
-.lang-close-btn {
-  padding:9px 28px; border-radius:14px;
-  background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15);
-  color:#fff; font-size:13px; font-weight:700; cursor:pointer;
-  transition:background 0.18s;
-}
-.lang-close-btn:hover { background:rgba(255,255,255,0.2); }
-
-/* Background File Manager Styles */
-.file-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 12px;
-  padding: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.22s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-.file-card:hover {
-  background: rgba(255, 255, 255, 0.08) !important;
-  border-color: rgba(255, 255, 255, 0.16) !important;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-.x-never-match .file-card {
-  background: rgba(0, 0, 0, 0.02);
-  border-color: rgba(0, 0, 0, 0.07);
-  color: #1c1c1e;
-}
-.x-never-match .file-card:hover {
-  background: rgba(0, 0, 0, 0.05) !important;
-  border-color: rgba(0, 0, 0, 0.12) !important;
-}
-.file-card-preview {
-  position: relative;
-  width: 100%;
-  height: 64px;
-  border-radius: 8px;
-  overflow: hidden;
-  background: rgba(0, 0, 0, 0.2);
-}
-.file-card-preview img, .file-card-preview video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.file-card-name {
-  font-size: 10px;
-  font-weight: 700;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  opacity: 0.85;
-}
-.file-card-meta {
-  font-size: 9px;
-  opacity: 0.55;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.file-card-actions {
-  display: flex;
-  gap: 4px;
-  margin-top: auto;
-}
-.file-card-btn {
-  flex: 1;
-  padding: 4px;
-  font-size: 8px;
-  font-weight: 700;
-  text-transform: uppercase;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.03);
-  color: inherit;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.15s ease;
-}
-.file-card-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-.x-never-match .file-card-btn {
-  border-color: rgba(0, 0, 0, 0.12);
-  background: rgba(0, 0, 0, 0.02);
-}
-.x-never-match .file-card-btn:hover {
-  background: rgba(0, 0, 0, 0.08);
-  border-color: rgba(0, 0, 0, 0.25);
-}
-.file-card-btn-delete {
-  padding: 3px 6px;
-  color: #ff3b30;
-  border: 1px solid rgba(255, 59, 48, 0.15);
-  background: rgba(255, 59, 48, 0.05);
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 9px;
-  transition: all 0.15s ease;
-}
-.file-card-btn-delete:hover {
-  background: rgba(255, 59, 48, 0.25);
-  border-color: rgba(255, 59, 48, 0.45);
-}
-
-.argus-bootstrap-layer {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.88);
-  /* NO backdrop-filter: element is permanently in DOM (display:none toggle).
-     WebKit compositor leak bug — opaque background is visually equivalent. */
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  animation: fadeIn 0.4s ease forwards;
-}
-.argus-bootstrap-card {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 24px;
-  padding: 40px;
-  max-width: 480px;
-  width: 90%;
-  box-shadow: 0 16px 40px rgba(0,0,0,0.5);
-  text-align: center;
-}
-.argus-bootstrap-card h1 {
-  margin: 0 0 16px;
-  font-weight: 300;
-  font-size: 28px;
-  letter-spacing: 0.5px;
-}
-.argus-bootstrap-card p {
-  color: rgba(255,255,255,0.7);
-  font-size: 16px;
-  line-height: 1.5;
-  margin-bottom: 32px;
-}
-@keyframes argusWelcomeCard {
-  from { opacity: 0; transform: translateY(18px) scale(.96); }
-  65% { opacity: 1; transform: translateY(-3px) scale(1.01); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-@keyframes argusWelcomeLogo {
-  0%,100% { transform: translateY(0) scale(1); filter: drop-shadow(0 10px 18px rgba(32,145,255,.28)); }
-  50% { transform: translateY(-5px) scale(1.045); filter: drop-shadow(0 16px 26px rgba(32,145,255,.5)); }
-}
-@keyframes argusWelcomeCheck {
-  from { opacity: 0; transform: scale(.55) rotate(-16deg); }
-  70% { opacity: 1; transform: scale(1.1) rotate(4deg); }
-  to { opacity: 1; transform: scale(1) rotate(0); }
-}
-.argus-first-run-card { animation: argusWelcomeCard .58s cubic-bezier(.22,1.2,.36,1) both; }
-.argus-first-run-logo { height:68px; width:68px; border-radius:19px; animation:argusWelcomeLogo 2.4s ease-in-out infinite; }
-.argus-first-run-brand { display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:20px; }
-.argus-first-run-brand h1 { margin:0; font-size:1.65rem; font-weight:850; letter-spacing:-.02em; }
-.argus-first-run-brand p { margin:0; font-size:.92rem; color:rgba(255,255,255,.7); }
-.argus-first-run-thank-icon { width:74px; height:74px; margin:0 auto 18px; display:grid; place-items:center; border-radius:50%; background:rgba(52,199,89,.18); border:1px solid rgba(52,199,89,.45); color:#58e37c; font-size:2.15rem; box-shadow:0 0 32px rgba(52,199,89,.22); animation:argusWelcomeCheck .5s cubic-bezier(.2,1.35,.35,1) both; }
-
-/* ─── tvOS Profile Selector ─── */
-.argus-profile-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.4); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
-  /* NO backdrop-filter: causes orphaned compositor layers in WebKit when removed.
-     High-opacity background achieves same visual effect safely. */
-  display: flex; align-items: center; justify-content: center;
-  z-index: 9999;
-  animation: argus-overlay-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-@keyframes argus-overlay-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-/* Título arriba */
-.argus-profile-header {
-  text-align: center;
-  margin-bottom: 36px;
-  animation: argus-slide-down 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
-}
-@keyframes argus-slide-down {
-  from { opacity: 0; transform: translateY(-20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.argus-profile-header h2 {
-  margin: 0; font-size: 1.6rem; font-weight: 800;
-  color: #fff; letter-spacing: -0.02em;
-}
-.argus-profile-header p {
-  margin: 6px 0 0; font-size: 0.85rem;
-  color: rgba(255,255,255,0.55);
-}
-
-/* Grid de perfiles */
-.argus-profile-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 36px 24px;
-  max-width: 900px;
-  width: 100%;
-  justify-content: center;
-  animation: argus-grid-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
-}
-@keyframes argus-grid-in {
-  from { opacity: 0; transform: scale(0.92) translateY(16px); }
-  to   { opacity: 1; transform: scale(1) translateY(0); }
-}
-
-/* Cada perfil */
-@media (max-width: 950px) and (orientation: landscape) {
-  .argus-profile-grid { 
-    grid-template-columns: repeat(4, 1fr);
-    padding: 16px;
-  }
-}
-@media (max-width: 600px) and (orientation: portrait) {
-  .argus-profile-grid { 
-    grid-template-columns: repeat(2, 1fr);
-    padding: 16px;
-    gap: 20px 16px;
-  }
-}
-@media (max-width: 380px) and (orientation: portrait) {
-  .argus-profile-grid { 
-    grid-template-columns: 1fr;
-    padding: 16px;
-  }
-  .argus-profile-item { width: 100%; }
-}
-
-.argus-profile-item {
-  touch-action: manipulation;
-  min-height: 44px;
-  display: flex; flex-direction: column;
-  align-items: center; gap: 10px;
-  cursor: pointer;
-  border-radius: 16px;
-  padding: 14px 8px 10px;
-  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-              background 0.2s ease;
-  -webkit-tap-highlight-color: transparent;
-}
-.argus-profile-item:hover {
-  transform: scale(1.08);
-  background: rgba(255,255,255,0.07);
-}
-.argus-profile-item:active {
-  transform: scale(0.96);
-}
-.argus-profile-item:focus-visible {
-  outline: 2px solid rgba(255,255,255,0.6);
-  outline-offset: 4px;
-}
-
-/* Círculo avatar */
-.argus-profile-circle {
-  width: 120px; height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid rgba(255,255,255,0.18);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.35);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.22s;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 2.5rem; font-weight: 800;
-  color: #fff; overflow: hidden; flex-shrink: 0;
-  background: rgba(255,255,255,0.1);
-  position: relative;
-}
-@media (max-width: 600px) and (orientation: portrait) {
-  .argus-profile-circle {
-    width: 76px; height: 76px;
-    font-size: 1.5rem; border-width: 2.5px;
-  }
-}
-@media (max-width: 950px) and (orientation: landscape) {
-  .argus-profile-circle {
-    width: 84px; height: 84px;
-    font-size: 1.8rem; border-width: 2.5px;
-  }
-}
-.argus-profile-item:hover .argus-profile-circle {
-  border-color: rgba(255,255,255,0.55);
-  box-shadow: 0 0 0 3px rgba(255,255,255,0.15), 0 6px 24px rgba(0,0,0,0.4);
-}
-.argus-profile-circle img {
-  width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
-}
-.argus-profile-circle .lock-badge {
-  position: absolute; bottom: 0; right: 0;
-  width: 28px; height: 28px; border-radius: 50%;
-  background: rgba(0,0,0,0.75); display: flex;
-  align-items: center; justify-content: center;
-  font-size: 14px; border: 2px solid rgba(255,255,255,0.2);
-}
-@media (max-width: 600px) {
-  .argus-profile-circle .lock-badge {
-    width: 22px; height: 22px; font-size: 11px; border-width: 1.5px;
-  }
-}
-
-/* Nombre y rol */
-.argus-profile-label {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.argus-profile-label .p-name {
-  font-size: 1rem; font-weight: 700;
-  color: #fff; line-height: 1.2;
-  max-width: 140px; overflow: hidden;
-  text-overflow: ellipsis; white-space: nowrap;
-}
-.argus-profile-label .p-role {
-  font-size: 0.72rem; font-weight: 600;
-  color: rgba(255,255,255,0.6);
-  margin-top: 4px;
-  text-transform: uppercase; letter-spacing: 0.04em;
-}
-@media (max-width: 600px) {
-  .argus-profile-label .p-name { font-size: 0.82rem; max-width: 80px; }
-  .argus-profile-label .p-role { font-size: 0.65rem; margin-top: 2px; }
-}
-
-/* ─── Welcome Screen (Fase 2) ─── */
-.argus-welcome-screen {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.88);
-  /* NO backdrop-filter: Safari/WebKit compositor bug causes blur to persist
-     after element.remove(). Use opaque background instead. */
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  z-index: 10000;
-  pointer-events: none;
-}
-.argus-welcome-avatar {
-  width: 110px; height: 110px;
-  border-radius: 50%; overflow: hidden;
-  border: 3px solid rgba(255,255,255,0.3);
-  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 2.8rem; font-weight: 800; color: #fff;
-  background: rgba(255,255,255,0.12);
-  will-change: transform, width, height, border-radius;
-}
-.argus-welcome-avatar img {
-  width: 100%; height: 100%; object-fit: cover;
-}
-.argus-welcome-text {
-  margin-top: 20px; text-align: center;
-}
-.argus-welcome-text .greeting {
-  font-size: 1.0rem; color: rgba(255,255,255,0.6);
-  font-weight: 500; letter-spacing: 0.02em;
-  margin: 0;
-}
-.argus-welcome-text .wname {
-  font-size: 2.0rem; font-weight: 900;
-  color: #fff; letter-spacing: -0.03em;
-  margin: 6px 0 0;
-  line-height: 1;
-}
-
-/* PIN prompt dentro del selector tvOS */
-.argus-pin-prompt {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.75);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 10001;
-  animation: argus-overlay-in 0.25s ease both;
-}
-.argus-pin-card {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.14);
-  border-radius: 20px; padding: 28px 24px;
-  width: min(340px, 90vw);
-  text-align: center; color: #fff;
-}
-.argus-pin-card h3 {
-  margin: 0 0 4px; font-size: 1.1rem; font-weight: 800;
-}
-.argus-pin-card .pin-sub {
-  font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-bottom: 16px;
-}
-.argus-pin-input {
-  width: 100%; box-sizing: border-box;
-  text-align: center; font-size: 1.6rem;
-  letter-spacing: 0.4em; padding: 12px;
-  border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);
-  background: rgba(255,255,255,0.07); color: #fff;
-  outline: none; margin-bottom: 14px;
-}
-.argus-numpad {
-  display: grid; grid-template-columns: repeat(3,1fr); gap: 10px;
-  margin-bottom: 12px;
-}
-.argus-numpad button {
-  padding: 14px; font-size: 1.15rem; font-weight: 700;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.14);
-  background: rgba(255,255,255,0.08); color: #fff;
-  cursor: pointer;
-  transition: background 0.15s, transform 0.1s;
-}
-.argus-numpad button:active { transform: scale(0.93); background: rgba(255,255,255,0.18); }
-.argus-pin-actions {
-  display: flex; gap: 10px; margin-top: 4px;
-}
-.argus-pin-actions button {
-  flex: 1; padding: 12px; border-radius: 12px; font-size: 0.85rem;
-  font-weight: 700; cursor: pointer;
-  border: 1px solid rgba(255,255,255,0.15);
-  background: rgba(255,255,255,0.07); color: #fff;
-  transition: background 0.15s;
-}
-.argus-pin-actions button:hover { background: rgba(255,255,255,0.15); }
-
-@keyframes argus-shake {
-  0%, 100% { transform: translateX(0); }
-  20%       { transform: translateX(-8px); }
-  40%       { transform: translateX(8px); }
-  60%       { transform: translateX(-5px); }
-  80%       { transform: translateX(5px); }
-}
-@keyframes argus-overlay-out {
-  from { opacity: 1; }
-  to   { opacity: 0; }
-}
-
-.user-selector-grid {
-
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  gap: 16px;
-  margin-top: 24px;
-}
-.user-card {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 16px;
-  padding: 20px 10px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
-.user-card:hover {
-  background: rgba(255,255,255,0.2);
-  transform: translateY(-2px);
-}
-.user-card-own {
-  border-color: rgba(0, 122, 255, 0.55);
-  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.22), 0 8px 24px rgba(0,122,255,0.1);
-}
-.user-card-own:hover {
-  border-color: rgba(0, 122, 255, 0.8);
-}
-.profile-own-badge {
-  font-size: 10px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #007aff;
-  background: rgba(0, 122, 255, 0.12);
-  border-radius: 999px;
-  padding: 2px 8px;
-  margin-top: -4px;
-}
-.user-role-label {
-  font-size: 11px;
-  opacity: 0.55;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-}
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-6px); }
-  40%, 80% { transform: translateX(6px); }
-}
-.user-avatar {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  font-weight: 600;
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.3);
-}
-.user-name {
-  font-size: 14px;
-  font-weight: 500;
-  color: rgba(255,255,255,0.9);
-}
-.pin-prompt {
-  display: none;
-  animation: fadeIn 0.3s ease forwards;
-  margin-top: 20px;
-}
-.pin-prompt input {
-  font-size: 24px;
-  letter-spacing: 8px;
-  text-align: center;
-  padding: 10px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.2);
-  background: rgba(0,0,0,0.2);
-  color: white;
-  width: 200px;
-  margin-bottom: 20px;
-}
-.btn-claim {
-  background: #ff3b30;
-  color: white;
-  border: none;
-  padding: 14px 28px;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.btn-claim:hover { background: #ff453a; }
-.btn-start {
-  background: #34c759;
-  color: white;
-  border: none;
-  padding: 14px 28px;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.btn-start:hover { background: #30d158; }
-.btn-cancel {
-  background: rgba(255,255,255,0.1);
-  color: white;
-  border: none;
-  padding: 14px 28px;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-left: 10px;
-}
-
-/* Mobile background and HomeKit polish fixes (moved from runtime hack) */
-.entry-icon,.entry-icon>svg,.argus-old-shield,.argus-old-shield>svg{overflow:visible!important;clip-path:none!important;-webkit-clip-path:none!important}
-.entry-icon{contain:layout!important}
-#global-status { display: none !important; }
-#global-status .badge.disarmed,.hero-pill#hero-security-pill{color:#fff!important;background:rgba(18,82,54,.78)!important;border:1px solid rgba(125,255,185,.64)!important;text-shadow:0 1px 2px rgba(0,0,0,.72)!important;opacity:1!important}
-.argus-instance-duplicate-status{display:none!important}
-.pin-prompt,.pin-modal,.modal,.argus-bootstrap-card{color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.55)!important}
-.pin-prompt input,.pin-modal input,.argus-bootstrap-card input{color:#fff!important;background:rgba(8,16,31,.72)!important;border-color:rgba(255,255,255,.24)!important;-webkit-text-fill-color:#fff!important}
-.pin-prompt label,.pin-modal label,.pin-prompt p,.pin-modal p,.argus-bootstrap-card label,.argus-bootstrap-card p{color:rgba(255,255,255,.88)!important}
-#w-activity,.activity-log{max-height:min(58vh,520px)!important;overflow-y:auto!important;overscroll-behavior:contain!important;scrollbar-gutter:stable!important}
-#w-activity .panel-body,.activity-log .panel-body{max-height:inherit!important;overflow-y:auto!important}
-@media(max-width:760px){
-  .hero{display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;gap:12px!important;padding:18px 14px!important}
-  .hero-left{width:100%!important;min-width:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:8px!important}
-  .hero-left>div{text-align:center!important;display:flex!important;flex-direction:column!important;align-items:center!important}
-  .hero-left h1,.hero-left p{text-align:center!important;margin:0 auto!important}
-  .hero-context{display:flex!important;flex-direction:column!important;width:100%!important;margin:4px 0 0!important;align-items:center!important;justify-content:center!important;gap:8px!important}
-  .hero-clock{width:100%!important;min-width:0!important;padding:0!important;border:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:3px!important;line-height:1.12!important}
-  .hero-clock strong,.hero-clock span,#hero-clock-time,#hero-clock-date{width:100%!important;max-width:100%!important;text-align:center!important;display:block!important;margin:0 auto!important;line-height:1.12!important}
-  #hero-profile-container{display:flex!important;justify-content:center!important;align-items:center!important;width:100%!important;margin:2px auto 0!important}
-  .hero-pills{display:grid!important;grid-template-columns:minmax(0,1fr)!important;width:100%!important;min-width:0!important;justify-items:center!important;align-items:center!important;gap:8px!important}
-  .hero-pill{width:min(100%,360px)!important;max-width:100%!important;white-space:normal!important;text-align:center!important;justify-content:center!important;align-items:center!important;line-height:1.25!important;margin:0 auto!important}
-  .dashboard-instances>.panel-head{flex-direction:column!important;align-items:stretch!important;gap:10px!important}
-  #global-status,#global-status .badge{width:100%!important;box-sizing:border-box!important;justify-content:center!important;text-align:center!important;white-space:normal!important;line-height:1.3!important}
-  .entry-content.security-console,.ios-fullscreen .entry-content.security-console{padding-left:10px!important;padding-right:10px!important}
-  .console-hud{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:'location' 'connection' 'readings'!important;justify-items:center!important;align-items:center!important;gap:8px!important;text-align:center!important}
-  .console-hud-loc,.argus-connection-pill,.console-hud-right{width:100%!important;max-width:100%!important;box-sizing:border-box!important;justify-self:center!important;justify-content:center!important;text-align:center!important;margin:0!important}
-  .console-hud-right{display:flex!important;flex-wrap:wrap!important;overflow:visible!important;gap:6px!important}
-  .security-console .liquid-stack{grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important}
-  .security-console .liquid-btn{min-width:0!important;white-space:normal!important;line-height:1.2!important;min-height:46px!important}
-  #w-activity,.activity-log{max-height:46vh!important;overflow-y:auto!important}
-  .argus-mobile-history-overflow-item{display:list-item!important}
-  #w-performance,.performance-card,.device-performance{display:grid!important;grid-template-columns:minmax(0,1fr)!important;justify-items:stretch!important;align-items:center!important;text-align:center!important;gap:10px!important}
-  #w-performance *,.performance-card *,.device-performance *{max-width:100%!important;box-sizing:border-box!important}
-  #w-access .panel-body,#w-settings .panel-body,.sos-actions,.panic-actions{overflow:visible!important;max-height:none!important}
-  .sos-actions button,.panic-actions button,[data-action*="sos"],[data-action*="panic"]{min-height:48px!important;touch-action:manipulation!important}
-  input[type="file"]{max-width:100%!important;width:100%!important;color:#fff!important}
-}
-@media(orientation:landscape) and (max-height:560px) and (max-width:950px){
-  .hero{padding:14px!important;gap:10px!important}
-  .hero-context{grid-template-columns:auto minmax(0,1fr)!important;align-items:center!important}
-  .hero-clock{width:auto!important;justify-items:start!important}
-  .hero-pills{justify-content:flex-start!important}
-  .ios-fullscreen .console-hud{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;grid-template-areas:'location connection readings'!important}
-  .ios-fullscreen .console-hud-loc,.ios-fullscreen .argus-connection-pill,.ios-fullscreen .console-hud-right{width:auto!important}
-}
-  .entry { overflow: hidden; border-radius: 28px; -webkit-mask-image: -webkit-radial-gradient(white, black); }
-</style>
-
-<!-- Bootstrap UI -->
-<div id="bootstrap-overlay" class="argus-bootstrap-layer" style="display:none"></div>
-
-<!-- Language picker modal -->
-<div class="lang-modal-back" id="lang-modal" aria-hidden="true">
-  <div class="lang-modal-card">
-    <div class="lang-modal-title" id="lang-modal-title">🌐 Select Language</div>
-    <div class="lang-grid" id="lang-grid"></div>
-    <div class="lang-close-row">
-      <button class="lang-close-btn" id="lang-modal-close">✕ Close</button>
-    </div>
-  </div>
-</div>
-
-<!-- SOS Confirm Modal -->
-<div class="ios-confirm-backdrop" id="sos-modal">
-  <div class="ios-confirm-card liquid-glass" id="sos-card" style="position:relative;">
-    <button id="sos-close-x" style="position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.1); border:none; color:white; border-radius:50%; width:32px; height:32px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; opacity:0.8; padding:0; transition:background 0.2s;">✕</button>
-    <div class="ios-confirm-title" id="sos-title-txt">Confirmar pánico</div>
-    <div class="ios-confirm-text" id="sos-text-txt">Desliza para disparar la alarma inmediatamente.</div>
-    <div class="ios-slider-shell">
-      <div class="ios-slider-track">
-        <div class="ios-slider-label" id="sos-label">Desliza para activar SOS</div>
-        <div class="ios-slider-thumb" id="sos-thumb">🚨</div>
-      </div>
-    </div>
-    <div style="margin-top:20px;text-align:center">
-      <a id="sos-call-btn" href="tel:911" style="display:flex;justify-content:center;align-items:center;gap:8px;background:rgba(255,59,48,0.2);color:#ff3b30;text-decoration:none;padding:14px;border-radius:18px;font-weight:800;font-size:15px;border:1px solid rgba(255,59,48,0.3)">
-        📞 Llamar a Emergencias (911)
-      </a>
-      <p id="sos-call-help" class="small" style="margin:10px 4px 0;opacity:.72;line-height:1.35">If this device cannot place calls, Argus will send an urgent alert to the configured mobile devices.</p>
-    </div>
-    <button class="ios-confirm-cancel" id="btn-cancel-sos" style="margin-top:10px">Cancelar</button>
-  </div>
-</div>
-
-
-<div id="argus-canvas-bg"></div>
-
-
-<div class="wrap">
-  <!-- HERO -->
-  <div class="glass hero liquid-glass">
-    <div class="hero-left">
-      <img src="/api/argus_static/argus_logo.png" alt="Argus Logo" style="width: 75px; height: 75px; border-radius: 18px; object-fit: cover; box-shadow: 0 8px 24px rgba(0,0,0,0.25); flex-shrink: 0;">
-      <div>
-        <h1>Argus Home Hub</h1>
-        <p id="p-hero-desc"></p>
-      </div>
-    </div>
-    <div class="hero-context" aria-live="polite">
-      <div class="hero-clock"><strong id="hero-clock-time">--:--</strong><span id="hero-clock-date"></span></div>
-      <div id="hero-profile-container"></div>
-    </div>
-  </div>
-
-  <!-- TWO-COLUMN LAYOUT -->
-  <div class="grid hide-legacy" id="widget-grid">
-
-    <!-- Instances -->
-    <section class="glass panel liquid-glass dashboard-instances" id="w-instances" style="grid-column: 1 / -1;">
-        <div class="panel-head">
-          <h2 id="h-instances"></h2>
-          <div style="display:flex;align-items:center;gap:12px">
-            <div id="global-status"></div>
-          </div>
-        </div>
-        <div id="entries"></div>
-        <!-- Personalization section -->
-        <div class="personalize-section">
-          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--personalize-divider, rgba(255,255,255,0.08)); padding-bottom:10px; flex-wrap:wrap; gap:10px;">
-            <div id="lbl-aesthetic-custom" style="font-weight:900; font-size:14px; letter-spacing:-0.01em; cursor:pointer; display:flex; align-items:center; gap:8px; user-select:none;">
-              <span id="lbl-mas-ajustes">⚙️ Más Ajustes / SOS</span>
-              <span id="personalize-chevron" style="transition: transform 0.3s ease; font-size: 11px; background: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 8px;">▲</span>
-            </div>
-            <div style="display:flex; gap:8px;">
-              <button class="ghost" id="btn-edit-home-name-standalone" style="padding:6px 10px;font-size:11px;border-radius:10px;white-space:nowrap">✏️ Editar Nombre</button>
-              <button class="primary" id="btn-save-personalization-standalone" style="padding:8px 14px;font-size:12px;border-radius:10px;white-space:nowrap">Guardar</button>
-            </div>
-          </div>
-
-          <div class="personalize-workspace" id="personalize-workspace">
-            <div class="personalize-top-row" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.08)">
-              <div>
-                <div class="setting-label" id="lbl-home-name-hdr" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6;">Nombre del Hogar</div>
-                <div id="lbl-home-name-prominent" style="font-size:18px;font-weight:900;margin-top:2px">Mi Casa</div>
-              </div>
-              <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);padding:8px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.08)">
-                <label class="setting-label" id="lbl-emergency-number" for="emergency-number-input" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.8; margin-bottom:0; white-space:nowrap;">🚨 Teléfono SOS:</label>
-                <input id="emergency-number-input" class="glass-control" inputmode="tel" maxlength="16" value="911" style="width:80px;min-height:28px;padding:4px 8px;font-size:13px;font-weight:800;text-align:center;border-radius:8px;background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.15)">
-              </div>
-            </div>
-
-            <div class="sos-configuration">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap">
-                <div class="setting-label" id="lbl-sos-actions" style="font-size:12px; font-weight:800; text-transform:uppercase; opacity:0.8;">🚨 Acciones SOS</div>
-                <button class="ghost" id="btn-select-sos-outputs" style="padding:6px 14px;font-size:12px;font-weight:700;border-radius:10px;background:rgba(255,255,255,0.06);">Seleccionar luces, sirenas o scripts</button>
-              </div>
-              <div id="sos-output-chips" class="sos-output-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-bottom:8px"></div>
-              <div class="small" id="sos-output-help" style="margin-top:5px;opacity:.65;line-height:1.35">Estos dispositivos se activarán siempre al usar SOS, incluso con Argus desarmado.</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Activity log -->
-      <section class="glass panel liquid-glass activity-panel" id="w-activity">
-        <div class="panel-head">
-          <h2 id="h-activity-log"></h2>
-          <div style="display:flex;gap:6px"><button class="ghost" id="btn-refresh-history" style="font-size:10px;padding:4px 8px"></button><button class="ghost" id="btn-export-forensic" style="font-size:10px;padding:4px 8px;opacity:.7">JSON</button><button class="ghost" id="btn-clear-log" style="font-size:10px;padding:4px 8px;opacity:0.6">BORRAR</button></div>
-        </div>
-        <div id="activity-log" style="display:grid;gap:10px;height:280px;overflow-y:auto;margin-top:10px"></div>
-      </section>
-
-      <!-- Modes -->
-      <section class="glass panel liquid-glass modes-panel" id="w-modes">
-        <div class="panel-head">
-           <h2 id="h-modes"></h2>
-        </div>
-        <div class="tabs" id="mode-tabs" style="margin-bottom:15px"></div>
-        <div id="mode-view"></div>
-      </section>
-
-      <!-- Users & Master PIN Settings -->
-      <section class="glass panel liquid-glass access-panel" id="w-access">
-        <div class="panel-head">
-          <div>
-            <h2 id="h-access-title">Control de Acceso y Usuarios</h2>
-            <p class="access-summary" id="p-access-desc">PIN desactivado · Sin usuarios adicionales</p>
-          </div>
-        </div>
-
-        <div class="access-workspace" id="access-workspace" style="display:contents">
-          <!-- Users -->
-          <div class="access-section" id="access-users-section">
-            <h3 id="h-users"></h3>
-            <p class="small" id="p-admin-only" style="margin-bottom:14px;color:#fb8c00;font-weight:600"></p>
-            <div id="users-list" style="display:grid;gap:12px;margin-bottom:16px"></div>
-          </div>
-
-          <!-- Notifications -->
-          <div class="access-section" id="access-notifications-section">
-            <h3 id="h-notifications"></h3>
-            <p class="small" id="p-notif-desc" style="margin:0 0 12px;opacity:.72"></p>
-            <div id="notif-targets" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px"></div>
-            <div style="display:flex;gap:8px;align-items:center">
-              <select id="notif-select" class="glass-control" style="flex:1;min-width:0"></select>
-              <button type="button" class="ghost" id="btn-add-notif" style="white-space:nowrap">＋</button>
-            </div>
-            <div class="save-row" style="margin-top:12px">
-              <button class="primary" id="btn-save-notif" style="width:100%"></button>
-            </div>
-            <div id="notif-status" class="status" style="margin-top:8px;text-align:center;font-size:12px;font-weight:bold;min-height:18px"></div>
-          </div>
-
-          <!-- Master PIN -->
-          <div class="access-section" id="access-pin-section">
-            <h3 id="h-settings-pin">PIN Maestro</h3>
-            <div class="subsection">
-              <div id="current-pin-display" style="font-size:13px;font-weight:800;color:var(--primary-color);margin-bottom:15px;background:rgba(3,169,244,0.1);padding:8px 12px;border-radius:10px;display:inline-block"></div>
-              <div class="field-group collapsible collapsed" id="group-current-pin" style="margin-bottom: 12px">
-                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                   <label id="l-current-pin-lbl"></label>
-                   <a href="#" id="lnk-forgot-pin" style="font-size:11px; color:var(--accent-color, #ff4081); text-decoration:none; font-weight:bold; margin-bottom:4px; display:none;"></a>
-                 </div>
-                 <input type="password" id="current-pin" inputmode="numeric" pattern="[0-9]*" class="glass-control">
-              </div>
-              <p class="small" id="p-pin-remove-hint" style="margin:0 0 10px 0; color:var(--primary-color); font-weight:700">Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.</p>
-              <div style="display:grid;gap:10px">
-                <div class="field-group"><label id="l-new-pin"></label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*" class="glass-control"></div>
-                <div class="field-group"><label id="l-confirm-pin"></label><input type="password" id="new-pin-2" inputmode="numeric" pattern="[0-9]*" class="glass-control"></div>
-              </div>
-              <div class="save-row" style="margin-top:15px">
-                <button class="primary" id="btn-save-pin" style="width:100%"></button>
-              </div>
-              <div id="pin-status" class="status" style="margin-top:8px; text-align:center; font-size:12px; font-weight:bold; min-height:18px;"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Automations -->
-      <section class="glass panel liquid-glass automations-panel" id="w-automations">
-        <h2 id="h-automations"></h2>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-          <span class="small" id="p-linked-rules" style="opacity:0.7"></span>
-          <button class="primary" id="btn-new-auto" style="padding:6px 12px;font-size:11px"></button>
-        </div>
-        <div id="auto-view"></div>
-      </section>
-
-      <!-- Backup & Restore -->
-      <section class="glass panel liquid-glass backup-panel" id="w-backup">
-        <h2 id="h-backup-title">Respaldo y Restauración</h2>
-        <p class="small" id="p-backup-desc" style="margin-bottom:12px;opacity:0.7">Guarda una copia de seguridad de tus ajustes o restaura una anterior.</p>
-        <div style="display:flex;gap:10px;align-items:center;">
-          <button class="ghost" id="btn-export-config" style="flex:1">📤 Descargar</button>
-          <div style="position:relative; flex:1">
-            <button class="ghost" style="width:100%" id="btn-import-trigger">📥 Restaurar</button>
-            <input type="file" id="import-config-file" style="display:none" accept=".json,.argus,application/json">
-          </div>
-          <button class="ghost danger" id="btn-reset-config" style="flex:1">⚠️ Restablecer</button>
-          <button class="primary" id="btn-undo-reset" style="flex:1; display:none;">↩️ Deshacer</button>
-        </div>
-      </section>
-
-      <!-- GitHub Opt-In -->
-      <section class="glass panel liquid-glass github-panel" id="w-github" style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); padding:16px;">
-        <div style="flex:1">
-          <h3 id="github-title" style="margin:0; font-size:14px; font-weight:600"></h3>
-          <p id="github-desc" style="margin:4px 0 0; font-size:12px; opacity:0.7"></p>
-        </div>
-        <div style="display:flex; align-items:center; gap:10px; margin-left:16px;">
-          <a id="github-action" class="github-star-action" href="https://github.com/Chrisalvir1/Argus" target="_blank" rel="noopener noreferrer"></a>
-          <a id="paypal-action" class="glass-control" href="https://paypal.me/CEstradaAlvir" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:4px; padding:6px 14px; border-radius:10px; font-size:12px; font-weight:750; color:#38bdf8 !important; text-decoration:none; background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.3); transition:transform 0.15s ease, background 0.15s ease;">☕ PayPal</a>
-        </div>
-      </section>
-
-  </div> <!-- /grid -->
-</div>
-
-<!-- Selector modal (dual-panel) -->
-<div class="modal-back" id="selector-modal" aria-hidden="true">
-  <div class="modal">
-    <div class="modal-head">
-      <h3 id="selector-title">Seleccionar</h3>
-      <button class="ghost" id="selector-close"></button>
-    </div>
-    <div class="modal-body" style="overflow:hidden;display:flex;flex-direction:column;gap:10px">
-      <div class="sel-grid">
-        <!-- LEFT: lista disponible con búsqueda y acciones rápidas -->
-        <div class="sel-panel">
-          <div class="subsection-title" id="l-available">Disponibles</div>
-          <div class="search-wrap" style="margin:0"><input id="selector-search" type="search" placeholder="Buscar..."></div>
-          <div class="sel-actions">
-            <button class="ghost" id="selector-select-all" style="padding:5px 10px;font-size:12px">☑ Todos</button>
-            <button class="ghost" id="selector-deselect-all" style="padding:5px 10px;font-size:12px">☐ Ninguno</button>
-          </div>
-          <div class="sel-panel-inner" id="selector-list"></div>
-        </div>
-        <!-- RIGHT: panel de seleccionados -->
-        <div class="sel-panel">
-          <div class="subsection-title" id="l-selected-lbl">Seleccionados</div>
-          <div class="small" id="selector-count" style="margin-bottom:4px">0 seleccionados</div>
-          <div class="sel-panel-inner" id="selector-selected"></div>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <div style="display:flex;gap:10px;width:100%;justify-content:flex-end">
-        <button class="ghost" id="selector-clear"></button>
-        <button class="primary" id="selector-accept"></button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Home name edit modal -->
-<div class="modal-back" id="home-name-modal" aria-hidden="true">
-  <div class="modal" style="width:min(400px,96vw)">
-    <div class="modal-head">
-      <h3 id="home-name-modal-h3">🏡 Nombre del Hogar</h3>
-      <button class="ghost" id="home-name-modal-close">✕</button>
-    </div>
-    <div style="display:grid;gap:14px;padding:4px 0">
-      <p class="small" id="home-name-modal-desc" style="margin:0;opacity:.7">This name appears in the instances panel and in full screen.</p>
-      <div class="field-group">
-        <label id="l-home-name-modal-label">Home name</label>
-        <input type="text" id="home-name-input" placeholder="Mi Casa" maxlength="60" autocomplete="off" class="glass-control">
-      </div>
-      <span class="status" id="home-name-status" style="text-align:center"></span>
-    </div>
-    <div class="modal-footer">
-      <button class="ghost" id="home-name-cancel">Cancelar</button>
-      <button class="primary" id="home-name-save">Guardar</button>
-    </div>
-  </div>
-</div>
-
-<!-- PIN modal -->
-<div class="modal-back pm" id="pin-modal" aria-hidden="true">
-  <div class="modal">
-    <div class="modal-head">
-      <h3 id="l-introduce-pin">🔒</h3>
-      <button class="ghost" id="pin-close" style="background:transparent; border:none; color:inherit; font-size:20px; cursor:pointer; padding:4px 8px;">✕</button>
-    </div>
-    <div style="display:grid;gap:10px;width:100%">
-      <p id="l-pin-modal-desc" class="small" style="text-align:center;margin:0;opacity:0.75"></p>
-      <input id="pin-input" class="pin-input" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="••••" autocomplete="off" maxlength="8" readonly>
-      <div class="pin-grid" id="pin-pad">
-        <button class="pin-btn-round" type="button" data-pin-digit="1">1</button>
-        <button class="pin-btn-round" type="button" data-pin-digit="2">2</button>
-        <button class="pin-btn-round" type="button" data-pin-digit="3">3</button>
-        <button class="pin-btn-round" type="button" data-pin-digit="4">4</button>
-        <button class="pin-btn-round" type="button" data-pin-digit="5">5</button>
-        <button class="pin-btn-round" type="button" data-pin-digit="6">6</button>
-        <button class="pin-btn-round" type="button" data-pin-digit="7">7</button>
-        <button class="pin-btn-round" type="button" data-pin-digit="8">8</button>
-        <button class="pin-btn-round" type="button" data-pin-digit="9">9</button>
-        <button class="pin-btn-round action-key delete-key" type="button" id="pin-backspace">Borrar</button>
-        <button class="pin-btn-round" type="button" data-pin-digit="0">0</button>
-        <button class="pin-btn-round action-key enter-key" type="button" id="pin-confirm">Enter</button>
-      </div>
-      <div id="pin-error" class="pin-error"></div>
-      <div style="text-align:center; margin-top: 5px;">
-        <a href="#" id="pin-forgot-link" style="font-size:12px; color:var(--accent-color, #ff4081); text-decoration:none; font-weight:700; display:none;"></a>
-      </div>
-    </div>
-    <button id="pin-cancel" style="display:none"></button>
-  </div>
-</div>
-`;
-
-/* ── Web Component ────────────────────────────────────────────────────── */
 class ArgusPanel extends HTMLElement {
   constructor() {
     super();
