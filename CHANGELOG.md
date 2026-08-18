@@ -1,3 +1,9 @@
+## [2.2.15] - 2026-08-18
+- Single unified "Guardar" button in personalization / SOS workspace next to edit button.
+- Cleanly open jelly water-drop bounce modal directly on mode tab click; removed redundant "Configurar" button.
+- Added XS size option to React Dashboard widget menu with clean 5-column sizing layout.
+- Fixed unstyled SOS confirmation modal backdrop rendering at top of page.
+
 ## [2.2.14] - 2026-08-18
 - Add XS widget size support, compact fit for GitHub and Backup widgets without empty gray space.
 - Add Modes configuration jelly water-drop bounce modal.

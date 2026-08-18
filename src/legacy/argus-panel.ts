@@ -1368,14 +1368,49 @@ _tmpl.innerHTML = `
   }
   
   /* Adaptivity styles for size XS and S widgets */
-  .panel[data-size="XS"] .tab-label, .panel[data-size="S"] .tab-label{display:none}
-  .panel[data-size="XS"] .tab-icon{font-size:18px !important}
-  .panel[data-size="S"] .tab-icon{font-size:24px !important}
   .panel[data-size="XS"] #p-backup-desc, .panel[data-size="S"] #p-backup-desc{display:none}
   .panel[data-size="XS"] #github-desc, .panel[data-size="S"] #github-desc{display:none}
   .panel[data-size="XS"] h2, .panel[data-size="XS"] h3{font-size:13px !important;margin:0 0 4px !important}
-  .panel[data-size="XS"] .panel-body, .panel[data-size="XS"] #mode-view{max-height:220px !important;overflow-y:auto !important;scrollbar-gutter:stable}
+  .panel[data-size="XS"] .panel-body{max-height:220px !important;overflow-y:auto !important;scrollbar-gutter:stable}
   #w-backup[data-size="XS"], #w-backup[data-size="S"], #w-github[data-size="XS"], #w-github[data-size="S"]{height:auto !important;min-height:fit-content !important;align-self:start !important}
+
+  /* Modes widget in XS size: clean ultra-compact mode strip */
+  #w-modes[data-size="XS"] #mode-view,
+  .argus-widget[data-widget-id="alarm-configuration"][data-size="XS"] #mode-view,
+  .modes-panel[data-size="XS"] #mode-view {
+    display: none !important;
+  }
+  #w-modes[data-size="XS"],
+  .modes-panel[data-size="XS"] {
+    height: auto !important;
+    min-height: fit-content !important;
+    padding: 12px 14px !important;
+    box-sizing: border-box !important;
+  }
+  #w-modes[data-size="XS"] .tabs,
+  .modes-panel[data-size="XS"] .tabs {
+    margin-bottom: 0 !important;
+    min-height: 52px !important;
+    padding: 4px !important;
+    gap: 4px !important;
+  }
+  #w-modes[data-size="XS"] .tab,
+  .modes-panel[data-size="XS"] .tab {
+    min-height: 44px !important;
+    padding: 4px 2px !important;
+    gap: 2px !important;
+  }
+  #w-modes[data-size="XS"] .tab-icon,
+  .modes-panel[data-size="XS"] .tab-icon {
+    font-size: 18px !important;
+  }
+  #w-modes[data-size="XS"] .tab-label,
+  .modes-panel[data-size="XS"] .tab-label {
+    font-size: 9px !important;
+    display: block !important;
+    font-weight: 700 !important;
+    line-height: 1.1 !important;
+  }
 
   /* Jelly water-drop bounce animation for modals */
   @keyframes jellyBounce {
@@ -1397,7 +1432,93 @@ _tmpl.innerHTML = `
     0%{transform:scale(0.96) translateY(-8px);opacity:0}
     70%{transform:scale(1.01) translateY(2px);opacity:0.9}
     100%{transform:scale(1) translateY(0);opacity:1}
-  }rm 0.15s; }
+  }
+
+  /* SOS confirmation modal & slider */
+  .ios-confirm-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 999999;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  .ios-confirm-backdrop.open {
+    display: flex !important;
+  }
+  .ios-confirm-card {
+    max-width: 440px;
+    width: 100%;
+    border-radius: 28px;
+    padding: 28px;
+    background: rgba(22, 26, 38, 0.95) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+    text-align: center;
+    color: #fff;
+  }
+  .ios-confirm-title {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  .ios-confirm-text {
+    font-size: 14px;
+    opacity: 0.8;
+    margin-bottom: 20px;
+  }
+  .ios-slider-shell {
+    margin: 16px 0;
+  }
+  .ios-slider-track {
+    position: relative;
+    height: 54px;
+    border-radius: 27px;
+    background: rgba(217, 4, 41, 0.15);
+    border: 1px solid rgba(217, 4, 41, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    user-select: none;
+  }
+  .ios-slider-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ff3b30;
+    pointer-events: none;
+  }
+  .ios-slider-thumb {
+    position: absolute;
+    left: 6px;
+    top: 5px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #ff3b30;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: grab;
+    box-shadow: 0 4px 12px rgba(255, 59, 48, 0.4);
+    touch-action: none;
+  }
+  .ios-confirm-cancel {
+    width: 100%;
+    padding: 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.06);
+    color: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.15s;
+  }
   .ios-confirm-cancel:hover { background: rgba(255,255,255,0.14); }
   .ios-confirm-cancel:active { transform: scale(0.96); }
 
@@ -3165,10 +3286,6 @@ _tmpl.innerHTML = `
               </div>
               <div id="sos-output-chips" class="sos-output-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-bottom:8px"></div>
               <div class="small" id="sos-output-help" style="margin-top:5px;opacity:.65;line-height:1.35">Estos dispositivos se activarán siempre al usar SOS, incluso con Argus desarmado.</div>
-              <div style="margin-top:14px;display:flex;align-items:center;gap:12px">
-                <button class="primary" id="btn-save-sos" style="padding:8px 18px;font-size:12px;border-radius:10px;font-weight:700">Guardar</button>
-                <span id="sos-status" style="font-size:13px;font-weight:700;min-height:18px;transition:opacity .35s;color:#10b981;opacity:0"></span>
-              </div>
             </div>
           </div>
         </div>
@@ -3185,9 +3302,8 @@ _tmpl.innerHTML = `
 
       <!-- Modes -->
       <section class="glass panel liquid-glass modes-panel" id="w-modes">
-        <div class="panel-head" style="display:flex; justify-content:space-between; align-items:center;">
+        <div class="panel-head">
            <h2 id="h-modes"></h2>
-           <button class="ghost" id="btn-open-mode-modal" style="padding:4px 10px; font-size:12px; font-weight:700; border-radius:10px;">⚙️ Configurar</button>
         </div>
         <div class="tabs" id="mode-tabs" style="margin-bottom:12px"></div>
         <div id="mode-view"></div>
@@ -4523,8 +4639,6 @@ class ArgusPanel extends HTMLElement {
     // Mode Modal
     s('mode-modal-close')?.addEventListener('click', () => this._closeModeModal());
     s('mode-modal')?.addEventListener('click', e => { if ((e.target as HTMLElement)?.id === 'mode-modal') this._closeModeModal(); });
-    s('btn-open-mode-modal')?.addEventListener('click', () => this._openModeModal(this._mode));
-    s('btn-save-sos')?.addEventListener('click', () => this._savePersonalization());
 
     // Edit widgets button
     s('btn-edit-widgets')?.addEventListener('click', () => this._toggleWidgetEditing());
@@ -5973,13 +6087,10 @@ gl_FragColor=vec4(col,alpha);}`;
     `;
     const bubble = tabs.querySelector('.tab-bubble');
     tabs.querySelectorAll('[data-mode]').forEach(t => t.addEventListener('click', () => {
-      const isCurrent = (this._mode === t.dataset.mode);
       this._mode = t.dataset.mode;
       this._renderModeTabs();
       this._renderModeView();
-      if (isCurrent || this.shadowRoot.getElementById('w-modes')?.getAttribute('data-size') === 'XS' || this.shadowRoot.getElementById('w-modes')?.getAttribute('data-size') === 'S') {
-        this._openModeModal(this._mode);
-      }
+      this._openModeModal(this._mode);
     }));
 
     const buttons = tabs.querySelectorAll('.tab');
