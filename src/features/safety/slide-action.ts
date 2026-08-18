@@ -391,7 +391,7 @@ function doCheckPin(panel, code) {
 }
 
 function mountOnEntry(panel, entry, idx) {
-  if (entry.dataset.staInstalled) return;
+  if (entry.querySelector('.argus-sta-wrap')) return;
   entry.dataset.staInstalled = '1';
 
   const entityId = entry.dataset.entityId

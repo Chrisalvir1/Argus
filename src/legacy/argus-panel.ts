@@ -1222,7 +1222,7 @@ _tmpl.innerHTML = `
     margin: 0 !important;
     max-width: none !important;
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
   }
   :host(.fullscreen-active) .hero {
     display: none !important;
@@ -1230,7 +1230,7 @@ _tmpl.innerHTML = `
   :host(.fullscreen-active) .grid {
     display: block !important;
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
     margin: 0 !important;
     gap: 0 !important;
   }
@@ -1239,7 +1239,7 @@ _tmpl.innerHTML = `
   }
   :host(.fullscreen-active) .grid > .stack:first-child {
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
   }
@@ -1253,7 +1253,7 @@ _tmpl.innerHTML = `
     padding: 0 !important;
     margin: 0 !important;
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
     border-radius: 0 !important;
     display: flex !important;
     flex-direction: column !important;
@@ -1266,7 +1266,7 @@ _tmpl.innerHTML = `
   }
   :host(.fullscreen-active) #entries {
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
   }
@@ -1277,7 +1277,7 @@ _tmpl.innerHTML = `
     position: fixed !important;
     inset: 0 !important;
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
     margin: 0 !important;
     border-radius: 0 !important;
     z-index: 100 !important;
@@ -1371,7 +1371,7 @@ _tmpl.innerHTML = `
     padding: 0 !important;
     margin: 0 !important;
     max-width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
     min-height: 380px !important;
     gap: 0 !important;
   }
@@ -1403,7 +1403,7 @@ _tmpl.innerHTML = `
     padding: 0 !important;
     margin: 0 !important;
     display: block !important;
-    height: 100% !important;
+    height: auto !important;
   }
   :host([compact]) #w-instances, :host(.argus-compact) #w-instances {
     background: transparent !important;
@@ -1411,13 +1411,13 @@ _tmpl.innerHTML = `
     box-shadow: none !important;
     padding: 0 !important;
     margin: 0 !important;
-    height: 100% !important;
+    height: auto !important;
     min-height: 380px !important;
   }
   :host([compact]) .entry, :host(.argus-compact) .entry {
     margin-bottom: 0 !important;
     border-radius: 24px !important;
-    height: 100% !important;
+    height: auto !important;
     min-height: 380px !important;
   }
   :host([compact]) #bootstrap-overlay, :host(.argus-compact) #bootstrap-overlay,
@@ -1426,7 +1426,7 @@ _tmpl.innerHTML = `
     display: none !important;
   }
   :host([compact]) .argus-widget__content, :host(.argus-compact) .argus-widget__content {
-    height: 100% !important;
+    height: auto !important;
     overflow: visible !important;
   }
   *{box-sizing:border-box}
@@ -1932,7 +1932,7 @@ _tmpl.innerHTML = `
       padding: 0 !important;
     }
   }
-  .ios-fullscreen .entry-content { grid-template-columns: 320px 1fr !important; padding: 60px !important; gap: 60px !important; height: 100% !important; align-items: center !important; background: radial-gradient(circle at 20% 50%, rgba(0,0,0,0.5) 0%, transparent 80%) !important; }
+  .ios-fullscreen .entry-content { grid-template-columns: 320px 1fr !important; padding: 60px !important; gap: 60px !important; height: auto !important; align-items: center !important; background: radial-gradient(circle at 20% 50%, rgba(0,0,0,0.5) 0%, transparent 80%) !important; }
   .ios-fullscreen .liquid-btn { padding: 16px 20px !important; font-size: 16px !important; border-radius: 20px !important; gap: 12px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.4) !important; }
   .ios-fullscreen .liquid-btn i { font-size: 24px !important; }
   .ios-fullscreen .hud { top: 60px !important; right: 60px !important; scale: 1.4; transform-origin: top right; }
