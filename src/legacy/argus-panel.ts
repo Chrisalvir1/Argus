@@ -1371,6 +1371,8 @@ _tmpl.innerHTML = `
     padding: 0 !important;
     margin: 0 !important;
     max-width: 100% !important;
+    height: 100% !important;
+    min-height: 380px !important;
     gap: 0 !important;
   }
   :host([compact]) .hero, :host(.argus-compact) .hero {
@@ -1401,6 +1403,7 @@ _tmpl.innerHTML = `
     padding: 0 !important;
     margin: 0 !important;
     display: block !important;
+    height: 100% !important;
   }
   :host([compact]) #w-instances, :host(.argus-compact) #w-instances {
     background: transparent !important;
@@ -1408,10 +1411,14 @@ _tmpl.innerHTML = `
     box-shadow: none !important;
     padding: 0 !important;
     margin: 0 !important;
+    height: 100% !important;
+    min-height: 380px !important;
   }
   :host([compact]) .entry, :host(.argus-compact) .entry {
     margin-bottom: 0 !important;
     border-radius: 24px !important;
+    height: 100% !important;
+    min-height: 380px !important;
   }
   :host([compact]) #bootstrap-overlay, :host(.argus-compact) #bootstrap-overlay,
   :host([compact]) .argus-profile-overlay, :host(.argus-compact) .argus-profile-overlay,
@@ -1419,7 +1426,7 @@ _tmpl.innerHTML = `
     display: none !important;
   }
   :host([compact]) .argus-widget__content, :host(.argus-compact) .argus-widget__content {
-    height: auto !important;
+    height: 100% !important;
     overflow: visible !important;
   }
   *{box-sizing:border-box}
@@ -4543,14 +4550,43 @@ class ArgusPanel extends HTMLElement {
 
     // Now we have a session, load dashboard
     let dashboard;
-    try { dashboard = await this._send('argus/dashboard'); }
-    catch (e) {
-      if (e.message.includes('permission') || e.message.includes('session') || e.message.includes('unauthorized')) {
-        this._renderLoginScreen(bootstrap);
+    try { 
+      dashboard = await this._send('argus/dashboard'); 
+    } catch (e) {
+      if (isCardMode) {
+        const entityId = this._config?.entity || 'alarm_control_panel.argus';
+        const entityState = this._hass?.states[entityId];
+        dashboard = {
+          entries: [{
+            entity_id: entityId,
+            name: entityState?.attributes?.friendly_name || 'Argus Security',
+            state: entityState?.state || 'unavailable',
+            pin_configured: true
+          }]
+        };
+      } else {
+        if (e.message.includes('permission') || e.message.includes('session') || e.message.includes('unauthorized')) {
+          this._renderLoginScreen(bootstrap);
+          return;
+        }
+        console.error('Argus dashboard load failed:', e);
         return;
       }
-      console.error('Argus dashboard load failed:', e);
-      return;
+    }
+
+    if (isCardMode && dashboard?.entries?.length) {
+      const entityId = this._config?.entity || 'alarm_control_panel.argus';
+      let targetEntry = dashboard.entries.find(e => e.entity_id === entityId);
+      if (!targetEntry) {
+        const entityState = this._hass?.states[entityId];
+        targetEntry = {
+          entity_id: entityId,
+          name: entityState?.attributes?.friendly_name || 'Argus Security',
+          state: entityState?.state || 'unavailable',
+          pin_configured: true
+        };
+      }
+      dashboard.entries = [targetEntry];
     }
 
     this._dashboard = dashboard;
