@@ -21,6 +21,7 @@ components_mock = MagicMock()
 components_mock.websocket_api = ws_mock
 sys.modules["homeassistant.components"] = components_mock
 sys.modules["homeassistant.components.http"] = ha_mock
+sys.modules["homeassistant.components.alarm_control_panel"] = ha_mock
 sys.modules["voluptuous"] = ha_mock
 sys.modules["aiohttp"] = ha_mock
 sys.modules["aiohttp.web"] = ha_mock
