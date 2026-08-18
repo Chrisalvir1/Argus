@@ -64,40 +64,68 @@ export function ArgusIntro({ userName }: ArgusIntroProps) {
         <style>
           {`
             @keyframes argusIntroFadeIn {
-              from { opacity: 0; transform: translateY(20px); }
-              to { opacity: 1; transform: translateY(0); }
+              from { opacity: 0; transform: translateY(20px) scale(0.95); }
+              to { opacity: 1; transform: translateY(0) scale(1); }
+            }
+            .tvos-profile {
+              position: relative;
+              width: 140px;
+              height: 140px;
+              border-radius: 50%;
+              background: rgba(255, 255, 255, 0.1);
+              display: flex;
+              align-items: center;
+              justifyContent: center;
+              box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.2);
+              overflow: hidden;
+            }
+            .tvos-profile img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              border-radius: 50%;
+            }
+            .tvos-profile::after {
+              content: '';
+              position: absolute;
+              top: 0; left: 0; right: 0; bottom: 0;
+              border-radius: 50%;
+              border: 2px solid rgba(255, 255, 255, 0.4);
+              box-shadow: inset 0 0 20px rgba(255,255,255,0.2);
+              pointer-events: none;
+            }
+            @media (min-width: 768px) {
+              .tvos-profile {
+                width: 180px;
+                height: 180px;
+              }
             }
           `}
         </style>
         
-        {/* Logo Shield brillante */}
-        <svg viewBox="0 0 200 200" width="120" height="120" style={{ filter: 'drop-shadow(0 10px 25px rgba(30, 136, 229, 0.5))' }}>
-          <defs>
-            <linearGradient id="intro-shield" x1="20%" y1="10%" x2="85%" y2="100%">
-              <stop stopColor="#fff" stopOpacity=".38" />
-              <stop offset=".25" stopColor="#1E88E5" stopOpacity=".78" />
-              <stop offset="1" stopColor="#1E88E5" stopOpacity=".18" />
-            </linearGradient>
-            <filter id="intro-glow">
-              <feGaussianBlur stdDeviation="6" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
-          <path d="M100 22 157 46v42c0 42-23 69-57 87-34-18-57-45-57-87V46z" fill="url(#intro-shield)" stroke="#1E88E5" strokeWidth="3" filter="url(#intro-glow)" />
-          <path d="M100 31 148 51" stroke="#fff" strokeOpacity=".45" strokeWidth="3" strokeLinecap="round" />
-        </svg>
+        {/* tvOS Style Circular Profile */}
+        <div className="tvos-profile">
+          <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=1E88E5&color=fff&size=200`} alt="Profile" />
+        </div>
 
         {/* Texto de bienvenida */}
-        <div style={{ textAlign: 'center', color: 'white' }}>
+        <div style={{ textAlign: 'center', color: 'white', marginTop: '8px' }}>
           <h1 style={{ margin: '0 0 8px 0', fontSize: '32px', fontWeight: 900, letterSpacing: '-0.02em', textShadow: '0 4px 12px rgba(0,0,0,0.5)' }}>
-            Bienvenido a Argus
+            Bienvenido, {userName}
           </h1>
-          <p style={{ margin: 0, fontSize: '18px', fontWeight: 600, opacity: 0.8 }}>
-            Iniciando sesión como {userName}...
-          </p>
+          <div style={{ 
+            display: 'inline-block',
+            padding: '6px 16px',
+            background: 'rgba(67, 160, 71, 0.2)',
+            border: '1px solid rgba(67, 160, 71, 0.4)',
+            borderRadius: '20px',
+            color: '#43A047',
+            fontSize: '12px',
+            fontWeight: 800,
+            letterSpacing: '1px'
+          }}>
+            ADMINISTRADOR
+          </div>
         </div>
       </div>
     </div>,
