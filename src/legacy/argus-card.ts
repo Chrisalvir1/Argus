@@ -142,18 +142,23 @@ class ArgusPanelCard extends HTMLElement {
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.innerHTML = `
       <style>
-        :host { display: block; }
+        :host { display: block; height: 100%; }
         ha-card {
           overflow: hidden;
           border-radius: 24px;
-          background: #07111f;
+          background: transparent !important;
           color: #fff;
           box-shadow: 0 20px 60px rgba(0,0,0,.38);
           position: relative;
           --ha-card-border-radius: 24px;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
         }
         .argus-panel-host {
-          display: block;
+          display: flex;
+          flex-direction: column;
+          flex: 1;
           min-height: 380px;
           width: 100%;
           overflow: hidden;

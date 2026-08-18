@@ -1371,9 +1371,15 @@ _tmpl.innerHTML = `
     padding: 0 !important;
     margin: 0 !important;
     max-width: 100% !important;
-    height: auto !important;
+    width: 100% !important;
+    height: 100% !important;
     min-height: 380px !important;
     gap: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
+    container-type: inline-size;
+    container-name: argus-compact-wrap;
   }
   :host([compact]) .hero, :host(.argus-compact) .hero {
     display: none !important;
@@ -1411,14 +1417,22 @@ _tmpl.innerHTML = `
     box-shadow: none !important;
     padding: 0 !important;
     margin: 0 !important;
-    height: auto !important;
+    height: 100% !important;
+    width: 100% !important;
     min-height: 380px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
   }
   :host([compact]) .entry, :host(.argus-compact) .entry {
     margin-bottom: 0 !important;
     border-radius: 24px !important;
-    height: auto !important;
+    height: 100% !important;
+    width: 100% !important;
     min-height: 380px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
   }
   :host([compact]) #bootstrap-overlay, :host(.argus-compact) #bootstrap-overlay,
   :host([compact]) .argus-profile-overlay, :host(.argus-compact) .argus-profile-overlay,
@@ -1426,10 +1440,32 @@ _tmpl.innerHTML = `
     display: none !important;
   }
   :host([compact]) .argus-widget__content, :host(.argus-compact) .argus-widget__content {
-    height: auto !important;
+    height: 100% !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
     overflow: visible !important;
   }
+  :host([compact]) #entries, :host(.argus-compact) #entries {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
+    height: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
   *{box-sizing:border-box}
+  @container argus-compact-wrap (max-width: 800px) {
+    .security-console { flex-direction: column !important; padding: 20px 18px 24px !important; gap: 20px !important; align-items: center !important; justify-content: center !important; }
+    .security-console .entry-icon { order: 2 !important; flex: 0 0 auto !important; min-height: 130px !important; margin: 0 auto !important; }
+    .security-console .liquid-stack { order: 3 !important; width: 100% !important; max-width: 360px !important; }
+    .security-console .console-sensors { order: 4 !important; width: 100% !important; max-width: 360px !important; display: flex !important; flex-direction: column !important; }
+    .sensor-column { position: static !important; max-width: 100% !important; width: 100% !important; align-items: stretch !important; padding: 0 !important; gap: 10px !important; }
+    .sensor-chip { max-width: none !important; }
+    .entry-content { padding: 20px !important; display: flex !important; flex-direction: column !important; align-items: center !important; background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, transparent 60%) !important; }
+    .liquid-stack { display: flex !important; flex-direction: column !important; align-items: stretch !important; gap: 8px !important; }
+  }
   @keyframes iosGlassIn{0%{opacity:0;transform:translateY(14px) scale(.965)}65%{opacity:1;transform:translateY(-2px) scale(1.008)}100%{transform:translateY(0) scale(1)}}
   @keyframes iosSelectPop{0%{transform:scale(.92);opacity:.45}60%{transform:scale(1.045);opacity:1}100%{transform:scale(1)}}
   .glass,.entry,.mode-section-card,.user-card,.file-card,.log-item{animation:iosGlassIn .5s cubic-bezier(.22,1.18,.36,1) both}
