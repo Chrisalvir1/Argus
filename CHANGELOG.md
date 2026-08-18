@@ -1,3 +1,10 @@
+## [2.2.3] - 2026-08-17
+
+### Fixed
+- **Badge superior externo eliminado:** Removido definitivamente `#global-status` de la cabecera externa; ahora el indicador de estado reside exclusivamente dentro de la barra de cristal HUD de la consola activa.
+- **Auto-registro en Lovelace Resources:** La integración ahora registra automáticamente `/api/argus_static/argus-bootstrap.js` en los recursos de Home Assistant para disponibilidad instantánea en todos los dashboards.
+- **Argus Alarm Card unificada:** Tanto `argus-panel-card` como `argus-card` renderizan el panel completo con selector de modo, auto-detección y pantalla completa.
+
 ## [2.2.2] - 2026-08-17
 
 ### Added

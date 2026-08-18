@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Slide-to-Action — v2.2.2
+ * Argus Slide-to-Action — v2.2.3
  * iOS "slide to power off" style — exact visual match.
  * - Large circular glass thumb on the LEFT, drags RIGHT to complete
  * - Very dark glass pill track

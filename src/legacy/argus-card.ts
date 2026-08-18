@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Panel Card — v2.2.2
+ * Argus Panel Card — v2.2.3
  * Auto-discovering Lovelace card that embeds the full argus-panel-v2018 UI.
  *
  * Features:
@@ -12,7 +12,7 @@
  * - Registers itself in window.customCards so HA shows it in the card browser
  */
 
-const ARGUS_CARD_VERSION='2.2.2';
+const ARGUS_CARD_VERSION='2.2.3';
 
 console.info(
   `%c🛡️ ARGUS PANEL CARD %c v${ARGUS_CARD_VERSION} `,
