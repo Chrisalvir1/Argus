@@ -2341,6 +2341,74 @@ Np.innerHTML = `
   .console-hud{order:0;flex:0 0 100%;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(0,0,0,0.25);border-radius:14px;backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);gap:12px;flex-wrap:wrap}
   .console-hud-loc{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:1.2px;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .console-hud-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+
+  /* ── System Status Badge ─────────────────────────────── */
+  .console-system-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-weight: 900;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border: 1.5px solid currentColor;
+    transition: all 0.35s ease;
+  }
+  .console-system-badge--disarmed {
+    color: #6ee7b7;
+    background: rgba(16,185,129,0.18);
+    border-color: rgba(16,185,129,0.60);
+    box-shadow: 0 0 16px rgba(16,185,129,0.25), inset 0 1px 0 rgba(255,255,255,0.18);
+  }
+  .console-system-badge--armed_home {
+    color: #fde68a;
+    background: rgba(251,140,0,0.20);
+    border-color: rgba(251,140,0,0.60);
+    box-shadow: 0 0 16px rgba(251,140,0,0.25), inset 0 1px 0 rgba(255,255,255,0.18);
+  }
+  .console-system-badge--armed_away {
+    color: #fca5a5;
+    background: rgba(229,57,53,0.20);
+    border-color: rgba(229,57,53,0.60);
+    box-shadow: 0 0 16px rgba(229,57,53,0.25), inset 0 1px 0 rgba(255,255,255,0.18);
+  }
+  .console-system-badge--armed_night {
+    color: #bfdbfe;
+    background: rgba(30,136,229,0.20);
+    border-color: rgba(30,136,229,0.60);
+    box-shadow: 0 0 16px rgba(30,136,229,0.25), inset 0 1px 0 rgba(255,255,255,0.18);
+  }
+  .console-system-badge--armed_vacation {
+    color: #e9d5ff;
+    background: rgba(156,39,176,0.20);
+    border-color: rgba(156,39,176,0.60);
+    box-shadow: 0 0 16px rgba(156,39,176,0.25), inset 0 1px 0 rgba(255,255,255,0.18);
+  }
+  .console-system-badge--triggered {
+    color: #fff;
+    background: rgba(239,68,68,0.35);
+    border-color: rgba(239,68,68,0.80);
+    box-shadow: 0 0 24px rgba(239,68,68,0.60), inset 0 1px 0 rgba(255,255,255,0.25);
+    animation: badgeFlash 0.8s infinite ease-in-out;
+  }
+  @keyframes badgeFlash {
+    0%,100% { opacity:1; box-shadow:0 0 24px rgba(239,68,68,.8); }
+    50%      { opacity:0.7; box-shadow:0 0 8px rgba(239,68,68,.2); }
+  }
+  /* arming state reuses armed_home styling with pulsing */
+  .console-system-badge--arming {
+    color: #fde68a;
+    background: rgba(251,140,0,0.20);
+    border-color: rgba(251,140,0,0.60);
+    animation: badgeArming 1.05s ease-in-out infinite;
+  }
+  @keyframes badgeArming {
+    0%,100% { opacity:0.65; } 50% { opacity:1; }
+  }
   .console-hud-time{font-size:16px;font-weight:800;letter-spacing:-.02em}
   .console-hud-temp{font-size:11px;opacity:.8;font-weight:700}
   .console-hud-temps{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
@@ -4812,6 +4880,9 @@ class th extends HTMLElement {
             <div class="console-hud">
               <span class="console-hud-loc">🏡 ${this._escapeHtml(J)}</span>
               <div class="console-hud-right">
+                <span class="console-system-badge console-system-badge--${D ? "triggered" : H}">${this._escapeHtml(
+        D ? l("system_triggered") || "ALARMA ACTIVADA" : ce ? l("waiting_sensors") || "ESPERANDO SENSORES" : H === "disarmed" ? l("system_disarmed") : H === "armed_home" ? l("system_armed") + " · " + (l("mode_home") || "CASA") : H === "armed_away" ? l("system_armed") + " · " + (l("mode_away") || "AUSENTE") : H === "armed_night" ? l("system_armed") + " · " + (l("mode_night") || "NOCHE") : H === "armed_vacation" ? l("system_armed") + " · " + (l("mode_vacation") || "VACACIONES") : l("system_armed")
+      )}</span>
               </div>
             </div>
             <div class="entry-icon" style="display:flex;justify-content:center;animation:float-icon 5s ease-in-out infinite;">
