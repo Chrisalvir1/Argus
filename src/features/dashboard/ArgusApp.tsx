@@ -55,6 +55,7 @@ export function ArgusApp({ hass, config }: ArgusAppProps) {
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
+        background: 'linear-gradient(135deg, #0b0f19 0%, #111827 50%, #0d1322 100%)',
         color: 'white',
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
         boxSizing: 'border-box'

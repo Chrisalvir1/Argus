@@ -1,3 +1,8 @@
+## [2.2.19] - 2026-08-18
+- FIX: Register all webcomponent aliases (`argus-panel-v2018`, `argus-panel`, `argus-card`) to resolve blank panel rendering in Home Assistant.
+- Inject full liquid glass global stylesheet and grid layout styles directly into document head.
+- Added deep liquid dark gradient background to main dashboard container.
+
 ## [2.2.18] - 2026-08-18
 - Single unified React architecture for the entire Argus frontend.
 - Apple tvOS style circular entrance animation with smooth spring bounce contraction to top profile.
