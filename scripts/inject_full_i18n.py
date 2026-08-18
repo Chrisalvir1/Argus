@@ -1,18 +1,40 @@
-import json, re
+import json, re, subprocess
 
-with open("merged_texts.json") as f:
-    merged = json.load(f)
+# 1. Get original v2.2.13 argus-panel.ts
+original = subprocess.check_output(["git", "show", "v2.2.13:src/legacy/argus-panel.ts"]).decode("utf-8")
 
-# Load existing base
-es_base = merged.get("es", {})
-en_base = merged.get("en", {})
-fr_base = merged.get("fr", {})
-pt_base = merged.get("pt", {})
-it_base = merged.get("it", {})
-zh_base = merged.get("zh", {})
-ru_base = merged.get("ru", {})
+tmpl_start = original.find("const _tmpl = document.createElement('template');")
+class_start = original.find("class ArgusPanel extends HTMLElement {")
 
-# Clean up corrupted keys from ES where Russian/broken text was stored
+if tmpl_start == -1 or class_start == -1:
+    print("Could not find template boundaries in original v2.2.13")
+    exit(1)
+
+tmpl_block = original[tmpl_start:class_start]
+header_block = original[:original.find("const TEXTS = {")]
+class_and_rest = original[class_start:]
+
+# 2. Build full clean translations dictionary
+from scripts.build_clean_translations import TRANSLATION_MAP
+
+# Load translations from previous dump or build fresh
+master_langs = ["es", "en", "fr", "pt", "it", "zh", "zh-Hant", "ru", "hi", "ar", "ko", "ja", "uk"]
+final_texts = {l: {} for l in master_langs}
+
+# Extract all keys and values from original TEXTS in v2.2.13
+orig_texts_block = original[original.find("const TEXTS = {"):tmpl_start]
+lang_blocks = re.findall(r"([a-zA-Z-]+):\s*\{([\s\S]*?)\n\s*\},?", orig_texts_block)
+
+for lang, body in lang_blocks:
+    if lang in final_texts:
+        pairs = re.findall(r"([a-zA-Z0-9_]+)\s*:\s*(\x27(?:\\.|[^\x27\\])*\x27|\"(?:\\.|[^\"\\])*\")", body)
+        for k, v in pairs:
+            try:
+                final_texts[lang][k] = eval(v)
+            except Exception:
+                final_texts[lang][k] = v[1:-1]
+
+# Apply clean overrides for ES
 corrupted_in_es = {
     "access_pin_lbl": "PIN de Acceso",
     "master_pin_lbl": "PIN Maestro",
@@ -56,51 +78,23 @@ corrupted_in_es = {
     "active_until": "Vence",
     "expired": "Expirado"
 }
-es_base.update(corrupted_in_es)
+final_texts["es"].update(corrupted_in_es)
 
-# Complete master translation map for all common keys in 13 languages
-master_langs = ["es", "en", "fr", "pt", "it", "zh", "zh-Hant", "ru", "hi", "ar", "ko", "ja", "uk"]
-
-from scripts.build_clean_translations import TRANSLATION_MAP
-
-# Build full dictionary
-final_texts = {l: {} for l in master_langs}
-
-# 1. Start with known base
-for k, v in es_base.items():
-    final_texts["es"][k] = v
-
-for k, v in en_base.items():
-    final_texts["en"][k] = v
-
-for k, v in fr_base.items():
-    final_texts["fr"][k] = v
-
-for k, v in pt_base.items():
-    final_texts["pt"][k] = v
-
-for k, v in it_base.items():
-    final_texts["it"][k] = v
-
-for k, v in zh_base.items():
-    final_texts["zh"][k] = v
-    # also use as base for zh-Hant
-    final_texts["zh-Hant"][k] = v
-
-for k, v in ru_base.items():
-    final_texts["ru"][k] = v
-
-# 2. Overlay verified TRANSLATION_MAP
+# Apply TRANSLATION_MAP
 for key, trans in TRANSLATION_MAP.items():
     for l, val in trans.items():
         if l in final_texts:
             final_texts[l][key] = val
 
-# 3. For any missing keys in any language, fallback to English or Spanish
-all_known_keys = set(es_base.keys()).union(set(en_base.keys()))
+# Ensure zh-Hant has all keys from zh
+for k, v in final_texts["zh"].items():
+    if k not in final_texts["zh-Hant"]:
+        final_texts["zh-Hant"][k] = v
 
+# Fill missing keys for all languages from EN or ES
+all_keys = set(final_texts["es"].keys()).union(set(final_texts["en"].keys()))
 for lang in master_langs:
-    for k in all_known_keys:
+    for k in all_keys:
         if k not in final_texts[lang] or not final_texts[lang][k]:
             if lang == "zh-Hant" and k in final_texts["zh"]:
                 final_texts[lang][k] = final_texts["zh"][k]
@@ -114,28 +108,21 @@ lines = ["const TEXTS = {"]
 for lang in master_langs:
     lines.append(f"  '{lang}': {{")
     for k, v in sorted(final_texts[lang].items()):
-        # Escape string for single-quoted JS literal
         escaped_v = json.dumps(v, ensure_ascii=False)[1:-1].replace("'", "\\'")
         lines.append(f"    '{k}': '{escaped_v}',")
     lines.append("  },")
-lines.append("};")
+lines.append("};\n")
 
 new_texts_block = "\n".join(lines) + "\n"
 
-# Replace in src/legacy/argus-panel.ts
-with open("src/legacy/argus-panel.ts") as f:
-    content = f.read()
+# Reassemble complete file: header + TEXTS + _tmpl + class ArgusPanel + rest
+full_file = header_block + new_texts_block + tmpl_block + class_and_rest
 
-start_idx = content.find("const TEXTS = {")
-class_idx = content.find("class ArgusPanel extends HTMLElement {")
-
-if start_idx == -1 or class_idx == -1:
-    print("Failed to find boundaries in argus-panel.ts")
-    exit(1)
-
-new_content = content[:start_idx] + new_texts_block + content[class_idx:]
+# Add alias customElements.define('argus-panel', ArgusPanel) at the end if not present
+if "customElements.define('argus-panel'," not in full_file:
+    full_file += "\ntry { if (!customElements.get('argus-panel')) customElements.define('argus-panel', ArgusPanel); } catch(_) {}\n"
 
 with open("src/legacy/argus-panel.ts", "w") as f:
-    f.write(new_content)
+    f.write(full_file)
 
-print("Successfully injected full clean i18n dictionary into src/legacy/argus-panel.ts")
+print("Successfully injected TEXTS and preserved full _tmpl in src/legacy/argus-panel.ts")

@@ -1,3 +1,6 @@
+## [2.2.27] - 2026-08-18
+- Restore template DOM element in panel custom element and enable 100% full 13-language translations
+
 ## [2.2.26] - 2026-08-18
 - Fix more-info hook runtime safety preventing blank screen and enable 100% stable 13-language translations
 
