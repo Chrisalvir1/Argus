@@ -1,3 +1,6 @@
+## [2.2.22] - 2026-08-18
+- fix(ui): top bar rewrite — Argus logo left, clock + date center-right, avatar + name + Admin badge right, tvOS shrink targets top-right avatar
+
 ## [2.2.21] - 2026-08-18
 - Visual parity with v2.2.13: hero layout, ActiveInstances full rewrite, Modes config tabs, HistoryWidget buttons, AccessControl user cards, SOS dark button.
 
