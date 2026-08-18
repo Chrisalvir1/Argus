@@ -5,6 +5,8 @@ import { ActiveInstances } from './widgets/ActiveInstances';
 import { Modes } from './widgets/Modes';
 import { SOSWidget } from './widgets/SOSWidget';
 import { AccessControlWidget } from './widgets/AccessControlWidget';
+import { HistoryWidget } from './widgets/HistoryWidget';
+import { AutomationsWidget } from './widgets/AutomationsWidget';
 
 interface ArgusAppProps {
   hass: any;
@@ -28,6 +30,7 @@ export function ArgusApp({ hass, config }: ArgusAppProps) {
     { id: 'active-instances', title: 'Instancias Activas', size: 'M' as any, kind: 'instances', visible: true },
     { id: 'sos', title: 'Acciones SOS', size: 'M' as any, kind: 'sos', visible: true },
     { id: 'history', title: 'Historial', size: 'L' as any, kind: 'history', visible: true },
+    { id: 'automations', title: 'Automatizaciones', size: 'L' as any, kind: 'automations', visible: true },
     { id: 'access', title: 'Control de Acceso', size: 'XL' as any, kind: 'access-control', visible: true }
   ];
 
@@ -35,7 +38,8 @@ export function ArgusApp({ hass, config }: ArgusAppProps) {
     'modes': <Modes hass={hass} />,
     'active-instances': <ActiveInstances hass={hass} />,
     'sos': <SOSWidget hass={hass} />,
-    'history': <div style={{ padding: '20px' }}>Registro de Actividad</div>,
+    'history': <HistoryWidget hass={hass} />,
+    'automations': <AutomationsWidget hass={hass} />,
     'access': <AccessControlWidget hass={hass} />
   };
 
