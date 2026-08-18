@@ -1,3 +1,6 @@
+## [2.2.29] - 2026-08-18
+- Eliminate cross-language dictionary pollution (0% Russian/Spanish bleed in English and vice-versa) across all 13 supported languages
+
 ## [2.2.28] - 2026-08-18
 - Complete 100% 13-language translations and full real-time UI synchronization across all dashboard components, sliders, and views
 
