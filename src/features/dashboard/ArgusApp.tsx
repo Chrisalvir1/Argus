@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { ArgusDashboard } from './ArgusDashboard';
+import { LocalStorageDashboardLayoutStorage } from './layout';
+import { ActiveInstances } from './widgets/ActiveInstances';
+import { Modes } from './widgets/Modes';
 
 interface ArgusAppProps {
   hass: any;
   config: any;
 }
+
+const storage = new LocalStorageDashboardLayoutStorage();
 
 export function ArgusApp({ hass, config }: ArgusAppProps) {
   const [time, setTime] = useState(new Date());
@@ -14,6 +20,22 @@ export function ArgusApp({ hass, config }: ArgusAppProps) {
   }, []);
 
   const profileImage = hass?.user?.name ? `https://ui-avatars.com/api/?name=${encodeURIComponent(hass.user.name)}&background=random` : '';
+
+  const widgets = [
+    { id: 'modes', title: 'Modos', size: 'L' as any, kind: 'modes', visible: true },
+    { id: 'active-instances', title: 'Instancias Activas', size: 'M' as any, kind: 'instances', visible: true },
+    { id: 'sos', title: 'Acciones SOS', size: 'M' as any, kind: 'sos', visible: true },
+    { id: 'history', title: 'Historial', size: 'L' as any, kind: 'history', visible: true },
+    { id: 'access', title: 'Control de Acceso', size: 'XL' as any, kind: 'access-control', visible: true }
+  ];
+
+  const widgetComponents = {
+    'modes': <Modes hass={hass} />,
+    'active-instances': <ActiveInstances hass={hass} />,
+    'sos': <div style={{ padding: '20px' }}>Botón de Pánico</div>,
+    'history': <div style={{ padding: '20px' }}>Registro de Actividad</div>,
+    'access': <div style={{ padding: '20px' }}>Usuarios y PIN Maestro</div>
+  };
 
   return (
     <div style={{
@@ -98,23 +120,16 @@ export function ArgusApp({ hass, config }: ArgusAppProps) {
       </header>
 
       {/* Main Content Area */}
-      <main style={{ flex: 1, padding: '20px' }}>
-        <div style={{ 
-          background: 'rgba(255, 255, 255, 0.05)', 
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          borderRadius: '24px', 
-          padding: '24px',
-          border: '1px solid rgba(255,255,255,0.08)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '200px'
-        }}>
-          <h2 style={{ fontSize: '20px', fontWeight: 800, margin: '0 0 8px 0' }}>Argus React Edition</h2>
-          <p style={{ margin: 0, opacity: 0.7, fontSize: '14px' }}>Capa Liquid Glass unificada en construcción...</p>
-        </div>
+      <main style={{ flex: 1, position: 'relative' }}>
+        <ArgusDashboard 
+          widgets={widgets}
+          widgetComponents={widgetComponents}
+          storage={storage}
+          userId={hass?.user?.id || 'default_user'}
+          dashboardId="main"
+          onEditing={() => {}}
+          registerEditor={() => {}}
+        />
       </main>
     </div>
   );
