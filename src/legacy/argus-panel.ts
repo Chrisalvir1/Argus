@@ -7801,6 +7801,7 @@ class ArgusPanel extends HTMLElement {
   }
 
   _refreshLocalizedUi() {
+    (window as any)._argusT = (key: string) => this._t(key);
     (window as any)._argusDashboardReadyBtn = this._t('edit_dashboard_done') || '✓ Listo';
     (window as any)._argusDashboardEditBtn = '✥ ' + (this._t('edit_dashboard') || 'Editar tablero');
     (window as any)._argusDashboardResetBtn = this._t('reset_dashboard') || 'Restablecer diseño';
@@ -9863,24 +9864,27 @@ gl_FragColor=vec4(col,alpha);}`;
         const detail = this._localizeActivityDetail(action, rawDetail);
 
         let icon = '<div class="glass-orb"></div>', badgeCls = '', badgeTxt = action, itemCls = '';
-        if (action.endsWith('_rejected')) {
+        const actionLower = String(action || '').toLowerCase();
+        if (actionLower.endsWith('_rejected')) {
           itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('log_action_rejected');
-        } else if (action.includes('arm') && !action.includes('disarm')) {
+        } else if (actionLower.includes('arm') && !actionLower.includes('disarm')) {
           itemCls = 'log-item--armed'; badgeCls = 'arm'; badgeTxt = this._t('log_armed');
-        } else if (action.includes('disarm')) {
+        } else if (actionLower.includes('disarm')) {
           itemCls = 'log-item--disarmed'; badgeCls = 'disarm'; badgeTxt = this._t('log_disarmed');
-        } else if (action.includes('trigger') || action.includes('alarm')) {
+        } else if (actionLower.includes('trigger') || actionLower.includes('alarm')) {
           itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('log_triggered');
-        } else if (action === 'pin_reset') {
+        } else if (actionLower === 'pin_reset') {
           itemCls = 'log-item--disarmed'; badgeCls = 'disarm'; badgeTxt = this._t('badge_pin_reset');
-        } else if (action === 'pin_reset_failed') {
+        } else if (actionLower === 'pin_reset_failed') {
           itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('badge_pin_reset_failed');
-        } else if (action === 'sos' || action === 'sos_stopped' || action === 'panic_stopped') {
+        } else if (actionLower === 'sos' || actionLower === 'sos_stopped' || actionLower === 'panic_stopped') {
           itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('log_action_sos');
+        } else if (actionLower === 'ui_configuration_updated') {
+          badgeTxt = this._t('settings');
         } else {
-          const tKey = `log_action_${action}`;
+          const tKey = `log_action_${actionLower}`;
           const tVal = this._t(tKey);
-          badgeTxt = tVal !== tKey ? tVal : (this._t(action) !== action ? this._t(action) : action);
+          badgeTxt = (tVal && tVal !== tKey) ? tVal : (this._t(actionLower) !== actionLower ? this._t(actionLower) : (this._t('log_action_analysis') || action));
         }
 
         let source = '';

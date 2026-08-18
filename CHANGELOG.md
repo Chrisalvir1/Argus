@@ -1,3 +1,7 @@
+## [2.2.32] - 2026-08-18
+- Real-time dynamic localization for React toolbar button (edit dashboard)
+- Localize backend audit log event names (e.g. ui_configuration_updated)
+
 ## [2.2.31] - 2026-08-18
 - Exhaustive 389-key translation coverage across all 13 supported languages including Backup, Users, Support, and Dashboard controls
 - Real-time language sync for React dashboard toolbar
