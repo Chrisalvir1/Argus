@@ -1,3 +1,6 @@
+## [2.2.11] - 2026-08-17
+- Completely removed legacy injected disarm button from argus-v2042-stability module.
+
 ## [2.2.10] - 2026-08-17
 - Fixed sensor display in dashboard card mode by initializing UI configuration prior to initial render.
 

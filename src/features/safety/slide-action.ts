@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Slide-to-Action — v2.2.10
+ * Argus Slide-to-Action — v2.2.11
  * iOS "slide to power off" style — exact visual match.
  * - Large circular glass thumb on the LEFT, drags RIGHT to complete
  * - Very dark glass pill track
@@ -431,7 +431,7 @@ function mountOnEntry(panel, entry, idx) {
   if (!stack) return;
 
   // Remove any legacy disarm or SOS buttons completely from the DOM
-  stack.querySelectorAll('.btn-disarm, .btn-sos').forEach(btn => btn.remove());
+  stack.querySelectorAll('.btn-disarm, .btn-sos, .argus-disarm-btn').forEach(btn => btn.remove());
 
   // Directly append sliders to stack
   stack.appendChild(dWrap);

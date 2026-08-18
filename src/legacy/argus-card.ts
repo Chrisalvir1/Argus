@@ -13,7 +13,7 @@
  *    Renders the classic compact card with animated weather backdrop and PIN keypad.
  */
 
-const ARGUS_CARD_VERSION='2.2.10';
+const ARGUS_CARD_VERSION='2.2.11';
 
 console.info(
   `%c🛡️ ARGUS ALARM CARD %c v${ARGUS_CARD_VERSION} `,
