@@ -1,3 +1,6 @@
+## [2.2.9] - 2026-08-17
+- Prioritize real-time Home Assistant state over stale snapshot for mode button active state.
+
 ## [2.2.8] - 2026-08-17
 - Completely removed legacy buttons from HTML templates, crisp white slider text.
 

@@ -18,7 +18,8 @@ type AlarmPanel = ArgusPanelHost & {
 
 function stateOf(panel: AlarmPanel, item: any): string {
   const id = item?.entity_id || item?.alarm_entity_id;
-  return String(item?.state || item?.alarm_state || item?.attributes?.state || panel._hass?.states?.[id]?.state || '').toLowerCase();
+  const liveState = id ? panel._hass?.states?.[id]?.state : undefined;
+  return String(liveState || item?.state || item?.alarm_state || item?.attributes?.state || '').toLowerCase();
 }
 
 function paint(button: HTMLElement, kind: string, active: boolean) {

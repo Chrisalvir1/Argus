@@ -4,7 +4,7 @@
  * Uses ONLY class toggles. No inline styles. All visual work is done in CSS.
  */
 const ACTIVE = { armed_home: /EN CASA|HOME|MAISON|EM CASA|IN CASA|在家|ДОМА|घर/i, armed_away: /AUSENTE|AWAY|ABSENT|FUORI|离家|ВНЕ ДОМА|दूर/i, armed_night: /NOCHE|NIGHT|NUIT|NOTTE|夜间|НОЧЬ|रात/i, armed_vacation: /VACACIONES|VACATION|VACANCES|VACANZA|FÉRIAS|度假|ОТПУСК|यात्रा/i };
-function stateOf(panel, item) { const id = item?.entity_id || item?.alarm_entity_id; return String(item?.state || item?.alarm_state || item?.attributes?.state || panel._hass?.states?.[id]?.state || '').toLowerCase(); }
+function stateOf(panel, item) { const id = item?.entity_id || item?.alarm_entity_id; const live = id ? panel._hass?.states?.[id]?.state : undefined; return String(live || item?.state || item?.alarm_state || item?.attributes?.state || '').toLowerCase(); }
 
 function paint(button, kind, active) {
   // Only class toggles — CSS handles all visual logic
