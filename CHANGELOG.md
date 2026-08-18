@@ -1,3 +1,7 @@
+## [2.2.31] - 2026-08-18
+- Exhaustive 389-key translation coverage across all 13 supported languages including Backup, Users, Support, and Dashboard controls
+- Real-time language sync for React dashboard toolbar
+
 ## [2.2.30] - 2026-08-18
 - Complete 100% dictionary coverage (389 keys) across all 13 languages (Chinese, Portuguese, French, Italian, Russian, Hindi, Arabic, Korean, Japanese, Ukrainian, etc.)
 - Dynamic localization of personalization toggle and profile controls
