@@ -1,3 +1,7 @@
+## [2.2.30] - 2026-08-18
+- Complete 100% dictionary coverage (389 keys) across all 13 languages (Chinese, Portuguese, French, Italian, Russian, Hindi, Arabic, Korean, Japanese, Ukrainian, etc.)
+- Dynamic localization of personalization toggle and profile controls
+
 ## [2.2.29] - 2026-08-18
 - Eliminate cross-language dictionary pollution (0% Russian/Spanish bleed in English and vice-versa) across all 13 supported languages
 

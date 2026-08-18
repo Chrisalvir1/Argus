@@ -18,15 +18,21 @@ function installPersonalizationToggle(panel) {
   const editButton = root.getElementById('btn-edit-home-name-standalone');
   const saveButton = root.getElementById('btn-save-personalization-standalone');
 
+  const updateChevronText = open => {
+    const chevron = header.querySelector('#personalize-chevron');
+    if (chevron) {
+      chevron.style.transform = 'none';
+      const openTxt = panel._t?.('hide') || 'Ocultar';
+      const closeTxt = panel._t?.('expand') || 'Desplegar';
+      chevron.textContent = open ? `▲ ${openTxt}` : `▼ ${closeTxt}`;
+    }
+  };
+
   const setOpen = open => {
     workspace.hidden = !open;
     workspace.classList.toggle('collapsed', !open);
     header.setAttribute('aria-expanded', String(open));
-    const chevron = header.querySelector('#personalize-chevron');
-    if (chevron) {
-      chevron.style.transform = 'none';
-      chevron.textContent = open ? '▲ Ocultar' : '▼ Desplegar';
-    }
+    updateChevronText(open);
     if (editButton) editButton.hidden = !open;
     if (saveButton) saveButton.hidden = !open;
   };
@@ -59,6 +65,23 @@ export function applyPersonalizationToggleFix(ArgusPanel) {
   proto._load = async function() {
     const result = await load?.call(this);
     installPersonalizationToggle(this);
+    return result;
+  };
+
+  const refresh = proto._refreshLocalizedUi;
+  proto._refreshLocalizedUi = function() {
+    const result = refresh?.call(this);
+    const root = this.shadowRoot;
+    const header = root?.getElementById('lbl-aesthetic-custom');
+    if (header) {
+      const open = header.getAttribute('aria-expanded') === 'true';
+      const chevron = header.querySelector('#personalize-chevron');
+      if (chevron) {
+        const openTxt = this._t?.('hide') || 'Ocultar';
+        const closeTxt = this._t?.('expand') || 'Desplegar';
+        chevron.textContent = open ? `▲ ${openTxt}` : `▼ ${closeTxt}`;
+      }
+    }
     return result;
   };
 }

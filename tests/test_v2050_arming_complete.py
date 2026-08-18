@@ -12,9 +12,9 @@ BOOTSTRAP = (ROOT / "custom_components" / "argus" / "www" / "argus-bootstrap.js"
 
 class TestV2050ArmingComplete(unittest.TestCase):
     def test_version_is_2050(self):
-        self.assertIn('VERSION = "2.2.29"', CONST)
-        self.assertIn('"version": "2.2.29"', MANIFEST)
-        self.assertIn("2.2.29", BOOTSTRAP)
+        self.assertIn('VERSION = "2.2.30"', CONST)
+        self.assertIn('"version": "2.2.30"', MANIFEST)
+        self.assertIn("2.2.30", BOOTSTRAP)
 
     def test_runtime_unifies_open_detection(self):
         self.assertIn("def is_sensor_active(", RUNTIME)
