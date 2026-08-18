@@ -1,13 +1,13 @@
 import type React from 'react';
 import type{Layout,Layouts}from'react-grid-layout';
 
-export type ArgusWidgetSize='XS'|'S'|'M'|'L'|'XL';
+export type ArgusWidgetSize='S'|'M'|'L'|'XL';
 export type ArgusBreakpoint='lg'|'md'|'sm'|'xs'|'xxs';
 export type ArgusWidgetKind='activity-history'|'automations'|'backup-restore'|'access-control'|'alarm-configuration'|'security-status'|'custom';
 
 export interface ArgusWidgetDefinition{
   id:string;
-  nativeId?:string;
+  nativeId:string;
   kind:ArgusWidgetKind;
   title:string;
   icon?:React.ReactNode;
