@@ -1,4 +1,5 @@
 import '../legacy/argus-panel';
+import '../legacy/argus-card';
 import{applyReactDashboardLayout}from'../features/dashboard';
 import{applyMediaClient}from'../features/media/client';
 import{applySecurityClient}from'../features/security/client';
