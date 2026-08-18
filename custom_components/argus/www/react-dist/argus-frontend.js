@@ -2073,7 +2073,8 @@ Hp.innerHTML = `
   .collapsible.collapsed {
     max-height: 0 !important;
     opacity: 0 !important;
-     .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;align-items:start;position:relative}
+  }
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;align-items:start;position:relative}
   .panel{transition:transform .3s ease,box-shadow .3s ease,grid-column .3s ease,grid-row .3s ease;position:relative}
   .panel[data-size="XS"]{grid-column:span 1;grid-row:span 1;height:auto!important;min-height:fit-content!important;padding:12px 14px!important;align-self:start!important}
   .panel[data-size="S"]{grid-column:span 1;grid-row:span 1;height:auto!important;min-height:fit-content!important;align-self:start!important}
@@ -7913,7 +7914,7 @@ ${i}`);
   }
 }
 customElements.define("argus-panel-v2018", uh);
-const Dp = "2.2.15";
+const Dp = "2.2.16";
 console.info(
   `%c🛡️ ARGUS ALARM CARD %c v${Dp} `,
   "color:white;background:#0a1628;font-weight:700;padding:4px 8px;border-radius:4px 0 0 4px;",

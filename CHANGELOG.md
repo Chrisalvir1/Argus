@@ -1,3 +1,6 @@
+## [2.2.16] - 2026-08-18
+- CRITICAL FIX: Fixed missing closing brace in CSS that caused Argus Panel and Dashboard to render completely unstyled.
+
 ## [2.2.15] - 2026-08-18
 - Single unified "Guardar" button in personalization / SOS workspace next to edit button.
 - Cleanly open jelly water-drop bounce modal directly on mode tab click; removed redundant "Configurar" button.
