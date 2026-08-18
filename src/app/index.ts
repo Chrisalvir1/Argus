@@ -10,6 +10,7 @@ import { applyV2050AlarmVisuals } from '../features/render/alarm';
 import { applySlideToAction } from '../features/safety/slide-action';
 import { applyV2049ResponsiveWidgets } from '../features/widgets/responsive';
 import { applyV2050WidgetLayouts } from '../features/widgets/layouts';
+import { applyMoreInfoHook } from '../features/more-info/hook';
 
 
 import{applyLegacyAfterTypedClients,applyLegacyBeforeTypedClients}from'../legacy/bridge';
@@ -30,6 +31,7 @@ import type{ArgusPanelConstructor}from'../core/panel';
    applySlideToAction(C);
    applyV2049ResponsiveWidgets(C);
    applyV2050WidgetLayouts(C);
+   applyMoreInfoHook(C);
   applyLegacyAfterTypedClients(C);
   applyReactDashboardLayout(C);
  }
