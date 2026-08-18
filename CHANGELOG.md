@@ -1,3 +1,6 @@
+## [2.2.12] - 2026-08-17
+- Fix mobile card height clipping and allow vertical auto-expansion.
+
 ## [2.2.11] - 2026-08-17
 - Completely removed legacy injected disarm button from argus-v2042-stability module.
 

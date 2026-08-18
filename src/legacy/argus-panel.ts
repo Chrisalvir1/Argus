@@ -1372,12 +1372,13 @@ _tmpl.innerHTML = `
     margin: 0 !important;
     max-width: 100% !important;
     width: 100% !important;
-    height: 100% !important;
-    min-height: 380px !important;
+    height: auto !important;
+    min-height: fit-content !important;
     gap: 0 !important;
     display: flex !important;
     flex-direction: column !important;
-    flex: 1 !important;
+    flex: 1 1 auto !important;
+    overflow: visible !important;
     container-type: inline-size;
     container-name: argus-compact-wrap;
   }
@@ -1417,12 +1418,13 @@ _tmpl.innerHTML = `
     box-shadow: none !important;
     padding: 0 !important;
     margin: 0 !important;
-    height: 100% !important;
+    height: auto !important;
     width: 100% !important;
-    min-height: 380px !important;
+    min-height: fit-content !important;
     display: flex !important;
     flex-direction: column !important;
-    flex: 1 !important;
+    flex: 1 1 auto !important;
+    overflow: visible !important;
     background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;
     backdrop-filter: blur(28px) saturate(150%) !important;
     -webkit-backdrop-filter: blur(28px) saturate(150%) !important;
@@ -1430,12 +1432,13 @@ _tmpl.innerHTML = `
   :host([compact]) .entry, :host(.argus-compact) .entry {
     margin-bottom: 0 !important;
     border-radius: 24px !important;
-    height: 100% !important;
+    height: auto !important;
     width: 100% !important;
-    min-height: 380px !important;
+    min-height: fit-content !important;
     display: flex !important;
     flex-direction: column !important;
-    flex: 1 !important;
+    flex: 1 1 auto !important;
+    overflow: visible !important;
     background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;
     backdrop-filter: blur(28px) saturate(150%) !important;
     -webkit-backdrop-filter: blur(28px) saturate(150%) !important;
@@ -1446,20 +1449,21 @@ _tmpl.innerHTML = `
     display: none !important;
   }
   :host([compact]) .argus-widget__content, :host(.argus-compact) .argus-widget__content {
-    height: 100% !important;
+    height: auto !important;
     width: 100% !important;
     display: flex !important;
     flex-direction: column !important;
-    flex: 1 !important;
+    flex: 1 1 auto !important;
     overflow: visible !important;
   }
   :host([compact]) #entries, :host(.argus-compact) #entries {
     display: flex !important;
     flex-direction: column !important;
-    flex: 1 !important;
-    height: 100% !important;
+    flex: 1 1 auto !important;
+    height: auto !important;
     width: 100% !important;
     margin: 0 !important;
+    overflow: visible !important;
   }
   *{box-sizing:border-box}
   @container argus-compact-wrap (max-width: 800px) {

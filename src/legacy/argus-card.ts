@@ -13,7 +13,7 @@
  *    Renders the classic compact card with animated weather backdrop and PIN keypad.
  */
 
-const ARGUS_CARD_VERSION='2.2.11';
+const ARGUS_CARD_VERSION='2.2.12';
 
 console.info(
   `%c🛡️ ARGUS ALARM CARD %c v${ARGUS_CARD_VERSION} `,
@@ -142,28 +142,26 @@ class ArgusPanelCard extends HTMLElement {
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.innerHTML = `
       <style>
-        :host { display: block; height: 100%; }
+        :host { display: block; width: 100%; }
         ha-card {
-          overflow: hidden;
           border-radius: 24px;
           background: transparent !important;
           border: none !important;
-          box-shadow: none !important;
           color: #fff;
-          box-shadow: 0 20px 60px rgba(0,0,0,.38);
           position: relative;
           --ha-card-border-radius: 24px;
-          height: 100%;
+          width: 100%;
           display: flex;
           flex-direction: column;
+          overflow: visible !important;
         }
         .argus-panel-host {
           display: flex;
           flex-direction: column;
-          flex: 1;
-          min-height: 380px;
+          flex: 1 1 auto;
           width: 100%;
-          overflow: hidden;
+          min-height: fit-content;
+          overflow: visible !important;
         }
         /* Fullscreen mode */
         :host(.argus-fullscreen) ha-card {
