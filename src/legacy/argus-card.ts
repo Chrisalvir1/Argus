@@ -246,19 +246,24 @@ class ArgusPanelCard extends HTMLElement {
     this._panelHost.innerHTML = '';
     this._panelEl = document.createElement('argus-panel-v2018');
 
+    if (this._config.mode !== 'panel') {
+      this._panelEl.setAttribute('compact', '');
+      this._panelEl.classList.add('argus-compact');
+    }
+
     try {
       this._panelEl.setConfig({
         entity: this._config.entity,
         title: this._config.title,
-        compact: this._config.mode !== 'panel', // compact by default for Instancia Activa
+        compact: this._config.mode !== 'panel',
       });
     } catch (_) {}
+
+    this._panelHost.appendChild(this._panelEl);
 
     if (this._hass) {
       try { this._panelEl.hass = this._hass; } catch (_) {}
     }
-
-    this._panelHost.appendChild(this._panelEl);
   }
 
   _renderBasicCard() {

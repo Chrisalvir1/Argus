@@ -3543,8 +3543,8 @@ class ArgusPanel extends HTMLElement {
   set hass(hass) {
     const oldHass = this._hass;
     this._hass = hass;
-    this._updateTheme();
-    if (this._loadState === 'profile_selection' || this._loadState === 'legacy_claim') return;
+    const isCardMode = this.hasAttribute('compact') || this.classList.contains('argus-compact') || Boolean(this._cardConfig?.compact);
+    if (!isCardMode && (this._loadState === 'profile_selection' || this._loadState === 'legacy_claim')) return;
     if (!this._dashboard?.entries?.length) {
       this._ensureInitialized();
       return;
@@ -4522,10 +4522,19 @@ class ArgusPanel extends HTMLElement {
       return;
     }
 
+    const isCardMode = this.hasAttribute('compact') || this.classList.contains('argus-compact') || Boolean(this._cardConfig?.compact);
     if (!bootstrap.has_active_session || !this._profileSelectedThisMount) {
-      this._loadState = 'profile_selection';
-      this._renderLoginScreen(bootstrap);
-      return;
+      if (isCardMode) {
+        this._profileSelectedThisMount = true;
+        const ownUser = (bootstrap.users || []).find(u => u.is_own_profile) || (bootstrap.users || [])[0];
+        if (ownUser && !bootstrap.has_active_session) {
+          try { await this._send('argus/select_profile', { argus_user_id: ownUser.id }); } catch (_) {}
+        }
+      } else {
+        this._loadState = 'profile_selection';
+        this._renderLoginScreen(bootstrap);
+        return;
+      }
     }
 
     // Always nuke any leftover login/profile overlays before showing dashboard,
@@ -4879,6 +4888,10 @@ class ArgusPanel extends HTMLElement {
     const heroDate = this.shadowRoot.getElementById('hero-clock-date');
     const heroWeather = this.shadowRoot.getElementById('hero-weather-pill');
     const heroSecurity = this.shadowRoot.getElementById('hero-security-pill');
+    const isArmed = entries.some(e => {
+      const s = this._hass?.states[e.entity_id]?.state || e.state;
+      return String(s).startsWith('armed') || s === 'triggered' || s === 'pending';
+    });
     if (heroClock) heroClock.textContent = timeStr;
     if (heroDate) heroDate.textContent = now.toLocaleDateString(this._getLocale(), { weekday: 'short', month: 'short', day: 'numeric' });
     if (heroWeather) heroWeather.textContent = `${weather.icon} ${weather.label}`;
