@@ -160,9 +160,7 @@ export function applyStableInstancesRender(C: ArgusPanelConstructor | undefined)
         const isArmed = allStates.some(s => String(s).startsWith('armed') || s === 'triggered' || s === 'pending');
         const globalStatusEl = root.getElementById('global-status');
         if (globalStatusEl) {
-          const t = (k: string) => this._t?.(k) || k;
-          const html = `<span class="badge ${isArmed ? 'armed_away' : 'disarmed'}">${isArmed ? t('system_armed') : t('system_disarmed')}</span>`;
-          if (globalStatusEl.innerHTML !== html) globalStatusEl.innerHTML = html;
+          globalStatusEl.innerHTML = '';
         }
         
         const heroSecurity = root.getElementById('hero-security-pill');

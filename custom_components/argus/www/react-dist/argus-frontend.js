@@ -2175,6 +2175,11 @@ Bp.innerHTML = `
     margin-bottom: 0 !important;
     border-radius: 24px !important;
   }
+  :host([compact]) #bootstrap-overlay, :host(.argus-compact) #bootstrap-overlay,
+  :host([compact]) .argus-profile-overlay, :host(.argus-compact) .argus-profile-overlay,
+  :host([compact]) .argus-welcome-screen, :host(.argus-compact) .argus-welcome-screen {
+    display: none !important;
+  }
   :host([compact]) .argus-widget__content, :host(.argus-compact) .argus-widget__content {
     height: auto !important;
     overflow: visible !important;
@@ -3684,6 +3689,7 @@ Bp.innerHTML = `
 /* Mobile background and HomeKit polish fixes (moved from runtime hack) */
 .entry-icon,.entry-icon>svg,.argus-old-shield,.argus-old-shield>svg{overflow:visible!important;clip-path:none!important;-webkit-clip-path:none!important}
 .entry-icon{contain:layout!important}
+#global-status { display: none !important; }
 #global-status .badge.disarmed,.hero-pill#hero-security-pill{color:#fff!important;background:rgba(18,82,54,.78)!important;border:1px solid rgba(125,255,185,.64)!important;text-shadow:0 1px 2px rgba(0,0,0,.72)!important;opacity:1!important}
 .argus-instance-duplicate-status{display:none!important}
 .pin-prompt,.pin-modal,.modal,.argus-bootstrap-card{color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.55)!important}
@@ -7254,7 +7260,7 @@ ${n}`);
     });
   }
   async _renderLoginScreen(r) {
-    if (!this._isRenderingLogin) {
+    if (!this._isRenderingLogin && !(this.hasAttribute("compact") || this.classList.contains("argus-compact") || this._cardConfig?.compact)) {
       this._isRenderingLogin = !0;
       try {
         const n = (h) => this._t(h);
@@ -17883,10 +17889,7 @@ function Sf(o) {
       }
       if (z) {
         const S = f.map((y) => this._hass?.states?.[y.entity_id]?.state || "unavailable").some((y) => String(y).startsWith("armed") || y === "triggered" || y === "pending"), _ = g.getElementById("global-status");
-        if (_) {
-          const y = (E) => this._t?.(E) || E, k = `<span class="badge ${S ? "armed_away" : "disarmed"}">${y(S ? "system_armed" : "system_disarmed")}</span>`;
-          _.innerHTML !== k && (_.innerHTML = k);
-        }
+        _ && (_.innerHTML = "");
         const w = g.getElementById("hero-security-pill");
         if (w) {
           const y = (N) => this._t?.(N) || N, k = y(S ? "system_armed" : "system_disarmed"), E = `<i class="hero-live" style="background:${S ? "#ffb54d" : "#55df91"};box-shadow:0 0 9px ${S ? "#ffb54d" : "#55df91"}"></i>${this._escapeHtml?.(k) || k}`;
@@ -19225,6 +19228,7 @@ function P_(o) {
   r.id = "argus-runtime-visual-style", r.textContent = `
 .entry-icon,.entry-icon>svg,.argus-old-shield,.argus-old-shield>svg{overflow:visible!important;clip-path:none!important;-webkit-clip-path:none!important}
 .entry-icon{contain:layout!important}
+#global-status { display: none !important; }
 #global-status .badge.disarmed,.hero-pill#hero-security-pill{color:#fff!important;background:rgba(18,82,54,.78)!important;border:1px solid rgba(125,255,185,.64)!important;text-shadow:0 1px 2px rgba(0,0,0,.72)!important;opacity:1!important}
 .argus-instance-duplicate-status{display:none!important}
 .pin-prompt,.pin-modal,.modal,.argus-bootstrap-card{color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.55)!important}
