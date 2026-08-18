@@ -7530,7 +7530,7 @@ ${i}`);
   }
 }
 customElements.define("argus-panel-v2018", oh);
-const Tp = "2.2.1";
+const Tp = "2.2.2";
 console.info(
   `%c🛡️ ARGUS PANEL CARD %c v${Tp} `,
   "color:white;background:#0a1628;font-weight:700;padding:4px 8px;border-radius:4px 0 0 4px;",

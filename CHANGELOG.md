@@ -1,3 +1,16 @@
+## [2.2.2] - 2026-08-17
+
+### Added
+- **Argus Panel Lovelace Card (`argus-panel-card`):** Tarjeta automática para dashboards de Home Assistant con selector visual en la interfaz de usuario (cero YAML requerido), auto-detección de la entidad de alarma Argus y switch entre vista de Panel Completo y Compacta.
+- **Botón de Pantalla Completa (⛶ / ✕):** Botón flotante en la tarjeta Lovelace para expandir a pantalla completa real (`100vw` × `100dvh`), convirtiendo cualquier tablet o móvil en una consola de alarma dedicada.
+- **Badge Dinámico de Estado:** Indicador tipo píldora (`SISTEMA DESARMADO`, `SISTEMA ARMADO · CASA`, `SISTEMA ARMADO · AUSENTE`, etc.) integrado en la barra superior HUD de las Instancias Activas con colores sincronizados.
+- **Slide-to-Action iOS Glass Redesign:** Rediseño fiel al estilo "slide to power off" de Apple con track oscuro en vidrio líquido, tirador circular a la izquierda, máscara de gradiente de texto y animación de resorte elástico.
+
+### Fixed
+- **Anulación de CSS eliminada:** Refactorizado `argus-v2046-active-visuals.ts` para eliminar estilos `!important` inline que sobreescribían el diseño Liquid Glass de los botones.
+- **Reglas duplicadas de `.btn-disarm`:** Limpiadas reglas CSS en conflicto en `argus-panel.ts`.
+- **Integración de Cards:** `argus-card` y `argus-panel-card` empaquetadas directamente en el bundle principal para disponibilidad inmediata en Home Assistant.
+
 ## [2.2.1] - 2026-08-17
 
 ### Added

@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * argus-v2046-active-visuals — v2.2.1 refactor
+ * argus-v2046-active-visuals — v2.2.2 refactor
  * Uses ONLY class toggles. No inline styles. All visual work is done in CSS.
  */
 const ACTIVE = { armed_home: /EN CASA|HOME|MAISON|EM CASA|IN CASA|在家|ДОМА|घर/i, armed_away: /AUSENTE|AWAY|ABSENT|FUORI|离家|ВНЕ ДОМА|दूर/i, armed_night: /NOCHE|NIGHT|NUIT|NOTTE|夜间|НОЧЬ|रात/i, armed_vacation: /VACACIONES|VACATION|VACANCES|VACANZA|FÉRIAS|度假|ОТПУСК|यात्रा/i };
