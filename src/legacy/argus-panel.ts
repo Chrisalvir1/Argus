@@ -5111,8 +5111,6 @@ class ArgusPanel extends HTMLElement {
               <button class="liquid-btn btn-away ${state==='armed_away'?'active':''} ${sensorAlert && state==='armed_away'?'buzz-orange':''}" data-idx="${idx}" data-action="away">${this._modeButtonIcon('away')}<span>${this._escapeHtml(modeLabel('btn_away'))}</span></button>
               <button class="liquid-btn btn-night ${state==='armed_night'?'active':''} ${sensorAlert && state==='armed_night'?'buzz-orange':''}" data-idx="${idx}" data-action="night">${this._modeButtonIcon('night')}<span>${this._escapeHtml(modeLabel('btn_night'))}</span></button>
               <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''} ${sensorAlert && state==='armed_vacation'?'buzz-orange':''}" data-idx="${idx}" data-action="vacation">${this._modeButtonIcon('vacation')}<span>${this._escapeHtml(modeLabel('btn_vacation'))}</span></button>
-              <button class="liquid-btn btn-disarm ${state==='disarmed'?'active':''}" data-idx="${idx}" data-action="disarm">${this._modeButtonIcon('disarm')}<span>${this._escapeHtml(modeLabel('btn_disarmed'))}</span></button>
-              ${this._permissions?.sos !== false ? `<button class="liquid-btn btn-sos ${panicActive || triggered ? 'active flashing' : ''}" data-action="${panicActive ? 'stop-sos' : 'sos'}" data-idx="${idx}">${this._modeButtonIcon('sos')}<span>${panicActive ? t('sos_stop') : t('btn_sos')}</span></button>` : ''}
             </div>
             <div class="console-sensors">${sensorRows || `<div class="console-empty">${this._escapeHtml(sList.length === 0 ? (t('no_sensors_configured') || 'Sin sensores de intrusión configurados.') : (t('all_sensors_bypassed') || 'Todos los sensores configurados están omitidos.'))}</div>`}</div>
 

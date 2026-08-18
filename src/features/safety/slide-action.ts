@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Argus Slide-to-Action — v2.2.7
+ * Argus Slide-to-Action — v2.2.8
  * iOS "slide to power off" style — exact visual match.
  * - Large circular glass thumb on the LEFT, drags RIGHT to complete
  * - Very dark glass pill track
@@ -161,7 +161,7 @@ function injectStyles(panel) {
   pointer-events: none;
 }
 
-/* Text label — centered, masked by the thumb */
+/* Text label — centered, crisp solid white */
 .argus-sta-label {
   position: absolute;
   left: 68px;
@@ -170,20 +170,19 @@ function injectStyles(panel) {
   transform: translateY(-50%);
   text-align: center;
   font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.3px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
   pointer-events: none;
   z-index: 2;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: clip;
-  /* gradient mask: brighter center, fading at edges */
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.6) 12%, rgba(0,0,0,0.9) 25%, rgba(0,0,0,0.9) 75%, rgba(0,0,0,0.6) 88%, transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.6) 12%, rgba(0,0,0,0.9) 25%, rgba(0,0,0,0.9) 75%, rgba(0,0,0,0.6) 88%, transparent 100%);
+  text-overflow: ellipsis;
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.7);
   transition: opacity 0.12s ease;
 }
-.argus-sta-track--disarm .argus-sta-label { color: rgba(167,243,208,0.65); }
-.argus-sta-track--sos .argus-sta-label    { color: rgba(252,165,165,0.65); }
+.argus-sta-track--disarm .argus-sta-label { color: #ffffff !important; }
+.argus-sta-track--sos .argus-sta-label    { color: #ffffff !important; }
 
 /* Spring snap-back animation */
 .argus-sta-thumb--snap {
@@ -431,25 +430,12 @@ function mountOnEntry(panel, entry, idx) {
   const stack = entry.querySelector('.liquid-stack');
   if (!stack) return;
 
-  // Remove the old plain disarm + sos buttons and replace with sliders
-  const oldDisarm = stack.querySelector('.btn-disarm');
-  const oldSos = stack.querySelector('.btn-sos');
+  // Remove any legacy disarm or SOS buttons completely from the DOM
+  stack.querySelectorAll('.btn-disarm, .btn-sos').forEach(btn => btn.remove());
 
-  // Insert sliders where old buttons were
-  if (oldDisarm) {
-    oldDisarm.parentNode.insertBefore(dWrap, oldDisarm.nextSibling);
-    // Hide the old button completely — slider is the new disarm UI
-    oldDisarm.style.display = 'none';
-  } else {
-    stack.appendChild(dWrap);
-  }
-  if (oldSos) {
-    oldSos.parentNode.insertBefore(sWrap, oldSos.nextSibling);
-    // Hide the old SOS button — slider replaces it
-    oldSos.style.display = 'none';
-  } else {
-    stack.appendChild(sWrap);
-  }
+  // Directly append sliders to stack
+  stack.appendChild(dWrap);
+  stack.appendChild(sWrap);
 
   // Update slider state reactively
   function refresh() {

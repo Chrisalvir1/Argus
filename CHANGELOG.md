@@ -1,3 +1,6 @@
+## [2.2.8] - 2026-08-17
+- Completely removed legacy buttons from HTML templates, crisp white slider text.
+
 ## [2.2.7] - 2026-08-17
 - Fix UI scaling, slider persistence, and payload mapping.
 
