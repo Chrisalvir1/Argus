@@ -7,7 +7,7 @@ export type ArgusWidgetKind='activity-history'|'automations'|'backup-restore'|'a
 
 export interface ArgusWidgetDefinition{
   id:string;
-  nativeId:string;
+  nativeId?:string;
   kind:ArgusWidgetKind;
   title:string;
   icon?:React.ReactNode;

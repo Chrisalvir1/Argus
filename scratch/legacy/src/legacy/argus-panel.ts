@@ -1,0 +1,9590 @@
+// @ts-nocheck
+/**
+ * Argus Home Hub – v2.0.99
+ * Complete, self-contained custom element.
+ * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
+ *        temperature from dedicated local sensor with weather fallback,
+ *        DESARMADO button active state when disarmed,
+ *        per-instance fullscreen, vacation quick action, numeric PIN dial pad,
+ *        mode tabs including disarmed.
+ * v0.9.26: Fix light-mode invisible text (mode-section-title/sensor-pill),
+ *          selector panel-right not showing selected items,
+ *          export uses Blob API (modern browsers), import reset + robust validation,
+ *          require_closed & bypassed_sensors read/write per entity_id structure.
+ * v0.9.31: Fix selector sirenas — delegación de eventos evita checkbox cruzado,
+ *          Fix require_closed — lee checkbox justo antes del send para garantizar
+ *          que el valor más reciente llega al bloqueo de armado.
+ * v0.9.32: Fix DESARMADO apaga animación parpadeo en sirenas/sensores triggered,
+ *          Fix historial muestra sensor que disparó la alarma,
+ *          Fix píldoras de sirenas parpadean rojo cuando estado=triggered,
+ *          Animación triggered muestra chips con nombre de sensores abiertos.
+ */
+
+/* ── i18n ─────────────────────────────────────────────────────────────── */
+const LANG_LIST = [
+  { code:'auto', flag:'🏠', label:'Home Assistant' },
+  { code:'es', flag:'🇪🇸', label:'Español' },
+  { code:'en', flag:'🇬🇧', label:'English' },
+  { code:'fr', flag:'🇫🇷', label:'Français' },
+  { code:'pt', flag:'🇧🇷', label:'Português' },
+  { code:'it', flag:'🇮🇹', label:'Italiano' },
+  { code:'zh', flag:'🇨🇳', label:'中文 (简体)' },
+  { code:'zh-Hant', flag:'🇭🇰', label:'中文 (繁體)' },
+  { code:'ru', flag:'🇷🇺', label:'Русский' },
+  { code:'hi', flag:'🇮🇳', label:'हिन्दी' },
+  { code:'ar', flag:'🇸🇦', label:'العربية' },
+  { code:'ko', flag:'🇰🇷', label:'한국어' },
+  { code:'ja', flag:'🇯🇵', label:'日本語' },
+  { code:'uk', flag:'🇺🇦', label:'Українська' },
+];
+
+// Values received from Home Assistant or persisted storage must never become
+// executable markup when rendered through a template literal.
+const escapeHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, char => ({
+  '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;',
+}[char]));
+const TEXTS = {
+  es: {
+    hero_desc:'Sistema integral de seguridad, control de acceso, automatizaciones y HomeKit.',
+    instances:'Instancias activas', modes:'Modos', automations:'⚡ Automatizaciones',
+    linked_rules:'Reglas vinculadas a Argus', create_ha:'+ Crear en HA',
+    no_rules:'', rules_tip:'',
+    settings:'⚙️ Ajustes', change_pin:'PIN Maestro', pin_desc:'Código numérico para armar y desarmar.',
+    new_pin:'Nuevo PIN', confirm_pin:'Confirmar PIN', update_pin:'Actualizar PIN',
+    current_pin:'PIN actual', notifications_title:'🔔 Notificaciones',
+    notif_desc:'Selecciona los dispositivos móviles registrados en HA que recibirán alertas de Argus.',
+    save_notif:'Guardar', users_title:'👥 Usuarios y Control de Acceso',
+    admin_only:'Solo administradores pueden modificar esta sección.',
+    add_user:'Agregar usuario', username:'Nombre de Usuario', user_pin:'PIN de usuario',
+    is_admin:'Administrador', save_user:'Guardar', no_users:'Sin usuarios adicionales configurados.',
+    homekit_title:'🏠 HomeKit', close:'Cerrar',
+    search_placeholder:'Buscar por nombre, área o entity_id',
+    available:'Disponibles', selected_lbl:'Seleccionadas', clear:'Limpiar', accept:'Aceptar',
+    introduce_pin:'Introduce tu PIN', pin_modal_desc:'PIN numérico para desarmar Argus',
+    confirm:'✓ Confirmar', cancel:'Cancelar',
+    disarmed:'Desarmado', armed_home:'En Casa', armed_away:'Ausente',
+    armed_night:'Noche', armed_vacation:'Vacaciones', triggered:'¡ALARMA!',
+    pending:'Cuenta regresiva', arming:'Armando', unavailable:'No disponible',
+    sync_panel_section:'Paneles Sincronizados', sync_panel_help:'Paneles de alarma que seguirán el mismo estado de Argus', sensor_section:'Sensores de Intrusión', siren_section:'Sirenas', thermostat_alert_notif:'🌡️ Alerta de temperatura',
+    none_selected:'Ninguno seleccionado', search_select:'Buscar y seleccionar',
+    save_mode:'💾 Guardar modo', details_notif:'Notificación de alarma',
+    activity_log:'📋 Historial de Actividad',
+    log_armed:'Armado', log_disarmed:'Desarmado', log_triggered:'¡Disparado!',
+    log_by:'por', log_sensor:'Sensor', log_no_events:'Sin eventos recientes.',
+    mode_home:'En Casa', mode_away:'Ausente', mode_night:'Noche', mode_vacation:'Vacaciones',
+    homekit_bridge:'Puente HomeKit', homekit_not_paired:'No vinculado a ninguna casa.',
+    homekit_house:'Casa de Apple Home', language:'Idioma',
+    lang_select_title:'Seleccionar Idioma',
+    btn_home:'🏠 EN CASA', btn_away:'🔒 AUSENTE', btn_night:'🌙 NOCHE',
+    btn_vacation:'✈️ VACACIONES', btn_disarmed:'DESARMADO', btn_sos:'🚨 SOS / PÁNICO',
+    system_armed:'SISTEMA ARMADO', system_disarmed:'SISTEMA DESARMADO',
+    home_name_lbl:'Nombre del Hogar', background_lbl:'Fondo', edit_btn:'✏️ Editar',
+    save_btn:'Guardar', backup_title:'Respaldo y Restauración',
+    backup_desc:'Guarda una copia de seguridad de tus ajustes o restaura una anterior.',
+    export_btn:'📤 Descargar', import_btn:'📥 Restaurar', reset_btn:'⚠️ Restablecer', undo_reset_btn:'↩️ Deshacer Restablecimiento',
+    access_title:'Control de Acceso y Usuarios',
+    access_desc:'Gestión global de seguridad, PIN maestro y administradores.',
+    pin_master_title:'PIN Maestro', pin_active_yes:'PIN Maestro: Activo', pin_active_no:'PIN Maestro: Desactivado',
+    select_all:'☑ Todos', deselect_all:'☐ Ninguno', mqtt_label:'MQTT',
+    arm_time_label:'Tiempo armado (s)', disarm_time_label:'Retraso de entrada (s)',
+    pin_incorrect:'❌ PIN actual incorrecto', pin_updated:'✓ PIN Actualizado', pin_deleted:'✓ PIN Eliminado',
+    searching_auto:'↻ Buscando automatizaciones...', no_auto_linked:'No hay automatizaciones vinculadas a Argus.',
+    pin_remove_hint:'Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.',
+    lbl_load_file:'Cargar archivo:', lbl_aesthetic_custom:'Más Ajustes / SOS', lbl_uploaded_files:'Archivos subidos en servidor',
+    bypass_lbl:'🚫 Omitir', lock_if_open:'Bloquear si abiertos', wait_if_open:'Esperar armado en espera',
+    select_btn:'+ Seleccionar', add_btn:'+ Añadir',
+    sensors_to_bypass:'Sensores a Omitir',
+    no_instances:'No hay instancias. Agrega Argus desde Integraciones.',
+    fullscreen_title:'Pantalla completa',
+    sos_slide:'Desliza para activar SOS', sos_confirm_title:'Confirmar pánico',
+    sos_confirm_text:'Desliza para disparar la alarma inmediatamente.',
+    sos_call:'📞 Llamar a Emergencias',
+    home_name_modal_title:'🏡 Nombre del Hogar',
+    home_name_modal_desc:'Este nombre aparece en el panel de instancias y en pantalla completa.',
+    home_name_label:'Nombre del Hogar', home_name_placeholder:'Mi Casa',
+    clear_log_btn:'BORRAR',
+    bg_weather:'Clima animado', bg_none:'Predeterminado', bg_panel_none:'Sin fondo', bg_photo:'Una foto', bg_collage:'Collage', bg_video:'Video en loop', bg_panel_title:'Fondo para panel', bg_hub_title:'Fondo Argus', bg_sound_opt:'Sonido de video', bg_image_opt:'Imagen / GIF', bg_hub_default:'Predeterminado (Argus)',
+    forgot_pin:'¿Olvidaste tu PIN?', pin_reset_admin_only:'❌ Error: Solo los administradores de Home Assistant pueden restablecer el PIN maestro.', pin_reset_confirm:'¿Estás seguro de que deseas restablecer el PIN maestro? Se eliminará el PIN actual y se desactivará.',
+    temp_auto:'Automático (sensor local / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Batería baja',
+    times_section:'⏱️ Tiempos', arm_time:'Armado (s)', disarm_time:'Retraso de entrada (s)',
+    save_config:'GUARDAR CONFIGURACIÓN', never_triggered:'Nunca activada',
+    bridge_paired:'Puente configurado',
+    bridge_paired_desc:'El puente <b>{bridge}</b> está configurado en Home Assistant. Home Assistant no permite comprobar desde aquí si fue añadido a Apple Home ni conocer su nombre.',
+    bridge_not_connected:'Puente no configurado',
+    bridge_not_desc:'Activa la integración HomeKit Bridge en Home Assistant e incluye la entidad <code>alarm_control_panel.argus_*</code> para generar un código QR de emparejamiento.',
+    manual_disarm:'Manual (Desarmado)',
+    manual_arm:'Manual',
+    open_sensors:'Sensores abiertos',
+    log_detail_disarm:'Sistema desarmado',
+    alarm_instance:'Instancia de Alarma',
+    log_detail_armed:'Modo',
+    log_detail_triggered:'Activación automática',
+    user_exp_type: 'Vencimiento',
+    user_exp_date: 'Fecha/Hora de Vencimiento',
+    exp_indefinite: 'Indefinido',
+    exp_temporary: 'Temporal (Fecha/Hora)',
+    expired: 'Expirado',
+    active_until: 'Vence',
+    log_detail_pin_reset: 'PIN maestro restablecido por el administrador',
+    log_detail_pin_reset_failed: 'Intento no autorizado de restablecer el PIN maestro',
+    badge_pin_reset: 'PIN Restablecido',
+    badge_pin_reset_failed: 'Fallo Reset PIN',
+    no_files_uploaded: 'Sin archivos subidos. Carga un fondo usando los controles de arriba.',
+    no_files_uploaded_short: 'Sin archivos subidos.',
+    files_count: '{count} archivos',
+    files_count_short: '{count} arch.',
+    file_delete_confirm: '¿Seguro que deseas borrar "{filename}" permanentemente?',
+    use_for_panel: 'Panel',
+    use_for_hub: 'Argus',
+    delete_btn_title: 'Borrar de almacenamiento',
+    bg_panel_selected_from_history: 'Fondo de panel seleccionado desde historial.',
+    bg_hub_selected_from_history: 'Fondo Argus seleccionado desde historial.',
+    error_loading_uploaded_files: 'Error al cargar historial de archivos.',
+    welcome_greeting: 'Bienvenido/a,',
+    select_profile_title: 'Selecciona tu perfil',
+    select_profile_subtitle: 'Accede a tus paneles e instancias de seguridad de Argus.',
+    exit_to_ha: 'Volver a Home Assistant',
+    role_argus_admin: 'Administrador de Argus',
+    role_argus_user: 'Usuario estándar',
+    ha_account_linked: 'Cuenta de Home Assistant: {name}',
+    ha_account_unavailable: 'Vinculación no disponible',
+    user_role_label: 'Rol Argus',
+    delete_user_tooltip: 'Eliminar perfil de usuario',
+    delete_user_confirm: '¿Estás seguro de que deseas eliminar a "{name}"?',
+    cannot_delete_last_admin: 'No se puede eliminar el último administrador vinculante.',
+    clock_format_label: 'Formato de hora',
+    clock_format_desc: 'Elige cómo se muestran las horas en el panel y el historial.',
+    clock_auto: 'Automático (Home Assistant)',
+    clock_12h: '12 horas (AM/PM)',
+    clock_24h: '24 horas',
+    unlock_kiosk: 'Desbloquear kiosco',
+    first_run_welcome: 'Gracias por elegir Argus Home Hub. Bienvenido/a.',
+    first_run_desc: 'Complete la configuración inicial para asegurar su hogar.',
+    first_run_pin_expl: 'El PIN de acceso abre Argus. El PIN maestro controla el armado y desarmado.',
+    first_run_skip: 'Omitir',
+    first_run_start: 'Comenzar con Argus',
+    first_run_blocked_title: 'Acceso denegado',
+    first_run_blocked_desc: 'Se requiere un administrador de Home Assistant para configurar Argus por primera vez.',
+    log_action_first_run_completed: 'Argus inicializado por {user}',
+    log_action_fullscreen_unlocked: 'Kiosco desbloqueado por {user}',
+    log_action_master_pin_rejected: 'Intento incorrecto de PIN maestro por {user}',
+    log_action_select_profile: 'Perfil seleccionado: {user}',
+    log_action_verify_access_pin: 'PIN de acceso verificado por {user}',
+    log_action_sos: 'Pánico SOS activado por {user}',
+    log_action_stop_sos: 'Pánico SOS detenido por {user}',
+    log_action_save_ui: 'Ajustes de UI guardados por {user}',
+    log_action_rejected: 'Acción rechazada',
+    unlinked_ha_accounts_title: 'Cuentas de Home Assistant sin perfil Argus',
+    btn_create_argus_profile: 'Crear perfil Argus',
+    no_unlinked_ha_accounts: 'Todas las cuentas de Home Assistant activas tienen perfil.',
+    profile_is_yours: 'Este es tu perfil',
+    profile_needs_pin: 'Perfil ajeno — introduce el PIN de acceso',
+    profile_no_pin_access: 'Este perfil no tiene PIN de acceso. No puedes abrirlo.',
+    ha_role_admin: 'Admin HA',
+    ha_role_standard: 'Usuario HA',
+    login_btn: 'Iniciar sesión',
+    cancel_btn: 'Cancelar',
+    pin_placeholder: 'PIN de acceso',
+    link_ha_user: 'Vincular a Usuario Home Assistant',
+    ha_admin_label: 'Home Assistant Admin',
+    ha_standard_user_label: 'Standard HA User',
+    role_argus_standard: 'Usuario estándar',
+      },
+  en: {
+    hero_desc:'Alarm control, modes and automations.',
+    instances:'Active Instances', modes:'Modes', automations:'⚡ Automations',
+    linked_rules:'Argus-linked Rules', create_ha:'+ Create in HA',
+    no_rules:'', rules_tip:'',
+    settings:'⚙️ Settings', change_pin:'Master PIN', pin_desc:'Numeric code to arm and disarm.',
+    new_pin:'New PIN', confirm_pin:'Confirm PIN', update_pin:'Update PIN',
+    current_pin:'Current PIN', notifications_title:'🔔 Notifications',
+    notif_desc:'Select the mobile devices registered in HA that will receive Argus alerts.',
+    save_notif:'Save', users_title:'👥 Users & Access Control',
+    admin_only:'Only administrators can modify this section.',
+    add_user:'Add user', username:'Username', user_pin:'User PIN',
+    is_admin:'Administrator', save_user:'Save', no_users:'No additional users configured.',
+    homekit_title:'🏠 HomeKit', close:'Close',
+    search_placeholder:'Search by name, area or entity_id',
+    available:'Available', selected_lbl:'Selected', clear:'Clear', accept:'Accept',
+    introduce_pin:'Enter your PIN', pin_modal_desc:'Numeric PIN to disarm Argus',
+    confirm:'✓ Confirm', cancel:'Cancel',
+    disarmed:'Disarmed', armed_home:'Home', armed_away:'Away',
+    armed_night:'Night', armed_vacation:'Vacation', triggered:'ALARM!',
+    pending:'Pending', arming:'Arming', unavailable:'Unavailable',
+    sensor_section:'Intrusion Sensors', siren_section:'Sirens', thermostat_alert_notif:'🌡️ Temperature alert',
+    none_selected:'None selected', search_select:'Search & select',
+    save_mode:'💾 Save mode', details_notif:'Alarm notification',
+    activity_log:'📋 Activity Log',
+    log_armed:'Armed', log_disarmed:'Disarmed', log_triggered:'Triggered!',
+    log_by:'by', log_sensor:'Sensor', log_no_events:'No recent events.',
+    mode_home:'Home', mode_away:'Away', mode_night:'Night', mode_vacation:'Vacation',
+    homekit_bridge:'HomeKit Bridge', homekit_not_paired:'Not paired to any home.',
+    homekit_house:'Apple Home', language:'Language',
+    lang_select_title:'Select Language',
+    btn_home:'🏠 HOME', btn_away:'🔒 AWAY', btn_night:'🌙 NIGHT',
+    btn_vacation:'✈️ VACATION', btn_disarmed:'DISARMED', btn_sos:'🚨 SOS / PANIC',
+    system_armed:'SYSTEM ARMED', system_disarmed:'SYSTEM DISARMED',
+    home_name_lbl:'Home Name', background_lbl:'Background', edit_btn:'✏️ Edit',
+    save_btn:'Save', backup_title:'Backup & Restore',
+    backup_desc:'Save a backup of your settings or restore a previous one.',
+    export_btn:'📤 Download', import_btn:'📥 Restore', reset_btn:'⚠️ Factory Reset', undo_reset_btn:'↩️ Undo Reset',
+    access_title:'Access Control & Users',
+    access_desc:'Global security management, master PIN and administrators.',
+    pin_master_title:'Master PIN', pin_active_yes:'Master PIN: Active', pin_active_no:'Master PIN: Deactivated',
+    select_all:'☑ All', deselect_all:'☐ None', mqtt_label:'MQTT',
+    arm_time_label:'Arm time (s)', disarm_time_label:'Entry delay (s)',
+    pin_incorrect:'❌ Incorrect current PIN', pin_updated:'✓ PIN Updated', pin_deleted:'✓ PIN Deleted',
+    searching_auto:'↻ Searching automations...', no_auto_linked:'No automations linked to Argus.',
+    pin_remove_hint:'To remove PIN: Enter the current one and leave the fields below empty.',
+    lbl_load_file:'Upload file:', lbl_aesthetic_custom:'Aesthetic Customization', lbl_uploaded_files:'Uploaded files on server',
+    bypass_lbl:'🚫 Bypass', lock_if_open:'Lock if open', wait_if_open:'Wait for sensors to close',
+    select_btn:'+ Select', add_btn:'+ Add',
+    sensors_to_bypass:'Sensors to Bypass',
+    no_instances:'No instances. Add Argus from Integrations.',
+    fullscreen_title:'Full screen',
+    sos_slide:'Slide to activate SOS', sos_confirm_title:'Confirm panic',
+    sos_confirm_text:'Slide to trigger the alarm immediately.',
+    sos_call:'📞 Call Emergency Services',
+    home_name_modal_title:'🏡 Home Name',
+    home_name_modal_desc:'This name appears in the instances panel and in full screen.',
+    home_name_label:'Home Name', home_name_placeholder:'My Home',
+    clear_log_btn:'CLEAR',
+    bg_weather:'Animated weather', bg_none:'Default', bg_panel_none:'No background', bg_photo:'One photo', bg_collage:'Collage', bg_video:'Loop video', bg_panel_title:'Panel background', bg_hub_title:'Argus background', bg_sound_opt:'Video sound', bg_image_opt:'Image / GIF', bg_hub_default:'Default (Argus)',
+    forgot_pin:'Forgot PIN?', pin_reset_admin_only:'❌ Error: Only Home Assistant administrators can reset the master PIN.', pin_reset_confirm:'Are you sure you want to reset the master PIN? The current PIN will be removed and deactivated.',
+    temp_auto:'Automatic (local sensor / thermostat / climate)', temp_thermostat:'(thermostat)', battery_low:'⚠️ Low Battery',
+    times_section:'⏱️ Times', arm_time:'Arming (s)', disarm_time:'Entry delay (s)',
+    save_config:'SAVE CONFIGURATION', never_triggered:'Never triggered',
+    bridge_paired:'Bridge configured',
+    bridge_paired_desc:'The <b>{bridge}</b> bridge is configured in Home Assistant. Home Assistant cannot verify from here whether it was added to Apple Home or report its name.',
+    bridge_not_connected:'Bridge not configured',
+    bridge_not_desc:'Enable the HomeKit Bridge integration in Home Assistant and include the entity <code>alarm_control_panel.argus_*</code> to generate a pairing QR code.',
+    manual_disarm:'Manual (Disarmed)',
+    manual_arm:'Manual',
+    open_sensors:'Open sensors',
+    log_detail_disarm:'System disarmed',
+    alarm_instance:'Alarm Instance',
+    log_detail_armed:'Mode',
+    log_detail_triggered:'Automatic activation',
+    user_exp_type: 'Expiration',
+    user_exp_date: 'Expiration Date/Time',
+    exp_indefinite: 'Indefinite',
+    exp_temporary: 'Temporary (Date/Time)',
+    expired: 'Expired',
+    active_until: 'Expires',
+    log_detail_pin_reset: 'Master PIN reset by administrator',
+    log_detail_pin_reset_failed: 'Unauthorized attempt to reset master PIN',
+    badge_pin_reset: 'PIN Reset',
+    badge_pin_reset_failed: 'PIN Reset Failed',
+    no_files_uploaded: 'No uploaded files. Upload a background using the controls above.',
+    no_files_uploaded_short: 'No uploaded files.',
+    files_count: '{count} files',
+    files_count_short: '{count} files',
+    file_delete_confirm: 'Are you sure you want to permanently delete "{filename}"?',
+    use_for_panel: 'Panel',
+    use_for_hub: 'Argus',
+    delete_btn_title: 'Delete from storage',
+    bg_panel_selected_from_history: 'Panel background selected from history.',
+    bg_hub_selected_from_history: 'Argus background selected from history.',
+    error_loading_uploaded_files: 'Error loading file history.',
+    welcome_greeting: 'Welcome,',
+    select_profile_title: 'Select Your Profile',
+    select_profile_subtitle: 'Access your security panels and Argus instances.',
+    exit_to_ha: 'Back to Home Assistant',
+    role_argus_admin: 'Argus Administrator',
+    role_argus_user: 'Standard User',
+    ha_account_linked: 'Home Assistant Account: {name}',
+    ha_account_unavailable: 'Binding unavailable',
+    user_role_label: 'Argus Role',
+    delete_user_tooltip: 'Delete user profile',
+    delete_user_confirm: 'Are you sure you want to delete "{name}"?',
+    cannot_delete_last_admin: 'Cannot delete the last binding administrator.',
+    clock_format_label: 'Time Format',
+    clock_format_desc: 'Choose how time is displayed across panels and logs.',
+    clock_auto: 'Automatic (Home Assistant)',
+    clock_12h: '12-hour (AM/PM)',
+    clock_24h: '24-hour',
+    unlock_kiosk: 'Unlock kiosk',
+    first_run_welcome: 'Thank you for choosing Argus Home Hub. Welcome.',
+    first_run_desc: 'Complete setup to secure your home.',
+    first_run_pin_expl: 'The access PIN opens Argus. The master PIN controls arming and disarming.',
+    first_run_skip: 'Skip',
+    first_run_start: 'Start with Argus',
+    first_run_blocked_title: 'Access Denied',
+    first_run_blocked_desc: 'A Home Assistant administrator is required to set up Argus for the first time.',
+    log_action_first_run_completed: 'Argus initialized by {user}',
+    log_action_fullscreen_unlocked: 'Kiosk unlocked by {user}',
+    log_action_master_pin_rejected: 'Incorrect master PIN attempt by {user}',
+    log_action_select_profile: 'Profile selected: {user}',
+    log_action_verify_access_pin: 'Access PIN verified by {user}',
+    log_action_sos: 'SOS Panic triggered by {user}',
+    log_action_stop_sos: 'SOS Panic stopped by {user}',
+    log_action_save_ui: 'UI Settings saved by {user}',
+    log_action_rejected: 'Action rejected',
+    unlinked_ha_accounts_title: 'Home Assistant accounts without Argus profile',
+    btn_create_argus_profile: 'Create Argus Profile',
+    no_unlinked_ha_accounts: 'All active Home Assistant accounts have a profile.',
+    profile_is_yours: 'This is your profile',
+    profile_needs_pin: 'Another person\u2019s profile — enter the access PIN',
+    profile_no_pin_access: 'This profile has no access PIN. You cannot open it.',
+    ha_role_admin: 'HA Admin',
+    ha_role_standard: 'HA User',
+    login_btn: 'Login',
+    cancel_btn: 'Cancel',
+    pin_placeholder: 'Access PIN',
+    link_ha_user: 'Link to Home Assistant User',
+    ha_admin_label: 'Home Assistant Admin',
+    ha_standard_user_label: 'Standard HA User',
+    role_argus_standard: 'Standard User',
+  },
+  fr: {
+    hero_desc:"Sécurité intégrée, contrôle d'accès, automatisations et HomeKit.",
+    instances:'Instances actives', modes:'Modes', automations:'⚡ Automatisations',
+    linked_rules:'Règles liées à Argus', create_ha:'+ Créer dans HA',
+    no_rules:'', rules_tip:'',
+    settings:'⚙️ Paramètres', change_pin:'PIN maître', pin_desc:'Code numérique pour armer et désarmer.',
+    new_pin:'Nouveau PIN', confirm_pin:'Confirmer PIN', update_pin:'Mettre à jour PIN',
+    current_pin:'PIN actuel', notifications_title:'🔔 Notifications',
+    notif_desc:'Sélectionnez les appareils mobiles enregistrés dans HA pour recevoir les alertes Argus.',
+    save_notif:'Enregistrer', users_title:'👥 Utilisateurs & Contrôle d\'accès',
+    admin_only:'Seuls les administrateurs peuvent modifier cette section.',
+    add_user:'Ajouter un utilisateur', username:'Nom d\'utilisateur', user_pin:'PIN utilisateur',
+    is_admin:'Administrateur', save_user:'Enregistrer', no_users:'Aucun utilisateur supplémentaire configuré.',
+    homekit_title:'🏠 HomeKit', close:'Fermer',
+    search_placeholder:'Rechercher par nom, zone ou entity_id',
+    available:'Disponibles', selected_lbl:'Sélectionnés', clear:'Effacer', accept:'Accepter',
+    introduce_pin:'Entrez votre PIN', pin_modal_desc:'PIN numérique pour désarmer Argus',
+    confirm:'✓ Confirmer', cancel:'Annuler',
+    disarmed:'Désarmé', armed_home:'À la maison', armed_away:'Absent',
+    armed_night:'Nuit', armed_vacation:'Vacances', triggered:'ALARME!',
+    pending:'En attente', arming:'Armement', unavailable:'Indisponible',
+    sensor_section:'Capteurs d\'intrusion', siren_section:'Sirènes', thermostat_alert_notif:'🌡️ Alerte de température',
+    none_selected:'Aucun sélectionné', search_select:'Rechercher & sélectionner',
+    save_mode:'💾 Enregistrer mode', details_notif:'Notification d\'alarme',
+    activity_log:'📋 Journal d\'activité',
+    log_armed:'Armé', log_disarmed:'Désarmé', log_triggered:'Déclenché!',
+    log_by:'par', log_sensor:'Capteur', log_no_events:'Aucun événement récent.',
+    mode_home:'Maison', mode_away:'Absent', mode_night:'Nuit', mode_vacation:'Vacances',
+    homekit_bridge:'Pont HomeKit', homekit_not_paired:'Non associé à une maison.',
+    homekit_house:'Apple Home', language:'Langue',
+    lang_select_title:'Sélectionner la langue',
+    btn_home:'🏠 MAISON', btn_away:'🔒 ABSENT', btn_night:'🌙 NUIT',
+    btn_vacation:'✈️ VACANCES', btn_disarmed:'DÉSARMÉ', btn_sos:'🚨 SOS / PANIQUE',
+    system_armed:'SYSTÈME ARMÉ', system_disarmed:'SYSTÈME DÉSARMÉ',
+    home_name_lbl:'Nom du domicile', background_lbl:'Fond', edit_btn:'✏️ Modifier',
+    save_btn:'Enregistrer', backup_title:'Sauvegarde & Restauration',
+    backup_desc:'Enregistrez une sauvegarde ou restaurez une précédente.',
+    export_btn:'📤 Télécharger', import_btn:'📥 Restaurer', reset_btn:'⚠️ Réinitialiser', undo_reset_btn:'↩️ Annuler la réinitialisation',
+    access_title:'Contrôle d\'accès & Utilisateurs',
+    access_desc:'Gestion globale de la sécurité, PIN maître et administrateurs.',
+    pin_master_title:'PIN Maître', pin_active_yes:'PIN actif: Oui', pin_active_no:'PIN actif: Non',
+    select_all:'☑ Tous', deselect_all:'☐ Aucun', mqtt_label:'MQTT',
+    arm_time_label:'Temps armement (s)', disarm_time_label:'Délai d\'entrée (s)',
+    pin_incorrect:'❌ PIN actuel incorrect', pin_updated:'✓ PIN mis à jour', pin_deleted:'✓ PIN supprimé',
+    searching_auto:'↻ Recherche automatisations...', no_auto_linked:'Aucune automatisation liée à Argus.',
+    pin_remove_hint:'Pour supprimer le PIN: entrez le PIN actuel et laissez les champs vides.',
+    lbl_load_file:'Charger le fichier:', lbl_aesthetic_custom:'Personnalisation esthétique', lbl_uploaded_files:'Fichiers téléchargés sur le serveur',
+    bypass_lbl:'🚫 Ignorer', lock_if_open:'Bloquer si ouvert', wait_if_open:'Attendre la fermeture des capteurs',
+    select_btn:'+ Sélectionner', add_btn:'+ Ajouter',
+    sensors_to_bypass:'Capteurs à ignorer', no_instances:'Aucune instance.',
+    fullscreen_title:'Plein écran', sos_slide:'Glisser pour activer SOS',
+    sos_confirm_title:'Confirmer la panique', sos_confirm_text:'Glissez pour déclencher l\'alarme immédiatement.',
+    sos_call:'📞 Appeler les urgences',
+    home_name_modal_title:'🏡 Nom du domicile',
+    home_name_modal_desc:'Ce nom apparaît dans le panneau des instances et en plein écran.',
+    home_name_label:'Nom du domicile', home_name_placeholder:'Ma maison',
+    clear_log_btn:'EFFACER',
+    bg_weather:'Météo animée', bg_none:'Par défaut', bg_panel_none:'Sans fond', bg_photo:'Une photo', bg_collage:'Collage', bg_video:'Vidéo en boucle', bg_panel_title:'Fond du panneau', bg_hub_title:'Fond Argus', bg_sound_opt:'Son de la vidéo', bg_image_opt:'Image / GIF', bg_hub_default:'Par défaut (Argus)',
+    forgot_pin:'PIN oublié ?', pin_reset_admin_only:'❌ Erreur : Seuls les administrateurs de Home Assistant peuvent réinitialiser le PIN maître.', pin_reset_confirm:'Êtes-vous sûr de vouloir réinitialiser le PIN maître ? Le PIN actuel sera supprimé et désactivé.',
+    temp_auto:'Automatique (capteur local / thermostat / climat)', temp_thermostat:'(thermostat)', battery_low:'⚠️ Batterie faible',
+    times_section:'⏱️ Temps', arm_time:'Armé (s)', disarm_time:'Délai entrée (s)',
+    save_config:'ENREGISTRER LA CONFIGURATION', never_triggered:'Jamais déclenché',
+    bridge_paired:'Pont configuré',
+    bridge_paired_desc:'Le pont <b>{bridge}</b> est configuré dans Home Assistant. Home Assistant ne peut pas vérifier ici son ajout à Apple Home ni fournir son nom.',
+    bridge_not_connected:'Pont non configuré',
+    bridge_not_desc:'Activez l\'intégration HomeKit Bridge dans Home Assistant et incluez l\'entité <code>alarm_control_panel.argus_*</code> pour générer un QR d\'appairage.',
+    manual_disarm:'Manuel (Désarmé)', manual_arm:'Manuel',
+    open_sensors:'Capteurs ouverts', log_detail_disarm:'Système désarmé',
+    alarm_instance:"Instance d'alarme",
+    log_detail_armed:'Mode', log_detail_triggered:'Activation automatique',
+    log_detail_pin_reset: "Code PIN maître réinitialisé par l'administrateur",
+    log_detail_pin_reset_failed: "Tentative non autorisée de réinitialiser le code PIN maître",
+    badge_pin_reset: 'PIN Réinitialisé',
+    badge_pin_reset_failed: 'Échec Réinit. PIN',
+    no_files_uploaded: "Aucun fichier téléchargé. Téléchargez un arrière-plan à l'aide des commandes ci-dessus.",
+    no_files_uploaded_short: 'Aucun fichier téléchargé.',
+    files_count: '{count} fichiers',
+    files_count_short: '{count} fich.',
+    file_delete_confirm: 'Voulez-vous vraiment supprimer définitivement "{filename}" ?',
+    use_for_panel: 'Panneau',
+    use_for_hub: 'Argus',
+    delete_btn_title: 'Supprimer du stockage',
+    bg_panel_selected_from_history: "Arrière-plan du panneau sélectionné depuis l'historique.",
+    bg_hub_selected_from_history: "Arrière-plan Argus sélectionné depuis l'historique.",
+    error_loading_uploaded_files: "Erreur lors du chargement de l'historique des fichiers.",
+    welcome_greeting: 'Bienvenue,',
+    select_profile_title: 'Sélectionnez votre profil',
+    select_profile_subtitle: 'Accédez à vos panneaux de sécurité et instances Argus.',
+    exit_to_ha: 'Retour à Home Assistant',
+    role_argus_admin: 'Administrateur Argus',
+    role_argus_user: 'Utilisateur standard',
+    ha_account_linked: 'Compte Home Assistant : {name}',
+    ha_account_unavailable: 'Liaison indisponible',
+    user_role_label: 'Rôle Argus',
+    delete_user_tooltip: 'Supprimer le profil utilisateur',
+    delete_user_confirm: 'Voulez-vous vraiment supprimer « {name} » ?',
+    cannot_delete_last_admin: 'Impossible de supprimer le dernier administrateur.',
+    clock_format_label: 'Format d\'heure',
+    clock_format_desc: 'Choisissez l\'affichage de l\'heure.',
+    clock_auto: 'Automatique (Home Assistant)',
+    clock_12h: '12 heures (AM/PM)',
+    clock_24h: '24 heures',
+    unlock_kiosk: 'Déverrouiller le kiosque',
+    first_run_welcome: 'Merci d\'avoir choisi Argus Home Hub. Bienvenue.',
+    first_run_desc: 'Complétez la configuration initiale.',
+    first_run_pin_expl: 'Le PIN d\'accès ouvre Argus. Le PIN maître contrôle l\'armement.',
+    first_run_skip: 'Passer',
+    first_run_start: 'Démarrer avec Argus',
+    first_run_blocked_title: 'Accès refusé',
+    first_run_blocked_desc: 'Un administrateur Home Assistant est requis.',
+    log_action_first_run_completed: 'Argus initialisé par {user}',
+    log_action_fullscreen_unlocked: 'Kiosque déverrouillé par {user}',
+    log_action_master_pin_rejected: 'Tentative de PIN maître incorrecte par {user}',
+    log_action_select_profile: 'Profil sélectionné : {user}',
+    log_action_verify_access_pin: 'PIN d\'accès vérifié par {user}',
+    log_action_sos: 'Panique SOS déclenchée par {user}',
+    log_action_stop_sos: 'Panique SOS arrêtée par {user}',
+    log_action_save_ui: 'Paramètres UI enregistrés par {user}',
+    log_action_rejected: 'Action rejetée',
+    unlinked_ha_accounts_title: 'Comptes Home Assistant sans profil Argus',
+    btn_create_argus_profile: 'Créer un profil Argus',
+    no_unlinked_ha_accounts: 'Tous les comptes Home Assistant actifs ont un profil.',
+    profile_is_yours: 'C\u2019est votre profil',
+    profile_needs_pin: 'Profil d\u2019une autre personne — entrez le PIN d\u2019accès',
+    profile_no_pin_access: 'Ce profil n\u2019a pas de PIN d\u2019accès. Vous ne pouvez pas l\u2019ouvrir.',
+    ha_role_admin: 'Admin HA',
+    ha_role_standard: 'Utilisateur HA',
+    login_btn: 'Connexion',
+    cancel_btn: 'Annuler',
+    pin_placeholder: 'Code PIN d\u2019accès',
+    link_ha_user: 'Lier à un utilisateur Home Assistant',
+    ha_admin_label: 'Admin Home Assistant',
+    ha_standard_user_label: 'Utilisateur HA standard',
+    role_argus_standard: 'Utilisateur standard',
+      },
+  pt: {
+    hero_desc:'Segurança integrada, controle de acesso, automações e HomeKit.',
+    instances:'Instâncias ativas', modes:'Modos', automations:'⚡ Automações',
+    linked_rules:'Regras vinculadas ao Argus', create_ha:'+ Criar no HA',
+    no_rules:'', rules_tip:'',
+    settings:'⚙️ Configurações', change_pin:'PIN Mestre', pin_desc:'Código numérico para armar e desarmar.',
+    new_pin:'Novo PIN', confirm_pin:'Confirmar PIN', update_pin:'Atualizar PIN',
+    current_pin:'PIN atual', notifications_title:'🔔 Notificações',
+    notif_desc:'Selecione os dispositivos móveis registrados no HA que receberão alertas do Argus.',
+    save_notif:'Salvar', users_title:'👥 Usuários & Controle de Acesso',
+    admin_only:'Somente administradores podem modificar esta seção.',
+    add_user:'Adicionar usuário', username:'Nome de usuário', user_pin:'PIN do usuário',
+    is_admin:'Administrador', save_user:'Salvar', no_users:'Nenhum usuário adicional configurado.',
+    homekit_title:'🏠 HomeKit', close:'Fechar',
+    search_placeholder:'Buscar por nome, área ou entity_id',
+    available:'Disponíveis', selected_lbl:'Selecionados', clear:'Limpar', accept:'Aceitar',
+    introduce_pin:'Digite seu PIN', pin_modal_desc:'PIN numérico para desarmar o Argus',
+    confirm:'✓ Confirmar', cancel:'Cancelar',
+    disarmed:'Desarmado', armed_home:'Em Casa', armed_away:'Ausente',
+    armed_night:'Noite', armed_vacation:'Férias', triggered:'ALARME!',
+    pending:'Pendente', arming:'Armando', unavailable:'Indisponível',
+    sensor_section:'Sensores de Intrusão', siren_section:'Sirenes', thermostat_alert_notif:'🌡️ Alerta de temperatura',
+    none_selected:'Nenhum selecionado', search_select:'Buscar & selecionar',
+    save_mode:'💾 Salvar modo', details_notif:'Notificação de alarme',
+    activity_log:'📋 Registro de Atividade',
+    log_armed:'Armado', log_disarmed:'Desarmado', log_triggered:'Disparado!',
+    log_by:'por', log_sensor:'Sensor', log_no_events:'Nenhum evento recente.',
+    mode_home:'Em Casa', mode_away:'Ausente', mode_night:'Noite', mode_vacation:'Férias',
+    homekit_bridge:'Ponte HomeKit', homekit_not_paired:'Não associado a nenhuma casa.',
+    homekit_house:'Apple Home', language:'Idioma',
+    lang_select_title:'Selecionar Idioma',
+    btn_home:'🏠 EM CASA', btn_away:'🔒 AUSENTE', btn_night:'🌙 NOITE',
+    btn_vacation:'✈️ FÉRIAS', btn_disarmed:'DESARMADO', btn_sos:'🚨 SOS / PÂNICO',
+    system_armed:'SISTEMA ARMADO', system_disarmed:'SISTEMA DESARMADO',
+    home_name_lbl:'Nome do lar', background_lbl:'Fundo', edit_btn:'✏️ Editar',
+    save_btn:'Salvar', backup_title:'Backup & Restauração',
+    backup_desc:'Salve um backup ou restaure um anterior.',
+    export_btn:'📤 Baixar', import_btn:'📥 Restaurar', reset_btn:'⚠️ Redefinir', undo_reset_btn:'↩️ Desfazer Redefinição',
+    access_title:'Controle de Acesso & Usuários',
+    access_desc:'Gerenciamento global, PIN mestre e administradores.',
+    pin_master_title:'PIN Mestre', pin_active_yes:'PIN Ativo: Sim', pin_active_no:'PIN Ativo: Não',
+    select_all:'☑ Todos', deselect_all:'☐ Nenhum', mqtt_label:'MQTT',
+    arm_time_label:'Tempo armado (s)', disarm_time_label:'Atraso de entrada (s)',
+    pin_incorrect:'❌ PIN atual incorreto', pin_updated:'✓ PIN Atualizado', pin_deleted:'✓ PIN Removido',
+    searching_auto:'↻ Buscando automações...', no_auto_linked:'Nenhuma automação vinculada ao Argus.',
+    pin_remove_hint:'Para remover o PIN: insira o atual e deixe os campos abaixo vazios.',
+    lbl_load_file:'Carregar arquivo:', lbl_aesthetic_custom:'Personalização estética', lbl_uploaded_files:'Arquivos enviados no servidor',
+    bypass_lbl:'🚫 Ignorar', lock_if_open:'Bloquear se aberto', wait_if_open:'Aguardar fechamento dos sensores',
+    select_btn:'+ Selecionar', add_btn:'+ Adicionar',
+    sensors_to_bypass:'Sensores a ignorar', no_instances:'Nenhuma instância.',
+    fullscreen_title:'Tela cheia', sos_slide:'Deslize para ativar SOS',
+    sos_confirm_title:'Confirmar pânico', sos_confirm_text:'Deslize para acionar o alarme imediatamente.',
+    sos_call:'📞 Chamar emergências',
+    home_name_modal_title:'🏡 Nome do lar',
+    home_name_modal_desc:'Este nome aparece no painel de instâncias e em tela cheia.',
+    home_name_label:'Nome do lar', home_name_placeholder:'Minha Casa',
+    clear_log_btn:'LIMPAR',
+    bg_weather:'Clima animado', bg_none:'Padrão', bg_panel_none:'Sem fundo', bg_photo:'Uma foto', bg_collage:'Colagem', bg_video:'Vídeo em loop', bg_panel_title:'Fundo do painel', bg_hub_title:'Fundo Argus', bg_sound_opt:'Som do vídeo', bg_image_opt:'Imagem / GIF', bg_hub_default:'Padrão (Argus)',
+    forgot_pin:'Esqueceu o PIN?', pin_reset_admin_only:'❌ Erro: Apenas administradores do Home Assistant podem redefinir o PIN mestre.', pin_reset_confirm:'Tem certeza que deseja redefinir o PIN mestre? O PIN atual será removido e desativado.',
+    temp_auto:'Automático (sensor local / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Bateria fraca',
+    times_section:'⏱️ Tempos', arm_time:'Armado (s)', disarm_time:'Atraso de entrada (s)',
+    save_config:'SALVAR CONFIGURAÇÃO', never_triggered:'Nunca ativado',
+    bridge_paired:'Ponte configurada',
+    bridge_paired_desc:'A ponte <b>{bridge}</b> está configurada no Home Assistant. Não é possível verificar daqui se foi adicionada ao Apple Home nem informar seu nome.',
+    bridge_not_connected:'Ponte não configurada',
+    bridge_not_desc:'Ative a integração HomeKit Bridge no Home Assistant e inclua a entidade <code>alarm_control_panel.argus_*</code> para gerar um QR de emparelhamento.',
+    manual_disarm:'Manual (Desarmado)', manual_arm:'Manual',
+    open_sensors:'Sensores abertos', log_detail_disarm:'Sistema desarmado',
+    log_detail_armed:'Modo', log_detail_triggered:'Ativação automática',
+    alarm_instance:'Instância do alarme',
+    log_detail_pin_reset: 'PIN mestre redefinido pelo administrador',
+    log_detail_pin_reset_failed: 'Tentativa não autorizada de redefinir o PIN mestre',
+    badge_pin_reset: 'PIN Redefinido',
+    badge_pin_reset_failed: 'Falha ao Redefinir PIN',
+    no_files_uploaded: 'Nenhum arquivo enviado. Envie um plano de fundo usando os controles acima.',
+    no_files_uploaded_short: 'Nenhum arquivo enviado.',
+    files_count: '{count} arquivos',
+    files_count_short: '{count} arq.',
+    file_delete_confirm: 'Tem certeza de que deseja excluir "{filename}" permanentemente?',
+    use_for_panel: 'Painel',
+    use_for_hub: 'Argus',
+    delete_btn_title: 'Excluir do armazenamento',
+    bg_panel_selected_from_history: 'Plano de fundo do painel selecionado a partir do histórico.',
+    bg_hub_selected_from_history: 'Plano de fundo do Argus selecionado a partir do histórico.',
+    error_loading_uploaded_files: 'Erro ao carregar o histórico de arquivos.',
+    welcome_greeting: 'Bem-vindo/a,',
+    select_profile_title: 'Selecione o seu perfil',
+    select_profile_subtitle: 'Acesse seus painéis de segurança e instâncias Argus.',
+    exit_to_ha: 'Voltar ao Home Assistant',
+    role_argus_admin: 'Administrador do Argus',
+    role_argus_user: 'Usuário padrão',
+    ha_account_linked: 'Conta do Home Assistant: {name}',
+    ha_account_unavailable: 'Vínculo indisponível',
+    user_role_label: 'Função Argus',
+    delete_user_tooltip: 'Excluir perfil de usuário',
+    delete_user_confirm: 'Tem certeza de que deseja excluir "{name}"?',
+    cannot_delete_last_admin: 'Não é possível excluir o último administrador.',
+    clock_format_label: 'Formato de hora',
+    clock_format_desc: 'Escolha como a hora é exibida.',
+    clock_auto: 'Automático (Home Assistant)',
+    clock_12h: '12 horas (AM/PM)',
+    clock_24h: '24 horas',
+    unlock_kiosk: 'Desbloquear quiosque',
+    first_run_welcome: 'Obrigado por escolher o Argus Home Hub. Bem-vindo(a).',
+    first_run_desc: 'Conclua a configuração inicial.',
+    first_run_pin_expl: 'O PIN de acesso abre o Argus. O PIN mestre controla o armamento.',
+    first_run_skip: 'Pular',
+    first_run_start: 'Começar com o Argus',
+    first_run_blocked_title: 'Acesso negado',
+    first_run_blocked_desc: 'É necessário um administrador do Home Assistant.',
+    log_action_first_run_completed: 'Argus inicializado por {user}',
+    log_action_fullscreen_unlocked: 'Quiosque desbloqueado por {user}',
+    log_action_master_pin_rejected: 'Tentativa incorreta de PIN mestre por {user}',
+    log_action_select_profile: 'Perfil selecionado: {user}',
+    log_action_verify_access_pin: 'PIN de acesso verificado por {user}',
+    log_action_sos: 'Pânico SOS acionado por {user}',
+    log_action_stop_sos: 'Pânico SOS interrompido por {user}',
+    log_action_save_ui: 'Configurações de UI salvas por {user}',
+    log_action_rejected: 'Ação rejeitada',
+    unlinked_ha_accounts_title: 'Contas do Home Assistant sem perfil Argus',
+    btn_create_argus_profile: 'Criar perfil Argus',
+    no_unlinked_ha_accounts: 'Todas as contas do Home Assistant ativas possuem perfil.',
+    profile_is_yours: 'Este é o seu perfil',
+    profile_needs_pin: 'Perfil de outra pessoa — insira o PIN de acesso',
+    profile_no_pin_access: 'Este perfil não tem PIN de acesso. Você não pode abri-lo.',
+    ha_role_admin: 'Admin HA',
+    ha_role_standard: 'Usuário HA',
+    login_btn: 'Entrar',
+    cancel_btn: 'Cancelar',
+    pin_placeholder: 'PIN de acesso',
+    link_ha_user: 'Vincular a Usuário do Home Assistant',
+    ha_admin_label: 'Administrador do Home Assistant',
+    ha_standard_user_label: 'Usuário padrão do HA',
+    role_argus_standard: 'Usuário padrão',
+      },
+  it: {
+    hero_desc:'Sicurezza integrata, controllo accessi, automazioni e HomeKit.',
+    instances:'Istanze attive', modes:'Modi', automations:'⚡ Automazioni',
+    linked_rules:'Regole collegate ad Argus', create_ha:'+ Crea in HA',
+    no_rules:'', rules_tip:'',
+    settings:'⚙️ Impostazioni', change_pin:'PIN Principale', pin_desc:'Codice numerico per armare e disarmare.',
+    new_pin:'Nuovo PIN', confirm_pin:'Conferma PIN', update_pin:'Aggiorna PIN',
+    current_pin:'PIN attuale', notifications_title:'🔔 Notifiche',
+    notif_desc:'Seleziona i dispositivi mobili registrati in HA che riceveranno gli avvisi di Argus.',
+    save_notif:'Salva', users_title:'👥 Utenti & Controllo Accessi',
+    admin_only:'Solo gli amministratori possono modificare questa sezione.',
+    add_user:'Aggiungi utente', username:'Nome utente', user_pin:'PIN utente',
+    is_admin:'Amministratore', save_user:'Salva', no_users:'Nessun utente aggiuntivo configurato.',
+    homekit_title:'🏠 HomeKit', close:'Chiudi',
+    search_placeholder:'Cerca per nome, area o entity_id',
+    available:'Disponibili', selected_lbl:'Selezionati', clear:'Cancella', accept:'Accetta',
+    introduce_pin:'Inserisci il tuo PIN', pin_modal_desc:'PIN numerico per disarmare Argus',
+    confirm:'✓ Conferma', cancel:'Annulla',
+    disarmed:'Disarmato', armed_home:'In Casa', armed_away:'Assente',
+    armed_night:'Notte', armed_vacation:'Vacanze', triggered:'ALLARME!',
+    pending:'In attesa', arming:'Armamento', unavailable:'Non disponibile',
+    sensor_section:'Sensori di intrusione', siren_section:'Sirene', thermostat_alert_notif:'🌡️ Avviso temperatura',
+    none_selected:'Nessuno selezionato', search_select:'Cerca & seleziona',
+    save_mode:'💾 Salva modalità', details_notif:'Notifica allarme',
+    activity_log:'📋 Registro Attività',
+    log_armed:'Armato', log_disarmed:'Disarmato', log_triggered:'Attivato!',
+    log_by:'da', log_sensor:'Sensore', log_no_events:'Nessun evento recente.',
+    mode_home:'In Casa', mode_away:'Assente', mode_night:'Notte', mode_vacation:'Vacanze',
+    homekit_bridge:'Ponte HomeKit', homekit_not_paired:'Non associato a nessuna casa.',
+    homekit_house:'Apple Home', language:'Lingua',
+    lang_select_title:'Seleziona Lingua',
+    btn_home:'🏠 CASA', btn_away:'🔒 ASSENTE', btn_night:'🌙 NOTTE',
+    btn_vacation:'✈️ VACANZE', btn_disarmed:'DISARMATO', btn_sos:'🚨 SOS / PANICO',
+    system_armed:'SISTEMA ARMATO', system_disarmed:'SISTEMA DISARMATO',
+    home_name_lbl:'Nome della casa', background_lbl:'Sfondo', edit_btn:'✏️ Modifica',
+    save_btn:'Salva', backup_title:'Backup & Ripristino',
+    backup_desc:'Salva un backup o ripristina uno precedente.',
+    export_btn:'📤 Scarica', import_btn:'📥 Ripristina', reset_btn:'⚠️ Ripristina', undo_reset_btn:'↩️ Annulla Ripristino',
+    access_title:'Controllo Accessi & Utenti',
+    access_desc:'Gestione globale della sicurezza, PIN principale e amministratori.',
+    pin_master_title:'PIN Principale', pin_active_yes:'PIN Attivo: Sì', pin_active_no:'PIN Attivo: No',
+    select_all:'☑ Tutti', deselect_all:'☐ Nessuno', mqtt_label:'MQTT',
+    arm_time_label:'Tempo armato (s)', disarm_time_label:'Ritardo ingresso (s)',
+    pin_incorrect:'❌ PIN attuale errato', pin_updated:'✓ PIN Aggiornato', pin_deleted:'✓ PIN Eliminato',
+    searching_auto:'↻ Ricerca automazioni...', no_auto_linked:'Nessuna automazione collegata ad Argus.',
+    pin_remove_hint:'Per rimuovere il PIN: inserisci quello attuale e lascia vuoti i campi sottostanti.',
+    lbl_load_file:'Carica file:', lbl_aesthetic_custom:'Personalizzazione estetica', lbl_uploaded_files:'File caricati sul server',
+    bypass_lbl:'🚫 Ignora', lock_if_open:'Blocca se aperto', wait_if_open:'Attendi chiusura sensori',
+    select_btn:'+ Seleziona', add_btn:'+ Aggiungi',
+    sensors_to_bypass:'Sensori da ignorare', no_instances:'Nessuna istanza.',
+    fullscreen_title:'Schermo intero', sos_slide:'Scorri per attivare SOS',
+    sos_confirm_title:'Conferma panico', sos_confirm_text:'Scorri per attivare immediatamente l\'allarme.',
+    sos_call:'📞 Chiama i soccorsi',
+    home_name_modal_title:'🏡 Nome della casa',
+    home_name_modal_desc:'Questo nome appare nel pannello delle istanze e a schermo intero.',
+    home_name_label:'Nome della casa', home_name_placeholder:'Casa mia',
+    clear_log_btn:'CANCELLA',
+    bg_weather:'Meteo animato', bg_none:'Predefinito', bg_panel_none:'Nessuno sfondo', bg_photo:'Una foto', bg_collage:'Collage', bg_video:'Video in loop', bg_panel_title:'Sfondo pannello', bg_hub_title:'Sfondo Argus', bg_sound_opt:'Audio video', bg_image_opt:'Immagine / GIF', bg_hub_default:'Predefinito (Argus)',
+    forgot_pin:'PIN dimenticato?', pin_reset_admin_only:'❌ Errore: Solo gli amministratori di Home Assistant possono reimpostare el PIN principale.', pin_reset_confirm:'Sei sicuro di voler reimpostare il PIN principale? Il PIN attuale verrà rimosso e disattivato.',
+    temp_auto:'Automatico (sensore locale / termostato / clima)', temp_thermostat:'(termostato)', battery_low:'⚠️ Batteria scarica',
+    times_section:'⏱️ Tempi', arm_time:'Armato (s)', disarm_time:'Ritardo entrata (s)',
+    save_config:'SALVA CONFIGURAZIONE', never_triggered:'Mai attivato',
+    bridge_paired:'Ponte configurato',
+    bridge_paired_desc:'Il ponte <b>{bridge}</b> è configurato in Home Assistant. Da qui non è possibile verificare se sia stato aggiunto ad Apple Home né conoscerne il nome.',
+    bridge_not_connected:'Ponte non configurato',
+    bridge_not_desc:"Abilita l'integrazione HomeKit Bridge in Home Assistant e includi l'entità <code>alarm_control_panel.argus_*</code> per generare un QR di abbinamento.",
+    manual_disarm:'Manuale (Disarmato)', manual_arm:'Manuale',
+    open_sensors:'Sensori aperti', log_detail_disarm:'Sistema disarmato',
+    alarm_instance:'Istanza allarme',
+    log_detail_armed:'Modalità', log_detail_triggered:'Attivazione automatica',
+    log_detail_pin_reset: "PIN principale reimpostato dall'amministratore",
+    log_detail_pin_reset_failed: 'Tentativo non autorizzato di reimpostare il PIN principale',
+    badge_pin_reset: 'PIN Reimpostato',
+    badge_pin_reset_failed: 'Reimpostazione PIN Fallita',
+    no_files_uploaded: 'Nessun file caricato. Carica uno sfondo usando i controlli sopra.',
+    no_files_uploaded_short: 'Nessun file caricato.',
+    files_count: '{count} file',
+    files_count_short: '{count} file',
+    file_delete_confirm: 'Sei sicuro di voler eliminare permanentemente "{filename}"?',
+    use_for_panel: 'Pannello',
+    use_for_hub: 'Argus',
+    delete_btn_title: 'Elimina dalla memoria',
+    bg_panel_selected_from_history: 'Sfondo del pannello selezionato dalla cronologia.',
+    bg_hub_selected_from_history: 'Sfondo di Argus selezionato dalla cronologia.',
+    error_loading_uploaded_files: 'Errore durante il caricamento della cronologia dei file.',
+    select_profile_title: 'Seleziona il tuo profilo',
+    select_profile_subtitle: 'Accedi ai tuoi pannelli di sicurezza e istanze Argus.',
+    exit_to_ha: 'Torna a Home Assistant',
+    role_argus_admin: 'Amministratore Argus',
+    role_argus_user: 'Utente standard',
+    ha_account_linked: 'Account Home Assistant: {name}',
+    ha_account_unavailable: 'Collegamento non disponibile',
+    user_role_label: 'Ruolo Argus',
+    delete_user_tooltip: 'Elimina profilo utente',
+    delete_user_confirm: 'Sei sicuro di voler eliminare "{name}"?',
+    cannot_delete_last_admin: 'Impossibile eliminare l\'ultimo amministratore.',
+    clock_format_label: 'Formato ora',
+    clock_format_desc: 'Scegli come visualizzare l\'ora.',
+    clock_auto: 'Automatico (Home Assistant)',
+    clock_12h: '12 ore (AM/PM)',
+    clock_24h: '24 ore',
+    unlock_kiosk: 'Sblocca chiosco',
+    first_run_welcome: 'Grazie per aver scelto Argus Home Hub. Benvenuto/a.',
+    first_run_desc: 'Completa la configurazione.',
+    first_run_pin_expl: 'Il PIN di accesso apre Argus. Il PIN master controlla l\'armamento.',
+    first_run_skip: 'Salta',
+    first_run_start: 'Inizia con Argus',
+    first_run_blocked_title: 'Accesso negato',
+    first_run_blocked_desc: 'È richiesto un amministratore di Home Assistant.',
+    log_action_first_run_completed: 'Argus inizializzato da {user}',
+    log_action_fullscreen_unlocked: 'Chiosco sbloccato da {user}',
+    log_action_master_pin_rejected: 'Tentativo di PIN master errato da {user}',
+    log_action_select_profile: 'Profilo selezionato: {user}',
+    log_action_verify_access_pin: 'PIN di accesso verificato da {user}',
+    log_action_sos: 'Panico SOS attivato da {user}',
+    log_action_stop_sos: 'Panico SOS fermato da {user}',
+    log_action_save_ui: 'Impostazioni UI salvate da {user}',
+    log_action_rejected: 'Azione rifiutata',
+    unlinked_ha_accounts_title: 'Account Home Assistant senza profilo Argus',
+    btn_create_argus_profile: 'Crea profilo Argus',
+    no_unlinked_ha_accounts: 'Tutti gli account Home Assistant attivi hanno un profilo.',
+    profile_is_yours: 'Questo è il tuo profilo',
+    profile_needs_pin: 'Profilo di un\u2019altra persona — inserisci il PIN di accesso',
+    profile_no_pin_access: 'Questo profilo non ha un PIN di accesso. Non puoi aprirlo.',
+    ha_role_admin: 'Admin HA',
+    ha_role_standard: 'Utente HA',
+    login_btn: 'Accedi',
+    cancel_btn: 'Annulla',
+    pin_placeholder: 'PIN di accesso',
+    link_ha_user: 'Collega all\u2019utente Home Assistant',
+    ha_admin_label: 'Amministratore Home Assistant',
+    ha_standard_user_label: 'Utente HA standard',
+    role_argus_standard: 'Utente standard',
+      },
+  zh: {
+    hero_desc:'集成安全、访问控制、自动化和HomeKit。',
+    instances:'活跃实例', modes:'模式', automations:'⚡ 自动化',
+    linked_rules:'Argus关联规则', create_ha:'+ 在HA中创建',
+    no_rules:'', rules_tip:'',
+    settings:'⚙️ 设置', change_pin:'主PIN码', pin_desc:'用于布防和撤防的数字代码。',
+    new_pin:'新PIN码', confirm_pin:'确认PIN码', update_pin:'更新PIN码',
+    current_pin:'当前PIN码', notifications_title:'🔔 通知',
+    notif_desc:'选择在HA中注册的移动设备以接收Argus警报。',
+    save_notif:'保存', users_title:'👥 用户和访问控制',
+    admin_only:'只有管理员才能修改此部分。',
+    add_user:'添加用户', username:'用户名', user_pin:'用户PIN码',
+    is_admin:'管理员', save_user:'保存', no_users:'未配置额外用户。',
+    homekit_title:'🏠 HomeKit', close:'关闭',
+    search_placeholder:'按名称、区域或entity_id搜索',
+    available:'可用', selected_lbl:'已选择', clear:'清除', accept:'接受',
+    introduce_pin:'输入您的PIN码', pin_modal_desc:'撤防Argus的数字PIN码',
+    confirm:'✓ 确认', cancel:'取消',
+    disarmed:'已撤防', armed_home:'在家', armed_away:'外出',
+    armed_night:'夜间', armed_vacation:'度假', triggered:'警报！',
+    pending:'等待中', arming:'布防中', unavailable:'不可用',
+    sensor_section:'入侵传感器', siren_section:'警报器', thermostat_alert_notif:'🌡️ 温度警报',
+    none_selected:'未选择', search_select:'搜索并选择',
+    save_mode:'💾 保存模式', details_notif:'警报通知',
+    activity_log:'📋 活动日志',
+    log_armed:'已布防', log_disarmed:'已撤防', log_triggered:'已触发！',
+    log_by:'由', log_sensor:'传感器', log_no_events:'没有最近事件。',
+    mode_home:'在家', mode_away:'外出', mode_night:'夜间', mode_vacation:'度假',
+    homekit_bridge:'HomeKit桥接', homekit_not_paired:'未与任何家庭关联。',
+    homekit_house:'Apple Home', language:'语言',
+    lang_select_title:'选择语言',
+    btn_home:'🏠 在家', btn_away:'🔒 外出', btn_night:'🌙 夜间',
+    btn_vacation:'✈️ 度假', btn_disarmed:'已撤防', btn_sos:'🚨 SOS / 紧急',
+    system_armed:'系统已布防', system_disarmed:'系统已撤防',
+    home_name_lbl:'家庭名称', background_lbl:'背景', edit_btn:'✏️ 编辑',
+    save_btn:'保存', backup_title:'备份与恢复',
+    backup_desc:'保存设置备份或恢复之前的设置。',
+    export_btn:'📤 下载', import_btn:'📥 恢复', reset_btn:'⚠️ 恢复出厂', undo_reset_btn:'↩️ 撤销重置',
+    access_title:'访问控制和用户',
+    access_desc:'全局安全管理、主PIN码和管理员。',
+    pin_master_title:'主PIN码', pin_active_yes:'PIN激活: 是', pin_active_no:'PIN激活: 否',
+    select_all:'☑ 全选', deselect_all:'☐ 全不选', mqtt_label:'MQTT',
+    arm_time_label:'布防延迟(s)', disarm_time_label:'进入延迟(s)',
+    pin_incorrect:'❌ 当前PIN错误', pin_updated:'✓ PIN已更新', pin_deleted:'✓ PIN已删除',
+    searching_auto:'↻ 正在搜索自动化...', no_auto_linked:'没有链接到Argus的自动化。',
+    pin_remove_hint:'删除PIN: 输入当前PIN并将下面字段留空。',
+    lbl_load_file:'上传文件:', lbl_aesthetic_custom:'美学个性化', lbl_uploaded_files:'服务器上上传的文件',
+    bypass_lbl:'🚫 跳过', lock_if_open:'开启时锁定', wait_if_open:'等待传感器关闭后布防',
+    select_btn:'+ 选择', add_btn:'+ 添加',
+    sensors_to_bypass:'跳过的传感器', no_instances:'没有实例。',
+    fullscreen_title:'全屏', sos_slide:'滑动以激活SOS',
+    sos_confirm_title:'确认紧急', sos_confirm_text:'滑动以立即触发警报。',
+    sos_call:'📞 拨打紧急服务',
+    home_name_modal_title:'🏡 家庭名称',
+    home_name_modal_desc:'此名称显示在实例面板和全屏中。',
+    home_name_label:'家庭名称', home_name_placeholder:'我的家',
+    clear_log_btn:'清除',
+    bg_weather:'动画天气', bg_none:'默认', bg_panel_none:'无背景', bg_photo:'单张照片', bg_collage:'拼贴画', bg_video:'循环视频', bg_panel_title:'面板背景', bg_hub_title:'Argus 背景', bg_sound_opt:'视频声音', bg_image_opt:'图片 / GIF', bg_hub_default:'默认 (Argus)',
+    forgot_pin:'忘记PIN码？', pin_reset_admin_only:'❌ 错误：只有 Home Assistant 管理员可以重置主 PIN 码。', pin_reset_confirm:'您确定要重置主 PIN 码吗？当前的 PIN 码将被删除并停用。',
+    temp_auto:'自动（本地传感器 / 恒温器 / 气候）', temp_thermostat:'(恒温器)', battery_low:'⚠️ 电池不足',
+    times_section:'⏱️ 时间', arm_time:'布防延迟(s)', disarm_time:'进入延迟(s)',
+    save_config:'保存配置', never_triggered:'从未触发',
+    bridge_paired:'桥接已配置',
+    bridge_paired_desc:'桥接 <b>{bridge}</b> 已在 Home Assistant 中配置。Home Assistant 无法从这里验证它是否已添加到 Apple Home，也无法提供家庭名称。',
+    bridge_not_connected:'桥接未配置',
+    bridge_not_desc:'在Home Assistant中启用HomeKit Bridge集成并包含实体<code>alarm_control_panel.argus_*</code>以生成配对QR码。',
+    manual_disarm:'手动(已撤防)', manual_arm:'手动',
+    open_sensors:'开启的传感器', log_detail_disarm:'系统已撤防',
+    alarm_instance:'报警实例',
+    log_detail_armed:'模式', log_detail_triggered:'自动激活',
+    log_detail_pin_reset: '管理员已重置主PIN码',
+    log_detail_pin_reset_failed: '未授权尝试重置主PIN码',
+    badge_pin_reset: 'PIN已重置',
+    badge_pin_reset_failed: 'PIN重置失败',
+    no_files_uploaded: '未上传文件。请使用上方控件上传背景。',
+    no_files_uploaded_short: '未上传文件。',
+    files_count: '{count} 个文件',
+    files_count_short: '{count} 文件',
+    file_delete_confirm: '您确定要永久删除 "{filename}" 吗？',
+    use_for_panel: '面板',
+    use_for_hub: 'Argus',
+    delete_btn_title: '从存储中删除',
+    bg_panel_selected_from_history: '已从历史记录中选择面板背景。',
+    bg_hub_selected_from_history: '已从历史记录中选择Argus背景。',
+    error_loading_uploaded_files: '加载文件历史记录出错。',
+    select_profile_title: '选择您的个人资料',
+    select_profile_subtitle: '访问您的安全面板和 Argus 实例。',
+    exit_to_ha: '返回 Home Assistant',
+    role_argus_admin: 'Argus 管理员',
+    role_argus_user: '标准用户',
+    ha_account_linked: 'Home Assistant 账户：{name}',
+    ha_account_unavailable: '绑定不可用',
+    user_role_label: 'Argus 角色',
+    delete_user_tooltip: '删除用户个人资料',
+    delete_user_confirm: '您确定要删除\u201c{name}\u201d吗？',
+    cannot_delete_last_admin: '无法删除最后一个管理员。',
+    clock_format_label: '时间格式',
+    clock_format_desc: '选择时间的显示方式。',
+    clock_auto: '自动（Home Assistant）',
+    clock_12h: '12 小时制 (AM/PM)',
+    clock_24h: '24 小时制',
+    unlock_kiosk: '解锁自助服务终端',
+    first_run_welcome: '感谢选择 Argus Home Hub。欢迎。',
+    first_run_desc: '完成设置以保护您的家。',
+    first_run_pin_expl: '访问 PIN 打开 Argus。主 PIN 控制撤防和布防。',
+    first_run_skip: '跳过',
+    first_run_start: '开始使用 Argus',
+    first_run_blocked_title: '拒绝访问',
+    first_run_blocked_desc: '首次设置 Argus 需要 Home Assistant 管理员。',
+    log_action_first_run_completed: 'Argus 已由 {user} 初始化',
+    log_action_fullscreen_unlocked: '自助服务终端已由 {user} 解锁',
+    log_action_master_pin_rejected: '{user} 的主 PIN 尝试不正确',
+    log_action_select_profile: '已选择个人资料：{user}',
+    log_action_verify_access_pin: '访问 PIN 已由 {user} 验证',
+    log_action_sos: 'SOS 紧急情况由 {user} 触发',
+    log_action_stop_sos: 'SOS 紧急情况由 {user} 停止',
+    log_action_save_ui: 'UI 设置已由 {user} 保存',
+    log_action_rejected: '操作已被拒绝',
+    unlinked_ha_accounts_title: '没有 Argus 个人资料的 Home Assistant 账户',
+    btn_create_argus_profile: '创建 Argus 个人资料',
+    no_unlinked_ha_accounts: '所有活跃的 Home Assistant 账户都有个人资料。',
+    profile_is_yours: '这是您的个人资料',
+    profile_needs_pin: '其他人的个人资料 — 请输入访问 PIN',
+    profile_no_pin_access: '该个人资料没有访问 PIN。您无法打开它。',
+    ha_role_admin: 'HA 管理员',
+    ha_role_standard: 'HA 用户',
+    login_btn: '登录',
+    cancel_btn: '取消',
+    pin_placeholder: '访问 PIN',
+    link_ha_user: '关联至 Home Assistant 用户',
+    ha_admin_label: 'Home Assistant 管理员',
+    ha_standard_user_label: '标准 HA 用户',
+    role_argus_standard: '标准用户',
+      },
+  ru: {
+    hero_desc:'Комплексная безопасность, контроль доступа, автоматизация и HomeKit.',
+    instances:'Активные экземпляры', modes:'Режимы', automations:'⚡ Автоматизации',
+    linked_rules:'Правила Argus', create_ha:'+ Создать в HA',
+    no_rules:'', rules_tip:'',
+    settings:'⚙️ Настройки', change_pin:'Мастер PIN', pin_desc:'Цифровой код для постановки и снятия с охраны.',
+    new_pin:'Новый PIN', confirm_pin:'Подтвердить PIN', update_pin:'Обновить PIN',
+    current_pin:'Текущий PIN', notifications_title:'🔔 Уведомления',
+    notif_desc:'Выберите мобильные устройства, зарегистрированные в HA для получения оповещений Argus.',
+    save_notif:'Сохранить', users_title:'👥 Пользователи и контроль доступа',
+    admin_only:'Только администраторы могут изменять этот раздел.',
+    add_user:'Добавить пользователя', username:'Имя пользователя', user_pin:'PIN пользователя',
+    is_admin:'Администратор', save_user:'Сохранить', no_users:'Дополнительные пользователи не настроены.',
+    homekit_title:'🏠 HomeKit', close:'Закрыть',
+    search_placeholder:'Поиск по имени, зоне или entity_id',
+    available:'Доступные', selected_lbl:'Выбранные', clear:'Очистить', accept:'Принять',
+    introduce_pin:'Введите PIN', pin_modal_desc:'Цифровой PIN для снятия с охраны Argus',
+    confirm:'✓ Подтвердить', cancel:'Отмена',
+    disarmed:'Снято с охраны', armed_home:'Дома', armed_away:'Ушёл',
+    armed_night:'Ночь', armed_vacation:'Отпуск', triggered:'ТРЕВОГА!',
+    pending:'Ожидание', arming:'Постановка', unavailable:'Недоступно',
+    sensor_section:'Датчики вторжения', siren_section:'Сирены', thermostat_alert_notif:'🌡️ Температурный сигнал',
+    none_selected:'Не выбрано', search_select:'Поиск и выбор',
+    save_mode:'💾 Сохранить режим', details_notif:'Уведомление тревоги',
+    activity_log:'📋 Журнал активности',
+    log_armed:'Поставлено', log_disarmed:'Снято', log_triggered:'Сработало!',
+    log_by:'от', log_sensor:'Датчик', log_no_events:'Нет последних событий.',
+    mode_home:'Дома', mode_away:'Ушёл', mode_night:'Ночь', mode_vacation:'Отпуск',
+    homekit_bridge:'Мост HomeKit', homekit_not_paired:'Не связано ни с каким домом.',
+    homekit_house:'Apple Home', language:'Язык',
+    lang_select_title:'Выбрать язык',
+    btn_home:'🏠 ДОМА', btn_away:'🔒 УШЁЛ', btn_night:'🌙 НОЧЬ',
+    btn_vacation:'✈️ ОТПУСК', btn_disarmed:'СНЯТО', btn_sos:'🚨 SOS / ТРЕВОГА',
+    system_armed:'СИСТЕМА ПОСТАВЛЕНА', system_disarmed:'СИСТЕМА СНЯТА',
+    home_name_lbl:'Название дома', background_lbl:'Фон', edit_btn:'✏️ Редактировать',
+    save_btn:'Сохранить', backup_title:'Резервная копия',
+    backup_desc:'Сохраните резервную копию или восстановите предыдущую.',
+    export_btn:'📤 Скачать', import_btn:'📥 Восстановить', reset_btn:'⚠️ Сброс', undo_reset_btn:'↩️ Отменить сброс',
+    access_title:'Контроль доступа и пользователи',
+    access_desc:'Глобальная безопасность, мастер PIN и администраторы.',
+    pin_master_title:'Мастер PIN', pin_active_yes:'PIN активен: Да', pin_active_no:'PIN активен: Нет',
+    select_all:'☑ Все', deselect_all:'☐ Ничего', mqtt_label:'MQTT',
+    arm_time_label:'Время взятия (с)', disarm_time_label:'Задержка входа (с)',
+    pin_incorrect:'❌ Неверный текущий PIN', pin_updated:'✓ PIN Обновлен', pin_deleted:'✓ PIN Удален',
+    searching_auto:'↻ Поиск автоматизаций...', no_auto_linked:'Нет автоматизаций, связанных с Argus.',
+    pin_remove_hint:'Для удаления PIN: введите текущий и оставьте поля пустыми.',
+    lbl_load_file:'Загрузить файл:', lbl_aesthetic_custom:'Эстетическая персонализация', lbl_uploaded_files:'Загруженные файлы на сервере',
+    bypass_lbl:'🚫 Обход', lock_if_open:'Блокировать если открыто', wait_if_open:'Ждать закрытия датчиков',
+    select_btn:'+ Выбрать', add_btn:'+ Добавить',
+    sensors_to_bypass:'Датчики для обхода', no_instances:'Нет экземпляров.',
+    fullscreen_title:'Полный экран', sos_slide:'Проведите для активации SOS',
+    sos_confirm_title:'Подтвердить тревогу', sos_confirm_text:'Проведите для немедленной активации тревоги.',
+    sos_call:'📞 Вызвать экстренные службы',
+    home_name_modal_title:'🏡 Название дома',
+    home_name_modal_desc:'Это имя отображается в панели экземпляров и в полноекранном режиме.',
+    home_name_label:'Название дома', home_name_placeholder:'Мой дом',
+    clear_log_btn:'ОЧИСТИТЬ',
+    bg_weather:'Анимированная погода', bg_none:'По умолчанию', bg_panel_none:'Без фона', bg_photo:'Одно фото', bg_collage:'Коллаж', bg_video:'Зацикленное видео', bg_panel_title:'Фон панели', bg_hub_title:'Фон Argus', bg_sound_opt:'Звук видео', bg_image_opt:'Изображение / GIF', bg_hub_default:'По умолчанию (Argus)',
+    forgot_pin:'Забыли PIN?', pin_reset_admin_only:'❌ Ошибка: Только администраторы Home Assistant могут сбросить мастер-PIN.', pin_reset_confirm:'Вы уверены, что хотите сбросить мастер-PIN? Текущий PIN-код будет удален и отключен.',
+    temp_auto:'Авто (лок. датчик / термостат / климат)', temp_thermostat:'(термостат)', battery_low:'⚠️ Низкий заряд',
+    times_section:'⏱️ Времена', arm_time:'Постановка (s)', disarm_time:'Задержка входа (s)',
+    save_config:'СОХРАНИТЬ КОНФИГУРАЦИЮ', never_triggered:'Никогда не срабатывало',
+    bridge_paired:'Мост настроен',
+    bridge_paired_desc:'Мост <b>{bridge}</b> настроен в Home Assistant. Здесь нельзя проверить, добавлен ли он в Apple Home, или узнать его название.',
+    bridge_not_connected:'Мост не настроен',
+    bridge_not_desc:'Включите интеграцию HomeKit Bridge в Home Assistant и добавьте <code>alarm_control_panel.argus_*</code> для QR сопряжения.',
+    manual_disarm:'Вручную (Снято)', manual_arm:'Вручную',
+    open_sensors:'Открытые датчики', log_detail_disarm:'Система снята',
+    alarm_instance:'Экземпляр тревоги',
+    log_detail_armed:'Режим', log_detail_triggered:'Автоматическая активация',
+    log_detail_pin_reset: 'Мастер-PIN сброшен администратором',
+    log_detail_pin_reset_failed: 'Несанкционированная попытка сбросить мастер-PIN',
+    badge_pin_reset: 'PIN Сброшен',
+    badge_pin_reset_failed: 'Ошибка Сброса PIN',
+    no_files_uploaded: 'Нет загруженных файлов. Загрузите фон с помощью элементов управления выше.',
+    no_files_uploaded_short: 'Нет загруженных файлов.',
+    files_count: '{count} файлов',
+    files_count_short: '{count} файл.',
+    file_delete_confirm: 'Вы уверены, что хотите навсегда удалить «{filename}»?',
+    use_for_panel: 'Панель',
+    use_for_hub: 'Argus',
+    delete_btn_title: 'Удалить из хранилища',
+    bg_panel_selected_from_history: 'Фон панели выбран из истории.',
+    bg_hub_selected_from_history: 'Фон Argus выбран из истории.',
+    error_loading_uploaded_files: 'Ошибка при загрузке истории файлов.',
+    select_profile_title: 'Выберите ваш профиль',
+    select_profile_subtitle: 'Доступ к вашим панелям безопасности и экземплярам Argus.',
+    exit_to_ha: 'Вернуться в Home Assistant',
+    role_argus_admin: 'Администратор Argus',
+    role_argus_user: 'Стандартный пользователь',
+    ha_account_linked: 'Учетная запись Home Assistant: {name}',
+    ha_account_unavailable: 'Привязка недоступна',
+    user_role_label: 'Роль Argus',
+    delete_user_tooltip: 'Удалить профиль пользователя',
+    delete_user_confirm: 'Вы уверены, что хотите удалить "{name}"?',
+    cannot_delete_last_admin: 'Нельзя удалить последнего администратора.',
+    clock_format_label: 'Формат времени',
+    clock_format_desc: 'Выберите способ отображения времени.',
+    clock_auto: 'Автоматически (Home Assistant)',
+    clock_12h: '12-часовой (AM/PM)',
+    clock_24h: '24-часовой',
+    unlock_kiosk: 'Разблокировать киоск',
+    first_run_welcome: 'Спасибо за выбор Argus Home Hub. Добро пожаловать.',
+    first_run_desc: 'Завершите настройку для защиты вашего дома.',
+    first_run_pin_expl: 'PIN-код доступа открывает Argus. Мастер PIN-код управляет охраной.',
+    first_run_skip: 'Пропустить',
+    first_run_start: 'Начать работу с Argus',
+    first_run_blocked_title: 'Доступ запрещен',
+    first_run_blocked_desc: 'Для первичной настройки Argus требуется администратор Home Assistant.',
+    log_action_first_run_completed: 'Argus инициализирован пользователем {user}',
+    log_action_fullscreen_unlocked: 'Киоск разблокирован пользователем {user}',
+    log_action_master_pin_rejected: 'Неверная попытка ввода мастер-PIN {user}',
+    log_action_select_profile: 'Выбран профиль: {user}',
+    log_action_verify_access_pin: 'PIN-код доступа проверен {user}',
+    log_action_sos: 'SOS паника вызвана пользователем {user}',
+    log_action_stop_sos: 'SOS паника остановлена пользователем {user}',
+    log_action_save_ui: 'Настройки UI сохранены пользователем {user}',
+    log_action_rejected: 'Действие отклонено',
+    unlinked_ha_accounts_title: 'Учетные записи Home Assistant без профиля Argus',
+    btn_create_argus_profile: 'Создать профиль Argus',
+    no_unlinked_ha_accounts: 'Все активные учетные записи Home Assistant имеют профиль.',
+    profile_is_yours: 'Это ваш профиль',
+    profile_needs_pin: 'Профиль другого пользователя — введите PIN доступа',
+    profile_no_pin_access: 'У этого профиля нет PIN доступа. Вы не можете его открыть.',
+    ha_role_admin: 'Админ HA',
+    ha_role_standard: 'Пользователь HA',
+    login_btn: 'Войти',
+    cancel_btn: 'Отмена',
+    pin_placeholder: 'PIN доступа',
+    link_ha_user: 'Связать с пользователем Home Assistant',
+    ha_admin_label: 'Администратор Home Assistant',
+    ha_standard_user_label: 'Стандартный пользователь HA',
+    role_argus_standard: 'Стандартный пользователь',
+      },
+};
+
+// Text that is shared by controls created dynamically. Keeping this separate
+// from the original dictionaries makes it much harder for a new UI feature to
+// accidentally ship in only one language.
+const EXTRA_TEXTS = {
+  es: { connected:'CONECTADO', no_sensors_configured:'Sin sensores de intrusión configurados.', all_sensors_bypassed:'Todos los sensores configurados están omitidos.', active_profile:'Perfil Activo', change_profile_picture:'Ir a Personas de HA ↗', pin_management:'🔑 Gestión de Pines', access_pin_lbl:'PIN de Acceso', master_pin_lbl:'PIN Maestro', switch_profile_btn:'👤 Cambiar de Perfil', lang_selector_lbl:'⚙️ Idioma / Language', change_btn:'Cambiar', remove_btn:'Quitar', role_argus_admin_short:'Admin', role_argus_user_short:'Estándar', use_ha_language:'Usar idioma de Home Assistant', emergency_number_label:'🚨 Número local de emergencias', emergency_help:'Configúralo según la ubicación del hogar (p. ej., Costa Rica: 911; España: 112). Se incluirá en las alertas SOS.', sos_actions:'🚨 Acciones SOS', sos_select_outputs:'Seleccionar luces, sirenas o scripts', sos_outputs_help:'Estos dispositivos se activarán siempre al usar SOS, incluso con Argus desarmado.', sos_no_outputs:'Sin dispositivos seleccionados', sos_call_help:'Si este equipo no admite llamadas, Argus enviará una alerta urgente a los dispositivos móviles configurados.', sos_stop:'🛑 DETENER PÁNICO', customize:'Personalizar', done:'Listo', sos_activated:'SOS activado', sos_call_confirm:'¿Quieres llamar ahora a emergencias ({number})?', sos_error:'No se pudo activar el SOS: {error}', no_alarm_instance:'No hay una instancia de alarma disponible', panic_state_unknown:'No se pudo determinar el estado anterior del pánico. Desarma o rearma manualmente.', panic_stopped:'Pánico detenido; restaurado a {state}', panic_stop_error:'No se pudo detener el pánico: {error}', selector_panic:'🚨 Acciones SOS', status_open:'Abierto', status_closed:'Cerrado', status_idle:'En reposo', status_recording:'Grabando', status_home:'En casa', status_away:'Fuera', no_results:'Sin resultados', user_required:'Nombre y PIN requeridos', generic_error:'Error: {error}', clear_history_confirm:'¿Seguro que quieres borrar todo el historial?', export_error:'Error al exportar: {error}', invalid_config:'Archivo de configuración no válido.', import_success:'Configuración restaurada con éxito. Recargando...', import_error:'Error al importar: {error}', file_read_error:'No se pudo leer el archivo.', reset_confirm:'¿Estás seguro de que deseas restablecer Argus a sus valores de fábrica? Perderás todas tus configuraciones, PINs y modos.', reset_success:'Argus restablecido. Tienes unos segundos para deshacer si cambias de opinión, o simplemente recarga la página para aplicar los cambios.', reset_error:'Error al restablecer: {error}', undo_success:'Restablecimiento deshecho con éxito.', undo_error:'Error al deshacer: {error}', url_placeholder:'URL del fondo...', loading:'Cargando...', delete:'Borrar', fullscreen_title:'Pantalla completa', home_default:'Mi Casa', home_fallback:'Hogar', user_default:'Usuario', temp_notification_title:'Argus — Alerta de Temperatura', action_failed:'No se pudo realizar la acción', cannot_arm:'No se puede armar', open_sensors_explain:'Los siguientes sensores están abiertos:\n{names}\n\nCiérralos antes de armar, o activa \u201cOmitir\u201d en el sensor.', pin_disarm_error:'PIN incorrecto o error al desarmar', notification_disarmed:'{user} desarmó el sistema.', notification_armed:'{user} activó el modo {mode}.', upload_error:'Falló la subida.', delete_file_error:'No se pudo eliminar el archivo: {error}', file_choice:'\u201c{file}\u201d\n\n¿Usar como imagen estática (Aceptar) o como video animado (Cancelar)?\n\n• Aceptar → Imagen estática\n• Cancelar → Video animado', first_run_blocked_title:'Acceso denegado', first_run_blocked_desc:'Se requiere un administrador de Home Assistant para configurar Argus por primera vez.', first_run_welcome:'Gracias por elegir Argus Home Hub. Bienvenido/a.', first_run_desc:'Complete la configuración para proteger su hogar.', first_run_pin_expl:'El PIN de acceso abre Argus. El PIN maestro controla el armado y desarmado.', first_run_skip:'Omitir por ahora', first_run_start:'Comenzar con Argus' },
+  en: { connected:'CONNECTED', no_sensors_configured:'No intrusion sensors configured.', all_sensors_bypassed:'All configured sensors are bypassed.', active_profile:'Active Profile', change_profile_picture:'Go to HA Persons ↗', pin_management:'🔑 PIN Management', access_pin_lbl:'Access PIN', master_pin_lbl:'Master PIN', switch_profile_btn:'👤 Switch Profile', lang_selector_lbl:'⚙️ Language / Idioma', change_btn:'Change', remove_btn:'Remove', role_argus_admin_short:'Admin', role_argus_user_short:'Standard', use_ha_language:'Use Home Assistant language', emergency_number_label:'🚨 Local emergency number', emergency_help:'Configure it for the home location (e.g., Costa Rica: 911; Spain: 112). It will be included in SOS alerts.', sos_actions:'🚨 SOS actions', sos_select_outputs:'Select lights, sirens, or scripts', sos_outputs_help:'These devices will always activate when SOS is used, even while Argus is disarmed.', sos_no_outputs:'No devices selected', sos_call_help:'If this device cannot place calls, Argus will send an urgent alert to the configured mobile devices.', sos_stop:'🛑 STOP PANIC', customize:'Customize', done:'Done', sos_activated:'SOS activated', sos_call_confirm:'Call emergency services now ({number})?', sos_error:'Could not activate SOS: {error}', no_alarm_instance:'No alarm instance is available', panic_state_unknown:'The prior panic state could not be determined. Disarm or arm manually.', panic_stopped:'Panic stopped; restored to {state}', panic_stop_error:'Could not stop panic: {error}', selector_panic:'🚨 SOS actions', status_open:'Open', status_closed:'Closed', status_idle:'Idle', status_recording:'Recording', status_home:'Home', status_away:'Away', no_results:'No results', user_required:'Name and PIN are required', generic_error:'Error: {error}', clear_history_confirm:'Delete the entire activity history?', export_error:'Export failed: {error}', invalid_config:'Invalid configuration file.', import_success:'Configuration restored successfully. Reloading…', import_error:'Import failed: {error}', file_read_error:'Could not read the file.', reset_confirm:'Reset Argus to factory settings? All configurations, PINs, and modes will be lost.', reset_success:'Argus was reset. You have a few seconds to undo it, or reload the page to apply the changes.', reset_error:'Reset failed: {error}', undo_success:'Reset undone successfully.', undo_error:'Could not undo reset: {error}', url_placeholder:'Background URL…', loading:'Loading…', delete:'Delete', fullscreen_title:'Full screen', home_default:'My Home', home_fallback:'Home', user_default:'User', temp_notification_title:'Argus — Temperature Alert', action_failed:'Action could not be completed', cannot_arm:'Cannot arm', open_sensors_explain:'The following sensors are open:\n{names}\n\nClose them before arming, or enable \u201cBypass\u201d on the sensor.', pin_disarm_error:'Incorrect PIN or error while disarming', notification_disarmed:'{user} disarmed the system.', notification_armed:'{user} activated {mode} mode.', upload_error:'Upload failed.', delete_file_error:'Could not delete the file: {error}', file_choice:'\u201c{file}\u201d\n\nUse as a static image (OK) or an animated video (Cancel)?\n\n• OK → Static image\n• Cancel → Animated video', first_run_blocked_title:'Access Denied', first_run_blocked_desc:'A Home Assistant administrator is required to configure Argus for the first time.', first_run_welcome:'Thank you for choosing Argus Home Hub. Welcome.', first_run_desc:'Complete setup to secure your home.', first_run_pin_expl:'The access PIN opens Argus. The master PIN controls arming and disarming.', first_run_skip:'Skip for now', first_run_start:'Start with Argus' },
+  fr: { connected:'CONNECTÉ', no_sensors_configured:'Aucun capteur configuré.', all_sensors_bypassed:'Tous les capteurs configurés sont contournés.', active_profile:'Profil actif', change_profile_picture:'Aller à Personnes HA ↗', pin_management:'🔑 Gestion des PINs', access_pin_lbl:'PIN d\u2019accès', master_pin_lbl:'PIN Maître', switch_profile_btn:'👤 Changer de profil', lang_selector_lbl:'⚙️ Langue', change_btn:'Modifier', remove_btn:'Supprimer', role_argus_admin_short:'Admin', role_argus_user_short:'Standard', use_ha_language:'Utiliser la langue de Home Assistant', emergency_number_label:'🚨 Numéro d\u2019urgence local', emergency_help:'Configurez-le pour le domicile (ex. Costa Rica : 911 ; Espagne : 112). Il sera inclus dans les alertes SOS.', sos_actions:'🚨 Actions SOS', sos_select_outputs:'Sélectionner lumières, sirènes ou scripts', sos_outputs_help:'Ces appareils s\u2019activeront toujours avec SOS, même si Argus est désarmé.', sos_no_outputs:'Aucun appareil sélectionné', sos_call_help:'Si cet appareil ne peut pas appeler, Argus enverra une alerte urgente aux appareils mobiles configurés.', sos_stop:'🛑 ARRÊTER LA PANIQUE', customize:'Personnaliser', done:'Terminé', sos_activated:'SOS activé', sos_call_confirm:'Appeler les urgences maintenant ({number}) ?', sos_error:'Impossible d\u2019activer SOS : {error}', no_alarm_instance:'Aucune instance d\u2019alarme disponible', panic_state_unknown:'L\u2019état antérieur de la panique est inconnu. Armez ou désarmez manuellement.', panic_stopped:'Panique arrêtée ; rétablie à {state}', panic_stop_error:'Impossible d\u2019arrêter la panique : {error}', selector_panic:'🚨 Actions SOS', status_open:'Ouvert', status_closed:'Fermé', status_idle:'Au repos', status_recording:'Enregistrement', status_home:'Maison', status_away:'Absent', no_results:'Aucun résultat', user_required:'Nom et PIN requis', generic_error:'Erreur : {error}', clear_history_confirm:'Supprimer tout l\u2019historique d\u2019activité ?', export_error:'Échec de l\u2019exportation : {error}', invalid_config:'Fichier de configuration invalide.', import_success:'Configuration restaurée. Rechargement…', import_error:'Échec de l\u2019importation : {error}', file_read_error:'Impossible de lire le fichier.', reset_confirm:'Réinitialiser Argus ? Toutes les configurations, PIN et modes seront perdus.', reset_success:'Argus a été réinitialisé. Vous avez quelques secondes pour annuler.', reset_error:'Échec de la réinitialisation : {error}', undo_success:'Réinitialisation annulée.', undo_error:'Impossible d\u2019annuler : {error}', url_placeholder:'URL de l\u2019arrière-plan…', loading:'Chargement…', delete:'Supprimer', fullscreen_title:'Plein écran', home_default:'Ma maison', home_fallback:'Maison', user_default:'Utilisateur', temp_notification_title:'Argus — Alerte de température', action_failed:'Action impossible', cannot_arm:'Impossible d\u2019armer', open_sensors_explain:'Les capteurs suivants sont ouverts :\n{names}\n\nFermez-les avant d\u2019armer ou activez « Ignorer ». ', pin_disarm_error:'PIN incorrect ou erreur de désarmement', notification_disarmed:'{user} a désarmé le système.', notification_armed:'{user} a activé le mode {mode}.', upload_error:'Échec du téléversement.', delete_file_error:'Impossible de supprimer le fichier : {error}', file_choice:'« {file} »\n\nUtiliser comme image fixe (OK) ou vidéo animée (Annuler) ?', first_run_blocked_title:'Accès refusé', first_run_blocked_desc:'Un administrateur Home Assistant est requis pour configurer Argus pour la première fois.', first_run_welcome:'Merci d\'avoir choisi Argus Home Hub. Bienvenue.', first_run_desc:'Terminez la configuration pour sécuriser votre domicile.', first_run_pin_expl:'Le code d\'accès ouvre Argus. Le code maître contrôle l\'armement.', first_run_skip:'Ignorer pour l\'instant', first_run_start:'Commencer avec Argus' },
+  pt: { connected:'CONECTADO', no_sensors_configured:'Sem sensores configurados.', all_sensors_bypassed:'Todos os sensores configurados estão ignorados.', active_profile:'Perfil ativo', change_profile_picture:'Ir para Pessoas do HA ↗', pin_management:'🔑 Gerenciamento de PINs', access_pin_lbl:'PIN de Acesso', master_pin_lbl:'PIN Mestre', switch_profile_btn:'👤 Trocar de perfil', lang_selector_lbl:'⚙️ Idioma', change_btn:'Alterar', remove_btn:'Remover', role_argus_admin_short:'Admin', role_argus_user_short:'Padrão', use_ha_language:'Usar idioma do Home Assistant', emergency_number_label:'🚨 Número local de emergência', emergency_help:'Configure para a localização da casa (ex.: Costa Rica: 911; Espanha: 112). Será incluído nos alertas SOS.', sos_actions:'🚨 Ações SOS', sos_select_outputs:'Selecionar luzes, sirenes ou scripts', sos_outputs_help:'Estes dispositivos sempre serão ativados ao usar SOS, mesmo com Argus desarmado.', sos_no_outputs:'Nenhum dispositivo selecionado', sos_call_help:'Se este dispositivo não puder ligar, o Argus enviará um alerta urgente aos dispositivos móveis configurados.', sos_stop:'🛑 PARAR PÂNICO', customize:'Personalizar', done:'Concluído', sos_activated:'SOS ativado', sos_call_confirm:'Ligar para emergência agora ({number})?', sos_error:'Não foi possível ativar SOS: {error}', no_alarm_instance:'Nenhuma instância de alarme disponível', panic_state_unknown:'Não foi possível determinar o estado anterior do pânico. Arme ou desarme manualmente.', panic_stopped:'Pânico parado; restaurado para {state}', panic_stop_error:'Não foi possível parar o pânico: {error}', selector_panic:'🚨 Ações SOS', status_open:'Aberto', status_closed:'Fechado', status_idle:'Em repouso', status_recording:'Gravando', status_home:'Em casa', status_away:'Fora', no_results:'Sem resultados', user_required:'Nome e PIN são obrigatórios', generic_error:'Erro: {error}', clear_history_confirm:'Excluir todo o histórico de atividade?', export_error:'Erro ao exportar: {error}', invalid_config:'Arquivo de configuração inválido.', import_success:'Configuração restaurada. Recarregando…', import_error:'Erro ao importar: {error}', file_read_error:'Não foi possível ler o arquivo.', reset_confirm:'Restaurar Argus aos padrões de fábrica? Todas as configurações, PINs e modos serão perdidos.', reset_success:'Argus foi restaurado. Você tem alguns segundos para desfazer.', reset_error:'Erro ao restaurar: {error}', undo_success:'Restauração desfeita.', undo_error:'Erro ao desfazer: {error}', url_placeholder:'URL do fundo…', loading:'Carregando…', delete:'Excluir', fullscreen_title:'Tela cheia', home_default:'Minha Casa', home_fallback:'Casa', user_default:'Usuário', temp_notification_title:'Argus — Alerta de Temperatura', action_failed:'Não foi possível realizar a ação', cannot_arm:'Não é possível armar', open_sensors_explain:'Os seguintes sensores estão abertos:\n{names}\n\nFeche-os antes de armar ou ative \u201cIgnorar\u201d.', pin_disarm_error:'PIN incorreto ou erro ao desarmar', notification_disarmed:'{user} desarmou o sistema.', notification_armed:'{user} ativou o modo {mode}.', upload_error:'Falha no envio.', delete_file_error:'Não foi possível excluir o arquivo: {error}', file_choice:'\u201c{file}\u201d\n\nUsar como imagem estática (OK) ou vídeo animado (Cancelar)?', first_run_blocked_title:'Acesso negado', first_run_blocked_desc:'É necessário um administrador do Home Assistant para configurar o Argus pela primeira vez.', first_run_welcome:'Obrigado por escolher o Argus Home Hub. Bem-vindo(a).', first_run_desc:'Conclua a configuração para proteger sua casa.', first_run_pin_expl:'O PIN de acesso abre o Argus. O PIN mestre controla armar e desarmar.', first_run_skip:'Ignorar por agora', first_run_start:'Começar com Argus' },
+  it: { connected:'CONNESSO', no_sensors_configured:'Nessun sensore configurato.', all_sensors_bypassed:'Tutti i sensori configurati sono ignorati.', active_profile:'Profilo attivo', change_profile_picture:'Vai a Persone HA ↗', pin_management:'🔑 Gestione PIN', access_pin_lbl:'PIN di Accesso', master_pin_lbl:'PIN Maestro', switch_profile_btn:'👤 Cambia profilo', lang_selector_lbl:'⚙️ Lingua', change_btn:'Modifica', remove_btn:'Rimuovi', role_argus_admin_short:'Admin', role_argus_user_short:'Standard', use_ha_language:'Usa la lingua di Home Assistant', emergency_number_label:'🚨 Numero di emergenza locale', emergency_help:'Configurarlo per la posizione della casa (es. Costa Rica: 911; Spagna: 112). Sarà incluso negli avvisi SOS.', sos_actions:'🚨 Azioni SOS', sos_select_outputs:'Seleziona luci, sirene o script', sos_outputs_help:'Questi dispositivi saranno sempre attivati con SOS, anche se Argus è disarmato.', sos_no_outputs:'Nessun dispositivo selezionato', sos_call_help:'Se questo dispositivo non può effettuare chiamate, Argus invierà un avviso urgente ai dispositivi mobili configurati.', sos_stop:'🛑 FERMA PANICO', customize:'Personalizza', done:'Fine', sos_activated:'SOS attivato', sos_call_confirm:'Chiamare ora i servizi di emergenza ({number})?', sos_error:'Impossibile attivare SOS: {error}', no_alarm_instance:'Nessuna istanza di allarme disponibile', panic_state_unknown:'Impossibile determinare lo stato precedente del panico. Armare o disarmare manualmente.', panic_stopped:'Panico fermato; ripristinato a {state}', panic_stop_error:'Impossibile fermare il panico: {error}', selector_panic:'🚨 Azioni SOS', status_open:'Aperto', status_closed:'Chiuso', status_idle:'Inattivo', status_recording:'Registrazione', status_home:'Casa', status_away:'Fuori', no_results:'Nessun risultato', user_required:'Nome e PIN obbligatori', generic_error:'Errore: {error}', clear_history_confirm:'Eliminare tutta la cronologia attività?', export_error:'Esportazione non riuscita: {error}', invalid_config:'File di configurazione non valido.', import_success:'Configurazione ripristinata. Ricaricamento…', import_error:'Importazione non riuscita: {error}', file_read_error:'Impossibile leggere il file.', reset_confirm:'Ripristinare Argus alle impostazioni di fabbrica? Configurazioni, PIN e modalità saranno persi.', reset_success:'Argus è stato ripristinato. Hai alcuni secondi per annullare.', reset_error:'Ripristino non riuscito: {error}', undo_success:'Ripristino annullato.', undo_error:'Impossibile annullare: {error}', url_placeholder:'URL dello sfondo…', loading:'Caricamento…', delete:'Elimina', fullscreen_title:'Schermo intero', home_default:'Casa mia', home_fallback:'Casa', user_default:'Utente', temp_notification_title:'Argus — Avviso temperatura', action_failed:'Impossibile eseguire l\u2019azione', cannot_arm:'Impossibile armare', open_sensors_explain:'I seguenti sensori sono aperti:\n{names}\n\nChiudili prima di armare o abilita \u201cIgnora\u201d.', pin_disarm_error:'PIN errato o errore durante il disarmo', notification_disarmed:'{user} ha disarmato il sistema.', notification_armed:'{user} ha attivato la modalità {mode}.', upload_error:'Caricamento non riuscito.', delete_file_error:'Impossibile eliminare il file: {error}', file_choice:'\u201c{file}\u201d\n\nUsare come immagine statica (OK) o video animato (Annulla)?', first_run_blocked_title:'Accesso negato', first_run_blocked_desc:'È necessario un amministratore di Home Assistant per configurare Argus per la prima volta.', first_run_welcome:'Grazie per aver scelto Argus Home Hub. Benvenuto/a.', first_run_desc:'Completa la configurazione per proteggere la tua casa.', first_run_pin_expl:'Il PIN di accesso apre Argus. Il PIN master controlla l\'inserimento e il disinserimento.', first_run_skip:'Salta per ora', first_run_start:'Inizia con Argus' },
+  zh: { connected:'已连接', no_sensors_configured:'未配置入侵传感器。', all_sensors_bypassed:'所有配置的传感器均已旁路。', active_profile:'当前个人资料', change_profile_picture:'转到 HA 人员设置 ↗', pin_management:'🔑 PIN 码管理', access_pin_lbl:'访问 PIN', master_pin_lbl:'主 PIN', switch_profile_btn:'👤 切换配置文件', lang_selector_lbl:'⚙️ 语言', change_btn:'更改', remove_btn:'移除', role_argus_admin_short:'管理员', role_argus_user_short:'标准', use_ha_language:'使用 Home Assistant 语言', emergency_number_label:'🚨 本地紧急号码', emergency_help:'请按家庭所在地设置（例如哥斯达黎加：911；西班牙：112）。该号码将包含在 SOS 警报中。', sos_actions:'🚨 SOS 操作', sos_select_outputs:'选择灯、警报器或脚本', sos_outputs_help:'即使 Argus 已撤防，使用 SOS 时这些设备也会始终启动。', sos_no_outputs:'未选择设备', sos_call_help:'如果该设备无法拨号，Argus 将向已配置的移动设备发送紧急警报。', sos_stop:'🛑 停止紧急状态', customize:'自定义', done:'完成', sos_activated:'SOS 已激活', sos_call_confirm:'现在拨打紧急服务电话 ({number})？', sos_error:'无法激活 SOS：{error}', no_alarm_instance:'没有可用的警报实例', panic_state_unknown:'无法确定紧急状态之前的状态。请手动布防或撤防。', panic_stopped:'紧急状态已停止；恢复为 {state}', panic_stop_error:'无法停止紧急状态：{error}', selector_panic:'🚨 SOS 操作', status_open:'打开', status_closed:'关闭', status_idle:'空闲', status_recording:'录制中', status_home:'在家', status_away:'离家', no_results:'无结果', user_required:'需要姓名和 PIN', generic_error:'错误：{error}', clear_history_confirm:'删除全部活动历史记录？', export_error:'导出失败：{error}', invalid_config:'配置文件无效。', import_success:'配置已恢复。正在重新加载…', import_error:'导入失败：{error}', file_read_error:'无法读取文件。', reset_confirm:'将 Argus 恢复为出厂设置？所有配置、PIN 和模式将丢失。', reset_success:'Argus 已重置。你有几秒钟可以撤销。', reset_error:'重置失败：{error}', undo_success:'已撤销重置。', undo_error:'无法撤销重置：{error}', url_placeholder:'背景 URL…', loading:'正在加载…', delete:'删除', fullscreen_title:'全屏', home_default:'我的家', home_fallback:'家', user_default:'用户', temp_notification_title:'Argus — 温度警报', action_failed:'无法完成操作', cannot_arm:'无法布防', open_sensors_explain:'以下传感器处于打开状态：\n{names}\n\n请在布防前关闭它们，或启用\u201c跳过\u201d。', pin_disarm_error:'PIN 错误或撤防时出错', notification_disarmed:'{user} 已撤防系统。', notification_armed:'{user} 已激活 {mode} 模式。', upload_error:'上传失败。', delete_file_error:'无法删除文件：{error}', file_choice:'\u201c{file}\u201d\n\n用作静态图片（确定）还是动画视频（取消）？', first_run_blocked_title:'拒绝访问', first_run_blocked_desc:'首次配置 Argus 需要 Home Assistant 管理员。', first_run_welcome:'感谢您选择 Argus Home Hub。欢迎。', first_run_desc:'完成设置以保护您的家庭。', first_run_pin_expl:'访问 PIN 用于打开 Argus。主 PIN 控制布防和撤防。', first_run_skip:'暂时跳过', first_run_start:'开始使用 Argus' },
+  ru: { connected:'ПОДКЛЮЧЕНО', no_sensors_configured:'Датчики не настроены.', all_sensors_bypassed:'Все настроенные датчики пропущены.', active_profile:'Активный профиль', change_profile_picture:'Перейти к профилям HA ↗', pin_management:'🔑 Управление PIN', access_pin_lbl:'PIN доступа', master_pin_lbl:'Мастер-PIN', switch_profile_btn:'👤 Сменить профиль', lang_selector_lbl:'⚙️ Язык', change_btn:'Изменить', remove_btn:'Удалить', role_argus_admin_short:'Админ', role_argus_user_short:'Стандарт', use_ha_language:'Использовать язык Home Assistant', emergency_number_label:'🚨 Местный номер экстренной службы', emergency_help:'Настройте для местоположения дома (например, Коста-Рика: 911; Испания: 112). Номер будет включён в SOS-оповещения.', sos_actions:'🚨 Действия SOS', sos_select_outputs:'Выбрать свет, сирены или сценарии', sos_outputs_help:'Эти устройства всегда будут включаться при SOS, даже когда Argus снят с охраны.', sos_no_outputs:'Устройства не выбраны', sos_call_help:'Если устройство не может звонить, Argus отправит срочное оповещение на настроенные мобильные устройства.', sos_stop:'🛑 ОСТАНОВИТЬ ТРЕВОГУ', customize:'Настроить', done:'Готово', sos_activated:'SOS активирован', sos_call_confirm:'Позвонить в экстренную службу ({number})?', sos_error:'Не удалось активировать SOS: {error}', no_alarm_instance:'Нет доступного экземпляра сигнализации', panic_state_unknown:'Невозможно определить предыдущее состояние тревоги. Поставьте или снимите с охраны вручную.', panic_stopped:'Тревога остановлена; восстановлено состояние {state}', panic_stop_error:'Не удалось остановить тревогу: {error}', selector_panic:'🚨 Действия SOS', status_open:'Открыто', status_closed:'Закрыто', status_idle:'Ожидание', status_recording:'Запись', status_home:'Дома', status_away:'Вне дома', no_results:'Нет результатов', user_required:'Требуются имя и PIN', generic_error:'Ошибка: {error}', clear_history_confirm:'Удалить всю историю активности?', export_error:'Ошибка экспорта: {error}', invalid_config:'Недопустимый файл конфигурации.', import_success:'Конфигурация восстановлена. Перезагрузка…', import_error:'Ошибка импорта: {error}', file_read_error:'Не удалось прочитать файл.', reset_confirm:'Сбросить Argus к заводским настройкам? Все конфигурации, PIN и режимы будут потеряны.', reset_success:'Argus сброшен. У вас есть несколько секунд, чтобы отменить это.', reset_error:'Ошибка сброса: {error}', undo_success:'Сброс отменён.', undo_error:'Не удалось отменить сброс: {error}', url_placeholder:'URL фона…', loading:'Загрузка…', delete:'Удалить', fullscreen_title:'Полный экран', home_default:'Мой дом', home_fallback:'Дом', user_default:'Пользователь', temp_notification_title:'Argus — Температурное предупреждение', action_failed:'Не удалось выполнить действие', cannot_arm:'Невозможно поставить на охрану', open_sensors_explain:'Следующие датчики открыты:\n{names}\n\nЗакройте их перед постановкой на охрану или включите «Обход».', pin_disarm_error:'Неверный PIN или ошибка снятия с охраны', notification_disarmed:'{user} снял систему с охраны.', notification_armed:'{user} активировал режим {mode}.', upload_error:'Ошибка загрузки.', delete_file_error:'Не удалось удалить файл: {error}', file_choice:'«{file}»\n\nИспользовать как статичное изображение (ОК) или анимированное видео (Отмена)?', first_run_blocked_title:'Доступ запрещен', first_run_blocked_desc:'Для первой настройки Argus требуется администратор Home Assistant.', first_run_welcome:'Спасибо, что выбрали Argus Home Hub. Добро пожаловать.', first_run_desc:'Завершите настройку для безопасности вашего дома.', first_run_pin_expl:'PIN доступа открывает Argus. Мастер-PIN управляет постановкой и снятием с охраны.', first_run_skip:'Пропустить пока', first_run_start:'Начать с Argus' },
+};
+
+const SETUP_REQUIRED_TEXTS = {
+  es: { setup_required_title:'Falta configurar Argus', setup_required_desc:'Argus está instalado, pero todavía no existe una instancia. Añádela en Integraciones y luego vuelve a este panel.', setup_required_action:'Configurar Argus en Integraciones', welcome_profile:'Bienvenido/a, {name}', initialization_error_title:'Argus no pudo iniciar', initialization_error_desc:'No se pudo conectar con el backend autenticado de Home Assistant.', retry_action:'Reintentar' },
+  en: { setup_required_title:'Argus setup required', setup_required_desc:'Argus is installed, but no instance exists yet. Add it in Integrations, then return to this panel.', setup_required_action:'Configure Argus in Integrations', welcome_profile:'Welcome, {name}', initialization_error_title:'Argus could not start', initialization_error_desc:'The authenticated Home Assistant backend connection could not be established.', retry_action:'Retry' },
+  fr: { setup_required_title:'Configuration d\u2019Argus requise', setup_required_desc:'Argus est installé, mais aucune instance n\u2019existe encore. Ajoutez-la dans Intégrations, puis revenez à ce panneau.', setup_required_action:'Configurer Argus dans Intégrations', welcome_profile:'Bienvenue, {name}', initialization_error_title:'Argus n\u2019a pas pu démarrer', initialization_error_desc:'La connexion authentifiée au backend Home Assistant a échoué.', retry_action:'Réessayer' },
+  pt: { setup_required_title:'É necessário configurar o Argus', setup_required_desc:'O Argus está instalado, mas ainda não existe uma instância. Adicione-a em Integrações e volte a este painel.', setup_required_action:'Configurar Argus em Integrações', welcome_profile:'Bem-vindo(a), {name}', initialization_error_title:'O Argus não pôde iniciar', initialization_error_desc:'Não foi possível conectar ao backend autenticado do Home Assistant.', retry_action:'Tentar novamente' },
+  it: { setup_required_title:'Configurazione di Argus necessaria', setup_required_desc:'Argus è installato, ma non esiste ancora un\u2019istanza. Aggiungila in Integrazioni, poi torna a questo pannello.', setup_required_action:'Configura Argus in Integrazioni', welcome_profile:'Benvenuto/a, {name}', initialization_error_title:'Argus non si è avviato', initialization_error_desc:'Impossibile connettersi al backend autenticato di Home Assistant.', retry_action:'Riprova' },
+  zh: { setup_required_title:'需要配置 Argus', setup_required_desc:'Argus 已安装，但尚未创建实例。请在\u201c集成\u201d中添加，然后返回此面板。', setup_required_action:'在集成中配置 Argus', welcome_profile:'欢迎，{name}', initialization_error_title:'Argus 无法启动', initialization_error_desc:'无法连接到 Home Assistant 的已认证后端。', retry_action:'重试' },
+  ru: { setup_required_title:'Требуется настройка Argus', setup_required_desc:'Argus установлен, но экземпляр ещё не создан. Добавьте его в разделе интеграций и вернитесь на эту панель.', setup_required_action:'Настроить Argus в интеграциях', welcome_profile:'Добро пожаловать, {name}', initialization_error_title:'Не удалось запустить Argus', initialization_error_desc:'Не удалось подключиться к авторизованному backend Home Assistant.', retry_action:'Повторить' },
+};
+
+const UI_AUDIT_TEXTS = {
+  es: { github_title:'Apoya a Argus', github_desc:'Si te gusta este proyecto, considera darle una estrella en GitHub para apoyar su desarrollo.', github_action:'Dar estrella en GitHub', history_refresh:'Actualizar', history_unavailable:'No se pudo cargar el historial. Verifica el permiso «Ver historial» e inténtalo de nuevo.', user_no_pin:'Sin PIN', user_pin_action:'PIN', user_role_action:'Rol', notif_no_services:'Sin servicios móviles',
+    log_action_user_logged_in:'Inicio de sesión', log_action_state_restored:'Estado restaurado', log_action_profile_selected:'Perfil seleccionado', log_action_schedule_applied:'Horario aplicado', log_action_mode_changed:'Modo cambiado', log_action_backup_created:'Copia de seguridad creada', log_action_backup_restored:'Configuración restaurada', log_action_access_pin_updated:'PIN de acceso actualizado',
+    modal_cancel:'Cancelar', modal_save:'Guardar', modal_confirm:'Confirmar', modal_pin_title:'PIN de acceso', modal_pin_help:'Deja en blanco para eliminar el PIN de acceso.', modal_edit_name:'Editar nombre', modal_add_user:'+ Agregar usuario manual', modal_name_label:'Nombre del perfil', modal_user_added:'Usuario creado.', modal_delete_confirm:'¿Eliminar este usuario? Esta acción no se puede deshacer.' },
+  en: { github_title:'Support Argus', github_desc:'If you like this project, consider starring it on GitHub to support its development.', github_action:'Star on GitHub', history_refresh:'Refresh', history_unavailable:'Activity history could not be loaded. Check the \u201cView history\u201d permission and try again.', user_no_pin:'No PIN', user_pin_action:'PIN', user_role_action:'Role', notif_no_services:'No mobile services',
+    log_action_user_logged_in:'User login', log_action_state_restored:'State restored', log_action_profile_selected:'Profile selected', log_action_schedule_applied:'Schedule applied', log_action_mode_changed:'Mode changed', log_action_backup_created:'Backup created', log_action_backup_restored:'Configuration restored', log_action_access_pin_updated:'Access PIN updated',
+    modal_cancel:'Cancel', modal_save:'Save', modal_confirm:'Confirm', modal_pin_title:'Access PIN', modal_pin_help:'Leave blank to remove the access PIN.', modal_edit_name:'Edit name', modal_add_user:'+ Add manual user', modal_name_label:'Profile name', modal_user_added:'User created.', modal_delete_confirm:'Delete this user? This action cannot be undone.' },
+  fr: { github_title:'Soutenez Argus', github_desc:'Si vous aimez ce projet, ajoutez une étoile sur GitHub pour soutenir son développement.', github_action:'Ajouter une étoile sur GitHub', history_refresh:'Actualiser', history_unavailable:'Impossible de charger l\u2019historique. Vérifiez l\u2019autorisation « Voir l\u2019historique » et réessayez.', user_no_pin:'Sans PIN', user_pin_action:'PIN', user_role_action:'Rôle', notif_no_services:'Aucun service mobile',
+    log_action_user_logged_in:'Connexion', log_action_state_restored:'État restauré', log_action_profile_selected:'Profil sélectionné', log_action_schedule_applied:'Horaire appliqué', log_action_mode_changed:'Mode modifié', log_action_backup_created:'Sauvegarde créée', log_action_backup_restored:'Configuration restaurée', log_action_access_pin_updated:'PIN d\u2019accès mis à jour',
+    modal_cancel:'Annuler', modal_save:'Enregistrer', modal_confirm:'Confirmer', modal_pin_title:'PIN d\u2019accès', modal_pin_help:'Laissez vide pour supprimer le PIN.', modal_edit_name:'Modifier le nom', modal_add_user:'+ Ajouter un utilisateur', modal_name_label:'Nom du profil', modal_user_added:'Utilisateur créé.', modal_delete_confirm:'Supprimer cet utilisateur ?' },
+  pt: { github_title:'Apoie o Argus', github_desc:'Se você gosta deste projeto, dê uma estrela no GitHub para apoiar o desenvolvimento.', github_action:'Dar estrela no GitHub', history_refresh:'Atualizar', history_unavailable:'Não foi possível carregar o histórico. Verifique a permissão \u201cVer histórico\u201d e tente novamente.', user_no_pin:'Sem PIN', user_pin_action:'PIN', user_role_action:'Função', notif_no_services:'Sem serviços móveis',
+    log_action_user_logged_in:'Login do usuário', log_action_state_restored:'Estado restaurado', log_action_profile_selected:'Perfil selecionado', log_action_schedule_applied:'Horário aplicado', log_action_mode_changed:'Modo alterado', log_action_backup_created:'Backup criado', log_action_backup_restored:'Configuração restaurada', log_action_access_pin_updated:'PIN de acesso atualizado',
+    modal_cancel:'Cancelar', modal_save:'Salvar', modal_confirm:'Confirmar', modal_pin_title:'PIN de acesso', modal_pin_help:'Deixe em branco para remover o PIN.', modal_edit_name:'Editar nome', modal_add_user:'+ Adicionar usuário', modal_name_label:'Nome do perfil', modal_user_added:'Usuário criado.', modal_delete_confirm:'Excluir este usuário?' },
+  it: { github_title:'Sostieni Argus', github_desc:'Se ti piace questo progetto, aggiungi una stella su GitHub per sostenerne lo sviluppo.', github_action:'Aggiungi una stella su GitHub', history_refresh:'Aggiorna', history_unavailable:'Impossibile caricare la cronologia. Controlla il permesso \u201cVisualizza cronologia\u201d e riprova.', user_no_pin:'Senza PIN', user_pin_action:'PIN', user_role_action:'Ruolo', notif_no_services:'Nessun servizio mobile',
+    log_action_user_logged_in:'Accesso utente', log_action_state_restored:'Stato ripristinato', log_action_profile_selected:'Profilo selezionato', log_action_schedule_applied:'Pianificazione applicata', log_action_mode_changed:'Modalità cambiata', log_action_backup_created:'Backup creato', log_action_backup_restored:'Configurazione ripristinata', log_action_access_pin_updated:'PIN di accesso aggiornato',
+    modal_cancel:'Annulla', modal_save:'Salva', modal_confirm:'Conferma', modal_pin_title:'PIN di accesso', modal_pin_help:'Lascia vuoto per rimuovere il PIN.', modal_edit_name:'Modifica nome', modal_add_user:'+ Aggiungi utente', modal_name_label:'Nome del profilo', modal_user_added:'Utente creato.', modal_delete_confirm:'Eliminare questo utente?' },
+  zh: { github_title:'支持 Argus', github_desc:'如果您喜欢这个项目，请在 GitHub 上加星以支持其开发。', github_action:'在 GitHub 上加星', history_refresh:'刷新', history_unavailable:'无法加载活动历史。请检查\u201c查看历史\u201d权限后重试。', user_no_pin:'无 PIN', user_pin_action:'PIN', user_role_action:'角色', notif_no_services:'无移动服务',
+    log_action_user_logged_in:'用户登录', log_action_state_restored:'状态已恢复', log_action_profile_selected:'已选择配置文件', log_action_schedule_applied:'已应用计划', log_action_mode_changed:'模式已更改', log_action_backup_created:'已创建备份', log_action_backup_restored:'配置已恢复', log_action_access_pin_updated:'访问 PIN 已更新',
+    modal_cancel:'取消', modal_save:'保存', modal_confirm:'确认', modal_pin_title:'访问 PIN', modal_pin_help:'留空以删除访问 PIN。', modal_edit_name:'编辑名称', modal_add_user:'+ 添加用户', modal_name_label:'配置文件名称', modal_user_added:'用户已创建。', modal_delete_confirm:'删除此用户？' },
+  ru: { github_title:'Поддержите Argus', github_desc:'Если вам нравится проект, поставьте звезду на GitHub, чтобы поддержать разработку.', github_action:'Поставить звезду на GitHub', history_refresh:'Обновить', history_unavailable:'Не удалось загрузить историю. Проверьте разрешение «Просмотр истории» и повторите попытку.', user_no_pin:'Без PIN', user_pin_action:'PIN', user_role_action:'Роль', notif_no_services:'Нет мобильных служб',
+    log_action_user_logged_in:'Вход пользователя', log_action_state_restored:'Состояние восстановлено', log_action_profile_selected:'Профиль выбран', log_action_schedule_applied:'Расписание применено', log_action_mode_changed:'Режим изменён', log_action_backup_created:'Резервная копия создана', log_action_backup_restored:'Конфигурация восстановлена', log_action_access_pin_updated:'PIN доступа обновлён',
+    modal_cancel:'Отмена', modal_save:'Сохранить', modal_confirm:'Подтвердить', modal_pin_title:'PIN доступа', modal_pin_help:'Оставьте пустым, чтобы удалить PIN.', modal_edit_name:'Изменить имя', modal_add_user:'+ Добавить пользователя', modal_name_label:'Имя профиля', modal_user_added:'Пользователь создан.', modal_delete_confirm:'Удалить этого пользователя?' },
+};
+
+const FIRST_RUN_TEXTS = {
+  es: { setup_admin_name:'Nombre del Administrador', setup_access_pin:'PIN de acceso al panel Argus (Opcional)', setup_master_pin:'PIN maestro para armar/desarmar (Opcional)', claim_title:'Argus Security Update', claim_desc:'Tu instalación requiere un administrador para reclamar el acceso.', claim_btn:'Reclamar Administración' },
+  en: { setup_admin_name:'Administrator Name', setup_access_pin:'Argus panel access PIN (Optional)', setup_master_pin:'Master PIN to arm/disarm (Optional)', claim_title:'Argus Security Update', claim_desc:'Your installation needs an administrator to claim access.', claim_btn:'Claim Administration' },
+  fr: { setup_admin_name:'Nom de l\u2019administrateur', setup_access_pin:'PIN d\u2019accès au panneau Argus (Optionnel)', setup_master_pin:'PIN maître pour armer/désarmer (Optionnel)', claim_title:'Mise à jour de sécurité Argus', claim_desc:'Votre installation nécessite un administrateur pour réclamer l\u2019accès.', claim_btn:'Réclamer l\u2019administration' },
+  pt: { setup_admin_name:'Nome do Administrador', setup_access_pin:'PIN de acesso ao painel Argus (Opcional)', setup_master_pin:'PIN mestre para armar/desarmar (Opcional)', claim_title:'Atualização de Segurança Argus', claim_desc:'Sua instalação precisa de um administrador para reivindicar o acesso.', claim_btn:'Reivindicar Administração' },
+  it: { setup_admin_name:'Nome dell\u2019amministratore', setup_access_pin:'PIN di accesso al pannello Argus (Opzionale)', setup_master_pin:'PIN master per armare/disarmare (Opzionale)', claim_title:'Aggiornamento di sicurezza Argus', claim_desc:'La tua installazione richiede un amministratore per rivendicare l\u2019accesso.', claim_btn:'Rivendica Amministrazione' },
+  zh: { setup_admin_name:'管理员名称', setup_access_pin:'Argus 面板访问 PIN (可选)', setup_master_pin:'布防/撤防主 PIN (可选)', claim_title:'Argus 安全更新', claim_desc:'您的安装需要管理员来声明访问权限。', claim_btn:'声明管理权限' },
+  ru: { setup_admin_name:'Имя администратора', setup_access_pin:'PIN доступа к панели Argus (Необязательно)', setup_master_pin:'Мастер-PIN для постановки/снятия с охраны (Необязательно)', claim_title:'Обновление безопасности Argus', claim_desc:'Вашей установке требуется администратор для получения доступа.', claim_btn:'Заявить права администратора' },
+};
+
+for (const language of Object.keys(TEXTS)) {
+  TEXTS[language] = Object.assign({}, TEXTS.en, TEXTS[language], EXTRA_TEXTS[language] || {}, SETUP_REQUIRED_TEXTS[language] || {}, UI_AUDIT_TEXTS[language] || {}, FIRST_RUN_TEXTS[language] || {});
+}
+
+Object.assign(TEXTS.es, { expired:'Expirado', active_until:'Vigente hasta', exp_indefinite:'Indefinido' });
+Object.assign(TEXTS.en, { expired:'Expired', active_until:'Valid until', exp_indefinite:'Indefinite' });
+Object.assign(TEXTS.fr, { expired:'Expiré', active_until:'Expire', exp_indefinite:'Indéfini' });
+Object.assign(TEXTS.pt, { expired:'Expirado', active_until:'Expira', exp_indefinite:'Indefinido' });
+Object.assign(TEXTS.it, { expired:'Scaduto', active_until:'Scade', exp_indefinite:'Indefinito' });
+Object.assign(TEXTS.zh, { expired:'已过期', active_until:'到期', exp_indefinite:'无限期' });
+Object.assign(TEXTS.ru, { expired:'Истёк', active_until:'Действует до', exp_indefinite:'Бессрочно' });
+Object.assign(TEXTS.es, { entry_sensors:'Sensores con retraso de entrada', select_entry_sensors:'Seleccionar sensores de entrada' });
+Object.assign(TEXTS.en, { entry_sensors:'Entry-delay sensors', select_entry_sensors:'Select entry sensors' });
+Object.assign(TEXTS.fr, { entry_sensors:'Capteurs avec délai d\u2019entrée', select_entry_sensors:'Sélectionner les capteurs d\u2019entrée' });
+Object.assign(TEXTS.pt, { entry_sensors:'Sensores com atraso de entrada', select_entry_sensors:'Selecionar sensores de entrada' });
+Object.assign(TEXTS.it, { entry_sensors:'Sensori con ritardo di ingresso', select_entry_sensors:'Seleziona sensori di ingresso' });
+Object.assign(TEXTS.zh, { entry_sensors:'具有进入延迟的传感器', select_entry_sensors:'选择进入传感器' });
+Object.assign(TEXTS.ru, { entry_sensors:'Датчики с задержкой входа', select_entry_sensors:'Выбрать датчики входа' });
+Object.assign(TEXTS.es, { entry_delay_toggle:'Retraso de entrada (⏳) o instantáneo (⚡)', saved:'✓ Guardado exitosamente', pin_mismatch:'❌ El nuevo PIN no coincide' });
+Object.assign(TEXTS.en, { entry_delay_toggle:'Entry delay (⏳) or instant (⚡)', saved:'✓ Saved successfully', pin_mismatch:'❌ New PIN does not match' });
+Object.assign(TEXTS.fr, { entry_delay_toggle:'Délai d\u2019entrée (⏳) ou instantané (⚡)', saved:'✓ Enregistré avec succès', pin_mismatch:'❌ Le nouveau code PIN ne correspond pas' });
+Object.assign(TEXTS.pt, { entry_delay_toggle:'Atraso de entrada (⏳) ou instantâneo (⚡)', saved:'✓ Salvo com sucesso', pin_mismatch:'❌ O novo PIN não coincide' });
+Object.assign(TEXTS.it, { entry_delay_toggle:'Ritardo di ingresso (⏳) o istantaneo (⚡)', saved:'✓ Salvato con successo', pin_mismatch:'❌ Il nuovo PIN non corrisponde' });
+Object.assign(TEXTS.zh, { entry_delay_toggle:'进入延迟 (⏳) 或即时 (⚡)', saved:'✓ 已成功保存', pin_mismatch:'❌ 新 PIN 不匹配' });
+Object.assign(TEXTS.ru, { entry_delay_toggle:'Задержка входа (⏳) или мгновенно (⚡)', saved:'✓ Успешно сохранено', pin_mismatch:'❌ Новый PIN-код не совпадает' });
+
+// Labels introduced after the original language dictionaries.  Keeping these
+// together makes the UI resilient when a newly-added static control is
+// translated, rather than falling back to English (or its template text).
+Object.assign(TEXTS.es, { temp_displayed:'🌡️ Temperatura mostrada', weather_source:'☁️ Fuente de clima', weather_auto:'Automático (primera entidad de clima)', user_exp_type:'Vencimiento', user_exp_date:'Fecha/Hora de vencimiento', exp_temporary:'Temporal (fecha/hora)', log_mode:'Modo', log_action_user_added:'Usuario añadido', log_action_user_deleted:'Usuario eliminado', log_action_rejected:'Acción rechazada', log_action_automation:'Automatización ejecutada', log_action_analysis:'Análisis de IA', log_action_sos:'SOS activado', log_action_sos_stopped:'Pánico detenido' });
+Object.assign(TEXTS.en, { temp_displayed:'🌡️ Displayed temperature', weather_source:'☁️ Weather source', weather_auto:'Automatic (first weather entity)', user_exp_type:'Expiration', user_exp_date:'Expiration date/time', exp_temporary:'Temporary (date/time)', log_mode:'Mode', log_action_user_added:'User added', log_action_user_deleted:'User deleted', log_action_rejected:'Action rejected', log_action_automation:'Automation executed', log_action_analysis:'AI analysis', log_action_sos:'SOS activated', log_action_sos_stopped:'Panic stopped' });
+Object.assign(TEXTS.fr, { temp_displayed:'🌡️ Température affichée', weather_source:'☁️ Source météo', weather_auto:'Automatique (première entité météo)', user_exp_type:'Expiration', user_exp_date:"Date/heure d\u2019expiration", exp_temporary:'Temporaire (date/heure)', log_mode:'Mode', log_action_user_added:'Utilisateur ajouté', log_action_user_deleted:'Utilisateur supprimé', log_action_rejected:'Action refusée', log_action_automation:'Automatisation exécutée', log_action_analysis:'Analyse IA', log_action_sos:'SOS activé', log_action_sos_stopped:'Panique arrêtée' });
+Object.assign(TEXTS.pt, { temp_displayed:'🌡️ Temperatura exibida', weather_source:'☁️ Fonte de clima', weather_auto:'Automático (primeira entidade meteorológica)', user_exp_type:'Expiração', user_exp_date:'Data/hora de expiração', exp_temporary:'Temporário (data/hora)', log_mode:'Modo', log_action_user_added:'Usuário adicionado', log_action_user_deleted:'Usuário removido', log_action_rejected:'Ação recusada', log_action_automation:'Automação executada', log_action_analysis:'Análise de IA', log_action_sos:'SOS ativado', log_action_sos_stopped:'Pânico interrompido' });
+Object.assign(TEXTS.it, { temp_displayed:'🌡️ Temperatura visualizzata', weather_source:'☁️ Fonte meteo', weather_auto:'Automatico (prima entità meteo)', user_exp_type:'Scadenza', user_exp_date:'Data/ora di scadenza', exp_temporary:'Temporaneo (data/ora)', log_mode:'Modalità', log_action_user_added:'Utente aggiunto', log_action_user_deleted:'Utente eliminato', log_action_rejected:'Azione rifiutata', log_action_automation:'Automazione eseguita', log_action_analysis:'Analisi IA', log_action_sos:'SOS attivato', log_action_sos_stopped:'Panico interrotto' });
+Object.assign(TEXTS.zh, { temp_displayed:'🌡️ 显示的温度', weather_source:'☁️ 天气来源', weather_auto:'自动（第一个天气实体）', user_exp_type:'到期', user_exp_date:'到期日期/时间', exp_temporary:'临时（日期/时间）', log_mode:'模式', log_action_user_added:'已添加用户', log_action_user_deleted:'已删除用户', log_action_rejected:'操作被拒绝', log_action_automation:'自动化已执行', log_action_analysis:'AI 分析', log_action_sos:'SOS 已激活', log_action_sos_stopped:'紧急状态已停止' });
+Object.assign(TEXTS.ru, { temp_displayed:'🌡️ Отображаемая температура', weather_source:'☁️ Источник погоды', weather_auto:'Автоматически (первая погодная сущность)', user_exp_type:'Срок действия', user_exp_date:'Дата/время окончания', exp_temporary:'Временный (дата/время)', log_mode:'Режим', log_action_user_added:'Пользователь добавлен', log_action_user_deleted:'Пользователь удалён', log_action_rejected:'Действие отклонено', log_action_automation:'Автоматизация выполнена', log_action_analysis:'Анализ ИИ', log_action_sos:'SOS активирован', log_action_sos_stopped:'Тревога остановлена' });
+Object.assign(TEXTS.es, { external_panels:'Paneles de alarma externos', light_siren_color:'Color de alarma', light_siren_flash:'Destello suave si está disponible' });
+Object.assign(TEXTS.en, { external_panels:'External alarm panels', light_siren_color:'Alarm colour', light_siren_flash:'Gentle flash when available' });
+Object.assign(TEXTS.fr, { external_panels:'Panneaux d’alarme externes', light_siren_color:'Couleur d’alarme', light_siren_flash:'Clignotement doux si disponible' });
+Object.assign(TEXTS.pt, { external_panels:'Painéis de alarme externos', light_siren_color:'Cor do alarme', light_siren_flash:'Piscar suave quando disponível' });
+Object.assign(TEXTS.it, { external_panels:'Pannelli di allarme esterni', light_siren_color:'Colore allarme', light_siren_flash:'Lampeggio delicato se disponibile' });
+Object.assign(TEXTS.zh, { external_panels:'外部报警面板', light_siren_color:'警报颜色', light_siren_flash:'可用时柔和闪烁' });
+Object.assign(TEXTS.ru, { external_panels:'Внешние панели сигнализации', light_siren_color:'Цвет тревоги', light_siren_flash:'Мягкое мигание при наличии' });
+
+
+Object.assign(TEXTS.fr, {"connected": "CONNECTÉ", "instances": "Instances Actives", "modes": "Modes d'Alarme", "automations": "Automatisations", "linked_rules": "Règles d'automatisation liées à Argus", "settings": "Paramètres", "activity_log": "Journal d'Activité", "history_refresh": "Actualiser", "users_title": "Contrôle d'Accès & Utilisateurs", "access_title": "Contrôle d'Accès & Utilisateurs", "access_desc": "Gestion globale de la sécurité, PIN maître et administrateurs.", "role_argus_admin": "Administrateur Argus", "role_argus_standard": "Utilisateur Standard", "role_argus_admin_short": "Admin", "role_argus_user_short": "Standard", "ha_account_linked": "Compte Home Assistant : {name}", "ha_account_unavailable": "Sans compte HA lié", "user_no_pin": "Sans PIN", "exp_indefinite": "Indéfini", "exp_temporary": "Temporaire", "active_until": "Actif jusqu'au", "expired": "Expiré", "disarmed": "Désarmé", "armed_home": "Présent (Maison)", "armed_away": "Absent", "armed_night": "Nuit", "armed_vacation": "Vacances", "mode_home": "Maison", "mode_away": "Absent", "mode_night": "Nuit", "mode_vacation": "Vacances", "btn_home": "🏠 MAISON", "btn_away": "🔒 ABSENT", "btn_night": "🌙 NUIT", "btn_vacation": "✈️ VACANCES", "btn_disarmed": "DÉSARMÉ", "btn_sos": "🚨 SOS / PANIQUE", "system_armed": "SYSTÈME ARMÉ", "system_disarmed": "SYSTÈME DÉSARMÉ", "home_name_lbl": "Nom du Domicile", "sensor_section": "Capteurs d'intrusion", "siren_section": "Sirènes", "bypass_lbl": "🚫 Ignorer", "times_section": "⏱️ Délais & Minuteries", "lock_if_open": "Bloquer si ouverts", "wait_if_open": "Attendre fermeture des capteurs", "none_selected": "Aucun sélectionné", "select_btn": "+ Sélectionner", "add_btn": "+ Ajouter", "status_open": "Ouvert", "status_closed": "Fermé", "status_idle": "Au repos", "status_recording": "Enregistrement", "status_home": "Maison", "status_away": "Absent", "log_detail_pin_reset": "PIN maître réinitialisé par un administrateur HA", "log_detail_pin_reset_failed": "Tentative de réinitialisation du PIN refusée", "log_detail_disarm": "Système désarmé", "log_detail_triggered": "Alarme déclenchée", "log_sensor": "Capteur", "log_mode": "Mode", "log_action_user_added": "Utilisateur ajouté", "log_action_user_deleted": "Utilisateur supprimé", "log_action_sos": "Alarme SOS activée", "log_action_sos_stopped": "Alarme SOS arrêtée", "log_action_automation": "Automatisation exécutée", "log_action_analysis": "Analyse de sécurité", "log_action_rejected": "Action rejetée", "log_action_user_logged_in": "Connexion utilisateur", "log_action_profile_selected": "Profil sélectionné", "log_action_schedule_applied": "Planning appliqué", "log_action_mode_changed": "Mode modifié", "log_action_state_restored": "État local restauré", "manual_arm": "Armement manuel", "waiting_sensors": "EN ATTENTE DES CAPTEURS", "waiting_sensors_count": "EN ATTENTE DE {count} CAPTEUR(S)", "lbl_aesthetic_custom": "Plus de Réglages / SOS", "external_panels": "Panneaux d'alarme externes", "light_siren_color": "Couleur d'alarme", "light_siren_flash": "Clignotement doux si disponible", "select_entry_sensors": "Sélectionner capteurs d'entrée", "entry_sensors": "Capteurs d'entrée", "arm_time": "Armement (s)", "disarm_time": "Délai d'entrée (s)"});
+
+Object.assign(TEXTS.pt, {"connected": "CONECTADO", "instances": "Instâncias Ativas", "modes": "Modos de Alarme", "automations": "Automações", "linked_rules": "Regras de automação vinculadas ao Argus", "settings": "Configurações", "activity_log": "Registro de Atividades", "history_refresh": "Atualizar", "users_title": "Controle de Acesso & Usuários", "access_title": "Controle de Acesso & Usuários", "access_desc": "Gestão global de segurança, PIN mestre e administradores.", "role_argus_admin": "Administrador do Argus", "role_argus_standard": "Usuário Padrão", "role_argus_admin_short": "Admin", "role_argus_user_short": "Padrão", "ha_account_linked": "Conta do Home Assistant: {name}", "ha_account_unavailable": "Sem conta HA vinculada", "user_no_pin": "Sem PIN", "exp_indefinite": "Indefinido", "exp_temporary": "Temporário", "active_until": "Ativo até", "expired": "Expirado", "disarmed": "Desarmado", "armed_home": "Em Casa", "armed_away": "Ausente", "armed_night": "Noite", "armed_vacation": "Férias", "mode_home": "Em Casa", "mode_away": "Ausente", "mode_night": "Noite", "mode_vacation": "Férias", "btn_home": "🏠 EM CASA", "btn_away": "🔒 AUSENTE", "btn_night": "🌙 NOITE", "btn_vacation": "✈️ FÉRIAS", "btn_disarmed": "DESARMADO", "btn_sos": "🚨 SOS / PÂNICO", "system_armed": "SISTEMA ARMADO", "system_disarmed": "SISTEMA DESARMADO", "home_name_lbl": "Nome da Casa", "sensor_section": "Sensores de Intrusão", "siren_section": "Sirenes", "bypass_lbl": "🚫 Ignorar", "times_section": "⏱️ Tempos & Prazos", "lock_if_open": "Bloquear se aberto", "wait_if_open": "Aguardar fechamento dos sensores", "none_selected": "Nenhum selecionado", "select_btn": "+ Selecionar", "add_btn": "+ Adicionar", "status_open": "Aberto", "status_closed": "Fechado", "status_idle": "Em repouso", "status_recording": "Gravando", "status_home": "Em casa", "status_away": "Fora", "log_detail_pin_reset": "PIN mestre redefinido por administrador HA", "log_detail_pin_reset_failed": "Tentativa de redefinição de PIN negada", "log_detail_disarm": "Sistema desarmado", "log_detail_triggered": "Alarme disparado", "log_sensor": "Sensor", "log_mode": "Modo", "log_action_user_added": "Usuário adicionado", "log_action_user_deleted": "Usuário excluído", "log_action_sos": "Alarme SOS ativado", "log_action_sos_stopped": "Alarme SOS parado", "log_action_automation": "Automação executada", "log_action_analysis": "Análise de segurança", "log_action_rejected": "Ação rejeitada", "log_action_user_logged_in": "Início de sessão", "log_action_profile_selected": "Perfil selecionado", "log_action_schedule_applied": "Horário aplicado", "log_action_mode_changed": "Modo alterado", "log_action_state_restored": "Estado local restaurado", "manual_arm": "Arme manual", "waiting_sensors": "AGUARDANDO SENSORES", "waiting_sensors_count": "AGUARDANDO {count} SENSOR(ES)", "lbl_aesthetic_custom": "Mais Ajustes / SOS", "external_panels": "Painéis de alarme externos", "light_siren_color": "Cor do alarme", "light_siren_flash": "Piscar suave se disponível", "select_entry_sensors": "Selecionar sensores de entrada", "entry_sensors": "Sensores de entrada", "arm_time": "Armado (s)", "disarm_time": "Atraso de entrada (s)"});
+
+Object.assign(TEXTS.it, {"connected": "CONNESSO", "instances": "Istanze Attive", "modes": "Modalità Allarme", "automations": "Automazioni", "linked_rules": "Regole di automazione collegate ad Argus", "settings": "Impostazioni", "activity_log": "Registro Attività", "history_refresh": "Aggiorna", "users_title": "Controllo Accessi & Utenti", "access_title": "Controllo Accessi & Utenti", "access_desc": "Gestione globale della sicurezza, PIN master e amministratori.", "role_argus_admin": "Amministratore Argus", "role_argus_standard": "Utente Standard", "role_argus_admin_short": "Admin", "role_argus_user_short": "Standard", "ha_account_linked": "Account Home Assistant: {name}", "ha_account_unavailable": "Nessun account HA collegato", "user_no_pin": "Senza PIN", "exp_indefinite": "Indefinito", "exp_temporary": "Temporaneo", "active_until": "Attivo fino a", "expired": "Scaduto", "disarmed": "Disarmato", "armed_home": "In Casa", "armed_away": "Fuori Casa", "armed_night": "Notte", "armed_vacation": "Vacanza", "mode_home": "In Casa", "mode_away": "Fuori Casa", "mode_night": "Notte", "mode_vacation": "Vacanza", "btn_home": "🏠 IN CASA", "btn_away": "🔒 FUORI CASA", "btn_night": "🌙 NOTTE", "btn_vacation": "✈️ VACANZA", "btn_disarmed": "DISARMATO", "btn_sos": "🚨 SOS / PANICO", "system_armed": "SISTEMA ARMATO", "system_disarmed": "SISTEMA DISARMATO", "home_name_lbl": "Nome della Casa", "sensor_section": "Sensori di Intrusione", "siren_section": "Sirene", "bypass_lbl": "🚫 Escludi", "times_section": "⏱️ Timer & Ritardi", "lock_if_open": "Blocca se aperti", "wait_if_open": "Attendi chiusura sensori", "none_selected": "Nessuno selezionato", "select_btn": "+ Seleziona", "add_btn": "+ Aggiungi", "status_open": "Aperto", "status_closed": "Chiuso", "status_idle": "Inattivo", "status_recording": "Registrazione", "status_home": "A casa", "status_away": "Fuori", "log_detail_pin_reset": "PIN master reimpostato da amministratore HA", "log_detail_pin_reset_failed": "Tentativo di reimpostazione PIN negato", "log_detail_disarm": "Sistema disarmato", "log_detail_triggered": "Allarme attivato", "log_sensor": "Sensore", "log_mode": "Modalità", "log_action_user_added": "Utente aggiunto", "log_action_user_deleted": "Utente eliminato", "log_action_sos": "Allarme SOS attivato", "log_action_sos_stopped": "Allarme SOS fermato", "log_action_automation": "Automazione eseguita", "log_action_analysis": "Analisi di sicurezza", "log_action_rejected": "Azione rifiutata", "log_action_user_logged_in": "Accesso utente", "log_action_profile_selected": "Profilo selezionato", "log_action_schedule_applied": "Orario applicato", "log_action_mode_changed": "Modalità modificata", "log_action_state_restored": "Stato locale ripristinato", "manual_arm": "Armamento manuale", "waiting_sensors": "IN ATTESA DEI SENSORI", "waiting_sensors_count": "IN ATTESA DI {count} SENSORE/I", "lbl_aesthetic_custom": "Più Impostazioni / SOS", "external_panels": "Pannelli allarme esterni", "light_siren_color": "Colore allarme", "light_siren_flash": "Lampeggio delicato se disponibile", "select_entry_sensors": "Seleziona sensori di ingresso", "entry_sensors": "Sensori di ingresso", "arm_time": "Armato (s)", "disarm_time": "Ritardo di ingresso (s)"});
+
+Object.assign(TEXTS.zh, {"connected": "已连接", "instances": "活动实例", "modes": "警报模式", "automations": "自动化", "linked_rules": "关联到 Argus 的自动化规则", "settings": "设置", "activity_log": "活动日志", "history_refresh": "刷新", "users_title": "访问控制与用户", "access_title": "访问控制与用户", "access_desc": "全局安全管理、主 PIN 码与管理员。", "role_argus_admin": "Argus 管理员", "role_argus_standard": "标准用户", "role_argus_admin_short": "管理员", "role_argus_user_short": "标准", "ha_account_linked": "Home Assistant 账户：{name}", "ha_account_unavailable": "未关联 HA 账户", "user_no_pin": "无 PIN", "exp_indefinite": "无限期", "exp_temporary": "临时", "active_until": "有效期至", "expired": "已过期", "disarmed": "已撤防", "armed_home": "在家", "armed_away": "离家", "armed_night": "夜间", "armed_vacation": "度假", "mode_home": "在家", "mode_away": "离家", "mode_night": "夜间", "mode_vacation": "度假", "btn_home": "🏠 在家", "btn_away": "🔒 离家", "btn_night": "🌙 夜间", "btn_vacation": "✈️ 度假", "btn_disarmed": "已撤防", "btn_sos": "🚨 SOS / 紧急求助", "system_armed": "系统已布防", "system_disarmed": "系统已撤防", "home_name_lbl": "房屋名称", "sensor_section": "入侵传感器", "siren_section": "警报器", "bypass_lbl": "🚫 旁路", "times_section": "⏱️ 时间与延迟", "lock_if_open": "打开时阻止布防", "wait_if_open": "等待传感器关闭", "none_selected": "未选择", "select_btn": "+ 选择", "add_btn": "+ 添加", "status_open": "打开", "status_closed": "关闭", "status_idle": "就绪", "status_recording": "录制中", "status_home": "在家", "status_away": "离家", "log_detail_pin_reset": "主 PIN 码已由 HA 管理员重置", "log_detail_pin_reset_failed": "PIN 重置请求已被拒绝", "log_detail_disarm": "系统已撤防", "log_detail_triggered": "警报已触发", "log_sensor": "传感器", "log_mode": "模式", "log_action_user_added": "用户已添加", "log_action_user_deleted": "用户已删除", "log_action_sos": "SOS 警报已激活", "log_action_sos_stopped": "SOS 警报已停止", "log_action_automation": "自动化已执行", "log_action_analysis": "安全分析", "log_action_rejected": "操作被拒绝", "log_action_user_logged_in": "用户登录", "log_action_profile_selected": "配置文件已选择", "log_action_schedule_applied": "计划已应用", "log_action_mode_changed": "模式已更改", "log_action_state_restored": "本地状态已恢复", "manual_arm": "手动布防", "waiting_sensors": "正在等待传感器", "waiting_sensors_count": "正在等待 {count} 个传感器", "lbl_aesthetic_custom": "更多设置 / SOS", "external_panels": "外部报警面板", "light_siren_color": "警报颜色", "light_siren_flash": "可用时柔和闪烁", "select_entry_sensors": "选择进入传感器", "entry_sensors": "进入传感器", "arm_time": "布防时间 (秒)", "disarm_time": "进入延迟 (秒)"});
+
+Object.assign(TEXTS.ru, {"connected": "ПОДКЛЮЧЕНО", "instances": "Активные экземпляры", "modes": "Режимы охраны", "automations": "Автоматизации", "linked_rules": "Правила автоматизации Argus", "settings": "Настройки", "activity_log": "Журнал активности", "history_refresh": "Обновить", "users_title": "Контроль доступа и пользователи", "access_title": "Контроль доступа и пользователи", "access_desc": "Глобальное управление безопасностью, мастер-PIN и администраторы.", "role_argus_admin": "Администратор Argus", "role_argus_standard": "Стандартный пользователь", "role_argus_admin_short": "Админ", "role_argus_user_short": "Стандарт", "ha_account_linked": "Учетная запись HA: {name}", "ha_account_unavailable": "Без привязки к HA", "user_no_pin": "Без PIN", "exp_indefinite": "Бессрочно", "exp_temporary": "Временно", "active_until": "Действителен до", "expired": "Истёк", "disarmed": "Снято с охраны", "armed_home": "Дома", "armed_away": "Вне дома", "armed_night": "Ночь", "armed_vacation": "Отпуск", "mode_home": "Дома", "mode_away": "Вне дома", "mode_night": "Ночь", "mode_vacation": "Отпуск", "btn_home": "🏠 ДОМА", "btn_away": "🔒 ВНЕ ДОМА", "btn_night": "🌙 НОЧЬ", "btn_vacation": "✈️ ОТПУСК", "btn_disarmed": "СНЯТО С ОХРАНЫ", "btn_sos": "🚨 SOS / ТРЕВОГА", "system_armed": "СИСТЕМА НА ОХРАНЕ", "system_disarmed": "СИСТЕМА СНЯТА С ОХРАНЫ", "home_name_lbl": "Имя дома", "sensor_section": "Датчики проникновения", "siren_section": "Сирены", "bypass_lbl": "🚫 Обход", "times_section": "⏱️ Таймеры и задержки", "lock_if_open": "Блокировать при открытии", "wait_if_open": "Ожидать закрытия датчиков", "none_selected": "Не выбрано", "select_btn": "+ Выбрать", "add_btn": "+ Добавить", "status_open": "Открыто", "status_closed": "Закрыто", "status_idle": "Готов", "status_recording": "Запись", "status_home": "Дома", "status_away": "Вне дома", "log_detail_pin_reset": "Мастер-PIN сброшен администратором HA", "log_detail_pin_reset_failed": "Попытка сброса PIN отклонена", "log_detail_disarm": "Система снята с охраны", "log_detail_triggered": "Тревога сработала", "log_sensor": "Датчик", "log_mode": "Режим", "log_action_user_added": "Пользователь добавлен", "log_action_user_deleted": "Пользователь удален", "log_action_sos": "Тревога SOS активирована", "log_action_sos_stopped": "Тревога SOS остановлена", "log_action_automation": "Автоматизация выполнена", "log_action_analysis": "Анализ безопасности", "log_action_rejected": "Действие отклонено", "log_action_user_logged_in": "Вход пользователя", "log_action_profile_selected": "Профиль выбран", "log_action_schedule_applied": "Расписание применено", "log_action_mode_changed": "Режим изменен", "log_action_state_restored": "Локальное состояние восстановлено", "manual_arm": "Ручная постановка", "waiting_sensors": "ОЖИДАНИЕ ДАТЧИКОВ", "waiting_sensors_count": "ОЖИДАНИЕ {count} ДАТЧИК(ОВ)", "lbl_aesthetic_custom": "Настройки / SOS", "external_panels": "Внешние панели сигнализации", "light_siren_color": "Цвет тревоги", "light_siren_flash": "Мягкое мигание при наличии", "select_entry_sensors": "Выбрать датчики входа", "entry_sensors": "Датчики входа", "arm_time": "Время охраны (с)", "disarm_time": "Задержка входа (с)"});
+
+Object.assign(TEXTS.es = TEXTS.es || {}, {"light_steady_safe": "Luz fija segura", "light_color_and_flash": "Color y destello seguro", "light_safe_flash": "Destello seguro", "test_safe_flash": "Probar destello seguro", "testing_safe_flash": "Probando de forma segura…", "light_onoff_only_safe_note": "Esta luz solo admite encendido/apagado. Argus la mantendrá encendida de forma fija por seguridad (sin ciclos de energía).", "no_flash": "Sin destello", "flash_gentle": "Suave", "flash_rapid": "Rápido", "flash_label": "Destello", "color_label": "Color", "size": "Tamaño", "reset_widget": "Restablecer widget", "hide_widget": "Ocultar widget", "show": "Mostrar", "edit_dashboard": "Editar tablero", "edit_dashboard_done": "✓ Listo", "reset_dashboard": "Restablecer diseño", "support_title": "Estado y soporte"});
+
+Object.assign(TEXTS.en = TEXTS.en || {}, {"light_steady_safe": "Safe Steady Light", "light_color_and_flash": "Safe Color & Flash", "light_safe_flash": "Safe Flash", "test_safe_flash": "Test safe flash", "testing_safe_flash": "Testing safely…", "light_onoff_only_safe_note": "This light only supports on/off. Argus will keep it steady for safety (no power cycling).", "no_flash": "No flash", "flash_gentle": "Gentle", "flash_rapid": "Rapid", "flash_label": "Flash", "color_label": "Color", "size": "Size", "reset_widget": "Reset widget", "hide_widget": "Hide widget", "show": "Show", "edit_dashboard": "Edit dashboard", "edit_dashboard_done": "✓ Done", "reset_dashboard": "Reset layout", "support_title": "Status & Support"});
+
+Object.assign(TEXTS.zh = TEXTS.zh || {}, {"light_steady_safe": "安全常亮", "light_color_and_flash": "安全色彩与闪烁", "light_safe_flash": "安全闪烁", "test_safe_flash": "测试安全闪烁", "testing_safe_flash": "正在安全测试…", "light_onoff_only_safe_note": "此灯具仅支持开/关。出于安全保护，Argus 将保持常亮（不进行频繁通断电）。", "no_flash": "不闪烁", "flash_gentle": "柔和", "flash_rapid": "快速", "flash_label": "闪烁模式", "color_label": "颜色", "size": "尺寸", "reset_widget": "重置小部件", "hide_widget": "隐藏小部件", "show": "显示", "edit_dashboard": "编辑仪表板", "edit_dashboard_done": "✓ 完成", "reset_dashboard": "重置布局", "support_title": "状态与支持"});
+
+Object.assign(TEXTS.fr = TEXTS.fr || {}, {"light_steady_safe": "Lumière fixe sécurisée", "light_color_and_flash": "Couleur et clignotement sécurisé", "light_safe_flash": "Clignotement sécurisé", "test_safe_flash": "Tester clignotement sécurisé", "testing_safe_flash": "Test en cours…", "light_onoff_only_safe_note": "Cette lumière ne gère que marche/arrêt. Argus la maintiendra allumée en continu par sécurité.", "no_flash": "Sans clignotement", "flash_gentle": "Doux", "flash_rapid": "Rapide", "flash_label": "Clignotement", "color_label": "Couleur", "size": "Taille", "reset_widget": "Réinitialiser widget", "hide_widget": "Masquer widget", "show": "Afficher", "edit_dashboard": "Modifier tableau", "edit_dashboard_done": "✓ Terminé", "reset_dashboard": "Réinitialiser disposition", "support_title": "État & Support"});
+
+Object.assign(TEXTS.pt = TEXTS.pt || {}, {"light_steady_safe": "Luz fixa segura", "light_color_and_flash": "Cor e piscar seguro", "light_safe_flash": "Piscar seguro", "test_safe_flash": "Testar piscar seguro", "testing_safe_flash": "Testando com segurança…", "light_onoff_only_safe_note": "Esta luz suporta apenas ligar/desligar. O Argus a manterá acesa de forma fixa por segurança.", "no_flash": "Sem piscar", "flash_gentle": "Suave", "flash_rapid": "Rápido", "flash_label": "Piscar", "color_label": "Cor", "size": "Tamanho", "reset_widget": "Redefinir widget", "hide_widget": "Ocultar widget", "show": "Mostrar", "edit_dashboard": "Editar painel", "edit_dashboard_done": "✓ Pronto", "reset_dashboard": "Redefinir layout", "support_title": "Status & Suporte"});
+
+Object.assign(TEXTS.it = TEXTS.it || {}, {"light_steady_safe": "Luce fissa sicura", "light_color_and_flash": "Colore e lampeggio sicuro", "light_safe_flash": "Lampeggio sicuro", "test_safe_flash": "Prova lampeggio sicuro", "testing_safe_flash": "Test in corso…", "light_onoff_only_safe_note": "Questa luce supporta solo accensione/spegnimento. Argus la manterrà accesa fissa per sicurezza.", "no_flash": "Nessun lampeggio", "flash_gentle": "Delicato", "flash_rapid": "Rapido", "flash_label": "Lampeggio", "color_label": "Colore", "size": "Dimensione", "reset_widget": "Reimposta widget", "hide_widget": "Nascondi widget", "show": "Mostra", "edit_dashboard": "Modifica dashboard", "edit_dashboard_done": "✓ Fatto", "reset_dashboard": "Reimposta layout", "support_title": "Stato & Supporto"});
+
+Object.assign(TEXTS.ru = TEXTS.ru || {}, {"light_steady_safe": "Безопасный постоянный свет", "light_color_and_flash": "Цвет и безопасное мигание", "light_safe_flash": "Безопасное мигание", "test_safe_flash": "Тест безопасного мигания", "testing_safe_flash": "Проверка…", "light_onoff_only_safe_note": "Этот свет поддерживает только вкл/выкл. Argus оставит его включенным для безопасности.", "no_flash": "Без мигания", "flash_gentle": "Мягкое", "flash_rapid": "Быстрое", "flash_label": "Мигание", "color_label": "Цвет", "size": "Размер", "reset_widget": "Сбросить виджет", "hide_widget": "Скрыть виджет", "show": "Показать", "edit_dashboard": "Редактировать панель", "edit_dashboard_done": "✓ Готово", "reset_dashboard": "Сбросить макет", "support_title": "Статус и поддержка"});
+/* ── Template ─────────────────────────────────────────────────────────── */
+const _tmpl = document.createElement('template');
+_tmpl.innerHTML = `
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+#widget-grid.hide-legacy > section.panel:not(#w-instances) { display: none !important; }
+
+@keyframes heroSpringSlideIn {
+  0% { transform: translateX(-50px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+  /* Modern Premium Liquid Glass & iOS Wobble Styles */
+  :host {
+    font-family: 'Inter', sans-serif !important;
+    --glass-bg: var(--argus-glass-bg, rgba(255, 255, 255, 0.07));
+    --glass-border: var(--argus-glass-border, rgba(255, 255, 255, 0.09));
+    --glass-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.35),
+                    0 15px 30px -10px rgba(0, 122, 255, 0.12),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    --sos-red: linear-gradient(135deg, #ff3b30, #ff2d55);
+    --ios-track: rgba(0, 0, 0, 0.25);
+    --ios-thumb: linear-gradient(180deg, #ffffff, #f4f4f7);
+    --text-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    --primary-color: #007aff;
+    --personalize-bg: rgba(255, 255, 255, 0.02);
+    --personalize-border: rgba(255, 255, 255, 0.06);
+    --personalize-divider: rgba(255, 255, 255, 0.08);
+    --bg-inputs-bg: rgba(0, 0, 0, 0.15);
+    --bg-inputs-border: rgba(255, 255, 255, 0.05);
+    --input-bg-darker: rgba(0, 0, 0, 0.25);
+    --input-border-darker: rgba(255, 255, 255, 0.12);
+    --hero-bg: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    --log-item-bg: rgba(255, 255, 255, 0.02);
+    --log-item-border: rgba(255, 255, 255, 0.05);
+    --user-card-bg: rgba(255, 255, 255, 0.02);
+    --user-card-border: rgba(255, 255, 255, 0.06);
+    --primary-text-color: #fff !important;
+    --secondary-text-color: rgba(255, 255, 255, 0.7);
+    --input-bg: rgba(255, 255, 255, 0.04);
+    --input-border: rgba(255, 255, 255, 0.12);
+  }
+
+  
+
+  :host {
+    --hud-text-color: #fff;
+    --hud-bg: rgba(255,255,255,0.06);
+  }
+
+  /* Garantiza legibilidad sobre cualquier fondo */
+  :host([data-bg-mode="default"]) .hero-top-bar,
+  :host([data-bg-mode="default"]) .entry-hud,
+  :host([data-bg-mode="default"]) .mode-btn,
+  :host([data-bg-mode="default"]) .sensor-pill {
+    text-shadow: 0 1px 4px rgba(0,0,0,0.7);
+  }
+
+  :host([data-bg-mode="default"]) .mode-btn {
+    background: rgba(255,255,255,0.10) !important;
+    border: 1px solid rgba(255,255,255,0.18) !important;
+    color: rgba(255,255,255,0.95) !important;
+    backdrop-filter: blur(12px);
+  }
+
+  :host([data-bg-mode="default"]) .subsection-title,
+  :host([data-bg-mode="default"]) .user-role-label {
+    color: rgba(255,255,255,0.60) !important;
+  }
+
+  /* Fullscreen Active / Virtual Fullscreen CSS Overrides */
+  :host(.fullscreen-active) {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 99999999 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  :host(.fullscreen-active) .wrap {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+  :host(.fullscreen-active) .hero {
+    display: none !important;
+  }
+  :host(.fullscreen-active) .grid {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    gap: 0 !important;
+  }
+  :host(.fullscreen-active) .grid > .stack:not(:first-child) {
+    display: none !important;
+  }
+  :host(.fullscreen-active) .grid > .stack:first-child {
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  :host(.fullscreen-active) .grid > .stack:first-child > section:not(:first-child) {
+    display: none !important;
+  }
+  :host(.fullscreen-active) .grid > .stack:first-child > section:first-child {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  :host(.fullscreen-active) .grid > .stack:first-child > section:first-child .panel-head {
+    display: none !important;
+  }
+  :host(.fullscreen-active) .grid > .stack:first-child > section:first-child .personalize-section {
+    display: none !important;
+  }
+  :host(.fullscreen-active) #entries {
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  :host(.fullscreen-active) #entries > .entry:not(.ios-fullscreen) {
+    display: none !important;
+  }
+  :host(.fullscreen-active) #entries > .entry.ios-fullscreen {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    z-index: 100 !important;
+  }
+
+  .liquid-glass {
+    background: linear-gradient(135deg,color-mix(in srgb,rgba(255,255,255,0.18) 80%,transparent),rgba(255,255,255,0.04));
+    backdrop-filter: blur(28px) saturate(180%) brightness(1.08);
+    -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(1.08);
+    border: 1px solid rgba(255,255,255,0.22);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.25);
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
+  }
+  .wrap { position: relative; z-index: 1; transition: filter 0.35s ease, opacity 0.35s ease; opacity: 0; pointer-events: none; }
+  .wrap.wrap-ready { opacity: 1; pointer-events: auto; }
+  .wrap.wrap-blurred { filter: blur(15px); opacity: 0.45; pointer-events: none; }
+  @keyframes dialElasticIn {
+    0% { transform: scale(0.8) translateY(20px); opacity: 0; }
+    60% { transform: scale(1.04) translateY(-4px); opacity: 0.9; }
+    85% { transform: scale(0.98) translateY(1px); opacity: 0.98; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+  }
+  .dial-elastic { animation: dialElasticIn 0.5s cubic-bezier(0.25, 1.25, 0.5, 1) forwards; }
+
+  .collapsible {
+    transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease, margin 0.4s ease, padding 0.4s ease;
+    overflow: hidden;
+    max-height: 600px;
+    opacity: 1;
+  }
+  .collapsible.collapsed {
+    max-height: 0 !important;
+    opacity: 0 !important;
+  }
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;align-items:start;position:relative}
+  .panel{transition:transform .3s ease,box-shadow .3s ease,grid-column .3s ease,grid-row .3s ease;position:relative}
+  .panel[data-size="XS"]{grid-column:span 1;grid-row:span 1;height:auto!important;min-height:fit-content!important;padding:12px 14px!important;align-self:start!important}
+  .panel[data-size="S"]{grid-column:span 1;grid-row:span 1;height:auto!important;min-height:fit-content!important;align-self:start!important}
+  .panel[data-size="M"]{grid-column:span 2;grid-row:span 1}
+  .panel[data-size="L"]{grid-column:span 2;grid-row:span 2}
+  .panel[data-size="XL"]{grid-column:span 4;grid-row:span 2}
+  .dashboard-instances{grid-column:1 / -1}
+  
+  /* Edit Mode Styles */
+  .grid.editing .panel{animation:jiggle .3s infinite ease-in-out;cursor:grab}
+  .grid.editing .panel:nth-child(even){animation-duration:.27s;animation-direction:reverse}
+  .grid.editing .panel:nth-child(3n){animation-duration:.32s;animation-delay:.05s}
+  .grid.editing .panel.dragging{opacity:.5;animation:none;cursor:grabbing}
+  
+  .panel-edit-overlay{position:absolute;inset:0;background:rgba(5,15,30,.82);backdrop-filter:blur(10px);border-radius:inherit;z-index:90;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;opacity:0;pointer-events:none;transition:opacity .25s ease}
+  .grid.editing .panel:not(.dashboard-instances) .panel-edit-overlay{opacity:1;pointer-events:auto}
+  
+   .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;align-items:start;position:relative}
+  .panel{transition:transform .3s ease,box-shadow .3s ease,grid-column .3s ease,grid-row .3s ease;position:relative}
+  .panel[data-size="XS"]{grid-column:span 1;grid-row:span 1;height:auto!important;min-height:fit-content!important;padding:12px 14px!important;align-self:start!important}
+  .panel[data-size="S"]{grid-column:span 1;grid-row:span 1;height:auto!important;min-height:fit-content!important;align-self:start!important}
+  .panel[data-size="M"]{grid-column:span 2;grid-row:span 1}
+  .panel[data-size="L"]{grid-column:span 2;grid-row:span 2}
+  .panel[data-size="XL"]{grid-column:span 4;grid-row:span 2}
+  .dashboard-instances{grid-column:1 / -1}
+  
+  /* Edit Mode Styles */
+  .grid.editing .panel{animation:jiggle .3s infinite ease-in-out;cursor:grab}
+  .grid.editing .panel:nth-child(even){animation-duration:.27s;animation-direction:reverse}
+  .grid.editing .panel:nth-child(3n){animation-duration:.32s;animation-delay:.05s}
+  .grid.editing .panel.dragging{opacity:.5;animation:none;cursor:grabbing}
+  
+  .panel-edit-overlay{position:absolute;inset:0;background:rgba(5,15,30,.82);backdrop-filter:blur(10px);border-radius:inherit;z-index:90;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;opacity:0;pointer-events:none;transition:opacity .25s ease}
+  .grid.editing .panel:not(.dashboard-instances) .panel-edit-overlay{opacity:1;pointer-events:auto}
+  
+  .widget-controls{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:18px;backdrop-filter:blur(8px)}
+  .widget-controls-title{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;opacity:.7}
+  .widget-sizes{display:flex;gap:5px;flex-wrap:wrap;justify-content:center}
+  .widget-size-btn{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#fff;border-radius:8px;padding:5px 8px;font-size:11px;font-weight:800;cursor:pointer;transition:all .2s}
+  .widget-size-btn:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3)}
+  .widget-size-btn.active{background:#007aff;border-color:#007aff;box-shadow:0 0 10px rgba(0,122,255,.4)}
+  .widget-drag-handle{font-size:22px;color:rgba(255,255,255,.6);cursor:grab;padding:4px}
+  .widget-toggle-btn{background:rgba(220,38,38,.85);color:white;border:none;border-radius:8px;padding:6px 12px;font-size:10px;font-weight:800;cursor:pointer}
+  
+  @keyframes jiggle{
+    0%{transform:rotate(-0.5deg)}
+    50%{transform:rotate(0.5deg)}
+    100%{transform:rotate(-0.5deg)}
+  }
+  @media(max-width:900px){
+    .grid{grid-template-columns:minmax(0,1fr)}
+    .panel[data-size="XS"],.panel[data-size="S"],.panel[data-size="M"],.panel[data-size="L"],.panel[data-size="XL"]{grid-column:1 / -1;grid-row:auto}
+    .grid.editing .panel{animation:none !important}
+  }
+  
+  /* Adaptivity styles for size XS and S widgets */
+  .panel[data-size="XS"] #p-backup-desc, .panel[data-size="S"] #p-backup-desc{display:none}
+  .panel[data-size="XS"] #github-desc, .panel[data-size="S"] #github-desc{display:none}
+  .panel[data-size="XS"] h2, .panel[data-size="XS"] h3{font-size:13px !important;margin:0 0 4px !important}
+  .panel[data-size="XS"] .panel-body{max-height:220px !important;overflow-y:auto !important;scrollbar-gutter:stable}
+  #w-backup[data-size="XS"], #w-backup[data-size="S"], #w-github[data-size="XS"], #w-github[data-size="S"]{height:auto !important;min-height:fit-content !important;align-self:start !important}
+
+  /* Modes widget in XS size: clean ultra-compact mode strip */
+  #w-modes[data-size="XS"] #mode-view,
+  .argus-widget[data-widget-id="alarm-configuration"][data-size="XS"] #mode-view,
+  .modes-panel[data-size="XS"] #mode-view {
+    display: none !important;
+  }
+  #w-modes[data-size="XS"],
+  .modes-panel[data-size="XS"] {
+    height: auto !important;
+    min-height: fit-content !important;
+    padding: 12px 14px !important;
+    box-sizing: border-box !important;
+  }
+  #w-modes[data-size="XS"] .tabs,
+  .modes-panel[data-size="XS"] .tabs {
+    margin-bottom: 0 !important;
+    min-height: 52px !important;
+    padding: 4px !important;
+    gap: 4px !important;
+  }
+  #w-modes[data-size="XS"] .tab,
+  .modes-panel[data-size="XS"] .tab {
+    min-height: 44px !important;
+    padding: 4px 2px !important;
+    gap: 2px !important;
+  }
+  #w-modes[data-size="XS"] .tab-icon,
+  .modes-panel[data-size="XS"] .tab-icon {
+    font-size: 18px !important;
+  }
+  #w-modes[data-size="XS"] .tab-label,
+  .modes-panel[data-size="XS"] .tab-label {
+    font-size: 9px !important;
+    display: block !important;
+    font-weight: 700 !important;
+    line-height: 1.1 !important;
+  }
+
+  /* Jelly water-drop bounce animation for modals */
+  @keyframes jellyBounce {
+    0% { transform: scale(0.65) translateY(40px); opacity: 0; }
+    45% { transform: scale(1.08, 0.92) translateY(-8px); opacity: 0.95; }
+    65% { transform: scale(0.95, 1.05) translateY(3px); opacity: 1; }
+    82% { transform: scale(1.02, 0.98) translateY(-1px); }
+    100% { transform: scale(1, 1) translateY(0); opacity: 1; }
+  }
+  .modal-back.open .modal.jelly-modal {
+    animation: jellyBounce 0.52s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+  }
+
+  /* Collapsible Personalization with Bounce expansion */
+  .personalize-workspace{display:grid;grid-template-rows:0fr;opacity:0;pointer-events:none;transition:grid-template-rows 0.6s cubic-bezier(0.175,0.885,0.32,1.275),opacity 0.4s ease,margin-top 0.4s ease}
+  .personalize-workspace > div { overflow:hidden; min-height:0; }
+  .personalize-workspace:not(.collapsed){grid-template-rows:1fr;opacity:1;pointer-events:auto;margin-top:16px;animation:bounceExpand 0.55s cubic-bezier(0.175,0.885,0.32,1.275) forwards}
+  @keyframes bounceExpand{
+    0%{transform:scale(0.96) translateY(-8px);opacity:0}
+    70%{transform:scale(1.01) translateY(2px);opacity:0.9}
+    100%{transform:scale(1) translateY(0);opacity:1}
+  }
+
+  /* SOS confirmation modal & slider */
+  .ios-confirm-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 999999;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  .ios-confirm-backdrop.open {
+    display: flex !important;
+  }
+  .ios-confirm-card {
+    max-width: 440px;
+    width: 100%;
+    border-radius: 28px;
+    padding: 28px;
+    background: rgba(22, 26, 38, 0.95) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+    text-align: center;
+    color: #fff;
+  }
+  .ios-confirm-title {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  .ios-confirm-text {
+    font-size: 14px;
+    opacity: 0.8;
+    margin-bottom: 20px;
+  }
+  .ios-slider-shell {
+    margin: 16px 0;
+  }
+  .ios-slider-track {
+    position: relative;
+    height: 54px;
+    border-radius: 27px;
+    background: rgba(217, 4, 41, 0.15);
+    border: 1px solid rgba(217, 4, 41, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    user-select: none;
+  }
+  .ios-slider-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ff3b30;
+    pointer-events: none;
+  }
+  .ios-slider-thumb {
+    position: absolute;
+    left: 6px;
+    top: 5px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #ff3b30;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: grab;
+    box-shadow: 0 4px 12px rgba(255, 59, 48, 0.4);
+    touch-action: none;
+  }
+  .ios-confirm-cancel {
+    width: 100%;
+    padding: 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.06);
+    color: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.15s;
+  }
+  .ios-confirm-cancel:hover { background: rgba(255,255,255,0.14); }
+  .ios-confirm-cancel:active { transform: scale(0.96); }
+
+  :host{display:block;min-height:100vh;box-sizing:border-box;--primary-text-color:#ffffff!important;--secondary-text-color:rgba(255,255,255,0.7)!important;color:#ffffff!important;background:var(--lovelace-background,var(--primary-background-color));font-family:'Outfit',Inter,system-ui,sans-serif}
+  :host([compact]), :host(.argus-compact) {
+    min-height: auto !important;
+    background: transparent !important;
+  }
+  :host([compact]) .wrap, :host(.argus-compact) .wrap {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: fit-content !important;
+    gap: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    overflow: visible !important;
+    container-type: inline-size;
+    container-name: argus-compact-wrap;
+  }
+  :host([compact]) .hero, :host(.argus-compact) .hero {
+    display: none !important;
+  }
+  :host([compact]) #argus-canvas-bg, :host(.argus-compact) #argus-canvas-bg {
+    display: none !important;
+  }
+  :host([compact]) .tabs, :host(.argus-compact) .tabs {
+    display: none !important;
+  }
+  :host([compact]) .dashboard-instances .panel-head, :host(.argus-compact) .dashboard-instances .panel-head {
+    display: none !important;
+  }
+  :host([compact]) .personalize-section, :host(.argus-compact) .personalize-section {
+    display: none !important;
+  }
+  :host([compact]) .glass.panel:not(#w-instances), :host(.argus-compact) .glass.panel:not(#w-instances) {
+    display: none !important;
+  }
+  :host([compact]) .argus-widget:not(:has(#w-instances)), :host(.argus-compact) .argus-widget:not(:has(#w-instances)) {
+    display: none !important;
+  }
+  :host([compact]) .argus-dashboard__toolbar, :host(.argus-compact) .argus-dashboard__toolbar {
+    display: none !important;
+  }
+  :host([compact]) #widget-grid, :host(.argus-compact) #widget-grid {
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important;
+    height: auto !important;
+  }
+  :host([compact]) #w-instances, :host(.argus-compact) #w-instances {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    height: auto !important;
+    width: 100% !important;
+    min-height: fit-content !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    overflow: visible !important;
+    background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;
+    backdrop-filter: blur(28px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(150%) !important;
+  }
+  :host([compact]) .entry, :host(.argus-compact) .entry {
+    margin-bottom: 0 !important;
+    border-radius: 24px !important;
+    height: auto !important;
+    width: 100% !important;
+    min-height: fit-content !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    overflow: visible !important;
+    background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;
+    backdrop-filter: blur(28px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(150%) !important;
+  }
+  :host([compact]) #bootstrap-overlay, :host(.argus-compact) #bootstrap-overlay,
+  :host([compact]) .argus-profile-overlay, :host(.argus-compact) .argus-profile-overlay,
+  :host([compact]) .argus-welcome-screen, :host(.argus-compact) .argus-welcome-screen {
+    display: none !important;
+  }
+  :host([compact]) .argus-widget__content, :host(.argus-compact) .argus-widget__content {
+    height: auto !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    overflow: visible !important;
+  }
+  :host([compact]) #entries, :host(.argus-compact) #entries {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    height: auto !important;
+    width: 100% !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+  *{box-sizing:border-box}
+  @container argus-compact-wrap (max-width: 800px) {
+    .security-console { flex-direction: column !important; padding: 20px 18px 24px !important; gap: 20px !important; align-items: center !important; justify-content: center !important; }
+    .security-console .entry-icon { order: 2 !important; flex: 0 0 auto !important; min-height: 130px !important; margin: 0 auto !important; }
+    .security-console .liquid-stack { order: 3 !important; width: 100% !important; max-width: 360px !important; }
+    .security-console .console-sensors { order: 4 !important; width: 100% !important; max-width: 360px !important; display: flex !important; flex-direction: column !important; }
+    .sensor-column { position: static !important; max-width: 100% !important; width: 100% !important; align-items: stretch !important; padding: 0 !important; gap: 10px !important; }
+    .sensor-chip { max-width: none !important; }
+    .entry-content { padding: 20px !important; display: flex !important; flex-direction: column !important; align-items: center !important;  }
+    .liquid-stack { display: flex !important; flex-direction: column !important; align-items: stretch !important; gap: 8px !important; }
+  }
+  @keyframes iosGlassIn{0%{opacity:0;transform:translateY(14px) scale(.965)}65%{opacity:1;transform:translateY(-2px) scale(1.008)}100%{transform:translateY(0) scale(1)}}
+  @keyframes iosSelectPop{0%{transform:scale(.92);opacity:.45}60%{transform:scale(1.045);opacity:1}100%{transform:scale(1)}}
+  .glass,.entry,.mode-section-card,.user-card,.file-card,.log-item{animation:iosGlassIn .5s cubic-bezier(.22,1.18,.36,1) both}
+  .pick-row:has(input:checked),.tab.active,.liquid-btn.active{animation:iosSelectPop .34s cubic-bezier(.2,1.45,.35,1);box-shadow:0 0 0 1px color-mix(in srgb,var(--primary-color,#007aff) 45%,transparent),0 12px 30px color-mix(in srgb,var(--primary-color,#007aff) 18%,transparent)}
+  .glass.liquid-glass{background:var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)))!important;backdrop-filter:blur(28px) saturate(150%)!important;-webkit-backdrop-filter:blur(28px) saturate(150%)!important;border-color:rgba(255,255,255,0.15)!important;box-shadow:0 8px 32px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.1)!important}
+  button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 70%,#fff);outline-offset:3px}
+  button:disabled{cursor:not-allowed;opacity:.5;filter:saturate(.45)}
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+  .wrap{max-width:1400px;margin:0 auto;padding:24px;display:grid;gap:24px}
+  .glass{background:var(--glass-bg, rgba(255, 255, 255, 0.06));border:1px solid var(--glass-border, rgba(255, 255, 255, 0.09));border-radius:28px;box-shadow:var(--glass-shadow);backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2)}
+  .hero{padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:var(--hero-bg, linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)));margin-bottom:12px;will-change:transform,opacity;animation:heroSpringSlideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both}
+  .hero-left{display:flex;align-items:center;gap:22px}
+  .hero-context{margin-left:auto;display:flex;align-items:center;gap:8px;min-width:0}.hero-clock{display:flex;flex-direction:column;align-items:flex-end;padding-right:14px;border-right:1px solid rgba(255,255,255,.14);line-height:1}.hero-clock strong{font-size:1.45rem;letter-spacing:-.05em}.hero-clock span{font-size:10px;opacity:.65;margin-top:5px;text-transform:uppercase;letter-spacing:.08em}.hero-pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.hero-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 10px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(7,16,29,.27);box-shadow:inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(14px);font-size:10px;font-weight:800;white-space:nowrap}.hero-pill .hero-live{width:7px;height:7px;border-radius:50%;background:#55df91;box-shadow:0 0 9px #55df91}
+  .hero-icon{font-size:54px;line-height:1;filter:drop-shadow(0 0 20px rgba(255,255,255,0.15))}
+  .hero h1{margin:0 0 4px;font-size:34px;font-weight:900;letter-spacing:-0.03em;background:var(--hero-gradient, linear-gradient(to right, #ffffff, #82b1ff));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .hero p{margin:0;font-size:16px;opacity:.7;font-weight:500}
+  @media(max-width:700px){.wrap{padding:14px;gap:14px}.glass{border-radius:22px}.hero{padding:22px;align-items:flex-start}.hero-icon{font-size:40px}.hero h1{font-size:27px}.hero p{font-size:14px}.entry-content{grid-template-columns:96px 1fr;padding:16px 105px 16px 14px;gap:10px}.sensor-column{width:98px}.sensor-chip{max-width:94px}.entry-icon{min-height:110px}.entry-icon svg{max-width:150px}.hud{top:12px;right:12px}.hud-data{font-size:15px;padding:5px 9px}.hud-loc{font-size:10px;padding:3px 8px}}
+
+  /* Modern Mode Navigation & iOS Liquid Bubble Transition */
+  .tabs { position: relative; isolation:isolate; display: flex; min-height:72px; background: rgba(255, 255, 255, 0.03); padding: 6px; border-radius: 20px; gap: 6px; overflow: visible; scrollbar-width: none; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.06); z-index: 1; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { position: relative; flex: 1; min-width: 55px; min-height:60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 14px; padding: 10px 4px; font-size: 11px; font-weight: 800; color: rgba(255, 255, 255, 0.55); transition: color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; border: none !important; outline: none; background: transparent !important; box-shadow: none !important; z-index: 1; }
+  .tab:hover { color: #fff; }
+  .tab:active:not(:disabled) { transform: scale(0.94); }
+  .tab.active { color: #fff !important; background: transparent !important; box-shadow: none !important; transform: none !important; }
+
+  .tab-bubble { position: absolute; top: 6px; bottom: 6px; height: calc(100% - 12px); border-radius: 14px; z-index: 0; transform-origin: left center; transition: transform 0.45s cubic-bezier(0.25, 1.35, 0.4, 1.05), background 0.4s ease, box-shadow 0.4s ease; pointer-events: none; }
+  .tab-bubble.bubble-disarmed { background: #43a047; box-shadow: 0 8px 24px rgba(67, 160, 71, 0.4); }
+  .tab-bubble.bubble-home { background: #fb8c00; box-shadow: 0 8px 24px rgba(251, 140, 0, 0.4); }
+  .tab-bubble.bubble-away { background: #e53935; box-shadow: 0 8px 24px rgba(229, 57, 53, 0.4); }
+  .tab-bubble.bubble-night { background: #1e88e5; box-shadow: 0 8px 24px rgba(30, 136, 229, 0.4); }
+  .tab-bubble.bubble-vacation { background: #9c27b0; box-shadow: 0 8px 24px rgba(156, 39, 176, 0.4); }
+
+
+  @keyframes bounceIn {
+    0% { transform: scale(0.96); opacity: 0; }
+    50% { transform: scale(1.01); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .bounce-in { animation: bounceIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;align-items:start;position:relative}
+  .panel{transition:transform .3s ease,box-shadow .3s ease,grid-column .3s ease,grid-row .3s ease;position:relative}
+  .panel[data-size="S"]{grid-column:span 1;grid-row:span 1}
+  .panel[data-size="M"]{grid-column:span 2;grid-row:span 1}
+  .panel[data-size="L"]{grid-column:span 2;grid-row:span 2}
+  .panel[data-size="XL"]{grid-column:span 4;grid-row:span 2}
+  .dashboard-instances{grid-column:1 / -1}
+  
+  /* Edit Mode Styles */
+  .grid.editing .panel{animation:jiggle .3s infinite ease-in-out;cursor:grab}
+  .grid.editing .panel:nth-child(even){animation-duration:.27s;animation-direction:reverse}
+  .grid.editing .panel:nth-child(3n){animation-duration:.32s;animation-delay:.05s}
+  .grid.editing .panel.dragging{opacity:.5;animation:none;cursor:grabbing}
+  
+  .panel-edit-overlay{position:absolute;inset:0;background:rgba(5,15,30,.82);backdrop-filter:blur(10px);border-radius:inherit;z-index:90;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;opacity:0;pointer-events:none;transition:opacity .25s ease}
+  .grid.editing .panel:not(.dashboard-instances) .panel-edit-overlay{opacity:1;pointer-events:auto}
+  
+  .widget-controls{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:18px;backdrop-filter:blur(8px)}
+  .widget-controls-title{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;opacity:.7}
+  .widget-sizes{display:flex;gap:6px}
+  .widget-size-btn{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#fff;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:800;cursor:pointer;transition:all .2s}
+  .widget-size-btn:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3)}
+  .widget-size-btn.active{background:#007aff;border-color:#007aff;box-shadow:0 0 10px rgba(0,122,255,.4)}
+  .widget-drag-handle{font-size:22px;color:rgba(255,255,255,.6);cursor:grab;padding:4px}
+  .widget-toggle-btn{background:rgba(220,38,38,.85);color:white;border:none;border-radius:8px;padding:6px 12px;font-size:10px;font-weight:800;cursor:pointer}
+  
+  @keyframes jiggle{
+    0%{transform:rotate(-0.5deg)}
+    50%{transform:rotate(0.5deg)}
+    100%{transform:rotate(-0.5deg)}
+  }
+  @media(max-width:900px){
+    .grid{grid-template-columns:minmax(0,1fr)}
+    .panel[data-size="S"],.panel[data-size="M"],.panel[data-size="L"],.panel[data-size="XL"]{grid-column:1 / -1;grid-row:auto}
+    .grid.editing .panel{animation:none !important}
+  }
+  
+  /* Adaptivity styles for size S widgets */
+  .panel[data-size="S"] .tab-label{display:none}
+  .panel[data-size="S"] .tab-icon{font-size:24px !important}
+  .panel[data-size="S"] #p-backup-desc{display:none}
+  .panel[data-size="S"] #github-desc{display:none}
+
+  /* Collapsible Personalization with Bounce expansion */
+  .personalize-workspace{display:grid;grid-template-rows:0fr;opacity:0;pointer-events:none;transition:grid-template-rows 0.6s cubic-bezier(0.175,0.885,0.32,1.275),opacity 0.4s ease,margin-top 0.4s ease}
+  .personalize-workspace > div { overflow:hidden; min-height:0; }
+  .personalize-workspace:not(.collapsed){grid-template-rows:1fr;opacity:1;pointer-events:auto;margin-top:16px;animation:bounceExpand 0.55s cubic-bezier(0.175,0.885,0.32,1.275) forwards}
+  @keyframes bounceExpand{
+    0%{transform:scale(0.96) translateY(-8px);opacity:0}
+    70%{transform:scale(1.01) translateY(2px);opacity:0.9}
+    100%{transform:scale(1) translateY(0);opacity:1}
+  }
+  @media(max-width:750px){.hero{flex-direction:column;text-align:center}.hero-left{flex-direction:column}}
+  @media(max-width:750px){.hero .lang-pill{align-self:center;margin-inline:auto}.hero-left{width:100%;align-items:center}}
+
+  .stack{display:grid;gap:24px}
+  .panel{padding:28px;position:relative;overflow:hidden}
+  .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+  .panel h2{margin:0;font-size:14px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--primary-color,#007aff);opacity:0.95}
+
+  /* Access settings stay quiet until the user needs to manage them. */
+  .access-panel { padding: 22px 24px; overflow-y:auto; max-height:60vh; -webkit-overflow-scrolling:touch; }
+  .access-panel .panel-head { margin-bottom: 12px; }
+  .access-summary { font-size: 12px; opacity: .72; }
+  .access-actions { display:flex; gap:10px; flex-wrap:wrap; }
+  .access-actions button { flex:0 1 auto; padding:8px 12px; font-size:11px; }
+  .access-actions button.active { background:var(--primary-color,#007aff); color:#fff; border-color:transparent; }
+  .access-section { display:block; min-width:0; margin-bottom:24px; }
+  .access-section h3 { font-size:12px; font-weight:900; opacity:.8; margin:0 0 10px; text-transform:uppercase; }
+  .access-panel .user-card { padding:10px 12px; border-radius:12px; }
+  .github-star-action {
+    display:inline-flex;align-items:center;justify-content:center;gap:7px;
+    min-height:42px;padding:9px 16px;border-radius:14px;text-decoration:none;
+    color:var(--primary-text-color,#fff);font-size:12px;font-weight:850;
+    background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.055));
+    border:1px solid rgba(255,255,255,.16);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 9px 24px rgba(0,0,0,.16);
+    backdrop-filter:blur(18px) saturate(150%);
+    -webkit-backdrop-filter:blur(18px) saturate(150%);
+    transition:transform .2s ease,background .2s ease,box-shadow .2s ease;
+  }
+  .github-star-action:hover { transform:translateY(-1px);background:rgba(255,255,255,.18);box-shadow:0 12px 28px rgba(0,0,0,.20); }
+  @media(max-width:600px){ .access-panel{padding:20px}.access-actions{width:100%}.access-actions button{flex:1} }
+
+  /* Personalization inside instances */
+  .personalize-row { display: flex; gap: 14px; align-items: center; margin-top: 18px; padding: 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 18px; flex-wrap: wrap; }
+  .personalize-row .setting-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-bottom: 4px; }
+
+  /* Mode Reorganization Styles — HORIZONTAL */
+  .mode-grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+  @media(max-width:900px){ .mode-grid-layout { grid-template-columns: 1fr; } }
+  .mode-section-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.025) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    border-radius: 20px !important;
+    padding: 18px !important;
+    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+  }
+  .mode-section-card:hover {
+    border-color: rgba(255, 255, 255, 0.26) !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.04) 100%) !important;
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
+    transform: translateY(-2px) !important;
+  }
+  .mode-section-card:hover { border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); }
+  .mode-section-title { font-size: 13px; font-weight: 800; color: var(--primary-color, #007aff); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+  .mode-sensor-grid { color: var(--primary-text-color, #fff); }
+  .mode-sensor-none { color: var(--primary-text-color, rgba(255,255,255,0.5)); opacity: 0.6; font-size: 13px; }
+  .mode-section-card span, .mode-section-card label, .mode-section-card .input-label { color: var(--primary-text-color, #fff); }
+
+  .sensor-pill { background: var(--pill-bg, rgba(255,255,255,0.06)); color: var(--pill-text, #fff); border: 1px solid var(--pill-border, rgba(255,255,255,0.1)); padding: 8px 14px; border-radius: 14px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; transition: all 0.2s; max-width: 100%; box-sizing: border-box; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+  @keyframes argus-blink-red { 0%,100%{box-shadow:0 0 0 0 rgba(255,50,50,0);background:var(--pill-bg,rgba(255,255,255,0.06))} 50%{box-shadow:0 0 0 6px rgba(255,50,50,0.25);background:rgba(255,50,50,0.15)} }
+  .sensor-pill.siren-active   { animation: argus-blink-red 1.2s ease-in-out infinite; border-color: rgba(255,82,82,0.5) !important; }
+  .sensor-pill.triggered-sensor { animation: argus-blink-red 0.9s ease-in-out infinite; border-color: rgba(255,82,82,0.6) !important; }
+  .icon-btn { background: none; border: none; padding: 4px; color: inherit; opacity: 0.6; cursor: pointer; transition: opacity 0.2s, transform 0.15s; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
+  .icon-btn:active { transform: scale(0.9); }
+
+  #mode-status { opacity: 0; transition: opacity .35s; }
+  #mode-status.show { opacity: 1; }
+  #mode-status.ok  { color: #4caf50; }
+  #mode-status.err { color: #f44336; }
+
+  .icon-btn:hover { opacity: 1; background: rgba(255,255,255,0.08); }
+  .icon-btn.active { color: #fb8c00; opacity: 1; }
+
+  .input-group { display: flex; flex-direction: column; gap: 6px; }
+  .times-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:end}
+  .time-field{min-width:0;display:flex;flex-direction:column;justify-content:flex-end;height:100%}
+  .time-field .input-label{min-height:34px;display:flex;align-items:flex-end;line-height:1.2;margin-bottom:6px;padding-bottom:2px}
+  .time-field input{width:100%;height:44px!important;padding:8px 12px!important;border-radius:12px!important;box-sizing:border-box!important;margin:0!important;font-size:14px!important}
+  .entry-sensor-list{min-height:44px;margin-top:12px!important;display:flex;flex-wrap:wrap;align-items:center;border:1px solid rgba(255,255,255,.10)!important;background:rgba(255,255,255,.03)!important;border-radius:12px!important;padding:10px;gap:8px}
+  .instance-activity-strip{display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr));gap:8px;align-items:center;margin:4px 0 16px;padding:10px 12px;border:1px solid rgba(255,255,255,.1);border-radius:18px;background:rgba(5,13,25,.25);backdrop-filter:blur(18px) saturate(135%);-webkit-backdrop-filter:blur(18px) saturate(135%)}.instance-activity-title{font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;opacity:.62;padding-right:6px}.instance-activity-item{min-width:0;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.86}.instance-activity-item time{opacity:.55;margin-right:4px;font-variant-numeric:tabular-nums}
+  .mode-mqtt-row{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 14px!important;min-height:44px;border-radius:12px!important;background:rgba(255,255,255,.03)!important;border:1px solid rgba(255,255,255,.10)!important}
+  .mode-mqtt-row input{margin:0;accent-color:var(--primary-color,#007aff)}
+  .input-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-left: 4px; }
+
+  /* Intelligent Entry Card */
+  .entry {
+    position: relative;
+    overflow: hidden;
+    border-radius: 28px !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%) !important;
+    backdrop-filter: blur(32px) saturate(170%) brightness(1.08) !important;
+    -webkit-backdrop-filter: blur(32px) saturate(170%) brightness(1.08) !important;
+    margin-bottom: 16px;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  .entry:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 20px 48px rgba(0,0,0,.3)}
+  .entry::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:inherit;background:linear-gradient(120deg,rgba(255,255,255,.14),transparent 22%,transparent 74%,rgba(255,255,255,.05));mix-blend-mode:soft-light}
+  .entry-status-ribbon{position:absolute;top:20px;left:20px;z-index:5;display:flex;align-items:center;gap:9px;max-width:calc(100% - 260px);padding:8px 12px;border:1px solid color-mix(in srgb,var(--entry-accent) 55%,rgba(255,255,255,.2));border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--entry-accent) 28%,rgba(8,15,28,.76)),rgba(7,14,25,.56));box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 8px 24px color-mix(in srgb,var(--entry-accent) 22%,transparent);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);color:#fff}
+  .entry-status-orb{width:10px;height:10px;flex:0 0 auto;border-radius:50%;background:var(--entry-accent);box-shadow:0 0 12px var(--entry-accent)}
+  .entry-status-copy{display:flex;flex-direction:column;min-width:0}.entry-status-kicker{font-size:8px;line-height:1;text-transform:uppercase;letter-spacing:.12em;opacity:.72;font-weight:800}.entry-status-name{font-size:13px;line-height:1.2;font-weight:900;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.entry-status-event{font-size:9px;line-height:1.2;opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:290px}
+  .entry-bg{position:absolute;inset:0;z-index:1;background-size:cover;background-position:center;transition:opacity 0.5s ease}
+  .entry-bg img{width:100%;height:100%;object-fit:cover;opacity:0.6}
+  .entry-content{position:relative;z-index:2;flex:1;padding:20px 140px 20px 20px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.2) 0%, transparent 60%)}
+  /* The live instance is the console: real controls, real sensors and one
+     clear disarm keypad. Decorative dashboard cards never sit above it. */
+  .security-console{display:flex;flex-wrap:wrap;justify-content:space-around;align-items:center;gap:32px;padding:32px 24px 24px;background:linear-gradient(90deg,rgba(3,10,20,.40),rgba(3,10,20,.08) 50%,rgba(3,10,20,.36))}
+  .security-console .entry-icon{order:2;flex:0 0 160px!important;min-height:150px!important;margin:0!important;display:flex;justify-content:center;align-items:center;animation:float-icon 5s ease-in-out infinite}.security-console .entry-icon svg{max-width:150px!important;width:100%}
+  .security-console .liquid-stack{order:1;flex:1 1 250px;max-width:320px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.security-console .liquid-btn{min-height:62px;justify-content:center;text-align:center;padding:10px;font-size:12px;gap:8px;white-space:nowrap}.security-console .liquid-btn span:last-child{min-width:0;overflow:hidden;text-overflow:ellipsis}.security-console .btn-disarm,.security-console .btn-sos{grid-column:1/-1}
+  .console-sensors{order:3;flex:1 1 300px;max-width:400px;display:grid;gap:14px;align-content:center}.console-sensor{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;padding:13px 16px;border:1px solid rgba(255,255,255,.15);border-radius:18px;background:linear-gradient(100deg,rgba(36,188,129,.22),rgba(10,27,38,.58));backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 8px 22px rgba(0,0,0,.22)}.console-sensor.open{background:linear-gradient(100deg,rgba(235,74,67,.30),rgba(34,14,23,.62));border-color:rgba(255,102,92,.7)}.console-sensor-icon{font-size:20px}.console-sensor-name{font-weight:850;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.console-sensor-state{font-size:11px;font-weight:900;text-transform:uppercase;color:#75f4b0}.console-sensor.open .console-sensor-state{color:#ff968b}.console-empty{padding:24px;text-align:center;border:1px dashed rgba(255,255,255,.22);border-radius:18px;opacity:.75}
+  .console-keypad{flex:1 1 220px;max-width:280px;padding:18px;border:1px solid rgba(255,255,255,.16);border-radius:24px;background:rgba(5,15,30,0.4);backdrop-filter:blur(16px);display:grid;gap:12px}.console-keypad-title{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;text-align:center}.console-keypad-close{position:absolute;top:8px;right:10px;width:28px;height:28px;border:0;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;font-size:20px;line-height:1;cursor:pointer}.console-keypad{position:relative}.console-pin-display{width:100%;box-sizing:border-box;padding:11px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(4,14,26,.46);color:#fff;text-align:center;font-size:20px;letter-spacing:.35em}.console-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;place-items:center}.console-pad button{width:100%;aspect-ratio:1/1;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:linear-gradient(145deg,rgba(165,220,255,.24),rgba(20,45,66,.62));color:#fff;font-size:17px;font-weight:800;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 6px 14px rgba(0,0,0,.25);cursor:pointer;display:flex;align-items:center;justify-content:center}.console-pad .console-enter{border-radius:16px;aspect-ratio:auto;height:100%;color:#7ff8c1;border-color:rgba(74,230,157,.65)}.console-keypad small{text-align:center;opacity:.7}.console-pin-status{min-height:1.2em;margin:0;color:#ffb4ac;opacity:0;transition:opacity .18s ease}.console-pin-status.visible{opacity:1}
+  /* ── Console HUD header (inside the flex layout, not absolute) ──────── */
+  .console-hud{order:0;flex:0 0 100%;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(0,0,0,0.25);border-radius:14px;backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);gap:12px;flex-wrap:wrap}
+  .console-hud-loc{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:1.2px;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .console-hud-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+
+  /* ── System Status Badge ─────────────────────────────── */
+  .console-system-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-weight: 900;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border: 1.5px solid currentColor;
+    transition: all 0.35s ease;
+  }
+  .console-system-badge--disarmed {
+    color: #6ee7b7;
+    background: rgba(16,185,129,0.18);
+    border-color: rgba(16,185,129,0.60);
+    box-shadow: 0 0 16px rgba(16,185,129,0.25), inset 0 1px 0 rgba(255,255,255,0.18);
+  }
+  .console-system-badge--armed_home {
+    color: #fde68a;
+    background: rgba(251,140,0,0.20);
+    border-color: rgba(251,140,0,0.60);
+    box-shadow: 0 0 16px rgba(251,140,0,0.25), inset 0 1px 0 rgba(255,255,255,0.18);
+  }
+  .console-system-badge--armed_away {
+    color: #fca5a5;
+    background: rgba(229,57,53,0.20);
+    border-color: rgba(229,57,53,0.60);
+    box-shadow: 0 0 16px rgba(229,57,53,0.25), inset 0 1px 0 rgba(255,255,255,0.18);
+  }
+  .console-system-badge--armed_night {
+    color: #bfdbfe;
+    background: rgba(30,136,229,0.20);
+    border-color: rgba(30,136,229,0.60);
+    box-shadow: 0 0 16px rgba(30,136,229,0.25), inset 0 1px 0 rgba(255,255,255,0.18);
+  }
+  .console-system-badge--armed_vacation {
+    color: #e9d5ff;
+    background: rgba(156,39,176,0.20);
+    border-color: rgba(156,39,176,0.60);
+    box-shadow: 0 0 16px rgba(156,39,176,0.25), inset 0 1px 0 rgba(255,255,255,0.18);
+  }
+  .console-system-badge--triggered {
+    color: #fff;
+    background: rgba(239,68,68,0.35);
+    border-color: rgba(239,68,68,0.80);
+    box-shadow: 0 0 24px rgba(239,68,68,0.60), inset 0 1px 0 rgba(255,255,255,0.25);
+    animation: badgeFlash 0.8s infinite ease-in-out;
+  }
+  @keyframes badgeFlash {
+    0%,100% { opacity:1; box-shadow:0 0 24px rgba(239,68,68,.8); }
+    50%      { opacity:0.7; box-shadow:0 0 8px rgba(239,68,68,.2); }
+  }
+  /* arming state reuses armed_home styling with pulsing */
+  .console-system-badge--arming {
+    color: #fde68a;
+    background: rgba(251,140,0,0.20);
+    border-color: rgba(251,140,0,0.60);
+    animation: badgeArming 1.05s ease-in-out infinite;
+  }
+  @keyframes badgeArming {
+    0%,100% { opacity:0.65; } 50% { opacity:1; }
+  }
+  .console-hud-time{font-size:16px;font-weight:800;letter-spacing:-.02em}
+  .console-hud-temp{font-size:11px;opacity:.8;font-weight:700}
+  .console-hud-temps{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .console-hud-tpill{font-size:10px;font-weight:800;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12)}
+  /* Hide the floating absolute HUD inside security-console to avoid overlap with sensor list */
+  .security-console .hud,.ios-fullscreen .entry-content.security-console ~ .hud,.entry-content.security-console + .hud{display:none!important}
+  /* The .hud inside the article gets hidden when the content is a security-console */
+  .entry:has(.security-console) .hud{display:none!important}
+  @media(max-width:950px){.grid{grid-template-columns:1fr;grid-template-areas:"instances" "activity" "modes" "access" "automations" "backup" "github"}.security-console{flex-direction:column;padding:10px 18px 24px;gap:20px}.security-console .entry-icon{order:2!important;flex:0 0 auto!important;min-height:130px!important}.security-console .liquid-stack{order:3!important;width:100%;max-width:320px}.security-console .console-sensors{order:4!important;width:100%;max-width:320px}.console-hud{order:1!important}.console-keypad{width:100%;max-width:320px}}
+
+  /* Sensor column */
+  .sensor-column{position:absolute;right:0;top:0;bottom:0;width:auto;max-width:40%;z-index:4;display:flex;flex-direction:column;gap:7px;align-items:flex-end;justify-content:center;padding:12px 12px 12px 0;pointer-events:none}
+  .sensor-chip{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:16px;font-size:10px;font-weight:800;letter-spacing:.2px;max-width:148px;backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 7px 18px rgba(0,0,0,.24);transition:transform .2s,box-shadow .2s}
+  .sensor-chip-text{display:flex;flex-direction:column;min-width:0;flex:1}
+  .sensor-chip-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .sensor-chip-state{font-size:8px;letter-spacing:.08em;text-transform:uppercase;opacity:.82;margin-top:2px}
+  .sensor-chip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+  .sensor-chip-battery{grid-column:1 / -1;margin-top:5px;padding-top:5px;border-top:1px solid currentColor;font-size:9px;line-height:1;opacity:.9}
+  .sensor-chip--open{background:linear-gradient(135deg,rgba(255,149,0,.9),rgba(255,96,0,.64));color:#fff}
+  .sensor-chip--open .sensor-chip-dot{background:#fff;box-shadow:0 0 8px rgba(255,255,255,.95)}
+  .sensor-chip--triggered{background:linear-gradient(135deg,rgba(255,69,58,.96),rgba(190,30,35,.82));animation:chip-pulse .9s ease-in-out infinite}
+  .sensor-chip--closed{background:rgba(15,23,32,.62);color:#eef8f1}
+  .sensor-chip--closed .sensor-chip-dot{background:#34c759;box-shadow:0 0 8px rgba(52,199,.9)}
+  .sensor-chip-battery.low{color:#ffd166;font-weight:900}
+  .buzz-orange{position:relative;border-color:rgba(255,171,64,.92)!important;background:linear-gradient(135deg,rgba(255,149,0,.38),rgba(255,109,0,.16))!important;box-shadow:0 0 0 1px rgba(255,183,77,.45),0 0 25px rgba(255,145,0,.55),inset 0 1px 0 rgba(255,255,255,.3)!important;animation:buzz-orange 1.05s cubic-bezier(.36,.07,.19,.97) infinite}
+  .buzz-orange::after{content:'⚠';margin-left:auto;color:#fff3d1;font-size:14px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.28))}
+  @keyframes buzz-orange{0%,100%{transform:translateX(0) rotate(0)}12%{transform:translateX(-2px) rotate(-.65deg)}25%{transform:translateX(3px) rotate(.8deg)}40%{transform:translateX(-3px) rotate(-.8deg)}55%{transform:translateX(2px) rotate(.55deg)}70%{transform:translateX(-1px) rotate(-.25deg)}}
+  @keyframes chip-pulse{0%,100%{opacity:1}50%{opacity:0.55}}
+
+  /* HUD Overlay */
+  .hud{position:absolute;top:20px;right:24px;text-align:right;z-index:3;color:var(--hud-text-color);text-shadow:var(--text-shadow);display:flex;flex-direction:column;gap:4px}
+  .hud-loc{font-size:13px;font-weight:900;text-transform:uppercase;opacity:1;letter-spacing:1.5px;background:var(--hud-bg);padding:4px 12px;border-radius:10px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.08);align-self:flex-end}
+  .hud-data{font-size:20px;font-weight:800;letter-spacing:-0.02em;background:var(--hud-bg);padding:6px 14px;border-radius:12px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.08);display:inline-flex;align-items:center;gap:8px;align-self:flex-end}
+  .hud-data i{font-size:14px;opacity:0.7;font-style:normal}
+  .hud-temperatures{display:flex;justify-content:flex-end;gap:5px;flex-wrap:wrap}
+  .hud-temperature{padding:4px 8px;border-radius:999px;background:var(--hud-bg);border:1px solid rgba(255,255,255,.09);font-size:10px;font-weight:800;backdrop-filter:blur(8px)}
+  .weather-eclipse{position:absolute;left:22px;bottom:18px;z-index:2;padding:7px 11px;border-radius:14px;background:rgba(18,10,28,.52);border:1px solid rgba(255,192,92,.36);backdrop-filter:blur(10px);font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.25);pointer-events:none}
+
+  /* Liquid Glass Buttons */
+  .liquid-stack{display:grid;gap:10px}
+  .liquid-btn {
+    border: 1px solid rgba(255, 255, 255, 0.20) !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.04) 100%) !important;
+    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;
+    color: #ffffff !important;
+    padding: 14px 18px;
+    border-radius: 18px !important;
+    font-size: 13.5px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
+    transition: all 0.22s cubic-bezier(0.25, 0.8, 0.25, 1);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    letter-spacing: 0.5px;
+  }
+  .liquid-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.08) 100%) !important;
+    border-color: rgba(255, 255, 255, 0.36) !important;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+    transform: translateY(-2px);
+  }
+  .btn-sos {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.32) 0%, rgba(185, 28, 28, 0.45) 100%) !important;
+    border: 1px solid rgba(252, 165, 165, 0.45) !important;
+    box-shadow: 0 10px 28px rgba(239, 68, 68, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+  }
+  .btn-sos:hover {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.48) 0%, rgba(185, 28, 28, 0.65) 100%) !important;
+    box-shadow: 0 14px 34px rgba(239, 68, 68, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+    transform: translateY(-2px);
+  }
+  .mode-btn-icon{width:26px;height:26px;padding:5px;border-radius:10px;flex:0 0 auto;background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 4px 10px rgba(0,0,0,.16);filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}
+  .liquid-btn.active .mode-btn-icon{background:linear-gradient(135deg,rgba(255,255,255,.36),rgba(255,255,255,.12));border-color:rgba(255,255,255,.42)}
+  .btn-sos .mode-btn-icon{width:28px;height:28px;border-radius:11px;background:rgba(255,255,255,.17)}
+  .liquid-btn:not(.btn-home):not(.btn-away):not(.btn-night):not(.btn-vacation):not(.btn-disarm):not(.btn-sos):hover{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.2)}
+  .liquid-btn.active{background:var(--btn-bg, rgba(255,255,255,0.2));border-color:rgba(255,255,255,0.4);box-shadow:0 8px 24px var(--btn-shadow, rgba(255,255,255,0.12))}
+  .liquid-btn:active:not(:disabled) { transform: scale(0.96); }
+  .liquid-btn i{font-size:16px}
+
+  .btn-home {
+    background: linear-gradient(135deg, rgba(251, 140, 0, 0.20) 0%, rgba(251, 140, 0, 0.06) 100%) !important;
+    border: 1px solid rgba(251, 140, 0, 0.38) !important;
+    color: #ffe0b2 !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  }
+  .btn-home.active {
+    background: linear-gradient(135deg, #fb8c00 0%, #d97706 100%) !important;
+    border: 1px solid rgba(254, 215, 170, 0.85) !important;
+    box-shadow: 0 14px 36px rgba(251, 140, 0, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+  }
+
+  .btn-away {
+    background: linear-gradient(135deg, rgba(229, 57, 53, 0.20) 0%, rgba(229, 57, 53, 0.06) 100%) !important;
+    border: 1px solid rgba(229, 57, 53, 0.38) !important;
+    color: #ffcdd2 !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  }
+  .btn-away.active {
+    background: linear-gradient(135deg, #e53935 0%, #b91c1c 100%) !important;
+    border: 1px solid rgba(254, 202, 202, 0.85) !important;
+    box-shadow: 0 14px 36px rgba(229, 57, 53, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+  }
+
+  .btn-night {
+    background: linear-gradient(135deg, rgba(30, 136, 229, 0.20) 0%, rgba(30, 136, 229, 0.06) 100%) !important;
+    border: 1px solid rgba(30, 136, 229, 0.38) !important;
+    color: #bbdefb !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  }
+  .btn-night.active {
+    background: linear-gradient(135deg, #1e88e5 0%, #1d4ed8 100%) !important;
+    border: 1px solid rgba(191, 219, 254, 0.85) !important;
+    box-shadow: 0 14px 36px rgba(30, 136, 229, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+  }
+
+  .btn-vacation {
+    background: linear-gradient(135deg, rgba(156, 39, 176, 0.20) 0%, rgba(156, 39, 176, 0.06) 100%) !important;
+    border: 1px solid rgba(156, 39, 176, 0.38) !important;
+    color: #e1bee7 !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  }
+  .btn-vacation.active {
+    background: linear-gradient(135deg, #9c27b0 0%, #7e22ce 100%) !important;
+    border: 1px solid rgba(245, 208, 254, 0.85) !important;
+    box-shadow: 0 14px 36px rgba(156, 39, 176, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+  }
+
+  .btn-disarm {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(16, 185, 129, 0.05) 100%) !important;
+    border: 1px solid rgba(16, 185, 129, 0.35) !important;
+    color: #a7f3d0 !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+    margin-top: 4px;
+  }
+  .btn-disarm.active {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    border: 1px solid rgba(167, 243, 208, 0.85) !important;
+    box-shadow: 0 14px 36px rgba(16, 185, 129, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+  }
+
+  .btn-sos {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.22) 0%, rgba(185, 28, 28, 0.08) 100%) !important;
+    border: 1px solid rgba(252, 165, 165, 0.35) !important;
+    color: #fca5a5 !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  }
+  .btn-sos.active, .btn-sos.flashing {
+    animation: sosFlashingPulse 0.8s infinite ease-in-out !important;
+  }
+
+  @keyframes sosFlashingPulse {
+    0%, 100% {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+      border-color: #fca5a5 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 32px rgba(239, 68, 68, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+      transform: scale(1.02);
+    }
+    50% {
+      background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%) !important;
+      border-color: rgba(239, 68, 68, 0.5) !important;
+      color: rgba(255, 255, 255, 0.8) !important;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+      transform: scale(0.98);
+    }
+  }
+  /* btn-disarm visual is handled by .btn-disarm and .btn-disarm.active above */
+
+  /* ── iOS/Android Fullscreen: cubre pantalla completa sin clipping ── */
+  .ios-fullscreen {
+    position: fixed !important;
+    inset: 0 !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100vw !important; height: 100dvh !important;
+    max-width: 100vw !important; max-height: 100dvh !important;
+    min-height: 100dvh !important;
+    margin: 0 !important; border-radius: 0 !important;
+    z-index: 999999 !important;
+    display: flex !important; flex-direction: column !important;
+    background: #000 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    /* Notch / home-indicator safe areas (iOS/Android) */
+    padding-top: env(safe-area-inset-top, 0px) !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+    padding-left: env(safe-area-inset-left, 0px) !important;
+    padding-right: env(safe-area-inset-right, 0px) !important;
+  }
+  @media(min-width:900px) {
+    .ios-fullscreen {
+      /* Remove floating modal override so it is truly fullscreen on iPad/Tablet */
+      inset: 0 !important;
+      left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important;
+      width: 100vw !important; height: 100vh !important;
+      max-width: 100vw !important;
+      margin: 0 !important; border-radius: 0 !important;
+      border: 1px solid rgba(255,255,255,0.12) !important;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.8) !important;
+      overflow: hidden !important;
+      -webkit-mask-image: -webkit-radial-gradient(white, black) !important;
+      padding: 0 !important;
+    }
+  }
+  .ios-fullscreen .entry-content { grid-template-columns: 320px 1fr !important; padding: 60px !important; gap: 60px !important; height: auto !important; align-items: center !important; background: radial-gradient(circle at 20% 50%, rgba(0,0,0,0.5) 0%, transparent 80%) !important; }
+  .ios-fullscreen .liquid-btn { padding: 16px 20px !important; font-size: 16px !important; border-radius: 20px !important; gap: 12px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.4) !important; }
+  .ios-fullscreen .liquid-btn i { font-size: 24px !important; }
+  .ios-fullscreen .hud { top: 60px !important; right: 60px !important; scale: 1.4; transform-origin: top right; }
+  .ios-fullscreen .sensor-column { max-width: 45% !important; padding-right: 60px !important; }
+  .ios-fullscreen .sensor-chip { font-size: 14px !important; padding: 10px 16px !important; max-width: 260px !important; }
+
+  .entry-icon{display:flex;justify-content:center;align-items:center;perspective:1000px;min-height:160px}
+  .entry-icon svg{width:100%;height:auto;max-width:280px;filter:drop-shadow(0 0 25px rgba(255,255,255,0.12));animation:float-icon 5s ease-in-out infinite;transition:max-width 0.4s ease}
+  .ios-fullscreen .entry-icon svg{max-width:650px;filter:drop-shadow(0 0 60px rgba(255,255,255,0.3))}
+  @keyframes float-icon{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-12px) rotate(1deg)}}
+
+  /* Phone layout: controls must never sit below the HUD or be hidden behind
+     the artwork. Sensor status becomes a readable section beneath the modes. */
+  @media(max-width:700px){
+    .hero-context{width:100%;margin:6px 0 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}.hero-clock{align-items:center;justify-content:center;text-align:center;border-right:0;padding-right:0}.hero-clock strong{font-size:1.35rem;text-align:center}.hero-clock span{text-align:center}.hero-pills{justify-content:center}.hero-pill{padding:6px 8px;font-size:9px}
+    .entry{min-height:0;border-radius:24px}
+    .instance-activity-strip{grid-template-columns:1fr;gap:5px;margin-bottom:12px;padding:10px}.instance-activity-item:nth-of-type(n+3){display:none}
+    .entry-status-ribbon{top:58px;left:14px;max-width:calc(100% - 28px);padding:6px 9px}.entry-status-name{font-size:11px}.entry-status-event{display:none}
+    .entry-content{display:grid;grid-template-columns:minmax(0,1fr);padding:78px 14px 76px;gap:14px;align-items:start;background:linear-gradient(180deg,rgba(0,0,0,.32),rgba(0,0,0,.10) 45%,rgba(0,0,0,.28))}
+    .liquid-stack{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%}
+    .liquid-btn{min-height:52px;padding:10px 11px;justify-content:center;text-align:center;font-size:12px;line-height:1.1;letter-spacing:.25px;border-radius:16px}
+    .liquid-stack .btn-disarm,.liquid-stack .btn-sos{grid-column:1/-1}
+    .liquid-stack .btn-sos{min-height:58px;margin-top:2px}
+    .entry-icon{display:none}
+    .hud{top:12px;left:14px;right:14px;display:flex;flex-direction:row;align-items:flex-start;justify-content:space-between;gap:8px;text-align:left}
+    .hud-loc{align-self:auto;max-width:58%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;letter-spacing:1px;padding:6px 9px}
+    .hud-data{align-self:auto;font-size:15px;padding:5px 9px;gap:5px}
+    .hud-data i{font-size:11px}
+    .hud-temperatures{justify-content:flex-start;position:absolute;top:42px;left:0}
+    .hud-temperature{font-size:9px;padding:3px 6px}
+    .weather-eclipse{left:14px;bottom:14px;padding:5px 7px;font-size:8px}
+    .sensor-column{position:static;grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;width:auto;padding:0;overflow:visible;pointer-events:auto;align-items:stretch}
+    .sensor-chip{max-width:none;min-width:0;padding:8px 9px;font-size:10px;border-radius:13px}
+    .entry-fs{bottom:14px!important;right:14px!important;padding:8px 11px!important;font-size:15px!important}
+  }
+
+  /* Fullscreen on phones has its own compact layouts for both orientations. */
+  /* dvh handled in base .ios-fullscreen rule */
+  @media(max-width:700px) and (orientation:portrait){
+    .ios-fullscreen .entry-content{grid-template-columns:minmax(0,1fr)!important;padding:76px 16px 22px!important;gap:14px!important;overflow-y:auto!important;align-content:start!important}
+    .ios-fullscreen .liquid-stack{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+    .ios-fullscreen .liquid-btn{min-height:50px!important;padding:10px!important;font-size:12px!important;border-radius:16px!important;gap:6px!important}
+    .ios-fullscreen .liquid-stack .btn-disarm,.ios-fullscreen .liquid-stack .btn-sos{grid-column:1/-1}
+
+    .ios-fullscreen .entry-icon{display:none!important}
+    .ios-fullscreen .sensor-column{position:static!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;width:auto!important;padding:0!important;gap:8px!important}
+    .ios-fullscreen .sensor-chip{max-width:none!important;padding:8px 9px!important;font-size:10px!important}
+    .ios-fullscreen .hud{top:12px!important;left:16px!important;right:16px!important;scale:1!important;transform:none!important}
+  }
+  @media(max-width:900px) and (orientation:landscape){
+    .ios-fullscreen .entry-content{grid-template-columns:minmax(210px,34vw) minmax(0,1fr)!important;padding:54px 22px 18px!important;gap:20px!important;align-items:center!important}
+    .ios-fullscreen .liquid-stack{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
+    .ios-fullscreen .liquid-btn{min-height:42px!important;padding:8px!important;font-size:11px!important;border-radius:14px!important;gap:5px!important}
+    .ios-fullscreen .liquid-stack .btn-disarm,.ios-fullscreen .liquid-stack .btn-sos{grid-column:1/-1}
+    .ios-fullscreen .liquid-stack .btn-sos{min-height:46px!important}
+    .ios-fullscreen .entry-icon svg{max-width:min(42vw,300px)!important}
+    .ios-fullscreen .hud{top:10px!important;right:18px!important;scale:1!important}
+    .ios-fullscreen .sensor-column{max-width: 40% !important;padding-right:16px!important;gap:5px!important}
+    .ios-fullscreen .sensor-chip{max-width:180px!important;padding:6px 8px!important;font-size:10px!important}
+  }
+  /* The active console owns its fullscreen layout. Legacy entry grid rules
+     must not redistribute the controls into empty corners. */
+  /* Fullscreen security-console: modos izquierda, escudo centro, sensores derecha */
+  .ios-fullscreen .entry-content.security-console{display:flex!important;flex-wrap:nowrap!important;justify-content:center!important;align-items:center!important;gap:32px!important;padding:50px 48px 36px!important;overflow:auto!important;height:100%!important;max-height:100vh!important;max-height:100dvh!important;box-sizing:border-box!important;-webkit-overflow-scrolling:touch!important}
+  .ios-fullscreen .entry-content.security-console .liquid-stack{order:1!important;flex:0 1 340px!important;min-width:240px!important;max-width:360px!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-self:center!important}
+  .ios-fullscreen .entry-content.security-console .entry-icon{order:2!important;flex:0 0 180px!important;min-height:160px!important;margin:0!important;display:flex!important;justify-content:center!important;align-items:center!important}
+  .ios-fullscreen .entry-content.security-console .console-sensors{order:3!important;flex:0 1 340px!important;min-width:220px!important;max-width:380px!important;align-self:center!important}
+  .ios-fullscreen .entry-content.security-console .console-keypad{order:4!important;flex:0 0 240px!important;width:240px!important;max-width:260px!important}
+  @media(max-width:900px){.ios-fullscreen .entry-content.security-console{flex-wrap:wrap!important;padding:80px 20px 24px!important;gap:18px!important;align-content:flex-start!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important}.ios-fullscreen .entry-content.security-console .entry-icon{order:1!important;flex:0 0 auto!important;min-height:110px!important;display:flex!important}.ios-fullscreen .entry-content.security-console .liquid-stack{order:2!important;flex:0 0 100%!important;width:100%!important;max-width:380px!important}.ios-fullscreen .entry-content.security-console .console-sensors{order:3!important;flex:0 0 100%!important;width:100%!important;max-width:380px!important}.ios-fullscreen .entry-content.security-console .console-keypad{order:4!important;flex:0 0 100%!important;width:100%!important;max-width:320px!important;padding:14px!important}}
+
+  .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+  .badge.armed_away,.badge.armed_vacation{background:rgba(229,57,53,.12);color:var(--error-color,#e53935)}
+  .badge.armed_home,.badge.armed_night{background:rgba(251,140,0,.12);color:#fb8c00}
+  .badge.disarmed{background:rgba(67,160,71,.12);color:var(--success-color,#43a047)}
+  .badge.triggered{background:rgba(229,57,53,.2);color:var(--error-color,#e53935);animation:pulse 1s ease-in-out infinite}
+
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  .meta{font-size:12px;opacity:.5}
+  .setting-label{font-size:13px;font-weight:700;color:var(--primary-text-color);letter-spacing:0.01em;margin-bottom:2px;display:block}
+  .setting-sublabel{font-size:12px;font-weight:400;opacity:0.55;color:var(--primary-text-color);margin-bottom:6px;display:block}
+  .temp-alert-row{display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap}
+  .temp-alert-row input[type=number]{width:72px;padding:6px 8px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:inherit;font-size:13px;font-weight:700;text-align:center}
+  .temp-alert-status-ok{color:#43a047;font-size:12px}
+  .temp-alert-status-warn{color:#e53935;font-size:12px;font-weight:700}
+
+  /* Generic buttons */
+  button{border:0;border-radius:14px;padding:10px 18px;font:700 13px/1 'Outfit',Inter,system-ui,sans-serif;cursor:pointer;transition:background 0.2s,opacity .15s,transform .15s cubic-bezier(0.175, 0.885, 0.32, 1.275),box-shadow 0.2s}
+  button:active:not(:disabled){transform:scale(.94) translateY(1px)}
+  button.primary{background:var(--primary-color,#007aff);color:#fff;box-shadow:0 4px 12px rgba(0, 122, 255, 0.25)}
+  button.primary:hover{background:#0062cc}
+  button.ghost{background:rgba(255, 255, 255, 0.05);border:1px solid rgba(255, 255, 255, 0.08);color:var(--primary-text-color)}
+  button.ghost:hover{background:rgba(255, 255, 255, 0.1)}
+
+
+  /* FS button */
+  .fs-btn{background:rgba(255,255,255,0.05);padding:8px;border-radius:10px;font-size:16px}
+
+  /* Modal Fixes */
+  .modal-back{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;padding:20px;z-index:999999;backdrop-filter:blur(12px)}
+  .modal-back.open{display:flex}
+  .modal{width:min(400px,100%);max-height:85vh;overflow:hidden;display:grid;grid-template-rows:auto 1fr auto;gap:14px;padding:24px;border-radius:32px;background:rgba(22, 24, 38, 0.95);border:1px solid rgba(255,255,255,0.08);box-shadow:0 30px 100px rgba(0,0,0,0.6);backdrop-filter:blur(28px)}
+  .modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+  .modal-head h3{margin:0;font-size:20px;font-weight:800}
+  .modal-body{overflow:auto;padding:5px}
+  .modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:15px}
+  /* PIN modal */
+  .pm .modal{max-width:340px;min-height:unset;grid-template-rows:auto auto auto;background:rgba(22, 24, 38, 0.82) !important;backdrop-filter:blur(16px) saturate(140%) !important;-webkit-backdrop-filter:blur(16px) saturate(140%) !important;border:1px solid rgba(255, 255, 255, 0.12) !important;box-shadow:0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;border-radius:36px;padding:28px;display:flex;flex-direction:column;align-items:center;gap:16px}
+  .pin-input{font-size:28px;letter-spacing:10px;text-align:center;padding:12px;border-radius:16px;border:none;background:rgba(255,255,255,0.02);color:inherit;width:100%;outline:none;box-shadow:inset 0 1px 3px rgba(0,0,0,0.2)}
+  .pin-error{color:var(--error-color,#e53935);font-size:13px;min-height:18px;text-align:center}
+  .pin-grid{display:grid;grid-template-columns:repeat(3,68px);gap:16px;justify-content:center;margin-top:10px}
+  .pin-btn-round{width:68px;height:68px;border-radius:50% !important;border:1px solid rgba(255,255,255,0.1) !important;background:rgba(255,255,255,0.04) !important;color:#fff !important;font-size:24px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.2s, transform 0.15s, border-color 0.2s;box-shadow:0 4px 10px rgba(0,0,0,0.15);padding:0 !important;outline:none}
+  .pin-btn-round:hover{background:rgba(255,255,255,0.12) !important;border-color:rgba(255,255,255,0.2) !important}
+  .pin-btn-round:active{transform:scale(0.92) !important;background:rgba(255,255,255,0.2) !important}
+  .pin-btn-round.action-key{font-size:12px;font-weight:700;letter-spacing:0.3px;text-transform:uppercase;border-color:transparent !important;background:transparent !important;box-shadow:none}
+  .pin-btn-round.action-key:hover{background:rgba(255,255,255,0.05) !important}
+  .pin-btn-round.action-key.enter-key{color:#34c759 !important}
+  .pin-btn-round.action-key.delete-key{color:#ff3b30 !important}
+  /* User card */
+  .user-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.025) 100%) !important;
+    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.20) !important;
+    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  .user-card:hover {
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%) !important;
+    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+    transform: translateY(-2px);
+  }
+  .user-badge{display:inline-block;padding:3px 9px;border-radius:8px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;background:rgba(0,122,255,.12);color:var(--primary-color,#007aff)}
+  /* REEMPLAZA los colores neón por tokens legibles */
+  .user-badge.admin {
+    background: rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.92);
+    border: 1px solid rgba(255,255,255,0.18);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .user-badge.user {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.75);
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  /* Role label debajo del nombre */
+  .user-role-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);  /* muted, no neón */
+    margin-top: 2px;
+  }
+  /* Notif target chip */
+  .notif-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:rgba(67,160,71,.1);border:1px solid rgba(67,160,71,.2);font-size:12px;font-weight:700;color:var(--success-color,#43a047)}
+  .notif-chip button{padding:0;border:0;background:none;cursor:pointer;opacity:.65}
+  /* Triggered box */
+  .trig-box{padding:12px 14px;border-radius:14px;background:rgba(229,57,53,.08);border:1px dashed var(--error-color,#e53935);font-size:12px;font-weight:600;color:var(--error-color,#e53935)}
+  /* inputs */
+  input[type="text"], input[type="password"], input[type="number"], input[type="search"], select, input[type="datetime-local"], .glass-control {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.055));
+    color: var(--primary-text-color);
+    backdrop-filter: blur(18px) saturate(145%);
+    -webkit-backdrop-filter: blur(18px) saturate(145%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 8px 22px rgba(0, 0, 0, 0.12);
+    font: 700 13px/1.2 'Outfit', Inter, system-ui, sans-serif;
+    outline: none;
+    transition: transform 0.34s cubic-bezier(0.18, 0.89, 0.32, 1.32), border-color 0.22s, box-shadow 0.22s;
+    display: block;
+    box-sizing: border-box;
+  }
+  input[type="text"]:focus, input[type="password"]:focus, input[type="number"]:focus, input[type="search"]:focus, select:focus, input[type="datetime-local"]:focus, .glass-control:focus {
+    transform: scale(1.018);
+    border-color: rgba(112, 188, 255, 0.78);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.23), 0 0 0 4px rgba(0, 122, 255, 0.14), 0 10px 28px rgba(0, 0, 0, 0.16);
+  }
+  .x-never-match input[type="text"],
+  .x-never-match input[type="password"],
+  .x-never-match input[type="number"],
+  .x-never-match input[type="search"],
+  .x-never-match select,
+  .x-never-match input[type="datetime-local"],
+  .x-never-match .glass-control {
+    background: rgba(255, 255, 255, 0.52);
+    border-color: rgba(0, 0, 0, 0.10);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 6px 16px rgba(0, 0, 0, 0.05);
+  }
+  /* search */
+  .search-wrap{display:flex;gap:10px;align-items:center}
+  .search-wrap input{flex:1;min-width:0}
+  /* ── Dual-panel selector modal ───────────────────────────────────────────────────── */
+  #selector-modal .modal{width:min(980px,96vw);height:min(780px,92vh);max-height:92vh;grid-template-rows:auto minmax(0,1fr) auto}
+  #selector-modal .modal-body{min-height:0;height:100%;padding:5px 0}
+  .sel-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;overflow:hidden;min-height:0;height:100%}
+  @media(max-width:600px){.sel-grid{grid-template-columns:1fr}}
+  .sel-panel{display:flex;flex-direction:column;gap:8px;overflow:hidden;min-width:0;min-height:0;padding:12px;border-radius:18px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.07)}
+  .sel-panel-inner{overflow-y:auto;overscroll-behavior:contain;flex:1;min-height:0;display:grid;gap:6px;align-content:start;padding-right:4px}
+  .sel-actions{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}
+  .pick-row{display:grid;grid-template-columns:20px minmax(0,1fr);align-items:start;gap:10px;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.025);cursor:pointer;transition:background .12s,border-color .12s}
+  .pick-row:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.16)}
+  .pick-row:has(input:checked){border-color:rgba(0,122,255,.58);background:rgba(0,122,255,.10)}
+  .pick-row input[type=checkbox]{width:16px;height:16px;cursor:pointer;accent-color:var(--primary-color,#007aff);margin-top:2px}
+  .pick-row-name{font-weight:750;font-size:13px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;line-height:1.25}
+  .pick-row-meta{font-size:11px;opacity:0.58;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .device-facts{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+  .device-fact{display:inline-flex;align-items:center;min-height:20px;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:750;line-height:1.1;white-space:nowrap}
+  .device-fact.status-open{color:#ff8a80;background:rgba(255,82,82,.12)}
+  .device-fact.status-closed{color:#7ee2a8;background:rgba(52,199,.12)}
+  .device-fact.power-low{color:#ffd166;background:rgba(255,183,77,.13)}
+  .sel-right-item{display:flex;align-items:center;justify-content:space-between;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.09);background:rgba(255,255,255,0.055);font-size:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.06)}
+  .sel-right-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+  .sel-right-facts{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
+  .mode-sensor-grid .sensor-pill{width:100%;min-width:0;padding:9px 10px;gap:7px}
+  .mode-sensor-grid .sensor-pill .pill-content{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:6px;min-width:0;flex:1}
+  .mode-sensor-grid .sensor-pill .pill-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .mode-sensor-grid .sensor-pill .pill-status{font-size:10px;font-weight:800;opacity:.78;white-space:nowrap}
+  .mode-sensor-grid .sensor-pill .pill-power{font-size:10px;font-weight:700;opacity:.82;white-space:nowrap}
+  .sel-panel-inner::-webkit-scrollbar{width:7px}.sel-panel-inner::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.18);border-radius:99px}
+  /* Activity log */
+  .log-item{display:flex;align-items:flex-start;gap:12px;padding:13px;border-radius:18px;border:1px solid var(--log-item-border, rgba(255,255,255,.05));background:linear-gradient(135deg,color-mix(in srgb,var(--log-item-bg,rgba(255,255,255,.02)) 84%,#fff 16%),var(--log-item-bg,rgba(255,255,255,.02)));color:var(--primary-text-color,#fff);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 7px 18px rgba(0,0,0,.10)}
+  .log-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:13px;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 5px 12px rgba(0,0,0,.12)}
+  .glass-orb{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 2px 4px rgba(255,255,255,0.5),0 2px 6px rgba(0,0,0,0.2);background:rgba(255,255,255,0.3)}
+  .log-item.log-item--armed .log-icon{background:rgba(255,149,0,.16);border-color:rgba(255,183,77,.28)}
+  .log-item.log-item--armed .glass-orb{background:linear-gradient(135deg,#ffb74d,#f57c00)}
+  .log-item.log-item--disarmed .log-icon{background:rgba(52,199,.14);border-color:rgba(105,219,139,.28)}
+  .log-item.log-item--disarmed .glass-orb{background:linear-gradient(135deg,#69db8b,#388e3c)}
+  .log-item.log-item--triggered .log-icon{background:rgba(255,69,58,.16);border-color:rgba(255,139,131,.30)}
+  .log-item.log-item--triggered .glass-orb{background:linear-gradient(135deg,#ff8b83,#d32f2f)}
+  .log-body{flex:1;min-width:0}
+  .log-title{font-weight:700;font-size:13px}
+  .log-meta{font-size:11px;opacity:.55;margin-top:2px}
+  .log-badge{display:inline-block;padding:2px 7px;border-radius:6px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-right:4px}
+  .log-badge.arm{background:rgba(251,140,0,.12);color:#fb8c00}
+  .log-badge.disarm{background:rgba(67,160,71,.12);color:var(--success-color,#43a047)}
+  .log-badge.trigger{background:rgba(229,57,53,.15);color:var(--error-color,#e53935)}
+  button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 72%,#fff);outline-offset:3px}
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}.wx canvas{display:none!important}}
+  /* Personalization section styles */
+  .personalize-section {
+    margin-top: 18px;
+    padding: 18px;
+    background: var(--personalize-bg, rgba(255,255,255,0.02));
+    border: 1px solid var(--personalize-border, rgba(255,255,255,0.06));
+    border-radius: 22px;
+    display: grid;
+    gap: 16px;
+  }
+  .personalize-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"home temp" "panel weather" "hub clock" "emergency emergency";gap:14px 16px;align-items:start}
+  .personalize-column{display:contents}
+  .personalize-field{min-width:0;align-self:stretch}
+  .pf-home{grid-area:home}.pf-temp{grid-area:temp}.pf-weather{grid-area:weather}.pf-panel{grid-area:panel}.pf-hub{grid-area:hub}.pf-emergency{grid-area:emergency}.pf-clock{grid-area:clock}
+  .pf-panel,.pf-hub{display:flex;flex-direction:column;gap:8px}
+  .pf-emergency{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"emergency-label emergency-label" "emergency-input emergency-help";gap:5px 16px;align-items:start;padding-top:2px}
+  .pf-emergency #lbl-emergency-number{grid-area:emergency-label}.pf-emergency #emergency-number-input{grid-area:emergency-input}.pf-emergency #emergency-number-help{grid-area:emergency-help;margin:0!important}
+  .sos-configuration {
+    padding: 18px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 59, 48, 0.25);
+    background: linear-gradient(135deg, rgba(255, 59, 48, 0.12), rgba(255, 255, 255, 0.02));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 12px 28px rgba(255, 59, 48, 0.06), 0 8px 20px rgba(0, 0, 0, 0.12);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  /* SOS uses the full personalization width so outputs never create a tall,
+     narrow list with unused space beside it. */
+  .sos-configuration{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"title action" "outputs outputs" "help help";gap:12px 16px;align-items:center}
+  .sos-configuration #lbl-sos-actions{grid-area:title;margin:0!important;white-space:nowrap}
+  .sos-configuration #sos-output-chips{grid-area:outputs;margin:0!important;display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:7px;align-items:stretch;max-height:148px;overflow-y:auto;overflow-x:hidden;padding:2px 5px 2px 2px;overscroll-behavior:contain}
+  .sos-configuration #sos-output-chips .sensor-pill{width:100%;min-width:0;min-height:34px;justify-content:center;padding:7px 10px;font-size:11px;border-radius:12px}
+  .sos-configuration #sos-output-chips .sensor-pill > span{display:block;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
+  .sos-configuration #sos-output-chips .mode-sensor-none{grid-column:1/-1;padding:18px;min-height:54px}
+  .sos-configuration #btn-select-sos-outputs{grid-area:action;width:auto!important;max-width:230px;min-width:0;white-space:normal;overflow-wrap:anywhere;line-height:1.15}
+  .sos-configuration #sos-output-help{grid-area:help;margin:0!important;max-width:none}
+  .sos-configuration:hover {
+    transform: translateY(-2px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 16px 36px rgba(255, 59, 48, 0.10), 0 12px 24px rgba(0, 0, 0, 0.16);
+  }
+  .x-never-match .sos-configuration {
+    border-color: rgba(255, 59, 48, 0.3);
+    background: linear-gradient(135deg, rgba(255, 59, 48, 0.08), rgba(0, 0, 0, 0.01));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 10px 24px rgba(255, 59, 48, 0.05);
+  }
+  #sos-output-chips .sensor-pill{background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.06));border-color:rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 5px 14px rgba(0,0,0,.10)}
+  .background-custom-inputs{flex-direction:column;gap:8px;background:rgba(0,0,0,.15);padding:12px;border-radius:18px;border:1px solid rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+  .modal-back.open .modal,
+  .lang-modal-back.open .lang-modal-card,
+  .ios-confirm-backdrop.open .ios-confirm-card {
+    animation: liquidDropIn .48s cubic-bezier(.16,1.24,.32,1) both;
+  }
+  @keyframes liquidDropIn{0%{opacity:0;transform:translateY(18px) scale(.91);filter:blur(5px)}65%{opacity:1;transform:translateY(-3px) scale(1.018);filter:blur(0)}100%{transform:translateY(0) scale(1)}}
+  @keyframes argus-modal-in{0%{opacity:0;transform:scale(.94) translateY(8px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+  @media(max-width:700px){
+    .personalize-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"home" "temp" "weather" "panel" "hub" "clock" "emergency"}
+    .pf-emergency{grid-template-columns:minmax(0,1fr);grid-template-areas:"emergency-label" "emergency-input" "emergency-help"}
+    .personalize-section{padding:14px}
+    .sos-configuration{display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:14px;border-radius:24px}
+    .sos-configuration #lbl-sos-actions{white-space:normal}.sos-configuration #btn-select-sos-outputs{width:100%!important}.sos-configuration #sos-output-help{max-width:none}
+  }
+  .wx-horizon::before{content:'';position:absolute;inset:26% 0 0;background:radial-gradient(ellipse at 12% 100%,rgba(0,0,0,.34) 0 18%,transparent 19%),radial-gradient(ellipse at 50% 100%,rgba(0,0,0,.29) 0 23%,transparent 24%),radial-gradient(ellipse at 89% 100%,rgba(0,0,0,.36) 0 20%,transparent 21%);filter:blur(10px)}
+  /* ── Weather Animated Backgrounds (Apple Weather Premium) ────────────────────────────────── */
+  .scene{position:absolute;inset:0;z-index:0;overflow:hidden;background:linear-gradient(165deg,#2c86c7,#8fc7dc 62%,#d7c7aa);transition:background 1.5s ease;border-radius:inherit}
+  .scene.sunny{background:linear-gradient(180deg,#1b60d0,#40a0ff 40%,#90d0ff)}
+  .scene.partlycloudy{background:linear-gradient(180deg,#3073d8,#6bb5ff 50%,#b8e0ff)}
+  .scene.cloudy{background:linear-gradient(180deg,#5b6976,#80909c 50%,#a4b3be)}
+  .scene.fog{background:linear-gradient(180deg,#6c767c,#9ca6ac 50%,#ccd1d4)}
+  .scene.rain,.scene.storm{background:linear-gradient(180deg,#303d49,#495a69 50%,#687985)}
+  .scene.snow{background:linear-gradient(180deg,#627f94,#92b1c7 50%,#d8eaf5)}
+  .scene.night{background:linear-gradient(180deg,#020513 0%,#0a1130 50%,#152248 100%)!important}
+  .scene.sunny::after,.scene.partlycloudy::after{content:'';position:absolute;inset:-50%;background:radial-gradient(circle at 50% 50%,#fff 0%,rgba(255,255,255,0.8) 5%,transparent 15%),radial-gradient(circle at 50% 50%,rgba(255,220,100,0.4) 0%,transparent 30%),conic-gradient(from 0deg at 50% 50%,transparent 0deg,rgba(255,255,255,0.15) 15deg,transparent 30deg,rgba(255,255,255,0.1) 45deg,transparent 60deg,rgba(255,255,255,0.2) 90deg,transparent 120deg,rgba(255,255,255,0.1) 180deg,transparent 240deg,rgba(255,255,255,0.15) 300deg,transparent 360deg);animation:rotate-sun 120s linear infinite;mix-blend-mode:screen;transform-origin:center;left:30%;top:-20%}
+  .scene.night.clear::after,.scene.night.partlycloudy::after{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,#fff 0 1px,transparent 1.5px);background-size:80px 73px;opacity:0.8;animation:stars 12s ease-in-out infinite alternate}
+  .scene.night.clear::before,.scene.night.partlycloudy::before{content:'';position:absolute;right:15%;top:15%;width:50px;height:50px;background:transparent;border-radius:50%;box-shadow:inset -10px -10px 0 0 #ffffe0;filter:drop-shadow(0 0 15px rgba(255,255,180,0.5))}
+  .scene.night.clear.eclipse::before{box-shadow:inset 0 0 0 25px rgba(0,0,0,0.9),0 0 20px 5px rgba(255,100,50,0.8)}
+  .scene.partlycloudy::before,.scene.cloudy::before{content:'';position:absolute;inset:-30%;background:radial-gradient(ellipse at 10% 20%,rgba(255,255,255,0.4) 0%,transparent 25%),radial-gradient(ellipse at 80% 30%,rgba(255,255,255,0.3) 0%,transparent 35%),radial-gradient(ellipse at 40% 50%,rgba(255,255,255,0.2) 0%,transparent 40%);filter:blur(25px);animation:clouds 40s linear infinite alternate}
+  .scene.night.cloudy::before,.scene.night.partlycloudy::before{background:radial-gradient(ellipse at 10% 20%,rgba(100,110,130,0.4) 0%,transparent 25%),radial-gradient(ellipse at 80% 30%,rgba(80,90,120,0.4) 0%,transparent 35%)}
+  .scene.rain::after,.scene.storm::after{content:'';position:absolute;inset:-50%;background:repeating-linear-gradient(108deg,transparent 0,transparent 20px,rgba(200,220,240,0.2) 21px,transparent 22px),repeating-linear-gradient(110deg,transparent 0,transparent 45px,rgba(200,220,240,0.4) 46px,transparent 48px);background-size:100% 200%;animation:rain 1.2s linear infinite;opacity:0.8}
+  .scene.snow::after{content:'';position:absolute;inset:-30%;background-image:radial-gradient(circle,rgba(255,255,255,0.8) 0 2px,transparent 3px),radial-gradient(circle,rgba(255,255,255,0.4) 0 4px,transparent 5px);background-size:45px 52px,90px 110px;background-position:0 0,20px 30px;animation:snow 8s linear infinite}
+  .scene.fog::before{content:'';position:absolute;inset:-20%;background:repeating-linear-gradient(0deg,transparent 0 40px,rgba(240,245,250,0.4) 50px 80px,transparent 90px 140px);filter:blur(18px);animation:fog 20s ease-in-out infinite alternate}
+  .scene.night.fog::before{background:repeating-linear-gradient(0deg,transparent 0 40px,rgba(120,130,150,0.4) 50px 80px,transparent 90px 140px)}
+  .scene.storm{animation:lightning 12s infinite}
+  @keyframes rotate-sun{to{transform:rotate(1turn)}}
+  @keyframes clouds{0%{transform:translate(-5%,-5%) scale(1)}100%{transform:translate(10%,10%) scale(1.1)}}
+  @keyframes stars{0%{opacity:0.4}100%{opacity:1}}
+  @keyframes rain{0%{background-position:0 0,0 0}100%{background-position:-150px 300px,-200px 400px}}
+  @keyframes snow{0%{background-position:0 0,20px 30px}100%{background-position:90px 300px,-45px 400px}}
+  @keyframes fog{0%{transform:translateY(0) scale(1);opacity:0.6}100%{transform:translateY(-50px) scale(1.2);opacity:0.9}}
+  @keyframes lightning{0%,93%,95%,100%{filter:none}94%{filter:brightness(2.5) contrast(1.5) saturate(0.5)}}
+  
+  .wx-static{background:linear-gradient(180deg,rgba(22,28,42,.92),rgba(35,44,67,.95));position:absolute;inset:0;z-index:0;border-radius:inherit}
+  .wx-photo,.wx-collage{background:#10141d;position:absolute;inset:0;z-index:0;border-radius:inherit}
+  .wx-photo::before{content:"";position:absolute;inset:0;background:var(--bg-image) center/cover no-repeat;filter:saturate(1.05) contrast(1.05);border-radius:inherit}
+  .wx-photo::after,.wx-collage::after,.wx-static::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,8,12,.18),rgba(5,8,12,.5));border-radius:inherit}
+  .wx-collage-grid{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4px;padding:4px}
+  .wx-collage-cell{border-radius:18px;background:center/cover no-repeat;min-height:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+  .wx-video{position:absolute;inset:0;overflow:hidden;border-radius:inherit;z-index:0;background:#10141d}
+  .wx-video::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,8,12,.18),rgba(5,8,12,.5));z-index:2}
+  #argus-canvas-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background-size:cover;background-position:center;background-repeat:no-repeat}
+  #argus-canvas-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.3) 100%);z-index:1;pointer-events:none}
+
+.sensor-pill {
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--argus-pill-bg, rgba(255,255,255,0.04));
+  border:1px solid var(--argus-pill-border, rgba(255,255,255,0.08));
+  border-radius:14px; padding:10px 14px;
+  font-size:13px; color:var(--argus-pill-color, rgba(255,255,255,0.95));
+  backdrop-filter:blur(10px); transition:all 0.2s cubic-bezier(0.4,0,0.2,1);
+  font-weight:700; box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+.sensor-pill:hover { background:var(--argus-pill-bg-hover, rgba(255,255,255,0.08)); border-color:rgba(255,255,255,0.25); transform:translateY(-1px); }
+.sensor-pill .pill-dot { width:10px; height:10px; border-radius:50%; background:#34c759; flex-shrink:0; box-shadow:0 0 10px rgba(52,199,0.5); }
+.sensor-pill .pill-dot.open { background:#ff3b30; box-shadow:0 0 10px rgba(255,59,48,0.5); }
+.sensor-pill .pill-dot.unavailable { background:#999; }
+.sensor-pill button { background:none; border:none; color:var(--argus-pill-color, #fff); cursor:pointer; opacity:0.5; padding:4px; font-size:14px; transition:opacity 0.2s; }
+.sensor-pill button:hover { opacity:1; }
+
+.mode-sensor-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:12px; margin-top:12px; }
+.mode-sensor-none { grid-column:1/-1; padding:30px; text-align:center; background:var(--argus-pill-bg,rgba(255,255,255,0.03)); border:2px dashed var(--argus-pill-border,rgba(255,255,255,0.1)); border-radius:20px; color:var(--argus-pill-color-muted,rgba(255,255,255,0.4)); font-size:14px; font-weight:600; }
+.subsection-title { font-size:12px; font-weight:900; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px; color:var(--argus-pill-color-muted,rgba(255,255,255,0.5)); display:block; }
+
+
+/* ── Language Picker ───────────────────────────────────── */
+.lang-pill {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:7px 14px; border-radius:999px;
+  background:rgba(255,255,255,0.10);
+  border:1px solid rgba(255,255,255,0.18);
+  backdrop-filter:blur(12px) saturate(120%);
+  -webkit-backdrop-filter:blur(12px) saturate(120%);
+  color:#fff; font-size:13px; font-weight:700;
+  cursor:pointer; transition:all 0.22s cubic-bezier(0.4,0,0.2,1);
+  box-shadow:0 4px 16px rgba(0,0,0,0.18);
+  white-space:nowrap; flex-shrink:0;
+}
+.lang-pill:hover { background:rgba(255,255,255,0.22); transform:translateY(-1px); }
+.x-never-match .lang-pill {
+  background:rgba(0,0,0,0.07); border-color:rgba(0,0,0,0.15); color:#1e1e2d;
+}
+
+/* Language modal */
+.lang-modal-back { position:fixed; inset:0; background:rgba(0,0,0,0.55); display:none; align-items:center; justify-content:center; z-index:999998; backdrop-filter:blur(4px); }
+.lang-modal-back.open { display:flex; }
+.lang-modal-card {
+  width:min(400px,92vw); border-radius:28px; padding:28px 24px 20px;
+  background:rgba(20,22,35,0.92);
+  border:1px solid rgba(255,255,255,0.14);
+  box-shadow:0 32px 80px rgba(0,0,0,0.55);
+  backdrop-filter:blur(12px) saturate(120%);
+  -webkit-backdrop-filter:blur(12px) saturate(120%);
+  color:#fff;
+  animation: langBounceIn 0.38s cubic-bezier(0.175,0.885,0.32,1.275) forwards;
+}
+.x-never-match .lang-modal-card {
+  background:rgba(255,255,255,0.96); color:#1e1e2d;
+  border-color:rgba(0,0,0,0.12); box-shadow:0 20px 60px rgba(0,0,0,0.25);
+}
+@keyframes langBounceIn {
+  0%   { transform:scale(0.82) translateY(20px); opacity:0; }
+  60%  { transform:scale(1.03) translateY(-4px); opacity:1; }
+  100% { transform:scale(1)    translateY(0);    opacity:1; }
+}
+.lang-modal-title {
+  font-size:18px; font-weight:900; letter-spacing:-0.01em;
+  margin-bottom:20px; text-align:center;
+}
+.lang-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:10px;
+}
+.lang-option {
+  display:flex; align-items:center; gap:10px;
+  padding:12px 14px; border-radius:16px;
+  background:rgba(255,255,255,0.10);
+  border:1.5px solid rgba(255,255,255,0.18);
+  /* Buttons do not inherit color reliably through the HA shadow DOM. */
+  color:rgba(255,255,255,0.98) !important;
+  text-shadow:0 1px 2px rgba(0,0,0,0.38);
+  cursor:pointer; transition:all 0.18s ease;
+  font-size:14px; font-weight:750;
+}
+.lang-option span:not(.lang-flag) { color:inherit !important; }
+.lang-option:hover { background:rgba(255,255,255,0.16); border-color:rgba(255,255,255,0.28); transform:translateY(-1px); }
+.lang-option.active {
+  background:rgba(3,169,244,0.30); border-color:rgba(76,201,255,0.82);
+  box-shadow:0 0 18px rgba(3,169,244,0.25);
+}
+.lang-flag { font-size:22px; line-height:1; }
+.lang-close-row { display:flex; justify-content:center; margin-top:18px; }
+.lang-close-btn {
+  padding:9px 28px; border-radius:14px;
+  background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15);
+  color:#fff; font-size:13px; font-weight:700; cursor:pointer;
+  transition:background 0.18s;
+}
+.lang-close-btn:hover { background:rgba(255,255,255,0.2); }
+
+/* Background File Manager Styles */
+.file-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.22s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.file-card:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.x-never-match .file-card {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.07);
+  color: #1c1c1e;
+}
+.x-never-match .file-card:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+.file-card-preview {
+  position: relative;
+  width: 100%;
+  height: 64px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.2);
+}
+.file-card-preview img, .file-card-preview video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.file-card-name {
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.85;
+}
+.file-card-meta {
+  font-size: 9px;
+  opacity: 0.55;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.file-card-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: auto;
+}
+.file-card-btn {
+  flex: 1;
+  padding: 4px;
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  color: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+.file-card-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.x-never-match .file-card-btn {
+  border-color: rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.02);
+}
+.x-never-match .file-card-btn:hover {
+  background: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.25);
+}
+.file-card-btn-delete {
+  padding: 3px 6px;
+  color: #ff3b30;
+  border: 1px solid rgba(255, 59, 48, 0.15);
+  background: rgba(255, 59, 48, 0.05);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 9px;
+  transition: all 0.15s ease;
+}
+.file-card-btn-delete:hover {
+  background: rgba(255, 59, 48, 0.25);
+  border-color: rgba(255, 59, 48, 0.45);
+}
+
+.argus-bootstrap-layer {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.88);
+  /* NO backdrop-filter: element is permanently in DOM (display:none toggle).
+     WebKit compositor leak bug — opaque background is visually equivalent. */
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  animation: fadeIn 0.4s ease forwards;
+}
+.argus-bootstrap-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 24px;
+  padding: 40px;
+  max-width: 480px;
+  width: 90%;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+  text-align: center;
+}
+.argus-bootstrap-card h1 {
+  margin: 0 0 16px;
+  font-weight: 300;
+  font-size: 28px;
+  letter-spacing: 0.5px;
+}
+.argus-bootstrap-card p {
+  color: rgba(255,255,255,0.7);
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 32px;
+}
+@keyframes argusWelcomeCard {
+  from { opacity: 0; transform: translateY(18px) scale(.96); }
+  65% { opacity: 1; transform: translateY(-3px) scale(1.01); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes argusWelcomeLogo {
+  0%,100% { transform: translateY(0) scale(1); filter: drop-shadow(0 10px 18px rgba(32,145,255,.28)); }
+  50% { transform: translateY(-5px) scale(1.045); filter: drop-shadow(0 16px 26px rgba(32,145,255,.5)); }
+}
+@keyframes argusWelcomeCheck {
+  from { opacity: 0; transform: scale(.55) rotate(-16deg); }
+  70% { opacity: 1; transform: scale(1.1) rotate(4deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+.argus-first-run-card { animation: argusWelcomeCard .58s cubic-bezier(.22,1.2,.36,1) both; }
+.argus-first-run-logo { height:68px; width:68px; border-radius:19px; animation:argusWelcomeLogo 2.4s ease-in-out infinite; }
+.argus-first-run-brand { display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:20px; }
+.argus-first-run-brand h1 { margin:0; font-size:1.65rem; font-weight:850; letter-spacing:-.02em; }
+.argus-first-run-brand p { margin:0; font-size:.92rem; color:rgba(255,255,255,.7); }
+.argus-first-run-thank-icon { width:74px; height:74px; margin:0 auto 18px; display:grid; place-items:center; border-radius:50%; background:rgba(52,199,89,.18); border:1px solid rgba(52,199,89,.45); color:#58e37c; font-size:2.15rem; box-shadow:0 0 32px rgba(52,199,89,.22); animation:argusWelcomeCheck .5s cubic-bezier(.2,1.35,.35,1) both; }
+
+/* ─── tvOS Profile Selector ─── */
+.argus-profile-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.4); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+  /* NO backdrop-filter: causes orphaned compositor layers in WebKit when removed.
+     High-opacity background achieves same visual effect safely. */
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999;
+  animation: argus-overlay-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes argus-overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Título arriba */
+.argus-profile-header {
+  text-align: center;
+  margin-bottom: 36px;
+  animation: argus-slide-down 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+@keyframes argus-slide-down {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.argus-profile-header h2 {
+  margin: 0; font-size: 1.6rem; font-weight: 800;
+  color: #fff; letter-spacing: -0.02em;
+}
+.argus-profile-header p {
+  margin: 6px 0 0; font-size: 0.85rem;
+  color: rgba(255,255,255,0.55);
+}
+
+/* Grid de perfiles */
+.argus-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 36px 24px;
+  max-width: 900px;
+  width: 100%;
+  justify-content: center;
+  animation: argus-grid-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+@keyframes argus-grid-in {
+  from { opacity: 0; transform: scale(0.92) translateY(16px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Cada perfil */
+@media (max-width: 950px) and (orientation: landscape) {
+  .argus-profile-grid { 
+    grid-template-columns: repeat(4, 1fr);
+    padding: 16px;
+  }
+}
+@media (max-width: 600px) and (orientation: portrait) {
+  .argus-profile-grid { 
+    grid-template-columns: repeat(2, 1fr);
+    padding: 16px;
+    gap: 20px 16px;
+  }
+}
+@media (max-width: 380px) and (orientation: portrait) {
+  .argus-profile-grid { 
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+  .argus-profile-item { width: 100%; }
+}
+
+.argus-profile-item {
+  touch-action: manipulation;
+  min-height: 44px;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 10px;
+  cursor: pointer;
+  border-radius: 16px;
+  padding: 14px 8px 10px;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.argus-profile-item:hover {
+  transform: scale(1.08);
+  background: rgba(255,255,255,0.07);
+}
+.argus-profile-item:active {
+  transform: scale(0.96);
+}
+.argus-profile-item:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.6);
+  outline-offset: 4px;
+}
+
+/* Círculo avatar */
+.argus-profile-circle {
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(255,255,255,0.18);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.22s;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem; font-weight: 800;
+  color: #fff; overflow: hidden; flex-shrink: 0;
+  background: rgba(255,255,255,0.1);
+  position: relative;
+}
+@media (max-width: 600px) and (orientation: portrait) {
+  .argus-profile-circle {
+    width: 76px; height: 76px;
+    font-size: 1.5rem; border-width: 2.5px;
+  }
+}
+@media (max-width: 950px) and (orientation: landscape) {
+  .argus-profile-circle {
+    width: 84px; height: 84px;
+    font-size: 1.8rem; border-width: 2.5px;
+  }
+}
+.argus-profile-item:hover .argus-profile-circle {
+  border-color: rgba(255,255,255,0.55);
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.15), 0 6px 24px rgba(0,0,0,0.4);
+}
+.argus-profile-circle img {
+  width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+}
+.argus-profile-circle .lock-badge {
+  position: absolute; bottom: 0; right: 0;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(0,0,0,0.75); display: flex;
+  align-items: center; justify-content: center;
+  font-size: 14px; border: 2px solid rgba(255,255,255,0.2);
+}
+@media (max-width: 600px) {
+  .argus-profile-circle .lock-badge {
+    width: 22px; height: 22px; font-size: 11px; border-width: 1.5px;
+  }
+}
+
+/* Nombre y rol */
+.argus-profile-label {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.argus-profile-label .p-name {
+  font-size: 1rem; font-weight: 700;
+  color: #fff; line-height: 1.2;
+  max-width: 140px; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
+}
+.argus-profile-label .p-role {
+  font-size: 0.72rem; font-weight: 600;
+  color: rgba(255,255,255,0.6);
+  margin-top: 4px;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+@media (max-width: 600px) {
+  .argus-profile-label .p-name { font-size: 0.82rem; max-width: 80px; }
+  .argus-profile-label .p-role { font-size: 0.65rem; margin-top: 2px; }
+}
+
+/* ─── Welcome Screen (Fase 2) ─── */
+.argus-welcome-screen {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.88);
+  /* NO backdrop-filter: Safari/WebKit compositor bug causes blur to persist
+     after element.remove(). Use opaque background instead. */
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  z-index: 10000;
+  pointer-events: none;
+}
+.argus-welcome-avatar {
+  width: 110px; height: 110px;
+  border-radius: 50%; overflow: hidden;
+  border: 3px solid rgba(255,255,255,0.3);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.8rem; font-weight: 800; color: #fff;
+  background: rgba(255,255,255,0.12);
+  will-change: transform, width, height, border-radius;
+}
+.argus-welcome-avatar img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.argus-welcome-text {
+  margin-top: 20px; text-align: center;
+}
+.argus-welcome-text .greeting {
+  font-size: 1.0rem; color: rgba(255,255,255,0.6);
+  font-weight: 500; letter-spacing: 0.02em;
+  margin: 0;
+}
+.argus-welcome-text .wname {
+  font-size: 2.0rem; font-weight: 900;
+  color: #fff; letter-spacing: -0.03em;
+  margin: 6px 0 0;
+  line-height: 1;
+}
+
+/* PIN prompt dentro del selector tvOS */
+.argus-pin-prompt {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 10001;
+  animation: argus-overlay-in 0.25s ease both;
+}
+.argus-pin-card {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 20px; padding: 28px 24px;
+  width: min(340px, 90vw);
+  text-align: center; color: #fff;
+}
+.argus-pin-card h3 {
+  margin: 0 0 4px; font-size: 1.1rem; font-weight: 800;
+}
+.argus-pin-card .pin-sub {
+  font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-bottom: 16px;
+}
+.argus-pin-input {
+  width: 100%; box-sizing: border-box;
+  text-align: center; font-size: 1.6rem;
+  letter-spacing: 0.4em; padding: 12px;
+  border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.07); color: #fff;
+  outline: none; margin-bottom: 14px;
+}
+.argus-numpad {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 10px;
+  margin-bottom: 12px;
+}
+.argus-numpad button {
+  padding: 14px; font-size: 1.15rem; font-weight: 700;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.08); color: #fff;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+.argus-numpad button:active { transform: scale(0.93); background: rgba(255,255,255,0.18); }
+.argus-pin-actions {
+  display: flex; gap: 10px; margin-top: 4px;
+}
+.argus-pin-actions button {
+  flex: 1; padding: 12px; border-radius: 12px; font-size: 0.85rem;
+  font-weight: 700; cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.07); color: #fff;
+  transition: background 0.15s;
+}
+.argus-pin-actions button:hover { background: rgba(255,255,255,0.15); }
+
+@keyframes argus-shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-8px); }
+  40%       { transform: translateX(8px); }
+  60%       { transform: translateX(-5px); }
+  80%       { transform: translateX(5px); }
+}
+@keyframes argus-overlay-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+.user-selector-grid {
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+.user-card {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 16px;
+  padding: 20px 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.user-card:hover {
+  background: rgba(255,255,255,0.2);
+  transform: translateY(-2px);
+}
+.user-card-own {
+  border-color: rgba(0, 122, 255, 0.55);
+  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.22), 0 8px 24px rgba(0,122,255,0.1);
+}
+.user-card-own:hover {
+  border-color: rgba(0, 122, 255, 0.8);
+}
+.profile-own-badge {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #007aff;
+  background: rgba(0, 122, 255, 0.12);
+  border-radius: 999px;
+  padding: 2px 8px;
+  margin-top: -4px;
+}
+.user-role-label {
+  font-size: 11px;
+  opacity: 0.55;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+.user-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+.user-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.9);
+}
+.pin-prompt {
+  display: none;
+  animation: fadeIn 0.3s ease forwards;
+  margin-top: 20px;
+}
+.pin-prompt input {
+  font-size: 24px;
+  letter-spacing: 8px;
+  text-align: center;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(0,0,0,0.2);
+  color: white;
+  width: 200px;
+  margin-bottom: 20px;
+}
+.btn-claim {
+  background: #ff3b30;
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-claim:hover { background: #ff453a; }
+.btn-start {
+  background: #34c759;
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-start:hover { background: #30d158; }
+.btn-cancel {
+  background: rgba(255,255,255,0.1);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+/* Mobile background and HomeKit polish fixes (moved from runtime hack) */
+.entry-icon,.entry-icon>svg,.argus-old-shield,.argus-old-shield>svg{overflow:visible!important;clip-path:none!important;-webkit-clip-path:none!important}
+.entry-icon{contain:layout!important}
+#global-status { display: none !important; }
+#global-status .badge.disarmed,.hero-pill#hero-security-pill{color:#fff!important;background:rgba(18,82,54,.78)!important;border:1px solid rgba(125,255,185,.64)!important;text-shadow:0 1px 2px rgba(0,0,0,.72)!important;opacity:1!important}
+.argus-instance-duplicate-status{display:none!important}
+.pin-prompt,.pin-modal,.modal,.argus-bootstrap-card{color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.55)!important}
+.pin-prompt input,.pin-modal input,.argus-bootstrap-card input{color:#fff!important;background:rgba(8,16,31,.72)!important;border-color:rgba(255,255,255,.24)!important;-webkit-text-fill-color:#fff!important}
+.pin-prompt label,.pin-modal label,.pin-prompt p,.pin-modal p,.argus-bootstrap-card label,.argus-bootstrap-card p{color:rgba(255,255,255,.88)!important}
+#w-activity,.activity-log{max-height:min(58vh,520px)!important;overflow-y:auto!important;overscroll-behavior:contain!important;scrollbar-gutter:stable!important}
+#w-activity .panel-body,.activity-log .panel-body{max-height:inherit!important;overflow-y:auto!important}
+@media(max-width:760px){
+  .hero{display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;gap:12px!important;padding:18px 14px!important}
+  .hero-left{width:100%!important;min-width:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:8px!important}
+  .hero-left>div{text-align:center!important;display:flex!important;flex-direction:column!important;align-items:center!important}
+  .hero-left h1,.hero-left p{text-align:center!important;margin:0 auto!important}
+  .hero-context{display:flex!important;flex-direction:column!important;width:100%!important;margin:4px 0 0!important;align-items:center!important;justify-content:center!important;gap:8px!important}
+  .hero-clock{width:100%!important;min-width:0!important;padding:0!important;border:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:3px!important;line-height:1.12!important}
+  .hero-clock strong,.hero-clock span,#hero-clock-time,#hero-clock-date{width:100%!important;max-width:100%!important;text-align:center!important;display:block!important;margin:0 auto!important;line-height:1.12!important}
+  #hero-profile-container{display:flex!important;justify-content:center!important;align-items:center!important;width:100%!important;margin:2px auto 0!important}
+  .hero-pills{display:grid!important;grid-template-columns:minmax(0,1fr)!important;width:100%!important;min-width:0!important;justify-items:center!important;align-items:center!important;gap:8px!important}
+  .hero-pill{width:min(100%,360px)!important;max-width:100%!important;white-space:normal!important;text-align:center!important;justify-content:center!important;align-items:center!important;line-height:1.25!important;margin:0 auto!important}
+  .dashboard-instances>.panel-head{flex-direction:column!important;align-items:stretch!important;gap:10px!important}
+  #global-status,#global-status .badge{width:100%!important;box-sizing:border-box!important;justify-content:center!important;text-align:center!important;white-space:normal!important;line-height:1.3!important}
+  .entry-content.security-console,.ios-fullscreen .entry-content.security-console{padding-left:10px!important;padding-right:10px!important}
+  .console-hud{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:'location' 'connection' 'readings'!important;justify-items:center!important;align-items:center!important;gap:8px!important;text-align:center!important}
+  .console-hud-loc,.argus-connection-pill,.console-hud-right{width:100%!important;max-width:100%!important;box-sizing:border-box!important;justify-self:center!important;justify-content:center!important;text-align:center!important;margin:0!important}
+  .console-hud-right{display:flex!important;flex-wrap:wrap!important;overflow:visible!important;gap:6px!important}
+  .security-console .liquid-stack{grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important}
+  .security-console .liquid-btn{min-width:0!important;white-space:normal!important;line-height:1.2!important;min-height:46px!important}
+  #w-activity,.activity-log{max-height:46vh!important;overflow-y:auto!important}
+  .argus-mobile-history-overflow-item{display:list-item!important}
+  #w-performance,.performance-card,.device-performance{display:grid!important;grid-template-columns:minmax(0,1fr)!important;justify-items:stretch!important;align-items:center!important;text-align:center!important;gap:10px!important}
+  #w-performance *,.performance-card *,.device-performance *{max-width:100%!important;box-sizing:border-box!important}
+  #w-access .panel-body,#w-settings .panel-body,.sos-actions,.panic-actions{overflow:visible!important;max-height:none!important}
+  .sos-actions button,.panic-actions button,[data-action*="sos"],[data-action*="panic"]{min-height:48px!important;touch-action:manipulation!important}
+  input[type="file"]{max-width:100%!important;width:100%!important;color:#fff!important}
+}
+@media(orientation:landscape) and (max-height:560px) and (max-width:950px){
+  .hero{padding:14px!important;gap:10px!important}
+  .hero-context{grid-template-columns:auto minmax(0,1fr)!important;align-items:center!important}
+  .hero-clock{width:auto!important;justify-items:start!important}
+  .hero-pills{justify-content:flex-start!important}
+  .ios-fullscreen .console-hud{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;grid-template-areas:'location connection readings'!important}
+  .ios-fullscreen .console-hud-loc,.ios-fullscreen .argus-connection-pill,.ios-fullscreen .console-hud-right{width:auto!important}
+}
+  .entry { overflow: hidden; border-radius: 28px; -webkit-mask-image: -webkit-radial-gradient(white, black); }
+</style>
+
+<!-- Bootstrap UI -->
+<div id="bootstrap-overlay" class="argus-bootstrap-layer" style="display:none"></div>
+
+<!-- Language picker modal -->
+<div class="lang-modal-back" id="lang-modal" aria-hidden="true">
+  <div class="lang-modal-card">
+    <div class="lang-modal-title" id="lang-modal-title">🌐 Select Language</div>
+    <div class="lang-grid" id="lang-grid"></div>
+    <div class="lang-close-row">
+      <button class="lang-close-btn" id="lang-modal-close">✕ Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- SOS Confirm Modal -->
+<div class="ios-confirm-backdrop" id="sos-modal">
+  <div class="ios-confirm-card liquid-glass" id="sos-card" style="position:relative;">
+    <button id="sos-close-x" style="position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.1); border:none; color:white; border-radius:50%; width:32px; height:32px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; opacity:0.8; padding:0; transition:background 0.2s;">✕</button>
+    <div class="ios-confirm-title" id="sos-title-txt">Confirmar pánico</div>
+    <div class="ios-confirm-text" id="sos-text-txt">Desliza para disparar la alarma inmediatamente.</div>
+    <div class="ios-slider-shell">
+      <div class="ios-slider-track">
+        <div class="ios-slider-label" id="sos-label">Desliza para activar SOS</div>
+        <div class="ios-slider-thumb" id="sos-thumb">🚨</div>
+      </div>
+    </div>
+    <div style="margin-top:20px;text-align:center">
+      <a id="sos-call-btn" href="tel:911" style="display:flex;justify-content:center;align-items:center;gap:8px;background:rgba(255,59,48,0.2);color:#ff3b30;text-decoration:none;padding:14px;border-radius:18px;font-weight:800;font-size:15px;border:1px solid rgba(255,59,48,0.3)">
+        📞 Llamar a Emergencias (911)
+      </a>
+      <p id="sos-call-help" class="small" style="margin:10px 4px 0;opacity:.72;line-height:1.35">If this device cannot place calls, Argus will send an urgent alert to the configured mobile devices.</p>
+    </div>
+    <button class="ios-confirm-cancel" id="btn-cancel-sos" style="margin-top:10px">Cancelar</button>
+  </div>
+</div>
+
+
+<div id="argus-canvas-bg"></div>
+
+
+<div class="wrap">
+  <!-- HERO -->
+  <div class="glass hero liquid-glass">
+    <div class="hero-left">
+      <img src="/api/argus_static/argus_logo.png" alt="Argus Logo" style="width: 75px; height: 75px; border-radius: 18px; object-fit: cover; box-shadow: 0 8px 24px rgba(0,0,0,0.25); flex-shrink: 0;">
+      <div>
+        <h1>Argus Home Hub</h1>
+        <p id="p-hero-desc"></p>
+      </div>
+    </div>
+    <div class="hero-context" aria-live="polite">
+      <div class="hero-clock"><strong id="hero-clock-time">--:--</strong><span id="hero-clock-date"></span></div>
+      <div id="hero-profile-container"></div>
+    </div>
+  </div>
+
+  <!-- TWO-COLUMN LAYOUT -->
+  <div class="grid hide-legacy" id="widget-grid">
+
+    <!-- Instances -->
+    <section class="glass panel liquid-glass dashboard-instances" id="w-instances" style="grid-column: 1 / -1;">
+        <div class="panel-head">
+          <h2 id="h-instances"></h2>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div id="global-status"></div>
+          </div>
+        </div>
+        <div id="entries"></div>
+        <!-- Personalization section -->
+        <div class="personalize-section">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--personalize-divider, rgba(255,255,255,0.08)); padding-bottom:10px; flex-wrap:wrap; gap:10px;">
+            <div id="lbl-aesthetic-custom" style="font-weight:900; font-size:14px; letter-spacing:-0.01em; cursor:pointer; display:flex; align-items:center; gap:8px; user-select:none;">
+              <span id="lbl-mas-ajustes">⚙️ Más Ajustes / SOS</span>
+              <span id="personalize-chevron" style="transition: transform 0.3s ease; font-size: 11px; background: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 8px;">▲</span>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button class="ghost" id="btn-edit-home-name-standalone" style="padding:6px 10px;font-size:11px;border-radius:10px;white-space:nowrap">✏️ Editar Nombre</button>
+              <button class="primary" id="btn-save-personalization-standalone" style="padding:8px 14px;font-size:12px;border-radius:10px;white-space:nowrap">Guardar</button>
+            </div>
+          </div>
+
+          <div class="personalize-workspace" id="personalize-workspace">
+            <div class="personalize-top-row" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.08)">
+              <div>
+                <div class="setting-label" id="lbl-home-name-hdr" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6;">Nombre del Hogar</div>
+                <div id="lbl-home-name-prominent" style="font-size:18px;font-weight:900;margin-top:2px">Mi Casa</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);padding:8px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.08)">
+                <label class="setting-label" id="lbl-emergency-number" for="emergency-number-input" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.8; margin-bottom:0; white-space:nowrap;">🚨 Teléfono SOS:</label>
+                <input id="emergency-number-input" class="glass-control" inputmode="tel" maxlength="16" value="911" style="width:80px;min-height:28px;padding:4px 8px;font-size:13px;font-weight:800;text-align:center;border-radius:8px;background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.15)">
+              </div>
+            </div>
+
+            <div class="sos-configuration">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap">
+                <div class="setting-label" id="lbl-sos-actions" style="font-size:12px; font-weight:800; text-transform:uppercase; opacity:0.8;">🚨 Acciones SOS</div>
+                <button class="ghost" id="btn-select-sos-outputs" style="padding:6px 14px;font-size:12px;font-weight:700;border-radius:10px;background:rgba(255,255,255,0.06);">Seleccionar luces, sirenas o scripts</button>
+              </div>
+              <div id="sos-output-chips" class="sos-output-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-bottom:8px"></div>
+              <div class="small" id="sos-output-help" style="margin-top:5px;opacity:.65;line-height:1.35">Estos dispositivos se activarán siempre al usar SOS, incluso con Argus desarmado.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Activity log -->
+      <section class="glass panel liquid-glass activity-panel" id="w-activity">
+        <div class="panel-head">
+          <h2 id="h-activity-log"></h2>
+          <div style="display:flex;gap:6px"><button class="ghost" id="btn-refresh-history" style="font-size:10px;padding:4px 8px"></button><button class="ghost" id="btn-export-forensic" style="font-size:10px;padding:4px 8px;opacity:.7">JSON</button><button class="ghost" id="btn-clear-log" style="font-size:10px;padding:4px 8px;opacity:0.6">BORRAR</button></div>
+        </div>
+        <div id="activity-log" style="display:grid;gap:10px;height:280px;overflow-y:auto;margin-top:10px"></div>
+      </section>
+
+      <!-- Modes -->
+      <section class="glass panel liquid-glass modes-panel" id="w-modes">
+        <div class="panel-head">
+           <h2 id="h-modes"></h2>
+        </div>
+        <div class="tabs" id="mode-tabs" style="margin-bottom:12px"></div>
+        <div id="mode-view"></div>
+      </section>
+
+      <!-- Users & Master PIN Settings -->
+      <section class="glass panel liquid-glass access-panel" id="w-access">
+        <div class="panel-head">
+          <div>
+            <h2 id="h-access-title">Control de Acceso y Usuarios</h2>
+            <p class="access-summary" id="p-access-desc">PIN desactivado · Sin usuarios adicionales</p>
+          </div>
+        </div>
+
+        <div class="access-workspace" id="access-workspace" style="display:contents">
+          <!-- Users -->
+          <div class="access-section" id="access-users-section">
+            <h3 id="h-users"></h3>
+            <p class="small" id="p-admin-only" style="margin-bottom:14px;color:#fb8c00;font-weight:600"></p>
+            <div id="users-list" style="display:grid;gap:12px;margin-bottom:16px"></div>
+          </div>
+
+          <!-- Notifications -->
+          <div class="access-section" id="access-notifications-section">
+            <h3 id="h-notifications"></h3>
+            <p class="small" id="p-notif-desc" style="margin:0 0 12px;opacity:.72"></p>
+            <div id="notif-targets" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px"></div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <select id="notif-select" class="glass-control" style="flex:1;min-width:0"></select>
+              <button type="button" class="ghost" id="btn-add-notif" style="white-space:nowrap">＋</button>
+            </div>
+            <div class="save-row" style="margin-top:12px">
+              <button class="primary" id="btn-save-notif" style="width:100%"></button>
+            </div>
+            <div id="notif-status" class="status" style="margin-top:8px;text-align:center;font-size:12px;font-weight:bold;min-height:18px"></div>
+          </div>
+
+          <!-- Master PIN -->
+          <div class="access-section" id="access-pin-section">
+            <h3 id="h-settings-pin">PIN Maestro</h3>
+            <div class="subsection">
+              <div id="current-pin-display" style="font-size:13px;font-weight:800;color:var(--primary-color);margin-bottom:15px;background:rgba(3,169,244,0.1);padding:8px 12px;border-radius:10px;display:inline-block"></div>
+              <div class="field-group collapsible collapsed" id="group-current-pin" style="margin-bottom: 12px">
+                 <div style="display:flex; justify-content:space-between; align-items:center;">
+                   <label id="l-current-pin-lbl"></label>
+                   <a href="#" id="lnk-forgot-pin" style="font-size:11px; color:var(--accent-color, #ff4081); text-decoration:none; font-weight:bold; margin-bottom:4px; display:none;"></a>
+                 </div>
+                 <input type="password" id="current-pin" inputmode="numeric" pattern="[0-9]*" class="glass-control">
+              </div>
+              <p class="small" id="p-pin-remove-hint" style="margin:0 0 10px 0; color:var(--primary-color); font-weight:700">Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.</p>
+              <div style="display:grid;gap:10px">
+                <div class="field-group"><label id="l-new-pin"></label><input type="password" id="new-pin-1" inputmode="numeric" pattern="[0-9]*" class="glass-control"></div>
+                <div class="field-group"><label id="l-confirm-pin"></label><input type="password" id="new-pin-2" inputmode="numeric" pattern="[0-9]*" class="glass-control"></div>
+              </div>
+              <div class="save-row" style="margin-top:15px">
+                <button class="primary" id="btn-save-pin" style="width:100%"></button>
+              </div>
+              <div id="pin-status" class="status" style="margin-top:8px; text-align:center; font-size:12px; font-weight:bold; min-height:18px;"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Automations -->
+      <section class="glass panel liquid-glass automations-panel" id="w-automations">
+        <h2 id="h-automations"></h2>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <span class="small" id="p-linked-rules" style="opacity:0.7"></span>
+          <button class="primary" id="btn-new-auto" style="padding:6px 12px;font-size:11px"></button>
+        </div>
+        <div id="auto-view"></div>
+      </section>
+
+      <!-- Backup & Restore -->
+      <section class="glass panel liquid-glass backup-panel" id="w-backup">
+        <h2 id="h-backup-title">Respaldo y Restauración</h2>
+        <p class="small" id="p-backup-desc" style="margin-bottom:12px;opacity:0.7">Guarda una copia de seguridad de tus ajustes o restaura una anterior.</p>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <button class="ghost" id="btn-export-config" style="flex:1">📤 Descargar</button>
+          <div style="position:relative; flex:1">
+            <button class="ghost" style="width:100%" id="btn-import-trigger">📥 Restaurar</button>
+            <input type="file" id="import-config-file" style="display:none" accept=".json,.argus,application/json">
+          </div>
+          <button class="ghost danger" id="btn-reset-config" style="flex:1">⚠️ Restablecer</button>
+          <button class="primary" id="btn-undo-reset" style="flex:1; display:none;">↩️ Deshacer</button>
+        </div>
+      </section>
+
+      <!-- GitHub Opt-In -->
+      <section class="glass panel liquid-glass github-panel" id="w-github" style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); padding:16px;">
+        <div style="flex:1">
+          <h3 id="github-title" style="margin:0; font-size:14px; font-weight:600"></h3>
+          <p id="github-desc" style="margin:4px 0 0; font-size:12px; opacity:0.7"></p>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px; margin-left:16px;">
+          <a id="github-action" class="github-star-action" href="https://github.com/Chrisalvir1/Argus" target="_blank" rel="noopener noreferrer"></a>
+          <a id="paypal-action" class="glass-control" href="https://paypal.me/CEstradaAlvir" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:4px; padding:6px 14px; border-radius:10px; font-size:12px; font-weight:750; color:#38bdf8 !important; text-decoration:none; background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.3); transition:transform 0.15s ease, background 0.15s ease;">☕ PayPal</a>
+        </div>
+      </section>
+
+  </div> <!-- /grid -->
+</div>
+
+<!-- Selector modal (dual-panel) -->
+<div class="modal-back" id="selector-modal" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="selector-title">Seleccionar</h3>
+      <button class="ghost" id="selector-close"></button>
+    </div>
+    <div class="modal-body" style="overflow:hidden;display:flex;flex-direction:column;gap:10px">
+      <div class="sel-grid">
+        <!-- LEFT: lista disponible con búsqueda y acciones rápidas -->
+        <div class="sel-panel">
+          <div class="subsection-title" id="l-available">Disponibles</div>
+          <div class="search-wrap" style="margin:0"><input id="selector-search" type="search" placeholder="Buscar..."></div>
+          <div class="sel-actions">
+            <button class="ghost" id="selector-select-all" style="padding:5px 10px;font-size:12px">☑ Todos</button>
+            <button class="ghost" id="selector-deselect-all" style="padding:5px 10px;font-size:12px">☐ Ninguno</button>
+          </div>
+          <div class="sel-panel-inner" id="selector-list"></div>
+        </div>
+        <!-- RIGHT: panel de seleccionados -->
+        <div class="sel-panel">
+          <div class="subsection-title" id="l-selected-lbl">Seleccionados</div>
+          <div class="small" id="selector-count" style="margin-bottom:4px">0 seleccionados</div>
+          <div class="sel-panel-inner" id="selector-selected"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div style="display:flex;gap:10px;width:100%;justify-content:flex-end">
+        <button class="ghost" id="selector-clear"></button>
+        <button class="primary" id="selector-accept"></button>
+      </div>
+    </div>
+  </div>
+<!-- Mode Config Modal with Jelly Bounce -->
+<div class="modal-back" id="mode-modal" aria-hidden="true">
+  <div class="modal jelly-modal" style="width:min(860px,96vw);max-height:min(90dvh,820px);display:flex;flex-direction:column">
+    <div class="modal-head">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span id="mode-modal-icon" style="font-size:22px">🛡️</span>
+        <h3 id="mode-modal-title" style="margin:0;font-size:17px;font-weight:800">Modo</h3>
+      </div>
+      <button class="ghost" id="mode-modal-close" style="font-size:16px;padding:4px 10px">✕</button>
+    </div>
+    <div class="modal-body" id="mode-modal-body" style="overflow-y:auto;flex:1;padding:16px;overscroll-behavior:contain"></div>
+  </div>
+</div>
+
+<!-- Home name edit modal -->
+<div class="modal-back" id="home-name-modal" aria-hidden="true">
+  <div class="modal" style="width:min(400px,96vw)">
+    <div class="modal-head">
+      <h3 id="home-name-modal-h3">🏡 Nombre del Hogar</h3>
+      <button class="ghost" id="home-name-modal-close">✕</button>
+    </div>
+    <div style="display:grid;gap:14px;padding:4px 0">
+      <p class="small" id="home-name-modal-desc" style="margin:0;opacity:.7">This name appears in the instances panel and in full screen.</p>
+      <div class="field-group">
+        <label id="l-home-name-modal-label">Home name</label>
+        <input type="text" id="home-name-input" placeholder="Mi Casa" maxlength="60" autocomplete="off" class="glass-control">
+      </div>
+      <span class="status" id="home-name-status" style="text-align:center"></span>
+    </div>
+    <div class="modal-footer">
+      <button class="ghost" id="home-name-cancel">Cancelar</button>
+      <button class="primary" id="home-name-save">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- PIN modal -->
+<div class="modal-back pm" id="pin-modal" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="l-introduce-pin">🔒</h3>
+      <button class="ghost" id="pin-close" style="background:transparent; border:none; color:inherit; font-size:20px; cursor:pointer; padding:4px 8px;">✕</button>
+    </div>
+    <div style="display:grid;gap:10px;width:100%">
+      <p id="l-pin-modal-desc" class="small" style="text-align:center;margin:0;opacity:0.75"></p>
+      <input id="pin-input" class="pin-input" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="••••" autocomplete="off" maxlength="8" readonly>
+      <div class="pin-grid" id="pin-pad">
+        <button class="pin-btn-round" type="button" data-pin-digit="1">1</button>
+        <button class="pin-btn-round" type="button" data-pin-digit="2">2</button>
+        <button class="pin-btn-round" type="button" data-pin-digit="3">3</button>
+        <button class="pin-btn-round" type="button" data-pin-digit="4">4</button>
+        <button class="pin-btn-round" type="button" data-pin-digit="5">5</button>
+        <button class="pin-btn-round" type="button" data-pin-digit="6">6</button>
+        <button class="pin-btn-round" type="button" data-pin-digit="7">7</button>
+        <button class="pin-btn-round" type="button" data-pin-digit="8">8</button>
+        <button class="pin-btn-round" type="button" data-pin-digit="9">9</button>
+        <button class="pin-btn-round action-key delete-key" type="button" id="pin-backspace">Borrar</button>
+        <button class="pin-btn-round" type="button" data-pin-digit="0">0</button>
+        <button class="pin-btn-round action-key enter-key" type="button" id="pin-confirm">Enter</button>
+      </div>
+      <div id="pin-error" class="pin-error"></div>
+      <div style="text-align:center; margin-top: 5px;">
+        <a href="#" id="pin-forgot-link" style="font-size:12px; color:var(--accent-color, #ff4081); text-decoration:none; font-weight:700; display:none;"></a>
+      </div>
+    </div>
+    <button id="pin-cancel" style="display:none"></button>
+  </div>
+</div>
+`;
+
+/* ── Web Component ────────────────────────────────────────────────────── */
+class ArgusPanel extends HTMLElement {
+  constructor() {
+    super();
+    this._showSosConfirm = false;
+    this._sosEntryIdx = null;
+    this._sosBusy = false;
+    this._sosSliding = false;
+    this._sosStartX = 0;
+    this._sosOffsetX = 0;
+    this._sosConfirmed = false;
+
+    this.attachShadow({ mode: 'open' }).appendChild(_tmpl.content.cloneNode(true));
+    this._wsId = 1; this._socket = null; this._dashboard = null;
+    this._ui = null; this._available = []; this._mode = 'home'; this._modeEntryId = null;
+    this._selected = []; this._selectorTarget = null;
+    this._hass = null; this._prevStates = {};
+    this._notifTargets = []; // list of notify service_ids selected
+    this._users = [];        // [{name, pin, role, ha_user_id}]
+    this._haUsersList = [];  // fetched HA users
+    this._isAdmin = true;    // determined from hass user
+    this._pinCallback = null;
+    this._homeName = '';     // custom home name, editable with PIN
+    this._backgroundMode = 'weather';
+    this._backgroundImages = [];
+    this._temperatureSource = 'auto';
+    this._weatherSource = 'auto';
+    this._pending = {};
+    this._lastClockUpdate = 0;
+    this._manualLang = null;
+    this._fullscreenIdx = -1;
+    this._cachedBgUrl = null;
+    this._cachedBgBrightness = undefined;
+    this._hubBgMode = 'default';
+    this._hubBgFile = '';
+    this._hubBgSound = false;
+    this._clockFormat = 'auto';
+    this._profileSelectedThisMount = false;
+    this._welcomeShownThisMount = false;
+    this._panicOutputs = undefined;
+    this._initPromise = null;
+    this._staticBound = false;
+    this._postLoadBound = false;
+  }
+
+  _getTimeZone() {
+    return this._hass?.config?.time_zone || undefined;
+  }
+
+  setConfig(config) {
+    this._cardConfig = config;
+    if (config?.compact) {
+      this.setAttribute('compact', '');
+      this.classList.add('argus-compact');
+    } else {
+      this.removeAttribute('compact');
+      this.classList.remove('argus-compact');
+    }
+  }
+
+  _getClockFormat() {
+    const fmt = this._ui?.personalization?.clock_format
+      ?? this._ui?.clock_format 
+      ?? this._dashboard?.clock_format 
+      ?? 'auto';
+    return ['auto', '12h', '24h'].includes(fmt) ? fmt : 'auto';
+  }
+
+  _formatTime(dateInput) {
+    if (!dateInput) return '';
+    const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
+    if (isNaN(date.getTime())) return '';
+
+    const clockPref = this._getClockFormat();
+    const haFmt = String(this._hass?.locale?.time_format || '').toLowerCase();
+    const is12h = clockPref === '12h' || (clockPref === 'auto' && (haFmt.includes('12') || haFmt.includes('am')));
+
+    if (is12h) {
+      let hours = date.getHours();
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      return `${hours}:${minutes} ${ampm}`;
+    } else {
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      return `${hours}:${minutes}`;
+    }
+  }
+
+  _formatDateTime(dateInput) {
+    if (!dateInput) return '';
+    const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
+    if (isNaN(date.getTime())) return '';
+
+    const clockPref = this._getClockFormat();
+    const haFmt = String(this._hass?.locale?.time_format || '').toLowerCase();
+    const is12h = clockPref === '12h' || (clockPref === 'auto' && (haFmt.includes('12') || haFmt.includes('am')));
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    if (is12h) {
+      let hours = date.getHours();
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      return `${day}/${month}/${year}, ${hours}:${minutes} ${ampm}`;
+    } else {
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      return `${day}/${month}/${year}, ${hours}:${minutes}`;
+    }
+  }
+
+  _updateProfileBadge() {
+    const pill = this.shadowRoot.getElementById('active-profile-pill');
+    const avatar = this.shadowRoot.getElementById('profile-avatar');
+    const nameEl = this.shadowRoot.getElementById('profile-name');
+    const roleEl = this.shadowRoot.getElementById('profile-role');
+    if (!pill || !avatar || !nameEl || !roleEl) return;
+
+    const prof = this._currentProfile;
+    if (!prof) { pill.style.display = 'none'; return; }
+
+    pill.style.display = 'flex';
+    const name = prof.name || 'User';
+
+    // ← ESTE ES EL FIX: usa foto si existe
+    if (prof.picture) {
+      avatar.innerHTML = `<img src="${this._escapeHtml(prof.picture)}" 
+        style="width:100%;height:100%;border-radius:50%;object-fit:cover;" 
+        alt="${this._escapeHtml(name)}" />`;
+    } else {
+      avatar.textContent = name.slice(0, 2).toUpperCase();
+    }
+
+    nameEl.textContent = name;
+    const roleKey = prof.role === 'admin' ? 'role_argus_admin' : 'role_argus_user';
+    roleEl.textContent = this._t(roleKey);
+  }
+
+  _getBrightness(src) {
+    return new Promise((resolve) => {
+      if (!src) {
+        resolve(128);
+        return;
+      }
+      const img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.onload = () => {
+        try {
+          const canvas = document.createElement("canvas");
+          canvas.width = 10;
+          canvas.height = 10;
+          const ctx = canvas.getContext("2d");
+          if (!ctx) {
+            resolve(128);
+            return;
+          }
+          ctx.drawImage(img, 0, 0, 10, 10);
+          const imgData = ctx.getImageData(0, 0, 10, 10).data;
+          let r = 0, g = 0, b = 0, count = 0;
+          for (let i = 0; i < imgData.length; i += 4) {
+            r += imgData[i];
+            g += imgData[i + 1];
+            b += imgData[i + 2];
+            count++;
+          }
+          const brightness = (0.299 * r + 0.587 * g + 0.114 * b) / count;
+          resolve(brightness);
+        } catch (e) {
+          resolve(128);
+        }
+      };
+      img.onerror = () => {
+        resolve(128);
+      };
+      img.src = src;
+    });
+  }
+
+  async _updateTheme() {
+    if (!this._hass) return;
+
+    let isDark = false;
+    const hubBgMode = this._hubBgMode || 'default';
+
+    if (hubBgMode === 'default') {
+      // The bundled Argus artwork is intentionally dark. Keeping its dark
+      // Liquid Glass palette preserves contrast and the original depth even
+      // when the surrounding HA shell is in light mode.
+      isDark = true;
+    } else if (hubBgMode === 'image') {
+      const src = this._hubBgFile || '';
+      if (src) {
+        if (this._cachedBgUrl === src && this._cachedBgBrightness !== undefined) {
+          isDark = this._cachedBgBrightness < 135;
+        } else {
+          const brightness = await this._getBrightness(src);
+          this._cachedBgUrl = src;
+          this._cachedBgBrightness = brightness;
+          isDark = brightness < 135;
+        }
+      } else {
+        // Fallback to Home Assistant theme if no image URL is populated yet
+        isDark = this._hass.themes ? this._hass.themes.darkMode === true : false;
+      }
+    } else {
+      // hubBgMode is 'none', so use panel background mode or Lovelace theme
+      const mode = this._backgroundMode || 'weather';
+      if (mode === 'none') {
+        isDark = this._hass.themes ? this._hass.themes.darkMode === true : false;
+      } else if (mode === 'weather') {
+        const isNight = this._hass.states?.['sun.sun']?.state === 'below_horizon';
+        if (isNight) {
+          isDark = true;
+        } else {
+          const weatherEnt = this._getWeatherEntity();
+          const weatherState = weatherEnt.state || 'sunny';
+          const lightConditions = ['sunny', 'fog', 'snow', 'windy'];
+          isDark = !lightConditions.includes(weatherState);
+        }
+      } else if (mode === 'photo' || mode === 'collage') {
+        let src = '';
+        if (this._backgroundImages && this._backgroundImages[0]) {
+          src = this._backgroundImages[0];
+        } else if (this._panelBgFile) {
+          src = this._panelBgFile;
+        }
+        if (src) {
+          if (this._cachedBgUrl === src && this._cachedBgBrightness !== undefined) {
+            isDark = this._cachedBgBrightness < 135;
+          } else {
+            const brightness = await this._getBrightness(src);
+            this._cachedBgUrl = src;
+            this._cachedBgBrightness = brightness;
+            isDark = brightness < 135;
+          }
+        } else {
+          isDark = this._hass.themes ? this._hass.themes.darkMode === true : false;
+        }
+      }
+    }
+
+    this.setAttribute('argus-dark-mode', isDark ? 'true' : 'false');
+    if (isDark) {
+    } else {
+    }
+  }
+
+  set hass(hass) {
+    const oldHass = this._hass;
+    this._hass = hass;
+    const isCardMode = this.hasAttribute('compact') || this.classList.contains('argus-compact') || Boolean(this._cardConfig?.compact);
+    if (!isCardMode && (this._loadState === 'profile_selection' || this._loadState === 'legacy_claim')) return;
+    if (!this._dashboard?.entries?.length) {
+      this._ensureInitialized();
+      return;
+    }
+
+    // Trigger render if any of these change:
+    // 1. Alarm states
+    // 2. Temperature sensor state
+    // 3. Clock (roughly every minute)
+    // 4. Weather state
+
+    const now = Date.now();
+    // Clock is now handled by a dedicated interval for better accuracy
+    const clockChanged = false;
+
+    const languageChanged = oldHass?.language !== hass.language;
+    if (languageChanged && !this._manualLang) this._refreshLocalizedUi();
+
+    const alarmChanged = this._dashboard.entries.some(
+      e => e.entity_id && oldHass?.states[e.entity_id]?.state !== hass.states[e.entity_id]?.state
+    );
+
+    const tempEntity = this._temperatureSource === 'auto' ? null : this._temperatureSource;
+    const tempChanged = tempEntity && oldHass?.states[tempEntity]?.state !== hass.states[tempEntity]?.state;
+
+    const weatherEnt = (this._weatherSource !== 'auto' ? this._weatherSource : Object.values(hass.states).find(s => s.entity_id.startsWith('weather.'))?.entity_id);
+    const weatherChanged = weatherEnt && (
+      oldHass?.states[weatherEnt]?.state !== hass.states[weatherEnt]?.state ||
+      oldHass?.states[weatherEnt]?.attributes?.temperature !== hass.states[weatherEnt]?.attributes?.temperature ||
+      oldHass?.states[weatherEnt]?.attributes?.temperature_unit !== hass.states[weatherEnt]?.attributes?.temperature_unit
+    );
+
+    // Instance cards display live contact state and battery level.  Restrict
+    // updates to configured sensors so unrelated HA state changes do not
+    // redraw the dashboard.
+    const configuredSensors = new Set();
+    const collectConfiguredSensors = value => {
+      if (!value || typeof value !== 'object') return;
+      if (Array.isArray(value.sensors)) value.sensors.forEach(id => configuredSensors.add(id));
+      Object.values(value).forEach(child => {
+        if (child && typeof child === 'object') collectConfiguredSensors(child);
+      });
+    };
+    collectConfiguredSensors(this._ui?.modes);
+    const sensorChanged = Boolean(oldHass) && [...configuredSensors].some(id => {
+      const previous = oldHass.states[id];
+      const current = hass.states[id];
+      return previous?.state !== current?.state
+        || previous?.attributes?.battery_level !== current?.attributes?.battery_level
+        || previous?.attributes?.battery_percentage !== current?.attributes?.battery_percentage;
+    });
+
+    const batteryChanged = Boolean(oldHass) && Object.values(hass.states).some(current => {
+      const id = current.entity_id || '';
+      const isBattery = current.attributes?.device_class === 'battery' || /_battery$/i.test(id);
+      const previous = oldHass.states[id];
+      return isBattery && previous?.state !== current.state;
+    });
+
+    if (alarmChanged || sensorChanged || batteryChanged || tempChanged || clockChanged || weatherChanged || !oldHass) {
+      this._renderEntries();
+      this._renderActivityLog();
+      // Only re-render setup views if they are visible or if it's the first load
+      if (!oldHass) {
+        this._renderModeTabs();
+        this._renderModeView();
+        this._renderAutomations();
+        this._renderNotifications();
+        if (this._activeAccessSection === 'users') this._renderUsers();
+      }
+    }
+  }
+  get hass() { return this._hass; }
+
+  /* ── Translation ─────────────────────────────────────────────────── */
+  _t(key) {
+    const lang = this._getCurrentLangCode();
+    return TEXTS[lang]?.[key] || TEXTS.en[key] || key;
+  }
+
+  _format(key, values = {}) {
+    return this._t(key).replace(/\{(\w+)\}/g, (_, name) => String(values[name] ?? `{${name}}`));
+  }
+
+  _escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, char => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[char]);
+  }
+
+  _getCurrentLangCode() {
+    let raw = this._manualLang;
+    if (!raw) {
+      try { raw = localStorage.getItem('argus_lang'); } catch(e) {}
+    }
+    if (!raw || raw === 'auto') {
+      raw = this._ui?.manual_lang || this._ui?.language || this._hass?.language || 'en';
+    }
+    raw = String(raw || 'en').trim();
+    if (TEXTS[raw]) return raw;
+    if (/^zh-(hant|tw|hk)/i.test(raw)) return 'zh-Hant';
+    if (/^zh/i.test(raw)) return 'zh';
+    const short = raw.split(/[-_]/)[0].toLowerCase();
+    if (TEXTS[short]) return short;
+    return 'en';
+  }
+
+  _getLocale() {
+    return {
+      es: 'es-ES', en: 'en-US', fr: 'fr-FR', pt: 'pt-BR',
+      it: 'it-IT', zh: 'zh-CN', 'zh-Hant': 'zh-TW', ru: 'ru-RU',
+      hi: 'hi-IN', ar: 'ar-SA', ko: 'ko-KR', ja: 'ja-JP', uk: 'uk-UA',
+    }[this._getCurrentLangCode()] || 'en-US';
+  }
+
+  _weatherPresentation(condition, isNight) {
+    const key = String(condition || 'sunny').toLowerCase().replace(/[\s-]+/g, '_');
+    const labels: Record<string, Record<string, string>> = {
+      es: { sunny:'Soleado', clear_night:'Noche despejada', partlycloudy:'Parcialmente nublado', cloudy:'Nublado', rainy:'Lluvioso', pouring:'Lluvia intensa', lightning:'Tormenta eléctrica', lightning_rainy:'Tormenta con lluvia', snowy:'Nevando', fog:'Niebla', windy:'Ventoso', exceptional:'Condiciones excepcionales' },
+      en: { sunny:'Sunny', clear_night:'Clear night', partlycloudy:'Partly cloudy', cloudy:'Cloudy', rainy:'Rainy', pouring:'Heavy rain', lightning:'Thunderstorm', lightning_rainy:'Thunderstorm with rain', snowy:'Snowing', fog:'Foggy', windy:'Windy', exceptional:'Exceptional conditions' },
+      fr: { sunny:'Ensoleillé', clear_night:'Nuit claire', partlycloudy:'Partiellement nuageux', cloudy:'Nuageux', rainy:'Pluvieux', pouring:'Forte pluie', lightning:'Orage', lightning_rainy:'Orage avec pluie', snowy:'Neige', fog:'Brouillard', windy:'Venteux', exceptional:'Conditions exceptionnelles' },
+      pt: { sunny:'Ensolarado', clear_night:'Noite limpa', partlycloudy:'Parcialmente nublado', cloudy:'Nublado', rainy:'Chuvoso', pouring:'Chuva forte', lightning:'Trovoada', lightning_rainy:'Trovoada com chuva', snowy:'Nevando', fog:'Neblina', windy:'Ventoso', exceptional:'Condições excepcionais' },
+      it: { sunny:'Soleggiato', clear_night:'Notte serena', partlycloudy:'Parzialmente nuvoloso', cloudy:'Nuvoloso', rainy:'Piovoso', pouring:'Pioggia intensa', lightning:'Temporale', lightning_rainy:'Temporale con pioggia', snowy:'Nevica', fog:'Nebbia', windy:'Ventoso', exceptional:'Condizioni eccezionali' },
+      zh: { sunny:'晴朗', clear_night:'晴夜', partlycloudy:'局部多云', cloudy:'多云', rainy:'有雨', pouring:'大雨', lightning:'雷暴', lightning_rainy:'雷雨', snowy:'下雪', fog:'有雾', windy:'有风', exceptional:'异常天气' },
+      'zh-Hant': { sunny:'晴朗', clear_night:'晴夜', partlycloudy:'局部多雲', cloudy:'多雲', rainy:'有雨', pouring:'大雨', lightning:'雷暴', lightning_rainy:'雷雨', snowy:'下雪', fog:'有霧', windy:'有風', exceptional:'異常天氣' },
+      ru: { sunny:'Солнечно', clear_night:'Ясная ночь', partlycloudy:'Переменная облачность', cloudy:'Облачно', rainy:'Дождливо', pouring:'Сильный дождь', lightning:'Гроза', lightning_rainy:'Гроза с дождём', snowy:'Снег', fog:'Туман', windy:'Ветрено', exceptional:'Исключительные условия' },
+      hi: { sunny:'धूप', clear_night:'साफ़ रात', partlycloudy:'आंशिक बादल', cloudy:'बादल', rainy:'बारिश', pouring:'भारी बारिश', lightning:'तूफ़ान', lightning_rainy:'तूफ़ानी बारिश', snowy:'बर्फ़बारी', fog:'कोहरा', windy:'हवादार', exceptional:'असाधारण स्थिति' },
+      ar: { sunny:'مشمس', clear_night:'ليلة صافية', partlycloudy:'غائم جزئياً', cloudy:'غائم', rainy:'ماطر', pouring:'أمطار غزيرة', lightning:'عاصفة رعدية', lightning_rainy:'عاصفة مع مطر', snowy:'مثلج', fog:'ضباب', windy:'عاصف', exceptional:'ظروف استثنائية' },
+      ko: { sunny:'맑음', clear_night:'맑은 밤', partlycloudy:'구름 조금', cloudy:'흐림', rainy:'비', pouring:'폭우', lightning:'뇌우', lightning_rainy:'비 동반 뇌우', snowy:'눈', fog:'안개', windy:'바람', exceptional:'특이 기상' },
+      ja: { sunny:'晴れ', clear_night:'快晴（夜）', partlycloudy:'一部曇り', cloudy:'曇り', rainy:'雨', pouring:'大雨', lightning:'雷雨', lightning_rainy:'雨を伴う雷雨', snowy:'雪', fog:'霧', windy:'強風', exceptional:'異常気象' },
+      uk: { sunny:'Сонячно', clear_night:'Ясна ніч', partlycloudy:'Мінлива хмарність', cloudy:'Хмарно', rainy:'Дощ', pouring:'Злива', lightning:'Гроза', lightning_rainy:'Гроза з дощем', snowy:'Сніг', fog:'Туман', windy:'Вітряно', exceptional:'Особливі умови' },
+    };
+    const icon = key.includes('lightning') ? '⛈️'
+      : key === 'pouring' || key.includes('rain') ? '🌧️'
+      : key.includes('snow') || key === 'hail' || key === 'sleet' ? '❄️'
+      : key === 'fog' ? '🌫️'
+      : key.includes('cloud') ? '☁️'
+      : isNight ? '🌙' : '☀️';
+    const language = this._getCurrentLangCode();
+    return { icon, label: labels[language]?.[key] || labels.en[key] || key.replace(/_/g, ' ') };
+  }
+
+  _openLangModal() {
+    const modal = this.shadowRoot.getElementById('lang-modal');
+    if (!modal) return;
+    const grid = this.shadowRoot.getElementById('lang-grid');
+    const cur = this._manualLang || 'auto';
+    if (grid) {
+      grid.innerHTML = LANG_LIST.map(l => `
+        <button class="lang-option${l.code === cur ? ' active' : ''}" data-lang="${l.code}">
+          <span class="lang-flag">${l.flag}</span>
+          <span>${l.code === 'auto' ? this._t('use_ha_language') : l.label}</span>
+        </button>`).join('');
+      grid.querySelectorAll('.lang-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this._setLanguage(btn.dataset.lang);
+          this._closeLangModal();
+        });
+      });
+    }
+    const title = this.shadowRoot.getElementById('lang-modal-title');
+    if (title) title.textContent = `\ud83c\udf10 ${this._t('lang_select_title')}`;
+    const card = modal.querySelector('.lang-modal-card');
+    if (card) { card.style.animation='none'; void card.offsetWidth; card.style.animation=''; }
+    modal.classList.add('open');
+  }
+
+  _closeLangModal() {
+    this.shadowRoot.getElementById('lang-modal')?.classList.remove('open');
+  }
+
+  _setLanguage(code) {
+    const entry_id = this._dashboard?.entry_id || this._dashboard?.entries?.[0]?.entry_id;
+    if (code === 'auto') {
+      this._manualLang = null;
+      try { localStorage.setItem('argus_lang', 'auto'); } catch(e) {}
+      this._send('argus/save_ui', { language: 'auto', manual_lang: 'auto', ...(entry_id ? { entry_id } : {}) }).catch(console.error);
+    } else {
+      if (!TEXTS[code]) return;
+      this._manualLang = code;
+      try { localStorage.setItem('argus_lang', code); } catch(e) {}
+      this._send('argus/save_ui', { language: code, manual_lang: code, ...(entry_id ? { entry_id } : {}) }).catch(console.error);
+    }
+    if (this._instanceSignatures) this._instanceSignatures.clear();
+    this._refreshLocalizedUi();
+  }
+
+  _refreshLocalizedUi() {
+    (window as any)._argusDashboardReadyBtn = this._t('edit_dashboard_done') || '✓ Listo';
+    (window as any)._argusDashboardEditBtn = '✥ ' + (this._t('edit_dashboard') || 'Editar tablero');
+    (window as any)._argusDashboardResetBtn = this._t('reset_dashboard') || 'Restablecer diseño';
+    this._applyTranslations();
+    this._updateHeroProfileDisplay();
+    this._updateHeroClock();
+    if (this._instanceSignatures) this._instanceSignatures.clear();
+    this._renderEntries(true);
+    this._renderModeTabs();
+    this._renderModeView();
+    this._renderActivityLog();
+    this._renderAutomations();
+    this._renderNotifications();
+    this._renderUsers();
+    this._renderSosOutputs();
+    this._configureEmergencyCall();
+    this._updateHomeNameDisplay();
+    this._renderUploadedFiles();
+    const cur = this._manualLang || 'auto';
+    const sel = this.shadowRoot.getElementById('dropdown-lang-select') as HTMLSelectElement | null;
+    if (sel && sel.value !== cur) sel.value = cur;
+  }
+
+  _applyTranslations() {
+    const t = k => this._t(k);
+    const s = id => this.shadowRoot.getElementById(id);
+    const set = (id, txt) => { const e = s(id); if (e) e.textContent = txt; };
+
+    // Update lang pill
+    const cur = this._manualLang || 'auto';
+    const langDef = LANG_LIST.find(l => l.code === cur) || LANG_LIST[1];
+    const flagEl = s('lang-pill-flag'); const labelEl = s('lang-pill-label');
+    if (flagEl) flagEl.textContent = langDef.flag;
+    if (labelEl) labelEl.textContent = cur === 'auto' ? this._t('use_ha_language') : langDef.label;
+
+
+    set('p-hero-desc',    t('hero_desc'));
+    set('h-instances',    t('instances'));
+    set('h-modes',        t('modes'));
+    set('h-automations',  t('automations'));
+    set('p-linked-rules', t('linked_rules'));
+    set('h-settings',     t('settings'));
+    set('h-activity-log', t('activity_log'));
+    set('btn-refresh-history', t('history_refresh'));
+    set('t-change-pin',   t('change_pin'));
+    set('l-current-pin-lbl', t('current_pin'));
+    set('lnk-forgot-pin', t('forgot_pin'));
+    set('pin-forgot-link', t('forgot_pin'));
+    set('btn-save-pin',   t('update_pin'));
+    set('l-new-pin',      t('new_pin'));
+    set('l-confirm-pin',  t('confirm_pin'));
+    set('h-notifications',t('notifications_title'));
+    set('p-notif-desc',   t('notif_desc'));
+    set('h-users',        t('users_title'));
+    set('p-admin-only',   t('admin_only'));
+    set('t-add-user',     t('add_user'));
+    set('l-username',     t('username'));
+    set('l-user-pin',     t('user_pin'));
+    set('s-is-admin',     t('is_admin'));
+    set('l-user-exp-type', t('user_exp_type'));
+    set('l-user-exp-date', t('user_exp_date'));
+    const optInd = s('opt-exp-indefinite'); if (optInd) optInd.textContent = t('exp_indefinite');
+    const optTemp = s('opt-exp-temporary'); if (optTemp) optTemp.textContent = t('exp_temporary');
+    set('selector-select-all',   t('select_all'));
+    set('selector-deselect-all', t('deselect_all'));
+    set('l-available',    t('available'));
+    set('l-selected-lbl', t('selected_lbl'));
+    set('l-introduce-pin',`🔒 ${t('introduce_pin')}`);
+    set('l-pin-modal-desc', t('pin_modal_desc'));
+
+    const sp = id => { const e = s(id); if (e) e.placeholder = t('search_placeholder'); };
+    sp('selector-search');
+
+    const btn = (id, k) => { const e = s(id); if (e) e.textContent = t(k); };
+    btn('btn-new-auto',   'create_ha');
+    btn('btn-save-pin',   'update_pin');
+    btn('btn-save-notif', 'save_notif');
+    btn('btn-save-user',  'save_user');
+    btn('selector-close', 'close');
+    btn('selector-clear', 'clear');
+    btn('selector-accept','accept');
+    btn('pin-cancel',     'cancel');
+    btn('pin-confirm',    'confirm');
+    btn('btn-cancel-sos', 'cancel');
+    btn('sos-call-btn',   'sos_call');
+    btn('home-name-cancel', 'cancel');
+    btn('home-name-save',   'save_btn');
+    const langClose = s('lang-modal-close');
+    if (langClose) langClose.textContent = `✕ ${t('close')}`;
+
+    // Static template labels (new in v1.0.1)
+    set('lbl-home-name-hdr',    t('home_name_lbl'));
+    set('lbl-panel-bg-title',   t('bg_panel_title'));
+    set('lbl-hub-bg-title',     t('bg_hub_title'));
+    set('s-panel-bg-sound-lbl', t('bg_sound_opt'));
+    set('s-hub-bg-sound-lbl',   t('bg_sound_opt'));
+    set('lbl-mas-ajustes', '🎨 ' + t('lbl_aesthetic_custom'));
+    set('edit-widgets-label', this._widgetEditing ? ('✓ ' + t('done')) : '⚙️ Config. Widgets');
+    set('lbl-temperature-source', t('temp_displayed'));
+    set('lbl-weather-source', t('weather_source'));
+    set('lbl-panel-bg-upload',  t('lbl_load_file'));
+    set('lbl-hub-bg-upload',    t('lbl_load_file'));
+    set('lbl-uploaded-files-title', t('lbl_uploaded_files'));
+    set('btn-edit-home-name-standalone', t('edit_btn'));
+    set('btn-save-personalization-standalone', t('save_btn'));
+    set('btn-clear-log',        t('clear_log_btn'));
+    set('h-access-title',       t('access_title'));
+    set('p-access-desc',        t('access_desc'));
+    set('btn-access-users',     `👥 ${t('users_title').replace(/^👥\s*/, '').replace(/\s(?:y|&|e)\s.*$/i, '')}`);
+    set('btn-access-pin',       `🔐 ${t('pin_master_title')}`);
+    set('h-settings-pin',       t('pin_master_title'));
+    set('p-pin-remove-hint',    t('pin_remove_hint'));
+    set('h-backup-title',       t('backup_title'));
+    set('p-backup-desc',        t('backup_desc'));
+    set('btn-export-config',    t('export_btn'));
+    set('btn-reset-config',     t('reset_btn'));
+    set('btn-undo-reset',       t('undo_reset_btn'));
+    set('btn-import-trigger',   t('import_btn'));
+    set('github-title',         t('github_title'));
+    set('github-desc',          t('github_desc'));
+    set('github-action',        `⭐ ${t('github_action')}`);
+    set('sos-title-txt',        t('sos_confirm_title'));
+    set('sos-text-txt',         t('sos_confirm_text'));
+    set('sos-label',            t('sos_slide'));
+    set('home-name-modal-h3',   t('home_name_modal_title'));
+    set('p-home-name-modal-desc', t('home_name_modal_desc'));
+    set('l-home-name-modal-label', t('home_name_label'));
+    set('lang-modal-title',     `🌐 ${t('lang_select_title')}`);
+    set('sos-call-help', t('sos_call_help'));
+    set('lbl-emergency-number', t('emergency_number_label'));
+    set('emergency-number-help', t('emergency_help'));
+    set('lbl-sos-actions', t('sos_actions'));
+    set('btn-select-sos-outputs', t('sos_select_outputs'));
+    set('sos-output-help', t('sos_outputs_help'));
+    set('home-name-modal-desc', t('home_name_modal_desc'));
+    set('pin-backspace', t('delete'));
+
+    const bgMode = s('bg-mode-select-standalone');
+    if (bgMode) {
+      const v = bgMode.value;
+      bgMode.innerHTML = `
+        <option value="weather">${t('bg_weather')}</option>
+        <option value="none">${t('bg_panel_none')}</option>
+        <option value="photo">${t('bg_photo')}</option>
+        <option value="collage">${t('bg_collage')}</option>
+      `;
+      if (v) bgMode.value = v;
+        this._renderEntries();
+}
+
+    const hubBgSelect = s('hub-bg-mode-select');
+    if (hubBgSelect) {
+      const v = hubBgSelect.value;
+      hubBgSelect.innerHTML = `
+        <option value="default">${t('bg_hub_default')}</option>
+        <option value="image">${t('bg_image_opt')}</option>
+      `;
+      if (v) hubBgSelect.value = v;
+    }
+
+    this._populateTemperatureSources();
+    this._populateWeatherSources();
+
+    // PIN display
+    const pinDisp2 = s('current-pin-display');
+    if (pinDisp2) {
+      const hasPIN = this._dashboard?.entries?.[0]?.pin_configured;
+      if (hasPIN !== undefined && hasPIN !== null) {
+        pinDisp2.textContent = hasPIN ? t('pin_active_yes') : t('pin_active_no');
+      } else {
+        const text = pinDisp2.textContent || '';
+        const hasPINText = text.includes('Sí') || text.includes('Yes')
+          || text.includes('Sim') || text.includes('Sì')
+          || text.includes('是') || text.includes('Да')
+          || text.includes('Ja') || text.includes('Oui')
+          || text.includes('Activo') || text.includes('Active');
+        pinDisp2.textContent = hasPINText ? t('pin_active_yes') : t('pin_active_no');
+      }
+    }
+    // Home name input placeholder
+    const hnInput = s('home-name-input');
+    if (hnInput) hnInput.placeholder = t('home_name_placeholder');
+    const panelUrl = s('panel-bg-url-input');
+    if (panelUrl) panelUrl.placeholder = t('url_placeholder');
+    const hubUrl = s('hub-bg-url-input');
+    if (hubUrl) hubUrl.placeholder = t('url_placeholder');
+
+    // Real-time live update of all entry buttons, disarm button & global status badge
+    const root = this.shadowRoot;
+    if (root) {
+      const modeLabel = key => {
+        const str = String(this._t(key) || '').trim();
+        const firstSpace = str.indexOf(' ');
+        if (firstSpace > 0 && firstSpace <= 3) return str.substring(firstSpace + 1).trim();
+        return str;
+      };
+      root.querySelectorAll('.entry').forEach(entry => {
+        const homeSpan = entry.querySelector('.btn-home span');
+        if (homeSpan) homeSpan.textContent = modeLabel('btn_home');
+        const awaySpan = entry.querySelector('.btn-away span');
+        if (awaySpan) awaySpan.textContent = modeLabel('btn_away');
+        const nightSpan = entry.querySelector('.btn-night span');
+        if (nightSpan) nightSpan.textContent = modeLabel('btn_night');
+        const vacationSpan = entry.querySelector('.btn-vacation span');
+        if (vacationSpan) vacationSpan.textContent = modeLabel('btn_vacation');
+        const disarmSpan = entry.querySelector('.btn-disarm span, .argus-disarm-btn b');
+        if (disarmSpan) disarmSpan.textContent = modeLabel('btn_disarmed');
+        const sosSpan = entry.querySelector('.btn-sos span');
+        if (sosSpan) {
+          const isPanicActive = entry.querySelector('.btn-sos[data-action="stop-sos"]');
+          sosSpan.textContent = isPanicActive ? this._t('sos_stop') : this._t('btn_sos');
+        }
+      });
+      const globalStatus = root.getElementById('global-status');
+      if (globalStatus) globalStatus.innerHTML = '';
+    }
+
+    this._syncAccessSummary();
+  }
+
+  _syncAccessSummary() {
+    const summary = this.shadowRoot?.getElementById('p-access-desc');
+    if (!summary) return;
+
+    // Translation runs before the dashboard bootstrap has necessarily
+    // completed. Keep the generic description until real access data exists.
+    if (!this._dashboard) {
+      summary.textContent = this._t('access_desc');
+      return;
+    }
+
+    const hasMasterPin = this._dashboard.entries?.[0]?.pin_configured === true;
+    const pinStatus = this._t(hasMasterPin ? 'pin_active_yes' : 'pin_active_no');
+    const userCount = Array.isArray(this._users)
+      ? this._users.filter(user => user?.enabled !== false).length
+      : 0;
+    const usersStatus = userCount > 0
+      ? `${this._t('users_title')}: ${userCount}`
+      : this._t('no_users');
+
+    summary.textContent = `${pinStatus} · ${usersStatus}`;
+  }
+
+  _toggleAccessSection(section) {
+    // Nav toggling is removed. Sections are always visible.
+  }
+
+  /* ── Init ────────────────────────────────────────────────────────── */
+  connectedCallback() {
+    // Restore persisted language
+    try { this._manualLang = localStorage.getItem('argus_lang') || null; } catch(e) {}
+    this._ensureInitialized();
+    this._startClock();
+    
+    // Safety check: If we think we are in fullscreen, but the browser is not, and we are not a kiosk, reset it.
+    // This prevents the 'X' button getting stuck when returning to a cached component state.
+    if (this._fullscreenIdx >= 0 && !this._kioskLocked) {
+      const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+      if (!fsEl) {
+        this._fullscreenIdx = -1;
+        this.classList.remove('fullscreen-active');
+      }
+    }
+
+    // Listen to fullscreen changes to handle native escape key / exit
+    this._onFsChange = () => {
+      const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+      if (!fsEl && !this._kioskLocked) {
+        this.classList.remove('fullscreen-active');
+        const activeFS = this.shadowRoot.querySelector('.entry.ios-fullscreen');
+        if (activeFS) {
+          activeFS.classList.remove('ios-fullscreen');
+        }
+        this._fullscreenIdx = -1;
+        document.body.style.overflow = '';
+        this._renderEntries();
+      }
+    };
+    document.addEventListener('fullscreenchange', this._onFsChange);
+    document.addEventListener('webkitfullscreenchange', this._onFsChange);
+    this._onEscape = event => {
+      if (event.key !== 'Escape' || !this.classList.contains('fullscreen-active')) return;
+      // Native fullscreen emits fullscreenchange. This also covers the CSS
+      // fallback used by Safari, where Esc does not emit that event.
+      if (!(document.fullscreenElement || document.webkitFullscreenElement)) {
+        this._exitFullscreenView();
+      }
+    };
+    document.addEventListener('keydown', this._onEscape);
+  }
+  disconnectedCallback() {
+    if (this._clockInterval) clearInterval(this._clockInterval);
+    if (this._initRetryTimer) clearTimeout(this._initRetryTimer);
+    if (this._socket) {
+      this._socket.close();
+      this._socket = null;
+    }
+    // Home Assistant may reuse this panel element after navigating away.
+    // Authentication is per opening, so do not retain a dashboard/profile.
+    this._dashboard = null;
+    this._currentProfile = null;
+    this._profileSelectedThisMount = false;
+    this._welcomeShownThisMount = false;
+    this._loadState = null;
+    this._initPromise = null;
+    if (this._onFsChange) {
+      document.removeEventListener('fullscreenchange', this._onFsChange);
+      document.removeEventListener('webkitfullscreenchange', this._onFsChange);
+    }
+    if (this._onEscape) document.removeEventListener('keydown', this._onEscape);
+    this.shadowRoot?.querySelectorAll('.wx-webgl').forEach(canvas => canvas._argusWebglStop?.());
+  }
+
+  _startClock() {
+    if (this._clockInterval) clearInterval(this._clockInterval);
+    this._clockInterval = setInterval(() => {
+      const now = new Date();
+      if (this._dashboard) {
+        const heroClock = this.shadowRoot.getElementById('hero-clock-time');
+        if (heroClock) {
+          const tStr = this._formatTime(now);
+          if (heroClock.textContent !== tStr) heroClock.textContent = tStr;
+        }
+        const conClock = this.shadowRoot.querySelector('.console-hud-time');
+        if (conClock) {
+          const tStr = this._formatTime(now);
+          if (conClock.textContent !== tStr) conClock.textContent = tStr;
+        }
+      }
+    }, 1000);
+  }
+
+  _ensureInitialized() {
+    // Lovelace can attach the element before assigning hass.  Waiting for the
+    // authenticated hass object avoids a permanent blank panel after a reload.
+    if (!this.isConnected || !this._hass || this._dashboard || this._initPromise) return;
+    this._initPromise = this._init()
+      .catch(err => {
+        console.error('Argus initialization failed:', err);
+        if (this.isConnected) {
+          this._renderInitializationError(err);
+        }
+      })
+      .finally(() => { this._initPromise = null; });
+  }
+
+  _bindSOS() {
+    if (this._sosBound) return;
+    const thumb = this.shadowRoot.getElementById('sos-thumb');
+    const track = thumb && thumb.closest('.ios-slider-track');
+    if (!thumb || !track || thumb._sosBound) return;
+    thumb._sosBound = true;
+
+    let sliding = false, startX = 0, offsetX = 0;
+    const maxSlide = () => Math.max(1, track.offsetWidth - thumb.offsetWidth - 12);
+
+    const onPointerDown = (e) => {
+      sliding = true;
+      startX = e.clientX - offsetX;
+      thumb.setPointerCapture(e.pointerId);
+      thumb.style.transition = 'none';
+      thumb.style.cursor = 'grabbing';
+      e.preventDefault();
+    };
+
+    const onPointerMove = (e) => {
+      if (!sliding) return;
+      offsetX = Math.max(0, Math.min(e.clientX - startX, maxSlide()));
+      thumb.style.left = (6 + offsetX) + 'px';
+      const pct = offsetX / maxSlide();
+      track.style.background = 'rgba(217,4,41,' + (0.15 + pct * 0.55) + ')';
+      if (pct >= 0.98) finalize(true);
+    };
+
+    const onPointerUp = (e) => {
+      if (!sliding) return;
+      finalize(false);
+    };
+
+    const finalize = (confirmed) => {
+      sliding = false;
+      thumb.style.transition = 'all 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28)';
+      thumb.style.cursor = 'grab';
+      if (confirmed) {
+        this._triggerSOS();
+        offsetX = 0;
+        setTimeout(() => {
+          thumb.style.left = '6px';
+          track.style.background = 'rgba(217,4,41,0.15)';
+        }, 600);
+      } else {
+        offsetX = 0;
+        thumb.style.left = '6px';
+        track.style.background = 'rgba(217,4,41,0.15)';
+      }
+    };
+
+    thumb.addEventListener('pointerdown', onPointerDown);
+    thumb.addEventListener('pointermove', onPointerMove);
+    thumb.addEventListener('pointerup', onPointerUp);
+    thumb.addEventListener('pointercancel', onPointerUp);
+    this._sosBound = true;
+  }
+
+  async _init() {
+    this._mode = 'disarmed';
+    if (!this._staticBound) {
+      this._bindStatic();
+      this._staticBound = true;
+    }
+    await this._connect();
+    this._applyTranslations();
+    await this._load();
+    // Onboarding and login are valid initialized states, not failures that
+    // should spawn a new WebSocket/retry loop.
+    if (!this._dashboard) return;
+    this._initWidgetGrid();
+    if (this._postLoadBound) return;
+    this._postLoadBound = true;
+    this.shadowRoot.getElementById('btn-clear-log')?.addEventListener('click', () => this._clearHistory());
+    this.shadowRoot.getElementById('btn-refresh-history')?.addEventListener('click', async () => {
+      await this._loadActivityTimeline(this._dashboard?.entry_id);
+      this._renderActivityLog();
+    });
+    this.shadowRoot.getElementById('btn-export-forensic')?.addEventListener('click', () => this._exportForensicTimeline());
+    this.shadowRoot.getElementById('btn-export-config')?.addEventListener('click', () => this._exportConfig());
+    this.shadowRoot.getElementById('btn-import-trigger')?.addEventListener('click', () => this.shadowRoot.getElementById('import-config-file').click());
+    this.shadowRoot.getElementById('import-config-file')?.addEventListener('change', (ev) => this._importConfig(ev));
+    this.shadowRoot.getElementById('btn-reset-config')?.addEventListener('click', () => this._resetConfig());
+    this.shadowRoot.getElementById('btn-undo-reset')?.addEventListener('click', () => this._undoResetConfig());
+
+    this.shadowRoot.getElementById('btn-save-personalization-standalone')?.addEventListener('click', () => this._savePersonalization());
+    // Toggle header logic moved to _localize to prevent duplicate bindings
+    this.shadowRoot.getElementById('btn-select-sos-outputs')?.addEventListener('click', () => this._openModal('panic'));
+
+    this._configureEmergencyCall();
+  }
+
+  async _clearHistory() {
+    if (!confirm(this._t('clear_history_confirm'))) return;
+    try {
+      const entryId = this._dashboard?.entry_id;
+      await this._send('argus/clear_audit_log', entryId ? { entry_id: entryId } : {});
+      await this._loadActivityTimeline(entryId);
+      this._renderActivityLog();
+    } catch (err) { alert(this._format('generic_error', { error: err.message })); }
+  }
+
+  async _loadActivityTimeline(entryId = null) {
+    if (!this._ui) return;
+    try {
+      const payload = { limit: 100 };
+      if (entryId) payload.entry_id = entryId;
+      const response = await this._send('argus/get_forensic_timeline', payload);
+      const timeline = Array.isArray(response?.timeline)
+        ? response.timeline.filter(entry => entry && typeof entry === 'object' && !Array.isArray(entry))
+        : [];
+      this._forensicTimeline = timeline;
+      this._activityTimelineError = null;
+      this._ui.audit_log = timeline;
+      this._renderActivityLog();
+    } catch (err) {
+      // A profile without view_history may continue using the dashboard.
+      // Preserve any audit data already present instead of erasing it.
+      console.warn('Argus activity timeline unavailable:', err);
+      this._activityTimelineError = err?.message || String(err);
+      this._forensicTimeline = null;
+      if (!Array.isArray(this._ui.audit_log)) this._ui.audit_log = [];
+      this._renderActivityLog();
+    }
+  }
+
+  _exportForensicTimeline() {
+    const events = Array.isArray(this._forensicTimeline) ? this._forensicTimeline : (this._ui?.audit_log || []);
+    const blob = new Blob([JSON.stringify({format:'argus-forensic-timeline',generated_at:new Date().toISOString(),events}, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob); const anchor = document.createElement('a');
+    anchor.href = url; anchor.download = `argus_forensic_${new Date().toISOString().replace(/[:.]/g,'-')}.json`; anchor.click();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+  }
+
+  _backupText(key) {
+    const language = this._getCurrentLangCode();
+    const messages = {
+      es:{password:'Contraseña de cifrado (mínimo 8 caracteres)',weak:'La contraseña debe tener al menos 8 caracteres.',decrypt:'Contraseña de la copia cifrada',bad:'No se pudo descifrar la copia. Verifica la contraseña.'},
+      en:{password:'Encryption password (minimum 8 characters)',weak:'The password must be at least 8 characters.',decrypt:'Encrypted backup password',bad:'The backup could not be decrypted. Check the password.'},
+      fr:{password:'Mot de passe de chiffrement (8 caractères minimum)',weak:'Le mot de passe doit comporter au moins 8 caractères.',decrypt:'Mot de passe de la sauvegarde chiffrée',bad:'Impossible de déchiffrer la sauvegarde. Vérifiez le mot de passe.'},
+      pt:{password:'Senha de criptografia (mínimo de 8 caracteres)',weak:'A senha deve ter pelo menos 8 caracteres.',decrypt:'Senha do backup criptografado',bad:'Não foi possível descriptografar o backup. Verifique a senha.'},
+      it:{password:'Password di cifratura (minimo 8 caratteri)',weak:'La password deve contenere almeno 8 caratteri.',decrypt:'Password del backup cifrato',bad:'Impossibile decifrare il backup. Verifica la password.'},
+      zh:{password:'加密密码（至少 8 个字符）',weak:'密码必须至少包含 8 个字符。',decrypt:'加密备份密码',bad:'无法解密备份，请检查密码。'},
+      ru:{password:'Пароль шифрования (минимум 8 символов)',weak:'Пароль должен содержать не менее 8 символов.',decrypt:'Пароль зашифрованной копии',bad:'Не удалось расшифровать копию. Проверьте пароль.'},
+    };
+    return (messages[language] || messages.en)[key];
+  }
+
+  _bytesToBase64(bytes) {
+    let binary = '';
+    bytes.forEach(byte => { binary += String.fromCharCode(byte); });
+    return btoa(binary);
+  }
+
+  _base64ToBytes(value) {
+    return Uint8Array.from(atob(value), char => char.charCodeAt(0));
+  }
+
+  async _backupKey(password, salt, usages) {
+    const material = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
+    return crypto.subtle.deriveKey(
+      {name:'PBKDF2',salt,iterations:250000,hash:'SHA-256'}, material,
+      {name:'AES-GCM',length:256}, false, usages
+    );
+  }
+
+  _requestBackupPassword(kind) {
+    return new Promise(resolve => {
+      const layer = document.createElement('div');
+      layer.className = 'modal-back open';
+      layer.setAttribute('role', 'dialog');
+      layer.setAttribute('aria-modal', 'true');
+      const title = kind === 'decrypt' ? this._backupText('decrypt') : this._backupText('password');
+      layer.innerHTML = `<div class="modal" style="max-width:430px"><div class="modal-head"><h3>${this._escapeHtml(title)}</h3></div><input type="password" class="glass-control" autocomplete="new-password" style="font-size:17px"><div style="display:flex;gap:9px;justify-content:flex-end;margin-top:14px"><button class="ghost" data-secret-cancel>✕</button><button class="primary" data-secret-ok>✓</button></div></div>`;
+      this.shadowRoot.appendChild(layer);
+      const input = layer.querySelector('input');
+      const finish = value => { layer.remove(); resolve(value); };
+      layer.querySelector('[data-secret-cancel]').addEventListener('click', () => finish(null));
+      layer.querySelector('[data-secret-ok]').addEventListener('click', () => finish(input.value));
+      input.addEventListener('keydown', event => { if (event.key === 'Enter') finish(input.value); if (event.key === 'Escape') finish(null); });
+      requestAnimationFrame(() => input.focus());
+    });
+  }
+
+  async _exportConfig() {
+    try {
+      const password = await this._requestBackupPassword('encrypt');
+      if (password === null) return;
+      if (password.length < 8) { alert(this._backupText('weak')); return; }
+      const exported = await this._send('argus/export_config');
+      const config = exported?.config;
+      if (typeof config !== 'object' || config === null) throw new Error(this._t('invalid_config'));
+      // Runtime alarm state belongs to the current installation and must not
+      // be imported as a command on another system.
+      delete config.runtime;
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const key = await this._backupKey(password, salt, ['encrypt']);
+      const cipher = await crypto.subtle.encrypt({name:'AES-GCM',iv}, key, new TextEncoder().encode(JSON.stringify(config)));
+      const envelope = {
+        format:'argus-encrypted-backup',version:1,kdf:'PBKDF2-SHA256',iterations:250000,cipher:'AES-256-GCM',
+        salt:this._bytesToBase64(salt),iv:this._bytesToBase64(iv),data:this._bytesToBase64(new Uint8Array(cipher))
+      };
+      const blob = new Blob([JSON.stringify(envelope)], { type: 'application/json' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href     = url;
+      a.download = `argus_backup_${new Date().toISOString().split('T')[0]}.argus`;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+    } catch (err) {
+      alert(this._format('export_error', { error: err.message }));
+    }
+  }
+
+  _importConfig(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    event.target.value = ''; // Fix #3 - permite reimportar el mismo archivo
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        let config = JSON.parse(e.target.result);
+        if (config?.format === 'argus-encrypted-backup') {
+          const password = await this._requestBackupPassword('decrypt');
+          if (password === null) return;
+          try {
+            const salt = this._base64ToBytes(config.salt);
+            const iv = this._base64ToBytes(config.iv);
+            const key = await this._backupKey(password, salt, ['decrypt']);
+            const plain = await crypto.subtle.decrypt({name:'AES-GCM',iv}, key, this._base64ToBytes(config.data));
+            config = JSON.parse(new TextDecoder().decode(plain));
+          } catch (_) {
+            throw new Error(this._backupText('bad'));
+          }
+        }
+        if (typeof config !== 'object' || config === null)
+          throw new Error(this._t('invalid_config'));
+        await this._send('argus/restore_config', { config });
+        alert(this._t('import_success'));
+        window.location.reload();
+      } catch (err) {
+        alert(this._format('import_error', { error: err.message }));
+      }
+    };
+    reader.onerror = () => alert(this._t('file_read_error'));
+    reader.readAsText(file);
+  }
+
+  async _resetConfig() {
+    if (!confirm(this._t('reset_confirm'))) return;
+    try {
+      this._undoState = JSON.parse(JSON.stringify(this._ui)); // Store for undo
+
+      const defaultConfig = {};
+      await this._send('argus/restore_config', { config: defaultConfig });
+
+      this.shadowRoot.getElementById('btn-reset-config').style.display = 'none';
+      this.shadowRoot.getElementById('btn-undo-reset').style.display = 'block';
+
+      alert(this._t('reset_success'));
+
+      // Auto reload after 10s if not undone
+      this._resetTimer = setTimeout(() => {
+        window.location.reload();
+      }, 10000);
+
+    } catch (err) {
+      alert(this._t('reset_error_auth'));
+    }
+  }
+
+  async _undoResetConfig() {
+    if (!this._undoState) return;
+    try {
+      clearTimeout(this._resetTimer);
+      await this._send('argus/restore_config', { config: this._undoState });
+
+      this.shadowRoot.getElementById('btn-reset-config').style.display = 'block';
+      this.shadowRoot.getElementById('btn-undo-reset').style.display = 'none';
+
+      alert(this._t('undo_success'));
+      window.location.reload();
+    } catch (err) {
+      alert(this._format('undo_error', { error: err.message }));
+    }
+  }
+
+  _bindStatic() {
+    const s = id => this.shadowRoot.getElementById(id);
+    s('selector-close').addEventListener('click', () => this._closeModal());
+    s('selector-accept').addEventListener('click', () => this._acceptSelection());
+    s('selector-clear').addEventListener('click', () => { this._selected = []; this._renderSelector(true); });
+    s('selector-search').addEventListener('input', () => {
+      clearTimeout(this._searchDebounce);
+      this._searchDebounce = setTimeout(() => this._renderSelector(true), 120);
+    });
+    s('selector-modal').addEventListener('click', e => { if (e.target.id === 'selector-modal') this._closeModal(); });
+    s('selector-select-all').addEventListener('click', () => this._selectAll());
+    s('selector-deselect-all').addEventListener('click', () => { this._selected = []; this._renderSelector(true); });
+
+    s('btn-new-auto').addEventListener('click', () => {
+      history.pushState(null, '', '/config/automation/edit/new');
+      window.dispatchEvent(new CustomEvent('location-changed'));
+    });
+    s('btn-access-users')?.addEventListener('click', () => this._toggleAccessSection('users'));
+    s('btn-access-pin')?.addEventListener('click', () => this._toggleAccessSection('pin'));
+    s('btn-save-pin').addEventListener('click', () => this._savePin());
+    s('lnk-forgot-pin')?.addEventListener('click', e => { e.preventDefault(); this._handleForgotPin(); });
+    s('pin-forgot-link')?.addEventListener('click', e => { e.preventDefault(); this._handleForgotPin(); });
+
+    s('pin-close').addEventListener('click', () => this._closePinModal());
+    s('pin-cancel').addEventListener('click', () => this._closePinModal());
+    s('pin-modal').addEventListener('click', e => { if (e.target.id === 'pin-modal') this._closePinModal(); });
+    s('pin-confirm').addEventListener('click', () => this._submitPin());
+    s('pin-input').addEventListener('keydown', e => { if (e.key === 'Enter') this._submitPin(); });
+    this.shadowRoot.querySelectorAll('[data-pin-digit]').forEach(btn =>
+      btn.addEventListener('click', () => this._appendPinDigit(btn.dataset.pinDigit))
+    );
+    s('pin-backspace').addEventListener('click', () => this._backspacePin());
+
+    s('btn-add-notif')?.addEventListener('click', () => this._addNotifTarget());
+    s('btn-save-notif')?.addEventListener('click', () => this._saveNotifications());
+
+    // Home name edit (requires PIN)
+    s('btn-edit-home-name-standalone')?.addEventListener('click', () => this._editHomeName());
+    s('home-name-modal-close').addEventListener('click', () => this._closeHomeNameModal());
+    s('home-name-cancel').addEventListener('click', () => this._closeHomeNameModal());
+    s('home-name-modal').addEventListener('click', e => { if (e.target.id === 'home-name-modal') this._closeHomeNameModal(); });
+    s('home-name-save').addEventListener('click', () => this._saveHomeName());
+    s('home-name-input').addEventListener('keydown', e => { if (e.key === 'Enter') this._saveHomeName(); });
+
+    // Mode Modal
+    s('mode-modal-close')?.addEventListener('click', () => this._closeModeModal());
+    s('mode-modal')?.addEventListener('click', e => { if ((e.target as HTMLElement)?.id === 'mode-modal') this._closeModeModal(); });
+
+    // Edit widgets button
+    s('btn-edit-widgets')?.addEventListener('click', () => this._toggleWidgetEditing());
+
+    // Personalize section toggle
+    const toggleHeader = s('lbl-aesthetic-custom');
+    const personalizeWorkspace = s('personalize-workspace');
+    if (toggleHeader && personalizeWorkspace && !toggleHeader._boundToggle) {
+      toggleHeader._boundToggle = true;
+      toggleHeader.addEventListener('click', () => {
+        const isCollapsed = personalizeWorkspace.classList.toggle('collapsed');
+        const chevron = s('personalize-chevron');
+        if (chevron) {
+          chevron.textContent = isCollapsed ? '▼' : '▲';
+        }
+      });
+    }
+
+    // Language picker
+    s('btn-lang-picker')?.addEventListener('click', () => this._openLangModal());
+    s('lang-modal-close')?.addEventListener('click', () => this._closeLangModal());
+    s('lang-modal')?.addEventListener('click', e => { if (e.target.id === 'lang-modal') this._closeLangModal(); });
+
+    // SOS Modal
+    const closeSOS = () => {
+      s('sos-modal')?.classList.remove('open');
+      this._sosEntryIdx = null;
+      if (s('sos-thumb')) {
+         s('sos-thumb').style.left = '6px';
+         s('sos-thumb').closest('.ios-slider-track').style.background = 'rgba(217,4,41,0.15)';
+      }
+    };
+    s('btn-cancel-sos')?.addEventListener('click', closeSOS);
+    s('sos-close-x')?.addEventListener('click', closeSOS);
+    s('sos-modal')?.addEventListener('click', e => { if (e.target.id === 'sos-modal') closeSOS(); });
+
+    s('bg-mode-select-standalone')?.addEventListener('change', () => this._updateBgFieldsVisibility());
+    s('hub-bg-mode-select')?.addEventListener('change', () => this._updateBgFieldsVisibility());
+    s('panel-bg-file-input')?.addEventListener('change', e => this._handlePanelBgFile(e));
+    s('hub-bg-file-input')?.addEventListener('change', e => this._handleHubBgFile(e));
+  }
+
+  /* ── WebSocket ───────────────────────────────────────────────────── */
+  async _connect() {
+    // A custom panel already receives Home Assistant's authenticated
+    // connection. Opening a second socket and reading hass.auth.data used an
+    // internal token that modern HA versions no longer expose reliably.
+    if (typeof this._hass?.callWS !== 'function') {
+      throw new Error('Home Assistant authenticated WebSocket is unavailable');
+    }
+  }
+
+  _send(type, data = {}) {
+    if (typeof this._hass?.callWS !== 'function') {
+      return Promise.reject(new Error('Home Assistant authenticated WebSocket is unavailable'));
+    }
+    return this._hass.callWS({ type, ...data });
+  }
+
+  /* ── Load dashboard ──────────────────────────────────────────────── */
+  async _load() {
+    this.shadowRoot.querySelector('.wrap')?.classList.remove('wrap-ready');
+    let bootstrap;
+    try { bootstrap = await this._send('argus/login_bootstrap'); }
+    catch (e) { console.error('Argus bootstrap load failed:', e); return; }
+
+    this._bootstrap = bootstrap;
+    
+    const userTheme = bootstrap.user_theme || { background_mode: "default", background_file: "" };
+    this._currentUserTheme = userTheme;
+    
+    if (userTheme.background_mode !== "default" && userTheme.background_file) {
+      this._backgroundMode = userTheme.background_mode;
+      this._panelBgFile = userTheme.background_file;
+      this._backgroundImages = [userTheme.background_file];
+    } else if (userTheme.background_mode !== "default" && userTheme.background_mode) {
+      this._backgroundMode = userTheme.background_mode;
+      this._panelBgFile = '';
+      this._backgroundImages = [];
+    } else {
+      this._backgroundMode = bootstrap.background_mode || 'none';
+      this._panelBgFile = '';
+      this._backgroundImages = bootstrap.background_images || [];
+    }
+    if (bootstrap.weather_source) this._weatherSource = bootstrap.weather_source;
+    if (bootstrap.temperature_source) this._temperatureSource = bootstrap.temperature_source;
+    try {
+      const stored = localStorage.getItem('argus_lang');
+      if (stored && stored !== 'auto') {
+        this._manualLang = stored;
+      } else if (bootstrap.language) {
+        this._manualLang = bootstrap.language;
+      }
+    } catch(e) {}
+    
+    this._updateCanvasBackground();
+
+    if (bootstrap.configuration_missing) {
+      this._loadState = 'configuration_missing';
+      this._renderMissingConfigurationScreen();
+      return;
+    }
+
+    if (bootstrap.first_run) {
+      this._loadState = 'first_run';
+      this._renderFirstRunScreen();
+      return;
+    }
+
+    if (bootstrap.legacy_claim_needed) {
+      this._loadState = 'legacy_claim';
+      this._renderLegacyClaimScreen();
+      return;
+    }
+
+    const isCardMode = this.hasAttribute('compact') || this.classList.contains('argus-compact') || Boolean(this._cardConfig?.compact);
+    if (!bootstrap.has_active_session || !this._profileSelectedThisMount) {
+      if (isCardMode) {
+        this._profileSelectedThisMount = true;
+        const ownUser = (bootstrap.users || []).find(u => u.is_own_profile) || (bootstrap.users || [])[0];
+        if (ownUser && !bootstrap.has_active_session) {
+          try { await this._send('argus/select_profile', { argus_user_id: ownUser.id }); } catch (_) {}
+        }
+      } else {
+        this._loadState = 'profile_selection';
+        this._renderLoginScreen(bootstrap);
+        return;
+      }
+    }
+
+    // Always nuke any leftover login/profile overlays before showing dashboard,
+    // but NEVER destroy the welcome screen since it might be mid-animation.
+    this.shadowRoot.querySelectorAll('.argus-profile-overlay, .argus-pin-prompt').forEach(el => el.remove());
+
+    // Now we have a session, load dashboard
+    let dashboard;
+    try { 
+      dashboard = await this._send('argus/dashboard'); 
+    } catch (e) {
+      if (isCardMode) {
+        const entityId = this._config?.entity || 'alarm_control_panel.argus';
+        const entityState = this._hass?.states[entityId];
+        dashboard = {
+          entries: [{
+            entity_id: entityId,
+            name: entityState?.attributes?.friendly_name || 'Argus Security',
+            state: entityState?.state || 'unavailable',
+            pin_configured: true
+          }]
+        };
+      } else {
+        if (e.message.includes('permission') || e.message.includes('session') || e.message.includes('unauthorized')) {
+          this._renderLoginScreen(bootstrap);
+          return;
+        }
+        console.error('Argus dashboard load failed:', e);
+        return;
+      }
+    }
+
+    if (isCardMode && dashboard?.entries?.length) {
+      const entityId = this._config?.entity || 'alarm_control_panel.argus';
+      let targetEntry = dashboard.entries.find(e => e.entity_id === entityId);
+      if (!targetEntry) {
+        targetEntry = dashboard.entries[0];
+      }
+      dashboard.entries = [targetEntry];
+    }
+
+    this._dashboard = dashboard;
+    this._available = dashboard.available_entities || [];
+    this._ui = dashboard.ui || { modes: {}, dashboard: {} };
+    this._notifTargets = dashboard.ui?.notif_targets || [];
+    this._users = Array.isArray(dashboard.ui?.users)
+      ? dashboard.ui.users.filter(user => user && typeof user === 'object' && !Array.isArray(user))
+      : [];
+    this._homeName = dashboard.ui?.home_name || '';
+    this._emergencyNumber = dashboard.ui?.emergency_number || '911';
+    this._loadState = 'dashboard';
+    this.shadowRoot.querySelector('.wrap')?.classList.add('wrap-ready');
+    this._currentProfile = dashboard.current_profile || null;
+    this._renderEntries();
+    this._renderModeTabs();
+    this._renderModeView();
+    this._renderAutomations();
+    this._renderNotifications();
+    this._updateHeroProfileDisplay();
+    const bootstrapOverlay = this.shadowRoot.getElementById('bootstrap-overlay');
+    if (bootstrapOverlay) {
+      if (this._currentProfile && !this._welcomeShownThisMount) {
+        bootstrapOverlay.style.display = 'flex';
+      } else {
+        bootstrapOverlay.style.display = 'none';
+      }
+    }
+    await this._loadActivityTimeline(dashboard.entry_id);
+    this._panicOutputs = dashboard.ui?.panic_outputs || [];
+    const myProfile = this._users.find(u => u.id === this._currentProfile?.id) || {};
+    this._backgroundMode = myProfile.background_mode || dashboard.ui?.background_mode || 'weather';
+    this._backgroundImages = myProfile.background_images || dashboard.ui?.background_images || [];
+    this._temperatureSource = dashboard.ui?.temperature_source || 'auto';
+    this._weatherSource = dashboard.ui?.weather_source || 'auto';
+    this._clockFormat = dashboard.ui?.clock_format || 'auto';
+    this._panelBgFile = myProfile.panel_bg_file !== undefined ? myProfile.panel_bg_file : (dashboard.ui?.panel_bg_file || '');
+    this._panelBgSound = Boolean(myProfile.panel_bg_sound !== undefined ? myProfile.panel_bg_sound : dashboard.ui?.panel_bg_sound);
+    const rawHubBgMode = myProfile.hub_bg_mode || dashboard.ui?.hub_bg_mode || 'none';
+    this._hubBgMode = (rawHubBgMode === 'none' || rawHubBgMode === 'default') ? 'default' : rawHubBgMode;
+    this._hubBgFile = myProfile.hub_bg_file !== undefined ? myProfile.hub_bg_file : (dashboard.ui?.hub_bg_file || '');
+    this._hubBgSound = Boolean(myProfile.hub_bg_sound !== undefined ? myProfile.hub_bg_sound : dashboard.ui?.hub_bg_sound);
+    this._updateTheme();
+    this._updateHomeNameDisplay();
+    this._updateProfileBadge();
+    
+
+    this._populateTemperatureSources();
+    const tempSel = this.shadowRoot.getElementById('temp-source-select-standalone');
+    if (tempSel) {
+      tempSel.value = this._temperatureSource || 'auto';
+      if (!tempSel.dataset.bound) { tempSel.dataset.bound = '1'; tempSel.addEventListener('change', () => this._savePersonalization()); }
+    }
+    this._populateWeatherSources();
+    const weatherSel = this.shadowRoot.getElementById('weather-source-select');
+    if (weatherSel) {
+      weatherSel.value = this._weatherSource || 'auto';
+      if (!weatherSel.dataset.bound) { weatherSel.dataset.bound = '1'; weatherSel.addEventListener('change', () => this._savePersonalization()); }
+    }
+    // Load & bind clock format selector
+    const clockSel = this.shadowRoot.getElementById('argus-clock-format-select');
+    if (clockSel) {
+      this._clockFormat = this._ui?.clock_format || this._dashboard?.clock_format || 'auto';
+      clockSel.value = this._clockFormat;
+      if (!clockSel.dataset.bound) { clockSel.dataset.bound = '1'; clockSel.addEventListener('change', () => this._savePersonalization()); }
+    }
+    const emergencyInput = this.shadowRoot.getElementById('emergency-number-input');
+    if (emergencyInput) emergencyInput.value = this._emergencyNumber;
+    this._renderSosOutputs();
+    this._configureEmergencyCall();
+
+    const bgMode = this.shadowRoot.getElementById('bg-mode-select-standalone');
+    if (bgMode) {
+      bgMode.innerHTML = `
+        <option value="weather">${this._t('bg_weather')}</option>
+        <option value="none">${this._t('bg_panel_none')}</option>
+        <option value="photo">${this._t('bg_photo')}</option>
+        <option value="collage">${this._t('bg_collage')}</option>
+      `;
+      bgMode.value = this._backgroundMode || 'weather';
+    }
+
+    const hubBgSelect = this.shadowRoot.getElementById('hub-bg-mode-select');
+    if (hubBgSelect) {
+      hubBgSelect.innerHTML = `
+        <option value="default">${this._t('bg_hub_default')}</option>
+        <option value="image">${this._t('bg_image_opt')}</option>
+        <option value="weather">Clima animado</option>
+      `;
+      hubBgSelect.value = this._hubBgMode || 'default';
+    }
+
+    const panelUrlInput = this.shadowRoot.getElementById('panel-bg-url-input');
+    if (panelUrlInput) panelUrlInput.value = (this._panelBgFile && !this._panelBgFile.startsWith('data:')) ? this._panelBgFile : '';
+
+    const chkPanelSound = this.shadowRoot.getElementById('chk-panel-bg-sound');
+    if (chkPanelSound) chkPanelSound.checked = this._panelBgSound;
+
+    const hubUrlInput = this.shadowRoot.getElementById('hub-bg-url-input');
+    if (hubUrlInput) hubUrlInput.value = (this._hubBgFile && !this._hubBgFile.startsWith('data:')) ? this._hubBgFile : '';
+
+    const chkHubSound = this.shadowRoot.getElementById('chk-hub-bg-sound');
+    if (chkHubSound) chkHubSound.checked = this._hubBgSound;
+
+    this._updateBgFieldsVisibility();
+    this._updateCanvasBackground();
+
+    this._isAdmin = dashboard.current_profile?.role === 'admin';
+    this._permissions = dashboard.current_profile?.permissions || {};
+    const resolvedEntityId = dashboard.entries?.[0]?.entity_id;
+    if (resolvedEntityId) {
+      if (!this._modeEntryId || this._modeEntryId === 'default') {
+        this._modeEntryId = resolvedEntityId;
+      }
+      if (this._loadRetryTimeout) {
+        clearTimeout(this._loadRetryTimeout);
+        this._loadRetryTimeout = null;
+      }
+    } else {
+      if (!this._modeEntryId || this._modeEntryId === 'default') {
+        this._modeEntryId = null;
+      }
+    }
+
+    if (this._isAdmin) {
+      try {
+        const haUsersResp = await this._send('argus/get_ha_users');
+        this._haUsersList = haUsersResp?.ha_users || [];
+      } catch (e) {
+        console.warn('Could not fetch HA users:', e);
+      }
+    }
+
+    // Show current PIN toggle & validation required
+    const pinConfigured = dashboard.entries?.[0]?.pin_configured === true;
+    const pinDisp = this.shadowRoot.getElementById('current-pin-display');
+    const groupCurrentPin = this.shadowRoot.getElementById('group-current-pin');
+
+    if (pinDisp) pinDisp.textContent = pinConfigured ? this._t('pin_active_yes') : this._t('pin_active_no');
+    if (groupCurrentPin) {
+      if (pinConfigured) groupCurrentPin.classList.remove('collapsed');
+      else groupCurrentPin.classList.add('collapsed');
+    }
+    const lnkForgot = this.shadowRoot.getElementById('lnk-forgot-pin');
+    if (lnkForgot) lnkForgot.style.display = pinConfigured ? 'inline' : 'none';
+    const pinForgot = this.shadowRoot.getElementById('pin-forgot-link');
+    if (pinForgot) pinForgot.style.display = pinConfigured ? 'inline' : 'none';
+
+    // Each section is independent. A bad legacy value in one must not leave
+    // the rest of the dashboard as an empty template skeleton.
+    [
+      ['instances', () => this._renderEntries()],
+      ['activity log', () => this._renderActivityLog()],
+      ['mode tabs', () => this._renderModeTabs()],
+      ['mode view', () => this._renderModeView()],
+      ['automations', () => this._renderAutomations()],
+      ['notifications', () => this._renderNotifications()],
+      ['users', () => this._renderUsers()],
+    ].forEach(([name, render]) => {
+      try { render(); }
+      catch (err) { console.error(`Argus ${name} render failed:`, err); }
+    });
+    this._loadUploadedFiles();
+
+    // Retry loading if integration is reloading and has no active entity_id yet
+    const hasEntries = dashboard.entries && dashboard.entries.length > 0;
+    const hasEntityId = hasEntries && dashboard.entries[0].entity_id;
+    if (hasEntries && !hasEntityId) {
+      if (!this._loadRetryTimeout) {
+        this._loadRetryTimeout = setTimeout(() => {
+          this._loadRetryTimeout = null;
+          this._load();
+        }, 1500);
+      }
+    } else {
+      if (this._loadRetryTimeout) {
+        clearTimeout(this._loadRetryTimeout);
+        this._loadRetryTimeout = null;
+      }
+    }
+  }
+
+  /* ── Entries (alarm instances) ───────────────────────────────────── */
+
+  _getSensorBattery(sensorId, sensorState) {
+    return this._getDevicePower(sensorId, sensorState).battery;
+  }
+
+  // Read only values that Home Assistant exposes.  In particular, do not use a
+  // lightning icon or assume 100% just because an entity has no battery sensor.
+  _getDevicePower(sensorId, sensorState) {
+    const attributes = sensorState?.attributes || {};
+    const direct = [attributes.battery_level, attributes.battery, attributes.battery_percentage]
+      .find(value => Number.isFinite(Number(value)));
+    let battery = direct === undefined ? null : Math.max(0, Math.min(100, Math.round(Number(direct))));
+
+    const source = String(attributes.power_source || attributes.power_supply || attributes.power_type || '').toLowerCase();
+    const mains = attributes.mains_powered === true || attributes.is_mains_powered === true || attributes.wired === true ||
+      /(?:mains|ac|wired|line|external|toma|corriente)/.test(source);
+
+    const domain = sensorId ? sensorId.split('.')[0] : '';
+    if (['switch', 'light', 'fan', 'script', 'input_boolean', 'siren'].includes(domain) && battery === null) {
+      return { battery: null, mains: true };
+    }
+
+    if (battery === null && this._hass?.states) {
+      if (!this._powerCache) this._powerCache = new Map();
+      if (this._powerCache.has(sensorId)) return this._powerCache.get(sensorId);
+
+      let companionState = null;
+      const objectId = sensorId.split('.').slice(1).join('.').toLowerCase();
+      const base = objectId.replace(/_(contact|door|window|motion|occupancy|opening|sensor)$/i, '');
+
+      const directCandidate = this._hass.states[`sensor.${objectId}_battery`]
+        || this._hass.states[`sensor.${base}_battery`]
+        || this._hass.states[`sensor.${objectId}_battery_level`]
+        || this._hass.states[`sensor.${base}_battery_level`];
+
+      if (directCandidate) {
+        companionState = directCandidate.state;
+      } else {
+        const avEntity = (this._available || []).find(e => e.entity_id === sensorId);
+        if (avEntity && avEntity.device_id) {
+           const companion = (this._available || []).find(e => 
+             e.device_id === avEntity.device_id &&
+             (this._hass?.states?.[e.entity_id]?.attributes?.device_class === 'battery' || /_battery(?:_level|_percent(?:age)?)?$/i.test(e.entity_id))
+           );
+           if (companion) companionState = this._hass?.states?.[companion.entity_id]?.state;
+        }
+      }
+
+      const level = Number(companionState);
+      if (Number.isFinite(level)) battery = Math.max(0, Math.min(100, Math.round(level)));
+      const res = { battery, mains };
+      this._powerCache.set(sensorId, res);
+      return res;
+    }
+    return { battery, mains };
+  }
+
+  _deviceFacts(entityId, stateObj, includeStatus = true) {
+    const raw = stateObj?.state || 'unknown';
+    const isOpen = ['on', 'unlocked', 'open', 'recording', 'active', 'motion'].includes(raw);
+    const labels = { on:this._t('status_open'), off:this._t('status_closed'), locked:this._t('status_closed'), unlocked:this._t('status_open'), idle:this._t('status_idle'), recording:this._t('status_recording'), home:this._t('status_home'), not_home:this._t('status_away') };
+    const domain = entityId.split('.')[0];
+    const isActuator = ['siren', 'switch', 'light', 'fan', 'input_boolean', 'script', 'alarm_control_panel'].includes(domain);
+    const power = this._getDevicePower(entityId, stateObj);
+    const facts = [];
+    if (includeStatus) facts.push({ text: isActuator ? raw.toUpperCase() : (labels[raw] || raw), className: isActuator ? '' : (isOpen ? 'status-open' : 'status-closed') });
+    if (power.mains) facts.push({ text: '🔌 AC', className: 'power-mains' });
+    if (power.battery !== null) {
+      const isDead = power.battery === 0;
+      const isLow = power.battery <= 10 && !isDead;
+      const batText = isDead ? '🔋 ❌' : `🔋 ${power.battery}%`;
+      const cls = isDead ? 'dead' : (isLow ? 'low' : '');
+      facts.push({ text: batText, className: `pill-power ${cls}` });
+    }
+    return facts;
+  }
+
+  _renderBatteryAlerts() {
+    if (!this._hass?.states) return '';
+    const states = this._hass.states;
+    const lowBatteries = Object.values(states).filter((st) => {
+      const isBattery = st.entity_id?.endsWith('_battery') || st.attributes?.device_class === 'battery';
+      const isMains = /dimmer|switch|light|plug|outlet/i.test(st.entity_id) || /dimmer|switch|light|plug|outlet/i.test(st.attributes?.friendly_name || '');
+      if (!isBattery || isMains || st.state === 'unknown' || st.state === 'unavailable') return false;
+      const level = Number(st.state);
+      return !Number.isNaN(level) && level <= 20;
+    });
+    if (!lowBatteries.length) return '';
+    const t = k => this._t(k);
+    const rows = lowBatteries.map(b => `<div class="battery-alert-pill" style="display:inline-flex; align-items:center; gap:6px; background:rgba(239,68,68,0.25); border:1px solid rgba(239,68,68,0.5); color:#fee2e2; padding:4px 12px; border-radius:999px; font-size:11px; font-weight:600; backdrop-filter:blur(12px); box-shadow:0 4px 12px rgba(0,0,0,0.3)">⚠️ ${t('battery_low')}: ${this._escapeHtml(b.attributes.friendly_name || b.entity_id)} (${b.state}%)</div>`).join('');
+    return `<div class="battery-alerts-container" style="position:absolute; top:18px; left:18px; z-index:15; display:flex; flex-direction:column; gap:6px; max-width:75%; pointer-events:none;">${rows}</div>`;
+  }
+
+  _modeButtonIcon(mode) {
+    const paths = {
+      home: '<path d="M3 10.5 12 3l9 7.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 19.5z"/><path d="M9 21v-6h6v6"/>',
+      away: '<path d="M12 3 20 6.5v5.2c0 5-3.4 8-8 9.8-4.6-1.8-8-4.8-8-9.8V6.5z"/><path d="M8.5 12h7M12 8.5v7"/>',
+      night: '<path d="M20 15.5A8.5 8.5 0 0 1 8.5 4 8.5 8.5 0 1 0 20 15.5z"/><path d="m17.5 4 .5 1.2L19.2 6l-1.2.5-.5 1.2-.5-1.2-1.2-.5 1.2-.8z"/>',
+      vacation: '<path d="M3 13.5 21 5l-6.8 15-2.3-6.2z"/><path d="m11.9 13.8 3.4 3.4M11.9 13.8 7.2 12"/>',
+      disarm: '<path d="M12 3 20 6.5v5.2c0 5-3.4 8-8 9.8-4.6-1.8-8-4.8-8-9.8V6.5z"/><path d="m8.5 12 2.2 2.2 4.8-5"/>',
+      sos: '<path d="M12 3 21 20H3z"/><path d="M12 9v4.5M12 17h.01"/>'
+    };
+    return `<svg class="mode-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[mode] || paths.disarm}</svg>`;
+  }
+
+  _renderPremiumStatusIcon(state, triggered, uid = '0') {
+    const mode = triggered ? 'triggered' : ({ armed_home:'home', armed_away:'away', armed_night:'night', armed_vacation:'vacation', disarmed:'disarm' }[state] || 'disarm');
+    const accent = { home:'#ffad42', away:'#ff6464', night:'#7fb9ff', vacation:'#d69cff', disarm:'#6be295', triggered:'#ff424f' }[mode];
+    const symbol = {
+      home:'<path d="M66 98 100 69l34 29v35H66z"/><path d="M89 133v-22h22v22"/>',
+      away:'<path d="M100 70c18 0 32 14 32 32s-14 32-32 32-32-14-32-32 14-32 32-32z"/><path d="M100 79v46M77 102h46"/>',
+      night:'<path d="M120 70a34 34 0 1 0 13 63 38 38 0 1 1-13-63z"/><circle cx="134" cy="73" r="3"/>',
+      vacation:'<path d="m67 113 66-34-28 66-9-25z"/><path d="m96 120 15 15M96 120l-20-6"/>',
+      disarm:'<path d="m76 104 16 16 34-39"/>',
+      triggered:'<path d="M100 65 139 137H61z"/><path d="M100 90v23M100 124h.01"/>'
+    }[mode];
+    return `<svg viewBox="0 0 200 200" width="100%" height="100%" style="filter:drop-shadow(0 18px 28px rgba(0,0,0,.34));max-width:180px;margin:auto;display:block;overflow:visible" aria-label="${this._escapeHtml(mode)}"><defs><linearGradient id="premium-${mode}-${uid}" x1="20%" y1="10%" x2="85%" y2="100%"><stop stop-color="#fff" stop-opacity=".38"/><stop offset=".25" stop-color="${accent}" stop-opacity=".78"/><stop offset="1" stop-color="${accent}" stop-opacity=".18"/></linearGradient><filter id="premium-glow-${mode}-${uid}" filterUnits="userSpaceOnUse" x="-80" y="-80" width="360" height="360" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M100 22 157 46v42c0 42-23 69-57 87-34-18-57-45-57-87V46z" fill="url(#premium-${mode}-${uid})" stroke="${accent}" stroke-width="3" filter="url(#premium-glow-${mode}-${uid})"/><path d="M100 31 148 51" stroke="#fff" stroke-opacity=".45" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="105" r="43" fill="rgba(5,12,23,.3)" stroke="rgba(255,255,255,.22)" stroke-width="2"/><g fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" filter="url(#premium-glow-${mode}-${uid})">${symbol}</g><circle cx="100" cy="105" r="55" fill="none" stroke="${accent}" stroke-opacity=".42" stroke-width="2"><animate attributeName="r" values="51;60;51" dur="3.5s" repeatCount="indefinite"/><animate attributeName="opacity" values=".6;.08;.6" dur="3.5s" repeatCount="indefinite"/></circle></svg>`;
+  }
+
+  _getIntelligentSVG(state, w, isNight, triggered, idx = '0') {
+    return this._renderPremiumStatusIcon(state, triggered, idx);
+  }
+
+  _renderEntries() {
+    this._sosBound = false;
+    const el = this.shadowRoot.getElementById('entries');
+    const globalStatusEl = this.shadowRoot.getElementById('global-status');
+    const entries = this._dashboard?.entries || [];
+    const t = k => this._t(k);
+
+    if (!entries.length) {
+      el.innerHTML = `<div class="small" style="padding:10px">${t('no_instances')}</div>`;
+      return;
+    }
+
+    // Global status is rendered inside the console-hud in each entry
+    if (globalStatusEl) globalStatusEl.innerHTML = '';
+
+    // Weather
+    const weatherEnt = this._getWeatherEntity();
+    const weatherState = weatherEnt.state || 'sunny';
+    const isNight = this._hass?.states?.['sun.sun']?.state === 'below_horizon';
+    const weather = this._weatherPresentation(weatherState, isNight);
+    const modeLabel = key => {
+      const str = String(t(key) || '').trim();
+      const firstSpace = str.indexOf(' ');
+      if (firstSpace > 0 && firstSpace <= 3) return str.substring(firstSpace + 1).trim();
+      return str;
+    };
+
+    // Time — use _formatTime so clock_format setting (12h/24h/auto) is respected
+    const now = new Date();
+    const timeStr = this._formatTime(now);
+    const heroClock = this.shadowRoot.getElementById('hero-clock-time');
+    const heroDate = this.shadowRoot.getElementById('hero-clock-date');
+    const heroWeather = this.shadowRoot.getElementById('hero-weather-pill');
+    const heroSecurity = this.shadowRoot.getElementById('hero-security-pill');
+    const isArmed = entries.some(e => {
+      const s = this._hass?.states[e.entity_id]?.state || e.state;
+      return String(s).startsWith('armed') || s === 'triggered' || s === 'pending';
+    });
+    if (heroClock) heroClock.textContent = timeStr;
+    if (heroDate) heroDate.textContent = now.toLocaleDateString(this._getLocale(), { weekday: 'short', month: 'short', day: 'numeric' });
+    if (heroWeather) heroWeather.textContent = `${weather.icon} ${weather.label}`;
+    if (heroSecurity) heroSecurity.innerHTML = `<i class="hero-live" style="background:${isArmed ? '#ffb54d' : '#55df91'};box-shadow:0 0 9px ${isArmed ? '#ffb54d' : '#55df91'}"></i>${this._escapeHtml(isArmed ? t('system_armed') : t('system_disarmed'))}`;
+
+    // Surgical Update: Maintain article nodes to persist fullscreen state
+    const existing = Array.from(el.querySelectorAll('article.entry'));
+    if (existing.length !== entries.length) {
+      el.innerHTML = entries.map((_, i) => `<article class="entry" data-idx="${i}"></article>`).join('');
+    }
+
+    const currentArticles = el.querySelectorAll('article.entry');
+    entries.forEach((e, idx) => {
+      const art = currentArticles[idx];
+      const live  = this._hass?.states[e.entity_id]?.state;
+      const state = live || e.state || 'unavailable';
+      const triggered = state === 'triggered';
+      const panicActive = Boolean(this._hass?.states?.[e.entity_id]?.attributes?.argus_panic_active);
+      const requiresDisarmPin = e.pin_configured === true || e.user_pin_configured === true;
+      const fullHudLoc = this._hass?.config?.location_name || this._homeName || t('home_fallback');
+      const displayedTemperature = this._getDisplayedTemperature();
+      const temperatures = this._getTemperatureReadings();
+      const stateMeta = {
+        disarmed: { label: t('disarmed'), accent: '#55df91' },
+        armed_home: { label: t('mode_home'), accent: '#ffb54d' },
+        armed_away: { label: t('mode_away'), accent: '#ff724f' },
+        armed_night: { label: t('mode_night'), accent: '#8ab9ff' },
+        armed_vacation: { label: t('mode_vacation'), accent: '#d59bff' },
+        triggered: { label: t('log_triggered'), accent: '#ff4d5d' },
+        pending: { label: t('system_armed'), accent: '#ffb54d' },
+      }[state] || { label: state.replace(/_/g, ' '), accent: '#9eb5cc' };
+      const weatherLabel = weather.label;
+      const recent = Array.isArray(this._ui?.audit_log) ? this._ui.audit_log[0] : null;
+      const recentEvent = recent ? this._localizeActivityDetail(String(recent.action || ''), String(recent.detail || '')) : '';
+
+      const mKey = state.replace('armed_', '');
+      let eCfg = (this._ui?.modes?.__by_entity__?.[e.entity_id]?.[mKey])
+                || (this._ui?.modes?.[mKey]) || {};
+      if (triggered && !(eCfg.sensors || []).length) {
+        const modes = this._ui?.modes?.__by_entity__?.[e.entity_id] || this._ui?.modes || {};
+        eCfg = ['away', 'home', 'night', 'vacation']
+          .map(mode => modes[mode])
+          .find(config => (config?.sensors || []).some(id => ['on', 'open', 'unlocked', 'recording', 'active', 'motion'].includes(this._hass?.states?.[id]?.state)))
+          || {};
+      }
+      let sList = eCfg.sensors || [];
+      if (state === 'disarmed' || !sList.length) {
+        const modes = this._ui?.modes?.__by_entity__?.[e.entity_id] || this._ui?.modes || {};
+        const allSensors = new Set();
+        ['away', 'home', 'night', 'vacation'].forEach(m => {
+          if (modes[m]?.sensors) {
+            modes[m].sensors.forEach(s => allSensors.add(s));
+          }
+        });
+        sList = Array.from(allSensors);
+      }
+      const sByps = eCfg.bypassed_sensors || [];
+      const activeSensors = sList.filter(s => !sByps.includes(s));
+      const OPEN = ['on', 'open', 'unlocked', 'recording', 'active', 'motion'];
+      const isWaiting = Boolean(this._hass?.states?.[e.entity_id]?.attributes?.arming_waiting_for_sensors);
+      const blockingSensors = Array.isArray(this._hass?.states?.[e.entity_id]?.attributes?.arming_blocking_sensors) ? this._hass?.states?.[e.entity_id]?.attributes?.arming_blocking_sensors : [];
+      const hasOpenSensor = activeSensors.some(sid => OPEN.includes(this._hass?.states?.[sid]?.state));
+      const sensorAlert = hasOpenSensor && (state.startsWith('armed') || state === 'pending' || isWaiting) && !triggered;
+
+      const isFS = this._fullscreenIdx === idx || (this._kioskLocked && (this._kioskEntryId === e.entry_id || entries.length === 1));
+      art.className = `entry cinematic-entry ${isFS ? 'ios-fullscreen' : ''}`;
+      art.style.cssText = triggered ? 'border:3px solid #ff5252;box-shadow:0 0 30px rgba(255,82,82,.4)' : '';
+      art.querySelectorAll('.wx-webgl').forEach(canvas => canvas._argusWebglStop?.());
+      const sensorRows = activeSensors.map(sid => {
+        const sensor = this._hass?.states[sid];
+        if (!sensor) return '';
+        const isOpen = OPEN.includes(sensor.state);
+        const name = sensor.attributes?.friendly_name || sid.split('.')[1] || sid;
+        const deviceClass = sensor.attributes?.device_class || (sid.startsWith('lock.') ? 'lock' : 'door');
+        
+        let iconHtml = '';
+        if (deviceClass === 'lock') {
+          iconHtml = isOpen ? `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>`
+                            : `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`;
+        } else if (deviceClass === 'window') {
+          iconHtml = isOpen ? `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14l16 0"></path><path d="M4 10l16 0"></path><rect x="4" y="4" width="16" height="16" rx="2"></rect></svg>`
+                            : `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"></rect><path d="M4 12h16M12 4v16"></path></svg>`;
+        } else if (deviceClass === 'motion') {
+          iconHtml = isOpen ? `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M4.93 4.93a10 10 0 0 1 14.14 0M4.93 19.07a10 10 0 0 0 14.14 0"></path></svg>`
+                            : `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle></svg>`;
+        } else {
+          // Default to door
+          iconHtml = isOpen ? `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22V2h12v20H4z"></path><path d="M16 4h4v18H4z"></path><circle cx="12" cy="12" r="1"></circle></svg>`
+                            : `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 22V2h12v20H6z"></path><circle cx="14" cy="12" r="1"></circle></svg>`;
+        }
+        const power = this._getDevicePower(sid, sensor);
+        let batHtml = '';
+        if (power.battery !== null) {
+          const isDead = power.battery === 0;
+          const isLow = power.battery <= 10 && !isDead;
+          const batText = isDead ? '🔋 ❌' : `🔋 ${power.battery}%`;
+          if (isDead || isLow) {
+             batHtml = `<span style="margin-left:8px;font-size:10px;font-weight:700;color:#ff5252;background:rgba(255,255,255,0.1);backdrop-filter:blur(4px);padding:2px 6px;border-radius:10px;border:1px solid rgba(255,82,82,0.3);text-shadow:0 0 5px rgba(255,82,82,0.5);">${batText}</span>`;
+          }
+        }
+
+        const isBlocking = isWaiting && blockingSensors.includes(sid);
+        return `<div class="console-sensor ${isOpen ? 'open' : ''}"><span class="console-sensor-icon" style="display:flex;align-items:center;justify-content:center;color:${isBlocking?'#ffd700':(isOpen?'#ff968b':'#75f4b0')};${isBlocking?'animation:pulse 1s infinite;':(isOpen?'animation:pulse 2s infinite;':'')}">${iconHtml}</span><span class="console-sensor-name" style="${isBlocking?'color:#ffd700':''}">${this._escapeHtml(name)}</span><span class="console-sensor-state" style="color:${isBlocking?'#ffd700':(isOpen?'#ff968b':'#75f4b0')}">${this._escapeHtml(isOpen ? t('status_open') : t('status_closed'))}${batHtml}</span></div>`;
+      }).join('');
+
+      art.innerHTML = `
+          ${this._renderEntryBackground(weatherState, isNight)}
+          ${this._kioskLocked ? `<button class="btn-unlock-kiosk" data-action="unlock-kiosk" style="position:absolute;top:16px;right:16px;z-index:99;padding:8px 14px;background:rgba(220,38,38,0.85);color:white;border:none;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 12px rgba(0,0,0,0.4)">🔓 ${this._escapeHtml(t('unlock_kiosk') || 'Desbloquear kiosco')}</button>` : ''}
+          <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:100;padding:5px 12px;background:rgba(36,188,129,.2);border:1px solid rgba(36,188,129,.4);border-radius:20px;color:#75f4b0;font-size:11px;font-weight:700;backdrop-filter:blur(10px);box-shadow:0 4px 12px rgba(0,0,0,0.2);display:flex;align-items:center;gap:6px;white-space:nowrap;"><div style="width:7px;height:7px;border-radius:50%;background:#75f4b0;box-shadow:0 0 8px #75f4b0;"></div>${this._escapeHtml(t('connected') || 'CONECTADO')}</div>
+          ${isFS ? `<button class="ghost entry-exit-fs" data-exit-fullscreen title="${this._escapeHtml(t('fullscreen_title'))}" aria-label="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;top:16px;left:16px;z-index:100;padding:9px 13px;font-size:18px;background:rgba(0,0,0,.55);backdrop-filter:blur(12px);border-radius:14px;color:white;border:1px solid rgba(255,255,255,.25);box-shadow:0 8px 20px rgba(0,0,0,.3)">×</button>` : ''}
+          ${!isFS ? `<button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>` : ''}
+          ${this._renderBatteryAlerts()}
+          <div class="hud">
+            <div class="hud-loc">${this._escapeHtml(fullHudLoc)}</div>
+            <div class="hud-data"></div>
+          </div>
+          <div class="entry-content security-console">
+            <!-- Compact HUD bar at top of console — replaces overlapping absolute hud -->
+            <div class="console-hud">
+              <span class="console-hud-loc">🏡 ${this._escapeHtml(fullHudLoc)}</span>
+              <div class="console-hud-right">
+                <span class="console-system-badge console-system-badge--${triggered ? 'triggered' : state}">${this._escapeHtml(
+                  triggered ? (t('system_triggered') || 'ALARMA ACTIVADA') :
+                  isWaiting  ? (t('waiting_sensors') || 'ESPERANDO SENSORES') :
+                  state === 'disarmed'        ? t('system_disarmed') :
+                  state === 'armed_home'      ? (t('system_armed') + ' · ' + (t('mode_home')     || 'CASA'))   :
+                  state === 'armed_away'      ? (t('system_armed') + ' · ' + (t('mode_away')     || 'AUSENTE')): 
+                  state === 'armed_night'     ? (t('system_armed') + ' · ' + (t('mode_night')    || 'NOCHE'))  :
+                  state === 'armed_vacation'  ? (t('system_armed') + ' · ' + (t('mode_vacation') || 'VACACIONES')) :
+                  t('system_armed')
+                )}</span>
+              </div>
+            </div>
+            <div class="entry-icon" style="display:flex;justify-content:center;animation:float-icon 5s ease-in-out infinite;">
+              ${this._getIntelligentSVG(isWaiting ? 'pending' : state, null, isNight, triggered, idx)}
+            </div>
+            <div class="liquid-stack">
+              <button class="liquid-btn btn-home ${state==='armed_home'?'active':''} ${sensorAlert && state==='armed_home'?'buzz-orange':''}" data-idx="${idx}" data-action="home">${this._modeButtonIcon('home')}<span>${this._escapeHtml(modeLabel('btn_home'))}</span></button>
+              <button class="liquid-btn btn-away ${state==='armed_away'?'active':''} ${sensorAlert && state==='armed_away'?'buzz-orange':''}" data-idx="${idx}" data-action="away">${this._modeButtonIcon('away')}<span>${this._escapeHtml(modeLabel('btn_away'))}</span></button>
+              <button class="liquid-btn btn-night ${state==='armed_night'?'active':''} ${sensorAlert && state==='armed_night'?'buzz-orange':''}" data-idx="${idx}" data-action="night">${this._modeButtonIcon('night')}<span>${this._escapeHtml(modeLabel('btn_night'))}</span></button>
+              <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''} ${sensorAlert && state==='armed_vacation'?'buzz-orange':''}" data-idx="${idx}" data-action="vacation">${this._modeButtonIcon('vacation')}<span>${this._escapeHtml(modeLabel('btn_vacation'))}</span></button>
+            </div>
+            <div class="console-sensors">${sensorRows || `<div class="console-empty">${this._escapeHtml(sList.length === 0 ? (t('no_sensors_configured') || 'Sin sensores de intrusión configurados.') : (t('all_sensors_bypassed') || 'Todos los sensores configurados están omitidos.'))}</div>`}</div>
+
+          </div>
+      `;
+    });
+
+    el.querySelectorAll('button[data-action]:not([data-action="sos"]):not([data-action="stop-sos"]):not([data-action="unlock-kiosk"])').forEach(btn =>
+      btn.addEventListener('click', ev => this._handleAction(ev.currentTarget.dataset.idx, ev.currentTarget.dataset.action))
+    );
+
+    el.querySelectorAll('button[data-action="unlock-kiosk"]').forEach(btn =>
+      btn.addEventListener('click', () => this._requestKioskUnlock())
+    );
+
+    el.querySelectorAll('button[data-action="sos"]').forEach(btn =>
+      btn.addEventListener('click', () => {
+        this._sosEntryIdx = Number(btn.dataset.idx);
+        const sosModal = this.shadowRoot.getElementById('sos-modal');
+        if (sosModal) sosModal.classList.add('open');
+      })
+    );
+    el.querySelectorAll('button[data-action="stop-sos"]').forEach(btn =>
+      btn.addEventListener('click', () => this._stopSOS(Number(btn.dataset.idx)))
+    );
+    el.querySelectorAll('button[data-fullscreen]').forEach(btn => {
+      btn.addEventListener('click', ev => this._toggleFullscreen(ev.currentTarget.closest('.entry')));
+    });
+    el.querySelectorAll('button[data-exit-fullscreen]').forEach(btn => {
+      btn.addEventListener('click', () => this._exitFullscreenView());
+    });
+    el.querySelectorAll('.wx-webgl').forEach(canvas => {
+      // Use ResizeObserver for reliable initialization on mobile/tablet
+      if (canvas._argusRO) canvas._argusRO.disconnect();
+      const initOnce = () => {
+        if (canvas._argusWebglInit) return;
+        if ((canvas.clientWidth > 0 || canvas.offsetWidth > 0) && canvas.isConnected) {
+          canvas._argusWebglInit = true;
+          this._initWeatherWebGL(canvas);
+        }
+      };
+      if (typeof ResizeObserver !== 'undefined') {
+        canvas._argusRO = new ResizeObserver(() => { initOnce(); canvas._argusRO?.disconnect(); });
+        canvas._argusRO.observe(canvas.parentElement || canvas);
+      }
+      // Fallback chain
+      if (canvas.clientWidth > 0) { initOnce(); }
+      else {
+        requestAnimationFrame(() => {
+          if (canvas.clientWidth > 0) { initOnce(); }
+          else { setTimeout(() => initOnce(), 200); }
+        });
+      }
+    });
+    this._bindSOS();
+  }
+
+  async _exitFullscreenView() {
+    const validIdx = this._fullscreenIdx >= 0 ? this._fullscreenIdx : 0;
+    const fsEntry = (this._dashboard?.entries || [])[validIdx];
+    const requiresPin = fsEntry && (fsEntry.pin_configured === true || fsEntry.user_pin_configured === true);
+
+    const doExit = async () => {
+      if (document.fullscreenElement || document.webkitFullscreenElement) {
+        try {
+          if (document.exitFullscreen) await document.exitFullscreen();
+          else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+        } catch (_) {}
+      }
+      const target = this._kioskTarget || this.shadowRoot.querySelector('.entry.ios-fullscreen');
+      target?.classList.remove('ios-fullscreen');
+      this.shadowRoot.querySelectorAll('.entry.ios-fullscreen').forEach(el => el.classList.remove('ios-fullscreen'));
+      this.classList.remove('fullscreen-active');
+      this._fullscreenIdx = -1;
+      this._kioskLocked = false;
+      this._kioskEntryId = null;
+      this._kioskTarget = null;
+      document.body.style.overflow = '';
+      this._renderEntries();
+    };
+
+    if (!requiresPin) {
+      await doExit();
+      return;
+    }
+
+    this._showPinModal(async (pin) => {
+      try {
+        await this._send('argus/verify_master_pin_for_screen_unlock', {
+          entry_id: fsEntry.entry_id,
+          pin: pin || ""
+        });
+        this._closePinModal();
+        await doExit();
+      } catch (err) {
+        const pinErr = this.shadowRoot.getElementById('pin-error');
+        if (pinErr) {
+          pinErr.textContent = '❌ PIN incorrecto o error de acceso';
+          pinErr.style.color = '#ff4a4a';
+        }
+      }
+    });
+  }
+
+  _requestKioskUnlock() {
+    if (!this._kioskLocked) return;
+
+    const kioskEntry = (this._dashboard?.entries || []).find(e => e && e.entry_id === this._kioskEntryId);
+    const errEl = this.shadowRoot.getElementById('pin-error');
+
+    // Fail closed if instance / entry_id cannot be resolved
+    if (!kioskEntry || !kioskEntry.entry_id) {
+      if (errEl) {
+        errEl.textContent = 'Cannot resolve Argus instance';
+        errEl.style.color = '#ff4a4a';
+      }
+      return;
+    }
+
+    const target = this._kioskTarget || this.shadowRoot.querySelector('.entry.ios-fullscreen') || this.shadowRoot.querySelector('.entry');
+
+    const doExit = () => {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
+      if (target) target.classList.remove('ios-fullscreen');
+      this.shadowRoot.querySelectorAll('.entry.ios-fullscreen').forEach(el => el.classList.remove('ios-fullscreen'));
+      this.classList.remove('fullscreen-active');
+      this._fullscreenIdx = -1;
+      this._kioskLocked = false;
+      this._kioskEntryId = null;
+      this._kioskTarget = null;
+      document.body.style.overflow = '';
+      this._renderEntries();
+    };
+
+    if (kioskEntry.pin_configured !== true) {
+      doExit();
+      return;
+    }
+
+    if (errEl) errEl.textContent = '';
+    this._showPinModal(async (pin) => {
+      try {
+        await this._send('argus/verify_master_pin_for_screen_unlock', {
+          entry_id: kioskEntry.entry_id,
+          pin: pin || ""
+        });
+        this._closePinModal();
+        doExit();
+      } catch (err) {
+        if (errEl) {
+          errEl.textContent = err.message || this._t('pin_disarm_error');
+          errEl.style.color = '#ff4a4a';
+        }
+      }
+    });
+  }
+
+  _toggleFullscreen(targetEl) {
+    if (this._kioskLocked) {
+      this._requestKioskUnlock();
+      return;
+    }
+
+    const target = targetEl || this.shadowRoot.querySelector('.entry');
+    const fsBtn = target?.querySelector('.entry-fs');
+    const idx = parseInt(fsBtn?.dataset?.fullscreen ?? 0);
+    const validIdx = (isNaN(idx) || idx < 0) ? 0 : idx;
+    const entry = this._dashboard?.entries?.[validIdx] || this._dashboard?.entries?.[0];
+
+    this._kioskEntryId = entry?.entry_id || null;
+    this._kioskTarget = target;
+    // Fullscreen is a presentation action, not kiosk lock.  A kiosk lock
+    // must be enabled explicitly; otherwise Esc must always leave fullscreen.
+    this._kioskLocked = false;
+    this._fullscreenIdx = validIdx;
+    this.classList.add('fullscreen-active');
+
+    const requestFS = target?.requestFullscreen || target?.webkitRequestFullscreen;
+    
+    const applyIosFullscreen = () => {
+      if (target) {
+        target.classList.add('ios-fullscreen');
+      }
+      document.body.style.overflow = 'hidden';
+      this._renderEntries();
+    };
+
+    if (requestFS) {
+      requestFS.call(target).then(() => {
+        document.body.style.overflow = 'hidden';
+        this._renderEntries();
+      }).catch(applyIosFullscreen);
+    } else {
+      applyIosFullscreen();
+    }
+  }
+
+  _getWeatherGradient(weather, rawKey = '') {
+    const map = {
+      sunny:          'linear-gradient(160deg, #4da6ff 0%, #89c4ff 60%, #c8e8ff 100%)',
+      clear:          'linear-gradient(160deg, #1a1a3e 0%, #2d2d6b 50%, #0f2557 100%)',
+      cloudy:         'linear-gradient(160deg, #6b7a8d 0%, #9aa5b1 60%, #c5cdd5 100%)',
+      partlycloudy:   'linear-gradient(160deg, #5b8fd4 0%, #7baee8 50%, #a8c8f0 100%)',
+      rainy:          'linear-gradient(160deg, #3d4f5c 0%, #5a6e7a 50%, #7a8e96 100%)',
+      snowy:          'linear-gradient(160deg, #a8bfcf 0%, #c5d8e8 60%, #e8f0f8 100%)',
+      stormy:         'linear-gradient(160deg, #1a1f2e 0%, #2d3244 50%, #3d4255 100%)',
+      fog:            'linear-gradient(160deg, #8a9099 0%, #adb5bd 60%, #ced4da 100%)',
+    };
+    const sKey = String(rawKey || weather.label || '').toLowerCase();
+    const key = Object.keys(map).find(k => sKey.includes(k)) 
+      || Object.keys(map).find(k => weather.label?.toLowerCase().includes(k)) 
+      || 'sunny';
+    return map[key];
+  }
+
+  _initWeatherWebGL(canvas) {
+    if (!canvas || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+
+    // Fallback inmediato mientras WebGL carga
+    const parent = canvas.parentElement;
+    if (parent) {
+      const weatherState = this._getWeatherEntity()?.state;
+      const isNight = this._hass?.states?.['sun.sun']?.state === 'below_horizon';
+      const key = String(weatherState || 'sunny').toLowerCase().replace(/[\s-]+/g, '_');
+      parent.style.background = this._getWeatherGradient(
+        this._weatherPresentation(weatherState, isNight),
+        key
+      );
+    }
+
+    const gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: false, antialias: false, powerPreference: 'low-power' }) ||
+               canvas.getContext('experimental-webgl', { alpha: true, premultipliedAlpha: false, antialias: false, powerPreference: 'low-power' });
+    if (!gl) {
+      canvas.style.opacity = '0';
+      return;
+    }
+    gl.clearColor(0, 0, 0, 0);
+
+    const vertex = 'attribute vec2 p;varying vec2 uv;void main(){uv=(p+1.0)*.5;gl_Position=vec4(p,0.0,1.0);}';
+    const fragment = `precision highp float;varying vec2 uv;uniform float time,rain,snow,fog,storm,wind,temp,night,cloudy;
+uniform vec2 cloudPositions[6];
+uniform vec2 cloudSizes[6];
+uniform float cloudAlphas[6];
+float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
+float noise(vec2 p){vec2 i=floor(p),f=fract(p),u=f*f*(3.0-2.0*f);return mix(mix(h(i+vec2(0.0,0.0)),h(i+vec2(1.0,0.0)),u.x),mix(h(i+vec2(0.0,1.0)),h(i+vec2(1.0,1.0)),u.x),u.y);}
+float fbm(vec2 p){float f=0.0,a=0.5;for(int i=0;i<4;i++){f+=a*noise(p);p*=2.0;a*=0.5;}return f;}
+float rainLayer(vec2 u,float t,float n){vec2 s=vec2(20.0+8.0*n,7.0+3.0*n);u.x+=wind*0.1*u.y;vec2 g=u*s,id=floor(g),q=fract(g);float sp=2.4+n*1.35+h(id)*1.2;q.y=fract(q.y+t*sp+h(id));float x=abs(q.x-(0.5+wind*0.2-q.y*(0.16+wind*0.1)));return (1.0-smoothstep(0.003,0.035-n*0.006,x))*(1.0-smoothstep(0.18,0.98,q.y));}
+float snowLayer(vec2 u,float t,float n){vec2 g=u*vec2(15.0+n*5.0,10.0+n*4.0),id=floor(g),q=fract(g);q.y=fract(q.y+t*(0.2+h(id)*0.2)+h(id));q.x+=sin(t+h(id)*6.28)*0.2+wind*0.1*t;return 1.0-smoothstep(0.01+n*0.01,0.08+n*0.02,length(q-vec2(0.5)));}
+void main(){float t=time*0.001;vec2 u=uv;if(temp>30.0){u.x+=sin(u.y*20.0+t*5.0)*0.003*(temp-30.0)/10.0;u.y+=cos(u.x*20.0+t*4.0)*0.003*(temp-30.0)/10.0;}
+vec3 col=vec3(0.0);float alpha=0.0;
+float clAlpha=0.0;
+if(cloudy>0.0){
+  for(int i=0;i<6;i++){
+    vec2 center=cloudPositions[i];
+    vec2 size=cloudSizes[i]*1.6;
+    vec2 d=(u-center)/size;
+    float dist=dot(d,d);
+    if(dist<1.0){
+      float base=exp(-dist*3.5);
+      float edge=noise(u*8.0+vec2(t*0.05))*0.35;
+      float intensity=clamp(base+edge*base,0.0,1.0);
+      clAlpha=max(clAlpha,cloudAlphas[i]*intensity*0.45);
+    }
+  }
+}
+if(clAlpha>0.0){
+  vec3 cloudColor=mix(vec3(0.85,0.90,0.95),vec3(1.0),clAlpha);
+  col=mix(col,cloudColor,clAlpha);
+  alpha=max(alpha,clAlpha*0.7);
+}
+if(night>0.5&&rain==0.0&&snow==0.0&&fog==0.0){float st=h(floor(u*150.0));if(st>0.99){float tw=0.5+0.5*sin(t*3.0+st*100.0);col+=vec3(1.0)*tw*(st-0.99)*100.0;alpha=max(alpha,tw*0.5);}}
+if(night>0.5&&temp<5.0&&rain==0.0&&snow==0.0&&storm==0.0){float au=fbm(vec2(u.x*2.0+t*0.1,u.y*3.0-t*0.05)),au2=fbm(vec2(u.x*3.0-t*0.15,u.y*2.0+t*0.08));vec3 ac=mix(vec3(0.0,1.0,0.5),vec3(0.5,0.0,1.0),au);float intn=smoothstep(0.4,0.8,au*au2)*(1.0-u.y);col+=ac*intn*1.5;alpha=max(alpha,intn);}
+if(night<0.5&&rain==0.0&&fog==0.0&&snow==0.0&&cloudy==0.0){float gr=fbm(vec2(u.x*4.0-t*0.08,u.y*0.4))*(1.0-u.y*0.8);float sunGlow=smoothstep(0.3,0.7,gr);col+=vec3(1.0,0.92,0.72)*sunGlow*0.65;alpha=max(alpha,sunGlow*0.45);}
+if(rain>0.0){float r=rainLayer(u,t,0.0)+rainLayer(u,t,1.0)*0.65+rainLayer(u,t,2.0)*0.45+rainLayer(u,t,3.0)*0.25;col+=vec3(0.75,0.88,1.0)*r*rain*1.2;alpha=max(alpha,min(1.0,r*rain*1.1));}
+if(snow>0.0){float s=snowLayer(u,t,0.0)+snowLayer(u,t,1.0)*0.7+snowLayer(u,t,2.0)*0.4;col+=vec3(1.0)*s*snow;alpha=max(alpha,min(1.0,s*snow));}
+if(fog>0.0){float f=fbm(vec2(u.x*3.0+t*0.2,u.y*4.0-t*0.1));col+=vec3(0.8,0.85,0.9)*f*fog*0.7;alpha=max(alpha,min(1.0,f*fog*0.8));}
+if(storm>0.0){float fl=step(0.98,fract(t*0.1+fbm(u*5.0+t)))*(0.8+0.2*noise(vec2(t*50.0)));col+=vec3(1.0,0.95,1.0)*fl*storm;alpha=max(alpha,fl*storm*0.8);}
+gl_FragColor=vec4(col,alpha);}`;
+
+    const compile = (type, source) => { const shader = gl.createShader(type); gl.shaderSource(shader, source); gl.compileShader(shader); return gl.getShaderParameter(shader, gl.COMPILE_STATUS) ? shader : null; };
+    const vs = compile(gl.VERTEX_SHADER, vertex), fs = compile(gl.FRAGMENT_SHADER, fragment);
+    if (!vs || !fs) {
+      canvas.style.opacity = '0';
+      return;
+    }
+    const program = gl.createProgram(); gl.attachShader(program, vs); gl.attachShader(program, fs); gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      canvas.style.opacity = '0';
+      return;
+    }
+    const buffer = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buffer); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
+    const getUniform = key => gl.getUniformLocation(program, key);
+    const position = gl.getAttribLocation(program, 'p');
+    const uniformLocs = {
+      time: getUniform('time'),
+      rain: getUniform('rain'),
+      snow: getUniform('snow'),
+      fog: getUniform('fog'),
+      storm: getUniform('storm'),
+      wind: getUniform('wind'),
+      temp: getUniform('temp'),
+      night: getUniform('night'),
+      cloudy: getUniform('cloudy'),
+      cloudPositions: getUniform('cloudPositions'),
+      cloudSizes: getUniform('cloudSizes'),
+      cloudAlphas: getUniform('cloudAlphas')
+    };
+
+    const values = {
+      rain: Math.max(Number(canvas.dataset.rain||0), Number(canvas.dataset.drizzle||0)*0.4),
+      snow: Number(canvas.dataset.snow||0),
+      fog: Number(canvas.dataset.fog||0),
+      storm: Number(canvas.dataset.storm||0),
+      wind: Number(canvas.dataset.wind||0),
+      temp: Number(canvas.dataset.temp||20),
+      night: Number(canvas.dataset.night||0),
+      cloudy: Number(canvas.dataset.cloudy||0)
+    };
+
+    const numClouds = 6;
+    const cloudsList = Array.from({ length: numClouds }, () => {
+      return {
+        x: Math.random() * 800,
+        y: 50 + Math.random() * 250,
+        rx: 120 + Math.random() * 80,
+        ry: 45 + Math.random() * 25,
+        speed: 0.1 + Math.random() * 0.3,
+        alpha: 0.08 + Math.random() * 0.07
+      };
+    });
+
+    let frame = 0, active = true;
+    
+    // Force initial size fallback immediately if layout isn't ready
+    if (canvas.width === 0 || canvas.height === 0 || canvas.clientWidth === 0 || canvas.clientHeight === 0) {
+      const parent = canvas.parentElement;
+      if (parent && parent.offsetWidth > 0) {
+        canvas.width = Math.floor(parent.offsetWidth * (window.devicePixelRatio || 1)) || 300;
+        canvas.height = Math.floor(parent.offsetHeight * (window.devicePixelRatio || 1)) || 200;
+      } else {
+        canvas.width = 600;
+        canvas.height = 400;
+      }
+    }
+
+    const draw = now => {
+      if (!active || !canvas.isConnected) return;
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      const ratio = Math.min(window.devicePixelRatio || 1, 1.5), width = Math.max(1, Math.round(canvas.clientWidth * ratio)), height = Math.max(1, Math.round(canvas.clientHeight * ratio));
+      if (canvas.width !== width || canvas.height !== height) { canvas.width = width; canvas.height = height; gl.viewport(0, 0, width, height); }
+
+      if (values.cloudy > 0.0) {
+        cloudsList.forEach(c => {
+          c.x -= c.speed;
+          if (c.x + c.rx < 0) {
+            c.x = width + c.rx;
+            c.y = 50 + Math.random() * (height - 100);
+          }
+        });
+      }
+      const flatPositions = [];
+      const flatSizes = [];
+      const flatAlphas = [];
+      cloudsList.forEach(c => {
+        flatPositions.push(c.x / width, c.y / height);
+        flatSizes.push(c.rx / width, c.ry / height);
+        flatAlphas.push(values.cloudy > 0.0 ? c.alpha : 0.0);
+      });
+
+      gl.useProgram(program); gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.bindBuffer(gl.ARRAY_BUFFER, buffer); gl.enableVertexAttribArray(position); gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+
+      if (uniformLocs.time) gl.uniform1f(uniformLocs.time, now);
+      if (uniformLocs.rain) gl.uniform1f(uniformLocs.rain, values.rain);
+      if (uniformLocs.snow) gl.uniform1f(uniformLocs.snow, values.snow);
+      if (uniformLocs.fog) gl.uniform1f(uniformLocs.fog, values.fog);
+      if (uniformLocs.storm) gl.uniform1f(uniformLocs.storm, values.storm);
+      if (uniformLocs.wind) gl.uniform1f(uniformLocs.wind, values.wind);
+      if (uniformLocs.temp) gl.uniform1f(uniformLocs.temp, values.temp);
+      if (uniformLocs.night) gl.uniform1f(uniformLocs.night, values.night);
+      if (uniformLocs.cloudy) gl.uniform1f(uniformLocs.cloudy, values.cloudy);
+      if (uniformLocs.cloudPositions) gl.uniform2fv(uniformLocs.cloudPositions, flatPositions);
+      if (uniformLocs.cloudSizes) gl.uniform2fv(uniformLocs.cloudSizes, flatSizes);
+      if (uniformLocs.cloudAlphas) gl.uniform1fv(uniformLocs.cloudAlphas, flatAlphas);
+
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      frame = requestAnimationFrame(draw);
+    };
+    canvas._argusWebglStop = () => { active = false; cancelAnimationFrame(frame); gl.getExtension('WEBGL_lose_context')?.loseContext(); };
+    canvas.closest('.wx-atmosphere')?.classList.add('webgl-active');
+    frame = requestAnimationFrame(draw);
+  }
+
+  /* ── Inline CSS Weather Backgrounds ─────────────────────────── */
+  _renderAtmosphere(ws, isNight) {
+    const value = String(ws || '').toLowerCase();
+    const has = term => value.includes(term);
+    const storm = has('thunder') || has('lightning') || has('storm');
+    const snow = has('snow') || has('hail') || has('sleet') || has('blizzard');
+    const drizzle = has('drizzle') || has('shower');
+    const rain = !drizzle && (has('rain') || has('pouring'));
+    const fog = has('fog') || has('mist') || has('hazy');
+    const cloud = has('cloud') || has('overcast');
+    
+    let base = 'clear';
+    if (storm) base = 'storm';
+    else if (rain || drizzle) base = 'rain';
+    else if (snow) base = 'snow';
+    else if (fog) base = 'fog';
+    else if (has('partly')) base = 'partlycloudy';
+    else if (cloud) base = 'cloudy';
+    else if (has('sunny')) base = 'sunny';
+    
+    const night = isNight ? 'night' : 'day';
+    const eclipse = this._eclipseEvent();
+    const eclipseClass = eclipse ? `eclipse` : '';
+    
+    return `<div class="scene ${night} ${base} ${eclipseClass}"></div>`;
+  }
+
+  _getWeatherBg(ws, isNight) {
+    return this._renderAtmosphere(ws, isNight);
+  }
+
+
+  /* ── Activity Log ────────────────────────────────────────────────── */
+  _healthText() {
+    const copy = {
+      es:{title:'Centro de salud',healthy:'Sistema saludable',warning:'Requiere atención',critical:'Dispositivos sin conexión',devices:'dispositivos configurados',offline:'sin conexión',low:'baterías bajas',battery:'Batería',none:'No hay dispositivos seleccionados en los modos.',local:'Local-first activo',confirm:'Confirmación inteligente',help:'Requiere señales independientes dentro de una ventana. Humo, gas, CO y seguridad siempre disparan de inmediato.',save:'Guardar',saved:'Guardado'},
+      en:{title:'Health center',healthy:'System healthy',warning:'Attention required',critical:'Devices offline',devices:'configured devices',offline:'offline',low:'low batteries',battery:'Battery',none:'No devices are selected in the modes.',local:'Local-first active',confirm:'Intelligent confirmation',help:'Requires independent signals within a window. Smoke, gas, CO and safety always trigger immediately.',save:'Save',saved:'Saved'},
+      fr:{title:'Centre de santé',healthy:'Système sain',warning:'Attention requise',critical:'Appareils hors ligne',devices:'appareils configurés',offline:'hors ligne',low:'batteries faibles',battery:'Batterie',none:'Aucun appareil n\u2019est sélectionné dans les modes.',local:'Local-first actif',confirm:'Confirmation intelligente',help:'Exige des signaux indépendants. Fumée, gaz, CO et sécurité déclenchent toujours immédiatement.',save:'Enregistrer',saved:'Enregistré'},
+      pt:{title:'Centro de saúde',healthy:'Sistema saudável',warning:'Requer atenção',critical:'Dispositivos offline',devices:'dispositivos configurados',offline:'offline',low:'baterias fracas',battery:'Bateria',none:'Nenhum dispositivo foi selecionado nos modos.',local:'Local-first ativo',confirm:'Confirmação inteligente',help:'Exige sinais independentes. Fumaça, gás, CO e segurança sempre disparam imediatamente.',save:'Salvar',saved:'Salvo'},
+      it:{title:'Centro salute',healthy:'Sistema integro',warning:'Richiede attenzione',critical:'Dispositivi offline',devices:'dispositivi configurati',offline:'offline',low:'batterie scariche',batteria:'Batteria',none:'Nessun dispositivo è selezionato nelle modalità.',local:'Local-first attivo',confirm:'Conferma intelligente',help:'Richiede segnali indipendenti. Fumo, gas, CO e sicurezza scattano sempre subito.',save:'Salva',saved:'Salvato'},
+      zh:{title:'健康中心',healthy:'系统健康',warning:'需要注意',critical:'设备离线',devices:'已配置设备',offline:'离线',low:'低电量',battery:'电池',none:'模式中未选择设备。',local:'本地优先已启用',confirm:'智能确认',help:'需要在时间窗口内收到独立信号。烟雾、燃气、一氧化碳和安全传感器始终立即触发。',save:'保存',saved:'已保存'},
+      ru:{title:'Центр здоровья',healthy:'Система исправна',warning:'Требуется внимание',critical:'Устройства не в сети',devices:'настроенных устройств',offline:'не в сети',low:'низкий заряд',battery:'Батарея',none:'В режимах не выбраны устройства.',local:'Local-first активен',confirm:'Умное подтверждение',help:'Требует независимых сигналов. Дым, газ, CO и безопасность всегда срабатывают сразу.',save:'Сохранить',saved:'Сохранено'},
+    };
+    return copy[this._getCurrentLangCode()] || copy.en;
+  }
+
+  _renderHealthCenter() {
+    const text = this._healthText();
+    const title = this.shadowRoot.getElementById('h-health-title');
+    const badge = this.shadowRoot.getElementById('health-local-badge');
+    const el = this.shadowRoot.getElementById('health-center');
+    if (title) title.textContent = text.title;
+    if (badge) badge.textContent = text.local;
+    const policy = this._ui?.intelligent_confirmation || {enabled:false,window_seconds:15,required_signals:2};
+    const enabled = this.shadowRoot.getElementById('confirm-enabled');
+    const signals = this.shadowRoot.getElementById('confirm-signals');
+    const windowSelect = this.shadowRoot.getElementById('confirm-window');
+    if (enabled) enabled.checked = Boolean(policy.enabled);
+    if (signals) signals.value = String(policy.required_signals || 2);
+    if (windowSelect) windowSelect.value = String(policy.window_seconds || 15);
+    const label = this.shadowRoot.getElementById('confirm-label'); if (label) label.textContent = text.confirm;
+    const help = this.shadowRoot.getElementById('confirm-help'); if (help) help.textContent = text.help;
+    const save = this.shadowRoot.getElementById('btn-save-confirmation'); if (save && save.dataset.saved !== '1') save.textContent = text.save;
+    this._renderStateSchedule();
+    if (!el) return;
+    const health = this._systemHealth;
+    if (!health) { el.innerHTML = `<div class="small" style="padding:10px">${this._escapeHtml(text.none)}</div>`; return; }
+    const batteries = Array.isArray(health.batteries) ? health.batteries : [];
+    const low = batteries.filter(item => item.low);
+    const offline = Array.isArray(health.unavailable) ? health.unavailable : [];
+    const devices = Array.isArray(health.configured_devices) ? health.configured_devices : [];
+    const statusText = health.status === 'critical' ? text.critical : health.status === 'warning' ? text.warning : text.healthy;
+    const batteriesByEntity = new Map(batteries.map(item => [item.entity_id, item]));
+    const details = devices.map(item => {
+      const battery = batteriesByEntity.get(item.entity_id);
+      const isOffline = item.state === 'unknown' || item.state === 'unavailable';
+      const facts = [isOffline ? text.offline : item.state];
+      if (battery?.value !== null && battery?.value !== undefined) facts.push(`${battery.value}${battery.unit || '%'}`);
+      return {name:item.name, value:facts.join(' · '), alert:isOffline || Boolean(battery?.low)};
+    });
+    el.innerHTML = `<div class="health-summary">
+      <div class="health-score" style="--score:${Number(health.score)||0}" aria-label="${Number(health.score)||0}%">${Number(health.score)||0}</div>
+      <div><div style="font-weight:850">${this._escapeHtml(statusText)}</div><div class="small" style="opacity:.6;margin-top:3px">${devices.length} ${this._escapeHtml(text.devices)}</div></div>
+    </div><div class="health-metrics">
+      <div class="health-metric"><strong>${offline.length}</strong><span>${this._escapeHtml(text.offline)}</span></div>
+      <div class="health-metric"><strong>${low.length}</strong><span>${this._escapeHtml(text.low)}</span></div>
+      <div class="health-metric"><strong>${batteries.length}</strong><span>${this._escapeHtml(text.battery)}</span></div>
+    </div><div class="health-list" style="margin-top:13px">${details.length ? details.map(item => `<div class="health-row"><span>${this._escapeHtml(item.name)}</span><strong style="color:${item.alert?'#ff8a80':'inherit'}">${this._escapeHtml(item.value)}</strong></div>`).join('') : `<div class="small" style="opacity:.55">${this._escapeHtml(text.none)}</div>`}</div>`;
+  }
+
+  async _saveIntelligentConfirmation() {
+    const config = {
+      enabled:Boolean(this.shadowRoot.getElementById('confirm-enabled')?.checked),
+      required_signals:Number(this.shadowRoot.getElementById('confirm-signals')?.value || 2),
+      window_seconds:Number(this.shadowRoot.getElementById('confirm-window')?.value || 15),
+    };
+    try {
+      await this._send('argus/save_ui', {intelligent_confirmation:config});
+      this._ui.intelligent_confirmation = config;
+      const button = this.shadowRoot.getElementById('btn-save-confirmation');
+      if (button) { button.textContent = `✓ ${this._healthText().saved}`; button.dataset.saved = '1'; setTimeout(() => { button.dataset.saved='0'; button.textContent=this._healthText().save; }, 1600); }
+    } catch (err) { alert(this._format('generic_error', {error:err.message})); }
+  }
+
+  _scheduleText() {
+    const copy = {
+      es:{title:'Horarios locales de estado',all:'Todos los días',weekdays:'Lunes a viernes',weekend:'Fin de semana',empty:'Sin horarios. Argus conservará el último estado confirmado.',disarmed:'Desarmado',home:'En casa',away:'Ausente',night:'Noche',vacation:'Vacaciones'},
+      en:{title:'Local state schedules',all:'Every day',weekdays:'Monday to Friday',weekend:'Weekend',empty:'No schedules. Argus will preserve the last confirmed state.',disarmed:'Disarmed',home:'Home',away:'Away',night:'Night',vacation:'Vacation'},
+      fr:{title:'Horaires d\u2019état locaux',all:'Tous les jours',weekdays:'Lundi à vendredi',weekend:'Week-end',empty:'Aucun horaire. Argus conservera le dernier état confirmé.',disarmed:'Désarmé',home:'Maison',away:'Absent',night:'Nuit',vacation:'Vacances'},
+      pt:{title:'Horários locais de estado',all:'Todos os dias',weekdays:'Segunda a sexta',weekend:'Fim de semana',empty:'Sem horários. Argus preservará o último estado confirmado.',disarmed:'Desarmado',home:'Em casa',away:'Ausente',night:'Noite',vacation:'Férias'},
+      it:{title:'Programmi locali di stato',all:'Ogni giorno',weekdays:'Da lunedì a venerdì',weekend:'Fine settimana',empty:'Nessun programma. Argus manterrà l\u2019ultimo stato confermato.',disarmed:'Disarmato',home:'Casa',away:'Assente',night:'Notte',vacation:'Vacanza'},
+      zh:{title:'本地状态计划',all:'每天',weekdays:'周一至周五',weekend:'周末',empty:'没有计划。Argus 将保留最后确认的状态。',disarmed:'撤防',home:'在家',away:'外出',night:'夜间',vacation:'度假'},
+      ru:{title:'Локальное расписание состояния',all:'Каждый день',weekdays:'Понедельник–пятница',weekend:'Выходные',empty:'Расписания нет. Argus сохранит последнее подтверждённое состояние.',disarmed:'Снято',home:'Дома',away:'Нет дома',night:'Ночь',vacation:'Отпуск'},
+    };
+    return copy[this._getCurrentLangCode()] || copy.en;
+  }
+
+  _renderStateSchedule() {
+    const text = this._scheduleText();
+    const title = this.shadowRoot.getElementById('schedule-title'); if (title) title.textContent = text.title;
+    const stateSelect = this.shadowRoot.getElementById('schedule-state');
+    const daysSelect = this.shadowRoot.getElementById('schedule-days');
+    if (stateSelect) {
+      const current = stateSelect.value;
+      stateSelect.innerHTML = `<option value="disarmed">${text.disarmed}</option><option value="armed_home">${text.home}</option><option value="armed_away">${text.away}</option><option value="armed_night">${text.night}</option><option value="armed_vacation">${text.vacation}</option>`;
+      stateSelect.value = current || 'armed_night';
+    }
+    if (daysSelect) {
+      const current = daysSelect.value;
+      daysSelect.innerHTML = `<option value="all">${text.all}</option><option value="weekdays">${text.weekdays}</option><option value="weekend">${text.weekend}</option>`;
+      daysSelect.value = current || 'all';
+    }
+    const list = this.shadowRoot.getElementById('schedule-list'); if (!list) return;
+    const schedules = Array.isArray(this._ui?.state_schedule) ? this._ui.state_schedule : [];
+    const deleteLabel = {es:'Eliminar horario',en:'Delete schedule',fr:'Supprimer l\u2019horaire',pt:'Excluir horário',it:'Elimina programma',zh:'删除计划',ru:'Удалить расписание'}[this._getCurrentLangCode()] || 'Delete schedule';
+    const labelForState = state => ({disarmed:text.disarmed,armed_home:text.home,armed_away:text.away,armed_night:text.night,armed_vacation:text.vacation}[state] || state);
+    const labelForDays = days => days?.length === 2 ? text.weekend : days?.length === 5 ? text.weekdays : text.all;
+    list.innerHTML = schedules.length ? schedules.map(item => `<div class="schedule-row"><span><strong>${this._escapeHtml(item.time || '')}</strong> · ${this._escapeHtml(labelForState(item.state))} · ${this._escapeHtml(labelForDays(item.days))}</span><button class="ghost" data-schedule-delete="${this._escapeHtml(item.id)}" aria-label="${this._escapeHtml(deleteLabel)}">×</button></div>`).join('') : `<div class="small" style="opacity:.55">${this._escapeHtml(text.empty)}</div>`;
+    list.querySelectorAll('[data-schedule-delete]').forEach(button => button.addEventListener('click', () => this._deleteStateSchedule(button.dataset.scheduleDelete)));
+  }
+
+  async _addStateSchedule() {
+    const state = this.shadowRoot.getElementById('schedule-state')?.value;
+    const time = this.shadowRoot.getElementById('schedule-time')?.value;
+    const dayPreset = this.shadowRoot.getElementById('schedule-days')?.value || 'all';
+    if (!state || !/^([01]\d|2[0-3]):[0-5]\d$/.test(time || '')) return;
+    const days = dayPreset === 'weekdays' ? [0,1,2,3,4] : dayPreset === 'weekend' ? [5,6] : [0,1,2,3,4,5,6];
+    const schedules = Array.isArray(this._ui?.state_schedule) ? [...this._ui.state_schedule] : [];
+    schedules.push({id:`schedule_${Date.now()}`,state,time,days,enabled:true});
+    await this._saveStateSchedule(schedules);
+  }
+
+  async _deleteStateSchedule(id) {
+    const schedules = (this._ui?.state_schedule || []).filter(item => item.id !== id);
+    await this._saveStateSchedule(schedules);
+  }
+
+  async _saveStateSchedule(schedules) {
+    try {
+      await this._send('argus/save_ui', {state_schedule:schedules});
+      this._ui.state_schedule = schedules;
+      this._renderStateSchedule();
+    } catch (err) { alert(this._format('generic_error', {error:err.message})); }
+  }
+
+  _localizeActivityDetail(action, rawDetail) {
+    const raw = String(rawDetail || '').trim();
+    const normalized = raw.toLocaleLowerCase();
+    const modes = {
+      home: ['en casa', 'home', 'casa', 'maison', 'em casa', 'дом', '在家'],
+      away: ['ausente', 'away', 'absent', 'fora', 'fuori', 'ушёл', '外出'],
+      night: ['noche', 'night', 'nuit', 'noite', 'notte', 'ночь', '夜间'],
+      vacation: ['vacaciones', 'vacation', 'vacances', 'férias', 'vacanza', 'отпуск', '度假'],
+    };
+    const findMode = () => {
+      return Object.entries(modes).find(([, terms]) => terms.some(term => normalized.includes(term)))?.[0];
+    };
+    const mode = findMode();
+
+    if (action === 'pin_reset') return this._t('log_detail_pin_reset');
+    if (action === 'pin_reset_failed') return this._t('log_detail_pin_reset_failed');
+    if (action === 'state_restored') {
+      const stateMap = {
+        disarmed: this._t('disarmed'),
+        armed_home: this._t('mode_home'),
+        armed_away: this._t('mode_away'),
+        armed_night: this._t('mode_night'),
+        armed_vacation: this._t('mode_vacation'),
+        triggered: this._t('log_triggered'),
+      };
+      let foundMode = this._t('disarmed');
+      const lower = raw.toLowerCase();
+      for (const [k, v] of Object.entries(stateMap)) {
+        if (lower.includes(k) || lower.includes(v.toLowerCase())) {
+          foundMode = v;
+          break;
+        }
+      }
+      return `${this._t('log_action_state_restored')}: ${foundMode}`;
+    }
+    if (action === 'confirmation_pending') return raw;
+    if (action === 'disarmed' || action === 'disarm') return this._t('log_detail_disarm');
+    if (action === 'armed' || action === 'arm') {
+      return mode ? `${this._t('manual_arm')} (${this._t(`mode_${mode}`)})` : this._t('manual_arm');
+    }
+    if (action === 'triggered') {
+      const modeMatch = raw.match(/\((?:modo|mode|modalità|режим|模式)\s*:?\s*([^)]+)\)/i);
+      let displayMode = '';
+      if (modeMatch && modeMatch[1]) {
+        const mStr = modeMatch[1].toLowerCase();
+        const modeKey = Object.entries(modes).find(([, terms]) => terms.some(t => mStr.includes(t)))?.[0];
+        displayMode = modeKey ? this._t(`mode_${modeKey}`) : modeMatch[1];
+      }
+      const sensor = raw.match(/(?:sensor|capteur|sensore|датчик|传感器)\s*:\s*(.+)$/i)?.[1]
+        ?.replace(/\s*\((?:modo|mode|modalità|режим|模式)\s*:?[^)]*\)\s*$/i, '')?.trim();
+
+      let msg = sensor ? `${this._t('log_sensor')}: ${sensor}` : this._t('log_detail_triggered');
+      if (displayMode) msg += ` (${this._t('log_mode')}: ${displayMode})`;
+      return msg;
+    }
+    if (action === 'user_added') return this._t('log_action_user_added');
+    if (action === 'user_deleted') return this._t('log_action_user_deleted');
+    if (action === 'sos') return this._t('log_action_sos');
+    if (action === 'sos_stopped' || action === 'panic_stopped') return this._t('log_action_sos_stopped');
+    if (action.startsWith('auto_') || action === 'automation_executed') return this._t('log_action_automation');
+    if (action.startsWith('ai_')) return this._t('log_action_analysis');
+    if (action.includes('rejected')) return this._t('log_action_rejected');
+    if (action === 'ui_configuration_updated') return this._t('settings');
+    if (action === 'user_logged_in') return this._t('log_action_user_logged_in');
+    if (action === 'profile_selected') return this._t('log_action_profile_selected');
+    if (action === 'schedule_applied') return this._t('log_action_schedule_applied');
+    if (action === 'mode_changed') return this._t('log_action_mode_changed');
+    if (action === 'audit_log_cleared') return this._t('history_refresh');
+    if (action.includes('pin_updated') || action.includes('access_pin_updated')) return this._t('update_pin');
+    const lowerAction = String(action).toLowerCase();
+    const tKey = `log_action_${lowerAction}`;
+    const tVal = this._t(tKey);
+    if (tVal !== tKey) return tVal;
+
+    // Apply real-time dynamic translation for any hardcoded strings that leak into the history log
+    let translatedRaw = raw;
+    const dynamicMap = {
+      'Administrador de Argus': this._t('role_argus_admin'),
+      'Argus Administrator': this._t('role_argus_admin'),
+      'Administrateur Argus': this._t('role_argus_admin'),
+      'Administrador': this._t('role_argus_admin'),
+      'Usuario estándar': this._t('role_argus_standard'),
+      'Standard user': this._t('role_argus_standard'),
+      'Utilisateur standard': this._t('role_argus_standard'),
+      'Cuenta de Home Assistant': (this._t('ha_account_linked') || '').split(':')[0] || 'Home Assistant',
+      'Compte Home Assistant': (this._t('ha_account_linked') || '').split(':')[0] || 'Home Assistant',
+      'Home Assistant Account': (this._t('ha_account_linked') || '').split(':')[0] || 'Home Assistant',
+      'Sin PIN': this._t('user_no_pin'),
+      'Sans PIN': this._t('user_no_pin'),
+      'No PIN': this._t('user_no_pin'),
+      'Indefinido': this._t('exp_indefinite'),
+      'Indéfini': this._t('exp_indefinite'),
+      'Indefinite': this._t('exp_indefinite'),
+      'En casa': this._t('mode_home'),
+      'Maison': this._t('mode_home'),
+      'Home': this._t('mode_home'),
+      'Ausente': this._t('mode_away'),
+      'Absent': this._t('mode_away'),
+      'Away': this._t('mode_away'),
+      'Noche': this._t('mode_night'),
+      'Nuit': this._t('mode_night'),
+      'Night': this._t('mode_night'),
+      'Vacaciones': this._t('mode_vacation'),
+      'Vacances': this._t('mode_vacation'),
+      'Vacation': this._t('mode_vacation'),
+      'Desarmado': this._t('disarmed'),
+      'Désarmé': this._t('disarmed'),
+      'Disarmed': this._t('disarmed'),
+      'Inicio de sesión': this._t('log_action_user_logged_in'),
+      'Inicio de sesion': this._t('log_action_user_logged_in'),
+      'Estado local restaurado': this._t('log_action_state_restored'),
+      'Estado restaurado': this._t('log_action_state_restored'),
+      'Armado manual': this._t('manual_arm'),
+      'Ajustes': this._t('settings')
+    };
+    
+    for (const [esKey, localizedValue] of Object.entries(dynamicMap)) {
+      if (localizedValue && localizedValue !== esKey) {
+        const regex = new RegExp(`\\b${esKey}\\b`, 'gi');
+        translatedRaw = translatedRaw.replace(regex, localizedValue);
+      }
+    }
+
+    return translatedRaw;
+  }
+
+  _renderActivityLog() {
+    const titleEl = this.shadowRoot.getElementById('h-activity-log');
+    const el = this.shadowRoot.getElementById('activity-log');
+    if (!el) return;
+    if (titleEl) titleEl.textContent = this._t('activity_log');
+
+    try {
+      const log = Array.isArray(this._ui?.audit_log)
+        ? this._ui.audit_log.filter(entry => entry && typeof entry === 'object' && !Array.isArray(entry))
+        : [];
+      if (!log.length) {
+        const message = this._activityTimelineError
+          ? this._t('history_unavailable')
+          : this._t('log_no_events');
+        el.innerHTML = `<div class="small" style="padding:8px 0;opacity:.72">${this._escapeHtml(message)}</div>`;
+        return;
+      }
+
+      const panel = el.closest('.panel');
+      const isSmall = panel && panel.getAttribute('data-size') === 'S';
+      el.innerHTML = log.slice(0, isSmall ? 1 : 30).map(ev => {
+        const action = String(ev.action || '');
+        const rawDetail = String(ev.detail || '');
+        const user   = String(ev.user || ev.actor || '');
+        const date = ev.ts ? new Date(ev.ts) : null;
+        let ts = '';
+        if (date && !Number.isNaN(date.getTime())) {
+          try {
+            ts = date.toLocaleString(this._getLocale());
+          } catch (e) {
+            ts = date.toISOString();
+          }
+        }
+
+        const detail = this._localizeActivityDetail(action, rawDetail);
+
+        let icon = '<div class="glass-orb"></div>', badgeCls = '', badgeTxt = action, itemCls = '';
+        if (action.endsWith('_rejected')) {
+          itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('log_action_rejected');
+        } else if (action.includes('arm') && !action.includes('disarm')) {
+          itemCls = 'log-item--armed'; badgeCls = 'arm'; badgeTxt = this._t('log_armed');
+        } else if (action.includes('disarm')) {
+          itemCls = 'log-item--disarmed'; badgeCls = 'disarm'; badgeTxt = this._t('log_disarmed');
+        } else if (action.includes('trigger') || action.includes('alarm')) {
+          itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('log_triggered');
+        } else if (action === 'pin_reset') {
+          itemCls = 'log-item--disarmed'; badgeCls = 'disarm'; badgeTxt = this._t('badge_pin_reset');
+        } else if (action === 'pin_reset_failed') {
+          itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('badge_pin_reset_failed');
+        } else if (action === 'sos' || action === 'sos_stopped' || action === 'panic_stopped') {
+          itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('log_action_sos');
+        } else {
+          const tKey = `log_action_${action}`;
+          const tVal = this._t(tKey);
+          badgeTxt = tVal !== tKey ? tVal : (this._t(action) !== action ? this._t(action) : action);
+        }
+
+        let source = '';
+        if (user && user !== 'Argus' && user !== 'system') {
+          source = `👤 ${user}`;
+        } else if (action.toLowerCase().includes('homekit') || detail.toLowerCase().includes('homekit')) {
+          source = `🍎 HomeKit`;
+        } else {
+          source = `🤖 Argus`;
+        }
+
+        return `<div class="log-item ${itemCls}">
+          <div class="log-icon">${icon}</div>
+          <div class="log-body">
+            <div class="log-title">
+              <span class="log-badge ${badgeCls}">${this._escapeHtml(badgeTxt)}</span>
+              <span style="font-weight:500">${this._escapeHtml(detail)}</span>
+            </div>
+            <div class="log-meta">${this._escapeHtml(ts)} &nbsp;·&nbsp; ${this._escapeHtml(source)}</div>
+          </div>
+        </div>`;
+      }).join('');
+    } catch (err) {
+      console.error('Argus activity log render failed:', err);
+      el.innerHTML = `<div class="small" style="padding:8px 0;opacity:.55">${this._t('log_no_events')}</div>`;
+    }
+  }
+
+  /* ── Modes ───────────────────────────────────────────────────────── */
+  _renderModeTabs() {
+    const tabs = this.shadowRoot.getElementById('mode-tabs');
+    if (!tabs) return;
+    const modes = ['disarmed', 'home', 'away', 'night', 'vacation'];
+    const icons = { disarmed:'🔓', home:'🏠', away:'🔴', night:'🌙', vacation:'✈️' };
+    const lbls  = {
+      disarmed: this._t('disarmed'),
+      home:     this._t('mode_home'),
+      away:     this._t('mode_away'),
+      night:    this._t('mode_night'),
+      vacation: this._t('mode_vacation'),
+    };
+
+    tabs.className = 'tabs';
+    tabs.innerHTML = `
+      <div class="tab-bubble"></div>
+      ${modes.map(m => `
+        <button type="button" class="tab ${m === this._mode ? 'active' : ''}" data-mode="${m}">
+          <span class="tab-icon" style="font-size: 20px;">${icons[m]}</span>
+          <span class="tab-label">${lbls[m]}</span>
+        </button>
+      `).join('')}
+    `;
+    const bubble = tabs.querySelector('.tab-bubble');
+    tabs.querySelectorAll('[data-mode]').forEach(t => t.addEventListener('click', () => {
+      this._mode = t.dataset.mode;
+      this._renderModeTabs();
+      this._renderModeView();
+      this._openModeModal(this._mode);
+    }));
+
+    const buttons = tabs.querySelectorAll('.tab');
+    let activeBtn = null;
+    buttons.forEach(btn => {
+      if (btn.dataset.mode === this._mode) {
+        btn.classList.add('active');
+        activeBtn = btn;
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    if (bubble && activeBtn) {
+      bubble.className = `tab-bubble bubble-${this._mode}`;
+      requestAnimationFrame(() => {
+        const left = activeBtn.offsetLeft;
+        const width = activeBtn.offsetWidth;
+        bubble.style.transform = `translate3d(${left}px, 0, 0) scaleX(${width / 100})`;
+        bubble.style.width = '100px';
+        bubble.style.left = '0';
+      });
+    }
+  }
+
+  _openModeModal(mode) {
+    if (mode) this._mode = mode;
+    const icons = { disarmed:'🔓', home:'🏠', away:'🔴', night:'🌙', vacation:'✈️' };
+    const lbls  = {
+      disarmed: this._t('disarmed'),
+      home:     this._t('mode_home'),
+      away:     this._t('mode_away'),
+      night:    this._t('mode_night'),
+      vacation: this._t('mode_vacation'),
+    };
+    const titleEl = this.shadowRoot.getElementById('mode-modal-title');
+    const iconEl = this.shadowRoot.getElementById('mode-modal-icon');
+    if (titleEl) titleEl.textContent = `${this._t('mode_lbl') || 'Modo'}: ${lbls[this._mode] || this._mode}`;
+    if (iconEl) iconEl.textContent = icons[this._mode] || '🛡️';
+
+    const modal = this.shadowRoot.getElementById('mode-modal');
+    if (modal) {
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      modal.style.setProperty('display', 'flex', 'important');
+      modal.style.setProperty('visibility', 'visible', 'important');
+    }
+    this._renderModeView();
+  }
+
+  _closeModeModal() {
+    const modal = this.shadowRoot.getElementById('mode-modal');
+    if (modal) {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      modal.style.display = '';
+      modal.style.visibility = '';
+    }
+    this._renderModeView();
+  }
+
+  _currentModeConfig() {
+    const emptyCfg = {
+      sensors: [], bypassed_sensors: [], sirens: [],
+      require_closed: false, open_sensors_policy: 'allow', arming_time: null, entry_delay: null,
+      mqtt_enabled: null, entry_sensors: [], external_panels: [], light_siren_settings: {}
+    };
+    if (!this._ui || typeof this._ui !== 'object' || Array.isArray(this._ui)) {
+      this._ui = { modes: {}, dashboard: {} };
+    }
+
+    if (!this._ui.modes || typeof this._ui.modes !== 'object' || Array.isArray(this._ui.modes)) {
+      this._ui.modes = {};
+    }
+    if (!this._ui.modes.__by_entity__ || typeof this._ui.modes.__by_entity__ !== 'object' || Array.isArray(this._ui.modes.__by_entity__)) {
+      this._ui.modes.__by_entity__ = {};
+    }
+
+    let entityId = this._modeEntryId;
+    if (!entityId || entityId === 'default') {
+      entityId = this._dashboard?.entries?.[0]?.entity_id || 'default';
+    }
+    this._modeEntryId = entityId;
+    this._mode = this._mode || 'disarmed';
+
+    if (!this._ui.modes.__by_entity__[entityId] || typeof this._ui.modes.__by_entity__[entityId] !== 'object' || Array.isArray(this._ui.modes.__by_entity__[entityId])) {
+      this._ui.modes.__by_entity__[entityId] = {};
+    }
+
+    // Migration/Ensure valid
+    if (!this._ui.modes.__by_entity__[entityId][this._mode] || typeof this._ui.modes.__by_entity__[entityId][this._mode] !== 'object' || Array.isArray(this._ui.modes.__by_entity__[entityId][this._mode])) {
+        let legacy = {};
+        if (this._ui.modes[this._mode] && typeof this._ui.modes[this._mode] === 'object' && !Array.isArray(this._ui.modes[this._mode])) {
+          legacy = this._ui.modes[this._mode];
+        }
+        this._ui.modes.__by_entity__[entityId][this._mode] = { ...emptyCfg, ...legacy };
+    }
+
+    const savedCfg = this._ui.modes.__by_entity__[entityId][this._mode];
+    const cfg = savedCfg && typeof savedCfg === 'object' && !Array.isArray(savedCfg) ? savedCfg : emptyCfg;
+    return {
+      ...emptyCfg,
+      ...cfg,
+      sensors: Array.isArray(cfg?.sensors) ? cfg.sensors : [],
+      bypassed_sensors: Array.isArray(cfg?.bypassed_sensors) ? cfg.bypassed_sensors : [],
+      sirens: Array.isArray(cfg?.sirens) ? cfg.sirens : [],
+      entry_sensors: Array.isArray(cfg?.entry_sensors) ? cfg.entry_sensors : [],
+      external_panels: Array.isArray(cfg?.external_panels) ? cfg.external_panels : (Array.isArray(cfg?.sync_panels) ? cfg.sync_panels : []),
+      require_closed: typeof cfg?.require_closed === 'boolean' ? cfg.require_closed : false,
+      open_sensors_policy: (cfg?.open_sensors_policy === 'pending' || cfg?.open_sensors_policy === 'allow' || cfg?.open_sensors_policy === 'block') ? cfg.open_sensors_policy : (cfg?.require_closed ? 'block' : 'allow'),
+      arming_time: (cfg?.arming_time !== undefined && cfg?.arming_time !== null) ? cfg.arming_time : null,
+      entry_delay: (cfg?.entry_delay !== undefined && cfg?.entry_delay !== null) ? cfg.entry_delay : null,
+      light_siren_settings: cfg?.light_siren_settings && typeof cfg.light_siren_settings === 'object' ? cfg.light_siren_settings : {},
+      mqtt_enabled: (cfg?.mqtt_enabled !== undefined && cfg?.mqtt_enabled !== null) ? cfg.mqtt_enabled : null,
+    };
+  }
+
+  _toggleEntrySensor(entityId) {
+    if (!this._isAdmin) return;
+    const cfg = this._currentModeConfig();
+    const list = Array.isArray(cfg.entry_sensors) ? [...cfg.entry_sensors] : [];
+    if (list.includes(entityId)) {
+      cfg.entry_sensors = list.filter(v => v !== entityId);
+    } else {
+      cfg.entry_sensors = [...list, entityId];
+    }
+    this._renderModeView();
+  }
+
+  _renderModeView() {
+    const cfg = this._currentModeConfig();
+    const sensors = cfg.sensors || [];
+    const bypass  = cfg.bypassed_sensors || [];
+    const sirens  = cfg.sirens  || [];
+    const externalPanels = cfg.external_panels || [];
+    const readonly = !this._isAdmin;
+    const entries = this._dashboard?.entries || [];
+    const activeEntityId = this._modeEntryId || entries[0]?.entity_id || '';
+
+    const instanceBlock = entries.length > 1 ? `
+        <div class="mode-section-card">
+          <div class="mode-section-title">${this._t('alarm_instance')}</div>
+          <select class="mode-instance-select" style="width:100%; padding:10px; border-radius:10px; background:rgba(255,255,255,0.05); color:inherit; border:1px solid rgba(255,255,255,0.1)">${entries.map(e => `<option value="${this._escapeHtml(e.entity_id)}" ${e.entity_id===activeEntityId ? 'selected' : ''}>${this._escapeHtml(e.title || e.entity_id)}</option>`).join('')}</select>
+        </div>` : '';
+
+    const contentHtml = (isModal = false) => `
+      <div class="mode-grid-layout">
+        ${instanceBlock}
+
+        <div class="mode-section-card">
+          <div class="mode-section-title">🛡️ ${this._t('sensor_section')}</div>
+          <div class="mode-sensor-grid">
+            ${sensors.map(x => this._chip(x, 'sensor')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
+          </div>
+          ${readonly ? '' : `
+            <button class="ghost" data-open-selector="sensor" style="margin-top:12px; width:100%; justify-content:center; font-size:12px">${this._t('select_btn')}</button>
+            <label class="checkbox-label" style="display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05);font-size:12px">
+              <input type="checkbox" class="mode-require-closed-inp" ${cfg.require_closed ? 'checked' : ''}>
+              <span style="font-size:12px;font-weight:600">${this._t('lock_if_open')}</span>
+            </label>
+            <label class="checkbox-label" style="display:flex;align-items:center;gap:8px;margin-top:8px;padding:8px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05);font-size:12px">
+              <input type="checkbox" class="mode-wait-if-open-inp" ${cfg.open_sensors_policy === 'pending' ? 'checked' : ''}>
+              <span style="font-size:12px;font-weight:600">${this._t('wait_if_open')}</span>
+            </label>
+          `}
+        </div>
+
+        <div class="mode-section-card">
+          <div class="mode-section-title">${this._t('bypass_lbl')}</div>
+          <div class="mode-sensor-grid">
+            ${bypass.map(x => this._chip(x, 'bypass')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
+          </div>
+          ${readonly ? '' : `<button class="ghost" data-open-selector="bypass" style="margin-top:12px; width:100%; justify-content:center; font-size:12px">${this._t('add_btn')}</button>`}
+        </div>
+
+        <div class="mode-section-card">
+          <div class="mode-section-title">📢 ${this._t('siren_section')}</div>
+          <div class="mode-sensor-grid">
+            ${sirens.map(x => this._chip(x, 'siren')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
+          </div>
+          ${sirens.filter(x => x.startsWith('light.')).map(x => {
+            const setting = cfg.light_siren_settings?.[x] || {};
+            const rgb = Array.isArray(setting.rgb_color) ? setting.rgb_color : [255, 0, 0];
+            const hex = '#' + rgb.map(v => Number(v).toString(16).padStart(2, '0')).join('');
+            return `<details class="light-siren-settings"><summary>⚙ ${this._escapeHtml(this._hass?.states?.[x]?.attributes?.friendly_name || x)}</summary><label>${this._t('light_siren_color') || 'Color'} <input type="color" data-light-siren-color="${this._escapeHtml(x)}" value="${hex}"></label><label class="checkbox-label"><input type="checkbox" data-light-siren-flash="${this._escapeHtml(x)}" ${setting.gentle_flash ? 'checked' : ''}> ${this._t('light_siren_flash') || 'Destello suave si está disponible'}</label></details>`;
+          }).join('')}
+          <div class="mode-section-title" style="margin-top:14px;font-size:12px">🔗 ${this._t('external_panels') || 'Paneles de alarma externos'}</div>
+          <div class="mode-sensor-grid">
+            ${externalPanels.map(x => this._chip(x, 'external_panel')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
+          </div>
+          ${readonly ? '' : `<button class="ghost" data-open-selector="siren" style="margin-top:12px; width:100%; justify-content:center; font-size:12px">${this._t('select_btn')}</button><button class="ghost" data-open-selector="external_panel" style="margin-top:8px; width:100%; justify-content:center; font-size:12px">${this._t('add_btn')}</button>`}
+        </div>
+
+        <div class="mode-section-card">
+          <div class="mode-section-title">${this._t('times_section')}</div>
+          <div class="times-grid">
+            <div class="input-group time-field">
+              <span class="input-label">${this._t('arm_time')}</span>
+              <input type="number" class="mode-arming-time-inp" value="${cfg.arming_time ?? ''}" placeholder="0" style="padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:inherit; font-size:13px">
+            </div>
+            <div class="input-group time-field">
+              <span class="input-label">${this._t('disarm_time')}</span>
+              <input type="number" class="mode-entry-delay-inp" value="${cfg.entry_delay ?? ''}" placeholder="0" style="padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:inherit; font-size:13px">
+            </div>
+          </div>
+          <div class="mode-sensor-grid entry-sensor-list">
+            ${(cfg.entry_sensors || []).map(x => this._chip(x, 'entry')).join('') || `<div class="mode-sensor-none">${this._t('none_selected')}</div>`}
+          </div>
+          ${readonly ? '' : `<button class="ghost" data-open-selector="entry" style="margin-top:10px;width:100%;justify-content:center;font-size:12px">${this._t('select_entry_sensors')}</button>`}
+          <label class="checkbox-label mode-mqtt-row">
+            <input type="checkbox" class="mode-mqtt-enabled-inp" ${cfg.mqtt_enabled === true ? 'checked' : ''}>
+            <span style="font-size:12px;font-weight:600">${this._t('mqtt_label')}</span>
+          </label>
+        </div>
+      </div>
+      ${readonly ? '' : `<div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;"><button class="primary mode-save-btn" id="${isModal ? 'save-mode-modal' : 'save-mode'}" style="width:100%;height:48px;font-size:14px;box-shadow:0 8px 20px rgba(0,0,0,0.2);font-weight:800">${this._t('save_config')}</button><span id="${isModal ? 'mode-modal-status' : 'mode-status'}" style="display:block;text-align:center;font-size:13px;font-weight:700;min-height:20px;transition:opacity .4s;opacity:1;color:var(--primary-color,#03a9f4)"></span></div>`}
+    `;
+
+    const bindScope = (scope) => {
+      if (!scope) return;
+      scope.querySelector('.mode-instance-select')?.addEventListener('change', ev => {
+        this._modeEntryId = ev.target.value;
+        this._renderModeView();
+      });
+      if (!readonly) {
+        scope.querySelectorAll('[data-open-selector]').forEach(btn =>
+          btn.addEventListener('click', () => this._openModal(btn.dataset.openSelector))
+        );
+        scope.querySelectorAll('[data-remove]').forEach(btn =>
+          btn.addEventListener('click', () => this._removeChip(btn.dataset.remove))
+        );
+        scope.querySelectorAll('[data-toggle-delay]').forEach(btn =>
+          btn.addEventListener('click', () => this._toggleEntrySensor(btn.dataset.toggleDelay))
+        );
+        scope.querySelector('.mode-save-btn')?.addEventListener('click', () => this._saveMode(scope));
+      }
+    };
+
+    const inlineEl = this.shadowRoot.getElementById('mode-view');
+    if (inlineEl) {
+      inlineEl.innerHTML = contentHtml(false);
+      bindScope(inlineEl);
+    }
+
+    const modalBody = this.shadowRoot.getElementById('mode-modal-body');
+    const modalEl = this.shadowRoot.getElementById('mode-modal');
+    if (modalBody && modalEl?.classList.contains('open')) {
+      modalBody.innerHTML = contentHtml(true);
+      bindScope(modalBody);
+    }
+  }
+
+  _chip(entityId, type) {
+    const raw = this._hass?.states?.[entityId]?.state;
+    const isTr = ['on', 'unlocked', 'open', 'recording', 'active', 'motion'].includes(raw);
+    const name = this._hass?.states?.[entityId]?.attributes?.friendly_name || entityId;
+    const readonly = !this._isAdmin;
+
+    const dot = type === 'sensor' || type === 'bypass'
+    ? `<span class="pill-dot ${isTr ? 'open' : ''}" title="${raw}"></span>`
+    : '';
+
+    let stateLabel = '';
+    let powerHtml = '';
+    if (type === 'sensor' || type === 'bypass' || type === 'entry') {
+      const stateObj = this._hass?.states?.[entityId];
+      const power = this._getDevicePower(entityId, stateObj);
+      stateLabel = `<span class="pill-status">${isTr ? this._t('status_open') : this._t('status_closed')}</span>`;
+      
+      if (power.mains) powerHtml += '<span class="pill-power">🔌 AC</span>';
+      if (power.battery !== null) {
+        const isDead = power.battery === 0;
+        const isLow = power.battery <= 10 && !isDead;
+        const batText = isDead ? '🔋 ❌' : `🔋 ${power.battery}%`;
+        const cls = isDead ? 'dead' : (isLow ? 'low' : '');
+        powerHtml += `<span class="pill-power ${cls}">${batText}</span>`;
+      }
+    }
+
+    const alarmTriggered = this._dashboard?.entries?.some(en =>
+    this._hass?.states?.[en.entity_id]?.state === 'triggered'
+    );
+    let pillExtra = '';
+    if (type === 'siren' && alarmTriggered) pillExtra = ' siren-active';
+    if ((type === 'sensor' || type === 'bypass' || type === 'entry') && alarmTriggered && isTr) pillExtra = ' triggered-sensor';
+
+    return `
+      <span class="sensor-pill${pillExtra}">
+        ${dot}
+        <span class="pill-content">
+          <span class="pill-name">${this._escapeHtml(name)}</span>
+          ${stateLabel}
+          ${powerHtml}
+        </span>
+        ${readonly ? '' : `<button data-remove="${type}:${entityId}" style="background:none; border:none; color:inherit; opacity:0.5; padding:0 4px; cursor:pointer; flex-shrink:0;">✕</button>`}
+      </span>
+    `;
+  }
+
+  _removeChip(value) {
+    if (!this._isAdmin) return;
+    const [type, entityId] = value.split(':');
+    const cfg = this._currentModeConfig();
+    const key = type === 'sensor' ? 'sensors' : (type === 'bypass' ? 'bypassed_sensors' : (type === 'entry' ? 'entry_sensors' : (type === 'external_panel' ? 'external_panels' : 'sirens')));
+    let eId = this._modeEntryId;
+    if (!eId || eId === 'default') {
+      eId = this._dashboard?.entries?.[0]?.entity_id || 'default';
+    }
+    this._modeEntryId = eId;
+    this._ui.modes.__by_entity__ = this._ui.modes.__by_entity__ || {};
+    this._ui.modes.__by_entity__[eId] = this._ui.modes.__by_entity__[eId] || {};
+    this._ui.modes.__by_entity__[eId][this._mode] = { ...cfg, [key]: (cfg[key] || []).filter(v => v !== entityId) };
+    this._renderModeView();
+  }
+
+  async _saveMode(scopeEl?: HTMLElement) {
+    const cfg = this._currentModeConfig();
+    const root = scopeEl || this.shadowRoot;
+    const chk      = root.querySelector('.mode-require-closed-inp') as HTMLInputElement | null;
+    const waitChk  = root.querySelector('.mode-wait-if-open-inp') as HTMLInputElement | null;
+    const armTime  = root.querySelector('.mode-arming-time-inp') as HTMLInputElement | null;
+    const entDelay = root.querySelector('.mode-entry-delay-inp') as HTMLInputElement | null;
+    const mqttChk  = root.querySelector('.mode-mqtt-enabled-inp') as HTMLInputElement | null;
+
+    if (chk) cfg.require_closed = chk.checked;
+    if (chk?.checked) {
+      cfg.open_sensors_policy = 'block';
+    } else if (waitChk?.checked) {
+      cfg.open_sensors_policy = 'pending';
+    } else {
+      cfg.open_sensors_policy = 'allow';
+    }
+    if (armTime)  cfg.arming_time  = armTime.value  ? parseInt(armTime.value)  : 0;
+    if (entDelay) cfg.entry_delay  = entDelay.value ? parseInt(entDelay.value) : 0;
+    if (mqttChk)  cfg.mqtt_enabled = mqttChk.checked;
+    cfg.light_siren_settings = {};
+    root.querySelectorAll('[data-light-siren-color]').forEach(input => {
+      const hex = (input as HTMLInputElement).value || '#ff0000';
+      cfg.light_siren_settings[(input as HTMLElement).dataset.lightSirenColor] = {
+        rgb_color: [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16)),
+        gentle_flash: Boolean(root.querySelector(`[data-light-siren-flash="${CSS.escape((input as HTMLElement).dataset.lightSirenColor)}"]`)?.checked),
+      };
+    });
+
+    this._runWithPin(async () => {
+      const _eid = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id || 'default';
+      this._ui.modes = this._ui.modes || {};
+      this._ui.modes.__by_entity__ = this._ui.modes.__by_entity__ || {};
+      this._ui.modes.__by_entity__[_eid] = this._ui.modes.__by_entity__[_eid] || {};
+      this._ui.modes.__by_entity__[_eid][this._mode] = { ...cfg };
+
+      const status = this.shadowRoot.getElementById('mode-status');
+      const modalStatus = this.shadowRoot.getElementById('mode-modal-status');
+      const saveBtns = this.shadowRoot.querySelectorAll('.mode-save-btn');
+      saveBtns.forEach(b => { (b as HTMLButtonElement).disabled = true; });
+
+      if (status) { status.textContent = '…'; status.className = 'status'; }
+      if (modalStatus) { modalStatus.textContent = '…'; modalStatus.className = 'status'; }
+      try {
+        await this._send('argus/save_mode_config', {
+          entity_id: _eid,
+          mode: this._mode,
+          config: cfg,
+        });
+        const successMsg = this._t('saved') || '✓ Guardado exitosamente';
+        if (status) { status.textContent = successMsg; status.className = 'status ok show'; }
+        if (modalStatus) { modalStatus.textContent = successMsg; modalStatus.className = 'status ok show'; }
+        saveBtns.forEach(b => {
+          b.textContent = successMsg;
+          (b as HTMLElement).style.background = 'linear-gradient(135deg, #10b981, #059669)';
+        });
+        setTimeout(() => {
+          if (status) { status.textContent = ''; status.className = 'status'; }
+          if (modalStatus) { modalStatus.textContent = ''; modalStatus.className = 'status'; }
+          saveBtns.forEach(b => {
+            b.textContent = this._t('save_config') || 'GUARDAR CONFIGURACIÓN';
+            (b as HTMLElement).style.background = '';
+            (b as HTMLButtonElement).disabled = false;
+          });
+        }, 3000);
+      } catch (err) {
+        const errMsg = '✗ ' + (err.message || this._t('generic_error').replace(': {error}', ''));
+        if (status) { status.textContent = errMsg; status.className = 'status err show'; }
+        if (modalStatus) { modalStatus.textContent = errMsg; modalStatus.className = 'status err show'; }
+        saveBtns.forEach(b => { (b as HTMLButtonElement).disabled = false; });
+      }
+    });
+  }
+
+  /* ── Automations ─────────────────────────────────────────────────── */
+  _renderAutomations() {
+    const el = this.shadowRoot.getElementById('auto-view');
+    if (!el) return;
+    if (!this._dashboard?.entries?.length || !this._hass) {
+      el.innerHTML = `<div class="small" style="padding:10px 0;opacity:.55">${this._t('searching_auto')}</div>`;
+      return;
+    }
+
+    try {
+      if (!this._relatedAutomationsQueried) {
+          this._relatedAutomationsQueried = true;
+          this._cachedRelatedAutomations = new Set();
+          (async () => {
+              try {
+                  let relatedSets = [];
+                  for (const e of this._dashboard.entries) {
+                      const res = await this._hass.callWS({ type: 'search/related', item_type: 'entity', item_id: e.entity_id });
+                      if (res) {
+                          if (res.automation) relatedSets.push(...res.automation);
+                          if (res.device && res.device.length) {
+                              for (const d of res.device) {
+                                  const resDev = await this._hass.callWS({ type: 'search/related', item_type: 'device', item_id: d });
+                                  if (resDev && resDev.automation) relatedSets.push(...resDev.automation);
+                              }
+                          }
+                      }
+                  }
+                  this._cachedRelatedAutomations = new Set(relatedSets);
+              } catch (err) {
+                  this._cachedRelatedAutomations = new Set();
+              } finally {
+                  this._relatedAutomationsFetched = true;
+                  this._renderAutomations(); // Re-render when data is ready
+              }
+          })();
+          el.innerHTML = `<div class="small" style="padding:10px 0;opacity:.55">${this._t('searching_auto')}</div>`;
+          return;
+      }
+
+      if (!this._relatedAutomationsFetched) return;
+
+      const states = this._hass.states || {};
+      const items = Object.values(states).filter(s => {
+        if (!s || !s.entity_id || !s.entity_id.startsWith('automation.')) return false;
+        const name = (s.attributes?.friendly_name || '').toLowerCase();
+        return this._cachedRelatedAutomations.has(s.entity_id) || name.includes('argus') || s.entity_id.toLowerCase().includes('argus');
+      });
+
+      if (!items.length) {
+        el.innerHTML = `<div class="small" style="padding:8px 0;opacity:.55">${this._t('no_auto_linked')}</div>`;
+        return;
+      }
+
+      const panel = el.closest('.panel');
+      const isSmall = panel && panel.getAttribute('data-size') === 'S';
+      const visibleItems = items.slice(0, isSmall ? 1 : 15);
+      el.innerHTML = `<div style="display:flex;flex-direction:column;gap:12px;max-height:300px;overflow-y:auto;padding-right:8px">${visibleItems.map(a => {
+        const editId = a.attributes?.id || a.entity_id.replace('automation.', '');
+        const lastTriggered = a.attributes?.last_triggered ? new Date(a.attributes.last_triggered).toLocaleString(this._getLocale()) : this._t('never_triggered');
+        const subtext = isSmall ? '' : `<div class="small" style="opacity:0.7;margin-top:4px">${this._escapeHtml(lastTriggered)}</div>`;
+        return `
+        <div class="list-item-card">
+          <div>
+            <div style="font-weight:700">${this._escapeHtml(a.attributes?.friendly_name || a.entity_id)}</div>
+            ${subtext}
+          </div>
+          <button class="ghost" style="padding:6px 12px;background:rgba(255,255,255,0.08);border-radius:8px" data-edit-auto="${this._escapeHtml(editId)}">✏️</button>
+        </div>`;
+      }).join('')}</div>`;
+
+      el.querySelectorAll('[data-edit-auto]').forEach(btn => btn.addEventListener('click', () => {
+        history.pushState(null, '', `/config/automation/edit/${btn.dataset.editAuto}`);
+        window.dispatchEvent(new CustomEvent('location-changed'));
+      }));
+    } catch (err) {
+      console.error('Argus automations render failed:', err);
+      el.innerHTML = `<div class="small" style="padding:8px 0;opacity:.55">${this._t('no_auto_linked')}</div>`;
+    }
+  }
+
+  /* ── Notifications ───────────────────────────────────────────────── */
+  _populateNotifSelect() {
+    const sel = this.shadowRoot.getElementById('notif-select');
+    if (!sel) return;
+    const services = this._hass?.services?.notify || {};
+    const notifyEntities = Object.values(this._hass?.states || {})
+      .filter(state => state?.entity_id?.startsWith('notify.') && state.entity_id !== 'notify.persistent_notification')
+      .map(state => ({ value: `entity:${state.entity_id}`, label: state.attributes?.friendly_name || state.entity_id }));
+    const legacyServices = Object.keys(services)
+      .filter(k => !['notify', 'send_message', 'persistent_notification'].includes(k) && !this._notifTargets.includes(k))
+      .map(k => ({ value: k, label: k.replace(/_/g, ' ') }));
+    const opts = [...notifyEntities, ...legacyServices].filter(option => !this._notifTargets.includes(option.value));
+
+    sel.innerHTML = opts.length
+      ? opts.map(({ value, label }) => `<option value="${this._escapeHtml(value)}">${this._escapeHtml(`🔔 ${label}`)}</option>`).join('')
+      : `<option value="">— ${this._escapeHtml(this._t('notif_no_services'))} —</option>`;
+  }
+
+  _addNotifTarget() {
+    const sel = this.shadowRoot.getElementById('notif-select');
+    const val = sel?.value;
+    if (!val || this._notifTargets.includes(val)) return;
+    this._notifTargets.push(val);
+    this._renderNotifChips();
+    this._populateNotifSelect();
+  }
+
+  _renderNotifChips() {
+    const el = this.shadowRoot.getElementById('notif-targets');
+    if (!el) return;
+    el.innerHTML = this._notifTargets.map(t => `
+      <span class="notif-chip">🔔 ${this._escapeHtml(t.replace(/^entity:notify\./, '').replace(/_/g,' '))}
+        <button data-notif-remove="${this._escapeHtml(t)}">✕</button>
+      </span>`).join('') || `<span class="small" style="opacity:.5">—</span>`;
+    el.querySelectorAll('[data-notif-remove]').forEach(btn =>
+      btn.addEventListener('click', () => {
+        this._notifTargets = this._notifTargets.filter(x => x !== btn.dataset.notifRemove);
+        this._renderNotifChips();
+        this._populateNotifSelect();
+      })
+    );
+  }
+
+  _renderNotifications() {
+    this._renderNotifChips();
+    this._populateNotifSelect();
+  }
+
+  async _saveNotifications() {
+    const status = this.shadowRoot.getElementById('notif-status');
+    this._runWithPin(async () => {
+      try {
+        await this._send('argus/save_ui', {
+          notif_targets: this._notifTargets,
+        });
+        if (status) { status.textContent = '✓'; status.className = 'status ok'; }
+      } catch (e) {
+        if (status) { status.textContent = e.message; status.className = 'status err'; }
+        else { alert(this._format('generic_error', { error: e.message })); }
+      }
+    });
+  }
+
+  /* ── Users ───────────────────────────────────────────────────────── */
+  _renderUsers() {
+    const el = this.shadowRoot.getElementById('users-list');
+    if (!el) return;
+
+    const adminOnlyText = this.shadowRoot.getElementById('p-admin-only');
+    if (adminOnlyText) {
+      adminOnlyText.style.display = this._isAdmin ? 'none' : 'block';
+    }
+
+    try {
+      const users = Array.isArray(this._users) ? this._users.filter(u => u && typeof u === 'object' && !Array.isArray(u)) : [];
+      const panel = el.closest('.panel');
+      const isSmall = panel && panel.getAttribute('data-size') === 'S';
+      const visibleUsers = isSmall ? users.slice(0, 2) : users;
+      if (!users.length) {
+        el.innerHTML = `<div class="small">${this._t('no_users')}</div>`;
+      } else {
+        el.innerHTML = visibleUsers.map((u, i) => {
+          if (isSmall) {
+            return `
+            <div class="user-card" style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 10px;flex-direction:row">
+              <div style="font-weight:700">${this._escapeHtml(u.name || '')}</div>
+              <div style="display:flex;gap:4px">
+                ${u.role === 'admin' ? '<span class="user-badge admin">⭐ Adm</span>' : '<span class="user-badge user">👤 Std</span>'}
+                ${u.access_pin_configured ? '<span class="user-badge" style="background:rgba(0,122,255,0.12);color:#007aff">🔒 PIN</span>' : ''}
+              </div>
+            </div>`;
+          }
+          const isExpired = u.expiration_date && new Date(u.expiration_date) < new Date();
+          let formattedDate = '';
+          if (u.expiration_date) {
+            const dateObj = new Date(u.expiration_date);
+            if (!isNaN(dateObj.getTime())) {
+              try {
+                formattedDate = this._formatDateTime(dateObj);
+              } catch (e) {
+                formattedDate = dateObj.toISOString();
+              }
+            }
+          }
+          const expBadge = u.expiration_date
+            ? (isExpired
+              ? `<span class="user-badge admin" style="background:rgba(229,57,53,0.12);color:#e53935;margin-left:5px">❌ ${this._escapeHtml(this._t('expired'))} (${this._escapeHtml(formattedDate)})</span>`
+              : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">⏳ ${this._escapeHtml(this._t('active_until'))}: ${this._escapeHtml(formattedDate)}</span>`)
+            : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">♾️ ${this._t('exp_indefinite')}</span>`;
+
+          const haAccountText = u.ha_user_id
+            ? (() => {
+                const haUser = (this._haUsersList || []).find(ha => ha.id === u.ha_user_id);
+                return haUser
+                  ? this._format('ha_account_linked', { name: haUser.name })
+                  : this._t('ha_account_unavailable');
+              })()
+            : this._t('ha_account_unavailable');
+
+          const roleText = u.role === 'admin'
+            ? '⭐ ' + this._escapeHtml(this._t('role_argus_admin'))
+            : '👤 ' + this._escapeHtml(this._t('role_argus_standard'));
+
+          const pinBadge = u.access_pin_configured
+            ? `<span class="user-badge" style="background:rgba(0,122,255,0.12);color:#007aff">🔒 PIN</span>`
+            : `<span class="user-badge" style="opacity:0.55">🔓 ${this._escapeHtml(this._t('user_no_pin'))}</span>`;
+
+          return `
+          <div class="user-card" style="display:flex;flex-direction:column;align-items:stretch;gap:8px">
+            <div style="display:flex;justify-content:space-between;align-items:center;width:100%">
+              <div style="flex:1">
+                <div style="font-weight:700">${this._escapeHtml(u.name || '')}</div>
+                <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
+                  <span class="user-badge ${u.role === 'admin' ? 'admin' : 'user'}">${roleText}</span>
+                  <span class="user-badge" style="background:rgba(74,20,140,0.15);color:rgba(186,104,200,0.95);border:1px solid rgba(74,20,140,0.22);margin-left:5px">${this._escapeHtml(haAccountText)}</span>
+                  ${pinBadge}
+                  ${expBadge}
+                </div>
+                ${u.role !== 'admin' && u.permissions ? `
+                <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px">
+                  <span class="user-badge" style="opacity:0.85;font-size:10px" title="Ver Panel">👁️ ${u.permissions.view_status ? 'Panel' : '---'}</span>
+                  <span class="user-badge" style="opacity:0.85;font-size:10px" title="Armar Sistema">🛡️ ${u.permissions.arm ? 'Armar' : '---'}</span>
+                  <span class="user-badge" style="opacity:0.85;font-size:10px" title="Desarmar Sistema">🔓 ${u.permissions.disarm ? 'Desarmar' : '---'}</span>
+                  <span class="user-badge" style="opacity:0.85;font-size:10px" title="Ver Historial">📜 ${u.permissions.view_history ? 'Historial' : '---'}</span>
+                  <span class="user-badge" style="opacity:0.85;font-size:10px;background:rgba(52,199,89,0.12);color:#34c759" title="Cambiar PIN Acceso">🔑 ${u.permissions.change_pin ? 'PIN Acceso' : '---'}</span>
+                  <span class="user-badge" style="opacity:0.85;font-size:10px;background:rgba(255,179,0,0.12);color:#ffb300" title="Cambiar PIN Maestro">🔑 ${u.permissions.change_master_pin ? 'PIN Maestro' : '---'}</span>
+                </div>
+                ` : ''}
+              </div>
+              <div style="display:flex;gap:4px;align-items:center;flex-wrap:wrap;justify-content:flex-end">
+                ${this._isAdmin ? `
+                  <button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-edit="${i}" title="${this._escapeHtml(this._t('modal_edit_name'))}">✏️</button>
+                  <button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-pin="${i}" title="${this._escapeHtml(this._t('modal_pin_title'))}">🔑</button>
+                  ${u.role !== 'admin' ? `<button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-perms="${i}" title="Permisos">🛡️</button>` : ''}
+                  <button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-role-toggle="${i}" title="${this._escapeHtml(this._t('user_role_label'))}">⭐</button>
+                  <button class="btn-danger danger" style="padding:6px 10px;font-size:12px;background:#e53935;color:white;border:none;border-radius:10px;cursor:pointer" title="${this._escapeHtml(this._t('delete_user_tooltip'))}" aria-label="${this._escapeHtml(this._t('delete_user_tooltip'))}" data-user-del="${i}">🗑️</button>
+                ` : ''}
+              </div>
+            </div>
+          </div>`;
+        }).join('');
+
+        if (this._isAdmin) {
+          el.insertAdjacentHTML('beforeend', `
+            <div style="margin-top:10px">
+              <button class="secondary" style="width:100%;padding:10px;font-size:13px;border-radius:12px;cursor:pointer;border:1px dashed rgba(255,255,255,0.18);background:rgba(255,255,255,0.03)" id="btn-add-manual-user">➕ ${this._escapeHtml(this._t('modal_add_user'))}</button>
+            </div>`);
+        }
+
+        if (this._isAdmin) {
+          el.querySelectorAll('[data-user-edit]').forEach(btn => {
+            btn.addEventListener('click', async () => {
+              const idx = Number(btn.dataset.userEdit);
+              const targetUser = this._users[idx];
+              if (!targetUser) return;
+              const newName = await this._showArgusInputModal({
+                title: this._t('modal_edit_name'),
+                label: this._t('modal_name_label'),
+                placeholder: targetUser.name,
+                initialValue: targetUser.name,
+                type: 'text',
+              });
+              if (newName === null || newName.trim() === '') return;
+              this._runWithPin(async () => {
+                try {
+                  const nextUsers = this._users.map((u, k) => k === idx ? { ...u, name: newName.trim() } : u);
+                  const resp = await this._send('argus/save_ui', { users: nextUsers });
+                  if (resp && resp.ui) { this._ui = resp.ui; this._users = resp.ui.users || nextUsers; }
+                  else { this._users = nextUsers; }
+                  this._renderUsers();
+                } catch (e) {
+                  this._showArgusConfirmModal(e.message || this._format('generic_error', { error: e }), { confirmLabel: 'OK' });
+                }
+              });
+            });
+          });
+
+          el.querySelectorAll('[data-user-pin]').forEach(btn => {
+            btn.addEventListener('click', async () => {
+              const idx = Number(btn.dataset.userPin);
+              const targetUser = this._users[idx];
+              if (!targetUser) return;
+              const newPin = await this._showArgusInputModal({
+                title: `${this._t('modal_pin_title')} — ${targetUser.name}`,
+                label: this._t('modal_pin_help'),
+                placeholder: '••••',
+                type: 'password',
+                numeric: true,
+              });
+              if (newPin === null) return;
+              this._runWithPin(async () => {
+                try {
+                  await this._send('argus/save_user_access_pin', { argus_user_id: targetUser.id, pin: newPin.trim() });
+                  const dash = await this._send('argus/dashboard');
+                  if (dash && dash.users) { this._users = dash.users; }
+                  this._renderUsers();
+                } catch (e) {
+                  this._showArgusConfirmModal(e.message || this._format('generic_error', { error: e }), { confirmLabel: 'OK' });
+                }
+              });
+            });
+          });
+
+          el.querySelector('#btn-add-manual-user')?.addEventListener('click', async () => {
+            const newName = await this._showArgusInputModal({
+              title: this._t('modal_add_user'),
+              label: this._t('modal_name_label'),
+              placeholder: this._t('user_default') || 'Usuario',
+              type: 'text',
+            });
+            if (!newName || !newName.trim()) return;
+            this._runWithPin(async () => {
+              try {
+                const newUser = {
+                  id: `argus_manual_${Date.now()}`,
+                  name: newName.trim(),
+                  role: 'standard',
+                  enabled: true,
+                  permissions: { view_status: true, arm: true, disarm: true, view_history: false },
+                };
+                const nextUsers = [...(this._users || []), newUser];
+                const resp = await this._send('argus/save_ui', { users: nextUsers });
+                if (resp && resp.ui) { this._ui = resp.ui; this._users = resp.ui.users || nextUsers; }
+                else { this._users = nextUsers; }
+                this._renderUsers();
+              } catch (e) {
+                this._showArgusConfirmModal(e.message || this._format('generic_error', { error: e }), { confirmLabel: 'OK' });
+              }
+            });
+          });
+
+          // Change Role via Select Modal
+          el.querySelectorAll('[data-user-role-toggle]').forEach(btn => {
+            btn.addEventListener('click', async () => {
+              const idx = Number(btn.dataset.userRoleToggle);
+              const targetUser = this._users[idx];
+              if (!targetUser) return;
+              const newRole = await this._showArgusInputModal({
+                title: this._t('user_role_action') || 'Cambiar Rol',
+                label: this._t('user_role_label') || 'Selecciona el rol',
+                initialValue: targetUser.role === 'admin' ? 'admin' : 'standard',
+                type: 'select',
+                options: [
+                  { value: 'admin', label: this._t('role_argus_admin') || 'Administrador de Argus' },
+                  { value: 'standard', label: this._t('role_argus_standard') || 'Usuario estándar' }
+                ]
+              });
+              if (!newRole || newRole === targetUser.role) return;
+
+              this._runWithPin(async () => {
+                const nextUsers = this._users.map((u, k) => k === idx ? { ...u, role: newRole } : u);
+                try {
+                  const resp = await this._send('argus/save_ui', { users: nextUsers });
+                  if (resp && resp.ui) {
+                    this._ui = resp.ui;
+                    this._users = resp.ui.users || nextUsers;
+                  } else {
+                    this._users = nextUsers;
+                  }
+                  this._renderUsers();
+                } catch (e) {
+                  this._showArgusConfirmModal(e.message || this._format('generic_error', { error: e }), { confirmLabel: 'OK' });
+                }
+              });
+            });
+          });
+
+          el.querySelectorAll('[data-user-del]').forEach(btn =>
+            btn.addEventListener('click', async () => {
+              const idx = Number(btn.dataset.userDel);
+              const targetUser = this._users[idx];
+              if (!targetUser) return;
+
+              const confirmMsg = this._format('delete_user_confirm', { name: targetUser.name || 'User' });
+              const confirmed = await this._showArgusConfirmModal(
+                this._t('modal_delete_confirm') || confirmMsg,
+                { confirmLabel: this._t('clear') || 'Delete', confirmStyle: 'background:#e53935;color:white;border:none' }
+              );
+              if (!confirmed) return;
+
+              this._runWithPin(async () => {
+                const nextUsers = [...this._users];
+                nextUsers.splice(idx, 1);
+                try {
+                  const resp = await this._send('argus/save_ui', { users: nextUsers });
+                  if (resp && resp.ui) {
+                    this._ui = resp.ui;
+                    this._users = resp.ui.users || nextUsers;
+                  } else {
+                    this._users = nextUsers;
+                  }
+                  this._renderUsers();
+                } catch (e) {
+                  this._showArgusConfirmModal(e.message || this._format('generic_error', { error: e }), { confirmLabel: 'OK' });
+                }
+              });
+            })
+          );
+
+          el.querySelectorAll('[data-user-perms]').forEach(btn => {
+            btn.addEventListener('click', async () => {
+              const idx = Number(btn.dataset.userPerms);
+              const targetUser = this._users[idx];
+              if (!targetUser) return;
+              const newPerms = await this._showArgusPermissionsModal(targetUser);
+              if (newPerms === null) return;
+              this._runWithPin(async () => {
+                const nextUsers = this._users.map((u, k) => k === idx ? { ...u, permissions: { ...u.permissions, ...newPerms } } : u);
+                try {
+                  const resp = await this._send('argus/save_ui', { users: nextUsers });
+                  if (resp && resp.ui) {
+                    this._ui = resp.ui;
+                    this._users = resp.ui.users || nextUsers;
+                  } else {
+                    this._users = nextUsers;
+                  }
+                  this._renderUsers();
+                } catch (e) {
+                  this._showArgusConfirmModal(e.message || this._format('generic_error', { error: e }), { confirmLabel: 'OK' });
+                }
+              });
+            });
+          });
+        }
+      }
+    } catch (err) {
+      console.error('Argus users list render failed:', err);
+      el.innerHTML = `<div class="small">${this._t('no_users')}</div>`;
+    }
+
+    this._syncAccessSummary();
+  }
+
+  _populateTemperatureSources() {
+    const sel = this.shadowRoot.getElementById('temp-source-select-standalone');
+    if (!sel || !this._hass) return;
+    const extra = [{ entity_id: 'auto', name: this._t('temp_auto') }];
+    for (const s of Object.values(this._hass.states || {})) {
+      const id = s.entity_id || ''; const a = s.attributes || {};
+      if (id.startsWith('climate.') && typeof a.current_temperature === 'number') { extra.push({ entity_id:id, name:`🌡️ ${a.friendly_name || id} ${this._t('temp_thermostat')}` }); continue; }
+      if (!id.startsWith('sensor.')) continue;
+      const dc = String(a.device_class || '').toLowerCase(); const u = String(a.unit_of_measurement || a.native_unit_of_measurement || '').toLowerCase(); const v = Number(s.state);
+      if (Number.isFinite(v) && (dc === 'temperature' || ['°c','°f','c','f'].includes(u))) extra.push({ entity_id:id, name:`🌡️ ${a.friendly_name || id}` });
+    }
+    const seen = new Set();
+    sel.innerHTML = extra.filter(x => {
+      if (seen.has(x.entity_id)) return false;
+      seen.add(x.entity_id);
+      return true;
+    }).map(x => `<option value="${this._escapeHtml(x.entity_id)}">${this._escapeHtml(x.name)}</option>`).join('');
+  }
+
+  _populateWeatherSources() {
+    const select = this.shadowRoot.getElementById('weather-source-select');
+    if (!select || !this._hass?.states) return;
+    const previous = select.value || this._weatherSource || 'auto';
+    const weather = Object.values(this._hass.states).filter(state => state.entity_id?.startsWith('weather.'));
+    select.innerHTML = [{ entity_id: 'auto', name: this._t('weather_auto') }, ...weather.map(state => ({ entity_id: state.entity_id, name: state.attributes?.friendly_name || state.entity_id }))]
+      .map(item => `<option value="${this._escapeHtml(item.entity_id)}">${this._escapeHtml(item.name)}</option>`).join('');
+    select.value = [...select.options].some(option => option.value === previous) ? previous : 'auto';
+  }
+
+  _getWeatherEntity() {
+    const selected = this._weatherSource || 'auto';
+    const configured = selected !== 'auto' ? this._hass?.states?.[selected] : null;
+    return configured || Object.values(this._hass?.states || {}).find(state => state.entity_id?.startsWith('weather.')) || { state: 'sunny', attributes: {} };
+  }
+
+  _getDisplayedTemperature() {
+    if (!this._hass) return null;
+    const source = this._temperatureSource || 'auto';
+    if (source !== 'auto') {
+      const state = this._hass.states?.[source];
+      if (!state) return null;
+      const value = source.startsWith('climate.') ? state.attributes?.current_temperature : Number(state.state);
+      const unit = source.startsWith('climate.')
+        ? state.attributes?.temperature_unit
+        : (state.attributes?.unit_of_measurement || state.attributes?.native_unit_of_measurement);
+      return Number.isFinite(Number(value)) ? `${Number(value).toFixed(1).replace(/\.0$/, '')}°${String(unit || '').replace('°', '')}` : null;
+    }
+    const weather = this._getWeatherEntity();
+    const value = weather?.attributes?.temperature;
+    const unit = weather?.attributes?.temperature_unit;
+    return Number.isFinite(Number(value)) ? `${Number(value).toFixed(1).replace(/\.0$/, '')}°${String(unit || '').replace('°', '')}` : null;
+  }
+
+  _getTemperatureReadings() {
+    if (!this._hass?.states) return [];
+    const readings = [];
+    const weather = this._getWeatherEntity();
+    const outside = weather?.attributes?.temperature;
+    const outsideUnit = weather?.attributes?.temperature_unit;
+    if (Number.isFinite(Number(outside))) readings.push({ label: 'EXT.', value: `${Number(outside).toFixed(1).replace(/\.0$/, '')}°${String(outsideUnit || '').replace('°', '')}` });
+
+    const source = this._temperatureSource || 'auto';
+    let indoor = source !== 'auto' ? this._hass.states[source] : Object.values(this._hass.states).find(state => state.entity_id?.startsWith('climate.') && Number.isFinite(Number(state.attributes?.current_temperature)));
+    if (indoor?.entity_id?.startsWith('weather.')) indoor = null;
+    if (indoor) {
+      const value = indoor.entity_id.startsWith('climate.') ? indoor.attributes?.current_temperature : Number(indoor.state);
+      const unit = indoor.entity_id.startsWith('climate.') ? indoor.attributes?.temperature_unit : (indoor.attributes?.unit_of_measurement || indoor.attributes?.native_unit_of_measurement);
+      if (Number.isFinite(Number(value))) readings.push({ label: 'INT.', value: `${Number(value).toFixed(1).replace(/\.0$/, '')}°${String(unit || '').replace('°', '')}` });
+    }
+    return readings;
+  }
+
+  _moonPhase() {
+    const raw = (this._hass?.states?.['sensor.moon_phase']?.state || this._hass?.states?.['sensor.moon']?.state || '').toLowerCase().replace(/[\s-]+/g, '_');
+    if (raw.includes('new')) return 'new';
+    if (raw.includes('waxing_crescent')) return 'waxing-crescent';
+    if (raw.includes('first_quarter')) return 'first-quarter';
+    if (raw.includes('waxing_gibbous')) return 'waxing-gibbous';
+    if (raw.includes('waning_gibbous')) return 'waning-gibbous';
+    if (raw.includes('last_quarter') || raw.includes('third_quarter')) return 'last-quarter';
+    if (raw.includes('waning_crescent')) return 'waning-crescent';
+    return raw.includes('full') ? 'full' : 'full';
+  }
+
+  _eclipseEvent() {
+    const states = Object.values(this._hass?.states || {});
+    const entity = states.find(state => {
+      const text = `${state.entity_id || ''} ${state.attributes?.friendly_name || ''} ${state.attributes?.device_class || ''}`.toLowerCase();
+      const value = `${state.state || ''} ${state.attributes?.event || ''} ${state.attributes?.type || ''}`.toLowerCase();
+      return /eclips/.test(text) && !/^(off|none|unknown|unavailable|false|0)$/i.test(String(state.state || '')) && /eclips|solar|lunar|moon|luna/.test(value);
+    });
+    if (!entity) return null;
+    const value = `${entity.state || ''} ${entity.attributes?.event || ''} ${entity.attributes?.type || ''} ${entity.attributes?.friendly_name || ''}`.toLowerCase();
+    return /solar|sun|sol/.test(value) ? 'solar' : (/lunar|moon|luna/.test(value) ? 'lunar' : null);
+  }
+
+  _renderEclipseOverlay(eclipse) {
+    if (!eclipse) return '';
+    const label = eclipse === 'solar' ? '☀️ Eclipse solar' : '🌕 Eclipse lunar';
+    return `<div class="weather-eclipse" aria-label="${label}">${label}</div>`;
+  }
+
+  _season() {
+    const month = new Date().getMonth();
+    const southern = Number(this._hass?.config?.latitude) < 0;
+    const seasonalMonth = southern ? (month + 6) % 12 : month;
+    if ([11, 0, 1].includes(seasonalMonth)) return 'winter';
+    if ([2, 3, 4].includes(seasonalMonth)) return 'spring';
+    if ([5, 6, 7].includes(seasonalMonth)) return 'summer';
+    return 'autumn';
+  }
+
+  async _handleBackgroundFiles(ev) {
+    const files = Array.from(ev?.target?.files || []).slice(0, 4); if (!files.length) return;
+    const read = f => new Promise((ok, bad) => { const r = new FileReader(); r.onload = () => ok(String(r.result || '')); r.onerror = bad; r.readAsDataURL(f); });
+    this._backgroundImages = (await Promise.all(files.map(read))).filter(Boolean);
+    const help = this.shadowRoot.getElementById('bg-file-help'); if (help) help.textContent = `${this._backgroundImages.length} imagen(es) cargadas para el panel.`;
+  }
+
+  _isVideoFile(file) {
+    const videoExts = ['.mov', '.mp4', '.webm', '.ogg', '.avi', '.m4v'];
+    const name = (file.name || '').toLowerCase();
+    return videoExts.some(e => name.endsWith(e)) || file.type.startsWith('video/');
+  }
+
+  async _showLivePhotoDialog(file, onImage, onVideo) {
+    // Show a simple confirm dialog asking what to do with .mov files
+    const choice = confirm(this._format('file_choice', { file: file.name }));
+    if (choice) {
+      await onImage();
+    } else {
+      await onVideo();
+    }
+  }
+
+  async _uploadFile(file, help) {
+    const token = this._hass?.auth?.accessToken;
+    const headers = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await fetch('/api/argus/upload', {
+      method: 'POST',
+      body: formData,
+      headers: headers
+    });
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return await response.json();
+  }
+
+  async _handlePanelBgFile(ev) {
+    const file = ev?.target?.files?.[0]; if (!file) return;
+    const help = this.shadowRoot.getElementById('bg-file-help');
+    if (help) help.textContent = 'Subiendo al servidor...';
+    ev.target.value = '';
+    try {
+      const isVideo = this._isVideoFile(file);
+      if (isVideo) {
+        await this._showLivePhotoDialog(
+          file,
+          async () => {
+            // As static image — still upload the file
+            const res = await this._uploadFile(file, help);
+            if (res?.success) {
+              this._panelBgFile = res.url;
+              const inp = this.shadowRoot.getElementById('panel-bg-url-input');
+              if (inp) inp.value = res.url;
+              if (help) help.textContent = `Subido como imagen: ${file.name}`;
+              this._loadUploadedFiles();
+            } else {
+      if (help) help.textContent = this._format('generic_error', { error: res?.error || this._t('upload_error') });
+            }
+          },
+          async () => {
+            // As animated video
+            const res = await this._uploadFile(file, help);
+            if (res?.success) {
+              this._panelBgFile = res.url;
+              const inp = this.shadowRoot.getElementById('panel-bg-url-input');
+              if (inp) inp.value = res.url;
+              if (help) help.textContent = `Subido como video: ${file.name}`;
+              this._loadUploadedFiles();
+            } else {
+              if (help) help.textContent = this._format('generic_error', { error: res?.error || this._t('upload_error') });
+            }
+          }
+        );
+      } else {
+        const res = await this._uploadFile(file, help);
+        if (res?.success) {
+          this._panelBgFile = res.url;
+          const inp = this.shadowRoot.getElementById('panel-bg-url-input');
+          if (inp) inp.value = res.url;
+          if (help) help.textContent = `Subido: ${file.name}`;
+          this._loadUploadedFiles();
+        } else {
+          if (help) help.textContent = this._format('generic_error', { error: res?.error || this._t('upload_error') });
+        }
+      }
+    } catch (err) {
+      console.error('Upload failed:', err);
+      if (help) help.textContent = this._format('generic_error', { error: err.message || err });
+    }
+  }
+
+  async _handleHubBgFile(ev) {
+    const file = ev?.target?.files?.[0]; if (!file) return;
+    const help = this.shadowRoot.getElementById('hub-file-help');
+    if (help) help.textContent = 'Subiendo al servidor...';
+    ev.target.value = '';
+    try {
+      const isVideo = this._isVideoFile(file);
+      if (isVideo) {
+        await this._showLivePhotoDialog(
+          file,
+          async () => {
+            // As static image
+            const res = await this._uploadFile(file, help);
+            if (res?.success) {
+              this._hubBgFile = res.url;
+              const inp = this.shadowRoot.getElementById('hub-bg-url-input');
+              if (inp) inp.value = res.url;
+              if (help) help.textContent = `Subido como imagen: ${file.name}`;
+              this._loadUploadedFiles();
+            } else {
+              if (help) help.textContent = this._format('generic_error', { error: res?.error || this._t('upload_error') });
+            }
+          },
+          async () => {
+            // As animated video — set hub bg mode to 'image' and use video URL directly
+            const res = await this._uploadFile(file, help);
+            if (res?.success) {
+              this._hubBgFile = res.url;
+              const inp = this.shadowRoot.getElementById('hub-bg-url-input');
+              if (inp) inp.value = res.url;
+              if (help) help.textContent = `Subido como video: ${file.name}`;
+              this._loadUploadedFiles();
+            } else {
+              if (help) help.textContent = this._format('generic_error', { error: res?.error || this._t('upload_error') });
+            }
+          }
+        );
+      } else {
+        const res = await this._uploadFile(file, help);
+        if (res?.success) {
+          this._hubBgFile = res.url;
+          const inp = this.shadowRoot.getElementById('hub-bg-url-input');
+          if (inp) inp.value = res.url;
+          if (help) help.textContent = `Subido: ${file.name}`;
+          this._loadUploadedFiles();
+        } else {
+          if (help) help.textContent = this._format('generic_error', { error: res?.error || this._t('upload_error') });
+        }
+      }
+    } catch (err) {
+      console.error('Upload failed:', err);
+      if (help) help.textContent = this._format('generic_error', { error: err.message || err });
+    }
+  }
+
+  async _loadUploadedFiles() {
+    try {
+      const files = await this._send('argus/list_uploaded_files');
+      this._uploadedFiles = files || [];
+      this._renderUploadedFiles();
+    } catch (err) {
+      console.error('Failed to load uploaded files:', err);
+      const listContainer = this.shadowRoot.getElementById('uploaded-files-list');
+      if (listContainer) {
+        listContainer.innerHTML = `
+          <div style="grid-column:1/-1; text-align:center; padding:20px; font-size:11px; color:#ff4d4d; opacity:0.8;">
+            ${this._t('error_loading_uploaded_files')}
+          </div>
+        `;
+      }
+    }
+  }
+
+  _renderUploadedFiles() {
+    const listContainer = this.shadowRoot.getElementById('uploaded-files-list');
+    const countLabel = this.shadowRoot.getElementById('storage-files-count');
+    if (!listContainer) return;
+
+    const files = this._uploadedFiles || [];
+    if (!files.length) {
+      listContainer.innerHTML = `
+        <div style="grid-column:1/-1; text-align:center; padding:20px; font-size:11px; opacity:0.5;">
+          ${this._t('no_files_uploaded')}
+        </div>
+      `;
+      if (countLabel) countLabel.textContent = this._t('files_count').replace('{count}', '0');
+      return;
+    }
+
+    let totalBytes = 0;
+    files.forEach(f => totalBytes += (f.size_bytes || 0));
+    let totalStr = '';
+    if (totalBytes >= 1024 * 1024) {
+      totalStr = `${(totalBytes / (1024 * 1024)).toFixed(2)} MB`;
+    } else {
+      totalStr = `${(totalBytes / 1024).toFixed(2)} KB`;
+    }
+
+    if (countLabel) {
+      countLabel.textContent = this._t('files_count_short').replace('{count}', files.length) + ` (${totalStr})`;
+    }
+
+    listContainer.innerHTML = files
+      .filter(file => !file.is_video)
+      .map(file => `
+      <div class="file-card" data-filename="${this._escapeHtml(file.name)}">
+        <div class="file-card-preview">
+          <img src="${this._escapeHtml(file.url)}" loading="lazy">
+        </div>
+        <div class="file-card-name" title="${this._escapeHtml(file.name)}">${this._escapeHtml(file.name)}</div>
+        <div class="file-card-meta">
+          <span>${this._escapeHtml(file.size_str)}</span>
+          <button class="file-card-btn-delete" data-filename="${this._escapeHtml(file.name)}" title="${this._escapeHtml(this._t('delete_btn_title'))}">🗑️</button>
+        </div>
+        <div class="file-card-actions">
+          <button class="file-card-btn use-for-panel" data-url="${this._escapeHtml(file.url)}">${this._escapeHtml(this._t('use_for_panel'))}</button>
+          <button class="file-card-btn use-for-hub" data-url="${this._escapeHtml(file.url)}">${this._escapeHtml(this._t('use_for_hub'))}</button>
+        </div>
+      </div>
+    `).join('');
+
+    listContainer.querySelectorAll('.file-card-btn-delete').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const fname = btn.dataset.filename;
+        if (confirm(this._t('file_delete_confirm').replace('{filename}', fname))) {
+          this._deleteUploadedFile(fname);
+        }
+      });
+    });
+
+    listContainer.querySelectorAll('.use-for-panel').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const url = btn.dataset.url;
+        this._panelBgFile = url;
+        const inp = this.shadowRoot.getElementById('panel-bg-url-input');
+        if (inp) inp.value = url;
+        const bgMode = this.shadowRoot.getElementById('bg-mode-select-standalone');
+        // This selector has no "video" value. Selecting it left the control
+        // blank and prevented the image from rendering until a reload.
+        if (bgMode) bgMode.value = 'photo';
+        this._backgroundMode = 'photo';
+        this._updateBgFieldsVisibility();
+        this._renderEntries();
+        this._savePersonalization();
+        const help = this.shadowRoot.getElementById('bg-file-help');
+        if (help) help.textContent = this._t('bg_panel_selected_from_history');
+      });
+    });
+
+    listContainer.querySelectorAll('.use-for-hub').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const url = btn.dataset.url;
+        this._hubBgFile = url;
+        const inp = this.shadowRoot.getElementById('hub-bg-url-input');
+        if (inp) inp.value = url;
+        const hubMode = this.shadowRoot.getElementById('hub-bg-mode-select');
+        // The hub selector uses "image" (not "photo"). The old value made
+        // uploaded images impossible to select as the Argus-wide background.
+        if (hubMode) hubMode.value = 'image';
+        this._hubBgMode = 'image';
+        this._updateBgFieldsVisibility();
+        this._updateCanvasBackground();
+        this._savePersonalization();
+        const help = this.shadowRoot.getElementById('hub-file-help');
+        if (help) help.textContent = this._t('bg_hub_selected_from_history');
+      });
+    });
+  }
+
+  async _deleteUploadedFile(filename) {
+    try {
+      await this._send('argus/delete_uploaded_file', { filename });
+      if (this._uploadedFiles) {
+        this._uploadedFiles = this._uploadedFiles.filter(f => f.name !== filename);
+        this._renderUploadedFiles();
+      }
+      // Clear a selected file only after the server confirms deletion.
+      const panelInp = this.shadowRoot.getElementById('panel-bg-url-input');
+      if (panelInp && panelInp.value === `/local/argus/${filename}`) {
+        panelInp.value = '';
+        this._panelBgFile = '';
+      }
+      const hubInp = this.shadowRoot.getElementById('hub-bg-url-input');
+      if (hubInp && hubInp.value === `/local/argus/${filename}`) {
+        hubInp.value = '';
+        this._hubBgFile = '';
+      }
+    } catch (err) {
+      console.warn('Server delete failed:', err);
+      alert(this._format('delete_file_error', { error: err.message || err }));
+    }
+  }
+
+  _updateBgFieldsVisibility() {
+    const bgMode = this.shadowRoot.getElementById('bg-mode-select-standalone')?.value || 'weather';
+    const hubBgMode = this.shadowRoot.getElementById('hub-bg-mode-select')?.value || 'default';
+
+    const panelInputs = this.shadowRoot.getElementById('panel-custom-bg-inputs');
+    if (panelInputs) {
+      if (bgMode === 'photo' || bgMode === 'collage') {
+        panelInputs.style.display = 'flex';
+        const soundLabel = this.shadowRoot.getElementById('lbl-panel-bg-sound');
+        if (soundLabel) soundLabel.style.display = 'none';
+
+        const fileInput = this.shadowRoot.getElementById('panel-bg-file-input');
+        if (fileInput) fileInput.accept = 'image/*,.mov,.heic,.heif';
+
+        const urlInput = this.shadowRoot.getElementById('panel-bg-url-input');
+        if (urlInput) urlInput.placeholder = 'Pegar URL de la imagen';
+      } else {
+        panelInputs.style.display = 'none';
+      }
+    }
+
+    const hubInputs = this.shadowRoot.getElementById('hub-custom-bg-inputs');
+    if (hubInputs) {
+      if (hubBgMode === 'image') {
+        hubInputs.style.display = 'flex';
+        const soundLabel = this.shadowRoot.getElementById('lbl-hub-bg-sound');
+        if (soundLabel) soundLabel.style.display = 'none';
+
+        const fileInput = this.shadowRoot.getElementById('hub-bg-file-input');
+        if (fileInput) fileInput.accept = 'image/*,.mov,.heic,.heif';
+
+        const urlInput = this.shadowRoot.getElementById('hub-bg-url-input');
+        if (urlInput) urlInput.placeholder = 'Pegar URL de la imagen/GIF';
+      } else {
+        hubInputs.style.display = 'none';
+      }
+    }
+  }
+
+  _updateCanvasBackground() {
+    const bgContainer = this.shadowRoot.getElementById('argus-canvas-bg');
+    this.setAttribute('data-bg-mode', 'default');
+
+    if (bgContainer) {
+      bgContainer.innerHTML = '';
+      bgContainer.style.backgroundImage = '';
+    }
+
+    // Stop and remove any WebGL canvas loops to guarantee liquid-smooth rendering
+    this.shadowRoot.querySelectorAll('.wx-webgl').forEach(canvas => {
+      if ((canvas as any)._argusRO) (canvas as any)._argusRO.disconnect();
+      if ((canvas as any)._argusWebglStop) (canvas as any)._argusWebglStop();
+      canvas.remove();
+    });
+
+    this.style.backgroundImage = `url('/api/argus_static/argus-default-bg.jpg')`;
+    this.style.backgroundSize = 'cover';
+    this.style.backgroundPosition = 'center';
+    this.style.backgroundRepeat = 'no-repeat';
+    this.style.backgroundAttachment = 'fixed';
+  }
+
+  _renderEntryBackground(ws, isNight) {
+    return `<div class="wx wx-liquid-glass" style="position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; border-radius:inherit; background:radial-gradient(circle at 50% 20%, rgba(255,255,255,0.06), transparent 70%);"></div>`;
+  }
+
+  _updateHomeNameDisplay() {
+    const prominent = this.shadowRoot.getElementById('lbl-home-name-prominent');
+    if (prominent) prominent.textContent = this._homeName || this._t('home_default');
+  }
+
+  _sendTempNotification(message) {
+    const targets = this._notifTargets || [];
+    if (!targets.length || !this._hass) return;
+    targets.forEach(target => {
+      try {
+        this._hass.callService('notify', target, {
+          message,
+          title: this._t('temp_notification_title'),
+             data: { push: { sound: 'default', badge: 1 } }
+        });
+      } catch (_) {}
+    });
+  }
+
+  _normaliseEmergencyNumber(value) {
+    const number = String(value || '').replace(/[^0-9+]/g, '');
+    return /^[+]?[0-9]{2,15}$/.test(number) ? number : '911';
+  }
+
+  _renderSosOutputs() {
+    const container = this.shadowRoot?.getElementById('sos-output-chips');
+    if (!container) return;
+    const outputs = this._panicOutputs || [];
+    container.innerHTML = outputs.length
+      ? outputs.map(id => {
+          const name = this._hass?.states?.[id]?.attributes?.friendly_name || id;
+          return `<span class="sensor-pill" title="${this._escapeHtml(name)}" style="display:inline-flex;align-items:center;justify-content:space-between;gap:6px;padding:6px 10px;">
+            <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${this._escapeHtml(name)}</span>
+            <button type="button" class="ghost" data-remove-sos="${this._escapeHtml(id)}" style="padding:0 4px;font-size:11px;line-height:1;opacity:.65;cursor:pointer;border:none;background:transparent;color:inherit;" title="Eliminar">✕</button>
+          </span>`;
+        }).join('')
+      : `<div class="mode-sensor-none">${this._t('sos_no_outputs')}</div>`;
+
+    container.querySelectorAll('[data-remove-sos]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = (btn as HTMLElement).dataset.removeSos;
+        if (id) {
+          this._panicOutputs = (this._panicOutputs || []).filter(x => x !== id);
+          this._renderSosOutputs();
+        }
+      });
+    });
+  }
+
+  _configureEmergencyCall() {
+    const callBtn = this.shadowRoot?.getElementById('sos-call-btn');
+    if (!callBtn) return;
+    const number = this._normaliseEmergencyNumber(this._emergencyNumber);
+    callBtn.href = `tel:${number}`;
+    callBtn.textContent = `${this._t('sos_call')} (${number})`;
+  }
+
+  async _triggerSOS() {
+    if (this._sosBusy) return;
+    this._sosBusy = true;
+    const modal = this.shadowRoot && this.shadowRoot.getElementById('sos-modal');
+    if (modal) modal.classList.remove('open');
+    const emergencyNumber = this._normaliseEmergencyNumber(this._emergencyNumber);
+    const idx = this._sosEntryIdx;
+    const entry = this._dashboard?.entries?.[idx];
+    const eid = entry?.entity_id;
+    try {
+      if (!this._hass || !eid) throw new Error(this._t('no_alarm_instance'));
+      await this._send('argus/perform_alarm_action', { action: 'sos', entry_id: entry.entry_id });
+      if (window.confirm(`${this._t('sos_activated')}. ${this._format('sos_call_confirm', { number: emergencyNumber })}`)) {
+        window.location.href = `tel:${emergencyNumber}`;
+      }
+    } catch (err) {
+      alert(this._format('sos_error', { error: err?.message || err }));
+    } finally {
+      this._sosEntryIdx = null;
+      this._sosBusy = false;
+    }
+  }
+
+  async _stopSOS(idx) {
+    const entry = this._dashboard?.entries?.[idx];
+    const live = entry && this._hass?.states?.[entry.entity_id];
+    const previous = live?.attributes?.panic_previous_state;
+    const restoreService = {
+      armed_home: 'alarm_arm_home', armed_away: 'alarm_arm_away',
+      armed_night: 'alarm_arm_night', armed_vacation: 'alarm_arm_vacation',
+      disarmed: 'alarm_disarm',
+    }[previous];
+    if (!entry?.entity_id || !restoreService) {
+      alert(this._t('panic_state_unknown'));
+      return;
+    }
+    const restore = async (pin) => {
+      try {
+        await this._send('argus/perform_alarm_action', {
+          action: restoreService.replace('alarm_', ''),
+          entry_id: entry.entry_id,
+          ...(pin ? { code: pin } : {})
+        });
+        await this._load();
+        return true;
+      } catch (err) {
+        const pinError = this.shadowRoot.getElementById('pin-error');
+        if (pinError) pinError.textContent = `❌ ${this._format('panic_stop_error', { error: '' }).replace(/:\s*$/, '')}`;
+        else alert(this._format('panic_stop_error', { error: err?.message || err }));
+        return false;
+      }
+    };
+
+    const pinConfigured = entry.pin_configured === true || (this._users || []).length > 0;
+    if (pinConfigured) this._showPinModal(restore);
+    else await restore(null);
+  }
+
+  _savePersonalization() {
+    this._runWithPin(() => this._persistPersonalization());
+  }
+
+  async _persistPersonalization() {
+    this._ui = this._ui || {};
+    const background_mode = this.shadowRoot.getElementById('bg-mode-select-standalone')?.value || 'weather';
+    const temperature_source = this.shadowRoot.getElementById('temp-source-select-standalone')?.value || 'auto';
+    const weather_source = this.shadowRoot.getElementById('weather-source-select')?.value || 'auto';
+    const clock_format_val = this.shadowRoot.getElementById('argus-clock-format-select')?.value || 'auto';
+    this._clockFormat = ['auto','12h','24h'].includes(clock_format_val) ? clock_format_val : 'auto';
+    const emergency_number = this._normaliseEmergencyNumber(this.shadowRoot.getElementById('emergency-number-input')?.value);
+
+    // FIX: Read directly from DOM, allowing empty strings when the user clears the URL
+    const panel_bg_file = this.shadowRoot.getElementById('panel-bg-url-input')?.value || '';
+    const panel_bg_sound = Boolean(this.shadowRoot.getElementById('chk-panel-bg-sound')?.checked);
+
+    const selected_hub_bg_mode = this.shadowRoot.getElementById('hub-bg-mode-select')?.value || 'default';
+    const hub_bg_mode = selected_hub_bg_mode === 'default' ? 'none' : selected_hub_bg_mode;
+    // Preserve file even in default mode so switching back to image restores it
+    const hub_bg_file = this._hubBgFile || this.shadowRoot.getElementById('hub-bg-url-input')?.value || '';
+    const hub_bg_sound = Boolean(this.shadowRoot.getElementById('chk-hub-bg-sound')?.checked);
+
+    const payload = {
+      home_name: this._homeName,
+      temperature_source,
+      weather_source,
+      clock_format: this._clockFormat,
+      emergency_number
+    };
+    
+    if (this._panicOutputs !== undefined) {
+      payload.panic_outputs = this._panicOutputs;
+    }
+
+    const myProfile = (this._ui.users || []).find(u => u.id === this._currentProfile?.id);
+    // Background is an instance preference, not a profile-only override: that
+    // makes the Default choice survive a refresh for every administrator.
+    payload.background_mode = background_mode;
+    payload.background_images = this._backgroundImages || [];
+    payload.panel_bg_file = panel_bg_file;
+    payload.panel_bg_sound = panel_bg_sound;
+    payload.hub_bg_mode = hub_bg_mode;
+    payload.hub_bg_file = hub_bg_file;
+    payload.hub_bg_sound = hub_bg_sound;
+    payload.entry_id = this._dashboard?.entry_id || this._dashboard?.entries?.[0]?.entry_id;
+
+    // Inject Theme Object per prompt requirements
+    let themeMode = "default";
+    let themeFile = "";
+    if (background_mode === "photo" && panel_bg_file) {
+        themeMode = "photo";
+        themeFile = panel_bg_file;
+    } else if (background_mode === "weather") {
+        themeMode = "weather";
+    } else if (background_mode === "none") {
+        themeMode = "none";
+    }
+    
+    payload.theme = {
+        background_mode: themeMode,
+        background_file: themeFile,
+    };
+
+    if (myProfile) {
+      const users = JSON.parse(JSON.stringify(this._ui.users || []));
+      const user = users.find(u => u.id === this._currentProfile?.id);
+      user.background_mode = background_mode;
+      user.background_images = this._backgroundImages || [];
+      user.panel_bg_file = panel_bg_file;
+      user.panel_bg_sound = panel_bg_sound;
+      user.hub_bg_mode = hub_bg_mode;
+      user.hub_bg_file = hub_bg_file;
+      user.hub_bg_sound = hub_bg_sound;
+      // also save theme
+      user.theme = payload.theme;
+      payload.users = users;
+    }
+
+    try {
+      await this._send('argus/save_ui', payload);
+      this._currentUserTheme = payload.theme;
+      this._backgroundMode = background_mode;
+      this._temperatureSource = temperature_source;
+      this._weatherSource = weather_source;
+      this._emergencyNumber = emergency_number;
+      this._panelBgFile = panel_bg_file;
+      this._panelBgSound = panel_bg_sound;
+      this._hubBgMode = selected_hub_bg_mode;
+      this._hubBgFile = hub_bg_file;
+      this._hubBgSound = hub_bg_sound;
+      this._updateTheme();
+
+      this._ui = this._ui || {};
+      if (myProfile) {
+        this._ui.users = payload.users;
+      } else {
+        this._ui.background_mode = background_mode;
+        this._ui.background_images = this._backgroundImages || [];
+        this._ui.panel_bg_file = panel_bg_file;
+        this._ui.panel_bg_sound = panel_bg_sound;
+        this._ui.hub_bg_mode = hub_bg_mode;
+        this._ui.hub_bg_file = hub_bg_file;
+        this._ui.hub_bg_sound = hub_bg_sound;
+      }
+      this._ui.temperature_source = temperature_source;
+      this._ui.weather_source = weather_source;
+      this._ui.clock_format = this._clockFormat;
+      this._ui.emergency_number = emergency_number;
+      this._ui.panic_outputs = this._panicOutputs;
+      this._configureEmergencyCall();
+      this._ui.hub_bg_file = hub_bg_file;
+      this._ui.hub_bg_sound = hub_bg_sound;
+
+      this._renderEntries();
+      this._updateCanvasBackground();
+
+      const successMsg = this._t('saved') || '✓ Guardado exitosamente';
+      const btn = this.shadowRoot.getElementById('btn-save-personalization-standalone');
+      if (btn) {
+        const oldText = btn.textContent;
+        btn.textContent = successMsg;
+        btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+        setTimeout(() => { btn.textContent = oldText; btn.style.background = ''; }, 3000);
+      }
+
+      const sosBtn = this.shadowRoot.getElementById('btn-save-sos');
+      const sosStatus = this.shadowRoot.getElementById('sos-status');
+      if (sosBtn) {
+        const oldSos = sosBtn.textContent;
+        sosBtn.textContent = successMsg;
+        sosBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+        setTimeout(() => { sosBtn.textContent = oldSos; sosBtn.style.background = ''; }, 3000);
+      }
+      if (sosStatus) {
+        sosStatus.textContent = successMsg;
+        sosStatus.style.opacity = '1';
+        setTimeout(() => { sosStatus.textContent = ''; sosStatus.style.opacity = '0'; }, 3000);
+      }
+    } catch (e) { alert(this._format('generic_error', { error: e.message })); }
+  }
+
+  /* ── Home Name management ────────────────────────────────────────── */
+  _editHomeName() {
+    const doOpen = () => {
+      const m = this.shadowRoot.getElementById('home-name-modal');
+      const inp = this.shadowRoot.getElementById('home-name-input');
+      const st  = this.shadowRoot.getElementById('home-name-status');
+      inp.value = this._homeName || this.shadowRoot.getElementById('home-name-setting')?.value || '';
+      if (st) st.textContent = '';
+      m.classList.add('open'); m.setAttribute('aria-hidden', 'false');
+      setTimeout(() => inp.focus(), 60);
+    };
+    this._runWithPin(doOpen);
+  }
+
+  _closeHomeNameModal() {
+    const m = this.shadowRoot.getElementById('home-name-modal');
+    m.classList.remove('open'); m.setAttribute('aria-hidden', 'true');
+  }
+
+  async _saveHomeName() {
+    const inp = this.shadowRoot.getElementById('home-name-input');
+    const name = (inp?.value || '').trim();
+    try {
+      await this._send('argus/save_ui', { home_name: name });
+      this._homeName = name;
+      if (!this._ui) this._ui = {};
+      this._ui.home_name = name;
+      this._updateHomeNameDisplay();
+      this._renderEntries();
+      setTimeout(() => this._closeHomeNameModal(), 800);
+    } catch (e) { alert(this._format('generic_error', { error: e.message })); }
+  }
+
+  /* ── PIN management ──────────────────────────────────────────────── */
+  async _savePin() {
+    const status = this.shadowRoot.getElementById('pin-status');
+    const pinConfigured = this._dashboard?.entries?.[0]?.pin_configured === true;
+
+    const pinCurrent = this.shadowRoot.getElementById('current-pin').value;
+    if (pinConfigured && !pinCurrent) {
+      if (status) {
+        status.textContent = this._t('pin_incorrect');
+        status.className = 'status err';
+      }
+      return;
+    }
+
+    const p1 = this.shadowRoot.getElementById('new-pin-1').value;
+    const p2 = this.shadowRoot.getElementById('new-pin-2').value;
+
+    if (p1 !== p2) {
+      if (status) {
+        status.textContent = this._t('pin_mismatch');
+        status.className = 'status err';
+      } else {
+        alert(this._t('pin_mismatch'));
+      }
+      return;
+    }
+
+    try {
+      await this._send('argus/update_master_pin', { pin: p1, current_pin: pinCurrent });
+      if (status) {
+        status.textContent = p1 ? this._t('pin_updated') : this._t('pin_deleted');
+        status.className = 'status ok';
+      }
+      if (this.shadowRoot.getElementById('current-pin-display')) {
+        this.shadowRoot.getElementById('current-pin-display').textContent = p1 ? this._t('pin_active_yes') : this._t('pin_active_no');
+      }
+      if (this._dashboard?.entries?.[0]) this._dashboard.entries[0].pin_configured = Boolean(p1);
+      this._syncAccessSummary();
+      if (this.shadowRoot.getElementById('current-pin')) this.shadowRoot.getElementById('current-pin').value = '';
+      this.shadowRoot.getElementById('new-pin-1').value = '';
+      this.shadowRoot.getElementById('new-pin-2').value = '';
+      setTimeout(() => this._load(), 1200);
+    } catch (e) {
+      if (status) {
+        status.textContent = e.message;
+        status.className = 'status err';
+      } else {
+        alert(e.message);
+      }
+    }
+  }
+
+  async _handleForgotPin() {
+    const status = this.shadowRoot.getElementById('pin-status');
+    const pinErr = this.shadowRoot.getElementById('pin-error');
+
+    const isAdmin = this._hass?.user?.is_admin === true;
+
+    if (!isAdmin) {
+      const errMsg = this._t('pin_reset_admin_only');
+      if (status) {
+        status.textContent = errMsg;
+        status.className = 'status err';
+      }
+      if (pinErr) {
+        pinErr.textContent = errMsg;
+      }
+      return;
+    }
+
+    if (confirm(this._t('pin_reset_confirm'))) {
+      try {
+        await this._send('argus/update_master_pin', { pin: '', force_reset: true });
+        const successMsg = '✓ PIN Maestro restablecido';
+        if (status) {
+          status.textContent = successMsg;
+          status.className = 'status ok';
+        }
+        if (pinErr) {
+          pinErr.textContent = successMsg;
+          pinErr.style.color = '#43a047';
+        }
+
+        if (this.shadowRoot.getElementById('current-pin')) this.shadowRoot.getElementById('current-pin').value = '';
+        this.shadowRoot.getElementById('new-pin-1').value = '';
+        this.shadowRoot.getElementById('new-pin-2').value = '';
+
+        setTimeout(() => {
+          this._closePinModal();
+          this._load();
+        }, 1200);
+      } catch (e) {
+        const errMsg = this._format('generic_error', { error: e.message });
+        if (status) {
+          status.textContent = errMsg;
+          status.className = 'status err';
+        }
+        if (pinErr) {
+          pinErr.textContent = errMsg;
+        }
+      }
+    }
+  }
+
+  /* ── Liquid-glass input modal (replaces window.prompt) ───────────── */
+  _showArgusInputModal({ title = '', label = '', placeholder = '', initialValue = '', type = 'text', numeric = false, options = null } = {}) {
+    return new Promise(resolve => {
+      const id = `_aim_${Date.now()}`;
+      const overlay = document.createElement('div');
+      overlay.id = id;
+      overlay.setAttribute('role', 'dialog');
+      overlay.setAttribute('aria-modal', 'true');
+      overlay.style.cssText = [
+        'position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;margin:0;padding:0;box-sizing:border-box;z-index:999999999;display:flex;align-items:center;justify-content:center',
+        'background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)',
+        'animation:argus-modal-in .18s ease',
+      ].join(';');
+
+      const safeLabel = label.replace(/'/g, '&#39;');
+      const safeTitle = title.replace(/'/g, '&#39;');
+      const safePlaceholder = placeholder.replace(/'/g, '&#39;');
+      const cancelLabel = this._t('modal_cancel') || 'Cancelar';
+      const saveLabel   = this._t('modal_save')   || 'Guardar';
+
+      overlay.innerHTML = `
+        <div style="background:rgba(30,30,45,0.92);border:1px solid rgba(255,255,255,0.18);border-radius:20px;
+          padding:28px 24px 22px;width:min(380px,90vw);box-shadow:0 24px 64px rgba(0,0,0,0.7);
+          display:flex;flex-direction:column;gap:14px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)">
+          <div style="font-size:16px;font-weight:700;color:#fff;letter-spacing:.01em">${safeTitle}</div>
+          ${safeLabel ? `<div style="font-size:13px;color:rgba(255,255,255,0.65);margin-top:-6px">${safeLabel}</div>` : ''}
+          ${type === 'select' && options
+            ? `<select id="aim-inp" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:12px 14px;font-size:15px;color:#fff;outline:none;width:100%;box-sizing:border-box;transition:border-color .2s;font-family:inherit">
+                 ${options.map(o => `<option value="${this._escapeHtml(o.value)}" ${o.value === initialValue ? 'selected' : ''}>${this._escapeHtml(o.label)}</option>`).join('')}
+               </select>`
+            : `<input id="aim-inp" type="${type === 'password' ? 'password' : 'text'}"
+            ${numeric ? 'inputmode="numeric" pattern="[0-9]*"' : ''}
+            placeholder="${safePlaceholder}"
+            value="${initialValue.replace(/"/g, '&quot;')}"
+            style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:12px;
+              padding:12px 14px;font-size:15px;color:#fff;outline:none;width:100%;box-sizing:border-box;
+              transition:border-color .2s;font-family:inherit"/>`
+          }
+          <div style="display:flex;gap:10px;margin-top:4px">
+            <button id="aim-cancel" style="flex:1;padding:11px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);
+              background:rgba(255,255,255,0.06);color:#fff;font-size:14px;cursor:pointer;font-family:inherit">${cancelLabel}</button>
+            <button id="aim-ok" style="flex:1;padding:11px;border-radius:12px;border:none;
+              background:linear-gradient(135deg,#4a90d9,#7b5ea7);color:#fff;font-size:14px;font-weight:600;
+              cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(74,144,217,0.35)">${saveLabel}</button>
+          </div>
+        </div>`;
+
+      const root = document.body || this.shadowRoot;
+      root.appendChild(overlay);
+
+      const inp = overlay.querySelector('#aim-inp');
+      const okBtn = overlay.querySelector('#aim-ok');
+      const cancelBtn = overlay.querySelector('#aim-cancel');
+
+      setTimeout(() => inp?.focus(), 60);
+      inp?.addEventListener('focus', () => inp.style.borderColor = 'rgba(74,144,217,0.8)');
+      inp?.addEventListener('blur',  () => inp.style.borderColor = 'rgba(255,255,255,0.15)');
+
+      const cleanup = val => { overlay.remove(); resolve(val); };
+
+      okBtn.addEventListener('click', () => cleanup(inp.value));
+      cancelBtn.addEventListener('click', () => cleanup(null));
+      inp.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); cleanup(inp.value); }
+        if (e.key === 'Escape') { e.preventDefault(); cleanup(null); }
+      });
+      overlay.addEventListener('click', e => { if (e.target === overlay) cleanup(null); });
+    });
+  }
+
+  _showArgusPermissionsModal(targetUser) {
+    return new Promise((resolve) => {
+      const overlay = document.createElement('div');
+      overlay.style.cssText = [
+        'position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;margin:0;padding:0;box-sizing:border-box;z-index:999999999;display:flex;align-items:center;justify-content:center',
+        'background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)',
+        'animation:argus-modal-in .18s ease',
+      ].join(';');
+
+      const cancelLabel = this._t('modal_cancel') || 'Cancelar';
+      const saveLabel = this._t('modal_save') || 'Guardar';
+      const perms = targetUser.permissions || {};
+
+      overlay.innerHTML = `
+        <div style="background:rgba(30,30,45,0.92);border:1px solid rgba(255,255,255,0.18);border-radius:20px;
+          padding:28px 24px 22px;width:min(420px,90vw);box-shadow:0 24px 64px rgba(0,0,0,0.7);
+          display:flex;flex-direction:column;gap:14px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)">
+          <div style="font-size:16px;font-weight:700;color:#fff;letter-spacing:.01em">🛡️ Permisos de ${this._escapeHtml(targetUser.name)}</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.65);margin-top:-6px">Selecciona las acciones permitidas para este perfil estándar:</div>
+          
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:6px;max-height:280px;overflow-y:auto;padding-right:4px;">
+            <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
+              <input type="checkbox" id="chk-perm-view-status" ${perms.view_status ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;" />
+              <span>Ver Estado de Sensores / Panel</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
+              <input type="checkbox" id="chk-perm-arm" ${perms.arm ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;" />
+              <span>Armar Alarma</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
+              <input type="checkbox" id="chk-perm-disarm" ${perms.disarm ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;" />
+              <span>Desarmar Alarma</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
+              <input type="checkbox" id="chk-perm-view-history" ${perms.view_history ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;" />
+              <span>Ver Historial de Actividad</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
+              <input type="checkbox" id="chk-perm-change-pin" ${perms.change_pin ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;" />
+              <span style="color:#34c759;font-weight:700;">Permitir Cambiar su PIN de Acceso</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
+              <input type="checkbox" id="chk-perm-change-master-pin" ${perms.change_master_pin ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;" />
+              <span style="color:#ffb300;font-weight:700;">Permitir Cambiar el PIN Maestro</span>
+            </label>
+          </div>
+
+          <div style="display:flex;gap:10px;margin-top:10px">
+            <button id="apm-cancel" style="flex:1;padding:11px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);
+              background:rgba(255,255,255,0.06);color:#fff;font-size:14px;cursor:pointer;font-family:inherit">${cancelLabel}</button>
+            <button id="apm-ok" style="flex:1;padding:11px;border-radius:12px;border:none;
+              background:linear-gradient(135deg,#4a90d9,#7b5ea7);color:#fff;font-size:14px;font-weight:600;
+              cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(74,144,217,0.35)">${saveLabel}</button>
+          </div>
+        </div>`;
+
+      const root = document.body || this.shadowRoot;
+      root.appendChild(overlay);
+
+      const okBtn = overlay.querySelector('#apm-ok');
+      const cancelBtn = overlay.querySelector('#apm-cancel');
+
+      const cleanup = val => { overlay.remove(); resolve(val); };
+
+      okBtn.addEventListener('click', () => {
+        const nextPerms = {
+          view_status: overlay.querySelector('#chk-perm-view-status').checked,
+          arm: overlay.querySelector('#chk-perm-arm').checked,
+          disarm: overlay.querySelector('#chk-perm-disarm').checked,
+          view_history: overlay.querySelector('#chk-perm-view-history').checked,
+          change_pin: overlay.querySelector('#chk-perm-change-pin').checked,
+          change_master_pin: overlay.querySelector('#chk-perm-change-master-pin').checked,
+        };
+        cleanup(nextPerms);
+      });
+      cancelBtn.addEventListener('click', () => cleanup(null));
+      overlay.addEventListener('click', e => { if (e.target === overlay) cleanup(null); });
+    });
+  }
+
+  /* ── Liquid-glass confirm modal (replaces window.confirm) ─────────── */
+  _showArgusConfirmModal(message = '', { confirmLabel = '', confirmStyle = '', cancelLabel = '' } = {}) {
+    return new Promise(resolve => {
+      const overlay = document.createElement('div');
+      overlay.setAttribute('role', 'alertdialog');
+      overlay.setAttribute('aria-modal', 'true');
+      overlay.style.cssText = [
+        'position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;margin:0;padding:0;box-sizing:border-box;z-index:999999999;display:flex;align-items:center;justify-content:center',
+        'background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)',
+        'animation:argus-modal-in .18s ease',
+      ].join(';');
+
+      const cl = confirmLabel || this._t('modal_confirm') || 'Confirmar';
+      const ccl = cancelLabel  || this._t('modal_cancel')  || 'Cancelar';
+      const cStyle = confirmStyle || 'background:linear-gradient(135deg,#4a90d9,#7b5ea7);border:none;box-shadow:0 4px 14px rgba(74,144,217,0.35)';
+
+      overlay.innerHTML = `
+        <div style="background:rgba(30,30,45,0.92);border:1px solid rgba(255,255,255,0.18);border-radius:20px;
+          padding:28px 24px 22px;width:min(360px,90vw);box-shadow:0 24px 64px rgba(0,0,0,0.7);
+          display:flex;flex-direction:column;gap:18px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)">
+          <div style="font-size:15px;color:rgba(255,255,255,0.92);line-height:1.5;text-align:center">${message}</div>
+          <div style="display:flex;gap:10px">
+            <button id="acm-cancel" style="flex:1;padding:11px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);
+              background:rgba(255,255,255,0.06);color:#fff;font-size:14px;cursor:pointer;font-family:inherit">${ccl}</button>
+            <button id="acm-ok" style="flex:1;padding:11px;border-radius:12px;color:#fff;font-size:14px;font-weight:600;
+              cursor:pointer;font-family:inherit;${cStyle}">${cl}</button>
+          </div>
+        </div>`;
+
+      const root = document.body || this.shadowRoot;
+      root.appendChild(overlay);
+
+      const cleanup = val => { overlay.remove(); resolve(val); };
+      overlay.querySelector('#acm-ok').addEventListener('click', () => cleanup(true));
+      overlay.querySelector('#acm-cancel').addEventListener('click', () => cleanup(false));
+      overlay.addEventListener('click', e => { if (e.target === overlay) cleanup(false); });
+      overlay.addEventListener('keydown', e => {
+        if (e.key === 'Enter') cleanup(true);
+        if (e.key === 'Escape') cleanup(false);
+      });
+      setTimeout(() => overlay.querySelector('#acm-ok')?.focus(), 60);
+    });
+  }
+
+  _runWithPin(action) {
+    action();
+  }
+
+  _showPinModal(onConfirm) {
+    const m = this.shadowRoot.getElementById('pin-modal');
+    const inp = this.shadowRoot.getElementById('pin-input');
+    const err = this.shadowRoot.getElementById('pin-error');
+    const wrap = this.shadowRoot.querySelector('.wrap');
+    inp.value = '';
+    if (err) {
+      err.textContent = '';
+      err.style.color = '';
+    }
+    this._pinCallback = onConfirm;
+
+    const isFS = this.classList.contains('fullscreen-active');
+    let fsEl = null;
+    if (isFS) {
+      fsEl = this.shadowRoot.querySelector('.entry.ios-fullscreen') ||
+             this.shadowRoot.querySelector('.entry') ||
+             this.shadowRoot.querySelector('article');
+    }
+
+    if (isFS && fsEl) {
+      m.style.position = 'absolute';
+      m.style.zIndex = '99999999';
+      m.style.background = 'rgba(0, 0, 0, 0.55)';
+      m.style.backdropFilter = 'none';
+      m.style.webkitBackdropFilter = 'none';
+      const modalBox = m.querySelector('.modal');
+      if (modalBox) {
+        modalBox.classList.remove('dial-elastic');
+        void modalBox.offsetWidth; // force reflow
+        modalBox.classList.add('dial-elastic');
+      }
+      fsEl.appendChild(m);
+    } else {
+      m.style.position = 'fixed';
+      m.style.zIndex = '999999';
+      m.style.background = 'rgba(0, 0, 0, 0.3)';
+      m.style.backdropFilter = 'none';
+      m.style.webkitBackdropFilter = 'none';
+      if (wrap) {
+        wrap.classList.add('wrap-blurred');
+      }
+    }
+
+    m.classList.add('open'); m.setAttribute('aria-hidden', 'false');
+    setTimeout(() => inp.focus(), 60);
+  }
+
+  _closePinModal() {
+    const m = this.shadowRoot.getElementById('pin-modal');
+    m.classList.remove('open');
+    m.setAttribute('aria-hidden', 'true');
+    const wrap = this.shadowRoot.querySelector('.wrap');
+    if (wrap) {
+      wrap.classList.remove('wrap-blurred');
+    }
+    m.style.position = 'fixed';
+    m.style.zIndex = '999999';
+    this.shadowRoot.appendChild(m);
+    this._pinCallback = null;
+  }
+
+  _appendPinDigit(digit) {
+    const inp = this.shadowRoot.getElementById('pin-input');
+    const err = this.shadowRoot.getElementById('pin-error');
+    if (!inp) return;
+    inp.value = `${inp.value || ''}${digit}`.slice(0, 8);
+    if (err) err.textContent = '';
+  }
+
+  _backspacePin() {
+    const inp = this.shadowRoot.getElementById('pin-input');
+    const err = this.shadowRoot.getElementById('pin-error');
+    if (!inp) return;
+    inp.value = (inp.value || '').slice(0, -1);
+    if (err) err.textContent = '';
+  }
+
+  async _submitPin() {
+    const pin = this.shadowRoot.getElementById('pin-input').value.trim();
+    if (!pin) {
+      const errEl = this.shadowRoot.getElementById('pin-error');
+      if (errEl) errEl.textContent = '⚠️ Introduce el PIN';
+      return;
+    }
+    const cb = this._pinCallback;
+    if (cb) {
+      try {
+        const success = await cb(pin);
+        if (success !== false) {
+          this._closePinModal();
+        }
+      } catch (err) {
+        const errEl = this.shadowRoot.getElementById('pin-error');
+        if (errEl) errEl.textContent = err.message || '❌ PIN incorrecto';
+      }
+    } else {
+      this._closePinModal();
+    }
+  }
+
+  /* ── Selector modal ──────────────────────────────────────────────── */
+  _selectAll() {
+    const q = (this.shadowRoot.getElementById('selector-search')?.value || '').toLowerCase().trim();
+    const INTRUSION_DC = ['door','window','motion','vibration','glass','opening','smoke','gas','tamper'];
+    const items = (this._available || []).filter(x => {
+      if (this._selectorTarget === 'external_panel') return x.domain === 'alarm_control_panel';
+      if (this._selectorTarget === 'siren' || this._selectorTarget === 'panic') return ['siren','switch','light','fan','input_boolean','script','alarm_control_panel'].includes(x.domain);
+      if (x.domain === 'lock') return true;
+      if (x.domain === 'binary_sensor') {
+        const dc = this._hass?.states?.[x.entity_id]?.attributes?.device_class || '';
+        return INTRUSION_DC.includes(dc);
+      }
+      return false;
+    }).filter(x => !q || [x.entity_id, x.name, x.area].filter(Boolean).join(' ').toLowerCase().includes(q));
+    items.forEach(x => { if (!this._selected.includes(x.entity_id)) this._selected.push(x.entity_id); });
+    this._renderSelector(true);
+  }
+
+  _openModal(type) {
+    this._selectorTarget = type;
+    const cfg = this._currentModeConfig();
+    const _srcKey = type === 'sensor' ? 'sensors' : (type === 'bypass' ? 'bypassed_sensors' : (type === 'entry' ? 'entry_sensors' : (type === 'external_panel' ? 'external_panels' : 'sirens')));
+    this._selected = type === 'panic'
+      ? [...(this._panicOutputs || [])]
+      : (Array.isArray(cfg?.[_srcKey]) ? [...cfg[_srcKey]] : []);
+    const title = this.shadowRoot.getElementById('selector-title');
+    if (type === 'sensor') title.textContent = this._t('sensor_section');
+    else if (type === 'bypass') title.textContent = this._t('sensors_to_bypass');
+    else if (type === 'entry') title.textContent = this._t('entry_sensors');
+    else if (type === 'panic') title.textContent = this._t('selector_panic');
+    else if (type === 'external_panel') title.textContent = this._t('external_panels') || 'Paneles de alarma externos';
+    else title.textContent = this._t('siren_section');
+    const searchInput = this.shadowRoot.getElementById('selector-search');
+    if (searchInput) searchInput.value = '';
+    this._renderSelector(true);
+    const m = this.shadowRoot.getElementById('selector-modal');
+    m.classList.add('open'); m.setAttribute('aria-hidden', 'false');
+  }
+
+  _closeModal() {
+    const m = this.shadowRoot.getElementById('selector-modal');
+    m.classList.remove('open'); m.setAttribute('aria-hidden', 'true');
+  }
+
+  _renderSelectedBox() {
+    const selBox = this.shadowRoot.getElementById('selector-selected');
+    if (!selBox) return;
+    selBox.innerHTML = this._selected.map(id => {
+      const stateObj = this._hass?.states?.[id];
+      const facts = this._deviceFacts(id, stateObj, true);
+      return `<div class="sel-right-item">
+        <div style="min-width:0">
+          <div class="sel-right-name">${this._escapeHtml(stateObj?.attributes?.friendly_name || id)}</div>
+          <div class="sel-right-facts">${facts.map(f => `<span class="device-fact ${f.className}">${this._escapeHtml(f.text)}</span>`).join('')}</div>
+        </div>
+        <button class="ghost" style="padding:3px 8px;font-size:11px;flex-shrink:0;margin-left:6px" data-rm="${this._escapeHtml(id)}">✕</button>
+      </div>`;
+    }).join('') || `<div class="small" style="padding:10px;opacity:.5">${this._t('none_selected')}</div>`;
+
+    const countEl = this.shadowRoot.getElementById('selector-count');
+    if (countEl) {
+      countEl.textContent = `${this._selected.length} ${this._t('selected_lbl').toLowerCase()}`;
+    }
+  }
+
+  _renderSelector(rebuildList = true) {
+    const list = this.shadowRoot.getElementById('selector-list');
+    const selBox = this.shadowRoot.getElementById('selector-selected');
+    if (!list || !selBox) return;
+
+    if (!list._boundSelectorChange) {
+      list._boundSelectorChange = true;
+      list.addEventListener('change', e => {
+        const cb = e.target.closest('input[type=checkbox]');
+        if (!cb || !cb.dataset.entity) return;
+        const id = cb.dataset.entity;
+        if (cb.checked) {
+          if (!this._selected.includes(id)) this._selected.push(id);
+        } else {
+          this._selected = this._selected.filter(v => v !== id);
+        }
+        this._renderSelectedBox();
+      });
+    }
+
+    if (!selBox._boundSelectorRm) {
+      selBox._boundSelectorRm = true;
+      selBox.addEventListener('click', e => {
+        const btn = e.target.closest('[data-rm]');
+        if (!btn || !btn.dataset.rm) return;
+        const id = btn.dataset.rm;
+        this._selected = this._selected.filter(v => v !== id);
+        const cb = list.querySelector(`input[type=checkbox][data-entity="${id}"]`);
+        if (cb) cb.checked = false;
+        this._renderSelectedBox();
+      });
+    }
+
+    if (rebuildList) {
+      const q = (this.shadowRoot.getElementById('selector-search')?.value || '').toLowerCase().trim();
+      const INTRUSION_DC = ['door','window','motion','vibration','glass','opening','smoke','gas','tamper'];
+      const items = (this._available || []).filter(x => {
+        if (this._selectorTarget === 'external_panel') return x.domain === 'alarm_control_panel';
+        if (this._selectorTarget === 'siren' || this._selectorTarget === 'panic') return ['siren','switch','light','fan','input_boolean','script','alarm_control_panel'].includes(x.domain);
+        if (x.domain === 'lock') return true;
+        if (x.domain === 'binary_sensor') {
+          const dc = this._hass?.states?.[x.entity_id]?.attributes?.device_class || '';
+          return INTRUSION_DC.includes(dc);
+        }
+        return false;
+      }).filter(x => !q || [x.entity_id, x.name, x.area, x.entity_id.split('.')[1]].filter(Boolean).join(' ').toLowerCase().includes(q));
+
+      list.innerHTML = items.map(x => {
+        const stateObj = this._hass?.states?.[x.entity_id];
+        const facts = this._deviceFacts(x.entity_id, stateObj, true);
+        return `<label class="pick-row">
+          <input type="checkbox" data-entity="${this._escapeHtml(x.entity_id)}" ${this._selected.includes(x.entity_id) ? 'checked' : ''}>
+          <div>
+            <div class="pick-row-name">${this._escapeHtml(x.name || x.entity_id)}</div>
+            <div class="pick-row-meta">${this._escapeHtml(x.entity_id)}${x.area ? ' · '+this._escapeHtml(x.area) : ''}</div>
+            <div class="device-facts">${facts.map(f => `<span class="device-fact ${f.className}">${this._escapeHtml(f.text)}</span>`).join('')}</div>
+          </div>
+        </label>`;
+      }).join('') || `<div class="small" style="padding:10px">${this._t('no_results')}</div>`;
+    }
+
+    this._renderSelectedBox();
+  }
+
+  _acceptSelection() {
+    // FIX A DEFINITIVO: leer cfg fresco, mutar, y escribir de vuelta
+    // EXACTAMENTE en modes.__by_entity__[eid][mode] — la misma ruta que _currentModeConfig lee
+    if (!this._ui) return;
+    if (this._selectorTarget === 'panic') {
+      this._panicOutputs = [...this._selected];
+      this._renderSosOutputs();
+      this._closeModal();
+      return;
+    }
+    if (!this._ui.modes) this._ui.modes = {};
+    if (!this._ui.modes.__by_entity__) this._ui.modes.__by_entity__ = {};
+    let _eid = this._modeEntryId;
+    if (!_eid || _eid === 'default') {
+      _eid = this._dashboard?.entries?.[0]?.entity_id || 'default';
+    }
+    this._modeEntryId = _eid;
+    if (!this._ui.modes.__by_entity__[_eid]) this._ui.modes.__by_entity__[_eid] = {};
+    const EMPTY = { sensors:[], bypassed_sensors:[], sirens:[], external_panels:[], require_closed:false,
+                    arming_time:null, entry_delay:null, mqtt_enabled:null, entry_sensors:[], light_siren_settings:{} };
+    // Partir de la config existente para no perder otros campos
+    const existing = this._ui.modes.__by_entity__[_eid][this._mode] || {};
+    const cfg = { ...EMPTY, ...existing };
+    if (this._selectorTarget === 'sensor') cfg.sensors          = [...this._selected];
+    if (this._selectorTarget === 'siren')  cfg.sirens           = [...this._selected];
+    if (this._selectorTarget === 'bypass') cfg.bypassed_sensors = [...this._selected];
+    if (this._selectorTarget === 'entry')  cfg.entry_sensors    = [...this._selected];
+    if (this._selectorTarget === 'external_panel') cfg.external_panels = [...this._selected];
+    // Escribir de vuelta en la ruta canónica
+    this._ui.modes.__by_entity__[_eid][this._mode] = cfg;
+    this._closeModal();
+    this._renderModeView();
+  }
+
+  /* ── Alarm actions ───────────────────────────────────────────────── */
+  async _handleAction(idx, action) {
+    const e = this._dashboard.entries[Number(idx)];
+    if (!e?.entity_id || !this._hass) return;
+    const live = this._hass.states[e.entity_id];
+    if (!live || live.state === 'unavailable') return;
+
+    const serviceMap = {
+      home: 'alarm_arm_home', away: 'alarm_arm_away',
+      night: 'alarm_arm_night', vacation: 'alarm_arm_vacation',
+      disarm: 'alarm_disarm',
+    };
+    const modeLabels = {
+      home: this._t('mode_home'), away: this._t('mode_away'),
+      night: this._t('mode_night'), vacation: this._t('mode_vacation'),
+    };
+    const service = serviceMap[action];
+    if (!service) return;
+    const currentUser = this._hass?.user?.name || this._t('user_default');
+
+    if (action === 'disarm') {
+      // FIX-4: sólo mostrar modal de PIN si hay código configurado
+      const masterPin = e.pin_configured === true;
+      const hasUsers = e.user_pin_configured === true;
+      const doDisarm = async (pin) => {
+        try {
+          await this._send('argus/perform_alarm_action', {
+            action: 'disarm',
+            entry_id: e.entry_id,
+            ...(pin ? { code: pin } : {})
+          });
+
+          // FIX v0.9.32 — Bug 1: al desarmar, forzar re-render inmediato para
+          // quitar la clase siren-active/triggered-sensor de todas las píldoras.
+          setTimeout(() => { this._renderModeView(); this._load(); }, 300);
+          return true;
+        } catch (err) {
+          const pinErr = this.shadowRoot.getElementById('pin-error');
+          if (pinErr) pinErr.textContent = '❌ PIN incorrecto o error al desarmar';
+          return false;
+        }
+      };
+      if (masterPin || hasUsers) {
+        // Keep the compact panel intact. The touch/mouse keypad is rendered
+        // only after the user explicitly asks to disarm.
+        this._showPinModal(async pin => { return await doDisarm(pin); });
+      } else {
+        await doDisarm(null);
+      }
+      return;
+    }
+
+    // FIX-3: leer modeCfg desde la ruta canónica __by_entity__
+    const _armEid = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id;
+    const modeCfg = (this._ui?.modes?.__by_entity__?.[_armEid]?.[action])
+                 || (this._ui?.modes?.[action])
+                 || {};
+
+    // FIX-5: bloqueo require_closed con detalle de sensores abiertos
+    if (modeCfg.require_closed) {
+      const modeSensors = modeCfg.sensors || [];
+      // Match the integration behaviour: bypassed sensors never block arming
+      // and never trigger the alarm in this specific mode.
+      const bypassedSensors = new Set(
+        modeCfg.bypassed_sensors || modeCfg.bypassedSensors || []
+      );
+      const openNames = [];
+      for (const sId of modeSensors) {
+        if (bypassedSensors.has(sId)) continue;
+        const estado = this._hass.states[sId]?.state;
+        if (['on', 'open', 'unlocked', 'active', 'motion', 'recording'].includes(estado)) {
+          openNames.push(this._hass.states[sId]?.attributes?.friendly_name || sId);
+        }
+      }
+      if (openNames.length > 0) {
+        this._showArmBlockedAlert(openNames);
+
+        return;
+      }
+    }
+
+    try {
+      await this._send('argus/perform_alarm_action', {
+        action: service.replace('alarm_', ''),
+        entry_id: e.entry_id
+      });
+      const modeTxt = modeLabels[action] || action;
+
+      setTimeout(() => this._load(), 800);
+    } catch (err) {
+      // FIX-5: mostrar error real del backend al usuario
+      const msg = err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
+      this._showArmBlockedAlert([], msg);
+      console.error('Argus action failed', err);
+    }
+  }
+
+  _showArmBlockedAlert(openSensors = [], customMsg = '') {
+    // FIX-5: alerta rica con motivo real
+    if (customMsg) {
+      alert(`🚨 ${this._t('action_failed')}\n\n${customMsg}`);
+      return;
+    }
+    const lines = openSensors.map(n => `  • ${n}`).join('\n');
+    alert(
+      `🚨 ${this._t('cannot_arm')}\n\n` +
+      this._format('open_sensors_explain', { names: lines })
+    );
+  }
+
+  /* ── Bootstrap Render Methods ─────────────────────────────────────── */
+  _renderInitializationError(error) {
+    const overlay = this.shadowRoot.getElementById('bootstrap-overlay');
+    overlay.style.display = 'flex';
+    overlay.innerHTML = `
+      <div class="argus-bootstrap-card liquid-glass">
+        <img src="/api/argus_static/argus_logo.png" alt="Argus"
+             style="height:72px;border-radius:18px;margin-bottom:16px">
+        <h1>${this._escapeHtml(this._t('initialization_error_title'))}</h1>
+        <p>${this._escapeHtml(this._t('initialization_error_desc'))}</p>
+        <div style="font-size:11px;opacity:.55;margin-bottom:16px;word-break:break-word">
+          ${this._escapeHtml(error?.message || 'unknown error')}
+        </div>
+        <button id="btn-retry-argus" class="btn-start" style="width:100%">
+          ${this._escapeHtml(this._t('retry_action'))}
+        </button>
+      </div>
+    `;
+    this.shadowRoot.getElementById('btn-retry-argus')?.addEventListener('click', () => {
+      overlay.style.display = 'none';
+      this._dashboard = null;
+      this._ensureInitialized();
+    });
+  }
+
+  _renderMissingConfigurationScreen() {
+    const overlay = this.shadowRoot.getElementById('bootstrap-overlay');
+    overlay.style.display = 'flex';
+    overlay.innerHTML = `
+      <div class="argus-bootstrap-card liquid-glass">
+        <img src="/api/argus_static/argus_logo.png" alt="Argus"
+             style="height:72px;border-radius:18px;margin-bottom:16px">
+        <h1>${this._escapeHtml(this._t('setup_required_title'))}</h1>
+        <p>${this._escapeHtml(this._t('setup_required_desc'))}</p>
+        <button id="btn-open-argus-integration" class="btn-start" style="width:100%">
+          ${this._escapeHtml(this._t('setup_required_action'))}
+        </button>
+      </div>
+    `;
+    this.shadowRoot.getElementById('btn-open-argus-integration')?.addEventListener('click', () => {
+      history.pushState(null, '', '/config/integrations/integration/argus');
+      window.dispatchEvent(new CustomEvent('location-changed'));
+    });
+  }
+
+
+  _updateHeroProfileDisplay() {
+    const container = this.shadowRoot.getElementById('hero-profile-container');
+    if (!container) return;
+    const prof = this._currentProfile;
+    if (!prof) {
+      container.style.display = 'none';
+      container.innerHTML = '';
+      return;
+    }
+    container.style.display = 'flex';
+    container.style.position = 'relative';
+
+    // Resolve picture: prefer stored picture, fallback to HA person entity_picture
+    let resolvedPicture = prof.picture || null;
+    if (!resolvedPicture && this._hass?.states) {
+      // Try to find a person entity matching this user
+      const personEntities = Object.values(this._hass.states).filter(
+        s => s.entity_id?.startsWith('person.') && 
+        (s.attributes?.friendly_name?.toLowerCase() === prof.name?.toLowerCase() ||
+         s.attributes?.user_id === prof.ha_user_id)
+      );
+      if (personEntities.length > 0) {
+        const pic = personEntities[0].attributes?.entity_picture;
+        if (pic) resolvedPicture = pic;
+      }
+    }
+    prof.picture = resolvedPicture;
+
+    const avatarHtml = prof.picture
+      ? `<img id="hero-profile-avatar" class="user-avatar" src="${this._escapeHtml(prof.picture)}" alt="${this._escapeHtml(prof.name)}" style="width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.20); box-shadow: 0 3px 8px rgba(0,0,0,0.2); flex-shrink: 0; transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);" />`
+      : `<div id="hero-profile-avatar" class="user-avatar" style="width: 34px; height: 34px; border-radius: 50%; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.15); flex-shrink: 0; transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">${this._escapeHtml(prof.name.substring(0, 2).toUpperCase())}</div>`;
+      
+    const curLang = this._manualLang || 'auto';
+    const canChangePin = prof.role === 'admin' || (prof.permissions && prof.permissions.change_pin);
+    const canChangeMasterPin = prof.role === 'admin' || (prof.permissions && prof.permissions.change_master_pin);
+    const roleLabel = prof.role === 'admin' 
+      ? (this._t('role_argus_admin_short') || 'Admin') 
+      : (this._t('role_argus_user_short') || 'Estándar');
+
+    container.innerHTML = `
+      <div class="hero-profile-pill glass liquid-glass" style="display: flex; align-items: center; gap: 8px; padding: 5px 12px 5px 7px; border-radius: 999px;">
+        ${avatarHtml}
+        <div style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.15;">
+          <span id="hero-profile-name" style="font-size: 12.5px; font-weight: 800; color: var(--v2066-text, #f7f9ff); max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${this._escapeHtml(prof.name)}</span>
+          <span id="hero-profile-role" style="font-size: 8.5px; opacity: 0.65; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;">${this._escapeHtml(roleLabel)}</span>
+        </div>
+        <span class="profile-chevron" style="font-size: 7.5px; opacity: 0.65; margin-left: 2px;">▼</span>
+      </div>
+
+      <!-- Dropdown Card -->
+      <div id="profile-dropdown" class="hero-profile-dropdown glass liquid-glass" style="display: none;">
+        <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px; margin-bottom: 8px; width: 100%;">
+          ${prof.picture
+            ? `<img src="${this._escapeHtml(prof.picture)}" alt="${this._escapeHtml(prof.name)}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.20); box-shadow: 0 4px 10px rgba(0,0,0,0.25); flex-shrink: 0;" />`
+            : `<div class="user-avatar" style="width: 44px; height: 44px; border-radius: 50%; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.15); box-shadow: 0 4px 10px rgba(0,0,0,0.25); flex-shrink: 0;">${this._escapeHtml(prof.name.substring(0, 2).toUpperCase())}</div>`
+          }
+          <div style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0; align-items: flex-start;">
+            <span style="font-size: 9.5px; opacity: 0.5; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em;">${this._t('profile_is_yours') || this._t('active_profile') || 'Perfil Activo'}</span>
+            <span style="font-size: 14px; font-weight: 850; color: var(--v2066-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; text-align: left;">${this._escapeHtml(prof.name)}</span>
+            <button id="btn-change-profile-picture" style="font-size: 10.5px; font-weight: 700; color: #30d158; text-decoration: none; display: flex; align-items: center; gap: 3px; margin-top: 3px; background: none; border: none; padding: 0; cursor: pointer;">
+              👤 ${this._t('change_profile_picture') || 'Ir a Personas de HA ↗'}
+            </button>
+          </div>
+          <span class="user-badge ${prof.role === 'admin' ? 'admin' : 'user'}" style="font-size: 8.5px; padding: 3px 8px; font-weight: 800; border-radius: 6px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.03em;">${this._escapeHtml(roleLabel)}</span>
+        </div>
+
+        <!-- Language Selector -->
+        <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
+          <label style="font-size: 11px; font-weight: 700; opacity: 0.7; display: flex; align-items: center; gap: 5px;">${this._t('lang_selector_lbl') || '⚙️ Idioma / Language'}</label>
+          <select id="dropdown-lang-select" class="glass-control" style="width: 100%; height: 36px; border-radius: 10px; padding: 0 10px; font-size: 12px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid var(--v2066-border); color: var(--v2066-text); outline: none; cursor: pointer;">
+            ${LANG_LIST.map(l => `<option value="${l.code}" ${l.code === curLang ? 'selected' : ''}>${l.flag} ${l.code === 'auto' ? (this._t('use_ha_language') || 'Automático (HA)') : l.label}</option>`).join('')}
+          </select>
+        </div>
+
+        <!-- PIN management section -->
+        ${(canChangePin || canChangeMasterPin) ? `
+        <div style="display: flex; flex-direction: column; gap: 6px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px;">
+          <span style="font-size: 11px; font-weight: 700; opacity: 0.7;">${this._t('pin_management') || '🔑 Gestión de Pines'}</span>
+          
+          <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 2px;">
+            ${canChangePin ? `
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 11px; opacity: 0.85;">${this._t('access_pin_lbl') || 'PIN de Acceso'}</span>
+              <div style="display: flex; gap: 4px;">
+                <button id="btn-dropdown-change-access-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase;">${this._t('change_btn') || 'Cambiar'}</button>
+                <button id="btn-dropdown-remove-access-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; color: #ff453a !important;">${this._t('remove_btn') || 'Quitar'}</button>
+              </div>
+            </div>
+            ` : ''}
+            
+            ${canChangeMasterPin ? `
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 11px; opacity: 0.85;">${this._t('master_pin_lbl') || 'PIN Maestro'}</span>
+              <div style="display: flex; gap: 4px;">
+                <button id="btn-dropdown-change-master-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase;">${this._t('change_btn') || 'Cambiar'}</button>
+                <button id="btn-dropdown-remove-master-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; color: #ff453a !important;">${this._t('remove_btn') || 'Quitar'}</button>
+              </div>
+            </div>
+            ` : ''}
+          </div>
+        </div>
+        ` : ''}
+
+        <!-- Switch user button -->
+        <button id="btn-dropdown-switch-user" class="glass-control" style="width: 100%; min-height: 32px; padding: 6px; border-radius: 10px; font-size: 10.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 6px; background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); color: var(--v2066-text);">
+          ${this._t('switch_profile_btn') || '👤 Cambiar de Perfil'}
+        </button>
+      </div>
+    `;
+
+    // Click handler for pill to toggle dropdown
+    const pill = container.querySelector('.hero-profile-pill');
+    const dropdown = container.querySelector('#profile-dropdown');
+    
+    if (pill && dropdown) {
+      pill.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = dropdown.style.display === 'flex';
+        dropdown.style.display = isOpen ? 'none' : 'flex';
+      });
+
+      // Close dropdown when clicking outside
+      const _closeOnClickOutside = (e) => {
+        // In Shadow DOM, e.target is the host element at document level.
+        // Use composedPath() to get the actual inner target.
+        const path = e.composedPath ? e.composedPath() : [e.target];
+        const insideContainer = path.some(el => el === container || (el.closest && el.closest?.('#profile-dropdown')));
+        if (!insideContainer) {
+          dropdown.style.display = 'none';
+          document.removeEventListener('click', _closeOnClickOutside, true);
+        }
+      };
+      pill.addEventListener('click', () => {
+        setTimeout(() => {
+          if (dropdown.style.display === 'flex') {
+            document.addEventListener('click', _closeOnClickOutside, true);
+          }
+        }, 10);
+      });
+    }
+
+    // Language dropdown change listener
+    const langSelect = container.querySelector('#dropdown-lang-select');
+    if (langSelect) {
+      langSelect.addEventListener('change', (e) => {
+        this._setLanguage(e.target.value);
+      });
+    }
+
+    // Change profile picture → navigate to HA Persons page
+    container.querySelector('#btn-change-profile-picture')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdown.style.display = 'none';
+      try {
+        window.history.pushState(null, '', '/config/person');
+        window.dispatchEvent(new CustomEvent('location-changed'));
+      } catch (_) {
+        window.location.href = '/config/person';
+      }
+    });
+
+    // Action listeners inside dropdown:
+    // Switch profile:
+    container.querySelector('#btn-dropdown-switch-user')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this._switchProfile();
+    });
+
+    // Redirect Access PIN change:
+    container.querySelector('#btn-dropdown-change-access-pin')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdown.style.display = 'none';
+      const target = this.shadowRoot.getElementById('w-access');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.style.transition = 'box-shadow 0.5s ease-in-out';
+        target.style.boxShadow = '0 0 30px rgba(0, 122, 255, 0.6)';
+        setTimeout(() => { target.style.boxShadow = ''; }, 1500);
+        
+        // Find and highlight active user card:
+        const userCards = this.shadowRoot.querySelectorAll('#users-list .user-card');
+        userCards.forEach(card => {
+          if (card.textContent.includes(prof.name)) {
+            card.style.transition = 'background-color 0.5s ease';
+            card.style.backgroundColor = 'rgba(0, 122, 255, 0.15)';
+            setTimeout(() => { card.style.backgroundColor = ''; }, 2000);
+            const pinBtn = card.querySelector('[data-user-pin]');
+            if (pinBtn) pinBtn.focus();
+          }
+        });
+      }
+    });
+
+    // Redirect Access PIN remove:
+    container.querySelector('#btn-dropdown-remove-access-pin')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdown.style.display = 'none';
+      const target = this.shadowRoot.getElementById('w-access');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.style.transition = 'box-shadow 0.5s ease-in-out';
+        target.style.boxShadow = '0 0 30px rgba(0, 122, 255, 0.6)';
+        setTimeout(() => { target.style.boxShadow = ''; }, 1500);
+        
+        // Find and highlight active user card:
+        const userCards = this.shadowRoot.querySelectorAll('#users-list .user-card');
+        userCards.forEach(card => {
+          if (card.textContent.includes(prof.name)) {
+            card.style.transition = 'background-color 0.5s ease';
+            card.style.backgroundColor = 'rgba(255, 69, 58, 0.15)';
+            setTimeout(() => { card.style.backgroundColor = ''; }, 2000);
+            const pinBtn = card.querySelector('[data-user-pin]');
+            if (pinBtn) pinBtn.focus();
+          }
+        });
+      }
+    });
+
+    // Redirect Master PIN change:
+    container.querySelector('#btn-dropdown-change-master-pin')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdown.style.display = 'none';
+      const target = this.shadowRoot.getElementById('w-access');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.style.transition = 'box-shadow 0.5s ease-in-out';
+        target.style.boxShadow = '0 0 30px rgba(255, 179, 0, 0.6)';
+        setTimeout(() => { target.style.boxShadow = ''; }, 1500);
+        
+        const pinInput = this.shadowRoot.getElementById('new-pin-1');
+        if (pinInput) pinInput.focus();
+      }
+    });
+
+    // Redirect Master PIN remove:
+    container.querySelector('#btn-dropdown-remove-master-pin')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdown.style.display = 'none';
+      const target = this.shadowRoot.getElementById('w-access');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.style.transition = 'box-shadow 0.5s ease-in-out';
+        target.style.boxShadow = '0 0 30px rgba(255, 179, 0, 0.6)';
+        setTimeout(() => { target.style.boxShadow = ''; }, 1500);
+        
+        const pinInput = this.shadowRoot.getElementById('current-pin');
+        if (pinInput) pinInput.focus();
+      }
+    });
+  }
+
+  async _switchProfile() {
+    let bootstrap;
+    try {
+      bootstrap = await this._send('argus/bootstrap');
+      this._welcomeShownThisMount = false;
+      this._renderLoginScreen(bootstrap);
+    } catch (e) {
+      console.error('Switch profile bootstrap failed:', e);
+    }
+  }
+
+  async _showChangePictureModal() {
+    // ── Try to load HA persons for their entity_picture options ───
+    let haPictures = [];
+    try {
+      const resp = await this._send('argus/get_ha_persons', {});
+      const persons = resp?.ha_persons ?? [];
+      haPictures = persons
+        .filter(p => p.entity_id)
+        .map(p => {
+          // Build the entity_picture URL from the person entity
+          const entityState = this._hass?.states?.[p.entity_id];
+          return {
+            name: p.name || p.entity_id,
+            url: entityState?.attributes?.entity_picture || null,
+          };
+        })
+        .filter(p => p.url);
+    } catch (_) {
+      // Not admin or unavailable — skip HA persons
+    }
+
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+      position: fixed; inset: 0; z-index: 10100;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: flex; align-items: center; justify-content: center;
+    `;
+
+    const picOptions = haPictures.map((p, i) => `
+      <div data-pic-url="${this._escapeHtml(p.url)}" data-pic-idx="${i}"
+           style="display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; padding:10px; border-radius:12px; border:2px solid transparent; transition:border-color 0.15s;"
+           class="ha-pic-option">
+        <img src="${this._escapeHtml(p.url)}" alt="${this._escapeHtml(p.name)}"
+             style="width:64px; height:64px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,0.15); box-shadow:0 4px 14px rgba(0,0,0,0.3);" />
+        <span style="font-size:10px; font-weight:700; color:rgba(255,255,255,0.7); max-width:72px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${this._escapeHtml(p.name)}</span>
+      </div>
+    `).join('');
+
+    modal.innerHTML = `
+      <div style="background:rgba(30,32,48,0.97); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:24px; width:min(380px,90vw); color:#fff;">
+        <h3 style="margin:0 0 4px; font-size:1.05rem; font-weight:800;">📸 Cambiar imagen de perfil</h3>
+        <p style="margin:0 0 16px; font-size:0.78rem; color:rgba(255,255,255,0.5);">Elige una foto de tus personas de HA o dirígete al perfil de HA para subir una nueva.</p>
+
+        ${haPictures.length ? `
+          <div style="font-size:11px; font-weight:700; opacity:0.6; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:10px;">Personas de Home Assistant</div>
+          <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
+            ${picOptions}
+          </div>
+        ` : `
+          <p style="font-size:12px; color:rgba(255,255,255,0.45); margin-bottom:16px;">No se encontraron personas con foto en HA. Abre HA para añadir una imagen a tu persona.</p>
+        `}
+
+        <div style="display:flex; gap:8px;">
+          <a href="/config/profile" target="_top"
+             style="flex:1; padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.07); color:#fff; font-size:12px; font-weight:700; text-decoration:none; text-align:center;">
+            Ir al Perfil HA ↗
+          </a>
+          <button id="modal-pic-cancel"
+                  style="flex:1; padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.6); font-size:12px; font-weight:700; cursor:pointer;">
+            Cancelar
+          </button>
+        </div>
+
+        <div id="pic-save-status" style="font-size:12px; margin-top:10px; min-height:16px; text-align:center;"></div>
+      </div>
+    `;
+    this.shadowRoot.appendChild(modal);
+
+    const statusEl = modal.querySelector('#pic-save-status');
+
+    // HA person picture picker
+    modal.querySelectorAll('.ha-pic-option').forEach(opt => {
+      opt.addEventListener('mouseenter', () => opt.style.borderColor = 'rgba(255,255,255,0.4)');
+      opt.addEventListener('mouseleave', () => opt.style.borderColor = 'transparent');
+      opt.addEventListener('click', async () => {
+        const picUrl = opt.getAttribute('data-pic-url');
+        if (!picUrl) return;
+        statusEl.textContent = '⏳ Guardando...';
+        try {
+          // Save picture via argus profile picture update
+          await this._send('argus/save_ui', {
+            profile_picture: picUrl,
+          });
+          statusEl.style.color = '#34c759';
+          statusEl.textContent = '✅ Imagen actualizada. Recarga para verla.';
+          setTimeout(() => {
+            modal.remove();
+            this._renderEntries();
+    this._renderModeTabs();
+    this._renderModeView();
+    this._renderAutomations();
+    this._renderNotifications();
+    this._updateHeroProfileDisplay();
+            this._updateProfileBadge();
+          }, 1200);
+        } catch (err) {
+          statusEl.style.color = '#ff453a';
+          statusEl.textContent = '❌ ' + (err.message || 'Error al guardar');
+        }
+      });
+    });
+
+    modal.querySelector('#modal-pic-cancel').addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+  }
+
+
+  _renderFirstRunScreen() {
+    const overlay = this.shadowRoot.getElementById('bootstrap-overlay');
+    overlay.style.display = 'flex';
+
+    if (this._hass?.user && this._hass.user.is_admin === false) {
+      overlay.innerHTML = `
+        <div class="argus-bootstrap-card liquid-glass">
+          <h1>${this._t('first_run_blocked_title') || 'Acceso denegado'}</h1>
+          <p>${this._t('first_run_blocked_desc') || 'Se requiere un administrador de Home Assistant para configurar Argus por primera vez.'}</p>
+        </div>
+      `;
+      return;
+    }
+
+    const defaultName = this._hass?.user?.name || "Admin";
+    const language = this._getCurrentLangCode();
+    const welcomeCopy = {
+      es: ['Bienvenido a Argus Home Hub', 'Protección inteligente para lo que más importa.'],
+      en: ['Welcome to Argus Home Hub', 'Smart protection for what matters most.'],
+      fr: ['Bienvenue dans Argus Home Hub', 'Une protection intelligente pour ce qui compte le plus.'],
+      pt: ['Bem-vindo ao Argus Home Hub', 'Proteção inteligente para o que mais importa.'],
+      it: ['Benvenuto in Argus Home Hub', 'Protezione intelligente per ciò che conta di più.'],
+      zh: ['欢迎使用 Argus Home Hub', '为重要事物提供智能保护。'],
+      ru: ['Добро пожаловать в Argus Home Hub', 'Умная защита самого важного.'],
+    }[language] || ['Welcome to Argus Home Hub', 'Smart protection for what matters most.'];
+    const finishFirstRun = () => {
+      overlay.innerHTML = `
+        <div class="argus-bootstrap-card liquid-glass argus-first-run-card" style="max-width:420px">
+          <div class="argus-first-run-thank-icon">✓</div>
+          <h1 style="margin-bottom:10px;font-weight:850">Gracias por usar Argus Home Hub</h1>
+          <p style="margin:0">Tu sistema está listo y protegido.</p>
+        </div>
+      `;
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        this._profileSelectedThisMount = true;
+        this._load();
+      }, 1500);
+    };
+    overlay.innerHTML = `
+      <div class="argus-bootstrap-card liquid-glass argus-first-run-card" style="max-width:540px;width:92vw">
+        <div class="argus-first-run-brand">
+          <img class="argus-first-run-logo" src="/api/argus_static/argus_logo.png" alt="Logotipo oficial de Argus">
+          <div>
+            <h1>${this._escapeHtml(welcomeCopy[0])}</h1>
+            <p>${this._escapeHtml(welcomeCopy[1])}</p>
+          </div>
+        </div>
+
+        <!-- Mode selector tabs -->
+        <div style="display:flex;gap:10px;margin-bottom:16px;background:rgba(255,255,255,0.05);padding:4px;border-radius:12px;border:1px solid rgba(255,255,255,0.08)">
+          <button id="tab-setup-fresh" style="flex:1;padding:10px;border-radius:10px;border:none;background:rgba(255,255,255,0.15);color:#fff;font-weight:700;font-size:13px;cursor:pointer">🚀 Configurar desde cero</button>
+          <button id="tab-setup-restore" style="flex:1;padding:10px;border-radius:10px;border:none;background:transparent;color:rgba(255,255,255,0.6);font-weight:600;font-size:13px;cursor:pointer">📁 Restaurar Backup</button>
+        </div>
+
+        <!-- Fresh Setup View -->
+        <div id="view-setup-fresh" class="pin-prompt" style="display:block;border:none;background:transparent;box-shadow:none;padding:0">
+          <label style="display:block;text-align:left;font-size:12px;opacity:0.8;margin-bottom:4px">${this._escapeHtml(this._t('setup_admin_name') || 'Nombre del Administrador')}</label>
+          <input type="text" id="setup-admin-name" placeholder="Name" value="${this._escapeHtml(defaultName)}" style="margin-bottom:15px;width:100%" />
+
+          <p style="font-size:12px;opacity:0.8;margin-bottom:10px;line-height:1.4">
+            ${this._escapeHtml(this._t('first_run_pin_expl') || 'El PIN de acceso abre Argus. El PIN maestro controla el armado y desarmado.')}
+          </p>
+
+          <label style="display:block;text-align:left;font-size:12px;opacity:0.8;margin-bottom:4px">${this._escapeHtml(this._t('setup_access_pin') || 'PIN de acceso al panel Argus (Opcional)')}</label>
+          <div style="display:flex;gap:10px;margin-bottom:15px">
+            <input type="password" id="setup-access-pin" placeholder="PIN (4-12)" style="flex:1" />
+            <button id="skip-access-pin" class="btn-cancel" style="width:auto;padding:0 12px;font-size:11px">${this._escapeHtml(this._t('first_run_skip') || 'Omitir')}</button>
+          </div>
+
+          <label style="display:block;text-align:left;font-size:12px;opacity:0.8;margin-bottom:4px">${this._escapeHtml(this._t('setup_master_pin') || 'PIN maestro para armar/desarmar (Opcional)')}</label>
+          <div style="display:flex;gap:10px;margin-bottom:20px">
+            <input type="password" id="setup-master-pin" placeholder="PIN (4-12)" style="flex:1" />
+            <button id="skip-master-pin" class="btn-cancel" style="width:auto;padding:0 12px;font-size:11px">${this._escapeHtml(this._t('first_run_skip') || 'Omitir')}</button>
+          </div>
+
+          <button id="btn-complete-setup" class="btn-start" style="width:100%">${this._escapeHtml(this._t('first_run_start') || 'Comenzar con Argus')}</button>
+        </div>
+
+        <!-- Restore Backup View -->
+        <div id="view-setup-restore" style="display:none;padding:10px 0;text-align:center">
+          <p style="font-size:13px;opacity:0.8;margin-bottom:16px;line-height:1.4">
+            Suba un archivo de copia de seguridad de Argus (<code>.json</code>) para restaurar automáticamente todos sus perfiles, configuraciones, PINs y temas almacenados.
+          </p>
+          <input type="file" id="setup-restore-file" accept=".json,.argus,application/json" style="display:none" />
+          <button id="btn-trigger-restore" class="btn-start" style="width:100%;padding:14px;font-size:14px;display:flex;align-items:center;justify-content:center;gap:8px">
+            📁 Seleccionar copia de seguridad Argus (.json o .argus)
+          </button>
+          <div id="restore-status" style="margin-top:12px;font-size:12px;min-height:20px"></div>
+        </div>
+      </div>
+    `;
+
+    const tabFresh = this.shadowRoot.getElementById('tab-setup-fresh');
+    const tabRestore = this.shadowRoot.getElementById('tab-setup-restore');
+    const viewFresh = this.shadowRoot.getElementById('view-setup-fresh');
+    const viewRestore = this.shadowRoot.getElementById('view-setup-restore');
+
+    tabFresh?.addEventListener('click', () => {
+      tabFresh.style.background = 'rgba(255,255,255,0.15)';
+      tabFresh.style.color = '#fff';
+      tabRestore.style.background = 'transparent';
+      tabRestore.style.color = 'rgba(255,255,255,0.6)';
+      viewFresh.style.display = 'block';
+      viewRestore.style.display = 'none';
+    });
+
+    tabRestore?.addEventListener('click', () => {
+      tabRestore.style.background = 'rgba(255,255,255,0.15)';
+      tabRestore.style.color = '#fff';
+      tabFresh.style.background = 'transparent';
+      tabFresh.style.color = 'rgba(255,255,255,0.6)';
+      viewRestore.style.display = 'block';
+      viewFresh.style.display = 'none';
+    });
+
+    this.shadowRoot.getElementById('skip-access-pin')?.addEventListener('click', () => {
+      this.shadowRoot.getElementById('setup-access-pin').value = '';
+    });
+
+    this.shadowRoot.getElementById('skip-master-pin')?.addEventListener('click', () => {
+      this.shadowRoot.getElementById('setup-master-pin').value = '';
+    });
+
+    this.shadowRoot.getElementById('btn-complete-setup')?.addEventListener('click', async () => {
+      const admin_name = this.shadowRoot.getElementById('setup-admin-name').value || defaultName;
+      const master_pin = this.shadowRoot.getElementById('setup-master-pin').value || undefined;
+      const access_pin = this.shadowRoot.getElementById('setup-access-pin').value || undefined;
+      try {
+        await this._send('argus/complete_first_run', { admin_name, master_pin, access_pin });
+        finishFirstRun();
+      } catch (err) {
+        alert("Setup failed: " + err.message);
+      }
+    });
+
+    // Handle Restore Backup File Upload
+    const restoreInput = this.shadowRoot.getElementById('setup-restore-file');
+    const restoreStatus = this.shadowRoot.getElementById('restore-status');
+
+    this.shadowRoot.getElementById('btn-trigger-restore')?.addEventListener('click', () => {
+      restoreInput?.click();
+    });
+
+    restoreInput?.addEventListener('change', (event) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      if (restoreStatus) restoreStatus.textContent = 'Procesando copia de seguridad...';
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          let config = JSON.parse(e.target.result);
+          if (config?.format === 'argus-encrypted-backup') {
+            const password = await this._showArgusInputModal({
+              title: 'Copia de seguridad cifrada',
+              label: 'Introduce la contraseña del backup:',
+              type: 'password'
+            });
+            if (!password) {
+              if (restoreStatus) restoreStatus.textContent = 'Restauración cancelada.';
+              return;
+            }
+            try {
+              const salt = this._base64ToBytes(config.salt);
+              const iv = this._base64ToBytes(config.iv);
+              const key = await this._backupKey(password, salt, ['decrypt']);
+              const plain = await crypto.subtle.decrypt({name:'AES-GCM',iv}, key, this._base64ToBytes(config.data));
+              config = JSON.parse(new TextDecoder().decode(plain));
+            } catch (_) {
+              throw new Error('Contraseña de copia de seguridad incorrecta.');
+            }
+          }
+
+          if (typeof config !== 'object' || config === null) {
+            throw new Error(this._t('invalid_config'));
+          }
+
+          await this._send('argus/restore_config', { config });
+
+          if (restoreStatus) restoreStatus.textContent = '✅ Copia de seguridad restaurada con éxito.';
+          finishFirstRun();
+        } catch (err) {
+          if (restoreStatus) restoreStatus.textContent = '❌ Error al restaurar: ' + (err.message || err);
+        }
+      };
+      reader.onerror = () => {
+        if (restoreStatus) restoreStatus.textContent = '❌ Error al leer el archivo.';
+      };
+      reader.readAsText(file);
+    });
+  }
+
+  _renderLegacyClaimScreen() {
+    const overlay = this.shadowRoot.getElementById('bootstrap-overlay');
+    overlay.style.display = 'flex';
+    overlay.innerHTML = `
+      <div class="argus-bootstrap-card liquid-glass">
+        <h1>${this._t('claim_title') || 'Argus Security Update'}</h1>
+        <p>${this._t('claim_desc') || 'Your installation needs an administrator to claim access.'}</p>
+        <button id="btn-claim-admin" class="btn-claim">${this._t('claim_btn') || 'Claim Administration'}</button>
+      </div>
+    `;
+    this.shadowRoot.getElementById('btn-claim-admin').addEventListener('click', async () => {
+      try {
+        await this._send('argus/claim_legacy_administration');
+        overlay.style.display = 'none';
+        this._profileSelectedThisMount = true;
+        this._load();
+      } catch (err) {
+        alert("Claim failed: " + err.message);
+      }
+    });
+  }
+
+
+  async _renderLoginScreen(bootstrap) {
+    if (this._isRenderingLogin) return;
+    if (this.hasAttribute('compact') || this.classList.contains('argus-compact') || this._cardConfig?.compact) {
+      return;
+    }
+    this._isRenderingLogin = true;
+    
+    try {
+      const t = (k) => this._t(k);
+
+      // ── Obtener perfiles ──────────────────────────────────────────
+      let users = [];
+      try {
+        const resp = await this._send('argus/get_profiles', {});
+        users = resp?.profiles ?? resp?.users ?? bootstrap?.users ?? [];
+      } catch (_) {
+        users = this._config?.profiles ?? bootstrap?.users ?? [];
+      }
+      if (!users.length) return;
+
+    // ── Enriquecer con photos de HA Persons si faltan ─────────────
+    // La foto de HA Person entity ya viene del bootstrap (picture field),
+    // pero si el usuario tiene picture sobreescrita en Argus se respeta esa.
+    // El campo u.picture viene directamente del backend:
+    //   u.get("picture") or p_info.get("picture")  ← ya está hecho en Python
+    // Así que sólo necesitamos garantizar que el display_name sea el argus name.
+    users = users.map(u => ({
+      ...u,
+      display_name: u.display_name || u.name,
+      picture: u.picture || null,
+    }));
+
+    // ── Ocultar overlay original si venimos de bootstrap
+    const bootOverlay = this.shadowRoot.getElementById('bootstrap-overlay');
+    if (bootOverlay) {
+        bootOverlay.style.display = 'none';
+    }
+    
+    // Limpiar overlays anteriores por si acaso
+    this.shadowRoot.querySelectorAll('.argus-profile-overlay, .argus-welcome-screen').forEach(el => el.remove());
+
+    // ── Render Fase 1 (Selector grid tvOS) ────────────────────────
+    const overlay = document.createElement('div');
+    overlay.className = 'argus-profile-overlay';
+    
+    const headerHtml = `
+      <div class="argus-profile-header">
+        <h2>${this._escapeHtml(t('select_profile_title'))}</h2>
+        <p>${this._escapeHtml(t('select_profile_subtitle'))}</p>
+      </div>
+    `;
+
+    const usersHtml = users.map(u => {
+      const isOwn = u.is_own_profile === true;
+      const requiresPin = u.access_pin_configured === true;
+      const roleLabel = u.role === 'admin' ? t('role_argus_admin') : t('role_argus_standard');
+      
+      const avatarContent = u.picture
+        ? `<img src="${this._escapeHtml(u.picture)}" alt="" />`
+        : this._escapeHtml(u.name.substring(0, 2).toUpperCase());
+
+      const lockIcon = requiresPin ? `<div class="lock-badge">🔒</div>` : '';
+
+      return `
+        <div class="argus-profile-item" tabindex="0"
+             data-user-id="${this._escapeHtml(u.id)}"
+             data-is-own="${isOwn ? 'true' : 'false'}"
+             data-requires-pin="${requiresPin ? 'true' : 'false'}">
+          
+          <div class="argus-profile-circle">
+            ${avatarContent}
+            ${lockIcon}
+          </div>
+          <div class="argus-profile-label">
+            <div class="p-name">${this._escapeHtml(u.name)}</div>
+            <div class="p-role">${this._escapeHtml(roleLabel)}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    const gridHtml = `
+      <div class="argus-profile-grid">
+        ${usersHtml}
+      </div>
+    `;
+
+    // Botón Salir
+    const actionsHtml = `
+      <button id="argus-exit-ha" style="
+        position: absolute; bottom: 40px;
+        background: rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.4); color: #fff;
+        padding: 12px 24px; border-radius: 20px; color: #fff; cursor: pointer;
+        font-size: 0.9rem; font-weight: 600; transition: background 0.2s;
+      ">
+        ← ${this._escapeHtml(t('exit_to_ha'))}
+      </button>
+    `;
+
+    overlay.innerHTML = `
+      <div style="display:flex; flex-direction:column; align-items:center;">
+        ${headerHtml}
+        ${gridHtml}
+      </div>
+      ${actionsHtml}
+    `;
+    this.shadowRoot.appendChild(overlay);
+
+    // Salir
+    overlay.querySelector('#argus-exit-ha').addEventListener('click', () => {
+      window.location.assign('/');
+    });
+
+    // Eventos Click en Perfil
+    const items = overlay.querySelectorAll('.argus-profile-item');
+    items.forEach(item => {
+      item.addEventListener('click', async () => {
+        if (overlay.dataset.processing) return;
+        overlay.dataset.processing = '1';
+        
+        const userId = item.getAttribute('data-user-id');
+        const isOwn = item.getAttribute('data-is-own') === 'true';
+        const requiresPin = item.getAttribute('data-requires-pin') === 'true';
+        const userObj = users.find(u => u.id === userId);
+
+        if (isOwn) {
+          if (requiresPin) {
+            overlay.remove();
+            this._showTvOSPinPrompt(userObj);
+          } else {
+            // Own sin PIN -> directo
+            try {
+              await this._send('argus/select_profile', { argus_user_id: userId });
+              overlay.remove();
+              this._profileSelectedThisMount = true;
+              await this._runProfileWelcomeAnimation(userObj);
+            } catch (err) {
+              overlay.dataset.processing = '';
+              alert(err.message || 'Error seleccionando perfil');
+            }
+          }
+        } else {
+          // Otro perfil
+          if (!requiresPin) {
+            // Rechazo directo si no tiene PIN
+            const el = item;
+            el.style.animation = 'none';
+            el.offsetHeight; // reflow
+            el.style.animation = 'argus-shake 0.3s ease';
+            overlay.dataset.processing = '';
+            return;
+          }
+          // Tiene PIN -> pedimos
+          overlay.remove();
+          this._showTvOSPinPrompt(userObj);
+        }
+      });
+      // Soporte teclado (enter/espacio)
+      item.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') item.dispatchEvent(new Event('click'));
+      });
+    });
+    } finally {
+      this._isRenderingLogin = false;
+    }
+  }
+
+  async _showTvOSPinPrompt(user) {
+    const t = (k) => this._t(k);
+    const overlay = document.createElement('div');
+    overlay.className = 'argus-pin-prompt';
+    overlay.innerHTML = `
+      <div class="argus-pin-card">
+        <h3>${this._escapeHtml(t('profile_needs_pin'))}</h3>
+        <div class="pin-sub">Ingresa el PIN de ${this._escapeHtml(user.name)}</div>
+        
+        <input type="password" id="pin-input" class="argus-pin-input" readonly
+               placeholder="••••" inputmode="numeric" />
+               
+        <div class="argus-numpad">
+          ${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => `<button data-digit="${n}">${n}</button>`).join('')}
+          <button id="pin-cancel" style="font-size:0.8rem; background:rgba(255,59,48,0.15); color:#ff453a; border-color:rgba(255,59,48,0.2);">X</button>
+          <button data-digit="0">0</button>
+          <button id="pin-del" style="font-size:1.1rem; color:#ff9f0a;">⌫</button>
+        </div>
+        
+        <div class="argus-pin-actions">
+          <button id="pin-enter" style="background:rgba(52,199,89,0.25); border-color:rgba(52,199,89,0.4); color:#34c759;">
+            Acceder
+          </button>
+        </div>
+        <div id="pin-error" style="color:#ff453a; font-size:12px; margin-top:8px; min-height:16px;"></div>
+      </div>
+    `;
+    this.shadowRoot.appendChild(overlay);
+
+    const pinInput = overlay.querySelector('#pin-input');
+    const pinError = overlay.querySelector('#pin-error');
+    const pinCard = overlay.querySelector('.argus-pin-card');
+    const numpad = overlay.querySelector('.argus-numpad');
+
+    numpad.querySelectorAll('[data-digit]').forEach(btn => {
+      const digit = btn.getAttribute('data-digit');
+      btn.addEventListener('click', () => {
+        if (pinInput.value.length < 8) pinInput.value += digit;
+      });
+    });
+
+    numpad.querySelector('#pin-del').addEventListener('click', () => {
+      pinInput.value = pinInput.value.slice(0, -1);
+    });
+    overlay.querySelector('#pin-enter').addEventListener('click', () => submitPin());
+
+    overlay.querySelector('#pin-cancel').addEventListener('click', () => {
+      overlay.remove();
+      this._renderLoginScreen({users: this._config?.profiles || []});
+    });
+
+    const submitPin = async () => {
+      if (overlay.dataset.processing) return;
+      overlay.dataset.processing = '1';
+      
+      if (!pinInput.value) { overlay.dataset.processing = ''; return; }
+      try {
+        await this._send('argus/verify_access_pin', {
+          argus_user_id: user.id,
+          pin: pinInput.value
+        });
+        overlay.remove();
+        
+        this._profileSelectedThisMount = true;
+        await this._runProfileWelcomeAnimation(user);
+      } catch (err) {
+        overlay.dataset.processing = '';
+        pinError.textContent = err.message || t('invalid_pin_msg');
+        pinCard.style.animation = 'none';
+        pinCard.offsetHeight; // reflow
+        pinCard.style.animation = 'argus-shake 0.3s ease';
+        pinInput.value = '';
+      }
+    };
+
+    pinInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') submitPin();
+    });
+  }
+
+  async _runProfileWelcomeAnimation(user) {
+    // Set profile and initialize hero display immediately so the target element is mounted in DOM
+    this._currentProfile = user;
+    this._updateHeroProfileDisplay();
+
+    // Prepare target destination avatar with initial empty opacity state
+    const destEl: HTMLElement | null = this.shadowRoot.getElementById('hero-profile-avatar') 
+      || this.shadowRoot.querySelector('#hero-profile-container .user-avatar')
+      || this.shadowRoot.querySelector('#hero-profile-container img')
+      || this.shadowRoot.querySelector('#hero-profile-container .hero-profile-pill');
+    
+    if (destEl) {
+      destEl.style.opacity = '0';
+      destEl.style.transition = 'opacity 0.25s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    }
+
+    // Ensure dashboard wrap is ready under the overlay
+    this.shadowRoot.querySelector('.wrap')?.classList.add('wrap-ready');
+
+    const overlay = document.createElement('div');
+    overlay.className = 'argus-welcome-screen active-anim';
+    overlay.style.position = 'fixed';
+    overlay.style.inset = '0';
+    overlay.style.background = 'rgba(0,0,0,0.88)';
+    overlay.style.display = 'flex';
+    overlay.style.flexDirection = 'column';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+    overlay.style.zIndex = '10000';
+    overlay.style.pointerEvents = 'none';
+
+    const avatarHtml = user.picture
+      ? `<img src="${this._escapeHtml(user.picture)}" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />`
+      : this._escapeHtml(user.name.substring(0, 2).toUpperCase());
+
+    overlay.innerHTML = `
+      <div class="argus-welcome-avatar" id="welcome-avatar-flying">
+        ${avatarHtml}
+      </div>
+      <div class="argus-welcome-text" id="welcome-text-anim">
+        <p class="greeting">${this._escapeHtml(this._t('welcome_greeting') || 'Bienvenido,')}</p>
+        <h1 class="wname">${this._escapeHtml(user.display_name || user.name)}</h1>
+      </div>
+    `;
+    this.shadowRoot.appendChild(overlay);
+
+    // Wait 1 frame so the overlay covers the screen instantly
+    await new Promise(r => requestAnimationFrame(r));
+    // Remove login screens beneath
+    this.shadowRoot.querySelectorAll('.argus-profile-overlay, .argus-pin-prompt').forEach(el => el.remove());
+
+    // Start loading dashboard in the background so it's ready when animation finishes
+    let dashboardPromise = Promise.resolve();
+    if (!this._dashboardLoading) {
+      this._dashboardLoading = true;
+      dashboardPromise = this._load().catch(e => console.error("Load error during animation:", e)).finally(() => { this._dashboardLoading = false; });
+    }
+
+    const avatar = overlay.querySelector('#welcome-avatar-flying') as HTMLElement;
+    const textGroup = overlay.querySelector('#welcome-text-anim') as HTMLElement;
+    if (avatar && textGroup) {
+      avatar.style.transform = 'scale(0.8)';
+      avatar.style.opacity = '0';
+      textGroup.style.opacity = '0';
+      textGroup.style.transform = 'translateY(15px)';
+
+      await new Promise(r => requestAnimationFrame(r));
+      
+      avatar.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease';
+      avatar.style.transform = 'scale(1)';
+      avatar.style.opacity = '1';
+      
+      textGroup.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, opacity 0.5s ease 0.15s';
+      textGroup.style.transform = 'translateY(0)';
+      textGroup.style.opacity = '1';
+
+      await new Promise(r => setTimeout(r, 1300));
+      await dashboardPromise;
+
+      textGroup.style.transition = 'opacity 0.25s ease';
+      textGroup.style.opacity = '0';
+
+      const rect = avatar.getBoundingClientRect();
+      
+      // Accurately measure destination profile avatar position
+      const liveDestEl: HTMLElement | null = this.shadowRoot.getElementById('hero-profile-avatar') 
+        || this.shadowRoot.querySelector('#hero-profile-container .user-avatar')
+        || this.shadowRoot.querySelector('#hero-profile-container img')
+        || this.shadowRoot.querySelector('#hero-profile-container .hero-profile-pill');
+
+      let destX = window.innerWidth / 2, destY = 60, targetScale = 0.35;
+      
+      if (liveDestEl) {
+        const destRect = liveDestEl.getBoundingClientRect();
+        if (destRect.width > 0 && destRect.height > 0) {
+          destX = destRect.left + destRect.width / 2;
+          destY = destRect.top + destRect.height / 2;
+          targetScale = Math.max(0.2, destRect.width / rect.width);
+        }
+      }
+      
+      // Calculate translate values from the center of the welcome avatar
+      const moveX = destX - (rect.left + rect.width / 2);
+      const moveY = destY - (rect.top + rect.height / 2);
+      
+      // Smooth elastic transition to exact top-bar coordinates
+      avatar.style.transition = 'transform 0.65s cubic-bezier(0.25, 1.25, 0.5, 1), opacity 0.35s ease 0.45s';
+      avatar.style.transform = `translate(${moveX}px, ${moveY}px) scale(${targetScale})`;
+      
+      overlay.style.transition = 'background-color 0.55s ease 0.1s';
+      overlay.style.backgroundColor = 'transparent';
+      
+      await new Promise(r => setTimeout(r, 650));
+      
+      // Reveal real top-bar avatar on landing with an elastic bounce
+      if (liveDestEl) {
+        liveDestEl.style.opacity = '1';
+        liveDestEl.style.transform = 'scale(1.1)';
+        setTimeout(() => { if (liveDestEl) liveDestEl.style.transform = 'scale(1)'; }, 180);
+      }
+    }
+
+    await new Promise(r => setTimeout(r, 120));
+    await dashboardPromise;
+    
+    this._nukeAllLoginOverlays();
+  }
+
+  _nukeAllLoginOverlays() {
+    // Hard-destroy all profile/welcome overlays. No animations.
+    // This is critical: any leftover overlay causes a permanent blur on the UI.
+    this.shadowRoot
+      .querySelectorAll('.argus-profile-overlay, .argus-welcome-screen, .argus-pin-prompt')
+      .forEach(el => {
+        el.style.transition = 'none';
+        el.style.backdropFilter = 'none';
+        el.style.webkitBackdropFilter = 'none';
+        el.style.opacity = '0';
+        el.style.display = 'none';
+        el.remove();
+      });
+    // Also force-hide the persistent #bootstrap-overlay (stays in DOM via display:none toggle).
+    // Even display:none + backdrop-filter can leave compositor artifacts in WebKit.
+    const boot = this.shadowRoot?.getElementById('bootstrap-overlay');
+    if (boot) {
+      boot.style.backdropFilter = 'none';
+      boot.style.webkitBackdropFilter = 'none';
+      boot.style.display = 'none';
+      boot.style.opacity = '0';
+      boot.style.pointerEvents = 'none';
+    }
+  }
+
+  _initWidgetGrid() {
+    try {
+      this._widgetConfig = JSON.parse(localStorage.getItem('argus-widgets-v1')) || [
+        { id: 'activity', size: 'M', hidden: false },
+        { id: 'modes', size: 'M', hidden: false },
+        { id: 'automations', size: 'M', hidden: false },
+        { id: 'access', size: 'M', hidden: false },
+        { id: 'backup', size: 'S', hidden: false },
+        { id: 'github', size: 'S', hidden: false }
+      ];
+    } catch(e) {
+      this._widgetConfig = [
+        { id: 'activity', size: 'M', hidden: false },
+        { id: 'modes', size: 'M', hidden: false },
+        { id: 'automations', size: 'M', hidden: false },
+        { id: 'access', size: 'M', hidden: false },
+        { id: 'backup', size: 'S', hidden: false },
+        { id: 'github', size: 'S', hidden: false }
+      ];
+    }
+
+    const grid = this.shadowRoot.getElementById('widget-grid');
+    if (!grid) return;
+
+    const panels = Array.from(grid.children).filter(el =>
+      el.classList.contains('panel') && !el.classList.contains('dashboard-instances')
+    );
+
+    panels.forEach(panel => {
+      const wId = panel.id.replace('w-', '');
+      if (!panel.querySelector('.panel-edit-overlay')) {
+        const overlay = document.createElement('div');
+        overlay.className = 'panel-edit-overlay';
+
+        const controls = document.createElement('div');
+        controls.className = 'widget-controls';
+
+        const title = document.createElement('div');
+        title.className = 'widget-controls-title';
+        const h2Text = panel.querySelector('h2')?.textContent;
+        title.textContent = h2Text ? `Widget: ${h2Text}` : `Widget: ${wId.toUpperCase()}`;
+        controls.appendChild(title);
+
+        const dragHandle = document.createElement('div');
+        dragHandle.className = 'widget-drag-handle';
+        dragHandle.innerHTML = '⋮⋮ Arrastrar';
+        dragHandle.title = 'Arrastrar para mover';
+
+        const sizesDiv = document.createElement('div');
+        sizesDiv.className = 'widget-sizes';
+
+        ['XS', 'S', 'M', 'L', 'XL'].forEach(sz => {
+          const btn = document.createElement('button');
+          btn.className = 'widget-size-btn';
+          btn.textContent = sz;
+          btn.dataset.size = sz;
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            this._changeWidgetSize(wId, sz);
+          });
+          sizesDiv.appendChild(btn);
+        });
+
+        const toggleBtn = document.createElement('button');
+        toggleBtn.className = 'widget-toggle-btn';
+        toggleBtn.textContent = 'Ocultar';
+        toggleBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          this._toggleWidgetVisibility(wId);
+        });
+
+        controls.appendChild(dragHandle);
+        controls.appendChild(sizesDiv);
+        controls.appendChild(toggleBtn);
+        overlay.appendChild(controls);
+        panel.appendChild(overlay);
+      }
+    });
+
+    this._renderWidgetLayout();
+    this._bindWidgetDragEvents(panels);
+  }
+
+  _renderWidgetLayout() {
+    const grid = this.shadowRoot.getElementById('widget-grid');
+    if (!grid) return;
+
+    const configMap = new Map((this._widgetConfig || []).map((w, idx) => [w.id, { ...w, idx }]));
+
+    const children = Array.from(grid.children).filter(el =>
+      el.classList.contains('panel') && !el.classList.contains('dashboard-instances')
+    );
+
+    children.sort((a, b) => {
+      const aCfg = configMap.get(a.id.replace('w-', '')) || { idx: 99 };
+      const bCfg = configMap.get(b.id.replace('w-', '')) || { idx: 99 };
+      return aCfg.idx - bCfg.idx;
+    });
+
+    children.forEach(child => {
+      grid.appendChild(child);
+      const wId = child.id.replace('w-', '');
+      const cfg = configMap.get(wId);
+      if (cfg) {
+        child.setAttribute('data-size', cfg.size);
+        child.style.display = cfg.hidden ? 'none' : '';
+
+        const overlay = child.querySelector('.panel-edit-overlay');
+        if (overlay) {
+          overlay.querySelectorAll('.widget-size-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.size === cfg.size);
+          });
+          const toggleBtn = overlay.querySelector('.widget-toggle-btn');
+          if (toggleBtn) {
+            toggleBtn.textContent = cfg.hidden ? 'Mostrar' : 'Ocultar';
+            toggleBtn.style.background = cfg.hidden ? 'rgba(52,199,89,.85)' : 'rgba(220,38,38,.85)';
+          }
+        }
+      }
+    });
+
+    grid.classList.toggle('editing', !!this._widgetEditing);
+  }
+
+  _bindWidgetDragEvents(panels) {
+    const grid = this.shadowRoot.getElementById('widget-grid');
+    if (!grid) return;
+
+    const list = panels || Array.from(grid.children).filter(el =>
+      el.classList.contains('panel') && !el.classList.contains('dashboard-instances')
+    );
+
+    list.forEach(panel => {
+      if (panel._dragBound) return;
+      panel._dragBound = true;
+
+      panel.addEventListener('dragstart', (e) => {
+        if (!this._widgetEditing) { e.preventDefault(); return; }
+        panel.classList.add('dragging');
+        e.dataTransfer.setData('text/plain', panel.id);
+        e.dataTransfer.effectAllowed = 'move';
+      });
+
+      panel.addEventListener('dragend', () => {
+        panel.classList.remove('dragging');
+        this._saveWidgetLayout();
+      });
+
+      panel.addEventListener('dragover', (e) => {
+        if (!this._widgetEditing) return;
+        e.preventDefault();
+        const dragging = grid.querySelector('.dragging');
+        if (!dragging || dragging === panel) return;
+        const rect = panel.getBoundingClientRect();
+        if ((e.clientY - rect.top) > rect.height / 2) {
+          panel.after(dragging);
+        } else {
+          panel.before(dragging);
+        }
+      });
+    });
+  }
+
+  _saveWidgetLayout() {
+    const grid = this.shadowRoot.getElementById('widget-grid');
+    if (!grid) return;
+    const children = Array.from(grid.children).filter(el =>
+      el.classList.contains('panel') && !el.classList.contains('dashboard-instances')
+    );
+    this._widgetConfig = children.map(child => ({
+      id: child.id.replace('w-', ''),
+      size: child.getAttribute('data-size') || 'M',
+      hidden: child.style.display === 'none'
+    }));
+    try { localStorage.setItem('argus-widgets-v1', JSON.stringify(this._widgetConfig)); } catch(e) {}
+  }
+
+  _toggleWidgetEditing() {
+    this._widgetEditing = !this._widgetEditing;
+    const grid = this.shadowRoot.getElementById('widget-grid');
+    if (grid) {
+      this._initWidgetGrid();
+      this._renderWidgetLayout();
+    }
+    this._applyTranslations();
+  }
+
+  _changeWidgetSize(id, size) {
+    const cfg = (this._widgetConfig || []).find(w => w.id === id);
+    if (cfg) {
+      cfg.size = size;
+      this._saveWidgetLayout();
+      this._renderWidgetLayout();
+    }
+  }
+
+  _toggleWidgetVisibility(id) {
+    const cfg = (this._widgetConfig || []).find(w => w.id === id);
+    if (cfg) {
+      cfg.hidden = !cfg.hidden;
+      this._saveWidgetLayout();
+      this._renderWidgetLayout();
+    }
+  }
+
+}
+
+customElements.define('argus-panel-v2018', ArgusPanel);

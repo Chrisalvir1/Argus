@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ArgusDashboard } from './ArgusDashboard';
 import { LocalStorageDashboardLayoutStorage } from './layout';
+import type { ArgusWidgetDefinition } from './types';
 import { ActiveInstances } from './widgets/ActiveInstances';
 import { Modes } from './widgets/Modes';
 import { SOSWidget } from './widgets/SOSWidget';
@@ -27,13 +28,13 @@ export function ArgusApp({ hass, config }: ArgusAppProps) {
   const userName = hass?.user?.name || 'Chris';
   const profileImage = hass?.user?.name ? `https://ui-avatars.com/api/?name=${encodeURIComponent(hass.user.name)}&background=random` : '';
 
-  const widgets = [
-    { id: 'modes', title: 'Modos', size: 'L' as any, kind: 'modes', visible: true },
-    { id: 'active-instances', title: 'Instancias Activas', size: 'M' as any, kind: 'instances', visible: true },
-    { id: 'sos', title: 'Acciones SOS', size: 'M' as any, kind: 'sos', visible: true },
-    { id: 'history', title: 'Historial', size: 'L' as any, kind: 'history', visible: true },
-    { id: 'automations', title: 'Automatizaciones', size: 'L' as any, kind: 'automations', visible: true },
-    { id: 'access', title: 'Control de Acceso', size: 'XL' as any, kind: 'access-control', visible: true }
+  const widgets: ArgusWidgetDefinition[] = [
+    { id: 'modes', title: 'Modos', size: 'L', kind: 'alarm-configuration', visible: true },
+    { id: 'active-instances', title: 'Instancias Activas', size: 'M', kind: 'security-status', visible: true },
+    { id: 'sos', title: 'Acciones SOS', size: 'M', kind: 'custom', visible: true },
+    { id: 'history', title: 'Historial', size: 'L', kind: 'activity-history', visible: true },
+    { id: 'automations', title: 'Automatizaciones', size: 'L', kind: 'automations', visible: true },
+    { id: 'access', title: 'Control de Acceso', size: 'XL', kind: 'access-control', visible: true }
   ];
 
   const widgetComponents = {

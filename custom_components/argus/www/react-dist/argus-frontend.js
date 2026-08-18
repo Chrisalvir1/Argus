@@ -10415,10 +10415,10 @@ function oh({ hass: a, config: c }) {
     return () => clearInterval(N);
   }, []);
   const E = a?.user?.name || "Chris", b = a?.user?.name ? `https://ui-avatars.com/api/?name=${encodeURIComponent(a.user.name)}&background=random` : "", L = [
-    { id: "modes", title: "Modos", size: "L", kind: "modes", visible: !0 },
-    { id: "active-instances", title: "Instancias Activas", size: "M", kind: "instances", visible: !0 },
-    { id: "sos", title: "Acciones SOS", size: "M", kind: "sos", visible: !0 },
-    { id: "history", title: "Historial", size: "L", kind: "history", visible: !0 },
+    { id: "modes", title: "Modos", size: "L", kind: "alarm-configuration", visible: !0 },
+    { id: "active-instances", title: "Instancias Activas", size: "M", kind: "security-status", visible: !0 },
+    { id: "sos", title: "Acciones SOS", size: "M", kind: "custom", visible: !0 },
+    { id: "history", title: "Historial", size: "L", kind: "activity-history", visible: !0 },
     { id: "automations", title: "Automatizaciones", size: "L", kind: "automations", visible: !0 },
     { id: "access", title: "Control de Acceso", size: "XL", kind: "access-control", visible: !0 }
   ], V = {

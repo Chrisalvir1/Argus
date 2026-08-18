@@ -12,7 +12,7 @@ export function ActiveInstances({ hass }: ActiveInstancesProps) {
   ).slice(0, 4);
 
   // Determinar el estado general de la alarma usando el primer panel disponible, o 'disarmed' por defecto
-  const alarmPanel = Object.values(entities).find((e: any) => e.entity_id.startsWith('alarm_control_panel.argus'));
+  const alarmPanel: any = Object.values(entities).find((e: any) => e.entity_id.startsWith('alarm_control_panel.argus'));
   const alarmState = alarmPanel?.state || 'disarmed';
 
   const isTriggered = alarmState === 'triggered';
