@@ -4620,18 +4620,20 @@ class ArgusPanel extends HTMLElement {
       const entityId = this._config?.entity || 'alarm_control_panel.argus';
       let targetEntry = dashboard.entries.find(e => e.entity_id === entityId);
       if (!targetEntry) {
-        const entityState = this._hass?.states[entityId];
-        targetEntry = {
-          entity_id: entityId,
-          name: entityState?.attributes?.friendly_name || 'Argus Security',
-          state: entityState?.state || 'unavailable',
-          pin_configured: true
-        };
+        targetEntry = dashboard.entries[0];
       }
       dashboard.entries = [targetEntry];
     }
 
     this._dashboard = dashboard;
+    this._available = dashboard.available_entities || [];
+    this._ui = dashboard.ui || { modes: {}, dashboard: {} };
+    this._notifTargets = dashboard.ui?.notif_targets || [];
+    this._users = Array.isArray(dashboard.ui?.users)
+      ? dashboard.ui.users.filter(user => user && typeof user === 'object' && !Array.isArray(user))
+      : [];
+    this._homeName = dashboard.ui?.home_name || '';
+    this._emergencyNumber = dashboard.ui?.emergency_number || '911';
     this._loadState = 'dashboard';
     this.shadowRoot.querySelector('.wrap')?.classList.add('wrap-ready');
     this._currentProfile = dashboard.current_profile || null;
@@ -4649,15 +4651,7 @@ class ArgusPanel extends HTMLElement {
         bootstrapOverlay.style.display = 'none';
       }
     }
-    this._available = dashboard.available_entities || [];
-    this._ui = dashboard.ui || { modes: {}, dashboard: {} };
     await this._loadActivityTimeline(dashboard.entry_id);
-    this._notifTargets = dashboard.ui?.notif_targets || [];
-    this._users = Array.isArray(dashboard.ui?.users)
-      ? dashboard.ui.users.filter(user => user && typeof user === 'object' && !Array.isArray(user))
-      : [];
-    this._homeName = dashboard.ui?.home_name || '';
-    this._emergencyNumber = dashboard.ui?.emergency_number || '911';
     this._panicOutputs = dashboard.ui?.panic_outputs || [];
     const myProfile = this._users.find(u => u.id === this._currentProfile?.id) || {};
     this._backgroundMode = myProfile.background_mode || dashboard.ui?.background_mode || 'weather';

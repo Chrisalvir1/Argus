@@ -1,3 +1,6 @@
+## [2.2.10] - 2026-08-17
+- Fixed sensor display in dashboard card mode by initializing UI configuration prior to initial render.
+
 ## [2.2.9] - 2026-08-17
 - Prioritize real-time Home Assistant state over stale snapshot for mode button active state.
 
