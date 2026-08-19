@@ -1,3 +1,9 @@
+## [2.2.33] - 2026-08-18
+- Fix Home Assistant backend websocket schema to accept `manual_lang` parameter
+- Enforce full translation refresh during startup and load across all 13 languages
+- Eliminate hardcoded Spanish strings in permissions dialog, state schedules, profile photo modal, and React widget menus
+- Remove emergency call button and apply initial hidden style to prevent red banner flash on startup
+
 ## [2.2.32] - 2026-08-18
 - Real-time dynamic localization for React toolbar button (edit dashboard)
 - Localize backend audit log event names (e.g. ui_configuration_updated)

@@ -450,6 +450,7 @@ _SAVE_UI_SCHEMA = {
     vol.Optional("hub_bg_sound"): bool,
     vol.Optional("clock_format"): vol.In(["auto", "12h", "24h"]),
     vol.Optional("language"): vol.Any(None, str),
+    vol.Optional("manual_lang"): vol.Any(None, str),
 }
 
 

@@ -7040,7 +7040,7 @@ _tmpl.innerHTML = `
 </div>
 
 <!-- SOS Confirm Modal -->
-<div class="ios-confirm-backdrop" id="sos-modal">
+<div class="ios-confirm-backdrop" id="sos-modal" style="display:none">
   <div class="ios-confirm-card liquid-glass" id="sos-card" style="position:relative;">
     <button id="sos-close-x" style="position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.1); border:none; color:white; border-radius:50%; width:32px; height:32px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; opacity:0.8; padding:0; transition:background 0.2s;">✕</button>
     <div class="ios-confirm-title" id="sos-title-txt">Confirmar pánico</div>
@@ -7051,13 +7051,7 @@ _tmpl.innerHTML = `
         <div class="ios-slider-thumb" id="sos-thumb">🚨</div>
       </div>
     </div>
-    <div style="margin-top:20px;text-align:center">
-      <a id="sos-call-btn" href="tel:911" style="display:flex;justify-content:center;align-items:center;gap:8px;background:rgba(255,59,48,0.2);color:#ff3b30;text-decoration:none;padding:14px;border-radius:18px;font-weight:800;font-size:15px;border:1px solid rgba(255,59,48,0.3)">
-        📞 Llamar a Emergencias (911)
-      </a>
-      <p id="sos-call-help" class="small" style="margin:10px 4px 0;opacity:.72;line-height:1.35">If this device cannot place calls, Argus will send an urgent alert to the configured mobile devices.</p>
-    </div>
-    <button class="ios-confirm-cancel" id="btn-cancel-sos" style="margin-top:10px">Cancelar</button>
+    <button class="ios-confirm-cancel" id="btn-cancel-sos" style="margin-top:16px">Cancelar</button>
   </div>
 </div>
 
@@ -8663,12 +8657,7 @@ class ArgusPanel extends HTMLElement {
     this._loadState = 'dashboard';
     this.shadowRoot.querySelector('.wrap')?.classList.add('wrap-ready');
     this._currentProfile = dashboard.current_profile || null;
-    this._renderEntries();
-    this._renderModeTabs();
-    this._renderModeView();
-    this._renderAutomations();
-    this._renderNotifications();
-    this._updateHeroProfileDisplay();
+    this._refreshLocalizedUi();
     const bootstrapOverlay = this.shadowRoot.getElementById('bootstrap-overlay');
     if (bootstrapOverlay) {
       if (this._currentProfile && !this._welcomeShownThisMount) {
@@ -9648,7 +9637,13 @@ gl_FragColor=vec4(col,alpha);}`;
       pt:{title:'Horários locais de estado',all:'Todos os dias',weekdays:'Segunda a sexta',weekend:'Fim de semana',empty:'Sem horários. Argus preservará o último estado confirmado.',disarmed:'Desarmado',home:'Em casa',away:'Ausente',night:'Noite',vacation:'Férias'},
       it:{title:'Programmi locali di stato',all:'Ogni giorno',weekdays:'Da lunedì a venerdì',weekend:'Fine settimana',empty:'Nessun programma. Argus manterrà l\u2019ultimo stato confermato.',disarmed:'Disarmato',home:'Casa',away:'Assente',night:'Notte',vacation:'Vacanza'},
       zh:{title:'本地状态计划',all:'每天',weekdays:'周一至周五',weekend:'周末',empty:'没有计划。Argus 将保留最后确认的状态。',disarmed:'撤防',home:'在家',away:'外出',night:'夜间',vacation:'度假'},
+      'zh-Hant':{title:'本地狀態排程',all:'每天',weekdays:'週一至週五',weekend:'週末',empty:'沒有排程。Argus 將保留最後確認的狀態。',disarmed:'撤防',home:'在家',away:'外出',night:'夜間',vacation:'度假'},
       ru:{title:'Локальное расписание состояния',all:'Каждый день',weekdays:'Понедельник–пятница',weekend:'Выходные',empty:'Расписания нет. Argus сохранит последнее подтверждённое состояние.',disarmed:'Снято',home:'Дома',away:'Нет дома',night:'Ночь',vacation:'Отпуск'},
+      hi:{title:'स्थानीय स्थिति कार्यक्रम',all:'हर दिन',weekdays:'सोमवार से शुक्रवार',weekend:'सप्ताहांत',empty:'कोई शेड्यूल नहीं। आर्गस अंतिम पुष्ट स्थिति को बनाए रखेगा।',disarmed:'निहत्था',home:'घर',away:'बाहर',night:'रात',vacation:'छुट्टी'},
+      ar:{title:'جداول الحالة المحلية',all:'كل يوم',weekdays:'من الاثنين إلى الجمعة',weekend:'عطلة نهاية الأسبوع',empty:'لا توجد جداول. سيحتفظ آرجوس بآخر حالة مؤكدة.',disarmed:'غير مسلح',home:'بيت',away:'خارج البيت',night:'ليل',vacation:'إجازة'},
+      ko:{title:'로컬 상태 일정',all:'매일',weekdays:'월요일~금요일',weekend:'주말',empty:'일정이 없습니다. Argus는 마지막으로 확인된 상태를 유지합니다.',disarmed:'해제됨',home:'집',away:'외출',night:'야간',vacation:'휴가'},
+      ja:{title:'ローカルステータススケジュール',all:'毎日',weekdays:'月曜日〜金曜日',weekend:'週末',empty:'スケジュールはありません。Argusは最後に確認された状態を維持します。',disarmed:'解除',home:'在宅',away:'外出',night:'夜間',vacation:'休暇'},
+      uk:{title:'Локальний розклад станів',all:'Щодня',weekdays:'Понеділок–п’ятниця',weekend:'Вихідні',empty:'Розкладу немає. Argus збереже останній підтверджений стан.',disarmed:'Знято з охорони',home:'Вдома',away:'Не вдома',night:'Ніч',vacation:'Відпустка'}
     };
     return copy[this._getCurrentLangCode()] || copy.en;
   }
@@ -9670,7 +9665,7 @@ gl_FragColor=vec4(col,alpha);}`;
     }
     const list = this.shadowRoot.getElementById('schedule-list'); if (!list) return;
     const schedules = Array.isArray(this._ui?.state_schedule) ? this._ui.state_schedule : [];
-    const deleteLabel = {es:'Eliminar horario',en:'Delete schedule',fr:'Supprimer l\u2019horaire',pt:'Excluir horário',it:'Elimina programma',zh:'删除计划',ru:'Удалить расписание'}[this._getCurrentLangCode()] || 'Delete schedule';
+    const deleteLabel = {es:'Eliminar horario',en:'Delete schedule',fr:'Supprimer l\u2019horaire',pt:'Excluir horário',it:'Elimina programma',zh:'删除计划','zh-Hant':'刪除排程',ru:'Удалить расписание',hi:'शेड्यूल हटाएं',ar:'حذف الجدول',ko:'일정 삭제',ja:'スケジュールを削除',uk:'Видалити розклад'}[this._getCurrentLangCode()] || 'Delete schedule';
     const labelForState = state => ({disarmed:text.disarmed,armed_home:text.home,armed_away:text.away,armed_night:text.night,armed_vacation:text.vacation}[state] || state);
     const labelForDays = days => days?.length === 2 ? text.weekend : days?.length === 5 ? text.weekdays : text.all;
     list.innerHTML = schedules.length ? schedules.map(item => `<div class="schedule-row"><span><strong>${this._escapeHtml(item.time || '')}</strong> · ${this._escapeHtml(labelForState(item.state))} · ${this._escapeHtml(labelForDays(item.days))}</span><button class="ghost" data-schedule-delete="${this._escapeHtml(item.id)}" aria-label="${this._escapeHtml(deleteLabel)}">×</button></div>`).join('') : `<div class="small" style="opacity:.55">${this._escapeHtml(text.empty)}</div>`;
@@ -10487,12 +10482,12 @@ gl_FragColor=vec4(col,alpha);}`;
                 </div>
                 ${u.role !== 'admin' && u.permissions ? `
                 <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px">
-                  <span class="user-badge" style="opacity:0.85;font-size:10px" title="Ver Panel">👁️ ${u.permissions.view_status ? 'Panel' : '---'}</span>
-                  <span class="user-badge" style="opacity:0.85;font-size:10px" title="Armar Sistema">🛡️ ${u.permissions.arm ? 'Armar' : '---'}</span>
-                  <span class="user-badge" style="opacity:0.85;font-size:10px" title="Desarmar Sistema">🔓 ${u.permissions.disarm ? 'Desarmar' : '---'}</span>
-                  <span class="user-badge" style="opacity:0.85;font-size:10px" title="Ver Historial">📜 ${u.permissions.view_history ? 'Historial' : '---'}</span>
-                  <span class="user-badge" style="opacity:0.85;font-size:10px;background:rgba(52,199,89,0.12);color:#34c759" title="Cambiar PIN Acceso">🔑 ${u.permissions.change_pin ? 'PIN Acceso' : '---'}</span>
-                  <span class="user-badge" style="opacity:0.85;font-size:10px;background:rgba(255,179,0,0.12);color:#ffb300" title="Cambiar PIN Maestro">🔑 ${u.permissions.change_master_pin ? 'PIN Maestro' : '---'}</span>
+                  <span class="user-badge" style="opacity:0.85;font-size:10px" title="${this._escapeHtml(this._t('view_panel_perm') || this._t('instances') || 'Panel')}">👁️ ${u.permissions.view_status ? (this._t('view_panel_perm') || this._t('instances') || 'Panel') : '---'}</span>
+                  <span class="user-badge" style="opacity:0.85;font-size:10px" title="${this._escapeHtml(this._t('arm_perm') || this._t('system_armed') || 'Armar')}">🛡️ ${u.permissions.arm ? (this._t('arm_perm') || this._t('system_armed') || 'Armar') : '---'}</span>
+                  <span class="user-badge" style="opacity:0.85;font-size:10px" title="${this._escapeHtml(this._t('disarm_perm') || this._t('disarmed') || 'Desarmar')}">🔓 ${u.permissions.disarm ? (this._t('disarm_perm') || this._t('disarmed') || 'Desarmar') : '---'}</span>
+                  <span class="user-badge" style="opacity:0.85;font-size:10px" title="${this._escapeHtml(this._t('view_history_perm') || this._t('activity_log') || 'Historial')}">📜 ${u.permissions.view_history ? (this._t('view_history_perm') || this._t('activity_log') || 'Historial') : '---'}</span>
+                  <span class="user-badge" style="opacity:0.85;font-size:10px;background:rgba(52,199,89,0.12);color:#34c759" title="${this._escapeHtml(this._t('access_pin_lbl') || 'PIN Acceso')}">🔑 ${u.permissions.change_pin ? (this._t('access_pin_lbl') || 'PIN Acceso') : '---'}</span>
+                  <span class="user-badge" style="opacity:0.85;font-size:10px;background:rgba(255,179,0,0.12);color:#ffb300" title="${this._escapeHtml(this._t('master_pin_lbl') || 'PIN Maestro')}">🔑 ${u.permissions.change_master_pin ? (this._t('master_pin_lbl') || 'PIN Maestro') : '---'}</span>
                 </div>
                 ` : ''}
               </div>
@@ -10500,7 +10495,7 @@ gl_FragColor=vec4(col,alpha);}`;
                 ${this._isAdmin ? `
                   <button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-edit="${i}" title="${this._escapeHtml(this._t('modal_edit_name'))}">✏️</button>
                   <button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-pin="${i}" title="${this._escapeHtml(this._t('modal_pin_title'))}">🔑</button>
-                  ${u.role !== 'admin' ? `<button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-perms="${i}" title="Permisos">🛡️</button>` : ''}
+                  ${u.role !== 'admin' ? `<button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-perms="${i}" title="${this._escapeHtml(this._t('permissions_title') || 'Permisos')}">🛡️</button>` : ''}
                   <button class="secondary" style="padding:6px 10px;font-size:12px;border-radius:10px;cursor:pointer" data-user-role-toggle="${i}" title="${this._escapeHtml(this._t('user_role_label'))}">⭐</button>
                   <button class="btn-danger danger" style="padding:6px 10px;font-size:12px;background:#e53935;color:white;border:none;border-radius:10px;cursor:pointer" title="${this._escapeHtml(this._t('delete_user_tooltip'))}" aria-label="${this._escapeHtml(this._t('delete_user_tooltip'))}" data-user-del="${i}">🗑️</button>
                 ` : ''}
@@ -11617,33 +11612,33 @@ gl_FragColor=vec4(col,alpha);}`;
         <div style="background:rgba(30,30,45,0.92);border:1px solid rgba(255,255,255,0.18);border-radius:20px;
           padding:28px 24px 22px;width:min(420px,90vw);box-shadow:0 24px 64px rgba(0,0,0,0.7);
           display:flex;flex-direction:column;gap:14px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)">
-          <div style="font-size:16px;font-weight:700;color:#fff;letter-spacing:.01em">🛡️ Permisos de ${this._escapeHtml(targetUser.name)}</div>
-          <div style="font-size:13px;color:rgba(255,255,255,0.65);margin-top:-6px">Selecciona las acciones permitidas para este perfil estándar:</div>
+          <div style="font-size:16px;font-weight:700;color:#fff;letter-spacing:.01em">🛡️ ${(this._t('permissions_title') || 'Permisos')} — ${this._escapeHtml(targetUser.name)}</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.65);margin-top:-6px">${this._t('permissions_modal_desc') || 'Selecciona las acciones permitidas para este perfil estándar:'}</div>
           
           <div style="display:flex;flex-direction:column;gap:10px;margin-top:6px;max-height:280px;overflow-y:auto;padding-right:4px;">
             <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
               <input type="checkbox" id="chk-perm-view-status" ${perms.view_status ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;" />
-              <span>Ver Estado de Sensores / Panel</span>
+              <span>${this._t('perm_view_status') || 'Ver Estado de Sensores / Panel'}</span>
             </label>
             <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
               <input type="checkbox" id="chk-perm-arm" ${perms.arm ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;" />
-              <span>Armar Alarma</span>
+              <span>${this._t('perm_arm') || 'Armar Alarma'}</span>
             </label>
             <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
               <input type="checkbox" id="chk-perm-disarm" ${perms.disarm ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;" />
-              <span>Desarmar Alarma</span>
+              <span>${this._t('perm_disarm') || 'Desarmar Alarma'}</span>
             </label>
             <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
               <input type="checkbox" id="chk-perm-view-history" ${perms.view_history ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;" />
-              <span>Ver Historial de Actividad</span>
+              <span>${this._t('perm_view_history') || 'Ver Historial de Actividad'}</span>
             </label>
             <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
               <input type="checkbox" id="chk-perm-change-pin" ${perms.change_pin ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;" />
-              <span style="color:#34c759;font-weight:700;">Permitir Cambiar su PIN de Acceso</span>
+              <span style="color:#34c759;font-weight:700;">${this._t('perm_change_pin') || 'Permitir Cambiar su PIN de Acceso'}</span>
             </label>
             <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
               <input type="checkbox" id="chk-perm-change-master-pin" ${perms.change_master_pin ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;" />
-              <span style="color:#ffb300;font-weight:700;">Permitir Cambiar el PIN Maestro</span>
+              <span style="color:#ffb300;font-weight:700;">${this._t('perm_change_master_pin') || 'Permitir Cambiar el PIN Maestro'}</span>
             </label>
           </div>
 
@@ -12453,26 +12448,26 @@ gl_FragColor=vec4(col,alpha);}`;
 
     modal.innerHTML = `
       <div style="background:rgba(30,32,48,0.97); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:24px; width:min(380px,90vw); color:#fff;">
-        <h3 style="margin:0 0 4px; font-size:1.05rem; font-weight:800;">📸 Cambiar imagen de perfil</h3>
-        <p style="margin:0 0 16px; font-size:0.78rem; color:rgba(255,255,255,0.5);">Elige una foto de tus personas de HA o dirígete al perfil de HA para subir una nueva.</p>
+        <h3 style="margin:0 0 4px; font-size:1.05rem; font-weight:800;">📸 ${this._escapeHtml(this._t('change_profile_picture') || 'Cambiar imagen de perfil')}</h3>
+        <p style="margin:0 0 16px; font-size:0.78rem; color:rgba(255,255,255,0.5);">${this._escapeHtml(this._t('change_picture_desc') || 'Elige una foto de tus personas de HA o dirígete al perfil de HA para subir una nueva.')}</p>
 
         ${haPictures.length ? `
-          <div style="font-size:11px; font-weight:700; opacity:0.6; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:10px;">Personas de Home Assistant</div>
+          <div style="font-size:11px; font-weight:700; opacity:0.6; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:10px;">${this._escapeHtml(this._t('ha_persons_title') || 'Personas de Home Assistant')}</div>
           <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
             ${picOptions}
           </div>
         ` : `
-          <p style="font-size:12px; color:rgba(255,255,255,0.45); margin-bottom:16px;">No se encontraron personas con foto en HA. Abre HA para añadir una imagen a tu persona.</p>
+          <p style="font-size:12px; color:rgba(255,255,255,0.45); margin-bottom:16px;">${this._escapeHtml(this._t('no_ha_persons_photo') || 'No se encontraron personas con foto en HA. Abre HA para añadir una imagen a tu persona.')}</p>
         `}
 
         <div style="display:flex; gap:8px;">
           <a href="/config/profile" target="_top"
              style="flex:1; padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.07); color:#fff; font-size:12px; font-weight:700; text-decoration:none; text-align:center;">
-            Ir al Perfil HA ↗
+            ${this._escapeHtml(this._t('go_to_ha_profile') || 'Ir al Perfil HA ↗')}
           </a>
           <button id="modal-pic-cancel"
                   style="flex:1; padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.6); font-size:12px; font-weight:700; cursor:pointer;">
-            Cancelar
+            ${this._escapeHtml(this._t('cancel') || 'Cancelar')}
           </button>
         </div>
 
