@@ -5318,6 +5318,9 @@ _tmpl.innerHTML = `
     width: 100vw !important;
     height: 100vh !important;
     height: 100dvh !important;
+    max-width: none !important;
+    max-height: none !important;
+    aspect-ratio: auto !important;
     margin: 0 !important;
     padding: 0 !important;
     display: flex !important;
@@ -8152,8 +8155,9 @@ class ArgusPanel extends HTMLElement {
     if (!this._shadowClickDelegated) {
       this._shadowClickDelegated = true;
       this.shadowRoot?.addEventListener('click', async (e: Event) => {
-        const target = e.target as HTMLElement;
-        if (!target) return;
+        const target = e.target as Element;
+        if (!target || typeof target.closest !== 'function') return;
+        
         const refreshBtn = target.closest('#btn-refresh-history, .btn-refresh-history');
         if (refreshBtn) {
           e.preventDefault();
@@ -8205,6 +8209,13 @@ class ArgusPanel extends HTMLElement {
         if (jsonBtn) {
           e.preventDefault();
           this._exportForensicTimeline();
+          return;
+        }
+        const exitFullscreenBtn = target.closest('.exit-kiosk-btn, button[data-exit-fullscreen]');
+        if (exitFullscreenBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          this._exitFullscreenView();
           return;
         }
       });
@@ -8339,29 +8350,10 @@ class ArgusPanel extends HTMLElement {
     this._initWidgetGrid();
     if (this._postLoadBound) return;
     this._postLoadBound = true;
-    this.shadowRoot.getElementById('btn-clear-log')?.addEventListener('click', () => this._clearHistory());
-    this.shadowRoot.getElementById('btn-refresh-history')?.addEventListener('click', async () => {
-      const btn = this.shadowRoot.getElementById('btn-refresh-history');
-      if (btn) btn.style.opacity = '0.5';
-      const entryId = this._dashboard?.entry_id || this._dashboard?.entries?.[0]?.entry_id;
-      await this._loadActivityTimeline(entryId);
-      this._renderActivityLog();
-      if (btn) {
-        btn.style.opacity = '1';
-        btn.textContent = '✓ ' + (this._t('history_refresh') || 'Actualizado');
-        setTimeout(() => {
-          if (btn) btn.textContent = '🔄 ' + (this._t('history_refresh') || 'Actualizar').replace(/^🔄\s*/, '');
-        }, 1500);
-      }
-    });
-    this.shadowRoot.getElementById('btn-export-forensic')?.addEventListener('click', () => this._openHistoryExportModal());
-    this.shadowRoot.getElementById('history-export-close')?.addEventListener('click', () => this._closeHistoryExportModal());
+    
     this.shadowRoot.getElementById('history-export-modal')?.addEventListener('click', (e) => {
       if (e.target && (e.target as HTMLElement).id === 'history-export-modal') this._closeHistoryExportModal();
     });
-    this.shadowRoot.getElementById('btn-do-print-pdf')?.addEventListener('click', () => this._exportHistoryPrintPdf());
-    this.shadowRoot.getElementById('btn-do-download-txt')?.addEventListener('click', () => this._exportHistoryText());
-    this.shadowRoot.getElementById('btn-do-download-json')?.addEventListener('click', () => this._exportForensicTimeline());
     this.shadowRoot.getElementById('btn-export-config')?.addEventListener('click', () => this._exportConfig());
     this.shadowRoot.getElementById('btn-import-trigger')?.addEventListener('click', () => this.shadowRoot.getElementById('import-config-file').click());
     this.shadowRoot.getElementById('import-config-file')?.addEventListener('change', (ev) => this._importConfig(ev));
@@ -8469,7 +8461,7 @@ class ArgusPanel extends HTMLElement {
       <body>
         <div class="header">
           <div class="brand">
-            <img src="/api/argus_static/argus_logo.png" alt="Argus Logo" onerror="this.style.display='none'">
+            <img src="${window.location.origin}/api/argus_static/argus_logo.png" alt="Argus Logo" onerror="this.style.display='none'">
             <div>
               <h1 class="title">Argus Home Hub</h1>
               <div class="subtitle">🏡 ${this._escapeHtml(homeName)} · Registro de Actividad y Seguridad</div>
@@ -9510,6 +9502,7 @@ class ArgusPanel extends HTMLElement {
               <button class="liquid-btn btn-home ${state==='armed_home'?'active':''} ${sensorAlert && state==='armed_home'?'buzz-orange':''}" data-idx="${idx}" data-action="home">${this._modeButtonIcon('home')}<span>${this._escapeHtml(modeLabel('btn_home'))}</span></button>
               <button class="liquid-btn btn-away ${state==='armed_away'?'active':''} ${sensorAlert && state==='armed_away'?'buzz-orange':''}" data-idx="${idx}" data-action="away">${this._modeButtonIcon('away')}<span>${this._escapeHtml(modeLabel('btn_away'))}</span></button>
               <button class="liquid-btn btn-night ${state==='armed_night'?'active':''} ${sensorAlert && state==='armed_night'?'buzz-orange':''}" data-idx="${idx}" data-action="night">${this._modeButtonIcon('night')}<span>${this._escapeHtml(modeLabel('btn_night'))}</span></button>
+              ${state !== 'disarmed' ? `<button class="liquid-btn btn-disarm" data-idx="${idx}" data-action="disarm"><span style="font-size: 20px;">🛡️</span><span>${this._escapeHtml(modeLabel('btn_disarmed') || 'DESARMAR')}</span></button>` : ''}
             </div>
             <div class="console-sensors">${sensorRows || `<div class="console-empty">${this._escapeHtml(sList.length === 0 ? (t('no_sensors_configured') || 'Sin sensores de intrusión configurados.') : (t('all_sensors_bypassed') || 'Todos los sensores configurados están omitidos.'))}</div>`}</div>
 
@@ -9582,6 +9575,13 @@ class ArgusPanel extends HTMLElement {
       const target = this._kioskTarget || this.shadowRoot.querySelector('.entry.ios-fullscreen');
       target?.classList.remove('ios-fullscreen');
       this.shadowRoot.querySelectorAll('.entry.ios-fullscreen').forEach(el => el.classList.remove('ios-fullscreen'));
+      
+      const stage = this.shadowRoot.getElementById('argus-fullscreen-stage');
+      if (stage) {
+        stage.innerHTML = '';
+        stage.style.display = 'none';
+      }
+      
       this.classList.remove('fullscreen-active');
       this._fullscreenIdx = -1;
       this._kioskLocked = false;

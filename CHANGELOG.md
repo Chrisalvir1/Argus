@@ -1,3 +1,10 @@
+## [2.2.47] - 2026-08-19
+- Fixed fullscreen exit event delegation and guaranteed stage reset on close
+- Fixed web desktop fullscreen layout by removing aspect-ratio constraints on root fullscreen stage
+- Realigned portrait mobile HUD with vertical stacking (Home Name -> Conectado -> State)
+- Dynamically rendered 3-column span Disarm button under mode selector when armed
+- Fixed activity history button event listeners and added origin prefix to PDF export logo
+
 ## [2.2.46] - 2026-08-19
 - Removed legacy duplicate floating .hud element overlapping the top-right status badge in web view
 - Ensured single clean location pill on the top-left and unobstructed system status pill on the top-right

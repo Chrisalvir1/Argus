@@ -565,11 +565,28 @@ function installStyles(panel){if(panel.shadowRoot?.getElementById('argus-fullscr
   .ios-fullscreen .console-hud {
     width: 100% !important;
     margin-bottom: 4px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    min-height: auto !important;
+  }
+  .ios-fullscreen .argus-connection-pill {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    margin: 0 !important;
   }
   .console-hud-loc {
-    margin-left: 44px !important;
-    max-width: 130px !important;
+    margin-left: 0 !important;
+    max-width: 100% !important;
     font-size: 10.5px !important;
+  }
+  .console-hud-right {
+    margin: 0 !important;
+    justify-content: center !important;
   }
   .ios-fullscreen .entry-icon {
     width: 100% !important;
