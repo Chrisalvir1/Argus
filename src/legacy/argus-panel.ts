@@ -7803,7 +7803,7 @@ class ArgusPanel extends HTMLElement {
     this._updateHeroProfileDisplay();
     this._updateHeroClock();
     if (this._instanceSignatures) this._instanceSignatures.clear();
-    this._renderEntries(true);
+    this._renderEntries();
     this._renderModeTabs();
     this._renderModeView();
     this._renderActivityLog();
@@ -7811,6 +7811,8 @@ class ArgusPanel extends HTMLElement {
     this._renderNotifications();
     this._renderUsers();
     this._renderSosOutputs();
+    if (typeof this._renderHealthCenter === 'function') this._renderHealthCenter();
+    if (typeof this._renderStateSchedule === 'function') this._renderStateSchedule();
     this._configureEmergencyCall();
     this._updateHomeNameDisplay();
     this._renderUploadedFiles();
@@ -8657,7 +8659,6 @@ class ArgusPanel extends HTMLElement {
     this._loadState = 'dashboard';
     this.shadowRoot.querySelector('.wrap')?.classList.add('wrap-ready');
     this._currentProfile = dashboard.current_profile || null;
-    this._refreshLocalizedUi();
     const bootstrapOverlay = this.shadowRoot.getElementById('bootstrap-overlay');
     if (bootstrapOverlay) {
       if (this._currentProfile && !this._welcomeShownThisMount) {
@@ -8801,6 +8802,7 @@ class ArgusPanel extends HTMLElement {
       catch (err) { console.error(`Argus ${name} render failed:`, err); }
     });
     this._loadUploadedFiles();
+    this._refreshLocalizedUi();
 
     // Retry loading if integration is reloading and has no active entity_id yet
     const hasEntries = dashboard.entries && dashboard.entries.length > 0;

@@ -1,3 +1,8 @@
+## [2.2.36] - 2026-08-18
+- React 19 Frontend Engine with unified lifecycle initialization
+- Resolve panel initialization sequence ensuring all widget nodes mount cleanly
+- 100% 13-language real-time translation sync and backend schema validation
+
 ## [2.2.35] - 2026-08-18
 - Stabilize React framework engine with React 18.3.1 ensuring full runtime compatibility with `react-grid-layout`
 - Restore full widget mounting and grid rendering across all 13 supported languages

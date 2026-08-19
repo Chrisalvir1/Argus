@@ -56,8 +56,8 @@ function removeLegacyEditor(panel:Panel){
 function renderDashboard(panel: Panel) {
   removeLegacyEditor(panel);
   const grid = panel.shadowRoot?.getElementById('widget-grid');
-  const dashboardId = panel._dashboard?.entry_id || panel._dashboard?.entries?.[0]?.entry_id;
-  if (!grid || !dashboardId) return;
+  const dashboardId = panel._dashboard?.entry_id || panel._dashboard?.entries?.[0]?.entry_id || 'default';
+  if (!grid) return;
 
   const activeWidgets = buildWidgetDefs(panel);
   const nodes = new Map<string, HTMLElement>();
