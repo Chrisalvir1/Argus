@@ -8504,10 +8504,6 @@ class P_ extends HTMLElement {
           ${R ? `<button class="ghost entry-exit-fs" data-exit-fullscreen title="${this._escapeHtml(l("fullscreen_title"))}" aria-label="${this._escapeHtml(l("fullscreen_title"))}" style="position:absolute;top:24px;left:24px;z-index:120;padding:9px 13px;font-size:18px;background:rgba(0,0,0,.55);backdrop-filter:blur(12px);border-radius:14px;color:white;border:1px solid rgba(255,255,255,.25);box-shadow:0 8px 20px rgba(0,0,0,.3)">×</button>` : ""}
           ${R ? "" : `<button class="ghost fs-btn entry-fs" data-fullscreen="${v}" title="${this._escapeHtml(l("fullscreen_title"))}" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>`}
           ${this._renderBatteryAlerts(fe)}
-          <div class="hud">
-            <div class="hud-loc">${this._escapeHtml(U)}</div>
-            <div class="hud-data"></div>
-          </div>
           <div class="entry-content security-console">
             <!-- Symmetrical HUD bar at top of console -->
             <div class="console-hud">

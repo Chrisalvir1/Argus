@@ -1,3 +1,7 @@
+## [2.2.46] - 2026-08-19
+- Removed legacy duplicate floating .hud element overlapping the top-right status badge in web view
+- Ensured single clean location pill on the top-left and unobstructed system status pill on the top-right
+
 ## [2.2.45] - 2026-08-19
 - Teleported fullscreen view to root shadowRoot stage to eliminate parent transform traps and container headers
 - Fixed 3-column mode buttons layout to eliminate empty grid gaps in portrait and mobile views
