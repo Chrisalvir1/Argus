@@ -9558,6 +9558,20 @@ class ArgusPanel extends HTMLElement {
       }
     });
     this._bindSOS();
+    if (this.classList.contains('fullscreen-active')) {
+      let stage = this.shadowRoot.getElementById('argus-fullscreen-stage');
+      if (!stage) {
+        stage = document.createElement('div');
+        stage.id = 'argus-fullscreen-stage';
+        this.shadowRoot.appendChild(stage);
+      }
+      stage.style.display = 'flex';
+      const activeEntry = el.querySelector('.entry');
+      if (activeEntry) {
+        activeEntry.classList.add('ios-fullscreen');
+        stage.replaceChildren(activeEntry);
+      }
+    }
   }
 
   async _exitFullscreenView() {
@@ -9704,26 +9718,14 @@ class ArgusPanel extends HTMLElement {
     this._kioskLocked = false;
     this._fullscreenIdx = validIdx;
     this.classList.add('fullscreen-active');
-
-    let stage = this.shadowRoot.getElementById('argus-fullscreen-stage');
-    if (!stage) {
-      stage = document.createElement('div');
-      stage.id = 'argus-fullscreen-stage';
-      this.shadowRoot.appendChild(stage);
-    }
-    stage.style.display = 'block';
-
-    if (target) {
-      target.classList.add('ios-fullscreen');
-      stage.appendChild(target);
-    }
     document.body.style.overflow = 'hidden';
+
+    this._renderEntries(true);
 
     const requestFS = target?.requestFullscreen || target?.webkitRequestFullscreen || this.requestFullscreen || this.webkitRequestFullscreen;
     if (requestFS) {
       requestFS.call(target || this).catch(() => {});
     }
-    this._renderEntries(true);
   }
 
   _getWeatherGradient(weather, rawKey = '') {

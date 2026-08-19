@@ -114,9 +114,10 @@ function installStyles(panel) {
   .hero{padding:14px!important;gap:10px!important}
   .hero-context{grid-template-columns:auto minmax(0,1fr)!important;align-items:center!important}
   .hero-clock{width:auto!important;justify-items:start!important}
-  .hero-pills{justify-content:flex-start!important}
-  .ios-fullscreen .console-hud{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;grid-template-areas:'location connection readings'!important}
-  .ios-fullscreen .console-hud-loc,.ios-fullscreen .argus-connection-pill,.ios-fullscreen .console-hud-right{width:auto!important}
+  .ios-fullscreen .console-hud{display:flex!important;align-items:center!important;justify-content:space-between!important;width:100%!important;position:relative!important}
+  .ios-fullscreen .console-hud-loc{justify-self:start!important;min-width:0!important}
+  .ios-fullscreen .argus-connection-pill{position:absolute!important;left:50%!important;transform:translateX(-50%)!important;justify-self:center!important}
+  .ios-fullscreen .console-hud-right{justify-self:end!important;min-width:0!important}
 }
 `;
   panel.shadowRoot?.appendChild(style);

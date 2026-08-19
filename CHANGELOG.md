@@ -1,3 +1,8 @@
+## [2.2.48] - 2026-08-19
+- Fixed active fullscreen entry teleportation and live updates inside stage
+- Harmonized audit and runtime visual styles to enforce vertical mobile portrait HUD
+- Enforced clean full-viewport responsive layout across desktop web and mobile
+
 ## [2.2.47] - 2026-08-19
 - Fixed fullscreen exit event delegation and guaranteed stage reset on close
 - Fixed web desktop fullscreen layout by removing aspect-ratio constraints on root fullscreen stage
