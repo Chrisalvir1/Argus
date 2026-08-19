@@ -5262,6 +5262,42 @@ q_.innerHTML = `
     background: radial-gradient(ellipse at 50% 50%, #162438 0%, #08101a 60%, #010408 100%) !important;
   }
 
+  #argus-fullscreen-stage {
+    display: none;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 999999999 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    background: #02050a !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+  :host(.fullscreen-active) #argus-fullscreen-stage {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  #argus-fullscreen-stage .entry.ios-fullscreen {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: radial-gradient(ellipse at 50% 50%, #162438 0%, #08101a 60%, #010408 100%) !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    z-index: 999999999 !important;
+  }
+
   .liquid-glass {
     background: linear-gradient(135deg,color-mix(in srgb,rgba(255,255,255,0.18) 80%,transparent),rgba(255,255,255,0.04));
     backdrop-filter: blur(28px) saturate(180%) brightness(1.08);
@@ -5745,8 +5781,19 @@ q_.innerHTML = `
   /* Hide the floating absolute HUD inside security-console to avoid overlap with sensor list */
   .security-console .hud,.ios-fullscreen .entry-content.security-console ~ .hud,.entry-content.security-console + .hud{display:none!important}
   /* The .hud inside the article gets hidden when the content is a security-console */
-  .entry:has(.security-console) .hud{display:none!important}
-  @media(max-width:950px){.grid{grid-template-columns:1fr;grid-template-areas:"instances" "activity" "modes" "access" "automations" "backup" "github"}.security-console{flex-direction:column;padding:10px 18px 24px;gap:20px}.security-console .entry-icon{order:2!important;flex:0 0 auto!important;min-height:130px!important}.security-console .liquid-stack{order:3!important;width:100%;max-width:320px}.security-console .console-sensors{order:4!important;width:100%;max-width:320px}.console-hud{order:1!important}.console-keypad{width:100%;max-width:320px}}
+  @media(max-width:950px){
+    .grid{grid-template-columns:1fr;grid-template-areas:"instances" "activity" "modes" "access" "automations" "backup" "github"}
+    .security-console{flex-direction:column;padding:12px 14px 20px;gap:16px}
+    .security-console .console-hud{order:1!important;width:100%!important;display:flex!important;flex-wrap:wrap!important;justify-content:space-between!important;align-items:center!important;gap:8px!important;padding:8px 12px!important;box-sizing:border-box!important}
+    .security-console .console-hud-loc{flex:1 1 auto!important;max-width:calc(100% - 130px)!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-size:11px!important}
+    .security-console .argus-connection-pill{flex:0 0 auto!important;font-size:10.5px!important}
+    .security-console .console-hud-right{flex:0 0 100%!important;display:flex!important;justify-content:center!important;margin-top:2px!important}
+    .security-console .entry-icon{order:2!important;flex:0 0 auto!important;min-height:130px!important}
+    .security-console .liquid-stack{order:3!important;width:100%!important;max-width:440px!important;margin:0 auto!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+    .security-console .liquid-stack .btn-disarm,.security-console .liquid-stack .btn-sos{grid-column:1/-1!important}
+    .security-console .console-sensors{order:4!important;width:100%!important;max-width:440px!important;margin:0 auto!important}
+    .console-keypad{width:100%;max-width:320px}
+  }
 
   /* Sensor column */
   .sensor-column{position:absolute;right:0;top:0;bottom:0;width:auto;max-width:40%;z-index:4;display:flex;flex-direction:column;gap:7px;align-items:flex-end;justify-content:center;padding:12px 12px 12px 0;pointer-events:none}
@@ -8546,7 +8593,11 @@ class P_ extends HTMLElement {
     }
     const r = this._kioskTarget || this.shadowRoot.querySelector(".entry.ios-fullscreen") || this.shadowRoot.querySelector(".entry"), l = () => {
       document.exitFullscreen ? document.exitFullscreen().catch(() => {
-      }) : document.webkitExitFullscreen && document.webkitExitFullscreen(), r && r.classList.remove("ios-fullscreen"), this.shadowRoot.querySelectorAll(".entry.ios-fullscreen").forEach((u) => u.classList.remove("ios-fullscreen")), this.classList.remove("fullscreen-active"), this._fullscreenIdx = -1, this._kioskLocked = !1, this._kioskEntryId = null, this._kioskTarget = null, document.body.style.overflow = "", this._renderEntries();
+      }) : document.webkitExitFullscreen && document.webkitExitFullscreen();
+      const u = this.shadowRoot.getElementById("argus-fullscreen-stage"), p = this.shadowRoot.getElementById("entries");
+      r && (r.classList.remove("ios-fullscreen"), p && r.parentElement === u && p.appendChild(r)), this.shadowRoot.querySelectorAll(".entry.ios-fullscreen").forEach((m) => {
+        m.classList.remove("ios-fullscreen"), p && m.parentElement === u && p.appendChild(m);
+      }), u && (u.style.display = "none", u.replaceChildren()), this.classList.remove("fullscreen-active"), this._fullscreenIdx = -1, this._kioskLocked = !1, this._kioskEntryId = null, this._kioskTarget = null, document.body.style.overflow = "", this._renderEntries();
     };
     if (a.pin_configured !== !0) {
       l();
@@ -8569,9 +8620,11 @@ class P_ extends HTMLElement {
       return;
     }
     const o = a || this.shadowRoot.querySelector(".entry"), r = o?.querySelector(".entry-fs") || o?.querySelector("[data-fullscreen]"), l = parseInt(r?.dataset?.fullscreen ?? 0), u = isNaN(l) || l < 0 ? 0 : l, p = this._dashboard?.entries?.[u] || this._dashboard?.entries?.[0];
-    this._kioskEntryId = p?.entry_id || null, this._kioskTarget = o, this._kioskLocked = !1, this._fullscreenIdx = u, this.classList.add("fullscreen-active"), o && o.classList.add("ios-fullscreen"), document.body.style.overflow = "hidden";
-    const m = o?.requestFullscreen || o?.webkitRequestFullscreen || this.requestFullscreen || this.webkitRequestFullscreen;
-    m && m.call(o || this).catch(() => {
+    this._kioskEntryId = p?.entry_id || null, this._kioskTarget = o, this._kioskLocked = !1, this._fullscreenIdx = u, this.classList.add("fullscreen-active");
+    let m = this.shadowRoot.getElementById("argus-fullscreen-stage");
+    m || (m = document.createElement("div"), m.id = "argus-fullscreen-stage", this.shadowRoot.appendChild(m)), m.style.display = "block", o && (o.classList.add("ios-fullscreen"), m.appendChild(o)), document.body.style.overflow = "hidden";
+    const g = o?.requestFullscreen || o?.webkitRequestFullscreen || this.requestFullscreen || this.webkitRequestFullscreen;
+    g && g.call(o || this).catch(() => {
     }), this._renderEntries(!0);
   }
   _getWeatherGradient(a, o = "") {
@@ -28135,8 +28188,8 @@ function S_(s) {
 .console-hud{grid-template-columns:minmax(0,1fr) minmax(150px,220px) minmax(0,1fr)!important}.console-hud-loc{grid-column:1!important;justify-self:start!important;min-width:0!important;max-width:100%!important}.argus-connection-pill{grid-column:2!important;justify-self:center!important}.console-hud-right{grid-column:3!important;justify-self:end!important;min-width:0!important;max-width:100%!important}
 .hero-context{display:grid!important;grid-template-columns:auto minmax(0,1fr)!important;align-items:center!important;gap:12px!important;min-width:0!important}.hero-clock{display:grid!important;grid-template-rows:auto auto!important;align-content:center!important;justify-items:end!important;min-width:76px!important;padding-right:12px!important}.hero-clock strong,.hero-clock span{width:100%!important;text-align:right!important;white-space:nowrap!important;font-variant-numeric:tabular-nums!important}.hero-clock span{overflow:hidden!important;text-overflow:ellipsis!important;max-width:14ch!important}.hero-pills{min-width:0!important;flex-wrap:wrap!important}
 .pf-clock{grid-area:clock}.personalize-grid{grid-template-areas:'home temp' 'panel weather' 'hub clock' 'emergency emergency'!important}.ios-fullscreen .entry-content.security-console{grid-template-columns:minmax(230px,340px) minmax(280px,1fr) minmax(250px,340px)!important;grid-template-areas:'hud hud hud' 'modes icon sensors'!important;align-items:center!important;overflow:hidden!important}.ios-fullscreen .entry-icon{justify-self:center!important;align-self:center!important}.ios-fullscreen .entry-icon svg{will-change:transform,opacity,filter}:host(.argus-exiting-fullscreen) .entry{pointer-events:none!important;transition:none!important}
-@media(max-width:900px){.entry-content.security-console,.ios-fullscreen .entry-content.security-console{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto auto auto auto!important;grid-template-areas:'hud' 'icon' 'modes' 'sensors'!important;justify-items:center!important;padding:68px 16px 24px!important;gap:16px!important;overflow-y:auto!important;align-content:start!important}.console-hud{width:100%!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-areas:'location connection' 'readings readings'!important;gap:8px!important}.console-hud-loc{grid-area:location!important}.argus-connection-pill{grid-area:connection!important}.console-hud-right{grid-area:readings!important;justify-self:stretch!important;justify-content:flex-start!important;overflow-x:auto!important}.security-console .entry-icon{display:flex!important;min-height:150px!important;max-width:280px!important}.security-console .entry-icon svg{width:min(58vw,260px)!important;max-width:260px!important;min-width:0!important}.security-console .liquid-stack,.security-console .console-sensors{width:100%!important;max-width:440px!important;margin:0 auto!important}.security-console .console-sensors{max-height:none!important;overflow:visible!important}.hero-context{width:100%!important;grid-template-columns:auto minmax(0,1fr)!important}.hero-clock{justify-items:start!important;padding:0 12px 0 0!important}.hero-clock strong,.hero-clock span{text-align:left!important}.hero-pills{justify-content:flex-start!important}.personalize-grid{grid-template-columns:1fr!important;grid-template-areas:'home' 'temp' 'weather' 'clock' 'panel' 'hub' 'emergency'!important}}
-@media(max-width:520px){.entry,.entry-bg,.entry-bg>*:first-child,.entry .wx,.entry-content{border-radius:26px!important}.entry-content.security-console,.ios-fullscreen .entry-content.security-console{padding:72px 12px 20px!important}.security-console .liquid-stack{grid-template-columns:repeat(2,minmax(0,1fr))!important}.security-console .liquid-btn{min-width:0!important;white-space:normal!important}.console-hud-loc{font-size:10px!important}.console-hud-right{scrollbar-width:none}.hero-context{grid-template-columns:1fr!important}.hero-clock{border:0!important;padding:0!important;justify-items:start!important}.hero-pills{width:100%!important}.ios-fullscreen{overflow:hidden!important}.ios-fullscreen .entry-content.security-console{height:100dvh!important;max-height:100dvh!important}.ios-fullscreen .console-sensors{padding-bottom:28px!important}}
+@media(max-width:900px){.entry-content.security-console{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto auto auto auto!important;grid-template-areas:'hud' 'icon' 'modes' 'sensors'!important;justify-items:center!important;padding:24px 14px 20px!important;gap:14px!important;overflow-y:auto!important;align-content:start!important}.security-console .liquid-stack{grid-template-columns:repeat(3,minmax(0,1fr))!important;width:100%!important;max-width:440px!important;margin:0 auto!important}.security-console .liquid-stack .btn-disarm,.security-console .liquid-stack .btn-sos{grid-column:1/-1!important}.security-console .entry-icon{display:flex!important;min-height:150px!important;max-width:280px!important}.security-console .entry-icon svg{width:min(58vw,260px)!important;max-width:260px!important;min-width:0!important}.security-console .console-sensors{width:100%!important;max-width:440px!important;margin:0 auto!important;max-height:none!important;overflow:visible!important}.hero-context{width:100%!important;grid-template-columns:auto minmax(0,1fr)!important}.hero-clock{justify-items:start!important;padding:0 12px 0 0!important}.hero-clock strong,.hero-clock span{text-align:left!important}.hero-pills{justify-content:flex-start!important}.personalize-grid{grid-template-columns:1fr!important;grid-template-areas:'home' 'temp' 'weather' 'clock' 'panel' 'hub' 'emergency'!important}}
+@media(max-width:520px){.entry,.entry-bg,.entry-bg>*:first-child,.entry .wx,.entry-content{border-radius:26px!important}.entry-content.security-console{padding:20px 12px 18px!important}.security-console .liquid-stack{grid-template-columns:repeat(3,minmax(0,1fr))!important;width:100%!important}.security-console .liquid-btn{min-width:0!important;white-space:normal!important}.console-hud-loc{font-size:10.5px!important}.console-hud-right{scrollbar-width:none}.hero-context{grid-template-columns:1fr!important}.hero-clock{border:0!important;padding:0!important;justify-items:start!important}.hero-pills{width:100%!important}}
 @media(prefers-reduced-motion:reduce){.argus-old-shield{display:none!important}.entry-icon.argus-shield-changing>svg{animation:none!important}}
 `, s.shadowRoot.appendChild(a);
 }
@@ -28549,11 +28602,9 @@ function $y(s) {
   .hero-pill{width:min(100%,360px)!important;max-width:100%!important;white-space:normal!important;text-align:center!important;justify-content:center!important;align-items:center!important;line-height:1.25!important;margin:0 auto!important}
   .dashboard-instances>.panel-head{flex-direction:column!important;align-items:stretch!important;gap:10px!important}
   #global-status,#global-status .badge{width:100%!important;box-sizing:border-box!important;justify-content:center!important;text-align:center!important;white-space:normal!important;line-height:1.3!important}
-  .entry-content.security-console,.ios-fullscreen .entry-content.security-console{padding-left:10px!important;padding-right:10px!important}
-  .console-hud{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:'location' 'connection' 'readings'!important;justify-items:center!important;align-items:center!important;gap:8px!important;text-align:center!important}
-  .console-hud-loc,.argus-connection-pill,.console-hud-right{width:100%!important;max-width:100%!important;box-sizing:border-box!important;justify-self:center!important;justify-content:center!important;text-align:center!important;margin:0!important}
-  .console-hud-right{display:flex!important;flex-wrap:wrap!important;overflow:visible!important;gap:6px!important}
-  .security-console .liquid-stack{grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important}
+  .entry-content.security-console{padding-left:12px!important;padding-right:12px!important}
+  .security-console .liquid-stack{grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:stretch!important;width:100%!important}
+  .security-console .liquid-stack .btn-disarm,.security-console .liquid-stack .btn-sos{grid-column:1/-1!important}
   .security-console .liquid-btn{min-width:0!important;white-space:normal!important;line-height:1.2!important;min-height:46px!important}
   #w-activity,.activity-log{max-height:46vh!important;overflow-y:auto!important}
   .argus-mobile-history-overflow-item{display:list-item!important}

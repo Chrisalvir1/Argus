@@ -1,3 +1,9 @@
+## [2.2.45] - 2026-08-19
+- Teleported fullscreen view to root shadowRoot stage to eliminate parent transform traps and container headers
+- Fixed 3-column mode buttons layout to eliminate empty grid gaps in portrait and mobile views
+- Adjusted portrait mobile HUD layout to prevent connection pill overflow and text clipping
+- Enhanced GPU 3D rendering for smooth 60/120 FPS and OLED Display P3 HDR radiance
+
 ## [2.2.44] - 2026-08-19
 - Clean isolation in fullscreen mode (completely hides widget headers, outer frames, and toolbar)
 - Responsive layout for iPhone/Android in both landscape and portrait orientations without HUD overlap

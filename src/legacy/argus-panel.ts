@@ -5294,6 +5294,42 @@ _tmpl.innerHTML = `
     background: radial-gradient(ellipse at 50% 50%, #162438 0%, #08101a 60%, #010408 100%) !important;
   }
 
+  #argus-fullscreen-stage {
+    display: none;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 999999999 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    background: #02050a !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+  :host(.fullscreen-active) #argus-fullscreen-stage {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  #argus-fullscreen-stage .entry.ios-fullscreen {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: radial-gradient(ellipse at 50% 50%, #162438 0%, #08101a 60%, #010408 100%) !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    z-index: 999999999 !important;
+  }
+
   .liquid-glass {
     background: linear-gradient(135deg,color-mix(in srgb,rgba(255,255,255,0.18) 80%,transparent),rgba(255,255,255,0.04));
     backdrop-filter: blur(28px) saturate(180%) brightness(1.08);
@@ -5777,8 +5813,19 @@ _tmpl.innerHTML = `
   /* Hide the floating absolute HUD inside security-console to avoid overlap with sensor list */
   .security-console .hud,.ios-fullscreen .entry-content.security-console ~ .hud,.entry-content.security-console + .hud{display:none!important}
   /* The .hud inside the article gets hidden when the content is a security-console */
-  .entry:has(.security-console) .hud{display:none!important}
-  @media(max-width:950px){.grid{grid-template-columns:1fr;grid-template-areas:"instances" "activity" "modes" "access" "automations" "backup" "github"}.security-console{flex-direction:column;padding:10px 18px 24px;gap:20px}.security-console .entry-icon{order:2!important;flex:0 0 auto!important;min-height:130px!important}.security-console .liquid-stack{order:3!important;width:100%;max-width:320px}.security-console .console-sensors{order:4!important;width:100%;max-width:320px}.console-hud{order:1!important}.console-keypad{width:100%;max-width:320px}}
+  @media(max-width:950px){
+    .grid{grid-template-columns:1fr;grid-template-areas:"instances" "activity" "modes" "access" "automations" "backup" "github"}
+    .security-console{flex-direction:column;padding:12px 14px 20px;gap:16px}
+    .security-console .console-hud{order:1!important;width:100%!important;display:flex!important;flex-wrap:wrap!important;justify-content:space-between!important;align-items:center!important;gap:8px!important;padding:8px 12px!important;box-sizing:border-box!important}
+    .security-console .console-hud-loc{flex:1 1 auto!important;max-width:calc(100% - 130px)!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-size:11px!important}
+    .security-console .argus-connection-pill{flex:0 0 auto!important;font-size:10.5px!important}
+    .security-console .console-hud-right{flex:0 0 100%!important;display:flex!important;justify-content:center!important;margin-top:2px!important}
+    .security-console .entry-icon{order:2!important;flex:0 0 auto!important;min-height:130px!important}
+    .security-console .liquid-stack{order:3!important;width:100%!important;max-width:440px!important;margin:0 auto!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+    .security-console .liquid-stack .btn-disarm,.security-console .liquid-stack .btn-sos{grid-column:1/-1!important}
+    .security-console .console-sensors{order:4!important;width:100%!important;max-width:440px!important;margin:0 auto!important}
+    .console-keypad{width:100%;max-width:320px}
+  }
 
   /* Sensor column */
   .sensor-column{position:absolute;right:0;top:0;bottom:0;width:auto;max-width:40%;z-index:4;display:flex;flex-direction:column;gap:7px;align-items:flex-end;justify-content:center;padding:12px 12px 12px 0;pointer-events:none}
@@ -9594,8 +9641,24 @@ class ArgusPanel extends HTMLElement {
       } else if (document.webkitExitFullscreen) {
         document.webkitExitFullscreen();
       }
-      if (target) target.classList.remove('ios-fullscreen');
-      this.shadowRoot.querySelectorAll('.entry.ios-fullscreen').forEach(el => el.classList.remove('ios-fullscreen'));
+      const stage = this.shadowRoot.getElementById('argus-fullscreen-stage');
+      const entriesContainer = this.shadowRoot.getElementById('entries');
+      if (target) {
+        target.classList.remove('ios-fullscreen');
+        if (entriesContainer && target.parentElement === stage) {
+          entriesContainer.appendChild(target);
+        }
+      }
+      this.shadowRoot.querySelectorAll('.entry.ios-fullscreen').forEach(el => {
+        el.classList.remove('ios-fullscreen');
+        if (entriesContainer && el.parentElement === stage) {
+          entriesContainer.appendChild(el);
+        }
+      });
+      if (stage) {
+        stage.style.display = 'none';
+        stage.replaceChildren();
+      }
       this.classList.remove('fullscreen-active');
       this._fullscreenIdx = -1;
       this._kioskLocked = false;
@@ -9645,8 +9708,18 @@ class ArgusPanel extends HTMLElement {
     this._kioskLocked = false;
     this._fullscreenIdx = validIdx;
     this.classList.add('fullscreen-active');
+
+    let stage = this.shadowRoot.getElementById('argus-fullscreen-stage');
+    if (!stage) {
+      stage = document.createElement('div');
+      stage.id = 'argus-fullscreen-stage';
+      this.shadowRoot.appendChild(stage);
+    }
+    stage.style.display = 'block';
+
     if (target) {
       target.classList.add('ios-fullscreen');
+      stage.appendChild(target);
     }
     document.body.style.overflow = 'hidden';
 
