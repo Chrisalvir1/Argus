@@ -22,7 +22,7 @@ function buildWidgetDefs(panel: Panel): ArgusWidgetDefinition[] {
     {id:'automations',nativeId:'w-automations',kind:'automations',title:t('automations') || 'Automatizaciones',size:'M',visible:true,t},
     {id:'backup-restore',nativeId:'w-backup',kind:'backup-restore',title:t('backup_title') || 'Respaldo y restauración',size:'M',visible:true,t},
     {id:'access-control',nativeId:'w-access',kind:'access-control',title:t('users_title') || 'Control de acceso y usuarios',size:'L',visible:true,t},
-    {id:'alarm-configuration',nativeId:'w-modes',kind:'alarm-configuration',title:t('modes') || 'Configuración de alarma',size:'XL',visible:true,t},
+    {id:'alarm-configuration',nativeId:'w-modes',kind:'alarm-configuration',title:t('modes_sos') || 'Modos / SOS',size:'XL',visible:true,t},
     {id:'security-status',nativeId:'w-github',kind:'security-status',title:t('support_title') || 'Estado y soporte',size:'S',visible:true,t},
   ];
 }

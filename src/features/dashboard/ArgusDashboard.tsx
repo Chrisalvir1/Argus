@@ -11,13 +11,25 @@ function Host({widget,node,editing,size,onSize,onHide,onReset}:HostProps){const 
 export function ArgusDashboard({widgets,nodes,storage,userId,dashboardId,onEditing,registerEditor}:{widgets:ArgusWidgetDefinition[];nodes:Map<string,HTMLElement>;storage:DashboardLayoutStorage;userId:string;dashboardId:string;onEditing:(v:boolean)=>void;registerEditor:(setter:EditorSetter)=>void}){
  const defaults=useMemo(()=>Object.fromEntries(widgets.map(w=>[w.id,w.visible])),[widgets]);
  const[layouts,setLayouts]=useState<Layouts>(defaultLayouts),[visibility,setVisibility]=useState<Record<string,boolean>>(defaults),[editing,setEditing]=useState(false),[hydrated,setHydrated]=useState(false),[bp,setBp]=useState<ArgusBreakpoint>('lg'),[message,setMessage]=useState(''),[,setLangTick]=useState(0);
- const lastValid=useRef<Layouts>(defaultLayouts),timer=useRef<number|undefined>(undefined),wasEditing=useRef(false);
+ const lastValid=useRef<Layouts>(defaultLayouts),timer=useRef<number|undefined>(undefined),wasEditing=useRef(false),containerRef=useRef<HTMLElement>(null);
  const getT=(k:string,f:string)=>{if(typeof(window as any)._argusT==='function'){const v=(window as any)._argusT(k);if(v&&v!==k)return v}return f};
  useEffect(()=>{const onLang=()=>setLangTick(t=>t+1);window.addEventListener('argus-lang-changed',onLang);return()=>window.removeEventListener('argus-lang-changed',onLang)},[]);
  useEffect(()=>{registerEditor(setEditing)},[registerEditor]);
  useEffect(()=>{let active=true;setHydrated(false);Promise.all([storage.load(userId,dashboardId),storage.loadVisibility?.(userId,dashboardId)]).then(([value,storedVisibility])=>{if(!active)return;const merged=mergeLayouts(value);setLayouts(merged);lastValid.current=merged;if(storedVisibility)setVisibility({...defaults,...storedVisibility});setHydrated(true)});return()=>{active=false}},[storage,userId,dashboardId,defaults]);
  useEffect(()=>{onEditing(editing);if(hydrated&&wasEditing.current&&!editing)storage.save(userId,dashboardId,lastValid.current);wasEditing.current=editing},[editing,hydrated,onEditing,storage,userId,dashboardId]);
  useEffect(()=>{const key=(event:KeyboardEvent)=>{if(!editing)return;if(event.key==='Escape'){setEditing(false);setMessage(getT('edit_dashboard_done','Edición finalizada'))}else if(event.key==='Enter'&&event.target===document.body)setEditing(false)};window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key)},[editing]);
+ useEffect(()=>{
+  if(typeof ResizeObserver==='undefined'||!containerRef.current)return;
+  let raf=0;
+  const ro=new ResizeObserver(()=>{
+   cancelAnimationFrame(raf);
+   raf=requestAnimationFrame(()=>{
+    try{window.dispatchEvent(new Event('resize'));}catch(_){}
+   });
+  });
+  ro.observe(containerRef.current);
+  return()=>{cancelAnimationFrame(raf);ro.disconnect();};
+ },[]);
  useEffect(()=>()=>clearTimeout(timer.current),[]);
  const save=(next:Layouts,now=false)=>{setLayouts(next);lastValid.current=next;clearTimeout(timer.current);timer.current=window.setTimeout(()=>storage.save(userId,dashboardId,next),now?0:550)};
  const setVisible=(id:string,value:boolean)=>{const next={...visibility,[id]:value};setVisibility(next);storage.saveVisibility?.(userId,dashboardId,next);setMessage(value?getT('widget_visible','Widget visible'):getT('hide_widget','Widget oculto'))};
@@ -28,9 +40,23 @@ export function ArgusDashboard({widgets,nodes,storage,userId,dashboardId,onEditi
  const reset=async()=>{if(!confirm(getT('reset_dashboard_confirm','¿Restablecer únicamente posiciones, tamaños y visibilidad del tablero?')))return;await storage.reset(userId,dashboardId);const clean=mergeLayouts(null);setVisibility(defaults);save(clean,true);setMessage(getT('reset_dashboard_done','Diseño predeterminado restaurado'))};
 
  const currentLayout=layouts[bp]||[];
- if(!hydrated)return <section className="argus-dashboard"><div className="argus-dashboard__feedback" aria-live="polite">{getT('loading_dashboard','Cargando tablero…')}</div></section>;
- return <section className={`argus-dashboard ${editing?'argus-dashboard--editing':''}`}><div className="argus-dashboard__feedback" aria-live="polite">{editing ? message : ''}</div><ErrorBoundary><ResponsiveGridLayout className="argus-dashboard-grid" layouts={layouts} breakpoints={BREAKPOINTS} cols={COLS} rowHeight={92} margin={[16,16]} containerPadding={[16,16]} compactType={null} preventCollision={true} allowOverlap={false} isBounded={true} isDraggable={editing} isResizable={editing} draggableHandle=".argus-widget__drag-handle" resizeHandles={['se']} onBreakpointChange={value=>setBp(value as ArgusBreakpoint)} onLayoutChange={(_,all)=>{if(editing){setLayouts(all);lastValid.current=all}}} onResizeStop={resize} onDragStop={(_,__,value)=>{const others=(lastValid.current[bp]||[]).filter(x=>x.i!==value.i);if(hasCollision(others,value)){setLayouts({...lastValid.current});setMessage(getT('position_collision','Posición bloqueada por colisión'));return}replaceItem(value.i,value,getT('position_saved','Posición guardada'))}} useCSSTransforms={true}>{widgets.filter(w=>visibility[w.id]!==false&&nodes.has(w.id)).map(w=>{const item=currentLayout.find(x=>x.i===w.id);const size=item?getClosestWidgetSize(item.w,item.h,COLS[bp]):w.size;return <div key={w.id}><ErrorBoundary><Host widget={w} node={nodes.get(w.id)!} editing={editing} size={size} onSize={value=>chooseSize(w.id,value)} onHide={()=>setVisible(w.id,false)} onReset={()=>resetWidget(w.id)}/></ErrorBoundary></div>})}</ResponsiveGridLayout></ErrorBoundary>
-
-<nav className="argus-dashboard__toolbar" aria-label={getT('edit_dashboard','Edición del tablero')}><button type="button" onClick={()=>setEditing(v=>!v)}>{editing?('✓ '+getT('edit_dashboard_done','Listo')):('❖ '+getT('edit_dashboard','Editar tablero'))}</button>{editing&&<><button type="button" onClick={reset}>{getT('reset_dashboard','Restablecer diseño')}</button><div className="argus-dashboard__visibility" aria-label={getT('hide_widget','Widgets ocultos')}>{widgets.filter(w=>visibility[w.id]===false).map(w=><button type="button" key={w.id} onClick={()=>setVisible(w.id,true)}>{getT('show','Mostrar')} {w.title}{/* Mostrar {w.title} */}</button>)}</div></>}</nav></section>;
+ if(!hydrated)return <section className="argus-dashboard" ref={containerRef}><div className="argus-dashboard__feedback" aria-live="polite">{getT('loading_dashboard','Cargando tablero…')}</div></section>;
+ return <section className={`argus-dashboard ${editing?'argus-dashboard--editing':''}`} ref={containerRef}>
+  <nav className="argus-dashboard__toolbar" aria-label={getT('edit_dashboard','Edición del tablero')}>
+   <button type="button" onClick={()=>setEditing(v=>!v)}>{editing?('✓ '+getT('edit_dashboard_done','Listo')):('❖ '+getT('edit_dashboard','Editar tablero'))}</button>
+   {editing&&<>
+    <button type="button" onClick={reset}>{getT('reset_dashboard','Restablecer diseño')}</button>
+    <div className="argus-dashboard__visibility" aria-label={getT('hide_widget','Widgets ocultos')}>
+     {widgets.filter(w=>visibility[w.id]===false).map(w=><button type="button" key={w.id} onClick={()=>setVisible(w.id,true)}>Mostrar {w.title}</button>)}
+    </div>
+   </>}
+  </nav>
+  <div className="argus-dashboard__feedback" aria-live="polite">{editing ? message : ''}</div>
+  <ErrorBoundary>
+   <ResponsiveGridLayout className="argus-dashboard-grid" layouts={layouts} breakpoints={BREAKPOINTS} cols={COLS} rowHeight={92} margin={[16,16]} containerPadding={[16,16]} compactType={null} preventCollision={true} allowOverlap={false} isBounded={true} isDraggable={editing} isResizable={editing} draggableHandle=".argus-widget__drag-handle" resizeHandles={['se']} onBreakpointChange={value=>setBp(value as ArgusBreakpoint)} onLayoutChange={(_,all)=>{if(editing){setLayouts(all);lastValid.current=all}}} onResizeStop={resize} onDragStop={(_,__,value)=>{const others=(lastValid.current[bp]||[]).filter(x=>x.i!==value.i);if(hasCollision(others,value)){setLayouts({...lastValid.current});setMessage(getT('position_collision','Posición bloqueada por colisión'));return}replaceItem(value.i,value,getT('position_saved','Posición guardada'))}} useCSSTransforms={true}>
+    {widgets.filter(w=>visibility[w.id]!==false&&nodes.has(w.id)).map(w=>{const item=currentLayout.find(x=>x.i===w.id);const size=item?getClosestWidgetSize(item.w,item.h,COLS[bp]):w.size;return <div key={w.id}><ErrorBoundary><Host widget={w} node={nodes.get(w.id)!} editing={editing} size={size} onSize={value=>chooseSize(w.id,value)} onHide={()=>setVisible(w.id,false)} onReset={()=>resetWidget(w.id)}/></ErrorBoundary></div>})}
+   </ResponsiveGridLayout>
+  </ErrorBoundary>
+ </section>;
 }
 export default ArgusDashboard;
