@@ -6,6 +6,11 @@ import localCss from './style.css?inline';
 import {ArgusDashboard} from './ArgusDashboard';
 import {LocalStorageDashboardLayoutStorage,mergeLayouts} from './layout';
 import type {ArgusWidgetDefinition,Layouts} from './types';
+import { mountSecurityConsole } from './components';
+
+if (typeof window !== 'undefined') {
+  (window as any).mountSecurityConsole = mountSecurityConsole;
+}
 
 type Panel=HTMLElement&{
  shadowRoot:ShadowRoot;_currentProfile?:{id?:string};_hass?:{user?:{id?:string}};
