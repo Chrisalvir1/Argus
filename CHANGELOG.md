@@ -1,3 +1,8 @@
+## [2.2.37] - 2026-08-19
+- Restrict low battery banner alerts strictly to configured security and intrusion sensors
+- Prevent arbitrary device battery alerts (e.g., Apple Watch, iPhone, laptop) from triggering alarm warnings
+- Refine sensor battery telemetry detection and live state tracking without stale caching
+
 ## [2.2.36] - 2026-08-18
 - React 19 Frontend Engine with unified lifecycle initialization
 - Resolve panel initialization sequence ensuring all widget nodes mount cleanly

@@ -8828,62 +8828,78 @@ class ArgusPanel extends HTMLElement {
     return this._getDevicePower(sensorId, sensorState).battery;
   }
 
-  // Read only values that Home Assistant exposes.  In particular, do not use a
+  // Read only values that Home Assistant exposes. In particular, do not use a
   // lightning icon or assume 100% just because an entity has no battery sensor.
-  _getDevicePower(sensorId, sensorState) {
+  _getDevicePower(sensorId: string, sensorState: any) {
+    if (!sensorId) return { battery: null, mains: false };
     const attributes = sensorState?.attributes || {};
+    
+    // 1. Direct sensor battery attributes
     const direct = [attributes.battery_level, attributes.battery, attributes.battery_percentage]
-      .find(value => Number.isFinite(Number(value)));
+      .find(value => value !== undefined && value !== null && value !== '' && Number.isFinite(Number(value)));
     let battery = direct === undefined ? null : Math.max(0, Math.min(100, Math.round(Number(direct))));
 
     const source = String(attributes.power_source || attributes.power_supply || attributes.power_type || '').toLowerCase();
     const mains = attributes.mains_powered === true || attributes.is_mains_powered === true || attributes.wired === true ||
       /(?:mains|ac|wired|line|external|toma|corriente)/.test(source);
 
-    const domain = sensorId ? sensorId.split('.')[0] : '';
+    const domain = sensorId.split('.')[0];
     if (['switch', 'light', 'fan', 'script', 'input_boolean', 'siren'].includes(domain) && battery === null) {
       return { battery: null, mains: true };
     }
 
+    // 2. Companion battery entity lookup (if no direct attribute)
     if (battery === null && this._hass?.states) {
-      if (!this._powerCache) this._powerCache = new Map();
-      if (this._powerCache.has(sensorId)) return this._powerCache.get(sensorId);
-
-      let companionState = null;
+      let companionState: any = null;
       const objectId = sensorId.split('.').slice(1).join('.').toLowerCase();
-      const base = objectId.replace(/_(contact|door|window|motion|occupancy|opening|sensor)$/i, '');
+      const base = objectId.replace(/_(contact|door|window|motion|occupancy|opening|sensor|iaszone|ias_zone)$/i, '');
 
-      const directCandidate = this._hass.states[`sensor.${objectId}_battery`]
-        || this._hass.states[`sensor.${base}_battery`]
-        || this._hass.states[`sensor.${objectId}_battery_level`]
-        || this._hass.states[`sensor.${base}_battery_level`];
+      const directCandidates = [
+        `sensor.${objectId}_battery`,
+        `sensor.${base}_battery`,
+        `sensor.${objectId}_battery_level`,
+        `sensor.${base}_battery_level`,
+        `sensor.${objectId}_battery_percentage`,
+        `sensor.${base}_battery_percentage`,
+      ];
 
-      if (directCandidate) {
-        companionState = directCandidate.state;
-      } else {
-        const avEntity = (this._available || []).find(e => e.entity_id === sensorId);
-        if (avEntity && avEntity.device_id) {
-           const companion = (this._available || []).find(e => 
-             e.device_id === avEntity.device_id &&
-             (this._hass?.states?.[e.entity_id]?.attributes?.device_class === 'battery' || /_battery(?:_level|_percent(?:age)?)?$/i.test(e.entity_id))
-           );
-           if (companion) companionState = this._hass?.states?.[companion.entity_id]?.state;
+      for (const cand of directCandidates) {
+        const st = this._hass.states[cand];
+        if (st && st.state !== 'unavailable' && st.state !== 'unknown' && Number.isFinite(Number(st.state))) {
+          companionState = st.state;
+          break;
         }
       }
 
-      const level = Number(companionState);
-      if (Number.isFinite(level)) battery = Math.max(0, Math.min(100, Math.round(level)));
-      const res = { battery, mains };
-      this._powerCache.set(sensorId, res);
-      return res;
+      if (companionState === null) {
+        const avEntity = (this._available || []).find((e: any) => e.entity_id === sensorId);
+        if (avEntity && avEntity.device_id) {
+           const companion = (this._available || []).find((e: any) => 
+             e.device_id === avEntity.device_id &&
+             e.entity_id !== sensorId &&
+             (this._hass?.states?.[e.entity_id]?.attributes?.device_class === 'battery' || /_battery(?:_level|_percent(?:age)?)?$/i.test(e.entity_id))
+           );
+           if (companion) {
+             const st = this._hass?.states?.[companion.entity_id];
+             if (st && st.state !== 'unavailable' && st.state !== 'unknown' && Number.isFinite(Number(st.state))) {
+               companionState = st.state;
+             }
+           }
+        }
+      }
+
+      if (companionState !== null) {
+        const level = Number(companionState);
+        if (Number.isFinite(level)) battery = Math.max(0, Math.min(100, Math.round(level)));
+      }
     }
     return { battery, mains };
   }
 
-  _deviceFacts(entityId, stateObj, includeStatus = true) {
+  _deviceFacts(entityId: string, stateObj: any, includeStatus = true) {
     const raw = stateObj?.state || 'unknown';
     const isOpen = ['on', 'unlocked', 'open', 'recording', 'active', 'motion'].includes(raw);
-    const labels = { on:this._t('status_open'), off:this._t('status_closed'), locked:this._t('status_closed'), unlocked:this._t('status_open'), idle:this._t('status_idle'), recording:this._t('status_recording'), home:this._t('status_home'), not_home:this._t('status_away') };
+    const labels: Record<string, string> = { on:this._t('status_open'), off:this._t('status_closed'), locked:this._t('status_closed'), unlocked:this._t('status_open'), idle:this._t('status_idle'), recording:this._t('status_recording'), home:this._t('status_home'), not_home:this._t('status_away') };
     const domain = entityId.split('.')[0];
     const isActuator = ['siren', 'switch', 'light', 'fan', 'input_boolean', 'script', 'alarm_control_panel'].includes(domain);
     const power = this._getDevicePower(entityId, stateObj);
@@ -8892,7 +8908,7 @@ class ArgusPanel extends HTMLElement {
     if (power.mains) facts.push({ text: '🔌 AC', className: 'power-mains' });
     if (power.battery !== null) {
       const isDead = power.battery === 0;
-      const isLow = power.battery <= 10 && !isDead;
+      const isLow = power.battery <= 20 && !isDead;
       const batText = isDead ? '🔋 ❌' : `🔋 ${power.battery}%`;
       const cls = isDead ? 'dead' : (isLow ? 'low' : '');
       facts.push({ text: batText, className: `pill-power ${cls}` });
@@ -8900,19 +8916,42 @@ class ArgusPanel extends HTMLElement {
     return facts;
   }
 
-  _renderBatteryAlerts() {
+  _renderBatteryAlerts(sensors?: string[]) {
     if (!this._hass?.states) return '';
-    const states = this._hass.states;
-    const lowBatteries = Object.values(states).filter((st) => {
-      const isBattery = st.entity_id?.endsWith('_battery') || st.attributes?.device_class === 'battery';
-      const isMains = /dimmer|switch|light|plug|outlet/i.test(st.entity_id) || /dimmer|switch|light|plug|outlet/i.test(st.attributes?.friendly_name || '');
-      if (!isBattery || isMains || st.state === 'unknown' || st.state === 'unavailable') return false;
-      const level = Number(st.state);
-      return !Number.isNaN(level) && level <= 20;
+    let sensorsToCheck: string[] = Array.isArray(sensors) && sensors.length ? sensors : [];
+    if (!sensorsToCheck.length) {
+      const modes = this._ui?.modes || {};
+      const all = new Set<string>();
+      ['away', 'home', 'night', 'vacation'].forEach(m => {
+        const list = modes[m]?.sensors;
+        if (Array.isArray(list)) list.forEach((s: string) => all.add(s));
+      });
+      if (this._ui?.modes?.__by_entity__) {
+        Object.values(this._ui.modes.__by_entity__).forEach((mObj: any) => {
+          ['away', 'home', 'night', 'vacation'].forEach(m => {
+            const list = mObj[m]?.sensors;
+            if (Array.isArray(list)) list.forEach((s: string) => all.add(s));
+          });
+        });
+      }
+      sensorsToCheck = Array.from(all);
+    }
+    if (!sensorsToCheck.length) return '';
+
+    const lowBatteries: { name: string; level: number }[] = [];
+    sensorsToCheck.forEach(sid => {
+      const st = this._hass?.states[sid];
+      if (!st) return;
+      const power = this._getDevicePower(sid, st);
+      if (power.battery !== null && Number.isFinite(power.battery) && power.battery <= 20 && !power.mains) {
+        const name = st.attributes?.friendly_name || sid.split('.')[1] || sid;
+        lowBatteries.push({ name, level: power.battery });
+      }
     });
+
     if (!lowBatteries.length) return '';
-    const t = k => this._t(k);
-    const rows = lowBatteries.map(b => `<div class="battery-alert-pill" style="display:inline-flex; align-items:center; gap:6px; background:rgba(239,68,68,0.25); border:1px solid rgba(239,68,68,0.5); color:#fee2e2; padding:4px 12px; border-radius:999px; font-size:11px; font-weight:600; backdrop-filter:blur(12px); box-shadow:0 4px 12px rgba(0,0,0,0.3)">⚠️ ${t('battery_low')}: ${this._escapeHtml(b.attributes.friendly_name || b.entity_id)} (${b.state}%)</div>`).join('');
+    const t = (k: string) => this._t(k);
+    const rows = lowBatteries.map(b => `<div class="battery-alert-pill" style="display:inline-flex; align-items:center; gap:6px; background:rgba(239,68,68,0.25); border:1px solid rgba(239,68,68,0.5); color:#fee2e2; padding:4px 12px; border-radius:999px; font-size:11px; font-weight:600; backdrop-filter:blur(12px); box-shadow:0 4px 12px rgba(0,0,0,0.3)">⚠️ ${t('battery_low')}: ${this._escapeHtml(b.name)} (${b.level}%)</div>`).join('');
     return `<div class="battery-alerts-container" style="position:absolute; top:18px; left:18px; z-index:15; display:flex; flex-direction:column; gap:6px; max-width:75%; pointer-events:none;">${rows}</div>`;
   }
 
@@ -9095,7 +9134,7 @@ class ArgusPanel extends HTMLElement {
           <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:100;padding:5px 12px;background:rgba(36,188,129,.2);border:1px solid rgba(36,188,129,.4);border-radius:20px;color:#75f4b0;font-size:11px;font-weight:700;backdrop-filter:blur(10px);box-shadow:0 4px 12px rgba(0,0,0,0.2);display:flex;align-items:center;gap:6px;white-space:nowrap;"><div style="width:7px;height:7px;border-radius:50%;background:#75f4b0;box-shadow:0 0 8px #75f4b0;"></div>${this._escapeHtml(t('connected') || 'CONECTADO')}</div>
           ${isFS ? `<button class="ghost entry-exit-fs" data-exit-fullscreen title="${this._escapeHtml(t('fullscreen_title'))}" aria-label="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;top:16px;left:16px;z-index:100;padding:9px 13px;font-size:18px;background:rgba(0,0,0,.55);backdrop-filter:blur(12px);border-radius:14px;color:white;border:1px solid rgba(255,255,255,.25);box-shadow:0 8px 20px rgba(0,0,0,.3)">×</button>` : ''}
           ${!isFS ? `<button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>` : ''}
-          ${this._renderBatteryAlerts()}
+          ${this._renderBatteryAlerts(activeSensors)}
           <div class="hud">
             <div class="hud-loc">${this._escapeHtml(fullHudLoc)}</div>
             <div class="hud-data"></div>

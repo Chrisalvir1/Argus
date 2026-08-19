@@ -147,7 +147,7 @@ export function applyStableInstancesRender(C: ArgusPanelConstructor | undefined)
         const active = sList.filter(s => !sByps.includes(s));
         const sensorKey = active.map(sid => {
           const st = this._hass?.states?.[sid];
-          const bat = st?.attributes?.battery_level ?? st?.attributes?.battery_percentage ?? '';
+          const bat = (this as any)._getSensorBattery?.(sid, st) ?? st?.attributes?.battery_level ?? st?.attributes?.battery_percentage ?? '';
           return `${sid}:${st?.state || ''}:${bat}`;
         }).join(',');
         
@@ -203,7 +203,7 @@ export function applyStableInstancesRender(C: ArgusPanelConstructor | undefined)
       const active = sList.filter(s => !sByps.includes(s));
       const sensorKey = active.map(sid => {
         const st = this._hass?.states?.[sid];
-        const bat = st?.attributes?.battery_level ?? st?.attributes?.battery_percentage ?? '';
+        const bat = (this as any)._getSensorBattery?.(sid, st) ?? st?.attributes?.battery_level ?? st?.attributes?.battery_percentage ?? '';
         return `${sid}:${st?.state || ''}:${bat}`;
       }).join(',');
       

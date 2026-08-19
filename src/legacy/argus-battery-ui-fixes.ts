@@ -112,7 +112,7 @@ function argusFixConsoleSensorBatteries(panel) {
         const stateEl = row.querySelector('.console-sensor-state');
         if (stateEl) {
            const isDead = pwr === 0;
-           const isLow = pwr <= 10 && !isDead;
+           const isLow = pwr <= 20 && !isDead;
            
            let batText = isDead ? '🔋 ❌' : `🔋 ${pwr}%`;
            let cls = isDead ? 'dead' : (isLow ? 'low' : '');
