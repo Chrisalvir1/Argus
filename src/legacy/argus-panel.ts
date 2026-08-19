@@ -9216,8 +9216,8 @@ class ArgusPanel extends HTMLElement {
 
   _renderPremiumStatusIcon(state, triggered, uid = '0') {
     const mode = triggered ? 'triggered' : ({ armed_home:'home', armed_away:'away', armed_night:'night', armed_vacation:'vacation', disarmed:'disarm' }[state] || 'disarm');
-    const accent = { home:'#ffb03a', away:'#ff4d4d', night:'#6eb4ff', vacation:'#d69cff', disarm:'#52efa0', triggered:'#ff2a3a' }[mode];
-    const glowColor = { home:'rgba(255,176,58,0.55)', away:'rgba(255,77,77,0.6)', night:'rgba(110,180,255,0.55)', vacation:'rgba(214,156,255,0.55)', disarm:'rgba(82,239,160,0.55)', triggered:'rgba(255,42,58,0.75)' }[mode];
+    const accent = { home:'#ffb700', away:'#ff3344', night:'#3898ff', vacation:'#d69cff', disarm:'#00ff8c', triggered:'#ff1744' }[mode];
+    const glowColor = { home:'rgba(255,183,0,0.65)', away:'rgba(255,51,68,0.7)', night:'rgba(56,152,255,0.65)', vacation:'rgba(214,156,255,0.65)', disarm:'rgba(0,255,140,0.65)', triggered:'rgba(255,23,68,0.85)' }[mode];
     const symbol = {
       home:'<path d="M66 98 100 69l34 29v35H66z"/><path d="M89 133v-22h22v22"/>',
       away:'<path d="M100 70c18 0 32 14 32 32s-14 32-32 32-32-14-32-32 14-32 32-32z"/><path d="M100 79v46M77 102h46"/>',
@@ -9226,7 +9226,7 @@ class ArgusPanel extends HTMLElement {
       disarm:'<path d="m76 104 16 16 34-39"/>',
       triggered:'<path d="M100 65 139 137H61z"/><path d="M100 90v23M100 124h.01"/>'
     }[mode];
-    return `<svg viewBox="0 0 200 200" width="100%" height="100%" style="filter:drop-shadow(0 0 30px ${glowColor}) drop-shadow(0 20px 40px rgba(0,0,0,.6));max-width:180px;margin:auto;display:block;overflow:visible" aria-label="${this._escapeHtml(mode)}"><defs><linearGradient id="premium-${mode}-${uid}" x1="20%" y1="5%" x2="85%" y2="100%"><stop stop-color="#ffffff" stop-opacity=".75"/><stop offset=".2" stop-color="${accent}" stop-opacity=".95"/><stop offset=".7" stop-color="${accent}" stop-opacity=".35"/><stop offset="1" stop-color="#02060f" stop-opacity=".75"/></linearGradient><linearGradient id="shield-inner-${mode}-${uid}" x1="0%" y1="0%" x2="100%" y2="100%"><stop stop-color="#ffffff" stop-opacity=".25"/><stop offset=".4" stop-color="${accent}" stop-opacity=".12"/><stop offset="1" stop-color="transparent"/></linearGradient><filter id="premium-glow-${mode}-${uid}" filterUnits="userSpaceOnUse" x="-80" y="-80" width="360" height="360" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M100 22 157 46v42c0 42-23 69-57 87-34-18-57-45-57-87V46z" fill="url(#premium-${mode}-${uid})" stroke="${accent}" stroke-width="3.5" filter="url(#premium-glow-${mode}-${uid})"/><path d="M100 28 152 50v38c0 38-21 62-52 79-31-17-52-41-52-79V50z" fill="url(#shield-inner-${mode}-${uid})"/><path d="M100 31 148 51" stroke="#fff" stroke-opacity=".7" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="105" r="43" fill="rgba(4,10,20,.45)" stroke="rgba(255,255,255,.3)" stroke-width="2"/><g fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#premium-glow-${mode}-${uid})">${symbol}</g><circle cx="100" cy="105" r="55" fill="none" stroke="${accent}" stroke-opacity=".55" stroke-width="2.5"><animate attributeName="r" values="50;62;50" dur="3.2s" repeatCount="indefinite"/><animate attributeName="opacity" values=".7;.05;.7" dur="3.2s" repeatCount="indefinite"/></circle></svg>`;
+    return `<svg viewBox="0 0 200 200" width="100%" height="100%" style="filter:drop-shadow(0 0 35px ${glowColor}) drop-shadow(0 0 70px ${glowColor}) drop-shadow(0 20px 40px rgba(0,0,0,.7));max-width:180px;margin:auto;display:block;overflow:visible" aria-label="${this._escapeHtml(mode)}"><defs><linearGradient id="premium-${mode}-${uid}" x1="20%" y1="5%" x2="85%" y2="100%"><stop stop-color="#ffffff" stop-opacity=".85"/><stop offset=".18" stop-color="${accent}" stop-opacity=".98"/><stop offset=".65" stop-color="${accent}" stop-opacity=".4"/><stop offset="1" stop-color="#01040a" stop-opacity=".85"/></linearGradient><linearGradient id="shield-inner-${mode}-${uid}" x1="0%" y1="0%" x2="100%" y2="100%"><stop stop-color="#ffffff" stop-opacity=".3"/><stop offset=".35" stop-color="${accent}" stop-opacity=".15"/><stop offset="1" stop-color="transparent"/></linearGradient><filter id="premium-glow-${mode}-${uid}" filterUnits="userSpaceOnUse" x="-80" y="-80" width="360" height="360" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="5.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M100 22 157 46v42c0 42-23 69-57 87-34-18-57-45-57-87V46z" fill="url(#premium-${mode}-${uid})" stroke="${accent}" stroke-width="3.5" filter="url(#premium-glow-${mode}-${uid})"/><path d="M100 28 152 50v38c0 38-21 62-52 79-31-17-52-41-52-79V50z" fill="url(#shield-inner-${mode}-${uid})"/><path d="M100 31 148 51" stroke="#fff" stroke-opacity=".85" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="105" r="43" fill="rgba(2,6,14,.55)" stroke="rgba(255,255,255,.35)" stroke-width="2"/><g fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#premium-glow-${mode}-${uid})">${symbol}</g><circle cx="100" cy="105" r="55" fill="none" stroke="${accent}" stroke-opacity=".65" stroke-width="2.5"><animate attributeName="r" values="50;62;50" dur="3.2s" repeatCount="indefinite"/><animate attributeName="opacity" values=".8;.08;.8" dur="3.2s" repeatCount="indefinite"/></circle></svg>`;
   }
 
   _getIntelligentSVG(state, w, isNight, triggered, idx = '0') {
@@ -9379,8 +9379,7 @@ class ArgusPanel extends HTMLElement {
       art.innerHTML = `
           ${this._renderEntryBackground(weatherState, isNight)}
           ${this._kioskLocked ? `<button class="btn-unlock-kiosk" data-action="unlock-kiosk" style="position:absolute;top:16px;right:16px;z-index:99;padding:8px 14px;background:rgba(220,38,38,0.85);color:white;border:none;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 12px rgba(0,0,0,0.4)">🔓 ${this._escapeHtml(t('unlock_kiosk') || 'Desbloquear kiosco')}</button>` : ''}
-          <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:100;padding:5px 12px;background:rgba(36,188,129,.2);border:1px solid rgba(36,188,129,.4);border-radius:20px;color:#75f4b0;font-size:11px;font-weight:700;backdrop-filter:blur(10px);box-shadow:0 4px 12px rgba(0,0,0,0.2);display:flex;align-items:center;gap:6px;white-space:nowrap;"><div style="width:7px;height:7px;border-radius:50%;background:#75f4b0;box-shadow:0 0 8px #75f4b0;"></div>${this._escapeHtml(t('connected') || 'CONECTADO')}</div>
-          ${isFS ? `<button class="ghost entry-exit-fs" data-exit-fullscreen title="${this._escapeHtml(t('fullscreen_title'))}" aria-label="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;top:16px;left:16px;z-index:100;padding:9px 13px;font-size:18px;background:rgba(0,0,0,.55);backdrop-filter:blur(12px);border-radius:14px;color:white;border:1px solid rgba(255,255,255,.25);box-shadow:0 8px 20px rgba(0,0,0,.3)">×</button>` : ''}
+          ${isFS ? `<button class="ghost entry-exit-fs" data-exit-fullscreen title="${this._escapeHtml(t('fullscreen_title'))}" aria-label="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;top:24px;left:24px;z-index:120;padding:9px 13px;font-size:18px;background:rgba(0,0,0,.55);backdrop-filter:blur(12px);border-radius:14px;color:white;border:1px solid rgba(255,255,255,.25);box-shadow:0 8px 20px rgba(0,0,0,.3)">×</button>` : ''}
           ${!isFS ? `<button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>` : ''}
           ${this._renderBatteryAlerts(activeSensors)}
           <div class="hud">
@@ -9388,9 +9387,10 @@ class ArgusPanel extends HTMLElement {
             <div class="hud-data"></div>
           </div>
           <div class="entry-content security-console">
-            <!-- Compact HUD bar at top of console — replaces overlapping absolute hud -->
+            <!-- Symmetrical HUD bar at top of console -->
             <div class="console-hud">
               <span class="console-hud-loc">🏡 ${this._escapeHtml(fullHudLoc)}</span>
+              <div class="argus-connection-pill" data-online="true"><i class="argus-connection-dot"></i><span class="argus-connection-label">${this._escapeHtml(t('connected') || 'CONECTADO')}</span></div>
               <div class="console-hud-right">
                 <span class="console-system-badge console-system-badge--${triggered ? 'triggered' : state}">${this._escapeHtml(
                   triggered ? (t('system_triggered') || 'ALARMA ACTIVADA') :
@@ -9579,37 +9579,26 @@ class ArgusPanel extends HTMLElement {
     }
 
     const target = targetEl || this.shadowRoot.querySelector('.entry');
-    const fsBtn = target?.querySelector('.entry-fs');
+    const fsBtn = target?.querySelector('.entry-fs') || target?.querySelector('[data-fullscreen]');
     const idx = parseInt(fsBtn?.dataset?.fullscreen ?? 0);
     const validIdx = (isNaN(idx) || idx < 0) ? 0 : idx;
     const entry = this._dashboard?.entries?.[validIdx] || this._dashboard?.entries?.[0];
 
     this._kioskEntryId = entry?.entry_id || null;
     this._kioskTarget = target;
-    // Fullscreen is a presentation action, not kiosk lock.  A kiosk lock
-    // must be enabled explicitly; otherwise Esc must always leave fullscreen.
     this._kioskLocked = false;
     this._fullscreenIdx = validIdx;
     this.classList.add('fullscreen-active');
-
-    const requestFS = target?.requestFullscreen || target?.webkitRequestFullscreen;
-    
-    const applyIosFullscreen = () => {
-      if (target) {
-        target.classList.add('ios-fullscreen');
-      }
-      document.body.style.overflow = 'hidden';
-      this._renderEntries();
-    };
-
-    if (requestFS) {
-      requestFS.call(target).then(() => {
-        document.body.style.overflow = 'hidden';
-        this._renderEntries();
-      }).catch(applyIosFullscreen);
-    } else {
-      applyIosFullscreen();
+    if (target) {
+      target.classList.add('ios-fullscreen');
     }
+    document.body.style.overflow = 'hidden';
+
+    const requestFS = target?.requestFullscreen || target?.webkitRequestFullscreen || this.requestFullscreen || this.webkitRequestFullscreen;
+    if (requestFS) {
+      requestFS.call(target || this).catch(() => {});
+    }
+    this._renderEntries(true);
   }
 
   _getWeatherGradient(weather, rawKey = '') {

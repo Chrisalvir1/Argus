@@ -1,3 +1,8 @@
+## [2.2.42] - 2026-08-19
+- Symmetrical mathematical centering for the HUD connection pill and balanced 3-item top bar alignment
+- Eliminated fullscreen transition jerkiness and layout stretching with GPU 3D acceleration
+- Enhanced HDR / HLG / Display P3 color spectrum radiance and 60fps/100Hz/120Hz rendering
+
 ## [2.2.41] - 2026-08-19
 - Enhanced fullscreen kiosk security console with pristine 16:9 aspect ratio and uniform 36px continuous corner curvature
 - Redesigned mode buttons with full legible text labels and vertical icon stacking preventing truncation

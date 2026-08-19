@@ -8344,7 +8344,7 @@ class P_ extends HTMLElement {
     return `<svg class="mode-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${o[a] || o.disarm}</svg>`;
   }
   _renderPremiumStatusIcon(a, o, r = "0") {
-    const l = o ? "triggered" : { armed_home: "home", armed_away: "away", armed_night: "night", armed_vacation: "vacation", disarmed: "disarm" }[a] || "disarm", u = { home: "#ffb03a", away: "#ff4d4d", night: "#6eb4ff", vacation: "#d69cff", disarm: "#52efa0", triggered: "#ff2a3a" }[l], p = { home: "rgba(255,176,58,0.55)", away: "rgba(255,77,77,0.6)", night: "rgba(110,180,255,0.55)", vacation: "rgba(214,156,255,0.55)", disarm: "rgba(82,239,160,0.55)", triggered: "rgba(255,42,58,0.75)" }[l], m = {
+    const l = o ? "triggered" : { armed_home: "home", armed_away: "away", armed_night: "night", armed_vacation: "vacation", disarmed: "disarm" }[a] || "disarm", u = { home: "#ffb700", away: "#ff3344", night: "#3898ff", vacation: "#d69cff", disarm: "#00ff8c", triggered: "#ff1744" }[l], p = { home: "rgba(255,183,0,0.65)", away: "rgba(255,51,68,0.7)", night: "rgba(56,152,255,0.65)", vacation: "rgba(214,156,255,0.65)", disarm: "rgba(0,255,140,0.65)", triggered: "rgba(255,23,68,0.85)" }[l], m = {
       home: '<path d="M66 98 100 69l34 29v35H66z"/><path d="M89 133v-22h22v22"/>',
       away: '<path d="M100 70c18 0 32 14 32 32s-14 32-32 32-32-14-32-32 14-32 32-32z"/><path d="M100 79v46M77 102h46"/>',
       night: '<path d="M120 70a34 34 0 1 0 13 63 38 38 0 1 1-13-63z"/><circle cx="134" cy="73" r="3"/>',
@@ -8352,7 +8352,7 @@ class P_ extends HTMLElement {
       disarm: '<path d="m76 104 16 16 34-39"/>',
       triggered: '<path d="M100 65 139 137H61z"/><path d="M100 90v23M100 124h.01"/>'
     }[l];
-    return `<svg viewBox="0 0 200 200" width="100%" height="100%" style="filter:drop-shadow(0 0 30px ${p}) drop-shadow(0 20px 40px rgba(0,0,0,.6));max-width:180px;margin:auto;display:block;overflow:visible" aria-label="${this._escapeHtml(l)}"><defs><linearGradient id="premium-${l}-${r}" x1="20%" y1="5%" x2="85%" y2="100%"><stop stop-color="#ffffff" stop-opacity=".75"/><stop offset=".2" stop-color="${u}" stop-opacity=".95"/><stop offset=".7" stop-color="${u}" stop-opacity=".35"/><stop offset="1" stop-color="#02060f" stop-opacity=".75"/></linearGradient><linearGradient id="shield-inner-${l}-${r}" x1="0%" y1="0%" x2="100%" y2="100%"><stop stop-color="#ffffff" stop-opacity=".25"/><stop offset=".4" stop-color="${u}" stop-opacity=".12"/><stop offset="1" stop-color="transparent"/></linearGradient><filter id="premium-glow-${l}-${r}" filterUnits="userSpaceOnUse" x="-80" y="-80" width="360" height="360" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M100 22 157 46v42c0 42-23 69-57 87-34-18-57-45-57-87V46z" fill="url(#premium-${l}-${r})" stroke="${u}" stroke-width="3.5" filter="url(#premium-glow-${l}-${r})"/><path d="M100 28 152 50v38c0 38-21 62-52 79-31-17-52-41-52-79V50z" fill="url(#shield-inner-${l}-${r})"/><path d="M100 31 148 51" stroke="#fff" stroke-opacity=".7" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="105" r="43" fill="rgba(4,10,20,.45)" stroke="rgba(255,255,255,.3)" stroke-width="2"/><g fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#premium-glow-${l}-${r})">${m}</g><circle cx="100" cy="105" r="55" fill="none" stroke="${u}" stroke-opacity=".55" stroke-width="2.5"><animate attributeName="r" values="50;62;50" dur="3.2s" repeatCount="indefinite"/><animate attributeName="opacity" values=".7;.05;.7" dur="3.2s" repeatCount="indefinite"/></circle></svg>`;
+    return `<svg viewBox="0 0 200 200" width="100%" height="100%" style="filter:drop-shadow(0 0 35px ${p}) drop-shadow(0 0 70px ${p}) drop-shadow(0 20px 40px rgba(0,0,0,.7));max-width:180px;margin:auto;display:block;overflow:visible" aria-label="${this._escapeHtml(l)}"><defs><linearGradient id="premium-${l}-${r}" x1="20%" y1="5%" x2="85%" y2="100%"><stop stop-color="#ffffff" stop-opacity=".85"/><stop offset=".18" stop-color="${u}" stop-opacity=".98"/><stop offset=".65" stop-color="${u}" stop-opacity=".4"/><stop offset="1" stop-color="#01040a" stop-opacity=".85"/></linearGradient><linearGradient id="shield-inner-${l}-${r}" x1="0%" y1="0%" x2="100%" y2="100%"><stop stop-color="#ffffff" stop-opacity=".3"/><stop offset=".35" stop-color="${u}" stop-opacity=".15"/><stop offset="1" stop-color="transparent"/></linearGradient><filter id="premium-glow-${l}-${r}" filterUnits="userSpaceOnUse" x="-80" y="-80" width="360" height="360" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="5.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M100 22 157 46v42c0 42-23 69-57 87-34-18-57-45-57-87V46z" fill="url(#premium-${l}-${r})" stroke="${u}" stroke-width="3.5" filter="url(#premium-glow-${l}-${r})"/><path d="M100 28 152 50v38c0 38-21 62-52 79-31-17-52-41-52-79V50z" fill="url(#shield-inner-${l}-${r})"/><path d="M100 31 148 51" stroke="#fff" stroke-opacity=".85" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="105" r="43" fill="rgba(2,6,14,.55)" stroke="rgba(255,255,255,.35)" stroke-width="2"/><g fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#premium-glow-${l}-${r})">${m}</g><circle cx="100" cy="105" r="55" fill="none" stroke="${u}" stroke-opacity=".65" stroke-width="2.5"><animate attributeName="r" values="50;62;50" dur="3.2s" repeatCount="indefinite"/><animate attributeName="opacity" values=".8;.08;.8" dur="3.2s" repeatCount="indefinite"/></circle></svg>`;
   }
   _getIntelligentSVG(a, o, r, l, u = "0") {
     return this._renderPremiumStatusIcon(a, l, u);
@@ -8422,8 +8422,7 @@ class P_ extends HTMLElement {
       S.innerHTML = `
           ${this._renderEntryBackground(p, m)}
           ${this._kioskLocked ? `<button class="btn-unlock-kiosk" data-action="unlock-kiosk" style="position:absolute;top:16px;right:16px;z-index:99;padding:8px 14px;background:rgba(220,38,38,0.85);color:white;border:none;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 12px rgba(0,0,0,0.4)">🔓 ${this._escapeHtml(l("unlock_kiosk") || "Desbloquear kiosco")}</button>` : ""}
-          <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:100;padding:5px 12px;background:rgba(36,188,129,.2);border:1px solid rgba(36,188,129,.4);border-radius:20px;color:#75f4b0;font-size:11px;font-weight:700;backdrop-filter:blur(10px);box-shadow:0 4px 12px rgba(0,0,0,0.2);display:flex;align-items:center;gap:6px;white-space:nowrap;"><div style="width:7px;height:7px;border-radius:50%;background:#75f4b0;box-shadow:0 0 8px #75f4b0;"></div>${this._escapeHtml(l("connected") || "CONECTADO")}</div>
-          ${R ? `<button class="ghost entry-exit-fs" data-exit-fullscreen title="${this._escapeHtml(l("fullscreen_title"))}" aria-label="${this._escapeHtml(l("fullscreen_title"))}" style="position:absolute;top:16px;left:16px;z-index:100;padding:9px 13px;font-size:18px;background:rgba(0,0,0,.55);backdrop-filter:blur(12px);border-radius:14px;color:white;border:1px solid rgba(255,255,255,.25);box-shadow:0 8px 20px rgba(0,0,0,.3)">×</button>` : ""}
+          ${R ? `<button class="ghost entry-exit-fs" data-exit-fullscreen title="${this._escapeHtml(l("fullscreen_title"))}" aria-label="${this._escapeHtml(l("fullscreen_title"))}" style="position:absolute;top:24px;left:24px;z-index:120;padding:9px 13px;font-size:18px;background:rgba(0,0,0,.55);backdrop-filter:blur(12px);border-radius:14px;color:white;border:1px solid rgba(255,255,255,.25);box-shadow:0 8px 20px rgba(0,0,0,.3)">×</button>` : ""}
           ${R ? "" : `<button class="ghost fs-btn entry-fs" data-fullscreen="${v}" title="${this._escapeHtml(l("fullscreen_title"))}" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>`}
           ${this._renderBatteryAlerts(fe)}
           <div class="hud">
@@ -8431,9 +8430,10 @@ class P_ extends HTMLElement {
             <div class="hud-data"></div>
           </div>
           <div class="entry-content security-console">
-            <!-- Compact HUD bar at top of console — replaces overlapping absolute hud -->
+            <!-- Symmetrical HUD bar at top of console -->
             <div class="console-hud">
               <span class="console-hud-loc">🏡 ${this._escapeHtml(U)}</span>
+              <div class="argus-connection-pill" data-online="true"><i class="argus-connection-dot"></i><span class="argus-connection-label">${this._escapeHtml(l("connected") || "CONECTADO")}</span></div>
               <div class="console-hud-right">
                 <span class="console-system-badge console-system-badge--${P ? "triggered" : N}">${this._escapeHtml(
         P ? l("system_triggered") || "ALARMA ACTIVADA" : Q ? l("waiting_sensors") || "ESPERANDO SENSORES" : N === "disarmed" ? l("system_disarmed") : N === "armed_home" ? l("system_armed") + " · " + (l("mode_home") || "CASA") : N === "armed_away" ? l("system_armed") + " · " + (l("mode_away") || "AUSENTE") : N === "armed_night" ? l("system_armed") + " · " + (l("mode_night") || "NOCHE") : N === "armed_vacation" ? l("system_armed") + " · " + (l("mode_vacation") || "VACACIONES") : l("system_armed")
@@ -8536,14 +8536,11 @@ class P_ extends HTMLElement {
       this._requestKioskUnlock();
       return;
     }
-    const o = a || this.shadowRoot.querySelector(".entry"), r = o?.querySelector(".entry-fs"), l = parseInt(r?.dataset?.fullscreen ?? 0), u = isNaN(l) || l < 0 ? 0 : l, p = this._dashboard?.entries?.[u] || this._dashboard?.entries?.[0];
-    this._kioskEntryId = p?.entry_id || null, this._kioskTarget = o, this._kioskLocked = !1, this._fullscreenIdx = u, this.classList.add("fullscreen-active");
-    const m = o?.requestFullscreen || o?.webkitRequestFullscreen, g = () => {
-      o && o.classList.add("ios-fullscreen"), document.body.style.overflow = "hidden", this._renderEntries();
-    };
-    m ? m.call(o).then(() => {
-      document.body.style.overflow = "hidden", this._renderEntries();
-    }).catch(g) : g();
+    const o = a || this.shadowRoot.querySelector(".entry"), r = o?.querySelector(".entry-fs") || o?.querySelector("[data-fullscreen]"), l = parseInt(r?.dataset?.fullscreen ?? 0), u = isNaN(l) || l < 0 ? 0 : l, p = this._dashboard?.entries?.[u] || this._dashboard?.entries?.[0];
+    this._kioskEntryId = p?.entry_id || null, this._kioskTarget = o, this._kioskLocked = !1, this._fullscreenIdx = u, this.classList.add("fullscreen-active"), o && o.classList.add("ios-fullscreen"), document.body.style.overflow = "hidden";
+    const m = o?.requestFullscreen || o?.webkitRequestFullscreen || this.requestFullscreen || this.webkitRequestFullscreen;
+    m && m.call(o || this).catch(() => {
+    }), this._renderEntries(!0);
   }
   _getWeatherGradient(a, o = "") {
     const r = {
@@ -27438,7 +27435,6 @@ const x_ = {
   hi: { on: "सक्रिय", off: "Argus डिस्कनेक्ट · HA ऑफ़लाइन" },
   ar: { on: "متصل", off: "Argus غير متصل · HA غير متصل" },
   ko: { on: "연결됨", off: "Argus 연결 끊김 · HA 오프라인" },
-  ja: { on: "接続済み", off: "Argus 未接続 · HA オフライン" },
   uk: { on: "Підключено", off: "Argus відключено · HA офлайн" }
 }, dy = (s) => {
   const a = String(s._manualLang || s._hass?.language || s._hass?.locale?.language || "en").toLowerCase().split(/[-_]/)[0];
@@ -27454,7 +27450,7 @@ function uy(s) {
   z-index: 99999999 !important;
   width: 100vw !important;
   height: 100vh !important;
-  background: radial-gradient(circle at 50% 45%, #182234 0%, #060a12 100%) !important;
+  background: radial-gradient(ellipse at 50% 45%, #162438 0%, #08101a 60%, #010408 100%) !important;
   margin: 0 !important;
   padding: 24px !important;
   box-sizing: border-box !important;
@@ -27462,7 +27458,7 @@ function uy(s) {
   align-items: center !important;
   justify-content: center !important;
   overflow: hidden !important;
-  animation: argusFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  animation: argusFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
 }
 :host(.fullscreen-active) .wrap {
   width: 100% !important;
@@ -27510,9 +27506,9 @@ function uy(s) {
   margin: auto !important;
   border-radius: 36px !important;
   overflow: hidden !important;
-  border: 1px solid rgba(255, 255, 255, 0.24) !important;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.65), 0 35px 90px rgba(0, 0, 0, 0.85), inset 0 1.5px 0 rgba(255, 255, 255, 0.35) !important;
-  transform: translateZ(0) scale(1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  box-shadow: 0 0 80px rgba(0, 255, 157, 0.15), 0 35px 90px rgba(0, 0, 0, 0.9), inset 0 1.5px 0 rgba(255, 255, 255, 0.45) !important;
+  transform: translate3d(0, 0, 0) scale(1) !important;
   animation: argusScaleIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
   will-change: transform, opacity !important;
 }
@@ -27524,16 +27520,16 @@ function uy(s) {
 }
 .ios-fullscreen .entry-exit-fs {
   position: absolute !important;
-  top: 18px !important;
-  left: 20px !important;
+  top: 24px !important;
+  left: 24px !important;
   z-index: 120 !important;
-  width: 42px !important;
-  height: 42px !important;
+  width: 44px !important;
+  height: 44px !important;
   border-radius: 50% !important;
-  background: rgba(0, 0, 0, 0.45) !important;
-  backdrop-filter: blur(18px) saturate(160%) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(24px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
   color: #ffffff !important;
   font-size: 22px !important;
   font-weight: 700 !important;
@@ -27541,12 +27537,13 @@ function uy(s) {
   align-items: center !important;
   justify-content: center !important;
   cursor: pointer !important;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.3) !important;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.4) !important;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, border-color 0.2s ease !important;
 }
 .ios-fullscreen .entry-exit-fs:hover {
   transform: scale(1.08) !important;
-  background: rgba(255, 255, 255, 0.15) !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
 }
 .ios-fullscreen .entry-exit-fs:active {
   transform: scale(0.94) !important;
@@ -27560,11 +27557,16 @@ function uy(s) {
 .ios-fullscreen .entry-fs {
   display: none !important;
 }
+
+/* ── HUD Symmetrical Grid Header ─────────────────────────────────────────── */
 .console-hud {
+  position: relative !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
   display: grid !important;
-  grid-template-columns: minmax(0,1fr) auto minmax(0,1fr) !important;
+  grid-template-columns: 1fr auto 1fr !important;
   align-items: center !important;
-  gap: 12px !important;
+  gap: 16px !important;
   padding: 0 !important;
   background: transparent !important;
   border: 0 !important;
@@ -27573,93 +27575,137 @@ function uy(s) {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   overflow: visible !important;
+  min-height: 40px !important;
 }
 .ios-fullscreen .console-hud {
-  padding-left: 64px !important;
+  padding: 0 84px !important;
 }
 .console-hud-loc {
+  grid-column: 1 !important;
   justify-self: start !important;
-  max-width: 100% !important;
-  padding: 8px 14px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  height: 38px !important;
+  box-sizing: border-box !important;
+  padding: 0 18px !important;
   border-radius: 999px !important;
-  background: linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.07)) !important;
-  border: 1px solid rgba(255,255,255,.24) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 8px 22px rgba(0,0,0,.16) !important;
-  backdrop-filter: blur(20px) saturate(145%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(145%) !important;
+  background: linear-gradient(135deg, rgba(255,255,255,0.20), rgba(255,255,255,0.06)) !important;
+  border: 1px solid rgba(255,255,255,0.28) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.38), 0 8px 24px rgba(0,0,0,0.35) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  font-size: 11.5px !important;
+  font-weight: 850 !important;
+  letter-spacing: 0.04em !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5) !important;
+  white-space: nowrap !important;
 }
 .console-hud-right {
+  grid-column: 3 !important;
   justify-self: end !important;
-  display: flex !important;
+  display: inline-flex !important;
   align-items: center !important;
   justify-content: flex-end !important;
-  gap: 7px !important;
+  gap: 8px !important;
   min-width: 0 !important;
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
+  height: 38px !important;
 }
-.console-hud-time,.console-hud-temp,.console-hud-tpill {
+.console-system-badge {
   display: inline-flex !important;
   align-items: center !important;
-  min-height: 30px !important;
+  height: 38px !important;
   box-sizing: border-box !important;
-  padding: 6px 10px !important;
+  padding: 0 18px !important;
   border-radius: 999px !important;
-  background: linear-gradient(135deg,rgba(255,255,255,.18),rgba(255,255,255,.07)) !important;
-  border: 1px solid rgba(255,255,255,.24) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.28),0 8px 22px rgba(0,0,0,.14) !important;
-  backdrop-filter: blur(20px) saturate(145%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(145%) !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
 }
-.console-hud-temps {
-  display: flex !important;
-  gap: 7px !important;
-  flex-wrap: nowrap !important;
+.console-system-badge--disarmed {
+  color: #00ff9d !important;
+  color: color(display-p3 0 1 0.6) !important;
+  background: linear-gradient(135deg, rgba(0,255,157,0.28), rgba(0,180,100,0.10)) !important;
+  border: 1.5px solid rgba(0,255,157,0.60) !important;
+  box-shadow: 0 0 28px rgba(0,255,157,0.38), inset 0 1px 0 rgba(255,255,255,0.45) !important;
+  text-shadow: 0 0 10px rgba(0,255,157,0.7) !important;
 }
+.console-system-badge--armed_home,
+.console-system-badge--armed_away,
+.console-system-badge--armed_night,
+.console-system-badge--armed_vacation,
+.console-system-badge--pending {
+  color: #ffb700 !important;
+  color: color(display-p3 1 0.72 0.1) !important;
+  background: linear-gradient(135deg, rgba(255,183,0,0.30), rgba(180,120,0,0.12)) !important;
+  border: 1.5px solid rgba(255,183,0,0.65) !important;
+  box-shadow: 0 0 28px rgba(255,183,0,0.38), inset 0 1px 0 rgba(255,255,255,0.45) !important;
+  text-shadow: 0 0 10px rgba(255,183,0,0.7) !important;
+}
+.console-system-badge--triggered {
+  color: #ff3344 !important;
+  color: color(display-p3 1 0.2 0.25) !important;
+  background: linear-gradient(135deg, rgba(255,51,68,0.38), rgba(180,20,30,0.15)) !important;
+  border: 1.5px solid rgba(255,51,68,0.75) !important;
+  box-shadow: 0 0 35px rgba(255,51,68,0.55), inset 0 1px 0 rgba(255,255,255,0.45) !important;
+  text-shadow: 0 0 12px rgba(255,51,68,0.85) !important;
+}
+
 .argus-connection-pill {
-  position: static !important;
-  inset: auto !important;
-  transform: none !important;
-  grid-column: 2 !important;
-  justify-self: center !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
   z-index: 30 !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 7px !important;
-  min-height: 30px !important;
+  gap: 8px !important;
+  height: 38px !important;
   box-sizing: border-box !important;
-  padding: 6px 12px !important;
+  padding: 0 18px !important;
   border-radius: 999px !important;
   white-space: nowrap !important;
-  font-size: 11px !important;
-  font-weight: 800 !important;
-  letter-spacing: .02em !important;
-  backdrop-filter: blur(20px) saturate(150%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(150%) !important;
-  transition: color .25s ease,background .25s ease,border-color .25s ease,box-shadow .25s ease !important;
+  font-size: 11.5px !important;
+  font-weight: 850 !important;
+  letter-spacing: 0.04em !important;
+  backdrop-filter: blur(24px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 .argus-connection-pill[data-online="true"] {
-  color: #7ff8bd !important;
-  background: linear-gradient(135deg,rgba(36,188,129,.28),rgba(36,188,129,.10)) !important;
-  border: 1px solid rgba(78,231,163,.48) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.24),0 0 20px rgba(36,188,129,.20) !important;
+  color: #00ff9d !important;
+  color: color(display-p3 0 1 0.6) !important;
+  background: linear-gradient(135deg, rgba(0,255,157,0.28), rgba(0,180,100,0.10)) !important;
+  border: 1.5px solid rgba(0,255,157,0.60) !important;
+  box-shadow: 0 0 28px rgba(0,255,157,0.38), inset 0 1px 0 rgba(255,255,255,0.45) !important;
+  text-shadow: 0 0 10px rgba(0,255,157,0.7) !important;
 }
 .argus-connection-pill[data-online="false"] {
-  color: #ffd09a !important;
-  background: linear-gradient(135deg,rgba(255,145,43,.32),rgba(130,66,8,.18)) !important;
-  border: 1px solid rgba(255,171,76,.62) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.22),0 0 22px rgba(255,132,28,.28) !important;
+  color: #ff9d00 !important;
+  color: color(display-p3 1 0.65 0) !important;
+  background: linear-gradient(135deg, rgba(255,157,0,0.30), rgba(180,100,0,0.12)) !important;
+  border: 1.5px solid rgba(255,157,0,0.65) !important;
+  box-shadow: 0 0 28px rgba(255,157,0,0.38), inset 0 1px 0 rgba(255,255,255,0.4) !important;
+  text-shadow: 0 0 10px rgba(255,157,0,0.7) !important;
 }
 .argus-connection-dot {
-  width: 7px !important;
-  height: 7px !important;
-  flex: 0 0 7px !important;
+  width: 8px !important;
+  height: 8px !important;
+  flex: 0 0 8px !important;
   border-radius: 50% !important;
   background: currentColor !important;
-  box-shadow: 0 0 9px currentColor !important;
+  box-shadow: 0 0 12px currentColor, 0 0 24px currentColor !important;
 }
+
+/* ── Fullscreen Console Content ─────────────────────────────────────────── */
 .ios-fullscreen .entry-content.security-console {
   display: grid !important;
   grid-template-columns: minmax(300px, 380px) minmax(260px, 1fr) minmax(280px, 380px) !important;
@@ -27726,9 +27772,9 @@ function uy(s) {
   overflow: visible !important;
 }
 .liquid-btn.active {
-  background: linear-gradient(135deg, rgba(85,223,145,0.32), rgba(36,188,129,0.16)) !important;
-  border-color: rgba(117,244,176,0.7) !important;
-  box-shadow: 0 0 24px rgba(85,223,145,0.4), inset 0 1px 0 rgba(255,255,255,0.3) !important;
+  background: linear-gradient(135deg, rgba(0,255,157,0.32), rgba(0,180,100,0.16)) !important;
+  border-color: rgba(0,255,157,0.7) !important;
+  box-shadow: 0 0 28px rgba(0,255,157,0.45), inset 0 1px 0 rgba(255,255,255,0.4) !important;
 }
 .ios-fullscreen .entry-icon {
   grid-area: icon !important;
@@ -27742,8 +27788,10 @@ function uy(s) {
   width: clamp(240px, 28vw, 420px) !important;
   max-width: 420px !important;
   min-width: 220px !important;
-  filter: drop-shadow(0 0 35px rgba(85, 223, 145, 0.45)) drop-shadow(0 0 80px rgba(85, 223, 145, 0.2)) !important;
+  filter: drop-shadow(0 0 35px rgba(0, 255, 157, 0.55)) drop-shadow(0 0 80px rgba(0, 255, 157, 0.30)) !important;
   animation: float-icon 5s ease-in-out infinite !important;
+  will-change: transform, filter !important;
+  transform: translate3d(0, 0, 0) !important;
 }
 .console-sensors {
   position: relative !important;
@@ -27805,8 +27853,8 @@ function uy(s) {
   to { opacity: 1; }
 }
 @keyframes argusScaleIn {
-  from { opacity: 0; transform: scale(0.96) translateZ(0); }
-  to { opacity: 1; transform: scale(1) translateZ(0); }
+  from { opacity: 0; transform: scale(0.96) translate3d(0, 0, 0); }
+  to { opacity: 1; transform: scale(1) translate3d(0, 0, 0); }
 }
 
 @media(max-width:900px){
@@ -27844,17 +27892,9 @@ function uy(s) {
     max-width: 420px !important;
     margin: 0 auto !important;
   }
-  .console-hud {
-    grid-template-columns: minmax(0,1fr) auto !important;
-    grid-template-areas: 'location connection' 'readings readings' !important;
-  }
-  .console-hud-loc { grid-area: location !important; }
-  .argus-connection-pill { grid-area: connection !important; }
-  .console-hud-right {
-    grid-area: readings !important;
-    justify-self: stretch !important;
-    justify-content: flex-start !important;
-    overflow-x: auto !important;
+  .ios-fullscreen .console-hud {
+    padding: 0 44px !important;
+    grid-template-columns: 1fr auto 1fr !important;
   }
   .ios-fullscreen .entry-icon {
     display: flex !important;
@@ -27870,6 +27910,7 @@ function uy(s) {
     max-width: 460px !important;
     max-height: 42vh !important;
   }
+}
 `, s.shadowRoot?.appendChild(a);
 }
 function py(s) {

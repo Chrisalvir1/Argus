@@ -11,7 +11,6 @@ const STATUS_TEXT={
   hi:{on:'सक्रिय',off:'Argus डिस्कनेक्ट · HA ऑफ़लाइन'},
   ar:{on:'متصل',off:'Argus غير متصل · HA غير متصل'},
   ko:{on:'연결됨',off:'Argus 연결 끊김 · HA 오프라인'},
-  ja:{on:'接続済み',off:'Argus 未接続 · HA オフライン'},
   uk:{on:'Підключено',off:'Argus відключено · HA офлайн'}
 };
 const languageFor=panel=>{const raw=String(panel._manualLang||panel._hass?.language||panel._hass?.locale?.language||'en').toLowerCase().split(/[-_]/)[0];return STATUS_TEXT[raw]||STATUS_TEXT.en};
@@ -22,7 +21,7 @@ function installStyles(panel){if(panel.shadowRoot?.getElementById('argus-fullscr
   z-index: 99999999 !important;
   width: 100vw !important;
   height: 100vh !important;
-  background: radial-gradient(circle at 50% 45%, #182234 0%, #060a12 100%) !important;
+  background: radial-gradient(ellipse at 50% 45%, #162438 0%, #08101a 60%, #010408 100%) !important;
   margin: 0 !important;
   padding: 24px !important;
   box-sizing: border-box !important;
@@ -30,7 +29,7 @@ function installStyles(panel){if(panel.shadowRoot?.getElementById('argus-fullscr
   align-items: center !important;
   justify-content: center !important;
   overflow: hidden !important;
-  animation: argusFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  animation: argusFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
 }
 :host(.fullscreen-active) .wrap {
   width: 100% !important;
@@ -78,9 +77,9 @@ function installStyles(panel){if(panel.shadowRoot?.getElementById('argus-fullscr
   margin: auto !important;
   border-radius: 36px !important;
   overflow: hidden !important;
-  border: 1px solid rgba(255, 255, 255, 0.24) !important;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.65), 0 35px 90px rgba(0, 0, 0, 0.85), inset 0 1.5px 0 rgba(255, 255, 255, 0.35) !important;
-  transform: translateZ(0) scale(1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  box-shadow: 0 0 80px rgba(0, 255, 157, 0.15), 0 35px 90px rgba(0, 0, 0, 0.9), inset 0 1.5px 0 rgba(255, 255, 255, 0.45) !important;
+  transform: translate3d(0, 0, 0) scale(1) !important;
   animation: argusScaleIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
   will-change: transform, opacity !important;
 }
@@ -92,16 +91,16 @@ function installStyles(panel){if(panel.shadowRoot?.getElementById('argus-fullscr
 }
 .ios-fullscreen .entry-exit-fs {
   position: absolute !important;
-  top: 18px !important;
-  left: 20px !important;
+  top: 24px !important;
+  left: 24px !important;
   z-index: 120 !important;
-  width: 42px !important;
-  height: 42px !important;
+  width: 44px !important;
+  height: 44px !important;
   border-radius: 50% !important;
-  background: rgba(0, 0, 0, 0.45) !important;
-  backdrop-filter: blur(18px) saturate(160%) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(24px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
   color: #ffffff !important;
   font-size: 22px !important;
   font-weight: 700 !important;
@@ -109,12 +108,13 @@ function installStyles(panel){if(panel.shadowRoot?.getElementById('argus-fullscr
   align-items: center !important;
   justify-content: center !important;
   cursor: pointer !important;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.3) !important;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.4) !important;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, border-color 0.2s ease !important;
 }
 .ios-fullscreen .entry-exit-fs:hover {
   transform: scale(1.08) !important;
-  background: rgba(255, 255, 255, 0.15) !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
 }
 .ios-fullscreen .entry-exit-fs:active {
   transform: scale(0.94) !important;
@@ -128,11 +128,16 @@ function installStyles(panel){if(panel.shadowRoot?.getElementById('argus-fullscr
 .ios-fullscreen .entry-fs {
   display: none !important;
 }
+
+/* ── HUD Symmetrical Grid Header ─────────────────────────────────────────── */
 .console-hud {
+  position: relative !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
   display: grid !important;
-  grid-template-columns: minmax(0,1fr) auto minmax(0,1fr) !important;
+  grid-template-columns: 1fr auto 1fr !important;
   align-items: center !important;
-  gap: 12px !important;
+  gap: 16px !important;
   padding: 0 !important;
   background: transparent !important;
   border: 0 !important;
@@ -141,93 +146,137 @@ function installStyles(panel){if(panel.shadowRoot?.getElementById('argus-fullscr
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   overflow: visible !important;
+  min-height: 40px !important;
 }
 .ios-fullscreen .console-hud {
-  padding-left: 64px !important;
+  padding: 0 84px !important;
 }
 .console-hud-loc {
+  grid-column: 1 !important;
   justify-self: start !important;
-  max-width: 100% !important;
-  padding: 8px 14px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  height: 38px !important;
+  box-sizing: border-box !important;
+  padding: 0 18px !important;
   border-radius: 999px !important;
-  background: linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.07)) !important;
-  border: 1px solid rgba(255,255,255,.24) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 8px 22px rgba(0,0,0,.16) !important;
-  backdrop-filter: blur(20px) saturate(145%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(145%) !important;
+  background: linear-gradient(135deg, rgba(255,255,255,0.20), rgba(255,255,255,0.06)) !important;
+  border: 1px solid rgba(255,255,255,0.28) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.38), 0 8px 24px rgba(0,0,0,0.35) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  font-size: 11.5px !important;
+  font-weight: 850 !important;
+  letter-spacing: 0.04em !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5) !important;
+  white-space: nowrap !important;
 }
 .console-hud-right {
+  grid-column: 3 !important;
   justify-self: end !important;
-  display: flex !important;
+  display: inline-flex !important;
   align-items: center !important;
   justify-content: flex-end !important;
-  gap: 7px !important;
+  gap: 8px !important;
   min-width: 0 !important;
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
+  height: 38px !important;
 }
-.console-hud-time,.console-hud-temp,.console-hud-tpill {
+.console-system-badge {
   display: inline-flex !important;
   align-items: center !important;
-  min-height: 30px !important;
+  height: 38px !important;
   box-sizing: border-box !important;
-  padding: 6px 10px !important;
+  padding: 0 18px !important;
   border-radius: 999px !important;
-  background: linear-gradient(135deg,rgba(255,255,255,.18),rgba(255,255,255,.07)) !important;
-  border: 1px solid rgba(255,255,255,.24) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.28),0 8px 22px rgba(0,0,0,.14) !important;
-  backdrop-filter: blur(20px) saturate(145%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(145%) !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
 }
-.console-hud-temps {
-  display: flex !important;
-  gap: 7px !important;
-  flex-wrap: nowrap !important;
+.console-system-badge--disarmed {
+  color: #00ff9d !important;
+  color: color(display-p3 0 1 0.6) !important;
+  background: linear-gradient(135deg, rgba(0,255,157,0.28), rgba(0,180,100,0.10)) !important;
+  border: 1.5px solid rgba(0,255,157,0.60) !important;
+  box-shadow: 0 0 28px rgba(0,255,157,0.38), inset 0 1px 0 rgba(255,255,255,0.45) !important;
+  text-shadow: 0 0 10px rgba(0,255,157,0.7) !important;
 }
+.console-system-badge--armed_home,
+.console-system-badge--armed_away,
+.console-system-badge--armed_night,
+.console-system-badge--armed_vacation,
+.console-system-badge--pending {
+  color: #ffb700 !important;
+  color: color(display-p3 1 0.72 0.1) !important;
+  background: linear-gradient(135deg, rgba(255,183,0,0.30), rgba(180,120,0,0.12)) !important;
+  border: 1.5px solid rgba(255,183,0,0.65) !important;
+  box-shadow: 0 0 28px rgba(255,183,0,0.38), inset 0 1px 0 rgba(255,255,255,0.45) !important;
+  text-shadow: 0 0 10px rgba(255,183,0,0.7) !important;
+}
+.console-system-badge--triggered {
+  color: #ff3344 !important;
+  color: color(display-p3 1 0.2 0.25) !important;
+  background: linear-gradient(135deg, rgba(255,51,68,0.38), rgba(180,20,30,0.15)) !important;
+  border: 1.5px solid rgba(255,51,68,0.75) !important;
+  box-shadow: 0 0 35px rgba(255,51,68,0.55), inset 0 1px 0 rgba(255,255,255,0.45) !important;
+  text-shadow: 0 0 12px rgba(255,51,68,0.85) !important;
+}
+
 .argus-connection-pill {
-  position: static !important;
-  inset: auto !important;
-  transform: none !important;
-  grid-column: 2 !important;
-  justify-self: center !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
   z-index: 30 !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 7px !important;
-  min-height: 30px !important;
+  gap: 8px !important;
+  height: 38px !important;
   box-sizing: border-box !important;
-  padding: 6px 12px !important;
+  padding: 0 18px !important;
   border-radius: 999px !important;
   white-space: nowrap !important;
-  font-size: 11px !important;
-  font-weight: 800 !important;
-  letter-spacing: .02em !important;
-  backdrop-filter: blur(20px) saturate(150%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(150%) !important;
-  transition: color .25s ease,background .25s ease,border-color .25s ease,box-shadow .25s ease !important;
+  font-size: 11.5px !important;
+  font-weight: 850 !important;
+  letter-spacing: 0.04em !important;
+  backdrop-filter: blur(24px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 .argus-connection-pill[data-online="true"] {
-  color: #7ff8bd !important;
-  background: linear-gradient(135deg,rgba(36,188,129,.28),rgba(36,188,129,.10)) !important;
-  border: 1px solid rgba(78,231,163,.48) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.24),0 0 20px rgba(36,188,129,.20) !important;
+  color: #00ff9d !important;
+  color: color(display-p3 0 1 0.6) !important;
+  background: linear-gradient(135deg, rgba(0,255,157,0.28), rgba(0,180,100,0.10)) !important;
+  border: 1.5px solid rgba(0,255,157,0.60) !important;
+  box-shadow: 0 0 28px rgba(0,255,157,0.38), inset 0 1px 0 rgba(255,255,255,0.45) !important;
+  text-shadow: 0 0 10px rgba(0,255,157,0.7) !important;
 }
 .argus-connection-pill[data-online="false"] {
-  color: #ffd09a !important;
-  background: linear-gradient(135deg,rgba(255,145,43,.32),rgba(130,66,8,.18)) !important;
-  border: 1px solid rgba(255,171,76,.62) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.22),0 0 22px rgba(255,132,28,.28) !important;
+  color: #ff9d00 !important;
+  color: color(display-p3 1 0.65 0) !important;
+  background: linear-gradient(135deg, rgba(255,157,0,0.30), rgba(180,100,0,0.12)) !important;
+  border: 1.5px solid rgba(255,157,0,0.65) !important;
+  box-shadow: 0 0 28px rgba(255,157,0,0.38), inset 0 1px 0 rgba(255,255,255,0.4) !important;
+  text-shadow: 0 0 10px rgba(255,157,0,0.7) !important;
 }
 .argus-connection-dot {
-  width: 7px !important;
-  height: 7px !important;
-  flex: 0 0 7px !important;
+  width: 8px !important;
+  height: 8px !important;
+  flex: 0 0 8px !important;
   border-radius: 50% !important;
   background: currentColor !important;
-  box-shadow: 0 0 9px currentColor !important;
+  box-shadow: 0 0 12px currentColor, 0 0 24px currentColor !important;
 }
+
+/* ── Fullscreen Console Content ─────────────────────────────────────────── */
 .ios-fullscreen .entry-content.security-console {
   display: grid !important;
   grid-template-columns: minmax(300px, 380px) minmax(260px, 1fr) minmax(280px, 380px) !important;
@@ -294,9 +343,9 @@ function installStyles(panel){if(panel.shadowRoot?.getElementById('argus-fullscr
   overflow: visible !important;
 }
 .liquid-btn.active {
-  background: linear-gradient(135deg, rgba(85,223,145,0.32), rgba(36,188,129,0.16)) !important;
-  border-color: rgba(117,244,176,0.7) !important;
-  box-shadow: 0 0 24px rgba(85,223,145,0.4), inset 0 1px 0 rgba(255,255,255,0.3) !important;
+  background: linear-gradient(135deg, rgba(0,255,157,0.32), rgba(0,180,100,0.16)) !important;
+  border-color: rgba(0,255,157,0.7) !important;
+  box-shadow: 0 0 28px rgba(0,255,157,0.45), inset 0 1px 0 rgba(255,255,255,0.4) !important;
 }
 .ios-fullscreen .entry-icon {
   grid-area: icon !important;
@@ -310,8 +359,10 @@ function installStyles(panel){if(panel.shadowRoot?.getElementById('argus-fullscr
   width: clamp(240px, 28vw, 420px) !important;
   max-width: 420px !important;
   min-width: 220px !important;
-  filter: drop-shadow(0 0 35px rgba(85, 223, 145, 0.45)) drop-shadow(0 0 80px rgba(85, 223, 145, 0.2)) !important;
+  filter: drop-shadow(0 0 35px rgba(0, 255, 157, 0.55)) drop-shadow(0 0 80px rgba(0, 255, 157, 0.30)) !important;
   animation: float-icon 5s ease-in-out infinite !important;
+  will-change: transform, filter !important;
+  transform: translate3d(0, 0, 0) !important;
 }
 .console-sensors {
   position: relative !important;
@@ -373,8 +424,8 @@ function installStyles(panel){if(panel.shadowRoot?.getElementById('argus-fullscr
   to { opacity: 1; }
 }
 @keyframes argusScaleIn {
-  from { opacity: 0; transform: scale(0.96) translateZ(0); }
-  to { opacity: 1; transform: scale(1) translateZ(0); }
+  from { opacity: 0; transform: scale(0.96) translate3d(0, 0, 0); }
+  to { opacity: 1; transform: scale(1) translate3d(0, 0, 0); }
 }
 
 @media(max-width:900px){
@@ -412,17 +463,9 @@ function installStyles(panel){if(panel.shadowRoot?.getElementById('argus-fullscr
     max-width: 420px !important;
     margin: 0 auto !important;
   }
-  .console-hud {
-    grid-template-columns: minmax(0,1fr) auto !important;
-    grid-template-areas: 'location connection' 'readings readings' !important;
-  }
-  .console-hud-loc { grid-area: location !important; }
-  .argus-connection-pill { grid-area: connection !important; }
-  .console-hud-right {
-    grid-area: readings !important;
-    justify-self: stretch !important;
-    justify-content: flex-start !important;
-    overflow-x: auto !important;
+  .ios-fullscreen .console-hud {
+    padding: 0 44px !important;
+    grid-template-columns: 1fr auto 1fr !important;
   }
   .ios-fullscreen .entry-icon {
     display: flex !important;
@@ -438,6 +481,7 @@ function installStyles(panel){if(panel.shadowRoot?.getElementById('argus-fullscr
     max-width: 460px !important;
     max-height: 42vh !important;
   }
+}
 `;panel.shadowRoot?.appendChild(style)}
 function connectionPill(entry){let pill=entry.querySelector('.argus-connection-pill');if(pill)return pill;pill=[...entry.children].find(el=>el.tagName==='DIV'&&(el.getAttribute('style')||'').includes('left:50%')&&(el.getAttribute('style')||'').includes('top:12px'));if(!pill)return null;pill.className='argus-connection-pill';pill.removeAttribute('style');const hud=entry.querySelector('.console-hud'),right=hud?.querySelector('.console-hud-right');if(hud)hud.insertBefore(pill,right||null);return pill}
 function isConnected(panel){const haReady=Boolean(panel._hass)&&panel._hass?.connection?.connected!==false;return navigator.onLine!==false&&haReady}
