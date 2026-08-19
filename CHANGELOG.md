@@ -1,3 +1,7 @@
+## [2.2.35] - 2026-08-18
+- Stabilize React framework engine with React 18.3.1 ensuring full runtime compatibility with `react-grid-layout`
+- Restore full widget mounting and grid rendering across all 13 supported languages
+
 ## [2.2.34] - 2026-08-18
 - Upgrade React framework core to React 19 (`react` and `react-dom` 19.2.8)
 - Enhance dashboard concurrent rendering performance and memory management
