@@ -8111,6 +8111,66 @@ class ArgusPanel extends HTMLElement {
       }
     };
     document.addEventListener('keydown', this._onEscape);
+    if (!this._shadowClickDelegated) {
+      this._shadowClickDelegated = true;
+      this.shadowRoot?.addEventListener('click', async (e: Event) => {
+        const target = e.target as HTMLElement;
+        if (!target) return;
+        const refreshBtn = target.closest('#btn-refresh-history, .btn-refresh-history');
+        if (refreshBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          (refreshBtn as HTMLElement).style.opacity = '0.5';
+          const entryId = this._dashboard?.entry_id || this._dashboard?.entries?.[0]?.entry_id;
+          await this._loadActivityTimeline(entryId);
+          this._renderActivityLog();
+          (refreshBtn as HTMLElement).style.opacity = '1';
+          (refreshBtn as HTMLElement).textContent = '✓ ' + (this._t('history_refresh') || 'Actualizado');
+          setTimeout(() => {
+            if (refreshBtn) (refreshBtn as HTMLElement).textContent = '🔄 ' + (this._t('history_refresh') || 'Actualizar').replace(/^🔄\s*/, '');
+          }, 1500);
+          return;
+        }
+        const exportBtn = target.closest('#btn-export-forensic, .btn-export-forensic');
+        if (exportBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          this._openHistoryExportModal();
+          return;
+        }
+        const clearBtn = target.closest('#btn-clear-log, .btn-clear-log');
+        if (clearBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          this._clearHistory();
+          return;
+        }
+        const closeExportBtn = target.closest('#history-export-close');
+        if (closeExportBtn) {
+          e.preventDefault();
+          this._closeHistoryExportModal();
+          return;
+        }
+        const printPdfBtn = target.closest('#btn-do-print-pdf');
+        if (printPdfBtn) {
+          e.preventDefault();
+          this._exportHistoryPrintPdf();
+          return;
+        }
+        const txtBtn = target.closest('#btn-do-download-txt');
+        if (txtBtn) {
+          e.preventDefault();
+          this._exportHistoryText();
+          return;
+        }
+        const jsonBtn = target.closest('#btn-do-download-json');
+        if (jsonBtn) {
+          e.preventDefault();
+          this._exportForensicTimeline();
+          return;
+        }
+      });
+    }
   }
   disconnectedCallback() {
     if (this._clockInterval) clearInterval(this._clockInterval);
@@ -8352,13 +8412,15 @@ class ArgusPanel extends HTMLElement {
         <title>Argus Home Hub - Historial</title>
         <style>
           @page { size: A4 portrait; margin: 12mm; }
-          body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #1e293b; margin: 0; padding: 24px; }
-          .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #0284c7; padding-bottom: 14px; margin-bottom: 18px; }
-          .title { font-size: 22px; font-weight: 900; color: #0f172a; margin: 0; }
-          .subtitle { font-size: 13px; color: #64748b; margin-top: 4px; }
+          body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #1e293b; margin: 0; padding: 24px; background: #fff; }
+          .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0284c7; padding-bottom: 14px; margin-bottom: 18px; }
+          .brand { display: flex; align-items: center; gap: 14px; }
+          .brand img { width: 54px; height: 54px; border-radius: 12px; object-fit: cover; box-shadow: 0 4px 12px rgba(0,0,0,0.12); flex-shrink: 0; }
+          .title { font-size: 24px; font-weight: 900; color: #0f172a; margin: 0; letter-spacing: -0.02em; }
+          .subtitle { font-size: 13px; color: #64748b; margin-top: 3px; font-weight: 600; }
           .meta { font-size: 11px; color: #475569; text-align: right; line-height: 1.5; }
           table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-          th { background: #f8fafc; padding: 8px; text-align: left; font-size: 11px; font-weight: 800; text-transform: uppercase; color: #334155; border-bottom: 2px solid #cbd5e1; }
+          th { background: #f8fafc; padding: 9px 8px; text-align: left; font-size: 11px; font-weight: 800; text-transform: uppercase; color: #334155; border-bottom: 2px solid #cbd5e1; }
           .footer { margin-top: 24px; text-align: center; font-size: 10px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 10px; }
           @media print {
             body { padding: 0; }
@@ -8368,9 +8430,12 @@ class ArgusPanel extends HTMLElement {
       </head>
       <body>
         <div class="header">
-          <div>
-            <h1 class="title">🛡️ Argus Home Hub - Historial</h1>
-            <div class="subtitle">🏡 ${this._escapeHtml(homeName)} · Registro de Actividad y Seguridad</div>
+          <div class="brand">
+            <img src="/api/argus_static/argus_logo.png" alt="Argus Logo" onerror="this.style.display='none'">
+            <div>
+              <h1 class="title">Argus Home Hub</h1>
+              <div class="subtitle">🏡 ${this._escapeHtml(homeName)} · Registro de Actividad y Seguridad</div>
+            </div>
           </div>
           <div class="meta">
             <div><strong>Rango:</strong> ${this._escapeHtml(fromInput)} al ${this._escapeHtml(toInput)}</div>

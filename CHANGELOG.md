@@ -1,3 +1,8 @@
+## [2.2.43] - 2026-08-19
+- Aligned connection pill directly above the central shield with notch safe-area support
+- Fixed Activity History buttons (Refresh, Export, Clear) with resilient shadowRoot event delegation
+- Included original Argus logo and Argus Home Hub branding in PDF/print history exports
+
 ## [2.2.42] - 2026-08-19
 - Symmetrical mathematical centering for the HUD connection pill and balanced 3-item top bar alignment
 - Eliminated fullscreen transition jerkiness and layout stretching with GPU 3D acceleration

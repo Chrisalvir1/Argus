@@ -23,7 +23,7 @@ function installStyles(panel){if(panel.shadowRoot?.getElementById('argus-fullscr
   height: 100vh !important;
   background: radial-gradient(ellipse at 50% 45%, #162438 0%, #08101a 60%, #010408 100%) !important;
   margin: 0 !important;
-  padding: 24px !important;
+  padding: max(20px, env(safe-area-inset-top, 20px)) max(20px, env(safe-area-inset-right, 20px)) max(20px, env(safe-area-inset-bottom, 20px)) max(20px, env(safe-area-inset-left, 20px)) !important;
   box-sizing: border-box !important;
   display: flex !important;
   align-items: center !important;
@@ -91,8 +91,8 @@ function installStyles(panel){if(panel.shadowRoot?.getElementById('argus-fullscr
 }
 .ios-fullscreen .entry-exit-fs {
   position: absolute !important;
-  top: 24px !important;
-  left: 24px !important;
+  top: max(22px, env(safe-area-inset-top, 22px)) !important;
+  left: max(22px, env(safe-area-inset-left, 22px)) !important;
   z-index: 120 !important;
   width: 44px !important;
   height: 44px !important;
@@ -129,16 +129,16 @@ function installStyles(panel){if(panel.shadowRoot?.getElementById('argus-fullscr
   display: none !important;
 }
 
-/* ── HUD Symmetrical Grid Header ─────────────────────────────────────────── */
+/* ── HUD Symmetrical Header (100% width with absolute center) ─────────── */
 .console-hud {
   position: relative !important;
   width: 100% !important;
   box-sizing: border-box !important;
-  display: grid !important;
-  grid-template-columns: 1fr auto 1fr !important;
+  display: flex !important;
   align-items: center !important;
-  gap: 16px !important;
+  justify-content: space-between !important;
   padding: 0 !important;
+  margin: 0 !important;
   background: transparent !important;
   border: 0 !important;
   border-radius: 0 !important;
@@ -146,19 +146,19 @@ function installStyles(panel){if(panel.shadowRoot?.getElementById('argus-fullscr
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   overflow: visible !important;
-  min-height: 40px !important;
+  min-height: 42px !important;
 }
 .ios-fullscreen .console-hud {
-  padding: 0 84px !important;
+  padding: 0 4px !important;
 }
 .console-hud-loc {
-  grid-column: 1 !important;
-  justify-self: start !important;
+  justify-self: flex-start !important;
   display: inline-flex !important;
   align-items: center !important;
   height: 38px !important;
   box-sizing: border-box !important;
   padding: 0 18px !important;
+  margin-left: 56px !important;
   border-radius: 999px !important;
   background: linear-gradient(135deg, rgba(255,255,255,0.20), rgba(255,255,255,0.06)) !important;
   border: 1px solid rgba(255,255,255,0.28) !important;
@@ -173,8 +173,7 @@ function installStyles(panel){if(panel.shadowRoot?.getElementById('argus-fullscr
   white-space: nowrap !important;
 }
 .console-hud-right {
-  grid-column: 3 !important;
-  justify-self: end !important;
+  justify-self: flex-end !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: flex-end !important;
@@ -234,7 +233,8 @@ function installStyles(panel){if(panel.shadowRoot?.getElementById('argus-fullscr
   left: 50% !important;
   top: 50% !important;
   transform: translate(-50%, -50%) !important;
-  z-index: 30 !important;
+  z-index: 60 !important;
+  margin: 0 !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
