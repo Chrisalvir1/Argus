@@ -1,3 +1,9 @@
+## [2.2.41] - 2026-08-19
+- Enhanced fullscreen kiosk security console with pristine 16:9 aspect ratio and uniform 36px continuous corner curvature
+- Redesigned mode buttons with full legible text labels and vertical icon stacking preventing truncation
+- Resolved exit fullscreen button overlap and restored fullscreen trigger button cleanly upon exiting
+- Added smooth 60fps hardware-accelerated transitions and luminous HDR OLED glow effects on the status shield
+
 ## [2.2.40] - 2026-08-19
 - Renamed SOS tab in Modos widget to CONFIGURACIÓN SOS
 - Verified seamless trigger of all configured SOS devices, sirens, scripts and notifications upon sliding the SOS bar in the main panel
