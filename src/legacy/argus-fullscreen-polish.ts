@@ -295,27 +295,28 @@ function installStyles(panel){if(panel.shadowRoot?.getElementById('argus-fullscr
   box-shadow: 0 0 10px currentColor, 0 0 20px currentColor !important;
 }
 
-/* ── Fullscreen Desktop & Tablet 16:9 ───────────────────────────────────── */
+/* ── Fullscreen Desktop & Tablet Fullscreen ─────────────────────────────── */
 @media (min-width: 901px) {
   .ios-fullscreen .entry-content.security-console {
-    width: min(96vw, calc((96vh - 32px) * 16 / 9)) !important;
-    aspect-ratio: 16 / 9 !important;
-    max-width: 1540px !important;
-    max-height: calc(100vh - 48px) !important;
-    height: auto !important;
-    margin: auto !important;
-    border-radius: 36px !important;
-    border: 1px solid rgba(255, 255, 255, 0.28) !important;
-    box-shadow: 0 0 80px rgba(0, 255, 157, 0.16), 0 35px 90px rgba(0, 0, 0, 0.9), inset 0 1.5px 0 rgba(255, 255, 255, 0.45) !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    max-width: none !important;
+    max-height: none !important;
+    aspect-ratio: auto !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
     background: radial-gradient(ellipse at 50% 45%, rgba(22, 36, 56, 0.85) 0%, rgba(8, 16, 26, 0.95) 60%, #010408 100%) !important;
     backdrop-filter: blur(28px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
     display: grid !important;
-    grid-template-columns: minmax(290px, 360px) minmax(240px, 1fr) minmax(280px, 360px) !important;
+    grid-template-columns: minmax(280px, 380px) minmax(220px, 1fr) minmax(280px, 380px) !important;
     grid-template-rows: auto minmax(0, 1fr) !important;
     grid-template-areas: 'hud hud hud' 'modes icon sensors' !important;
     gap: 20px 28px !important;
-    padding: 44px 36px 30px !important;
+    padding: max(24px, env(safe-area-inset-top, 24px)) max(36px, env(safe-area-inset-right, 36px)) max(24px, env(safe-area-inset-bottom, 24px)) max(36px, env(safe-area-inset-left, 36px)) !important;
     overflow: hidden !important;
     align-items: center !important;
     box-sizing: border-box !important;

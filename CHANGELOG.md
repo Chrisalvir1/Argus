@@ -1,3 +1,8 @@
+## [2.2.49] - 2026-08-19
+- Fixed full-screen exit cleanup to guarantee immediate removal of fullscreen stage and full restoration of dashboard widgets
+- Removed 16:9 fixed box constraints in desktop fullscreen view to allow 100vw/100vh viewport expansion
+- Harmonized sensor chip pill styling across dashboard and fullscreen views to prevent name truncation
+
 ## [2.2.48] - 2026-08-19
 - Fixed active fullscreen entry teleportation and live updates inside stage
 - Harmonized audit and runtime visual styles to enforce vertical mobile portrait HUD

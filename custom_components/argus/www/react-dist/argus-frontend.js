@@ -7743,13 +7743,9 @@ class P_ extends HTMLElement {
     } catch {
     }
     this._ensureInitialized(), this._startClock(), this._fullscreenIdx >= 0 && !this._kioskLocked && (document.fullscreenElement || document.webkitFullscreenElement || (this._fullscreenIdx = -1, this.classList.remove("fullscreen-active"))), this._onFsChange = () => {
-      if (!(document.fullscreenElement || document.webkitFullscreenElement) && !this._kioskLocked) {
-        this.classList.remove("fullscreen-active");
-        const o = this.shadowRoot.querySelector(".entry.ios-fullscreen");
-        o && o.classList.remove("ios-fullscreen"), this._fullscreenIdx = -1, document.body.style.overflow = "", this._renderEntries();
-      }
+      !(document.fullscreenElement || document.webkitFullscreenElement) && !this._kioskLocked && (this.classList.contains("fullscreen-active") || this.shadowRoot?.getElementById("argus-fullscreen-stage")?.style.display !== "none") && this._exitFullscreenView();
     }, document.addEventListener("fullscreenchange", this._onFsChange), document.addEventListener("webkitfullscreenchange", this._onFsChange), this._onEscape = (a) => {
-      a.key !== "Escape" || !this.classList.contains("fullscreen-active") || document.fullscreenElement || document.webkitFullscreenElement || this._exitFullscreenView();
+      a.key === "Escape" && (this.classList.contains("fullscreen-active") || this.shadowRoot?.getElementById("argus-fullscreen-stage")?.style.display !== "none") && this._exitFullscreenView();
     }, document.addEventListener("keydown", this._onEscape), this._shadowClickDelegated || (this._shadowClickDelegated = !0, this.shadowRoot?.addEventListener("click", async (a) => {
       const o = a.target;
       if (!o || typeof o.closest != "function") return;
@@ -27811,27 +27807,28 @@ function uy(s) {
   box-shadow: 0 0 10px currentColor, 0 0 20px currentColor !important;
 }
 
-/* ── Fullscreen Desktop & Tablet 16:9 ───────────────────────────────────── */
+/* ── Fullscreen Desktop & Tablet Fullscreen ─────────────────────────────── */
 @media (min-width: 901px) {
   .ios-fullscreen .entry-content.security-console {
-    width: min(96vw, calc((96vh - 32px) * 16 / 9)) !important;
-    aspect-ratio: 16 / 9 !important;
-    max-width: 1540px !important;
-    max-height: calc(100vh - 48px) !important;
-    height: auto !important;
-    margin: auto !important;
-    border-radius: 36px !important;
-    border: 1px solid rgba(255, 255, 255, 0.28) !important;
-    box-shadow: 0 0 80px rgba(0, 255, 157, 0.16), 0 35px 90px rgba(0, 0, 0, 0.9), inset 0 1.5px 0 rgba(255, 255, 255, 0.45) !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    max-width: none !important;
+    max-height: none !important;
+    aspect-ratio: auto !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
     background: radial-gradient(ellipse at 50% 45%, rgba(22, 36, 56, 0.85) 0%, rgba(8, 16, 26, 0.95) 60%, #010408 100%) !important;
     backdrop-filter: blur(28px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
     display: grid !important;
-    grid-template-columns: minmax(290px, 360px) minmax(240px, 1fr) minmax(280px, 360px) !important;
+    grid-template-columns: minmax(280px, 380px) minmax(220px, 1fr) minmax(280px, 380px) !important;
     grid-template-rows: auto minmax(0, 1fr) !important;
     grid-template-areas: 'hud hud hud' 'modes icon sensors' !important;
     gap: 20px 28px !important;
-    padding: 44px 36px 30px !important;
+    padding: max(24px, env(safe-area-inset-top, 24px)) max(36px, env(safe-area-inset-right, 36px)) max(24px, env(safe-area-inset-bottom, 24px)) max(36px, env(safe-area-inset-left, 36px)) !important;
     overflow: hidden !important;
     align-items: center !important;
     box-sizing: border-box !important;
@@ -29164,8 +29161,7 @@ function Co(s) {
 .sos-output-settings input[type="color"]::-webkit-color-swatch-wrapper,.light-siren-settings input[type="color"]::-webkit-color-swatch-wrapper{padding:0}
 .sos-output-settings input[type="color"]::-webkit-color-swatch,.light-siren-settings input[type="color"]::-webkit-color-swatch{border:none;border-radius:8px}
 .sos-output-settings select,.light-siren-settings select{padding:6px 10px;border-radius:8px;background:rgba(0,0,0,0.4);color:#fff;border:1px solid rgba(255,255,255,0.15);font-size:12px;outline:none;cursor:pointer}
-#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensors{flex:0 1 248px!important;width:248px!important;max-width:248px!important;min-width:205px!important;gap:6px!important;margin-inline:0!important}#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor{min-height:34px!important;padding:6px 10px!important;gap:7px!important;border-radius:999px!important;box-sizing:border-box!important}#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor-icon{font-size:16px!important}#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor-name{font-size:10px!important}#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor-state{font-size:8px!important}#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensor-battery{font-size:9px!important;padding:2px 5px!important;border-radius:999px!important}
-#widget-grid>#w-access{align-self:start!important;height:max-content!important;min-height:0!important;max-height:none!important}#widget-grid>#w-access .access-workspace:not(.open){display:none!important}#widget-grid>#w-access .access-workspace.open{max-height:430px!important;overflow:auto!important;overscroll-behavior:contain}#widget-grid>#w-activity,#widget-grid>#w-automations{grid-row:span 1!important;height:clamp(270px,32vh,340px)!important;min-height:270px!important;max-height:340px!important;align-self:start!important}#widget-grid>#w-activity #activity-log,#widget-grid>#w-automations #auto-view,#widget-grid>#w-automations #auto-view>div{min-height:0!important;overflow-y:auto!important;overscroll-behavior:contain!important;scrollbar-gutter:stable!important}@media(max-width:760px){#entries>.entry:not(.ios-fullscreen) .entry-content.security-console .console-sensors{width:min(100%,248px)!important;max-width:248px!important}#widget-grid>#w-activity,#widget-grid>#w-automations{height:360px!important;min-height:360px!important;max-height:360px!important}}`, a.appendChild(o);
+#widget-grid>#w-access{align-self:start!important;height:max-content!important;min-height:0!important;max-height:none!important}#widget-grid>#w-access .access-workspace:not(.open){display:none!important}#widget-grid>#w-access .access-workspace.open{max-height:430px!important;overflow:auto!important;overscroll-behavior:contain}#widget-grid>#w-activity,#widget-grid>#w-automations{grid-row:span 1!important;height:clamp(270px,32vh,340px)!important;min-height:270px!important;max-height:340px!important;align-self:start!important}#widget-grid>#w-activity #activity-log,#widget-grid>#w-automations #auto-view,#widget-grid>#w-automations #auto-view>div{min-height:0!important;overflow-y:auto!important;overscroll-behavior:contain!important;scrollbar-gutter:stable!important}@media(max-width:760px){#widget-grid>#w-activity,#widget-grid>#w-automations{height:360px!important;min-height:360px!important;max-height:360px!important}}`, a.appendChild(o);
 }
 async function cf(s, a, o, r, l) {
   if (!o || r === "none") return;

@@ -8130,24 +8130,14 @@ class ArgusPanel extends HTMLElement {
     // Listen to fullscreen changes to handle native escape key / exit
     this._onFsChange = () => {
       const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
-      if (!fsEl && !this._kioskLocked) {
-        this.classList.remove('fullscreen-active');
-        const activeFS = this.shadowRoot.querySelector('.entry.ios-fullscreen');
-        if (activeFS) {
-          activeFS.classList.remove('ios-fullscreen');
-        }
-        this._fullscreenIdx = -1;
-        document.body.style.overflow = '';
-        this._renderEntries();
+      if (!fsEl && !this._kioskLocked && (this.classList.contains('fullscreen-active') || this.shadowRoot?.getElementById('argus-fullscreen-stage')?.style.display !== 'none')) {
+        this._exitFullscreenView();
       }
     };
     document.addEventListener('fullscreenchange', this._onFsChange);
     document.addEventListener('webkitfullscreenchange', this._onFsChange);
     this._onEscape = event => {
-      if (event.key !== 'Escape' || !this.classList.contains('fullscreen-active')) return;
-      // Native fullscreen emits fullscreenchange. This also covers the CSS
-      // fallback used by Safari, where Esc does not emit that event.
-      if (!(document.fullscreenElement || document.webkitFullscreenElement)) {
+      if (event.key === 'Escape' && (this.classList.contains('fullscreen-active') || this.shadowRoot?.getElementById('argus-fullscreen-stage')?.style.display !== 'none')) {
         this._exitFullscreenView();
       }
     };
