@@ -11,7 +11,7 @@ function Host({widget,node,editing,size,onSize,onHide,onReset}:HostProps){const 
 export function ArgusDashboard({widgets,nodes,storage,userId,dashboardId,onEditing,registerEditor}:{widgets:ArgusWidgetDefinition[];nodes:Map<string,HTMLElement>;storage:DashboardLayoutStorage;userId:string;dashboardId:string;onEditing:(v:boolean)=>void;registerEditor:(setter:EditorSetter)=>void}){
  const defaults=useMemo(()=>Object.fromEntries(widgets.map(w=>[w.id,w.visible])),[widgets]);
  const[layouts,setLayouts]=useState<Layouts>(defaultLayouts),[visibility,setVisibility]=useState<Record<string,boolean>>(defaults),[editing,setEditing]=useState(false),[hydrated,setHydrated]=useState(false),[bp,setBp]=useState<ArgusBreakpoint>('lg'),[message,setMessage]=useState(''),[,setLangTick]=useState(0);
- const lastValid=useRef<Layouts>(defaultLayouts),timer=useRef<number>(),wasEditing=useRef(false);
+ const lastValid=useRef<Layouts>(defaultLayouts),timer=useRef<number|undefined>(undefined),wasEditing=useRef(false);
  const getT=(k:string,f:string)=>{if(typeof(window as any)._argusT==='function'){const v=(window as any)._argusT(k);if(v&&v!==k)return v}return f};
  useEffect(()=>{const onLang=()=>setLangTick(t=>t+1);window.addEventListener('argus-lang-changed',onLang);return()=>window.removeEventListener('argus-lang-changed',onLang)},[]);
  useEffect(()=>{registerEditor(setEditing)},[registerEditor]);

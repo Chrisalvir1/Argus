@@ -1,3 +1,7 @@
+## [2.2.34] - 2026-08-18
+- Upgrade React framework core to React 19 (`react` and `react-dom` 19.2.8)
+- Enhance dashboard concurrent rendering performance and memory management
+
 ## [2.2.33] - 2026-08-18
 - Fix Home Assistant backend websocket schema to accept `manual_lang` parameter
 - Enforce full translation refresh during startup and load across all 13 languages
