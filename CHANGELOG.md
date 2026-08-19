@@ -1,3 +1,8 @@
+## [2.2.50] - 2026-08-19
+- Re-architected Security Console rendering from vanilla HTML string generation to React 19 components
+- Purged 21 legacy DOM injection patches to eliminate CSS layout conflicts and radiografia
+
+
 ## [2.2.49] - 2026-08-19
 - Fixed full-screen exit cleanup to guarantee immediate removal of fullscreen stage and full restoration of dashboard widgets
 - Removed 16:9 fixed box constraints in desktop fullscreen view to allow 100vw/100vh viewport expansion
