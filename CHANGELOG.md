@@ -1,3 +1,9 @@
+## [2.2.38] - 2026-08-19
+- Removed obsolete personalization accordion from alarm instance panel
+- Replaced legacy Vacaciones mode with dedicated SOS actions configuration in Modos widget
+- Removed Vacaciones button from alarm instance panel card
+- Added home/household name editing directly in user profile dropdown
+
 ## [2.2.37] - 2026-08-19
 - Restrict low battery banner alerts strictly to configured security and intrusion sensors
 - Prevent arbitrary device battery alerts (e.g., Apple Watch, iPhone, laptop) from triggering alarm warnings

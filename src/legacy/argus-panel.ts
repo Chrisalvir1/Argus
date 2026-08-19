@@ -5696,7 +5696,7 @@ _tmpl.innerHTML = `
      clear disarm keypad. Decorative dashboard cards never sit above it. */
   .security-console{display:flex;flex-wrap:wrap;justify-content:space-around;align-items:center;gap:32px;padding:32px 24px 24px;background:linear-gradient(90deg,rgba(3,10,20,.40),rgba(3,10,20,.08) 50%,rgba(3,10,20,.36))}
   .security-console .entry-icon{order:2;flex:0 0 160px!important;min-height:150px!important;margin:0!important;display:flex;justify-content:center;align-items:center;animation:float-icon 5s ease-in-out infinite}.security-console .entry-icon svg{max-width:150px!important;width:100%}
-  .security-console .liquid-stack{order:1;flex:1 1 250px;max-width:320px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.security-console .liquid-btn{min-height:62px;justify-content:center;text-align:center;padding:10px;font-size:12px;gap:8px;white-space:nowrap}.security-console .liquid-btn span:last-child{min-width:0;overflow:hidden;text-overflow:ellipsis}.security-console .btn-disarm,.security-console .btn-sos{grid-column:1/-1}
+  .security-console .liquid-stack{order:1;flex:1 1 250px;max-width:340px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.security-console .liquid-btn{min-height:62px;justify-content:center;text-align:center;padding:10px;font-size:12px;gap:8px;white-space:nowrap}.security-console .liquid-btn span:last-child{min-width:0;overflow:hidden;text-overflow:ellipsis}.security-console .btn-disarm,.security-console .btn-sos{grid-column:1/-1}
   .console-sensors{order:3;flex:1 1 300px;max-width:400px;display:grid;gap:14px;align-content:center}.console-sensor{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;padding:13px 16px;border:1px solid rgba(255,255,255,.15);border-radius:18px;background:linear-gradient(100deg,rgba(36,188,129,.22),rgba(10,27,38,.58));backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 8px 22px rgba(0,0,0,.22)}.console-sensor.open{background:linear-gradient(100deg,rgba(235,74,67,.30),rgba(34,14,23,.62));border-color:rgba(255,102,92,.7)}.console-sensor-icon{font-size:20px}.console-sensor-name{font-weight:850;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.console-sensor-state{font-size:11px;font-weight:900;text-transform:uppercase;color:#75f4b0}.console-sensor.open .console-sensor-state{color:#ff968b}.console-empty{padding:24px;text-align:center;border:1px dashed rgba(255,255,255,.22);border-radius:18px;opacity:.75}
   .console-keypad{flex:1 1 220px;max-width:280px;padding:18px;border:1px solid rgba(255,255,255,.16);border-radius:24px;background:rgba(5,15,30,0.4);backdrop-filter:blur(16px);display:grid;gap:12px}.console-keypad-title{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;text-align:center}.console-keypad-close{position:absolute;top:8px;right:10px;width:28px;height:28px;border:0;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;font-size:20px;line-height:1;cursor:pointer}.console-keypad{position:relative}.console-pin-display{width:100%;box-sizing:border-box;padding:11px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(4,14,26,.46);color:#fff;text-align:center;font-size:20px;letter-spacing:.35em}.console-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;place-items:center}.console-pad button{width:100%;aspect-ratio:1/1;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:linear-gradient(145deg,rgba(165,220,255,.24),rgba(20,45,66,.62));color:#fff;font-size:17px;font-weight:800;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 6px 14px rgba(0,0,0,.25);cursor:pointer;display:flex;align-items:center;justify-content:center}.console-pad .console-enter{border-radius:16px;aspect-ratio:auto;height:100%;color:#7ff8c1;border-color:rgba(74,230,157,.65)}.console-keypad small{text-align:center;opacity:.7}.console-pin-status{min-height:1.2em;margin:0;color:#ffb4ac;opacity:0;transition:opacity .18s ease}.console-pin-status.visible{opacity:1}
   /* ── Console HUD header (inside the flex layout, not absolute) ──────── */
@@ -6010,7 +6010,7 @@ _tmpl.innerHTML = `
     .instance-activity-strip{grid-template-columns:1fr;gap:5px;margin-bottom:12px;padding:10px}.instance-activity-item:nth-of-type(n+3){display:none}
     .entry-status-ribbon{top:58px;left:14px;max-width:calc(100% - 28px);padding:6px 9px}.entry-status-name{font-size:11px}.entry-status-event{display:none}
     .entry-content{display:grid;grid-template-columns:minmax(0,1fr);padding:78px 14px 76px;gap:14px;align-items:start;background:linear-gradient(180deg,rgba(0,0,0,.32),rgba(0,0,0,.10) 45%,rgba(0,0,0,.28))}
-    .liquid-stack{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%}
+    .liquid-stack{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%}
     .liquid-btn{min-height:52px;padding:10px 11px;justify-content:center;text-align:center;font-size:12px;line-height:1.1;letter-spacing:.25px;border-radius:16px}
     .liquid-stack .btn-disarm,.liquid-stack .btn-sos{grid-column:1/-1}
     .liquid-stack .btn-sos{min-height:58px;margin-top:2px}
@@ -6031,7 +6031,7 @@ _tmpl.innerHTML = `
   /* dvh handled in base .ios-fullscreen rule */
   @media(max-width:700px) and (orientation:portrait){
     .ios-fullscreen .entry-content{grid-template-columns:minmax(0,1fr)!important;padding:76px 16px 22px!important;gap:14px!important;overflow-y:auto!important;align-content:start!important}
-    .ios-fullscreen .liquid-stack{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+    .ios-fullscreen .liquid-stack{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:9px!important}
     .ios-fullscreen .liquid-btn{min-height:50px!important;padding:10px!important;font-size:12px!important;border-radius:16px!important;gap:6px!important}
     .ios-fullscreen .liquid-stack .btn-disarm,.ios-fullscreen .liquid-stack .btn-sos{grid-column:1/-1}
 
@@ -6042,7 +6042,7 @@ _tmpl.innerHTML = `
   }
   @media(max-width:900px) and (orientation:landscape){
     .ios-fullscreen .entry-content{grid-template-columns:minmax(210px,34vw) minmax(0,1fr)!important;padding:54px 22px 18px!important;gap:20px!important;align-items:center!important}
-    .ios-fullscreen .liquid-stack{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
+    .ios-fullscreen .liquid-stack{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important}
     .ios-fullscreen .liquid-btn{min-height:42px!important;padding:8px!important;font-size:11px!important;border-radius:14px!important;gap:5px!important}
     .ios-fullscreen .liquid-stack .btn-disarm,.ios-fullscreen .liquid-stack .btn-sos{grid-column:1/-1}
     .ios-fullscreen .liquid-stack .btn-sos{min-height:46px!important}
@@ -6055,7 +6055,7 @@ _tmpl.innerHTML = `
      must not redistribute the controls into empty corners. */
   /* Fullscreen security-console: modos izquierda, escudo centro, sensores derecha */
   .ios-fullscreen .entry-content.security-console{display:flex!important;flex-wrap:nowrap!important;justify-content:center!important;align-items:center!important;gap:32px!important;padding:50px 48px 36px!important;overflow:auto!important;height:100%!important;max-height:100vh!important;max-height:100dvh!important;box-sizing:border-box!important;-webkit-overflow-scrolling:touch!important}
-  .ios-fullscreen .entry-content.security-console .liquid-stack{order:1!important;flex:0 1 340px!important;min-width:240px!important;max-width:360px!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-self:center!important}
+  .ios-fullscreen .entry-content.security-console .liquid-stack{order:1!important;flex:0 1 340px!important;min-width:240px!important;max-width:360px!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;align-self:center!important}
   .ios-fullscreen .entry-content.security-console .entry-icon{order:2!important;flex:0 0 180px!important;min-height:160px!important;margin:0!important;display:flex!important;justify-content:center!important;align-items:center!important}
   .ios-fullscreen .entry-content.security-console .console-sensors{order:3!important;flex:0 1 340px!important;min-width:220px!important;max-width:380px!important;align-self:center!important}
   .ios-fullscreen .entry-content.security-console .console-keypad{order:4!important;flex:0 0 240px!important;width:240px!important;max-width:260px!important}
@@ -7017,7 +7017,7 @@ _tmpl.innerHTML = `
   .console-hud{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:'location' 'connection' 'readings'!important;justify-items:center!important;align-items:center!important;gap:8px!important;text-align:center!important}
   .console-hud-loc,.argus-connection-pill,.console-hud-right{width:100%!important;max-width:100%!important;box-sizing:border-box!important;justify-self:center!important;justify-content:center!important;text-align:center!important;margin:0!important}
   .console-hud-right{display:flex!important;flex-wrap:wrap!important;overflow:visible!important;gap:6px!important}
-  .security-console .liquid-stack{grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important}
+  .security-console .liquid-stack{grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:stretch!important}
   .security-console .liquid-btn{min-width:0!important;white-space:normal!important;line-height:1.2!important;min-height:46px!important}
   #w-activity,.activity-log{max-height:46vh!important;overflow-y:auto!important}
   .argus-mobile-history-overflow-item{display:list-item!important}
@@ -7100,41 +7100,6 @@ _tmpl.innerHTML = `
           </div>
         </div>
         <div id="entries"></div>
-        <!-- Personalization section -->
-        <div class="personalize-section">
-          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--personalize-divider, rgba(255,255,255,0.08)); padding-bottom:10px; flex-wrap:wrap; gap:10px;">
-            <div id="lbl-aesthetic-custom" style="font-weight:900; font-size:14px; letter-spacing:-0.01em; cursor:pointer; display:flex; align-items:center; gap:8px; user-select:none;">
-              <span id="lbl-mas-ajustes">⚙️ Más Ajustes / SOS</span>
-              <span id="personalize-chevron" style="transition: transform 0.3s ease; font-size: 11px; background: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 8px;">▲</span>
-            </div>
-            <div style="display:flex; gap:8px;">
-              <button class="ghost" id="btn-edit-home-name-standalone" style="padding:6px 10px;font-size:11px;border-radius:10px;white-space:nowrap">✏️ Editar Nombre</button>
-              <button class="primary" id="btn-save-personalization-standalone" style="padding:8px 14px;font-size:12px;border-radius:10px;white-space:nowrap">Guardar</button>
-            </div>
-          </div>
-
-          <div class="personalize-workspace" id="personalize-workspace">
-            <div class="personalize-top-row" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.08)">
-              <div>
-                <div class="setting-label" id="lbl-home-name-hdr" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.6;">Nombre del Hogar</div>
-                <div id="lbl-home-name-prominent" style="font-size:18px;font-weight:900;margin-top:2px">Mi Casa</div>
-              </div>
-              <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);padding:8px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.08)">
-                <label class="setting-label" id="lbl-emergency-number" for="emergency-number-input" style="font-size:11px; font-weight:800; text-transform:uppercase; opacity:0.8; margin-bottom:0; white-space:nowrap;">🚨 Teléfono SOS:</label>
-                <input id="emergency-number-input" class="glass-control" inputmode="tel" maxlength="16" value="911" style="width:80px;min-height:28px;padding:4px 8px;font-size:13px;font-weight:800;text-align:center;border-radius:8px;background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.15)">
-              </div>
-            </div>
-
-            <div class="sos-configuration">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap">
-                <div class="setting-label" id="lbl-sos-actions" style="font-size:12px; font-weight:800; text-transform:uppercase; opacity:0.8;">🚨 Acciones SOS</div>
-                <button class="ghost" id="btn-select-sos-outputs" style="padding:6px 14px;font-size:12px;font-weight:700;border-radius:10px;background:rgba(255,255,255,0.06);">Seleccionar luces, sirenas o scripts</button>
-              </div>
-              <div id="sos-output-chips" class="sos-output-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-bottom:8px"></div>
-              <div class="small" id="sos-output-help" style="margin-top:5px;opacity:.65;line-height:1.35">Estos dispositivos se activarán siempre al usar SOS, incluso con Argus desarmado.</div>
-            </div>
-          </div>
-        </div>
       </section>
 
       <!-- Activity log -->
@@ -8015,8 +7980,6 @@ class ArgusPanel extends HTMLElement {
         if (awaySpan) awaySpan.textContent = modeLabel('btn_away');
         const nightSpan = entry.querySelector('.btn-night span');
         if (nightSpan) nightSpan.textContent = modeLabel('btn_night');
-        const vacationSpan = entry.querySelector('.btn-vacation span');
-        if (vacationSpan) vacationSpan.textContent = modeLabel('btn_vacation');
         const disarmSpan = entry.querySelector('.btn-disarm span, .argus-disarm-btn b');
         if (disarmSpan) disarmSpan.textContent = modeLabel('btn_disarmed');
         const sosSpan = entry.querySelector('.btn-sos span');
@@ -9176,7 +9139,6 @@ class ArgusPanel extends HTMLElement {
               <button class="liquid-btn btn-home ${state==='armed_home'?'active':''} ${sensorAlert && state==='armed_home'?'buzz-orange':''}" data-idx="${idx}" data-action="home">${this._modeButtonIcon('home')}<span>${this._escapeHtml(modeLabel('btn_home'))}</span></button>
               <button class="liquid-btn btn-away ${state==='armed_away'?'active':''} ${sensorAlert && state==='armed_away'?'buzz-orange':''}" data-idx="${idx}" data-action="away">${this._modeButtonIcon('away')}<span>${this._escapeHtml(modeLabel('btn_away'))}</span></button>
               <button class="liquid-btn btn-night ${state==='armed_night'?'active':''} ${sensorAlert && state==='armed_night'?'buzz-orange':''}" data-idx="${idx}" data-action="night">${this._modeButtonIcon('night')}<span>${this._escapeHtml(modeLabel('btn_night'))}</span></button>
-              <button class="liquid-btn btn-vacation ${state==='armed_vacation'?'active':''} ${sensorAlert && state==='armed_vacation'?'buzz-orange':''}" data-idx="${idx}" data-action="vacation">${this._modeButtonIcon('vacation')}<span>${this._escapeHtml(modeLabel('btn_vacation'))}</span></button>
             </div>
             <div class="console-sensors">${sensorRows || `<div class="console-empty">${this._escapeHtml(sList.length === 0 ? (t('no_sensors_configured') || 'Sin sensores de intrusión configurados.') : (t('all_sensors_bypassed') || 'Todos los sensores configurados están omitidos.'))}</div>`}</div>
 
@@ -9966,14 +9928,14 @@ gl_FragColor=vec4(col,alpha);}`;
   _renderModeTabs() {
     const tabs = this.shadowRoot.getElementById('mode-tabs');
     if (!tabs) return;
-    const modes = ['disarmed', 'home', 'away', 'night', 'vacation'];
-    const icons = { disarmed:'🔓', home:'🏠', away:'🔴', night:'🌙', vacation:'✈️' };
+    const modes = ['disarmed', 'home', 'away', 'night', 'sos'];
+    const icons = { disarmed:'🔓', home:'🏠', away:'🔴', night:'🌙', sos:'🚨' };
     const lbls  = {
       disarmed: this._t('disarmed'),
       home:     this._t('mode_home'),
       away:     this._t('mode_away'),
       night:    this._t('mode_night'),
-      vacation: this._t('mode_vacation'),
+      sos:      'SOS',
     };
 
     tabs.className = 'tabs';
@@ -10088,11 +10050,6 @@ gl_FragColor=vec4(col,alpha);}`;
   }
 
   _renderModeView() {
-    const cfg = this._currentModeConfig();
-    const sensors = cfg.sensors || [];
-    const bypass  = cfg.bypassed_sensors || [];
-    const sirens  = cfg.sirens  || [];
-    const externalPanels = cfg.external_panels || [];
     const el = this.shadowRoot.getElementById('mode-view');
     if (el) {
       el.classList.remove('bounce-in');
@@ -10100,6 +10057,74 @@ gl_FragColor=vec4(col,alpha);}`;
       el.classList.add('bounce-in');
     }
     const readonly = !this._isAdmin;
+
+    if (this._mode === 'sos') {
+      const emergencyNumber = this._emergencyNumber || this._ui?.emergency_number || '911';
+      const outputs = this._panicOutputs || this._ui?.panic_outputs || [];
+
+      el.innerHTML = `
+        <div class="mode-grid-layout" style="grid-template-columns: 1fr;">
+          <div class="mode-section-card">
+            <div class="mode-section-title">🚨 ${this._t('sos_config_title') || 'Configuración de Emergencia SOS'}</div>
+            
+            <div style="display:flex;flex-direction:column;gap:14px;margin-top:10px;">
+              <!-- Emergency Phone -->
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:rgba(255,255,255,0.03);padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);flex-wrap:wrap;">
+                <div>
+                  <div class="setting-label" style="font-size:12px;font-weight:800;text-transform:uppercase;opacity:0.85;">📞 ${this._t('emergency_number_label') || 'Teléfono de Emergencia'}</div>
+                  <div class="small" style="font-size:11px;opacity:0.65;margin-top:2px;">${this._t('emergency_help') || 'Número de llamada directa al activar el botón de emergencia'}</div>
+                </div>
+                <input id="mode-emergency-number-input" class="glass-control" inputmode="tel" maxlength="16" value="${this._escapeHtml(emergencyNumber)}" style="width:110px;min-height:36px;padding:6px 12px;font-size:14px;font-weight:800;text-align:center;border-radius:10px;background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.15)">
+              </div>
+
+              <!-- SOS Output Actions (Sirens, Lights, Switches, Scripts) -->
+              <div style="display:flex;flex-direction:column;gap:10px;background:rgba(255,255,255,0.03);padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+                  <div>
+                    <div class="setting-label" style="font-size:12px;font-weight:800;text-transform:uppercase;opacity:0.85;">⚡ ${this._t('sos_actions') || 'Dispositivos y Acciones SOS'}</div>
+                    <div class="small" style="font-size:11px;opacity:0.65;margin-top:2px;">${this._t('sos_outputs_help') || 'Estos dispositivos se encenderán al dispararse el SOS'}</div>
+                  </div>
+                  ${readonly ? '' : `
+                    <button class="ghost" id="btn-mode-select-sos-outputs" style="padding:6px 14px;font-size:12px;font-weight:700;border-radius:10px;background:rgba(255,255,255,0.06);cursor:pointer;">
+                      + ${this._t('sos_select_outputs') || 'Seleccionar Dispositivos'}
+                    </button>
+                  `}
+                </div>
+                <div id="sos-output-chips" class="mode-sensor-grid" style="margin-top:6px;">
+                  ${outputs.length
+                    ? outputs.map(id => this._chip(id, 'sos_output')).join('')
+                    : `<div class="mode-sensor-none">${this._t('sos_no_outputs') || 'Ningún dispositivo configurado'}</div>`
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        ${readonly ? '' : `
+          <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;">
+            <button class="primary" id="save-sos-mode" style="width:100%;height:48px;font-size:14px;box-shadow:0 8px 20px rgba(0,0,0,0.2);cursor:pointer;">
+              ${this._t('save_config') || 'Guardar Configuración'}
+            </button>
+            <span id="mode-status" style="display:block;text-align:center;font-size:13px;font-weight:700;min-height:20px;transition:opacity .4s;opacity:1;color:var(--primary-color,#03a9f4)"></span>
+          </div>
+        `}
+      `;
+
+      if (!readonly) {
+        el.querySelector('#btn-mode-select-sos-outputs')?.addEventListener('click', () => this._openModal('panic'));
+        el.querySelectorAll('[data-remove]').forEach(btn =>
+          btn.addEventListener('click', () => this._removeChip(btn.dataset.remove))
+        );
+        el.querySelector('#save-sos-mode')?.addEventListener('click', () => this._saveSosMode());
+      }
+      return;
+    }
+
+    const cfg = this._currentModeConfig();
+    const sensors = cfg.sensors || [];
+    const bypass  = cfg.bypassed_sensors || [];
+    const sirens  = cfg.sirens  || [];
+    const externalPanels = cfg.external_panels || [];
     const entries = this._dashboard?.entries || [];
     const activeEntityId = this._modeEntryId || entries[0]?.entity_id || '';
 
@@ -10250,6 +10275,11 @@ gl_FragColor=vec4(col,alpha);}`;
   _removeChip(value) {
     if (!this._isAdmin) return;
     const [type, entityId] = value.split(':');
+    if (type === 'sos_output' || type === 'panic') {
+      this._panicOutputs = (this._panicOutputs || []).filter(v => v !== entityId);
+      this._renderModeView();
+      return;
+    }
     const cfg = this._currentModeConfig();
     const key = type === 'sensor' ? 'sensors' : (type === 'bypass' ? 'bypassed_sensors' : (type === 'entry' ? 'entry_sensors' : (type === 'external_panel' ? 'external_panels' : 'sirens')));
     let eId = this._modeEntryId;
@@ -10261,6 +10291,39 @@ gl_FragColor=vec4(col,alpha);}`;
     this._ui.modes.__by_entity__[eId] = this._ui.modes.__by_entity__[eId] || {};
     this._ui.modes.__by_entity__[eId][this._mode] = { ...cfg, [key]: (cfg[key] || []).filter(v => v !== entityId) };
     this._renderModeView();
+  }
+
+  async _saveSosMode() {
+    const status = this.shadowRoot.getElementById('mode-status');
+    const inp = this.shadowRoot.getElementById('mode-emergency-number-input') as HTMLInputElement | null;
+    const emergencyNumber = this._normaliseEmergencyNumber(inp?.value || this._emergencyNumber || '911');
+    this._emergencyNumber = emergencyNumber;
+    try {
+      if (status) {
+        status.textContent = '...';
+        status.className = 'status';
+        status.style.opacity = '1';
+      }
+      await this._send('argus/save_ui', {
+        emergency_number: emergencyNumber,
+        panic_outputs: this._panicOutputs || []
+      });
+      if (!this._ui) this._ui = {};
+      this._ui.emergency_number = emergencyNumber;
+      this._ui.panic_outputs = this._panicOutputs || [];
+      if (status) {
+        status.textContent = '✓ ' + (this._t('mode_saved') || 'Configuración SOS guardada');
+        status.className = 'status ok';
+        status.style.opacity = '1';
+        setTimeout(() => { if (status) status.textContent = ''; }, 3000);
+      }
+    } catch (e: any) {
+      if (status) {
+        status.textContent = this._format('generic_error', { error: e.message });
+        status.className = 'status err';
+        status.style.opacity = '1';
+      }
+    }
   }
 
   async _saveMode() {
@@ -11216,6 +11279,8 @@ gl_FragColor=vec4(col,alpha);}`;
   _updateHomeNameDisplay() {
     const prominent = this.shadowRoot.getElementById('lbl-home-name-prominent');
     if (prominent) prominent.textContent = this._homeName || this._t('home_default');
+    const dropdownHome = this.shadowRoot.getElementById('dropdown-home-name');
+    if (dropdownHome) dropdownHome.textContent = this._homeName || this._t('home_default');
   }
 
   _sendTempNotification(message) {
@@ -11901,13 +11966,13 @@ gl_FragColor=vec4(col,alpha);}`;
     const cfg = this._currentModeConfig();
     const _srcKey = type === 'sensor' ? 'sensors' : (type === 'bypass' ? 'bypassed_sensors' : (type === 'entry' ? 'entry_sensors' : (type === 'external_panel' ? 'external_panels' : 'sirens')));
     this._selected = type === 'panic'
-      ? [...(this._panicOutputs || [])]
+      ? [...(this._panicOutputs || this._ui?.panic_outputs || [])]
       : (Array.isArray(cfg?.[_srcKey]) ? [...cfg[_srcKey]] : []);
     const title = this.shadowRoot.getElementById('selector-title');
     if (type === 'sensor') title.textContent = this._t('sensor_section');
     else if (type === 'bypass') title.textContent = this._t('sensors_to_bypass');
     else if (type === 'entry') title.textContent = this._t('entry_sensors');
-    else if (type === 'panic') title.textContent = this._t('selector_panic');
+    else if (type === 'panic') title.textContent = this._t('sos_actions') || this._t('selector_panic') || 'Dispositivos y Acciones SOS';
     else if (type === 'external_panel') title.textContent = this._t('external_panels') || 'Paneles de alarma externos';
     else title.textContent = this._t('siren_section');
     const searchInput = this.shadowRoot.getElementById('selector-search');
@@ -12015,7 +12080,9 @@ gl_FragColor=vec4(col,alpha);}`;
       this._panicOutputs = [...this._selected];
       this._renderSosOutputs();
       this._closeModal();
-      this._savePersonalization();
+      if (this._mode === 'sos') {
+        this._renderModeView();
+      }
       return;
     }
     if (!this._ui.modes) this._ui.modes = {};
@@ -12301,6 +12368,15 @@ gl_FragColor=vec4(col,alpha);}`;
         </div>
         ` : ''}
 
+        <!-- Home Name Section -->
+        <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px; margin-top: 2px;">
+          <div style="display: flex; flex-direction: column; min-width: 0; align-items: flex-start;">
+            <span style="font-size: 11px; font-weight: 700; opacity: 0.7;">🏡 ${this._t('home_name_lbl') || 'Nombre de la Casa'}</span>
+            <span id="dropdown-home-name" style="font-size: 12.5px; font-weight: 800; color: var(--v2066-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px; margin-top: 1px;">${this._escapeHtml(this._homeName || 'Mi Casa')}</span>
+          </div>
+          <button id="btn-dropdown-edit-home-name" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase;">${this._t('change_btn') || 'Cambiar'}</button>
+        </div>
+
         <!-- Switch user button -->
         <button id="btn-dropdown-switch-user" class="glass-control" style="width: 100%; min-height: 32px; padding: 6px; border-radius: 10px; font-size: 10.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 6px; background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); color: var(--v2066-text);">
           ${this._t('switch_profile_btn') || '👤 Cambiar de Perfil'}
@@ -12446,6 +12522,13 @@ gl_FragColor=vec4(col,alpha);}`;
         const pinInput = this.shadowRoot.getElementById('current-pin');
         if (pinInput) pinInput.focus();
       }
+    });
+
+    // Edit Home Name listener:
+    container.querySelector('#btn-dropdown-edit-home-name')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdown.style.display = 'none';
+      this._editHomeName();
     });
   }
 
