@@ -187,6 +187,7 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_argus_import_alarmo)
     websocket_api.async_register_command(hass, ws_argus_get_profile_theme)
     websocket_api.async_register_command(hass, ws_argus_save_profile_theme)
+    websocket_api.async_register_command(hass, ws_argus_validate_master_pin)
 
 
 @websocket_api.websocket_command({
@@ -596,18 +597,44 @@ async def ws_argus_get_stats(hass, connection, msg) -> None:
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/clear_audit_log",
     vol.Optional("entry_id"): str,
+    vol.Optional("user_name"): str,
 })
 @websocket_api.async_response
 async def ws_argus_clear_audit_log(hass, connection, msg) -> None:
     entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
     try:
         profile, _ = await _require_argus_admin(hass, connection, entry_id)
-    except ArgusAuthError as err:
-        connection.send_error(msg["id"], err.code, err.message)
-        return
-    actor = profile.get("name", "Unknown")
+        actor = msg.get("user_name") or profile.get("name") or getattr(connection.user, "name", "Administrador")
+    except ArgusAuthError:
+        if connection.user and connection.user.is_admin:
+            actor = msg.get("user_name") or getattr(connection.user, "name", "Administrador")
+        else:
+            connection.send_error(msg["id"], "unauthorized", "Requires Argus administrator privileges")
+            return
     await async_clear_audit_log(hass, actor=actor, entry_id=entry_id)
-    connection.send_result(msg["id"], {"cleared": True})
+    connection.send_result(msg["id"], {"cleared": True, "user": actor})
+
+
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/validate_master_pin",
+    vol.Required("pin"): str,
+    vol.Optional("entry_id"): str,
+})
+@websocket_api.async_response
+async def ws_argus_validate_master_pin(hass, connection, msg) -> None:
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
+    entry = _entry_by_id(hass, entry_id)
+    if not entry:
+        connection.send_error(msg["id"], "not_found", "Argus config entry not found")
+        return
+    current = entry.options.get("code") or entry.data.get("code") or ""
+    if not current:
+        connection.send_result(msg["id"], {"valid": True, "pin_configured": False})
+        return
+    if not verify_pin(msg["pin"], current):
+        connection.send_error(msg["id"], "invalid_pin", "Incorrect PIN")
+        return
+    connection.send_result(msg["id"], {"valid": True, "pin_configured": True})
 
 
 @websocket_api.websocket_command({

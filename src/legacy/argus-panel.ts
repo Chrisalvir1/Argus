@@ -149,7 +149,10 @@ const TEXTS = {
     'edit_dashboard_done': '✓ Listo',
     'emergency_call_active': 'Llamada de emergencia en curso...',
     'emergency_help': 'Configura el número local de emergencia (ej. 911 o 112). Se incluirá en alertas SOS.',
-    'emergency_number_label': '🚨 Número Local de Emergencia',
+    'emergency_number_label': 'Número Local de Emergencia',
+    'sos_config_title': 'CONFIGURACIÓN SOS',
+    'export_history_title': 'Exportar Historial',
+    'log_action_audit_log_cleared': 'Historial de actividad eliminado',
     'entry_sensors': 'Sensores de entrada',
     'error_loading_uploaded_files': 'Error al cargar archivos subidos.',
     'exit_to_ha': 'Salir a Home Assistant',
@@ -369,7 +372,7 @@ const TEXTS = {
     'slide_disarm': 'Desliza para desarmar',
     'slide_sos': 'Desliza para activar SOS',
     'slide_sos_stop': 'Desliza para detener SOS',
-    'sos_actions': '🚨 Acciones SOS',
+    'sos_actions': 'Dispositivos y Acciones SOS',
     'sos_activated': 'SOS activado',
     'sos_call': 'Llamar a Emergencias',
     'sos_call_confirm': '¿Llamar al número local de emergencias ({number})?',
@@ -541,7 +544,10 @@ const TEXTS = {
     'edit_dashboard_done': '✓ Done',
     'emergency_call_active': 'Emergency call in progress...',
     'emergency_help': 'Set local emergency service number (e.g. 911 or 112). Included in SOS alerts.',
-    'emergency_number_label': '🚨 Local Emergency Number',
+    'emergency_number_label': 'Local Emergency Number',
+    'sos_config_title': 'SOS CONFIGURATION',
+    'export_history_title': 'Export History',
+    'log_action_audit_log_cleared': 'Activity history cleared',
     'entry_sensors': 'Entry sensors',
     'error_loading_uploaded_files': 'Error loading uploaded files.',
     'exit_to_ha': 'Exit to Home Assistant',
@@ -761,7 +767,7 @@ const TEXTS = {
     'slide_disarm': 'Slide to disarm',
     'slide_sos': 'Slide to trigger SOS',
     'slide_sos_stop': 'Slide to stop SOS',
-    'sos_actions': '🚨 SOS Actions',
+    'sos_actions': 'SOS Devices and Actions',
     'sos_activated': 'SOS Activated',
     'sos_call': 'Call Emergency Services',
     'sos_call_confirm': 'Call local emergency service ({number})?',
@@ -6152,8 +6158,8 @@ _tmpl.innerHTML = `
     margin-top: 2px;
   }
   /* Notif target chip */
-  .notif-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:rgba(67,160,71,.1);border:1px solid rgba(67,160,71,.2);font-size:12px;font-weight:700;color:var(--success-color,#43a047)}
-  .notif-chip button{padding:0;border:0;background:none;cursor:pointer;opacity:.65}
+  .notif-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);font-size:12px;font-weight:800;color:#ffffff !important}
+  .notif-chip button{padding:0 4px;border:0;background:none;cursor:pointer;opacity:.75;color:#ffffff}
   /* Triggered box */
   .trig-box{padding:12px 14px;border-radius:14px;background:rgba(229,57,53,.08);border:1px dashed var(--error-color,#e53935);font-size:12px;font-weight:600;color:var(--error-color,#e53935)}
   /* inputs */
@@ -7106,7 +7112,11 @@ _tmpl.innerHTML = `
       <section class="glass panel liquid-glass activity-panel" id="w-activity">
         <div class="panel-head">
           <h2 id="h-activity-log"></h2>
-          <div style="display:flex;gap:6px"><button class="ghost" id="btn-refresh-history" style="font-size:10px;padding:4px 8px"></button><button class="ghost" id="btn-export-forensic" style="font-size:10px;padding:4px 8px;opacity:.7">JSON</button><button class="ghost" id="btn-clear-log" style="font-size:10px;padding:4px 8px;opacity:0.6">BORRAR</button></div>
+          <div style="display:flex;gap:6px">
+            <button class="ghost" id="btn-refresh-history" style="font-size:10.5px;padding:4px 10px;font-weight:800;cursor:pointer;background:rgba(255,255,255,0.06);border-radius:8px">🔄 Actualizar</button>
+            <button class="ghost" id="btn-export-forensic" style="font-size:10.5px;padding:4px 10px;font-weight:800;cursor:pointer;background:rgba(255,255,255,0.06);border-radius:8px">📄 Exportar</button>
+            <button class="ghost" id="btn-clear-log" style="font-size:10.5px;padding:4px 10px;font-weight:800;cursor:pointer;background:rgba(255,69,58,0.12);color:#ff453a !important;border-radius:8px">🗑️ Limpiar</button>
+          </div>
         </div>
         <div id="activity-log" style="display:grid;gap:10px;height:280px;overflow-y:auto;margin-top:10px"></div>
       </section>
@@ -7156,7 +7166,7 @@ _tmpl.innerHTML = `
           <div class="access-section" id="access-pin-section">
             <h3 id="h-settings-pin">PIN Maestro</h3>
             <div class="subsection">
-              <div id="current-pin-display" style="font-size:13px;font-weight:800;color:var(--primary-color);margin-bottom:15px;background:rgba(3,169,244,0.1);padding:8px 12px;border-radius:10px;display:inline-block"></div>
+              <div id="current-pin-display" style="font-size:13px;font-weight:800;color:#ffffff !important;margin-bottom:15px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);padding:8px 14px;border-radius:10px;display:inline-block"></div>
               <div class="field-group collapsible collapsed" id="group-current-pin" style="margin-bottom: 12px">
                  <div style="display:flex; justify-content:space-between; align-items:center;">
                    <label id="l-current-pin-lbl"></label>
@@ -7306,6 +7316,40 @@ _tmpl.innerHTML = `
       </div>
     </div>
     <button id="pin-cancel" style="display:none"></button>
+  </div>
+</div>
+
+<!-- History Export modal -->
+<div class="modal-back pm" id="history-export-modal" aria-hidden="true">
+  <div class="modal" style="max-width: 440px;">
+    <div class="modal-head">
+      <h3 id="h-history-export-title">📄 Exportar Historial</h3>
+      <button class="ghost" id="history-export-close" style="background:transparent; border:none; color:inherit; font-size:20px; cursor:pointer; padding:4px 8px;">✕</button>
+    </div>
+    <div style="display:grid;gap:14px;padding:6px 0">
+      <p class="small" style="margin:0;opacity:.75">Selecciona el rango de fechas para exportar o imprimir el reporte de auditoría.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="field-group">
+          <label style="font-size:11px;font-weight:700;opacity:0.8;">📅 Desde</label>
+          <input type="date" id="export-history-from" class="glass-control" style="width:100%;box-sizing:border-box;padding:8px 10px;border-radius:10px;color:#fff;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12)">
+        </div>
+        <div class="field-group">
+          <label style="font-size:11px;font-weight:700;opacity:0.8;">📅 Hasta</label>
+          <input type="date" id="export-history-to" class="glass-control" style="width:100%;box-sizing:border-box;padding:8px 10px;border-radius:10px;color:#fff;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12)">
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px;">
+        <button class="primary" id="btn-do-print-pdf" style="height:44px;font-size:13px;font-weight:800;cursor:pointer;border-radius:12px;box-shadow:0 6px 18px rgba(0,122,255,0.3)">
+          🖨️ Imprimir / Guardar en PDF
+        </button>
+        <button class="glass-control" id="btn-do-download-txt" style="height:40px;font-size:12px;font-weight:700;cursor:pointer;border-radius:12px;background:rgba(255,255,255,0.05);color:#fff;border:1px solid rgba(255,255,255,0.15)">
+          📑 Descargar Reporte (.txt)
+        </button>
+        <button class="ghost" id="btn-do-download-json" style="height:36px;font-size:11px;cursor:pointer;opacity:0.75">
+          💾 Descargar JSON sin procesar
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 `;
@@ -7882,7 +7926,10 @@ class ArgusPanel extends HTMLElement {
     set('lbl-uploaded-files-title', t('lbl_uploaded_files'));
     set('btn-edit-home-name-standalone', t('edit_btn'));
     set('btn-save-personalization-standalone', t('save_btn'));
+    set('btn-refresh-history',  t('history_refresh'));
+    set('btn-export-forensic',  '📄 ' + (t('export_history_title') || 'Exportar'));
     set('btn-clear-log',        t('clear_log_btn'));
+    set('h-history-export-title', '📄 ' + (t('export_history_title') || 'Exportar Historial'));
     set('h-access-title',       t('access_title'));
     set('p-access-desc',        t('access_desc'));
     set('btn-access-users',     `👥 ${t('users_title').replace(/^👥\s*/, '').replace(/\s(?:y|&|e)\s.*$/i, '')}`);
@@ -8196,10 +8243,27 @@ class ArgusPanel extends HTMLElement {
     this._postLoadBound = true;
     this.shadowRoot.getElementById('btn-clear-log')?.addEventListener('click', () => this._clearHistory());
     this.shadowRoot.getElementById('btn-refresh-history')?.addEventListener('click', async () => {
-      await this._loadActivityTimeline(this._dashboard?.entry_id);
+      const btn = this.shadowRoot.getElementById('btn-refresh-history');
+      if (btn) btn.style.opacity = '0.5';
+      const entryId = this._dashboard?.entry_id || this._dashboard?.entries?.[0]?.entry_id;
+      await this._loadActivityTimeline(entryId);
       this._renderActivityLog();
+      if (btn) {
+        btn.style.opacity = '1';
+        btn.textContent = '✓ ' + (this._t('history_refresh') || 'Actualizado');
+        setTimeout(() => {
+          if (btn) btn.textContent = '🔄 ' + (this._t('history_refresh') || 'Actualizar').replace(/^🔄\s*/, '');
+        }, 1500);
+      }
     });
-    this.shadowRoot.getElementById('btn-export-forensic')?.addEventListener('click', () => this._exportForensicTimeline());
+    this.shadowRoot.getElementById('btn-export-forensic')?.addEventListener('click', () => this._openHistoryExportModal());
+    this.shadowRoot.getElementById('history-export-close')?.addEventListener('click', () => this._closeHistoryExportModal());
+    this.shadowRoot.getElementById('history-export-modal')?.addEventListener('click', (e) => {
+      if (e.target && (e.target as HTMLElement).id === 'history-export-modal') this._closeHistoryExportModal();
+    });
+    this.shadowRoot.getElementById('btn-do-print-pdf')?.addEventListener('click', () => this._exportHistoryPrintPdf());
+    this.shadowRoot.getElementById('btn-do-download-txt')?.addEventListener('click', () => this._exportHistoryText());
+    this.shadowRoot.getElementById('btn-do-download-json')?.addEventListener('click', () => this._exportForensicTimeline());
     this.shadowRoot.getElementById('btn-export-config')?.addEventListener('click', () => this._exportConfig());
     this.shadowRoot.getElementById('btn-import-trigger')?.addEventListener('click', () => this.shadowRoot.getElementById('import-config-file').click());
     this.shadowRoot.getElementById('import-config-file')?.addEventListener('change', (ev) => this._importConfig(ev));
@@ -8213,21 +8277,227 @@ class ArgusPanel extends HTMLElement {
     this._configureEmergencyCall();
   }
 
+  _openHistoryExportModal() {
+    const m = this.shadowRoot.getElementById('history-export-modal');
+    if (!m) return;
+    const now = new Date();
+    const fromDate = new Date();
+    fromDate.setDate(now.getDate() - 30);
+    const fromInput = this.shadowRoot.getElementById('export-history-from') as HTMLInputElement | null;
+    const toInput = this.shadowRoot.getElementById('export-history-to') as HTMLInputElement | null;
+    if (fromInput && !fromInput.value) fromInput.value = fromDate.toISOString().split('T')[0];
+    if (toInput && !toInput.value) toInput.value = now.toISOString().split('T')[0];
+    m.classList.add('open');
+    m.setAttribute('aria-hidden', 'false');
+  }
+
+  _closeHistoryExportModal() {
+    const m = this.shadowRoot.getElementById('history-export-modal');
+    if (m) {
+      m.classList.remove('open');
+      m.setAttribute('aria-hidden', 'true');
+    }
+  }
+
+  _getFilteredHistory() {
+    const events = Array.isArray(this._forensicTimeline) && this._forensicTimeline.length
+      ? this._forensicTimeline
+      : (Array.isArray(this._ui?.audit_log) ? this._ui.audit_log : []);
+
+    const fromInput = this.shadowRoot.getElementById('export-history-from') as HTMLInputElement | null;
+    const toInput = this.shadowRoot.getElementById('export-history-to') as HTMLInputElement | null;
+    const fromVal = fromInput?.value ? new Date(fromInput.value + 'T00:00:00') : null;
+    const toVal = toInput?.value ? new Date(toInput.value + 'T23:59:59') : null;
+
+    return events.filter(ev => {
+      if (!ev || typeof ev !== 'object') return false;
+      if (!ev.ts) return true;
+      const t = new Date(ev.ts);
+      if (fromVal && t < fromVal) return false;
+      if (toVal && t > toVal) return false;
+      return true;
+    });
+  }
+
+  _exportHistoryPrintPdf() {
+    this._closeHistoryExportModal();
+    const list = this._getFilteredHistory();
+    const homeName = this._homeName || 'Argus Home Hub';
+    const nowStr = new Date().toLocaleString(this._getLocale());
+    const fromInput = (this.shadowRoot.getElementById('export-history-from') as HTMLInputElement | null)?.value || 'Inicio';
+    const toInput = (this.shadowRoot.getElementById('export-history-to') as HTMLInputElement | null)?.value || 'Hoy';
+
+    const rowsHtml = list.map((ev, idx) => {
+      const date = ev.ts ? new Date(ev.ts) : null;
+      const ts = date && !isNaN(date.getTime()) ? date.toLocaleString(this._getLocale()) : '—';
+      const action = String(ev.action || '');
+      const detail = this._localizeActivityDetail(action, ev.detail);
+      const user = ev.user || ev.actor || 'Argus';
+      return `
+        <tr style="border-bottom: 1px solid #e2e8f0; font-size: 11px;">
+          <td style="padding: 6px 8px; color: #64748b; font-family: monospace;">${idx + 1}</td>
+          <td style="padding: 6px 8px; white-space: nowrap; font-weight: 600;">${this._escapeHtml(ts)}</td>
+          <td style="padding: 6px 8px; font-weight: 700; color: #0284c7;">${this._escapeHtml(action)}</td>
+          <td style="padding: 6px 8px;">${this._escapeHtml(detail)}</td>
+          <td style="padding: 6px 8px; font-weight: 600;">${this._escapeHtml(user)}</td>
+        </tr>
+      `;
+    }).join('');
+
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <title>Argus Home Hub - Historial</title>
+        <style>
+          @page { size: A4 portrait; margin: 12mm; }
+          body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #1e293b; margin: 0; padding: 24px; }
+          .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #0284c7; padding-bottom: 14px; margin-bottom: 18px; }
+          .title { font-size: 22px; font-weight: 900; color: #0f172a; margin: 0; }
+          .subtitle { font-size: 13px; color: #64748b; margin-top: 4px; }
+          .meta { font-size: 11px; color: #475569; text-align: right; line-height: 1.5; }
+          table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+          th { background: #f8fafc; padding: 8px; text-align: left; font-size: 11px; font-weight: 800; text-transform: uppercase; color: #334155; border-bottom: 2px solid #cbd5e1; }
+          .footer { margin-top: 24px; text-align: center; font-size: 10px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 10px; }
+          @media print {
+            body { padding: 0; }
+            .no-print { display: none; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div>
+            <h1 class="title">🛡️ Argus Home Hub - Historial</h1>
+            <div class="subtitle">🏡 ${this._escapeHtml(homeName)} · Registro de Actividad y Seguridad</div>
+          </div>
+          <div class="meta">
+            <div><strong>Rango:</strong> ${this._escapeHtml(fromInput)} al ${this._escapeHtml(toInput)}</div>
+            <div><strong>Generado:</strong> ${this._escapeHtml(nowStr)}</div>
+            <div><strong>Total Eventos:</strong> ${list.length}</div>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 30px;">#</th>
+              <th style="width: 130px;">Fecha / Hora</th>
+              <th style="width: 120px;">Acción</th>
+              <th>Descripción y Detalles</th>
+              <th style="width: 100px;">Usuario</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rowsHtml || '<tr><td colspan="5" style="text-align:center;padding:24px;color:#888;">No hay registros en el rango seleccionado</td></tr>'}
+          </tbody>
+        </table>
+        <div class="footer">
+          Argus Home Hub · Sistema de Seguridad Inteligente · Documento de Auditoría
+        </div>
+        <script>
+          window.onload = function() {
+            setTimeout(function() {
+              window.print();
+            }, 300);
+          };
+        </script>
+      </body>
+      </html>
+    `;
+
+    const printWin = window.open('', '_blank', 'width=900,height=700');
+    if (printWin) {
+      printWin.document.open();
+      printWin.document.write(htmlContent);
+      printWin.document.close();
+    }
+  }
+
+  _exportHistoryText() {
+    this._closeHistoryExportModal();
+    const list = this._getFilteredHistory();
+    const homeName = this._homeName || 'Argus Home Hub';
+    const nowStr = new Date().toLocaleString(this._getLocale());
+    const fromInput = (this.shadowRoot.getElementById('export-history-from') as HTMLInputElement | null)?.value || 'Inicio';
+    const toInput = (this.shadowRoot.getElementById('export-history-to') as HTMLInputElement | null)?.value || 'Hoy';
+
+    let content = `================================================================================\n`;
+    content += `🛡️  ARGUS HOME HUB - HISTORIAL DE ACTIVIDAD\n`;
+    content += `🏡  ${homeName}\n`;
+    content += `📅  Rango: ${fromInput} al ${toInput}\n`;
+    content += `⏰  Generado: ${nowStr}\n`;
+    content += `📊  Total eventos: ${list.length}\n`;
+    content += `================================================================================\n\n`;
+
+    list.forEach((ev, idx) => {
+      const date = ev.ts ? new Date(ev.ts) : null;
+      const ts = date && !isNaN(date.getTime()) ? date.toLocaleString(this._getLocale()) : '—';
+      const action = String(ev.action || '');
+      const detail = this._localizeActivityDetail(action, ev.detail);
+      const user = ev.user || ev.actor || 'Argus';
+      content += `[${String(idx + 1).padStart(3, '0')}] ${ts} | [${action}] ${detail} | 👤 ${user}\n`;
+    });
+
+    content += `\n================================================================================\n`;
+    content += `Argus Home Hub - Fin del reporte\n`;
+
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `argus_historial_${new Date().toISOString().slice(0, 10)}.txt`;
+    anchor.click();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+  }
+
   async _clearHistory() {
-    if (!confirm(this._t('clear_history_confirm'))) return;
-    try {
-      const entryId = this._dashboard?.entry_id;
-      await this._send('argus/clear_audit_log', entryId ? { entry_id: entryId } : {});
-      await this._loadActivityTimeline(entryId);
-      this._renderActivityLog();
-    } catch (err) { alert(this._format('generic_error', { error: err.message })); }
+    const hasMasterPin = this._dashboard?.entries?.[0]?.pin_configured === true;
+    const currentUser = this._activeProfile?.name || this._hass?.user?.name || 'Administrador';
+    const entryId = this._dashboard?.entry_id || this._dashboard?.entries?.[0]?.entry_id;
+
+    const executeClear = async () => {
+      try {
+        await this._send('argus/clear_audit_log', {
+          ...(entryId ? { entry_id: entryId } : {}),
+          user_name: currentUser
+        });
+        await this._loadActivityTimeline(entryId);
+        this._renderActivityLog();
+        return true;
+      } catch (err: any) {
+        alert(this._format('generic_error', { error: err.message }));
+        return false;
+      }
+    };
+
+    if (hasMasterPin) {
+      this._showPinModal(async (pin) => {
+        try {
+          const res = await this._send('argus/validate_master_pin', {
+            pin,
+            ...(entryId ? { entry_id: entryId } : {})
+          });
+          if (res && res.valid === false) {
+            throw new Error(this._t('pin_invalid') || 'PIN incorrecto');
+          }
+        } catch (e: any) {
+          throw new Error(this._t('pin_invalid') || 'PIN incorrecto');
+        }
+        return await executeClear();
+      });
+    } else {
+      if (!confirm(this._t('clear_history_confirm') || '¿Eliminar todo el historial de actividad?')) return;
+      await executeClear();
+    }
   }
 
   async _loadActivityTimeline(entryId = null) {
     if (!this._ui) return;
     try {
-      const payload = { limit: 100 };
-      if (entryId) payload.entry_id = entryId;
+      const eid = entryId || this._dashboard?.entry_id || this._dashboard?.entries?.[0]?.entry_id;
+      const payload: any = { limit: 100 };
+      if (eid) payload.entry_id = eid;
       const response = await this._send('argus/get_forensic_timeline', payload);
       const timeline = Array.isArray(response?.timeline)
         ? response.timeline.filter(entry => entry && typeof entry === 'object' && !Array.isArray(entry))
@@ -8236,7 +8506,7 @@ class ArgusPanel extends HTMLElement {
       this._activityTimelineError = null;
       this._ui.audit_log = timeline;
       this._renderActivityLog();
-    } catch (err) {
+    } catch (err: any) {
       // A profile without view_history may continue using the dashboard.
       // Preserve any audit data already present instead of erasing it.
       console.warn('Argus activity timeline unavailable:', err);
@@ -8248,7 +8518,8 @@ class ArgusPanel extends HTMLElement {
   }
 
   _exportForensicTimeline() {
-    const events = Array.isArray(this._forensicTimeline) ? this._forensicTimeline : (this._ui?.audit_log || []);
+    this._closeHistoryExportModal();
+    const events = Array.isArray(this._forensicTimeline) && this._forensicTimeline.length ? this._forensicTimeline : (this._ui?.audit_log || []);
     const blob = new Blob([JSON.stringify({format:'argus-forensic-timeline',generated_at:new Date().toISOString(),events}, null, 2)], {type:'application/json'});
     const url = URL.createObjectURL(blob); const anchor = document.createElement('a');
     anchor.href = url; anchor.download = `argus_forensic_${new Date().toISOString().replace(/[:.]/g,'-')}.json`; anchor.click();
@@ -9779,7 +10050,7 @@ gl_FragColor=vec4(col,alpha);}`;
     if (action === 'profile_selected') return this._t('log_action_profile_selected');
     if (action === 'schedule_applied') return this._t('log_action_schedule_applied');
     if (action === 'mode_changed') return this._t('log_action_mode_changed');
-    if (action === 'audit_log_cleared') return this._t('history_refresh');
+    if (action === 'audit_log_cleared') return rawDetail || this._t('log_action_audit_log_cleared') || 'Historial de actividad eliminado';
     if (action.includes('pin_updated') || action.includes('access_pin_updated')) return this._t('update_pin');
     const lowerAction = String(action).toLowerCase();
     const tKey = `log_action_${lowerAction}`;
@@ -9890,6 +10161,8 @@ gl_FragColor=vec4(col,alpha);}`;
           itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('badge_pin_reset_failed');
         } else if (actionLower === 'sos' || actionLower === 'sos_stopped' || actionLower === 'panic_stopped') {
           itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = this._t('log_action_sos');
+        } else if (actionLower === 'audit_log_cleared') {
+          itemCls = 'log-item--triggered'; badgeCls = 'trigger'; badgeTxt = '🗑️ ' + (this._t('log_action_audit_log_cleared') || 'Historial Borrado');
         } else if (actionLower === 'ui_configuration_updated') {
           badgeTxt = this._t('settings');
         } else {
@@ -9935,7 +10208,7 @@ gl_FragColor=vec4(col,alpha);}`;
       home:     this._t('mode_home'),
       away:     this._t('mode_away'),
       night:    this._t('mode_night'),
-      sos:      'SOS',
+      sos:      this._t('sos_config_title') || 'CONFIGURACIÓN SOS',
     };
 
     tabs.className = 'tabs';
@@ -10063,39 +10336,65 @@ gl_FragColor=vec4(col,alpha);}`;
       const outputs = this._panicOutputs || this._ui?.panic_outputs || [];
 
       el.innerHTML = `
-        <div class="mode-grid-layout" style="grid-template-columns: 1fr;">
+        <div class="mode-grid-layout">
+          <!-- Card 1: Emergency Phone -->
           <div class="mode-section-card">
-            <div class="mode-section-title">🚨 ${this._t('sos_config_title') || 'Configuración de Emergencia SOS'}</div>
-            
-            <div style="display:flex;flex-direction:column;gap:14px;margin-top:10px;">
-              <!-- Emergency Phone -->
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:rgba(255,255,255,0.03);padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);flex-wrap:wrap;">
-                <div>
-                  <div class="setting-label" style="font-size:12px;font-weight:800;text-transform:uppercase;opacity:0.85;">📞 ${this._t('emergency_number_label') || 'Teléfono de Emergencia'}</div>
-                  <div class="small" style="font-size:11px;opacity:0.65;margin-top:2px;">${this._t('emergency_help') || 'Número de llamada directa al activar el botón de emergencia'}</div>
-                </div>
-                <input id="mode-emergency-number-input" class="glass-control" inputmode="tel" maxlength="16" value="${this._escapeHtml(emergencyNumber)}" style="width:110px;min-height:36px;padding:6px 12px;font-size:14px;font-weight:800;text-align:center;border-radius:10px;background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.15)">
-              </div>
+            <div class="mode-section-title">📞 ${this._t('emergency_number_label') || 'Número Local de Emergencia'}</div>
+            <p class="small" style="margin:4px 0 12px;opacity:0.75">${this._t('emergency_help') || 'Configura el número local de emergencia (ej. 911 o 112). Se incluirá en alertas SOS.'}</p>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:rgba(255,255,255,0.03);padding:14px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.08);">
+              <span style="font-size:12.5px;font-weight:700;">${this._t('emergency_number_label') || 'Marcado Directo'}:</span>
+              <input id="mode-emergency-number-input" class="glass-control" inputmode="tel" maxlength="16" value="${this._escapeHtml(emergencyNumber)}" style="width:130px;min-height:38px;padding:6px 12px;font-size:15px;font-weight:900;text-align:center;border-radius:10px;background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.18)">
+            </div>
+            <div class="small" style="margin-top:10px;opacity:0.6;font-size:11px;">
+              ℹ️ Al activar el SOS desde el panel o widget, se iniciará la marcación rápida y se registrará el evento de auxilio en el historial forense.
+            </div>
+          </div>
 
-              <!-- SOS Output Actions (Sirens, Lights, Switches, Scripts) -->
-              <div style="display:flex;flex-direction:column;gap:10px;background:rgba(255,255,255,0.03);padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);">
-                <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
-                  <div>
-                    <div class="setting-label" style="font-size:12px;font-weight:800;text-transform:uppercase;opacity:0.85;">⚡ ${this._t('sos_actions') || 'Dispositivos y Acciones SOS'}</div>
-                    <div class="small" style="font-size:11px;opacity:0.65;margin-top:2px;">${this._t('sos_outputs_help') || 'Estos dispositivos se encenderán al dispararse el SOS'}</div>
-                  </div>
-                  ${readonly ? '' : `
-                    <button class="ghost" id="btn-mode-select-sos-outputs" style="padding:6px 14px;font-size:12px;font-weight:700;border-radius:10px;background:rgba(255,255,255,0.06);cursor:pointer;">
-                      + ${this._t('sos_select_outputs') || 'Seleccionar Dispositivos'}
-                    </button>
-                  `}
-                </div>
-                <div id="sos-output-chips" class="mode-sensor-grid" style="margin-top:6px;">
-                  ${outputs.length
-                    ? outputs.map(id => this._chip(id, 'sos_output')).join('')
-                    : `<div class="mode-sensor-none">${this._t('sos_no_outputs') || 'Ningún dispositivo configurado'}</div>`
-                  }
-                </div>
+          <!-- Card 2: SOS Actions / Devices -->
+          <div class="mode-section-card">
+            <div class="mode-section-title">⚡ ${this._t('sos_actions') || 'Dispositivos y Acciones SOS'}</div>
+            <p class="small" style="margin:4px 0 10px;opacity:0.75">${this._t('sos_outputs_help') || 'Estos dispositivos se encenderán o ejecutarán inmediatamente al dispararse el SOS.'}</p>
+            <div id="sos-output-chips" class="mode-sensor-grid" style="min-height:70px;">
+              ${outputs.length
+                ? outputs.map(id => this._chip(id, 'sos_output')).join('')
+                : `<div class="mode-sensor-none">${this._t('sos_no_outputs') || 'Ningún dispositivo configurado'}</div>`
+              }
+            </div>
+            ${readonly ? '' : `
+              <button class="ghost" id="btn-mode-select-sos-outputs" style="margin-top:12px;width:100%;justify-content:center;font-size:12px;font-weight:800;padding:8px 12px;background:rgba(255,255,255,0.06);border-radius:10px;cursor:pointer;">
+                ＋ ${this._t('sos_select_outputs') || 'Seleccionar Luces, Sirenas o Escenas'}
+              </button>
+            `}
+          </div>
+
+          <!-- Card 3: Audible / Visual Signals -->
+          <div class="mode-section-card">
+            <div class="mode-section-title">📢 Señales de Alerta de Auxilio</div>
+            <p class="small" style="margin:4px 0 10px;opacity:0.75">Comportamiento del sistema ante una señal de emergencia SOS.</p>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.06);font-size:12px;">
+                <span>🚨</span>
+                <span style="font-weight:600;">Disparo inmediato sin tiempo de entrada ni retardo.</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.06);font-size:12px;">
+                <span>💡</span>
+                <span style="font-weight:600;">Encendido general de luces de emergencia configuradas.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: Broadcast & History -->
+          <div class="mode-section-card">
+            <div class="mode-section-title">🛡️ Notificaciones y Registro</div>
+            <p class="small" style="margin:4px 0 10px;opacity:0.75">Difusión prioritaria a usuarios autorizados y registro de seguridad.</p>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.06);font-size:12px;">
+                <span>📱</span>
+                <span style="font-weight:600;">Notificación push de alta prioridad con sonido de alerta crítica.</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.06);font-size:12px;">
+                <span>📋</span>
+                <span style="font-weight:600;">Registro criptográfico inmutable en la línea de tiempo de auditoría.</span>
               </div>
             </div>
           </div>
@@ -10490,8 +10789,8 @@ gl_FragColor=vec4(col,alpha);}`;
     const el = this.shadowRoot.getElementById('notif-targets');
     if (!el) return;
     el.innerHTML = this._notifTargets.map(t => `
-      <span class="notif-chip">🔔 ${this._escapeHtml(t.replace(/^entity:notify\./, '').replace(/_/g,' '))}
-        <button data-notif-remove="${this._escapeHtml(t)}">✕</button>
+      <span class="notif-chip" style="color:#ffffff !important;font-weight:700;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);">🔔 ${this._escapeHtml(t.replace(/^entity:notify\./, '').replace(/_/g,' '))}
+        <button data-notif-remove="${this._escapeHtml(t)}" style="color:#ffffff;opacity:0.75;cursor:pointer;margin-left:4px;font-weight:bold;">✕</button>
       </span>`).join('') || `<span class="small" style="opacity:.5">—</span>`;
     el.querySelectorAll('[data-notif-remove]').forEach(btn =>
       btn.addEventListener('click', () => {

@@ -1,3 +1,14 @@
+## [2.2.40] - 2026-08-19
+- Renamed SOS tab in Modos widget to CONFIGURACIÓN SOS
+- Verified seamless trigger of all configured SOS devices, sirens, scripts and notifications upon sliding the SOS bar in the main panel
+
+## [2.2.39] - 2026-08-19
+- Added Activity History PDF and formatted Text report export modal with date range filters
+- Required Master PIN verification for clearing activity history when configured
+- Recorded actor name in audit log timeline upon clearing history
+- Improved visual contrast with pure white `#ffffff` text on "Sin PIN activo" badge and notification target chips
+- Balanced SOS actions mode tab layout into a structured 4-card grid eliminating empty void spaces
+
 ## [2.2.38] - 2026-08-19
 - Removed obsolete personalization accordion from alarm instance panel
 - Replaced legacy Vacaciones mode with dedicated SOS actions configuration in Modos widget

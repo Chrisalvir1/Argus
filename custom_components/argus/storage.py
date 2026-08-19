@@ -369,7 +369,7 @@ async def async_clear_audit_log(hass: HomeAssistant, *, actor: str, entry_id: st
         count = len(current.get("audit_log", []))
         current["audit_log"] = [{
             "ts": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-            "action": "audit_log_cleared", "detail": f"Cleared {count} prior events",
+            "action": "audit_log_cleared", "detail": f"Historial de actividad eliminado por {actor}",
             "user": actor, "severity": "warning", "metadata": {"prior_count": count},
         }]
         await _store(hass, entry_id).async_save(current)
