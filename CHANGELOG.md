@@ -1,3 +1,8 @@
+## [2.2.44] - 2026-08-19
+- Clean isolation in fullscreen mode (completely hides widget headers, outer frames, and toolbar)
+- Responsive layout for iPhone/Android in both landscape and portrait orientations without HUD overlap
+- Enhanced GPU 3D acceleration for 60 FPS / 120 FPS ProMotion and OLED Display P3 HDR visuals
+
 ## [2.2.43] - 2026-08-19
 - Aligned connection pill directly above the central shield with notch safe-area support
 - Fixed Activity History buttons (Refresh, Export, Clear) with resilient shadowRoot event delegation

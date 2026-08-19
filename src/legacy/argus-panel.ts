@@ -5252,41 +5252,30 @@ _tmpl.innerHTML = `
     margin: 0 !important;
     gap: 0 !important;
   }
-  :host(.fullscreen-active) .grid > .stack:not(:first-child) {
-    display: none !important;
-  }
-  :host(.fullscreen-active) .grid > .stack:first-child {
-    width: 100% !important;
-    height: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
+  :host(.fullscreen-active) .hero,
+  :host(.fullscreen-active) .panel-head,
+  :host(.fullscreen-active) .dashboard-instances > .panel-head,
+  :host(.fullscreen-active) #h-instances,
+  :host(.fullscreen-active) .argus-dashboard,
+  :host(.fullscreen-active) .argus-dashboard__toolbar,
+  :host(.fullscreen-active) .argus-dashboard__feedback,
+  :host(.fullscreen-active) .argus-widget__edit-header,
+  :host(.fullscreen-active) .argus-widget:not(:has(.ios-fullscreen)),
+  :host(.fullscreen-active) section:not(:has(.ios-fullscreen)):not(#w-instances),
+  :host(.fullscreen-active) .personalize-section,
+  :host(.fullscreen-active) .grid > .stack:not(:first-child),
   :host(.fullscreen-active) .grid > .stack:first-child > section:not(:first-child) {
     display: none !important;
-  }
-  :host(.fullscreen-active) .grid > .stack:first-child > section:first-child {
-    background: none !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    width: 100% !important;
-    height: auto !important;
-    border-radius: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-  }
-  :host(.fullscreen-active) .grid > .stack:first-child > section:first-child .panel-head {
-    display: none !important;
-  }
-  :host(.fullscreen-active) .grid > .stack:first-child > section:first-child .personalize-section {
-    display: none !important;
+    visibility: hidden !important;
   }
   :host(.fullscreen-active) #entries {
     width: 100% !important;
-    height: auto !important;
+    height: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
   :host(.fullscreen-active) #entries > .entry:not(.ios-fullscreen) {
     display: none !important;
@@ -5294,11 +5283,15 @@ _tmpl.innerHTML = `
   :host(.fullscreen-active) #entries > .entry.ios-fullscreen {
     position: fixed !important;
     inset: 0 !important;
-    width: 100% !important;
-    height: auto !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
     margin: 0 !important;
+    padding: 0 !important;
     border-radius: 0 !important;
-    z-index: 100 !important;
+    border: none !important;
+    z-index: 99999999 !important;
+    background: radial-gradient(ellipse at 50% 50%, #162438 0%, #08101a 60%, #010408 100%) !important;
   }
 
   .liquid-glass {
@@ -7019,10 +7012,10 @@ _tmpl.innerHTML = `
   .hero-pill{width:min(100%,360px)!important;max-width:100%!important;white-space:normal!important;text-align:center!important;justify-content:center!important;align-items:center!important;line-height:1.25!important;margin:0 auto!important}
   .dashboard-instances>.panel-head{flex-direction:column!important;align-items:stretch!important;gap:10px!important}
   #global-status,#global-status .badge{width:100%!important;box-sizing:border-box!important;justify-content:center!important;text-align:center!important;white-space:normal!important;line-height:1.3!important}
-  .entry-content.security-console,.ios-fullscreen .entry-content.security-console{padding-left:10px!important;padding-right:10px!important}
-  .console-hud{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:'location' 'connection' 'readings'!important;justify-items:center!important;align-items:center!important;gap:8px!important;text-align:center!important}
-  .console-hud-loc,.argus-connection-pill,.console-hud-right{width:100%!important;max-width:100%!important;box-sizing:border-box!important;justify-self:center!important;justify-content:center!important;text-align:center!important;margin:0!important}
-  .console-hud-right{display:flex!important;flex-wrap:wrap!important;overflow:visible!important;gap:6px!important}
+  .entry:not(.ios-fullscreen) .entry-content.security-console{padding-left:10px!important;padding-right:10px!important}
+  .entry:not(.ios-fullscreen) .console-hud{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:'location' 'connection' 'readings'!important;justify-items:center!important;align-items:center!important;gap:8px!important;text-align:center!important}
+  .entry:not(.ios-fullscreen) .console-hud-loc,.entry:not(.ios-fullscreen) .argus-connection-pill,.entry:not(.ios-fullscreen) .console-hud-right{width:100%!important;max-width:100%!important;box-sizing:border-box!important;justify-self:center!important;justify-content:center!important;text-align:center!important;margin:0!important}
+  .entry:not(.ios-fullscreen) .console-hud-right{display:flex!important;flex-wrap:wrap!important;overflow:visible!important;gap:6px!important}
   .security-console .liquid-stack{grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:stretch!important}
   .security-console .liquid-btn{min-width:0!important;white-space:normal!important;line-height:1.2!important;min-height:46px!important}
   #w-activity,.activity-log{max-height:46vh!important;overflow-y:auto!important}
@@ -7038,8 +7031,6 @@ _tmpl.innerHTML = `
   .hero-context{grid-template-columns:auto minmax(0,1fr)!important;align-items:center!important}
   .hero-clock{width:auto!important;justify-items:start!important}
   .hero-pills{justify-content:flex-start!important}
-  .ios-fullscreen .console-hud{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;grid-template-areas:'location connection readings'!important}
-  .ios-fullscreen .console-hud-loc,.ios-fullscreen .argus-connection-pill,.ios-fullscreen .console-hud-right{width:auto!important}
 }
   .entry { overflow: hidden; border-radius: 28px; -webkit-mask-image: -webkit-radial-gradient(white, black); }
 </style>
