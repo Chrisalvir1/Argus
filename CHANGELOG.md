@@ -1,3 +1,7 @@
+## [2.2.57] - 2026-08-19
+- Completely destroy and replace the legacy HTML DOM for the HUD instead of just hiding it, avoiding duplicate hidden structures.
+
+
 ## [2.2.56] - 2026-08-19
 - Fix React mount point for the Security Console to actually render the new HUD.
 
