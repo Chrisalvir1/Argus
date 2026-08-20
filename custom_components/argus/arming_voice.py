@@ -9,22 +9,103 @@ from .i18n import translate, _TRANSLATIONS
 
 _LOGGER = logging.getLogger(__name__)
 
+def _detect_tts_language(hass, tts_entity_id: str) -> str | None:
+    """Infer the language directly from the configured TTS entity or its metadata."""
+    if not tts_entity_id:
+        return None
+    candidates = [str(tts_entity_id).lower()]
+    
+    state = hass.states.get(tts_entity_id) if hasattr(hass, "states") else None
+    if state and state.attributes:
+        for attr_key in ("language", "friendly_name", "voice"):
+            val = state.attributes.get(attr_key)
+            if val:
+                candidates.append(str(val).lower())
+        opts = state.attributes.get("options")
+        if isinstance(opts, dict):
+            for opt_val in opts.values():
+                candidates.append(str(opt_val).lower())
+                
+    try:
+        registry = er.async_get(hass)
+        entry = registry.async_get(tts_entity_id)
+        if entry:
+            if entry.name:
+                candidates.append(str(entry.name).lower())
+            if entry.original_name:
+                candidates.append(str(entry.original_name).lower())
+            if entry.unique_id:
+                candidates.append(str(entry.unique_id).lower())
+            if entry.options and isinstance(entry.options, dict):
+                for opt_val in entry.options.values():
+                    candidates.append(str(opt_val).lower())
+    except Exception:
+        pass
+
+    full_text = " ".join(candidates)
+
+    if any(tok in full_text for tok in [
+        "espanol", "español", "spanish", "es-es", "es_es", "es-419", "es_419",
+        "es-mx", "es_mx", "es-us", "es_us", "es-ar", "es_ar", "es-co", "es_co",
+        "_es", "-es", ".es", " es", "es "
+    ]):
+        return "es"
+
+    if any(tok in full_text for tok in [
+        "francais", "français", "french", "fr-fr", "fr_fr", "fr-ca", "fr_ca",
+        "_fr", "-fr", ".fr", " fr", "fr "
+    ]):
+        return "fr"
+
+    if any(tok in full_text for tok in [
+        "portugues", "português", "portuguese", "pt-br", "pt_br", "pt-pt", "pt_pt",
+        "_pt", "-pt", ".pt", " pt", "pt "
+    ]):
+        return "pt"
+
+    if any(tok in full_text for tok in [
+        "italiano", "italian", "it-it", "it_it", "_it", "-it", ".it", " it", "it "
+    ]):
+        return "it"
+
+    if any(tok in full_text for tok in [
+        "russian", "ruso", "русский", "ru-ru", "ru_ru", "_ru", "-ru", ".ru", " ru", "ru "
+    ]):
+        return "ru"
+
+    if any(tok in full_text for tok in [
+        "chinese", "chino", "中文", "zh-cn", "zh_cn", "zh-tw", "zh_tw", "zh-hans", "zh-hant",
+        "_zh", "-zh", ".zh", " zh", "zh "
+    ]):
+        return "zh"
+
+    if any(tok in full_text for tok in [
+        "english", "ingles", "inglés", "en-us", "en_us", "en-gb", "en_gb", "en-au", "en_au", "en-ca", "en_ca",
+        "_en", "-en", ".en", " en", "en "
+    ]):
+        return "en"
+
+    return None
+
 async def _get_language(hass, config_entry):
+    options = _options(hass, config_entry)
+    tts_entity = str(options.get(CONF_ARMING_VOICE_TTS, "") or "")
+    if tts_entity:
+        detected = _detect_tts_language(hass, tts_entity)
+        if detected:
+            return detected
     ui_data = await async_load_ui_data(hass, config_entry.entry_id)
     lang = ui_data.get("language")
-    if not lang:
-        tts = config_entry.options.get(CONF_ARMING_VOICE_TTS, "")
-        if "espanol" in tts.lower() or "_es" in tts.lower():
-            return "es"
-    return lang or hass.config.language or "en"
-
-
-
+    if lang:
+        return str(lang).split("-")[0].lower()
+    ha_lang = getattr(hass.config, "language", None)
+    if ha_lang:
+        return str(ha_lang).split("-")[0].lower()
+    return "es"
 
 def _options(hass, entry):
     merged = dict(entry.options)
     merged.update(hass.data.get(DOMAIN, {}).get("arming_voice_yaml", {}))
-
     return merged
 
 def _sensor_identity(hass, entity_id):
