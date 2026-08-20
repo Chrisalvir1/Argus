@@ -12,16 +12,19 @@ _LOGGER = logging.getLogger(__name__)
 async def _get_language(hass, config_entry):
     ui_data = await async_load_ui_data(hass, config_entry.entry_id)
     lang = ui_data.get("language")
+    if not lang:
+        tts = config_entry.options.get(CONF_ARMING_VOICE_TTS, "")
+        if "espanol" in tts.lower() or "_es" in tts.lower():
+            return "es"
     return lang or hass.config.language or "en"
+
 
 
 
 def _options(hass, entry):
     merged = dict(entry.options)
     merged.update(hass.data.get(DOMAIN, {}).get("arming_voice_yaml", {}))
-    for k, v in list(merged.items()):
-        if isinstance(v, str) and any(v.strip() == val for lang_dict in _TRANSLATIONS.values() for val in lang_dict.values()):
-            merged.pop(k)
+
     return merged
 
 def _sensor_identity(hass, entity_id):

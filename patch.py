@@ -1,29 +1,50 @@
+import re
+
 with open("custom_components/argus/arming_voice.py", "r") as f:
     content = f.read()
 
-OLD = """def _options(hass, entry):
-    merged = dict(entry.options)
-    merged.update(hass.data.get(DOMAIN, {}).get("arming_voice_yaml", {}))
-    return merged"""
+# 1. Remove the popping loop in _options
+content = re.sub(
+    r"    for k, v in list\(merged\.items\(\)\):\n        if isinstance\(v, str\) and any\(v\.strip\(\) == val for lang_dict in _TRANSLATIONS\.values\(\) for val in lang_dict\.values\(\)\):\n            merged\.pop\(k\)",
+    "",
+    content
+)
 
-NEW = """
-LEGACY_SPANISH_DEFAULTS = {
-    "No puedo completar el armado. Hay {count} sensores abiertos: {sensors}.",
-    "{closed} se ha cerrado. Faltan {count} sensores por cerrar: {sensors}.",
-    "Falta un sensor por cerrar: {sensors}.",
-    "Todos los sensores están cerrados. Argus continuará el armado en modo {mode}.",
-    "El armado en modo {mode} fue cancelado manualmente.",
-    "Alerta de seguridad. La alarma fue disparada por: {sensors}. Modo {mode}.",
-    "Alerta adicional. También se activó {sensor}. Ya hay {count} sensores involucrados: {sensors}.",
-}
+# 2. Change fallbacks to return empty string if no template is provided
+content = re.sub(
+    r'template = options\.get\(CONF_ARMING_VOICE_MESSAGE_START\) or translate\(lang, "msg_start"\)',
+    'template = options.get(CONF_ARMING_VOICE_MESSAGE_START)',
+    content
+)
+content = re.sub(
+    r'template = options\.get\(CONF_ARMING_VOICE_MESSAGE_REMAINING\) or translate\(lang, "msg_remaining"\)',
+    'template = options.get(CONF_ARMING_VOICE_MESSAGE_REMAINING)',
+    content
+)
+content = re.sub(
+    r'template = options\.get\(CONF_ARMING_VOICE_MESSAGE_LAST\) or translate\(lang, "msg_last"\)',
+    'template = options.get(CONF_ARMING_VOICE_MESSAGE_LAST)',
+    content
+)
+content = re.sub(
+    r'template = options\.get\(CONF_ARMING_VOICE_MESSAGE_COMPLETE\) or translate\(lang, "msg_complete"\)',
+    'template = options.get(CONF_ARMING_VOICE_MESSAGE_COMPLETE)',
+    content
+)
 
-def _options(hass, entry):
-    merged = dict(entry.options)
-    merged.update(hass.data.get(DOMAIN, {}).get("arming_voice_yaml", {}))
-    for k, v in list(merged.items()):
-        if isinstance(v, str) and v.strip() in LEGACY_SPANISH_DEFAULTS:
-            merged.pop(k)
-    return merged"""
+# 3. Fix cancelled
+content = re.sub(
+    r'    else:\n        message = translate\(lang, "msg_cancelled", mode=mode, home=config_entry\.title, source=source\)',
+    '    else:\n        message = ""',
+    content
+)
+
+# 4. Fix triggered
+content = re.sub(
+    r'    else:\n        msg_key = "msg_additional_triggered" if additional else "msg_triggered"\n        message = translate\(lang, msg_key, \*\*values\)',
+    '    else:\n        message = ""',
+    content
+)
 
 with open("custom_components/argus/arming_voice.py", "w") as f:
-    f.write(content.replace(OLD, NEW))
+    f.write(content)
