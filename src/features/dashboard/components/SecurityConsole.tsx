@@ -1,3 +1,5 @@
+import "./SecurityConsole.css";
+
 import React, { useEffect, useState } from 'react';
 import { SensorChip } from './SensorChip';
 
@@ -38,6 +40,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   const state = entry.entity_id && hass?.states[entry.entity_id] ? hass.states[entry.entity_id].state : 'unknown';
   const fullHudLoc = panel._ui?.dashboard?.location_name || dashboard.location_name || 'Hogar';
   const triggered = state === 'triggered';
+  const isOnline = panel._hass ? panel._hass.connected !== false : false;
   const isWaiting = panel._waitingInstances?.includes(entry.entity_id) || false;
 
   const t = (k: string) => panel._t?.(k) || k;
@@ -81,9 +84,9 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
       <div className="entry-content security-console">
         <div className="console-hud">
           <span className="console-hud-loc">🏡 {fullHudLoc}</span>
-          <div className="argus-connection-pill" data-online="true">
+          <div className="argus-connection-pill" data-online={isOnline ? 'true' : 'false'}>
             <i className="argus-connection-dot"></i>
-            <span className="argus-connection-label">{t('connected') || 'CONECTADO'}</span>
+            <span className="argus-connection-label">{isOnline ? (t('connected') || 'CONECTADO') : (t('disconnected') || 'DESCONECTADO')}</span>
           </div>
           <div className="console-hud-right">
             <span className={`console-system-badge console-system-badge--${triggered ? 'triggered' : state}`}>
@@ -92,7 +95,10 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
           </div>
         </div>
 
-        <div className="entry-icon" style={{display:'flex',justifyContent:'center',animation:'float-icon 5s ease-in-out infinite'}} dangerouslySetInnerHTML={{ __html: getIconSvg() }} />
+        <div className="entry-icon" style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',animation:'float-icon 5s ease-in-out infinite'}}>
+          <div dangerouslySetInnerHTML={{ __html: getIconSvg() }} />
+          {isWaiting && <span className="argus-shield-status">{blockingSensors.length ? (t('waiting_sensors') || 'ESPERANDO SENSORES') : (t('arming') || 'ARMANDO…')}</span>}
+        </div>
 
         <div className="liquid-stack">
           <button className={`liquid-btn btn-home ${state==='armed_home'?'active':''}`} onClick={() => panel._handleAction(idx, 'home')} dangerouslySetInnerHTML={{ __html: panel._modeButtonIcon('home') + `<span>${t('mode_home') || 'CASA'}</span>` }} />
