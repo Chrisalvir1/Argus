@@ -1,3 +1,7 @@
+## [2.2.60] - 2026-08-19
+- Render bypassed sensors with a gray visual state indicating they are bypassed while still showing their open/closed state.
+
+
 ## [2.2.57] - 2026-08-19
 - Completely destroy and replace the legacy HTML DOM for the HUD instead of just hiding it, avoiding duplicate hidden structures.
 

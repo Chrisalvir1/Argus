@@ -5,13 +5,15 @@ interface SensorChipProps {
   name: string;
   isOpen: boolean;
   isBlocking: boolean;
+  isBypassed?: boolean;
   battery: number | null;
-  iconHtml: string; // Pre-rendered SVG for now
+  iconHtml: string;
   statusLabelOpen: string;
   statusLabelClosed: string;
+  bypassedLabel?: string;
 }
 
-export function SensorChip({ id, name, isOpen, isBlocking, battery, iconHtml, statusLabelOpen, statusLabelClosed }: SensorChipProps) {
+export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, battery, iconHtml, statusLabelOpen, statusLabelClosed, bypassedLabel }: SensorChipProps) {
   let batHtml = null;
   if (battery !== null) {
     const isDead = battery === 0;
@@ -30,16 +32,20 @@ export function SensorChip({ id, name, isOpen, isBlocking, battery, iconHtml, st
     }
   }
 
-  const iconColor = isBlocking ? '#ffd700' : (isOpen ? '#ff968b' : '#75f4b0');
-  const iconAnimation = isBlocking ? 'pulse 1s infinite' : (isOpen ? 'pulse 2s infinite' : 'none');
-  const stateColor = isBlocking ? '#ffd700' : (isOpen ? '#ff968b' : '#75f4b0');
+  const iconColor = isBypassed ? '#a1a1aa' : (isBlocking ? '#ffd700' : (isOpen ? '#ff968b' : '#75f4b0'));
+  const iconAnimation = isBypassed ? 'none' : (isBlocking ? 'pulse 1s infinite' : (isOpen ? 'pulse 2s infinite' : 'none'));
+  const stateColor = isBypassed ? '#a1a1aa' : (isBlocking ? '#ffd700' : (isOpen ? '#ff968b' : '#75f4b0'));
+  const opacity = isBypassed ? 0.6 : 1;
+
+  const stateText = isOpen ? statusLabelOpen : statusLabelClosed;
+  const labelText = isBypassed ? `${bypassedLabel || 'OMITIDO'} · ${stateText}` : stateText;
 
   return (
-    <div className={`console-sensor ${isOpen ? 'open' : ''}`}>
+    <div className={`console-sensor ${isOpen && !isBypassed ? 'open' : ''}`} style={{ opacity }}>
       <span className="console-sensor-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: iconColor, animation: iconAnimation }} dangerouslySetInnerHTML={{ __html: iconHtml }} />
-      <span className="console-sensor-name" style={{ color: isBlocking ? '#ffd700' : '' }}>{name}</span>
+      <span className="console-sensor-name" style={{ color: isBlocking && !isBypassed ? '#ffd700' : '' }}>{name}</span>
       <span className="console-sensor-state" style={{ color: stateColor }}>
-        {isOpen ? statusLabelOpen : statusLabelClosed}
+        {labelText}
         {batHtml}
       </span>
     </div>

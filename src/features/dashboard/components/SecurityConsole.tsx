@@ -61,7 +61,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   };
 
   // Sensors mapping
-  const activeSensors: Array<{id: string, name?: string}> = [];
+  const activeSensors: Array<{id: string, name?: string, isBypassed: boolean}> = [];
   const blockingSensors = hass?.states?.[entry.entity_id]?.attributes?.arming_blocking_sensors || [];
   
   if (entry.entity_id) {
@@ -90,8 +90,8 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
     }
     
     const sByps = eCfg.bypassed_sensors || [];
-    sList.filter((s: string) => !sByps.includes(s)).forEach((s: string) => {
-       activeSensors.push({ id: s });
+    sList.forEach((s: string) => {
+       activeSensors.push({ id: s, isBypassed: sByps.includes(s) });
     });
   }
   
@@ -163,10 +163,12 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
                   name={sName}
                   isOpen={isOpen}
                   isBlocking={isBlocking}
+                  isBypassed={sensor.isBypassed}
                   battery={power}
                   iconHtml={panel._getSensorIcon?.(sState, sensor) || ''}
                   statusLabelOpen={t('status_open') || 'ABIERTO'}
                   statusLabelClosed={t('status_closed') || 'CERRADO'}
+                  bypassedLabel={t('bypassed_sensor') || 'OMITIDO'}
                 />
               );
             })
