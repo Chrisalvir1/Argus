@@ -1,8 +1,10 @@
 /* Console HUD Grid Overrides */
 
-@media (min-width: 901px) {
-  .entry:not(.ios-fullscreen) .console-hud { display: contents !important; }
+.security-console .console-hud {
+  display: contents !important;
+}
 
+@media (min-width: 901px) {
   .entry:not(.ios-fullscreen) .security-console {
     display: grid !important;
     grid-template-columns: minmax(240px, 360px) auto minmax(260px, 400px) !important;
@@ -13,7 +15,7 @@
     padding: 32px 32px 24px !important;
   }
 
-  .console-hud-loc {
+  .entry:not(.ios-fullscreen) .security-console .console-hud-loc {
     grid-column: 1 !important;
     grid-row: 1 !important;
     justify-self: start !important;
@@ -21,7 +23,7 @@
     margin: 0 !important;
   }
 
-  .argus-connection-pill {
+  .entry:not(.ios-fullscreen) .security-console .argus-connection-pill {
     grid-column: 2 !important;
     grid-row: 1 !important;
     justify-self: center !important;
@@ -31,14 +33,18 @@
     left: auto !important;
     top: auto !important;
     margin: 0 !important;
+    width: auto !important;
+    max-width: none !important;
   }
 
-  .console-hud-right {
+  .entry:not(.ios-fullscreen) .security-console .console-hud-right {
     grid-column: 3 !important;
     grid-row: 1 !important;
     justify-self: end !important;
     align-self: center !important;
     margin: 0 !important;
+    width: auto !important;
+    max-width: none !important;
   }
 
   .entry:not(.ios-fullscreen) .security-console .liquid-stack {
@@ -194,7 +200,7 @@
 }
 
 /* Base buttons liquid glass styling */
-.entry:not(.ios-fullscreen) .security-console .liquid-btn {
+.security-console .liquid-btn {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
@@ -224,19 +230,19 @@
   transform: translate3d(0,0,0) !important;
 }
 
-.entry:not(.ios-fullscreen) .security-console .liquid-btn:hover {
+.security-console .liquid-btn:hover {
   transform: translateY(-2px) translate3d(0,0,0) scale(1.02) !important;
   background: rgba(255, 255, 255, 0.13) !important;
   border-color: rgba(255, 255, 255, 0.28) !important;
 }
 
-.entry:not(.ios-fullscreen) .security-console .liquid-btn span:first-child, .entry:not(.ios-fullscreen) .security-console .liquid-btn .mode-btn-icon {
+.security-console .liquid-btn span:first-child, .security-console .liquid-btn .mode-btn-icon {
   font-size: 22px !important;
   line-height: 1 !important;
   margin: 0 !important;
 }
 
-.entry:not(.ios-fullscreen) .security-console .liquid-btn span:last-child {
+.security-console .liquid-btn span:last-child {
   font-size: 11.5px !important;
   font-weight: 800 !important;
   color: #ffffff !important;
@@ -247,37 +253,37 @@
 }
 
 /* Active colors for specific modes (overrides the liquid glass base) */
-.entry:not(.ios-fullscreen) .security-console .btn-home.active {
+.security-console .btn-home.active {
   background: linear-gradient(135deg, #fb8c00 0%, #d97706 100%) !important;
   border: 1px solid rgba(254, 215, 170, 0.85) !important;
   box-shadow: 0 14px 36px rgba(251, 140, 0, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
   color: #ffffff !important;
 }
-.entry:not(.ios-fullscreen) .security-console .btn-away.active {
+.security-console .btn-away.active {
   background: linear-gradient(135deg, #e53935 0%, #b91c1c 100%) !important;
   border: 1px solid rgba(254, 202, 202, 0.85) !important;
   box-shadow: 0 14px 36px rgba(229, 57, 53, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
   color: #ffffff !important;
 }
-.entry:not(.ios-fullscreen) .security-console .btn-night.active {
+.security-console .btn-night.active {
   background: linear-gradient(135deg, #1e88e5 0%, #1d4ed8 100%) !important;
   border: 1px solid rgba(191, 219, 254, 0.85) !important;
   box-shadow: 0 14px 36px rgba(30, 136, 229, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
   color: #ffffff !important;
 }
-.entry:not(.ios-fullscreen) .security-console .btn-vacation.active {
+.security-console .btn-vacation.active {
   background: linear-gradient(135deg, #9c27b0 0%, #7e22ce 100%) !important;
   border: 1px solid rgba(245, 208, 254, 0.85) !important;
   box-shadow: 0 14px 36px rgba(156, 39, 176, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
   color: #ffffff !important;
 }
-.entry:not(.ios-fullscreen) .security-console .btn-disarm {
+.security-console .btn-disarm {
   background: linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(16, 185, 129, 0.05) 100%) !important;
   border: 1px solid rgba(16, 185, 129, 0.35) !important;
   color: #a7f3d0 !important;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
 }
-.entry:not(.ios-fullscreen) .security-console .btn-disarm.active {
+.security-console .btn-disarm.active {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
   border: 1px solid rgba(167, 243, 208, 0.85) !important;
   box-shadow: 0 14px 36px rgba(16, 185, 129, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
@@ -285,10 +291,10 @@
 }
 
 @media(max-width:900px){
-  .entry:not(.ios-fullscreen) .security-console .console-hud{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:8px!important;width:100%!important}
-  .entry:not(.ios-fullscreen) .security-console .console-hud-loc{order:1!important;margin:0 auto!important;max-width:100%!important;text-align:center!important;justify-self:center!important}
-  .entry:not(.ios-fullscreen) .security-console .argus-connection-pill{order:2!important;position:static!important;transform:none!important;margin:0 auto!important;justify-self:center!important}
-  .entry:not(.ios-fullscreen) .security-console .console-hud-right{order:3!important;margin:0 auto!important;justify-self:center!important;justify-content:center!important}
+  .security-console .console-hud{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:8px!important;width:100%!important}
+  .security-console .console-hud-loc{order:1!important;margin:0 auto!important;max-width:100%!important;text-align:center!important;justify-self:center!important}
+  .security-console .argus-connection-pill{order:2!important;position:static!important;transform:none!important;margin:0 auto!important;justify-self:center!important}
+  .security-console .console-hud-right{order:3!important;margin:0 auto!important;justify-self:center!important;justify-content:center!important}
 }
 
 /* Arming Shield Animations */
