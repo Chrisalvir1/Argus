@@ -1,0 +1,275 @@
+/* HUD Header (Zero Overlap, Clean Symmetry) */
+.console-hud {
+  position: relative !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  overflow: visible !important;
+  min-height: 38px !important;
+}
+
+.console-hud-loc {
+  justify-self: flex-start !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  height: 36px !important;
+  box-sizing: border-box !important;
+  padding: 0 16px !important;
+  margin-left: 50px !important;
+  max-width: clamp(120px, 26vw, 240px) !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, rgba(255,255,255,0.20), rgba(255,255,255,0.06)) !important;
+  border: 1px solid rgba(255,255,255,0.28) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.38), 0 8px 24px rgba(0,0,0,0.35) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  font-size: 11.5px !important;
+  font-weight: 850 !important;
+  letter-spacing: 0.04em !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5) !important;
+}
+
+.console-hud-right {
+  justify-self: flex-end !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+  min-width: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  height: 36px !important;
+}
+
+.console-system-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  height: 36px !important;
+  box-sizing: border-box !important;
+  padding: 0 16px !important;
+  border-radius: 999px !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+}
+
+.console-system-badge--disarmed {
+  color: #00ff9d !important;
+  color: color(display-p3 0 1 0.6) !important;
+  background: linear-gradient(135deg, rgba(0,255,157,0.28), rgba(0,180,100,0.10)) !important;
+  border: 1.5px solid rgba(0,255,157,0.60) !important;
+  box-shadow: 0 0 28px rgba(0,255,157,0.38), inset 0 1px 0 rgba(255,255,255,0.45) !important;
+  text-shadow: 0 0 10px rgba(0,255,157,0.7) !important;
+}
+.console-system-badge--armed_home,
+.console-system-badge--armed_away,
+.console-system-badge--armed_night,
+.console-system-badge--armed_vacation,
+.console-system-badge--pending {
+  color: #ffb700 !important;
+  color: color(display-p3 1 0.72 0.1) !important;
+  background: linear-gradient(135deg, rgba(255,183,0,0.30), rgba(180,120,0,0.12)) !important;
+  border: 1.5px solid rgba(255,183,0,0.65) !important;
+  box-shadow: 0 0 28px rgba(255,183,0,0.38), inset 0 1px 0 rgba(255,255,255,0.45) !important;
+  text-shadow: 0 0 10px rgba(255,183,0,0.7) !important;
+}
+.console-system-badge--triggered {
+  color: #ff3344 !important;
+  color: color(display-p3 1 0.2 0.25) !important;
+  background: linear-gradient(135deg, rgba(255,51,68,0.38), rgba(180,20,30,0.15)) !important;
+  border: 1.5px solid rgba(255,51,68,0.75) !important;
+  box-shadow: 0 0 35px rgba(255,51,68,0.55), inset 0 1px 0 rgba(255,255,255,0.45) !important;
+  text-shadow: 0 0 12px rgba(255,51,68,0.85) !important;
+}
+
+.argus-connection-pill {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 60 !important;
+  margin: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  height: 36px !important;
+  box-sizing: border-box !important;
+  padding: 0 16px !important;
+  border-radius: 999px !important;
+  white-space: nowrap !important;
+  font-size: 11px !important;
+  font-weight: 850 !important;
+  letter-spacing: 0.04em !important;
+  backdrop-filter: blur(20px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.argus-connection-pill[data-online="true"] {
+  color: #00ff9d !important;
+  color: color(display-p3 0 1 0.6) !important;
+  background: linear-gradient(135deg, rgba(0,255,157,0.28), rgba(0,180,100,0.10)) !important;
+  border: 1.5px solid rgba(0,255,157,0.60) !important;
+  box-shadow: 0 0 28px rgba(0,255,157,0.38), inset 0 1px 0 rgba(255,255,255,0.45) !important;
+  text-shadow: 0 0 10px rgba(0,255,157,0.7) !important;
+}
+.argus-connection-pill[data-online="false"] {
+  color: #ff9d00 !important;
+  color: color(display-p3 1 0.65 0) !important;
+  background: linear-gradient(135deg, rgba(255,157,0,0.30), rgba(180,100,0,0.12)) !important;
+  border: 1.5px solid rgba(255,157,0,0.65) !important;
+  box-shadow: 0 0 28px rgba(255,157,0,0.38), inset 0 1px 0 rgba(255,255,255,0.4) !important;
+  text-shadow: 0 0 10px rgba(255,157,0,0.7) !important;
+}
+.argus-connection-dot {
+  width: 7px !important;
+  height: 7px !important;
+  flex: 0 0 7px !important;
+  border-radius: 50% !important;
+  background: currentColor !important;
+  box-shadow: 0 0 10px currentColor, 0 0 20px currentColor !important;
+}
+
+/* Base buttons liquid glass styling */
+.security-console .liquid-btn {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  gap: 4px !important;
+  padding: 10px 4px !important;
+  min-height: 68px !important;
+  border-radius: 16px !important;
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+  line-height: 1.15 !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow: visible !important;
+  
+  /* The default un-active styling: liquid glass */
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 8px 22px rgba(0, 0, 0, 0.25) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  color: #ffffff !important;
+  
+  cursor: pointer !important;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+  transform: translate3d(0,0,0) !important;
+}
+
+.security-console .liquid-btn:hover {
+  transform: translateY(-2px) translate3d(0,0,0) scale(1.02) !important;
+  background: rgba(255, 255, 255, 0.13) !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+}
+
+.security-console .liquid-btn span:first-child, .security-console .liquid-btn .mode-btn-icon {
+  font-size: 22px !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+}
+
+.security-console .liquid-btn span:last-child {
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  text-align: center !important;
+  white-space: normal !important;
+  text-overflow: clip !important;
+  overflow: visible !important;
+}
+
+/* Active colors for specific modes (overrides the liquid glass base) */
+.security-console .btn-home.active {
+  background: linear-gradient(135deg, #fb8c00 0%, #d97706 100%) !important;
+  border: 1px solid rgba(254, 215, 170, 0.85) !important;
+  box-shadow: 0 14px 36px rgba(251, 140, 0, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+  color: #ffffff !important;
+}
+.security-console .btn-away.active {
+  background: linear-gradient(135deg, #e53935 0%, #b91c1c 100%) !important;
+  border: 1px solid rgba(254, 202, 202, 0.85) !important;
+  box-shadow: 0 14px 36px rgba(229, 57, 53, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+  color: #ffffff !important;
+}
+.security-console .btn-night.active {
+  background: linear-gradient(135deg, #1e88e5 0%, #1d4ed8 100%) !important;
+  border: 1px solid rgba(191, 219, 254, 0.85) !important;
+  box-shadow: 0 14px 36px rgba(30, 136, 229, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+  color: #ffffff !important;
+}
+.security-console .btn-vacation.active {
+  background: linear-gradient(135deg, #9c27b0 0%, #7e22ce 100%) !important;
+  border: 1px solid rgba(245, 208, 254, 0.85) !important;
+  box-shadow: 0 14px 36px rgba(156, 39, 176, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+  color: #ffffff !important;
+}
+.security-console .btn-disarm {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(16, 185, 129, 0.05) 100%) !important;
+  border: 1px solid rgba(16, 185, 129, 0.35) !important;
+  color: #a7f3d0 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+}
+.security-console .btn-disarm.active {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  border: 1px solid rgba(167, 243, 208, 0.85) !important;
+  box-shadow: 0 14px 36px rgba(16, 185, 129, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+  color: #ffffff !important;
+}
+
+@media(max-width:900px){
+  .security-console .console-hud{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:8px!important;width:100%!important}
+  .security-console .console-hud-loc{order:1!important;margin:0 auto!important;max-width:100%!important;text-align:center!important;justify-self:center!important}
+  .security-console .argus-connection-pill{order:2!important;position:static!important;transform:none!important;margin:0 auto!important;justify-self:center!important}
+  .security-console .console-hud-right{order:3!important;margin:0 auto!important;justify-self:center!important;justify-content:center!important}
+}
+
+/* Arming Shield Animations */
+.entry.argus-waiting .entry-icon > svg {
+  transform-origin: center !important;
+  animation: argusArmingShield 1.05s ease-in-out infinite !important;
+  filter: drop-shadow(0 0 26px rgba(255,184,57,.95)) saturate(1.35) !important;
+}
+
+.argus-shield-status { 
+  display:block;
+  margin:7px auto 0;
+  padding:5px 10px;
+  width:max-content;
+  max-width:180px;
+  border:1px solid rgba(255,184,57,.45);
+  border-radius:999px;
+  background:rgba(255,149,0,.13);
+  color:#ffd27a;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-align:center;
+  animation:argusArmingLabel 1.05s ease-in-out infinite 
+}
+
+@keyframes argusArmingShield { 0%,100%{opacity:.55;transform:scale(.94)} 50%{opacity:1;transform:scale(1.07)} }
+@keyframes argusArmingLabel { 0%,100%{opacity:.62} 50%{opacity:1} }

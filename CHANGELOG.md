@@ -1,3 +1,7 @@
+## [2.2.52] - 2026-08-19
+- Restored original "liquid glass" visual styles and dynamic connection state to the React Security Console.
+
+
 ## [2.2.51] - 2026-08-19
 - Fixed TTS announcements for alarm cancellations ignoring configured language.
 
