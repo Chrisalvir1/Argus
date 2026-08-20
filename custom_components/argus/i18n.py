@@ -1,4 +1,6 @@
 """Translations for the Argus backend TTS and notifications."""
+from __future__ import annotations
+from typing import Any
 
 _TRANSLATIONS = {
     "es": {
