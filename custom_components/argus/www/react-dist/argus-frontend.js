@@ -26251,7 +26251,7 @@ function ub({ panel: d, isFullscreen: n, onToggleFullscreen: r, onUnlockKiosk: o
   }, [d]);
   const p = d._dashboard, m = d._hass;
   if (!p || !p.entries || p.entries.length === 0) return null;
-  const g = p.entries[0], f = 0, k = d._renderEntryBackground?.(d._weatherState, d._isNight) || "", b = d._renderBatteryAlerts?.(d._activeSensors || []) || "", E = g.entity_id && m?.states[g.entity_id] ? m.states[g.entity_id].state : "unknown", R = d._hass?.config?.location_name || d._homeName || x("home_fallback") || "Hogar", L = E === "triggered", C = d._hass ? d._hass.connected !== !1 : !1, N = !!m?.states?.[g.entity_id]?.attributes?.arming_waiting_for_sensors, x = (A) => d._t?.(A) || A, y = () => {
+  const g = p.entries[0], f = 0, k = d._renderEntryBackground?.(d._weatherState, d._isNight) || "", b = d._renderBatteryAlerts?.(d._activeSensors || []) || "", E = g.entity_id && m?.states[g.entity_id] ? m.states[g.entity_id].state : "unknown", R = d._homeName || d._ui?.home_name || x("home_fallback") || "Hogar", L = E === "triggered", C = d._hass ? d._hass.connected !== !1 : !1, N = !!m?.states?.[g.entity_id]?.attributes?.arming_waiting_for_sensors, x = (A) => d._t?.(A) || A, y = () => {
     if (L) return x("system_triggered") || "ALARMA ACTIVADA";
     if (N) {
       const A = m?.states?.[g.entity_id]?.attributes?.arming_blocking_sensors || [];

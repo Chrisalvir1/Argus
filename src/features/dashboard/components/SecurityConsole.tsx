@@ -38,7 +38,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
 
   // Calculate HUD and State
   const state = entry.entity_id && hass?.states[entry.entity_id] ? hass.states[entry.entity_id].state : 'unknown';
-  const fullHudLoc = panel._hass?.config?.location_name || panel._homeName || t('home_fallback') || 'Hogar';
+  const fullHudLoc = panel._homeName || panel._ui?.home_name || t('home_fallback') || 'Hogar';
   const triggered = state === 'triggered';
   const isOnline = panel._hass ? panel._hass.connected !== false : false;
   const isWaiting = Boolean(hass?.states?.[entry.entity_id]?.attributes?.arming_waiting_for_sensors);
