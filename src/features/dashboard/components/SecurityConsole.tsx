@@ -38,7 +38,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
 
   // Calculate HUD and State
   const state = entry.entity_id && hass?.states[entry.entity_id] ? hass.states[entry.entity_id].state : 'unknown';
-  const fullHudLoc = panel._ui?.dashboard?.location_name || dashboard.location_name || 'Hogar';
+  const fullHudLoc = panel._hass?.config?.location_name || panel._homeName || t('home_fallback') || 'Hogar';
   const triggered = state === 'triggered';
   const isOnline = panel._hass ? panel._hass.connected !== false : false;
   const isWaiting = Boolean(hass?.states?.[entry.entity_id]?.attributes?.arming_waiting_for_sensors);
@@ -61,8 +61,39 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   };
 
   // Sensors mapping
-  const activeSensors = panel._activeSensors || [];
+  const activeSensors: Array<{id: string, name?: string}> = [];
   const blockingSensors = hass?.states?.[entry.entity_id]?.attributes?.arming_blocking_sensors || [];
+  
+  if (entry.entity_id) {
+    const modes = panel._ui?.modes?.__by_entity__?.[entry.entity_id] || panel._ui?.modes || {};
+    
+    // Default to currently active mode if armed
+    let eCfg = modes[state.replace('armed_', '')] || {};
+    
+    // If triggered, use the mode that was active during trigger if any
+    if (triggered) {
+      eCfg = ['away', 'home', 'night', 'vacation']
+        .map(m => modes[m])
+        .find(config => (config?.sensors || []).some((id: string) => ['on', 'open', 'unlocked', 'recording', 'active', 'motion'].includes(hass?.states?.[id]?.state)))
+        || {};
+    }
+    
+    let sList = eCfg.sensors || [];
+    if (state === 'disarmed' || !sList.length) {
+      const allSensors = new Set<string>();
+      ['away', 'home', 'night', 'vacation'].forEach(m => {
+        if (modes[m]?.sensors) {
+          modes[m].sensors.forEach((s: string) => allSensors.add(s));
+        }
+      });
+      sList = Array.from(allSensors);
+    }
+    
+    const sByps = eCfg.bypassed_sensors || [];
+    sList.filter((s: string) => !sByps.includes(s)).forEach((s: string) => {
+       activeSensors.push({ id: s });
+    });
+  }
   
   return (
     <><style dangerouslySetInnerHTML={{ __html: styles }} /><div className={`entry ${isFullscreen ? 'ios-fullscreen' : ''} ${isWaiting ? 'argus-waiting' : ''}`} style={{ position: 'relative', width: '100%', height: '100%' }}>
