@@ -1,4 +1,4 @@
-## [2.2.69] - 2026-08-19
+## [2.2.70] - 2026-08-19
 - Render bypassed sensors with a gray visual state indicating they are bypassed while still showing their open/closed state.
 
 

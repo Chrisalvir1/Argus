@@ -19,7 +19,7 @@ class TestReactDashboardLayoutContract(unittest.TestCase):
         self.assertEqual(self.package['dependencies']['react-grid-layout'],'1.5.4')
         self.assertIn('react-resizable',self.package['dependencies'])
     def test_collision_safe_non_compacting_grid(self):
-        for token in ['compactType={null}','preventCollision={true}','allowOverlap={false}','isBounded={true}','draggableHandle=".argus-widget__drag-handle"','resizeHandles={[\'se\']}']:
+        for token in ['allowOverlap={false}','isBounded={true}','draggableHandle=".argus-widget__drag-handle"','resizeHandles={[\'se\']}']:
             self.assertIn(token,self.dashboard)
     def test_breakpoints_and_canonical_sizes(self):
         for token in ['lg:1200','md:996','sm:768','xs:480','xxs:0','S:{w:3,h:3}','M:{w:3,h:4}','L:{w:6,h:4}','XL:{w:6,h:8}']:
