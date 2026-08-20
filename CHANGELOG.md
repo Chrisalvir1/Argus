@@ -1,3 +1,7 @@
+## [2.2.55] - 2026-08-19
+- TypeScript compilation fixes to unblock CI release build.
+
+
 ## [2.2.54] - 2026-08-19
 - Test suite fixes to unblock CI release build.
 
