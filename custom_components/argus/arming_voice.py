@@ -58,7 +58,7 @@ async def _async_speak(hass, options, message, lang):
       return
   for player in dict.fromkeys(players):
       try:
-          await hass.services.async_call("tts", "speak", {"entity_id": tts, "media_player_entity_id": player, "message": message, "cache": True}, blocking=False)
+          await hass.services.async_call("tts", "speak", {"entity_id": tts, "media_player_entity_id": player, "message": message, "cache": True, "language": lang}, blocking=False)
       except Exception:
           _LOGGER.exception("Argus could not announce on %s", player)
           persistent_notification.async_create(
