@@ -41,13 +41,13 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   const fullHudLoc = panel._ui?.dashboard?.location_name || dashboard.location_name || 'Hogar';
   const triggered = state === 'triggered';
   const isOnline = panel._hass ? panel._hass.connected !== false : false;
-  const isWaiting = panel._waitingInstances?.includes(entry.entity_id) || false;
+  const isWaiting = Boolean(hass?.states?.[entry.entity_id]?.attributes?.arming_waiting_for_sensors);
 
   const t = (k: string) => panel._t?.(k) || k;
   
   const getBadgeText = () => {
     if (triggered) return t('system_triggered') || 'ALARMA ACTIVADA';
-    if (isWaiting) return t('waiting_sensors') || 'ESPERANDO SENSORES';
+    if (isWaiting) { const b = hass?.states?.[entry.entity_id]?.attributes?.arming_blocking_sensors || []; return b.length ? (t('waiting_sensors_count') || 'ESPERANDO {count} SENSOR(ES)').replace('{count}', String(b.length)) : t('waiting_sensors') || 'ESPERANDO SENSORES'; }
     if (state === 'disarmed') return t('system_disarmed') || 'SISTEMA DESARMADO';
     if (state === 'armed_home') return (t('system_armed') || 'ARMADO') + ' · ' + (t('mode_home') || 'CASA');
     if (state === 'armed_away') return (t('system_armed') || 'ARMADO') + ' · ' + (t('mode_away') || 'AUSENTE');
@@ -62,7 +62,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
 
   // Sensors mapping
   const activeSensors = panel._activeSensors || [];
-  const blockingSensors = panel._blockingSensors || [];
+  const blockingSensors = hass?.states?.[entry.entity_id]?.attributes?.arming_blocking_sensors || [];
   
   return (
     <div className={`entry ${isFullscreen ? 'ios-fullscreen' : ''} ${isWaiting ? 'argus-waiting' : ''}`} style={{ position: 'relative', width: '100%', height: '100%' }}>

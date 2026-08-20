@@ -1,3 +1,8 @@
+## [2.2.53] - 2026-08-19
+- Fix: Disarming now immediately exits the waiting for sensors state.
+- Fix: TTS announcements are now fully dynamic in all languages.
+
+
 ## [2.2.52] - 2026-08-19
 - Restored original "liquid glass" visual styles and dynamic connection state to the React Security Console.
 

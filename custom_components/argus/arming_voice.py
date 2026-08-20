@@ -5,7 +5,7 @@ from homeassistant.components import persistent_notification
 from homeassistant.helpers import device_registry as dr, entity_registry as er
 from .const import *
 from .storage import async_load_ui_data
-from .i18n import translate
+from .i18n import translate, _TRANSLATIONS
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -15,21 +15,12 @@ async def _get_language(hass, config_entry):
     return lang or hass.config.language or "en"
 
 
-LEGACY_SPANISH_DEFAULTS = {
-    "No puedo completar el armado. Hay {count} sensores abiertos: {sensors}.",
-    "{closed} se ha cerrado. Faltan {count} sensores por cerrar: {sensors}.",
-    "Falta un sensor por cerrar: {sensors}.",
-    "Todos los sensores están cerrados. Argus continuará el armado en modo {mode}.",
-    "El armado en modo {mode} fue cancelado manualmente.",
-    "Alerta de seguridad. La alarma fue disparada por: {sensors}. Modo {mode}.",
-    "Alerta adicional. También se activó {sensor}. Ya hay {count} sensores involucrados: {sensors}.",
-}
 
 def _options(hass, entry):
     merged = dict(entry.options)
     merged.update(hass.data.get(DOMAIN, {}).get("arming_voice_yaml", {}))
     for k, v in list(merged.items()):
-        if isinstance(v, str) and v.strip() in LEGACY_SPANISH_DEFAULTS:
+        if isinstance(v, str) and any(v.strip() == val for lang_dict in _TRANSLATIONS.values() for val in lang_dict.values()):
             merged.pop(k)
     return merged
 
