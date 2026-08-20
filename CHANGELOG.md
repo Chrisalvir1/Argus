@@ -1,3 +1,7 @@
+## [2.2.56] - 2026-08-19
+- Fix React mount point for the Security Console to actually render the new HUD.
+
+
 ## [2.2.55] - 2026-08-19
 - TypeScript compilation fixes to unblock CI release build.
 

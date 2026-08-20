@@ -3,11 +3,29 @@ import { SecurityConsole } from './SecurityConsole';
 import { createRoot, Root } from 'react-dom/client';
 
 export function mountSecurityConsole(panel: any) {
-  const container = panel.shadowRoot?.getElementById('entries');
-  if (!container) return;
+  const shadow = panel.shadowRoot;
+  if (!shadow) return;
+  
+  let reactContainer = shadow.getElementById('react-entries');
+  const legacyContainer = shadow.getElementById('entries');
+  
+  if (legacyContainer) {
+    legacyContainer.style.display = 'none';
+  }
+  
+  if (!reactContainer) {
+    reactContainer = document.createElement('div');
+    reactContainer.id = 'react-entries';
+    reactContainer.className = 'entries-container';
+    if (legacyContainer) {
+      legacyContainer.insertAdjacentElement('afterend', reactContainer);
+    } else {
+      shadow.appendChild(reactContainer);
+    }
+  }
   
   if (!panel._reactConsoleRoot) {
-    panel._reactConsoleRoot = createRoot(container);
+    panel._reactConsoleRoot = createRoot(reactContainer);
   }
   
   panel._reactConsoleRoot.render(
@@ -25,11 +43,12 @@ function SecurityConsoleRoot({ panel }: { panel: any }) {
       setIsFullscreen(panel.classList.contains('fullscreen-active'));
     };
     
-    // We hook into the panel's internal render cycle
+    // Hook into the panel's internal render cycle to sync React state
     const originalRender = panel._renderEntries;
     panel._renderEntries = function(...args: any[]) {
       const res = originalRender?.apply(this, args);
-      onUpdate();
+      // Wait for legacy DOM to finish updating before triggering React
+      requestAnimationFrame(() => onUpdate());
       return res;
     };
     
@@ -46,4 +65,24 @@ function SecurityConsoleRoot({ panel }: { panel: any }) {
       onUnlockKiosk={() => panel._requestKioskUnlock()}
     />
   );
+}
+
+export function applyReactSecurityConsole(C: any) {
+  if (!C || C.__argusReactSecurityConsole) return;
+  C.__argusReactSecurityConsole = true;
+  
+  const connected = C.prototype.connectedCallback;
+  const load = C.prototype._load;
+  
+  C.prototype.connectedCallback = function() {
+    const res = connected?.call(this);
+    mountSecurityConsole(this);
+    return res;
+  };
+  
+  C.prototype._load = async function(...args: any[]) {
+    const res = await load?.apply(this, args);
+    mountSecurityConsole(this);
+    return res;
+  };
 }

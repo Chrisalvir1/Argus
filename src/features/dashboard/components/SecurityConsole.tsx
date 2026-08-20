@@ -1,4 +1,4 @@
-import "./SecurityConsole.css";
+import styles from "./SecurityConsole.css?inline";
 
 import React, { useEffect, useState } from 'react';
 import { SensorChip } from './SensorChip';
@@ -65,7 +65,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   const blockingSensors = hass?.states?.[entry.entity_id]?.attributes?.arming_blocking_sensors || [];
   
   return (
-    <div className={`entry ${isFullscreen ? 'ios-fullscreen' : ''} ${isWaiting ? 'argus-waiting' : ''}`} style={{ position: 'relative', width: '100%', height: '100%' }}>
+    <><style dangerouslySetInnerHTML={{ __html: styles }} /><div className={`entry ${isFullscreen ? 'ios-fullscreen' : ''} ${isWaiting ? 'argus-waiting' : ''}`} style={{ position: 'relative', width: '100%', height: '100%' }}>
       <div dangerouslySetInnerHTML={{ __html: bgHtml }} />
       {panel._kioskLocked && !isFullscreen && (
         <button className="btn-unlock-kiosk" onClick={onUnlockKiosk} style={{position:'absolute',top:'16px',right:'16px',zIndex:99,padding:'8px 14px',background:'rgba(220,38,38,0.85)',color:'white',border:'none',borderRadius:'10px',fontWeight:600,fontSize:'13px',cursor:'pointer',backdropFilter:'blur(8px)',boxShadow:'0 4px 12px rgba(0,0,0,0.4)'}}>
@@ -143,5 +143,6 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
         </div>
       </div>
     </div>
+    </>
   );
 }

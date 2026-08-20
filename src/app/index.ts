@@ -1,6 +1,7 @@
 import '../legacy/argus-panel';
 import '../legacy/argus-card';
 import{applyReactDashboardLayout}from'../features/dashboard';
+import { applyReactSecurityConsole } from '../features/dashboard/components';
 import{applyMediaClient}from'../features/media/client';
 import{applySecurityClient}from'../features/security/client';
 import{applyPremiumExperience}from'../features/premium';
@@ -34,4 +35,5 @@ import type{ArgusPanelConstructor}from'../core/panel';
    applyMoreInfoHook(C);
   applyLegacyAfterTypedClients(C);
   applyReactDashboardLayout(C);
+  applyReactSecurityConsole(C);
  }
