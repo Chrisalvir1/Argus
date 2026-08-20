@@ -1,3 +1,7 @@
+## [2.2.54] - 2026-08-19
+- Test suite fixes to unblock CI release build.
+
+
 ## [2.2.53] - 2026-08-19
 - Fix: Disarming now immediately exits the waiting for sensors state.
 - Fix: TTS announcements are now fully dynamic in all languages.
