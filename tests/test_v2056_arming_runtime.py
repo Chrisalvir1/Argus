@@ -85,6 +85,7 @@ def _load_voice_runtime():
 
     storage.async_load_ui_data = load_ui_data
     i18n = types.ModuleType("argus_voice_v2056.i18n")
+    i18n._TRANSLATIONS = {}
     i18n.translate = lambda _lang, key, **values: {
         "msg_start": "start {sensors}", "msg_remaining": "closed {closed}; remaining {sensors}",
         "msg_last": "last {sensors}", "msg_complete": "complete",
