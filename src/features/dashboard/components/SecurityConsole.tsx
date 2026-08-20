@@ -38,12 +38,11 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
 
   // Calculate HUD and State
   const state = entry.entity_id && hass?.states[entry.entity_id] ? hass.states[entry.entity_id].state : 'unknown';
+  const t = (k: string) => panel._t?.(k) || k;
   const fullHudLoc = panel._homeName || panel._ui?.home_name || t('home_fallback') || 'Hogar';
   const triggered = state === 'triggered';
   const isOnline = panel._hass ? panel._hass.connected !== false : false;
   const isWaiting = Boolean(hass?.states?.[entry.entity_id]?.attributes?.arming_waiting_for_sensors);
-
-  const t = (k: string) => panel._t?.(k) || k;
   
   const getBadgeText = () => {
     if (triggered) return t('system_triggered') || 'ALARMA ACTIVADA';
