@@ -1,3 +1,7 @@
+## [2.2.51] - 2026-08-19
+- Fixed TTS announcements for alarm cancellations ignoring configured language.
+
+
 ## [2.2.50] - 2026-08-19
 - Re-architected Security Console rendering from vanilla HTML string generation to React 19 components
 - Purged 21 legacy DOM injection patches to eliminate CSS layout conflicts and radiografia
