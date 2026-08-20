@@ -46,7 +46,7 @@ async def _async_speak(hass, options, message, lang):
   players = options.get(CONF_ARMING_VOICE_PLAYERS, [])
   if isinstance(players, str): players = [players]
   players = [player for player in players if player]
-  if not message: return
+  if not message or not message.strip(" `´'\".,!?:;-"): return
   if not tts or not players:
       _LOGGER.error("Argus: voice announcements enabled but incomplete (tts=%r, players=%r). Announcement skipped: %s", tts or None, players or None, message)
       persistent_notification.async_create(

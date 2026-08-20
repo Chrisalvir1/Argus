@@ -134,11 +134,6 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
           <button className={`liquid-btn btn-home ${state==='armed_home'?'active':''}`} onClick={() => panel._handleAction(idx, 'home')} dangerouslySetInnerHTML={{ __html: panel._modeButtonIcon('home') + `<span>${t('mode_home') || 'CASA'}</span>` }} />
           <button className={`liquid-btn btn-away ${state==='armed_away'?'active':''}`} onClick={() => panel._handleAction(idx, 'away')} dangerouslySetInnerHTML={{ __html: panel._modeButtonIcon('away') + `<span>${t('mode_away') || 'AUSENTE'}</span>` }} />
           <button className={`liquid-btn btn-night ${state==='armed_night'?'active':''}`} onClick={() => panel._handleAction(idx, 'night')} dangerouslySetInnerHTML={{ __html: panel._modeButtonIcon('night') + `<span>${t('mode_night') || 'NOCHE'}</span>` }} />
-          {state !== 'disarmed' && (
-            <button className="liquid-btn btn-disarm" onClick={() => panel._handleAction(idx, 'disarm')}>
-              <span style={{fontSize: '20px'}}>🛡️</span><span>{t('btn_disarmed') || 'DESARMAR'}</span>
-            </button>
-          )}
         </div>
 
         <div className="console-sensors">
