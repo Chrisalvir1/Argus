@@ -5504,9 +5504,11 @@ Mm.innerHTML = `
   @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
   .wrap{max-width:1400px;margin:0 auto;padding:24px;display:grid;gap:24px}
   .glass{background:var(--glass-bg, rgba(255, 255, 255, 0.06));border:1px solid var(--glass-border, rgba(255, 255, 255, 0.09));border-radius:28px;box-shadow:var(--glass-shadow);backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2)}
-  .hero{padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:var(--hero-bg, linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)));margin-bottom:12px;will-change:transform,opacity;animation:heroSpringSlideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both}
+  .hero{position:relative!important;z-index:9999!important;overflow:visible!important;padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:var(--hero-bg, linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)));margin-bottom:12px;will-change:transform,opacity;animation:heroSpringSlideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both}
   .hero-left{display:flex;align-items:center;gap:22px}
-  .hero-context{margin-left:auto;display:flex;align-items:center;gap:8px;min-width:0}.hero-clock{display:flex;flex-direction:column;align-items:flex-end;padding-right:14px;border-right:1px solid rgba(255,255,255,.14);line-height:1}.hero-clock strong{font-size:1.45rem;letter-spacing:-.05em}.hero-clock span{font-size:10px;opacity:.65;margin-top:5px;text-transform:uppercase;letter-spacing:.08em}.hero-pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.hero-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 10px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(7,16,29,.27);box-shadow:inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(14px);font-size:10px;font-weight:800;white-space:nowrap}.hero-pill .hero-live{width:7px;height:7px;border-radius:50%;background:#55df91;box-shadow:0 0 9px #55df91}
+  .hero-context{position:relative!important;z-index:10000!important;overflow:visible!important;margin-left:auto;display:flex;align-items:center;gap:8px;min-width:0}
+  #hero-profile-container{position:relative!important;z-index:10001!important;overflow:visible!important}
+  .hero-profile-dropdown{position:absolute!important;top:calc(100% + 12px)!important;right:0!important;z-index:999999!important;max-height:calc(100vh - 100px)!important;overflow-y:auto!important}.hero-clock{display:flex;flex-direction:column;align-items:flex-end;padding-right:14px;border-right:1px solid rgba(255,255,255,.14);line-height:1}.hero-clock strong{font-size:1.45rem;letter-spacing:-.05em}.hero-clock span{font-size:10px;opacity:.65;margin-top:5px;text-transform:uppercase;letter-spacing:.08em}.hero-pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.hero-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 10px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(7,16,29,.27);box-shadow:inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(14px);font-size:10px;font-weight:800;white-space:nowrap}.hero-pill .hero-live{width:7px;height:7px;border-radius:50%;background:#55df91;box-shadow:0 0 9px #55df91}
   .hero-icon{font-size:54px;line-height:1;filter:drop-shadow(0 0 20px rgba(255,255,255,0.15))}
   .hero h1{margin:0 0 4px;font-size:34px;font-weight:900;letter-spacing:-0.03em;background:var(--hero-gradient, linear-gradient(to right, #ffffff, #82b1ff));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
   .hero p{margin:0;font-size:16px;opacity:.7;font-weight:500}
@@ -7397,11 +7399,11 @@ class Dm extends HTMLElement {
     const o = this._getClockFormat(), c = String(this._hass?.locale?.time_format || "").toLowerCase(), u = o === "12h" || o === "auto" && (c.includes("12") || c.includes("am")), p = String(r.getDate()).padStart(2, "0"), m = String(r.getMonth() + 1).padStart(2, "0"), g = r.getFullYear();
     if (u) {
       let f = r.getHours();
-      const S = String(r.getMinutes()).padStart(2, "0"), b = f >= 12 ? "PM" : "AM";
-      return f = f % 12, f = f || 12, `${p}/${m}/${g}, ${f}:${S} ${b}`;
+      const k = String(r.getMinutes()).padStart(2, "0"), b = f >= 12 ? "PM" : "AM";
+      return f = f % 12, f = f || 12, `${p}/${m}/${g}, ${f}:${k} ${b}`;
     } else {
-      const f = String(r.getHours()).padStart(2, "0"), S = String(r.getMinutes()).padStart(2, "0");
-      return `${p}/${m}/${g}, ${f}:${S}`;
+      const f = String(r.getHours()).padStart(2, "0"), k = String(r.getMinutes()).padStart(2, "0");
+      return `${p}/${m}/${g}, ${f}:${k}`;
     }
   }
   _updateProfileBadge() {
@@ -7438,10 +7440,10 @@ class Dm extends HTMLElement {
           }
           u.drawImage(o, 0, 0, 10, 10);
           const p = u.getImageData(0, 0, 10, 10).data;
-          let m = 0, g = 0, f = 0, S = 0;
+          let m = 0, g = 0, f = 0, k = 0;
           for (let E = 0; E < p.length; E += 4)
-            m += p[E], g += p[E + 1], f += p[E + 2], S++;
-          const b = (0.299 * m + 0.587 * g + 0.114 * f) / S;
+            m += p[E], g += p[E + 1], f += p[E + 2], k++;
+          const b = (0.299 * m + 0.587 * g + 0.114 * f) / k;
           r(b);
         } catch {
           r(128);
@@ -7505,20 +7507,20 @@ class Dm extends HTMLElement {
     r?.language !== n.language && !this._manualLang && this._refreshLocalizedUi();
     const p = this._dashboard.entries.some(
       (O) => O.entity_id && r?.states[O.entity_id]?.state !== n.states[O.entity_id]?.state
-    ), m = this._temperatureSource === "auto" ? null : this._temperatureSource, g = m && r?.states[m]?.state !== n.states[m]?.state, f = this._weatherSource !== "auto" ? this._weatherSource : Object.values(n.states).find((O) => O.entity_id.startsWith("weather."))?.entity_id, S = f && (r?.states[f]?.state !== n.states[f]?.state || r?.states[f]?.attributes?.temperature !== n.states[f]?.attributes?.temperature || r?.states[f]?.attributes?.temperature_unit !== n.states[f]?.attributes?.temperature_unit), b = /* @__PURE__ */ new Set(), E = (O) => {
+    ), m = this._temperatureSource === "auto" ? null : this._temperatureSource, g = m && r?.states[m]?.state !== n.states[m]?.state, f = this._weatherSource !== "auto" ? this._weatherSource : Object.values(n.states).find((O) => O.entity_id.startsWith("weather."))?.entity_id, k = f && (r?.states[f]?.state !== n.states[f]?.state || r?.states[f]?.attributes?.temperature !== n.states[f]?.attributes?.temperature || r?.states[f]?.attributes?.temperature_unit !== n.states[f]?.attributes?.temperature_unit), b = /* @__PURE__ */ new Set(), E = (O) => {
       !O || typeof O != "object" || (Array.isArray(O.sensors) && O.sensors.forEach((N) => b.add(N)), Object.values(O).forEach((N) => {
         N && typeof N == "object" && E(N);
       }));
     };
     E(this._ui?.modes);
     const C = !!r && [...b].some((O) => {
-      const N = r.states[O], k = n.states[O];
-      return N?.state !== k?.state || N?.attributes?.battery_level !== k?.attributes?.battery_level || N?.attributes?.battery_percentage !== k?.attributes?.battery_percentage;
+      const N = r.states[O], S = n.states[O];
+      return N?.state !== S?.state || N?.attributes?.battery_level !== S?.attributes?.battery_level || N?.attributes?.battery_percentage !== S?.attributes?.battery_percentage;
     }), D = !!r && Object.values(n.states).some((O) => {
-      const N = O.entity_id || "", k = O.attributes?.device_class === "battery" || /_battery$/i.test(N), y = r.states[N];
-      return k && y?.state !== O.state;
+      const N = O.entity_id || "", S = O.attributes?.device_class === "battery" || /_battery$/i.test(N), y = r.states[N];
+      return S && y?.state !== O.state;
     });
-    (p || C || D || g || c || S || !r) && (this._renderEntries(), this._renderActivityLog(), r || (this._renderModeTabs(), this._renderModeView(), this._renderAutomations(), this._renderNotifications(), this._activeAccessSection === "users" && this._renderUsers()));
+    (p || C || D || g || c || k || !r) && (this._renderEntries(), this._renderActivityLog(), r || (this._renderModeTabs(), this._renderModeView(), this._renderAutomations(), this._renderNotifications(), this._activeAccessSection === "users" && this._renderUsers()));
   }
   get hass() {
     return this._hass;
@@ -7694,8 +7696,8 @@ class Dm extends HTMLElement {
     }
     const N = r("home-name-input");
     N && (N.placeholder = n("home_name_placeholder"));
-    const k = r("panel-bg-url-input");
-    k && (k.placeholder = n("url_placeholder"));
+    const S = r("panel-bg-url-input");
+    S && (S.placeholder = n("url_placeholder"));
     const y = r("hub-bg-url-input");
     y && (y.placeholder = n("url_placeholder"));
     const v = this.shadowRoot;
@@ -7827,10 +7829,10 @@ class Dm extends HTMLElement {
       if (!o) return;
       u = Math.max(0, Math.min(b.clientX - c, p())), n.style.left = 6 + u + "px";
       const E = u / p();
-      r.style.background = "rgba(217,4,41," + (0.15 + E * 0.55) + ")", E >= 0.98 && S(!0);
+      r.style.background = "rgba(217,4,41," + (0.15 + E * 0.55) + ")", E >= 0.98 && k(!0);
     }, f = (b) => {
-      o && S(!1);
-    }, S = (b) => {
+      o && k(!1);
+    }, k = (b) => {
       o = !1, n.style.transition = "all 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28)", n.style.cursor = "grab", b ? (this._triggerSOS(), u = 0, setTimeout(() => {
         n.style.left = "6px", r.style.background = "rgba(217,4,41,0.15)";
       }, 600)) : (u = 0, n.style.left = "6px", r.style.background = "rgba(217,4,41,0.15)");
@@ -7865,11 +7867,11 @@ class Dm extends HTMLElement {
   }
   _exportHistoryPrintPdf() {
     this._closeHistoryExportModal();
-    const n = this._getFilteredHistory(), r = this._homeName || "Argus Home Hub", o = (/* @__PURE__ */ new Date()).toLocaleString(this._getLocale()), c = this.shadowRoot.getElementById("export-history-from")?.value || "Inicio", u = this.shadowRoot.getElementById("export-history-to")?.value || "Hoy", p = n.map((f, S) => {
+    const n = this._getFilteredHistory(), r = this._homeName || "Argus Home Hub", o = (/* @__PURE__ */ new Date()).toLocaleString(this._getLocale()), c = this.shadowRoot.getElementById("export-history-from")?.value || "Inicio", u = this.shadowRoot.getElementById("export-history-to")?.value || "Hoy", p = n.map((f, k) => {
       const b = f.ts ? new Date(f.ts) : null, E = b && !isNaN(b.getTime()) ? b.toLocaleString(this._getLocale()) : "—", C = String(f.action || ""), D = this._localizeActivityDetail(C, f.detail), O = f.user || f.actor || "Argus";
       return `
         <tr style="border-bottom: 1px solid #e2e8f0; font-size: 11px;">
-          <td style="padding: 6px 8px; color: #64748b; font-family: monospace;">${S + 1}</td>
+          <td style="padding: 6px 8px; color: #64748b; font-family: monospace;">${k + 1}</td>
           <td style="padding: 6px 8px; white-space: nowrap; font-weight: 600;">${this._escapeHtml(E)}</td>
           <td style="padding: 6px 8px; font-weight: 700; color: #0284c7;">${this._escapeHtml(C)}</td>
           <td style="padding: 6px 8px;">${this._escapeHtml(D)}</td>
@@ -7956,8 +7958,8 @@ class Dm extends HTMLElement {
 `, p += `📊  Total eventos: ${n.length}
 `, p += `================================================================================
 
-`, n.forEach((S, b) => {
-      const E = S.ts ? new Date(S.ts) : null, C = E && !isNaN(E.getTime()) ? E.toLocaleString(this._getLocale()) : "—", D = String(S.action || ""), O = this._localizeActivityDetail(D, S.detail), N = S.user || S.actor || "Argus";
+`, n.forEach((k, b) => {
+      const E = k.ts ? new Date(k.ts) : null, C = E && !isNaN(E.getTime()) ? E.toLocaleString(this._getLocale()) : "—", D = String(k.action || ""), O = this._localizeActivityDetail(D, k.detail), N = k.user || k.actor || "Argus";
       p += `[${String(b + 1).padStart(3, "0")}] ${C} | [${D}] ${O} | 👤 ${N}
 `;
     }), p += `
@@ -8078,8 +8080,8 @@ class Dm extends HTMLElement {
         salt: this._bytesToBase64(c),
         iv: this._bytesToBase64(u),
         data: this._bytesToBase64(new Uint8Array(m))
-      }, f = new Blob([JSON.stringify(g)], { type: "application/json" }), S = URL.createObjectURL(f), b = document.createElement("a");
-      b.href = S, b.download = `argus_backup_${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}.argus`, b.click(), setTimeout(() => URL.revokeObjectURL(S), 5e3);
+      }, f = new Blob([JSON.stringify(g)], { type: "application/json" }), k = URL.createObjectURL(f), b = document.createElement("a");
+      b.href = k, b.download = `argus_backup_${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}.argus`, b.click(), setTimeout(() => URL.revokeObjectURL(k), 5e3);
     } catch (n) {
       alert(this._format("export_error", { error: n.message }));
     }
@@ -8096,8 +8098,8 @@ class Dm extends HTMLElement {
           const p = await this._requestBackupPassword("decrypt");
           if (p === null) return;
           try {
-            const m = this._base64ToBytes(u.salt), g = this._base64ToBytes(u.iv), f = await this._backupKey(p, m, ["decrypt"]), S = await crypto.subtle.decrypt({ name: "AES-GCM", iv: g }, f, this._base64ToBytes(u.data));
-            u = JSON.parse(new TextDecoder().decode(S));
+            const m = this._base64ToBytes(u.salt), g = this._base64ToBytes(u.iv), f = await this._backupKey(p, m, ["decrypt"]), k = await crypto.subtle.decrypt({ name: "AES-GCM", iv: g }, f, this._base64ToBytes(u.data));
+            u = JSON.parse(new TextDecoder().decode(k));
           } catch {
             throw new Error(this._backupText("bad"));
           }
@@ -8263,8 +8265,8 @@ class Dm extends HTMLElement {
     g && (g.value = this._temperatureSource || "auto", g.dataset.bound || (g.dataset.bound = "1", g.addEventListener("change", () => this._savePersonalization()))), this._populateWeatherSources();
     const f = this.shadowRoot.getElementById("weather-source-select");
     f && (f.value = this._weatherSource || "auto", f.dataset.bound || (f.dataset.bound = "1", f.addEventListener("change", () => this._savePersonalization())));
-    const S = this.shadowRoot.getElementById("argus-clock-format-select");
-    S && (this._clockFormat = this._ui?.clock_format || this._dashboard?.clock_format || "auto", S.value = this._clockFormat, S.dataset.bound || (S.dataset.bound = "1", S.addEventListener("change", () => this._savePersonalization())));
+    const k = this.shadowRoot.getElementById("argus-clock-format-select");
+    k && (this._clockFormat = this._ui?.clock_format || this._dashboard?.clock_format || "auto", k.value = this._clockFormat, k.dataset.bound || (k.dataset.bound = "1", k.addEventListener("change", () => this._savePersonalization())));
     const b = this.shadowRoot.getElementById("emergency-number-input");
     b && (b.value = this._emergencyNumber), this._renderSosOutputs(), this._configureEmergencyCall();
     const E = this.shadowRoot.getElementById("bg-mode-select-standalone");
@@ -8286,8 +8288,8 @@ class Dm extends HTMLElement {
     O && (O.checked = this._panelBgSound);
     const N = this.shadowRoot.getElementById("hub-bg-url-input");
     N && (N.value = this._hubBgFile && !this._hubBgFile.startsWith("data:") ? this._hubBgFile : "");
-    const k = this.shadowRoot.getElementById("chk-hub-bg-sound");
-    k && (k.checked = this._hubBgSound), this._updateBgFieldsVisibility(), this._updateCanvasBackground(), this._isAdmin = c.current_profile?.role === "admin", this._permissions = c.current_profile?.permissions || {};
+    const S = this.shadowRoot.getElementById("chk-hub-bg-sound");
+    S && (S.checked = this._hubBgSound), this._updateBgFieldsVisibility(), this._updateCanvasBackground(), this._isAdmin = c.current_profile?.role === "admin", this._permissions = c.current_profile?.permissions || {};
     const y = c.entries?.[0]?.entity_id;
     if (y ? ((!this._modeEntryId || this._modeEntryId === "default") && (this._modeEntryId = y), this._loadRetryTimeout && (clearTimeout(this._loadRetryTimeout), this._loadRetryTimeout = null)) : (!this._modeEntryId || this._modeEntryId === "default") && (this._modeEntryId = null), this._isAdmin)
       try {
@@ -8336,12 +8338,12 @@ class Dm extends HTMLElement {
       return { battery: null, mains: !0 };
     if (u === null && this._hass?.states) {
       let f = null;
-      const S = n.split(".").slice(1).join(".").toLowerCase(), b = S.replace(/_(contact|door|window|motion|occupancy|opening|sensor|iaszone|ias_zone)$/i, ""), E = [
-        `sensor.${S}_battery`,
+      const k = n.split(".").slice(1).join(".").toLowerCase(), b = k.replace(/_(contact|door|window|motion|occupancy|opening|sensor|iaszone|ias_zone)$/i, ""), E = [
+        `sensor.${k}_battery`,
         `sensor.${b}_battery`,
-        `sensor.${S}_battery_level`,
+        `sensor.${k}_battery_level`,
         `sensor.${b}_battery_level`,
-        `sensor.${S}_battery_percentage`,
+        `sensor.${k}_battery_percentage`,
         `sensor.${b}_battery_percentage`
       ];
       for (const C of E) {
@@ -8371,12 +8373,12 @@ class Dm extends HTMLElement {
     return { battery: u, mains: m };
   }
   _deviceFacts(n, r, o = !0) {
-    const c = r?.state || "unknown", u = ["on", "unlocked", "open", "recording", "active", "motion"].includes(c), p = { on: this._t("status_open"), off: this._t("status_closed"), locked: this._t("status_closed"), unlocked: this._t("status_open"), idle: this._t("status_idle"), recording: this._t("status_recording"), home: this._t("status_home"), not_home: this._t("status_away") }, m = n.split(".")[0], g = ["siren", "switch", "light", "fan", "input_boolean", "script", "alarm_control_panel"].includes(m), f = this._getDevicePower(n, r), S = [];
-    if (o && S.push({ text: g ? c.toUpperCase() : p[c] || c, className: g ? "" : u ? "status-open" : "status-closed" }), f.mains && S.push({ text: "🔌 AC", className: "power-mains" }), f.battery !== null) {
+    const c = r?.state || "unknown", u = ["on", "unlocked", "open", "recording", "active", "motion"].includes(c), p = { on: this._t("status_open"), off: this._t("status_closed"), locked: this._t("status_closed"), unlocked: this._t("status_open"), idle: this._t("status_idle"), recording: this._t("status_recording"), home: this._t("status_home"), not_home: this._t("status_away") }, m = n.split(".")[0], g = ["siren", "switch", "light", "fan", "input_boolean", "script", "alarm_control_panel"].includes(m), f = this._getDevicePower(n, r), k = [];
+    if (o && k.push({ text: g ? c.toUpperCase() : p[c] || c, className: g ? "" : u ? "status-open" : "status-closed" }), f.mains && k.push({ text: "🔌 AC", className: "power-mains" }), f.battery !== null) {
       const b = f.battery === 0, E = f.battery <= 20 && !b, C = b ? "🔋 ❌" : `🔋 ${f.battery}%`, D = b ? "dead" : E ? "low" : "";
-      S.push({ text: C, className: `pill-power ${D}` });
+      k.push({ text: C, className: `pill-power ${D}` });
     }
-    return S;
+    return k;
   }
   _renderBatteryAlerts(n) {
     if (!this._hass?.states) return "";
@@ -8385,11 +8387,11 @@ class Dm extends HTMLElement {
       const p = this._ui?.modes || {}, m = /* @__PURE__ */ new Set();
       ["away", "home", "night", "vacation"].forEach((g) => {
         const f = p[g]?.sensors;
-        Array.isArray(f) && f.forEach((S) => m.add(S));
+        Array.isArray(f) && f.forEach((k) => m.add(k));
       }), this._ui?.modes?.__by_entity__ && Object.values(this._ui.modes.__by_entity__).forEach((g) => {
         ["away", "home", "night", "vacation"].forEach((f) => {
-          const S = g[f]?.sensors;
-          Array.isArray(S) && S.forEach((b) => m.add(b));
+          const k = g[f]?.sensors;
+          Array.isArray(k) && k.forEach((b) => m.add(b));
         });
       }), r = Array.from(m);
     }
@@ -8443,11 +8445,11 @@ class Dm extends HTMLElement {
     const p = this._getWeatherEntity().state || "sunny", m = this._hass?.states?.["sun.sun"]?.state === "below_horizon", g = this._weatherPresentation(p, m), f = (v) => {
       const h = String(c(v) || "").trim(), x = h.indexOf(" ");
       return x > 0 && x <= 3 ? h.substring(x + 1).trim() : h;
-    }, S = /* @__PURE__ */ new Date(), b = this._formatTime(S), E = this.shadowRoot.getElementById("hero-clock-time"), C = this.shadowRoot.getElementById("hero-clock-date"), D = this.shadowRoot.getElementById("hero-weather-pill"), O = this.shadowRoot.getElementById("hero-security-pill"), N = o.some((v) => {
+    }, k = /* @__PURE__ */ new Date(), b = this._formatTime(k), E = this.shadowRoot.getElementById("hero-clock-time"), C = this.shadowRoot.getElementById("hero-clock-date"), D = this.shadowRoot.getElementById("hero-weather-pill"), O = this.shadowRoot.getElementById("hero-security-pill"), N = o.some((v) => {
       const h = this._hass?.states[v.entity_id]?.state || v.state;
       return String(h).startsWith("armed") || h === "triggered" || h === "pending";
     });
-    E && (E.textContent = b), C && (C.textContent = S.toLocaleDateString(this._getLocale(), { weekday: "short", month: "short", day: "numeric" })), D && (D.textContent = `${g.icon} ${g.label}`), O && (O.innerHTML = `<i class="hero-live" style="background:${N ? "#ffb54d" : "#55df91"};box-shadow:0 0 9px ${N ? "#ffb54d" : "#55df91"}"></i>${this._escapeHtml(c(N ? "system_armed" : "system_disarmed"))}`), Array.from(n.querySelectorAll("article.entry")).length !== o.length && (n.innerHTML = o.map((v, h) => `<article class="entry" data-idx="${h}"></article>`).join(""));
+    E && (E.textContent = b), C && (C.textContent = k.toLocaleDateString(this._getLocale(), { weekday: "short", month: "short", day: "numeric" })), D && (D.textContent = `${g.icon} ${g.label}`), O && (O.innerHTML = `<i class="hero-live" style="background:${N ? "#ffb54d" : "#55df91"};box-shadow:0 0 9px ${N ? "#ffb54d" : "#55df91"}"></i>${this._escapeHtml(c(N ? "system_armed" : "system_disarmed"))}`), Array.from(n.querySelectorAll("article.entry")).length !== o.length && (n.innerHTML = o.map((v, h) => `<article class="entry" data-idx="${h}"></article>`).join(""));
     const y = n.querySelectorAll("article.entry");
     if (o.forEach((v, h) => {
       const x = y[h], z = this._hass?.states[v.entity_id]?.state || v.state || "unavailable", j = z === "triggered";
@@ -8705,8 +8707,8 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
       n.style.opacity = "0";
       return;
     }
-    const S = o.createBuffer();
-    o.bindBuffer(o.ARRAY_BUFFER, S), o.bufferData(o.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), o.STATIC_DRAW);
+    const k = o.createBuffer();
+    o.bindBuffer(o.ARRAY_BUFFER, k), o.bufferData(o.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), o.STATIC_DRAW);
     const b = (h) => o.getUniformLocation(f, h), E = o.getAttribLocation(f, "p"), C = {
       time: b("time"),
       rain: b("rain"),
@@ -8737,7 +8739,7 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
       speed: 0.1 + Math.random() * 0.3,
       alpha: 0.08 + Math.random() * 0.07
     }));
-    let k = 0, y = !0;
+    let S = 0, y = !0;
     if (n.width === 0 || n.height === 0 || n.clientWidth === 0 || n.clientHeight === 0) {
       const h = n.parentElement;
       h && h.offsetWidth > 0 ? (n.width = Math.floor(h.offsetWidth * (window.devicePixelRatio || 1)) || 300, n.height = Math.floor(h.offsetHeight * (window.devicePixelRatio || 1)) || 200) : (n.width = 600, n.height = 400);
@@ -8752,17 +8754,17 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
       const j = [], K = [], X = [];
       N.forEach((W) => {
         j.push(W.x / A, W.y / z), K.push(W.rx / A, W.ry / z), X.push(D.cloudy > 0 ? W.alpha : 0);
-      }), o.useProgram(f), o.enable(o.BLEND), o.blendFunc(o.SRC_ALPHA, o.ONE_MINUS_SRC_ALPHA), o.bindBuffer(o.ARRAY_BUFFER, S), o.enableVertexAttribArray(E), o.vertexAttribPointer(E, 2, o.FLOAT, !1, 0, 0), C.time && o.uniform1f(C.time, h), C.rain && o.uniform1f(C.rain, D.rain), C.snow && o.uniform1f(C.snow, D.snow), C.fog && o.uniform1f(C.fog, D.fog), C.storm && o.uniform1f(C.storm, D.storm), C.wind && o.uniform1f(C.wind, D.wind), C.temp && o.uniform1f(C.temp, D.temp), C.night && o.uniform1f(C.night, D.night), C.cloudy && o.uniform1f(C.cloudy, D.cloudy), C.cloudPositions && o.uniform2fv(C.cloudPositions, j), C.cloudSizes && o.uniform2fv(C.cloudSizes, K), C.cloudAlphas && o.uniform1fv(C.cloudAlphas, X), o.drawArrays(o.TRIANGLE_STRIP, 0, 4), k = requestAnimationFrame(v);
+      }), o.useProgram(f), o.enable(o.BLEND), o.blendFunc(o.SRC_ALPHA, o.ONE_MINUS_SRC_ALPHA), o.bindBuffer(o.ARRAY_BUFFER, k), o.enableVertexAttribArray(E), o.vertexAttribPointer(E, 2, o.FLOAT, !1, 0, 0), C.time && o.uniform1f(C.time, h), C.rain && o.uniform1f(C.rain, D.rain), C.snow && o.uniform1f(C.snow, D.snow), C.fog && o.uniform1f(C.fog, D.fog), C.storm && o.uniform1f(C.storm, D.storm), C.wind && o.uniform1f(C.wind, D.wind), C.temp && o.uniform1f(C.temp, D.temp), C.night && o.uniform1f(C.night, D.night), C.cloudy && o.uniform1f(C.cloudy, D.cloudy), C.cloudPositions && o.uniform2fv(C.cloudPositions, j), C.cloudSizes && o.uniform2fv(C.cloudSizes, K), C.cloudAlphas && o.uniform1fv(C.cloudAlphas, X), o.drawArrays(o.TRIANGLE_STRIP, 0, 4), S = requestAnimationFrame(v);
     };
     n._argusWebglStop = () => {
-      y = !1, cancelAnimationFrame(k), o.getExtension("WEBGL_lose_context")?.loseContext();
-    }, n.closest(".wx-atmosphere")?.classList.add("webgl-active"), k = requestAnimationFrame(v);
+      y = !1, cancelAnimationFrame(S), o.getExtension("WEBGL_lose_context")?.loseContext();
+    }, n.closest(".wx-atmosphere")?.classList.add("webgl-active"), S = requestAnimationFrame(v);
   }
   /* ── Inline CSS Weather Backgrounds ─────────────────────────── */
   _renderAtmosphere(n, r) {
-    const o = String(n || "").toLowerCase(), c = (O) => o.includes(O), u = c("thunder") || c("lightning") || c("storm"), p = c("snow") || c("hail") || c("sleet") || c("blizzard"), m = c("drizzle") || c("shower"), g = !m && (c("rain") || c("pouring")), f = c("fog") || c("mist") || c("hazy"), S = c("cloud") || c("overcast");
+    const o = String(n || "").toLowerCase(), c = (O) => o.includes(O), u = c("thunder") || c("lightning") || c("storm"), p = c("snow") || c("hail") || c("sleet") || c("blizzard"), m = c("drizzle") || c("shower"), g = !m && (c("rain") || c("pouring")), f = c("fog") || c("mist") || c("hazy"), k = c("cloud") || c("overcast");
     let b = "clear";
-    u ? b = "storm" : g || m ? b = "rain" : p ? b = "snow" : f ? b = "fog" : c("partly") ? b = "partlycloudy" : S ? b = "cloudy" : c("sunny") && (b = "sunny");
+    u ? b = "storm" : g || m ? b = "rain" : p ? b = "snow" : f ? b = "fog" : c("partly") ? b = "partlycloudy" : k ? b = "cloudy" : c("sunny") && (b = "sunny");
     const E = r ? "night" : "day", D = this._eclipseEvent() ? "eclipse" : "";
     return `<div class="scene ${E} ${b} ${D}"></div>`;
   }
@@ -8795,8 +8797,8 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
     p && (p.checked = !!u.enabled), m && (m.value = String(u.required_signals || 2)), g && (g.value = String(u.window_seconds || 15));
     const f = this.shadowRoot.getElementById("confirm-label");
     f && (f.textContent = n.confirm);
-    const S = this.shadowRoot.getElementById("confirm-help");
-    S && (S.textContent = n.help);
+    const k = this.shadowRoot.getElementById("confirm-help");
+    k && (k.textContent = n.help);
     const b = this.shadowRoot.getElementById("btn-save-confirmation");
     if (b && b.dataset.saved !== "1" && (b.textContent = n.save), this._renderStateSchedule(), !c) return;
     const E = this._systemHealth;
@@ -8804,13 +8806,13 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
       c.innerHTML = `<div class="small" style="padding:10px">${this._escapeHtml(n.none)}</div>`;
       return;
     }
-    const C = Array.isArray(E.batteries) ? E.batteries : [], D = C.filter((h) => h.low), O = Array.isArray(E.unavailable) ? E.unavailable : [], N = Array.isArray(E.configured_devices) ? E.configured_devices : [], k = E.status === "critical" ? n.critical : E.status === "warning" ? n.warning : n.healthy, y = new Map(C.map((h) => [h.entity_id, h])), v = N.map((h) => {
+    const C = Array.isArray(E.batteries) ? E.batteries : [], D = C.filter((h) => h.low), O = Array.isArray(E.unavailable) ? E.unavailable : [], N = Array.isArray(E.configured_devices) ? E.configured_devices : [], S = E.status === "critical" ? n.critical : E.status === "warning" ? n.warning : n.healthy, y = new Map(C.map((h) => [h.entity_id, h])), v = N.map((h) => {
       const x = y.get(h.entity_id), A = h.state === "unknown" || h.state === "unavailable", z = [A ? n.offline : h.state];
       return x?.value !== null && x?.value !== void 0 && z.push(`${x.value}${x.unit || "%"}`), { name: h.name, value: z.join(" · "), alert: A || !!x?.low };
     });
     c.innerHTML = `<div class="health-summary">
       <div class="health-score" style="--score:${Number(E.score) || 0}" aria-label="${Number(E.score) || 0}%">${Number(E.score) || 0}</div>
-      <div><div style="font-weight:850">${this._escapeHtml(k)}</div><div class="small" style="opacity:.6;margin-top:3px">${N.length} ${this._escapeHtml(n.devices)}</div></div>
+      <div><div style="font-weight:850">${this._escapeHtml(S)}</div><div class="small" style="opacity:.6;margin-top:3px">${N.length} ${this._escapeHtml(n.devices)}</div></div>
     </div><div class="health-metrics">
       <div class="health-metric"><strong>${O.length}</strong><span>${this._escapeHtml(n.offline)}</span></div>
       <div class="health-metric"><strong>${D.length}</strong><span>${this._escapeHtml(n.low)}</span></div>
@@ -8856,17 +8858,17 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
     r && (r.textContent = n.title);
     const o = this.shadowRoot.getElementById("schedule-state"), c = this.shadowRoot.getElementById("schedule-days");
     if (o) {
-      const S = o.value;
-      o.innerHTML = `<option value="disarmed">${n.disarmed}</option><option value="armed_home">${n.home}</option><option value="armed_away">${n.away}</option><option value="armed_night">${n.night}</option><option value="armed_vacation">${n.vacation}</option>`, o.value = S || "armed_night";
+      const k = o.value;
+      o.innerHTML = `<option value="disarmed">${n.disarmed}</option><option value="armed_home">${n.home}</option><option value="armed_away">${n.away}</option><option value="armed_night">${n.night}</option><option value="armed_vacation">${n.vacation}</option>`, o.value = k || "armed_night";
     }
     if (c) {
-      const S = c.value;
-      c.innerHTML = `<option value="all">${n.all}</option><option value="weekdays">${n.weekdays}</option><option value="weekend">${n.weekend}</option>`, c.value = S || "all";
+      const k = c.value;
+      c.innerHTML = `<option value="all">${n.all}</option><option value="weekdays">${n.weekdays}</option><option value="weekend">${n.weekend}</option>`, c.value = k || "all";
     }
     const u = this.shadowRoot.getElementById("schedule-list");
     if (!u) return;
-    const p = Array.isArray(this._ui?.state_schedule) ? this._ui.state_schedule : [], m = { es: "Eliminar horario", en: "Delete schedule", fr: "Supprimer l’horaire", pt: "Excluir horário", it: "Elimina programma", zh: "删除计划", "zh-Hant": "刪除排程", ru: "Удалить расписание", hi: "शेड्यूल हटाएं", ar: "حذف الجدول", ko: "일정 삭제", ja: "スケジュールを削除", uk: "Видалити розклад" }[this._getCurrentLangCode()] || "Delete schedule", g = (S) => ({ disarmed: n.disarmed, armed_home: n.home, armed_away: n.away, armed_night: n.night, armed_vacation: n.vacation })[S] || S, f = (S) => S?.length === 2 ? n.weekend : S?.length === 5 ? n.weekdays : n.all;
-    u.innerHTML = p.length ? p.map((S) => `<div class="schedule-row"><span><strong>${this._escapeHtml(S.time || "")}</strong> · ${this._escapeHtml(g(S.state))} · ${this._escapeHtml(f(S.days))}</span><button class="ghost" data-schedule-delete="${this._escapeHtml(S.id)}" aria-label="${this._escapeHtml(m)}">×</button></div>`).join("") : `<div class="small" style="opacity:.55">${this._escapeHtml(n.empty)}</div>`, u.querySelectorAll("[data-schedule-delete]").forEach((S) => S.addEventListener("click", () => this._deleteStateSchedule(S.dataset.scheduleDelete)));
+    const p = Array.isArray(this._ui?.state_schedule) ? this._ui.state_schedule : [], m = { es: "Eliminar horario", en: "Delete schedule", fr: "Supprimer l’horaire", pt: "Excluir horário", it: "Elimina programma", zh: "删除计划", "zh-Hant": "刪除排程", ru: "Удалить расписание", hi: "शेड्यूल हटाएं", ar: "حذف الجدول", ko: "일정 삭제", ja: "スケジュールを削除", uk: "Видалити розклад" }[this._getCurrentLangCode()] || "Delete schedule", g = (k) => ({ disarmed: n.disarmed, armed_home: n.home, armed_away: n.away, armed_night: n.night, armed_vacation: n.vacation })[k] || k, f = (k) => k?.length === 2 ? n.weekend : k?.length === 5 ? n.weekdays : n.all;
+    u.innerHTML = p.length ? p.map((k) => `<div class="schedule-row"><span><strong>${this._escapeHtml(k.time || "")}</strong> · ${this._escapeHtml(g(k.state))} · ${this._escapeHtml(f(k.days))}</span><button class="ghost" data-schedule-delete="${this._escapeHtml(k.id)}" aria-label="${this._escapeHtml(m)}">×</button></div>`).join("") : `<div class="small" style="opacity:.55">${this._escapeHtml(n.empty)}</div>`, u.querySelectorAll("[data-schedule-delete]").forEach((k) => k.addEventListener("click", () => this._deleteStateSchedule(k.dataset.scheduleDelete)));
   }
   async _addStateSchedule() {
     const n = this.shadowRoot.getElementById("schedule-state")?.value, r = this.shadowRoot.getElementById("schedule-time")?.value, o = this.shadowRoot.getElementById("schedule-days")?.value || "all";
@@ -8905,9 +8907,9 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
       };
       let D = this._t("disarmed");
       const O = o.toLowerCase();
-      for (const [N, k] of Object.entries(C))
-        if (O.includes(N) || O.includes(k.toLowerCase())) {
-          D = k;
+      for (const [N, S] of Object.entries(C))
+        if (O.includes(N) || O.includes(S.toLowerCase())) {
+          D = S;
           break;
         }
       return `${this._t("log_action_state_restored")}: ${D}`;
@@ -8920,7 +8922,7 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
       const C = o.match(/\((?:modo|mode|modalità|режим|模式)\s*:?\s*([^)]+)\)/i);
       let D = "";
       if (C && C[1]) {
-        const k = C[1].toLowerCase(), y = Object.entries(u).find(([, v]) => v.some((h) => k.includes(h)))?.[0];
+        const S = C[1].toLowerCase(), y = Object.entries(u).find(([, v]) => v.some((h) => S.includes(h)))?.[0];
         D = y ? this._t(`mode_${y}`) : C[1];
       }
       const O = o.match(/(?:sensor|capteur|sensore|датчик|传感器)\s*:\s*(.+)$/i)?.[1]?.replace(/\s*\((?:modo|mode|modalità|режим|模式)\s*:?[^)]*\)\s*$/i, "")?.trim();
@@ -8941,8 +8943,8 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
     if (n === "mode_changed") return this._t("log_action_mode_changed");
     if (n === "audit_log_cleared") return r || this._t("log_action_audit_log_cleared") || "Historial de actividad eliminado";
     if (n.includes("pin_updated") || n.includes("access_pin_updated")) return this._t("update_pin");
-    const f = `log_action_${String(n).toLowerCase()}`, S = this._t(f);
-    if (S !== f) return S;
+    const f = `log_action_${String(n).toLowerCase()}`, k = this._t(f);
+    if (k !== f) return k;
     let b = o;
     const E = {
       "Administrador de Argus": this._t("role_argus_admin"),
@@ -9003,38 +9005,38 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
         }
         const c = r.closest(".panel"), u = c && c.getAttribute("data-size") === "S";
         r.innerHTML = o.slice(0, u ? 1 : 30).map((p) => {
-          const m = String(p.action || ""), g = String(p.detail || ""), f = String(p.user || p.actor || ""), S = p.ts ? new Date(p.ts) : null;
+          const m = String(p.action || ""), g = String(p.detail || ""), f = String(p.user || p.actor || ""), k = p.ts ? new Date(p.ts) : null;
           let b = "";
-          if (S && !Number.isNaN(S.getTime()))
+          if (k && !Number.isNaN(k.getTime()))
             try {
-              b = S.toLocaleString(this._getLocale());
+              b = k.toLocaleString(this._getLocale());
             } catch {
-              b = S.toISOString();
+              b = k.toISOString();
             }
           const E = this._localizeActivityDetail(m, g);
           let C = '<div class="glass-orb"></div>', D = "", O = m, N = "";
-          const k = String(m || "").toLowerCase();
-          if (k.endsWith("_rejected"))
+          const S = String(m || "").toLowerCase();
+          if (S.endsWith("_rejected"))
             N = "log-item--triggered", D = "trigger", O = this._t("log_action_rejected");
-          else if (k.includes("arm") && !k.includes("disarm"))
+          else if (S.includes("arm") && !S.includes("disarm"))
             N = "log-item--armed", D = "arm", O = this._t("log_armed");
-          else if (k.includes("disarm"))
+          else if (S.includes("disarm"))
             N = "log-item--disarmed", D = "disarm", O = this._t("log_disarmed");
-          else if (k.includes("trigger") || k.includes("alarm"))
+          else if (S.includes("trigger") || S.includes("alarm"))
             N = "log-item--triggered", D = "trigger", O = this._t("log_triggered");
-          else if (k === "pin_reset")
+          else if (S === "pin_reset")
             N = "log-item--disarmed", D = "disarm", O = this._t("badge_pin_reset");
-          else if (k === "pin_reset_failed")
+          else if (S === "pin_reset_failed")
             N = "log-item--triggered", D = "trigger", O = this._t("badge_pin_reset_failed");
-          else if (k === "sos" || k === "sos_stopped" || k === "panic_stopped")
+          else if (S === "sos" || S === "sos_stopped" || S === "panic_stopped")
             N = "log-item--triggered", D = "trigger", O = this._t("log_action_sos");
-          else if (k === "audit_log_cleared")
+          else if (S === "audit_log_cleared")
             N = "log-item--triggered", D = "trigger", O = "🗑️ " + (this._t("log_action_audit_log_cleared") || "Historial Borrado");
-          else if (k === "ui_configuration_updated")
+          else if (S === "ui_configuration_updated")
             O = this._t("settings");
           else {
-            const v = `log_action_${k}`, h = this._t(v);
-            O = h && h !== v ? h : this._t(k) !== k ? this._t(k) : this._t("log_action_analysis") || m;
+            const v = `log_action_${S}`, h = this._t(v);
+            O = h && h !== v ? h : this._t(S) !== S ? this._t(S) : this._t("log_action_analysis") || m;
           }
           let y = "";
           return f && f !== "Argus" && f !== "system" ? y = `👤 ${f}` : m.toLowerCase().includes("homekit") || E.toLowerCase().includes("homekit") ? y = "🍎 HomeKit" : y = "🤖 Argus", `<div class="log-item ${N}">
@@ -9209,14 +9211,14 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
       ), n.querySelector("#save-sos-mode")?.addEventListener("click", () => this._saveSosMode()));
       return;
     }
-    const o = this._currentModeConfig(), c = o.sensors || [], u = o.bypassed_sensors || [], p = o.sirens || [], m = o.external_panels || [], g = this._dashboard?.entries || [], f = this._modeEntryId || g[0]?.entity_id || "", S = g.length > 1 ? `
+    const o = this._currentModeConfig(), c = o.sensors || [], u = o.bypassed_sensors || [], p = o.sirens || [], m = o.external_panels || [], g = this._dashboard?.entries || [], f = this._modeEntryId || g[0]?.entity_id || "", k = g.length > 1 ? `
         <div class="mode-section-card">
           <div class="mode-section-title">${this._t("alarm_instance")}</div>
           <select id="mode-instance-select" style="width:100%; padding:10px; border-radius:10px; background:rgba(255,255,255,0.05); color:inherit; border:1px solid rgba(255,255,255,0.1)">${g.map((b) => `<option value="${this._escapeHtml(b.entity_id)}" ${b.entity_id === f ? "selected" : ""}>${this._escapeHtml(b.title || b.entity_id)}</option>`).join("")}</select>
         </div>` : "";
     n.innerHTML = `
       <div class="mode-grid-layout">
-        ${S}
+        ${k}
 
         <div class="mode-section-card">
           <div class="mode-section-title">🛡️ ${this._t("sensor_section")}</div>
@@ -9303,11 +9305,11 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
         f += `<span class="pill-power ${D ? "dead" : O ? "low" : ""}">${N}</span>`;
       }
     }
-    const S = this._dashboard?.entries?.some(
+    const k = this._dashboard?.entries?.some(
       (E) => this._hass?.states?.[E.entity_id]?.state === "triggered"
     );
     let b = "";
-    return r === "siren" && S && (b = " siren-active"), (r === "sensor" || r === "bypass" || r === "entry") && S && c && (b = " triggered-sensor"), `
+    return r === "siren" && k && (b = " siren-active"), (r === "sensor" || r === "bypass" || r === "entry") && k && c && (b = " triggered-sensor"), `
       <span class="sensor-pill${b}">
         ${m}
         <span class="pill-content">
@@ -9386,8 +9388,8 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
               for (const g of this._dashboard.entries) {
                 const f = await this._hass.callWS({ type: "search/related", item_type: "entity", item_id: g.entity_id });
                 if (f && (f.automation && m.push(...f.automation), f.device && f.device.length))
-                  for (const S of f.device) {
-                    const b = await this._hass.callWS({ type: "search/related", item_type: "device", item_id: S });
+                  for (const k of f.device) {
+                    const b = await this._hass.callWS({ type: "search/related", item_type: "device", item_id: k });
                     b && b.automation && m.push(...b.automation);
                   }
               }
@@ -9412,12 +9414,12 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
         }
         const c = n.closest(".panel"), u = c && c.getAttribute("data-size") === "S", p = o.slice(0, u ? 1 : 15);
         n.innerHTML = `<div style="display:flex;flex-direction:column;gap:12px;max-height:300px;overflow-y:auto;padding-right:8px">${p.map((m) => {
-          const g = m.attributes?.id || m.entity_id.replace("automation.", ""), f = m.attributes?.last_triggered ? new Date(m.attributes.last_triggered).toLocaleString(this._getLocale()) : this._t("never_triggered"), S = u ? "" : `<div class="small" style="opacity:0.7;margin-top:4px">${this._escapeHtml(f)}</div>`;
+          const g = m.attributes?.id || m.entity_id.replace("automation.", ""), f = m.attributes?.last_triggered ? new Date(m.attributes.last_triggered).toLocaleString(this._getLocale()) : this._t("never_triggered"), k = u ? "" : `<div class="small" style="opacity:0.7;margin-top:4px">${this._escapeHtml(f)}</div>`;
           return `
         <div class="list-item-card">
           <div>
             <div style="font-weight:700">${this._escapeHtml(m.attributes?.friendly_name || m.entity_id)}</div>
-            ${S}
+            ${k}
           </div>
           <button class="ghost" style="padding:6px 12px;background:rgba(255,255,255,0.08);border-radius:8px" data-edit-auto="${this._escapeHtml(g)}">✏️</button>
         </div>`;
@@ -9485,17 +9487,17 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
               </div>
             </div>`;
         const f = m.expiration_date && new Date(m.expiration_date) < /* @__PURE__ */ new Date();
-        let S = "";
+        let k = "";
         if (m.expiration_date) {
           const O = new Date(m.expiration_date);
           if (!isNaN(O.getTime()))
             try {
-              S = this._formatDateTime(O);
+              k = this._formatDateTime(O);
             } catch {
-              S = O.toISOString();
+              k = O.toISOString();
             }
         }
-        const b = m.expiration_date ? f ? `<span class="user-badge admin" style="background:rgba(229,57,53,0.12);color:#e53935;margin-left:5px">❌ ${this._escapeHtml(this._t("expired"))} (${this._escapeHtml(S)})</span>` : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">⏳ ${this._escapeHtml(this._t("active_until"))}: ${this._escapeHtml(S)}</span>` : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">♾️ ${this._t("exp_indefinite")}</span>`, E = m.ha_user_id ? (() => {
+        const b = m.expiration_date ? f ? `<span class="user-badge admin" style="background:rgba(229,57,53,0.12);color:#e53935;margin-left:5px">❌ ${this._escapeHtml(this._t("expired"))} (${this._escapeHtml(k)})</span>` : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">⏳ ${this._escapeHtml(this._t("active_until"))}: ${this._escapeHtml(k)}</span>` : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">♾️ ${this._t("exp_indefinite")}</span>`, E = m.ha_user_id ? (() => {
           const O = (this._haUsersList || []).find((N) => N.id === m.ha_user_id);
           return O ? this._format("ha_account_linked", { name: O.name }) : this._t("ha_account_unavailable");
         })() : this._t("ha_account_unavailable"), C = m.role === "admin" ? "⭐ " + this._escapeHtml(this._t("role_argus_admin")) : "👤 " + this._escapeHtml(this._t("role_argus_standard")), D = m.access_pin_configured ? '<span class="user-badge" style="background:rgba(0,122,255,0.12);color:#007aff">🔒 PIN</span>' : `<span class="user-badge" style="opacity:0.55">🔓 ${this._escapeHtml(this._t("user_no_pin"))}</span>`;
@@ -9539,16 +9541,16 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
         m.addEventListener("click", async () => {
           const g = Number(m.dataset.userEdit), f = this._users[g];
           if (!f) return;
-          const S = await this._showArgusInputModal({
+          const k = await this._showArgusInputModal({
             title: this._t("modal_edit_name"),
             label: this._t("modal_name_label"),
             placeholder: f.name,
             initialValue: f.name,
             type: "text"
           });
-          S === null || S.trim() === "" || this._runWithPin(async () => {
+          k === null || k.trim() === "" || this._runWithPin(async () => {
             try {
-              const b = this._users.map((C, D) => D === g ? { ...C, name: S.trim() } : C), E = await this._send("argus/save_ui", { users: b });
+              const b = this._users.map((C, D) => D === g ? { ...C, name: k.trim() } : C), E = await this._send("argus/save_ui", { users: b });
               E && E.ui ? (this._ui = E.ui, this._users = E.ui.users || b) : this._users = b, this._renderUsers();
             } catch (b) {
               this._showArgusConfirmModal(b.message || this._format("generic_error", { error: b }), { confirmLabel: "OK" });
@@ -9559,16 +9561,16 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
         m.addEventListener("click", async () => {
           const g = Number(m.dataset.userPin), f = this._users[g];
           if (!f) return;
-          const S = await this._showArgusInputModal({
+          const k = await this._showArgusInputModal({
             title: `${this._t("modal_pin_title")} — ${f.name}`,
             label: this._t("modal_pin_help"),
             placeholder: "••••",
             type: "password",
             numeric: !0
           });
-          S !== null && this._runWithPin(async () => {
+          k !== null && this._runWithPin(async () => {
             try {
-              await this._send("argus/save_user_access_pin", { argus_user_id: f.id, pin: S.trim() });
+              await this._send("argus/save_user_access_pin", { argus_user_id: f.id, pin: k.trim() });
               const b = await this._send("argus/dashboard");
               b && b.users && (this._users = b.users), this._renderUsers();
             } catch (b) {
@@ -9591,8 +9593,8 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
               role: "standard",
               enabled: !0,
               permissions: { view_status: !0, arm: !0, disarm: !0, view_history: !1 }
-            }, f = [...this._users || [], g], S = await this._send("argus/save_ui", { users: f });
-            S && S.ui ? (this._ui = S.ui, this._users = S.ui.users || f) : this._users = f, this._renderUsers();
+            }, f = [...this._users || [], g], k = await this._send("argus/save_ui", { users: f });
+            k && k.ui ? (this._ui = k.ui, this._users = k.ui.users || f) : this._users = f, this._renderUsers();
           } catch (g) {
             this._showArgusConfirmModal(g.message || this._format("generic_error", { error: g }), { confirmLabel: "OK" });
           }
@@ -9601,7 +9603,7 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
         m.addEventListener("click", async () => {
           const g = Number(m.dataset.userRoleToggle), f = this._users[g];
           if (!f) return;
-          const S = await this._showArgusInputModal({
+          const k = await this._showArgusInputModal({
             title: this._t("user_role_action") || "Cambiar Rol",
             label: this._t("user_role_label") || "Selecciona el rol",
             initialValue: f.role === "admin" ? "admin" : "standard",
@@ -9611,8 +9613,8 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
               { value: "standard", label: this._t("role_argus_standard") || "Usuario estándar" }
             ]
           });
-          !S || S === f.role || this._runWithPin(async () => {
-            const b = this._users.map((E, C) => C === g ? { ...E, role: S } : E);
+          !k || k === f.role || this._runWithPin(async () => {
+            const b = this._users.map((E, C) => C === g ? { ...E, role: k } : E);
             try {
               const E = await this._send("argus/save_ui", { users: b });
               E && E.ui ? (this._ui = E.ui, this._users = E.ui.users || b) : this._users = b, this._renderUsers();
@@ -9625,9 +9627,9 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
         (m) => m.addEventListener("click", async () => {
           const g = Number(m.dataset.userDel), f = this._users[g];
           if (!f) return;
-          const S = this._format("delete_user_confirm", { name: f.name || "User" });
+          const k = this._format("delete_user_confirm", { name: f.name || "User" });
           await this._showArgusConfirmModal(
-            this._t("modal_delete_confirm") || S,
+            this._t("modal_delete_confirm") || k,
             { confirmLabel: this._t("clear") || "Delete", confirmStyle: "background:#e53935;color:white;border:none" }
           ) && this._runWithPin(async () => {
             const E = [...this._users];
@@ -9644,9 +9646,9 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
         m.addEventListener("click", async () => {
           const g = Number(m.dataset.userPerms), f = this._users[g];
           if (!f) return;
-          const S = await this._showArgusPermissionsModal(f);
-          S !== null && this._runWithPin(async () => {
-            const b = this._users.map((E, C) => C === g ? { ...E, permissions: { ...E.permissions, ...S } } : E);
+          const k = await this._showArgusPermissionsModal(f);
+          k !== null && this._runWithPin(async () => {
+            const b = this._users.map((E, C) => C === g ? { ...E, permissions: { ...E.permissions, ...k } } : E);
             try {
               const E = await this._send("argus/save_ui", { users: b });
               E && E.ui ? (this._ui = E.ui, this._users = E.ui.users || b) : this._users = b, this._renderUsers();
@@ -9904,8 +9906,8 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
         g && (g.value = m);
         const f = this.shadowRoot.getElementById("bg-mode-select-standalone");
         f && (f.value = "photo"), this._backgroundMode = "photo", this._updateBgFieldsVisibility(), this._renderEntries(), this._savePersonalization();
-        const S = this.shadowRoot.getElementById("bg-file-help");
-        S && (S.textContent = this._t("bg_panel_selected_from_history"));
+        const k = this.shadowRoot.getElementById("bg-file-help");
+        k && (k.textContent = this._t("bg_panel_selected_from_history"));
       });
     }), n.querySelectorAll(".use-for-hub").forEach((p) => {
       p.addEventListener("click", () => {
@@ -9915,8 +9917,8 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
         g && (g.value = m);
         const f = this.shadowRoot.getElementById("hub-bg-mode-select");
         f && (f.value = "image"), this._hubBgMode = "image", this._updateBgFieldsVisibility(), this._updateCanvasBackground(), this._savePersonalization();
-        const S = this.shadowRoot.getElementById("hub-file-help");
-        S && (S.textContent = this._t("bg_hub_selected_from_history"));
+        const k = this.shadowRoot.getElementById("hub-file-help");
+        k && (k.textContent = this._t("bg_hub_selected_from_history"));
       });
     });
   }
@@ -10039,8 +10041,8 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
           ...g ? { code: g } : {}
         }), await this._load(), !0;
       } catch (f) {
-        const S = this.shadowRoot.getElementById("pin-error");
-        return S ? S.textContent = `❌ ${this._format("panic_stop_error", { error: "" }).replace(/:\s*$/, "")}` : alert(this._format("panic_stop_error", { error: f?.message || f })), !1;
+        const k = this.shadowRoot.getElementById("pin-error");
+        return k ? k.textContent = `❌ ${this._format("panic_stop_error", { error: "" }).replace(/:\s*$/, "")}` : alert(this._format("panic_stop_error", { error: f?.message || f })), !1;
       }
     };
     r.pin_configured === !0 || (this._users || []).length > 0 ? this._showPinModal(p) : await p(null);
@@ -10052,7 +10054,7 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
     this._ui = this._ui || {};
     const n = this.shadowRoot.getElementById("bg-mode-select-standalone")?.value || "weather", r = this.shadowRoot.getElementById("temp-source-select-standalone")?.value || "auto", o = this.shadowRoot.getElementById("weather-source-select")?.value || "auto", c = this.shadowRoot.getElementById("argus-clock-format-select")?.value || "auto";
     this._clockFormat = ["auto", "12h", "24h"].includes(c) ? c : "auto";
-    const u = this._normaliseEmergencyNumber(this.shadowRoot.getElementById("emergency-number-input")?.value), p = this.shadowRoot.getElementById("panel-bg-url-input")?.value || "", m = !!this.shadowRoot.getElementById("chk-panel-bg-sound")?.checked, g = this.shadowRoot.getElementById("hub-bg-mode-select")?.value || "default", f = g === "default" ? "none" : g, S = this._hubBgFile || this.shadowRoot.getElementById("hub-bg-url-input")?.value || "", b = !!this.shadowRoot.getElementById("chk-hub-bg-sound")?.checked, E = {
+    const u = this._normaliseEmergencyNumber(this.shadowRoot.getElementById("emergency-number-input")?.value), p = this.shadowRoot.getElementById("panel-bg-url-input")?.value || "", m = !!this.shadowRoot.getElementById("chk-panel-bg-sound")?.checked, g = this.shadowRoot.getElementById("hub-bg-mode-select")?.value || "default", f = g === "default" ? "none" : g, k = this._hubBgFile || this.shadowRoot.getElementById("hub-bg-url-input")?.value || "", b = !!this.shadowRoot.getElementById("chk-hub-bg-sound")?.checked, E = {
       home_name: this._homeName,
       temperature_source: r,
       weather_source: o,
@@ -10061,22 +10063,22 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
     };
     this._panicOutputs !== void 0 && (E.panic_outputs = this._panicOutputs);
     const C = (this._ui.users || []).find((N) => N.id === this._currentProfile?.id);
-    E.background_mode = n, E.background_images = this._backgroundImages || [], E.panel_bg_file = p, E.panel_bg_sound = m, E.hub_bg_mode = f, E.hub_bg_file = S, E.hub_bg_sound = b, E.entry_id = this._dashboard?.entry_id || this._dashboard?.entries?.[0]?.entry_id;
+    E.background_mode = n, E.background_images = this._backgroundImages || [], E.panel_bg_file = p, E.panel_bg_sound = m, E.hub_bg_mode = f, E.hub_bg_file = k, E.hub_bg_sound = b, E.entry_id = this._dashboard?.entry_id || this._dashboard?.entries?.[0]?.entry_id;
     let D = "default", O = "";
     if (n === "photo" && p ? (D = "photo", O = p) : n === "weather" ? D = "weather" : n === "none" && (D = "none"), E.theme = {
       background_mode: D,
       background_file: O
     }, C) {
-      const N = JSON.parse(JSON.stringify(this._ui.users || [])), k = N.find((y) => y.id === this._currentProfile?.id);
-      k.background_mode = n, k.background_images = this._backgroundImages || [], k.panel_bg_file = p, k.panel_bg_sound = m, k.hub_bg_mode = f, k.hub_bg_file = S, k.hub_bg_sound = b, k.theme = E.theme, E.users = N;
+      const N = JSON.parse(JSON.stringify(this._ui.users || [])), S = N.find((y) => y.id === this._currentProfile?.id);
+      S.background_mode = n, S.background_images = this._backgroundImages || [], S.panel_bg_file = p, S.panel_bg_sound = m, S.hub_bg_mode = f, S.hub_bg_file = k, S.hub_bg_sound = b, S.theme = E.theme, E.users = N;
     }
     try {
-      await this._send("argus/save_ui", E), this._currentUserTheme = E.theme, this._backgroundMode = n, this._temperatureSource = r, this._weatherSource = o, this._emergencyNumber = u, this._panelBgFile = p, this._panelBgSound = m, this._hubBgMode = g, this._hubBgFile = S, this._hubBgSound = b, this._updateTheme(), this._ui = this._ui || {}, C ? this._ui.users = E.users : (this._ui.background_mode = n, this._ui.background_images = this._backgroundImages || [], this._ui.panel_bg_file = p, this._ui.panel_bg_sound = m, this._ui.hub_bg_mode = f, this._ui.hub_bg_file = S, this._ui.hub_bg_sound = b), this._ui.temperature_source = r, this._ui.weather_source = o, this._ui.clock_format = this._clockFormat, this._ui.emergency_number = u, this._ui.panic_outputs = this._panicOutputs, this._configureEmergencyCall(), this._ui.hub_bg_file = S, this._ui.hub_bg_sound = b, this._renderEntries(), this._updateCanvasBackground();
+      await this._send("argus/save_ui", E), this._currentUserTheme = E.theme, this._backgroundMode = n, this._temperatureSource = r, this._weatherSource = o, this._emergencyNumber = u, this._panelBgFile = p, this._panelBgSound = m, this._hubBgMode = g, this._hubBgFile = k, this._hubBgSound = b, this._updateTheme(), this._ui = this._ui || {}, C ? this._ui.users = E.users : (this._ui.background_mode = n, this._ui.background_images = this._backgroundImages || [], this._ui.panel_bg_file = p, this._ui.panel_bg_sound = m, this._ui.hub_bg_mode = f, this._ui.hub_bg_file = k, this._ui.hub_bg_sound = b), this._ui.temperature_source = r, this._ui.weather_source = o, this._ui.clock_format = this._clockFormat, this._ui.emergency_number = u, this._ui.panic_outputs = this._panicOutputs, this._configureEmergencyCall(), this._ui.hub_bg_file = k, this._ui.hub_bg_sound = b, this._renderEntries(), this._updateCanvasBackground();
       const N = this.shadowRoot.getElementById("btn-save-personalization-standalone");
       if (N) {
-        const k = N.textContent;
+        const S = N.textContent;
         N.textContent = this._t("saved"), N.style.background = "#43a047", setTimeout(() => {
-          N.textContent = k, N.style.background = "";
+          N.textContent = S, N.style.background = "";
         }, 3e3);
       }
     } catch (N) {
@@ -10143,14 +10145,14 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
   /* ── Liquid-glass input modal (replaces window.prompt) ───────────── */
   _showArgusInputModal({ title: n = "", label: r = "", placeholder: o = "", initialValue: c = "", type: u = "text", numeric: p = !1, options: m = null } = {}) {
     return new Promise((g) => {
-      const f = `_aim_${Date.now()}`, S = document.createElement("div");
-      S.id = f, S.setAttribute("role", "dialog"), S.setAttribute("aria-modal", "true"), S.style.cssText = [
+      const f = `_aim_${Date.now()}`, k = document.createElement("div");
+      k.id = f, k.setAttribute("role", "dialog"), k.setAttribute("aria-modal", "true"), k.style.cssText = [
         "position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;margin:0;padding:0;box-sizing:border-box;z-index:999999999;display:flex;align-items:center;justify-content:center",
         "background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)",
         "animation:argus-modal-in .18s ease"
       ].join(";");
       const b = r.replace(/'/g, "&#39;"), E = n.replace(/'/g, "&#39;"), C = o.replace(/'/g, "&#39;"), D = this._t("modal_cancel") || "Cancelar", O = this._t("modal_save") || "Guardar";
-      S.innerHTML = `
+      k.innerHTML = `
         <div style="background:rgba(30,30,45,0.92);border:1px solid rgba(255,255,255,0.18);border-radius:20px;
           padding:28px 24px 22px;width:min(380px,90vw);box-shadow:0 24px 64px rgba(0,0,0,0.7);
           display:flex;flex-direction:column;gap:14px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)">
@@ -10172,16 +10174,16 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
               background:linear-gradient(135deg,#4a90d9,#7b5ea7);color:#fff;font-size:14px;font-weight:600;
               cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(74,144,217,0.35)">${O}</button>
           </div>
-        </div>`, (document.body || this.shadowRoot).appendChild(S);
-      const k = S.querySelector("#aim-inp"), y = S.querySelector("#aim-ok"), v = S.querySelector("#aim-cancel");
-      setTimeout(() => k?.focus(), 60), k?.addEventListener("focus", () => k.style.borderColor = "rgba(74,144,217,0.8)"), k?.addEventListener("blur", () => k.style.borderColor = "rgba(255,255,255,0.15)");
+        </div>`, (document.body || this.shadowRoot).appendChild(k);
+      const S = k.querySelector("#aim-inp"), y = k.querySelector("#aim-ok"), v = k.querySelector("#aim-cancel");
+      setTimeout(() => S?.focus(), 60), S?.addEventListener("focus", () => S.style.borderColor = "rgba(74,144,217,0.8)"), S?.addEventListener("blur", () => S.style.borderColor = "rgba(255,255,255,0.15)");
       const h = (x) => {
-        S.remove(), g(x);
+        k.remove(), g(x);
       };
-      y.addEventListener("click", () => h(k.value)), v.addEventListener("click", () => h(null)), k.addEventListener("keydown", (x) => {
-        x.key === "Enter" && (x.preventDefault(), h(k.value)), x.key === "Escape" && (x.preventDefault(), h(null));
-      }), S.addEventListener("click", (x) => {
-        x.target === S && h(null);
+      y.addEventListener("click", () => h(S.value)), v.addEventListener("click", () => h(null)), S.addEventListener("keydown", (x) => {
+        x.key === "Enter" && (x.preventDefault(), h(S.value)), x.key === "Escape" && (x.preventDefault(), h(null));
+      }), k.addEventListener("click", (x) => {
+        x.target === k && h(null);
       });
     });
   }
@@ -10236,7 +10238,7 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
               cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(74,144,217,0.35)">${u}</button>
           </div>
         </div>`, (document.body || this.shadowRoot).appendChild(o);
-      const g = o.querySelector("#apm-ok"), f = o.querySelector("#apm-cancel"), S = (b) => {
+      const g = o.querySelector("#apm-ok"), f = o.querySelector("#apm-cancel"), k = (b) => {
         o.remove(), r(b);
       };
       g.addEventListener("click", () => {
@@ -10248,9 +10250,9 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
           change_pin: o.querySelector("#chk-perm-change-pin").checked,
           change_master_pin: o.querySelector("#chk-perm-change-master-pin").checked
         };
-        S(b);
-      }), f.addEventListener("click", () => S(null)), o.addEventListener("click", (b) => {
-        b.target === o && S(null);
+        k(b);
+      }), f.addEventListener("click", () => k(null)), o.addEventListener("click", (b) => {
+        b.target === o && k(null);
       });
     });
   }
@@ -10414,7 +10416,7 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
           <div>
             <div class="pick-row-name">${this._escapeHtml(m.name || m.entity_id)}</div>
             <div class="pick-row-meta">${this._escapeHtml(m.entity_id)}${m.area ? " · " + this._escapeHtml(m.area) : ""}</div>
-            <div class="device-facts">${f.map((S) => `<span class="device-fact ${S.className}">${this._escapeHtml(S.text)}</span>`).join("")}</div>
+            <div class="device-facts">${f.map((k) => `<span class="device-fact ${k.className}">${this._escapeHtml(k.text)}</span>`).join("")}</div>
           </div>
         </label>`;
         }).join("") || `<div class="small" style="padding:10px">${this._t("no_results")}</div>`;
@@ -10465,7 +10467,7 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
     }, m = u[r];
     if (!m) return;
     if (this._hass?.user?.name || this._t("user_default"), r === "disarm") {
-      const S = o.pin_configured === !0, b = o.user_pin_configured === !0, E = async (C) => {
+      const k = o.pin_configured === !0, b = o.user_pin_configured === !0, E = async (C) => {
         try {
           return await this._send("argus/perform_alarm_action", {
             action: "disarm",
@@ -10479,15 +10481,15 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
           return O && (O.textContent = "❌ PIN incorrecto o error al desarmar"), !1;
         }
       };
-      S || b ? this._showPinModal(async (C) => await E(C)) : await E(null);
+      k || b ? this._showPinModal(async (C) => await E(C)) : await E(null);
       return;
     }
     const g = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id, f = this._ui?.modes?.__by_entity__?.[g]?.[r] || this._ui?.modes?.[r] || {};
     if (f.require_closed) {
-      const S = f.sensors || [], b = new Set(
+      const k = f.sensors || [], b = new Set(
         f.bypassed_sensors || f.bypassedSensors || []
       ), E = [];
-      for (const C of S) {
+      for (const C of k) {
         if (b.has(C)) continue;
         const D = this._hass.states[C]?.state;
         ["on", "open", "unlocked", "active", "motion", "recording"].includes(D) && E.push(this._hass.states[C]?.attributes?.friendly_name || C);
@@ -10502,11 +10504,11 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
         action: m.replace("alarm_", ""),
         entry_id: o.entry_id
       });
-      const S = p[r] || r;
+      const k = p[r] || r;
       setTimeout(() => this._load(), 800);
-    } catch (S) {
-      const b = S?.message || (typeof S == "string" ? S : JSON.stringify(S));
-      this._showArmBlockedAlert([], b), console.error("Argus action failed", S);
+    } catch (k) {
+      const b = k?.message || (typeof k == "string" ? k : JSON.stringify(k));
+      this._showArmBlockedAlert([], b), console.error("Argus action failed", k);
     }
   }
   _showArmBlockedAlert(n = [], r = "") {
@@ -10582,7 +10584,7 @@ ${r}`);
     r.picture = o;
     const c = r.picture ? `<img id="hero-profile-avatar" class="user-avatar" src="${this._escapeHtml(r.picture)}" alt="${this._escapeHtml(r.name)}" style="width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.20); box-shadow: 0 3px 8px rgba(0,0,0,0.2); flex-shrink: 0; transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);" />` : `<div id="hero-profile-avatar" class="user-avatar" style="width: 34px; height: 34px; border-radius: 50%; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.15); flex-shrink: 0; transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">${this._escapeHtml(r.name.substring(0, 2).toUpperCase())}</div>`, u = this._manualLang || "auto", p = r.role === "admin" || r.permissions && r.permissions.change_pin, m = r.role === "admin" || r.permissions && r.permissions.change_master_pin, g = r.role === "admin" ? this._t("role_argus_admin_short") || "Admin" : this._t("role_argus_user_short") || "Estándar";
     n.innerHTML = `
-      <div style="position: relative; display: flex; align-items: center; isolation: isolate;">
+      <div style="position: relative; display: flex; align-items: center; z-index: 10002;">
         <div class="hero-profile-pill glass liquid-glass" style="display: flex; align-items: center; gap: 8px; padding: 5px 12px 5px 7px; border-radius: 999px;">
           ${c}
           <div style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.15;">
@@ -10593,7 +10595,7 @@ ${r}`);
         </div>
 
         <!-- Dropdown Card -->
-        <div id="profile-dropdown" class="hero-profile-dropdown glass liquid-glass" style="display: none; position: absolute; top: calc(100% + 12px); right: 0; flex-direction: column; width: 280px; z-index: 1000; padding: 16px; border-radius: 18px; box-shadow: 0 16px 32px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); max-height: calc(100vh - 100px); overflow-y: auto;">
+        <div id="profile-dropdown" class="hero-profile-dropdown glass liquid-glass" style="display: none; position: absolute; top: calc(100% + 12px); right: 0; flex-direction: column; width: 280px; z-index: 999999; padding: 16px; border-radius: 18px; box-shadow: 0 16px 32px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); max-height: calc(100vh - 100px); overflow-y: auto;">
         <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px; margin-bottom: 8px; width: 100%;">
           ${r.picture ? `<img src="${this._escapeHtml(r.picture)}" alt="${this._escapeHtml(r.name)}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.20); box-shadow: 0 4px 10px rgba(0,0,0,0.25); flex-shrink: 0;" />` : `<div class="user-avatar" style="width: 44px; height: 44px; border-radius: 50%; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.15); box-shadow: 0 4px 10px rgba(0,0,0,0.25); flex-shrink: 0;">${this._escapeHtml(r.name.substring(0, 2).toUpperCase())}</div>`}
           <div style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0; align-items: flex-start;">
@@ -10659,25 +10661,27 @@ ${r}`);
       </div>
       </div>
     `;
-    const f = n.querySelector(".hero-profile-pill"), S = n.querySelector("#profile-dropdown");
-    if (f && S) {
+    const f = n.querySelector(".hero-profile-pill"), k = n.querySelector("#profile-dropdown");
+    if (f && k) {
       const E = (D) => {
-        const O = n.closest(".argus-widget") || n.closest(".react-grid-item") || n.closest(".panel");
-        O && (O.style.zIndex = D ? "99999" : "");
-        const N = n.closest(".react-grid-item");
-        N && (N.style.zIndex = D ? "99999" : "");
+        const O = n.closest(".hero");
+        O && (O.style.zIndex = D ? "999999" : "9999");
+        const N = n.closest(".wrap");
+        N && (N.style.zIndex = D ? "999999" : "");
+        const S = n.closest(".argus-widget") || n.closest(".react-grid-item") || n.closest(".panel");
+        S && (S.style.zIndex = D ? "999999" : "");
       };
       f.addEventListener("click", (D) => {
         D.stopPropagation();
-        const O = S.style.display === "flex";
-        S.style.display = O ? "none" : "flex", E(!O);
+        const O = k.style.display === "flex";
+        k.style.display = O ? "none" : "flex", E(!O);
       });
       const C = (D) => {
-        (D.composedPath ? D.composedPath() : [D.target]).some((k) => k === n || k.closest && k.closest?.("#profile-dropdown")) || (S.style.display = "none", E(!1), document.removeEventListener("click", C, !0));
+        (D.composedPath ? D.composedPath() : [D.target]).some((S) => S === n || S.closest && S.closest?.("#profile-dropdown")) || (k.style.display = "none", E(!1), document.removeEventListener("click", C, !0));
       };
       f.addEventListener("click", () => {
         setTimeout(() => {
-          S.style.display === "flex" && document.addEventListener("click", C, !0);
+          k.style.display === "flex" && document.addEventListener("click", C, !0);
         }, 10);
       });
     }
@@ -10685,7 +10689,7 @@ ${r}`);
     b && b.addEventListener("change", (E) => {
       this._setLanguage(E.target.value);
     }), n.querySelector("#btn-change-profile-picture")?.addEventListener("click", (E) => {
-      E.stopPropagation(), S.style.display = "none";
+      E.stopPropagation(), k.style.display = "none";
       try {
         window.history.pushState(null, "", "/config/person"), window.dispatchEvent(new CustomEvent("location-changed"));
       } catch {
@@ -10694,7 +10698,7 @@ ${r}`);
     }), n.querySelector("#btn-dropdown-switch-user")?.addEventListener("click", (E) => {
       E.stopPropagation(), this._switchProfile();
     }), n.querySelector("#btn-dropdown-change-access-pin")?.addEventListener("click", (E) => {
-      E.stopPropagation(), S.style.display = "none";
+      E.stopPropagation(), k.style.display = "none";
       const C = this.shadowRoot.getElementById("w-access");
       C && (C.scrollIntoView({ behavior: "smooth", block: "center" }), C.style.transition = "box-shadow 0.5s ease-in-out", C.style.boxShadow = "0 0 30px rgba(0, 122, 255, 0.6)", setTimeout(() => {
         C.style.boxShadow = "";
@@ -10708,7 +10712,7 @@ ${r}`);
         }
       }));
     }), n.querySelector("#btn-dropdown-remove-access-pin")?.addEventListener("click", (E) => {
-      E.stopPropagation(), S.style.display = "none";
+      E.stopPropagation(), k.style.display = "none";
       const C = this.shadowRoot.getElementById("w-access");
       C && (C.scrollIntoView({ behavior: "smooth", block: "center" }), C.style.transition = "box-shadow 0.5s ease-in-out", C.style.boxShadow = "0 0 30px rgba(0, 122, 255, 0.6)", setTimeout(() => {
         C.style.boxShadow = "";
@@ -10722,7 +10726,7 @@ ${r}`);
         }
       }));
     }), n.querySelector("#btn-dropdown-change-master-pin")?.addEventListener("click", (E) => {
-      E.stopPropagation(), S.style.display = "none";
+      E.stopPropagation(), k.style.display = "none";
       const C = this.shadowRoot.getElementById("w-access");
       if (C) {
         C.scrollIntoView({ behavior: "smooth", block: "center" }), C.style.transition = "box-shadow 0.5s ease-in-out", C.style.boxShadow = "0 0 30px rgba(255, 179, 0, 0.6)", setTimeout(() => {
@@ -10732,7 +10736,7 @@ ${r}`);
         D && D.focus();
       }
     }), n.querySelector("#btn-dropdown-remove-master-pin")?.addEventListener("click", (E) => {
-      E.stopPropagation(), S.style.display = "none";
+      E.stopPropagation(), k.style.display = "none";
       const C = this.shadowRoot.getElementById("w-access");
       if (C) {
         C.scrollIntoView({ behavior: "smooth", block: "center" }), C.style.transition = "box-shadow 0.5s ease-in-out", C.style.boxShadow = "0 0 30px rgba(255, 179, 0, 0.6)", setTimeout(() => {
@@ -10742,7 +10746,7 @@ ${r}`);
         D && D.focus();
       }
     }), n.querySelector("#btn-dropdown-edit-home-name")?.addEventListener("click", (E) => {
-      E.stopPropagation(), S.style.display = "none", this._editHomeName();
+      E.stopPropagation(), k.style.display = "none", this._editHomeName();
     });
   }
   async _switchProfile() {
@@ -10931,10 +10935,10 @@ ${r}`);
         alert("Setup failed: " + O.message);
       }
     });
-    const S = this.shadowRoot.getElementById("setup-restore-file"), b = this.shadowRoot.getElementById("restore-status");
+    const k = this.shadowRoot.getElementById("setup-restore-file"), b = this.shadowRoot.getElementById("restore-status");
     this.shadowRoot.getElementById("btn-trigger-restore")?.addEventListener("click", () => {
-      S?.click();
-    }), S?.addEventListener("change", (E) => {
+      k?.click();
+    }), k?.addEventListener("change", (E) => {
       const C = E.target.files?.[0];
       if (!C) return;
       b && (b.textContent = "Procesando copia de seguridad...");
@@ -10943,17 +10947,17 @@ ${r}`);
         try {
           let N = JSON.parse(O.target.result);
           if (N?.format === "argus-encrypted-backup") {
-            const k = await this._showArgusInputModal({
+            const S = await this._showArgusInputModal({
               title: "Copia de seguridad cifrada",
               label: "Introduce la contraseña del backup:",
               type: "password"
             });
-            if (!k) {
+            if (!S) {
               b && (b.textContent = "Restauración cancelada.");
               return;
             }
             try {
-              const y = this._base64ToBytes(N.salt), v = this._base64ToBytes(N.iv), h = await this._backupKey(k, y, ["decrypt"]), x = await crypto.subtle.decrypt({ name: "AES-GCM", iv: v }, h, this._base64ToBytes(N.data));
+              const y = this._base64ToBytes(N.salt), v = this._base64ToBytes(N.iv), h = await this._backupKey(S, y, ["decrypt"]), x = await crypto.subtle.decrypt({ name: "AES-GCM", iv: v }, h, this._base64ToBytes(N.data));
               N = JSON.parse(new TextDecoder().decode(x));
             } catch {
               throw new Error("Contraseña de copia de seguridad incorrecta.");
@@ -11111,9 +11115,9 @@ ${r}`);
     `, this.shadowRoot.appendChild(o);
     const c = o.querySelector("#pin-input"), u = o.querySelector("#pin-error"), p = o.querySelector(".argus-pin-card"), m = o.querySelector(".argus-numpad");
     m.querySelectorAll("[data-digit]").forEach((f) => {
-      const S = f.getAttribute("data-digit");
+      const k = f.getAttribute("data-digit");
       f.addEventListener("click", () => {
-        c.value.length < 8 && (c.value += S);
+        c.value.length < 8 && (c.value += k);
       });
     }), m.querySelector("#pin-del").addEventListener("click", () => {
       c.value = c.value.slice(0, -1);
@@ -11164,12 +11168,12 @@ ${r}`);
     if (p && m) {
       p.style.transform = "scale(0.8)", p.style.opacity = "0", m.style.opacity = "0", m.style.transform = "translateY(15px)", await new Promise((O) => requestAnimationFrame(O)), p.style.transition = "transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease", p.style.transform = "scale(1)", p.style.opacity = "1", m.style.transition = "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, opacity 0.5s ease 0.15s", m.style.transform = "translateY(0)", m.style.opacity = "1", await new Promise((O) => setTimeout(O, 1300)), await u, m.style.transition = "opacity 0.25s ease", m.style.opacity = "0";
       const g = p.getBoundingClientRect(), f = this.shadowRoot.getElementById("hero-profile-avatar") || this.shadowRoot.querySelector("#hero-profile-container .user-avatar") || this.shadowRoot.querySelector("#hero-profile-container img") || this.shadowRoot.querySelector("#hero-profile-container .hero-profile-pill");
-      let S = window.innerWidth / 2, b = 60, E = 0.35;
+      let k = window.innerWidth / 2, b = 60, E = 0.35;
       if (f) {
         const O = f.getBoundingClientRect();
-        O.width > 0 && O.height > 0 && (S = O.left + O.width / 2, b = O.top + O.height / 2, E = Math.max(0.2, O.width / g.width));
+        O.width > 0 && O.height > 0 && (k = O.left + O.width / 2, b = O.top + O.height / 2, E = Math.max(0.2, O.width / g.width));
       }
-      const C = S - (g.left + g.width / 2), D = b - (g.top + g.height / 2);
+      const C = k - (g.left + g.width / 2), D = b - (g.top + g.height / 2);
       p.style.transition = "transform 0.65s cubic-bezier(0.25, 1.25, 0.5, 1), opacity 0.35s ease 0.45s", p.style.transform = `translate(${C}px, ${D}px) scale(${E})`, o.style.transition = "background-color 0.55s ease 0.1s", o.style.backgroundColor = "transparent", await new Promise((O) => setTimeout(O, 650)), f && (f.style.opacity = "1", f.style.transform = "scale(1.1)", setTimeout(() => {
         f && (f.style.transform = "scale(1)");
       }, 180));
@@ -11221,17 +11225,17 @@ ${r}`);
         m.textContent = g ? `Widget: ${g}` : `Widget: ${c.toUpperCase()}`, p.appendChild(m);
         const f = document.createElement("div");
         f.className = "widget-drag-handle", f.innerHTML = "⋮⋮ Arrastrar", f.title = "Arrastrar para mover";
-        const S = document.createElement("div");
-        S.className = "widget-sizes", ["S", "M", "L", "XL"].forEach((E) => {
+        const k = document.createElement("div");
+        k.className = "widget-sizes", ["S", "M", "L", "XL"].forEach((E) => {
           const C = document.createElement("button");
           C.className = "widget-size-btn", C.textContent = E, C.dataset.size = E, C.addEventListener("click", (D) => {
             D.stopPropagation(), D.preventDefault(), this._changeWidgetSize(c, E);
-          }), S.appendChild(C);
+          }), k.appendChild(C);
         });
         const b = document.createElement("button");
         b.className = "widget-toggle-btn", b.textContent = "Ocultar", b.addEventListener("click", (E) => {
           E.stopPropagation(), E.preventDefault(), this._toggleWidgetVisibility(c);
-        }), p.appendChild(f), p.appendChild(S), p.appendChild(b), u.appendChild(p), o.appendChild(u);
+        }), p.appendChild(f), p.appendChild(k), p.appendChild(b), u.appendChild(p), o.appendChild(u);
       }
     }), this._renderWidgetLayout(), this._bindWidgetDragEvents(r);
   }
@@ -11530,9 +11534,9 @@ class Im extends HTMLElement {
       temp: Number.isFinite(m) ? Math.round(m) : "—",
       unit: Number.isFinite(m) ? String(p?.attributes?.temperature_unit || "") : "",
       night: this._hass?.states?.["sun.sun"]?.state === "below_horizon"
-    }, f = this._hass?.config || {}, S = [];
-    f.location_name && !/^(home|casa|hogar)$/i.test(f.location_name) && S.push(f.location_name), f.country && S.push(f.country);
-    const b = S.length ? S.join(", ") : r.unknown, E = this._config.title || r.title, C = g.state, D = /thunder|storm|lightning/.test(C), O = /rain|pouring|drizzle|shower/.test(C), N = /snow/.test(C), k = /fog|mist|hazy/.test(C), y = /cloud|overcast/.test(C), v = [g.night ? "night" : "day", D ? "storm" : O ? "rain" : N ? "snow" : k ? "fog" : y ? "cloud" : "clear"].join(" "), h = new Intl.DateTimeFormat(this._hass.language || void 0, { hour: "2-digit", minute: "2-digit" }).format(/* @__PURE__ */ new Date());
+    }, f = this._hass?.config || {}, k = [];
+    f.location_name && !/^(home|casa|hogar)$/i.test(f.location_name) && k.push(f.location_name), f.country && k.push(f.country);
+    const b = k.length ? k.join(", ") : r.unknown, E = this._config.title || r.title, C = g.state, D = /thunder|storm|lightning/.test(C), O = /rain|pouring|drizzle|shower/.test(C), N = /snow/.test(C), S = /fog|mist|hazy/.test(C), y = /cloud|overcast/.test(C), v = [g.night ? "night" : "day", D ? "storm" : O ? "rain" : N ? "snow" : S ? "fog" : y ? "cloud" : "clear"].join(" "), h = new Intl.DateTimeFormat(this._hass.language || void 0, { hour: "2-digit", minute: "2-digit" }).format(/* @__PURE__ */ new Date());
     this._panelHost.innerHTML = `
       <style>
         .basic-card{position:relative;min-height:330px;isolation:isolate;overflow:hidden;font-family:'Outfit',Inter,system-ui,sans-serif}
@@ -11717,7 +11721,7 @@ function gh() {
         return p.now() - m;
       };
     }
-    var g = [], f = [], S = 1, b = null, E = 3, C = !1, D = !1, O = !1, N = !1, k = typeof setTimeout == "function" ? setTimeout : null, y = typeof clearTimeout == "function" ? clearTimeout : null, v = typeof setImmediate < "u" ? setImmediate : null;
+    var g = [], f = [], k = 1, b = null, E = 3, C = !1, D = !1, O = !1, N = !1, S = typeof setTimeout == "function" ? setTimeout : null, y = typeof clearTimeout == "function" ? clearTimeout : null, v = typeof setImmediate < "u" ? setImmediate : null;
     function h(B) {
       for (var Q = r(f); Q !== null; ) {
         if (Q.callback === null) o(f);
@@ -11798,10 +11802,10 @@ function gh() {
       };
     } else
       oe = function() {
-        k(W, 0);
+        S(W, 0);
       };
     function fe(B, Q) {
-      z = k(function() {
+      z = S(function() {
         B(d.unstable_now());
       }, Q);
     }
@@ -11869,7 +11873,7 @@ function gh() {
           te = 5e3;
       }
       return te = de + te, B = {
-        id: S++,
+        id: k++,
         callback: Q,
         priorityLevel: B,
         startTime: de,
@@ -11908,7 +11912,7 @@ var B_;
 function bh() {
   if (B_) return Ce;
   B_ = 1;
-  var d = Symbol.for("react.transitional.element"), n = Symbol.for("react.portal"), r = Symbol.for("react.fragment"), o = Symbol.for("react.strict_mode"), c = Symbol.for("react.profiler"), u = Symbol.for("react.consumer"), p = Symbol.for("react.context"), m = Symbol.for("react.forward_ref"), g = Symbol.for("react.suspense"), f = Symbol.for("react.memo"), S = Symbol.for("react.lazy"), b = Symbol.for("react.activity"), E = Symbol.iterator;
+  var d = Symbol.for("react.transitional.element"), n = Symbol.for("react.portal"), r = Symbol.for("react.fragment"), o = Symbol.for("react.strict_mode"), c = Symbol.for("react.profiler"), u = Symbol.for("react.consumer"), p = Symbol.for("react.context"), m = Symbol.for("react.forward_ref"), g = Symbol.for("react.suspense"), f = Symbol.for("react.memo"), k = Symbol.for("react.lazy"), b = Symbol.for("react.activity"), E = Symbol.iterator;
   function C(R) {
     return R === null || typeof R != "object" ? null : (R = E && R[E] || R["@@iterator"], typeof R == "function" ? R : null);
   }
@@ -11923,26 +11927,26 @@ function bh() {
     enqueueSetState: function() {
     }
   }, O = Object.assign, N = {};
-  function k(R, P, ee) {
+  function S(R, P, ee) {
     this.props = R, this.context = P, this.refs = N, this.updater = ee || D;
   }
-  k.prototype.isReactComponent = {}, k.prototype.setState = function(R, P) {
+  S.prototype.isReactComponent = {}, S.prototype.setState = function(R, P) {
     if (typeof R != "object" && typeof R != "function" && R != null)
       throw Error(
         "takes an object of state variables to update or a function which returns an object of state variables."
       );
     this.updater.enqueueSetState(this, R, P, "setState");
-  }, k.prototype.forceUpdate = function(R) {
+  }, S.prototype.forceUpdate = function(R) {
     this.updater.enqueueForceUpdate(this, R, "forceUpdate");
   };
   function y() {
   }
-  y.prototype = k.prototype;
+  y.prototype = S.prototype;
   function v(R, P, ee) {
     this.props = R, this.context = P, this.refs = N, this.updater = ee || D;
   }
   var h = v.prototype = new y();
-  h.constructor = v, O(h, k.prototype), h.isPureReactComponent = !0;
+  h.constructor = v, O(h, S.prototype), h.isPureReactComponent = !0;
   var x = Array.isArray;
   function A() {
   }
@@ -12014,7 +12018,7 @@ function bh() {
             case n:
               Oe = !0;
               break;
-            case S:
+            case k:
               return Oe = R._init, B(
                 Oe(R._payload),
                 P,
@@ -12135,7 +12139,7 @@ function bh() {
       return R;
     }
   };
-  return Ce.Activity = b, Ce.Children = te, Ce.Component = k, Ce.Fragment = r, Ce.Profiler = c, Ce.PureComponent = v, Ce.StrictMode = o, Ce.Suspense = g, Ce.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE = z, Ce.__COMPILER_RUNTIME = {
+  return Ce.Activity = b, Ce.Children = te, Ce.Component = S, Ce.Fragment = r, Ce.Profiler = c, Ce.PureComponent = v, Ce.StrictMode = o, Ce.Suspense = g, Ce.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE = z, Ce.__COMPILER_RUNTIME = {
     __proto__: null,
     c: function(R) {
       return z.H.useMemoCache(R);
@@ -12197,7 +12201,7 @@ function bh() {
     return { $$typeof: m, render: R };
   }, Ce.isValidElement = W, Ce.lazy = function(R) {
     return {
-      $$typeof: S,
+      $$typeof: k,
       _payload: { _status: -1, _result: R },
       _init: de
     };
@@ -12286,8 +12290,8 @@ function yh() {
     var f = "https://react.dev/errors/" + g;
     if (1 < arguments.length) {
       f += "?args[]=" + encodeURIComponent(arguments[1]);
-      for (var S = 2; S < arguments.length; S++)
-        f += "&args[]=" + encodeURIComponent(arguments[S]);
+      for (var k = 2; k < arguments.length; k++)
+        f += "&args[]=" + encodeURIComponent(arguments[k]);
     }
     return "Minified React error #" + g + "; visit " + f + " for the full message or use the non-minified dev environment for full errors and additional helpful warnings.";
   }
@@ -12310,14 +12314,14 @@ function yh() {
     p: 0,
     findDOMNode: null
   }, c = Symbol.for("react.portal");
-  function u(g, f, S) {
+  function u(g, f, k) {
     var b = 3 < arguments.length && arguments[3] !== void 0 ? arguments[3] : null;
     return {
       $$typeof: c,
       key: b == null ? null : "" + b,
       children: g,
       containerInfo: f,
-      implementation: S
+      implementation: k
     };
   }
   var p = d.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
@@ -12327,16 +12331,16 @@ function yh() {
       return f === "use-credentials" ? f : "";
   }
   return zt.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE = o, zt.createPortal = function(g, f) {
-    var S = 2 < arguments.length && arguments[2] !== void 0 ? arguments[2] : null;
+    var k = 2 < arguments.length && arguments[2] !== void 0 ? arguments[2] : null;
     if (!f || f.nodeType !== 1 && f.nodeType !== 9 && f.nodeType !== 11)
       throw Error(n(299));
-    return u(g, f, null, S);
+    return u(g, f, null, k);
   }, zt.flushSync = function(g) {
-    var f = p.T, S = o.p;
+    var f = p.T, k = o.p;
     try {
       if (p.T = null, o.p = 2, g) return g();
     } finally {
-      p.T = f, o.p = S, o.d.f();
+      p.T = f, o.p = k, o.d.f();
     }
   }, zt.preconnect = function(g, f) {
     typeof g == "string" && (f ? (f = f.crossOrigin, f = typeof f == "string" ? f === "use-credentials" ? f : "" : void 0) : f = null, o.d.C(g, f));
@@ -12344,8 +12348,8 @@ function yh() {
     typeof g == "string" && o.d.D(g);
   }, zt.preinit = function(g, f) {
     if (typeof g == "string" && f && typeof f.as == "string") {
-      var S = f.as, b = m(S, f.crossOrigin), E = typeof f.integrity == "string" ? f.integrity : void 0, C = typeof f.fetchPriority == "string" ? f.fetchPriority : void 0;
-      S === "style" ? o.d.S(
+      var k = f.as, b = m(k, f.crossOrigin), E = typeof f.integrity == "string" ? f.integrity : void 0, C = typeof f.fetchPriority == "string" ? f.fetchPriority : void 0;
+      k === "style" ? o.d.S(
         g,
         typeof f.precedence == "string" ? f.precedence : void 0,
         {
@@ -12353,7 +12357,7 @@ function yh() {
           integrity: E,
           fetchPriority: C
         }
-      ) : S === "script" && o.d.X(g, {
+      ) : k === "script" && o.d.X(g, {
         crossOrigin: b,
         integrity: E,
         fetchPriority: C,
@@ -12364,12 +12368,12 @@ function yh() {
     if (typeof g == "string")
       if (typeof f == "object" && f !== null) {
         if (f.as == null || f.as === "script") {
-          var S = m(
+          var k = m(
             f.as,
             f.crossOrigin
           );
           o.d.M(g, {
-            crossOrigin: S,
+            crossOrigin: k,
             integrity: typeof f.integrity == "string" ? f.integrity : void 0,
             nonce: typeof f.nonce == "string" ? f.nonce : void 0
           });
@@ -12377,8 +12381,8 @@ function yh() {
       } else f == null && o.d.M(g);
   }, zt.preload = function(g, f) {
     if (typeof g == "string" && typeof f == "object" && f !== null && typeof f.as == "string") {
-      var S = f.as, b = m(S, f.crossOrigin);
-      o.d.L(g, S, {
+      var k = f.as, b = m(k, f.crossOrigin);
+      o.d.L(g, k, {
         crossOrigin: b,
         integrity: typeof f.integrity == "string" ? f.integrity : void 0,
         nonce: typeof f.nonce == "string" ? f.nonce : void 0,
@@ -12393,10 +12397,10 @@ function yh() {
   }, zt.preloadModule = function(g, f) {
     if (typeof g == "string")
       if (f) {
-        var S = m(f.as, f.crossOrigin);
+        var k = m(f.as, f.crossOrigin);
         o.d.m(g, {
           as: typeof f.as == "string" && f.as !== "script" ? f.as : void 0,
-          crossOrigin: S,
+          crossOrigin: k,
           integrity: typeof f.integrity == "string" ? f.integrity : void 0
         });
       } else o.d.m(g);
@@ -12404,8 +12408,8 @@ function yh() {
     o.d.r(g);
   }, zt.unstable_batchedUpdates = function(g, f) {
     return g(f);
-  }, zt.useFormState = function(g, f, S) {
-    return p.H.useFormState(g, f, S);
+  }, zt.useFormState = function(g, f, k) {
+    return p.H.useFormState(g, f, k);
   }, zt.useFormStatus = function() {
     return p.H.useHostTransitionStatus();
   }, zt.version = "19.2.8", zt;
@@ -12537,16 +12541,16 @@ function vh() {
     if (a.tag !== 3) throw Error(o(188));
     return a.stateNode.current === a ? e : t;
   }
-  function S(e) {
+  function k(e) {
     var t = e.tag;
     if (t === 5 || t === 26 || t === 27 || t === 6) return e;
     for (e = e.child; e !== null; ) {
-      if (t = S(e), t !== null) return t;
+      if (t = k(e), t !== null) return t;
       e = e.sibling;
     }
     return null;
   }
-  var b = Object.assign, E = Symbol.for("react.element"), C = Symbol.for("react.transitional.element"), D = Symbol.for("react.portal"), O = Symbol.for("react.fragment"), N = Symbol.for("react.strict_mode"), k = Symbol.for("react.profiler"), y = Symbol.for("react.consumer"), v = Symbol.for("react.context"), h = Symbol.for("react.forward_ref"), x = Symbol.for("react.suspense"), A = Symbol.for("react.suspense_list"), z = Symbol.for("react.memo"), j = Symbol.for("react.lazy"), K = Symbol.for("react.activity"), X = Symbol.for("react.memo_cache_sentinel"), W = Symbol.iterator;
+  var b = Object.assign, E = Symbol.for("react.element"), C = Symbol.for("react.transitional.element"), D = Symbol.for("react.portal"), O = Symbol.for("react.fragment"), N = Symbol.for("react.strict_mode"), S = Symbol.for("react.profiler"), y = Symbol.for("react.consumer"), v = Symbol.for("react.context"), h = Symbol.for("react.forward_ref"), x = Symbol.for("react.suspense"), A = Symbol.for("react.suspense_list"), z = Symbol.for("react.memo"), j = Symbol.for("react.lazy"), K = Symbol.for("react.activity"), X = Symbol.for("react.memo_cache_sentinel"), W = Symbol.iterator;
   function oe(e) {
     return e === null || typeof e != "object" ? null : (e = W && e[W] || e["@@iterator"], typeof e == "function" ? e : null);
   }
@@ -12559,7 +12563,7 @@ function vh() {
     switch (e) {
       case O:
         return "Fragment";
-      case k:
+      case S:
         return "Profiler";
       case N:
         return "StrictMode";
@@ -14032,8 +14036,8 @@ Error generating stack: ` + i.message + `
         case N:
           _ = 8, s |= 24;
           break;
-        case k:
-          return e = Bt(12, a, t, s | 2), e.elementType = k, e.lanes = l, e;
+        case S:
+          return e = Bt(12, a, t, s | 2), e.elementType = S, e.lanes = l, e;
         case x:
           return e = Bt(13, a, t, s), e.elementType = x, e.lanes = l, e;
         case A:
@@ -22151,7 +22155,7 @@ Error generating stack: ` + i.message + `
     var t = e._reactInternals;
     if (t === void 0)
       throw typeof e.render == "function" ? Error(o(188)) : (e = Object.keys(e).join(","), Error(o(268, e)));
-    return e = f(t), e = e !== null ? S(e) : null, e = e === null ? null : e.stateNode, e;
+    return e = f(t), e = e !== null ? k(e) : null, e = e === null ? null : e.stateNode, e;
   };
   var dh = {
     bundleType: 0,
@@ -22282,7 +22286,7 @@ function Tc() {
       function g(se, _e) {
         return se === _e || se !== se && _e !== _e;
       }
-      var f = "[object Arguments]", S = "[object Boolean]", b = "[object Date]", E = "[object RegExp]", C = "[object Map]", D = "[object Number]", O = "[object Object]", N = "[object Set]", k = "[object String]", y = Object.prototype.toString;
+      var f = "[object Arguments]", k = "[object Boolean]", b = "[object Date]", E = "[object RegExp]", C = "[object Map]", D = "[object Number]", O = "[object Object]", N = "[object Set]", S = "[object String]", y = Object.prototype.toString;
       function v(se) {
         var _e = se.areArraysEqual, Re = se.areDatesEqual, ze = se.areMapsEqual, Te = se.areObjectsEqual, Ke = se.areRegExpsEqual, $e = se.areSetsEqual, ct = se.createIsNestedEqual, M = ct(I);
         function I(U, ae, pe) {
@@ -22296,7 +22300,7 @@ function Tc() {
           if (xe || Ee)
             return xe === Ee && _e(U, ae, M, pe);
           var He = y.call(U);
-          return He !== y.call(ae) ? !1 : He === b ? Re(U, ae, M, pe) : He === E ? Ke(U, ae, M, pe) : He === C ? ze(U, ae, M, pe) : He === N ? $e(U, ae, M, pe) : He === O || He === f ? m(U) || m(ae) ? !1 : Te(U, ae, M, pe) : He === S || He === D || He === k ? g(U.valueOf(), ae.valueOf()) : !1;
+          return He !== y.call(ae) ? !1 : He === b ? Re(U, ae, M, pe) : He === E ? Ke(U, ae, M, pe) : He === C ? ze(U, ae, M, pe) : He === N ? $e(U, ae, M, pe) : He === O || He === f ? m(U) || m(ae) ? !1 : Te(U, ae, M, pe) : He === k || He === D || He === S ? g(U.valueOf(), ae.valueOf()) : !1;
         }
         return I;
       }
@@ -22446,7 +22450,7 @@ function mn() {
   if (K_) return Ue;
   K_ = 1, Object.defineProperty(Ue, "__esModule", {
     value: !0
-  }), Ue.bottom = g, Ue.childrenEqual = C, Ue.cloneLayout = f, Ue.cloneLayoutItem = E, Ue.collides = O, Ue.compact = N, Ue.compactItem = v, Ue.compactType = Ke, Ue.correctBounds = h, Ue.fastPositionEqual = D, Ue.fastRGLPropsEqual = void 0, Ue.getAllCollisions = z, Ue.getFirstCollision = A, Ue.getLayoutItem = x, Ue.getStatics = j, Ue.modifyLayout = S, Ue.moveElement = K, Ue.moveElementAwayFromCollision = X, Ue.noop = void 0, Ue.perc = W, Ue.resizeItemInDirection = ge, Ue.setTopLeft = Oe, Ue.setTransform = ke, Ue.sortLayoutItems = se, Ue.sortLayoutItemsByColRow = Re, Ue.sortLayoutItemsByRowCol = _e, Ue.synchronizeLayoutWithChildren = ze, Ue.validateLayout = Te, Ue.withLayoutItem = b;
+  }), Ue.bottom = g, Ue.childrenEqual = C, Ue.cloneLayout = f, Ue.cloneLayoutItem = E, Ue.collides = O, Ue.compact = N, Ue.compactItem = v, Ue.compactType = Ke, Ue.correctBounds = h, Ue.fastPositionEqual = D, Ue.fastRGLPropsEqual = void 0, Ue.getAllCollisions = z, Ue.getFirstCollision = A, Ue.getLayoutItem = x, Ue.getStatics = j, Ue.modifyLayout = k, Ue.moveElement = K, Ue.moveElementAwayFromCollision = X, Ue.noop = void 0, Ue.perc = W, Ue.resizeItemInDirection = ge, Ue.setTopLeft = Oe, Ue.setTransform = ke, Ue.sortLayoutItems = se, Ue.sortLayoutItemsByColRow = Re, Ue.sortLayoutItemsByRowCol = _e, Ue.synchronizeLayoutWithChildren = ze, Ue.validateLayout = Te, Ue.withLayoutItem = b;
   var d = /* @__PURE__ */ Tc(), n = r(Lt());
   function r(M) {
     return M && M.__esModule ? M : { default: M };
@@ -22501,7 +22505,7 @@ function mn() {
       I[U] = E(M[U]);
     return I;
   }
-  function S(M, I) {
+  function k(M, I) {
     const U = Array(M.length);
     for (let ae = 0, pe = M.length; ae < pe; ae++)
       I.i === M[ae].i ? U[ae] = I : U[ae] = M[ae];
@@ -22509,7 +22513,7 @@ function mn() {
   }
   function b(M, I, U) {
     let ae = x(M, I);
-    return ae ? (ae = U(E(ae)), M = S(M, ae), [M, ae]) : [M, null];
+    return ae ? (ae = U(E(ae)), M = k(M, ae), [M, ae]) : [M, null];
   }
   function E(M) {
     return {
@@ -22551,12 +22555,12 @@ function mn() {
     }
     return He;
   }
-  const k = {
+  const S = {
     x: "w",
     y: "h"
   };
   function y(M, I, U, ae) {
-    const pe = k[ae];
+    const pe = S[ae];
     I[ae] += 1;
     const xe = M.map((Ee) => Ee.i).indexOf(I.i);
     for (let Ee = xe + 1; Ee < M.length; Ee++) {
@@ -22833,22 +22837,22 @@ function Hc() {
       margin: m,
       containerPadding: g,
       containerWidth: f,
-      cols: S
+      cols: k
     } = p;
-    return (f - m[0] * (S - 1) - g[0] * 2) / S;
+    return (f - m[0] * (k - 1) - g[0] * 2) / k;
   }
   function n(p, m, g) {
     return Number.isFinite(p) ? Math.round(m * p + Math.max(0, p - 1) * g) : p;
   }
-  function r(p, m, g, f, S, b) {
+  function r(p, m, g, f, k, b) {
     const {
       margin: E,
       containerPadding: C,
       rowHeight: D
     } = p, O = d(p), N = {};
-    return b && b.resizing ? (N.width = Math.round(b.resizing.width), N.height = Math.round(b.resizing.height)) : (N.width = n(f, O, E[0]), N.height = n(S, D, E[1])), b && b.dragging ? (N.top = Math.round(b.dragging.top), N.left = Math.round(b.dragging.left)) : b && b.resizing && typeof b.resizing.top == "number" && typeof b.resizing.left == "number" ? (N.top = Math.round(b.resizing.top), N.left = Math.round(b.resizing.left)) : (N.top = Math.round((D + E[1]) * g + C[1]), N.left = Math.round((O + E[0]) * m + C[0])), N;
+    return b && b.resizing ? (N.width = Math.round(b.resizing.width), N.height = Math.round(b.resizing.height)) : (N.width = n(f, O, E[0]), N.height = n(k, D, E[1])), b && b.dragging ? (N.top = Math.round(b.dragging.top), N.left = Math.round(b.dragging.left)) : b && b.resizing && typeof b.resizing.top == "number" && typeof b.resizing.left == "number" ? (N.top = Math.round(b.resizing.top), N.left = Math.round(b.resizing.left)) : (N.top = Math.round((D + E[1]) * g + C[1]), N.left = Math.round((O + E[0]) * m + C[0])), N;
   }
-  function o(p, m, g, f, S) {
+  function o(p, m, g, f, k) {
     const {
       margin: b,
       containerPadding: E,
@@ -22856,21 +22860,21 @@ function Hc() {
       rowHeight: D,
       maxRows: O
     } = p, N = d(p);
-    let k = Math.round((g - E[0]) / (N + b[0])), y = Math.round((m - E[1]) / (D + b[1]));
-    return k = u(k, 0, C - f), y = u(y, 0, O - S), {
-      x: k,
+    let S = Math.round((g - E[0]) / (N + b[0])), y = Math.round((m - E[1]) / (D + b[1]));
+    return S = u(S, 0, C - f), y = u(y, 0, O - k), {
+      x: S,
       y
     };
   }
-  function c(p, m, g, f, S, b) {
+  function c(p, m, g, f, k, b) {
     const {
       margin: E,
       maxRows: C,
       cols: D,
       rowHeight: O
     } = p, N = d(p);
-    let k = Math.round((m + E[0]) / (N + E[0])), y = Math.round((g + E[1]) / (O + E[1])), v = u(k, 0, D - f), h = u(y, 0, C - S);
-    return ["sw", "w", "nw"].indexOf(b) !== -1 && (v = u(k, 0, D)), ["nw", "n", "ne"].indexOf(b) !== -1 && (h = u(y, 0, C)), {
+    let S = Math.round((m + E[0]) / (N + E[0])), y = Math.round((g + E[1]) / (O + E[1])), v = u(S, 0, D - f), h = u(y, 0, C - k);
+    return ["sw", "w", "nw"].indexOf(b) !== -1 && (v = u(S, 0, D)), ["nw", "n", "ne"].indexOf(b) !== -1 && (h = u(y, 0, C)), {
       w: v,
       h
     };
@@ -22897,7 +22901,7 @@ function Nh() {
   function r() {
   }
   return r.resetWarningCache = n, yc = function() {
-    function o(p, m, g, f, S, b) {
+    function o(p, m, g, f, k, b) {
       if (b !== d) {
         var E = new Error(
           "Calling PropTypes validators directly is not supported by the `prop-types` package. Use PropTypes.checkPropTypes() to call them. Read more at http://fb.me/use-check-prop-types"
@@ -22958,11 +22962,11 @@ function Ch() {
     // "default" to the CommonJS "module.exports" for node compatibility.
     !T || !T.__esModule ? n(Z, "default", { value: T, enumerable: !0 }) : Z,
     T
-  )), f = (T) => m(n({}, "__esModule", { value: !0 }), T), S = {};
-  p(S, {
+  )), f = (T) => m(n({}, "__esModule", { value: !0 }), T), k = {};
+  p(k, {
     DraggableCore: () => st,
     default: () => xt
-  }), vc = f(S);
+  }), vc = f(k);
   var b = g(Lt()), E = g(/* @__PURE__ */ ai()), C = g(Yr()), D = Kr();
   function O(T, Y) {
     for (let Z = 0, le = T.length; Z < le; Z++)
@@ -22971,7 +22975,7 @@ function Ch() {
   function N(T) {
     return typeof T == "function" || Object.prototype.toString.call(T) === "[object Function]";
   }
-  function k(T) {
+  function S(T) {
     return typeof T == "number" && !isNaN(T);
   }
   function y(T) {
@@ -23140,7 +23144,7 @@ function Ch() {
         bottom: B(it) - ue(me) - me.offsetTop + y(Ra.paddingBottom) - y(la.marginBottom)
       };
     }
-    return k(le.right) && (Y = Math.min(Y, le.right)), k(le.bottom) && (Z = Math.min(Z, le.bottom)), k(le.left) && (Y = Math.max(Y, le.left)), k(le.top) && (Z = Math.max(Z, le.top)), [Y, Z];
+    return S(le.right) && (Y = Math.min(Y, le.right)), S(le.bottom) && (Z = Math.min(Z, le.bottom)), S(le.left) && (Y = Math.max(Y, le.left)), S(le.top) && (Z = Math.max(Z, le.top)), [Y, Z];
   }
   function ze(T, Y, Z) {
     const le = Math.round(Y / T[0]) * T[0], me = Math.round(Z / T[1]) * T[1];
@@ -23159,7 +23163,7 @@ function Ch() {
     return de(le || T, Le, Z.props.scale);
   }
   function ct(T, Y, Z) {
-    const le = !k(T.lastX), me = U(T);
+    const le = !S(T.lastX), me = U(T);
     return le ? {
       node: me,
       deltaX: 0,
@@ -23700,28 +23704,28 @@ function Oh() {
     return g && g.__esModule ? g : { default: g };
   }
   function r(g, f) {
-    var S = Object.keys(g);
+    var k = Object.keys(g);
     if (Object.getOwnPropertySymbols) {
       var b = Object.getOwnPropertySymbols(g);
       f && (b = b.filter(function(E) {
         return Object.getOwnPropertyDescriptor(g, E).enumerable;
-      })), S.push.apply(S, b);
+      })), k.push.apply(k, b);
     }
-    return S;
+    return k;
   }
   function o(g) {
     for (var f = 1; f < arguments.length; f++) {
-      var S = arguments[f] != null ? arguments[f] : {};
-      f % 2 ? r(Object(S), !0).forEach(function(b) {
-        c(g, b, S[b]);
-      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(g, Object.getOwnPropertyDescriptors(S)) : r(Object(S)).forEach(function(b) {
-        Object.defineProperty(g, b, Object.getOwnPropertyDescriptor(S, b));
+      var k = arguments[f] != null ? arguments[f] : {};
+      f % 2 ? r(Object(k), !0).forEach(function(b) {
+        c(g, b, k[b]);
+      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(g, Object.getOwnPropertyDescriptors(k)) : r(Object(k)).forEach(function(b) {
+        Object.defineProperty(g, b, Object.getOwnPropertyDescriptor(k, b));
       });
     }
     return g;
   }
-  function c(g, f, S) {
-    return f = u(f), f in g ? Object.defineProperty(g, f, { value: S, enumerable: !0, configurable: !0, writable: !0 }) : g[f] = S, g;
+  function c(g, f, k) {
+    return f = u(f), f in g ? Object.defineProperty(g, f, { value: k, enumerable: !0, configurable: !0, writable: !0 }) : g[f] = k, g;
   }
   function u(g) {
     var f = p(g, "string");
@@ -23729,9 +23733,9 @@ function Oh() {
   }
   function p(g, f) {
     if (typeof g != "object" || g === null) return g;
-    var S = g[Symbol.toPrimitive];
-    if (S !== void 0) {
-      var b = S.call(g, f);
+    var k = g[Symbol.toPrimitive];
+    if (k !== void 0) {
+      var b = k.call(g, f);
       if (typeof b != "object") return b;
       throw new TypeError("@@toPrimitive must return a primitive value.");
     }
@@ -23863,98 +23867,98 @@ function jm() {
   if (im) return fo;
   im = 1, fo.__esModule = !0, fo.default = void 0;
   var d = p(Lt()), n = Mc(), r = Oh(), o = Pm(), c = ["children", "className", "draggableOpts", "width", "height", "handle", "handleSize", "lockAspectRatio", "axis", "minConstraints", "maxConstraints", "onResize", "onResizeStop", "onResizeStart", "resizeHandles", "transformScale"];
-  function u(k) {
+  function u(S) {
     if (typeof WeakMap != "function") return null;
     var y = /* @__PURE__ */ new WeakMap(), v = /* @__PURE__ */ new WeakMap();
     return (u = function(x) {
       return x ? v : y;
-    })(k);
+    })(S);
   }
-  function p(k, y) {
-    if (k && k.__esModule)
-      return k;
-    if (k === null || typeof k != "object" && typeof k != "function")
-      return { default: k };
+  function p(S, y) {
+    if (S && S.__esModule)
+      return S;
+    if (S === null || typeof S != "object" && typeof S != "function")
+      return { default: S };
     var v = u(y);
-    if (v && v.has(k))
-      return v.get(k);
+    if (v && v.has(S))
+      return v.get(S);
     var h = {}, x = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for (var A in k)
-      if (A !== "default" && Object.prototype.hasOwnProperty.call(k, A)) {
-        var z = x ? Object.getOwnPropertyDescriptor(k, A) : null;
-        z && (z.get || z.set) ? Object.defineProperty(h, A, z) : h[A] = k[A];
+    for (var A in S)
+      if (A !== "default" && Object.prototype.hasOwnProperty.call(S, A)) {
+        var z = x ? Object.getOwnPropertyDescriptor(S, A) : null;
+        z && (z.get || z.set) ? Object.defineProperty(h, A, z) : h[A] = S[A];
       }
-    return h.default = k, v && v.set(k, h), h;
+    return h.default = S, v && v.set(S, h), h;
   }
   function m() {
-    return m = Object.assign ? Object.assign.bind() : function(k) {
+    return m = Object.assign ? Object.assign.bind() : function(S) {
       for (var y = 1; y < arguments.length; y++) {
         var v = arguments[y];
         for (var h in v)
-          Object.prototype.hasOwnProperty.call(v, h) && (k[h] = v[h]);
+          Object.prototype.hasOwnProperty.call(v, h) && (S[h] = v[h]);
       }
-      return k;
+      return S;
     }, m.apply(this, arguments);
   }
-  function g(k, y) {
-    if (k == null) return {};
-    var v = {}, h = Object.keys(k), x, A;
+  function g(S, y) {
+    if (S == null) return {};
+    var v = {}, h = Object.keys(S), x, A;
     for (A = 0; A < h.length; A++)
-      x = h[A], !(y.indexOf(x) >= 0) && (v[x] = k[x]);
+      x = h[A], !(y.indexOf(x) >= 0) && (v[x] = S[x]);
     return v;
   }
-  function f(k, y) {
-    var v = Object.keys(k);
+  function f(S, y) {
+    var v = Object.keys(S);
     if (Object.getOwnPropertySymbols) {
-      var h = Object.getOwnPropertySymbols(k);
+      var h = Object.getOwnPropertySymbols(S);
       y && (h = h.filter(function(x) {
-        return Object.getOwnPropertyDescriptor(k, x).enumerable;
+        return Object.getOwnPropertyDescriptor(S, x).enumerable;
       })), v.push.apply(v, h);
     }
     return v;
   }
-  function S(k) {
+  function k(S) {
     for (var y = 1; y < arguments.length; y++) {
       var v = arguments[y] != null ? arguments[y] : {};
       y % 2 ? f(Object(v), !0).forEach(function(h) {
-        b(k, h, v[h]);
-      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(k, Object.getOwnPropertyDescriptors(v)) : f(Object(v)).forEach(function(h) {
-        Object.defineProperty(k, h, Object.getOwnPropertyDescriptor(v, h));
+        b(S, h, v[h]);
+      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(S, Object.getOwnPropertyDescriptors(v)) : f(Object(v)).forEach(function(h) {
+        Object.defineProperty(S, h, Object.getOwnPropertyDescriptor(v, h));
       });
     }
-    return k;
+    return S;
   }
-  function b(k, y, v) {
-    return y = E(y), y in k ? Object.defineProperty(k, y, { value: v, enumerable: !0, configurable: !0, writable: !0 }) : k[y] = v, k;
+  function b(S, y, v) {
+    return y = E(y), y in S ? Object.defineProperty(S, y, { value: v, enumerable: !0, configurable: !0, writable: !0 }) : S[y] = v, S;
   }
-  function E(k) {
-    var y = C(k, "string");
+  function E(S) {
+    var y = C(S, "string");
     return typeof y == "symbol" ? y : String(y);
   }
-  function C(k, y) {
-    if (typeof k != "object" || k === null) return k;
-    var v = k[Symbol.toPrimitive];
+  function C(S, y) {
+    if (typeof S != "object" || S === null) return S;
+    var v = S[Symbol.toPrimitive];
     if (v !== void 0) {
-      var h = v.call(k, y);
+      var h = v.call(S, y);
       if (typeof h != "object") return h;
       throw new TypeError("@@toPrimitive must return a primitive value.");
     }
-    return (y === "string" ? String : Number)(k);
+    return (y === "string" ? String : Number)(S);
   }
-  function D(k, y) {
-    k.prototype = Object.create(y.prototype), k.prototype.constructor = k, O(k, y);
+  function D(S, y) {
+    S.prototype = Object.create(y.prototype), S.prototype.constructor = S, O(S, y);
   }
-  function O(k, y) {
+  function O(S, y) {
     return O = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(h, x) {
       return h.__proto__ = x, h;
-    }, O(k, y);
+    }, O(S, y);
   }
-  var N = /* @__PURE__ */ function(k) {
-    D(y, k);
+  var N = /* @__PURE__ */ function(S) {
+    D(y, S);
     function y() {
       for (var h, x = arguments.length, A = new Array(x), z = 0; z < x; z++)
         A[z] = arguments[z];
-      return h = k.call.apply(k, [this].concat(A)) || this, h.handleRefs = {}, h.lastHandleRect = null, h.slack = null, h;
+      return h = S.call.apply(S, [this].concat(A)) || this, h.handleRefs = {}, h.lastHandleRect = null, h.slack = null, h;
     }
     var v = y.prototype;
     return v.componentWillUnmount = function() {
@@ -24011,7 +24015,7 @@ function jm() {
         });
       if (typeof z == "function")
         return z(x, A);
-      var j = typeof z.type == "string", K = S({
+      var j = typeof z.type == "string", K = k({
         ref: A
       }, j ? {} : {
         handleAxis: x
@@ -24023,7 +24027,7 @@ function jm() {
       var X = A.resizeHandles;
       A.transformScale;
       var W = g(A, c);
-      return (0, r.cloneElement)(z, S(S({}, W), {}, {
+      return (0, r.cloneElement)(z, k(k({}, W), {}, {
         className: (j ? j + " " : "") + "react-resizable",
         children: [].concat(z.props.children, X.map(function(oe) {
           var ce, ue = (ce = x.handleRefs[oe]) != null ? ce : x.handleRefs[oe] = /* @__PURE__ */ d.createRef();
@@ -24099,7 +24103,7 @@ function Rh() {
     }
     return h;
   }
-  function S(y) {
+  function k(y) {
     for (var v = 1; v < arguments.length; v++) {
       var h = arguments[v] != null ? arguments[v] : {};
       v % 2 ? f(Object(h), !0).forEach(function(x) {
@@ -24142,7 +24146,7 @@ function Rh() {
       return x.__proto__ = A, x;
     }, N(y, v);
   }
-  var k = /* @__PURE__ */ function(y) {
+  var S = /* @__PURE__ */ function(y) {
     O(v, y);
     function v() {
       for (var x, A = arguments.length, z = new Array(A), j = 0; j < A; j++)
@@ -24190,14 +24194,14 @@ function Rh() {
         transformScale: de,
         width: this.state.width
       }, /* @__PURE__ */ d.createElement("div", g({}, ve, {
-        style: S(S({}, Q), {}, {
+        style: k(k({}, Q), {}, {
           width: this.state.width + "px",
           height: this.state.height + "px"
         })
       })));
     }, v;
   }(d.Component);
-  return ho.default = k, k.propTypes = S(S({}, o.resizableProps), {}, {
+  return ho.default = S, S.propTypes = k(k({}, o.resizableProps), {}, {
     children: n.default.element
   }), ho;
 }
@@ -24335,43 +24339,43 @@ function Hh() {
   function f(N) {
     return N && N.__esModule ? N : { default: N };
   }
-  function S(N, k) {
+  function k(N, S) {
     var y = Object.keys(N);
     if (Object.getOwnPropertySymbols) {
       var v = Object.getOwnPropertySymbols(N);
-      k && (v = v.filter(function(h) {
+      S && (v = v.filter(function(h) {
         return Object.getOwnPropertyDescriptor(N, h).enumerable;
       })), y.push.apply(y, v);
     }
     return y;
   }
   function b(N) {
-    for (var k = 1; k < arguments.length; k++) {
-      var y = arguments[k] != null ? arguments[k] : {};
-      k % 2 ? S(Object(y), !0).forEach(function(v) {
+    for (var S = 1; S < arguments.length; S++) {
+      var y = arguments[S] != null ? arguments[S] : {};
+      S % 2 ? k(Object(y), !0).forEach(function(v) {
         E(N, v, y[v]);
-      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(N, Object.getOwnPropertyDescriptors(y)) : S(Object(y)).forEach(function(v) {
+      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(N, Object.getOwnPropertyDescriptors(y)) : k(Object(y)).forEach(function(v) {
         Object.defineProperty(N, v, Object.getOwnPropertyDescriptor(y, v));
       });
     }
     return N;
   }
-  function E(N, k, y) {
-    return (k = C(k)) in N ? Object.defineProperty(N, k, { value: y, enumerable: !0, configurable: !0, writable: !0 }) : N[k] = y, N;
+  function E(N, S, y) {
+    return (S = C(S)) in N ? Object.defineProperty(N, S, { value: y, enumerable: !0, configurable: !0, writable: !0 }) : N[S] = y, N;
   }
   function C(N) {
-    var k = D(N, "string");
-    return typeof k == "symbol" ? k : k + "";
+    var S = D(N, "string");
+    return typeof S == "symbol" ? S : S + "";
   }
-  function D(N, k) {
+  function D(N, S) {
     if (typeof N != "object" || !N) return N;
     var y = N[Symbol.toPrimitive];
     if (y !== void 0) {
-      var v = y.call(N, k);
+      var v = y.call(N, S);
       if (typeof v != "object") return v;
       throw new TypeError("@@toPrimitive must return a primitive value.");
     }
-    return (k === "string" ? String : Number)(N);
+    return (S === "string" ? String : Number)(N);
   }
   let O = class extends d.default.Component {
     constructor() {
@@ -24379,7 +24383,7 @@ function Hh() {
         resizing: null,
         dragging: null,
         className: ""
-      }), E(this, "elementRef", /* @__PURE__ */ d.default.createRef()), E(this, "onDragStart", (k, y) => {
+      }), E(this, "elementRef", /* @__PURE__ */ d.default.createRef()), E(this, "onDragStart", (S, y) => {
         let {
           node: v
         } = y;
@@ -24404,11 +24408,11 @@ function Hh() {
           y: fe
         } = (0, p.calcXY)(this.getPositionParams(), A.top, A.left, this.props.w, this.props.h);
         return h.call(this, this.props.i, ue, fe, {
-          e: k,
+          e: S,
           node: v,
           newPosition: A
         });
-      }), E(this, "onDrag", (k, y, v) => {
+      }), E(this, "onDrag", (S, y, v) => {
         let {
           node: h,
           deltaX: x,
@@ -24458,11 +24462,11 @@ function Hh() {
           y: de
         } = (0, p.calcXY)(fe, j, K, oe, ce);
         return z.call(this, W, Q, de, {
-          e: k,
+          e: S,
           node: h,
           newPosition: B
         });
-      }), E(this, "onDragStop", (k, y) => {
+      }), E(this, "onDragStop", (S, y) => {
         let {
           node: v
         } = y;
@@ -24491,33 +24495,33 @@ function Hh() {
           y: oe
         } = (0, p.calcXY)(this.getPositionParams(), K, j, x, A);
         return h.call(this, z, W, oe, {
-          e: k,
+          e: S,
           node: v,
           newPosition: X
         });
-      }), E(this, "onResizeStop", (k, y, v) => this.onResizeHandler(k, y, v, "onResizeStop")), E(this, "onResizeStart", (k, y, v) => this.onResizeHandler(k, y, v, "onResizeStart")), E(this, "onResize", (k, y, v) => this.onResizeHandler(k, y, v, "onResize"));
+      }), E(this, "onResizeStop", (S, y, v) => this.onResizeHandler(S, y, v, "onResizeStop")), E(this, "onResizeStart", (S, y, v) => this.onResizeHandler(S, y, v, "onResizeStart")), E(this, "onResize", (S, y, v) => this.onResizeHandler(S, y, v, "onResize"));
     }
-    shouldComponentUpdate(k, y) {
-      if (this.props.children !== k.children || this.props.droppingPosition !== k.droppingPosition) return !0;
-      const v = (0, p.calcGridItemPosition)(this.getPositionParams(this.props), this.props.x, this.props.y, this.props.w, this.props.h, this.state), h = (0, p.calcGridItemPosition)(this.getPositionParams(k), k.x, k.y, k.w, k.h, y);
-      return !(0, u.fastPositionEqual)(v, h) || this.props.useCSSTransforms !== k.useCSSTransforms;
+    shouldComponentUpdate(S, y) {
+      if (this.props.children !== S.children || this.props.droppingPosition !== S.droppingPosition) return !0;
+      const v = (0, p.calcGridItemPosition)(this.getPositionParams(this.props), this.props.x, this.props.y, this.props.w, this.props.h, this.state), h = (0, p.calcGridItemPosition)(this.getPositionParams(S), S.x, S.y, S.w, S.h, y);
+      return !(0, u.fastPositionEqual)(v, h) || this.props.useCSSTransforms !== S.useCSSTransforms;
     }
     componentDidMount() {
       this.moveDroppingItem({});
     }
-    componentDidUpdate(k) {
-      this.moveDroppingItem(k);
+    componentDidUpdate(S) {
+      this.moveDroppingItem(S);
     }
     // When a droppingPosition is present, this means we should fire a move event, as if we had moved
     // this element by `x, y` pixels.
-    moveDroppingItem(k) {
+    moveDroppingItem(S) {
       const {
         droppingPosition: y
       } = this.props;
       if (!y) return;
       const v = this.elementRef.current;
       if (!v) return;
-      const h = k.droppingPosition || {
+      const h = S.droppingPosition || {
         left: 0,
         top: 0
       }, {
@@ -24544,14 +24548,14 @@ function Hh() {
       }
     }
     getPositionParams() {
-      let k = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : this.props;
+      let S = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : this.props;
       return {
-        cols: k.cols,
-        containerPadding: k.containerPadding,
-        containerWidth: k.containerWidth,
-        margin: k.margin,
-        maxRows: k.maxRows,
-        rowHeight: k.rowHeight
+        cols: S.cols,
+        containerPadding: S.containerPadding,
+        containerWidth: S.containerWidth,
+        margin: S.margin,
+        maxRows: S.maxRows,
+        rowHeight: S.rowHeight
       };
     }
     /**
@@ -24564,21 +24568,21 @@ function Hh() {
      * @param  {Object} pos Position object with width, height, left, top.
      * @return {Object}     Style object.
      */
-    createStyle(k) {
+    createStyle(S) {
       const {
         usePercentages: y,
         containerWidth: v,
         useCSSTransforms: h
       } = this.props;
       let x;
-      return h ? x = (0, u.setTransform)(k) : (x = (0, u.setTopLeft)(k), y && (x.left = (0, u.perc)(k.left / v), x.width = (0, u.perc)(k.width / v))), x;
+      return h ? x = (0, u.setTransform)(S) : (x = (0, u.setTopLeft)(S), y && (x.left = (0, u.perc)(S.left / v), x.width = (0, u.perc)(S.width / v))), x;
     }
     /**
      * Mix a Draggable instance into a child.
      * @param  {Element} child    Child element.
      * @return {Element}          Child wrapped in Draggable.
      */
-    mixinDraggable(k, y) {
+    mixinDraggable(S, y) {
       return /* @__PURE__ */ d.default.createElement(o.DraggableCore, {
         disabled: !y,
         onStart: this.onDragStart,
@@ -24588,16 +24592,16 @@ function Hh() {
         cancel: ".react-resizable-handle" + (this.props.cancel ? "," + this.props.cancel : ""),
         scale: this.props.transformScale,
         nodeRef: this.elementRef
-      }, k);
+      }, S);
     }
     /**
      * Utility function to setup callback handler definitions for
      * similarily structured resize events.
      */
-    curryResizeHandler(k, y) {
+    curryResizeHandler(S, y) {
       return (v, h) => (
         /*: Function*/
-        y(v, h, k)
+        y(v, h, S)
       );
     }
     /**
@@ -24606,7 +24610,7 @@ function Hh() {
      * @param  {Object} position  Position object (pixel values)
      * @return {Element}          Child wrapped in Resizable.
      */
-    mixinResizable(k, y, v) {
+    mixinResizable(S, y, v) {
       const {
         cols: h,
         minW: x,
@@ -24635,13 +24639,13 @@ function Hh() {
           resizeHandles: X,
           handle: W
         },
-        k
+        S
       );
     }
     /**
      * Wrapper around resize events to provide more useful data.
      */
-    onResizeHandler(k, y, v, h) {
+    onResizeHandler(S, y, v, h) {
       let {
         node: x,
         size: A,
@@ -24671,7 +24675,7 @@ function Hh() {
         h: ve
       } = (0, p.calcWH)(this.getPositionParams(), Q.width, Q.height, K, X, z);
       de = (0, p.clamp)(de, Math.max(fe, 1), B), ve = (0, p.clamp)(ve, ce, oe), j.call(this, W, de, ve, {
-        e: k,
+        e: S,
         node: x,
         size: Q,
         handle: z
@@ -24679,7 +24683,7 @@ function Hh() {
     }
     render() {
       const {
-        x: k,
+        x: S,
         y,
         w: v,
         h,
@@ -24687,7 +24691,7 @@ function Hh() {
         isResizable: A,
         droppingPosition: z,
         useCSSTransforms: j
-      } = this.props, K = (0, p.calcGridItemPosition)(this.getPositionParams(), k, y, v, h, this.state), X = d.default.Children.only(this.props.children);
+      } = this.props, K = (0, p.calcGridItemPosition)(this.getPositionParams(), S, y, v, h, this.state), X = d.default.Children.only(this.props.children);
       let W = /* @__PURE__ */ d.default.cloneElement(X, {
         ref: this.elementRef,
         className: (0, g.default)("react-grid-item", X.props.className, this.props.className, {
@@ -24720,23 +24724,23 @@ function Hh() {
     w: r.default.number.isRequired,
     h: r.default.number.isRequired,
     // All optional
-    minW: function(N, k) {
-      const y = N[k];
+    minW: function(N, S) {
+      const y = N[S];
       if (typeof y != "number") return new Error("minWidth not Number");
       if (y > N.w || y > N.maxW) return new Error("minWidth larger than item width/maxWidth");
     },
-    maxW: function(N, k) {
-      const y = N[k];
+    maxW: function(N, S) {
+      const y = N[S];
       if (typeof y != "number") return new Error("maxWidth not Number");
       if (y < N.w || y < N.minW) return new Error("maxWidth smaller than item width/minWidth");
     },
-    minH: function(N, k) {
-      const y = N[k];
+    minH: function(N, S) {
+      const y = N[S];
       if (typeof y != "number") return new Error("minHeight not Number");
       if (y > N.h || y > N.maxH) return new Error("minHeight larger than item height/maxHeight");
     },
-    maxH: function(N, k) {
-      const y = N[k];
+    maxH: function(N, S) {
+      const y = N[S];
       if (typeof y != "number") return new Error("maxHeight not Number");
       if (y < N.h || y < N.minH) return new Error("maxHeight smaller than item height/minHeight");
     },
@@ -24790,10 +24794,10 @@ function $m() {
     value: !0
   }), uo.default = void 0;
   var d = g(Lt()), n = /* @__PURE__ */ Tc(), r = m(Kr()), o = mn(), c = Hc(), u = m(Hh()), p = m(Um());
-  function m(k) {
-    return k && k.__esModule ? k : { default: k };
+  function m(S) {
+    return S && S.__esModule ? S : { default: S };
   }
-  function g(k, y) {
+  function g(S, y) {
     if (typeof WeakMap == "function") var v = /* @__PURE__ */ new WeakMap(), h = /* @__PURE__ */ new WeakMap();
     return (g = function(x, A) {
       if (!A && x && x.__esModule) return x;
@@ -24805,45 +24809,45 @@ function $m() {
       }
       for (const X in x) X !== "default" && {}.hasOwnProperty.call(x, X) && ((j = (z = Object.defineProperty) && Object.getOwnPropertyDescriptor(x, X)) && (j.get || j.set) ? z(K, X, j) : K[X] = x[X]);
       return K;
-    })(k, y);
+    })(S, y);
   }
-  function f(k, y) {
-    var v = Object.keys(k);
+  function f(S, y) {
+    var v = Object.keys(S);
     if (Object.getOwnPropertySymbols) {
-      var h = Object.getOwnPropertySymbols(k);
+      var h = Object.getOwnPropertySymbols(S);
       y && (h = h.filter(function(x) {
-        return Object.getOwnPropertyDescriptor(k, x).enumerable;
+        return Object.getOwnPropertyDescriptor(S, x).enumerable;
       })), v.push.apply(v, h);
     }
     return v;
   }
-  function S(k) {
+  function k(S) {
     for (var y = 1; y < arguments.length; y++) {
       var v = arguments[y] != null ? arguments[y] : {};
       y % 2 ? f(Object(v), !0).forEach(function(h) {
-        b(k, h, v[h]);
-      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(k, Object.getOwnPropertyDescriptors(v)) : f(Object(v)).forEach(function(h) {
-        Object.defineProperty(k, h, Object.getOwnPropertyDescriptor(v, h));
+        b(S, h, v[h]);
+      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(S, Object.getOwnPropertyDescriptors(v)) : f(Object(v)).forEach(function(h) {
+        Object.defineProperty(S, h, Object.getOwnPropertyDescriptor(v, h));
       });
     }
-    return k;
+    return S;
   }
-  function b(k, y, v) {
-    return (y = E(y)) in k ? Object.defineProperty(k, y, { value: v, enumerable: !0, configurable: !0, writable: !0 }) : k[y] = v, k;
+  function b(S, y, v) {
+    return (y = E(y)) in S ? Object.defineProperty(S, y, { value: v, enumerable: !0, configurable: !0, writable: !0 }) : S[y] = v, S;
   }
-  function E(k) {
-    var y = C(k, "string");
+  function E(S) {
+    var y = C(S, "string");
     return typeof y == "symbol" ? y : y + "";
   }
-  function C(k, y) {
-    if (typeof k != "object" || !k) return k;
-    var v = k[Symbol.toPrimitive];
+  function C(S, y) {
+    if (typeof S != "object" || !S) return S;
+    var v = S[Symbol.toPrimitive];
     if (v !== void 0) {
-      var h = v.call(k, y);
+      var h = v.call(S, y);
       if (typeof h != "object") return h;
       throw new TypeError("@@toPrimitive must return a primitive value.");
     }
-    return (y === "string" ? String : Number)(k);
+    return (y === "string" ? String : Number)(S);
   }
   const D = "react-grid-layout";
   let O = !1;
@@ -24983,7 +24987,7 @@ function $m() {
         let fe = !1, B, Q, de;
         const [ve, te] = (0, o.withLayoutItem)(W, y, (P) => {
           let ee;
-          return Q = P.x, de = P.y, ["sw", "w", "nw", "n", "ne"].indexOf(K) !== -1 && (["sw", "nw", "w"].indexOf(K) !== -1 && (Q = P.x + (P.w - v), v = P.x !== Q && Q < 0 ? P.w : v, Q = Q < 0 ? 0 : Q), ["ne", "n", "nw"].indexOf(K) !== -1 && (de = P.y + (P.h - h), h = P.y !== de && de < 0 ? P.h : h, de = de < 0 ? 0 : de), fe = !0), ce && !ue && (ee = (0, o.getAllCollisions)(W, S(S({}, P), {}, {
+          return Q = P.x, de = P.y, ["sw", "w", "nw", "n", "ne"].indexOf(K) !== -1 && (["sw", "nw", "w"].indexOf(K) !== -1 && (Q = P.x + (P.w - v), v = P.x !== Q && Q < 0 ? P.w : v, Q = Q < 0 ? 0 : Q), ["ne", "n", "nw"].indexOf(K) !== -1 && (de = P.y + (P.h - h), h = P.y !== de && de < 0 ? P.h : h, de = de < 0 ? 0 : de), fe = !0), ce && !ue && (ee = (0, o.getAllCollisions)(W, k(k({}, P), {}, {
             w: v,
             h,
             x: Q,
@@ -25045,7 +25049,7 @@ function $m() {
         } = this.props, ce = x?.(y);
         if (ce === !1)
           return this.state.droppingDOMNode && this.removeDroppingPlaceholder(), !1;
-        const ue = S(S({}, h), ce), {
+        const ue = k(k({}, h), ce), {
           layout: fe
         } = this.state, B = y.currentTarget.getBoundingClientRect(), Q = y.clientX - B.left, de = y.clientY - B.top, ve = {
           left: Q / oe,
@@ -25076,7 +25080,7 @@ function $m() {
               key: ue.i
             }),
             droppingPosition: ve,
-            layout: [...fe, S(S({}, ue), {}, {
+            layout: [...fe, k(k({}, ue), {}, {
               x: R.x,
               y: R.y,
               static: !1,
@@ -25263,7 +25267,7 @@ function $m() {
         style: v,
         isDroppable: h,
         innerRef: x
-      } = this.props, A = (0, r.default)(D, y), z = S({
+      } = this.props, A = (0, r.default)(D, y), z = k({
         height: this.containerHeight()
       }, v);
       return /* @__PURE__ */ d.createElement("div", {
@@ -25327,7 +25331,7 @@ function Gm() {
   function n(u, p) {
     const m = c(u);
     let g = m[0];
-    for (let f = 1, S = m.length; f < S; f++) {
+    for (let f = 1, k = m.length; f < k; f++) {
       const b = m[f];
       p > u[b] && (g = b);
     }
@@ -25338,7 +25342,7 @@ function Gm() {
       throw new Error("ResponsiveReactGridLayout: `cols` entry for breakpoint " + u + " is missing!");
     return p[u];
   }
-  function o(u, p, m, g, f, S) {
+  function o(u, p, m, g, f, k) {
     if (u[m]) return (0, d.cloneLayout)(u[m]);
     let b = u[g];
     const E = c(p), C = E.slice(E.indexOf(m));
@@ -25351,7 +25355,7 @@ function Gm() {
     }
     return b = (0, d.cloneLayout)(b || []), (0, d.compact)((0, d.correctBounds)(b, {
       cols: f
-    }), S, f);
+    }), k, f);
   }
   function c(u) {
     return Object.keys(u).sort(function(m, g) {
@@ -25394,7 +25398,7 @@ function Mh() {
       return h;
     }, f.apply(null, arguments);
   }
-  function S(h, x) {
+  function k(h, x) {
     if (h == null) return {};
     var A, z, j = b(h, x);
     if (Object.getOwnPropertySymbols) {
@@ -25450,7 +25454,7 @@ function Mh() {
     }
     return (x === "string" ? String : Number)(h);
   }
-  const k = (h) => Object.prototype.toString.call(h);
+  const S = (h) => Object.prototype.toString.call(h);
   function y(h, x) {
     return h == null ? null : Array.isArray(h) ? h : h[x];
   }
@@ -25525,7 +25529,7 @@ function Mh() {
         onBreakpointChange: oe,
         onLayoutChange: ce,
         onWidthChange: ue
-      } = x, fe = S(x, p);
+      } = x, fe = k(x, p);
       return /* @__PURE__ */ d.createElement(u.default, f({}, fe, {
         // $FlowIgnore should allow nullable here due to DefaultProps
         margin: y(X, this.state.breakpoint),
@@ -25561,8 +25565,8 @@ function Mh() {
     // layouts is an object mapping breakpoints to layouts.
     // e.g. {lg: Layout, md: Layout, ...}
     layouts(h, x) {
-      if (k(h[x]) !== "[object Object]")
-        throw new Error("Layout property must be an object. Received: " + k(h[x]));
+      if (S(h[x]) !== "[object Object]")
+        throw new Error("Layout property must be an object. Received: " + S(h[x]));
       Object.keys(h[x]).forEach((A) => {
         if (!(A in h.breakpoints))
           throw new Error("Each key in layouts must align with a key in breakpoints.");
@@ -25769,8 +25773,8 @@ function Gh(d) {
     return Xm;
   var o = pn(d).getComputedStyle(d), c = Uh(o), u = c.left + c.right, p = c.top + c.bottom, m = Xr(o.width), g = Xr(o.height);
   if (o.boxSizing === "border-box" && (Math.round(m + u) !== n && (m -= um(o, "left", "right") + u), Math.round(g + p) !== r && (g -= um(o, "top", "bottom") + p)), !Vh(d)) {
-    var f = Math.round(m + u) - n, S = Math.round(g + p) - r;
-    Math.abs(f) !== 1 && (m -= f), Math.abs(S) !== 1 && (g -= S);
+    var f = Math.round(m + u) - n, k = Math.round(g + p) - r;
+    Math.abs(f) !== 1 && (m -= f), Math.abs(k) !== 1 && (g -= k);
   }
   return Fr(c.left, c.top, m, g);
 }
@@ -25915,12 +25919,12 @@ function tb() {
     return O && O.__esModule ? O : { default: O };
   }
   function p(O, N) {
-    if (typeof WeakMap == "function") var k = /* @__PURE__ */ new WeakMap(), y = /* @__PURE__ */ new WeakMap();
+    if (typeof WeakMap == "function") var S = /* @__PURE__ */ new WeakMap(), y = /* @__PURE__ */ new WeakMap();
     return (p = function(v, h) {
       if (!h && v && v.__esModule) return v;
       var x, A, z = { __proto__: null, default: v };
       if (v === null || typeof v != "object" && typeof v != "function") return z;
-      if (x = h ? y : k) {
+      if (x = h ? y : S) {
         if (x.has(v)) return x.get(v);
         x.set(v, z);
       }
@@ -25931,32 +25935,32 @@ function tb() {
   function m() {
     return m = Object.assign ? Object.assign.bind() : function(O) {
       for (var N = 1; N < arguments.length; N++) {
-        var k = arguments[N];
-        for (var y in k) ({}).hasOwnProperty.call(k, y) && (O[y] = k[y]);
+        var S = arguments[N];
+        for (var y in S) ({}).hasOwnProperty.call(S, y) && (O[y] = S[y]);
       }
       return O;
     }, m.apply(null, arguments);
   }
   function g(O, N) {
     if (O == null) return {};
-    var k, y, v = f(O, N);
+    var S, y, v = f(O, N);
     if (Object.getOwnPropertySymbols) {
       var h = Object.getOwnPropertySymbols(O);
-      for (y = 0; y < h.length; y++) k = h[y], N.indexOf(k) === -1 && {}.propertyIsEnumerable.call(O, k) && (v[k] = O[k]);
+      for (y = 0; y < h.length; y++) S = h[y], N.indexOf(S) === -1 && {}.propertyIsEnumerable.call(O, S) && (v[S] = O[S]);
     }
     return v;
   }
   function f(O, N) {
     if (O == null) return {};
-    var k = {};
+    var S = {};
     for (var y in O) if ({}.hasOwnProperty.call(O, y)) {
       if (N.indexOf(y) !== -1) continue;
-      k[y] = O[y];
+      S[y] = O[y];
     }
-    return k;
+    return S;
   }
-  function S(O, N, k) {
-    return (N = b(N)) in O ? Object.defineProperty(O, N, { value: k, enumerable: !0, configurable: !0, writable: !0 }) : O[N] = k, O;
+  function k(O, N, S) {
+    return (N = b(N)) in O ? Object.defineProperty(O, N, { value: S, enumerable: !0, configurable: !0, writable: !0 }) : O[N] = S, O;
   }
   function b(O) {
     var N = E(O, "string");
@@ -25964,9 +25968,9 @@ function tb() {
   }
   function E(O, N) {
     if (typeof O != "object" || !O) return O;
-    var k = O[Symbol.toPrimitive];
-    if (k !== void 0) {
-      var y = k.call(O, N);
+    var S = O[Symbol.toPrimitive];
+    if (S !== void 0) {
+      var y = S.call(O, N);
       if (typeof y != "object") return y;
       throw new TypeError("@@toPrimitive must return a primitive value.");
     }
@@ -25977,9 +25981,9 @@ function tb() {
     var N;
     return N = class extends d.Component {
       constructor() {
-        super(...arguments), S(this, "state", {
+        super(...arguments), k(this, "state", {
           width: 1280
-        }), S(this, "elementRef", /* @__PURE__ */ d.createRef()), S(this, "mounted", !1), S(this, "resizeObserver", void 0);
+        }), k(this, "elementRef", /* @__PURE__ */ d.createRef()), k(this, "mounted", !1), k(this, "resizeObserver", void 0);
       }
       componentDidMount() {
         this.mounted = !0, this.resizeObserver = new r.default((v) => {
@@ -26010,9 +26014,9 @@ function tb() {
           innerRef: this.elementRef
         }, h, this.state));
       }
-    }, S(N, "defaultProps", {
+    }, k(N, "defaultProps", {
       measureBeforeMount: !1
-    }), S(N, "propTypes", {
+    }), k(N, "propTypes", {
       // If true, will not render children until mounted. Useful for getting the exact width before
       // rendering, to prevent any unsightly resizing.
       measureBeforeMount: n.default.bool
@@ -26053,10 +26057,10 @@ function _n(d) {
   const n = {};
   return Object.keys(Oa).forEach((r) => {
     const o = Oa[r], c = Array.isArray(d?.[r]) ? d[r] : [], u = new Map(c.map((f) => [f.i, f])), p = ($r[r] || []).map((f) => {
-      const S = u.get(f.i);
-      if (!S) return { ...f };
-      const b = Math.min(Math.max(1, S.w), o);
-      return { ...f, ...S, w: b, x: Math.max(0, Math.min(S.x, o - b)), y: Math.max(0, S.y) };
+      const k = u.get(f.i);
+      if (!k) return { ...f };
+      const b = Math.min(Math.max(1, k.w), o);
+      return { ...f, ...k, w: b, x: Math.max(0, Math.min(k.x, o - b)), y: Math.max(0, k.y) };
     }), m = new Set(p.map((f) => f.i)), g = c.filter((f) => !m.has(f.i)).map((f) => ({ ...f, w: Math.min(Math.max(1, f.w), o), x: Math.max(0, Math.min(f.x, o - Math.min(f.w, o))), y: Math.max(0, f.y) }));
     n[r] = [...p, ...g];
   }), n;
@@ -26101,12 +26105,12 @@ function lb({ widget: d, node: n, editing: r, size: o, onSize: c, onHide: u, onR
   We.useLayoutEffect(() => {
     m.current?.appendChild(n), n.draggable = !1, n.querySelector(":scope > .panel-edit-overlay")?.remove(), r ? n.setAttribute("inert", "") : n.removeAttribute("inert");
   }, [n, r]);
-  const g = (f, S) => {
+  const g = (f, k) => {
     if (typeof window._argusT == "function") {
       const b = window._argusT(f);
       if (b && b !== f) return b;
     }
-    return S;
+    return k;
   };
   return /* @__PURE__ */ he.jsxs("article", { className: "argus-widget", children: [
     /* @__PURE__ */ he.jsxs("header", { className: "argus-widget__edit-header", children: [
@@ -26126,7 +26130,7 @@ function lb({ widget: d, node: n, editing: r, size: o, onSize: c, onHide: u, onR
   ] });
 }
 function fm({ widgets: d, nodes: n, storage: r, userId: o, dashboardId: c, onEditing: u, registerEditor: p }) {
-  const m = We.useMemo(() => Object.fromEntries(d.map((te) => [te.id, te.visible])), [d]), [g, f] = We.useState($r), [S, b] = We.useState(m), [E, C] = We.useState(!1), [D, O] = We.useState(!1), [N, k] = We.useState("lg"), [y, v] = We.useState(""), [, h] = We.useState(0), [x, A] = We.useState(0), z = We.useRef($r), j = We.useRef(void 0), K = We.useRef(!1), X = We.useRef(null), W = (te, R) => {
+  const m = We.useMemo(() => Object.fromEntries(d.map((te) => [te.id, te.visible])), [d]), [g, f] = We.useState($r), [k, b] = We.useState(m), [E, C] = We.useState(!1), [D, O] = We.useState(!1), [N, S] = We.useState("lg"), [y, v] = We.useState(""), [, h] = We.useState(0), [x, A] = We.useState(0), z = We.useRef($r), j = We.useRef(void 0), K = We.useRef(!1), X = We.useRef(null), W = (te, R) => {
     if (typeof window._argusT == "function") {
       const P = window._argusT(te);
       if (P && P !== te) return P;
@@ -26172,7 +26176,7 @@ function fm({ widgets: d, nodes: n, storage: r, userId: o, dashboardId: c, onEdi
   const oe = (te, R = !1) => {
     f(te), z.current = te, clearTimeout(j.current), j.current = window.setTimeout(() => r.save(o, c, te), R ? 0 : 550);
   }, ce = (te, R) => {
-    const P = { ...S, [te]: R };
+    const P = { ...k, [te]: R };
     b(P), r.saveVisibility?.(o, c, P), v(R ? W("widget_visible", "Widget visible") : W("hide_widget", "Widget oculto"));
   }, ue = (te, R, P) => {
     const ee = z.current, re = ee[N] || [], ge = re.filter((se) => se.i !== te), ke = Cc(ge, R) ? ob(ge, R, Oa[N]) : R, Oe = { ...ee, [N]: re.map((se) => se.i === te ? ke : se) };
@@ -26202,14 +26206,14 @@ function fm({ widgets: d, nodes: n, storage: r, userId: o, dashboardId: c, onEdi
       /* @__PURE__ */ he.jsx("button", { type: "button", onClick: () => C((te) => !te), children: E ? "✓ " + W("edit_dashboard_done", "Listo") : "❖ " + W("edit_dashboard", "Editar tablero") }),
       E && /* @__PURE__ */ he.jsxs(he.Fragment, { children: [
         /* @__PURE__ */ he.jsx("button", { type: "button", onClick: de, children: W("reset_dashboard", "Restablecer diseño") }),
-        /* @__PURE__ */ he.jsx("div", { className: "argus-dashboard__visibility", "aria-label": W("hide_widget", "Widgets ocultos"), children: d.filter((te) => S[te.id] === !1).map((te) => /* @__PURE__ */ he.jsxs("button", { type: "button", onClick: () => ce(te.id, !0), children: [
+        /* @__PURE__ */ he.jsx("div", { className: "argus-dashboard__visibility", "aria-label": W("hide_widget", "Widgets ocultos"), children: d.filter((te) => k[te.id] === !1).map((te) => /* @__PURE__ */ he.jsxs("button", { type: "button", onClick: () => ce(te.id, !0), children: [
           "Mostrar ",
           te.title
         ] }, te.id)) })
       ] })
     ] }),
     /* @__PURE__ */ he.jsx("div", { className: "argus-dashboard__feedback", "aria-live": "polite", children: E ? y : "" }),
-    /* @__PURE__ */ he.jsx(G_, { children: /* @__PURE__ */ he.jsx(sb, { className: "argus-dashboard-grid", layouts: g, breakpoints: ib, cols: Oa, rowHeight: 92, margin: [16, 16], containerPadding: [16, 16], compactType: "vertical", preventCollision: !1, allowOverlap: !1, isBounded: !0, isDraggable: E, isResizable: E, draggableHandle: ".argus-widget__drag-handle", resizeHandles: ["se"], onBreakpointChange: (te) => k(te), onLayoutChange: (te, R) => {
+    /* @__PURE__ */ he.jsx(G_, { children: /* @__PURE__ */ he.jsx(sb, { className: "argus-dashboard-grid", layouts: g, breakpoints: ib, cols: Oa, rowHeight: 92, margin: [16, 16], containerPadding: [16, 16], compactType: "vertical", preventCollision: !1, allowOverlap: !1, isBounded: !0, isDraggable: E, isResizable: E, draggableHandle: ".argus-widget__drag-handle", resizeHandles: ["se"], onBreakpointChange: (te) => S(te), onLayoutChange: (te, R) => {
       E && (f(R), z.current = R);
     }, onResizeStop: Q, onDragStop: (te, R, P) => {
       const ee = (z.current[N] || []).filter((re) => re.i !== P.i);
@@ -26218,7 +26222,7 @@ function fm({ widgets: d, nodes: n, storage: r, userId: o, dashboardId: c, onEdi
         return;
       }
       ue(P.i, P, W("position_saved", "Posición guardada"));
-    }, useCSSTransforms: !0, children: d.filter((te) => S[te.id] !== !1 && n.has(te.id)).map((te) => {
+    }, useCSSTransforms: !0, children: d.filter((te) => k[te.id] !== !1 && n.has(te.id)).map((te) => {
       const R = ve.find((ee) => ee.i === te.id), P = R ? Nc(R.w, R.h, Oa[N]) : te.size;
       return /* @__PURE__ */ he.jsx("div", { children: /* @__PURE__ */ he.jsx(G_, { children: /* @__PURE__ */ he.jsx(lb, { widget: te, node: n.get(te.id), editing: E, size: P, onSize: (ee) => fe(te.id, ee), onHide: () => ce(te.id, !1), onReset: () => B(te.id) }) }) }, te.id);
     }) }, x) })
@@ -26226,10 +26230,10 @@ function fm({ widgets: d, nodes: n, storage: r, userId: o, dashboardId: c, onEdi
 }
 const cb = ".security-console .console-hud{display:contents!important}@media (min-width: 901px){.entry:not(.ios-fullscreen) .security-console{display:grid!important;grid-template-columns:minmax(240px,360px) auto minmax(260px,400px)!important;grid-template-rows:auto 1fr!important;align-items:start!important;justify-content:center!important;gap:16px 40px!important;padding:32px 32px 24px!important}.entry:not(.ios-fullscreen) .security-console .console-hud-loc{grid-column:1!important;grid-row:1!important;justify-self:start!important;align-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .argus-connection-pill{grid-column:2!important;grid-row:1!important;justify-self:center!important;align-self:center!important;position:relative!important;transform:none!important;left:auto!important;top:auto!important;margin:0!important;width:auto!important;max-width:none!important}.entry:not(.ios-fullscreen) .security-console .console-hud-right{grid-column:3!important;grid-row:1!important;justify-self:end!important;align-self:center!important;margin:0!important;width:auto!important;max-width:none!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack{grid-column:1!important;grid-row:2!important;justify-self:start!important;width:100%!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .entry-icon{grid-column:2!important;grid-row:2!important;justify-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .console-sensors{grid-column:3!important;grid-row:2!important;justify-self:end!important;width:100%!important;margin:0!important}}.console-hud-loc{display:inline-flex!important;align-items:center!important;height:36px!important;box-sizing:border-box!important;padding:0 16px!important;max-width:clamp(120px,26vw,240px)!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;border-radius:999px!important;background:linear-gradient(135deg,#fff3,#ffffff0f)!important;border:1px solid rgba(255,255,255,.28)!important;box-shadow:inset 0 1px #ffffff61,0 8px 24px #00000059!important;backdrop-filter:blur(20px) saturate(180%)!important;-webkit-backdrop-filter:blur(20px) saturate(180%)!important;font-size:11.5px!important;font-weight:850!important;letter-spacing:.04em!important;color:#fff!important;text-shadow:0 1px 3px rgba(0,0,0,.5)!important}.console-hud-right{display:inline-flex!important;align-items:center!important;justify-content:flex-end!important;gap:8px!important;min-width:0!important;background:transparent!important;border:0!important;box-shadow:none!important;height:36px!important}.console-system-badge{display:inline-flex!important;align-items:center!important;height:36px!important;box-sizing:border-box!important;padding:0 16px!important;border-radius:999px!important;font-size:11px!important;font-weight:900!important;letter-spacing:.05em!important;text-transform:uppercase!important;white-space:nowrap!important;backdrop-filter:blur(20px) saturate(180%)!important;-webkit-backdrop-filter:blur(20px) saturate(180%)!important}.console-system-badge--disarmed{color:#43a047!important;color:color(display-p3 .25 .7 .3)!important;background:linear-gradient(135deg,#43a04747,#2878321f)!important;border:1.5px solid rgba(67,160,71,.6)!important;box-shadow:0 0 28px #43a04759,inset 0 1px #fff6!important;text-shadow:0 0 10px rgba(67,160,71,.6)!important}.console-system-badge--armed_home,.console-system-badge--armed_away,.console-system-badge--armed_night,.console-system-badge--armed_vacation,.console-system-badge--pending{color:#ffb700!important;color:color(display-p3 1 .72 .1)!important;background:linear-gradient(135deg,#ffb7004d,#b478001f)!important;border:1.5px solid rgba(255,183,0,.65)!important;box-shadow:0 0 28px #ffb70061,inset 0 1px #ffffff73!important;text-shadow:0 0 10px rgba(255,183,0,.7)!important}.console-system-badge--triggered{color:#f34!important;color:color(display-p3 1 .2 .25)!important;background:linear-gradient(135deg,#ff334461,#b4141e26)!important;border:1.5px solid rgba(255,51,68,.75)!important;box-shadow:0 0 35px #ff33448c,inset 0 1px #ffffff73!important;text-shadow:0 0 12px rgba(255,51,68,.85)!important}.argus-connection-pill{position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;z-index:60!important;margin:0!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;height:36px!important;box-sizing:border-box!important;padding:0 16px!important;border-radius:999px!important;white-space:nowrap!important;font-size:11px!important;font-weight:850!important;letter-spacing:.04em!important;backdrop-filter:blur(20px) saturate(190%)!important;-webkit-backdrop-filter:blur(20px) saturate(190%)!important;transition:all .25s cubic-bezier(.16,1,.3,1)!important}.argus-connection-pill[data-online=true]{color:#00ff9d!important;color:color(display-p3 0 1 .6)!important;background:linear-gradient(135deg,#00ff9d47,#00b4641a)!important;border:1.5px solid rgba(0,255,157,.6)!important;box-shadow:0 0 28px #00ff9d61,inset 0 1px #ffffff73!important;text-shadow:0 0 10px rgba(0,255,157,.7)!important}.argus-connection-pill[data-online=false]{color:#ff9d00!important;color:color(display-p3 1 .65 0)!important;background:linear-gradient(135deg,#ff9d004d,#b464001f)!important;border:1.5px solid rgba(255,157,0,.65)!important;box-shadow:0 0 28px #ff9d0061,inset 0 1px #fff6!important;text-shadow:0 0 10px rgba(255,157,0,.7)!important}.argus-connection-dot{width:7px!important;height:7px!important;flex:0 0 7px!important;border-radius:50%!important;background:currentColor!important;box-shadow:0 0 10px currentColor,0 0 20px currentColor!important}.security-console .liquid-btn{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:4px!important;padding:10px 4px!important;min-height:68px!important;border-radius:16px!important;font-size:11.5px!important;font-weight:800!important;line-height:1.15!important;white-space:normal!important;word-break:normal!important;overflow:visible!important;background:#ffffff14!important;border:1px solid rgba(255,255,255,.16)!important;box-shadow:inset 0 1px #ffffff38,0 8px 22px #00000040!important;backdrop-filter:blur(20px) saturate(180%)!important;-webkit-backdrop-filter:blur(20px) saturate(180%)!important;color:#fff!important;cursor:pointer!important;transition:transform .2s cubic-bezier(.16,1,.3,1),background .2s ease,border-color .2s ease,box-shadow .2s ease!important;transform:translateZ(0)!important}.security-console .liquid-btn:hover{transform:translateY(-2px) translateZ(0) scale(1.02)!important;background:#ffffff21!important;border-color:#ffffff47!important}.security-console .liquid-btn span:first-child,.security-console .liquid-btn .mode-btn-icon{font-size:22px!important;line-height:1!important;margin:0!important}.security-console .liquid-btn span:last-child{font-size:11.5px!important;font-weight:800!important;color:#fff!important;text-align:center!important;white-space:normal!important;text-overflow:clip!important;overflow:visible!important}.security-console .btn-home.active{background:linear-gradient(135deg,#fb8c00,#d97706)!important;border:1px solid rgba(254,215,170,.85)!important;box-shadow:0 14px 36px #fb8c0099,inset 0 1px #ffffff8c!important;color:#fff!important}.security-console .btn-away.active{background:linear-gradient(135deg,#e53935,#b91c1c)!important;border:1px solid rgba(254,202,202,.85)!important;box-shadow:0 14px 36px #e5393599,inset 0 1px #ffffff8c!important;color:#fff!important}.security-console .btn-night.active{background:linear-gradient(135deg,#1e88e5,#1d4ed8)!important;border:1px solid rgba(191,219,254,.85)!important;box-shadow:0 14px 36px #1e88e599,inset 0 1px #ffffff8c!important;color:#fff!important}.security-console .btn-vacation.active{background:linear-gradient(135deg,#9c27b0,#7e22ce)!important;border:1px solid rgba(245,208,254,.85)!important;box-shadow:0 14px 36px #9c27b099,inset 0 1px #ffffff8c!important;color:#fff!important}.security-console .btn-disarm{background:linear-gradient(135deg,#10b9812e,#10b9810d)!important;border:1px solid rgba(16,185,129,.35)!important;color:#a7f3d0!important;box-shadow:0 8px 24px #0003,inset 0 1px #ffffff40!important}.security-console .btn-disarm.active{background:linear-gradient(135deg,#10b981,#059669)!important;border:1px solid rgba(167,243,208,.85)!important;box-shadow:0 14px 36px #10b98199,inset 0 1px #ffffff8c!important;color:#fff!important}@media (max-width:900px){.security-console .console-hud{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:8px!important;width:100%!important}.security-console .console-hud-loc{order:1!important;margin:0 auto!important;max-width:100%!important;text-align:center!important;justify-self:center!important}.security-console .argus-connection-pill{order:2!important;position:static!important;transform:none!important;margin:0 auto!important;justify-self:center!important}.security-console .console-hud-right{order:3!important;margin:0 auto!important;justify-self:center!important;justify-content:center!important}}.entry.argus-waiting .entry-icon>svg{transform-origin:center!important;animation:argusArmingShield 1.05s ease-in-out infinite!important;filter:drop-shadow(0 0 26px rgba(255,184,57,.95)) saturate(1.35)!important}.argus-shield-status{display:block;margin:7px auto 0;padding:5px 10px;width:max-content;max-width:180px;border:1px solid rgba(255,184,57,.45);border-radius:999px;background:#ff950021;color:#ffd27a;font-size:9px;font-weight:800;letter-spacing:.12em;text-align:center;animation:argusArmingLabel 1.05s ease-in-out infinite}@keyframes argusArmingShield{0%,to{opacity:.55;transform:scale(.94)}50%{opacity:1;transform:scale(1.07)}}@keyframes argusArmingLabel{0%,to{opacity:.62}50%{opacity:1}}";
 function db({ id: d, name: n, isOpen: r, isBlocking: o, isBypassed: c, battery: u, iconHtml: p, statusLabelOpen: m, statusLabelClosed: g, bypassedLabel: f }) {
-  let S = null;
+  let k = null;
   if (u !== null) {
-    const k = u === 0, y = u <= 10 && !k, v = k ? "🔋 ❌" : `🔋 ${u}%`;
-    (k || y) && (S = /* @__PURE__ */ he.jsx("span", { style: {
+    const S = u === 0, y = u <= 10 && !S, v = S ? "🔋 ❌" : `🔋 ${u}%`;
+    (S || y) && (k = /* @__PURE__ */ he.jsx("span", { style: {
       marginLeft: "8px",
       fontSize: "10px",
       fontWeight: 700,
@@ -26248,7 +26252,7 @@ function db({ id: d, name: n, isOpen: r, isBlocking: o, isBypassed: c, battery: 
     /* @__PURE__ */ he.jsx("span", { className: "console-sensor-name", style: { color: o && !c ? "#ffd700" : "" }, children: n }),
     /* @__PURE__ */ he.jsxs("span", { className: "console-sensor-state", style: { color: C }, children: [
       N,
-      S
+      k
     ] })
   ] });
 }
@@ -26260,14 +26264,14 @@ function ub({ panel: d, isFullscreen: n, onToggleFullscreen: r, onUnlockKiosk: o
   }, [d]);
   const p = d._dashboard, m = d._hass;
   if (!p || !p.entries || p.entries.length === 0) return null;
-  const g = p.entries[0], f = 0, S = d._renderEntryBackground?.(d._weatherState, d._isNight) || "", b = d._renderBatteryAlerts?.(d._activeSensors || []) || "", E = g.entity_id && m?.states[g.entity_id] ? m.states[g.entity_id].state : "unknown", C = (A) => d._t?.(A) || A, D = d._homeName || d._ui?.home_name || C("home_fallback") || "Hogar", O = E === "triggered", N = d._hass ? d._hass.connected !== !1 : !1, k = !!m?.states?.[g.entity_id]?.attributes?.arming_waiting_for_sensors, y = () => {
+  const g = p.entries[0], f = 0, k = d._renderEntryBackground?.(d._weatherState, d._isNight) || "", b = d._renderBatteryAlerts?.(d._activeSensors || []) || "", E = g.entity_id && m?.states[g.entity_id] ? m.states[g.entity_id].state : "unknown", C = (A) => d._t?.(A) || A, D = d._homeName || d._ui?.home_name || C("home_fallback") || "Hogar", O = E === "triggered", N = d._hass ? d._hass.connected !== !1 : !1, S = !!m?.states?.[g.entity_id]?.attributes?.arming_waiting_for_sensors, y = () => {
     if (O) return C("system_triggered") || "ALARMA ACTIVADA";
-    if (k) {
+    if (S) {
       const A = m?.states?.[g.entity_id]?.attributes?.arming_blocking_sensors || [];
       return A.length ? (C("waiting_sensors_count") || "ESPERANDO {count} SENSOR(ES)").replace("{count}", String(A.length)) : C("waiting_sensors") || "ESPERANDO SENSORES";
     }
     return E === "disarmed" ? C("system_disarmed") || "SISTEMA DESARMADO" : E === "armed_home" ? (C("system_armed") || "ARMADO") + " · " + (C("mode_home") || "CASA") : E === "armed_away" ? (C("system_armed") || "ARMADO") + " · " + (C("mode_away") || "AUSENTE") : E === "armed_night" ? (C("system_armed") || "ARMADO") + " · " + (C("mode_night") || "NOCHE") : E === "armed_vacation" ? (C("system_armed") || "ARMADO") + " · " + (C("mode_vacation") || "VACACIONES") : C("system_armed") || "ARMADO";
-  }, v = () => d._getIntelligentSVG?.(k ? "pending" : E, null, d._isNight, O, f) || "", h = [], x = m?.states?.[g.entity_id]?.attributes?.arming_blocking_sensors || [];
+  }, v = () => d._getIntelligentSVG?.(S ? "pending" : E, null, d._isNight, O, f) || "", h = [], x = m?.states?.[g.entity_id]?.attributes?.arming_blocking_sensors || [];
   if (g.entity_id) {
     const A = d._ui?.modes?.__by_entity__?.[g.entity_id] || d._ui?.modes || {};
     let z = A[E.replace("armed_", "")] || {};
@@ -26286,8 +26290,8 @@ function ub({ panel: d, isFullscreen: n, onToggleFullscreen: r, onUnlockKiosk: o
   }
   return /* @__PURE__ */ he.jsxs(he.Fragment, { children: [
     /* @__PURE__ */ he.jsx("style", { dangerouslySetInnerHTML: { __html: cb } }),
-    /* @__PURE__ */ he.jsxs("div", { className: `entry ${n ? "ios-fullscreen" : ""} ${k ? "argus-waiting" : ""}`, style: { position: "relative", width: "100%", height: "100%" }, children: [
-      /* @__PURE__ */ he.jsx("div", { dangerouslySetInnerHTML: { __html: S } }),
+    /* @__PURE__ */ he.jsxs("div", { className: `entry ${n ? "ios-fullscreen" : ""} ${S ? "argus-waiting" : ""}`, style: { position: "relative", width: "100%", height: "100%" }, children: [
+      /* @__PURE__ */ he.jsx("div", { dangerouslySetInnerHTML: { __html: k } }),
       d._kioskLocked && !n && /* @__PURE__ */ he.jsxs("button", { className: "btn-unlock-kiosk", onClick: o, style: { position: "absolute", top: "16px", right: "16px", zIndex: 99, padding: "8px 14px", background: "rgba(220,38,38,0.85)", color: "white", border: "none", borderRadius: "10px", fontWeight: 600, fontSize: "13px", cursor: "pointer", backdropFilter: "blur(8px)", boxShadow: "0 4px 12px rgba(0,0,0,0.4)" }, children: [
         "🔓 ",
         C("unlock_kiosk") || "Desbloquear kiosco"
@@ -26308,7 +26312,7 @@ function ub({ panel: d, isFullscreen: n, onToggleFullscreen: r, onUnlockKiosk: o
         ] }),
         /* @__PURE__ */ he.jsxs("div", { className: "entry-icon", style: { display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", animation: "float-icon 5s ease-in-out infinite" }, children: [
           /* @__PURE__ */ he.jsx("div", { dangerouslySetInnerHTML: { __html: v() } }),
-          k && /* @__PURE__ */ he.jsx("span", { className: "argus-shield-status", children: x.length ? C("waiting_sensors") || "ESPERANDO SENSORES" : C("arming") || "ARMANDO…" })
+          S && /* @__PURE__ */ he.jsx("span", { className: "argus-shield-status", children: x.length ? C("waiting_sensors") || "ESPERANDO SENSORES" : C("arming") || "ARMANDO…" })
         ] }),
         /* @__PURE__ */ he.jsxs("div", { className: "liquid-stack", children: [
           /* @__PURE__ */ he.jsx("button", { className: `liquid-btn btn-home ${E === "armed_home" ? "active" : ""}`, onClick: () => d._handleAction(f, "home"), dangerouslySetInnerHTML: { __html: d._modeButtonIcon("home") + `<span>${C("mode_home") || "CASA"}</span>` } }),
@@ -26316,7 +26320,7 @@ function ub({ panel: d, isFullscreen: n, onToggleFullscreen: r, onUnlockKiosk: o
           /* @__PURE__ */ he.jsx("button", { className: `liquid-btn btn-night ${E === "armed_night" ? "active" : ""}`, onClick: () => d._handleAction(f, "night"), dangerouslySetInnerHTML: { __html: d._modeButtonIcon("night") + `<span>${C("mode_night") || "NOCHE"}</span>` } })
         ] }),
         /* @__PURE__ */ he.jsx("div", { className: "console-sensors", children: h.length === 0 ? /* @__PURE__ */ he.jsx("div", { className: "console-empty", children: C("no_sensors_configured") || "Sin sensores configurados" }) : h.map((A) => {
-          const z = m.states[A.id], j = A.name || z?.attributes?.friendly_name || A.id, K = k && x.includes(A.id), X = d.isSensorActive ? d.isSensorActive(z) : z?.state === "on";
+          const z = m.states[A.id], j = A.name || z?.attributes?.friendly_name || A.id, K = S && x.includes(A.id), X = d.isSensorActive ? d.isSensorActive(z) : z?.state === "on";
           let W = null;
           return z?.attributes?.battery_level !== void 0 ? W = z.attributes.battery_level : z?.attributes?.battery !== void 0 && (W = z.attributes.battery), /* @__PURE__ */ he.jsx(
             db,
@@ -26610,7 +26614,7 @@ function bm(d, n, r) {
     </div>`, c.append(u, p, m, g), o.appendChild(c), { wrap: o, track: c, fill: u, thumb: p, label: m, pin: g };
 }
 function ym(d, n, r, o, c, u, p, m) {
-  let f = !1, S = 0, b = 0, E = 0;
+  let f = !1, k = 0, b = 0, E = 0;
   function C() {
     return r.getBoundingClientRect().width - 56 - 4 * 2;
   }
@@ -26625,10 +26629,10 @@ function ym(d, n, r, o, c, u, p, m) {
     c.classList.add("argus-sta-thumb--snap"), D(0), u.style.opacity = "1", setTimeout(() => c.classList.remove("argus-sta-thumb--snap"), 520);
   }
   function N(z) {
-    p.classList.contains("open") || (f = !0, E = C(), S = z - b, c.style.cursor = "grabbing");
+    p.classList.contains("open") || (f = !0, E = C(), k = z - b, c.style.cursor = "grabbing");
   }
-  function k(z) {
-    f && (b = D(z - S));
+  function S(z) {
+    f && (b = D(z - k));
   }
   function y() {
     f && (f = !1, c.style.cursor = "grab", b >= E * 0.8 ? n === "disarm" && gb(d) ? (v(), O()) : (m(), O()) : O(), b = 0);
@@ -26636,13 +26640,13 @@ function ym(d, n, r, o, c, u, p, m) {
   c.addEventListener("mousedown", (z) => {
     z.preventDefault(), N(z.clientX);
   }), window.addEventListener("mousemove", (z) => {
-    f && k(z.clientX);
+    f && S(z.clientX);
   }), window.addEventListener("mouseup", () => {
     f && y();
   }), c.addEventListener("touchstart", (z) => {
     z.preventDefault(), N(z.touches[0].clientX);
   }, { passive: !1 }), window.addEventListener("touchmove", (z) => {
-    f && (z.preventDefault(), k(z.touches[0].clientX));
+    f && (z.preventDefault(), S(z.touches[0].clientX));
   }, { passive: !1 }), window.addEventListener("touchend", () => {
     f && y();
   });
@@ -26681,14 +26685,14 @@ function bb(d, n, r) {
   function p() {
     return !!d._hass?.states?.[c]?.attributes?.argus_panic_active;
   }
-  const { wrap: m, track: g, fill: f, thumb: S, label: b, pin: E } = bm("disarm", un(d, "slide_disarm"), _b);
-  ym(d, "disarm", g, f, S, b, E, (x) => {
+  const { wrap: m, track: g, fill: f, thumb: k, label: b, pin: E } = bm("disarm", un(d, "slide_disarm"), _b);
+  ym(d, "disarm", g, f, k, b, E, (x) => {
     const A = d._dashboard?.entries?.[r]?.entry_id || "";
     typeof d._send == "function" && d._send("argus/perform_alarm_action", { action: "disarm", entry_id: A, ...x ? { code: x } : {} }).catch(() => {
     });
   });
-  const { wrap: C, track: D, fill: O, thumb: N, label: k, pin: y } = bm("sos", un(d, "slide_sos"), hm);
-  ym(d, "sos", D, O, N, k, y, () => {
+  const { wrap: C, track: D, fill: O, thumb: N, label: S, pin: y } = bm("sos", un(d, "slide_sos"), hm);
+  ym(d, "sos", D, O, N, S, y, () => {
     const x = d._dashboard?.entries?.[r]?.entry_id || "";
     typeof d._send == "function" && d._send("argus/perform_alarm_action", { action: "sos", entry_id: x }).catch(() => {
     });
@@ -26698,7 +26702,7 @@ function bb(d, n, r) {
   v.querySelectorAll(".btn-disarm, .btn-sos, .argus-disarm-btn").forEach((x) => x.remove()), v.appendChild(m), v.appendChild(C);
   function h() {
     const x = u(), A = p(), z = x !== "disarmed" && x !== "unavailable";
-    m.classList.toggle("sta-armed", z), b.textContent = un(d, "slide_disarm"), D.classList.toggle("sos-pulsing", A), k.textContent = A ? un(d, "slide_sos_stop") : un(d, "slide_sos"), N.innerHTML = A ? mb : hm;
+    m.classList.toggle("sta-armed", z), b.textContent = un(d, "slide_disarm"), D.classList.toggle("sos-pulsing", A), S.textContent = A ? un(d, "slide_sos_stop") : un(d, "slide_sos"), N.innerHTML = A ? mb : hm;
   }
   h(), n._staRefresh = h;
 }
@@ -26954,8 +26958,8 @@ function Eb(d) {
     try {
       await this._send("argus/update_master_pin", { entry_id: c.entry_id, pin: p, current_pin: u }), c.pin_configured = !!p, r && (r.textContent = p ? Pr(this, "pin_updated", "PIN actualizado") : Pr(this, "pin_deleted", "PIN eliminado"), r.className = "status ok");
       for (const f of ["current-pin", "new-pin-1", "new-pin-2"]) {
-        const S = qr(this.shadowRoot, f);
-        S && (S.value = "");
+        const k = qr(this.shadowRoot, f);
+        k && (k.value = "");
       }
       this._syncAccessSummary?.(), window.setTimeout(() => {
         this._load?.();
@@ -27184,19 +27188,19 @@ function Db(d) {
   }, n._renderEntries = function(m = !1) {
     const g = this.shadowRoot;
     if (!g) return r?.call(this, m);
-    const f = g.getElementById("entries"), S = this._dashboard?.entries || [];
-    if (this._instanceSignatures = this._instanceSignatures || /* @__PURE__ */ new Map(), !f || !S.length) {
+    const f = g.getElementById("entries"), k = this._dashboard?.entries || [];
+    if (this._instanceSignatures = this._instanceSignatures || /* @__PURE__ */ new Map(), !f || !k.length) {
       const O = r?.call(this, m);
       return kc(this, g.getElementById("entries")), ki(this), O;
     }
     const b = [...f.querySelectorAll("article.entry")];
-    if (!(m || b.length !== S.length || !b.every((O) => O.querySelector(".entry-content")))) {
+    if (!(m || b.length !== k.length || !b.every((O) => O.querySelector(".entry-content")))) {
       let O = !0;
-      for (let N = 0; N < S.length; N++) {
-        const k = S[N], y = this._hass?.states?.[k.entity_id], v = y?.state || k.state || "unavailable", h = y?.attributes || {}, x = !!h.argus_panic_active, A = this._fullscreenIdx === N || !!this._kioskLocked && (this._kioskEntryId === k.entry_id || S.length === 1), z = String(v).replace("armed_", "");
-        let j = this._ui?.modes?.__by_entity__?.[k.entity_id]?.[z] || this._ui?.modes?.[z] || {}, K = j.sensors || [];
+      for (let N = 0; N < k.length; N++) {
+        const S = k[N], y = this._hass?.states?.[S.entity_id], v = y?.state || S.state || "unavailable", h = y?.attributes || {}, x = !!h.argus_panic_active, A = this._fullscreenIdx === N || !!this._kioskLocked && (this._kioskEntryId === S.entry_id || k.length === 1), z = String(v).replace("armed_", "");
+        let j = this._ui?.modes?.__by_entity__?.[S.entity_id]?.[z] || this._ui?.modes?.[z] || {}, K = j.sensors || [];
         if (v === "disarmed" || !K.length) {
-          const ue = this._ui?.modes?.__by_entity__?.[k.entity_id] || this._ui?.modes || {}, fe = /* @__PURE__ */ new Set();
+          const ue = this._ui?.modes?.__by_entity__?.[S.entity_id] || this._ui?.modes || {}, fe = /* @__PURE__ */ new Set();
           ["away", "home", "night", "vacation"].forEach((B) => {
             (ue[B]?.sensors || []).forEach((Q) => fe.add(Q));
           }), K = [...fe];
@@ -27204,18 +27208,18 @@ function Db(d) {
         const X = j.bypassed_sensors || [], oe = K.filter((ue) => !X.includes(ue)).map((ue) => {
           const fe = this._hass?.states?.[ue], B = this._getSensorBattery?.(ue, fe) ?? fe?.attributes?.battery_level ?? fe?.attributes?.battery_percentage ?? "";
           return `${ue}:${fe?.state || ""}:${B}`;
-        }).join(","), ce = zm(this, k, v, h, oe, x, A);
+        }).join(","), ce = zm(this, S, v, h, oe, x, A);
         if (this._instanceSignatures.get(N) !== ce) {
           O = !1;
           break;
         }
       }
       if (O) {
-        const k = S.map((h) => this._hass?.states?.[h.entity_id]?.state || "unavailable").some((h) => String(h).startsWith("armed") || h === "triggered" || h === "pending"), y = g.getElementById("global-status");
+        const S = k.map((h) => this._hass?.states?.[h.entity_id]?.state || "unavailable").some((h) => String(h).startsWith("armed") || h === "triggered" || h === "pending"), y = g.getElementById("global-status");
         y && (y.innerHTML = "");
         const v = g.getElementById("hero-security-pill");
         if (v) {
-          const h = (z) => this._t?.(z) || z, x = h(k ? "system_armed" : "system_disarmed"), A = `<i class="hero-live" style="background:${k ? "#ffb54d" : "#55df91"};box-shadow:0 0 9px ${k ? "#ffb54d" : "#55df91"}"></i>${this._escapeHtml?.(x) || x}`;
+          const h = (z) => this._t?.(z) || z, x = h(S ? "system_armed" : "system_disarmed"), A = `<i class="hero-live" style="background:${S ? "#ffb54d" : "#55df91"};box-shadow:0 0 9px ${S ? "#ffb54d" : "#55df91"}"></i>${this._escapeHtml?.(x) || x}`;
           v.innerHTML !== A && (v.innerHTML = A);
         }
         ki(this), kc(this, f);
@@ -27224,12 +27228,12 @@ function Db(d) {
     }
     const C = r?.call(this, m === !0 ? !0 : void 0);
     return [...f.querySelectorAll("article.entry")].forEach((O, N) => {
-      const k = S[N];
-      if (!k) return;
-      const y = this._hass?.states?.[k.entity_id], v = y?.state || k.state || "unavailable", h = y?.attributes || {}, x = !!h.argus_panic_active, A = this._fullscreenIdx === N || !!this._kioskLocked && (this._kioskEntryId === k.entry_id || S.length === 1), z = String(v).replace("armed_", "");
-      let j = this._ui?.modes?.__by_entity__?.[k.entity_id]?.[z] || this._ui?.modes?.[z] || {}, K = j.sensors || [];
+      const S = k[N];
+      if (!S) return;
+      const y = this._hass?.states?.[S.entity_id], v = y?.state || S.state || "unavailable", h = y?.attributes || {}, x = !!h.argus_panic_active, A = this._fullscreenIdx === N || !!this._kioskLocked && (this._kioskEntryId === S.entry_id || k.length === 1), z = String(v).replace("armed_", "");
+      let j = this._ui?.modes?.__by_entity__?.[S.entity_id]?.[z] || this._ui?.modes?.[z] || {}, K = j.sensors || [];
       if (v === "disarmed" || !K.length) {
-        const ue = this._ui?.modes?.__by_entity__?.[k.entity_id] || this._ui?.modes || {}, fe = /* @__PURE__ */ new Set();
+        const ue = this._ui?.modes?.__by_entity__?.[S.entity_id] || this._ui?.modes || {}, fe = /* @__PURE__ */ new Set();
         ["away", "home", "night", "vacation"].forEach((B) => {
           (ue[B]?.sensors || []).forEach((Q) => fe.add(Q));
         }), K = [...fe];
@@ -27237,7 +27241,7 @@ function Db(d) {
       const X = j.bypassed_sensors || [], oe = K.filter((ue) => !X.includes(ue)).map((ue) => {
         const fe = this._hass?.states?.[ue], B = this._getSensorBattery?.(ue, fe) ?? fe?.attributes?.battery_level ?? fe?.attributes?.battery_percentage ?? "";
         return `${ue}:${fe?.state || ""}:${B}`;
-      }).join(","), ce = zm(this, k, v, h, oe, x, A);
+      }).join(","), ce = zm(this, S, v, h, oe, x, A);
       this._instanceSignatures.set(N, ce), O.dataset.renderSig = ce;
     }), kc(this, f), ki(this), C;
   };
@@ -27251,17 +27255,17 @@ function Db(d) {
     set: function(m) {
       const g = this._hass;
       if (g && this._dashboard?.entries?.length) {
-        const f = /* @__PURE__ */ new Set(), S = (v) => {
+        const f = /* @__PURE__ */ new Set(), k = (v) => {
           !v || typeof v != "object" || (Array.isArray(v.sensors) && v.sensors.forEach((h) => f.add(h)), Object.values(v).forEach((h) => {
-            h && typeof h == "object" && S(h);
+            h && typeof h == "object" && k(h);
           }));
         };
-        S(this._ui?.modes);
+        k(this._ui?.modes);
         const b = g.language !== m.language;
         b && !this._manualLang && this._refreshLocalizedUi?.();
         const E = this._dashboard.entries.some((v) => v.entity_id && g.states[v.entity_id]?.state !== m.states[v.entity_id]?.state), C = [...f].some(
           (v) => g.states[v]?.state !== m.states[v]?.state || g.states[v]?.attributes?.battery_level !== m.states[v]?.attributes?.battery_level || g.states[v]?.attributes?.battery_percentage !== m.states[v]?.attributes?.battery_percentage
-        ), D = this._temperatureSource === "auto" ? null : this._temperatureSource, O = D && g.states[D]?.state !== m.states[D]?.state, N = this._weatherSource && this._weatherSource !== "auto" ? this._weatherSource : Object.values(m.states).find((v) => v.entity_id?.startsWith("weather."))?.entity_id, k = N && (g.states[N]?.state !== m.states[N]?.state || g.states[N]?.attributes?.temperature !== m.states[N]?.attributes?.temperature), y = E || C || O || k || b;
+        ), D = this._temperatureSource === "auto" ? null : this._temperatureSource, O = D && g.states[D]?.state !== m.states[D]?.state, N = this._weatherSource && this._weatherSource !== "auto" ? this._weatherSource : Object.values(m.states).find((v) => v.entity_id?.startsWith("weather."))?.entity_id, S = N && (g.states[N]?.state !== m.states[N]?.state || g.states[N]?.attributes?.temperature !== m.states[N]?.attributes?.temperature), y = E || C || O || S || b;
         this._hass = m, this._updateTheme?.(), y ? (this._renderEntries?.(b), this._renderActivityLog?.()) : ki(this);
         return;
       }
@@ -27309,27 +27313,27 @@ function Ac(d) {
     const c = d._dashboard?.entries?.[o] || {}, u = c.attributes || d._hass?.states?.[c.entity_id]?.attributes || {}, p = Ib(d, c), m = u.arming_blocking_sensors || [], g = p === "arming" || !!u.arming_waiting_for_sensors || !!m.length;
     r.classList.toggle("argus-arming", g), r.classList.toggle("argus-waiting", g);
     const f = r.querySelector(".entry-icon");
-    let S = r.querySelector(".argus-shield-status");
+    let k = r.querySelector(".argus-shield-status");
     if (g && f) {
-      S || (S = document.createElement("span"), S.className = "argus-shield-status", f.insertAdjacentElement("afterend", S));
+      k || (k = document.createElement("span"), k.className = "argus-shield-status", f.insertAdjacentElement("afterend", k));
       const O = (d._t?.("waiting_sensors_count") || "ESPERANDO {count} SENSOR(ES)").replace("{count}", String(m.length));
-      S.textContent = m.length ? O : p === "arming" ? d._t?.("arming") || "ARMANDO…" : d._t?.("waiting_sensors") || "ESPERANDO SENSORES";
+      k.textContent = m.length ? O : p === "arming" ? d._t?.("arming") || "ARMANDO…" : d._t?.("waiting_sensors") || "ESPERANDO SENSORES";
     } else
-      S?.remove();
+      k?.remove();
     const b = r.querySelector(".liquid-stack");
     b && Array.from(b.querySelectorAll(".liquid-btn,button")).forEach((D) => {
       const O = D, N = String(O.textContent || "");
       if (/SOS|PÁNICO|PANIC|PANIQUE|PÂNICO|PANICO|紧急|ПАНИКА/i.test(N)) Ec(O, "sos", !!u.argus_panic_active);
       else if (/DESARMAR|DISARM|DESARMADO|DISARMED|DÉSARMER|DÉSARMÉ|OFF|已撤防|СНЯТО/i.test(N)) Ec(O, "disarm", p === "disarmed");
       else {
-        const k = Object.entries(Lb).find(([, y]) => y.test(N));
-        k && Ec(O, k[0], p === k[0]);
+        const S = Object.entries(Lb).find(([, y]) => y.test(N));
+        S && Ec(O, S[0], p === S[0]);
       }
     });
     const E = new Set((u.triggered_sensors || []).map(String)), C = new Set(m.map((D) => String(d._dashboard?.available_entities?.find((O) => O.entity_id === D)?.name || D).toLocaleLowerCase()));
     r.querySelectorAll(".console-sensor").forEach((D) => {
-      const O = String(D.querySelector(".console-sensor-name")?.textContent || D.textContent || "").toLocaleLowerCase(), N = Array.from(C).some((y) => O.includes(y) || y.includes(O)), k = Array.from(E).some((y) => O.includes(String(y).toLocaleLowerCase()));
-      D.classList.toggle("argus-blocking", N), D.classList.toggle("argus-triggered-sensor", k);
+      const O = String(D.querySelector(".console-sensor-name")?.textContent || D.textContent || "").toLocaleLowerCase(), N = Array.from(C).some((y) => O.includes(y) || y.includes(O)), S = Array.from(E).some((y) => O.includes(String(y).toLocaleLowerCase()));
+      D.classList.toggle("argus-blocking", N), D.classList.toggle("argus-triggered-sensor", S);
     });
   });
 }

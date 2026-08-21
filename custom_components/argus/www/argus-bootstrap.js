@@ -1,2 +1,2 @@
-import { applyArgusFrontend } from './react-dist/argus-frontend.js?v=2.2.75';
+import { applyArgusFrontend } from './react-dist/argus-frontend.js?v=2.2.76';
 applyArgusFrontend();
