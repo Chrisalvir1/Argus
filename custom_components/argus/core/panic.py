@@ -14,20 +14,10 @@ SOS_TEXT = {
         "🚨 SOS button activated from {home}. Check the alarm status immediately.",
         "Call {number}",
     ),
-    "fr": (
-        "ARGUS — SOS / PANIQUE",
-        "🚨 Bouton SOS activé depuis {home}. Vérifiez immédiatement l’état de l’alarme.",
-        "Appeler le {number}",
-    ),
     "pt": (
         "ARGUS — SOS / PÂNICO",
         "🚨 Botão SOS ativado em {home}. Verifique o estado do alarme imediatamente.",
         "Ligar para {number}",
-    ),
-    "it": (
-        "ARGUS — SOS / PANICO",
-        "🚨 Pulsante SOS attivato da {home}. Controlla subito lo stato dell’allarme.",
-        "Chiama {number}",
     ),
     "zh": (
         "ARGUS — SOS / 紧急",

@@ -52,21 +52,10 @@ def _detect_tts_language(hass, tts_entity_id: str) -> str | None:
         return "es"
 
     if any(tok in full_text for tok in [
-        "francais", "français", "french", "fr-fr", "fr_fr", "fr-ca", "fr_ca",
-        "_fr", "-fr", ".fr", " fr", "fr "
-    ]):
-        return "fr"
-
-    if any(tok in full_text for tok in [
         "portugues", "português", "portuguese", "pt-br", "pt_br", "pt-pt", "pt_pt",
         "_pt", "-pt", ".pt", " pt", "pt "
     ]):
         return "pt"
-
-    if any(tok in full_text for tok in [
-        "italiano", "italian", "it-it", "it_it", "_it", "-it", ".it", " it", "it "
-    ]):
-        return "it"
 
     if any(tok in full_text for tok in [
         "russian", "ruso", "русский", "ru-ru", "ru_ru", "_ru", "-ru", ".ru", " ru", "ru "
