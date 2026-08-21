@@ -7551,6 +7551,8 @@ class Dm extends HTMLElement {
       } catch {
       }
     if (!n) {
+      if (this._hass?.language && this._hass.language.startsWith("es"))
+        return "es";
       const o = this._ui?.manual_lang || this._ui?.language;
       o && o !== "auto" && (n = o);
     }
@@ -8196,7 +8198,7 @@ class Dm extends HTMLElement {
     this._currentUserTheme = r, r.background_mode !== "default" && r.background_file ? (this._backgroundMode = r.background_mode, this._panelBgFile = r.background_file, this._backgroundImages = [r.background_file]) : r.background_mode !== "default" && r.background_mode ? (this._backgroundMode = r.background_mode, this._panelBgFile = "", this._backgroundImages = []) : (this._backgroundMode = n.background_mode || "none", this._panelBgFile = "", this._backgroundImages = n.background_images || []), n.weather_source && (this._weatherSource = n.weather_source), n.temperature_source && (this._temperatureSource = n.temperature_source);
     try {
       const X = localStorage.getItem("argus_lang");
-      X && X !== "auto" ? this._manualLang = X : n.language && n.language !== "auto" ? this._manualLang = n.language : this._manualLang = null;
+      X && X !== "auto" ? this._manualLang = X : n.language && n.language !== "auto" && (!this._hass?.language?.startsWith("es") || n.language === "es") ? this._manualLang = n.language : this._manualLang = null;
     } catch {
     }
     if (this._updateCanvasBackground(), n.configuration_missing) {

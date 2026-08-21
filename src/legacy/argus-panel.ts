@@ -7756,6 +7756,9 @@ class ArgusPanel extends HTMLElement {
       } catch(e) {}
     }
     if (!raw) {
+      if (this._hass?.language && this._hass.language.startsWith('es')) {
+        return 'es';
+      }
       const uiLang = this._ui?.manual_lang || this._ui?.language;
       if (uiLang && uiLang !== 'auto') raw = uiLang;
     }
@@ -8900,7 +8903,7 @@ class ArgusPanel extends HTMLElement {
       const stored = localStorage.getItem('argus_lang');
       if (stored && stored !== 'auto') {
         this._manualLang = stored;
-      } else if (bootstrap.language && bootstrap.language !== 'auto') {
+      } else if (bootstrap.language && bootstrap.language !== 'auto' && (!this._hass?.language?.startsWith('es') || bootstrap.language === 'es')) {
         this._manualLang = bootstrap.language;
       } else {
         this._manualLang = null;
