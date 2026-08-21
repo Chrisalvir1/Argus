@@ -36,7 +36,13 @@ export function ArgusDashboard({widgets,nodes,storage,userId,dashboardId,onEditi
  const replaceItem=(id:string,nextItem:Layout,label:string)=>{const base=lastValid.current,current=base[bp]||[],others=current.filter(x=>x.i!==id),safe=hasCollision(others,nextItem)?firstFreePosition(others,nextItem,COLS[bp]):nextItem;const next={...base,[bp]:current.map(x=>x.i===id?safe:x)};save(next,true);setMessage(label)};
  const chooseSize=(id:string,size:ArgusWidgetSize)=>{const current=(lastValid.current[bp]||[]).find(x=>x.i===id);if(!current)return;const d=clampSizeForBreakpoint(size,COLS[bp]);replaceItem(id,{...current,...d,x:Math.max(0,Math.min(current.x,COLS[bp]-d.w))},`${getT('size','Tamaño')} ${size}`)};
  const resetWidget=(id:string)=>{const base=(defaultLayouts[bp]||[]).find(x=>x.i===id);if(base)replaceItem(id,{...base},getT('reset_widget','Widget restablecido'))};
- const resize=(_layout:Layout[],_old:Layout,value:Layout)=>{const snapped=snapLayoutItemToSize(value,COLS[bp]);replaceItem(value.i,snapped,`${getT('size','Tamaño')} ${getClosestWidgetSize(snapped.w,snapped.h,COLS[bp])}`)};
+  const resize=(_layout:Layout[],_old:Layout,value:Layout)=>{
+    const maxCols=COLS[bp];
+    const freeW=Math.min(maxCols,Math.max(1,value.w));
+    const freeH=Math.max(1,value.h);
+    const updated:Layout={...value,w:freeW,h:freeH,x:Math.max(0,Math.min(value.x,maxCols-freeW))};
+    replaceItem(value.i,updated,`${getT('size','Tamaño')}: ${freeW}x${freeH}`);
+  };
  const reset=async()=>{try{localStorage.removeItem(`argus:dashboard-layout:${userId}:${dashboardId}`);}catch(_){}await storage.reset(userId,dashboardId);const clean=mergeLayouts(null);setVisibility(defaults);setLayouts(clean);lastValid.current=clean;setGridKey(k=>k+1);save(clean,true);setMessage(getT('reset_dashboard_done','Diseño predeterminado restaurado'))};
 
  const currentLayout=layouts[bp]||[];
