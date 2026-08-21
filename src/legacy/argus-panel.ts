@@ -12797,20 +12797,27 @@ gl_FragColor=vec4(col,alpha);}`;
     const dropdown = container.querySelector('#profile-dropdown');
     
     if (pill && dropdown) {
+      const setHostZIndex = (elevate: boolean) => {
+        const widget = container.closest('.argus-widget') || container.closest('.react-grid-item') || container.closest('.panel');
+        if (widget) (widget as HTMLElement).style.zIndex = elevate ? '99999' : '';
+        const gridItem = container.closest('.react-grid-item');
+        if (gridItem) (gridItem as HTMLElement).style.zIndex = elevate ? '99999' : '';
+      };
+
       pill.addEventListener('click', (e) => {
         e.stopPropagation();
         const isOpen = dropdown.style.display === 'flex';
         dropdown.style.display = isOpen ? 'none' : 'flex';
+        setHostZIndex(!isOpen);
       });
 
       // Close dropdown when clicking outside
       const _closeOnClickOutside = (e) => {
-        // In Shadow DOM, e.target is the host element at document level.
-        // Use composedPath() to get the actual inner target.
         const path = e.composedPath ? e.composedPath() : [e.target];
         const insideContainer = path.some(el => el === container || (el.closest && el.closest?.('#profile-dropdown')));
         if (!insideContainer) {
           dropdown.style.display = 'none';
+          setHostZIndex(false);
           document.removeEventListener('click', _closeOnClickOutside, true);
         }
       };

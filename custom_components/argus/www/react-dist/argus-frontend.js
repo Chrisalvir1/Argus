@@ -7506,19 +7506,19 @@ class Dm extends HTMLElement {
     const p = this._dashboard.entries.some(
       (O) => O.entity_id && r?.states[O.entity_id]?.state !== n.states[O.entity_id]?.state
     ), m = this._temperatureSource === "auto" ? null : this._temperatureSource, g = m && r?.states[m]?.state !== n.states[m]?.state, f = this._weatherSource !== "auto" ? this._weatherSource : Object.values(n.states).find((O) => O.entity_id.startsWith("weather."))?.entity_id, S = f && (r?.states[f]?.state !== n.states[f]?.state || r?.states[f]?.attributes?.temperature !== n.states[f]?.attributes?.temperature || r?.states[f]?.attributes?.temperature_unit !== n.states[f]?.attributes?.temperature_unit), b = /* @__PURE__ */ new Set(), E = (O) => {
-      !O || typeof O != "object" || (Array.isArray(O.sensors) && O.sensors.forEach((C) => b.add(C)), Object.values(O).forEach((C) => {
-        C && typeof C == "object" && E(C);
+      !O || typeof O != "object" || (Array.isArray(O.sensors) && O.sensors.forEach((N) => b.add(N)), Object.values(O).forEach((N) => {
+        N && typeof N == "object" && E(N);
       }));
     };
     E(this._ui?.modes);
-    const N = !!r && [...b].some((O) => {
-      const C = r.states[O], k = n.states[O];
-      return C?.state !== k?.state || C?.attributes?.battery_level !== k?.attributes?.battery_level || C?.attributes?.battery_percentage !== k?.attributes?.battery_percentage;
-    }), L = !!r && Object.values(n.states).some((O) => {
-      const C = O.entity_id || "", k = O.attributes?.device_class === "battery" || /_battery$/i.test(C), y = r.states[C];
+    const C = !!r && [...b].some((O) => {
+      const N = r.states[O], k = n.states[O];
+      return N?.state !== k?.state || N?.attributes?.battery_level !== k?.attributes?.battery_level || N?.attributes?.battery_percentage !== k?.attributes?.battery_percentage;
+    }), D = !!r && Object.values(n.states).some((O) => {
+      const N = O.entity_id || "", k = O.attributes?.device_class === "battery" || /_battery$/i.test(N), y = r.states[N];
       return k && y?.state !== O.state;
     });
-    (p || N || L || g || c || S || !r) && (this._renderEntries(), this._renderActivityLog(), r || (this._renderModeTabs(), this._renderModeView(), this._renderAutomations(), this._renderNotifications(), this._activeAccessSection === "users" && this._renderUsers()));
+    (p || C || D || g || c || S || !r) && (this._renderEntries(), this._renderActivityLog(), r || (this._renderModeTabs(), this._renderModeView(), this._renderAutomations(), this._renderNotifications(), this._activeAccessSection === "users" && this._renderUsers()));
   }
   get hass() {
     return this._hass;
@@ -7663,23 +7663,23 @@ class Dm extends HTMLElement {
     b("btn-new-auto", "create_ha"), b("btn-save-pin", "update_pin"), b("btn-save-notif", "save_notif"), b("btn-save-user", "save_user"), b("selector-close", "close"), b("selector-clear", "clear"), b("selector-accept", "accept"), b("pin-cancel", "cancel"), b("pin-confirm", "confirm"), b("btn-cancel-sos", "cancel"), b("sos-call-btn", "sos_call"), b("home-name-cancel", "cancel"), b("home-name-save", "save_btn");
     const E = r("lang-modal-close");
     E && (E.textContent = `✕ ${n("close")}`), o("lbl-home-name-hdr", n("home_name_lbl")), o("lbl-panel-bg-title", n("bg_panel_title")), o("lbl-hub-bg-title", n("bg_hub_title")), o("s-panel-bg-sound-lbl", n("bg_sound_opt")), o("s-hub-bg-sound-lbl", n("bg_sound_opt")), o("lbl-mas-ajustes", "🎨 " + n("lbl_aesthetic_custom")), o("edit-widgets-label", this._widgetEditing ? "✓ " + n("done") : "⚙️ Config. Widgets"), o("lbl-temperature-source", n("temp_displayed")), o("lbl-weather-source", n("weather_source")), o("lbl-panel-bg-upload", n("lbl_load_file")), o("lbl-hub-bg-upload", n("lbl_load_file")), o("lbl-uploaded-files-title", n("lbl_uploaded_files")), o("btn-edit-home-name-standalone", n("edit_btn")), o("btn-save-personalization-standalone", n("save_btn")), o("btn-refresh-history", n("history_refresh")), o("btn-export-forensic", "📄 " + (n("export_history_title") || "Exportar")), o("btn-clear-log", n("clear_log_btn")), o("h-history-export-title", "📄 " + (n("export_history_title") || "Exportar Historial")), o("h-access-title", n("access_title")), o("p-access-desc", n("access_desc")), o("btn-access-users", `👥 ${n("users_title").replace(/^👥\s*/, "").replace(/\s(?:y|&|e)\s.*$/i, "")}`), o("btn-access-pin", `🔐 ${n("pin_master_title")}`), o("h-settings-pin", n("pin_master_title")), o("p-pin-remove-hint", n("pin_remove_hint")), o("h-backup-title", n("backup_title")), o("p-backup-desc", n("backup_desc")), o("btn-export-config", n("export_btn")), o("btn-reset-config", n("reset_btn")), o("btn-undo-reset", n("undo_reset_btn")), o("btn-import-trigger", n("import_btn")), o("github-title", n("github_title")), o("github-desc", n("github_desc")), o("github-action", `⭐ ${n("github_action")}`), o("sos-title-txt", n("sos_confirm_title")), o("sos-text-txt", n("sos_confirm_text")), o("sos-label", n("sos_slide")), o("home-name-modal-h3", n("home_name_modal_title")), o("p-home-name-modal-desc", n("home_name_modal_desc")), o("l-home-name-modal-label", n("home_name_label")), o("lang-modal-title", `🌐 ${n("lang_select_title")}`), o("sos-call-help", n("sos_call_help")), o("lbl-emergency-number", n("emergency_number_label")), o("emergency-number-help", n("emergency_help")), o("lbl-sos-actions", n("sos_actions")), o("btn-select-sos-outputs", n("sos_select_outputs")), o("sos-output-help", n("sos_outputs_help")), o("home-name-modal-desc", n("home_name_modal_desc")), o("pin-backspace", n("delete"));
-    const N = r("bg-mode-select-standalone");
-    if (N) {
-      const h = N.value;
-      N.innerHTML = `
+    const C = r("bg-mode-select-standalone");
+    if (C) {
+      const h = C.value;
+      C.innerHTML = `
         <option value="weather">${n("bg_weather")}</option>
         <option value="none">${n("bg_panel_none")}</option>
         <option value="photo">${n("bg_photo")}</option>
         <option value="collage">${n("bg_collage")}</option>
-      `, h && (N.value = h), this._renderEntries();
+      `, h && (C.value = h), this._renderEntries();
     }
-    const L = r("hub-bg-mode-select");
-    if (L) {
-      const h = L.value;
-      L.innerHTML = `
+    const D = r("hub-bg-mode-select");
+    if (D) {
+      const h = D.value;
+      D.innerHTML = `
         <option value="default">${n("bg_hub_default")}</option>
         <option value="image">${n("bg_image_opt")}</option>
-      `, h && (L.value = h);
+      `, h && (D.value = h);
     }
     this._populateTemperatureSources(), this._populateWeatherSources();
     const O = r("current-pin-display");
@@ -7692,8 +7692,8 @@ class Dm extends HTMLElement {
         O.textContent = n(A ? "pin_active_yes" : "pin_active_no");
       }
     }
-    const C = r("home-name-input");
-    C && (C.placeholder = n("home_name_placeholder"));
+    const N = r("home-name-input");
+    N && (N.placeholder = n("home_name_placeholder"));
     const k = r("panel-bg-url-input");
     k && (k.placeholder = n("url_placeholder"));
     const y = r("hub-bg-url-input");
@@ -7866,13 +7866,13 @@ class Dm extends HTMLElement {
   _exportHistoryPrintPdf() {
     this._closeHistoryExportModal();
     const n = this._getFilteredHistory(), r = this._homeName || "Argus Home Hub", o = (/* @__PURE__ */ new Date()).toLocaleString(this._getLocale()), c = this.shadowRoot.getElementById("export-history-from")?.value || "Inicio", u = this.shadowRoot.getElementById("export-history-to")?.value || "Hoy", p = n.map((f, S) => {
-      const b = f.ts ? new Date(f.ts) : null, E = b && !isNaN(b.getTime()) ? b.toLocaleString(this._getLocale()) : "—", N = String(f.action || ""), L = this._localizeActivityDetail(N, f.detail), O = f.user || f.actor || "Argus";
+      const b = f.ts ? new Date(f.ts) : null, E = b && !isNaN(b.getTime()) ? b.toLocaleString(this._getLocale()) : "—", C = String(f.action || ""), D = this._localizeActivityDetail(C, f.detail), O = f.user || f.actor || "Argus";
       return `
         <tr style="border-bottom: 1px solid #e2e8f0; font-size: 11px;">
           <td style="padding: 6px 8px; color: #64748b; font-family: monospace;">${S + 1}</td>
           <td style="padding: 6px 8px; white-space: nowrap; font-weight: 600;">${this._escapeHtml(E)}</td>
-          <td style="padding: 6px 8px; font-weight: 700; color: #0284c7;">${this._escapeHtml(N)}</td>
-          <td style="padding: 6px 8px;">${this._escapeHtml(L)}</td>
+          <td style="padding: 6px 8px; font-weight: 700; color: #0284c7;">${this._escapeHtml(C)}</td>
+          <td style="padding: 6px 8px;">${this._escapeHtml(D)}</td>
           <td style="padding: 6px 8px; font-weight: 600;">${this._escapeHtml(O)}</td>
         </tr>
       `;
@@ -7957,8 +7957,8 @@ class Dm extends HTMLElement {
 `, p += `================================================================================
 
 `, n.forEach((S, b) => {
-      const E = S.ts ? new Date(S.ts) : null, N = E && !isNaN(E.getTime()) ? E.toLocaleString(this._getLocale()) : "—", L = String(S.action || ""), O = this._localizeActivityDetail(L, S.detail), C = S.user || S.actor || "Argus";
-      p += `[${String(b + 1).padStart(3, "0")}] ${N} | [${L}] ${O} | 👤 ${C}
+      const E = S.ts ? new Date(S.ts) : null, C = E && !isNaN(E.getTime()) ? E.toLocaleString(this._getLocale()) : "—", D = String(S.action || ""), O = this._localizeActivityDetail(D, S.detail), N = S.user || S.actor || "Argus";
+      p += `[${String(b + 1).padStart(3, "0")}] ${C} | [${D}] ${O} | 👤 ${N}
 `;
     }), p += `
 ================================================================================
@@ -8274,18 +8274,18 @@ class Dm extends HTMLElement {
         <option value="photo">${this._t("bg_photo")}</option>
         <option value="collage">${this._t("bg_collage")}</option>
       `, E.value = this._backgroundMode || "weather");
-    const N = this.shadowRoot.getElementById("hub-bg-mode-select");
-    N && (N.innerHTML = `
+    const C = this.shadowRoot.getElementById("hub-bg-mode-select");
+    C && (C.innerHTML = `
         <option value="default">${this._t("bg_hub_default")}</option>
         <option value="image">${this._t("bg_image_opt")}</option>
         <option value="weather">Clima animado</option>
-      `, N.value = this._hubBgMode || "default");
-    const L = this.shadowRoot.getElementById("panel-bg-url-input");
-    L && (L.value = this._panelBgFile && !this._panelBgFile.startsWith("data:") ? this._panelBgFile : "");
+      `, C.value = this._hubBgMode || "default");
+    const D = this.shadowRoot.getElementById("panel-bg-url-input");
+    D && (D.value = this._panelBgFile && !this._panelBgFile.startsWith("data:") ? this._panelBgFile : "");
     const O = this.shadowRoot.getElementById("chk-panel-bg-sound");
     O && (O.checked = this._panelBgSound);
-    const C = this.shadowRoot.getElementById("hub-bg-url-input");
-    C && (C.value = this._hubBgFile && !this._hubBgFile.startsWith("data:") ? this._hubBgFile : "");
+    const N = this.shadowRoot.getElementById("hub-bg-url-input");
+    N && (N.value = this._hubBgFile && !this._hubBgFile.startsWith("data:") ? this._hubBgFile : "");
     const k = this.shadowRoot.getElementById("chk-hub-bg-sound");
     k && (k.checked = this._hubBgSound), this._updateBgFieldsVisibility(), this._updateCanvasBackground(), this._isAdmin = c.current_profile?.role === "admin", this._permissions = c.current_profile?.permissions || {};
     const y = c.entries?.[0]?.entity_id;
@@ -8344,28 +8344,28 @@ class Dm extends HTMLElement {
         `sensor.${S}_battery_percentage`,
         `sensor.${b}_battery_percentage`
       ];
-      for (const N of E) {
-        const L = this._hass.states[N];
-        if (L && L.state !== "unavailable" && L.state !== "unknown" && Number.isFinite(Number(L.state))) {
-          f = L.state;
+      for (const C of E) {
+        const D = this._hass.states[C];
+        if (D && D.state !== "unavailable" && D.state !== "unknown" && Number.isFinite(Number(D.state))) {
+          f = D.state;
           break;
         }
       }
       if (f === null) {
-        const N = (this._available || []).find((L) => L.entity_id === n);
-        if (N && N.device_id) {
-          const L = (this._available || []).find(
-            (O) => O.device_id === N.device_id && O.entity_id !== n && (this._hass?.states?.[O.entity_id]?.attributes?.device_class === "battery" || /_battery(?:_level|_percent(?:age)?)?$/i.test(O.entity_id))
+        const C = (this._available || []).find((D) => D.entity_id === n);
+        if (C && C.device_id) {
+          const D = (this._available || []).find(
+            (O) => O.device_id === C.device_id && O.entity_id !== n && (this._hass?.states?.[O.entity_id]?.attributes?.device_class === "battery" || /_battery(?:_level|_percent(?:age)?)?$/i.test(O.entity_id))
           );
-          if (L) {
-            const O = this._hass?.states?.[L.entity_id];
+          if (D) {
+            const O = this._hass?.states?.[D.entity_id];
             O && O.state !== "unavailable" && O.state !== "unknown" && Number.isFinite(Number(O.state)) && (f = O.state);
           }
         }
       }
       if (f !== null) {
-        const N = Number(f);
-        Number.isFinite(N) && (u = Math.max(0, Math.min(100, Math.round(N))));
+        const C = Number(f);
+        Number.isFinite(C) && (u = Math.max(0, Math.min(100, Math.round(C))));
       }
     }
     return { battery: u, mains: m };
@@ -8373,8 +8373,8 @@ class Dm extends HTMLElement {
   _deviceFacts(n, r, o = !0) {
     const c = r?.state || "unknown", u = ["on", "unlocked", "open", "recording", "active", "motion"].includes(c), p = { on: this._t("status_open"), off: this._t("status_closed"), locked: this._t("status_closed"), unlocked: this._t("status_open"), idle: this._t("status_idle"), recording: this._t("status_recording"), home: this._t("status_home"), not_home: this._t("status_away") }, m = n.split(".")[0], g = ["siren", "switch", "light", "fan", "input_boolean", "script", "alarm_control_panel"].includes(m), f = this._getDevicePower(n, r), S = [];
     if (o && S.push({ text: g ? c.toUpperCase() : p[c] || c, className: g ? "" : u ? "status-open" : "status-closed" }), f.mains && S.push({ text: "🔌 AC", className: "power-mains" }), f.battery !== null) {
-      const b = f.battery === 0, E = f.battery <= 20 && !b, N = b ? "🔋 ❌" : `🔋 ${f.battery}%`, L = b ? "dead" : E ? "low" : "";
-      S.push({ text: N, className: `pill-power ${L}` });
+      const b = f.battery === 0, E = f.battery <= 20 && !b, C = b ? "🔋 ❌" : `🔋 ${f.battery}%`, D = b ? "dead" : E ? "low" : "";
+      S.push({ text: C, className: `pill-power ${D}` });
     }
     return S;
   }
@@ -8443,11 +8443,11 @@ class Dm extends HTMLElement {
     const p = this._getWeatherEntity().state || "sunny", m = this._hass?.states?.["sun.sun"]?.state === "below_horizon", g = this._weatherPresentation(p, m), f = (v) => {
       const h = String(c(v) || "").trim(), x = h.indexOf(" ");
       return x > 0 && x <= 3 ? h.substring(x + 1).trim() : h;
-    }, S = /* @__PURE__ */ new Date(), b = this._formatTime(S), E = this.shadowRoot.getElementById("hero-clock-time"), N = this.shadowRoot.getElementById("hero-clock-date"), L = this.shadowRoot.getElementById("hero-weather-pill"), O = this.shadowRoot.getElementById("hero-security-pill"), C = o.some((v) => {
+    }, S = /* @__PURE__ */ new Date(), b = this._formatTime(S), E = this.shadowRoot.getElementById("hero-clock-time"), C = this.shadowRoot.getElementById("hero-clock-date"), D = this.shadowRoot.getElementById("hero-weather-pill"), O = this.shadowRoot.getElementById("hero-security-pill"), N = o.some((v) => {
       const h = this._hass?.states[v.entity_id]?.state || v.state;
       return String(h).startsWith("armed") || h === "triggered" || h === "pending";
     });
-    E && (E.textContent = b), N && (N.textContent = S.toLocaleDateString(this._getLocale(), { weekday: "short", month: "short", day: "numeric" })), L && (L.textContent = `${g.icon} ${g.label}`), O && (O.innerHTML = `<i class="hero-live" style="background:${C ? "#ffb54d" : "#55df91"};box-shadow:0 0 9px ${C ? "#ffb54d" : "#55df91"}"></i>${this._escapeHtml(c(C ? "system_armed" : "system_disarmed"))}`), Array.from(n.querySelectorAll("article.entry")).length !== o.length && (n.innerHTML = o.map((v, h) => `<article class="entry" data-idx="${h}"></article>`).join(""));
+    E && (E.textContent = b), C && (C.textContent = S.toLocaleDateString(this._getLocale(), { weekday: "short", month: "short", day: "numeric" })), D && (D.textContent = `${g.icon} ${g.label}`), O && (O.innerHTML = `<i class="hero-live" style="background:${N ? "#ffb54d" : "#55df91"};box-shadow:0 0 9px ${N ? "#ffb54d" : "#55df91"}"></i>${this._escapeHtml(c(N ? "system_armed" : "system_disarmed"))}`), Array.from(n.querySelectorAll("article.entry")).length !== o.length && (n.innerHTML = o.map((v, h) => `<article class="entry" data-idx="${h}"></article>`).join(""));
     const y = n.querySelectorAll("article.entry");
     if (o.forEach((v, h) => {
       const x = y[h], z = this._hass?.states[v.entity_id]?.state || v.state || "unavailable", P = z === "triggered";
@@ -8707,7 +8707,7 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
     }
     const S = o.createBuffer();
     o.bindBuffer(o.ARRAY_BUFFER, S), o.bufferData(o.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), o.STATIC_DRAW);
-    const b = (h) => o.getUniformLocation(f, h), E = o.getAttribLocation(f, "p"), N = {
+    const b = (h) => o.getUniformLocation(f, h), E = o.getAttribLocation(f, "p"), C = {
       time: b("time"),
       rain: b("rain"),
       snow: b("snow"),
@@ -8720,7 +8720,7 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
       cloudPositions: b("cloudPositions"),
       cloudSizes: b("cloudSizes"),
       cloudAlphas: b("cloudAlphas")
-    }, L = {
+    }, D = {
       rain: Math.max(Number(n.dataset.rain || 0), Number(n.dataset.drizzle || 0) * 0.4),
       snow: Number(n.dataset.snow || 0),
       fog: Number(n.dataset.fog || 0),
@@ -8729,7 +8729,7 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
       temp: Number(n.dataset.temp || 20),
       night: Number(n.dataset.night || 0),
       cloudy: Number(n.dataset.cloudy || 0)
-    }, C = Array.from({ length: 6 }, () => ({
+    }, N = Array.from({ length: 6 }, () => ({
       x: Math.random() * 800,
       y: 50 + Math.random() * 250,
       rx: 120 + Math.random() * 80,
@@ -8746,13 +8746,13 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
       if (!y || !n.isConnected) return;
       o.clear(o.COLOR_BUFFER_BIT);
       const x = Math.min(window.devicePixelRatio || 1, 1.5), A = Math.max(1, Math.round(n.clientWidth * x)), z = Math.max(1, Math.round(n.clientHeight * x));
-      (n.width !== A || n.height !== z) && (n.width = A, n.height = z, o.viewport(0, 0, A, z)), L.cloudy > 0 && C.forEach((ee) => {
+      (n.width !== A || n.height !== z) && (n.width = A, n.height = z, o.viewport(0, 0, A, z)), D.cloudy > 0 && N.forEach((ee) => {
         ee.x -= ee.speed, ee.x + ee.rx < 0 && (ee.x = A + ee.rx, ee.y = 50 + Math.random() * (z - 100));
       });
       const P = [], U = [], F = [];
-      C.forEach((ee) => {
-        P.push(ee.x / A, ee.y / z), U.push(ee.rx / A, ee.ry / z), F.push(L.cloudy > 0 ? ee.alpha : 0);
-      }), o.useProgram(f), o.enable(o.BLEND), o.blendFunc(o.SRC_ALPHA, o.ONE_MINUS_SRC_ALPHA), o.bindBuffer(o.ARRAY_BUFFER, S), o.enableVertexAttribArray(E), o.vertexAttribPointer(E, 2, o.FLOAT, !1, 0, 0), N.time && o.uniform1f(N.time, h), N.rain && o.uniform1f(N.rain, L.rain), N.snow && o.uniform1f(N.snow, L.snow), N.fog && o.uniform1f(N.fog, L.fog), N.storm && o.uniform1f(N.storm, L.storm), N.wind && o.uniform1f(N.wind, L.wind), N.temp && o.uniform1f(N.temp, L.temp), N.night && o.uniform1f(N.night, L.night), N.cloudy && o.uniform1f(N.cloudy, L.cloudy), N.cloudPositions && o.uniform2fv(N.cloudPositions, P), N.cloudSizes && o.uniform2fv(N.cloudSizes, U), N.cloudAlphas && o.uniform1fv(N.cloudAlphas, F), o.drawArrays(o.TRIANGLE_STRIP, 0, 4), k = requestAnimationFrame(v);
+      N.forEach((ee) => {
+        P.push(ee.x / A, ee.y / z), U.push(ee.rx / A, ee.ry / z), F.push(D.cloudy > 0 ? ee.alpha : 0);
+      }), o.useProgram(f), o.enable(o.BLEND), o.blendFunc(o.SRC_ALPHA, o.ONE_MINUS_SRC_ALPHA), o.bindBuffer(o.ARRAY_BUFFER, S), o.enableVertexAttribArray(E), o.vertexAttribPointer(E, 2, o.FLOAT, !1, 0, 0), C.time && o.uniform1f(C.time, h), C.rain && o.uniform1f(C.rain, D.rain), C.snow && o.uniform1f(C.snow, D.snow), C.fog && o.uniform1f(C.fog, D.fog), C.storm && o.uniform1f(C.storm, D.storm), C.wind && o.uniform1f(C.wind, D.wind), C.temp && o.uniform1f(C.temp, D.temp), C.night && o.uniform1f(C.night, D.night), C.cloudy && o.uniform1f(C.cloudy, D.cloudy), C.cloudPositions && o.uniform2fv(C.cloudPositions, P), C.cloudSizes && o.uniform2fv(C.cloudSizes, U), C.cloudAlphas && o.uniform1fv(C.cloudAlphas, F), o.drawArrays(o.TRIANGLE_STRIP, 0, 4), k = requestAnimationFrame(v);
     };
     n._argusWebglStop = () => {
       y = !1, cancelAnimationFrame(k), o.getExtension("WEBGL_lose_context")?.loseContext();
@@ -8763,8 +8763,8 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
     const o = String(n || "").toLowerCase(), c = (O) => o.includes(O), u = c("thunder") || c("lightning") || c("storm"), p = c("snow") || c("hail") || c("sleet") || c("blizzard"), m = c("drizzle") || c("shower"), g = !m && (c("rain") || c("pouring")), f = c("fog") || c("mist") || c("hazy"), S = c("cloud") || c("overcast");
     let b = "clear";
     u ? b = "storm" : g || m ? b = "rain" : p ? b = "snow" : f ? b = "fog" : c("partly") ? b = "partlycloudy" : S ? b = "cloudy" : c("sunny") && (b = "sunny");
-    const E = r ? "night" : "day", L = this._eclipseEvent() ? "eclipse" : "";
-    return `<div class="scene ${E} ${b} ${L}"></div>`;
+    const E = r ? "night" : "day", D = this._eclipseEvent() ? "eclipse" : "";
+    return `<div class="scene ${E} ${b} ${D}"></div>`;
   }
   _getWeatherBg(n, r) {
     return this._renderAtmosphere(n, r);
@@ -8804,17 +8804,17 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
       c.innerHTML = `<div class="small" style="padding:10px">${this._escapeHtml(n.none)}</div>`;
       return;
     }
-    const N = Array.isArray(E.batteries) ? E.batteries : [], L = N.filter((h) => h.low), O = Array.isArray(E.unavailable) ? E.unavailable : [], C = Array.isArray(E.configured_devices) ? E.configured_devices : [], k = E.status === "critical" ? n.critical : E.status === "warning" ? n.warning : n.healthy, y = new Map(N.map((h) => [h.entity_id, h])), v = C.map((h) => {
+    const C = Array.isArray(E.batteries) ? E.batteries : [], D = C.filter((h) => h.low), O = Array.isArray(E.unavailable) ? E.unavailable : [], N = Array.isArray(E.configured_devices) ? E.configured_devices : [], k = E.status === "critical" ? n.critical : E.status === "warning" ? n.warning : n.healthy, y = new Map(C.map((h) => [h.entity_id, h])), v = N.map((h) => {
       const x = y.get(h.entity_id), A = h.state === "unknown" || h.state === "unavailable", z = [A ? n.offline : h.state];
       return x?.value !== null && x?.value !== void 0 && z.push(`${x.value}${x.unit || "%"}`), { name: h.name, value: z.join(" · "), alert: A || !!x?.low };
     });
     c.innerHTML = `<div class="health-summary">
       <div class="health-score" style="--score:${Number(E.score) || 0}" aria-label="${Number(E.score) || 0}%">${Number(E.score) || 0}</div>
-      <div><div style="font-weight:850">${this._escapeHtml(k)}</div><div class="small" style="opacity:.6;margin-top:3px">${C.length} ${this._escapeHtml(n.devices)}</div></div>
+      <div><div style="font-weight:850">${this._escapeHtml(k)}</div><div class="small" style="opacity:.6;margin-top:3px">${N.length} ${this._escapeHtml(n.devices)}</div></div>
     </div><div class="health-metrics">
       <div class="health-metric"><strong>${O.length}</strong><span>${this._escapeHtml(n.offline)}</span></div>
-      <div class="health-metric"><strong>${L.length}</strong><span>${this._escapeHtml(n.low)}</span></div>
-      <div class="health-metric"><strong>${N.length}</strong><span>${this._escapeHtml(n.battery)}</span></div>
+      <div class="health-metric"><strong>${D.length}</strong><span>${this._escapeHtml(n.low)}</span></div>
+      <div class="health-metric"><strong>${C.length}</strong><span>${this._escapeHtml(n.battery)}</span></div>
     </div><div class="health-list" style="margin-top:13px">${v.length ? v.map((h) => `<div class="health-row"><span>${this._escapeHtml(h.name)}</span><strong style="color:${h.alert ? "#ff8a80" : "inherit"}">${this._escapeHtml(h.value)}</strong></div>`).join("") : `<div class="small" style="opacity:.55">${this._escapeHtml(n.none)}</div>`}</div>`;
   }
   async _saveIntelligentConfirmation() {
@@ -8891,11 +8891,11 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
       away: ["ausente", "away", "absent", "fora", "fuori", "ушёл", "外出"],
       night: ["noche", "night", "nuit", "noite", "notte", "ночь", "夜间"],
       vacation: ["vacaciones", "vacation", "vacances", "férias", "vacanza", "отпуск", "度假"]
-    }, m = Object.entries(u).find(([, N]) => N.some((L) => c.includes(L)))?.[0];
+    }, m = Object.entries(u).find(([, C]) => C.some((D) => c.includes(D)))?.[0];
     if (n === "pin_reset") return this._t("log_detail_pin_reset");
     if (n === "pin_reset_failed") return this._t("log_detail_pin_reset_failed");
     if (n === "state_restored") {
-      const N = {
+      const C = {
         disarmed: this._t("disarmed"),
         armed_home: this._t("mode_home"),
         armed_away: this._t("mode_away"),
@@ -8903,29 +8903,29 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
         armed_vacation: this._t("mode_vacation"),
         triggered: this._t("log_triggered")
       };
-      let L = this._t("disarmed");
+      let D = this._t("disarmed");
       const O = o.toLowerCase();
-      for (const [C, k] of Object.entries(N))
-        if (O.includes(C) || O.includes(k.toLowerCase())) {
-          L = k;
+      for (const [N, k] of Object.entries(C))
+        if (O.includes(N) || O.includes(k.toLowerCase())) {
+          D = k;
           break;
         }
-      return `${this._t("log_action_state_restored")}: ${L}`;
+      return `${this._t("log_action_state_restored")}: ${D}`;
     }
     if (n === "confirmation_pending") return o;
     if (n === "disarmed" || n === "disarm") return this._t("log_detail_disarm");
     if (n === "armed" || n === "arm")
       return m ? `${this._t("manual_arm")} (${this._t(`mode_${m}`)})` : this._t("manual_arm");
     if (n === "triggered") {
-      const N = o.match(/\((?:modo|mode|modalità|режим|模式)\s*:?\s*([^)]+)\)/i);
-      let L = "";
-      if (N && N[1]) {
-        const k = N[1].toLowerCase(), y = Object.entries(u).find(([, v]) => v.some((h) => k.includes(h)))?.[0];
-        L = y ? this._t(`mode_${y}`) : N[1];
+      const C = o.match(/\((?:modo|mode|modalità|режим|模式)\s*:?\s*([^)]+)\)/i);
+      let D = "";
+      if (C && C[1]) {
+        const k = C[1].toLowerCase(), y = Object.entries(u).find(([, v]) => v.some((h) => k.includes(h)))?.[0];
+        D = y ? this._t(`mode_${y}`) : C[1];
       }
       const O = o.match(/(?:sensor|capteur|sensore|датчик|传感器)\s*:\s*(.+)$/i)?.[1]?.replace(/\s*\((?:modo|mode|modalità|режим|模式)\s*:?[^)]*\)\s*$/i, "")?.trim();
-      let C = O ? `${this._t("log_sensor")}: ${O}` : this._t("log_detail_triggered");
-      return L && (C += ` (${this._t("log_mode")}: ${L})`), C;
+      let N = O ? `${this._t("log_sensor")}: ${O}` : this._t("log_detail_triggered");
+      return D && (N += ` (${this._t("log_mode")}: ${D})`), N;
     }
     if (n === "user_added") return this._t("log_action_user_added");
     if (n === "user_deleted") return this._t("log_action_user_deleted");
@@ -8983,10 +8983,10 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
       "Armado manual": this._t("manual_arm"),
       Ajustes: this._t("settings")
     };
-    for (const [N, L] of Object.entries(E))
-      if (L && L !== N) {
-        const O = new RegExp(`\\b${N}\\b`, "gi");
-        b = b.replace(O, L);
+    for (const [C, D] of Object.entries(E))
+      if (D && D !== C) {
+        const O = new RegExp(`\\b${C}\\b`, "gi");
+        b = b.replace(O, D);
       }
     return b;
   }
@@ -9012,24 +9012,24 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
               b = S.toISOString();
             }
           const E = this._localizeActivityDetail(m, g);
-          let N = '<div class="glass-orb"></div>', L = "", O = m, C = "";
+          let C = '<div class="glass-orb"></div>', D = "", O = m, N = "";
           const k = String(m || "").toLowerCase();
           if (k.endsWith("_rejected"))
-            C = "log-item--triggered", L = "trigger", O = this._t("log_action_rejected");
+            N = "log-item--triggered", D = "trigger", O = this._t("log_action_rejected");
           else if (k.includes("arm") && !k.includes("disarm"))
-            C = "log-item--armed", L = "arm", O = this._t("log_armed");
+            N = "log-item--armed", D = "arm", O = this._t("log_armed");
           else if (k.includes("disarm"))
-            C = "log-item--disarmed", L = "disarm", O = this._t("log_disarmed");
+            N = "log-item--disarmed", D = "disarm", O = this._t("log_disarmed");
           else if (k.includes("trigger") || k.includes("alarm"))
-            C = "log-item--triggered", L = "trigger", O = this._t("log_triggered");
+            N = "log-item--triggered", D = "trigger", O = this._t("log_triggered");
           else if (k === "pin_reset")
-            C = "log-item--disarmed", L = "disarm", O = this._t("badge_pin_reset");
+            N = "log-item--disarmed", D = "disarm", O = this._t("badge_pin_reset");
           else if (k === "pin_reset_failed")
-            C = "log-item--triggered", L = "trigger", O = this._t("badge_pin_reset_failed");
+            N = "log-item--triggered", D = "trigger", O = this._t("badge_pin_reset_failed");
           else if (k === "sos" || k === "sos_stopped" || k === "panic_stopped")
-            C = "log-item--triggered", L = "trigger", O = this._t("log_action_sos");
+            N = "log-item--triggered", D = "trigger", O = this._t("log_action_sos");
           else if (k === "audit_log_cleared")
-            C = "log-item--triggered", L = "trigger", O = "🗑️ " + (this._t("log_action_audit_log_cleared") || "Historial Borrado");
+            N = "log-item--triggered", D = "trigger", O = "🗑️ " + (this._t("log_action_audit_log_cleared") || "Historial Borrado");
           else if (k === "ui_configuration_updated")
             O = this._t("settings");
           else {
@@ -9037,11 +9037,11 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
             O = h && h !== v ? h : this._t(k) !== k ? this._t(k) : this._t("log_action_analysis") || m;
           }
           let y = "";
-          return f && f !== "Argus" && f !== "system" ? y = `👤 ${f}` : m.toLowerCase().includes("homekit") || E.toLowerCase().includes("homekit") ? y = "🍎 HomeKit" : y = "🤖 Argus", `<div class="log-item ${C}">
-          <div class="log-icon">${N}</div>
+          return f && f !== "Argus" && f !== "system" ? y = `👤 ${f}` : m.toLowerCase().includes("homekit") || E.toLowerCase().includes("homekit") ? y = "🍎 HomeKit" : y = "🤖 Argus", `<div class="log-item ${N}">
+          <div class="log-icon">${C}</div>
           <div class="log-body">
             <div class="log-title">
-              <span class="log-badge ${L}">${this._escapeHtml(O)}</span>
+              <span class="log-badge ${D}">${this._escapeHtml(O)}</span>
               <span style="font-weight:500">${this._escapeHtml(E)}</span>
             </div>
             <div class="log-meta">${this._escapeHtml(b)} &nbsp;·&nbsp; ${this._escapeHtml(y)}</div>
@@ -9155,7 +9155,7 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
             <div class="mode-section-title">⚡ ${this._t("sos_actions") || "Dispositivos y Acciones SOS"}</div>
             <p class="small" style="margin:4px 0 10px;opacity:0.75">${this._t("sos_outputs_help") || "Estos dispositivos se encenderán o ejecutarán inmediatamente al dispararse el SOS."}</p>
             <div id="sos-output-chips" class="mode-sensor-grid" style="min-height:70px;">
-              ${E.length ? E.map((N) => this._chip(N, "sos_output")).join("") : `<div class="mode-sensor-none">${this._t("sos_no_outputs") || "Ningún dispositivo configurado"}</div>`}
+              ${E.length ? E.map((C) => this._chip(C, "sos_output")).join("") : `<div class="mode-sensor-none">${this._t("sos_no_outputs") || "Ningún dispositivo configurado"}</div>`}
             </div>
             ${r ? "" : `
               <button class="ghost" id="btn-mode-select-sos-outputs" style="margin-top:12px;width:100%;justify-content:center;font-size:12px;font-weight:800;padding:8px 12px;background:rgba(255,255,255,0.06);border-radius:10px;cursor:pointer;">
@@ -9205,7 +9205,7 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
           </div>
         `}
       `, r || (n.querySelector("#btn-mode-select-sos-outputs")?.addEventListener("click", () => this._openModal("panic")), n.querySelectorAll("[data-remove]").forEach(
-        (N) => N.addEventListener("click", () => this._removeChip(N.dataset.remove))
+        (C) => C.addEventListener("click", () => this._removeChip(C.dataset.remove))
       ), n.querySelector("#save-sos-mode")?.addEventListener("click", () => this._saveSosMode()));
       return;
     }
@@ -9250,8 +9250,8 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
             ${p.map((b) => this._chip(b, "siren")).join("") || `<div class="mode-sensor-none">${this._t("none_selected")}</div>`}
           </div>
           ${p.filter((b) => b.startsWith("light.")).map((b) => {
-      const E = o.light_siren_settings?.[b] || {}, L = "#" + (Array.isArray(E.rgb_color) ? E.rgb_color : [255, 0, 0]).map((O) => Number(O).toString(16).padStart(2, "0")).join("");
-      return `<details class="light-siren-settings"><summary>⚙ ${this._escapeHtml(this._hass?.states?.[b]?.attributes?.friendly_name || b)}</summary><label>${this._t("light_siren_color") || "Color"} <input type="color" data-light-siren-color="${this._escapeHtml(b)}" value="${L}"></label><label class="checkbox-label"><input type="checkbox" data-light-siren-flash="${this._escapeHtml(b)}" ${E.gentle_flash ? "checked" : ""}> ${this._t("light_siren_flash") || "Destello suave si está disponible"}</label></details>`;
+      const E = o.light_siren_settings?.[b] || {}, D = "#" + (Array.isArray(E.rgb_color) ? E.rgb_color : [255, 0, 0]).map((O) => Number(O).toString(16).padStart(2, "0")).join("");
+      return `<details class="light-siren-settings"><summary>⚙ ${this._escapeHtml(this._hass?.states?.[b]?.attributes?.friendly_name || b)}</summary><label>${this._t("light_siren_color") || "Color"} <input type="color" data-light-siren-color="${this._escapeHtml(b)}" value="${D}"></label><label class="checkbox-label"><input type="checkbox" data-light-siren-flash="${this._escapeHtml(b)}" ${E.gentle_flash ? "checked" : ""}> ${this._t("light_siren_flash") || "Destello suave si está disponible"}</label></details>`;
     }).join("")}
           <div class="mode-section-title" style="margin-top:14px;font-size:12px">🔗 ${this._t("external_panels") || "Paneles de alarma externos"}</div>
           <div class="mode-sensor-grid" id="external-panel-chips">
@@ -9297,10 +9297,10 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
     const o = this._hass?.states?.[n]?.state, c = ["on", "unlocked", "open", "recording", "active", "motion"].includes(o), u = this._hass?.states?.[n]?.attributes?.friendly_name || n, p = !this._isAdmin, m = r === "sensor" || r === "bypass" ? `<span class="pill-dot ${c ? "open" : ""}" title="${o}"></span>` : "";
     let g = "", f = "";
     if (r === "sensor" || r === "bypass" || r === "entry") {
-      const E = this._hass?.states?.[n], N = this._getDevicePower(n, E);
-      if (g = `<span class="pill-status">${c ? this._t("status_open") : this._t("status_closed")}</span>`, N.mains && (f += '<span class="pill-power">🔌 AC</span>'), N.battery !== null) {
-        const L = N.battery === 0, O = N.battery <= 10 && !L, C = L ? "🔋 ❌" : `🔋 ${N.battery}%`;
-        f += `<span class="pill-power ${L ? "dead" : O ? "low" : ""}">${C}</span>`;
+      const E = this._hass?.states?.[n], C = this._getDevicePower(n, E);
+      if (g = `<span class="pill-status">${c ? this._t("status_open") : this._t("status_closed")}</span>`, C.mains && (f += '<span class="pill-power">🔌 AC</span>'), C.battery !== null) {
+        const D = C.battery === 0, O = C.battery <= 10 && !D, N = D ? "🔋 ❌" : `🔋 ${C.battery}%`;
+        f += `<span class="pill-power ${D ? "dead" : O ? "low" : ""}">${N}</span>`;
       }
     }
     const S = this._dashboard?.entries?.some(
@@ -9496,18 +9496,18 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
             }
         }
         const b = m.expiration_date ? f ? `<span class="user-badge admin" style="background:rgba(229,57,53,0.12);color:#e53935;margin-left:5px">❌ ${this._escapeHtml(this._t("expired"))} (${this._escapeHtml(S)})</span>` : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">⏳ ${this._escapeHtml(this._t("active_until"))}: ${this._escapeHtml(S)}</span>` : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">♾️ ${this._t("exp_indefinite")}</span>`, E = m.ha_user_id ? (() => {
-          const O = (this._haUsersList || []).find((C) => C.id === m.ha_user_id);
+          const O = (this._haUsersList || []).find((N) => N.id === m.ha_user_id);
           return O ? this._format("ha_account_linked", { name: O.name }) : this._t("ha_account_unavailable");
-        })() : this._t("ha_account_unavailable"), N = m.role === "admin" ? "⭐ " + this._escapeHtml(this._t("role_argus_admin")) : "👤 " + this._escapeHtml(this._t("role_argus_standard")), L = m.access_pin_configured ? '<span class="user-badge" style="background:rgba(0,122,255,0.12);color:#007aff">🔒 PIN</span>' : `<span class="user-badge" style="opacity:0.55">🔓 ${this._escapeHtml(this._t("user_no_pin"))}</span>`;
+        })() : this._t("ha_account_unavailable"), C = m.role === "admin" ? "⭐ " + this._escapeHtml(this._t("role_argus_admin")) : "👤 " + this._escapeHtml(this._t("role_argus_standard")), D = m.access_pin_configured ? '<span class="user-badge" style="background:rgba(0,122,255,0.12);color:#007aff">🔒 PIN</span>' : `<span class="user-badge" style="opacity:0.55">🔓 ${this._escapeHtml(this._t("user_no_pin"))}</span>`;
         return `
           <div class="user-card" style="display:flex;flex-direction:column;align-items:stretch;gap:8px">
             <div style="display:flex;justify-content:space-between;align-items:center;width:100%">
               <div style="flex:1">
                 <div style="font-weight:700">${this._escapeHtml(m.name || "")}</div>
                 <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
-                  <span class="user-badge ${m.role === "admin" ? "admin" : "user"}">${N}</span>
+                  <span class="user-badge ${m.role === "admin" ? "admin" : "user"}">${C}</span>
                   <span class="user-badge" style="background:rgba(74,20,140,0.15);color:rgba(186,104,200,0.95);border:1px solid rgba(74,20,140,0.22);margin-left:5px">${this._escapeHtml(E)}</span>
-                  ${L}
+                  ${D}
                   ${b}
                 </div>
                 ${m.role !== "admin" && m.permissions ? `
@@ -9548,7 +9548,7 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
           });
           S === null || S.trim() === "" || this._runWithPin(async () => {
             try {
-              const b = this._users.map((N, L) => L === g ? { ...N, name: S.trim() } : N), E = await this._send("argus/save_ui", { users: b });
+              const b = this._users.map((C, D) => D === g ? { ...C, name: S.trim() } : C), E = await this._send("argus/save_ui", { users: b });
               E && E.ui ? (this._ui = E.ui, this._users = E.ui.users || b) : this._users = b, this._renderUsers();
             } catch (b) {
               this._showArgusConfirmModal(b.message || this._format("generic_error", { error: b }), { confirmLabel: "OK" });
@@ -9612,7 +9612,7 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
             ]
           });
           !S || S === f.role || this._runWithPin(async () => {
-            const b = this._users.map((E, N) => N === g ? { ...E, role: S } : E);
+            const b = this._users.map((E, C) => C === g ? { ...E, role: S } : E);
             try {
               const E = await this._send("argus/save_ui", { users: b });
               E && E.ui ? (this._ui = E.ui, this._users = E.ui.users || b) : this._users = b, this._renderUsers();
@@ -9633,10 +9633,10 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
             const E = [...this._users];
             E.splice(g, 1);
             try {
-              const N = await this._send("argus/save_ui", { users: E });
-              N && N.ui ? (this._ui = N.ui, this._users = N.ui.users || E) : this._users = E, this._renderUsers();
-            } catch (N) {
-              this._showArgusConfirmModal(N.message || this._format("generic_error", { error: N }), { confirmLabel: "OK" });
+              const C = await this._send("argus/save_ui", { users: E });
+              C && C.ui ? (this._ui = C.ui, this._users = C.ui.users || E) : this._users = E, this._renderUsers();
+            } catch (C) {
+              this._showArgusConfirmModal(C.message || this._format("generic_error", { error: C }), { confirmLabel: "OK" });
             }
           });
         })
@@ -9646,7 +9646,7 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
           if (!f) return;
           const S = await this._showArgusPermissionsModal(f);
           S !== null && this._runWithPin(async () => {
-            const b = this._users.map((E, N) => N === g ? { ...E, permissions: { ...E.permissions, ...S } } : E);
+            const b = this._users.map((E, C) => C === g ? { ...E, permissions: { ...E.permissions, ...S } } : E);
             try {
               const E = await this._send("argus/save_ui", { users: b });
               E && E.ui ? (this._ui = E.ui, this._users = E.ui.users || b) : this._users = b, this._renderUsers();
@@ -10060,27 +10060,27 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
       emergency_number: u
     };
     this._panicOutputs !== void 0 && (E.panic_outputs = this._panicOutputs);
-    const N = (this._ui.users || []).find((C) => C.id === this._currentProfile?.id);
+    const C = (this._ui.users || []).find((N) => N.id === this._currentProfile?.id);
     E.background_mode = n, E.background_images = this._backgroundImages || [], E.panel_bg_file = p, E.panel_bg_sound = m, E.hub_bg_mode = f, E.hub_bg_file = S, E.hub_bg_sound = b, E.entry_id = this._dashboard?.entry_id || this._dashboard?.entries?.[0]?.entry_id;
-    let L = "default", O = "";
-    if (n === "photo" && p ? (L = "photo", O = p) : n === "weather" ? L = "weather" : n === "none" && (L = "none"), E.theme = {
-      background_mode: L,
+    let D = "default", O = "";
+    if (n === "photo" && p ? (D = "photo", O = p) : n === "weather" ? D = "weather" : n === "none" && (D = "none"), E.theme = {
+      background_mode: D,
       background_file: O
-    }, N) {
-      const C = JSON.parse(JSON.stringify(this._ui.users || [])), k = C.find((y) => y.id === this._currentProfile?.id);
-      k.background_mode = n, k.background_images = this._backgroundImages || [], k.panel_bg_file = p, k.panel_bg_sound = m, k.hub_bg_mode = f, k.hub_bg_file = S, k.hub_bg_sound = b, k.theme = E.theme, E.users = C;
+    }, C) {
+      const N = JSON.parse(JSON.stringify(this._ui.users || [])), k = N.find((y) => y.id === this._currentProfile?.id);
+      k.background_mode = n, k.background_images = this._backgroundImages || [], k.panel_bg_file = p, k.panel_bg_sound = m, k.hub_bg_mode = f, k.hub_bg_file = S, k.hub_bg_sound = b, k.theme = E.theme, E.users = N;
     }
     try {
-      await this._send("argus/save_ui", E), this._currentUserTheme = E.theme, this._backgroundMode = n, this._temperatureSource = r, this._weatherSource = o, this._emergencyNumber = u, this._panelBgFile = p, this._panelBgSound = m, this._hubBgMode = g, this._hubBgFile = S, this._hubBgSound = b, this._updateTheme(), this._ui = this._ui || {}, N ? this._ui.users = E.users : (this._ui.background_mode = n, this._ui.background_images = this._backgroundImages || [], this._ui.panel_bg_file = p, this._ui.panel_bg_sound = m, this._ui.hub_bg_mode = f, this._ui.hub_bg_file = S, this._ui.hub_bg_sound = b), this._ui.temperature_source = r, this._ui.weather_source = o, this._ui.clock_format = this._clockFormat, this._ui.emergency_number = u, this._ui.panic_outputs = this._panicOutputs, this._configureEmergencyCall(), this._ui.hub_bg_file = S, this._ui.hub_bg_sound = b, this._renderEntries(), this._updateCanvasBackground();
-      const C = this.shadowRoot.getElementById("btn-save-personalization-standalone");
-      if (C) {
-        const k = C.textContent;
-        C.textContent = this._t("saved"), C.style.background = "#43a047", setTimeout(() => {
-          C.textContent = k, C.style.background = "";
+      await this._send("argus/save_ui", E), this._currentUserTheme = E.theme, this._backgroundMode = n, this._temperatureSource = r, this._weatherSource = o, this._emergencyNumber = u, this._panelBgFile = p, this._panelBgSound = m, this._hubBgMode = g, this._hubBgFile = S, this._hubBgSound = b, this._updateTheme(), this._ui = this._ui || {}, C ? this._ui.users = E.users : (this._ui.background_mode = n, this._ui.background_images = this._backgroundImages || [], this._ui.panel_bg_file = p, this._ui.panel_bg_sound = m, this._ui.hub_bg_mode = f, this._ui.hub_bg_file = S, this._ui.hub_bg_sound = b), this._ui.temperature_source = r, this._ui.weather_source = o, this._ui.clock_format = this._clockFormat, this._ui.emergency_number = u, this._ui.panic_outputs = this._panicOutputs, this._configureEmergencyCall(), this._ui.hub_bg_file = S, this._ui.hub_bg_sound = b, this._renderEntries(), this._updateCanvasBackground();
+      const N = this.shadowRoot.getElementById("btn-save-personalization-standalone");
+      if (N) {
+        const k = N.textContent;
+        N.textContent = this._t("saved"), N.style.background = "#43a047", setTimeout(() => {
+          N.textContent = k, N.style.background = "";
         }, 3e3);
       }
-    } catch (C) {
-      alert(this._format("generic_error", { error: C.message }));
+    } catch (N) {
+      alert(this._format("generic_error", { error: N.message }));
     }
   }
   /* ── Home Name management ────────────────────────────────────────── */
@@ -10149,7 +10149,7 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
         "background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)",
         "animation:argus-modal-in .18s ease"
       ].join(";");
-      const b = r.replace(/'/g, "&#39;"), E = n.replace(/'/g, "&#39;"), N = o.replace(/'/g, "&#39;"), L = this._t("modal_cancel") || "Cancelar", O = this._t("modal_save") || "Guardar";
+      const b = r.replace(/'/g, "&#39;"), E = n.replace(/'/g, "&#39;"), C = o.replace(/'/g, "&#39;"), D = this._t("modal_cancel") || "Cancelar", O = this._t("modal_save") || "Guardar";
       S.innerHTML = `
         <div style="background:rgba(30,30,45,0.92);border:1px solid rgba(255,255,255,0.18);border-radius:20px;
           padding:28px 24px 22px;width:min(380px,90vw);box-shadow:0 24px 64px rgba(0,0,0,0.7);
@@ -10160,14 +10160,14 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
                  ${m.map((x) => `<option value="${this._escapeHtml(x.value)}" ${x.value === c ? "selected" : ""}>${this._escapeHtml(x.label)}</option>`).join("")}
                </select>` : `<input id="aim-inp" type="${u === "password" ? "password" : "text"}"
             ${p ? 'inputmode="numeric" pattern="[0-9]*"' : ""}
-            placeholder="${N}"
+            placeholder="${C}"
             value="${c.replace(/"/g, "&quot;")}"
             style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:12px;
               padding:12px 14px;font-size:15px;color:#fff;outline:none;width:100%;box-sizing:border-box;
               transition:border-color .2s;font-family:inherit"/>`}
           <div style="display:flex;gap:10px;margin-top:4px">
             <button id="aim-cancel" style="flex:1;padding:11px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);
-              background:rgba(255,255,255,0.06);color:#fff;font-size:14px;cursor:pointer;font-family:inherit">${L}</button>
+              background:rgba(255,255,255,0.06);color:#fff;font-size:14px;cursor:pointer;font-family:inherit">${D}</button>
             <button id="aim-ok" style="flex:1;padding:11px;border-radius:12px;border:none;
               background:linear-gradient(135deg,#4a90d9,#7b5ea7);color:#fff;font-size:14px;font-weight:600;
               cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(74,144,217,0.35)">${O}</button>
@@ -10465,12 +10465,12 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
     }, m = u[r];
     if (!m) return;
     if (this._hass?.user?.name || this._t("user_default"), r === "disarm") {
-      const S = o.pin_configured === !0, b = o.user_pin_configured === !0, E = async (N) => {
+      const S = o.pin_configured === !0, b = o.user_pin_configured === !0, E = async (C) => {
         try {
           return await this._send("argus/perform_alarm_action", {
             action: "disarm",
             entry_id: o.entry_id,
-            ...N ? { code: N } : {}
+            ...C ? { code: C } : {}
           }), setTimeout(() => {
             this._renderModeView(), this._load();
           }, 300), !0;
@@ -10479,7 +10479,7 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
           return O && (O.textContent = "❌ PIN incorrecto o error al desarmar"), !1;
         }
       };
-      S || b ? this._showPinModal(async (N) => await E(N)) : await E(null);
+      S || b ? this._showPinModal(async (C) => await E(C)) : await E(null);
       return;
     }
     const g = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id, f = this._ui?.modes?.__by_entity__?.[g]?.[r] || this._ui?.modes?.[r] || {};
@@ -10487,10 +10487,10 @@ gl_FragColor=vec4(col,alpha);}`, p = (h, x) => {
       const S = f.sensors || [], b = new Set(
         f.bypassed_sensors || f.bypassedSensors || []
       ), E = [];
-      for (const N of S) {
-        if (b.has(N)) continue;
-        const L = this._hass.states[N]?.state;
-        ["on", "open", "unlocked", "active", "motion", "recording"].includes(L) && E.push(this._hass.states[N]?.attributes?.friendly_name || N);
+      for (const C of S) {
+        if (b.has(C)) continue;
+        const D = this._hass.states[C]?.state;
+        ["on", "open", "unlocked", "active", "motion", "recording"].includes(D) && E.push(this._hass.states[C]?.attributes?.friendly_name || C);
       }
       if (E.length > 0) {
         this._showArmBlockedAlert(E);
@@ -10572,11 +10572,11 @@ ${r}`);
     let o = r.picture || null;
     if (!o && this._hass?.states) {
       const E = Object.values(this._hass.states).filter(
-        (N) => N.entity_id?.startsWith("person.") && (N.attributes?.friendly_name?.toLowerCase() === r.name?.toLowerCase() || N.attributes?.user_id === r.ha_user_id)
+        (C) => C.entity_id?.startsWith("person.") && (C.attributes?.friendly_name?.toLowerCase() === r.name?.toLowerCase() || C.attributes?.user_id === r.ha_user_id)
       );
       if (E.length > 0) {
-        const N = E[0].attributes?.entity_picture;
-        N && (o = N);
+        const C = E[0].attributes?.entity_picture;
+        C && (o = C);
       }
     }
     r.picture = o;
@@ -10661,17 +10661,23 @@ ${r}`);
     `;
     const f = n.querySelector(".hero-profile-pill"), S = n.querySelector("#profile-dropdown");
     if (f && S) {
-      f.addEventListener("click", (N) => {
-        N.stopPropagation();
-        const L = S.style.display === "flex";
-        S.style.display = L ? "none" : "flex";
+      const E = (D) => {
+        const O = n.closest(".argus-widget") || n.closest(".react-grid-item") || n.closest(".panel");
+        O && (O.style.zIndex = D ? "99999" : "");
+        const N = n.closest(".react-grid-item");
+        N && (N.style.zIndex = D ? "99999" : "");
+      };
+      f.addEventListener("click", (D) => {
+        D.stopPropagation();
+        const O = S.style.display === "flex";
+        S.style.display = O ? "none" : "flex", E(!O);
       });
-      const E = (N) => {
-        (N.composedPath ? N.composedPath() : [N.target]).some((C) => C === n || C.closest && C.closest?.("#profile-dropdown")) || (S.style.display = "none", document.removeEventListener("click", E, !0));
+      const C = (D) => {
+        (D.composedPath ? D.composedPath() : [D.target]).some((k) => k === n || k.closest && k.closest?.("#profile-dropdown")) || (S.style.display = "none", E(!1), document.removeEventListener("click", C, !0));
       };
       f.addEventListener("click", () => {
         setTimeout(() => {
-          S.style.display === "flex" && document.addEventListener("click", E, !0);
+          S.style.display === "flex" && document.addEventListener("click", C, !0);
         }, 10);
       });
     }
@@ -10689,51 +10695,51 @@ ${r}`);
       E.stopPropagation(), this._switchProfile();
     }), n.querySelector("#btn-dropdown-change-access-pin")?.addEventListener("click", (E) => {
       E.stopPropagation(), S.style.display = "none";
-      const N = this.shadowRoot.getElementById("w-access");
-      N && (N.scrollIntoView({ behavior: "smooth", block: "center" }), N.style.transition = "box-shadow 0.5s ease-in-out", N.style.boxShadow = "0 0 30px rgba(0, 122, 255, 0.6)", setTimeout(() => {
-        N.style.boxShadow = "";
+      const C = this.shadowRoot.getElementById("w-access");
+      C && (C.scrollIntoView({ behavior: "smooth", block: "center" }), C.style.transition = "box-shadow 0.5s ease-in-out", C.style.boxShadow = "0 0 30px rgba(0, 122, 255, 0.6)", setTimeout(() => {
+        C.style.boxShadow = "";
       }, 1500), this.shadowRoot.querySelectorAll("#users-list .user-card").forEach((O) => {
         if (O.textContent.includes(r.name)) {
           O.style.transition = "background-color 0.5s ease", O.style.backgroundColor = "rgba(0, 122, 255, 0.15)", setTimeout(() => {
             O.style.backgroundColor = "";
           }, 2e3);
-          const C = O.querySelector("[data-user-pin]");
-          C && C.focus();
+          const N = O.querySelector("[data-user-pin]");
+          N && N.focus();
         }
       }));
     }), n.querySelector("#btn-dropdown-remove-access-pin")?.addEventListener("click", (E) => {
       E.stopPropagation(), S.style.display = "none";
-      const N = this.shadowRoot.getElementById("w-access");
-      N && (N.scrollIntoView({ behavior: "smooth", block: "center" }), N.style.transition = "box-shadow 0.5s ease-in-out", N.style.boxShadow = "0 0 30px rgba(0, 122, 255, 0.6)", setTimeout(() => {
-        N.style.boxShadow = "";
+      const C = this.shadowRoot.getElementById("w-access");
+      C && (C.scrollIntoView({ behavior: "smooth", block: "center" }), C.style.transition = "box-shadow 0.5s ease-in-out", C.style.boxShadow = "0 0 30px rgba(0, 122, 255, 0.6)", setTimeout(() => {
+        C.style.boxShadow = "";
       }, 1500), this.shadowRoot.querySelectorAll("#users-list .user-card").forEach((O) => {
         if (O.textContent.includes(r.name)) {
           O.style.transition = "background-color 0.5s ease", O.style.backgroundColor = "rgba(255, 69, 58, 0.15)", setTimeout(() => {
             O.style.backgroundColor = "";
           }, 2e3);
-          const C = O.querySelector("[data-user-pin]");
-          C && C.focus();
+          const N = O.querySelector("[data-user-pin]");
+          N && N.focus();
         }
       }));
     }), n.querySelector("#btn-dropdown-change-master-pin")?.addEventListener("click", (E) => {
       E.stopPropagation(), S.style.display = "none";
-      const N = this.shadowRoot.getElementById("w-access");
-      if (N) {
-        N.scrollIntoView({ behavior: "smooth", block: "center" }), N.style.transition = "box-shadow 0.5s ease-in-out", N.style.boxShadow = "0 0 30px rgba(255, 179, 0, 0.6)", setTimeout(() => {
-          N.style.boxShadow = "";
+      const C = this.shadowRoot.getElementById("w-access");
+      if (C) {
+        C.scrollIntoView({ behavior: "smooth", block: "center" }), C.style.transition = "box-shadow 0.5s ease-in-out", C.style.boxShadow = "0 0 30px rgba(255, 179, 0, 0.6)", setTimeout(() => {
+          C.style.boxShadow = "";
         }, 1500);
-        const L = this.shadowRoot.getElementById("new-pin-1");
-        L && L.focus();
+        const D = this.shadowRoot.getElementById("new-pin-1");
+        D && D.focus();
       }
     }), n.querySelector("#btn-dropdown-remove-master-pin")?.addEventListener("click", (E) => {
       E.stopPropagation(), S.style.display = "none";
-      const N = this.shadowRoot.getElementById("w-access");
-      if (N) {
-        N.scrollIntoView({ behavior: "smooth", block: "center" }), N.style.transition = "box-shadow 0.5s ease-in-out", N.style.boxShadow = "0 0 30px rgba(255, 179, 0, 0.6)", setTimeout(() => {
-          N.style.boxShadow = "";
+      const C = this.shadowRoot.getElementById("w-access");
+      if (C) {
+        C.scrollIntoView({ behavior: "smooth", block: "center" }), C.style.transition = "box-shadow 0.5s ease-in-out", C.style.boxShadow = "0 0 30px rgba(255, 179, 0, 0.6)", setTimeout(() => {
+          C.style.boxShadow = "";
         }, 1500);
-        const L = this.shadowRoot.getElementById("current-pin");
-        L && L.focus();
+        const D = this.shadowRoot.getElementById("current-pin");
+        D && D.focus();
       }
     }), n.querySelector("#btn-dropdown-edit-home-name")?.addEventListener("click", (E) => {
       E.stopPropagation(), S.style.display = "none", this._editHomeName();
@@ -10918,9 +10924,9 @@ ${r}`);
     }), this.shadowRoot.getElementById("skip-master-pin")?.addEventListener("click", () => {
       this.shadowRoot.getElementById("setup-master-pin").value = "";
     }), this.shadowRoot.getElementById("btn-complete-setup")?.addEventListener("click", async () => {
-      const E = this.shadowRoot.getElementById("setup-admin-name").value || r, N = this.shadowRoot.getElementById("setup-master-pin").value || void 0, L = this.shadowRoot.getElementById("setup-access-pin").value || void 0;
+      const E = this.shadowRoot.getElementById("setup-admin-name").value || r, C = this.shadowRoot.getElementById("setup-master-pin").value || void 0, D = this.shadowRoot.getElementById("setup-access-pin").value || void 0;
       try {
-        await this._send("argus/complete_first_run", { admin_name: E, master_pin: N, access_pin: L }), u();
+        await this._send("argus/complete_first_run", { admin_name: E, master_pin: C, access_pin: D }), u();
       } catch (O) {
         alert("Setup failed: " + O.message);
       }
@@ -10929,14 +10935,14 @@ ${r}`);
     this.shadowRoot.getElementById("btn-trigger-restore")?.addEventListener("click", () => {
       S?.click();
     }), S?.addEventListener("change", (E) => {
-      const N = E.target.files?.[0];
-      if (!N) return;
+      const C = E.target.files?.[0];
+      if (!C) return;
       b && (b.textContent = "Procesando copia de seguridad...");
-      const L = new FileReader();
-      L.onload = async (O) => {
+      const D = new FileReader();
+      D.onload = async (O) => {
         try {
-          let C = JSON.parse(O.target.result);
-          if (C?.format === "argus-encrypted-backup") {
+          let N = JSON.parse(O.target.result);
+          if (N?.format === "argus-encrypted-backup") {
             const k = await this._showArgusInputModal({
               title: "Copia de seguridad cifrada",
               label: "Introduce la contraseña del backup:",
@@ -10947,21 +10953,21 @@ ${r}`);
               return;
             }
             try {
-              const y = this._base64ToBytes(C.salt), v = this._base64ToBytes(C.iv), h = await this._backupKey(k, y, ["decrypt"]), x = await crypto.subtle.decrypt({ name: "AES-GCM", iv: v }, h, this._base64ToBytes(C.data));
-              C = JSON.parse(new TextDecoder().decode(x));
+              const y = this._base64ToBytes(N.salt), v = this._base64ToBytes(N.iv), h = await this._backupKey(k, y, ["decrypt"]), x = await crypto.subtle.decrypt({ name: "AES-GCM", iv: v }, h, this._base64ToBytes(N.data));
+              N = JSON.parse(new TextDecoder().decode(x));
             } catch {
               throw new Error("Contraseña de copia de seguridad incorrecta.");
             }
           }
-          if (typeof C != "object" || C === null)
+          if (typeof N != "object" || N === null)
             throw new Error(this._t("invalid_config"));
-          await this._send("argus/restore_config", { config: C }), b && (b.textContent = "✅ Copia de seguridad restaurada con éxito."), u();
-        } catch (C) {
-          b && (b.textContent = "❌ Error al restaurar: " + (C.message || C));
+          await this._send("argus/restore_config", { config: N }), b && (b.textContent = "✅ Copia de seguridad restaurada con éxito."), u();
+        } catch (N) {
+          b && (b.textContent = "❌ Error al restaurar: " + (N.message || N));
         }
-      }, L.onerror = () => {
+      }, D.onerror = () => {
         b && (b.textContent = "❌ Error al leer el archivo.");
-      }, L.readAsText(N);
+      }, D.readAsText(C);
     });
   }
   _renderLegacyClaimScreen() {
@@ -11010,20 +11016,20 @@ ${r}`);
     `, g = `
       <div class="argus-profile-grid">
         ${o.map((b) => {
-          const E = b.is_own_profile === !0, N = b.access_pin_configured === !0, L = b.role === "admin" ? r("role_argus_admin") : r("role_argus_standard"), O = b.picture ? `<img src="${this._escapeHtml(b.picture)}" alt="" />` : this._escapeHtml(b.name.substring(0, 2).toUpperCase()), C = N ? '<div class="lock-badge">🔒</div>' : "";
+          const E = b.is_own_profile === !0, C = b.access_pin_configured === !0, D = b.role === "admin" ? r("role_argus_admin") : r("role_argus_standard"), O = b.picture ? `<img src="${this._escapeHtml(b.picture)}" alt="" />` : this._escapeHtml(b.name.substring(0, 2).toUpperCase()), N = C ? '<div class="lock-badge">🔒</div>' : "";
           return `
         <div class="argus-profile-item" tabindex="0"
              data-user-id="${this._escapeHtml(b.id)}"
              data-is-own="${E ? "true" : "false"}"
-             data-requires-pin="${N ? "true" : "false"}">
+             data-requires-pin="${C ? "true" : "false"}">
           
           <div class="argus-profile-circle">
             ${O}
-            ${C}
+            ${N}
           </div>
           <div class="argus-profile-label">
             <div class="p-name">${this._escapeHtml(b.name)}</div>
-            <div class="p-role">${this._escapeHtml(L)}</div>
+            <div class="p-role">${this._escapeHtml(D)}</div>
           </div>
         </div>
       `;
@@ -11051,20 +11057,20 @@ ${r}`);
           b.addEventListener("click", async () => {
             if (u.dataset.processing) return;
             u.dataset.processing = "1";
-            const E = b.getAttribute("data-user-id"), N = b.getAttribute("data-is-own") === "true", L = b.getAttribute("data-requires-pin") === "true", O = o.find((C) => C.id === E);
-            if (N)
-              if (L)
+            const E = b.getAttribute("data-user-id"), C = b.getAttribute("data-is-own") === "true", D = b.getAttribute("data-requires-pin") === "true", O = o.find((N) => N.id === E);
+            if (C)
+              if (D)
                 u.remove(), this._showTvOSPinPrompt(O);
               else
                 try {
                   await this._send("argus/select_profile", { argus_user_id: E }), u.remove(), this._profileSelectedThisMount = !0, await this._runProfileWelcomeAnimation(O);
-                } catch (C) {
-                  u.dataset.processing = "", alert(C.message || "Error seleccionando perfil");
+                } catch (N) {
+                  u.dataset.processing = "", alert(N.message || "Error seleccionando perfil");
                 }
             else {
-              if (!L) {
-                const C = b;
-                C.style.animation = "none", C.offsetHeight, C.style.animation = "argus-shake 0.3s ease", u.dataset.processing = "";
+              if (!D) {
+                const N = b;
+                N.style.animation = "none", N.offsetHeight, N.style.animation = "argus-shake 0.3s ease", u.dataset.processing = "";
                 return;
               }
               u.remove(), this._showTvOSPinPrompt(O);
@@ -11163,8 +11169,8 @@ ${r}`);
         const O = f.getBoundingClientRect();
         O.width > 0 && O.height > 0 && (S = O.left + O.width / 2, b = O.top + O.height / 2, E = Math.max(0.2, O.width / g.width));
       }
-      const N = S - (g.left + g.width / 2), L = b - (g.top + g.height / 2);
-      p.style.transition = "transform 0.65s cubic-bezier(0.25, 1.25, 0.5, 1), opacity 0.35s ease 0.45s", p.style.transform = `translate(${N}px, ${L}px) scale(${E})`, o.style.transition = "background-color 0.55s ease 0.1s", o.style.backgroundColor = "transparent", await new Promise((O) => setTimeout(O, 650)), f && (f.style.opacity = "1", f.style.transform = "scale(1.1)", setTimeout(() => {
+      const C = S - (g.left + g.width / 2), D = b - (g.top + g.height / 2);
+      p.style.transition = "transform 0.65s cubic-bezier(0.25, 1.25, 0.5, 1), opacity 0.35s ease 0.45s", p.style.transform = `translate(${C}px, ${D}px) scale(${E})`, o.style.transition = "background-color 0.55s ease 0.1s", o.style.backgroundColor = "transparent", await new Promise((O) => setTimeout(O, 650)), f && (f.style.opacity = "1", f.style.transform = "scale(1.1)", setTimeout(() => {
         f && (f.style.transform = "scale(1)");
       }, 180));
     }
@@ -11217,10 +11223,10 @@ ${r}`);
         f.className = "widget-drag-handle", f.innerHTML = "⋮⋮ Arrastrar", f.title = "Arrastrar para mover";
         const S = document.createElement("div");
         S.className = "widget-sizes", ["S", "M", "L", "XL"].forEach((E) => {
-          const N = document.createElement("button");
-          N.className = "widget-size-btn", N.textContent = E, N.dataset.size = E, N.addEventListener("click", (L) => {
-            L.stopPropagation(), L.preventDefault(), this._changeWidgetSize(c, E);
-          }), S.appendChild(N);
+          const C = document.createElement("button");
+          C.className = "widget-size-btn", C.textContent = E, C.dataset.size = E, C.addEventListener("click", (D) => {
+            D.stopPropagation(), D.preventDefault(), this._changeWidgetSize(c, E);
+          }), S.appendChild(C);
         });
         const b = document.createElement("button");
         b.className = "widget-toggle-btn", b.textContent = "Ocultar", b.addEventListener("click", (E) => {
@@ -11526,7 +11532,7 @@ class Im extends HTMLElement {
       night: this._hass?.states?.["sun.sun"]?.state === "below_horizon"
     }, f = this._hass?.config || {}, S = [];
     f.location_name && !/^(home|casa|hogar)$/i.test(f.location_name) && S.push(f.location_name), f.country && S.push(f.country);
-    const b = S.length ? S.join(", ") : r.unknown, E = this._config.title || r.title, N = g.state, L = /thunder|storm|lightning/.test(N), O = /rain|pouring|drizzle|shower/.test(N), C = /snow/.test(N), k = /fog|mist|hazy/.test(N), y = /cloud|overcast/.test(N), v = [g.night ? "night" : "day", L ? "storm" : O ? "rain" : C ? "snow" : k ? "fog" : y ? "cloud" : "clear"].join(" "), h = new Intl.DateTimeFormat(this._hass.language || void 0, { hour: "2-digit", minute: "2-digit" }).format(/* @__PURE__ */ new Date());
+    const b = S.length ? S.join(", ") : r.unknown, E = this._config.title || r.title, C = g.state, D = /thunder|storm|lightning/.test(C), O = /rain|pouring|drizzle|shower/.test(C), N = /snow/.test(C), k = /fog|mist|hazy/.test(C), y = /cloud|overcast/.test(C), v = [g.night ? "night" : "day", D ? "storm" : O ? "rain" : N ? "snow" : k ? "fog" : y ? "cloud" : "clear"].join(" "), h = new Intl.DateTimeFormat(this._hass.language || void 0, { hour: "2-digit", minute: "2-digit" }).format(/* @__PURE__ */ new Date());
     this._panelHost.innerHTML = `
       <style>
         .basic-card{position:relative;min-height:330px;isolation:isolate;overflow:hidden;font-family:'Outfit',Inter,system-ui,sans-serif}
@@ -11711,7 +11717,7 @@ function gh() {
         return p.now() - m;
       };
     }
-    var g = [], f = [], S = 1, b = null, E = 3, N = !1, L = !1, O = !1, C = !1, k = typeof setTimeout == "function" ? setTimeout : null, y = typeof clearTimeout == "function" ? clearTimeout : null, v = typeof setImmediate < "u" ? setImmediate : null;
+    var g = [], f = [], S = 1, b = null, E = 3, C = !1, D = !1, O = !1, N = !1, k = typeof setTimeout == "function" ? setTimeout : null, y = typeof clearTimeout == "function" ? clearTimeout : null, v = typeof setImmediate < "u" ? setImmediate : null;
     function h(B) {
       for (var Q = r(f); Q !== null; ) {
         if (Q.callback === null) o(f);
@@ -11722,9 +11728,9 @@ function gh() {
       }
     }
     function x(B) {
-      if (O = !1, h(B), !L)
+      if (O = !1, h(B), !D)
         if (r(g) !== null)
-          L = !0, A || (A = !0, oe());
+          D = !0, A || (A = !0, oe());
         else {
           var Q = r(f);
           Q !== null && ge(x, Q.startTime - B);
@@ -11732,16 +11738,16 @@ function gh() {
     }
     var A = !1, z = -1, P = 5, U = -1;
     function F() {
-      return C ? !0 : !(d.unstable_now() - U < P);
+      return N ? !0 : !(d.unstable_now() - U < P);
     }
     function ee() {
-      if (C = !1, A) {
+      if (N = !1, A) {
         var B = d.unstable_now();
         U = B;
         var Q = !0;
         try {
           e: {
-            L = !1, O && (O = !1, y(z), z = -1), N = !0;
+            D = !1, O && (O = !1, y(z), z = -1), C = !0;
             var K = E;
             try {
               t: {
@@ -11771,7 +11777,7 @@ function gh() {
               }
               break e;
             } finally {
-              b = null, E = K, N = !1;
+              b = null, E = K, C = !1;
             }
             Q = void 0;
           }
@@ -11825,7 +11831,7 @@ function gh() {
         E = K;
       }
     }, d.unstable_requestPaint = function() {
-      C = !0;
+      N = !0;
     }, d.unstable_runWithPriority = function(B, Q) {
       switch (B) {
         case 1:
@@ -11869,7 +11875,7 @@ function gh() {
         startTime: K,
         expirationTime: ue,
         sortIndex: -1
-      }, K > re ? (B.sortIndex = K, n(f, B), r(g) === null && B === r(f) && (O ? (y(z), z = -1) : O = !0, ge(x, K - re))) : (B.sortIndex = ue, n(g, B), L || N || (L = !0, A || (A = !0, oe()))), B;
+      }, K > re ? (B.sortIndex = K, n(f, B), r(g) === null && B === r(f) && (O ? (y(z), z = -1) : O = !0, ge(x, K - re))) : (B.sortIndex = ue, n(g, B), D || C || (D = !0, A || (A = !0, oe()))), B;
     }, d.unstable_shouldYield = F, d.unstable_wrapCallback = function(B) {
       var Q = E;
       return function() {
@@ -11903,10 +11909,10 @@ function bh() {
   if (B_) return Ce;
   B_ = 1;
   var d = Symbol.for("react.transitional.element"), n = Symbol.for("react.portal"), r = Symbol.for("react.fragment"), o = Symbol.for("react.strict_mode"), c = Symbol.for("react.profiler"), u = Symbol.for("react.consumer"), p = Symbol.for("react.context"), m = Symbol.for("react.forward_ref"), g = Symbol.for("react.suspense"), f = Symbol.for("react.memo"), S = Symbol.for("react.lazy"), b = Symbol.for("react.activity"), E = Symbol.iterator;
-  function N(R) {
+  function C(R) {
     return R === null || typeof R != "object" ? null : (R = E && R[E] || R["@@iterator"], typeof R == "function" ? R : null);
   }
-  var L = {
+  var D = {
     isMounted: function() {
       return !1;
     },
@@ -11916,9 +11922,9 @@ function bh() {
     },
     enqueueSetState: function() {
     }
-  }, O = Object.assign, C = {};
+  }, O = Object.assign, N = {};
   function k(R, V, ne) {
-    this.props = R, this.context = V, this.refs = C, this.updater = ne || L;
+    this.props = R, this.context = V, this.refs = N, this.updater = ne || D;
   }
   k.prototype.isReactComponent = {}, k.prototype.setState = function(R, V) {
     if (typeof R != "object" && typeof R != "function" && R != null)
@@ -11933,7 +11939,7 @@ function bh() {
   }
   y.prototype = k.prototype;
   function v(R, V, ne) {
-    this.props = R, this.context = V, this.refs = C, this.updater = ne || L;
+    this.props = R, this.context = V, this.refs = N, this.updater = ne || D;
   }
   var h = v.prototype = new y();
   h.constructor = v, O(h, k.prototype), h.isPureReactComponent = !0;
@@ -12039,7 +12045,7 @@ function bh() {
           Se,
           he
         );
-    else if (me = N(R), typeof me == "function")
+    else if (me = C(R), typeof me == "function")
       for (R = me.call(R), me = 0; !(se = R.next()).done; )
         se = se.value, Se = de + _e(se, me++), Me += B(
           se,
@@ -12338,19 +12344,19 @@ function yh() {
     typeof g == "string" && o.d.D(g);
   }, zt.preinit = function(g, f) {
     if (typeof g == "string" && f && typeof f.as == "string") {
-      var S = f.as, b = m(S, f.crossOrigin), E = typeof f.integrity == "string" ? f.integrity : void 0, N = typeof f.fetchPriority == "string" ? f.fetchPriority : void 0;
+      var S = f.as, b = m(S, f.crossOrigin), E = typeof f.integrity == "string" ? f.integrity : void 0, C = typeof f.fetchPriority == "string" ? f.fetchPriority : void 0;
       S === "style" ? o.d.S(
         g,
         typeof f.precedence == "string" ? f.precedence : void 0,
         {
           crossOrigin: b,
           integrity: E,
-          fetchPriority: N
+          fetchPriority: C
         }
       ) : S === "script" && o.d.X(g, {
         crossOrigin: b,
         integrity: E,
-        fetchPriority: N,
+        fetchPriority: C,
         nonce: typeof f.nonce == "string" ? f.nonce : void 0
       });
     }
@@ -12540,7 +12546,7 @@ function vh() {
     }
     return null;
   }
-  var b = Object.assign, E = Symbol.for("react.element"), N = Symbol.for("react.transitional.element"), L = Symbol.for("react.portal"), O = Symbol.for("react.fragment"), C = Symbol.for("react.strict_mode"), k = Symbol.for("react.profiler"), y = Symbol.for("react.consumer"), v = Symbol.for("react.context"), h = Symbol.for("react.forward_ref"), x = Symbol.for("react.suspense"), A = Symbol.for("react.suspense_list"), z = Symbol.for("react.memo"), P = Symbol.for("react.lazy"), U = Symbol.for("react.activity"), F = Symbol.for("react.memo_cache_sentinel"), ee = Symbol.iterator;
+  var b = Object.assign, E = Symbol.for("react.element"), C = Symbol.for("react.transitional.element"), D = Symbol.for("react.portal"), O = Symbol.for("react.fragment"), N = Symbol.for("react.strict_mode"), k = Symbol.for("react.profiler"), y = Symbol.for("react.consumer"), v = Symbol.for("react.context"), h = Symbol.for("react.forward_ref"), x = Symbol.for("react.suspense"), A = Symbol.for("react.suspense_list"), z = Symbol.for("react.memo"), P = Symbol.for("react.lazy"), U = Symbol.for("react.activity"), F = Symbol.for("react.memo_cache_sentinel"), ee = Symbol.iterator;
   function oe(e) {
     return e === null || typeof e != "object" ? null : (e = ee && e[ee] || e["@@iterator"], typeof e == "function" ? e : null);
   }
@@ -12555,7 +12561,7 @@ function vh() {
         return "Fragment";
       case k:
         return "Profiler";
-      case C:
+      case N:
         return "StrictMode";
       case x:
         return "Suspense";
@@ -12566,7 +12572,7 @@ function vh() {
     }
     if (typeof e == "object")
       switch (e.$$typeof) {
-        case L:
+        case D:
           return "Portal";
         case v:
           return e.displayName || "Context";
@@ -14023,7 +14029,7 @@ Error generating stack: ` + i.message + `
           return e = Bt(31, a, t, s), e.elementType = U, e.lanes = l, e;
         case O:
           return ui(a.children, s, l, t);
-        case C:
+        case N:
           _ = 8, s |= 24;
           break;
         case k:
@@ -14500,135 +14506,135 @@ Error generating stack: ` + i.message + `
     ));
   }
   function Vd(e) {
-    function t(q, D) {
+    function t(q, L) {
       if (e) {
         var $ = q.deletions;
-        $ === null ? (q.deletions = [D], q.flags |= 16) : $.push(D);
+        $ === null ? (q.deletions = [L], q.flags |= 16) : $.push(L);
       }
     }
-    function a(q, D) {
+    function a(q, L) {
       if (!e) return null;
-      for (; D !== null; )
-        t(q, D), D = D.sibling;
+      for (; L !== null; )
+        t(q, L), L = L.sibling;
       return null;
     }
     function i(q) {
-      for (var D = /* @__PURE__ */ new Map(); q !== null; )
-        q.key !== null ? D.set(q.key, q) : D.set(q.index, q), q = q.sibling;
-      return D;
+      for (var L = /* @__PURE__ */ new Map(); q !== null; )
+        q.key !== null ? L.set(q.key, q) : L.set(q.index, q), q = q.sibling;
+      return L;
     }
-    function s(q, D) {
-      return q = _a(q, D), q.index = 0, q.sibling = null, q;
+    function s(q, L) {
+      return q = _a(q, L), q.index = 0, q.sibling = null, q;
     }
-    function l(q, D, $) {
-      return q.index = $, e ? ($ = q.alternate, $ !== null ? ($ = $.index, $ < D ? (q.flags |= 67108866, D) : $) : (q.flags |= 67108866, D)) : (q.flags |= 1048576, D);
+    function l(q, L, $) {
+      return q.index = $, e ? ($ = q.alternate, $ !== null ? ($ = $.index, $ < L ? (q.flags |= 67108866, L) : $) : (q.flags |= 67108866, L)) : (q.flags |= 1048576, L);
     }
     function _(q) {
       return e && q.alternate === null && (q.flags |= 67108866), q;
     }
-    function w(q, D, $, ae) {
-      return D === null || D.tag !== 6 ? (D = As($, q.mode, ae), D.return = q, D) : (D = s(D, $), D.return = q, D);
+    function w(q, L, $, ae) {
+      return L === null || L.tag !== 6 ? (L = As($, q.mode, ae), L.return = q, L) : (L = s(L, $), L.return = q, L);
     }
-    function H(q, D, $, ae) {
+    function H(q, L, $, ae) {
       var we = $.type;
       return we === O ? J(
         q,
-        D,
+        L,
         $.props.children,
         ae,
         $.key
-      ) : D !== null && (D.elementType === we || typeof we == "object" && we !== null && we.$$typeof === P && gi(we) === D.type) ? (D = s(D, $.props), Mn(D, $), D.return = q, D) : (D = Io(
+      ) : L !== null && (L.elementType === we || typeof we == "object" && we !== null && we.$$typeof === P && gi(we) === L.type) ? (L = s(L, $.props), Mn(L, $), L.return = q, L) : (L = Io(
         $.type,
         $.key,
         $.props,
         null,
         q.mode,
         ae
-      ), Mn(D, $), D.return = q, D);
+      ), Mn(L, $), L.return = q, L);
     }
-    function G(q, D, $, ae) {
-      return D === null || D.tag !== 4 || D.stateNode.containerInfo !== $.containerInfo || D.stateNode.implementation !== $.implementation ? (D = zs($, q.mode, ae), D.return = q, D) : (D = s(D, $.children || []), D.return = q, D);
+    function G(q, L, $, ae) {
+      return L === null || L.tag !== 4 || L.stateNode.containerInfo !== $.containerInfo || L.stateNode.implementation !== $.implementation ? (L = zs($, q.mode, ae), L.return = q, L) : (L = s(L, $.children || []), L.return = q, L);
     }
-    function J(q, D, $, ae, we) {
-      return D === null || D.tag !== 7 ? (D = ui(
+    function J(q, L, $, ae, we) {
+      return L === null || L.tag !== 7 ? (L = ui(
         $,
         q.mode,
         ae,
         we
-      ), D.return = q, D) : (D = s(D, $), D.return = q, D);
+      ), L.return = q, L) : (L = s(L, $), L.return = q, L);
     }
-    function ie(q, D, $) {
-      if (typeof D == "string" && D !== "" || typeof D == "number" || typeof D == "bigint")
-        return D = As(
-          "" + D,
+    function ie(q, L, $) {
+      if (typeof L == "string" && L !== "" || typeof L == "number" || typeof L == "bigint")
+        return L = As(
+          "" + L,
           q.mode,
           $
-        ), D.return = q, D;
-      if (typeof D == "object" && D !== null) {
-        switch (D.$$typeof) {
-          case N:
+        ), L.return = q, L;
+      if (typeof L == "object" && L !== null) {
+        switch (L.$$typeof) {
+          case C:
             return $ = Io(
-              D.type,
-              D.key,
-              D.props,
+              L.type,
+              L.key,
+              L.props,
               null,
               q.mode,
               $
-            ), Mn($, D), $.return = q, $;
-          case L:
-            return D = zs(
-              D,
+            ), Mn($, L), $.return = q, $;
+          case D:
+            return L = zs(
+              L,
               q.mode,
               $
-            ), D.return = q, D;
+            ), L.return = q, L;
           case P:
-            return D = gi(D), ie(q, D, $);
+            return L = gi(L), ie(q, L, $);
         }
-        if (ge(D) || oe(D))
-          return D = ui(
-            D,
+        if (ge(L) || oe(L))
+          return L = ui(
+            L,
             q.mode,
             $,
             null
-          ), D.return = q, D;
-        if (typeof D.then == "function")
-          return ie(q, Go(D), $);
-        if (D.$$typeof === v)
+          ), L.return = q, L;
+        if (typeof L.then == "function")
+          return ie(q, Go(L), $);
+        if (L.$$typeof === v)
           return ie(
             q,
-            Po(q, D),
+            Po(q, L),
             $
           );
-        Yo(q, D);
+        Yo(q, L);
       }
       return null;
     }
-    function X(q, D, $, ae) {
-      var we = D !== null ? D.key : null;
+    function X(q, L, $, ae) {
+      var we = L !== null ? L.key : null;
       if (typeof $ == "string" && $ !== "" || typeof $ == "number" || typeof $ == "bigint")
-        return we !== null ? null : w(q, D, "" + $, ae);
+        return we !== null ? null : w(q, L, "" + $, ae);
       if (typeof $ == "object" && $ !== null) {
         switch ($.$$typeof) {
-          case N:
-            return $.key === we ? H(q, D, $, ae) : null;
-          case L:
-            return $.key === we ? G(q, D, $, ae) : null;
+          case C:
+            return $.key === we ? H(q, L, $, ae) : null;
+          case D:
+            return $.key === we ? G(q, L, $, ae) : null;
           case P:
-            return $ = gi($), X(q, D, $, ae);
+            return $ = gi($), X(q, L, $, ae);
         }
         if (ge($) || oe($))
-          return we !== null ? null : J(q, D, $, ae, null);
+          return we !== null ? null : J(q, L, $, ae, null);
         if (typeof $.then == "function")
           return X(
             q,
-            D,
+            L,
             Go($),
             ae
           );
         if ($.$$typeof === v)
           return X(
             q,
-            D,
+            L,
             Po(q, $),
             ae
           );
@@ -14636,34 +14642,34 @@ Error generating stack: ` + i.message + `
       }
       return null;
     }
-    function W(q, D, $, ae, we) {
+    function W(q, L, $, ae, we) {
       if (typeof ae == "string" && ae !== "" || typeof ae == "number" || typeof ae == "bigint")
-        return q = q.get($) || null, w(D, q, "" + ae, we);
+        return q = q.get($) || null, w(L, q, "" + ae, we);
       if (typeof ae == "object" && ae !== null) {
         switch (ae.$$typeof) {
-          case N:
+          case C:
             return q = q.get(
               ae.key === null ? $ : ae.key
-            ) || null, H(D, q, ae, we);
-          case L:
+            ) || null, H(L, q, ae, we);
+          case D:
             return q = q.get(
               ae.key === null ? $ : ae.key
-            ) || null, G(D, q, ae, we);
+            ) || null, G(L, q, ae, we);
           case P:
             return ae = gi(ae), W(
               q,
-              D,
+              L,
               $,
               ae,
               we
             );
         }
         if (ge(ae) || oe(ae))
-          return q = q.get($) || null, J(D, q, ae, we, null);
+          return q = q.get($) || null, J(L, q, ae, we, null);
         if (typeof ae.then == "function")
           return W(
             q,
-            D,
+            L,
             $,
             Go(ae),
             we
@@ -14671,17 +14677,17 @@ Error generating stack: ` + i.message + `
         if (ae.$$typeof === v)
           return W(
             q,
-            D,
+            L,
             $,
-            Po(D, ae),
+            Po(L, ae),
             we
           );
-        Yo(D, ae);
+        Yo(L, ae);
       }
       return null;
     }
-    function ye(q, D, $, ae) {
-      for (var we = null, Ge = null, ve = D, De = D = 0, Pe = null; ve !== null && De < $.length; De++) {
+    function ye(q, L, $, ae) {
+      for (var we = null, Ge = null, ve = L, De = L = 0, Pe = null; ve !== null && De < $.length; De++) {
         ve.index > De ? (Pe = ve, ve = null) : Pe = ve.sibling;
         var Ye = X(
           q,
@@ -14693,15 +14699,15 @@ Error generating stack: ` + i.message + `
           ve === null && (ve = Pe);
           break;
         }
-        e && ve && Ye.alternate === null && t(q, ve), D = l(Ye, D, De), Ge === null ? we = Ye : Ge.sibling = Ye, Ge = Ye, ve = Pe;
+        e && ve && Ye.alternate === null && t(q, ve), L = l(Ye, L, De), Ge === null ? we = Ye : Ge.sibling = Ye, Ge = Ye, ve = Pe;
       }
       if (De === $.length)
         return a(q, ve), je && ma(q, De), we;
       if (ve === null) {
         for (; De < $.length; De++)
-          ve = ie(q, $[De], ae), ve !== null && (D = l(
+          ve = ie(q, $[De], ae), ve !== null && (L = l(
             ve,
-            D,
+            L,
             De
           ), Ge === null ? we = ve : Ge.sibling = ve, Ge = ve);
         return je && ma(q, De), we;
@@ -14715,68 +14721,68 @@ Error generating stack: ` + i.message + `
           ae
         ), Pe !== null && (e && Pe.alternate !== null && ve.delete(
           Pe.key === null ? De : Pe.key
-        ), D = l(
+        ), L = l(
           Pe,
-          D,
+          L,
           De
         ), Ge === null ? we = Pe : Ge.sibling = Pe, Ge = Pe);
       return e && ve.forEach(function(ti) {
         return t(q, ti);
       }), je && ma(q, De), we;
     }
-    function ke(q, D, $, ae) {
+    function ke(q, L, $, ae) {
       if ($ == null) throw Error(o(151));
-      for (var we = null, Ge = null, ve = D, De = D = 0, Pe = null, Ye = $.next(); ve !== null && !Ye.done; De++, Ye = $.next()) {
+      for (var we = null, Ge = null, ve = L, De = L = 0, Pe = null, Ye = $.next(); ve !== null && !Ye.done; De++, Ye = $.next()) {
         ve.index > De ? (Pe = ve, ve = null) : Pe = ve.sibling;
         var ti = X(q, ve, Ye.value, ae);
         if (ti === null) {
           ve === null && (ve = Pe);
           break;
         }
-        e && ve && ti.alternate === null && t(q, ve), D = l(ti, D, De), Ge === null ? we = ti : Ge.sibling = ti, Ge = ti, ve = Pe;
+        e && ve && ti.alternate === null && t(q, ve), L = l(ti, L, De), Ge === null ? we = ti : Ge.sibling = ti, Ge = ti, ve = Pe;
       }
       if (Ye.done)
         return a(q, ve), je && ma(q, De), we;
       if (ve === null) {
         for (; !Ye.done; De++, Ye = $.next())
-          Ye = ie(q, Ye.value, ae), Ye !== null && (D = l(Ye, D, De), Ge === null ? we = Ye : Ge.sibling = Ye, Ge = Ye);
+          Ye = ie(q, Ye.value, ae), Ye !== null && (L = l(Ye, L, De), Ge === null ? we = Ye : Ge.sibling = Ye, Ge = Ye);
         return je && ma(q, De), we;
       }
       for (ve = i(ve); !Ye.done; De++, Ye = $.next())
-        Ye = W(ve, q, De, Ye.value, ae), Ye !== null && (e && Ye.alternate !== null && ve.delete(Ye.key === null ? De : Ye.key), D = l(Ye, D, De), Ge === null ? we = Ye : Ge.sibling = Ye, Ge = Ye);
+        Ye = W(ve, q, De, Ye.value, ae), Ye !== null && (e && Ye.alternate !== null && ve.delete(Ye.key === null ? De : Ye.key), L = l(Ye, L, De), Ge === null ? we = Ye : Ge.sibling = Ye, Ge = Ye);
       return e && ve.forEach(function(uh) {
         return t(q, uh);
       }), je && ma(q, De), we;
     }
-    function tt(q, D, $, ae) {
+    function tt(q, L, $, ae) {
       if (typeof $ == "object" && $ !== null && $.type === O && $.key === null && ($ = $.props.children), typeof $ == "object" && $ !== null) {
         switch ($.$$typeof) {
-          case N:
+          case C:
             e: {
-              for (var we = $.key; D !== null; ) {
-                if (D.key === we) {
+              for (var we = $.key; L !== null; ) {
+                if (L.key === we) {
                   if (we = $.type, we === O) {
-                    if (D.tag === 7) {
+                    if (L.tag === 7) {
                       a(
                         q,
-                        D.sibling
+                        L.sibling
                       ), ae = s(
-                        D,
+                        L,
                         $.props.children
                       ), ae.return = q, q = ae;
                       break e;
                     }
-                  } else if (D.elementType === we || typeof we == "object" && we !== null && we.$$typeof === P && gi(we) === D.type) {
+                  } else if (L.elementType === we || typeof we == "object" && we !== null && we.$$typeof === P && gi(we) === L.type) {
                     a(
                       q,
-                      D.sibling
-                    ), ae = s(D, $.props), Mn(ae, $), ae.return = q, q = ae;
+                      L.sibling
+                    ), ae = s(L, $.props), Mn(ae, $), ae.return = q, q = ae;
                     break e;
                   }
-                  a(q, D);
+                  a(q, L);
                   break;
-                } else t(q, D);
-                D = D.sibling;
+                } else t(q, L);
+                L = L.sibling;
               }
               $.type === O ? (ae = ui(
                 $.props.children,
@@ -14793,22 +14799,22 @@ Error generating stack: ` + i.message + `
               ), Mn(ae, $), ae.return = q, q = ae);
             }
             return _(q);
-          case L:
+          case D:
             e: {
-              for (we = $.key; D !== null; ) {
-                if (D.key === we)
-                  if (D.tag === 4 && D.stateNode.containerInfo === $.containerInfo && D.stateNode.implementation === $.implementation) {
+              for (we = $.key; L !== null; ) {
+                if (L.key === we)
+                  if (L.tag === 4 && L.stateNode.containerInfo === $.containerInfo && L.stateNode.implementation === $.implementation) {
                     a(
                       q,
-                      D.sibling
-                    ), ae = s(D, $.children || []), ae.return = q, q = ae;
+                      L.sibling
+                    ), ae = s(L, $.children || []), ae.return = q, q = ae;
                     break e;
                   } else {
-                    a(q, D);
+                    a(q, L);
                     break;
                   }
-                else t(q, D);
-                D = D.sibling;
+                else t(q, L);
+                L = L.sibling;
               }
               ae = zs($, q.mode, ae), ae.return = q, q = ae;
             }
@@ -14816,7 +14822,7 @@ Error generating stack: ` + i.message + `
           case P:
             return $ = gi($), tt(
               q,
-              D,
+              L,
               $,
               ae
             );
@@ -14824,7 +14830,7 @@ Error generating stack: ` + i.message + `
         if (ge($))
           return ye(
             q,
-            D,
+            L,
             $,
             ae
           );
@@ -14832,7 +14838,7 @@ Error generating stack: ` + i.message + `
           if (we = oe($), typeof we != "function") throw Error(o(150));
           return $ = we.call($), ke(
             q,
-            D,
+            L,
             $,
             ae
           );
@@ -14840,27 +14846,27 @@ Error generating stack: ` + i.message + `
         if (typeof $.then == "function")
           return tt(
             q,
-            D,
+            L,
             Go($),
             ae
           );
         if ($.$$typeof === v)
           return tt(
             q,
-            D,
+            L,
             Po(q, $),
             ae
           );
         Yo(q, $);
       }
-      return typeof $ == "string" && $ !== "" || typeof $ == "number" || typeof $ == "bigint" ? ($ = "" + $, D !== null && D.tag === 6 ? (a(q, D.sibling), ae = s(D, $), ae.return = q, q = ae) : (a(q, D), ae = As($, q.mode, ae), ae.return = q, q = ae), _(q)) : a(q, D);
+      return typeof $ == "string" && $ !== "" || typeof $ == "number" || typeof $ == "bigint" ? ($ = "" + $, L !== null && L.tag === 6 ? (a(q, L.sibling), ae = s(L, $), ae.return = q, q = ae) : (a(q, L), ae = As($, q.mode, ae), ae.return = q, q = ae), _(q)) : a(q, L);
     }
-    return function(q, D, $, ae) {
+    return function(q, L, $, ae) {
       try {
         Hn = 0;
         var we = tt(
           q,
-          D,
+          L,
           $,
           ae
         );
@@ -19393,13 +19399,13 @@ Error generating stack: ` + i.message + `
                   var q = vd(
                     w,
                     ke
-                  ), D = vd(
+                  ), L = vd(
                     w,
                     tt
                   );
-                  if (q && D && (W.rangeCount !== 1 || W.anchorNode !== q.node || W.anchorOffset !== q.offset || W.focusNode !== D.node || W.focusOffset !== D.offset)) {
+                  if (q && L && (W.rangeCount !== 1 || W.anchorNode !== q.node || W.anchorOffset !== q.offset || W.focusNode !== L.node || W.focusOffset !== L.offset)) {
                     var $ = ie.createRange();
-                    $.setStart(q.node, q.offset), W.removeAllRanges(), ke > tt ? (W.addRange($), W.extend(D.node, D.offset)) : ($.setEnd(D.node, D.offset), W.addRange($));
+                    $.setStart(q.node, q.offset), W.removeAllRanges(), ke > tt ? (W.addRange($), W.extend(L.node, L.offset)) : ($.setEnd(L.node, L.offset), W.addRange($));
                   }
                 }
               }
@@ -19975,12 +19981,12 @@ Error generating stack: ` + i.message + `
           }
           var ke = (t & 4) !== 0, tt = !ke && (e === "scroll" || e === "scrollend"), q = ke ? X !== null ? X + "Capture" : null : X;
           ke = [];
-          for (var D = G, $; D !== null; ) {
-            var ae = D;
-            if ($ = ae.stateNode, ae = ae.tag, ae !== 5 && ae !== 26 && ae !== 27 || $ === null || q === null || (ae = vn(D, q), ae != null && ke.push(
-              Jn(D, ae, $)
+          for (var L = G, $; L !== null; ) {
+            var ae = L;
+            if ($ = ae.stateNode, ae = ae.tag, ae !== 5 && ae !== 26 && ae !== 27 || $ === null || q === null || (ae = vn(L, q), ae != null && ke.push(
+              Jn(L, ae, $)
             )), tt) break;
-            D = D.return;
+            L = L.return;
           }
           0 < ke.length && (X = new W(
             X,
@@ -19996,35 +20002,35 @@ Error generating stack: ` + i.message + `
           if (X = e === "mouseover" || e === "pointerover", W = e === "mouseout" || e === "pointerout", X && a !== rs && (ye = a.relatedTarget || a.fromElement) && (Ai(ye) || ye[Ei]))
             break e;
           if ((W || X) && (X = J.window === J ? J : (X = J.ownerDocument) ? X.defaultView || X.parentWindow : window, W ? (ye = a.relatedTarget || a.toElement, W = G, ye = ye ? Ai(ye) : null, ye !== null && (tt = u(ye), ke = ye.tag, ye !== tt || ke !== 5 && ke !== 27 && ke !== 6) && (ye = null)) : (W = null, ye = G), W !== ye)) {
-            if (ke = nd, ae = "onMouseLeave", q = "onMouseEnter", D = "mouse", (e === "pointerout" || e === "pointerover") && (ke = rd, ae = "onPointerLeave", q = "onPointerEnter", D = "pointer"), tt = W == null ? X : yn(W), $ = ye == null ? X : yn(ye), X = new ke(
+            if (ke = nd, ae = "onMouseLeave", q = "onMouseEnter", L = "mouse", (e === "pointerout" || e === "pointerover") && (ke = rd, ae = "onPointerLeave", q = "onPointerEnter", L = "pointer"), tt = W == null ? X : yn(W), $ = ye == null ? X : yn(ye), X = new ke(
               ae,
-              D + "leave",
+              L + "leave",
               W,
               a,
               J
             ), X.target = tt, X.relatedTarget = $, ae = null, Ai(J) === G && (ke = new ke(
               q,
-              D + "enter",
+              L + "enter",
               ye,
               a,
               J
             ), ke.target = $, ke.relatedTarget = tt, ae = ke), tt = ae, W && ye)
               t: {
-                for (ke = Tg, q = W, D = ye, $ = 0, ae = q; ae; ae = ke(ae))
+                for (ke = Tg, q = W, L = ye, $ = 0, ae = q; ae; ae = ke(ae))
                   $++;
                 ae = 0;
-                for (var we = D; we; we = ke(we))
+                for (var we = L; we; we = ke(we))
                   ae++;
                 for (; 0 < $ - ae; )
                   q = ke(q), $--;
                 for (; 0 < ae - $; )
-                  D = ke(D), ae--;
+                  L = ke(L), ae--;
                 for (; $--; ) {
-                  if (q === D || D !== null && q === D.alternate) {
+                  if (q === L || L !== null && q === L.alternate) {
                     ke = q;
                     break t;
                   }
-                  q = ke(q), D = ke(D);
+                  q = ke(q), L = ke(L);
                 }
                 ke = null;
               }
@@ -22215,7 +22221,7 @@ function xh() {
   return d(), dc.exports = vh(), dc.exports;
 }
 var qm = xh();
-const wh = '.react-grid-layout{position:relative;transition:height .2s ease}.react-grid-item{transition:all .2s ease;transition-property:left,top,width,height}.react-grid-item img{pointer-events:none;user-select:none}.react-grid-item.cssTransforms{transition-property:transform,width,height}.react-grid-item.resizing{transition:none;z-index:1;will-change:width,height}.react-grid-item.react-draggable-dragging{transition:none;z-index:3;will-change:transform}.react-grid-item.dropping{visibility:hidden}.react-grid-item.react-grid-placeholder{background:red;opacity:.2;transition-duration:.1s;z-index:2;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none}.react-grid-item.react-grid-placeholder.placeholder-resizing{transition:none}.react-grid-item>.react-resizable-handle{position:absolute;width:20px;height:20px}.react-grid-item>.react-resizable-handle:after{content:"";position:absolute;right:3px;bottom:3px;width:5px;height:5px;border-right:2px solid rgba(0,0,0,.4);border-bottom:2px solid rgba(0,0,0,.4)}.react-resizable-hide>.react-resizable-handle{display:none}.react-grid-item>.react-resizable-handle.react-resizable-handle-sw{bottom:0;left:0;cursor:sw-resize;transform:rotate(90deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-se{bottom:0;right:0;cursor:se-resize}.react-grid-item>.react-resizable-handle.react-resizable-handle-nw{top:0;left:0;cursor:nw-resize;transform:rotate(180deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-ne{top:0;right:0;cursor:ne-resize;transform:rotate(270deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-w,.react-grid-item>.react-resizable-handle.react-resizable-handle-e{top:50%;margin-top:-10px;cursor:ew-resize}.react-grid-item>.react-resizable-handle.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-n,.react-grid-item>.react-resizable-handle.react-resizable-handle-s{left:50%;margin-left:-10px;cursor:ns-resize}.react-grid-item>.react-resizable-handle.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}', Sh = ".react-resizable{position:relative}.react-resizable-handle{position:absolute;width:20px;height:20px;background-repeat:no-repeat;background-origin:content-box;box-sizing:border-box;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMDAwMDAiLz48L2c+PC9zdmc+);background-position:bottom right;padding:0 3px 3px 0}.react-resizable-handle-sw{bottom:0;left:0;cursor:sw-resize;transform:rotate(90deg)}.react-resizable-handle-se{bottom:0;right:0;cursor:se-resize}.react-resizable-handle-nw{top:0;left:0;cursor:nw-resize;transform:rotate(180deg)}.react-resizable-handle-ne{top:0;right:0;cursor:ne-resize;transform:rotate(270deg)}.react-resizable-handle-w,.react-resizable-handle-e{top:50%;margin-top:-10px;cursor:ew-resize}.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-resizable-handle-n,.react-resizable-handle-s{left:50%;margin-left:-10px;cursor:ns-resize}.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}", kh = "#widget-grid.grid{display:block!important;grid-template-columns:none!important;grid-auto-flow:initial!important}.argus-dashboard{min-height:100%}.argus-dashboard__toolbar{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px;padding:12px 16px}.argus-dashboard__toolbar button,.argus-widget__drag-handle,.argus-widget__options summary,.argus-widget__menu button{border:1px solid rgba(255,255,255,.12);border-radius:12px;color:#fff!important;background:#ffffff14;padding:9px 13px}.argus-dashboard__toolbar button:focus-visible,.argus-widget__drag-handle:focus-visible,.argus-widget__options summary:focus-visible,.argus-widget__menu button:focus-visible{outline:3px solid #76b7ff;outline-offset:2px}.argus-dashboard__feedback{min-height:20px;padding:0 18px;color:#b9d9ff;text-align:right;font-size:12px}.argus-dashboard__visibility{display:flex;flex-wrap:wrap;gap:6px}.argus-dashboard-grid .react-grid-item{transition:transform .18s cubic-bezier(.2,.8,.2,1),width .18s cubic-bezier(.2,.8,.2,1),height .18s cubic-bezier(.2,.8,.2,1)}.argus-dashboard-grid .react-grid-item.react-draggable-dragging{z-index:100;opacity:.98;transition:none}.argus-dashboard-grid .react-grid-placeholder{border:2px solid rgb(94 168 255 / 78%);border-radius:24px;background:linear-gradient(135deg,#5ea8ff33,#8468ff1f);box-shadow:inset 0 0 0 1px #ffffff14,0 12px 35px #0000002e}.argus-widget{position:relative;width:100%;height:100%;overflow:visible;border:1px solid var(--v2066-border,rgba(255,255,255,.08))!important;border-radius:24px;background:var(--v2066-glass,rgba(255,255,255,.06))!important;box-shadow:0 14px 34px #0000002e,inset 0 1px #ffffff0f;backdrop-filter:blur(24px) saturate(145%)!important;-webkit-backdrop-filter:blur(24px) saturate(145%)!important}.argus-widget .panel{background:transparent!important;border:none!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}.argus-widget__edit-header{display:none;align-items:center;gap:10px;padding:8px 12px}.argus-dashboard--editing .argus-widget__edit-header{display:flex}.argus-widget__edit-header>strong{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.argus-widget__drag-handle{width:44px;height:40px;cursor:grab;touch-action:none}.argus-widget__options{position:relative}.argus-widget__options summary{display:grid;width:38px;height:38px;box-sizing:border-box;place-items:center;cursor:pointer;list-style:none}.argus-widget__options summary::-webkit-details-marker{display:none}.argus-widget__menu{position:absolute;right:0;top:44px;z-index:140;display:grid;min-width:210px;gap:8px;padding:12px;border:1px solid rgba(255,255,255,.14);border-radius:16px;background:#0f1623f5;box-shadow:0 18px 46px #00000061}.argus-widget__menu>div{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.argus-widget__menu button{padding:7px}.argus-widget__menu button.active{background:#3478d4}.argus-widget__content{height:100%;overflow:visible}.argus-dashboard--editing .argus-widget__content{height:calc(100% - 56px)}.argus-widget__content>.panel{display:block!important;width:100%!important;height:100%!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;box-sizing:border-box!important;grid-column:auto!important;grid-row:auto!important}.argus-dashboard-grid .react-resizable-handle{display:none!important;width:34px;height:34px;right:8px;bottom:8px;border:1px solid rgba(255,255,255,.18);border-radius:10px;background:#131925db}.argus-dashboard--editing .react-resizable-handle{display:block!important}.argus-dashboard--editing .react-resizable-handle:after{width:10px;height:10px;right:9px;bottom:9px;border-color:#9bc7ff}.alarm-configuration-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:16px}@media (max-width:760px){.alarm-configuration-grid{grid-template-columns:minmax(0,1fr)}.argus-dashboard__toolbar{justify-content:stretch}.argus-dashboard__toolbar>button{flex:1}.argus-widget__menu{position:fixed;inset:auto 16px 16px}}@media (prefers-reduced-motion:reduce){.argus-dashboard-grid .react-grid-item,.argus-dashboard-grid .react-resizable-handle{transition:none!important}}";
+const wh = '.react-grid-layout{position:relative;transition:height .2s ease}.react-grid-item{transition:all .2s ease;transition-property:left,top,width,height}.react-grid-item img{pointer-events:none;user-select:none}.react-grid-item.cssTransforms{transition-property:transform,width,height}.react-grid-item.resizing{transition:none;z-index:1;will-change:width,height}.react-grid-item.react-draggable-dragging{transition:none;z-index:3;will-change:transform}.react-grid-item.dropping{visibility:hidden}.react-grid-item.react-grid-placeholder{background:red;opacity:.2;transition-duration:.1s;z-index:2;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none}.react-grid-item.react-grid-placeholder.placeholder-resizing{transition:none}.react-grid-item>.react-resizable-handle{position:absolute;width:20px;height:20px}.react-grid-item>.react-resizable-handle:after{content:"";position:absolute;right:3px;bottom:3px;width:5px;height:5px;border-right:2px solid rgba(0,0,0,.4);border-bottom:2px solid rgba(0,0,0,.4)}.react-resizable-hide>.react-resizable-handle{display:none}.react-grid-item>.react-resizable-handle.react-resizable-handle-sw{bottom:0;left:0;cursor:sw-resize;transform:rotate(90deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-se{bottom:0;right:0;cursor:se-resize}.react-grid-item>.react-resizable-handle.react-resizable-handle-nw{top:0;left:0;cursor:nw-resize;transform:rotate(180deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-ne{top:0;right:0;cursor:ne-resize;transform:rotate(270deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-w,.react-grid-item>.react-resizable-handle.react-resizable-handle-e{top:50%;margin-top:-10px;cursor:ew-resize}.react-grid-item>.react-resizable-handle.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-n,.react-grid-item>.react-resizable-handle.react-resizable-handle-s{left:50%;margin-left:-10px;cursor:ns-resize}.react-grid-item>.react-resizable-handle.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}', Sh = ".react-resizable{position:relative}.react-resizable-handle{position:absolute;width:20px;height:20px;background-repeat:no-repeat;background-origin:content-box;box-sizing:border-box;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMDAwMDAiLz48L2c+PC9zdmc+);background-position:bottom right;padding:0 3px 3px 0}.react-resizable-handle-sw{bottom:0;left:0;cursor:sw-resize;transform:rotate(90deg)}.react-resizable-handle-se{bottom:0;right:0;cursor:se-resize}.react-resizable-handle-nw{top:0;left:0;cursor:nw-resize;transform:rotate(180deg)}.react-resizable-handle-ne{top:0;right:0;cursor:ne-resize;transform:rotate(270deg)}.react-resizable-handle-w,.react-resizable-handle-e{top:50%;margin-top:-10px;cursor:ew-resize}.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-resizable-handle-n,.react-resizable-handle-s{left:50%;margin-left:-10px;cursor:ns-resize}.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}", kh = "#widget-grid.grid{display:block!important;grid-template-columns:none!important;grid-auto-flow:initial!important}.argus-dashboard{min-height:100%}.argus-dashboard__toolbar{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px;padding:12px 16px}.argus-dashboard__toolbar button,.argus-widget__drag-handle,.argus-widget__options summary,.argus-widget__menu button{border:1px solid rgba(255,255,255,.12);border-radius:12px;color:#fff!important;background:#ffffff14;padding:9px 13px}.argus-dashboard__toolbar button:focus-visible,.argus-widget__drag-handle:focus-visible,.argus-widget__options summary:focus-visible,.argus-widget__menu button:focus-visible{outline:3px solid #76b7ff;outline-offset:2px}.argus-dashboard__feedback{min-height:20px;padding:0 18px;color:#b9d9ff;text-align:right;font-size:12px}.argus-dashboard__visibility{display:flex;flex-wrap:wrap;gap:6px}.argus-dashboard-grid .react-grid-item{transition:transform .18s cubic-bezier(.2,.8,.2,1),width .18s cubic-bezier(.2,.8,.2,1),height .18s cubic-bezier(.2,.8,.2,1)}.argus-dashboard-grid .react-grid-item.react-draggable-dragging{z-index:100;opacity:.98;transition:none}.argus-dashboard-grid .react-grid-placeholder{border:2px solid rgb(94 168 255 / 78%);border-radius:24px;background:linear-gradient(135deg,#5ea8ff33,#8468ff1f);box-shadow:inset 0 0 0 1px #ffffff14,0 12px 35px #0000002e}.argus-widget{position:relative;width:100%;height:100%;overflow:visible;border:1px solid var(--v2066-border,rgba(255,255,255,.08))!important;border-radius:24px;background:var(--v2066-glass,rgba(255,255,255,.06))!important;box-shadow:0 14px 34px #0000002e,inset 0 1px #ffffff0f;backdrop-filter:blur(24px) saturate(145%)!important;-webkit-backdrop-filter:blur(24px) saturate(145%)!important}.argus-widget .panel{background:transparent!important;border:none!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}.argus-widget__edit-header{display:none;align-items:center;gap:10px;padding:8px 12px}.argus-dashboard--editing .argus-widget__edit-header{display:flex}.argus-widget__edit-header>strong{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.argus-widget__drag-handle{width:44px;height:40px;cursor:grab;touch-action:none}.argus-widget__options{position:relative}.argus-widget__options summary{display:grid;width:38px;height:38px;box-sizing:border-box;place-items:center;cursor:pointer;list-style:none}.argus-widget__options summary::-webkit-details-marker{display:none}.argus-widget__menu{position:absolute;right:0;top:44px;z-index:140;display:grid;min-width:210px;gap:8px;padding:12px;border:1px solid rgba(255,255,255,.14);border-radius:16px;background:#0f1623f5;box-shadow:0 18px 46px #00000061}.argus-widget__menu>div{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.argus-widget__menu button{padding:7px}.argus-widget__menu button.active{background:#3478d4}.argus-widget__content{height:100%;overflow:visible}.argus-dashboard--editing .argus-widget__content{height:calc(100% - 56px)}.argus-widget__content>.panel{display:block!important;width:100%!important;height:100%!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;box-sizing:border-box!important;grid-column:auto!important;grid-row:auto!important}.argus-widget__content>.panel:has(#hero),.argus-widget__content>.panel:has(.hero),.argus-widget__content>.panel:has(#hero-profile-container),.argus-widget:has(#hero),.argus-widget:has(.hero),.argus-dashboard-grid .react-grid-item:has(#hero),.argus-dashboard-grid .react-grid-item:first-child{overflow:visible!important;z-index:50!important}#profile-dropdown.hero-profile-dropdown{z-index:999999!important;position:absolute!important;top:calc(100% + 12px)!important;right:0!important;max-height:calc(100vh - 120px)!important;overflow-y:auto!important}.argus-dashboard-grid .react-resizable-handle{display:none!important;width:34px;height:34px;right:8px;bottom:8px;border:1px solid rgba(255,255,255,.18);border-radius:10px;background:#131925db}.argus-dashboard--editing .react-resizable-handle{display:block!important}.argus-dashboard--editing .react-resizable-handle:after{width:10px;height:10px;right:9px;bottom:9px;border-color:#9bc7ff}.alarm-configuration-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:16px}@media (max-width:760px){.alarm-configuration-grid{grid-template-columns:minmax(0,1fr)}.argus-dashboard__toolbar{justify-content:stretch}.argus-dashboard__toolbar>button{flex:1}.argus-widget__menu{position:fixed;inset:auto 16px 16px}}@media (prefers-reduced-motion:reduce){.argus-dashboard-grid .react-grid-item,.argus-dashboard-grid .react-resizable-handle{transition:none!important}}";
 var Ze = Lt();
 class G_ extends Ze.Component {
   state = {
@@ -22276,7 +22282,7 @@ function Tc() {
       function g(de, me) {
         return de === me || de !== de && me !== me;
       }
-      var f = "[object Arguments]", S = "[object Boolean]", b = "[object Date]", E = "[object RegExp]", N = "[object Map]", L = "[object Number]", O = "[object Object]", C = "[object Set]", k = "[object String]", y = Object.prototype.toString;
+      var f = "[object Arguments]", S = "[object Boolean]", b = "[object Date]", E = "[object RegExp]", C = "[object Map]", D = "[object Number]", O = "[object Object]", N = "[object Set]", k = "[object String]", y = Object.prototype.toString;
       function v(de) {
         var me = de.areArraysEqual, Oe = de.areDatesEqual, ze = de.areMapsEqual, Re = de.areObjectsEqual, Ke = de.areRegExpsEqual, $e = de.areSetsEqual, ct = de.createIsNestedEqual, M = ct(I);
         function I(j, te, pe) {
@@ -22290,7 +22296,7 @@ function Tc() {
           if (xe || Ee)
             return xe === Ee && me(j, te, M, pe);
           var Te = y.call(j);
-          return Te !== y.call(te) ? !1 : Te === b ? Oe(j, te, M, pe) : Te === E ? Ke(j, te, M, pe) : Te === N ? ze(j, te, M, pe) : Te === C ? $e(j, te, M, pe) : Te === O || Te === f ? m(j) || m(te) ? !1 : Re(j, te, M, pe) : Te === S || Te === L || Te === k ? g(j.valueOf(), te.valueOf()) : !1;
+          return Te !== y.call(te) ? !1 : Te === b ? Oe(j, te, M, pe) : Te === E ? Ke(j, te, M, pe) : Te === C ? ze(j, te, M, pe) : Te === N ? $e(j, te, M, pe) : Te === O || Te === f ? m(j) || m(te) ? !1 : Re(j, te, M, pe) : Te === S || Te === D || Te === k ? g(j.valueOf(), te.valueOf()) : !1;
         }
         return I;
       }
@@ -22440,7 +22446,7 @@ function mn() {
   if (K_) return Ue;
   K_ = 1, Object.defineProperty(Ue, "__esModule", {
     value: !0
-  }), Ue.bottom = g, Ue.childrenEqual = N, Ue.cloneLayout = f, Ue.cloneLayoutItem = E, Ue.collides = O, Ue.compact = C, Ue.compactItem = v, Ue.compactType = Ke, Ue.correctBounds = h, Ue.fastPositionEqual = L, Ue.fastRGLPropsEqual = void 0, Ue.getAllCollisions = z, Ue.getFirstCollision = A, Ue.getLayoutItem = x, Ue.getStatics = P, Ue.modifyLayout = S, Ue.moveElement = U, Ue.moveElementAwayFromCollision = F, Ue.noop = void 0, Ue.perc = ee, Ue.resizeItemInDirection = he, Ue.setTopLeft = Me, Ue.setTransform = Se, Ue.sortLayoutItems = de, Ue.sortLayoutItemsByColRow = Oe, Ue.sortLayoutItemsByRowCol = me, Ue.synchronizeLayoutWithChildren = ze, Ue.validateLayout = Re, Ue.withLayoutItem = b;
+  }), Ue.bottom = g, Ue.childrenEqual = C, Ue.cloneLayout = f, Ue.cloneLayoutItem = E, Ue.collides = O, Ue.compact = N, Ue.compactItem = v, Ue.compactType = Ke, Ue.correctBounds = h, Ue.fastPositionEqual = D, Ue.fastRGLPropsEqual = void 0, Ue.getAllCollisions = z, Ue.getFirstCollision = A, Ue.getLayoutItem = x, Ue.getStatics = P, Ue.modifyLayout = S, Ue.moveElement = U, Ue.moveElementAwayFromCollision = F, Ue.noop = void 0, Ue.perc = ee, Ue.resizeItemInDirection = he, Ue.setTopLeft = Me, Ue.setTransform = Se, Ue.sortLayoutItems = de, Ue.sortLayoutItemsByColRow = Oe, Ue.sortLayoutItemsByRowCol = me, Ue.synchronizeLayoutWithChildren = ze, Ue.validateLayout = Re, Ue.withLayoutItem = b;
   var d = /* @__PURE__ */ Tc(), n = r(Lt());
   function r(M) {
     return M && M.__esModule ? M : { default: M };
@@ -22525,17 +22531,17 @@ function mn() {
       isBounded: M.isBounded
     };
   }
-  function N(M, I) {
+  function C(M, I) {
     return (0, d.deepEqual)(n.default.Children.map(M, (j) => j?.key), n.default.Children.map(I, (j) => j?.key)) && (0, d.deepEqual)(n.default.Children.map(M, (j) => j?.props["data-grid"]), n.default.Children.map(I, (j) => j?.props["data-grid"]));
   }
   Ue.fastRGLPropsEqual = Ah();
-  function L(M, I) {
+  function D(M, I) {
     return M.left === I.left && M.top === I.top && M.width === I.width && M.height === I.height;
   }
   function O(M, I) {
     return !(M.i === I.i || M.x + M.w <= I.x || M.x >= I.x + I.w || M.y + M.h <= I.y || M.y >= I.y + I.h);
   }
-  function C(M, I, j, te) {
+  function N(M, I, j, te) {
     const pe = P(M);
     let xe = g(pe);
     const Ee = de(M, I), Te = Array(M.length);
@@ -22786,7 +22792,7 @@ function mn() {
     const Ee = h(xe, {
       cols: j
     });
-    return pe ? Ee : C(Ee, te, j);
+    return pe ? Ee : N(Ee, te, j);
   }
   function Re(M) {
     let I = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : "Layout";
@@ -22837,21 +22843,21 @@ function Hc() {
   function r(p, m, g, f, S, b) {
     const {
       margin: E,
-      containerPadding: N,
-      rowHeight: L
-    } = p, O = d(p), C = {};
-    return b && b.resizing ? (C.width = Math.round(b.resizing.width), C.height = Math.round(b.resizing.height)) : (C.width = n(f, O, E[0]), C.height = n(S, L, E[1])), b && b.dragging ? (C.top = Math.round(b.dragging.top), C.left = Math.round(b.dragging.left)) : b && b.resizing && typeof b.resizing.top == "number" && typeof b.resizing.left == "number" ? (C.top = Math.round(b.resizing.top), C.left = Math.round(b.resizing.left)) : (C.top = Math.round((L + E[1]) * g + N[1]), C.left = Math.round((O + E[0]) * m + N[0])), C;
+      containerPadding: C,
+      rowHeight: D
+    } = p, O = d(p), N = {};
+    return b && b.resizing ? (N.width = Math.round(b.resizing.width), N.height = Math.round(b.resizing.height)) : (N.width = n(f, O, E[0]), N.height = n(S, D, E[1])), b && b.dragging ? (N.top = Math.round(b.dragging.top), N.left = Math.round(b.dragging.left)) : b && b.resizing && typeof b.resizing.top == "number" && typeof b.resizing.left == "number" ? (N.top = Math.round(b.resizing.top), N.left = Math.round(b.resizing.left)) : (N.top = Math.round((D + E[1]) * g + C[1]), N.left = Math.round((O + E[0]) * m + C[0])), N;
   }
   function o(p, m, g, f, S) {
     const {
       margin: b,
       containerPadding: E,
-      cols: N,
-      rowHeight: L,
+      cols: C,
+      rowHeight: D,
       maxRows: O
-    } = p, C = d(p);
-    let k = Math.round((g - E[0]) / (C + b[0])), y = Math.round((m - E[1]) / (L + b[1]));
-    return k = u(k, 0, N - f), y = u(y, 0, O - S), {
+    } = p, N = d(p);
+    let k = Math.round((g - E[0]) / (N + b[0])), y = Math.round((m - E[1]) / (D + b[1]));
+    return k = u(k, 0, C - f), y = u(y, 0, O - S), {
       x: k,
       y
     };
@@ -22859,12 +22865,12 @@ function Hc() {
   function c(p, m, g, f, S, b) {
     const {
       margin: E,
-      maxRows: N,
-      cols: L,
+      maxRows: C,
+      cols: D,
       rowHeight: O
-    } = p, C = d(p);
-    let k = Math.round((m + E[0]) / (C + E[0])), y = Math.round((g + E[1]) / (O + E[1])), v = u(k, 0, L - f), h = u(y, 0, N - S);
-    return ["sw", "w", "nw"].indexOf(b) !== -1 && (v = u(k, 0, L)), ["nw", "n", "ne"].indexOf(b) !== -1 && (h = u(y, 0, N)), {
+    } = p, N = d(p);
+    let k = Math.round((m + E[0]) / (N + E[0])), y = Math.round((g + E[1]) / (O + E[1])), v = u(k, 0, D - f), h = u(y, 0, C - S);
+    return ["sw", "w", "nw"].indexOf(b) !== -1 && (v = u(k, 0, D)), ["nw", "n", "ne"].indexOf(b) !== -1 && (h = u(y, 0, C)), {
       w: v,
       h
     };
@@ -22957,12 +22963,12 @@ function Ch() {
     DraggableCore: () => st,
     default: () => xt
   }), vc = f(S);
-  var b = g(Lt()), E = g(/* @__PURE__ */ ai()), N = g(Yr()), L = Kr();
+  var b = g(Lt()), E = g(/* @__PURE__ */ ai()), C = g(Yr()), D = Kr();
   function O(T, Y) {
     for (let Z = 0, le = T.length; Z < le; Z++)
       if (Y.apply(Y, [T[Z], Z, T])) return T[Z];
   }
-  function C(T) {
+  function N(T) {
     return typeof T == "function" || Object.prototype.toString.call(T) === "[object Function]";
   }
   function k(T) {
@@ -23004,10 +23010,10 @@ function Ch() {
       "msMatchesSelector",
       "oMatchesSelector"
     ], function(fe) {
-      return C(T[fe]);
+      return N(T[fe]);
     })) != null ? Z : "");
     const le = T[U];
-    return C(le) ? !!le.call(T, Y) : !1;
+    return N(le) ? !!le.call(T, Y) : !1;
   }
   function ee(T, Y, Z) {
     let le = T;
@@ -23520,7 +23526,7 @@ function Ch() {
       var T;
       if ((T = this.props) != null && T.nodeRef)
         return this.props.nodeRef.current;
-      const Y = N.default;
+      const Y = C.default;
       return typeof Y.findDOMNode == "function" ? Y.findDOMNode(this) : null;
     }
     render() {
@@ -23545,7 +23551,7 @@ function Ch() {
         y: Ke(this) && ni ? this.state.y : ia.y
       };
       this.state.isElementSVG ? ii = ue(oi, it) : fn = re(oi, it);
-      const ca = b.Children.only(Z), Wr = (0, L.clsx)(ca.props.className || "", fe, {
+      const ca = b.Children.only(Z), Wr = (0, D.clsx)(ca.props.className || "", fe, {
         [Le]: this.state.dragging,
         [Ne]: this.state.dragged
       });
@@ -23922,10 +23928,10 @@ function jm() {
     return y = E(y), y in k ? Object.defineProperty(k, y, { value: v, enumerable: !0, configurable: !0, writable: !0 }) : k[y] = v, k;
   }
   function E(k) {
-    var y = N(k, "string");
+    var y = C(k, "string");
     return typeof y == "symbol" ? y : String(y);
   }
-  function N(k, y) {
+  function C(k, y) {
     if (typeof k != "object" || k === null) return k;
     var v = k[Symbol.toPrimitive];
     if (v !== void 0) {
@@ -23935,7 +23941,7 @@ function jm() {
     }
     return (y === "string" ? String : Number)(k);
   }
-  function L(k, y) {
+  function D(k, y) {
     k.prototype = Object.create(y.prototype), k.prototype.constructor = k, O(k, y);
   }
   function O(k, y) {
@@ -23943,8 +23949,8 @@ function jm() {
       return h.__proto__ = x, h;
     }, O(k, y);
   }
-  var C = /* @__PURE__ */ function(k) {
-    L(y, k);
+  var N = /* @__PURE__ */ function(k) {
+    D(y, k);
     function y() {
       for (var h, x = arguments.length, A = new Array(x), z = 0; z < x; z++)
         A[z] = arguments[z];
@@ -24032,7 +24038,7 @@ function jm() {
       }));
     }, y;
   }(d.Component);
-  return fo.default = C, C.propTypes = o.resizableProps, C.defaultProps = {
+  return fo.default = N, N.propTypes = o.resizableProps, N.defaultProps = {
     axis: "both",
     handleSize: [20, 20],
     lockAspectRatio: !1,
@@ -24108,10 +24114,10 @@ function Rh() {
     return v = E(v), v in y ? Object.defineProperty(y, v, { value: h, enumerable: !0, configurable: !0, writable: !0 }) : y[v] = h, y;
   }
   function E(y) {
-    var v = N(y, "string");
+    var v = C(y, "string");
     return typeof v == "symbol" ? v : String(v);
   }
-  function N(y, v) {
+  function C(y, v) {
     if (typeof y != "object" || y === null) return y;
     var h = y[Symbol.toPrimitive];
     if (h !== void 0) {
@@ -24121,7 +24127,7 @@ function Rh() {
     }
     return (v === "string" ? String : Number)(y);
   }
-  function L(y, v) {
+  function D(y, v) {
     if (y == null) return {};
     var h = {}, x = Object.keys(y), A, z;
     for (z = 0; z < x.length; z++)
@@ -24129,12 +24135,12 @@ function Rh() {
     return h;
   }
   function O(y, v) {
-    y.prototype = Object.create(v.prototype), y.prototype.constructor = y, C(y, v);
+    y.prototype = Object.create(v.prototype), y.prototype.constructor = y, N(y, v);
   }
-  function C(y, v) {
-    return C = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(x, A) {
+  function N(y, v) {
+    return N = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(x, A) {
       return x.__proto__ = A, x;
-    }, C(y, v);
+    }, N(y, v);
   }
   var k = /* @__PURE__ */ function(y) {
     O(v, y);
@@ -24167,7 +24173,7 @@ function Rh() {
       A.onResize;
       var U = A.onResizeStart, F = A.onResizeStop, ee = A.draggableOpts, oe = A.minConstraints, ce = A.maxConstraints, _e = A.lockAspectRatio, ge = A.axis;
       A.width, A.height;
-      var B = A.resizeHandles, Q = A.style, K = A.transformScale, re = L(A, c);
+      var B = A.resizeHandles, Q = A.style, K = A.transformScale, re = D(A, c);
       return /* @__PURE__ */ d.createElement(r.default, {
         axis: ge,
         draggableOpts: ee,
@@ -24326,46 +24332,46 @@ function Hh() {
     value: !0
   }), po.default = void 0;
   var d = f(Lt()), n = Yr(), r = f(/* @__PURE__ */ ai()), o = Mc(), c = Th(), u = mn(), p = Hc(), m = Um(), g = f(Kr());
-  function f(C) {
-    return C && C.__esModule ? C : { default: C };
+  function f(N) {
+    return N && N.__esModule ? N : { default: N };
   }
-  function S(C, k) {
-    var y = Object.keys(C);
+  function S(N, k) {
+    var y = Object.keys(N);
     if (Object.getOwnPropertySymbols) {
-      var v = Object.getOwnPropertySymbols(C);
+      var v = Object.getOwnPropertySymbols(N);
       k && (v = v.filter(function(h) {
-        return Object.getOwnPropertyDescriptor(C, h).enumerable;
+        return Object.getOwnPropertyDescriptor(N, h).enumerable;
       })), y.push.apply(y, v);
     }
     return y;
   }
-  function b(C) {
+  function b(N) {
     for (var k = 1; k < arguments.length; k++) {
       var y = arguments[k] != null ? arguments[k] : {};
       k % 2 ? S(Object(y), !0).forEach(function(v) {
-        E(C, v, y[v]);
-      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(C, Object.getOwnPropertyDescriptors(y)) : S(Object(y)).forEach(function(v) {
-        Object.defineProperty(C, v, Object.getOwnPropertyDescriptor(y, v));
+        E(N, v, y[v]);
+      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(N, Object.getOwnPropertyDescriptors(y)) : S(Object(y)).forEach(function(v) {
+        Object.defineProperty(N, v, Object.getOwnPropertyDescriptor(y, v));
       });
     }
-    return C;
+    return N;
   }
-  function E(C, k, y) {
-    return (k = N(k)) in C ? Object.defineProperty(C, k, { value: y, enumerable: !0, configurable: !0, writable: !0 }) : C[k] = y, C;
+  function E(N, k, y) {
+    return (k = C(k)) in N ? Object.defineProperty(N, k, { value: y, enumerable: !0, configurable: !0, writable: !0 }) : N[k] = y, N;
   }
-  function N(C) {
-    var k = L(C, "string");
+  function C(N) {
+    var k = D(N, "string");
     return typeof k == "symbol" ? k : k + "";
   }
-  function L(C, k) {
-    if (typeof C != "object" || !C) return C;
-    var y = C[Symbol.toPrimitive];
+  function D(N, k) {
+    if (typeof N != "object" || !N) return N;
+    var y = N[Symbol.toPrimitive];
     if (y !== void 0) {
-      var v = y.call(C, k);
+      var v = y.call(N, k);
       if (typeof v != "object") return v;
       throw new TypeError("@@toPrimitive must return a primitive value.");
     }
-    return (k === "string" ? String : Number)(C);
+    return (k === "string" ? String : Number)(N);
   }
   let O = class extends d.default.Component {
     constructor() {
@@ -24714,25 +24720,25 @@ function Hh() {
     w: r.default.number.isRequired,
     h: r.default.number.isRequired,
     // All optional
-    minW: function(C, k) {
-      const y = C[k];
+    minW: function(N, k) {
+      const y = N[k];
       if (typeof y != "number") return new Error("minWidth not Number");
-      if (y > C.w || y > C.maxW) return new Error("minWidth larger than item width/maxWidth");
+      if (y > N.w || y > N.maxW) return new Error("minWidth larger than item width/maxWidth");
     },
-    maxW: function(C, k) {
-      const y = C[k];
+    maxW: function(N, k) {
+      const y = N[k];
       if (typeof y != "number") return new Error("maxWidth not Number");
-      if (y < C.w || y < C.minW) return new Error("maxWidth smaller than item width/minWidth");
+      if (y < N.w || y < N.minW) return new Error("maxWidth smaller than item width/minWidth");
     },
-    minH: function(C, k) {
-      const y = C[k];
+    minH: function(N, k) {
+      const y = N[k];
       if (typeof y != "number") return new Error("minHeight not Number");
-      if (y > C.h || y > C.maxH) return new Error("minHeight larger than item height/maxHeight");
+      if (y > N.h || y > N.maxH) return new Error("minHeight larger than item height/maxHeight");
     },
-    maxH: function(C, k) {
-      const y = C[k];
+    maxH: function(N, k) {
+      const y = N[k];
       if (typeof y != "number") return new Error("maxHeight not Number");
-      if (y < C.h || y < C.minH) return new Error("maxHeight smaller than item height/minHeight");
+      if (y < N.h || y < N.minH) return new Error("maxHeight smaller than item height/minHeight");
     },
     // ID is nice to have for callbacks
     i: r.default.string.isRequired,
@@ -24826,10 +24832,10 @@ function $m() {
     return (y = E(y)) in k ? Object.defineProperty(k, y, { value: v, enumerable: !0, configurable: !0, writable: !0 }) : k[y] = v, k;
   }
   function E(k) {
-    var y = N(k, "string");
+    var y = C(k, "string");
     return typeof y == "symbol" ? y : y + "";
   }
-  function N(k, y) {
+  function C(k, y) {
     if (typeof k != "object" || !k) return k;
     var v = k[Symbol.toPrimitive];
     if (v !== void 0) {
@@ -24839,13 +24845,13 @@ function $m() {
     }
     return (y === "string" ? String : Number)(k);
   }
-  const L = "react-grid-layout";
+  const D = "react-grid-layout";
   let O = !1;
   try {
     O = /firefox/i.test(navigator.userAgent);
   } catch {
   }
-  let C = class extends d.Component {
+  let N = class extends d.Component {
     constructor() {
       super(...arguments), b(this, "state", {
         activeDrag: null,
@@ -25024,7 +25030,7 @@ function $m() {
       }), b(this, "onDragOver", (y) => {
         var v;
         if (y.preventDefault(), y.stopPropagation(), O && // $FlowIgnore can't figure this out
-        !((v = y.nativeEvent.target) !== null && v !== void 0 && v.classList.contains(L)))
+        !((v = y.nativeEvent.target) !== null && v !== void 0 && v.classList.contains(D)))
           return !1;
         const {
           droppingItem: h,
@@ -25257,7 +25263,7 @@ function $m() {
         style: v,
         isDroppable: h,
         innerRef: x
-      } = this.props, A = (0, r.default)(L, y), z = S({
+      } = this.props, A = (0, r.default)(D, y), z = S({
         height: this.containerHeight()
       }, v);
       return /* @__PURE__ */ d.createElement("div", {
@@ -25271,7 +25277,7 @@ function $m() {
       }, d.Children.map(this.props.children, (P) => this.processGridItem(P)), h && this.state.droppingDOMNode && this.processGridItem(this.state.droppingDOMNode, !0), this.placeholder());
     }
   };
-  return uo.default = C, b(C, "displayName", "ReactGridLayout"), b(C, "propTypes", p.default), b(C, "defaultProps", {
+  return uo.default = N, b(N, "displayName", "ReactGridLayout"), b(N, "propTypes", p.default), b(N, "defaultProps", {
     autoSize: !0,
     cols: 12,
     className: "",
@@ -25335,11 +25341,11 @@ function Gm() {
   function o(u, p, m, g, f, S) {
     if (u[m]) return (0, d.cloneLayout)(u[m]);
     let b = u[g];
-    const E = c(p), N = E.slice(E.indexOf(m));
-    for (let L = 0, O = N.length; L < O; L++) {
-      const C = N[L];
-      if (u[C]) {
-        b = u[C];
+    const E = c(p), C = E.slice(E.indexOf(m));
+    for (let D = 0, O = C.length; D < O; D++) {
+      const N = C[D];
+      if (u[N]) {
+        b = u[N];
         break;
       }
     }
@@ -25416,25 +25422,25 @@ function Mh() {
     }
     return A;
   }
-  function N(h) {
+  function C(h) {
     for (var x = 1; x < arguments.length; x++) {
       var A = arguments[x] != null ? arguments[x] : {};
       x % 2 ? E(Object(A), !0).forEach(function(z) {
-        L(h, z, A[z]);
+        D(h, z, A[z]);
       }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(h, Object.getOwnPropertyDescriptors(A)) : E(Object(A)).forEach(function(z) {
         Object.defineProperty(h, z, Object.getOwnPropertyDescriptor(A, z));
       });
     }
     return h;
   }
-  function L(h, x, A) {
+  function D(h, x, A) {
     return (x = O(x)) in h ? Object.defineProperty(h, x, { value: A, enumerable: !0, configurable: !0, writable: !0 }) : h[x] = A, h;
   }
   function O(h) {
-    var x = C(h, "string");
+    var x = N(h, "string");
     return typeof x == "symbol" ? x : x + "";
   }
-  function C(h, x) {
+  function N(h, x) {
     if (typeof h != "object" || !h) return h;
     var A = h[Symbol.toPrimitive];
     if (A !== void 0) {
@@ -25450,8 +25456,8 @@ function Mh() {
   }
   let v = class extends d.Component {
     constructor() {
-      super(...arguments), L(this, "state", this.generateInitialState()), L(this, "onLayoutChange", (x) => {
-        this.props.onLayoutChange(x, N(N({}, this.props.layouts), {}, {
+      super(...arguments), D(this, "state", this.generateInitialState()), D(this, "onLayoutChange", (x) => {
+        this.props.onLayoutChange(x, C(C({}, this.props.layouts), {}, {
           [this.state.breakpoint]: x
         }));
       });
@@ -25495,7 +25501,7 @@ function Mh() {
         cols: z,
         layouts: P,
         compactType: U
-      } = this.props, F = this.props.breakpoint || (0, c.getBreakpointFromWidth)(this.props.breakpoints, this.props.width), ee = this.state.breakpoint, oe = (0, c.getColsFromBreakpoint)(F, z), ce = N({}, P);
+      } = this.props, F = this.props.breakpoint || (0, c.getBreakpointFromWidth)(this.props.breakpoints, this.props.width), ee = this.state.breakpoint, oe = (0, c.getColsFromBreakpoint)(F, z), ce = C({}, P);
       if (ee !== F || x.breakpoints !== A || x.cols !== z) {
         ee in ce || (ce[ee] = (0, o.cloneLayout)(this.state.layout));
         let B = (0, c.findOrGenerateResponsiveLayout)(ce, A, F, ee, oe, U);
@@ -25530,7 +25536,7 @@ function Mh() {
       }));
     }
   };
-  return bo.default = v, L(v, "propTypes", {
+  return bo.default = v, D(v, "propTypes", {
     //
     // Basic props
     //
@@ -25576,7 +25582,7 @@ function Mh() {
     onLayoutChange: n.default.func,
     // Calls back with (containerWidth, margin, cols, containerPadding)
     onWidthChange: n.default.func
-  }), L(v, "defaultProps", {
+  }), D(v, "defaultProps", {
     breakpoints: {
       lg: 1200,
       md: 996,
@@ -25902,13 +25908,13 @@ function tb() {
   if (pm) return Br;
   pm = 1, Object.defineProperty(Br, "__esModule", {
     value: !0
-  }), Br.default = L;
+  }), Br.default = D;
   var d = p(Lt()), n = u(/* @__PURE__ */ ai()), r = u(eb), o = u(Kr());
   const c = ["measureBeforeMount"];
   function u(O) {
     return O && O.__esModule ? O : { default: O };
   }
-  function p(O, C) {
+  function p(O, N) {
     if (typeof WeakMap == "function") var k = /* @__PURE__ */ new WeakMap(), y = /* @__PURE__ */ new WeakMap();
     return (p = function(v, h) {
       if (!h && v && v.__esModule) return v;
@@ -25920,56 +25926,56 @@ function tb() {
       }
       for (const P in v) P !== "default" && {}.hasOwnProperty.call(v, P) && ((A = (x = Object.defineProperty) && Object.getOwnPropertyDescriptor(v, P)) && (A.get || A.set) ? x(z, P, A) : z[P] = v[P]);
       return z;
-    })(O, C);
+    })(O, N);
   }
   function m() {
     return m = Object.assign ? Object.assign.bind() : function(O) {
-      for (var C = 1; C < arguments.length; C++) {
-        var k = arguments[C];
+      for (var N = 1; N < arguments.length; N++) {
+        var k = arguments[N];
         for (var y in k) ({}).hasOwnProperty.call(k, y) && (O[y] = k[y]);
       }
       return O;
     }, m.apply(null, arguments);
   }
-  function g(O, C) {
+  function g(O, N) {
     if (O == null) return {};
-    var k, y, v = f(O, C);
+    var k, y, v = f(O, N);
     if (Object.getOwnPropertySymbols) {
       var h = Object.getOwnPropertySymbols(O);
-      for (y = 0; y < h.length; y++) k = h[y], C.indexOf(k) === -1 && {}.propertyIsEnumerable.call(O, k) && (v[k] = O[k]);
+      for (y = 0; y < h.length; y++) k = h[y], N.indexOf(k) === -1 && {}.propertyIsEnumerable.call(O, k) && (v[k] = O[k]);
     }
     return v;
   }
-  function f(O, C) {
+  function f(O, N) {
     if (O == null) return {};
     var k = {};
     for (var y in O) if ({}.hasOwnProperty.call(O, y)) {
-      if (C.indexOf(y) !== -1) continue;
+      if (N.indexOf(y) !== -1) continue;
       k[y] = O[y];
     }
     return k;
   }
-  function S(O, C, k) {
-    return (C = b(C)) in O ? Object.defineProperty(O, C, { value: k, enumerable: !0, configurable: !0, writable: !0 }) : O[C] = k, O;
+  function S(O, N, k) {
+    return (N = b(N)) in O ? Object.defineProperty(O, N, { value: k, enumerable: !0, configurable: !0, writable: !0 }) : O[N] = k, O;
   }
   function b(O) {
-    var C = E(O, "string");
-    return typeof C == "symbol" ? C : C + "";
+    var N = E(O, "string");
+    return typeof N == "symbol" ? N : N + "";
   }
-  function E(O, C) {
+  function E(O, N) {
     if (typeof O != "object" || !O) return O;
     var k = O[Symbol.toPrimitive];
     if (k !== void 0) {
-      var y = k.call(O, C);
+      var y = k.call(O, N);
       if (typeof y != "object") return y;
       throw new TypeError("@@toPrimitive must return a primitive value.");
     }
-    return (C === "string" ? String : Number)(O);
+    return (N === "string" ? String : Number)(O);
   }
-  const N = "react-grid-layout";
-  function L(O) {
-    var C;
-    return C = class extends d.Component {
+  const C = "react-grid-layout";
+  function D(O) {
+    var N;
+    return N = class extends d.Component {
       constructor() {
         super(...arguments), S(this, "state", {
           width: 1280
@@ -25997,20 +26003,20 @@ function tb() {
           measureBeforeMount: v
         } = y, h = g(y, c);
         return v && !this.mounted ? /* @__PURE__ */ d.createElement("div", {
-          className: (0, o.default)(this.props.className, N),
+          className: (0, o.default)(this.props.className, C),
           style: this.props.style,
           ref: this.elementRef
         }) : /* @__PURE__ */ d.createElement(O, m({
           innerRef: this.elementRef
         }, h, this.state));
       }
-    }, S(C, "defaultProps", {
+    }, S(N, "defaultProps", {
       measureBeforeMount: !1
-    }), S(C, "propTypes", {
+    }), S(N, "propTypes", {
       // If true, will not render children until mounted. Useful for getting the exact width before
       // rendering, to prevent any unsightly resizing.
       measureBeforeMount: n.default.bool
-    }), C;
+    }), N;
   }
   return Br;
 }
@@ -26120,7 +26126,7 @@ function lb({ widget: d, node: n, editing: r, size: o, onSize: c, onHide: u, onR
   ] });
 }
 function fm({ widgets: d, nodes: n, storage: r, userId: o, dashboardId: c, onEditing: u, registerEditor: p }) {
-  const m = Ze.useMemo(() => Object.fromEntries(d.map((K) => [K.id, K.visible])), [d]), [g, f] = Ze.useState($r), [S, b] = Ze.useState(m), [E, N] = Ze.useState(!1), [L, O] = Ze.useState(!1), [C, k] = Ze.useState("lg"), [y, v] = Ze.useState(""), [, h] = Ze.useState(0), x = Ze.useRef($r), A = Ze.useRef(void 0), z = Ze.useRef(!1), P = Ze.useRef(null), U = (K, re) => {
+  const m = Ze.useMemo(() => Object.fromEntries(d.map((K) => [K.id, K.visible])), [d]), [g, f] = Ze.useState($r), [S, b] = Ze.useState(m), [E, C] = Ze.useState(!1), [D, O] = Ze.useState(!1), [N, k] = Ze.useState("lg"), [y, v] = Ze.useState(""), [, h] = Ze.useState(0), x = Ze.useRef($r), A = Ze.useRef(void 0), z = Ze.useRef(!1), P = Ze.useRef(null), U = (K, re) => {
     if (typeof window._argusT == "function") {
       const ue = window._argusT(K);
       if (ue && ue !== K) return ue;
@@ -26131,7 +26137,7 @@ function fm({ widgets: d, nodes: n, storage: r, userId: o, dashboardId: c, onEdi
     const K = () => h((re) => re + 1);
     return window.addEventListener("argus-lang-changed", K), () => window.removeEventListener("argus-lang-changed", K);
   }, []), Ze.useEffect(() => {
-    p(N);
+    p(C);
   }, [p]), Ze.useEffect(() => {
     let K = !0;
     return O(!1), Promise.all([r.load(o, c), r.loadVisibility?.(o, c)]).then(([re, ue]) => {
@@ -26142,10 +26148,10 @@ function fm({ widgets: d, nodes: n, storage: r, userId: o, dashboardId: c, onEdi
       K = !1;
     };
   }, [r, o, c, m]), Ze.useEffect(() => {
-    u(E), L && z.current && !E && r.save(o, c, x.current), z.current = E;
-  }, [E, L, u, r, o, c]), Ze.useEffect(() => {
+    u(E), D && z.current && !E && r.save(o, c, x.current), z.current = E;
+  }, [E, D, u, r, o, c]), Ze.useEffect(() => {
     const K = (re) => {
-      E && (re.key === "Escape" ? (N(!1), v(U("edit_dashboard_done", "Edición finalizada"))) : re.key === "Enter" && re.target === document.body && N(!1));
+      E && (re.key === "Escape" ? (C(!1), v(U("edit_dashboard_done", "Edición finalizada"))) : re.key === "Enter" && re.target === document.body && C(!1));
     };
     return window.addEventListener("keydown", K), () => window.removeEventListener("keydown", K);
   }, [E]), Ze.useEffect(() => {
@@ -26169,28 +26175,28 @@ function fm({ widgets: d, nodes: n, storage: r, userId: o, dashboardId: c, onEdi
     const ue = { ...S, [K]: re };
     b(ue), r.saveVisibility?.(o, c, ue), v(re ? U("widget_visible", "Widget visible") : U("hide_widget", "Widget oculto"));
   }, oe = (K, re, ue) => {
-    const R = x.current, V = R[C] || [], ne = V.filter((Se) => Se.i !== K), se = Cc(ne, re) ? ob(ne, re, Oa[C]) : re, he = { ...R, [C]: V.map((Se) => Se.i === K ? se : Se) };
+    const R = x.current, V = R[N] || [], ne = V.filter((Se) => Se.i !== K), se = Cc(ne, re) ? ob(ne, re, Oa[N]) : re, he = { ...R, [N]: V.map((Se) => Se.i === K ? se : Se) };
     F(he, !0), v(ue);
   }, ce = (K, re) => {
-    const ue = (x.current[C] || []).find((V) => V.i === K);
+    const ue = (x.current[N] || []).find((V) => V.i === K);
     if (!ue) return;
-    const R = Qm(re, Oa[C]);
-    oe(K, { ...ue, ...R, x: Math.max(0, Math.min(ue.x, Oa[C] - R.w)) }, `${U("size", "Tamaño")} ${re}`);
+    const R = Qm(re, Oa[N]);
+    oe(K, { ...ue, ...R, x: Math.max(0, Math.min(ue.x, Oa[N] - R.w)) }, `${U("size", "Tamaño")} ${re}`);
   }, _e = (K) => {
-    const re = ($r[C] || []).find((ue) => ue.i === K);
+    const re = ($r[N] || []).find((ue) => ue.i === K);
     re && oe(K, { ...re }, U("reset_widget", "Widget restablecido"));
   }, ge = (K, re, ue) => {
-    const R = nb(ue, Oa[C]);
-    oe(ue.i, R, `${U("size", "Tamaño")} ${Nc(R.w, R.h, Oa[C])}`);
+    const R = nb(ue, Oa[N]);
+    oe(ue.i, R, `${U("size", "Tamaño")} ${Nc(R.w, R.h, Oa[N])}`);
   }, B = async () => {
     if (!confirm(U("reset_dashboard_confirm", "¿Restablecer únicamente posiciones, tamaños y visibilidad del tablero?"))) return;
     await r.reset(o, c);
     const K = _n(null);
     b(m), F(K, !0), v(U("reset_dashboard_done", "Diseño predeterminado restaurado"));
-  }, Q = g[C] || [];
-  return L ? /* @__PURE__ */ be.jsxs("section", { className: `argus-dashboard ${E ? "argus-dashboard--editing" : ""}`, ref: P, children: [
+  }, Q = g[N] || [];
+  return D ? /* @__PURE__ */ be.jsxs("section", { className: `argus-dashboard ${E ? "argus-dashboard--editing" : ""}`, ref: P, children: [
     /* @__PURE__ */ be.jsxs("nav", { className: "argus-dashboard__toolbar", "aria-label": U("edit_dashboard", "Edición del tablero"), children: [
-      /* @__PURE__ */ be.jsx("button", { type: "button", onClick: () => N((K) => !K), children: E ? "✓ " + U("edit_dashboard_done", "Listo") : "❖ " + U("edit_dashboard", "Editar tablero") }),
+      /* @__PURE__ */ be.jsx("button", { type: "button", onClick: () => C((K) => !K), children: E ? "✓ " + U("edit_dashboard_done", "Listo") : "❖ " + U("edit_dashboard", "Editar tablero") }),
       E && /* @__PURE__ */ be.jsxs(be.Fragment, { children: [
         /* @__PURE__ */ be.jsx("button", { type: "button", onClick: B, children: U("reset_dashboard", "Restablecer diseño") }),
         /* @__PURE__ */ be.jsx("div", { className: "argus-dashboard__visibility", "aria-label": U("hide_widget", "Widgets ocultos"), children: d.filter((K) => S[K.id] === !1).map((K) => /* @__PURE__ */ be.jsxs("button", { type: "button", onClick: () => ee(K.id, !0), children: [
@@ -26203,14 +26209,14 @@ function fm({ widgets: d, nodes: n, storage: r, userId: o, dashboardId: c, onEdi
     /* @__PURE__ */ be.jsx(G_, { children: /* @__PURE__ */ be.jsx(sb, { className: "argus-dashboard-grid", layouts: g, breakpoints: ib, cols: Oa, rowHeight: 92, margin: [16, 16], containerPadding: [16, 16], compactType: "vertical", preventCollision: !1, allowOverlap: !1, isBounded: !0, isDraggable: E, isResizable: E, draggableHandle: ".argus-widget__drag-handle", resizeHandles: ["se"], onBreakpointChange: (K) => k(K), onLayoutChange: (K, re) => {
       E && (f(re), x.current = re);
     }, onResizeStop: ge, onDragStop: (K, re, ue) => {
-      const R = (x.current[C] || []).filter((V) => V.i !== ue.i);
+      const R = (x.current[N] || []).filter((V) => V.i !== ue.i);
       if (Cc(R, ue)) {
         f({ ...x.current }), v(U("position_collision", "Posición bloqueada por colisión"));
         return;
       }
       oe(ue.i, ue, U("position_saved", "Posición guardada"));
     }, useCSSTransforms: !0, children: d.filter((K) => S[K.id] !== !1 && n.has(K.id)).map((K) => {
-      const re = Q.find((R) => R.i === K.id), ue = re ? Nc(re.w, re.h, Oa[C]) : K.size;
+      const re = Q.find((R) => R.i === K.id), ue = re ? Nc(re.w, re.h, Oa[N]) : K.size;
       return /* @__PURE__ */ be.jsx("div", { children: /* @__PURE__ */ be.jsx(G_, { children: /* @__PURE__ */ be.jsx(lb, { widget: K, node: n.get(K.id), editing: E, size: ue, onSize: (R) => ce(K.id, R), onHide: () => ee(K.id, !1), onReset: () => _e(K.id) }) }) }, K.id);
     }) }) })
   ] }) : /* @__PURE__ */ be.jsx("section", { className: "argus-dashboard", ref: P, children: /* @__PURE__ */ be.jsx("div", { className: "argus-dashboard__feedback", "aria-live": "polite", children: U("loading_dashboard", "Cargando tablero…") }) });
@@ -26233,12 +26239,12 @@ function db({ id: d, name: n, isOpen: r, isBlocking: o, isBypassed: c, battery: 
       textShadow: "0 0 5px rgba(255,82,82,0.5)"
     }, children: v }));
   }
-  const b = c ? "#a1a1aa" : o ? "#ffd700" : r ? "#ff968b" : "#75f4b0", E = c ? "none" : o ? "pulse 1s infinite" : r ? "pulse 2s infinite" : "none", N = c ? "#a1a1aa" : o ? "#ffd700" : r ? "#ff968b" : "#75f4b0", L = c ? 0.6 : 1, O = r ? m : g, C = c ? `${f || "OMITIDO"} · ${O}` : O;
-  return /* @__PURE__ */ be.jsxs("div", { className: `console-sensor ${r && !c ? "open" : ""}`, style: { opacity: L }, children: [
+  const b = c ? "#a1a1aa" : o ? "#ffd700" : r ? "#ff968b" : "#75f4b0", E = c ? "none" : o ? "pulse 1s infinite" : r ? "pulse 2s infinite" : "none", C = c ? "#a1a1aa" : o ? "#ffd700" : r ? "#ff968b" : "#75f4b0", D = c ? 0.6 : 1, O = r ? m : g, N = c ? `${f || "OMITIDO"} · ${O}` : O;
+  return /* @__PURE__ */ be.jsxs("div", { className: `console-sensor ${r && !c ? "open" : ""}`, style: { opacity: D }, children: [
     /* @__PURE__ */ be.jsx("span", { className: "console-sensor-icon", style: { display: "flex", alignItems: "center", justifyContent: "center", color: b, animation: E }, dangerouslySetInnerHTML: { __html: p } }),
     /* @__PURE__ */ be.jsx("span", { className: "console-sensor-name", style: { color: o && !c ? "#ffd700" : "" }, children: n }),
-    /* @__PURE__ */ be.jsxs("span", { className: "console-sensor-state", style: { color: N }, children: [
-      C,
+    /* @__PURE__ */ be.jsxs("span", { className: "console-sensor-state", style: { color: C }, children: [
+      N,
       S
     ] })
   ] });
@@ -26251,13 +26257,13 @@ function ub({ panel: d, isFullscreen: n, onToggleFullscreen: r, onUnlockKiosk: o
   }, [d]);
   const p = d._dashboard, m = d._hass;
   if (!p || !p.entries || p.entries.length === 0) return null;
-  const g = p.entries[0], f = 0, S = d._renderEntryBackground?.(d._weatherState, d._isNight) || "", b = d._renderBatteryAlerts?.(d._activeSensors || []) || "", E = g.entity_id && m?.states[g.entity_id] ? m.states[g.entity_id].state : "unknown", N = (A) => d._t?.(A) || A, L = d._homeName || d._ui?.home_name || N("home_fallback") || "Hogar", O = E === "triggered", C = d._hass ? d._hass.connected !== !1 : !1, k = !!m?.states?.[g.entity_id]?.attributes?.arming_waiting_for_sensors, y = () => {
-    if (O) return N("system_triggered") || "ALARMA ACTIVADA";
+  const g = p.entries[0], f = 0, S = d._renderEntryBackground?.(d._weatherState, d._isNight) || "", b = d._renderBatteryAlerts?.(d._activeSensors || []) || "", E = g.entity_id && m?.states[g.entity_id] ? m.states[g.entity_id].state : "unknown", C = (A) => d._t?.(A) || A, D = d._homeName || d._ui?.home_name || C("home_fallback") || "Hogar", O = E === "triggered", N = d._hass ? d._hass.connected !== !1 : !1, k = !!m?.states?.[g.entity_id]?.attributes?.arming_waiting_for_sensors, y = () => {
+    if (O) return C("system_triggered") || "ALARMA ACTIVADA";
     if (k) {
       const A = m?.states?.[g.entity_id]?.attributes?.arming_blocking_sensors || [];
-      return A.length ? (N("waiting_sensors_count") || "ESPERANDO {count} SENSOR(ES)").replace("{count}", String(A.length)) : N("waiting_sensors") || "ESPERANDO SENSORES";
+      return A.length ? (C("waiting_sensors_count") || "ESPERANDO {count} SENSOR(ES)").replace("{count}", String(A.length)) : C("waiting_sensors") || "ESPERANDO SENSORES";
     }
-    return E === "disarmed" ? N("system_disarmed") || "SISTEMA DESARMADO" : E === "armed_home" ? (N("system_armed") || "ARMADO") + " · " + (N("mode_home") || "CASA") : E === "armed_away" ? (N("system_armed") || "ARMADO") + " · " + (N("mode_away") || "AUSENTE") : E === "armed_night" ? (N("system_armed") || "ARMADO") + " · " + (N("mode_night") || "NOCHE") : E === "armed_vacation" ? (N("system_armed") || "ARMADO") + " · " + (N("mode_vacation") || "VACACIONES") : N("system_armed") || "ARMADO";
+    return E === "disarmed" ? C("system_disarmed") || "SISTEMA DESARMADO" : E === "armed_home" ? (C("system_armed") || "ARMADO") + " · " + (C("mode_home") || "CASA") : E === "armed_away" ? (C("system_armed") || "ARMADO") + " · " + (C("mode_away") || "AUSENTE") : E === "armed_night" ? (C("system_armed") || "ARMADO") + " · " + (C("mode_night") || "NOCHE") : E === "armed_vacation" ? (C("system_armed") || "ARMADO") + " · " + (C("mode_vacation") || "VACACIONES") : C("system_armed") || "ARMADO";
   }, v = () => d._getIntelligentSVG?.(k ? "pending" : E, null, d._isNight, O, f) || "", h = [], x = m?.states?.[g.entity_id]?.attributes?.arming_blocking_sensors || [];
   if (g.entity_id) {
     const A = d._ui?.modes?.__by_entity__?.[g.entity_id] || d._ui?.modes || {};
@@ -26281,32 +26287,32 @@ function ub({ panel: d, isFullscreen: n, onToggleFullscreen: r, onUnlockKiosk: o
       /* @__PURE__ */ be.jsx("div", { dangerouslySetInnerHTML: { __html: S } }),
       d._kioskLocked && !n && /* @__PURE__ */ be.jsxs("button", { className: "btn-unlock-kiosk", onClick: o, style: { position: "absolute", top: "16px", right: "16px", zIndex: 99, padding: "8px 14px", background: "rgba(220,38,38,0.85)", color: "white", border: "none", borderRadius: "10px", fontWeight: 600, fontSize: "13px", cursor: "pointer", backdropFilter: "blur(8px)", boxShadow: "0 4px 12px rgba(0,0,0,0.4)" }, children: [
         "🔓 ",
-        N("unlock_kiosk") || "Desbloquear kiosco"
+        C("unlock_kiosk") || "Desbloquear kiosco"
       ] }),
-      n ? /* @__PURE__ */ be.jsx("button", { className: "ghost entry-exit-fs", onClick: r, title: N("fullscreen_title"), style: { position: "absolute", top: "24px", left: "24px", zIndex: 120, padding: "9px 13px", fontSize: "18px", background: "rgba(0,0,0,.55)", backdropFilter: "blur(12px)", borderRadius: "14px", color: "white", border: "1px solid rgba(255,255,255,.25)", boxShadow: "0 8px 20px rgba(0,0,0,.3)" }, children: "×" }) : /* @__PURE__ */ be.jsx("button", { className: "ghost fs-btn entry-fs", onClick: r, title: N("fullscreen_title"), style: { position: "absolute", bottom: "24px", right: "24px", zIndex: 10, padding: "10px 15px", fontSize: "18px", background: "rgba(0,0,0,0.4)", backdropFilter: "blur(12px)", borderRadius: "14px", opacity: 0.8, color: "white", border: "1px solid rgba(255,255,255,0.2)", boxShadow: "0 8px 20px rgba(0,0,0,0.3)" }, children: "⛶" }),
+      n ? /* @__PURE__ */ be.jsx("button", { className: "ghost entry-exit-fs", onClick: r, title: C("fullscreen_title"), style: { position: "absolute", top: "24px", left: "24px", zIndex: 120, padding: "9px 13px", fontSize: "18px", background: "rgba(0,0,0,.55)", backdropFilter: "blur(12px)", borderRadius: "14px", color: "white", border: "1px solid rgba(255,255,255,.25)", boxShadow: "0 8px 20px rgba(0,0,0,.3)" }, children: "×" }) : /* @__PURE__ */ be.jsx("button", { className: "ghost fs-btn entry-fs", onClick: r, title: C("fullscreen_title"), style: { position: "absolute", bottom: "24px", right: "24px", zIndex: 10, padding: "10px 15px", fontSize: "18px", background: "rgba(0,0,0,0.4)", backdropFilter: "blur(12px)", borderRadius: "14px", opacity: 0.8, color: "white", border: "1px solid rgba(255,255,255,0.2)", boxShadow: "0 8px 20px rgba(0,0,0,0.3)" }, children: "⛶" }),
       /* @__PURE__ */ be.jsx("div", { dangerouslySetInnerHTML: { __html: b } }),
       /* @__PURE__ */ be.jsxs("div", { className: "entry-content security-console", children: [
         /* @__PURE__ */ be.jsxs("div", { className: "console-hud", children: [
           /* @__PURE__ */ be.jsxs("span", { className: "console-hud-loc", children: [
             "🏡 ",
-            L
+            D
           ] }),
-          /* @__PURE__ */ be.jsxs("div", { className: "argus-connection-pill", "data-online": C ? "true" : "false", children: [
+          /* @__PURE__ */ be.jsxs("div", { className: "argus-connection-pill", "data-online": N ? "true" : "false", children: [
             /* @__PURE__ */ be.jsx("i", { className: "argus-connection-dot" }),
-            /* @__PURE__ */ be.jsx("span", { className: "argus-connection-label", children: C ? N("connected") || "CONECTADO" : N("disconnected") || "DESCONECTADO" })
+            /* @__PURE__ */ be.jsx("span", { className: "argus-connection-label", children: N ? C("connected") || "CONECTADO" : C("disconnected") || "DESCONECTADO" })
           ] }),
           /* @__PURE__ */ be.jsx("div", { className: "console-hud-right", children: /* @__PURE__ */ be.jsx("span", { className: `console-system-badge console-system-badge--${O ? "triggered" : E}`, children: y() }) })
         ] }),
         /* @__PURE__ */ be.jsxs("div", { className: "entry-icon", style: { display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", animation: "float-icon 5s ease-in-out infinite" }, children: [
           /* @__PURE__ */ be.jsx("div", { dangerouslySetInnerHTML: { __html: v() } }),
-          k && /* @__PURE__ */ be.jsx("span", { className: "argus-shield-status", children: x.length ? N("waiting_sensors") || "ESPERANDO SENSORES" : N("arming") || "ARMANDO…" })
+          k && /* @__PURE__ */ be.jsx("span", { className: "argus-shield-status", children: x.length ? C("waiting_sensors") || "ESPERANDO SENSORES" : C("arming") || "ARMANDO…" })
         ] }),
         /* @__PURE__ */ be.jsxs("div", { className: "liquid-stack", children: [
-          /* @__PURE__ */ be.jsx("button", { className: `liquid-btn btn-home ${E === "armed_home" ? "active" : ""}`, onClick: () => d._handleAction(f, "home"), dangerouslySetInnerHTML: { __html: d._modeButtonIcon("home") + `<span>${N("mode_home") || "CASA"}</span>` } }),
-          /* @__PURE__ */ be.jsx("button", { className: `liquid-btn btn-away ${E === "armed_away" ? "active" : ""}`, onClick: () => d._handleAction(f, "away"), dangerouslySetInnerHTML: { __html: d._modeButtonIcon("away") + `<span>${N("mode_away") || "AUSENTE"}</span>` } }),
-          /* @__PURE__ */ be.jsx("button", { className: `liquid-btn btn-night ${E === "armed_night" ? "active" : ""}`, onClick: () => d._handleAction(f, "night"), dangerouslySetInnerHTML: { __html: d._modeButtonIcon("night") + `<span>${N("mode_night") || "NOCHE"}</span>` } })
+          /* @__PURE__ */ be.jsx("button", { className: `liquid-btn btn-home ${E === "armed_home" ? "active" : ""}`, onClick: () => d._handleAction(f, "home"), dangerouslySetInnerHTML: { __html: d._modeButtonIcon("home") + `<span>${C("mode_home") || "CASA"}</span>` } }),
+          /* @__PURE__ */ be.jsx("button", { className: `liquid-btn btn-away ${E === "armed_away" ? "active" : ""}`, onClick: () => d._handleAction(f, "away"), dangerouslySetInnerHTML: { __html: d._modeButtonIcon("away") + `<span>${C("mode_away") || "AUSENTE"}</span>` } }),
+          /* @__PURE__ */ be.jsx("button", { className: `liquid-btn btn-night ${E === "armed_night" ? "active" : ""}`, onClick: () => d._handleAction(f, "night"), dangerouslySetInnerHTML: { __html: d._modeButtonIcon("night") + `<span>${C("mode_night") || "NOCHE"}</span>` } })
         ] }),
-        /* @__PURE__ */ be.jsx("div", { className: "console-sensors", children: h.length === 0 ? /* @__PURE__ */ be.jsx("div", { className: "console-empty", children: N("no_sensors_configured") || "Sin sensores configurados" }) : h.map((A) => {
+        /* @__PURE__ */ be.jsx("div", { className: "console-sensors", children: h.length === 0 ? /* @__PURE__ */ be.jsx("div", { className: "console-empty", children: C("no_sensors_configured") || "Sin sensores configurados" }) : h.map((A) => {
           const z = m.states[A.id], P = A.name || z?.attributes?.friendly_name || A.id, U = k && x.includes(A.id), F = d.isSensorActive ? d.isSensorActive(z) : z?.state === "on";
           let ee = null;
           return z?.attributes?.battery_level !== void 0 ? ee = z.attributes.battery_level : z?.attributes?.battery !== void 0 && (ee = z.attributes.battery), /* @__PURE__ */ be.jsx(
@@ -26319,9 +26325,9 @@ function ub({ panel: d, isFullscreen: n, onToggleFullscreen: r, onUnlockKiosk: o
               isBypassed: A.isBypassed,
               battery: ee,
               iconHtml: d._getSensorIcon?.(z, A) || "",
-              statusLabelOpen: N("status_open") || "ABIERTO",
-              statusLabelClosed: N("status_closed") || "CERRADO",
-              bypassedLabel: N("bypassed_sensor") || "OMITIDO"
+              statusLabelOpen: C("status_open") || "ABIERTO",
+              statusLabelClosed: C("status_closed") || "CERRADO",
+              bypassedLabel: C("bypassed_sensor") || "OMITIDO"
             },
             A.id
           );
@@ -26602,36 +26608,36 @@ function bm(d, n, r) {
 }
 function ym(d, n, r, o, c, u, p, m) {
   let f = !1, S = 0, b = 0, E = 0;
-  function N() {
+  function C() {
     return r.getBoundingClientRect().width - 56 - 4 * 2;
   }
-  function L(z) {
-    E = N();
+  function D(z) {
+    E = C();
     const P = Math.max(0, Math.min(z, E));
     c.style.transform = `translateX(${P}px)`, o.style.width = `${P + 60}px`;
     const U = P / E;
     return u.style.opacity = String(Math.max(0, 1 - U * 1.8)), P;
   }
   function O() {
-    c.classList.add("argus-sta-thumb--snap"), L(0), u.style.opacity = "1", setTimeout(() => c.classList.remove("argus-sta-thumb--snap"), 520);
+    c.classList.add("argus-sta-thumb--snap"), D(0), u.style.opacity = "1", setTimeout(() => c.classList.remove("argus-sta-thumb--snap"), 520);
   }
-  function C(z) {
-    p.classList.contains("open") || (f = !0, E = N(), S = z - b, c.style.cursor = "grabbing");
+  function N(z) {
+    p.classList.contains("open") || (f = !0, E = C(), S = z - b, c.style.cursor = "grabbing");
   }
   function k(z) {
-    f && (b = L(z - S));
+    f && (b = D(z - S));
   }
   function y() {
     f && (f = !1, c.style.cursor = "grab", b >= E * 0.8 ? n === "disarm" && gb(d) ? (v(), O()) : (m(), O()) : O(), b = 0);
   }
   c.addEventListener("mousedown", (z) => {
-    z.preventDefault(), C(z.clientX);
+    z.preventDefault(), N(z.clientX);
   }), window.addEventListener("mousemove", (z) => {
     f && k(z.clientX);
   }), window.addEventListener("mouseup", () => {
     f && y();
   }), c.addEventListener("touchstart", (z) => {
-    z.preventDefault(), C(z.touches[0].clientX);
+    z.preventDefault(), N(z.touches[0].clientX);
   }, { passive: !1 }), window.addEventListener("touchmove", (z) => {
     f && (z.preventDefault(), k(z.touches[0].clientX));
   }, { passive: !1 }), window.addEventListener("touchend", () => {
@@ -26678,18 +26684,18 @@ function bb(d, n, r) {
     typeof d._send == "function" && d._send("argus/perform_alarm_action", { action: "disarm", entry_id: A, ...x ? { code: x } : {} }).catch(() => {
     });
   });
-  const { wrap: N, track: L, fill: O, thumb: C, label: k, pin: y } = bm("sos", un(d, "slide_sos"), hm);
-  ym(d, "sos", L, O, C, k, y, () => {
+  const { wrap: C, track: D, fill: O, thumb: N, label: k, pin: y } = bm("sos", un(d, "slide_sos"), hm);
+  ym(d, "sos", D, O, N, k, y, () => {
     const x = d._dashboard?.entries?.[r]?.entry_id || "";
     typeof d._send == "function" && d._send("argus/perform_alarm_action", { action: "sos", entry_id: x }).catch(() => {
     });
   });
   const v = n.querySelector(".liquid-stack");
   if (!v) return;
-  v.querySelectorAll(".btn-disarm, .btn-sos, .argus-disarm-btn").forEach((x) => x.remove()), v.appendChild(m), v.appendChild(N);
+  v.querySelectorAll(".btn-disarm, .btn-sos, .argus-disarm-btn").forEach((x) => x.remove()), v.appendChild(m), v.appendChild(C);
   function h() {
     const x = u(), A = p(), z = x !== "disarmed" && x !== "unavailable";
-    m.classList.toggle("sta-armed", z), b.textContent = un(d, "slide_disarm"), L.classList.toggle("sos-pulsing", A), k.textContent = A ? un(d, "slide_sos_stop") : un(d, "slide_sos"), C.innerHTML = A ? mb : hm;
+    m.classList.toggle("sta-armed", z), b.textContent = un(d, "slide_disarm"), D.classList.toggle("sos-pulsing", A), k.textContent = A ? un(d, "slide_sos_stop") : un(d, "slide_sos"), N.innerHTML = A ? mb : hm;
   }
   h(), n._staRefresh = h;
 }
@@ -27183,8 +27189,8 @@ function Db(d) {
     const b = [...f.querySelectorAll("article.entry")];
     if (!(m || b.length !== S.length || !b.every((O) => O.querySelector(".entry-content")))) {
       let O = !0;
-      for (let C = 0; C < S.length; C++) {
-        const k = S[C], y = this._hass?.states?.[k.entity_id], v = y?.state || k.state || "unavailable", h = y?.attributes || {}, x = !!h.argus_panic_active, A = this._fullscreenIdx === C || !!this._kioskLocked && (this._kioskEntryId === k.entry_id || S.length === 1), z = String(v).replace("armed_", "");
+      for (let N = 0; N < S.length; N++) {
+        const k = S[N], y = this._hass?.states?.[k.entity_id], v = y?.state || k.state || "unavailable", h = y?.attributes || {}, x = !!h.argus_panic_active, A = this._fullscreenIdx === N || !!this._kioskLocked && (this._kioskEntryId === k.entry_id || S.length === 1), z = String(v).replace("armed_", "");
         let P = this._ui?.modes?.__by_entity__?.[k.entity_id]?.[z] || this._ui?.modes?.[z] || {}, U = P.sensors || [];
         if (v === "disarmed" || !U.length) {
           const _e = this._ui?.modes?.__by_entity__?.[k.entity_id] || this._ui?.modes || {}, ge = /* @__PURE__ */ new Set();
@@ -27196,7 +27202,7 @@ function Db(d) {
           const ge = this._hass?.states?.[_e], B = this._getSensorBattery?.(_e, ge) ?? ge?.attributes?.battery_level ?? ge?.attributes?.battery_percentage ?? "";
           return `${_e}:${ge?.state || ""}:${B}`;
         }).join(","), ce = zm(this, k, v, h, oe, x, A);
-        if (this._instanceSignatures.get(C) !== ce) {
+        if (this._instanceSignatures.get(N) !== ce) {
           O = !1;
           break;
         }
@@ -27213,11 +27219,11 @@ function Db(d) {
         return;
       }
     }
-    const N = r?.call(this, m === !0 ? !0 : void 0);
-    return [...f.querySelectorAll("article.entry")].forEach((O, C) => {
-      const k = S[C];
+    const C = r?.call(this, m === !0 ? !0 : void 0);
+    return [...f.querySelectorAll("article.entry")].forEach((O, N) => {
+      const k = S[N];
       if (!k) return;
-      const y = this._hass?.states?.[k.entity_id], v = y?.state || k.state || "unavailable", h = y?.attributes || {}, x = !!h.argus_panic_active, A = this._fullscreenIdx === C || !!this._kioskLocked && (this._kioskEntryId === k.entry_id || S.length === 1), z = String(v).replace("armed_", "");
+      const y = this._hass?.states?.[k.entity_id], v = y?.state || k.state || "unavailable", h = y?.attributes || {}, x = !!h.argus_panic_active, A = this._fullscreenIdx === N || !!this._kioskLocked && (this._kioskEntryId === k.entry_id || S.length === 1), z = String(v).replace("armed_", "");
       let P = this._ui?.modes?.__by_entity__?.[k.entity_id]?.[z] || this._ui?.modes?.[z] || {}, U = P.sensors || [];
       if (v === "disarmed" || !U.length) {
         const _e = this._ui?.modes?.__by_entity__?.[k.entity_id] || this._ui?.modes || {}, ge = /* @__PURE__ */ new Set();
@@ -27229,8 +27235,8 @@ function Db(d) {
         const ge = this._hass?.states?.[_e], B = this._getSensorBattery?.(_e, ge) ?? ge?.attributes?.battery_level ?? ge?.attributes?.battery_percentage ?? "";
         return `${_e}:${ge?.state || ""}:${B}`;
       }).join(","), ce = zm(this, k, v, h, oe, x, A);
-      this._instanceSignatures.set(C, ce), O.dataset.renderSig = ce;
-    }), kc(this, f), ki(this), N;
+      this._instanceSignatures.set(N, ce), O.dataset.renderSig = ce;
+    }), kc(this, f), ki(this), C;
   };
   const c = o?.get, u = o?.set;
   u && Object.defineProperty(n, "hass", {
@@ -27250,9 +27256,9 @@ function Db(d) {
         S(this._ui?.modes);
         const b = g.language !== m.language;
         b && !this._manualLang && this._refreshLocalizedUi?.();
-        const E = this._dashboard.entries.some((v) => v.entity_id && g.states[v.entity_id]?.state !== m.states[v.entity_id]?.state), N = [...f].some(
+        const E = this._dashboard.entries.some((v) => v.entity_id && g.states[v.entity_id]?.state !== m.states[v.entity_id]?.state), C = [...f].some(
           (v) => g.states[v]?.state !== m.states[v]?.state || g.states[v]?.attributes?.battery_level !== m.states[v]?.attributes?.battery_level || g.states[v]?.attributes?.battery_percentage !== m.states[v]?.attributes?.battery_percentage
-        ), L = this._temperatureSource === "auto" ? null : this._temperatureSource, O = L && g.states[L]?.state !== m.states[L]?.state, C = this._weatherSource && this._weatherSource !== "auto" ? this._weatherSource : Object.values(m.states).find((v) => v.entity_id?.startsWith("weather."))?.entity_id, k = C && (g.states[C]?.state !== m.states[C]?.state || g.states[C]?.attributes?.temperature !== m.states[C]?.attributes?.temperature), y = E || N || O || k || b;
+        ), D = this._temperatureSource === "auto" ? null : this._temperatureSource, O = D && g.states[D]?.state !== m.states[D]?.state, N = this._weatherSource && this._weatherSource !== "auto" ? this._weatherSource : Object.values(m.states).find((v) => v.entity_id?.startsWith("weather."))?.entity_id, k = N && (g.states[N]?.state !== m.states[N]?.state || g.states[N]?.attributes?.temperature !== m.states[N]?.attributes?.temperature), y = E || C || O || k || b;
         this._hass = m, this._updateTheme?.(), y ? (this._renderEntries?.(b), this._renderActivityLog?.()) : ki(this);
         return;
       }
@@ -27308,19 +27314,19 @@ function Ac(d) {
     } else
       S?.remove();
     const b = r.querySelector(".liquid-stack");
-    b && Array.from(b.querySelectorAll(".liquid-btn,button")).forEach((L) => {
-      const O = L, C = String(O.textContent || "");
-      if (/SOS|PÁNICO|PANIC|PANIQUE|PÂNICO|PANICO|紧急|ПАНИКА/i.test(C)) Ec(O, "sos", !!u.argus_panic_active);
-      else if (/DESARMAR|DISARM|DESARMADO|DISARMED|DÉSARMER|DÉSARMÉ|OFF|已撤防|СНЯТО/i.test(C)) Ec(O, "disarm", p === "disarmed");
+    b && Array.from(b.querySelectorAll(".liquid-btn,button")).forEach((D) => {
+      const O = D, N = String(O.textContent || "");
+      if (/SOS|PÁNICO|PANIC|PANIQUE|PÂNICO|PANICO|紧急|ПАНИКА/i.test(N)) Ec(O, "sos", !!u.argus_panic_active);
+      else if (/DESARMAR|DISARM|DESARMADO|DISARMED|DÉSARMER|DÉSARMÉ|OFF|已撤防|СНЯТО/i.test(N)) Ec(O, "disarm", p === "disarmed");
       else {
-        const k = Object.entries(Lb).find(([, y]) => y.test(C));
+        const k = Object.entries(Lb).find(([, y]) => y.test(N));
         k && Ec(O, k[0], p === k[0]);
       }
     });
-    const E = new Set((u.triggered_sensors || []).map(String)), N = new Set(m.map((L) => String(d._dashboard?.available_entities?.find((O) => O.entity_id === L)?.name || L).toLocaleLowerCase()));
-    r.querySelectorAll(".console-sensor").forEach((L) => {
-      const O = String(L.querySelector(".console-sensor-name")?.textContent || L.textContent || "").toLocaleLowerCase(), C = Array.from(N).some((y) => O.includes(y) || y.includes(O)), k = Array.from(E).some((y) => O.includes(String(y).toLocaleLowerCase()));
-      L.classList.toggle("argus-blocking", C), L.classList.toggle("argus-triggered-sensor", k);
+    const E = new Set((u.triggered_sensors || []).map(String)), C = new Set(m.map((D) => String(d._dashboard?.available_entities?.find((O) => O.entity_id === D)?.name || D).toLocaleLowerCase()));
+    r.querySelectorAll(".console-sensor").forEach((D) => {
+      const O = String(D.querySelector(".console-sensor-name")?.textContent || D.textContent || "").toLocaleLowerCase(), N = Array.from(C).some((y) => O.includes(y) || y.includes(O)), k = Array.from(E).some((y) => O.includes(String(y).toLocaleLowerCase()));
+      D.classList.toggle("argus-blocking", N), D.classList.toggle("argus-triggered-sensor", k);
     });
   });
 }
