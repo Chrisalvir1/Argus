@@ -17,7 +17,11 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
     // Listen for updates from the panel
     const handler = () => setTick(t => t + 1);
     panel.addEventListener('argus-state-update', handler);
-    return () => panel.removeEventListener('argus-state-update', handler);
+    window.addEventListener('argus-state-update', handler);
+    return () => {
+      panel.removeEventListener('argus-state-update', handler);
+      window.removeEventListener('argus-state-update', handler);
+    };
   }, [panel]);
 
   // Read data directly from the panel instance
@@ -27,11 +31,6 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
 
   const entry = dashboard.entries[0];
   const idx = 0;
-  
-  // Need to port the logic from _renderEntries safely. 
-  // For now, since the logic in _renderEntries is extremely complex 
-  // (weather state, background images, checking sensors, SOS bindings),
-  // we will execute the raw rendering inside React, calling panel methods.
 
   const bgHtml = panel._renderEntryBackground?.(panel._weatherState, panel._isNight) || '';
   const batteryAlerts = panel._renderBatteryAlerts?.(panel._activeSensors || []) || '';
@@ -43,6 +42,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   const triggered = state === 'triggered';
   const isOnline = panel._hass ? panel._hass.connected !== false : false;
   const isWaiting = Boolean(hass?.states?.[entry.entity_id]?.attributes?.arming_waiting_for_sensors);
+  const isPending = state === 'pending' || isWaiting;
   
   const getBadgeText = () => {
     if (triggered) return t('system_triggered') || 'ALARMA ACTIVADA';
@@ -66,10 +66,8 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   if (entry.entity_id) {
     const modes = panel._ui?.modes?.__by_entity__?.[entry.entity_id] || panel._ui?.modes || {};
     
-    // Default to currently active mode if armed
     let eCfg = modes[state.replace('armed_', '')] || {};
     
-    // If triggered, use the mode that was active during trigger if any
     if (triggered) {
       eCfg = ['away', 'home', 'night', 'vacation']
         .map(m => modes[m])
@@ -78,7 +76,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
     }
     
     let sList = eCfg.sensors || [];
-    if (state === 'disarmed' || !sList.length) {
+    if (state === 'disarmed' || isPending || !sList.length) {
       const allSensors = new Set<string>();
       ['away', 'home', 'night', 'vacation'].forEach(m => {
         if (modes[m]?.sensors) {
@@ -93,6 +91,23 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
        activeSensors.push({ id: s, isBypassed: sByps.includes(s) });
     });
   }
+
+  // Sort sensors: in waiting/pending or armed, place blocking & open sensors first
+  const sortedSensors = [...activeSensors].sort((a, b) => {
+    const isBlockingA = isWaiting && blockingSensors.includes(a.id);
+    const isBlockingB = isWaiting && blockingSensors.includes(b.id);
+    if (isBlockingA && !isBlockingB) return -1;
+    if (!isBlockingA && isBlockingB) return 1;
+
+    const isOpenA = panel.isSensorActive ? panel.isSensorActive(hass?.states[a.id]) : hass?.states[a.id]?.state === 'on';
+    const isOpenB = panel.isSensorActive ? panel.isSensorActive(hass?.states[b.id]) : hass?.states[b.id]?.state === 'on';
+    if (isOpenA && !isOpenB) return -1;
+    if (!isOpenA && isOpenB) return 1;
+    return 0;
+  });
+
+  const sensorCount = sortedSensors.length;
+  const gridClass = sensorCount >= 7 ? 'console-sensors--micro' : (sensorCount >= 3 ? 'console-sensors--compact' : '');
   
   return (
     <><style dangerouslySetInnerHTML={{ __html: styles }} /><div className={`entry ${isFullscreen ? 'ios-fullscreen' : ''} ${isWaiting ? 'argus-waiting' : ''}`} style={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -136,11 +151,11 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
           <button className={`liquid-btn btn-night ${state==='armed_night'?'active':''}`} onClick={() => panel._handleAction(idx, 'night')} dangerouslySetInnerHTML={{ __html: panel._modeButtonIcon('night') + `<span>${t('mode_night') || 'NOCHE'}</span>` }} />
         </div>
 
-        <div className="console-sensors">
-          {activeSensors.length === 0 ? (
+        <div className={`console-sensors ${gridClass}`} data-count={sensorCount}>
+          {sortedSensors.length === 0 ? (
             <div className="console-empty">{t('no_sensors_configured') || 'Sin sensores configurados'}</div>
           ) : (
-            activeSensors.map((sensor: any) => {
+            sortedSensors.map((sensor: any) => {
               const sState = hass.states[sensor.id];
               const sName = sensor.name || sState?.attributes?.friendly_name || sensor.id;
               const isBlocking = isWaiting && blockingSensors.includes(sensor.id);

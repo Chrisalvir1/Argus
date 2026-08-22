@@ -5021,7 +5021,7 @@ class ArgusPanel extends HTMLElement {
       // Only re-render setup views if they are visible or if it's the first load
       if (!oldHass) {
         this._renderModeTabs();
-        this._renderModeView();
+        this._renderModeView(); this._renderEntries(); this.dispatchEvent(new CustomEvent("argus-state-update"));
         this._renderAutomations();
         this._renderNotifications();
         if (this._activeAccessSection === 'users') this._renderUsers();
@@ -5164,7 +5164,7 @@ class ArgusPanel extends HTMLElement {
     if (this._instanceSignatures) this._instanceSignatures.clear();
     this._renderEntries();
     this._renderModeTabs();
-    this._renderModeView();
+    this._renderModeView(); this._renderEntries(); this.dispatchEvent(new CustomEvent("argus-state-update"));
     this._renderActivityLog();
     this._renderAutomations();
     this._renderNotifications();
@@ -7771,7 +7771,7 @@ gl_FragColor=vec4(col,alpha);}`;
     tabs.querySelectorAll('[data-mode]').forEach(t => t.addEventListener('click', () => {
       this._mode = t.dataset.mode;
       this._renderModeTabs();
-      this._renderModeView();
+      this._renderModeView(); this._renderEntries(); this.dispatchEvent(new CustomEvent("argus-state-update"));
     }));
 
     const buttons = tabs.querySelectorAll('.tab');
@@ -7865,7 +7865,7 @@ gl_FragColor=vec4(col,alpha);}`;
     } else {
       cfg.entry_sensors = [...list, entityId];
     }
-    this._renderModeView();
+    this._renderModeView(); this._renderEntries(); this.dispatchEvent(new CustomEvent("argus-state-update"));
   }
 
   _renderModeView() {
@@ -7913,34 +7913,24 @@ gl_FragColor=vec4(col,alpha);}`;
             `}
           </div>
 
-          <!-- Card 3: Audible / Visual Signals -->
-          <div class="mode-section-card">
-            <div class="mode-section-title">📢 Señales de Alerta de Auxilio</div>
-            <p class="small" style="margin:4px 0 10px;opacity:0.75">Comportamiento del sistema ante una señal de emergencia SOS.</p>
-            <div style="display:flex;flex-direction:column;gap:8px;">
-              <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.06);font-size:12px;">
-                <span>🚨</span>
-                <span style="font-weight:600;">Disparo inmediato sin tiempo de entrada ni retardo.</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.06);font-size:12px;">
-                <span>💡</span>
-                <span style="font-weight:600;">Encendido general de luces de emergencia configuradas.</span>
-              </div>
+          <!-- Unified Informative Card: Signals, Notifications & Log in Small Compact Card -->
+          <div class="mode-section-card" style="grid-column: 1 / -1; padding: 14px 18px; border-radius: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:4px;">
+              <span style="font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;color:rgba(255,255,255,0.85)">ℹ️ Protocolo Informativo de Auxilio y Difusión</span>
+              <span style="font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:6px;background:rgba(74,222,128,0.12);color:#4ade80">✓ Activo</span>
             </div>
-          </div>
-
-          <!-- Card 4: Broadcast & History -->
-          <div class="mode-section-card">
-            <div class="mode-section-title">🛡️ Notificaciones y Registro</div>
-            <p class="small" style="margin:4px 0 10px;opacity:0.75">Difusión prioritaria a usuarios autorizados y registro de seguridad.</p>
-            <div style="display:flex;flex-direction:column;gap:8px;">
-              <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.06);font-size:12px;">
-                <span>📱</span>
-                <span style="font-weight:600;">Notificación push de alta prioridad con sonido de alerta crítica.</span>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;font-size:11px;">
+              <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:rgba(255,255,255,0.02);border-radius:8px;border:1px solid rgba(255,255,255,0.04)">
+                <span style="font-size:14px">🚨</span>
+                <div><strong style="color:#fff;font-size:11px">Disparo Inmediato:</strong> <span style="opacity:0.7">Sin retardos de salida ni entrada.</span></div>
               </div>
-              <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.06);font-size:12px;">
-                <span>📋</span>
-                <span style="font-weight:600;">Registro criptográfico inmutable en la línea de tiempo de auditoría.</span>
+              <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:rgba(255,255,255,0.02);border-radius:8px;border:1px solid rgba(255,255,255,0.04)">
+                <span style="font-size:14px">📱</span>
+                <div><strong style="color:#fff;font-size:11px">Notificación Push:</strong> <span style="opacity:0.7">Alerta crítica a dispositivos autorizados.</span></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:rgba(255,255,255,0.02);border-radius:8px;border:1px solid rgba(255,255,255,0.04)">
+                <span style="font-size:14px">📋</span>
+                <div><strong style="color:#fff;font-size:11px">Auditoría:</strong> <span style="opacity:0.7">Registro inmutable en el historial.</span></div>
               </div>
             </div>
           </div>
@@ -8054,7 +8044,7 @@ gl_FragColor=vec4(col,alpha);}`;
 
     el.querySelector('#mode-instance-select')?.addEventListener('change', ev => {
       this._modeEntryId = ev.target.value;
-      this._renderModeView();
+      this._renderModeView(); this._renderEntries(); this.dispatchEvent(new CustomEvent("argus-state-update"));
     });
     if (!readonly) {
       el.querySelectorAll('[data-open-selector]').forEach(btn =>
@@ -8122,7 +8112,7 @@ gl_FragColor=vec4(col,alpha);}`;
     const [type, entityId] = value.split(':');
     if (type === 'sos_output' || type === 'panic') {
       this._panicOutputs = (this._panicOutputs || []).filter(v => v !== entityId);
-      this._renderModeView();
+      this._renderModeView(); this._renderEntries(); this.dispatchEvent(new CustomEvent("argus-state-update"));
       return;
     }
     const cfg = this._currentModeConfig();
@@ -8135,7 +8125,7 @@ gl_FragColor=vec4(col,alpha);}`;
     this._ui.modes.__by_entity__ = this._ui.modes.__by_entity__ || {};
     this._ui.modes.__by_entity__[eId] = this._ui.modes.__by_entity__[eId] || {};
     this._ui.modes.__by_entity__[eId][this._mode] = { ...cfg, [key]: (cfg[key] || []).filter(v => v !== entityId) };
-    this._renderModeView();
+    this._renderModeView(); this._renderEntries(); this.dispatchEvent(new CustomEvent("argus-state-update"));
   }
 
   async _saveSosMode() {
@@ -9926,7 +9916,7 @@ gl_FragColor=vec4(col,alpha);}`;
       this._renderSosOutputs();
       this._closeModal();
       if (this._mode === 'sos') {
-        this._renderModeView();
+        this._renderModeView(); this._renderEntries(); this.dispatchEvent(new CustomEvent("argus-state-update"));
       }
       return;
     }
@@ -9951,7 +9941,7 @@ gl_FragColor=vec4(col,alpha);}`;
     // Escribir de vuelta en la ruta canónica
     this._ui.modes.__by_entity__[_eid][this._mode] = cfg;
     this._closeModal();
-    this._renderModeView();
+    this._renderModeView(); this._renderEntries(); this.dispatchEvent(new CustomEvent("argus-state-update"));
   }
 
   /* ── Alarm actions ───────────────────────────────────────────────── */
@@ -9988,7 +9978,7 @@ gl_FragColor=vec4(col,alpha);}`;
 
           // FIX v0.9.32 — Bug 1: al desarmar, forzar re-render inmediato para
           // quitar la clase siren-active/triggered-sensor de todas las píldoras.
-          setTimeout(() => { this._renderModeView(); this._load(); }, 300);
+          setTimeout(() => { this._renderModeView(); this._renderEntries(); this.dispatchEvent(new CustomEvent("argus-state-update")); this._load(); }, 300);
           return true;
         } catch (err) {
           const pinErr = this.shadowRoot.getElementById('pin-error');
@@ -10490,7 +10480,7 @@ gl_FragColor=vec4(col,alpha);}`;
             modal.remove();
             this._renderEntries();
     this._renderModeTabs();
-    this._renderModeView();
+    this._renderModeView(); this._renderEntries(); this.dispatchEvent(new CustomEvent("argus-state-update"));
     this._renderAutomations();
     this._renderNotifications();
     this._updateHeroProfileDisplay();

@@ -323,3 +323,125 @@
 
 @keyframes argusArmingShield { 0%,100%{opacity:.55;transform:scale(.94)} 50%{opacity:1;transform:scale(1.07)} }
 @keyframes argusArmingLabel { 0%,100%{opacity:.62} 50%{opacity:1} }
+
+/* Dynamic Adaptive Sensor Grid with Contained Scrolling */
+.security-console .console-sensors {
+  order: 3;
+  flex: 1 1 280px;
+  max-width: 420px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  max-height: 280px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+.security-console .console-sensors::-webkit-scrollbar {
+  width: 5px;
+}
+.security-console .console-sensors::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+}
+.security-console .console-sensors::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 4px;
+}
+.security-console .console-sensors::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Compact 2-column grid for 3-6 sensors */
+.security-console .console-sensors.console-sensors--compact,
+.security-console .console-sensors[data-count="3"],
+.security-console .console-sensors[data-count="4"],
+.security-console .console-sensors[data-count="5"],
+.security-console .console-sensors[data-count="6"] {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+}
+
+.security-console .console-sensors.console-sensors--compact .console-sensor,
+.security-console .console-sensors[data-count="3"] .console-sensor,
+.security-console .console-sensors[data-count="4"] .console-sensor,
+.security-console .console-sensors[data-count="5"] .console-sensor,
+.security-console .console-sensors[data-count="6"] .console-sensor {
+  padding: 6px 8px !important;
+  border-radius: 12px !important;
+  min-height: 34px !important;
+  gap: 6px !important;
+}
+
+.security-console .console-sensors.console-sensors--compact .console-sensor-name,
+.security-console .console-sensors[data-count="3"] .console-sensor-name,
+.security-console .console-sensors[data-count="4"] .console-sensor-name,
+.security-console .console-sensors[data-count="5"] .console-sensor-name,
+.security-console .console-sensors[data-count="6"] .console-sensor-name {
+  font-size: 10px !important;
+}
+
+/* Micro grid for 7+ sensors */
+.security-console .console-sensors.console-sensors--micro,
+.security-console .console-sensors[data-count="7"],
+.security-console .console-sensors[data-count="8"],
+.security-console .console-sensors[data-count="9"],
+.security-console .console-sensors[data-count="10"],
+.security-console .console-sensors[data-count="11"],
+.security-console .console-sensors[data-count="12"],
+.security-console .console-sensors[data-count="13"],
+.security-console .console-sensors[data-count="14"],
+.security-console .console-sensors[data-count="15"],
+.security-console .console-sensors[data-count="16"] {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 4px !important;
+}
+
+.security-console .console-sensors.console-sensors--micro .console-sensor,
+.security-console .console-sensors[data-count="7"] .console-sensor,
+.security-console .console-sensors[data-count="8"] .console-sensor,
+.security-console .console-sensors[data-count="9"] .console-sensor,
+.security-console .console-sensors[data-count="10"] .console-sensor,
+.security-console .console-sensors[data-count="11"] .console-sensor,
+.security-console .console-sensors[data-count="12"] .console-sensor {
+  padding: 4px 6px !important;
+  border-radius: 10px !important;
+  min-height: 28px !important;
+  gap: 4px !important;
+}
+
+.security-console .console-sensors.console-sensors--micro .console-sensor-name,
+.security-console .console-sensors[data-count="7"] .console-sensor-name,
+.security-console .console-sensors[data-count="8"] .console-sensor-name,
+.security-console .console-sensors[data-count="9"] .console-sensor-name,
+.security-console .console-sensors[data-count="10"] .console-sensor-name,
+.security-console .console-sensors[data-count="11"] .console-sensor-name,
+.security-console .console-sensors[data-count="12"] .console-sensor-name {
+  font-size: 9px !important;
+}
+
+/* Arming Pending Priority Blinking */
+.console-sensor.sensor-arming-blink,
+.console-sensor.argus-blocking {
+  border-color: #ffd60a !important;
+  background: linear-gradient(135deg, rgba(255, 149, 0, 0.38), rgba(255, 96, 0, 0.22)) !important;
+  animation: argusSensorArmBlink 0.9s ease-in-out infinite !important;
+  color: #fff !important;
+}
+
+@keyframes argusSensorArmBlink {
+  0%, 100% {
+    border-color: rgba(255, 159, 10, 0.85);
+    box-shadow: 0 0 10px rgba(255, 159, 10, 0.5), inset 0 0 6px rgba(255, 159, 10, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    border-color: #ffd60a;
+    box-shadow: 0 0 20px 4px rgba(255, 214, 10, 0.85), inset 0 0 12px rgba(255, 214, 10, 0.5);
+    transform: scale(1.02);
+  }
+}
