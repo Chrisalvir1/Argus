@@ -1,4 +1,4 @@
-"""Regression contracts retained and extended for the v2.0.49 HomeKit fix."""
+"""Regression contracts retained and extended for the v2.2.81 HomeKit fix."""
 from pathlib import Path
 import unittest
 

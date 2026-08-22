@@ -39,8 +39,8 @@ const TEXTS = {
   'es': {
     'accept': 'Aceptar',
     'access_control_title': '👥 Control de Acceso y Usuarios',
-    'access_desc': 'Control global de seguridad, PIN maestro y administradores.',
-    'access_pin_lbl': 'PIN de Acceso',
+    'access_desc': 'Control global de seguridad, Pin de Armado y administradores.',
+    'access_pin_lbl': 'Pin perfil Argus',
     'access_title': 'Control de Acceso y Usuarios',
     'action_disarmed': 'Desarmado',
     'action_failed': 'No se pudo realizar la acción',
@@ -103,7 +103,7 @@ const TEXTS = {
     'cannot_arm': 'No se puede armar el sistema',
     'cannot_delete_last_admin': 'No se puede eliminar al único administrador.',
     'change_btn': 'Cambiar',
-    'change_pin': 'Cambiar PIN de Acceso',
+    'change_pin': 'Cambiar Pin perfil Argus',
     'change_profile_picture': 'Cambiar foto en Personas de HA ↗',
     'claim_btn': 'Reclamar Administrador',
     'claim_desc': 'Tu instalación requiere un administrador para obtener acceso.',
@@ -163,7 +163,7 @@ const TEXTS = {
     'first_run_blocked_desc': 'Configuración bloqueada.',
     'first_run_blocked_title': 'Configuración Inicial Requerida',
     'first_run_desc': 'Configura tus credenciales iniciales de seguridad.',
-    'first_run_pin_expl': 'Establece un PIN maestro para controlar el sistema.',
+    'first_run_pin_expl': 'Establece un Pin de Armado para controlar el sistema.',
     'first_run_skip': 'Omitir por ahora',
     'first_run_start': 'Comenzar Configuración',
     'first_run_welcome': '¡Bienvenido a Argus!',
@@ -203,7 +203,7 @@ const TEXTS = {
     'initialization_error_desc': 'No se pudo conectar con el backend autorizado de Home Assistant.',
     'initialization_error_title': 'No se pudo iniciar Argus',
     'instances': 'Panel de Seguridad Argus',
-    'introduce_pin': 'Introduce tu PIN de acceso',
+    'introduce_pin': 'Introduce tu Pin perfil Argus',
     'invalid_config': 'Archivo de configuración no válido.',
     'invalid_pin_msg': 'PIN incorrecto',
     'is_admin': '¿Es Administrador?',
@@ -219,14 +219,14 @@ const TEXTS = {
     'linked_rules': 'Reglas vinculadas a Argus',
     'loading': 'Cargando…',
     'lock_if_open': 'Bloquear si abiertos',
-    'log_action_access_pin_updated': 'PIN de acceso actualizado',
+    'log_action_access_pin_updated': 'Pin perfil Argus actualizado',
     'log_action_analysis': 'Análisis de Seguridad',
     'log_action_automation': 'Automatización Ejecutada',
     'log_action_backup_created': 'Respaldo Creado',
     'log_action_backup_restored': 'Configuración Restaurada',
     'log_action_first_run_completed': 'Configuración inicial completada',
     'log_action_fullscreen_unlocked': 'Pantalla completa desbloqueada',
-    'log_action_master_pin_rejected': 'PIN maestro incorrecto rechazado',
+    'log_action_master_pin_rejected': 'Pin de Armado incorrecto rechazado',
     'log_action_mode_changed': 'Modo Cambiado',
     'log_action_profile_selected': 'Perfil Seleccionado',
     'log_action_rejected': 'Acción Rechazada',
@@ -240,12 +240,12 @@ const TEXTS = {
     'log_action_user_added': 'Usuario Creado',
     'log_action_user_deleted': 'Usuario Eliminado',
     'log_action_user_logged_in': 'Inicio de Sesión',
-    'log_action_verify_access_pin': 'PIN de acceso verificado',
+    'log_action_verify_access_pin': 'Pin perfil Argus verificado',
     'log_armed': 'ARMADO',
     'log_by': 'por',
     'log_detail_armed': 'Sistema armado',
     'log_detail_disarm': 'Sistema desarmado',
-    'log_detail_pin_reset': 'PIN maestro restablecido por admin',
+    'log_detail_pin_reset': 'Pin de Armado restablecido por admin',
     'log_detail_pin_reset_failed': 'Intento de restablecer PIN rechazado',
     'log_detail_triggered': 'Activación automática',
     'log_disarmed': 'DESARMADO',
@@ -256,7 +256,7 @@ const TEXTS = {
     'login_btn': 'Iniciar Sesión',
     'manual_arm': 'Armado manual',
     'manual_disarm': 'Desarmado manual',
-    'master_pin_lbl': 'PIN Maestro',
+    'master_pin_lbl': 'Pin de Armado',
     'modal_add_user': '+ Añadir Usuario',
     'modal_cancel': 'Cancelar',
     'modal_confirm': 'Confirmar',
@@ -264,7 +264,7 @@ const TEXTS = {
     'modal_edit_name': 'Editar Nombre',
     'modal_name_label': 'Nombre del Perfil',
     'modal_pin_help': 'Deja en blanco para no requerir PIN.',
-    'modal_pin_title': 'PIN de Acceso',
+    'modal_pin_title': 'Pin perfil Argus',
     'modal_save': 'Guardar',
     'modal_user_added': 'Usuario creado exitosamente.',
     'mode_away': 'Ausente',
@@ -305,16 +305,16 @@ const TEXTS = {
     'pin_disarm_error': 'PIN incorrecto o error al desarmar',
     'pin_incorrect': 'PIN incorrecto',
     'pin_management': '🔑 Gestión de Pines',
-    'pin_master_title': 'PIN Maestro',
+    'pin_master_title': 'Pin de Armado',
     'pin_mismatch': 'Los PIN no coinciden',
     'pin_modal_desc': 'Ingresa tu PIN de seguridad para continuar.',
     'pin_placeholder': '••••',
-    'pin_remove_hint': 'Deja en blanco para eliminar el PIN maestro.',
+    'pin_remove_hint': 'Deja en blanco para eliminar el Pin de Armado.',
     'pin_reset_admin_only': 'Solo el administrador puede restablecer el PIN.',
     'pin_reset_confirm': '¿Restablecer el PIN?',
     'pin_updated': 'PIN actualizado exitosamente',
     'profile_is_yours': 'Tu Perfil',
-    'profile_needs_pin': 'Este perfil requiere PIN de acceso.',
+    'profile_needs_pin': 'Este perfil requiere Pin perfil Argus.',
     'profile_no_pin_access': 'Acceso libre sin PIN.',
     'remove_btn': 'Eliminar',
     'reset_btn': 'Restablecer a Valores de Fábrica',
@@ -353,9 +353,9 @@ const TEXTS = {
     'sensor_section': 'Sensores de Intrusión',
     'sensors_to_bypass': 'Sensores para omitir',
     'settings': '⚙️ Ajustes',
-    'setup_access_pin': 'PIN de acceso al panel Argus (Opcional)',
+    'setup_access_pin': 'Pin perfil Argus al panel Argus (Opcional)',
     'setup_admin_name': 'Nombre de Administrador',
-    'setup_master_pin': 'PIN maestro para armar/desarmar (Opcional)',
+    'setup_master_pin': 'Pin de Armado para armar/desarmar (Opcional)',
     'setup_required_action': 'Configurar Argus en Integraciones',
     'setup_required_desc': 'Argus está instalado pero aún no se ha creado una instancia.',
     'setup_required_title': 'Configuración de Argus Requerida',
@@ -413,8 +413,8 @@ const TEXTS = {
     'user_default': 'Usuario',
     'user_exp_date': 'Fecha y hora de expiración',
     'user_exp_type': 'Tipo de expiración',
-    'user_no_pin': 'Sin PIN de acceso',
-    'user_pin': 'PIN de Acceso',
+    'user_no_pin': 'Sin Pin perfil Argus',
+    'user_pin': 'Pin perfil Argus',
     'user_pin_action': 'Configurar PIN',
     'user_required': 'Se requieren nombre y PIN.',
     'user_role_action': 'Cambiar Rol',
@@ -435,7 +435,7 @@ const TEXTS = {
     'accept': 'Accept',
     'access_control_title': '👥 Users & Access Control',
     'access_desc': 'Global security management, master PIN and administrators.',
-    'access_pin_lbl': 'Access PIN',
+    'access_pin_lbl': 'Argus Profile PIN',
     'access_title': 'Users & Access Control',
     'action_disarmed': 'Disarmed',
     'action_failed': 'Action could not be executed',
@@ -651,7 +651,7 @@ const TEXTS = {
     'login_btn': 'Log In',
     'manual_arm': 'Manual arming',
     'manual_disarm': 'Manual disarm',
-    'master_pin_lbl': 'Master PIN',
+    'master_pin_lbl': 'Arming PIN',
     'modal_add_user': '+ Add User',
     'modal_cancel': 'Cancel',
     'modal_confirm': 'Confirm',
@@ -830,7 +830,7 @@ const TEXTS = {
     'accept': 'Aceitar',
     'access_control_title': '👥 Usuários e Controle de Acesso',
     'access_desc': 'Gerenciamento de segurança global, PIN mestre e administradores.',
-    'access_pin_lbl': 'PIN de Acesso',
+    'access_pin_lbl': 'Pin perfil Argus',
     'access_title': 'Usuários e Controle de Acesso',
     'action_disarmed': 'Desarmado',
     'action_failed': 'A ação não pôde ser executada',
@@ -1044,7 +1044,7 @@ const TEXTS = {
     'login_btn': 'Conecte-se',
     'manual_arm': 'Armar manualmente',
     'manual_disarm': 'Desarme manual',
-    'master_pin_lbl': 'PIN Mestre',
+    'master_pin_lbl': 'Pin de Arme',
     'modal_add_user': '+ Adicionar usuário',
     'modal_cancel': 'Cancelar',
     'modal_confirm': 'Confirmar',
@@ -1437,7 +1437,7 @@ const TEXTS = {
     'login_btn': '登录',
     'manual_arm': '手动布防',
     'manual_disarm': '手动撤防',
-    'master_pin_lbl': '主 PIN 码',
+    'master_pin_lbl': '布防 PIN',
     'modal_add_user': '+ 添加用户',
     'modal_cancel': '取消',
     'modal_confirm': '确认',
@@ -1830,7 +1830,7 @@ const TEXTS = {
     'login_btn': '登入',
     'manual_arm': '手動布防',
     'manual_disarm': '手動撤防',
-    'master_pin_lbl': '主 PIN 碼',
+    'master_pin_lbl': '布防 PIN',
     'modal_add_user': '+ 新增用戶',
     'modal_cancel': '取消',
     'modal_confirm': '確認',
@@ -2009,7 +2009,7 @@ const TEXTS = {
     'accept': 'Принять',
     'access_control_title': '👥 Пользователи и контроль доступа',
     'access_desc': 'Глобальное управление безопасностью, главный PIN-код и администраторы.',
-    'access_pin_lbl': 'PIN доступа',
+    'access_pin_lbl': 'Pin профиля Argus',
     'access_title': 'Пользователи и контроль доступа',
     'action_disarmed': 'Разоружен',
     'action_failed': 'Действие не может быть выполнено',
@@ -2223,7 +2223,7 @@ const TEXTS = {
     'login_btn': 'Авторизоваться',
     'manual_arm': 'Ручная постановка на охрану',
     'manual_disarm': 'Ручное снятие с охраны',
-    'master_pin_lbl': 'Мастер-PIN',
+    'master_pin_lbl': 'Pin постановки',
     'modal_add_user': '+ Добавить пользователя',
     'modal_cancel': 'Отмена',
     'modal_confirm': 'Подтверждать',
@@ -4331,6 +4331,38 @@ _tmpl.innerHTML = `
   .hero-pills{justify-content:flex-start!important}
 }
   .entry { overflow: hidden; border-radius: 28px; -webkit-mask-image: -webkit-radial-gradient(white, black); }
+
+/* Profile Frosted Glass & Jelly Spring Animation */
+@keyframes jellySpringIn{0%{opacity:0;transform:scale(0.7) translateY(-14px)}45%{opacity:1;transform:scale(1.06) translateY(3px)}70%{transform:scale(0.97) translateY(-1px)}88%{transform:scale(1.01) translateY(1px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes jellySpringOut{0%{opacity:1;transform:scale(1) translateY(0)}35%{opacity:0.95;transform:scale(1.04) translateY(2px)}100%{opacity:0;transform:scale(0.72) translateY(-12px)}}
+@keyframes argusSensorArmBlink{0%,100%{border-color:rgba(255,159,10,0.85);box-shadow:0 0 10px rgba(255,159,10,0.5),inset 0 0 6px rgba(255,159,10,0.3);transform:scale(1)}50%{border-color:#ffd60a;box-shadow:0 0 20px 4px rgba(255,214,10,0.85),inset 0 0 12px rgba(255,214,10,0.5);transform:scale(1.02)}}
+
+.hero-profile-dropdown.opening{display:flex!important;animation:jellySpringIn 0.38s cubic-bezier(0.34,1.56,0.64,1) both!important}
+.hero-profile-dropdown.closing{display:flex!important;animation:jellySpringOut 0.28s cubic-bezier(0.4,0,0.2,1) both!important;pointer-events:none!important}
+
+/* Dynamic sensor grid with contained scrolling */
+.security-console .console-sensors{order:3;flex:1 1 300px;max-width:400px;display:grid;grid-template-columns:1fr;gap:8px;max-height:280px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;padding-right:4px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.25) transparent}
+.security-console .console-sensors.console-sensors--compact,
+.security-console .console-sensors[data-count="3"],
+.security-console .console-sensors[data-count="4"],
+.security-console .console-sensors[data-count="5"],
+.security-console .console-sensors[data-count="6"]{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}
+.security-console .console-sensors.console-sensors--micro,
+.security-console .console-sensors[data-count="7"],
+.security-console .console-sensors[data-count="8"],
+.security-console .console-sensors[data-count="9"],
+.security-console .console-sensors[data-count="10"],
+.security-console .console-sensors[data-count="11"],
+.security-console .console-sensors[data-count="12"]{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:4px!important}
+.console-sensor.sensor-arming-blink,
+.console-sensor.argus-blocking{border-color:#ffd60a!important;background:linear-gradient(135deg,rgba(255,149,0,0.38),rgba(255,96,0,0.22))!important;animation:argusSensorArmBlink 0.9s ease-in-out infinite!important;color:#fff!important}
+
+/* Wide spacious SOS selector */
+.emergency-number-card{transition:all 0.3s ease}
+.sos-configuration #sos-output-chips{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))!important;gap:12px!important;width:100%!important;max-height:none!important;overflow:visible!important}
+.sos-output-row{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;padding:10px 14px!important;background:rgba(255,255,255,0.06)!important;border:1px solid rgba(255,255,255,0.12)!important;border-radius:12px!important;width:100%!important;box-sizing:border-box!important}
+.sos-output-row > .sensor-pill{flex:1!important;min-width:0!important;background:transparent!important;border:none!important;box-shadow:none!important;padding:0!important;font-weight:700!important;font-size:12px!important}
+
 </style>
 
 <!-- Bootstrap UI -->
@@ -4429,6 +4461,28 @@ _tmpl.innerHTML = `
         </div>
 
         <div class="access-workspace" id="access-workspace" style="display:contents">
+          <!-- Unified Informative Widget: SOS signals, notifications & audit logging -->
+          <div class="system-info-compact-card glass-subpanel" style="padding:14px 18px;border-radius:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);margin-bottom:14px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:6px;">
+              <span style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;color:rgba(255,255,255,0.85)">ℹ️ Diagnóstico y Resumen del Sistema</span>
+              <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;background:rgba(74,222,128,0.15);color:#4ade80;border:1px solid rgba(74,222,128,0.3)">✓ Operativo</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;font-size:11px;">
+              <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05)">
+                <span style="font-size:16px">🚨</span>
+                <div><strong style="display:block;color:#fff;font-size:11px">Señales de Auxilio</strong><span style="opacity:0.65;font-size:9.5px">Enlace SOS activo</span></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05)">
+                <span style="font-size:16px">🔔</span>
+                <div><strong style="display:block;color:#fff;font-size:11px">Notificaciones</strong><span style="opacity:0.65;font-size:9.5px">Push operativas</span></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05)">
+                <span style="font-size:16px">📋</span>
+                <div><strong style="display:block;color:#fff;font-size:11px">Registro en Vivo</strong><span style="opacity:0.65;font-size:9.5px">Auditoría continua</span></div>
+              </div>
+            </div>
+          </div>
+
           <!-- Users -->
           <div class="access-section" id="access-users-section">
             <h3 id="h-users"></h3>
@@ -4453,7 +4507,7 @@ _tmpl.innerHTML = `
 
           <!-- Master PIN -->
           <div class="access-section" id="access-pin-section">
-            <h3 id="h-settings-pin">PIN Maestro</h3>
+            <h3 id="h-settings-pin">Pin de Armado</h3>
             <div class="subsection">
               <div id="current-pin-display" style="font-size:13px;font-weight:800;color:#ffffff !important;margin-bottom:15px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);padding:8px 14px;border-radius:10px;display:inline-block"></div>
               <div class="field-group collapsible collapsed" id="group-current-pin" style="margin-bottom: 12px">
@@ -5842,6 +5896,149 @@ class ArgusPanel extends HTMLElement {
       if (!Array.isArray(this._ui.audit_log)) this._ui.audit_log = [];
       this._renderActivityLog();
     }
+  }
+
+  _generateHistoryPDF(events, metadata) {
+    const homeName = metadata.homeName || 'Mi Casa';
+    const generatedAt = metadata.generatedAt || new Date().toLocaleString();
+    const totalEvents = events.length;
+
+    const escapePdfText = (str) => {
+      return String(str || '')
+        .replace(/\\/g, '\\\\')
+        .replace(/\(/g, '\\(')
+        .replace(/\)/g, '\\)')
+        .replace(/[^\x20-\x7E\xA0-\xFF]/g, ' ');
+    };
+
+    const PAGE_WIDTH = 612;
+    const PAGE_HEIGHT = 792;
+    const MARGIN_LEFT = 36;
+    const MARGIN_BOTTOM = 40;
+    const CONTENT_WIDTH = PAGE_WIDTH - MARGIN_LEFT * 2;
+
+    const itemsPerPage = 22;
+    const pagesCount = Math.max(1, Math.ceil(events.length / itemsPerPage));
+
+    const pageObjIds = [];
+    for (let p = 0; p < pagesCount; p++) {
+      pageObjIds.push(5 + p * 2);
+    }
+
+    const pageContents = [];
+    for (let p = 0; p < pagesCount; p++) {
+      const pageEvents = events.slice(p * itemsPerPage, (p + 1) * itemsPerPage);
+      let stream = '';
+
+      // Header bar
+      stream += `q 0.05 0.08 0.15 rg 0 ${PAGE_HEIGHT - 65} ${PAGE_WIDTH} 65 re f Q\n`;
+      stream += `BT /F2 14 Tf 1 1 1 rg ${MARGIN_LEFT} ${PAGE_HEIGHT - 32} Td (ARGUS HOME HUB - HISTORIAL DE ACTIVIDAD) Tj ET\n`;
+      stream += `BT /F1 8.5 Tf 0.7 0.8 0.9 rg ${MARGIN_LEFT} ${PAGE_HEIGHT - 48} Td (${escapePdfText(`Hogar: ${homeName}   |   Generado: ${generatedAt}   |   Total Eventos: ${totalEvents}`)}) Tj ET\n`;
+
+      // Table Header
+      const tableTop = PAGE_HEIGHT - 80;
+      stream += `q 0.12 0.18 0.28 rg ${MARGIN_LEFT} ${tableTop - 18} ${CONTENT_WIDTH} 20 re f Q\n`;
+      stream += `BT /F2 8.5 Tf 1 1 1 rg ${MARGIN_LEFT + 6} ${tableTop - 13} Td (FECHA Y HORA) Tj ET\n`;
+      stream += `BT /F2 8.5 Tf 1 1 1 rg ${MARGIN_LEFT + 130} ${tableTop - 13} Td (ACCION / EVENTO) Tj ET\n`;
+      stream += `BT /F2 8.5 Tf 1 1 1 rg ${MARGIN_LEFT + 255} ${tableTop - 13} Td (ORIGEN / USUARIO) Tj ET\n`;
+      stream += `BT /F2 8.5 Tf 1 1 1 rg ${MARGIN_LEFT + 365} ${tableTop - 13} Td (DETALLE) Tj ET\n`;
+
+      let y = tableTop - 38;
+      for (let i = 0; i < pageEvents.length; i++) {
+        const ev = pageEvents[i];
+        if (i % 2 === 0) {
+          stream += `q 0.96 0.97 0.98 rg ${MARGIN_LEFT} ${y - 4} ${CONTENT_WIDTH} 20 re f Q\n`;
+        }
+        stream += `q 0.88 0.88 0.88 RG 0.5 w ${MARGIN_LEFT} ${y - 4} m ${MARGIN_LEFT + CONTENT_WIDTH} ${y - 4} l S Q\n`;
+
+        const ts = escapePdfText(ev.ts || '-');
+        const action = escapePdfText(ev.action || '-');
+        const user = escapePdfText(ev.user || 'Argus');
+        const detail = escapePdfText(ev.detail || '-');
+
+        stream += `BT /F1 8 Tf 0.15 0.15 0.15 rg ${MARGIN_LEFT + 6} ${y + 2} Td (${ts.slice(0, 24)}) Tj ET\n`;
+        stream += `BT /F2 8 Tf 0.1 0.2 0.4 rg ${MARGIN_LEFT + 130} ${y + 2} Td (${action.slice(0, 22)}) Tj ET\n`;
+        stream += `BT /F1 8 Tf 0.2 0.2 0.2 rg ${MARGIN_LEFT + 255} ${y + 2} Td (${user.slice(0, 20)}) Tj ET\n`;
+        stream += `BT /F1 7.5 Tf 0.3 0.3 0.3 rg ${MARGIN_LEFT + 365} ${y + 2} Td (${detail.slice(0, 35)}) Tj ET\n`;
+
+        y -= 22;
+      }
+
+      // Footer
+      stream += `q 0.8 0.8 0.8 RG 0.5 w ${MARGIN_LEFT} ${MARGIN_BOTTOM} m ${MARGIN_LEFT + CONTENT_WIDTH} ${MARGIN_BOTTOM} l S Q\n`;
+      stream += `BT /F1 7.5 Tf 0.5 0.5 0.5 rg ${MARGIN_LEFT} ${MARGIN_BOTTOM - 12} Td (Argus Home Hub Security System - Documento Oficial de Auditoria) Tj ET\n`;
+      stream += `BT /F1 7.5 Tf 0.5 0.5 0.5 rg ${PAGE_WIDTH - MARGIN_LEFT - 60} ${MARGIN_BOTTOM - 12} Td (${escapePdfText(`Pagina ${p + 1} de ${pagesCount}`)}) Tj ET\n`;
+
+      pageContents.push(stream);
+    }
+
+    const pdfLines = [];
+    const offsets = [];
+    const addObj = (str) => {
+      offsets.push(pdfLines.join('\n').length + (pdfLines.length > 0 ? 1 : 0));
+      pdfLines.push(str);
+    };
+
+    pdfLines.push('%PDF-1.4');
+    addObj(`1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj`);
+    addObj(`2 0 obj\n<< /Type /Pages /Kids [${pageObjIds.map(id => `${id} 0 R`).join(' ')}] /Count ${pagesCount} /MediaBox [0 0 ${PAGE_WIDTH} ${PAGE_HEIGHT}] >>\nendobj`);
+    addObj(`3 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj`);
+    addObj(`4 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>\nendobj`);
+
+    for (let p = 0; p < pagesCount; p++) {
+      const pageObjId = pageObjIds[p];
+      const contentObjId = pageObjId + 1;
+      const stream = pageContents[p];
+      const streamBytes = unescape(encodeURIComponent(stream)).length;
+
+      addObj(`${pageObjId} 0 obj\n<< /Type /Page /Parent 2 0 R /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${contentObjId} 0 R >>\nendobj`);
+      addObj(`${contentObjId} 0 obj\n<< /Length ${streamBytes} >>\nstream\n${stream}endstream\nendobj`);
+    }
+
+    const startxref = pdfLines.join('\n').length + 1;
+    pdfLines.push('xref');
+    pdfLines.push(`0 ${offsets.length + 1}`);
+    pdfLines.push('0000000000 65535 f ');
+    for (let i = 0; i < offsets.length; i++) {
+      pdfLines.push(String(offsets[i]).padStart(10, '0') + ' 00000 n ');
+    }
+    pdfLines.push('trailer');
+    pdfLines.push(`<< /Size ${offsets.length + 1} /Root 1 0 R >>`);
+    pdfLines.push('startxref');
+    pdfLines.push(String(startxref));
+    pdfLines.push('%%EOF');
+
+    return pdfLines.join('\n');
+  }
+
+  _exportHistoryPDF() {
+    const rawEvents = Array.isArray(this._forensicTimeline) && this._forensicTimeline.length ? this._forensicTimeline : (this._ui?.audit_log || []);
+    const events = rawEvents.map(ev => {
+      const action = String(ev.action || '');
+      const rawDetail = String(ev.detail || '');
+      const detail = this._localizeActivityDetail ? this._localizeActivityDetail(action, rawDetail) : rawDetail;
+      const user = String(ev.user || ev.actor || 'Argus');
+      let ts = '';
+      if (ev.ts) {
+        try { ts = new Date(ev.ts).toLocaleString(this._getLocale()); } catch (e) { ts = String(ev.ts); }
+      }
+      return { ts, action, user, detail };
+    });
+
+    const homeName = this._homeName || 'Mi Casa';
+    const now = new Date();
+    const dateStr = now.toISOString().slice(0, 10);
+    const timeStr = now.toTimeString().slice(0, 5).replace(':', '-');
+    const generatedAt = now.toLocaleString(this._getLocale());
+
+    const pdfData = this._generateHistoryPDF(events, { homeName, generatedAt });
+    const blob = new Blob([pdfData], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `argus_historial_${dateStr}_${timeStr}.pdf`;
+    anchor.click();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
   }
 
   _exportForensicTimeline() {
@@ -8252,7 +8449,7 @@ gl_FragColor=vec4(col,alpha);}`;
                   <span class="user-badge" style="opacity:0.85;font-size:10px" title="${this._escapeHtml(this._t('disarm_perm') || this._t('disarmed') || 'Desarmar')}">🔓 ${u.permissions.disarm ? (this._t('disarm_perm') || this._t('disarmed') || 'Desarmar') : '---'}</span>
                   <span class="user-badge" style="opacity:0.85;font-size:10px" title="${this._escapeHtml(this._t('view_history_perm') || this._t('activity_log') || 'Historial')}">📜 ${u.permissions.view_history ? (this._t('view_history_perm') || this._t('activity_log') || 'Historial') : '---'}</span>
                   <span class="user-badge" style="opacity:0.85;font-size:10px;background:rgba(52,199,89,0.12);color:#34c759" title="${this._escapeHtml(this._t('access_pin_lbl') || 'PIN Acceso')}">🔑 ${u.permissions.change_pin ? (this._t('access_pin_lbl') || 'PIN Acceso') : '---'}</span>
-                  <span class="user-badge" style="opacity:0.85;font-size:10px;background:rgba(255,179,0,0.12);color:#ffb300" title="${this._escapeHtml(this._t('master_pin_lbl') || 'PIN Maestro')}">🔑 ${u.permissions.change_master_pin ? (this._t('master_pin_lbl') || 'PIN Maestro') : '---'}</span>
+                  <span class="user-badge" style="opacity:0.85;font-size:10px;background:rgba(255,179,0,0.12);color:#ffb300" title="${this._escapeHtml(this._t('master_pin_lbl') || 'Pin de Armado')}">🔑 ${u.permissions.change_master_pin ? (this._t('master_pin_lbl') || 'Pin de Armado') : '---'}</span>
                 </div>
                 ` : ''}
               </div>
@@ -9261,7 +9458,7 @@ gl_FragColor=vec4(col,alpha);}`;
     if (confirm(this._t('pin_reset_confirm'))) {
       try {
         await this._send('argus/update_master_pin', { pin: '', force_reset: true });
-        const successMsg = '✓ PIN Maestro restablecido';
+        const successMsg = '✓ Pin de Armado restablecido';
         if (status) {
           status.textContent = successMsg;
           status.className = 'status ok';
@@ -9401,11 +9598,11 @@ gl_FragColor=vec4(col,alpha);}`;
             </label>
             <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
               <input type="checkbox" id="chk-perm-change-pin" ${perms.change_pin ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;" />
-              <span style="color:#34c759;font-weight:700;">${this._t('perm_change_pin') || 'Permitir Cambiar su PIN de Acceso'}</span>
+              <span style="color:#34c759;font-weight:700;">${this._t('perm_change_pin') || 'Permitir Cambiar su Pin perfil Argus'}</span>
             </label>
             <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;cursor:pointer;">
               <input type="checkbox" id="chk-perm-change-master-pin" ${perms.change_master_pin ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;" />
-              <span style="color:#ffb300;font-weight:700;">${this._t('perm_change_master_pin') || 'Permitir Cambiar el PIN Maestro'}</span>
+              <span style="color:#ffb300;font-weight:700;">${this._t('perm_change_master_pin') || 'Permitir Cambiar el Pin de Armado'}</span>
             </label>
           </div>
 
@@ -9996,7 +10193,7 @@ gl_FragColor=vec4(col,alpha);}`;
           <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 2px;">
             ${canChangePin ? `
             <div style="display: flex; align-items: center; justify-content: space-between;">
-              <span style="font-size: 11px; opacity: 0.85;">${this._t('access_pin_lbl') || 'PIN de Acceso'}</span>
+              <span style="font-size: 11px; opacity: 0.85;">${this._t('access_pin_lbl') || 'Pin perfil Argus'}</span>
               <div style="display: flex; gap: 4px;">
                 <button id="btn-dropdown-change-access-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase;">${this._t('change_btn') || 'Cambiar'}</button>
                 <button id="btn-dropdown-remove-access-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; color: #ff453a !important;">${this._t('remove_btn') || 'Quitar'}</button>
@@ -10006,7 +10203,7 @@ gl_FragColor=vec4(col,alpha);}`;
             
             ${canChangeMasterPin ? `
             <div style="display: flex; align-items: center; justify-content: space-between;">
-              <span style="font-size: 11px; opacity: 0.85;">${this._t('master_pin_lbl') || 'PIN Maestro'}</span>
+              <span style="font-size: 11px; opacity: 0.85;">${this._t('master_pin_lbl') || 'Pin de Armado'}</span>
               <div style="display: flex; gap: 4px;">
                 <button id="btn-dropdown-change-master-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase;">${this._t('change_btn') || 'Cambiar'}</button>
                 <button id="btn-dropdown-remove-master-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; color: #ff453a !important;">${this._t('remove_btn') || 'Quitar'}</button>
@@ -10372,16 +10569,16 @@ gl_FragColor=vec4(col,alpha);}`;
           <input type="text" id="setup-admin-name" placeholder="Name" value="${this._escapeHtml(defaultName)}" style="margin-bottom:15px;width:100%" />
 
           <p style="font-size:12px;opacity:0.8;margin-bottom:10px;line-height:1.4">
-            ${this._escapeHtml(this._t('first_run_pin_expl') || 'El PIN de acceso abre Argus. El PIN maestro controla el armado y desarmado.')}
+            ${this._escapeHtml(this._t('first_run_pin_expl') || 'El Pin perfil Argus abre Argus. El Pin de Armado controla el armado y desarmado.')}
           </p>
 
-          <label style="display:block;text-align:left;font-size:12px;opacity:0.8;margin-bottom:4px">${this._escapeHtml(this._t('setup_access_pin') || 'PIN de acceso al panel Argus (Opcional)')}</label>
+          <label style="display:block;text-align:left;font-size:12px;opacity:0.8;margin-bottom:4px">${this._escapeHtml(this._t('setup_access_pin') || 'Pin perfil Argus al panel Argus (Opcional)')}</label>
           <div style="display:flex;gap:10px;margin-bottom:15px">
             <input type="password" id="setup-access-pin" placeholder="PIN (4-12)" style="flex:1" />
             <button id="skip-access-pin" class="btn-cancel" style="width:auto;padding:0 12px;font-size:11px">${this._escapeHtml(this._t('first_run_skip') || 'Omitir')}</button>
           </div>
 
-          <label style="display:block;text-align:left;font-size:12px;opacity:0.8;margin-bottom:4px">${this._escapeHtml(this._t('setup_master_pin') || 'PIN maestro para armar/desarmar (Opcional)')}</label>
+          <label style="display:block;text-align:left;font-size:12px;opacity:0.8;margin-bottom:4px">${this._escapeHtml(this._t('setup_master_pin') || 'Pin de Armado para armar/desarmar (Opcional)')}</label>
           <div style="display:flex;gap:10px;margin-bottom:20px">
             <input type="password" id="setup-master-pin" placeholder="PIN (4-12)" style="flex:1" />
             <button id="skip-master-pin" class="btn-cancel" style="width:auto;padding:0 12px;font-size:11px">${this._escapeHtml(this._t('first_run_skip') || 'Omitir')}</button>
