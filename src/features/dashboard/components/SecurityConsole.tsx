@@ -33,7 +33,6 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   const idx = 0;
 
   const bgHtml = panel._renderEntryBackground?.(panel._weatherState, panel._isNight) || '';
-  const batteryAlerts = panel._renderBatteryAlerts?.(panel._activeSensors || []) || '';
 
   // Calculate HUD and State
   const state = entry.entity_id && hass?.states[entry.entity_id] ? hass.states[entry.entity_id].state : 'unknown';
@@ -113,6 +112,10 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   const sensorCount = sortedSensors.length;
   const gridClass = sensorCount >= 7 ? 'console-sensors--micro' : (sensorCount >= 3 ? 'console-sensors--compact' : '');
   
+  // Battery alerts strictly for configured active sensors
+  const modeSensorIds = activeSensors.map(s => s.id);
+  const batteryAlerts = panel._renderBatteryAlerts?.(modeSensorIds) || '';
+
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: styles }} />
@@ -130,7 +133,9 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
           <button className="ghost fs-btn entry-fs" onClick={onToggleFullscreen} title={t('fullscreen_title') || 'Pantalla completa'} style={{position:'absolute',bottom:'20px',right:'20px',zIndex:10,padding:'10px 15px',fontSize:'18px',background:'rgba(0,0,0,0.45)',backdropFilter:'blur(12px)',borderRadius:'14px',opacity:0.85,color:'white',border:'1px solid rgba(255,255,255,0.22)',boxShadow:'0 8px 20px rgba(0,0,0,0.35)',cursor:'pointer'}}>⛶</button>
         )}
 
-        <div dangerouslySetInnerHTML={{ __html: batteryAlerts }} />
+        {batteryAlerts && (
+          <div className="battery-alerts-wrapper" dangerouslySetInnerHTML={{ __html: batteryAlerts }} />
+        )}
 
         <div className="entry-content security-console">
           <div className="console-hud">

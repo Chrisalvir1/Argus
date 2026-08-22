@@ -2540,44 +2540,7 @@ _tmpl.innerHTML = `
     background: radial-gradient(ellipse at 50% 50%, #162438 0%, #08101a 60%, #010408 100%) !important;
   }
 
-  #argus-fullscreen-stage {
-    display: none;
-    position: fixed !important;
-    inset: 0 !important;
-    z-index: 999999999 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    height: 100dvh !important;
-    background: #02050a !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-  }
-  :host(.fullscreen-active) #argus-fullscreen-stage {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-  #argus-fullscreen-stage .entry.ios-fullscreen {
-    position: fixed !important;
-    inset: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    height: 100dvh !important;
-    max-width: none !important;
-    max-height: none !important;
-    aspect-ratio: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    background: radial-gradient(ellipse at 50% 50%, #162438 0%, #08101a 60%, #010408 100%) !important;
-    border: none !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    z-index: 999999999 !important;
-  }
+
 
   .liquid-glass {
     background: linear-gradient(135deg,color-mix(in srgb,rgba(255,255,255,0.18) 80%,transparent),rgba(255,255,255,0.04));
@@ -2980,15 +2943,16 @@ _tmpl.innerHTML = `
   .entry-content{position:relative;z-index:2;flex:1;padding:20px 140px 20px 20px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.2) 0%, transparent 60%)}
   /* The live instance is the console: real controls, real sensors and one
      clear disarm keypad. Decorative dashboard cards never sit above it. */
-  .security-console{display:flex;flex-wrap:wrap;justify-content:space-around;align-items:center;gap:32px;padding:32px 24px 24px;background:linear-gradient(90deg,rgba(3,10,20,.40),rgba(3,10,20,.08) 50%,rgba(3,10,20,.36))}
-  .security-console .entry-icon{order:2;flex:0 0 160px!important;min-height:150px!important;margin:0!important;display:flex;justify-content:center;align-items:center;animation:float-icon 5s ease-in-out infinite}.security-console .entry-icon svg{max-width:150px!important;width:100%}
-  .security-console .liquid-stack{order:1;flex:1 1 280px;max-width:360px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.security-console .liquid-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:68px;text-align:center;padding:10px 4px;font-size:11.5px;font-weight:800;gap:4px;white-space:normal;line-height:1.15;word-break:normal}.security-console .liquid-btn span:last-child{min-width:0;overflow:visible;text-overflow:clip;white-space:normal;text-align:center}.security-console .btn-disarm,.security-console .btn-sos{grid-column:1/-1}
-  .console-sensors{order:3;flex:1 1 300px;max-width:400px;display:grid;gap:14px;align-content:center}.console-sensor{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;padding:13px 16px;border:1px solid rgba(255,255,255,.15);border-radius:18px;background:linear-gradient(100deg,rgba(36,188,129,.22),rgba(10,27,38,.58));backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 8px 22px rgba(0,0,0,.22)}.console-sensor.open{background:linear-gradient(100deg,rgba(235,74,67,.30),rgba(34,14,23,.62));border-color:rgba(255,102,92,.7)}.console-sensor-icon{font-size:20px}.console-sensor-name{font-weight:850;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.console-sensor-state{font-size:11px;font-weight:900;text-transform:uppercase;color:#75f4b0}.console-sensor.open .console-sensor-state{color:#ff968b}.console-empty{padding:24px;text-align:center;border:1px dashed rgba(255,255,255,.22);border-radius:18px;opacity:.75}
-  .console-keypad{flex:1 1 220px;max-width:280px;padding:18px;border:1px solid rgba(255,255,255,.16);border-radius:24px;background:rgba(5,15,30,0.4);backdrop-filter:blur(16px);display:grid;gap:12px}.console-keypad-title{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;text-align:center}.console-keypad-close{position:absolute;top:8px;right:10px;width:28px;height:28px;border:0;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;font-size:20px;line-height:1;cursor:pointer}.console-keypad{position:relative}.console-pin-display{width:100%;box-sizing:border-box;padding:11px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(4,14,26,.46);color:#fff;text-align:center;font-size:20px;letter-spacing:.35em}.console-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;place-items:center}.console-pad button{width:100%;aspect-ratio:1/1;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:linear-gradient(145deg,rgba(165,220,255,.24),rgba(20,45,66,.62));color:#fff;font-size:17px;font-weight:800;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 6px 14px rgba(0,0,0,.25);cursor:pointer;display:flex;align-items:center;justify-content:center}.console-pad .console-enter{border-radius:16px;aspect-ratio:auto;height:100%;color:#7ff8c1;border-color:rgba(74,230,157,.65)}.console-keypad small{text-align:center;opacity:.7}.console-pin-status{min-height:1.2em;margin:0;color:#ffb4ac;opacity:0;transition:opacity .18s ease}.console-pin-status.visible{opacity:1}
-  /* ── Console HUD header (inside the flex layout, not absolute) ──────── */
-  .console-hud{order:0;flex:0 0 100%;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(0,0,0,0.25);border-radius:14px;backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);gap:12px;flex-wrap:wrap}
-  .console-hud-loc{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:1.2px;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .console-hud-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+  .security-console {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  .console-hud {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
 
   /* ── System Status Badge ─────────────────────────────── */
   .console-system-badge {
@@ -3251,112 +3215,11 @@ _tmpl.innerHTML = `
   }
   /* btn-disarm visual is handled by .btn-disarm and .btn-disarm.active above */
 
-  /* ── iOS/Android Fullscreen: cubre pantalla completa sin clipping ── */
-  .ios-fullscreen {
-    position: fixed !important;
-    inset: 0 !important;
-    left: 0 !important;
-    top: 0 !important;
-    width: 100vw !important; height: 100dvh !important;
-    max-width: 100vw !important; max-height: 100dvh !important;
-    min-height: 100dvh !important;
-    margin: 0 !important; border-radius: 0 !important;
-    z-index: 999999 !important;
-    display: flex !important; flex-direction: column !important;
-    background: #000 !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-    /* Notch / home-indicator safe areas (iOS/Android) */
-    padding-top: env(safe-area-inset-top, 0px) !important;
-    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
-    padding-left: env(safe-area-inset-left, 0px) !important;
-    padding-right: env(safe-area-inset-right, 0px) !important;
+  .entry-content {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
   }
-  @media(min-width:900px) {
-    .ios-fullscreen {
-      /* Remove floating modal override so it is truly fullscreen on iPad/Tablet */
-      inset: 0 !important;
-      left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important;
-      width: 100vw !important; height: 100vh !important;
-      max-width: 100vw !important;
-      margin: 0 !important; border-radius: 0 !important;
-      border: 1px solid rgba(255,255,255,0.12) !important;
-      box-shadow: 0 40px 100px rgba(0,0,0,0.8) !important;
-      overflow: hidden !important;
-      -webkit-mask-image: -webkit-radial-gradient(white, black) !important;
-      padding: 0 !important;
-    }
-  }
-  .ios-fullscreen .entry-content { grid-template-columns: 320px 1fr !important; padding: 60px !important; gap: 60px !important; height: auto !important; align-items: center !important; background: radial-gradient(circle at 20% 50%, rgba(0,0,0,0.5) 0%, transparent 80%) !important; }
-  .ios-fullscreen .liquid-btn { padding: 16px 20px !important; font-size: 16px !important; border-radius: 20px !important; gap: 12px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.4) !important; }
-  .ios-fullscreen .liquid-btn i { font-size: 24px !important; }
-  .ios-fullscreen .hud { top: 60px !important; right: 60px !important; scale: 1.4; transform-origin: top right; }
-  .ios-fullscreen .sensor-column { max-width: 45% !important; padding-right: 60px !important; }
-  .ios-fullscreen .sensor-chip { font-size: 14px !important; padding: 10px 16px !important; max-width: 260px !important; }
-
-  .entry-icon{display:flex;justify-content:center;align-items:center;perspective:1000px;min-height:160px}
-  .entry-icon svg{width:100%;height:auto;max-width:280px;filter:drop-shadow(0 0 25px rgba(255,255,255,0.12));animation:float-icon 5s ease-in-out infinite;transition:max-width 0.4s ease}
-  .ios-fullscreen .entry-icon svg{max-width:650px;filter:drop-shadow(0 0 60px rgba(255,255,255,0.3))}
-  @keyframes float-icon{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-12px) rotate(1deg)}}
-
-  /* Phone layout: controls must never sit below the HUD or be hidden behind
-     the artwork. Sensor status becomes a readable section beneath the modes. */
-  @media(max-width:700px){
-    .hero-context{width:100%;margin:6px 0 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}.hero-clock{align-items:center;justify-content:center;text-align:center;border-right:0;padding-right:0}.hero-clock strong{font-size:1.35rem;text-align:center}.hero-clock span{text-align:center}.hero-pills{justify-content:center}.hero-pill{padding:6px 8px;font-size:9px}
-    .entry{min-height:0;border-radius:24px}
-    .instance-activity-strip{grid-template-columns:1fr;gap:5px;margin-bottom:12px;padding:10px}.instance-activity-item:nth-of-type(n+3){display:none}
-    .entry-status-ribbon{top:58px;left:14px;max-width:calc(100% - 28px);padding:6px 9px}.entry-status-name{font-size:11px}.entry-status-event{display:none}
-    .entry-content{display:grid;grid-template-columns:minmax(0,1fr);padding:78px 14px 76px;gap:14px;align-items:start;background:linear-gradient(180deg,rgba(0,0,0,.32),rgba(0,0,0,.10) 45%,rgba(0,0,0,.28))}
-    .liquid-stack{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%}
-    .liquid-btn{min-height:52px;padding:10px 11px;justify-content:center;text-align:center;font-size:12px;line-height:1.1;letter-spacing:.25px;border-radius:16px}
-    .liquid-stack .btn-disarm,.liquid-stack .btn-sos{grid-column:1/-1}
-    .liquid-stack .btn-sos{min-height:58px;margin-top:2px}
-    .entry-icon{display:none}
-    .hud{top:12px;left:14px;right:14px;display:flex;flex-direction:row;align-items:flex-start;justify-content:space-between;gap:8px;text-align:left}
-    .hud-loc{align-self:auto;max-width:58%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;letter-spacing:1px;padding:6px 9px}
-    .hud-data{align-self:auto;font-size:15px;padding:5px 9px;gap:5px}
-    .hud-data i{font-size:11px}
-    .hud-temperatures{justify-content:flex-start;position:absolute;top:42px;left:0}
-    .hud-temperature{font-size:9px;padding:3px 6px}
-    .weather-eclipse{left:14px;bottom:14px;padding:5px 7px;font-size:8px}
-    .sensor-column{position:static;grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;width:auto;padding:0;overflow:visible;pointer-events:auto;align-items:stretch}
-    .sensor-chip{max-width:none;min-width:0;padding:8px 9px;font-size:10px;border-radius:13px}
-    .entry-fs{bottom:14px!important;right:14px!important;padding:8px 11px!important;font-size:15px!important}
-  }
-
-  /* Fullscreen on phones has its own compact layouts for both orientations. */
-  /* dvh handled in base .ios-fullscreen rule */
-  @media(max-width:700px) and (orientation:portrait){
-    .ios-fullscreen .entry-content{grid-template-columns:minmax(0,1fr)!important;padding:76px 16px 22px!important;gap:14px!important;overflow-y:auto!important;align-content:start!important}
-    .ios-fullscreen .liquid-stack{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:9px!important}
-    .ios-fullscreen .liquid-btn{min-height:50px!important;padding:10px!important;font-size:12px!important;border-radius:16px!important;gap:6px!important}
-    .ios-fullscreen .liquid-stack .btn-disarm,.ios-fullscreen .liquid-stack .btn-sos{grid-column:1/-1}
-
-    .ios-fullscreen .entry-icon{display:none!important}
-    .ios-fullscreen .sensor-column{position:static!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;width:auto!important;padding:0!important;gap:8px!important}
-    .ios-fullscreen .sensor-chip{max-width:none!important;padding:8px 9px!important;font-size:10px!important}
-    .ios-fullscreen .hud{top:12px!important;left:16px!important;right:16px!important;scale:1!important;transform:none!important}
-  }
-  @media(max-width:900px) and (orientation:landscape){
-    .ios-fullscreen .entry-content{grid-template-columns:minmax(210px,34vw) minmax(0,1fr)!important;padding:54px 22px 18px!important;gap:20px!important;align-items:center!important}
-    .ios-fullscreen .liquid-stack{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important}
-    .ios-fullscreen .liquid-btn{min-height:42px!important;padding:8px!important;font-size:11px!important;border-radius:14px!important;gap:5px!important}
-    .ios-fullscreen .liquid-stack .btn-disarm,.ios-fullscreen .liquid-stack .btn-sos{grid-column:1/-1}
-    .ios-fullscreen .liquid-stack .btn-sos{min-height:46px!important}
-    .ios-fullscreen .entry-icon svg{max-width:min(42vw,300px)!important}
-    .ios-fullscreen .hud{top:10px!important;right:18px!important;scale:1!important}
-    .ios-fullscreen .sensor-column{max-width: 40% !important;padding-right:16px!important;gap:5px!important}
-    .ios-fullscreen .sensor-chip{max-width:180px!important;padding:6px 8px!important;font-size:10px!important}
-  }
-  /* The active console owns its fullscreen layout. Legacy entry grid rules
-     must not redistribute the controls into empty corners. */
-  /* Fullscreen security-console: modos izquierda, escudo centro, sensores derecha */
-  .ios-fullscreen .entry-content.security-console{display:flex!important;flex-wrap:nowrap!important;justify-content:center!important;align-items:center!important;gap:32px!important;padding:50px 48px 36px!important;overflow:auto!important;height:100%!important;max-height:100vh!important;max-height:100dvh!important;box-sizing:border-box!important;-webkit-overflow-scrolling:touch!important}
-  .ios-fullscreen .entry-content.security-console .liquid-stack{order:1!important;flex:0 1 340px!important;min-width:240px!important;max-width:360px!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;align-self:center!important}
-  .ios-fullscreen .entry-content.security-console .entry-icon{order:2!important;flex:0 0 180px!important;min-height:160px!important;margin:0!important;display:flex!important;justify-content:center!important;align-items:center!important}
-  .ios-fullscreen .entry-content.security-console .console-sensors{order:3!important;flex:0 1 340px!important;min-width:220px!important;max-width:380px!important;align-self:center!important}
-  .ios-fullscreen .entry-content.security-console .console-keypad{order:4!important;flex:0 0 240px!important;width:240px!important;max-width:260px!important}
-  @media(max-width:900px){.ios-fullscreen .entry-content.security-console{flex-wrap:wrap!important;padding:80px 20px 24px!important;gap:18px!important;align-content:flex-start!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important}.ios-fullscreen .entry-content.security-console .entry-icon{order:1!important;flex:0 0 auto!important;min-height:110px!important;display:flex!important}.ios-fullscreen .entry-content.security-console .liquid-stack{order:2!important;flex:0 0 100%!important;width:100%!important;max-width:380px!important}.ios-fullscreen .entry-content.security-console .console-sensors{order:3!important;flex:0 0 100%!important;width:100%!important;max-width:380px!important}.ios-fullscreen .entry-content.security-console .console-keypad{order:4!important;flex:0 0 100%!important;width:100%!important;max-width:320px!important;padding:14px!important}}
 
   .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
   .badge.armed_away,.badge.armed_vacation{background:rgba(229,57,53,.12);color:var(--error-color,#e53935)}
@@ -5428,14 +5291,14 @@ class ArgusPanel extends HTMLElement {
     // Listen to fullscreen changes to handle native escape key / exit
     this._onFsChange = () => {
       const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
-      if (!fsEl && !this._kioskLocked && (this.classList.contains('fullscreen-active') || this.shadowRoot?.getElementById('argus-fullscreen-stage')?.style.display !== 'none')) {
+      if (!fsEl && !this._kioskLocked && this.classList.contains('fullscreen-active')) {
         this._exitFullscreenView();
       }
     };
     document.addEventListener('fullscreenchange', this._onFsChange);
     document.addEventListener('webkitfullscreenchange', this._onFsChange);
     this._onEscape = event => {
-      if (event.key === 'Escape' && (this.classList.contains('fullscreen-active') || this.shadowRoot?.getElementById('argus-fullscreen-stage')?.style.display !== 'none')) {
+      if (event.key === 'Escape' && this.classList.contains('fullscreen-active')) {
         this._exitFullscreenView();
       }
     };
@@ -6725,7 +6588,7 @@ class ArgusPanel extends HTMLElement {
     if (!lowBatteries.length) return '';
     const t = (k: string) => this._t(k);
     const rows = lowBatteries.map(b => `<div class="battery-alert-pill" style="display:inline-flex; align-items:center; gap:6px; background:rgba(239,68,68,0.25); border:1px solid rgba(239,68,68,0.5); color:#fee2e2; padding:4px 12px; border-radius:999px; font-size:11px; font-weight:600; backdrop-filter:blur(12px); box-shadow:0 4px 12px rgba(0,0,0,0.3)">⚠️ ${t('battery_low')}: ${this._escapeHtml(b.name)} (${b.level}%)</div>`).join('');
-    return `<div class="battery-alerts-container" style="position:absolute; top:18px; left:18px; z-index:15; display:flex; flex-direction:column; gap:6px; max-width:75%; pointer-events:none;">${rows}</div>`;
+    return `<div class="battery-alerts-container" style="display:flex; flex-direction:column; align-items:center; gap:6px; width:100%; max-width:90%; margin:0 auto 10px; pointer-events:none;">${rows}</div>`;
   }
 
   _modeButtonIcon(mode) {
@@ -6989,20 +6852,6 @@ class ArgusPanel extends HTMLElement {
       }
     });
     this._bindSOS();
-    if (this.classList.contains('fullscreen-active')) {
-      let stage = this.shadowRoot.getElementById('argus-fullscreen-stage');
-      if (!stage) {
-        stage = document.createElement('div');
-        stage.id = 'argus-fullscreen-stage';
-        this.shadowRoot.appendChild(stage);
-      }
-      stage.style.display = 'flex';
-      const activeEntry = el.querySelector('.entry');
-      if (activeEntry) {
-        activeEntry.classList.add('ios-fullscreen');
-        stage.replaceChildren(activeEntry);
-      }
-    }
   }
 
   async _exitFullscreenView() {
@@ -7021,18 +6870,13 @@ class ArgusPanel extends HTMLElement {
       target?.classList.remove('ios-fullscreen');
       this.shadowRoot.querySelectorAll('.entry.ios-fullscreen').forEach(el => el.classList.remove('ios-fullscreen'));
       
-      const stage = this.shadowRoot.getElementById('argus-fullscreen-stage');
-      if (stage) {
-        stage.innerHTML = '';
-        stage.style.display = 'none';
-      }
-      
       this.classList.remove('fullscreen-active');
       this._fullscreenIdx = -1;
       this._kioskLocked = false;
       this._kioskEntryId = null;
       this._kioskTarget = null;
       document.body.style.overflow = '';
+      this.dispatchEvent(new CustomEvent('argus-fullscreen-changed', { detail: { fullscreen: false } }));
       this._renderEntries(true);
     };
 
@@ -7082,24 +6926,12 @@ class ArgusPanel extends HTMLElement {
       } else if (document.webkitExitFullscreen) {
         document.webkitExitFullscreen();
       }
-      const stage = this.shadowRoot.getElementById('argus-fullscreen-stage');
-      const entriesContainer = this.shadowRoot.getElementById('entries');
       if (target) {
         target.classList.remove('ios-fullscreen');
-        if (entriesContainer && target.parentElement === stage) {
-          entriesContainer.appendChild(target);
-        }
       }
       this.shadowRoot.querySelectorAll('.entry.ios-fullscreen').forEach(el => {
         el.classList.remove('ios-fullscreen');
-        if (entriesContainer && el.parentElement === stage) {
-          entriesContainer.appendChild(el);
-        }
       });
-      if (stage) {
-        stage.style.display = 'none';
-        stage.replaceChildren();
-      }
       this.classList.remove('fullscreen-active');
       this._fullscreenIdx = -1;
       this._kioskLocked = false;
