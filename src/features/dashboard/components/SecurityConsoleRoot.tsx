@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { SecurityConsole } from './SecurityConsole';
-import { createRoot, Root } from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 import { applyToAllEntries } from '../../safety/slide-action';
 
 export function mountSecurityConsole(panel: any) {
@@ -11,9 +11,7 @@ export function mountSecurityConsole(panel: any) {
   if (!container) return;
   
   if (!panel._reactConsoleRoot) {
-    // Delete the old HTML to follow the user's explicit instruction
     container.innerHTML = '';
-    // Take over the container completely
     panel._reactConsoleRoot = createRoot(container);
   }
   
@@ -33,8 +31,15 @@ function SecurityConsoleRoot({ panel }: { panel: any }) {
       setIsFullscreen(panel.classList.contains('fullscreen-active'));
     };
     
-    // Completely hijack the render cycle. We do NOT call originalRender.
-    // This entirely eliminates the legacy DOM rendering for the HUD.
+    const onFsChange = () => {
+      setIsFullscreen(panel.classList.contains('fullscreen-active') || Boolean(document.fullscreenElement));
+    };
+
+    panel.addEventListener('argus-state-update', onUpdate);
+    panel.addEventListener('argus-fullscreen-changed', onFsChange);
+    document.addEventListener('fullscreenchange', onFsChange);
+    document.addEventListener('webkitfullscreenchange', onFsChange);
+
     const originalRender = panel._renderEntries;
     panel._renderEntries = function(...args: any[]) {
       onUpdate();
@@ -42,42 +47,56 @@ function SecurityConsoleRoot({ panel }: { panel: any }) {
     };
     
     return () => {
+      panel.removeEventListener('argus-state-update', onUpdate);
+      panel.removeEventListener('argus-fullscreen-changed', onFsChange);
+      document.removeEventListener('fullscreenchange', onFsChange);
+      document.removeEventListener('webkitfullscreenchange', onFsChange);
       panel._renderEntries = originalRender;
     };
   }, [panel]);
 
-  // Handle side-effects (WebGL + SOS Slider) after React renders
+  // Re-apply slide-to-action sliders whenever React renders or fullscreen changes
   useEffect(() => {
     if (!rootRef.current) return;
     
-    // 1. Initialize WebGL Weather Canvases
-    const canvases = rootRef.current.querySelectorAll('.wx-webgl');
-    canvases.forEach((canvas: any) => {
-      if (!canvas._argusWebglInit) {
-        canvas._argusWebglInit = true;
-        panel._initWeatherWebGL?.(canvas);
-      }
-    });
-
-    // 2. Re-apply the slide-to-action sliders to the new React DOM
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       try {
         if (typeof applyToAllEntries === 'function') {
-           applyToAllEntries(panel);
+          applyToAllEntries(panel);
         }
       } catch (e) {
         console.error("Argus: Failed to attach SOS sliders", e);
       }
-    }, 50);
+    }, 40);
 
-  }, [tick, panel]);
+    return () => clearTimeout(timer);
+  }, [tick, isFullscreen, panel]);
 
   return (
     <div ref={rootRef} style={{ width: '100%', height: '100%' }}>
       <SecurityConsole 
         panel={panel} 
         isFullscreen={isFullscreen}
-        onToggleFullscreen={() => panel._toggleFullscreen(panel.shadowRoot.querySelector('.entry'))}
+        onToggleFullscreen={() => {
+          if (isFullscreen) {
+            if (typeof panel._exitFullscreenView === 'function') {
+              panel._exitFullscreenView();
+            } else {
+              panel.classList.remove('fullscreen-active');
+              document.body.style.overflow = '';
+              setIsFullscreen(false);
+            }
+          } else {
+            const entryEl = panel.shadowRoot?.querySelector('.entry');
+            if (typeof panel._toggleFullscreen === 'function') {
+              panel._toggleFullscreen(entryEl);
+            } else {
+              panel.classList.add('fullscreen-active');
+              document.body.style.overflow = 'hidden';
+              setIsFullscreen(true);
+            }
+          }
+        }}
         onUnlockKiosk={() => panel._requestKioskUnlock()}
       />
     </div>

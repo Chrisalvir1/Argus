@@ -1,74 +1,19 @@
-/* Console HUD Grid Overrides */
+/* ══════════════════════════════════════════════════════════════════════════════
+   ARGUS SECURITY CONSOLE — REACT COMPONENT STYLES
+   Wide-gamut Rec.2020 / Display-P3 HDR & 120Hz Apple ProMotion GPU Acceleration
+   ══════════════════════════════════════════════════════════════════════════════ */
 
+/* ── HUD Elements ──────────────────────────────────────────────────────────── */
 .security-console .console-hud {
-  display: contents !important;
-}
-
-@media (min-width: 901px) {
-  .entry:not(.ios-fullscreen) .security-console {
-    display: grid !important;
-    grid-template-columns: minmax(240px, 360px) auto minmax(260px, 400px) !important;
-    grid-template-rows: auto 1fr !important;
-    align-items: start !important;
-    justify-content: center !important;
-    gap: 16px 40px !important;
-    padding: 32px 32px 24px !important;
-  }
-
-  .entry:not(.ios-fullscreen) .security-console .console-hud-loc {
-    grid-column: 1 !important;
-    grid-row: 1 !important;
-    justify-self: start !important;
-    align-self: center !important;
-    margin: 0 !important;
-  }
-
-  .entry:not(.ios-fullscreen) .security-console .argus-connection-pill {
-    grid-column: 2 !important;
-    grid-row: 1 !important;
-    justify-self: center !important;
-    align-self: center !important;
-    position: relative !important;
-    transform: none !important;
-    left: auto !important;
-    top: auto !important;
-    margin: 0 !important;
-    width: auto !important;
-    max-width: none !important;
-  }
-
-  .entry:not(.ios-fullscreen) .security-console .console-hud-right {
-    grid-column: 3 !important;
-    grid-row: 1 !important;
-    justify-self: end !important;
-    align-self: center !important;
-    margin: 0 !important;
-    width: auto !important;
-    max-width: none !important;
-  }
-
-  .entry:not(.ios-fullscreen) .security-console .liquid-stack {
-    grid-column: 1 !important;
-    grid-row: 2 !important;
-    justify-self: start !important;
-    width: 100% !important;
-    margin: 0 !important;
-  }
-
-  .entry:not(.ios-fullscreen) .security-console .entry-icon {
-    grid-column: 2 !important;
-    grid-row: 2 !important;
-    justify-self: center !important;
-    margin: 0 !important;
-  }
-
-  .entry:not(.ios-fullscreen) .security-console .console-sensors {
-    grid-column: 3 !important;
-    grid-row: 2 !important;
-    justify-self: end !important;
-    width: 100% !important;
-    margin: 0 !important;
-  }
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  gap: 12px !important;
+  margin-bottom: 8px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .console-hud-loc {
@@ -82,9 +27,9 @@
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
   border-radius: 999px !important;
-  background: linear-gradient(135deg, rgba(255,255,255,0.20), rgba(255,255,255,0.06)) !important;
-  border: 1px solid rgba(255,255,255,0.28) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.38), 0 8px 24px rgba(0,0,0,0.35) !important;
+  background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.05)) !important;
+  border: 1px solid rgba(255,255,255,0.25) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 8px 24px rgba(0,0,0,0.35) !important;
   backdrop-filter: blur(20px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
   font-size: 11.5px !important;
@@ -92,6 +37,38 @@
   letter-spacing: 0.04em !important;
   color: #ffffff !important;
   text-shadow: 0 1px 3px rgba(0,0,0,0.5) !important;
+}
+
+.argus-connection-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  height: 36px !important;
+  padding: 0 14px !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.05em !important;
+  color: #ffffff !important;
+  max-width: max-content !important;
+  white-space: nowrap !important;
+}
+
+.argus-connection-dot {
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  background: #10b981 !important;
+  box-shadow: 0 0 10px #10b981 !important;
+}
+
+.argus-connection-pill[data-online="false"] .argus-connection-dot {
+  background: #ef4444 !important;
+  box-shadow: 0 0 10px #ef4444 !important;
 }
 
 .console-hud-right {
@@ -122,179 +99,74 @@
   -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
 }
 
+/* Wide-gamut status badge colors */
 .console-system-badge--disarmed {
-  color: #43a047 !important;
-  color: color(display-p3 0.25 0.7 0.3) !important;
-  background: linear-gradient(135deg, rgba(67,160,71,0.28), rgba(40,120,50,0.12)) !important;
-  border: 1.5px solid rgba(67,160,71,0.60) !important;
-  box-shadow: 0 0 28px rgba(67,160,71,0.35), inset 0 1px 0 rgba(255,255,255,0.4) !important;
-  text-shadow: 0 0 10px rgba(67,160,71,0.6) !important;
+  color: #34d399 !important;
+  background: linear-gradient(135deg, rgba(16,185,129,0.28), rgba(5,150,105,0.12)) !important;
+  border: 1.5px solid rgba(16,185,129,0.60) !important;
+  box-shadow: 0 0 24px rgba(16,185,129,0.35), inset 0 1px 0 rgba(255,255,255,0.4) !important;
+  text-shadow: 0 0 10px rgba(16,185,129,0.6) !important;
 }
+@supports (color: color(rec2020 1 1 1)) {
+  .console-system-badge--disarmed {
+    color: color(rec2020 0.2 0.85 0.4) !important;
+  }
+}
+
 .console-system-badge--armed_home,
 .console-system-badge--armed_away,
 .console-system-badge--armed_night,
-.console-system-badge--armed_vacation,
 .console-system-badge--pending {
-  color: #ffb700 !important;
-  color: color(display-p3 1 0.72 0.1) !important;
-  background: linear-gradient(135deg, rgba(255,183,0,0.30), rgba(180,120,0,0.12)) !important;
-  border: 1.5px solid rgba(255,183,0,0.65) !important;
-  box-shadow: 0 0 28px rgba(255,183,0,0.38), inset 0 1px 0 rgba(255,255,255,0.45) !important;
-  text-shadow: 0 0 10px rgba(255,183,0,0.7) !important;
+  color: #fbbf24 !important;
+  background: linear-gradient(135deg, rgba(245,158,11,0.30), rgba(217,119,6,0.12)) !important;
+  border: 1.5px solid rgba(245,158,11,0.65) !important;
+  box-shadow: 0 0 24px rgba(245,158,11,0.38), inset 0 1px 0 rgba(255,255,255,0.45) !important;
+  text-shadow: 0 0 10px rgba(245,158,11,0.7) !important;
 }
+@supports (color: color(rec2020 1 1 1)) {
+  .console-system-badge--armed_home,
+  .console-system-badge--armed_away,
+  .console-system-badge--armed_night,
+  .console-system-badge--pending {
+    color: color(rec2020 0.95 0.75 0.1) !important;
+  }
+}
+
 .console-system-badge--triggered {
-  color: #ff3344 !important;
-  color: color(display-p3 1 0.2 0.25) !important;
-  background: linear-gradient(135deg, rgba(255,51,68,0.38), rgba(180,20,30,0.15)) !important;
-  border: 1.5px solid rgba(255,51,68,0.75) !important;
-  box-shadow: 0 0 35px rgba(255,51,68,0.55), inset 0 1px 0 rgba(255,255,255,0.45) !important;
-  text-shadow: 0 0 12px rgba(255,51,68,0.85) !important;
+  color: #f87171 !important;
+  background: linear-gradient(135deg, rgba(239,68,68,0.38), rgba(185,28,28,0.15)) !important;
+  border: 1.5px solid rgba(239,68,68,0.75) !important;
+  box-shadow: 0 0 32px rgba(239,68,68,0.55), inset 0 1px 0 rgba(255,255,255,0.45) !important;
+  text-shadow: 0 0 12px rgba(239,68,68,0.8) !important;
+  animation: argusTriggerBadgePulse 0.9s ease-in-out infinite !important;
 }
 
-.argus-connection-pill {
-  position: absolute !important;
-  left: 50% !important;
-  top: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  z-index: 60 !important;
-  margin: 0 !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 8px !important;
-  height: 36px !important;
-  box-sizing: border-box !important;
-  padding: 0 16px !important;
-  border-radius: 999px !important;
-  white-space: nowrap !important;
-  font-size: 11px !important;
-  font-weight: 850 !important;
-  letter-spacing: 0.04em !important;
-  backdrop-filter: blur(20px) saturate(190%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-.argus-connection-pill[data-online="true"] {
-  color: #00ff9d !important;
-  color: color(display-p3 0 1 0.6) !important;
-  background: linear-gradient(135deg, rgba(0,255,157,0.28), rgba(0,180,100,0.10)) !important;
-  border: 1.5px solid rgba(0,255,157,0.60) !important;
-  box-shadow: 0 0 28px rgba(0,255,157,0.38), inset 0 1px 0 rgba(255,255,255,0.45) !important;
-  text-shadow: 0 0 10px rgba(0,255,157,0.7) !important;
-}
-.argus-connection-pill[data-online="false"] {
-  color: #ff9d00 !important;
-  color: color(display-p3 1 0.65 0) !important;
-  background: linear-gradient(135deg, rgba(255,157,0,0.30), rgba(180,100,0,0.12)) !important;
-  border: 1.5px solid rgba(255,157,0,0.65) !important;
-  box-shadow: 0 0 28px rgba(255,157,0,0.38), inset 0 1px 0 rgba(255,255,255,0.4) !important;
-  text-shadow: 0 0 10px rgba(255,157,0,0.7) !important;
-}
-.argus-connection-dot {
-  width: 7px !important;
-  height: 7px !important;
-  flex: 0 0 7px !important;
-  border-radius: 50% !important;
-  background: currentColor !important;
-  box-shadow: 0 0 10px currentColor, 0 0 20px currentColor !important;
+@keyframes argusTriggerBadgePulse {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.04); }
 }
 
-/* Base buttons liquid glass styling */
-.security-console .liquid-btn {
+/* ── Central Shield SVG ────────────────────────────────────────────────────── */
+.security-console .entry-icon {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
-  text-align: center !important;
-  gap: 4px !important;
-  padding: 10px 4px !important;
-  min-height: 68px !important;
-  border-radius: 16px !important;
-  font-size: 11.5px !important;
-  font-weight: 800 !important;
-  line-height: 1.15 !important;
-  white-space: normal !important;
-  word-break: normal !important;
-  overflow: visible !important;
-  
-  /* The default un-active styling: liquid glass */
-  background: rgba(255, 255, 255, 0.08) !important;
-  border: 1px solid rgba(255, 255, 255, 0.16) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 8px 22px rgba(0, 0, 0, 0.25) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-  color: #ffffff !important;
-  
-  cursor: pointer !important;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
-  transform: translate3d(0,0,0) !important;
+  will-change: transform;
+  animation: float-icon 5s ease-in-out infinite;
+  transform: translate3d(0,0,0);
 }
 
-.security-console .liquid-btn:hover {
-  transform: translateY(-2px) translate3d(0,0,0) scale(1.02) !important;
-  background: rgba(255, 255, 255, 0.13) !important;
-  border-color: rgba(255, 255, 255, 0.28) !important;
+.security-console .entry-icon svg {
+  width: 100% !important;
+  max-width: 220px !important;
+  height: auto !important;
+  filter: drop-shadow(0 12px 32px rgba(0,0,0,0.5));
 }
 
-.security-console .liquid-btn span:first-child, .security-console .liquid-btn .mode-btn-icon {
-  font-size: 22px !important;
-  line-height: 1 !important;
-  margin: 0 !important;
-}
-
-.security-console .liquid-btn span:last-child {
-  font-size: 11.5px !important;
-  font-weight: 800 !important;
-  color: #ffffff !important;
-  text-align: center !important;
-  white-space: normal !important;
-  text-overflow: clip !important;
-  overflow: visible !important;
-}
-
-/* Active colors for specific modes (overrides the liquid glass base) */
-.security-console .btn-home.active {
-  background: linear-gradient(135deg, #fb8c00 0%, #d97706 100%) !important;
-  border: 1px solid rgba(254, 215, 170, 0.85) !important;
-  box-shadow: 0 14px 36px rgba(251, 140, 0, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
-  color: #ffffff !important;
-}
-.security-console .btn-away.active {
-  background: linear-gradient(135deg, #e53935 0%, #b91c1c 100%) !important;
-  border: 1px solid rgba(254, 202, 202, 0.85) !important;
-  box-shadow: 0 14px 36px rgba(229, 57, 53, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
-  color: #ffffff !important;
-}
-.security-console .btn-night.active {
-  background: linear-gradient(135deg, #1e88e5 0%, #1d4ed8 100%) !important;
-  border: 1px solid rgba(191, 219, 254, 0.85) !important;
-  box-shadow: 0 14px 36px rgba(30, 136, 229, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
-  color: #ffffff !important;
-}
-.security-console .btn-vacation.active {
-  background: linear-gradient(135deg, #9c27b0 0%, #7e22ce 100%) !important;
-  border: 1px solid rgba(245, 208, 254, 0.85) !important;
-  box-shadow: 0 14px 36px rgba(156, 39, 176, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
-  color: #ffffff !important;
-}
-.security-console .btn-disarm {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(16, 185, 129, 0.05) 100%) !important;
-  border: 1px solid rgba(16, 185, 129, 0.35) !important;
-  color: #a7f3d0 !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
-}
-.security-console .btn-disarm.active {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-  border: 1px solid rgba(167, 243, 208, 0.85) !important;
-  box-shadow: 0 14px 36px rgba(16, 185, 129, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
-  color: #ffffff !important;
-}
-
-@media(max-width:900px){
-  .security-console .console-hud{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:8px!important;width:100%!important}
-  .security-console .console-hud-loc{order:1!important;margin:0 auto!important;max-width:100%!important;text-align:center!important;justify-self:center!important}
-  .security-console .argus-connection-pill{order:2!important;position:static!important;transform:none!important;margin:0 auto!important;justify-self:center!important}
-  .security-console .console-hud-right{order:3!important;margin:0 auto!important;justify-self:center!important;justify-content:center!important}
+@keyframes float-icon {
+  0%, 100% { transform: translate3d(0, 0, 0) scale3d(1, 1, 1); }
+  50% { transform: translate3d(0, -6px, 0) scale3d(1.015, 1.015, 1); }
 }
 
 /* Arming Shield Animations */
@@ -305,34 +177,96 @@
 }
 
 .argus-shield-status { 
-  display:block;
-  margin:7px auto 0;
-  padding:5px 10px;
-  width:max-content;
-  max-width:180px;
-  border:1px solid rgba(255,184,57,.45);
-  border-radius:999px;
-  background:rgba(255,149,0,.13);
-  color:#ffd27a;
-  font-size:9px;
-  font-weight:800;
-  letter-spacing:.12em;
-  text-align:center;
-  animation:argusArmingLabel 1.05s ease-in-out infinite 
+  display: block;
+  margin: 7px auto 0;
+  padding: 5px 12px;
+  width: max-content;
+  max-width: 200px;
+  border: 1px solid rgba(255,184,57,.45);
+  border-radius: 999px;
+  background: rgba(255,149,0,.15);
+  color: #ffd27a;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-align: center;
+  animation: argusArmingLabel 1.05s ease-in-out infinite;
 }
 
-@keyframes argusArmingShield { 0%,100%{opacity:.55;transform:scale(.94)} 50%{opacity:1;transform:scale(1.07)} }
+@keyframes argusArmingShield { 0%,100%{opacity:.55;transform:scale3d(.94,.94,1)} 50%{opacity:1;transform:scale3d(1.07,1.07,1)} }
 @keyframes argusArmingLabel { 0%,100%{opacity:.62} 50%{opacity:1} }
 
-/* Dynamic Adaptive Sensor Grid with Contained Scrolling */
+/* ── Mode Buttons & Liquid Stack ───────────────────────────────────────────── */
+.security-console .liquid-stack {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  width: 100% !important;
+}
+
+.security-console .liquid-btn {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  gap: 4px !important;
+  padding: 10px 4px !important;
+  min-height: 64px !important;
+  border-radius: 16px !important;
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+  line-height: 1.15 !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 8px 22px rgba(0, 0, 0, 0.25) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, border-color 0.2s ease !important;
+  transform: translate3d(0,0,0) !important;
+}
+
+.security-console .liquid-btn:hover {
+  transform: translateY(-2px) translate3d(0,0,0) scale(1.02) !important;
+  background: rgba(255, 255, 255, 0.13) !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+}
+
+.security-console .liquid-btn span:first-child, .security-console .liquid-btn .mode-btn-icon {
+  font-size: 20px !important;
+  line-height: 1 !important;
+}
+
+.security-console .liquid-btn span:last-child {
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+}
+
+.security-console .btn-home.active {
+  background: linear-gradient(135deg, #fb8c00 0%, #d97706 100%) !important;
+  border: 1px solid rgba(254, 215, 170, 0.85) !important;
+  box-shadow: 0 12px 32px rgba(251, 140, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+}
+.security-console .btn-away.active {
+  background: linear-gradient(135deg, #e53935 0%, #b91c1c 100%) !important;
+  border: 1px solid rgba(254, 202, 202, 0.85) !important;
+  box-shadow: 0 12px 32px rgba(229, 57, 53, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+}
+.security-console .btn-night.active {
+  background: linear-gradient(135deg, #1e88e5 0%, #1d4ed8 100%) !important;
+  border: 1px solid rgba(191, 219, 254, 0.85) !important;
+  box-shadow: 0 12px 32px rgba(30, 136, 229, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+}
+
+/* ── Live Sensors Grid ─────────────────────────────────────────────────────── */
 .security-console .console-sensors {
-  order: 3;
-  flex: 1 1 280px;
-  max-width: 420px;
   display: grid;
   grid-template-columns: 1fr;
   gap: 8px;
-  max-height: 280px;
+  max-height: 260px;
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
@@ -341,22 +275,10 @@
   scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
 }
 
-.security-console .console-sensors::-webkit-scrollbar {
-  width: 5px;
-}
-.security-console .console-sensors::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 4px;
-}
-.security-console .console-sensors::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.22);
-  border-radius: 4px;
-}
-.security-console .console-sensors::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.4);
-}
+.security-console .console-sensors::-webkit-scrollbar { width: 5px; }
+.security-console .console-sensors::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); border-radius: 4px; }
+.security-console .console-sensors::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.22); border-radius: 4px; }
 
-/* Compact 2-column grid for 3-6 sensors */
 .security-console .console-sensors.console-sensors--compact,
 .security-console .console-sensors[data-count="3"],
 .security-console .console-sensors[data-count="4"],
@@ -366,82 +288,217 @@
   gap: 6px !important;
 }
 
-.security-console .console-sensors.console-sensors--compact .console-sensor,
-.security-console .console-sensors[data-count="3"] .console-sensor,
-.security-console .console-sensors[data-count="4"] .console-sensor,
-.security-console .console-sensors[data-count="5"] .console-sensor,
-.security-console .console-sensors[data-count="6"] .console-sensor {
-  padding: 6px 8px !important;
-  border-radius: 12px !important;
-  min-height: 34px !important;
-  gap: 6px !important;
-}
-
-.security-console .console-sensors.console-sensors--compact .console-sensor-name,
-.security-console .console-sensors[data-count="3"] .console-sensor-name,
-.security-console .console-sensors[data-count="4"] .console-sensor-name,
-.security-console .console-sensors[data-count="5"] .console-sensor-name,
-.security-console .console-sensors[data-count="6"] .console-sensor-name {
-  font-size: 10px !important;
-}
-
-/* Micro grid for 7+ sensors */
 .security-console .console-sensors.console-sensors--micro,
 .security-console .console-sensors[data-count="7"],
 .security-console .console-sensors[data-count="8"],
 .security-console .console-sensors[data-count="9"],
 .security-console .console-sensors[data-count="10"],
 .security-console .console-sensors[data-count="11"],
-.security-console .console-sensors[data-count="12"],
-.security-console .console-sensors[data-count="13"],
-.security-console .console-sensors[data-count="14"],
-.security-console .console-sensors[data-count="15"],
-.security-console .console-sensors[data-count="16"] {
+.security-console .console-sensors[data-count="12"] {
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   gap: 4px !important;
 }
 
-.security-console .console-sensors.console-sensors--micro .console-sensor,
-.security-console .console-sensors[data-count="7"] .console-sensor,
-.security-console .console-sensors[data-count="8"] .console-sensor,
-.security-console .console-sensors[data-count="9"] .console-sensor,
-.security-console .console-sensors[data-count="10"] .console-sensor,
-.security-console .console-sensors[data-count="11"] .console-sensor,
-.security-console .console-sensors[data-count="12"] .console-sensor {
-  padding: 4px 6px !important;
-  border-radius: 10px !important;
-  min-height: 28px !important;
-  gap: 4px !important;
-}
-
-.security-console .console-sensors.console-sensors--micro .console-sensor-name,
-.security-console .console-sensors[data-count="7"] .console-sensor-name,
-.security-console .console-sensors[data-count="8"] .console-sensor-name,
-.security-console .console-sensors[data-count="9"] .console-sensor-name,
-.security-console .console-sensors[data-count="10"] .console-sensor-name,
-.security-console .console-sensors[data-count="11"] .console-sensor-name,
-.security-console .console-sensors[data-count="12"] .console-sensor-name {
-  font-size: 9px !important;
-}
-
-/* Arming Pending Priority Blinking */
-.console-sensor.sensor-arming-blink,
-.console-sensor.argus-blocking {
-  border-color: #ffd60a !important;
-  background: linear-gradient(135deg, rgba(255, 149, 0, 0.38), rgba(255, 96, 0, 0.22)) !important;
-  animation: argusSensorArmBlink 0.9s ease-in-out infinite !important;
-  color: #fff !important;
-}
-
-@keyframes argusSensorArmBlink {
-  0%, 100% {
-    border-color: rgba(255, 159, 10, 0.85);
-    box-shadow: 0 0 10px rgba(255, 159, 10, 0.5), inset 0 0 6px rgba(255, 159, 10, 0.3);
-    transform: scale(1);
+/* ── NORMAL DESKTOP LAYOUT (Not Fullscreen) ────────────────────────────────── */
+@media (min-width: 901px) {
+  .entry:not(.ios-fullscreen) .security-console {
+    display: grid !important;
+    grid-template-columns: minmax(240px, 340px) auto minmax(260px, 380px) !important;
+    grid-template-rows: auto 1fr !important;
+    align-items: start !important;
+    justify-content: center !important;
+    gap: 16px 36px !important;
+    padding: 24px 28px 20px !important;
   }
-  50% {
-    border-color: #ffd60a;
-    box-shadow: 0 0 20px 4px rgba(255, 214, 10, 0.85), inset 0 0 12px rgba(255, 214, 10, 0.5);
-    transform: scale(1.02);
+
+  .entry:not(.ios-fullscreen) .security-console .console-hud {
+    grid-column: 1 / -1 !important;
+    grid-row: 1 !important;
+  }
+
+  .entry:not(.ios-fullscreen) .security-console .liquid-stack {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+  }
+
+  .entry:not(.ios-fullscreen) .security-console .entry-icon {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+    justify-self: center !important;
+    align-self: center !important;
+  }
+
+  .entry:not(.ios-fullscreen) .security-console .console-sensors {
+    grid-column: 3 !important;
+    grid-row: 2 !important;
+  }
+}
+
+/* ── NORMAL MOBILE LAYOUT (Not Fullscreen) ─────────────────────────────────── */
+@media (max-width: 900px) {
+  .entry:not(.ios-fullscreen) .security-console {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 14px !important;
+    padding: 18px 14px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .entry:not(.ios-fullscreen) .security-console .console-hud {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 8px !important;
+  }
+
+  .entry:not(.ios-fullscreen) .security-console .liquid-stack {
+    width: 100% !important;
+    max-width: 420px !important;
+  }
+
+  .entry:not(.ios-fullscreen) .security-console .console-sensors {
+    width: 100% !important;
+    max-width: 420px !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   FULLSCREEN MODE (.entry.ios-fullscreen)
+   Complete takeover of viewport for Mobile & Desktop (Vertical & Horizontal)
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.entry.ios-fullscreen {
+  position: fixed !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  width: 100dvw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  z-index: 99999999 !important;
+  background: radial-gradient(ellipse at 50% 50%, #162438 0%, #08101a 60%, #010408 100%) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* Fullscreen Exit Button */
+.entry.ios-fullscreen .entry-exit-fs {
+  position: fixed !important;
+  top: max(16px, env(safe-area-inset-top)) !important;
+  left: max(16px, env(safe-area-inset-left)) !important;
+  z-index: 100000 !important;
+  padding: 10px 16px !important;
+  font-size: 20px !important;
+  font-weight: 900 !important;
+  background: rgba(0, 0, 0, 0.65) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-radius: 14px !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+  cursor: pointer !important;
+}
+
+/* ── Fullscreen Portrait (Mobile Vertical) ─────────────────────────────────── */
+@media (max-width: 900px), (orientation: portrait) {
+  .entry.ios-fullscreen .security-console {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding: max(64px, calc(env(safe-area-inset-top) + 48px)) 16px max(32px, env(safe-area-inset-bottom)) !important;
+    gap: 18px !important;
+    width: 100% !important;
+    max-width: 480px !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+    min-height: 100% !important;
+  }
+
+  .entry.ios-fullscreen .security-console .console-hud {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 8px !important;
+  }
+
+  .entry.ios-fullscreen .security-console .entry-icon {
+    display: flex !important;
+    margin: 6px auto !important;
+  }
+
+  .entry.ios-fullscreen .security-console .entry-icon svg {
+    max-width: min(50vw, 220px) !important;
+  }
+
+  .entry.ios-fullscreen .security-console .liquid-stack {
+    width: 100% !important;
+    max-width: 440px !important;
+  }
+
+  .entry.ios-fullscreen .security-console .console-sensors {
+    width: 100% !important;
+    max-width: 440px !important;
+    max-height: 300px !important;
+  }
+}
+
+/* ── Fullscreen Landscape (Mobile Horizontal & Desktop) ────────────────────── */
+@media (min-width: 901px) and (orientation: landscape), (orientation: landscape) and (max-height: 600px) {
+  .entry.ios-fullscreen .security-console {
+    display: grid !important;
+    grid-template-columns: minmax(280px, 360px) minmax(260px, 1fr) minmax(280px, 420px) !important;
+    grid-template-rows: auto 1fr !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 20px 48px !important;
+    padding: max(56px, env(safe-area-inset-top)) max(48px, env(safe-area-inset-right)) max(32px, env(safe-area-inset-bottom)) max(48px, env(safe-area-inset-left)) !important;
+    width: 100% !important;
+    max-width: 1440px !important;
+    margin: 0 auto !important;
+    height: 100% !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    box-sizing: border-box !important;
+  }
+
+  .entry.ios-fullscreen .security-console .console-hud {
+    grid-column: 1 / -1 !important;
+    grid-row: 1 !important;
+  }
+
+  .entry.ios-fullscreen .security-console .liquid-stack {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    width: 100% !important;
+  }
+
+  .entry.ios-fullscreen .security-console .entry-icon {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+    justify-self: center !important;
+    align-self: center !important;
+  }
+
+  .entry.ios-fullscreen .security-console .entry-icon svg {
+    max-width: min(35vw, 320px) !important;
+  }
+
+  .entry.ios-fullscreen .security-console .console-sensors {
+    grid-column: 3 !important;
+    grid-row: 2 !important;
+    width: 100% !important;
+    max-height: 420px !important;
   }
 }

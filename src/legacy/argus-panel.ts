@@ -6695,13 +6695,13 @@ class ArgusPanel extends HTMLElement {
     if (!sensorsToCheck.length) {
       const modes = this._ui?.modes || {};
       const all = new Set<string>();
-      ['away', 'home', 'night', 'vacation'].forEach(m => {
+      ['away', 'home', 'night'].forEach(m => {
         const list = modes[m]?.sensors;
         if (Array.isArray(list)) list.forEach((s: string) => all.add(s));
       });
       if (this._ui?.modes?.__by_entity__) {
         Object.values(this._ui.modes.__by_entity__).forEach((mObj: any) => {
-          ['away', 'home', 'night', 'vacation'].forEach(m => {
+          ['away', 'home', 'night'].forEach(m => {
             const list = mObj[m]?.sensors;
             if (Array.isArray(list)) list.forEach((s: string) => all.add(s));
           });
@@ -7106,7 +7106,8 @@ class ArgusPanel extends HTMLElement {
       this._kioskEntryId = null;
       this._kioskTarget = null;
       document.body.style.overflow = '';
-      this._renderEntries();
+      this.dispatchEvent(new CustomEvent('argus-fullscreen-changed', { detail: { fullscreen: false } }));
+      this._renderEntries(true);
     };
 
     if (kioskEntry.pin_configured !== true) {
@@ -7150,12 +7151,13 @@ class ArgusPanel extends HTMLElement {
     this._fullscreenIdx = validIdx;
     this.classList.add('fullscreen-active');
     document.body.style.overflow = 'hidden';
+    this.dispatchEvent(new CustomEvent('argus-fullscreen-changed', { detail: { fullscreen: true } }));
 
     this._renderEntries(true);
 
-    const requestFS = target?.requestFullscreen || target?.webkitRequestFullscreen || this.requestFullscreen || this.webkitRequestFullscreen;
+    const requestFS = this.requestFullscreen || this.webkitRequestFullscreen || target?.requestFullscreen || target?.webkitRequestFullscreen;
     if (requestFS) {
-      requestFS.call(target || this).catch(() => {});
+      requestFS.call(this).catch(() => {});
     }
   }
 

@@ -9,17 +9,10 @@ const STYLE_ID = 'argus-slide-action-styles';
 const SLIDE_I18N = {
   es: { slide_disarm: 'Desliza para desarmar', slide_sos: 'Desliza para activar SOS', slide_sos_stop: 'Desliza para detener SOS', enter_pin: 'Ingresa el PIN maestro', wrong_pin: 'PIN incorrecto', cancel: 'Cancelar' },
   en: { slide_disarm: 'Slide to disarm', slide_sos: 'Slide to trigger SOS', slide_sos_stop: 'Slide to stop SOS', enter_pin: 'Enter master PIN', wrong_pin: 'Wrong PIN', cancel: 'Cancel' },
-  fr: { slide_disarm: 'Glisser pour désarmer', slide_sos: 'Glisser pour déclencher SOS', slide_sos_stop: 'Glisser pour arrêter SOS', enter_pin: 'Saisir PIN maître', wrong_pin: 'PIN incorrect', cancel: 'Annuler' },
   pt: { slide_disarm: 'Deslize para desarmar', slide_sos: 'Deslize para acionar SOS', slide_sos_stop: 'Deslize para parar SOS', enter_pin: 'Inserir PIN mestre', wrong_pin: 'PIN errado', cancel: 'Cancelar' },
-  it: { slide_disarm: 'Scorri per disarmare', slide_sos: 'Scorri per attivare SOS', slide_sos_stop: 'Scorri per fermare SOS', enter_pin: 'Inserisci PIN master', wrong_pin: 'PIN errato', cancel: 'Annulla' },
+  ru: { slide_disarm: 'Сдвиньте для снятия охраны', slide_sos: 'Сдвиньте для включения SOS', slide_sos_stop: 'Сдвиньте для остановки SOS', enter_pin: 'Введите мастер-PIN', wrong_pin: 'Неверный PIN', cancel: 'Отмена' },
   zh: { slide_disarm: '滑动撤防', slide_sos: '滑动触发 SOS', slide_sos_stop: '滑动停止 SOS', enter_pin: '请输入主 PIN 码', wrong_pin: 'PIN 错误', cancel: '取消' },
   'zh-Hant': { slide_disarm: '滑動撤防', slide_sos: '滑動觸發 SOS', slide_sos_stop: '滑動停止 SOS', enter_pin: '請輸入主 PIN 碼', wrong_pin: 'PIN 錯誤', cancel: '取消' },
-  ru: { slide_disarm: 'Сдвиньте для снятия охраны', slide_sos: 'Сдвиньте для включения SOS', slide_sos_stop: 'Сдвиньте для остановки SOS', enter_pin: 'Введите мастер-PIN', wrong_pin: 'Неверный PIN', cancel: 'Отмена' },
-  hi: { slide_disarm: 'निरस्त करने के लिए स्लाइड करें', slide_sos: 'SOS के लिए स्लाइड करें', slide_sos_stop: 'SOS रोकने के लिए स्लाइड करें', enter_pin: 'मास्टर PIN दर्ज करें', wrong_pin: 'गलत PIN', cancel: 'रद्द करें' },
-  ar: { slide_disarm: 'اسحب لنزع التسليح', slide_sos: 'اسحب لتشغيل نداء الاستغاثة', slide_sos_stop: 'اسحب لإيقاف SOS', enter_pin: 'أدخل الرمز الرئيسي', wrong_pin: 'رمز خاطئ', cancel: 'إلغاء' },
-  ko: { slide_disarm: '밀어서 해제', slide_sos: '밀어서 SOS 활성화', slide_sos_stop: '밀어서 SOS 중지', enter_pin: '마스터 PIN 입력', wrong_pin: '잘못된 PIN', cancel: '취소' },
-  ja: { slide_disarm: 'スライドして解除', slide_sos: 'スライドしてSOS作動', slide_sos_stop: 'スライドしてSOS停止', enter_pin: 'マスターPINを入力', wrong_pin: 'PINが違います', cancel: 'キャンセル' },
-  uk: { slide_disarm: 'Посуньте для зняття охорони', slide_sos: 'Посуньте для ввімкнення SOS', slide_sos_stop: 'Посуньте щоб зупинити SOS', enter_pin: 'Введіть майстер-PIN', wrong_pin: 'Неправильний PIN', cancel: 'Скасувати' },
 };
 
 function getActiveLang(panel) {
