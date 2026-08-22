@@ -2786,7 +2786,7 @@ _tmpl.innerHTML = `
   .hero-left{display:flex;align-items:center;gap:22px}
   .hero-context{position:relative!important;z-index:10000!important;overflow:visible!important;margin-left:auto;display:flex;align-items:center;gap:8px;min-width:0}
   #hero-profile-container{position:relative!important;z-index:10001!important;overflow:visible!important}
-  .hero-profile-dropdown{position:absolute!important;top:calc(100% + 12px)!important;right:0!important;z-index:999999!important;max-height:calc(100vh - 100px)!important;overflow-y:auto!important}.hero-clock{display:flex;flex-direction:column;align-items:flex-end;padding-right:14px;border-right:1px solid rgba(255,255,255,.14);line-height:1}.hero-clock strong{font-size:1.45rem;letter-spacing:-.05em}.hero-clock span{font-size:10px;opacity:.65;margin-top:5px;text-transform:uppercase;letter-spacing:.08em}.hero-pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.hero-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 10px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(7,16,29,.27);box-shadow:inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(14px);font-size:10px;font-weight:800;white-space:nowrap}.hero-pill .hero-live{width:7px;height:7px;border-radius:50%;background:#55df91;box-shadow:0 0 9px #55df91}
+  .hero-profile-dropdown{position:absolute!important;top:calc(100% + 12px)!important;right:0!important;z-index:999999!important;max-height:calc(100vh - 100px)!important;overflow-y:auto!important;background:#0f172a!important;background-color:#0f172a!important;border:1.5px solid rgba(255,255,255,0.2)!important;box-shadow:0 24px 60px rgba(0,0,0,0.85),inset 0 1px 0 rgba(255,255,255,0.15)!important;backdrop-filter:blur(48px) saturate(200%)!important;-webkit-backdrop-filter:blur(48px) saturate(200%)!important;opacity:1!important}.hero-clock{display:flex;flex-direction:column;align-items:flex-end;padding-right:14px;border-right:1px solid rgba(255,255,255,.14);line-height:1}.hero-clock strong{font-size:1.45rem;letter-spacing:-.05em}.hero-clock span{font-size:10px;opacity:.65;margin-top:5px;text-transform:uppercase;letter-spacing:.08em}.hero-pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.hero-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 10px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(7,16,29,.27);box-shadow:inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(14px);font-size:10px;font-weight:800;white-space:nowrap}.hero-pill .hero-live{width:7px;height:7px;border-radius:50%;background:#55df91;box-shadow:0 0 9px #55df91}
   .hero-icon{font-size:54px;line-height:1;filter:drop-shadow(0 0 20px rgba(255,255,255,0.15))}
   .hero h1{margin:0 0 4px;font-size:34px;font-weight:900;letter-spacing:-0.03em;background:var(--hero-gradient, linear-gradient(to right, #ffffff, #82b1ff));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
   .hero p{margin:0;font-size:16px;opacity:.7;font-weight:500}
@@ -3425,16 +3425,18 @@ _tmpl.innerHTML = `
     box-shadow: 0 16px 38px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
     transform: translateY(-2px);
   }
-  .user-badge{display:inline-block;padding:3px 9px;border-radius:8px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;background:rgba(0,122,255,.12);color:var(--primary-color,#007aff)}
+  .user-badge{display:inline-block;padding:4px 10px;border-radius:8px;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#ffffff!important;border:1px solid rgba(255,255,255,0.18)}
   /* REEMPLAZA los colores neón por tokens legibles */
-  .user-badge.admin {
+  .user-badge.admin { background: #d97706 !important; color: #ffffff !important; font-weight: 900 !important; border: 1px solid rgba(255,255,255,0.3) !important; }
+  .user-badge.admin_old {
     background: rgba(255,255,255,0.12);
     color: rgba(255,255,255,0.92);
     border: 1px solid rgba(255,255,255,0.18);
     font-weight: 700;
     letter-spacing: 0.04em;
   }
-  .user-badge.user {
+  .user-badge.user { background: #475569 !important; color: #ffffff !important; font-weight: 800 !important; border: 1px solid rgba(255,255,255,0.2) !important; }
+  .user-badge.user_old {
     background: rgba(255,255,255,0.08);
     color: rgba(255,255,255,0.75);
     border: 1px solid rgba(255,255,255,0.12);
@@ -7882,39 +7884,47 @@ gl_FragColor=vec4(col,alpha);}`;
       const outputs = this._panicOutputs || this._ui?.panic_outputs || [];
 
       el.innerHTML = `
-        <div class="mode-grid-layout">
-          <!-- Card 1: Emergency Phone -->
-          <div class="mode-section-card">
-            <div class="mode-section-title">📞 ${this._t('emergency_number_label') || 'Número Local de Emergencia'}</div>
-            <p class="small" style="margin:4px 0 12px;opacity:0.75">${this._t('emergency_help') || 'Configura el número local de emergencia (ej. 911 o 112). Se incluirá en alertas SOS.'}</p>
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:rgba(255,255,255,0.03);padding:14px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.08);">
-              <span style="font-size:12.5px;font-weight:700;">${this._t('emergency_number_label') || 'Marcado Directo'}:</span>
-              <input id="mode-emergency-number-input" class="glass-control" inputmode="tel" maxlength="16" value="${this._escapeHtml(emergencyNumber)}" style="width:130px;min-height:38px;padding:6px 12px;font-size:15px;font-weight:900;text-align:center;border-radius:10px;background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.18)">
+        <div class="sos-mode-stack" style="display:flex;flex-direction:column;gap:16px;width:100%">
+          <!-- Card 1: Emergency Phone (Full width, styled like mode box) -->
+          <div class="mode-section-card" style="width:100%;box-sizing:border-box;padding:20px 24px;border-radius:18px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+              <div style="flex:1;min-width:220px;">
+                <div class="mode-section-title" style="font-size:15px;font-weight:900;margin-bottom:4px;">📞 ${this._t('emergency_number_label') || 'Número Local de Emergencia'}</div>
+                <p class="small" style="margin:0;opacity:0.75;line-height:1.4;">${this._t('emergency_help') || 'Configura el número local de emergencia (ej. 911 o 112). Se incluirá en alertas SOS.'}</p>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.04);padding:10px 16px;border-radius:14px;border:1px solid rgba(255,255,255,0.1);">
+                <span style="font-size:12px;font-weight:800;text-transform:uppercase;opacity:0.85;">TEL:</span>
+                <input id="mode-emergency-number-input" class="glass-control" inputmode="tel" maxlength="16" value="${this._escapeHtml(emergencyNumber)}" style="width:130px;min-height:38px;padding:6px 10px;font-size:18px;font-weight:900;text-align:center;border-radius:10px;background:rgba(0,0,0,0.25);color:#fff;border:1px solid rgba(255,255,255,0.2);letter-spacing:1.5px">
+              </div>
             </div>
-            <div class="small" style="margin-top:10px;opacity:0.6;font-size:11px;">
+            <div class="small" style="margin-top:12px;opacity:0.6;font-size:11px;">
               ℹ️ Al activar el SOS desde el panel o widget, se iniciará la marcación rápida y se registrará el evento de auxilio en el historial forense.
             </div>
           </div>
 
-          <!-- Card 2: SOS Actions / Devices -->
-          <div class="mode-section-card">
-            <div class="mode-section-title">⚡ ${this._t('sos_actions') || 'Dispositivos y Acciones SOS'}</div>
-            <p class="small" style="margin:4px 0 10px;opacity:0.75">${this._t('sos_outputs_help') || 'Estos dispositivos se encenderán o ejecutarán inmediatamente al dispararse el SOS.'}</p>
-            <div id="sos-output-chips" class="mode-sensor-grid" style="min-height:70px;">
+          <!-- Card 2: SOS Actions / Devices (Wide container DEBAJO) -->
+          <div class="mode-section-card" style="width:100%;box-sizing:border-box;padding:20px 24px;border-radius:18px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:12px;flex-wrap:wrap;">
+              <div>
+                <div class="mode-section-title" style="font-size:15px;font-weight:900;margin-bottom:4px;">⚡ ${this._t('sos_actions') || 'Dispositivos y Acciones SOS'}</div>
+                <p class="small" style="margin:0;opacity:0.75;">${this._t('sos_outputs_help') || 'Estos dispositivos se encenderán o ejecutarán inmediatamente al dispararse el SOS.'}</p>
+              </div>
+              ${readonly ? '' : `
+                <button class="ghost" id="btn-mode-select-sos-outputs" style="padding:8px 16px;font-size:12px;font-weight:800;border-radius:12px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);cursor:pointer;">
+                  ＋ ${this._t('sos_select_outputs') || 'Seleccionar Luces, Sirenas o Escenas'}
+                </button>
+              `}
+            </div>
+            <div id="sos-output-chips" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;width:100%;">
               ${outputs.length
                 ? outputs.map(id => this._chip(id, 'sos_output')).join('')
-                : `<div class="mode-sensor-none">${this._t('sos_no_outputs') || 'Ningún dispositivo configurado'}</div>`
+                : `<div class="mode-sensor-none" style="grid-column:1/-1;">${this._t('sos_no_outputs') || 'Ningún dispositivo configurado'}</div>`
               }
             </div>
-            ${readonly ? '' : `
-              <button class="ghost" id="btn-mode-select-sos-outputs" style="margin-top:12px;width:100%;justify-content:center;font-size:12px;font-weight:800;padding:8px 12px;background:rgba(255,255,255,0.06);border-radius:10px;cursor:pointer;">
-                ＋ ${this._t('sos_select_outputs') || 'Seleccionar Luces, Sirenas o Escenas'}
-              </button>
-            `}
           </div>
 
-          <!-- Unified Informative Card: Signals, Notifications & Log in Small Compact Card -->
-          <div class="mode-section-card" style="grid-column: 1 / -1; padding: 14px 18px; border-radius: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);">
+          <!-- Card 3: Unified Informative Diagnostic Card -->
+          <div class="mode-section-card" style="padding:14px 18px;border-radius:16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:4px;">
               <span style="font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;color:rgba(255,255,255,0.85)">ℹ️ Protocolo Informativo de Auxilio y Difusión</span>
               <span style="font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:6px;background:rgba(74,222,128,0.12);color:#4ade80">✓ Activo</span>
@@ -8382,7 +8392,7 @@ gl_FragColor=vec4(col,alpha);}`;
               <div style="font-weight:700">${this._escapeHtml(u.name || '')}</div>
               <div style="display:flex;gap:4px">
                 ${u.role === 'admin' ? '<span class="user-badge admin">⭐ Adm</span>' : '<span class="user-badge user">👤 Std</span>'}
-                ${u.access_pin_configured ? '<span class="user-badge" style="background:rgba(0,122,255,0.12);color:#007aff">🔒 PIN</span>' : ''}
+                ${u.access_pin_configured ? '<span class="user-badge" style="background:#0284c7;color:#ffffff!important;border:1px solid rgba(255,255,255,0.3);font-weight:800">🔒 PIN</span>' : ''}
               </div>
             </div>`;
           }
@@ -8400,9 +8410,9 @@ gl_FragColor=vec4(col,alpha);}`;
           }
           const expBadge = u.expiration_date
             ? (isExpired
-              ? `<span class="user-badge admin" style="background:rgba(229,57,53,0.12);color:#e53935;margin-left:5px">❌ ${this._escapeHtml(this._t('expired'))} (${this._escapeHtml(formattedDate)})</span>`
-              : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">⏳ ${this._escapeHtml(this._t('active_until'))}: ${this._escapeHtml(formattedDate)}</span>`)
-            : `<span class="user-badge" style="background:rgba(67,160,71,0.12);color:#43a047;margin-left:5px">♾️ ${this._t('exp_indefinite')}</span>`;
+              ? `<span class="user-badge admin" style="background:#b91c1c;color:#ffffff!important;border:1px solid rgba(255,255,255,0.3);font-weight:800;margin-left:5px">❌ ${this._escapeHtml(this._t('expired'))} (${this._escapeHtml(formattedDate)})</span>`
+              : `<span class="user-badge" style="background:#15803d;color:#ffffff!important;border:1px solid rgba(255,255,255,0.3);font-weight:800;margin-left:5px">⏳ ${this._escapeHtml(this._t('active_until'))}: ${this._escapeHtml(formattedDate)}</span>`)
+            : `<span class="user-badge" style="background:#15803d;color:#ffffff!important;border:1px solid rgba(255,255,255,0.3);font-weight:800;margin-left:5px">♾️ ${this._t('exp_indefinite')}</span>`;
 
           const haAccountText = u.ha_user_id
             ? (() => {
@@ -8418,8 +8428,8 @@ gl_FragColor=vec4(col,alpha);}`;
             : '👤 ' + this._escapeHtml(this._t('role_argus_standard'));
 
           const pinBadge = u.access_pin_configured
-            ? `<span class="user-badge" style="background:rgba(0,122,255,0.12);color:#007aff">🔒 PIN</span>`
-            : `<span class="user-badge" style="opacity:0.55">🔓 ${this._escapeHtml(this._t('user_no_pin'))}</span>`;
+            ? `<span class="user-badge" style="background:#0284c7;color:#ffffff!important;border:1px solid rgba(255,255,255,0.3);font-weight:800">🔒 PIN</span>`
+            : `<span class="user-badge" style="background:#334155;color:#ffffff!important;border:1px solid rgba(255,255,255,0.2);font-weight:800">🔓 ${this._escapeHtml(this._t('user_no_pin'))}</span>`;
 
           return `
           <div class="user-card" style="display:flex;flex-direction:column;align-items:stretch;gap:8px">
@@ -8428,7 +8438,7 @@ gl_FragColor=vec4(col,alpha);}`;
                 <div style="font-weight:700">${this._escapeHtml(u.name || '')}</div>
                 <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
                   <span class="user-badge ${u.role === 'admin' ? 'admin' : 'user'}">${roleText}</span>
-                  <span class="user-badge" style="background:rgba(74,20,140,0.15);color:rgba(186,104,200,0.95);border:1px solid rgba(74,20,140,0.22);margin-left:5px">${this._escapeHtml(haAccountText)}</span>
+                  <span class="user-badge" style="background:#581c87;color:#ffffff!important;border:1px solid rgba(255,255,255,0.3);font-weight:800;margin-left:5px">${this._escapeHtml(haAccountText)}</span>
                   ${pinBadge}
                   ${expBadge}
                 </div>
@@ -10151,7 +10161,7 @@ gl_FragColor=vec4(col,alpha);}`;
         </div>
 
         <!-- Dropdown Card -->
-        <div id="profile-dropdown" class="hero-profile-dropdown glass liquid-glass" style="display: none; position: absolute; top: calc(100% + 12px); right: 0; flex-direction: column; width: 280px; z-index: 999999; padding: 16px; border-radius: 18px; box-shadow: 0 16px 32px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); max-height: calc(100vh - 100px); overflow-y: auto;">
+        <div id="profile-dropdown" class="hero-profile-dropdown" style="display: none; position: absolute; top: calc(100% + 12px); right: 0; flex-direction: column; width: 280px; z-index: 999999; padding: 16px; border-radius: 18px; box-shadow: 0 16px 32px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); max-height: calc(100vh - 100px); overflow-y: auto;">
         <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px; margin-bottom: 8px; width: 100%;">
           ${prof.picture
             ? `<img src="${this._escapeHtml(prof.picture)}" alt="${this._escapeHtml(prof.name)}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.20); box-shadow: 0 4px 10px rgba(0,0,0,0.25); flex-shrink: 0;" />`
