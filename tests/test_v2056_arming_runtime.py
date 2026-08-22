@@ -1,4 +1,4 @@
-"""Executable regressions for the v2.2.81 arming path."""
+"""Executable regressions for the v2.2.82 arming path."""
 from __future__ import annotations
 
 import asyncio

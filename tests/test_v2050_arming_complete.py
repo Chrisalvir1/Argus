@@ -1,4 +1,4 @@
-"""v2.2.81 arming-wait completion and Aqara-safe open detection."""
+"""v2.2.82 arming-wait completion and Aqara-safe open detection."""
 from pathlib import Path
 import unittest
 
@@ -12,9 +12,9 @@ BOOTSTRAP = (ROOT / "custom_components" / "argus" / "www" / "argus-bootstrap.js"
 
 class TestV2050ArmingComplete(unittest.TestCase):
     def test_version_is_2050(self):
-        self.assertIn('VERSION = "2.2.81"', CONST)
-        self.assertIn('"version": "2.2.81"', MANIFEST)
-        self.assertIn("2.2.81", BOOTSTRAP)
+        self.assertIn('VERSION = "2.2.82"', CONST)
+        self.assertIn('"version": "2.2.82"', MANIFEST)
+        self.assertIn("2.2.82", BOOTSTRAP)
 
     def test_runtime_unifies_open_detection(self):
         self.assertIn("def is_sensor_active(", RUNTIME)
