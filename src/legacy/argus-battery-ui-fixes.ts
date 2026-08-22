@@ -77,33 +77,32 @@ function argusFixConsoleSensorBatteries(panel) {
   root.querySelectorAll('.entry').forEach((art, idx) => {
     const entry = entries[idx];
     if (!entry) return;
+
+    // Always collect sensors from ALL modes (not just the current state's mode)
+    // so bypassed sensors are excluded but configured ones always appear.
+    const modes = panel._ui?.modes?.__by_entity__?.[entry.entity_id] || panel._ui?.modes || {};
+    const all = new Set();
+    ['away', 'home', 'night', 'vacation'].forEach(m => {
+      if (modes[m]?.sensors) modes[m].sensors.forEach(s => all.add(s));
+    });
+    // Also include sensors from the active mode config if state-based
     const stateObj = panel._hass.states[entry.entity_id];
     const state = String(stateObj?.state || 'disarmed');
     const mKey = state.replace('armed_', '');
-    
-    let eCfg = (panel._ui?.modes?.__by_entity__?.[entry.entity_id]?.[mKey])
-              || (panel._ui?.modes?.[mKey]) || {};
-    let sList = eCfg.sensors || [];
-    if (state === 'disarmed' || !sList.length) {
-      const modes = panel._ui?.modes?.__by_entity__?.[entry.entity_id] || panel._ui?.modes || {};
-      const all = new Set();
-      ['away', 'home', 'night', 'vacation'].forEach(m => {
-        if (modes[m]?.sensors) modes[m].sensors.forEach(s => all.add(s));
-      });
-      sList = Array.from(all);
-    }
-    const bypassed = eCfg.bypassed_sensors || [];
-    const active = sList.filter(s => !bypassed.includes(s) && panel._hass.states[s]);
+    const eCfg = (panel._ui?.modes?.__by_entity__?.[entry.entity_id]?.[mKey]) || (panel._ui?.modes?.[mKey]) || {};
+    const sByps = eCfg.bypassed_sensors || [];
+    // Remove bypassed sensors
+    const active = [...all].filter(s => !sByps.includes(s) && panel._hass.states[s]);
 
     const rows = art.querySelectorAll('.console-sensors .console-sensor');
     if (!rows.length) return;
-    
+
     rows.forEach((row, rowIdx) => {
       const sid = active[rowIdx];
       if (!sid) return;
       const st = panel._hass.states[sid];
       if (!st) return;
-      
+
       // Prevent duplicate injection if re-rendered by another fix
       if (row.querySelector('.console-sensor-battery')) return;
 
@@ -111,15 +110,15 @@ function argusFixConsoleSensorBatteries(panel) {
       if (pwr !== null && pwr !== undefined && typeof pwr === 'number') {
         const stateEl = row.querySelector('.console-sensor-state');
         if (stateEl) {
-           const isDead = pwr === 0;
-           const isLow = pwr <= 10 && !isDead;
-           
-           let batText = isDead ? '🔋 ❌' : `🔋 ${pwr}%`;
-           let cls = isDead ? 'dead' : (isLow ? 'low' : '');
-           let title = isDead ? 'Sin conexión (Batería agotada)' : (isLow ? 'Batería crítica - Reemplazar ya' : 'Nivel de batería');
-           
-           const batHtml = `<span class="console-sensor-battery ${cls}" title="${title}">${batText}</span>`;
-           stateEl.insertAdjacentHTML('beforebegin', batHtml);
+          const isDead = pwr === 0;
+          const isLow = pwr <= 10 && !isDead;
+
+          let batText = isDead ? '🔋 ❌' : `🔋 ${pwr}%`;
+          let cls = isDead ? 'dead' : (isLow ? 'low' : '');
+          let title = isDead ? 'Sin conexión (Batería agotada)' : (isLow ? 'Batería crítica - Reemplazar ya' : 'Nivel de batería');
+
+          const batHtml = `<span class="console-sensor-battery ${cls}" title="${title}">${batText}</span>`;
+          stateEl.insertAdjacentHTML('beforebegin', batHtml);
         }
       }
     });

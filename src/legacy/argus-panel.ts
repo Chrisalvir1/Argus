@@ -1154,6 +1154,37 @@ _tmpl.innerHTML = `
   :host {
     --hud-text-color: #fff;
     --hud-bg: rgba(255,255,255,0.06);
+    --argus-accent-home: #ffad42;
+    --argus-accent-away: #ff6464;
+    --argus-accent-night: #7fb9ff;
+    --argus-accent-vacation: #d69cff;
+    --argus-accent-disarm: #6be295;
+    --argus-accent-triggered: #ff424f;
+    --argus-accent-connected: #75f4b0;
+  }
+
+  @supports (color: color(display-p3 1 1 1)) {
+    :host {
+      --argus-accent-home: color(display-p3 1 0.68 0.22);
+      --argus-accent-away: color(display-p3 1 0.35 0.35);
+      --argus-accent-night: color(display-p3 0.45 0.72 1);
+      --argus-accent-vacation: color(display-p3 0.85 0.55 1);
+      --argus-accent-disarm: color(display-p3 0.4 0.9 0.55);
+      --argus-accent-triggered: color(display-p3 1 0.2 0.2);
+      --argus-accent-connected: color(display-p3 0.46 0.96 0.69);
+    }
+  }
+
+  @supports (color: color(rec2020 1 1 1)) {
+    :host {
+      --argus-accent-home: color(rec2020 1 0.65 0.12);
+      --argus-accent-away: color(rec2020 1 0.25 0.28);
+      --argus-accent-night: color(rec2020 0.35 0.72 1);
+      --argus-accent-vacation: color(rec2020 0.85 0.5 1);
+      --argus-accent-disarm: color(rec2020 0.3 0.95 0.5);
+      --argus-accent-triggered: color(rec2020 1 0.1 0.15);
+      --argus-accent-connected: color(rec2020 0.38 0.98 0.64);
+    }
   }
 
   /* Garantiza legibilidad sobre cualquier fondo */
@@ -1183,7 +1214,9 @@ _tmpl.innerHTML = `
     z-index: 99999999 !important;
     width: 100vw !important;
     height: 100vh !important;
-    background: #000 !important;
+    /* No background:#000 here — that belongs only on .ios-fullscreen to avoid
+       a black overlay bleeding into other HA views when fullscreen state is
+       stale or not properly cleaned up. */
     margin: 0 !important;
     padding: 0 !important;
   }
@@ -1517,12 +1550,12 @@ _tmpl.innerHTML = `
   .console-sensors{order:3;flex:1 1 300px;max-width:400px;display:grid;gap:14px;align-content:center}.console-sensor{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;padding:13px 16px;border:1px solid rgba(255,255,255,.15);border-radius:18px;background:linear-gradient(100deg,rgba(36,188,129,.22),rgba(10,27,38,.58));backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 8px 22px rgba(0,0,0,.22)}.console-sensor.open{background:linear-gradient(100deg,rgba(235,74,67,.30),rgba(34,14,23,.62));border-color:rgba(255,102,92,.7)}.console-sensor-icon{font-size:20px}.console-sensor-name{font-weight:850;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.console-sensor-state{font-size:11px;font-weight:900;text-transform:uppercase;color:#75f4b0}.console-sensor.open .console-sensor-state{color:#ff968b}.console-empty{padding:24px;text-align:center;border:1px dashed rgba(255,255,255,.22);border-radius:18px;opacity:.75}
   .console-keypad{flex:1 1 220px;max-width:280px;padding:18px;border:1px solid rgba(255,255,255,.16);border-radius:24px;background:rgba(5,15,30,0.4);backdrop-filter:blur(16px);display:grid;gap:12px}.console-keypad-title{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;text-align:center}.console-keypad-close{position:absolute;top:8px;right:10px;width:28px;height:28px;border:0;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;font-size:20px;line-height:1;cursor:pointer}.console-keypad{position:relative}.console-pin-display{width:100%;box-sizing:border-box;padding:11px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(4,14,26,.46);color:#fff;text-align:center;font-size:20px;letter-spacing:.35em}.console-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;place-items:center}.console-pad button{width:100%;aspect-ratio:1/1;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:linear-gradient(145deg,rgba(165,220,255,.24),rgba(20,45,66,.62));color:#fff;font-size:17px;font-weight:800;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 6px 14px rgba(0,0,0,.25);cursor:pointer;display:flex;align-items:center;justify-content:center}.console-pad .console-enter{border-radius:16px;aspect-ratio:auto;height:100%;color:#7ff8c1;border-color:rgba(74,230,157,.65)}.console-keypad small{text-align:center;opacity:.7}.console-pin-status{min-height:1.2em;margin:0;color:#ffb4ac;opacity:0;transition:opacity .18s ease}.console-pin-status.visible{opacity:1}
   /* ── Console HUD header (inside the flex layout, not absolute) ──────── */
-  .console-hud{order:0;flex:0 0 100%;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(0,0,0,0.25);border-radius:14px;backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);gap:12px;flex-wrap:wrap}
-  .console-hud-loc{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:1.2px;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .console-hud-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+  .console-hud{order:0;flex:0 0 100%;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:transparent;border-radius:14px;backdrop-filter:none;border:none;gap:12px;flex-wrap:nowrap;min-width:0}
+  .console-hud-loc{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:1.2px;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1 1 auto}
+  .console-hud-right{display:flex;align-items:center;gap:10px;flex-shrink:0;flex-wrap:nowrap}
   .console-hud-time{font-size:16px;font-weight:800;letter-spacing:-.02em}
   .console-hud-temp{font-size:11px;opacity:.8;font-weight:700}
-  .console-hud-temps{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .console-hud-temps{display:flex;gap:6px;flex-wrap:nowrap;align-items:center}
   .console-hud-tpill{font-size:10px;font-weight:800;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12)}
   /* Hide the floating absolute HUD inside security-console to avoid overlap with sensor list */
   .security-console .hud,.ios-fullscreen .entry-content.security-console ~ .hud,.entry-content.security-console + .hud{display:none!important}
@@ -1619,10 +1652,10 @@ _tmpl.innerHTML = `
   .ios-fullscreen .sensor-column { max-width: 45% !important; padding-right: 60px !important; }
   .ios-fullscreen .sensor-chip { font-size: 14px !important; padding: 10px 16px !important; max-width: 260px !important; }
 
-  .entry-icon{display:flex;justify-content:center;align-items:center;perspective:1000px;min-height:160px}
-  .entry-icon svg{width:100%;height:auto;max-width:280px;filter:drop-shadow(0 0 25px rgba(255,255,255,0.12));animation:float-icon 5s ease-in-out infinite;transition:max-width 0.4s ease}
+  .entry-icon{display:flex;justify-content:center;align-items:center;perspective:1000px;-webkit-perspective:1000px;min-height:160px;transform:translate3d(0,0,0);-webkit-transform:translate3d(0,0,0);will-change:transform;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+  .entry-icon svg{width:100%;height:auto;max-width:280px;filter:drop-shadow(0 0 25px rgba(255,255,255,0.12));animation:float-icon 5s ease-in-out infinite;transition:max-width 0.4s ease;transform:translate3d(0,0,0);-webkit-transform:translate3d(0,0,0);will-change:transform}
   .ios-fullscreen .entry-icon svg{max-width:650px;filter:drop-shadow(0 0 60px rgba(255,255,255,0.3))}
-  @keyframes float-icon{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-12px) rotate(1deg)}}
+  @keyframes float-icon{0%,100%{transform:translate3d(0,0,0) rotate(-1deg)}50%{transform:translate3d(0,-12px,0) rotate(1deg)}}
 
   /* Phone layout: controls must never sit below the HUD or be hidden behind
      the artwork. Sensor status becomes a readable section beneath the modes. */
@@ -3645,7 +3678,8 @@ class ArgusPanel extends HTMLElement {
         }
         this._fullscreenIdx = -1;
         document.body.style.overflow = '';
-        this._renderEntries();
+        // force=true bypasses stable.ts diff after native fullscreen exit
+        this._renderEntries(true);
       }
     };
     document.addEventListener('fullscreenchange', this._onFsChange);
@@ -3675,6 +3709,9 @@ class ArgusPanel extends HTMLElement {
     this._welcomeShownThisMount = false;
     this._loadState = null;
     this._initPromise = null;
+    // Always restore body scroll when unmounting — prevents scroll freeze if
+    // the user navigates away while fullscreen is active.
+    document.body.style.overflow = '';
     if (this._onFsChange) {
       document.removeEventListener('fullscreenchange', this._onFsChange);
       document.removeEventListener('webkitfullscreenchange', this._onFsChange);
@@ -4431,17 +4468,42 @@ class ArgusPanel extends HTMLElement {
 
   _renderBatteryAlerts() {
     if (!this._hass?.states) return '';
+
+    // Collect only sensor IDs that are explicitly configured in any Argus mode.
+    // Sensors not configured in any mode are completely ignored — even if HA
+    // reports them as having low battery.
+    const configured = new Set();
+    const collectSensors = (v) => {
+      if (!v || typeof v !== 'object') return;
+      if (Array.isArray(v.sensors)) v.sensors.forEach(id => configured.add(id));
+      // Recurse into nested objects (handles __by_entity__ and per-mode structures)
+      Object.values(v).forEach(c => { if (c && typeof c === 'object' && !Array.isArray(c)) collectSensors(c); });
+    };
+    const modes = this._ui?.modes || {};
+    collectSensors(modes);
+
+    // No sensors configured in any mode → nothing to show
+    if (!configured.size) return '';
+
     const states = this._hass.states;
-    const lowBatteries = Object.values(states).filter((st) => {
-      const isBattery = st.entity_id?.endsWith('_battery') || st.attributes?.device_class === 'battery';
-      const isMains = /dimmer|switch|light|plug|outlet/i.test(st.entity_id) || /dimmer|switch|light|plug|outlet/i.test(st.attributes?.friendly_name || '');
-      if (!isBattery || isMains || st.state === 'unknown' || st.state === 'unavailable') return false;
-      const level = Number(st.state);
-      return !Number.isNaN(level) && level <= 20;
+    const lowBatteries = [];
+    configured.forEach(sid => {
+      const st = states[sid];
+      if (!st) return;
+      // Read battery from attributes (battery_level or battery_percentage)
+      const bat = st.attributes?.battery_level ?? st.attributes?.battery_percentage ?? null;
+      if (bat === null) return;
+      const level = Number(bat);
+      if (!Number.isNaN(level) && level <= 20) {
+        lowBatteries.push({ st, level });
+      }
     });
+
     if (!lowBatteries.length) return '';
     const t = k => this._t(k);
-    const rows = lowBatteries.map(b => `<div class="battery-alert-pill" style="display:inline-flex; align-items:center; gap:6px; background:rgba(239,68,68,0.25); border:1px solid rgba(239,68,68,0.5); color:#fee2e2; padding:4px 12px; border-radius:999px; font-size:11px; font-weight:600; backdrop-filter:blur(12px); box-shadow:0 4px 12px rgba(0,0,0,0.3)">⚠️ ${t('battery_low')}: ${this._escapeHtml(b.attributes.friendly_name || b.entity_id)} (${b.state}%)</div>`).join('');
+    const rows = lowBatteries.map(({ st, level }) =>
+      `<div class="battery-alert-pill" style="display:inline-flex; align-items:center; gap:6px; background:rgba(239,68,68,0.25); border:1px solid rgba(239,68,68,0.5); color:#fee2e2; padding:4px 12px; border-radius:999px; font-size:11px; font-weight:600; backdrop-filter:blur(12px); box-shadow:0 4px 12px rgba(0,0,0,0.3)">⚠️ ${t('battery_low')}: ${this._escapeHtml(st.attributes.friendly_name || st.entity_id)} (${level}%)</div>`
+    ).join('');
     return `<div class="battery-alerts-container" style="position:absolute; top:18px; left:18px; z-index:15; display:flex; flex-direction:column; gap:6px; max-width:75%; pointer-events:none;">${rows}</div>`;
   }
 
@@ -4460,6 +4522,7 @@ class ArgusPanel extends HTMLElement {
   _renderPremiumStatusIcon(state, triggered, uid = '0') {
     const mode = triggered ? 'triggered' : ({ armed_home:'home', armed_away:'away', armed_night:'night', armed_vacation:'vacation', disarmed:'disarm' }[state] || 'disarm');
     const accent = { home:'#ffad42', away:'#ff6464', night:'#7fb9ff', vacation:'#d69cff', disarm:'#6be295', triggered:'#ff424f' }[mode];
+    const hdrVar = `var(--argus-accent-${mode}, ${accent})`;
     const symbol = {
       home:'<path d="M66 98 100 69l34 29v35H66z"/><path d="M89 133v-22h22v22"/>',
       away:'<path d="M100 70c18 0 32 14 32 32s-14 32-32 32-32-14-32-32 14-32 32-32z"/><path d="M100 79v46M77 102h46"/>',
@@ -4468,7 +4531,7 @@ class ArgusPanel extends HTMLElement {
       disarm:'<path d="m76 104 16 16 34-39"/>',
       triggered:'<path d="M100 65 139 137H61z"/><path d="M100 90v23M100 124h.01"/>'
     }[mode];
-    return `<svg viewBox="0 0 200 200" width="100%" height="100%" style="filter:drop-shadow(0 18px 28px rgba(0,0,0,.34));max-width:180px;margin:auto;display:block;overflow:visible" aria-label="${this._escapeHtml(mode)}"><defs><linearGradient id="premium-${mode}-${uid}" x1="20%" y1="10%" x2="85%" y2="100%"><stop stop-color="#fff" stop-opacity=".38"/><stop offset=".25" stop-color="${accent}" stop-opacity=".78"/><stop offset="1" stop-color="${accent}" stop-opacity=".18"/></linearGradient><filter id="premium-glow-${mode}-${uid}" filterUnits="userSpaceOnUse" x="-80" y="-80" width="360" height="360" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M100 22 157 46v42c0 42-23 69-57 87-34-18-57-45-57-87V46z" fill="url(#premium-${mode}-${uid})" stroke="${accent}" stroke-width="3" filter="url(#premium-glow-${mode}-${uid})"/><path d="M100 31 148 51" stroke="#fff" stroke-opacity=".45" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="105" r="43" fill="rgba(5,12,23,.3)" stroke="rgba(255,255,255,.22)" stroke-width="2"/><g fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" filter="url(#premium-glow-${mode}-${uid})">${symbol}</g><circle cx="100" cy="105" r="55" fill="none" stroke="${accent}" stroke-opacity=".42" stroke-width="2"><animate attributeName="r" values="51;60;51" dur="3.5s" repeatCount="indefinite"/><animate attributeName="opacity" values=".6;.08;.6" dur="3.5s" repeatCount="indefinite"/></circle></svg>`;
+    return `<svg viewBox="0 0 200 200" width="100%" height="100%" style="filter:drop-shadow(0 18px 28px rgba(0,0,0,.34));max-width:180px;margin:auto;display:block;overflow:visible;contain:layout paint;transform:translate3d(0,0,0);will-change:transform;" aria-label="${this._escapeHtml(mode)}"><defs><linearGradient id="premium-${mode}-${uid}" x1="20%" y1="10%" x2="85%" y2="100%"><stop stop-color="#fff" stop-opacity=".38"/><stop offset=".25" stop-color="${accent}" stop-opacity=".82" style="stop-color:${hdrVar};"/><stop offset="1" stop-color="${accent}" stop-opacity=".18" style="stop-color:${hdrVar};"/></linearGradient><filter id="premium-glow-${mode}-${uid}" filterUnits="userSpaceOnUse" x="-80" y="-80" width="360" height="360" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M100 22 157 46v42c0 42-23 69-57 87-34-18-57-45-57-87V46z" fill="url(#premium-${mode}-${uid})" stroke="${accent}" style="stroke:${hdrVar};" stroke-width="3" filter="url(#premium-glow-${mode}-${uid})"/><path d="M100 31 148 51" stroke="#fff" stroke-opacity=".45" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="105" r="43" fill="rgba(5,12,23,.3)" stroke="rgba(255,255,255,.22)" stroke-width="2"/><g fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" filter="url(#premium-glow-${mode}-${uid})">${symbol}</g><circle cx="100" cy="105" r="55" fill="none" stroke="${accent}" style="stroke:${hdrVar};" stroke-opacity=".42" stroke-width="2"><animate attributeName="r" values="51;60;51" dur="3.5s" repeatCount="indefinite"/><animate attributeName="opacity" values=".6;.08;.6" dur="3.5s" repeatCount="indefinite"/></circle></svg>`;
   }
 
   _getIntelligentSVG(state, w, isNight, triggered, idx = '0') {
@@ -4675,29 +4738,6 @@ class ArgusPanel extends HTMLElement {
     el.querySelectorAll('button[data-exit-fullscreen]').forEach(btn => {
       btn.addEventListener('click', () => this._exitFullscreenView());
     });
-    el.querySelectorAll('.wx-webgl').forEach(canvas => {
-      // Use ResizeObserver for reliable initialization on mobile/tablet
-      if (canvas._argusRO) canvas._argusRO.disconnect();
-      const initOnce = () => {
-        if (canvas._argusWebglInit) return;
-        if ((canvas.clientWidth > 0 || canvas.offsetWidth > 0) && canvas.isConnected) {
-          canvas._argusWebglInit = true;
-          this._initWeatherWebGL(canvas);
-        }
-      };
-      if (typeof ResizeObserver !== 'undefined') {
-        canvas._argusRO = new ResizeObserver(() => { initOnce(); canvas._argusRO?.disconnect(); });
-        canvas._argusRO.observe(canvas.parentElement || canvas);
-      }
-      // Fallback chain
-      if (canvas.clientWidth > 0) { initOnce(); }
-      else {
-        requestAnimationFrame(() => {
-          if (canvas.clientWidth > 0) { initOnce(); }
-          else { setTimeout(() => initOnce(), 200); }
-        });
-      }
-    });
     this._bindSOS();
   }
 
@@ -4722,7 +4762,8 @@ class ArgusPanel extends HTMLElement {
       this._kioskEntryId = null;
       this._kioskTarget = null;
       document.body.style.overflow = '';
-      this._renderEntries();
+      // force=true bypasses stable.ts diff so the panel is fully re-rendered
+      this._renderEntries(true);
     };
 
     if (!requiresPin) {
@@ -4819,26 +4860,30 @@ class ArgusPanel extends HTMLElement {
 
     this._kioskEntryId = entry?.entry_id || null;
     this._kioskTarget = target;
-    // Fullscreen is a presentation action, not kiosk lock.  A kiosk lock
+    // Fullscreen is a presentation action, not kiosk lock. A kiosk lock
     // must be enabled explicitly; otherwise Esc must always leave fullscreen.
     this._kioskLocked = false;
     this._fullscreenIdx = validIdx;
     this.classList.add('fullscreen-active');
 
-    const requestFS = target?.requestFullscreen || target?.webkitRequestFullscreen;
-    
+    // Apply ios-fullscreen class and force a full re-render (bypassing
+    // stable.ts signature cache) so the panel content is never black.
     const applyIosFullscreen = () => {
-      if (target) {
-        target.classList.add('ios-fullscreen');
-      }
+      if (target) target.classList.add('ios-fullscreen');
       document.body.style.overflow = 'hidden';
-      this._renderEntries();
+      // force=true bypasses the stable.ts render-diff so isFS change is applied
+      this._renderEntries(true);
     };
 
-    if (requestFS) {
-      requestFS.call(target).then(() => {
+    // Use the host element (this) as the fullscreen target so that buttons
+    // rendered inside the shadow-root remain fully interactive. Falling back
+    // to the CSS-only path (applyIosFullscreen) on iOS/WebView where the API
+    // is unavailable.
+    const hostFS = this.requestFullscreen?.bind(this) || this.webkitRequestFullscreen?.bind(this);
+    if (hostFS) {
+      hostFS().then(() => {
         document.body.style.overflow = 'hidden';
-        this._renderEntries();
+        this._renderEntries(true);
       }).catch(applyIosFullscreen);
     } else {
       applyIosFullscreen();
@@ -4863,212 +4908,14 @@ class ArgusPanel extends HTMLElement {
     return map[key];
   }
 
-  _initWeatherWebGL(canvas) {
-    if (!canvas || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+  _initWeatherWebGL(canvas) {}
 
-    // Fallback inmediato mientras WebGL carga
-    const parent = canvas.parentElement;
-    if (parent) {
-      const weatherState = this._getWeatherEntity()?.state;
-      const isNight = this._hass?.states?.['sun.sun']?.state === 'below_horizon';
-      const key = String(weatherState || 'sunny').toLowerCase().replace(/[\s-]+/g, '_');
-      parent.style.background = this._getWeatherGradient(
-        this._weatherPresentation(weatherState, isNight),
-        key
-      );
-    }
-
-    const gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: false, antialias: false, powerPreference: 'low-power' }) ||
-               canvas.getContext('experimental-webgl', { alpha: true, premultipliedAlpha: false, antialias: false, powerPreference: 'low-power' });
-    if (!gl) {
-      canvas.style.opacity = '0';
-      return;
-    }
-    gl.clearColor(0, 0, 0, 0);
-
-    const vertex = 'attribute vec2 p;varying vec2 uv;void main(){uv=(p+1.0)*.5;gl_Position=vec4(p,0.0,1.0);}';
-    const fragment = `precision highp float;varying vec2 uv;uniform float time,rain,snow,fog,storm,wind,temp,night,cloudy;
-uniform vec2 cloudPositions[6];
-uniform vec2 cloudSizes[6];
-uniform float cloudAlphas[6];
-float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
-float noise(vec2 p){vec2 i=floor(p),f=fract(p),u=f*f*(3.0-2.0*f);return mix(mix(h(i+vec2(0.0,0.0)),h(i+vec2(1.0,0.0)),u.x),mix(h(i+vec2(0.0,1.0)),h(i+vec2(1.0,1.0)),u.x),u.y);}
-float fbm(vec2 p){float f=0.0,a=0.5;for(int i=0;i<4;i++){f+=a*noise(p);p*=2.0;a*=0.5;}return f;}
-float rainLayer(vec2 u,float t,float n){vec2 s=vec2(20.0+8.0*n,7.0+3.0*n);u.x+=wind*0.1*u.y;vec2 g=u*s,id=floor(g),q=fract(g);float sp=2.4+n*1.35+h(id)*1.2;q.y=fract(q.y+t*sp+h(id));float x=abs(q.x-(0.5+wind*0.2-q.y*(0.16+wind*0.1)));return (1.0-smoothstep(0.003,0.035-n*0.006,x))*(1.0-smoothstep(0.18,0.98,q.y));}
-float snowLayer(vec2 u,float t,float n){vec2 g=u*vec2(15.0+n*5.0,10.0+n*4.0),id=floor(g),q=fract(g);q.y=fract(q.y+t*(0.2+h(id)*0.2)+h(id));q.x+=sin(t+h(id)*6.28)*0.2+wind*0.1*t;return 1.0-smoothstep(0.01+n*0.01,0.08+n*0.02,length(q-vec2(0.5)));}
-void main(){float t=time*0.001;vec2 u=uv;if(temp>30.0){u.x+=sin(u.y*20.0+t*5.0)*0.003*(temp-30.0)/10.0;u.y+=cos(u.x*20.0+t*4.0)*0.003*(temp-30.0)/10.0;}
-vec3 col=vec3(0.0);float alpha=0.0;
-float clAlpha=0.0;
-if(cloudy>0.0){
-  for(int i=0;i<6;i++){
-    vec2 center=cloudPositions[i];
-    vec2 size=cloudSizes[i]*1.6;
-    vec2 d=(u-center)/size;
-    float dist=dot(d,d);
-    if(dist<1.0){
-      float base=exp(-dist*3.5);
-      float edge=noise(u*8.0+vec2(t*0.05))*0.35;
-      float intensity=clamp(base+edge*base,0.0,1.0);
-      clAlpha=max(clAlpha,cloudAlphas[i]*intensity*0.45);
-    }
-  }
-}
-if(clAlpha>0.0){
-  vec3 cloudColor=mix(vec3(0.85,0.90,0.95),vec3(1.0),clAlpha);
-  col=mix(col,cloudColor,clAlpha);
-  alpha=max(alpha,clAlpha*0.7);
-}
-if(night>0.5&&rain==0.0&&snow==0.0&&fog==0.0){float st=h(floor(u*150.0));if(st>0.99){float tw=0.5+0.5*sin(t*3.0+st*100.0);col+=vec3(1.0)*tw*(st-0.99)*100.0;alpha=max(alpha,tw*0.5);}}
-if(night>0.5&&temp<5.0&&rain==0.0&&snow==0.0&&storm==0.0){float au=fbm(vec2(u.x*2.0+t*0.1,u.y*3.0-t*0.05)),au2=fbm(vec2(u.x*3.0-t*0.15,u.y*2.0+t*0.08));vec3 ac=mix(vec3(0.0,1.0,0.5),vec3(0.5,0.0,1.0),au);float intn=smoothstep(0.4,0.8,au*au2)*(1.0-u.y);col+=ac*intn*1.5;alpha=max(alpha,intn);}
-if(night<0.5&&rain==0.0&&fog==0.0&&snow==0.0&&cloudy==0.0){float gr=fbm(vec2(u.x*4.0-t*0.08,u.y*0.4))*(1.0-u.y*0.8);float sunGlow=smoothstep(0.3,0.7,gr);col+=vec3(1.0,0.92,0.72)*sunGlow*0.65;alpha=max(alpha,sunGlow*0.45);}
-if(rain>0.0){float r=rainLayer(u,t,0.0)+rainLayer(u,t,1.0)*0.65+rainLayer(u,t,2.0)*0.45+rainLayer(u,t,3.0)*0.25;col+=vec3(0.75,0.88,1.0)*r*rain*1.2;alpha=max(alpha,min(1.0,r*rain*1.1));}
-if(snow>0.0){float s=snowLayer(u,t,0.0)+snowLayer(u,t,1.0)*0.7+snowLayer(u,t,2.0)*0.4;col+=vec3(1.0)*s*snow;alpha=max(alpha,min(1.0,s*snow));}
-if(fog>0.0){float f=fbm(vec2(u.x*3.0+t*0.2,u.y*4.0-t*0.1));col+=vec3(0.8,0.85,0.9)*f*fog*0.7;alpha=max(alpha,min(1.0,f*fog*0.8));}
-if(storm>0.0){float fl=step(0.98,fract(t*0.1+fbm(u*5.0+t)))*(0.8+0.2*noise(vec2(t*50.0)));col+=vec3(1.0,0.95,1.0)*fl*storm;alpha=max(alpha,fl*storm*0.8);}
-gl_FragColor=vec4(col,alpha);}`;
-
-    const compile = (type, source) => { const shader = gl.createShader(type); gl.shaderSource(shader, source); gl.compileShader(shader); return gl.getShaderParameter(shader, gl.COMPILE_STATUS) ? shader : null; };
-    const vs = compile(gl.VERTEX_SHADER, vertex), fs = compile(gl.FRAGMENT_SHADER, fragment);
-    if (!vs || !fs) {
-      canvas.style.opacity = '0';
-      return;
-    }
-    const program = gl.createProgram(); gl.attachShader(program, vs); gl.attachShader(program, fs); gl.linkProgram(program);
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      canvas.style.opacity = '0';
-      return;
-    }
-    const buffer = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buffer); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
-    const getUniform = key => gl.getUniformLocation(program, key);
-    const position = gl.getAttribLocation(program, 'p');
-    const uniformLocs = {
-      time: getUniform('time'),
-      rain: getUniform('rain'),
-      snow: getUniform('snow'),
-      fog: getUniform('fog'),
-      storm: getUniform('storm'),
-      wind: getUniform('wind'),
-      temp: getUniform('temp'),
-      night: getUniform('night'),
-      cloudy: getUniform('cloudy'),
-      cloudPositions: getUniform('cloudPositions'),
-      cloudSizes: getUniform('cloudSizes'),
-      cloudAlphas: getUniform('cloudAlphas')
-    };
-
-    const values = {
-      rain: Math.max(Number(canvas.dataset.rain||0), Number(canvas.dataset.drizzle||0)*0.4),
-      snow: Number(canvas.dataset.snow||0),
-      fog: Number(canvas.dataset.fog||0),
-      storm: Number(canvas.dataset.storm||0),
-      wind: Number(canvas.dataset.wind||0),
-      temp: Number(canvas.dataset.temp||20),
-      night: Number(canvas.dataset.night||0),
-      cloudy: Number(canvas.dataset.cloudy||0)
-    };
-
-    const numClouds = 6;
-    const cloudsList = Array.from({ length: numClouds }, () => {
-      return {
-        x: Math.random() * 800,
-        y: 50 + Math.random() * 250,
-        rx: 120 + Math.random() * 80,
-        ry: 45 + Math.random() * 25,
-        speed: 0.1 + Math.random() * 0.3,
-        alpha: 0.08 + Math.random() * 0.07
-      };
-    });
-
-    let frame = 0, active = true;
-    
-    // Force initial size fallback immediately if layout isn't ready
-    if (canvas.width === 0 || canvas.height === 0 || canvas.clientWidth === 0 || canvas.clientHeight === 0) {
-      const parent = canvas.parentElement;
-      if (parent && parent.offsetWidth > 0) {
-        canvas.width = Math.floor(parent.offsetWidth * (window.devicePixelRatio || 1)) || 300;
-        canvas.height = Math.floor(parent.offsetHeight * (window.devicePixelRatio || 1)) || 200;
-      } else {
-        canvas.width = 600;
-        canvas.height = 400;
-      }
-    }
-
-    const draw = now => {
-      if (!active || !canvas.isConnected) return;
-      gl.clear(gl.COLOR_BUFFER_BIT);
-      const ratio = Math.min(window.devicePixelRatio || 1, 1.5), width = Math.max(1, Math.round(canvas.clientWidth * ratio)), height = Math.max(1, Math.round(canvas.clientHeight * ratio));
-      if (canvas.width !== width || canvas.height !== height) { canvas.width = width; canvas.height = height; gl.viewport(0, 0, width, height); }
-
-      if (values.cloudy > 0.0) {
-        cloudsList.forEach(c => {
-          c.x -= c.speed;
-          if (c.x + c.rx < 0) {
-            c.x = width + c.rx;
-            c.y = 50 + Math.random() * (height - 100);
-          }
-        });
-      }
-      const flatPositions = [];
-      const flatSizes = [];
-      const flatAlphas = [];
-      cloudsList.forEach(c => {
-        flatPositions.push(c.x / width, c.y / height);
-        flatSizes.push(c.rx / width, c.ry / height);
-        flatAlphas.push(values.cloudy > 0.0 ? c.alpha : 0.0);
-      });
-
-      gl.useProgram(program); gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.bindBuffer(gl.ARRAY_BUFFER, buffer); gl.enableVertexAttribArray(position); gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
-
-      if (uniformLocs.time) gl.uniform1f(uniformLocs.time, now);
-      if (uniformLocs.rain) gl.uniform1f(uniformLocs.rain, values.rain);
-      if (uniformLocs.snow) gl.uniform1f(uniformLocs.snow, values.snow);
-      if (uniformLocs.fog) gl.uniform1f(uniformLocs.fog, values.fog);
-      if (uniformLocs.storm) gl.uniform1f(uniformLocs.storm, values.storm);
-      if (uniformLocs.wind) gl.uniform1f(uniformLocs.wind, values.wind);
-      if (uniformLocs.temp) gl.uniform1f(uniformLocs.temp, values.temp);
-      if (uniformLocs.night) gl.uniform1f(uniformLocs.night, values.night);
-      if (uniformLocs.cloudy) gl.uniform1f(uniformLocs.cloudy, values.cloudy);
-      if (uniformLocs.cloudPositions) gl.uniform2fv(uniformLocs.cloudPositions, flatPositions);
-      if (uniformLocs.cloudSizes) gl.uniform2fv(uniformLocs.cloudSizes, flatSizes);
-      if (uniformLocs.cloudAlphas) gl.uniform1fv(uniformLocs.cloudAlphas, flatAlphas);
-
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      frame = requestAnimationFrame(draw);
-    };
-    canvas._argusWebglStop = () => { active = false; cancelAnimationFrame(frame); gl.getExtension('WEBGL_lose_context')?.loseContext(); };
-    canvas.closest('.wx-atmosphere')?.classList.add('webgl-active');
-    frame = requestAnimationFrame(draw);
-  }
-
-  /* ── Inline CSS Weather Backgrounds ─────────────────────────── */
   _renderAtmosphere(ws, isNight) {
-    const value = String(ws || '').toLowerCase();
-    const has = term => value.includes(term);
-    const storm = has('thunder') || has('lightning') || has('storm');
-    const snow = has('snow') || has('hail') || has('sleet') || has('blizzard');
-    const drizzle = has('drizzle') || has('shower');
-    const rain = !drizzle && (has('rain') || has('pouring'));
-    const fog = has('fog') || has('mist') || has('hazy');
-    const cloud = has('cloud') || has('overcast');
-    
-    let base = 'clear';
-    if (storm) base = 'storm';
-    else if (rain || drizzle) base = 'rain';
-    else if (snow) base = 'snow';
-    else if (fog) base = 'fog';
-    else if (has('partly')) base = 'partlycloudy';
-    else if (cloud) base = 'cloudy';
-    else if (has('sunny')) base = 'sunny';
-    
-    const night = isNight ? 'night' : 'day';
-    const eclipse = this._eclipseEvent();
-    const eclipseClass = eclipse ? `eclipse` : '';
-    
-    return `<div class="scene ${night} ${base} ${eclipseClass}"></div>`;
+    return '';
   }
 
   _getWeatherBg(ws, isNight) {
-    return this._renderAtmosphere(ws, isNight);
+    return '';
   }
 
 
@@ -6702,7 +6549,7 @@ gl_FragColor=vec4(col,alpha);}`;
         </video>
       </div>`;
     }
-    return `<canvas class="wx-webgl" style="position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; border-radius:inherit;"></canvas>`;
+    return `<div class="wx wx-static" style="position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; border-radius:inherit;"></div>`;
   }
 
   _updateHomeNameDisplay() {

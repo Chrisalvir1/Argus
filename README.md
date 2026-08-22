@@ -51,17 +51,18 @@ Puedes ver el diagnóstico detectado y forzar un perfil manualmente desde **Pers
 - **Fondos Personalizables Independientes por Perfil** (v2.0.29): Cada usuario puede tener su propio fondo.
 - Selector de perfiles con distinción visual del perfil propio; perfiles ajenos protegidos por PIN de acceso.
 - Auditoría, estadísticas de 30 días y línea temporal forense.
-- **Indicadores Inteligentes de Batería (Liquid Glass)**: Visualización en tiempo real con alertas críticas al 10% y estado de batería agotada.
 - MQTT opcional con comandos JSON o texto.
 - Horarios locales y confirmación de intrusión mediante múltiples señales.
 - Medios privados firmados bajo `.storage`.
 - Panel completo y tarjeta Lovelace en siete idiomas con **Onboarding Premium** y bienvenida inmersiva.
 - **Restauración de Backup Segura:** Restaura configuraciones encriptadas directamente desde el primer uso (exclusivo para administradores HA).
-- **Diseño Liquid Glass:** Elementos de UI y tarjetas de instancias activas rediseñados con estética premium de cristal líquido.
-- Atmósfera WebGL procedimental ultra-realista (motor mejorado) para lluvia, tormenta, nieve, niebla, nubes, sol, estrellas, luna y eclipses respaldados por entidades reales.
-- **Perfiles de rendimiento adaptable:** detección automática de capacidades del dispositivo, benchmark breve y ajuste visual (Completo/Equilibrado/Ligero/Esencial) sin afectar las funciones de seguridad.
+- **Gama Amplia de Color Rec. 2020 / Display P3 / HDR / HLG:** Renderizado de alto rango dinámico y colores de máxima pureza para escudo SVG, estados y alertas en pantallas compatibles (OLED, Retina XDR, Display P3 / Rec. 2020).
+- **Fluidez Nativa 120Hz Apple ProMotion y 60Hz:** Animaciones de escudo, espera de armado y sensores aceleradas 100% por hardware GPU en Safari, Chrome y app oficial de Home Assistant.
+- **Visualización Móvil y Modo Pantalla Completa Perfeccionados:** Soporte robusto de pantalla completa en iOS y Android con salida segura por PIN o directa, HUD adaptativo sin franjas y corrección de scroll.
+- **Alertas Inteligentes de Batería:** Detección y notificación exclusiva para sensores configurados en los modos activos de Argus.
+- **Perfiles de rendimiento adaptable:** detección automática de capacidades del dispositivo y ajuste visual sin afectar las funciones de seguridad.
 - **Presencia HA:** Sincronización inteligente de estados de presencia directamente desde Home Assistant.
-- Animaciones premium para paneles, opciones, guardado, sensores, botones y modales, con respeto por `prefers-reduced-motion`.
+- **Animaciones premium fluidas:** Animaciones optimizadas por hardware para paneles, opciones, guardado, sensores, botones y modales, con respeto por `prefers-reduced-motion`.
 
 ## Activación del Asistente de Voz (TTS)
 
