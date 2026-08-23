@@ -1,9 +1,25 @@
 /* ══════════════════════════════════════════════════════════════════════════════
-   ARGUS SECURITY CONSOLE — REACT COMPONENT STYLES
-   Wide-gamut Rec.2020 / Display-P3 HDR & 120Hz Apple ProMotion GPU Acceleration
+   ARGUS SECURITY CONSOLE — 3D LIQUID GLASS & HDR ARCHITECTURE
+   High-gloss specular reflections, depth drop-shadows, 120Hz/60Hz GPU acceleration
    ══════════════════════════════════════════════════════════════════════════════ */
 
-/* ── Container Clean Slate (No dark shadows or black boxes) ───────────────── */
+/* ── Container Clean Slate (Pure 3D Glass) ─────────────────────────────────── */
+.entry {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 100%) !important;
+  backdrop-filter: blur(40px) saturate(190%) brightness(1.12) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(190%) brightness(1.12) !important;
+  box-shadow: 
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+    0 24px 64px rgba(0, 0, 0, 0.45),
+    0 4px 16px rgba(0, 0, 0, 0.25) !important;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease !important;
+}
+
 .security-console {
   background: transparent !important;
   border: none !important;
@@ -16,11 +32,11 @@
   box-shadow: none !important;
 }
 
-/* ── HUD Elements ──────────────────────────────────────────────────────────── */
+/* ── 3D HUD Elements ───────────────────────────────────────────────────────── */
 .console-hud-loc {
   display: inline-flex !important;
   align-items: center !important;
-  height: 36px !important;
+  height: 38px !important;
   box-sizing: border-box !important;
   padding: 0 16px !important;
   max-width: clamp(140px, 26vw, 260px) !important;
@@ -28,35 +44,45 @@
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
   border-radius: 999px !important;
-  background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.05)) !important;
-  border: 1px solid rgba(255,255,255,0.25) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 8px 24px rgba(0,0,0,0.35) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.05) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  box-shadow: 
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 8px 24px rgba(0, 0, 0, 0.35) !important;
+  backdrop-filter: blur(24px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
   font-size: 11.5px !important;
   font-weight: 850 !important;
   letter-spacing: 0.04em !important;
   color: #ffffff !important;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.5) !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
+  transform: translate3d(0,0,0) !important;
 }
 
 .argus-connection-pill {
   display: inline-flex !important;
   align-items: center !important;
   gap: 8px !important;
-  height: 36px !important;
-  padding: 0 14px !important;
+  height: 38px !important;
+  padding: 0 16px !important;
   border-radius: 999px !important;
-  background: rgba(255, 255, 255, 0.08) !important;
-  border: 1px solid rgba(255, 255, 255, 0.16) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.04) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  box-shadow: 
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.38),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+    0 8px 24px rgba(0, 0, 0, 0.35) !important;
+  backdrop-filter: blur(24px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
   font-size: 11px !important;
-  font-weight: 800 !important;
+  font-weight: 850 !important;
   letter-spacing: 0.05em !important;
   color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
   max-width: max-content !important;
   white-space: nowrap !important;
+  transform: translate3d(0,0,0) !important;
 }
 
 .argus-connection-dot {
@@ -64,12 +90,12 @@
   height: 8px !important;
   border-radius: 50% !important;
   background: #10b981 !important;
-  box-shadow: 0 0 10px #10b981 !important;
+  box-shadow: 0 0 12px #10b981 !important;
 }
 
 .argus-connection-pill[data-online="false"] .argus-connection-dot {
   background: #ef4444 !important;
-  box-shadow: 0 0 10px #ef4444 !important;
+  box-shadow: 0 0 12px #ef4444 !important;
 }
 
 .console-hud-right {
@@ -81,37 +107,36 @@
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
-  height: 36px !important;
+  height: 38px !important;
 }
 
 .console-system-badge {
   display: inline-flex !important;
   align-items: center !important;
-  height: 36px !important;
+  height: 38px !important;
   box-sizing: border-box !important;
-  padding: 0 16px !important;
+  padding: 0 18px !important;
   border-radius: 999px !important;
   font-size: 11px !important;
   font-weight: 900 !important;
   letter-spacing: 0.05em !important;
   text-transform: uppercase !important;
   white-space: nowrap !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  backdrop-filter: blur(24px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+  transform: translate3d(0,0,0) !important;
 }
 
-/* Wide-gamut status badge colors */
+/* Wide-gamut 3D Status Badges */
 .console-system-badge--disarmed {
   color: #34d399 !important;
-  background: linear-gradient(135deg, rgba(16,185,129,0.28), rgba(5,150,105,0.12)) !important;
-  border: 1.5px solid rgba(16,185,129,0.60) !important;
-  box-shadow: 0 0 24px rgba(16,185,129,0.35), inset 0 1px 0 rgba(255,255,255,0.4) !important;
-  text-shadow: 0 0 10px rgba(16,185,129,0.6) !important;
-}
-@supports (color: color(rec2020 1 1 1)) {
-  .console-system-badge--disarmed {
-    color: color(rec2020 0.2 0.85 0.4) !important;
-  }
+  background: linear-gradient(135deg, rgba(16,185,129,0.32) 0%, rgba(5,150,105,0.12) 100%) !important;
+  border: 1.5px solid rgba(16,185,129,0.65) !important;
+  box-shadow: 
+    inset 0 1.5px 0 rgba(255,255,255,0.5),
+    0 0 24px rgba(16,185,129,0.4),
+    0 8px 24px rgba(0,0,0,0.35) !important;
+  text-shadow: 0 0 10px rgba(16,185,129,0.7) !important;
 }
 
 .console-system-badge--armed_home,
@@ -119,35 +144,33 @@
 .console-system-badge--armed_night,
 .console-system-badge--pending {
   color: #fbbf24 !important;
-  background: linear-gradient(135deg, rgba(245,158,11,0.30), rgba(217,119,6,0.12)) !important;
-  border: 1.5px solid rgba(245,158,11,0.65) !important;
-  box-shadow: 0 0 24px rgba(245,158,11,0.38), inset 0 1px 0 rgba(255,255,255,0.45) !important;
-  text-shadow: 0 0 10px rgba(245,158,11,0.7) !important;
-}
-@supports (color: color(rec2020 1 1 1)) {
-  .console-system-badge--armed_home,
-  .console-system-badge--armed_away,
-  .console-system-badge--armed_night,
-  .console-system-badge--pending {
-    color: color(rec2020 0.95 0.75 0.1) !important;
-  }
+  background: linear-gradient(135deg, rgba(245,158,11,0.35) 0%, rgba(217,119,6,0.14) 100%) !important;
+  border: 1.5px solid rgba(245,158,11,0.7) !important;
+  box-shadow: 
+    inset 0 1.5px 0 rgba(255,255,255,0.55),
+    0 0 24px rgba(245,158,11,0.45),
+    0 8px 24px rgba(0,0,0,0.35) !important;
+  text-shadow: 0 0 10px rgba(245,158,11,0.8) !important;
 }
 
 .console-system-badge--triggered {
   color: #f87171 !important;
-  background: linear-gradient(135deg, rgba(239,68,68,0.38), rgba(185,28,28,0.15)) !important;
-  border: 1.5px solid rgba(239,68,68,0.75) !important;
-  box-shadow: 0 0 32px rgba(239,68,68,0.55), inset 0 1px 0 rgba(255,255,255,0.45) !important;
-  text-shadow: 0 0 12px rgba(239,68,68,0.8) !important;
+  background: linear-gradient(135deg, rgba(239,68,68,0.42) 0%, rgba(185,28,28,0.16) 100%) !important;
+  border: 1.5px solid rgba(239,68,68,0.85) !important;
+  box-shadow: 
+    inset 0 1.5px 0 rgba(255,255,255,0.6),
+    0 0 32px rgba(239,68,68,0.6),
+    0 8px 24px rgba(0,0,0,0.35) !important;
+  text-shadow: 0 0 12px rgba(239,68,68,0.85) !important;
   animation: argusTriggerBadgePulse 0.9s ease-in-out infinite !important;
 }
 
 @keyframes argusTriggerBadgePulse {
-  0%, 100% { opacity: 0.85; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.04); }
+  0%, 100% { opacity: 0.85; transform: scale3d(1,1,1); }
+  50% { opacity: 1; transform: scale3d(1.04,1.04,1); }
 }
 
-/* ── Central Shield SVG ────────────────────────────────────────────────────── */
+/* ── 3D Central Shield SVG ─────────────────────────────────────────────────── */
 .security-console .entry-icon {
   display: flex !important;
   flex-direction: column !important;
@@ -165,7 +188,7 @@
   width: 100% !important;
   max-width: 220px !important;
   height: auto !important;
-  filter: drop-shadow(0 12px 32px rgba(0,0,0,0.5));
+  filter: drop-shadow(0 14px 28px rgba(0,0,0,0.6)) drop-shadow(0 0 45px rgba(16,185,129,0.55)) !important;
 }
 
 @keyframes float-icon {
@@ -183,15 +206,16 @@
 .argus-shield-status { 
   display: block;
   margin: 7px auto 0;
-  padding: 5px 12px;
+  padding: 5px 14px;
   width: max-content;
   max-width: 200px;
-  border: 1px solid rgba(255,184,57,.45);
+  border: 1px solid rgba(255,184,57,.55);
   border-radius: 999px;
-  background: rgba(255,149,0,.15);
+  background: rgba(255,149,0,.2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 6px 18px rgba(0,0,0,0.3);
   color: #ffd27a;
   font-size: 9.5px;
-  font-weight: 800;
+  font-weight: 850;
   letter-spacing: .12em;
   text-align: center;
   animation: argusArmingLabel 1.05s ease-in-out infinite;
@@ -200,7 +224,7 @@
 @keyframes argusArmingShield { 0%,100%{opacity:.55;transform:scale3d(.94,.94,1)} 50%{opacity:1;transform:scale3d(1.07,1.07,1)} }
 @keyframes argusArmingLabel { 0%,100%{opacity:.62} 50%{opacity:1} }
 
-/* ── Mode Buttons & Liquid Stack ───────────────────────────────────────────── */
+/* ── 3D Mode Buttons ───────────────────────────────────────────────────────── */
 .security-console .liquid-stack {
   display: grid !important;
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
@@ -217,58 +241,73 @@
   align-items: center !important;
   justify-content: center !important;
   text-align: center !important;
-  gap: 4px !important;
-  padding: 10px 4px !important;
-  min-height: 64px !important;
-  border-radius: 16px !important;
+  gap: 5px !important;
+  padding: 12px 6px !important;
+  min-height: 68px !important;
+  border-radius: 20px !important;
   font-size: 11.5px !important;
-  font-weight: 800 !important;
+  font-weight: 850 !important;
+  letter-spacing: 0.03em !important;
   line-height: 1.15 !important;
-  background: rgba(255, 255, 255, 0.08) !important;
-  border: 1px solid rgba(255, 255, 255, 0.16) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 8px 22px rgba(0, 0, 0, 0.25) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.05) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 10px 28px rgba(0, 0, 0, 0.35) !important;
+  backdrop-filter: blur(24px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
   color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
   cursor: pointer !important;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, border-color 0.2s ease !important;
-  transform: translate3d(0,0,0) !important;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease !important;
+  transform: translate3d(0, 0, 0) !important;
 }
 
 .security-console .liquid-btn:hover {
-  transform: translateY(-2px) translate3d(0,0,0) scale(1.02) !important;
-  background: rgba(255, 255, 255, 0.13) !important;
-  border-color: rgba(255, 255, 255, 0.28) !important;
+  transform: translateY(-3px) translate3d(0, 0, 0) scale(1.025) !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.08) 100%) !important;
+  border-color: rgba(255, 255, 255, 0.40) !important;
+  box-shadow: 
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.55),
+    0 14px 34px rgba(0, 0, 0, 0.45) !important;
 }
 
 .security-console .liquid-btn span:first-child, .security-console .liquid-btn .mode-btn-icon {
   font-size: 20px !important;
   line-height: 1 !important;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4)) !important;
 }
 
 .security-console .liquid-btn span:last-child {
   font-size: 11px !important;
-  font-weight: 800 !important;
+  font-weight: 850 !important;
   color: #ffffff !important;
 }
 
 .security-console .btn-home.active {
   background: linear-gradient(135deg, #fb8c00 0%, #d97706 100%) !important;
   border: 1px solid rgba(254, 215, 170, 0.85) !important;
-  box-shadow: 0 12px 32px rgba(251, 140, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+  box-shadow: 
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.6),
+    0 12px 32px rgba(251, 140, 0, 0.6) !important;
 }
 .security-console .btn-away.active {
   background: linear-gradient(135deg, #e53935 0%, #b91c1c 100%) !important;
   border: 1px solid rgba(254, 202, 202, 0.85) !important;
-  box-shadow: 0 12px 32px rgba(229, 57, 53, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+  box-shadow: 
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.6),
+    0 12px 32px rgba(229, 57, 53, 0.6) !important;
 }
 .security-console .btn-night.active {
   background: linear-gradient(135deg, #1e88e5 0%, #1d4ed8 100%) !important;
   border: 1px solid rgba(191, 219, 254, 0.85) !important;
-  box-shadow: 0 12px 32px rgba(30, 136, 229, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+  box-shadow: 
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.6),
+    0 12px 32px rgba(30, 136, 229, 0.6) !important;
 }
 
-/* ── Live Sensors Grid ─────────────────────────────────────────────────────── */
+/* ── 3D Live Sensors Grid ─────────────────────────────────────────────────── */
 .security-console .console-sensors {
   display: grid;
   grid-template-columns: 1fr;
@@ -309,28 +348,44 @@
   gap: 4px !important;
 }
 
+/* ── 3D Sensor Chips ──────────────────────────────────────────────────────── */
 .console-sensor {
   display: grid !important;
   grid-template-columns: auto minmax(0, 1fr) auto !important;
   align-items: center !important;
   gap: 10px !important;
-  padding: 10px 14px !important;
-  border-radius: 16px !important;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)) !important;
-  border: 1px solid rgba(255, 255, 255, 0.16) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 6px 18px rgba(0, 0, 0, 0.25) !important;
-  backdrop-filter: blur(16px) saturate(160%) !important;
-  -webkit-backdrop-filter: blur(16px) saturate(160%) !important;
+  padding: 10px 16px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.04) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  box-shadow: 
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.38),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+    0 8px 24px rgba(0, 0, 0, 0.35) !important;
+  backdrop-filter: blur(24px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
   color: #ffffff !important;
-  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
   min-height: 44px !important;
   box-sizing: border-box !important;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease !important;
+  transform: translate3d(0, 0, 0) !important;
+}
+
+.console-sensor:hover {
+  transform: translateY(-2px) translate3d(0, 0, 0) scale(1.02) !important;
+  box-shadow: 
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.5),
+    0 12px 28px rgba(0, 0, 0, 0.45) !important;
 }
 
 .console-sensor.open {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.28), rgba(185, 28, 28, 0.12)) !important;
-  border-color: rgba(239, 68, 68, 0.55) !important;
-  box-shadow: 0 0 20px rgba(239, 68, 68, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.35) 0%, rgba(185, 28, 28, 0.16) 100%) !important;
+  border-color: rgba(239, 68, 68, 0.65) !important;
+  box-shadow: 
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.45),
+    0 0 24px rgba(239, 68, 68, 0.4),
+    0 8px 24px rgba(0, 0, 0, 0.35) !important;
 }
 
 .console-sensor-icon {
@@ -338,6 +393,7 @@
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)) !important;
 }
 
 .console-sensor-name {
@@ -364,14 +420,14 @@
 .console-empty {
   padding: 24px !important;
   text-align: center !important;
-  border: 1px dashed rgba(255, 255, 255, 0.22) !important;
-  border-radius: 16px !important;
-  color: rgba(255, 255, 255, 0.6) !important;
+  border: 1px dashed rgba(255, 255, 255, 0.25) !important;
+  border-radius: 20px !important;
+  color: rgba(255, 255, 255, 0.65) !important;
   font-size: 12px !important;
-  font-weight: 700 !important;
+  font-weight: 800 !important;
 }
 
-/* ── 3x3 DESKTOP / HORIZONTAL GRID (Conectado Perfectly Centered Above Shield) ── */
+/* ── 3x3 DESKTOP GRID (Conectado Perfectly Centered Above Shield) ──────────── */
 @media (min-width: 901px) {
   .entry:not(.ios-fullscreen) .security-console {
     display: grid !important;
@@ -466,12 +522,12 @@
 
   .entry:not(.ios-fullscreen) .security-console .liquid-stack {
     width: 100% !important;
-    max-width: 420px !important;
+    max-width: 440px !important;
   }
 
   .entry:not(.ios-fullscreen) .security-console .console-sensors {
     width: 100% !important;
-    max-width: 420px !important;
+    max-width: 440px !important;
   }
 }
 
@@ -481,26 +537,22 @@
    ══════════════════════════════════════════════════════════════════════════════ */
 
 .entry.ios-fullscreen {
-  position: fixed !important;
-  inset: 0 !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  width: 100vw !important;
-  width: 100dvw !important;
-  height: 100vh !important;
-  height: 100dvh !important;
-  z-index: 99999999 !important;
-  background: radial-gradient(ellipse at 50% 50%, #162438 0%, #08101a 60%, #010408 100%) !important;
-  margin: 0 !important;
-  padding: 0 !important;
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  box-sizing: border-box !important;
+  background: transparent !important;
   border: none !important;
   border-radius: 0 !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  box-sizing: border-box !important;
-  -webkit-overflow-scrolling: touch !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  overflow: visible !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 /* Fullscreen Exit Button */
@@ -513,12 +565,12 @@
   font-size: 20px !important;
   font-weight: 900 !important;
   background: rgba(0, 0, 0, 0.65) !important;
-  backdrop-filter: blur(16px) !important;
-  -webkit-backdrop-filter: blur(16px) !important;
-  border-radius: 14px !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-radius: 16px !important;
   color: white !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 8px 24px rgba(0, 0, 0, 0.5) !important;
   cursor: pointer !important;
 }
 
@@ -529,7 +581,7 @@
     flex-direction: column !important;
     align-items: center !important;
     justify-content: flex-start !important;
-    padding: max(60px, calc(env(safe-area-inset-top) + 44px)) 16px max(32px, env(safe-area-inset-bottom)) !important;
+    padding: max(64px, calc(env(safe-area-inset-top) + 48px)) 16px max(32px, env(safe-area-inset-bottom)) !important;
     gap: 16px !important;
     width: 100% !important;
     max-width: 480px !important;

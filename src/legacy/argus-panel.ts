@@ -2474,70 +2474,53 @@ _tmpl.innerHTML = `
   :host(.fullscreen-active) {
     position: fixed !important;
     inset: 0 !important;
-    z-index: 99999999 !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
     width: 100vw !important;
-    height: 100vh !important;
-    background: #000 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-  :host(.fullscreen-active) .wrap {
-    padding: 0 !important;
-    margin: 0 !important;
-    max-width: none !important;
-    width: 100% !important;
-    height: auto !important;
-  }
-  :host(.fullscreen-active) .hero {
-    display: none !important;
-  }
-  :host(.fullscreen-active) .grid {
-    display: block !important;
-    width: 100% !important;
-    height: auto !important;
-    margin: 0 !important;
-    gap: 0 !important;
-  }
-  :host(.fullscreen-active) .hero,
-  :host(.fullscreen-active) .panel-head,
-  :host(.fullscreen-active) .dashboard-instances > .panel-head,
-  :host(.fullscreen-active) #h-instances,
-  :host(.fullscreen-active) .argus-dashboard,
-  :host(.fullscreen-active) .argus-dashboard__toolbar,
-  :host(.fullscreen-active) .argus-dashboard__feedback,
-  :host(.fullscreen-active) .argus-widget__edit-header,
-  :host(.fullscreen-active) .argus-widget:not(:has(.ios-fullscreen)),
-  :host(.fullscreen-active) section:not(:has(.ios-fullscreen)):not(#w-instances),
-  :host(.fullscreen-active) .personalize-section,
-  :host(.fullscreen-active) .grid > .stack:not(:first-child),
-  :host(.fullscreen-active) .grid > .stack:first-child > section:not(:first-child) {
-    display: none !important;
-    visibility: hidden !important;
-  }
-  :host(.fullscreen-active) #entries {
-    width: 100% !important;
-    height: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-  :host(.fullscreen-active) #entries > .entry:not(.ios-fullscreen) {
-    display: none !important;
-  }
-  :host(.fullscreen-active) #entries > .entry.ios-fullscreen {
-    position: fixed !important;
-    inset: 0 !important;
-    width: 100vw !important;
+    width: 100dvw !important;
     height: 100vh !important;
     height: 100dvh !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border-radius: 0 !important;
-    border: none !important;
     z-index: 99999999 !important;
     background: radial-gradient(ellipse at 50% 50%, #162438 0%, #08101a 60%, #010408 100%) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  :host(.fullscreen-active) .hero,
+  :host(.fullscreen-active) #argus-react-dashboard-root,
+  :host(.fullscreen-active) .argus-dashboard,
+  :host(.fullscreen-active) .panel-head,
+  :host(.fullscreen-active) section:not(#w-instances),
+  :host(.fullscreen-active) .argus-widget:not(#w-instances),
+  :host(.fullscreen-active) .personalize-section {
+    display: none !important;
+  }
+  :host(.fullscreen-active) .wrap,
+  :host(.fullscreen-active) .grid,
+  :host(.fullscreen-active) #w-instances,
+  :host(.fullscreen-active) #entries,
+  :host(.fullscreen-active) #entries > div {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    min-height: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    transform: none !important;
+    filter: none !important;
+    overflow: visible !important;
   }
 
 
@@ -3030,16 +3013,6 @@ _tmpl.innerHTML = `
   /* The .hud inside the article gets hidden when the content is a security-console */
   @media(max-width:950px){
     .grid{grid-template-columns:1fr;grid-template-areas:"instances" "activity" "modes" "access" "automations" "backup" "github"}
-    .security-console{flex-direction:column;padding:12px 14px 20px;gap:16px}
-    .security-console .console-hud{order:1!important;width:100%!important;display:flex!important;flex-wrap:wrap!important;justify-content:space-between!important;align-items:center!important;gap:8px!important;padding:8px 12px!important;box-sizing:border-box!important}
-    .security-console .console-hud-loc{flex:1 1 auto!important;max-width:calc(100% - 130px)!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-size:11px!important}
-    .security-console .argus-connection-pill{flex:0 0 auto!important;font-size:10.5px!important}
-    .security-console .console-hud-right{flex:0 0 100%!important;display:flex!important;justify-content:center!important;margin-top:2px!important}
-    .security-console .entry-icon{order:2!important;flex:0 0 auto!important;min-height:130px!important}
-    .security-console .liquid-stack{order:3!important;width:100%!important;max-width:440px!important;margin:0 auto!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
-    .security-console .liquid-stack .btn-disarm,.security-console .liquid-stack .btn-sos{grid-column:1/-1!important}
-    .security-console .console-sensors{order:4!important;width:100%!important;max-width:440px!important;margin:0 auto!important}
-    .console-keypad{width:100%;max-width:320px}
   }
 
   /* Sensor column */
@@ -4175,12 +4148,6 @@ _tmpl.innerHTML = `
   .hero-pill{width:min(100%,360px)!important;max-width:100%!important;white-space:normal!important;text-align:center!important;justify-content:center!important;align-items:center!important;line-height:1.25!important;margin:0 auto!important}
   .dashboard-instances>.panel-head{flex-direction:column!important;align-items:stretch!important;gap:10px!important}
   #global-status,#global-status .badge{width:100%!important;box-sizing:border-box!important;justify-content:center!important;text-align:center!important;white-space:normal!important;line-height:1.3!important}
-  .entry:not(.ios-fullscreen) .entry-content.security-console{padding-left:10px!important;padding-right:10px!important}
-  .entry:not(.ios-fullscreen) .console-hud{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:'location' 'connection' 'readings'!important;justify-items:center!important;align-items:center!important;gap:8px!important;text-align:center!important}
-  .entry:not(.ios-fullscreen) .console-hud-loc,.entry:not(.ios-fullscreen) .argus-connection-pill,.entry:not(.ios-fullscreen) .console-hud-right{width:100%!important;max-width:100%!important;box-sizing:border-box!important;justify-self:center!important;justify-content:center!important;text-align:center!important;margin:0!important}
-  .entry:not(.ios-fullscreen) .console-hud-right{display:flex!important;flex-wrap:wrap!important;overflow:visible!important;gap:6px!important}
-  .security-console .liquid-stack{grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:stretch!important}
-  .security-console .liquid-btn{min-width:0!important;white-space:normal!important;line-height:1.2!important;min-height:46px!important}
   #w-activity,.activity-log{max-height:46vh!important;overflow-y:auto!important}
   .argus-mobile-history-overflow-item{display:list-item!important}
   #w-performance,.performance-card,.device-performance{display:grid!important;grid-template-columns:minmax(0,1fr)!important;justify-items:stretch!important;align-items:center!important;text-align:center!important;gap:10px!important}
@@ -4205,20 +4172,7 @@ _tmpl.innerHTML = `
 .hero-profile-dropdown.opening{display:flex!important;animation:jellySpringIn 0.38s cubic-bezier(0.34,1.56,0.64,1) both!important}
 .hero-profile-dropdown.closing{display:flex!important;animation:jellySpringOut 0.28s cubic-bezier(0.4,0,0.2,1) both!important;pointer-events:none!important}
 
-/* Dynamic sensor grid with contained scrolling */
-.security-console .console-sensors{order:3;flex:1 1 300px;max-width:400px;display:grid;grid-template-columns:1fr;gap:8px;max-height:280px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;padding-right:4px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.25) transparent}
-.security-console .console-sensors.console-sensors--compact,
-.security-console .console-sensors[data-count="3"],
-.security-console .console-sensors[data-count="4"],
-.security-console .console-sensors[data-count="5"],
-.security-console .console-sensors[data-count="6"]{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}
-.security-console .console-sensors.console-sensors--micro,
-.security-console .console-sensors[data-count="7"],
-.security-console .console-sensors[data-count="8"],
-.security-console .console-sensors[data-count="9"],
-.security-console .console-sensors[data-count="10"],
-.security-console .console-sensors[data-count="11"],
-.security-console .console-sensors[data-count="12"]{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:4px!important}
+
 .console-sensor.sensor-arming-blink,
 .console-sensor.argus-blocking{border-color:#ffd60a!important;background:linear-gradient(135deg,rgba(255,149,0,0.38),rgba(255,96,0,0.22))!important;animation:argusSensorArmBlink 0.9s ease-in-out infinite!important;color:#fff!important}
 

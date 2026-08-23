@@ -69,29 +69,32 @@ function injectStyles(panel) {
   display: block;
 }
 
-/* The pill track — dark Liquid Glass */
+/* The pill track — 3D Liquid Glass */
 .argus-sta-track {
   position: relative;
   width: 100%;
   height: 64px;
-  border-radius: 32px;
+  border-radius: 999px;
   overflow: hidden;
   user-select: none;
   -webkit-user-select: none;
   cursor: pointer;
   box-sizing: border-box;
-  backdrop-filter: blur(32px) saturate(180%) brightness(0.7);
-  -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(0.7);
+  backdrop-filter: blur(32px) saturate(190%) brightness(1.08);
+  -webkit-backdrop-filter: blur(32px) saturate(190%) brightness(1.08);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.03) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.35), inset 0 2px 8px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+  transform: translate3d(0,0,0);
 }
 .argus-sta-track--disarm {
-  background: linear-gradient(135deg, rgba(10,18,30,0.92) 0%, rgba(6,12,22,0.96) 100%);
-  border: 1px solid rgba(16,185,129,0.28);
-  box-shadow: 0 4px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.07);
+  border-color: rgba(52, 211, 153, 0.55);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.4), 0 0 20px rgba(16, 185, 129, 0.2), 0 8px 24px rgba(0,0,0,0.35);
 }
 .argus-sta-track--sos {
-  background: linear-gradient(135deg, rgba(10,18,30,0.92) 0%, rgba(6,12,22,0.96) 100%);
-  border: 1px solid rgba(239,68,68,0.28);
-  box-shadow: 0 4px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.07);
+  border-color: rgba(248, 113, 113, 0.55);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.4), 0 0 20px rgba(239, 68, 68, 0.2), 0 8px 24px rgba(0,0,0,0.35);
 }
 
 /* Fill bar that follows the thumb */
@@ -104,10 +107,10 @@ function injectStyles(panel) {
   transition: width 0.04s linear;
 }
 .argus-sta-track--disarm .argus-sta-fill {
-  background: linear-gradient(90deg, rgba(16,185,129,0.22), rgba(5,150,105,0.06));
+  background: linear-gradient(90deg, rgba(16,185,129,0.35), rgba(5,150,105,0.12));
 }
 .argus-sta-track--sos .argus-sta-fill {
-  background: linear-gradient(90deg, rgba(239,68,68,0.25), rgba(185,28,28,0.06));
+  background: linear-gradient(90deg, rgba(239,68,68,0.38), rgba(185,28,28,0.12));
 }
 
 /* The large circular thumb (left side) */
@@ -126,26 +129,29 @@ function injectStyles(panel) {
   will-change: transform;
   touch-action: none;
   -webkit-tap-highlight-color: transparent;
+  backdrop-filter: blur(20px) saturate(190%);
+  -webkit-backdrop-filter: blur(20px) saturate(190%);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
 }
 .argus-sta-thumb:active { cursor: grabbing; }
 
 .argus-sta-track--disarm .argus-sta-thumb {
-  background: radial-gradient(circle at 35% 35%, rgba(20,220,140,0.18), rgba(8,10,18,0.96));
-  border: 1.5px solid rgba(16,185,129,0.55);
+  background: radial-gradient(circle at 35% 35%, rgba(52, 211, 153, 0.35), rgba(10, 24, 20, 0.95));
+  border: 1.5px solid rgba(52, 211, 153, 0.85);
   box-shadow:
-    0 0 0 1px rgba(255,255,255,0.06) inset,
-    0 6px 24px rgba(0,0,0,0.55),
-    0 0 18px rgba(16,185,129,0.30);
-  color: rgba(167,243,208,0.95);
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.65),
+    0 8px 24px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(16, 185, 129, 0.45);
+  color: #ffffff;
 }
 .argus-sta-track--sos .argus-sta-thumb {
-  background: radial-gradient(circle at 35% 35%, rgba(220,30,30,0.18), rgba(8,10,18,0.96));
-  border: 1.5px solid rgba(239,68,68,0.55);
+  background: radial-gradient(circle at 35% 35%, rgba(248, 113, 113, 0.35), rgba(28, 12, 16, 0.95));
+  border: 1.5px solid rgba(248, 113, 113, 0.85);
   box-shadow:
-    0 0 0 1px rgba(255,255,255,0.06) inset,
-    0 6px 24px rgba(0,0,0,0.55),
-    0 0 18px rgba(239,68,68,0.30);
-  color: rgba(252,165,165,0.95);
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.65),
+    0 8px 24px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(239, 68, 68, 0.45);
+  color: #ffffff;
 }
 .argus-sta-track--sos.sos-pulsing .argus-sta-thumb {
   animation: staThumbPulse 0.8s infinite ease-in-out;
