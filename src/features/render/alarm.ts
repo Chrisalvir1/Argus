@@ -27,10 +27,10 @@ function paint(button: HTMLElement, kind: string, active: boolean) {
   const color = kind === 'sos' ? 'linear-gradient(110deg,#ff453a,#ff2d55)' :
                 kind === 'disarm' ? 'linear-gradient(110deg,#34c759,#16863a)' :
                 'linear-gradient(110deg,rgba(67,180,255,.72),rgba(52,120,212,.68))';
-  button.style.setProperty('background', active ? color : 'rgba(255,255,255,.105)', 'important');
-  button.style.setProperty('background-image', active ? color : 'linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.055))', 'important');
+  button.style.setProperty('background', active ? color : 'rgba(255,255,255,.08)', 'important');
+  button.style.setProperty('background-image', active ? color : 'none', 'important');
   button.style.setProperty('border', active ? '1px solid rgba(255,255,255,.38)' : '1px solid rgba(255,255,255,.14)', 'important');
-  button.style.setProperty('box-shadow', active ? '0 8px 24px rgba(0,0,0,.24)' : 'inset 0 1px 0 rgba(255,255,255,.08)', 'important');
+  button.style.setProperty('box-shadow', active ? '0 8px 24px rgba(0,0,0,.24)' : 'inset 0 1px 0 rgba(255,255,255,.12), 0 4px 12px rgba(0,0,0,.2)', 'important');
 }
 
 function ensureStyles(panel: AlarmPanel) {
