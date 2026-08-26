@@ -1121,32 +1121,33 @@ _tmpl.innerHTML = `
   /* Modern Premium Liquid Glass & iOS Wobble Styles */
   :host {
     font-family: 'Inter', sans-serif !important;
-    --glass-bg: var(--argus-glass-bg, rgba(255, 255, 255, 0.07));
-    --glass-border: var(--argus-glass-border, rgba(255, 255, 255, 0.09));
-    --glass-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.35),
-                    0 15px 30px -10px rgba(0, 122, 255, 0.12),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    --sos-red: linear-gradient(135deg, #ff3b30, #ff2d55);
-    --ios-track: rgba(0, 0, 0, 0.25);
-    --ios-thumb: linear-gradient(180deg, #ffffff, #f4f4f7);
-    --text-shadow: 0 1px 3px rgba(0,0,0,0.15);
-    --primary-color: #007aff;
-    --personalize-bg: rgba(255, 255, 255, 0.02);
-    --personalize-border: rgba(255, 255, 255, 0.06);
-    --personalize-divider: rgba(255, 255, 255, 0.08);
-    --bg-inputs-bg: rgba(0, 0, 0, 0.15);
-    --bg-inputs-border: rgba(255, 255, 255, 0.05);
-    --input-bg-darker: rgba(0, 0, 0, 0.25);
-    --input-border-darker: rgba(255, 255, 255, 0.12);
-    --hero-bg: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-    --log-item-bg: rgba(255, 255, 255, 0.02);
-    --log-item-border: rgba(255, 255, 255, 0.05);
-    --user-card-bg: rgba(255, 255, 255, 0.02);
-    --user-card-border: rgba(255, 255, 255, 0.06);
+    color: #fff !important;
     --primary-text-color: #fff !important;
     --secondary-text-color: rgba(255, 255, 255, 0.7);
-    --input-bg: rgba(255, 255, 255, 0.04);
-    --input-border: rgba(255, 255, 255, 0.12);
+    --glass-bg: linear-gradient(135deg, rgba(16, 23, 38, 0.94) 0%, rgba(10, 15, 26, 0.98) 100%);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.45),
+                    0 15px 30px -10px rgba(0, 122, 255, 0.12),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    --sos-red: linear-gradient(135deg, #ff3b30, #ff2d55);
+    --ios-track: rgba(0, 0, 0, 0.35);
+    --ios-thumb: linear-gradient(180deg, #ffffff, #f4f4f7);
+    --text-shadow: 0 1px 3px rgba(0,0,0,0.45);
+    --primary-color: #38bdf8;
+    --personalize-bg: rgba(255, 255, 255, 0.03);
+    --personalize-border: rgba(255, 255, 255, 0.08);
+    --personalize-divider: rgba(255, 255, 255, 0.1);
+    --bg-inputs-bg: rgba(0, 0, 0, 0.25);
+    --bg-inputs-border: rgba(255, 255, 255, 0.08);
+    --input-bg-darker: rgba(0, 0, 0, 0.35);
+    --input-border-darker: rgba(255, 255, 255, 0.14);
+    --hero-bg: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+    --log-item-bg: rgba(255, 255, 255, 0.03);
+    --log-item-border: rgba(255, 255, 255, 0.06);
+    --user-card-bg: rgba(255, 255, 255, 0.03);
+    --user-card-border: rgba(255, 255, 255, 0.08);
+    --input-bg: rgba(255, 255, 255, 0.05);
+    --input-border: rgba(255, 255, 255, 0.14);
   }
 
   
@@ -1254,11 +1255,11 @@ _tmpl.innerHTML = `
   }
 
   .liquid-glass {
-    background: linear-gradient(135deg,color-mix(in srgb,rgba(255,255,255,0.18) 80%,transparent),rgba(255,255,255,0.04));
+    background: linear-gradient(135deg, rgba(16, 23, 38, 0.94) 0%, rgba(10, 15, 26, 0.98) 100%) !important;
     backdrop-filter: blur(28px) saturate(180%) brightness(1.08);
     -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(1.08);
-    border: 1px solid rgba(255,255,255,0.22);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.25);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.18);
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
   }
   .wrap { position: relative; z-index: 1; transition: filter 0.35s ease, opacity 0.35s ease; opacity: 0; pointer-events: none; }
@@ -1500,21 +1501,21 @@ _tmpl.innerHTML = `
   .input-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-left: 4px; }
 
   /* Intelligent Entry Card */
-  .entry{position:relative;overflow:hidden;border-radius:28px;border:1px solid rgba(255,255,255,0.08);margin-bottom:16px;min-height:220px;display:flex;flex-direction:column;transition:transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);box-shadow:0 12px 30px rgba(0,0,0,0.15)}
-  .entry:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 20px 48px rgba(0,0,0,.3)}
+  .entry{position:relative;overflow:hidden;border-radius:28px;border:1px solid rgba(255,255,255,0.1)!important;margin-bottom:16px;min-height:220px;display:flex;flex-direction:column;transition:transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);box-shadow:0 16px 40px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.14)!important;background:linear-gradient(135deg, rgba(13, 19, 32, 0.94) 0%, rgba(8, 12, 22, 0.98) 100%)!important;color:#fff!important}
+  .entry:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 22px 52px rgba(0,0,0,.45)!important}
   .entry::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:inherit;background:linear-gradient(120deg,rgba(255,255,255,.14),transparent 22%,transparent 74%,rgba(255,255,255,.05));mix-blend-mode:soft-light}
   .entry-status-ribbon{position:absolute;top:20px;left:20px;z-index:5;display:flex;align-items:center;gap:9px;max-width:calc(100% - 260px);padding:8px 12px;border:1px solid color-mix(in srgb,var(--entry-accent) 55%,rgba(255,255,255,.2));border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--entry-accent) 28%,rgba(8,15,28,.76)),rgba(7,14,25,.56));box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 8px 24px color-mix(in srgb,var(--entry-accent) 22%,transparent);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);color:#fff}
   .entry-status-orb{width:10px;height:10px;flex:0 0 auto;border-radius:50%;background:var(--entry-accent);box-shadow:0 0 12px var(--entry-accent)}
   .entry-status-copy{display:flex;flex-direction:column;min-width:0}.entry-status-kicker{font-size:8px;line-height:1;text-transform:uppercase;letter-spacing:.12em;opacity:.72;font-weight:800}.entry-status-name{font-size:13px;line-height:1.2;font-weight:900;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.entry-status-event{font-size:9px;line-height:1.2;opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:290px}
   .entry-bg{position:absolute;inset:0;z-index:1;background-size:cover;background-position:center;transition:opacity 0.5s ease}
-  .entry-bg img{width:100%;height:100%;object-fit:cover;opacity:0.6}
-  .entry-content{position:relative;z-index:2;flex:1;padding:20px 140px 20px 20px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.2) 0%, transparent 60%)}
+  .entry-bg img{width:100%;height:100%;object-fit:cover;opacity:0.4}
+  .entry-content{position:relative;z-index:2;flex:1;padding:20px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:transparent}
   /* The live instance is the console: real controls, real sensors and one
      clear disarm keypad. Decorative dashboard cards never sit above it. */
-  .security-console{display:flex;flex-wrap:wrap;justify-content:space-around;align-items:center;gap:32px;padding:32px 24px 24px;background:linear-gradient(90deg,rgba(3,10,20,.40),rgba(3,10,20,.08) 50%,rgba(3,10,20,.36))}
-  .security-console .entry-icon{order:2;flex:0 0 160px!important;min-height:150px!important;margin:0!important;display:flex;justify-content:center;align-items:center;animation:float-icon 5s ease-in-out infinite}.security-console .entry-icon svg{max-width:150px!important;width:100%}
-  .security-console .liquid-stack{order:1;flex:1 1 250px;max-width:320px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.security-console .liquid-btn{min-height:62px;justify-content:center;text-align:center;padding:10px;font-size:12px;gap:8px;white-space:nowrap}.security-console .liquid-btn span:last-child{min-width:0;overflow:hidden;text-overflow:ellipsis}.security-console .btn-disarm,.security-console .btn-sos{grid-column:1/-1}
-  .console-sensors{order:3;flex:1 1 300px;max-width:400px;display:grid;gap:14px;align-content:center}.console-sensor{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;padding:13px 16px;border:1px solid rgba(255,255,255,.15);border-radius:18px;background:linear-gradient(100deg,rgba(36,188,129,.22),rgba(10,27,38,.58));backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 8px 22px rgba(0,0,0,.22)}.console-sensor.open{background:linear-gradient(100deg,rgba(235,74,67,.30),rgba(34,14,23,.62));border-color:rgba(255,102,92,.7)}.console-sensor-icon{font-size:20px}.console-sensor-name{font-weight:850;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.console-sensor-state{font-size:11px;font-weight:900;text-transform:uppercase;color:#75f4b0}.console-sensor.open .console-sensor-state{color:#ff968b}.console-empty{padding:24px;text-align:center;border:1px dashed rgba(255,255,255,.22);border-radius:18px;opacity:.75}
+  .security-console{display:flex;flex-wrap:wrap;justify-content:space-around;align-items:center;gap:24px;padding:24px;background:transparent;color:#fff!important}
+  .security-console .entry-icon{order:2;flex:0 0 160px!important;min-height:150px!important;margin:0!important;display:flex;justify-content:center;align-items:center;animation:float-icon 5s ease-in-out infinite;filter:drop-shadow(0 0 28px rgba(52,199,89,0.45))!important}.security-console .entry-icon svg{max-width:150px!important;width:100%}
+  .security-console .liquid-stack{order:1;flex:1 1 250px;max-width:340px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;align-items:stretch!important}.security-console .liquid-btn{min-height:56px!important;justify-content:center!important;text-align:center!important;padding:10px 6px!important;font-size:11px!important;font-weight:800!important;gap:5px!important;flex-direction:column!important;border-radius:16px!important;background:rgba(255,255,255,0.08)!important;border:1px solid rgba(255,255,255,0.14)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,0.15),0 4px 12px rgba(0,0,0,0.2)!important;color:#fff!important}.security-console .liquid-btn span:last-child{min-width:0;overflow:hidden;text-overflow:ellipsis}.security-console .btn-disarm,.security-console .btn-sos,.security-console .argus-disarm-btn{grid-column:1/-1!important;width:100%!important}
+  .console-sensors{order:3;flex:1 1 300px;max-width:400px;display:grid;gap:10px;align-content:center}.console-sensor{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 14px;border:1px solid rgba(255,255,255,.12)!important;border-radius:999px!important;background:rgba(255,255,255,.07)!important;backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 12px rgba(0,0,0,.2)!important;color:#fff!important}.console-sensor.open{background:linear-gradient(100deg,rgba(235,74,67,.28),rgba(34,14,23,.58))!important;border-color:rgba(255,102,92,.6)!important}.console-sensor-icon{font-size:16px;display:flex;align-items:center;justify-content:center}.console-sensor-name{font-weight:800!important;font-size:11px!important;color:#fff!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}.console-sensor-state{font-size:10px!important;font-weight:900!important;text-transform:uppercase;color:#34c759}.console-sensor.open .console-sensor-state{color:#ff453a}.console-empty{padding:24px;text-align:center;border:1px dashed rgba(255,255,255,.22);border-radius:18px;opacity:.75}
   .console-keypad{flex:1 1 220px;max-width:280px;padding:18px;border:1px solid rgba(255,255,255,.16);border-radius:24px;background:rgba(5,15,30,0.4);backdrop-filter:blur(16px);display:grid;gap:12px}.console-keypad-title{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;text-align:center}.console-keypad-close{position:absolute;top:8px;right:10px;width:28px;height:28px;border:0;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;font-size:20px;line-height:1;cursor:pointer}.console-keypad{position:relative}.console-pin-display{width:100%;box-sizing:border-box;padding:11px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(4,14,26,.46);color:#fff;text-align:center;font-size:20px;letter-spacing:.35em}.console-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;place-items:center}.console-pad button{width:100%;aspect-ratio:1/1;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:linear-gradient(145deg,rgba(165,220,255,.24),rgba(20,45,66,.62));color:#fff;font-size:17px;font-weight:800;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 6px 14px rgba(0,0,0,.25);cursor:pointer;display:flex;align-items:center;justify-content:center}.console-pad .console-enter{border-radius:16px;aspect-ratio:auto;height:100%;color:#7ff8c1;border-color:rgba(74,230,157,.65)}.console-keypad small{text-align:center;opacity:.7}.console-pin-status{min-height:1.2em;margin:0;color:#ffb4ac;opacity:0;transition:opacity .18s ease}.console-pin-status.visible{opacity:1}
   /* ── Console HUD header (inside the flex layout, not absolute) ──────── */
   .console-hud{order:0;flex:0 0 100%;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(0,0,0,0.25);border-radius:14px;backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);gap:12px;flex-wrap:wrap}
@@ -4619,7 +4620,6 @@ class ArgusPanel extends HTMLElement {
       art.innerHTML = `
           ${this._renderEntryBackground(weatherState, isNight)}
           ${this._kioskLocked ? `<button class="btn-unlock-kiosk" data-action="unlock-kiosk" style="position:absolute;top:16px;right:16px;z-index:99;padding:8px 14px;background:rgba(220,38,38,0.85);color:white;border:none;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 12px rgba(0,0,0,0.4)">🔓 ${this._escapeHtml(t('unlock_kiosk') || 'Desbloquear kiosco')}</button>` : ''}
-          <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:100;padding:5px 12px;background:rgba(36,188,129,.2);border:1px solid rgba(36,188,129,.4);border-radius:20px;color:#75f4b0;font-size:11px;font-weight:700;backdrop-filter:blur(10px);box-shadow:0 4px 12px rgba(0,0,0,0.2);display:flex;align-items:center;gap:6px;white-space:nowrap;"><div style="width:7px;height:7px;border-radius:50%;background:#75f4b0;box-shadow:0 0 8px #75f4b0;"></div>${this._escapeHtml(t('connected') || 'CONECTADO')}</div>
           ${isFS ? `<button class="ghost entry-exit-fs" data-exit-fullscreen title="${this._escapeHtml(t('fullscreen_title'))}" aria-label="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;top:16px;left:16px;z-index:100;padding:9px 13px;font-size:18px;background:rgba(0,0,0,.55);backdrop-filter:blur(12px);border-radius:14px;color:white;border:1px solid rgba(255,255,255,.25);box-shadow:0 8px 20px rgba(0,0,0,.3)">×</button>` : ''}
           ${!isFS ? `<button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>` : ''}
           ${this._renderBatteryAlerts()}
@@ -4631,7 +4631,12 @@ class ArgusPanel extends HTMLElement {
             <!-- Compact HUD bar at top of console — replaces overlapping absolute hud -->
             <div class="console-hud">
               <span class="console-hud-loc">🏡 ${this._escapeHtml(fullHudLoc)}</span>
+              <div class="argus-connection-pill" data-online="true" role="status" aria-live="polite">
+                <i class="argus-connection-dot"></i>
+                <span class="argus-connection-label">${this._escapeHtml(t('connected') || 'CONECTADO')}</span>
+              </div>
               <div class="console-hud-right">
+                <span class="badge ${isArmed ? 'armed_away' : 'disarmed'}" style="margin:0;padding:6px 14px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;">${isArmed ? t('system_armed') : t('system_disarmed')}</span>
               </div>
             </div>
             <div class="entry-icon" style="display:flex;justify-content:center;animation:float-icon 5s ease-in-out infinite;">
