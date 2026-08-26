@@ -6578,234 +6578,34 @@ class ArgusPanel extends HTMLElement {
 
   _renderEntries() {
     this._sosBound = false;
-    const el = this.shadowRoot.getElementById('entries');
-    const globalStatusEl = this.shadowRoot.getElementById('global-status');
-    const entries = this._dashboard?.entries || [];
-    const t = k => this._t(k);
+    const heroClock = this.shadowRoot?.getElementById('hero-clock-time');
+    const heroDate = this.shadowRoot?.getElementById('hero-clock-date');
+    const heroWeather = this.shadowRoot?.getElementById('hero-weather-pill');
+    const heroSecurity = this.shadowRoot?.getElementById('hero-security-pill');
 
-    if (!entries.length) {
-      el.innerHTML = `<div class="small" style="padding:10px">${t('no_instances')}</div>`;
-      return;
+    if (heroClock || heroDate || heroWeather || heroSecurity) {
+      const now = new Date();
+      const timeStr = this._formatTime(now);
+      const weatherEnt = this._getWeatherEntity();
+      const weatherState = weatherEnt.state || 'sunny';
+      const isNight = this._hass?.states?.['sun.sun']?.state === 'below_horizon';
+      const weather = this._weatherPresentation(weatherState, isNight);
+      const entries = this._dashboard?.entries || [];
+      const t = k => this._t(k);
+      const isArmed = entries.some(e => {
+        const s = this._hass?.states[e.entity_id]?.state || e.state;
+        return String(s).startsWith('armed') || s === 'triggered' || s === 'pending';
+      });
+
+      if (heroClock) heroClock.textContent = timeStr;
+      if (heroDate) heroDate.textContent = now.toLocaleDateString(this._getLocale(), { weekday: 'short', month: 'short', day: 'numeric' });
+      if (heroWeather) heroWeather.textContent = `${weather.icon} ${weather.label}`;
+      if (heroSecurity) heroSecurity.innerHTML = `<i class="hero-live" style="background:${isArmed ? '#ffb54d' : '#55df91'};box-shadow:0 0 9px ${isArmed ? '#ffb54d' : '#55df91'}"></i>${this._escapeHtml(isArmed ? t('system_armed') : t('system_disarmed'))}`;
     }
 
-    // Global status is rendered inside the console-hud in each entry
-    if (globalStatusEl) globalStatusEl.innerHTML = '';
-
-    // Weather
-    const weatherEnt = this._getWeatherEntity();
-    const weatherState = weatherEnt.state || 'sunny';
-    const isNight = this._hass?.states?.['sun.sun']?.state === 'below_horizon';
-    const weather = this._weatherPresentation(weatherState, isNight);
-    const modeLabel = key => {
-      const str = String(t(key) || '').trim();
-      const firstSpace = str.indexOf(' ');
-      if (firstSpace > 0 && firstSpace <= 3) return str.substring(firstSpace + 1).trim();
-      return str;
-    };
-
-    // Time — use _formatTime so clock_format setting (12h/24h/auto) is respected
-    const now = new Date();
-    const timeStr = this._formatTime(now);
-    const heroClock = this.shadowRoot.getElementById('hero-clock-time');
-    const heroDate = this.shadowRoot.getElementById('hero-clock-date');
-    const heroWeather = this.shadowRoot.getElementById('hero-weather-pill');
-    const heroSecurity = this.shadowRoot.getElementById('hero-security-pill');
-    const isArmed = entries.some(e => {
-      const s = this._hass?.states[e.entity_id]?.state || e.state;
-      return String(s).startsWith('armed') || s === 'triggered' || s === 'pending';
-    });
-    if (heroClock) heroClock.textContent = timeStr;
-    if (heroDate) heroDate.textContent = now.toLocaleDateString(this._getLocale(), { weekday: 'short', month: 'short', day: 'numeric' });
-    if (heroWeather) heroWeather.textContent = `${weather.icon} ${weather.label}`;
-    if (heroSecurity) heroSecurity.innerHTML = `<i class="hero-live" style="background:${isArmed ? '#ffb54d' : '#55df91'};box-shadow:0 0 9px ${isArmed ? '#ffb54d' : '#55df91'}"></i>${this._escapeHtml(isArmed ? t('system_armed') : t('system_disarmed'))}`;
-
-    // Surgical Update: Maintain article nodes to persist fullscreen state
-    const existing = Array.from(el.querySelectorAll('article.entry'));
-    if (existing.length !== entries.length) {
-      el.innerHTML = entries.map((_, i) => `<article class="entry" data-idx="${i}"></article>`).join('');
+    if (typeof (window as any).mountSecurityConsole === 'function') {
+      (window as any).mountSecurityConsole(this);
     }
-
-    const currentArticles = el.querySelectorAll('article.entry');
-    entries.forEach((e, idx) => {
-      const art = currentArticles[idx];
-      const live  = this._hass?.states[e.entity_id]?.state;
-      const state = live || e.state || 'unavailable';
-      const triggered = state === 'triggered';
-      const panicActive = Boolean(this._hass?.states?.[e.entity_id]?.attributes?.argus_panic_active);
-      const requiresDisarmPin = e.pin_configured === true || e.user_pin_configured === true;
-      const fullHudLoc = this._hass?.config?.location_name || this._homeName || t('home_fallback');
-      const displayedTemperature = this._getDisplayedTemperature();
-      const temperatures = this._getTemperatureReadings();
-      const stateMeta = {
-        disarmed: { label: t('disarmed'), accent: '#55df91' },
-        armed_home: { label: t('mode_home'), accent: '#ffb54d' },
-        armed_away: { label: t('mode_away'), accent: '#ff724f' },
-        armed_night: { label: t('mode_night'), accent: '#8ab9ff' },
-        armed_vacation: { label: t('mode_vacation'), accent: '#d59bff' },
-        triggered: { label: t('log_triggered'), accent: '#ff4d5d' },
-        pending: { label: t('system_armed'), accent: '#ffb54d' },
-      }[state] || { label: state.replace(/_/g, ' '), accent: '#9eb5cc' };
-      const weatherLabel = weather.label;
-      const recent = Array.isArray(this._ui?.audit_log) ? this._ui.audit_log[0] : null;
-      const recentEvent = recent ? this._localizeActivityDetail(String(recent.action || ''), String(recent.detail || '')) : '';
-
-      const mKey = state.replace('armed_', '');
-      let eCfg = (this._ui?.modes?.__by_entity__?.[e.entity_id]?.[mKey])
-                || (this._ui?.modes?.[mKey]) || {};
-      if (triggered && !(eCfg.sensors || []).length) {
-        const modes = this._ui?.modes?.__by_entity__?.[e.entity_id] || this._ui?.modes || {};
-        eCfg = ['away', 'home', 'night', 'vacation']
-          .map(mode => modes[mode])
-          .find(config => (config?.sensors || []).some(id => ['on', 'open', 'unlocked', 'recording', 'active', 'motion'].includes(this._hass?.states?.[id]?.state)))
-          || {};
-      }
-      let sList = eCfg.sensors || [];
-      if (state === 'disarmed' || !sList.length) {
-        const modes = this._ui?.modes?.__by_entity__?.[e.entity_id] || this._ui?.modes || {};
-        const allSensors = new Set();
-        ['away', 'home', 'night', 'vacation'].forEach(m => {
-          if (modes[m]?.sensors) {
-            modes[m].sensors.forEach(s => allSensors.add(s));
-          }
-        });
-        sList = Array.from(allSensors);
-      }
-      const sByps = eCfg.bypassed_sensors || [];
-      const activeSensors = sList.filter(s => !sByps.includes(s));
-      const OPEN = ['on', 'open', 'unlocked', 'recording', 'active', 'motion'];
-      const isWaiting = Boolean(this._hass?.states?.[e.entity_id]?.attributes?.arming_waiting_for_sensors);
-      const blockingSensors = Array.isArray(this._hass?.states?.[e.entity_id]?.attributes?.arming_blocking_sensors) ? this._hass?.states?.[e.entity_id]?.attributes?.arming_blocking_sensors : [];
-      const hasOpenSensor = activeSensors.some(sid => OPEN.includes(this._hass?.states?.[sid]?.state));
-      const sensorAlert = hasOpenSensor && (state.startsWith('armed') || state === 'pending' || isWaiting) && !triggered;
-
-      const isFS = this._fullscreenIdx === idx || (this._kioskLocked && (this._kioskEntryId === e.entry_id || entries.length === 1));
-      art.className = `entry cinematic-entry ${isFS ? 'ios-fullscreen' : ''}`;
-      art.style.cssText = triggered ? 'border:3px solid #ff5252;box-shadow:0 0 30px rgba(255,82,82,.4)' : '';
-      art.querySelectorAll('.wx-webgl').forEach(canvas => canvas._argusWebglStop?.());
-      const sensorRows = activeSensors.map(sid => {
-        const sensor = this._hass?.states[sid];
-        if (!sensor) return '';
-        const isOpen = OPEN.includes(sensor.state);
-        const name = sensor.attributes?.friendly_name || sid.split('.')[1] || sid;
-        const deviceClass = sensor.attributes?.device_class || (sid.startsWith('lock.') ? 'lock' : 'door');
-        
-        let iconHtml = '';
-        if (deviceClass === 'lock') {
-          iconHtml = isOpen ? `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>`
-                            : `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`;
-        } else if (deviceClass === 'window') {
-          iconHtml = isOpen ? `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14l16 0"></path><path d="M4 10l16 0"></path><rect x="4" y="4" width="16" height="16" rx="2"></rect></svg>`
-                            : `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"></rect><path d="M4 12h16M12 4v16"></path></svg>`;
-        } else if (deviceClass === 'motion') {
-          iconHtml = isOpen ? `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M4.93 4.93a10 10 0 0 1 14.14 0M4.93 19.07a10 10 0 0 0 14.14 0"></path></svg>`
-                            : `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle></svg>`;
-        } else {
-          // Default to door
-          iconHtml = isOpen ? `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22V2h12v20H4z"></path><path d="M16 4h4v18H4z"></path><circle cx="12" cy="12" r="1"></circle></svg>`
-                            : `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 22V2h12v20H6z"></path><circle cx="14" cy="12" r="1"></circle></svg>`;
-        }
-        const power = this._getDevicePower(sid, sensor);
-        let batHtml = '';
-        if (power.battery !== null) {
-          const isDead = power.battery === 0;
-          const isLow = power.battery <= 10 && !isDead;
-          const batText = isDead ? '🔋 ❌' : `🔋 ${power.battery}%`;
-          if (isDead || isLow) {
-             batHtml = `<span style="margin-left:8px;font-size:10px;font-weight:700;color:#ff5252;background:rgba(255,255,255,0.1);backdrop-filter:blur(4px);padding:2px 6px;border-radius:10px;border:1px solid rgba(255,82,82,0.3);text-shadow:0 0 5px rgba(255,82,82,0.5);">${batText}</span>`;
-          }
-        }
-
-        const isBlocking = isWaiting && blockingSensors.includes(sid);
-        return `<div class="console-sensor ${isOpen ? 'open' : ''}"><span class="console-sensor-icon" style="display:flex;align-items:center;justify-content:center;color:${isBlocking?'#ffd700':(isOpen?'#ff968b':'#75f4b0')};${isBlocking?'animation:pulse 1s infinite;':(isOpen?'animation:pulse 2s infinite;':'')}">${iconHtml}</span><span class="console-sensor-name" style="${isBlocking?'color:#ffd700':''}">${this._escapeHtml(name)}</span><span class="console-sensor-state" style="color:${isBlocking?'#ffd700':(isOpen?'#ff968b':'#75f4b0')}">${this._escapeHtml(isOpen ? t('status_open') : t('status_closed'))}${batHtml}</span></div>`;
-      }).join('');
-
-      art.innerHTML = `
-          ${this._renderEntryBackground(weatherState, isNight)}
-          ${this._kioskLocked ? `<button class="btn-unlock-kiosk" data-action="unlock-kiosk" style="position:absolute;top:16px;right:16px;z-index:99;padding:8px 14px;background:rgba(220,38,38,0.85);color:white;border:none;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 12px rgba(0,0,0,0.4)">🔓 ${this._escapeHtml(t('unlock_kiosk') || 'Desbloquear kiosco')}</button>` : ''}
-          ${isFS ? `<button class="ghost entry-exit-fs" data-exit-fullscreen title="${this._escapeHtml(t('fullscreen_title'))}" aria-label="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;top:24px;left:24px;z-index:120;padding:9px 13px;font-size:18px;background:rgba(0,0,0,.55);backdrop-filter:blur(12px);border-radius:14px;color:white;border:1px solid rgba(255,255,255,.25);box-shadow:0 8px 20px rgba(0,0,0,.3)">×</button>` : ''}
-          ${!isFS ? `<button class="ghost fs-btn entry-fs" data-fullscreen="${idx}" title="${this._escapeHtml(t('fullscreen_title'))}" style="position:absolute;bottom:24px;right:24px;z-index:10;padding:10px 15px;font-size:18px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-radius:14px;opacity:0.8;color:white;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 20px rgba(0,0,0,0.3)">⛶</button>` : ''}
-          ${this._renderBatteryAlerts(activeSensors)}
-          <div class="entry-content security-console">
-            <!-- Symmetrical HUD bar at top of console -->
-            <div class="console-hud">
-              <span class="console-hud-loc">🏡 ${this._escapeHtml(fullHudLoc)}</span>
-              <div class="argus-connection-pill" data-online="true"><i class="argus-connection-dot"></i><span class="argus-connection-label">${this._escapeHtml(t('connected') || 'CONECTADO')}</span></div>
-              <div class="console-hud-right">
-                <span class="console-system-badge console-system-badge--${triggered ? 'triggered' : state}">${this._escapeHtml(
-                  triggered ? (t('system_triggered') || 'ALARMA ACTIVADA') :
-                  isWaiting  ? (t('waiting_sensors') || 'ESPERANDO SENSORES') :
-                  state === 'disarmed'        ? t('system_disarmed') :
-                  state === 'armed_home'      ? (t('system_armed') + ' · ' + (t('mode_home')     || 'CASA'))   :
-                  state === 'armed_away'      ? (t('system_armed') + ' · ' + (t('mode_away')     || 'AUSENTE')): 
-                  state === 'armed_night'     ? (t('system_armed') + ' · ' + (t('mode_night')    || 'NOCHE'))  :
-                  state === 'armed_vacation'  ? (t('system_armed') + ' · ' + (t('mode_vacation') || 'VACACIONES')) :
-                  t('system_armed')
-                )}</span>
-              </div>
-            </div>
-            <div class="entry-icon" style="display:flex;justify-content:center;animation:float-icon 5s ease-in-out infinite;">
-              ${this._getIntelligentSVG(isWaiting ? 'pending' : state, null, isNight, triggered, idx)}
-            </div>
-            <div class="liquid-stack">
-              <button class="liquid-btn btn-home ${state==='armed_home'?'active':''} ${sensorAlert && state==='armed_home'?'buzz-orange':''}" data-idx="${idx}" data-action="home">${this._modeButtonIcon('home')}<span>${this._escapeHtml(modeLabel('btn_home'))}</span></button>
-              <button class="liquid-btn btn-away ${state==='armed_away'?'active':''} ${sensorAlert && state==='armed_away'?'buzz-orange':''}" data-idx="${idx}" data-action="away">${this._modeButtonIcon('away')}<span>${this._escapeHtml(modeLabel('btn_away'))}</span></button>
-              <button class="liquid-btn btn-night ${state==='armed_night'?'active':''} ${sensorAlert && state==='armed_night'?'buzz-orange':''}" data-idx="${idx}" data-action="night">${this._modeButtonIcon('night')}<span>${this._escapeHtml(modeLabel('btn_night'))}</span></button>
-              ${state !== 'disarmed' ? `<button class="liquid-btn btn-disarm" data-idx="${idx}" data-action="disarm"><span style="font-size: 20px;">🛡️</span><span>${this._escapeHtml(modeLabel('btn_disarmed') || 'DESARMAR')}</span></button>` : ''}
-            </div>
-            <div class="console-sensors">${sensorRows || `<div class="console-empty">${this._escapeHtml(sList.length === 0 ? (t('no_sensors_configured') || 'Sin sensores de intrusión configurados.') : (t('all_sensors_bypassed') || 'Todos los sensores configurados están omitidos.'))}</div>`}</div>
-
-          </div>
-      `;
-    });
-
-    el.querySelectorAll('button[data-action]:not([data-action="sos"]):not([data-action="stop-sos"]):not([data-action="unlock-kiosk"])').forEach(btn =>
-      btn.addEventListener('click', ev => this._handleAction(ev.currentTarget.dataset.idx, ev.currentTarget.dataset.action))
-    );
-
-    el.querySelectorAll('button[data-action="unlock-kiosk"]').forEach(btn =>
-      btn.addEventListener('click', () => this._requestKioskUnlock())
-    );
-
-    el.querySelectorAll('button[data-action="sos"]').forEach(btn =>
-      btn.addEventListener('click', () => {
-        this._sosEntryIdx = Number(btn.dataset.idx);
-        const sosModal = this.shadowRoot.getElementById('sos-modal');
-        if (sosModal) sosModal.classList.add('open');
-      })
-    );
-    el.querySelectorAll('button[data-action="stop-sos"]').forEach(btn =>
-      btn.addEventListener('click', () => this._stopSOS(Number(btn.dataset.idx)))
-    );
-    el.querySelectorAll('button[data-fullscreen]').forEach(btn => {
-      btn.addEventListener('click', ev => this._toggleFullscreen(ev.currentTarget.closest('.entry')));
-    });
-    el.querySelectorAll('button[data-exit-fullscreen]').forEach(btn => {
-      btn.addEventListener('click', () => this._exitFullscreenView());
-    });
-    el.querySelectorAll('.wx-webgl').forEach(canvas => {
-      // Use ResizeObserver for reliable initialization on mobile/tablet
-      if (canvas._argusRO) canvas._argusRO.disconnect();
-      const initOnce = () => {
-        if (canvas._argusWebglInit) return;
-        if ((canvas.clientWidth > 0 || canvas.offsetWidth > 0) && canvas.isConnected) {
-          canvas._argusWebglInit = true;
-          this._initWeatherWebGL(canvas);
-        }
-      };
-      if (typeof ResizeObserver !== 'undefined') {
-        canvas._argusRO = new ResizeObserver(() => { initOnce(); canvas._argusRO?.disconnect(); });
-        canvas._argusRO.observe(canvas.parentElement || canvas);
-      }
-      // Fallback chain
-      if (canvas.clientWidth > 0) { initOnce(); }
-      else {
-        requestAnimationFrame(() => {
-          if (canvas.clientWidth > 0) { initOnce(); }
-          else { setTimeout(() => initOnce(), 200); }
-        });
-      }
-    });
-    this._bindSOS();
   }
 
   async _exitFullscreenView() {

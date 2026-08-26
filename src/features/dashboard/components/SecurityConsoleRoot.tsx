@@ -20,6 +20,10 @@ export function mountSecurityConsole(panel: any) {
   );
 }
 
+if (typeof window !== 'undefined') {
+  (window as any).mountSecurityConsole = mountSecurityConsole;
+}
+
 function SecurityConsoleRoot({ panel }: { panel: any }) {
   const [tick, setTick] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(panel.classList.contains('fullscreen-active'));
