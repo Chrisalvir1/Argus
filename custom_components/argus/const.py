@@ -2,7 +2,7 @@
 from homeassistant.const import CONF_CODE, CONF_NAME
 DOMAIN = "argus"
 NAME = "Argus Home Hub"
-VERSION = "2.2.88"
+VERSION = "2.2.90"
 PLATFORMS = ["alarm_control_panel", "binary_sensor", "switch"]
 DATA_PANELS = "panels"
 CONF_ARMING_TIME = "arming_time"
@@ -34,7 +34,7 @@ MQTT_COMMAND_ARM_AWAY = "ARM_AWAY"
 MQTT_COMMAND_ARM_NIGHT = "ARM_NIGHT"
 MQTT_COMMAND_ARM_VACATION = "ARM_VACATION"
 STORAGE_KEY = "argus_ui_data"
-STORAGE_VERSION = "2.2.88"
+STORAGE_VERSION = "2.2.90"
 SIGNAL_CONFIG_UPDATED = f"{DOMAIN}_config_updated"
 CONF_ARMING_VOICE_ENABLED = "arming_voice_enabled"
 CONF_ARMING_VOICE_TTS = "arming_voice_tts"

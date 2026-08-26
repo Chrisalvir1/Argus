@@ -1,3 +1,8 @@
+## [2.2.90] - 2026-08-26
+
+### Release
+- **Argus Release v2.2.90:** Pristine restoration of original v2.2.88 3D liquid glass architecture, specular reflections, pure React layout and unconstrained mobile fullscreen.
+
 ## [2.2.88] - 2026-08-22
 
 ### Added & Enhanced
