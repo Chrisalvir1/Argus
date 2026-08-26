@@ -1,4 +1,4 @@
-# Argus v2.1.8 — Dashboard Visual Alignment & Dark Glassmorphism Parity
+# Argus v2.2.89 — Dashboard Visual Alignment & Dark Glassmorphism Parity
 
 ## Fixed
 - **Dashboard Visual Parity & Dark Glassmorphism:** Fully aligned the security panel card embedded in Home Assistant Lovelace Dashboards with the dedicated Argus Home Hub sidebar experience.

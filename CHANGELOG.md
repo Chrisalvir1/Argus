@@ -1,4 +1,4 @@
-## [2.1.8] - 2026-08-26
+## [2.2.89] - 2026-08-26
 
 ### Fixed
 - **Dashboard Visual Alignment & Dark Glassmorphism:** Fully aligned the security panel card rendered in Lovelace dashboards with the Argus Home Hub experience.

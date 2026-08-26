@@ -11,9 +11,9 @@ class TestArchitectureContract(unittest.TestCase):
         manifest = (COMPONENT / "manifest.json").read_text(encoding="utf-8")
         constants = (COMPONENT / "const.py").read_text(encoding="utf-8")
         card = ((ROOT / "src" / "legacy") / "argus-card.ts").read_text(encoding="utf-8")
-        self.assertIn('"version": "2.1.8"', manifest)
-        self.assertIn('VERSION = "2.1.8"', constants)
-        self.assertIn("ARGUS_CARD_VERSION='2.1.8'", card)
+        self.assertIn('"version": "2.2.89"', manifest)
+        self.assertIn('VERSION = "2.2.89"', constants)
+        self.assertIn("ARGUS_CARD_VERSION='2.2.89'", card)
 
     def test_private_media_is_not_local(self) -> None:
         media = (COMPONENT / "media.py").read_text(encoding="utf-8")
