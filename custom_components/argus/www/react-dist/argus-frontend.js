@@ -8599,18 +8599,22 @@ class Mu extends HTMLElement {
     const r = this.attachShadow({ mode: "open" });
     r.innerHTML = `
       <style>
-        :host { display: block; width: 100%; }
+        :host { display: block; width: 100%; box-sizing: border-box; }
         ha-card {
-          border-radius: 24px;
-          background: transparent !important;
-          border: none !important;
-          color: #fff;
+          border-radius: 28px !important;
+          background: linear-gradient(135deg, rgba(16, 23, 38, 0.96) 0%, rgba(10, 15, 26, 0.98) 100%) !important;
+          border: 1px solid rgba(255, 255, 255, 0.14) !important;
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+          backdrop-filter: blur(28px) saturate(160%) !important;
+          -webkit-backdrop-filter: blur(28px) saturate(160%) !important;
+          color: #ffffff !important;
           position: relative;
-          --ha-card-border-radius: 24px;
+          --ha-card-border-radius: 28px;
           width: 100%;
+          box-sizing: border-box;
           display: flex;
           flex-direction: column;
-          overflow: visible !important;
+          overflow: hidden !important;
         }
         .argus-panel-host {
           display: flex;
@@ -8639,17 +8643,17 @@ class Mu extends HTMLElement {
         }
         .argus-fs-btn {
           position: absolute;
-          top: 12px;
-          right: 12px;
+          top: 14px;
+          right: 14px;
           z-index: 10000;
           width: 36px;
           height: 36px;
           border-radius: 50%;
-          border: 1px solid rgba(255,255,255,0.20);
+          border: 1px solid rgba(255,255,255,0.22);
           background: rgba(8,16,30,0.72);
           backdrop-filter: blur(16px);
           -webkit-backdrop-filter: blur(16px);
-          color: rgba(255,255,255,0.80);
+          color: rgba(255,255,255,0.85);
           font-size: 16px;
           display: flex;
           align-items: center;
@@ -8687,22 +8691,142 @@ class Mu extends HTMLElement {
       }
   }
   _mountPanel() {
-    if (!(this._panelMounted || !this._panelHost || !(customElements.get("argus-panel-v2018") || !1))) {
-      this._panelMounted = !0, this._panelHost.innerHTML = "", this._panelEl = document.createElement("argus-panel-v2018"), this._config.mode !== "panel" && (this._panelEl.setAttribute("compact", ""), this._panelEl.classList.add("argus-compact"));
+    if (this._panelMounted || !this._panelHost || !(customElements.get("argus-panel-v2018") ? "argus-panel-v2018" : null)) return;
+    this._panelMounted = !0, this._panelHost.innerHTML = "", this._panelEl = document.createElement("argus-panel-v2018"), this._config.mode !== "panel" && (this._panelEl.setAttribute("compact", ""), this._panelEl.classList.add("argus-compact"));
+    try {
+      this._panelEl.setConfig({
+        entity: this._config.entity,
+        title: this._config.title,
+        compact: this._config.mode !== "panel"
+      });
+    } catch {
+    }
+    this._panelHost.appendChild(this._panelEl);
+    const i = () => {
+      const o = this._panelEl?.shadowRoot;
+      if (!o || o.getElementById("argus-card-scoped-styles")) return;
+      const s = document.createElement("style");
+      s.id = "argus-card-scoped-styles", s.textContent = `
+        :host {
+          background: transparent !important;
+          box-shadow: none !important;
+          --argus-container-radius: 28px !important;
+        }
+        .wrap {
+          container-type: inline-size;
+          container-name: argus-card-wrap;
+          width: 100% !important;
+          max-width: 100% !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          background: transparent !important;
+        }
+        #w-instances, .entry {
+          background: transparent !important;
+          border: none !important;
+          box-shadow: none !important;
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
+          width: 100% !important;
+          padding: 0 !important;
+          margin: 0 !important;
+        }
+        .security-console {
+          display: grid !important;
+          grid-template-columns: minmax(180px, 1.1fr) minmax(160px, 220px) minmax(200px, 1.2fr) !important;
+          grid-template-rows: auto 1fr !important;
+          grid-template-areas:
+            'hud hud hud'
+            'modes icon sensors' !important;
+          align-items: center !important;
+          justify-content: center !important;
+          gap: 16px 22px !important;
+          padding: 24px 28px 20px !important;
+          width: 100% !important;
+          box-sizing: border-box !important;
+          background: transparent !important;
+          color: #fff !important;
+        }
+        .console-hud {
+          grid-area: hud !important;
+          display: grid !important;
+          grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
+          grid-template-areas: 'location connection state' !important;
+          align-items: center !important;
+          gap: 12px !important;
+          width: 100% !important;
+          background: transparent !important;
+          border: none !important;
+        }
+        .console-hud-loc { grid-area: location !important; justify-self: start !important; }
+        .argus-connection-pill { grid-area: connection !important; justify-self: center !important; }
+        .console-hud-right { grid-area: state !important; justify-self: end !important; }
+        .liquid-stack {
+          grid-area: modes !important;
+          width: 100% !important;
+          max-width: none !important;
+          display: flex !important;
+          flex-direction: column !important;
+          gap: 8px !important;
+          margin: 0 !important;
+        }
+        .entry-icon {
+          grid-area: icon !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          margin: 0 auto !important;
+          min-height: 150px !important;
+        }
+        .console-sensors {
+          grid-area: sensors !important;
+          width: 100% !important;
+          max-width: none !important;
+          display: grid !important;
+          gap: 8px !important;
+          max-height: 260px !important;
+          overflow-y: auto !important;
+          margin: 0 !important;
+        }
+
+        @container argus-card-wrap (max-width: 580px) {
+          .security-console {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 14px !important;
+            padding: 18px 14px !important;
+          }
+          .console-hud {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+            align-items: center !important;
+            gap: 8px !important;
+          }
+          .entry-icon {
+            order: 1 !important;
+            min-height: 110px !important;
+          }
+          .liquid-stack {
+            order: 2 !important;
+            width: 100% !important;
+            max-width: 440px !important;
+          }
+          .console-sensors {
+            order: 3 !important;
+            width: 100% !important;
+            max-width: 440px !important;
+          }
+        }
+      `, o.appendChild(s);
+    };
+    if (setTimeout(i, 0), setTimeout(i, 100), this._hass)
       try {
-        this._panelEl.setConfig({
-          entity: this._config.entity,
-          title: this._config.title,
-          compact: this._config.mode !== "panel"
-        });
+        this._panelEl.hass = this._hass;
       } catch {
       }
-      if (this._panelHost.appendChild(this._panelEl), this._hass)
-        try {
-          this._panelEl.hass = this._hass;
-        } catch {
-        }
-    }
   }
   _renderBasicCard() {
     if (!this._panelHost || !this._hass) return;
