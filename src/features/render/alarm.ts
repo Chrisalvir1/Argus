@@ -108,6 +108,7 @@ function apply(panel: AlarmPanel) {
         const bold = btn.querySelector('b');
         if (bold && bold.textContent !== disarmLabel) bold.textContent = disarmLabel;
       }
+      btn.style.display = state === 'disarmed' ? 'none' : '';
       
       Array.from(stack.querySelectorAll('.liquid-btn,button')).forEach(b => {
         const el = b as HTMLElement;
