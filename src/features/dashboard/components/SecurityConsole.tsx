@@ -27,9 +27,14 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   // Read data directly from the panel instance
   const dashboard = panel._dashboard;
   const hass = panel._hass;
-  if (!dashboard || !dashboard.entries || dashboard.entries.length === 0) return null;
+  
+  let entry = dashboard?.entries?.[0];
+  if (!entry) {
+    const entityId = panel._cardConfig?.entity || panel._config?.entity || Object.keys(hass?.states || {}).find(k => k.startsWith('alarm_control_panel.')) || 'alarm_control_panel.argus';
+    if (!entityId || !hass?.states?.[entityId]) return null;
+    entry = { entity_id: entityId };
+  }
 
-  const entry = dashboard.entries[0];
   const idx = 0;
 
   const bgHtml = panel._renderEntryBackground?.(panel._weatherState, panel._isNight) || '';
@@ -86,6 +91,18 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
           modes[m].sensors.forEach((s: string) => allSensors.add(s));
         }
       });
+      if (Array.isArray(panel._sensors)) {
+        panel._sensors.forEach((s: any) => allSensors.add(typeof s === 'string' ? s : s.entity_id || s.id));
+      }
+      if (allSensors.size === 0 && hass?.states) {
+        Object.keys(hass.states).forEach(id => {
+          if (id.startsWith('binary_sensor.') && (
+            id.includes('door') || id.includes('window') || id.includes('motion') || id.includes('puerta') || id.includes('porton') || id.includes('patio') || id.includes('sensor') || id.includes('seguridad')
+          )) {
+            allSensors.add(id);
+          }
+        });
+      }
       sList = Array.from(allSensors);
     }
     

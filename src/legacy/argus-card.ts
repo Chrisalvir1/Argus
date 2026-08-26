@@ -270,133 +270,6 @@ class ArgusPanelCard extends HTMLElement {
 
     this._panelHost.appendChild(this._panelEl);
 
-    const injectCardScopedStyles = () => {
-      const root = this._panelEl?.shadowRoot;
-      if (!root) return;
-      if (root.getElementById('argus-card-scoped-styles')) return;
-      const style = document.createElement('style');
-      style.id = 'argus-card-scoped-styles';
-      style.textContent = `
-        :host {
-          background: transparent !important;
-          box-shadow: none !important;
-          --argus-container-radius: 28px !important;
-        }
-        .wrap {
-          container-type: inline-size;
-          container-name: argus-card-wrap;
-          width: 100% !important;
-          max-width: 100% !important;
-          padding: 0 !important;
-          margin: 0 !important;
-          background: transparent !important;
-        }
-        #w-instances, .entry {
-          background: transparent !important;
-          border: none !important;
-          box-shadow: none !important;
-          backdrop-filter: none !important;
-          -webkit-backdrop-filter: none !important;
-          width: 100% !important;
-          padding: 0 !important;
-          margin: 0 !important;
-        }
-        .security-console {
-          display: grid !important;
-          grid-template-columns: minmax(180px, 1.1fr) minmax(160px, 220px) minmax(200px, 1.2fr) !important;
-          grid-template-rows: auto 1fr !important;
-          grid-template-areas:
-            'hud hud hud'
-            'modes icon sensors' !important;
-          align-items: center !important;
-          justify-content: center !important;
-          gap: 16px 22px !important;
-          padding: 24px 28px 20px !important;
-          width: 100% !important;
-          box-sizing: border-box !important;
-          background: transparent !important;
-          color: #fff !important;
-        }
-        .console-hud {
-          grid-area: hud !important;
-          display: grid !important;
-          grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
-          grid-template-areas: 'location connection state' !important;
-          align-items: center !important;
-          gap: 12px !important;
-          width: 100% !important;
-          background: transparent !important;
-          border: none !important;
-        }
-        .console-hud-loc { grid-area: location !important; justify-self: start !important; }
-        .argus-connection-pill { grid-area: connection !important; justify-self: center !important; }
-        .console-hud-right { grid-area: state !important; justify-self: end !important; }
-        .liquid-stack {
-          grid-area: modes !important;
-          width: 100% !important;
-          max-width: none !important;
-          display: flex !important;
-          flex-direction: column !important;
-          gap: 8px !important;
-          margin: 0 !important;
-        }
-        .entry-icon {
-          grid-area: icon !important;
-          display: flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          margin: 0 auto !important;
-          min-height: 150px !important;
-        }
-        .console-sensors {
-          grid-area: sensors !important;
-          width: 100% !important;
-          max-width: none !important;
-          display: grid !important;
-          gap: 8px !important;
-          max-height: 260px !important;
-          overflow-y: auto !important;
-          margin: 0 !important;
-        }
-
-        @container argus-card-wrap (max-width: 580px) {
-          .security-console {
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-            gap: 14px !important;
-            padding: 18px 14px !important;
-          }
-          .console-hud {
-            display: flex !important;
-            flex-direction: row !important;
-            flex-wrap: wrap !important;
-            justify-content: center !important;
-            align-items: center !important;
-            gap: 8px !important;
-          }
-          .entry-icon {
-            order: 1 !important;
-            min-height: 110px !important;
-          }
-          .liquid-stack {
-            order: 2 !important;
-            width: 100% !important;
-            max-width: 440px !important;
-          }
-          .console-sensors {
-            order: 3 !important;
-            width: 100% !important;
-            max-width: 440px !important;
-          }
-        }
-      `;
-      root.appendChild(style);
-    };
-
-    setTimeout(injectCardScopedStyles, 0);
-    setTimeout(injectCardScopedStyles, 100);
-
     if (this._hass) {
       try { this._panelEl.hass = this._hass; } catch (_) {}
     }
@@ -493,6 +366,24 @@ class ArgusPanelCard extends HTMLElement {
   }
 
   getCardSize() { return 6; }
+
+  getGridOptions() {
+    return {
+      columns: 12,
+      rows: 'auto',
+      min_columns: 3,
+      min_rows: 2,
+    };
+  }
+
+  getLayoutOptions() {
+    return {
+      grid_columns: 4,
+      grid_rows: 'auto',
+      grid_min_columns: 2,
+      grid_min_rows: 2,
+    };
+  }
 }
 
 if (!customElements.get('argus-panel-card')) {

@@ -109,6 +109,7 @@ export function applyReactSecurityConsole(C: any) {
   
   const connected = C.prototype.connectedCallback;
   const load = C.prototype._load;
+  const renderEntries = C.prototype._renderEntries;
   
   C.prototype.connectedCallback = function() {
     const res = connected?.call(this);
@@ -120,5 +121,9 @@ export function applyReactSecurityConsole(C: any) {
     const res = await load?.apply(this, args);
     mountSecurityConsole(this);
     return res;
+  };
+
+  C.prototype._renderEntries = function() {
+    mountSecurityConsole(this);
   };
 }

@@ -7,6 +7,8 @@
 .entry {
   position: relative;
   overflow: hidden;
+  container-type: inline-size;
+  container-name: argus-console;
   border-radius: 28px !important;
   border: 1px solid rgba(255, 255, 255, 0.22) !important;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 100%) !important;
@@ -427,11 +429,11 @@
   font-weight: 800 !important;
 }
 
-/* ── 3x3 DESKTOP GRID (Conectado Perfectly Centered Above Shield) ──────────── */
+/* ── 3x3 DESKTOP & WIDE CONTAINER GRID (Conectado Perfectly Centered Above Shield) ──────────── */
 @media (min-width: 901px) {
   .entry:not(.ios-fullscreen) .security-console {
     display: grid !important;
-    grid-template-columns: minmax(280px, 350px) 1fr minmax(280px, 380px) !important;
+    grid-template-columns: minmax(200px, 350px) 1fr minmax(220px, 380px) !important;
     grid-template-rows: auto 1fr !important;
     align-items: center !important;
     justify-content: center !important;
@@ -494,8 +496,110 @@
   }
 }
 
-/* ── NORMAL MOBILE LAYOUT (Not Fullscreen) ─────────────────────────────────── */
-@media (max-width: 900px) {
+@container argus-console (min-width: 540px) {
+  .entry:not(.ios-fullscreen) .security-console {
+    display: grid !important;
+    grid-template-columns: minmax(170px, 1fr) minmax(140px, 200px) minmax(180px, 1.2fr) !important;
+    grid-template-rows: auto 1fr !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 14px 20px !important;
+    padding: 20px 24px 18px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .entry:not(.ios-fullscreen) .security-console .console-hud {
+    display: contents !important;
+  }
+
+  .entry:not(.ios-fullscreen) .security-console .console-hud-loc {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    justify-self: start !important;
+    align-self: center !important;
+    margin: 0 !important;
+  }
+
+  .entry:not(.ios-fullscreen) .security-console .argus-connection-pill {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    justify-self: center !important;
+    align-self: center !important;
+    margin: 0 !important;
+    position: static !important;
+    transform: none !important;
+  }
+
+  .entry:not(.ios-fullscreen) .security-console .console-hud-right {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    justify-self: end !important;
+    align-self: center !important;
+    margin: 0 !important;
+  }
+
+  .entry:not(.ios-fullscreen) .security-console .liquid-stack {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    align-self: center !important;
+    margin: 0 !important;
+  }
+
+  .entry:not(.ios-fullscreen) .security-console .entry-icon {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+    justify-self: center !important;
+    align-self: center !important;
+    margin: 0 !important;
+  }
+
+  .entry:not(.ios-fullscreen) .security-console .console-sensors {
+    grid-column: 3 !important;
+    grid-row: 2 !important;
+    align-self: center !important;
+    margin: 0 !important;
+  }
+}
+
+/* ── NORMAL MOBILE LAYOUT (Not Fullscreen & Narrow Container) ──────────────── */
+@media (max-width: 539px) {
+  .entry:not(.ios-fullscreen) .security-console {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 14px !important;
+    padding: 18px 14px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .entry:not(.ios-fullscreen) .security-console .console-hud {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .entry:not(.ios-fullscreen) .security-console .liquid-stack {
+    width: 100% !important;
+    max-width: 440px !important;
+  }
+
+  .entry:not(.ios-fullscreen) .security-console .console-sensors {
+    width: 100% !important;
+    max-width: 440px !important;
+  }
+}
+
+@container argus-console (max-width: 539px) {
   .entry:not(.ios-fullscreen) .security-console {
     display: flex !important;
     flex-direction: column !important;
