@@ -655,6 +655,9 @@
   display: flex !important;
   flex-direction: column !important;
   width: 100% !important;
+  width: 100vw !important;
+  width: 100dvw !important;
+  height: 100% !important;
   min-height: 100vh !important;
   min-height: 100dvh !important;
   box-sizing: border-box !important;
@@ -742,17 +745,17 @@
 }
 
 /* ── Fullscreen Landscape (Mobile Horizontal & Desktop) ────────────────────── */
-@media (min-width: 901px) and (orientation: landscape), (orientation: landscape) and (max-height: 600px) {
+@media (min-width: 901px) and (orientation: landscape), (min-width: 901px), (orientation: landscape) and (max-height: 600px) {
   .entry.ios-fullscreen .security-console {
     display: grid !important;
-    grid-template-columns: minmax(280px, 360px) 1fr minmax(280px, 420px) !important;
+    grid-template-columns: minmax(280px, 380px) 1fr minmax(280px, 440px) !important;
     grid-template-rows: auto 1fr !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 16px 36px !important;
+    gap: 20px 48px !important;
     padding: max(56px, env(safe-area-inset-top)) max(48px, env(safe-area-inset-right)) max(32px, env(safe-area-inset-bottom)) max(48px, env(safe-area-inset-left)) !important;
     width: 100% !important;
-    max-width: 1440px !important;
+    max-width: 1600px !important;
     margin: 0 auto !important;
     height: 100% !important;
     min-height: 100vh !important;
@@ -807,14 +810,14 @@
   }
 
   .entry.ios-fullscreen .security-console .entry-icon svg {
-    max-width: min(35vw, 320px) !important;
+    max-width: min(35vw, 360px) !important;
   }
 
   .entry.ios-fullscreen .security-console .console-sensors {
     grid-column: 3 !important;
     grid-row: 2 !important;
     width: 100% !important;
-    max-height: 420px !important;
+    max-height: 520px !important;
     align-self: center !important;
     background: transparent !important;
     box-shadow: none !important;

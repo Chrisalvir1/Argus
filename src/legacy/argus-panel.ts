@@ -934,14 +934,21 @@ _tmpl.innerHTML = `
   }
   :host(.fullscreen-active) .wrap,
   :host(.fullscreen-active) .grid,
+  :host(.fullscreen-active) #widget-grid,
   :host(.fullscreen-active) #w-instances,
   :host(.fullscreen-active) #entries,
   :host(.fullscreen-active) #entries > div {
-    display: block !important;
+    display: flex !important;
+    flex-direction: column !important;
     position: static !important;
     width: 100% !important;
+    width: 100vw !important;
+    width: 100dvw !important;
+    max-width: none !important;
     min-height: 100% !important;
-    height: auto !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    height: 100% !important;
     max-height: none !important;
     padding: 0 !important;
     margin: 0 !important;

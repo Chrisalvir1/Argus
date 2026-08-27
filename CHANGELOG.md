@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.2.96]
+- **Fullscreen (Web)**: Fixed desktop web fullscreen layout alignment and container clamping issues, ensuring the console expands and centers across the entire browser viewport on desktop screens without affecting the mobile view.
+- **Argus Card**: Removed duplicate top-right fullscreen button in Argus Card so only the bottom-right button is displayed and works smoothly.
+
+
 ## [2.2.95]
 - **Crash**: Fix a JavaScript evaluation crash caused by static module-level template interpolations preventing the entire dashboard from rendering.
 
@@ -451,6 +456,11 @@
 - Recuperada compatibilidad del clima animado (WebGL) y agregado como opción para el fondo general del panel.
 
 # Changelog
+
+## [2.2.96]
+- **Fullscreen (Web)**: Fixed desktop web fullscreen layout alignment and container clamping issues, ensuring the console expands and centers across the entire browser viewport on desktop screens without affecting the mobile view.
+- **Argus Card**: Removed duplicate top-right fullscreen button in Argus Card so only the bottom-right button is displayed and works smoothly.
+
 
 ## [2.2.95]
 - **Crash**: Fix a JavaScript evaluation crash caused by static module-level template interpolations preventing the entire dashboard from rendering.

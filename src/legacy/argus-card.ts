@@ -171,57 +171,42 @@ class ArgusPanelCard extends HTMLElement {
         :host(.argus-fullscreen) ha-card {
           position: fixed !important;
           inset: 0 !important;
-          z-index: 9999 !important;
+          z-index: 99999999 !important;
           border-radius: 0 !important;
           width: 100vw !important;
+          width: 100dvw !important;
+          height: 100vh !important;
           height: 100dvh !important;
           max-width: 100vw !important;
           max-height: 100dvh !important;
           overflow: auto !important;
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
+          background: radial-gradient(ellipse at 50% 50%, #162438 0%, #08101a 60%, #010408 100%) !important;
+          border: none !important;
+          box-shadow: none !important;
         }
         :host(.argus-fullscreen) .argus-panel-host {
           min-height: 100dvh;
           height: 100dvh;
+          width: 100vw;
+          width: 100dvw;
           overflow: auto;
-        }
-        .argus-fs-btn {
-          position: absolute;
-          top: 14px;
-          right: 14px;
-          z-index: 10000;
-          width: 36px;
-          height: 36px;
-          border-radius: 50%;
-          border: 1px solid rgba(255,255,255,0.22);
-          background: rgba(8,16,30,0.72);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
-          color: rgba(255,255,255,0.85);
-          font-size: 16px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: background 0.2s ease, transform 0.2s ease;
-          box-shadow: 0 4px 14px rgba(0,0,0,0.35);
-        }
-        .argus-fs-btn:hover {
-          background: rgba(20,40,70,0.92);
-          transform: scale(1.08);
         }
         @media (max-width: 600px) {
           .argus-panel-host { min-height: 340px; }
         }
       </style>
       <ha-card>
-        <button class="argus-fs-btn" id="fs-btn" title="Pantalla completa" aria-label="Pantalla completa">⛶</button>
         <div class="argus-panel-host" id="panel-host"></div>
       </ha-card>`;
 
     this._fsBtn = shadow.getElementById('fs-btn');
     this._panelHost = shadow.getElementById('panel-host');
 
-    this._fsBtn.addEventListener('click', () => this._toggleFullscreen());
+    if (this._fsBtn) {
+      this._fsBtn.addEventListener('click', () => this._toggleFullscreen());
+    }
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape' && this._fullscreen) this._exitFullscreen();
     });
@@ -269,6 +254,14 @@ class ArgusPanelCard extends HTMLElement {
     } catch (_) {}
 
     this._panelHost.appendChild(this._panelEl);
+
+    this._panelEl.addEventListener('argus-fullscreen-changed', (e: any) => {
+      if (e.detail?.fullscreen) {
+        this._enterFullscreen();
+      } else {
+        this._exitFullscreen();
+      }
+    });
 
     if (this._hass) {
       try { this._panelEl.hass = this._hass; } catch (_) {}
@@ -352,16 +345,20 @@ class ArgusPanelCard extends HTMLElement {
   _enterFullscreen() {
     this._fullscreen = true;
     this.classList.add('argus-fullscreen');
-    this._fsBtn.textContent = '✕';
-    this._fsBtn.title = 'Salir de pantalla completa';
+    if (this._fsBtn) {
+      this._fsBtn.textContent = '✕';
+      this._fsBtn.title = 'Salir de pantalla completa';
+    }
     document.body.style.overflow = 'hidden';
   }
 
   _exitFullscreen() {
     this._fullscreen = false;
     this.classList.remove('argus-fullscreen');
-    this._fsBtn.textContent = '⛶';
-    this._fsBtn.title = 'Pantalla completa';
+    if (this._fsBtn) {
+      this._fsBtn.textContent = '⛶';
+      this._fsBtn.title = 'Pantalla completa';
+    }
     document.body.style.overflow = '';
   }
 
