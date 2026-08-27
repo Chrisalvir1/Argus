@@ -1,7 +1,7 @@
 // @ts-nocheck
 /**
- * Argus Slide-to-Action — v2.2.28
- * iOS "slide to power off" style — 100% reactive 13-language i18n support.
+ * Argus Slide-to-Action — v2.2.93
+ * iOS "slide to power off" style — Español / English / HA auto-detect.
  */
 
 const STYLE_ID = 'argus-slide-action-styles';
@@ -9,10 +9,6 @@ const STYLE_ID = 'argus-slide-action-styles';
 const SLIDE_I18N = {
   es: { slide_disarm: 'Desliza para desarmar', slide_sos: 'Desliza para activar SOS', slide_sos_stop: 'Desliza para detener SOS', enter_pin: 'Ingresa el PIN maestro', wrong_pin: 'PIN incorrecto', cancel: 'Cancelar' },
   en: { slide_disarm: 'Slide to disarm', slide_sos: 'Slide to trigger SOS', slide_sos_stop: 'Slide to stop SOS', enter_pin: 'Enter master PIN', wrong_pin: 'Wrong PIN', cancel: 'Cancel' },
-  pt: { slide_disarm: 'Deslize para desarmar', slide_sos: 'Deslize para acionar SOS', slide_sos_stop: 'Deslize para parar SOS', enter_pin: 'Inserir PIN mestre', wrong_pin: 'PIN errado', cancel: 'Cancelar' },
-  ru: { slide_disarm: 'Сдвиньте для снятия охраны', slide_sos: 'Сдвиньте для включения SOS', slide_sos_stop: 'Сдвиньте для остановки SOS', enter_pin: 'Введите мастер-PIN', wrong_pin: 'Неверный PIN', cancel: 'Отмена' },
-  zh: { slide_disarm: '滑动撤防', slide_sos: '滑动触发 SOS', slide_sos_stop: '滑动停止 SOS', enter_pin: '请输入主 PIN 码', wrong_pin: 'PIN 错误', cancel: '取消' },
-  'zh-Hant': { slide_disarm: '滑動撤防', slide_sos: '滑動觸發 SOS', slide_sos_stop: '滑動停止 SOS', enter_pin: '請輸入主 PIN 碼', wrong_pin: 'PIN 錯誤', cancel: '取消' },
 };
 
 function getActiveLang(panel) {
@@ -28,10 +24,10 @@ function getActiveLang(panel) {
   }
   raw = String(raw || 'en').trim();
   if (SLIDE_I18N[raw]) return raw;
-  if (/^zh-(hant|tw|hk)/i.test(raw)) return 'zh-Hant';
-  if (/^zh/i.test(raw)) return 'zh';
   const short = raw.split(/[-_]/)[0].toLowerCase();
-  return SLIDE_I18N[short] ? short : 'en';
+  if (SLIDE_I18N[short]) return short;
+  // Spanish variants → es; everything else → en
+  return short.startsWith('es') ? 'es' : 'en';
 }
 
 function t(panel, key) {

@@ -1,4 +1,10 @@
-## [2.2.92] - 2026-08-26
+# Changelog
+
+## [2.2.93] - 2026-08-26
+### Changed
+- Removed legacy UI languages (pt, ru, zh, fr, it) for leaner performance.
+- Cleaned up weather translation logic thoroughly.
+- Improved "Auto" language logic: HA's locale applies universally to all date/time Intl formatters, while static text falls back cleanly to English if not Spanish.
 
 ### Fixed
 - **Sensor Backdrop Box Removal:** Completely eliminated the dark rectangular compositing box behind sensor chips by removing scroll layer isolation and forcing `overflow: visible` with pure transparent background.
