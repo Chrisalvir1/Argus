@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.2.94]
+- **i18n**: Fix React Security Console not updating automatically when changing language in settings.
+- **i18n**: Eradicate hardcoded Spanish HTML strings from legacy components.
+- **UI**: Eliminate residual rectangular shadow/backdrop artifact behind sensor chips in compact views.
+
+
 ## [2.2.93] - 2026-08-26
 ### Changed
 - Removed legacy UI languages (pt, ru, zh, fr, it) for leaner performance.
@@ -441,6 +447,12 @@
 - Recuperada compatibilidad del clima animado (WebGL) y agregado como opción para el fondo general del panel.
 
 # Changelog
+
+## [2.2.94]
+- **i18n**: Fix React Security Console not updating automatically when changing language in settings.
+- **i18n**: Eradicate hardcoded Spanish HTML strings from legacy components.
+- **UI**: Eliminate residual rectangular shadow/backdrop artifact behind sensor chips in compact views.
+
 
 Todos los cambios relevantes de Argus se documentan aquí. El historial anterior continúa disponible en Git.
 
