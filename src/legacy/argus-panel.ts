@@ -2639,7 +2639,7 @@ _tmpl.innerHTML = `
     <div class="ios-confirm-text" id="sos-text-txt">Desliza para disparar la alarma inmediatamente.</div>
     <div class="ios-slider-shell">
       <div class="ios-slider-track">
-        <div class="ios-slider-label" id="sos-label">${this._t('sos_slide') || 'Desliza para activar SOS'}</div>
+        <div class="ios-slider-label" id="sos-label">Desliza para activar SOS</div>
         <div class="ios-slider-thumb" id="sos-thumb">🚨</div>
       </div>
     </div>
@@ -2716,7 +2716,7 @@ _tmpl.innerHTML = `
           <!-- Unified Informative Widget: SOS signals, notifications & audit logging -->
           <div class="system-info-compact-card glass-subpanel" style="padding:14px 18px;border-radius:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);margin-bottom:14px;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:6px;">
-              <span style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;color:rgba(255,255,255,0.85)">ℹ️ ${this._t('system_diagnostics') || 'Diagnóstico y Resumen del Sistema'}</span>
+              <span id="system-diagnostics-txt" style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;color:rgba(255,255,255,0.85)">ℹ️ Diagnóstico y Resumen del Sistema</span>
               <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;background:rgba(74,222,128,0.15);color:#4ade80;border:1px solid rgba(74,222,128,0.3)">✓ Operativo</span>
             </div>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;font-size:11px;">
@@ -3523,6 +3523,8 @@ class ArgusPanel extends HTMLElement {
     set('sos-title-txt',        t('sos_confirm_title'));
     set('sos-text-txt',         t('sos_confirm_text'));
     set('sos-label',            t('sos_slide'));
+    set('system-diagnostics-txt', 'ℹ️ ' + (t('system_diagnostics') || 'Diagnóstico y Resumen del Sistema'));
+
     set('home-name-modal-h3',   t('home_name_modal_title'));
     set('p-home-name-modal-desc', t('home_name_modal_desc'));
     set('l-home-name-modal-label', t('home_name_label'));
