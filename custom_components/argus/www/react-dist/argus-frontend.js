@@ -105,6 +105,7 @@ const si = [
     done: "Listo",
     edit_btn: "✏️ Editar Nombre",
     edit_dashboard: "Editar tablero",
+    edit_widgets: "Config. Widgets",
     edit_dashboard_done: "✓ Listo",
     emergency_call_active: "Llamada de emergencia en curso...",
     emergency_help: "Configura el número local de emergencia (ej. 911 o 112). Se incluirá en alertas SOS.",
@@ -240,6 +241,7 @@ const si = [
     mode_vacation: "Vacaciones",
     modes: "Modos / SOS",
     modes_sos: "Modos / SOS",
+    system_diagnostics: "Diagnóstico y Resumen del Sistema",
     mqtt_label: "MQTT",
     never_triggered: "Nunca activado",
     new_pin: "Nuevo PIN",
@@ -500,6 +502,7 @@ const si = [
     done: "Done",
     edit_btn: "✏️ Edit Name",
     edit_dashboard: "Edit Dashboard",
+    edit_widgets: "Widget Config",
     edit_dashboard_done: "✓ Done",
     emergency_call_active: "Emergency call in progress...",
     emergency_help: "Set local emergency service number (e.g. 911 or 112). Included in SOS alerts.",
@@ -635,6 +638,7 @@ const si = [
     mode_vacation: "Vacation",
     modes: "Modes / SOS",
     modes_sos: "Modes / SOS",
+    system_diagnostics: "System Diagnostics & Summary",
     mqtt_label: "MQTT",
     never_triggered: "Never triggered",
     new_pin: "New PIN",
@@ -2599,7 +2603,7 @@ Tu.innerHTML = `
     <div class="ios-confirm-text" id="sos-text-txt">Desliza para disparar la alarma inmediatamente.</div>
     <div class="ios-slider-shell">
       <div class="ios-slider-track">
-        <div class="ios-slider-label" id="sos-label">Desliza para activar SOS</div>
+        <div class="ios-slider-label" id="sos-label">${(void 0)._t("sos_slide") || "Desliza para activar SOS"}</div>
         <div class="ios-slider-thumb" id="sos-thumb">🚨</div>
       </div>
     </div>
@@ -2676,7 +2680,7 @@ Tu.innerHTML = `
           <!-- Unified Informative Widget: SOS signals, notifications & audit logging -->
           <div class="system-info-compact-card glass-subpanel" style="padding:14px 18px;border-radius:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);margin-bottom:14px;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:6px;">
-              <span style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;color:rgba(255,255,255,0.85)">ℹ️ Diagnóstico y Resumen del Sistema</span>
+              <span style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;color:rgba(255,255,255,0.85)">ℹ️ ${(void 0)._t("system_diagnostics") || "Diagnóstico y Resumen del Sistema"}</span>
               <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;background:rgba(74,222,128,0.15);color:#4ade80;border:1px solid rgba(74,222,128,0.3)">✓ Operativo</span>
             </div>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;font-size:11px;">
@@ -3182,7 +3186,7 @@ class Du extends HTMLElement {
     };
     b("btn-new-auto", "create_ha"), b("btn-save-pin", "update_pin"), b("btn-save-notif", "save_notif"), b("btn-save-user", "save_user"), b("selector-close", "close"), b("selector-clear", "clear"), b("selector-accept", "accept"), b("pin-cancel", "cancel"), b("pin-confirm", "confirm"), b("btn-cancel-sos", "cancel"), b("sos-call-btn", "sos_call"), b("home-name-cancel", "cancel"), b("home-name-save", "save_btn");
     const x = i("lang-modal-close");
-    x && (x.textContent = `✕ ${r("close")}`), a("lbl-home-name-hdr", r("home_name_lbl")), a("lbl-panel-bg-title", r("bg_panel_title")), a("lbl-hub-bg-title", r("bg_hub_title")), a("s-panel-bg-sound-lbl", r("bg_sound_opt")), a("s-hub-bg-sound-lbl", r("bg_sound_opt")), a("lbl-mas-ajustes", "🎨 " + r("lbl_aesthetic_custom")), a("edit-widgets-label", this._widgetEditing ? "✓ " + r("done") : "⚙️ Config. Widgets"), a("lbl-temperature-source", r("temp_displayed")), a("lbl-weather-source", r("weather_source")), a("lbl-panel-bg-upload", r("lbl_load_file")), a("lbl-hub-bg-upload", r("lbl_load_file")), a("lbl-uploaded-files-title", r("lbl_uploaded_files")), a("btn-edit-home-name-standalone", r("edit_btn")), a("btn-save-personalization-standalone", r("save_btn")), a("btn-refresh-history", r("history_refresh")), a("btn-export-forensic", "📄 " + (r("export_history_title") || "Exportar")), a("btn-clear-log", r("clear_log_btn")), a("h-history-export-title", "📄 " + (r("export_history_title") || "Exportar Historial")), a("h-access-title", r("access_title")), a("p-access-desc", r("access_desc")), a("btn-access-users", `👥 ${r("users_title").replace(/^👥\s*/, "").replace(/\s(?:y|&|e)\s.*$/i, "")}`), a("btn-access-pin", `🔐 ${r("pin_master_title")}`), a("h-settings-pin", r("pin_master_title")), a("p-pin-remove-hint", r("pin_remove_hint")), a("h-backup-title", r("backup_title")), a("p-backup-desc", r("backup_desc")), a("btn-export-config", r("export_btn")), a("btn-reset-config", r("reset_btn")), a("btn-undo-reset", r("undo_reset_btn")), a("btn-import-trigger", r("import_btn")), a("github-title", r("github_title")), a("github-desc", r("github_desc")), a("github-action", `⭐ ${r("github_action")}`), a("sos-title-txt", r("sos_confirm_title")), a("sos-text-txt", r("sos_confirm_text")), a("sos-label", r("sos_slide")), a("home-name-modal-h3", r("home_name_modal_title")), a("p-home-name-modal-desc", r("home_name_modal_desc")), a("l-home-name-modal-label", r("home_name_label")), a("lang-modal-title", `🌐 ${r("lang_select_title")}`), a("sos-call-help", r("sos_call_help")), a("lbl-emergency-number", r("emergency_number_label")), a("emergency-number-help", r("emergency_help")), a("lbl-sos-actions", r("sos_actions")), a("btn-select-sos-outputs", r("sos_select_outputs")), a("sos-output-help", r("sos_outputs_help")), a("home-name-modal-desc", r("home_name_modal_desc")), a("pin-backspace", r("delete"));
+    x && (x.textContent = `✕ ${r("close")}`), a("lbl-home-name-hdr", r("home_name_lbl")), a("lbl-panel-bg-title", r("bg_panel_title")), a("lbl-hub-bg-title", r("bg_hub_title")), a("s-panel-bg-sound-lbl", r("bg_sound_opt")), a("s-hub-bg-sound-lbl", r("bg_sound_opt")), a("lbl-mas-ajustes", "🎨 " + r("lbl_aesthetic_custom")), a("edit-widgets-label", this._widgetEditing ? "✓ " + r("done") : `⚙️ ${this._t("edit_widgets") || "Config. Widgets"}`), a("lbl-temperature-source", r("temp_displayed")), a("lbl-weather-source", r("weather_source")), a("lbl-panel-bg-upload", r("lbl_load_file")), a("lbl-hub-bg-upload", r("lbl_load_file")), a("lbl-uploaded-files-title", r("lbl_uploaded_files")), a("btn-edit-home-name-standalone", r("edit_btn")), a("btn-save-personalization-standalone", r("save_btn")), a("btn-refresh-history", r("history_refresh")), a("btn-export-forensic", "📄 " + (r("export_history_title") || "Exportar")), a("btn-clear-log", r("clear_log_btn")), a("h-history-export-title", "📄 " + (r("export_history_title") || "Exportar Historial")), a("h-access-title", r("access_title")), a("p-access-desc", r("access_desc")), a("btn-access-users", `👥 ${r("users_title").replace(/^👥\s*/, "").replace(/\s(?:y|&|e)\s.*$/i, "")}`), a("btn-access-pin", `🔐 ${r("pin_master_title")}`), a("h-settings-pin", r("pin_master_title")), a("p-pin-remove-hint", r("pin_remove_hint")), a("h-backup-title", r("backup_title")), a("p-backup-desc", r("backup_desc")), a("btn-export-config", r("export_btn")), a("btn-reset-config", r("reset_btn")), a("btn-undo-reset", r("undo_reset_btn")), a("btn-import-trigger", r("import_btn")), a("github-title", r("github_title")), a("github-desc", r("github_desc")), a("github-action", `⭐ ${r("github_action")}`), a("sos-title-txt", r("sos_confirm_title")), a("sos-text-txt", r("sos_confirm_text")), a("sos-label", r("sos_slide")), a("home-name-modal-h3", r("home_name_modal_title")), a("p-home-name-modal-desc", r("home_name_modal_desc")), a("l-home-name-modal-label", r("home_name_label")), a("lang-modal-title", `🌐 ${r("lang_select_title")}`), a("sos-call-help", r("sos_call_help")), a("lbl-emergency-number", r("emergency_number_label")), a("emergency-number-help", r("emergency_help")), a("lbl-sos-actions", r("sos_actions")), a("btn-select-sos-outputs", r("sos_select_outputs")), a("sos-output-help", r("sos_outputs_help")), a("home-name-modal-desc", r("home_name_modal_desc")), a("pin-backspace", r("delete"));
     const A = i("bg-mode-select-standalone");
     if (A) {
       const _ = A.value;
@@ -6770,7 +6774,7 @@ try {
   customElements.get("argus-panel") || customElements.define("argus-panel", Du);
 } catch {
 }
-const Mu = "2.2.92";
+const Mu = "2.2.93";
 console.info(
   `%c🛡️ ARGUS ALARM CARD %c v${Mu} `,
   "color:white;background:#0a1628;font-weight:700;padding:4px 8px;border-radius:4px 0 0 4px;",
@@ -17272,12 +17276,12 @@ function rh({ panel: c }) {
     }, f = () => {
       s(c.classList.contains("fullscreen-active") || !!document.fullscreenElement);
     };
-    c.addEventListener("argus-state-update", u), c.addEventListener("argus-fullscreen-changed", f), document.addEventListener("fullscreenchange", f), document.addEventListener("webkitfullscreenchange", f);
+    c.addEventListener("argus-state-update", u), window.addEventListener("argus-lang-changed", u), c.addEventListener("argus-fullscreen-changed", f), document.addEventListener("fullscreenchange", f), document.addEventListener("webkitfullscreenchange", f);
     const g = c._renderEntries;
     return c._renderEntries = function(...h) {
       u();
     }, () => {
-      c.removeEventListener("argus-state-update", u), c.removeEventListener("argus-fullscreen-changed", f), document.removeEventListener("fullscreenchange", f), document.removeEventListener("webkitfullscreenchange", f), c._renderEntries = g;
+      c.removeEventListener("argus-state-update", u), window.removeEventListener("argus-lang-changed", u), c.removeEventListener("argus-fullscreen-changed", f), document.removeEventListener("fullscreenchange", f), document.removeEventListener("webkitfullscreenchange", f), c._renderEntries = g;
     };
   }, [c]), qe.useEffect(() => {
     if (!d.current) return;

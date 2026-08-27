@@ -27,6 +27,8 @@
 .entry-content.security-console {
   background: transparent !important;
   background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
   border: none !important;
   box-shadow: none !important;
 }
@@ -324,6 +326,8 @@
   scrollbar-width: none;
   background: transparent !important;
   background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
   border: none !important;
   outline: none !important;
   box-shadow: none !important;

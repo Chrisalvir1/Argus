@@ -40,6 +40,7 @@ function SecurityConsoleRoot({ panel }: { panel: any }) {
     };
 
     panel.addEventListener('argus-state-update', onUpdate);
+    window.addEventListener('argus-lang-changed', onUpdate);
     panel.addEventListener('argus-fullscreen-changed', onFsChange);
     document.addEventListener('fullscreenchange', onFsChange);
     document.addEventListener('webkitfullscreenchange', onFsChange);
@@ -52,6 +53,7 @@ function SecurityConsoleRoot({ panel }: { panel: any }) {
     
     return () => {
       panel.removeEventListener('argus-state-update', onUpdate);
+      window.removeEventListener('argus-lang-changed', onUpdate);
       panel.removeEventListener('argus-fullscreen-changed', onFsChange);
       document.removeEventListener('fullscreenchange', onFsChange);
       document.removeEventListener('webkitfullscreenchange', onFsChange);

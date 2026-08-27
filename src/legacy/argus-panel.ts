@@ -135,6 +135,8 @@ const TEXTS = {
     'done': 'Listo',
     'edit_btn': '✏️ Editar Nombre',
     'edit_dashboard': 'Editar tablero',
+    'edit_widgets': 'Config. Widgets',
+
     'edit_dashboard_done': '✓ Listo',
     'emergency_call_active': 'Llamada de emergencia en curso...',
     'emergency_help': 'Configura el número local de emergencia (ej. 911 o 112). Se incluirá en alertas SOS.',
@@ -270,6 +272,8 @@ const TEXTS = {
     'mode_vacation': 'Vacaciones',
     'modes': 'Modos / SOS',
     'modes_sos': 'Modos / SOS',
+    'system_diagnostics': 'Diagnóstico y Resumen del Sistema',
+
     'mqtt_label': 'MQTT',
     'never_triggered': 'Nunca activado',
     'new_pin': 'Nuevo PIN',
@@ -530,6 +534,8 @@ const TEXTS = {
     'done': 'Done',
     'edit_btn': '✏️ Edit Name',
     'edit_dashboard': 'Edit Dashboard',
+    'edit_widgets': 'Widget Config',
+
     'edit_dashboard_done': '✓ Done',
     'emergency_call_active': 'Emergency call in progress...',
     'emergency_help': 'Set local emergency service number (e.g. 911 or 112). Included in SOS alerts.',
@@ -665,6 +671,8 @@ const TEXTS = {
     'mode_vacation': 'Vacation',
     'modes': 'Modes / SOS',
     'modes_sos': 'Modes / SOS',
+    'system_diagnostics': 'System Diagnostics & Summary',
+
     'mqtt_label': 'MQTT',
     'never_triggered': 'Never triggered',
     'new_pin': 'New PIN',
@@ -2631,7 +2639,7 @@ _tmpl.innerHTML = `
     <div class="ios-confirm-text" id="sos-text-txt">Desliza para disparar la alarma inmediatamente.</div>
     <div class="ios-slider-shell">
       <div class="ios-slider-track">
-        <div class="ios-slider-label" id="sos-label">Desliza para activar SOS</div>
+        <div class="ios-slider-label" id="sos-label">${this._t('sos_slide') || 'Desliza para activar SOS'}</div>
         <div class="ios-slider-thumb" id="sos-thumb">🚨</div>
       </div>
     </div>
@@ -2708,7 +2716,7 @@ _tmpl.innerHTML = `
           <!-- Unified Informative Widget: SOS signals, notifications & audit logging -->
           <div class="system-info-compact-card glass-subpanel" style="padding:14px 18px;border-radius:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);margin-bottom:14px;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:6px;">
-              <span style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;color:rgba(255,255,255,0.85)">ℹ️ Diagnóstico y Resumen del Sistema</span>
+              <span style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;color:rgba(255,255,255,0.85)">ℹ️ ${this._t('system_diagnostics') || 'Diagnóstico y Resumen del Sistema'}</span>
               <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;background:rgba(74,222,128,0.15);color:#4ade80;border:1px solid rgba(74,222,128,0.3)">✓ Operativo</span>
             </div>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;font-size:11px;">
@@ -3485,7 +3493,7 @@ class ArgusPanel extends HTMLElement {
     set('s-panel-bg-sound-lbl', t('bg_sound_opt'));
     set('s-hub-bg-sound-lbl',   t('bg_sound_opt'));
     set('lbl-mas-ajustes', '🎨 ' + t('lbl_aesthetic_custom'));
-    set('edit-widgets-label', this._widgetEditing ? ('✓ ' + t('done')) : '⚙️ Config. Widgets');
+    set('edit-widgets-label', this._widgetEditing ? ('✓ ' + t('done')) : `⚙️ ${this._t('edit_widgets') || 'Config. Widgets'}`);
     set('lbl-temperature-source', t('temp_displayed'));
     set('lbl-weather-source', t('weather_source'));
     set('lbl-panel-bg-upload',  t('lbl_load_file'));
