@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.2.97]
+- **Modal Localization**: Fixed missing translation keys in standard profile permissions modal.
+- **Granular Permissions Control**: Added options for SOS trigger, Admin tabs access, and Admin profiles access.
+- **Profile PIN Management**: Added `SIN PIN` indicator with `⚙️ Configurar` button and direct liquid-glass modals for setting, changing, and removing access and master PINs.
+
+
 ## [2.2.96]
 - **Fullscreen (Web)**: Fixed desktop web fullscreen layout alignment and container clamping issues, ensuring the console expands and centers across the entire browser viewport on desktop screens without affecting the mobile view.
 - **Argus Card**: Removed duplicate top-right fullscreen button in Argus Card so only the bottom-right button is displayed and works smoothly.
@@ -456,6 +462,12 @@
 - Recuperada compatibilidad del clima animado (WebGL) y agregado como opción para el fondo general del panel.
 
 # Changelog
+
+## [2.2.97]
+- **Modal Localization**: Fixed missing translation keys in standard profile permissions modal.
+- **Granular Permissions Control**: Added options for SOS trigger, Admin tabs access, and Admin profiles access.
+- **Profile PIN Management**: Added `SIN PIN` indicator with `⚙️ Configurar` button and direct liquid-glass modals for setting, changing, and removing access and master PINs.
+
 
 ## [2.2.96]
 - **Fullscreen (Web)**: Fixed desktop web fullscreen layout alignment and container clamping issues, ensuring the console expands and centers across the entire browser viewport on desktop screens without affecting the mobile view.

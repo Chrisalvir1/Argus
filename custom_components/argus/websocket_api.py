@@ -364,13 +364,29 @@ def _resolve_alarm_entity_id(hass: HomeAssistant, config_entry_id: str) -> str |
     return None
 
 
-_PROFILE_ALLOWLIST = {"id", "name", "role", "enabled", "permissions", "shared_kiosk_profile", "picture", "ha_user_id"}
+_PROFILE_ALLOWLIST = {
+    "id",
+    "name",
+    "role",
+    "enabled",
+    "permissions",
+    "shared_kiosk_profile",
+    "picture",
+    "ha_user_id",
+    "access_pin_configured",
+    "pin_configured",
+    "master_pin_configured",
+}
 
 def _redact_user_profile(profile: dict | None) -> dict | None:
     """Redact user profile using a strict allowlist of fields."""
     if not isinstance(profile, dict):
         return None
-    return {k: copy.deepcopy(v) for k, v in profile.items() if k in _PROFILE_ALLOWLIST}
+    p = copy.deepcopy(profile)
+    p["access_pin_configured"] = bool(p.get("access_pin_hash") or p.get("access_pin_configured"))
+    p["pin_configured"] = bool(p.get("pin") or p.get("pin_configured"))
+    p["master_pin_configured"] = bool(p.get("master_pin_hash") or p.get("master_pin_configured"))
+    return {k: v for k, v in p.items() if k in _PROFILE_ALLOWLIST}
 
 
 
@@ -1426,9 +1442,16 @@ async def ws_argus_get_ha_persons(hass, connection, msg) -> None:
 async def ws_argus_save_user_access_pin(hass, connection, msg) -> None:
     entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
     try:
-        profile, ha_user_id = await _require_argus_admin(hass, connection, entry_id)
+        profile, ha_user_id = await _authenticate_profile(hass, connection, entry_id)
     except ArgusAuthError as err:
         connection.send_error(msg["id"], err.code, err.message)
+        return
+
+    is_admin = profile.get("role") == "admin"
+    is_self = profile.get("id") == msg["argus_user_id"]
+    can_change = is_admin or (is_self and profile.get("permissions", {}).get("change_pin", False))
+    if not can_change:
+        connection.send_error(msg["id"], "unauthorized", "Permission denied to change PIN")
         return
 
     ui_data = await async_load_ui_data(hass, entry_id)

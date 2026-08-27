@@ -282,6 +282,8 @@ def _sanitize_users(users: object) -> list[dict]:
             "sos": bool(perms.get("sos", False)),
             "change_pin": bool(perms.get("change_pin", False)),
             "change_master_pin": bool(perms.get("change_master_pin", False)),
+            "admin_access": bool(perms.get("admin_access", False)),
+            "admin_profiles": bool(perms.get("admin_profiles", False)),
         }
 
         # Validate/Hash alarm pin
@@ -410,6 +412,10 @@ def _default_permissions_for_role(role: str) -> dict:
             "arm": True,
             "disarm": True,
             "sos": True,
+            "change_pin": True,
+            "change_master_pin": True,
+            "admin_access": True,
+            "admin_profiles": True,
         }
     # standard
     return {
@@ -418,6 +424,10 @@ def _default_permissions_for_role(role: str) -> dict:
         "arm": False,
         "disarm": False,
         "sos": False,
+        "change_pin": False,
+        "change_master_pin": False,
+        "admin_access": False,
+        "admin_profiles": False,
     }
 
 
