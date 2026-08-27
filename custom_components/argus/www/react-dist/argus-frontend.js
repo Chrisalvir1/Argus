@@ -8391,7 +8391,7 @@ try {
   customElements.get("argus-panel") || customElements.define("argus-panel", Du);
 } catch {
 }
-const Mu = "2.2.90";
+const Mu = "2.2.91";
 console.info(
   `%c🛡️ ARGUS ALARM CARD %c v${Mu} `,
   "color:white;background:#0a1628;font-weight:700;padding:4px 8px;border-radius:4px 0 0 4px;",

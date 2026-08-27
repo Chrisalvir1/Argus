@@ -1,3 +1,10 @@
+## [2.2.91] - 2026-08-26
+
+### Fixed & Enhanced
+- **Argus Card React Parity:** Total elimination of legacy HTML fallback templates in favor of pure React SecurityConsole across all dashboards.
+- **Sections Resizing:** Added `getGridOptions()` and `getLayoutOptions()` enabling flexible horizontal and vertical multi-column resizing in Lovelace Sections.
+- **Sensor Shadow Polish:** Eliminated rectangular backdrop compositing artifact behind sensor chips.
+
 ## [2.2.90] - 2026-08-26
 
 ### Release
