@@ -22,8 +22,11 @@
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease !important;
 }
 
-.security-console {
+.security-console,
+.entry-content,
+.entry-content.security-console {
   background: transparent !important;
+  background-color: transparent !important;
   border: none !important;
   box-shadow: none !important;
 }
@@ -311,17 +314,14 @@
 
 /* ── 3D Live Sensors Grid ─────────────────────────────────────────────────── */
 .security-console .console-sensors {
-  display: grid;
+  display: grid !important;
   grid-template-columns: 1fr;
   gap: 8px;
-  max-height: 260px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  overscroll-behavior: contain;
-  padding: 4px !important;
-  margin: -4px !important;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  scrollbar-width: none;
   background: transparent !important;
   background-color: transparent !important;
   border: none !important;
@@ -329,11 +329,12 @@
   box-shadow: none !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
+  filter: none !important;
+  isolation: auto !important;
+  contain: none !important;
 }
 
-.security-console .console-sensors::-webkit-scrollbar { width: 5px; }
-.security-console .console-sensors::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); border-radius: 4px; }
-.security-console .console-sensors::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.22); border-radius: 4px; }
+.security-console .console-sensors::-webkit-scrollbar { display: none; }
 
 .security-console .console-sensors.console-sensors--compact,
 .security-console .console-sensors[data-count="3"],
@@ -353,6 +354,9 @@
 .security-console .console-sensors[data-count="12"] {
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   gap: 4px !important;
+  max-height: 280px !important;
+  overflow-y: auto !important;
+  scrollbar-width: thin;
 }
 
 /* ── 3D Sensor Chips ──────────────────────────────────────────────────────── */
@@ -374,11 +378,10 @@
   min-height: 44px !important;
   box-sizing: border-box !important;
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease !important;
-  transform: translate3d(0, 0, 0) !important;
 }
 
 .console-sensor:hover {
-  transform: translateY(-2px) translate3d(0, 0, 0) scale(1.02) !important;
+  transform: translateY(-2px) scale(1.02) !important;
   box-shadow: 
     inset 0 1.5px 0 rgba(255, 255, 255, 0.5),
     0 8px 18px rgba(0, 0, 0, 0.35) !important;

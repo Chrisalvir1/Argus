@@ -1,3 +1,8 @@
+## [2.2.92] - 2026-08-26
+
+### Fixed
+- **Sensor Backdrop Box Removal:** Completely eliminated the dark rectangular compositing box behind sensor chips by removing scroll layer isolation and forcing `overflow: visible` with pure transparent background.
+
 ## [2.2.91] - 2026-08-26
 
 ### Fixed & Enhanced
