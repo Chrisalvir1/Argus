@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.2.95]
+- **Crash**: Fix a JavaScript evaluation crash caused by static module-level template interpolations preventing the entire dashboard from rendering.
+
+
 ## [2.2.94]
 - **i18n**: Fix React Security Console not updating automatically when changing language in settings.
 - **i18n**: Eradicate hardcoded Spanish HTML strings from legacy components.
@@ -447,6 +451,10 @@
 - Recuperada compatibilidad del clima animado (WebGL) y agregado como opción para el fondo general del panel.
 
 # Changelog
+
+## [2.2.95]
+- **Crash**: Fix a JavaScript evaluation crash caused by static module-level template interpolations preventing the entire dashboard from rendering.
+
 
 ## [2.2.94]
 - **i18n**: Fix React Security Console not updating automatically when changing language in settings.
