@@ -3116,6 +3116,22 @@ class ArgusPanel extends HTMLElement {
     }
   }
 
+  _updateHeroClock() {
+    if (typeof this._updateLiveClocks === 'function') {
+      this._updateLiveClocks();
+      return;
+    }
+    const root = this.shadowRoot;
+    if (!root) return;
+    const now = new Date();
+    const timeStr = typeof this._formatTime === 'function' ? this._formatTime(now) : now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const dateStr = now.toLocaleDateString(typeof this._getLocale === 'function' ? this._getLocale() : undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+    const heroClock = root.getElementById('hero-clock-time');
+    const heroDate = root.getElementById('hero-clock-date');
+    if (heroClock && heroClock.textContent !== timeStr) heroClock.textContent = timeStr;
+    if (heroDate && heroDate.textContent !== dateStr) heroDate.textContent = dateStr;
+  }
+
   _updateProfileBadge() {
     const pill = this.shadowRoot.getElementById('active-profile-pill');
     const avatar = this.shadowRoot.getElementById('profile-avatar');
@@ -3447,7 +3463,7 @@ class ArgusPanel extends HTMLElement {
     (window as any)._argusDashboardResetBtn = this._t('reset_dashboard') || 'Restablecer diseño';
     this._applyTranslations();
     this._updateHeroProfileDisplay();
-    this._updateHeroClock();
+    this._updateHeroClock?.();
     if (this._instanceSignatures) this._instanceSignatures.clear();
     this._renderEntries();
     this._renderModeTabs();

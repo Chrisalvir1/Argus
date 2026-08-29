@@ -20,6 +20,7 @@ type StablePanel = ArgusPanelHost & {
   _handleAction?: (idx: string, action: string) => void;
   _clockInterval?: ReturnType<typeof setInterval>;
   _updateLiveClocks?: () => void;
+  _updateHeroClock?: () => void;
   _startClock?: () => void;
   _instanceSignatures?: Map<number, string>;
   _renderEntries?: (force?: boolean) => any;
@@ -98,6 +99,7 @@ export function applyStableInstancesRender(C: ArgusPanelConstructor | undefined)
   const desc = Object.getOwnPropertyDescriptor(proto, 'hass') || Object.getOwnPropertyDescriptor(Object.getPrototypeOf(proto), 'hass');
   
   proto._updateLiveClocks = function (this: StablePanel) { updateClocks(this); };
+  proto._updateHeroClock = function (this: StablePanel) { updateClocks(this); };
   proto._startClock = function (this: StablePanel) {
     if (this._clockInterval) clearInterval(this._clockInterval);
     updateClocks(this);

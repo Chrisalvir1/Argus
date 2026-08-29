@@ -888,7 +888,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             return
 
         # Fire "sensor_opened" automations globally (before filtering by alarm state)
-        self.hass.async_create_task(self._evaluate_automations("sensor_opened", sensor=entity_id))
+        self.hass.create_task(self._evaluate_automations("sensor_opened", sensor=entity_id))
         self.hass.bus.async_fire("argus_sensor_opened", {
             "entity_id": entity_id, "state": new_state.state, "alarm_entity_id": self.entity_id, "entry_id": self._config_entry.entry_id
         })

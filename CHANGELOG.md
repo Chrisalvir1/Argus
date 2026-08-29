@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.2.98]
+- **Thread Safety**: Fixes Home Assistant thread-safety failures when sensor-state callbacks schedule Argus automations. The `sensor_opened` automation evaluation now uses `hass.create_task()`, allowing it to be safely scheduled from executor threads and preventing the subsequent “coroutine was never awaited” warning.
+- **Frontend**: Fixed `TypeError: this.updateHeroClock is not a function` during UI language refresh in `ArgusPanel`.
+
+
 ## [2.2.97]
 - **Modal Localization**: Fixed missing translation keys in standard profile permissions modal.
 - **Granular Permissions Control**: Added options for SOS trigger, Admin tabs access, and Admin profiles access.
