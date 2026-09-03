@@ -7,7 +7,7 @@
 [![Donate](https://img.shields.io/badge/Donate-PayPal-00457C.svg?style=for-the-badge&logo=paypal)](https://paypal.me/CEstradaAlvir)
 [![GitHub Stars](https://img.shields.io/github/stars/Chrisalvir1/Argus?style=for-the-badge&logo=github&color=gold)](https://github.com/Chrisalvir1/Argus)
 
-Argus convierte tu Home Assistant en un centro de seguridad profesional, local, multiinstancia y visualmente impecable con **React 18 + TypeScript**, estética *Liquid Glass* y el nuevo **Modo Alto Contraste / OLED Dark Mode**.
+Argus convierte tu Home Assistant en un centro de seguridad profesional, local, multiinstancia y visualmente impecable con **React 19 + TypeScript**, estética *Liquid Glass* y el nuevo **Modo Alto Contraste / OLED Dark Mode**.
 
 ---
 
@@ -15,7 +15,7 @@ Argus convierte tu Home Assistant en un centro de seguridad profesional, local, 
 
 - 🖤 **Nuevo Modo Alto Contraste & OLED:** Selector manual en el perfil para disfrutar de fondos oscuros profundos, textos de máximo contraste y contornos nítidos para una legibilidad perfecta en cualquier pantalla.
 - 📱 **Deslizador de Seguridad iOS (Slide-to-Action):** Prevención de desarmes o activaciones de pánico accidentales mediante gestos táctiles de deslizamiento continuo.
-- ⚛️ **Dashboard Modular React 18:** Tarjetas y widgets organizables y redimensionables con memoria adaptativa para móvil, tablet y escritorio.
+- ⚛️ **Dashboard Modular React 19:** Tarjetas y widgets organizables y redimensionables con memoria adaptativa para móvil, tablet y escritorio.
 - 🗣️ **Asistente de Voz y TTS Dinámico:** Anuncios automáticos por voz en altavoces de tu hogar para estados de armado, desarmado, sensores que impiden el armado y alarmas activadas.
 - 🔑 **Separación Criptográfica de PINs:** Distinción segura entre el Pin de Armado (Master PIN) y el Pin de Perfil (Access PIN) protegidos con PBKDF2/scrypt.
 - 🚨 **Gestión de Salidas de Emergencia SOS:** Botón de pánico reversible con llamada rápida a emergencias y activación de sirenas y luces de auxilio.

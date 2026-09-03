@@ -2,7 +2,8 @@
 
 ## [2.2.99]
 - **Accessibility & Contrast**: Added High Contrast & OLED Dark Mode toggle in user profile, supporting `@media (prefers-contrast: more)` and OLED battery/display preservation.
-- **Documentation**: Completely rewritten `README.md` and `info.md` from scratch to accurately reflect modern Argus capabilities, modular React 18 dashboard, slide-to-action lock, TTS voice, blueprints, and prominent community support links.
+- **Documentation**: Completely rewritten `README.md` and `info.md` from scratch to accurately reflect modern Argus capabilities, modular React 19 dashboard, slide-to-action lock, TTS voice, blueprints, and prominent community support links.
+- **Dependencies & Security**: Updated `vite` to 6.4.3, `vitest` to 3.2.7, `@types/react-dom` to 19.2.7, and `@types/react-grid-layout` to 1.3.6, addressing security advisories and achieving 0 vulnerabilities in `npm audit`.
 - **Community & Support**: Added quick-access buttons for PayPal donations, GitHub Star, and suggestions email directly into the support panel and user profile dropdown.
 
 ## [2.2.98]

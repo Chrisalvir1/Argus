@@ -27,7 +27,7 @@
 
 **Argus Home Hub** es un centro de seguridad residencial avanzado, local e independiente para Home Assistant, diseñado para proteger tu hogar con total privacidad, sin suscripciones mensuales y sin depender de servicios externos en la nube. 
 
-Construido sobre una arquitectura moderna con **React 18 + TypeScript**, Argus combina una estética cinematográfica de **Liquid Glass (Cristal Líquido)** con un motor de seguridad de grado profesional, compatibilidad nativa con HomeKit, asistente de voz interactivo (TTS), notificaciones enriquecidas para móviles y un **Nuevo Modo de Alto Contraste / Modo Oscuro OLED** enfocado en máxima accesibilidad visual.
+Construido sobre una arquitectura moderna con **React 19 + TypeScript**, Argus combina una estética cinematográfica de **Liquid Glass (Cristal Líquido)** con un motor de seguridad de grado profesional, compatibilidad nativa con HomeKit, asistente de voz interactivo (TTS), notificaciones enriquecidas para móviles y un **Nuevo Modo de Alto Contraste / Modo Oscuro OLED** enfocado en máxima accesibilidad visual.
 
 > [!IMPORTANT]
 > **Aviso de Responsabilidad:** Argus es un sistema de automatización y seguridad residencial local de código abierto para Home Assistant. No sustituye una central receptora de alarmas certificada ni garantiza conexión directa con servicios de policía o bomberos. Asegúrate de probar periódicamente sensores, sirenas, avisos sonoros y respaldos.
@@ -51,7 +51,7 @@ Construido sobre una arquitectura moderna con **React 18 + TypeScript**, Argus c
 - **Seguro contra Toques Accidentales:** Sustituye botones convencionales por controles deslizantes táctiles fluidos tipo *"Deslizar para desarmar"* o *"Deslizar para activar SOS"*, inspirados en el diseño de iOS.
 - **Protección para Niños y Mascotas:** Impide desarmes o alertas de pánico involuntarias causadas por roces en tablets de pared o pantallas táctiles.
 
-### 🧩 Dashboard Modular Interactivo (React 18)
+### 🧩 Dashboard Modular Interactivo (React 19)
 - **Widgets Arrastrables y Redimensionables:** Basado en `react-grid-layout`, organiza tus tarjetas de seguridad, historial, automatizaciones y control de acceso a tu gusto con tamaños inteligentes (S, M, L, XL).
 - **Persistencia por Dispositivo:** El diseño y la distribución de widgets se memorizan localmente según el tamaño de la pantalla (teléfono, tablet de pared, monitor de escritorio o pantalla en formato Kiosk).
 
@@ -146,7 +146,7 @@ type: custom:argus-panel-card
 Argus cuenta con una suite completa de pruebas unitarias y verificación de contratos:
 
 ```bash
-# Compilar el frontend en React 18
+# Compilar el frontend en React 19
 npm install
 npm run build
 
