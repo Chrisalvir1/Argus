@@ -6,7 +6,7 @@
 **Sistema Integral de Seguridad Residencial Inteligente, Local y Profesional para Home Assistant**
 
 [![Release](https://img.shields.io/github/v/release/Chrisalvir1/Argus?style=for-the-badge&color=blue)](https://github.com/Chrisalvir1/Argus/releases)
-[![HACS](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/default)
+[![HACS](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/default)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-00457C.svg?style=for-the-badge&logo=paypal)](https://paypal.me/CEstradaAlvir)
 [![GitHub Stars](https://img.shields.io/github/stars/Chrisalvir1/Argus?style=for-the-badge&logo=github&color=gold)](https://github.com/Chrisalvir1/Argus)
 [![License](https://img.shields.io/github/license/Chrisalvir1/Argus?style=for-the-badge)](LICENSE)
@@ -27,7 +27,12 @@
 
 **Argus Home Hub** es un centro de seguridad residencial avanzado, local e independiente para Home Assistant, diseñado para proteger tu hogar con total privacidad, sin suscripciones mensuales y sin depender de servicios externos en la nube. 
 
-Construido sobre una arquitectura moderna con **React 19 + TypeScript**, Argus combina una estética cinematográfica de **Liquid Glass (Cristal Líquido)** con un motor de seguridad de grado profesional, compatibilidad nativa con HomeKit, asistente de voz interactivo (TTS), notificaciones enriquecidas para móviles y un **Nuevo Modo de Alto Contraste / Modo Oscuro OLED** enfocado en máxima accesibilidad visual.
+Construido sobre una arquitectura ultra-ligera de última generación con **TypeScript 7 + Vite 8.2 + React 19.2**, Argus combina una estética cinematográfica de **Liquid Glass (Cristal Líquido)** con un motor de seguridad de grado profesional, compatibilidad nativa con HomeKit, asistente de voz interactivo (TTS), notificaciones móviles inteligentes y un **Nuevo Modo de Alto Contraste / Modo Oscuro OLED** enfocado en máxima accesibilidad visual.
+
+### ⚡ Arquitectura Ultra-Ligera y Alto Rendimiento
+- **Tecnología de Vanguardia:** Impulsado por **React 19.2.8**, **Vite 8.2.2**, **TypeScript 7.0.2** y **Nanoid 6.0.1**.
+- **Velocidad Extrema:** Compilación y empaquetado en ~110ms, tiempos de carga instantáneos y renderizado fluido a 60 FPS sin recargar la CPU de tu servidor o tablet.
+- **Zero-Bloat:** Sin librerías pesadas innecesarias y **0 dependencias externas de pip en Python** (opera de forma 100% nativa y local en Home Assistant).
 
 > [!IMPORTANT]
 > **Aviso de Responsabilidad:** Argus es un sistema de automatización y seguridad residencial local de código abierto para Home Assistant. No sustituye una central receptora de alarmas certificada ni garantiza conexión directa con servicios de policía o bomberos. Asegúrate de probar periódicamente sensores, sirenas, avisos sonoros y respaldos.
@@ -72,10 +77,10 @@ Construido sobre una arquitectura moderna con **React 19 + TypeScript**, Argus c
 - **Teléfono de Emergencias Local:** Botón de llamada rápida configurable según tu país o región (911, 112, etc.).
 - **Detención Reversible:** Permite cancelar el pánico restaurando el sistema exactamente al estado de seguridad anterior.
 
-### 🤖 Blueprints Nativos para iOS y Telegram
-Argus incluye plantillas de automatización listas para importar en Home Assistant:
-- **Alertas Críticas para iOS:** Notificaciones push de alta prioridad con sonido de sirena (que ignoran el modo No Molestar) y botones de acción rápida (*Desarmar*, *Ver Cámaras*, *Activar Luces*).
-- **Bot de Telegram con Video en Vivo:** Envía un mensaje instantáneo a tu chat de Telegram acompañado de un clip de video de 15 segundos grabado por la cámara del área vulnerada.
+### 📲 Notificaciones Móviles Inteligentes y Alertas Críticas (iOS y Android)
+Argus se integra de forma directa y nativa con la aplicación Home Assistant Companion para alertarte de cualquier evento de seguridad en tu móvil:
+- **Alertas Críticas de Máxima Prioridad:** Notificaciones push de emergencia con sonido de sirena estridente que ignoran automáticamente el modo silencioso o No Molestar del dispositivo.
+- **Acciones Rápidas desde el Mensaje:** Botones interactivos directamente en la notificación (*Desarmar*, *Ver Cámaras*, *Silenciar Sirena*, *Activar Luces*) para actuar de inmediato sin perder tiempo abriendo la aplicación.
 
 ### 📦 Copias de Seguridad Cifradas (.argus)
 - **Exportación e Importación Completa:** Descarga y restaura perfiles, sensores, configuraciones de modos y ajustes de seguridad en archivos protegidos con cifrado AES-GCM.
@@ -89,22 +94,30 @@ Argus incluye plantillas de automatización listas para importar en Home Assista
 
 ## 🚀 Instalación
 
-### Método 1: Mediante HACS (Recomendado)
-1. Abre **HACS** en tu panel de Home Assistant.
-2. Ve al menú superior derecho de tres puntos y selecciona **Repositorios personalizados**.
-3. Pega la URL del repositorio: `https://github.com/Chrisalvir1/Argus` y selecciona la categoría **Integración**.
-4. Haz clic en **Descargar**.
+### Método 1: Directamente desde HACS (Oficial y Recomendado)
+Argus Home Hub forma parte del **catálogo oficial por defecto de HACS**, por lo que su instalación es directa y sin configuraciones manuales de repositorios:
+1. Abre **HACS** en el menú lateral de tu Home Assistant.
+2. Ve a la sección **Integraciones**.
+3. En el buscador superior escribe **Argus** (o **Argus Home Hub**).
+4. Selecciona la integración y haz clic en **Descargar**.
 5. Reinicia Home Assistant.
-6. Ve a **Ajustes → Dispositivos y servicios → Añadir integración** y busca **Argus Home Hub**.
+6. Ve a **Ajustes → Dispositivos y servicios → Añadir integración** y selecciona **Argus Home Hub**.
 
-### Método 2: Instalación Manual
+### Método 2: Repositorio Personalizado en HACS (Alternativa)
+Si por temas de caché tu catálogo local de HACS no muestra la integración en la búsqueda:
+1. En **HACS → Integraciones**, toca el menú de tres puntos (⋮) en la esquina superior derecha y selecciona **Repositorios personalizados**.
+2. Añade `https://github.com/Chrisalvir1/Argus` con la categoría **Integración**.
+3. Haz clic en **Añadir** y luego en **Descargar**.
+4. Reinicia Home Assistant y añade la integración desde **Ajustes**.
+
+### Método 3: Instalación Manual
 1. Descarga el archivo `argus.zip` de la última versión en [Releases](https://github.com/Chrisalvir1/Argus/releases).
-2. Descomprime la carpeta `argus` dentro del directorio `custom_components` de tu instalación de Home Assistant:
+2. Descomprime el contenido dentro de la carpeta `custom_components/argus/` de tu instalación:
    ```
    /config/custom_components/argus/
    ```
 3. Reinicia Home Assistant.
-4. Añade la integración desde la interfaz web de Home Assistant.
+4. Añade la integración desde **Ajustes → Dispositivos y servicios**.
 
 ---
 

@@ -2,7 +2,7 @@
 
 ## [2.2.99]
 - **Accessibility & Contrast**: Added High Contrast & OLED Dark Mode toggle in user profile, supporting `@media (prefers-contrast: more)` and OLED battery/display preservation.
-- **Documentation**: Completely rewritten `README.md` and `info.md` from scratch to accurately reflect modern Argus capabilities, modular React 19 dashboard, slide-to-action lock, TTS voice, blueprints, and prominent community support links.
+- **Documentation**: Completely rewritten `README.md` and `info.md` from scratch to accurately reflect modern Argus capabilities, ultra-lightweight TypeScript 7 + Vite 8.2 + React 19.2 stack, slide-to-action lock, TTS voice, critical mobile notifications for iOS/Android, official HACS Default catalog approval, and prominent community support links.
 - **Dependencies & Security**: Updated to `vite` 8.2.2, `vitest` 5.0.0, `@vitejs/plugin-react` 6.1.1, `nanoid` 6.0.1, and `@types/react-dom` 19.2.7, achieving 110ms builds and 0 vulnerabilities in `npm audit`.
 - **Community & Support**: Added quick-access buttons for PayPal donations, GitHub Star, and suggestions email directly into the support panel and user profile dropdown.
 

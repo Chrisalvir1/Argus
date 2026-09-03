@@ -3,23 +3,24 @@
 **Sistema de seguridad residencial inteligente, local y profesional para Home Assistant**
 
 [![Release](https://img.shields.io/github/v/release/Chrisalvir1/Argus?style=for-the-badge&color=blue)](https://github.com/Chrisalvir1/Argus/releases)
-[![HACS](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/default)
+[![HACS](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/default)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-00457C.svg?style=for-the-badge&logo=paypal)](https://paypal.me/CEstradaAlvir)
 [![GitHub Stars](https://img.shields.io/github/stars/Chrisalvir1/Argus?style=for-the-badge&logo=github&color=gold)](https://github.com/Chrisalvir1/Argus)
 
-Argus convierte tu Home Assistant en un centro de seguridad profesional, local, multiinstancia y visualmente impecable con **React 19 + TypeScript**, estética *Liquid Glass* y el nuevo **Modo Alto Contraste / OLED Dark Mode**.
+Argus convierte tu Home Assistant en un centro de seguridad profesional, local, multiinstancia y visualmente impecable impulsado por una arquitectura ultra-ligera de última generación (**TypeScript 7 + Vite 8.2 + React 19.2**), estética *Liquid Glass* y el nuevo **Modo Alto Contraste / OLED Dark Mode**.
 
 ---
 
 ### ✨ Características Principales
 
+- ⚡ **Rendimiento Ultra-Ligero:** Compilación instantánea en ~110ms, carga fluida a 60 FPS y cero dependencias de pip externas en Python (100% nativo y local).
 - 🖤 **Nuevo Modo Alto Contraste & OLED:** Selector manual en el perfil para disfrutar de fondos oscuros profundos, textos de máximo contraste y contornos nítidos para una legibilidad perfecta en cualquier pantalla.
 - 📱 **Deslizador de Seguridad iOS (Slide-to-Action):** Prevención de desarmes o activaciones de pánico accidentales mediante gestos táctiles de deslizamiento continuo.
 - ⚛️ **Dashboard Modular React 19:** Tarjetas y widgets organizables y redimensionables con memoria adaptativa para móvil, tablet y escritorio.
 - 🗣️ **Asistente de Voz y TTS Dinámico:** Anuncios automáticos por voz en altavoces de tu hogar para estados de armado, desarmado, sensores que impiden el armado y alarmas activadas.
 - 🔑 **Separación Criptográfica de PINs:** Distinción segura entre el Pin de Armado (Master PIN) y el Pin de Perfil (Access PIN) protegidos con PBKDF2/scrypt.
 - 🚨 **Gestión de Salidas de Emergencia SOS:** Botón de pánico reversible con llamada rápida a emergencias y activación de sirenas y luces de auxilio.
-- 🤖 **Blueprints Nativos:** Alertas críticas con botones interactivos para iOS y clips de video de 15 segundos de tus cámaras para bots de Telegram.
+- 📲 **Alertas Críticas para iOS y Android:** Notificaciones push de alta prioridad con sonido de sirena que ignoran el modo No Molestar y botones de acción rápida (*Desarmar*, *Ver Cámaras*, *Activar Luces*).
 - 📦 **Copias de Seguridad Cifradas (.argus):** Respaldo completo de usuarios, sensores y configuraciones protegido con clave AES-GCM.
 
 ---
