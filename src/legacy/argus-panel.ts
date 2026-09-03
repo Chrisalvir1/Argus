@@ -51,6 +51,9 @@ const TEXTS = {
     'admin_only': 'Solo los administradores pueden gestionar usuarios y configuraciones.',
     'alarm_instance': 'Instancia de alarma',
     'all_sensors_bypassed': 'Todos los sensores configurados están omitidos.',
+    'contrast_selector_lbl': '👁️ Aspecto y Contraste',
+    'contrast_standard': '✨ Estándar (Liquid Glass)',
+    'contrast_high': '🖤 Alto Contraste (OLED / Oscuro)',
     'analysis_title': 'Análisis de Seguridad',
     'arm_time': 'Armado (s)',
     'arm_time_label': 'Tiempo de armado',
@@ -471,6 +474,9 @@ const TEXTS = {
     'admin_only': 'Only administrators can manage users and settings.',
     'alarm_instance': 'Alarm Instance',
     'all_sensors_bypassed': 'All configured sensors are bypassed.',
+    'contrast_selector_lbl': '👁️ Appearance & Contrast',
+    'contrast_standard': '✨ Standard (Liquid Glass)',
+    'contrast_high': '🖤 High Contrast (OLED / Dark)',
     'analysis_title': 'Security Analysis',
     'arm_time': 'Arming delay (s)',
     'arm_time_label': 'Arming Delay',
@@ -918,7 +924,35 @@ _tmpl.innerHTML = `
     --input-border: rgba(255, 255, 255, 0.12);
   }
 
-  
+  /* High Contrast / OLED Dark Mode Accessibility */
+  :host([argus-contrast="high"]),
+  :host(.argus-contrast-high) {
+    --glass-bg: rgba(11, 16, 26, 0.95);
+    --glass-border: rgba(255, 255, 255, 0.22);
+    --v2066-glass: rgba(11, 16, 26, 0.95);
+    --v2066-border: rgba(255, 255, 255, 0.22);
+    --v2066-text: #ffffff;
+    --v2066-muted: #cbd5e1;
+    --primary-text-color: #ffffff !important;
+    --secondary-text-color: #cbd5e1 !important;
+    --hud-bg: rgba(11, 16, 26, 0.98);
+    --hero-bg: linear-gradient(135deg, rgba(16, 24, 39, 0.96), rgba(8, 12, 20, 0.98));
+    --personalize-bg: rgba(11, 16, 26, 0.92);
+    --personalize-border: rgba(255, 255, 255, 0.2);
+    --user-card-bg: rgba(14, 20, 33, 0.95);
+    --user-card-border: rgba(255, 255, 255, 0.2);
+  }
+  :host([argus-contrast="high"]) #profile-dropdown,
+  :host(.argus-contrast-high) #profile-dropdown {
+    background: rgba(10, 14, 23, 0.98) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7) !important;
+  }
+  :host([argus-contrast="high"]) .liquid-glass,
+  :host(.argus-contrast-high) .liquid-glass {
+    background: rgba(11, 16, 26, 0.95) !important;
+    border-color: rgba(255, 255, 255, 0.22) !important;
+  }
 
   :host {
     --hud-text-color: #fff;
@@ -2863,9 +2897,10 @@ _tmpl.innerHTML = `
           <h3 id="github-title" style="margin:0; font-size:14px; font-weight:600"></h3>
           <p id="github-desc" style="margin:4px 0 0; font-size:12px; opacity:0.7"></p>
         </div>
-        <div style="display:flex; align-items:center; gap:10px; margin-left:16px;">
+        <div style="display:flex; align-items:center; gap:10px; margin-left:16px; flex-wrap:wrap;">
           <a id="github-action" class="github-star-action" href="https://github.com/Chrisalvir1/Argus" target="_blank" rel="noopener noreferrer"></a>
           <a id="paypal-action" class="glass-control" href="https://paypal.me/CEstradaAlvir" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:4px; padding:6px 14px; border-radius:10px; font-size:12px; font-weight:750; color:#38bdf8 !important; text-decoration:none; background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.3); transition:transform 0.15s ease, background 0.15s ease;">☕ PayPal</a>
+          <a id="email-action" class="glass-control" href="mailto:chrisalvir01@gmail.com" style="display:inline-flex; align-items:center; gap:4px; padding:6px 14px; border-radius:10px; font-size:12px; font-weight:750; color:#a78bfa !important; text-decoration:none; background:rgba(167,139,250,0.12); border:1px solid rgba(167,139,250,0.3); transition:transform 0.15s ease, background 0.15s ease;">✉️ Sugerencias</a>
         </div>
       </section>
 
@@ -3716,6 +3751,7 @@ class ArgusPanel extends HTMLElement {
     // Restore persisted language
     try { this._manualLang = localStorage.getItem('argus_lang') || null; } catch(e) {}
     this._ensureInitialized();
+    this._initContrastMode();
     this._startClock();
     
     // Safety check: If we think we are in fullscreen, but the browser is not, and we are not a kiosk, reset it.
@@ -8187,6 +8223,38 @@ gl_FragColor=vec4(col,alpha);}`;
     });
   }
 
+  _getProfileContrast(): string {
+    const profId = this._currentProfile?.id || 'default';
+    try {
+      const stored = localStorage.getItem(`argus_contrast_${profId}`);
+      if (stored === 'high' || stored === 'standard') return stored;
+    } catch (_) {}
+    return 'standard';
+  }
+
+  _setContrastMode(mode: string): void {
+    const profId = this._currentProfile?.id || 'default';
+    try {
+      localStorage.setItem(`argus_contrast_${profId}`, mode);
+      localStorage.setItem('argus_contrast_global', mode);
+    } catch (_) {}
+    this._applyContrastMode(mode);
+  }
+
+  _applyContrastMode(mode: string): void {
+    if (mode === 'high') {
+      this.setAttribute('argus-contrast', 'high');
+      this.classList.add('argus-contrast-high');
+    } else {
+      this.removeAttribute('argus-contrast');
+      this.classList.remove('argus-contrast-high');
+    }
+  }
+
+  _initContrastMode(): void {
+    const mode = this._getProfileContrast();
+    this._applyContrastMode(mode);
+  }
 
   _updateHeroProfileDisplay() {
     const container = this.shadowRoot.getElementById('hero-profile-container');
@@ -8267,6 +8335,15 @@ gl_FragColor=vec4(col,alpha);}`;
           </select>
         </div>
 
+        <!-- Appearance & Contrast Selector -->
+        <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
+          <label style="font-size: 11px; font-weight: 700; opacity: 0.7; display: flex; align-items: center; gap: 5px;">${this._t('contrast_selector_lbl') || '👁️ Aspecto y Contraste'}</label>
+          <select id="dropdown-contrast-select" class="glass-control" style="width: 100%; height: 36px; border-radius: 10px; padding: 0 10px; font-size: 12px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid var(--v2066-border); color: var(--v2066-text); outline: none; cursor: pointer;">
+            <option value="standard" ${this._getProfileContrast() === 'standard' ? 'selected' : ''}>${this._t('contrast_standard') || '✨ Estándar (Liquid Glass)'}</option>
+            <option value="high" ${this._getProfileContrast() === 'high' ? 'selected' : ''}>${this._t('contrast_high') || '🖤 Alto Contraste (OLED / Oscuro)'}</option>
+          </select>
+        </div>
+
         <!-- PIN management section -->
         ${(canChangePin || canChangeMasterPin) ? `
         <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px;">
@@ -8323,6 +8400,15 @@ gl_FragColor=vec4(col,alpha);}`;
         <button id="btn-dropdown-switch-user" class="glass-control" style="width: 100%; min-height: 32px; padding: 6px; border-radius: 10px; font-size: 10.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 6px; background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); color: var(--v2066-text);">
           ${this._t('switch_profile_btn') || '👤 Cambiar de Perfil'}
         </button>
+
+        <!-- Argus Support Links (Star, PayPal, Email) -->
+        <div style="display: flex; align-items: center; justify-content: space-around; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px; margin-top: 8px; font-size: 11px;">
+          <a href="https://github.com/Chrisalvir1/Argus" target="_blank" rel="noopener noreferrer" style="color: #eab308; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 4px;">⭐ GitHub</a>
+          <span style="opacity: 0.3;">•</span>
+          <a href="https://paypal.me/CEstradaAlvir" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 4px;">☕ PayPal</a>
+          <span style="opacity: 0.3;">•</span>
+          <a href="mailto:chrisalvir01@gmail.com" style="color: #a78bfa; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 4px;">✉️ Ideas</a>
+        </div>
       </div>
       </div>
     `;
@@ -8374,6 +8460,15 @@ gl_FragColor=vec4(col,alpha);}`;
         this._setLanguage(e.target.value);
       });
     }
+
+    // Contrast dropdown change listener
+    const contrastSelect = container.querySelector('#dropdown-contrast-select');
+    if (contrastSelect) {
+      contrastSelect.addEventListener('change', (e: Event) => {
+        this._setContrastMode((e.target as HTMLSelectElement).value);
+      });
+    }
+    this._initContrastMode();
 
     // Change profile picture → navigate to HA Persons page
     container.querySelector('#btn-change-profile-picture')?.addEventListener('click', (e) => {

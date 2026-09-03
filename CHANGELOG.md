@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.2.99]
+- **Accessibility & Contrast**: Added High Contrast & OLED Dark Mode toggle in user profile, supporting `@media (prefers-contrast: more)` and OLED battery/display preservation.
+- **Documentation**: Completely rewritten `README.md` and `info.md` from scratch to accurately reflect modern Argus capabilities, modular React 18 dashboard, slide-to-action lock, TTS voice, blueprints, and prominent community support links.
+- **Community & Support**: Added quick-access buttons for PayPal donations, GitHub Star, and suggestions email directly into the support panel and user profile dropdown.
+
 ## [2.2.98]
 - **Thread Safety**: Fixes Home Assistant thread-safety failures when sensor-state callbacks schedule Argus automations. The `sensor_opened` automation evaluation now uses `hass.create_task()`, allowing it to be safely scheduled from executor threads and preventing the subsequent “coroutine was never awaited” warning.
 - **Frontend**: Fixed `TypeError: this.updateHeroClock is not a function` during UI language refresh in `ArgusPanel`.

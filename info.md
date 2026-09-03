@@ -1,30 +1,30 @@
 # Argus Home Hub 🛡️
 
-**Sistema de seguridad residencial inteligente y local para Home Assistant**
+**Sistema de seguridad residencial inteligente, local y profesional para Home Assistant**
 
-[![Version](https://img.shields.io/badge/version-2.2.0-blue.svg)](https://github.com/Chrisalvir1/Argus/releases)
-[![HACS](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/default)
-[![Donate](https://img.shields.io/badge/Donate-PayPal-00457C.svg)](https://paypal.me/CEstradaAlvir)
+[![Release](https://img.shields.io/github/v/release/Chrisalvir1/Argus?style=for-the-badge&color=blue)](https://github.com/Chrisalvir1/Argus/releases)
+[![HACS](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/default)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-00457C.svg?style=for-the-badge&logo=paypal)](https://paypal.me/CEstradaAlvir)
+[![GitHub Stars](https://img.shields.io/github/stars/Chrisalvir1/Argus?style=for-the-badge&logo=github&color=gold)](https://github.com/Chrisalvir1/Argus)
 
-Argus convierte tu Home Assistant en un centro de seguridad profesional, local, multiinstancia y visualmente impecable impulsado por **React 19 + TypeScript**.
-
----
-
-### ✨ Novedades de la versión 2.2.0
-
-- ⚛️ **Arquitectura 100% React 19 + Vite:** Rendimiento ultrarrápido, cero código legado, sin parches DOM y con tipado estricto de extremo a extremo.
-- 🏢 **Aislamiento Multiinstancia Estricto:** Si tienes varias instancias o particiones de alarma en tu hogar, cada una opera con datos y comandos completamente aislados mediante `entry_id`.
-- 🗣️ **Asistente de Voz y TTS Dinámico:** Anuncios automáticos por voz en altavoces de tu hogar para estados de armado, desarmado, sensores que impiden el armado y eventos de alarma.
-- ⚡ **Rendimiento y Estabilidad Máxima:** Se eliminaron los fondos personalizados y sombreadores pesados de clima en favor de una interfaz sólida, fluida y con fondo fijo optimizado.
-- 🔗 **Integración con Automatizaciones de Home Assistant:** Vista en vivo (solo lectura) de las automatizaciones de HA vinculadas a la instancia con acceso directo al editor nativo de Home Assistant.
-- 🚨 **Gestión de Salidas de Emergencia SOS:** Configuración protegida por permisos para activar luces estroboscópicas, sirenas o conmutadores dedicados.
-- 🌐 **Soporte para 12 Idiomas:** Español, Inglés, Francés, Portugués, Italiano, Chino Simplificado, Chino Tradicional, Hindi, Árabe (con soporte RTL nativo), Coreano, Japonés y Ucraniano (nuevos idiomas en fase de pruebas).
+Argus convierte tu Home Assistant en un centro de seguridad profesional, local, multiinstancia y visualmente impecable con **React 18 + TypeScript**, estética *Liquid Glass* y el nuevo **Modo Alto Contraste / OLED Dark Mode**.
 
 ---
 
-### 🔊 Cómo Activar y Configurar el Asistente de Voz (TTS)
+### ✨ Características Principales
 
-Argus puede hablar a través de tus altavoces inteligentes (Media Players) cuando el sistema cambia de estado o se activa una alarma.
+- 🖤 **Nuevo Modo Alto Contraste & OLED:** Selector manual en el perfil para disfrutar de fondos oscuros profundos, textos de máximo contraste y contornos nítidos para una legibilidad perfecta en cualquier pantalla.
+- 📱 **Deslizador de Seguridad iOS (Slide-to-Action):** Prevención de desarmes o activaciones de pánico accidentales mediante gestos táctiles de deslizamiento continuo.
+- ⚛️ **Dashboard Modular React 18:** Tarjetas y widgets organizables y redimensionables con memoria adaptativa para móvil, tablet y escritorio.
+- 🗣️ **Asistente de Voz y TTS Dinámico:** Anuncios automáticos por voz en altavoces de tu hogar para estados de armado, desarmado, sensores que impiden el armado y alarmas activadas.
+- 🔑 **Separación Criptográfica de PINs:** Distinción segura entre el Pin de Armado (Master PIN) y el Pin de Perfil (Access PIN) protegidos con PBKDF2/scrypt.
+- 🚨 **Gestión de Salidas de Emergencia SOS:** Botón de pánico reversible con llamada rápida a emergencias y activación de sirenas y luces de auxilio.
+- 🤖 **Blueprints Nativos:** Alertas críticas con botones interactivos para iOS y clips de video de 15 segundos de tus cámaras para bots de Telegram.
+- 📦 **Copias de Seguridad Cifradas (.argus):** Respaldo completo de usuarios, sensores y configuraciones protegido con clave AES-GCM.
+
+---
+
+### 🔊 Cómo Activar el Asistente de Voz (TTS)
 
 Agrega lo siguiente en tu `configuration.yaml` de Home Assistant:
 
@@ -35,13 +35,15 @@ argus:
     tts_service: tts.google_translate_say
 ```
 
-El motor de voz anunciará automáticamente en el idioma que tengas configurado en el panel.
+El motor de voz anunciará automáticamente en el idioma configurado en tu panel.
 
 ---
 
 ### ☕ Apoya el Proyecto
 
-Si Argus te resulta útil para proteger tu hogar y deseas apoyar el desarrollo continuo:
+Si Argus te resulta útil para proteger tu hogar:
 
-- 🌟 **Dale una estrella en GitHub:** [Chrisalvir1/Argus](https://github.com/Chrisalvir1/Argus)
-- ☕ **Donación por PayPal:** [paypal.me/CEstradaAlvir](https://paypal.me/CEstradaAlvir)
+- ⭐ **Dale una estrella en GitHub:** [https://github.com/Chrisalvir1/Argus](https://github.com/Chrisalvir1/Argus)
+- ☕ **Donación por PayPal:** [https://paypal.me/CEstradaAlvir](https://paypal.me/CEstradaAlvir)
+- ✉️ **Correo para sugerencias y soporte:** [chrisalvir01@gmail.com](mailto:chrisalvir01@gmail.com)
+
