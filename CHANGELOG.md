@@ -1,11 +1,13 @@
 # Changelog
 
-## [2.2.99]
+## [2.3.0]
 - **Accessibility (WCAG 2.1 / 2.2 AA & AAA)**: Added interaction mode toggle between Swipe Slider (anti-touch protection) and Accessible Tap Button (direct click/touch and keyboard `Enter`/`Space` support, WCAG 2.5.1); elevated text contrast above 7:1 (AAA); added full tooltip and `aria-label` metadata on sensor states to prevent truncation (WCAG 1.4.4); calibrated accent blue to `#38bdf8` (11.1:1 ratio); enlarged checkboxes to 44x44px target sizes (WCAG 2.5.5); replaced all-caps with sentence case for dyslexia readability; prevented mid-word hyphenation on action buttons; added fat-finger isolation for destructive actions (WCAG 2.5.8).
 - **Codebase Sanitation**: Purged all legacy animated weather WebGL shaders, meteorological gradient functions, atmospheric scenes, and obsolete background options.
+- **Dependencies & Performance**: Modernized to Vite 8.2.2, Vitest 5.0.0, React 19.2.8, Nanoid 6.0.1, TypeScript 7.0.2 with 0 vulnerabilities and 110ms builds.
+
+## [2.2.99]
 - **Accessibility & Contrast**: Added High Contrast & OLED Dark Mode toggle in user profile, supporting `@media (prefers-contrast: more)` and OLED battery/display preservation.
 - **Documentation**: Completely rewritten `README.md` and `info.md` from scratch to accurately reflect modern Argus capabilities, ultra-lightweight TypeScript 7 + Vite 8.2 + React 19.2 stack, slide-to-action lock, TTS voice, critical mobile notifications for iOS/Android, official HACS Default catalog approval, and prominent community support links.
-- **Dependencies & Security**: Updated to `vite` 8.2.2, `vitest` 5.0.0, `@vitejs/plugin-react` 6.1.1, `nanoid` 6.0.1, and `@types/react-dom` 19.2.7, achieving 110ms builds and 0 vulnerabilities in `npm audit`.
 - **Community & Support**: Added quick-access buttons for PayPal donations, GitHub Star, and suggestions email directly into the support panel and user profile dropdown.
 
 ## [2.2.98]
