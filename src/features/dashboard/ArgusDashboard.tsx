@@ -51,7 +51,7 @@ export function ArgusDashboard({widgets,nodes,storage,userId,dashboardId,onEditi
   <nav className="argus-dashboard__toolbar" aria-label={getT('edit_dashboard','Edición del tablero')}>
    <button type="button" onClick={()=>setEditing(v=>!v)}>{editing?('✓ '+getT('edit_dashboard_done','Listo')):('❖ '+getT('edit_dashboard','Editar tablero'))}</button>
    {editing&&<>
-    <button type="button" onClick={reset}>{getT('reset_dashboard','Restablecer diseño')}</button>
+    <button type="button" className="argus-btn-reset-dashboard" onClick={reset}>{getT('reset_dashboard','Restablecer diseño')}</button>
     <div className="argus-dashboard__visibility" aria-label={getT('hide_widget','Widgets ocultos')}>
      {widgets.filter(w=>visibility[w.id]===false).map(w=><button type="button" key={w.id} onClick={()=>setVisible(w.id,true)}>Mostrar {w.title}</button>)}
     </div>

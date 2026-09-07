@@ -9,8 +9,8 @@
  *    slide-to-disarm, slide-to-sos, and intrusion sensors).
  * 2. "panel" (Panel Completo):
  *    Renders the complete Argus hub (dashboard widgets, history log, automations, access control).
- * 3. "basic" (Básico con Clima):
- *    Renders the classic compact card with animated weather backdrop and PIN keypad.
+ * 3. "basic" (Básico Clásico):
+ *    Renders the classic compact card with solid dark backdrop and PIN keypad.
  */
 
 const ARGUS_CARD_VERSION='2.2.93';
@@ -81,12 +81,12 @@ class ArgusCardEditor extends HTMLElement {
           <select id="mode-sel">
             <option value="compact" ${mode === 'compact' ? 'selected' : ''}>✨ Instancia Activa (Consola Liquid Glass · Recomendado)</option>
             <option value="panel" ${mode === 'panel' ? 'selected' : ''}>📊 Panel Completo (Dashboard, widgets e historial)</option>
-            <option value="basic" ${mode === 'basic' ? 'selected' : ''}>🌤️ Básico (Tarjeta clásica con clima animado)</option>
+            <option value="basic" ${mode === 'basic' ? 'selected' : ''}>🛡️ Básico (Tarjeta compacta con teclado PIN)</option>
           </select>
           <div class="opt-grp hint">
-            ${mode === 'compact' ? 'Muestra la consola de seguridad de Instancias Activas con el escudo animado, modos iluminados, slide-to-disarm, slide-to-sos y sensores.' :
+            ${mode === 'compact' ? 'Muestra la consola de seguridad de Instancias Activas con el escudo dinámico, modos iluminados, control táctil seguro y sensores.' :
               mode === 'panel' ? 'Muestra todo el panel de control de Argus con su cuadrícula de widgets e historial de eventos.' :
-              'Muestra la tarjeta de alarma ligera con escena de clima y teclado PIN.'}
+              'Muestra la tarjeta de alarma ligera con fondo oscuro sólido y teclado PIN.'}
           </div>
         </label>
         <label>
@@ -290,16 +290,12 @@ class ArgusPanelCard extends HTMLElement {
     if (c.country) parts.push(c.country);
     const location = parts.length ? parts.join(', ') : copy.unknown;
     const title = this._config.title || copy.title;
-    const s = weather.state;
-    const storm = /thunder|storm|lightning/.test(s), rain = /rain|pouring|drizzle|shower/.test(s), snow = /snow/.test(s), fog = /fog|mist|hazy/.test(s), cloud = /cloud|overcast/.test(s);
-    const scene = [weather.night ? 'night' : 'day', storm ? 'storm' : rain ? 'rain' : snow ? 'snow' : fog ? 'fog' : cloud ? 'cloud' : 'clear'].join(' ');
     const time = new Intl.DateTimeFormat(this._hass.language || undefined, { hour: '2-digit', minute: '2-digit' }).format(new Date());
 
     this._panelHost.innerHTML = `
       <style>
-        .basic-card{position:relative;min-height:330px;isolation:isolate;overflow:hidden;font-family:'Outfit',Inter,system-ui,sans-serif}
-        .basic-scene{position:absolute;inset:0;z-index:-3;overflow:hidden;background:linear-gradient(165deg,#2c86c7,#8fc7dc 62%,#d7c7aa);transition:background 1.5s ease}
-        .basic-scene.night{background:linear-gradient(180deg,#020513 0%,#0a1130 50%,#152248 100%)!important}
+        .basic-card{position:relative;min-height:330px;isolation:isolate;overflow:hidden;font-family:'Outfit',Inter,system-ui,sans-serif;background:#0b101a}
+        .basic-scene{position:absolute;inset:0;z-index:-3;background:linear-gradient(180deg,#0b101a 0%,#131a29 100%)}
         .basic-vignette{position:absolute;inset:0;z-index:-2;background:radial-gradient(circle at 68% 42%,transparent 15%,rgba(2,6,15,.1) 55%,rgba(0,0,0,.58) 100%)}
         .basic-hud{display:flex;justify-content:space-between;gap:16px;padding:20px 22px;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;text-shadow:0 2px 12px #000}
         .basic-weather{font-size:18px;letter-spacing:0;text-transform:none}
@@ -313,7 +309,7 @@ class ArgusPanelCard extends HTMLElement {
         .basic-title{position:absolute;right:22px;bottom:18px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;font-size:10px;opacity:.7}
       </style>
       <div class="basic-card">
-        <div class="basic-scene ${esc(scene)}"></div>
+        <div class="basic-scene"></div>
         <div class="basic-vignette"></div>
         <div class="basic-hud"><span>${esc(location)}</span><span class="basic-weather">${esc(time)} · ${esc(weather.temp)}${esc(weather.unit)}</span></div>
         <div class="basic-layout">

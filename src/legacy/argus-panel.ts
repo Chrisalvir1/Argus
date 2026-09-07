@@ -81,11 +81,7 @@ const TEXTS = {
     'bg_none': 'Ninguno',
     'bg_panel_none': 'Sin fondo en el panel',
     'bg_panel_selected_from_history': 'Fondo del panel seleccionado del historial',
-    'bg_panel_title': 'Fondo del Panel',
-    'bg_photo': 'Foto',
     'bg_sound_opt': 'Sonido de fondo',
-    'bg_video': 'Video animado',
-    'bg_weather': 'Clima en vivo',
     'bridge_not_connected': 'Puente no conectado',
     'bridge_not_desc': 'El puente HomeKit no está conectado actualmente.',
     'bridge_paired': 'Puente vinculado',
@@ -389,6 +385,12 @@ const TEXTS = {
     'slide_disarm': 'Desliza para desarmar',
     'slide_sos': 'Desliza para activar SOS',
     'slide_sos_stop': 'Desliza para detener SOS',
+    'tap_disarm': 'Toca para desarmar',
+    'tap_sos': 'Toca para activar SOS',
+    'tap_sos_stop': 'Toca para detener SOS',
+    'gesture_selector_lbl': '🕹️ Modo de Control (Accesibilidad)',
+    'gesture_slide': '↔️ Deslizador Táctil (Antitoques)',
+    'gesture_touch': '👆 Botón Accesible (Toque Simple)',
     'sos_actions': 'Dispositivos y Acciones SOS',
     'sos_activated': 'SOS activado',
     'sos_call': 'Llamar a Emergencias',
@@ -448,10 +450,8 @@ const TEXTS = {
     'users_title': '👥 Control de Acceso y Usuarios',
     'vacation': 'Vacaciones',
     'wait_if_open': 'Esperar armado en espera',
-    'waiting_sensors': 'ESPERANDO SENSORES',
-    'waiting_sensors_count': 'ESPERANDO {count} SENSOR(ES)',
-    'weather_auto': 'Detección automática de clima',
-    'weather_source': 'Entidad de clima',
+    'waiting_sensors': 'Esperando sensores',
+    'waiting_sensors_count': 'Esperando {count} sensor(es)',
     'welcome_greeting': '¡Hola de nuevo!',
     'welcome_profile': 'Bienvenido, {name}',
     'wrong_pin': 'PIN incorrecto',
@@ -504,11 +504,7 @@ const TEXTS = {
     'bg_none': 'None',
     'bg_panel_none': 'No panel background',
     'bg_panel_selected_from_history': 'Panel background selected from history',
-    'bg_panel_title': 'Panel Background',
-    'bg_photo': 'Photo',
     'bg_sound_opt': 'Background Sound',
-    'bg_video': 'Animated Video',
-    'bg_weather': 'Live Weather',
     'bridge_not_connected': 'Bridge Not Connected',
     'bridge_not_desc': 'The HomeKit bridge is currently disconnected.',
     'bridge_paired': 'Bridge Paired',
@@ -812,6 +808,12 @@ const TEXTS = {
     'slide_disarm': 'Slide to disarm',
     'slide_sos': 'Slide to trigger SOS',
     'slide_sos_stop': 'Slide to stop SOS',
+    'tap_disarm': 'Tap to disarm',
+    'tap_sos': 'Tap to trigger SOS',
+    'tap_sos_stop': 'Tap to stop SOS',
+    'gesture_selector_lbl': '🕹️ Interaction Mode (Accessibility)',
+    'gesture_slide': '↔️ Swipe Slider (Anti-touch)',
+    'gesture_touch': '👆 Accessible Tap Button (WCAG)',
     'sos_actions': 'SOS Devices and Actions',
     'sos_activated': 'SOS Activated',
     'sos_call': 'Call Emergency Services',
@@ -871,10 +873,8 @@ const TEXTS = {
     'users_title': '👥 Users & Access Control',
     'vacation': 'Vacation',
     'wait_if_open': 'Wait for sensors to close',
-    'waiting_sensors': 'WAITING FOR SENSORS',
-    'waiting_sensors_count': 'WAITING FOR {count} SENSOR(S)',
-    'weather_auto': 'Automatic weather detection',
-    'weather_source': 'Weather entity',
+    'waiting_sensors': 'Waiting for sensors',
+    'waiting_sensors_count': 'Waiting for {count} sensor(s)',
     'welcome_greeting': 'Welcome back!',
     'welcome_profile': 'Welcome, {name}',
     'wrong_pin': 'Wrong PIN',
@@ -904,9 +904,7 @@ _tmpl.innerHTML = `
     --sos-red: linear-gradient(135deg, #ff3b30, #ff2d55);
     --ios-track: rgba(0, 0, 0, 0.25);
     --ios-thumb: linear-gradient(180deg, #ffffff, #f4f4f7);
-    --text-shadow: 0 1px 3px rgba(0,0,0,0.15);
-    --primary-color: #007aff;
-    --personalize-bg: rgba(255, 255, 255, 0.02);
+    --primary-color: #38bdf8;
     --personalize-border: rgba(255, 255, 255, 0.06);
     --personalize-divider: rgba(255, 255, 255, 0.08);
     --bg-inputs-bg: rgba(0, 0, 0, 0.15);
@@ -1248,10 +1246,10 @@ _tmpl.innerHTML = `
   .hero-left{display:flex;align-items:center;gap:22px}
   .hero-context{position:relative!important;z-index:10000!important;overflow:visible!important;margin-left:auto;display:flex;align-items:center;gap:8px;min-width:0}
   #hero-profile-container{position:relative!important;z-index:10001!important;overflow:visible!important}
-  .hero-profile-dropdown{position:absolute!important;top:calc(100% + 12px)!important;right:0!important;z-index:999999!important;max-height:calc(100vh - 100px)!important;overflow-y:auto!important;background:#0f172a!important;background-color:#0f172a!important;border:1.5px solid rgba(255,255,255,0.2)!important;box-shadow:0 24px 60px rgba(0,0,0,0.85),inset 0 1px 0 rgba(255,255,255,0.15)!important;backdrop-filter:blur(48px) saturate(200%)!important;-webkit-backdrop-filter:blur(48px) saturate(200%)!important;opacity:1!important}.hero-clock{display:flex;flex-direction:column;align-items:flex-end;padding-right:14px;border-right:1px solid rgba(255,255,255,.14);line-height:1}.hero-clock strong{font-size:1.45rem;letter-spacing:-.05em}.hero-clock span{font-size:10px;opacity:.65;margin-top:5px;text-transform:uppercase;letter-spacing:.08em}.hero-pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.hero-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 10px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(7,16,29,.27);box-shadow:inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(14px);font-size:10px;font-weight:800;white-space:nowrap}.hero-pill .hero-live{width:7px;height:7px;border-radius:50%;background:#55df91;box-shadow:0 0 9px #55df91}
+  .hero-profile-dropdown{position:absolute!important;top:calc(100% + 12px)!important;right:0!important;z-index:999999!important;max-height:calc(100vh - 100px)!important;overflow-y:auto!important;background:#0f172a!important;background-color:#0f172a!important;border:1.5px solid rgba(255,255,255,0.2)!important;box-shadow:0 24px 60px rgba(0,0,0,0.85),inset 0 1px 0 rgba(255,255,255,0.15)!important;backdrop-filter:blur(48px) saturate(200%)!important;-webkit-backdrop-filter:blur(48px) saturate(200%)!important;opacity:1!important}.hero-clock{display:flex;flex-direction:column;align-items:flex-end;padding-right:14px;border-right:1px solid rgba(255,255,255,.14);line-height:1}.hero-clock strong{font-size:1.45rem;letter-spacing:-.05em;color:#ffffff!important}.hero-clock span{font-size:11px;color:#e2e8f0!important;opacity:1!important;margin-top:5px;letter-spacing:.03em;font-weight:700}.hero-pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.hero-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 10px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(7,16,29,.27);box-shadow:inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(14px);font-size:10px;font-weight:800;white-space:nowrap}.hero-pill .hero-live{width:7px;height:7px;border-radius:50%;background:#55df91;box-shadow:0 0 9px #55df91}
   .hero-icon{font-size:54px;line-height:1;filter:drop-shadow(0 0 20px rgba(255,255,255,0.15))}
   .hero h1{margin:0 0 4px;font-size:34px;font-weight:900;letter-spacing:-0.03em;background:var(--hero-gradient, linear-gradient(to right, #ffffff, #82b1ff));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  .hero p{margin:0;font-size:16px;opacity:.7;font-weight:500}
+  .hero p{margin:0;font-size:16px;color:#f1f5f9!important;opacity:1!important;font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,0.85)}
   @media(max-width:700px){.wrap{padding:14px;gap:14px}.glass{border-radius:22px}.hero{padding:22px;align-items:flex-start}.hero-icon{font-size:40px}.hero h1{font-size:27px}.hero p{font-size:14px}.entry-content{grid-template-columns:96px 1fr;padding:16px 105px 16px 14px;gap:10px}.sensor-column{width:98px}.sensor-chip{max-width:94px}.entry-icon{min-height:110px}.entry-icon svg{max-width:150px}.hud{top:12px;right:12px}.hud-data{font-size:15px;padding:5px 9px}.hud-loc{font-size:10px;padding:3px 8px}}
 
   /* Modern Mode Navigation & iOS Liquid Bubble Transition */
@@ -1335,17 +1333,17 @@ _tmpl.innerHTML = `
   .stack{display:grid;gap:24px}
   .panel{padding:28px;position:relative;overflow:hidden}
   .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-  .panel h2{margin:0;font-size:14px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--primary-color,#007aff);opacity:0.95}
+  .panel h2{margin:0;font-size:14px;font-weight:900;letter-spacing:.04em;color:var(--primary-color,#38bdf8);opacity:1}
 
   /* Access settings stay quiet until the user needs to manage them. */
   .access-panel { padding: 22px 24px; overflow-y:auto; max-height:60vh; -webkit-overflow-scrolling:touch; }
   .access-panel .panel-head { margin-bottom: 12px; }
-  .access-summary { font-size: 12px; opacity: .72; }
+  .access-summary { font-size: 12px; opacity: .88; color: #cbd5e1; }
   .access-actions { display:flex; gap:10px; flex-wrap:wrap; }
-  .access-actions button { flex:0 1 auto; padding:8px 12px; font-size:11px; }
-  .access-actions button.active { background:var(--primary-color,#007aff); color:#fff; border-color:transparent; }
+  .access-actions button { flex:0 1 auto; padding:8px 12px; font-size:12px; font-weight:700; }
+  .access-actions button.active { background:var(--primary-color,#38bdf8); color:#0f172a; font-weight:800; border-color:transparent; }
   .access-section { display:block; min-width:0; margin-bottom:24px; }
-  .access-section h3 { font-size:12px; font-weight:900; opacity:.8; margin:0 0 10px; text-transform:uppercase; }
+  .access-section h3 { font-size:13px; font-weight:800; color: #f1f5f9; margin:0 0 10px; }
   .access-panel .user-card { padding:10px 12px; border-radius:12px; }
   .github-star-action {
     display:inline-flex;align-items:center;justify-content:center;gap:7px;
@@ -1552,12 +1550,11 @@ _tmpl.innerHTML = `
 
   /* HUD Overlay */
   .hud{position:absolute;top:20px;right:24px;text-align:right;z-index:3;color:var(--hud-text-color);text-shadow:var(--text-shadow);display:flex;flex-direction:column;gap:4px}
-  .hud-loc{font-size:13px;font-weight:900;text-transform:uppercase;opacity:1;letter-spacing:1.5px;background:var(--hud-bg);padding:4px 12px;border-radius:10px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.08);align-self:flex-end}
+  .hud-loc{font-size:13px;font-weight:800;letter-spacing:0.04em;color:#ffffff;background:var(--hud-bg);padding:4px 12px;border-radius:10px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.18);align-self:flex-end}
   .hud-data{font-size:20px;font-weight:800;letter-spacing:-0.02em;background:var(--hud-bg);padding:6px 14px;border-radius:12px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.08);display:inline-flex;align-items:center;gap:8px;align-self:flex-end}
   .hud-data i{font-size:14px;opacity:0.7;font-style:normal}
   .hud-temperatures{display:flex;justify-content:flex-end;gap:5px;flex-wrap:wrap}
   .hud-temperature{padding:4px 8px;border-radius:999px;background:var(--hud-bg);border:1px solid rgba(255,255,255,.09);font-size:10px;font-weight:800;backdrop-filter:blur(8px)}
-  .weather-eclipse{position:absolute;left:22px;bottom:18px;z-index:2;padding:7px 11px;border-radius:14px;background:rgba(18,10,28,.52);border:1px solid rgba(255,192,92,.36);backdrop-filter:blur(10px);font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.25);pointer-events:none}
 
   /* Liquid Glass Buttons */
   .liquid-stack{display:grid;gap:10px}
@@ -1726,12 +1723,13 @@ _tmpl.innerHTML = `
   .temp-alert-status-warn{color:#e53935;font-size:12px;font-weight:700}
 
   /* Generic buttons */
-  button{border:0;border-radius:14px;padding:10px 18px;font:700 13px/1 'Outfit',Inter,system-ui,sans-serif;cursor:pointer;transition:background 0.2s,opacity .15s,transform .15s cubic-bezier(0.175, 0.885, 0.32, 1.275),box-shadow 0.2s}
+  button{border:0;border-radius:14px;padding:10px 18px;font:700 13px/1.3 'Outfit',Inter,system-ui,sans-serif;cursor:pointer;white-space:nowrap;hyphens:none;word-break:normal;transition:background 0.2s,opacity .15s,transform .15s cubic-bezier(0.175, 0.885, 0.32, 1.275),box-shadow 0.2s}
+  button:focus-visible{outline:3px solid #38bdf8;outline-offset:2px}
   button:active:not(:disabled){transform:scale(.94) translateY(1px)}
-  button.primary{background:var(--primary-color,#007aff);color:#fff;box-shadow:0 4px 12px rgba(0, 122, 255, 0.25)}
-  button.primary:hover{background:#0062cc}
-  button.ghost{background:rgba(255, 255, 255, 0.05);border:1px solid rgba(255, 255, 255, 0.08);color:var(--primary-text-color)}
-  button.ghost:hover{background:rgba(255, 255, 255, 0.1)}
+  button.primary{background:var(--primary-color,#38bdf8);color:#0f172a;font-weight:800;box-shadow:0 4px 12px rgba(56, 189, 248, 0.35)}
+  button.primary:hover{background:#0284c7;color:#ffffff}
+  button.ghost{background:rgba(255, 255, 255, 0.08);border:1px solid rgba(255, 255, 255, 0.24);color:#ffffff !important}
+  button.ghost:hover{background:rgba(255, 255, 255, 0.16);border-color:rgba(255,255,255,0.36)}
 
 
   /* FS button */
@@ -1851,12 +1849,12 @@ _tmpl.innerHTML = `
   .sel-panel{display:flex;flex-direction:column;gap:8px;overflow:hidden;min-width:0;min-height:0;padding:12px;border-radius:18px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.07)}
   .sel-panel-inner{overflow-y:auto;overscroll-behavior:contain;flex:1;min-height:0;display:grid;gap:6px;align-content:start;padding-right:4px}
   .sel-actions{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}
-  .pick-row{display:grid;grid-template-columns:20px minmax(0,1fr);align-items:start;gap:10px;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.025);cursor:pointer;transition:background .12s,border-color .12s}
-  .pick-row:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.16)}
-  .pick-row:has(input:checked){border-color:rgba(0,122,255,.58);background:rgba(0,122,255,.10)}
-  .pick-row input[type=checkbox]{width:16px;height:16px;cursor:pointer;accent-color:var(--primary-color,#007aff);margin-top:2px}
-  .pick-row-name{font-weight:750;font-size:13px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;line-height:1.25}
-  .pick-row-meta{font-size:11px;opacity:0.58;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pick-row{display:grid;grid-template-columns:24px minmax(0,1fr);align-items:center;gap:12px;padding:12px 14px;min-height:48px;border-radius:14px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.035);cursor:pointer;transition:background .12s,border-color .12s}
+  .pick-row:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.24)}
+  .pick-row:has(input:checked){border-color:rgba(56,189,248,.65);background:rgba(56,189,248,.12)}
+  .pick-row input[type=checkbox]{width:22px;height:22px;min-width:22px;min-height:22px;cursor:pointer;accent-color:var(--primary-color,#38bdf8);margin:0}
+  .pick-row-name{font-weight:750;font-size:14px;color:#ffffff;display:flex;align-items:center;gap:6px;flex-wrap:wrap;line-height:1.3}
+  .pick-row-meta{font-size:12px;color:#cbd5e1;opacity:0.92;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .device-facts{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
   .device-fact{display:inline-flex;align-items:center;min-height:20px;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:750;line-height:1.1;white-space:nowrap}
   .device-fact.status-open{color:#ff8a80;background:rgba(255,82,82,.12)}
@@ -1900,10 +1898,10 @@ _tmpl.innerHTML = `
     display: grid;
     gap: 16px;
   }
-  .personalize-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"home temp" "panel weather" "hub clock" "emergency emergency";gap:14px 16px;align-items:start}
+  .personalize-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"home temp" "panel clock" "hub emergency";gap:14px 16px;align-items:start}
   .personalize-column{display:contents}
   .personalize-field{min-width:0;align-self:stretch}
-  .pf-home{grid-area:home}.pf-temp{grid-area:temp}.pf-weather{grid-area:weather}.pf-panel{grid-area:panel}.pf-hub{grid-area:hub}.pf-emergency{grid-area:emergency}.pf-clock{grid-area:clock}
+  .pf-home{grid-area:home}.pf-temp{grid-area:temp}.pf-panel{grid-area:panel}.pf-hub{grid-area:hub}.pf-emergency{grid-area:emergency}.pf-clock{grid-area:clock}
   .pf-panel,.pf-hub{display:flex;flex-direction:column;gap:8px}
   .pf-emergency{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"emergency-label emergency-label" "emergency-input emergency-help";gap:5px 16px;align-items:start;padding-top:2px}
   .pf-emergency #lbl-emergency-number{grid-area:emergency-label}.pf-emergency #emergency-number-input{grid-area:emergency-input}.pf-emergency #emergency-number-help{grid-area:emergency-help;margin:0!important}
@@ -1944,49 +1942,13 @@ _tmpl.innerHTML = `
   @keyframes liquidDropIn{0%{opacity:0;transform:translateY(18px) scale(.91);filter:blur(5px)}65%{opacity:1;transform:translateY(-3px) scale(1.018);filter:blur(0)}100%{transform:translateY(0) scale(1)}}
   @keyframes argus-modal-in{0%{opacity:0;transform:scale(.94) translateY(8px)}100%{opacity:1;transform:scale(1) translateY(0)}}
   @media(max-width:700px){
-    .personalize-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"home" "temp" "weather" "panel" "hub" "clock" "emergency"}
+    .personalize-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"home" "temp" "panel" "hub" "clock" "emergency"}
     .pf-emergency{grid-template-columns:minmax(0,1fr);grid-template-areas:"emergency-label" "emergency-input" "emergency-help"}
     .personalize-section{padding:14px}
     .sos-configuration{display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:14px;border-radius:24px}
     .sos-configuration #lbl-sos-actions{white-space:normal}.sos-configuration #btn-select-sos-outputs{width:100%!important}.sos-configuration #sos-output-help{max-width:none}
   }
-  .wx-horizon::before{content:'';position:absolute;inset:26% 0 0;background:radial-gradient(ellipse at 12% 100%,rgba(0,0,0,.34) 0 18%,transparent 19%),radial-gradient(ellipse at 50% 100%,rgba(0,0,0,.29) 0 23%,transparent 24%),radial-gradient(ellipse at 89% 100%,rgba(0,0,0,.36) 0 20%,transparent 21%);filter:blur(10px)}
-  /* ── Weather Animated Backgrounds (Apple Weather Premium) ────────────────────────────────── */
-  .scene{position:absolute;inset:0;z-index:0;overflow:hidden;background:linear-gradient(165deg,#2c86c7,#8fc7dc 62%,#d7c7aa);transition:background 1.5s ease;border-radius:inherit}
-  .scene.sunny{background:linear-gradient(180deg,#1b60d0,#40a0ff 40%,#90d0ff)}
-  .scene.partlycloudy{background:linear-gradient(180deg,#3073d8,#6bb5ff 50%,#b8e0ff)}
-  .scene.cloudy{background:linear-gradient(180deg,#5b6976,#80909c 50%,#a4b3be)}
-  .scene.fog{background:linear-gradient(180deg,#6c767c,#9ca6ac 50%,#ccd1d4)}
-  .scene.rain,.scene.storm{background:linear-gradient(180deg,#303d49,#495a69 50%,#687985)}
-  .scene.snow{background:linear-gradient(180deg,#627f94,#92b1c7 50%,#d8eaf5)}
-  .scene.night{background:linear-gradient(180deg,#020513 0%,#0a1130 50%,#152248 100%)!important}
-  .scene.sunny::after,.scene.partlycloudy::after{content:'';position:absolute;inset:-50%;background:radial-gradient(circle at 50% 50%,#fff 0%,rgba(255,255,255,0.8) 5%,transparent 15%),radial-gradient(circle at 50% 50%,rgba(255,220,100,0.4) 0%,transparent 30%),conic-gradient(from 0deg at 50% 50%,transparent 0deg,rgba(255,255,255,0.15) 15deg,transparent 30deg,rgba(255,255,255,0.1) 45deg,transparent 60deg,rgba(255,255,255,0.2) 90deg,transparent 120deg,rgba(255,255,255,0.1) 180deg,transparent 240deg,rgba(255,255,255,0.15) 300deg,transparent 360deg);animation:rotate-sun 120s linear infinite;mix-blend-mode:screen;transform-origin:center;left:30%;top:-20%}
-  .scene.night.clear::after,.scene.night.partlycloudy::after{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,#fff 0 1px,transparent 1.5px);background-size:80px 73px;opacity:0.8;animation:stars 12s ease-in-out infinite alternate}
-  .scene.night.clear::before,.scene.night.partlycloudy::before{content:'';position:absolute;right:15%;top:15%;width:50px;height:50px;background:transparent;border-radius:50%;box-shadow:inset -10px -10px 0 0 #ffffe0;filter:drop-shadow(0 0 15px rgba(255,255,180,0.5))}
-  .scene.night.clear.eclipse::before{box-shadow:inset 0 0 0 25px rgba(0,0,0,0.9),0 0 20px 5px rgba(255,100,50,0.8)}
-  .scene.partlycloudy::before,.scene.cloudy::before{content:'';position:absolute;inset:-30%;background:radial-gradient(ellipse at 10% 20%,rgba(255,255,255,0.4) 0%,transparent 25%),radial-gradient(ellipse at 80% 30%,rgba(255,255,255,0.3) 0%,transparent 35%),radial-gradient(ellipse at 40% 50%,rgba(255,255,255,0.2) 0%,transparent 40%);filter:blur(25px);animation:clouds 40s linear infinite alternate}
-  .scene.night.cloudy::before,.scene.night.partlycloudy::before{background:radial-gradient(ellipse at 10% 20%,rgba(100,110,130,0.4) 0%,transparent 25%),radial-gradient(ellipse at 80% 30%,rgba(80,90,120,0.4) 0%,transparent 35%)}
-  .scene.rain::after,.scene.storm::after{content:'';position:absolute;inset:-50%;background:repeating-linear-gradient(108deg,transparent 0,transparent 20px,rgba(200,220,240,0.2) 21px,transparent 22px),repeating-linear-gradient(110deg,transparent 0,transparent 45px,rgba(200,220,240,0.4) 46px,transparent 48px);background-size:100% 200%;animation:rain 1.2s linear infinite;opacity:0.8}
-  .scene.snow::after{content:'';position:absolute;inset:-30%;background-image:radial-gradient(circle,rgba(255,255,255,0.8) 0 2px,transparent 3px),radial-gradient(circle,rgba(255,255,255,0.4) 0 4px,transparent 5px);background-size:45px 52px,90px 110px;background-position:0 0,20px 30px;animation:snow 8s linear infinite}
-  .scene.fog::before{content:'';position:absolute;inset:-20%;background:repeating-linear-gradient(0deg,transparent 0 40px,rgba(240,245,250,0.4) 50px 80px,transparent 90px 140px);filter:blur(18px);animation:fog 20s ease-in-out infinite alternate}
-  .scene.night.fog::before{background:repeating-linear-gradient(0deg,transparent 0 40px,rgba(120,130,150,0.4) 50px 80px,transparent 90px 140px)}
-  .scene.storm{animation:lightning 12s infinite}
-  @keyframes rotate-sun{to{transform:rotate(1turn)}}
-  @keyframes clouds{0%{transform:translate(-5%,-5%) scale(1)}100%{transform:translate(10%,10%) scale(1.1)}}
-  @keyframes stars{0%{opacity:0.4}100%{opacity:1}}
-  @keyframes rain{0%{background-position:0 0,0 0}100%{background-position:-150px 300px,-200px 400px}}
-  @keyframes snow{0%{background-position:0 0,20px 30px}100%{background-position:90px 300px,-45px 400px}}
-  @keyframes fog{0%{transform:translateY(0) scale(1);opacity:0.6}100%{transform:translateY(-50px) scale(1.2);opacity:0.9}}
-  @keyframes lightning{0%,93%,95%,100%{filter:none}94%{filter:brightness(2.5) contrast(1.5) saturate(0.5)}}
-  
-  .wx-static{background:linear-gradient(180deg,rgba(22,28,42,.92),rgba(35,44,67,.95));position:absolute;inset:0;z-index:0;border-radius:inherit}
-  .wx-photo,.wx-collage{background:#10141d;position:absolute;inset:0;z-index:0;border-radius:inherit}
-  .wx-photo::before{content:"";position:absolute;inset:0;background:var(--bg-image) center/cover no-repeat;filter:saturate(1.05) contrast(1.05);border-radius:inherit}
-  .wx-photo::after,.wx-collage::after,.wx-static::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,8,12,.18),rgba(5,8,12,.5));border-radius:inherit}
-  .wx-collage-grid{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4px;padding:4px}
-  .wx-collage-cell{border-radius:18px;background:center/cover no-repeat;min-height:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
-  .wx-video{position:absolute;inset:0;overflow:hidden;border-radius:inherit;z-index:0;background:#10141d}
-  .wx-video::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,8,12,.18),rgba(5,8,12,.5));z-index:2}
+
   #argus-canvas-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background-size:cover;background-position:center;background-repeat:no-repeat}
   #argus-canvas-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.3) 100%);z-index:1;pointer-events:none}
 
@@ -3056,7 +3018,7 @@ class ArgusPanel extends HTMLElement {
     this._isAdmin = true;    // determined from hass user
     this._pinCallback = null;
     this._homeName = '';     // custom home name, editable with PIN
-    this._backgroundMode = 'weather';
+    this._backgroundMode = 'none';
     this._backgroundImages = [];
     this._temperatureSource = 'auto';
     this._weatherSource = 'auto';
@@ -3261,40 +3223,8 @@ class ArgusPanel extends HTMLElement {
         isDark = this._hass.themes ? this._hass.themes.darkMode === true : false;
       }
     } else {
-      // hubBgMode is 'none', so use panel background mode or Lovelace theme
-      const mode = this._backgroundMode || 'weather';
-      if (mode === 'none') {
-        isDark = this._hass.themes ? this._hass.themes.darkMode === true : false;
-      } else if (mode === 'weather') {
-        const isNight = this._hass.states?.['sun.sun']?.state === 'below_horizon';
-        if (isNight) {
-          isDark = true;
-        } else {
-          const weatherEnt = this._getWeatherEntity();
-          const weatherState = weatherEnt.state || 'sunny';
-          const lightConditions = ['sunny', 'fog', 'snow', 'windy'];
-          isDark = !lightConditions.includes(weatherState);
-        }
-      } else if (mode === 'photo' || mode === 'collage') {
-        let src = '';
-        if (this._backgroundImages && this._backgroundImages[0]) {
-          src = this._backgroundImages[0];
-        } else if (this._panelBgFile) {
-          src = this._panelBgFile;
-        }
-        if (src) {
-          if (this._cachedBgUrl === src && this._cachedBgBrightness !== undefined) {
-            isDark = this._cachedBgBrightness < 135;
-          } else {
-            const brightness = await this._getBrightness(src);
-            this._cachedBgUrl = src;
-            this._cachedBgBrightness = brightness;
-            isDark = brightness < 135;
-          }
-        } else {
-          isDark = this._hass.themes ? this._hass.themes.darkMode === true : false;
-        }
-      }
+      // Hub and panel use clean dark background by default
+      isDark = this._hass.themes ? this._hass.themes.darkMode === true : true;
     }
 
     this.setAttribute('argus-dark-mode', isDark ? 'true' : 'false');
@@ -3595,7 +3525,6 @@ class ArgusPanel extends HTMLElement {
     set('lbl-mas-ajustes', '🎨 ' + t('lbl_aesthetic_custom'));
     set('edit-widgets-label', this._widgetEditing ? ('✓ ' + t('done')) : `⚙️ ${this._t('edit_widgets') || 'Config. Widgets'}`);
     set('lbl-temperature-source', t('temp_displayed'));
-    set('lbl-weather-source', t('weather_source'));
     set('lbl-panel-bg-upload',  t('lbl_load_file'));
     set('lbl-hub-bg-upload',    t('lbl_load_file'));
     set('lbl-uploaded-files-title', t('lbl_uploaded_files'));
@@ -3642,14 +3571,11 @@ class ArgusPanel extends HTMLElement {
     if (bgMode) {
       const v = bgMode.value;
       bgMode.innerHTML = `
-        <option value="weather">${t('bg_weather')}</option>
         <option value="none">${t('bg_panel_none')}</option>
-        <option value="photo">${t('bg_photo')}</option>
-        <option value="collage">${t('bg_collage')}</option>
       `;
       if (v) bgMode.value = v;
-        this._renderEntries();
-}
+      this._renderEntries();
+    }
 
     const hubBgSelect = s('hub-bg-mode-select');
     if (hubBgSelect) {
@@ -3662,7 +3588,6 @@ class ArgusPanel extends HTMLElement {
     }
 
     this._populateTemperatureSources();
-    this._populateWeatherSources();
 
     // PIN display
     const pinDisp2 = s('current-pin-display');
@@ -3752,6 +3677,7 @@ class ArgusPanel extends HTMLElement {
     try { this._manualLang = localStorage.getItem('argus_lang') || null; } catch(e) {}
     this._ensureInitialized();
     this._initContrastMode();
+    this._initGestureMode();
     this._startClock();
     
     // Safety check: If we think we are in fullscreen, but the browser is not, and we are not a kiosk, reset it.
@@ -3954,6 +3880,23 @@ class ArgusPanel extends HTMLElement {
         track.style.background = 'rgba(217,4,41,0.15)';
       }
     };
+
+    thumb.setAttribute('role', 'button');
+    thumb.setAttribute('tabindex', '0');
+    thumb.setAttribute('aria-label', this._t('tap_sos') || 'Activar SOS');
+
+    thumb.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this._triggerSOS();
+      }
+    });
+
+    track.addEventListener('click', () => {
+      if (this._getProfileGesture() === 'touch') {
+        this._triggerSOS();
+      }
+    });
 
     thumb.addEventListener('pointerdown', onPointerDown);
     thumb.addEventListener('pointermove', onPointerMove);
@@ -4799,12 +4742,6 @@ class ArgusPanel extends HTMLElement {
       tempSel.value = this._temperatureSource || 'auto';
       if (!tempSel.dataset.bound) { tempSel.dataset.bound = '1'; tempSel.addEventListener('change', () => this._savePersonalization()); }
     }
-    this._populateWeatherSources();
-    const weatherSel = this.shadowRoot.getElementById('weather-source-select');
-    if (weatherSel) {
-      weatherSel.value = this._weatherSource || 'auto';
-      if (!weatherSel.dataset.bound) { weatherSel.dataset.bound = '1'; weatherSel.addEventListener('change', () => this._savePersonalization()); }
-    }
     // Load & bind clock format selector
     const clockSel = this.shadowRoot.getElementById('argus-clock-format-select');
     if (clockSel) {
@@ -4820,12 +4757,9 @@ class ArgusPanel extends HTMLElement {
     const bgMode = this.shadowRoot.getElementById('bg-mode-select-standalone');
     if (bgMode) {
       bgMode.innerHTML = `
-        <option value="weather">${this._t('bg_weather')}</option>
         <option value="none">${this._t('bg_panel_none')}</option>
-        <option value="photo">${this._t('bg_photo')}</option>
-        <option value="collage">${this._t('bg_collage')}</option>
       `;
-      bgMode.value = this._backgroundMode || 'weather';
+      bgMode.value = this._backgroundMode || 'none';
     }
 
     const hubBgSelect = this.shadowRoot.getElementById('hub-bg-mode-select');
@@ -4833,7 +4767,6 @@ class ArgusPanel extends HTMLElement {
       hubBgSelect.innerHTML = `
         <option value="default">${this._t('bg_hub_default')}</option>
         <option value="image">${this._t('bg_image_opt')}</option>
-        <option value="weather">Clima animado</option>
       `;
       hubBgSelect.value = this._hubBgMode || 'default';
     }
@@ -5264,231 +5197,7 @@ class ArgusPanel extends HTMLElement {
     }
   }
 
-  _getWeatherGradient(weather, rawKey = '') {
-    const map = {
-      sunny:          'linear-gradient(160deg, #4da6ff 0%, #89c4ff 60%, #c8e8ff 100%)',
-      clear:          'linear-gradient(160deg, #1a1a3e 0%, #2d2d6b 50%, #0f2557 100%)',
-      cloudy:         'linear-gradient(160deg, #6b7a8d 0%, #9aa5b1 60%, #c5cdd5 100%)',
-      partlycloudy:   'linear-gradient(160deg, #5b8fd4 0%, #7baee8 50%, #a8c8f0 100%)',
-      rainy:          'linear-gradient(160deg, #3d4f5c 0%, #5a6e7a 50%, #7a8e96 100%)',
-      snowy:          'linear-gradient(160deg, #a8bfcf 0%, #c5d8e8 60%, #e8f0f8 100%)',
-      stormy:         'linear-gradient(160deg, #1a1f2e 0%, #2d3244 50%, #3d4255 100%)',
-      fog:            'linear-gradient(160deg, #8a9099 0%, #adb5bd 60%, #ced4da 100%)',
-    };
-    const sKey = String(rawKey || weather.label || '').toLowerCase();
-    const key = Object.keys(map).find(k => sKey.includes(k)) 
-      || Object.keys(map).find(k => weather.label?.toLowerCase().includes(k)) 
-      || 'sunny';
-    return map[key];
-  }
 
-  _initWeatherWebGL(canvas) {
-    if (!canvas || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
-
-    // Fallback inmediato mientras WebGL carga
-    const parent = canvas.parentElement;
-    if (parent) {
-      const weatherState = this._getWeatherEntity()?.state;
-      const isNight = this._hass?.states?.['sun.sun']?.state === 'below_horizon';
-      const key = String(weatherState || 'sunny').toLowerCase().replace(/[\s-]+/g, '_');
-      parent.style.background = this._getWeatherGradient(
-        this._weatherPresentation(weatherState, isNight),
-        key
-      );
-    }
-
-    const gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: false, antialias: false, powerPreference: 'low-power' }) ||
-               canvas.getContext('experimental-webgl', { alpha: true, premultipliedAlpha: false, antialias: false, powerPreference: 'low-power' });
-    if (!gl) {
-      canvas.style.opacity = '0';
-      return;
-    }
-    gl.clearColor(0, 0, 0, 0);
-
-    const vertex = 'attribute vec2 p;varying vec2 uv;void main(){uv=(p+1.0)*.5;gl_Position=vec4(p,0.0,1.0);}';
-    const fragment = `precision highp float;varying vec2 uv;uniform float time,rain,snow,fog,storm,wind,temp,night,cloudy;
-uniform vec2 cloudPositions[6];
-uniform vec2 cloudSizes[6];
-uniform float cloudAlphas[6];
-float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
-float noise(vec2 p){vec2 i=floor(p),f=fract(p),u=f*f*(3.0-2.0*f);return mix(mix(h(i+vec2(0.0,0.0)),h(i+vec2(1.0,0.0)),u.x),mix(h(i+vec2(0.0,1.0)),h(i+vec2(1.0,1.0)),u.x),u.y);}
-float fbm(vec2 p){float f=0.0,a=0.5;for(int i=0;i<4;i++){f+=a*noise(p);p*=2.0;a*=0.5;}return f;}
-float rainLayer(vec2 u,float t,float n){vec2 s=vec2(20.0+8.0*n,7.0+3.0*n);u.x+=wind*0.1*u.y;vec2 g=u*s,id=floor(g),q=fract(g);float sp=2.4+n*1.35+h(id)*1.2;q.y=fract(q.y+t*sp+h(id));float x=abs(q.x-(0.5+wind*0.2-q.y*(0.16+wind*0.1)));return (1.0-smoothstep(0.003,0.035-n*0.006,x))*(1.0-smoothstep(0.18,0.98,q.y));}
-float snowLayer(vec2 u,float t,float n){vec2 g=u*vec2(15.0+n*5.0,10.0+n*4.0),id=floor(g),q=fract(g);q.y=fract(q.y+t*(0.2+h(id)*0.2)+h(id));q.x+=sin(t+h(id)*6.28)*0.2+wind*0.1*t;return 1.0-smoothstep(0.01+n*0.01,0.08+n*0.02,length(q-vec2(0.5)));}
-void main(){float t=time*0.001;vec2 u=uv;if(temp>30.0){u.x+=sin(u.y*20.0+t*5.0)*0.003*(temp-30.0)/10.0;u.y+=cos(u.x*20.0+t*4.0)*0.003*(temp-30.0)/10.0;}
-vec3 col=vec3(0.0);float alpha=0.0;
-float clAlpha=0.0;
-if(cloudy>0.0){
-  for(int i=0;i<6;i++){
-    vec2 center=cloudPositions[i];
-    vec2 size=cloudSizes[i]*1.6;
-    vec2 d=(u-center)/size;
-    float dist=dot(d,d);
-    if(dist<1.0){
-      float base=exp(-dist*3.5);
-      float edge=noise(u*8.0+vec2(t*0.05))*0.35;
-      float intensity=clamp(base+edge*base,0.0,1.0);
-      clAlpha=max(clAlpha,cloudAlphas[i]*intensity*0.45);
-    }
-  }
-}
-if(clAlpha>0.0){
-  vec3 cloudColor=mix(vec3(0.85,0.90,0.95),vec3(1.0),clAlpha);
-  col=mix(col,cloudColor,clAlpha);
-  alpha=max(alpha,clAlpha*0.7);
-}
-if(night>0.5&&rain==0.0&&snow==0.0&&fog==0.0){float st=h(floor(u*150.0));if(st>0.99){float tw=0.5+0.5*sin(t*3.0+st*100.0);col+=vec3(1.0)*tw*(st-0.99)*100.0;alpha=max(alpha,tw*0.5);}}
-if(night>0.5&&temp<5.0&&rain==0.0&&snow==0.0&&storm==0.0){float au=fbm(vec2(u.x*2.0+t*0.1,u.y*3.0-t*0.05)),au2=fbm(vec2(u.x*3.0-t*0.15,u.y*2.0+t*0.08));vec3 ac=mix(vec3(0.0,1.0,0.5),vec3(0.5,0.0,1.0),au);float intn=smoothstep(0.4,0.8,au*au2)*(1.0-u.y);col+=ac*intn*1.5;alpha=max(alpha,intn);}
-if(night<0.5&&rain==0.0&&fog==0.0&&snow==0.0&&cloudy==0.0){float gr=fbm(vec2(u.x*4.0-t*0.08,u.y*0.4))*(1.0-u.y*0.8);float sunGlow=smoothstep(0.3,0.7,gr);col+=vec3(1.0,0.92,0.72)*sunGlow*0.65;alpha=max(alpha,sunGlow*0.45);}
-if(rain>0.0){float r=rainLayer(u,t,0.0)+rainLayer(u,t,1.0)*0.65+rainLayer(u,t,2.0)*0.45+rainLayer(u,t,3.0)*0.25;col+=vec3(0.75,0.88,1.0)*r*rain*1.2;alpha=max(alpha,min(1.0,r*rain*1.1));}
-if(snow>0.0){float s=snowLayer(u,t,0.0)+snowLayer(u,t,1.0)*0.7+snowLayer(u,t,2.0)*0.4;col+=vec3(1.0)*s*snow;alpha=max(alpha,min(1.0,s*snow));}
-if(fog>0.0){float f=fbm(vec2(u.x*3.0+t*0.2,u.y*4.0-t*0.1));col+=vec3(0.8,0.85,0.9)*f*fog*0.7;alpha=max(alpha,min(1.0,f*fog*0.8));}
-if(storm>0.0){float fl=step(0.98,fract(t*0.1+fbm(u*5.0+t)))*(0.8+0.2*noise(vec2(t*50.0)));col+=vec3(1.0,0.95,1.0)*fl*storm;alpha=max(alpha,fl*storm*0.8);}
-gl_FragColor=vec4(col,alpha);}`;
-
-    const compile = (type, source) => { const shader = gl.createShader(type); gl.shaderSource(shader, source); gl.compileShader(shader); return gl.getShaderParameter(shader, gl.COMPILE_STATUS) ? shader : null; };
-    const vs = compile(gl.VERTEX_SHADER, vertex), fs = compile(gl.FRAGMENT_SHADER, fragment);
-    if (!vs || !fs) {
-      canvas.style.opacity = '0';
-      return;
-    }
-    const program = gl.createProgram(); gl.attachShader(program, vs); gl.attachShader(program, fs); gl.linkProgram(program);
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      canvas.style.opacity = '0';
-      return;
-    }
-    const buffer = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buffer); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
-    const getUniform = key => gl.getUniformLocation(program, key);
-    const position = gl.getAttribLocation(program, 'p');
-    const uniformLocs = {
-      time: getUniform('time'),
-      rain: getUniform('rain'),
-      snow: getUniform('snow'),
-      fog: getUniform('fog'),
-      storm: getUniform('storm'),
-      wind: getUniform('wind'),
-      temp: getUniform('temp'),
-      night: getUniform('night'),
-      cloudy: getUniform('cloudy'),
-      cloudPositions: getUniform('cloudPositions'),
-      cloudSizes: getUniform('cloudSizes'),
-      cloudAlphas: getUniform('cloudAlphas')
-    };
-
-    const values = {
-      rain: Math.max(Number(canvas.dataset.rain||0), Number(canvas.dataset.drizzle||0)*0.4),
-      snow: Number(canvas.dataset.snow||0),
-      fog: Number(canvas.dataset.fog||0),
-      storm: Number(canvas.dataset.storm||0),
-      wind: Number(canvas.dataset.wind||0),
-      temp: Number(canvas.dataset.temp||20),
-      night: Number(canvas.dataset.night||0),
-      cloudy: Number(canvas.dataset.cloudy||0)
-    };
-
-    const numClouds = 6;
-    const cloudsList = Array.from({ length: numClouds }, () => {
-      return {
-        x: Math.random() * 800,
-        y: 50 + Math.random() * 250,
-        rx: 120 + Math.random() * 80,
-        ry: 45 + Math.random() * 25,
-        speed: 0.1 + Math.random() * 0.3,
-        alpha: 0.08 + Math.random() * 0.07
-      };
-    });
-
-    let frame = 0, active = true;
-    
-    // Force initial size fallback immediately if layout isn't ready
-    if (canvas.width === 0 || canvas.height === 0 || canvas.clientWidth === 0 || canvas.clientHeight === 0) {
-      const parent = canvas.parentElement;
-      if (parent && parent.offsetWidth > 0) {
-        canvas.width = Math.floor(parent.offsetWidth * (window.devicePixelRatio || 1)) || 300;
-        canvas.height = Math.floor(parent.offsetHeight * (window.devicePixelRatio || 1)) || 200;
-      } else {
-        canvas.width = 600;
-        canvas.height = 400;
-      }
-    }
-
-    const draw = now => {
-      if (!active || !canvas.isConnected) return;
-      gl.clear(gl.COLOR_BUFFER_BIT);
-      const ratio = Math.min(window.devicePixelRatio || 1, 1.5), width = Math.max(1, Math.round(canvas.clientWidth * ratio)), height = Math.max(1, Math.round(canvas.clientHeight * ratio));
-      if (canvas.width !== width || canvas.height !== height) { canvas.width = width; canvas.height = height; gl.viewport(0, 0, width, height); }
-
-      if (values.cloudy > 0.0) {
-        cloudsList.forEach(c => {
-          c.x -= c.speed;
-          if (c.x + c.rx < 0) {
-            c.x = width + c.rx;
-            c.y = 50 + Math.random() * (height - 100);
-          }
-        });
-      }
-      const flatPositions = [];
-      const flatSizes = [];
-      const flatAlphas = [];
-      cloudsList.forEach(c => {
-        flatPositions.push(c.x / width, c.y / height);
-        flatSizes.push(c.rx / width, c.ry / height);
-        flatAlphas.push(values.cloudy > 0.0 ? c.alpha : 0.0);
-      });
-
-      gl.useProgram(program); gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.bindBuffer(gl.ARRAY_BUFFER, buffer); gl.enableVertexAttribArray(position); gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
-
-      if (uniformLocs.time) gl.uniform1f(uniformLocs.time, now);
-      if (uniformLocs.rain) gl.uniform1f(uniformLocs.rain, values.rain);
-      if (uniformLocs.snow) gl.uniform1f(uniformLocs.snow, values.snow);
-      if (uniformLocs.fog) gl.uniform1f(uniformLocs.fog, values.fog);
-      if (uniformLocs.storm) gl.uniform1f(uniformLocs.storm, values.storm);
-      if (uniformLocs.wind) gl.uniform1f(uniformLocs.wind, values.wind);
-      if (uniformLocs.temp) gl.uniform1f(uniformLocs.temp, values.temp);
-      if (uniformLocs.night) gl.uniform1f(uniformLocs.night, values.night);
-      if (uniformLocs.cloudy) gl.uniform1f(uniformLocs.cloudy, values.cloudy);
-      if (uniformLocs.cloudPositions) gl.uniform2fv(uniformLocs.cloudPositions, flatPositions);
-      if (uniformLocs.cloudSizes) gl.uniform2fv(uniformLocs.cloudSizes, flatSizes);
-      if (uniformLocs.cloudAlphas) gl.uniform1fv(uniformLocs.cloudAlphas, flatAlphas);
-
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      frame = requestAnimationFrame(draw);
-    };
-    canvas._argusWebglStop = () => { active = false; cancelAnimationFrame(frame); gl.getExtension('WEBGL_lose_context')?.loseContext(); };
-    canvas.closest('.wx-atmosphere')?.classList.add('webgl-active');
-    frame = requestAnimationFrame(draw);
-  }
-
-  /* ── Inline CSS Weather Backgrounds ─────────────────────────── */
-  _renderAtmosphere(ws, isNight) {
-    const value = String(ws || '').toLowerCase();
-    const has = term => value.includes(term);
-    const storm = has('thunder') || has('lightning') || has('storm');
-    const snow = has('snow') || has('hail') || has('sleet') || has('blizzard');
-    const drizzle = has('drizzle') || has('shower');
-    const rain = !drizzle && (has('rain') || has('pouring'));
-    const fog = has('fog') || has('mist') || has('hazy');
-    const cloud = has('cloud') || has('overcast');
-    
-    let base = 'clear';
-    if (storm) base = 'storm';
-    else if (rain || drizzle) base = 'rain';
-    else if (snow) base = 'snow';
-    else if (fog) base = 'fog';
-    else if (has('partly')) base = 'partlycloudy';
-    else if (cloud) base = 'cloudy';
-    else if (has('sunny')) base = 'sunny';
-    
-    const night = isNight ? 'night' : 'day';
-    const eclipse = this._eclipseEvent();
-    const eclipseClass = eclipse ? `eclipse` : '';
-    
-    return `<div class="scene ${night} ${base} ${eclipseClass}"></div>`;
-  }
-
-  _getWeatherBg(ws, isNight) {
-    return this._renderAtmosphere(ws, isNight);
-  }
 
 
   /* ── Activity Log ────────────────────────────────────────────────── */
@@ -6762,15 +6471,7 @@ gl_FragColor=vec4(col,alpha);}`;
     }).map(x => `<option value="${this._escapeHtml(x.entity_id)}">${this._escapeHtml(x.name)}</option>`).join('');
   }
 
-  _populateWeatherSources() {
-    const select = this.shadowRoot.getElementById('weather-source-select');
-    if (!select || !this._hass?.states) return;
-    const previous = select.value || this._weatherSource || 'auto';
-    const weather = Object.values(this._hass.states).filter(state => state.entity_id?.startsWith('weather.'));
-    select.innerHTML = [{ entity_id: 'auto', name: this._t('weather_auto') }, ...weather.map(state => ({ entity_id: state.entity_id, name: state.attributes?.friendly_name || state.entity_id }))]
-      .map(item => `<option value="${this._escapeHtml(item.entity_id)}">${this._escapeHtml(item.name)}</option>`).join('');
-    select.value = [...select.options].some(option => option.value === previous) ? previous : 'auto';
-  }
+
 
   _getWeatherEntity() {
     const selected = this._weatherSource || 'auto';
@@ -7321,9 +7022,9 @@ gl_FragColor=vec4(col,alpha);}`;
 
   async _persistPersonalization() {
     this._ui = this._ui || {};
-    const background_mode = this.shadowRoot.getElementById('bg-mode-select-standalone')?.value || 'weather';
+    const background_mode = this.shadowRoot.getElementById('bg-mode-select-standalone')?.value || 'none';
     const temperature_source = this.shadowRoot.getElementById('temp-source-select-standalone')?.value || 'auto';
-    const weather_source = this.shadowRoot.getElementById('weather-source-select')?.value || 'auto';
+    const weather_source = 'auto';
     const clock_format_val = this.shadowRoot.getElementById('argus-clock-format-select')?.value || 'auto';
     this._clockFormat = ['auto','12h','24h'].includes(clock_format_val) ? clock_format_val : 'auto';
     const emergency_number = this._normaliseEmergencyNumber(this.shadowRoot.getElementById('emergency-number-input')?.value);
@@ -8256,6 +7957,50 @@ gl_FragColor=vec4(col,alpha);}`;
     this._applyContrastMode(mode);
   }
 
+  _getProfileGesture(): string {
+    const profId = this._currentProfile?.id || 'default';
+    try {
+      const stored = localStorage.getItem(`argus_gesture_${profId}`);
+      if (stored === 'touch' || stored === 'slide') return stored;
+      const global = localStorage.getItem('argus_gesture_global');
+      if (global === 'touch' || global === 'slide') return global;
+    } catch (_) {}
+    return 'slide';
+  }
+
+  _setGestureMode(mode: string): void {
+    const profId = this._currentProfile?.id || 'default';
+    try {
+      localStorage.setItem(`argus_gesture_${profId}`, mode);
+      localStorage.setItem('argus_gesture_global', mode);
+    } catch (_) {}
+    this._applyGestureMode(mode);
+  }
+
+  _applyGestureMode(mode: string): void {
+    if (mode === 'touch') {
+      this.setAttribute('argus-gesture', 'touch');
+      this.classList.add('argus-gesture-touch');
+    } else {
+      this.removeAttribute('argus-gesture');
+      this.classList.remove('argus-gesture-touch');
+    }
+    const sosLabel = this.shadowRoot?.getElementById('sos-label');
+    if (sosLabel) {
+      sosLabel.textContent = mode === 'touch' ? (this._t('tap_sos') || 'Toca para activar SOS') : (this._t('slide_sos') || 'Desliza para activar SOS');
+    }
+    const sosThumb = this.shadowRoot?.getElementById('sos-thumb');
+    if (sosThumb) {
+      sosThumb.setAttribute('aria-label', mode === 'touch' ? (this._t('tap_sos') || 'Activar SOS') : (this._t('slide_sos') || 'Deslizar para activar SOS'));
+    }
+    this.shadowRoot?.querySelectorAll('.entry').forEach((entry: any) => entry._staRefresh?.());
+  }
+
+  _initGestureMode(): void {
+    const mode = this._getProfileGesture();
+    this._applyGestureMode(mode);
+  }
+
   _updateHeroProfileDisplay() {
     const container = this.shadowRoot.getElementById('hero-profile-container');
     if (!container) return;
@@ -8338,9 +8083,18 @@ gl_FragColor=vec4(col,alpha);}`;
         <!-- Appearance & Contrast Selector -->
         <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
           <label style="font-size: 11px; font-weight: 700; opacity: 0.7; display: flex; align-items: center; gap: 5px;">${this._t('contrast_selector_lbl') || '👁️ Aspecto y Contraste'}</label>
-          <select id="dropdown-contrast-select" class="glass-control" style="width: 100%; height: 36px; border-radius: 10px; padding: 0 10px; font-size: 12px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid var(--v2066-border); color: var(--v2066-text); outline: none; cursor: pointer;">
+          <select id="dropdown-contrast-select" class="glass-control" aria-label="${this._t('contrast_selector_lbl') || 'Aspecto y Contraste'}" style="width: 100%; height: 38px; border-radius: 10px; padding: 0 10px; font-size: 12px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid var(--v2066-border); color: var(--v2066-text); outline: none; cursor: pointer;">
             <option value="standard" ${this._getProfileContrast() === 'standard' ? 'selected' : ''}>${this._t('contrast_standard') || '✨ Estándar (Liquid Glass)'}</option>
             <option value="high" ${this._getProfileContrast() === 'high' ? 'selected' : ''}>${this._t('contrast_high') || '🖤 Alto Contraste (OLED / Oscuro)'}</option>
+          </select>
+        </div>
+
+        <!-- Interaction / Gesture Selector (WCAG 2.5.1) -->
+        <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
+          <label style="font-size: 11px; font-weight: 700; opacity: 0.85; display: flex; align-items: center; gap: 5px;">${this._t('gesture_selector_lbl') || '🕹️ Modo de Control'}</label>
+          <select id="dropdown-gesture-select" class="glass-control" aria-label="${this._t('gesture_selector_lbl') || 'Modo de control de alarma'}" style="width: 100%; height: 38px; border-radius: 10px; padding: 0 10px; font-size: 12px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid var(--v2066-border); color: var(--v2066-text); outline: none; cursor: pointer;">
+            <option value="slide" ${this._getProfileGesture() === 'slide' ? 'selected' : ''}>${this._t('gesture_slide') || '↔️ Deslizador Táctil (Antitoques)'}</option>
+            <option value="touch" ${this._getProfileGesture() === 'touch' ? 'selected' : ''}>${this._t('gesture_touch') || '👆 Botón Accesible (Toque Simple)'}</option>
           </select>
         </div>
 
@@ -8352,16 +8106,16 @@ gl_FragColor=vec4(col,alpha);}`;
           <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 2px;">
             ${canChangePin ? `
             <div style="display: flex; align-items: center; justify-content: space-between;">
-              <span style="font-size: 11px; opacity: 0.85;">${this._t('access_pin_lbl') || 'Pin perfil Argus'}</span>
+              <span style="font-size: 12px; opacity: 0.9;">${this._t('access_pin_lbl') || 'Pin perfil Argus'}</span>
               ${hasAccessPin ? `
-              <div style="display: flex; gap: 4px;">
-                <button id="btn-dropdown-change-access-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase;">${this._t('change_btn') || 'Cambiar'}</button>
-                <button id="btn-dropdown-remove-access-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; color: #ff453a !important;">${this._t('remove_btn') || 'Eliminar'}</button>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <button id="btn-dropdown-change-access-pin" class="glass-control" aria-label="Cambiar PIN de perfil" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer;">${this._t('change_btn') || 'Cambiar'}</button>
+                <button id="btn-dropdown-remove-access-pin" class="glass-control" aria-label="Eliminar PIN de perfil" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; color: #f87171 !important; background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.3); margin-left: 6px;">${this._t('remove_btn') || 'Eliminar'}</button>
               </div>
               ` : `
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <span style="font-size: 9.5px; font-weight: 800; opacity: 0.5; background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 6px;">${this._t('no_pin_badge') || 'SIN PIN'}</span>
-                <button id="btn-dropdown-set-access-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; color: #30d158 !important;">⚙️ ${this._t('configure_btn') || 'Configurar'}</button>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 10.5px; font-weight: 800; opacity: 0.6; background: rgba(255,255,255,0.06); padding: 4px 8px; border-radius: 6px;">${this._t('no_pin_badge') || 'SIN PIN'}</span>
+                <button id="btn-dropdown-set-access-pin" class="glass-control" aria-label="Configurar PIN de perfil" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; color: #34d399 !important;">⚙️ ${this._t('configure_btn') || 'Configurar'}</button>
               </div>
               `}
             </div>
@@ -8369,16 +8123,16 @@ gl_FragColor=vec4(col,alpha);}`;
             
             ${canChangeMasterPin ? `
             <div style="display: flex; align-items: center; justify-content: space-between;">
-              <span style="font-size: 11px; opacity: 0.85;">${this._t('master_pin_lbl') || 'Pin de Armado'}</span>
+              <span style="font-size: 12px; opacity: 0.9;">${this._t('master_pin_lbl') || 'Pin de Armado'}</span>
               ${hasMasterPin ? `
-              <div style="display: flex; gap: 4px;">
-                <button id="btn-dropdown-change-master-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase;">${this._t('change_btn') || 'Cambiar'}</button>
-                <button id="btn-dropdown-remove-master-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; color: #ff453a !important;">${this._t('remove_btn') || 'Eliminar'}</button>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <button id="btn-dropdown-change-master-pin" class="glass-control" aria-label="Cambiar PIN de armado" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer;">${this._t('change_btn') || 'Cambiar'}</button>
+                <button id="btn-dropdown-remove-master-pin" class="glass-control" aria-label="Eliminar PIN de armado" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; color: #f87171 !important; background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.3); margin-left: 6px;">${this._t('remove_btn') || 'Eliminar'}</button>
               </div>
               ` : `
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <span style="font-size: 9.5px; font-weight: 800; opacity: 0.5; background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 6px;">${this._t('no_pin_badge') || 'SIN PIN'}</span>
-                <button id="btn-dropdown-set-master-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; color: #30d158 !important;">⚙️ ${this._t('configure_btn') || 'Configurar'}</button>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 10.5px; font-weight: 800; opacity: 0.6; background: rgba(255,255,255,0.06); padding: 4px 8px; border-radius: 6px;">${this._t('no_pin_badge') || 'SIN PIN'}</span>
+                <button id="btn-dropdown-set-master-pin" class="glass-control" aria-label="Configurar PIN de armado" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; color: #34d399 !important;">⚙️ ${this._t('configure_btn') || 'Configurar'}</button>
               </div>
               `}
             </div>
@@ -8393,11 +8147,11 @@ gl_FragColor=vec4(col,alpha);}`;
             <span style="font-size: 11px; font-weight: 700; opacity: 0.7;">🏡 ${this._t('home_name_lbl') || 'Nombre de la Casa'}</span>
             <span id="dropdown-home-name" style="font-size: 12.5px; font-weight: 800; color: var(--v2066-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px; margin-top: 1px;">${this._escapeHtml(this._homeName || 'Mi Casa')}</span>
           </div>
-          <button id="btn-dropdown-edit-home-name" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase;">${this._t('change_btn') || 'Cambiar'}</button>
+          <button id="btn-dropdown-edit-home-name" class="glass-control" aria-label="Cambiar nombre de la casa" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer;">${this._t('change_btn') || 'Cambiar'}</button>
         </div>
 
         <!-- Switch user button -->
-        <button id="btn-dropdown-switch-user" class="glass-control" style="width: 100%; min-height: 32px; padding: 6px; border-radius: 10px; font-size: 10.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 6px; background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); color: var(--v2066-text);">
+        <button id="btn-dropdown-switch-user" class="glass-control" aria-label="Cambiar perfil de usuario" style="width: 100%; min-height: 38px; padding: 8px 12px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; margin-top: 6px; background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.12); color: var(--v2066-text);">
           ${this._t('switch_profile_btn') || '👤 Cambiar de Perfil'}
         </button>
 
@@ -8469,6 +8223,15 @@ gl_FragColor=vec4(col,alpha);}`;
       });
     }
     this._initContrastMode();
+
+    // Gesture dropdown change listener (WCAG 2.5.1)
+    const gestureSelect = container.querySelector('#dropdown-gesture-select');
+    if (gestureSelect) {
+      gestureSelect.addEventListener('change', (e: Event) => {
+        this._setGestureMode((e.target as HTMLSelectElement).value);
+      });
+    }
+    this._initGestureMode();
 
     // Change profile picture → navigate to HA Persons page
     container.querySelector('#btn-change-profile-picture')?.addEventListener('click', (e) => {

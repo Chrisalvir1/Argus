@@ -7,9 +7,36 @@
 const STYLE_ID = 'argus-slide-action-styles';
 
 const SLIDE_I18N = {
-  es: { slide_disarm: 'Desliza para desarmar', slide_sos: 'Desliza para activar SOS', slide_sos_stop: 'Desliza para detener SOS', enter_pin: 'Ingresa el PIN maestro', wrong_pin: 'PIN incorrecto', cancel: 'Cancelar' },
-  en: { slide_disarm: 'Slide to disarm', slide_sos: 'Slide to trigger SOS', slide_sos_stop: 'Slide to stop SOS', enter_pin: 'Enter master PIN', wrong_pin: 'Wrong PIN', cancel: 'Cancel' },
+  es: {
+    slide_disarm: 'Desliza para desarmar',
+    slide_sos: 'Desliza para activar SOS',
+    slide_sos_stop: 'Desliza para detener SOS',
+    tap_disarm: 'Toca para desarmar',
+    tap_sos: 'Toca para activar SOS',
+    tap_sos_stop: 'Toca para detener SOS',
+    enter_pin: 'Ingresa el PIN maestro',
+    wrong_pin: 'PIN incorrecto',
+    cancel: 'Cancelar'
+  },
+  en: {
+    slide_disarm: 'Slide to disarm',
+    slide_sos: 'Slide to trigger SOS',
+    slide_sos_stop: 'Slide to stop SOS',
+    tap_disarm: 'Tap to disarm',
+    tap_sos: 'Tap to trigger SOS',
+    tap_sos_stop: 'Tap to stop SOS',
+    enter_pin: 'Enter master PIN',
+    wrong_pin: 'Wrong PIN',
+    cancel: 'Cancel'
+  },
 };
+
+function isTouchMode(panel) {
+  if (typeof panel._getProfileGesture === 'function') {
+    return panel._getProfileGesture() === 'touch';
+  }
+  return panel?.getAttribute?.('argus-gesture') === 'touch';
+}
 
 function getActiveLang(panel) {
   if (typeof panel._getCurrentLangCode === 'function') {
@@ -301,6 +328,33 @@ function attachDrag(panel, kind, track, fill, thumb, label, pin, onDone) {
   const PAD = 4;
   let dragging = false, startX = 0, curX = 0, maxX = 0;
 
+  track.setAttribute('role', 'button');
+  track.setAttribute('tabindex', '0');
+  track.setAttribute('aria-label', label.textContent || kind);
+
+  function executeAction() {
+    if (pin.classList.contains('open')) return;
+    if (kind === 'disarm' && pinRequired(panel)) {
+      openPin();
+    } else {
+      onDone();
+    }
+  }
+
+  track.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      executeAction();
+    }
+  });
+
+  track.addEventListener('click', e => {
+    if (isTouchMode(panel)) {
+      if (pin.classList.contains('open') || (e.target && (e.target as HTMLElement).closest?.('.argus-sta-pin'))) return;
+      executeAction();
+    }
+  });
+
   function getMax() { return track.getBoundingClientRect().width - 56 - PAD * 2; }
 
   function moveTo(x) {
@@ -338,13 +392,11 @@ function attachDrag(panel, kind, track, fill, thumb, label, pin, onDone) {
     dragging = false;
     thumb.style.cursor = 'grab';
     if (curX >= maxX * 0.80) {
-      if (kind === 'disarm' && pinRequired(panel)) {
-        openPin();
-        snapBack();
-      } else {
-        onDone();
-        snapBack();
-      }
+      executeAction();
+      snapBack();
+    } else if (isTouchMode(panel) && Math.abs(curX) < 6) {
+      executeAction();
+      snapBack();
     } else {
       snapBack();
     }
@@ -452,12 +504,17 @@ function mountOnEntry(panel, entry, idx) {
     const state = getState();
     const panic = getPanic();
     const isArmed = state !== 'disarmed' && state !== 'unavailable';
+    const touch = isTouchMode(panel);
 
     dWrap.classList.toggle('sta-armed', isArmed);
-    dLabel.textContent = t(panel, 'slide_disarm');
+    const disarmKey = touch ? 'tap_disarm' : 'slide_disarm';
+    dLabel.textContent = t(panel, disarmKey);
+    dTrack.setAttribute('aria-label', dLabel.textContent);
 
     sTrack.classList.toggle('sos-pulsing', panic);
-    sLabel.textContent = panic ? t(panel, 'slide_sos_stop') : t(panel, 'slide_sos');
+    const sosKey = panic ? (touch ? 'tap_sos_stop' : 'slide_sos_stop') : (touch ? 'tap_sos' : 'slide_sos');
+    sLabel.textContent = t(panel, sosKey);
+    sTrack.setAttribute('aria-label', sLabel.textContent);
     sThumb.innerHTML = panic ? ICON_SOS_STOP : ICON_SOS;
   }
 

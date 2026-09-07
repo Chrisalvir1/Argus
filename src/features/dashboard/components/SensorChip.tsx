@@ -32,18 +32,31 @@ export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, battery, 
     }
   }
 
-  const iconColor = isBypassed ? '#a1a1aa' : (isBlocking ? '#ffd700' : (isOpen ? '#ff968b' : '#75f4b0'));
+  const iconColor = isBypassed ? '#94a3b8' : (isBlocking ? '#fde047' : (isOpen ? '#f87171' : '#34d399'));
   const iconAnimation = isBypassed ? 'none' : (isBlocking ? 'pulse 1s infinite' : (isOpen ? 'pulse 2s infinite' : 'none'));
-  const stateColor = isBypassed ? '#a1a1aa' : (isBlocking ? '#ffd700' : (isOpen ? '#ff968b' : '#75f4b0'));
+  const stateColor = isBypassed ? '#94a3b8' : (isBlocking ? '#fde047' : (isOpen ? '#f87171' : '#34d399'));
   const opacity = isBypassed ? 0.6 : 1;
 
   const stateText = isOpen ? statusLabelOpen : statusLabelClosed;
-  const labelText = isBypassed ? `${bypassedLabel || 'OMITIDO'} · ${stateText}` : stateText;
+  const labelText = isBypassed ? `${bypassedLabel || 'Omitido'} · ${stateText}` : stateText;
+  const fullLabel = `${name}: ${labelText}${battery !== null ? ` (Batería: ${battery}%)` : ''}`;
 
   return (
-    <div className={`console-sensor ${isOpen && !isBypassed ? 'open' : ''}`} style={{ opacity }}>
-      <span className="console-sensor-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: iconColor, animation: iconAnimation }} dangerouslySetInnerHTML={{ __html: iconHtml }} />
-      <span className="console-sensor-name" style={{ color: isBlocking && !isBypassed ? '#ffd700' : '' }}>{name}</span>
+    <div
+      className={`console-sensor ${isOpen && !isBypassed ? 'open' : ''}`}
+      style={{ opacity }}
+      title={fullLabel}
+      aria-label={fullLabel}
+      tabIndex={0}
+      role="status"
+    >
+      <span
+        className="console-sensor-icon"
+        aria-hidden="true"
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: iconColor, animation: iconAnimation }}
+        dangerouslySetInnerHTML={{ __html: iconHtml }}
+      />
+      <span className="console-sensor-name" title={name} style={{ color: isBlocking && !isBypassed ? '#fde047' : '#ffffff' }}>{name}</span>
       <span className="console-sensor-state" style={{ color: stateColor }}>
         {labelText}
         {batHtml}

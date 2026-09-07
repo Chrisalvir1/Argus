@@ -87,11 +87,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		bg_none: "Ninguno",
 		bg_panel_none: "Sin fondo en el panel",
 		bg_panel_selected_from_history: "Fondo del panel seleccionado del historial",
-		bg_panel_title: "Fondo del Panel",
-		bg_photo: "Foto",
 		bg_sound_opt: "Sonido de fondo",
-		bg_video: "Video animado",
-		bg_weather: "Clima en vivo",
 		bridge_not_connected: "Puente no conectado",
 		bridge_not_desc: "El puente HomeKit no está conectado actualmente.",
 		bridge_paired: "Puente vinculado",
@@ -393,6 +389,12 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		slide_disarm: "Desliza para desarmar",
 		slide_sos: "Desliza para activar SOS",
 		slide_sos_stop: "Desliza para detener SOS",
+		tap_disarm: "Toca para desarmar",
+		tap_sos: "Toca para activar SOS",
+		tap_sos_stop: "Toca para detener SOS",
+		gesture_selector_lbl: "🕹️ Modo de Control (Accesibilidad)",
+		gesture_slide: "↔️ Deslizador Táctil (Antitoques)",
+		gesture_touch: "👆 Botón Accesible (Toque Simple)",
 		sos_actions: "Dispositivos y Acciones SOS",
 		sos_activated: "SOS activado",
 		sos_call: "Llamar a Emergencias",
@@ -452,10 +454,8 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		users_title: "👥 Control de Acceso y Usuarios",
 		vacation: "Vacaciones",
 		wait_if_open: "Esperar armado en espera",
-		waiting_sensors: "ESPERANDO SENSORES",
-		waiting_sensors_count: "ESPERANDO {count} SENSOR(ES)",
-		weather_auto: "Detección automática de clima",
-		weather_source: "Entidad de clima",
+		waiting_sensors: "Esperando sensores",
+		waiting_sensors_count: "Esperando {count} sensor(es)",
 		welcome_greeting: "¡Hola de nuevo!",
 		welcome_profile: "Bienvenido, {name}",
 		wrong_pin: "PIN incorrecto"
@@ -508,11 +508,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		bg_none: "None",
 		bg_panel_none: "No panel background",
 		bg_panel_selected_from_history: "Panel background selected from history",
-		bg_panel_title: "Panel Background",
-		bg_photo: "Photo",
 		bg_sound_opt: "Background Sound",
-		bg_video: "Animated Video",
-		bg_weather: "Live Weather",
 		bridge_not_connected: "Bridge Not Connected",
 		bridge_not_desc: "The HomeKit bridge is currently disconnected.",
 		bridge_paired: "Bridge Paired",
@@ -814,6 +810,12 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		slide_disarm: "Slide to disarm",
 		slide_sos: "Slide to trigger SOS",
 		slide_sos_stop: "Slide to stop SOS",
+		tap_disarm: "Tap to disarm",
+		tap_sos: "Tap to trigger SOS",
+		tap_sos_stop: "Tap to stop SOS",
+		gesture_selector_lbl: "🕹️ Interaction Mode (Accessibility)",
+		gesture_slide: "↔️ Swipe Slider (Anti-touch)",
+		gesture_touch: "👆 Accessible Tap Button (WCAG)",
 		sos_actions: "SOS Devices and Actions",
 		sos_activated: "SOS Activated",
 		sos_call: "Call Emergency Services",
@@ -873,19 +875,17 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		users_title: "👥 Users & Access Control",
 		vacation: "Vacation",
 		wait_if_open: "Wait for sensors to close",
-		waiting_sensors: "WAITING FOR SENSORS",
-		waiting_sensors_count: "WAITING FOR {count} SENSOR(S)",
-		weather_auto: "Automatic weather detection",
-		weather_source: "Weather entity",
+		waiting_sensors: "Waiting for sensors",
+		waiting_sensors_count: "Waiting for {count} sensor(s)",
 		welcome_greeting: "Welcome back!",
 		welcome_profile: "Welcome, {name}",
 		wrong_pin: "Wrong PIN"
 	}
 }, m = document.createElement("template");
-m.innerHTML = "\n<style>\n@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');\n\n#widget-grid.hide-legacy > section.panel:not(#w-instances) { display: none !important; }\n\n@keyframes heroSpringSlideIn {\n  0% { transform: translateX(-50px); opacity: 0; }\n  100% { transform: translateX(0); opacity: 1; }\n}\n\n  /* Modern Premium Liquid Glass & iOS Wobble Styles */\n  :host {\n    font-family: 'Inter', sans-serif !important;\n    --glass-bg: var(--argus-glass-bg, rgba(255, 255, 255, 0.07));\n    --glass-border: var(--argus-glass-border, rgba(255, 255, 255, 0.09));\n    --glass-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.35),\n                    0 15px 30px -10px rgba(0, 122, 255, 0.12),\n                    inset 0 1px 0 rgba(255, 255, 255, 0.15);\n    --sos-red: linear-gradient(135deg, #ff3b30, #ff2d55);\n    --ios-track: rgba(0, 0, 0, 0.25);\n    --ios-thumb: linear-gradient(180deg, #ffffff, #f4f4f7);\n    --text-shadow: 0 1px 3px rgba(0,0,0,0.15);\n    --primary-color: #007aff;\n    --personalize-bg: rgba(255, 255, 255, 0.02);\n    --personalize-border: rgba(255, 255, 255, 0.06);\n    --personalize-divider: rgba(255, 255, 255, 0.08);\n    --bg-inputs-bg: rgba(0, 0, 0, 0.15);\n    --bg-inputs-border: rgba(255, 255, 255, 0.05);\n    --input-bg-darker: rgba(0, 0, 0, 0.25);\n    --input-border-darker: rgba(255, 255, 255, 0.12);\n    --hero-bg: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));\n    --log-item-bg: rgba(255, 255, 255, 0.02);\n    --log-item-border: rgba(255, 255, 255, 0.05);\n    --user-card-bg: rgba(255, 255, 255, 0.02);\n    --user-card-border: rgba(255, 255, 255, 0.06);\n    --primary-text-color: #fff !important;\n    --secondary-text-color: rgba(255, 255, 255, 0.7);\n    --input-bg: rgba(255, 255, 255, 0.04);\n    --input-border: rgba(255, 255, 255, 0.12);\n  }\n\n  /* High Contrast / OLED Dark Mode Accessibility */\n  :host([argus-contrast=\"high\"]),\n  :host(.argus-contrast-high) {\n    --glass-bg: rgba(11, 16, 26, 0.95);\n    --glass-border: rgba(255, 255, 255, 0.22);\n    --v2066-glass: rgba(11, 16, 26, 0.95);\n    --v2066-border: rgba(255, 255, 255, 0.22);\n    --v2066-text: #ffffff;\n    --v2066-muted: #cbd5e1;\n    --primary-text-color: #ffffff !important;\n    --secondary-text-color: #cbd5e1 !important;\n    --hud-bg: rgba(11, 16, 26, 0.98);\n    --hero-bg: linear-gradient(135deg, rgba(16, 24, 39, 0.96), rgba(8, 12, 20, 0.98));\n    --personalize-bg: rgba(11, 16, 26, 0.92);\n    --personalize-border: rgba(255, 255, 255, 0.2);\n    --user-card-bg: rgba(14, 20, 33, 0.95);\n    --user-card-border: rgba(255, 255, 255, 0.2);\n  }\n  :host([argus-contrast=\"high\"]) #profile-dropdown,\n  :host(.argus-contrast-high) #profile-dropdown {\n    background: rgba(10, 14, 23, 0.98) !important;\n    border: 1px solid rgba(255, 255, 255, 0.25) !important;\n    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7) !important;\n  }\n  :host([argus-contrast=\"high\"]) .liquid-glass,\n  :host(.argus-contrast-high) .liquid-glass {\n    background: rgba(11, 16, 26, 0.95) !important;\n    border-color: rgba(255, 255, 255, 0.22) !important;\n  }\n\n  :host {\n    --hud-text-color: #fff;\n    --hud-bg: rgba(255,255,255,0.06);\n  }\n\n  /* Garantiza legibilidad sobre cualquier fondo */\n  :host([data-bg-mode=\"default\"]) .hero-top-bar,\n  :host([data-bg-mode=\"default\"]) .entry-hud,\n  :host([data-bg-mode=\"default\"]) .mode-btn,\n  :host([data-bg-mode=\"default\"]) .sensor-pill {\n    text-shadow: 0 1px 4px rgba(0,0,0,0.7);\n  }\n\n  :host([data-bg-mode=\"default\"]) .mode-btn {\n    background: rgba(255,255,255,0.10) !important;\n    border: 1px solid rgba(255,255,255,0.18) !important;\n    color: rgba(255,255,255,0.95) !important;\n    backdrop-filter: blur(12px);\n  }\n\n  :host([data-bg-mode=\"default\"]) .subsection-title,\n  :host([data-bg-mode=\"default\"]) .user-role-label {\n    color: rgba(255,255,255,0.60) !important;\n  }\n\n  /* Fullscreen Active / Virtual Fullscreen CSS Overrides */\n  :host(.fullscreen-active) {\n    position: fixed !important;\n    inset: 0 !important;\n    top: 0 !important;\n    left: 0 !important;\n    right: 0 !important;\n    bottom: 0 !important;\n    width: 100vw !important;\n    width: 100dvw !important;\n    height: 100vh !important;\n    height: 100dvh !important;\n    z-index: 99999999 !important;\n    background: radial-gradient(ellipse at 50% 50%, #162438 0%, #08101a 60%, #010408 100%) !important;\n    overflow-y: auto !important;\n    overflow-x: hidden !important;\n    -webkit-overflow-scrolling: touch !important;\n    margin: 0 !important;\n    padding: 0 !important;\n  }\n  :host(.fullscreen-active) .hero,\n  :host(.fullscreen-active) #argus-react-dashboard-root,\n  :host(.fullscreen-active) .argus-dashboard,\n  :host(.fullscreen-active) .panel-head,\n  :host(.fullscreen-active) section:not(#w-instances),\n  :host(.fullscreen-active) .argus-widget:not(#w-instances),\n  :host(.fullscreen-active) .personalize-section {\n    display: none !important;\n  }\n  :host(.fullscreen-active) .wrap,\n  :host(.fullscreen-active) .grid,\n  :host(.fullscreen-active) #widget-grid,\n  :host(.fullscreen-active) #w-instances,\n  :host(.fullscreen-active) #entries,\n  :host(.fullscreen-active) #entries > div {\n    display: flex !important;\n    flex-direction: column !important;\n    position: static !important;\n    width: 100% !important;\n    width: 100vw !important;\n    width: 100dvw !important;\n    max-width: none !important;\n    min-height: 100% !important;\n    min-height: 100vh !important;\n    min-height: 100dvh !important;\n    height: 100% !important;\n    max-height: none !important;\n    padding: 0 !important;\n    margin: 0 !important;\n    border: none !important;\n    border-radius: 0 !important;\n    box-shadow: none !important;\n    background: transparent !important;\n    backdrop-filter: none !important;\n    -webkit-backdrop-filter: none !important;\n    transform: none !important;\n    filter: none !important;\n    overflow: visible !important;\n  }\n\n\n\n  .liquid-glass {\n    background: linear-gradient(135deg,color-mix(in srgb,rgba(255,255,255,0.18) 80%,transparent),rgba(255,255,255,0.04));\n    backdrop-filter: blur(28px) saturate(180%) brightness(1.08);\n    -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(1.08);\n    border: 1px solid rgba(255,255,255,0.22);\n    box-shadow: 0 8px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.25);\n    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;\n  }\n  .wrap { position: relative; z-index: 1; transition: filter 0.35s ease, opacity 0.35s ease; opacity: 0; pointer-events: none; }\n  .wrap.wrap-ready { opacity: 1; pointer-events: auto; }\n  .wrap.wrap-blurred { filter: blur(15px); opacity: 0.45; pointer-events: none; }\n  @keyframes dialElasticIn {\n    0% { transform: scale(0.8) translateY(20px); opacity: 0; }\n    60% { transform: scale(1.04) translateY(-4px); opacity: 0.9; }\n    85% { transform: scale(0.98) translateY(1px); opacity: 0.98; }\n    100% { transform: scale(1) translateY(0); opacity: 1; }\n  }\n  .dial-elastic { animation: dialElasticIn 0.5s cubic-bezier(0.25, 1.25, 0.5, 1) forwards; }\n\n  .collapsible {\n    transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease, margin 0.4s ease, padding 0.4s ease;\n    overflow: hidden;\n    max-height: 600px;\n    opacity: 1;\n  }\n  .collapsible.collapsed {\n    max-height: 0 !important;\n    opacity: 0 !important;\n    margin-top: 0 !important;\n    margin-bottom: 0 !important;\n    padding-top: 0 !important;\n    padding-bottom: 0 !important;\n    border: none !important;\n    pointer-events: none;\n  }\n\n  /* Scrollbar aesthetics */\n  ::-webkit-scrollbar {\n    width: 6px;\n    height: 6px;\n  }\n  ::-webkit-scrollbar-track {\n    background: transparent;\n  }\n  ::-webkit-scrollbar-thumb {\n    background: rgba(255, 255, 255, 0.12);\n    border-radius: 999px;\n  }\n  ::-webkit-scrollbar-thumb:hover {\n    background: rgba(255, 255, 255, 0.25);\n  }\n  .x-never-match ::-webkit-scrollbar-thumb {\n    background: rgba(0, 0, 0, 0.08);\n  }\n  .x-never-match ::-webkit-scrollbar-thumb:hover {\n    background: rgba(0, 0, 0, 0.18);\n  }\n\n  .battery-alert { margin: 0 0 16px 0; padding: 14px 18px; border-radius: 20px; background: rgba(255, 149, 0, 0.12); border: 1px solid rgba(255, 149, 0, 0.22); color: #ffe3b3; font-weight: 700; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); text-align: left; box-shadow: 0 4px 15px rgba(255,149,0,0.1); }\n\n  /* SOS Slider redesign */\n  .btn-sos { width: 100%; min-height: 56px; border: 0; border-radius: 20px; background: var(--sos-red); color: white; font-size: 1.05rem; font-weight: 800; letter-spacing: 0.02em; cursor: pointer; box-shadow: 0 10px 25px rgba(255, 59, 48, 0.35); transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, opacity 0.2s; margin-top: 8px; display:flex;align-items:center;justify-content:center;gap:10px; }\n  .btn-sos:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(255, 59, 48, 0.45); }\n  .btn-sos:active { transform: scale(0.95); opacity: 0.92; }\n  .ios-confirm-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 999999; backdrop-filter: blur(12px); }\n  .ios-confirm-backdrop.open { display: flex; pointer-events: auto !important; }\n  .ios-confirm-backdrop.open * { pointer-events: auto; }\n  .ios-confirm-backdrop.open .ios-slider-label { pointer-events: none !important; }\n  .ios-confirm-card { width: min(100%, 420px); border-radius: 32px; padding: 24px; color: white; background: rgba(20,22,35,0.85); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 32px 80px rgba(0,0,0,0.6); }\n  .ios-confirm-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 8px; text-align: center; }\n  .ios-confirm-text { font-size: 0.98rem; opacity: 0.85; line-height: 1.45; text-align: center; margin-bottom: 20px; }\n  .ios-slider-shell { padding: 4px 0 16px; }\n  .ios-slider-track { position: relative; height: 66px; border-radius: 999px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); overflow: hidden; }\n  .ios-slider-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 82px; font-size: 0.95rem; font-weight: 700; color: rgba(255, 255, 255, 0.85); pointer-events: none; text-align: center; }\n  .ios-slider-thumb { position: absolute; top: 6px; left: 6px; width: 52px; height: 52px; border-radius: 50%; background: var(--ios-thumb); color: #ff3b30; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 900; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25); touch-action: none; user-select: none; cursor: grab; transition: transform 0.1s ease-out; }\n  .ios-confirm-cancel { width: 100%; min-height: 50px; border: 0; border-radius: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.05); color: white; font-weight: 700; cursor: pointer; transition: background 0.2s, transform 0.15s; }\n  .ios-confirm-cancel:hover { background: rgba(255,255,255,0.14); }\n  .ios-confirm-cancel:active { transform: scale(0.96); }\n\n  :host{display:block;min-height:100vh;box-sizing:border-box;--primary-text-color:#ffffff!important;--secondary-text-color:rgba(255,255,255,0.7)!important;color:#ffffff!important;background:var(--lovelace-background,var(--primary-background-color));font-family:'Outfit',Inter,system-ui,sans-serif}\n  :host([compact]), :host(.argus-compact) {\n    min-height: auto !important;\n    background: transparent !important;\n  }\n  :host([compact]) .wrap, :host(.argus-compact) .wrap {\n    padding: 0 !important;\n    margin: 0 !important;\n    max-width: 100% !important;\n    width: 100% !important;\n    height: auto !important;\n    min-height: fit-content !important;\n    gap: 0 !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 1 1 auto !important;\n    overflow: visible !important;\n    container-type: inline-size;\n    container-name: argus-compact-wrap;\n  }\n  :host([compact]) .hero, :host(.argus-compact) .hero {\n    display: none !important;\n  }\n  :host([compact]) #argus-canvas-bg, :host(.argus-compact) #argus-canvas-bg {\n    display: none !important;\n  }\n  :host([compact]) .tabs, :host(.argus-compact) .tabs {\n    display: none !important;\n  }\n  :host([compact]) .dashboard-instances .panel-head, :host(.argus-compact) .dashboard-instances .panel-head {\n    display: none !important;\n  }\n  :host([compact]) .personalize-section, :host(.argus-compact) .personalize-section {\n    display: none !important;\n  }\n  :host([compact]) .glass.panel:not(#w-instances), :host(.argus-compact) .glass.panel:not(#w-instances) {\n    display: none !important;\n  }\n  :host([compact]) .argus-widget:not(:has(#w-instances)), :host(.argus-compact) .argus-widget:not(:has(#w-instances)) {\n    display: none !important;\n  }\n  :host([compact]) .argus-dashboard__toolbar, :host(.argus-compact) .argus-dashboard__toolbar {\n    display: none !important;\n  }\n  :host([compact]) #widget-grid, :host(.argus-compact) #widget-grid {\n    padding: 0 !important;\n    margin: 0 !important;\n    display: block !important;\n    height: auto !important;\n  }\n  :host([compact]) #w-instances, :host(.argus-compact) #w-instances {\n    background: transparent !important;\n    border: none !important;\n    box-shadow: none !important;\n    padding: 0 !important;\n    margin: 0 !important;\n    height: auto !important;\n    width: 100% !important;\n    min-height: fit-content !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 1 1 auto !important;\n    overflow: visible !important;\n    background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;\n    backdrop-filter: blur(28px) saturate(150%) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(150%) !important;\n  }\n  :host([compact]) .entry, :host(.argus-compact) .entry {\n    margin-bottom: 0 !important;\n    border-radius: 24px !important;\n    height: auto !important;\n    width: 100% !important;\n    min-height: fit-content !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 1 1 auto !important;\n    overflow: visible !important;\n    background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;\n    backdrop-filter: blur(28px) saturate(150%) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(150%) !important;\n  }\n  :host([compact]) #bootstrap-overlay, :host(.argus-compact) #bootstrap-overlay,\n  :host([compact]) .argus-profile-overlay, :host(.argus-compact) .argus-profile-overlay,\n  :host([compact]) .argus-welcome-screen, :host(.argus-compact) .argus-welcome-screen {\n    display: none !important;\n  }\n  :host([compact]) .argus-widget__content, :host(.argus-compact) .argus-widget__content {\n    height: auto !important;\n    width: 100% !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 1 1 auto !important;\n    overflow: visible !important;\n  }\n  :host([compact]) #entries, :host(.argus-compact) #entries {\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 1 1 auto !important;\n    height: auto !important;\n    width: 100% !important;\n    margin: 0 !important;\n    overflow: visible !important;\n  }\n  *{box-sizing:border-box}\n  @container argus-compact-wrap (max-width: 800px) {\n    .security-console { flex-direction: column !important; padding: 20px 18px 24px !important; gap: 20px !important; align-items: center !important; justify-content: center !important; }\n    .security-console .entry-icon { order: 2 !important; flex: 0 0 auto !important; min-height: 130px !important; margin: 0 auto !important; }\n    .security-console .liquid-stack { order: 3 !important; width: 100% !important; max-width: 360px !important; }\n    .security-console .console-sensors { order: 4 !important; width: 100% !important; max-width: 360px !important; display: flex !important; flex-direction: column !important; }\n    .sensor-column { position: static !important; max-width: 100% !important; width: 100% !important; align-items: stretch !important; padding: 0 !important; gap: 10px !important; }\n    .sensor-chip { max-width: none !important; }\n    .entry-content { padding: 20px !important; display: flex !important; flex-direction: column !important; align-items: center !important;  }\n    .liquid-stack { display: flex !important; flex-direction: column !important; align-items: stretch !important; gap: 8px !important; }\n  }\n  @keyframes iosGlassIn{0%{opacity:0;transform:translateY(14px) scale(.965)}65%{opacity:1;transform:translateY(-2px) scale(1.008)}100%{transform:translateY(0) scale(1)}}\n  @keyframes iosSelectPop{0%{transform:scale(.92);opacity:.45}60%{transform:scale(1.045);opacity:1}100%{transform:scale(1)}}\n  .glass,.entry,.mode-section-card,.user-card,.file-card,.log-item{animation:iosGlassIn .5s cubic-bezier(.22,1.18,.36,1) both}\n  .pick-row:has(input:checked),.tab.active,.liquid-btn.active{animation:iosSelectPop .34s cubic-bezier(.2,1.45,.35,1);box-shadow:0 0 0 1px color-mix(in srgb,var(--primary-color,#007aff) 45%,transparent),0 12px 30px color-mix(in srgb,var(--primary-color,#007aff) 18%,transparent)}\n  .glass.liquid-glass{background:var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)))!important;backdrop-filter:blur(28px) saturate(150%)!important;-webkit-backdrop-filter:blur(28px) saturate(150%)!important;border-color:rgba(255,255,255,0.15)!important;box-shadow:0 8px 32px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.1)!important}\n  button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 70%,#fff);outline-offset:3px}\n  button:disabled{cursor:not-allowed;opacity:.5;filter:saturate(.45)}\n  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}\n  .wrap{max-width:1400px;margin:0 auto;padding:24px;display:grid;gap:24px}\n  .glass{background:var(--glass-bg, rgba(255, 255, 255, 0.06));border:1px solid var(--glass-border, rgba(255, 255, 255, 0.09));border-radius:28px;box-shadow:var(--glass-shadow);backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2)}\n  .hero{position:relative!important;z-index:9999!important;overflow:visible!important;padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:var(--hero-bg, linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)));margin-bottom:12px;will-change:transform,opacity;animation:heroSpringSlideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both}\n  .hero-left{display:flex;align-items:center;gap:22px}\n  .hero-context{position:relative!important;z-index:10000!important;overflow:visible!important;margin-left:auto;display:flex;align-items:center;gap:8px;min-width:0}\n  #hero-profile-container{position:relative!important;z-index:10001!important;overflow:visible!important}\n  .hero-profile-dropdown{position:absolute!important;top:calc(100% + 12px)!important;right:0!important;z-index:999999!important;max-height:calc(100vh - 100px)!important;overflow-y:auto!important;background:#0f172a!important;background-color:#0f172a!important;border:1.5px solid rgba(255,255,255,0.2)!important;box-shadow:0 24px 60px rgba(0,0,0,0.85),inset 0 1px 0 rgba(255,255,255,0.15)!important;backdrop-filter:blur(48px) saturate(200%)!important;-webkit-backdrop-filter:blur(48px) saturate(200%)!important;opacity:1!important}.hero-clock{display:flex;flex-direction:column;align-items:flex-end;padding-right:14px;border-right:1px solid rgba(255,255,255,.14);line-height:1}.hero-clock strong{font-size:1.45rem;letter-spacing:-.05em}.hero-clock span{font-size:10px;opacity:.65;margin-top:5px;text-transform:uppercase;letter-spacing:.08em}.hero-pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.hero-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 10px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(7,16,29,.27);box-shadow:inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(14px);font-size:10px;font-weight:800;white-space:nowrap}.hero-pill .hero-live{width:7px;height:7px;border-radius:50%;background:#55df91;box-shadow:0 0 9px #55df91}\n  .hero-icon{font-size:54px;line-height:1;filter:drop-shadow(0 0 20px rgba(255,255,255,0.15))}\n  .hero h1{margin:0 0 4px;font-size:34px;font-weight:900;letter-spacing:-0.03em;background:var(--hero-gradient, linear-gradient(to right, #ffffff, #82b1ff));-webkit-background-clip:text;-webkit-text-fill-color:transparent}\n  .hero p{margin:0;font-size:16px;opacity:.7;font-weight:500}\n  @media(max-width:700px){.wrap{padding:14px;gap:14px}.glass{border-radius:22px}.hero{padding:22px;align-items:flex-start}.hero-icon{font-size:40px}.hero h1{font-size:27px}.hero p{font-size:14px}.entry-content{grid-template-columns:96px 1fr;padding:16px 105px 16px 14px;gap:10px}.sensor-column{width:98px}.sensor-chip{max-width:94px}.entry-icon{min-height:110px}.entry-icon svg{max-width:150px}.hud{top:12px;right:12px}.hud-data{font-size:15px;padding:5px 9px}.hud-loc{font-size:10px;padding:3px 8px}}\n\n  /* Modern Mode Navigation & iOS Liquid Bubble Transition */\n  .tabs { position: relative; isolation:isolate; display: flex; min-height:72px; background: rgba(255, 255, 255, 0.03); padding: 6px; border-radius: 20px; gap: 6px; overflow: visible; scrollbar-width: none; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.06); z-index: 1; }\n  .tabs::-webkit-scrollbar { display: none; }\n  .tab { position: relative; flex: 1; min-width: 55px; min-height:60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 14px; padding: 10px 4px; font-size: 11px; font-weight: 800; color: rgba(255, 255, 255, 0.55); transition: color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; border: none !important; outline: none; background: transparent !important; box-shadow: none !important; z-index: 1; }\n  .tab:hover { color: #fff; }\n  .tab:active:not(:disabled) { transform: scale(0.94); }\n  .tab.active { color: #fff !important; background: transparent !important; box-shadow: none !important; transform: none !important; }\n\n  .tab-bubble { position: absolute; top: 6px; bottom: 6px; height: calc(100% - 12px); border-radius: 14px; z-index: 0; transform-origin: left center; transition: transform 0.45s cubic-bezier(0.25, 1.35, 0.4, 1.05), background 0.4s ease, box-shadow 0.4s ease; pointer-events: none; }\n  .tab-bubble.bubble-disarmed { background: #43a047; box-shadow: 0 8px 24px rgba(67, 160, 71, 0.4); }\n  .tab-bubble.bubble-home { background: #fb8c00; box-shadow: 0 8px 24px rgba(251, 140, 0, 0.4); }\n  .tab-bubble.bubble-away { background: #e53935; box-shadow: 0 8px 24px rgba(229, 57, 53, 0.4); }\n  .tab-bubble.bubble-night { background: #1e88e5; box-shadow: 0 8px 24px rgba(30, 136, 229, 0.4); }\n  .tab-bubble.bubble-vacation { background: #9c27b0; box-shadow: 0 8px 24px rgba(156, 39, 176, 0.4); }\n\n\n  @keyframes bounceIn {\n    0% { transform: scale(0.96); opacity: 0; }\n    50% { transform: scale(1.01); opacity: 1; }\n    100% { transform: scale(1); opacity: 1; }\n  }\n  .bounce-in { animation: bounceIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }\n\n  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;align-items:start;position:relative}\n  .panel{transition:transform .3s ease,box-shadow .3s ease,grid-column .3s ease,grid-row .3s ease;position:relative}\n  .panel[data-size=\"S\"]{grid-column:span 1;grid-row:span 1}\n  .panel[data-size=\"M\"]{grid-column:span 2;grid-row:span 1}\n  .panel[data-size=\"L\"]{grid-column:span 2;grid-row:span 2}\n  .panel[data-size=\"XL\"]{grid-column:span 4;grid-row:span 2}\n  .dashboard-instances{grid-column:1 / -1}\n  \n  /* Edit Mode Styles */\n  .grid.editing .panel{animation:jiggle .3s infinite ease-in-out;cursor:grab}\n  .grid.editing .panel:nth-child(even){animation-duration:.27s;animation-direction:reverse}\n  .grid.editing .panel:nth-child(3n){animation-duration:.32s;animation-delay:.05s}\n  .grid.editing .panel.dragging{opacity:.5;animation:none;cursor:grabbing}\n  \n  .panel-edit-overlay{position:absolute;inset:0;background:rgba(5,15,30,.82);backdrop-filter:blur(10px);border-radius:inherit;z-index:90;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;opacity:0;pointer-events:none;transition:opacity .25s ease}\n  .grid.editing .panel:not(.dashboard-instances) .panel-edit-overlay{opacity:1;pointer-events:auto}\n  \n  .widget-controls{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:18px;backdrop-filter:blur(8px)}\n  .widget-controls-title{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;opacity:.7}\n  .widget-sizes{display:flex;gap:6px}\n  .widget-size-btn{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#fff;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:800;cursor:pointer;transition:all .2s}\n  .widget-size-btn:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3)}\n  .widget-size-btn.active{background:#007aff;border-color:#007aff;box-shadow:0 0 10px rgba(0,122,255,.4)}\n  .widget-drag-handle{font-size:22px;color:rgba(255,255,255,.6);cursor:grab;padding:4px}\n  .widget-toggle-btn{background:rgba(220,38,38,.85);color:white;border:none;border-radius:8px;padding:6px 12px;font-size:10px;font-weight:800;cursor:pointer}\n  \n  @keyframes jiggle{\n    0%{transform:rotate(-0.5deg)}\n    50%{transform:rotate(0.5deg)}\n    100%{transform:rotate(-0.5deg)}\n  }\n  @media(max-width:900px){\n    .grid{grid-template-columns:minmax(0,1fr)}\n    .panel[data-size=\"S\"],.panel[data-size=\"M\"],.panel[data-size=\"L\"],.panel[data-size=\"XL\"]{grid-column:1 / -1;grid-row:auto}\n    .grid.editing .panel{animation:none !important}\n  }\n  \n  /* Adaptivity styles for size S widgets */\n  .panel[data-size=\"S\"] .tab-label{display:none}\n  .panel[data-size=\"S\"] .tab-icon{font-size:24px !important}\n  .panel[data-size=\"S\"] #p-backup-desc{display:none}\n  .panel[data-size=\"S\"] #github-desc{display:none}\n\n  /* Collapsible Personalization with Bounce expansion */\n  .personalize-workspace{display:grid;grid-template-rows:0fr;opacity:0;pointer-events:none;transition:grid-template-rows 0.6s cubic-bezier(0.175,0.885,0.32,1.275),opacity 0.4s ease,margin-top 0.4s ease}\n  .personalize-workspace > div { overflow:hidden; min-height:0; }\n  .personalize-workspace:not(.collapsed){grid-template-rows:1fr;opacity:1;pointer-events:auto;margin-top:16px;animation:bounceExpand 0.55s cubic-bezier(0.175,0.885,0.32,1.275) forwards}\n  @keyframes bounceExpand{\n    0%{transform:scale(0.96) translateY(-8px);opacity:0}\n    70%{transform:scale(1.01) translateY(2px);opacity:0.9}\n    100%{transform:scale(1) translateY(0);opacity:1}\n  }\n  @media(max-width:750px){.hero{flex-direction:column;text-align:center}.hero-left{flex-direction:column}}\n  @media(max-width:750px){.hero .lang-pill{align-self:center;margin-inline:auto}.hero-left{width:100%;align-items:center}}\n\n  .stack{display:grid;gap:24px}\n  .panel{padding:28px;position:relative;overflow:hidden}\n  .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}\n  .panel h2{margin:0;font-size:14px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--primary-color,#007aff);opacity:0.95}\n\n  /* Access settings stay quiet until the user needs to manage them. */\n  .access-panel { padding: 22px 24px; overflow-y:auto; max-height:60vh; -webkit-overflow-scrolling:touch; }\n  .access-panel .panel-head { margin-bottom: 12px; }\n  .access-summary { font-size: 12px; opacity: .72; }\n  .access-actions { display:flex; gap:10px; flex-wrap:wrap; }\n  .access-actions button { flex:0 1 auto; padding:8px 12px; font-size:11px; }\n  .access-actions button.active { background:var(--primary-color,#007aff); color:#fff; border-color:transparent; }\n  .access-section { display:block; min-width:0; margin-bottom:24px; }\n  .access-section h3 { font-size:12px; font-weight:900; opacity:.8; margin:0 0 10px; text-transform:uppercase; }\n  .access-panel .user-card { padding:10px 12px; border-radius:12px; }\n  .github-star-action {\n    display:inline-flex;align-items:center;justify-content:center;gap:7px;\n    min-height:42px;padding:9px 16px;border-radius:14px;text-decoration:none;\n    color:var(--primary-text-color,#fff);font-size:12px;font-weight:850;\n    background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.055));\n    border:1px solid rgba(255,255,255,.16);\n    box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 9px 24px rgba(0,0,0,.16);\n    backdrop-filter:blur(18px) saturate(150%);\n    -webkit-backdrop-filter:blur(18px) saturate(150%);\n    transition:transform .2s ease,background .2s ease,box-shadow .2s ease;\n  }\n  .github-star-action:hover { transform:translateY(-1px);background:rgba(255,255,255,.18);box-shadow:0 12px 28px rgba(0,0,0,.20); }\n  @media(max-width:600px){ .access-panel{padding:20px}.access-actions{width:100%}.access-actions button{flex:1} }\n\n  /* Personalization inside instances */\n  .personalize-row { display: flex; gap: 14px; align-items: center; margin-top: 18px; padding: 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 18px; flex-wrap: wrap; }\n  .personalize-row .setting-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-bottom: 4px; }\n\n  /* Mode Reorganization Styles — HORIZONTAL */\n  .mode-grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }\n  @media(max-width:900px){ .mode-grid-layout { grid-template-columns: 1fr; } }\n  .mode-section-card {\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.025) 100%) !important;\n    border: 1px solid rgba(255, 255, 255, 0.16) !important;\n    border-radius: 20px !important;\n    padding: 18px !important;\n    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;\n    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;\n  }\n  .mode-section-card:hover {\n    border-color: rgba(255, 255, 255, 0.26) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.04) 100%) !important;\n    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;\n    transform: translateY(-2px) !important;\n  }\n  .mode-section-card:hover { border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); }\n  .mode-section-title { font-size: 13px; font-weight: 800; color: var(--primary-color, #007aff); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }\n  .mode-sensor-grid { color: var(--primary-text-color, #fff); }\n  .mode-sensor-none { color: var(--primary-text-color, rgba(255,255,255,0.5)); opacity: 0.6; font-size: 13px; }\n  .mode-section-card span, .mode-section-card label, .mode-section-card .input-label { color: var(--primary-text-color, #fff); }\n\n  .sensor-pill { background: var(--pill-bg, rgba(255,255,255,0.06)); color: var(--pill-text, #fff); border: 1px solid var(--pill-border, rgba(255,255,255,0.1)); padding: 8px 14px; border-radius: 14px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; transition: all 0.2s; max-width: 100%; box-sizing: border-box; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }\n  @keyframes argus-blink-red { 0%,100%{box-shadow:0 0 0 0 rgba(255,50,50,0);background:var(--pill-bg,rgba(255,255,255,0.06))} 50%{box-shadow:0 0 0 6px rgba(255,50,50,0.25);background:rgba(255,50,50,0.15)} }\n  .sensor-pill.siren-active   { animation: argus-blink-red 1.2s ease-in-out infinite; border-color: rgba(255,82,82,0.5) !important; }\n  .sensor-pill.triggered-sensor { animation: argus-blink-red 0.9s ease-in-out infinite; border-color: rgba(255,82,82,0.6) !important; }\n  .icon-btn { background: none; border: none; padding: 4px; color: inherit; opacity: 0.6; cursor: pointer; transition: opacity 0.2s, transform 0.15s; display: flex; align-items: center; justify-content: center; border-radius: 8px; }\n  .icon-btn:active { transform: scale(0.9); }\n\n  #mode-status { opacity: 0; transition: opacity .35s; }\n  #mode-status.show { opacity: 1; }\n  #mode-status.ok  { color: #4caf50; }\n  #mode-status.err { color: #f44336; }\n\n  .icon-btn:hover { opacity: 1; background: rgba(255,255,255,0.08); }\n  .icon-btn.active { color: #fb8c00; opacity: 1; }\n\n  .input-group { display: flex; flex-direction: column; gap: 6px; }\n  .times-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:end}\n  .time-field{min-width:0;display:flex;flex-direction:column;justify-content:flex-end;height:100%}\n  .time-field .input-label{min-height:34px;display:flex;align-items:flex-end;line-height:1.2;margin-bottom:6px;padding-bottom:2px}\n  .time-field input{width:100%;height:44px!important;padding:8px 12px!important;border-radius:12px!important;box-sizing:border-box!important;margin:0!important;font-size:14px!important}\n  .entry-sensor-list{min-height:44px;margin-top:12px!important;display:flex;flex-wrap:wrap;align-items:center;border:1px solid rgba(255,255,255,.10)!important;background:rgba(255,255,255,.03)!important;border-radius:12px!important;padding:10px;gap:8px}\n  .instance-activity-strip{display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr));gap:8px;align-items:center;margin:4px 0 16px;padding:10px 12px;border:1px solid rgba(255,255,255,.1);border-radius:18px;background:rgba(5,13,25,.25);backdrop-filter:blur(18px) saturate(135%);-webkit-backdrop-filter:blur(18px) saturate(135%)}.instance-activity-title{font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;opacity:.62;padding-right:6px}.instance-activity-item{min-width:0;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.86}.instance-activity-item time{opacity:.55;margin-right:4px;font-variant-numeric:tabular-nums}\n  .mode-mqtt-row{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 14px!important;min-height:44px;border-radius:12px!important;background:rgba(255,255,255,.03)!important;border:1px solid rgba(255,255,255,.10)!important}\n  .mode-mqtt-row input{margin:0;accent-color:var(--primary-color,#007aff)}\n  .input-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-left: 4px; }\n\n  /* Intelligent Entry Card */\n  .entry {\n    position: relative;\n    overflow: hidden;\n    border-radius: 28px !important;\n    border: 1px solid rgba(255, 255, 255, 0.18) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%) !important;\n    backdrop-filter: blur(32px) saturate(170%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(32px) saturate(170%) brightness(1.08) !important;\n    margin-bottom: 16px;\n    min-height: 220px;\n    display: flex;\n    flex-direction: column;\n    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);\n  }\n  .entry:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 20px 48px rgba(0,0,0,.3)}\n  .entry::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:inherit;background:linear-gradient(120deg,rgba(255,255,255,.14),transparent 22%,transparent 74%,rgba(255,255,255,.05));mix-blend-mode:soft-light}\n  .entry-status-ribbon{position:absolute;top:20px;left:20px;z-index:5;display:flex;align-items:center;gap:9px;max-width:calc(100% - 260px);padding:8px 12px;border:1px solid color-mix(in srgb,var(--entry-accent) 55%,rgba(255,255,255,.2));border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--entry-accent) 28%,rgba(8,15,28,.76)),rgba(7,14,25,.56));box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 8px 24px color-mix(in srgb,var(--entry-accent) 22%,transparent);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);color:#fff}\n  .entry-status-orb{width:10px;height:10px;flex:0 0 auto;border-radius:50%;background:var(--entry-accent);box-shadow:0 0 12px var(--entry-accent)}\n  .entry-status-copy{display:flex;flex-direction:column;min-width:0}.entry-status-kicker{font-size:8px;line-height:1;text-transform:uppercase;letter-spacing:.12em;opacity:.72;font-weight:800}.entry-status-name{font-size:13px;line-height:1.2;font-weight:900;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.entry-status-event{font-size:9px;line-height:1.2;opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:290px}\n  .entry-bg{position:absolute;inset:0;z-index:1;background-size:cover;background-position:center;transition:opacity 0.5s ease}\n  .entry-bg img{width:100%;height:100%;object-fit:cover;opacity:0.6}\n  .entry-content{position:relative;z-index:2;flex:1;padding:20px 140px 20px 20px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.2) 0%, transparent 60%)}\n  /* The live instance is the console: real controls, real sensors and one\n     clear disarm keypad. Decorative dashboard cards never sit above it. */\n  .security-console {\n    background: transparent !important;\n    border: none !important;\n    box-shadow: none !important;\n  }\n  .console-hud {\n    background: transparent !important;\n    border: none !important;\n    box-shadow: none !important;\n  }\n\n  /* ── System Status Badge ─────────────────────────────── */\n  .console-system-badge {\n    display: inline-flex;\n    align-items: center;\n    padding: 5px 14px;\n    border-radius: 999px;\n    font-size: 10.5px;\n    font-weight: 900;\n    letter-spacing: 0.8px;\n    text-transform: uppercase;\n    white-space: nowrap;\n    backdrop-filter: blur(16px) saturate(160%);\n    -webkit-backdrop-filter: blur(16px) saturate(160%);\n    border: 1.5px solid currentColor;\n    transition: all 0.35s ease;\n  }\n  .console-system-badge--disarmed {\n    color: #6ee7b7;\n    background: rgba(16,185,129,0.18);\n    border-color: rgba(16,185,129,0.60);\n    box-shadow: 0 0 16px rgba(16,185,129,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--armed_home {\n    color: #fde68a;\n    background: rgba(251,140,0,0.20);\n    border-color: rgba(251,140,0,0.60);\n    box-shadow: 0 0 16px rgba(251,140,0,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--armed_away {\n    color: #fca5a5;\n    background: rgba(229,57,53,0.20);\n    border-color: rgba(229,57,53,0.60);\n    box-shadow: 0 0 16px rgba(229,57,53,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--armed_night {\n    color: #bfdbfe;\n    background: rgba(30,136,229,0.20);\n    border-color: rgba(30,136,229,0.60);\n    box-shadow: 0 0 16px rgba(30,136,229,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--armed_vacation {\n    color: #e9d5ff;\n    background: rgba(156,39,176,0.20);\n    border-color: rgba(156,39,176,0.60);\n    box-shadow: 0 0 16px rgba(156,39,176,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--triggered {\n    color: #fff;\n    background: rgba(239,68,68,0.35);\n    border-color: rgba(239,68,68,0.80);\n    box-shadow: 0 0 24px rgba(239,68,68,0.60), inset 0 1px 0 rgba(255,255,255,0.25);\n    animation: badgeFlash 0.8s infinite ease-in-out;\n  }\n  @keyframes badgeFlash {\n    0%,100% { opacity:1; box-shadow:0 0 24px rgba(239,68,68,.8); }\n    50%      { opacity:0.7; box-shadow:0 0 8px rgba(239,68,68,.2); }\n  }\n  /* arming state reuses armed_home styling with pulsing */\n  .console-system-badge--arming {\n    color: #fde68a;\n    background: rgba(251,140,0,0.20);\n    border-color: rgba(251,140,0,0.60);\n    animation: badgeArming 1.05s ease-in-out infinite;\n  }\n  @keyframes badgeArming {\n    0%,100% { opacity:0.65; } 50% { opacity:1; }\n  }\n  .console-hud-time{font-size:16px;font-weight:800;letter-spacing:-.02em}\n  .console-hud-temp{font-size:11px;opacity:.8;font-weight:700}\n  .console-hud-temps{display:flex;gap:6px;flex-wrap:wrap;align-items:center}\n  .console-hud-tpill{font-size:10px;font-weight:800;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12)}\n  /* Hide the floating absolute HUD inside security-console to avoid overlap with sensor list */\n  .security-console .hud,.ios-fullscreen .entry-content.security-console ~ .hud,.entry-content.security-console + .hud{display:none!important}\n  /* The .hud inside the article gets hidden when the content is a security-console */\n  @media(max-width:950px){\n    .grid{grid-template-columns:1fr;grid-template-areas:\"instances\" \"activity\" \"modes\" \"access\" \"automations\" \"backup\" \"github\"}\n  }\n\n  /* Sensor column */\n  .sensor-column{position:absolute;right:0;top:0;bottom:0;width:auto;max-width:40%;z-index:4;display:flex;flex-direction:column;gap:7px;align-items:flex-end;justify-content:center;padding:12px 12px 12px 0;pointer-events:none}\n  .sensor-chip{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:16px;font-size:10px;font-weight:800;letter-spacing:.2px;max-width:148px;backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 7px 18px rgba(0,0,0,.24);transition:transform .2s,box-shadow .2s}\n  .sensor-chip-text{display:flex;flex-direction:column;min-width:0;flex:1}\n  .sensor-chip-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\n  .sensor-chip-state{font-size:8px;letter-spacing:.08em;text-transform:uppercase;opacity:.82;margin-top:2px}\n  .sensor-chip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}\n  .sensor-chip-battery{grid-column:1 / -1;margin-top:5px;padding-top:5px;border-top:1px solid currentColor;font-size:9px;line-height:1;opacity:.9}\n  .sensor-chip--open{background:linear-gradient(135deg,rgba(255,149,0,.9),rgba(255,96,0,.64));color:#fff}\n  .sensor-chip--open .sensor-chip-dot{background:#fff;box-shadow:0 0 8px rgba(255,255,255,.95)}\n  .sensor-chip--triggered{background:linear-gradient(135deg,rgba(255,69,58,.96),rgba(190,30,35,.82));animation:chip-pulse .9s ease-in-out infinite}\n  .sensor-chip--closed{background:rgba(15,23,32,.62);color:#eef8f1}\n  .sensor-chip--closed .sensor-chip-dot{background:#34c759;box-shadow:0 0 8px rgba(52,199,.9)}\n  .sensor-chip-battery.low{color:#ffd166;font-weight:900}\n  .buzz-orange{position:relative;border-color:rgba(255,171,64,.92)!important;background:linear-gradient(135deg,rgba(255,149,0,.38),rgba(255,109,0,.16))!important;box-shadow:0 0 0 1px rgba(255,183,77,.45),0 0 25px rgba(255,145,0,.55),inset 0 1px 0 rgba(255,255,255,.3)!important;animation:buzz-orange 1.05s cubic-bezier(.36,.07,.19,.97) infinite}\n  .buzz-orange::after{content:'⚠';margin-left:auto;color:#fff3d1;font-size:14px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.28))}\n  @keyframes buzz-orange{0%,100%{transform:translateX(0) rotate(0)}12%{transform:translateX(-2px) rotate(-.65deg)}25%{transform:translateX(3px) rotate(.8deg)}40%{transform:translateX(-3px) rotate(-.8deg)}55%{transform:translateX(2px) rotate(.55deg)}70%{transform:translateX(-1px) rotate(-.25deg)}}\n  @keyframes chip-pulse{0%,100%{opacity:1}50%{opacity:0.55}}\n\n  /* HUD Overlay */\n  .hud{position:absolute;top:20px;right:24px;text-align:right;z-index:3;color:var(--hud-text-color);text-shadow:var(--text-shadow);display:flex;flex-direction:column;gap:4px}\n  .hud-loc{font-size:13px;font-weight:900;text-transform:uppercase;opacity:1;letter-spacing:1.5px;background:var(--hud-bg);padding:4px 12px;border-radius:10px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.08);align-self:flex-end}\n  .hud-data{font-size:20px;font-weight:800;letter-spacing:-0.02em;background:var(--hud-bg);padding:6px 14px;border-radius:12px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.08);display:inline-flex;align-items:center;gap:8px;align-self:flex-end}\n  .hud-data i{font-size:14px;opacity:0.7;font-style:normal}\n  .hud-temperatures{display:flex;justify-content:flex-end;gap:5px;flex-wrap:wrap}\n  .hud-temperature{padding:4px 8px;border-radius:999px;background:var(--hud-bg);border:1px solid rgba(255,255,255,.09);font-size:10px;font-weight:800;backdrop-filter:blur(8px)}\n  .weather-eclipse{position:absolute;left:22px;bottom:18px;z-index:2;padding:7px 11px;border-radius:14px;background:rgba(18,10,28,.52);border:1px solid rgba(255,192,92,.36);backdrop-filter:blur(10px);font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.25);pointer-events:none}\n\n  /* Liquid Glass Buttons */\n  .liquid-stack{display:grid;gap:10px}\n  .liquid-btn {\n    border: 1px solid rgba(255, 255, 255, 0.20) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.04) 100%) !important;\n    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    color: #ffffff !important;\n    padding: 14px 18px;\n    border-radius: 18px !important;\n    font-size: 13.5px;\n    font-weight: 800;\n    display: flex;\n    align-items: center;\n    gap: 12px;\n    text-align: left;\n    cursor: pointer;\n    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;\n    transition: all 0.22s cubic-bezier(0.25, 0.8, 0.25, 1);\n    text-shadow: 0 1px 2px rgba(0,0,0,0.3);\n    letter-spacing: 0.5px;\n  }\n  .liquid-btn:hover {\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.08) 100%) !important;\n    border-color: rgba(255, 255, 255, 0.36) !important;\n    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;\n    transform: translateY(-2px);\n  }\n  .btn-sos {\n    background: linear-gradient(135deg, rgba(239, 68, 68, 0.32) 0%, rgba(185, 28, 28, 0.45) 100%) !important;\n    border: 1px solid rgba(252, 165, 165, 0.45) !important;\n    box-shadow: 0 10px 28px rgba(239, 68, 68, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;\n  }\n  .btn-sos:hover {\n    background: linear-gradient(135deg, rgba(239, 68, 68, 0.48) 0%, rgba(185, 28, 28, 0.65) 100%) !important;\n    box-shadow: 0 14px 34px rgba(239, 68, 68, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;\n    transform: translateY(-2px);\n  }\n  .mode-btn-icon{width:26px;height:26px;padding:5px;border-radius:10px;flex:0 0 auto;background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 4px 10px rgba(0,0,0,.16);filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}\n  .liquid-btn.active .mode-btn-icon{background:linear-gradient(135deg,rgba(255,255,255,.36),rgba(255,255,255,.12));border-color:rgba(255,255,255,.42)}\n  .btn-sos .mode-btn-icon{width:28px;height:28px;border-radius:11px;background:rgba(255,255,255,.17)}\n  .liquid-btn:not(.btn-home):not(.btn-away):not(.btn-night):not(.btn-vacation):not(.btn-disarm):not(.btn-sos):hover{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.2)}\n  .liquid-btn.active{background:var(--btn-bg, rgba(255,255,255,0.2));border-color:rgba(255,255,255,0.4);box-shadow:0 8px 24px var(--btn-shadow, rgba(255,255,255,0.12))}\n  .liquid-btn:active:not(:disabled) { transform: scale(0.96); }\n  .liquid-btn i{font-size:16px}\n\n  .btn-home {\n    background: linear-gradient(135deg, rgba(251, 140, 0, 0.20) 0%, rgba(251, 140, 0, 0.06) 100%) !important;\n    border: 1px solid rgba(251, 140, 0, 0.38) !important;\n    color: #ffe0b2 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-home.active {\n    background: linear-gradient(135deg, #fb8c00 0%, #d97706 100%) !important;\n    border: 1px solid rgba(254, 215, 170, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(251, 140, 0, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-away {\n    background: linear-gradient(135deg, rgba(229, 57, 53, 0.20) 0%, rgba(229, 57, 53, 0.06) 100%) !important;\n    border: 1px solid rgba(229, 57, 53, 0.38) !important;\n    color: #ffcdd2 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-away.active {\n    background: linear-gradient(135deg, #e53935 0%, #b91c1c 100%) !important;\n    border: 1px solid rgba(254, 202, 202, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(229, 57, 53, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-night {\n    background: linear-gradient(135deg, rgba(30, 136, 229, 0.20) 0%, rgba(30, 136, 229, 0.06) 100%) !important;\n    border: 1px solid rgba(30, 136, 229, 0.38) !important;\n    color: #bbdefb !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-night.active {\n    background: linear-gradient(135deg, #1e88e5 0%, #1d4ed8 100%) !important;\n    border: 1px solid rgba(191, 219, 254, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(30, 136, 229, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-vacation {\n    background: linear-gradient(135deg, rgba(156, 39, 176, 0.20) 0%, rgba(156, 39, 176, 0.06) 100%) !important;\n    border: 1px solid rgba(156, 39, 176, 0.38) !important;\n    color: #e1bee7 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-vacation.active {\n    background: linear-gradient(135deg, #9c27b0 0%, #7e22ce 100%) !important;\n    border: 1px solid rgba(245, 208, 254, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(156, 39, 176, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-disarm {\n    background: linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(16, 185, 129, 0.05) 100%) !important;\n    border: 1px solid rgba(16, 185, 129, 0.35) !important;\n    color: #a7f3d0 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n    margin-top: 4px;\n  }\n  .btn-disarm.active {\n    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;\n    border: 1px solid rgba(167, 243, 208, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(16, 185, 129, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-sos {\n    background: linear-gradient(135deg, rgba(239, 68, 68, 0.22) 0%, rgba(185, 28, 28, 0.08) 100%) !important;\n    border: 1px solid rgba(252, 165, 165, 0.35) !important;\n    color: #fca5a5 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-sos.active, .btn-sos.flashing {\n    animation: sosFlashingPulse 0.8s infinite ease-in-out !important;\n  }\n\n  @keyframes sosFlashingPulse {\n    0%, 100% {\n      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;\n      border-color: #fca5a5 !important;\n      color: #ffffff !important;\n      box-shadow: 0 0 32px rgba(239, 68, 68, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;\n      transform: scale(1.02);\n    }\n    50% {\n      background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%) !important;\n      border-color: rgba(239, 68, 68, 0.5) !important;\n      color: rgba(255, 255, 255, 0.8) !important;\n      box-shadow: 0 0 10px rgba(239, 68, 68, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;\n      transform: scale(0.98);\n    }\n  }\n  /* btn-disarm visual is handled by .btn-disarm and .btn-disarm.active above */\n\n  .entry-content {\n    background: transparent !important;\n    box-shadow: none !important;\n    border: none !important;\n  }\n\n  .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}\n  .badge.armed_away,.badge.armed_vacation{background:rgba(229,57,53,.12);color:var(--error-color,#e53935)}\n  .badge.armed_home,.badge.armed_night{background:rgba(251,140,0,.12);color:#fb8c00}\n  .badge.disarmed{background:rgba(67,160,71,.12);color:var(--success-color,#43a047)}\n  .badge.triggered{background:rgba(229,57,53,.2);color:var(--error-color,#e53935);animation:pulse 1s ease-in-out infinite}\n\n  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}\n  .meta{font-size:12px;opacity:.5}\n  .setting-label{font-size:13px;font-weight:700;color:var(--primary-text-color);letter-spacing:0.01em;margin-bottom:2px;display:block}\n  .setting-sublabel{font-size:12px;font-weight:400;opacity:0.55;color:var(--primary-text-color);margin-bottom:6px;display:block}\n  .temp-alert-row{display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap}\n  .temp-alert-row input[type=number]{width:72px;padding:6px 8px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:inherit;font-size:13px;font-weight:700;text-align:center}\n  .temp-alert-status-ok{color:#43a047;font-size:12px}\n  .temp-alert-status-warn{color:#e53935;font-size:12px;font-weight:700}\n\n  /* Generic buttons */\n  button{border:0;border-radius:14px;padding:10px 18px;font:700 13px/1 'Outfit',Inter,system-ui,sans-serif;cursor:pointer;transition:background 0.2s,opacity .15s,transform .15s cubic-bezier(0.175, 0.885, 0.32, 1.275),box-shadow 0.2s}\n  button:active:not(:disabled){transform:scale(.94) translateY(1px)}\n  button.primary{background:var(--primary-color,#007aff);color:#fff;box-shadow:0 4px 12px rgba(0, 122, 255, 0.25)}\n  button.primary:hover{background:#0062cc}\n  button.ghost{background:rgba(255, 255, 255, 0.05);border:1px solid rgba(255, 255, 255, 0.08);color:var(--primary-text-color)}\n  button.ghost:hover{background:rgba(255, 255, 255, 0.1)}\n\n\n  /* FS button */\n  .fs-btn{background:rgba(255,255,255,0.05);padding:8px;border-radius:10px;font-size:16px}\n\n  /* Modal Fixes */\n  .modal-back{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;padding:20px;z-index:999999;backdrop-filter:blur(12px)}\n  .modal-back.open{display:flex}\n  .modal{width:min(400px,100%);max-height:85vh;overflow:hidden;display:grid;grid-template-rows:auto 1fr auto;gap:14px;padding:24px;border-radius:32px;background:rgba(22, 24, 38, 0.95);border:1px solid rgba(255,255,255,0.08);box-shadow:0 30px 100px rgba(0,0,0,0.6);backdrop-filter:blur(28px)}\n  .modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}\n  .modal-head h3{margin:0;font-size:20px;font-weight:800}\n  .modal-body{overflow:auto;padding:5px}\n  .modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:15px}\n  /* PIN modal */\n  .pm .modal{max-width:340px;min-height:unset;grid-template-rows:auto auto auto;background:rgba(22, 24, 38, 0.82) !important;backdrop-filter:blur(16px) saturate(140%) !important;-webkit-backdrop-filter:blur(16px) saturate(140%) !important;border:1px solid rgba(255, 255, 255, 0.12) !important;box-shadow:0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;border-radius:36px;padding:28px;display:flex;flex-direction:column;align-items:center;gap:16px}\n  .pin-input{font-size:28px;letter-spacing:10px;text-align:center;padding:12px;border-radius:16px;border:none;background:rgba(255,255,255,0.02);color:inherit;width:100%;outline:none;box-shadow:inset 0 1px 3px rgba(0,0,0,0.2)}\n  .pin-error{color:var(--error-color,#e53935);font-size:13px;min-height:18px;text-align:center}\n  .pin-grid{display:grid;grid-template-columns:repeat(3,68px);gap:16px;justify-content:center;margin-top:10px}\n  .pin-btn-round{width:68px;height:68px;border-radius:50% !important;border:1px solid rgba(255,255,255,0.1) !important;background:rgba(255,255,255,0.04) !important;color:#fff !important;font-size:24px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.2s, transform 0.15s, border-color 0.2s;box-shadow:0 4px 10px rgba(0,0,0,0.15);padding:0 !important;outline:none}\n  .pin-btn-round:hover{background:rgba(255,255,255,0.12) !important;border-color:rgba(255,255,255,0.2) !important}\n  .pin-btn-round:active{transform:scale(0.92) !important;background:rgba(255,255,255,0.2) !important}\n  .pin-btn-round.action-key{font-size:12px;font-weight:700;letter-spacing:0.3px;text-transform:uppercase;border-color:transparent !important;background:transparent !important;box-shadow:none}\n  .pin-btn-round.action-key:hover{background:rgba(255,255,255,0.05) !important}\n  .pin-btn-round.action-key.enter-key{color:#34c759 !important}\n  .pin-btn-round.action-key.delete-key{color:#ff3b30 !important}\n  /* User card */\n  .user-card {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    padding: 16px 18px;\n    border-radius: 18px;\n    border: 1px solid rgba(255, 255, 255, 0.16) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.025) 100%) !important;\n    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.20) !important;\n    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);\n  }\n  .user-card:hover {\n    border-color: rgba(255, 255, 255, 0.25) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%) !important;\n    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;\n    transform: translateY(-2px);\n  }\n  .user-badge{display:inline-block;padding:4px 10px;border-radius:8px;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#ffffff!important;border:1px solid rgba(255,255,255,0.18)}\n  /* REEMPLAZA los colores neón por tokens legibles */\n  .user-badge.admin { background: #d97706 !important; color: #ffffff !important; font-weight: 900 !important; border: 1px solid rgba(255,255,255,0.3) !important; }\n  .user-badge.admin_old {\n    background: rgba(255,255,255,0.12);\n    color: rgba(255,255,255,0.92);\n    border: 1px solid rgba(255,255,255,0.18);\n    font-weight: 700;\n    letter-spacing: 0.04em;\n  }\n  .user-badge.user { background: #475569 !important; color: #ffffff !important; font-weight: 800 !important; border: 1px solid rgba(255,255,255,0.2) !important; }\n  .user-badge.user_old {\n    background: rgba(255,255,255,0.08);\n    color: rgba(255,255,255,0.75);\n    border: 1px solid rgba(255,255,255,0.12);\n  }\n  /* Role label debajo del nombre */\n  .user-role-label {\n    font-size: 11px;\n    font-weight: 600;\n    letter-spacing: 0.06em;\n    text-transform: uppercase;\n    color: rgba(255,255,255,0.55);  /* muted, no neón */\n    margin-top: 2px;\n  }\n  /* Notif target chip */\n  .notif-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);font-size:12px;font-weight:800;color:#ffffff !important}\n  .notif-chip button{padding:0 4px;border:0;background:none;cursor:pointer;opacity:.75;color:#ffffff}\n  /* Triggered box */\n  .trig-box{padding:12px 14px;border-radius:14px;background:rgba(229,57,53,.08);border:1px dashed var(--error-color,#e53935);font-size:12px;font-weight:600;color:var(--error-color,#e53935)}\n  /* inputs */\n  input[type=\"text\"], input[type=\"password\"], input[type=\"number\"], input[type=\"search\"], select, input[type=\"datetime-local\"], .glass-control {\n    width: 100%;\n    padding: 11px 14px;\n    border-radius: 16px;\n    border: 1px solid rgba(255, 255, 255, 0.16);\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.055));\n    color: var(--primary-text-color);\n    backdrop-filter: blur(18px) saturate(145%);\n    -webkit-backdrop-filter: blur(18px) saturate(145%);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 8px 22px rgba(0, 0, 0, 0.12);\n    font: 700 13px/1.2 'Outfit', Inter, system-ui, sans-serif;\n    outline: none;\n    transition: transform 0.34s cubic-bezier(0.18, 0.89, 0.32, 1.32), border-color 0.22s, box-shadow 0.22s;\n    display: block;\n    box-sizing: border-box;\n  }\n  input[type=\"text\"]:focus, input[type=\"password\"]:focus, input[type=\"number\"]:focus, input[type=\"search\"]:focus, select:focus, input[type=\"datetime-local\"]:focus, .glass-control:focus {\n    transform: scale(1.018);\n    border-color: rgba(112, 188, 255, 0.78);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.23), 0 0 0 4px rgba(0, 122, 255, 0.14), 0 10px 28px rgba(0, 0, 0, 0.16);\n  }\n  .x-never-match input[type=\"text\"],\n  .x-never-match input[type=\"password\"],\n  .x-never-match input[type=\"number\"],\n  .x-never-match input[type=\"search\"],\n  .x-never-match select,\n  .x-never-match input[type=\"datetime-local\"],\n  .x-never-match .glass-control {\n    background: rgba(255, 255, 255, 0.52);\n    border-color: rgba(0, 0, 0, 0.10);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 6px 16px rgba(0, 0, 0, 0.05);\n  }\n  /* search */\n  .search-wrap{display:flex;gap:10px;align-items:center}\n  .search-wrap input{flex:1;min-width:0}\n  /* ── Dual-panel selector modal ───────────────────────────────────────────────────── */\n  #selector-modal .modal{width:min(980px,96vw);height:min(780px,92vh);max-height:92vh;grid-template-rows:auto minmax(0,1fr) auto}\n  #selector-modal .modal-body{min-height:0;height:100%;padding:5px 0}\n  .sel-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;overflow:hidden;min-height:0;height:100%}\n  @media(max-width:600px){.sel-grid{grid-template-columns:1fr}}\n  .sel-panel{display:flex;flex-direction:column;gap:8px;overflow:hidden;min-width:0;min-height:0;padding:12px;border-radius:18px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.07)}\n  .sel-panel-inner{overflow-y:auto;overscroll-behavior:contain;flex:1;min-height:0;display:grid;gap:6px;align-content:start;padding-right:4px}\n  .sel-actions{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}\n  .pick-row{display:grid;grid-template-columns:20px minmax(0,1fr);align-items:start;gap:10px;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.025);cursor:pointer;transition:background .12s,border-color .12s}\n  .pick-row:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.16)}\n  .pick-row:has(input:checked){border-color:rgba(0,122,255,.58);background:rgba(0,122,255,.10)}\n  .pick-row input[type=checkbox]{width:16px;height:16px;cursor:pointer;accent-color:var(--primary-color,#007aff);margin-top:2px}\n  .pick-row-name{font-weight:750;font-size:13px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;line-height:1.25}\n  .pick-row-meta{font-size:11px;opacity:0.58;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\n  .device-facts{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}\n  .device-fact{display:inline-flex;align-items:center;min-height:20px;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:750;line-height:1.1;white-space:nowrap}\n  .device-fact.status-open{color:#ff8a80;background:rgba(255,82,82,.12)}\n  .device-fact.status-closed{color:#7ee2a8;background:rgba(52,199,.12)}\n  .device-fact.power-low{color:#ffd166;background:rgba(255,183,77,.13)}\n  .sel-right-item{display:flex;align-items:center;justify-content:space-between;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.09);background:rgba(255,255,255,0.055);font-size:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.06)}\n  .sel-right-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}\n  .sel-right-facts{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}\n  .mode-sensor-grid .sensor-pill{width:100%;min-width:0;padding:9px 10px;gap:7px}\n  .mode-sensor-grid .sensor-pill .pill-content{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:6px;min-width:0;flex:1}\n  .mode-sensor-grid .sensor-pill .pill-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\n  .mode-sensor-grid .sensor-pill .pill-status{font-size:10px;font-weight:800;opacity:.78;white-space:nowrap}\n  .mode-sensor-grid .sensor-pill .pill-power{font-size:10px;font-weight:700;opacity:.82;white-space:nowrap}\n  .sel-panel-inner::-webkit-scrollbar{width:7px}.sel-panel-inner::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.18);border-radius:99px}\n  /* Activity log */\n  .log-item{display:flex;align-items:flex-start;gap:12px;padding:13px;border-radius:18px;border:1px solid var(--log-item-border, rgba(255,255,255,.05));background:linear-gradient(135deg,color-mix(in srgb,var(--log-item-bg,rgba(255,255,255,.02)) 84%,#fff 16%),var(--log-item-bg,rgba(255,255,255,.02)));color:var(--primary-text-color,#fff);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 7px 18px rgba(0,0,0,.10)}\n  .log-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:13px;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 5px 12px rgba(0,0,0,.12)}\n  .glass-orb{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 2px 4px rgba(255,255,255,0.5),0 2px 6px rgba(0,0,0,0.2);background:rgba(255,255,255,0.3)}\n  .log-item.log-item--armed .log-icon{background:rgba(255,149,0,.16);border-color:rgba(255,183,77,.28)}\n  .log-item.log-item--armed .glass-orb{background:linear-gradient(135deg,#ffb74d,#f57c00)}\n  .log-item.log-item--disarmed .log-icon{background:rgba(52,199,.14);border-color:rgba(105,219,139,.28)}\n  .log-item.log-item--disarmed .glass-orb{background:linear-gradient(135deg,#69db8b,#388e3c)}\n  .log-item.log-item--triggered .log-icon{background:rgba(255,69,58,.16);border-color:rgba(255,139,131,.30)}\n  .log-item.log-item--triggered .glass-orb{background:linear-gradient(135deg,#ff8b83,#d32f2f)}\n  .log-body{flex:1;min-width:0}\n  .log-title{font-weight:700;font-size:13px}\n  .log-meta{font-size:11px;opacity:.55;margin-top:2px}\n  .log-badge{display:inline-block;padding:2px 7px;border-radius:6px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-right:4px}\n  .log-badge.arm{background:rgba(251,140,0,.12);color:#fb8c00}\n  .log-badge.disarm{background:rgba(67,160,71,.12);color:var(--success-color,#43a047)}\n  .log-badge.trigger{background:rgba(229,57,53,.15);color:var(--error-color,#e53935)}\n  button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 72%,#fff);outline-offset:3px}\n  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}.wx canvas{display:none!important}}\n  /* Personalization section styles */\n  .personalize-section {\n    margin-top: 18px;\n    padding: 18px;\n    background: var(--personalize-bg, rgba(255,255,255,0.02));\n    border: 1px solid var(--personalize-border, rgba(255,255,255,0.06));\n    border-radius: 22px;\n    display: grid;\n    gap: 16px;\n  }\n  .personalize-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:\"home temp\" \"panel weather\" \"hub clock\" \"emergency emergency\";gap:14px 16px;align-items:start}\n  .personalize-column{display:contents}\n  .personalize-field{min-width:0;align-self:stretch}\n  .pf-home{grid-area:home}.pf-temp{grid-area:temp}.pf-weather{grid-area:weather}.pf-panel{grid-area:panel}.pf-hub{grid-area:hub}.pf-emergency{grid-area:emergency}.pf-clock{grid-area:clock}\n  .pf-panel,.pf-hub{display:flex;flex-direction:column;gap:8px}\n  .pf-emergency{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:\"emergency-label emergency-label\" \"emergency-input emergency-help\";gap:5px 16px;align-items:start;padding-top:2px}\n  .pf-emergency #lbl-emergency-number{grid-area:emergency-label}.pf-emergency #emergency-number-input{grid-area:emergency-input}.pf-emergency #emergency-number-help{grid-area:emergency-help;margin:0!important}\n  .sos-configuration {\n    padding: 18px;\n    border-radius: 24px;\n    border: 1px solid rgba(255, 59, 48, 0.25);\n    background: linear-gradient(135deg, rgba(255, 59, 48, 0.12), rgba(255, 255, 255, 0.02));\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 12px 28px rgba(255, 59, 48, 0.06), 0 8px 20px rgba(0, 0, 0, 0.12);\n    transition: transform 0.3s ease, box-shadow 0.3s ease;\n  }\n  /* SOS uses the full personalization width so outputs never create a tall,\n     narrow list with unused space beside it. */\n  .sos-configuration{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:\"title action\" \"outputs outputs\" \"help help\";gap:12px 16px;align-items:center}\n  .sos-configuration #lbl-sos-actions{grid-area:title;margin:0!important;white-space:nowrap}\n  .sos-configuration #sos-output-chips{grid-area:outputs;margin:0!important;display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:7px;align-items:stretch;max-height:148px;overflow-y:auto;overflow-x:hidden;padding:2px 5px 2px 2px;overscroll-behavior:contain}\n  .sos-configuration #sos-output-chips .sensor-pill{width:100%;min-width:0;min-height:34px;justify-content:center;padding:7px 10px;font-size:11px;border-radius:12px}\n  .sos-configuration #sos-output-chips .sensor-pill > span{display:block;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}\n  .sos-configuration #sos-output-chips .mode-sensor-none{grid-column:1/-1;padding:18px;min-height:54px}\n  .sos-configuration #btn-select-sos-outputs{grid-area:action;width:auto!important;max-width:230px;min-width:0;white-space:normal;overflow-wrap:anywhere;line-height:1.15}\n  .sos-configuration #sos-output-help{grid-area:help;margin:0!important;max-width:none}\n  .sos-configuration:hover {\n    transform: translateY(-2px);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 16px 36px rgba(255, 59, 48, 0.10), 0 12px 24px rgba(0, 0, 0, 0.16);\n  }\n  .x-never-match .sos-configuration {\n    border-color: rgba(255, 59, 48, 0.3);\n    background: linear-gradient(135deg, rgba(255, 59, 48, 0.08), rgba(0, 0, 0, 0.01));\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 10px 24px rgba(255, 59, 48, 0.05);\n  }\n  #sos-output-chips .sensor-pill{background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.06));border-color:rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 5px 14px rgba(0,0,0,.10)}\n  .background-custom-inputs{flex-direction:column;gap:8px;background:rgba(0,0,0,.15);padding:12px;border-radius:18px;border:1px solid rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}\n  .modal-back.open .modal,\n  .lang-modal-back.open .lang-modal-card,\n  .ios-confirm-backdrop.open .ios-confirm-card {\n    animation: liquidDropIn .48s cubic-bezier(.16,1.24,.32,1) both;\n  }\n  @keyframes liquidDropIn{0%{opacity:0;transform:translateY(18px) scale(.91);filter:blur(5px)}65%{opacity:1;transform:translateY(-3px) scale(1.018);filter:blur(0)}100%{transform:translateY(0) scale(1)}}\n  @keyframes argus-modal-in{0%{opacity:0;transform:scale(.94) translateY(8px)}100%{opacity:1;transform:scale(1) translateY(0)}}\n  @media(max-width:700px){\n    .personalize-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:\"home\" \"temp\" \"weather\" \"panel\" \"hub\" \"clock\" \"emergency\"}\n    .pf-emergency{grid-template-columns:minmax(0,1fr);grid-template-areas:\"emergency-label\" \"emergency-input\" \"emergency-help\"}\n    .personalize-section{padding:14px}\n    .sos-configuration{display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:14px;border-radius:24px}\n    .sos-configuration #lbl-sos-actions{white-space:normal}.sos-configuration #btn-select-sos-outputs{width:100%!important}.sos-configuration #sos-output-help{max-width:none}\n  }\n  .wx-horizon::before{content:'';position:absolute;inset:26% 0 0;background:radial-gradient(ellipse at 12% 100%,rgba(0,0,0,.34) 0 18%,transparent 19%),radial-gradient(ellipse at 50% 100%,rgba(0,0,0,.29) 0 23%,transparent 24%),radial-gradient(ellipse at 89% 100%,rgba(0,0,0,.36) 0 20%,transparent 21%);filter:blur(10px)}\n  /* ── Weather Animated Backgrounds (Apple Weather Premium) ────────────────────────────────── */\n  .scene{position:absolute;inset:0;z-index:0;overflow:hidden;background:linear-gradient(165deg,#2c86c7,#8fc7dc 62%,#d7c7aa);transition:background 1.5s ease;border-radius:inherit}\n  .scene.sunny{background:linear-gradient(180deg,#1b60d0,#40a0ff 40%,#90d0ff)}\n  .scene.partlycloudy{background:linear-gradient(180deg,#3073d8,#6bb5ff 50%,#b8e0ff)}\n  .scene.cloudy{background:linear-gradient(180deg,#5b6976,#80909c 50%,#a4b3be)}\n  .scene.fog{background:linear-gradient(180deg,#6c767c,#9ca6ac 50%,#ccd1d4)}\n  .scene.rain,.scene.storm{background:linear-gradient(180deg,#303d49,#495a69 50%,#687985)}\n  .scene.snow{background:linear-gradient(180deg,#627f94,#92b1c7 50%,#d8eaf5)}\n  .scene.night{background:linear-gradient(180deg,#020513 0%,#0a1130 50%,#152248 100%)!important}\n  .scene.sunny::after,.scene.partlycloudy::after{content:'';position:absolute;inset:-50%;background:radial-gradient(circle at 50% 50%,#fff 0%,rgba(255,255,255,0.8) 5%,transparent 15%),radial-gradient(circle at 50% 50%,rgba(255,220,100,0.4) 0%,transparent 30%),conic-gradient(from 0deg at 50% 50%,transparent 0deg,rgba(255,255,255,0.15) 15deg,transparent 30deg,rgba(255,255,255,0.1) 45deg,transparent 60deg,rgba(255,255,255,0.2) 90deg,transparent 120deg,rgba(255,255,255,0.1) 180deg,transparent 240deg,rgba(255,255,255,0.15) 300deg,transparent 360deg);animation:rotate-sun 120s linear infinite;mix-blend-mode:screen;transform-origin:center;left:30%;top:-20%}\n  .scene.night.clear::after,.scene.night.partlycloudy::after{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,#fff 0 1px,transparent 1.5px);background-size:80px 73px;opacity:0.8;animation:stars 12s ease-in-out infinite alternate}\n  .scene.night.clear::before,.scene.night.partlycloudy::before{content:'';position:absolute;right:15%;top:15%;width:50px;height:50px;background:transparent;border-radius:50%;box-shadow:inset -10px -10px 0 0 #ffffe0;filter:drop-shadow(0 0 15px rgba(255,255,180,0.5))}\n  .scene.night.clear.eclipse::before{box-shadow:inset 0 0 0 25px rgba(0,0,0,0.9),0 0 20px 5px rgba(255,100,50,0.8)}\n  .scene.partlycloudy::before,.scene.cloudy::before{content:'';position:absolute;inset:-30%;background:radial-gradient(ellipse at 10% 20%,rgba(255,255,255,0.4) 0%,transparent 25%),radial-gradient(ellipse at 80% 30%,rgba(255,255,255,0.3) 0%,transparent 35%),radial-gradient(ellipse at 40% 50%,rgba(255,255,255,0.2) 0%,transparent 40%);filter:blur(25px);animation:clouds 40s linear infinite alternate}\n  .scene.night.cloudy::before,.scene.night.partlycloudy::before{background:radial-gradient(ellipse at 10% 20%,rgba(100,110,130,0.4) 0%,transparent 25%),radial-gradient(ellipse at 80% 30%,rgba(80,90,120,0.4) 0%,transparent 35%)}\n  .scene.rain::after,.scene.storm::after{content:'';position:absolute;inset:-50%;background:repeating-linear-gradient(108deg,transparent 0,transparent 20px,rgba(200,220,240,0.2) 21px,transparent 22px),repeating-linear-gradient(110deg,transparent 0,transparent 45px,rgba(200,220,240,0.4) 46px,transparent 48px);background-size:100% 200%;animation:rain 1.2s linear infinite;opacity:0.8}\n  .scene.snow::after{content:'';position:absolute;inset:-30%;background-image:radial-gradient(circle,rgba(255,255,255,0.8) 0 2px,transparent 3px),radial-gradient(circle,rgba(255,255,255,0.4) 0 4px,transparent 5px);background-size:45px 52px,90px 110px;background-position:0 0,20px 30px;animation:snow 8s linear infinite}\n  .scene.fog::before{content:'';position:absolute;inset:-20%;background:repeating-linear-gradient(0deg,transparent 0 40px,rgba(240,245,250,0.4) 50px 80px,transparent 90px 140px);filter:blur(18px);animation:fog 20s ease-in-out infinite alternate}\n  .scene.night.fog::before{background:repeating-linear-gradient(0deg,transparent 0 40px,rgba(120,130,150,0.4) 50px 80px,transparent 90px 140px)}\n  .scene.storm{animation:lightning 12s infinite}\n  @keyframes rotate-sun{to{transform:rotate(1turn)}}\n  @keyframes clouds{0%{transform:translate(-5%,-5%) scale(1)}100%{transform:translate(10%,10%) scale(1.1)}}\n  @keyframes stars{0%{opacity:0.4}100%{opacity:1}}\n  @keyframes rain{0%{background-position:0 0,0 0}100%{background-position:-150px 300px,-200px 400px}}\n  @keyframes snow{0%{background-position:0 0,20px 30px}100%{background-position:90px 300px,-45px 400px}}\n  @keyframes fog{0%{transform:translateY(0) scale(1);opacity:0.6}100%{transform:translateY(-50px) scale(1.2);opacity:0.9}}\n  @keyframes lightning{0%,93%,95%,100%{filter:none}94%{filter:brightness(2.5) contrast(1.5) saturate(0.5)}}\n  \n  .wx-static{background:linear-gradient(180deg,rgba(22,28,42,.92),rgba(35,44,67,.95));position:absolute;inset:0;z-index:0;border-radius:inherit}\n  .wx-photo,.wx-collage{background:#10141d;position:absolute;inset:0;z-index:0;border-radius:inherit}\n  .wx-photo::before{content:\"\";position:absolute;inset:0;background:var(--bg-image) center/cover no-repeat;filter:saturate(1.05) contrast(1.05);border-radius:inherit}\n  .wx-photo::after,.wx-collage::after,.wx-static::after{content:\"\";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,8,12,.18),rgba(5,8,12,.5));border-radius:inherit}\n  .wx-collage-grid{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4px;padding:4px}\n  .wx-collage-cell{border-radius:18px;background:center/cover no-repeat;min-height:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}\n  .wx-video{position:absolute;inset:0;overflow:hidden;border-radius:inherit;z-index:0;background:#10141d}\n  .wx-video::after{content:\"\";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,8,12,.18),rgba(5,8,12,.5));z-index:2}\n  #argus-canvas-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background-size:cover;background-position:center;background-repeat:no-repeat}\n  #argus-canvas-bg::after{content:\"\";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.3) 100%);z-index:1;pointer-events:none}\n\n.sensor-pill {\n  display:inline-flex; align-items:center; gap:8px;\n  background:var(--argus-pill-bg, rgba(255,255,255,0.04));\n  border:1px solid var(--argus-pill-border, rgba(255,255,255,0.08));\n  border-radius:14px; padding:10px 14px;\n  font-size:13px; color:var(--argus-pill-color, rgba(255,255,255,0.95));\n  backdrop-filter:blur(10px); transition:all 0.2s cubic-bezier(0.4,0,0.2,1);\n  font-weight:700; box-shadow:0 4px 12px rgba(0,0,0,0.08);\n}\n.sensor-pill:hover { background:var(--argus-pill-bg-hover, rgba(255,255,255,0.08)); border-color:rgba(255,255,255,0.25); transform:translateY(-1px); }\n.sensor-pill .pill-dot { width:10px; height:10px; border-radius:50%; background:#34c759; flex-shrink:0; box-shadow:0 0 10px rgba(52,199,0.5); }\n.sensor-pill .pill-dot.open { background:#ff3b30; box-shadow:0 0 10px rgba(255,59,48,0.5); }\n.sensor-pill .pill-dot.unavailable { background:#999; }\n.sensor-pill button { background:none; border:none; color:var(--argus-pill-color, #fff); cursor:pointer; opacity:0.5; padding:4px; font-size:14px; transition:opacity 0.2s; }\n.sensor-pill button:hover { opacity:1; }\n\n.mode-sensor-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:12px; margin-top:12px; }\n.mode-sensor-none { grid-column:1/-1; padding:30px; text-align:center; background:var(--argus-pill-bg,rgba(255,255,255,0.03)); border:2px dashed var(--argus-pill-border,rgba(255,255,255,0.1)); border-radius:20px; color:var(--argus-pill-color-muted,rgba(255,255,255,0.4)); font-size:14px; font-weight:600; }\n.subsection-title { font-size:12px; font-weight:900; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px; color:var(--argus-pill-color-muted,rgba(255,255,255,0.5)); display:block; }\n\n\n/* ── Language Picker ───────────────────────────────────── */\n.lang-pill {\n  display:inline-flex; align-items:center; gap:6px;\n  padding:7px 14px; border-radius:999px;\n  background:rgba(255,255,255,0.10);\n  border:1px solid rgba(255,255,255,0.18);\n  backdrop-filter:blur(12px) saturate(120%);\n  -webkit-backdrop-filter:blur(12px) saturate(120%);\n  color:#fff; font-size:13px; font-weight:700;\n  cursor:pointer; transition:all 0.22s cubic-bezier(0.4,0,0.2,1);\n  box-shadow:0 4px 16px rgba(0,0,0,0.18);\n  white-space:nowrap; flex-shrink:0;\n}\n.lang-pill:hover { background:rgba(255,255,255,0.22); transform:translateY(-1px); }\n.x-never-match .lang-pill {\n  background:rgba(0,0,0,0.07); border-color:rgba(0,0,0,0.15); color:#1e1e2d;\n}\n\n/* Language modal */\n.lang-modal-back { position:fixed; inset:0; background:rgba(0,0,0,0.55); display:none; align-items:center; justify-content:center; z-index:999998; backdrop-filter:blur(4px); }\n.lang-modal-back.open { display:flex; }\n.lang-modal-card {\n  width:min(400px,92vw); border-radius:28px; padding:28px 24px 20px;\n  background:rgba(20,22,35,0.92);\n  border:1px solid rgba(255,255,255,0.14);\n  box-shadow:0 32px 80px rgba(0,0,0,0.55);\n  backdrop-filter:blur(12px) saturate(120%);\n  -webkit-backdrop-filter:blur(12px) saturate(120%);\n  color:#fff;\n  animation: langBounceIn 0.38s cubic-bezier(0.175,0.885,0.32,1.275) forwards;\n}\n.x-never-match .lang-modal-card {\n  background:rgba(255,255,255,0.96); color:#1e1e2d;\n  border-color:rgba(0,0,0,0.12); box-shadow:0 20px 60px rgba(0,0,0,0.25);\n}\n@keyframes langBounceIn {\n  0%   { transform:scale(0.82) translateY(20px); opacity:0; }\n  60%  { transform:scale(1.03) translateY(-4px); opacity:1; }\n  100% { transform:scale(1)    translateY(0);    opacity:1; }\n}\n.lang-modal-title {\n  font-size:18px; font-weight:900; letter-spacing:-0.01em;\n  margin-bottom:20px; text-align:center;\n}\n.lang-grid {\n  display:grid; grid-template-columns:1fr 1fr; gap:10px;\n}\n.lang-option {\n  display:flex; align-items:center; gap:10px;\n  padding:12px 14px; border-radius:16px;\n  background:rgba(255,255,255,0.10);\n  border:1.5px solid rgba(255,255,255,0.18);\n  /* Buttons do not inherit color reliably through the HA shadow DOM. */\n  color:rgba(255,255,255,0.98) !important;\n  text-shadow:0 1px 2px rgba(0,0,0,0.38);\n  cursor:pointer; transition:all 0.18s ease;\n  font-size:14px; font-weight:750;\n}\n.lang-option span:not(.lang-flag) { color:inherit !important; }\n.lang-option:hover { background:rgba(255,255,255,0.16); border-color:rgba(255,255,255,0.28); transform:translateY(-1px); }\n.lang-option.active {\n  background:rgba(3,169,244,0.30); border-color:rgba(76,201,255,0.82);\n  box-shadow:0 0 18px rgba(3,169,244,0.25);\n}\n.lang-flag { font-size:22px; line-height:1; }\n.lang-close-row { display:flex; justify-content:center; margin-top:18px; }\n.lang-close-btn {\n  padding:9px 28px; border-radius:14px;\n  background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15);\n  color:#fff; font-size:13px; font-weight:700; cursor:pointer;\n  transition:background 0.18s;\n}\n.lang-close-btn:hover { background:rgba(255,255,255,0.2); }\n\n/* Background File Manager Styles */\n.file-card {\n  background: rgba(255, 255, 255, 0.03);\n  border: 1px solid rgba(255, 255, 255, 0.06);\n  border-radius: 12px;\n  padding: 8px;\n  display: flex;\n  flex-direction: column;\n  gap: 6px;\n  position: relative;\n  overflow: hidden;\n  transition: all 0.22s cubic-bezier(0.25, 0.8, 0.25, 1);\n}\n.file-card:hover {\n  background: rgba(255, 255, 255, 0.08) !important;\n  border-color: rgba(255, 255, 255, 0.16) !important;\n  transform: translateY(-2px);\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);\n}\n.x-never-match .file-card {\n  background: rgba(0, 0, 0, 0.02);\n  border-color: rgba(0, 0, 0, 0.07);\n  color: #1c1c1e;\n}\n.x-never-match .file-card:hover {\n  background: rgba(0, 0, 0, 0.05) !important;\n  border-color: rgba(0, 0, 0, 0.12) !important;\n}\n.file-card-preview {\n  position: relative;\n  width: 100%;\n  height: 64px;\n  border-radius: 8px;\n  overflow: hidden;\n  background: rgba(0, 0, 0, 0.2);\n}\n.file-card-preview img, .file-card-preview video {\n  width: 100%;\n  height: 100%;\n  object-fit: cover;\n  display: block;\n}\n.file-card-name {\n  font-size: 10px;\n  font-weight: 700;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  opacity: 0.85;\n}\n.file-card-meta {\n  font-size: 9px;\n  opacity: 0.55;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n.file-card-actions {\n  display: flex;\n  gap: 4px;\n  margin-top: auto;\n}\n.file-card-btn {\n  flex: 1;\n  padding: 4px;\n  font-size: 8px;\n  font-weight: 700;\n  text-transform: uppercase;\n  border: 1px solid rgba(255, 255, 255, 0.12);\n  border-radius: 6px;\n  background: rgba(255, 255, 255, 0.03);\n  color: inherit;\n  cursor: pointer;\n  white-space: nowrap;\n  transition: all 0.15s ease;\n}\n.file-card-btn:hover {\n  background: rgba(255, 255, 255, 0.15);\n  border-color: rgba(255, 255, 255, 0.3);\n}\n.x-never-match .file-card-btn {\n  border-color: rgba(0, 0, 0, 0.12);\n  background: rgba(0, 0, 0, 0.02);\n}\n.x-never-match .file-card-btn:hover {\n  background: rgba(0, 0, 0, 0.08);\n  border-color: rgba(0, 0, 0, 0.25);\n}\n.file-card-btn-delete {\n  padding: 3px 6px;\n  color: #ff3b30;\n  border: 1px solid rgba(255, 59, 48, 0.15);\n  background: rgba(255, 59, 48, 0.05);\n  border-radius: 6px;\n  cursor: pointer;\n  font-size: 9px;\n  transition: all 0.15s ease;\n}\n.file-card-btn-delete:hover {\n  background: rgba(255, 59, 48, 0.25);\n  border-color: rgba(255, 59, 48, 0.45);\n}\n\n.argus-bootstrap-layer {\n  position: fixed;\n  inset: 0;\n  background: rgba(0,0,0,0.88);\n  /* NO backdrop-filter: element is permanently in DOM (display:none toggle).\n     WebKit compositor leak bug — opaque background is visually equivalent. */\n  z-index: 9999;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  color: white;\n  animation: fadeIn 0.4s ease forwards;\n}\n.argus-bootstrap-card {\n  background: rgba(255,255,255,0.05);\n  border: 1px solid rgba(255,255,255,0.1);\n  border-radius: 24px;\n  padding: 40px;\n  max-width: 480px;\n  width: 90%;\n  box-shadow: 0 16px 40px rgba(0,0,0,0.5);\n  text-align: center;\n}\n.argus-bootstrap-card h1 {\n  margin: 0 0 16px;\n  font-weight: 300;\n  font-size: 28px;\n  letter-spacing: 0.5px;\n}\n.argus-bootstrap-card p {\n  color: rgba(255,255,255,0.7);\n  font-size: 16px;\n  line-height: 1.5;\n  margin-bottom: 32px;\n}\n@keyframes argusWelcomeCard {\n  from { opacity: 0; transform: translateY(18px) scale(.96); }\n  65% { opacity: 1; transform: translateY(-3px) scale(1.01); }\n  to { opacity: 1; transform: translateY(0) scale(1); }\n}\n@keyframes argusWelcomeLogo {\n  0%,100% { transform: translateY(0) scale(1); filter: drop-shadow(0 10px 18px rgba(32,145,255,.28)); }\n  50% { transform: translateY(-5px) scale(1.045); filter: drop-shadow(0 16px 26px rgba(32,145,255,.5)); }\n}\n@keyframes argusWelcomeCheck {\n  from { opacity: 0; transform: scale(.55) rotate(-16deg); }\n  70% { opacity: 1; transform: scale(1.1) rotate(4deg); }\n  to { opacity: 1; transform: scale(1) rotate(0); }\n}\n.argus-first-run-card { animation: argusWelcomeCard .58s cubic-bezier(.22,1.2,.36,1) both; }\n.argus-first-run-logo { height:68px; width:68px; border-radius:19px; animation:argusWelcomeLogo 2.4s ease-in-out infinite; }\n.argus-first-run-brand { display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:20px; }\n.argus-first-run-brand h1 { margin:0; font-size:1.65rem; font-weight:850; letter-spacing:-.02em; }\n.argus-first-run-brand p { margin:0; font-size:.92rem; color:rgba(255,255,255,.7); }\n.argus-first-run-thank-icon { width:74px; height:74px; margin:0 auto 18px; display:grid; place-items:center; border-radius:50%; background:rgba(52,199,89,.18); border:1px solid rgba(52,199,89,.45); color:#58e37c; font-size:2.15rem; box-shadow:0 0 32px rgba(52,199,89,.22); animation:argusWelcomeCheck .5s cubic-bezier(.2,1.35,.35,1) both; }\n\n/* ─── tvOS Profile Selector ─── */\n.argus-profile-overlay {\n  position: fixed; inset: 0;\n  background: rgba(0,0,0,0.4); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);\n  /* NO backdrop-filter: causes orphaned compositor layers in WebKit when removed.\n     High-opacity background achieves same visual effect safely. */\n  display: flex; align-items: center; justify-content: center;\n  z-index: 9999;\n  animation: argus-overlay-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;\n}\n@keyframes argus-overlay-in {\n  from { opacity: 0; }\n  to   { opacity: 1; }\n}\n\n/* Título arriba */\n.argus-profile-header {\n  text-align: center;\n  margin-bottom: 36px;\n  animation: argus-slide-down 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;\n}\n@keyframes argus-slide-down {\n  from { opacity: 0; transform: translateY(-20px); }\n  to   { opacity: 1; transform: translateY(0); }\n}\n.argus-profile-header h2 {\n  margin: 0; font-size: 1.6rem; font-weight: 800;\n  color: #fff; letter-spacing: -0.02em;\n}\n.argus-profile-header p {\n  margin: 6px 0 0; font-size: 0.85rem;\n  color: rgba(255,255,255,0.55);\n}\n\n/* Grid de perfiles */\n.argus-profile-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));\n  gap: 36px 24px;\n  max-width: 900px;\n  width: 100%;\n  justify-content: center;\n  animation: argus-grid-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;\n}\n@keyframes argus-grid-in {\n  from { opacity: 0; transform: scale(0.92) translateY(16px); }\n  to   { opacity: 1; transform: scale(1) translateY(0); }\n}\n\n/* Cada perfil */\n@media (max-width: 950px) and (orientation: landscape) {\n  .argus-profile-grid { \n    grid-template-columns: repeat(4, 1fr);\n    padding: 16px;\n  }\n}\n@media (max-width: 600px) and (orientation: portrait) {\n  .argus-profile-grid { \n    grid-template-columns: repeat(2, 1fr);\n    padding: 16px;\n    gap: 20px 16px;\n  }\n}\n@media (max-width: 380px) and (orientation: portrait) {\n  .argus-profile-grid { \n    grid-template-columns: 1fr;\n    padding: 16px;\n  }\n  .argus-profile-item { width: 100%; }\n}\n\n.argus-profile-item {\n  touch-action: manipulation;\n  min-height: 44px;\n  display: flex; flex-direction: column;\n  align-items: center; gap: 10px;\n  cursor: pointer;\n  border-radius: 16px;\n  padding: 14px 8px 10px;\n  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),\n              background 0.2s ease;\n  -webkit-tap-highlight-color: transparent;\n}\n.argus-profile-item:hover {\n  transform: scale(1.08);\n  background: rgba(255,255,255,0.07);\n}\n.argus-profile-item:active {\n  transform: scale(0.96);\n}\n.argus-profile-item:focus-visible {\n  outline: 2px solid rgba(255,255,255,0.6);\n  outline-offset: 4px;\n}\n\n/* Círculo avatar */\n.argus-profile-circle {\n  width: 120px; height: 120px;\n  border-radius: 50%;\n  object-fit: cover;\n  border: 3px solid rgba(255,255,255,0.18);\n  box-shadow: 0 4px 20px rgba(0,0,0,0.35);\n  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.22s;\n  display: flex; align-items: center; justify-content: center;\n  font-size: 2.5rem; font-weight: 800;\n  color: #fff; overflow: hidden; flex-shrink: 0;\n  background: rgba(255,255,255,0.1);\n  position: relative;\n}\n@media (max-width: 600px) and (orientation: portrait) {\n  .argus-profile-circle {\n    width: 76px; height: 76px;\n    font-size: 1.5rem; border-width: 2.5px;\n  }\n}\n@media (max-width: 950px) and (orientation: landscape) {\n  .argus-profile-circle {\n    width: 84px; height: 84px;\n    font-size: 1.8rem; border-width: 2.5px;\n  }\n}\n.argus-profile-item:hover .argus-profile-circle {\n  border-color: rgba(255,255,255,0.55);\n  box-shadow: 0 0 0 3px rgba(255,255,255,0.15), 0 6px 24px rgba(0,0,0,0.4);\n}\n.argus-profile-circle img {\n  width: 100%; height: 100%; border-radius: 50%; object-fit: cover;\n}\n.argus-profile-circle .lock-badge {\n  position: absolute; bottom: 0; right: 0;\n  width: 28px; height: 28px; border-radius: 50%;\n  background: rgba(0,0,0,0.75); display: flex;\n  align-items: center; justify-content: center;\n  font-size: 14px; border: 2px solid rgba(255,255,255,0.2);\n}\n@media (max-width: 600px) {\n  .argus-profile-circle .lock-badge {\n    width: 22px; height: 22px; font-size: 11px; border-width: 1.5px;\n  }\n}\n\n/* Nombre y rol */\n.argus-profile-label {\n  text-align: center;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.argus-profile-label .p-name {\n  font-size: 1rem; font-weight: 700;\n  color: #fff; line-height: 1.2;\n  max-width: 140px; overflow: hidden;\n  text-overflow: ellipsis; white-space: nowrap;\n}\n.argus-profile-label .p-role {\n  font-size: 0.72rem; font-weight: 600;\n  color: rgba(255,255,255,0.6);\n  margin-top: 4px;\n  text-transform: uppercase; letter-spacing: 0.04em;\n}\n@media (max-width: 600px) {\n  .argus-profile-label .p-name { font-size: 0.82rem; max-width: 80px; }\n  .argus-profile-label .p-role { font-size: 0.65rem; margin-top: 2px; }\n}\n\n/* ─── Welcome Screen (Fase 2) ─── */\n.argus-welcome-screen {\n  position: fixed; inset: 0;\n  background: rgba(0,0,0,0.88);\n  /* NO backdrop-filter: Safari/WebKit compositor bug causes blur to persist\n     after element.remove(). Use opaque background instead. */\n  display: flex; flex-direction: column;\n  align-items: center; justify-content: center;\n  z-index: 10000;\n  pointer-events: none;\n}\n.argus-welcome-avatar {\n  width: 110px; height: 110px;\n  border-radius: 50%; overflow: hidden;\n  border: 3px solid rgba(255,255,255,0.3);\n  box-shadow: 0 8px 40px rgba(0,0,0,0.5);\n  display: flex; align-items: center; justify-content: center;\n  font-size: 2.8rem; font-weight: 800; color: #fff;\n  background: rgba(255,255,255,0.12);\n  will-change: transform, width, height, border-radius;\n}\n.argus-welcome-avatar img {\n  width: 100%; height: 100%; object-fit: cover;\n}\n.argus-welcome-text {\n  margin-top: 20px; text-align: center;\n}\n.argus-welcome-text .greeting {\n  font-size: 1.0rem; color: rgba(255,255,255,0.6);\n  font-weight: 500; letter-spacing: 0.02em;\n  margin: 0;\n}\n.argus-welcome-text .wname {\n  font-size: 2.0rem; font-weight: 900;\n  color: #fff; letter-spacing: -0.03em;\n  margin: 6px 0 0;\n  line-height: 1;\n}\n\n/* PIN prompt dentro del selector tvOS */\n.argus-pin-prompt {\n  position: fixed; inset: 0;\n  background: rgba(0,0,0,0.75);\n  backdrop-filter: blur(28px);\n  -webkit-backdrop-filter: blur(28px);\n  display: flex; align-items: center; justify-content: center;\n  z-index: 10001;\n  animation: argus-overlay-in 0.25s ease both;\n}\n.argus-pin-card {\n  background: rgba(255,255,255,0.08);\n  border: 1px solid rgba(255,255,255,0.14);\n  border-radius: 20px; padding: 28px 24px;\n  width: min(340px, 90vw);\n  text-align: center; color: #fff;\n}\n.argus-pin-card h3 {\n  margin: 0 0 4px; font-size: 1.1rem; font-weight: 800;\n}\n.argus-pin-card .pin-sub {\n  font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-bottom: 16px;\n}\n.argus-pin-input {\n  width: 100%; box-sizing: border-box;\n  text-align: center; font-size: 1.6rem;\n  letter-spacing: 0.4em; padding: 12px;\n  border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);\n  background: rgba(255,255,255,0.07); color: #fff;\n  outline: none; margin-bottom: 14px;\n}\n.argus-numpad {\n  display: grid; grid-template-columns: repeat(3,1fr); gap: 10px;\n  margin-bottom: 12px;\n}\n.argus-numpad button {\n  padding: 14px; font-size: 1.15rem; font-weight: 700;\n  border-radius: 12px;\n  border: 1px solid rgba(255,255,255,0.14);\n  background: rgba(255,255,255,0.08); color: #fff;\n  cursor: pointer;\n  transition: background 0.15s, transform 0.1s;\n}\n.argus-numpad button:active { transform: scale(0.93); background: rgba(255,255,255,0.18); }\n.argus-pin-actions {\n  display: flex; gap: 10px; margin-top: 4px;\n}\n.argus-pin-actions button {\n  flex: 1; padding: 12px; border-radius: 12px; font-size: 0.85rem;\n  font-weight: 700; cursor: pointer;\n  border: 1px solid rgba(255,255,255,0.15);\n  background: rgba(255,255,255,0.07); color: #fff;\n  transition: background 0.15s;\n}\n.argus-pin-actions button:hover { background: rgba(255,255,255,0.15); }\n\n@keyframes argus-shake {\n  0%, 100% { transform: translateX(0); }\n  20%       { transform: translateX(-8px); }\n  40%       { transform: translateX(8px); }\n  60%       { transform: translateX(-5px); }\n  80%       { transform: translateX(5px); }\n}\n@keyframes argus-overlay-out {\n  from { opacity: 1; }\n  to   { opacity: 0; }\n}\n\n.user-selector-grid {\n\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));\n  gap: 16px;\n  margin-top: 24px;\n}\n.user-card {\n  background: rgba(255,255,255,0.1);\n  border: 1px solid rgba(255,255,255,0.15);\n  border-radius: 16px;\n  padding: 20px 10px;\n  cursor: pointer;\n  transition: all 0.2s ease;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: 12px;\n}\n.user-card:hover {\n  background: rgba(255,255,255,0.2);\n  transform: translateY(-2px);\n}\n.user-card-own {\n  border-color: rgba(0, 122, 255, 0.55);\n  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.22), 0 8px 24px rgba(0,122,255,0.1);\n}\n.user-card-own:hover {\n  border-color: rgba(0, 122, 255, 0.8);\n}\n.profile-own-badge {\n  font-size: 10px;\n  font-weight: 800;\n  text-transform: uppercase;\n  letter-spacing: 0.08em;\n  color: #007aff;\n  background: rgba(0, 122, 255, 0.12);\n  border-radius: 999px;\n  padding: 2px 8px;\n  margin-top: -4px;\n}\n.user-role-label {\n  font-size: 11px;\n  opacity: 0.55;\n  font-weight: 600;\n  letter-spacing: 0.02em;\n}\n@keyframes shake {\n  0%, 100% { transform: translateX(0); }\n  20%, 60% { transform: translateX(-6px); }\n  40%, 80% { transform: translateX(6px); }\n}\n.user-avatar {\n  width: 56px;\n  height: 56px;\n  border-radius: 50%;\n  background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 20px;\n  font-weight: 600;\n  color: #fff;\n  border: 1px solid rgba(255,255,255,0.3);\n}\n.user-name {\n  font-size: 14px;\n  font-weight: 500;\n  color: rgba(255,255,255,0.9);\n}\n.pin-prompt {\n  display: none;\n  animation: fadeIn 0.3s ease forwards;\n  margin-top: 20px;\n}\n.pin-prompt input {\n  font-size: 24px;\n  letter-spacing: 8px;\n  text-align: center;\n  padding: 10px;\n  border-radius: 12px;\n  border: 1px solid rgba(255,255,255,0.2);\n  background: rgba(0,0,0,0.2);\n  color: white;\n  width: 200px;\n  margin-bottom: 20px;\n}\n.btn-claim {\n  background: #ff3b30;\n  color: white;\n  border: none;\n  padding: 14px 28px;\n  border-radius: 12px;\n  font-size: 16px;\n  font-weight: 600;\n  cursor: pointer;\n  transition: background 0.2s;\n}\n.btn-claim:hover { background: #ff453a; }\n.btn-start {\n  background: #34c759;\n  color: white;\n  border: none;\n  padding: 14px 28px;\n  border-radius: 12px;\n  font-size: 16px;\n  font-weight: 600;\n  cursor: pointer;\n  transition: background 0.2s;\n}\n.btn-start:hover { background: #30d158; }\n.btn-cancel {\n  background: rgba(255,255,255,0.1);\n  color: white;\n  border: none;\n  padding: 14px 28px;\n  border-radius: 12px;\n  font-size: 16px;\n  font-weight: 600;\n  cursor: pointer;\n  margin-left: 10px;\n}\n\n/* Mobile background and HomeKit polish fixes (moved from runtime hack) */\n.entry-icon,.entry-icon>svg,.argus-old-shield,.argus-old-shield>svg{overflow:visible!important;clip-path:none!important;-webkit-clip-path:none!important}\n.entry-icon{contain:layout!important}\n#global-status { display: none !important; }\n#global-status .badge.disarmed,.hero-pill#hero-security-pill{color:#fff!important;background:rgba(18,82,54,.78)!important;border:1px solid rgba(125,255,185,.64)!important;text-shadow:0 1px 2px rgba(0,0,0,.72)!important;opacity:1!important}\n.argus-instance-duplicate-status{display:none!important}\n.pin-prompt,.pin-modal,.modal,.argus-bootstrap-card{color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.55)!important}\n.pin-prompt input,.pin-modal input,.argus-bootstrap-card input{color:#fff!important;background:rgba(8,16,31,.72)!important;border-color:rgba(255,255,255,.24)!important;-webkit-text-fill-color:#fff!important}\n.pin-prompt label,.pin-modal label,.pin-prompt p,.pin-modal p,.argus-bootstrap-card label,.argus-bootstrap-card p{color:rgba(255,255,255,.88)!important}\n#w-activity,.activity-log{max-height:min(58vh,520px)!important;overflow-y:auto!important;overscroll-behavior:contain!important;scrollbar-gutter:stable!important}\n#w-activity .panel-body,.activity-log .panel-body{max-height:inherit!important;overflow-y:auto!important}\n@media(max-width:760px){\n  .hero{display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;gap:12px!important;padding:18px 14px!important}\n  .hero-left{width:100%!important;min-width:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:8px!important}\n  .hero-left>div{text-align:center!important;display:flex!important;flex-direction:column!important;align-items:center!important}\n  .hero-left h1,.hero-left p{text-align:center!important;margin:0 auto!important}\n  .hero-context{display:flex!important;flex-direction:column!important;width:100%!important;margin:4px 0 0!important;align-items:center!important;justify-content:center!important;gap:8px!important}\n  .hero-clock{width:100%!important;min-width:0!important;padding:0!important;border:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:3px!important;line-height:1.12!important}\n  .hero-clock strong,.hero-clock span,#hero-clock-time,#hero-clock-date{width:100%!important;max-width:100%!important;text-align:center!important;display:block!important;margin:0 auto!important;line-height:1.12!important}\n  #hero-profile-container{display:flex!important;justify-content:center!important;align-items:center!important;width:100%!important;margin:2px auto 0!important}\n  .hero-pills{display:grid!important;grid-template-columns:minmax(0,1fr)!important;width:100%!important;min-width:0!important;justify-items:center!important;align-items:center!important;gap:8px!important}\n  .hero-pill{width:min(100%,360px)!important;max-width:100%!important;white-space:normal!important;text-align:center!important;justify-content:center!important;align-items:center!important;line-height:1.25!important;margin:0 auto!important}\n  .dashboard-instances>.panel-head{flex-direction:column!important;align-items:stretch!important;gap:10px!important}\n  #global-status,#global-status .badge{width:100%!important;box-sizing:border-box!important;justify-content:center!important;text-align:center!important;white-space:normal!important;line-height:1.3!important}\n  #w-activity,.activity-log{max-height:46vh!important;overflow-y:auto!important}\n  .argus-mobile-history-overflow-item{display:list-item!important}\n  #w-performance,.performance-card,.device-performance{display:grid!important;grid-template-columns:minmax(0,1fr)!important;justify-items:stretch!important;align-items:center!important;text-align:center!important;gap:10px!important}\n  #w-performance *,.performance-card *,.device-performance *{max-width:100%!important;box-sizing:border-box!important}\n  #w-access .panel-body,#w-settings .panel-body,.sos-actions,.panic-actions{overflow:visible!important;max-height:none!important}\n  .sos-actions button,.panic-actions button,[data-action*=\"sos\"],[data-action*=\"panic\"]{min-height:48px!important;touch-action:manipulation!important}\n  input[type=\"file\"]{max-width:100%!important;width:100%!important;color:#fff!important}\n}\n@media(orientation:landscape) and (max-height:560px) and (max-width:950px){\n  .hero{padding:14px!important;gap:10px!important}\n  .hero-context{grid-template-columns:auto minmax(0,1fr)!important;align-items:center!important}\n  .hero-clock{width:auto!important;justify-items:start!important}\n  .hero-pills{justify-content:flex-start!important}\n}\n  .entry { overflow: hidden; border-radius: 28px; -webkit-mask-image: -webkit-radial-gradient(white, black); }\n\n/* Profile Frosted Glass & Jelly Spring Animation */\n@keyframes jellySpringIn{0%{opacity:0;transform:scale(0.7) translateY(-14px)}45%{opacity:1;transform:scale(1.06) translateY(3px)}70%{transform:scale(0.97) translateY(-1px)}88%{transform:scale(1.01) translateY(1px)}100%{opacity:1;transform:scale(1) translateY(0)}}\n@keyframes jellySpringOut{0%{opacity:1;transform:scale(1) translateY(0)}35%{opacity:0.95;transform:scale(1.04) translateY(2px)}100%{opacity:0;transform:scale(0.72) translateY(-12px)}}\n@keyframes argusSensorArmBlink{0%,100%{border-color:rgba(255,159,10,0.85);box-shadow:0 0 10px rgba(255,159,10,0.5),inset 0 0 6px rgba(255,159,10,0.3);transform:scale(1)}50%{border-color:#ffd60a;box-shadow:0 0 20px 4px rgba(255,214,10,0.85),inset 0 0 12px rgba(255,214,10,0.5);transform:scale(1.02)}}\n\n.hero-profile-dropdown.opening{display:flex!important;animation:jellySpringIn 0.38s cubic-bezier(0.34,1.56,0.64,1) both!important}\n.hero-profile-dropdown.closing{display:flex!important;animation:jellySpringOut 0.28s cubic-bezier(0.4,0,0.2,1) both!important;pointer-events:none!important}\n\n\n.console-sensor.sensor-arming-blink,\n.console-sensor.argus-blocking{border-color:#ffd60a!important;background:linear-gradient(135deg,rgba(255,149,0,0.38),rgba(255,96,0,0.22))!important;animation:argusSensorArmBlink 0.9s ease-in-out infinite!important;color:#fff!important}\n\n/* Wide spacious SOS selector */\n.emergency-number-card{transition:all 0.3s ease}\n.sos-configuration #sos-output-chips{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))!important;gap:12px!important;width:100%!important;max-height:none!important;overflow:visible!important}\n.sos-output-row{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;padding:10px 14px!important;background:rgba(255,255,255,0.06)!important;border:1px solid rgba(255,255,255,0.12)!important;border-radius:12px!important;width:100%!important;box-sizing:border-box!important}\n.sos-output-row > .sensor-pill{flex:1!important;min-width:0!important;background:transparent!important;border:none!important;box-shadow:none!important;padding:0!important;font-weight:700!important;font-size:12px!important}\n\n</style>\n\n<!-- Bootstrap UI -->\n<div id=\"bootstrap-overlay\" class=\"argus-bootstrap-layer\" style=\"display:none\"></div>\n\n<!-- Language picker modal -->\n<div class=\"lang-modal-back\" id=\"lang-modal\" aria-hidden=\"true\">\n  <div class=\"lang-modal-card\">\n    <div class=\"lang-modal-title\" id=\"lang-modal-title\">🌐 Select Language</div>\n    <div class=\"lang-grid\" id=\"lang-grid\"></div>\n    <div class=\"lang-close-row\">\n      <button class=\"lang-close-btn\" id=\"lang-modal-close\">✕ Close</button>\n    </div>\n  </div>\n</div>\n\n<!-- SOS Confirm Modal -->\n<div class=\"ios-confirm-backdrop\" id=\"sos-modal\" style=\"display:none\">\n  <div class=\"ios-confirm-card liquid-glass\" id=\"sos-card\" style=\"position:relative;\">\n    <button id=\"sos-close-x\" style=\"position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.1); border:none; color:white; border-radius:50%; width:32px; height:32px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; opacity:0.8; padding:0; transition:background 0.2s;\">✕</button>\n    <div class=\"ios-confirm-title\" id=\"sos-title-txt\">Confirmar pánico</div>\n    <div class=\"ios-confirm-text\" id=\"sos-text-txt\">Desliza para disparar la alarma inmediatamente.</div>\n    <div class=\"ios-slider-shell\">\n      <div class=\"ios-slider-track\">\n        <div class=\"ios-slider-label\" id=\"sos-label\">Desliza para activar SOS</div>\n        <div class=\"ios-slider-thumb\" id=\"sos-thumb\">🚨</div>\n      </div>\n    </div>\n    <button class=\"ios-confirm-cancel\" id=\"btn-cancel-sos\" style=\"margin-top:16px\">Cancelar</button>\n  </div>\n</div>\n\n\n<div id=\"argus-canvas-bg\"></div>\n\n\n<div class=\"wrap\">\n  <!-- HERO -->\n  <div class=\"glass hero liquid-glass\">\n    <div class=\"hero-left\">\n      <img src=\"/api/argus_static/argus_logo.png\" alt=\"Argus Logo\" style=\"width: 75px; height: 75px; border-radius: 18px; object-fit: cover; box-shadow: 0 8px 24px rgba(0,0,0,0.25); flex-shrink: 0;\">\n      <div>\n        <h1>Argus Home Hub</h1>\n        <p id=\"p-hero-desc\"></p>\n      </div>\n    </div>\n    <div class=\"hero-context\" aria-live=\"polite\">\n      <div class=\"hero-clock\"><strong id=\"hero-clock-time\">--:--</strong><span id=\"hero-clock-date\"></span></div>\n      <div id=\"hero-profile-container\"></div>\n    </div>\n  </div>\n\n  <!-- TWO-COLUMN LAYOUT -->\n  <div class=\"grid hide-legacy\" id=\"widget-grid\">\n\n    <!-- Instances -->\n    <section class=\"glass panel liquid-glass dashboard-instances\" id=\"w-instances\" style=\"grid-column: 1 / -1;\">\n        <div class=\"panel-head\">\n          <h2 id=\"h-instances\"></h2>\n          <div style=\"display:flex;align-items:center;gap:12px\">\n            <div id=\"global-status\"></div>\n          </div>\n        </div>\n        <div id=\"entries\"></div>\n      </section>\n\n      <!-- Activity log -->\n      <section class=\"glass panel liquid-glass activity-panel\" id=\"w-activity\">\n        <div class=\"panel-head\">\n          <h2 id=\"h-activity-log\"></h2>\n          <div style=\"display:flex;gap:6px\">\n            <button class=\"ghost\" id=\"btn-refresh-history\" style=\"font-size:10.5px;padding:4px 10px;font-weight:800;cursor:pointer;background:rgba(255,255,255,0.06);border-radius:8px\">🔄 Actualizar</button>\n            <button class=\"ghost\" id=\"btn-export-forensic\" style=\"font-size:10.5px;padding:4px 10px;font-weight:800;cursor:pointer;background:rgba(255,255,255,0.06);border-radius:8px\">📄 Exportar</button>\n            <button class=\"ghost\" id=\"btn-clear-log\" style=\"font-size:10.5px;padding:4px 10px;font-weight:800;cursor:pointer;background:rgba(255,69,58,0.12);color:#ff453a !important;border-radius:8px\">🗑️ Limpiar</button>\n          </div>\n        </div>\n        <div id=\"activity-log\" style=\"display:grid;gap:10px;height:280px;overflow-y:auto;margin-top:10px\"></div>\n      </section>\n\n      <!-- Modes -->\n      <section class=\"glass panel liquid-glass modes-panel\" id=\"w-modes\">\n        <div class=\"panel-head\">\n           <h2 id=\"h-modes\"></h2>\n        </div>\n        <div class=\"tabs\" id=\"mode-tabs\" style=\"margin-bottom:15px\"></div>\n        <div id=\"mode-view\"></div>\n      </section>\n\n      <!-- Users & Master PIN Settings -->\n      <section class=\"glass panel liquid-glass access-panel\" id=\"w-access\">\n        <div class=\"panel-head\">\n          <div>\n            <h2 id=\"h-access-title\">Control de Acceso y Usuarios</h2>\n            <p class=\"access-summary\" id=\"p-access-desc\">PIN desactivado · Sin usuarios adicionales</p>\n          </div>\n        </div>\n\n        <div class=\"access-workspace\" id=\"access-workspace\" style=\"display:contents\">\n          <!-- Unified Informative Widget: SOS signals, notifications & audit logging -->\n          <div class=\"system-info-compact-card glass-subpanel\" style=\"padding:14px 18px;border-radius:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);margin-bottom:14px;\">\n            <div style=\"display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:6px;\">\n              <span id=\"system-diagnostics-txt\" style=\"font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;color:rgba(255,255,255,0.85)\">ℹ️ Diagnóstico y Resumen del Sistema</span>\n              <span style=\"font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;background:rgba(74,222,128,0.15);color:#4ade80;border:1px solid rgba(74,222,128,0.3)\">✓ Operativo</span>\n            </div>\n            <div style=\"display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;font-size:11px;\">\n              <div style=\"display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05)\">\n                <span style=\"font-size:16px\">🚨</span>\n                <div><strong style=\"display:block;color:#fff;font-size:11px\">Señales de Auxilio</strong><span style=\"opacity:0.65;font-size:9.5px\">Enlace SOS activo</span></div>\n              </div>\n              <div style=\"display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05)\">\n                <span style=\"font-size:16px\">🔔</span>\n                <div><strong style=\"display:block;color:#fff;font-size:11px\">Notificaciones</strong><span style=\"opacity:0.65;font-size:9.5px\">Push operativas</span></div>\n              </div>\n              <div style=\"display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05)\">\n                <span style=\"font-size:16px\">📋</span>\n                <div><strong style=\"display:block;color:#fff;font-size:11px\">Registro en Vivo</strong><span style=\"opacity:0.65;font-size:9.5px\">Auditoría continua</span></div>\n              </div>\n            </div>\n          </div>\n\n          <!-- Users -->\n          <div class=\"access-section\" id=\"access-users-section\">\n            <h3 id=\"h-users\"></h3>\n            <p class=\"small\" id=\"p-admin-only\" style=\"margin-bottom:14px;color:#fb8c00;font-weight:600\"></p>\n            <div id=\"users-list\" style=\"display:grid;gap:12px;margin-bottom:16px\"></div>\n          </div>\n\n          <!-- Notifications -->\n          <div class=\"access-section\" id=\"access-notifications-section\">\n            <h3 id=\"h-notifications\"></h3>\n            <p class=\"small\" id=\"p-notif-desc\" style=\"margin:0 0 12px;opacity:.72\"></p>\n            <div id=\"notif-targets\" style=\"display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px\"></div>\n            <div style=\"display:flex;gap:8px;align-items:center\">\n              <select id=\"notif-select\" class=\"glass-control\" style=\"flex:1;min-width:0\"></select>\n              <button type=\"button\" class=\"ghost\" id=\"btn-add-notif\" style=\"white-space:nowrap\">＋</button>\n            </div>\n            <div class=\"save-row\" style=\"margin-top:12px\">\n              <button class=\"primary\" id=\"btn-save-notif\" style=\"width:100%\"></button>\n            </div>\n            <div id=\"notif-status\" class=\"status\" style=\"margin-top:8px;text-align:center;font-size:12px;font-weight:bold;min-height:18px\"></div>\n          </div>\n\n          <!-- Master PIN -->\n          <div class=\"access-section\" id=\"access-pin-section\">\n            <h3 id=\"h-settings-pin\">Pin de Armado</h3>\n            <div class=\"subsection\">\n              <div id=\"current-pin-display\" style=\"font-size:13px;font-weight:800;color:#ffffff !important;margin-bottom:15px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);padding:8px 14px;border-radius:10px;display:inline-block\"></div>\n              <div class=\"field-group collapsible collapsed\" id=\"group-current-pin\" style=\"margin-bottom: 12px\">\n                 <div style=\"display:flex; justify-content:space-between; align-items:center;\">\n                   <label id=\"l-current-pin-lbl\"></label>\n                   <a href=\"#\" id=\"lnk-forgot-pin\" style=\"font-size:11px; color:var(--accent-color, #ff4081); text-decoration:none; font-weight:bold; margin-bottom:4px; display:none;\"></a>\n                 </div>\n                 <input type=\"password\" id=\"current-pin\" inputmode=\"numeric\" pattern=\"[0-9]*\" class=\"glass-control\">\n              </div>\n              <p class=\"small\" id=\"p-pin-remove-hint\" style=\"margin:0 0 10px 0; color:var(--primary-color); font-weight:700\">Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.</p>\n              <div style=\"display:grid;gap:10px\">\n                <div class=\"field-group\"><label id=\"l-new-pin\"></label><input type=\"password\" id=\"new-pin-1\" inputmode=\"numeric\" pattern=\"[0-9]*\" class=\"glass-control\"></div>\n                <div class=\"field-group\"><label id=\"l-confirm-pin\"></label><input type=\"password\" id=\"new-pin-2\" inputmode=\"numeric\" pattern=\"[0-9]*\" class=\"glass-control\"></div>\n              </div>\n              <div class=\"save-row\" style=\"margin-top:15px\">\n                <button class=\"primary\" id=\"btn-save-pin\" style=\"width:100%\"></button>\n              </div>\n              <div id=\"pin-status\" class=\"status\" style=\"margin-top:8px; text-align:center; font-size:12px; font-weight:bold; min-height:18px;\"></div>\n            </div>\n          </div>\n        </div>\n      </section>\n\n      <!-- Automations -->\n      <section class=\"glass panel liquid-glass automations-panel\" id=\"w-automations\">\n        <h2 id=\"h-automations\"></h2>\n        <div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:16px\">\n          <span class=\"small\" id=\"p-linked-rules\" style=\"opacity:0.7\"></span>\n          <button class=\"primary\" id=\"btn-new-auto\" style=\"padding:6px 12px;font-size:11px\"></button>\n        </div>\n        <div id=\"auto-view\"></div>\n      </section>\n\n      <!-- Backup & Restore -->\n      <section class=\"glass panel liquid-glass backup-panel\" id=\"w-backup\">\n        <h2 id=\"h-backup-title\">Respaldo y Restauración</h2>\n        <p class=\"small\" id=\"p-backup-desc\" style=\"margin-bottom:12px;opacity:0.7\">Guarda una copia de seguridad de tus ajustes o restaura una anterior.</p>\n        <div style=\"display:flex;gap:10px;align-items:center;\">\n          <button class=\"ghost\" id=\"btn-export-config\" style=\"flex:1\">📤 Descargar</button>\n          <div style=\"position:relative; flex:1\">\n            <button class=\"ghost\" style=\"width:100%\" id=\"btn-import-trigger\">📥 Restaurar</button>\n            <input type=\"file\" id=\"import-config-file\" style=\"display:none\" accept=\".json,.argus,application/json\">\n          </div>\n          <button class=\"ghost danger\" id=\"btn-reset-config\" style=\"flex:1\">⚠️ Restablecer</button>\n          <button class=\"primary\" id=\"btn-undo-reset\" style=\"flex:1; display:none;\">↩️ Deshacer</button>\n        </div>\n      </section>\n\n      <!-- GitHub Opt-In -->\n      <section class=\"glass panel liquid-glass github-panel\" id=\"w-github\" style=\"display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); padding:16px;\">\n        <div style=\"flex:1\">\n          <h3 id=\"github-title\" style=\"margin:0; font-size:14px; font-weight:600\"></h3>\n          <p id=\"github-desc\" style=\"margin:4px 0 0; font-size:12px; opacity:0.7\"></p>\n        </div>\n        <div style=\"display:flex; align-items:center; gap:10px; margin-left:16px; flex-wrap:wrap;\">\n          <a id=\"github-action\" class=\"github-star-action\" href=\"https://github.com/Chrisalvir1/Argus\" target=\"_blank\" rel=\"noopener noreferrer\"></a>\n          <a id=\"paypal-action\" class=\"glass-control\" href=\"https://paypal.me/CEstradaAlvir\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display:inline-flex; align-items:center; gap:4px; padding:6px 14px; border-radius:10px; font-size:12px; font-weight:750; color:#38bdf8 !important; text-decoration:none; background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.3); transition:transform 0.15s ease, background 0.15s ease;\">☕ PayPal</a>\n          <a id=\"email-action\" class=\"glass-control\" href=\"mailto:chrisalvir01@gmail.com\" style=\"display:inline-flex; align-items:center; gap:4px; padding:6px 14px; border-radius:10px; font-size:12px; font-weight:750; color:#a78bfa !important; text-decoration:none; background:rgba(167,139,250,0.12); border:1px solid rgba(167,139,250,0.3); transition:transform 0.15s ease, background 0.15s ease;\">✉️ Sugerencias</a>\n        </div>\n      </section>\n\n  </div> <!-- /grid -->\n</div>\n\n<!-- Selector modal (dual-panel) -->\n<div class=\"modal-back\" id=\"selector-modal\" aria-hidden=\"true\">\n  <div class=\"modal\">\n    <div class=\"modal-head\">\n      <h3 id=\"selector-title\">Seleccionar</h3>\n      <button class=\"ghost\" id=\"selector-close\"></button>\n    </div>\n    <div class=\"modal-body\" style=\"overflow:hidden;display:flex;flex-direction:column;gap:10px\">\n      <div class=\"sel-grid\">\n        <!-- LEFT: lista disponible con búsqueda y acciones rápidas -->\n        <div class=\"sel-panel\">\n          <div class=\"subsection-title\" id=\"l-available\">Disponibles</div>\n          <div class=\"search-wrap\" style=\"margin:0\"><input id=\"selector-search\" type=\"search\" placeholder=\"Buscar...\"></div>\n          <div class=\"sel-actions\">\n            <button class=\"ghost\" id=\"selector-select-all\" style=\"padding:5px 10px;font-size:12px\">☑ Todos</button>\n            <button class=\"ghost\" id=\"selector-deselect-all\" style=\"padding:5px 10px;font-size:12px\">☐ Ninguno</button>\n          </div>\n          <div class=\"sel-panel-inner\" id=\"selector-list\"></div>\n        </div>\n        <!-- RIGHT: panel de seleccionados -->\n        <div class=\"sel-panel\">\n          <div class=\"subsection-title\" id=\"l-selected-lbl\">Seleccionados</div>\n          <div class=\"small\" id=\"selector-count\" style=\"margin-bottom:4px\">0 seleccionados</div>\n          <div class=\"sel-panel-inner\" id=\"selector-selected\"></div>\n        </div>\n      </div>\n    </div>\n    <div class=\"modal-footer\">\n      <div style=\"display:flex;gap:10px;width:100%;justify-content:flex-end\">\n        <button class=\"ghost\" id=\"selector-clear\"></button>\n        <button class=\"primary\" id=\"selector-accept\"></button>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- Home name edit modal -->\n<div class=\"modal-back\" id=\"home-name-modal\" aria-hidden=\"true\">\n  <div class=\"modal\" style=\"width:min(400px,96vw)\">\n    <div class=\"modal-head\">\n      <h3 id=\"home-name-modal-h3\">🏡 Nombre del Hogar</h3>\n      <button class=\"ghost\" id=\"home-name-modal-close\">✕</button>\n    </div>\n    <div style=\"display:grid;gap:14px;padding:4px 0\">\n      <p class=\"small\" id=\"home-name-modal-desc\" style=\"margin:0;opacity:.7\">This name appears in the instances panel and in full screen.</p>\n      <div class=\"field-group\">\n        <label id=\"l-home-name-modal-label\">Home name</label>\n        <input type=\"text\" id=\"home-name-input\" placeholder=\"Mi Casa\" maxlength=\"60\" autocomplete=\"off\" class=\"glass-control\">\n      </div>\n      <span class=\"status\" id=\"home-name-status\" style=\"text-align:center\"></span>\n    </div>\n    <div class=\"modal-footer\">\n      <button class=\"ghost\" id=\"home-name-cancel\">Cancelar</button>\n      <button class=\"primary\" id=\"home-name-save\">Guardar</button>\n    </div>\n  </div>\n</div>\n\n<!-- PIN modal -->\n<div class=\"modal-back pm\" id=\"pin-modal\" aria-hidden=\"true\">\n  <div class=\"modal\">\n    <div class=\"modal-head\">\n      <h3 id=\"l-introduce-pin\">🔒</h3>\n      <button class=\"ghost\" id=\"pin-close\" style=\"background:transparent; border:none; color:inherit; font-size:20px; cursor:pointer; padding:4px 8px;\">✕</button>\n    </div>\n    <div style=\"display:grid;gap:10px;width:100%\">\n      <p id=\"l-pin-modal-desc\" class=\"small\" style=\"text-align:center;margin:0;opacity:0.75\"></p>\n      <input id=\"pin-input\" class=\"pin-input\" type=\"password\" inputmode=\"numeric\" pattern=\"[0-9]*\" placeholder=\"••••\" autocomplete=\"off\" maxlength=\"8\" readonly>\n      <div class=\"pin-grid\" id=\"pin-pad\">\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"1\">1</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"2\">2</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"3\">3</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"4\">4</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"5\">5</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"6\">6</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"7\">7</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"8\">8</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"9\">9</button>\n        <button class=\"pin-btn-round action-key delete-key\" type=\"button\" id=\"pin-backspace\">Borrar</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"0\">0</button>\n        <button class=\"pin-btn-round action-key enter-key\" type=\"button\" id=\"pin-confirm\">Enter</button>\n      </div>\n      <div id=\"pin-error\" class=\"pin-error\"></div>\n      <div style=\"text-align:center; margin-top: 5px;\">\n        <a href=\"#\" id=\"pin-forgot-link\" style=\"font-size:12px; color:var(--accent-color, #ff4081); text-decoration:none; font-weight:700; display:none;\"></a>\n      </div>\n    </div>\n    <button id=\"pin-cancel\" style=\"display:none\"></button>\n  </div>\n</div>\n\n<!-- History Export modal -->\n<div class=\"modal-back pm\" id=\"history-export-modal\" aria-hidden=\"true\">\n  <div class=\"modal\" style=\"max-width: 440px;\">\n    <div class=\"modal-head\">\n      <h3 id=\"h-history-export-title\">📄 Exportar Historial</h3>\n      <button class=\"ghost\" id=\"history-export-close\" style=\"background:transparent; border:none; color:inherit; font-size:20px; cursor:pointer; padding:4px 8px;\">✕</button>\n    </div>\n    <div style=\"display:grid;gap:14px;padding:6px 0\">\n      <p class=\"small\" style=\"margin:0;opacity:.75\">Selecciona el rango de fechas para exportar o imprimir el reporte de auditoría.</p>\n      <div style=\"display:grid;grid-template-columns:1fr 1fr;gap:10px;\">\n        <div class=\"field-group\">\n          <label style=\"font-size:11px;font-weight:700;opacity:0.8;\">📅 Desde</label>\n          <input type=\"date\" id=\"export-history-from\" class=\"glass-control\" style=\"width:100%;box-sizing:border-box;padding:8px 10px;border-radius:10px;color:#fff;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12)\">\n        </div>\n        <div class=\"field-group\">\n          <label style=\"font-size:11px;font-weight:700;opacity:0.8;\">📅 Hasta</label>\n          <input type=\"date\" id=\"export-history-to\" class=\"glass-control\" style=\"width:100%;box-sizing:border-box;padding:8px 10px;border-radius:10px;color:#fff;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12)\">\n        </div>\n      </div>\n      <div style=\"display:flex;flex-direction:column;gap:8px;margin-top:6px;\">\n        <button class=\"primary\" id=\"btn-do-print-pdf\" style=\"height:44px;font-size:13px;font-weight:800;cursor:pointer;border-radius:12px;box-shadow:0 6px 18px rgba(0,122,255,0.3)\">\n          🖨️ Imprimir / Guardar en PDF\n        </button>\n        <button class=\"glass-control\" id=\"btn-do-download-txt\" style=\"height:40px;font-size:12px;font-weight:700;cursor:pointer;border-radius:12px;background:rgba(255,255,255,0.05);color:#fff;border:1px solid rgba(255,255,255,0.15)\">\n          📑 Descargar Reporte (.txt)\n        </button>\n        <button class=\"ghost\" id=\"btn-do-download-json\" style=\"height:36px;font-size:11px;cursor:pointer;opacity:0.75\">\n          💾 Descargar JSON sin procesar\n        </button>\n      </div>\n    </div>\n  </div>\n</div>\n";
+m.innerHTML = "\n<style>\n@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');\n\n#widget-grid.hide-legacy > section.panel:not(#w-instances) { display: none !important; }\n\n@keyframes heroSpringSlideIn {\n  0% { transform: translateX(-50px); opacity: 0; }\n  100% { transform: translateX(0); opacity: 1; }\n}\n\n  /* Modern Premium Liquid Glass & iOS Wobble Styles */\n  :host {\n    font-family: 'Inter', sans-serif !important;\n    --glass-bg: var(--argus-glass-bg, rgba(255, 255, 255, 0.07));\n    --glass-border: var(--argus-glass-border, rgba(255, 255, 255, 0.09));\n    --glass-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.35),\n                    0 15px 30px -10px rgba(0, 122, 255, 0.12),\n                    inset 0 1px 0 rgba(255, 255, 255, 0.15);\n    --sos-red: linear-gradient(135deg, #ff3b30, #ff2d55);\n    --ios-track: rgba(0, 0, 0, 0.25);\n    --ios-thumb: linear-gradient(180deg, #ffffff, #f4f4f7);\n    --primary-color: #38bdf8;\n    --personalize-border: rgba(255, 255, 255, 0.06);\n    --personalize-divider: rgba(255, 255, 255, 0.08);\n    --bg-inputs-bg: rgba(0, 0, 0, 0.15);\n    --bg-inputs-border: rgba(255, 255, 255, 0.05);\n    --input-bg-darker: rgba(0, 0, 0, 0.25);\n    --input-border-darker: rgba(255, 255, 255, 0.12);\n    --hero-bg: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));\n    --log-item-bg: rgba(255, 255, 255, 0.02);\n    --log-item-border: rgba(255, 255, 255, 0.05);\n    --user-card-bg: rgba(255, 255, 255, 0.02);\n    --user-card-border: rgba(255, 255, 255, 0.06);\n    --primary-text-color: #fff !important;\n    --secondary-text-color: rgba(255, 255, 255, 0.7);\n    --input-bg: rgba(255, 255, 255, 0.04);\n    --input-border: rgba(255, 255, 255, 0.12);\n  }\n\n  /* High Contrast / OLED Dark Mode Accessibility */\n  :host([argus-contrast=\"high\"]),\n  :host(.argus-contrast-high) {\n    --glass-bg: rgba(11, 16, 26, 0.95);\n    --glass-border: rgba(255, 255, 255, 0.22);\n    --v2066-glass: rgba(11, 16, 26, 0.95);\n    --v2066-border: rgba(255, 255, 255, 0.22);\n    --v2066-text: #ffffff;\n    --v2066-muted: #cbd5e1;\n    --primary-text-color: #ffffff !important;\n    --secondary-text-color: #cbd5e1 !important;\n    --hud-bg: rgba(11, 16, 26, 0.98);\n    --hero-bg: linear-gradient(135deg, rgba(16, 24, 39, 0.96), rgba(8, 12, 20, 0.98));\n    --personalize-bg: rgba(11, 16, 26, 0.92);\n    --personalize-border: rgba(255, 255, 255, 0.2);\n    --user-card-bg: rgba(14, 20, 33, 0.95);\n    --user-card-border: rgba(255, 255, 255, 0.2);\n  }\n  :host([argus-contrast=\"high\"]) #profile-dropdown,\n  :host(.argus-contrast-high) #profile-dropdown {\n    background: rgba(10, 14, 23, 0.98) !important;\n    border: 1px solid rgba(255, 255, 255, 0.25) !important;\n    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7) !important;\n  }\n  :host([argus-contrast=\"high\"]) .liquid-glass,\n  :host(.argus-contrast-high) .liquid-glass {\n    background: rgba(11, 16, 26, 0.95) !important;\n    border-color: rgba(255, 255, 255, 0.22) !important;\n  }\n\n  :host {\n    --hud-text-color: #fff;\n    --hud-bg: rgba(255,255,255,0.06);\n  }\n\n  /* Garantiza legibilidad sobre cualquier fondo */\n  :host([data-bg-mode=\"default\"]) .hero-top-bar,\n  :host([data-bg-mode=\"default\"]) .entry-hud,\n  :host([data-bg-mode=\"default\"]) .mode-btn,\n  :host([data-bg-mode=\"default\"]) .sensor-pill {\n    text-shadow: 0 1px 4px rgba(0,0,0,0.7);\n  }\n\n  :host([data-bg-mode=\"default\"]) .mode-btn {\n    background: rgba(255,255,255,0.10) !important;\n    border: 1px solid rgba(255,255,255,0.18) !important;\n    color: rgba(255,255,255,0.95) !important;\n    backdrop-filter: blur(12px);\n  }\n\n  :host([data-bg-mode=\"default\"]) .subsection-title,\n  :host([data-bg-mode=\"default\"]) .user-role-label {\n    color: rgba(255,255,255,0.60) !important;\n  }\n\n  /* Fullscreen Active / Virtual Fullscreen CSS Overrides */\n  :host(.fullscreen-active) {\n    position: fixed !important;\n    inset: 0 !important;\n    top: 0 !important;\n    left: 0 !important;\n    right: 0 !important;\n    bottom: 0 !important;\n    width: 100vw !important;\n    width: 100dvw !important;\n    height: 100vh !important;\n    height: 100dvh !important;\n    z-index: 99999999 !important;\n    background: radial-gradient(ellipse at 50% 50%, #162438 0%, #08101a 60%, #010408 100%) !important;\n    overflow-y: auto !important;\n    overflow-x: hidden !important;\n    -webkit-overflow-scrolling: touch !important;\n    margin: 0 !important;\n    padding: 0 !important;\n  }\n  :host(.fullscreen-active) .hero,\n  :host(.fullscreen-active) #argus-react-dashboard-root,\n  :host(.fullscreen-active) .argus-dashboard,\n  :host(.fullscreen-active) .panel-head,\n  :host(.fullscreen-active) section:not(#w-instances),\n  :host(.fullscreen-active) .argus-widget:not(#w-instances),\n  :host(.fullscreen-active) .personalize-section {\n    display: none !important;\n  }\n  :host(.fullscreen-active) .wrap,\n  :host(.fullscreen-active) .grid,\n  :host(.fullscreen-active) #widget-grid,\n  :host(.fullscreen-active) #w-instances,\n  :host(.fullscreen-active) #entries,\n  :host(.fullscreen-active) #entries > div {\n    display: flex !important;\n    flex-direction: column !important;\n    position: static !important;\n    width: 100% !important;\n    width: 100vw !important;\n    width: 100dvw !important;\n    max-width: none !important;\n    min-height: 100% !important;\n    min-height: 100vh !important;\n    min-height: 100dvh !important;\n    height: 100% !important;\n    max-height: none !important;\n    padding: 0 !important;\n    margin: 0 !important;\n    border: none !important;\n    border-radius: 0 !important;\n    box-shadow: none !important;\n    background: transparent !important;\n    backdrop-filter: none !important;\n    -webkit-backdrop-filter: none !important;\n    transform: none !important;\n    filter: none !important;\n    overflow: visible !important;\n  }\n\n\n\n  .liquid-glass {\n    background: linear-gradient(135deg,color-mix(in srgb,rgba(255,255,255,0.18) 80%,transparent),rgba(255,255,255,0.04));\n    backdrop-filter: blur(28px) saturate(180%) brightness(1.08);\n    -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(1.08);\n    border: 1px solid rgba(255,255,255,0.22);\n    box-shadow: 0 8px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.25);\n    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;\n  }\n  .wrap { position: relative; z-index: 1; transition: filter 0.35s ease, opacity 0.35s ease; opacity: 0; pointer-events: none; }\n  .wrap.wrap-ready { opacity: 1; pointer-events: auto; }\n  .wrap.wrap-blurred { filter: blur(15px); opacity: 0.45; pointer-events: none; }\n  @keyframes dialElasticIn {\n    0% { transform: scale(0.8) translateY(20px); opacity: 0; }\n    60% { transform: scale(1.04) translateY(-4px); opacity: 0.9; }\n    85% { transform: scale(0.98) translateY(1px); opacity: 0.98; }\n    100% { transform: scale(1) translateY(0); opacity: 1; }\n  }\n  .dial-elastic { animation: dialElasticIn 0.5s cubic-bezier(0.25, 1.25, 0.5, 1) forwards; }\n\n  .collapsible {\n    transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease, margin 0.4s ease, padding 0.4s ease;\n    overflow: hidden;\n    max-height: 600px;\n    opacity: 1;\n  }\n  .collapsible.collapsed {\n    max-height: 0 !important;\n    opacity: 0 !important;\n    margin-top: 0 !important;\n    margin-bottom: 0 !important;\n    padding-top: 0 !important;\n    padding-bottom: 0 !important;\n    border: none !important;\n    pointer-events: none;\n  }\n\n  /* Scrollbar aesthetics */\n  ::-webkit-scrollbar {\n    width: 6px;\n    height: 6px;\n  }\n  ::-webkit-scrollbar-track {\n    background: transparent;\n  }\n  ::-webkit-scrollbar-thumb {\n    background: rgba(255, 255, 255, 0.12);\n    border-radius: 999px;\n  }\n  ::-webkit-scrollbar-thumb:hover {\n    background: rgba(255, 255, 255, 0.25);\n  }\n  .x-never-match ::-webkit-scrollbar-thumb {\n    background: rgba(0, 0, 0, 0.08);\n  }\n  .x-never-match ::-webkit-scrollbar-thumb:hover {\n    background: rgba(0, 0, 0, 0.18);\n  }\n\n  .battery-alert { margin: 0 0 16px 0; padding: 14px 18px; border-radius: 20px; background: rgba(255, 149, 0, 0.12); border: 1px solid rgba(255, 149, 0, 0.22); color: #ffe3b3; font-weight: 700; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); text-align: left; box-shadow: 0 4px 15px rgba(255,149,0,0.1); }\n\n  /* SOS Slider redesign */\n  .btn-sos { width: 100%; min-height: 56px; border: 0; border-radius: 20px; background: var(--sos-red); color: white; font-size: 1.05rem; font-weight: 800; letter-spacing: 0.02em; cursor: pointer; box-shadow: 0 10px 25px rgba(255, 59, 48, 0.35); transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, opacity 0.2s; margin-top: 8px; display:flex;align-items:center;justify-content:center;gap:10px; }\n  .btn-sos:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(255, 59, 48, 0.45); }\n  .btn-sos:active { transform: scale(0.95); opacity: 0.92; }\n  .ios-confirm-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 999999; backdrop-filter: blur(12px); }\n  .ios-confirm-backdrop.open { display: flex; pointer-events: auto !important; }\n  .ios-confirm-backdrop.open * { pointer-events: auto; }\n  .ios-confirm-backdrop.open .ios-slider-label { pointer-events: none !important; }\n  .ios-confirm-card { width: min(100%, 420px); border-radius: 32px; padding: 24px; color: white; background: rgba(20,22,35,0.85); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 32px 80px rgba(0,0,0,0.6); }\n  .ios-confirm-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 8px; text-align: center; }\n  .ios-confirm-text { font-size: 0.98rem; opacity: 0.85; line-height: 1.45; text-align: center; margin-bottom: 20px; }\n  .ios-slider-shell { padding: 4px 0 16px; }\n  .ios-slider-track { position: relative; height: 66px; border-radius: 999px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); overflow: hidden; }\n  .ios-slider-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 82px; font-size: 0.95rem; font-weight: 700; color: rgba(255, 255, 255, 0.85); pointer-events: none; text-align: center; }\n  .ios-slider-thumb { position: absolute; top: 6px; left: 6px; width: 52px; height: 52px; border-radius: 50%; background: var(--ios-thumb); color: #ff3b30; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 900; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25); touch-action: none; user-select: none; cursor: grab; transition: transform 0.1s ease-out; }\n  .ios-confirm-cancel { width: 100%; min-height: 50px; border: 0; border-radius: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.05); color: white; font-weight: 700; cursor: pointer; transition: background 0.2s, transform 0.15s; }\n  .ios-confirm-cancel:hover { background: rgba(255,255,255,0.14); }\n  .ios-confirm-cancel:active { transform: scale(0.96); }\n\n  :host{display:block;min-height:100vh;box-sizing:border-box;--primary-text-color:#ffffff!important;--secondary-text-color:rgba(255,255,255,0.7)!important;color:#ffffff!important;background:var(--lovelace-background,var(--primary-background-color));font-family:'Outfit',Inter,system-ui,sans-serif}\n  :host([compact]), :host(.argus-compact) {\n    min-height: auto !important;\n    background: transparent !important;\n  }\n  :host([compact]) .wrap, :host(.argus-compact) .wrap {\n    padding: 0 !important;\n    margin: 0 !important;\n    max-width: 100% !important;\n    width: 100% !important;\n    height: auto !important;\n    min-height: fit-content !important;\n    gap: 0 !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 1 1 auto !important;\n    overflow: visible !important;\n    container-type: inline-size;\n    container-name: argus-compact-wrap;\n  }\n  :host([compact]) .hero, :host(.argus-compact) .hero {\n    display: none !important;\n  }\n  :host([compact]) #argus-canvas-bg, :host(.argus-compact) #argus-canvas-bg {\n    display: none !important;\n  }\n  :host([compact]) .tabs, :host(.argus-compact) .tabs {\n    display: none !important;\n  }\n  :host([compact]) .dashboard-instances .panel-head, :host(.argus-compact) .dashboard-instances .panel-head {\n    display: none !important;\n  }\n  :host([compact]) .personalize-section, :host(.argus-compact) .personalize-section {\n    display: none !important;\n  }\n  :host([compact]) .glass.panel:not(#w-instances), :host(.argus-compact) .glass.panel:not(#w-instances) {\n    display: none !important;\n  }\n  :host([compact]) .argus-widget:not(:has(#w-instances)), :host(.argus-compact) .argus-widget:not(:has(#w-instances)) {\n    display: none !important;\n  }\n  :host([compact]) .argus-dashboard__toolbar, :host(.argus-compact) .argus-dashboard__toolbar {\n    display: none !important;\n  }\n  :host([compact]) #widget-grid, :host(.argus-compact) #widget-grid {\n    padding: 0 !important;\n    margin: 0 !important;\n    display: block !important;\n    height: auto !important;\n  }\n  :host([compact]) #w-instances, :host(.argus-compact) #w-instances {\n    background: transparent !important;\n    border: none !important;\n    box-shadow: none !important;\n    padding: 0 !important;\n    margin: 0 !important;\n    height: auto !important;\n    width: 100% !important;\n    min-height: fit-content !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 1 1 auto !important;\n    overflow: visible !important;\n    background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;\n    backdrop-filter: blur(28px) saturate(150%) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(150%) !important;\n  }\n  :host([compact]) .entry, :host(.argus-compact) .entry {\n    margin-bottom: 0 !important;\n    border-radius: 24px !important;\n    height: auto !important;\n    width: 100% !important;\n    min-height: fit-content !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 1 1 auto !important;\n    overflow: visible !important;\n    background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;\n    backdrop-filter: blur(28px) saturate(150%) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(150%) !important;\n  }\n  :host([compact]) #bootstrap-overlay, :host(.argus-compact) #bootstrap-overlay,\n  :host([compact]) .argus-profile-overlay, :host(.argus-compact) .argus-profile-overlay,\n  :host([compact]) .argus-welcome-screen, :host(.argus-compact) .argus-welcome-screen {\n    display: none !important;\n  }\n  :host([compact]) .argus-widget__content, :host(.argus-compact) .argus-widget__content {\n    height: auto !important;\n    width: 100% !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 1 1 auto !important;\n    overflow: visible !important;\n  }\n  :host([compact]) #entries, :host(.argus-compact) #entries {\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 1 1 auto !important;\n    height: auto !important;\n    width: 100% !important;\n    margin: 0 !important;\n    overflow: visible !important;\n  }\n  *{box-sizing:border-box}\n  @container argus-compact-wrap (max-width: 800px) {\n    .security-console { flex-direction: column !important; padding: 20px 18px 24px !important; gap: 20px !important; align-items: center !important; justify-content: center !important; }\n    .security-console .entry-icon { order: 2 !important; flex: 0 0 auto !important; min-height: 130px !important; margin: 0 auto !important; }\n    .security-console .liquid-stack { order: 3 !important; width: 100% !important; max-width: 360px !important; }\n    .security-console .console-sensors { order: 4 !important; width: 100% !important; max-width: 360px !important; display: flex !important; flex-direction: column !important; }\n    .sensor-column { position: static !important; max-width: 100% !important; width: 100% !important; align-items: stretch !important; padding: 0 !important; gap: 10px !important; }\n    .sensor-chip { max-width: none !important; }\n    .entry-content { padding: 20px !important; display: flex !important; flex-direction: column !important; align-items: center !important;  }\n    .liquid-stack { display: flex !important; flex-direction: column !important; align-items: stretch !important; gap: 8px !important; }\n  }\n  @keyframes iosGlassIn{0%{opacity:0;transform:translateY(14px) scale(.965)}65%{opacity:1;transform:translateY(-2px) scale(1.008)}100%{transform:translateY(0) scale(1)}}\n  @keyframes iosSelectPop{0%{transform:scale(.92);opacity:.45}60%{transform:scale(1.045);opacity:1}100%{transform:scale(1)}}\n  .glass,.entry,.mode-section-card,.user-card,.file-card,.log-item{animation:iosGlassIn .5s cubic-bezier(.22,1.18,.36,1) both}\n  .pick-row:has(input:checked),.tab.active,.liquid-btn.active{animation:iosSelectPop .34s cubic-bezier(.2,1.45,.35,1);box-shadow:0 0 0 1px color-mix(in srgb,var(--primary-color,#007aff) 45%,transparent),0 12px 30px color-mix(in srgb,var(--primary-color,#007aff) 18%,transparent)}\n  .glass.liquid-glass{background:var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)))!important;backdrop-filter:blur(28px) saturate(150%)!important;-webkit-backdrop-filter:blur(28px) saturate(150%)!important;border-color:rgba(255,255,255,0.15)!important;box-shadow:0 8px 32px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.1)!important}\n  button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 70%,#fff);outline-offset:3px}\n  button:disabled{cursor:not-allowed;opacity:.5;filter:saturate(.45)}\n  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}\n  .wrap{max-width:1400px;margin:0 auto;padding:24px;display:grid;gap:24px}\n  .glass{background:var(--glass-bg, rgba(255, 255, 255, 0.06));border:1px solid var(--glass-border, rgba(255, 255, 255, 0.09));border-radius:28px;box-shadow:var(--glass-shadow);backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2)}\n  .hero{position:relative!important;z-index:9999!important;overflow:visible!important;padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:var(--hero-bg, linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)));margin-bottom:12px;will-change:transform,opacity;animation:heroSpringSlideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both}\n  .hero-left{display:flex;align-items:center;gap:22px}\n  .hero-context{position:relative!important;z-index:10000!important;overflow:visible!important;margin-left:auto;display:flex;align-items:center;gap:8px;min-width:0}\n  #hero-profile-container{position:relative!important;z-index:10001!important;overflow:visible!important}\n  .hero-profile-dropdown{position:absolute!important;top:calc(100% + 12px)!important;right:0!important;z-index:999999!important;max-height:calc(100vh - 100px)!important;overflow-y:auto!important;background:#0f172a!important;background-color:#0f172a!important;border:1.5px solid rgba(255,255,255,0.2)!important;box-shadow:0 24px 60px rgba(0,0,0,0.85),inset 0 1px 0 rgba(255,255,255,0.15)!important;backdrop-filter:blur(48px) saturate(200%)!important;-webkit-backdrop-filter:blur(48px) saturate(200%)!important;opacity:1!important}.hero-clock{display:flex;flex-direction:column;align-items:flex-end;padding-right:14px;border-right:1px solid rgba(255,255,255,.14);line-height:1}.hero-clock strong{font-size:1.45rem;letter-spacing:-.05em;color:#ffffff!important}.hero-clock span{font-size:11px;color:#e2e8f0!important;opacity:1!important;margin-top:5px;letter-spacing:.03em;font-weight:700}.hero-pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.hero-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 10px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(7,16,29,.27);box-shadow:inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(14px);font-size:10px;font-weight:800;white-space:nowrap}.hero-pill .hero-live{width:7px;height:7px;border-radius:50%;background:#55df91;box-shadow:0 0 9px #55df91}\n  .hero-icon{font-size:54px;line-height:1;filter:drop-shadow(0 0 20px rgba(255,255,255,0.15))}\n  .hero h1{margin:0 0 4px;font-size:34px;font-weight:900;letter-spacing:-0.03em;background:var(--hero-gradient, linear-gradient(to right, #ffffff, #82b1ff));-webkit-background-clip:text;-webkit-text-fill-color:transparent}\n  .hero p{margin:0;font-size:16px;color:#f1f5f9!important;opacity:1!important;font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,0.85)}\n  @media(max-width:700px){.wrap{padding:14px;gap:14px}.glass{border-radius:22px}.hero{padding:22px;align-items:flex-start}.hero-icon{font-size:40px}.hero h1{font-size:27px}.hero p{font-size:14px}.entry-content{grid-template-columns:96px 1fr;padding:16px 105px 16px 14px;gap:10px}.sensor-column{width:98px}.sensor-chip{max-width:94px}.entry-icon{min-height:110px}.entry-icon svg{max-width:150px}.hud{top:12px;right:12px}.hud-data{font-size:15px;padding:5px 9px}.hud-loc{font-size:10px;padding:3px 8px}}\n\n  /* Modern Mode Navigation & iOS Liquid Bubble Transition */\n  .tabs { position: relative; isolation:isolate; display: flex; min-height:72px; background: rgba(255, 255, 255, 0.03); padding: 6px; border-radius: 20px; gap: 6px; overflow: visible; scrollbar-width: none; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.06); z-index: 1; }\n  .tabs::-webkit-scrollbar { display: none; }\n  .tab { position: relative; flex: 1; min-width: 55px; min-height:60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 14px; padding: 10px 4px; font-size: 11px; font-weight: 800; color: rgba(255, 255, 255, 0.55); transition: color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; border: none !important; outline: none; background: transparent !important; box-shadow: none !important; z-index: 1; }\n  .tab:hover { color: #fff; }\n  .tab:active:not(:disabled) { transform: scale(0.94); }\n  .tab.active { color: #fff !important; background: transparent !important; box-shadow: none !important; transform: none !important; }\n\n  .tab-bubble { position: absolute; top: 6px; bottom: 6px; height: calc(100% - 12px); border-radius: 14px; z-index: 0; transform-origin: left center; transition: transform 0.45s cubic-bezier(0.25, 1.35, 0.4, 1.05), background 0.4s ease, box-shadow 0.4s ease; pointer-events: none; }\n  .tab-bubble.bubble-disarmed { background: #43a047; box-shadow: 0 8px 24px rgba(67, 160, 71, 0.4); }\n  .tab-bubble.bubble-home { background: #fb8c00; box-shadow: 0 8px 24px rgba(251, 140, 0, 0.4); }\n  .tab-bubble.bubble-away { background: #e53935; box-shadow: 0 8px 24px rgba(229, 57, 53, 0.4); }\n  .tab-bubble.bubble-night { background: #1e88e5; box-shadow: 0 8px 24px rgba(30, 136, 229, 0.4); }\n  .tab-bubble.bubble-vacation { background: #9c27b0; box-shadow: 0 8px 24px rgba(156, 39, 176, 0.4); }\n\n\n  @keyframes bounceIn {\n    0% { transform: scale(0.96); opacity: 0; }\n    50% { transform: scale(1.01); opacity: 1; }\n    100% { transform: scale(1); opacity: 1; }\n  }\n  .bounce-in { animation: bounceIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }\n\n  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;align-items:start;position:relative}\n  .panel{transition:transform .3s ease,box-shadow .3s ease,grid-column .3s ease,grid-row .3s ease;position:relative}\n  .panel[data-size=\"S\"]{grid-column:span 1;grid-row:span 1}\n  .panel[data-size=\"M\"]{grid-column:span 2;grid-row:span 1}\n  .panel[data-size=\"L\"]{grid-column:span 2;grid-row:span 2}\n  .panel[data-size=\"XL\"]{grid-column:span 4;grid-row:span 2}\n  .dashboard-instances{grid-column:1 / -1}\n  \n  /* Edit Mode Styles */\n  .grid.editing .panel{animation:jiggle .3s infinite ease-in-out;cursor:grab}\n  .grid.editing .panel:nth-child(even){animation-duration:.27s;animation-direction:reverse}\n  .grid.editing .panel:nth-child(3n){animation-duration:.32s;animation-delay:.05s}\n  .grid.editing .panel.dragging{opacity:.5;animation:none;cursor:grabbing}\n  \n  .panel-edit-overlay{position:absolute;inset:0;background:rgba(5,15,30,.82);backdrop-filter:blur(10px);border-radius:inherit;z-index:90;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;opacity:0;pointer-events:none;transition:opacity .25s ease}\n  .grid.editing .panel:not(.dashboard-instances) .panel-edit-overlay{opacity:1;pointer-events:auto}\n  \n  .widget-controls{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:18px;backdrop-filter:blur(8px)}\n  .widget-controls-title{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;opacity:.7}\n  .widget-sizes{display:flex;gap:6px}\n  .widget-size-btn{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#fff;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:800;cursor:pointer;transition:all .2s}\n  .widget-size-btn:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3)}\n  .widget-size-btn.active{background:#007aff;border-color:#007aff;box-shadow:0 0 10px rgba(0,122,255,.4)}\n  .widget-drag-handle{font-size:22px;color:rgba(255,255,255,.6);cursor:grab;padding:4px}\n  .widget-toggle-btn{background:rgba(220,38,38,.85);color:white;border:none;border-radius:8px;padding:6px 12px;font-size:10px;font-weight:800;cursor:pointer}\n  \n  @keyframes jiggle{\n    0%{transform:rotate(-0.5deg)}\n    50%{transform:rotate(0.5deg)}\n    100%{transform:rotate(-0.5deg)}\n  }\n  @media(max-width:900px){\n    .grid{grid-template-columns:minmax(0,1fr)}\n    .panel[data-size=\"S\"],.panel[data-size=\"M\"],.panel[data-size=\"L\"],.panel[data-size=\"XL\"]{grid-column:1 / -1;grid-row:auto}\n    .grid.editing .panel{animation:none !important}\n  }\n  \n  /* Adaptivity styles for size S widgets */\n  .panel[data-size=\"S\"] .tab-label{display:none}\n  .panel[data-size=\"S\"] .tab-icon{font-size:24px !important}\n  .panel[data-size=\"S\"] #p-backup-desc{display:none}\n  .panel[data-size=\"S\"] #github-desc{display:none}\n\n  /* Collapsible Personalization with Bounce expansion */\n  .personalize-workspace{display:grid;grid-template-rows:0fr;opacity:0;pointer-events:none;transition:grid-template-rows 0.6s cubic-bezier(0.175,0.885,0.32,1.275),opacity 0.4s ease,margin-top 0.4s ease}\n  .personalize-workspace > div { overflow:hidden; min-height:0; }\n  .personalize-workspace:not(.collapsed){grid-template-rows:1fr;opacity:1;pointer-events:auto;margin-top:16px;animation:bounceExpand 0.55s cubic-bezier(0.175,0.885,0.32,1.275) forwards}\n  @keyframes bounceExpand{\n    0%{transform:scale(0.96) translateY(-8px);opacity:0}\n    70%{transform:scale(1.01) translateY(2px);opacity:0.9}\n    100%{transform:scale(1) translateY(0);opacity:1}\n  }\n  @media(max-width:750px){.hero{flex-direction:column;text-align:center}.hero-left{flex-direction:column}}\n  @media(max-width:750px){.hero .lang-pill{align-self:center;margin-inline:auto}.hero-left{width:100%;align-items:center}}\n\n  .stack{display:grid;gap:24px}\n  .panel{padding:28px;position:relative;overflow:hidden}\n  .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}\n  .panel h2{margin:0;font-size:14px;font-weight:900;letter-spacing:.04em;color:var(--primary-color,#38bdf8);opacity:1}\n\n  /* Access settings stay quiet until the user needs to manage them. */\n  .access-panel { padding: 22px 24px; overflow-y:auto; max-height:60vh; -webkit-overflow-scrolling:touch; }\n  .access-panel .panel-head { margin-bottom: 12px; }\n  .access-summary { font-size: 12px; opacity: .88; color: #cbd5e1; }\n  .access-actions { display:flex; gap:10px; flex-wrap:wrap; }\n  .access-actions button { flex:0 1 auto; padding:8px 12px; font-size:12px; font-weight:700; }\n  .access-actions button.active { background:var(--primary-color,#38bdf8); color:#0f172a; font-weight:800; border-color:transparent; }\n  .access-section { display:block; min-width:0; margin-bottom:24px; }\n  .access-section h3 { font-size:13px; font-weight:800; color: #f1f5f9; margin:0 0 10px; }\n  .access-panel .user-card { padding:10px 12px; border-radius:12px; }\n  .github-star-action {\n    display:inline-flex;align-items:center;justify-content:center;gap:7px;\n    min-height:42px;padding:9px 16px;border-radius:14px;text-decoration:none;\n    color:var(--primary-text-color,#fff);font-size:12px;font-weight:850;\n    background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.055));\n    border:1px solid rgba(255,255,255,.16);\n    box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 9px 24px rgba(0,0,0,.16);\n    backdrop-filter:blur(18px) saturate(150%);\n    -webkit-backdrop-filter:blur(18px) saturate(150%);\n    transition:transform .2s ease,background .2s ease,box-shadow .2s ease;\n  }\n  .github-star-action:hover { transform:translateY(-1px);background:rgba(255,255,255,.18);box-shadow:0 12px 28px rgba(0,0,0,.20); }\n  @media(max-width:600px){ .access-panel{padding:20px}.access-actions{width:100%}.access-actions button{flex:1} }\n\n  /* Personalization inside instances */\n  .personalize-row { display: flex; gap: 14px; align-items: center; margin-top: 18px; padding: 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 18px; flex-wrap: wrap; }\n  .personalize-row .setting-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-bottom: 4px; }\n\n  /* Mode Reorganization Styles — HORIZONTAL */\n  .mode-grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }\n  @media(max-width:900px){ .mode-grid-layout { grid-template-columns: 1fr; } }\n  .mode-section-card {\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.025) 100%) !important;\n    border: 1px solid rgba(255, 255, 255, 0.16) !important;\n    border-radius: 20px !important;\n    padding: 18px !important;\n    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;\n    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;\n  }\n  .mode-section-card:hover {\n    border-color: rgba(255, 255, 255, 0.26) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.04) 100%) !important;\n    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;\n    transform: translateY(-2px) !important;\n  }\n  .mode-section-card:hover { border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); }\n  .mode-section-title { font-size: 13px; font-weight: 800; color: var(--primary-color, #007aff); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }\n  .mode-sensor-grid { color: var(--primary-text-color, #fff); }\n  .mode-sensor-none { color: var(--primary-text-color, rgba(255,255,255,0.5)); opacity: 0.6; font-size: 13px; }\n  .mode-section-card span, .mode-section-card label, .mode-section-card .input-label { color: var(--primary-text-color, #fff); }\n\n  .sensor-pill { background: var(--pill-bg, rgba(255,255,255,0.06)); color: var(--pill-text, #fff); border: 1px solid var(--pill-border, rgba(255,255,255,0.1)); padding: 8px 14px; border-radius: 14px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; transition: all 0.2s; max-width: 100%; box-sizing: border-box; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }\n  @keyframes argus-blink-red { 0%,100%{box-shadow:0 0 0 0 rgba(255,50,50,0);background:var(--pill-bg,rgba(255,255,255,0.06))} 50%{box-shadow:0 0 0 6px rgba(255,50,50,0.25);background:rgba(255,50,50,0.15)} }\n  .sensor-pill.siren-active   { animation: argus-blink-red 1.2s ease-in-out infinite; border-color: rgba(255,82,82,0.5) !important; }\n  .sensor-pill.triggered-sensor { animation: argus-blink-red 0.9s ease-in-out infinite; border-color: rgba(255,82,82,0.6) !important; }\n  .icon-btn { background: none; border: none; padding: 4px; color: inherit; opacity: 0.6; cursor: pointer; transition: opacity 0.2s, transform 0.15s; display: flex; align-items: center; justify-content: center; border-radius: 8px; }\n  .icon-btn:active { transform: scale(0.9); }\n\n  #mode-status { opacity: 0; transition: opacity .35s; }\n  #mode-status.show { opacity: 1; }\n  #mode-status.ok  { color: #4caf50; }\n  #mode-status.err { color: #f44336; }\n\n  .icon-btn:hover { opacity: 1; background: rgba(255,255,255,0.08); }\n  .icon-btn.active { color: #fb8c00; opacity: 1; }\n\n  .input-group { display: flex; flex-direction: column; gap: 6px; }\n  .times-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:end}\n  .time-field{min-width:0;display:flex;flex-direction:column;justify-content:flex-end;height:100%}\n  .time-field .input-label{min-height:34px;display:flex;align-items:flex-end;line-height:1.2;margin-bottom:6px;padding-bottom:2px}\n  .time-field input{width:100%;height:44px!important;padding:8px 12px!important;border-radius:12px!important;box-sizing:border-box!important;margin:0!important;font-size:14px!important}\n  .entry-sensor-list{min-height:44px;margin-top:12px!important;display:flex;flex-wrap:wrap;align-items:center;border:1px solid rgba(255,255,255,.10)!important;background:rgba(255,255,255,.03)!important;border-radius:12px!important;padding:10px;gap:8px}\n  .instance-activity-strip{display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr));gap:8px;align-items:center;margin:4px 0 16px;padding:10px 12px;border:1px solid rgba(255,255,255,.1);border-radius:18px;background:rgba(5,13,25,.25);backdrop-filter:blur(18px) saturate(135%);-webkit-backdrop-filter:blur(18px) saturate(135%)}.instance-activity-title{font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;opacity:.62;padding-right:6px}.instance-activity-item{min-width:0;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.86}.instance-activity-item time{opacity:.55;margin-right:4px;font-variant-numeric:tabular-nums}\n  .mode-mqtt-row{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 14px!important;min-height:44px;border-radius:12px!important;background:rgba(255,255,255,.03)!important;border:1px solid rgba(255,255,255,.10)!important}\n  .mode-mqtt-row input{margin:0;accent-color:var(--primary-color,#007aff)}\n  .input-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-left: 4px; }\n\n  /* Intelligent Entry Card */\n  .entry {\n    position: relative;\n    overflow: hidden;\n    border-radius: 28px !important;\n    border: 1px solid rgba(255, 255, 255, 0.18) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%) !important;\n    backdrop-filter: blur(32px) saturate(170%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(32px) saturate(170%) brightness(1.08) !important;\n    margin-bottom: 16px;\n    min-height: 220px;\n    display: flex;\n    flex-direction: column;\n    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);\n  }\n  .entry:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 20px 48px rgba(0,0,0,.3)}\n  .entry::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:inherit;background:linear-gradient(120deg,rgba(255,255,255,.14),transparent 22%,transparent 74%,rgba(255,255,255,.05));mix-blend-mode:soft-light}\n  .entry-status-ribbon{position:absolute;top:20px;left:20px;z-index:5;display:flex;align-items:center;gap:9px;max-width:calc(100% - 260px);padding:8px 12px;border:1px solid color-mix(in srgb,var(--entry-accent) 55%,rgba(255,255,255,.2));border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--entry-accent) 28%,rgba(8,15,28,.76)),rgba(7,14,25,.56));box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 8px 24px color-mix(in srgb,var(--entry-accent) 22%,transparent);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);color:#fff}\n  .entry-status-orb{width:10px;height:10px;flex:0 0 auto;border-radius:50%;background:var(--entry-accent);box-shadow:0 0 12px var(--entry-accent)}\n  .entry-status-copy{display:flex;flex-direction:column;min-width:0}.entry-status-kicker{font-size:8px;line-height:1;text-transform:uppercase;letter-spacing:.12em;opacity:.72;font-weight:800}.entry-status-name{font-size:13px;line-height:1.2;font-weight:900;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.entry-status-event{font-size:9px;line-height:1.2;opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:290px}\n  .entry-bg{position:absolute;inset:0;z-index:1;background-size:cover;background-position:center;transition:opacity 0.5s ease}\n  .entry-bg img{width:100%;height:100%;object-fit:cover;opacity:0.6}\n  .entry-content{position:relative;z-index:2;flex:1;padding:20px 140px 20px 20px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.2) 0%, transparent 60%)}\n  /* The live instance is the console: real controls, real sensors and one\n     clear disarm keypad. Decorative dashboard cards never sit above it. */\n  .security-console {\n    background: transparent !important;\n    border: none !important;\n    box-shadow: none !important;\n  }\n  .console-hud {\n    background: transparent !important;\n    border: none !important;\n    box-shadow: none !important;\n  }\n\n  /* ── System Status Badge ─────────────────────────────── */\n  .console-system-badge {\n    display: inline-flex;\n    align-items: center;\n    padding: 5px 14px;\n    border-radius: 999px;\n    font-size: 10.5px;\n    font-weight: 900;\n    letter-spacing: 0.8px;\n    text-transform: uppercase;\n    white-space: nowrap;\n    backdrop-filter: blur(16px) saturate(160%);\n    -webkit-backdrop-filter: blur(16px) saturate(160%);\n    border: 1.5px solid currentColor;\n    transition: all 0.35s ease;\n  }\n  .console-system-badge--disarmed {\n    color: #6ee7b7;\n    background: rgba(16,185,129,0.18);\n    border-color: rgba(16,185,129,0.60);\n    box-shadow: 0 0 16px rgba(16,185,129,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--armed_home {\n    color: #fde68a;\n    background: rgba(251,140,0,0.20);\n    border-color: rgba(251,140,0,0.60);\n    box-shadow: 0 0 16px rgba(251,140,0,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--armed_away {\n    color: #fca5a5;\n    background: rgba(229,57,53,0.20);\n    border-color: rgba(229,57,53,0.60);\n    box-shadow: 0 0 16px rgba(229,57,53,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--armed_night {\n    color: #bfdbfe;\n    background: rgba(30,136,229,0.20);\n    border-color: rgba(30,136,229,0.60);\n    box-shadow: 0 0 16px rgba(30,136,229,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--armed_vacation {\n    color: #e9d5ff;\n    background: rgba(156,39,176,0.20);\n    border-color: rgba(156,39,176,0.60);\n    box-shadow: 0 0 16px rgba(156,39,176,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--triggered {\n    color: #fff;\n    background: rgba(239,68,68,0.35);\n    border-color: rgba(239,68,68,0.80);\n    box-shadow: 0 0 24px rgba(239,68,68,0.60), inset 0 1px 0 rgba(255,255,255,0.25);\n    animation: badgeFlash 0.8s infinite ease-in-out;\n  }\n  @keyframes badgeFlash {\n    0%,100% { opacity:1; box-shadow:0 0 24px rgba(239,68,68,.8); }\n    50%      { opacity:0.7; box-shadow:0 0 8px rgba(239,68,68,.2); }\n  }\n  /* arming state reuses armed_home styling with pulsing */\n  .console-system-badge--arming {\n    color: #fde68a;\n    background: rgba(251,140,0,0.20);\n    border-color: rgba(251,140,0,0.60);\n    animation: badgeArming 1.05s ease-in-out infinite;\n  }\n  @keyframes badgeArming {\n    0%,100% { opacity:0.65; } 50% { opacity:1; }\n  }\n  .console-hud-time{font-size:16px;font-weight:800;letter-spacing:-.02em}\n  .console-hud-temp{font-size:11px;opacity:.8;font-weight:700}\n  .console-hud-temps{display:flex;gap:6px;flex-wrap:wrap;align-items:center}\n  .console-hud-tpill{font-size:10px;font-weight:800;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12)}\n  /* Hide the floating absolute HUD inside security-console to avoid overlap with sensor list */\n  .security-console .hud,.ios-fullscreen .entry-content.security-console ~ .hud,.entry-content.security-console + .hud{display:none!important}\n  /* The .hud inside the article gets hidden when the content is a security-console */\n  @media(max-width:950px){\n    .grid{grid-template-columns:1fr;grid-template-areas:\"instances\" \"activity\" \"modes\" \"access\" \"automations\" \"backup\" \"github\"}\n  }\n\n  /* Sensor column */\n  .sensor-column{position:absolute;right:0;top:0;bottom:0;width:auto;max-width:40%;z-index:4;display:flex;flex-direction:column;gap:7px;align-items:flex-end;justify-content:center;padding:12px 12px 12px 0;pointer-events:none}\n  .sensor-chip{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:16px;font-size:10px;font-weight:800;letter-spacing:.2px;max-width:148px;backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 7px 18px rgba(0,0,0,.24);transition:transform .2s,box-shadow .2s}\n  .sensor-chip-text{display:flex;flex-direction:column;min-width:0;flex:1}\n  .sensor-chip-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\n  .sensor-chip-state{font-size:8px;letter-spacing:.08em;text-transform:uppercase;opacity:.82;margin-top:2px}\n  .sensor-chip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}\n  .sensor-chip-battery{grid-column:1 / -1;margin-top:5px;padding-top:5px;border-top:1px solid currentColor;font-size:9px;line-height:1;opacity:.9}\n  .sensor-chip--open{background:linear-gradient(135deg,rgba(255,149,0,.9),rgba(255,96,0,.64));color:#fff}\n  .sensor-chip--open .sensor-chip-dot{background:#fff;box-shadow:0 0 8px rgba(255,255,255,.95)}\n  .sensor-chip--triggered{background:linear-gradient(135deg,rgba(255,69,58,.96),rgba(190,30,35,.82));animation:chip-pulse .9s ease-in-out infinite}\n  .sensor-chip--closed{background:rgba(15,23,32,.62);color:#eef8f1}\n  .sensor-chip--closed .sensor-chip-dot{background:#34c759;box-shadow:0 0 8px rgba(52,199,.9)}\n  .sensor-chip-battery.low{color:#ffd166;font-weight:900}\n  .buzz-orange{position:relative;border-color:rgba(255,171,64,.92)!important;background:linear-gradient(135deg,rgba(255,149,0,.38),rgba(255,109,0,.16))!important;box-shadow:0 0 0 1px rgba(255,183,77,.45),0 0 25px rgba(255,145,0,.55),inset 0 1px 0 rgba(255,255,255,.3)!important;animation:buzz-orange 1.05s cubic-bezier(.36,.07,.19,.97) infinite}\n  .buzz-orange::after{content:'⚠';margin-left:auto;color:#fff3d1;font-size:14px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.28))}\n  @keyframes buzz-orange{0%,100%{transform:translateX(0) rotate(0)}12%{transform:translateX(-2px) rotate(-.65deg)}25%{transform:translateX(3px) rotate(.8deg)}40%{transform:translateX(-3px) rotate(-.8deg)}55%{transform:translateX(2px) rotate(.55deg)}70%{transform:translateX(-1px) rotate(-.25deg)}}\n  @keyframes chip-pulse{0%,100%{opacity:1}50%{opacity:0.55}}\n\n  /* HUD Overlay */\n  .hud{position:absolute;top:20px;right:24px;text-align:right;z-index:3;color:var(--hud-text-color);text-shadow:var(--text-shadow);display:flex;flex-direction:column;gap:4px}\n  .hud-loc{font-size:13px;font-weight:800;letter-spacing:0.04em;color:#ffffff;background:var(--hud-bg);padding:4px 12px;border-radius:10px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.18);align-self:flex-end}\n  .hud-data{font-size:20px;font-weight:800;letter-spacing:-0.02em;background:var(--hud-bg);padding:6px 14px;border-radius:12px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.08);display:inline-flex;align-items:center;gap:8px;align-self:flex-end}\n  .hud-data i{font-size:14px;opacity:0.7;font-style:normal}\n  .hud-temperatures{display:flex;justify-content:flex-end;gap:5px;flex-wrap:wrap}\n  .hud-temperature{padding:4px 8px;border-radius:999px;background:var(--hud-bg);border:1px solid rgba(255,255,255,.09);font-size:10px;font-weight:800;backdrop-filter:blur(8px)}\n\n  /* Liquid Glass Buttons */\n  .liquid-stack{display:grid;gap:10px}\n  .liquid-btn {\n    border: 1px solid rgba(255, 255, 255, 0.20) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.04) 100%) !important;\n    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    color: #ffffff !important;\n    padding: 14px 18px;\n    border-radius: 18px !important;\n    font-size: 13.5px;\n    font-weight: 800;\n    display: flex;\n    align-items: center;\n    gap: 12px;\n    text-align: left;\n    cursor: pointer;\n    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;\n    transition: all 0.22s cubic-bezier(0.25, 0.8, 0.25, 1);\n    text-shadow: 0 1px 2px rgba(0,0,0,0.3);\n    letter-spacing: 0.5px;\n  }\n  .liquid-btn:hover {\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.08) 100%) !important;\n    border-color: rgba(255, 255, 255, 0.36) !important;\n    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;\n    transform: translateY(-2px);\n  }\n  .btn-sos {\n    background: linear-gradient(135deg, rgba(239, 68, 68, 0.32) 0%, rgba(185, 28, 28, 0.45) 100%) !important;\n    border: 1px solid rgba(252, 165, 165, 0.45) !important;\n    box-shadow: 0 10px 28px rgba(239, 68, 68, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;\n  }\n  .btn-sos:hover {\n    background: linear-gradient(135deg, rgba(239, 68, 68, 0.48) 0%, rgba(185, 28, 28, 0.65) 100%) !important;\n    box-shadow: 0 14px 34px rgba(239, 68, 68, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;\n    transform: translateY(-2px);\n  }\n  .mode-btn-icon{width:26px;height:26px;padding:5px;border-radius:10px;flex:0 0 auto;background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 4px 10px rgba(0,0,0,.16);filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}\n  .liquid-btn.active .mode-btn-icon{background:linear-gradient(135deg,rgba(255,255,255,.36),rgba(255,255,255,.12));border-color:rgba(255,255,255,.42)}\n  .btn-sos .mode-btn-icon{width:28px;height:28px;border-radius:11px;background:rgba(255,255,255,.17)}\n  .liquid-btn:not(.btn-home):not(.btn-away):not(.btn-night):not(.btn-vacation):not(.btn-disarm):not(.btn-sos):hover{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.2)}\n  .liquid-btn.active{background:var(--btn-bg, rgba(255,255,255,0.2));border-color:rgba(255,255,255,0.4);box-shadow:0 8px 24px var(--btn-shadow, rgba(255,255,255,0.12))}\n  .liquid-btn:active:not(:disabled) { transform: scale(0.96); }\n  .liquid-btn i{font-size:16px}\n\n  .btn-home {\n    background: linear-gradient(135deg, rgba(251, 140, 0, 0.20) 0%, rgba(251, 140, 0, 0.06) 100%) !important;\n    border: 1px solid rgba(251, 140, 0, 0.38) !important;\n    color: #ffe0b2 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-home.active {\n    background: linear-gradient(135deg, #fb8c00 0%, #d97706 100%) !important;\n    border: 1px solid rgba(254, 215, 170, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(251, 140, 0, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-away {\n    background: linear-gradient(135deg, rgba(229, 57, 53, 0.20) 0%, rgba(229, 57, 53, 0.06) 100%) !important;\n    border: 1px solid rgba(229, 57, 53, 0.38) !important;\n    color: #ffcdd2 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-away.active {\n    background: linear-gradient(135deg, #e53935 0%, #b91c1c 100%) !important;\n    border: 1px solid rgba(254, 202, 202, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(229, 57, 53, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-night {\n    background: linear-gradient(135deg, rgba(30, 136, 229, 0.20) 0%, rgba(30, 136, 229, 0.06) 100%) !important;\n    border: 1px solid rgba(30, 136, 229, 0.38) !important;\n    color: #bbdefb !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-night.active {\n    background: linear-gradient(135deg, #1e88e5 0%, #1d4ed8 100%) !important;\n    border: 1px solid rgba(191, 219, 254, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(30, 136, 229, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-vacation {\n    background: linear-gradient(135deg, rgba(156, 39, 176, 0.20) 0%, rgba(156, 39, 176, 0.06) 100%) !important;\n    border: 1px solid rgba(156, 39, 176, 0.38) !important;\n    color: #e1bee7 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-vacation.active {\n    background: linear-gradient(135deg, #9c27b0 0%, #7e22ce 100%) !important;\n    border: 1px solid rgba(245, 208, 254, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(156, 39, 176, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-disarm {\n    background: linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(16, 185, 129, 0.05) 100%) !important;\n    border: 1px solid rgba(16, 185, 129, 0.35) !important;\n    color: #a7f3d0 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n    margin-top: 4px;\n  }\n  .btn-disarm.active {\n    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;\n    border: 1px solid rgba(167, 243, 208, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(16, 185, 129, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-sos {\n    background: linear-gradient(135deg, rgba(239, 68, 68, 0.22) 0%, rgba(185, 28, 28, 0.08) 100%) !important;\n    border: 1px solid rgba(252, 165, 165, 0.35) !important;\n    color: #fca5a5 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-sos.active, .btn-sos.flashing {\n    animation: sosFlashingPulse 0.8s infinite ease-in-out !important;\n  }\n\n  @keyframes sosFlashingPulse {\n    0%, 100% {\n      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;\n      border-color: #fca5a5 !important;\n      color: #ffffff !important;\n      box-shadow: 0 0 32px rgba(239, 68, 68, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;\n      transform: scale(1.02);\n    }\n    50% {\n      background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%) !important;\n      border-color: rgba(239, 68, 68, 0.5) !important;\n      color: rgba(255, 255, 255, 0.8) !important;\n      box-shadow: 0 0 10px rgba(239, 68, 68, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;\n      transform: scale(0.98);\n    }\n  }\n  /* btn-disarm visual is handled by .btn-disarm and .btn-disarm.active above */\n\n  .entry-content {\n    background: transparent !important;\n    box-shadow: none !important;\n    border: none !important;\n  }\n\n  .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}\n  .badge.armed_away,.badge.armed_vacation{background:rgba(229,57,53,.12);color:var(--error-color,#e53935)}\n  .badge.armed_home,.badge.armed_night{background:rgba(251,140,0,.12);color:#fb8c00}\n  .badge.disarmed{background:rgba(67,160,71,.12);color:var(--success-color,#43a047)}\n  .badge.triggered{background:rgba(229,57,53,.2);color:var(--error-color,#e53935);animation:pulse 1s ease-in-out infinite}\n\n  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}\n  .meta{font-size:12px;opacity:.5}\n  .setting-label{font-size:13px;font-weight:700;color:var(--primary-text-color);letter-spacing:0.01em;margin-bottom:2px;display:block}\n  .setting-sublabel{font-size:12px;font-weight:400;opacity:0.55;color:var(--primary-text-color);margin-bottom:6px;display:block}\n  .temp-alert-row{display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap}\n  .temp-alert-row input[type=number]{width:72px;padding:6px 8px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:inherit;font-size:13px;font-weight:700;text-align:center}\n  .temp-alert-status-ok{color:#43a047;font-size:12px}\n  .temp-alert-status-warn{color:#e53935;font-size:12px;font-weight:700}\n\n  /* Generic buttons */\n  button{border:0;border-radius:14px;padding:10px 18px;font:700 13px/1.3 'Outfit',Inter,system-ui,sans-serif;cursor:pointer;white-space:nowrap;hyphens:none;word-break:normal;transition:background 0.2s,opacity .15s,transform .15s cubic-bezier(0.175, 0.885, 0.32, 1.275),box-shadow 0.2s}\n  button:focus-visible{outline:3px solid #38bdf8;outline-offset:2px}\n  button:active:not(:disabled){transform:scale(.94) translateY(1px)}\n  button.primary{background:var(--primary-color,#38bdf8);color:#0f172a;font-weight:800;box-shadow:0 4px 12px rgba(56, 189, 248, 0.35)}\n  button.primary:hover{background:#0284c7;color:#ffffff}\n  button.ghost{background:rgba(255, 255, 255, 0.08);border:1px solid rgba(255, 255, 255, 0.24);color:#ffffff !important}\n  button.ghost:hover{background:rgba(255, 255, 255, 0.16);border-color:rgba(255,255,255,0.36)}\n\n\n  /* FS button */\n  .fs-btn{background:rgba(255,255,255,0.05);padding:8px;border-radius:10px;font-size:16px}\n\n  /* Modal Fixes */\n  .modal-back{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;padding:20px;z-index:999999;backdrop-filter:blur(12px)}\n  .modal-back.open{display:flex}\n  .modal{width:min(400px,100%);max-height:85vh;overflow:hidden;display:grid;grid-template-rows:auto 1fr auto;gap:14px;padding:24px;border-radius:32px;background:rgba(22, 24, 38, 0.95);border:1px solid rgba(255,255,255,0.08);box-shadow:0 30px 100px rgba(0,0,0,0.6);backdrop-filter:blur(28px)}\n  .modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}\n  .modal-head h3{margin:0;font-size:20px;font-weight:800}\n  .modal-body{overflow:auto;padding:5px}\n  .modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:15px}\n  /* PIN modal */\n  .pm .modal{max-width:340px;min-height:unset;grid-template-rows:auto auto auto;background:rgba(22, 24, 38, 0.82) !important;backdrop-filter:blur(16px) saturate(140%) !important;-webkit-backdrop-filter:blur(16px) saturate(140%) !important;border:1px solid rgba(255, 255, 255, 0.12) !important;box-shadow:0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;border-radius:36px;padding:28px;display:flex;flex-direction:column;align-items:center;gap:16px}\n  .pin-input{font-size:28px;letter-spacing:10px;text-align:center;padding:12px;border-radius:16px;border:none;background:rgba(255,255,255,0.02);color:inherit;width:100%;outline:none;box-shadow:inset 0 1px 3px rgba(0,0,0,0.2)}\n  .pin-error{color:var(--error-color,#e53935);font-size:13px;min-height:18px;text-align:center}\n  .pin-grid{display:grid;grid-template-columns:repeat(3,68px);gap:16px;justify-content:center;margin-top:10px}\n  .pin-btn-round{width:68px;height:68px;border-radius:50% !important;border:1px solid rgba(255,255,255,0.1) !important;background:rgba(255,255,255,0.04) !important;color:#fff !important;font-size:24px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.2s, transform 0.15s, border-color 0.2s;box-shadow:0 4px 10px rgba(0,0,0,0.15);padding:0 !important;outline:none}\n  .pin-btn-round:hover{background:rgba(255,255,255,0.12) !important;border-color:rgba(255,255,255,0.2) !important}\n  .pin-btn-round:active{transform:scale(0.92) !important;background:rgba(255,255,255,0.2) !important}\n  .pin-btn-round.action-key{font-size:12px;font-weight:700;letter-spacing:0.3px;text-transform:uppercase;border-color:transparent !important;background:transparent !important;box-shadow:none}\n  .pin-btn-round.action-key:hover{background:rgba(255,255,255,0.05) !important}\n  .pin-btn-round.action-key.enter-key{color:#34c759 !important}\n  .pin-btn-round.action-key.delete-key{color:#ff3b30 !important}\n  /* User card */\n  .user-card {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    padding: 16px 18px;\n    border-radius: 18px;\n    border: 1px solid rgba(255, 255, 255, 0.16) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.025) 100%) !important;\n    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.20) !important;\n    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);\n  }\n  .user-card:hover {\n    border-color: rgba(255, 255, 255, 0.25) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%) !important;\n    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;\n    transform: translateY(-2px);\n  }\n  .user-badge{display:inline-block;padding:4px 10px;border-radius:8px;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#ffffff!important;border:1px solid rgba(255,255,255,0.18)}\n  /* REEMPLAZA los colores neón por tokens legibles */\n  .user-badge.admin { background: #d97706 !important; color: #ffffff !important; font-weight: 900 !important; border: 1px solid rgba(255,255,255,0.3) !important; }\n  .user-badge.admin_old {\n    background: rgba(255,255,255,0.12);\n    color: rgba(255,255,255,0.92);\n    border: 1px solid rgba(255,255,255,0.18);\n    font-weight: 700;\n    letter-spacing: 0.04em;\n  }\n  .user-badge.user { background: #475569 !important; color: #ffffff !important; font-weight: 800 !important; border: 1px solid rgba(255,255,255,0.2) !important; }\n  .user-badge.user_old {\n    background: rgba(255,255,255,0.08);\n    color: rgba(255,255,255,0.75);\n    border: 1px solid rgba(255,255,255,0.12);\n  }\n  /* Role label debajo del nombre */\n  .user-role-label {\n    font-size: 11px;\n    font-weight: 600;\n    letter-spacing: 0.06em;\n    text-transform: uppercase;\n    color: rgba(255,255,255,0.55);  /* muted, no neón */\n    margin-top: 2px;\n  }\n  /* Notif target chip */\n  .notif-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);font-size:12px;font-weight:800;color:#ffffff !important}\n  .notif-chip button{padding:0 4px;border:0;background:none;cursor:pointer;opacity:.75;color:#ffffff}\n  /* Triggered box */\n  .trig-box{padding:12px 14px;border-radius:14px;background:rgba(229,57,53,.08);border:1px dashed var(--error-color,#e53935);font-size:12px;font-weight:600;color:var(--error-color,#e53935)}\n  /* inputs */\n  input[type=\"text\"], input[type=\"password\"], input[type=\"number\"], input[type=\"search\"], select, input[type=\"datetime-local\"], .glass-control {\n    width: 100%;\n    padding: 11px 14px;\n    border-radius: 16px;\n    border: 1px solid rgba(255, 255, 255, 0.16);\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.055));\n    color: var(--primary-text-color);\n    backdrop-filter: blur(18px) saturate(145%);\n    -webkit-backdrop-filter: blur(18px) saturate(145%);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 8px 22px rgba(0, 0, 0, 0.12);\n    font: 700 13px/1.2 'Outfit', Inter, system-ui, sans-serif;\n    outline: none;\n    transition: transform 0.34s cubic-bezier(0.18, 0.89, 0.32, 1.32), border-color 0.22s, box-shadow 0.22s;\n    display: block;\n    box-sizing: border-box;\n  }\n  input[type=\"text\"]:focus, input[type=\"password\"]:focus, input[type=\"number\"]:focus, input[type=\"search\"]:focus, select:focus, input[type=\"datetime-local\"]:focus, .glass-control:focus {\n    transform: scale(1.018);\n    border-color: rgba(112, 188, 255, 0.78);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.23), 0 0 0 4px rgba(0, 122, 255, 0.14), 0 10px 28px rgba(0, 0, 0, 0.16);\n  }\n  .x-never-match input[type=\"text\"],\n  .x-never-match input[type=\"password\"],\n  .x-never-match input[type=\"number\"],\n  .x-never-match input[type=\"search\"],\n  .x-never-match select,\n  .x-never-match input[type=\"datetime-local\"],\n  .x-never-match .glass-control {\n    background: rgba(255, 255, 255, 0.52);\n    border-color: rgba(0, 0, 0, 0.10);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 6px 16px rgba(0, 0, 0, 0.05);\n  }\n  /* search */\n  .search-wrap{display:flex;gap:10px;align-items:center}\n  .search-wrap input{flex:1;min-width:0}\n  /* ── Dual-panel selector modal ───────────────────────────────────────────────────── */\n  #selector-modal .modal{width:min(980px,96vw);height:min(780px,92vh);max-height:92vh;grid-template-rows:auto minmax(0,1fr) auto}\n  #selector-modal .modal-body{min-height:0;height:100%;padding:5px 0}\n  .sel-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;overflow:hidden;min-height:0;height:100%}\n  @media(max-width:600px){.sel-grid{grid-template-columns:1fr}}\n  .sel-panel{display:flex;flex-direction:column;gap:8px;overflow:hidden;min-width:0;min-height:0;padding:12px;border-radius:18px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.07)}\n  .sel-panel-inner{overflow-y:auto;overscroll-behavior:contain;flex:1;min-height:0;display:grid;gap:6px;align-content:start;padding-right:4px}\n  .sel-actions{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}\n  .pick-row{display:grid;grid-template-columns:24px minmax(0,1fr);align-items:center;gap:12px;padding:12px 14px;min-height:48px;border-radius:14px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.035);cursor:pointer;transition:background .12s,border-color .12s}\n  .pick-row:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.24)}\n  .pick-row:has(input:checked){border-color:rgba(56,189,248,.65);background:rgba(56,189,248,.12)}\n  .pick-row input[type=checkbox]{width:22px;height:22px;min-width:22px;min-height:22px;cursor:pointer;accent-color:var(--primary-color,#38bdf8);margin:0}\n  .pick-row-name{font-weight:750;font-size:14px;color:#ffffff;display:flex;align-items:center;gap:6px;flex-wrap:wrap;line-height:1.3}\n  .pick-row-meta{font-size:12px;color:#cbd5e1;opacity:0.92;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\n  .device-facts{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}\n  .device-fact{display:inline-flex;align-items:center;min-height:20px;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:750;line-height:1.1;white-space:nowrap}\n  .device-fact.status-open{color:#ff8a80;background:rgba(255,82,82,.12)}\n  .device-fact.status-closed{color:#7ee2a8;background:rgba(52,199,.12)}\n  .device-fact.power-low{color:#ffd166;background:rgba(255,183,77,.13)}\n  .sel-right-item{display:flex;align-items:center;justify-content:space-between;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.09);background:rgba(255,255,255,0.055);font-size:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.06)}\n  .sel-right-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}\n  .sel-right-facts{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}\n  .mode-sensor-grid .sensor-pill{width:100%;min-width:0;padding:9px 10px;gap:7px}\n  .mode-sensor-grid .sensor-pill .pill-content{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:6px;min-width:0;flex:1}\n  .mode-sensor-grid .sensor-pill .pill-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\n  .mode-sensor-grid .sensor-pill .pill-status{font-size:10px;font-weight:800;opacity:.78;white-space:nowrap}\n  .mode-sensor-grid .sensor-pill .pill-power{font-size:10px;font-weight:700;opacity:.82;white-space:nowrap}\n  .sel-panel-inner::-webkit-scrollbar{width:7px}.sel-panel-inner::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.18);border-radius:99px}\n  /* Activity log */\n  .log-item{display:flex;align-items:flex-start;gap:12px;padding:13px;border-radius:18px;border:1px solid var(--log-item-border, rgba(255,255,255,.05));background:linear-gradient(135deg,color-mix(in srgb,var(--log-item-bg,rgba(255,255,255,.02)) 84%,#fff 16%),var(--log-item-bg,rgba(255,255,255,.02)));color:var(--primary-text-color,#fff);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 7px 18px rgba(0,0,0,.10)}\n  .log-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:13px;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 5px 12px rgba(0,0,0,.12)}\n  .glass-orb{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 2px 4px rgba(255,255,255,0.5),0 2px 6px rgba(0,0,0,0.2);background:rgba(255,255,255,0.3)}\n  .log-item.log-item--armed .log-icon{background:rgba(255,149,0,.16);border-color:rgba(255,183,77,.28)}\n  .log-item.log-item--armed .glass-orb{background:linear-gradient(135deg,#ffb74d,#f57c00)}\n  .log-item.log-item--disarmed .log-icon{background:rgba(52,199,.14);border-color:rgba(105,219,139,.28)}\n  .log-item.log-item--disarmed .glass-orb{background:linear-gradient(135deg,#69db8b,#388e3c)}\n  .log-item.log-item--triggered .log-icon{background:rgba(255,69,58,.16);border-color:rgba(255,139,131,.30)}\n  .log-item.log-item--triggered .glass-orb{background:linear-gradient(135deg,#ff8b83,#d32f2f)}\n  .log-body{flex:1;min-width:0}\n  .log-title{font-weight:700;font-size:13px}\n  .log-meta{font-size:11px;opacity:.55;margin-top:2px}\n  .log-badge{display:inline-block;padding:2px 7px;border-radius:6px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-right:4px}\n  .log-badge.arm{background:rgba(251,140,0,.12);color:#fb8c00}\n  .log-badge.disarm{background:rgba(67,160,71,.12);color:var(--success-color,#43a047)}\n  .log-badge.trigger{background:rgba(229,57,53,.15);color:var(--error-color,#e53935)}\n  button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 72%,#fff);outline-offset:3px}\n  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}.wx canvas{display:none!important}}\n  /* Personalization section styles */\n  .personalize-section {\n    margin-top: 18px;\n    padding: 18px;\n    background: var(--personalize-bg, rgba(255,255,255,0.02));\n    border: 1px solid var(--personalize-border, rgba(255,255,255,0.06));\n    border-radius: 22px;\n    display: grid;\n    gap: 16px;\n  }\n  .personalize-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:\"home temp\" \"panel clock\" \"hub emergency\";gap:14px 16px;align-items:start}\n  .personalize-column{display:contents}\n  .personalize-field{min-width:0;align-self:stretch}\n  .pf-home{grid-area:home}.pf-temp{grid-area:temp}.pf-panel{grid-area:panel}.pf-hub{grid-area:hub}.pf-emergency{grid-area:emergency}.pf-clock{grid-area:clock}\n  .pf-panel,.pf-hub{display:flex;flex-direction:column;gap:8px}\n  .pf-emergency{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:\"emergency-label emergency-label\" \"emergency-input emergency-help\";gap:5px 16px;align-items:start;padding-top:2px}\n  .pf-emergency #lbl-emergency-number{grid-area:emergency-label}.pf-emergency #emergency-number-input{grid-area:emergency-input}.pf-emergency #emergency-number-help{grid-area:emergency-help;margin:0!important}\n  .sos-configuration {\n    padding: 18px;\n    border-radius: 24px;\n    border: 1px solid rgba(255, 59, 48, 0.25);\n    background: linear-gradient(135deg, rgba(255, 59, 48, 0.12), rgba(255, 255, 255, 0.02));\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 12px 28px rgba(255, 59, 48, 0.06), 0 8px 20px rgba(0, 0, 0, 0.12);\n    transition: transform 0.3s ease, box-shadow 0.3s ease;\n  }\n  /* SOS uses the full personalization width so outputs never create a tall,\n     narrow list with unused space beside it. */\n  .sos-configuration{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:\"title action\" \"outputs outputs\" \"help help\";gap:12px 16px;align-items:center}\n  .sos-configuration #lbl-sos-actions{grid-area:title;margin:0!important;white-space:nowrap}\n  .sos-configuration #sos-output-chips{grid-area:outputs;margin:0!important;display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:7px;align-items:stretch;max-height:148px;overflow-y:auto;overflow-x:hidden;padding:2px 5px 2px 2px;overscroll-behavior:contain}\n  .sos-configuration #sos-output-chips .sensor-pill{width:100%;min-width:0;min-height:34px;justify-content:center;padding:7px 10px;font-size:11px;border-radius:12px}\n  .sos-configuration #sos-output-chips .sensor-pill > span{display:block;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}\n  .sos-configuration #sos-output-chips .mode-sensor-none{grid-column:1/-1;padding:18px;min-height:54px}\n  .sos-configuration #btn-select-sos-outputs{grid-area:action;width:auto!important;max-width:230px;min-width:0;white-space:normal;overflow-wrap:anywhere;line-height:1.15}\n  .sos-configuration #sos-output-help{grid-area:help;margin:0!important;max-width:none}\n  .sos-configuration:hover {\n    transform: translateY(-2px);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 16px 36px rgba(255, 59, 48, 0.10), 0 12px 24px rgba(0, 0, 0, 0.16);\n  }\n  .x-never-match .sos-configuration {\n    border-color: rgba(255, 59, 48, 0.3);\n    background: linear-gradient(135deg, rgba(255, 59, 48, 0.08), rgba(0, 0, 0, 0.01));\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 10px 24px rgba(255, 59, 48, 0.05);\n  }\n  #sos-output-chips .sensor-pill{background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.06));border-color:rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 5px 14px rgba(0,0,0,.10)}\n  .background-custom-inputs{flex-direction:column;gap:8px;background:rgba(0,0,0,.15);padding:12px;border-radius:18px;border:1px solid rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}\n  .modal-back.open .modal,\n  .lang-modal-back.open .lang-modal-card,\n  .ios-confirm-backdrop.open .ios-confirm-card {\n    animation: liquidDropIn .48s cubic-bezier(.16,1.24,.32,1) both;\n  }\n  @keyframes liquidDropIn{0%{opacity:0;transform:translateY(18px) scale(.91);filter:blur(5px)}65%{opacity:1;transform:translateY(-3px) scale(1.018);filter:blur(0)}100%{transform:translateY(0) scale(1)}}\n  @keyframes argus-modal-in{0%{opacity:0;transform:scale(.94) translateY(8px)}100%{opacity:1;transform:scale(1) translateY(0)}}\n  @media(max-width:700px){\n    .personalize-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:\"home\" \"temp\" \"panel\" \"hub\" \"clock\" \"emergency\"}\n    .pf-emergency{grid-template-columns:minmax(0,1fr);grid-template-areas:\"emergency-label\" \"emergency-input\" \"emergency-help\"}\n    .personalize-section{padding:14px}\n    .sos-configuration{display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:14px;border-radius:24px}\n    .sos-configuration #lbl-sos-actions{white-space:normal}.sos-configuration #btn-select-sos-outputs{width:100%!important}.sos-configuration #sos-output-help{max-width:none}\n  }\n\n  #argus-canvas-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background-size:cover;background-position:center;background-repeat:no-repeat}\n  #argus-canvas-bg::after{content:\"\";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.3) 100%);z-index:1;pointer-events:none}\n\n.sensor-pill {\n  display:inline-flex; align-items:center; gap:8px;\n  background:var(--argus-pill-bg, rgba(255,255,255,0.04));\n  border:1px solid var(--argus-pill-border, rgba(255,255,255,0.08));\n  border-radius:14px; padding:10px 14px;\n  font-size:13px; color:var(--argus-pill-color, rgba(255,255,255,0.95));\n  backdrop-filter:blur(10px); transition:all 0.2s cubic-bezier(0.4,0,0.2,1);\n  font-weight:700; box-shadow:0 4px 12px rgba(0,0,0,0.08);\n}\n.sensor-pill:hover { background:var(--argus-pill-bg-hover, rgba(255,255,255,0.08)); border-color:rgba(255,255,255,0.25); transform:translateY(-1px); }\n.sensor-pill .pill-dot { width:10px; height:10px; border-radius:50%; background:#34c759; flex-shrink:0; box-shadow:0 0 10px rgba(52,199,0.5); }\n.sensor-pill .pill-dot.open { background:#ff3b30; box-shadow:0 0 10px rgba(255,59,48,0.5); }\n.sensor-pill .pill-dot.unavailable { background:#999; }\n.sensor-pill button { background:none; border:none; color:var(--argus-pill-color, #fff); cursor:pointer; opacity:0.5; padding:4px; font-size:14px; transition:opacity 0.2s; }\n.sensor-pill button:hover { opacity:1; }\n\n.mode-sensor-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:12px; margin-top:12px; }\n.mode-sensor-none { grid-column:1/-1; padding:30px; text-align:center; background:var(--argus-pill-bg,rgba(255,255,255,0.03)); border:2px dashed var(--argus-pill-border,rgba(255,255,255,0.1)); border-radius:20px; color:var(--argus-pill-color-muted,rgba(255,255,255,0.4)); font-size:14px; font-weight:600; }\n.subsection-title { font-size:12px; font-weight:900; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px; color:var(--argus-pill-color-muted,rgba(255,255,255,0.5)); display:block; }\n\n\n/* ── Language Picker ───────────────────────────────────── */\n.lang-pill {\n  display:inline-flex; align-items:center; gap:6px;\n  padding:7px 14px; border-radius:999px;\n  background:rgba(255,255,255,0.10);\n  border:1px solid rgba(255,255,255,0.18);\n  backdrop-filter:blur(12px) saturate(120%);\n  -webkit-backdrop-filter:blur(12px) saturate(120%);\n  color:#fff; font-size:13px; font-weight:700;\n  cursor:pointer; transition:all 0.22s cubic-bezier(0.4,0,0.2,1);\n  box-shadow:0 4px 16px rgba(0,0,0,0.18);\n  white-space:nowrap; flex-shrink:0;\n}\n.lang-pill:hover { background:rgba(255,255,255,0.22); transform:translateY(-1px); }\n.x-never-match .lang-pill {\n  background:rgba(0,0,0,0.07); border-color:rgba(0,0,0,0.15); color:#1e1e2d;\n}\n\n/* Language modal */\n.lang-modal-back { position:fixed; inset:0; background:rgba(0,0,0,0.55); display:none; align-items:center; justify-content:center; z-index:999998; backdrop-filter:blur(4px); }\n.lang-modal-back.open { display:flex; }\n.lang-modal-card {\n  width:min(400px,92vw); border-radius:28px; padding:28px 24px 20px;\n  background:rgba(20,22,35,0.92);\n  border:1px solid rgba(255,255,255,0.14);\n  box-shadow:0 32px 80px rgba(0,0,0,0.55);\n  backdrop-filter:blur(12px) saturate(120%);\n  -webkit-backdrop-filter:blur(12px) saturate(120%);\n  color:#fff;\n  animation: langBounceIn 0.38s cubic-bezier(0.175,0.885,0.32,1.275) forwards;\n}\n.x-never-match .lang-modal-card {\n  background:rgba(255,255,255,0.96); color:#1e1e2d;\n  border-color:rgba(0,0,0,0.12); box-shadow:0 20px 60px rgba(0,0,0,0.25);\n}\n@keyframes langBounceIn {\n  0%   { transform:scale(0.82) translateY(20px); opacity:0; }\n  60%  { transform:scale(1.03) translateY(-4px); opacity:1; }\n  100% { transform:scale(1)    translateY(0);    opacity:1; }\n}\n.lang-modal-title {\n  font-size:18px; font-weight:900; letter-spacing:-0.01em;\n  margin-bottom:20px; text-align:center;\n}\n.lang-grid {\n  display:grid; grid-template-columns:1fr 1fr; gap:10px;\n}\n.lang-option {\n  display:flex; align-items:center; gap:10px;\n  padding:12px 14px; border-radius:16px;\n  background:rgba(255,255,255,0.10);\n  border:1.5px solid rgba(255,255,255,0.18);\n  /* Buttons do not inherit color reliably through the HA shadow DOM. */\n  color:rgba(255,255,255,0.98) !important;\n  text-shadow:0 1px 2px rgba(0,0,0,0.38);\n  cursor:pointer; transition:all 0.18s ease;\n  font-size:14px; font-weight:750;\n}\n.lang-option span:not(.lang-flag) { color:inherit !important; }\n.lang-option:hover { background:rgba(255,255,255,0.16); border-color:rgba(255,255,255,0.28); transform:translateY(-1px); }\n.lang-option.active {\n  background:rgba(3,169,244,0.30); border-color:rgba(76,201,255,0.82);\n  box-shadow:0 0 18px rgba(3,169,244,0.25);\n}\n.lang-flag { font-size:22px; line-height:1; }\n.lang-close-row { display:flex; justify-content:center; margin-top:18px; }\n.lang-close-btn {\n  padding:9px 28px; border-radius:14px;\n  background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15);\n  color:#fff; font-size:13px; font-weight:700; cursor:pointer;\n  transition:background 0.18s;\n}\n.lang-close-btn:hover { background:rgba(255,255,255,0.2); }\n\n/* Background File Manager Styles */\n.file-card {\n  background: rgba(255, 255, 255, 0.03);\n  border: 1px solid rgba(255, 255, 255, 0.06);\n  border-radius: 12px;\n  padding: 8px;\n  display: flex;\n  flex-direction: column;\n  gap: 6px;\n  position: relative;\n  overflow: hidden;\n  transition: all 0.22s cubic-bezier(0.25, 0.8, 0.25, 1);\n}\n.file-card:hover {\n  background: rgba(255, 255, 255, 0.08) !important;\n  border-color: rgba(255, 255, 255, 0.16) !important;\n  transform: translateY(-2px);\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);\n}\n.x-never-match .file-card {\n  background: rgba(0, 0, 0, 0.02);\n  border-color: rgba(0, 0, 0, 0.07);\n  color: #1c1c1e;\n}\n.x-never-match .file-card:hover {\n  background: rgba(0, 0, 0, 0.05) !important;\n  border-color: rgba(0, 0, 0, 0.12) !important;\n}\n.file-card-preview {\n  position: relative;\n  width: 100%;\n  height: 64px;\n  border-radius: 8px;\n  overflow: hidden;\n  background: rgba(0, 0, 0, 0.2);\n}\n.file-card-preview img, .file-card-preview video {\n  width: 100%;\n  height: 100%;\n  object-fit: cover;\n  display: block;\n}\n.file-card-name {\n  font-size: 10px;\n  font-weight: 700;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  opacity: 0.85;\n}\n.file-card-meta {\n  font-size: 9px;\n  opacity: 0.55;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n.file-card-actions {\n  display: flex;\n  gap: 4px;\n  margin-top: auto;\n}\n.file-card-btn {\n  flex: 1;\n  padding: 4px;\n  font-size: 8px;\n  font-weight: 700;\n  text-transform: uppercase;\n  border: 1px solid rgba(255, 255, 255, 0.12);\n  border-radius: 6px;\n  background: rgba(255, 255, 255, 0.03);\n  color: inherit;\n  cursor: pointer;\n  white-space: nowrap;\n  transition: all 0.15s ease;\n}\n.file-card-btn:hover {\n  background: rgba(255, 255, 255, 0.15);\n  border-color: rgba(255, 255, 255, 0.3);\n}\n.x-never-match .file-card-btn {\n  border-color: rgba(0, 0, 0, 0.12);\n  background: rgba(0, 0, 0, 0.02);\n}\n.x-never-match .file-card-btn:hover {\n  background: rgba(0, 0, 0, 0.08);\n  border-color: rgba(0, 0, 0, 0.25);\n}\n.file-card-btn-delete {\n  padding: 3px 6px;\n  color: #ff3b30;\n  border: 1px solid rgba(255, 59, 48, 0.15);\n  background: rgba(255, 59, 48, 0.05);\n  border-radius: 6px;\n  cursor: pointer;\n  font-size: 9px;\n  transition: all 0.15s ease;\n}\n.file-card-btn-delete:hover {\n  background: rgba(255, 59, 48, 0.25);\n  border-color: rgba(255, 59, 48, 0.45);\n}\n\n.argus-bootstrap-layer {\n  position: fixed;\n  inset: 0;\n  background: rgba(0,0,0,0.88);\n  /* NO backdrop-filter: element is permanently in DOM (display:none toggle).\n     WebKit compositor leak bug — opaque background is visually equivalent. */\n  z-index: 9999;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  color: white;\n  animation: fadeIn 0.4s ease forwards;\n}\n.argus-bootstrap-card {\n  background: rgba(255,255,255,0.05);\n  border: 1px solid rgba(255,255,255,0.1);\n  border-radius: 24px;\n  padding: 40px;\n  max-width: 480px;\n  width: 90%;\n  box-shadow: 0 16px 40px rgba(0,0,0,0.5);\n  text-align: center;\n}\n.argus-bootstrap-card h1 {\n  margin: 0 0 16px;\n  font-weight: 300;\n  font-size: 28px;\n  letter-spacing: 0.5px;\n}\n.argus-bootstrap-card p {\n  color: rgba(255,255,255,0.7);\n  font-size: 16px;\n  line-height: 1.5;\n  margin-bottom: 32px;\n}\n@keyframes argusWelcomeCard {\n  from { opacity: 0; transform: translateY(18px) scale(.96); }\n  65% { opacity: 1; transform: translateY(-3px) scale(1.01); }\n  to { opacity: 1; transform: translateY(0) scale(1); }\n}\n@keyframes argusWelcomeLogo {\n  0%,100% { transform: translateY(0) scale(1); filter: drop-shadow(0 10px 18px rgba(32,145,255,.28)); }\n  50% { transform: translateY(-5px) scale(1.045); filter: drop-shadow(0 16px 26px rgba(32,145,255,.5)); }\n}\n@keyframes argusWelcomeCheck {\n  from { opacity: 0; transform: scale(.55) rotate(-16deg); }\n  70% { opacity: 1; transform: scale(1.1) rotate(4deg); }\n  to { opacity: 1; transform: scale(1) rotate(0); }\n}\n.argus-first-run-card { animation: argusWelcomeCard .58s cubic-bezier(.22,1.2,.36,1) both; }\n.argus-first-run-logo { height:68px; width:68px; border-radius:19px; animation:argusWelcomeLogo 2.4s ease-in-out infinite; }\n.argus-first-run-brand { display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:20px; }\n.argus-first-run-brand h1 { margin:0; font-size:1.65rem; font-weight:850; letter-spacing:-.02em; }\n.argus-first-run-brand p { margin:0; font-size:.92rem; color:rgba(255,255,255,.7); }\n.argus-first-run-thank-icon { width:74px; height:74px; margin:0 auto 18px; display:grid; place-items:center; border-radius:50%; background:rgba(52,199,89,.18); border:1px solid rgba(52,199,89,.45); color:#58e37c; font-size:2.15rem; box-shadow:0 0 32px rgba(52,199,89,.22); animation:argusWelcomeCheck .5s cubic-bezier(.2,1.35,.35,1) both; }\n\n/* ─── tvOS Profile Selector ─── */\n.argus-profile-overlay {\n  position: fixed; inset: 0;\n  background: rgba(0,0,0,0.4); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);\n  /* NO backdrop-filter: causes orphaned compositor layers in WebKit when removed.\n     High-opacity background achieves same visual effect safely. */\n  display: flex; align-items: center; justify-content: center;\n  z-index: 9999;\n  animation: argus-overlay-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;\n}\n@keyframes argus-overlay-in {\n  from { opacity: 0; }\n  to   { opacity: 1; }\n}\n\n/* Título arriba */\n.argus-profile-header {\n  text-align: center;\n  margin-bottom: 36px;\n  animation: argus-slide-down 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;\n}\n@keyframes argus-slide-down {\n  from { opacity: 0; transform: translateY(-20px); }\n  to   { opacity: 1; transform: translateY(0); }\n}\n.argus-profile-header h2 {\n  margin: 0; font-size: 1.6rem; font-weight: 800;\n  color: #fff; letter-spacing: -0.02em;\n}\n.argus-profile-header p {\n  margin: 6px 0 0; font-size: 0.85rem;\n  color: rgba(255,255,255,0.55);\n}\n\n/* Grid de perfiles */\n.argus-profile-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));\n  gap: 36px 24px;\n  max-width: 900px;\n  width: 100%;\n  justify-content: center;\n  animation: argus-grid-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;\n}\n@keyframes argus-grid-in {\n  from { opacity: 0; transform: scale(0.92) translateY(16px); }\n  to   { opacity: 1; transform: scale(1) translateY(0); }\n}\n\n/* Cada perfil */\n@media (max-width: 950px) and (orientation: landscape) {\n  .argus-profile-grid { \n    grid-template-columns: repeat(4, 1fr);\n    padding: 16px;\n  }\n}\n@media (max-width: 600px) and (orientation: portrait) {\n  .argus-profile-grid { \n    grid-template-columns: repeat(2, 1fr);\n    padding: 16px;\n    gap: 20px 16px;\n  }\n}\n@media (max-width: 380px) and (orientation: portrait) {\n  .argus-profile-grid { \n    grid-template-columns: 1fr;\n    padding: 16px;\n  }\n  .argus-profile-item { width: 100%; }\n}\n\n.argus-profile-item {\n  touch-action: manipulation;\n  min-height: 44px;\n  display: flex; flex-direction: column;\n  align-items: center; gap: 10px;\n  cursor: pointer;\n  border-radius: 16px;\n  padding: 14px 8px 10px;\n  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),\n              background 0.2s ease;\n  -webkit-tap-highlight-color: transparent;\n}\n.argus-profile-item:hover {\n  transform: scale(1.08);\n  background: rgba(255,255,255,0.07);\n}\n.argus-profile-item:active {\n  transform: scale(0.96);\n}\n.argus-profile-item:focus-visible {\n  outline: 2px solid rgba(255,255,255,0.6);\n  outline-offset: 4px;\n}\n\n/* Círculo avatar */\n.argus-profile-circle {\n  width: 120px; height: 120px;\n  border-radius: 50%;\n  object-fit: cover;\n  border: 3px solid rgba(255,255,255,0.18);\n  box-shadow: 0 4px 20px rgba(0,0,0,0.35);\n  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.22s;\n  display: flex; align-items: center; justify-content: center;\n  font-size: 2.5rem; font-weight: 800;\n  color: #fff; overflow: hidden; flex-shrink: 0;\n  background: rgba(255,255,255,0.1);\n  position: relative;\n}\n@media (max-width: 600px) and (orientation: portrait) {\n  .argus-profile-circle {\n    width: 76px; height: 76px;\n    font-size: 1.5rem; border-width: 2.5px;\n  }\n}\n@media (max-width: 950px) and (orientation: landscape) {\n  .argus-profile-circle {\n    width: 84px; height: 84px;\n    font-size: 1.8rem; border-width: 2.5px;\n  }\n}\n.argus-profile-item:hover .argus-profile-circle {\n  border-color: rgba(255,255,255,0.55);\n  box-shadow: 0 0 0 3px rgba(255,255,255,0.15), 0 6px 24px rgba(0,0,0,0.4);\n}\n.argus-profile-circle img {\n  width: 100%; height: 100%; border-radius: 50%; object-fit: cover;\n}\n.argus-profile-circle .lock-badge {\n  position: absolute; bottom: 0; right: 0;\n  width: 28px; height: 28px; border-radius: 50%;\n  background: rgba(0,0,0,0.75); display: flex;\n  align-items: center; justify-content: center;\n  font-size: 14px; border: 2px solid rgba(255,255,255,0.2);\n}\n@media (max-width: 600px) {\n  .argus-profile-circle .lock-badge {\n    width: 22px; height: 22px; font-size: 11px; border-width: 1.5px;\n  }\n}\n\n/* Nombre y rol */\n.argus-profile-label {\n  text-align: center;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.argus-profile-label .p-name {\n  font-size: 1rem; font-weight: 700;\n  color: #fff; line-height: 1.2;\n  max-width: 140px; overflow: hidden;\n  text-overflow: ellipsis; white-space: nowrap;\n}\n.argus-profile-label .p-role {\n  font-size: 0.72rem; font-weight: 600;\n  color: rgba(255,255,255,0.6);\n  margin-top: 4px;\n  text-transform: uppercase; letter-spacing: 0.04em;\n}\n@media (max-width: 600px) {\n  .argus-profile-label .p-name { font-size: 0.82rem; max-width: 80px; }\n  .argus-profile-label .p-role { font-size: 0.65rem; margin-top: 2px; }\n}\n\n/* ─── Welcome Screen (Fase 2) ─── */\n.argus-welcome-screen {\n  position: fixed; inset: 0;\n  background: rgba(0,0,0,0.88);\n  /* NO backdrop-filter: Safari/WebKit compositor bug causes blur to persist\n     after element.remove(). Use opaque background instead. */\n  display: flex; flex-direction: column;\n  align-items: center; justify-content: center;\n  z-index: 10000;\n  pointer-events: none;\n}\n.argus-welcome-avatar {\n  width: 110px; height: 110px;\n  border-radius: 50%; overflow: hidden;\n  border: 3px solid rgba(255,255,255,0.3);\n  box-shadow: 0 8px 40px rgba(0,0,0,0.5);\n  display: flex; align-items: center; justify-content: center;\n  font-size: 2.8rem; font-weight: 800; color: #fff;\n  background: rgba(255,255,255,0.12);\n  will-change: transform, width, height, border-radius;\n}\n.argus-welcome-avatar img {\n  width: 100%; height: 100%; object-fit: cover;\n}\n.argus-welcome-text {\n  margin-top: 20px; text-align: center;\n}\n.argus-welcome-text .greeting {\n  font-size: 1.0rem; color: rgba(255,255,255,0.6);\n  font-weight: 500; letter-spacing: 0.02em;\n  margin: 0;\n}\n.argus-welcome-text .wname {\n  font-size: 2.0rem; font-weight: 900;\n  color: #fff; letter-spacing: -0.03em;\n  margin: 6px 0 0;\n  line-height: 1;\n}\n\n/* PIN prompt dentro del selector tvOS */\n.argus-pin-prompt {\n  position: fixed; inset: 0;\n  background: rgba(0,0,0,0.75);\n  backdrop-filter: blur(28px);\n  -webkit-backdrop-filter: blur(28px);\n  display: flex; align-items: center; justify-content: center;\n  z-index: 10001;\n  animation: argus-overlay-in 0.25s ease both;\n}\n.argus-pin-card {\n  background: rgba(255,255,255,0.08);\n  border: 1px solid rgba(255,255,255,0.14);\n  border-radius: 20px; padding: 28px 24px;\n  width: min(340px, 90vw);\n  text-align: center; color: #fff;\n}\n.argus-pin-card h3 {\n  margin: 0 0 4px; font-size: 1.1rem; font-weight: 800;\n}\n.argus-pin-card .pin-sub {\n  font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-bottom: 16px;\n}\n.argus-pin-input {\n  width: 100%; box-sizing: border-box;\n  text-align: center; font-size: 1.6rem;\n  letter-spacing: 0.4em; padding: 12px;\n  border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);\n  background: rgba(255,255,255,0.07); color: #fff;\n  outline: none; margin-bottom: 14px;\n}\n.argus-numpad {\n  display: grid; grid-template-columns: repeat(3,1fr); gap: 10px;\n  margin-bottom: 12px;\n}\n.argus-numpad button {\n  padding: 14px; font-size: 1.15rem; font-weight: 700;\n  border-radius: 12px;\n  border: 1px solid rgba(255,255,255,0.14);\n  background: rgba(255,255,255,0.08); color: #fff;\n  cursor: pointer;\n  transition: background 0.15s, transform 0.1s;\n}\n.argus-numpad button:active { transform: scale(0.93); background: rgba(255,255,255,0.18); }\n.argus-pin-actions {\n  display: flex; gap: 10px; margin-top: 4px;\n}\n.argus-pin-actions button {\n  flex: 1; padding: 12px; border-radius: 12px; font-size: 0.85rem;\n  font-weight: 700; cursor: pointer;\n  border: 1px solid rgba(255,255,255,0.15);\n  background: rgba(255,255,255,0.07); color: #fff;\n  transition: background 0.15s;\n}\n.argus-pin-actions button:hover { background: rgba(255,255,255,0.15); }\n\n@keyframes argus-shake {\n  0%, 100% { transform: translateX(0); }\n  20%       { transform: translateX(-8px); }\n  40%       { transform: translateX(8px); }\n  60%       { transform: translateX(-5px); }\n  80%       { transform: translateX(5px); }\n}\n@keyframes argus-overlay-out {\n  from { opacity: 1; }\n  to   { opacity: 0; }\n}\n\n.user-selector-grid {\n\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));\n  gap: 16px;\n  margin-top: 24px;\n}\n.user-card {\n  background: rgba(255,255,255,0.1);\n  border: 1px solid rgba(255,255,255,0.15);\n  border-radius: 16px;\n  padding: 20px 10px;\n  cursor: pointer;\n  transition: all 0.2s ease;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: 12px;\n}\n.user-card:hover {\n  background: rgba(255,255,255,0.2);\n  transform: translateY(-2px);\n}\n.user-card-own {\n  border-color: rgba(0, 122, 255, 0.55);\n  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.22), 0 8px 24px rgba(0,122,255,0.1);\n}\n.user-card-own:hover {\n  border-color: rgba(0, 122, 255, 0.8);\n}\n.profile-own-badge {\n  font-size: 10px;\n  font-weight: 800;\n  text-transform: uppercase;\n  letter-spacing: 0.08em;\n  color: #007aff;\n  background: rgba(0, 122, 255, 0.12);\n  border-radius: 999px;\n  padding: 2px 8px;\n  margin-top: -4px;\n}\n.user-role-label {\n  font-size: 11px;\n  opacity: 0.55;\n  font-weight: 600;\n  letter-spacing: 0.02em;\n}\n@keyframes shake {\n  0%, 100% { transform: translateX(0); }\n  20%, 60% { transform: translateX(-6px); }\n  40%, 80% { transform: translateX(6px); }\n}\n.user-avatar {\n  width: 56px;\n  height: 56px;\n  border-radius: 50%;\n  background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 20px;\n  font-weight: 600;\n  color: #fff;\n  border: 1px solid rgba(255,255,255,0.3);\n}\n.user-name {\n  font-size: 14px;\n  font-weight: 500;\n  color: rgba(255,255,255,0.9);\n}\n.pin-prompt {\n  display: none;\n  animation: fadeIn 0.3s ease forwards;\n  margin-top: 20px;\n}\n.pin-prompt input {\n  font-size: 24px;\n  letter-spacing: 8px;\n  text-align: center;\n  padding: 10px;\n  border-radius: 12px;\n  border: 1px solid rgba(255,255,255,0.2);\n  background: rgba(0,0,0,0.2);\n  color: white;\n  width: 200px;\n  margin-bottom: 20px;\n}\n.btn-claim {\n  background: #ff3b30;\n  color: white;\n  border: none;\n  padding: 14px 28px;\n  border-radius: 12px;\n  font-size: 16px;\n  font-weight: 600;\n  cursor: pointer;\n  transition: background 0.2s;\n}\n.btn-claim:hover { background: #ff453a; }\n.btn-start {\n  background: #34c759;\n  color: white;\n  border: none;\n  padding: 14px 28px;\n  border-radius: 12px;\n  font-size: 16px;\n  font-weight: 600;\n  cursor: pointer;\n  transition: background 0.2s;\n}\n.btn-start:hover { background: #30d158; }\n.btn-cancel {\n  background: rgba(255,255,255,0.1);\n  color: white;\n  border: none;\n  padding: 14px 28px;\n  border-radius: 12px;\n  font-size: 16px;\n  font-weight: 600;\n  cursor: pointer;\n  margin-left: 10px;\n}\n\n/* Mobile background and HomeKit polish fixes (moved from runtime hack) */\n.entry-icon,.entry-icon>svg,.argus-old-shield,.argus-old-shield>svg{overflow:visible!important;clip-path:none!important;-webkit-clip-path:none!important}\n.entry-icon{contain:layout!important}\n#global-status { display: none !important; }\n#global-status .badge.disarmed,.hero-pill#hero-security-pill{color:#fff!important;background:rgba(18,82,54,.78)!important;border:1px solid rgba(125,255,185,.64)!important;text-shadow:0 1px 2px rgba(0,0,0,.72)!important;opacity:1!important}\n.argus-instance-duplicate-status{display:none!important}\n.pin-prompt,.pin-modal,.modal,.argus-bootstrap-card{color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.55)!important}\n.pin-prompt input,.pin-modal input,.argus-bootstrap-card input{color:#fff!important;background:rgba(8,16,31,.72)!important;border-color:rgba(255,255,255,.24)!important;-webkit-text-fill-color:#fff!important}\n.pin-prompt label,.pin-modal label,.pin-prompt p,.pin-modal p,.argus-bootstrap-card label,.argus-bootstrap-card p{color:rgba(255,255,255,.88)!important}\n#w-activity,.activity-log{max-height:min(58vh,520px)!important;overflow-y:auto!important;overscroll-behavior:contain!important;scrollbar-gutter:stable!important}\n#w-activity .panel-body,.activity-log .panel-body{max-height:inherit!important;overflow-y:auto!important}\n@media(max-width:760px){\n  .hero{display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;gap:12px!important;padding:18px 14px!important}\n  .hero-left{width:100%!important;min-width:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:8px!important}\n  .hero-left>div{text-align:center!important;display:flex!important;flex-direction:column!important;align-items:center!important}\n  .hero-left h1,.hero-left p{text-align:center!important;margin:0 auto!important}\n  .hero-context{display:flex!important;flex-direction:column!important;width:100%!important;margin:4px 0 0!important;align-items:center!important;justify-content:center!important;gap:8px!important}\n  .hero-clock{width:100%!important;min-width:0!important;padding:0!important;border:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:3px!important;line-height:1.12!important}\n  .hero-clock strong,.hero-clock span,#hero-clock-time,#hero-clock-date{width:100%!important;max-width:100%!important;text-align:center!important;display:block!important;margin:0 auto!important;line-height:1.12!important}\n  #hero-profile-container{display:flex!important;justify-content:center!important;align-items:center!important;width:100%!important;margin:2px auto 0!important}\n  .hero-pills{display:grid!important;grid-template-columns:minmax(0,1fr)!important;width:100%!important;min-width:0!important;justify-items:center!important;align-items:center!important;gap:8px!important}\n  .hero-pill{width:min(100%,360px)!important;max-width:100%!important;white-space:normal!important;text-align:center!important;justify-content:center!important;align-items:center!important;line-height:1.25!important;margin:0 auto!important}\n  .dashboard-instances>.panel-head{flex-direction:column!important;align-items:stretch!important;gap:10px!important}\n  #global-status,#global-status .badge{width:100%!important;box-sizing:border-box!important;justify-content:center!important;text-align:center!important;white-space:normal!important;line-height:1.3!important}\n  #w-activity,.activity-log{max-height:46vh!important;overflow-y:auto!important}\n  .argus-mobile-history-overflow-item{display:list-item!important}\n  #w-performance,.performance-card,.device-performance{display:grid!important;grid-template-columns:minmax(0,1fr)!important;justify-items:stretch!important;align-items:center!important;text-align:center!important;gap:10px!important}\n  #w-performance *,.performance-card *,.device-performance *{max-width:100%!important;box-sizing:border-box!important}\n  #w-access .panel-body,#w-settings .panel-body,.sos-actions,.panic-actions{overflow:visible!important;max-height:none!important}\n  .sos-actions button,.panic-actions button,[data-action*=\"sos\"],[data-action*=\"panic\"]{min-height:48px!important;touch-action:manipulation!important}\n  input[type=\"file\"]{max-width:100%!important;width:100%!important;color:#fff!important}\n}\n@media(orientation:landscape) and (max-height:560px) and (max-width:950px){\n  .hero{padding:14px!important;gap:10px!important}\n  .hero-context{grid-template-columns:auto minmax(0,1fr)!important;align-items:center!important}\n  .hero-clock{width:auto!important;justify-items:start!important}\n  .hero-pills{justify-content:flex-start!important}\n}\n  .entry { overflow: hidden; border-radius: 28px; -webkit-mask-image: -webkit-radial-gradient(white, black); }\n\n/* Profile Frosted Glass & Jelly Spring Animation */\n@keyframes jellySpringIn{0%{opacity:0;transform:scale(0.7) translateY(-14px)}45%{opacity:1;transform:scale(1.06) translateY(3px)}70%{transform:scale(0.97) translateY(-1px)}88%{transform:scale(1.01) translateY(1px)}100%{opacity:1;transform:scale(1) translateY(0)}}\n@keyframes jellySpringOut{0%{opacity:1;transform:scale(1) translateY(0)}35%{opacity:0.95;transform:scale(1.04) translateY(2px)}100%{opacity:0;transform:scale(0.72) translateY(-12px)}}\n@keyframes argusSensorArmBlink{0%,100%{border-color:rgba(255,159,10,0.85);box-shadow:0 0 10px rgba(255,159,10,0.5),inset 0 0 6px rgba(255,159,10,0.3);transform:scale(1)}50%{border-color:#ffd60a;box-shadow:0 0 20px 4px rgba(255,214,10,0.85),inset 0 0 12px rgba(255,214,10,0.5);transform:scale(1.02)}}\n\n.hero-profile-dropdown.opening{display:flex!important;animation:jellySpringIn 0.38s cubic-bezier(0.34,1.56,0.64,1) both!important}\n.hero-profile-dropdown.closing{display:flex!important;animation:jellySpringOut 0.28s cubic-bezier(0.4,0,0.2,1) both!important;pointer-events:none!important}\n\n\n.console-sensor.sensor-arming-blink,\n.console-sensor.argus-blocking{border-color:#ffd60a!important;background:linear-gradient(135deg,rgba(255,149,0,0.38),rgba(255,96,0,0.22))!important;animation:argusSensorArmBlink 0.9s ease-in-out infinite!important;color:#fff!important}\n\n/* Wide spacious SOS selector */\n.emergency-number-card{transition:all 0.3s ease}\n.sos-configuration #sos-output-chips{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))!important;gap:12px!important;width:100%!important;max-height:none!important;overflow:visible!important}\n.sos-output-row{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;padding:10px 14px!important;background:rgba(255,255,255,0.06)!important;border:1px solid rgba(255,255,255,0.12)!important;border-radius:12px!important;width:100%!important;box-sizing:border-box!important}\n.sos-output-row > .sensor-pill{flex:1!important;min-width:0!important;background:transparent!important;border:none!important;box-shadow:none!important;padding:0!important;font-weight:700!important;font-size:12px!important}\n\n</style>\n\n<!-- Bootstrap UI -->\n<div id=\"bootstrap-overlay\" class=\"argus-bootstrap-layer\" style=\"display:none\"></div>\n\n<!-- Language picker modal -->\n<div class=\"lang-modal-back\" id=\"lang-modal\" aria-hidden=\"true\">\n  <div class=\"lang-modal-card\">\n    <div class=\"lang-modal-title\" id=\"lang-modal-title\">🌐 Select Language</div>\n    <div class=\"lang-grid\" id=\"lang-grid\"></div>\n    <div class=\"lang-close-row\">\n      <button class=\"lang-close-btn\" id=\"lang-modal-close\">✕ Close</button>\n    </div>\n  </div>\n</div>\n\n<!-- SOS Confirm Modal -->\n<div class=\"ios-confirm-backdrop\" id=\"sos-modal\" style=\"display:none\">\n  <div class=\"ios-confirm-card liquid-glass\" id=\"sos-card\" style=\"position:relative;\">\n    <button id=\"sos-close-x\" style=\"position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.1); border:none; color:white; border-radius:50%; width:32px; height:32px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; opacity:0.8; padding:0; transition:background 0.2s;\">✕</button>\n    <div class=\"ios-confirm-title\" id=\"sos-title-txt\">Confirmar pánico</div>\n    <div class=\"ios-confirm-text\" id=\"sos-text-txt\">Desliza para disparar la alarma inmediatamente.</div>\n    <div class=\"ios-slider-shell\">\n      <div class=\"ios-slider-track\">\n        <div class=\"ios-slider-label\" id=\"sos-label\">Desliza para activar SOS</div>\n        <div class=\"ios-slider-thumb\" id=\"sos-thumb\">🚨</div>\n      </div>\n    </div>\n    <button class=\"ios-confirm-cancel\" id=\"btn-cancel-sos\" style=\"margin-top:16px\">Cancelar</button>\n  </div>\n</div>\n\n\n<div id=\"argus-canvas-bg\"></div>\n\n\n<div class=\"wrap\">\n  <!-- HERO -->\n  <div class=\"glass hero liquid-glass\">\n    <div class=\"hero-left\">\n      <img src=\"/api/argus_static/argus_logo.png\" alt=\"Argus Logo\" style=\"width: 75px; height: 75px; border-radius: 18px; object-fit: cover; box-shadow: 0 8px 24px rgba(0,0,0,0.25); flex-shrink: 0;\">\n      <div>\n        <h1>Argus Home Hub</h1>\n        <p id=\"p-hero-desc\"></p>\n      </div>\n    </div>\n    <div class=\"hero-context\" aria-live=\"polite\">\n      <div class=\"hero-clock\"><strong id=\"hero-clock-time\">--:--</strong><span id=\"hero-clock-date\"></span></div>\n      <div id=\"hero-profile-container\"></div>\n    </div>\n  </div>\n\n  <!-- TWO-COLUMN LAYOUT -->\n  <div class=\"grid hide-legacy\" id=\"widget-grid\">\n\n    <!-- Instances -->\n    <section class=\"glass panel liquid-glass dashboard-instances\" id=\"w-instances\" style=\"grid-column: 1 / -1;\">\n        <div class=\"panel-head\">\n          <h2 id=\"h-instances\"></h2>\n          <div style=\"display:flex;align-items:center;gap:12px\">\n            <div id=\"global-status\"></div>\n          </div>\n        </div>\n        <div id=\"entries\"></div>\n      </section>\n\n      <!-- Activity log -->\n      <section class=\"glass panel liquid-glass activity-panel\" id=\"w-activity\">\n        <div class=\"panel-head\">\n          <h2 id=\"h-activity-log\"></h2>\n          <div style=\"display:flex;gap:6px\">\n            <button class=\"ghost\" id=\"btn-refresh-history\" style=\"font-size:10.5px;padding:4px 10px;font-weight:800;cursor:pointer;background:rgba(255,255,255,0.06);border-radius:8px\">🔄 Actualizar</button>\n            <button class=\"ghost\" id=\"btn-export-forensic\" style=\"font-size:10.5px;padding:4px 10px;font-weight:800;cursor:pointer;background:rgba(255,255,255,0.06);border-radius:8px\">📄 Exportar</button>\n            <button class=\"ghost\" id=\"btn-clear-log\" style=\"font-size:10.5px;padding:4px 10px;font-weight:800;cursor:pointer;background:rgba(255,69,58,0.12);color:#ff453a !important;border-radius:8px\">🗑️ Limpiar</button>\n          </div>\n        </div>\n        <div id=\"activity-log\" style=\"display:grid;gap:10px;height:280px;overflow-y:auto;margin-top:10px\"></div>\n      </section>\n\n      <!-- Modes -->\n      <section class=\"glass panel liquid-glass modes-panel\" id=\"w-modes\">\n        <div class=\"panel-head\">\n           <h2 id=\"h-modes\"></h2>\n        </div>\n        <div class=\"tabs\" id=\"mode-tabs\" style=\"margin-bottom:15px\"></div>\n        <div id=\"mode-view\"></div>\n      </section>\n\n      <!-- Users & Master PIN Settings -->\n      <section class=\"glass panel liquid-glass access-panel\" id=\"w-access\">\n        <div class=\"panel-head\">\n          <div>\n            <h2 id=\"h-access-title\">Control de Acceso y Usuarios</h2>\n            <p class=\"access-summary\" id=\"p-access-desc\">PIN desactivado · Sin usuarios adicionales</p>\n          </div>\n        </div>\n\n        <div class=\"access-workspace\" id=\"access-workspace\" style=\"display:contents\">\n          <!-- Unified Informative Widget: SOS signals, notifications & audit logging -->\n          <div class=\"system-info-compact-card glass-subpanel\" style=\"padding:14px 18px;border-radius:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);margin-bottom:14px;\">\n            <div style=\"display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:6px;\">\n              <span id=\"system-diagnostics-txt\" style=\"font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;color:rgba(255,255,255,0.85)\">ℹ️ Diagnóstico y Resumen del Sistema</span>\n              <span style=\"font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;background:rgba(74,222,128,0.15);color:#4ade80;border:1px solid rgba(74,222,128,0.3)\">✓ Operativo</span>\n            </div>\n            <div style=\"display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;font-size:11px;\">\n              <div style=\"display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05)\">\n                <span style=\"font-size:16px\">🚨</span>\n                <div><strong style=\"display:block;color:#fff;font-size:11px\">Señales de Auxilio</strong><span style=\"opacity:0.65;font-size:9.5px\">Enlace SOS activo</span></div>\n              </div>\n              <div style=\"display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05)\">\n                <span style=\"font-size:16px\">🔔</span>\n                <div><strong style=\"display:block;color:#fff;font-size:11px\">Notificaciones</strong><span style=\"opacity:0.65;font-size:9.5px\">Push operativas</span></div>\n              </div>\n              <div style=\"display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05)\">\n                <span style=\"font-size:16px\">📋</span>\n                <div><strong style=\"display:block;color:#fff;font-size:11px\">Registro en Vivo</strong><span style=\"opacity:0.65;font-size:9.5px\">Auditoría continua</span></div>\n              </div>\n            </div>\n          </div>\n\n          <!-- Users -->\n          <div class=\"access-section\" id=\"access-users-section\">\n            <h3 id=\"h-users\"></h3>\n            <p class=\"small\" id=\"p-admin-only\" style=\"margin-bottom:14px;color:#fb8c00;font-weight:600\"></p>\n            <div id=\"users-list\" style=\"display:grid;gap:12px;margin-bottom:16px\"></div>\n          </div>\n\n          <!-- Notifications -->\n          <div class=\"access-section\" id=\"access-notifications-section\">\n            <h3 id=\"h-notifications\"></h3>\n            <p class=\"small\" id=\"p-notif-desc\" style=\"margin:0 0 12px;opacity:.72\"></p>\n            <div id=\"notif-targets\" style=\"display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px\"></div>\n            <div style=\"display:flex;gap:8px;align-items:center\">\n              <select id=\"notif-select\" class=\"glass-control\" style=\"flex:1;min-width:0\"></select>\n              <button type=\"button\" class=\"ghost\" id=\"btn-add-notif\" style=\"white-space:nowrap\">＋</button>\n            </div>\n            <div class=\"save-row\" style=\"margin-top:12px\">\n              <button class=\"primary\" id=\"btn-save-notif\" style=\"width:100%\"></button>\n            </div>\n            <div id=\"notif-status\" class=\"status\" style=\"margin-top:8px;text-align:center;font-size:12px;font-weight:bold;min-height:18px\"></div>\n          </div>\n\n          <!-- Master PIN -->\n          <div class=\"access-section\" id=\"access-pin-section\">\n            <h3 id=\"h-settings-pin\">Pin de Armado</h3>\n            <div class=\"subsection\">\n              <div id=\"current-pin-display\" style=\"font-size:13px;font-weight:800;color:#ffffff !important;margin-bottom:15px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);padding:8px 14px;border-radius:10px;display:inline-block\"></div>\n              <div class=\"field-group collapsible collapsed\" id=\"group-current-pin\" style=\"margin-bottom: 12px\">\n                 <div style=\"display:flex; justify-content:space-between; align-items:center;\">\n                   <label id=\"l-current-pin-lbl\"></label>\n                   <a href=\"#\" id=\"lnk-forgot-pin\" style=\"font-size:11px; color:var(--accent-color, #ff4081); text-decoration:none; font-weight:bold; margin-bottom:4px; display:none;\"></a>\n                 </div>\n                 <input type=\"password\" id=\"current-pin\" inputmode=\"numeric\" pattern=\"[0-9]*\" class=\"glass-control\">\n              </div>\n              <p class=\"small\" id=\"p-pin-remove-hint\" style=\"margin:0 0 10px 0; color:var(--primary-color); font-weight:700\">Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.</p>\n              <div style=\"display:grid;gap:10px\">\n                <div class=\"field-group\"><label id=\"l-new-pin\"></label><input type=\"password\" id=\"new-pin-1\" inputmode=\"numeric\" pattern=\"[0-9]*\" class=\"glass-control\"></div>\n                <div class=\"field-group\"><label id=\"l-confirm-pin\"></label><input type=\"password\" id=\"new-pin-2\" inputmode=\"numeric\" pattern=\"[0-9]*\" class=\"glass-control\"></div>\n              </div>\n              <div class=\"save-row\" style=\"margin-top:15px\">\n                <button class=\"primary\" id=\"btn-save-pin\" style=\"width:100%\"></button>\n              </div>\n              <div id=\"pin-status\" class=\"status\" style=\"margin-top:8px; text-align:center; font-size:12px; font-weight:bold; min-height:18px;\"></div>\n            </div>\n          </div>\n        </div>\n      </section>\n\n      <!-- Automations -->\n      <section class=\"glass panel liquid-glass automations-panel\" id=\"w-automations\">\n        <h2 id=\"h-automations\"></h2>\n        <div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:16px\">\n          <span class=\"small\" id=\"p-linked-rules\" style=\"opacity:0.7\"></span>\n          <button class=\"primary\" id=\"btn-new-auto\" style=\"padding:6px 12px;font-size:11px\"></button>\n        </div>\n        <div id=\"auto-view\"></div>\n      </section>\n\n      <!-- Backup & Restore -->\n      <section class=\"glass panel liquid-glass backup-panel\" id=\"w-backup\">\n        <h2 id=\"h-backup-title\">Respaldo y Restauración</h2>\n        <p class=\"small\" id=\"p-backup-desc\" style=\"margin-bottom:12px;opacity:0.7\">Guarda una copia de seguridad de tus ajustes o restaura una anterior.</p>\n        <div style=\"display:flex;gap:10px;align-items:center;\">\n          <button class=\"ghost\" id=\"btn-export-config\" style=\"flex:1\">📤 Descargar</button>\n          <div style=\"position:relative; flex:1\">\n            <button class=\"ghost\" style=\"width:100%\" id=\"btn-import-trigger\">📥 Restaurar</button>\n            <input type=\"file\" id=\"import-config-file\" style=\"display:none\" accept=\".json,.argus,application/json\">\n          </div>\n          <button class=\"ghost danger\" id=\"btn-reset-config\" style=\"flex:1\">⚠️ Restablecer</button>\n          <button class=\"primary\" id=\"btn-undo-reset\" style=\"flex:1; display:none;\">↩️ Deshacer</button>\n        </div>\n      </section>\n\n      <!-- GitHub Opt-In -->\n      <section class=\"glass panel liquid-glass github-panel\" id=\"w-github\" style=\"display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); padding:16px;\">\n        <div style=\"flex:1\">\n          <h3 id=\"github-title\" style=\"margin:0; font-size:14px; font-weight:600\"></h3>\n          <p id=\"github-desc\" style=\"margin:4px 0 0; font-size:12px; opacity:0.7\"></p>\n        </div>\n        <div style=\"display:flex; align-items:center; gap:10px; margin-left:16px; flex-wrap:wrap;\">\n          <a id=\"github-action\" class=\"github-star-action\" href=\"https://github.com/Chrisalvir1/Argus\" target=\"_blank\" rel=\"noopener noreferrer\"></a>\n          <a id=\"paypal-action\" class=\"glass-control\" href=\"https://paypal.me/CEstradaAlvir\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display:inline-flex; align-items:center; gap:4px; padding:6px 14px; border-radius:10px; font-size:12px; font-weight:750; color:#38bdf8 !important; text-decoration:none; background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.3); transition:transform 0.15s ease, background 0.15s ease;\">☕ PayPal</a>\n          <a id=\"email-action\" class=\"glass-control\" href=\"mailto:chrisalvir01@gmail.com\" style=\"display:inline-flex; align-items:center; gap:4px; padding:6px 14px; border-radius:10px; font-size:12px; font-weight:750; color:#a78bfa !important; text-decoration:none; background:rgba(167,139,250,0.12); border:1px solid rgba(167,139,250,0.3); transition:transform 0.15s ease, background 0.15s ease;\">✉️ Sugerencias</a>\n        </div>\n      </section>\n\n  </div> <!-- /grid -->\n</div>\n\n<!-- Selector modal (dual-panel) -->\n<div class=\"modal-back\" id=\"selector-modal\" aria-hidden=\"true\">\n  <div class=\"modal\">\n    <div class=\"modal-head\">\n      <h3 id=\"selector-title\">Seleccionar</h3>\n      <button class=\"ghost\" id=\"selector-close\"></button>\n    </div>\n    <div class=\"modal-body\" style=\"overflow:hidden;display:flex;flex-direction:column;gap:10px\">\n      <div class=\"sel-grid\">\n        <!-- LEFT: lista disponible con búsqueda y acciones rápidas -->\n        <div class=\"sel-panel\">\n          <div class=\"subsection-title\" id=\"l-available\">Disponibles</div>\n          <div class=\"search-wrap\" style=\"margin:0\"><input id=\"selector-search\" type=\"search\" placeholder=\"Buscar...\"></div>\n          <div class=\"sel-actions\">\n            <button class=\"ghost\" id=\"selector-select-all\" style=\"padding:5px 10px;font-size:12px\">☑ Todos</button>\n            <button class=\"ghost\" id=\"selector-deselect-all\" style=\"padding:5px 10px;font-size:12px\">☐ Ninguno</button>\n          </div>\n          <div class=\"sel-panel-inner\" id=\"selector-list\"></div>\n        </div>\n        <!-- RIGHT: panel de seleccionados -->\n        <div class=\"sel-panel\">\n          <div class=\"subsection-title\" id=\"l-selected-lbl\">Seleccionados</div>\n          <div class=\"small\" id=\"selector-count\" style=\"margin-bottom:4px\">0 seleccionados</div>\n          <div class=\"sel-panel-inner\" id=\"selector-selected\"></div>\n        </div>\n      </div>\n    </div>\n    <div class=\"modal-footer\">\n      <div style=\"display:flex;gap:10px;width:100%;justify-content:flex-end\">\n        <button class=\"ghost\" id=\"selector-clear\"></button>\n        <button class=\"primary\" id=\"selector-accept\"></button>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- Home name edit modal -->\n<div class=\"modal-back\" id=\"home-name-modal\" aria-hidden=\"true\">\n  <div class=\"modal\" style=\"width:min(400px,96vw)\">\n    <div class=\"modal-head\">\n      <h3 id=\"home-name-modal-h3\">🏡 Nombre del Hogar</h3>\n      <button class=\"ghost\" id=\"home-name-modal-close\">✕</button>\n    </div>\n    <div style=\"display:grid;gap:14px;padding:4px 0\">\n      <p class=\"small\" id=\"home-name-modal-desc\" style=\"margin:0;opacity:.7\">This name appears in the instances panel and in full screen.</p>\n      <div class=\"field-group\">\n        <label id=\"l-home-name-modal-label\">Home name</label>\n        <input type=\"text\" id=\"home-name-input\" placeholder=\"Mi Casa\" maxlength=\"60\" autocomplete=\"off\" class=\"glass-control\">\n      </div>\n      <span class=\"status\" id=\"home-name-status\" style=\"text-align:center\"></span>\n    </div>\n    <div class=\"modal-footer\">\n      <button class=\"ghost\" id=\"home-name-cancel\">Cancelar</button>\n      <button class=\"primary\" id=\"home-name-save\">Guardar</button>\n    </div>\n  </div>\n</div>\n\n<!-- PIN modal -->\n<div class=\"modal-back pm\" id=\"pin-modal\" aria-hidden=\"true\">\n  <div class=\"modal\">\n    <div class=\"modal-head\">\n      <h3 id=\"l-introduce-pin\">🔒</h3>\n      <button class=\"ghost\" id=\"pin-close\" style=\"background:transparent; border:none; color:inherit; font-size:20px; cursor:pointer; padding:4px 8px;\">✕</button>\n    </div>\n    <div style=\"display:grid;gap:10px;width:100%\">\n      <p id=\"l-pin-modal-desc\" class=\"small\" style=\"text-align:center;margin:0;opacity:0.75\"></p>\n      <input id=\"pin-input\" class=\"pin-input\" type=\"password\" inputmode=\"numeric\" pattern=\"[0-9]*\" placeholder=\"••••\" autocomplete=\"off\" maxlength=\"8\" readonly>\n      <div class=\"pin-grid\" id=\"pin-pad\">\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"1\">1</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"2\">2</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"3\">3</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"4\">4</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"5\">5</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"6\">6</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"7\">7</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"8\">8</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"9\">9</button>\n        <button class=\"pin-btn-round action-key delete-key\" type=\"button\" id=\"pin-backspace\">Borrar</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"0\">0</button>\n        <button class=\"pin-btn-round action-key enter-key\" type=\"button\" id=\"pin-confirm\">Enter</button>\n      </div>\n      <div id=\"pin-error\" class=\"pin-error\"></div>\n      <div style=\"text-align:center; margin-top: 5px;\">\n        <a href=\"#\" id=\"pin-forgot-link\" style=\"font-size:12px; color:var(--accent-color, #ff4081); text-decoration:none; font-weight:700; display:none;\"></a>\n      </div>\n    </div>\n    <button id=\"pin-cancel\" style=\"display:none\"></button>\n  </div>\n</div>\n\n<!-- History Export modal -->\n<div class=\"modal-back pm\" id=\"history-export-modal\" aria-hidden=\"true\">\n  <div class=\"modal\" style=\"max-width: 440px;\">\n    <div class=\"modal-head\">\n      <h3 id=\"h-history-export-title\">📄 Exportar Historial</h3>\n      <button class=\"ghost\" id=\"history-export-close\" style=\"background:transparent; border:none; color:inherit; font-size:20px; cursor:pointer; padding:4px 8px;\">✕</button>\n    </div>\n    <div style=\"display:grid;gap:14px;padding:6px 0\">\n      <p class=\"small\" style=\"margin:0;opacity:.75\">Selecciona el rango de fechas para exportar o imprimir el reporte de auditoría.</p>\n      <div style=\"display:grid;grid-template-columns:1fr 1fr;gap:10px;\">\n        <div class=\"field-group\">\n          <label style=\"font-size:11px;font-weight:700;opacity:0.8;\">📅 Desde</label>\n          <input type=\"date\" id=\"export-history-from\" class=\"glass-control\" style=\"width:100%;box-sizing:border-box;padding:8px 10px;border-radius:10px;color:#fff;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12)\">\n        </div>\n        <div class=\"field-group\">\n          <label style=\"font-size:11px;font-weight:700;opacity:0.8;\">📅 Hasta</label>\n          <input type=\"date\" id=\"export-history-to\" class=\"glass-control\" style=\"width:100%;box-sizing:border-box;padding:8px 10px;border-radius:10px;color:#fff;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12)\">\n        </div>\n      </div>\n      <div style=\"display:flex;flex-direction:column;gap:8px;margin-top:6px;\">\n        <button class=\"primary\" id=\"btn-do-print-pdf\" style=\"height:44px;font-size:13px;font-weight:800;cursor:pointer;border-radius:12px;box-shadow:0 6px 18px rgba(0,122,255,0.3)\">\n          🖨️ Imprimir / Guardar en PDF\n        </button>\n        <button class=\"glass-control\" id=\"btn-do-download-txt\" style=\"height:40px;font-size:12px;font-weight:700;cursor:pointer;border-radius:12px;background:rgba(255,255,255,0.05);color:#fff;border:1px solid rgba(255,255,255,0.15)\">\n          📑 Descargar Reporte (.txt)\n        </button>\n        <button class=\"ghost\" id=\"btn-do-download-json\" style=\"height:36px;font-size:11px;cursor:pointer;opacity:0.75\">\n          💾 Descargar JSON sin procesar\n        </button>\n      </div>\n    </div>\n  </div>\n</div>\n";
 var h = class extends HTMLElement {
 	constructor() {
-		super(), this._showSosConfirm = !1, this._sosEntryIdx = null, this._sosBusy = !1, this._sosSliding = !1, this._sosStartX = 0, this._sosOffsetX = 0, this._sosConfirmed = !1, this.attachShadow({ mode: "open" }).appendChild(m.content.cloneNode(!0)), this._wsId = 1, this._socket = null, this._dashboard = null, this._ui = null, this._available = [], this._mode = "home", this._modeEntryId = null, this._selected = [], this._selectorTarget = null, this._hass = null, this._prevStates = {}, this._notifTargets = [], this._users = [], this._haUsersList = [], this._isAdmin = !0, this._pinCallback = null, this._homeName = "", this._backgroundMode = "weather", this._backgroundImages = [], this._temperatureSource = "auto", this._weatherSource = "auto", this._pending = {}, this._lastClockUpdate = 0, this._manualLang = null, this._fullscreenIdx = -1, this._cachedBgUrl = null, this._cachedBgBrightness = void 0, this._hubBgMode = "default", this._hubBgFile = "", this._hubBgSound = !1, this._clockFormat = "auto", this._profileSelectedThisMount = !1, this._welcomeShownThisMount = !1, this._panicOutputs = void 0, this._initPromise = null, this._staticBound = !1, this._postLoadBound = !1;
+		super(), this._showSosConfirm = !1, this._sosEntryIdx = null, this._sosBusy = !1, this._sosSliding = !1, this._sosStartX = 0, this._sosOffsetX = 0, this._sosConfirmed = !1, this.attachShadow({ mode: "open" }).appendChild(m.content.cloneNode(!0)), this._wsId = 1, this._socket = null, this._dashboard = null, this._ui = null, this._available = [], this._mode = "home", this._modeEntryId = null, this._selected = [], this._selectorTarget = null, this._hass = null, this._prevStates = {}, this._notifTargets = [], this._users = [], this._haUsersList = [], this._isAdmin = !0, this._pinCallback = null, this._homeName = "", this._backgroundMode = "none", this._backgroundImages = [], this._temperatureSource = "auto", this._weatherSource = "auto", this._pending = {}, this._lastClockUpdate = 0, this._manualLang = null, this._fullscreenIdx = -1, this._cachedBgUrl = null, this._cachedBgBrightness = void 0, this._hubBgMode = "default", this._hubBgFile = "", this._hubBgSound = !1, this._clockFormat = "auto", this._profileSelectedThisMount = !1, this._welcomeShownThisMount = !1, this._panicOutputs = void 0, this._initPromise = null, this._staticBound = !1, this._postLoadBound = !1;
 	}
 	_getTimeZone() {
 		return this._hass?.config?.time_zone || void 0;
@@ -997,31 +997,7 @@ var h = class extends HTMLElement {
 					this._cachedBgUrl = t, this._cachedBgBrightness = n, e = n < 135;
 				}
 			} else e = this._hass.themes ? this._hass.themes.darkMode === !0 : !1;
-		} else {
-			let t = this._backgroundMode || "weather";
-			if (t === "none") e = this._hass.themes ? this._hass.themes.darkMode === !0 : !1;
-			else if (t === "weather") {
-				if (this._hass.states?.["sun.sun"]?.state === "below_horizon") e = !0;
-				else {
-					let t = this._getWeatherEntity().state || "sunny";
-					e = ![
-						"sunny",
-						"fog",
-						"snow",
-						"windy"
-					].includes(t);
-				}
-			} else if (t === "photo" || t === "collage") {
-				let t = "";
-				if (this._backgroundImages && this._backgroundImages[0] ? t = this._backgroundImages[0] : this._panelBgFile && (t = this._panelBgFile), t) {
-					if (this._cachedBgUrl === t && this._cachedBgBrightness !== void 0) e = this._cachedBgBrightness < 135;
-					else {
-						let n = await this._getBrightness(t);
-						this._cachedBgUrl = t, this._cachedBgBrightness = n, e = n < 135;
-					}
-				} else e = this._hass.themes ? this._hass.themes.darkMode === !0 : !1;
-			}
-		}
+		} else e = !this._hass.themes || this._hass.themes.darkMode === !0;
 		this.setAttribute("argus-dark-mode", e ? "true" : "false");
 	}
 	set hass(e) {
@@ -1167,15 +1143,12 @@ var h = class extends HTMLElement {
 		};
 		l("btn-new-auto", "create_ha"), l("btn-save-pin", "update_pin"), l("btn-save-notif", "save_notif"), l("btn-save-user", "save_user"), l("selector-close", "close"), l("selector-clear", "clear"), l("selector-accept", "accept"), l("pin-cancel", "cancel"), l("pin-confirm", "confirm"), l("btn-cancel-sos", "cancel"), l("sos-call-btn", "sos_call"), l("home-name-cancel", "cancel"), l("home-name-save", "save_btn");
 		let u = t("lang-modal-close");
-		u && (u.textContent = `✕ ${e("close")}`), n("lbl-home-name-hdr", e("home_name_lbl")), n("lbl-panel-bg-title", e("bg_panel_title")), n("lbl-hub-bg-title", e("bg_hub_title")), n("s-panel-bg-sound-lbl", e("bg_sound_opt")), n("s-hub-bg-sound-lbl", e("bg_sound_opt")), n("lbl-mas-ajustes", "🎨 " + e("lbl_aesthetic_custom")), n("edit-widgets-label", this._widgetEditing ? "✓ " + e("done") : `⚙️ ${this._t("edit_widgets") || "Config. Widgets"}`), n("lbl-temperature-source", e("temp_displayed")), n("lbl-weather-source", e("weather_source")), n("lbl-panel-bg-upload", e("lbl_load_file")), n("lbl-hub-bg-upload", e("lbl_load_file")), n("lbl-uploaded-files-title", e("lbl_uploaded_files")), n("btn-edit-home-name-standalone", e("edit_btn")), n("btn-save-personalization-standalone", e("save_btn")), n("btn-refresh-history", e("history_refresh")), n("btn-export-forensic", "📄 " + (e("export_history_title") || "Exportar")), n("btn-clear-log", e("clear_log_btn")), n("h-history-export-title", "📄 " + (e("export_history_title") || "Exportar Historial")), n("h-access-title", e("access_title")), n("p-access-desc", e("access_desc")), n("btn-access-users", `👥 ${e("users_title").replace(/^👥\s*/, "").replace(/\s(?:y|&|e)\s.*$/i, "")}`), n("btn-access-pin", `🔐 ${e("pin_master_title")}`), n("h-settings-pin", e("pin_master_title")), n("p-pin-remove-hint", e("pin_remove_hint")), n("h-backup-title", e("backup_title")), n("p-backup-desc", e("backup_desc")), n("btn-export-config", e("export_btn")), n("btn-reset-config", e("reset_btn")), n("btn-undo-reset", e("undo_reset_btn")), n("btn-import-trigger", e("import_btn")), n("github-title", e("github_title")), n("github-desc", e("github_desc")), n("github-action", `⭐ ${e("github_action")}`), n("sos-title-txt", e("sos_confirm_title")), n("sos-text-txt", e("sos_confirm_text")), n("sos-label", e("sos_slide")), n("system-diagnostics-txt", "ℹ️ " + (e("system_diagnostics") || "Diagnóstico y Resumen del Sistema")), n("home-name-modal-h3", e("home_name_modal_title")), n("p-home-name-modal-desc", e("home_name_modal_desc")), n("l-home-name-modal-label", e("home_name_label")), n("lang-modal-title", `🌐 ${e("lang_select_title")}`), n("sos-call-help", e("sos_call_help")), n("lbl-emergency-number", e("emergency_number_label")), n("emergency-number-help", e("emergency_help")), n("lbl-sos-actions", e("sos_actions")), n("btn-select-sos-outputs", e("sos_select_outputs")), n("sos-output-help", e("sos_outputs_help")), n("home-name-modal-desc", e("home_name_modal_desc")), n("pin-backspace", e("delete"));
+		u && (u.textContent = `✕ ${e("close")}`), n("lbl-home-name-hdr", e("home_name_lbl")), n("lbl-panel-bg-title", e("bg_panel_title")), n("lbl-hub-bg-title", e("bg_hub_title")), n("s-panel-bg-sound-lbl", e("bg_sound_opt")), n("s-hub-bg-sound-lbl", e("bg_sound_opt")), n("lbl-mas-ajustes", "🎨 " + e("lbl_aesthetic_custom")), n("edit-widgets-label", this._widgetEditing ? "✓ " + e("done") : `⚙️ ${this._t("edit_widgets") || "Config. Widgets"}`), n("lbl-temperature-source", e("temp_displayed")), n("lbl-panel-bg-upload", e("lbl_load_file")), n("lbl-hub-bg-upload", e("lbl_load_file")), n("lbl-uploaded-files-title", e("lbl_uploaded_files")), n("btn-edit-home-name-standalone", e("edit_btn")), n("btn-save-personalization-standalone", e("save_btn")), n("btn-refresh-history", e("history_refresh")), n("btn-export-forensic", "📄 " + (e("export_history_title") || "Exportar")), n("btn-clear-log", e("clear_log_btn")), n("h-history-export-title", "📄 " + (e("export_history_title") || "Exportar Historial")), n("h-access-title", e("access_title")), n("p-access-desc", e("access_desc")), n("btn-access-users", `👥 ${e("users_title").replace(/^👥\s*/, "").replace(/\s(?:y|&|e)\s.*$/i, "")}`), n("btn-access-pin", `🔐 ${e("pin_master_title")}`), n("h-settings-pin", e("pin_master_title")), n("p-pin-remove-hint", e("pin_remove_hint")), n("h-backup-title", e("backup_title")), n("p-backup-desc", e("backup_desc")), n("btn-export-config", e("export_btn")), n("btn-reset-config", e("reset_btn")), n("btn-undo-reset", e("undo_reset_btn")), n("btn-import-trigger", e("import_btn")), n("github-title", e("github_title")), n("github-desc", e("github_desc")), n("github-action", `⭐ ${e("github_action")}`), n("sos-title-txt", e("sos_confirm_title")), n("sos-text-txt", e("sos_confirm_text")), n("sos-label", e("sos_slide")), n("system-diagnostics-txt", "ℹ️ " + (e("system_diagnostics") || "Diagnóstico y Resumen del Sistema")), n("home-name-modal-h3", e("home_name_modal_title")), n("p-home-name-modal-desc", e("home_name_modal_desc")), n("l-home-name-modal-label", e("home_name_label")), n("lang-modal-title", `🌐 ${e("lang_select_title")}`), n("sos-call-help", e("sos_call_help")), n("lbl-emergency-number", e("emergency_number_label")), n("emergency-number-help", e("emergency_help")), n("lbl-sos-actions", e("sos_actions")), n("btn-select-sos-outputs", e("sos_select_outputs")), n("sos-output-help", e("sos_outputs_help")), n("home-name-modal-desc", e("home_name_modal_desc")), n("pin-backspace", e("delete"));
 		let d = t("bg-mode-select-standalone");
 		if (d) {
 			let t = d.value;
 			d.innerHTML = `
-        <option value="weather">${e("bg_weather")}</option>
         <option value="none">${e("bg_panel_none")}</option>
-        <option value="photo">${e("bg_photo")}</option>
-        <option value="collage">${e("bg_collage")}</option>
       `, t && (d.value = t), this._renderEntries();
 		}
 		let p = t("hub-bg-mode-select");
@@ -1186,7 +1159,7 @@ var h = class extends HTMLElement {
         <option value="image">${e("bg_image_opt")}</option>
       `, t && (p.value = t);
 		}
-		this._populateTemperatureSources(), this._populateWeatherSources();
+		this._populateTemperatureSources();
 		let m = t("current-pin-display");
 		if (m) {
 			let t = this._dashboard?.entries?.[0]?.pin_configured;
@@ -1240,7 +1213,7 @@ var h = class extends HTMLElement {
 		try {
 			this._manualLang = localStorage.getItem("argus_lang") || null;
 		} catch {}
-		this._ensureInitialized(), this._initContrastMode(), this._startClock(), this._fullscreenIdx >= 0 && !this._kioskLocked && (document.fullscreenElement || document.webkitFullscreenElement || (this._fullscreenIdx = -1, this.classList.remove("fullscreen-active"))), this._onFsChange = () => {
+		this._ensureInitialized(), this._initContrastMode(), this._initGestureMode(), this._startClock(), this._fullscreenIdx >= 0 && !this._kioskLocked && (document.fullscreenElement || document.webkitFullscreenElement || (this._fullscreenIdx = -1, this.classList.remove("fullscreen-active"))), this._onFsChange = () => {
 			!(document.fullscreenElement || document.webkitFullscreenElement) && !this._kioskLocked && this.classList.contains("fullscreen-active") && this._exitFullscreenView();
 		}, document.addEventListener("fullscreenchange", this._onFsChange), document.addEventListener("webkitfullscreenchange", this._onFsChange), this._onEscape = (e) => {
 			e.key === "Escape" && this.classList.contains("fullscreen-active") && this._exitFullscreenView();
@@ -1332,7 +1305,11 @@ var h = class extends HTMLElement {
 				e.style.left = "6px", t.style.background = "rgba(217,4,41,0.15)";
 			}, 600)) : (i = 0, e.style.left = "6px", t.style.background = "rgba(217,4,41,0.15)");
 		};
-		e.addEventListener("pointerdown", o), e.addEventListener("pointermove", s), e.addEventListener("pointerup", c), e.addEventListener("pointercancel", c), this._sosBound = !0;
+		e.setAttribute("role", "button"), e.setAttribute("tabindex", "0"), e.setAttribute("aria-label", this._t("tap_sos") || "Activar SOS"), e.addEventListener("keydown", (e) => {
+			(e.key === "Enter" || e.key === " ") && (e.preventDefault(), this._triggerSOS());
+		}), t.addEventListener("click", () => {
+			this._getProfileGesture() === "touch" && this._triggerSOS();
+		}), e.addEventListener("pointerdown", o), e.addEventListener("pointermove", s), e.addEventListener("pointerup", c), e.addEventListener("pointercancel", c), this._sosBound = !0;
 	}
 	async _init() {
 		this._mode = "disarmed", this._staticBound ||= (this._bindStatic(), !0), await this._connect(), this._applyTranslations(), await this._load(), this._dashboard && (this._initWidgetGrid(), !this._postLoadBound && (this._postLoadBound = !0, this.shadowRoot.getElementById("history-export-modal")?.addEventListener("click", (e) => {
@@ -1801,47 +1778,41 @@ var h = class extends HTMLElement {
 		let o = a.hub_bg_mode || r.ui?.hub_bg_mode || "none";
 		this._hubBgMode = o === "none" || o === "default" ? "default" : o, this._hubBgFile = a.hub_bg_file === void 0 ? r.ui?.hub_bg_file || "" : a.hub_bg_file, this._hubBgSound = !!(a.hub_bg_sound === void 0 ? r.ui?.hub_bg_sound : a.hub_bg_sound), this._updateTheme(), this._updateHomeNameDisplay(), this._updateProfileBadge(), this._populateTemperatureSources();
 		let s = this.shadowRoot.getElementById("temp-source-select-standalone");
-		s && (s.value = this._temperatureSource || "auto", s.dataset.bound || (s.dataset.bound = "1", s.addEventListener("change", () => this._savePersonalization()))), this._populateWeatherSources();
-		let c = this.shadowRoot.getElementById("weather-source-select");
-		c && (c.value = this._weatherSource || "auto", c.dataset.bound || (c.dataset.bound = "1", c.addEventListener("change", () => this._savePersonalization())));
-		let l = this.shadowRoot.getElementById("argus-clock-format-select");
-		l && (this._clockFormat = this._ui?.clock_format || this._dashboard?.clock_format || "auto", l.value = this._clockFormat, l.dataset.bound || (l.dataset.bound = "1", l.addEventListener("change", () => this._savePersonalization())));
-		let u = this.shadowRoot.getElementById("emergency-number-input");
-		u && (u.value = this._emergencyNumber), this._renderSosOutputs(), this._configureEmergencyCall();
-		let d = this.shadowRoot.getElementById("bg-mode-select-standalone");
-		d && (d.innerHTML = `
-        <option value="weather">${this._t("bg_weather")}</option>
+		s && (s.value = this._temperatureSource || "auto", s.dataset.bound || (s.dataset.bound = "1", s.addEventListener("change", () => this._savePersonalization())));
+		let c = this.shadowRoot.getElementById("argus-clock-format-select");
+		c && (this._clockFormat = this._ui?.clock_format || this._dashboard?.clock_format || "auto", c.value = this._clockFormat, c.dataset.bound || (c.dataset.bound = "1", c.addEventListener("change", () => this._savePersonalization())));
+		let l = this.shadowRoot.getElementById("emergency-number-input");
+		l && (l.value = this._emergencyNumber), this._renderSosOutputs(), this._configureEmergencyCall();
+		let u = this.shadowRoot.getElementById("bg-mode-select-standalone");
+		u && (u.innerHTML = `
         <option value="none">${this._t("bg_panel_none")}</option>
-        <option value="photo">${this._t("bg_photo")}</option>
-        <option value="collage">${this._t("bg_collage")}</option>
-      `, d.value = this._backgroundMode || "weather");
-		let p = this.shadowRoot.getElementById("hub-bg-mode-select");
-		p && (p.innerHTML = `
+      `, u.value = this._backgroundMode || "none");
+		let d = this.shadowRoot.getElementById("hub-bg-mode-select");
+		d && (d.innerHTML = `
         <option value="default">${this._t("bg_hub_default")}</option>
         <option value="image">${this._t("bg_image_opt")}</option>
-        <option value="weather">Clima animado</option>
-      `, p.value = this._hubBgMode || "default");
-		let m = this.shadowRoot.getElementById("panel-bg-url-input");
-		m && (m.value = this._panelBgFile && !this._panelBgFile.startsWith("data:") ? this._panelBgFile : "");
-		let h = this.shadowRoot.getElementById("chk-panel-bg-sound");
-		h && (h.checked = this._panelBgSound);
-		let g = this.shadowRoot.getElementById("hub-bg-url-input");
-		g && (g.value = this._hubBgFile && !this._hubBgFile.startsWith("data:") ? this._hubBgFile : "");
-		let _ = this.shadowRoot.getElementById("chk-hub-bg-sound");
-		_ && (_.checked = this._hubBgSound), this._updateBgFieldsVisibility(), this._updateCanvasBackground(), this._isAdmin = r.current_profile?.role === "admin", this._permissions = r.current_profile?.permissions || {};
-		let v = r.entries?.[0]?.entity_id;
-		if (v ? ((!this._modeEntryId || this._modeEntryId === "default") && (this._modeEntryId = v), this._loadRetryTimeout &&= (clearTimeout(this._loadRetryTimeout), null)) : (!this._modeEntryId || this._modeEntryId === "default") && (this._modeEntryId = null), this._isAdmin) try {
+      `, d.value = this._hubBgMode || "default");
+		let p = this.shadowRoot.getElementById("panel-bg-url-input");
+		p && (p.value = this._panelBgFile && !this._panelBgFile.startsWith("data:") ? this._panelBgFile : "");
+		let m = this.shadowRoot.getElementById("chk-panel-bg-sound");
+		m && (m.checked = this._panelBgSound);
+		let h = this.shadowRoot.getElementById("hub-bg-url-input");
+		h && (h.value = this._hubBgFile && !this._hubBgFile.startsWith("data:") ? this._hubBgFile : "");
+		let g = this.shadowRoot.getElementById("chk-hub-bg-sound");
+		g && (g.checked = this._hubBgSound), this._updateBgFieldsVisibility(), this._updateCanvasBackground(), this._isAdmin = r.current_profile?.role === "admin", this._permissions = r.current_profile?.permissions || {};
+		let _ = r.entries?.[0]?.entity_id;
+		if (_ ? ((!this._modeEntryId || this._modeEntryId === "default") && (this._modeEntryId = _), this._loadRetryTimeout &&= (clearTimeout(this._loadRetryTimeout), null)) : (!this._modeEntryId || this._modeEntryId === "default") && (this._modeEntryId = null), this._isAdmin) try {
 			let e = await this._send("argus/get_ha_users");
 			this._haUsersList = e?.ha_users || [];
 		} catch (e) {
 			console.warn("Could not fetch HA users:", e);
 		}
-		let y = r.entries?.[0]?.pin_configured === !0, b = this.shadowRoot.getElementById("current-pin-display"), x = this.shadowRoot.getElementById("group-current-pin");
-		b && (b.textContent = y ? this._t("pin_active_yes") : this._t("pin_active_no")), x && (y ? x.classList.remove("collapsed") : x.classList.add("collapsed"));
-		let S = this.shadowRoot.getElementById("lnk-forgot-pin");
-		S && (S.style.display = y ? "inline" : "none");
-		let C = this.shadowRoot.getElementById("pin-forgot-link");
-		C && (C.style.display = y ? "inline" : "none"), [
+		let v = r.entries?.[0]?.pin_configured === !0, y = this.shadowRoot.getElementById("current-pin-display"), b = this.shadowRoot.getElementById("group-current-pin");
+		y && (y.textContent = v ? this._t("pin_active_yes") : this._t("pin_active_no")), b && (v ? b.classList.remove("collapsed") : b.classList.add("collapsed"));
+		let x = this.shadowRoot.getElementById("lnk-forgot-pin");
+		x && (x.style.display = v ? "inline" : "none");
+		let S = this.shadowRoot.getElementById("pin-forgot-link");
+		S && (S.style.display = v ? "inline" : "none"), [
 			["instances", () => this._renderEntries()],
 			["activity log", () => this._renderActivityLog()],
 			["mode tabs", () => this._renderModeTabs()],
@@ -1856,8 +1827,8 @@ var h = class extends HTMLElement {
 				console.error(`Argus ${e} render failed:`, t);
 			}
 		}), this._loadUploadedFiles(), this._refreshLocalizedUi();
-		let w = r.entries && r.entries.length > 0, ee = w && r.entries[0].entity_id;
-		w && !ee ? this._loadRetryTimeout ||= setTimeout(() => {
+		let C = r.entries && r.entries.length > 0, w = C && r.entries[0].entity_id;
+		C && !w ? this._loadRetryTimeout ||= setTimeout(() => {
 			this._loadRetryTimeout = null, this._load();
 		}, 1500) : this._loadRetryTimeout &&= (clearTimeout(this._loadRetryTimeout), null);
 	}
@@ -2122,125 +2093,6 @@ var h = class extends HTMLElement {
 		this._kioskEntryId = a?.entry_id || null, this._kioskTarget = t, this._kioskLocked = !1, this._fullscreenIdx = i, this.classList.add("fullscreen-active"), document.body.style.overflow = "hidden", this.dispatchEvent(new CustomEvent("argus-fullscreen-changed", { detail: { fullscreen: !0 } })), this._renderEntries(!0);
 		let o = this.requestFullscreen || this.webkitRequestFullscreen || t?.requestFullscreen || t?.webkitRequestFullscreen;
 		o && o.call(this).catch(() => {});
-	}
-	_getWeatherGradient(e, t = "") {
-		let n = {
-			sunny: "linear-gradient(160deg, #4da6ff 0%, #89c4ff 60%, #c8e8ff 100%)",
-			clear: "linear-gradient(160deg, #1a1a3e 0%, #2d2d6b 50%, #0f2557 100%)",
-			cloudy: "linear-gradient(160deg, #6b7a8d 0%, #9aa5b1 60%, #c5cdd5 100%)",
-			partlycloudy: "linear-gradient(160deg, #5b8fd4 0%, #7baee8 50%, #a8c8f0 100%)",
-			rainy: "linear-gradient(160deg, #3d4f5c 0%, #5a6e7a 50%, #7a8e96 100%)",
-			snowy: "linear-gradient(160deg, #a8bfcf 0%, #c5d8e8 60%, #e8f0f8 100%)",
-			stormy: "linear-gradient(160deg, #1a1f2e 0%, #2d3244 50%, #3d4255 100%)",
-			fog: "linear-gradient(160deg, #8a9099 0%, #adb5bd 60%, #ced4da 100%)"
-		}, r = String(t || e.label || "").toLowerCase();
-		return n[Object.keys(n).find((e) => r.includes(e)) || Object.keys(n).find((t) => e.label?.toLowerCase().includes(t)) || "sunny"];
-	}
-	_initWeatherWebGL(e) {
-		if (!e || window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
-		let t = e.parentElement;
-		if (t) {
-			let e = this._getWeatherEntity()?.state, n = this._hass?.states?.["sun.sun"]?.state === "below_horizon", r = String(e || "sunny").toLowerCase().replace(/[\s-]+/g, "_");
-			t.style.background = this._getWeatherGradient(this._weatherPresentation(e, n), r);
-		}
-		let n = e.getContext("webgl", {
-			alpha: !0,
-			premultipliedAlpha: !1,
-			antialias: !1,
-			powerPreference: "low-power"
-		}) || e.getContext("experimental-webgl", {
-			alpha: !0,
-			premultipliedAlpha: !1,
-			antialias: !1,
-			powerPreference: "low-power"
-		});
-		if (!n) {
-			e.style.opacity = "0";
-			return;
-		}
-		n.clearColor(0, 0, 0, 0);
-		let r = (e, t) => {
-			let r = n.createShader(e);
-			return n.shaderSource(r, t), n.compileShader(r), n.getShaderParameter(r, n.COMPILE_STATUS) ? r : null;
-		}, i = r(n.VERTEX_SHADER, "attribute vec2 p;varying vec2 uv;void main(){uv=(p+1.0)*.5;gl_Position=vec4(p,0.0,1.0);}"), a = r(n.FRAGMENT_SHADER, "precision highp float;varying vec2 uv;uniform float time,rain,snow,fog,storm,wind,temp,night,cloudy;\nuniform vec2 cloudPositions[6];\nuniform vec2 cloudSizes[6];\nuniform float cloudAlphas[6];\nfloat h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}\nfloat noise(vec2 p){vec2 i=floor(p),f=fract(p),u=f*f*(3.0-2.0*f);return mix(mix(h(i+vec2(0.0,0.0)),h(i+vec2(1.0,0.0)),u.x),mix(h(i+vec2(0.0,1.0)),h(i+vec2(1.0,1.0)),u.x),u.y);}\nfloat fbm(vec2 p){float f=0.0,a=0.5;for(int i=0;i<4;i++){f+=a*noise(p);p*=2.0;a*=0.5;}return f;}\nfloat rainLayer(vec2 u,float t,float n){vec2 s=vec2(20.0+8.0*n,7.0+3.0*n);u.x+=wind*0.1*u.y;vec2 g=u*s,id=floor(g),q=fract(g);float sp=2.4+n*1.35+h(id)*1.2;q.y=fract(q.y+t*sp+h(id));float x=abs(q.x-(0.5+wind*0.2-q.y*(0.16+wind*0.1)));return (1.0-smoothstep(0.003,0.035-n*0.006,x))*(1.0-smoothstep(0.18,0.98,q.y));}\nfloat snowLayer(vec2 u,float t,float n){vec2 g=u*vec2(15.0+n*5.0,10.0+n*4.0),id=floor(g),q=fract(g);q.y=fract(q.y+t*(0.2+h(id)*0.2)+h(id));q.x+=sin(t+h(id)*6.28)*0.2+wind*0.1*t;return 1.0-smoothstep(0.01+n*0.01,0.08+n*0.02,length(q-vec2(0.5)));}\nvoid main(){float t=time*0.001;vec2 u=uv;if(temp>30.0){u.x+=sin(u.y*20.0+t*5.0)*0.003*(temp-30.0)/10.0;u.y+=cos(u.x*20.0+t*4.0)*0.003*(temp-30.0)/10.0;}\nvec3 col=vec3(0.0);float alpha=0.0;\nfloat clAlpha=0.0;\nif(cloudy>0.0){\n  for(int i=0;i<6;i++){\n    vec2 center=cloudPositions[i];\n    vec2 size=cloudSizes[i]*1.6;\n    vec2 d=(u-center)/size;\n    float dist=dot(d,d);\n    if(dist<1.0){\n      float base=exp(-dist*3.5);\n      float edge=noise(u*8.0+vec2(t*0.05))*0.35;\n      float intensity=clamp(base+edge*base,0.0,1.0);\n      clAlpha=max(clAlpha,cloudAlphas[i]*intensity*0.45);\n    }\n  }\n}\nif(clAlpha>0.0){\n  vec3 cloudColor=mix(vec3(0.85,0.90,0.95),vec3(1.0),clAlpha);\n  col=mix(col,cloudColor,clAlpha);\n  alpha=max(alpha,clAlpha*0.7);\n}\nif(night>0.5&&rain==0.0&&snow==0.0&&fog==0.0){float st=h(floor(u*150.0));if(st>0.99){float tw=0.5+0.5*sin(t*3.0+st*100.0);col+=vec3(1.0)*tw*(st-0.99)*100.0;alpha=max(alpha,tw*0.5);}}\nif(night>0.5&&temp<5.0&&rain==0.0&&snow==0.0&&storm==0.0){float au=fbm(vec2(u.x*2.0+t*0.1,u.y*3.0-t*0.05)),au2=fbm(vec2(u.x*3.0-t*0.15,u.y*2.0+t*0.08));vec3 ac=mix(vec3(0.0,1.0,0.5),vec3(0.5,0.0,1.0),au);float intn=smoothstep(0.4,0.8,au*au2)*(1.0-u.y);col+=ac*intn*1.5;alpha=max(alpha,intn);}\nif(night<0.5&&rain==0.0&&fog==0.0&&snow==0.0&&cloudy==0.0){float gr=fbm(vec2(u.x*4.0-t*0.08,u.y*0.4))*(1.0-u.y*0.8);float sunGlow=smoothstep(0.3,0.7,gr);col+=vec3(1.0,0.92,0.72)*sunGlow*0.65;alpha=max(alpha,sunGlow*0.45);}\nif(rain>0.0){float r=rainLayer(u,t,0.0)+rainLayer(u,t,1.0)*0.65+rainLayer(u,t,2.0)*0.45+rainLayer(u,t,3.0)*0.25;col+=vec3(0.75,0.88,1.0)*r*rain*1.2;alpha=max(alpha,min(1.0,r*rain*1.1));}\nif(snow>0.0){float s=snowLayer(u,t,0.0)+snowLayer(u,t,1.0)*0.7+snowLayer(u,t,2.0)*0.4;col+=vec3(1.0)*s*snow;alpha=max(alpha,min(1.0,s*snow));}\nif(fog>0.0){float f=fbm(vec2(u.x*3.0+t*0.2,u.y*4.0-t*0.1));col+=vec3(0.8,0.85,0.9)*f*fog*0.7;alpha=max(alpha,min(1.0,f*fog*0.8));}\nif(storm>0.0){float fl=step(0.98,fract(t*0.1+fbm(u*5.0+t)))*(0.8+0.2*noise(vec2(t*50.0)));col+=vec3(1.0,0.95,1.0)*fl*storm;alpha=max(alpha,fl*storm*0.8);}\ngl_FragColor=vec4(col,alpha);}");
-		if (!i || !a) {
-			e.style.opacity = "0";
-			return;
-		}
-		let o = n.createProgram();
-		if (n.attachShader(o, i), n.attachShader(o, a), n.linkProgram(o), !n.getProgramParameter(o, n.LINK_STATUS)) {
-			e.style.opacity = "0";
-			return;
-		}
-		let s = n.createBuffer();
-		n.bindBuffer(n.ARRAY_BUFFER, s), n.bufferData(n.ARRAY_BUFFER, new Float32Array([
-			-1,
-			-1,
-			1,
-			-1,
-			-1,
-			1,
-			1,
-			1
-		]), n.STATIC_DRAW);
-		let c = (e) => n.getUniformLocation(o, e), l = n.getAttribLocation(o, "p"), u = {
-			time: c("time"),
-			rain: c("rain"),
-			snow: c("snow"),
-			fog: c("fog"),
-			storm: c("storm"),
-			wind: c("wind"),
-			temp: c("temp"),
-			night: c("night"),
-			cloudy: c("cloudy"),
-			cloudPositions: c("cloudPositions"),
-			cloudSizes: c("cloudSizes"),
-			cloudAlphas: c("cloudAlphas")
-		}, d = {
-			rain: Math.max(Number(e.dataset.rain || 0), Number(e.dataset.drizzle || 0) * .4),
-			snow: Number(e.dataset.snow || 0),
-			fog: Number(e.dataset.fog || 0),
-			storm: Number(e.dataset.storm || 0),
-			wind: Number(e.dataset.wind || 0),
-			temp: Number(e.dataset.temp || 20),
-			night: Number(e.dataset.night || 0),
-			cloudy: Number(e.dataset.cloudy || 0)
-		}, f = Array.from({ length: 6 }, () => ({
-			x: Math.random() * 800,
-			y: 50 + Math.random() * 250,
-			rx: 120 + Math.random() * 80,
-			ry: 45 + Math.random() * 25,
-			speed: .1 + Math.random() * .3,
-			alpha: .08 + Math.random() * .07
-		})), p = 0, m = !0;
-		if (e.width === 0 || e.height === 0 || e.clientWidth === 0 || e.clientHeight === 0) {
-			let t = e.parentElement;
-			t && t.offsetWidth > 0 ? (e.width = Math.floor(t.offsetWidth * (window.devicePixelRatio || 1)) || 300, e.height = Math.floor(t.offsetHeight * (window.devicePixelRatio || 1)) || 200) : (e.width = 600, e.height = 400);
-		}
-		let h = (t) => {
-			if (!m || !e.isConnected) return;
-			n.clear(n.COLOR_BUFFER_BIT);
-			let r = Math.min(window.devicePixelRatio || 1, 1.5), i = Math.max(1, Math.round(e.clientWidth * r)), a = Math.max(1, Math.round(e.clientHeight * r));
-			(e.width !== i || e.height !== a) && (e.width = i, e.height = a, n.viewport(0, 0, i, a)), d.cloudy > 0 && f.forEach((e) => {
-				e.x -= e.speed, e.x + e.rx < 0 && (e.x = i + e.rx, e.y = 50 + Math.random() * (a - 100));
-			});
-			let c = [], g = [], _ = [];
-			f.forEach((e) => {
-				c.push(e.x / i, e.y / a), g.push(e.rx / i, e.ry / a), _.push(d.cloudy > 0 ? e.alpha : 0);
-			}), n.useProgram(o), n.enable(n.BLEND), n.blendFunc(n.SRC_ALPHA, n.ONE_MINUS_SRC_ALPHA), n.bindBuffer(n.ARRAY_BUFFER, s), n.enableVertexAttribArray(l), n.vertexAttribPointer(l, 2, n.FLOAT, !1, 0, 0), u.time && n.uniform1f(u.time, t), u.rain && n.uniform1f(u.rain, d.rain), u.snow && n.uniform1f(u.snow, d.snow), u.fog && n.uniform1f(u.fog, d.fog), u.storm && n.uniform1f(u.storm, d.storm), u.wind && n.uniform1f(u.wind, d.wind), u.temp && n.uniform1f(u.temp, d.temp), u.night && n.uniform1f(u.night, d.night), u.cloudy && n.uniform1f(u.cloudy, d.cloudy), u.cloudPositions && n.uniform2fv(u.cloudPositions, c), u.cloudSizes && n.uniform2fv(u.cloudSizes, g), u.cloudAlphas && n.uniform1fv(u.cloudAlphas, _), n.drawArrays(n.TRIANGLE_STRIP, 0, 4), p = requestAnimationFrame(h);
-		};
-		e._argusWebglStop = () => {
-			m = !1, cancelAnimationFrame(p), n.getExtension("WEBGL_lose_context")?.loseContext();
-		}, e.closest(".wx-atmosphere")?.classList.add("webgl-active"), p = requestAnimationFrame(h);
-	}
-	_renderAtmosphere(e, t) {
-		let n = String(e || "").toLowerCase(), r = (e) => n.includes(e), i = r("thunder") || r("lightning") || r("storm"), a = r("snow") || r("hail") || r("sleet") || r("blizzard"), o = r("drizzle") || r("shower"), s = !o && (r("rain") || r("pouring")), c = r("fog") || r("mist") || r("hazy"), l = r("cloud") || r("overcast"), u = "clear";
-		i ? u = "storm" : s || o ? u = "rain" : a ? u = "snow" : c ? u = "fog" : r("partly") ? u = "partlycloudy" : l ? u = "cloudy" : r("sunny") && (u = "sunny");
-		let d = t ? "night" : "day", f = this._eclipseEvent() ? "eclipse" : "";
-		return `<div class="scene ${d} ${u} ${f}"></div>`;
-	}
-	_getWeatherBg(e, t) {
-		return this._renderAtmosphere(e, t);
 	}
 	_healthText() {
 		let e = {
@@ -3291,18 +3143,6 @@ var h = class extends HTMLElement {
 		let n = /* @__PURE__ */ new Set();
 		e.innerHTML = t.filter((e) => !n.has(e.entity_id) && (n.add(e.entity_id), !0)).map((e) => `<option value="${this._escapeHtml(e.entity_id)}">${this._escapeHtml(e.name)}</option>`).join("");
 	}
-	_populateWeatherSources() {
-		let e = this.shadowRoot.getElementById("weather-source-select");
-		if (!e || !this._hass?.states) return;
-		let t = e.value || this._weatherSource || "auto", n = Object.values(this._hass.states).filter((e) => e.entity_id?.startsWith("weather."));
-		e.innerHTML = [{
-			entity_id: "auto",
-			name: this._t("weather_auto")
-		}, ...n.map((e) => ({
-			entity_id: e.entity_id,
-			name: e.attributes?.friendly_name || e.entity_id
-		}))].map((e) => `<option value="${this._escapeHtml(e.entity_id)}">${this._escapeHtml(e.name)}</option>`).join(""), e.value = [...e.options].some((e) => e.value === t) ? t : "auto";
-	}
 	_getWeatherEntity() {
 		let e = this._weatherSource || "auto";
 		return (e === "auto" ? null : this._hass?.states?.[e]) || Object.values(this._hass?.states || {}).find((e) => e.entity_id?.startsWith("weather.")) || {
@@ -3689,7 +3529,7 @@ var h = class extends HTMLElement {
 	}
 	async _persistPersonalization() {
 		this._ui = this._ui || {};
-		let e = this.shadowRoot.getElementById("bg-mode-select-standalone")?.value || "weather", t = this.shadowRoot.getElementById("temp-source-select-standalone")?.value || "auto", n = this.shadowRoot.getElementById("weather-source-select")?.value || "auto", r = this.shadowRoot.getElementById("argus-clock-format-select")?.value || "auto";
+		let e = this.shadowRoot.getElementById("bg-mode-select-standalone")?.value || "none", t = this.shadowRoot.getElementById("temp-source-select-standalone")?.value || "auto", n = "auto", r = this.shadowRoot.getElementById("argus-clock-format-select")?.value || "auto";
 		this._clockFormat = [
 			"auto",
 			"12h",
@@ -4285,6 +4125,34 @@ var h = class extends HTMLElement {
 		let e = this._getProfileContrast();
 		this._applyContrastMode(e);
 	}
+	_getProfileGesture() {
+		let e = this._currentProfile?.id || "default";
+		try {
+			let t = localStorage.getItem(`argus_gesture_${e}`);
+			if (t === "touch" || t === "slide") return t;
+			let n = localStorage.getItem("argus_gesture_global");
+			if (n === "touch" || n === "slide") return n;
+		} catch {}
+		return "slide";
+	}
+	_setGestureMode(e) {
+		let t = this._currentProfile?.id || "default";
+		try {
+			localStorage.setItem(`argus_gesture_${t}`, e), localStorage.setItem("argus_gesture_global", e);
+		} catch {}
+		this._applyGestureMode(e);
+	}
+	_applyGestureMode(e) {
+		e === "touch" ? (this.setAttribute("argus-gesture", "touch"), this.classList.add("argus-gesture-touch")) : (this.removeAttribute("argus-gesture"), this.classList.remove("argus-gesture-touch"));
+		let t = this.shadowRoot?.getElementById("sos-label");
+		t && (t.textContent = e === "touch" ? this._t("tap_sos") || "Toca para activar SOS" : this._t("slide_sos") || "Desliza para activar SOS");
+		let n = this.shadowRoot?.getElementById("sos-thumb");
+		n && n.setAttribute("aria-label", e === "touch" ? this._t("tap_sos") || "Activar SOS" : this._t("slide_sos") || "Deslizar para activar SOS"), this.shadowRoot?.querySelectorAll(".entry").forEach((e) => e._staRefresh?.());
+	}
+	_initGestureMode() {
+		let e = this._getProfileGesture();
+		this._applyGestureMode(e);
+	}
 	_updateHeroProfileDisplay() {
 		let e = this.shadowRoot.getElementById("hero-profile-container");
 		if (!e) return;
@@ -4340,9 +4208,18 @@ var h = class extends HTMLElement {
         <!-- Appearance & Contrast Selector -->
         <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
           <label style="font-size: 11px; font-weight: 700; opacity: 0.7; display: flex; align-items: center; gap: 5px;">${this._t("contrast_selector_lbl") || "👁️ Aspecto y Contraste"}</label>
-          <select id="dropdown-contrast-select" class="glass-control" style="width: 100%; height: 36px; border-radius: 10px; padding: 0 10px; font-size: 12px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid var(--v2066-border); color: var(--v2066-text); outline: none; cursor: pointer;">
+          <select id="dropdown-contrast-select" class="glass-control" aria-label="${this._t("contrast_selector_lbl") || "Aspecto y Contraste"}" style="width: 100%; height: 38px; border-radius: 10px; padding: 0 10px; font-size: 12px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid var(--v2066-border); color: var(--v2066-text); outline: none; cursor: pointer;">
             <option value="standard" ${this._getProfileContrast() === "standard" ? "selected" : ""}>${this._t("contrast_standard") || "✨ Estándar (Liquid Glass)"}</option>
             <option value="high" ${this._getProfileContrast() === "high" ? "selected" : ""}>${this._t("contrast_high") || "🖤 Alto Contraste (OLED / Oscuro)"}</option>
+          </select>
+        </div>
+
+        <!-- Interaction / Gesture Selector (WCAG 2.5.1) -->
+        <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
+          <label style="font-size: 11px; font-weight: 700; opacity: 0.85; display: flex; align-items: center; gap: 5px;">${this._t("gesture_selector_lbl") || "🕹️ Modo de Control"}</label>
+          <select id="dropdown-gesture-select" class="glass-control" aria-label="${this._t("gesture_selector_lbl") || "Modo de control de alarma"}" style="width: 100%; height: 38px; border-radius: 10px; padding: 0 10px; font-size: 12px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid var(--v2066-border); color: var(--v2066-text); outline: none; cursor: pointer;">
+            <option value="slide" ${this._getProfileGesture() === "slide" ? "selected" : ""}>${this._t("gesture_slide") || "↔️ Deslizador Táctil (Antitoques)"}</option>
+            <option value="touch" ${this._getProfileGesture() === "touch" ? "selected" : ""}>${this._t("gesture_touch") || "👆 Botón Accesible (Toque Simple)"}</option>
           </select>
         </div>
 
@@ -4354,16 +4231,16 @@ var h = class extends HTMLElement {
           <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 2px;">
             ${a ? `
             <div style="display: flex; align-items: center; justify-content: space-between;">
-              <span style="font-size: 11px; opacity: 0.85;">${this._t("access_pin_lbl") || "Pin perfil Argus"}</span>
+              <span style="font-size: 12px; opacity: 0.9;">${this._t("access_pin_lbl") || "Pin perfil Argus"}</span>
               ${l ? `
-              <div style="display: flex; gap: 4px;">
-                <button id="btn-dropdown-change-access-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase;">${this._t("change_btn") || "Cambiar"}</button>
-                <button id="btn-dropdown-remove-access-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; color: #ff453a !important;">${this._t("remove_btn") || "Eliminar"}</button>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <button id="btn-dropdown-change-access-pin" class="glass-control" aria-label="Cambiar PIN de perfil" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer;">${this._t("change_btn") || "Cambiar"}</button>
+                <button id="btn-dropdown-remove-access-pin" class="glass-control" aria-label="Eliminar PIN de perfil" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; color: #f87171 !important; background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.3); margin-left: 6px;">${this._t("remove_btn") || "Eliminar"}</button>
               </div>
               ` : `
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <span style="font-size: 9.5px; font-weight: 800; opacity: 0.5; background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 6px;">${this._t("no_pin_badge") || "SIN PIN"}</span>
-                <button id="btn-dropdown-set-access-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; color: #30d158 !important;">⚙️ ${this._t("configure_btn") || "Configurar"}</button>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 10.5px; font-weight: 800; opacity: 0.6; background: rgba(255,255,255,0.06); padding: 4px 8px; border-radius: 6px;">${this._t("no_pin_badge") || "SIN PIN"}</span>
+                <button id="btn-dropdown-set-access-pin" class="glass-control" aria-label="Configurar PIN de perfil" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; color: #34d399 !important;">⚙️ ${this._t("configure_btn") || "Configurar"}</button>
               </div>
               `}
             </div>
@@ -4371,16 +4248,16 @@ var h = class extends HTMLElement {
             
             ${o ? `
             <div style="display: flex; align-items: center; justify-content: space-between;">
-              <span style="font-size: 11px; opacity: 0.85;">${this._t("master_pin_lbl") || "Pin de Armado"}</span>
+              <span style="font-size: 12px; opacity: 0.9;">${this._t("master_pin_lbl") || "Pin de Armado"}</span>
               ${u ? `
-              <div style="display: flex; gap: 4px;">
-                <button id="btn-dropdown-change-master-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase;">${this._t("change_btn") || "Cambiar"}</button>
-                <button id="btn-dropdown-remove-master-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; color: #ff453a !important;">${this._t("remove_btn") || "Eliminar"}</button>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <button id="btn-dropdown-change-master-pin" class="glass-control" aria-label="Cambiar PIN de armado" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer;">${this._t("change_btn") || "Cambiar"}</button>
+                <button id="btn-dropdown-remove-master-pin" class="glass-control" aria-label="Eliminar PIN de armado" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; color: #f87171 !important; background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.3); margin-left: 6px;">${this._t("remove_btn") || "Eliminar"}</button>
               </div>
               ` : `
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <span style="font-size: 9.5px; font-weight: 800; opacity: 0.5; background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 6px;">${this._t("no_pin_badge") || "SIN PIN"}</span>
-                <button id="btn-dropdown-set-master-pin" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; color: #30d158 !important;">⚙️ ${this._t("configure_btn") || "Configurar"}</button>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 10.5px; font-weight: 800; opacity: 0.6; background: rgba(255,255,255,0.06); padding: 4px 8px; border-radius: 6px;">${this._t("no_pin_badge") || "SIN PIN"}</span>
+                <button id="btn-dropdown-set-master-pin" class="glass-control" aria-label="Configurar PIN de armado" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; color: #34d399 !important;">⚙️ ${this._t("configure_btn") || "Configurar"}</button>
               </div>
               `}
             </div>
@@ -4395,11 +4272,11 @@ var h = class extends HTMLElement {
             <span style="font-size: 11px; font-weight: 700; opacity: 0.7;">🏡 ${this._t("home_name_lbl") || "Nombre de la Casa"}</span>
             <span id="dropdown-home-name" style="font-size: 12.5px; font-weight: 800; color: var(--v2066-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px; margin-top: 1px;">${this._escapeHtml(this._homeName || "Mi Casa")}</span>
           </div>
-          <button id="btn-dropdown-edit-home-name" class="glass-control" style="min-height: 24px; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 800; cursor: pointer; text-transform: uppercase;">${this._t("change_btn") || "Cambiar"}</button>
+          <button id="btn-dropdown-edit-home-name" class="glass-control" aria-label="Cambiar nombre de la casa" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer;">${this._t("change_btn") || "Cambiar"}</button>
         </div>
 
         <!-- Switch user button -->
-        <button id="btn-dropdown-switch-user" class="glass-control" style="width: 100%; min-height: 32px; padding: 6px; border-radius: 10px; font-size: 10.5px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 6px; background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); color: var(--v2066-text);">
+        <button id="btn-dropdown-switch-user" class="glass-control" aria-label="Cambiar perfil de usuario" style="width: 100%; min-height: 38px; padding: 8px 12px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; margin-top: 6px; background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.12); color: var(--v2066-text);">
           ${this._t("switch_profile_btn") || "👤 Cambiar de Perfil"}
         </button>
 
@@ -4445,7 +4322,11 @@ var h = class extends HTMLElement {
 		let h = e.querySelector("#dropdown-contrast-select");
 		h && h.addEventListener("change", (e) => {
 			this._setContrastMode(e.target.value);
-		}), this._initContrastMode(), e.querySelector("#btn-change-profile-picture")?.addEventListener("click", (e) => {
+		}), this._initContrastMode();
+		let g = e.querySelector("#dropdown-gesture-select");
+		g && g.addEventListener("change", (e) => {
+			this._setGestureMode(e.target.value);
+		}), this._initGestureMode(), e.querySelector("#btn-change-profile-picture")?.addEventListener("click", (e) => {
 			e.stopPropagation(), p.style.display = "none";
 			try {
 				window.history.pushState(null, "", "/config/person"), window.dispatchEvent(new CustomEvent("location-changed"));
@@ -4455,7 +4336,7 @@ var h = class extends HTMLElement {
 		}), e.querySelector("#btn-dropdown-switch-user")?.addEventListener("click", (e) => {
 			e.stopPropagation(), this._switchProfile();
 		});
-		let g = async (e) => {
+		let _ = async (e) => {
 			e.stopPropagation(), p.style.display = "none";
 			let n = await this._showArgusInputModal({
 				title: `🔑 ${this._t("access_pin_lbl") || "Pin perfil Argus"}`,
@@ -4477,7 +4358,7 @@ var h = class extends HTMLElement {
 				this._showArgusConfirmModal(e.message || this._format("generic_error", { error: e }), { confirmLabel: "OK" });
 			}
 		};
-		e.querySelector("#btn-dropdown-set-access-pin")?.addEventListener("click", g), e.querySelector("#btn-dropdown-change-access-pin")?.addEventListener("click", g), e.querySelector("#btn-dropdown-remove-access-pin")?.addEventListener("click", async (e) => {
+		e.querySelector("#btn-dropdown-set-access-pin")?.addEventListener("click", _), e.querySelector("#btn-dropdown-change-access-pin")?.addEventListener("click", _), e.querySelector("#btn-dropdown-remove-access-pin")?.addEventListener("click", async (e) => {
 			if (e.stopPropagation(), p.style.display = "none", await this._showArgusConfirmModal(this._t("confirm_remove_access_pin") || "¿Estás seguro de que deseas eliminar el Pin de perfil Argus?", {
 				confirmLabel: this._t("remove_btn") || "Eliminar",
 				confirmStyle: "background:#ef4444;color:#fff;border:none;box-shadow:0 4px 14px rgba(239,68,68,0.35);"
@@ -4494,7 +4375,7 @@ var h = class extends HTMLElement {
 				this._showArgusConfirmModal(e.message || this._format("generic_error", { error: e }), { confirmLabel: "OK" });
 			}
 		});
-		let _ = async (e) => {
+		let v = async (e) => {
 			e.stopPropagation(), p.style.display = "none";
 			let n = this._dashboard?.entries?.[0]?.entry_id || this._dashboard?.entry_id || this._modeEntryId, r = "";
 			if (u && t.role !== "admin") {
@@ -4525,7 +4406,7 @@ var h = class extends HTMLElement {
 				this._showArgusConfirmModal(e.message || this._format("generic_error", { error: e }), { confirmLabel: "OK" });
 			}
 		};
-		e.querySelector("#btn-dropdown-set-master-pin")?.addEventListener("click", _), e.querySelector("#btn-dropdown-change-master-pin")?.addEventListener("click", _), e.querySelector("#btn-dropdown-remove-master-pin")?.addEventListener("click", async (e) => {
+		e.querySelector("#btn-dropdown-set-master-pin")?.addEventListener("click", v), e.querySelector("#btn-dropdown-change-master-pin")?.addEventListener("click", v), e.querySelector("#btn-dropdown-remove-master-pin")?.addEventListener("click", async (e) => {
 			e.stopPropagation(), p.style.display = "none";
 			let n = this._dashboard?.entries?.[0]?.entry_id || this._dashboard?.entry_id || this._modeEntryId, r = "";
 			if (u && t.role !== "admin") {
@@ -5350,10 +5231,10 @@ var v = {
           <select id="mode-sel">
             <option value="compact" ${t === "compact" ? "selected" : ""}>✨ Instancia Activa (Consola Liquid Glass · Recomendado)</option>
             <option value="panel" ${t === "panel" ? "selected" : ""}>📊 Panel Completo (Dashboard, widgets e historial)</option>
-            <option value="basic" ${t === "basic" ? "selected" : ""}>🌤️ Básico (Tarjeta clásica con clima animado)</option>
+            <option value="basic" ${t === "basic" ? "selected" : ""}>🛡️ Básico (Tarjeta compacta con teclado PIN)</option>
           </select>
           <div class="opt-grp hint">
-            ${t === "compact" ? "Muestra la consola de seguridad de Instancias Activas con el escudo animado, modos iluminados, slide-to-disarm, slide-to-sos y sensores." : t === "panel" ? "Muestra todo el panel de control de Argus con su cuadrícula de widgets e historial de eventos." : "Muestra la tarjeta de alarma ligera con escena de clima y teclado PIN."}
+            ${t === "compact" ? "Muestra la consola de seguridad de Instancias Activas con el escudo dinámico, modos iluminados, control táctil seguro y sensores." : t === "panel" ? "Muestra todo el panel de control de Argus con su cuadrícula de widgets e historial de eventos." : "Muestra la tarjeta de alarma ligera con fondo oscuro sólido y teclado PIN."}
           </div>
         </label>
         <label>
@@ -5437,15 +5318,14 @@ var x = class extends HTMLElement {
 			night: this._hass?.states?.["sun.sun"]?.state === "below_horizon"
 		}, o = this._hass?.config || {}, s = [];
 		o.location_name && !/^(home|casa|hogar)$/i.test(o.location_name) && s.push(o.location_name), o.country && s.push(o.country);
-		let c = s.length ? s.join(", ") : e.unknown, l = this._config.title || e.title, u = a.state, d = /thunder|storm|lightning/.test(u), f = /rain|pouring|drizzle|shower/.test(u), p = /snow/.test(u), m = /fog|mist|hazy/.test(u), h = /cloud|overcast/.test(u), _ = [a.night ? "night" : "day", d ? "storm" : f ? "rain" : p ? "snow" : m ? "fog" : h ? "cloud" : "clear"].join(" "), b = new Intl.DateTimeFormat(this._hass.language || void 0, {
+		let c = s.length ? s.join(", ") : e.unknown, l = this._config.title || e.title, u = new Intl.DateTimeFormat(this._hass.language || void 0, {
 			hour: "2-digit",
 			minute: "2-digit"
 		}).format(/* @__PURE__ */ new Date());
 		this._panelHost.innerHTML = `
       <style>
-        .basic-card{position:relative;min-height:330px;isolation:isolate;overflow:hidden;font-family:'Outfit',Inter,system-ui,sans-serif}
-        .basic-scene{position:absolute;inset:0;z-index:-3;overflow:hidden;background:linear-gradient(165deg,#2c86c7,#8fc7dc 62%,#d7c7aa);transition:background 1.5s ease}
-        .basic-scene.night{background:linear-gradient(180deg,#020513 0%,#0a1130 50%,#152248 100%)!important}
+        .basic-card{position:relative;min-height:330px;isolation:isolate;overflow:hidden;font-family:'Outfit',Inter,system-ui,sans-serif;background:#0b101a}
+        .basic-scene{position:absolute;inset:0;z-index:-3;background:linear-gradient(180deg,#0b101a 0%,#131a29 100%)}
         .basic-vignette{position:absolute;inset:0;z-index:-2;background:radial-gradient(circle at 68% 42%,transparent 15%,rgba(2,6,15,.1) 55%,rgba(0,0,0,.58) 100%)}
         .basic-hud{display:flex;justify-content:space-between;gap:16px;padding:20px 22px;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;text-shadow:0 2px 12px #000}
         .basic-weather{font-size:18px;letter-spacing:0;text-transform:none}
@@ -5459,9 +5339,9 @@ var x = class extends HTMLElement {
         .basic-title{position:absolute;right:22px;bottom:18px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;font-size:10px;opacity:.7}
       </style>
       <div class="basic-card">
-        <div class="basic-scene ${y(_)}"></div>
+        <div class="basic-scene"></div>
         <div class="basic-vignette"></div>
-        <div class="basic-hud"><span>${y(c)}</span><span class="basic-weather">${y(b)} · ${y(a.temp)}${y(a.unit)}</span></div>
+        <div class="basic-hud"><span>${y(c)}</span><span class="basic-weather">${y(u)} · ${y(a.temp)}${y(a.unit)}</span></div>
         <div class="basic-layout">
           <div class="basic-modes">
             <button class="basic-mode ${t === "armed_home" ? "active" : ""}" data-service="alarm_arm_home">🏠 ${e.home}</button>
@@ -6666,22 +6546,22 @@ var C = /* @__PURE__ */ s(((e) => {
 			hoistableScripts: /* @__PURE__ */ new Map()
 		}, t;
 	}
-	function N(e) {
+	function Tt(e) {
 		e[yt] = !0;
 	}
-	var Tt = /* @__PURE__ */ new Set(), Et = {};
-	function Dt(e, t) {
-		Ot(e, t), Ot(e + "Capture", t);
-	}
+	var Et = /* @__PURE__ */ new Set(), Dt = {};
 	function Ot(e, t) {
-		for (Et[e] = t, e = 0; e < t.length; e++) Tt.add(t[e]);
+		kt(e, t), kt(e + "Capture", t);
 	}
-	var kt = RegExp("^[:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD][:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD\\-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040]*$"), At = {}, jt = {};
-	function Mt(e) {
-		return Oe.call(jt, e) ? !0 : Oe.call(At, e) ? !1 : kt.test(e) ? jt[e] = !0 : (At[e] = !0, !1);
+	function kt(e, t) {
+		for (Dt[e] = t, e = 0; e < t.length; e++) Et.add(t[e]);
 	}
-	function Nt(e, t, n) {
-		if (Mt(t)) {
+	var At = RegExp("^[:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD][:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD\\-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040]*$"), jt = {}, Mt = {};
+	function Nt(e) {
+		return Oe.call(Mt, e) ? !0 : Oe.call(jt, e) ? !1 : At.test(e) ? Mt[e] = !0 : (jt[e] = !0, !1);
+	}
+	function Pt(e, t, n) {
+		if (Nt(t)) {
 			if (n === null) e.removeAttribute(t);
 			else {
 				switch (typeof n) {
@@ -6701,7 +6581,7 @@ var C = /* @__PURE__ */ s(((e) => {
 			}
 		}
 	}
-	function Pt(e, t, n) {
+	function Ft(e, t, n) {
 		if (n === null) e.removeAttribute(t);
 		else {
 			switch (typeof n) {
@@ -6715,7 +6595,7 @@ var C = /* @__PURE__ */ s(((e) => {
 			e.setAttribute(t, "" + n);
 		}
 	}
-	function Ft(e, t, n, r) {
+	function It(e, t, n, r) {
 		if (r === null) e.removeAttribute(n);
 		else {
 			switch (typeof r) {
@@ -6729,7 +6609,7 @@ var C = /* @__PURE__ */ s(((e) => {
 			e.setAttributeNS(t, n, "" + r);
 		}
 	}
-	function It(e) {
+	function Lt(e) {
 		switch (typeof e) {
 			case "bigint":
 			case "boolean":
@@ -6740,11 +6620,11 @@ var C = /* @__PURE__ */ s(((e) => {
 			default: return "";
 		}
 	}
-	function Lt(e) {
+	function Rt(e) {
 		var t = e.type;
 		return (e = e.nodeName) && e.toLowerCase() === "input" && (t === "checkbox" || t === "radio");
 	}
-	function Rt(e, t, n) {
+	function zt(e, t, n) {
 		var r = Object.getOwnPropertyDescriptor(e.constructor.prototype, t);
 		if (!e.hasOwnProperty(t) && r !== void 0 && typeof r.get == "function" && typeof r.set == "function") {
 			var i = r.get, a = r.set;
@@ -6769,20 +6649,20 @@ var C = /* @__PURE__ */ s(((e) => {
 			};
 		}
 	}
-	function zt(e) {
+	function Bt(e) {
 		if (!e._valueTracker) {
-			var t = Lt(e) ? "checked" : "value";
-			e._valueTracker = Rt(e, t, "" + e[t]);
+			var t = Rt(e) ? "checked" : "value";
+			e._valueTracker = zt(e, t, "" + e[t]);
 		}
 	}
-	function Bt(e) {
+	function Vt(e) {
 		if (!e) return !1;
 		var t = e._valueTracker;
 		if (!t) return !0;
 		var n = t.getValue(), r = "";
-		return e && (r = Lt(e) ? e.checked ? "true" : "false" : e.value), e = r, e !== n && (t.setValue(e), !0);
+		return e && (r = Rt(e) ? e.checked ? "true" : "false" : e.value), e = r, e !== n && (t.setValue(e), !0);
 	}
-	function Vt(e) {
+	function Ht(e) {
 		if (e ||= typeof document < "u" ? document : void 0, e === void 0) return null;
 		try {
 			return e.activeElement || e.body;
@@ -6790,35 +6670,35 @@ var C = /* @__PURE__ */ s(((e) => {
 			return e.body;
 		}
 	}
-	var Ht = /[\n"\\]/g;
-	function Ut(e) {
-		return e.replace(Ht, function(e) {
+	var Ut = /[\n"\\]/g;
+	function Wt(e) {
+		return e.replace(Ut, function(e) {
 			return "\\" + e.charCodeAt(0).toString(16) + " ";
 		});
 	}
-	function Wt(e, t, n, r, i, a, o, s) {
-		e.name = "", o != null && typeof o != "function" && typeof o != "symbol" && typeof o != "boolean" ? e.type = o : e.removeAttribute("type"), t == null ? o !== "submit" && o !== "reset" || e.removeAttribute("value") : o === "number" ? (t === 0 && e.value === "" || e.value != t) && (e.value = "" + It(t)) : e.value !== "" + It(t) && (e.value = "" + It(t)), t == null ? n == null ? r != null && e.removeAttribute("value") : Kt(e, o, It(n)) : Kt(e, o, It(t)), i == null && a != null && (e.defaultChecked = !!a), i != null && (e.checked = i && typeof i != "function" && typeof i != "symbol"), s != null && typeof s != "function" && typeof s != "symbol" && typeof s != "boolean" ? e.name = "" + It(s) : e.removeAttribute("name");
-	}
 	function Gt(e, t, n, r, i, a, o, s) {
+		e.name = "", o != null && typeof o != "function" && typeof o != "symbol" && typeof o != "boolean" ? e.type = o : e.removeAttribute("type"), t == null ? o !== "submit" && o !== "reset" || e.removeAttribute("value") : o === "number" ? (t === 0 && e.value === "" || e.value != t) && (e.value = "" + Lt(t)) : e.value !== "" + Lt(t) && (e.value = "" + Lt(t)), t == null ? n == null ? r != null && e.removeAttribute("value") : qt(e, o, Lt(n)) : qt(e, o, Lt(t)), i == null && a != null && (e.defaultChecked = !!a), i != null && (e.checked = i && typeof i != "function" && typeof i != "symbol"), s != null && typeof s != "function" && typeof s != "symbol" && typeof s != "boolean" ? e.name = "" + Lt(s) : e.removeAttribute("name");
+	}
+	function Kt(e, t, n, r, i, a, o, s) {
 		if (a != null && typeof a != "function" && typeof a != "symbol" && typeof a != "boolean" && (e.type = a), t != null || n != null) {
 			if (!(a !== "submit" && a !== "reset" || t != null)) {
-				zt(e);
+				Bt(e);
 				return;
 			}
-			n = n == null ? "" : "" + It(n), t = t == null ? n : "" + It(t), s || t === e.value || (e.value = t), e.defaultValue = t;
+			n = n == null ? "" : "" + Lt(n), t = t == null ? n : "" + Lt(t), s || t === e.value || (e.value = t), e.defaultValue = t;
 		}
-		r ??= i, r = typeof r != "function" && typeof r != "symbol" && !!r, e.checked = s ? e.checked : !!r, e.defaultChecked = !!r, o != null && typeof o != "function" && typeof o != "symbol" && typeof o != "boolean" && (e.name = o), zt(e);
+		r ??= i, r = typeof r != "function" && typeof r != "symbol" && !!r, e.checked = s ? e.checked : !!r, e.defaultChecked = !!r, o != null && typeof o != "function" && typeof o != "symbol" && typeof o != "boolean" && (e.name = o), Bt(e);
 	}
-	function Kt(e, t, n) {
-		t === "number" && Vt(e.ownerDocument) === e || e.defaultValue === "" + n || (e.defaultValue = "" + n);
+	function qt(e, t, n) {
+		t === "number" && Ht(e.ownerDocument) === e || e.defaultValue === "" + n || (e.defaultValue = "" + n);
 	}
-	function qt(e, t, n, r) {
+	function Jt(e, t, n, r) {
 		if (e = e.options, t) {
 			t = {};
 			for (var i = 0; i < n.length; i++) t["$" + n[i]] = !0;
 			for (n = 0; n < e.length; n++) i = t.hasOwnProperty("$" + e[n].value), e[n].selected !== i && (e[n].selected = i), i && r && (e[n].defaultSelected = !0);
 		} else {
-			for (n = "" + It(n), t = null, i = 0; i < e.length; i++) {
+			for (n = "" + Lt(n), t = null, i = 0; i < e.length; i++) {
 				if (e[i].value === n) {
 					e[i].selected = !0, r && (e[i].defaultSelected = !0);
 					return;
@@ -6828,14 +6708,14 @@ var C = /* @__PURE__ */ s(((e) => {
 			t !== null && (t.selected = !0);
 		}
 	}
-	function Jt(e, t, n) {
-		if (t != null && (t = "" + It(t), t !== e.value && (e.value = t), n == null)) {
+	function Yt(e, t, n) {
+		if (t != null && (t = "" + Lt(t), t !== e.value && (e.value = t), n == null)) {
 			e.defaultValue !== t && (e.defaultValue = t);
 			return;
 		}
-		e.defaultValue = n == null ? "" : "" + It(n);
+		e.defaultValue = n == null ? "" : "" + Lt(n);
 	}
-	function Yt(e, t, n, r) {
+	function Xt(e, t, n, r) {
 		if (t == null) {
 			if (r != null) {
 				if (n != null) throw Error(i(92));
@@ -6847,9 +6727,9 @@ var C = /* @__PURE__ */ s(((e) => {
 			}
 			n ??= "", t = n;
 		}
-		n = It(t), e.defaultValue = n, r = e.textContent, r === n && r !== "" && r !== null && (e.value = r), zt(e);
+		n = Lt(t), e.defaultValue = n, r = e.textContent, r === n && r !== "" && r !== null && (e.value = r), Bt(e);
 	}
-	function Xt(e, t) {
+	function Zt(e, t) {
 		if (t) {
 			var n = e.firstChild;
 			if (n && n === e.lastChild && n.nodeType === 3) {
@@ -6859,19 +6739,19 @@ var C = /* @__PURE__ */ s(((e) => {
 		}
 		e.textContent = t;
 	}
-	var Zt = new Set("animationIterationCount aspectRatio borderImageOutset borderImageSlice borderImageWidth boxFlex boxFlexGroup boxOrdinalGroup columnCount columns flex flexGrow flexPositive flexShrink flexNegative flexOrder gridArea gridRow gridRowEnd gridRowSpan gridRowStart gridColumn gridColumnEnd gridColumnSpan gridColumnStart fontWeight lineClamp lineHeight opacity order orphans scale tabSize widows zIndex zoom fillOpacity floodOpacity stopOpacity strokeDasharray strokeDashoffset strokeMiterlimit strokeOpacity strokeWidth MozAnimationIterationCount MozBoxFlex MozBoxFlexGroup MozLineClamp msAnimationIterationCount msFlex msZoom msFlexGrow msFlexNegative msFlexOrder msFlexPositive msFlexShrink msGridColumn msGridColumnSpan msGridRow msGridRowSpan WebkitAnimationIterationCount WebkitBoxFlex WebKitBoxFlexGroup WebkitBoxOrdinalGroup WebkitColumnCount WebkitColumns WebkitFlex WebkitFlexGrow WebkitFlexPositive WebkitFlexShrink WebkitLineClamp".split(" "));
-	function Qt(e, t, n) {
-		var r = t.indexOf("--") === 0;
-		n == null || typeof n == "boolean" || n === "" ? r ? e.setProperty(t, "") : t === "float" ? e.cssFloat = "" : e[t] = "" : r ? e.setProperty(t, n) : typeof n != "number" || n === 0 || Zt.has(t) ? t === "float" ? e.cssFloat = n : e[t] = ("" + n).trim() : e[t] = n + "px";
-	}
+	var Qt = new Set("animationIterationCount aspectRatio borderImageOutset borderImageSlice borderImageWidth boxFlex boxFlexGroup boxOrdinalGroup columnCount columns flex flexGrow flexPositive flexShrink flexNegative flexOrder gridArea gridRow gridRowEnd gridRowSpan gridRowStart gridColumn gridColumnEnd gridColumnSpan gridColumnStart fontWeight lineClamp lineHeight opacity order orphans scale tabSize widows zIndex zoom fillOpacity floodOpacity stopOpacity strokeDasharray strokeDashoffset strokeMiterlimit strokeOpacity strokeWidth MozAnimationIterationCount MozBoxFlex MozBoxFlexGroup MozLineClamp msAnimationIterationCount msFlex msZoom msFlexGrow msFlexNegative msFlexOrder msFlexPositive msFlexShrink msGridColumn msGridColumnSpan msGridRow msGridRowSpan WebkitAnimationIterationCount WebkitBoxFlex WebKitBoxFlexGroup WebkitBoxOrdinalGroup WebkitColumnCount WebkitColumns WebkitFlex WebkitFlexGrow WebkitFlexPositive WebkitFlexShrink WebkitLineClamp".split(" "));
 	function $t(e, t, n) {
+		var r = t.indexOf("--") === 0;
+		n == null || typeof n == "boolean" || n === "" ? r ? e.setProperty(t, "") : t === "float" ? e.cssFloat = "" : e[t] = "" : r ? e.setProperty(t, n) : typeof n != "number" || n === 0 || Qt.has(t) ? t === "float" ? e.cssFloat = n : e[t] = ("" + n).trim() : e[t] = n + "px";
+	}
+	function en(e, t, n) {
 		if (t != null && typeof t != "object") throw Error(i(62));
 		if (e = e.style, n != null) {
 			for (var r in n) !n.hasOwnProperty(r) || t != null && t.hasOwnProperty(r) || (r.indexOf("--") === 0 ? e.setProperty(r, "") : r === "float" ? e.cssFloat = "" : e[r] = "");
-			for (var a in t) r = t[a], t.hasOwnProperty(a) && n[a] !== r && Qt(e, a, r);
-		} else for (var o in t) t.hasOwnProperty(o) && Qt(e, o, t[o]);
+			for (var a in t) r = t[a], t.hasOwnProperty(a) && n[a] !== r && $t(e, a, r);
+		} else for (var o in t) t.hasOwnProperty(o) && $t(e, o, t[o]);
 	}
-	function en(e) {
+	function tn(e) {
 		if (e.indexOf("-") === -1) return !1;
 		switch (e) {
 			case "annotation-xml":
@@ -6885,7 +6765,7 @@ var C = /* @__PURE__ */ s(((e) => {
 			default: return !0;
 		}
 	}
-	var tn = /* @__PURE__ */ new Map([
+	var nn = /* @__PURE__ */ new Map([
 		["acceptCharset", "accept-charset"],
 		["htmlFor", "for"],
 		["httpEquiv", "http-equiv"],
@@ -6964,53 +6844,53 @@ var C = /* @__PURE__ */ s(((e) => {
 		["writingMode", "writing-mode"],
 		["xmlnsXlink", "xmlns:xlink"],
 		["xHeight", "x-height"]
-	]), nn = /^[\u0000-\u001F ]*j[\r\n\t]*a[\r\n\t]*v[\r\n\t]*a[\r\n\t]*s[\r\n\t]*c[\r\n\t]*r[\r\n\t]*i[\r\n\t]*p[\r\n\t]*t[\r\n\t]*:/i;
-	function rn(e) {
-		return nn.test("" + e) ? "javascript:throw new Error('React has blocked a javascript: URL as a security precaution.')" : e;
+	]), rn = /^[\u0000-\u001F ]*j[\r\n\t]*a[\r\n\t]*v[\r\n\t]*a[\r\n\t]*s[\r\n\t]*c[\r\n\t]*r[\r\n\t]*i[\r\n\t]*p[\r\n\t]*t[\r\n\t]*:/i;
+	function an(e) {
+		return rn.test("" + e) ? "javascript:throw new Error('React has blocked a javascript: URL as a security precaution.')" : e;
 	}
-	function an() {}
-	var on = null;
-	function sn(e) {
+	function on() {}
+	var sn = null;
+	function cn(e) {
 		return e = e.target || e.srcElement || window, e.correspondingUseElement && (e = e.correspondingUseElement), e.nodeType === 3 ? e.parentNode : e;
 	}
-	var cn = null, ln = null;
-	function un(e) {
+	var ln = null, un = null;
+	function dn(e) {
 		var t = St(e);
 		if (t && (e = t.stateNode)) {
 			var n = e[pt] || null;
 			a: switch (e = t.stateNode, t.type) {
 				case "input":
-					if (Wt(e, n.value, n.defaultValue, n.defaultValue, n.checked, n.defaultChecked, n.type, n.name), t = n.name, n.type === "radio" && t != null) {
+					if (Gt(e, n.value, n.defaultValue, n.defaultValue, n.checked, n.defaultChecked, n.type, n.name), t = n.name, n.type === "radio" && t != null) {
 						for (n = e; n.parentNode;) n = n.parentNode;
-						for (n = n.querySelectorAll("input[name=\"" + Ut("" + t) + "\"][type=\"radio\"]"), t = 0; t < n.length; t++) {
+						for (n = n.querySelectorAll("input[name=\"" + Wt("" + t) + "\"][type=\"radio\"]"), t = 0; t < n.length; t++) {
 							var r = n[t];
 							if (r !== e && r.form === e.form) {
 								var a = r[pt] || null;
 								if (!a) throw Error(i(90));
-								Wt(r, a.value, a.defaultValue, a.defaultValue, a.checked, a.defaultChecked, a.type, a.name);
+								Gt(r, a.value, a.defaultValue, a.defaultValue, a.checked, a.defaultChecked, a.type, a.name);
 							}
 						}
-						for (t = 0; t < n.length; t++) r = n[t], r.form === e.form && Bt(r);
+						for (t = 0; t < n.length; t++) r = n[t], r.form === e.form && Vt(r);
 					}
 					break a;
 				case "textarea":
-					Jt(e, n.value, n.defaultValue);
+					Yt(e, n.value, n.defaultValue);
 					break a;
-				case "select": t = n.value, t != null && qt(e, !!n.multiple, t, !1);
+				case "select": t = n.value, t != null && Jt(e, !!n.multiple, t, !1);
 			}
 		}
 	}
-	var dn = !1;
-	function fn(e, t, n) {
-		if (dn) return e(t, n);
-		dn = !0;
+	var fn = !1;
+	function pn(e, t, n) {
+		if (fn) return e(t, n);
+		fn = !0;
 		try {
 			return e(t);
 		} finally {
-			if (dn = !1, (cn !== null || ln !== null) && (bu(), cn && (t = cn, e = ln, ln = cn = null, un(t), e))) for (t = 0; t < e.length; t++) un(e[t]);
+			if (fn = !1, (ln !== null || un !== null) && (bu(), ln && (t = ln, e = un, un = ln = null, dn(t), e))) for (t = 0; t < e.length; t++) dn(e[t]);
 		}
 	}
-	function pn(e, t) {
+	function mn(e, t) {
 		var n = e.stateNode;
 		if (n === null) return null;
 		var r = n[pt] || null;
@@ -7036,54 +6916,54 @@ var C = /* @__PURE__ */ s(((e) => {
 		if (n && typeof n != "function") throw Error(i(231, t, typeof n));
 		return n;
 	}
-	var mn = !(typeof window > "u" || window.document === void 0 || window.document.createElement === void 0), hn = !1;
-	if (mn) try {
-		var gn = {};
-		Object.defineProperty(gn, "passive", { get: function() {
-			hn = !0;
-		} }), window.addEventListener("test", gn, gn), window.removeEventListener("test", gn, gn);
+	var hn = !(typeof window > "u" || window.document === void 0 || window.document.createElement === void 0), gn = !1;
+	if (hn) try {
+		var _n = {};
+		Object.defineProperty(_n, "passive", { get: function() {
+			gn = !0;
+		} }), window.addEventListener("test", _n, _n), window.removeEventListener("test", _n, _n);
 	} catch {
-		hn = !1;
+		gn = !1;
 	}
-	var _n = null, vn = null, yn = null;
-	function bn() {
-		if (yn) return yn;
-		var e, t = vn, n = t.length, r, i = "value" in _n ? _n.value : _n.textContent, a = i.length;
+	var vn = null, yn = null, bn = null;
+	function xn() {
+		if (bn) return bn;
+		var e, t = yn, n = t.length, r, i = "value" in vn ? vn.value : vn.textContent, a = i.length;
 		for (e = 0; e < n && t[e] === i[e]; e++);
 		var o = n - e;
 		for (r = 1; r <= o && t[n - r] === i[a - r]; r++);
-		return yn = i.slice(e, 1 < r ? 1 - r : void 0);
+		return bn = i.slice(e, 1 < r ? 1 - r : void 0);
 	}
-	function xn(e) {
+	function Sn(e) {
 		var t = e.keyCode;
 		return "charCode" in e ? (e = e.charCode, e === 0 && t === 13 && (e = 13)) : e = t, e === 10 && (e = 13), 32 <= e || e === 13 ? e : 0;
 	}
-	function Sn() {
+	function Cn() {
 		return !0;
 	}
-	function Cn() {
+	function wn() {
 		return !1;
 	}
-	function wn(e) {
+	function Tn(e) {
 		function t(t, n, r, i, a) {
 			for (var o in this._reactName = t, this._targetInst = r, this.type = n, this.nativeEvent = i, this.target = a, this.currentTarget = null, e) e.hasOwnProperty(o) && (t = e[o], this[o] = t ? t(i) : i[o]);
-			return this.isDefaultPrevented = (i.defaultPrevented == null ? !1 === i.returnValue : i.defaultPrevented) ? Sn : Cn, this.isPropagationStopped = Cn, this;
+			return this.isDefaultPrevented = (i.defaultPrevented == null ? !1 === i.returnValue : i.defaultPrevented) ? Cn : wn, this.isPropagationStopped = wn, this;
 		}
 		return f(t.prototype, {
 			preventDefault: function() {
 				this.defaultPrevented = !0;
 				var e = this.nativeEvent;
-				e && (e.preventDefault ? e.preventDefault() : typeof e.returnValue != "unknown" && (e.returnValue = !1), this.isDefaultPrevented = Sn);
+				e && (e.preventDefault ? e.preventDefault() : typeof e.returnValue != "unknown" && (e.returnValue = !1), this.isDefaultPrevented = Cn);
 			},
 			stopPropagation: function() {
 				var e = this.nativeEvent;
-				e && (e.stopPropagation ? e.stopPropagation() : typeof e.cancelBubble != "unknown" && (e.cancelBubble = !0), this.isPropagationStopped = Sn);
+				e && (e.stopPropagation ? e.stopPropagation() : typeof e.cancelBubble != "unknown" && (e.cancelBubble = !0), this.isPropagationStopped = Cn);
 			},
 			persist: function() {},
-			isPersistent: Sn
+			isPersistent: Cn
 		}), t;
 	}
-	var Tn = {
+	var En = {
 		eventPhase: 0,
 		bubbles: 0,
 		cancelable: 0,
@@ -7092,10 +6972,10 @@ var C = /* @__PURE__ */ s(((e) => {
 		},
 		defaultPrevented: 0,
 		isTrusted: 0
-	}, En = wn(Tn), Dn = f({}, Tn, {
+	}, Dn = Tn(En), On = f({}, En, {
 		view: 0,
 		detail: 0
-	}), On = wn(Dn), kn, An, jn, Mn = f({}, Dn, {
+	}), kn = Tn(On), An, jn, Mn, Nn = f({}, On, {
 		screenX: 0,
 		screenY: 0,
 		clientX: 0,
@@ -7106,25 +6986,25 @@ var C = /* @__PURE__ */ s(((e) => {
 		shiftKey: 0,
 		altKey: 0,
 		metaKey: 0,
-		getModifierState: Un,
+		getModifierState: Wn,
 		button: 0,
 		buttons: 0,
 		relatedTarget: function(e) {
 			return e.relatedTarget === void 0 ? e.fromElement === e.srcElement ? e.toElement : e.fromElement : e.relatedTarget;
 		},
 		movementX: function(e) {
-			return "movementX" in e ? e.movementX : (e !== jn && (jn && e.type === "mousemove" ? (kn = e.screenX - jn.screenX, An = e.screenY - jn.screenY) : An = kn = 0, jn = e), kn);
+			return "movementX" in e ? e.movementX : (e !== Mn && (Mn && e.type === "mousemove" ? (An = e.screenX - Mn.screenX, jn = e.screenY - Mn.screenY) : jn = An = 0, Mn = e), An);
 		},
 		movementY: function(e) {
-			return "movementY" in e ? e.movementY : An;
+			return "movementY" in e ? e.movementY : jn;
 		}
-	}), Nn = wn(Mn), Pn = wn(f({}, Mn, { dataTransfer: 0 })), Fn = wn(f({}, Dn, { relatedTarget: 0 })), In = wn(f({}, Tn, {
+	}), Pn = Tn(Nn), Fn = Tn(f({}, Nn, { dataTransfer: 0 })), In = Tn(f({}, On, { relatedTarget: 0 })), Ln = Tn(f({}, En, {
 		animationName: 0,
 		elapsedTime: 0,
 		pseudoElement: 0
-	})), Ln = wn(f({}, Tn, { clipboardData: function(e) {
+	})), Rn = Tn(f({}, En, { clipboardData: function(e) {
 		return "clipboardData" in e ? e.clipboardData : window.clipboardData;
-	} })), Rn = wn(f({}, Tn, { data: 0 })), zn = {
+	} })), zn = Tn(f({}, En, { data: 0 })), Bn = {
 		Esc: "Escape",
 		Spacebar: " ",
 		Left: "ArrowLeft",
@@ -7137,7 +7017,7 @@ var C = /* @__PURE__ */ s(((e) => {
 		Apps: "ContextMenu",
 		Scroll: "ScrollLock",
 		MozPrintableKey: "Unidentified"
-	}, Bn = {
+	}, Vn = {
 		8: "Backspace",
 		9: "Tab",
 		12: "Clear",
@@ -7174,26 +7054,26 @@ var C = /* @__PURE__ */ s(((e) => {
 		144: "NumLock",
 		145: "ScrollLock",
 		224: "Meta"
-	}, Vn = {
+	}, Hn = {
 		Alt: "altKey",
 		Control: "ctrlKey",
 		Meta: "metaKey",
 		Shift: "shiftKey"
 	};
-	function Hn(e) {
+	function Un(e) {
 		var t = this.nativeEvent;
-		return t.getModifierState ? t.getModifierState(e) : (e = Vn[e]) ? !!t[e] : !1;
+		return t.getModifierState ? t.getModifierState(e) : (e = Hn[e]) ? !!t[e] : !1;
 	}
-	function Un() {
-		return Hn;
+	function Wn() {
+		return Un;
 	}
-	var Wn = wn(f({}, Dn, {
+	var Gn = Tn(f({}, On, {
 		key: function(e) {
 			if (e.key) {
-				var t = zn[e.key] || e.key;
+				var t = Bn[e.key] || e.key;
 				if (t !== "Unidentified") return t;
 			}
-			return e.type === "keypress" ? (e = xn(e), e === 13 ? "Enter" : String.fromCharCode(e)) : e.type === "keydown" || e.type === "keyup" ? Bn[e.keyCode] || "Unidentified" : "";
+			return e.type === "keypress" ? (e = Sn(e), e === 13 ? "Enter" : String.fromCharCode(e)) : e.type === "keydown" || e.type === "keyup" ? Vn[e.keyCode] || "Unidentified" : "";
 		},
 		code: 0,
 		location: 0,
@@ -7203,17 +7083,17 @@ var C = /* @__PURE__ */ s(((e) => {
 		metaKey: 0,
 		repeat: 0,
 		locale: 0,
-		getModifierState: Un,
+		getModifierState: Wn,
 		charCode: function(e) {
-			return e.type === "keypress" ? xn(e) : 0;
+			return e.type === "keypress" ? Sn(e) : 0;
 		},
 		keyCode: function(e) {
 			return e.type === "keydown" || e.type === "keyup" ? e.keyCode : 0;
 		},
 		which: function(e) {
-			return e.type === "keypress" ? xn(e) : e.type === "keydown" || e.type === "keyup" ? e.keyCode : 0;
+			return e.type === "keypress" ? Sn(e) : e.type === "keydown" || e.type === "keyup" ? e.keyCode : 0;
 		}
-	})), Gn = wn(f({}, Mn, {
+	})), Kn = Tn(f({}, Nn, {
 		pointerId: 0,
 		width: 0,
 		height: 0,
@@ -7224,7 +7104,7 @@ var C = /* @__PURE__ */ s(((e) => {
 		twist: 0,
 		pointerType: 0,
 		isPrimary: 0
-	})), Kn = wn(f({}, Dn, {
+	})), qn = Tn(f({}, On, {
 		touches: 0,
 		targetTouches: 0,
 		changedTouches: 0,
@@ -7232,12 +7112,12 @@ var C = /* @__PURE__ */ s(((e) => {
 		metaKey: 0,
 		ctrlKey: 0,
 		shiftKey: 0,
-		getModifierState: Un
-	})), qn = wn(f({}, Tn, {
+		getModifierState: Wn
+	})), Jn = Tn(f({}, En, {
 		propertyName: 0,
 		elapsedTime: 0,
 		pseudoElement: 0
-	})), Jn = wn(f({}, Mn, {
+	})), Yn = Tn(f({}, Nn, {
 		deltaX: function(e) {
 			return "deltaX" in e ? e.deltaX : "wheelDeltaX" in e ? -e.wheelDeltaX : 0;
 		},
@@ -7246,20 +7126,20 @@ var C = /* @__PURE__ */ s(((e) => {
 		},
 		deltaZ: 0,
 		deltaMode: 0
-	})), Yn = wn(f({}, Tn, {
+	})), Xn = Tn(f({}, En, {
 		newState: 0,
 		oldState: 0
-	})), Xn = [
+	})), Zn = [
 		9,
 		13,
 		27,
 		32
-	], Zn = mn && "CompositionEvent" in window, Qn = null;
-	mn && "documentMode" in document && (Qn = document.documentMode);
-	var $n = mn && "TextEvent" in window && !Qn, er = mn && (!Zn || Qn && 8 < Qn && 11 >= Qn), tr = " ", nr = !1;
-	function rr(e, t) {
+	], Qn = hn && "CompositionEvent" in window, $n = null;
+	hn && "documentMode" in document && ($n = document.documentMode);
+	var er = hn && "TextEvent" in window && !$n, tr = hn && (!Qn || $n && 8 < $n && 11 >= $n), nr = " ", rr = !1;
+	function ir(e, t) {
 		switch (e) {
-			case "keyup": return Xn.indexOf(t.keyCode) !== -1;
+			case "keyup": return Zn.indexOf(t.keyCode) !== -1;
 			case "keydown": return t.keyCode !== 229;
 			case "keypress":
 			case "mousedown":
@@ -7267,20 +7147,20 @@ var C = /* @__PURE__ */ s(((e) => {
 			default: return !1;
 		}
 	}
-	function ir(e) {
+	function ar(e) {
 		return e = e.detail, typeof e == "object" && "data" in e ? e.data : null;
 	}
-	var ar = !1;
-	function or(e, t) {
+	var or = !1;
+	function sr(e, t) {
 		switch (e) {
-			case "compositionend": return ir(t);
-			case "keypress": return t.which === 32 ? (nr = !0, tr) : null;
-			case "textInput": return e = t.data, e === tr && nr ? null : e;
+			case "compositionend": return ar(t);
+			case "keypress": return t.which === 32 ? (rr = !0, nr) : null;
+			case "textInput": return e = t.data, e === nr && rr ? null : e;
 			default: return null;
 		}
 	}
-	function sr(e, t) {
-		if (ar) return e === "compositionend" || !Zn && rr(e, t) ? (e = bn(), yn = vn = _n = null, ar = !1, e) : null;
+	function cr(e, t) {
+		if (or) return e === "compositionend" || !Qn && ir(e, t) ? (e = xn(), bn = yn = vn = null, or = !1, e) : null;
 		switch (e) {
 			case "paste": return null;
 			case "keypress":
@@ -7289,11 +7169,11 @@ var C = /* @__PURE__ */ s(((e) => {
 					if (t.which) return String.fromCharCode(t.which);
 				}
 				return null;
-			case "compositionend": return er && t.locale !== "ko" ? null : t.data;
+			case "compositionend": return tr && t.locale !== "ko" ? null : t.data;
 			default: return null;
 		}
 	}
-	var cr = {
+	var lr = {
 		color: !0,
 		date: !0,
 		datetime: !0,
@@ -7310,81 +7190,81 @@ var C = /* @__PURE__ */ s(((e) => {
 		url: !0,
 		week: !0
 	};
-	function lr(e) {
+	function ur(e) {
 		var t = e && e.nodeName && e.nodeName.toLowerCase();
-		return t === "input" ? !!cr[e.type] : t === "textarea";
+		return t === "input" ? !!lr[e.type] : t === "textarea";
 	}
-	function ur(e, t, n, r) {
-		cn ? ln ? ln.push(r) : ln = [r] : cn = r, t = Ed(t, "onChange"), 0 < t.length && (n = new En("onChange", "change", null, n, r), e.push({
+	function dr(e, t, n, r) {
+		ln ? un ? un.push(r) : un = [r] : ln = r, t = Ed(t, "onChange"), 0 < t.length && (n = new Dn("onChange", "change", null, n, r), e.push({
 			event: n,
 			listeners: t
 		}));
 	}
-	var dr = null, fr = null;
-	function pr(e) {
+	var fr = null, pr = null;
+	function mr(e) {
 		yd(e, 0);
 	}
-	function mr(e) {
-		if (Bt(Ct(e))) return e;
+	function hr(e) {
+		if (Vt(Ct(e))) return e;
 	}
-	function hr(e, t) {
+	function gr(e, t) {
 		if (e === "change") return t;
 	}
-	var gr = !1;
-	if (mn) {
-		var _r;
-		if (mn) {
-			var vr = "oninput" in document;
-			if (!vr) {
-				var yr = document.createElement("div");
-				yr.setAttribute("oninput", "return;"), vr = typeof yr.oninput == "function";
+	var _r = !1;
+	if (hn) {
+		var vr;
+		if (hn) {
+			var yr = "oninput" in document;
+			if (!yr) {
+				var br = document.createElement("div");
+				br.setAttribute("oninput", "return;"), yr = typeof br.oninput == "function";
 			}
-			_r = vr;
-		} else _r = !1;
-		gr = _r && (!document.documentMode || 9 < document.documentMode);
+			vr = yr;
+		} else vr = !1;
+		_r = vr && (!document.documentMode || 9 < document.documentMode);
 	}
-	function br() {
-		dr && (dr.detachEvent("onpropertychange", xr), fr = dr = null);
+	function xr() {
+		fr && (fr.detachEvent("onpropertychange", Sr), pr = fr = null);
 	}
-	function xr(e) {
-		if (e.propertyName === "value" && mr(fr)) {
+	function Sr(e) {
+		if (e.propertyName === "value" && hr(pr)) {
 			var t = [];
-			ur(t, fr, e, sn(e)), fn(pr, t);
+			dr(t, pr, e, cn(e)), pn(mr, t);
 		}
 	}
-	function Sr(e, t, n) {
-		e === "focusin" ? (br(), dr = t, fr = n, dr.attachEvent("onpropertychange", xr)) : e === "focusout" && br();
+	function Cr(e, t, n) {
+		e === "focusin" ? (xr(), fr = t, pr = n, fr.attachEvent("onpropertychange", Sr)) : e === "focusout" && xr();
 	}
-	function Cr(e) {
-		if (e === "selectionchange" || e === "keyup" || e === "keydown") return mr(fr);
-	}
-	function wr(e, t) {
-		if (e === "click") return mr(t);
+	function wr(e) {
+		if (e === "selectionchange" || e === "keyup" || e === "keydown") return hr(pr);
 	}
 	function Tr(e, t) {
-		if (e === "input" || e === "change") return mr(t);
+		if (e === "click") return hr(t);
 	}
 	function Er(e, t) {
+		if (e === "input" || e === "change") return hr(t);
+	}
+	function Dr(e, t) {
 		return e === t && (e !== 0 || 1 / e == 1 / t) || e !== e && t !== t;
 	}
-	var Dr = typeof Object.is == "function" ? Object.is : Er;
-	function Or(e, t) {
-		if (Dr(e, t)) return !0;
+	var Or = typeof Object.is == "function" ? Object.is : Dr;
+	function kr(e, t) {
+		if (Or(e, t)) return !0;
 		if (typeof e != "object" || !e || typeof t != "object" || !t) return !1;
 		var n = Object.keys(e), r = Object.keys(t);
 		if (n.length !== r.length) return !1;
 		for (r = 0; r < n.length; r++) {
 			var i = n[r];
-			if (!Oe.call(t, i) || !Dr(e[i], t[i])) return !1;
+			if (!Oe.call(t, i) || !Or(e[i], t[i])) return !1;
 		}
 		return !0;
 	}
-	function kr(e) {
+	function Ar(e) {
 		for (; e && e.firstChild;) e = e.firstChild;
 		return e;
 	}
-	function Ar(e, t) {
-		var n = kr(e);
+	function jr(e, t) {
+		var n = Ar(e);
 		e = 0;
 		for (var r; n;) {
 			if (n.nodeType === 3) {
@@ -7404,15 +7284,15 @@ var C = /* @__PURE__ */ s(((e) => {
 				}
 				n = void 0;
 			}
-			n = kr(n);
+			n = Ar(n);
 		}
 	}
-	function jr(e, t) {
-		return e && t ? e === t ? !0 : e && e.nodeType === 3 ? !1 : t && t.nodeType === 3 ? jr(e, t.parentNode) : "contains" in e ? e.contains(t) : e.compareDocumentPosition ? !!(e.compareDocumentPosition(t) & 16) : !1 : !1;
+	function Mr(e, t) {
+		return e && t ? e === t ? !0 : e && e.nodeType === 3 ? !1 : t && t.nodeType === 3 ? Mr(e, t.parentNode) : "contains" in e ? e.contains(t) : e.compareDocumentPosition ? !!(e.compareDocumentPosition(t) & 16) : !1 : !1;
 	}
-	function Mr(e) {
+	function Nr(e) {
 		e = e != null && e.ownerDocument != null && e.ownerDocument.defaultView != null ? e.ownerDocument.defaultView : window;
-		for (var t = Vt(e.document); t instanceof e.HTMLIFrameElement;) {
+		for (var t = Ht(e.document); t instanceof e.HTMLIFrameElement;) {
 			try {
 				var n = typeof t.contentWindow.location.href == "string";
 			} catch {
@@ -7420,18 +7300,18 @@ var C = /* @__PURE__ */ s(((e) => {
 			}
 			if (n) e = t.contentWindow;
 			else break;
-			t = Vt(e.document);
+			t = Ht(e.document);
 		}
 		return t;
 	}
-	function Nr(e) {
+	function Pr(e) {
 		var t = e && e.nodeName && e.nodeName.toLowerCase();
 		return t && (t === "input" && (e.type === "text" || e.type === "search" || e.type === "tel" || e.type === "url" || e.type === "password") || t === "textarea" || e.contentEditable === "true");
 	}
-	var Pr = mn && "documentMode" in document && 11 >= document.documentMode, Fr = null, Ir = null, Lr = null, Rr = !1;
-	function zr(e, t, n) {
+	var Fr = hn && "documentMode" in document && 11 >= document.documentMode, Ir = null, Lr = null, Rr = null, zr = !1;
+	function Br(e, t, n) {
 		var r = n.window === n ? n.document : n.nodeType === 9 ? n : n.ownerDocument;
-		Rr || Fr == null || Fr !== Vt(r) || (r = Fr, "selectionStart" in r && Nr(r) ? r = {
+		zr || Ir == null || Ir !== Ht(r) || (r = Ir, "selectionStart" in r && Pr(r) ? r = {
 			start: r.selectionStart,
 			end: r.selectionEnd
 		} : (r = (r.ownerDocument && r.ownerDocument.defaultView || window).getSelection(), r = {
@@ -7439,38 +7319,38 @@ var C = /* @__PURE__ */ s(((e) => {
 			anchorOffset: r.anchorOffset,
 			focusNode: r.focusNode,
 			focusOffset: r.focusOffset
-		}), Lr && Or(Lr, r) || (Lr = r, r = Ed(Ir, "onSelect"), 0 < r.length && (t = new En("onSelect", "select", null, t, n), e.push({
+		}), Rr && kr(Rr, r) || (Rr = r, r = Ed(Lr, "onSelect"), 0 < r.length && (t = new Dn("onSelect", "select", null, t, n), e.push({
 			event: t,
 			listeners: r
-		}), t.target = Fr)));
+		}), t.target = Ir)));
 	}
-	function Br(e, t) {
+	function Vr(e, t) {
 		var n = {};
 		return n[e.toLowerCase()] = t.toLowerCase(), n["Webkit" + e] = "webkit" + t, n["Moz" + e] = "moz" + t, n;
 	}
-	var Vr = {
-		animationend: Br("Animation", "AnimationEnd"),
-		animationiteration: Br("Animation", "AnimationIteration"),
-		animationstart: Br("Animation", "AnimationStart"),
-		transitionrun: Br("Transition", "TransitionRun"),
-		transitionstart: Br("Transition", "TransitionStart"),
-		transitioncancel: Br("Transition", "TransitionCancel"),
-		transitionend: Br("Transition", "TransitionEnd")
-	}, Hr = {}, Ur = {};
-	mn && (Ur = document.createElement("div").style, "AnimationEvent" in window || (delete Vr.animationend.animation, delete Vr.animationiteration.animation, delete Vr.animationstart.animation), "TransitionEvent" in window || delete Vr.transitionend.transition);
-	function Wr(e) {
-		if (Hr[e]) return Hr[e];
-		if (!Vr[e]) return e;
-		var t = Vr[e], n;
-		for (n in t) if (t.hasOwnProperty(n) && n in Ur) return Hr[e] = t[n];
+	var Hr = {
+		animationend: Vr("Animation", "AnimationEnd"),
+		animationiteration: Vr("Animation", "AnimationIteration"),
+		animationstart: Vr("Animation", "AnimationStart"),
+		transitionrun: Vr("Transition", "TransitionRun"),
+		transitionstart: Vr("Transition", "TransitionStart"),
+		transitioncancel: Vr("Transition", "TransitionCancel"),
+		transitionend: Vr("Transition", "TransitionEnd")
+	}, Ur = {}, Wr = {};
+	hn && (Wr = document.createElement("div").style, "AnimationEvent" in window || (delete Hr.animationend.animation, delete Hr.animationiteration.animation, delete Hr.animationstart.animation), "TransitionEvent" in window || delete Hr.transitionend.transition);
+	function Gr(e) {
+		if (Ur[e]) return Ur[e];
+		if (!Hr[e]) return e;
+		var t = Hr[e], n;
+		for (n in t) if (t.hasOwnProperty(n) && n in Wr) return Ur[e] = t[n];
 		return e;
 	}
-	var Gr = Wr("animationend"), Kr = Wr("animationiteration"), qr = Wr("animationstart"), Jr = Wr("transitionrun"), Yr = Wr("transitionstart"), Xr = Wr("transitioncancel"), Zr = Wr("transitionend"), Qr = /* @__PURE__ */ new Map(), $r = "abort auxClick beforeToggle cancel canPlay canPlayThrough click close contextMenu copy cut drag dragEnd dragEnter dragExit dragLeave dragOver dragStart drop durationChange emptied encrypted ended error gotPointerCapture input invalid keyDown keyPress keyUp load loadedData loadedMetadata loadStart lostPointerCapture mouseDown mouseMove mouseOut mouseOver mouseUp paste pause play playing pointerCancel pointerDown pointerMove pointerOut pointerOver pointerUp progress rateChange reset resize seeked seeking stalled submit suspend timeUpdate touchCancel touchEnd touchStart volumeChange scroll toggle touchMove waiting wheel".split(" ");
-	$r.push("scrollEnd");
-	function ei(e, t) {
-		Qr.set(e, t), Dt(t, [e]);
+	var Kr = Gr("animationend"), qr = Gr("animationiteration"), Jr = Gr("animationstart"), Yr = Gr("transitionrun"), Xr = Gr("transitionstart"), Zr = Gr("transitioncancel"), Qr = Gr("transitionend"), $r = /* @__PURE__ */ new Map(), ei = "abort auxClick beforeToggle cancel canPlay canPlayThrough click close contextMenu copy cut drag dragEnd dragEnter dragExit dragLeave dragOver dragStart drop durationChange emptied encrypted ended error gotPointerCapture input invalid keyDown keyPress keyUp load loadedData loadedMetadata loadStart lostPointerCapture mouseDown mouseMove mouseOut mouseOver mouseUp paste pause play playing pointerCancel pointerDown pointerMove pointerOut pointerOver pointerUp progress rateChange reset resize seeked seeking stalled submit suspend timeUpdate touchCancel touchEnd touchStart volumeChange scroll toggle touchMove waiting wheel".split(" ");
+	ei.push("scrollEnd");
+	function ti(e, t) {
+		$r.set(e, t), Ot(t, [e]);
 	}
-	var ti = typeof reportError == "function" ? reportError : function(e) {
+	var ni = typeof reportError == "function" ? reportError : function(e) {
 		if (typeof window == "object" && typeof window.ErrorEvent == "function") {
 			var t = new window.ErrorEvent("error", {
 				bubbles: !0,
@@ -7484,62 +7364,62 @@ var C = /* @__PURE__ */ s(((e) => {
 			return;
 		}
 		console.error(e);
-	}, ni = [], ri = 0, ii = 0;
-	function ai() {
-		for (var e = ri, t = ii = ri = 0; t < e;) {
-			var n = ni[t];
-			ni[t++] = null;
-			var r = ni[t];
-			ni[t++] = null;
-			var i = ni[t];
-			ni[t++] = null;
-			var a = ni[t];
-			if (ni[t++] = null, r !== null && i !== null) {
+	}, ri = [], ii = 0, ai = 0;
+	function oi() {
+		for (var e = ii, t = ai = ii = 0; t < e;) {
+			var n = ri[t];
+			ri[t++] = null;
+			var r = ri[t];
+			ri[t++] = null;
+			var i = ri[t];
+			ri[t++] = null;
+			var a = ri[t];
+			if (ri[t++] = null, r !== null && i !== null) {
 				var o = r.pending;
 				o === null ? i.next = i : (i.next = o.next, o.next = i), r.pending = i;
 			}
-			a !== 0 && li(n, i, a);
+			a !== 0 && ui(n, i, a);
 		}
 	}
-	function oi(e, t, n, r) {
-		ni[ri++] = e, ni[ri++] = t, ni[ri++] = n, ni[ri++] = r, ii |= r, e.lanes |= r, e = e.alternate, e !== null && (e.lanes |= r);
-	}
 	function si(e, t, n, r) {
-		return oi(e, t, n, r), ui(e);
+		ri[ii++] = e, ri[ii++] = t, ri[ii++] = n, ri[ii++] = r, ai |= r, e.lanes |= r, e = e.alternate, e !== null && (e.lanes |= r);
 	}
-	function ci(e, t) {
-		return oi(e, null, null, t), ui(e);
+	function ci(e, t, n, r) {
+		return si(e, t, n, r), di(e);
 	}
-	function li(e, t, n) {
+	function li(e, t) {
+		return si(e, null, null, t), di(e);
+	}
+	function ui(e, t, n) {
 		e.lanes |= n;
 		var r = e.alternate;
 		r !== null && (r.lanes |= n);
 		for (var i = !1, a = e.return; a !== null;) a.childLanes |= n, r = a.alternate, r !== null && (r.childLanes |= n), a.tag === 22 && (e = a.stateNode, e === null || e._visibility & 1 || (i = !0)), e = a, a = a.return;
 		return e.tag === 3 ? (a = e.stateNode, i && t !== null && (i = 31 - We(n), e = a.hiddenUpdates, r = e[i], r === null ? e[i] = [t] : r.push(t), t.lane = n | 536870912), a) : null;
 	}
-	function ui(e) {
+	function di(e) {
 		if (50 < du) throw du = 0, fu = null, Error(i(185));
 		for (var t = e.return; t !== null;) e = t, t = e.return;
 		return e.tag === 3 ? e.stateNode : null;
 	}
-	var di = {};
-	function fi(e, t, n, r) {
+	var fi = {};
+	function pi(e, t, n, r) {
 		this.tag = e, this.key = n, this.sibling = this.child = this.return = this.stateNode = this.type = this.elementType = null, this.index = 0, this.refCleanup = this.ref = null, this.pendingProps = t, this.dependencies = this.memoizedState = this.updateQueue = this.memoizedProps = null, this.mode = r, this.subtreeFlags = this.flags = 0, this.deletions = null, this.childLanes = this.lanes = 0, this.alternate = null;
 	}
-	function pi(e, t, n, r) {
-		return new fi(e, t, n, r);
+	function mi(e, t, n, r) {
+		return new pi(e, t, n, r);
 	}
-	function mi(e) {
+	function hi(e) {
 		return e = e.prototype, !(!e || !e.isReactComponent);
 	}
-	function hi(e, t) {
+	function gi(e, t) {
 		var n = e.alternate;
-		return n === null ? (n = pi(e.tag, t, e.key, e.mode), n.elementType = e.elementType, n.type = e.type, n.stateNode = e.stateNode, n.alternate = e, e.alternate = n) : (n.pendingProps = t, n.type = e.type, n.flags = 0, n.subtreeFlags = 0, n.deletions = null), n.flags = e.flags & 65011712, n.childLanes = e.childLanes, n.lanes = e.lanes, n.child = e.child, n.memoizedProps = e.memoizedProps, n.memoizedState = e.memoizedState, n.updateQueue = e.updateQueue, t = e.dependencies, n.dependencies = t === null ? null : {
+		return n === null ? (n = mi(e.tag, t, e.key, e.mode), n.elementType = e.elementType, n.type = e.type, n.stateNode = e.stateNode, n.alternate = e, e.alternate = n) : (n.pendingProps = t, n.type = e.type, n.flags = 0, n.subtreeFlags = 0, n.deletions = null), n.flags = e.flags & 65011712, n.childLanes = e.childLanes, n.lanes = e.lanes, n.child = e.child, n.memoizedProps = e.memoizedProps, n.memoizedState = e.memoizedState, n.updateQueue = e.updateQueue, t = e.dependencies, n.dependencies = t === null ? null : {
 			lanes: t.lanes,
 			firstContext: t.firstContext
 		}, n.sibling = e.sibling, n.index = e.index, n.ref = e.ref, n.refCleanup = e.refCleanup, n;
 	}
-	function gi(e, t) {
+	function _i(e, t) {
 		e.flags &= 65011714;
 		var n = e.alternate;
 		return n === null ? (e.childLanes = 0, e.lanes = t, e.child = null, e.subtreeFlags = 0, e.memoizedProps = null, e.memoizedState = null, e.updateQueue = null, e.dependencies = null, e.stateNode = null) : (e.childLanes = n.childLanes, e.lanes = n.lanes, e.child = n.child, e.subtreeFlags = 0, e.deletions = null, e.memoizedProps = n.memoizedProps, e.memoizedState = n.memoizedState, e.updateQueue = n.updateQueue, e.type = n.type, t = n.dependencies, e.dependencies = t === null ? null : {
@@ -7547,19 +7427,19 @@ var C = /* @__PURE__ */ s(((e) => {
 			firstContext: t.firstContext
 		}), e;
 	}
-	function _i(e, t, n, r, a, o) {
+	function vi(e, t, n, r, a, o) {
 		var s = 0;
-		if (r = e, typeof e == "function") mi(e) && (s = 1);
+		if (r = e, typeof e == "function") hi(e) && (s = 1);
 		else if (typeof e == "string") s = Uf(e, n, pe.current) ? 26 : e === "html" || e === "head" || e === "body" ? 27 : 5;
 		else a: switch (e) {
-			case re: return e = pi(31, n, t, a), e.elementType = re, e.lanes = o, e;
-			case g: return vi(n.children, a, o, t);
+			case re: return e = mi(31, n, t, a), e.elementType = re, e.lanes = o, e;
+			case g: return yi(n.children, a, o, t);
 			case _:
 				s = 8, a |= 24;
 				break;
-			case v: return e = pi(12, n, t, a | 2), e.elementType = v, e.lanes = o, e;
-			case S: return e = pi(13, n, t, a), e.elementType = S, e.lanes = o, e;
-			case C: return e = pi(19, n, t, a), e.elementType = C, e.lanes = o, e;
+			case v: return e = mi(12, n, t, a | 2), e.elementType = v, e.lanes = o, e;
+			case S: return e = mi(13, n, t, a), e.elementType = S, e.lanes = o, e;
+			case C: return e = mi(19, n, t, a), e.elementType = C, e.lanes = o, e;
 			default:
 				if (typeof e == "object" && e) switch (e.$$typeof) {
 					case b:
@@ -7580,34 +7460,34 @@ var C = /* @__PURE__ */ s(((e) => {
 				}
 				s = 29, n = Error(i(130, e === null ? "null" : typeof e, "")), r = null;
 		}
-		return t = pi(s, n, t, a), t.elementType = e, t.type = r, t.lanes = o, t;
+		return t = mi(s, n, t, a), t.elementType = e, t.type = r, t.lanes = o, t;
 	}
-	function vi(e, t, n, r) {
-		return e = pi(7, e, r, t), e.lanes = n, e;
+	function yi(e, t, n, r) {
+		return e = mi(7, e, r, t), e.lanes = n, e;
 	}
-	function yi(e, t, n) {
-		return e = pi(6, e, null, t), e.lanes = n, e;
+	function bi(e, t, n) {
+		return e = mi(6, e, null, t), e.lanes = n, e;
 	}
-	function bi(e) {
-		var t = pi(18, null, null, 0);
+	function xi(e) {
+		var t = mi(18, null, null, 0);
 		return t.stateNode = e, t;
 	}
-	function xi(e, t, n) {
-		return t = pi(4, e.children === null ? [] : e.children, e.key, t), t.lanes = n, t.stateNode = {
+	function Si(e, t, n) {
+		return t = mi(4, e.children === null ? [] : e.children, e.key, t), t.lanes = n, t.stateNode = {
 			containerInfo: e.containerInfo,
 			pendingChildren: null,
 			implementation: e.implementation
 		}, t;
 	}
-	var Si = /* @__PURE__ */ new WeakMap();
-	function Ci(e, t) {
+	var Ci = /* @__PURE__ */ new WeakMap();
+	function wi(e, t) {
 		if (typeof e == "object" && e) {
-			var n = Si.get(e);
+			var n = Ci.get(e);
 			return n === void 0 ? (t = {
 				value: e,
 				source: t,
 				stack: De(t)
-			}, Si.set(e, t), t) : n;
+			}, Ci.set(e, t), t) : n;
 		}
 		return {
 			value: e,
@@ -7615,37 +7495,37 @@ var C = /* @__PURE__ */ s(((e) => {
 			stack: De(t)
 		};
 	}
-	var wi = [], Ti = 0, Ei = null, Di = 0, Oi = [], ki = 0, Ai = null, ji = 1, Mi = "";
-	function Ni(e, t) {
-		wi[Ti++] = Di, wi[Ti++] = Ei, Ei = e, Di = t;
+	var Ti = [], Ei = 0, Di = null, Oi = 0, ki = [], Ai = 0, ji = null, Mi = 1, Ni = "";
+	function Pi(e, t) {
+		Ti[Ei++] = Oi, Ti[Ei++] = Di, Di = e, Oi = t;
 	}
-	function Pi(e, t, n) {
-		Oi[ki++] = ji, Oi[ki++] = Mi, Oi[ki++] = Ai, Ai = e;
-		var r = ji;
-		e = Mi;
+	function Fi(e, t, n) {
+		ki[Ai++] = Mi, ki[Ai++] = Ni, ki[Ai++] = ji, ji = e;
+		var r = Mi;
+		e = Ni;
 		var i = 32 - We(r) - 1;
 		r &= ~(1 << i), n += 1;
 		var a = 32 - We(t) + i;
 		if (30 < a) {
 			var o = i - i % 5;
-			a = (r & (1 << o) - 1).toString(32), r >>= o, i -= o, ji = 1 << 32 - We(t) + i | n << i | r, Mi = a + e;
-		} else ji = 1 << a | n << i | r, Mi = e;
-	}
-	function Fi(e) {
-		e.return !== null && (Ni(e, 1), Pi(e, 1, 0));
+			a = (r & (1 << o) - 1).toString(32), r >>= o, i -= o, Mi = 1 << 32 - We(t) + i | n << i | r, Ni = a + e;
+		} else Mi = 1 << a | n << i | r, Ni = e;
 	}
 	function Ii(e) {
-		for (; e === Ei;) Ei = wi[--Ti], wi[Ti] = null, Di = wi[--Ti], wi[Ti] = null;
-		for (; e === Ai;) Ai = Oi[--ki], Oi[ki] = null, Mi = Oi[--ki], Oi[ki] = null, ji = Oi[--ki], Oi[ki] = null;
+		e.return !== null && (Pi(e, 1), Fi(e, 1, 0));
 	}
-	function Li(e, t) {
-		Oi[ki++] = ji, Oi[ki++] = Mi, Oi[ki++] = Ai, ji = t.id, Mi = t.overflow, Ai = e;
+	function Li(e) {
+		for (; e === Di;) Di = Ti[--Ei], Ti[Ei] = null, Oi = Ti[--Ei], Ti[Ei] = null;
+		for (; e === ji;) ji = ki[--Ai], ki[Ai] = null, Ni = ki[--Ai], ki[Ai] = null, Mi = ki[--Ai], ki[Ai] = null;
 	}
-	var Ri = null, P = null, F = !1, zi = null, Bi = !1, Vi = Error(i(519));
-	function Hi(e) {
-		throw Ji(Ci(Error(i(418, 1 < arguments.length && arguments[1] !== void 0 && arguments[1] ? "text" : "HTML", "")), e)), Vi;
+	function Ri(e, t) {
+		ki[Ai++] = Mi, ki[Ai++] = Ni, ki[Ai++] = ji, Mi = t.id, Ni = t.overflow, ji = e;
 	}
+	var zi = null, N = null, P = !1, Bi = null, Vi = !1, Hi = Error(i(519));
 	function Ui(e) {
+		throw Yi(wi(Error(i(418, 1 < arguments.length && arguments[1] !== void 0 && arguments[1] ? "text" : "HTML", "")), e)), Hi;
+	}
+	function Wi(e) {
 		var t = e.stateNode, n = e.type, r = e.memoizedProps;
 		switch (t[ft] = e, t[pt] = r, n) {
 			case "dialog":
@@ -7672,67 +7552,67 @@ var C = /* @__PURE__ */ s(((e) => {
 				Q("toggle", t);
 				break;
 			case "input":
-				Q("invalid", t), Gt(t, r.value, r.defaultValue, r.checked, r.defaultChecked, r.type, r.name, !0);
+				Q("invalid", t), Kt(t, r.value, r.defaultValue, r.checked, r.defaultChecked, r.type, r.name, !0);
 				break;
 			case "select":
 				Q("invalid", t);
 				break;
-			case "textarea": Q("invalid", t), Yt(t, r.value, r.defaultValue, r.children);
+			case "textarea": Q("invalid", t), Xt(t, r.value, r.defaultValue, r.children);
 		}
-		n = r.children, typeof n != "string" && typeof n != "number" && typeof n != "bigint" || t.textContent === "" + n || !0 === r.suppressHydrationWarning || Md(t.textContent, n) ? (r.popover != null && (Q("beforetoggle", t), Q("toggle", t)), r.onScroll != null && Q("scroll", t), r.onScrollEnd != null && Q("scrollend", t), r.onClick != null && (t.onclick = an), t = !0) : t = !1, t || Hi(e, !0);
+		n = r.children, typeof n != "string" && typeof n != "number" && typeof n != "bigint" || t.textContent === "" + n || !0 === r.suppressHydrationWarning || Md(t.textContent, n) ? (r.popover != null && (Q("beforetoggle", t), Q("toggle", t)), r.onScroll != null && Q("scroll", t), r.onScrollEnd != null && Q("scrollend", t), r.onClick != null && (t.onclick = on), t = !0) : t = !1, t || Ui(e, !0);
 	}
-	function Wi(e) {
-		for (Ri = e.return; Ri;) switch (Ri.tag) {
+	function Gi(e) {
+		for (zi = e.return; zi;) switch (zi.tag) {
 			case 5:
 			case 31:
 			case 13:
-				Bi = !1;
+				Vi = !1;
 				return;
 			case 27:
 			case 3:
-				Bi = !0;
+				Vi = !0;
 				return;
-			default: Ri = Ri.return;
+			default: zi = zi.return;
 		}
 	}
-	function Gi(e) {
-		if (e !== Ri) return !1;
-		if (!F) return Wi(e), F = !0, !1;
+	function Ki(e) {
+		if (e !== zi) return !1;
+		if (!P) return Gi(e), P = !0, !1;
 		var t = e.tag, n;
-		if ((n = t !== 3 && t !== 27) && ((n = t === 5) && (n = e.type, n = n === "form" || n === "button" || Ud(e.type, e.memoizedProps)), n = !n), n && P && Hi(e), Wi(e), t === 13) {
+		if ((n = t !== 3 && t !== 27) && ((n = t === 5) && (n = e.type, n = n === "form" || n === "button" || Ud(e.type, e.memoizedProps)), n = !n), n && N && Ui(e), Gi(e), t === 13) {
 			if (e = e.memoizedState, e = e === null ? null : e.dehydrated, !e) throw Error(i(317));
-			P = uf(e);
+			N = uf(e);
 		} else if (t === 31) {
 			if (e = e.memoizedState, e = e === null ? null : e.dehydrated, !e) throw Error(i(317));
-			P = uf(e);
-		} else t === 27 ? (t = P, Zd(e.type) ? (e = lf, lf = null, P = e) : P = t) : P = Ri ? cf(e.stateNode.nextSibling) : null;
+			N = uf(e);
+		} else t === 27 ? (t = N, Zd(e.type) ? (e = lf, lf = null, N = e) : N = t) : N = zi ? cf(e.stateNode.nextSibling) : null;
 		return !0;
 	}
-	function Ki() {
-		P = Ri = null, F = !1;
-	}
 	function qi() {
-		var e = zi;
-		return e !== null && (Zl === null ? Zl = e : Zl.push.apply(Zl, e), zi = null), e;
+		N = zi = null, P = !1;
 	}
-	function Ji(e) {
-		zi === null ? zi = [e] : zi.push(e);
+	function Ji() {
+		var e = Bi;
+		return e !== null && (Zl === null ? Zl = e : Zl.push.apply(Zl, e), Bi = null), e;
 	}
-	var Yi = fe(null), Xi = null, Zi = null;
-	function Qi(e, t, n) {
-		A(Yi, t._currentValue), t._currentValue = n;
+	function Yi(e) {
+		Bi === null ? Bi = [e] : Bi.push(e);
 	}
-	function $i(e) {
-		e._currentValue = Yi.current, k(Yi);
+	var Xi = fe(null), Zi = null, Qi = null;
+	function $i(e, t, n) {
+		A(Xi, t._currentValue), t._currentValue = n;
 	}
-	function ea(e, t, n) {
+	function ea(e) {
+		e._currentValue = Xi.current, k(Xi);
+	}
+	function ta(e, t, n) {
 		for (; e !== null;) {
 			var r = e.alternate;
 			if ((e.childLanes & t) === t ? r !== null && (r.childLanes & t) !== t && (r.childLanes |= t) : (e.childLanes |= t, r !== null && (r.childLanes |= t)), e === n) break;
 			e = e.return;
 		}
 	}
-	function ta(e, t, n, r) {
+	function na(e, t, n, r) {
 		var a = e.child;
 		for (a !== null && (a.return = e); a !== null;) {
 			var o = a.dependencies;
@@ -7743,14 +7623,14 @@ var C = /* @__PURE__ */ s(((e) => {
 					var c = o;
 					o = a;
 					for (var l = 0; l < t.length; l++) if (c.context === t[l]) {
-						o.lanes |= n, c = o.alternate, c !== null && (c.lanes |= n), ea(o.return, n, e), r || (s = null);
+						o.lanes |= n, c = o.alternate, c !== null && (c.lanes |= n), ta(o.return, n, e), r || (s = null);
 						break a;
 					}
 					o = c.next;
 				}
 			} else if (a.tag === 18) {
 				if (s = a.return, s === null) throw Error(i(341));
-				s.lanes |= n, o = s.alternate, o !== null && (o.lanes |= n), ea(s, n, e), s = null;
+				s.lanes |= n, o = s.alternate, o !== null && (o.lanes |= n), ta(s, n, e), s = null;
 			} else s = a.child;
 			if (s !== null) s.return = a;
 			else for (s = a; s !== null;) {
@@ -7767,7 +7647,7 @@ var C = /* @__PURE__ */ s(((e) => {
 			a = s;
 		}
 	}
-	function na(e, t, n, r) {
+	function ra(e, t, n, r) {
 		e = null;
 		for (var a = t, o = !1; a !== null;) {
 			if (!o) {
@@ -7779,7 +7659,7 @@ var C = /* @__PURE__ */ s(((e) => {
 				if (s === null) throw Error(i(387));
 				if (s = s.memoizedProps, s !== null) {
 					var c = a.type;
-					Dr(a.pendingProps.value, s.value) || (e === null ? e = [c] : e.push(c));
+					Or(a.pendingProps.value, s.value) || (e === null ? e = [c] : e.push(c));
 				}
 			} else if (a === ge.current) {
 				if (s = a.alternate, s === null) throw Error(i(387));
@@ -7787,40 +7667,40 @@ var C = /* @__PURE__ */ s(((e) => {
 			}
 			a = a.return;
 		}
-		e !== null && ta(t, e, n, r), t.flags |= 262144;
+		e !== null && na(t, e, n, r), t.flags |= 262144;
 	}
-	function ra(e) {
+	function ia(e) {
 		for (e = e.firstContext; e !== null;) {
-			if (!Dr(e.context._currentValue, e.memoizedValue)) return !0;
+			if (!Or(e.context._currentValue, e.memoizedValue)) return !0;
 			e = e.next;
 		}
 		return !1;
 	}
-	function ia(e) {
-		Xi = e, Zi = null, e = e.dependencies, e !== null && (e.firstContext = null);
-	}
 	function aa(e) {
-		return sa(Xi, e);
+		Zi = e, Qi = null, e = e.dependencies, e !== null && (e.firstContext = null);
 	}
-	function oa(e, t) {
-		return Xi === null && ia(e), sa(e, t);
+	function oa(e) {
+		return ca(Zi, e);
 	}
 	function sa(e, t) {
+		return Zi === null && aa(e), ca(e, t);
+	}
+	function ca(e, t) {
 		var n = t._currentValue;
 		if (t = {
 			context: t,
 			memoizedValue: n,
 			next: null
-		}, Zi === null) {
+		}, Qi === null) {
 			if (e === null) throw Error(i(308));
-			Zi = t, e.dependencies = {
+			Qi = t, e.dependencies = {
 				lanes: 0,
 				firstContext: t
 			}, e.flags |= 524288;
-		} else Zi = Zi.next = t;
+		} else Qi = Qi.next = t;
 		return n;
 	}
-	var ca = typeof AbortController < "u" ? AbortController : function() {
+	var la = typeof AbortController < "u" ? AbortController : function() {
 		var e = [], t = this.signal = {
 			aborted: !1,
 			addEventListener: function(t, n) {
@@ -7832,7 +7712,7 @@ var C = /* @__PURE__ */ s(((e) => {
 				return e();
 			});
 		};
-	}, la = t.unstable_scheduleCallback, ua = t.unstable_NormalPriority, I = {
+	}, ua = t.unstable_scheduleCallback, da = t.unstable_NormalPriority, F = {
 		$$typeof: b,
 		Consumer: null,
 		Provider: null,
@@ -7840,23 +7720,23 @@ var C = /* @__PURE__ */ s(((e) => {
 		_currentValue2: null,
 		_threadCount: 0
 	};
-	function da() {
+	function fa() {
 		return {
-			controller: new ca(),
+			controller: new la(),
 			data: /* @__PURE__ */ new Map(),
 			refCount: 0
 		};
 	}
-	function fa(e) {
-		e.refCount--, e.refCount === 0 && la(ua, function() {
+	function pa(e) {
+		e.refCount--, e.refCount === 0 && ua(da, function() {
 			e.controller.abort();
 		});
 	}
-	var pa = null, ma = 0, ha = 0, ga = null;
-	function _a(e, t) {
-		if (pa === null) {
-			var n = pa = [];
-			ma = 0, ha = dd(), ga = {
+	var ma = null, ha = 0, ga = 0, _a = null;
+	function va(e, t) {
+		if (ma === null) {
+			var n = ma = [];
+			ha = 0, ga = dd(), _a = {
 				status: "pending",
 				value: void 0,
 				then: function(e) {
@@ -7864,17 +7744,17 @@ var C = /* @__PURE__ */ s(((e) => {
 				}
 			};
 		}
-		return ma++, t.then(va, va), t;
+		return ha++, t.then(ya, ya), t;
 	}
-	function va() {
-		if (--ma === 0 && pa !== null) {
-			ga !== null && (ga.status = "fulfilled");
-			var e = pa;
-			pa = null, ha = 0, ga = null;
+	function ya() {
+		if (--ha === 0 && ma !== null) {
+			_a !== null && (_a.status = "fulfilled");
+			var e = ma;
+			ma = null, ga = 0, _a = null;
 			for (var t = 0; t < e.length; t++) (0, e[t])();
 		}
 	}
-	function ya(e, t) {
+	function ba(e, t) {
 		var n = [], r = {
 			status: "pending",
 			value: null,
@@ -7890,35 +7770,35 @@ var C = /* @__PURE__ */ s(((e) => {
 			for (r.status = "rejected", r.reason = e, e = 0; e < n.length; e++) (0, n[e])(void 0);
 		}), r;
 	}
-	var ba = D.S;
+	var xa = D.S;
 	D.S = function(e, t) {
-		eu = j(), typeof t == "object" && t && typeof t.then == "function" && _a(e, t), ba !== null && ba(e, t);
+		eu = j(), typeof t == "object" && t && typeof t.then == "function" && va(e, t), xa !== null && xa(e, t);
 	};
-	var xa = fe(null);
-	function Sa() {
-		var e = xa.current;
+	var Sa = fe(null);
+	function Ca() {
+		var e = Sa.current;
 		return e === null ? K.pooledCache : e;
 	}
-	function Ca(e, t) {
-		t === null ? A(xa, xa.current) : A(xa, t.pool);
+	function wa(e, t) {
+		t === null ? A(Sa, Sa.current) : A(Sa, t.pool);
 	}
-	function wa() {
-		var e = Sa();
+	function Ta() {
+		var e = Ca();
 		return e === null ? null : {
-			parent: I._currentValue,
+			parent: F._currentValue,
 			pool: e
 		};
 	}
-	var Ta = Error(i(460)), Ea = Error(i(474)), Da = Error(i(542)), Oa = { then: function() {} };
-	function ka(e) {
+	var Ea = Error(i(460)), Da = Error(i(474)), Oa = Error(i(542)), ka = { then: function() {} };
+	function Aa(e) {
 		return e = e.status, e === "fulfilled" || e === "rejected";
 	}
-	function Aa(e, t, n) {
-		switch (n = e[n], n === void 0 ? e.push(t) : n !== t && (t.then(an, an), t = n), t.status) {
+	function ja(e, t, n) {
+		switch (n = e[n], n === void 0 ? e.push(t) : n !== t && (t.then(on, on), t = n), t.status) {
 			case "fulfilled": return t.value;
-			case "rejected": throw e = t.reason, Pa(e), e;
+			case "rejected": throw e = t.reason, Fa(e), e;
 			default:
-				if (typeof t.status == "string") t.then(an, an);
+				if (typeof t.status == "string") t.then(on, on);
 				else {
 					if (e = K, e !== null && 100 < e.shellSuspendCounter) throw Error(i(482));
 					e = t, e.status = "pending", e.then(function(e) {
@@ -7935,40 +7815,40 @@ var C = /* @__PURE__ */ s(((e) => {
 				}
 				switch (t.status) {
 					case "fulfilled": return t.value;
-					case "rejected": throw e = t.reason, Pa(e), e;
+					case "rejected": throw e = t.reason, Fa(e), e;
 				}
-				throw Ma = t, Ta;
+				throw Na = t, Ea;
 		}
 	}
-	function ja(e) {
+	function Ma(e) {
 		try {
 			var t = e._init;
 			return t(e._payload);
 		} catch (e) {
-			throw typeof e == "object" && e && typeof e.then == "function" ? (Ma = e, Ta) : e;
+			throw typeof e == "object" && e && typeof e.then == "function" ? (Na = e, Ea) : e;
 		}
 	}
-	var Ma = null;
-	function Na() {
-		if (Ma === null) throw Error(i(459));
-		var e = Ma;
-		return Ma = null, e;
+	var Na = null;
+	function Pa() {
+		if (Na === null) throw Error(i(459));
+		var e = Na;
+		return Na = null, e;
 	}
-	function Pa(e) {
-		if (e === Ta || e === Da) throw Error(i(483));
+	function Fa(e) {
+		if (e === Ea || e === Oa) throw Error(i(483));
 	}
-	var Fa = null, Ia = 0;
-	function La(e) {
-		var t = Ia;
-		return Ia += 1, Fa === null && (Fa = []), Aa(Fa, e, t);
-	}
-	function Ra(e, t) {
-		t = t.props.ref, e.ref = t === void 0 ? null : t;
+	var Ia = null, La = 0;
+	function Ra(e) {
+		var t = La;
+		return La += 1, Ia === null && (Ia = []), ja(Ia, e, t);
 	}
 	function za(e, t) {
+		t = t.props.ref, e.ref = t === void 0 ? null : t;
+	}
+	function Ba(e, t) {
 		throw t.$$typeof === p ? Error(i(525)) : (e = Object.prototype.toString.call(t), Error(i(31, e === "[object Object]" ? "object with keys {" + Object.keys(t).join(", ") + "}" : e)));
 	}
-	function Ba(e) {
+	function Va(e) {
 		function t(t, n) {
 			if (e) {
 				var r = t.deletions;
@@ -7985,7 +7865,7 @@ var C = /* @__PURE__ */ s(((e) => {
 			return t;
 		}
 		function a(e, t) {
-			return e = hi(e, t), e.index = 0, e.sibling = null, e;
+			return e = gi(e, t), e.index = 0, e.sibling = null, e;
 		}
 		function o(t, n, r) {
 			return t.index = r, e ? (r = t.alternate, r === null ? (t.flags |= 67108866, n) : (r = r.index, r < n ? (t.flags |= 67108866, n) : r)) : (t.flags |= 1048576, n);
@@ -7994,30 +7874,30 @@ var C = /* @__PURE__ */ s(((e) => {
 			return e && t.alternate === null && (t.flags |= 67108866), t;
 		}
 		function c(e, t, n, r) {
-			return t === null || t.tag !== 6 ? (t = yi(n, e.mode, r), t.return = e, t) : (t = a(t, n), t.return = e, t);
+			return t === null || t.tag !== 6 ? (t = bi(n, e.mode, r), t.return = e, t) : (t = a(t, n), t.return = e, t);
 		}
 		function l(e, t, n, r) {
 			var i = n.type;
-			return i === g ? d(e, t, n.props.children, r, n.key) : t !== null && (t.elementType === i || typeof i == "object" && i && i.$$typeof === T && ja(i) === t.type) ? (t = a(t, n.props), Ra(t, n), t.return = e, t) : (t = _i(n.type, n.key, n.props, null, e.mode, r), Ra(t, n), t.return = e, t);
+			return i === g ? d(e, t, n.props.children, r, n.key) : t !== null && (t.elementType === i || typeof i == "object" && i && i.$$typeof === T && Ma(i) === t.type) ? (t = a(t, n.props), za(t, n), t.return = e, t) : (t = vi(n.type, n.key, n.props, null, e.mode, r), za(t, n), t.return = e, t);
 		}
 		function u(e, t, n, r) {
-			return t === null || t.tag !== 4 || t.stateNode.containerInfo !== n.containerInfo || t.stateNode.implementation !== n.implementation ? (t = xi(n, e.mode, r), t.return = e, t) : (t = a(t, n.children || []), t.return = e, t);
+			return t === null || t.tag !== 4 || t.stateNode.containerInfo !== n.containerInfo || t.stateNode.implementation !== n.implementation ? (t = Si(n, e.mode, r), t.return = e, t) : (t = a(t, n.children || []), t.return = e, t);
 		}
 		function d(e, t, n, r, i) {
-			return t === null || t.tag !== 7 ? (t = vi(n, e.mode, r, i), t.return = e, t) : (t = a(t, n), t.return = e, t);
+			return t === null || t.tag !== 7 ? (t = yi(n, e.mode, r, i), t.return = e, t) : (t = a(t, n), t.return = e, t);
 		}
 		function f(e, t, n) {
-			if (typeof t == "string" && t !== "" || typeof t == "number" || typeof t == "bigint") return t = yi("" + t, e.mode, n), t.return = e, t;
+			if (typeof t == "string" && t !== "" || typeof t == "number" || typeof t == "bigint") return t = bi("" + t, e.mode, n), t.return = e, t;
 			if (typeof t == "object" && t) {
 				switch (t.$$typeof) {
-					case m: return n = _i(t.type, t.key, t.props, null, e.mode, n), Ra(n, t), n.return = e, n;
-					case h: return t = xi(t, e.mode, n), t.return = e, t;
-					case T: return t = ja(t), f(e, t, n);
+					case m: return n = vi(t.type, t.key, t.props, null, e.mode, n), za(n, t), n.return = e, n;
+					case h: return t = Si(t, e.mode, n), t.return = e, t;
+					case T: return t = Ma(t), f(e, t, n);
 				}
-				if (ce(t) || ae(t)) return t = vi(t, e.mode, n, null), t.return = e, t;
-				if (typeof t.then == "function") return f(e, La(t), n);
-				if (t.$$typeof === b) return f(e, oa(e, t), n);
-				za(e, t);
+				if (ce(t) || ae(t)) return t = yi(t, e.mode, n, null), t.return = e, t;
+				if (typeof t.then == "function") return f(e, Ra(t), n);
+				if (t.$$typeof === b) return f(e, sa(e, t), n);
+				Ba(e, t);
 			}
 			return null;
 		}
@@ -8028,12 +7908,12 @@ var C = /* @__PURE__ */ s(((e) => {
 				switch (n.$$typeof) {
 					case m: return n.key === i ? l(e, t, n, r) : null;
 					case h: return n.key === i ? u(e, t, n, r) : null;
-					case T: return n = ja(n), p(e, t, n, r);
+					case T: return n = Ma(n), p(e, t, n, r);
 				}
 				if (ce(n) || ae(n)) return i === null ? d(e, t, n, r, null) : null;
-				if (typeof n.then == "function") return p(e, t, La(n), r);
-				if (n.$$typeof === b) return p(e, t, oa(e, n), r);
-				za(e, n);
+				if (typeof n.then == "function") return p(e, t, Ra(n), r);
+				if (n.$$typeof === b) return p(e, t, sa(e, n), r);
+				Ba(e, n);
 			}
 			return null;
 		}
@@ -8043,12 +7923,12 @@ var C = /* @__PURE__ */ s(((e) => {
 				switch (r.$$typeof) {
 					case m: return e = e.get(r.key === null ? n : r.key) || null, l(t, e, r, i);
 					case h: return e = e.get(r.key === null ? n : r.key) || null, u(t, e, r, i);
-					case T: return r = ja(r), _(e, t, n, r, i);
+					case T: return r = Ma(r), _(e, t, n, r, i);
 				}
 				if (ce(r) || ae(r)) return e = e.get(n) || null, d(t, e, r, i, null);
-				if (typeof r.then == "function") return _(e, t, n, La(r), i);
-				if (r.$$typeof === b) return _(e, t, n, oa(t, r), i);
-				za(t, r);
+				if (typeof r.then == "function") return _(e, t, n, Ra(r), i);
+				if (r.$$typeof === b) return _(e, t, n, sa(t, r), i);
+				Ba(t, r);
 			}
 			return null;
 		}
@@ -8062,15 +7942,15 @@ var C = /* @__PURE__ */ s(((e) => {
 				}
 				e && d && g.alternate === null && t(i, d), a = o(g, a, m), u === null ? l = g : u.sibling = g, u = g, d = h;
 			}
-			if (m === s.length) return n(i, d), F && Ni(i, m), l;
+			if (m === s.length) return n(i, d), P && Pi(i, m), l;
 			if (d === null) {
 				for (; m < s.length; m++) d = f(i, s[m], c), d !== null && (a = o(d, a, m), u === null ? l = d : u.sibling = d, u = d);
-				return F && Ni(i, m), l;
+				return P && Pi(i, m), l;
 			}
 			for (d = r(d); m < s.length; m++) h = _(d, i, m, s[m], c), h !== null && (e && h.alternate !== null && d.delete(h.key === null ? m : h.key), a = o(h, a, m), u === null ? l = h : u.sibling = h, u = h);
 			return e && d.forEach(function(e) {
 				return t(i, e);
-			}), F && Ni(i, m), l;
+			}), P && Pi(i, m), l;
 		}
 		function y(a, s, c, l) {
 			if (c == null) throw Error(i(151));
@@ -8083,15 +7963,15 @@ var C = /* @__PURE__ */ s(((e) => {
 				}
 				e && m && y.alternate === null && t(a, m), s = o(y, s, h), d === null ? u = y : d.sibling = y, d = y, m = g;
 			}
-			if (v.done) return n(a, m), F && Ni(a, h), u;
+			if (v.done) return n(a, m), P && Pi(a, h), u;
 			if (m === null) {
 				for (; !v.done; h++, v = c.next()) v = f(a, v.value, l), v !== null && (s = o(v, s, h), d === null ? u = v : d.sibling = v, d = v);
-				return F && Ni(a, h), u;
+				return P && Pi(a, h), u;
 			}
 			for (m = r(m); !v.done; h++, v = c.next()) v = _(m, a, h, v.value, l), v !== null && (e && v.alternate !== null && m.delete(v.key === null ? h : v.key), s = o(v, s, h), d === null ? u = v : d.sibling = v, d = v);
 			return e && m.forEach(function(e) {
 				return t(a, e);
-			}), F && Ni(a, h), u;
+			}), P && Pi(a, h), u;
 		}
 		function x(e, r, o, c) {
 			if (typeof o == "object" && o && o.type === g && o.key === null && (o = o.props.children), typeof o == "object" && o) {
@@ -8105,8 +7985,8 @@ var C = /* @__PURE__ */ s(((e) => {
 											n(e, r.sibling), c = a(r, o.props.children), c.return = e, e = c;
 											break a;
 										}
-									} else if (r.elementType === l || typeof l == "object" && l && l.$$typeof === T && ja(l) === r.type) {
-										n(e, r.sibling), c = a(r, o.props), Ra(c, o), c.return = e, e = c;
+									} else if (r.elementType === l || typeof l == "object" && l && l.$$typeof === T && Ma(l) === r.type) {
+										n(e, r.sibling), c = a(r, o.props), za(c, o), c.return = e, e = c;
 										break a;
 									}
 									n(e, r);
@@ -8114,7 +7994,7 @@ var C = /* @__PURE__ */ s(((e) => {
 								}
 								t(e, r), r = r.sibling;
 							}
-							o.type === g ? (c = vi(o.props.children, e.mode, c, o.key), c.return = e, e = c) : (c = _i(o.type, o.key, o.props, null, e.mode, c), Ra(c, o), c.return = e, e = c);
+							o.type === g ? (c = yi(o.props.children, e.mode, c, o.key), c.return = e, e = c) : (c = vi(o.type, o.key, o.props, null, e.mode, c), za(c, o), c.return = e, e = c);
 						}
 						return s(e);
 					case h:
@@ -8130,36 +8010,36 @@ var C = /* @__PURE__ */ s(((e) => {
 								}
 								t(e, r), r = r.sibling;
 							}
-							c = xi(o, e.mode, c), c.return = e, e = c;
+							c = Si(o, e.mode, c), c.return = e, e = c;
 						}
 						return s(e);
-					case T: return o = ja(o), x(e, r, o, c);
+					case T: return o = Ma(o), x(e, r, o, c);
 				}
 				if (ce(o)) return v(e, r, o, c);
 				if (ae(o)) {
 					if (l = ae(o), typeof l != "function") throw Error(i(150));
 					return o = l.call(o), y(e, r, o, c);
 				}
-				if (typeof o.then == "function") return x(e, r, La(o), c);
-				if (o.$$typeof === b) return x(e, r, oa(e, o), c);
-				za(e, o);
+				if (typeof o.then == "function") return x(e, r, Ra(o), c);
+				if (o.$$typeof === b) return x(e, r, sa(e, o), c);
+				Ba(e, o);
 			}
-			return typeof o == "string" && o !== "" || typeof o == "number" || typeof o == "bigint" ? (o = "" + o, r !== null && r.tag === 6 ? (n(e, r.sibling), c = a(r, o), c.return = e, e = c) : (n(e, r), c = yi(o, e.mode, c), c.return = e, e = c), s(e)) : n(e, r);
+			return typeof o == "string" && o !== "" || typeof o == "number" || typeof o == "bigint" ? (o = "" + o, r !== null && r.tag === 6 ? (n(e, r.sibling), c = a(r, o), c.return = e, e = c) : (n(e, r), c = bi(o, e.mode, c), c.return = e, e = c), s(e)) : n(e, r);
 		}
 		return function(e, t, n, r) {
 			try {
-				Ia = 0;
+				La = 0;
 				var i = x(e, t, n, r);
-				return Fa = null, i;
+				return Ia = null, i;
 			} catch (t) {
-				if (t === Ta || t === Da) throw t;
-				var a = pi(29, t, null, e.mode);
+				if (t === Ea || t === Oa) throw t;
+				var a = mi(29, t, null, e.mode);
 				return a.lanes = r, a.return = e, a;
 			}
 		};
 	}
-	var Va = Ba(!0), Ha = Ba(!1), Ua = !1;
-	function Wa(e) {
+	var Ha = Va(!0), Ua = Va(!1), Wa = !1;
+	function Ga(e) {
 		e.updateQueue = {
 			baseState: e.memoizedState,
 			firstBaseUpdate: null,
@@ -8172,7 +8052,7 @@ var C = /* @__PURE__ */ s(((e) => {
 			callbacks: null
 		};
 	}
-	function Ga(e, t) {
+	function Ka(e, t) {
 		e = e.updateQueue, t.updateQueue === e && (t.updateQueue = {
 			baseState: e.baseState,
 			firstBaseUpdate: e.firstBaseUpdate,
@@ -8181,7 +8061,7 @@ var C = /* @__PURE__ */ s(((e) => {
 			callbacks: null
 		});
 	}
-	function Ka(e) {
+	function qa(e) {
 		return {
 			lane: e,
 			tag: 0,
@@ -8190,22 +8070,22 @@ var C = /* @__PURE__ */ s(((e) => {
 			next: null
 		};
 	}
-	function qa(e, t, n) {
+	function Ja(e, t, n) {
 		var r = e.updateQueue;
 		if (r === null) return null;
 		if (r = r.shared, G & 2) {
 			var i = r.pending;
-			return i === null ? t.next = t : (t.next = i.next, i.next = t), r.pending = t, t = ui(e), li(e, null, n), t;
+			return i === null ? t.next = t : (t.next = i.next, i.next = t), r.pending = t, t = di(e), ui(e, null, n), t;
 		}
-		return oi(e, r, t, n), ui(e);
+		return si(e, r, t, n), di(e);
 	}
-	function Ja(e, t, n) {
+	function Ya(e, t, n) {
 		if (t = t.updateQueue, t !== null && (t = t.shared, n & 4194048)) {
 			var r = t.lanes;
 			r &= e.pendingLanes, n |= r, t.lanes = n, ot(e, n);
 		}
 	}
-	function Ya(e, t) {
+	function Xa(e, t) {
 		var n = e.updateQueue, r = e.alternate;
 		if (r !== null && (r = r.updateQueue, n === r)) {
 			var i = null, a = null;
@@ -8233,17 +8113,17 @@ var C = /* @__PURE__ */ s(((e) => {
 		}
 		e = n.lastBaseUpdate, e === null ? n.firstBaseUpdate = t : e.next = t, n.lastBaseUpdate = t;
 	}
-	var Xa = !1;
-	function Za() {
-		if (Xa) {
-			var e = ga;
+	var Za = !1;
+	function Qa() {
+		if (Za) {
+			var e = _a;
 			if (e !== null) throw e;
 		}
 	}
-	function Qa(e, t, n, r) {
-		Xa = !1;
+	function $a(e, t, n, r) {
+		Za = !1;
 		var i = e.updateQueue;
-		Ua = !1;
+		Wa = !1;
 		var a = i.firstBaseUpdate, o = i.lastBaseUpdate, s = i.shared.pending;
 		if (s !== null) {
 			i.shared.pending = null;
@@ -8258,7 +8138,7 @@ var C = /* @__PURE__ */ s(((e) => {
 			do {
 				var p = s.lane & -536870913, m = p !== s.lane;
 				if (m ? (J & p) === p : (r & p) === p) {
-					p !== 0 && p === ha && (Xa = !0), u !== null && (u = u.next = {
+					p !== 0 && p === ga && (Za = !0), u !== null && (u = u.next = {
 						lane: 0,
 						tag: s.tag,
 						payload: s.payload,
@@ -8282,7 +8162,7 @@ var C = /* @__PURE__ */ s(((e) => {
 								if (h = g.payload, p = typeof h == "function" ? h.call(_, d, p) : h, p == null) break a;
 								d = f({}, d, p);
 								break a;
-							case 2: Ua = !0;
+							case 2: Wa = !0;
 						}
 					}
 					p = s.callback, p !== null && (e.flags |= 64, m && (e.flags |= 8192), m = i.callbacks, m === null ? i.callbacks = [p] : m.push(p));
@@ -8301,43 +8181,43 @@ var C = /* @__PURE__ */ s(((e) => {
 			u === null && (c = d), i.baseState = c, i.firstBaseUpdate = l, i.lastBaseUpdate = u, a === null && (i.shared.lanes = 0), Gl |= o, e.lanes = o, e.memoizedState = d;
 		}
 	}
-	function $a(e, t) {
+	function eo(e, t) {
 		if (typeof e != "function") throw Error(i(191, e));
 		e.call(t);
 	}
-	function eo(e, t) {
+	function to(e, t) {
 		var n = e.callbacks;
-		if (n !== null) for (e.callbacks = null, e = 0; e < n.length; e++) $a(n[e], t);
+		if (n !== null) for (e.callbacks = null, e = 0; e < n.length; e++) eo(n[e], t);
 	}
-	var to = fe(null), no = fe(0);
-	function ro(e, t) {
-		e = Wl, A(no, e), A(to, t), Wl = e | t.baseLanes;
-	}
-	function io() {
-		A(no, Wl), A(to, to.current);
+	var no = fe(null), ro = fe(0);
+	function io(e, t) {
+		e = Wl, A(ro, e), A(no, t), Wl = e | t.baseLanes;
 	}
 	function ao() {
-		Wl = no.current, k(to), k(no);
+		A(ro, Wl), A(no, no.current);
 	}
-	var oo = fe(null), so = null;
-	function co(e) {
-		var t = e.alternate;
-		A(L, L.current & 1), A(oo, e), so === null && (t === null || to.current !== null || t.memoizedState !== null) && (so = e);
+	function oo() {
+		Wl = ro.current, k(no), k(ro);
 	}
+	var so = fe(null), co = null;
 	function lo(e) {
-		A(L, L.current), A(oo, e), so === null && (so = e);
+		var t = e.alternate;
+		A(I, I.current & 1), A(so, e), co === null && (t === null || no.current !== null || t.memoizedState !== null) && (co = e);
 	}
 	function uo(e) {
-		e.tag === 22 ? (A(L, L.current), A(oo, e), so === null && (so = e)) : fo(e);
+		A(I, I.current), A(so, e), co === null && (co = e);
 	}
-	function fo() {
-		A(L, L.current), A(oo, oo.current);
+	function fo(e) {
+		e.tag === 22 ? (A(I, I.current), A(so, e), co === null && (co = e)) : po(e);
 	}
-	function po(e) {
-		k(oo), so === e && (so = null), k(L);
+	function po() {
+		A(I, I.current), A(so, so.current);
 	}
-	var L = fe(0);
 	function mo(e) {
+		k(so), co === e && (co = null), k(I);
+	}
+	var I = fe(0);
+	function ho(e) {
 		for (var t = e; t !== null;) {
 			if (t.tag === 13) {
 				var n = t.memoizedState;
@@ -8357,59 +8237,59 @@ var C = /* @__PURE__ */ s(((e) => {
 		}
 		return null;
 	}
-	var ho = 0, R = null, z = null, B = null, go = !1, _o = !1, vo = !1, yo = 0, bo = 0, xo = null, So = 0;
-	function V() {
+	var go = 0, L = null, R = null, z = null, _o = !1, vo = !1, yo = !1, bo = 0, xo = 0, So = null, Co = 0;
+	function B() {
 		throw Error(i(321));
 	}
-	function Co(e, t) {
+	function wo(e, t) {
 		if (t === null) return !1;
-		for (var n = 0; n < t.length && n < e.length; n++) if (!Dr(e[n], t[n])) return !1;
+		for (var n = 0; n < t.length && n < e.length; n++) if (!Or(e[n], t[n])) return !1;
 		return !0;
 	}
-	function wo(e, t, n, r, i, a) {
-		return ho = a, R = t, t.memoizedState = null, t.updateQueue = null, t.lanes = 0, D.H = e === null || e.memoizedState === null ? Bs : Vs, vo = !1, a = n(r, i), vo = !1, _o && (a = Eo(t, n, r, i)), To(e), a;
+	function To(e, t, n, r, i, a) {
+		return go = a, L = t, t.memoizedState = null, t.updateQueue = null, t.lanes = 0, D.H = e === null || e.memoizedState === null ? Vs : Hs, yo = !1, a = n(r, i), yo = !1, vo && (a = Do(t, n, r, i)), Eo(e), a;
 	}
-	function To(e) {
-		D.H = zs;
-		var t = z !== null && z.next !== null;
-		if (ho = 0, B = z = R = null, go = !1, bo = 0, xo = null, t) throw Error(i(300));
-		e === null || ic || (e = e.dependencies, e !== null && ra(e) && (ic = !0));
+	function Eo(e) {
+		D.H = Bs;
+		var t = R !== null && R.next !== null;
+		if (go = 0, z = R = L = null, _o = !1, xo = 0, So = null, t) throw Error(i(300));
+		e === null || H || (e = e.dependencies, e !== null && ia(e) && (H = !0));
 	}
-	function Eo(e, t, n, r) {
-		R = e;
+	function Do(e, t, n, r) {
+		L = e;
 		var a = 0;
 		do {
-			if (_o && (xo = null), bo = 0, _o = !1, 25 <= a) throw Error(i(301));
-			if (a += 1, B = z = null, e.updateQueue != null) {
+			if (vo && (So = null), xo = 0, vo = !1, 25 <= a) throw Error(i(301));
+			if (a += 1, z = R = null, e.updateQueue != null) {
 				var o = e.updateQueue;
 				o.lastEffect = null, o.events = null, o.stores = null, o.memoCache != null && (o.memoCache.index = 0);
 			}
-			D.H = Hs, o = t(n, r);
-		} while (_o);
+			D.H = Us, o = t(n, r);
+		} while (vo);
 		return o;
 	}
-	function Do() {
-		var e = D.H, t = e.useState()[0];
-		return t = typeof t.then == "function" ? No(t) : t, e = e.useState()[0], (z === null ? null : z.memoizedState) !== e && (R.flags |= 1024), t;
-	}
 	function Oo() {
-		var e = yo !== 0;
-		return yo = 0, e;
+		var e = D.H, t = e.useState()[0];
+		return t = typeof t.then == "function" ? Po(t) : t, e = e.useState()[0], (R === null ? null : R.memoizedState) !== e && (L.flags |= 1024), t;
 	}
-	function ko(e, t, n) {
+	function ko() {
+		var e = bo !== 0;
+		return bo = 0, e;
+	}
+	function Ao(e, t, n) {
 		t.updateQueue = e.updateQueue, t.flags &= -2053, e.lanes &= ~n;
 	}
-	function Ao(e) {
-		if (go) {
+	function jo(e) {
+		if (_o) {
 			for (e = e.memoizedState; e !== null;) {
 				var t = e.queue;
 				t !== null && (t.pending = null), e = e.next;
 			}
-			go = !1;
+			_o = !1;
 		}
-		ho = 0, B = z = R = null, _o = !1, bo = yo = 0, xo = null;
+		go = 0, z = R = L = null, vo = !1, xo = bo = 0, So = null;
 	}
-	function jo() {
+	function Mo() {
 		var e = {
 			memoizedState: null,
 			baseState: null,
@@ -8417,28 +8297,28 @@ var C = /* @__PURE__ */ s(((e) => {
 			queue: null,
 			next: null
 		};
-		return B === null ? R.memoizedState = B = e : B = B.next = e, B;
+		return z === null ? L.memoizedState = z = e : z = z.next = e, z;
 	}
-	function H() {
-		if (z === null) {
-			var e = R.alternate;
+	function V() {
+		if (R === null) {
+			var e = L.alternate;
 			e = e === null ? null : e.memoizedState;
-		} else e = z.next;
-		var t = B === null ? R.memoizedState : B.next;
-		if (t !== null) B = t, z = e;
+		} else e = R.next;
+		var t = z === null ? L.memoizedState : z.next;
+		if (t !== null) z = t, R = e;
 		else {
-			if (e === null) throw R.alternate === null ? Error(i(467)) : Error(i(310));
-			z = e, e = {
-				memoizedState: z.memoizedState,
-				baseState: z.baseState,
-				baseQueue: z.baseQueue,
-				queue: z.queue,
+			if (e === null) throw L.alternate === null ? Error(i(467)) : Error(i(310));
+			R = e, e = {
+				memoizedState: R.memoizedState,
+				baseState: R.baseState,
+				baseQueue: R.baseQueue,
+				queue: R.queue,
 				next: null
-			}, B === null ? R.memoizedState = B = e : B = B.next = e;
+			}, z === null ? L.memoizedState = z = e : z = z.next = e;
 		}
-		return B;
+		return z;
 	}
-	function Mo() {
+	function No() {
 		return {
 			lastEffect: null,
 			events: null,
@@ -8446,21 +8326,21 @@ var C = /* @__PURE__ */ s(((e) => {
 			memoCache: null
 		};
 	}
-	function No(e) {
-		var t = bo;
-		return bo += 1, xo === null && (xo = []), e = Aa(xo, e, t), t = R, (B === null ? t.memoizedState : B.next) === null && (t = t.alternate, D.H = t === null || t.memoizedState === null ? Bs : Vs), e;
-	}
 	function Po(e) {
+		var t = xo;
+		return xo += 1, So === null && (So = []), e = ja(So, e, t), t = L, (z === null ? t.memoizedState : z.next) === null && (t = t.alternate, D.H = t === null || t.memoizedState === null ? Vs : Hs), e;
+	}
+	function Fo(e) {
 		if (typeof e == "object" && e) {
-			if (typeof e.then == "function") return No(e);
-			if (e.$$typeof === b) return aa(e);
+			if (typeof e.then == "function") return Po(e);
+			if (e.$$typeof === b) return oa(e);
 		}
 		throw Error(i(438, String(e)));
 	}
-	function Fo(e) {
-		var t = null, n = R.updateQueue;
+	function Io(e) {
+		var t = null, n = L.updateQueue;
 		if (n !== null && (t = n.memoCache), t == null) {
-			var r = R.alternate;
+			var r = L.alternate;
 			r !== null && (r = r.updateQueue, r !== null && (r = r.memoCache, r != null && (t = {
 				data: r.data.map(function(e) {
 					return e.slice();
@@ -8471,16 +8351,16 @@ var C = /* @__PURE__ */ s(((e) => {
 		if (t ??= {
 			data: [],
 			index: 0
-		}, n === null && (n = Mo(), R.updateQueue = n), n.memoCache = t, n = t.data[t.index], n === void 0) for (n = t.data[t.index] = Array(e), r = 0; r < e; r++) n[r] = ie;
+		}, n === null && (n = No(), L.updateQueue = n), n.memoCache = t, n = t.data[t.index], n === void 0) for (n = t.data[t.index] = Array(e), r = 0; r < e; r++) n[r] = ie;
 		return t.index++, n;
 	}
-	function Io(e, t) {
+	function Lo(e, t) {
 		return typeof t == "function" ? t(e) : t;
 	}
-	function Lo(e) {
-		return Ro(H(), z, e);
+	function Ro(e) {
+		return zo(V(), R, e);
 	}
-	function Ro(e, t, n) {
+	function zo(e, t, n) {
 		var r = e.queue;
 		if (r === null) throw Error(i(311));
 		r.lastRenderedReducer = n;
@@ -8498,7 +8378,7 @@ var C = /* @__PURE__ */ s(((e) => {
 			var c = s = null, l = null, u = t, d = !1;
 			do {
 				var f = u.lane & -536870913;
-				if (f === u.lane ? (ho & f) === f : (J & f) === f) {
+				if (f === u.lane ? (go & f) === f : (J & f) === f) {
 					var p = u.revertLane;
 					if (p === 0) l !== null && (l = l.next = {
 						lane: 0,
@@ -8508,9 +8388,9 @@ var C = /* @__PURE__ */ s(((e) => {
 						hasEagerState: u.hasEagerState,
 						eagerState: u.eagerState,
 						next: null
-					}), f === ha && (d = !0);
-					else if ((ho & p) === p) {
-						u = u.next, p === ha && (d = !0);
+					}), f === ga && (d = !0);
+					else if ((go & p) === p) {
+						u = u.next, p === ga && (d = !0);
 						continue;
 					} else f = {
 						lane: 0,
@@ -8520,8 +8400,8 @@ var C = /* @__PURE__ */ s(((e) => {
 						hasEagerState: u.hasEagerState,
 						eagerState: u.eagerState,
 						next: null
-					}, l === null ? (c = l = f, s = o) : l = l.next = f, R.lanes |= p, Gl |= p;
-					f = u.action, vo && n(o, f), o = u.hasEagerState ? u.eagerState : n(o, f);
+					}, l === null ? (c = l = f, s = o) : l = l.next = f, L.lanes |= p, Gl |= p;
+					f = u.action, yo && n(o, f), o = u.hasEagerState ? u.eagerState : n(o, f);
 				} else p = {
 					lane: f,
 					revertLane: u.revertLane,
@@ -8530,16 +8410,16 @@ var C = /* @__PURE__ */ s(((e) => {
 					hasEagerState: u.hasEagerState,
 					eagerState: u.eagerState,
 					next: null
-				}, l === null ? (c = l = p, s = o) : l = l.next = p, R.lanes |= f, Gl |= f;
+				}, l === null ? (c = l = p, s = o) : l = l.next = p, L.lanes |= f, Gl |= f;
 				u = u.next;
 			} while (u !== null && u !== t);
-			if (l === null ? s = o : l.next = c, !Dr(o, e.memoizedState) && (ic = !0, d && (n = ga, n !== null))) throw n;
+			if (l === null ? s = o : l.next = c, !Or(o, e.memoizedState) && (H = !0, d && (n = _a, n !== null))) throw n;
 			e.memoizedState = o, e.baseState = s, e.baseQueue = l, r.lastRenderedState = o;
 		}
 		return a === null && (r.lanes = 0), [e.memoizedState, r.dispatch];
 	}
-	function zo(e) {
-		var t = H(), n = t.queue;
+	function Bo(e) {
+		var t = V(), n = t.queue;
 		if (n === null) throw Error(i(311));
 		n.lastRenderedReducer = e;
 		var r = n.dispatch, a = n.pending, o = t.memoizedState;
@@ -8549,56 +8429,56 @@ var C = /* @__PURE__ */ s(((e) => {
 			do
 				o = e(o, s.action), s = s.next;
 			while (s !== a);
-			Dr(o, t.memoizedState) || (ic = !0), t.memoizedState = o, t.baseQueue === null && (t.baseState = o), n.lastRenderedState = o;
+			Or(o, t.memoizedState) || (H = !0), t.memoizedState = o, t.baseQueue === null && (t.baseState = o), n.lastRenderedState = o;
 		}
 		return [o, r];
 	}
-	function Bo(e, t, n) {
-		var r = R, a = H(), o = F;
+	function Vo(e, t, n) {
+		var r = L, a = V(), o = P;
 		if (o) {
 			if (n === void 0) throw Error(i(407));
 			n = n();
 		} else n = t();
-		var s = !Dr((z || a).memoizedState, n);
-		if (s && (a.memoizedState = n, ic = !0), a = a.queue, ds(Uo.bind(null, r, a, e), [e]), a.getSnapshot !== t || s || B !== null && B.memoizedState.tag & 1) {
-			if (r.flags |= 2048, os(9, { destroy: void 0 }, Ho.bind(null, r, a, n, t), null), K === null) throw Error(i(349));
-			o || ho & 127 || Vo(r, t, n);
+		var s = !Or((R || a).memoizedState, n);
+		if (s && (a.memoizedState = n, H = !0), a = a.queue, fs(Wo.bind(null, r, a, e), [e]), a.getSnapshot !== t || s || z !== null && z.memoizedState.tag & 1) {
+			if (r.flags |= 2048, ss(9, { destroy: void 0 }, Uo.bind(null, r, a, n, t), null), K === null) throw Error(i(349));
+			o || go & 127 || Ho(r, t, n);
 		}
 		return n;
 	}
-	function Vo(e, t, n) {
+	function Ho(e, t, n) {
 		e.flags |= 16384, e = {
 			getSnapshot: t,
 			value: n
-		}, t = R.updateQueue, t === null ? (t = Mo(), R.updateQueue = t, t.stores = [e]) : (n = t.stores, n === null ? t.stores = [e] : n.push(e));
+		}, t = L.updateQueue, t === null ? (t = No(), L.updateQueue = t, t.stores = [e]) : (n = t.stores, n === null ? t.stores = [e] : n.push(e));
 	}
-	function Ho(e, t, n, r) {
-		t.value = n, t.getSnapshot = r, Wo(t) && Go(e);
+	function Uo(e, t, n, r) {
+		t.value = n, t.getSnapshot = r, Go(t) && Ko(e);
 	}
-	function Uo(e, t, n) {
+	function Wo(e, t, n) {
 		return n(function() {
-			Wo(t) && Go(e);
+			Go(t) && Ko(e);
 		});
 	}
-	function Wo(e) {
+	function Go(e) {
 		var t = e.getSnapshot;
 		e = e.value;
 		try {
 			var n = t();
-			return !Dr(e, n);
+			return !Or(e, n);
 		} catch {
 			return !0;
 		}
 	}
-	function Go(e) {
-		var t = ci(e, 2);
+	function Ko(e) {
+		var t = li(e, 2);
 		t !== null && hu(t, e, 2);
 	}
-	function Ko(e) {
-		var t = jo();
+	function qo(e) {
+		var t = Mo();
 		if (typeof e == "function") {
 			var n = e;
-			if (e = n(), vo) {
+			if (e = n(), yo) {
 				Ue(!0);
 				try {
 					n();
@@ -8611,15 +8491,15 @@ var C = /* @__PURE__ */ s(((e) => {
 			pending: null,
 			lanes: 0,
 			dispatch: null,
-			lastRenderedReducer: Io,
+			lastRenderedReducer: Lo,
 			lastRenderedState: e
 		}, t;
 	}
-	function qo(e, t, n, r) {
-		return e.baseState = n, Ro(e, z, typeof r == "function" ? r : Io);
+	function Jo(e, t, n, r) {
+		return e.baseState = n, zo(e, R, typeof r == "function" ? r : Lo);
 	}
-	function Jo(e, t, n, r, a) {
-		if (Is(e)) throw Error(i(485));
+	function Yo(e, t, n, r, a) {
+		if (Ls(e)) throw Error(i(485));
 		if (e = t.action, e !== null) {
 			var o = {
 				payload: a,
@@ -8634,65 +8514,65 @@ var C = /* @__PURE__ */ s(((e) => {
 					o.listeners.push(e);
 				}
 			};
-			D.T === null ? o.isTransition = !1 : n(!0), r(o), n = t.pending, n === null ? (o.next = t.pending = o, Yo(t, o)) : (o.next = n.next, t.pending = n.next = o);
+			D.T === null ? o.isTransition = !1 : n(!0), r(o), n = t.pending, n === null ? (o.next = t.pending = o, Xo(t, o)) : (o.next = n.next, t.pending = n.next = o);
 		}
 	}
-	function Yo(e, t) {
+	function Xo(e, t) {
 		var n = t.action, r = t.payload, i = e.state;
 		if (t.isTransition) {
 			var a = D.T, o = {};
 			D.T = o;
 			try {
 				var s = n(i, r), c = D.S;
-				c !== null && c(o, s), Xo(e, t, s);
+				c !== null && c(o, s), Zo(e, t, s);
 			} catch (n) {
-				Qo(e, t, n);
+				$o(e, t, n);
 			} finally {
 				a !== null && o.types !== null && (a.types = o.types), D.T = a;
 			}
 		} else try {
-			a = n(i, r), Xo(e, t, a);
+			a = n(i, r), Zo(e, t, a);
 		} catch (n) {
-			Qo(e, t, n);
+			$o(e, t, n);
 		}
 	}
-	function Xo(e, t, n) {
-		typeof n == "object" && n && typeof n.then == "function" ? n.then(function(n) {
-			Zo(e, t, n);
-		}, function(n) {
-			return Qo(e, t, n);
-		}) : Zo(e, t, n);
-	}
 	function Zo(e, t, n) {
-		t.status = "fulfilled", t.value = n, $o(t), e.state = n, t = e.pending, t !== null && (n = t.next, n === t ? e.pending = null : (n = n.next, t.next = n, Yo(e, n)));
+		typeof n == "object" && n && typeof n.then == "function" ? n.then(function(n) {
+			Qo(e, t, n);
+		}, function(n) {
+			return $o(e, t, n);
+		}) : Qo(e, t, n);
 	}
 	function Qo(e, t, n) {
+		t.status = "fulfilled", t.value = n, es(t), e.state = n, t = e.pending, t !== null && (n = t.next, n === t ? e.pending = null : (n = n.next, t.next = n, Xo(e, n)));
+	}
+	function $o(e, t, n) {
 		var r = e.pending;
 		if (e.pending = null, r !== null) {
 			r = r.next;
 			do
-				t.status = "rejected", t.reason = n, $o(t), t = t.next;
+				t.status = "rejected", t.reason = n, es(t), t = t.next;
 			while (t !== r);
 		}
 		e.action = null;
 	}
-	function $o(e) {
+	function es(e) {
 		e = e.listeners;
 		for (var t = 0; t < e.length; t++) (0, e[t])();
 	}
-	function es(e, t) {
+	function ts(e, t) {
 		return t;
 	}
-	function ts(e, t) {
-		if (F) {
+	function ns(e, t) {
+		if (P) {
 			var n = K.formState;
 			if (n !== null) {
 				a: {
-					var r = R;
-					if (F) {
-						if (P) {
+					var r = L;
+					if (P) {
+						if (N) {
 							b: {
-								for (var i = P, a = Bi; i.nodeType !== 8;) {
+								for (var i = N, a = Vi; i.nodeType !== 8;) {
 									if (!a) {
 										i = null;
 										break b;
@@ -8705,59 +8585,59 @@ var C = /* @__PURE__ */ s(((e) => {
 								a = i.data, i = a === "F!" || a === "F" ? i : null;
 							}
 							if (i) {
-								P = cf(i.nextSibling), r = i.data === "F!";
+								N = cf(i.nextSibling), r = i.data === "F!";
 								break a;
 							}
 						}
-						Hi(r);
+						Ui(r);
 					}
 					r = !1;
 				}
 				r && (t = n[0]);
 			}
 		}
-		return n = jo(), n.memoizedState = n.baseState = t, r = {
+		return n = Mo(), n.memoizedState = n.baseState = t, r = {
 			pending: null,
 			lanes: 0,
 			dispatch: null,
-			lastRenderedReducer: es,
+			lastRenderedReducer: ts,
 			lastRenderedState: t
-		}, n.queue = r, n = Ns.bind(null, R, r), r.dispatch = n, r = Ko(!1), a = Fs.bind(null, R, !1, r.queue), r = jo(), i = {
+		}, n.queue = r, n = Ps.bind(null, L, r), r.dispatch = n, r = qo(!1), a = Is.bind(null, L, !1, r.queue), r = Mo(), i = {
 			state: t,
 			dispatch: null,
 			action: e,
 			pending: null
-		}, r.queue = i, n = Jo.bind(null, R, i, a, n), i.dispatch = n, r.memoizedState = e, [
+		}, r.queue = i, n = Yo.bind(null, L, i, a, n), i.dispatch = n, r.memoizedState = e, [
 			t,
 			n,
 			!1
 		];
 	}
-	function ns(e) {
-		return rs(H(), z, e);
+	function rs(e) {
+		return is(V(), R, e);
 	}
-	function rs(e, t, n) {
-		if (t = Ro(e, t, es)[0], e = Lo(Io)[0], typeof t == "object" && t && typeof t.then == "function") try {
-			var r = No(t);
+	function is(e, t, n) {
+		if (t = zo(e, t, ts)[0], e = Ro(Lo)[0], typeof t == "object" && t && typeof t.then == "function") try {
+			var r = Po(t);
 		} catch (e) {
-			throw e === Ta ? Da : e;
+			throw e === Ea ? Oa : e;
 		}
 		else r = t;
-		t = H();
+		t = V();
 		var i = t.queue, a = i.dispatch;
-		return n !== t.memoizedState && (R.flags |= 2048, os(9, { destroy: void 0 }, is.bind(null, i, n), null)), [
+		return n !== t.memoizedState && (L.flags |= 2048, ss(9, { destroy: void 0 }, as.bind(null, i, n), null)), [
 			r,
 			a,
 			e
 		];
 	}
-	function is(e, t) {
+	function as(e, t) {
 		e.action = t;
 	}
-	function as(e) {
-		var t = H(), n = z;
-		if (n !== null) return rs(t, n, e);
-		H(), t = t.memoizedState, n = H();
+	function os(e) {
+		var t = V(), n = R;
+		if (n !== null) return is(t, n, e);
+		V(), t = t.memoizedState, n = V();
 		var r = n.queue.dispatch;
 		return n.memoizedState = e, [
 			t,
@@ -8765,46 +8645,46 @@ var C = /* @__PURE__ */ s(((e) => {
 			!1
 		];
 	}
-	function os(e, t, n, r) {
+	function ss(e, t, n, r) {
 		return e = {
 			tag: e,
 			create: n,
 			deps: r,
 			inst: t,
 			next: null
-		}, t = R.updateQueue, t === null && (t = Mo(), R.updateQueue = t), n = t.lastEffect, n === null ? t.lastEffect = e.next = e : (r = n.next, n.next = e, e.next = r, t.lastEffect = e), e;
+		}, t = L.updateQueue, t === null && (t = No(), L.updateQueue = t), n = t.lastEffect, n === null ? t.lastEffect = e.next = e : (r = n.next, n.next = e, e.next = r, t.lastEffect = e), e;
 	}
-	function ss() {
-		return H().memoizedState;
-	}
-	function cs(e, t, n, r) {
-		var i = jo();
-		R.flags |= e, i.memoizedState = os(1 | t, { destroy: void 0 }, n, r === void 0 ? null : r);
+	function cs() {
+		return V().memoizedState;
 	}
 	function ls(e, t, n, r) {
-		var i = H();
+		var i = Mo();
+		L.flags |= e, i.memoizedState = ss(1 | t, { destroy: void 0 }, n, r === void 0 ? null : r);
+	}
+	function us(e, t, n, r) {
+		var i = V();
 		r = r === void 0 ? null : r;
 		var a = i.memoizedState.inst;
-		z !== null && r !== null && Co(r, z.memoizedState.deps) ? i.memoizedState = os(t, a, n, r) : (R.flags |= e, i.memoizedState = os(1 | t, a, n, r));
-	}
-	function us(e, t) {
-		cs(8390656, 8, e, t);
+		R !== null && r !== null && wo(r, R.memoizedState.deps) ? i.memoizedState = ss(t, a, n, r) : (L.flags |= e, i.memoizedState = ss(1 | t, a, n, r));
 	}
 	function ds(e, t) {
-		ls(2048, 8, e, t);
+		ls(8390656, 8, e, t);
 	}
-	function fs(e) {
-		R.flags |= 4;
-		var t = R.updateQueue;
-		if (t === null) t = Mo(), R.updateQueue = t, t.events = [e];
+	function fs(e, t) {
+		us(2048, 8, e, t);
+	}
+	function ps(e) {
+		L.flags |= 4;
+		var t = L.updateQueue;
+		if (t === null) t = No(), L.updateQueue = t, t.events = [e];
 		else {
 			var n = t.events;
 			n === null ? t.events = [e] : n.push(e);
 		}
 	}
-	function ps(e) {
-		var t = H().memoizedState;
-		return fs({
+	function ms(e) {
+		var t = V().memoizedState;
+		return ps({
 			ref: t,
 			nextImpl: e
 		}), function() {
@@ -8812,13 +8692,13 @@ var C = /* @__PURE__ */ s(((e) => {
 			return t.impl.apply(void 0, arguments);
 		};
 	}
-	function ms(e, t) {
-		return ls(4, 2, e, t);
-	}
 	function hs(e, t) {
-		return ls(4, 4, e, t);
+		return us(4, 2, e, t);
 	}
 	function gs(e, t) {
+		return us(4, 4, e, t);
+	}
+	function _s(e, t) {
 		if (typeof t == "function") {
 			e = e();
 			var n = t(e);
@@ -8830,22 +8710,22 @@ var C = /* @__PURE__ */ s(((e) => {
 			t.current = null;
 		};
 	}
-	function _s(e, t, n) {
-		n = n == null ? null : n.concat([e]), ls(4, 4, gs.bind(null, t, e), n);
+	function vs(e, t, n) {
+		n = n == null ? null : n.concat([e]), us(4, 4, _s.bind(null, t, e), n);
 	}
-	function vs() {}
-	function ys(e, t) {
-		var n = H();
-		t = t === void 0 ? null : t;
-		var r = n.memoizedState;
-		return t !== null && Co(t, r[1]) ? r[0] : (n.memoizedState = [e, t], e);
-	}
+	function ys() {}
 	function bs(e, t) {
-		var n = H();
+		var n = V();
 		t = t === void 0 ? null : t;
 		var r = n.memoizedState;
-		if (t !== null && Co(t, r[1])) return r[0];
-		if (r = e(), vo) {
+		return t !== null && wo(t, r[1]) ? r[0] : (n.memoizedState = [e, t], e);
+	}
+	function xs(e, t) {
+		var n = V();
+		t = t === void 0 ? null : t;
+		var r = n.memoizedState;
+		if (t !== null && wo(t, r[1])) return r[0];
+		if (r = e(), yo) {
 			Ue(!0);
 			try {
 				e();
@@ -8855,22 +8735,22 @@ var C = /* @__PURE__ */ s(((e) => {
 		}
 		return n.memoizedState = [r, t], r;
 	}
-	function xs(e, t, n) {
-		return n === void 0 || ho & 1073741824 && !(J & 261930) ? e.memoizedState = t : (e.memoizedState = n, e = mu(), R.lanes |= e, Gl |= e, n);
+	function Ss(e, t, n) {
+		return n === void 0 || go & 1073741824 && !(J & 261930) ? e.memoizedState = t : (e.memoizedState = n, e = mu(), L.lanes |= e, Gl |= e, n);
 	}
-	function Ss(e, t, n, r) {
-		return Dr(n, t) ? n : to.current === null ? !(ho & 42) || ho & 1073741824 && !(J & 261930) ? (ic = !0, e.memoizedState = n) : (e = mu(), R.lanes |= e, Gl |= e, t) : (e = xs(e, n, r), Dr(e, t) || (ic = !0), e);
+	function Cs(e, t, n, r) {
+		return Or(n, t) ? n : no.current === null ? !(go & 42) || go & 1073741824 && !(J & 261930) ? (H = !0, e.memoizedState = n) : (e = mu(), L.lanes |= e, Gl |= e, t) : (e = Ss(e, n, r), Or(e, t) || (H = !0), e);
 	}
-	function Cs(e, t, n, r, i) {
+	function ws(e, t, n, r, i) {
 		var a = O.p;
 		O.p = a !== 0 && 8 > a ? a : 8;
 		var o = D.T, s = {};
-		D.T = s, Fs(e, !1, t, n);
+		D.T = s, Is(e, !1, t, n);
 		try {
 			var c = i(), l = D.S;
-			l !== null && l(s, c), typeof c == "object" && c && typeof c.then == "function" ? Ps(e, t, ya(c, r), pu(e)) : Ps(e, t, r, pu(e));
+			l !== null && l(s, c), typeof c == "object" && c && typeof c.then == "function" ? Fs(e, t, ba(c, r), pu(e)) : Fs(e, t, r, pu(e));
 		} catch (n) {
-			Ps(e, t, {
+			Fs(e, t, {
 				then: function() {},
 				status: "rejected",
 				reason: n
@@ -8879,15 +8759,15 @@ var C = /* @__PURE__ */ s(((e) => {
 			O.p = a, o !== null && s.types !== null && (o.types = s.types), D.T = o;
 		}
 	}
-	function ws() {}
-	function Ts(e, t, n, r) {
+	function Ts() {}
+	function Es(e, t, n, r) {
 		if (e.tag !== 5) throw Error(i(476));
-		var a = Es(e).queue;
-		Cs(e, a, t, le, n === null ? ws : function() {
-			return Ds(e), n(r);
+		var a = Ds(e).queue;
+		ws(e, a, t, le, n === null ? Ts : function() {
+			return Os(e), n(r);
 		});
 	}
-	function Es(e) {
+	function Ds(e) {
 		var t = e.memoizedState;
 		if (t !== null) return t;
 		t = {
@@ -8898,7 +8778,7 @@ var C = /* @__PURE__ */ s(((e) => {
 				pending: null,
 				lanes: 0,
 				dispatch: null,
-				lastRenderedReducer: Io,
+				lastRenderedReducer: Lo,
 				lastRenderedState: le
 			},
 			next: null
@@ -8912,40 +8792,40 @@ var C = /* @__PURE__ */ s(((e) => {
 				pending: null,
 				lanes: 0,
 				dispatch: null,
-				lastRenderedReducer: Io,
+				lastRenderedReducer: Lo,
 				lastRenderedState: n
 			},
 			next: null
 		}, e.memoizedState = t, e = e.alternate, e !== null && (e.memoizedState = t), t;
 	}
-	function Ds(e) {
-		var t = Es(e);
-		t.next === null && (t = e.alternate.memoizedState), Ps(e, t.next.queue, {}, pu());
-	}
-	function Os() {
-		return aa(Qf);
+	function Os(e) {
+		var t = Ds(e);
+		t.next === null && (t = e.alternate.memoizedState), Fs(e, t.next.queue, {}, pu());
 	}
 	function ks() {
-		return H().memoizedState;
+		return oa(Qf);
 	}
 	function As() {
-		return H().memoizedState;
+		return V().memoizedState;
 	}
-	function js(e) {
+	function js() {
+		return V().memoizedState;
+	}
+	function Ms(e) {
 		for (var t = e.return; t !== null;) {
 			switch (t.tag) {
 				case 24:
 				case 3:
 					var n = pu();
-					e = Ka(n);
-					var r = qa(t, e, n);
-					r !== null && (hu(r, t, n), Ja(r, t, n)), t = { cache: da() }, e.payload = t;
+					e = qa(n);
+					var r = Ja(t, e, n);
+					r !== null && (hu(r, t, n), Ya(r, t, n)), t = { cache: fa() }, e.payload = t;
 					return;
 			}
 			t = t.return;
 		}
 	}
-	function Ms(e, t, n) {
+	function Ns(e, t, n) {
 		var r = pu();
 		n = {
 			lane: r,
@@ -8955,12 +8835,12 @@ var C = /* @__PURE__ */ s(((e) => {
 			hasEagerState: !1,
 			eagerState: null,
 			next: null
-		}, Is(e) ? Ls(t, n) : (n = si(e, t, n, r), n !== null && (hu(n, e, r), Rs(n, t, r)));
+		}, Ls(e) ? Rs(t, n) : (n = ci(e, t, n, r), n !== null && (hu(n, e, r), zs(n, t, r)));
 	}
-	function Ns(e, t, n) {
-		Ps(e, t, n, pu());
+	function Ps(e, t, n) {
+		Fs(e, t, n, pu());
 	}
-	function Ps(e, t, n, r) {
+	function Fs(e, t, n, r) {
 		var i = {
 			lane: r,
 			revertLane: 0,
@@ -8970,18 +8850,18 @@ var C = /* @__PURE__ */ s(((e) => {
 			eagerState: null,
 			next: null
 		};
-		if (Is(e)) Ls(t, i);
+		if (Ls(e)) Rs(t, i);
 		else {
 			var a = e.alternate;
 			if (e.lanes === 0 && (a === null || a.lanes === 0) && (a = t.lastRenderedReducer, a !== null)) try {
 				var o = t.lastRenderedState, s = a(o, n);
-				if (i.hasEagerState = !0, i.eagerState = s, Dr(s, o)) return oi(e, t, i, 0), K === null && ai(), !1;
+				if (i.hasEagerState = !0, i.eagerState = s, Or(s, o)) return si(e, t, i, 0), K === null && oi(), !1;
 			} catch {}
-			if (n = si(e, t, i, r), n !== null) return hu(n, e, r), Rs(n, t, r), !0;
+			if (n = ci(e, t, i, r), n !== null) return hu(n, e, r), zs(n, t, r), !0;
 		}
 		return !1;
 	}
-	function Fs(e, t, n, r) {
+	function Is(e, t, n, r) {
 		if (r = {
 			lane: 2,
 			revertLane: dd(),
@@ -8990,73 +8870,73 @@ var C = /* @__PURE__ */ s(((e) => {
 			hasEagerState: !1,
 			eagerState: null,
 			next: null
-		}, Is(e)) {
+		}, Ls(e)) {
 			if (t) throw Error(i(479));
-		} else t = si(e, n, r, 2), t !== null && hu(t, e, 2);
+		} else t = ci(e, n, r, 2), t !== null && hu(t, e, 2);
 	}
-	function Is(e) {
+	function Ls(e) {
 		var t = e.alternate;
-		return e === R || t !== null && t === R;
+		return e === L || t !== null && t === L;
 	}
-	function Ls(e, t) {
-		_o = go = !0;
+	function Rs(e, t) {
+		vo = _o = !0;
 		var n = e.pending;
 		n === null ? t.next = t : (t.next = n.next, n.next = t), e.pending = t;
 	}
-	function Rs(e, t, n) {
+	function zs(e, t, n) {
 		if (n & 4194048) {
 			var r = t.lanes;
 			r &= e.pendingLanes, n |= r, t.lanes = n, ot(e, n);
 		}
 	}
-	var zs = {
-		readContext: aa,
-		use: Po,
-		useCallback: V,
-		useContext: V,
-		useEffect: V,
-		useImperativeHandle: V,
-		useLayoutEffect: V,
-		useInsertionEffect: V,
-		useMemo: V,
-		useReducer: V,
-		useRef: V,
-		useState: V,
-		useDebugValue: V,
-		useDeferredValue: V,
-		useTransition: V,
-		useSyncExternalStore: V,
-		useId: V,
-		useHostTransitionStatus: V,
-		useFormState: V,
-		useActionState: V,
-		useOptimistic: V,
-		useMemoCache: V,
-		useCacheRefresh: V
-	};
-	zs.useEffectEvent = V;
 	var Bs = {
-		readContext: aa,
-		use: Po,
+		readContext: oa,
+		use: Fo,
+		useCallback: B,
+		useContext: B,
+		useEffect: B,
+		useImperativeHandle: B,
+		useLayoutEffect: B,
+		useInsertionEffect: B,
+		useMemo: B,
+		useReducer: B,
+		useRef: B,
+		useState: B,
+		useDebugValue: B,
+		useDeferredValue: B,
+		useTransition: B,
+		useSyncExternalStore: B,
+		useId: B,
+		useHostTransitionStatus: B,
+		useFormState: B,
+		useActionState: B,
+		useOptimistic: B,
+		useMemoCache: B,
+		useCacheRefresh: B
+	};
+	Bs.useEffectEvent = B;
+	var Vs = {
+		readContext: oa,
+		use: Fo,
 		useCallback: function(e, t) {
-			return jo().memoizedState = [e, t === void 0 ? null : t], e;
+			return Mo().memoizedState = [e, t === void 0 ? null : t], e;
 		},
-		useContext: aa,
-		useEffect: us,
+		useContext: oa,
+		useEffect: ds,
 		useImperativeHandle: function(e, t, n) {
-			n = n == null ? null : n.concat([e]), cs(4194308, 4, gs.bind(null, t, e), n);
+			n = n == null ? null : n.concat([e]), ls(4194308, 4, _s.bind(null, t, e), n);
 		},
 		useLayoutEffect: function(e, t) {
-			return cs(4194308, 4, e, t);
+			return ls(4194308, 4, e, t);
 		},
 		useInsertionEffect: function(e, t) {
-			cs(4, 2, e, t);
+			ls(4, 2, e, t);
 		},
 		useMemo: function(e, t) {
-			var n = jo();
+			var n = Mo();
 			t = t === void 0 ? null : t;
 			var r = e();
-			if (vo) {
+			if (yo) {
 				Ue(!0);
 				try {
 					e();
@@ -9067,10 +8947,10 @@ var C = /* @__PURE__ */ s(((e) => {
 			return n.memoizedState = [r, t], r;
 		},
 		useReducer: function(e, t, n) {
-			var r = jo();
+			var r = Mo();
 			if (n !== void 0) {
 				var i = n(t);
-				if (vo) {
+				if (yo) {
 					Ue(!0);
 					try {
 						n(t);
@@ -9085,54 +8965,54 @@ var C = /* @__PURE__ */ s(((e) => {
 				dispatch: null,
 				lastRenderedReducer: e,
 				lastRenderedState: i
-			}, r.queue = e, e = e.dispatch = Ms.bind(null, R, e), [r.memoizedState, e];
+			}, r.queue = e, e = e.dispatch = Ns.bind(null, L, e), [r.memoizedState, e];
 		},
 		useRef: function(e) {
-			var t = jo();
+			var t = Mo();
 			return e = { current: e }, t.memoizedState = e;
 		},
 		useState: function(e) {
-			e = Ko(e);
-			var t = e.queue, n = Ns.bind(null, R, t);
+			e = qo(e);
+			var t = e.queue, n = Ps.bind(null, L, t);
 			return t.dispatch = n, [e.memoizedState, n];
 		},
-		useDebugValue: vs,
+		useDebugValue: ys,
 		useDeferredValue: function(e, t) {
-			return xs(jo(), e, t);
+			return Ss(Mo(), e, t);
 		},
 		useTransition: function() {
-			var e = Ko(!1);
-			return e = Cs.bind(null, R, e.queue, !0, !1), jo().memoizedState = e, [!1, e];
+			var e = qo(!1);
+			return e = ws.bind(null, L, e.queue, !0, !1), Mo().memoizedState = e, [!1, e];
 		},
 		useSyncExternalStore: function(e, t, n) {
-			var r = R, a = jo();
-			if (F) {
+			var r = L, a = Mo();
+			if (P) {
 				if (n === void 0) throw Error(i(407));
 				n = n();
 			} else {
 				if (n = t(), K === null) throw Error(i(349));
-				J & 127 || Vo(r, t, n);
+				J & 127 || Ho(r, t, n);
 			}
 			a.memoizedState = n;
 			var o = {
 				value: n,
 				getSnapshot: t
 			};
-			return a.queue = o, us(Uo.bind(null, r, o, e), [e]), r.flags |= 2048, os(9, { destroy: void 0 }, Ho.bind(null, r, o, n, t), null), n;
+			return a.queue = o, ds(Wo.bind(null, r, o, e), [e]), r.flags |= 2048, ss(9, { destroy: void 0 }, Uo.bind(null, r, o, n, t), null), n;
 		},
 		useId: function() {
-			var e = jo(), t = K.identifierPrefix;
-			if (F) {
-				var n = Mi, r = ji;
-				n = (r & ~(1 << 32 - We(r) - 1)).toString(32) + n, t = "_" + t + "R_" + n, n = yo++, 0 < n && (t += "H" + n.toString(32)), t += "_";
-			} else n = So++, t = "_" + t + "r_" + n.toString(32) + "_";
+			var e = Mo(), t = K.identifierPrefix;
+			if (P) {
+				var n = Ni, r = Mi;
+				n = (r & ~(1 << 32 - We(r) - 1)).toString(32) + n, t = "_" + t + "R_" + n, n = bo++, 0 < n && (t += "H" + n.toString(32)), t += "_";
+			} else n = Co++, t = "_" + t + "r_" + n.toString(32) + "_";
 			return e.memoizedState = t;
 		},
-		useHostTransitionStatus: Os,
-		useFormState: ts,
-		useActionState: ts,
+		useHostTransitionStatus: ks,
+		useFormState: ns,
+		useActionState: ns,
 		useOptimistic: function(e) {
-			var t = jo();
+			var t = Mo();
 			t.memoizedState = t.baseState = e;
 			var n = {
 				pending: null,
@@ -9141,133 +9021,133 @@ var C = /* @__PURE__ */ s(((e) => {
 				lastRenderedReducer: null,
 				lastRenderedState: null
 			};
-			return t.queue = n, t = Fs.bind(null, R, !0, n), n.dispatch = t, [e, t];
+			return t.queue = n, t = Is.bind(null, L, !0, n), n.dispatch = t, [e, t];
 		},
-		useMemoCache: Fo,
+		useMemoCache: Io,
 		useCacheRefresh: function() {
-			return jo().memoizedState = js.bind(null, R);
+			return Mo().memoizedState = Ms.bind(null, L);
 		},
 		useEffectEvent: function(e) {
-			var t = jo(), n = { impl: e };
+			var t = Mo(), n = { impl: e };
 			return t.memoizedState = n, function() {
 				if (G & 2) throw Error(i(440));
 				return n.impl.apply(void 0, arguments);
 			};
 		}
-	}, Vs = {
-		readContext: aa,
-		use: Po,
-		useCallback: ys,
-		useContext: aa,
-		useEffect: ds,
-		useImperativeHandle: _s,
-		useInsertionEffect: ms,
-		useLayoutEffect: hs,
-		useMemo: bs,
-		useReducer: Lo,
-		useRef: ss,
+	}, Hs = {
+		readContext: oa,
+		use: Fo,
+		useCallback: bs,
+		useContext: oa,
+		useEffect: fs,
+		useImperativeHandle: vs,
+		useInsertionEffect: hs,
+		useLayoutEffect: gs,
+		useMemo: xs,
+		useReducer: Ro,
+		useRef: cs,
 		useState: function() {
-			return Lo(Io);
+			return Ro(Lo);
 		},
-		useDebugValue: vs,
+		useDebugValue: ys,
 		useDeferredValue: function(e, t) {
-			return Ss(H(), z.memoizedState, e, t);
+			return Cs(V(), R.memoizedState, e, t);
 		},
 		useTransition: function() {
-			var e = Lo(Io)[0], t = H().memoizedState;
-			return [typeof e == "boolean" ? e : No(e), t];
+			var e = Ro(Lo)[0], t = V().memoizedState;
+			return [typeof e == "boolean" ? e : Po(e), t];
 		},
-		useSyncExternalStore: Bo,
-		useId: ks,
-		useHostTransitionStatus: Os,
-		useFormState: ns,
-		useActionState: ns,
+		useSyncExternalStore: Vo,
+		useId: As,
+		useHostTransitionStatus: ks,
+		useFormState: rs,
+		useActionState: rs,
 		useOptimistic: function(e, t) {
-			return qo(H(), z, e, t);
+			return Jo(V(), R, e, t);
 		},
-		useMemoCache: Fo,
-		useCacheRefresh: As
+		useMemoCache: Io,
+		useCacheRefresh: js
 	};
-	Vs.useEffectEvent = ps;
-	var Hs = {
-		readContext: aa,
-		use: Po,
-		useCallback: ys,
-		useContext: aa,
-		useEffect: ds,
-		useImperativeHandle: _s,
-		useInsertionEffect: ms,
-		useLayoutEffect: hs,
-		useMemo: bs,
-		useReducer: zo,
-		useRef: ss,
+	Hs.useEffectEvent = ms;
+	var Us = {
+		readContext: oa,
+		use: Fo,
+		useCallback: bs,
+		useContext: oa,
+		useEffect: fs,
+		useImperativeHandle: vs,
+		useInsertionEffect: hs,
+		useLayoutEffect: gs,
+		useMemo: xs,
+		useReducer: Bo,
+		useRef: cs,
 		useState: function() {
-			return zo(Io);
+			return Bo(Lo);
 		},
-		useDebugValue: vs,
+		useDebugValue: ys,
 		useDeferredValue: function(e, t) {
-			var n = H();
-			return z === null ? xs(n, e, t) : Ss(n, z.memoizedState, e, t);
+			var n = V();
+			return R === null ? Ss(n, e, t) : Cs(n, R.memoizedState, e, t);
 		},
 		useTransition: function() {
-			var e = zo(Io)[0], t = H().memoizedState;
-			return [typeof e == "boolean" ? e : No(e), t];
+			var e = Bo(Lo)[0], t = V().memoizedState;
+			return [typeof e == "boolean" ? e : Po(e), t];
 		},
-		useSyncExternalStore: Bo,
-		useId: ks,
-		useHostTransitionStatus: Os,
-		useFormState: as,
-		useActionState: as,
+		useSyncExternalStore: Vo,
+		useId: As,
+		useHostTransitionStatus: ks,
+		useFormState: os,
+		useActionState: os,
 		useOptimistic: function(e, t) {
-			var n = H();
-			return z === null ? (n.baseState = e, [e, n.queue.dispatch]) : qo(n, z, e, t);
+			var n = V();
+			return R === null ? (n.baseState = e, [e, n.queue.dispatch]) : Jo(n, R, e, t);
 		},
-		useMemoCache: Fo,
-		useCacheRefresh: As
+		useMemoCache: Io,
+		useCacheRefresh: js
 	};
-	Hs.useEffectEvent = ps;
-	function Us(e, t, n, r) {
+	Us.useEffectEvent = ms;
+	function Ws(e, t, n, r) {
 		t = e.memoizedState, n = n(r, t), n = n == null ? t : f({}, t, n), e.memoizedState = n, e.lanes === 0 && (e.updateQueue.baseState = n);
 	}
-	var Ws = {
+	var Gs = {
 		enqueueSetState: function(e, t, n) {
 			e = e._reactInternals;
-			var r = pu(), i = Ka(r);
-			i.payload = t, n != null && (i.callback = n), t = qa(e, i, r), t !== null && (hu(t, e, r), Ja(t, e, r));
+			var r = pu(), i = qa(r);
+			i.payload = t, n != null && (i.callback = n), t = Ja(e, i, r), t !== null && (hu(t, e, r), Ya(t, e, r));
 		},
 		enqueueReplaceState: function(e, t, n) {
 			e = e._reactInternals;
-			var r = pu(), i = Ka(r);
-			i.tag = 1, i.payload = t, n != null && (i.callback = n), t = qa(e, i, r), t !== null && (hu(t, e, r), Ja(t, e, r));
+			var r = pu(), i = qa(r);
+			i.tag = 1, i.payload = t, n != null && (i.callback = n), t = Ja(e, i, r), t !== null && (hu(t, e, r), Ya(t, e, r));
 		},
 		enqueueForceUpdate: function(e, t) {
 			e = e._reactInternals;
-			var n = pu(), r = Ka(n);
-			r.tag = 2, t != null && (r.callback = t), t = qa(e, r, n), t !== null && (hu(t, e, n), Ja(t, e, n));
+			var n = pu(), r = qa(n);
+			r.tag = 2, t != null && (r.callback = t), t = Ja(e, r, n), t !== null && (hu(t, e, n), Ya(t, e, n));
 		}
 	};
-	function Gs(e, t, n, r, i, a, o) {
-		return e = e.stateNode, typeof e.shouldComponentUpdate == "function" ? e.shouldComponentUpdate(r, a, o) : t.prototype && t.prototype.isPureReactComponent ? !Or(n, r) || !Or(i, a) : !0;
+	function Ks(e, t, n, r, i, a, o) {
+		return e = e.stateNode, typeof e.shouldComponentUpdate == "function" ? e.shouldComponentUpdate(r, a, o) : t.prototype && t.prototype.isPureReactComponent ? !kr(n, r) || !kr(i, a) : !0;
 	}
-	function Ks(e, t, n, r) {
-		e = t.state, typeof t.componentWillReceiveProps == "function" && t.componentWillReceiveProps(n, r), typeof t.UNSAFE_componentWillReceiveProps == "function" && t.UNSAFE_componentWillReceiveProps(n, r), t.state !== e && Ws.enqueueReplaceState(t, t.state, null);
+	function qs(e, t, n, r) {
+		e = t.state, typeof t.componentWillReceiveProps == "function" && t.componentWillReceiveProps(n, r), typeof t.UNSAFE_componentWillReceiveProps == "function" && t.UNSAFE_componentWillReceiveProps(n, r), t.state !== e && Gs.enqueueReplaceState(t, t.state, null);
 	}
-	function qs(e, t) {
+	function Js(e, t) {
 		var n = t;
 		if ("ref" in t) for (var r in n = {}, t) r !== "ref" && (n[r] = t[r]);
 		if (e = e.defaultProps) for (var i in n === t && (n = f({}, n)), e) n[i] === void 0 && (n[i] = e[i]);
 		return n;
 	}
-	function Js(e) {
-		ti(e);
-	}
 	function Ys(e) {
-		console.error(e);
+		ni(e);
 	}
 	function Xs(e) {
-		ti(e);
+		console.error(e);
 	}
-	function Zs(e, t) {
+	function Zs(e) {
+		ni(e);
+	}
+	function Qs(e, t) {
 		try {
 			var n = e.onUncaughtError;
 			n(t.value, { componentStack: t.stack });
@@ -9277,7 +9157,7 @@ var C = /* @__PURE__ */ s(((e) => {
 			});
 		}
 	}
-	function Qs(e, t, n) {
+	function $s(e, t, n) {
 		try {
 			var r = e.onCaughtError;
 			r(n.value, {
@@ -9290,38 +9170,38 @@ var C = /* @__PURE__ */ s(((e) => {
 			});
 		}
 	}
-	function $s(e, t, n) {
-		return n = Ka(n), n.tag = 3, n.payload = { element: null }, n.callback = function() {
-			Zs(e, t);
+	function ec(e, t, n) {
+		return n = qa(n), n.tag = 3, n.payload = { element: null }, n.callback = function() {
+			Qs(e, t);
 		}, n;
 	}
-	function ec(e) {
-		return e = Ka(e), e.tag = 3, e;
+	function tc(e) {
+		return e = qa(e), e.tag = 3, e;
 	}
-	function tc(e, t, n, r) {
+	function nc(e, t, n, r) {
 		var i = n.type.getDerivedStateFromError;
 		if (typeof i == "function") {
 			var a = r.value;
 			e.payload = function() {
 				return i(a);
 			}, e.callback = function() {
-				Qs(t, n, r);
+				$s(t, n, r);
 			};
 		}
 		var o = n.stateNode;
 		o !== null && typeof o.componentDidCatch == "function" && (e.callback = function() {
-			Qs(t, n, r), typeof i != "function" && (ru === null ? ru = /* @__PURE__ */ new Set([this]) : ru.add(this));
+			$s(t, n, r), typeof i != "function" && (ru === null ? ru = /* @__PURE__ */ new Set([this]) : ru.add(this));
 			var e = r.stack;
 			this.componentDidCatch(r.value, { componentStack: e === null ? "" : e });
 		});
 	}
-	function nc(e, t, n, r, a) {
+	function rc(e, t, n, r, a) {
 		if (n.flags |= 32768, typeof r == "object" && r && typeof r.then == "function") {
-			if (t = n.alternate, t !== null && na(t, n, a, !0), n = oo.current, n !== null) {
+			if (t = n.alternate, t !== null && ra(t, n, a, !0), n = so.current, n !== null) {
 				switch (n.tag) {
 					case 31:
-					case 13: return so === null ? Du() : n.alternate === null && X === 0 && (X = 3), n.flags &= -257, n.flags |= 65536, n.lanes = a, r === Oa ? n.flags |= 16384 : (t = n.updateQueue, t === null ? n.updateQueue = /* @__PURE__ */ new Set([r]) : t.add(r), Gu(e, r, a)), !1;
-					case 22: return n.flags |= 65536, r === Oa ? n.flags |= 16384 : (t = n.updateQueue, t === null ? (t = {
+					case 13: return co === null ? Du() : n.alternate === null && X === 0 && (X = 3), n.flags &= -257, n.flags |= 65536, n.lanes = a, r === ka ? n.flags |= 16384 : (t = n.updateQueue, t === null ? n.updateQueue = /* @__PURE__ */ new Set([r]) : t.add(r), Gu(e, r, a)), !1;
+					case 22: return n.flags |= 65536, r === ka ? n.flags |= 16384 : (t = n.updateQueue, t === null ? (t = {
 						transitions: null,
 						markerInstances: null,
 						retryQueue: /* @__PURE__ */ new Set([r])
@@ -9331,22 +9211,22 @@ var C = /* @__PURE__ */ s(((e) => {
 			}
 			return Gu(e, r, a), Du(), !1;
 		}
-		if (F) return t = oo.current, t === null ? (r !== Vi && (t = Error(i(423), { cause: r }), Ji(Ci(t, n))), e = e.current.alternate, e.flags |= 65536, a &= -a, e.lanes |= a, r = Ci(r, n), a = $s(e.stateNode, r, a), Ya(e, a), X !== 4 && (X = 2)) : (!(t.flags & 65536) && (t.flags |= 256), t.flags |= 65536, t.lanes = a, r !== Vi && (e = Error(i(422), { cause: r }), Ji(Ci(e, n)))), !1;
+		if (P) return t = so.current, t === null ? (r !== Hi && (t = Error(i(423), { cause: r }), Yi(wi(t, n))), e = e.current.alternate, e.flags |= 65536, a &= -a, e.lanes |= a, r = wi(r, n), a = ec(e.stateNode, r, a), Xa(e, a), X !== 4 && (X = 2)) : (!(t.flags & 65536) && (t.flags |= 256), t.flags |= 65536, t.lanes = a, r !== Hi && (e = Error(i(422), { cause: r }), Yi(wi(e, n)))), !1;
 		var o = Error(i(520), { cause: r });
-		if (o = Ci(o, n), Xl === null ? Xl = [o] : Xl.push(o), X !== 4 && (X = 2), t === null) return !0;
-		r = Ci(r, n), n = t;
+		if (o = wi(o, n), Xl === null ? Xl = [o] : Xl.push(o), X !== 4 && (X = 2), t === null) return !0;
+		r = wi(r, n), n = t;
 		do {
 			switch (n.tag) {
-				case 3: return n.flags |= 65536, e = a & -a, n.lanes |= e, e = $s(n.stateNode, r, e), Ya(n, e), !1;
-				case 1: if (t = n.type, o = n.stateNode, !(n.flags & 128) && (typeof t.getDerivedStateFromError == "function" || o !== null && typeof o.componentDidCatch == "function" && (ru === null || !ru.has(o)))) return n.flags |= 65536, a &= -a, n.lanes |= a, a = ec(a), tc(a, e, n, r), Ya(n, a), !1;
+				case 3: return n.flags |= 65536, e = a & -a, n.lanes |= e, e = ec(n.stateNode, r, e), Xa(n, e), !1;
+				case 1: if (t = n.type, o = n.stateNode, !(n.flags & 128) && (typeof t.getDerivedStateFromError == "function" || o !== null && typeof o.componentDidCatch == "function" && (ru === null || !ru.has(o)))) return n.flags |= 65536, a &= -a, n.lanes |= a, a = tc(a), nc(a, e, n, r), Xa(n, a), !1;
 			}
 			n = n.return;
 		} while (n !== null);
 		return !1;
 	}
-	var rc = Error(i(461)), ic = !1;
+	var ic = Error(i(461)), H = !1;
 	function ac(e, t, n, r) {
-		t.child = e === null ? Ha(t, null, n, r) : Va(t, e.child, n, r);
+		t.child = e === null ? Ua(t, null, n, r) : Ha(t, e.child, n, r);
 	}
 	function oc(e, t, n, r, i) {
 		n = n.render;
@@ -9355,24 +9235,24 @@ var C = /* @__PURE__ */ s(((e) => {
 			var o = {};
 			for (var s in r) s !== "ref" && (o[s] = r[s]);
 		} else o = r;
-		return ia(t), r = wo(e, t, n, o, a, i), s = Oo(), e !== null && !ic ? (ko(e, t, i), Ac(e, t, i)) : (F && s && Fi(t), t.flags |= 1, ac(e, t, r, i), t.child);
+		return aa(t), r = To(e, t, n, o, a, i), s = ko(), e !== null && !H ? (Ao(e, t, i), Ac(e, t, i)) : (P && s && Ii(t), t.flags |= 1, ac(e, t, r, i), t.child);
 	}
 	function sc(e, t, n, r, i) {
 		if (e === null) {
 			var a = n.type;
-			return typeof a == "function" && !mi(a) && a.defaultProps === void 0 && n.compare === null ? (t.tag = 15, t.type = a, cc(e, t, a, r, i)) : (e = _i(n.type, null, r, t, t.mode, i), e.ref = t.ref, e.return = t, t.child = e);
+			return typeof a == "function" && !hi(a) && a.defaultProps === void 0 && n.compare === null ? (t.tag = 15, t.type = a, cc(e, t, a, r, i)) : (e = vi(n.type, null, r, t, t.mode, i), e.ref = t.ref, e.return = t, t.child = e);
 		}
 		if (a = e.child, !jc(e, i)) {
 			var o = a.memoizedProps;
-			if (n = n.compare, n = n === null ? Or : n, n(o, r) && e.ref === t.ref) return Ac(e, t, i);
+			if (n = n.compare, n = n === null ? kr : n, n(o, r) && e.ref === t.ref) return Ac(e, t, i);
 		}
-		return t.flags |= 1, e = hi(a, r), e.ref = t.ref, e.return = t, t.child = e;
+		return t.flags |= 1, e = gi(a, r), e.ref = t.ref, e.return = t, t.child = e;
 	}
 	function cc(e, t, n, r, i) {
 		if (e !== null) {
 			var a = e.memoizedProps;
-			if (Or(a, r) && e.ref === t.ref) {
-				if (ic = !1, t.pendingProps = r = a, jc(e, i)) e.flags & 131072 && (ic = !0);
+			if (kr(a, r) && e.ref === t.ref) {
+				if (H = !1, t.pendingProps = r = a, jc(e, i)) e.flags & 131072 && (H = !0);
 				else return t.lanes = e.lanes, Ac(e, t, i);
 			}
 		}
@@ -9396,9 +9276,9 @@ var C = /* @__PURE__ */ s(((e) => {
 			if (n & 536870912) t.memoizedState = {
 				baseLanes: 0,
 				cachePool: null
-			}, e !== null && Ca(t, a === null ? null : a.cachePool), a === null ? io() : ro(t, a), uo(t);
+			}, e !== null && wa(t, a === null ? null : a.cachePool), a === null ? ao() : io(t, a), fo(t);
 			else return r = t.lanes = 536870912, dc(e, t, a === null ? n : a.baseLanes | n, n, r);
-		} else a === null ? (e !== null && Ca(t, null), io(), fo(t)) : (Ca(t, a.cachePool), ro(t, a), fo(t), t.memoizedState = null);
+		} else a === null ? (e !== null && wa(t, null), ao(), po(t)) : (wa(t, a.cachePool), io(t, a), po(t), t.memoizedState = null);
 		return ac(e, t, i, n), t.child;
 	}
 	function uc(e, t) {
@@ -9410,14 +9290,14 @@ var C = /* @__PURE__ */ s(((e) => {
 		}), t.sibling;
 	}
 	function dc(e, t, n, r, i) {
-		var a = Sa();
+		var a = Ca();
 		return a = a === null ? null : {
-			parent: I._currentValue,
+			parent: F._currentValue,
 			pool: a
 		}, t.memoizedState = {
 			baseLanes: n,
 			cachePool: a
-		}, e !== null && Ca(t, null), io(), uo(t), e !== null && na(e, t, r, !0), t.childLanes = i, null;
+		}, e !== null && wa(t, null), ao(), fo(t), e !== null && ra(e, t, r, !0), t.childLanes = i, null;
 	}
 	function fc(e, t) {
 		return t = Tc({
@@ -9426,22 +9306,22 @@ var C = /* @__PURE__ */ s(((e) => {
 		}, e.mode), t.ref = e.ref, e.child = t, t.return = e, t;
 	}
 	function pc(e, t, n) {
-		return Va(t, e.child, null, n), e = fc(t, t.pendingProps), e.flags |= 2, po(t), t.memoizedState = null, e;
+		return Ha(t, e.child, null, n), e = fc(t, t.pendingProps), e.flags |= 2, mo(t), t.memoizedState = null, e;
 	}
 	function mc(e, t, n) {
 		var r = t.pendingProps, a = !!(t.flags & 128);
 		if (t.flags &= -129, e === null) {
-			if (F) {
+			if (P) {
 				if (r.mode === "hidden") return e = fc(t, r), t.lanes = 536870912, uc(null, e);
-				if (lo(t), (e = P) ? (e = rf(e, Bi), e = e !== null && e.data === "&" ? e : null, e !== null && (t.memoizedState = {
+				if (uo(t), (e = N) ? (e = rf(e, Vi), e = e !== null && e.data === "&" ? e : null, e !== null && (t.memoizedState = {
 					dehydrated: e,
-					treeContext: Ai === null ? null : {
-						id: ji,
-						overflow: Mi
+					treeContext: ji === null ? null : {
+						id: Mi,
+						overflow: Ni
 					},
 					retryLane: 536870912,
 					hydrationErrors: null
-				}, n = bi(e), n.return = t, t.child = n, Ri = t, P = null)) : e = null, e === null) throw Hi(t);
+				}, n = xi(e), n.return = t, t.child = n, zi = t, N = null)) : e = null, e === null) throw Ui(t);
 				return t.lanes = 536870912, null;
 			}
 			return fc(t, r);
@@ -9449,17 +9329,17 @@ var C = /* @__PURE__ */ s(((e) => {
 		var o = e.memoizedState;
 		if (o !== null) {
 			var s = o.dehydrated;
-			if (lo(t), a) {
+			if (uo(t), a) {
 				if (t.flags & 256) t.flags &= -257, t = pc(e, t, n);
 				else if (t.memoizedState !== null) t.child = e.child, t.flags |= 128, t = null;
 				else throw Error(i(558));
-			} else if (ic || na(e, t, n, !1), a = (n & e.childLanes) !== 0, ic || a) {
-				if (r = K, r !== null && (s = st(r, n), s !== 0 && s !== o.retryLane)) throw o.retryLane = s, ci(e, s), hu(r, e, s), rc;
+			} else if (H || ra(e, t, n, !1), a = (n & e.childLanes) !== 0, H || a) {
+				if (r = K, r !== null && (s = st(r, n), s !== 0 && s !== o.retryLane)) throw o.retryLane = s, li(e, s), hu(r, e, s), ic;
 				Du(), t = pc(e, t, n);
-			} else e = o.treeContext, P = cf(s.nextSibling), Ri = t, F = !0, zi = null, Bi = !1, e !== null && Li(t, e), t = fc(t, r), t.flags |= 4096;
+			} else e = o.treeContext, N = cf(s.nextSibling), zi = t, P = !0, Bi = null, Vi = !1, e !== null && Ri(t, e), t = fc(t, r), t.flags |= 4096;
 			return t;
 		}
-		return e = hi(e.child, {
+		return e = gi(e.child, {
 			mode: r.mode,
 			children: r.children
 		}), e.ref = t.ref, t.child = e, e.return = t, e;
@@ -9473,34 +9353,34 @@ var C = /* @__PURE__ */ s(((e) => {
 		}
 	}
 	function gc(e, t, n, r, i) {
-		return ia(t), n = wo(e, t, n, r, void 0, i), r = Oo(), e !== null && !ic ? (ko(e, t, i), Ac(e, t, i)) : (F && r && Fi(t), t.flags |= 1, ac(e, t, n, i), t.child);
+		return aa(t), n = To(e, t, n, r, void 0, i), r = ko(), e !== null && !H ? (Ao(e, t, i), Ac(e, t, i)) : (P && r && Ii(t), t.flags |= 1, ac(e, t, n, i), t.child);
 	}
 	function _c(e, t, n, r, i, a) {
-		return ia(t), t.updateQueue = null, n = Eo(t, r, n, i), To(e), r = Oo(), e !== null && !ic ? (ko(e, t, a), Ac(e, t, a)) : (F && r && Fi(t), t.flags |= 1, ac(e, t, n, a), t.child);
+		return aa(t), t.updateQueue = null, n = Do(t, r, n, i), Eo(e), r = ko(), e !== null && !H ? (Ao(e, t, a), Ac(e, t, a)) : (P && r && Ii(t), t.flags |= 1, ac(e, t, n, a), t.child);
 	}
 	function vc(e, t, n, r, i) {
-		if (ia(t), t.stateNode === null) {
-			var a = di, o = n.contextType;
-			typeof o == "object" && o && (a = aa(o)), a = new n(r, a), t.memoizedState = a.state !== null && a.state !== void 0 ? a.state : null, a.updater = Ws, t.stateNode = a, a._reactInternals = t, a = t.stateNode, a.props = r, a.state = t.memoizedState, a.refs = {}, Wa(t), o = n.contextType, a.context = typeof o == "object" && o ? aa(o) : di, a.state = t.memoizedState, o = n.getDerivedStateFromProps, typeof o == "function" && (Us(t, n, o, r), a.state = t.memoizedState), typeof n.getDerivedStateFromProps == "function" || typeof a.getSnapshotBeforeUpdate == "function" || typeof a.UNSAFE_componentWillMount != "function" && typeof a.componentWillMount != "function" || (o = a.state, typeof a.componentWillMount == "function" && a.componentWillMount(), typeof a.UNSAFE_componentWillMount == "function" && a.UNSAFE_componentWillMount(), o !== a.state && Ws.enqueueReplaceState(a, a.state, null), Qa(t, r, a, i), Za(), a.state = t.memoizedState), typeof a.componentDidMount == "function" && (t.flags |= 4194308), r = !0;
+		if (aa(t), t.stateNode === null) {
+			var a = fi, o = n.contextType;
+			typeof o == "object" && o && (a = oa(o)), a = new n(r, a), t.memoizedState = a.state !== null && a.state !== void 0 ? a.state : null, a.updater = Gs, t.stateNode = a, a._reactInternals = t, a = t.stateNode, a.props = r, a.state = t.memoizedState, a.refs = {}, Ga(t), o = n.contextType, a.context = typeof o == "object" && o ? oa(o) : fi, a.state = t.memoizedState, o = n.getDerivedStateFromProps, typeof o == "function" && (Ws(t, n, o, r), a.state = t.memoizedState), typeof n.getDerivedStateFromProps == "function" || typeof a.getSnapshotBeforeUpdate == "function" || typeof a.UNSAFE_componentWillMount != "function" && typeof a.componentWillMount != "function" || (o = a.state, typeof a.componentWillMount == "function" && a.componentWillMount(), typeof a.UNSAFE_componentWillMount == "function" && a.UNSAFE_componentWillMount(), o !== a.state && Gs.enqueueReplaceState(a, a.state, null), $a(t, r, a, i), Qa(), a.state = t.memoizedState), typeof a.componentDidMount == "function" && (t.flags |= 4194308), r = !0;
 		} else if (e === null) {
 			a = t.stateNode;
-			var s = t.memoizedProps, c = qs(n, s);
+			var s = t.memoizedProps, c = Js(n, s);
 			a.props = c;
 			var l = a.context, u = n.contextType;
-			o = di, typeof u == "object" && u && (o = aa(u));
+			o = fi, typeof u == "object" && u && (o = oa(u));
 			var d = n.getDerivedStateFromProps;
-			u = typeof d == "function" || typeof a.getSnapshotBeforeUpdate == "function", s = t.pendingProps !== s, u || typeof a.UNSAFE_componentWillReceiveProps != "function" && typeof a.componentWillReceiveProps != "function" || (s || l !== o) && Ks(t, a, r, o), Ua = !1;
+			u = typeof d == "function" || typeof a.getSnapshotBeforeUpdate == "function", s = t.pendingProps !== s, u || typeof a.UNSAFE_componentWillReceiveProps != "function" && typeof a.componentWillReceiveProps != "function" || (s || l !== o) && qs(t, a, r, o), Wa = !1;
 			var f = t.memoizedState;
-			a.state = f, Qa(t, r, a, i), Za(), l = t.memoizedState, s || f !== l || Ua ? (typeof d == "function" && (Us(t, n, d, r), l = t.memoizedState), (c = Ua || Gs(t, n, c, r, f, l, o)) ? (u || typeof a.UNSAFE_componentWillMount != "function" && typeof a.componentWillMount != "function" || (typeof a.componentWillMount == "function" && a.componentWillMount(), typeof a.UNSAFE_componentWillMount == "function" && a.UNSAFE_componentWillMount()), typeof a.componentDidMount == "function" && (t.flags |= 4194308)) : (typeof a.componentDidMount == "function" && (t.flags |= 4194308), t.memoizedProps = r, t.memoizedState = l), a.props = r, a.state = l, a.context = o, r = c) : (typeof a.componentDidMount == "function" && (t.flags |= 4194308), r = !1);
+			a.state = f, $a(t, r, a, i), Qa(), l = t.memoizedState, s || f !== l || Wa ? (typeof d == "function" && (Ws(t, n, d, r), l = t.memoizedState), (c = Wa || Ks(t, n, c, r, f, l, o)) ? (u || typeof a.UNSAFE_componentWillMount != "function" && typeof a.componentWillMount != "function" || (typeof a.componentWillMount == "function" && a.componentWillMount(), typeof a.UNSAFE_componentWillMount == "function" && a.UNSAFE_componentWillMount()), typeof a.componentDidMount == "function" && (t.flags |= 4194308)) : (typeof a.componentDidMount == "function" && (t.flags |= 4194308), t.memoizedProps = r, t.memoizedState = l), a.props = r, a.state = l, a.context = o, r = c) : (typeof a.componentDidMount == "function" && (t.flags |= 4194308), r = !1);
 		} else {
-			a = t.stateNode, Ga(e, t), o = t.memoizedProps, u = qs(n, o), a.props = u, d = t.pendingProps, f = a.context, l = n.contextType, c = di, typeof l == "object" && l && (c = aa(l)), s = n.getDerivedStateFromProps, (l = typeof s == "function" || typeof a.getSnapshotBeforeUpdate == "function") || typeof a.UNSAFE_componentWillReceiveProps != "function" && typeof a.componentWillReceiveProps != "function" || (o !== d || f !== c) && Ks(t, a, r, c), Ua = !1, f = t.memoizedState, a.state = f, Qa(t, r, a, i), Za();
+			a = t.stateNode, Ka(e, t), o = t.memoizedProps, u = Js(n, o), a.props = u, d = t.pendingProps, f = a.context, l = n.contextType, c = fi, typeof l == "object" && l && (c = oa(l)), s = n.getDerivedStateFromProps, (l = typeof s == "function" || typeof a.getSnapshotBeforeUpdate == "function") || typeof a.UNSAFE_componentWillReceiveProps != "function" && typeof a.componentWillReceiveProps != "function" || (o !== d || f !== c) && qs(t, a, r, c), Wa = !1, f = t.memoizedState, a.state = f, $a(t, r, a, i), Qa();
 			var p = t.memoizedState;
-			o !== d || f !== p || Ua || e !== null && e.dependencies !== null && ra(e.dependencies) ? (typeof s == "function" && (Us(t, n, s, r), p = t.memoizedState), (u = Ua || Gs(t, n, u, r, f, p, c) || e !== null && e.dependencies !== null && ra(e.dependencies)) ? (l || typeof a.UNSAFE_componentWillUpdate != "function" && typeof a.componentWillUpdate != "function" || (typeof a.componentWillUpdate == "function" && a.componentWillUpdate(r, p, c), typeof a.UNSAFE_componentWillUpdate == "function" && a.UNSAFE_componentWillUpdate(r, p, c)), typeof a.componentDidUpdate == "function" && (t.flags |= 4), typeof a.getSnapshotBeforeUpdate == "function" && (t.flags |= 1024)) : (typeof a.componentDidUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 4), typeof a.getSnapshotBeforeUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 1024), t.memoizedProps = r, t.memoizedState = p), a.props = r, a.state = p, a.context = c, r = u) : (typeof a.componentDidUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 4), typeof a.getSnapshotBeforeUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 1024), r = !1);
+			o !== d || f !== p || Wa || e !== null && e.dependencies !== null && ia(e.dependencies) ? (typeof s == "function" && (Ws(t, n, s, r), p = t.memoizedState), (u = Wa || Ks(t, n, u, r, f, p, c) || e !== null && e.dependencies !== null && ia(e.dependencies)) ? (l || typeof a.UNSAFE_componentWillUpdate != "function" && typeof a.componentWillUpdate != "function" || (typeof a.componentWillUpdate == "function" && a.componentWillUpdate(r, p, c), typeof a.UNSAFE_componentWillUpdate == "function" && a.UNSAFE_componentWillUpdate(r, p, c)), typeof a.componentDidUpdate == "function" && (t.flags |= 4), typeof a.getSnapshotBeforeUpdate == "function" && (t.flags |= 1024)) : (typeof a.componentDidUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 4), typeof a.getSnapshotBeforeUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 1024), t.memoizedProps = r, t.memoizedState = p), a.props = r, a.state = p, a.context = c, r = u) : (typeof a.componentDidUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 4), typeof a.getSnapshotBeforeUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 1024), r = !1);
 		}
-		return a = r, hc(e, t), r = !!(t.flags & 128), a || r ? (a = t.stateNode, n = r && typeof n.getDerivedStateFromError != "function" ? null : a.render(), t.flags |= 1, e !== null && r ? (t.child = Va(t, e.child, null, i), t.child = Va(t, null, n, i)) : ac(e, t, n, i), t.memoizedState = a.state, e = t.child) : e = Ac(e, t, i), e;
+		return a = r, hc(e, t), r = !!(t.flags & 128), a || r ? (a = t.stateNode, n = r && typeof n.getDerivedStateFromError != "function" ? null : a.render(), t.flags |= 1, e !== null && r ? (t.child = Ha(t, e.child, null, i), t.child = Ha(t, null, n, i)) : ac(e, t, n, i), t.memoizedState = a.state, e = t.child) : e = Ac(e, t, i), e;
 	}
 	function yc(e, t, n, r) {
-		return Ki(), t.flags |= 256, ac(e, t, n, r), t.child;
+		return qi(), t.flags |= 256, ac(e, t, n, r), t.child;
 	}
 	var bc = {
 		dehydrated: null,
@@ -9511,7 +9391,7 @@ var C = /* @__PURE__ */ s(((e) => {
 	function xc(e) {
 		return {
 			baseLanes: e,
-			cachePool: wa()
+			cachePool: Ta()
 		};
 	}
 	function Sc(e, t, n) {
@@ -9519,54 +9399,54 @@ var C = /* @__PURE__ */ s(((e) => {
 	}
 	function Cc(e, t, n) {
 		var r = t.pendingProps, a = !1, o = !!(t.flags & 128), s;
-		if ((s = o) || (s = e !== null && e.memoizedState === null ? !1 : !!(L.current & 2)), s && (a = !0, t.flags &= -129), s = !!(t.flags & 32), t.flags &= -33, e === null) {
-			if (F) {
-				if (a ? co(t) : fo(t), (e = P) ? (e = rf(e, Bi), e = e !== null && e.data !== "&" ? e : null, e !== null && (t.memoizedState = {
+		if ((s = o) || (s = e !== null && e.memoizedState === null ? !1 : !!(I.current & 2)), s && (a = !0, t.flags &= -129), s = !!(t.flags & 32), t.flags &= -33, e === null) {
+			if (P) {
+				if (a ? lo(t) : po(t), (e = N) ? (e = rf(e, Vi), e = e !== null && e.data !== "&" ? e : null, e !== null && (t.memoizedState = {
 					dehydrated: e,
-					treeContext: Ai === null ? null : {
-						id: ji,
-						overflow: Mi
+					treeContext: ji === null ? null : {
+						id: Mi,
+						overflow: Ni
 					},
 					retryLane: 536870912,
 					hydrationErrors: null
-				}, n = bi(e), n.return = t, t.child = n, Ri = t, P = null)) : e = null, e === null) throw Hi(t);
+				}, n = xi(e), n.return = t, t.child = n, zi = t, N = null)) : e = null, e === null) throw Ui(t);
 				return of(e) ? t.lanes = 32 : t.lanes = 536870912, null;
 			}
 			var c = r.children;
-			return r = r.fallback, a ? (fo(t), a = t.mode, c = Tc({
+			return r = r.fallback, a ? (po(t), a = t.mode, c = Tc({
 				mode: "hidden",
 				children: c
-			}, a), r = vi(r, a, n, null), c.return = t, r.return = t, c.sibling = r, t.child = c, r = t.child, r.memoizedState = xc(n), r.childLanes = Sc(e, s, n), t.memoizedState = bc, uc(null, r)) : (co(t), wc(t, c));
+			}, a), r = yi(r, a, n, null), c.return = t, r.return = t, c.sibling = r, t.child = c, r = t.child, r.memoizedState = xc(n), r.childLanes = Sc(e, s, n), t.memoizedState = bc, uc(null, r)) : (lo(t), wc(t, c));
 		}
 		var l = e.memoizedState;
 		if (l !== null && (c = l.dehydrated, c !== null)) {
-			if (o) t.flags & 256 ? (co(t), t.flags &= -257, t = Ec(e, t, n)) : t.memoizedState === null ? (fo(t), c = r.fallback, a = t.mode, r = Tc({
+			if (o) t.flags & 256 ? (lo(t), t.flags &= -257, t = Ec(e, t, n)) : t.memoizedState === null ? (po(t), c = r.fallback, a = t.mode, r = Tc({
 				mode: "visible",
 				children: r.children
-			}, a), c = vi(c, a, n, null), c.flags |= 2, r.return = t, c.return = t, r.sibling = c, t.child = r, Va(t, e.child, null, n), r = t.child, r.memoizedState = xc(n), r.childLanes = Sc(e, s, n), t.memoizedState = bc, t = uc(null, r)) : (fo(t), t.child = e.child, t.flags |= 128, t = null);
-			else if (co(t), of(c)) {
+			}, a), c = yi(c, a, n, null), c.flags |= 2, r.return = t, c.return = t, r.sibling = c, t.child = r, Ha(t, e.child, null, n), r = t.child, r.memoizedState = xc(n), r.childLanes = Sc(e, s, n), t.memoizedState = bc, t = uc(null, r)) : (po(t), t.child = e.child, t.flags |= 128, t = null);
+			else if (lo(t), of(c)) {
 				if (s = c.nextSibling && c.nextSibling.dataset, s) var u = s.dgst;
-				s = u, r = Error(i(419)), r.stack = "", r.digest = s, Ji({
+				s = u, r = Error(i(419)), r.stack = "", r.digest = s, Yi({
 					value: r,
 					source: null,
 					stack: null
 				}), t = Ec(e, t, n);
-			} else if (ic || na(e, t, n, !1), s = (n & e.childLanes) !== 0, ic || s) {
-				if (s = K, s !== null && (r = st(s, n), r !== 0 && r !== l.retryLane)) throw l.retryLane = r, ci(e, r), hu(s, e, r), rc;
+			} else if (H || ra(e, t, n, !1), s = (n & e.childLanes) !== 0, H || s) {
+				if (s = K, s !== null && (r = st(s, n), r !== 0 && r !== l.retryLane)) throw l.retryLane = r, li(e, r), hu(s, e, r), ic;
 				af(c) || Du(), t = Ec(e, t, n);
-			} else af(c) ? (t.flags |= 192, t.child = e.child, t = null) : (e = l.treeContext, P = cf(c.nextSibling), Ri = t, F = !0, zi = null, Bi = !1, e !== null && Li(t, e), t = wc(t, r.children), t.flags |= 4096);
+			} else af(c) ? (t.flags |= 192, t.child = e.child, t = null) : (e = l.treeContext, N = cf(c.nextSibling), zi = t, P = !0, Bi = null, Vi = !1, e !== null && Ri(t, e), t = wc(t, r.children), t.flags |= 4096);
 			return t;
 		}
-		return a ? (fo(t), c = r.fallback, a = t.mode, l = e.child, u = l.sibling, r = hi(l, {
+		return a ? (po(t), c = r.fallback, a = t.mode, l = e.child, u = l.sibling, r = gi(l, {
 			mode: "hidden",
 			children: r.children
-		}), r.subtreeFlags = l.subtreeFlags & 65011712, u === null ? (c = vi(c, a, n, null), c.flags |= 2) : c = hi(u, c), c.return = t, r.return = t, r.sibling = c, t.child = r, uc(null, r), r = t.child, c = e.child.memoizedState, c === null ? c = xc(n) : (a = c.cachePool, a === null ? a = wa() : (l = I._currentValue, a = a.parent === l ? a : {
+		}), r.subtreeFlags = l.subtreeFlags & 65011712, u === null ? (c = yi(c, a, n, null), c.flags |= 2) : c = gi(u, c), c.return = t, r.return = t, r.sibling = c, t.child = r, uc(null, r), r = t.child, c = e.child.memoizedState, c === null ? c = xc(n) : (a = c.cachePool, a === null ? a = Ta() : (l = F._currentValue, a = a.parent === l ? a : {
 			parent: l,
 			pool: l
 		}), c = {
 			baseLanes: c.baseLanes | n,
 			cachePool: a
-		}), r.memoizedState = c, r.childLanes = Sc(e, s, n), t.memoizedState = bc, uc(e.child, r)) : (co(t), n = e.child, e = n.sibling, n = hi(n, {
+		}), r.memoizedState = c, r.childLanes = Sc(e, s, n), t.memoizedState = bc, uc(e.child, r)) : (lo(t), n = e.child, e = n.sibling, n = gi(n, {
 			mode: "visible",
 			children: r.children
 		}), n.return = t, n.sibling = null, e !== null && (s = t.deletions, s === null ? (t.deletions = [e], t.flags |= 16) : s.push(e)), t.child = n, t.memoizedState = null, n);
@@ -9578,15 +9458,15 @@ var C = /* @__PURE__ */ s(((e) => {
 		}, e.mode), t.return = e, e.child = t;
 	}
 	function Tc(e, t) {
-		return e = pi(22, e, null, t), e.lanes = 0, e;
+		return e = mi(22, e, null, t), e.lanes = 0, e;
 	}
 	function Ec(e, t, n) {
-		return Va(t, e.child, null, n), e = wc(t, t.pendingProps.children), e.flags |= 2, t.memoizedState = null, e;
+		return Ha(t, e.child, null, n), e = wc(t, t.pendingProps.children), e.flags |= 2, t.memoizedState = null, e;
 	}
 	function Dc(e, t, n) {
 		e.lanes |= t;
 		var r = e.alternate;
-		r !== null && (r.lanes |= t), ea(e.return, t, n);
+		r !== null && (r.lanes |= t), ta(e.return, t, n);
 	}
 	function Oc(e, t, n, r, i, a) {
 		var o = e.memoizedState;
@@ -9603,8 +9483,8 @@ var C = /* @__PURE__ */ s(((e) => {
 	function kc(e, t, n) {
 		var r = t.pendingProps, i = r.revealOrder, a = r.tail;
 		r = r.children;
-		var o = L.current, s = !!(o & 2);
-		if (s ? (o = o & 1 | 2, t.flags |= 128) : o &= 1, A(L, o), ac(e, t, r, n), r = F ? Di : 0, !s && e !== null && e.flags & 128) a: for (e = t.child; e !== null;) {
+		var o = I.current, s = !!(o & 2);
+		if (s ? (o = o & 1 | 2, t.flags |= 128) : o &= 1, A(I, o), ac(e, t, r, n), r = P ? Oi : 0, !s && e !== null && e.flags & 128) a: for (e = t.child; e !== null;) {
 			if (e.tag === 13) e.memoizedState !== null && Dc(e, n, t);
 			else if (e.tag === 19) Dc(e, n, t);
 			else if (e.child !== null) {
@@ -9620,13 +9500,13 @@ var C = /* @__PURE__ */ s(((e) => {
 		}
 		switch (i) {
 			case "forwards":
-				for (n = t.child, i = null; n !== null;) e = n.alternate, e !== null && mo(e) === null && (i = n), n = n.sibling;
+				for (n = t.child, i = null; n !== null;) e = n.alternate, e !== null && ho(e) === null && (i = n), n = n.sibling;
 				n = i, n === null ? (i = t.child, t.child = null) : (i = n.sibling, n.sibling = null), Oc(t, !1, i, n, a, r);
 				break;
 			case "backwards":
 			case "unstable_legacy-backwards":
 				for (n = null, i = t.child, t.child = null; i !== null;) {
-					if (e = i.alternate, e !== null && mo(e) === null) {
+					if (e = i.alternate, e !== null && ho(e) === null) {
 						t.child = i;
 						break;
 					}
@@ -9644,23 +9524,23 @@ var C = /* @__PURE__ */ s(((e) => {
 	function Ac(e, t, n) {
 		if (e !== null && (t.dependencies = e.dependencies), Gl |= t.lanes, (n & t.childLanes) === 0) {
 			if (e !== null) {
-				if (na(e, t, n, !1), (n & t.childLanes) === 0) return null;
+				if (ra(e, t, n, !1), (n & t.childLanes) === 0) return null;
 			} else return null;
 		}
 		if (e !== null && t.child !== e.child) throw Error(i(153));
 		if (t.child !== null) {
-			for (e = t.child, n = hi(e, e.pendingProps), t.child = n, n.return = t; e.sibling !== null;) e = e.sibling, n = n.sibling = hi(e, e.pendingProps), n.return = t;
+			for (e = t.child, n = gi(e, e.pendingProps), t.child = n, n.return = t; e.sibling !== null;) e = e.sibling, n = n.sibling = gi(e, e.pendingProps), n.return = t;
 			n.sibling = null;
 		}
 		return t.child;
 	}
 	function jc(e, t) {
-		return (e.lanes & t) !== 0 || (e = e.dependencies, !!(e !== null && ra(e)));
+		return (e.lanes & t) !== 0 || (e = e.dependencies, !!(e !== null && ia(e)));
 	}
 	function Mc(e, t, n) {
 		switch (t.tag) {
 			case 3:
-				_e(t, t.stateNode.containerInfo), Qi(t, I, e.memoizedState.cache), Ki();
+				_e(t, t.stateNode.containerInfo), $i(t, F, e.memoizedState.cache), qi();
 				break;
 			case 27:
 			case 5:
@@ -9670,42 +9550,42 @@ var C = /* @__PURE__ */ s(((e) => {
 				_e(t, t.stateNode.containerInfo);
 				break;
 			case 10:
-				Qi(t, t.type, t.memoizedProps.value);
+				$i(t, t.type, t.memoizedProps.value);
 				break;
 			case 31:
-				if (t.memoizedState !== null) return t.flags |= 128, lo(t), null;
+				if (t.memoizedState !== null) return t.flags |= 128, uo(t), null;
 				break;
 			case 13:
 				var r = t.memoizedState;
-				if (r !== null) return r.dehydrated === null ? (n & t.child.childLanes) === 0 ? (co(t), e = Ac(e, t, n), e === null ? null : e.sibling) : Cc(e, t, n) : (co(t), t.flags |= 128, null);
-				co(t);
+				if (r !== null) return r.dehydrated === null ? (n & t.child.childLanes) === 0 ? (lo(t), e = Ac(e, t, n), e === null ? null : e.sibling) : Cc(e, t, n) : (lo(t), t.flags |= 128, null);
+				lo(t);
 				break;
 			case 19:
 				var i = !!(e.flags & 128);
-				if (r = (n & t.childLanes) !== 0, r ||= (na(e, t, n, !1), (n & t.childLanes) !== 0), i) {
+				if (r = (n & t.childLanes) !== 0, r ||= (ra(e, t, n, !1), (n & t.childLanes) !== 0), i) {
 					if (r) return kc(e, t, n);
 					t.flags |= 128;
 				}
-				if (i = t.memoizedState, i !== null && (i.rendering = null, i.tail = null, i.lastEffect = null), A(L, L.current), r) break;
+				if (i = t.memoizedState, i !== null && (i.rendering = null, i.tail = null, i.lastEffect = null), A(I, I.current), r) break;
 				return null;
 			case 22: return t.lanes = 0, lc(e, t, n, t.pendingProps);
-			case 24: Qi(t, I, e.memoizedState.cache);
+			case 24: $i(t, F, e.memoizedState.cache);
 		}
 		return Ac(e, t, n);
 	}
 	function Nc(e, t, n) {
 		if (e !== null) {
-			if (e.memoizedProps !== t.pendingProps) ic = !0;
+			if (e.memoizedProps !== t.pendingProps) H = !0;
 			else {
-				if (!jc(e, n) && !(t.flags & 128)) return ic = !1, Mc(e, t, n);
-				ic = !!(e.flags & 131072);
+				if (!jc(e, n) && !(t.flags & 128)) return H = !1, Mc(e, t, n);
+				H = !!(e.flags & 131072);
 			}
-		} else ic = !1, F && t.flags & 1048576 && Pi(t, Di, t.index);
+		} else H = !1, P && t.flags & 1048576 && Fi(t, Oi, t.index);
 		switch (t.lanes = 0, t.tag) {
 			case 16:
 				a: {
 					var r = t.pendingProps;
-					if (e = ja(t.elementType), t.type = e, typeof e == "function") mi(e) ? (r = qs(e, r), t.tag = 1, t = vc(null, t, e, r, n)) : (t.tag = 0, t = gc(null, t, e, r, n));
+					if (e = Ma(t.elementType), t.type = e, typeof e == "function") hi(e) ? (r = Js(e, r), t.tag = 1, t = vc(null, t, e, r, n)) : (t.tag = 0, t = gc(null, t, e, r, n));
 					else {
 						if (e != null) {
 							var a = e.$$typeof;
@@ -9723,15 +9603,15 @@ var C = /* @__PURE__ */ s(((e) => {
 				}
 				return t;
 			case 0: return gc(e, t, t.type, t.pendingProps, n);
-			case 1: return r = t.type, a = qs(r, t.pendingProps), vc(e, t, r, a, n);
+			case 1: return r = t.type, a = Js(r, t.pendingProps), vc(e, t, r, a, n);
 			case 3:
 				a: {
 					if (_e(t, t.stateNode.containerInfo), e === null) throw Error(i(387));
 					r = t.pendingProps;
 					var o = t.memoizedState;
-					a = o.element, Ga(e, t), Qa(t, r, null, n);
+					a = o.element, Ka(e, t), $a(t, r, null, n);
 					var s = t.memoizedState;
-					if (r = s.cache, Qi(t, I, r), r !== o.cache && ta(t, [I], n, !0), Za(), r = s.element, o.isDehydrated) {
+					if (r = s.cache, $i(t, F, r), r !== o.cache && na(t, [F], n, !0), Qa(), r = s.element, o.isDehydrated) {
 						if (o = {
 							element: r,
 							isDehydrated: !1,
@@ -9741,7 +9621,7 @@ var C = /* @__PURE__ */ s(((e) => {
 							break a;
 						}
 						if (r !== a) {
-							a = Ci(Error(i(424)), t), Ji(a), t = yc(e, t, r, n);
+							a = wi(Error(i(424)), t), Yi(a), t = yc(e, t, r, n);
 							break a;
 						}
 						switch (e = t.stateNode.containerInfo, e.nodeType) {
@@ -9750,9 +9630,9 @@ var C = /* @__PURE__ */ s(((e) => {
 								break;
 							default: e = e.nodeName === "HTML" ? e.ownerDocument.body : e;
 						}
-						for (P = cf(e.firstChild), Ri = t, F = !0, zi = null, Bi = !0, n = Ha(t, null, r, n), t.child = n; n;) n.flags = n.flags & -3 | 4096, n = n.sibling;
+						for (N = cf(e.firstChild), zi = t, P = !0, Bi = null, Vi = !0, n = Ua(t, null, r, n), t.child = n; n;) n.flags = n.flags & -3 | 4096, n = n.sibling;
 					} else {
-						if (Ki(), r === a) {
+						if (qi(), r === a) {
 							t = Ac(e, t, n);
 							break a;
 						}
@@ -9761,30 +9641,30 @@ var C = /* @__PURE__ */ s(((e) => {
 					t = t.child;
 				}
 				return t;
-			case 26: return hc(e, t), e === null ? (n = kf(t.type, null, t.pendingProps, null)) ? t.memoizedState = n : F || (n = t.type, e = t.pendingProps, r = Bd(he.current).createElement(n), r[ft] = t, r[pt] = e, Pd(r, n, e), N(r), t.stateNode = r) : t.memoizedState = kf(t.type, e.memoizedProps, t.pendingProps, e.memoizedState), null;
-			case 27: return ye(t), e === null && F && (r = t.stateNode = ff(t.type, t.pendingProps, he.current), Ri = t, Bi = !0, a = P, Zd(t.type) ? (lf = a, P = cf(r.firstChild)) : P = a), ac(e, t, t.pendingProps.children, n), hc(e, t), e === null && (t.flags |= 4194304), t.child;
-			case 5: return e === null && F && ((a = r = P) && (r = tf(r, t.type, t.pendingProps, Bi), r === null ? a = !1 : (t.stateNode = r, Ri = t, P = cf(r.firstChild), Bi = !1, a = !0)), a || Hi(t)), ye(t), a = t.type, o = t.pendingProps, s = e === null ? null : e.memoizedProps, r = o.children, Ud(a, o) ? r = null : s !== null && Ud(a, s) && (t.flags |= 32), t.memoizedState !== null && (a = wo(e, t, Do, null, null, n), Qf._currentValue = a), hc(e, t), ac(e, t, r, n), t.child;
-			case 6: return e === null && F && ((e = n = P) && (n = nf(n, t.pendingProps, Bi), n === null ? e = !1 : (t.stateNode = n, Ri = t, P = null, e = !0)), e || Hi(t)), null;
+			case 26: return hc(e, t), e === null ? (n = kf(t.type, null, t.pendingProps, null)) ? t.memoizedState = n : P || (n = t.type, e = t.pendingProps, r = Bd(he.current).createElement(n), r[ft] = t, r[pt] = e, Pd(r, n, e), Tt(r), t.stateNode = r) : t.memoizedState = kf(t.type, e.memoizedProps, t.pendingProps, e.memoizedState), null;
+			case 27: return ye(t), e === null && P && (r = t.stateNode = ff(t.type, t.pendingProps, he.current), zi = t, Vi = !0, a = N, Zd(t.type) ? (lf = a, N = cf(r.firstChild)) : N = a), ac(e, t, t.pendingProps.children, n), hc(e, t), e === null && (t.flags |= 4194304), t.child;
+			case 5: return e === null && P && ((a = r = N) && (r = tf(r, t.type, t.pendingProps, Vi), r === null ? a = !1 : (t.stateNode = r, zi = t, N = cf(r.firstChild), Vi = !1, a = !0)), a || Ui(t)), ye(t), a = t.type, o = t.pendingProps, s = e === null ? null : e.memoizedProps, r = o.children, Ud(a, o) ? r = null : s !== null && Ud(a, s) && (t.flags |= 32), t.memoizedState !== null && (a = To(e, t, Oo, null, null, n), Qf._currentValue = a), hc(e, t), ac(e, t, r, n), t.child;
+			case 6: return e === null && P && ((e = n = N) && (n = nf(n, t.pendingProps, Vi), n === null ? e = !1 : (t.stateNode = n, zi = t, N = null, e = !0)), e || Ui(t)), null;
 			case 13: return Cc(e, t, n);
-			case 4: return _e(t, t.stateNode.containerInfo), r = t.pendingProps, e === null ? t.child = Va(t, null, r, n) : ac(e, t, r, n), t.child;
+			case 4: return _e(t, t.stateNode.containerInfo), r = t.pendingProps, e === null ? t.child = Ha(t, null, r, n) : ac(e, t, r, n), t.child;
 			case 11: return oc(e, t, t.type, t.pendingProps, n);
 			case 7: return ac(e, t, t.pendingProps, n), t.child;
 			case 8: return ac(e, t, t.pendingProps.children, n), t.child;
 			case 12: return ac(e, t, t.pendingProps.children, n), t.child;
-			case 10: return r = t.pendingProps, Qi(t, t.type, r.value), ac(e, t, r.children, n), t.child;
-			case 9: return a = t.type._context, r = t.pendingProps.children, ia(t), a = aa(a), r = r(a), t.flags |= 1, ac(e, t, r, n), t.child;
+			case 10: return r = t.pendingProps, $i(t, t.type, r.value), ac(e, t, r.children, n), t.child;
+			case 9: return a = t.type._context, r = t.pendingProps.children, aa(t), a = oa(a), r = r(a), t.flags |= 1, ac(e, t, r, n), t.child;
 			case 14: return sc(e, t, t.type, t.pendingProps, n);
 			case 15: return cc(e, t, t.type, t.pendingProps, n);
 			case 19: return kc(e, t, n);
 			case 31: return mc(e, t, n);
 			case 22: return lc(e, t, n, t.pendingProps);
-			case 24: return ia(t), r = aa(I), e === null ? (a = Sa(), a === null && (a = K, o = da(), a.pooledCache = o, o.refCount++, o !== null && (a.pooledCacheLanes |= n), a = o), t.memoizedState = {
+			case 24: return aa(t), r = oa(F), e === null ? (a = Ca(), a === null && (a = K, o = fa(), a.pooledCache = o, o.refCount++, o !== null && (a.pooledCacheLanes |= n), a = o), t.memoizedState = {
 				parent: r,
 				cache: a
-			}, Wa(t), Qi(t, I, a)) : ((e.lanes & n) !== 0 && (Ga(e, t), Qa(t, null, null, n), Za()), a = e.memoizedState, o = t.memoizedState, a.parent === r ? (r = o.cache, Qi(t, I, r), r !== a.cache && ta(t, [I], n, !0)) : (a = {
+			}, Ga(t), $i(t, F, a)) : ((e.lanes & n) !== 0 && (Ka(e, t), $a(t, null, null, n), Qa()), a = e.memoizedState, o = t.memoizedState, a.parent === r ? (r = o.cache, $i(t, F, r), r !== a.cache && na(t, [F], n, !0)) : (a = {
 				parent: r,
 				cache: r
-			}, t.memoizedState = a, t.lanes === 0 && (t.memoizedState = t.updateQueue.baseState = a), Qi(t, I, r))), ac(e, t, t.pendingProps.children, n), t.child;
+			}, t.memoizedState = a, t.lanes === 0 && (t.memoizedState = t.updateQueue.baseState = a), $i(t, F, r))), ac(e, t, t.pendingProps.children, n), t.child;
 			case 29: throw t.pendingProps;
 		}
 		throw Error(i(156, t.tag));
@@ -9797,7 +9677,7 @@ var C = /* @__PURE__ */ s(((e) => {
 			if (e.flags |= 16777216, (i & 335544128) === i) {
 				if (e.stateNode.complete) e.flags |= 8192;
 				else if (wu()) e.flags |= 8192;
-				else throw Ma = Oa, Ea;
+				else throw Na = ka, Da;
 			}
 		} else e.flags &= -16777217;
 	}
@@ -9805,14 +9685,14 @@ var C = /* @__PURE__ */ s(((e) => {
 		if (t.type !== "stylesheet" || t.state.loading & 4) e.flags &= -16777217;
 		else if (e.flags |= 16777216, !Wf(t)) {
 			if (wu()) e.flags |= 8192;
-			else throw Ma = Oa, Ea;
+			else throw Na = ka, Da;
 		}
 	}
 	function Lc(e, t) {
 		t !== null && (e.flags |= 4), e.flags & 16384 && (t = e.tag === 22 ? 536870912 : tt(), e.lanes |= t, Yl |= t);
 	}
 	function Rc(e, t) {
-		if (!F) switch (e.tailMode) {
+		if (!P) switch (e.tailMode) {
 			case "hidden":
 				t = e.tail;
 				for (var n = null; t !== null;) t.alternate !== null && (n = t), t = t.sibling;
@@ -9832,7 +9712,7 @@ var C = /* @__PURE__ */ s(((e) => {
 	}
 	function zc(e, t, n) {
 		var r = t.pendingProps;
-		switch (Ii(t), t.tag) {
+		switch (Li(t), t.tag) {
 			case 16:
 			case 15:
 			case 0:
@@ -9843,7 +9723,7 @@ var C = /* @__PURE__ */ s(((e) => {
 			case 9:
 			case 14: return U(t), null;
 			case 1: return U(t), null;
-			case 3: return n = t.stateNode, r = null, e !== null && (r = e.memoizedState.cache), t.memoizedState.cache !== r && (t.flags |= 2048), $i(I), ve(), n.pendingContext && (n.context = n.pendingContext, n.pendingContext = null), (e === null || e.child === null) && (Gi(t) ? Pc(t) : e === null || e.memoizedState.isDehydrated && !(t.flags & 256) || (t.flags |= 1024, qi())), U(t), null;
+			case 3: return n = t.stateNode, r = null, e !== null && (r = e.memoizedState.cache), t.memoizedState.cache !== r && (t.flags |= 2048), ea(F), ve(), n.pendingContext && (n.context = n.pendingContext, n.pendingContext = null), (e === null || e.child === null) && (Ki(t) ? Pc(t) : e === null || e.memoizedState.isDehydrated && !(t.flags & 256) || (t.flags |= 1024, Ji())), U(t), null;
 			case 26:
 				var a = t.type, o = t.memoizedState;
 				return e === null ? (Pc(t), o === null ? (U(t), Fc(t, a, null, r, n)) : (U(t), Ic(t, o))) : o ? o === e.memoizedState ? (U(t), t.flags &= -16777217) : (Pc(t), U(t), Ic(t, o)) : (e = e.memoizedProps, e !== r && Pc(t), U(t), Fc(t, a, e, r, n)), null;
@@ -9854,7 +9734,7 @@ var C = /* @__PURE__ */ s(((e) => {
 						if (t.stateNode === null) throw Error(i(166));
 						return U(t), null;
 					}
-					e = pe.current, Gi(t) ? Ui(t, e) : (e = ff(a, r, n), t.stateNode = e, Pc(t));
+					e = pe.current, Ki(t) ? Wi(t, e) : (e = ff(a, r, n), t.stateNode = e, Pc(t));
 				}
 				return U(t), null;
 			case 5:
@@ -9864,7 +9744,7 @@ var C = /* @__PURE__ */ s(((e) => {
 						if (t.stateNode === null) throw Error(i(166));
 						return U(t), null;
 					}
-					if (o = pe.current, Gi(t)) Ui(t, o);
+					if (o = pe.current, Ki(t)) Wi(t, o);
 					else {
 						var s = Bd(he.current);
 						switch (o) {
@@ -9925,53 +9805,53 @@ var C = /* @__PURE__ */ s(((e) => {
 				if (e && t.stateNode != null) e.memoizedProps !== r && Pc(t);
 				else {
 					if (typeof r != "string" && t.stateNode === null) throw Error(i(166));
-					if (e = he.current, Gi(t)) {
-						if (e = t.stateNode, n = t.memoizedProps, r = null, a = Ri, a !== null) switch (a.tag) {
+					if (e = he.current, Ki(t)) {
+						if (e = t.stateNode, n = t.memoizedProps, r = null, a = zi, a !== null) switch (a.tag) {
 							case 27:
 							case 5: r = a.memoizedProps;
 						}
-						e[ft] = t, e = !!(e.nodeValue === n || r !== null && !0 === r.suppressHydrationWarning || Md(e.nodeValue, n)), e || Hi(t, !0);
+						e[ft] = t, e = !!(e.nodeValue === n || r !== null && !0 === r.suppressHydrationWarning || Md(e.nodeValue, n)), e || Ui(t, !0);
 					} else e = Bd(e).createTextNode(r), e[ft] = t, t.stateNode = e;
 				}
 				return U(t), null;
 			case 31:
 				if (n = t.memoizedState, e === null || e.memoizedState !== null) {
-					if (r = Gi(t), n !== null) {
+					if (r = Ki(t), n !== null) {
 						if (e === null) {
 							if (!r) throw Error(i(318));
 							if (e = t.memoizedState, e = e === null ? null : e.dehydrated, !e) throw Error(i(557));
 							e[ft] = t;
-						} else Ki(), !(t.flags & 128) && (t.memoizedState = null), t.flags |= 4;
+						} else qi(), !(t.flags & 128) && (t.memoizedState = null), t.flags |= 4;
 						U(t), e = !1;
-					} else n = qi(), e !== null && e.memoizedState !== null && (e.memoizedState.hydrationErrors = n), e = !0;
-					if (!e) return t.flags & 256 ? (po(t), t) : (po(t), null);
+					} else n = Ji(), e !== null && e.memoizedState !== null && (e.memoizedState.hydrationErrors = n), e = !0;
+					if (!e) return t.flags & 256 ? (mo(t), t) : (mo(t), null);
 					if (t.flags & 128) throw Error(i(558));
 				}
 				return U(t), null;
 			case 13:
 				if (r = t.memoizedState, e === null || e.memoizedState !== null && e.memoizedState.dehydrated !== null) {
-					if (a = Gi(t), r !== null && r.dehydrated !== null) {
+					if (a = Ki(t), r !== null && r.dehydrated !== null) {
 						if (e === null) {
 							if (!a) throw Error(i(318));
 							if (a = t.memoizedState, a = a === null ? null : a.dehydrated, !a) throw Error(i(317));
 							a[ft] = t;
-						} else Ki(), !(t.flags & 128) && (t.memoizedState = null), t.flags |= 4;
+						} else qi(), !(t.flags & 128) && (t.memoizedState = null), t.flags |= 4;
 						U(t), a = !1;
-					} else a = qi(), e !== null && e.memoizedState !== null && (e.memoizedState.hydrationErrors = a), a = !0;
-					if (!a) return t.flags & 256 ? (po(t), t) : (po(t), null);
+					} else a = Ji(), e !== null && e.memoizedState !== null && (e.memoizedState.hydrationErrors = a), a = !0;
+					if (!a) return t.flags & 256 ? (mo(t), t) : (mo(t), null);
 				}
-				return po(t), t.flags & 128 ? (t.lanes = n, t) : (n = r !== null, e = e !== null && e.memoizedState !== null, n && (r = t.child, a = null, r.alternate !== null && r.alternate.memoizedState !== null && r.alternate.memoizedState.cachePool !== null && (a = r.alternate.memoizedState.cachePool.pool), o = null, r.memoizedState !== null && r.memoizedState.cachePool !== null && (o = r.memoizedState.cachePool.pool), o !== a && (r.flags |= 2048)), n !== e && n && (t.child.flags |= 8192), Lc(t, t.updateQueue), U(t), null);
+				return mo(t), t.flags & 128 ? (t.lanes = n, t) : (n = r !== null, e = e !== null && e.memoizedState !== null, n && (r = t.child, a = null, r.alternate !== null && r.alternate.memoizedState !== null && r.alternate.memoizedState.cachePool !== null && (a = r.alternate.memoizedState.cachePool.pool), o = null, r.memoizedState !== null && r.memoizedState.cachePool !== null && (o = r.memoizedState.cachePool.pool), o !== a && (r.flags |= 2048)), n !== e && n && (t.child.flags |= 8192), Lc(t, t.updateQueue), U(t), null);
 			case 4: return ve(), e === null && Sd(t.stateNode.containerInfo), U(t), null;
-			case 10: return $i(t.type), U(t), null;
+			case 10: return ea(t.type), U(t), null;
 			case 19:
-				if (k(L), r = t.memoizedState, r === null) return U(t), null;
+				if (k(I), r = t.memoizedState, r === null) return U(t), null;
 				if (a = !!(t.flags & 128), o = r.rendering, o === null) {
 					if (a) Rc(r, !1);
 					else {
 						if (X !== 0 || e !== null && e.flags & 128) for (e = t.child; e !== null;) {
-							if (o = mo(e), o !== null) {
-								for (t.flags |= 128, Rc(r, !1), e = o.updateQueue, t.updateQueue = e, Lc(t, e), t.subtreeFlags = 0, e = n, n = t.child; n !== null;) gi(n, e), n = n.sibling;
-								return A(L, L.current & 1 | 2), F && Ni(t, r.treeForkCount), t.child;
+							if (o = ho(e), o !== null) {
+								for (t.flags |= 128, Rc(r, !1), e = o.updateQueue, t.updateQueue = e, Lc(t, e), t.subtreeFlags = 0, e = n, n = t.child; n !== null;) _i(n, e), n = n.sibling;
+								return A(I, I.current & 1 | 2), P && Pi(t, r.treeForkCount), t.child;
 							}
 							e = e.sibling;
 						}
@@ -9979,54 +9859,54 @@ var C = /* @__PURE__ */ s(((e) => {
 					}
 				} else {
 					if (!a) {
-						if (e = mo(o), e !== null) {
-							if (t.flags |= 128, a = !0, e = e.updateQueue, t.updateQueue = e, Lc(t, e), Rc(r, !0), r.tail === null && r.tailMode === "hidden" && !o.alternate && !F) return U(t), null;
+						if (e = ho(o), e !== null) {
+							if (t.flags |= 128, a = !0, e = e.updateQueue, t.updateQueue = e, Lc(t, e), Rc(r, !0), r.tail === null && r.tailMode === "hidden" && !o.alternate && !P) return U(t), null;
 						} else 2 * j() - r.renderingStartTime > tu && n !== 536870912 && (t.flags |= 128, a = !0, Rc(r, !1), t.lanes = 4194304);
 					}
 					r.isBackwards ? (o.sibling = t.child, t.child = o) : (e = r.last, e === null ? t.child = o : e.sibling = o, r.last = o);
 				}
-				return r.tail === null ? (U(t), null) : (e = r.tail, r.rendering = e, r.tail = e.sibling, r.renderingStartTime = j(), e.sibling = null, n = L.current, A(L, a ? n & 1 | 2 : n & 1), F && Ni(t, r.treeForkCount), e);
+				return r.tail === null ? (U(t), null) : (e = r.tail, r.rendering = e, r.tail = e.sibling, r.renderingStartTime = j(), e.sibling = null, n = I.current, A(I, a ? n & 1 | 2 : n & 1), P && Pi(t, r.treeForkCount), e);
 			case 22:
-			case 23: return po(t), ao(), r = t.memoizedState !== null, e === null ? r && (t.flags |= 8192) : e.memoizedState !== null !== r && (t.flags |= 8192), r ? n & 536870912 && !(t.flags & 128) && (U(t), t.subtreeFlags & 6 && (t.flags |= 8192)) : U(t), n = t.updateQueue, n !== null && Lc(t, n.retryQueue), n = null, e !== null && e.memoizedState !== null && e.memoizedState.cachePool !== null && (n = e.memoizedState.cachePool.pool), r = null, t.memoizedState !== null && t.memoizedState.cachePool !== null && (r = t.memoizedState.cachePool.pool), r !== n && (t.flags |= 2048), e !== null && k(xa), null;
-			case 24: return n = null, e !== null && (n = e.memoizedState.cache), t.memoizedState.cache !== n && (t.flags |= 2048), $i(I), U(t), null;
+			case 23: return mo(t), oo(), r = t.memoizedState !== null, e === null ? r && (t.flags |= 8192) : e.memoizedState !== null !== r && (t.flags |= 8192), r ? n & 536870912 && !(t.flags & 128) && (U(t), t.subtreeFlags & 6 && (t.flags |= 8192)) : U(t), n = t.updateQueue, n !== null && Lc(t, n.retryQueue), n = null, e !== null && e.memoizedState !== null && e.memoizedState.cachePool !== null && (n = e.memoizedState.cachePool.pool), r = null, t.memoizedState !== null && t.memoizedState.cachePool !== null && (r = t.memoizedState.cachePool.pool), r !== n && (t.flags |= 2048), e !== null && k(Sa), null;
+			case 24: return n = null, e !== null && (n = e.memoizedState.cache), t.memoizedState.cache !== n && (t.flags |= 2048), ea(F), U(t), null;
 			case 25: return null;
 			case 30: return null;
 		}
 		throw Error(i(156, t.tag));
 	}
 	function Bc(e, t) {
-		switch (Ii(t), t.tag) {
+		switch (Li(t), t.tag) {
 			case 1: return e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
-			case 3: return $i(I), ve(), e = t.flags, e & 65536 && !(e & 128) ? (t.flags = e & -65537 | 128, t) : null;
+			case 3: return ea(F), ve(), e = t.flags, e & 65536 && !(e & 128) ? (t.flags = e & -65537 | 128, t) : null;
 			case 26:
 			case 27:
 			case 5: return be(t), null;
 			case 31:
 				if (t.memoizedState !== null) {
-					if (po(t), t.alternate === null) throw Error(i(340));
-					Ki();
+					if (mo(t), t.alternate === null) throw Error(i(340));
+					qi();
 				}
 				return e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
 			case 13:
-				if (po(t), e = t.memoizedState, e !== null && e.dehydrated !== null) {
+				if (mo(t), e = t.memoizedState, e !== null && e.dehydrated !== null) {
 					if (t.alternate === null) throw Error(i(340));
-					Ki();
+					qi();
 				}
 				return e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
-			case 19: return k(L), null;
+			case 19: return k(I), null;
 			case 4: return ve(), null;
-			case 10: return $i(t.type), null;
+			case 10: return ea(t.type), null;
 			case 22:
-			case 23: return po(t), ao(), e !== null && k(xa), e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
-			case 24: return $i(I), null;
+			case 23: return mo(t), oo(), e !== null && k(Sa), e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
+			case 24: return ea(F), null;
 			case 25: return null;
 			default: return null;
 		}
 	}
 	function Vc(e, t) {
-		switch (Ii(t), t.tag) {
+		switch (Li(t), t.tag) {
 			case 3:
-				$i(I), ve();
+				ea(F), ve();
 				break;
 			case 26:
 			case 27:
@@ -10037,22 +9917,22 @@ var C = /* @__PURE__ */ s(((e) => {
 				ve();
 				break;
 			case 31:
-				t.memoizedState !== null && po(t);
+				t.memoizedState !== null && mo(t);
 				break;
 			case 13:
-				po(t);
+				mo(t);
 				break;
 			case 19:
-				k(L);
+				k(I);
 				break;
 			case 10:
-				$i(t.type);
+				ea(t.type);
 				break;
 			case 22:
 			case 23:
-				po(t), ao(), e !== null && k(xa);
+				mo(t), oo(), e !== null && k(Sa);
 				break;
-			case 24: $i(I);
+			case 24: ea(F);
 		}
 	}
 	function Hc(e, t) {
@@ -10105,14 +9985,14 @@ var C = /* @__PURE__ */ s(((e) => {
 		if (t !== null) {
 			var n = e.stateNode;
 			try {
-				eo(t, n);
+				to(t, n);
 			} catch (t) {
 				Z(e, e.return, t);
 			}
 		}
 	}
 	function Gc(e, t, n) {
-		n.props = qs(e.type, e.memoizedProps), n.state = e.memoizedState;
+		n.props = Js(e.type, e.memoizedProps), n.state = e.memoizedState;
 		try {
 			n.componentWillUnmount();
 		} catch (n) {
@@ -10200,7 +10080,7 @@ var C = /* @__PURE__ */ s(((e) => {
 	}
 	function Qc(e, t, n) {
 		var r = e.tag;
-		if (r === 5 || r === 6) e = e.stateNode, t ? (n.nodeType === 9 ? n.body : n.nodeName === "HTML" ? n.ownerDocument.body : n).insertBefore(e, t) : (t = n.nodeType === 9 ? n.body : n.nodeName === "HTML" ? n.ownerDocument.body : n, t.appendChild(e), n = n._reactRootContainer, n != null || t.onclick !== null || (t.onclick = an));
+		if (r === 5 || r === 6) e = e.stateNode, t ? (n.nodeType === 9 ? n.body : n.nodeName === "HTML" ? n.ownerDocument.body : n).insertBefore(e, t) : (t = n.nodeType === 9 ? n.body : n.nodeName === "HTML" ? n.ownerDocument.body : n, t.appendChild(e), n = n._reactRootContainer, n != null || t.onclick !== null || (t.onclick = on));
 		else if (r !== 4 && (r === 27 && Zd(e.type) && (n = e.stateNode, t = null), e = e.child, e !== null)) for (Qc(e, t, n), e = e.sibling; e !== null;) Qc(e, t, n), e = e.sibling;
 	}
 	function $c(e, t, n) {
@@ -10219,7 +10099,7 @@ var C = /* @__PURE__ */ s(((e) => {
 	}
 	var tl = !1, nl = !1, rl = !1, il = typeof WeakSet == "function" ? WeakSet : Set, al = null;
 	function ol(e, t) {
-		if (e = e.containerInfo, Rd = sp, e = Mr(e), Nr(e)) {
+		if (e = e.containerInfo, Rd = sp, e = Nr(e), Pr(e)) {
 			if ("selectionStart" in e) var n = {
 				start: e.selectionStart,
 				end: e.selectionEnd
@@ -10273,7 +10153,7 @@ var C = /* @__PURE__ */ s(((e) => {
 					if (e & 1024 && o !== null) {
 						e = void 0, n = t, a = o.memoizedProps, o = o.memoizedState, r = n.stateNode;
 						try {
-							var h = qs(n.type, a);
+							var h = Js(n.type, a);
 							e = r.getSnapshotBeforeUpdate(h, o), r.__reactInternalSnapshotBeforeUpdate = e;
 						} catch (e) {
 							Z(n, n.return, e);
@@ -10324,7 +10204,7 @@ var C = /* @__PURE__ */ s(((e) => {
 						Z(n, n.return, e);
 					}
 					else {
-						var i = qs(n.type, t.memoizedProps);
+						var i = Js(n.type, t.memoizedProps);
 						t = t.memoizedState;
 						try {
 							e.componentDidUpdate(i, t, e.__reactInternalSnapshotBeforeUpdate);
@@ -10345,7 +10225,7 @@ var C = /* @__PURE__ */ s(((e) => {
 						case 1: t = n.child.stateNode;
 					}
 					try {
-						eo(e, t);
+						to(e, t);
 					} catch (e) {
 						Z(n, n.return, e);
 					}
@@ -10525,7 +10405,7 @@ var C = /* @__PURE__ */ s(((e) => {
 									r = e.type, n = e.memoizedProps, a = a.ownerDocument || a;
 									b: switch (r) {
 										case "title":
-											o = a.getElementsByTagName("title")[0], (!o || o[yt] || o[ft] || o.namespaceURI === "http://www.w3.org/2000/svg" || o.hasAttribute("itemprop")) && (o = a.createElement(r), a.head.insertBefore(o, a.querySelector("head > title"))), Pd(o, r, n), o[ft] = e, N(o), r = o;
+											o = a.getElementsByTagName("title")[0], (!o || o[yt] || o[ft] || o.namespaceURI === "http://www.w3.org/2000/svg" || o.hasAttribute("itemprop")) && (o = a.createElement(r), a.head.insertBefore(o, a.querySelector("head > title"))), Pd(o, r, n), o[ft] = e, Tt(o), r = o;
 											break a;
 										case "link":
 											var s = Vf("link", "href", a).get(r + (n.href || ""));
@@ -10548,7 +10428,7 @@ var C = /* @__PURE__ */ s(((e) => {
 											break;
 										default: throw Error(i(468, r));
 									}
-									o[ft] = e, N(o), r = o;
+									o[ft] = e, Tt(o), r = o;
 								}
 								e.stateNode = r;
 							} else Hf(a, e.type, e.stateNode);
@@ -10563,7 +10443,7 @@ var C = /* @__PURE__ */ s(((e) => {
 				if (gl(t, e), yl(e), r & 512 && (nl || n === null || qc(n, n.return)), e.flags & 32) {
 					a = e.stateNode;
 					try {
-						Xt(a, "");
+						Zt(a, "");
 					} catch (t) {
 						Z(e, e.return, t);
 					}
@@ -10678,7 +10558,7 @@ var C = /* @__PURE__ */ s(((e) => {
 						break;
 					case 5:
 						var o = n.stateNode;
-						n.flags & 32 && (Xt(o, ""), n.flags &= -33), $c(e, Zc(e), o);
+						n.flags & 32 && (Zt(o, ""), n.flags &= -33), $c(e, Zc(e), o);
 						break;
 					case 3:
 					case 4:
@@ -10753,7 +10633,7 @@ var C = /* @__PURE__ */ s(((e) => {
 						var s = r.stateNode;
 						try {
 							var c = i.shared.hiddenCallbacks;
-							if (c !== null) for (i.shared.hiddenCallbacks = null, i = 0; i < c.length; i++) $a(c[i], s);
+							if (c !== null) for (i.shared.hiddenCallbacks = null, i = 0; i < c.length; i++) eo(c[i], s);
 						} catch (e) {
 							Z(r, r.return, e);
 						}
@@ -10785,10 +10665,10 @@ var C = /* @__PURE__ */ s(((e) => {
 	}
 	function wl(e, t) {
 		var n = null;
-		e !== null && e.memoizedState !== null && e.memoizedState.cachePool !== null && (n = e.memoizedState.cachePool.pool), e = null, t.memoizedState !== null && t.memoizedState.cachePool !== null && (e = t.memoizedState.cachePool.pool), e !== n && (e != null && e.refCount++, n != null && fa(n));
+		e !== null && e.memoizedState !== null && e.memoizedState.cachePool !== null && (n = e.memoizedState.cachePool.pool), e = null, t.memoizedState !== null && t.memoizedState.cachePool !== null && (e = t.memoizedState.cachePool.pool), e !== n && (e != null && e.refCount++, n != null && pa(n));
 	}
 	function Tl(e, t) {
-		e = null, t.alternate !== null && (e = t.alternate.memoizedState.cache), t = t.memoizedState.cache, t !== e && (t.refCount++, e != null && fa(e));
+		e = null, t.alternate !== null && (e = t.alternate.memoizedState.cache), t = t.memoizedState.cache, t !== e && (t.refCount++, e != null && pa(e));
 	}
 	function El(e, t, n, r) {
 		if (t.subtreeFlags & 10256) for (t = t.child; t !== null;) Dl(e, t, n, r), t = t.sibling;
@@ -10805,7 +10685,7 @@ var C = /* @__PURE__ */ s(((e) => {
 				El(e, t, n, r);
 				break;
 			case 3:
-				El(e, t, n, r), i & 2048 && (e = null, t.alternate !== null && (e = t.alternate.memoizedState.cache), t = t.memoizedState.cache, t !== e && (t.refCount++, e != null && fa(e)));
+				El(e, t, n, r), i & 2048 && (e = null, t.alternate !== null && (e = t.alternate.memoizedState.cache), t = t.memoizedState.cache, t !== e && (t.refCount++, e != null && pa(e)));
 				break;
 			case 12:
 				if (i & 2048) {
@@ -10974,7 +10854,7 @@ var C = /* @__PURE__ */ s(((e) => {
 						r != null && r.refCount++;
 					}
 					break;
-				case 24: fa(n.memoizedState.cache);
+				case 24: pa(n.memoizedState.cache);
 			}
 			if (r = n.child, r !== null) r.return = n, al = r;
 			else a: for (n = e; al !== null;) {
@@ -10994,11 +10874,11 @@ var C = /* @__PURE__ */ s(((e) => {
 	}
 	var Rl = {
 		getCacheForType: function(e) {
-			var t = aa(I), n = t.data.get(e);
+			var t = oa(F), n = t.data.get(e);
 			return n === void 0 && (n = e(), t.data.set(e, n)), n;
 		},
 		cacheSignal: function() {
-			return aa(I).controller.signal;
+			return oa(F).controller.signal;
 		}
 	}, zl = typeof WeakMap == "function" ? WeakMap : Map, G = 0, K = null, q = null, J = 0, Y = 0, Bl = null, Vl = !1, Hl = !1, Ul = !1, Wl = 0, X = 0, Gl = 0, Kl = 0, ql = 0, Jl = 0, Yl = 0, Xl = null, Zl = null, Ql = !1, $l = 0, eu = 0, tu = Infinity, nu = null, ru = null, iu = 0, au = null, ou = null, su = 0, cu = 0, lu = null, uu = null, du = 0, fu = null;
 	function pu() {
@@ -11006,12 +10886,12 @@ var C = /* @__PURE__ */ s(((e) => {
 	}
 	function mu() {
 		if (Jl === 0) {
-			if (!(J & 536870912) || F) {
+			if (!(J & 536870912) || P) {
 				var e = Ye;
 				Ye <<= 1, !(Ye & 3932160) && (Ye = 262144), Jl = e;
 			} else Jl = 536870912;
 		}
-		return e = oo.current, e !== null && (e.flags |= 32), Jl;
+		return e = so.current, e !== null && (e.flags |= 32), Jl;
 	}
 	function hu(e, t, n) {
 		(e === K && (Y === 2 || Y === 9) || e.cancelPendingCommit !== null) && (Su(e, 0), yu(e, J, Jl, !1)), rt(e, n), (!(G & 2) || e !== K) && (e === K && (!(G & 2) && (Kl |= n), X === 4 && yu(e, J, Jl, !1)), rd(e));
@@ -11089,7 +10969,7 @@ var C = /* @__PURE__ */ s(((e) => {
 				suspenseyImages: [],
 				waitingForImages: !0,
 				waitingForViewTransition: !1,
-				unsuspend: an
+				unsuspend: on
 			}, Ml(t, a, d);
 			var m = (a & 62914560) === a ? $l - j() : (a & 4194048) === a ? eu - j() : 0;
 			if (m = qf(d, m), m !== null) {
@@ -11106,7 +10986,7 @@ var C = /* @__PURE__ */ s(((e) => {
 				var i = n[r], a = i.getSnapshot;
 				i = i.value;
 				try {
-					if (!Dr(a(), i)) return !1;
+					if (!Or(a(), i)) return !1;
 				} catch {
 					return !1;
 				}
@@ -11137,38 +11017,38 @@ var C = /* @__PURE__ */ s(((e) => {
 	function xu() {
 		if (q !== null) {
 			if (Y === 0) var e = q.return;
-			else e = q, Zi = Xi = null, Ao(e), Fa = null, Ia = 0, e = q;
+			else e = q, Qi = Zi = null, jo(e), Ia = null, La = 0, e = q;
 			for (; e !== null;) Vc(e.alternate, e), e = e.return;
 			q = null;
 		}
 	}
 	function Su(e, t) {
 		var n = e.timeoutHandle;
-		n !== -1 && (e.timeoutHandle = -1, qd(n)), n = e.cancelPendingCommit, n !== null && (e.cancelPendingCommit = null, n()), su = 0, xu(), K = e, q = n = hi(e.current, null), J = t, Y = 0, Bl = null, Vl = !1, Hl = $e(e, t), Ul = !1, Yl = Jl = ql = Kl = Gl = X = 0, Zl = Xl = null, Ql = !1, t & 8 && (t |= t & 32);
+		n !== -1 && (e.timeoutHandle = -1, qd(n)), n = e.cancelPendingCommit, n !== null && (e.cancelPendingCommit = null, n()), su = 0, xu(), K = e, q = n = gi(e.current, null), J = t, Y = 0, Bl = null, Vl = !1, Hl = $e(e, t), Ul = !1, Yl = Jl = ql = Kl = Gl = X = 0, Zl = Xl = null, Ql = !1, t & 8 && (t |= t & 32);
 		var r = e.entangledLanes;
 		if (r !== 0) for (e = e.entanglements, r &= t; 0 < r;) {
 			var i = 31 - We(r), a = 1 << i;
 			t |= e[i], r &= ~a;
 		}
-		return Wl = t, ai(), n;
+		return Wl = t, oi(), n;
 	}
 	function Cu(e, t) {
-		R = null, D.H = zs, t === Ta || t === Da ? (t = Na(), Y = 3) : t === Ea ? (t = Na(), Y = 4) : Y = t === rc ? 8 : typeof t == "object" && t && typeof t.then == "function" ? 6 : 1, Bl = t, q === null && (X = 1, Zs(e, Ci(t, e.current)));
+		L = null, D.H = Bs, t === Ea || t === Oa ? (t = Pa(), Y = 3) : t === Da ? (t = Pa(), Y = 4) : Y = t === ic ? 8 : typeof t == "object" && t && typeof t.then == "function" ? 6 : 1, Bl = t, q === null && (X = 1, Qs(e, wi(t, e.current)));
 	}
 	function wu() {
-		var e = oo.current;
-		return e === null ? !0 : (J & 4194048) === J ? so === null : (J & 62914560) === J || J & 536870912 ? e === so : !1;
+		var e = so.current;
+		return e === null ? !0 : (J & 4194048) === J ? co === null : (J & 62914560) === J || J & 536870912 ? e === co : !1;
 	}
 	function Tu() {
 		var e = D.H;
-		return D.H = zs, e === null ? zs : e;
+		return D.H = Bs, e === null ? Bs : e;
 	}
 	function Eu() {
 		var e = D.A;
 		return D.A = Rl, e;
 	}
 	function Du() {
-		X = 4, Vl || (J & 4194048) !== J && oo.current !== null || (Hl = !0), !(Gl & 134217727) && !(Kl & 134217727) || K === null || yu(K, J, Jl, !1);
+		X = 4, Vl || (J & 4194048) !== J && so.current !== null || (Hl = !0), !(Gl & 134217727) && !(Kl & 134217727) || K === null || yu(K, J, Jl, !1);
 	}
 	function Ou(e, t, n) {
 		var r = G;
@@ -11188,7 +11068,7 @@ var C = /* @__PURE__ */ s(((e) => {
 						case 2:
 						case 9:
 						case 6:
-							oo.current === null && (t = !0);
+							so.current === null && (t = !0);
 							var l = Y;
 							if (Y = 0, Bl = null, Pu(e, s, c, l), n && Hl) {
 								o = 0;
@@ -11204,7 +11084,7 @@ var C = /* @__PURE__ */ s(((e) => {
 				Cu(e, t);
 			}
 		while (1);
-		return t && e.shellSuspendCounter++, Zi = Xi = null, G = r, D.H = i, D.A = a, q === null && (K = null, J = 0, ai()), o;
+		return t && e.shellSuspendCounter++, Qi = Zi = null, G = r, D.H = i, D.A = a, q === null && (K = null, J = 0, oi()), o;
 	}
 	function ku() {
 		for (; q !== null;) Mu(q);
@@ -11225,7 +11105,7 @@ var C = /* @__PURE__ */ s(((e) => {
 							break;
 						case 2:
 						case 9:
-							if (ka(o)) {
+							if (Aa(o)) {
 								Y = 0, Bl = null, Nu(t);
 								break;
 							}
@@ -11240,7 +11120,7 @@ var C = /* @__PURE__ */ s(((e) => {
 							Y = 5;
 							break a;
 						case 7:
-							ka(o) ? (Y = 0, Bl = null, Nu(t)) : (Y = 0, Bl = null, Pu(e, t, o, 7));
+							Aa(o) ? (Y = 0, Bl = null, Nu(t)) : (Y = 0, Bl = null, Pu(e, t, o, 7));
 							break;
 						case 5:
 							var s = null;
@@ -11277,7 +11157,7 @@ var C = /* @__PURE__ */ s(((e) => {
 				Cu(e, t);
 			}
 		while (1);
-		return Zi = Xi = null, D.H = r, D.A = a, G = n, q === null ? (K = null, J = 0, ai(), X) : 0;
+		return Qi = Zi = null, D.H = r, D.A = a, G = n, q === null ? (K = null, J = 0, oi(), X) : 0;
 	}
 	function ju() {
 		for (; q !== null && !je();) Mu(q);
@@ -11296,25 +11176,25 @@ var C = /* @__PURE__ */ s(((e) => {
 			case 11:
 				t = _c(n, t, t.pendingProps, t.type.render, t.ref, J);
 				break;
-			case 5: Ao(t);
-			default: Vc(n, t), t = q = gi(t, Wl), t = Nc(n, t, Wl);
+			case 5: jo(t);
+			default: Vc(n, t), t = q = _i(t, Wl), t = Nc(n, t, Wl);
 		}
 		e.memoizedProps = e.pendingProps, t === null ? Fu(e) : q = t;
 	}
 	function Pu(e, t, n, r) {
-		Zi = Xi = null, Ao(t), Fa = null, Ia = 0;
+		Qi = Zi = null, jo(t), Ia = null, La = 0;
 		var i = t.return;
 		try {
-			if (nc(e, i, t, n, J)) {
-				X = 1, Zs(e, Ci(n, e.current)), q = null;
+			if (rc(e, i, t, n, J)) {
+				X = 1, Qs(e, wi(n, e.current)), q = null;
 				return;
 			}
 		} catch (t) {
 			if (i !== null) throw q = i, t;
-			X = 1, Zs(e, Ci(n, e.current)), q = null;
+			X = 1, Qs(e, wi(n, e.current)), q = null;
 			return;
 		}
-		t.flags & 32768 ? (F || r === 1 ? e = !0 : Hl || J & 536870912 ? e = !1 : (Vl = e = !0, (r === 2 || r === 9 || r === 3 || r === 6) && (r = oo.current, r !== null && r.tag === 13 && (r.flags |= 16384))), Iu(t, e)) : Fu(t);
+		t.flags & 32768 ? (P || r === 1 ? e = !0 : Hl || J & 536870912 ? e = !1 : (Vl = e = !0, (r === 2 || r === 9 || r === 3 || r === 6) && (r = so.current, r !== null && r.tag === 13 && (r.flags |= 16384))), Iu(t, e)) : Fu(t);
 	}
 	function Fu(e) {
 		var t = e;
@@ -11360,7 +11240,7 @@ var C = /* @__PURE__ */ s(((e) => {
 		if (G & 6) throw Error(i(327));
 		if (t !== null) {
 			if (t === e.current) throw Error(i(177));
-			if (o = t.lanes | t.childLanes, o |= ii, it(e, n, o, s, c, l), e === K && (q = K = null, J = 0), ou = t, au = e, su = n, cu = o, lu = a, uu = r, t.subtreeFlags & 10256 || t.flags & 10256 ? (e.callbackNode = null, e.callbackPriority = 0, Xu(Ie, function() {
+			if (o = t.lanes | t.childLanes, o |= ai, it(e, n, o, s, c, l), e === K && (q = K = null, J = 0), ou = t, au = e, su = n, cu = o, lu = a, uu = r, t.subtreeFlags & 10256 || t.flags & 10256 ? (e.callbackNode = null, e.callbackPriority = 0, Xu(Ie, function() {
 				return Uu(), null;
 			})) : (e.callbackNode = null, e.callbackPriority = 0), r = !!(t.flags & 13878), t.subtreeFlags & 13878 || r) {
 				r = D.T, D.T = null, a = O.p, O.p = 2, s = G, G |= 4;
@@ -11385,9 +11265,9 @@ var C = /* @__PURE__ */ s(((e) => {
 				G |= 4;
 				try {
 					vl(t, e);
-					var a = zd, o = Mr(e.containerInfo), s = a.focusedElem, c = a.selectionRange;
-					if (o !== s && s && s.ownerDocument && jr(s.ownerDocument.documentElement, s)) {
-						if (c !== null && Nr(s)) {
+					var a = zd, o = Nr(e.containerInfo), s = a.focusedElem, c = a.selectionRange;
+					if (o !== s && s && s.ownerDocument && Mr(s.ownerDocument.documentElement, s)) {
+						if (c !== null && Pr(s)) {
 							var l = c.start, u = c.end;
 							if (u === void 0 && (u = l), "selectionStart" in s) s.selectionStart = l, s.selectionEnd = Math.min(u, s.value.length);
 							else {
@@ -11395,7 +11275,7 @@ var C = /* @__PURE__ */ s(((e) => {
 								if (f.getSelection) {
 									var p = f.getSelection(), m = s.textContent.length, h = Math.min(c.start, m), g = c.end === void 0 ? h : Math.min(c.end, m);
 									!p.extend && h > g && (o = g, g = h, h = o);
-									var _ = Ar(s, h), v = Ar(s, g);
+									var _ = jr(s, h), v = jr(s, g);
 									if (_ && v && (p.rangeCount !== 1 || p.anchorNode !== _.node || p.anchorOffset !== _.offset || p.focusNode !== v.node || p.focusOffset !== v.offset)) {
 										var y = d.createRange();
 										y.setStart(_.node, _.offset), p.removeAllRanges(), h > g ? (p.addRange(y), p.extend(v.node, v.offset)) : (y.setEnd(v.node, v.offset), p.addRange(y));
@@ -11464,7 +11344,7 @@ var C = /* @__PURE__ */ s(((e) => {
 		}
 	}
 	function Vu(e, t) {
-		(e.pooledCacheLanes &= t) === 0 && (t = e.pooledCache, t != null && (e.pooledCache = null, fa(t)));
+		(e.pooledCacheLanes &= t) === 0 && (t = e.pooledCache, t != null && (e.pooledCache = null, pa(t)));
 	}
 	function Hu() {
 		return Ru(), zu(), Bu(), Uu();
@@ -11488,7 +11368,7 @@ var C = /* @__PURE__ */ s(((e) => {
 		}
 	}
 	function Wu(e, t, n) {
-		t = Ci(n, t), t = $s(e.stateNode, t, 2), e = qa(e, t, 2), e !== null && (rt(e, 2), rd(e));
+		t = wi(n, t), t = ec(e.stateNode, t, 2), e = Ja(e, t, 2), e !== null && (rt(e, 2), rd(e));
 	}
 	function Z(e, t, n) {
 		if (e.tag === 3) Wu(e, e, n);
@@ -11500,7 +11380,7 @@ var C = /* @__PURE__ */ s(((e) => {
 			if (t.tag === 1) {
 				var r = t.stateNode;
 				if (typeof t.type.getDerivedStateFromError == "function" || typeof r.componentDidCatch == "function" && (ru === null || !ru.has(r))) {
-					e = Ci(n, e), n = ec(2), r = qa(t, n, 2), r !== null && (tc(n, r, t, e), rt(r, 2), rd(r));
+					e = wi(n, e), n = tc(2), r = Ja(t, n, 2), r !== null && (nc(n, r, t, e), rt(r, 2), rd(r));
 					break;
 				}
 			}
@@ -11521,7 +11401,7 @@ var C = /* @__PURE__ */ s(((e) => {
 		r !== null && r.delete(t), e.pingedLanes |= e.suspendedLanes & n, e.warmLanes &= ~n, K === e && (J & n) === n && (X === 4 || X === 3 && (J & 62914560) === J && 300 > j() - $l ? !(G & 2) && Su(e, 0) : ql |= n, Yl === J && (Yl = 0)), rd(e);
 	}
 	function qu(e, t) {
-		t === 0 && (t = tt()), e = ci(e, t), e !== null && (rt(e, t), rd(e));
+		t === 0 && (t = tt()), e = li(e, t), e !== null && (rt(e, t), rd(e));
 	}
 	function Ju(e) {
 		var t = e.memoizedState, n = 0;
@@ -11630,13 +11510,13 @@ var C = /* @__PURE__ */ s(((e) => {
 	}
 	function dd() {
 		if (nd === 0) {
-			var e = ha;
+			var e = ga;
 			e === 0 && (e = Je, Je <<= 1, !(Je & 261888) && (Je = 256)), nd = e;
 		}
 		return nd;
 	}
 	function fd(e) {
-		return e == null || typeof e == "symbol" || typeof e == "boolean" ? null : typeof e == "function" ? e : rn("" + e);
+		return e == null || typeof e == "symbol" || typeof e == "boolean" ? null : typeof e == "function" ? e : an("" + e);
 	}
 	function pd(e, t) {
 		var n = t.ownerDocument.createElement("input");
@@ -11646,7 +11526,7 @@ var C = /* @__PURE__ */ s(((e) => {
 		if (t === "submit" && n && n.stateNode === i) {
 			var a = fd((i[pt] || null).action), o = r.submitter;
 			o && (t = (t = o[pt] || null) ? fd(t.formAction) : o.getAttribute("formAction"), t !== null && (a = t, o = null));
-			var s = new En("action", "action", null, r, i);
+			var s = new Dn("action", "action", null, r, i);
 			e.push({
 				event: s,
 				listeners: [{
@@ -11655,14 +11535,14 @@ var C = /* @__PURE__ */ s(((e) => {
 						if (r.defaultPrevented) {
 							if (nd !== 0) {
 								var e = o ? pd(i, o) : new FormData(i);
-								Ts(n, {
+								Es(n, {
 									pending: !0,
 									data: e,
 									method: i.method,
 									action: a
 								}, null, e);
 							}
-						} else typeof a == "function" && (s.preventDefault(), e = o ? pd(i, o) : new FormData(i), Ts(n, {
+						} else typeof a == "function" && (s.preventDefault(), e = o ? pd(i, o) : new FormData(i), Es(n, {
 							pending: !0,
 							data: e,
 							method: i.method,
@@ -11674,16 +11554,16 @@ var C = /* @__PURE__ */ s(((e) => {
 			});
 		}
 	}
-	for (var hd = 0; hd < $r.length; hd++) {
-		var gd = $r[hd];
-		ei(gd.toLowerCase(), "on" + (gd[0].toUpperCase() + gd.slice(1)));
+	for (var hd = 0; hd < ei.length; hd++) {
+		var gd = ei[hd];
+		ti(gd.toLowerCase(), "on" + (gd[0].toUpperCase() + gd.slice(1)));
 	}
-	ei(Gr, "onAnimationEnd"), ei(Kr, "onAnimationIteration"), ei(qr, "onAnimationStart"), ei("dblclick", "onDoubleClick"), ei("focusin", "onFocus"), ei("focusout", "onBlur"), ei(Jr, "onTransitionRun"), ei(Yr, "onTransitionStart"), ei(Xr, "onTransitionCancel"), ei(Zr, "onTransitionEnd"), Ot("onMouseEnter", ["mouseout", "mouseover"]), Ot("onMouseLeave", ["mouseout", "mouseover"]), Ot("onPointerEnter", ["pointerout", "pointerover"]), Ot("onPointerLeave", ["pointerout", "pointerover"]), Dt("onChange", "change click focusin focusout input keydown keyup selectionchange".split(" ")), Dt("onSelect", "focusout contextmenu dragend focusin keydown keyup mousedown mouseup selectionchange".split(" ")), Dt("onBeforeInput", [
+	ti(Kr, "onAnimationEnd"), ti(qr, "onAnimationIteration"), ti(Jr, "onAnimationStart"), ti("dblclick", "onDoubleClick"), ti("focusin", "onFocus"), ti("focusout", "onBlur"), ti(Yr, "onTransitionRun"), ti(Xr, "onTransitionStart"), ti(Zr, "onTransitionCancel"), ti(Qr, "onTransitionEnd"), kt("onMouseEnter", ["mouseout", "mouseover"]), kt("onMouseLeave", ["mouseout", "mouseover"]), kt("onPointerEnter", ["pointerout", "pointerover"]), kt("onPointerLeave", ["pointerout", "pointerover"]), Ot("onChange", "change click focusin focusout input keydown keyup selectionchange".split(" ")), Ot("onSelect", "focusout contextmenu dragend focusin keydown keyup mousedown mouseup selectionchange".split(" ")), Ot("onBeforeInput", [
 		"compositionend",
 		"keypress",
 		"textInput",
 		"paste"
-	]), Dt("onCompositionEnd", "compositionend focusout keydown keypress keyup mousedown".split(" ")), Dt("onCompositionStart", "compositionstart focusout keydown keypress keyup mousedown".split(" ")), Dt("onCompositionUpdate", "compositionupdate focusout keydown keypress keyup mousedown".split(" "));
+	]), Ot("onCompositionEnd", "compositionend focusout keydown keypress keyup mousedown".split(" ")), Ot("onCompositionStart", "compositionstart focusout keydown keypress keyup mousedown".split(" ")), Ot("onCompositionUpdate", "compositionupdate focusout keydown keypress keyup mousedown".split(" "));
 	var _d = "abort canplay canplaythrough durationchange emptied encrypted ended error loadeddata loadedmetadata loadstart pause play playing progress ratechange resize seeked seeking stalled suspend timeupdate volumechange waiting".split(" "), vd = new Set("beforetoggle cancel close invalid load scroll scrollend toggle".split(" ").concat(_d));
 	function yd(e, t) {
 		t = !!(t & 4);
@@ -11699,7 +11579,7 @@ var C = /* @__PURE__ */ s(((e) => {
 					try {
 						a(i);
 					} catch (e) {
-						ti(e);
+						ni(e);
 					}
 					i.currentTarget = null, a = c;
 				}
@@ -11709,7 +11589,7 @@ var C = /* @__PURE__ */ s(((e) => {
 					try {
 						a(i);
 					} catch (e) {
-						ti(e);
+						ni(e);
 					}
 					i.currentTarget = null, a = c;
 				}
@@ -11729,7 +11609,7 @@ var C = /* @__PURE__ */ s(((e) => {
 	var xd = "_reactListening" + Math.random().toString(36).slice(2);
 	function Sd(e) {
 		if (!e[xd]) {
-			e[xd] = !0, Tt.forEach(function(t) {
+			e[xd] = !0, Et.forEach(function(t) {
 				t !== "selectionchange" && (vd.has(t) || bd(t, !1, e), bd(t, !0, e));
 			});
 			var t = e.nodeType === 9 ? e : e.ownerDocument;
@@ -11746,7 +11626,7 @@ var C = /* @__PURE__ */ s(((e) => {
 				break;
 			default: i = up;
 		}
-		n = i.bind(null, t, n, e), i = void 0, !hn || t !== "touchstart" && t !== "touchmove" && t !== "wheel" || (i = !0), r ? i === void 0 ? e.addEventListener(t, n, !0) : e.addEventListener(t, n, {
+		n = i.bind(null, t, n, e), i = void 0, !gn || t !== "touchstart" && t !== "touchmove" && t !== "wheel" || (i = !0), r ? i === void 0 ? e.addEventListener(t, n, !0) : e.addEventListener(t, n, {
 			capture: !0,
 			passive: i
 		}) : i === void 0 ? e.addEventListener(t, n, !1) : e.addEventListener(t, n, { passive: i });
@@ -11775,27 +11655,27 @@ var C = /* @__PURE__ */ s(((e) => {
 			}
 			r = r.return;
 		}
-		fn(function() {
-			var r = a, i = sn(n), s = [];
+		pn(function() {
+			var r = a, i = cn(n), s = [];
 			a: {
-				var c = Qr.get(e);
+				var c = $r.get(e);
 				if (c !== void 0) {
-					var l = En, u = e;
+					var l = Dn, u = e;
 					switch (e) {
-						case "keypress": if (xn(n) === 0) break a;
+						case "keypress": if (Sn(n) === 0) break a;
 						case "keydown":
 						case "keyup":
-							l = Wn;
+							l = Gn;
 							break;
 						case "focusin":
-							u = "focus", l = Fn;
+							u = "focus", l = In;
 							break;
 						case "focusout":
-							u = "blur", l = Fn;
+							u = "blur", l = In;
 							break;
 						case "beforeblur":
 						case "afterblur":
-							l = Fn;
+							l = In;
 							break;
 						case "click": if (n.button === 2) break a;
 						case "auxclick":
@@ -11806,7 +11686,7 @@ var C = /* @__PURE__ */ s(((e) => {
 						case "mouseout":
 						case "mouseover":
 						case "contextmenu":
-							l = Nn;
+							l = Pn;
 							break;
 						case "drag":
 						case "dragend":
@@ -11816,33 +11696,33 @@ var C = /* @__PURE__ */ s(((e) => {
 						case "dragover":
 						case "dragstart":
 						case "drop":
-							l = Pn;
+							l = Fn;
 							break;
 						case "touchcancel":
 						case "touchend":
 						case "touchmove":
 						case "touchstart":
-							l = Kn;
+							l = qn;
 							break;
-						case Gr:
 						case Kr:
 						case qr:
-							l = In;
+						case Jr:
+							l = Ln;
 							break;
-						case Zr:
-							l = qn;
+						case Qr:
+							l = Jn;
 							break;
 						case "scroll":
 						case "scrollend":
-							l = On;
+							l = kn;
 							break;
 						case "wheel":
-							l = Jn;
+							l = Yn;
 							break;
 						case "copy":
 						case "cut":
 						case "paste":
-							l = Ln;
+							l = Rn;
 							break;
 						case "gotpointercapture":
 						case "lostpointercapture":
@@ -11852,16 +11732,16 @@ var C = /* @__PURE__ */ s(((e) => {
 						case "pointerout":
 						case "pointerover":
 						case "pointerup":
-							l = Gn;
+							l = Kn;
 							break;
 						case "toggle":
-						case "beforetoggle": l = Yn;
+						case "beforetoggle": l = Xn;
 					}
 					var d = !!(t & 4), f = !d && (e === "scroll" || e === "scrollend"), p = d ? c === null ? null : c + "Capture" : c;
 					d = [];
 					for (var m = r, h; m !== null;) {
 						var g = m;
-						if (h = g.stateNode, g = g.tag, g !== 5 && g !== 26 && g !== 27 || h === null || p === null || (g = pn(m, p), g != null && d.push(Td(m, g, h))), f) break;
+						if (h = g.stateNode, g = g.tag, g !== 5 && g !== 26 && g !== 27 || h === null || p === null || (g = mn(m, p), g != null && d.push(Td(m, g, h))), f) break;
 						m = m.return;
 					}
 					0 < d.length && (c = new l(c, u, null, n, i), s.push({
@@ -11872,9 +11752,9 @@ var C = /* @__PURE__ */ s(((e) => {
 			}
 			if (!(t & 7)) {
 				a: {
-					if (c = e === "mouseover" || e === "pointerover", l = e === "mouseout" || e === "pointerout", c && n !== on && (u = n.relatedTarget || n.fromElement) && (xt(u) || u[mt])) break a;
+					if (c = e === "mouseover" || e === "pointerover", l = e === "mouseout" || e === "pointerout", c && n !== sn && (u = n.relatedTarget || n.fromElement) && (xt(u) || u[mt])) break a;
 					if ((l || c) && (c = i.window === i ? i : (c = i.ownerDocument) ? c.defaultView || c.parentWindow : window, l ? (u = n.relatedTarget || n.toElement, l = r, u = u ? xt(u) : null, u !== null && (f = o(u), d = u.tag, u !== f || d !== 5 && d !== 27 && d !== 6) && (u = null)) : (l = null, u = r), l !== u)) {
-						if (d = Nn, g = "onMouseLeave", p = "onMouseEnter", m = "mouse", (e === "pointerout" || e === "pointerover") && (d = Gn, g = "onPointerLeave", p = "onPointerEnter", m = "pointer"), f = l == null ? c : Ct(l), h = u == null ? c : Ct(u), c = new d(g, m + "leave", l, n, i), c.target = f, c.relatedTarget = h, g = null, xt(i) === r && (d = new d(p, m + "enter", u, n, i), d.target = h, d.relatedTarget = f, g = d), f = g, l && u) b: {
+						if (d = Pn, g = "onMouseLeave", p = "onMouseEnter", m = "mouse", (e === "pointerout" || e === "pointerover") && (d = Kn, g = "onPointerLeave", p = "onPointerEnter", m = "pointer"), f = l == null ? c : Ct(l), h = u == null ? c : Ct(u), c = new d(g, m + "leave", l, n, i), c.target = f, c.relatedTarget = h, g = null, xt(i) === r && (d = new d(p, m + "enter", u, n, i), d.target = h, d.relatedTarget = f, g = d), f = g, l && u) b: {
 							for (d = Dd, p = l, m = u, h = 0, g = p; g; g = d(g)) h++;
 							g = 0;
 							for (var _ = m; _; _ = d(_)) g++;
@@ -11894,41 +11774,41 @@ var C = /* @__PURE__ */ s(((e) => {
 					}
 				}
 				a: {
-					if (c = r ? Ct(r) : window, l = c.nodeName && c.nodeName.toLowerCase(), l === "select" || l === "input" && c.type === "file") var v = hr;
-					else if (lr(c)) {
-						if (gr) v = Tr;
+					if (c = r ? Ct(r) : window, l = c.nodeName && c.nodeName.toLowerCase(), l === "select" || l === "input" && c.type === "file") var v = gr;
+					else if (ur(c)) {
+						if (_r) v = Er;
 						else {
-							v = Cr;
-							var y = Sr;
+							v = wr;
+							var y = Cr;
 						}
-					} else l = c.nodeName, !l || l.toLowerCase() !== "input" || c.type !== "checkbox" && c.type !== "radio" ? r && en(r.elementType) && (v = hr) : v = wr;
+					} else l = c.nodeName, !l || l.toLowerCase() !== "input" || c.type !== "checkbox" && c.type !== "radio" ? r && tn(r.elementType) && (v = gr) : v = Tr;
 					if (v &&= v(e, r)) {
-						ur(s, v, n, i);
+						dr(s, v, n, i);
 						break a;
 					}
-					y && y(e, c, r), e === "focusout" && r && c.type === "number" && r.memoizedProps.value != null && Kt(c, "number", c.value);
+					y && y(e, c, r), e === "focusout" && r && c.type === "number" && r.memoizedProps.value != null && qt(c, "number", c.value);
 				}
 				switch (y = r ? Ct(r) : window, e) {
 					case "focusin":
-						(lr(y) || y.contentEditable === "true") && (Fr = y, Ir = r, Lr = null);
+						(ur(y) || y.contentEditable === "true") && (Ir = y, Lr = r, Rr = null);
 						break;
 					case "focusout":
-						Lr = Ir = Fr = null;
+						Rr = Lr = Ir = null;
 						break;
 					case "mousedown":
-						Rr = !0;
+						zr = !0;
 						break;
 					case "contextmenu":
 					case "mouseup":
 					case "dragend":
-						Rr = !1, zr(s, n, i);
+						zr = !1, Br(s, n, i);
 						break;
-					case "selectionchange": if (Pr) break;
+					case "selectionchange": if (Fr) break;
 					case "keydown":
-					case "keyup": zr(s, n, i);
+					case "keyup": Br(s, n, i);
 				}
 				var b;
-				if (Zn) b: {
+				if (Qn) b: {
 					switch (e) {
 						case "compositionstart":
 							var x = "onCompositionStart";
@@ -11942,11 +11822,11 @@ var C = /* @__PURE__ */ s(((e) => {
 					}
 					x = void 0;
 				}
-				else ar ? rr(e, n) && (x = "onCompositionEnd") : e === "keydown" && n.keyCode === 229 && (x = "onCompositionStart");
-				x && (er && n.locale !== "ko" && (ar || x !== "onCompositionStart" ? x === "onCompositionEnd" && ar && (b = bn()) : (_n = i, vn = "value" in _n ? _n.value : _n.textContent, ar = !0)), y = Ed(r, x), 0 < y.length && (x = new Rn(x, e, null, n, i), s.push({
+				else or ? ir(e, n) && (x = "onCompositionEnd") : e === "keydown" && n.keyCode === 229 && (x = "onCompositionStart");
+				x && (tr && n.locale !== "ko" && (or || x !== "onCompositionStart" ? x === "onCompositionEnd" && or && (b = xn()) : (vn = i, yn = "value" in vn ? vn.value : vn.textContent, or = !0)), y = Ed(r, x), 0 < y.length && (x = new zn(x, e, null, n, i), s.push({
 					event: x,
 					listeners: y
-				}), b ? x.data = b : (b = ir(n), b !== null && (x.data = b)))), (b = $n ? or(e, n) : sr(e, n)) && (x = Ed(r, "onBeforeInput"), 0 < x.length && (y = new Rn("onBeforeInput", "beforeinput", null, n, i), s.push({
+				}), b ? x.data = b : (b = ar(n), b !== null && (x.data = b)))), (b = er ? sr(e, n) : cr(e, n)) && (x = Ed(r, "onBeforeInput"), 0 < x.length && (y = new zn("onBeforeInput", "beforeinput", null, n, i), s.push({
 					event: y,
 					listeners: x
 				}), y.data = b)), md(s, e, r, n, i);
@@ -11964,7 +11844,7 @@ var C = /* @__PURE__ */ s(((e) => {
 	function Ed(e, t) {
 		for (var n = t + "Capture", r = []; e !== null;) {
 			var i = e, a = i.stateNode;
-			if (i = i.tag, i !== 5 && i !== 26 && i !== 27 || a === null || (i = pn(e, n), i != null && r.unshift(Td(e, i, a)), i = pn(e, t), i != null && r.push(Td(e, i, a))), e.tag === 3) return r;
+			if (i = i.tag, i !== 5 && i !== 26 && i !== 27 || a === null || (i = mn(e, n), i != null && r.unshift(Td(e, i, a)), i = mn(e, t), i != null && r.push(Td(e, i, a))), e.tag === 3) return r;
 			e = e.return;
 		}
 		return [];
@@ -11980,7 +11860,7 @@ var C = /* @__PURE__ */ s(((e) => {
 		for (var a = t._reactName, o = []; n !== null && n !== r;) {
 			var s = n, c = s.alternate, l = s.stateNode;
 			if (s = s.tag, c !== null && c === r) break;
-			s !== 5 && s !== 26 && s !== 27 || l === null || (c = l, i ? (l = pn(n, a), l != null && o.unshift(Td(n, l, c))) : i || (l = pn(n, a), l != null && o.push(Td(n, l, c)))), n = n.return;
+			s !== 5 && s !== 26 && s !== 27 || l === null || (c = l, i ? (l = mn(n, a), l != null && o.unshift(Td(n, l, c))) : i || (l = mn(n, a), l != null && o.push(Td(n, l, c)))), n = n.return;
 		}
 		o.length !== 0 && e.push({
 			event: t,
@@ -11997,26 +11877,26 @@ var C = /* @__PURE__ */ s(((e) => {
 	function $(e, t, n, r, a, o) {
 		switch (n) {
 			case "children":
-				typeof r == "string" ? t === "body" || t === "textarea" && r === "" || Xt(e, r) : (typeof r == "number" || typeof r == "bigint") && t !== "body" && Xt(e, "" + r);
+				typeof r == "string" ? t === "body" || t === "textarea" && r === "" || Zt(e, r) : (typeof r == "number" || typeof r == "bigint") && t !== "body" && Zt(e, "" + r);
 				break;
 			case "className":
-				Pt(e, "class", r);
+				Ft(e, "class", r);
 				break;
 			case "tabIndex":
-				Pt(e, "tabindex", r);
+				Ft(e, "tabindex", r);
 				break;
 			case "dir":
 			case "role":
 			case "viewBox":
 			case "width":
 			case "height":
-				Pt(e, n, r);
+				Ft(e, n, r);
 				break;
 			case "style":
-				$t(e, r, o);
+				en(e, r, o);
 				break;
 			case "data": if (t !== "object") {
-				Pt(e, "data", r);
+				Ft(e, "data", r);
 				break;
 			}
 			case "src":
@@ -12029,7 +11909,7 @@ var C = /* @__PURE__ */ s(((e) => {
 					e.removeAttribute(n);
 					break;
 				}
-				r = rn("" + r), e.setAttribute(n, r);
+				r = an("" + r), e.setAttribute(n, r);
 				break;
 			case "action":
 			case "formAction":
@@ -12041,10 +11921,10 @@ var C = /* @__PURE__ */ s(((e) => {
 					e.removeAttribute(n);
 					break;
 				}
-				r = rn("" + r), e.setAttribute(n, r);
+				r = an("" + r), e.setAttribute(n, r);
 				break;
 			case "onClick":
-				r != null && (e.onclick = an);
+				r != null && (e.onclick = on);
 				break;
 			case "onScroll":
 				r != null && Q("scroll", e);
@@ -12079,7 +11959,7 @@ var C = /* @__PURE__ */ s(((e) => {
 					e.removeAttribute("xlink:href");
 					break;
 				}
-				n = rn("" + r), e.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", n);
+				n = an("" + r), e.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", n);
 				break;
 			case "contentEditable":
 			case "spellCheck":
@@ -12131,47 +12011,47 @@ var C = /* @__PURE__ */ s(((e) => {
 				r == null || typeof r == "function" || typeof r == "symbol" || isNaN(r) ? e.removeAttribute(n) : e.setAttribute(n, r);
 				break;
 			case "popover":
-				Q("beforetoggle", e), Q("toggle", e), Nt(e, "popover", r);
+				Q("beforetoggle", e), Q("toggle", e), Pt(e, "popover", r);
 				break;
 			case "xlinkActuate":
-				Ft(e, "http://www.w3.org/1999/xlink", "xlink:actuate", r);
+				It(e, "http://www.w3.org/1999/xlink", "xlink:actuate", r);
 				break;
 			case "xlinkArcrole":
-				Ft(e, "http://www.w3.org/1999/xlink", "xlink:arcrole", r);
+				It(e, "http://www.w3.org/1999/xlink", "xlink:arcrole", r);
 				break;
 			case "xlinkRole":
-				Ft(e, "http://www.w3.org/1999/xlink", "xlink:role", r);
+				It(e, "http://www.w3.org/1999/xlink", "xlink:role", r);
 				break;
 			case "xlinkShow":
-				Ft(e, "http://www.w3.org/1999/xlink", "xlink:show", r);
+				It(e, "http://www.w3.org/1999/xlink", "xlink:show", r);
 				break;
 			case "xlinkTitle":
-				Ft(e, "http://www.w3.org/1999/xlink", "xlink:title", r);
+				It(e, "http://www.w3.org/1999/xlink", "xlink:title", r);
 				break;
 			case "xlinkType":
-				Ft(e, "http://www.w3.org/1999/xlink", "xlink:type", r);
+				It(e, "http://www.w3.org/1999/xlink", "xlink:type", r);
 				break;
 			case "xmlBase":
-				Ft(e, "http://www.w3.org/XML/1998/namespace", "xml:base", r);
+				It(e, "http://www.w3.org/XML/1998/namespace", "xml:base", r);
 				break;
 			case "xmlLang":
-				Ft(e, "http://www.w3.org/XML/1998/namespace", "xml:lang", r);
+				It(e, "http://www.w3.org/XML/1998/namespace", "xml:lang", r);
 				break;
 			case "xmlSpace":
-				Ft(e, "http://www.w3.org/XML/1998/namespace", "xml:space", r);
+				It(e, "http://www.w3.org/XML/1998/namespace", "xml:space", r);
 				break;
 			case "is":
-				Nt(e, "is", r);
+				Pt(e, "is", r);
 				break;
 			case "innerText":
 			case "textContent": break;
-			default: (!(2 < n.length) || n[0] !== "o" && n[0] !== "O" || n[1] !== "n" && n[1] !== "N") && (n = tn.get(n) || n, Nt(e, n, r));
+			default: (!(2 < n.length) || n[0] !== "o" && n[0] !== "O" || n[1] !== "n" && n[1] !== "N") && (n = nn.get(n) || n, Pt(e, n, r));
 		}
 	}
 	function Nd(e, t, n, r, a, o) {
 		switch (n) {
 			case "style":
-				$t(e, r, o);
+				en(e, r, o);
 				break;
 			case "dangerouslySetInnerHTML":
 				if (r != null) {
@@ -12183,7 +12063,7 @@ var C = /* @__PURE__ */ s(((e) => {
 				}
 				break;
 			case "children":
-				typeof r == "string" ? Xt(e, r) : (typeof r == "number" || typeof r == "bigint") && Xt(e, "" + r);
+				typeof r == "string" ? Zt(e, r) : (typeof r == "number" || typeof r == "bigint") && Zt(e, "" + r);
 				break;
 			case "onScroll":
 				r != null && Q("scroll", e);
@@ -12192,7 +12072,7 @@ var C = /* @__PURE__ */ s(((e) => {
 				r != null && Q("scrollend", e);
 				break;
 			case "onClick":
-				r != null && (e.onclick = an);
+				r != null && (e.onclick = on);
 				break;
 			case "suppressContentEditableWarning":
 			case "suppressHydrationWarning":
@@ -12200,12 +12080,12 @@ var C = /* @__PURE__ */ s(((e) => {
 			case "ref": break;
 			case "innerText":
 			case "textContent": break;
-			default: if (!Et.hasOwnProperty(n)) a: {
+			default: if (!Dt.hasOwnProperty(n)) a: {
 				if (n[0] === "o" && n[1] === "n" && (a = n.endsWith("Capture"), t = n.slice(2, a ? n.length - 7 : void 0), o = e[pt] || null, o = o == null ? null : o[n], typeof o == "function" && e.removeEventListener(t, o, a), typeof r == "function")) {
 					typeof o != "function" && o !== null && (n in e ? e[n] = null : e.hasAttribute(n) && e.removeAttribute(n)), e.addEventListener(t, r, a);
 					break a;
 				}
-				n in e ? e[n] = r : !0 === r ? e.setAttribute(n, "") : Nt(e, n, r);
+				n in e ? e[n] = r : !0 === r ? e.setAttribute(n, "") : Pt(e, n, r);
 			}
 		}
 	}
@@ -12269,7 +12149,7 @@ var C = /* @__PURE__ */ s(((e) => {
 						default: $(e, t, r, d, n, null);
 					}
 				}
-				Gt(e, o, c, l, u, s, a, !1);
+				Kt(e, o, c, l, u, s, a, !1);
 				return;
 			case "select":
 				for (a in Q("invalid", e), r = s = o = null, n) if (n.hasOwnProperty(a) && (c = n[a], c != null)) switch (a) {
@@ -12282,7 +12162,7 @@ var C = /* @__PURE__ */ s(((e) => {
 					case "multiple": r = c;
 					default: $(e, t, a, c, n, null);
 				}
-				t = o, n = s, e.multiple = !!r, t == null ? n != null && qt(e, !!r, n, !0) : qt(e, !!r, t, !1);
+				t = o, n = s, e.multiple = !!r, t == null ? n != null && Jt(e, !!r, n, !0) : Jt(e, !!r, t, !1);
 				return;
 			case "textarea":
 				for (s in Q("invalid", e), o = a = r = null, n) if (n.hasOwnProperty(s) && (c = n[s], c != null)) switch (s) {
@@ -12300,7 +12180,7 @@ var C = /* @__PURE__ */ s(((e) => {
 						break;
 					default: $(e, t, s, c, n, null);
 				}
-				Yt(e, r, a, o);
+				Xt(e, r, a, o);
 				return;
 			case "option":
 				for (l in n) if (n.hasOwnProperty(l) && (r = n[l], r != null)) switch (l) {
@@ -12347,7 +12227,7 @@ var C = /* @__PURE__ */ s(((e) => {
 					default: $(e, t, u, r, n, null);
 				}
 				return;
-			default: if (en(t)) {
+			default: if (tn(t)) {
 				for (d in n) n.hasOwnProperty(d) && (r = n[d], r !== void 0 && Nd(e, t, d, r, n, void 0));
 				return;
 			}
@@ -12403,7 +12283,7 @@ var C = /* @__PURE__ */ s(((e) => {
 						default: m !== f && $(e, t, p, m, r, f);
 					}
 				}
-				Wt(e, s, c, l, u, d, o, a);
+				Gt(e, s, c, l, u, d, o, a);
 				return;
 			case "select":
 				for (o in m = s = c = p = null, n) if (l = n[o], n.hasOwnProperty(o) && l != null) switch (o) {
@@ -12421,7 +12301,7 @@ var C = /* @__PURE__ */ s(((e) => {
 					case "multiple": s = o;
 					default: o !== l && $(e, t, a, o, r, l);
 				}
-				t = c, n = s, r = m, p == null ? !!r != !!n && (t == null ? qt(e, !!n, n ? [] : "", !1) : qt(e, !!n, t, !0)) : qt(e, !!n, p, !1);
+				t = c, n = s, r = m, p == null ? !!r != !!n && (t == null ? Jt(e, !!n, n ? [] : "", !1) : Jt(e, !!n, t, !0)) : Jt(e, !!n, p, !1);
 				return;
 			case "textarea":
 				for (c in m = p = null, n) if (a = n[c], n.hasOwnProperty(c) && a != null && !r.hasOwnProperty(c)) switch (c) {
@@ -12442,7 +12322,7 @@ var C = /* @__PURE__ */ s(((e) => {
 						break;
 					default: a !== o && $(e, t, s, a, r, o);
 				}
-				Jt(e, p, m);
+				Yt(e, p, m);
 				return;
 			case "option":
 				for (var h in n) if (p = n[h], n.hasOwnProperty(h) && p != null && !r.hasOwnProperty(h)) switch (h) {
@@ -12482,7 +12362,7 @@ var C = /* @__PURE__ */ s(((e) => {
 					default: $(e, t, u, p, r, m);
 				}
 				return;
-			default: if (en(t)) {
+			default: if (tn(t)) {
 				for (var _ in n) p = n[_], n.hasOwnProperty(_) && p !== void 0 && !r.hasOwnProperty(_) && Nd(e, t, _, void 0, r, p);
 				for (d in r) p = r[d], m = n[d], !r.hasOwnProperty(d) || p === m || p === void 0 && m === void 0 || Nd(e, t, d, p, r, m);
 				return;
@@ -12750,18 +12630,18 @@ var C = /* @__PURE__ */ s(((e) => {
 	}
 	function yf(e) {
 		var t = St(e);
-		t !== null && t.tag === 5 && t.type === "form" ? Ds(t) : _f.r(e);
+		t !== null && t.tag === 5 && t.type === "form" ? Os(t) : _f.r(e);
 	}
 	var bf = typeof document > "u" ? null : document;
 	function xf(e, t, n) {
 		var r = bf;
 		if (r && typeof t == "string" && t) {
-			var i = Ut(t);
+			var i = Wt(t);
 			i = "link[rel=\"" + e + "\"][href=\"" + i + "\"]", typeof n == "string" && (i += "[crossorigin=\"" + n + "\"]"), hf.has(i) || (hf.add(i), e = {
 				rel: e,
 				crossOrigin: n,
 				href: t
-			}, r.querySelector(i) === null && (t = r.createElement("link"), Pd(t, "link", e), N(t), r.head.appendChild(t)));
+			}, r.querySelector(i) === null && (t = r.createElement("link"), Pd(t, "link", e), Tt(t), r.head.appendChild(t)));
 		}
 	}
 	function Sf(e) {
@@ -12774,8 +12654,8 @@ var C = /* @__PURE__ */ s(((e) => {
 		_f.L(e, t, n);
 		var r = bf;
 		if (r && e && t) {
-			var i = "link[rel=\"preload\"][as=\"" + Ut(t) + "\"]";
-			t === "image" && n && n.imageSrcSet ? (i += "[imagesrcset=\"" + Ut(n.imageSrcSet) + "\"]", typeof n.imageSizes == "string" && (i += "[imagesizes=\"" + Ut(n.imageSizes) + "\"]")) : i += "[href=\"" + Ut(e) + "\"]";
+			var i = "link[rel=\"preload\"][as=\"" + Wt(t) + "\"]";
+			t === "image" && n && n.imageSrcSet ? (i += "[imagesrcset=\"" + Wt(n.imageSrcSet) + "\"]", typeof n.imageSizes == "string" && (i += "[imagesizes=\"" + Wt(n.imageSizes) + "\"]")) : i += "[href=\"" + Wt(e) + "\"]";
 			var a = i;
 			switch (t) {
 				case "style":
@@ -12787,14 +12667,14 @@ var C = /* @__PURE__ */ s(((e) => {
 				rel: "preload",
 				href: t === "image" && n && n.imageSrcSet ? void 0 : e,
 				as: t
-			}, n), mf.set(a, e), r.querySelector(i) !== null || t === "style" && r.querySelector(jf(a)) || t === "script" && r.querySelector(Ff(a)) || (t = r.createElement("link"), Pd(t, "link", e), N(t), r.head.appendChild(t)));
+			}, n), mf.set(a, e), r.querySelector(i) !== null || t === "style" && r.querySelector(jf(a)) || t === "script" && r.querySelector(Ff(a)) || (t = r.createElement("link"), Pd(t, "link", e), Tt(t), r.head.appendChild(t)));
 		}
 	}
 	function Tf(e, t) {
 		_f.m(e, t);
 		var n = bf;
 		if (n && e) {
-			var r = t && typeof t.as == "string" ? t.as : "script", i = "link[rel=\"modulepreload\"][as=\"" + Ut(r) + "\"][href=\"" + Ut(e) + "\"]", a = i;
+			var r = t && typeof t.as == "string" ? t.as : "script", i = "link[rel=\"modulepreload\"][as=\"" + Wt(r) + "\"][href=\"" + Wt(e) + "\"]", a = i;
 			switch (r) {
 				case "audioworklet":
 				case "paintworklet":
@@ -12815,7 +12695,7 @@ var C = /* @__PURE__ */ s(((e) => {
 					case "worker":
 					case "script": if (n.querySelector(Ff(a))) return;
 				}
-				r = n.createElement("link"), Pd(r, "link", e), N(r), n.head.appendChild(r);
+				r = n.createElement("link"), Pd(r, "link", e), Tt(r), n.head.appendChild(r);
 			}
 		}
 	}
@@ -12839,7 +12719,7 @@ var C = /* @__PURE__ */ s(((e) => {
 						"data-precedence": t
 					}, n), (n = mf.get(a)) && Rf(e, n);
 					var c = o = r.createElement("link");
-					N(c), Pd(c, "link", e), c._p = new Promise(function(e, t) {
+					Tt(c), Pd(c, "link", e), c._p = new Promise(function(e, t) {
 						c.onload = e, c.onerror = t;
 					}), c.addEventListener("load", function() {
 						s.loading |= 1;
@@ -12864,7 +12744,7 @@ var C = /* @__PURE__ */ s(((e) => {
 			a || (a = n.querySelector(Ff(i)), a || (e = f({
 				src: e,
 				async: !0
-			}, t), (t = mf.get(i)) && zf(e, t), a = n.createElement("script"), N(a), Pd(a, "link", e), n.head.appendChild(a)), a = {
+			}, t), (t = mf.get(i)) && zf(e, t), a = n.createElement("script"), Tt(a), Pd(a, "link", e), n.head.appendChild(a)), a = {
 				type: "script",
 				instance: a,
 				count: 1,
@@ -12881,7 +12761,7 @@ var C = /* @__PURE__ */ s(((e) => {
 				src: e,
 				async: !0,
 				type: "module"
-			}, t), (t = mf.get(i)) && zf(e, t), a = n.createElement("script"), N(a), Pd(a, "link", e), n.head.appendChild(a)), a = {
+			}, t), (t = mf.get(i)) && zf(e, t), a = n.createElement("script"), Tt(a), Pd(a, "link", e), n.head.appendChild(a)), a = {
 				type: "script",
 				instance: a,
 				count: 1,
@@ -12947,7 +12827,7 @@ var C = /* @__PURE__ */ s(((e) => {
 		}
 	}
 	function Af(e) {
-		return "href=\"" + Ut(e) + "\"";
+		return "href=\"" + Wt(e) + "\"";
 	}
 	function jf(e) {
 		return "link[rel=\"stylesheet\"][" + e + "]";
@@ -12963,10 +12843,10 @@ var C = /* @__PURE__ */ s(((e) => {
 			return r.loading |= 1;
 		}), t.addEventListener("error", function() {
 			return r.loading |= 2;
-		}), Pd(t, "link", n), N(t), e.head.appendChild(t));
+		}), Pd(t, "link", n), Tt(t), e.head.appendChild(t));
 	}
 	function Pf(e) {
-		return "[src=\"" + Ut(e) + "\"]";
+		return "[src=\"" + Wt(e) + "\"]";
 	}
 	function Ff(e) {
 		return "script[async]" + e;
@@ -12974,25 +12854,25 @@ var C = /* @__PURE__ */ s(((e) => {
 	function If(e, t, n) {
 		if (t.count++, t.instance === null) switch (t.type) {
 			case "style":
-				var r = e.querySelector("style[data-href~=\"" + Ut(n.href) + "\"]");
-				if (r) return t.instance = r, N(r), r;
+				var r = e.querySelector("style[data-href~=\"" + Wt(n.href) + "\"]");
+				if (r) return t.instance = r, Tt(r), r;
 				var a = f({}, n, {
 					"data-href": n.href,
 					"data-precedence": n.precedence,
 					href: null,
 					precedence: null
 				});
-				return r = (e.ownerDocument || e).createElement("style"), N(r), Pd(r, "style", a), Lf(r, n.precedence, e), t.instance = r;
+				return r = (e.ownerDocument || e).createElement("style"), Tt(r), Pd(r, "style", a), Lf(r, n.precedence, e), t.instance = r;
 			case "stylesheet":
 				a = Af(n.href);
 				var o = e.querySelector(jf(a));
-				if (o) return t.state.loading |= 4, t.instance = o, N(o), o;
-				r = Mf(n), (a = mf.get(a)) && Rf(r, a), o = (e.ownerDocument || e).createElement("link"), N(o);
+				if (o) return t.state.loading |= 4, t.instance = o, Tt(o), o;
+				r = Mf(n), (a = mf.get(a)) && Rf(r, a), o = (e.ownerDocument || e).createElement("link"), Tt(o);
 				var s = o;
 				return s._p = new Promise(function(e, t) {
 					s.onload = e, s.onerror = t;
 				}), Pd(o, "link", r), t.state.loading |= 4, Lf(o, n.precedence, e), t.instance = o;
-			case "script": return o = Pf(n.src), (a = e.querySelector(Ff(o))) ? (t.instance = a, N(a), a) : (r = n, (a = mf.get(o)) && (r = f({}, n), zf(r, a)), e = e.ownerDocument || e, a = e.createElement("script"), N(a), Pd(a, "link", r), e.head.appendChild(a), t.instance = a);
+			case "script": return o = Pf(n.src), (a = e.querySelector(Ff(o))) ? (t.instance = a, Tt(a), a) : (r = n, (a = mf.get(o)) && (r = f({}, n), zf(r, a)), e = e.ownerDocument || e, a = e.createElement("script"), Tt(a), Pd(a, "link", r), e.head.appendChild(a), t.instance = a);
 			case "void": return null;
 			default: throw Error(i(443, t.type));
 		}
@@ -13060,10 +12940,10 @@ var C = /* @__PURE__ */ s(((e) => {
 			if (n.instance === null) {
 				var i = Af(r.href), a = t.querySelector(jf(i));
 				if (a) {
-					t = a._p, typeof t == "object" && t && typeof t.then == "function" && (e.count++, e = Jf.bind(e), t.then(e, e)), n.state.loading |= 4, n.instance = a, N(a);
+					t = a._p, typeof t == "object" && t && typeof t.then == "function" && (e.count++, e = Jf.bind(e), t.then(e, e)), n.state.loading |= 4, n.instance = a, Tt(a);
 					return;
 				}
-				a = t.ownerDocument || t, r = Mf(r), (i = mf.get(i)) && Rf(r, i), a = a.createElement("link"), N(a);
+				a = t.ownerDocument || t, r = Mf(r), (i = mf.get(i)) && Rf(r, i), a = a.createElement("link"), Tt(a);
 				var o = a;
 				o._p = new Promise(function(e, t) {
 					o.onload = e, o.onerror = t;
@@ -13133,17 +13013,17 @@ var C = /* @__PURE__ */ s(((e) => {
 		this.tag = 1, this.containerInfo = e, this.pingCache = this.current = this.pendingChildren = null, this.timeoutHandle = -1, this.callbackNode = this.next = this.pendingContext = this.context = this.cancelPendingCommit = null, this.callbackPriority = 0, this.expirationTimes = nt(-1), this.entangledLanes = this.shellSuspendCounter = this.errorRecoveryDisabledLanes = this.expiredLanes = this.warmLanes = this.pingedLanes = this.suspendedLanes = this.pendingLanes = 0, this.entanglements = nt(0), this.hiddenUpdates = nt(null), this.identifierPrefix = r, this.onUncaughtError = i, this.onCaughtError = a, this.onRecoverableError = o, this.pooledCache = null, this.pooledCacheLanes = 0, this.formState = c, this.incompleteTransitions = /* @__PURE__ */ new Map();
 	}
 	function ep(e, t, n, r, i, a, o, s, c, l, u, d) {
-		return e = new $f(e, t, n, o, c, l, u, d, s), t = 1, !0 === a && (t |= 24), a = pi(3, null, null, t), e.current = a, a.stateNode = e, t = da(), t.refCount++, e.pooledCache = t, t.refCount++, a.memoizedState = {
+		return e = new $f(e, t, n, o, c, l, u, d, s), t = 1, !0 === a && (t |= 24), a = mi(3, null, null, t), e.current = a, a.stateNode = e, t = fa(), t.refCount++, e.pooledCache = t, t.refCount++, a.memoizedState = {
 			element: r,
 			isDehydrated: n,
 			cache: t
-		}, Wa(a), e;
+		}, Ga(a), e;
 	}
 	function tp(e) {
-		return e ? (e = di, e) : di;
+		return e ? (e = fi, e) : fi;
 	}
 	function np(e, t, n, r, i, a) {
-		i = tp(i), r.context === null ? r.context = i : r.pendingContext = i, r = Ka(t), r.payload = { element: n }, a = a === void 0 ? null : a, a !== null && (r.callback = a), n = qa(e, r, t), n !== null && (hu(n, e, t), Ja(n, e, t));
+		i = tp(i), r.context === null ? r.context = i : r.pendingContext = i, r = qa(t), r.payload = { element: n }, a = a === void 0 ? null : a, a !== null && (r.callback = a), n = Ja(e, r, t), n !== null && (hu(n, e, t), Ya(n, e, t));
 	}
 	function rp(e, t) {
 		if (e = e.memoizedState, e !== null && e.dehydrated !== null) {
@@ -13156,7 +13036,7 @@ var C = /* @__PURE__ */ s(((e) => {
 	}
 	function ap(e) {
 		if (e.tag === 13 || e.tag === 31) {
-			var t = ci(e, 67108864);
+			var t = li(e, 67108864);
 			t !== null && hu(t, e, 67108864), ip(e, 67108864);
 		}
 	}
@@ -13164,7 +13044,7 @@ var C = /* @__PURE__ */ s(((e) => {
 		if (e.tag === 13 || e.tag === 31) {
 			var t = pu();
 			t = ct(t);
-			var n = ci(e, t);
+			var n = li(e, t);
 			n !== null && hu(n, e, t), ip(e, t);
 		}
 	}
@@ -13212,7 +13092,7 @@ var C = /* @__PURE__ */ s(((e) => {
 							}
 							break;
 						case 31:
-						case 13: s = ci(a, 2), s !== null && hu(s, a, 2), bu(), ip(a, 2);
+						case 13: s = li(a, 2), s !== null && hu(s, a, 2), bu(), ip(a, 2);
 					}
 					if (a = dp(r), a === null && wd(e, t, r, fp, n), a === i) break;
 					i = a;
@@ -13222,7 +13102,7 @@ var C = /* @__PURE__ */ s(((e) => {
 		}
 	}
 	function dp(e) {
-		return e = sn(e), pp(e);
+		return e = cn(e), pp(e);
 	}
 	var fp = null;
 	function pp(e) {
@@ -13407,7 +13287,7 @@ var C = /* @__PURE__ */ s(((e) => {
 			if (n === null) {
 				n = e.nativeEvent;
 				var r = new n.constructor(n.type, n);
-				on = r, n.target.dispatchEvent(r), on = null;
+				sn = r, n.target.dispatchEvent(r), sn = null;
 			} else return t = St(n), t !== null && ap(t), e.blockedOn = n, !1;
 			t.shift();
 		}
@@ -13433,7 +13313,7 @@ var C = /* @__PURE__ */ s(((e) => {
 					break;
 				}
 				var a = St(n);
-				a !== null && (e.splice(t, 3), t -= 3, Ts(a, {
+				a !== null && (e.splice(t, 3), t -= 3, Es(a, {
 					pending: !0,
 					data: i,
 					method: n.method,
@@ -13550,7 +13430,7 @@ var C = /* @__PURE__ */ s(((e) => {
 	}
 	e.createRoot = function(e, t) {
 		if (!a(e)) throw Error(i(299));
-		var n = !1, r = "", o = Js, s = Ys, c = Xs;
+		var n = !1, r = "", o = Ys, s = Xs, c = Zs;
 		return t != null && (!0 === t.unstable_strictMode && (n = !0), t.identifierPrefix !== void 0 && (r = t.identifierPrefix), t.onUncaughtError !== void 0 && (o = t.onUncaughtError), t.onCaughtError !== void 0 && (s = t.onCaughtError), t.onRecoverableError !== void 0 && (c = t.onRecoverableError)), t = ep(e, 1, !1, null, null, n, r, null, o, s, c, Pp), e[mt] = t.current, Sd(e), new Fp(t);
 	};
 })), ie = /* @__PURE__ */ s(((e, t) => {
@@ -13562,7 +13442,7 @@ var C = /* @__PURE__ */ s(((e) => {
 		}
 	}
 	n(), t.exports = re();
-})), E = /* @__PURE__ */ u(w(), 1), ae = ie(), oe = ".react-grid-layout{transition:height .2s;position:relative}.react-grid-item{transition:left .2s,top .2s,width .2s,height .2s}.react-grid-item img{pointer-events:none;user-select:none}.react-grid-item.cssTransforms{transition-property:transform,width,height}.react-grid-item.resizing{z-index:1;will-change:width, height;transition:none}.react-grid-item.react-draggable-dragging{z-index:3;will-change:transform;transition:none}.react-grid-item.dropping{visibility:hidden}.react-grid-item.react-grid-placeholder{opacity:.2;z-index:2;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-o-user-select:none;background:red;transition-duration:.1s}.react-grid-item.react-grid-placeholder.placeholder-resizing{transition:none}.react-grid-item>.react-resizable-handle{width:20px;height:20px;position:absolute}.react-grid-item>.react-resizable-handle:after{content:\"\";border-bottom:2px solid #0006;border-right:2px solid #0006;width:5px;height:5px;position:absolute;bottom:3px;right:3px}.react-resizable-hide>.react-resizable-handle{display:none}.react-grid-item>.react-resizable-handle.react-resizable-handle-sw{cursor:sw-resize;bottom:0;left:0;transform:rotate(90deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-se{cursor:se-resize;bottom:0;right:0}.react-grid-item>.react-resizable-handle.react-resizable-handle-nw{cursor:nw-resize;top:0;left:0;transform:rotate(180deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-ne{cursor:ne-resize;top:0;right:0;transform:rotate(270deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-w,.react-grid-item>.react-resizable-handle.react-resizable-handle-e{cursor:ew-resize;margin-top:-10px;top:50%}.react-grid-item>.react-resizable-handle.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-n,.react-grid-item>.react-resizable-handle.react-resizable-handle-s{cursor:ns-resize;margin-left:-10px;left:50%}.react-grid-item>.react-resizable-handle.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}", se = ".react-resizable{position:relative}.react-resizable-handle{box-sizing:border-box;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMDAwMDAiLz48L2c+PC9zdmc+);background-position:100% 100%;background-repeat:no-repeat;background-origin:content-box;width:20px;height:20px;padding:0 3px 3px 0;position:absolute}.react-resizable-handle-sw{cursor:sw-resize;bottom:0;left:0;transform:rotate(90deg)}.react-resizable-handle-se{cursor:se-resize;bottom:0;right:0}.react-resizable-handle-nw{cursor:nw-resize;top:0;left:0;transform:rotate(180deg)}.react-resizable-handle-ne{cursor:ne-resize;top:0;right:0;transform:rotate(270deg)}.react-resizable-handle-w,.react-resizable-handle-e{cursor:ew-resize;margin-top:-10px;top:50%}.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-resizable-handle-n,.react-resizable-handle-s{cursor:ns-resize;margin-left:-10px;left:50%}.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}", ce = "#widget-grid.grid{grid-template-columns:none!important;grid-auto-flow:initial!important;display:block!important}.argus-dashboard{min-height:100%}.argus-dashboard__toolbar{flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px;padding:12px 16px;display:flex}.argus-dashboard__toolbar button,.argus-widget__drag-handle,.argus-widget__options summary,.argus-widget__menu button{background:#ffffff14;border:1px solid #ffffff1f;border-radius:12px;padding:9px 13px;color:#fff!important}.argus-dashboard__toolbar button:focus-visible,.argus-widget__drag-handle:focus-visible,.argus-widget__options summary:focus-visible,.argus-widget__menu button:focus-visible{outline-offset:2px;outline:3px solid #76b7ff}.argus-dashboard__feedback{color:#b9d9ff;text-align:right;min-height:20px;padding:0 18px;font-size:12px}.argus-dashboard__visibility{flex-wrap:wrap;gap:6px;display:flex}.argus-dashboard-grid .react-grid-item{transition:transform .18s cubic-bezier(.2,.8,.2,1),width .18s cubic-bezier(.2,.8,.2,1),height .18s cubic-bezier(.2,.8,.2,1)}.argus-dashboard-grid .react-grid-item.react-draggable-dragging{z-index:100;opacity:.98;transition:none}.argus-dashboard-grid .react-grid-placeholder{background:linear-gradient(135deg,#5ea8ff33,#8468ff1f);border:2px solid #5ea8ffc7;border-radius:24px;box-shadow:inset 0 0 0 1px #ffffff14,0 12px 35px #0000002e}.argus-widget{border-radius:24px;width:100%;height:100%;position:relative;overflow:visible;box-shadow:0 14px 34px #0000002e,inset 0 1px #ffffff0f;border:1px solid var(--v2066-border,#ffffff14)!important;background:var(--v2066-glass,#ffffff0f)!important;-webkit-backdrop-filter:blur(24px)saturate(145%)!important}.argus-widget .panel{box-shadow:none!important;-webkit-backdrop-filter:none!important;background:0 0!important;border:none!important}.argus-widget__edit-header{align-items:center;gap:10px;padding:8px 12px;display:none}.argus-dashboard--editing .argus-widget__edit-header{display:flex}.argus-widget__edit-header>strong{text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;overflow:hidden}.argus-widget__drag-handle{cursor:grab;touch-action:none;width:44px;height:40px}.argus-widget__options{position:relative}.argus-widget__options summary{box-sizing:border-box;cursor:pointer;place-items:center;width:38px;height:38px;list-style:none;display:grid}.argus-widget__options summary::-webkit-details-marker{display:none}.argus-widget__menu{z-index:140;background:#0f1623f5;border:1px solid #ffffff24;border-radius:16px;gap:8px;min-width:210px;padding:12px;display:grid;position:absolute;top:44px;right:0;box-shadow:0 18px 46px #00000061}.argus-widget__menu>div{grid-template-columns:repeat(4,1fr);gap:5px;display:grid}.argus-widget__menu button{padding:7px}.argus-widget__menu button.active{background:#3478d4}.argus-widget__content{height:100%;overflow:visible}.argus-dashboard--editing .argus-widget__content{height:calc(100% - 56px)}.argus-widget__content>.panel{overscroll-behavior:contain!important;box-sizing:border-box!important;grid-area:auto!important;width:100%!important;height:100%!important;display:block!important;overflow:hidden auto!important}.argus-widget__content>.panel:has(#hero),.argus-widget__content>.panel:has(.hero),.argus-widget__content>.panel:has(#hero-profile-container),.argus-widget:has(#hero),.argus-widget:has(.hero),.argus-dashboard-grid .react-grid-item:has(#hero),.argus-dashboard-grid .react-grid-item:first-child{z-index:50!important;overflow:visible!important}#profile-dropdown.hero-profile-dropdown{z-index:999999!important;max-height:calc(100vh - 120px)!important;position:absolute!important;top:calc(100% + 12px)!important;right:0!important;overflow-y:auto!important}.argus-dashboard-grid .react-resizable-handle{background:#131925db;border:1px solid #ffffff2e;border-radius:10px;width:34px;height:34px;bottom:8px;right:8px;display:none!important}.argus-dashboard--editing .react-resizable-handle{display:block!important}.argus-dashboard--editing .react-resizable-handle:after{border-color:#9bc7ff;width:10px;height:10px;bottom:9px;right:9px}.alarm-configuration-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:16px;display:grid}@media (width<=760px){.alarm-configuration-grid{grid-template-columns:minmax(0,1fr)}.argus-dashboard__toolbar{justify-content:stretch}.argus-dashboard__toolbar>button{flex:1}.argus-widget__menu{position:fixed;inset:auto 16px 16px}}@media (prefers-reduced-motion:reduce){.argus-dashboard-grid .react-grid-item,.argus-dashboard-grid .react-resizable-handle{transition:none!important}}:host([argus-contrast=high]) .argus-widget,:host(.argus-contrast-high) .argus-widget{-webkit-backdrop-filter:blur(28px)saturate(130%)!important;background:linear-gradient(145deg,#0b101af2,#070a12f7)!important;border:1px solid #ffffff3d!important;box-shadow:0 16px 42px #000000a6,inset 0 1px #ffffff24!important}:host([argus-contrast=high]) .argus-widget strong,:host(.argus-contrast-high) .argus-widget strong,:host([argus-contrast=high]) .argus-widget .panel h1,:host(.argus-contrast-high) .argus-widget .panel h1,:host([argus-contrast=high]) .argus-widget .panel h2,:host(.argus-contrast-high) .argus-widget .panel h2,:host([argus-contrast=high]) .argus-widget .panel h3,:host(.argus-contrast-high) .argus-widget .panel h3,:host([argus-contrast=high]) .argus-widget .panel h4,:host(.argus-contrast-high) .argus-widget .panel h4,:host([argus-contrast=high]) .argus-widget .panel-title,:host(.argus-contrast-high) .argus-widget .panel-title,:host([argus-contrast=high]) .argus-widget .section-title,:host(.argus-contrast-high) .argus-widget .section-title,:host([argus-contrast=high]) .argus-widget .setting-label,:host(.argus-contrast-high) .argus-widget .setting-label{color:#fff!important;text-shadow:0 1px 2px #00000080!important}:host([argus-contrast=high]) .argus-widget p,:host(.argus-contrast-high) .argus-widget p,:host([argus-contrast=high]) .argus-widget small,:host(.argus-contrast-high) .argus-widget small,:host([argus-contrast=high]) .argus-widget .hint,:host(.argus-contrast-high) .argus-widget .hint,:host([argus-contrast=high]) .argus-widget .muted,:host(.argus-contrast-high) .argus-widget .muted,:host([argus-contrast=high]) .argus-widget .setting-help,:host(.argus-contrast-high) .argus-widget .setting-help,:host([argus-contrast=high]) .argus-widget .small,:host(.argus-contrast-high) .argus-widget .small{color:#cbd5e1!important;opacity:1!important}:host([argus-contrast=high]) .argus-dashboard__toolbar button,:host(.argus-contrast-high) .argus-dashboard__toolbar button,:host([argus-contrast=high]) .argus-widget__drag-handle,:host(.argus-contrast-high) .argus-widget__drag-handle,:host([argus-contrast=high]) .argus-widget__options summary,:host(.argus-contrast-high) .argus-widget__options summary,:host([argus-contrast=high]) .argus-widget__menu button,:host(.argus-contrast-high) .argus-widget__menu button{color:#fff!important;background:#ffffff1f!important;border:1px solid #ffffff42!important}:host([argus-contrast=high]) .argus-dashboard__feedback,:host(.argus-contrast-high) .argus-dashboard__feedback{color:#93c5fd!important;font-weight:600!important}:host([argus-contrast=high]) .argus-widget__menu,:host(.argus-contrast-high) .argus-widget__menu{background:#0a0e17fa!important;border:1px solid #ffffff40!important;box-shadow:0 20px 50px #0009!important}@media (prefers-contrast:more){.argus-widget{-webkit-backdrop-filter:blur(28px)saturate(130%)!important;background:linear-gradient(145deg,#0b101af2,#070a12f7)!important;border:1px solid #ffffff3d!important;box-shadow:0 16px 42px #000000a6,inset 0 1px #ffffff24!important}.argus-widget strong,.argus-widget .panel h1,.argus-widget .panel h2,.argus-widget .panel h3,.argus-widget .panel h4,.argus-widget .panel-title,.argus-widget .section-title,.argus-widget .setting-label{color:#fff!important;text-shadow:0 1px 2px #00000080!important}.argus-widget p,.argus-widget small,.argus-widget .hint,.argus-widget .muted,.argus-widget .setting-help,.argus-widget .small{color:#cbd5e1!important;opacity:1!important}.argus-dashboard__toolbar button,.argus-widget__drag-handle,.argus-widget__options summary,.argus-widget__menu button{color:#fff!important;background:#ffffff1f!important;border:1px solid #ffffff42!important}.argus-dashboard__toolbar button:focus-visible,.argus-widget__drag-handle:focus-visible,.argus-widget__options summary:focus-visible,.argus-widget__menu button:focus-visible{outline-offset:2px!important;outline:3px solid #60a5fa!important}.argus-dashboard__feedback{color:#93c5fd!important;font-weight:600!important}.argus-widget__menu{background:#0a0e17fa!important;border:1px solid #ffffff40!important;box-shadow:0 20px 50px #0009!important}}", D = /* @__PURE__ */ s(((e) => {
+})), E = /* @__PURE__ */ u(w(), 1), ae = ie(), oe = ".react-grid-layout{transition:height .2s;position:relative}.react-grid-item{transition:left .2s,top .2s,width .2s,height .2s}.react-grid-item img{pointer-events:none;user-select:none}.react-grid-item.cssTransforms{transition-property:transform,width,height}.react-grid-item.resizing{z-index:1;will-change:width, height;transition:none}.react-grid-item.react-draggable-dragging{z-index:3;will-change:transform;transition:none}.react-grid-item.dropping{visibility:hidden}.react-grid-item.react-grid-placeholder{opacity:.2;z-index:2;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-o-user-select:none;background:red;transition-duration:.1s}.react-grid-item.react-grid-placeholder.placeholder-resizing{transition:none}.react-grid-item>.react-resizable-handle{width:20px;height:20px;position:absolute}.react-grid-item>.react-resizable-handle:after{content:\"\";border-bottom:2px solid #0006;border-right:2px solid #0006;width:5px;height:5px;position:absolute;bottom:3px;right:3px}.react-resizable-hide>.react-resizable-handle{display:none}.react-grid-item>.react-resizable-handle.react-resizable-handle-sw{cursor:sw-resize;bottom:0;left:0;transform:rotate(90deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-se{cursor:se-resize;bottom:0;right:0}.react-grid-item>.react-resizable-handle.react-resizable-handle-nw{cursor:nw-resize;top:0;left:0;transform:rotate(180deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-ne{cursor:ne-resize;top:0;right:0;transform:rotate(270deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-w,.react-grid-item>.react-resizable-handle.react-resizable-handle-e{cursor:ew-resize;margin-top:-10px;top:50%}.react-grid-item>.react-resizable-handle.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-n,.react-grid-item>.react-resizable-handle.react-resizable-handle-s{cursor:ns-resize;margin-left:-10px;left:50%}.react-grid-item>.react-resizable-handle.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}", se = ".react-resizable{position:relative}.react-resizable-handle{box-sizing:border-box;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMDAwMDAiLz48L2c+PC9zdmc+);background-position:100% 100%;background-repeat:no-repeat;background-origin:content-box;width:20px;height:20px;padding:0 3px 3px 0;position:absolute}.react-resizable-handle-sw{cursor:sw-resize;bottom:0;left:0;transform:rotate(90deg)}.react-resizable-handle-se{cursor:se-resize;bottom:0;right:0}.react-resizable-handle-nw{cursor:nw-resize;top:0;left:0;transform:rotate(180deg)}.react-resizable-handle-ne{cursor:ne-resize;top:0;right:0;transform:rotate(270deg)}.react-resizable-handle-w,.react-resizable-handle-e{cursor:ew-resize;margin-top:-10px;top:50%}.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-resizable-handle-n,.react-resizable-handle-s{cursor:ns-resize;margin-left:-10px;left:50%}.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}", ce = "#widget-grid.grid{grid-template-columns:none!important;grid-auto-flow:initial!important;display:block!important}.argus-dashboard{min-height:100%}.argus-dashboard__toolbar{flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px;padding:12px 16px;display:flex}.argus-dashboard__toolbar button,.argus-widget__drag-handle,.argus-widget__options summary,.argus-widget__menu button{background:#ffffff14;border:1px solid #ffffff1f;border-radius:12px;padding:9px 13px;color:#fff!important;white-space:nowrap!important;hyphens:none!important;word-break:normal!important}.argus-btn-reset-dashboard{color:#f87171!important;background:#ef44441f!important;border:1px solid #ef444452!important;margin-left:14px!important}.argus-dashboard__toolbar button:focus-visible,.argus-widget__drag-handle:focus-visible,.argus-widget__options summary:focus-visible,.argus-widget__menu button:focus-visible{outline-offset:2px;outline:3px solid #76b7ff}.argus-dashboard__feedback{color:#b9d9ff;text-align:right;min-height:20px;padding:0 18px;font-size:12px}.argus-dashboard__visibility{flex-wrap:wrap;gap:6px;display:flex}.argus-dashboard-grid .react-grid-item{transition:transform .18s cubic-bezier(.2,.8,.2,1),width .18s cubic-bezier(.2,.8,.2,1),height .18s cubic-bezier(.2,.8,.2,1)}.argus-dashboard-grid .react-grid-item.react-draggable-dragging{z-index:100;opacity:.98;transition:none}.argus-dashboard-grid .react-grid-placeholder{background:linear-gradient(135deg,#5ea8ff33,#8468ff1f);border:2px solid #5ea8ffc7;border-radius:24px;box-shadow:inset 0 0 0 1px #ffffff14,0 12px 35px #0000002e}.argus-widget{border-radius:24px;width:100%;height:100%;position:relative;overflow:visible;box-shadow:0 14px 34px #0000002e,inset 0 1px #ffffff0f;border:1px solid var(--v2066-border,#ffffff14)!important;background:var(--v2066-glass,#ffffff0f)!important;-webkit-backdrop-filter:blur(24px)saturate(145%)!important}.argus-widget .panel{box-shadow:none!important;-webkit-backdrop-filter:none!important;background:0 0!important;border:none!important}.argus-widget__edit-header{align-items:center;gap:10px;padding:8px 12px;display:none}.argus-dashboard--editing .argus-widget__edit-header{display:flex}.argus-widget__edit-header>strong{text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;overflow:hidden}.argus-widget__drag-handle{cursor:grab;touch-action:none;width:44px;height:40px}.argus-widget__options{position:relative}.argus-widget__options summary{box-sizing:border-box;cursor:pointer;place-items:center;width:38px;height:38px;list-style:none;display:grid}.argus-widget__options summary::-webkit-details-marker{display:none}.argus-widget__menu{z-index:140;background:#0f1623f5;border:1px solid #ffffff24;border-radius:16px;gap:8px;min-width:210px;padding:12px;display:grid;position:absolute;top:44px;right:0;box-shadow:0 18px 46px #00000061}.argus-widget__menu>div{grid-template-columns:repeat(4,1fr);gap:5px;display:grid}.argus-widget__menu button{padding:7px}.argus-widget__menu button.active{background:#3478d4}.argus-widget__content{height:100%;overflow:visible}.argus-dashboard--editing .argus-widget__content{height:calc(100% - 56px)}.argus-widget__content>.panel{overscroll-behavior:contain!important;box-sizing:border-box!important;grid-area:auto!important;width:100%!important;height:100%!important;display:block!important;overflow:hidden auto!important}.argus-widget__content>.panel:has(#hero),.argus-widget__content>.panel:has(.hero),.argus-widget__content>.panel:has(#hero-profile-container),.argus-widget:has(#hero),.argus-widget:has(.hero),.argus-dashboard-grid .react-grid-item:has(#hero),.argus-dashboard-grid .react-grid-item:first-child{z-index:50!important;overflow:visible!important}#profile-dropdown.hero-profile-dropdown{z-index:999999!important;max-height:calc(100vh - 120px)!important;position:absolute!important;top:calc(100% + 12px)!important;right:0!important;overflow-y:auto!important}.argus-dashboard-grid .react-resizable-handle{background:#131925db;border:1px solid #ffffff2e;border-radius:10px;width:34px;height:34px;bottom:8px;right:8px;display:none!important}.argus-dashboard--editing .react-resizable-handle{display:block!important}.argus-dashboard--editing .react-resizable-handle:after{border-color:#9bc7ff;width:10px;height:10px;bottom:9px;right:9px}.alarm-configuration-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:16px;display:grid}@media (width<=760px){.alarm-configuration-grid{grid-template-columns:minmax(0,1fr)}.argus-dashboard__toolbar{justify-content:stretch}.argus-dashboard__toolbar>button{flex:1}.argus-widget__menu{position:fixed;inset:auto 16px 16px}}@media (prefers-reduced-motion:reduce){.argus-dashboard-grid .react-grid-item,.argus-dashboard-grid .react-resizable-handle{transition:none!important}}:host([argus-contrast=high]) .argus-widget,:host(.argus-contrast-high) .argus-widget{-webkit-backdrop-filter:blur(28px)saturate(130%)!important;background:linear-gradient(145deg,#0b101af2,#070a12f7)!important;border:1px solid #ffffff3d!important;box-shadow:0 16px 42px #000000a6,inset 0 1px #ffffff24!important}:host([argus-contrast=high]) .argus-widget strong,:host(.argus-contrast-high) .argus-widget strong,:host([argus-contrast=high]) .argus-widget .panel h1,:host(.argus-contrast-high) .argus-widget .panel h1,:host([argus-contrast=high]) .argus-widget .panel h2,:host(.argus-contrast-high) .argus-widget .panel h2,:host([argus-contrast=high]) .argus-widget .panel h3,:host(.argus-contrast-high) .argus-widget .panel h3,:host([argus-contrast=high]) .argus-widget .panel h4,:host(.argus-contrast-high) .argus-widget .panel h4,:host([argus-contrast=high]) .argus-widget .panel-title,:host(.argus-contrast-high) .argus-widget .panel-title,:host([argus-contrast=high]) .argus-widget .section-title,:host(.argus-contrast-high) .argus-widget .section-title,:host([argus-contrast=high]) .argus-widget .setting-label,:host(.argus-contrast-high) .argus-widget .setting-label{color:#fff!important;text-shadow:0 1px 2px #00000080!important}:host([argus-contrast=high]) .argus-widget p,:host(.argus-contrast-high) .argus-widget p,:host([argus-contrast=high]) .argus-widget small,:host(.argus-contrast-high) .argus-widget small,:host([argus-contrast=high]) .argus-widget .hint,:host(.argus-contrast-high) .argus-widget .hint,:host([argus-contrast=high]) .argus-widget .muted,:host(.argus-contrast-high) .argus-widget .muted,:host([argus-contrast=high]) .argus-widget .setting-help,:host(.argus-contrast-high) .argus-widget .setting-help,:host([argus-contrast=high]) .argus-widget .small,:host(.argus-contrast-high) .argus-widget .small{color:#cbd5e1!important;opacity:1!important}:host([argus-contrast=high]) .argus-dashboard__toolbar button,:host(.argus-contrast-high) .argus-dashboard__toolbar button,:host([argus-contrast=high]) .argus-widget__drag-handle,:host(.argus-contrast-high) .argus-widget__drag-handle,:host([argus-contrast=high]) .argus-widget__options summary,:host(.argus-contrast-high) .argus-widget__options summary,:host([argus-contrast=high]) .argus-widget__menu button,:host(.argus-contrast-high) .argus-widget__menu button{color:#fff!important;background:#ffffff1f!important;border:1px solid #ffffff42!important}:host([argus-contrast=high]) .argus-dashboard__feedback,:host(.argus-contrast-high) .argus-dashboard__feedback{color:#93c5fd!important;font-weight:600!important}:host([argus-contrast=high]) .argus-widget__menu,:host(.argus-contrast-high) .argus-widget__menu{background:#0a0e17fa!important;border:1px solid #ffffff40!important;box-shadow:0 20px 50px #0009!important}@media (prefers-contrast:more){.argus-widget{-webkit-backdrop-filter:blur(28px)saturate(130%)!important;background:linear-gradient(145deg,#0b101af2,#070a12f7)!important;border:1px solid #ffffff3d!important;box-shadow:0 16px 42px #000000a6,inset 0 1px #ffffff24!important}.argus-widget strong,.argus-widget .panel h1,.argus-widget .panel h2,.argus-widget .panel h3,.argus-widget .panel h4,.argus-widget .panel-title,.argus-widget .section-title,.argus-widget .setting-label{color:#fff!important;text-shadow:0 1px 2px #00000080!important}.argus-widget p,.argus-widget small,.argus-widget .hint,.argus-widget .muted,.argus-widget .setting-help,.argus-widget .small{color:#cbd5e1!important;opacity:1!important}.argus-dashboard__toolbar button,.argus-widget__drag-handle,.argus-widget__options summary,.argus-widget__menu button{color:#fff!important;background:#ffffff1f!important;border:1px solid #ffffff42!important}.argus-dashboard__toolbar button:focus-visible,.argus-widget__drag-handle:focus-visible,.argus-widget__options summary:focus-visible,.argus-widget__menu button:focus-visible{outline-offset:2px!important;outline:3px solid #60a5fa!important}.argus-dashboard__feedback{color:#93c5fd!important;font-weight:600!important}.argus-widget__menu{background:#0a0e17fa!important;border:1px solid #ffffff40!important;box-shadow:0 20px 50px #0009!important}}", D = /* @__PURE__ */ s(((e) => {
 	var t = Symbol.for("react.transitional.element"), n = Symbol.for("react.fragment");
 	function r(e, n, r) {
 		var i = null;
@@ -16912,6 +16792,7 @@ function vt({ widgets: e, nodes: t, storage: n, userId: r, dashboardId: i, onEdi
 					children: f ? "✓ " + T("edit_dashboard_done", "Listo") : "❖ " + T("edit_dashboard", "Editar tablero")
 				}), f && /* @__PURE__ */ (0, O.jsxs)(O.Fragment, { children: [/* @__PURE__ */ (0, O.jsx)("button", {
 					type: "button",
+					className: "argus-btn-reset-dashboard",
 					onClick: ce,
 					children: T("reset_dashboard", "Restablecer diseño")
 				}), /* @__PURE__ */ (0, O.jsx)("div", {
@@ -16984,7 +16865,7 @@ function vt({ widgets: e, nodes: t, storage: n, userId: r, dashboardId: i, onEdi
 }
 //#endregion
 //#region src/features/dashboard/components/SecurityConsole.css?inline
-var yt = ".entry{position:relative;overflow:hidden;container:argus-console/inline-size;-webkit-backdrop-filter:blur(40px)saturate(190%)brightness(1.12)!important;background:linear-gradient(135deg,#ffffff1f 0%,#ffffff08 100%)!important;border:1px solid #ffffff38!important;border-radius:28px!important;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s!important;box-shadow:inset 0 1.5px #ffffff73,inset 0 -1px #ffffff1a,0 24px 64px #00000073,0 4px 16px #00000040!important}.security-console,.entry-content,.entry-content.security-console{box-shadow:none!important;box-shadow:none!important;background:0 0!important;border:none!important}.security-console .console-hud{box-shadow:none!important;background:0 0!important;border:none!important}.console-hud-loc{box-sizing:border-box!important;text-overflow:ellipsis!important;white-space:nowrap!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;letter-spacing:.04em!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;background:linear-gradient(135deg,#fff3 0%,#ffffff0d 100%)!important;border:1px solid #ffffff47!important;border-radius:999px!important;align-items:center!important;max-width:clamp(140px,26vw,260px)!important;height:38px!important;padding:0 16px!important;font-size:11.5px!important;font-weight:850!important;display:inline-flex!important;overflow:hidden!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff73,inset 0 -1px #0003,0 8px 24px #00000059!important}.argus-connection-pill{-webkit-backdrop-filter:blur(24px)saturate(190%)!important;letter-spacing:.05em!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;white-space:nowrap!important;background:linear-gradient(135deg,#ffffff29 0%,#ffffff0a 100%)!important;border:1px solid #ffffff3d!important;border-radius:999px!important;align-items:center!important;gap:8px!important;max-width:max-content!important;height:38px!important;padding:0 16px!important;font-size:11px!important;font-weight:850!important;display:inline-flex!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff61,inset 0 -1px #00000026,0 8px 24px #00000059!important}.argus-connection-dot{background:#10b981!important;border-radius:50%!important;width:8px!important;height:8px!important;box-shadow:0 0 12px #10b981!important}.argus-connection-pill[data-online=false] .argus-connection-dot{background:#ef4444!important;box-shadow:0 0 12px #ef4444!important}.console-hud-right{min-width:0!important;box-shadow:none!important;background:0 0!important;border:0!important;justify-content:flex-end!important;align-items:center!important;gap:8px!important;height:38px!important;display:inline-flex!important}.console-system-badge{box-sizing:border-box!important;letter-spacing:.05em!important;text-transform:uppercase!important;white-space:nowrap!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;border-radius:999px!important;align-items:center!important;height:38px!important;padding:0 18px!important;font-size:11px!important;font-weight:900!important;display:inline-flex!important;transform:translate(0,0)!important}.console-system-badge--disarmed{color:#34d399!important;text-shadow:0 0 10px #10b981b3!important;background:linear-gradient(135deg,#10b98152 0%,#0596691f 100%)!important;border:1.5px solid #10b981a6!important;box-shadow:inset 0 1.5px #ffffff80,0 0 24px #10b98166,0 8px 24px #00000059!important}.console-system-badge--armed_home,.console-system-badge--armed_away,.console-system-badge--armed_night,.console-system-badge--pending{color:#fbbf24!important;text-shadow:0 0 10px #f59e0bcc!important;background:linear-gradient(135deg,#f59e0b59 0%,#d9770624 100%)!important;border:1.5px solid #f59e0bb3!important;box-shadow:inset 0 1.5px #ffffff8c,0 0 24px #f59e0b73,0 8px 24px #00000059!important}.console-system-badge--triggered{color:#f87171!important;text-shadow:0 0 12px #ef4444d9!important;background:linear-gradient(135deg,#ef44446b 0%,#b91c1c29 100%)!important;border:1.5px solid #ef4444d9!important;animation:.9s ease-in-out infinite argusTriggerBadgePulse!important;box-shadow:inset 0 1.5px #fff9,0 0 32px #ef444499,0 8px 24px #00000059!important}@keyframes argusTriggerBadgePulse{0%,to{opacity:.85;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}.security-console .entry-icon{will-change:transform;animation:5s ease-in-out infinite float-icon;transform:translate(0,0);box-shadow:none!important;background:0 0!important;border:none!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;display:flex!important}.security-console .entry-icon svg{filter:drop-shadow(0 14px 28px #0009)drop-shadow(0 0 45px #10b9818c)!important;width:100%!important;max-width:220px!important;height:auto!important}@keyframes float-icon{0%,to{transform:translate(0,0)scale(1)}50%{transform:translateY(-6px)scale(1.015)}}.entry.argus-waiting .entry-icon>svg{transform-origin:50%!important;filter:drop-shadow(0 0 26px #ffb839f2)saturate(1.35)!important;animation:1.05s ease-in-out infinite argusArmingShield!important}.argus-shield-status{color:#ffd27a;letter-spacing:.12em;text-align:center;background:#ff950033;border:1px solid #ffb8398c;border-radius:999px;width:max-content;max-width:200px;margin:7px auto 0;padding:5px 14px;font-size:9.5px;font-weight:850;animation:1.05s ease-in-out infinite argusArmingLabel;display:block;box-shadow:inset 0 1px #fff6,0 6px 18px #0000004d}@keyframes argusArmingShield{0%,to{opacity:.55;transform:scale(.94)}50%{opacity:1;transform:scale(1.07)}}@keyframes argusArmingLabel{0%,to{opacity:.62}50%{opacity:1}}.security-console .liquid-stack{width:100%!important;box-shadow:none!important;background:0 0!important;border:none!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;display:grid!important}.security-console .liquid-btn{text-align:center!important;letter-spacing:.03em!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;cursor:pointer!important;background:linear-gradient(135deg,#ffffff2e 0%,#ffffff0d 100%)!important;border:1px solid #ffffff40!important;border-radius:20px!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:5px!important;min-height:68px!important;padding:12px 6px!important;font-size:11.5px!important;font-weight:850!important;line-height:1.15!important;transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s,background .25s,border-color .25s!important;display:flex!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff6b,inset 0 -1px #0003,0 10px 28px #00000059!important}.security-console .liquid-btn:hover{background:linear-gradient(135deg,#ffffff3d 0%,#ffffff14 100%)!important;border-color:#fff6!important;transform:translateY(-3px)translate(0,0)scale(1.025)!important;box-shadow:inset 0 1.5px #ffffff8c,0 14px 34px #00000073!important}.security-console .liquid-btn span:first-child,.security-console .liquid-btn .mode-btn-icon{filter:drop-shadow(0 2px 6px #0006)!important;font-size:20px!important;line-height:1!important}.security-console .liquid-btn span:last-child{color:#fff!important;font-size:11px!important;font-weight:850!important}.security-console .btn-home.active{background:linear-gradient(135deg,#fb8c00 0%,#d97706 100%)!important;border:1px solid #fed7aad9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #fb8c0099!important}.security-console .btn-away.active{background:linear-gradient(135deg,#e53935 0%,#b91c1c 100%)!important;border:1px solid #fecacad9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #e5393599!important}.security-console .btn-night.active{background:linear-gradient(135deg,#1e88e5 0%,#1d4ed8 100%)!important;border:1px solid #bfdbfed9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #1e88e599!important}.security-console .console-sensors{scrollbar-width:none;grid-template-columns:1fr;gap:8px;max-height:none!important;box-shadow:none!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;filter:none!important;isolation:auto!important;contain:none!important;background:0 0!important;border:none!important;outline:none!important;margin:0!important;padding:0!important;display:grid!important;overflow:visible!important}.security-console .console-sensors::-webkit-scrollbar{display:none}.security-console .console-sensors.console-sensors--compact,.security-console .console-sensors[data-count=\"3\"],.security-console .console-sensors[data-count=\"4\"],.security-console .console-sensors[data-count=\"5\"],.security-console .console-sensors[data-count=\"6\"]{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}.security-console .console-sensors.console-sensors--micro,.security-console .console-sensors[data-count=\"7\"],.security-console .console-sensors[data-count=\"8\"],.security-console .console-sensors[data-count=\"9\"],.security-console .console-sensors[data-count=\"10\"],.security-console .console-sensors[data-count=\"11\"],.security-console .console-sensors[data-count=\"12\"]{scrollbar-width:thin;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:4px!important;max-height:280px!important;overflow-y:auto!important}.console-sensor{color:#fff!important;text-shadow:0 1px 3px #00000080!important;box-sizing:border-box!important;background:linear-gradient(135deg,#ffffff29 0%,#ffffff0a 100%)!important;border:1px solid #ffffff3d!important;border-radius:999px!important;grid-template-columns:auto minmax(0,1fr) auto!important;align-items:center!important;gap:10px!important;min-height:44px!important;padding:10px 16px!important;transition:transform .2s cubic-bezier(.16,1,.3,1),box-shadow .2s,border-color .2s!important;display:grid!important;box-shadow:inset 0 1.5px #ffffff61,inset 0 -1px #00000026,0 4px 12px #00000040!important}.console-sensor:hover{transform:translateY(-2px)scale(1.02)!important;box-shadow:inset 0 1.5px #ffffff80,0 8px 18px #00000059!important}.console-sensor.open{background:linear-gradient(135deg,#ef444459 0%,#b91c1c29 100%)!important;border-color:#ef4444a6!important;box-shadow:inset 0 1.5px #ffffff73,0 0 16px #ef444459,0 4px 12px #00000040!important}.console-sensor-icon{filter:drop-shadow(0 2px 4px #0006)!important;justify-content:center!important;align-items:center!important;font-size:18px!important;display:flex!important}.console-sensor-name{letter-spacing:.02em!important;text-overflow:ellipsis!important;white-space:nowrap!important;color:#fff!important;font-size:11.5px!important;font-weight:850!important;overflow:hidden!important}.console-sensor-state{letter-spacing:.05em!important;text-transform:uppercase!important;white-space:nowrap!important;align-items:center!important;gap:4px!important;font-size:10.5px!important;font-weight:900!important;display:inline-flex!important}.console-empty{text-align:center!important;color:#ffffffa6!important;border:1px dashed #ffffff40!important;border-radius:20px!important;padding:24px!important;font-size:12px!important;font-weight:800!important}@media (width>=901px){.entry:not(.ios-fullscreen) .security-console{box-shadow:none!important;background:0 0!important;grid-template-rows:auto 1fr!important;grid-template-columns:minmax(200px,350px) 1fr minmax(220px,380px)!important;justify-content:center!important;align-items:center!important;gap:16px 36px!important;padding:24px 28px 20px!important;display:grid!important}.entry:not(.ios-fullscreen) .security-console .console-hud{display:contents!important}.entry:not(.ios-fullscreen) .security-console .console-hud-loc{grid-area:1/1!important;place-self:center start!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .argus-connection-pill{grid-area:1/2!important;place-self:center!important;margin:0!important;position:static!important;transform:none!important}.entry:not(.ios-fullscreen) .security-console .console-hud-right{grid-area:1/3!important;place-self:center end!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack{grid-area:2/1!important;align-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .entry-icon{grid-area:2/2!important;place-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .console-sensors{grid-area:2/3!important;align-self:center!important;margin:0!important}}@container argus-console (width>=540px){.entry:not(.ios-fullscreen) .security-console{box-shadow:none!important;background:0 0!important;grid-template-rows:auto 1fr!important;grid-template-columns:minmax(170px,1fr) minmax(140px,200px) minmax(180px,1.2fr)!important;justify-content:center!important;align-items:center!important;gap:14px 20px!important;padding:20px 24px 18px!important;display:grid!important}.entry:not(.ios-fullscreen) .security-console .console-hud{display:contents!important}.entry:not(.ios-fullscreen) .security-console .console-hud-loc{grid-area:1/1!important;place-self:center start!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .argus-connection-pill{grid-area:1/2!important;place-self:center!important;margin:0!important;position:static!important;transform:none!important}.entry:not(.ios-fullscreen) .security-console .console-hud-right{grid-area:1/3!important;place-self:center end!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack{grid-area:2/1!important;align-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .entry-icon{grid-area:2/2!important;place-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .console-sensors{grid-area:2/3!important;align-self:center!important;margin:0!important}}@media (width<=539px){.entry:not(.ios-fullscreen) .security-console{box-sizing:border-box!important;width:100%!important;box-shadow:none!important;background:0 0!important;flex-direction:column!important;align-items:center!important;gap:14px!important;padding:18px 14px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .console-hud{width:100%!important;box-shadow:none!important;background:0 0!important;flex-flow:wrap!important;justify-content:center!important;align-items:center!important;gap:8px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack,.entry:not(.ios-fullscreen) .security-console .console-sensors{width:100%!important;max-width:440px!important}}@container argus-console (width<=539px){.entry:not(.ios-fullscreen) .security-console{box-sizing:border-box!important;width:100%!important;box-shadow:none!important;background:0 0!important;flex-direction:column!important;align-items:center!important;gap:14px!important;padding:18px 14px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .console-hud{width:100%!important;box-shadow:none!important;background:0 0!important;flex-flow:wrap!important;justify-content:center!important;align-items:center!important;gap:8px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack,.entry:not(.ios-fullscreen) .security-console .console-sensors{width:100%!important;max-width:440px!important}}.entry.ios-fullscreen{box-sizing:border-box!important;width:100dvw!important;height:100%!important;min-height:100dvh!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;background:0 0!important;border:none!important;border-radius:0!important;flex-direction:column!important;margin:0!important;padding:0!important;display:flex!important;position:relative!important;overflow:visible!important}.entry.ios-fullscreen .entry-exit-fs{top:max(16px, env(safe-area-inset-top))!important;left:max(16px, env(safe-area-inset-left))!important;z-index:100000!important;-webkit-backdrop-filter:blur(20px)!important;color:#fff!important;cursor:pointer!important;background:#000000a6!important;border:1px solid #ffffff4d!important;border-radius:16px!important;padding:10px 16px!important;font-size:20px!important;font-weight:900!important;position:fixed!important;box-shadow:inset 0 1px #fff6,0 8px 24px #00000080!important}@media (width<=900px),(orientation:portrait){.entry.ios-fullscreen .security-console{padding:max(64px, calc(env(safe-area-inset-top) + 48px)) 16px max(32px, env(safe-area-inset-bottom))!important;box-sizing:border-box!important;width:100%!important;max-width:480px!important;min-height:100%!important;box-shadow:none!important;background:0 0!important;flex-direction:column!important;justify-content:flex-start!important;align-items:center!important;gap:16px!important;margin:0 auto!important;display:flex!important}.entry.ios-fullscreen .security-console .console-hud{width:100%!important;box-shadow:none!important;background:0 0!important;flex-flow:wrap!important;justify-content:center!important;align-items:center!important;gap:8px!important;display:flex!important}.entry.ios-fullscreen .security-console .entry-icon{margin:6px auto!important;display:flex!important}.entry.ios-fullscreen .security-console .entry-icon svg{max-width:min(50vw,220px)!important}.entry.ios-fullscreen .security-console .liquid-stack{width:100%!important;max-width:440px!important}.entry.ios-fullscreen .security-console .console-sensors{width:100%!important;max-width:440px!important;max-height:300px!important;box-shadow:none!important;background:0 0!important}}@media (width>=901px) and (orientation:landscape),(width>=901px),(orientation:landscape) and (height<=600px){.entry.ios-fullscreen .security-console{padding:max(56px, env(safe-area-inset-top)) max(48px, env(safe-area-inset-right)) max(32px, env(safe-area-inset-bottom)) max(48px, env(safe-area-inset-left))!important;box-sizing:border-box!important;width:100%!important;max-width:1600px!important;height:100%!important;min-height:100dvh!important;box-shadow:none!important;background:0 0!important;grid-template-rows:auto 1fr!important;grid-template-columns:minmax(280px,380px) 1fr minmax(280px,440px)!important;justify-content:center!important;align-items:center!important;gap:20px 48px!important;margin:0 auto!important;display:grid!important}.entry.ios-fullscreen .security-console .console-hud{display:contents!important}.entry.ios-fullscreen .security-console .console-hud-loc{grid-area:1/1!important;place-self:center start!important;margin:0!important}.entry.ios-fullscreen .security-console .argus-connection-pill{grid-area:1/2!important;place-self:center!important;margin:0!important;position:static!important;transform:none!important}.entry.ios-fullscreen .security-console .console-hud-right{grid-area:1/3!important;place-self:center end!important;margin:0!important}.entry.ios-fullscreen .security-console .liquid-stack{grid-area:2/1!important;align-self:center!important;width:100%!important}.entry.ios-fullscreen .security-console .entry-icon{grid-area:2/2!important;place-self:center!important}.entry.ios-fullscreen .security-console .entry-icon svg{max-width:min(35vw,360px)!important}.entry.ios-fullscreen .security-console .console-sensors{width:100%!important;max-height:520px!important;box-shadow:none!important;background:0 0!important;grid-area:2/3!important;align-self:center!important}}";
+var yt = ".entry{position:relative;overflow:hidden;container:argus-console/inline-size;-webkit-backdrop-filter:blur(40px)saturate(190%)brightness(1.12)!important;background:linear-gradient(135deg,#ffffff1f 0%,#ffffff08 100%)!important;border:1px solid #ffffff38!important;border-radius:28px!important;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s!important;box-shadow:inset 0 1.5px #ffffff73,inset 0 -1px #ffffff1a,0 24px 64px #00000073,0 4px 16px #00000040!important}.security-console,.entry-content,.entry-content.security-console{box-shadow:none!important;box-shadow:none!important;background:0 0!important;border:none!important}.security-console .console-hud{box-shadow:none!important;background:0 0!important;border:none!important}.console-hud-loc{box-sizing:border-box!important;text-overflow:ellipsis!important;white-space:nowrap!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;letter-spacing:.04em!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;background:linear-gradient(135deg,#fff3 0%,#ffffff0d 100%)!important;border:1px solid #ffffff47!important;border-radius:999px!important;align-items:center!important;max-width:clamp(140px,26vw,260px)!important;height:38px!important;padding:0 16px!important;font-size:11.5px!important;font-weight:850!important;display:inline-flex!important;overflow:hidden!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff73,inset 0 -1px #0003,0 8px 24px #00000059!important}.argus-connection-pill{-webkit-backdrop-filter:blur(24px)saturate(190%)!important;letter-spacing:.05em!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;white-space:nowrap!important;background:linear-gradient(135deg,#ffffff29 0%,#ffffff0a 100%)!important;border:1px solid #ffffff3d!important;border-radius:999px!important;align-items:center!important;gap:8px!important;max-width:max-content!important;height:38px!important;padding:0 16px!important;font-size:11px!important;font-weight:850!important;display:inline-flex!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff61,inset 0 -1px #00000026,0 8px 24px #00000059!important}.argus-connection-dot{background:#10b981!important;border-radius:50%!important;width:8px!important;height:8px!important;box-shadow:0 0 12px #10b981!important}.argus-connection-pill[data-online=false] .argus-connection-dot{background:#ef4444!important;box-shadow:0 0 12px #ef4444!important}.console-hud-right{min-width:0!important;box-shadow:none!important;background:0 0!important;border:0!important;justify-content:flex-end!important;align-items:center!important;gap:8px!important;height:38px!important;display:inline-flex!important}.console-system-badge{box-sizing:border-box!important;letter-spacing:.02em!important;text-transform:none!important;white-space:nowrap!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;border-radius:999px!important;align-items:center!important;height:38px!important;padding:0 18px!important;font-size:12px!important;font-weight:800!important;display:inline-flex!important;transform:translate(0,0)!important}.console-system-badge--disarmed{color:#34d399!important;text-shadow:0 0 10px #10b981b3!important;background:linear-gradient(135deg,#10b98152 0%,#0596691f 100%)!important;border:1.5px solid #10b981a6!important;box-shadow:inset 0 1.5px #ffffff80,0 0 24px #10b98166,0 8px 24px #00000059!important}.console-system-badge--armed_home,.console-system-badge--armed_away,.console-system-badge--armed_night,.console-system-badge--pending{color:#fbbf24!important;text-shadow:0 0 10px #f59e0bcc!important;background:linear-gradient(135deg,#f59e0b59 0%,#d9770624 100%)!important;border:1.5px solid #f59e0bb3!important;box-shadow:inset 0 1.5px #ffffff8c,0 0 24px #f59e0b73,0 8px 24px #00000059!important}.console-system-badge--triggered{color:#f87171!important;text-shadow:0 0 12px #ef4444d9!important;background:linear-gradient(135deg,#ef44446b 0%,#b91c1c29 100%)!important;border:1.5px solid #ef4444d9!important;animation:.9s ease-in-out infinite argusTriggerBadgePulse!important;box-shadow:inset 0 1.5px #fff9,0 0 32px #ef444499,0 8px 24px #00000059!important}@keyframes argusTriggerBadgePulse{0%,to{opacity:.85;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}.security-console .entry-icon{will-change:transform;animation:5s ease-in-out infinite float-icon;transform:translate(0,0);box-shadow:none!important;background:0 0!important;border:none!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;display:flex!important}.security-console .entry-icon svg{filter:drop-shadow(0 14px 28px #0009)drop-shadow(0 0 45px #10b9818c)!important;width:100%!important;max-width:220px!important;height:auto!important}@keyframes float-icon{0%,to{transform:translate(0,0)scale(1)}50%{transform:translateY(-6px)scale(1.015)}}.entry.argus-waiting .entry-icon>svg{transform-origin:50%!important;filter:drop-shadow(0 0 26px #ffb839f2)saturate(1.35)!important;animation:1.05s ease-in-out infinite argusArmingShield!important}.argus-shield-status{color:#ffd27a;letter-spacing:.12em;text-align:center;background:#ff950033;border:1px solid #ffb8398c;border-radius:999px;width:max-content;max-width:200px;margin:7px auto 0;padding:5px 14px;font-size:9.5px;font-weight:850;animation:1.05s ease-in-out infinite argusArmingLabel;display:block;box-shadow:inset 0 1px #fff6,0 6px 18px #0000004d}@keyframes argusArmingShield{0%,to{opacity:.55;transform:scale(.94)}50%{opacity:1;transform:scale(1.07)}}@keyframes argusArmingLabel{0%,to{opacity:.62}50%{opacity:1}}.security-console .liquid-stack{width:100%!important;box-shadow:none!important;background:0 0!important;border:none!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;display:grid!important}.security-console .liquid-btn{text-align:center!important;letter-spacing:.03em!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;cursor:pointer!important;background:linear-gradient(135deg,#ffffff2e 0%,#ffffff0d 100%)!important;border:1px solid #ffffff40!important;border-radius:20px!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:5px!important;min-height:68px!important;padding:12px 6px!important;font-size:11.5px!important;font-weight:850!important;line-height:1.15!important;transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s,background .25s,border-color .25s!important;display:flex!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff6b,inset 0 -1px #0003,0 10px 28px #00000059!important}.security-console .liquid-btn:hover{background:linear-gradient(135deg,#ffffff3d 0%,#ffffff14 100%)!important;border-color:#fff6!important;transform:translateY(-3px)translate(0,0)scale(1.025)!important;box-shadow:inset 0 1.5px #ffffff8c,0 14px 34px #00000073!important}.security-console .liquid-btn span:first-child,.security-console .liquid-btn .mode-btn-icon{filter:drop-shadow(0 2px 6px #0006)!important;font-size:20px!important;line-height:1!important}.security-console .liquid-btn span:last-child{color:#fff!important;font-size:11px!important;font-weight:850!important}.security-console .btn-home.active{background:linear-gradient(135deg,#fb8c00 0%,#d97706 100%)!important;border:1px solid #fed7aad9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #fb8c0099!important}.security-console .btn-away.active{background:linear-gradient(135deg,#e53935 0%,#b91c1c 100%)!important;border:1px solid #fecacad9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #e5393599!important}.security-console .btn-night.active{background:linear-gradient(135deg,#1e88e5 0%,#1d4ed8 100%)!important;border:1px solid #bfdbfed9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #1e88e599!important}.security-console .console-sensors{scrollbar-width:none;grid-template-columns:1fr;gap:8px;max-height:none!important;box-shadow:none!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;filter:none!important;isolation:auto!important;contain:none!important;background:0 0!important;border:none!important;outline:none!important;margin:0!important;padding:0!important;display:grid!important;overflow:visible!important}.security-console .console-sensors::-webkit-scrollbar{display:none}.security-console .console-sensors.console-sensors--compact,.security-console .console-sensors[data-count=\"3\"],.security-console .console-sensors[data-count=\"4\"],.security-console .console-sensors[data-count=\"5\"],.security-console .console-sensors[data-count=\"6\"]{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}.security-console .console-sensors.console-sensors--micro,.security-console .console-sensors[data-count=\"7\"],.security-console .console-sensors[data-count=\"8\"],.security-console .console-sensors[data-count=\"9\"],.security-console .console-sensors[data-count=\"10\"],.security-console .console-sensors[data-count=\"11\"],.security-console .console-sensors[data-count=\"12\"]{scrollbar-width:thin;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:4px!important;max-height:280px!important;overflow-y:auto!important}.console-sensor{color:#fff!important;text-shadow:0 1px 3px #00000080!important;box-sizing:border-box!important;background:linear-gradient(135deg,#ffffff29 0%,#ffffff0a 100%)!important;border:1px solid #ffffff3d!important;border-radius:999px!important;grid-template-columns:auto minmax(0,1fr) auto!important;align-items:center!important;gap:10px!important;min-height:44px!important;padding:10px 16px!important;transition:transform .2s cubic-bezier(.16,1,.3,1),box-shadow .2s,border-color .2s!important;display:grid!important;box-shadow:inset 0 1.5px #ffffff61,inset 0 -1px #00000026,0 4px 12px #00000040!important}.console-sensor:hover{transform:translateY(-2px)scale(1.02)!important;box-shadow:inset 0 1.5px #ffffff80,0 8px 18px #00000059!important}.console-sensor.open{background:linear-gradient(135deg,#ef444459 0%,#b91c1c29 100%)!important;border-color:#ef4444a6!important;box-shadow:inset 0 1.5px #ffffff73,0 0 16px #ef444459,0 4px 12px #00000040!important}.console-sensor-icon{filter:drop-shadow(0 2px 4px #0006)!important;justify-content:center!important;align-items:center!important;font-size:18px!important;display:flex!important}.console-sensor-name{letter-spacing:.02em!important;text-overflow:ellipsis!important;white-space:nowrap!important;color:#fff!important;font-size:11.5px!important;font-weight:850!important;overflow:hidden!important}.console-sensor-state{letter-spacing:.02em!important;text-transform:none!important;white-space:nowrap!important;align-items:center!important;gap:4px!important;font-size:11px!important;font-weight:800!important;display:inline-flex!important}.console-empty{text-align:center!important;color:#ffffffa6!important;border:1px dashed #ffffff40!important;border-radius:20px!important;padding:24px!important;font-size:12px!important;font-weight:800!important}@media (width>=901px){.entry:not(.ios-fullscreen) .security-console{box-shadow:none!important;background:0 0!important;grid-template-rows:auto 1fr!important;grid-template-columns:minmax(200px,350px) 1fr minmax(220px,380px)!important;justify-content:center!important;align-items:center!important;gap:16px 36px!important;padding:24px 28px 20px!important;display:grid!important}.entry:not(.ios-fullscreen) .security-console .console-hud{display:contents!important}.entry:not(.ios-fullscreen) .security-console .console-hud-loc{grid-area:1/1!important;place-self:center start!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .argus-connection-pill{grid-area:1/2!important;place-self:center!important;margin:0!important;position:static!important;transform:none!important}.entry:not(.ios-fullscreen) .security-console .console-hud-right{grid-area:1/3!important;place-self:center end!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack{grid-area:2/1!important;align-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .entry-icon{grid-area:2/2!important;place-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .console-sensors{grid-area:2/3!important;align-self:center!important;margin:0!important}}@container argus-console (width>=540px){.entry:not(.ios-fullscreen) .security-console{box-shadow:none!important;background:0 0!important;grid-template-rows:auto 1fr!important;grid-template-columns:minmax(170px,1fr) minmax(140px,200px) minmax(180px,1.2fr)!important;justify-content:center!important;align-items:center!important;gap:14px 20px!important;padding:20px 24px 18px!important;display:grid!important}.entry:not(.ios-fullscreen) .security-console .console-hud{display:contents!important}.entry:not(.ios-fullscreen) .security-console .console-hud-loc{grid-area:1/1!important;place-self:center start!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .argus-connection-pill{grid-area:1/2!important;place-self:center!important;margin:0!important;position:static!important;transform:none!important}.entry:not(.ios-fullscreen) .security-console .console-hud-right{grid-area:1/3!important;place-self:center end!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack{grid-area:2/1!important;align-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .entry-icon{grid-area:2/2!important;place-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .console-sensors{grid-area:2/3!important;align-self:center!important;margin:0!important}}@media (width<=539px){.entry:not(.ios-fullscreen) .security-console{box-sizing:border-box!important;width:100%!important;box-shadow:none!important;background:0 0!important;flex-direction:column!important;align-items:center!important;gap:14px!important;padding:18px 14px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .console-hud{width:100%!important;box-shadow:none!important;background:0 0!important;flex-flow:wrap!important;justify-content:center!important;align-items:center!important;gap:8px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack,.entry:not(.ios-fullscreen) .security-console .console-sensors{width:100%!important;max-width:440px!important}}@container argus-console (width<=539px){.entry:not(.ios-fullscreen) .security-console{box-sizing:border-box!important;width:100%!important;box-shadow:none!important;background:0 0!important;flex-direction:column!important;align-items:center!important;gap:14px!important;padding:18px 14px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .console-hud{width:100%!important;box-shadow:none!important;background:0 0!important;flex-flow:wrap!important;justify-content:center!important;align-items:center!important;gap:8px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack,.entry:not(.ios-fullscreen) .security-console .console-sensors{width:100%!important;max-width:440px!important}}.entry.ios-fullscreen{box-sizing:border-box!important;width:100dvw!important;height:100%!important;min-height:100dvh!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;background:0 0!important;border:none!important;border-radius:0!important;flex-direction:column!important;margin:0!important;padding:0!important;display:flex!important;position:relative!important;overflow:visible!important}.entry.ios-fullscreen .entry-exit-fs{top:max(16px, env(safe-area-inset-top))!important;left:max(16px, env(safe-area-inset-left))!important;z-index:100000!important;-webkit-backdrop-filter:blur(20px)!important;color:#fff!important;cursor:pointer!important;background:#000000a6!important;border:1px solid #ffffff4d!important;border-radius:16px!important;padding:10px 16px!important;font-size:20px!important;font-weight:900!important;position:fixed!important;box-shadow:inset 0 1px #fff6,0 8px 24px #00000080!important}@media (width<=900px),(orientation:portrait){.entry.ios-fullscreen .security-console{padding:max(64px, calc(env(safe-area-inset-top) + 48px)) 16px max(32px, env(safe-area-inset-bottom))!important;box-sizing:border-box!important;width:100%!important;max-width:480px!important;min-height:100%!important;box-shadow:none!important;background:0 0!important;flex-direction:column!important;justify-content:flex-start!important;align-items:center!important;gap:16px!important;margin:0 auto!important;display:flex!important}.entry.ios-fullscreen .security-console .console-hud{width:100%!important;box-shadow:none!important;background:0 0!important;flex-flow:wrap!important;justify-content:center!important;align-items:center!important;gap:8px!important;display:flex!important}.entry.ios-fullscreen .security-console .entry-icon{margin:6px auto!important;display:flex!important}.entry.ios-fullscreen .security-console .entry-icon svg{max-width:min(50vw,220px)!important}.entry.ios-fullscreen .security-console .liquid-stack{width:100%!important;max-width:440px!important}.entry.ios-fullscreen .security-console .console-sensors{width:100%!important;max-width:440px!important;max-height:300px!important;box-shadow:none!important;background:0 0!important}}@media (width>=901px) and (orientation:landscape),(width>=901px),(orientation:landscape) and (height<=600px){.entry.ios-fullscreen .security-console{padding:max(56px, env(safe-area-inset-top)) max(48px, env(safe-area-inset-right)) max(32px, env(safe-area-inset-bottom)) max(48px, env(safe-area-inset-left))!important;box-sizing:border-box!important;width:100%!important;max-width:1600px!important;height:100%!important;min-height:100dvh!important;box-shadow:none!important;background:0 0!important;grid-template-rows:auto 1fr!important;grid-template-columns:minmax(280px,380px) 1fr minmax(280px,440px)!important;justify-content:center!important;align-items:center!important;gap:20px 48px!important;margin:0 auto!important;display:grid!important}.entry.ios-fullscreen .security-console .console-hud{display:contents!important}.entry.ios-fullscreen .security-console .console-hud-loc{grid-area:1/1!important;place-self:center start!important;margin:0!important}.entry.ios-fullscreen .security-console .argus-connection-pill{grid-area:1/2!important;place-self:center!important;margin:0!important;position:static!important;transform:none!important}.entry.ios-fullscreen .security-console .console-hud-right{grid-area:1/3!important;place-self:center end!important;margin:0!important}.entry.ios-fullscreen .security-console .liquid-stack{grid-area:2/1!important;align-self:center!important;width:100%!important}.entry.ios-fullscreen .security-console .entry-icon{grid-area:2/2!important;place-self:center!important}.entry.ios-fullscreen .security-console .entry-icon svg{max-width:min(35vw,360px)!important}.entry.ios-fullscreen .security-console .console-sensors{width:100%!important;max-height:520px!important;box-shadow:none!important;background:0 0!important;grid-area:2/3!important;align-self:center!important}}";
 //#endregion
 //#region src/features/dashboard/components/SensorChip.tsx
 function bt({ id: e, name: t, isOpen: n, isBlocking: r, isBypassed: i, battery: a, iconHtml: o, statusLabelOpen: s, statusLabelClosed: c, bypassedLabel: l }) {
@@ -17007,13 +16888,18 @@ function bt({ id: e, name: t, isOpen: n, isBlocking: r, isBypassed: i, battery: 
 			children: n
 		}));
 	}
-	let d = i ? "#a1a1aa" : r ? "#ffd700" : n ? "#ff968b" : "#75f4b0", f = i ? "none" : r ? "pulse 1s infinite" : n ? "pulse 2s infinite" : "none", p = i ? "#a1a1aa" : r ? "#ffd700" : n ? "#ff968b" : "#75f4b0", m = i ? .6 : 1, h = n ? s : c, g = i ? `${l || "OMITIDO"} · ${h}` : h;
+	let d = i ? "#94a3b8" : r ? "#fde047" : n ? "#f87171" : "#34d399", f = i ? "none" : r ? "pulse 1s infinite" : n ? "pulse 2s infinite" : "none", p = i ? "#94a3b8" : r ? "#fde047" : n ? "#f87171" : "#34d399", m = i ? .6 : 1, h = n ? s : c, g = i ? `${l || "Omitido"} · ${h}` : h, _ = `${t}: ${g}${a === null ? "" : ` (Batería: ${a}%)`}`;
 	return /* @__PURE__ */ (0, O.jsxs)("div", {
 		className: `console-sensor ${n && !i ? "open" : ""}`,
 		style: { opacity: m },
+		title: _,
+		"aria-label": _,
+		tabIndex: 0,
+		role: "status",
 		children: [
 			/* @__PURE__ */ (0, O.jsx)("span", {
 				className: "console-sensor-icon",
+				"aria-hidden": "true",
 				style: {
 					display: "flex",
 					alignItems: "center",
@@ -17025,7 +16911,8 @@ function bt({ id: e, name: t, isOpen: n, isBlocking: r, isBypassed: i, battery: 
 			}),
 			/* @__PURE__ */ (0, O.jsx)("span", {
 				className: "console-sensor-name",
-				style: { color: r && !i ? "#ffd700" : "" },
+				title: t,
+				style: { color: r && !i ? "#fde047" : "#ffffff" },
 				children: t
 			}),
 			/* @__PURE__ */ (0, O.jsxs)("span", {
@@ -17267,6 +17154,9 @@ var St = "argus-slide-action-styles", Ct = {
 		slide_disarm: "Desliza para desarmar",
 		slide_sos: "Desliza para activar SOS",
 		slide_sos_stop: "Desliza para detener SOS",
+		tap_disarm: "Toca para desarmar",
+		tap_sos: "Toca para activar SOS",
+		tap_sos_stop: "Toca para detener SOS",
 		enter_pin: "Ingresa el PIN maestro",
 		wrong_pin: "PIN incorrecto",
 		cancel: "Cancelar"
@@ -17275,12 +17165,18 @@ var St = "argus-slide-action-styles", Ct = {
 		slide_disarm: "Slide to disarm",
 		slide_sos: "Slide to trigger SOS",
 		slide_sos_stop: "Slide to stop SOS",
+		tap_disarm: "Tap to disarm",
+		tap_sos: "Tap to trigger SOS",
+		tap_sos_stop: "Tap to stop SOS",
 		enter_pin: "Enter master PIN",
 		wrong_pin: "Wrong PIN",
 		cancel: "Cancel"
 	}
 };
 function wt(e) {
+	return typeof e._getProfileGesture == "function" ? e._getProfileGesture() === "touch" : e?.getAttribute?.("argus-gesture") === "touch";
+}
+function Tt(e) {
 	if (typeof e._getCurrentLangCode == "function") return e._getCurrentLangCode();
 	let t = e._manualLang || e._lang;
 	if (!t) try {
@@ -17290,22 +17186,22 @@ function wt(e) {
 	let n = t.split(/[-_]/)[0].toLowerCase();
 	return Ct[n] ? n : n.startsWith("es") ? "es" : "en";
 }
-function N(e, t) {
-	let n = wt(e);
+function Et(e, t) {
+	let n = Tt(e);
 	if (e._t) {
 		let n = e._t(t);
 		if (n && n !== t) return n;
 	}
 	return (Ct[n] || Ct.es)[t] || Ct.es[t] || t;
 }
-var Tt = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"26\" height=\"26\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"11\" width=\"18\" height=\"11\" rx=\"2\" ry=\"2\"/><path d=\"M7 11V7a5 5 0 0 1 9.9-1\"/></svg>", Et = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"26\" height=\"26\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z\"/><line x1=\"12\" y1=\"9\" x2=\"12\" y2=\"13\"/><line x1=\"12\" y1=\"17\" x2=\"12.01\" y2=\"17\"/></svg>", Dt = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"26\" height=\"26\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"4.93\" y1=\"4.93\" x2=\"19.07\" y2=\"19.07\"/></svg>";
-function Ot(e) {
+var Dt = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"26\" height=\"26\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"11\" width=\"18\" height=\"11\" rx=\"2\" ry=\"2\"/><path d=\"M7 11V7a5 5 0 0 1 9.9-1\"/></svg>", Ot = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"26\" height=\"26\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z\"/><line x1=\"12\" y1=\"9\" x2=\"12\" y2=\"13\"/><line x1=\"12\" y1=\"17\" x2=\"12.01\" y2=\"17\"/></svg>", kt = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"26\" height=\"26\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"4.93\" y1=\"4.93\" x2=\"19.07\" y2=\"19.07\"/></svg>";
+function At(e) {
 	let t = e.shadowRoot;
 	if (!t || t.getElementById(St)) return;
 	let n = document.createElement("style");
 	n.id = St, n.textContent = "\n/* ── Slide-to-action base ─────────────────────────────────────────── */\n.argus-sta-wrap {\n  width: 100%;\n  grid-column: 1 / -1;\n  position: relative;\n}\n\n/* Disarm wrapper: hidden by default, shown only when armed */\n.argus-sta-wrap--disarm {\n  display: none;\n}\n.argus-sta-wrap--disarm.sta-armed {\n  display: block;\n}\n\n/* The pill track — 3D Liquid Glass */\n.argus-sta-track {\n  position: relative;\n  width: 100%;\n  height: 64px;\n  border-radius: 999px;\n  overflow: hidden;\n  user-select: none;\n  -webkit-user-select: none;\n  cursor: pointer;\n  box-sizing: border-box;\n  backdrop-filter: blur(32px) saturate(190%) brightness(1.08);\n  -webkit-backdrop-filter: blur(32px) saturate(190%) brightness(1.08);\n  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.03) 100%);\n  border: 1px solid rgba(255, 255, 255, 0.25);\n  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.35), inset 0 2px 8px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.35);\n  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;\n  transform: translate3d(0,0,0);\n}\n.argus-sta-track--disarm {\n  border-color: rgba(52, 211, 153, 0.55);\n  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.4), 0 0 20px rgba(16, 185, 129, 0.2), 0 8px 24px rgba(0,0,0,0.35);\n}\n.argus-sta-track--sos {\n  border-color: rgba(248, 113, 113, 0.55);\n  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.4), 0 0 20px rgba(239, 68, 68, 0.2), 0 8px 24px rgba(0,0,0,0.35);\n}\n\n/* Fill bar that follows the thumb */\n.argus-sta-fill {\n  position: absolute;\n  left: 0; top: 0; bottom: 0;\n  border-radius: inherit;\n  pointer-events: none;\n  will-change: width;\n  transition: width 0.04s linear;\n}\n.argus-sta-track--disarm .argus-sta-fill {\n  background: linear-gradient(90deg, rgba(16,185,129,0.35), rgba(5,150,105,0.12));\n}\n.argus-sta-track--sos .argus-sta-fill {\n  background: linear-gradient(90deg, rgba(239,68,68,0.38), rgba(185,28,28,0.12));\n}\n\n/* The large circular thumb (left side) */\n.argus-sta-thumb {\n  position: absolute;\n  left: 4px;\n  top: 4px;\n  width: 56px;\n  height: 56px;\n  border-radius: 50%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: grab;\n  z-index: 4;\n  will-change: transform;\n  touch-action: none;\n  -webkit-tap-highlight-color: transparent;\n  backdrop-filter: blur(20px) saturate(190%);\n  -webkit-backdrop-filter: blur(20px) saturate(190%);\n  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;\n}\n.argus-sta-thumb:active { cursor: grabbing; }\n\n.argus-sta-track--disarm .argus-sta-thumb {\n  background: radial-gradient(circle at 35% 35%, rgba(52, 211, 153, 0.35), rgba(10, 24, 20, 0.95));\n  border: 1.5px solid rgba(52, 211, 153, 0.85);\n  box-shadow:\n    inset 0 1.5px 0 rgba(255, 255, 255, 0.65),\n    0 8px 24px rgba(0, 0, 0, 0.5),\n    0 0 20px rgba(16, 185, 129, 0.45);\n  color: #ffffff;\n}\n.argus-sta-track--sos .argus-sta-thumb {\n  background: radial-gradient(circle at 35% 35%, rgba(248, 113, 113, 0.35), rgba(28, 12, 16, 0.95));\n  border: 1.5px solid rgba(248, 113, 113, 0.85);\n  box-shadow:\n    inset 0 1.5px 0 rgba(255, 255, 255, 0.65),\n    0 8px 24px rgba(0, 0, 0, 0.5),\n    0 0 20px rgba(239, 68, 68, 0.45);\n  color: #ffffff;\n}\n.argus-sta-track--sos.sos-pulsing .argus-sta-thumb {\n  animation: staThumbPulse 0.8s infinite ease-in-out;\n}\n@keyframes staThumbPulse {\n  0%, 100% {\n    box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset, 0 6px 24px rgba(0,0,0,.5), 0 0 32px rgba(239,68,68,0.90);\n    border-color: rgba(239,68,68,0.90);\n  }\n  50% {\n    box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset, 0 6px 24px rgba(0,0,0,.5), 0 0 8px rgba(239,68,68,0.25);\n    border-color: rgba(239,68,68,0.30);\n  }\n}\n\n/* The specular highlight ring on thumb */\n.argus-sta-thumb::after {\n  content: '';\n  position: absolute;\n  inset: 0;\n  border-radius: 50%;\n  background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.18) 0%, transparent 60%);\n  pointer-events: none;\n}\n\n/* Text label — centered, crisp solid white */\n.argus-sta-label {\n  position: absolute;\n  left: 68px;\n  right: 14px;\n  top: 50%;\n  transform: translateY(-50%);\n  text-align: center;\n  font-size: 13px;\n  font-weight: 700;\n  letter-spacing: 0.5px;\n  pointer-events: none;\n  z-index: 2;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #ffffff !important;\n  text-shadow: 0 1px 3px rgba(0,0,0,0.7);\n  transition: opacity 0.12s ease;\n}\n.argus-sta-track--disarm .argus-sta-label { color: #ffffff !important; }\n.argus-sta-track--sos .argus-sta-label    { color: #ffffff !important; }\n\n/* Spring snap-back animation */\n.argus-sta-thumb--snap {\n  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) !important;\n}\n\n/* PIN modal overlay */\n.argus-sta-pin {\n  position: absolute;\n  inset: 0;\n  border-radius: inherit;\n  display: none;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  gap: 9px;\n  z-index: 10;\n  backdrop-filter: blur(28px) saturate(160%);\n  -webkit-backdrop-filter: blur(28px) saturate(160%);\n  background: rgba(8,12,22,0.95);\n}\n.argus-sta-pin.open { display: flex; }\n.argus-sta-pin input {\n  width: 120px;\n  padding: 8px 12px;\n  border-radius: 10px;\n  border: 1px solid rgba(16,185,129,0.3);\n  background: rgba(255,255,255,0.05);\n  color: #fff;\n  font-size: 20px;\n  font-weight: 700;\n  text-align: center;\n  letter-spacing: 8px;\n  outline: none;\n}\n.argus-sta-pin input.pin-shake {\n  animation: pinShake 0.38s ease both;\n  border-color: rgba(239,68,68,0.6) !important;\n}\n@keyframes pinShake {\n  10%,90%{transform:translateX(-2px)}\n  20%,80%{transform:translateX(4px)}\n  30%,50%,70%{transform:translateX(-4px)}\n  40%,60%{transform:translateX(4px)}\n}\n.argus-sta-pin .pin-row { display:flex; gap:8px; }\n.argus-sta-pin button {\n  padding: 6px 14px;\n  border-radius: 8px;\n  font-size: 11px;\n  font-weight: 700;\n  cursor: pointer;\n  border: 1px solid rgba(255,255,255,0.14);\n  color: #fff;\n  background: rgba(255,255,255,0.08);\n}\n.argus-sta-pin .pin-ok {\n  background: linear-gradient(135deg, #10b981, #059669);\n  border-color: rgba(167,243,208,0.4);\n}\n.argus-sta-pin .pin-err {\n  font-size: 10px;\n  color: #fca5a5;\n  min-height: 14px;\n}\n", t.appendChild(n);
 }
-function kt(e, t, n) {
+function jt(e, t, n) {
 	let r = document.createElement("div");
 	r.className = `argus-sta-wrap argus-sta-wrap--${e}`;
 	let i = document.createElement("div");
@@ -17326,66 +17222,78 @@ function kt(e, t, n) {
 		pin: c
 	};
 }
-function At(e, t, n, r, i, a, o, s) {
+function Mt(e, t, n, r, i, a, o, s) {
 	let c = !1, l = 0, u = 0, d = 0;
+	n.setAttribute("role", "button"), n.setAttribute("tabindex", "0"), n.setAttribute("aria-label", a.textContent || t);
 	function f() {
+		o.classList.contains("open") || (t === "disarm" && Nt(e) ? y() : s());
+	}
+	n.addEventListener("keydown", (e) => {
+		(e.key === "Enter" || e.key === " ") && (e.preventDefault(), f());
+	}), n.addEventListener("click", (t) => {
+		if (wt(e)) {
+			if (o.classList.contains("open") || t.target && t.target.closest?.(".argus-sta-pin")) return;
+			f();
+		}
+	});
+	function p() {
 		return n.getBoundingClientRect().width - 56 - 8;
 	}
-	function p(e) {
-		d = f();
+	function m(e) {
+		d = p();
 		let t = Math.max(0, Math.min(e, d));
 		i.style.transform = `translateX(${t}px)`, r.style.width = `${t + 60}px`;
 		let n = t / d;
 		return a.style.opacity = String(Math.max(0, 1 - n * 1.8)), t;
 	}
-	function m() {
-		i.classList.add("argus-sta-thumb--snap"), p(0), a.style.opacity = "1", setTimeout(() => i.classList.remove("argus-sta-thumb--snap"), 520);
-	}
-	function h(e) {
-		o.classList.contains("open") || (c = !0, d = f(), l = e - u, i.style.cursor = "grabbing");
+	function h() {
+		i.classList.add("argus-sta-thumb--snap"), m(0), a.style.opacity = "1", setTimeout(() => i.classList.remove("argus-sta-thumb--snap"), 520);
 	}
 	function g(e) {
-		c && (u = p(e - l));
+		o.classList.contains("open") || (c = !0, d = p(), l = e - u, i.style.cursor = "grabbing");
 	}
-	function _() {
-		c && (c = !1, i.style.cursor = "grab", u >= d * .8 ? t === "disarm" && jt(e) ? (v(), m()) : (s(), m()) : m(), u = 0);
+	function _(e) {
+		c && (u = m(e - l));
+	}
+	function v() {
+		c && (c = !1, i.style.cursor = "grab", u >= d * .8 ? (f(), h()) : (wt(e) && Math.abs(u) < 6 && f(), h()), u = 0);
 	}
 	i.addEventListener("mousedown", (e) => {
-		e.preventDefault(), h(e.clientX);
+		e.preventDefault(), g(e.clientX);
 	}), window.addEventListener("mousemove", (e) => {
-		c && g(e.clientX);
+		c && _(e.clientX);
 	}), window.addEventListener("mouseup", () => {
-		c && _();
+		c && v();
 	}), i.addEventListener("touchstart", (e) => {
-		e.preventDefault(), h(e.touches[0].clientX);
+		e.preventDefault(), g(e.touches[0].clientX);
 	}, { passive: !1 }), window.addEventListener("touchmove", (e) => {
-		c && (e.preventDefault(), g(e.touches[0].clientX));
+		c && (e.preventDefault(), _(e.touches[0].clientX));
 	}, { passive: !1 }), window.addEventListener("touchend", () => {
-		c && _();
+		c && v();
 	});
-	function v() {
+	function y() {
 		o.classList.add("open"), o.querySelector("input").focus();
 	}
-	let y = o.querySelector("input"), b = o.querySelector(".pin-err");
-	function x() {
-		let t = y.value;
-		Mt(e, t) ? (o.classList.remove("open"), y.value = "", b.textContent = "", s(t)) : (y.classList.add("pin-shake"), b.textContent = N(e, "wrong_pin"), setTimeout(() => {
-			y.classList.remove("pin-shake"), b.textContent = "", y.value = "";
+	let b = o.querySelector("input"), x = o.querySelector(".pin-err");
+	function S() {
+		let t = b.value;
+		Pt(e, t) ? (o.classList.remove("open"), b.value = "", x.textContent = "", s(t)) : (b.classList.add("pin-shake"), x.textContent = Et(e, "wrong_pin"), setTimeout(() => {
+			b.classList.remove("pin-shake"), x.textContent = "", b.value = "";
 		}, 700));
 	}
-	o.querySelector(".pin-ok").addEventListener("click", x), y.addEventListener("keydown", (e) => {
-		e.key === "Enter" && x();
+	o.querySelector(".pin-ok").addEventListener("click", S), b.addEventListener("keydown", (e) => {
+		e.key === "Enter" && S();
 	}), o.querySelector(".pin-cancel").addEventListener("click", () => {
-		o.classList.remove("open"), y.value = "", b.textContent = "";
+		o.classList.remove("open"), b.value = "", x.textContent = "";
 	});
 }
-function jt(e) {
+function Nt(e) {
 	return !!(e._entries?.[0]?.pin_configured || e._dashboard?.entries?.[0]?.pin_configured || e._ui?.master_pin_configured || e._pinConfigured);
 }
-function Mt(e, t) {
+function Pt(e, t) {
 	return typeof e._verifyPin == "function" ? e._verifyPin(t) : typeof e._checkMasterPin == "function" && e._checkMasterPin(t);
 }
-function Nt(e, t, n) {
+function Ft(e, t, n) {
 	if (t.querySelector(".argus-sta-wrap")) {
 		t._staRefresh?.();
 		return;
@@ -17398,8 +17306,8 @@ function Nt(e, t, n) {
 	function a() {
 		return !!e._hass?.states?.[r]?.attributes?.argus_panic_active;
 	}
-	let { wrap: o, track: s, fill: c, thumb: l, label: u, pin: d } = kt("disarm", N(e, "slide_disarm"), Tt);
-	At(e, "disarm", s, c, l, u, d, (t) => {
+	let { wrap: o, track: s, fill: c, thumb: l, label: u, pin: d } = jt("disarm", Et(e, "slide_disarm"), Dt);
+	Mt(e, "disarm", s, c, l, u, d, (t) => {
 		let r = e._dashboard?.entries?.[n]?.entry_id || "";
 		typeof e._send == "function" && e._send("argus/perform_alarm_action", {
 			action: "disarm",
@@ -17407,8 +17315,8 @@ function Nt(e, t, n) {
 			...t ? { code: t } : {}
 		}).catch(() => {});
 	});
-	let { wrap: f, track: p, fill: m, thumb: h, label: g, pin: _ } = kt("sos", N(e, "slide_sos"), Et);
-	At(e, "sos", p, m, h, g, _, () => {
+	let { wrap: f, track: p, fill: m, thumb: h, label: g, pin: _ } = jt("sos", Et(e, "slide_sos"), Ot);
+	Mt(e, "sos", p, m, h, g, _, () => {
 		let t = e._dashboard?.entries?.[n]?.entry_id || "";
 		typeof e._send == "function" && e._send("argus/perform_alarm_action", {
 			action: "sos",
@@ -17419,36 +17327,36 @@ function Nt(e, t, n) {
 	if (!v) return;
 	v.querySelectorAll(".btn-disarm, .btn-sos, .argus-disarm-btn").forEach((e) => e.remove()), v.appendChild(o), v.appendChild(f);
 	function y() {
-		let t = i(), n = a(), r = t !== "disarmed" && t !== "unavailable";
-		o.classList.toggle("sta-armed", r), u.textContent = N(e, "slide_disarm"), p.classList.toggle("sos-pulsing", n), g.textContent = n ? N(e, "slide_sos_stop") : N(e, "slide_sos"), h.innerHTML = n ? Dt : Et;
+		let t = i(), n = a(), r = t !== "disarmed" && t !== "unavailable", c = wt(e);
+		o.classList.toggle("sta-armed", r), u.textContent = Et(e, c ? "tap_disarm" : "slide_disarm"), s.setAttribute("aria-label", u.textContent), p.classList.toggle("sos-pulsing", n), g.textContent = Et(e, n ? c ? "tap_sos_stop" : "slide_sos_stop" : c ? "tap_sos" : "slide_sos"), p.setAttribute("aria-label", g.textContent), h.innerHTML = n ? kt : Ot;
 	}
 	y(), t._staRefresh = y;
 }
-function Pt(e) {
-	Ot(e);
+function It(e) {
+	At(e);
 	let t = e.shadowRoot;
 	t && t.querySelectorAll(".entry").forEach((t, n) => {
 		if (!t.dataset.entityId) {
 			let r = e._dashboard?.entries?.[n]?.entity_id;
 			r && (t.dataset.entityId = r);
 		}
-		Nt(e, t, n), t._staRefresh?.();
+		Ft(e, t, n), t._staRefresh?.();
 	});
 }
-function Ft(e) {
+function Lt(e) {
 	if (!e || e.__argusSlideToAction) return;
 	e.__argusSlideToAction = !0;
 	let t = e.prototype, n = t._renderEntries;
 	t._renderEntries = function(...e) {
 		let t = n?.call(this, ...e);
 		return requestAnimationFrame(() => {
-			Pt(this), setTimeout(() => Pt(this), 100);
+			It(this), setTimeout(() => It(this), 100);
 		}), t;
 	};
 	let r = t._refreshLocalizedUi;
 	if (t._refreshLocalizedUi = function(...e) {
 		let t = r?.call(this, ...e);
-		return Pt(this), t;
+		return It(this), t;
 	}, Object.getOwnPropertyDescriptor(t, "_hass")?.set || t.set_hass) {
 		let e = t.set_hass;
 		t.set_hass = function(t) {
@@ -17458,14 +17366,14 @@ function Ft(e) {
 }
 //#endregion
 //#region src/features/dashboard/components/SecurityConsoleRoot.tsx
-function It(e) {
+function Rt(e) {
 	let t = e.shadowRoot;
 	if (!t) return;
 	let n = t.getElementById("entries");
-	n && (e._reactConsoleRoot ||= (n.innerHTML = "", (0, ae.createRoot)(n)), e._reactConsoleRoot.render(/* @__PURE__ */ (0, O.jsx)(Lt, { panel: e })));
+	n && (e._reactConsoleRoot ||= (n.innerHTML = "", (0, ae.createRoot)(n)), e._reactConsoleRoot.render(/* @__PURE__ */ (0, O.jsx)(zt, { panel: e })));
 }
-typeof window < "u" && (window.mountSecurityConsole = It);
-function Lt({ panel: e }) {
+typeof window < "u" && (window.mountSecurityConsole = Rt);
+function zt({ panel: e }) {
 	let [t, n] = (0, E.useState)(0), [r, i] = (0, E.useState)(e.classList.contains("fullscreen-active")), a = (0, E.useRef)(null);
 	return (0, E.useEffect)(() => {
 		let t = () => {
@@ -17484,7 +17392,7 @@ function Lt({ panel: e }) {
 		if (!a.current) return;
 		let t = setTimeout(() => {
 			try {
-				typeof Pt == "function" && Pt(e);
+				typeof It == "function" && It(e);
 			} catch (e) {
 				console.error("Argus: Failed to attach SOS sliders", e);
 			}
@@ -17514,24 +17422,24 @@ function Lt({ panel: e }) {
 		})
 	});
 }
-function Rt(e) {
+function Bt(e) {
 	if (!e || e.__argusReactSecurityConsole) return;
 	e.__argusReactSecurityConsole = !0;
 	let t = e.prototype.connectedCallback, n = e.prototype._load;
 	e.prototype._renderEntries, e.prototype.connectedCallback = function() {
 		let e = t?.call(this);
-		return It(this), e;
+		return Rt(this), e;
 	}, e.prototype._load = async function(...e) {
 		let t = await n?.apply(this, e);
-		return It(this), t;
+		return Rt(this), t;
 	}, e.prototype._renderEntries = function() {
-		It(this);
+		Rt(this);
 	};
 }
 //#endregion
 //#region src/features/dashboard/index.tsx
-typeof window < "u" && (window.mountSecurityConsole = It);
-function zt(e) {
+typeof window < "u" && (window.mountSecurityConsole = Rt);
+function Vt(e) {
 	let t = (t) => e._t?.(t) || t;
 	return [
 		{
@@ -17590,7 +17498,7 @@ function zt(e) {
 		}
 	];
 }
-var Bt = class extends ht {
+var Ht = class extends ht {
 	panel;
 	constructor(e) {
 		super(), this.panel = e;
@@ -17634,17 +17542,17 @@ var Bt = class extends ht {
 		});
 	}
 };
-function Vt(e) {
+function Ut(e) {
 	let t = e.shadowRoot?.getElementById("edit-widgets-label");
 	(t?.closest("button") || t)?.remove(), e.shadowRoot?.querySelectorAll(".panel-edit-overlay,.widget-drag-handle").forEach((e) => e.remove());
 	let n = e.shadowRoot?.getElementById("argus-react-editor-only");
 	n || (n = document.createElement("style"), n.id = "argus-react-editor-only", n.textContent = "#edit-widgets-label,.panel-edit-overlay,.widget-drag-handle{display:none!important}", e.shadowRoot.appendChild(n));
 }
-function Ht(e) {
-	Vt(e);
+function Wt(e) {
+	Ut(e);
 	let t = e.shadowRoot?.getElementById("widget-grid"), n = e._dashboard?.entry_id || e._dashboard?.entries?.[0]?.entry_id || "default";
 	if (!t) return;
-	let r = zt(e), i = /* @__PURE__ */ new Map();
+	let r = Vt(e), i = /* @__PURE__ */ new Map();
 	if (r.forEach((t) => {
 		let n = e.shadowRoot.getElementById(t.nativeId);
 		n && i.set(t.id, n);
@@ -17652,7 +17560,7 @@ function Ht(e) {
 		e._argusReactRoot.render(/* @__PURE__ */ (0, O.jsx)(vt, {
 			widgets: r,
 			nodes: i,
-			storage: new Bt(e),
+			storage: new Ht(e),
 			userId: e._currentProfile?.id || e._hass?.user?.id || "anonymous",
 			dashboardId: n,
 			onEditing: (n) => {
@@ -17675,7 +17583,7 @@ function Ht(e) {
 	e._argusReactRoot = s, s.render(/* @__PURE__ */ (0, O.jsx)(vt, {
 		widgets: r,
 		nodes: i,
-		storage: new Bt(e),
+		storage: new Ht(e),
 		userId: e._currentProfile?.id || e._hass?.user?.id || "anonymous",
 		dashboardId: n,
 		onEditing: (n) => {
@@ -17686,35 +17594,35 @@ function Ht(e) {
 		}
 	}));
 }
-function Ut(e) {
+function Gt(e) {
 	if (!e || e.__argusReactDashboard) return;
 	e.__argusReactDashboard = !0;
 	let t = e.prototype, n = t.connectedCallback, r = t._load, i = t._refreshLocalizedUi;
 	t.connectedCallback = function() {
 		let e = n?.call(this);
-		return Vt(this), e;
+		return Ut(this), e;
 	}, t._load = async function() {
 		let e = await r?.call(this);
-		return Ht(this), e;
+		return Wt(this), e;
 	}, t._refreshLocalizedUi = function() {
 		let e = i?.call(this);
-		return Ht(this), e;
+		return Wt(this), e;
 	}, t._toggleWidgetEditing = function() {
 		this._argusReactSetEditing?.(!this._widgetEditing);
 	};
 }
 //#endregion
 //#region src/features/media/client.ts
-function Wt(e) {
+function Kt(e) {
 	let t = e._hass?.auth?.accessToken;
 	return t ? { Authorization: `Bearer ${t}` } : {};
 }
-function Gt(e) {
+function qt(e) {
 	let t = e?.prototype;
 	t && !t.__argusMediaClient && (t.__argusMediaClient = !0, t._loadUploadedFiles = async function() {
 		try {
 			let e = await fetch("/api/argus/media", {
-				headers: Wt(this),
+				headers: Kt(this),
 				credentials: "same-origin"
 			});
 			if (!e.ok) throw Error(`HTTP ${e.status}`);
@@ -17728,7 +17636,7 @@ function Gt(e) {
 		try {
 			let t = await fetch(`/api/argus/media/${encodeURIComponent(e)}`, {
 				method: "DELETE",
-				headers: Wt(this),
+				headers: Kt(this),
 				credentials: "same-origin"
 			});
 			if (!t.ok) throw Error(`HTTP ${t.status}`);
@@ -17746,16 +17654,16 @@ function Gt(e) {
 }
 //#endregion
 //#region src/features/security/client.ts
-var Kt = (e, t) => e.getElementById(t), qt = (e, t, n) => e._t?.(t) ?? n;
-function Jt(e) {
+var Jt = (e, t) => e.getElementById(t), Yt = (e, t, n) => e._t?.(t) ?? n;
+function Xt(e) {
 	let t = e?.prototype;
 	t && !t.__argusSecurityClient && (t.__argusSecurityClient = !0, t._savePin = async function() {
-		let e = this.shadowRoot.getElementById("pin-status"), t = this._dashboard?.entries?.[0], n = Kt(this.shadowRoot, "current-pin")?.value ?? "", r = Kt(this.shadowRoot, "new-pin-1")?.value ?? "", i = Kt(this.shadowRoot, "new-pin-2")?.value ?? "", a = (t) => {
+		let e = this.shadowRoot.getElementById("pin-status"), t = this._dashboard?.entries?.[0], n = Jt(this.shadowRoot, "current-pin")?.value ?? "", r = Jt(this.shadowRoot, "new-pin-1")?.value ?? "", i = Jt(this.shadowRoot, "new-pin-2")?.value ?? "", a = (t) => {
 			e && (e.textContent = t, e.className = "status err");
 		};
 		if (!t?.entry_id) return a("No Argus config entry is available");
-		if (t.pin_configured && !n) return a(qt(this, "pin_incorrect", "PIN incorrecto"));
-		if (r !== i) return a(qt(this, "pin_mismatch", "Los PIN no coinciden"));
+		if (t.pin_configured && !n) return a(Yt(this, "pin_incorrect", "PIN incorrecto"));
+		if (r !== i) return a(Yt(this, "pin_mismatch", "Los PIN no coinciden"));
 		if (r && !/^\d{4,12}$/.test(r)) return a("PIN: se requieren entre 4 y 12 dígitos");
 		if (!this._send) return a("Argus WebSocket is unavailable");
 		try {
@@ -17763,13 +17671,13 @@ function Jt(e) {
 				entry_id: t.entry_id,
 				pin: r,
 				current_pin: n
-			}), t.pin_configured = !!r, e && (e.textContent = r ? qt(this, "pin_updated", "PIN actualizado") : qt(this, "pin_deleted", "PIN eliminado"), e.className = "status ok");
+			}), t.pin_configured = !!r, e && (e.textContent = r ? Yt(this, "pin_updated", "PIN actualizado") : Yt(this, "pin_deleted", "PIN eliminado"), e.className = "status ok");
 			for (let e of [
 				"current-pin",
 				"new-pin-1",
 				"new-pin-2"
 			]) {
-				let t = Kt(this.shadowRoot, e);
+				let t = Jt(this.shadowRoot, e);
 				t && (t.value = "");
 			}
 			this._syncAccessSummary?.(), window.setTimeout(() => {
@@ -17785,35 +17693,35 @@ function Jt(e) {
 }
 //#endregion
 //#region src/features/premium/index.ts
-var Yt = "argus-hdr-promotion-styles";
-function Xt(e) {
-	Zt(e);
+var Zt = "argus-hdr-promotion-styles";
+function Qt(e) {
+	$t(e);
 }
-function Zt(e) {
+function $t(e) {
 	if (!e || e.__argusPremiumHDRApplied) return;
 	e.__argusPremiumHDRApplied = !0;
 	let t = e.prototype.connectedCallback;
 	e.prototype.connectedCallback = function() {
 		let e = typeof t == "function" ? t.call(this) : void 0;
-		return Qt(this), e;
+		return en(this), e;
 	};
 }
-function Qt(e) {
+function en(e) {
 	let t = e.shadowRoot;
-	if (!t || t.getElementById(Yt)) return;
+	if (!t || t.getElementById(Zt)) return;
 	let n = document.createElement("style");
-	n.id = Yt, n.textContent = "\n    @supports (color: color(rec2020 1 1 1)) {\n      :host {\n        --argus-accent-green: color(rec2020 0.15 0.85 0.35);\n        --argus-accent-amber: color(rec2020 0.95 0.70 0.10);\n        --argus-accent-red: color(rec2020 0.95 0.15 0.20);\n        --argus-accent-blue: color(rec2020 0.15 0.55 0.95);\n        --argus-accent-purple: color(rec2020 0.70 0.20 0.90);\n        --argus-glow-green: rgba(30, 220, 90, 0.45);\n        --argus-glow-amber: rgba(255, 180, 20, 0.45);\n        --argus-glow-red: rgba(255, 40, 50, 0.55);\n      }\n    }\n\n    @supports (color: color(display-p3 1 1 1)) and (not (color: color(rec2020 1 1 1))) {\n      :host {\n        --argus-accent-green: color(display-p3 0.22 0.82 0.38);\n        --argus-accent-amber: color(display-p3 0.98 0.72 0.15);\n        --argus-accent-red: color(display-p3 0.98 0.20 0.25);\n        --argus-accent-blue: color(display-p3 0.20 0.58 0.95);\n        --argus-accent-purple: color(display-p3 0.68 0.25 0.88);\n        --argus-glow-green: rgba(34, 197, 94, 0.40);\n        --argus-glow-amber: rgba(245, 158, 11, 0.40);\n        --argus-glow-red: rgba(239, 68, 68, 0.50);\n      }\n    }\n\n    :host {\n      --argus-accent-green: #10b981;\n      --argus-accent-amber: #f59e0b;\n      --argus-accent-red: #ef4444;\n      --argus-accent-blue: #3b82f6;\n      --argus-accent-purple: #8b5cf6;\n      --argus-glow-green: rgba(16, 185, 129, 0.35);\n      --argus-glow-amber: rgba(245, 158, 11, 0.35);\n      --argus-glow-red: rgba(239, 68, 68, 0.45);\n    }\n\n    .entry-icon,\n    .argus-shield-svg,\n    .liquid-btn,\n    .console-sensor,\n    .argus-sta-thumb {\n      transform: translate3d(0, 0, 0);\n      backface-visibility: hidden;\n      -webkit-backface-visibility: hidden;\n      perspective: 1000px;\n    }\n\n    .entry-icon {\n      will-change: transform;\n      animation: float-icon 5s ease-in-out infinite;\n    }\n\n    @keyframes float-icon {\n      0%, 100% {\n        transform: translate3d(0, 0, 0) scale3d(1, 1, 1);\n      }\n      50% {\n        transform: translate3d(0, -6px, 0) scale3d(1.015, 1.015, 1);\n      }\n    }\n\n    @media (prefers-reduced-motion: reduce) {\n      .entry-icon {\n        animation: none !important;\n        transform: none !important;\n      }\n    }\n  ", t.appendChild(n);
+	n.id = Zt, n.textContent = "\n    @supports (color: color(rec2020 1 1 1)) {\n      :host {\n        --argus-accent-green: color(rec2020 0.15 0.85 0.35);\n        --argus-accent-amber: color(rec2020 0.95 0.70 0.10);\n        --argus-accent-red: color(rec2020 0.95 0.15 0.20);\n        --argus-accent-blue: color(rec2020 0.15 0.55 0.95);\n        --argus-accent-purple: color(rec2020 0.70 0.20 0.90);\n        --argus-glow-green: rgba(30, 220, 90, 0.45);\n        --argus-glow-amber: rgba(255, 180, 20, 0.45);\n        --argus-glow-red: rgba(255, 40, 50, 0.55);\n      }\n    }\n\n    @supports (color: color(display-p3 1 1 1)) and (not (color: color(rec2020 1 1 1))) {\n      :host {\n        --argus-accent-green: color(display-p3 0.22 0.82 0.38);\n        --argus-accent-amber: color(display-p3 0.98 0.72 0.15);\n        --argus-accent-red: color(display-p3 0.98 0.20 0.25);\n        --argus-accent-blue: color(display-p3 0.20 0.58 0.95);\n        --argus-accent-purple: color(display-p3 0.68 0.25 0.88);\n        --argus-glow-green: rgba(34, 197, 94, 0.40);\n        --argus-glow-amber: rgba(245, 158, 11, 0.40);\n        --argus-glow-red: rgba(239, 68, 68, 0.50);\n      }\n    }\n\n    :host {\n      --argus-accent-green: #10b981;\n      --argus-accent-amber: #f59e0b;\n      --argus-accent-red: #ef4444;\n      --argus-accent-blue: #3b82f6;\n      --argus-accent-purple: #8b5cf6;\n      --argus-glow-green: rgba(16, 185, 129, 0.35);\n      --argus-glow-amber: rgba(245, 158, 11, 0.35);\n      --argus-glow-red: rgba(239, 68, 68, 0.45);\n    }\n\n    .entry-icon,\n    .argus-shield-svg,\n    .liquid-btn,\n    .console-sensor,\n    .argus-sta-thumb {\n      transform: translate3d(0, 0, 0);\n      backface-visibility: hidden;\n      -webkit-backface-visibility: hidden;\n      perspective: 1000px;\n    }\n\n    .entry-icon {\n      will-change: transform;\n      animation: float-icon 5s ease-in-out infinite;\n    }\n\n    @keyframes float-icon {\n      0%, 100% {\n        transform: translate3d(0, 0, 0) scale3d(1, 1, 1);\n      }\n      50% {\n        transform: translate3d(0, -6px, 0) scale3d(1.015, 1.015, 1);\n      }\n    }\n\n    @media (prefers-reduced-motion: reduce) {\n      .entry-icon {\n        animation: none !important;\n        transform: none !important;\n      }\n    }\n  ", t.appendChild(n);
 }
 //#endregion
 //#region src/features/motion/index.ts
-var $t = "argus-motion-system-v2049", en = "__argusMotionV2049", tn = ".user-card,.liquid-btn,.mode-btn,.lang-pill,.entry-fs,.fs-btn,.file-card-btn,.pick-row,.widget-size-btn,.widget-toggle-btn,.argus-disarm-btn,[data-login-digit],#btn-submit-login-pin,#btn-cancel-login,#btn-complete-setup,#btn-claim-admin", nn = "\n:host{--argus-motion-fast:120ms;--argus-motion-ease:cubic-bezier(.22,.8,.25,1)}\n#widget-grid,.dashboard-instances,#widget-grid>.dashboard-instances,#widget-grid>.dashboard-instances>.entry{animation:none!important;transition:none!important;opacity:1!important;transform:none!important;visibility:visible!important}\n#widget-grid.argus-motion-dashboard-enter,.dashboard-instances.argus-motion-dashboard-enter,.argus-motion-dashboard-prep{animation:none!important;transition:none!important;opacity:1!important;transform:none!important}\n.dashboard-instances>.entry{will-change:auto!important}\n.user-card.is-entering{pointer-events:none;box-shadow:0 0 0 1px rgba(120,190,255,.45),0 10px 24px rgba(0,60,140,.18)}\n.argus-motion-press{transform:scale(.982)!important;transition:transform var(--argus-motion-fast) var(--argus-motion-ease)!important}\n:host(.argus-perf-essential) .argus-motion-press{transition:none!important;transform:none!important}\n@media(prefers-reduced-motion:reduce){.argus-motion-press{transition:none!important;transform:none!important}}\n";
-function rn(e) {
+var tn = "argus-motion-system-v2049", nn = "__argusMotionV2049", rn = ".user-card,.liquid-btn,.mode-btn,.lang-pill,.entry-fs,.fs-btn,.file-card-btn,.pick-row,.widget-size-btn,.widget-toggle-btn,.argus-disarm-btn,[data-login-digit],#btn-submit-login-pin,#btn-cancel-login,#btn-complete-setup,#btn-claim-admin", an = "\n:host{--argus-motion-fast:120ms;--argus-motion-ease:cubic-bezier(.22,.8,.25,1)}\n#widget-grid,.dashboard-instances,#widget-grid>.dashboard-instances,#widget-grid>.dashboard-instances>.entry{animation:none!important;transition:none!important;opacity:1!important;transform:none!important;visibility:visible!important}\n#widget-grid.argus-motion-dashboard-enter,.dashboard-instances.argus-motion-dashboard-enter,.argus-motion-dashboard-prep{animation:none!important;transition:none!important;opacity:1!important;transform:none!important}\n.dashboard-instances>.entry{will-change:auto!important}\n.user-card.is-entering{pointer-events:none;box-shadow:0 0 0 1px rgba(120,190,255,.45),0 10px 24px rgba(0,60,140,.18)}\n.argus-motion-press{transform:scale(.982)!important;transition:transform var(--argus-motion-fast) var(--argus-motion-ease)!important}\n:host(.argus-perf-essential) .argus-motion-press{transition:none!important;transform:none!important}\n@media(prefers-reduced-motion:reduce){.argus-motion-press{transition:none!important;transform:none!important}}\n";
+function on(e) {
 	if (window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches) return "essential";
 	let t = String(e._argusPerfProfile || e.dataset?.argusPerf || "").toLowerCase();
 	return t === "essential" || e.classList.contains("argus-perf-essential") ? "essential" : t === "light" ? "light" : "full";
 }
-function an(e) {
-	if (e[en]) return e[en];
+function sn(e) {
+	if (e[nn]) return e[nn];
 	let t = {
 		panel: e,
 		active: !1,
@@ -17826,37 +17734,37 @@ function an(e) {
 		profileControl: null,
 		api: null
 	};
-	return Object.defineProperty(e, en, {
+	return Object.defineProperty(e, nn, {
 		value: t,
 		writable: !0,
 		configurable: !0
 	}), t;
 }
-function on(e, t) {
+function cn(e, t) {
 	let n = requestAnimationFrame(() => {
 		e.rafs.delete(n), e.active && t();
 	});
 	return e.rafs.add(n), n;
 }
-function sn(e, t, n, r, i) {
+function ln(e, t, n, r, i) {
 	t.addEventListener(n, r, i), e.cleanups.add(() => t.removeEventListener(n, r, i));
 }
-function cn(e) {
+function un(e) {
 	let t = e.shadowRoot;
 	if (!t) return;
-	let n = t.getElementById($t);
-	n ? n.textContent !== nn && (n.textContent = nn) : (n = document.createElement("style"), n.id = $t, n.textContent = nn, t.appendChild(n));
-}
-function ln(e) {
-	e.profileControl?.classList.remove("is-entering"), e.profileControl = null, e.panel.shadowRoot?.getElementById("bootstrap-overlay")?.removeAttribute("aria-busy");
-}
-function un(e, t) {
-	ln(e), e.profileControl = t, t?.classList.add("is-entering"), e.panel.shadowRoot?.getElementById("bootstrap-overlay")?.setAttribute("aria-busy", "true");
+	let n = t.getElementById(tn);
+	n ? n.textContent !== an && (n.textContent = an) : (n = document.createElement("style"), n.id = tn, n.textContent = an, t.appendChild(n));
 }
 function dn(e) {
+	e.profileControl?.classList.remove("is-entering"), e.profileControl = null, e.panel.shadowRoot?.getElementById("bootstrap-overlay")?.removeAttribute("aria-busy");
+}
+function fn(e, t) {
+	dn(e), e.profileControl = t, t?.classList.add("is-entering"), e.panel.shadowRoot?.getElementById("bootstrap-overlay")?.setAttribute("aria-busy", "true");
+}
+function pn(e) {
 	!e.observer && e.panel.shadowRoot && (e.observer = new MutationObserver((t) => {
-		t.some((e) => [...e.addedNodes].some((e) => e instanceof Element && e.id !== $t)) && (e.observerFrame ||= on(e, () => {
-			e.observerFrame = 0, cn(e.panel);
+		t.some((e) => [...e.addedNodes].some((e) => e instanceof Element && e.id !== tn)) && (e.observerFrame ||= cn(e, () => {
+			e.observerFrame = 0, un(e.panel);
 		}));
 	}), e.observer.observe(e.panel.shadowRoot, {
 		childList: !0,
@@ -17864,64 +17772,64 @@ function dn(e) {
 		attributes: !1
 	}));
 }
-function fn(e) {
+function mn(e) {
 	let t = e.panel.shadowRoot;
 	if (!t) return;
 	let n = (t) => {
 		t && (t.classList.remove("argus-motion-press"), e.pressed.delete(t));
 	};
-	sn(e, t, "pointerdown", (t) => {
-		if (rn(e.panel) === "essential") return;
-		let n = t.target?.closest?.(tn);
+	ln(e, t, "pointerdown", (t) => {
+		if (on(e.panel) === "essential") return;
+		let n = t.target?.closest?.(rn);
 		n && !n.disabled && (n.classList.add("argus-motion-press"), e.pressed.add(n));
 	}, !0), [
 		"pointerup",
 		"pointercancel",
 		"pointerleave"
-	].forEach((r) => sn(e, t, r, (e) => {
+	].forEach((r) => ln(e, t, r, (e) => {
 		let t = e.target;
-		n(t?.closest?.(tn));
-	}, !0)), sn(e, t, "click", (t) => {
+		n(t?.closest?.(rn));
+	}, !0)), ln(e, t, "click", (t) => {
 		let n = t.target, r = n?.closest?.(".user-card");
-		r && r.dataset.isOwn === "true" && r.dataset.pinRequired !== "true" && un(e, r), n?.closest?.("#btn-submit-login-pin,#btn-complete-setup,#btn-claim-admin") && un(e, n.closest("button")), n?.closest?.("#btn-cancel-login") && ln(e);
+		r && r.dataset.isOwn === "true" && r.dataset.pinRequired !== "true" && fn(e, r), n?.closest?.("#btn-submit-login-pin,#btn-complete-setup,#btn-claim-admin") && fn(e, n.closest("button")), n?.closest?.("#btn-cancel-login") && dn(e);
 	}, !0);
 }
-function pn(e) {
-	!e.active && e.panel.shadowRoot && (e.active = !0, cn(e.panel), fn(e), dn(e), e.api = Object.freeze({
+function hn(e) {
+	!e.active && e.panel.shadowRoot && (e.active = !0, un(e.panel), mn(e), pn(e), e.api = Object.freeze({
 		animateView: () => {},
 		stagger: () => {},
 		transitionBackground: () => () => {},
 		animateDashboard: () => {}
 	}));
 }
-function mn(e) {
-	e.active = !1, e.observer?.disconnect(), e.observer = null, e.observerFrame && cancelAnimationFrame(e.observerFrame), e.observerFrame = 0, e.rafs.forEach(cancelAnimationFrame), e.rafs.clear(), e.timers.forEach(clearTimeout), e.timers.clear(), e.cleanups.forEach((e) => e()), e.cleanups.clear(), e.pressed.forEach((e) => e.classList.remove("argus-motion-press")), e.pressed.clear(), ln(e);
+function gn(e) {
+	e.active = !1, e.observer?.disconnect(), e.observer = null, e.observerFrame && cancelAnimationFrame(e.observerFrame), e.observerFrame = 0, e.rafs.forEach(cancelAnimationFrame), e.rafs.clear(), e.timers.forEach(clearTimeout), e.timers.clear(), e.cleanups.forEach((e) => e()), e.cleanups.clear(), e.pressed.forEach((e) => e.classList.remove("argus-motion-press")), e.pressed.clear(), dn(e);
 }
-function hn(e) {
+function _n(e) {
 	let t = e?.prototype;
 	if (!t || t.__argusMotionSystemV2049) return;
 	t.__argusMotionSystemV2049 = !0;
 	let n = t.connectedCallback, r = t.disconnectedCallback, i = t._load;
 	t.connectedCallback = function() {
-		let e = n?.call(this), t = an(this);
-		return this.shadowRoot ? pn(t) : queueMicrotask(() => pn(t)), e;
+		let e = n?.call(this), t = sn(this);
+		return this.shadowRoot ? hn(t) : queueMicrotask(() => hn(t)), e;
 	}, t.disconnectedCallback = function() {
-		let e = this[en];
-		return e && mn(e), r?.call(this);
+		let e = this[nn];
+		return e && gn(e), r?.call(this);
 	}, t._load = async function(...e) {
-		let t = an(this);
+		let t = sn(this);
 		try {
 			let n = await i?.apply(this, e);
-			return !t.active && this.isConnected && pn(t), cn(this), ln(t), n;
+			return !t.active && this.isConnected && hn(t), un(this), dn(t), n;
 		} catch (e) {
-			throw ln(t), e;
+			throw dn(t), e;
 		}
 	};
 }
 //#endregion
 //#region src/features/render/stable.ts
-var gn = "__argusStableRenderV2050";
-function _n(e) {
+var vn = "__argusStableRenderV2050";
+function yn(e) {
 	let t = e.shadowRoot;
 	if (!t) return;
 	let n = /* @__PURE__ */ new Date(), r = e._formatTime ? e._formatTime(n) : n.toLocaleTimeString([], {
@@ -17936,7 +17844,7 @@ function _n(e) {
 		e && e.textContent !== r && (e.textContent = r);
 	});
 }
-function vn(e, t, n, r, i, a, o) {
+function bn(e, t, n, r, i, a, o) {
 	return [
 		t?.entity_id || "",
 		t?.entry_id || "",
@@ -17957,7 +17865,7 @@ function vn(e, t, n, r, i, a, o) {
 		String(e._getCurrentLangCode?.() || e._manualLang || e._ui?.language || e._hass?.language || "")
 	].join("|");
 }
-function yn(e, t) {
+function xn(e, t) {
 	t && !t._argusDelegated && (t._argusDelegated = !0, t.addEventListener("click", (t) => {
 		let n = t.target;
 		if (n.closest?.("button[data-action=\"unlock-kiosk\"]")) {
@@ -17987,18 +17895,18 @@ function yn(e, t) {
 		o?.dataset?.idx != null && o?.dataset?.action && e._handleAction?.(o.dataset.idx, o.dataset.action);
 	}));
 }
-function bn(e) {
+function Sn(e) {
 	let t = e?.prototype;
-	if (!t || t[gn]) return;
-	t[gn] = !0;
+	if (!t || t[vn]) return;
+	t[vn] = !0;
 	let n = t._renderEntries, r = Object.getOwnPropertyDescriptor(t, "hass") || Object.getOwnPropertyDescriptor(Object.getPrototypeOf(t), "hass");
 	t._updateLiveClocks = function() {
-		_n(this);
+		yn(this);
 	}, t._updateHeroClock = function() {
-		_n(this);
+		yn(this);
 	}, t._startClock = function() {
-		this._clockInterval && clearInterval(this._clockInterval), _n(this), this._clockInterval = setInterval(() => {
-			this._dashboard && _n(this);
+		this._clockInterval && clearInterval(this._clockInterval), yn(this), this._clockInterval = setInterval(() => {
+			this._dashboard && yn(this);
 		}, 1e3);
 	}, t._renderEntries = function(e = !1) {
 		let t = this.shadowRoot;
@@ -18006,7 +17914,7 @@ function bn(e) {
 		let r = t.getElementById("entries"), i = this._dashboard?.entries || [];
 		if (this._instanceSignatures = this._instanceSignatures || /* @__PURE__ */ new Map(), !r || !i.length) {
 			let r = n?.call(this, e);
-			return yn(this, t.getElementById("entries")), _n(this), r;
+			return xn(this, t.getElementById("entries")), yn(this), r;
 		}
 		let a = [...r.querySelectorAll("article.entry")];
 		if (!e && a.length === i.length && a.every((e) => e.querySelector(".entry-content"))) {
@@ -18027,7 +17935,7 @@ function bn(e) {
 				let f = u.bypassed_sensors || [], p = d.filter((e) => !f.includes(e)).map((e) => {
 					let t = this._hass?.states?.[e], n = this._getSensorBattery?.(e, t) ?? t?.attributes?.battery_level ?? t?.attributes?.battery_percentage ?? "";
 					return `${e}:${t?.state || ""}:${n}`;
-				}).join(","), m = vn(this, n, a, o, p, s, c);
+				}).join(","), m = bn(this, n, a, o, p, s, c);
 				if (this._instanceSignatures.get(t) !== m) {
 					e = !1;
 					break;
@@ -18041,7 +17949,7 @@ function bn(e) {
 					let t = ((e) => this._t?.(e) || e)(e ? "system_armed" : "system_disarmed"), n = `<i class="hero-live" style="background:${e ? "#ffb54d" : "#55df91"};box-shadow:0 0 9px ${e ? "#ffb54d" : "#55df91"}"></i>${this._escapeHtml?.(t) || t}`;
 					a.innerHTML !== n && (a.innerHTML = n);
 				}
-				_n(this), yn(this, r);
+				yn(this), xn(this, r);
 				return;
 			}
 		}
@@ -18064,9 +17972,9 @@ function bn(e) {
 			let f = u.bypassed_sensors || [], p = d.filter((e) => !f.includes(e)).map((e) => {
 				let t = this._hass?.states?.[e], n = this._getSensorBattery?.(e, t) ?? t?.attributes?.battery_level ?? t?.attributes?.battery_percentage ?? "";
 				return `${e}:${t?.state || ""}:${n}`;
-			}).join(","), m = vn(this, n, a, o, p, s, c);
+			}).join(","), m = bn(this, n, a, o, p, s, c);
 			this._instanceSignatures.set(t, m), e.dataset.renderSig = m;
-		}), yn(this, r), _n(this), o;
+		}), xn(this, r), yn(this), o;
 	};
 	let i = r?.get, a = r?.set;
 	a && Object.defineProperty(t, "hass", {
@@ -18087,7 +17995,7 @@ function bn(e) {
 				let i = t.language !== e.language;
 				i && !this._manualLang && this._refreshLocalizedUi?.();
 				let a = this._dashboard.entries.some((n) => n.entity_id && t.states[n.entity_id]?.state !== e.states[n.entity_id]?.state), o = [...n].some((n) => t.states[n]?.state !== e.states[n]?.state || t.states[n]?.attributes?.battery_level !== e.states[n]?.attributes?.battery_level || t.states[n]?.attributes?.battery_percentage !== e.states[n]?.attributes?.battery_percentage), s = this._temperatureSource === "auto" ? null : this._temperatureSource, c = s && t.states[s]?.state !== e.states[s]?.state, l = this._weatherSource && this._weatherSource !== "auto" ? this._weatherSource : Object.values(e.states).find((e) => e.entity_id?.startsWith("weather."))?.entity_id, u = l && (t.states[l]?.state !== e.states[l]?.state || t.states[l]?.attributes?.temperature !== e.states[l]?.attributes?.temperature), d = a || o || c || u || i;
-				this._hass = e, this._updateTheme?.(), d ? (this._renderEntries?.(i), this._renderActivityLog?.()) : _n(this);
+				this._hass = e, this._updateTheme?.(), d ? (this._renderEntries?.(i), this._renderActivityLog?.()) : yn(this);
 				return;
 			}
 			return a.call(this, e);
@@ -18101,30 +18009,30 @@ function bn(e) {
 }
 //#endregion
 //#region src/features/render/alarm.ts
-var xn = "argus-v2050-alarm-visuals", Sn = {
+var Cn = "argus-v2050-alarm-visuals", wn = {
 	armed_home: /EN CASA|HOME|EM CASA|CASA|在家|ДОМА/i,
 	armed_away: /AUSENTE|AWAY|ASSENTE|外出|УШЁЛ/i,
 	armed_night: /NOCHE|NIGHT|NOITE|NOTTE|夜间|НОЧЬ/i
 };
-function Cn(e, t) {
+function Tn(e, t) {
 	let n = t?.entity_id || t?.alarm_entity_id, r = n ? e._hass?.states?.[n]?.state : void 0;
 	return String(r || t?.state || t?.alarm_state || t?.attributes?.state || "").toLowerCase();
 }
-function wn(e, t, n) {
+function En(e, t, n) {
 	e.classList.toggle("active", n), e.classList.toggle("argus-action-active", n), e.dataset.argusAction = t, t === "sos" && e.classList.toggle("flashing", n);
 }
-function Tn(e) {
+function Dn(e) {
 	let t = e.shadowRoot;
 	if (!t) return;
-	let n = t.getElementById(xn);
-	n || (n = document.createElement("style"), n.id = xn, t.appendChild(n)), n.textContent = "\n.entry .liquid-stack .liquid-btn{border-radius:13px!important;color:rgba(255,255,255,.92)!important}\n.entry.argus-arming .entry-icon>svg,.entry.argus-waiting .entry-icon>svg{transform-origin:center!important;animation:argusArmingShield 1.05s ease-in-out infinite!important;filter:drop-shadow(0 0 26px rgba(255,184,57,.95)) saturate(1.35)!important;will-change:transform,opacity}\n.argus-shield-status{display:block;margin:7px auto 0;padding:5px 10px;width:max-content;max-width:180px;border:1px solid rgba(255,184,57,.45);border-radius:999px;background:rgba(255,149,0,.13);color:#ffd27a;font-size:9px;font-weight:800;letter-spacing:.12em;text-align:center;animation:argusArmingLabel 1.05s ease-in-out infinite}\n.entry .console-sensor.argus-blocking,.entry .console-sensor.argus-triggered-sensor{border-color:#ff8a1f!important;background:linear-gradient(135deg,rgba(249,115,22,.32),rgba(194,65,12,.18))!important;animation:argusTriggeredSensor .72s ease-in-out infinite!important;will-change:transform,opacity}\n@keyframes argusArmingShield{0%,100%{opacity:.55;transform:scale3d(.94,.94,1)}50%{opacity:1;transform:scale3d(1.07,1.07,1)}}\n@keyframes argusArmingLabel{0%,100%{opacity:.62}50%{opacity:1}}\n@keyframes argusTriggeredSensor{0%,100%{opacity:.62;transform:scale3d(1,1,1)}50%{opacity:1;transform:scale3d(1.02,1.02,1)}}\n";
+	let n = t.getElementById(Cn);
+	n || (n = document.createElement("style"), n.id = Cn, t.appendChild(n)), n.textContent = "\n.entry .liquid-stack .liquid-btn{border-radius:13px!important;color:rgba(255,255,255,.92)!important}\n.entry.argus-arming .entry-icon>svg,.entry.argus-waiting .entry-icon>svg{transform-origin:center!important;animation:argusArmingShield 1.05s ease-in-out infinite!important;filter:drop-shadow(0 0 26px rgba(255,184,57,.95)) saturate(1.35)!important;will-change:transform,opacity}\n.argus-shield-status{display:block;margin:7px auto 0;padding:5px 10px;width:max-content;max-width:180px;border:1px solid rgba(255,184,57,.45);border-radius:999px;background:rgba(255,149,0,.13);color:#ffd27a;font-size:9px;font-weight:800;letter-spacing:.12em;text-align:center;animation:argusArmingLabel 1.05s ease-in-out infinite}\n.entry .console-sensor.argus-blocking,.entry .console-sensor.argus-triggered-sensor{border-color:#ff8a1f!important;background:linear-gradient(135deg,rgba(249,115,22,.32),rgba(194,65,12,.18))!important;animation:argusTriggeredSensor .72s ease-in-out infinite!important;will-change:transform,opacity}\n@keyframes argusArmingShield{0%,100%{opacity:.55;transform:scale3d(.94,.94,1)}50%{opacity:1;transform:scale3d(1.07,1.07,1)}}\n@keyframes argusArmingLabel{0%,100%{opacity:.62}50%{opacity:1}}\n@keyframes argusTriggeredSensor{0%,100%{opacity:.62;transform:scale3d(1,1,1)}50%{opacity:1;transform:scale3d(1.02,1.02,1)}}\n";
 }
-function En(e) {
+function On(e) {
 	if (!e.shadowRoot) return;
-	Tn(e);
+	Dn(e);
 	let t = e.shadowRoot.querySelectorAll(".entry");
 	Array.from(t).forEach((t, n) => {
-		let r = e._dashboard?.entries?.[n] || {}, i = r.attributes || e._hass?.states?.[r.entity_id]?.attributes || {}, a = Cn(e, r), o = i.arming_blocking_sensors || [], s = a === "arming" || !!i.arming_waiting_for_sensors || !!o.length;
+		let r = e._dashboard?.entries?.[n] || {}, i = r.attributes || e._hass?.states?.[r.entity_id]?.attributes || {}, a = Tn(e, r), o = i.arming_blocking_sensors || [], s = a === "arming" || !!i.arming_waiting_for_sensors || !!o.length;
 		t.classList.toggle("argus-arming", s), t.classList.toggle("argus-waiting", s);
 		let c = t.querySelector(".entry-icon"), l = t.querySelector(".argus-shield-status");
 		if (s && c) {
@@ -18135,11 +18043,11 @@ function En(e) {
 		let u = t.querySelector(".liquid-stack");
 		u && Array.from(u.querySelectorAll(".liquid-btn,button")).forEach((e) => {
 			let t = e, n = String(t.textContent || "");
-			if (/SOS|PÁNICO|PANIC|PANIQUE|PÂNICO|PANICO|紧急|ПАНИКА/i.test(n)) wn(t, "sos", !!i.argus_panic_active);
-			else if (/DESARMAR|DISARM|DESARMADO|DISARMED|DÉSARMER|DÉSARMÉ|OFF|已撤防|СНЯТО/i.test(n)) wn(t, "disarm", a === "disarmed");
+			if (/SOS|PÁNICO|PANIC|PANIQUE|PÂNICO|PANICO|紧急|ПАНИКА/i.test(n)) En(t, "sos", !!i.argus_panic_active);
+			else if (/DESARMAR|DISARM|DESARMADO|DISARMED|DÉSARMER|DÉSARMÉ|OFF|已撤防|СНЯТО/i.test(n)) En(t, "disarm", a === "disarmed");
 			else {
-				let e = Object.entries(Sn).find(([, e]) => e.test(n));
-				e && wn(t, e[0], a === e[0]);
+				let e = Object.entries(wn).find(([, e]) => e.test(n));
+				e && En(t, e[0], a === e[0]);
 			}
 		});
 		let d = new Set((i.triggered_sensors || []).map(String)), f = new Set(o.map((t) => String(e._dashboard?.available_entities?.find((e) => e.entity_id === t)?.name || t).toLocaleLowerCase()));
@@ -18149,51 +18057,51 @@ function En(e) {
 		});
 	});
 }
-function Dn(e) {
+function kn(e) {
 	let t = e?.prototype;
 	if (!t || t.__v2050AlarmVisuals) return;
 	t.__v2050AlarmVisuals = !0;
 	let n = t.connectedCallback, r = t._load, i = t._renderEntries;
 	t.connectedCallback = function() {
 		let e = n?.call(this);
-		return En(this), e;
+		return On(this), e;
 	}, t._load = async function(...e) {
 		let t = await r?.apply(this, e);
-		return En(this), t;
+		return On(this), t;
 	}, t._renderEntries = function(...e) {
 		let t = i?.apply(this, e);
-		return En(this), t;
+		return On(this), t;
 	};
 }
 //#endregion
 //#region src/features/widgets/responsive.ts
-var On = "argus-v2049-responsive-widgets", kn = "#w-access,.access-view,.access-content,.access-sections,.users-list,.user-list,.users-grid,[role=\"tabpanel\"],.users-modal,.access-modal,.argus-users-modal";
-function An(e) {
+var An = "argus-v2049-responsive-widgets", jn = "#w-access,.access-view,.access-content,.access-sections,.users-list,.user-list,.users-grid,[role=\"tabpanel\"],.users-modal,.access-modal,.argus-users-modal";
+function Mn(e) {
 	let t = e.shadowRoot;
 	if (!t) return;
-	let n = t.getElementById(On);
-	n || (n = document.createElement("style"), n.id = On, t.appendChild(n)), n.textContent = "\n#w-access{display:flex!important;flex-direction:column!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;box-sizing:border-box!important}\n#w-access>.panel-head,#w-access>.access-summary,#w-access>.tabs{flex:0 0 auto!important}\n#w-access :is(.panel-body,#access-view,.access-view,.access-content,.access-sections,.users-list,.user-list,.users-grid,[role=\"tabpanel\"]){flex:1 1 auto!important;min-width:0!important;min-height:0!important;max-height:none!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;scrollbar-gutter:stable!important;box-sizing:border-box!important}\n:is(.users-modal,.access-modal,.argus-users-modal,.modal,[role=\"dialog\"]){max-width:min(94vw,760px)!important;max-height:min(88dvh,720px)!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;box-sizing:border-box!important}\n/* Backup: title plus an explicit responsive button grid. */\n#w-backup{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-auto-rows:max-content!important;place-content:center!important;align-items:center!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow:hidden!important;box-sizing:border-box!important;padding:16px!important;gap:12px!important;text-align:center!important}\n#w-backup>h2,#w-backup>.panel-head,#w-backup>.panel-title{grid-column:1/-1!important;width:100%!important;margin:0 0 2px!important;text-align:center!important}\n#w-backup>:not(.panel-edit-overlay){min-width:0!important;max-width:100%!important;box-sizing:border-box!important;margin-top:0!important;margin-bottom:0!important}\n#w-backup :is(.panel-body,.actions,.backup-actions,.button-row,.controls){display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-column:1/-1!important;gap:12px!important;width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;box-sizing:border-box!important;flex-wrap:wrap!important}\n#w-backup :is(button,a,ha-button,mwc-button){width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;padding-inline:8px!important;white-space:normal!important;overflow-wrap:anywhere!important;text-align:center!important;justify-content:center!important;box-sizing:border-box!important;font-size:clamp(11px,1.1vw,14px)!important}\n/* Support: compact centered group; no inherited space-between or auto margins. */\n#w-github{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-auto-rows:max-content!important;place-content:center!important;justify-items:center!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow:hidden!important;box-sizing:border-box!important;padding:18px!important;row-gap:18px!important;text-align:center!important}\n#w-github>:not(.panel-edit-overlay){min-width:0!important;max-width:100%!important;margin:0!important;box-sizing:border-box!important}\n#w-github :is(h2,.panel-head,.panel-title){width:100%!important;margin:0!important;text-align:center!important}\n#w-github :is(.panel-body,.actions,.support-actions,.button-row,.controls){display:grid!important;place-items:center!important;width:auto!important;min-width:0!important;max-width:100%!important;margin:0!important;padding:0!important;box-sizing:border-box!important;flex-wrap:wrap!important}\n#w-github :is(button,a,ha-button,mwc-button){width:auto!important;min-width:0!important;max-width:100%!important;margin:0!important;white-space:normal!important;text-align:center!important;justify-content:center!important;box-sizing:border-box!important}\n#w-backup .panel-edit-overlay,#w-github .panel-edit-overlay{position:absolute!important;inset:0!important;margin:0!important;max-width:none!important}\n@media(max-width:460px){#w-backup{grid-template-columns:1fr!important;overflow-y:auto!important}#w-backup :is(.panel-body,.actions,.backup-actions,.button-row,.controls){grid-template-columns:1fr!important}#w-backup :is(button,a,ha-button,mwc-button){font-size:13px!important}#w-github{padding:14px!important;row-gap:12px!important}}\n";
+	let n = t.getElementById(An);
+	n || (n = document.createElement("style"), n.id = An, t.appendChild(n)), n.textContent = "\n#w-access{display:flex!important;flex-direction:column!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;box-sizing:border-box!important}\n#w-access>.panel-head,#w-access>.access-summary,#w-access>.tabs{flex:0 0 auto!important}\n#w-access :is(.panel-body,#access-view,.access-view,.access-content,.access-sections,.users-list,.user-list,.users-grid,[role=\"tabpanel\"]){flex:1 1 auto!important;min-width:0!important;min-height:0!important;max-height:none!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;scrollbar-gutter:stable!important;box-sizing:border-box!important}\n:is(.users-modal,.access-modal,.argus-users-modal,.modal,[role=\"dialog\"]){max-width:min(94vw,760px)!important;max-height:min(88dvh,720px)!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;box-sizing:border-box!important}\n/* Backup: title plus an explicit responsive button grid. */\n#w-backup{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-auto-rows:max-content!important;place-content:center!important;align-items:center!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow:hidden!important;box-sizing:border-box!important;padding:16px!important;gap:12px!important;text-align:center!important}\n#w-backup>h2,#w-backup>.panel-head,#w-backup>.panel-title{grid-column:1/-1!important;width:100%!important;margin:0 0 2px!important;text-align:center!important}\n#w-backup>:not(.panel-edit-overlay){min-width:0!important;max-width:100%!important;box-sizing:border-box!important;margin-top:0!important;margin-bottom:0!important}\n#w-backup :is(.panel-body,.actions,.backup-actions,.button-row,.controls){display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-column:1/-1!important;gap:12px!important;width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;box-sizing:border-box!important;flex-wrap:wrap!important}\n#w-backup :is(button,a,ha-button,mwc-button){width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;padding-inline:8px!important;white-space:normal!important;overflow-wrap:anywhere!important;text-align:center!important;justify-content:center!important;box-sizing:border-box!important;font-size:clamp(11px,1.1vw,14px)!important}\n/* Support: compact centered group; no inherited space-between or auto margins. */\n#w-github{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-auto-rows:max-content!important;place-content:center!important;justify-items:center!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow:hidden!important;box-sizing:border-box!important;padding:18px!important;row-gap:18px!important;text-align:center!important}\n#w-github>:not(.panel-edit-overlay){min-width:0!important;max-width:100%!important;margin:0!important;box-sizing:border-box!important}\n#w-github :is(h2,.panel-head,.panel-title){width:100%!important;margin:0!important;text-align:center!important}\n#w-github :is(.panel-body,.actions,.support-actions,.button-row,.controls){display:grid!important;place-items:center!important;width:auto!important;min-width:0!important;max-width:100%!important;margin:0!important;padding:0!important;box-sizing:border-box!important;flex-wrap:wrap!important}\n#w-github :is(button,a,ha-button,mwc-button){width:auto!important;min-width:0!important;max-width:100%!important;margin:0!important;white-space:normal!important;text-align:center!important;justify-content:center!important;box-sizing:border-box!important}\n#w-backup .panel-edit-overlay,#w-github .panel-edit-overlay{position:absolute!important;inset:0!important;margin:0!important;max-width:none!important}\n@media(max-width:460px){#w-backup{grid-template-columns:1fr!important;overflow-y:auto!important}#w-backup :is(.panel-body,.actions,.backup-actions,.button-row,.controls){grid-template-columns:1fr!important}#w-backup :is(button,a,ha-button,mwc-button){font-size:13px!important}#w-github{padding:14px!important;row-gap:12px!important}}\n";
 }
-function jn(e) {
+function Nn(e) {
 	let t = e.shadowRoot;
-	t && t.querySelectorAll(kn).forEach((e) => {
+	t && t.querySelectorAll(jn).forEach((e) => {
 		let t = e;
 		t.style.touchAction = "pan-y", t.style.setProperty("-webkit-overflow-scrolling", "touch"), t.scrollHeight > t.clientHeight && (t.style.overflowY = "auto");
 	});
 }
-function Mn(e) {
-	An(e), jn(e);
+function Pn(e) {
+	Mn(e), Nn(e);
 }
-function Nn(e) {
+function Fn(e) {
 	let t = e?.prototype;
 	if (!t || t.__v2049ResponsiveWidgets) return;
 	t.__v2049ResponsiveWidgets = !0;
 	let n = t.connectedCallback, r = t.disconnectedCallback, i = t._load, a = t._renderEntries;
 	t.connectedCallback = function() {
 		let e = n?.call(this);
-		return Mn(this), this._v2049Observer?.disconnect?.(), this._v2049Frame = 0, this._v2049Observer = new MutationObserver(() => {
+		return Pn(this), this._v2049Observer?.disconnect?.(), this._v2049Frame = 0, this._v2049Observer = new MutationObserver(() => {
 			this._v2049Frame ||= requestAnimationFrame(() => {
-				this._v2049Frame = 0, Mn(this);
+				this._v2049Frame = 0, Pn(this);
 			});
 		}), this.shadowRoot && this._v2049Observer.observe(this.shadowRoot, {
 			childList: !0,
@@ -18203,41 +18111,41 @@ function Nn(e) {
 		return this._v2049Observer?.disconnect?.(), this._v2049Observer = null, this._v2049Frame && cancelAnimationFrame(this._v2049Frame), this._v2049Frame = 0, r?.call(this);
 	}, t._load = async function(...e) {
 		let t = await i?.apply(this, e);
-		return Mn(this), t;
+		return Pn(this), t;
 	}, t._renderEntries = function(...e) {
 		let t = a?.apply(this, e);
-		return Mn(this), t;
+		return Pn(this), t;
 	};
 }
 //#endregion
 //#region src/features/widgets/layouts.ts
-var Pn = "argus-v2050-widget-layouts";
-function Fn(e) {
+var In = "argus-v2050-widget-layouts";
+function Ln(e) {
 	let t = e.shadowRoot;
 	if (!t) return;
-	let n = t.getElementById(Pn);
-	n || (n = document.createElement("style"), n.id = Pn, t.appendChild(n)), n.textContent = "\n#w-access{display:flex!important;flex-direction:column!important;min-width:0!important;min-height:0!important;height:100%!important;overflow:hidden!important}\n#w-access .panel-body,#w-access #access-view,#w-access .access-view,#w-access .access-content,#w-access .users-list,#w-access .user-list{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;overscroll-behavior:contain!important}\n#w-backup{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:14px!important;padding:16px!important;box-sizing:border-box!important;height:100%!important;min-height:0!important;overflow:hidden!important;text-align:center!important}\n#w-backup h2,#w-backup .panel-head,#w-backup .panel-title{margin:0!important;width:100%!important;text-align:center!important;flex:0 0 auto!important}\n#w-backup .panel-body,#w-backup .actions,#w-backup .backup-actions,#w-backup .button-row,#w-backup .controls{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important;width:100%!important;max-width:100%!important;margin:0!important;padding:0!important;box-sizing:border-box!important}\n#w-backup button,#w-backup a,#w-backup ha-button,#w-backup mwc-button{width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;white-space:normal!important;overflow-wrap:anywhere!important;justify-content:center!important;text-align:center!important;font-size:clamp(11px,1.1vw,14px)!important;box-sizing:border-box!important}\n#w-github{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:16px!important;padding:18px!important;box-sizing:border-box!important;height:100%!important;min-height:0!important;overflow:hidden!important;text-align:center!important}\n#w-github h2,#w-github .panel-head,#w-github .panel-title{margin:0!important;width:100%!important;text-align:center!important}\n#w-github .panel-body,#w-github .actions,#w-github .support-actions{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:12px!important;width:auto!important;max-width:100%!important;margin:0!important;padding:0!important}\n#w-github button,#w-github a,#w-github ha-button,#w-github mwc-button{width:auto!important;max-width:100%!important;margin:0!important;justify-content:center!important}\n#w-backup .panel-edit-overlay,#w-github .panel-edit-overlay,#w-access .panel-edit-overlay{position:absolute!important;inset:0!important}\n@media(max-width:520px){#w-backup .panel-body,#w-backup .actions,#w-backup .backup-actions,#w-backup .button-row,#w-backup .controls{grid-template-columns:1fr!important}#w-backup{overflow-y:auto!important}}\n";
+	let n = t.getElementById(In);
+	n || (n = document.createElement("style"), n.id = In, t.appendChild(n)), n.textContent = "\n#w-access{display:flex!important;flex-direction:column!important;min-width:0!important;min-height:0!important;height:100%!important;overflow:hidden!important}\n#w-access .panel-body,#w-access #access-view,#w-access .access-view,#w-access .access-content,#w-access .users-list,#w-access .user-list{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;overscroll-behavior:contain!important}\n#w-backup{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:14px!important;padding:16px!important;box-sizing:border-box!important;height:100%!important;min-height:0!important;overflow:hidden!important;text-align:center!important}\n#w-backup h2,#w-backup .panel-head,#w-backup .panel-title{margin:0!important;width:100%!important;text-align:center!important;flex:0 0 auto!important}\n#w-backup .panel-body,#w-backup .actions,#w-backup .backup-actions,#w-backup .button-row,#w-backup .controls{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important;width:100%!important;max-width:100%!important;margin:0!important;padding:0!important;box-sizing:border-box!important}\n#w-backup button,#w-backup a,#w-backup ha-button,#w-backup mwc-button{width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;white-space:normal!important;overflow-wrap:anywhere!important;justify-content:center!important;text-align:center!important;font-size:clamp(11px,1.1vw,14px)!important;box-sizing:border-box!important}\n#w-github{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:16px!important;padding:18px!important;box-sizing:border-box!important;height:100%!important;min-height:0!important;overflow:hidden!important;text-align:center!important}\n#w-github h2,#w-github .panel-head,#w-github .panel-title{margin:0!important;width:100%!important;text-align:center!important}\n#w-github .panel-body,#w-github .actions,#w-github .support-actions{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:12px!important;width:auto!important;max-width:100%!important;margin:0!important;padding:0!important}\n#w-github button,#w-github a,#w-github ha-button,#w-github mwc-button{width:auto!important;max-width:100%!important;margin:0!important;justify-content:center!important}\n#w-backup .panel-edit-overlay,#w-github .panel-edit-overlay,#w-access .panel-edit-overlay{position:absolute!important;inset:0!important}\n@media(max-width:520px){#w-backup .panel-body,#w-backup .actions,#w-backup .backup-actions,#w-backup .button-row,#w-backup .controls{grid-template-columns:1fr!important}#w-backup{overflow-y:auto!important}}\n";
 }
-function In(e) {
+function Rn(e) {
 	let t = e.shadowRoot;
 	t && t.querySelectorAll("#w-access,.access-content,.users-list,.user-list,[role=tabpanel],.users-modal,.access-modal").forEach((e) => {
 		let t = e;
 		t.style.touchAction = "pan-y", t.style.setProperty("-webkit-overflow-scrolling", "touch"), t.scrollHeight > t.clientHeight && (t.style.overflowY = "auto");
 	});
 }
-function Ln(e) {
-	Fn(e), In(e);
+function zn(e) {
+	Ln(e), Rn(e);
 }
-function Rn(e) {
+function Bn(e) {
 	let t = e?.prototype;
 	if (!t || t.__v2050WidgetLayouts) return;
 	t.__v2050WidgetLayouts = !0;
 	let n = t.connectedCallback, r = t.disconnectedCallback, i = t._load, a = t._renderEntries;
 	t.connectedCallback = function() {
 		let e = n?.call(this);
-		return Ln(this), this._v2050LayoutObs?.disconnect?.(), this._v2050LayoutFrame = 0, this._v2050LayoutObs = new MutationObserver(() => {
+		return zn(this), this._v2050LayoutObs?.disconnect?.(), this._v2050LayoutFrame = 0, this._v2050LayoutObs = new MutationObserver(() => {
 			this._v2050LayoutFrame ||= requestAnimationFrame(() => {
-				this._v2050LayoutFrame = 0, Ln(this);
+				this._v2050LayoutFrame = 0, zn(this);
 			});
 		}), this.shadowRoot && this._v2050LayoutObs.observe(this.shadowRoot, {
 			childList: !0,
@@ -18247,30 +18155,30 @@ function Rn(e) {
 		return this._v2050LayoutObs?.disconnect?.(), this._v2050LayoutObs = null, this._v2050LayoutFrame && cancelAnimationFrame(this._v2050LayoutFrame), this._v2050LayoutFrame = 0, r?.call(this);
 	}, t._load = async function(...e) {
 		let t = await i?.apply(this, e);
-		return Ln(this), t;
+		return zn(this), t;
 	}, t._renderEntries = function(...e) {
 		let t = a?.apply(this, e);
-		return Ln(this), t;
+		return zn(this), t;
 	};
 }
 //#endregion
 //#region src/features/more-info/hook.ts
-var zn = "argus-more-info-hook-installed", Bn = "argus-more-info-dialog-styles";
-function Vn(e, t) {
+var Vn = "argus-more-info-hook-installed", Hn = "argus-more-info-dialog-styles";
+function Un(e, t) {
 	if (!e || !e.startsWith("alarm_control_panel.")) return !1;
 	if (e.includes("argus")) return !0;
 	let n = t?.states?.[e];
 	return !!(n?.attributes?.argus_version || n?.attributes?.argus_entry_id);
 }
-function Hn(e) {
-	if (!e || typeof e.getElementById == "function" && e.getElementById(Bn)) return;
+function Wn(e) {
+	if (!e || typeof e.getElementById == "function" && e.getElementById(Hn)) return;
 	let t = e.createElement("style");
-	t.id = Bn, t.textContent = "\n    ha-more-info-dialog:has(.argus-more-info-active) ha-dialog,\n    ha-more-info-dialog:has(.argus-more-info-active) .mdc-dialog__surface {\n      --ha-dialog-border-radius: 28px !important;\n      --mdc-shape-medium: 28px !important;\n      background: rgba(7, 17, 31, 0.94) !important;\n      backdrop-filter: blur(32px) saturate(170%) !important;\n      -webkit-backdrop-filter: blur(32px) saturate(170%) !important;\n      border: 1px solid rgba(255, 255, 255, 0.16) !important;\n      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.65) !important;\n      max-width: 640px !important;\n      width: min(92vw, 620px) !important;\n    }\n    .argus-more-info-container {\n      width: 100%;\n      box-sizing: border-box;\n      padding: 0;\n      margin: 0;\n      overflow: hidden;\n      border-radius: 24px;\n    }\n    .argus-more-info-container argus-panel-v2018 {\n      display: block;\n      width: 100%;\n    }\n  ", (e.head || e.body || e).appendChild(t);
+	t.id = Hn, t.textContent = "\n    ha-more-info-dialog:has(.argus-more-info-active) ha-dialog,\n    ha-more-info-dialog:has(.argus-more-info-active) .mdc-dialog__surface {\n      --ha-dialog-border-radius: 28px !important;\n      --mdc-shape-medium: 28px !important;\n      background: rgba(7, 17, 31, 0.94) !important;\n      backdrop-filter: blur(32px) saturate(170%) !important;\n      -webkit-backdrop-filter: blur(32px) saturate(170%) !important;\n      border: 1px solid rgba(255, 255, 255, 0.16) !important;\n      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.65) !important;\n      max-width: 640px !important;\n      width: min(92vw, 620px) !important;\n    }\n    .argus-more-info-container {\n      width: 100%;\n      box-sizing: border-box;\n      padding: 0;\n      margin: 0;\n      overflow: hidden;\n      border-radius: 24px;\n    }\n    .argus-more-info-container argus-panel-v2018 {\n      display: block;\n      width: 100%;\n    }\n  ", (e.head || e.body || e).appendChild(t);
 }
-function Un(e, t) {
+function Gn(e, t) {
 	if (!e) return;
 	let n = e._entityId || e.entityId || e.params?.entityId;
-	if (!Vn(n, t)) return;
+	if (!Un(n, t)) return;
 	let r = e.shadowRoot;
 	if (!r) return;
 	let i = r.querySelector("more-info-content") || r.querySelector("more-info-alarm_control_panel") || r.querySelector(".content") || r.querySelector("ha-dialog");
@@ -18297,17 +18205,17 @@ function Un(e, t) {
 		o && o !== a ? (o.style.display = "none", o.parentNode?.insertBefore(a, o)) : i.appendChild(a);
 	}
 }
-function Wn(e) {
-	if (typeof window > "u" || typeof document > "u" || window[zn]) return;
-	window[zn] = !0;
+function Kn(e) {
+	if (typeof window > "u" || typeof document > "u" || window[Vn]) return;
+	window[Vn] = !0;
 	try {
-		Hn(document);
+		Wn(document);
 	} catch {}
 	let t = (e) => {
 		e.detail?.entityId && requestAnimationFrame(() => {
 			try {
 				let e = document.querySelector("home-assistant"), t = e?.shadowRoot?.querySelector("ha-more-info-dialog") || document.querySelector("ha-more-info-dialog");
-				t && Un(t, e?.hass);
+				t && Gn(t, e?.hass);
 			} catch {}
 		});
 	};
@@ -18318,7 +18226,7 @@ function Wn(e) {
 		typeof MutationObserver < "u" && document.body && new MutationObserver(() => {
 			try {
 				let e = document.querySelector("home-assistant"), t = e?.shadowRoot?.querySelector("ha-more-info-dialog") || document.querySelector("ha-more-info-dialog");
-				t && Un(t, e?.hass);
+				t && Gn(t, e?.hass);
 			} catch {}
 		}).observe(document.body, {
 			childList: !0,
@@ -18328,10 +18236,10 @@ function Wn(e) {
 }
 //#endregion
 //#region src/app/index.ts
-function Gn(e) {
+function qn(e) {
 	e ||= customElements.get("argus-panel-v2018");
 	let t = e;
-	t && !t.__argusTypedFrontend && (t.__argusTypedFrontend = !0, Jt(t), Gt(t), Xt(t), hn(t), bn(t), Dn(t), Ft(t), Nn(t), Rn(t), Wn(t), Ut(t), Rt(t));
+	t && !t.__argusTypedFrontend && (t.__argusTypedFrontend = !0, Xt(t), qt(t), Qt(t), _n(t), Sn(t), kn(t), Lt(t), Fn(t), Bn(t), Kn(t), Gt(t), Bt(t));
 }
 //#endregion
-export { Gn as applyArgusFrontend };
+export { qn as applyArgusFrontend };

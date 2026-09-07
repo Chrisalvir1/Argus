@@ -124,10 +124,10 @@
   box-sizing: border-box !important;
   padding: 0 18px !important;
   border-radius: 999px !important;
-  font-size: 11px !important;
-  font-weight: 900 !important;
-  letter-spacing: 0.05em !important;
-  text-transform: uppercase !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+  text-transform: none !important;
   white-space: nowrap !important;
   backdrop-filter: blur(24px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
@@ -419,10 +419,10 @@
 }
 
 .console-sensor-state {
-  font-size: 10.5px !important;
-  font-weight: 900 !important;
-  letter-spacing: 0.05em !important;
-  text-transform: uppercase !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+  text-transform: none !important;
   display: inline-flex !important;
   align-items: center !important;
   gap: 4px !important;
