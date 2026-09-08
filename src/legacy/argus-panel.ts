@@ -107,7 +107,7 @@ const TEXTS = {
     'clear': 'Limpiar',
     'clear_history': 'Limpiar Historial',
     'clear_history_confirm': '¿Eliminar todo el historial de actividad?',
-    'clear_log_btn': '🗑️ Limpiar historial',
+    'clear_log_btn': '🗑️ Limpiar',
     'clock_12h': '12 Horas (AM/PM)',
     'clock_24h': '24 Horas',
     'clock_auto': 'Automático (según idioma)',
@@ -142,6 +142,7 @@ const TEXTS = {
     'emergency_number_label': 'Número Local de Emergencia',
     'sos_config_title': 'CONFIGURACIÓN SOS',
     'export_history_title': 'Exportar Historial',
+    'export_action': 'Exportar',
     'log_action_audit_log_cleared': 'Historial de actividad eliminado',
     'entry_sensors': 'Sensores de entrada',
     'error_loading_uploaded_files': 'Error al cargar archivos subidos.',
@@ -168,7 +169,7 @@ const TEXTS = {
     'forgot_pin': '¿Olvidaste tu PIN?',
     'fullscreen_title': 'Pantalla Completa',
     'generic_error': 'Error: {error}',
-    'github_action': 'Dar Estrella en GitHub',
+    'github_action': 'Dar Estrella',
     'github_desc': 'Si te gusta el proyecto, apóyanos con una estrella en GitHub.',
     'github_title': 'Apoya a Argus',
     'ha_account_linked': 'Cuenta HA: {name}',
@@ -530,7 +531,7 @@ const TEXTS = {
     'clear': 'Clear',
     'clear_history': 'Clear History',
     'clear_history_confirm': 'Delete all activity history?',
-    'clear_log_btn': '🗑️ Clear Log',
+    'clear_log_btn': '🗑️ Clear',
     'clock_12h': '12-Hour (AM/PM)',
     'clock_24h': '24-Hour',
     'clock_auto': 'Automatic (by language)',
@@ -565,6 +566,7 @@ const TEXTS = {
     'emergency_number_label': 'Local Emergency Number',
     'sos_config_title': 'SOS CONFIGURATION',
     'export_history_title': 'Export History',
+    'export_action': 'Export',
     'log_action_audit_log_cleared': 'Activity history cleared',
     'entry_sensors': 'Entry sensors',
     'error_loading_uploaded_files': 'Error loading uploaded files.',
@@ -591,7 +593,7 @@ const TEXTS = {
     'forgot_pin': 'Forgot your PIN?',
     'fullscreen_title': 'Full Screen',
     'generic_error': 'Error: {error}',
-    'github_action': 'Star on GitHub',
+    'github_action': 'Star',
     'github_desc': 'If you enjoy this project, support development with a star on GitHub.',
     'github_title': 'Support Argus',
     'ha_account_linked': 'HA Account: {name}',
@@ -1357,6 +1359,177 @@ _tmpl.innerHTML = `
     transition:transform .2s ease,background .2s ease,box-shadow .2s ease;
   }
   .github-star-action:hover { transform:translateY(-1px);background:rgba(255,255,255,.18);box-shadow:0 12px 28px rgba(0,0,0,.20); }
+
+  /* Profile Dropdown Buttons & Setting Tiles */
+  .profile-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    width: auto !important;
+    min-height: 34px !important;
+    padding: 6px 14px !important;
+    border-radius: 10px !important;
+    font-size: 12px !important;
+    font-weight: 750 !important;
+    cursor: pointer !important;
+    box-sizing: border-box !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    color: #ffffff !important;
+    transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease !important;
+  }
+  .profile-btn:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-color: rgba(255, 255, 255, 0.28) !important;
+    transform: translateY(-1px) !important;
+  }
+  .profile-btn.primary {
+    background: rgba(52, 211, 153, 0.14) !important;
+    border-color: rgba(52, 211, 153, 0.35) !important;
+    color: #34d399 !important;
+  }
+  .profile-btn.primary:hover {
+    background: rgba(52, 211, 153, 0.24) !important;
+  }
+  .profile-btn.danger {
+    background: rgba(239, 68, 68, 0.14) !important;
+    border-color: rgba(239, 68, 68, 0.35) !important;
+    color: #f87171 !important;
+  }
+  .profile-btn.danger:hover {
+    background: rgba(239, 68, 68, 0.24) !important;
+  }
+  .profile-card-tile {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    padding: 10px 14px !important;
+    background: rgba(255, 255, 255, 0.035) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+  }
+
+  /* Activity log responsive header */
+  .activity-panel .panel-head {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px 12px !important;
+    margin-bottom: 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .activity-panel .panel-head h2 {
+    white-space: nowrap !important;
+    font-size: 15px !important;
+    font-weight: 850 !important;
+    margin: 0 !important;
+    flex: 0 1 auto !important;
+  }
+  .activity-panel .panel-actions {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex-wrap: wrap !important;
+  }
+  .activity-panel .panel-actions button {
+    min-height: 32px !important;
+    padding: 5px 11px !important;
+    font-size: 11.5px !important;
+    font-weight: 750 !important;
+    border-radius: 9px !important;
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+  }
+
+  /* Support / Community panel & buttons */
+  .github-panel {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    gap: 14px !important;
+    padding: 18px 20px !important;
+    box-sizing: border-box !important;
+  }
+  @media (min-width: 900px) {
+    .github-panel {
+      flex-direction: row !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+    }
+  }
+  .support-actions-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+    max-width: 440px !important;
+    box-sizing: border-box !important;
+  }
+  @media (max-width: 420px) {
+    .support-actions-grid {
+      grid-template-columns: 1fr !important;
+      gap: 6px !important;
+    }
+  }
+  .support-link-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 0 12px !important;
+    border-radius: 12px !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease !important;
+  }
+  .support-link-btn:hover {
+    transform: translateY(-1.5px) !important;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.25) !important;
+  }
+  .support-link-btn.star {
+    background: linear-gradient(135deg, rgba(234, 179, 8, 0.18), rgba(234, 179, 8, 0.06)) !important;
+    border: 1px solid rgba(234, 179, 8, 0.35) !important;
+    color: #facc15 !important;
+  }
+  .support-link-btn.star:hover {
+    background: rgba(234, 179, 8, 0.28) !important;
+    border-color: rgba(234, 179, 8, 0.55) !important;
+  }
+  .support-link-btn.paypal {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(56, 189, 248, 0.06)) !important;
+    border: 1px solid rgba(56, 189, 248, 0.35) !important;
+    color: #38bdf8 !important;
+  }
+  .support-link-btn.paypal:hover {
+    background: rgba(56, 189, 248, 0.28) !important;
+    border-color: rgba(56, 189, 248, 0.55) !important;
+  }
+  .support-link-btn.email {
+    background: linear-gradient(135deg, rgba(167, 139, 250, 0.18), rgba(167, 139, 250, 0.06)) !important;
+    border: 1px solid rgba(167, 139, 250, 0.35) !important;
+    color: #c084fc !important;
+  }
+  .support-link-btn.email:hover {
+    background: rgba(167, 139, 250, 0.28) !important;
+    border-color: rgba(167, 139, 250, 0.55) !important;
+  }
   @media(max-width:600px){ .access-panel{padding:20px}.access-actions{width:100%}.access-actions button{flex:1} }
 
   /* Personalization inside instances */
@@ -2729,11 +2902,11 @@ _tmpl.innerHTML = `
       <!-- Activity log -->
       <section class="glass panel liquid-glass activity-panel" id="w-activity">
         <div class="panel-head">
-          <h2 id="h-activity-log"></h2>
-          <div style="display:flex;gap:6px">
-            <button class="ghost" id="btn-refresh-history" style="font-size:10.5px;padding:4px 10px;font-weight:800;cursor:pointer;background:rgba(255,255,255,0.06);border-radius:8px">🔄 Actualizar</button>
-            <button class="ghost" id="btn-export-forensic" style="font-size:10.5px;padding:4px 10px;font-weight:800;cursor:pointer;background:rgba(255,255,255,0.06);border-radius:8px">📄 Exportar</button>
-            <button class="ghost" id="btn-clear-log" style="font-size:10.5px;padding:4px 10px;font-weight:800;cursor:pointer;background:rgba(255,69,58,0.12);color:#ff453a !important;border-radius:8px">🗑️ Limpiar</button>
+          <h2 id="h-activity-log">📋 Historial de Actividad</h2>
+          <div class="panel-actions">
+            <button class="ghost" id="btn-refresh-history" aria-label="Actualizar Historial" title="Actualizar">🔄 Actualizar</button>
+            <button class="ghost" id="btn-export-forensic" aria-label="Exportar Historial" title="Exportar">📄 Exportar</button>
+            <button class="ghost" id="btn-clear-log" aria-label="Limpiar Historial" style="background:rgba(255,69,58,0.12);color:#ff453a !important" title="Limpiar">🗑️ Limpiar</button>
           </div>
         </div>
         <div id="activity-log" style="display:grid;gap:10px;height:280px;overflow-y:auto;margin-top:10px"></div>
@@ -2854,15 +3027,15 @@ _tmpl.innerHTML = `
       </section>
 
       <!-- GitHub Opt-In -->
-      <section class="glass panel liquid-glass github-panel" id="w-github" style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); padding:16px;">
-        <div style="flex:1">
-          <h3 id="github-title" style="margin:0; font-size:14px; font-weight:600"></h3>
-          <p id="github-desc" style="margin:4px 0 0; font-size:12px; opacity:0.7"></p>
+      <section class="glass panel liquid-glass github-panel" id="w-github">
+        <div class="github-header" style="flex:1">
+          <h3 id="github-title" style="margin:0; font-size:14px; font-weight:700"></h3>
+          <p id="github-desc" style="margin:4px 0 0; font-size:12px; opacity:0.75"></p>
         </div>
-        <div style="display:flex; align-items:center; gap:10px; margin-left:16px; flex-wrap:wrap;">
-          <a id="github-action" class="github-star-action" href="https://github.com/Chrisalvir1/Argus" target="_blank" rel="noopener noreferrer"></a>
-          <a id="paypal-action" class="glass-control" href="https://paypal.me/CEstradaAlvir" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:4px; padding:6px 14px; border-radius:10px; font-size:12px; font-weight:750; color:#38bdf8 !important; text-decoration:none; background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.3); transition:transform 0.15s ease, background 0.15s ease;">☕ PayPal</a>
-          <a id="email-action" class="glass-control" href="mailto:chrisalvir01@gmail.com" style="display:inline-flex; align-items:center; gap:4px; padding:6px 14px; border-radius:10px; font-size:12px; font-weight:750; color:#a78bfa !important; text-decoration:none; background:rgba(167,139,250,0.12); border:1px solid rgba(167,139,250,0.3); transition:transform 0.15s ease, background 0.15s ease;">✉️ Sugerencias</a>
+        <div class="support-actions-grid">
+          <a id="github-action" class="support-link-btn star" href="https://github.com/Chrisalvir1/Argus" target="_blank" rel="noopener noreferrer">⭐ GitHub</a>
+          <a id="paypal-action" class="support-link-btn paypal" href="https://paypal.me/CEstradaAlvir" target="_blank" rel="noopener noreferrer">☕ PayPal</a>
+          <a id="email-action" class="support-link-btn email" href="mailto:chrisalvir01@gmail.com">✉️ Sugerencias</a>
         </div>
       </section>
 
@@ -3531,7 +3704,7 @@ class ArgusPanel extends HTMLElement {
     set('btn-edit-home-name-standalone', t('edit_btn'));
     set('btn-save-personalization-standalone', t('save_btn'));
     set('btn-refresh-history',  t('history_refresh'));
-    set('btn-export-forensic',  '📄 ' + (t('export_history_title') || 'Exportar'));
+    set('btn-export-forensic',  '📄 ' + (t('export_action') || 'Exportar'));
     set('btn-clear-log',        t('clear_log_btn'));
     set('h-history-export-title', '📄 ' + (t('export_history_title') || 'Exportar Historial'));
     set('h-access-title',       t('access_title'));
@@ -8104,41 +8277,61 @@ class ArgusPanel extends HTMLElement {
 
         <!-- PIN management section -->
         ${(canChangePin || canChangeMasterPin) ? `
-        <div style="display: flex; flex-direction: column; gap: 9px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; margin-top: 2px;">
+        <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; margin-top: 2px;">
           <span style="font-size: 11.5px; font-weight: 700; opacity: 0.85;">${this._t('pin_management') || '🔑 Gestión de Pines'}</span>
           
           <div style="display: flex; flex-direction: column; gap: 8px;">
             ${canChangePin ? `
-            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-              <span style="font-size: 12.5px; font-weight: 600; opacity: 0.95;">${this._t('access_pin_lbl') || 'Pin perfil Argus'}</span>
-              ${hasAccessPin ? `
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <button id="btn-dropdown-change-access-pin" class="glass-control" aria-label="Cambiar PIN de perfil" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer;">${this._t('change_btn') || 'Cambiar'}</button>
-                <button id="btn-dropdown-remove-access-pin" class="glass-control" aria-label="Eliminar PIN de perfil" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; color: #f87171 !important; background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.3);">${this._t('remove_btn') || 'Eliminar'}</button>
+            <div class="profile-card-tile">
+              <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+                <span style="font-size: 12.5px; font-weight: 700; color: #f1f5f9; white-space: nowrap;">${this._t('access_pin_lbl') || 'PIN de Perfil'}</span>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  ${hasAccessPin ? `
+                  <span style="font-size: 11px; font-weight: 750; color: #34d399; display: flex; align-items: center; gap: 5px;">
+                    <span style="width: 6px; height: 6px; border-radius: 50%; background: #34d399; box-shadow: 0 0 6px rgba(52,211,153,0.6);"></span> ${this._t('configured_pin_badge') || 'Configurado'}
+                  </span>
+                  ` : `
+                  <span style="font-size: 11px; font-weight: 750; color: #fbbf24; display: flex; align-items: center; gap: 5px;">
+                    <span style="width: 6px; height: 6px; border-radius: 50%; background: #fbbf24; box-shadow: 0 0 6px rgba(251,191,36,0.6);"></span> ${this._t('no_pin_badge') || 'Sin PIN'}
+                  </span>
+                  `}
+                </div>
               </div>
-              ` : `
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 11px; font-weight: 800; opacity: 0.7; background: rgba(255,255,255,0.08); padding: 5px 9px; border-radius: 6px;">${this._t('no_pin_badge') || 'SIN PIN'}</span>
-                <button id="btn-dropdown-set-access-pin" class="glass-control" aria-label="Configurar PIN de perfil" style="min-height: 34px; padding: 6px 14px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; color: #34d399 !important;">⚙️ ${this._t('configure_btn') || 'Configurar'}</button>
+              <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+                ${hasAccessPin ? `
+                <button id="btn-dropdown-change-access-pin" class="profile-btn" aria-label="Cambiar PIN de perfil">${this._t('change_btn') || 'Cambiar'}</button>
+                <button id="btn-dropdown-remove-access-pin" class="profile-btn danger" aria-label="Eliminar PIN de perfil">${this._t('remove_btn') || 'Eliminar'}</button>
+                ` : `
+                <button id="btn-dropdown-set-access-pin" class="profile-btn primary" aria-label="Configurar PIN de perfil">⚙️ ${this._t('configure_btn') || 'Configurar'}</button>
+                `}
               </div>
-              `}
             </div>
             ` : ''}
             
             ${canChangeMasterPin ? `
-            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-              <span style="font-size: 12.5px; font-weight: 600; opacity: 0.95;">${this._t('master_pin_lbl') || 'Pin de Armado'}</span>
-              ${hasMasterPin ? `
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <button id="btn-dropdown-change-master-pin" class="glass-control" aria-label="Cambiar PIN de armado" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer;">${this._t('change_btn') || 'Cambiar'}</button>
-                <button id="btn-dropdown-remove-master-pin" class="glass-control" aria-label="Eliminar PIN de armado" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; color: #f87171 !important; background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.3);">${this._t('remove_btn') || 'Eliminar'}</button>
+            <div class="profile-card-tile">
+              <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+                <span style="font-size: 12.5px; font-weight: 700; color: #f1f5f9; white-space: nowrap;">${this._t('master_pin_lbl') || 'PIN de Armado'}</span>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  ${hasMasterPin ? `
+                  <span style="font-size: 11px; font-weight: 750; color: #34d399; display: flex; align-items: center; gap: 5px;">
+                    <span style="width: 6px; height: 6px; border-radius: 50%; background: #34d399; box-shadow: 0 0 6px rgba(52,211,153,0.6);"></span> ${this._t('configured_pin_badge') || 'Configurado'}
+                  </span>
+                  ` : `
+                  <span style="font-size: 11px; font-weight: 750; color: #fbbf24; display: flex; align-items: center; gap: 5px;">
+                    <span style="width: 6px; height: 6px; border-radius: 50%; background: #fbbf24; box-shadow: 0 0 6px rgba(251,191,36,0.6);"></span> ${this._t('no_pin_badge') || 'Sin PIN'}
+                  </span>
+                  `}
+                </div>
               </div>
-              ` : `
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 11px; font-weight: 800; opacity: 0.7; background: rgba(255,255,255,0.08); padding: 5px 9px; border-radius: 6px;">${this._t('no_pin_badge') || 'SIN PIN'}</span>
-                <button id="btn-dropdown-set-master-pin" class="glass-control" aria-label="Configurar PIN de armado" style="min-height: 34px; padding: 6px 14px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; color: #34d399 !important;">⚙️ ${this._t('configure_btn') || 'Configurar'}</button>
+              <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+                ${hasMasterPin ? `
+                <button id="btn-dropdown-change-master-pin" class="profile-btn" aria-label="Cambiar PIN de armado">${this._t('change_btn') || 'Cambiar'}</button>
+                <button id="btn-dropdown-remove-master-pin" class="profile-btn danger" aria-label="Eliminar PIN de armado">${this._t('remove_btn') || 'Eliminar'}</button>
+                ` : `
+                <button id="btn-dropdown-set-master-pin" class="profile-btn primary" aria-label="Configurar PIN de armado">⚙️ ${this._t('configure_btn') || 'Configurar'}</button>
+                `}
               </div>
-              `}
             </div>
             ` : ''}
           </div>
@@ -8146,26 +8339,26 @@ class ArgusPanel extends HTMLElement {
         ` : ''}
 
         <!-- Home Name Section -->
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; margin-top: 2px;">
-          <div style="display: flex; flex-direction: column; min-width: 0; flex-grow: 1; align-items: flex-start;">
-            <span style="font-size: 11.5px; font-weight: 700; opacity: 0.85;">🏡 ${this._t('home_name_lbl') || 'Nombre del Hogar'}</span>
-            <span id="dropdown-home-name" style="font-size: 13.5px; font-weight: 800; color: var(--v2066-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 250px; margin-top: 2px;">${this._escapeHtml(this._homeName || 'Mi Casa')}</span>
+        <div class="profile-card-tile" style="margin-top: 4px;">
+          <div style="display: flex; flex-direction: column; min-width: 0; flex: 1 1 auto; gap: 3px;">
+            <span style="font-size: 11px; font-weight: 750; color: #94a3b8; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.04em;">🏡 ${this._t('home_name_lbl') || 'Nombre del Hogar'}</span>
+            <span id="dropdown-home-name" style="font-size: 14px; font-weight: 850; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 240px; display: block;" title="${this._escapeHtml(this._homeName || 'Mi Casa')}">${this._escapeHtml(this._homeName || 'Mi Casa')}</span>
           </div>
-          <button id="btn-dropdown-edit-home-name" class="glass-control" aria-label="Cambiar nombre de la casa" style="min-height: 36px; padding: 6px 16px; border-radius: 9px; font-size: 12.5px; font-weight: 700; cursor: pointer; flex-shrink: 0;">${this._t('change_btn') || 'Cambiar'}</button>
+          <button id="btn-dropdown-edit-home-name" class="profile-btn" aria-label="Cambiar nombre de la casa" style="min-height: 36px; padding: 7px 16px;">✏️ ${this._t('change_btn') || 'Cambiar'}</button>
         </div>
 
         <!-- Switch user button -->
-        <button id="btn-dropdown-switch-user" class="glass-control" aria-label="Cambiar perfil de usuario" style="width: 100%; min-height: 42px; padding: 8px 14px; border-radius: 12px; font-size: 13px; font-weight: 800; cursor: pointer; margin-top: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: var(--v2066-text);">
+        <button id="btn-dropdown-switch-user" class="profile-btn" aria-label="Cambiar perfil de usuario" style="width: 100% !important; min-height: 42px; padding: 8px 14px; border-radius: 12px; font-size: 13px; font-weight: 800; margin-top: 8px; background: rgba(255,255,255,0.06) !important; border: 1px solid rgba(255,255,255,0.15) !important;">
           ${this._t('switch_profile_btn') || '👤 Cambiar de Perfil'}
         </button>
 
         <!-- Argus Support Links (Star, PayPal, Email) -->
         <div style="display: flex; align-items: center; justify-content: space-around; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; margin-top: 10px; font-size: 12px;">
-          <a href="https://github.com/Chrisalvir1/Argus" target="_blank" rel="noopener noreferrer" style="color: #eab308; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 5px;">⭐ GitHub</a>
-          <span style="opacity: 0.3;">•</span>
+          <a href="https://github.com/Chrisalvir1/Argus" target="_blank" rel="noopener noreferrer" style="color: #facc15; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 5px;">⭐ GitHub</a>
+          <span style="opacity: 0.3; color: #fff;">•</span>
           <a href="https://paypal.me/CEstradaAlvir" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 5px;">☕ PayPal</a>
-          <span style="opacity: 0.3;">•</span>
-          <a href="mailto:chrisalvir01@gmail.com" style="color: #a78bfa; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 5px;">✉️ Ideas</a>
+          <span style="opacity: 0.3; color: #fff;">•</span>
+          <a href="mailto:chrisalvir01@gmail.com" style="color: #c084fc; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 5px;">✉️ Ideas</a>
         </div>
       </div>
       </div>

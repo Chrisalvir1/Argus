@@ -2,6 +2,10 @@
 
 ## [2.3.0]
 - **Accessibility (WCAG 2.1 / 2.2 AA & AAA)**: Added interaction mode toggle between Swipe Slider (anti-touch protection) and Accessible Tap Button (WCAG 2.5.1). In accessible button mode, slider tracks and draggable knobs are removed, presenting a standard red SOS button with white letters that blink at medium speed when activated, and a standard green touch Disarm button that appears exclusively when the system is armed.
+- **Visual Polish & Layout Hardening**:
+  - **Activity Log Header**: Implemented responsive flex wrap with `white-space: nowrap` title and compact action buttons (`🔄 Actualizar`, `📄 Exportar`, `🗑️ Limpiar`), preventing title text from breaking into vertical syllables and eliminating edge-overflow clipping.
+  - **Community & Support Card**: Unified GitHub Star, PayPal, and Suggestions into an elegant, balanced 3-column action grid with matching heights, glass gradients, and responsive mobile stacking.
+  - **Profile Dropdown Setting Tiles**: Redesigned PIN management and Home Name with dedicated glass card tiles (`.profile-card-tile`), replaced cramped badge with luminous glowing LED status dots (`● Configurado` / `● Sin PIN`), removed button width overrides, and prevented home name label wrapping.
 - **Responsive Profile Modal**: Expanded user profile modal width to `min(420px, calc(100vw - 24px))` with comfortable horizontal padding and clean spacing, eliminating cramped vertical stacking and home name truncation.
 - **Contrast & Readability**: Elevated text contrast above 7:1 (AAA); added full tooltip and `aria-label` metadata on sensor states to prevent truncation (WCAG 1.4.4); calibrated accent blue to `#38bdf8` (11.1:1 ratio); enlarged checkboxes to 44x44px target sizes (WCAG 2.5.5); replaced all-caps with sentence case for dyslexia readability; prevented mid-word hyphenation on action buttons; added fat-finger isolation for destructive actions (WCAG 2.5.8).
 - **Codebase Sanitation**: Purged all legacy animated weather WebGL shaders, meteorological gradient functions, atmospheric scenes, and obsolete background options.
