@@ -385,9 +385,9 @@ const TEXTS = {
     'slide_disarm': 'Desliza para desarmar',
     'slide_sos': 'Desliza para activar SOS',
     'slide_sos_stop': 'Desliza para detener SOS',
-    'tap_disarm': 'Toca para desarmar',
-    'tap_sos': 'Toca para activar SOS',
-    'tap_sos_stop': 'Toca para detener SOS',
+    'tap_disarm': 'Desarmar',
+    'tap_sos': 'Activar SOS',
+    'tap_sos_stop': 'Detener SOS',
     'gesture_selector_lbl': '🕹️ Modo de Control (Accesibilidad)',
     'gesture_slide': '↔️ Deslizador Táctil (Antitoques)',
     'gesture_touch': '👆 Botón Accesible (Toque Simple)',
@@ -808,9 +808,9 @@ const TEXTS = {
     'slide_disarm': 'Slide to disarm',
     'slide_sos': 'Slide to trigger SOS',
     'slide_sos_stop': 'Slide to stop SOS',
-    'tap_disarm': 'Tap to disarm',
-    'tap_sos': 'Tap to trigger SOS',
-    'tap_sos_stop': 'Tap to stop SOS',
+    'tap_disarm': 'Disarm',
+    'tap_sos': 'Trigger SOS',
+    'tap_sos_stop': 'Stop SOS',
     'gesture_selector_lbl': '🕹️ Interaction Mode (Accessibility)',
     'gesture_slide': '↔️ Swipe Slider (Anti-touch)',
     'gesture_touch': '👆 Accessible Tap Button (WCAG)',
@@ -1246,7 +1246,7 @@ _tmpl.innerHTML = `
   .hero-left{display:flex;align-items:center;gap:22px}
   .hero-context{position:relative!important;z-index:10000!important;overflow:visible!important;margin-left:auto;display:flex;align-items:center;gap:8px;min-width:0}
   #hero-profile-container{position:relative!important;z-index:10001!important;overflow:visible!important}
-  .hero-profile-dropdown{position:absolute!important;top:calc(100% + 12px)!important;right:0!important;z-index:999999!important;max-height:calc(100vh - 100px)!important;overflow-y:auto!important;background:#0f172a!important;background-color:#0f172a!important;border:1.5px solid rgba(255,255,255,0.2)!important;box-shadow:0 24px 60px rgba(0,0,0,0.85),inset 0 1px 0 rgba(255,255,255,0.15)!important;backdrop-filter:blur(48px) saturate(200%)!important;-webkit-backdrop-filter:blur(48px) saturate(200%)!important;opacity:1!important}.hero-clock{display:flex;flex-direction:column;align-items:flex-end;padding-right:14px;border-right:1px solid rgba(255,255,255,.14);line-height:1}.hero-clock strong{font-size:1.45rem;letter-spacing:-.05em;color:#ffffff!important}.hero-clock span{font-size:11px;color:#e2e8f0!important;opacity:1!important;margin-top:5px;letter-spacing:.03em;font-weight:700}.hero-pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.hero-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 10px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(7,16,29,.27);box-shadow:inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(14px);font-size:10px;font-weight:800;white-space:nowrap}.hero-pill .hero-live{width:7px;height:7px;border-radius:50%;background:#55df91;box-shadow:0 0 9px #55df91}
+  .hero-profile-dropdown{position:absolute!important;top:calc(100% + 12px)!important;right:0!important;z-index:999999!important;width:min(420px, calc(100vw - 24px))!important;min-width:320px!important;max-height:calc(100vh - 100px)!important;overflow-y:auto!important;background:#0f172a!important;background-color:#0f172a!important;border:1.5px solid rgba(255,255,255,0.2)!important;box-shadow:0 24px 60px rgba(0,0,0,0.85),inset 0 1px 0 rgba(255,255,255,0.15)!important;backdrop-filter:blur(48px) saturate(200%)!important;-webkit-backdrop-filter:blur(48px) saturate(200%)!important;opacity:1!important}.hero-clock{display:flex;flex-direction:column;align-items:flex-end;padding-right:14px;border-right:1px solid rgba(255,255,255,.14);line-height:1}.hero-clock strong{font-size:1.45rem;letter-spacing:-.05em;color:#ffffff!important}.hero-clock span{font-size:11px;color:#e2e8f0!important;opacity:1!important;margin-top:5px;letter-spacing:.03em;font-weight:700}.hero-pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.hero-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 10px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(7,16,29,.27);box-shadow:inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(14px);font-size:10px;font-weight:800;white-space:nowrap}.hero-pill .hero-live{width:7px;height:7px;border-radius:50%;background:#55df91;box-shadow:0 0 9px #55df91}
   .hero-icon{font-size:54px;line-height:1;filter:drop-shadow(0 0 20px rgba(255,255,255,0.15))}
   .hero h1{margin:0 0 4px;font-size:34px;font-weight:900;letter-spacing:-0.03em;background:var(--hero-gradient, linear-gradient(to right, #ffffff, #82b1ff));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
   .hero p{margin:0;font-size:16px;color:#f1f5f9!important;opacity:1!important;font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,0.85)}
@@ -7987,13 +7987,17 @@ class ArgusPanel extends HTMLElement {
     }
     const sosLabel = this.shadowRoot?.getElementById('sos-label');
     if (sosLabel) {
-      sosLabel.textContent = mode === 'touch' ? (this._t('tap_sos') || 'Toca para activar SOS') : (this._t('slide_sos') || 'Desliza para activar SOS');
+      sosLabel.textContent = mode === 'touch' ? (this._t('tap_sos') || 'Activar SOS') : (this._t('slide_sos') || 'Desliza para activar SOS');
     }
     const sosThumb = this.shadowRoot?.getElementById('sos-thumb');
     if (sosThumb) {
       sosThumb.setAttribute('aria-label', mode === 'touch' ? (this._t('tap_sos') || 'Activar SOS') : (this._t('slide_sos') || 'Deslizar para activar SOS'));
     }
     this.shadowRoot?.querySelectorAll('.entry').forEach((entry: any) => entry._staRefresh?.());
+    try {
+      this.dispatchEvent(new CustomEvent('argus-state-update'));
+      window.dispatchEvent(new CustomEvent('argus-state-update'));
+    } catch (_) {}
   }
 
   _initGestureMode(): void {
@@ -8056,43 +8060,43 @@ class ArgusPanel extends HTMLElement {
         </div>
 
         <!-- Dropdown Card -->
-        <div id="profile-dropdown" class="hero-profile-dropdown" style="display: none; position: absolute; top: calc(100% + 12px); right: 0; flex-direction: column; width: 280px; z-index: 999999; padding: 16px; border-radius: 18px; box-shadow: 0 16px 32px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); max-height: calc(100vh - 100px); overflow-y: auto;">
-        <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px; margin-bottom: 8px; width: 100%;">
+        <div id="profile-dropdown" class="hero-profile-dropdown" style="display: none; position: absolute; top: calc(100% + 12px); right: 0; flex-direction: column; width: min(420px, calc(100vw - 24px)); min-width: 320px; z-index: 999999; padding: 20px 22px; border-radius: 20px; box-shadow: 0 20px 48px rgba(0,0,0,0.55); border: 1.5px solid rgba(255,255,255,0.18); max-height: calc(100vh - 100px); overflow-y: auto;">
+        <div style="display: flex; align-items: center; gap: 14px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 12px; width: 100%;">
           ${prof.picture
-            ? `<img src="${this._escapeHtml(prof.picture)}" alt="${this._escapeHtml(prof.name)}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.20); box-shadow: 0 4px 10px rgba(0,0,0,0.25); flex-shrink: 0;" />`
-            : `<div class="user-avatar" style="width: 44px; height: 44px; border-radius: 50%; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.15); box-shadow: 0 4px 10px rgba(0,0,0,0.25); flex-shrink: 0;">${this._escapeHtml(prof.name.substring(0, 2).toUpperCase())}</div>`
+            ? `<img src="${this._escapeHtml(prof.picture)}" alt="${this._escapeHtml(prof.name)}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.25); box-shadow: 0 4px 12px rgba(0,0,0,0.3); flex-shrink: 0;" />`
+            : `<div class="user-avatar" style="width: 48px; height: 48px; border-radius: 50%; font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 4px 12px rgba(0,0,0,0.3); flex-shrink: 0;">${this._escapeHtml(prof.name.substring(0, 2).toUpperCase())}</div>`
           }
           <div style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0; align-items: flex-start;">
-            <span style="font-size: 9.5px; opacity: 0.5; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em;">${this._t('profile_is_yours') || this._t('active_profile') || 'Perfil Activo'}</span>
-            <span style="font-size: 14px; font-weight: 850; color: var(--v2066-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; text-align: left;">${this._escapeHtml(prof.name)}</span>
-            <button id="btn-change-profile-picture" style="font-size: 10.5px; font-weight: 700; color: #30d158; text-decoration: none; display: flex; align-items: center; gap: 3px; margin-top: 3px; background: none; border: none; padding: 0; cursor: pointer;">
-              👤 ${this._t('change_profile_picture') || 'Ir a Personas de HA ↗'}
+            <span style="font-size: 10px; opacity: 0.65; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;">${this._t('profile_is_yours') || this._t('active_profile') || 'Perfil Activo'}</span>
+            <span style="font-size: 15px; font-weight: 850; color: var(--v2066-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; text-align: left;">${this._escapeHtml(prof.name)}</span>
+            <button id="btn-change-profile-picture" style="font-size: 11px; font-weight: 700; color: #34d399; text-decoration: none; display: flex; align-items: center; gap: 4px; margin-top: 3px; background: none; border: none; padding: 0; cursor: pointer;">
+              👤 ${this._t('change_profile_picture') || 'Cambiar foto en Personas de HA ↗'}
             </button>
           </div>
-          <span class="user-badge ${prof.role === 'admin' ? 'admin' : 'user'}" style="font-size: 8.5px; padding: 3px 8px; font-weight: 800; border-radius: 6px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.03em;">${this._escapeHtml(roleLabel)}</span>
+          <span class="user-badge ${prof.role === 'admin' ? 'admin' : 'user'}" style="font-size: 9px; padding: 4px 9px; font-weight: 800; border-radius: 6px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.04em;">${this._escapeHtml(roleLabel)}</span>
         </div>
 
         <!-- Language Selector -->
-        <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
-          <label style="font-size: 11px; font-weight: 700; opacity: 0.7; display: flex; align-items: center; gap: 5px;">${this._t('lang_selector_lbl') || '⚙️ Idioma / Language'}</label>
-          <select id="dropdown-lang-select" class="glass-control" style="width: 100%; height: 36px; border-radius: 10px; padding: 0 10px; font-size: 12px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid var(--v2066-border); color: var(--v2066-text); outline: none; cursor: pointer;">
+        <div style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px;">
+          <label style="font-size: 11.5px; font-weight: 700; opacity: 0.85; display: flex; align-items: center; gap: 6px;">${this._t('lang_selector_lbl') || '⚙️ Idioma / Language'}</label>
+          <select id="dropdown-lang-select" class="glass-control" style="width: 100%; height: 38px; border-radius: 10px; padding: 0 12px; font-size: 12.5px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid var(--v2066-border); color: var(--v2066-text); outline: none; cursor: pointer;">
             ${LANG_LIST.map(l => `<option value="${l.code}" ${l.code === curLang ? 'selected' : ''}>${l.flag} ${l.code === 'auto' ? (this._t('use_ha_language') || 'Automático (HA)') : l.label}</option>`).join('')}
           </select>
         </div>
 
         <!-- Appearance & Contrast Selector -->
-        <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
-          <label style="font-size: 11px; font-weight: 700; opacity: 0.7; display: flex; align-items: center; gap: 5px;">${this._t('contrast_selector_lbl') || '👁️ Aspecto y Contraste'}</label>
-          <select id="dropdown-contrast-select" class="glass-control" aria-label="${this._t('contrast_selector_lbl') || 'Aspecto y Contraste'}" style="width: 100%; height: 38px; border-radius: 10px; padding: 0 10px; font-size: 12px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid var(--v2066-border); color: var(--v2066-text); outline: none; cursor: pointer;">
+        <div style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px;">
+          <label style="font-size: 11.5px; font-weight: 700; opacity: 0.85; display: flex; align-items: center; gap: 6px;">${this._t('contrast_selector_lbl') || '👁️ Aspecto y Contraste'}</label>
+          <select id="dropdown-contrast-select" class="glass-control" aria-label="${this._t('contrast_selector_lbl') || 'Aspecto y Contraste'}" style="width: 100%; height: 38px; border-radius: 10px; padding: 0 12px; font-size: 12.5px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid var(--v2066-border); color: var(--v2066-text); outline: none; cursor: pointer;">
             <option value="standard" ${this._getProfileContrast() === 'standard' ? 'selected' : ''}>${this._t('contrast_standard') || '✨ Estándar (Liquid Glass)'}</option>
             <option value="high" ${this._getProfileContrast() === 'high' ? 'selected' : ''}>${this._t('contrast_high') || '🖤 Alto Contraste (OLED / Oscuro)'}</option>
           </select>
         </div>
 
         <!-- Interaction / Gesture Selector (WCAG 2.5.1) -->
-        <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
-          <label style="font-size: 11px; font-weight: 700; opacity: 0.85; display: flex; align-items: center; gap: 5px;">${this._t('gesture_selector_lbl') || '🕹️ Modo de Control'}</label>
-          <select id="dropdown-gesture-select" class="glass-control" aria-label="${this._t('gesture_selector_lbl') || 'Modo de control de alarma'}" style="width: 100%; height: 38px; border-radius: 10px; padding: 0 10px; font-size: 12px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid var(--v2066-border); color: var(--v2066-text); outline: none; cursor: pointer;">
+        <div style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px;">
+          <label style="font-size: 11.5px; font-weight: 700; opacity: 0.85; display: flex; align-items: center; gap: 6px;">${this._t('gesture_selector_lbl') || '🕹️ Modo de Control (Accesibilidad)'}</label>
+          <select id="dropdown-gesture-select" class="glass-control" aria-label="${this._t('gesture_selector_lbl') || 'Modo de control de alarma'}" style="width: 100%; height: 38px; border-radius: 10px; padding: 0 12px; font-size: 12.5px; font-weight: 700; background: rgba(255,255,255,0.06); border: 1px solid var(--v2066-border); color: var(--v2066-text); outline: none; cursor: pointer;">
             <option value="slide" ${this._getProfileGesture() === 'slide' ? 'selected' : ''}>${this._t('gesture_slide') || '↔️ Deslizador Táctil (Antitoques)'}</option>
             <option value="touch" ${this._getProfileGesture() === 'touch' ? 'selected' : ''}>${this._t('gesture_touch') || '👆 Botón Accesible (Toque Simple)'}</option>
           </select>
@@ -8100,39 +8104,39 @@ class ArgusPanel extends HTMLElement {
 
         <!-- PIN management section -->
         ${(canChangePin || canChangeMasterPin) ? `
-        <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px;">
-          <span style="font-size: 11px; font-weight: 700; opacity: 0.7;">${this._t('pin_management') || '🔑 Gestión de Pines'}</span>
+        <div style="display: flex; flex-direction: column; gap: 9px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; margin-top: 2px;">
+          <span style="font-size: 11.5px; font-weight: 700; opacity: 0.85;">${this._t('pin_management') || '🔑 Gestión de Pines'}</span>
           
-          <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 2px;">
+          <div style="display: flex; flex-direction: column; gap: 8px;">
             ${canChangePin ? `
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-              <span style="font-size: 12px; opacity: 0.9;">${this._t('access_pin_lbl') || 'Pin perfil Argus'}</span>
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+              <span style="font-size: 12.5px; font-weight: 600; opacity: 0.95;">${this._t('access_pin_lbl') || 'Pin perfil Argus'}</span>
               ${hasAccessPin ? `
-              <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
                 <button id="btn-dropdown-change-access-pin" class="glass-control" aria-label="Cambiar PIN de perfil" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer;">${this._t('change_btn') || 'Cambiar'}</button>
-                <button id="btn-dropdown-remove-access-pin" class="glass-control" aria-label="Eliminar PIN de perfil" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; color: #f87171 !important; background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.3); margin-left: 6px;">${this._t('remove_btn') || 'Eliminar'}</button>
+                <button id="btn-dropdown-remove-access-pin" class="glass-control" aria-label="Eliminar PIN de perfil" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; color: #f87171 !important; background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.3);">${this._t('remove_btn') || 'Eliminar'}</button>
               </div>
               ` : `
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 10.5px; font-weight: 800; opacity: 0.6; background: rgba(255,255,255,0.06); padding: 4px 8px; border-radius: 6px;">${this._t('no_pin_badge') || 'SIN PIN'}</span>
-                <button id="btn-dropdown-set-access-pin" class="glass-control" aria-label="Configurar PIN de perfil" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; color: #34d399 !important;">⚙️ ${this._t('configure_btn') || 'Configurar'}</button>
+                <span style="font-size: 11px; font-weight: 800; opacity: 0.7; background: rgba(255,255,255,0.08); padding: 5px 9px; border-radius: 6px;">${this._t('no_pin_badge') || 'SIN PIN'}</span>
+                <button id="btn-dropdown-set-access-pin" class="glass-control" aria-label="Configurar PIN de perfil" style="min-height: 34px; padding: 6px 14px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; color: #34d399 !important;">⚙️ ${this._t('configure_btn') || 'Configurar'}</button>
               </div>
               `}
             </div>
             ` : ''}
             
             ${canChangeMasterPin ? `
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-              <span style="font-size: 12px; opacity: 0.9;">${this._t('master_pin_lbl') || 'Pin de Armado'}</span>
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+              <span style="font-size: 12.5px; font-weight: 600; opacity: 0.95;">${this._t('master_pin_lbl') || 'Pin de Armado'}</span>
               ${hasMasterPin ? `
-              <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
                 <button id="btn-dropdown-change-master-pin" class="glass-control" aria-label="Cambiar PIN de armado" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer;">${this._t('change_btn') || 'Cambiar'}</button>
-                <button id="btn-dropdown-remove-master-pin" class="glass-control" aria-label="Eliminar PIN de armado" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; color: #f87171 !important; background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.3); margin-left: 6px;">${this._t('remove_btn') || 'Eliminar'}</button>
+                <button id="btn-dropdown-remove-master-pin" class="glass-control" aria-label="Eliminar PIN de armado" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; color: #f87171 !important; background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.3);">${this._t('remove_btn') || 'Eliminar'}</button>
               </div>
               ` : `
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 10.5px; font-weight: 800; opacity: 0.6; background: rgba(255,255,255,0.06); padding: 4px 8px; border-radius: 6px;">${this._t('no_pin_badge') || 'SIN PIN'}</span>
-                <button id="btn-dropdown-set-master-pin" class="glass-control" aria-label="Configurar PIN de armado" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; color: #34d399 !important;">⚙️ ${this._t('configure_btn') || 'Configurar'}</button>
+                <span style="font-size: 11px; font-weight: 800; opacity: 0.7; background: rgba(255,255,255,0.08); padding: 5px 9px; border-radius: 6px;">${this._t('no_pin_badge') || 'SIN PIN'}</span>
+                <button id="btn-dropdown-set-master-pin" class="glass-control" aria-label="Configurar PIN de armado" style="min-height: 34px; padding: 6px 14px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; color: #34d399 !important;">⚙️ ${this._t('configure_btn') || 'Configurar'}</button>
               </div>
               `}
             </div>
@@ -8142,26 +8146,26 @@ class ArgusPanel extends HTMLElement {
         ` : ''}
 
         <!-- Home Name Section -->
-        <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px; margin-top: 2px;">
-          <div style="display: flex; flex-direction: column; min-width: 0; align-items: flex-start;">
-            <span style="font-size: 11px; font-weight: 700; opacity: 0.7;">🏡 ${this._t('home_name_lbl') || 'Nombre de la Casa'}</span>
-            <span id="dropdown-home-name" style="font-size: 12.5px; font-weight: 800; color: var(--v2066-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px; margin-top: 1px;">${this._escapeHtml(this._homeName || 'Mi Casa')}</span>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; margin-top: 2px;">
+          <div style="display: flex; flex-direction: column; min-width: 0; flex-grow: 1; align-items: flex-start;">
+            <span style="font-size: 11.5px; font-weight: 700; opacity: 0.85;">🏡 ${this._t('home_name_lbl') || 'Nombre del Hogar'}</span>
+            <span id="dropdown-home-name" style="font-size: 13.5px; font-weight: 800; color: var(--v2066-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 250px; margin-top: 2px;">${this._escapeHtml(this._homeName || 'Mi Casa')}</span>
           </div>
-          <button id="btn-dropdown-edit-home-name" class="glass-control" aria-label="Cambiar nombre de la casa" style="min-height: 34px; padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer;">${this._t('change_btn') || 'Cambiar'}</button>
+          <button id="btn-dropdown-edit-home-name" class="glass-control" aria-label="Cambiar nombre de la casa" style="min-height: 36px; padding: 6px 16px; border-radius: 9px; font-size: 12.5px; font-weight: 700; cursor: pointer; flex-shrink: 0;">${this._t('change_btn') || 'Cambiar'}</button>
         </div>
 
         <!-- Switch user button -->
-        <button id="btn-dropdown-switch-user" class="glass-control" aria-label="Cambiar perfil de usuario" style="width: 100%; min-height: 38px; padding: 8px 12px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; margin-top: 6px; background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.12); color: var(--v2066-text);">
+        <button id="btn-dropdown-switch-user" class="glass-control" aria-label="Cambiar perfil de usuario" style="width: 100%; min-height: 42px; padding: 8px 14px; border-radius: 12px; font-size: 13px; font-weight: 800; cursor: pointer; margin-top: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: var(--v2066-text);">
           ${this._t('switch_profile_btn') || '👤 Cambiar de Perfil'}
         </button>
 
         <!-- Argus Support Links (Star, PayPal, Email) -->
-        <div style="display: flex; align-items: center; justify-content: space-around; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px; margin-top: 8px; font-size: 11px;">
-          <a href="https://github.com/Chrisalvir1/Argus" target="_blank" rel="noopener noreferrer" style="color: #eab308; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 4px;">⭐ GitHub</a>
+        <div style="display: flex; align-items: center; justify-content: space-around; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; margin-top: 10px; font-size: 12px;">
+          <a href="https://github.com/Chrisalvir1/Argus" target="_blank" rel="noopener noreferrer" style="color: #eab308; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 5px;">⭐ GitHub</a>
           <span style="opacity: 0.3;">•</span>
-          <a href="https://paypal.me/CEstradaAlvir" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 4px;">☕ PayPal</a>
+          <a href="https://paypal.me/CEstradaAlvir" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 5px;">☕ PayPal</a>
           <span style="opacity: 0.3;">•</span>
-          <a href="mailto:chrisalvir01@gmail.com" style="color: #a78bfa; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 4px;">✉️ Ideas</a>
+          <a href="mailto:chrisalvir01@gmail.com" style="color: #a78bfa; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 5px;">✉️ Ideas</a>
         </div>
       </div>
       </div>

@@ -3,7 +3,8 @@
 ## 🛡️ Accesibilidad Universal WCAG 2.1 / 2.2 (AA & AAA) y Depuración de Código
 
 - **Accesibilidad Integral WCAG 2.1 / 2.2 (Niveles AA y AAA)**:
-  - *Alternativa Accesible a Deslizadores (WCAG 2.5.1)*: Nuevo selector en el menú de perfil para alternar entre **↔️ Deslizador Táctil (Antitoques)** y **👆 Botón Accesible (Toque Simple)** con soporte completo para pulsación directa y teclado (`Enter` / `Espacio`).
+  - *Alternativa Accesible a Deslizadores (WCAG 2.5.1)*: Nuevo selector en el menú de perfil para alternar entre **↔️ Deslizador Táctil (Antitoques)** y **👆 Botón Accesible (Toque Simple)**. Al activar el modo accesible, se retira por completo el mecanismo deslizante: SOS se convierte en un botón rojo estándar con letras blancas que parpadean a velocidad media cuando se activa la alarma, y Desarmado se convierte en un botón táctil verde (con confirmación de PIN si aplica) que se muestra exclusivamente cuando el sistema está armado.
+  - *Modal de Perfil Más Amplio y Adaptable*: Se amplió el ancho del modal a un formato responsivo (`min(420px, calc(100vw - 24px))`) con espacio horizontal holgado y separación limpia de controles, eliminando el apiñamiento vertical y permitiendo nombres de hogar largos sin truncamiento.
   - *Calibración de Contraste AAA (> 7:1)*: Textos secundarios y leyendas elevados a `#f1f5f9` y `#e2e8f0` con sombras suaves de lectura; azul de acento sustituido por `#38bdf8` (ratio 11.1:1).
   - *Lectura sin Truncamiento (WCAG 1.4.4)*: Atributos `title` y `aria-label` en sensores para visualizar nombres y estados íntegros sin recortes con tooltips nativos.
   - *Objetivos Táctiles de 44x44px (WCAG 2.5.5)*: Filas interactivas de 48px de alto y casillas de verificación de 22x22px para evitar errores en pantallas táctiles.

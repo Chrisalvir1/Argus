@@ -1,7 +1,9 @@
 # Changelog
 
 ## [2.3.0]
-- **Accessibility (WCAG 2.1 / 2.2 AA & AAA)**: Added interaction mode toggle between Swipe Slider (anti-touch protection) and Accessible Tap Button (direct click/touch and keyboard `Enter`/`Space` support, WCAG 2.5.1); elevated text contrast above 7:1 (AAA); added full tooltip and `aria-label` metadata on sensor states to prevent truncation (WCAG 1.4.4); calibrated accent blue to `#38bdf8` (11.1:1 ratio); enlarged checkboxes to 44x44px target sizes (WCAG 2.5.5); replaced all-caps with sentence case for dyslexia readability; prevented mid-word hyphenation on action buttons; added fat-finger isolation for destructive actions (WCAG 2.5.8).
+- **Accessibility (WCAG 2.1 / 2.2 AA & AAA)**: Added interaction mode toggle between Swipe Slider (anti-touch protection) and Accessible Tap Button (WCAG 2.5.1). In accessible button mode, slider tracks and draggable knobs are removed, presenting a standard red SOS button with white letters that blink at medium speed when activated, and a standard green touch Disarm button that appears exclusively when the system is armed.
+- **Responsive Profile Modal**: Expanded user profile modal width to `min(420px, calc(100vw - 24px))` with comfortable horizontal padding and clean spacing, eliminating cramped vertical stacking and home name truncation.
+- **Contrast & Readability**: Elevated text contrast above 7:1 (AAA); added full tooltip and `aria-label` metadata on sensor states to prevent truncation (WCAG 1.4.4); calibrated accent blue to `#38bdf8` (11.1:1 ratio); enlarged checkboxes to 44x44px target sizes (WCAG 2.5.5); replaced all-caps with sentence case for dyslexia readability; prevented mid-word hyphenation on action buttons; added fat-finger isolation for destructive actions (WCAG 2.5.8).
 - **Codebase Sanitation**: Purged all legacy animated weather WebGL shaders, meteorological gradient functions, atmospheric scenes, and obsolete background options.
 - **Dependencies & Performance**: Modernized to Vite 8.2.2, Vitest 5.0.0, React 19.2.8, Nanoid 6.0.1, TypeScript 7.0.2 with 0 vulnerabilities and 110ms builds.
 

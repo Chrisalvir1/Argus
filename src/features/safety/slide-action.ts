@@ -11,9 +11,9 @@ const SLIDE_I18N = {
     slide_disarm: 'Desliza para desarmar',
     slide_sos: 'Desliza para activar SOS',
     slide_sos_stop: 'Desliza para detener SOS',
-    tap_disarm: 'Toca para desarmar',
-    tap_sos: 'Toca para activar SOS',
-    tap_sos_stop: 'Toca para detener SOS',
+    tap_disarm: 'Desarmar',
+    tap_sos: 'Activar SOS',
+    tap_sos_stop: 'Detener SOS',
     enter_pin: 'Ingresa el PIN maestro',
     wrong_pin: 'PIN incorrecto',
     cancel: 'Cancelar'
@@ -22,9 +22,9 @@ const SLIDE_I18N = {
     slide_disarm: 'Slide to disarm',
     slide_sos: 'Slide to trigger SOS',
     slide_sos_stop: 'Slide to stop SOS',
-    tap_disarm: 'Tap to disarm',
-    tap_sos: 'Tap to trigger SOS',
-    tap_sos_stop: 'Tap to stop SOS',
+    tap_disarm: 'Disarm',
+    tap_sos: 'Trigger SOS',
+    tap_sos_stop: 'Stop SOS',
     enter_pin: 'Enter master PIN',
     wrong_pin: 'Wrong PIN',
     cancel: 'Cancel'
@@ -32,10 +32,19 @@ const SLIDE_I18N = {
 };
 
 function isTouchMode(panel) {
-  if (typeof panel._getProfileGesture === 'function') {
+  if (typeof panel?._getProfileGesture === 'function') {
     return panel._getProfileGesture() === 'touch';
   }
-  return panel?.getAttribute?.('argus-gesture') === 'touch';
+  if (panel?.getAttribute?.('argus-gesture') === 'touch') return true;
+  try {
+    const profId = panel?._currentProfile?.id || 'default';
+    const stored = localStorage.getItem(`argus_gesture_${profId}`);
+    if (stored === 'touch') return true;
+    if (stored === 'slide') return false;
+    const global = localStorage.getItem('argus_gesture_global');
+    if (global === 'touch') return true;
+  } catch (_) {}
+  return false;
 }
 
 function getActiveLang(panel) {
@@ -287,6 +296,105 @@ function injectStyles(panel) {
   color: #fca5a5;
   min-height: 14px;
 }
+
+/* ── Accessible Button Mode (Touch) ─────────────────────────────── */
+.argus-sta-wrap.sta-mode-touch {
+  margin-top: 4px;
+}
+.argus-sta-wrap.sta-mode-touch .argus-sta-thumb,
+.argus-sta-wrap.sta-mode-touch .argus-sta-fill {
+  display: none !important;
+}
+.argus-sta-wrap.sta-mode-touch .argus-sta-track {
+  height: 56px !important;
+  min-height: 56px !important;
+  border-radius: 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  padding: 0 16px !important;
+  text-align: center !important;
+  transform: none !important;
+  box-sizing: border-box !important;
+  outline: none !important;
+  transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease !important;
+}
+.argus-sta-wrap.sta-mode-touch .argus-sta-track:active {
+  transform: scale(0.97) !important;
+}
+.argus-sta-wrap.sta-mode-touch .argus-sta-track:focus-visible {
+  outline: 3px solid #ffffff !important;
+  outline-offset: 2px !important;
+}
+.argus-sta-wrap.sta-mode-touch .argus-sta-label {
+  position: static !important;
+  left: auto !important;
+  right: auto !important;
+  top: auto !important;
+  transform: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  pointer-events: none !important;
+  opacity: 1 !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Red SOS Normal Touch Button */
+.argus-sta-wrap--sos.sta-mode-touch .argus-sta-track {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+  box-shadow: 0 4px 18px rgba(220, 38, 38, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+}
+.argus-sta-wrap--sos.sta-mode-touch .argus-sta-track:hover {
+  filter: brightness(1.1) !important;
+  box-shadow: 0 6px 24px rgba(220, 38, 38, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Red SOS Button Active / Triggered: Letters blink noticeably at medium speed */
+.argus-sta-wrap--sos.sta-mode-touch.sos-active .argus-sta-track {
+  background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%) !important;
+  border-color: #fca5a5 !important;
+  box-shadow: 0 0 28px rgba(239, 68, 68, 0.85), inset 0 0 14px rgba(255, 255, 255, 0.35) !important;
+}
+.argus-sta-wrap--sos.sta-mode-touch.sos-active .argus-sta-label,
+.argus-sta-wrap--sos.sta-mode-touch.sos-active .argus-sta-label span,
+.argus-sta-wrap--sos.sta-mode-touch.sos-active .sta-sos-text {
+  animation: sosLettersBlink 0.75s ease-in-out infinite !important;
+}
+
+@keyframes sosLettersBlink {
+  0%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 14px rgba(255, 255, 255, 1), 0 0 28px rgba(255, 255, 255, 0.9);
+  }
+  50% {
+    opacity: 0.08;
+    text-shadow: none;
+  }
+}
+
+/* Green Disarm Normal Touch Button (Only appears when armed via .sta-armed) */
+.argus-sta-wrap--disarm.sta-mode-touch .argus-sta-track {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+}
+.argus-sta-wrap--disarm.sta-mode-touch .argus-sta-track:hover {
+  filter: brightness(1.1) !important;
+  box-shadow: 0 6px 24px rgba(16, 185, 129, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+}
+.argus-sta-wrap.sta-mode-touch .argus-sta-pin {
+  border-radius: 16px !important;
+}
 `;
   root.appendChild(s);
 }
@@ -327,12 +435,17 @@ function buildTrack(kind, labelText, icon) {
 function attachDrag(panel, kind, track, fill, thumb, label, pin, onDone) {
   const PAD = 4;
   let dragging = false, startX = 0, curX = 0, maxX = 0;
+  let touchStartX = 0, touchStartY = 0, touchMoved = false;
+  let lastActionTime = 0;
 
   track.setAttribute('role', 'button');
   track.setAttribute('tabindex', '0');
   track.setAttribute('aria-label', label.textContent || kind);
 
   function executeAction() {
+    const now = Date.now();
+    if (now - lastActionTime < 450) return;
+    lastActionTime = now;
     if (pin.classList.contains('open')) return;
     if (kind === 'disarm' && pinRequired(panel)) {
       openPin();
@@ -343,6 +456,31 @@ function attachDrag(panel, kind, track, fill, thumb, label, pin, onDone) {
 
   track.addEventListener('keydown', e => {
     if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      executeAction();
+    }
+  });
+
+  track.addEventListener('touchstart', e => {
+    if (isTouchMode(panel)) {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      touchMoved = false;
+    }
+  }, { passive: true });
+
+  track.addEventListener('touchmove', e => {
+    if (isTouchMode(panel)) {
+      const dx = Math.abs(e.touches[0].clientX - touchStartX);
+      const dy = Math.abs(e.touches[0].clientY - touchStartY);
+      if (dx > 10 || dy > 10) touchMoved = true;
+    }
+  }, { passive: true });
+
+  track.addEventListener('touchend', e => {
+    if (isTouchMode(panel)) {
+      if (touchMoved) return;
+      if (pin.classList.contains('open') || (e.target && (e.target as HTMLElement).closest?.('.argus-sta-pin'))) return;
       e.preventDefault();
       executeAction();
     }
@@ -468,7 +606,8 @@ function mountOnEntry(panel, entry, idx) {
     return String(panel._hass?.states?.[entityId]?.state || 'disarmed').toLowerCase();
   }
   function getPanic() {
-    return Boolean(panel._hass?.states?.[entityId]?.attributes?.argus_panic_active);
+    const s = getState();
+    return Boolean(panel._hass?.states?.[entityId]?.attributes?.argus_panic_active) || s === 'triggered';
   }
 
   // ── DISARM SLIDER ──────────────────────────────────────────────────
@@ -486,10 +625,18 @@ function mountOnEntry(panel, entry, idx) {
   const { wrap: sWrap, track: sTrack, fill: sFill, thumb: sThumb, label: sLabel, pin: sPin } =
     buildTrack('sos', t(panel, 'slide_sos'), ICON_SOS);
 
-  attachDrag(panel, 'sos', sTrack, sFill, sThumb, sLabel, sPin, () => {
+  attachDrag(panel, 'sos', sTrack, sFill, sThumb, sLabel, sPin, (pin) => {
     const realEntryId = panel._dashboard?.entries?.[idx]?.entry_id || '';
-    if (typeof panel._send === 'function') {
-      panel._send('argus/perform_alarm_action', { action: 'sos', entry_id: realEntryId }).catch(() => {});
+    const panic = getPanic();
+    if (panic) {
+      if (typeof panel._send === 'function') {
+        panel._send('argus/perform_alarm_action', { action: 'disarm', entry_id: realEntryId, ...(pin ? { code: pin } : {}) }).catch(() => {});
+      }
+    } else {
+      sWrap.classList.add('sos-active');
+      if (typeof panel._send === 'function') {
+        panel._send('argus/perform_alarm_action', { action: 'sos', entry_id: realEntryId }).catch(() => {});
+      }
     }
   });
 
@@ -506,16 +653,36 @@ function mountOnEntry(panel, entry, idx) {
     const isArmed = state !== 'disarmed' && state !== 'unavailable';
     const touch = isTouchMode(panel);
 
+    // Disarm only appears when armed!
     dWrap.classList.toggle('sta-armed', isArmed);
-    const disarmKey = touch ? 'tap_disarm' : 'slide_disarm';
-    dLabel.textContent = t(panel, disarmKey);
-    dTrack.setAttribute('aria-label', dLabel.textContent);
-
+    dWrap.classList.toggle('sta-mode-touch', touch);
+    sWrap.classList.toggle('sta-mode-touch', touch);
+    sWrap.classList.toggle('sos-active', panic);
     sTrack.classList.toggle('sos-pulsing', panic);
-    const sosKey = panic ? (touch ? 'tap_sos_stop' : 'slide_sos_stop') : (touch ? 'tap_sos' : 'slide_sos');
-    sLabel.textContent = t(panel, sosKey);
-    sTrack.setAttribute('aria-label', sLabel.textContent);
-    sThumb.innerHTML = panic ? ICON_SOS_STOP : ICON_SOS;
+
+    if (touch) {
+      // Accessible Normal Buttons
+      dLabel.innerHTML = `<span style="font-size: 20px; display: inline-flex; align-items: center;">🔓</span><span style="font-size: 15px; font-weight: 800; letter-spacing: 0.04em;">${t(panel, 'tap_disarm')}</span>`;
+      dTrack.setAttribute('aria-label', t(panel, 'tap_disarm'));
+
+      const sosText = panic ? t(panel, 'tap_sos_stop') : t(panel, 'tap_sos');
+      const sosIcon = panic ? '⏹️' : '🚨';
+      sLabel.innerHTML = `<span style="font-size: 20px; display: inline-flex; align-items: center;">${sosIcon}</span><span class="sta-sos-text" style="font-size: 15px; font-weight: 800; letter-spacing: 0.04em;">${sosText}</span>`;
+      sTrack.setAttribute('aria-label', sosText);
+    } else {
+      // Sliders
+      dLabel.textContent = t(panel, 'slide_disarm');
+      dTrack.setAttribute('aria-label', dLabel.textContent);
+      dThumb.style.transform = '';
+      dFill.style.width = '';
+
+      const sosText = panic ? t(panel, 'slide_sos_stop') : t(panel, 'slide_sos');
+      sLabel.textContent = sosText;
+      sTrack.setAttribute('aria-label', sLabel.textContent);
+      sThumb.innerHTML = panic ? ICON_SOS_STOP : ICON_SOS;
+      sThumb.style.transform = '';
+      sFill.style.width = '';
+    }
   }
 
   refresh();
