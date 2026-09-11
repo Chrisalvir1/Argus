@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.4.2]
+- **Cold Boot FOUC & Squished Layout Total Elimination**: Solved the cold-boot unstyled DOM flash when opening Argus immediately after Home Assistant restarts. Enforced `.wrap { display: none !important; }` by default until session authorization (`.wrap-ready`), and added a native Shadow DOM dark glass curtain overlay (`#argus-initial-curtain`) with a glowing Argus shield and animated progress bar that renders instantly and fades out smoothly.
+- **Brand Assets & Static Proxy Optimization**: Added full high-resolution brand assets to both `custom_components/argus/brand/` and `custom_components/argus/www/brand/`, allowing direct access via `/api/argus_static/brand/icon.png`.
+- **HACS Distribution Packaging**: Normalized release archive `argus.zip` directory layout so HACS extracts `manifest.json`, `brand/`, and `www/` cleanly to the integration root.
+- **Frontend Versioning**: Updated bootstrap loader to `v=2.4.2` for automatic cache invalidation across client browsers.
+
 ## [2.4.1]
 - **Official Home Assistant 2026.3+ Brand Assets**: Shipped full high-resolution brand assets (`icon.png`, `logo.png`, `dark_icon.png`, `dark_logo.png`) directly into `custom_components/argus/brand/`, fully complying with the new local brand images specification and ensuring proper logo display in HACS and Home Assistant UI.
 - **Liquid Bubble Mode Navigation (iOS/macOS Fluid Spring)**: Redesigned the "Modos / SOS" active pill transition with organic spring physics (`cubic-bezier(0.34, 1.56, 0.64, 1)`), multi-stop liquid glass specular gradients, dynamic glowing shadows, and persistent DOM preservation preventing tab destruction. Added full vibrant styling for `.bubble-sos`.

@@ -1049,8 +1049,25 @@ _tmpl.innerHTML = `
     box-shadow: 0 8px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.25);
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
   }
-  .wrap { position: relative; z-index: 1; transition: filter 0.35s ease, opacity 0.35s ease; opacity: 0; visibility: hidden; pointer-events: none; }
-  .wrap.wrap-ready { opacity: 1; visibility: visible; pointer-events: auto; }
+  .wrap {
+    display: none !important;
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px;
+    gap: 24px;
+    transition: opacity 0.35s ease, filter 0.35s ease;
+  }
+  .wrap.wrap-ready {
+    display: grid !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
   .wrap.wrap-blurred { filter: blur(15px); opacity: 0.45; visibility: visible; pointer-events: none; }
   @keyframes dialElasticIn {
     0% { transform: scale(0.8) translateY(20px); opacity: 0; }
@@ -1240,9 +1257,7 @@ _tmpl.innerHTML = `
   .pick-row:has(input:checked),.tab.active,.liquid-btn.active{animation:iosSelectPop .34s cubic-bezier(.2,1.45,.35,1);box-shadow:0 0 0 1px color-mix(in srgb,var(--primary-color,#007aff) 45%,transparent),0 12px 30px color-mix(in srgb,var(--primary-color,#007aff) 18%,transparent)}
   .glass.liquid-glass{background:var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)))!important;backdrop-filter:blur(28px) saturate(150%)!important;-webkit-backdrop-filter:blur(28px) saturate(150%)!important;border-color:rgba(255,255,255,0.15)!important;box-shadow:0 8px 32px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.1)!important}
   button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 70%,#fff);outline-offset:3px}
-  button:disabled{cursor:not-allowed;opacity:.5;filter:saturate(.45)}
-  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
-  .wrap{max-width:1400px;margin:0 auto;padding:24px;display:grid;gap:24px}
+  .wrap{max-width:1400px;margin:0 auto;padding:24px;gap:24px}
   .glass{background:var(--glass-bg, rgba(255, 255, 255, 0.06));border:1px solid var(--glass-border, rgba(255, 255, 255, 0.09));border-radius:28px;box-shadow:var(--glass-shadow);backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2)}
   .hero{position:relative!important;z-index:9999!important;overflow:visible!important;padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:var(--hero-bg, linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)));margin-bottom:12px;will-change:transform,opacity;animation:heroSpringSlideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both}
   .hero-left{display:flex;align-items:center;gap:22px}
@@ -2871,7 +2886,66 @@ _tmpl.innerHTML = `
 .sos-output-row{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;padding:10px 14px!important;background:rgba(255,255,255,0.06)!important;border:1px solid rgba(255,255,255,0.12)!important;border-radius:12px!important;width:100%!important;box-sizing:border-box!important}
 .sos-output-row > .sensor-pill{flex:1!important;min-width:0!important;background:transparent!important;border:none!important;box-shadow:none!important;padding:0!important;font-weight:700!important;font-size:12px!important}
 
+/* Initial Dark Loading Curtain to guarantee zero raw DOM / FOUC flash */
+#argus-initial-curtain {
+  position: fixed;
+  inset: 0;
+  background: #080d1a;
+  z-index: 99998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+#argus-initial-curtain.curtain-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.argus-curtain-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.argus-curtain-icon {
+  font-size: 42px;
+  animation: curtainPulse 1.4s ease-in-out infinite;
+}
+.argus-curtain-bar {
+  width: 120px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  position: relative;
+}
+.argus-curtain-fill {
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, #38bdf8, #818cf8);
+  border-radius: 999px;
+  position: absolute;
+  animation: curtainSlide 1.2s ease-in-out infinite;
+}
+@keyframes curtainPulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 16px rgba(56,189,248,0.5)); }
+}
+@keyframes curtainSlide {
+  0% { left: -40%; }
+  100% { left: 100%; }
+}
+
 </style>
+
+<!-- Initial Cold Boot Dark Curtain -->
+<div id="argus-initial-curtain">
+  <div class="argus-curtain-spinner">
+    <div class="argus-curtain-icon">🛡️</div>
+    <div class="argus-curtain-bar"><div class="argus-curtain-fill"></div></div>
+  </div>
+</div>
 
 <!-- Bootstrap UI -->
 <div id="bootstrap-overlay" class="argus-bootstrap-layer" style="display:none"></div>
@@ -4035,10 +4109,19 @@ class ArgusPanel extends HTMLElement {
       .catch(err => {
         console.error('Argus initialization failed:', err);
         if (this.isConnected) {
+          this._hideInitialCurtain();
           this._renderInitializationError(err);
         }
       })
       .finally(() => { this._initPromise = null; });
+  }
+
+  _hideInitialCurtain() {
+    const c = this.shadowRoot.getElementById('argus-initial-curtain');
+    if (c) {
+      c.classList.add('curtain-hidden');
+      setTimeout(() => c.remove(), 350);
+    }
   }
 
   _bindSOS() {
@@ -4919,6 +5002,7 @@ class ArgusPanel extends HTMLElement {
     this._emergencyNumber = dashboard.ui?.emergency_number || '911';
     this._loadState = 'dashboard';
     this.shadowRoot.querySelector('.wrap')?.classList.add('wrap-ready');
+    this._hideInitialCurtain();
     this._currentProfile = dashboard.current_profile || null;
     const bootstrapOverlay = this.shadowRoot.getElementById('bootstrap-overlay');
     if (bootstrapOverlay) {
@@ -8150,6 +8234,7 @@ class ArgusPanel extends HTMLElement {
   }
 
   _renderMissingConfigurationScreen() {
+    this._hideInitialCurtain();
     const overlay = this.shadowRoot.getElementById('bootstrap-overlay');
     overlay.style.display = 'flex';
     overlay.innerHTML = `
@@ -8800,6 +8885,7 @@ class ArgusPanel extends HTMLElement {
 
 
   _renderFirstRunScreen() {
+    this._hideInitialCurtain();
     const overlay = this.shadowRoot.getElementById('bootstrap-overlay');
     overlay.style.display = 'flex';
 
@@ -8987,6 +9073,7 @@ class ArgusPanel extends HTMLElement {
   }
 
   _renderLegacyClaimScreen() {
+    this._hideInitialCurtain();
     const overlay = this.shadowRoot.getElementById('bootstrap-overlay');
     overlay.style.display = 'flex';
     overlay.innerHTML = `
@@ -9049,6 +9136,7 @@ class ArgusPanel extends HTMLElement {
     
     // Limpiar overlays anteriores por si acaso
     this.shadowRoot.querySelectorAll('.argus-profile-overlay, .argus-welcome-screen').forEach(el => el.remove());
+    this._hideInitialCurtain();
 
     // ── Render Fase 1 (Selector grid tvOS) ────────────────────────
     const overlay = document.createElement('div');
