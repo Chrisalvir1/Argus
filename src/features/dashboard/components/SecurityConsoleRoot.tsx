@@ -9,6 +9,11 @@ export function mountSecurityConsole(panel: any) {
   
   const container = shadow.getElementById('entries');
   if (!container) return;
+
+  const isCardMode = panel.hasAttribute?.('compact') || panel.classList?.contains('argus-compact') || Boolean(panel._cardConfig?.compact);
+  if (!isCardMode && !panel._profileSelectedThisMount && !panel._currentProfile && !panel._bootstrap?.has_active_session) {
+    return;
+  }
   
   if (!panel._reactConsoleRoot) {
     container.innerHTML = '';

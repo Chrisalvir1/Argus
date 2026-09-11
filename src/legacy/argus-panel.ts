@@ -1049,9 +1049,9 @@ _tmpl.innerHTML = `
     box-shadow: 0 8px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.25);
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
   }
-  .wrap { position: relative; z-index: 1; transition: filter 0.35s ease, opacity 0.35s ease; opacity: 0; pointer-events: none; }
-  .wrap.wrap-ready { opacity: 1; pointer-events: auto; }
-  .wrap.wrap-blurred { filter: blur(15px); opacity: 0.45; pointer-events: none; }
+  .wrap { position: relative; z-index: 1; transition: filter 0.35s ease, opacity 0.35s ease; opacity: 0; visibility: hidden; pointer-events: none; }
+  .wrap.wrap-ready { opacity: 1; visibility: visible; pointer-events: auto; }
+  .wrap.wrap-blurred { filter: blur(15px); opacity: 0.45; visibility: visible; pointer-events: none; }
   @keyframes dialElasticIn {
     0% { transform: scale(0.8) translateY(20px); opacity: 0; }
     60% { transform: scale(1.04) translateY(-4px); opacity: 0.9; }
@@ -1254,20 +1254,57 @@ _tmpl.innerHTML = `
   .hero p{margin:0;font-size:16px;color:#f1f5f9!important;opacity:1!important;font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,0.85)}
   @media(max-width:700px){.wrap{padding:14px;gap:14px}.glass{border-radius:22px}.hero{padding:22px;align-items:flex-start}.hero-icon{font-size:40px}.hero h1{font-size:27px}.hero p{font-size:14px}.entry-content{grid-template-columns:96px 1fr;padding:16px 105px 16px 14px;gap:10px}.sensor-column{width:98px}.sensor-chip{max-width:94px}.entry-icon{min-height:110px}.entry-icon svg{max-width:150px}.hud{top:12px;right:12px}.hud-data{font-size:15px;padding:5px 9px}.hud-loc{font-size:10px;padding:3px 8px}}
 
-  /* Modern Mode Navigation & iOS Liquid Bubble Transition */
-  .tabs { position: relative; isolation:isolate; display: flex; min-height:72px; background: rgba(255, 255, 255, 0.03); padding: 6px; border-radius: 20px; gap: 6px; overflow: visible; scrollbar-width: none; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.06); z-index: 1; }
+  /* Modern Mode Navigation & iOS/macOS Liquid Bubble Transition */
+  .tabs { position: relative; isolation:isolate; display: flex; min-height:72px; background: rgba(255, 255, 255, 0.03); padding: 6px; border-radius: 20px; gap: 6px; overflow: visible; scrollbar-width: none; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.08); z-index: 1; box-shadow: inset 0 1px 2px rgba(255,255,255,0.05), 0 8px 32px rgba(0,0,0,0.25); }
   .tabs::-webkit-scrollbar { display: none; }
-  .tab { position: relative; flex: 1; min-width: 55px; min-height:60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 14px; padding: 10px 4px; font-size: 11px; font-weight: 800; color: rgba(255, 255, 255, 0.55); transition: color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; border: none !important; outline: none; background: transparent !important; box-shadow: none !important; z-index: 1; }
+  .tab { position: relative; flex: 1; min-width: 55px; min-height:60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 14px; padding: 10px 4px; font-size: 11px; font-weight: 800; color: rgba(255, 255, 255, 0.6); transition: color 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s ease; cursor: pointer; border: none !important; outline: none; background: transparent !important; box-shadow: none !important; z-index: 2; user-select: none; -webkit-tap-highlight-color: transparent; }
   .tab:hover { color: #fff; }
-  .tab:active:not(:disabled) { transform: scale(0.94); }
+  .tab:active:not(:disabled) { transform: scale(0.92); }
   .tab.active { color: #fff !important; background: transparent !important; box-shadow: none !important; transform: none !important; }
 
-  .tab-bubble { position: absolute; top: 6px; bottom: 6px; height: calc(100% - 12px); border-radius: 14px; z-index: 0; transform-origin: left center; transition: transform 0.45s cubic-bezier(0.25, 1.35, 0.4, 1.05), background 0.4s ease, box-shadow 0.4s ease; pointer-events: none; }
-  .tab-bubble.bubble-disarmed { background: #43a047; box-shadow: 0 8px 24px rgba(67, 160, 71, 0.4); }
-  .tab-bubble.bubble-home { background: #fb8c00; box-shadow: 0 8px 24px rgba(251, 140, 0, 0.4); }
-  .tab-bubble.bubble-away { background: #e53935; box-shadow: 0 8px 24px rgba(229, 57, 53, 0.4); }
-  .tab-bubble.bubble-night { background: #1e88e5; box-shadow: 0 8px 24px rgba(30, 136, 229, 0.4); }
-  .tab-bubble.bubble-vacation { background: #9c27b0; box-shadow: 0 8px 24px rgba(156, 39, 176, 0.4); }
+  .tab-bubble {
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 0;
+    height: calc(100% - 12px);
+    border-radius: 14px;
+    z-index: 1;
+    pointer-events: none;
+    will-change: transform, width, background, box-shadow;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    transition:
+      transform 0.48s cubic-bezier(0.34, 1.56, 0.64, 1),
+      width 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+      background 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .tab-bubble.bubble-disarmed {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.95), rgba(21, 128, 61, 0.92));
+    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(34, 197, 94, 0.42), 0 2px 8px rgba(0, 0, 0, 0.25);
+  }
+  .tab-bubble.bubble-home {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.95), rgba(217, 119, 6, 0.92));
+    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(245, 158, 11, 0.42), 0 2px 8px rgba(0, 0, 0, 0.25);
+  }
+  .tab-bubble.bubble-away {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.95), rgba(185, 28, 28, 0.92));
+    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(239, 68, 68, 0.45), 0 2px 8px rgba(0, 0, 0, 0.25);
+  }
+  .tab-bubble.bubble-night {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(29, 78, 216, 0.92));
+    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(59, 130, 246, 0.42), 0 2px 8px rgba(0, 0, 0, 0.25);
+  }
+  .tab-bubble.bubble-vacation {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.95), rgba(126, 34, 206, 0.92));
+    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(168, 85, 247, 0.42), 0 2px 8px rgba(0, 0, 0, 0.25);
+  }
+  .tab-bubble.bubble-sos {
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.98), rgba(153, 27, 27, 0.95));
+    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 26px rgba(220, 38, 38, 0.55), 0 2px 8px rgba(0, 0, 0, 0.25);
+  }
 
 
   @keyframes bounceIn {
@@ -3028,7 +3065,7 @@ _tmpl.innerHTML = `
 
       <!-- GitHub Opt-In -->
       <section class="glass panel liquid-glass github-panel" id="w-github">
-        <div class="github-header" style="flex:1">
+        <div class="github-header">
           <h3 id="github-title" style="margin:0; font-size:14px; font-weight:700"></h3>
           <p id="github-desc" style="margin:4px 0 0; font-size:12px; opacity:0.75"></p>
         </div>
@@ -5724,22 +5761,42 @@ class ArgusPanel extends HTMLElement {
       sos:      this._t('sos_config_title') || 'CONFIGURACIÓN SOS',
     };
 
-    tabs.className = 'tabs';
-    tabs.innerHTML = `
-      <div class="tab-bubble"></div>
-      ${modes.map(m => `
-        <button type="button" class="tab ${m === this._mode ? 'active' : ''}" data-mode="${m}">
-          <span class="tab-icon" style="font-size: 20px;">${icons[m]}</span>
-          <span class="tab-label">${lbls[m]}</span>
-        </button>
-      `).join('')}
-    `;
-    const bubble = tabs.querySelector('.tab-bubble');
-    tabs.querySelectorAll('[data-mode]').forEach(t => t.addEventListener('click', () => {
-      this._mode = t.dataset.mode;
-      this._renderModeTabs();
-      this._renderModeView(); this._renderEntries(); this.dispatchEvent(new CustomEvent("argus-state-update"));
-    }));
+    let bubble = tabs.querySelector('.tab-bubble');
+    const existingButtons = tabs.querySelectorAll('.tab');
+
+    if (!bubble || existingButtons.length !== modes.length) {
+      tabs.className = 'tabs';
+      tabs.innerHTML = `
+        <div class="tab-bubble"></div>
+        ${modes.map(m => `
+          <button type="button" class="tab ${m === this._mode ? 'active' : ''}" data-mode="${m}">
+            <span class="tab-icon" style="font-size: 20px;">${icons[m]}</span>
+            <span class="tab-label">${lbls[m]}</span>
+          </button>
+        `).join('')}
+      `;
+      bubble = tabs.querySelector('.tab-bubble');
+      tabs.querySelectorAll('[data-mode]').forEach(t => t.addEventListener('click', (e) => {
+        e.preventDefault();
+        const nextMode = t.dataset.mode;
+        if (this._mode === nextMode) return;
+        this._mode = nextMode;
+        this._renderModeTabs();
+        this._renderModeView();
+        this._renderEntries();
+        this.dispatchEvent(new CustomEvent("argus-state-update"));
+      }));
+    } else {
+      existingButtons.forEach(btn => {
+        const m = btn.dataset.mode;
+        if (m && lbls[m]) {
+          const lblSpan = btn.querySelector('.tab-label');
+          if (lblSpan && lblSpan.textContent !== lbls[m]) {
+            lblSpan.textContent = lbls[m];
+          }
+        }
+      });
+    }
 
     const buttons = tabs.querySelectorAll('.tab');
     let activeBtn = null;
@@ -5757,9 +5814,10 @@ class ArgusPanel extends HTMLElement {
       requestAnimationFrame(() => {
         const left = activeBtn.offsetLeft;
         const width = activeBtn.offsetWidth;
-        bubble.style.transform = `translate3d(${left}px, 0, 0) scaleX(${width / 100})`;
-        bubble.style.width = '100px';
-        bubble.style.left = '0';
+        if (width > 0) {
+          bubble.style.width = `${width}px`;
+          bubble.style.transform = `translate3d(${left}px, 0, 0)`;
+        }
       });
     }
   }

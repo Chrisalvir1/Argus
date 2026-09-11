@@ -29,8 +29,10 @@
 
 Construido sobre una arquitectura ultra-ligera de última generación con **TypeScript 7 + Vite 8.3 + React 19.3 + react-grid-layout 2.2**, Argus combina una estética cinematográfica de **Liquid Glass (Cristal Líquido)** con un motor de seguridad de grado profesional, compatibilidad nativa con HomeKit, asistente de voz interactivo (TTS), notificaciones móviles inteligentes y un **Nuevo Modo de Alto Contraste / Modo Oscuro OLED** enfocado en máxima accesibilidad visual.
 
-### ⚡ Arquitectura Ultra-Ligera y Alto Rendimiento (v2.4.0)
+### ⚡ Arquitectura Ultra-Ligera y Alto Rendimiento (v2.4.1)
 - **Tecnología de Vanguardia:** Impulsado por **React 19.3.0**, **Vite 8.3.0** (Rolldown engine), **react-grid-layout 2.2.4**, **react-resizable 4.0.2**, **Vitest 5.0.0**, **TypeScript 7.0.2** y **Nanoid 6.0.1**.
+- **Activos de Marca Oficiales (HA 2026.3+):** Cumplimiento total con el nuevo Brands Proxy API de Home Assistant, sirviendo localmente los iconos y logos oficiales en alta resolución.
+- **Transición Líquida (iOS/macOS Fluid Spring):** Selector de Modos / SOS con física de resorte elástico, gradientes multicapa y deslizamiento continuo de cristal líquido.
 - **50% Más Ligero:** Reducción drástica a la mitad de los paquetes en desarrollo (de 118 a 59 dependencias, eliminando 67 módulos heredados obsoletos de Babel).
 - **Velocidad Extrema:** Compilación del bundle en ~120 ms (5x más rápido) y suite de pruebas de frontend en ~140 ms.
 - **Zero-Bloat y Cero Vulnerabilidades:** 0 dependencias externas de pip en Python (100% nativo y local en Home Assistant) y 0 vulnerabilidades de seguridad auditadas en producción.

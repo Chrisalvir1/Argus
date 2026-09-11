@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.4.1]
+- **Official Home Assistant 2026.3+ Brand Assets**: Shipped full high-resolution brand assets (`icon.png`, `logo.png`, `dark_icon.png`, `dark_logo.png`) directly into `custom_components/argus/brand/`, fully complying with the new local brand images specification and ensuring proper logo display in HACS and Home Assistant UI.
+- **Liquid Bubble Mode Navigation (iOS/macOS Fluid Spring)**: Redesigned the "Modos / SOS" active pill transition with organic spring physics (`cubic-bezier(0.34, 1.56, 0.64, 1)`), multi-stop liquid glass specular gradients, dynamic glowing shadows, and persistent DOM preservation preventing tab destruction. Added full vibrant styling for `.bubble-sos`.
+- **Card Spacing & Proportions**: Removed inline `style="flex:1"` from `.github-header` in `#w-github`, eliminating the excessive vertical void between header text and community buttons in the "Apoya a Argus" card.
+- **Cold Boot FOUC & Squished Layout Elimination**: Guarded the initial mounting of `SecurityConsole` and hid unstyled container elements (`visibility: hidden`) during Home Assistant restart/boot until user profile selection or active session is confirmed, providing a clean, seamless transition to the profile selector.
+
 ## [2.4.0]
 - **Frontend Architecture Overhaul**: Fully migrated to React 19.3.0 and React DOM 19.3.0, modernizing all internal hooks, refs, and component boundaries.
 - **react-grid-layout 2.x & react-resizable 4.x**: Upgraded to `react-grid-layout` 2.2.4 and `react-resizable` 4.0.2 via modern legacy adapter, permanently resolving runtime incompatibilities with `ReactDOM.findDOMNode` without breaking existing dashboard persistence.
