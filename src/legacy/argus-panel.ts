@@ -1257,7 +1257,8 @@ _tmpl.innerHTML = `
   /* Modern Mode Navigation & iOS/macOS Liquid Bubble Transition */
   .tabs { position: relative; isolation:isolate; display: flex; min-height:72px; background: rgba(255, 255, 255, 0.03); padding: 6px; border-radius: 20px; gap: 6px; overflow: visible; scrollbar-width: none; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.08); z-index: 1; box-shadow: inset 0 1px 2px rgba(255,255,255,0.05), 0 8px 32px rgba(0,0,0,0.25); }
   .tabs::-webkit-scrollbar { display: none; }
-  .tab { position: relative; flex: 1; min-width: 55px; min-height:60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 14px; padding: 10px 4px; font-size: 11px; font-weight: 800; color: rgba(255, 255, 255, 0.6); transition: color 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s ease; cursor: pointer; border: none !important; outline: none; background: transparent !important; box-shadow: none !important; z-index: 2; user-select: none; -webkit-tap-highlight-color: transparent; }
+  .tab { position: relative; flex: 1 1 0px; min-width: 0; min-height:60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 14px; padding: 10px 4px; font-size: 11px; font-weight: 800; color: rgba(255, 255, 255, 0.6); transition: color 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s ease; cursor: pointer; border: none !important; outline: none; background: transparent !important; box-shadow: none !important; z-index: 2; user-select: none; -webkit-tap-highlight-color: transparent; }
+  .tab-label { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; }
   .tab:hover { color: #fff; }
   .tab:active:not(:disabled) { transform: scale(0.92); }
   .tab.active { color: #fff !important; background: transparent !important; box-shadow: none !important; transform: none !important; }
@@ -5811,14 +5812,27 @@ class ArgusPanel extends HTMLElement {
 
     if (bubble && activeBtn) {
       bubble.className = `tab-bubble bubble-${this._mode}`;
-      requestAnimationFrame(() => {
-        const left = activeBtn.offsetLeft;
-        const width = activeBtn.offsetWidth;
+      const updateBubblePos = () => {
+        const currentActive = tabs.querySelector('.tab.active') as HTMLElement || activeBtn;
+        const currentBubble = tabs.querySelector('.tab-bubble') as HTMLElement || bubble;
+        if (!currentActive || !currentBubble) return;
+        const left = currentActive.offsetLeft;
+        const width = currentActive.offsetWidth;
         if (width > 0) {
-          bubble.style.width = `${width}px`;
-          bubble.style.transform = `translate3d(${left}px, 0, 0)`;
+          currentBubble.style.width = `${width}px`;
+          currentBubble.style.transform = `translate3d(${left}px, 0, 0)`;
         }
-      });
+      };
+      requestAnimationFrame(updateBubblePos);
+      setTimeout(updateBubblePos, 60);
+      setTimeout(updateBubblePos, 250);
+
+      if (!(tabs as any).__argusTabObserver && typeof ResizeObserver !== 'undefined') {
+        (tabs as any).__argusTabObserver = new ResizeObserver(() => {
+          updateBubblePos();
+        });
+        (tabs as any).__argusTabObserver.observe(tabs);
+      }
     }
   }
 
