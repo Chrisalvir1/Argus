@@ -22,7 +22,7 @@ class TestV210RuntimeContract(unittest.TestCase):
 
     def test_node_24_lts_and_typescript_702_are_enforced(self):
         package = (ROOT / "package.json").read_text()
-        self.assertIn('"typescript":"7.0.2"', package)
+        self.assertTrue('"typescript":"7.0.2"' in package or '"typescript": "7.0.2"' in package)
         for workflow in ("validate.yml", "release.yml"):
             source = (ROOT / ".github" / "workflows" / workflow).read_text()
             self.assertIn("node-version: '24'", source)

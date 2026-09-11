@@ -16,7 +16,7 @@ class TestReactDashboardLayoutContract(unittest.TestCase):
         cls.bootstrap=(WWW/'argus-bootstrap.js').read_text(encoding='utf-8')
         cls.package=json.loads((ROOT/'package.json').read_text(encoding='utf-8'))
     def test_real_react_grid_layout_dependencies(self):
-        self.assertEqual(self.package['dependencies']['react-grid-layout'],'1.5.4')
+        self.assertEqual(self.package['dependencies']['react-grid-layout'],'^2.2.4')
         self.assertIn('react-resizable',self.package['dependencies'])
     def test_collision_safe_non_compacting_grid(self):
         for token in ['allowOverlap={false}','isBounded={true}','draggableHandle=".argus-widget__drag-handle"','resizeHandles={[\'se\']}']:
