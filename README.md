@@ -5,11 +5,7 @@
 
 **Sistema Integral de Seguridad Residencial Inteligente, Local y Profesional para Home Assistant**
 
-[![Release](https://img.shields.io/github/v/release/Chrisalvir1/Argus?style=for-the-badge&color=blue)](https://github.com/Chrisalvir1/Argus/releases)
-[![HACS](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/default)
-[![Donate](https://img.shields.io/badge/Donate-PayPal-00457C.svg?style=for-the-badge&logo=paypal)](https://paypal.me/CEstradaAlvir)
-[![GitHub Stars](https://img.shields.io/github/stars/Chrisalvir1/Argus?style=for-the-badge&logo=github&color=gold)](https://github.com/Chrisalvir1/Argus)
-[![License](https://img.shields.io/github/license/Chrisalvir1/Argus?style=for-the-badge)](LICENSE)
+
 
 <br>
 

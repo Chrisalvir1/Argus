@@ -2,10 +2,7 @@
 
 **Sistema de seguridad residencial inteligente, local y profesional para Home Assistant**
 
-[![Release](https://img.shields.io/github/v/release/Chrisalvir1/Argus?style=for-the-badge&color=blue)](https://github.com/Chrisalvir1/Argus/releases)
-[![HACS](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/default)
-[![Donate](https://img.shields.io/badge/Donate-PayPal-00457C.svg?style=for-the-badge&logo=paypal)](https://paypal.me/CEstradaAlvir)
-[![GitHub Stars](https://img.shields.io/github/stars/Chrisalvir1/Argus?style=for-the-badge&logo=github&color=gold)](https://github.com/Chrisalvir1/Argus)
+
 
 Argus convierte tu Home Assistant en un centro de seguridad profesional, local, multiinstancia y visualmente impecable impulsado por una arquitectura ultra-ligera de última generación (**TypeScript 7 + Vite 8.3 + React 19.3 + react-grid-layout 2.2**), estética *Liquid Glass* y el nuevo **Modo Alto Contraste / OLED Dark Mode**.
 
