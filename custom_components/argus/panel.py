@@ -30,7 +30,13 @@ async def async_register_panel(hass: HomeAssistant) -> None:
 
     try:
         from homeassistant.components.frontend import add_extra_js_url
-        add_extra_js_url(hass, f"/api/{DOMAIN}_static/argus-brand-patch.js?v={VERSION}")
+        # Register as ES5 (non-module) so HA injects it as a regular <script> tag
+        # that runs synchronously *before* any ES module (including HACS frontend).
+        # If we register as a module (es5=False), HA uses dynamic import() which
+        # defers execution until after all Lit/HACS components have already rendered
+        # their brand icons — too late for our prototype patch to intercept.
+        add_extra_js_url(hass, f"/api/{DOMAIN}_static/argus-brand-patch.js?v={VERSION}", es5=True)
+        add_extra_js_url(hass, f"/api/{DOMAIN}_static/argus-brand-patch.js?v={VERSION}", es5=False)
     except Exception as err:
         _LOGGER.debug("Argus: non-fatal extra js registration note: %s", err)
 
