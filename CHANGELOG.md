@@ -1,6 +1,8 @@
 # Changelog
 
-## [2.4.4]
+## [2.4.5]
+- **Aggressive Multi-Layer Brand Patch & Shadow DOM Piercing**: Completely overhauled `argus-brand-patch.js` with automated `Element.prototype.attachShadow` monkey-patching, recursive shadow tree traversal, continuous background polling, and capturing error listeners. Ensures the Argus brand shield displays immediately in HACS dynamic tables without being blocked by Web Component encapsulation.
+
 - **Global Brand Asset Redirection for HACS (`argus-brand-patch.js`)**: Added client-side interceptor that redirects hardcoded external CDN requests (`https://brands.home-assistant.io/_/argus/...`) to locally served assets (`/api/argus_static/brand/dark_icon.png`). Injected globally across Home Assistant via `add_extra_js_url` and Lovelace resources, guaranteeing the official shield icon renders immediately in HACS without waiting for upstream HACS brands proxy support.
 - **Total Elimination of Cold-Boot FOUC**: Removed blocking `@import` font loading in Shadow DOM and added direct inline protection to initial curtain and root layout wrappers, completely preventing black-and-white unstyled text flashes on browser boot.
 
