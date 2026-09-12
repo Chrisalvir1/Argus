@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.4.3]
+- **Auto-Healing Brand Assets & Cache Purging**: Automatically verifies and syncs brand assets (`icon.png`, `dark_icon.png`, `logo.png`, `dark_logo.png`) into `brand/` at startup. Ensures Home Assistant loader's in-memory `Integration` instance registers `has_branding = True`. Automatically purges stale 404 placeholder caches from `.cache/brands/integrations/argus`.
+
 ## [2.4.2]
 - **Cold Boot FOUC & Squished Layout Total Elimination**: Solved the cold-boot unstyled DOM flash when opening Argus immediately after Home Assistant restarts. Enforced `.wrap { display: none !important; }` by default until session authorization (`.wrap-ready`), and added a native Shadow DOM dark glass curtain overlay (`#argus-initial-curtain`) with a glowing Argus shield and animated progress bar that renders instantly and fades out smoothly.
 - **Brand Assets & Static Proxy Optimization**: Added full high-resolution brand assets to both `custom_components/argus/brand/` and `custom_components/argus/www/brand/`, allowing direct access via `/api/argus_static/brand/icon.png`.
