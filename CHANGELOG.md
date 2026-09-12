@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.4.4]
+- **Global Brand Asset Redirection for HACS (`argus-brand-patch.js`)**: Added client-side interceptor that redirects hardcoded external CDN requests (`https://brands.home-assistant.io/_/argus/...`) to locally served assets (`/api/argus_static/brand/dark_icon.png`). Injected globally across Home Assistant via `add_extra_js_url` and Lovelace resources, guaranteeing the official shield icon renders immediately in HACS without waiting for upstream HACS brands proxy support.
+- **Total Elimination of Cold-Boot FOUC**: Removed blocking `@import` font loading in Shadow DOM and added direct inline protection to initial curtain and root layout wrappers, completely preventing black-and-white unstyled text flashes on browser boot.
+
 ## [2.4.3]
 - **Auto-Healing Brand Assets & Cache Purging**: Automatically verifies and syncs brand assets (`icon.png`, `dark_icon.png`, `logo.png`, `dark_logo.png`) into `brand/` at startup. Ensures Home Assistant loader's in-memory `Integration` instance registers `has_branding = True`. Automatically purges stale 404 placeholder caches from `.cache/brands/integrations/argus`.
 

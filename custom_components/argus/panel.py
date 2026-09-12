@@ -28,6 +28,12 @@ async def async_register_panel(hass: HomeAssistant) -> None:
         ])
         hass.data[DOMAIN][_STATIC_REGISTERED_KEY] = True
 
+    try:
+        from homeassistant.components.frontend import add_extra_js_url
+        add_extra_js_url(hass, f"/api/{DOMAIN}_static/argus-brand-patch.js?v={VERSION}")
+    except Exception as err:
+        _LOGGER.debug("Argus: non-fatal extra js registration note: %s", err)
+
     if not hass.data[DOMAIN].get(_PANEL_REGISTERED_KEY):
         await panel_custom.async_register_panel(
             hass,
@@ -75,6 +81,16 @@ async def _async_register_lovelace_resources(hass: HomeAssistant) -> None:
                 for item in existing:
                     if item.get("url") != url and "id" in item:
                         await resources.async_update_item(item["id"], {"res_type": "module", "url": url})
+
+            patch_url = f"/api/{DOMAIN}_static/argus-brand-patch.js?v={VERSION}"
+            patch_prefix = f"/api/{DOMAIN}_static/argus-brand-patch.js"
+            existing_patch = [item for item in items if isinstance(item, dict) and item.get("url", "").startswith(patch_prefix)]
+            if not existing_patch and hasattr(resources, "async_create_item"):
+                await resources.async_create_item({"res_type": "module", "url": patch_url})
+            elif existing_patch and hasattr(resources, "async_update_item"):
+                for item in existing_patch:
+                    if item.get("url") != patch_url and "id" in item:
+                        await resources.async_update_item(item["id"], {"res_type": "module", "url": patch_url})
     except Exception as err:
         _LOGGER.debug("Argus: non-fatal Lovelace resource note: %s", err)
 

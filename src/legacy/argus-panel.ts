@@ -886,7 +886,16 @@ const TEXTS = {
 const _tmpl = document.createElement('template');
 _tmpl.innerHTML = `
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+:host {
+  display: block;
+  background: #080d1a;
+  color: #fff;
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+}
+:host:not(:defined) {
+  display: none !important;
+}
 
 #widget-grid.hide-legacy > section.panel:not(#w-instances) { display: none !important; }
 
@@ -897,7 +906,7 @@ _tmpl.innerHTML = `
 
   /* Modern Premium Liquid Glass & iOS Wobble Styles */
   :host {
-    font-family: 'Inter', sans-serif !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
     --glass-bg: var(--argus-glass-bg, rgba(255, 255, 255, 0.07));
     --glass-border: var(--argus-glass-border, rgba(255, 255, 255, 0.09));
     --glass-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.35),
@@ -2940,7 +2949,7 @@ _tmpl.innerHTML = `
 </style>
 
 <!-- Initial Cold Boot Dark Curtain -->
-<div id="argus-initial-curtain">
+<div id="argus-initial-curtain" style="position:fixed;inset:0;background:#080d1a;z-index:99998;display:flex;align-items:center;justify-content:center;">
   <div class="argus-curtain-spinner">
     <div class="argus-curtain-icon">🛡️</div>
     <div class="argus-curtain-bar"><div class="argus-curtain-fill"></div></div>
@@ -2981,7 +2990,7 @@ _tmpl.innerHTML = `
 <div id="argus-canvas-bg"></div>
 
 
-<div class="wrap">
+<div class="wrap" style="display:none !important;">
   <!-- HERO -->
   <div class="glass hero liquid-glass">
     <div class="hero-left">
@@ -4881,7 +4890,11 @@ class ArgusPanel extends HTMLElement {
 
   /* ── Load dashboard ──────────────────────────────────────────────── */
   async _load() {
-    this.shadowRoot.querySelector('.wrap')?.classList.remove('wrap-ready');
+    const wrapEl = this.shadowRoot.querySelector('.wrap') as HTMLElement | null;
+    if (wrapEl) {
+      wrapEl.style.setProperty('display', 'none', 'important');
+      wrapEl.classList.remove('wrap-ready');
+    }
     let bootstrap;
     try { bootstrap = await this._send('argus/login_bootstrap'); }
     catch (e) { console.error('Argus bootstrap load failed:', e); return; }
@@ -5001,7 +5014,11 @@ class ArgusPanel extends HTMLElement {
     this._homeName = dashboard.ui?.home_name || '';
     this._emergencyNumber = dashboard.ui?.emergency_number || '911';
     this._loadState = 'dashboard';
-    this.shadowRoot.querySelector('.wrap')?.classList.add('wrap-ready');
+    const readyWrap = this.shadowRoot.querySelector('.wrap') as HTMLElement | null;
+    if (readyWrap) {
+      readyWrap.style.removeProperty('display');
+      readyWrap.classList.add('wrap-ready');
+    }
     this._hideInitialCurtain();
     this._currentProfile = dashboard.current_profile || null;
     const bootstrapOverlay = this.shadowRoot.getElementById('bootstrap-overlay');
@@ -9361,7 +9378,11 @@ class ArgusPanel extends HTMLElement {
     }
 
     // Ensure dashboard wrap is ready under the overlay
-    this.shadowRoot.querySelector('.wrap')?.classList.add('wrap-ready');
+    const readyWrap = this.shadowRoot.querySelector('.wrap') as HTMLElement | null;
+    if (readyWrap) {
+      readyWrap.style.removeProperty('display');
+      readyWrap.classList.add('wrap-ready');
+    }
 
     const overlay = document.createElement('div');
     overlay.className = 'argus-welcome-screen active-anim';
