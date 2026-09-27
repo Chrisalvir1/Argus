@@ -1,3 +1,10 @@
+## [2.4.12]
+
+- Keep sensor cards stable when state changes.
+- Remove technical suffixes such as Puerta/DPS 4 from displayed labels.
+- Hide battery warnings from the live console; keep them in activity history.
+- Smooth lock-state transitions.
+
 ## [2.4.11]
 
 - Improve sensor labels in normal and fullscreen views.
