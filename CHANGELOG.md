@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.4.10]
+- Align runtime version contracts and thread-safe sensor event dispatch.
+
 ## [2.4.5]
 - **Aggressive Multi-Layer Brand Patch & Shadow DOM Piercing**: Completely overhauled `argus-brand-patch.js` with automated `Element.prototype.attachShadow` monkey-patching, recursive shadow tree traversal, continuous background polling, and capturing error listeners. Ensures the Argus brand shield displays immediately in HACS dynamic tables without being blocked by Web Component encapsulation.
 
