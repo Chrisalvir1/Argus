@@ -186,6 +186,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
               sortedSensors.map((sensor: any) => {
                 const sState = hass.states[sensor.id];
                 const sName = sensor.name || sState?.attributes?.friendly_name || sensor.id;
+                const isLockLike = /door|puerta|port[oó]n|gate|lock|cerradura|window|ventana/i.test(`${sensor.id} ${sName}`);
                 const isBlocking = isWaiting && blockingSensors.includes(sensor.id);
                 const isOpen = panel.isSensorActive ? panel.isSensorActive(sState) : sState?.state === 'on';
                 
@@ -206,6 +207,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
                     statusLabelOpen={t('status_open') || 'ABIERTO'}
                     statusLabelClosed={t('status_closed') || 'CERRADO'}
                     bypassedLabel={t('bypassed_sensor') || 'OMITIDO'}
+                    isLockLike={isLockLike}
                   />
                 );
               })

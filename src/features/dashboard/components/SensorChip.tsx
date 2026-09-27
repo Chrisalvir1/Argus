@@ -11,9 +11,21 @@ interface SensorChipProps {
   statusLabelOpen: string;
   statusLabelClosed: string;
   bypassedLabel?: string;
+  isLockLike?: boolean;
 }
 
-export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, battery, iconHtml, statusLabelOpen, statusLabelClosed, bypassedLabel }: SensorChipProps) {
+function PremiumLockIcon({ isOpen, isBypassed, label }: { isOpen: boolean; isBypassed?: boolean; label: string }) {
+  return (
+    <svg className={`argus-lock-icon ${isOpen ? 'is-open' : 'is-closed'} ${isBypassed ? 'is-bypassed' : ''}`} viewBox="0 0 48 48" role="img" aria-label={label}>
+      <path className="argus-lock-shackle" d="M15 21v-7a9 9 0 0 1 18 0v7" />
+      <rect className="argus-lock-body" x="8" y="19" width="32" height="25" rx="8" />
+      <circle className="argus-lock-keyhole" cx="24" cy="31" r="3" />
+      <path className="argus-lock-keyline" d="M24 34v5" />
+    </svg>
+  );
+}
+
+export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, battery, iconHtml, statusLabelOpen, statusLabelClosed, bypassedLabel, isLockLike }: SensorChipProps) {
   let batHtml = null;
   if (battery !== null) {
     const isDead = battery === 0;
@@ -52,10 +64,11 @@ export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, battery, 
     >
       <span
         className="console-sensor-icon"
-        aria-hidden="true"
+        aria-hidden={isLockLike ? undefined : 'true'}
         style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: iconColor, animation: iconAnimation }}
-        dangerouslySetInnerHTML={{ __html: iconHtml }}
-      />
+      >
+        {isLockLike ? <PremiumLockIcon isOpen={isOpen} isBypassed={isBypassed} label={fullLabel} /> : <span dangerouslySetInnerHTML={{ __html: iconHtml }} />}
+      </span>
       <span className="console-sensor-name" title={name} style={{ color: isBlocking && !isBypassed ? '#fde047' : '#ffffff' }}>{name}</span>
       <span className="console-sensor-state" style={{ color: stateColor }}>
         {labelText}
