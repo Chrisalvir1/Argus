@@ -379,9 +379,9 @@
     0 4px 12px rgba(0, 0, 0, 0.25) !important;
   color: #ffffff !important;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
-  min-height: 44px !important;
+  min-height: 68px !important;
   box-sizing: border-box !important;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease !important;
+  transition: background .35s ease, box-shadow .35s ease, border-color .35s ease !important;
 }
 
 .console-sensor:hover {
@@ -466,6 +466,25 @@
   text-overflow: clip !important;
   overflow-wrap: anywhere !important;
   line-height: 1.25 !important;
+}
+
+@media (max-width: 539px) {
+  .entry:not(.ios-fullscreen) .security-console .console-sensors,
+  .entry:not(.ios-fullscreen) .security-console .console-sensors.console-sensors--compact,
+  .entry:not(.ios-fullscreen) .security-console .console-sensors.console-sensors--micro {
+    grid-template-columns: minmax(0, 1fr) !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  .entry:not(.ios-fullscreen) .security-console .console-sensor {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  .entry:not(.ios-fullscreen) .security-console .console-sensor-name {
+    writing-mode: horizontal-tb !important;
+    word-break: normal !important;
+    overflow-wrap: anywhere !important;
+  }
 }
 
 .console-empty {

@@ -112,26 +112,14 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
     });
   }
 
-  // Sort sensors: in waiting/pending or armed, place blocking & open sensors first
-  const sortedSensors = [...activeSensors].sort((a, b) => {
-    const isBlockingA = isWaiting && blockingSensors.includes(a.id);
-    const isBlockingB = isWaiting && blockingSensors.includes(b.id);
-    if (isBlockingA && !isBlockingB) return -1;
-    if (!isBlockingA && isBlockingB) return 1;
-
-    const isOpenA = panel.isSensorActive ? panel.isSensorActive(hass?.states[a.id]) : hass?.states[a.id]?.state === 'on';
-    const isOpenB = panel.isSensorActive ? panel.isSensorActive(hass?.states[b.id]) : hass?.states[b.id]?.state === 'on';
-    if (isOpenA && !isOpenB) return -1;
-    if (!isOpenA && isOpenB) return 1;
-    return 0;
-  });
+  // Keep configured order stable; live state must never move a card.
+  const sortedSensors = activeSensors;
 
   const sensorCount = sortedSensors.length;
   const gridClass = sensorCount >= 7 ? 'console-sensors--micro' : (sensorCount >= 3 ? 'console-sensors--compact' : '');
   
   // Battery alerts strictly for configured active sensors
   const modeSensorIds = activeSensors.map(s => s.id);
-  const batteryAlerts = panel._renderBatteryAlerts?.(modeSensorIds) || '';
 
   return (
     <>
@@ -148,10 +136,6 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
           <button className="ghost entry-exit-fs" onClick={onToggleFullscreen} title={t('fullscreen_title') || 'Salir de pantalla completa'} style={{position:'fixed',top:'max(16px, env(safe-area-inset-top))',left:'max(16px, env(safe-area-inset-left))',zIndex:100000,padding:'10px 16px',fontSize:'20px',fontWeight:900,background:'rgba(0,0,0,.65)',backdropFilter:'blur(16px)',borderRadius:'14px',color:'white',border:'1px solid rgba(255,255,255,.25)',boxShadow:'0 8px 24px rgba(0,0,0,.5)',cursor:'pointer'}}>✕</button>
         ) : (
           <button className="ghost fs-btn entry-fs" onClick={onToggleFullscreen} title={t('fullscreen_title') || 'Pantalla completa'} style={{position:'absolute',bottom:'20px',right:'20px',zIndex:10,padding:'10px 15px',fontSize:'18px',background:'rgba(0,0,0,0.45)',backdropFilter:'blur(12px)',borderRadius:'14px',opacity:0.85,color:'white',border:'1px solid rgba(255,255,255,0.22)',boxShadow:'0 8px 20px rgba(0,0,0,0.35)',cursor:'pointer'}}>⛶</button>
-        )}
-
-        {batteryAlerts && (
-          <div className="battery-alerts-wrapper" dangerouslySetInnerHTML={{ __html: batteryAlerts }} />
         )}
 
         <div className="entry-content security-console">
@@ -185,7 +169,11 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
             ) : (
               sortedSensors.map((sensor: any) => {
                 const sState = hass.states[sensor.id];
-                const sName = sensor.name || sState?.attributes?.friendly_name || sensor.id;
+                const rawName = sensor.name || sState?.attributes?.friendly_name || sensor.id;
+                const sName = rawName
+                  .replace(/\b(?:dps\s*4|puerta|door)\b/gi, ' ')
+                  .replace(/\s{2,}/g, ' ')
+                  .trim();
                 const isLockLike = /door|puerta|port[oó]n|gate|lock|cerradura|window|ventana/i.test(`${sensor.id} ${sName}`);
                 const isBlocking = isWaiting && blockingSensors.includes(sensor.id);
                 const isOpen = panel.isSensorActive ? panel.isSensorActive(sState) : sState?.state === 'on';

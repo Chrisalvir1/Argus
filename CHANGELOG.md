@@ -1,3 +1,9 @@
+## [2.4.13]
+
+- Unify mobile sensor layout to one readable column.
+- Remove technical labels such as Puerta, Door and DPS 4 from sensor names.
+- Ship the corrected React bundle used by the add-on bootstrap.
+
 ## [2.4.12]
 
 - Keep sensor cards stable when state changes.

@@ -45,7 +45,7 @@ export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, battery, 
   }
 
   const iconColor = isBypassed ? '#94a3b8' : (isBlocking ? '#fde047' : (isOpen ? '#f87171' : '#34d399'));
-  const iconAnimation = isBypassed ? 'none' : (isBlocking ? 'pulse 1s infinite' : (isOpen ? 'pulse 2s infinite' : 'none'));
+  const iconAnimation = isLockLike ? 'none' : (isBypassed ? 'none' : (isBlocking ? 'pulse 1s infinite' : (isOpen ? 'pulse 2s infinite' : 'none')));
   const stateColor = isBypassed ? '#94a3b8' : (isBlocking ? '#fde047' : (isOpen ? '#f87171' : '#34d399'));
   const opacity = isBypassed ? 0.6 : 1;
 
