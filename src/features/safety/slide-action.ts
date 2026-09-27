@@ -633,10 +633,12 @@ function mountOnEntry(panel, entry, idx) {
         panel._send('argus/perform_alarm_action', { action: 'disarm', entry_id: realEntryId, ...(pin ? { code: pin } : {}) }).catch(() => {});
       }
     } else {
-      sWrap.classList.add('sos-active');
-      if (typeof panel._send === 'function') {
-        panel._send('argus/perform_alarm_action', { action: 'sos', entry_id: realEntryId }).catch(() => {});
-      }
+      // Always use the same confirmation flow for SOS, including touch/slider
+      // activation. This prevents accidental calls and keeps the disarm path
+      // visible after the alarm enters panic state.
+      (panel as any)._sosEntryIdx = idx;
+      panel.shadowRoot?.getElementById('sos-modal')?.classList.add('open');
+      return;
     }
   });
 
@@ -654,7 +656,9 @@ function mountOnEntry(panel, entry, idx) {
     const touch = isTouchMode(panel);
 
     // Disarm only appears when armed!
-    dWrap.classList.toggle('sta-armed', isArmed);
+    // Panic is an armed state too; keep the disarm control available while SOS
+    // is active instead of allowing the render refresh to hide it.
+    dWrap.classList.toggle('sta-armed', isArmed || panic);
     dWrap.classList.toggle('sta-mode-touch', touch);
     sWrap.classList.toggle('sta-mode-touch', touch);
     sWrap.classList.toggle('sos-active', panic);
