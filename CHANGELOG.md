@@ -1,3 +1,9 @@
+## [2.4.11]
+
+- Improve sensor labels in normal and fullscreen views.
+- Add animated liquid-glass lock states.
+- Keep SOS disarm control visible and require call confirmation.
+
 # Changelog
 
 ## [2.4.10]
