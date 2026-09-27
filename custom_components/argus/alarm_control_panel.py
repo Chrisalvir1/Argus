@@ -889,7 +889,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         # Fire "sensor_opened" automations globally (before filtering by alarm state)
         self.hass.create_task(self._evaluate_automations("sensor_opened", sensor=entity_id))
-        self.hass.bus.async_fire("argus_sensor_opened", {
+        self.hass.add_job(self.hass.bus.async_fire, "argus_sensor_opened", {
             "entity_id": entity_id, "state": new_state.state, "alarm_entity_id": self.entity_id, "entry_id": self._config_entry.entry_id
         })
 
@@ -1372,7 +1372,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             self.async_write_ha_state()
             await self._async_mqtt_publish()
             await self._async_persist_stable_state("disarm")
-            self.hass.bus.async_fire("argus_state_changed", {
+            self.hass.add_job(self.hass.bus.async_fire, "argus_state_changed", {
                 "entity_id": self.entity_id, "state": "disarmed", "duress": True, "entry_id": self._config_entry.entry_id
             })
             self.hass.async_create_task(self.async_alarm_trigger())
@@ -1410,10 +1410,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         await self._async_mqtt_publish()
         await self._async_persist_stable_state("disarm")
         self.hass.async_create_task(self._evaluate_automations("disarmed"))
-        self.hass.bus.async_fire("argus_state_changed", {
+        self.hass.add_job(self.hass.bus.async_fire, "argus_state_changed", {
             "entity_id": self.entity_id, "state": "disarmed", "user": caller_name, "entry_id": self._config_entry.entry_id
         })
-        self.hass.bus.async_fire("argus_disarmed", {
+        self.hass.add_job(self.hass.bus.async_fire, "argus_disarmed", {
             "entity_id": self.entity_id, "user": caller_name, "entry_id": self._config_entry.entry_id
         })
         await self._async_notify_configured(
@@ -1514,7 +1514,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 "El sistema no se armó porque estos sensores están abiertos o activos:\n"
                 + "\n".join(f"• {name}" for name in open_names),
             )
-            self.hass.bus.async_fire(
+            self.hass.add_job(self.hass.bus.async_fire, 
                 "argus_arm_blocked",
                 {
                     "entity_id": self.entity_id,
@@ -1631,10 +1631,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         self.hass.async_create_task(self._evaluate_automations("armed", target=target))
         user_name = await self._get_context_user()
-        self.hass.bus.async_fire("argus_state_changed", {
+        self.hass.add_job(self.hass.bus.async_fire, "argus_state_changed", {
             "entity_id": self.entity_id, "state": target.value if hasattr(target, "value") else str(target), "user": user_name, "entry_id": self._config_entry.entry_id
         })
-        self.hass.bus.async_fire("argus_armed", {
+        self.hass.add_job(self.hass.bus.async_fire, "argus_armed", {
             "entity_id": self.entity_id, "mode": target.value if hasattr(target, "value") else str(target), "user": user_name, "entry_id": self._config_entry.entry_id
         })
         mode = target.value if hasattr(target, "value") else str(target)
@@ -1675,7 +1675,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 self._panic_previous_state = AlarmControlPanelState.DISARMED
             self._panic_active = True
         self._triggered_by = "SOS / manual panic"
-        self.hass.bus.async_fire("argus_panic_activated", {
+        self.hass.add_job(self.hass.bus.async_fire, "argus_panic_activated", {
             "entity_id": self.entity_id, "user": await self._get_context_user(), "entry_id": self._config_entry.entry_id
         })
         await self._async_trigger()
