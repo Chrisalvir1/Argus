@@ -1,3 +1,6 @@
+## [2.4.21]
+- Prevent Home Assistant dashboard layout from stretching the Argus custom card beyond its content.
+
 ## [2.4.20]
 - Stop copying the startup fullscreen height into Lovelace cards; compact dashboards now use intrinsic content height.
 
