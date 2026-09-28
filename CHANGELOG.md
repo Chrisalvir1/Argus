@@ -1,3 +1,6 @@
+## [2.4.22]
+- Collapse the hidden React editor grid in compact Lovelace cards so persisted widget layouts cannot add thousands of pixels of blank height.
+
 ## [2.4.21]
 - Prevent Home Assistant dashboard layout from stretching the Argus custom card beyond its content.
 

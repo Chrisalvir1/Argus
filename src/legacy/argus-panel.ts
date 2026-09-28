@@ -1174,6 +1174,17 @@ _tmpl.innerHTML = `
   :host([compact]) #argus-canvas-bg, :host(.argus-compact) #argus-canvas-bg {
     display: none !important;
   }
+  /* The compact card renders the live security console directly. The React
+     dashboard grid is a secondary editor surface and can retain persisted
+     widget coordinates (thousands of pixels tall) even while hidden. */
+  :host([compact]) #argus-react-dashboard-root,
+  :host(.argus-compact) #argus-react-dashboard-root {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+  }
   :host([compact]) .tabs, :host(.argus-compact) .tabs {
     display: none !important;
   }

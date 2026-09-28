@@ -1,4 +1,4 @@
 import './argus-brand-patch.js';
-import { applyArgusFrontend } from './react-dist/argus-frontend.js?v=2.4.21';
+import { applyArgusFrontend } from './react-dist/argus-frontend.js?v=2.4.22';
 applyArgusFrontend();
 
