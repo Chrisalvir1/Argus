@@ -1,3 +1,7 @@
+## [2.4.16]
+
+- Complete local Argus brand assets with high-density icon and logo variants for Home Assistant 2026.9.4.
+
 ## [2.4.15]
 
 - Make the Argus Lovelace card size to its content instead of reserving viewport height.
