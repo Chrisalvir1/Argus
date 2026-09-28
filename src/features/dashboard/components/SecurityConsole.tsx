@@ -170,10 +170,10 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
               sortedSensors.map((sensor: any) => {
                 const sState = hass.states[sensor.id];
                 const rawName = sensor.name || sState?.attributes?.friendly_name || sensor.id;
-                const sName = rawName
-                  .replace(/\b(?:dps\s*4|puerta|door)\b/gi, ' ')
-                  .replace(/\s{2,}/g, ' ')
-                  .trim();
+                // Preserve the user's friendly name. Only strip a technical
+                // DPS suffix that is appended by the integration, never words
+                // such as “Puerta” that are part of the configured name.
+                const sName = rawName.replace(/\s+\(?dps\s*4\)?\s*$/i, '').trim();
                 const isLockLike = /door|puerta|port[oó]n|gate|lock|cerradura|window|ventana/i.test(`${sensor.id} ${sName}`);
                 const isBlocking = isWaiting && blockingSensors.includes(sensor.id);
                 const isOpen = panel.isSensorActive ? panel.isSensorActive(sState) : sState?.state === 'on';

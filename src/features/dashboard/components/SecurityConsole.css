@@ -414,16 +414,18 @@
   overflow: visible;
   filter: drop-shadow(0 0 6px currentColor);
   transition: color .35s ease, filter .35s ease;
+  transform-style: preserve-3d;
+  perspective: 240px;
 }
-.argus-lock-icon.is-open { color: #ff4f6d; animation: argus-lock-open .55s ease both; }
-.argus-lock-icon.is-closed { color: #35e6a0; animation: argus-lock-closed .55s ease both; }
+.argus-lock-icon.is-open { color: #ff4f6d; animation: argus-lock-open 1.15s cubic-bezier(.22,.75,.2,1) both; }
+.argus-lock-icon.is-closed { color: #35e6a0; animation: argus-lock-closed 1.15s cubic-bezier(.22,.75,.2,1) both; }
 .argus-lock-icon.is-bypassed { color: #94a3b8; filter: none; }
 .argus-lock-body { fill: color-mix(in srgb, currentColor 28%, transparent); stroke: currentColor; stroke-width: 2; }
-.argus-lock-shackle { fill: none; stroke: currentColor; stroke-width: 4; stroke-linecap: round; transform-origin: 15px 21px; transition: transform .45s cubic-bezier(.2,.8,.2,1); }
-.argus-lock-icon.is-open .argus-lock-shackle { transform: rotate(-24deg) translate(-1px,-2px); }
+.argus-lock-shackle { fill: none; stroke: currentColor; stroke-width: 4; stroke-linecap: round; transform-origin: 15px 21px; transition: transform .85s cubic-bezier(.22,.75,.2,1); }
+.argus-lock-icon.is-open .argus-lock-shackle { transform: rotate(-28deg) translate(-1px,-2px); }
 .argus-lock-keyhole, .argus-lock-keyline { fill: currentColor; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
-@keyframes argus-lock-open { 0% { transform: scale(.86) rotate(-8deg); opacity: .55; } 70% { transform: scale(1.08) rotate(2deg); } 100% { transform: scale(1) rotate(0); opacity: 1; } }
-@keyframes argus-lock-closed { 0% { transform: scale(.86) rotate(8deg); opacity: .55; } 70% { transform: scale(1.08) rotate(-2deg); } 100% { transform: scale(1) rotate(0); opacity: 1; } }
+@keyframes argus-lock-open { 0% { transform: translateZ(0) scale(1); opacity: .9; } 38% { transform: translateZ(16px) scale(1.22) rotate(-3deg); opacity: 1; } 100% { transform: translateZ(0) scale(1) rotate(0); opacity: 1; } }
+@keyframes argus-lock-closed { 0% { transform: translateZ(0) scale(1); opacity: .9; } 38% { transform: translateZ(16px) scale(1.22) rotate(3deg); opacity: 1; } 100% { transform: translateZ(0) scale(1) rotate(0); opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .argus-lock-icon { animation: none !important; } .argus-lock-shackle { transition: none !important; } }
 
 .console-sensor-name {
@@ -483,7 +485,8 @@
   .entry:not(.ios-fullscreen) .security-console .console-sensor-name {
     writing-mode: horizontal-tb !important;
     word-break: normal !important;
-    overflow-wrap: anywhere !important;
+    overflow-wrap: normal !important;
+    hyphens: none !important;
   }
 }
 

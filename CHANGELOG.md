@@ -1,3 +1,10 @@
+## [2.4.14]
+
+- Preserve original friendly sensor names such as Puerta Principal.
+- Remove only the technical DPS 4 suffix.
+- Smooth and slow the lock open/close zoom transition.
+- Prevent character-by-character wrapping on mobile.
+
 ## [2.4.13]
 
 - Unify mobile sensor layout to one readable column.
