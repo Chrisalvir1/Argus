@@ -5329,25 +5329,21 @@ var v = class extends HTMLElement {
 		} catch {}
 	}
 	_mountPanel() {
-		if (this._panelMounted || !this._panelHost || !customElements.get("argus-panel-v2018")) return;
-		this._panelMounted = !0, this._panelHost.innerHTML = "", this._panelEl = document.createElement("argus-panel-v2018"), this._panelEl.style.display = "block", this._panelEl.style.width = "100%", this._panelEl.style.setProperty("height", "auto", "important"), this._panelEl.style.setProperty("min-height", "0", "important"), this._panelEl.style.setProperty("max-height", "none", "important"), this._config.mode !== "panel" && (this._panelEl.setAttribute("compact", ""), this._panelEl.classList.add("argus-compact"));
-		try {
-			this._panelEl.setConfig({
-				entity: this._config.entity,
-				title: this._config.title,
-				compact: this._config.mode !== "panel"
-			});
-		} catch {}
-		this._panelHost.appendChild(this._panelEl);
-		let e = () => {
-			let e = Math.ceil(this._panelEl?.getBoundingClientRect?.().height || 0);
-			e > 0 && (this.style.setProperty("height", `${e}px`, "important"), this.style.setProperty("min-height", "0", "important"), this._panelHost?.style.setProperty("height", `${e}px`, "important"));
-		};
-		if (this._panelResizeObserver = typeof ResizeObserver < "u" ? new ResizeObserver(e) : null, this._panelResizeObserver?.observe(this._panelEl), requestAnimationFrame(e), this._panelEl.addEventListener("argus-fullscreen-changed", (e) => {
-			e.detail?.fullscreen ? this._enterFullscreen() : this._exitFullscreen();
-		}), this._hass) try {
-			this._panelEl.hass = this._hass;
-		} catch {}
+		if (!this._panelMounted && this._panelHost && customElements.get("argus-panel-v2018")) {
+			this._panelMounted = !0, this._panelHost.innerHTML = "", this._panelEl = document.createElement("argus-panel-v2018"), this._panelEl.style.display = "block", this._panelEl.style.width = "100%", this._panelEl.style.setProperty("height", "auto", "important"), this._panelEl.style.setProperty("min-height", "0", "important"), this._panelEl.style.setProperty("max-height", "none", "important"), this._config.mode !== "panel" && (this._panelEl.setAttribute("compact", ""), this._panelEl.classList.add("argus-compact"));
+			try {
+				this._panelEl.setConfig({
+					entity: this._config.entity,
+					title: this._config.title,
+					compact: this._config.mode !== "panel"
+				});
+			} catch {}
+			if (this._panelHost.appendChild(this._panelEl), this._panelEl.addEventListener("argus-fullscreen-changed", (e) => {
+				e.detail?.fullscreen ? this._enterFullscreen() : this._exitFullscreen();
+			}), this._hass) try {
+				this._panelEl.hass = this._hass;
+			} catch {}
+		}
 	}
 	_renderBasicCard() {
 		if (!this._panelHost || !this._hass) return;
@@ -5412,7 +5408,7 @@ var v = class extends HTMLElement {
 		this._fullscreen = !1, this.classList.remove("argus-fullscreen"), this._fsBtn && (this._fsBtn.textContent = "⛶", this._fsBtn.title = "Pantalla completa"), document.body.style.overflow = "";
 	}
 	getCardSize() {
-		return 2;
+		return 1;
 	}
 	getGridOptions() {
 		return {

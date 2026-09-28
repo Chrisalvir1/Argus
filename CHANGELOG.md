@@ -1,3 +1,6 @@
+## [2.4.20]
+- Stop copying the startup fullscreen height into Lovelace cards; compact dashboards now use intrinsic content height.
+
 ## [2.4.19]
 - Fix Lovelace card row sizing so compact Argus panels do not reserve six empty rows.
 

@@ -268,18 +268,10 @@ class ArgusPanelCard extends HTMLElement {
     } catch (_) {}
 
     this._panelHost.appendChild(this._panelEl);
-    // Keep the Lovelace row tied to the rendered panel instead of a viewport-sized child.
-    const syncCardHeight = () => {
-      const height = Math.ceil(this._panelEl?.getBoundingClientRect?.().height || 0);
-      if (height > 0) {
-        this.style.setProperty('height', `${height}px`, 'important');
-        this.style.setProperty('min-height', '0', 'important');
-        this._panelHost?.style.setProperty('height', `${height}px`, 'important');
-      }
-    };
-    this._panelResizeObserver = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(syncCardHeight) : null;
-    this._panelResizeObserver?.observe(this._panelEl);
-    requestAnimationFrame(syncCardHeight);
+    // Do not copy the panel's first layout height into the Lovelace card. During
+    // startup the panel briefly has its fullscreen minimum and that stale value
+    // creates the large empty dashboard area. Intrinsic sizing must remain in
+    // control; fullscreen is handled only by the fullscreen class.
 
     this._panelEl.addEventListener('argus-fullscreen-changed', (e: any) => {
       if (e.detail?.fullscreen) {
@@ -386,7 +378,7 @@ class ArgusPanelCard extends HTMLElement {
 
   // Compact cards are content-sized. Returning a fixed six-row estimate makes
   // Lovelace reserve a large empty area below the rendered panel.
-  getCardSize() { return 2; }
+  getCardSize() { return 1; }
 
   getGridOptions() {
     return {
