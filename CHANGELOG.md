@@ -1,3 +1,7 @@
+## [2.4.18]
+- Fix embedded Lovelace card height so compact panels do not reserve viewport space.
+- Keep sensor labels and ABIERTO/CERRADO status readable in both dashboard and sidebar render paths.
+
 ## [2.4.17]
 
 - Keep sensor names readable by removing generated type suffixes and preventing letter-by-letter wrapping.

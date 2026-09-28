@@ -1149,6 +1149,8 @@ _tmpl.innerHTML = `
   :host{display:block;min-height:100vh;box-sizing:border-box;--primary-text-color:#ffffff!important;--secondary-text-color:rgba(255,255,255,0.7)!important;color:#ffffff!important;background:var(--lovelace-background,var(--primary-background-color));font-family:'Outfit',Inter,system-ui,sans-serif}
   :host([compact]), :host(.argus-compact) {
     min-height: auto !important;
+    height: auto !important;
+    max-height: none !important;
     background: transparent !important;
   }
   :host([compact]) .wrap, :host(.argus-compact) .wrap {
@@ -1161,7 +1163,7 @@ _tmpl.innerHTML = `
     gap: 0 !important;
     display: flex !important;
     flex-direction: column !important;
-    flex: 1 1 auto !important;
+    flex: 0 0 auto !important;
     overflow: visible !important;
     container-type: inline-size;
     container-name: argus-compact-wrap;
@@ -1204,10 +1206,10 @@ _tmpl.innerHTML = `
     margin: 0 !important;
     height: auto !important;
     width: 100% !important;
-    min-height: fit-content !important;
+    min-height: 0 !important;
     display: flex !important;
     flex-direction: column !important;
-    flex: 1 1 auto !important;
+    flex: 0 0 auto !important;
     overflow: visible !important;
     background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;
     backdrop-filter: blur(28px) saturate(150%) !important;
@@ -1218,10 +1220,10 @@ _tmpl.innerHTML = `
     border-radius: 24px !important;
     height: auto !important;
     width: 100% !important;
-    min-height: fit-content !important;
+    min-height: 0 !important;
     display: flex !important;
     flex-direction: column !important;
-    flex: 1 1 auto !important;
+    flex: 0 0 auto !important;
     overflow: visible !important;
     background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;
     backdrop-filter: blur(28px) saturate(150%) !important;
@@ -1237,7 +1239,7 @@ _tmpl.innerHTML = `
     width: 100% !important;
     display: flex !important;
     flex-direction: column !important;
-    flex: 1 1 auto !important;
+    flex: 0 0 auto !important;
     overflow: visible !important;
   }
   :host([compact]) #entries, :host(.argus-compact) #entries {
@@ -1248,6 +1250,20 @@ _tmpl.innerHTML = `
     width: 100% !important;
     margin: 0 !important;
     overflow: visible !important;
+  }
+  /* Embedded Lovelace cards must size to their content, never to the viewport. */
+  :host([compact]) .argus-widget__content,
+  :host(.argus-compact) .argus-widget__content,
+  :host([compact]) #entries,
+  :host(.argus-compact) #entries,
+  :host([compact]) #w-instances,
+  :host(.argus-compact) #w-instances,
+  :host([compact]) .entry,
+  :host(.argus-compact) .entry {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    flex: 0 0 auto !important;
   }
   *{box-sizing:border-box}
   @container argus-compact-wrap (max-width: 800px) {
@@ -2888,6 +2904,21 @@ _tmpl.innerHTML = `
 
 .console-sensor.sensor-arming-blink,
 .console-sensor.argus-blocking{border-color:#ffd60a!important;background:linear-gradient(135deg,rgba(255,149,0,0.38),rgba(255,96,0,0.22))!important;animation:argusSensorArmBlink 0.9s ease-in-out infinite!important;color:#fff!important}
+
+/* Keep sensor labels readable and keep the status word intact. */
+.security-console .console-sensor,
+.security-console .console-sensor-card { min-width: 0 !important; }
+.security-console .console-sensor-name {
+  min-width: 0 !important;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+  hyphens: none !important;
+  white-space: normal !important;
+}
+.security-console .console-sensor-state {
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
+}
 
 /* Wide spacious SOS selector */
 .emergency-number-card{transition:all 0.3s ease}

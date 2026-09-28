@@ -138,13 +138,14 @@ class ArgusPanelCard extends HTMLElement {
     if (this._structureReady) return;
     this._structureReady = true;
     this.style.display = 'block';
-    this.style.height = 'auto';
-    this.style.minHeight = '0';
+    this.style.setProperty('height', 'auto', 'important');
+    this.style.setProperty('min-height', '0', 'important');
 
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.innerHTML = `
       <style>
         :host { display: block; width: 100%; box-sizing: border-box; }
+        :host(.argus-compact) { height: auto !important; min-height: 0 !important; max-height: none !important; }
         ha-card {
           border-radius: 28px !important;
           background: linear-gradient(135deg, rgba(16, 23, 38, 0.96) 0%, rgba(10, 15, 26, 0.98) 100%) !important;
@@ -171,6 +172,7 @@ class ArgusPanelCard extends HTMLElement {
           min-height: 0 !important;
           overflow: visible !important;
         }
+        .argus-panel-host > * { height: auto !important; min-height: 0 !important; max-height: none !important; }
         /* Fullscreen mode */
         :host(.argus-fullscreen) ha-card {
           position: fixed !important;
@@ -248,9 +250,9 @@ class ArgusPanelCard extends HTMLElement {
     // embedded card host while leaving fullscreen to its own class rules.
     this._panelEl.style.display = 'block';
     this._panelEl.style.width = '100%';
-    this._panelEl.style.height = 'auto';
-    this._panelEl.style.minHeight = '0';
-    this._panelEl.style.maxHeight = 'none';
+    this._panelEl.style.setProperty('height', 'auto', 'important');
+    this._panelEl.style.setProperty('min-height', '0', 'important');
+    this._panelEl.style.setProperty('max-height', 'none', 'important');
 
     if (this._config.mode !== 'panel') {
       this._panelEl.setAttribute('compact', '');
@@ -270,8 +272,9 @@ class ArgusPanelCard extends HTMLElement {
     const syncCardHeight = () => {
       const height = Math.ceil(this._panelEl?.getBoundingClientRect?.().height || 0);
       if (height > 0) {
-        this.style.height = `${height}px`;
-        this.style.minHeight = '0';
+        this.style.setProperty('height', `${height}px`, 'important');
+        this.style.setProperty('min-height', '0', 'important');
+        this._panelHost?.style.setProperty('height', `${height}px`, 'important');
       }
     };
     this._panelResizeObserver = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(syncCardHeight) : null;
