@@ -1,3 +1,8 @@
+## [2.4.15]
+
+- Make the Argus Lovelace card size to its content instead of reserving viewport height.
+- Preserve fullscreen sizing separately.
+
 ## [2.4.14]
 
 - Preserve original friendly sensor names such as Puerta Principal.

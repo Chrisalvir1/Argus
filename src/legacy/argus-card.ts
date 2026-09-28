@@ -158,12 +158,14 @@ class ArgusPanelCard extends HTMLElement {
           display: flex;
           flex-direction: column;
           overflow: hidden !important;
+          height: auto !important;
         }
         .argus-panel-host {
           display: flex;
           flex-direction: column;
-          flex: 1 1 auto;
+          flex: 0 0 auto;
           width: 100%;
+          height: auto !important;
           min-height: fit-content;
           overflow: visible !important;
         }
@@ -239,6 +241,13 @@ class ArgusPanelCard extends HTMLElement {
     this._panelMounted = true;
     this._panelHost.innerHTML = '';
     this._panelEl = document.createElement('argus-panel-v2018');
+    // A Lovelace card must size to its content. The panel element itself
+    // reserves viewport height for fullscreen, so explicitly constrain the
+    // embedded card host while leaving fullscreen to its own class rules.
+    this._panelEl.style.display = 'block';
+    this._panelEl.style.width = '100%';
+    this._panelEl.style.height = 'auto';
+    this._panelEl.style.minHeight = '0';
 
     if (this._config.mode !== 'panel') {
       this._panelEl.setAttribute('compact', '');
