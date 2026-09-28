@@ -169,11 +169,13 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
             ) : (
               sortedSensors.map((sensor: any) => {
                 const sState = hass.states[sensor.id];
-                const rawName = sensor.name || sState?.attributes?.friendly_name || sensor.id;
-                // Preserve the user's friendly name. Only strip a technical
-                // DPS suffix that is appended by the integration, never words
-                // such as “Puerta” that are part of the configured name.
-                const sName = rawName.replace(/\s+\(?dps\s*4\)?\s*$/i, '').trim();
+                const rawName = String(sensor.name || sState?.attributes?.friendly_name || sensor.id).trim();
+                // Keep the configured sensor name, removing only generated type
+                // suffixes that Argus appended to the display label.
+                const sName = rawName
+                  .replace(/\s+\(?dps\s*\d+\)?\s*$/i, '')
+                  .replace(/\s+(?:puerta|door|window|ventana)\s*$/i, '')
+                  .trim();
                 const isLockLike = /door|puerta|port[oó]n|gate|lock|cerradura|window|ventana/i.test(`${sensor.id} ${sName}`);
                 const isBlocking = isWaiting && blockingSensors.includes(sensor.id);
                 const isOpen = panel.isSensorActive ? panel.isSensorActive(sState) : sState?.state === 'on';

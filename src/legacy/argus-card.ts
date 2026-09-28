@@ -138,6 +138,8 @@ class ArgusPanelCard extends HTMLElement {
     if (this._structureReady) return;
     this._structureReady = true;
     this.style.display = 'block';
+    this.style.height = 'auto';
+    this.style.minHeight = '0';
 
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.innerHTML = `
@@ -166,7 +168,7 @@ class ArgusPanelCard extends HTMLElement {
           flex: 0 0 auto;
           width: 100%;
           height: auto !important;
-          min-height: fit-content;
+          min-height: 0 !important;
           overflow: visible !important;
         }
         /* Fullscreen mode */
@@ -196,7 +198,7 @@ class ArgusPanelCard extends HTMLElement {
           overflow: auto;
         }
         @media (max-width: 600px) {
-          .argus-panel-host { min-height: 340px; }
+          .argus-panel-host { min-height: 0 !important; }
         }
       </style>
       <ha-card>
@@ -248,6 +250,7 @@ class ArgusPanelCard extends HTMLElement {
     this._panelEl.style.width = '100%';
     this._panelEl.style.height = 'auto';
     this._panelEl.style.minHeight = '0';
+    this._panelEl.style.maxHeight = 'none';
 
     if (this._config.mode !== 'panel') {
       this._panelEl.setAttribute('compact', '');
@@ -263,6 +266,17 @@ class ArgusPanelCard extends HTMLElement {
     } catch (_) {}
 
     this._panelHost.appendChild(this._panelEl);
+    // Keep the Lovelace row tied to the rendered panel instead of a viewport-sized child.
+    const syncCardHeight = () => {
+      const height = Math.ceil(this._panelEl?.getBoundingClientRect?.().height || 0);
+      if (height > 0) {
+        this.style.height = `${height}px`;
+        this.style.minHeight = '0';
+      }
+    };
+    this._panelResizeObserver = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(syncCardHeight) : null;
+    this._panelResizeObserver?.observe(this._panelEl);
+    requestAnimationFrame(syncCardHeight);
 
     this._panelEl.addEventListener('argus-fullscreen-changed', (e: any) => {
       if (e.detail?.fullscreen) {

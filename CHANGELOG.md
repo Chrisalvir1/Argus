@@ -1,3 +1,9 @@
+## [2.4.17]
+
+- Keep sensor names readable by removing generated type suffixes and preventing letter-by-letter wrapping.
+- Add a deeper 3D lock transition with a soft rebound.
+- Force embedded Lovelace cards to follow content height instead of reserving viewport space.
+
 ## [2.4.16]
 
 - Complete local Argus brand assets with high-density icon and logo variants for Home Assistant 2026.9.4.
