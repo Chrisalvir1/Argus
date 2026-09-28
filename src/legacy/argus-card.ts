@@ -384,14 +384,16 @@ class ArgusPanelCard extends HTMLElement {
     document.body.style.overflow = '';
   }
 
-  getCardSize() { return 6; }
+  // Compact cards are content-sized. Returning a fixed six-row estimate makes
+  // Lovelace reserve a large empty area below the rendered panel.
+  getCardSize() { return 2; }
 
   getGridOptions() {
     return {
       columns: 12,
       rows: 'auto',
       min_columns: 3,
-      min_rows: 2,
+      min_rows: 1,
     };
   }
 
@@ -400,7 +402,7 @@ class ArgusPanelCard extends HTMLElement {
       grid_columns: 4,
       grid_rows: 'auto',
       grid_min_columns: 2,
-      grid_min_rows: 2,
+      grid_min_rows: 1,
     };
   }
 }

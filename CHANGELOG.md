@@ -1,3 +1,6 @@
+## [2.4.19]
+- Fix Lovelace card row sizing so compact Argus panels do not reserve six empty rows.
+
 ## [2.4.18]
 - Fix embedded Lovelace card height so compact panels do not reserve viewport space.
 - Keep sensor labels and ABIERTO/CERRADO status readable in both dashboard and sidebar render paths.

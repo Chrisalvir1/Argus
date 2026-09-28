@@ -5412,14 +5412,14 @@ var v = class extends HTMLElement {
 		this._fullscreen = !1, this.classList.remove("argus-fullscreen"), this._fsBtn && (this._fsBtn.textContent = "⛶", this._fsBtn.title = "Pantalla completa"), document.body.style.overflow = "";
 	}
 	getCardSize() {
-		return 6;
+		return 2;
 	}
 	getGridOptions() {
 		return {
 			columns: 12,
 			rows: "auto",
 			min_columns: 3,
-			min_rows: 2
+			min_rows: 1
 		};
 	}
 	getLayoutOptions() {
@@ -5427,7 +5427,7 @@ var v = class extends HTMLElement {
 			grid_columns: 4,
 			grid_rows: "auto",
 			grid_min_columns: 2,
-			grid_min_rows: 2
+			grid_min_rows: 1
 		};
 	}
 };
