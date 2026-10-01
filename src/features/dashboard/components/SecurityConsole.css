@@ -345,7 +345,7 @@
 .security-console .console-sensors[data-count="4"],
 .security-console .console-sensors[data-count="5"],
 .security-console .console-sensors[data-count="6"] {
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)) !important;
   gap: 6px !important;
 }
 
@@ -356,7 +356,7 @@
 .security-console .console-sensors[data-count="10"],
 .security-console .console-sensors[data-count="11"],
 .security-console .console-sensors[data-count="12"] {
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)) !important;
   gap: 4px !important;
   max-height: 280px !important;
   overflow-y: auto !important;
@@ -474,7 +474,7 @@
   line-height: 1.25 !important;
 }
 
-@media (max-width: 539px) {
+@media (max-width: 900px) {
   .entry:not(.ios-fullscreen) .security-console .console-sensors,
   .entry:not(.ios-fullscreen) .security-console .console-sensors.console-sensors--compact,
   .entry:not(.ios-fullscreen) .security-console .console-sensors.console-sensors--micro {
@@ -571,7 +571,7 @@
   }
 }
 
-@container argus-console (min-width: 540px) {
+@container argus-console (min-width: 901px) {
   .entry:not(.ios-fullscreen) .security-console {
     display: grid !important;
     grid-template-columns: minmax(170px, 1fr) minmax(140px, 200px) minmax(180px, 1.2fr) !important;
@@ -638,7 +638,7 @@
 }
 
 /* ── NORMAL MOBILE LAYOUT (Not Fullscreen & Narrow Container) ──────────────── */
-@media (max-width: 539px) {
+@media (max-width: 900px) {
   .entry:not(.ios-fullscreen) .security-console {
     display: flex !important;
     flex-direction: column !important;
@@ -674,7 +674,7 @@
   }
 }
 
-@container argus-console (max-width: 539px) {
+@container argus-console (max-width: 900px) {
   .entry:not(.ios-fullscreen) .security-console {
     display: flex !important;
     flex-direction: column !important;
@@ -886,5 +886,21 @@
     align-self: center !important;
     background: transparent !important;
     box-shadow: none !important;
+  }
+}
+
+/* Keep status on its own line so translated names retain readable width. */
+.security-console .console-sensor {
+  grid-template-columns: 28px minmax(0, 1fr) !important;
+  min-width: 0 !important;
+}
+.security-console .console-sensor-icon { grid-column: 1; grid-row: 1 / span 2; }
+.security-console .console-sensor-name { grid-column: 2; grid-row: 1; }
+.security-console .console-sensor-state { grid-column: 2; grid-row: 2; flex-wrap: wrap; }
+.security-console .liquid-btn:disabled { opacity: .45; cursor: not-allowed; }
+@media (prefers-reduced-motion: reduce) {
+  .security-console *, .security-console *::before, .security-console *::after {
+    animation: none !important;
+    transition: none !important;
   }
 }

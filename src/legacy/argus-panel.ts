@@ -3272,7 +3272,7 @@ _tmpl.innerHTML = `
     </div>
     <div style="display:grid;gap:10px;width:100%">
       <p id="l-pin-modal-desc" class="small" style="text-align:center;margin:0;opacity:0.75"></p>
-      <input id="pin-input" class="pin-input" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="••••" autocomplete="off" maxlength="8" readonly>
+      <input id="pin-input" class="pin-input" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="••••" autocomplete="off" maxlength="12" readonly>
       <div class="pin-grid" id="pin-pad">
         <button class="pin-btn-round" type="button" data-pin-digit="1">1</button>
         <button class="pin-btn-round" type="button" data-pin-digit="2">2</button>
@@ -4111,6 +4111,12 @@ class ArgusPanel extends HTMLElement {
     }
   }
   disconnectedCallback() {
+    for (const controller of this._staControllers?.values() || []) controller.abort();
+    this._staControllers?.clear();
+    this._reactConsoleRoot?.unmount();
+    this._reactConsoleRoot = null;
+    this._argusReactRoot?.unmount();
+    this._argusReactRoot = null;
     if (this._clockInterval) clearInterval(this._clockInterval);
     if (this._initRetryTimer) clearTimeout(this._initRetryTimer);
     if (this._socket) {
@@ -4927,7 +4933,9 @@ class ArgusPanel extends HTMLElement {
     if (typeof this._hass?.callWS !== 'function') {
       return Promise.reject(new Error('Home Assistant authenticated WebSocket is unavailable'));
     }
-    return this._hass.callWS({ type, ...data });
+    const scoped = !['argus/get_media_players', 'argus/upload_file', 'argus/list_uploaded_files', 'argus/delete_uploaded_file'].includes(type);
+    const entry_id = scoped && (data.entry_id || this._dashboard?.entry_id || this._cardConfig?.entry_id || this._config?.entry_id);
+    return this._hass.callWS({ type, ...(entry_id ? { entry_id } : {}), ...data });
   }
 
   /* ── Load dashboard ──────────────────────────────────────────────── */
@@ -7947,7 +7955,7 @@ class ArgusPanel extends HTMLElement {
     const inp = this.shadowRoot.getElementById('pin-input');
     const err = this.shadowRoot.getElementById('pin-error');
     if (!inp) return;
-    inp.value = `${inp.value || ''}${digit}`.slice(0, 8);
+    inp.value = `${inp.value || ''}${digit}`.slice(0, 12);
     if (err) err.textContent = '';
   }
 
@@ -8238,19 +8246,26 @@ class ArgusPanel extends HTMLElement {
       }
     }
 
-    try {
-      await this._send('argus/perform_alarm_action', {
-        action: service.replace('alarm_', ''),
-        entry_id: e.entry_id
-      });
-      const modeTxt = modeLabels[action] || action;
-
-      setTimeout(() => this._load(), 800);
-    } catch (err) {
-      // FIX-5: mostrar error real del backend al usuario
-      const msg = err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
-      this._showArmBlockedAlert([], msg);
-      console.error('Argus action failed', err);
+    const doArm = async (pin) => {
+      try {
+        await this._send('argus/perform_alarm_action', {
+          action: service.replace('alarm_', ''),
+          entry_id: e.entry_id,
+          ...(pin ? { code: pin } : {})
+        });
+        setTimeout(() => this._load(), 800);
+        return true;
+      } catch (err) {
+        const msg = err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
+        this._showArmBlockedAlert([], msg);
+        console.error('Argus action failed', err);
+        return false;
+      }
+    };
+    if (live.attributes?.argus_arm_pin_required && e.pin_configured) {
+      this._showPinModal(async pin => await doArm(pin));
+    } else {
+      await doArm(null);
     }
   }
 
@@ -8826,7 +8841,7 @@ class ArgusPanel extends HTMLElement {
   async _switchProfile() {
     let bootstrap;
     try {
-      bootstrap = await this._send('argus/bootstrap');
+      bootstrap = await this._send('argus/login_bootstrap');
       this._welcomeShownThisMount = false;
       this._renderLoginScreen(bootstrap);
     } catch (e) {

@@ -23,7 +23,7 @@ def sanitize_user_list(users: list[Any]) -> list[dict[str, Any]]:
             raise ValueError("every user must be an object")
         user = copy.deepcopy(item)
         pin = user.get("pin")
-        if pin and not str(pin).startswith("scrypt:"):
+        if pin and not str(pin).startswith(("scrypt:", "pbkdf2_sha256:")):
             if not validate_pin(str(pin)):
                 raise ValueError("user object contains an invalid PIN")
             user["pin"] = hash_pin(str(pin))

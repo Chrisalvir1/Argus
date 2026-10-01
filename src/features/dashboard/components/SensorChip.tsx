@@ -5,6 +5,8 @@ interface SensorChipProps {
   name: string;
   isOpen: boolean;
   isBlocking: boolean;
+  isUnavailable?: boolean;
+  unavailableLabel?: string;
   isBypassed?: boolean;
   battery: number | null;
   iconHtml: string;
@@ -25,7 +27,7 @@ function PremiumLockIcon({ isOpen, isBypassed, label }: { isOpen: boolean; isByp
   );
 }
 
-export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, battery, iconHtml, statusLabelOpen, statusLabelClosed, bypassedLabel, isLockLike }: SensorChipProps) {
+export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, isUnavailable, unavailableLabel, battery, iconHtml, statusLabelOpen, statusLabelClosed, bypassedLabel, isLockLike }: SensorChipProps) {
   let batHtml = null;
   if (battery !== null) {
     const isDead = battery === 0;
@@ -44,12 +46,12 @@ export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, battery, 
     }
   }
 
-  const iconColor = isBypassed ? '#94a3b8' : (isBlocking ? '#fde047' : (isOpen ? '#f87171' : '#34d399'));
+  const iconColor = isUnavailable ? '#94a3b8' : isBypassed ? '#94a3b8' : (isBlocking ? '#fde047' : (isOpen ? '#f87171' : '#34d399'));
   const iconAnimation = isLockLike ? 'none' : (isBypassed ? 'none' : (isBlocking ? 'pulse 1s infinite' : (isOpen ? 'pulse 2s infinite' : 'none')));
-  const stateColor = isBypassed ? '#94a3b8' : (isBlocking ? '#fde047' : (isOpen ? '#f87171' : '#34d399'));
+  const stateColor = isUnavailable ? '#94a3b8' : isBypassed ? '#94a3b8' : (isBlocking ? '#fde047' : (isOpen ? '#f87171' : '#34d399'));
   const opacity = isBypassed ? 0.6 : 1;
 
-  const stateText = isOpen ? statusLabelOpen : statusLabelClosed;
+  const stateText = isUnavailable ? (unavailableLabel || 'No disponible') : isOpen ? statusLabelOpen : statusLabelClosed;
   const labelText = isBypassed ? `${bypassedLabel || 'Omitido'} · ${stateText}` : stateText;
   const fullLabel = `${name}: ${labelText}${battery !== null ? ` (Batería: ${battery}%)` : ''}`;
 
@@ -67,7 +69,7 @@ export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, battery, 
         aria-hidden={isLockLike ? undefined : 'true'}
         style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: iconColor, animation: iconAnimation }}
       >
-        {isLockLike ? <PremiumLockIcon isOpen={isOpen} isBypassed={isBypassed} label={fullLabel} /> : <span dangerouslySetInnerHTML={{ __html: iconHtml }} />}
+        {isUnavailable ? <span>?</span> : isLockLike ? <PremiumLockIcon isOpen={isOpen} isBypassed={isBypassed} label={fullLabel} /> : <span dangerouslySetInnerHTML={{ __html: iconHtml }} />}
       </span>
       <span className="console-sensor-name" title={name} style={{ color: isBlocking && !isBypassed ? '#fde047' : '#ffffff' }}>{name}</span>
       <span className="console-sensor-state" style={{ color: stateColor }}>

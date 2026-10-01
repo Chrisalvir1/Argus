@@ -127,13 +127,22 @@ export function ArgusDashboard({
 
   useEffect(() => {
     let active = true;
+    clearTimeout(timer.current);
     setHydrated(false);
     Promise.all([storage.load(userId, dashboardId), storage.loadVisibility?.(userId, dashboardId)]).then(([value, storedVisibility]) => {
       if (!active) return;
       const merged = mergeLayouts(value);
       setLayouts(merged);
       lastValid.current = merged;
-      if (storedVisibility) setVisibility({ ...defaults, ...storedVisibility });
+      setVisibility({ ...defaults, ...storedVisibility });
+      setHydrated(true);
+    }).catch(() => {
+      if (!active) return;
+      const merged = mergeLayouts(null);
+      setLayouts(merged);
+      lastValid.current = merged;
+      setVisibility(defaults);
+      setMessage(getT('dashboard_load_failed', 'No se pudo cargar el diseño guardado'));
       setHydrated(true);
     });
     return () => { active = false; };
@@ -141,7 +150,7 @@ export function ArgusDashboard({
 
   useEffect(() => {
     onEditing(editing);
-    if (hydrated && wasEditing.current && !editing) storage.save(userId, dashboardId, lastValid.current);
+    if (hydrated && wasEditing.current && !editing) storage.save(userId, dashboardId, lastValid.current).catch(() => setMessage(getT('dashboard_save_failed', 'No se pudo guardar el diseño')));
     wasEditing.current = editing;
   }, [editing, hydrated, onEditing, storage, userId, dashboardId]);
 
@@ -178,13 +187,13 @@ export function ArgusDashboard({
     setLayouts(next);
     lastValid.current = next;
     clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => storage.save(userId, dashboardId, next), now ? 0 : 550);
+    timer.current = window.setTimeout(() => storage.save(userId, dashboardId, next).catch(() => setMessage(getT('dashboard_save_failed', 'No se pudo guardar el diseño'))), now ? 0 : 550);
   };
 
   const setVisible = (id: string, value: boolean) => {
     const next = { ...visibility, [id]: value };
     setVisibility(next);
-    storage.saveVisibility?.(userId, dashboardId, next);
+    storage.saveVisibility?.(userId, dashboardId, next).catch(() => setMessage(getT('dashboard_save_failed', 'No se pudo guardar el diseño')));
     setMessage(value ? getT('widget_visible', 'Widget visible') : getT('hide_widget', 'Widget oculto'));
   };
 
@@ -221,7 +230,9 @@ export function ArgusDashboard({
 
   const reset = async () => {
     try { localStorage.removeItem(`argus:dashboard-layout:${userId}:${dashboardId}`); } catch (_) {}
-    await storage.reset(userId, dashboardId);
+    clearTimeout(timer.current);
+    try { await storage.reset(userId, dashboardId); }
+    catch { setMessage(getT('dashboard_save_failed', 'No se pudo guardar el diseño')); return; }
     const clean = mergeLayouts(null);
     setVisibility(defaults);
     setLayouts(clean);
@@ -263,7 +274,7 @@ export function ArgusDashboard({
           </>
         )}
       </nav>
-      <div className="argus-dashboard__feedback" aria-live="polite">{editing ? message : ''}</div>
+      <div className="argus-dashboard__feedback" aria-live="polite">{message}</div>
       <ErrorBoundary>
         <ResponsiveGridLayout
           key={gridKey}

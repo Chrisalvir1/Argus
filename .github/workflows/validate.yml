@@ -18,16 +18,19 @@ concurrency:
 
 jobs:
   static-tests:
-    name: Python 3.14 regression tests
+    name: Python ${{ matrix.python }} regression tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    strategy:
+      matrix:
+        python: ['3.12', '3.13', '3.14']
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
-          python-version-file: '.python-version'
+          python-version: ${{ matrix.python }}
       - name: Verify Python runtime
-        run: python -c 'import sys; assert sys.version_info >= (3, 11, 0); print(sys.version)'
+        run: python -c 'import sys; assert (3, 12, 0) <= sys.version_info < (3, 15, 0); print(sys.version)'
       - run: python -m compileall -q custom_components/argus tests
       - run: python -m unittest discover -s tests -v
 
@@ -36,8 +39,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: '24'
       - name: Verify Node runtime
@@ -52,8 +55,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: npm
@@ -72,8 +75,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: npm
@@ -94,7 +97,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: hacs/action@1ebf01c408f29afcb6406bd431bc98fd8cbb15aa
         with:
           category: integration
@@ -104,21 +107,19 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: home-assistant/actions/hassfest@f4ca6f671bd429efb108c0f2fa0ae8af0215986c
 
   dependency-audit:
-    name: Weekly dependency audit (informational)
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    name: Dependency security audit
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: npm
       - run: npm ci
       - name: Report high-severity dependency findings
-        continue-on-error: true
-        run: npm audit --omit=dev --audit-level=high
+        run: npm audit --audit-level=high

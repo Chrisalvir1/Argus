@@ -1,6 +1,7 @@
 """Private, signed media storage for Argus."""
 from __future__ import annotations
 
+import asyncio
 import hashlib
 import hmac
 import logging
@@ -147,12 +148,15 @@ class ArgusMediaManager:
 
 async def async_get_media_manager(hass: HomeAssistant) -> ArgusMediaManager:
     hass.data.setdefault(DOMAIN, {})
-    manager = hass.data[DOMAIN].get(_MEDIA_MANAGER_KEY)
-    if manager is None:
-        manager = ArgusMediaManager(hass)
-        await manager.async_initialize()
-        hass.data[DOMAIN][_MEDIA_MANAGER_KEY] = manager
-    return manager
+    lock = hass.data[DOMAIN].setdefault("media_manager_lock", asyncio.Lock())
+    async with lock:
+        manager = hass.data[DOMAIN].get(_MEDIA_MANAGER_KEY)
+        if manager is None:
+            manager = ArgusMediaManager(hass)
+            await manager.async_initialize()
+            hass.data[DOMAIN][_MEDIA_MANAGER_KEY] = manager
+        return manager
+
 
 
 class ArgusMediaUploadView(HomeAssistantView):

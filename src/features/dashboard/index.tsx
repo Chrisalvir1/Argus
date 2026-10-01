@@ -15,7 +15,7 @@ if (typeof window !== 'undefined') {
 type Panel=HTMLElement&{
  shadowRoot:ShadowRoot;_currentProfile?:{id?:string};_hass?:{user?:{id?:string}};
  _dashboard?:{entry_id?:string;entries?:Array<{entry_id?:string}>};_ui?:{dashboard?:Record<string,unknown>};
- _widgetEditing?:boolean;_argusReactRoot?:Root;_argusReactSetEditing?:(v:boolean)=>void;
+ _argusDashboardStorage?:PanelDashboardStorage;_widgetEditing?:boolean;_argusReactRoot?:Root;_argusReactSetEditing?:(v:boolean)=>void;
  _send?:(type:string,payload:Record<string,unknown>)=>Promise<any>;
  _t?:(key:string)=>string;
 };
@@ -40,8 +40,8 @@ class PanelDashboardStorage extends LocalStorageDashboardLayoutStorage{
   const current=this.record();const react_layout_v2={...current,...patch,layoutVersion:2,updatedAt:new Date().toISOString()};
   const dashboard={...(this.panel._ui?.dashboard||{}),react_layout_v2};
   const entry_id=this.panel._dashboard?.entry_id||this.panel._dashboard?.entries?.[0]?.entry_id;
-  await this.panel._send('argus/save_ui',{dashboard,...entry_id?{entry_id}:{}});
-  this.panel._ui=this.panel._ui||{};this.panel._ui.dashboard=dashboard;
+  const response = await this.panel._send('argus/save_ui',{dashboard: {react_layout_v2: patch},...entry_id?{entry_id}:{}});
+  this.panel._ui=this.panel._ui||{};this.panel._ui.dashboard=response.ui?.dashboard || dashboard;
  }
  async load(u:string,d:string){const remote=this.record().layouts;if(remote)return mergeLayouts(remote);return super.load(u,d)}
  async save(u:string,d:string,layouts:Layouts){await super.save(u,d,layouts);await this.remote({layouts})}
@@ -65,6 +65,7 @@ function renderDashboard(panel: Panel) {
   if (!grid) return;
 
   const activeWidgets = buildWidgetDefs(panel);
+  const storage = panel._argusDashboardStorage ||= new PanelDashboardStorage(panel);
   const nodes = new Map<string, HTMLElement>();
   activeWidgets.forEach(w => {
     const node = panel.shadowRoot.getElementById(w.nativeId);
@@ -76,7 +77,7 @@ function renderDashboard(panel: Panel) {
       <ArgusDashboard
         widgets={activeWidgets}
         nodes={nodes}
-        storage={new PanelDashboardStorage(panel)}
+        storage={storage}
         userId={panel._currentProfile?.id || panel._hass?.user?.id || 'anonymous'}
         dashboardId={dashboardId}
         onEditing={value => { panel._widgetEditing = value; grid.classList.toggle('editing', value); }}
@@ -110,7 +111,7 @@ function renderDashboard(panel: Panel) {
     <ArgusDashboard
       widgets={activeWidgets}
       nodes={nodes}
-      storage={new PanelDashboardStorage(panel)}
+      storage={storage}
       userId={panel._currentProfile?.id || panel._hass?.user?.id || 'anonymous'}
       dashboardId={dashboardId}
       onEditing={value => { panel._widgetEditing = value; grid.classList.toggle('editing', value); }}

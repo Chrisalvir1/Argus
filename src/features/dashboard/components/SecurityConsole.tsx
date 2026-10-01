@@ -28,14 +28,19 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   const dashboard = panel._dashboard;
   const hass = panel._hass;
   
-  let entry = dashboard?.entries?.[0];
+  const configuredEntity = panel._cardConfig?.entity || panel._config?.entity;
+  const configuredEntry = panel._cardConfig?.entry_id || panel._config?.entry_id || dashboard?.entry_id;
+  let idx = Math.max(0, dashboard?.entries?.findIndex((value: any) =>
+    configuredEntity ? value.entity_id === configuredEntity : value.entry_id === configuredEntry
+  ) ?? 0);
+  let entry = dashboard?.entries?.[idx];
   if (!entry) {
-    const entityId = panel._cardConfig?.entity || panel._config?.entity || Object.keys(hass?.states || {}).find(k => k.startsWith('alarm_control_panel.')) || 'alarm_control_panel.argus';
+    const entityId = panel._cardConfig?.entity || panel._config?.entity || 'alarm_control_panel.argus';
     if (!entityId || !hass?.states?.[entityId]) return null;
     entry = { entity_id: entityId };
   }
 
-  const idx = 0;
+
 
   const bgHtml = panel._renderEntryBackground?.(panel._weatherState, panel._isNight) || '';
 
@@ -46,7 +51,8 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   const triggered = state === 'triggered';
   const isOnline = panel._hass ? panel._hass.connected !== false : false;
   const isWaiting = Boolean(hass?.states?.[entry.entity_id]?.attributes?.arming_waiting_for_sensors);
-  const isPending = state === 'pending' || isWaiting;
+  const isPending = state === 'pending' || state === 'arming' || isWaiting;
+  const actionsDisabled = !isOnline || ['unknown', 'unavailable'].includes(state);
   
   const getBadgeText = () => {
     if (triggered) return t('system_triggered') || 'ALARMA ACTIVADA';
@@ -56,6 +62,10 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
         ? (t('waiting_sensors_count') || 'ESPERANDO {count} SENSOR(ES)').replace('{count}', String(b.length))
         : t('waiting_sensors') || 'ESPERANDO SENSORES';
     }
+    if (state === 'unknown' || state === 'unavailable') return t('unavailable');
+    if (state === 'arming') return t('arming');
+    if (state === 'pending') return t('pending');
+    if (state === 'armed_vacation') return t('system_armed') + ' · ' + t('mode_vacation');
     if (state === 'disarmed') return t('system_disarmed') || 'SISTEMA DESARMADO';
     if (state === 'armed_home') return (t('system_armed') || 'ARMADO') + ' · ' + (t('mode_home') || 'CASA');
     if (state === 'armed_away') return (t('system_armed') || 'ARMADO') + ' · ' + (t('mode_away') || 'AUSENTE');
@@ -77,7 +87,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
     let eCfg = modes[state.replace('armed_', '')] || {};
     
     if (triggered) {
-      eCfg = ['away', 'home', 'night']
+      eCfg = ['away', 'home', 'night', 'vacation']
         .map(m => modes[m])
         .find(config => (config?.sensors || []).some((id: string) => ['on', 'open', 'unlocked', 'recording', 'active', 'motion'].includes(hass?.states?.[id]?.state)))
         || {};
@@ -86,22 +96,13 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
     let sList = eCfg.sensors || [];
     if (state === 'disarmed' || isPending || !sList.length) {
       const allSensors = new Set<string>();
-      ['away', 'home', 'night'].forEach(m => {
+      ['away', 'home', 'night', 'vacation'].forEach(m => {
         if (modes[m]?.sensors) {
           modes[m].sensors.forEach((s: string) => allSensors.add(s));
         }
       });
       if (Array.isArray(panel._sensors)) {
         panel._sensors.forEach((s: any) => allSensors.add(typeof s === 'string' ? s : s.entity_id || s.id));
-      }
-      if (allSensors.size === 0 && hass?.states) {
-        Object.keys(hass.states).forEach(id => {
-          if (id.startsWith('binary_sensor.') && (
-            id.includes('door') || id.includes('window') || id.includes('motion') || id.includes('puerta') || id.includes('porton') || id.includes('patio') || id.includes('sensor') || id.includes('seguridad')
-          )) {
-            allSensors.add(id);
-          }
-        });
       }
       sList = Array.from(allSensors);
     }
@@ -133,9 +134,9 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
         )}
         
         {isFullscreen ? (
-          <button className="ghost entry-exit-fs" onClick={onToggleFullscreen} title={t('fullscreen_title') || 'Salir de pantalla completa'} style={{position:'fixed',top:'max(16px, env(safe-area-inset-top))',left:'max(16px, env(safe-area-inset-left))',zIndex:100000,padding:'10px 16px',fontSize:'20px',fontWeight:900,background:'rgba(0,0,0,.65)',backdropFilter:'blur(16px)',borderRadius:'14px',color:'white',border:'1px solid rgba(255,255,255,.25)',boxShadow:'0 8px 24px rgba(0,0,0,.5)',cursor:'pointer'}}>✕</button>
+          <button aria-label={t('fullscreen_title')} className="ghost entry-exit-fs" onClick={onToggleFullscreen} title={t('fullscreen_title') || 'Salir de pantalla completa'} style={{position:'fixed',top:'max(16px, env(safe-area-inset-top))',left:'max(16px, env(safe-area-inset-left))',zIndex:100000,padding:'10px 16px',fontSize:'20px',fontWeight:900,background:'rgba(0,0,0,.65)',backdropFilter:'blur(16px)',borderRadius:'14px',color:'white',border:'1px solid rgba(255,255,255,.25)',boxShadow:'0 8px 24px rgba(0,0,0,.5)',cursor:'pointer'}}>✕</button>
         ) : (
-          <button className="ghost fs-btn entry-fs" onClick={onToggleFullscreen} title={t('fullscreen_title') || 'Pantalla completa'} style={{position:'absolute',bottom:'20px',right:'20px',zIndex:10,padding:'10px 15px',fontSize:'18px',background:'rgba(0,0,0,0.45)',backdropFilter:'blur(12px)',borderRadius:'14px',opacity:0.85,color:'white',border:'1px solid rgba(255,255,255,0.22)',boxShadow:'0 8px 20px rgba(0,0,0,0.35)',cursor:'pointer'}}>⛶</button>
+          <button aria-label={t('fullscreen_title')} className="ghost fs-btn entry-fs" onClick={onToggleFullscreen} title={t('fullscreen_title') || 'Pantalla completa'} style={{position:'absolute',bottom:'20px',right:'20px',zIndex:10,padding:'10px 15px',fontSize:'18px',background:'rgba(0,0,0,0.45)',backdropFilter:'blur(12px)',borderRadius:'14px',opacity:0.85,color:'white',border:'1px solid rgba(255,255,255,0.22)',boxShadow:'0 8px 20px rgba(0,0,0,0.35)',cursor:'pointer'}}>⛶</button>
         )}
 
         <div className="entry-content security-console">
@@ -158,9 +159,9 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
           </div>
 
           <div className="liquid-stack">
-            <button className={`liquid-btn btn-home ${state==='armed_home'?'active':''}`} onClick={() => panel._handleAction(idx, 'home')} dangerouslySetInnerHTML={{ __html: panel._modeButtonIcon('home') + `<span>${t('mode_home') || 'CASA'}</span>` }} />
-            <button className={`liquid-btn btn-away ${state==='armed_away'?'active':''}`} onClick={() => panel._handleAction(idx, 'away')} dangerouslySetInnerHTML={{ __html: panel._modeButtonIcon('away') + `<span>${t('mode_away') || 'AUSENTE'}</span>` }} />
-            <button className={`liquid-btn btn-night ${state==='armed_night'?'active':''}`} onClick={() => panel._handleAction(idx, 'night')} dangerouslySetInnerHTML={{ __html: panel._modeButtonIcon('night') + `<span>${t('mode_night') || 'NOCHE'}</span>` }} />
+            <button disabled={actionsDisabled} className={`liquid-btn btn-home ${state==='armed_home'?'active':''}`} onClick={() => panel._handleAction(idx, 'home')} dangerouslySetInnerHTML={{ __html: panel._modeButtonIcon('home') + `<span>${t('mode_home') || 'CASA'}</span>` }} />
+            <button disabled={actionsDisabled} className={`liquid-btn btn-away ${state==='armed_away'?'active':''}`} onClick={() => panel._handleAction(idx, 'away')} dangerouslySetInnerHTML={{ __html: panel._modeButtonIcon('away') + `<span>${t('mode_away') || 'AUSENTE'}</span>` }} />
+            <button disabled={actionsDisabled} className={`liquid-btn btn-night ${state==='armed_night'?'active':''}`} onClick={() => panel._handleAction(idx, 'night')} dangerouslySetInnerHTML={{ __html: panel._modeButtonIcon('night') + `<span>${t('mode_night') || 'NOCHE'}</span>` }} />
           </div>
 
           <div className={`console-sensors ${gridClass}`} data-count={sensorCount}>
@@ -168,7 +169,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
               <div className="console-empty">{t('no_sensors_configured') || 'Sin sensores configurados'}</div>
             ) : (
               sortedSensors.map((sensor: any) => {
-                const sState = hass.states[sensor.id];
+                const sState = hass?.states?.[sensor.id];
                 const rawName = String(sensor.name || sState?.attributes?.friendly_name || sensor.id).trim();
                 // Keep the configured sensor name, removing only generated type
                 // suffixes that Argus appended to the display label.
@@ -178,6 +179,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
                   .trim();
                 const isLockLike = /door|puerta|port[oó]n|gate|lock|cerradura|window|ventana/i.test(`${sensor.id} ${sName}`);
                 const isBlocking = isWaiting && blockingSensors.includes(sensor.id);
+                const isUnavailable = !sState || ['unknown', 'unavailable'].includes(sState.state);
                 const isOpen = panel.isSensorActive ? panel.isSensorActive(sState) : sState?.state === 'on';
                 
                 let power = null;
@@ -190,6 +192,8 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
                     id={sensor.id}
                     name={sName}
                     isOpen={isOpen}
+                    isUnavailable={isUnavailable}
+                    unavailableLabel={t('unavailable')}
                     isBlocking={isBlocking}
                     isBypassed={sensor.isBypassed}
                     battery={power}

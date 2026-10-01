@@ -157,26 +157,24 @@ def _preserve_redacted_user_pins(current: object, incoming: object) -> list[dict
     """Keep stored hashes when the browser sends redacted user objects."""
     if not isinstance(incoming, list):
         raise ValueError("users must be a list")
-    current_by_name = {
-        str(item.get("name")): item for item in (current if isinstance(current, list) else [])
-        if isinstance(item, dict) and item.get("name")
+    current_by_id = {
+        str(item.get("id")): item for item in (current if isinstance(current, list) else [])
+        if isinstance(item, dict) and item.get("id")
     }
     merged = []
     for item in incoming:
         if not isinstance(item, dict):
             raise ValueError("every user must be an object")
         user = copy.deepcopy(item)
-
-        previous = current_by_name.get(str(user.get("name")))
+        previous = current_by_id.get(str(user.get("id")))
         if previous:
-            # Preserve old pin
-            if not user.get("pin") and previous.get("pin"):
-                user["pin"] = previous["pin"]
-            # Preserve new access_pin_hash
-            if not user.get("access_pin_hash") and previous.get("access_pin_hash"):
-                user["access_pin_hash"] = previous["access_pin_hash"]
-
+            # Missing fields are redaction; an explicit empty value removes a PIN.
+            # Names are editable and cannot identify the credential owner.
+            for field in ("pin", "access_pin_hash", "master_pin_hash"):
+                if field not in user and field in previous:
+                    user[field] = previous[field]
         merged.append(user)
+
     return merged
 
 
@@ -233,6 +231,9 @@ async def async_save_ui_data(
             if safe_updates["clock_format"] not in ["auto", "12h", "24h"]:
                 safe_updates["clock_format"] = "auto"
 
+        if "dashboard" in safe_updates:
+            from .dashboard_merge import merge_dashboard_patch
+            safe_updates["dashboard"] = merge_dashboard_patch(current.get("dashboard"), safe_updates["dashboard"])
         current.update(safe_updates)
         await _store(hass, entry_id).async_save(current)
         return current
@@ -288,14 +289,14 @@ def _sanitize_users(users: object) -> list[dict]:
 
         # Validate/Hash alarm pin
         pin = user.get("pin")
-        if pin and not str(pin).startswith("scrypt:"):
+        if pin and not str(pin).startswith(("scrypt:", "pbkdf2_sha256:")):
             if not validate_pin(str(pin)):
                 raise ValueError("backup contains an invalid user PIN")
             user["pin"] = hash_pin(str(pin))
 
         # Validate/Hash access pin
         access_pin = user.get("access_pin_hash")
-        if access_pin and not str(access_pin).startswith("scrypt:"):
+        if access_pin and not str(access_pin).startswith(("scrypt:", "pbkdf2_sha256:")):
             if not validate_pin(str(access_pin)):
                 raise ValueError("backup contains an invalid access PIN")
             user["access_pin_hash"] = hash_pin(str(access_pin))
@@ -318,7 +319,7 @@ def _sanitize_restore(payload: object, runtime: dict) -> dict:
     if not isinstance(advanced, dict):
         raise ValueError("advanced must be an object")
     guest = advanced.get("guest_code")
-    if guest and not str(guest).startswith("scrypt:"):
+    if guest and not str(guest).startswith(("scrypt:", "pbkdf2_sha256:")):
         if not validate_pin(str(guest)):
             raise ValueError("backup contains an invalid guest PIN")
         advanced["guest_code"] = hash_pin(str(guest))
