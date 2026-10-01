@@ -36,7 +36,8 @@ export function FloorplanWidget({ panel }: { panel: Panel }) {
     try {
       const entry_id = panel._dashboard?.entry_id || panel._dashboard?.entries?.[0]?.entry_id;
       const result = await panel._send('argus/save_ui', { floorplan: draft, ...(entry_id ? { entry_id } : {}) });
-      panel._ui = panel._ui || {}; panel._ui.floorplan = result.ui?.floorplan || draft; setDraft(structuredClone(panel._ui.floorplan)); setMessage('Plano guardado.');
+      const savedFloorplan: FloorplanData = result.ui?.floorplan || draft;
+      panel._ui = panel._ui || {}; panel._ui.floorplan = savedFloorplan; setDraft(structuredClone(savedFloorplan)); setMessage('Plano guardado.');
     } catch { setMessage('No se pudo guardar. Se requiere perfil administrador.'); }
     finally { setSaving(false); }
   };
