@@ -3,22 +3,27 @@ import {createRoot,type Root} from 'react-dom/client';
 import gridCss from 'react-grid-layout/css/styles.css?inline';
 import resizeCss from 'react-resizable/css/styles.css?inline';
 import localCss from './style.css?inline';
+import insightsCss from './components/insights.css?inline';
 import {ArgusDashboard} from './ArgusDashboard';
 import {LocalStorageDashboardLayoutStorage,mergeLayouts} from './layout';
 import type {ArgusWidgetDefinition,Layouts} from './types';
 import { mountSecurityConsole } from './components';
+import { SecurityInsights } from './components/SecurityInsights';
+import { FloorplanWidget } from './components/FloorplanWidget';
 
 if (typeof window !== 'undefined') {
   (window as any).mountSecurityConsole = mountSecurityConsole;
 }
 
 type Panel=HTMLElement&{
- shadowRoot:ShadowRoot;_currentProfile?:{id?:string};_hass?:{user?:{id?:string}};
- _dashboard?:{entry_id?:string;entries?:Array<{entry_id?:string}>};_ui?:{dashboard?:Record<string,unknown>};
+ shadowRoot:ShadowRoot;_currentProfile?:{id?:string;role?:string};_hass?:{user?:{id?:string};states?:Record<string,{state:string;attributes?:Record<string,unknown>}>};
+ _dashboard?:{entry_id?:string;entries?:Array<{entry_id?:string}>};_ui?:{dashboard?:Record<string,unknown>;floorplan?:FloorplanData};_available?:Array<{entity_id:string;name?:string;domain?:string;state?:string;area?:string|null}>;
  _argusDashboardStorage?:PanelDashboardStorage;_widgetEditing?:boolean;_argusReactRoot?:Root;_argusReactSetEditing?:(v:boolean)=>void;
  _send?:(type:string,payload:Record<string,unknown>)=>Promise<any>;
  _t?:(key:string)=>string;
 };
+
+export interface FloorplanData {image_url:string;markers:Array<{entity_id:string;label?:string;x:number;y:number;icon?:string}>}
 
 function buildWidgetDefs(panel: Panel): ArgusWidgetDefinition[] {
   const t = (k: string) => (panel as any)._t?.(k) || k;
@@ -29,6 +34,8 @@ function buildWidgetDefs(panel: Panel): ArgusWidgetDefinition[] {
     {id:'access-control',nativeId:'w-access',kind:'access-control',title:t('users_title') || 'Control de acceso y usuarios',size:'L',visible:true,t},
     {id:'alarm-configuration',nativeId:'w-modes',kind:'alarm-configuration',title:t('modes_sos') || 'Modos / SOS',size:'XL',visible:true,t},
     {id:'security-status',nativeId:'w-github',kind:'security-status',title:t('support_title') || 'Estado y soporte',size:'S',visible:true,t},
+    {id:'security-insights',kind:'custom',title:'Seguridad · 30 días',size:'L',visible:true,t,content:<SecurityInsights panel={panel}/>},
+    {id:'floorplan',kind:'custom',title:'Plano de sensores',size:'L',visible:true,t,content:<FloorplanWidget panel={panel}/>},
   ];
 }
 
@@ -68,7 +75,7 @@ function renderDashboard(panel: Panel) {
   const storage = panel._argusDashboardStorage ||= new PanelDashboardStorage(panel);
   const nodes = new Map<string, HTMLElement>();
   activeWidgets.forEach(w => {
-    const node = panel.shadowRoot.getElementById(w.nativeId);
+    const node = w.nativeId ? panel.shadowRoot.getElementById(w.nativeId) : null;
     if (node) nodes.set(w.id, node);
   });
 
@@ -91,7 +98,7 @@ function renderDashboard(panel: Panel) {
   if (!style) {
     style = document.createElement('style');
     style.id = 'argus-react-dashboard-style';
-    style.textContent = gridCss + resizeCss + localCss;
+    style.textContent = gridCss + resizeCss + localCss + insightsCss;
     panel.shadowRoot.appendChild(style);
   }
   if (!panel.shadowRoot.getElementById('argus-access-scroll-fix')) {

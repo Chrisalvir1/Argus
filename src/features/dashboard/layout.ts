@@ -37,6 +37,8 @@ export const defaultLayouts: Layouts = {
     item('access-control', 6, 4, 6, 4),
     item('alarm-configuration', 0, 8, 12, 5),
     item('security-status', 0, 13, 12, 2),
+    item('security-insights', 0, 15, 6, 5),
+    item('floorplan', 6, 15, 6, 5),
   ],
   md: [
     item('activity-history', 0, 0, 4, 4),
@@ -45,6 +47,8 @@ export const defaultLayouts: Layouts = {
     item('access-control', 4, 4, 4, 4),
     item('alarm-configuration', 0, 8, 8, 5),
     item('security-status', 0, 13, 8, 2),
+    item('security-insights', 0, 15, 4, 5),
+    item('floorplan', 4, 15, 4, 5),
   ],
   sm: [
     item('activity-history', 0, 0, 4, 4),
@@ -53,6 +57,8 @@ export const defaultLayouts: Layouts = {
     item('access-control', 0, 12, 4, 4),
     item('alarm-configuration', 0, 16, 4, 5),
     item('security-status', 0, 21, 4, 2),
+    item('security-insights', 0, 23, 4, 5),
+    item('floorplan', 0, 28, 4, 5),
   ],
   xs: [
     item('activity-history', 0, 0, 2, 4),
@@ -61,6 +67,8 @@ export const defaultLayouts: Layouts = {
     item('access-control', 0, 12, 2, 4),
     item('alarm-configuration', 0, 16, 2, 5),
     item('security-status', 0, 21, 2, 2),
+    item('security-insights', 0, 23, 2, 5),
+    item('floorplan', 0, 28, 2, 5),
   ],
   xxs: [
     item('activity-history', 0, 0, 2, 4),
@@ -69,6 +77,8 @@ export const defaultLayouts: Layouts = {
     item('access-control', 0, 12, 2, 4),
     item('alarm-configuration', 0, 16, 2, 5),
     item('security-status', 0, 21, 2, 2),
+    item('security-insights', 0, 23, 2, 5),
+    item('floorplan', 0, 28, 2, 5),
   ],
 };
 
@@ -192,4 +202,3 @@ export class LocalStorageDashboardLayoutStorage implements DashboardLayoutStorag
     try { localStorage.removeItem(this.key(u, d)); } catch { /* Recovery cache is optional. */ }
   }
 }
-

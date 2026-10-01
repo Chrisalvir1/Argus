@@ -449,6 +449,7 @@ _SAVE_UI_SCHEMA = {
     vol.Optional("entry_id"): str,
     vol.Optional("zones"): list,
     vol.Optional("dashboard"): dict,
+    vol.Optional("floorplan"): dict,
     vol.Optional("notif_targets"): list,
     vol.Optional("emergency_number"): vol.All(str, vol.Length(min=1, max=16), vol.Match(r"^[0-9+()\-\s]+$")),
     vol.Optional("panic_outputs"): list,

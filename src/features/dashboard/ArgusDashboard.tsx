@@ -9,7 +9,7 @@ type EditorSetter = (value: boolean) => void;
 
 interface HostProps {
   widget: ArgusWidgetDefinition;
-  node: HTMLElement;
+  node?: HTMLElement;
   editing: boolean;
   size: ArgusWidgetSize;
   onSize: (size: ArgusWidgetSize) => void;
@@ -20,6 +20,7 @@ interface HostProps {
 function Host({ widget, node, editing, size, onSize, onHide, onReset }: HostProps) {
   const ref = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
+    if (!node) return;
     ref.current?.appendChild(node);
     node.draggable = false;
     node.querySelector(':scope > .panel-edit-overlay')?.remove();
@@ -70,7 +71,7 @@ function Host({ widget, node, editing, size, onSize, onHide, onReset }: HostProp
           </div>
         </details>
       </header>
-      <div className={`argus-widget__content${widget.kind === 'access-control' ? ' argus-widget__content--access' : ''}`} ref={ref} />
+      <div className={`argus-widget__content${widget.kind === 'access-control' ? ' argus-widget__content--access' : ''}${widget.content ? ' argus-widget__content--virtual' : ''}`} ref={ref}>{widget.content}</div>
     </article>
   );
 }
@@ -313,7 +314,7 @@ export function ArgusDashboard({
           }}
           useCSSTransforms={true}
         >
-          {widgets.filter(w => visibility[w.id] !== false && nodes.has(w.id)).map(w => {
+          {widgets.filter(w => visibility[w.id] !== false && (nodes.has(w.id) || !!w.content)).map(w => {
             const item = currentLayout.find((x: Layout) => x.i === w.id);
             const size = item ? getClosestWidgetSize(item.w, item.h, COLS[bp]) : w.size;
             return (
@@ -321,7 +322,7 @@ export function ArgusDashboard({
                 <ErrorBoundary>
                   <Host
                     widget={w}
-                    node={nodes.get(w.id)!}
+                    node={nodes.get(w.id)}
                     editing={editing}
                     size={size}
                     onSize={value => chooseSize(w.id, value)}
