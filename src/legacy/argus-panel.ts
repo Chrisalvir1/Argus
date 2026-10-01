@@ -142,6 +142,32 @@ const TEXTS = {
     'emergency_number_label': 'Número Local de Emergencia',
     'sos_config_title': 'CONFIGURACIÓN SOS',
     'export_history_title': 'Exportar Historial',
+    'history_export_desc': 'El archivo PDF se descargará directamente; el reporte conservará el idioma seleccionado.',
+    'history_from': 'Desde',
+    'history_to': 'Hasta',
+    'history_download_pdf': '⬇️ Descargar PDF',
+    'history_download_txt': '📑 Descargar reporte (.txt)',
+    'history_download_json': '💾 Descargar JSON sin procesar',
+    'history_pdf_title': 'Argus Home Hub - Historial de actividad',
+    'history_pdf_home': 'Hogar',
+    'history_pdf_range': 'Rango',
+    'history_pdf_generated': 'Generado',
+    'history_pdf_total': 'Total de eventos',
+    'history_pdf_date': 'Fecha y hora',
+    'history_pdf_action': 'Acción / evento',
+    'history_pdf_user': 'Origen / usuario',
+    'history_pdf_detail': 'Detalle',
+    'history_pdf_empty': 'No hay registros en el rango seleccionado.',
+    'history_pdf_footer': 'Argus Home Hub - Sistema de seguridad - Reporte de auditoría',
+    'history_pdf_page': 'Página {page} de {pages}',
+    'history_range_all': 'Todo',
+    'history_range_today': 'Hoy',
+    'history_unknown_event': 'Evento',
+    'log_action_arming_cancelled': 'Armado cancelado',
+    'log_action_auto_arm': 'Armado automático',
+    'log_action_auto_disarm': 'Desarmado automático',
+    'log_action_auto_arm_cancelled': 'Armado automático cancelado',
+    'log_action_arm_rejected': 'Armado rechazado',
     'export_action': 'Exportar',
     'log_action_audit_log_cleared': 'Historial de actividad eliminado',
     'entry_sensors': 'Sensores de entrada',
@@ -566,6 +592,32 @@ const TEXTS = {
     'emergency_number_label': 'Local Emergency Number',
     'sos_config_title': 'SOS CONFIGURATION',
     'export_history_title': 'Export History',
+    'history_export_desc': 'The PDF will download directly and use your selected language.',
+    'history_from': 'From',
+    'history_to': 'To',
+    'history_download_pdf': '⬇️ Download PDF',
+    'history_download_txt': '📑 Download report (.txt)',
+    'history_download_json': '💾 Download raw JSON',
+    'history_pdf_title': 'Argus Home Hub - Activity History',
+    'history_pdf_home': 'Home',
+    'history_pdf_range': 'Date range',
+    'history_pdf_generated': 'Generated',
+    'history_pdf_total': 'Total events',
+    'history_pdf_date': 'Date and time',
+    'history_pdf_action': 'Action / event',
+    'history_pdf_user': 'Source / user',
+    'history_pdf_detail': 'Details',
+    'history_pdf_empty': 'No records in the selected date range.',
+    'history_pdf_footer': 'Argus Home Hub - Security system - Audit report',
+    'history_pdf_page': 'Page {page} of {pages}',
+    'history_range_all': 'All',
+    'history_range_today': 'Today',
+    'history_unknown_event': 'Event',
+    'log_action_arming_cancelled': 'Arming cancelled',
+    'log_action_auto_arm': 'Automatic arming',
+    'log_action_auto_disarm': 'Automatic disarming',
+    'log_action_auto_arm_cancelled': 'Automatic arming cancelled',
+    'log_action_arm_rejected': 'Arming rejected',
     'export_action': 'Export',
     'log_action_audit_log_cleared': 'Activity history cleared',
     'entry_sensors': 'Entry sensors',
@@ -3304,23 +3356,23 @@ _tmpl.innerHTML = `
       <button class="ghost" id="history-export-close" style="background:transparent; border:none; color:inherit; font-size:20px; cursor:pointer; padding:4px 8px;">✕</button>
     </div>
     <div style="display:grid;gap:14px;padding:6px 0">
-      <p class="small" style="margin:0;opacity:.75">Selecciona el rango de fechas para exportar o imprimir el reporte de auditoría.</p>
+      <p class="small" id="p-history-export-desc" style="margin:0;opacity:.75">Selecciona el rango de fechas para descargar el reporte.</p>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
         <div class="field-group">
-          <label style="font-size:11px;font-weight:700;opacity:0.8;">📅 Desde</label>
+          <label id="l-history-export-from" style="font-size:11px;font-weight:700;opacity:0.8;">📅 Desde</label>
           <input type="date" id="export-history-from" class="glass-control" style="width:100%;box-sizing:border-box;padding:8px 10px;border-radius:10px;color:#fff;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12)">
         </div>
         <div class="field-group">
-          <label style="font-size:11px;font-weight:700;opacity:0.8;">📅 Hasta</label>
+          <label id="l-history-export-to" style="font-size:11px;font-weight:700;opacity:0.8;">📅 Hasta</label>
           <input type="date" id="export-history-to" class="glass-control" style="width:100%;box-sizing:border-box;padding:8px 10px;border-radius:10px;color:#fff;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12)">
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px;">
-        <button class="primary" id="btn-do-print-pdf" style="height:44px;font-size:13px;font-weight:800;cursor:pointer;border-radius:12px;box-shadow:0 6px 18px rgba(0,122,255,0.3)">
-          🖨️ Imprimir / Guardar en PDF
+        <button class="primary" id="btn-do-download-pdf" style="height:44px;font-size:13px;font-weight:800;cursor:pointer;border-radius:12px;box-shadow:0 6px 18px rgba(0,122,255,0.3)">
+          ⬇️ Descargar PDF
         </button>
         <button class="glass-control" id="btn-do-download-txt" style="height:40px;font-size:12px;font-weight:700;cursor:pointer;border-radius:12px;background:rgba(255,255,255,0.05);color:#fff;border:1px solid rgba(255,255,255,0.15)">
-          📑 Descargar Reporte (.txt)
+          📑 Descargar reporte (.txt)
         </button>
         <button class="ghost" id="btn-do-download-json" style="height:36px;font-size:11px;cursor:pointer;opacity:0.75">
           💾 Descargar JSON sin procesar
@@ -3870,6 +3922,12 @@ class ArgusPanel extends HTMLElement {
     set('btn-export-forensic',  '📄 ' + (t('export_action') || 'Exportar'));
     set('btn-clear-log',        t('clear_log_btn'));
     set('h-history-export-title', '📄 ' + (t('export_history_title') || 'Exportar Historial'));
+    set('p-history-export-desc', t('history_export_desc'));
+    set('l-history-export-from', `📅 ${t('history_from')}`);
+    set('l-history-export-to', `📅 ${t('history_to')}`);
+    set('btn-do-download-pdf', t('history_download_pdf'));
+    set('btn-do-download-txt', t('history_download_txt'));
+    set('btn-do-download-json', t('history_download_json'));
     set('h-access-title',       t('access_title'));
     set('p-access-desc',        t('access_desc'));
     set('btn-access-users',     `👥 ${t('users_title').replace(/^👥\s*/, '').replace(/\s(?:y|&|e)\s.*$/i, '')}`);
@@ -4082,10 +4140,10 @@ class ArgusPanel extends HTMLElement {
           this._closeHistoryExportModal();
           return;
         }
-        const printPdfBtn = target.closest('#btn-do-print-pdf');
-        if (printPdfBtn) {
+        const downloadPdfBtn = target.closest('#btn-do-download-pdf');
+        if (downloadPdfBtn) {
           e.preventDefault();
-          this._exportHistoryPrintPdf();
+          this._exportHistoryPDF();
           return;
         }
         const txtBtn = target.closest('#btn-do-download-txt');
@@ -4318,145 +4376,49 @@ class ArgusPanel extends HTMLElement {
     const fromInput = this.shadowRoot.getElementById('export-history-from') as HTMLInputElement | null;
     const toInput = this.shadowRoot.getElementById('export-history-to') as HTMLInputElement | null;
     const fromVal = fromInput?.value ? new Date(fromInput.value + 'T00:00:00') : null;
-    const toVal = toInput?.value ? new Date(toInput.value + 'T23:59:59') : null;
+    const toVal = toInput?.value ? new Date(toInput.value + 'T00:00:00') : null;
+    if (toVal) toVal.setDate(toVal.getDate() + 1);
 
     return events.filter(ev => {
       if (!ev || typeof ev !== 'object') return false;
       if (!ev.ts) return true;
       const t = new Date(ev.ts);
       if (fromVal && t < fromVal) return false;
-      if (toVal && t > toVal) return false;
+      if (toVal && t >= toVal) return false;
       return true;
     });
-  }
-
-  _exportHistoryPrintPdf() {
-    this._closeHistoryExportModal();
-    const list = this._getFilteredHistory();
-    const homeName = this._homeName || 'Argus Home Hub';
-    const nowStr = new Date().toLocaleString(this._getLocale());
-    const fromInput = (this.shadowRoot.getElementById('export-history-from') as HTMLInputElement | null)?.value || 'Inicio';
-    const toInput = (this.shadowRoot.getElementById('export-history-to') as HTMLInputElement | null)?.value || 'Hoy';
-
-    const rowsHtml = list.map((ev, idx) => {
-      const date = ev.ts ? new Date(ev.ts) : null;
-      const ts = date && !isNaN(date.getTime()) ? date.toLocaleString(this._getLocale()) : '—';
-      const action = String(ev.action || '');
-      const detail = this._localizeActivityDetail(action, ev.detail);
-      const user = ev.user || ev.actor || 'Argus';
-      return `
-        <tr style="border-bottom: 1px solid #e2e8f0; font-size: 11px;">
-          <td style="padding: 6px 8px; color: #64748b; font-family: monospace;">${idx + 1}</td>
-          <td style="padding: 6px 8px; white-space: nowrap; font-weight: 600;">${this._escapeHtml(ts)}</td>
-          <td style="padding: 6px 8px; font-weight: 700; color: #0284c7;">${this._escapeHtml(action)}</td>
-          <td style="padding: 6px 8px;">${this._escapeHtml(detail)}</td>
-          <td style="padding: 6px 8px; font-weight: 600;">${this._escapeHtml(user)}</td>
-        </tr>
-      `;
-    }).join('');
-
-    const htmlContent = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <title>Argus Home Hub - Historial</title>
-        <style>
-          @page { size: A4 portrait; margin: 12mm; }
-          body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #1e293b; margin: 0; padding: 24px; background: #fff; }
-          .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0284c7; padding-bottom: 14px; margin-bottom: 18px; }
-          .brand { display: flex; align-items: center; gap: 14px; }
-          .brand img { width: 54px; height: 54px; border-radius: 12px; object-fit: cover; box-shadow: 0 4px 12px rgba(0,0,0,0.12); flex-shrink: 0; }
-          .title { font-size: 24px; font-weight: 900; color: #0f172a; margin: 0; letter-spacing: -0.02em; }
-          .subtitle { font-size: 13px; color: #64748b; margin-top: 3px; font-weight: 600; }
-          .meta { font-size: 11px; color: #475569; text-align: right; line-height: 1.5; }
-          table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-          th { background: #f8fafc; padding: 9px 8px; text-align: left; font-size: 11px; font-weight: 800; text-transform: uppercase; color: #334155; border-bottom: 2px solid #cbd5e1; }
-          .footer { margin-top: 24px; text-align: center; font-size: 10px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 10px; }
-          @media print {
-            body { padding: 0; }
-            .no-print { display: none; }
-          }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <div class="brand">
-            <img src="${window.location.origin}/api/argus_static/argus_logo.png" alt="Argus Logo" onerror="this.style.display='none'">
-            <div>
-              <h1 class="title">Argus Home Hub</h1>
-              <div class="subtitle">🏡 ${this._escapeHtml(homeName)} · Registro de Actividad y Seguridad</div>
-            </div>
-          </div>
-          <div class="meta">
-            <div><strong>Rango:</strong> ${this._escapeHtml(fromInput)} al ${this._escapeHtml(toInput)}</div>
-            <div><strong>Generado:</strong> ${this._escapeHtml(nowStr)}</div>
-            <div><strong>Total Eventos:</strong> ${list.length}</div>
-          </div>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th style="width: 30px;">#</th>
-              <th style="width: 130px;">Fecha / Hora</th>
-              <th style="width: 120px;">Acción</th>
-              <th>Descripción y Detalles</th>
-              <th style="width: 100px;">Usuario</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${rowsHtml || '<tr><td colspan="5" style="text-align:center;padding:24px;color:#888;">No hay registros en el rango seleccionado</td></tr>'}
-          </tbody>
-        </table>
-        <div class="footer">
-          Argus Home Hub · Sistema de Seguridad Inteligente · Documento de Auditoría
-        </div>
-        <script>
-          window.onload = function() {
-            setTimeout(function() {
-              window.print();
-            }, 300);
-          };
-        </script>
-      </body>
-      </html>
-    `;
-
-    const printWin = window.open('', '_blank', 'width=900,height=700');
-    if (printWin) {
-      printWin.document.open();
-      printWin.document.write(htmlContent);
-      printWin.document.close();
-    }
   }
 
   _exportHistoryText() {
     this._closeHistoryExportModal();
     const list = this._getFilteredHistory();
-    const homeName = this._homeName || 'Argus Home Hub';
+    const homeName = this._homeName || this._t('home_default');
     const nowStr = new Date().toLocaleString(this._getLocale());
-    const fromInput = (this.shadowRoot.getElementById('export-history-from') as HTMLInputElement | null)?.value || 'Inicio';
-    const toInput = (this.shadowRoot.getElementById('export-history-to') as HTMLInputElement | null)?.value || 'Hoy';
+    const fromValue = (this.shadowRoot.getElementById('export-history-from') as HTMLInputElement | null)?.value;
+    const toValue = (this.shadowRoot.getElementById('export-history-to') as HTMLInputElement | null)?.value;
+    const formatRangeDate = (value, fallback) => value ? new Date(`${value}T12:00:00`).toLocaleDateString(this._getLocale()) : fallback;
+    const fromInput = formatRangeDate(fromValue, this._t('history_range_all'));
+    const toInput = formatRangeDate(toValue, this._t('history_range_today'));
 
     let content = `================================================================================\n`;
-    content += `🛡️  ARGUS HOME HUB - HISTORIAL DE ACTIVIDAD\n`;
-    content += `🏡  ${homeName}\n`;
-    content += `📅  Rango: ${fromInput} al ${toInput}\n`;
-    content += `⏰  Generado: ${nowStr}\n`;
-    content += `📊  Total eventos: ${list.length}\n`;
+    content += `🛡️  ${this._t('history_pdf_title').toLocaleUpperCase(this._getLocale())}\n`;
+    content += `🏡  ${this._t('history_pdf_home')}: ${homeName}\n`;
+    content += `📅  ${this._t('history_pdf_range')}: ${fromInput} - ${toInput}\n`;
+    content += `⏰  ${this._t('history_pdf_generated')}: ${nowStr}\n`;
+    content += `📊  ${this._t('history_pdf_total')}: ${list.length}\n`;
     content += `================================================================================\n\n`;
 
     list.forEach((ev, idx) => {
       const date = ev.ts ? new Date(ev.ts) : null;
       const ts = date && !isNaN(date.getTime()) ? date.toLocaleString(this._getLocale()) : '—';
-      const action = String(ev.action || '');
-      const detail = this._localizeActivityDetail(action, ev.detail);
+      const action = this._localizeActivityAction(ev.action);
+      const detail = this._localizeActivityDetail(ev.action, ev.detail);
       const user = ev.user || ev.actor || 'Argus';
       content += `[${String(idx + 1).padStart(3, '0')}] ${ts} | [${action}] ${detail} | 👤 ${user}\n`;
     });
 
     content += `\n================================================================================\n`;
-    content += `Argus Home Hub - Fin del reporte\n`;
+    content += `${this._t('history_pdf_footer')}\n`;
 
     const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -4533,125 +4495,107 @@ class ArgusPanel extends HTMLElement {
     }
   }
 
-  _generateHistoryPDF(events, metadata) {
-    const homeName = metadata.homeName || 'Mi Casa';
-    const generatedAt = metadata.generatedAt || new Date().toLocaleString();
-    const totalEvents = events.length;
-
-    const escapePdfText = (str) => {
-      return String(str || '')
-        .replace(/\\/g, '\\\\')
-        .replace(/\(/g, '\\(')
-        .replace(/\)/g, '\\)')
-        .replace(/[^\x20-\x7E\xA0-\xFF]/g, ' ');
+  _localizeActivityAction(rawAction) {
+    const action = String(rawAction || '').trim().toLowerCase();
+    const known = {
+      armed: 'log_detail_armed', arm: 'manual_arm', disarmed: 'log_detail_disarm', disarm: 'manual_disarm',
+      triggered: 'log_triggered', arming_cancelled: 'log_action_arming_cancelled',
+      arm_rejected: 'log_action_arm_rejected', user_added: 'log_action_user_added',
+      user_deleted: 'log_action_user_deleted', sos: 'log_action_sos', sos_stopped: 'log_action_sos_stopped',
+      auto_arm: 'log_action_auto_arm', auto_disarm: 'log_action_auto_disarm', auto_arm_cancelled: 'log_action_auto_arm_cancelled',
+      panic_stopped: 'log_action_sos_stopped', automation_executed: 'log_action_automation',
+      analysis: 'log_action_analysis', mode_changed: 'log_action_mode_changed',
+      state_restored: 'log_action_state_restored', audit_log_cleared: 'log_action_audit_log_cleared',
+      ui_configuration_updated: 'log_action_save_ui', user_logged_in: 'log_action_user_logged_in',
+      profile_selected: 'log_action_profile_selected', schedule_applied: 'log_action_schedule_applied',
     };
+    const key = known[action] || (action.startsWith('auto_') ? 'log_action_automation' : action.startsWith('ai_') ? 'log_action_analysis' : `log_action_${action}`);
+    const translated = this._t(key);
+    return translated !== key ? translated : (rawAction || this._t('history_unknown_event'));
+  }
 
+  _generateHistoryPDF(events, metadata) {
+    const labels = metadata.labels;
     const PAGE_WIDTH = 612;
     const PAGE_HEIGHT = 792;
     const MARGIN_LEFT = 36;
-    const MARGIN_BOTTOM = 40;
+    const MARGIN_BOTTOM = 42;
     const CONTENT_WIDTH = PAGE_WIDTH - MARGIN_LEFT * 2;
-
     const itemsPerPage = 22;
     const pagesCount = Math.max(1, Math.ceil(events.length / itemsPerPage));
+    const pageObjIds = Array.from({ length: pagesCount }, (_, index) => 5 + index * 2);
 
-    const pageObjIds = [];
-    for (let p = 0; p < pagesCount; p++) {
-      pageObjIds.push(5 + p * 2);
-    }
+    // Standard PDF fonts use WinAnsiEncoding. Keep Latin characters (including
+    // Spanish accents) as single bytes so stream lengths and xref offsets agree.
+    const toPdfText = value => Array.from(String(value ?? '-').normalize('NFC')).map(char => {
+      const code = char.codePointAt(0);
+      if (code >= 32 && code <= 255) return char;
+      const fallback = char.normalize('NFKD').replace(/[\u0300-\u036f]/g, '');
+      return Array.from(fallback).map(part => part.codePointAt(0) <= 255 ? part : '?').join('') || ' ';
+    }).join('').replace(/[\\()]/g, '\\$&').replace(/[\r\n\t]/g, ' ');
+    const text = (font, size, color, x, y, value) => `BT /${font} ${size} Tf ${color} rg ${x} ${y} Td (${toPdfText(value)}) Tj ET\n`;
+    const pages = [];
 
-    const pageContents = [];
-    for (let p = 0; p < pagesCount; p++) {
-      const pageEvents = events.slice(p * itemsPerPage, (p + 1) * itemsPerPage);
+    for (let page = 0; page < pagesCount; page++) {
+      const pageEvents = events.slice(page * itemsPerPage, (page + 1) * itemsPerPage);
       let stream = '';
+      stream += `q 0.05 0.08 0.15 rg 0 ${PAGE_HEIGHT - 72} ${PAGE_WIDTH} 72 re f Q\n`;
+      stream += text('F2', 13, '1 1 1', MARGIN_LEFT, PAGE_HEIGHT - 31, labels.title);
+      stream += text('F1', 8, '0.82 0.87 0.93', MARGIN_LEFT, PAGE_HEIGHT - 48, `${labels.home}: ${metadata.homeName}`);
+      stream += text('F1', 8, '0.82 0.87 0.93', MARGIN_LEFT, PAGE_HEIGHT - 61, `${labels.range}: ${metadata.rangeFrom} - ${metadata.rangeTo}   |   ${labels.generated}: ${metadata.generatedAt}   |   ${labels.total}: ${events.length}`);
 
-      // Header bar
-      stream += `q 0.05 0.08 0.15 rg 0 ${PAGE_HEIGHT - 65} ${PAGE_WIDTH} 65 re f Q\n`;
-      stream += `BT /F2 14 Tf 1 1 1 rg ${MARGIN_LEFT} ${PAGE_HEIGHT - 32} Td (ARGUS HOME HUB - HISTORIAL DE ACTIVIDAD) Tj ET\n`;
-      stream += `BT /F1 8.5 Tf 0.7 0.8 0.9 rg ${MARGIN_LEFT} ${PAGE_HEIGHT - 48} Td (${escapePdfText(`Hogar: ${homeName}   |   Generado: ${generatedAt}   |   Total Eventos: ${totalEvents}`)}) Tj ET\n`;
-
-      // Table Header
-      const tableTop = PAGE_HEIGHT - 80;
+      const tableTop = PAGE_HEIGHT - 86;
       stream += `q 0.12 0.18 0.28 rg ${MARGIN_LEFT} ${tableTop - 18} ${CONTENT_WIDTH} 20 re f Q\n`;
-      stream += `BT /F2 8.5 Tf 1 1 1 rg ${MARGIN_LEFT + 6} ${tableTop - 13} Td (FECHA Y HORA) Tj ET\n`;
-      stream += `BT /F2 8.5 Tf 1 1 1 rg ${MARGIN_LEFT + 130} ${tableTop - 13} Td (ACCION / EVENTO) Tj ET\n`;
-      stream += `BT /F2 8.5 Tf 1 1 1 rg ${MARGIN_LEFT + 255} ${tableTop - 13} Td (ORIGEN / USUARIO) Tj ET\n`;
-      stream += `BT /F2 8.5 Tf 1 1 1 rg ${MARGIN_LEFT + 365} ${tableTop - 13} Td (DETALLE) Tj ET\n`;
+      stream += text('F2', 7.5, '1 1 1', MARGIN_LEFT + 5, tableTop - 12, labels.date);
+      stream += text('F2', 7.5, '1 1 1', MARGIN_LEFT + 125, tableTop - 12, labels.action);
+      stream += text('F2', 7.5, '1 1 1', MARGIN_LEFT + 265, tableTop - 12, labels.user);
+      stream += text('F2', 7.5, '1 1 1', MARGIN_LEFT + 390, tableTop - 12, labels.detail);
 
       let y = tableTop - 38;
-      for (let i = 0; i < pageEvents.length; i++) {
-        const ev = pageEvents[i];
-        if (i % 2 === 0) {
-          stream += `q 0.96 0.97 0.98 rg ${MARGIN_LEFT} ${y - 4} ${CONTENT_WIDTH} 20 re f Q\n`;
-        }
+      pageEvents.forEach((event, index) => {
+        if (index % 2 === 0) stream += `q 0.96 0.97 0.98 rg ${MARGIN_LEFT} ${y - 4} ${CONTENT_WIDTH} 20 re f Q\n`;
         stream += `q 0.88 0.88 0.88 RG 0.5 w ${MARGIN_LEFT} ${y - 4} m ${MARGIN_LEFT + CONTENT_WIDTH} ${y - 4} l S Q\n`;
-
-        const ts = escapePdfText(ev.ts || '-');
-        const action = escapePdfText(ev.action || '-');
-        const user = escapePdfText(ev.user || 'Argus');
-        const detail = escapePdfText(ev.detail || '-');
-
-        stream += `BT /F1 8 Tf 0.15 0.15 0.15 rg ${MARGIN_LEFT + 6} ${y + 2} Td (${ts.slice(0, 24)}) Tj ET\n`;
-        stream += `BT /F2 8 Tf 0.1 0.2 0.4 rg ${MARGIN_LEFT + 130} ${y + 2} Td (${action.slice(0, 22)}) Tj ET\n`;
-        stream += `BT /F1 8 Tf 0.2 0.2 0.2 rg ${MARGIN_LEFT + 255} ${y + 2} Td (${user.slice(0, 20)}) Tj ET\n`;
-        stream += `BT /F1 7.5 Tf 0.3 0.3 0.3 rg ${MARGIN_LEFT + 365} ${y + 2} Td (${detail.slice(0, 35)}) Tj ET\n`;
-
+        stream += text('F1', 7.2, '0.15 0.15 0.15', MARGIN_LEFT + 5, y + 2, String(event.ts || '-').slice(0, 22));
+        stream += text('F2', 7.2, '0.1 0.2 0.4', MARGIN_LEFT + 125, y + 2, String(event.action || '-').slice(0, 24));
+        stream += text('F1', 7.2, '0.2 0.2 0.2', MARGIN_LEFT + 265, y + 2, String(event.user || 'Argus').slice(0, 21));
+        stream += text('F1', 7.0, '0.3 0.3 0.3', MARGIN_LEFT + 390, y + 2, String(event.detail || '-').slice(0, 37));
         y -= 22;
-      }
-
-      // Footer
+      });
+      if (!events.length) stream += text('F1', 9, '0.4 0.4 0.4', MARGIN_LEFT + 8, tableTop - 44, labels.empty);
       stream += `q 0.8 0.8 0.8 RG 0.5 w ${MARGIN_LEFT} ${MARGIN_BOTTOM} m ${MARGIN_LEFT + CONTENT_WIDTH} ${MARGIN_BOTTOM} l S Q\n`;
-      stream += `BT /F1 7.5 Tf 0.5 0.5 0.5 rg ${MARGIN_LEFT} ${MARGIN_BOTTOM - 12} Td (Argus Home Hub Security System - Documento Oficial de Auditoria) Tj ET\n`;
-      stream += `BT /F1 7.5 Tf 0.5 0.5 0.5 rg ${PAGE_WIDTH - MARGIN_LEFT - 60} ${MARGIN_BOTTOM - 12} Td (${escapePdfText(`Pagina ${p + 1} de ${pagesCount}`)}) Tj ET\n`;
-
-      pageContents.push(stream);
+      stream += text('F1', 7, '0.5 0.5 0.5', MARGIN_LEFT, MARGIN_BOTTOM - 13, labels.footer);
+      stream += text('F1', 7, '0.5 0.5 0.5', PAGE_WIDTH - MARGIN_LEFT - 80, MARGIN_BOTTOM - 13, this._format('history_pdf_page', { page: page + 1, pages: pagesCount }));
+      pages.push(stream);
     }
 
-    const pdfLines = [];
-    const offsets = [];
-    const addObj = (str) => {
-      offsets.push(pdfLines.join('\n').length + (pdfLines.length > 0 ? 1 : 0));
-      pdfLines.push(str);
-    };
-
-    pdfLines.push('%PDF-1.4');
-    addObj(`1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj`);
-    addObj(`2 0 obj\n<< /Type /Pages /Kids [${pageObjIds.map(id => `${id} 0 R`).join(' ')}] /Count ${pagesCount} /MediaBox [0 0 ${PAGE_WIDTH} ${PAGE_HEIGHT}] >>\nendobj`);
-    addObj(`3 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj`);
-    addObj(`4 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>\nendobj`);
-
-    for (let p = 0; p < pagesCount; p++) {
-      const pageObjId = pageObjIds[p];
-      const contentObjId = pageObjId + 1;
-      const stream = pageContents[p];
-      const streamBytes = unescape(encodeURIComponent(stream)).length;
-
-      addObj(`${pageObjId} 0 obj\n<< /Type /Page /Parent 2 0 R /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${contentObjId} 0 R >>\nendobj`);
-      addObj(`${contentObjId} 0 obj\n<< /Length ${streamBytes} >>\nstream\n${stream}endstream\nendobj`);
-    }
-
-    const startxref = pdfLines.join('\n').length + 1;
-    pdfLines.push('xref');
-    pdfLines.push(`0 ${offsets.length + 1}`);
-    pdfLines.push('0000000000 65535 f ');
-    for (let i = 0; i < offsets.length; i++) {
-      pdfLines.push(String(offsets[i]).padStart(10, '0') + ' 00000 n ');
-    }
-    pdfLines.push('trailer');
-    pdfLines.push(`<< /Size ${offsets.length + 1} /Root 1 0 R >>`);
-    pdfLines.push('startxref');
-    pdfLines.push(String(startxref));
-    pdfLines.push('%%EOF');
-
-    return pdfLines.join('\n');
+    let document = '%PDF-1.4\n';
+    const offsets = [0];
+    const addObject = (id, body) => { offsets[id] = document.length; document += `${id} 0 obj\n${body}\nendobj\n`; };
+    addObject(1, '<< /Type /Catalog /Pages 2 0 R >>');
+    addObject(2, `<< /Type /Pages /Kids [${pageObjIds.map(id => `${id} 0 R`).join(' ')}] /Count ${pagesCount} /MediaBox [0 0 ${PAGE_WIDTH} ${PAGE_HEIGHT}] >>`);
+    addObject(3, '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>');
+    addObject(4, '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>');
+    pages.forEach((stream, index) => {
+      const pageId = pageObjIds[index];
+      const contentId = pageId + 1;
+      addObject(pageId, `<< /Type /Page /Parent 2 0 R /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${contentId} 0 R >>`);
+      addObject(contentId, `<< /Length ${stream.length} >>\nstream\n${stream}endstream`);
+    });
+    const xrefOffset = document.length;
+    document += `xref\n0 ${offsets.length}\n0000000000 65535 f \n`;
+    for (let id = 1; id < offsets.length; id++) document += `${String(offsets[id]).padStart(10, '0')} 00000 n \n`;
+    document += `trailer\n<< /Size ${offsets.length} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
+    return Uint8Array.from(document, char => char.charCodeAt(0) & 0xff);
   }
 
   _exportHistoryPDF() {
-    const rawEvents = Array.isArray(this._forensicTimeline) && this._forensicTimeline.length ? this._forensicTimeline : (this._ui?.audit_log || []);
+    this._closeHistoryExportModal();
+    const rawEvents = this._getFilteredHistory();
     const events = rawEvents.map(ev => {
-      const action = String(ev.action || '');
+      const rawAction = String(ev.action || '');
       const rawDetail = String(ev.detail || '');
-      const detail = this._localizeActivityDetail ? this._localizeActivityDetail(action, rawDetail) : rawDetail;
+      const action = this._localizeActivityAction(rawAction);
+      const detail = this._localizeActivityDetail ? this._localizeActivityDetail(rawAction, rawDetail) : rawDetail;
       const user = String(ev.user || ev.actor || 'Argus');
       let ts = '';
       if (ev.ts) {
@@ -4660,20 +4604,35 @@ class ArgusPanel extends HTMLElement {
       return { ts, action, user, detail };
     });
 
-    const homeName = this._homeName || 'Mi Casa';
+    const homeName = this._homeName || this._t('home_default');
     const now = new Date();
     const dateStr = now.toISOString().slice(0, 10);
     const timeStr = now.toTimeString().slice(0, 5).replace(':', '-');
     const generatedAt = now.toLocaleString(this._getLocale());
-
-    const pdfData = this._generateHistoryPDF(events, { homeName, generatedAt });
+    const fromValue = (this.shadowRoot.getElementById('export-history-from') as HTMLInputElement | null)?.value;
+    const toValue = (this.shadowRoot.getElementById('export-history-to') as HTMLInputElement | null)?.value;
+    const formatDate = (value, fallback) => value ? new Date(`${value}T12:00:00`).toLocaleDateString(this._getLocale()) : fallback;
+    const labels = {
+      title: this._t('history_pdf_title'), home: this._t('history_pdf_home'), range: this._t('history_pdf_range'),
+      generated: this._t('history_pdf_generated'), total: this._t('history_pdf_total'), date: this._t('history_pdf_date'),
+      action: this._t('history_pdf_action'), user: this._t('history_pdf_user'), detail: this._t('history_pdf_detail'),
+      empty: this._t('history_pdf_empty'), footer: this._t('history_pdf_footer'),
+    };
+    const pdfData = this._generateHistoryPDF(events, {
+      homeName, generatedAt, labels,
+      rangeFrom: formatDate(fromValue, this._t('history_range_all')),
+      rangeTo: formatDate(toValue, this._t('history_range_today')),
+    });
     const blob = new Blob([pdfData], { type: 'application/pdf' });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
     anchor.download = `argus_historial_${dateStr}_${timeStr}.pdf`;
+    anchor.style.display = 'none';
+    document.body.appendChild(anchor);
     anchor.click();
-    setTimeout(() => URL.revokeObjectURL(url), 5000);
+    anchor.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
   }
 
   _exportForensicTimeline() {
@@ -5701,6 +5660,10 @@ class ArgusPanel extends HTMLElement {
 
     if (action === 'pin_reset') return this._t('log_detail_pin_reset');
     if (action === 'pin_reset_failed') return this._t('log_detail_pin_reset_failed');
+    if (action === 'arming_cancelled') {
+      const reason = raw.replace(/^Armado cancelado:\s*/i, '').trim();
+      return reason || this._t('log_action_arming_cancelled');
+    }
     if (action === 'state_restored') {
       const stateMap = {
         disarmed: this._t('disarmed'),
