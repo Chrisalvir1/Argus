@@ -322,6 +322,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             attrs["arming_origin"] = self._arm_request["origin"]
             attrs["arming_blocking_sensors"] = list(self._arm_request["blocking_sensors"])
             attrs["arming_waiting_for_sensors"] = bool(self._arm_request["wait_for_sensors"])
+            attrs["argus_arming_transition"] = (
+                self._alarm_state == AlarmControlPanelState.ARMING
+            )
+            # Retained for the built-in HomeKit-specific target adapter.
             attrs["argus_homekit_transition"] = (
                 self._alarm_state == AlarmControlPanelState.ARMING
             )

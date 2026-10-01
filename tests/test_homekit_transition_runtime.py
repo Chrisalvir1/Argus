@@ -38,10 +38,17 @@ class TestHomeKitTransitionRuntime(unittest.TestCase):
             self.assertEqual(
                 runtime.resolve_argus_arming_target(
                     "arming",
-                    {"argus_homekit_transition": True, "arming_target": target},
+                    {"argus_arming_transition": True, "arming_target": target},
                 ),
                 target,
             )
+        self.assertEqual(
+            runtime.resolve_argus_arming_target(
+                "arming",
+                {"argus_homekit_transition": True, "arming_target": "armed_home"},
+            ),
+            "armed_home",
+        )
         self.assertIsNone(runtime.resolve_argus_arming_target("arming", {"arming_target": "armed_home"}))
         self.assertIsNone(runtime.resolve_argus_arming_target("armed_home", {"argus_homekit_transition": True, "arming_target": "armed_home"}))
         self.assertIsNone(runtime.resolve_argus_arming_target("arming", {"argus_homekit_transition": True, "arming_target": "invalid"}))
@@ -89,7 +96,7 @@ class TestHomeKitTransitionRuntime(unittest.TestCase):
             }
             for target, homekit_value in expected.items():
                 accessory = FakeSecuritySystem()
-                accessory.async_update_state(FakeState("arming", {"argus_homekit_transition": True, "arming_target": target}))
+                accessory.async_update_state(FakeState("arming", {"argus_arming_transition": True, "arming_target": target}))
                 self.assertEqual(accessory.char_target_state.values, [99, homekit_value])
 
             unrelated = FakeSecuritySystem()
