@@ -25,7 +25,7 @@
 
 Construido sobre una arquitectura ultra-ligera de última generación con **TypeScript 7 + Vite 8.3 + React 19.3 + react-grid-layout 2.2**, Argus combina una estética cinematográfica de **Liquid Glass (Cristal Líquido)** con un motor de seguridad de grado profesional, compatibilidad nativa con HomeKit, asistente de voz interactivo (TTS), notificaciones móviles inteligentes y un **Nuevo Modo de Alto Contraste / Modo Oscuro OLED** enfocado en máxima accesibilidad visual.
 
-### ⚡ Arquitectura Ultra-Ligera y Alto Rendimiento (v2.4.1)
+### ⚡ Arquitectura Ultra-Ligera y Alto Rendimiento (v2.5.0)
 - **Tecnología de Vanguardia:** Impulsado por **React 19.3.0**, **Vite 8.3.2** (Rolldown engine), **react-grid-layout 2.2.4**, **react-resizable 4.0.2**, **Vitest 5.0.3**, **TypeScript 7.0.2** y **Nanoid 6.0.1**.
 - **Activos de Marca Oficiales (HA 2026.3+):** Cumplimiento total con el nuevo Brands Proxy API de Home Assistant, sirviendo localmente los iconos y logos oficiales en alta resolución.
 - **Transición Líquida (iOS/macOS Fluid Spring):** Selector de Modos / SOS con física de resorte elástico, gradientes multicapa y deslizamiento continuo de cristal líquido.
@@ -42,7 +42,7 @@ Construido sobre una arquitectura ultra-ligera de última generación con **Type
 ## ✨ Características Principales
 
 ### 🛡️ Motor de Seguridad y Alarma Multimodo
-- **5 Estados de Protección:** *Desarmado*, *En Casa (Arm Home)*, *Fuera de Casa (Arm Away)*, *Noche (Arm Night)* y *Vacaciones (Arm Vacation)*.
+- **4 Estados de Protección:** *Desarmado*, *En Casa (Arm Home)*, *Fuera de Casa (Arm Away)* y *Noche (Arm Night)*.
 - **Tiempos de Gracia Configurables:** Retardos independientes de salida y entrada por cada modo para evitar falsas alarmas al entrar o salir.
 - **Disparo Instantáneo:** Modo de intrusión con activación configurable de sirenas internas, externas, luces parpadeantes y scripts de emergencia.
 - **Detección Activa de Sensores Abiertos:** Al intentar armar, Argus comprueba inmediatamente todas las puertas, ventanas y sensores vinculados. Si alguno está abierto, lo notifica en pantalla y por voz (TTS) y te permite cerrarlo o aplicar **Bypass (Omitir)** de forma individual con un solo toque.
@@ -190,4 +190,3 @@ python3 -m unittest discover tests
 ## 📄 Licencia
 
 Este proyecto está bajo la Licencia **MIT**. Consulta el archivo [LICENSE](LICENSE) para más información.
-

@@ -1,3 +1,18 @@
+## [2.5.0] - 2026-10-01
+
+### Security and reliability
+- Harden authentication, PIN handling, storage access, media endpoints, presence checks, and WebSocket request validation.
+- Add regression coverage and automated dependency security checks; refresh stable frontend dependencies and lockfile.
+- Fix dashboard layout, sensor labels, responsive rendering, and optional floorplan response handling.
+
+### Arming and bridge interoperability
+- Publish generic arming transition state and target attributes so compatible HAP adapters can expose pending arming outside HomeKit Bridge.
+- Preserve HomeKit Bridge behavior and Argus's supported modes: disarmed, home, away, and night.
+
+### Dashboard and activity history
+- Add security readiness insights and an interactive live floorplan widget.
+- Export activity history as a real downloadable PDF, localized to the selected Argus language.
+
 ## [2.4.22]
 - Collapse the hidden React editor grid in compact Lovelace cards so persisted widget layouts cannot add thousands of pixels of blank height.
 
