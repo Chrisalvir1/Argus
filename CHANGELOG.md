@@ -1,3 +1,12 @@
+## [2.5.2] - 2026-10-01
+
+### Corrective and Visual Polish Release
+- Rebalance sensor chip proportions with right-aligned status, delay, and battery badges, and bound max-width to eliminate wasted whitespace in fullscreen.
+- Introduce custom 3D Liquid Glass SVG clock icons for instant (0s) and custom sensor delays in console chips and mode configuration.
+- Upgrade PDF activity report logo to high-definition 1024x1024 artwork rendered at 384x384 ultra-sharp resolution, positioned on the left side of the header followed by metadata.
+- Fix sensor availability display discrepancy so offline/unavailable sensors correctly reflect "No disponible" consistently across both the security console and modes views.
+- Add resilient normalized and case-insensitive entity lookup for partition sensors.
+
 ## [2.5.1] - 2026-10-01
 
 ### Corrective and Evolutionary Release
@@ -8,9 +17,6 @@
 - Implement Sensor Walk Test (Alarmo feature) with countdown timer, sensor status tracking, audit logging, and Web Audio chime.
 - Implement per-sensor delays (Alarmo feature) supporting instant triggers (0s), custom delays, and visual badges on sensor chips.
 - Improve visual styling for unavailable sensors with dedicated dashed-border cards, aligned alert SVG icons, and synchronized status in Modos view.
-- Introduce Liquid Glass clock SVG icons for instant (0s) and custom sensor delays.
-- Rebalance sensor chip proportions with right-aligned status badges and container max-width to eliminate wasted blank space in fullscreen.
-- Upgrade PDF activity report logo to high-definition 1024x1024 artwork rendered at 384x384, positioned on the left side of the header with metadata on the right.
 
 ## [2.5.0] - 2026-10-01
 
