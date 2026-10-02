@@ -400,6 +400,12 @@
     0 4px 12px rgba(0, 0, 0, 0.25) !important;
 }
 
+.console-sensor.unavailable {
+  background: linear-gradient(135deg, rgba(148, 163, 184, 0.15) 0%, rgba(100, 116, 139, 0.05) 100%) !important;
+  border-color: rgba(148, 163, 184, 0.35) !important;
+  border-style: dashed !important;
+}
+
 .console-sensor-icon {
   font-size: 18px !important;
   display: flex !important;
@@ -574,7 +580,7 @@
 @container argus-console (min-width: 901px) {
   .entry:not(.ios-fullscreen) .security-console {
     display: grid !important;
-    grid-template-columns: minmax(170px, 1fr) minmax(140px, 200px) minmax(180px, 1.2fr) !important;
+    grid-template-columns: minmax(200px, 320px) minmax(160px, 220px) minmax(280px, 1fr) !important;
     grid-template-rows: auto 1fr !important;
     align-items: center !important;
     justify-content: center !important;

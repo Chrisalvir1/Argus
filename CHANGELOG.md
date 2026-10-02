@@ -1,3 +1,14 @@
+## [2.5.1] - 2026-10-01
+
+### Corrective and Evolutionary Release
+- Refresh live security-console sensor chips and battery levels in real-time upon Home Assistant state changes.
+- Remove unrequested floorplan and daily activity widgets from dashboard and filter legacy widget IDs in saved layouts.
+- Completely remove "Vacation" arming mode across UI, backend, services, and integrations; migrate legacy configurations safely without reducing sensor coverage.
+- Restore original Argus logo in activity history PDF and fix local calendar date formatting (Costa Rica UTC-6).
+- Implement Sensor Walk Test (Alarmo feature) with countdown timer, sensor status tracking, audit logging, and Web Audio chime.
+- Implement per-sensor delays (Alarmo feature) supporting instant triggers (0s), custom delays, and visual badges on sensor chips.
+- Improve visual styling for unavailable sensors with dedicated dashed-border cards and aligned alert SVG icons.
+
 ## [2.5.0] - 2026-10-01
 
 ### Security and reliability
@@ -10,7 +21,7 @@
 - Preserve HomeKit Bridge behavior and Argus's supported modes: disarmed, home, away, and night.
 
 ### Dashboard and activity history
-- Add security readiness insights and an interactive live floorplan widget.
+- Add security readiness insights and an interactive live floorplan widget. These experimental widgets are removed in v2.5.1 following user feedback.
 - Export activity history as a real downloadable PDF, localized to the selected Argus language.
 
 ## [2.4.22]

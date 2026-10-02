@@ -1,7 +1,7 @@
 import type {HomeAssistant} from './home-assistant';
 
-export type AlarmAction='arm_home'|'arm_away'|'arm_night'|'arm_vacation'|'disarm'|'sos';
-export type ArgusMode='disarmed'|'home'|'away'|'night'|'vacation';
+export type AlarmAction='arm_home'|'arm_away'|'arm_night'|'disarm'|'sos';
+export type ArgusMode='disarmed'|'home'|'away'|'night';
 export type IncidentAction='confirm'|'false_alarm'|'silence_siren'|'resolve';
 export type JsonObject=Record<string,unknown>;
 export interface EntryScoped{entry_id?:string}

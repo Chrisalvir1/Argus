@@ -42,7 +42,6 @@ from .const import (
     CONF_SENSORS_AWAY,
     CONF_SENSORS_HOME,
     CONF_SENSORS_NIGHT,
-    CONF_SENSORS_VACATION,
     CONF_ENTRY_SENSORS,
     CONF_LINKED_ALARM_PANELS,
     CONF_SIREN_ENTITY,
@@ -57,7 +56,6 @@ from .const import (
     MQTT_COMMAND_ARM_HOME,
     MQTT_COMMAND_ARM_AWAY,
     MQTT_COMMAND_ARM_NIGHT,
-    MQTT_COMMAND_ARM_VACATION,
 )
 from .storage import (
     async_load_ui_data, async_append_audit_log,
@@ -72,7 +70,6 @@ _MODE_LABELS = {
     'armed_home': 'En Casa',
     'armed_away': 'Ausente',
     'armed_night': 'Noche',
-    'armed_vacation': 'Vacaciones'
 }
 
 _LANGUAGE_NAMES = {
@@ -92,7 +89,6 @@ ARMED_STATES = {
     AlarmControlPanelState.ARMED_HOME,
     AlarmControlPanelState.ARMED_AWAY,
     AlarmControlPanelState.ARMED_NIGHT,
-    AlarmControlPanelState.ARMED_VACATION,
 }
 
 # Argus accepts locks and several binary-sensor style entities as intrusion
@@ -121,7 +117,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         AlarmControlPanelEntityFeature.ARM_HOME
         | AlarmControlPanelEntityFeature.ARM_AWAY
         | AlarmControlPanelEntityFeature.ARM_NIGHT
-        | AlarmControlPanelEntityFeature.ARM_VACATION
         | AlarmControlPanelEntityFeature.TRIGGER
     )
 
@@ -249,10 +244,15 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._entry_delay  = _safe_int(d.get(CONF_ENTRY_DELAY),  DEFAULT_ENTRY_DELAY)
         
         # Base sensors (defaults if no per-mode UI config exists)
-        self._sensors_away = d.get(CONF_SENSORS_AWAY, [])
+        self._sensors_away = list(d.get(CONF_SENSORS_AWAY, []))
+        # Migrate legacy vacation sensors to away so coverage is never reduced
+        vac_legacy = d.get("sensors_vacation", [])
+        if isinstance(vac_legacy, list):
+            for s in vac_legacy:
+                if s and s not in self._sensors_away:
+                    self._sensors_away.append(s)
         self._sensors_home = d.get(CONF_SENSORS_HOME, [])
         self._sensors_night = d.get(CONF_SENSORS_NIGHT, [])
-        self._sensors_vacation = d.get(CONF_SENSORS_VACATION, self._sensors_away)
         self._entry_sensors = d.get(CONF_ENTRY_SENSORS, [])
         self._siren_entity = d.get(CONF_SIREN_ENTITY)
         
@@ -435,8 +435,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             return self._sensors_home or self._sensors_away
         if state == AlarmControlPanelState.ARMED_NIGHT:
             return self._sensors_night or self._sensors_away
-        if state == AlarmControlPanelState.ARMED_VACATION:
-            return self._sensors_vacation or self._sensors_away
         return self._sensors_away  # ARMED_AWAY
 
     def _all_sensors(self) -> list[str]:
@@ -447,7 +445,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         s.update(self._sensors_away     or [])
         s.update(self._sensors_home     or [])
         s.update(self._sensors_night    or [])
-        s.update(self._sensors_vacation or [])
 
         modes = self._ui_config.get("modes", {})
 
@@ -500,14 +497,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         runtime_value = runtime_state.get("state")
         if runtime_value:
             try:
-                candidate = AlarmControlPanelState(runtime_value)
+                candidate = AlarmControlPanelState("armed_away" if runtime_value == "armed_vacation" else runtime_value)
                 if candidate in (
                     AlarmControlPanelState.DISARMED,
                     AlarmControlPanelState.ARMED_HOME,
                     AlarmControlPanelState.ARMED_AWAY,
                     AlarmControlPanelState.ARMED_NIGHT,
-                    AlarmControlPanelState.ARMED_VACATION,
-                ):
+                                ):
                     self._alarm_state = candidate
                     restored_from_runtime = True
             except ValueError:
@@ -518,14 +514,13 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         last = await self.async_get_last_state()
         if last is not None and not restored_from_runtime:
             try:
-                restored = AlarmControlPanelState(last.state)
+                restored = AlarmControlPanelState("armed_away" if last.state == "armed_vacation" else last.state)
                 if restored in (
                     AlarmControlPanelState.DISARMED,
                     AlarmControlPanelState.ARMED_HOME,
                     AlarmControlPanelState.ARMED_AWAY,
                     AlarmControlPanelState.ARMED_NIGHT,
-                    AlarmControlPanelState.ARMED_VACATION,
-                ):
+                                ):
                     self._alarm_state = restored
                     runtime_state = {
                         "state": restored.value,
@@ -576,7 +571,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         now = dt_util.now()
         candidates = []
         valid_states = {
-            "disarmed", "armed_home", "armed_away", "armed_night", "armed_vacation",
+            "disarmed", "armed_home", "armed_away", "armed_night",
         }
         for item in schedule:
             if not isinstance(item, dict) or item.get("enabled", True) is False:
@@ -642,7 +637,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         scheduled_value = getattr(scheduled_state, "value", scheduled_state)
         is_scheduled_arm = scheduled_value in {
-            "armed_home", "armed_away", "armed_night", "armed_vacation"
+            "armed_home", "armed_away", "armed_night"
         }
         if self._alarm_state != scheduled_state and is_scheduled_arm:
             # Schedules must take the same pending/bypass-aware path as every
@@ -698,7 +693,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         # Update MQTT status dynamically on config reload
         global_mqtt = self._get_mode_val(None, "mqtt_enabled", self._mqtt_enabled)
-        any_mode_mqtt = any(self._get_mode_val(m, "mqtt_enabled", False) for m in ["home", "away", "night", "vacation"])
+        any_mode_mqtt = any(self._get_mode_val(m, "mqtt_enabled", False) for m in ["home", "away", "night"])
         should_mqtt = global_mqtt or any_mode_mqtt
 
         if should_mqtt:
@@ -899,6 +894,26 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         if new_state is None or new_state.state not in _INTRUSION_ACTIVE_STATES:
             return
 
+        # Check if Walk Test is active for this instance
+        from .core.walk_test import async_get_walk_test_manager
+        wt_mgr = async_get_walk_test_manager(self.hass)
+        if wt_mgr.is_active(self._config_entry.entry_id):
+            session = wt_mgr.get_session(self._config_entry.entry_id)
+            if session:
+                friendly_name = new_state.attributes.get("friendly_name") if new_state else None
+                is_new = session.record_trigger(entity_id, new_state.state, friendly_name)
+                self.hass.bus.async_fire("argus_walk_test_sensor_tested", {
+                    "entry_id": self._config_entry.entry_id,
+                    "entity_id": entity_id,
+                    "state": new_state.state,
+                    "name": friendly_name or entity_id,
+                    "is_new": is_new,
+                    "tested_count": len(session.tested_sensors),
+                    "total_sensors": len(session.all_sensors),
+                })
+                _LOGGER.info("Argus Walk Test: sensor %s tested (%s)", entity_id, new_state.state)
+                return
+
         # Fire "sensor_opened" automations globally (before filtering by alarm state)
         self.hass.create_task(self._evaluate_automations("sensor_opened", sensor=entity_id))
         try:
@@ -949,13 +964,30 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         if not isinstance(entry_list, list):
             entry_list = []
 
+        # Per-sensor delay configuration or global entry delay
+        sensor_settings = mode_cfg.get("sensor_settings", {})
+        sensor_setting = sensor_settings.get(entity_id, {}) if isinstance(sensor_settings, dict) else {}
+        custom_delay = sensor_setting.get("delay")
+        is_instant = sensor_setting.get("type") == "instant" or custom_delay == 0
+
         _raw_delay = mode_cfg.get("entry_delay", self._entry_delay)
         try:
             entry_delay = int(_raw_delay) if _raw_delay is not None else 0
         except (TypeError, ValueError):
             entry_delay = 0
 
-        if entity_id in entry_list and entry_delay > 0:
+        if custom_delay is not None:
+            try:
+                entry_delay = max(0, int(custom_delay))
+            except (TypeError, ValueError):
+                pass
+
+        if is_instant:
+            entry_delay = 0
+
+        is_delayed = (entity_id in entry_list or custom_delay is not None) and not is_instant
+
+        if is_delayed and entry_delay > 0:
             # Entry delay → PENDING
             self._alarm_state = AlarmControlPanelState.PENDING
             self.async_write_ha_state()
@@ -1276,7 +1308,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             MQTT_COMMAND_ARM_HOME: self.async_alarm_arm_home,
             MQTT_COMMAND_ARM_AWAY: self.async_alarm_arm_away,
             MQTT_COMMAND_ARM_NIGHT: self.async_alarm_arm_night,
-            MQTT_COMMAND_ARM_VACATION: self.async_alarm_arm_vacation,
         }
         if cmd in dispatch:
             self.hass.async_create_task(dispatch[cmd](code=code))
@@ -1287,7 +1318,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         """Publish status to MQTT if enabled globally or for any mode."""
         # Ensure we don't spam if strictly disabled everywhere
         global_mqtt = self._get_mode_val(None, "mqtt_enabled", self._mqtt_enabled)
-        any_mode_mqtt = any(self._get_mode_val(m, "mqtt_enabled", False) for m in ["home", "away", "night", "vacation"])
+        any_mode_mqtt = any(self._get_mode_val(m, "mqtt_enabled", False) for m in ["home", "away", "night"])
         
         if not global_mqtt and not any_mode_mqtt:
              return
@@ -1441,14 +1472,14 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         )
 
         # ── ARM-LOCK v2 (Anti-Rebote HomeKit) ──────────────────────────
-        # Cuando Argus está en Away/Night/Vacation y algo externo (HomeKit
+        # Cuando Argus está en Away/Night y algo externo (HomeKit
         # sincronizando con Aqara) intenta forzarlo a Home dentro de los
         # primeros 120 segundos, rechazamos la orden y re-publicamos
         # nuestro estado real para corregir la UI de HomeKit.
         #
         # Reglas:
-        #   - Solo bloquea transiciones HACIA Home desde Away/Night/Vacation
-        #   - Permite cambiar entre Away ↔ Night ↔ Vacation libremente
+        #   - Solo bloquea transiciones HACIA Home desde Away/Night
+        #   - Permite cambiar entre Away ↔ Night libremente
         #   - Permite desarmar siempre (disarm no pasa por _async_arm)
         #   - No causa ningún congelamiento ni retraso
         if (
@@ -1470,10 +1501,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         if self._alarm_state == target:
             return
 
-        # STRICT AWAY/VACATION LOCK:
-        # Prevent automations or accidental clicks from lowering the security state from Away/Vacation.
-        # To exit Away/Vacation, the user MUST disarm first.
-        if self._alarm_state in (AlarmControlPanelState.ARMED_AWAY, AlarmControlPanelState.ARMED_VACATION) and target in ARMED_STATES:
+        # STRICT AWAY LOCK:
+        # Prevent automations or accidental clicks from lowering the security state from Away.
+        # To exit Away, the user MUST disarm first.
+        if self._alarm_state == AlarmControlPanelState.ARMED_AWAY and target in ARMED_STATES:
             _LOGGER.warning(
                 "Argus: Blocked transition from %s to %s. System must be disarmed first.",
                 self._alarm_state, target
@@ -1490,7 +1521,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             AlarmControlPanelState.ARMED_HOME:     "home",
             AlarmControlPanelState.ARMED_AWAY:     "away",
             AlarmControlPanelState.ARMED_NIGHT:    "night",
-            AlarmControlPanelState.ARMED_VACATION: "vacation",
         }
         mode_key = _MODE_KEY_MAP.get(target)
 
@@ -1665,9 +1695,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
     async def async_alarm_arm_night(self, code=None) -> None:
         await self._async_arm(AlarmControlPanelState.ARMED_NIGHT, code)
 
-    async def async_alarm_arm_vacation(self, code=None) -> None:
-        await self._async_arm(AlarmControlPanelState.ARMED_VACATION, code)
-
     async def async_alarm_trigger(self, code=None) -> None:
         """Trigger the alarm from an explicit SOS/manual panic action."""
         if not self._panic_active:
@@ -1678,7 +1705,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                     "home": AlarmControlPanelState.ARMED_HOME,
                     "away": AlarmControlPanelState.ARMED_AWAY,
                     "night": AlarmControlPanelState.ARMED_NIGHT,
-                    "vacation": AlarmControlPanelState.ARMED_VACATION,
                 }
                 self._panic_previous_state = mode_map.get(self._triggered_mode, AlarmControlPanelState.DISARMED)
             else:
@@ -1737,7 +1763,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             
             # Obtener todos los paneles sincronizados de todos los modos para el disarm/trigger
             all_sync_panels = set()
-            for mode_key in ["home", "away", "night", "vacation"]:
+            for mode_key in ["home", "away", "night"]:
                 cfg = by_entity.get(mode_key) or modes.get(mode_key) or {}
                 for p in (cfg.get("external_panels") or cfg.get("sync_panels") or []):
                     all_sync_panels.add(p)
@@ -1762,7 +1788,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                     AlarmControlPanelState.ARMED_HOME: ("home", "alarm_arm_home"),
                     AlarmControlPanelState.ARMED_AWAY: ("away", "alarm_arm_away"),
                     AlarmControlPanelState.ARMED_NIGHT: ("night", "alarm_arm_night"),
-                    AlarmControlPanelState.ARMED_VACATION: ("vacation", "alarm_arm_vacation"),
                 }
                 mode_key, service = _MODE_MAP.get(state, ("away", "alarm_arm_away"))
                 cfg = by_entity.get(mode_key) or modes.get(mode_key) or {}

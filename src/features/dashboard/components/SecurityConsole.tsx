@@ -65,7 +65,6 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
     if (state === 'unknown' || state === 'unavailable') return t('unavailable');
     if (state === 'arming') return t('arming');
     if (state === 'pending') return t('pending');
-    if (state === 'armed_vacation') return t('system_armed') + ' · ' + t('mode_vacation');
     if (state === 'disarmed') return t('system_disarmed') || 'SISTEMA DESARMADO';
     if (state === 'armed_home') return (t('system_armed') || 'ARMADO') + ' · ' + (t('mode_home') || 'CASA');
     if (state === 'armed_away') return (t('system_armed') || 'ARMADO') + ' · ' + (t('mode_away') || 'AUSENTE');
@@ -80,14 +79,15 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   // Sensors mapping - strictly only from configured modes: home, away, night
   const activeSensors: Array<{id: string, name?: string, isBypassed: boolean}> = [];
   const blockingSensors = hass?.states?.[entry.entity_id]?.attributes?.arming_blocking_sensors || [];
+  let eCfg: any = {};
   
   if (entry.entity_id) {
     const modes = panel._ui?.modes?.__by_entity__?.[entry.entity_id] || panel._ui?.modes || {};
     
-    let eCfg = modes[state.replace('armed_', '')] || {};
+    eCfg = modes[state.replace('armed_', '')] || {};
     
     if (triggered) {
-      eCfg = ['away', 'home', 'night', 'vacation']
+      eCfg = ['away', 'home', 'night']
         .map(m => modes[m])
         .find(config => (config?.sensors || []).some((id: string) => ['on', 'open', 'unlocked', 'recording', 'active', 'motion'].includes(hass?.states?.[id]?.state)))
         || {};
@@ -96,7 +96,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
     let sList = eCfg.sensors || [];
     if (state === 'disarmed' || isPending || !sList.length) {
       const allSensors = new Set<string>();
-      ['away', 'home', 'night', 'vacation'].forEach(m => {
+      ['away', 'home', 'night'].forEach(m => {
         if (modes[m]?.sensors) {
           modes[m].sensors.forEach((s: string) => allSensors.add(s));
         }
@@ -147,6 +147,26 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
               <span className="argus-connection-label">{isOnline ? (t('connected') || 'CONECTADO') : (t('disconnected') || 'DESCONECTADO')}</span>
             </div>
             <div className="console-hud-right">
+              {panel._isAdmin && (
+                <button
+                  type="button"
+                  onClick={() => panel._openWalkTest?.()}
+                  title={t('walk_test') || 'Prueba de Sensores (Walk Test)'}
+                  style={{
+                    marginRight: '8px',
+                    padding: '3px 8px',
+                    borderRadius: '8px',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    background: 'rgba(255,255,255,0.08)',
+                    color: '#fff',
+                    border: '1px solid rgba(255,255,255,0.18)',
+                    cursor: 'pointer',
+                  }}
+                >
+                  🚶‍♂️ {t('walk_test_btn') || 'Walk Test'}
+                </button>
+              )}
               <span className={`console-system-badge console-system-badge--${triggered ? 'triggered' : state}`}>
                 {getBadgeText()}
               </span>
@@ -180,11 +200,26 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
                 const isLockLike = /door|puerta|port[oó]n|gate|lock|cerradura|window|ventana/i.test(`${sensor.id} ${sName}`);
                 const isBlocking = isWaiting && blockingSensors.includes(sensor.id);
                 const isUnavailable = !sState || ['unknown', 'unavailable'].includes(sState.state);
-                const isOpen = panel.isSensorActive ? panel.isSensorActive(sState) : sState?.state === 'on';
+                const intrusionStates = ['on', 'open', 'unlocked', 'recording', 'active', 'motion'];
+                const isOpen = !isUnavailable && (
+                  typeof panel?.isSensorActive === 'function'
+                    ? Boolean(panel.isSensorActive(sState))
+                    : intrusionStates.includes(String(sState?.state || '').toLowerCase())
+                );
                 
-                let power = null;
-                if (sState?.attributes?.battery_level !== undefined) power = sState.attributes.battery_level;
-                else if (sState?.attributes?.battery !== undefined) power = sState.attributes.battery;
+                let power: number | null = null;
+                if (typeof panel?._getSensorBattery === 'function') {
+                  power = panel._getSensorBattery(sensor.id, sState);
+                }
+                if (power === null && sState?.attributes) {
+                  const direct = [sState.attributes.battery_level, sState.attributes.battery, sState.attributes.battery_percentage]
+                    .find((val: any) => val !== undefined && val !== null && val !== '' && Number.isFinite(Number(val)));
+                  if (direct !== undefined) {
+                    power = Math.max(0, Math.min(100, Math.round(Number(direct))));
+                  }
+                }
+
+                const customDelay = eCfg?.sensor_settings?.[sensor.id]?.delay;
 
                 return (
                   <SensorChip 
@@ -197,6 +232,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
                     isBlocking={isBlocking}
                     isBypassed={sensor.isBypassed}
                     battery={power}
+                    delay={customDelay}
                     iconHtml={panel._getSensorIcon?.(sState, sensor) || ''}
                     statusLabelOpen={t('status_open') || 'ABIERTO'}
                     statusLabelClosed={t('status_closed') || 'CERRADO'}

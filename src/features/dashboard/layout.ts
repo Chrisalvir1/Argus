@@ -37,8 +37,6 @@ export const defaultLayouts: Layouts = {
     item('access-control', 6, 4, 6, 4),
     item('alarm-configuration', 0, 8, 12, 5),
     item('security-status', 0, 13, 12, 2),
-    item('security-insights', 0, 15, 6, 5),
-    item('floorplan', 6, 15, 6, 5),
   ],
   md: [
     item('activity-history', 0, 0, 4, 4),
@@ -47,8 +45,6 @@ export const defaultLayouts: Layouts = {
     item('access-control', 4, 4, 4, 4),
     item('alarm-configuration', 0, 8, 8, 5),
     item('security-status', 0, 13, 8, 2),
-    item('security-insights', 0, 15, 4, 5),
-    item('floorplan', 4, 15, 4, 5),
   ],
   sm: [
     item('activity-history', 0, 0, 4, 4),
@@ -57,8 +53,6 @@ export const defaultLayouts: Layouts = {
     item('access-control', 0, 12, 4, 4),
     item('alarm-configuration', 0, 16, 4, 5),
     item('security-status', 0, 21, 4, 2),
-    item('security-insights', 0, 23, 4, 5),
-    item('floorplan', 0, 28, 4, 5),
   ],
   xs: [
     item('activity-history', 0, 0, 2, 4),
@@ -67,8 +61,6 @@ export const defaultLayouts: Layouts = {
     item('access-control', 0, 12, 2, 4),
     item('alarm-configuration', 0, 16, 2, 5),
     item('security-status', 0, 21, 2, 2),
-    item('security-insights', 0, 23, 2, 5),
-    item('floorplan', 0, 28, 2, 5),
   ],
   xxs: [
     item('activity-history', 0, 0, 2, 4),
@@ -77,8 +69,6 @@ export const defaultLayouts: Layouts = {
     item('access-control', 0, 12, 2, 4),
     item('alarm-configuration', 0, 16, 2, 5),
     item('security-status', 0, 21, 2, 2),
-    item('security-insights', 0, 23, 2, 5),
-    item('floorplan', 0, 28, 2, 5),
   ],
 };
 
@@ -152,7 +142,9 @@ export function mergeLayouts(saved: Layouts | null): Layouts {
     const defaults = (defaultLayouts[bp] || []) as Layout[];
     const known = defaults.map(base => ({ ...base, ...clean.get(base.i), maxW: cols }));
     const knownIds = new Set(known.map(x => x.i));
-    const extra = [...clean.values()].filter(x => !knownIds.has(x.i));
+    // Drop widget IDs removed in the corrective release even from old saved layouts.
+    const removed = new Set(['security-insights', 'floorplan']);
+    const extra = [...clean.values()].filter(x => !knownIds.has(x.i) && !removed.has(x.i));
     result[bp] = [...known, ...extra];
   });
   return result;

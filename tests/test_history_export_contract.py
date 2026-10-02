@@ -14,6 +14,13 @@ class TestActivityHistoryExportContract(unittest.TestCase):
         self.assertIn("id=\"btn-do-download-pdf\"", PANEL_SOURCE)
         self.assertIn("new Blob([pdfData], { type: 'application/pdf' })", PANEL_SOURCE)
         self.assertIn("anchor.download = `argus_historial_${dateStr}_${timeStr}.pdf`", PANEL_SOURCE)
+        self.assertIn("'/api/argus_static/argus_logo.png'", PANEL_SOURCE)
+        self.assertIn("/Subtype /Image", PANEL_SOURCE)
+        self.assertIn("/ArgusLogo Do", PANEL_SOURCE)
+        self.assertIn("date.getFullYear()", PANEL_SOURCE)
+        self.assertNotIn("now.toISOString().slice(0, 10)", PANEL_SOURCE)
+        self.assertIn("this._formatLocalDateInput(now)", PANEL_SOURCE)
+        self.assertNotIn("fromDate.toISOString().split('T')[0]", PANEL_SOURCE)
 
     def test_pdf_uses_byte_correct_winansi_and_localized_report_labels(self):
         self.assertIn("/Encoding /WinAnsiEncoding", PANEL_SOURCE)

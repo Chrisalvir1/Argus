@@ -51,7 +51,7 @@ class AlarmoImporter:
     def generate_argus_config(alarmo_data: Dict[str, Any]) -> Dict[str, Any]:
         """Convert Alarmo storage dictionary into sanitized Argus UI config."""
         preview = AlarmoImporter.preview_import(alarmo_data)
-        modes_config = {"home": {}, "away": {}, "night": {}, "vacation": {}}
+        modes_config = {"home": {}, "away": {}, "night": {}}
 
         # Map sensors to modes
         sensors = alarmo_data.get("sensors", [])

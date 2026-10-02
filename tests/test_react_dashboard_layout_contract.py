@@ -24,6 +24,10 @@ class TestReactDashboardLayoutContract(unittest.TestCase):
     def test_breakpoints_and_canonical_sizes(self):
         for token in ['lg:1200','md:996','sm:768','xs:480','xxs:0','S:{w:3,h:3}','M:{w:3,h:4}','L:{w:6,h:4}','XL:{w:6,h:8}']:
             self.assertIn(token,self.layout)
+    def test_unrequested_insights_and_floorplan_widgets_are_removed(self):
+        for token in ["security-insights", "floorplan"]:
+            self.assertNotIn(f"item('{token}'", self.layout)
+        self.assertIn("new Set(['security-insights', 'floorplan'])", self.layout)
     def test_editing_visibility_reset_and_accessibility(self):
         for token in ['Editar tablero','Restablecer diseño','Ocultar widget','Mostrar {w.title}','aria-live="polite"',"event.key==='Escape'",'saveVisibility']:
             self.assertIn(token,self.dashboard+self.layout)

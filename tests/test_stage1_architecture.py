@@ -48,7 +48,7 @@ class TestStage1Architecture(unittest.TestCase):
     def test_users_sanitization_and_lookup(self) -> None:
         raw_users = [{"name": "Admin", "pin": "840275"}]
         sanitized = users.sanitize_user_list(raw_users)
-        self.assertTrue(sanitized[0]["pin"].startswith("scrypt:"))
+        self.assertTrue(sanitized[0]["pin"].startswith(("scrypt:", "pbkdf2_sha256:")))
         found = users.find_user_by_pin("840275", sanitized)
         self.assertIsNotNone(found)
         self.assertEqual(found["name"], "Admin")

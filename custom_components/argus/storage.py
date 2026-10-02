@@ -37,7 +37,7 @@ def _store(hass: HomeAssistant, entry_id: str | None = None) -> Store:
 def _default_payload() -> dict:
     return {
         "first_run": True,
-        "zones": [], "modes": {"home": {}, "away": {}, "night": {}, "vacation": {}},
+        "zones": [], "modes": {"home": {}, "away": {}, "night": {}},
         "dashboard": {"layout": "grid", "dense": False}, "audit_log": [],
         "advanced": {"guest_code": None, "guest_code_enabled": False, "duress_pin": None},
         "automations": [], "notif_targets": [],
@@ -148,6 +148,20 @@ async def async_load_ui_data(hass: HomeAssistant, entry_id: str | None = None) -
             if value:
                 migrated.append(value)
         data["background_images"] = migrated
+
+    # Safely migrate legacy vacation mode without reducing sensor coverage
+    modes = data.get("modes")
+    if isinstance(modes, dict) and "vacation" in modes:
+        vacation_cfg = modes.pop("vacation", {})
+        if isinstance(vacation_cfg, dict):
+            vac_sensors = vacation_cfg.get("sensors") or []
+            if vac_sensors and isinstance(modes.get("away"), dict):
+                away_sensors = modes["away"].setdefault("sensors", [])
+                for s in vac_sensors:
+                    if s not in away_sensors:
+                        away_sensors.append(s)
+        changed = True
+
     if changed:
         await store.async_save(data)
     return data
@@ -386,7 +400,10 @@ async def async_get_audit_log(hass: HomeAssistant, entry_id: str | None = None) 
 async def async_save_alarm_runtime_state(
     hass: HomeAssistant, entry_id: str, state: str, *, source: str
 ) -> None:
-    if state not in {"disarmed", "armed_home", "armed_away", "armed_night", "armed_vacation"}:
+    # Keep older persisted vacation states secure while exposing only the supported modes.
+    if state == "armed_vacation":
+        state = "armed_away"
+    if state not in {"disarmed", "armed_home", "armed_away", "armed_night"}:
         return
     async with _storage_lock(hass):
         current = await async_load_ui_data(hass, entry_id)

@@ -34,7 +34,7 @@ class FakeState:
 class TestHomeKitTransitionRuntime(unittest.TestCase):
     def test_resolver_requires_argus_marker_and_arming_state(self):
         runtime = load_runtime()
-        for target in ("armed_home", "armed_away", "armed_night", "armed_vacation"):
+        for target in ("armed_home", "armed_away", "armed_night"):
             self.assertEqual(
                 runtime.resolve_argus_arming_target(
                     "arming",
@@ -92,7 +92,6 @@ class TestHomeKitTransitionRuntime(unittest.TestCase):
                 "armed_home": 0,
                 "armed_away": 1,
                 "armed_night": 2,
-                "armed_vacation": 1,
             }
             for target, homekit_value in expected.items():
                 accessory = FakeSecuritySystem()

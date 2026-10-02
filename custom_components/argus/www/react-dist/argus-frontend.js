@@ -52,7 +52,6 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		armed_away: "Ausente",
 		armed_home: "En Casa",
 		armed_night: "Noche",
-		armed_vacation: "Vacaciones",
 		arming: "Armando",
 		automations: "Automatizaciones",
 		available: "Disponibles",
@@ -84,7 +83,6 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		btn_home: "🏠 En Casa",
 		btn_night: "🌙 Noche",
 		btn_sos: "🚨 SOS / PÁNICO",
-		btn_vacation: "✈️ Vacaciones",
 		bypass_lbl: "🚫 Omitir",
 		cancel: "Cancelar",
 		cancel_btn: "Cancelar",
@@ -286,7 +284,6 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		mode_away: "Ausente",
 		mode_home: "En Casa",
 		mode_night: "Noche",
-		mode_vacation: "Vacaciones",
 		modes: "Modos / SOS",
 		modes_sos: "Modos / SOS",
 		system_diagnostics: "Diagnóstico y Resumen del Sistema",
@@ -465,13 +462,27 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		user_role_label: "Rol del Usuario",
 		username: "Nombre de Usuario",
 		users_title: "👥 Control de Acceso y Usuarios",
-		vacation: "Vacaciones",
 		wait_if_open: "Esperar armado en espera",
 		waiting_sensors: "Esperando sensores",
 		waiting_sensors_count: "Esperando {count} sensor(es)",
 		welcome_greeting: "¡Hola de nuevo!",
 		welcome_profile: "Bienvenido, {name}",
-		wrong_pin: "PIN incorrecto"
+		wrong_pin: "PIN incorrecto",
+		walk_test: "Prueba de Sensores (Walk Test)",
+		walk_test_btn: "🚶 Prueba de Sensores",
+		walk_test_desc: "Camina y prueba cada sensor sin activar sirenas. Recibirás un aviso sonoro cuando responda cada detector.",
+		walk_test_active: "Prueba de sensores en curso",
+		walk_test_completed: "Prueba completada",
+		walk_test_stop: "Finalizar Prueba",
+		walk_test_close: "Cerrar",
+		walk_test_progress: "{tested} de {total} sensores verificados ({pct}%)",
+		walk_test_waiting: "Esperando activación de sensores...",
+		walk_test_time_left: "Tiempo restante",
+		sensor_delay_cfg_title: "Configurar retardo del sensor",
+		sensor_delay_instant: "⚡ Instantáneo (0s - Disparo inmediato)",
+		sensor_delay_custom: "⏱️ Retardo personalizado",
+		sensor_delay_default: "🌐 Heredar retardo global del modo",
+		sensor_delay_seconds: "Segundos de retardo"
 	},
 	en: {
 		accept: "Accept",
@@ -500,7 +511,6 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		armed_away: "Away",
 		armed_home: "Home",
 		armed_night: "Night",
-		armed_vacation: "Vacation",
 		arming: "Arming",
 		automations: "Automations",
 		available: "Available",
@@ -532,7 +542,6 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		btn_home: "🏠 Home",
 		btn_night: "🌙 Night",
 		btn_sos: "🚨 SOS / PANIC",
-		btn_vacation: "✈️ Vacation",
 		bypass_lbl: "🚫 Bypass",
 		cancel: "Cancel",
 		cancel_btn: "Cancel",
@@ -734,7 +743,6 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		mode_away: "Away",
 		mode_home: "Home",
 		mode_night: "Night",
-		mode_vacation: "Vacation",
 		modes: "Modes / SOS",
 		modes_sos: "Modes / SOS",
 		system_diagnostics: "System Diagnostics & Summary",
@@ -913,19 +921,33 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		user_role_label: "User Role",
 		username: "Username",
 		users_title: "👥 Users & Access Control",
-		vacation: "Vacation",
 		wait_if_open: "Wait for sensors to close",
 		waiting_sensors: "Waiting for sensors",
 		waiting_sensors_count: "Waiting for {count} sensor(s)",
 		welcome_greeting: "Welcome back!",
 		welcome_profile: "Welcome, {name}",
-		wrong_pin: "Wrong PIN"
+		wrong_pin: "Wrong PIN",
+		walk_test: "Walk Test (Sensor Verification)",
+		walk_test_btn: "🚶 Sensor Walk Test",
+		walk_test_desc: "Walk and test each sensor without sounding sirens. You will hear an audio chime each time a detector triggers.",
+		walk_test_active: "Walk test session in progress",
+		walk_test_completed: "Walk test completed",
+		walk_test_stop: "End Test",
+		walk_test_close: "Close",
+		walk_test_progress: "{tested} of {total} sensors verified ({pct}%)",
+		walk_test_waiting: "Waiting for sensor triggers...",
+		walk_test_time_left: "Time remaining",
+		sensor_delay_cfg_title: "Configure Sensor Delay",
+		sensor_delay_instant: "⚡ Instant (0s - Immediate trigger)",
+		sensor_delay_custom: "⏱️ Custom delay",
+		sensor_delay_default: "🌐 Inherit mode global delay",
+		sensor_delay_seconds: "Delay seconds"
 	}
 }, d = document.createElement("template");
-d.innerHTML = "\n<style>\n:host {\n  display: block;\n  background: #080d1a;\n  color: #fff;\n  min-height: 100vh;\n  font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif !important;\n}\n:host:not(:defined) {\n  display: none !important;\n}\n\n#widget-grid.hide-legacy > section.panel:not(#w-instances) { display: none !important; }\n\n@keyframes heroSpringSlideIn {\n  0% { transform: translateX(-50px); opacity: 0; }\n  100% { transform: translateX(0); opacity: 1; }\n}\n\n  /* Modern Premium Liquid Glass & iOS Wobble Styles */\n  :host {\n    font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif !important;\n    --glass-bg: var(--argus-glass-bg, rgba(255, 255, 255, 0.07));\n    --glass-border: var(--argus-glass-border, rgba(255, 255, 255, 0.09));\n    --glass-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.35),\n                    0 15px 30px -10px rgba(0, 122, 255, 0.12),\n                    inset 0 1px 0 rgba(255, 255, 255, 0.15);\n    --sos-red: linear-gradient(135deg, #ff3b30, #ff2d55);\n    --ios-track: rgba(0, 0, 0, 0.25);\n    --ios-thumb: linear-gradient(180deg, #ffffff, #f4f4f7);\n    --primary-color: #38bdf8;\n    --personalize-border: rgba(255, 255, 255, 0.06);\n    --personalize-divider: rgba(255, 255, 255, 0.08);\n    --bg-inputs-bg: rgba(0, 0, 0, 0.15);\n    --bg-inputs-border: rgba(255, 255, 255, 0.05);\n    --input-bg-darker: rgba(0, 0, 0, 0.25);\n    --input-border-darker: rgba(255, 255, 255, 0.12);\n    --hero-bg: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));\n    --log-item-bg: rgba(255, 255, 255, 0.02);\n    --log-item-border: rgba(255, 255, 255, 0.05);\n    --user-card-bg: rgba(255, 255, 255, 0.02);\n    --user-card-border: rgba(255, 255, 255, 0.06);\n    --primary-text-color: #fff !important;\n    --secondary-text-color: rgba(255, 255, 255, 0.7);\n    --input-bg: rgba(255, 255, 255, 0.04);\n    --input-border: rgba(255, 255, 255, 0.12);\n  }\n\n  /* High Contrast / OLED Dark Mode Accessibility */\n  :host([argus-contrast=\"high\"]),\n  :host(.argus-contrast-high) {\n    --glass-bg: rgba(11, 16, 26, 0.95);\n    --glass-border: rgba(255, 255, 255, 0.22);\n    --v2066-glass: rgba(11, 16, 26, 0.95);\n    --v2066-border: rgba(255, 255, 255, 0.22);\n    --v2066-text: #ffffff;\n    --v2066-muted: #cbd5e1;\n    --primary-text-color: #ffffff !important;\n    --secondary-text-color: #cbd5e1 !important;\n    --hud-bg: rgba(11, 16, 26, 0.98);\n    --hero-bg: linear-gradient(135deg, rgba(16, 24, 39, 0.96), rgba(8, 12, 20, 0.98));\n    --personalize-bg: rgba(11, 16, 26, 0.92);\n    --personalize-border: rgba(255, 255, 255, 0.2);\n    --user-card-bg: rgba(14, 20, 33, 0.95);\n    --user-card-border: rgba(255, 255, 255, 0.2);\n  }\n  :host([argus-contrast=\"high\"]) #profile-dropdown,\n  :host(.argus-contrast-high) #profile-dropdown {\n    background: rgba(10, 14, 23, 0.98) !important;\n    border: 1px solid rgba(255, 255, 255, 0.25) !important;\n    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7) !important;\n  }\n  :host([argus-contrast=\"high\"]) .liquid-glass,\n  :host(.argus-contrast-high) .liquid-glass {\n    background: rgba(11, 16, 26, 0.95) !important;\n    border-color: rgba(255, 255, 255, 0.22) !important;\n  }\n\n  :host {\n    --hud-text-color: #fff;\n    --hud-bg: rgba(255,255,255,0.06);\n  }\n\n  /* Garantiza legibilidad sobre cualquier fondo */\n  :host([data-bg-mode=\"default\"]) .hero-top-bar,\n  :host([data-bg-mode=\"default\"]) .entry-hud,\n  :host([data-bg-mode=\"default\"]) .mode-btn,\n  :host([data-bg-mode=\"default\"]) .sensor-pill {\n    text-shadow: 0 1px 4px rgba(0,0,0,0.7);\n  }\n\n  :host([data-bg-mode=\"default\"]) .mode-btn {\n    background: rgba(255,255,255,0.10) !important;\n    border: 1px solid rgba(255,255,255,0.18) !important;\n    color: rgba(255,255,255,0.95) !important;\n    backdrop-filter: blur(12px);\n  }\n\n  :host([data-bg-mode=\"default\"]) .subsection-title,\n  :host([data-bg-mode=\"default\"]) .user-role-label {\n    color: rgba(255,255,255,0.60) !important;\n  }\n\n  /* Fullscreen Active / Virtual Fullscreen CSS Overrides */\n  :host(.fullscreen-active) {\n    position: fixed !important;\n    inset: 0 !important;\n    top: 0 !important;\n    left: 0 !important;\n    right: 0 !important;\n    bottom: 0 !important;\n    width: 100vw !important;\n    width: 100dvw !important;\n    height: 100vh !important;\n    height: 100dvh !important;\n    z-index: 99999999 !important;\n    background: radial-gradient(ellipse at 50% 50%, #162438 0%, #08101a 60%, #010408 100%) !important;\n    overflow-y: auto !important;\n    overflow-x: hidden !important;\n    -webkit-overflow-scrolling: touch !important;\n    margin: 0 !important;\n    padding: 0 !important;\n  }\n  :host(.fullscreen-active) .hero,\n  :host(.fullscreen-active) #argus-react-dashboard-root,\n  :host(.fullscreen-active) .argus-dashboard,\n  :host(.fullscreen-active) .panel-head,\n  :host(.fullscreen-active) section:not(#w-instances),\n  :host(.fullscreen-active) .argus-widget:not(#w-instances),\n  :host(.fullscreen-active) .personalize-section {\n    display: none !important;\n  }\n  :host(.fullscreen-active) .wrap,\n  :host(.fullscreen-active) .grid,\n  :host(.fullscreen-active) #widget-grid,\n  :host(.fullscreen-active) #w-instances,\n  :host(.fullscreen-active) #entries,\n  :host(.fullscreen-active) #entries > div {\n    display: flex !important;\n    flex-direction: column !important;\n    position: static !important;\n    width: 100% !important;\n    width: 100vw !important;\n    width: 100dvw !important;\n    max-width: none !important;\n    min-height: 100% !important;\n    min-height: 100vh !important;\n    min-height: 100dvh !important;\n    height: 100% !important;\n    max-height: none !important;\n    padding: 0 !important;\n    margin: 0 !important;\n    border: none !important;\n    border-radius: 0 !important;\n    box-shadow: none !important;\n    background: transparent !important;\n    backdrop-filter: none !important;\n    -webkit-backdrop-filter: none !important;\n    transform: none !important;\n    filter: none !important;\n    overflow: visible !important;\n  }\n\n\n\n  .liquid-glass {\n    background: linear-gradient(135deg,color-mix(in srgb,rgba(255,255,255,0.18) 80%,transparent),rgba(255,255,255,0.04));\n    backdrop-filter: blur(28px) saturate(180%) brightness(1.08);\n    -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(1.08);\n    border: 1px solid rgba(255,255,255,0.22);\n    box-shadow: 0 8px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.25);\n    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;\n  }\n  .wrap {\n    display: none !important;\n    position: relative;\n    z-index: 1;\n    opacity: 0;\n    visibility: hidden;\n    pointer-events: none;\n    max-width: 1400px;\n    margin: 0 auto;\n    padding: 24px;\n    gap: 24px;\n    transition: opacity 0.35s ease, filter 0.35s ease;\n  }\n  .wrap.wrap-ready {\n    display: grid !important;\n    opacity: 1 !important;\n    visibility: visible !important;\n    pointer-events: auto !important;\n  }\n  .wrap.wrap-blurred { filter: blur(15px); opacity: 0.45; visibility: visible; pointer-events: none; }\n  @keyframes dialElasticIn {\n    0% { transform: scale(0.8) translateY(20px); opacity: 0; }\n    60% { transform: scale(1.04) translateY(-4px); opacity: 0.9; }\n    85% { transform: scale(0.98) translateY(1px); opacity: 0.98; }\n    100% { transform: scale(1) translateY(0); opacity: 1; }\n  }\n  .dial-elastic { animation: dialElasticIn 0.5s cubic-bezier(0.25, 1.25, 0.5, 1) forwards; }\n\n  .collapsible {\n    transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease, margin 0.4s ease, padding 0.4s ease;\n    overflow: hidden;\n    max-height: 600px;\n    opacity: 1;\n  }\n  .collapsible.collapsed {\n    max-height: 0 !important;\n    opacity: 0 !important;\n    margin-top: 0 !important;\n    margin-bottom: 0 !important;\n    padding-top: 0 !important;\n    padding-bottom: 0 !important;\n    border: none !important;\n    pointer-events: none;\n  }\n\n  /* Scrollbar aesthetics */\n  ::-webkit-scrollbar {\n    width: 6px;\n    height: 6px;\n  }\n  ::-webkit-scrollbar-track {\n    background: transparent;\n  }\n  ::-webkit-scrollbar-thumb {\n    background: rgba(255, 255, 255, 0.12);\n    border-radius: 999px;\n  }\n  ::-webkit-scrollbar-thumb:hover {\n    background: rgba(255, 255, 255, 0.25);\n  }\n  .x-never-match ::-webkit-scrollbar-thumb {\n    background: rgba(0, 0, 0, 0.08);\n  }\n  .x-never-match ::-webkit-scrollbar-thumb:hover {\n    background: rgba(0, 0, 0, 0.18);\n  }\n\n  .battery-alert { margin: 0 0 16px 0; padding: 14px 18px; border-radius: 20px; background: rgba(255, 149, 0, 0.12); border: 1px solid rgba(255, 149, 0, 0.22); color: #ffe3b3; font-weight: 700; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); text-align: left; box-shadow: 0 4px 15px rgba(255,149,0,0.1); }\n\n  /* SOS Slider redesign */\n  .btn-sos { width: 100%; min-height: 56px; border: 0; border-radius: 20px; background: var(--sos-red); color: white; font-size: 1.05rem; font-weight: 800; letter-spacing: 0.02em; cursor: pointer; box-shadow: 0 10px 25px rgba(255, 59, 48, 0.35); transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, opacity 0.2s; margin-top: 8px; display:flex;align-items:center;justify-content:center;gap:10px; }\n  .btn-sos:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(255, 59, 48, 0.45); }\n  .btn-sos:active { transform: scale(0.95); opacity: 0.92; }\n  .ios-confirm-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 999999; backdrop-filter: blur(12px); }\n  .ios-confirm-backdrop.open { display: flex; pointer-events: auto !important; }\n  .ios-confirm-backdrop.open * { pointer-events: auto; }\n  .ios-confirm-backdrop.open .ios-slider-label { pointer-events: none !important; }\n  .ios-confirm-card { width: min(100%, 420px); border-radius: 32px; padding: 24px; color: white; background: rgba(20,22,35,0.85); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 32px 80px rgba(0,0,0,0.6); }\n  .ios-confirm-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 8px; text-align: center; }\n  .ios-confirm-text { font-size: 0.98rem; opacity: 0.85; line-height: 1.45; text-align: center; margin-bottom: 20px; }\n  .ios-slider-shell { padding: 4px 0 16px; }\n  .ios-slider-track { position: relative; height: 66px; border-radius: 999px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); overflow: hidden; }\n  .ios-slider-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 82px; font-size: 0.95rem; font-weight: 700; color: rgba(255, 255, 255, 0.85); pointer-events: none; text-align: center; }\n  .ios-slider-thumb { position: absolute; top: 6px; left: 6px; width: 52px; height: 52px; border-radius: 50%; background: var(--ios-thumb); color: #ff3b30; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 900; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25); touch-action: none; user-select: none; cursor: grab; transition: transform 0.1s ease-out; }\n  .ios-confirm-cancel { width: 100%; min-height: 50px; border: 0; border-radius: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.05); color: white; font-weight: 700; cursor: pointer; transition: background 0.2s, transform 0.15s; }\n  .ios-confirm-cancel:hover { background: rgba(255,255,255,0.14); }\n  .ios-confirm-cancel:active { transform: scale(0.96); }\n\n  :host{display:block;min-height:100vh;box-sizing:border-box;--primary-text-color:#ffffff!important;--secondary-text-color:rgba(255,255,255,0.7)!important;color:#ffffff!important;background:var(--lovelace-background,var(--primary-background-color));font-family:'Outfit',Inter,system-ui,sans-serif}\n  :host([compact]), :host(.argus-compact) {\n    min-height: auto !important;\n    height: auto !important;\n    max-height: none !important;\n    background: transparent !important;\n  }\n  :host([compact]) .wrap, :host(.argus-compact) .wrap {\n    padding: 0 !important;\n    margin: 0 !important;\n    max-width: 100% !important;\n    width: 100% !important;\n    height: auto !important;\n    min-height: fit-content !important;\n    gap: 0 !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 0 0 auto !important;\n    overflow: visible !important;\n    container-type: inline-size;\n    container-name: argus-compact-wrap;\n  }\n  :host([compact]) .hero, :host(.argus-compact) .hero {\n    display: none !important;\n  }\n  :host([compact]) #argus-canvas-bg, :host(.argus-compact) #argus-canvas-bg {\n    display: none !important;\n  }\n  /* The compact card renders the live security console directly. The React\n     dashboard grid is a secondary editor surface and can retain persisted\n     widget coordinates (thousands of pixels tall) even while hidden. */\n  :host([compact]) #argus-react-dashboard-root,\n  :host(.argus-compact) #argus-react-dashboard-root {\n    display: none !important;\n    height: 0 !important;\n    min-height: 0 !important;\n    max-height: 0 !important;\n    overflow: hidden !important;\n  }\n  :host([compact]) .tabs, :host(.argus-compact) .tabs {\n    display: none !important;\n  }\n  :host([compact]) .dashboard-instances .panel-head, :host(.argus-compact) .dashboard-instances .panel-head {\n    display: none !important;\n  }\n  :host([compact]) .personalize-section, :host(.argus-compact) .personalize-section {\n    display: none !important;\n  }\n  :host([compact]) .glass.panel:not(#w-instances), :host(.argus-compact) .glass.panel:not(#w-instances) {\n    display: none !important;\n  }\n  :host([compact]) .argus-widget:not(:has(#w-instances)), :host(.argus-compact) .argus-widget:not(:has(#w-instances)) {\n    display: none !important;\n  }\n  :host([compact]) .argus-dashboard__toolbar, :host(.argus-compact) .argus-dashboard__toolbar {\n    display: none !important;\n  }\n  :host([compact]) #widget-grid, :host(.argus-compact) #widget-grid {\n    padding: 0 !important;\n    margin: 0 !important;\n    display: block !important;\n    height: auto !important;\n  }\n  :host([compact]) #w-instances, :host(.argus-compact) #w-instances {\n    background: transparent !important;\n    border: none !important;\n    box-shadow: none !important;\n    padding: 0 !important;\n    margin: 0 !important;\n    height: auto !important;\n    width: 100% !important;\n    min-height: 0 !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 0 0 auto !important;\n    overflow: visible !important;\n    background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;\n    backdrop-filter: blur(28px) saturate(150%) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(150%) !important;\n  }\n  :host([compact]) .entry, :host(.argus-compact) .entry {\n    margin-bottom: 0 !important;\n    border-radius: 24px !important;\n    height: auto !important;\n    width: 100% !important;\n    min-height: 0 !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 0 0 auto !important;\n    overflow: visible !important;\n    background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;\n    backdrop-filter: blur(28px) saturate(150%) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(150%) !important;\n  }\n  :host([compact]) #bootstrap-overlay, :host(.argus-compact) #bootstrap-overlay,\n  :host([compact]) .argus-profile-overlay, :host(.argus-compact) .argus-profile-overlay,\n  :host([compact]) .argus-welcome-screen, :host(.argus-compact) .argus-welcome-screen {\n    display: none !important;\n  }\n  :host([compact]) .argus-widget__content, :host(.argus-compact) .argus-widget__content {\n    height: auto !important;\n    width: 100% !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 0 0 auto !important;\n    overflow: visible !important;\n  }\n  :host([compact]) #entries, :host(.argus-compact) #entries {\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 1 1 auto !important;\n    height: auto !important;\n    width: 100% !important;\n    margin: 0 !important;\n    overflow: visible !important;\n  }\n  /* Embedded Lovelace cards must size to their content, never to the viewport. */\n  :host([compact]) .argus-widget__content,\n  :host(.argus-compact) .argus-widget__content,\n  :host([compact]) #entries,\n  :host(.argus-compact) #entries,\n  :host([compact]) #w-instances,\n  :host(.argus-compact) #w-instances,\n  :host([compact]) .entry,\n  :host(.argus-compact) .entry {\n    height: auto !important;\n    min-height: 0 !important;\n    max-height: none !important;\n    flex: 0 0 auto !important;\n  }\n  *{box-sizing:border-box}\n  @container argus-compact-wrap (max-width: 800px) {\n    .security-console { flex-direction: column !important; padding: 20px 18px 24px !important; gap: 20px !important; align-items: center !important; justify-content: center !important; }\n    .security-console .entry-icon { order: 2 !important; flex: 0 0 auto !important; min-height: 130px !important; margin: 0 auto !important; }\n    .security-console .liquid-stack { order: 3 !important; width: 100% !important; max-width: 360px !important; }\n    .security-console .console-sensors { order: 4 !important; width: 100% !important; max-width: 360px !important; display: flex !important; flex-direction: column !important; }\n    .sensor-column { position: static !important; max-width: 100% !important; width: 100% !important; align-items: stretch !important; padding: 0 !important; gap: 10px !important; }\n    .sensor-chip { max-width: none !important; }\n    .entry-content { padding: 20px !important; display: flex !important; flex-direction: column !important; align-items: center !important;  }\n    .liquid-stack { display: flex !important; flex-direction: column !important; align-items: stretch !important; gap: 8px !important; }\n  }\n  @keyframes iosGlassIn{0%{opacity:0;transform:translateY(14px) scale(.965)}65%{opacity:1;transform:translateY(-2px) scale(1.008)}100%{transform:translateY(0) scale(1)}}\n  @keyframes iosSelectPop{0%{transform:scale(.92);opacity:.45}60%{transform:scale(1.045);opacity:1}100%{transform:scale(1)}}\n  .glass,.entry,.mode-section-card,.user-card,.file-card,.log-item{animation:iosGlassIn .5s cubic-bezier(.22,1.18,.36,1) both}\n  .pick-row:has(input:checked),.tab.active,.liquid-btn.active{animation:iosSelectPop .34s cubic-bezier(.2,1.45,.35,1);box-shadow:0 0 0 1px color-mix(in srgb,var(--primary-color,#007aff) 45%,transparent),0 12px 30px color-mix(in srgb,var(--primary-color,#007aff) 18%,transparent)}\n  .glass.liquid-glass{background:var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)))!important;backdrop-filter:blur(28px) saturate(150%)!important;-webkit-backdrop-filter:blur(28px) saturate(150%)!important;border-color:rgba(255,255,255,0.15)!important;box-shadow:0 8px 32px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.1)!important}\n  button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 70%,#fff);outline-offset:3px}\n  .wrap{max-width:1400px;margin:0 auto;padding:24px;gap:24px}\n  .glass{background:var(--glass-bg, rgba(255, 255, 255, 0.06));border:1px solid var(--glass-border, rgba(255, 255, 255, 0.09));border-radius:28px;box-shadow:var(--glass-shadow);backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2)}\n  .hero{position:relative!important;z-index:9999!important;overflow:visible!important;padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:var(--hero-bg, linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)));margin-bottom:12px;will-change:transform,opacity;animation:heroSpringSlideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both}\n  .hero-left{display:flex;align-items:center;gap:22px}\n  .hero-context{position:relative!important;z-index:10000!important;overflow:visible!important;margin-left:auto;display:flex;align-items:center;gap:8px;min-width:0}\n  #hero-profile-container{position:relative!important;z-index:10001!important;overflow:visible!important}\n  .hero-profile-dropdown{position:absolute!important;top:calc(100% + 12px)!important;right:0!important;z-index:999999!important;width:min(420px, calc(100vw - 24px))!important;min-width:320px!important;max-height:calc(100vh - 100px)!important;overflow-y:auto!important;background:#0f172a!important;background-color:#0f172a!important;border:1.5px solid rgba(255,255,255,0.2)!important;box-shadow:0 24px 60px rgba(0,0,0,0.85),inset 0 1px 0 rgba(255,255,255,0.15)!important;backdrop-filter:blur(48px) saturate(200%)!important;-webkit-backdrop-filter:blur(48px) saturate(200%)!important;opacity:1!important}.hero-clock{display:flex;flex-direction:column;align-items:flex-end;padding-right:14px;border-right:1px solid rgba(255,255,255,.14);line-height:1}.hero-clock strong{font-size:1.45rem;letter-spacing:-.05em;color:#ffffff!important}.hero-clock span{font-size:11px;color:#e2e8f0!important;opacity:1!important;margin-top:5px;letter-spacing:.03em;font-weight:700}.hero-pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.hero-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 10px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(7,16,29,.27);box-shadow:inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(14px);font-size:10px;font-weight:800;white-space:nowrap}.hero-pill .hero-live{width:7px;height:7px;border-radius:50%;background:#55df91;box-shadow:0 0 9px #55df91}\n  .hero-icon{font-size:54px;line-height:1;filter:drop-shadow(0 0 20px rgba(255,255,255,0.15))}\n  .hero h1{margin:0 0 4px;font-size:34px;font-weight:900;letter-spacing:-0.03em;background:var(--hero-gradient, linear-gradient(to right, #ffffff, #82b1ff));-webkit-background-clip:text;-webkit-text-fill-color:transparent}\n  .hero p{margin:0;font-size:16px;color:#f1f5f9!important;opacity:1!important;font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,0.85)}\n  @media(max-width:700px){.wrap{padding:14px;gap:14px}.glass{border-radius:22px}.hero{padding:22px;align-items:flex-start}.hero-icon{font-size:40px}.hero h1{font-size:27px}.hero p{font-size:14px}.entry-content{grid-template-columns:96px 1fr;padding:16px 105px 16px 14px;gap:10px}.sensor-column{width:98px}.sensor-chip{max-width:94px}.entry-icon{min-height:110px}.entry-icon svg{max-width:150px}.hud{top:12px;right:12px}.hud-data{font-size:15px;padding:5px 9px}.hud-loc{font-size:10px;padding:3px 8px}}\n\n  /* Modern Mode Navigation & iOS/macOS Liquid Bubble Transition */\n  .tabs { position: relative; isolation:isolate; display: flex; min-height:72px; background: rgba(255, 255, 255, 0.03); padding: 6px; border-radius: 20px; gap: 6px; overflow: visible; scrollbar-width: none; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.08); z-index: 1; box-shadow: inset 0 1px 2px rgba(255,255,255,0.05), 0 8px 32px rgba(0,0,0,0.25); }\n  .tabs::-webkit-scrollbar { display: none; }\n  .tab { position: relative; flex: 1 1 0px; min-width: 0; min-height:60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 14px; padding: 10px 4px; font-size: 11px; font-weight: 800; color: rgba(255, 255, 255, 0.6); transition: color 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s ease; cursor: pointer; border: none !important; outline: none; background: transparent !important; box-shadow: none !important; z-index: 2; user-select: none; -webkit-tap-highlight-color: transparent; }\n  .tab-label { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; }\n  .tab:hover { color: #fff; }\n  .tab:active:not(:disabled) { transform: scale(0.92); }\n  .tab.active { color: #fff !important; background: transparent !important; box-shadow: none !important; transform: none !important; }\n\n  .tab-bubble {\n    position: absolute;\n    top: 6px;\n    bottom: 6px;\n    left: 0;\n    height: calc(100% - 12px);\n    border-radius: 14px;\n    z-index: 1;\n    pointer-events: none;\n    will-change: transform, width, background, box-shadow;\n    backdrop-filter: blur(20px) saturate(180%);\n    -webkit-backdrop-filter: blur(20px) saturate(180%);\n    border: 1px solid rgba(255, 255, 255, 0.32);\n    transition:\n      transform 0.48s cubic-bezier(0.34, 1.56, 0.64, 1),\n      width 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),\n      background 0.45s cubic-bezier(0.4, 0, 0.2, 1),\n      box-shadow 0.45s cubic-bezier(0.4, 0, 0.2, 1);\n  }\n  .tab-bubble.bubble-disarmed {\n    background: linear-gradient(135deg, rgba(34, 197, 94, 0.95), rgba(21, 128, 61, 0.92));\n    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(34, 197, 94, 0.42), 0 2px 8px rgba(0, 0, 0, 0.25);\n  }\n  .tab-bubble.bubble-home {\n    background: linear-gradient(135deg, rgba(245, 158, 11, 0.95), rgba(217, 119, 6, 0.92));\n    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(245, 158, 11, 0.42), 0 2px 8px rgba(0, 0, 0, 0.25);\n  }\n  .tab-bubble.bubble-away {\n    background: linear-gradient(135deg, rgba(239, 68, 68, 0.95), rgba(185, 28, 28, 0.92));\n    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(239, 68, 68, 0.45), 0 2px 8px rgba(0, 0, 0, 0.25);\n  }\n  .tab-bubble.bubble-night {\n    background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(29, 78, 216, 0.92));\n    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(59, 130, 246, 0.42), 0 2px 8px rgba(0, 0, 0, 0.25);\n  }\n  .tab-bubble.bubble-vacation {\n    background: linear-gradient(135deg, rgba(168, 85, 247, 0.95), rgba(126, 34, 206, 0.92));\n    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(168, 85, 247, 0.42), 0 2px 8px rgba(0, 0, 0, 0.25);\n  }\n  .tab-bubble.bubble-sos {\n    background: linear-gradient(135deg, rgba(220, 38, 38, 0.98), rgba(153, 27, 27, 0.95));\n    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 26px rgba(220, 38, 38, 0.55), 0 2px 8px rgba(0, 0, 0, 0.25);\n  }\n\n\n  @keyframes bounceIn {\n    0% { transform: scale(0.96); opacity: 0; }\n    50% { transform: scale(1.01); opacity: 1; }\n    100% { transform: scale(1); opacity: 1; }\n  }\n  .bounce-in { animation: bounceIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }\n\n  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;align-items:start;position:relative}\n  .panel{transition:transform .3s ease,box-shadow .3s ease,grid-column .3s ease,grid-row .3s ease;position:relative}\n  .panel[data-size=\"S\"]{grid-column:span 1;grid-row:span 1}\n  .panel[data-size=\"M\"]{grid-column:span 2;grid-row:span 1}\n  .panel[data-size=\"L\"]{grid-column:span 2;grid-row:span 2}\n  .panel[data-size=\"XL\"]{grid-column:span 4;grid-row:span 2}\n  .dashboard-instances{grid-column:1 / -1}\n  \n  /* Edit Mode Styles */\n  .grid.editing .panel{animation:jiggle .3s infinite ease-in-out;cursor:grab}\n  .grid.editing .panel:nth-child(even){animation-duration:.27s;animation-direction:reverse}\n  .grid.editing .panel:nth-child(3n){animation-duration:.32s;animation-delay:.05s}\n  .grid.editing .panel.dragging{opacity:.5;animation:none;cursor:grabbing}\n  \n  .panel-edit-overlay{position:absolute;inset:0;background:rgba(5,15,30,.82);backdrop-filter:blur(10px);border-radius:inherit;z-index:90;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;opacity:0;pointer-events:none;transition:opacity .25s ease}\n  .grid.editing .panel:not(.dashboard-instances) .panel-edit-overlay{opacity:1;pointer-events:auto}\n  \n  .widget-controls{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:18px;backdrop-filter:blur(8px)}\n  .widget-controls-title{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;opacity:.7}\n  .widget-sizes{display:flex;gap:6px}\n  .widget-size-btn{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#fff;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:800;cursor:pointer;transition:all .2s}\n  .widget-size-btn:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3)}\n  .widget-size-btn.active{background:#007aff;border-color:#007aff;box-shadow:0 0 10px rgba(0,122,255,.4)}\n  .widget-drag-handle{font-size:22px;color:rgba(255,255,255,.6);cursor:grab;padding:4px}\n  .widget-toggle-btn{background:rgba(220,38,38,.85);color:white;border:none;border-radius:8px;padding:6px 12px;font-size:10px;font-weight:800;cursor:pointer}\n  \n  @keyframes jiggle{\n    0%{transform:rotate(-0.5deg)}\n    50%{transform:rotate(0.5deg)}\n    100%{transform:rotate(-0.5deg)}\n  }\n  @media(max-width:900px){\n    .grid{grid-template-columns:minmax(0,1fr)}\n    .panel[data-size=\"S\"],.panel[data-size=\"M\"],.panel[data-size=\"L\"],.panel[data-size=\"XL\"]{grid-column:1 / -1;grid-row:auto}\n    .grid.editing .panel{animation:none !important}\n  }\n  \n  /* Adaptivity styles for size S widgets */\n  .panel[data-size=\"S\"] .tab-label{display:none}\n  .panel[data-size=\"S\"] .tab-icon{font-size:24px !important}\n  .panel[data-size=\"S\"] #p-backup-desc{display:none}\n  .panel[data-size=\"S\"] #github-desc{display:none}\n\n  /* Collapsible Personalization with Bounce expansion */\n  .personalize-workspace{display:grid;grid-template-rows:0fr;opacity:0;pointer-events:none;transition:grid-template-rows 0.6s cubic-bezier(0.175,0.885,0.32,1.275),opacity 0.4s ease,margin-top 0.4s ease}\n  .personalize-workspace > div { overflow:hidden; min-height:0; }\n  .personalize-workspace:not(.collapsed){grid-template-rows:1fr;opacity:1;pointer-events:auto;margin-top:16px;animation:bounceExpand 0.55s cubic-bezier(0.175,0.885,0.32,1.275) forwards}\n  @keyframes bounceExpand{\n    0%{transform:scale(0.96) translateY(-8px);opacity:0}\n    70%{transform:scale(1.01) translateY(2px);opacity:0.9}\n    100%{transform:scale(1) translateY(0);opacity:1}\n  }\n  @media(max-width:750px){.hero{flex-direction:column;text-align:center}.hero-left{flex-direction:column}}\n  @media(max-width:750px){.hero .lang-pill{align-self:center;margin-inline:auto}.hero-left{width:100%;align-items:center}}\n\n  .stack{display:grid;gap:24px}\n  .panel{padding:28px;position:relative;overflow:hidden}\n  .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}\n  .panel h2{margin:0;font-size:14px;font-weight:900;letter-spacing:.04em;color:var(--primary-color,#38bdf8);opacity:1}\n\n  /* Access settings stay quiet until the user needs to manage them. */\n  .access-panel { padding: 22px 24px; overflow-y:auto; max-height:60vh; -webkit-overflow-scrolling:touch; }\n  .access-panel .panel-head { margin-bottom: 12px; }\n  .access-summary { font-size: 12px; opacity: .88; color: #cbd5e1; }\n  .access-actions { display:flex; gap:10px; flex-wrap:wrap; }\n  .access-actions button { flex:0 1 auto; padding:8px 12px; font-size:12px; font-weight:700; }\n  .access-actions button.active { background:var(--primary-color,#38bdf8); color:#0f172a; font-weight:800; border-color:transparent; }\n  .access-section { display:block; min-width:0; margin-bottom:24px; }\n  .access-section h3 { font-size:13px; font-weight:800; color: #f1f5f9; margin:0 0 10px; }\n  .access-panel .user-card { padding:10px 12px; border-radius:12px; }\n  .github-star-action {\n    display:inline-flex;align-items:center;justify-content:center;gap:7px;\n    min-height:42px;padding:9px 16px;border-radius:14px;text-decoration:none;\n    color:var(--primary-text-color,#fff);font-size:12px;font-weight:850;\n    background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.055));\n    border:1px solid rgba(255,255,255,.16);\n    box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 9px 24px rgba(0,0,0,.16);\n    backdrop-filter:blur(18px) saturate(150%);\n    -webkit-backdrop-filter:blur(18px) saturate(150%);\n    transition:transform .2s ease,background .2s ease,box-shadow .2s ease;\n  }\n  .github-star-action:hover { transform:translateY(-1px);background:rgba(255,255,255,.18);box-shadow:0 12px 28px rgba(0,0,0,.20); }\n\n  /* Profile Dropdown Buttons & Setting Tiles */\n  .profile-btn {\n    display: inline-flex !important;\n    align-items: center !important;\n    justify-content: center !important;\n    gap: 6px !important;\n    width: auto !important;\n    min-height: 34px !important;\n    padding: 6px 14px !important;\n    border-radius: 10px !important;\n    font-size: 12px !important;\n    font-weight: 750 !important;\n    cursor: pointer !important;\n    box-sizing: border-box !important;\n    white-space: nowrap !important;\n    flex-shrink: 0 !important;\n    background: rgba(255, 255, 255, 0.08) !important;\n    border: 1px solid rgba(255, 255, 255, 0.16) !important;\n    color: #ffffff !important;\n    transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease !important;\n  }\n  .profile-btn:hover {\n    background: rgba(255, 255, 255, 0.15) !important;\n    border-color: rgba(255, 255, 255, 0.28) !important;\n    transform: translateY(-1px) !important;\n  }\n  .profile-btn.primary {\n    background: rgba(52, 211, 153, 0.14) !important;\n    border-color: rgba(52, 211, 153, 0.35) !important;\n    color: #34d399 !important;\n  }\n  .profile-btn.primary:hover {\n    background: rgba(52, 211, 153, 0.24) !important;\n  }\n  .profile-btn.danger {\n    background: rgba(239, 68, 68, 0.14) !important;\n    border-color: rgba(239, 68, 68, 0.35) !important;\n    color: #f87171 !important;\n  }\n  .profile-btn.danger:hover {\n    background: rgba(239, 68, 68, 0.24) !important;\n  }\n  .profile-card-tile {\n    display: flex !important;\n    align-items: center !important;\n    justify-content: space-between !important;\n    gap: 12px !important;\n    padding: 10px 14px !important;\n    background: rgba(255, 255, 255, 0.035) !important;\n    border: 1px solid rgba(255, 255, 255, 0.08) !important;\n    border-radius: 14px !important;\n    box-sizing: border-box !important;\n    width: 100% !important;\n  }\n\n  /* Activity log responsive header */\n  .activity-panel .panel-head {\n    display: flex !important;\n    flex-wrap: wrap !important;\n    align-items: center !important;\n    justify-content: space-between !important;\n    gap: 8px 12px !important;\n    margin-bottom: 12px !important;\n    width: 100% !important;\n    box-sizing: border-box !important;\n  }\n  .activity-panel .panel-head h2 {\n    white-space: nowrap !important;\n    font-size: 15px !important;\n    font-weight: 850 !important;\n    margin: 0 !important;\n    flex: 0 1 auto !important;\n  }\n  .activity-panel .panel-actions {\n    display: inline-flex !important;\n    align-items: center !important;\n    gap: 6px !important;\n    flex-wrap: wrap !important;\n  }\n  .activity-panel .panel-actions button {\n    min-height: 32px !important;\n    padding: 5px 11px !important;\n    font-size: 11.5px !important;\n    font-weight: 750 !important;\n    border-radius: 9px !important;\n    white-space: nowrap !important;\n    display: inline-flex !important;\n    align-items: center !important;\n    gap: 4px !important;\n  }\n\n  /* Support / Community panel & buttons */\n  .github-panel {\n    display: flex !important;\n    flex-direction: column !important;\n    justify-content: center !important;\n    gap: 14px !important;\n    padding: 18px 20px !important;\n    box-sizing: border-box !important;\n  }\n  @media (min-width: 900px) {\n    .github-panel {\n      flex-direction: row !important;\n      align-items: center !important;\n      justify-content: space-between !important;\n    }\n  }\n  .support-actions-grid {\n    display: grid !important;\n    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;\n    gap: 8px !important;\n    width: 100% !important;\n    max-width: 440px !important;\n    box-sizing: border-box !important;\n  }\n  @media (max-width: 420px) {\n    .support-actions-grid {\n      grid-template-columns: 1fr !important;\n      gap: 6px !important;\n    }\n  }\n  .support-link-btn {\n    display: inline-flex !important;\n    align-items: center !important;\n    justify-content: center !important;\n    gap: 6px !important;\n    height: 38px !important;\n    min-height: 38px !important;\n    padding: 0 12px !important;\n    border-radius: 12px !important;\n    font-size: 12px !important;\n    font-weight: 800 !important;\n    text-decoration: none !important;\n    white-space: nowrap !important;\n    box-sizing: border-box !important;\n    backdrop-filter: blur(16px) !important;\n    -webkit-backdrop-filter: blur(16px) !important;\n    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease !important;\n  }\n  .support-link-btn:hover {\n    transform: translateY(-1.5px) !important;\n    box-shadow: 0 8px 22px rgba(0,0,0,0.25) !important;\n  }\n  .support-link-btn.star {\n    background: linear-gradient(135deg, rgba(234, 179, 8, 0.18), rgba(234, 179, 8, 0.06)) !important;\n    border: 1px solid rgba(234, 179, 8, 0.35) !important;\n    color: #facc15 !important;\n  }\n  .support-link-btn.star:hover {\n    background: rgba(234, 179, 8, 0.28) !important;\n    border-color: rgba(234, 179, 8, 0.55) !important;\n  }\n  .support-link-btn.paypal {\n    background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(56, 189, 248, 0.06)) !important;\n    border: 1px solid rgba(56, 189, 248, 0.35) !important;\n    color: #38bdf8 !important;\n  }\n  .support-link-btn.paypal:hover {\n    background: rgba(56, 189, 248, 0.28) !important;\n    border-color: rgba(56, 189, 248, 0.55) !important;\n  }\n  .support-link-btn.email {\n    background: linear-gradient(135deg, rgba(167, 139, 250, 0.18), rgba(167, 139, 250, 0.06)) !important;\n    border: 1px solid rgba(167, 139, 250, 0.35) !important;\n    color: #c084fc !important;\n  }\n  .support-link-btn.email:hover {\n    background: rgba(167, 139, 250, 0.28) !important;\n    border-color: rgba(167, 139, 250, 0.55) !important;\n  }\n  @media(max-width:600px){ .access-panel{padding:20px}.access-actions{width:100%}.access-actions button{flex:1} }\n\n  /* Personalization inside instances */\n  .personalize-row { display: flex; gap: 14px; align-items: center; margin-top: 18px; padding: 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 18px; flex-wrap: wrap; }\n  .personalize-row .setting-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-bottom: 4px; }\n\n  /* Mode Reorganization Styles — HORIZONTAL */\n  .mode-grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }\n  @media(max-width:900px){ .mode-grid-layout { grid-template-columns: 1fr; } }\n  .mode-section-card {\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.025) 100%) !important;\n    border: 1px solid rgba(255, 255, 255, 0.16) !important;\n    border-radius: 20px !important;\n    padding: 18px !important;\n    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;\n    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;\n  }\n  .mode-section-card:hover {\n    border-color: rgba(255, 255, 255, 0.26) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.04) 100%) !important;\n    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;\n    transform: translateY(-2px) !important;\n  }\n  .mode-section-card:hover { border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); }\n  .mode-section-title { font-size: 13px; font-weight: 800; color: var(--primary-color, #007aff); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }\n  .mode-sensor-grid { color: var(--primary-text-color, #fff); }\n  .mode-sensor-none { color: var(--primary-text-color, rgba(255,255,255,0.5)); opacity: 0.6; font-size: 13px; }\n  .mode-section-card span, .mode-section-card label, .mode-section-card .input-label { color: var(--primary-text-color, #fff); }\n\n  .sensor-pill { background: var(--pill-bg, rgba(255,255,255,0.06)); color: var(--pill-text, #fff); border: 1px solid var(--pill-border, rgba(255,255,255,0.1)); padding: 8px 14px; border-radius: 14px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; transition: all 0.2s; max-width: 100%; box-sizing: border-box; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }\n  @keyframes argus-blink-red { 0%,100%{box-shadow:0 0 0 0 rgba(255,50,50,0);background:var(--pill-bg,rgba(255,255,255,0.06))} 50%{box-shadow:0 0 0 6px rgba(255,50,50,0.25);background:rgba(255,50,50,0.15)} }\n  .sensor-pill.siren-active   { animation: argus-blink-red 1.2s ease-in-out infinite; border-color: rgba(255,82,82,0.5) !important; }\n  .sensor-pill.triggered-sensor { animation: argus-blink-red 0.9s ease-in-out infinite; border-color: rgba(255,82,82,0.6) !important; }\n  .icon-btn { background: none; border: none; padding: 4px; color: inherit; opacity: 0.6; cursor: pointer; transition: opacity 0.2s, transform 0.15s; display: flex; align-items: center; justify-content: center; border-radius: 8px; }\n  .icon-btn:active { transform: scale(0.9); }\n\n  #mode-status { opacity: 0; transition: opacity .35s; }\n  #mode-status.show { opacity: 1; }\n  #mode-status.ok  { color: #4caf50; }\n  #mode-status.err { color: #f44336; }\n\n  .icon-btn:hover { opacity: 1; background: rgba(255,255,255,0.08); }\n  .icon-btn.active { color: #fb8c00; opacity: 1; }\n\n  .input-group { display: flex; flex-direction: column; gap: 6px; }\n  .times-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:end}\n  .time-field{min-width:0;display:flex;flex-direction:column;justify-content:flex-end;height:100%}\n  .time-field .input-label{min-height:34px;display:flex;align-items:flex-end;line-height:1.2;margin-bottom:6px;padding-bottom:2px}\n  .time-field input{width:100%;height:44px!important;padding:8px 12px!important;border-radius:12px!important;box-sizing:border-box!important;margin:0!important;font-size:14px!important}\n  .entry-sensor-list{min-height:44px;margin-top:12px!important;display:flex;flex-wrap:wrap;align-items:center;border:1px solid rgba(255,255,255,.10)!important;background:rgba(255,255,255,.03)!important;border-radius:12px!important;padding:10px;gap:8px}\n  .instance-activity-strip{display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr));gap:8px;align-items:center;margin:4px 0 16px;padding:10px 12px;border:1px solid rgba(255,255,255,.1);border-radius:18px;background:rgba(5,13,25,.25);backdrop-filter:blur(18px) saturate(135%);-webkit-backdrop-filter:blur(18px) saturate(135%)}.instance-activity-title{font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;opacity:.62;padding-right:6px}.instance-activity-item{min-width:0;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.86}.instance-activity-item time{opacity:.55;margin-right:4px;font-variant-numeric:tabular-nums}\n  .mode-mqtt-row{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 14px!important;min-height:44px;border-radius:12px!important;background:rgba(255,255,255,.03)!important;border:1px solid rgba(255,255,255,.10)!important}\n  .mode-mqtt-row input{margin:0;accent-color:var(--primary-color,#007aff)}\n  .input-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-left: 4px; }\n\n  /* Intelligent Entry Card */\n  .entry {\n    position: relative;\n    overflow: hidden;\n    border-radius: 28px !important;\n    border: 1px solid rgba(255, 255, 255, 0.18) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%) !important;\n    backdrop-filter: blur(32px) saturate(170%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(32px) saturate(170%) brightness(1.08) !important;\n    margin-bottom: 16px;\n    min-height: 220px;\n    display: flex;\n    flex-direction: column;\n    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);\n  }\n  .entry:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 20px 48px rgba(0,0,0,.3)}\n  .entry::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:inherit;background:linear-gradient(120deg,rgba(255,255,255,.14),transparent 22%,transparent 74%,rgba(255,255,255,.05));mix-blend-mode:soft-light}\n  .entry-status-ribbon{position:absolute;top:20px;left:20px;z-index:5;display:flex;align-items:center;gap:9px;max-width:calc(100% - 260px);padding:8px 12px;border:1px solid color-mix(in srgb,var(--entry-accent) 55%,rgba(255,255,255,.2));border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--entry-accent) 28%,rgba(8,15,28,.76)),rgba(7,14,25,.56));box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 8px 24px color-mix(in srgb,var(--entry-accent) 22%,transparent);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);color:#fff}\n  .entry-status-orb{width:10px;height:10px;flex:0 0 auto;border-radius:50%;background:var(--entry-accent);box-shadow:0 0 12px var(--entry-accent)}\n  .entry-status-copy{display:flex;flex-direction:column;min-width:0}.entry-status-kicker{font-size:8px;line-height:1;text-transform:uppercase;letter-spacing:.12em;opacity:.72;font-weight:800}.entry-status-name{font-size:13px;line-height:1.2;font-weight:900;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.entry-status-event{font-size:9px;line-height:1.2;opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:290px}\n  .entry-bg{position:absolute;inset:0;z-index:1;background-size:cover;background-position:center;transition:opacity 0.5s ease}\n  .entry-bg img{width:100%;height:100%;object-fit:cover;opacity:0.6}\n  .entry-content{position:relative;z-index:2;flex:1;padding:20px 140px 20px 20px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.2) 0%, transparent 60%)}\n  /* The live instance is the console: real controls, real sensors and one\n     clear disarm keypad. Decorative dashboard cards never sit above it. */\n  .security-console {\n    background: transparent !important;\n    border: none !important;\n    box-shadow: none !important;\n  }\n  .console-hud {\n    background: transparent !important;\n    border: none !important;\n    box-shadow: none !important;\n  }\n\n  /* ── System Status Badge ─────────────────────────────── */\n  .console-system-badge {\n    display: inline-flex;\n    align-items: center;\n    padding: 5px 14px;\n    border-radius: 999px;\n    font-size: 10.5px;\n    font-weight: 900;\n    letter-spacing: 0.8px;\n    text-transform: uppercase;\n    white-space: nowrap;\n    backdrop-filter: blur(16px) saturate(160%);\n    -webkit-backdrop-filter: blur(16px) saturate(160%);\n    border: 1.5px solid currentColor;\n    transition: all 0.35s ease;\n  }\n  .console-system-badge--disarmed {\n    color: #6ee7b7;\n    background: rgba(16,185,129,0.18);\n    border-color: rgba(16,185,129,0.60);\n    box-shadow: 0 0 16px rgba(16,185,129,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--armed_home {\n    color: #fde68a;\n    background: rgba(251,140,0,0.20);\n    border-color: rgba(251,140,0,0.60);\n    box-shadow: 0 0 16px rgba(251,140,0,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--armed_away {\n    color: #fca5a5;\n    background: rgba(229,57,53,0.20);\n    border-color: rgba(229,57,53,0.60);\n    box-shadow: 0 0 16px rgba(229,57,53,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--armed_night {\n    color: #bfdbfe;\n    background: rgba(30,136,229,0.20);\n    border-color: rgba(30,136,229,0.60);\n    box-shadow: 0 0 16px rgba(30,136,229,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--armed_vacation {\n    color: #e9d5ff;\n    background: rgba(156,39,176,0.20);\n    border-color: rgba(156,39,176,0.60);\n    box-shadow: 0 0 16px rgba(156,39,176,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--triggered {\n    color: #fff;\n    background: rgba(239,68,68,0.35);\n    border-color: rgba(239,68,68,0.80);\n    box-shadow: 0 0 24px rgba(239,68,68,0.60), inset 0 1px 0 rgba(255,255,255,0.25);\n    animation: badgeFlash 0.8s infinite ease-in-out;\n  }\n  @keyframes badgeFlash {\n    0%,100% { opacity:1; box-shadow:0 0 24px rgba(239,68,68,.8); }\n    50%      { opacity:0.7; box-shadow:0 0 8px rgba(239,68,68,.2); }\n  }\n  /* arming state reuses armed_home styling with pulsing */\n  .console-system-badge--arming {\n    color: #fde68a;\n    background: rgba(251,140,0,0.20);\n    border-color: rgba(251,140,0,0.60);\n    animation: badgeArming 1.05s ease-in-out infinite;\n  }\n  @keyframes badgeArming {\n    0%,100% { opacity:0.65; } 50% { opacity:1; }\n  }\n  .console-hud-time{font-size:16px;font-weight:800;letter-spacing:-.02em}\n  .console-hud-temp{font-size:11px;opacity:.8;font-weight:700}\n  .console-hud-temps{display:flex;gap:6px;flex-wrap:wrap;align-items:center}\n  .console-hud-tpill{font-size:10px;font-weight:800;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12)}\n  /* Hide the floating absolute HUD inside security-console to avoid overlap with sensor list */\n  .security-console .hud,.ios-fullscreen .entry-content.security-console ~ .hud,.entry-content.security-console + .hud{display:none!important}\n  /* The .hud inside the article gets hidden when the content is a security-console */\n  @media(max-width:950px){\n    .grid{grid-template-columns:1fr;grid-template-areas:\"instances\" \"activity\" \"modes\" \"access\" \"automations\" \"backup\" \"github\"}\n  }\n\n  /* Sensor column */\n  .sensor-column{position:absolute;right:0;top:0;bottom:0;width:auto;max-width:40%;z-index:4;display:flex;flex-direction:column;gap:7px;align-items:flex-end;justify-content:center;padding:12px 12px 12px 0;pointer-events:none}\n  .sensor-chip{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:16px;font-size:10px;font-weight:800;letter-spacing:.2px;max-width:148px;backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 7px 18px rgba(0,0,0,.24);transition:transform .2s,box-shadow .2s}\n  .sensor-chip-text{display:flex;flex-direction:column;min-width:0;flex:1}\n  .sensor-chip-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\n  .sensor-chip-state{font-size:8px;letter-spacing:.08em;text-transform:uppercase;opacity:.82;margin-top:2px}\n  .sensor-chip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}\n  .sensor-chip-battery{grid-column:1 / -1;margin-top:5px;padding-top:5px;border-top:1px solid currentColor;font-size:9px;line-height:1;opacity:.9}\n  .sensor-chip--open{background:linear-gradient(135deg,rgba(255,149,0,.9),rgba(255,96,0,.64));color:#fff}\n  .sensor-chip--open .sensor-chip-dot{background:#fff;box-shadow:0 0 8px rgba(255,255,255,.95)}\n  .sensor-chip--triggered{background:linear-gradient(135deg,rgba(255,69,58,.96),rgba(190,30,35,.82));animation:chip-pulse .9s ease-in-out infinite}\n  .sensor-chip--closed{background:rgba(15,23,32,.62);color:#eef8f1}\n  .sensor-chip--closed .sensor-chip-dot{background:#34c759;box-shadow:0 0 8px rgba(52,199,.9)}\n  .sensor-chip-battery.low{color:#ffd166;font-weight:900}\n  .buzz-orange{position:relative;border-color:rgba(255,171,64,.92)!important;background:linear-gradient(135deg,rgba(255,149,0,.38),rgba(255,109,0,.16))!important;box-shadow:0 0 0 1px rgba(255,183,77,.45),0 0 25px rgba(255,145,0,.55),inset 0 1px 0 rgba(255,255,255,.3)!important;animation:buzz-orange 1.05s cubic-bezier(.36,.07,.19,.97) infinite}\n  .buzz-orange::after{content:'⚠';margin-left:auto;color:#fff3d1;font-size:14px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.28))}\n  @keyframes buzz-orange{0%,100%{transform:translateX(0) rotate(0)}12%{transform:translateX(-2px) rotate(-.65deg)}25%{transform:translateX(3px) rotate(.8deg)}40%{transform:translateX(-3px) rotate(-.8deg)}55%{transform:translateX(2px) rotate(.55deg)}70%{transform:translateX(-1px) rotate(-.25deg)}}\n  @keyframes chip-pulse{0%,100%{opacity:1}50%{opacity:0.55}}\n\n  /* HUD Overlay */\n  .hud{position:absolute;top:20px;right:24px;text-align:right;z-index:3;color:var(--hud-text-color);text-shadow:var(--text-shadow);display:flex;flex-direction:column;gap:4px}\n  .hud-loc{font-size:13px;font-weight:800;letter-spacing:0.04em;color:#ffffff;background:var(--hud-bg);padding:4px 12px;border-radius:10px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.18);align-self:flex-end}\n  .hud-data{font-size:20px;font-weight:800;letter-spacing:-0.02em;background:var(--hud-bg);padding:6px 14px;border-radius:12px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.08);display:inline-flex;align-items:center;gap:8px;align-self:flex-end}\n  .hud-data i{font-size:14px;opacity:0.7;font-style:normal}\n  .hud-temperatures{display:flex;justify-content:flex-end;gap:5px;flex-wrap:wrap}\n  .hud-temperature{padding:4px 8px;border-radius:999px;background:var(--hud-bg);border:1px solid rgba(255,255,255,.09);font-size:10px;font-weight:800;backdrop-filter:blur(8px)}\n\n  /* Liquid Glass Buttons */\n  .liquid-stack{display:grid;gap:10px}\n  .liquid-btn {\n    border: 1px solid rgba(255, 255, 255, 0.20) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.04) 100%) !important;\n    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    color: #ffffff !important;\n    padding: 14px 18px;\n    border-radius: 18px !important;\n    font-size: 13.5px;\n    font-weight: 800;\n    display: flex;\n    align-items: center;\n    gap: 12px;\n    text-align: left;\n    cursor: pointer;\n    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;\n    transition: all 0.22s cubic-bezier(0.25, 0.8, 0.25, 1);\n    text-shadow: 0 1px 2px rgba(0,0,0,0.3);\n    letter-spacing: 0.5px;\n  }\n  .liquid-btn:hover {\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.08) 100%) !important;\n    border-color: rgba(255, 255, 255, 0.36) !important;\n    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;\n    transform: translateY(-2px);\n  }\n  .btn-sos {\n    background: linear-gradient(135deg, rgba(239, 68, 68, 0.32) 0%, rgba(185, 28, 28, 0.45) 100%) !important;\n    border: 1px solid rgba(252, 165, 165, 0.45) !important;\n    box-shadow: 0 10px 28px rgba(239, 68, 68, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;\n  }\n  .btn-sos:hover {\n    background: linear-gradient(135deg, rgba(239, 68, 68, 0.48) 0%, rgba(185, 28, 28, 0.65) 100%) !important;\n    box-shadow: 0 14px 34px rgba(239, 68, 68, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;\n    transform: translateY(-2px);\n  }\n  .mode-btn-icon{width:26px;height:26px;padding:5px;border-radius:10px;flex:0 0 auto;background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 4px 10px rgba(0,0,0,.16);filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}\n  .liquid-btn.active .mode-btn-icon{background:linear-gradient(135deg,rgba(255,255,255,.36),rgba(255,255,255,.12));border-color:rgba(255,255,255,.42)}\n  .btn-sos .mode-btn-icon{width:28px;height:28px;border-radius:11px;background:rgba(255,255,255,.17)}\n  .liquid-btn:not(.btn-home):not(.btn-away):not(.btn-night):not(.btn-vacation):not(.btn-disarm):not(.btn-sos):hover{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.2)}\n  .liquid-btn.active{background:var(--btn-bg, rgba(255,255,255,0.2));border-color:rgba(255,255,255,0.4);box-shadow:0 8px 24px var(--btn-shadow, rgba(255,255,255,0.12))}\n  .liquid-btn:active:not(:disabled) { transform: scale(0.96); }\n  .liquid-btn i{font-size:16px}\n\n  .btn-home {\n    background: linear-gradient(135deg, rgba(251, 140, 0, 0.20) 0%, rgba(251, 140, 0, 0.06) 100%) !important;\n    border: 1px solid rgba(251, 140, 0, 0.38) !important;\n    color: #ffe0b2 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-home.active {\n    background: linear-gradient(135deg, #fb8c00 0%, #d97706 100%) !important;\n    border: 1px solid rgba(254, 215, 170, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(251, 140, 0, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-away {\n    background: linear-gradient(135deg, rgba(229, 57, 53, 0.20) 0%, rgba(229, 57, 53, 0.06) 100%) !important;\n    border: 1px solid rgba(229, 57, 53, 0.38) !important;\n    color: #ffcdd2 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-away.active {\n    background: linear-gradient(135deg, #e53935 0%, #b91c1c 100%) !important;\n    border: 1px solid rgba(254, 202, 202, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(229, 57, 53, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-night {\n    background: linear-gradient(135deg, rgba(30, 136, 229, 0.20) 0%, rgba(30, 136, 229, 0.06) 100%) !important;\n    border: 1px solid rgba(30, 136, 229, 0.38) !important;\n    color: #bbdefb !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-night.active {\n    background: linear-gradient(135deg, #1e88e5 0%, #1d4ed8 100%) !important;\n    border: 1px solid rgba(191, 219, 254, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(30, 136, 229, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-vacation {\n    background: linear-gradient(135deg, rgba(156, 39, 176, 0.20) 0%, rgba(156, 39, 176, 0.06) 100%) !important;\n    border: 1px solid rgba(156, 39, 176, 0.38) !important;\n    color: #e1bee7 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-vacation.active {\n    background: linear-gradient(135deg, #9c27b0 0%, #7e22ce 100%) !important;\n    border: 1px solid rgba(245, 208, 254, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(156, 39, 176, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-disarm {\n    background: linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(16, 185, 129, 0.05) 100%) !important;\n    border: 1px solid rgba(16, 185, 129, 0.35) !important;\n    color: #a7f3d0 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n    margin-top: 4px;\n  }\n  .btn-disarm.active {\n    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;\n    border: 1px solid rgba(167, 243, 208, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(16, 185, 129, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-sos {\n    background: linear-gradient(135deg, rgba(239, 68, 68, 0.22) 0%, rgba(185, 28, 28, 0.08) 100%) !important;\n    border: 1px solid rgba(252, 165, 165, 0.35) !important;\n    color: #fca5a5 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-sos.active, .btn-sos.flashing {\n    animation: sosFlashingPulse 0.8s infinite ease-in-out !important;\n  }\n\n  @keyframes sosFlashingPulse {\n    0%, 100% {\n      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;\n      border-color: #fca5a5 !important;\n      color: #ffffff !important;\n      box-shadow: 0 0 32px rgba(239, 68, 68, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;\n      transform: scale(1.02);\n    }\n    50% {\n      background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%) !important;\n      border-color: rgba(239, 68, 68, 0.5) !important;\n      color: rgba(255, 255, 255, 0.8) !important;\n      box-shadow: 0 0 10px rgba(239, 68, 68, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;\n      transform: scale(0.98);\n    }\n  }\n  /* btn-disarm visual is handled by .btn-disarm and .btn-disarm.active above */\n\n  .entry-content {\n    background: transparent !important;\n    box-shadow: none !important;\n    border: none !important;\n  }\n\n  .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}\n  .badge.armed_away,.badge.armed_vacation{background:rgba(229,57,53,.12);color:var(--error-color,#e53935)}\n  .badge.armed_home,.badge.armed_night{background:rgba(251,140,0,.12);color:#fb8c00}\n  .badge.disarmed{background:rgba(67,160,71,.12);color:var(--success-color,#43a047)}\n  .badge.triggered{background:rgba(229,57,53,.2);color:var(--error-color,#e53935);animation:pulse 1s ease-in-out infinite}\n\n  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}\n  .meta{font-size:12px;opacity:.5}\n  .setting-label{font-size:13px;font-weight:700;color:var(--primary-text-color);letter-spacing:0.01em;margin-bottom:2px;display:block}\n  .setting-sublabel{font-size:12px;font-weight:400;opacity:0.55;color:var(--primary-text-color);margin-bottom:6px;display:block}\n  .temp-alert-row{display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap}\n  .temp-alert-row input[type=number]{width:72px;padding:6px 8px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:inherit;font-size:13px;font-weight:700;text-align:center}\n  .temp-alert-status-ok{color:#43a047;font-size:12px}\n  .temp-alert-status-warn{color:#e53935;font-size:12px;font-weight:700}\n\n  /* Generic buttons */\n  button{border:0;border-radius:14px;padding:10px 18px;font:700 13px/1.3 'Outfit',Inter,system-ui,sans-serif;cursor:pointer;white-space:nowrap;hyphens:none;word-break:normal;transition:background 0.2s,opacity .15s,transform .15s cubic-bezier(0.175, 0.885, 0.32, 1.275),box-shadow 0.2s}\n  button:focus-visible{outline:3px solid #38bdf8;outline-offset:2px}\n  button:active:not(:disabled){transform:scale(.94) translateY(1px)}\n  button.primary{background:var(--primary-color,#38bdf8);color:#0f172a;font-weight:800;box-shadow:0 4px 12px rgba(56, 189, 248, 0.35)}\n  button.primary:hover{background:#0284c7;color:#ffffff}\n  button.ghost{background:rgba(255, 255, 255, 0.08);border:1px solid rgba(255, 255, 255, 0.24);color:#ffffff !important}\n  button.ghost:hover{background:rgba(255, 255, 255, 0.16);border-color:rgba(255,255,255,0.36)}\n\n\n  /* FS button */\n  .fs-btn{background:rgba(255,255,255,0.05);padding:8px;border-radius:10px;font-size:16px}\n\n  /* Modal Fixes */\n  .modal-back{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;padding:20px;z-index:999999;backdrop-filter:blur(12px)}\n  .modal-back.open{display:flex}\n  .modal{width:min(400px,100%);max-height:85vh;overflow:hidden;display:grid;grid-template-rows:auto 1fr auto;gap:14px;padding:24px;border-radius:32px;background:rgba(22, 24, 38, 0.95);border:1px solid rgba(255,255,255,0.08);box-shadow:0 30px 100px rgba(0,0,0,0.6);backdrop-filter:blur(28px)}\n  .modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}\n  .modal-head h3{margin:0;font-size:20px;font-weight:800}\n  .modal-body{overflow:auto;padding:5px}\n  .modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:15px}\n  /* PIN modal */\n  .pm .modal{max-width:340px;min-height:unset;grid-template-rows:auto auto auto;background:rgba(22, 24, 38, 0.82) !important;backdrop-filter:blur(16px) saturate(140%) !important;-webkit-backdrop-filter:blur(16px) saturate(140%) !important;border:1px solid rgba(255, 255, 255, 0.12) !important;box-shadow:0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;border-radius:36px;padding:28px;display:flex;flex-direction:column;align-items:center;gap:16px}\n  .pin-input{font-size:28px;letter-spacing:10px;text-align:center;padding:12px;border-radius:16px;border:none;background:rgba(255,255,255,0.02);color:inherit;width:100%;outline:none;box-shadow:inset 0 1px 3px rgba(0,0,0,0.2)}\n  .pin-error{color:var(--error-color,#e53935);font-size:13px;min-height:18px;text-align:center}\n  .pin-grid{display:grid;grid-template-columns:repeat(3,68px);gap:16px;justify-content:center;margin-top:10px}\n  .pin-btn-round{width:68px;height:68px;border-radius:50% !important;border:1px solid rgba(255,255,255,0.1) !important;background:rgba(255,255,255,0.04) !important;color:#fff !important;font-size:24px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.2s, transform 0.15s, border-color 0.2s;box-shadow:0 4px 10px rgba(0,0,0,0.15);padding:0 !important;outline:none}\n  .pin-btn-round:hover{background:rgba(255,255,255,0.12) !important;border-color:rgba(255,255,255,0.2) !important}\n  .pin-btn-round:active{transform:scale(0.92) !important;background:rgba(255,255,255,0.2) !important}\n  .pin-btn-round.action-key{font-size:12px;font-weight:700;letter-spacing:0.3px;text-transform:uppercase;border-color:transparent !important;background:transparent !important;box-shadow:none}\n  .pin-btn-round.action-key:hover{background:rgba(255,255,255,0.05) !important}\n  .pin-btn-round.action-key.enter-key{color:#34c759 !important}\n  .pin-btn-round.action-key.delete-key{color:#ff3b30 !important}\n  /* User card */\n  .user-card {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    padding: 16px 18px;\n    border-radius: 18px;\n    border: 1px solid rgba(255, 255, 255, 0.16) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.025) 100%) !important;\n    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.20) !important;\n    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);\n  }\n  .user-card:hover {\n    border-color: rgba(255, 255, 255, 0.25) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%) !important;\n    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;\n    transform: translateY(-2px);\n  }\n  .user-badge{display:inline-block;padding:4px 10px;border-radius:8px;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#ffffff!important;border:1px solid rgba(255,255,255,0.18)}\n  /* REEMPLAZA los colores neón por tokens legibles */\n  .user-badge.admin { background: #d97706 !important; color: #ffffff !important; font-weight: 900 !important; border: 1px solid rgba(255,255,255,0.3) !important; }\n  .user-badge.admin_old {\n    background: rgba(255,255,255,0.12);\n    color: rgba(255,255,255,0.92);\n    border: 1px solid rgba(255,255,255,0.18);\n    font-weight: 700;\n    letter-spacing: 0.04em;\n  }\n  .user-badge.user { background: #475569 !important; color: #ffffff !important; font-weight: 800 !important; border: 1px solid rgba(255,255,255,0.2) !important; }\n  .user-badge.user_old {\n    background: rgba(255,255,255,0.08);\n    color: rgba(255,255,255,0.75);\n    border: 1px solid rgba(255,255,255,0.12);\n  }\n  /* Role label debajo del nombre */\n  .user-role-label {\n    font-size: 11px;\n    font-weight: 600;\n    letter-spacing: 0.06em;\n    text-transform: uppercase;\n    color: rgba(255,255,255,0.55);  /* muted, no neón */\n    margin-top: 2px;\n  }\n  /* Notif target chip */\n  .notif-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);font-size:12px;font-weight:800;color:#ffffff !important}\n  .notif-chip button{padding:0 4px;border:0;background:none;cursor:pointer;opacity:.75;color:#ffffff}\n  /* Triggered box */\n  .trig-box{padding:12px 14px;border-radius:14px;background:rgba(229,57,53,.08);border:1px dashed var(--error-color,#e53935);font-size:12px;font-weight:600;color:var(--error-color,#e53935)}\n  /* inputs */\n  input[type=\"text\"], input[type=\"password\"], input[type=\"number\"], input[type=\"search\"], select, input[type=\"datetime-local\"], .glass-control {\n    width: 100%;\n    padding: 11px 14px;\n    border-radius: 16px;\n    border: 1px solid rgba(255, 255, 255, 0.16);\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.055));\n    color: var(--primary-text-color);\n    backdrop-filter: blur(18px) saturate(145%);\n    -webkit-backdrop-filter: blur(18px) saturate(145%);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 8px 22px rgba(0, 0, 0, 0.12);\n    font: 700 13px/1.2 'Outfit', Inter, system-ui, sans-serif;\n    outline: none;\n    transition: transform 0.34s cubic-bezier(0.18, 0.89, 0.32, 1.32), border-color 0.22s, box-shadow 0.22s;\n    display: block;\n    box-sizing: border-box;\n  }\n  input[type=\"text\"]:focus, input[type=\"password\"]:focus, input[type=\"number\"]:focus, input[type=\"search\"]:focus, select:focus, input[type=\"datetime-local\"]:focus, .glass-control:focus {\n    transform: scale(1.018);\n    border-color: rgba(112, 188, 255, 0.78);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.23), 0 0 0 4px rgba(0, 122, 255, 0.14), 0 10px 28px rgba(0, 0, 0, 0.16);\n  }\n  .x-never-match input[type=\"text\"],\n  .x-never-match input[type=\"password\"],\n  .x-never-match input[type=\"number\"],\n  .x-never-match input[type=\"search\"],\n  .x-never-match select,\n  .x-never-match input[type=\"datetime-local\"],\n  .x-never-match .glass-control {\n    background: rgba(255, 255, 255, 0.52);\n    border-color: rgba(0, 0, 0, 0.10);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 6px 16px rgba(0, 0, 0, 0.05);\n  }\n  /* search */\n  .search-wrap{display:flex;gap:10px;align-items:center}\n  .search-wrap input{flex:1;min-width:0}\n  /* ── Dual-panel selector modal ───────────────────────────────────────────────────── */\n  #selector-modal .modal{width:min(980px,96vw);height:min(780px,92vh);max-height:92vh;grid-template-rows:auto minmax(0,1fr) auto}\n  #selector-modal .modal-body{min-height:0;height:100%;padding:5px 0}\n  .sel-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;overflow:hidden;min-height:0;height:100%}\n  @media(max-width:600px){.sel-grid{grid-template-columns:1fr}}\n  .sel-panel{display:flex;flex-direction:column;gap:8px;overflow:hidden;min-width:0;min-height:0;padding:12px;border-radius:18px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.07)}\n  .sel-panel-inner{overflow-y:auto;overscroll-behavior:contain;flex:1;min-height:0;display:grid;gap:6px;align-content:start;padding-right:4px}\n  .sel-actions{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}\n  .pick-row{display:grid;grid-template-columns:24px minmax(0,1fr);align-items:center;gap:12px;padding:12px 14px;min-height:48px;border-radius:14px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.035);cursor:pointer;transition:background .12s,border-color .12s}\n  .pick-row:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.24)}\n  .pick-row:has(input:checked){border-color:rgba(56,189,248,.65);background:rgba(56,189,248,.12)}\n  .pick-row input[type=checkbox]{width:22px;height:22px;min-width:22px;min-height:22px;cursor:pointer;accent-color:var(--primary-color,#38bdf8);margin:0}\n  .pick-row-name{font-weight:750;font-size:14px;color:#ffffff;display:flex;align-items:center;gap:6px;flex-wrap:wrap;line-height:1.3}\n  .pick-row-meta{font-size:12px;color:#cbd5e1;opacity:0.92;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\n  .device-facts{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}\n  .device-fact{display:inline-flex;align-items:center;min-height:20px;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:750;line-height:1.1;white-space:nowrap}\n  .device-fact.status-open{color:#ff8a80;background:rgba(255,82,82,.12)}\n  .device-fact.status-closed{color:#7ee2a8;background:rgba(52,199,.12)}\n  .device-fact.power-low{color:#ffd166;background:rgba(255,183,77,.13)}\n  .sel-right-item{display:flex;align-items:center;justify-content:space-between;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.09);background:rgba(255,255,255,0.055);font-size:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.06)}\n  .sel-right-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}\n  .sel-right-facts{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}\n  .mode-sensor-grid .sensor-pill{width:100%;min-width:0;padding:9px 10px;gap:7px}\n  .mode-sensor-grid .sensor-pill .pill-content{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:6px;min-width:0;flex:1}\n  .mode-sensor-grid .sensor-pill .pill-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\n  .mode-sensor-grid .sensor-pill .pill-status{font-size:10px;font-weight:800;opacity:.78;white-space:nowrap}\n  .mode-sensor-grid .sensor-pill .pill-power{font-size:10px;font-weight:700;opacity:.82;white-space:nowrap}\n  .sel-panel-inner::-webkit-scrollbar{width:7px}.sel-panel-inner::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.18);border-radius:99px}\n  /* Activity log */\n  .log-item{display:flex;align-items:flex-start;gap:12px;padding:13px;border-radius:18px;border:1px solid var(--log-item-border, rgba(255,255,255,.05));background:linear-gradient(135deg,color-mix(in srgb,var(--log-item-bg,rgba(255,255,255,.02)) 84%,#fff 16%),var(--log-item-bg,rgba(255,255,255,.02)));color:var(--primary-text-color,#fff);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 7px 18px rgba(0,0,0,.10)}\n  .log-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:13px;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 5px 12px rgba(0,0,0,.12)}\n  .glass-orb{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 2px 4px rgba(255,255,255,0.5),0 2px 6px rgba(0,0,0,0.2);background:rgba(255,255,255,0.3)}\n  .log-item.log-item--armed .log-icon{background:rgba(255,149,0,.16);border-color:rgba(255,183,77,.28)}\n  .log-item.log-item--armed .glass-orb{background:linear-gradient(135deg,#ffb74d,#f57c00)}\n  .log-item.log-item--disarmed .log-icon{background:rgba(52,199,.14);border-color:rgba(105,219,139,.28)}\n  .log-item.log-item--disarmed .glass-orb{background:linear-gradient(135deg,#69db8b,#388e3c)}\n  .log-item.log-item--triggered .log-icon{background:rgba(255,69,58,.16);border-color:rgba(255,139,131,.30)}\n  .log-item.log-item--triggered .glass-orb{background:linear-gradient(135deg,#ff8b83,#d32f2f)}\n  .log-body{flex:1;min-width:0}\n  .log-title{font-weight:700;font-size:13px}\n  .log-meta{font-size:11px;opacity:.55;margin-top:2px}\n  .log-badge{display:inline-block;padding:2px 7px;border-radius:6px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-right:4px}\n  .log-badge.arm{background:rgba(251,140,0,.12);color:#fb8c00}\n  .log-badge.disarm{background:rgba(67,160,71,.12);color:var(--success-color,#43a047)}\n  .log-badge.trigger{background:rgba(229,57,53,.15);color:var(--error-color,#e53935)}\n  button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 72%,#fff);outline-offset:3px}\n  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}.wx canvas{display:none!important}}\n  /* Personalization section styles */\n  .personalize-section {\n    margin-top: 18px;\n    padding: 18px;\n    background: var(--personalize-bg, rgba(255,255,255,0.02));\n    border: 1px solid var(--personalize-border, rgba(255,255,255,0.06));\n    border-radius: 22px;\n    display: grid;\n    gap: 16px;\n  }\n  .personalize-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:\"home temp\" \"panel clock\" \"hub emergency\";gap:14px 16px;align-items:start}\n  .personalize-column{display:contents}\n  .personalize-field{min-width:0;align-self:stretch}\n  .pf-home{grid-area:home}.pf-temp{grid-area:temp}.pf-panel{grid-area:panel}.pf-hub{grid-area:hub}.pf-emergency{grid-area:emergency}.pf-clock{grid-area:clock}\n  .pf-panel,.pf-hub{display:flex;flex-direction:column;gap:8px}\n  .pf-emergency{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:\"emergency-label emergency-label\" \"emergency-input emergency-help\";gap:5px 16px;align-items:start;padding-top:2px}\n  .pf-emergency #lbl-emergency-number{grid-area:emergency-label}.pf-emergency #emergency-number-input{grid-area:emergency-input}.pf-emergency #emergency-number-help{grid-area:emergency-help;margin:0!important}\n  .sos-configuration {\n    padding: 18px;\n    border-radius: 24px;\n    border: 1px solid rgba(255, 59, 48, 0.25);\n    background: linear-gradient(135deg, rgba(255, 59, 48, 0.12), rgba(255, 255, 255, 0.02));\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 12px 28px rgba(255, 59, 48, 0.06), 0 8px 20px rgba(0, 0, 0, 0.12);\n    transition: transform 0.3s ease, box-shadow 0.3s ease;\n  }\n  /* SOS uses the full personalization width so outputs never create a tall,\n     narrow list with unused space beside it. */\n  .sos-configuration{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:\"title action\" \"outputs outputs\" \"help help\";gap:12px 16px;align-items:center}\n  .sos-configuration #lbl-sos-actions{grid-area:title;margin:0!important;white-space:nowrap}\n  .sos-configuration #sos-output-chips{grid-area:outputs;margin:0!important;display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:7px;align-items:stretch;max-height:148px;overflow-y:auto;overflow-x:hidden;padding:2px 5px 2px 2px;overscroll-behavior:contain}\n  .sos-configuration #sos-output-chips .sensor-pill{width:100%;min-width:0;min-height:34px;justify-content:center;padding:7px 10px;font-size:11px;border-radius:12px}\n  .sos-configuration #sos-output-chips .sensor-pill > span{display:block;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}\n  .sos-configuration #sos-output-chips .mode-sensor-none{grid-column:1/-1;padding:18px;min-height:54px}\n  .sos-configuration #btn-select-sos-outputs{grid-area:action;width:auto!important;max-width:230px;min-width:0;white-space:normal;overflow-wrap:anywhere;line-height:1.15}\n  .sos-configuration #sos-output-help{grid-area:help;margin:0!important;max-width:none}\n  .sos-configuration:hover {\n    transform: translateY(-2px);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 16px 36px rgba(255, 59, 48, 0.10), 0 12px 24px rgba(0, 0, 0, 0.16);\n  }\n  .x-never-match .sos-configuration {\n    border-color: rgba(255, 59, 48, 0.3);\n    background: linear-gradient(135deg, rgba(255, 59, 48, 0.08), rgba(0, 0, 0, 0.01));\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 10px 24px rgba(255, 59, 48, 0.05);\n  }\n  #sos-output-chips .sensor-pill{background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.06));border-color:rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 5px 14px rgba(0,0,0,.10)}\n  .background-custom-inputs{flex-direction:column;gap:8px;background:rgba(0,0,0,.15);padding:12px;border-radius:18px;border:1px solid rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}\n  .modal-back.open .modal,\n  .lang-modal-back.open .lang-modal-card,\n  .ios-confirm-backdrop.open .ios-confirm-card {\n    animation: liquidDropIn .48s cubic-bezier(.16,1.24,.32,1) both;\n  }\n  @keyframes liquidDropIn{0%{opacity:0;transform:translateY(18px) scale(.91);filter:blur(5px)}65%{opacity:1;transform:translateY(-3px) scale(1.018);filter:blur(0)}100%{transform:translateY(0) scale(1)}}\n  @keyframes argus-modal-in{0%{opacity:0;transform:scale(.94) translateY(8px)}100%{opacity:1;transform:scale(1) translateY(0)}}\n  @media(max-width:700px){\n    .personalize-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:\"home\" \"temp\" \"panel\" \"hub\" \"clock\" \"emergency\"}\n    .pf-emergency{grid-template-columns:minmax(0,1fr);grid-template-areas:\"emergency-label\" \"emergency-input\" \"emergency-help\"}\n    .personalize-section{padding:14px}\n    .sos-configuration{display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:14px;border-radius:24px}\n    .sos-configuration #lbl-sos-actions{white-space:normal}.sos-configuration #btn-select-sos-outputs{width:100%!important}.sos-configuration #sos-output-help{max-width:none}\n  }\n\n  #argus-canvas-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background-size:cover;background-position:center;background-repeat:no-repeat}\n  #argus-canvas-bg::after{content:\"\";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.3) 100%);z-index:1;pointer-events:none}\n\n.sensor-pill {\n  display:inline-flex; align-items:center; gap:8px;\n  background:var(--argus-pill-bg, rgba(255,255,255,0.04));\n  border:1px solid var(--argus-pill-border, rgba(255,255,255,0.08));\n  border-radius:14px; padding:10px 14px;\n  font-size:13px; color:var(--argus-pill-color, rgba(255,255,255,0.95));\n  backdrop-filter:blur(10px); transition:all 0.2s cubic-bezier(0.4,0,0.2,1);\n  font-weight:700; box-shadow:0 4px 12px rgba(0,0,0,0.08);\n}\n.sensor-pill:hover { background:var(--argus-pill-bg-hover, rgba(255,255,255,0.08)); border-color:rgba(255,255,255,0.25); transform:translateY(-1px); }\n.sensor-pill .pill-dot { width:10px; height:10px; border-radius:50%; background:#34c759; flex-shrink:0; box-shadow:0 0 10px rgba(52,199,0.5); }\n.sensor-pill .pill-dot.open { background:#ff3b30; box-shadow:0 0 10px rgba(255,59,48,0.5); }\n.sensor-pill .pill-dot.unavailable { background:#999; }\n.sensor-pill button { background:none; border:none; color:var(--argus-pill-color, #fff); cursor:pointer; opacity:0.5; padding:4px; font-size:14px; transition:opacity 0.2s; }\n.sensor-pill button:hover { opacity:1; }\n\n.mode-sensor-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:12px; margin-top:12px; }\n.mode-sensor-none { grid-column:1/-1; padding:30px; text-align:center; background:var(--argus-pill-bg,rgba(255,255,255,0.03)); border:2px dashed var(--argus-pill-border,rgba(255,255,255,0.1)); border-radius:20px; color:var(--argus-pill-color-muted,rgba(255,255,255,0.4)); font-size:14px; font-weight:600; }\n.subsection-title { font-size:12px; font-weight:900; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px; color:var(--argus-pill-color-muted,rgba(255,255,255,0.5)); display:block; }\n\n\n/* ── Language Picker ───────────────────────────────────── */\n.lang-pill {\n  display:inline-flex; align-items:center; gap:6px;\n  padding:7px 14px; border-radius:999px;\n  background:rgba(255,255,255,0.10);\n  border:1px solid rgba(255,255,255,0.18);\n  backdrop-filter:blur(12px) saturate(120%);\n  -webkit-backdrop-filter:blur(12px) saturate(120%);\n  color:#fff; font-size:13px; font-weight:700;\n  cursor:pointer; transition:all 0.22s cubic-bezier(0.4,0,0.2,1);\n  box-shadow:0 4px 16px rgba(0,0,0,0.18);\n  white-space:nowrap; flex-shrink:0;\n}\n.lang-pill:hover { background:rgba(255,255,255,0.22); transform:translateY(-1px); }\n.x-never-match .lang-pill {\n  background:rgba(0,0,0,0.07); border-color:rgba(0,0,0,0.15); color:#1e1e2d;\n}\n\n/* Language modal */\n.lang-modal-back { position:fixed; inset:0; background:rgba(0,0,0,0.55); display:none; align-items:center; justify-content:center; z-index:999998; backdrop-filter:blur(4px); }\n.lang-modal-back.open { display:flex; }\n.lang-modal-card {\n  width:min(400px,92vw); border-radius:28px; padding:28px 24px 20px;\n  background:rgba(20,22,35,0.92);\n  border:1px solid rgba(255,255,255,0.14);\n  box-shadow:0 32px 80px rgba(0,0,0,0.55);\n  backdrop-filter:blur(12px) saturate(120%);\n  -webkit-backdrop-filter:blur(12px) saturate(120%);\n  color:#fff;\n  animation: langBounceIn 0.38s cubic-bezier(0.175,0.885,0.32,1.275) forwards;\n}\n.x-never-match .lang-modal-card {\n  background:rgba(255,255,255,0.96); color:#1e1e2d;\n  border-color:rgba(0,0,0,0.12); box-shadow:0 20px 60px rgba(0,0,0,0.25);\n}\n@keyframes langBounceIn {\n  0%   { transform:scale(0.82) translateY(20px); opacity:0; }\n  60%  { transform:scale(1.03) translateY(-4px); opacity:1; }\n  100% { transform:scale(1)    translateY(0);    opacity:1; }\n}\n.lang-modal-title {\n  font-size:18px; font-weight:900; letter-spacing:-0.01em;\n  margin-bottom:20px; text-align:center;\n}\n.lang-grid {\n  display:grid; grid-template-columns:1fr 1fr; gap:10px;\n}\n.lang-option {\n  display:flex; align-items:center; gap:10px;\n  padding:12px 14px; border-radius:16px;\n  background:rgba(255,255,255,0.10);\n  border:1.5px solid rgba(255,255,255,0.18);\n  /* Buttons do not inherit color reliably through the HA shadow DOM. */\n  color:rgba(255,255,255,0.98) !important;\n  text-shadow:0 1px 2px rgba(0,0,0,0.38);\n  cursor:pointer; transition:all 0.18s ease;\n  font-size:14px; font-weight:750;\n}\n.lang-option span:not(.lang-flag) { color:inherit !important; }\n.lang-option:hover { background:rgba(255,255,255,0.16); border-color:rgba(255,255,255,0.28); transform:translateY(-1px); }\n.lang-option.active {\n  background:rgba(3,169,244,0.30); border-color:rgba(76,201,255,0.82);\n  box-shadow:0 0 18px rgba(3,169,244,0.25);\n}\n.lang-flag { font-size:22px; line-height:1; }\n.lang-close-row { display:flex; justify-content:center; margin-top:18px; }\n.lang-close-btn {\n  padding:9px 28px; border-radius:14px;\n  background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15);\n  color:#fff; font-size:13px; font-weight:700; cursor:pointer;\n  transition:background 0.18s;\n}\n.lang-close-btn:hover { background:rgba(255,255,255,0.2); }\n\n/* Background File Manager Styles */\n.file-card {\n  background: rgba(255, 255, 255, 0.03);\n  border: 1px solid rgba(255, 255, 255, 0.06);\n  border-radius: 12px;\n  padding: 8px;\n  display: flex;\n  flex-direction: column;\n  gap: 6px;\n  position: relative;\n  overflow: hidden;\n  transition: all 0.22s cubic-bezier(0.25, 0.8, 0.25, 1);\n}\n.file-card:hover {\n  background: rgba(255, 255, 255, 0.08) !important;\n  border-color: rgba(255, 255, 255, 0.16) !important;\n  transform: translateY(-2px);\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);\n}\n.x-never-match .file-card {\n  background: rgba(0, 0, 0, 0.02);\n  border-color: rgba(0, 0, 0, 0.07);\n  color: #1c1c1e;\n}\n.x-never-match .file-card:hover {\n  background: rgba(0, 0, 0, 0.05) !important;\n  border-color: rgba(0, 0, 0, 0.12) !important;\n}\n.file-card-preview {\n  position: relative;\n  width: 100%;\n  height: 64px;\n  border-radius: 8px;\n  overflow: hidden;\n  background: rgba(0, 0, 0, 0.2);\n}\n.file-card-preview img, .file-card-preview video {\n  width: 100%;\n  height: 100%;\n  object-fit: cover;\n  display: block;\n}\n.file-card-name {\n  font-size: 10px;\n  font-weight: 700;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  opacity: 0.85;\n}\n.file-card-meta {\n  font-size: 9px;\n  opacity: 0.55;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n.file-card-actions {\n  display: flex;\n  gap: 4px;\n  margin-top: auto;\n}\n.file-card-btn {\n  flex: 1;\n  padding: 4px;\n  font-size: 8px;\n  font-weight: 700;\n  text-transform: uppercase;\n  border: 1px solid rgba(255, 255, 255, 0.12);\n  border-radius: 6px;\n  background: rgba(255, 255, 255, 0.03);\n  color: inherit;\n  cursor: pointer;\n  white-space: nowrap;\n  transition: all 0.15s ease;\n}\n.file-card-btn:hover {\n  background: rgba(255, 255, 255, 0.15);\n  border-color: rgba(255, 255, 255, 0.3);\n}\n.x-never-match .file-card-btn {\n  border-color: rgba(0, 0, 0, 0.12);\n  background: rgba(0, 0, 0, 0.02);\n}\n.x-never-match .file-card-btn:hover {\n  background: rgba(0, 0, 0, 0.08);\n  border-color: rgba(0, 0, 0, 0.25);\n}\n.file-card-btn-delete {\n  padding: 3px 6px;\n  color: #ff3b30;\n  border: 1px solid rgba(255, 59, 48, 0.15);\n  background: rgba(255, 59, 48, 0.05);\n  border-radius: 6px;\n  cursor: pointer;\n  font-size: 9px;\n  transition: all 0.15s ease;\n}\n.file-card-btn-delete:hover {\n  background: rgba(255, 59, 48, 0.25);\n  border-color: rgba(255, 59, 48, 0.45);\n}\n\n.argus-bootstrap-layer {\n  position: fixed;\n  inset: 0;\n  background: rgba(0,0,0,0.88);\n  /* NO backdrop-filter: element is permanently in DOM (display:none toggle).\n     WebKit compositor leak bug — opaque background is visually equivalent. */\n  z-index: 9999;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  color: white;\n  animation: fadeIn 0.4s ease forwards;\n}\n.argus-bootstrap-card {\n  background: rgba(255,255,255,0.05);\n  border: 1px solid rgba(255,255,255,0.1);\n  border-radius: 24px;\n  padding: 40px;\n  max-width: 480px;\n  width: 90%;\n  box-shadow: 0 16px 40px rgba(0,0,0,0.5);\n  text-align: center;\n}\n.argus-bootstrap-card h1 {\n  margin: 0 0 16px;\n  font-weight: 300;\n  font-size: 28px;\n  letter-spacing: 0.5px;\n}\n.argus-bootstrap-card p {\n  color: rgba(255,255,255,0.7);\n  font-size: 16px;\n  line-height: 1.5;\n  margin-bottom: 32px;\n}\n@keyframes argusWelcomeCard {\n  from { opacity: 0; transform: translateY(18px) scale(.96); }\n  65% { opacity: 1; transform: translateY(-3px) scale(1.01); }\n  to { opacity: 1; transform: translateY(0) scale(1); }\n}\n@keyframes argusWelcomeLogo {\n  0%,100% { transform: translateY(0) scale(1); filter: drop-shadow(0 10px 18px rgba(32,145,255,.28)); }\n  50% { transform: translateY(-5px) scale(1.045); filter: drop-shadow(0 16px 26px rgba(32,145,255,.5)); }\n}\n@keyframes argusWelcomeCheck {\n  from { opacity: 0; transform: scale(.55) rotate(-16deg); }\n  70% { opacity: 1; transform: scale(1.1) rotate(4deg); }\n  to { opacity: 1; transform: scale(1) rotate(0); }\n}\n.argus-first-run-card { animation: argusWelcomeCard .58s cubic-bezier(.22,1.2,.36,1) both; }\n.argus-first-run-logo { height:68px; width:68px; border-radius:19px; animation:argusWelcomeLogo 2.4s ease-in-out infinite; }\n.argus-first-run-brand { display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:20px; }\n.argus-first-run-brand h1 { margin:0; font-size:1.65rem; font-weight:850; letter-spacing:-.02em; }\n.argus-first-run-brand p { margin:0; font-size:.92rem; color:rgba(255,255,255,.7); }\n.argus-first-run-thank-icon { width:74px; height:74px; margin:0 auto 18px; display:grid; place-items:center; border-radius:50%; background:rgba(52,199,89,.18); border:1px solid rgba(52,199,89,.45); color:#58e37c; font-size:2.15rem; box-shadow:0 0 32px rgba(52,199,89,.22); animation:argusWelcomeCheck .5s cubic-bezier(.2,1.35,.35,1) both; }\n\n/* ─── tvOS Profile Selector ─── */\n.argus-profile-overlay {\n  position: fixed; inset: 0;\n  background: rgba(0,0,0,0.4); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);\n  /* NO backdrop-filter: causes orphaned compositor layers in WebKit when removed.\n     High-opacity background achieves same visual effect safely. */\n  display: flex; align-items: center; justify-content: center;\n  z-index: 9999;\n  animation: argus-overlay-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;\n}\n@keyframes argus-overlay-in {\n  from { opacity: 0; }\n  to   { opacity: 1; }\n}\n\n/* Título arriba */\n.argus-profile-header {\n  text-align: center;\n  margin-bottom: 36px;\n  animation: argus-slide-down 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;\n}\n@keyframes argus-slide-down {\n  from { opacity: 0; transform: translateY(-20px); }\n  to   { opacity: 1; transform: translateY(0); }\n}\n.argus-profile-header h2 {\n  margin: 0; font-size: 1.6rem; font-weight: 800;\n  color: #fff; letter-spacing: -0.02em;\n}\n.argus-profile-header p {\n  margin: 6px 0 0; font-size: 0.85rem;\n  color: rgba(255,255,255,0.55);\n}\n\n/* Grid de perfiles */\n.argus-profile-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));\n  gap: 36px 24px;\n  max-width: 900px;\n  width: 100%;\n  justify-content: center;\n  animation: argus-grid-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;\n}\n@keyframes argus-grid-in {\n  from { opacity: 0; transform: scale(0.92) translateY(16px); }\n  to   { opacity: 1; transform: scale(1) translateY(0); }\n}\n\n/* Cada perfil */\n@media (max-width: 950px) and (orientation: landscape) {\n  .argus-profile-grid { \n    grid-template-columns: repeat(4, 1fr);\n    padding: 16px;\n  }\n}\n@media (max-width: 600px) and (orientation: portrait) {\n  .argus-profile-grid { \n    grid-template-columns: repeat(2, 1fr);\n    padding: 16px;\n    gap: 20px 16px;\n  }\n}\n@media (max-width: 380px) and (orientation: portrait) {\n  .argus-profile-grid { \n    grid-template-columns: 1fr;\n    padding: 16px;\n  }\n  .argus-profile-item { width: 100%; }\n}\n\n.argus-profile-item {\n  touch-action: manipulation;\n  min-height: 44px;\n  display: flex; flex-direction: column;\n  align-items: center; gap: 10px;\n  cursor: pointer;\n  border-radius: 16px;\n  padding: 14px 8px 10px;\n  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),\n              background 0.2s ease;\n  -webkit-tap-highlight-color: transparent;\n}\n.argus-profile-item:hover {\n  transform: scale(1.08);\n  background: rgba(255,255,255,0.07);\n}\n.argus-profile-item:active {\n  transform: scale(0.96);\n}\n.argus-profile-item:focus-visible {\n  outline: 2px solid rgba(255,255,255,0.6);\n  outline-offset: 4px;\n}\n\n/* Círculo avatar */\n.argus-profile-circle {\n  width: 120px; height: 120px;\n  border-radius: 50%;\n  object-fit: cover;\n  border: 3px solid rgba(255,255,255,0.18);\n  box-shadow: 0 4px 20px rgba(0,0,0,0.35);\n  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.22s;\n  display: flex; align-items: center; justify-content: center;\n  font-size: 2.5rem; font-weight: 800;\n  color: #fff; overflow: hidden; flex-shrink: 0;\n  background: rgba(255,255,255,0.1);\n  position: relative;\n}\n@media (max-width: 600px) and (orientation: portrait) {\n  .argus-profile-circle {\n    width: 76px; height: 76px;\n    font-size: 1.5rem; border-width: 2.5px;\n  }\n}\n@media (max-width: 950px) and (orientation: landscape) {\n  .argus-profile-circle {\n    width: 84px; height: 84px;\n    font-size: 1.8rem; border-width: 2.5px;\n  }\n}\n.argus-profile-item:hover .argus-profile-circle {\n  border-color: rgba(255,255,255,0.55);\n  box-shadow: 0 0 0 3px rgba(255,255,255,0.15), 0 6px 24px rgba(0,0,0,0.4);\n}\n.argus-profile-circle img {\n  width: 100%; height: 100%; border-radius: 50%; object-fit: cover;\n}\n.argus-profile-circle .lock-badge {\n  position: absolute; bottom: 0; right: 0;\n  width: 28px; height: 28px; border-radius: 50%;\n  background: rgba(0,0,0,0.75); display: flex;\n  align-items: center; justify-content: center;\n  font-size: 14px; border: 2px solid rgba(255,255,255,0.2);\n}\n@media (max-width: 600px) {\n  .argus-profile-circle .lock-badge {\n    width: 22px; height: 22px; font-size: 11px; border-width: 1.5px;\n  }\n}\n\n/* Nombre y rol */\n.argus-profile-label {\n  text-align: center;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.argus-profile-label .p-name {\n  font-size: 1rem; font-weight: 700;\n  color: #fff; line-height: 1.2;\n  max-width: 140px; overflow: hidden;\n  text-overflow: ellipsis; white-space: nowrap;\n}\n.argus-profile-label .p-role {\n  font-size: 0.72rem; font-weight: 600;\n  color: rgba(255,255,255,0.6);\n  margin-top: 4px;\n  text-transform: uppercase; letter-spacing: 0.04em;\n}\n@media (max-width: 600px) {\n  .argus-profile-label .p-name { font-size: 0.82rem; max-width: 80px; }\n  .argus-profile-label .p-role { font-size: 0.65rem; margin-top: 2px; }\n}\n\n/* ─── Welcome Screen (Fase 2) ─── */\n.argus-welcome-screen {\n  position: fixed; inset: 0;\n  background: rgba(0,0,0,0.88);\n  /* NO backdrop-filter: Safari/WebKit compositor bug causes blur to persist\n     after element.remove(). Use opaque background instead. */\n  display: flex; flex-direction: column;\n  align-items: center; justify-content: center;\n  z-index: 10000;\n  pointer-events: none;\n}\n.argus-welcome-avatar {\n  width: 110px; height: 110px;\n  border-radius: 50%; overflow: hidden;\n  border: 3px solid rgba(255,255,255,0.3);\n  box-shadow: 0 8px 40px rgba(0,0,0,0.5);\n  display: flex; align-items: center; justify-content: center;\n  font-size: 2.8rem; font-weight: 800; color: #fff;\n  background: rgba(255,255,255,0.12);\n  will-change: transform, width, height, border-radius;\n}\n.argus-welcome-avatar img {\n  width: 100%; height: 100%; object-fit: cover;\n}\n.argus-welcome-text {\n  margin-top: 20px; text-align: center;\n}\n.argus-welcome-text .greeting {\n  font-size: 1.0rem; color: rgba(255,255,255,0.6);\n  font-weight: 500; letter-spacing: 0.02em;\n  margin: 0;\n}\n.argus-welcome-text .wname {\n  font-size: 2.0rem; font-weight: 900;\n  color: #fff; letter-spacing: -0.03em;\n  margin: 6px 0 0;\n  line-height: 1;\n}\n\n/* PIN prompt dentro del selector tvOS */\n.argus-pin-prompt {\n  position: fixed; inset: 0;\n  background: rgba(0,0,0,0.75);\n  backdrop-filter: blur(28px);\n  -webkit-backdrop-filter: blur(28px);\n  display: flex; align-items: center; justify-content: center;\n  z-index: 10001;\n  animation: argus-overlay-in 0.25s ease both;\n}\n.argus-pin-card {\n  background: rgba(255,255,255,0.08);\n  border: 1px solid rgba(255,255,255,0.14);\n  border-radius: 20px; padding: 28px 24px;\n  width: min(340px, 90vw);\n  text-align: center; color: #fff;\n}\n.argus-pin-card h3 {\n  margin: 0 0 4px; font-size: 1.1rem; font-weight: 800;\n}\n.argus-pin-card .pin-sub {\n  font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-bottom: 16px;\n}\n.argus-pin-input {\n  width: 100%; box-sizing: border-box;\n  text-align: center; font-size: 1.6rem;\n  letter-spacing: 0.4em; padding: 12px;\n  border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);\n  background: rgba(255,255,255,0.07); color: #fff;\n  outline: none; margin-bottom: 14px;\n}\n.argus-numpad {\n  display: grid; grid-template-columns: repeat(3,1fr); gap: 10px;\n  margin-bottom: 12px;\n}\n.argus-numpad button {\n  padding: 14px; font-size: 1.15rem; font-weight: 700;\n  border-radius: 12px;\n  border: 1px solid rgba(255,255,255,0.14);\n  background: rgba(255,255,255,0.08); color: #fff;\n  cursor: pointer;\n  transition: background 0.15s, transform 0.1s;\n}\n.argus-numpad button:active { transform: scale(0.93); background: rgba(255,255,255,0.18); }\n.argus-pin-actions {\n  display: flex; gap: 10px; margin-top: 4px;\n}\n.argus-pin-actions button {\n  flex: 1; padding: 12px; border-radius: 12px; font-size: 0.85rem;\n  font-weight: 700; cursor: pointer;\n  border: 1px solid rgba(255,255,255,0.15);\n  background: rgba(255,255,255,0.07); color: #fff;\n  transition: background 0.15s;\n}\n.argus-pin-actions button:hover { background: rgba(255,255,255,0.15); }\n\n@keyframes argus-shake {\n  0%, 100% { transform: translateX(0); }\n  20%       { transform: translateX(-8px); }\n  40%       { transform: translateX(8px); }\n  60%       { transform: translateX(-5px); }\n  80%       { transform: translateX(5px); }\n}\n@keyframes argus-overlay-out {\n  from { opacity: 1; }\n  to   { opacity: 0; }\n}\n\n.user-selector-grid {\n\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));\n  gap: 16px;\n  margin-top: 24px;\n}\n.user-card {\n  background: rgba(255,255,255,0.1);\n  border: 1px solid rgba(255,255,255,0.15);\n  border-radius: 16px;\n  padding: 20px 10px;\n  cursor: pointer;\n  transition: all 0.2s ease;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: 12px;\n}\n.user-card:hover {\n  background: rgba(255,255,255,0.2);\n  transform: translateY(-2px);\n}\n.user-card-own {\n  border-color: rgba(0, 122, 255, 0.55);\n  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.22), 0 8px 24px rgba(0,122,255,0.1);\n}\n.user-card-own:hover {\n  border-color: rgba(0, 122, 255, 0.8);\n}\n.profile-own-badge {\n  font-size: 10px;\n  font-weight: 800;\n  text-transform: uppercase;\n  letter-spacing: 0.08em;\n  color: #007aff;\n  background: rgba(0, 122, 255, 0.12);\n  border-radius: 999px;\n  padding: 2px 8px;\n  margin-top: -4px;\n}\n.user-role-label {\n  font-size: 11px;\n  opacity: 0.55;\n  font-weight: 600;\n  letter-spacing: 0.02em;\n}\n@keyframes shake {\n  0%, 100% { transform: translateX(0); }\n  20%, 60% { transform: translateX(-6px); }\n  40%, 80% { transform: translateX(6px); }\n}\n.user-avatar {\n  width: 56px;\n  height: 56px;\n  border-radius: 50%;\n  background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 20px;\n  font-weight: 600;\n  color: #fff;\n  border: 1px solid rgba(255,255,255,0.3);\n}\n.user-name {\n  font-size: 14px;\n  font-weight: 500;\n  color: rgba(255,255,255,0.9);\n}\n.pin-prompt {\n  display: none;\n  animation: fadeIn 0.3s ease forwards;\n  margin-top: 20px;\n}\n.pin-prompt input {\n  font-size: 24px;\n  letter-spacing: 8px;\n  text-align: center;\n  padding: 10px;\n  border-radius: 12px;\n  border: 1px solid rgba(255,255,255,0.2);\n  background: rgba(0,0,0,0.2);\n  color: white;\n  width: 200px;\n  margin-bottom: 20px;\n}\n.btn-claim {\n  background: #ff3b30;\n  color: white;\n  border: none;\n  padding: 14px 28px;\n  border-radius: 12px;\n  font-size: 16px;\n  font-weight: 600;\n  cursor: pointer;\n  transition: background 0.2s;\n}\n.btn-claim:hover { background: #ff453a; }\n.btn-start {\n  background: #34c759;\n  color: white;\n  border: none;\n  padding: 14px 28px;\n  border-radius: 12px;\n  font-size: 16px;\n  font-weight: 600;\n  cursor: pointer;\n  transition: background 0.2s;\n}\n.btn-start:hover { background: #30d158; }\n.btn-cancel {\n  background: rgba(255,255,255,0.1);\n  color: white;\n  border: none;\n  padding: 14px 28px;\n  border-radius: 12px;\n  font-size: 16px;\n  font-weight: 600;\n  cursor: pointer;\n  margin-left: 10px;\n}\n\n/* Mobile background and HomeKit polish fixes (moved from runtime hack) */\n.entry-icon,.entry-icon>svg,.argus-old-shield,.argus-old-shield>svg{overflow:visible!important;clip-path:none!important;-webkit-clip-path:none!important}\n.entry-icon{contain:layout!important}\n#global-status { display: none !important; }\n#global-status .badge.disarmed,.hero-pill#hero-security-pill{color:#fff!important;background:rgba(18,82,54,.78)!important;border:1px solid rgba(125,255,185,.64)!important;text-shadow:0 1px 2px rgba(0,0,0,.72)!important;opacity:1!important}\n.argus-instance-duplicate-status{display:none!important}\n.pin-prompt,.pin-modal,.modal,.argus-bootstrap-card{color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.55)!important}\n.pin-prompt input,.pin-modal input,.argus-bootstrap-card input{color:#fff!important;background:rgba(8,16,31,.72)!important;border-color:rgba(255,255,255,.24)!important;-webkit-text-fill-color:#fff!important}\n.pin-prompt label,.pin-modal label,.pin-prompt p,.pin-modal p,.argus-bootstrap-card label,.argus-bootstrap-card p{color:rgba(255,255,255,.88)!important}\n#w-activity,.activity-log{max-height:min(58vh,520px)!important;overflow-y:auto!important;overscroll-behavior:contain!important;scrollbar-gutter:stable!important}\n#w-activity .panel-body,.activity-log .panel-body{max-height:inherit!important;overflow-y:auto!important}\n@media(max-width:760px){\n  .hero{display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;gap:12px!important;padding:18px 14px!important}\n  .hero-left{width:100%!important;min-width:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:8px!important}\n  .hero-left>div{text-align:center!important;display:flex!important;flex-direction:column!important;align-items:center!important}\n  .hero-left h1,.hero-left p{text-align:center!important;margin:0 auto!important}\n  .hero-context{display:flex!important;flex-direction:column!important;width:100%!important;margin:4px 0 0!important;align-items:center!important;justify-content:center!important;gap:8px!important}\n  .hero-clock{width:100%!important;min-width:0!important;padding:0!important;border:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:3px!important;line-height:1.12!important}\n  .hero-clock strong,.hero-clock span,#hero-clock-time,#hero-clock-date{width:100%!important;max-width:100%!important;text-align:center!important;display:block!important;margin:0 auto!important;line-height:1.12!important}\n  #hero-profile-container{display:flex!important;justify-content:center!important;align-items:center!important;width:100%!important;margin:2px auto 0!important}\n  .hero-pills{display:grid!important;grid-template-columns:minmax(0,1fr)!important;width:100%!important;min-width:0!important;justify-items:center!important;align-items:center!important;gap:8px!important}\n  .hero-pill{width:min(100%,360px)!important;max-width:100%!important;white-space:normal!important;text-align:center!important;justify-content:center!important;align-items:center!important;line-height:1.25!important;margin:0 auto!important}\n  .dashboard-instances>.panel-head{flex-direction:column!important;align-items:stretch!important;gap:10px!important}\n  #global-status,#global-status .badge{width:100%!important;box-sizing:border-box!important;justify-content:center!important;text-align:center!important;white-space:normal!important;line-height:1.3!important}\n  #w-activity,.activity-log{max-height:46vh!important;overflow-y:auto!important}\n  .argus-mobile-history-overflow-item{display:list-item!important}\n  #w-performance,.performance-card,.device-performance{display:grid!important;grid-template-columns:minmax(0,1fr)!important;justify-items:stretch!important;align-items:center!important;text-align:center!important;gap:10px!important}\n  #w-performance *,.performance-card *,.device-performance *{max-width:100%!important;box-sizing:border-box!important}\n  #w-access .panel-body,#w-settings .panel-body,.sos-actions,.panic-actions{overflow:visible!important;max-height:none!important}\n  .sos-actions button,.panic-actions button,[data-action*=\"sos\"],[data-action*=\"panic\"]{min-height:48px!important;touch-action:manipulation!important}\n  input[type=\"file\"]{max-width:100%!important;width:100%!important;color:#fff!important}\n}\n@media(orientation:landscape) and (max-height:560px) and (max-width:950px){\n  .hero{padding:14px!important;gap:10px!important}\n  .hero-context{grid-template-columns:auto minmax(0,1fr)!important;align-items:center!important}\n  .hero-clock{width:auto!important;justify-items:start!important}\n  .hero-pills{justify-content:flex-start!important}\n}\n  .entry { overflow: hidden; border-radius: 28px; -webkit-mask-image: -webkit-radial-gradient(white, black); }\n\n/* Profile Frosted Glass & Jelly Spring Animation */\n@keyframes jellySpringIn{0%{opacity:0;transform:scale(0.7) translateY(-14px)}45%{opacity:1;transform:scale(1.06) translateY(3px)}70%{transform:scale(0.97) translateY(-1px)}88%{transform:scale(1.01) translateY(1px)}100%{opacity:1;transform:scale(1) translateY(0)}}\n@keyframes jellySpringOut{0%{opacity:1;transform:scale(1) translateY(0)}35%{opacity:0.95;transform:scale(1.04) translateY(2px)}100%{opacity:0;transform:scale(0.72) translateY(-12px)}}\n@keyframes argusSensorArmBlink{0%,100%{border-color:rgba(255,159,10,0.85);box-shadow:0 0 10px rgba(255,159,10,0.5),inset 0 0 6px rgba(255,159,10,0.3);transform:scale(1)}50%{border-color:#ffd60a;box-shadow:0 0 20px 4px rgba(255,214,10,0.85),inset 0 0 12px rgba(255,214,10,0.5);transform:scale(1.02)}}\n\n.hero-profile-dropdown.opening{display:flex!important;animation:jellySpringIn 0.38s cubic-bezier(0.34,1.56,0.64,1) both!important}\n.hero-profile-dropdown.closing{display:flex!important;animation:jellySpringOut 0.28s cubic-bezier(0.4,0,0.2,1) both!important;pointer-events:none!important}\n\n\n.console-sensor.sensor-arming-blink,\n.console-sensor.argus-blocking{border-color:#ffd60a!important;background:linear-gradient(135deg,rgba(255,149,0,0.38),rgba(255,96,0,0.22))!important;animation:argusSensorArmBlink 0.9s ease-in-out infinite!important;color:#fff!important}\n\n/* Keep sensor labels readable and keep the status word intact. */\n.security-console .console-sensor,\n.security-console .console-sensor-card { min-width: 0 !important; }\n.security-console .console-sensor-name {\n  min-width: 0 !important;\n  overflow-wrap: normal !important;\n  word-break: normal !important;\n  hyphens: none !important;\n  white-space: normal !important;\n}\n.security-console .console-sensor-state {\n  flex: 0 0 auto !important;\n  white-space: nowrap !important;\n}\n\n/* Wide spacious SOS selector */\n.emergency-number-card{transition:all 0.3s ease}\n.sos-configuration #sos-output-chips{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))!important;gap:12px!important;width:100%!important;max-height:none!important;overflow:visible!important}\n.sos-output-row{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;padding:10px 14px!important;background:rgba(255,255,255,0.06)!important;border:1px solid rgba(255,255,255,0.12)!important;border-radius:12px!important;width:100%!important;box-sizing:border-box!important}\n.sos-output-row > .sensor-pill{flex:1!important;min-width:0!important;background:transparent!important;border:none!important;box-shadow:none!important;padding:0!important;font-weight:700!important;font-size:12px!important}\n\n/* Initial Dark Loading Curtain to guarantee zero raw DOM / FOUC flash */\n#argus-initial-curtain {\n  position: fixed;\n  inset: 0;\n  background: #080d1a;\n  z-index: 99998;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  transition: opacity 0.35s ease, visibility 0.35s ease;\n}\n#argus-initial-curtain.curtain-hidden {\n  opacity: 0;\n  visibility: hidden;\n  pointer-events: none;\n}\n.argus-curtain-spinner {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: 16px;\n}\n.argus-curtain-icon {\n  font-size: 42px;\n  animation: curtainPulse 1.4s ease-in-out infinite;\n}\n.argus-curtain-bar {\n  width: 120px;\n  height: 4px;\n  border-radius: 999px;\n  background: rgba(255, 255, 255, 0.08);\n  overflow: hidden;\n  position: relative;\n}\n.argus-curtain-fill {\n  width: 40%;\n  height: 100%;\n  background: linear-gradient(90deg, #38bdf8, #818cf8);\n  border-radius: 999px;\n  position: absolute;\n  animation: curtainSlide 1.2s ease-in-out infinite;\n}\n@keyframes curtainPulse {\n  0%, 100% { transform: scale(1); opacity: 0.8; }\n  50% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 16px rgba(56,189,248,0.5)); }\n}\n@keyframes curtainSlide {\n  0% { left: -40%; }\n  100% { left: 100%; }\n}\n\n</style>\n\n<!-- Initial Cold Boot Dark Curtain -->\n<div id=\"argus-initial-curtain\" style=\"position:fixed;inset:0;background:#080d1a;z-index:99998;display:flex;align-items:center;justify-content:center;\">\n  <div class=\"argus-curtain-spinner\">\n    <div class=\"argus-curtain-icon\">🛡️</div>\n    <div class=\"argus-curtain-bar\"><div class=\"argus-curtain-fill\"></div></div>\n  </div>\n</div>\n\n<!-- Bootstrap UI -->\n<div id=\"bootstrap-overlay\" class=\"argus-bootstrap-layer\" style=\"display:none\"></div>\n\n<!-- Language picker modal -->\n<div class=\"lang-modal-back\" id=\"lang-modal\" aria-hidden=\"true\">\n  <div class=\"lang-modal-card\">\n    <div class=\"lang-modal-title\" id=\"lang-modal-title\">🌐 Select Language</div>\n    <div class=\"lang-grid\" id=\"lang-grid\"></div>\n    <div class=\"lang-close-row\">\n      <button class=\"lang-close-btn\" id=\"lang-modal-close\">✕ Close</button>\n    </div>\n  </div>\n</div>\n\n<!-- SOS Confirm Modal -->\n<div class=\"ios-confirm-backdrop\" id=\"sos-modal\" style=\"display:none\">\n  <div class=\"ios-confirm-card liquid-glass\" id=\"sos-card\" style=\"position:relative;\">\n    <button id=\"sos-close-x\" style=\"position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.1); border:none; color:white; border-radius:50%; width:32px; height:32px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; opacity:0.8; padding:0; transition:background 0.2s;\">✕</button>\n    <div class=\"ios-confirm-title\" id=\"sos-title-txt\">Confirmar pánico</div>\n    <div class=\"ios-confirm-text\" id=\"sos-text-txt\">Desliza para disparar la alarma inmediatamente.</div>\n    <div class=\"ios-slider-shell\">\n      <div class=\"ios-slider-track\">\n        <div class=\"ios-slider-label\" id=\"sos-label\">Desliza para activar SOS</div>\n        <div class=\"ios-slider-thumb\" id=\"sos-thumb\">🚨</div>\n      </div>\n    </div>\n    <button class=\"ios-confirm-cancel\" id=\"btn-cancel-sos\" style=\"margin-top:16px\">Cancelar</button>\n  </div>\n</div>\n\n\n<div id=\"argus-canvas-bg\"></div>\n\n\n<div class=\"wrap\" style=\"display:none !important;\">\n  <!-- HERO -->\n  <div class=\"glass hero liquid-glass\">\n    <div class=\"hero-left\">\n      <img src=\"/api/argus_static/argus_logo.png\" alt=\"Argus Logo\" style=\"width: 75px; height: 75px; border-radius: 18px; object-fit: cover; box-shadow: 0 8px 24px rgba(0,0,0,0.25); flex-shrink: 0;\">\n      <div>\n        <h1>Argus Home Hub</h1>\n        <p id=\"p-hero-desc\"></p>\n      </div>\n    </div>\n    <div class=\"hero-context\" aria-live=\"polite\">\n      <div class=\"hero-clock\"><strong id=\"hero-clock-time\">--:--</strong><span id=\"hero-clock-date\"></span></div>\n      <div id=\"hero-profile-container\"></div>\n    </div>\n  </div>\n\n  <!-- TWO-COLUMN LAYOUT -->\n  <div class=\"grid hide-legacy\" id=\"widget-grid\">\n\n    <!-- Instances -->\n    <section class=\"glass panel liquid-glass dashboard-instances\" id=\"w-instances\" style=\"grid-column: 1 / -1;\">\n        <div class=\"panel-head\">\n          <h2 id=\"h-instances\"></h2>\n          <div style=\"display:flex;align-items:center;gap:12px\">\n            <div id=\"global-status\"></div>\n          </div>\n        </div>\n        <div id=\"entries\"></div>\n      </section>\n\n      <!-- Activity log -->\n      <section class=\"glass panel liquid-glass activity-panel\" id=\"w-activity\">\n        <div class=\"panel-head\">\n          <h2 id=\"h-activity-log\">📋 Historial de Actividad</h2>\n          <div class=\"panel-actions\">\n            <button class=\"ghost\" id=\"btn-refresh-history\" aria-label=\"Actualizar Historial\" title=\"Actualizar\">🔄 Actualizar</button>\n            <button class=\"ghost\" id=\"btn-export-forensic\" aria-label=\"Exportar Historial\" title=\"Exportar\">📄 Exportar</button>\n            <button class=\"ghost\" id=\"btn-clear-log\" aria-label=\"Limpiar Historial\" style=\"background:rgba(255,69,58,0.12);color:#ff453a !important\" title=\"Limpiar\">🗑️ Limpiar</button>\n          </div>\n        </div>\n        <div id=\"activity-log\" style=\"display:grid;gap:10px;height:280px;overflow-y:auto;margin-top:10px\"></div>\n      </section>\n\n      <!-- Modes -->\n      <section class=\"glass panel liquid-glass modes-panel\" id=\"w-modes\">\n        <div class=\"panel-head\">\n           <h2 id=\"h-modes\"></h2>\n        </div>\n        <div class=\"tabs\" id=\"mode-tabs\" style=\"margin-bottom:15px\"></div>\n        <div id=\"mode-view\"></div>\n      </section>\n\n      <!-- Users & Master PIN Settings -->\n      <section class=\"glass panel liquid-glass access-panel\" id=\"w-access\">\n        <div class=\"panel-head\">\n          <div>\n            <h2 id=\"h-access-title\">Control de Acceso y Usuarios</h2>\n            <p class=\"access-summary\" id=\"p-access-desc\">PIN desactivado · Sin usuarios adicionales</p>\n          </div>\n        </div>\n\n        <div class=\"access-workspace\" id=\"access-workspace\" style=\"display:contents\">\n          <!-- Unified Informative Widget: SOS signals, notifications & audit logging -->\n          <div class=\"system-info-compact-card glass-subpanel\" style=\"padding:14px 18px;border-radius:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);margin-bottom:14px;\">\n            <div style=\"display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:6px;\">\n              <span id=\"system-diagnostics-txt\" style=\"font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;color:rgba(255,255,255,0.85)\">ℹ️ Diagnóstico y Resumen del Sistema</span>\n              <span style=\"font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;background:rgba(74,222,128,0.15);color:#4ade80;border:1px solid rgba(74,222,128,0.3)\">✓ Operativo</span>\n            </div>\n            <div style=\"display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;font-size:11px;\">\n              <div style=\"display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05)\">\n                <span style=\"font-size:16px\">🚨</span>\n                <div><strong style=\"display:block;color:#fff;font-size:11px\">Señales de Auxilio</strong><span style=\"opacity:0.65;font-size:9.5px\">Enlace SOS activo</span></div>\n              </div>\n              <div style=\"display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05)\">\n                <span style=\"font-size:16px\">🔔</span>\n                <div><strong style=\"display:block;color:#fff;font-size:11px\">Notificaciones</strong><span style=\"opacity:0.65;font-size:9.5px\">Push operativas</span></div>\n              </div>\n              <div style=\"display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05)\">\n                <span style=\"font-size:16px\">📋</span>\n                <div><strong style=\"display:block;color:#fff;font-size:11px\">Registro en Vivo</strong><span style=\"opacity:0.65;font-size:9.5px\">Auditoría continua</span></div>\n              </div>\n            </div>\n          </div>\n\n          <!-- Users -->\n          <div class=\"access-section\" id=\"access-users-section\">\n            <h3 id=\"h-users\"></h3>\n            <p class=\"small\" id=\"p-admin-only\" style=\"margin-bottom:14px;color:#fb8c00;font-weight:600\"></p>\n            <div id=\"users-list\" style=\"display:grid;gap:12px;margin-bottom:16px\"></div>\n          </div>\n\n          <!-- Notifications -->\n          <div class=\"access-section\" id=\"access-notifications-section\">\n            <h3 id=\"h-notifications\"></h3>\n            <p class=\"small\" id=\"p-notif-desc\" style=\"margin:0 0 12px;opacity:.72\"></p>\n            <div id=\"notif-targets\" style=\"display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px\"></div>\n            <div style=\"display:flex;gap:8px;align-items:center\">\n              <select id=\"notif-select\" class=\"glass-control\" style=\"flex:1;min-width:0\"></select>\n              <button type=\"button\" class=\"ghost\" id=\"btn-add-notif\" style=\"white-space:nowrap\">＋</button>\n            </div>\n            <div class=\"save-row\" style=\"margin-top:12px\">\n              <button class=\"primary\" id=\"btn-save-notif\" style=\"width:100%\"></button>\n            </div>\n            <div id=\"notif-status\" class=\"status\" style=\"margin-top:8px;text-align:center;font-size:12px;font-weight:bold;min-height:18px\"></div>\n          </div>\n\n          <!-- Master PIN -->\n          <div class=\"access-section\" id=\"access-pin-section\">\n            <h3 id=\"h-settings-pin\">Pin de Armado</h3>\n            <div class=\"subsection\">\n              <div id=\"current-pin-display\" style=\"font-size:13px;font-weight:800;color:#ffffff !important;margin-bottom:15px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);padding:8px 14px;border-radius:10px;display:inline-block\"></div>\n              <div class=\"field-group collapsible collapsed\" id=\"group-current-pin\" style=\"margin-bottom: 12px\">\n                 <div style=\"display:flex; justify-content:space-between; align-items:center;\">\n                   <label id=\"l-current-pin-lbl\"></label>\n                   <a href=\"#\" id=\"lnk-forgot-pin\" style=\"font-size:11px; color:var(--accent-color, #ff4081); text-decoration:none; font-weight:bold; margin-bottom:4px; display:none;\"></a>\n                 </div>\n                 <input type=\"password\" id=\"current-pin\" inputmode=\"numeric\" pattern=\"[0-9]*\" class=\"glass-control\">\n              </div>\n              <p class=\"small\" id=\"p-pin-remove-hint\" style=\"margin:0 0 10px 0; color:var(--primary-color); font-weight:700\">Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.</p>\n              <div style=\"display:grid;gap:10px\">\n                <div class=\"field-group\"><label id=\"l-new-pin\"></label><input type=\"password\" id=\"new-pin-1\" inputmode=\"numeric\" pattern=\"[0-9]*\" class=\"glass-control\"></div>\n                <div class=\"field-group\"><label id=\"l-confirm-pin\"></label><input type=\"password\" id=\"new-pin-2\" inputmode=\"numeric\" pattern=\"[0-9]*\" class=\"glass-control\"></div>\n              </div>\n              <div class=\"save-row\" style=\"margin-top:15px\">\n                <button class=\"primary\" id=\"btn-save-pin\" style=\"width:100%\"></button>\n              </div>\n              <div id=\"pin-status\" class=\"status\" style=\"margin-top:8px; text-align:center; font-size:12px; font-weight:bold; min-height:18px;\"></div>\n            </div>\n          </div>\n        </div>\n      </section>\n\n      <!-- Automations -->\n      <section class=\"glass panel liquid-glass automations-panel\" id=\"w-automations\">\n        <h2 id=\"h-automations\"></h2>\n        <div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:16px\">\n          <span class=\"small\" id=\"p-linked-rules\" style=\"opacity:0.7\"></span>\n          <button class=\"primary\" id=\"btn-new-auto\" style=\"padding:6px 12px;font-size:11px\"></button>\n        </div>\n        <div id=\"auto-view\"></div>\n      </section>\n\n      <!-- Backup & Restore -->\n      <section class=\"glass panel liquid-glass backup-panel\" id=\"w-backup\">\n        <h2 id=\"h-backup-title\">Respaldo y Restauración</h2>\n        <p class=\"small\" id=\"p-backup-desc\" style=\"margin-bottom:12px;opacity:0.7\">Guarda una copia de seguridad de tus ajustes o restaura una anterior.</p>\n        <div style=\"display:flex;gap:10px;align-items:center;\">\n          <button class=\"ghost\" id=\"btn-export-config\" style=\"flex:1\">📤 Descargar</button>\n          <div style=\"position:relative; flex:1\">\n            <button class=\"ghost\" style=\"width:100%\" id=\"btn-import-trigger\">📥 Restaurar</button>\n            <input type=\"file\" id=\"import-config-file\" style=\"display:none\" accept=\".json,.argus,application/json\">\n          </div>\n          <button class=\"ghost danger\" id=\"btn-reset-config\" style=\"flex:1\">⚠️ Restablecer</button>\n          <button class=\"primary\" id=\"btn-undo-reset\" style=\"flex:1; display:none;\">↩️ Deshacer</button>\n        </div>\n      </section>\n\n      <!-- GitHub Opt-In -->\n      <section class=\"glass panel liquid-glass github-panel\" id=\"w-github\">\n        <div class=\"github-header\">\n          <h3 id=\"github-title\" style=\"margin:0; font-size:14px; font-weight:700\"></h3>\n          <p id=\"github-desc\" style=\"margin:4px 0 0; font-size:12px; opacity:0.75\"></p>\n        </div>\n        <div class=\"support-actions-grid\">\n          <a id=\"github-action\" class=\"support-link-btn star\" href=\"https://github.com/Chrisalvir1/Argus\" target=\"_blank\" rel=\"noopener noreferrer\">⭐ GitHub</a>\n          <a id=\"paypal-action\" class=\"support-link-btn paypal\" href=\"https://paypal.me/CEstradaAlvir\" target=\"_blank\" rel=\"noopener noreferrer\">☕ PayPal</a>\n          <a id=\"email-action\" class=\"support-link-btn email\" href=\"mailto:chrisalvir01@gmail.com\">✉️ Sugerencias</a>\n        </div>\n      </section>\n\n  </div> <!-- /grid -->\n</div>\n\n<!-- Selector modal (dual-panel) -->\n<div class=\"modal-back\" id=\"selector-modal\" aria-hidden=\"true\">\n  <div class=\"modal\">\n    <div class=\"modal-head\">\n      <h3 id=\"selector-title\">Seleccionar</h3>\n      <button class=\"ghost\" id=\"selector-close\"></button>\n    </div>\n    <div class=\"modal-body\" style=\"overflow:hidden;display:flex;flex-direction:column;gap:10px\">\n      <div class=\"sel-grid\">\n        <!-- LEFT: lista disponible con búsqueda y acciones rápidas -->\n        <div class=\"sel-panel\">\n          <div class=\"subsection-title\" id=\"l-available\">Disponibles</div>\n          <div class=\"search-wrap\" style=\"margin:0\"><input id=\"selector-search\" type=\"search\" placeholder=\"Buscar...\"></div>\n          <div class=\"sel-actions\">\n            <button class=\"ghost\" id=\"selector-select-all\" style=\"padding:5px 10px;font-size:12px\">☑ Todos</button>\n            <button class=\"ghost\" id=\"selector-deselect-all\" style=\"padding:5px 10px;font-size:12px\">☐ Ninguno</button>\n          </div>\n          <div class=\"sel-panel-inner\" id=\"selector-list\"></div>\n        </div>\n        <!-- RIGHT: panel de seleccionados -->\n        <div class=\"sel-panel\">\n          <div class=\"subsection-title\" id=\"l-selected-lbl\">Seleccionados</div>\n          <div class=\"small\" id=\"selector-count\" style=\"margin-bottom:4px\">0 seleccionados</div>\n          <div class=\"sel-panel-inner\" id=\"selector-selected\"></div>\n        </div>\n      </div>\n    </div>\n    <div class=\"modal-footer\">\n      <div style=\"display:flex;gap:10px;width:100%;justify-content:flex-end\">\n        <button class=\"ghost\" id=\"selector-clear\"></button>\n        <button class=\"primary\" id=\"selector-accept\"></button>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- Home name edit modal -->\n<div class=\"modal-back\" id=\"home-name-modal\" aria-hidden=\"true\">\n  <div class=\"modal\" style=\"width:min(400px,96vw)\">\n    <div class=\"modal-head\">\n      <h3 id=\"home-name-modal-h3\">🏡 Nombre del Hogar</h3>\n      <button class=\"ghost\" id=\"home-name-modal-close\">✕</button>\n    </div>\n    <div style=\"display:grid;gap:14px;padding:4px 0\">\n      <p class=\"small\" id=\"home-name-modal-desc\" style=\"margin:0;opacity:.7\">This name appears in the instances panel and in full screen.</p>\n      <div class=\"field-group\">\n        <label id=\"l-home-name-modal-label\">Home name</label>\n        <input type=\"text\" id=\"home-name-input\" placeholder=\"Mi Casa\" maxlength=\"60\" autocomplete=\"off\" class=\"glass-control\">\n      </div>\n      <span class=\"status\" id=\"home-name-status\" style=\"text-align:center\"></span>\n    </div>\n    <div class=\"modal-footer\">\n      <button class=\"ghost\" id=\"home-name-cancel\">Cancelar</button>\n      <button class=\"primary\" id=\"home-name-save\">Guardar</button>\n    </div>\n  </div>\n</div>\n\n<!-- PIN modal -->\n<div class=\"modal-back pm\" id=\"pin-modal\" aria-hidden=\"true\">\n  <div class=\"modal\">\n    <div class=\"modal-head\">\n      <h3 id=\"l-introduce-pin\">🔒</h3>\n      <button class=\"ghost\" id=\"pin-close\" style=\"background:transparent; border:none; color:inherit; font-size:20px; cursor:pointer; padding:4px 8px;\">✕</button>\n    </div>\n    <div style=\"display:grid;gap:10px;width:100%\">\n      <p id=\"l-pin-modal-desc\" class=\"small\" style=\"text-align:center;margin:0;opacity:0.75\"></p>\n      <input id=\"pin-input\" class=\"pin-input\" type=\"password\" inputmode=\"numeric\" pattern=\"[0-9]*\" placeholder=\"••••\" autocomplete=\"off\" maxlength=\"12\" readonly>\n      <div class=\"pin-grid\" id=\"pin-pad\">\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"1\">1</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"2\">2</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"3\">3</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"4\">4</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"5\">5</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"6\">6</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"7\">7</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"8\">8</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"9\">9</button>\n        <button class=\"pin-btn-round action-key delete-key\" type=\"button\" id=\"pin-backspace\">Borrar</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"0\">0</button>\n        <button class=\"pin-btn-round action-key enter-key\" type=\"button\" id=\"pin-confirm\">Enter</button>\n      </div>\n      <div id=\"pin-error\" class=\"pin-error\"></div>\n      <div style=\"text-align:center; margin-top: 5px;\">\n        <a href=\"#\" id=\"pin-forgot-link\" style=\"font-size:12px; color:var(--accent-color, #ff4081); text-decoration:none; font-weight:700; display:none;\"></a>\n      </div>\n    </div>\n    <button id=\"pin-cancel\" style=\"display:none\"></button>\n  </div>\n</div>\n\n<!-- History Export modal -->\n<div class=\"modal-back pm\" id=\"history-export-modal\" aria-hidden=\"true\">\n  <div class=\"modal\" style=\"max-width: 440px;\">\n    <div class=\"modal-head\">\n      <h3 id=\"h-history-export-title\">📄 Exportar Historial</h3>\n      <button class=\"ghost\" id=\"history-export-close\" style=\"background:transparent; border:none; color:inherit; font-size:20px; cursor:pointer; padding:4px 8px;\">✕</button>\n    </div>\n    <div style=\"display:grid;gap:14px;padding:6px 0\">\n      <p class=\"small\" id=\"p-history-export-desc\" style=\"margin:0;opacity:.75\">Selecciona el rango de fechas para descargar el reporte.</p>\n      <div style=\"display:grid;grid-template-columns:1fr 1fr;gap:10px;\">\n        <div class=\"field-group\">\n          <label id=\"l-history-export-from\" style=\"font-size:11px;font-weight:700;opacity:0.8;\">📅 Desde</label>\n          <input type=\"date\" id=\"export-history-from\" class=\"glass-control\" style=\"width:100%;box-sizing:border-box;padding:8px 10px;border-radius:10px;color:#fff;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12)\">\n        </div>\n        <div class=\"field-group\">\n          <label id=\"l-history-export-to\" style=\"font-size:11px;font-weight:700;opacity:0.8;\">📅 Hasta</label>\n          <input type=\"date\" id=\"export-history-to\" class=\"glass-control\" style=\"width:100%;box-sizing:border-box;padding:8px 10px;border-radius:10px;color:#fff;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12)\">\n        </div>\n      </div>\n      <div style=\"display:flex;flex-direction:column;gap:8px;margin-top:6px;\">\n        <button class=\"primary\" id=\"btn-do-download-pdf\" style=\"height:44px;font-size:13px;font-weight:800;cursor:pointer;border-radius:12px;box-shadow:0 6px 18px rgba(0,122,255,0.3)\">\n          ⬇️ Descargar PDF\n        </button>\n        <button class=\"glass-control\" id=\"btn-do-download-txt\" style=\"height:40px;font-size:12px;font-weight:700;cursor:pointer;border-radius:12px;background:rgba(255,255,255,0.05);color:#fff;border:1px solid rgba(255,255,255,0.15)\">\n          📑 Descargar reporte (.txt)\n        </button>\n        <button class=\"ghost\" id=\"btn-do-download-json\" style=\"height:36px;font-size:11px;cursor:pointer;opacity:0.75\">\n          💾 Descargar JSON sin procesar\n        </button>\n      </div>\n    </div>\n  </div>\n</div>\n";
+d.innerHTML = "\n<style>\n:host {\n  display: block;\n  background: #080d1a;\n  color: #fff;\n  min-height: 100vh;\n  font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif !important;\n}\n:host:not(:defined) {\n  display: none !important;\n}\n\n#widget-grid.hide-legacy > section.panel:not(#w-instances) { display: none !important; }\n\n@keyframes heroSpringSlideIn {\n  0% { transform: translateX(-50px); opacity: 0; }\n  100% { transform: translateX(0); opacity: 1; }\n}\n\n  /* Modern Premium Liquid Glass & iOS Wobble Styles */\n  :host {\n    font-family: 'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif !important;\n    --glass-bg: var(--argus-glass-bg, rgba(255, 255, 255, 0.07));\n    --glass-border: var(--argus-glass-border, rgba(255, 255, 255, 0.09));\n    --glass-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.35),\n                    0 15px 30px -10px rgba(0, 122, 255, 0.12),\n                    inset 0 1px 0 rgba(255, 255, 255, 0.15);\n    --sos-red: linear-gradient(135deg, #ff3b30, #ff2d55);\n    --ios-track: rgba(0, 0, 0, 0.25);\n    --ios-thumb: linear-gradient(180deg, #ffffff, #f4f4f7);\n    --primary-color: #38bdf8;\n    --personalize-border: rgba(255, 255, 255, 0.06);\n    --personalize-divider: rgba(255, 255, 255, 0.08);\n    --bg-inputs-bg: rgba(0, 0, 0, 0.15);\n    --bg-inputs-border: rgba(255, 255, 255, 0.05);\n    --input-bg-darker: rgba(0, 0, 0, 0.25);\n    --input-border-darker: rgba(255, 255, 255, 0.12);\n    --hero-bg: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));\n    --log-item-bg: rgba(255, 255, 255, 0.02);\n    --log-item-border: rgba(255, 255, 255, 0.05);\n    --user-card-bg: rgba(255, 255, 255, 0.02);\n    --user-card-border: rgba(255, 255, 255, 0.06);\n    --primary-text-color: #fff !important;\n    --secondary-text-color: rgba(255, 255, 255, 0.7);\n    --input-bg: rgba(255, 255, 255, 0.04);\n    --input-border: rgba(255, 255, 255, 0.12);\n  }\n\n  /* High Contrast / OLED Dark Mode Accessibility */\n  :host([argus-contrast=\"high\"]),\n  :host(.argus-contrast-high) {\n    --glass-bg: rgba(11, 16, 26, 0.95);\n    --glass-border: rgba(255, 255, 255, 0.22);\n    --v2066-glass: rgba(11, 16, 26, 0.95);\n    --v2066-border: rgba(255, 255, 255, 0.22);\n    --v2066-text: #ffffff;\n    --v2066-muted: #cbd5e1;\n    --primary-text-color: #ffffff !important;\n    --secondary-text-color: #cbd5e1 !important;\n    --hud-bg: rgba(11, 16, 26, 0.98);\n    --hero-bg: linear-gradient(135deg, rgba(16, 24, 39, 0.96), rgba(8, 12, 20, 0.98));\n    --personalize-bg: rgba(11, 16, 26, 0.92);\n    --personalize-border: rgba(255, 255, 255, 0.2);\n    --user-card-bg: rgba(14, 20, 33, 0.95);\n    --user-card-border: rgba(255, 255, 255, 0.2);\n  }\n  :host([argus-contrast=\"high\"]) #profile-dropdown,\n  :host(.argus-contrast-high) #profile-dropdown {\n    background: rgba(10, 14, 23, 0.98) !important;\n    border: 1px solid rgba(255, 255, 255, 0.25) !important;\n    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7) !important;\n  }\n  :host([argus-contrast=\"high\"]) .liquid-glass,\n  :host(.argus-contrast-high) .liquid-glass {\n    background: rgba(11, 16, 26, 0.95) !important;\n    border-color: rgba(255, 255, 255, 0.22) !important;\n  }\n\n  :host {\n    --hud-text-color: #fff;\n    --hud-bg: rgba(255,255,255,0.06);\n  }\n\n  /* Garantiza legibilidad sobre cualquier fondo */\n  :host([data-bg-mode=\"default\"]) .hero-top-bar,\n  :host([data-bg-mode=\"default\"]) .entry-hud,\n  :host([data-bg-mode=\"default\"]) .mode-btn,\n  :host([data-bg-mode=\"default\"]) .sensor-pill {\n    text-shadow: 0 1px 4px rgba(0,0,0,0.7);\n  }\n\n  :host([data-bg-mode=\"default\"]) .mode-btn {\n    background: rgba(255,255,255,0.10) !important;\n    border: 1px solid rgba(255,255,255,0.18) !important;\n    color: rgba(255,255,255,0.95) !important;\n    backdrop-filter: blur(12px);\n  }\n\n  :host([data-bg-mode=\"default\"]) .subsection-title,\n  :host([data-bg-mode=\"default\"]) .user-role-label {\n    color: rgba(255,255,255,0.60) !important;\n  }\n\n  /* Fullscreen Active / Virtual Fullscreen CSS Overrides */\n  :host(.fullscreen-active) {\n    position: fixed !important;\n    inset: 0 !important;\n    top: 0 !important;\n    left: 0 !important;\n    right: 0 !important;\n    bottom: 0 !important;\n    width: 100vw !important;\n    width: 100dvw !important;\n    height: 100vh !important;\n    height: 100dvh !important;\n    z-index: 99999999 !important;\n    background: radial-gradient(ellipse at 50% 50%, #162438 0%, #08101a 60%, #010408 100%) !important;\n    overflow-y: auto !important;\n    overflow-x: hidden !important;\n    -webkit-overflow-scrolling: touch !important;\n    margin: 0 !important;\n    padding: 0 !important;\n  }\n  :host(.fullscreen-active) .hero,\n  :host(.fullscreen-active) #argus-react-dashboard-root,\n  :host(.fullscreen-active) .argus-dashboard,\n  :host(.fullscreen-active) .panel-head,\n  :host(.fullscreen-active) section:not(#w-instances),\n  :host(.fullscreen-active) .argus-widget:not(#w-instances),\n  :host(.fullscreen-active) .personalize-section {\n    display: none !important;\n  }\n  :host(.fullscreen-active) .wrap,\n  :host(.fullscreen-active) .grid,\n  :host(.fullscreen-active) #widget-grid,\n  :host(.fullscreen-active) #w-instances,\n  :host(.fullscreen-active) #entries,\n  :host(.fullscreen-active) #entries > div {\n    display: flex !important;\n    flex-direction: column !important;\n    position: static !important;\n    width: 100% !important;\n    width: 100vw !important;\n    width: 100dvw !important;\n    max-width: none !important;\n    min-height: 100% !important;\n    min-height: 100vh !important;\n    min-height: 100dvh !important;\n    height: 100% !important;\n    max-height: none !important;\n    padding: 0 !important;\n    margin: 0 !important;\n    border: none !important;\n    border-radius: 0 !important;\n    box-shadow: none !important;\n    background: transparent !important;\n    backdrop-filter: none !important;\n    -webkit-backdrop-filter: none !important;\n    transform: none !important;\n    filter: none !important;\n    overflow: visible !important;\n  }\n\n\n\n  .liquid-glass {\n    background: linear-gradient(135deg,color-mix(in srgb,rgba(255,255,255,0.18) 80%,transparent),rgba(255,255,255,0.04));\n    backdrop-filter: blur(28px) saturate(180%) brightness(1.08);\n    -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(1.08);\n    border: 1px solid rgba(255,255,255,0.22);\n    box-shadow: 0 8px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.25);\n    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;\n  }\n  .wrap {\n    display: none !important;\n    position: relative;\n    z-index: 1;\n    opacity: 0;\n    visibility: hidden;\n    pointer-events: none;\n    max-width: 1400px;\n    margin: 0 auto;\n    padding: 24px;\n    gap: 24px;\n    transition: opacity 0.35s ease, filter 0.35s ease;\n  }\n  .wrap.wrap-ready {\n    display: grid !important;\n    opacity: 1 !important;\n    visibility: visible !important;\n    pointer-events: auto !important;\n  }\n  .wrap.wrap-blurred { filter: blur(15px); opacity: 0.45; visibility: visible; pointer-events: none; }\n  @keyframes dialElasticIn {\n    0% { transform: scale(0.8) translateY(20px); opacity: 0; }\n    60% { transform: scale(1.04) translateY(-4px); opacity: 0.9; }\n    85% { transform: scale(0.98) translateY(1px); opacity: 0.98; }\n    100% { transform: scale(1) translateY(0); opacity: 1; }\n  }\n  .dial-elastic { animation: dialElasticIn 0.5s cubic-bezier(0.25, 1.25, 0.5, 1) forwards; }\n\n  .collapsible {\n    transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease, margin 0.4s ease, padding 0.4s ease;\n    overflow: hidden;\n    max-height: 600px;\n    opacity: 1;\n  }\n  .collapsible.collapsed {\n    max-height: 0 !important;\n    opacity: 0 !important;\n    margin-top: 0 !important;\n    margin-bottom: 0 !important;\n    padding-top: 0 !important;\n    padding-bottom: 0 !important;\n    border: none !important;\n    pointer-events: none;\n  }\n\n  /* Scrollbar aesthetics */\n  ::-webkit-scrollbar {\n    width: 6px;\n    height: 6px;\n  }\n  ::-webkit-scrollbar-track {\n    background: transparent;\n  }\n  ::-webkit-scrollbar-thumb {\n    background: rgba(255, 255, 255, 0.12);\n    border-radius: 999px;\n  }\n  ::-webkit-scrollbar-thumb:hover {\n    background: rgba(255, 255, 255, 0.25);\n  }\n  .x-never-match ::-webkit-scrollbar-thumb {\n    background: rgba(0, 0, 0, 0.08);\n  }\n  .x-never-match ::-webkit-scrollbar-thumb:hover {\n    background: rgba(0, 0, 0, 0.18);\n  }\n\n  .battery-alert { margin: 0 0 16px 0; padding: 14px 18px; border-radius: 20px; background: rgba(255, 149, 0, 0.12); border: 1px solid rgba(255, 149, 0, 0.22); color: #ffe3b3; font-weight: 700; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); text-align: left; box-shadow: 0 4px 15px rgba(255,149,0,0.1); }\n\n  /* SOS Slider redesign */\n  .btn-sos { width: 100%; min-height: 56px; border: 0; border-radius: 20px; background: var(--sos-red); color: white; font-size: 1.05rem; font-weight: 800; letter-spacing: 0.02em; cursor: pointer; box-shadow: 0 10px 25px rgba(255, 59, 48, 0.35); transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, opacity 0.2s; margin-top: 8px; display:flex;align-items:center;justify-content:center;gap:10px; }\n  .btn-sos:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(255, 59, 48, 0.45); }\n  .btn-sos:active { transform: scale(0.95); opacity: 0.92; }\n  .ios-confirm-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 999999; backdrop-filter: blur(12px); }\n  .ios-confirm-backdrop.open { display: flex; pointer-events: auto !important; }\n  .ios-confirm-backdrop.open * { pointer-events: auto; }\n  .ios-confirm-backdrop.open .ios-slider-label { pointer-events: none !important; }\n  .ios-confirm-card { width: min(100%, 420px); border-radius: 32px; padding: 24px; color: white; background: rgba(20,22,35,0.85); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 32px 80px rgba(0,0,0,0.6); }\n  .ios-confirm-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 8px; text-align: center; }\n  .ios-confirm-text { font-size: 0.98rem; opacity: 0.85; line-height: 1.45; text-align: center; margin-bottom: 20px; }\n  .ios-slider-shell { padding: 4px 0 16px; }\n  .ios-slider-track { position: relative; height: 66px; border-radius: 999px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); overflow: hidden; }\n  .ios-slider-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 82px; font-size: 0.95rem; font-weight: 700; color: rgba(255, 255, 255, 0.85); pointer-events: none; text-align: center; }\n  .ios-slider-thumb { position: absolute; top: 6px; left: 6px; width: 52px; height: 52px; border-radius: 50%; background: var(--ios-thumb); color: #ff3b30; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 900; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25); touch-action: none; user-select: none; cursor: grab; transition: transform 0.1s ease-out; }\n  .ios-confirm-cancel { width: 100%; min-height: 50px; border: 0; border-radius: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.05); color: white; font-weight: 700; cursor: pointer; transition: background 0.2s, transform 0.15s; }\n  .ios-confirm-cancel:hover { background: rgba(255,255,255,0.14); }\n  .ios-confirm-cancel:active { transform: scale(0.96); }\n\n  :host{display:block;min-height:100vh;box-sizing:border-box;--primary-text-color:#ffffff!important;--secondary-text-color:rgba(255,255,255,0.7)!important;color:#ffffff!important;background:var(--lovelace-background,var(--primary-background-color));font-family:'Outfit',Inter,system-ui,sans-serif}\n  :host([compact]), :host(.argus-compact) {\n    min-height: auto !important;\n    height: auto !important;\n    max-height: none !important;\n    background: transparent !important;\n  }\n  :host([compact]) .wrap, :host(.argus-compact) .wrap {\n    padding: 0 !important;\n    margin: 0 !important;\n    max-width: 100% !important;\n    width: 100% !important;\n    height: auto !important;\n    min-height: fit-content !important;\n    gap: 0 !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 0 0 auto !important;\n    overflow: visible !important;\n    container-type: inline-size;\n    container-name: argus-compact-wrap;\n  }\n  :host([compact]) .hero, :host(.argus-compact) .hero {\n    display: none !important;\n  }\n  :host([compact]) #argus-canvas-bg, :host(.argus-compact) #argus-canvas-bg {\n    display: none !important;\n  }\n  /* The compact card renders the live security console directly. The React\n     dashboard grid is a secondary editor surface and can retain persisted\n     widget coordinates (thousands of pixels tall) even while hidden. */\n  :host([compact]) #argus-react-dashboard-root,\n  :host(.argus-compact) #argus-react-dashboard-root {\n    display: none !important;\n    height: 0 !important;\n    min-height: 0 !important;\n    max-height: 0 !important;\n    overflow: hidden !important;\n  }\n  :host([compact]) .tabs, :host(.argus-compact) .tabs {\n    display: none !important;\n  }\n  :host([compact]) .dashboard-instances .panel-head, :host(.argus-compact) .dashboard-instances .panel-head {\n    display: none !important;\n  }\n  :host([compact]) .personalize-section, :host(.argus-compact) .personalize-section {\n    display: none !important;\n  }\n  :host([compact]) .glass.panel:not(#w-instances), :host(.argus-compact) .glass.panel:not(#w-instances) {\n    display: none !important;\n  }\n  :host([compact]) .argus-widget:not(:has(#w-instances)), :host(.argus-compact) .argus-widget:not(:has(#w-instances)) {\n    display: none !important;\n  }\n  :host([compact]) .argus-dashboard__toolbar, :host(.argus-compact) .argus-dashboard__toolbar {\n    display: none !important;\n  }\n  :host([compact]) #widget-grid, :host(.argus-compact) #widget-grid {\n    padding: 0 !important;\n    margin: 0 !important;\n    display: block !important;\n    height: auto !important;\n  }\n  :host([compact]) #w-instances, :host(.argus-compact) #w-instances {\n    background: transparent !important;\n    border: none !important;\n    box-shadow: none !important;\n    padding: 0 !important;\n    margin: 0 !important;\n    height: auto !important;\n    width: 100% !important;\n    min-height: 0 !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 0 0 auto !important;\n    overflow: visible !important;\n    background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;\n    backdrop-filter: blur(28px) saturate(150%) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(150%) !important;\n  }\n  :host([compact]) .entry, :host(.argus-compact) .entry {\n    margin-bottom: 0 !important;\n    border-radius: 24px !important;\n    height: auto !important;\n    width: 100% !important;\n    min-height: 0 !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 0 0 auto !important;\n    overflow: visible !important;\n    background: var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))) !important;\n    backdrop-filter: blur(28px) saturate(150%) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(150%) !important;\n  }\n  :host([compact]) #bootstrap-overlay, :host(.argus-compact) #bootstrap-overlay,\n  :host([compact]) .argus-profile-overlay, :host(.argus-compact) .argus-profile-overlay,\n  :host([compact]) .argus-welcome-screen, :host(.argus-compact) .argus-welcome-screen {\n    display: none !important;\n  }\n  :host([compact]) .argus-widget__content, :host(.argus-compact) .argus-widget__content {\n    height: auto !important;\n    width: 100% !important;\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 0 0 auto !important;\n    overflow: visible !important;\n  }\n  :host([compact]) #entries, :host(.argus-compact) #entries {\n    display: flex !important;\n    flex-direction: column !important;\n    flex: 1 1 auto !important;\n    height: auto !important;\n    width: 100% !important;\n    margin: 0 !important;\n    overflow: visible !important;\n  }\n  /* Embedded Lovelace cards must size to their content, never to the viewport. */\n  :host([compact]) .argus-widget__content,\n  :host(.argus-compact) .argus-widget__content,\n  :host([compact]) #entries,\n  :host(.argus-compact) #entries,\n  :host([compact]) #w-instances,\n  :host(.argus-compact) #w-instances,\n  :host([compact]) .entry,\n  :host(.argus-compact) .entry {\n    height: auto !important;\n    min-height: 0 !important;\n    max-height: none !important;\n    flex: 0 0 auto !important;\n  }\n  *{box-sizing:border-box}\n  @container argus-compact-wrap (max-width: 800px) {\n    .security-console { flex-direction: column !important; padding: 20px 18px 24px !important; gap: 20px !important; align-items: center !important; justify-content: center !important; }\n    .security-console .entry-icon { order: 2 !important; flex: 0 0 auto !important; min-height: 130px !important; margin: 0 auto !important; }\n    .security-console .liquid-stack { order: 3 !important; width: 100% !important; max-width: 360px !important; }\n    .security-console .console-sensors { order: 4 !important; width: 100% !important; max-width: 360px !important; display: flex !important; flex-direction: column !important; }\n    .sensor-column { position: static !important; max-width: 100% !important; width: 100% !important; align-items: stretch !important; padding: 0 !important; gap: 10px !important; }\n    .sensor-chip { max-width: none !important; }\n    .entry-content { padding: 20px !important; display: flex !important; flex-direction: column !important; align-items: center !important;  }\n    .liquid-stack { display: flex !important; flex-direction: column !important; align-items: stretch !important; gap: 8px !important; }\n  }\n  @keyframes iosGlassIn{0%{opacity:0;transform:translateY(14px) scale(.965)}65%{opacity:1;transform:translateY(-2px) scale(1.008)}100%{transform:translateY(0) scale(1)}}\n  @keyframes iosSelectPop{0%{transform:scale(.92);opacity:.45}60%{transform:scale(1.045);opacity:1}100%{transform:scale(1)}}\n  .glass,.entry,.mode-section-card,.user-card,.file-card,.log-item{animation:iosGlassIn .5s cubic-bezier(.22,1.18,.36,1) both}\n  .pick-row:has(input:checked),.tab.active,.liquid-btn.active{animation:iosSelectPop .34s cubic-bezier(.2,1.45,.35,1);box-shadow:0 0 0 1px color-mix(in srgb,var(--primary-color,#007aff) 45%,transparent),0 12px 30px color-mix(in srgb,var(--primary-color,#007aff) 18%,transparent)}\n  .glass.liquid-glass{background:var(--liquid-glass-bg, linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)))!important;backdrop-filter:blur(28px) saturate(150%)!important;-webkit-backdrop-filter:blur(28px) saturate(150%)!important;border-color:rgba(255,255,255,0.15)!important;box-shadow:0 8px 32px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.1)!important}\n  button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 70%,#fff);outline-offset:3px}\n  .wrap{max-width:1400px;margin:0 auto;padding:24px;gap:24px}\n  .glass{background:var(--glass-bg, rgba(255, 255, 255, 0.06));border:1px solid var(--glass-border, rgba(255, 255, 255, 0.09));border-radius:28px;box-shadow:var(--glass-shadow);backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2)}\n  .hero{position:relative!important;z-index:9999!important;overflow:visible!important;padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:var(--hero-bg, linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)));margin-bottom:12px;will-change:transform,opacity;animation:heroSpringSlideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both}\n  .hero-left{display:flex;align-items:center;gap:22px}\n  .hero-context{position:relative!important;z-index:10000!important;overflow:visible!important;margin-left:auto;display:flex;align-items:center;gap:8px;min-width:0}\n  #hero-profile-container{position:relative!important;z-index:10001!important;overflow:visible!important}\n  .hero-profile-dropdown{position:absolute!important;top:calc(100% + 12px)!important;right:0!important;z-index:999999!important;width:min(420px, calc(100vw - 24px))!important;min-width:320px!important;max-height:calc(100vh - 100px)!important;overflow-y:auto!important;background:#0f172a!important;background-color:#0f172a!important;border:1.5px solid rgba(255,255,255,0.2)!important;box-shadow:0 24px 60px rgba(0,0,0,0.85),inset 0 1px 0 rgba(255,255,255,0.15)!important;backdrop-filter:blur(48px) saturate(200%)!important;-webkit-backdrop-filter:blur(48px) saturate(200%)!important;opacity:1!important}.hero-clock{display:flex;flex-direction:column;align-items:flex-end;padding-right:14px;border-right:1px solid rgba(255,255,255,.14);line-height:1}.hero-clock strong{font-size:1.45rem;letter-spacing:-.05em;color:#ffffff!important}.hero-clock span{font-size:11px;color:#e2e8f0!important;opacity:1!important;margin-top:5px;letter-spacing:.03em;font-weight:700}.hero-pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.hero-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 10px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(7,16,29,.27);box-shadow:inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(14px);font-size:10px;font-weight:800;white-space:nowrap}.hero-pill .hero-live{width:7px;height:7px;border-radius:50%;background:#55df91;box-shadow:0 0 9px #55df91}\n  .hero-icon{font-size:54px;line-height:1;filter:drop-shadow(0 0 20px rgba(255,255,255,0.15))}\n  .hero h1{margin:0 0 4px;font-size:34px;font-weight:900;letter-spacing:-0.03em;background:var(--hero-gradient, linear-gradient(to right, #ffffff, #82b1ff));-webkit-background-clip:text;-webkit-text-fill-color:transparent}\n  .hero p{margin:0;font-size:16px;color:#f1f5f9!important;opacity:1!important;font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,0.85)}\n  @media(max-width:700px){.wrap{padding:14px;gap:14px}.glass{border-radius:22px}.hero{padding:22px;align-items:flex-start}.hero-icon{font-size:40px}.hero h1{font-size:27px}.hero p{font-size:14px}.entry-content{grid-template-columns:96px 1fr;padding:16px 105px 16px 14px;gap:10px}.sensor-column{width:98px}.sensor-chip{max-width:94px}.entry-icon{min-height:110px}.entry-icon svg{max-width:150px}.hud{top:12px;right:12px}.hud-data{font-size:15px;padding:5px 9px}.hud-loc{font-size:10px;padding:3px 8px}}\n\n  /* Modern Mode Navigation & iOS/macOS Liquid Bubble Transition */\n  .tabs { position: relative; isolation:isolate; display: flex; min-height:72px; background: rgba(255, 255, 255, 0.03); padding: 6px; border-radius: 20px; gap: 6px; overflow: visible; scrollbar-width: none; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.08); z-index: 1; box-shadow: inset 0 1px 2px rgba(255,255,255,0.05), 0 8px 32px rgba(0,0,0,0.25); }\n  .tabs::-webkit-scrollbar { display: none; }\n  .tab { position: relative; flex: 1 1 0px; min-width: 0; min-height:60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 14px; padding: 10px 4px; font-size: 11px; font-weight: 800; color: rgba(255, 255, 255, 0.6); transition: color 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s ease; cursor: pointer; border: none !important; outline: none; background: transparent !important; box-shadow: none !important; z-index: 2; user-select: none; -webkit-tap-highlight-color: transparent; }\n  .tab-label { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; }\n  .tab:hover { color: #fff; }\n  .tab:active:not(:disabled) { transform: scale(0.92); }\n  .tab.active { color: #fff !important; background: transparent !important; box-shadow: none !important; transform: none !important; }\n\n  .tab-bubble {\n    position: absolute;\n    top: 6px;\n    bottom: 6px;\n    left: 0;\n    height: calc(100% - 12px);\n    border-radius: 14px;\n    z-index: 1;\n    pointer-events: none;\n    will-change: transform, width, background, box-shadow;\n    backdrop-filter: blur(20px) saturate(180%);\n    -webkit-backdrop-filter: blur(20px) saturate(180%);\n    border: 1px solid rgba(255, 255, 255, 0.32);\n    transition:\n      transform 0.48s cubic-bezier(0.34, 1.56, 0.64, 1),\n      width 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),\n      background 0.45s cubic-bezier(0.4, 0, 0.2, 1),\n      box-shadow 0.45s cubic-bezier(0.4, 0, 0.2, 1);\n  }\n  .tab-bubble.bubble-disarmed {\n    background: linear-gradient(135deg, rgba(34, 197, 94, 0.95), rgba(21, 128, 61, 0.92));\n    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(34, 197, 94, 0.42), 0 2px 8px rgba(0, 0, 0, 0.25);\n  }\n  .tab-bubble.bubble-home {\n    background: linear-gradient(135deg, rgba(245, 158, 11, 0.95), rgba(217, 119, 6, 0.92));\n    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(245, 158, 11, 0.42), 0 2px 8px rgba(0, 0, 0, 0.25);\n  }\n  .tab-bubble.bubble-away {\n    background: linear-gradient(135deg, rgba(239, 68, 68, 0.95), rgba(185, 28, 28, 0.92));\n    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(239, 68, 68, 0.45), 0 2px 8px rgba(0, 0, 0, 0.25);\n  }\n  .tab-bubble.bubble-night {\n    background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(29, 78, 216, 0.92));\n    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(59, 130, 246, 0.42), 0 2px 8px rgba(0, 0, 0, 0.25);\n  }\n  .tab-bubble.bubble-sos {\n    background: linear-gradient(135deg, rgba(220, 38, 38, 0.98), rgba(153, 27, 27, 0.95));\n    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 26px rgba(220, 38, 38, 0.55), 0 2px 8px rgba(0, 0, 0, 0.25);\n  }\n\n\n  @keyframes bounceIn {\n    0% { transform: scale(0.96); opacity: 0; }\n    50% { transform: scale(1.01); opacity: 1; }\n    100% { transform: scale(1); opacity: 1; }\n  }\n  .bounce-in { animation: bounceIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }\n\n  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;align-items:start;position:relative}\n  .panel{transition:transform .3s ease,box-shadow .3s ease,grid-column .3s ease,grid-row .3s ease;position:relative}\n  .panel[data-size=\"S\"]{grid-column:span 1;grid-row:span 1}\n  .panel[data-size=\"M\"]{grid-column:span 2;grid-row:span 1}\n  .panel[data-size=\"L\"]{grid-column:span 2;grid-row:span 2}\n  .panel[data-size=\"XL\"]{grid-column:span 4;grid-row:span 2}\n  .dashboard-instances{grid-column:1 / -1}\n  \n  /* Edit Mode Styles */\n  .grid.editing .panel{animation:jiggle .3s infinite ease-in-out;cursor:grab}\n  .grid.editing .panel:nth-child(even){animation-duration:.27s;animation-direction:reverse}\n  .grid.editing .panel:nth-child(3n){animation-duration:.32s;animation-delay:.05s}\n  .grid.editing .panel.dragging{opacity:.5;animation:none;cursor:grabbing}\n  \n  .panel-edit-overlay{position:absolute;inset:0;background:rgba(5,15,30,.82);backdrop-filter:blur(10px);border-radius:inherit;z-index:90;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;opacity:0;pointer-events:none;transition:opacity .25s ease}\n  .grid.editing .panel:not(.dashboard-instances) .panel-edit-overlay{opacity:1;pointer-events:auto}\n  \n  .widget-controls{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:18px;backdrop-filter:blur(8px)}\n  .widget-controls-title{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;opacity:.7}\n  .widget-sizes{display:flex;gap:6px}\n  .widget-size-btn{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#fff;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:800;cursor:pointer;transition:all .2s}\n  .widget-size-btn:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3)}\n  .widget-size-btn.active{background:#007aff;border-color:#007aff;box-shadow:0 0 10px rgba(0,122,255,.4)}\n  .widget-drag-handle{font-size:22px;color:rgba(255,255,255,.6);cursor:grab;padding:4px}\n  .widget-toggle-btn{background:rgba(220,38,38,.85);color:white;border:none;border-radius:8px;padding:6px 12px;font-size:10px;font-weight:800;cursor:pointer}\n  \n  @keyframes jiggle{\n    0%{transform:rotate(-0.5deg)}\n    50%{transform:rotate(0.5deg)}\n    100%{transform:rotate(-0.5deg)}\n  }\n  @media(max-width:900px){\n    .grid{grid-template-columns:minmax(0,1fr)}\n    .panel[data-size=\"S\"],.panel[data-size=\"M\"],.panel[data-size=\"L\"],.panel[data-size=\"XL\"]{grid-column:1 / -1;grid-row:auto}\n    .grid.editing .panel{animation:none !important}\n  }\n  \n  /* Adaptivity styles for size S widgets */\n  .panel[data-size=\"S\"] .tab-label{display:none}\n  .panel[data-size=\"S\"] .tab-icon{font-size:24px !important}\n  .panel[data-size=\"S\"] #p-backup-desc{display:none}\n  .panel[data-size=\"S\"] #github-desc{display:none}\n\n  /* Collapsible Personalization with Bounce expansion */\n  .personalize-workspace{display:grid;grid-template-rows:0fr;opacity:0;pointer-events:none;transition:grid-template-rows 0.6s cubic-bezier(0.175,0.885,0.32,1.275),opacity 0.4s ease,margin-top 0.4s ease}\n  .personalize-workspace > div { overflow:hidden; min-height:0; }\n  .personalize-workspace:not(.collapsed){grid-template-rows:1fr;opacity:1;pointer-events:auto;margin-top:16px;animation:bounceExpand 0.55s cubic-bezier(0.175,0.885,0.32,1.275) forwards}\n  @keyframes bounceExpand{\n    0%{transform:scale(0.96) translateY(-8px);opacity:0}\n    70%{transform:scale(1.01) translateY(2px);opacity:0.9}\n    100%{transform:scale(1) translateY(0);opacity:1}\n  }\n  @media(max-width:750px){.hero{flex-direction:column;text-align:center}.hero-left{flex-direction:column}}\n  @media(max-width:750px){.hero .lang-pill{align-self:center;margin-inline:auto}.hero-left{width:100%;align-items:center}}\n\n  .stack{display:grid;gap:24px}\n  .panel{padding:28px;position:relative;overflow:hidden}\n  .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}\n  .panel h2{margin:0;font-size:14px;font-weight:900;letter-spacing:.04em;color:var(--primary-color,#38bdf8);opacity:1}\n\n  /* Access settings stay quiet until the user needs to manage them. */\n  .access-panel { padding: 22px 24px; overflow-y:auto; max-height:60vh; -webkit-overflow-scrolling:touch; }\n  .access-panel .panel-head { margin-bottom: 12px; }\n  .access-summary { font-size: 12px; opacity: .88; color: #cbd5e1; }\n  .access-actions { display:flex; gap:10px; flex-wrap:wrap; }\n  .access-actions button { flex:0 1 auto; padding:8px 12px; font-size:12px; font-weight:700; }\n  .access-actions button.active { background:var(--primary-color,#38bdf8); color:#0f172a; font-weight:800; border-color:transparent; }\n  .access-section { display:block; min-width:0; margin-bottom:24px; }\n  .access-section h3 { font-size:13px; font-weight:800; color: #f1f5f9; margin:0 0 10px; }\n  .access-panel .user-card { padding:10px 12px; border-radius:12px; }\n  .github-star-action {\n    display:inline-flex;align-items:center;justify-content:center;gap:7px;\n    min-height:42px;padding:9px 16px;border-radius:14px;text-decoration:none;\n    color:var(--primary-text-color,#fff);font-size:12px;font-weight:850;\n    background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.055));\n    border:1px solid rgba(255,255,255,.16);\n    box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 9px 24px rgba(0,0,0,.16);\n    backdrop-filter:blur(18px) saturate(150%);\n    -webkit-backdrop-filter:blur(18px) saturate(150%);\n    transition:transform .2s ease,background .2s ease,box-shadow .2s ease;\n  }\n  .github-star-action:hover { transform:translateY(-1px);background:rgba(255,255,255,.18);box-shadow:0 12px 28px rgba(0,0,0,.20); }\n\n  /* Profile Dropdown Buttons & Setting Tiles */\n  .profile-btn {\n    display: inline-flex !important;\n    align-items: center !important;\n    justify-content: center !important;\n    gap: 6px !important;\n    width: auto !important;\n    min-height: 34px !important;\n    padding: 6px 14px !important;\n    border-radius: 10px !important;\n    font-size: 12px !important;\n    font-weight: 750 !important;\n    cursor: pointer !important;\n    box-sizing: border-box !important;\n    white-space: nowrap !important;\n    flex-shrink: 0 !important;\n    background: rgba(255, 255, 255, 0.08) !important;\n    border: 1px solid rgba(255, 255, 255, 0.16) !important;\n    color: #ffffff !important;\n    transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease !important;\n  }\n  .profile-btn:hover {\n    background: rgba(255, 255, 255, 0.15) !important;\n    border-color: rgba(255, 255, 255, 0.28) !important;\n    transform: translateY(-1px) !important;\n  }\n  .profile-btn.primary {\n    background: rgba(52, 211, 153, 0.14) !important;\n    border-color: rgba(52, 211, 153, 0.35) !important;\n    color: #34d399 !important;\n  }\n  .profile-btn.primary:hover {\n    background: rgba(52, 211, 153, 0.24) !important;\n  }\n  .profile-btn.danger {\n    background: rgba(239, 68, 68, 0.14) !important;\n    border-color: rgba(239, 68, 68, 0.35) !important;\n    color: #f87171 !important;\n  }\n  .profile-btn.danger:hover {\n    background: rgba(239, 68, 68, 0.24) !important;\n  }\n  .profile-card-tile {\n    display: flex !important;\n    align-items: center !important;\n    justify-content: space-between !important;\n    gap: 12px !important;\n    padding: 10px 14px !important;\n    background: rgba(255, 255, 255, 0.035) !important;\n    border: 1px solid rgba(255, 255, 255, 0.08) !important;\n    border-radius: 14px !important;\n    box-sizing: border-box !important;\n    width: 100% !important;\n  }\n\n  /* Activity log responsive header */\n  .activity-panel .panel-head {\n    display: flex !important;\n    flex-wrap: wrap !important;\n    align-items: center !important;\n    justify-content: space-between !important;\n    gap: 8px 12px !important;\n    margin-bottom: 12px !important;\n    width: 100% !important;\n    box-sizing: border-box !important;\n  }\n  .activity-panel .panel-head h2 {\n    white-space: nowrap !important;\n    font-size: 15px !important;\n    font-weight: 850 !important;\n    margin: 0 !important;\n    flex: 0 1 auto !important;\n  }\n  .activity-panel .panel-actions {\n    display: inline-flex !important;\n    align-items: center !important;\n    gap: 6px !important;\n    flex-wrap: wrap !important;\n  }\n  .activity-panel .panel-actions button {\n    min-height: 32px !important;\n    padding: 5px 11px !important;\n    font-size: 11.5px !important;\n    font-weight: 750 !important;\n    border-radius: 9px !important;\n    white-space: nowrap !important;\n    display: inline-flex !important;\n    align-items: center !important;\n    gap: 4px !important;\n  }\n\n  /* Support / Community panel & buttons */\n  .github-panel {\n    display: flex !important;\n    flex-direction: column !important;\n    justify-content: center !important;\n    gap: 14px !important;\n    padding: 18px 20px !important;\n    box-sizing: border-box !important;\n  }\n  @media (min-width: 900px) {\n    .github-panel {\n      flex-direction: row !important;\n      align-items: center !important;\n      justify-content: space-between !important;\n    }\n  }\n  .support-actions-grid {\n    display: grid !important;\n    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;\n    gap: 8px !important;\n    width: 100% !important;\n    max-width: 440px !important;\n    box-sizing: border-box !important;\n  }\n  @media (max-width: 420px) {\n    .support-actions-grid {\n      grid-template-columns: 1fr !important;\n      gap: 6px !important;\n    }\n  }\n  .support-link-btn {\n    display: inline-flex !important;\n    align-items: center !important;\n    justify-content: center !important;\n    gap: 6px !important;\n    height: 38px !important;\n    min-height: 38px !important;\n    padding: 0 12px !important;\n    border-radius: 12px !important;\n    font-size: 12px !important;\n    font-weight: 800 !important;\n    text-decoration: none !important;\n    white-space: nowrap !important;\n    box-sizing: border-box !important;\n    backdrop-filter: blur(16px) !important;\n    -webkit-backdrop-filter: blur(16px) !important;\n    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease !important;\n  }\n  .support-link-btn:hover {\n    transform: translateY(-1.5px) !important;\n    box-shadow: 0 8px 22px rgba(0,0,0,0.25) !important;\n  }\n  .support-link-btn.star {\n    background: linear-gradient(135deg, rgba(234, 179, 8, 0.18), rgba(234, 179, 8, 0.06)) !important;\n    border: 1px solid rgba(234, 179, 8, 0.35) !important;\n    color: #facc15 !important;\n  }\n  .support-link-btn.star:hover {\n    background: rgba(234, 179, 8, 0.28) !important;\n    border-color: rgba(234, 179, 8, 0.55) !important;\n  }\n  .support-link-btn.paypal {\n    background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(56, 189, 248, 0.06)) !important;\n    border: 1px solid rgba(56, 189, 248, 0.35) !important;\n    color: #38bdf8 !important;\n  }\n  .support-link-btn.paypal:hover {\n    background: rgba(56, 189, 248, 0.28) !important;\n    border-color: rgba(56, 189, 248, 0.55) !important;\n  }\n  .support-link-btn.email {\n    background: linear-gradient(135deg, rgba(167, 139, 250, 0.18), rgba(167, 139, 250, 0.06)) !important;\n    border: 1px solid rgba(167, 139, 250, 0.35) !important;\n    color: #c084fc !important;\n  }\n  .support-link-btn.email:hover {\n    background: rgba(167, 139, 250, 0.28) !important;\n    border-color: rgba(167, 139, 250, 0.55) !important;\n  }\n  @media(max-width:600px){ .access-panel{padding:20px}.access-actions{width:100%}.access-actions button{flex:1} }\n\n  /* Personalization inside instances */\n  .personalize-row { display: flex; gap: 14px; align-items: center; margin-top: 18px; padding: 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 18px; flex-wrap: wrap; }\n  .personalize-row .setting-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-bottom: 4px; }\n\n  /* Mode Reorganization Styles — HORIZONTAL */\n  .mode-grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }\n  @media(max-width:900px){ .mode-grid-layout { grid-template-columns: 1fr; } }\n  .mode-section-card {\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.025) 100%) !important;\n    border: 1px solid rgba(255, 255, 255, 0.16) !important;\n    border-radius: 20px !important;\n    padding: 18px !important;\n    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;\n    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;\n  }\n  .mode-section-card:hover {\n    border-color: rgba(255, 255, 255, 0.26) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.04) 100%) !important;\n    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;\n    transform: translateY(-2px) !important;\n  }\n  .mode-section-card:hover { border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); }\n  .mode-section-title { font-size: 13px; font-weight: 800; color: var(--primary-color, #007aff); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }\n  .mode-sensor-grid { color: var(--primary-text-color, #fff); }\n  .mode-sensor-none { color: var(--primary-text-color, rgba(255,255,255,0.5)); opacity: 0.6; font-size: 13px; }\n  .mode-section-card span, .mode-section-card label, .mode-section-card .input-label { color: var(--primary-text-color, #fff); }\n\n  .sensor-pill { background: var(--pill-bg, rgba(255,255,255,0.06)); color: var(--pill-text, #fff); border: 1px solid var(--pill-border, rgba(255,255,255,0.1)); padding: 8px 14px; border-radius: 14px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; transition: all 0.2s; max-width: 100%; box-sizing: border-box; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }\n  @keyframes argus-blink-red { 0%,100%{box-shadow:0 0 0 0 rgba(255,50,50,0);background:var(--pill-bg,rgba(255,255,255,0.06))} 50%{box-shadow:0 0 0 6px rgba(255,50,50,0.25);background:rgba(255,50,50,0.15)} }\n  .sensor-pill.siren-active   { animation: argus-blink-red 1.2s ease-in-out infinite; border-color: rgba(255,82,82,0.5) !important; }\n  .sensor-pill.triggered-sensor { animation: argus-blink-red 0.9s ease-in-out infinite; border-color: rgba(255,82,82,0.6) !important; }\n  .icon-btn { background: none; border: none; padding: 4px; color: inherit; opacity: 0.6; cursor: pointer; transition: opacity 0.2s, transform 0.15s; display: flex; align-items: center; justify-content: center; border-radius: 8px; }\n  .icon-btn:active { transform: scale(0.9); }\n\n  #mode-status { opacity: 0; transition: opacity .35s; }\n  #mode-status.show { opacity: 1; }\n  #mode-status.ok  { color: #4caf50; }\n  #mode-status.err { color: #f44336; }\n\n  .icon-btn:hover { opacity: 1; background: rgba(255,255,255,0.08); }\n  .icon-btn.active { color: #fb8c00; opacity: 1; }\n\n  .input-group { display: flex; flex-direction: column; gap: 6px; }\n  .times-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:end}\n  .time-field{min-width:0;display:flex;flex-direction:column;justify-content:flex-end;height:100%}\n  .time-field .input-label{min-height:34px;display:flex;align-items:flex-end;line-height:1.2;margin-bottom:6px;padding-bottom:2px}\n  .time-field input{width:100%;height:44px!important;padding:8px 12px!important;border-radius:12px!important;box-sizing:border-box!important;margin:0!important;font-size:14px!important}\n  .entry-sensor-list{min-height:44px;margin-top:12px!important;display:flex;flex-wrap:wrap;align-items:center;border:1px solid rgba(255,255,255,.10)!important;background:rgba(255,255,255,.03)!important;border-radius:12px!important;padding:10px;gap:8px}\n  .instance-activity-strip{display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr));gap:8px;align-items:center;margin:4px 0 16px;padding:10px 12px;border:1px solid rgba(255,255,255,.1);border-radius:18px;background:rgba(5,13,25,.25);backdrop-filter:blur(18px) saturate(135%);-webkit-backdrop-filter:blur(18px) saturate(135%)}.instance-activity-title{font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;opacity:.62;padding-right:6px}.instance-activity-item{min-width:0;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.86}.instance-activity-item time{opacity:.55;margin-right:4px;font-variant-numeric:tabular-nums}\n  .mode-mqtt-row{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 14px!important;min-height:44px;border-radius:12px!important;background:rgba(255,255,255,.03)!important;border:1px solid rgba(255,255,255,.10)!important}\n  .mode-mqtt-row input{margin:0;accent-color:var(--primary-color,#007aff)}\n  .input-label { font-size: 12px; font-weight: 700; opacity: 0.7; margin-left: 4px; }\n\n  /* Intelligent Entry Card */\n  .entry {\n    position: relative;\n    overflow: hidden;\n    border-radius: 28px !important;\n    border: 1px solid rgba(255, 255, 255, 0.18) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%) !important;\n    backdrop-filter: blur(32px) saturate(170%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(32px) saturate(170%) brightness(1.08) !important;\n    margin-bottom: 16px;\n    min-height: 220px;\n    display: flex;\n    flex-direction: column;\n    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);\n  }\n  .entry:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 20px 48px rgba(0,0,0,.3)}\n  .entry::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:inherit;background:linear-gradient(120deg,rgba(255,255,255,.14),transparent 22%,transparent 74%,rgba(255,255,255,.05));mix-blend-mode:soft-light}\n  .entry-status-ribbon{position:absolute;top:20px;left:20px;z-index:5;display:flex;align-items:center;gap:9px;max-width:calc(100% - 260px);padding:8px 12px;border:1px solid color-mix(in srgb,var(--entry-accent) 55%,rgba(255,255,255,.2));border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--entry-accent) 28%,rgba(8,15,28,.76)),rgba(7,14,25,.56));box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 8px 24px color-mix(in srgb,var(--entry-accent) 22%,transparent);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);color:#fff}\n  .entry-status-orb{width:10px;height:10px;flex:0 0 auto;border-radius:50%;background:var(--entry-accent);box-shadow:0 0 12px var(--entry-accent)}\n  .entry-status-copy{display:flex;flex-direction:column;min-width:0}.entry-status-kicker{font-size:8px;line-height:1;text-transform:uppercase;letter-spacing:.12em;opacity:.72;font-weight:800}.entry-status-name{font-size:13px;line-height:1.2;font-weight:900;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.entry-status-event{font-size:9px;line-height:1.2;opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:290px}\n  .entry-bg{position:absolute;inset:0;z-index:1;background-size:cover;background-position:center;transition:opacity 0.5s ease}\n  .entry-bg img{width:100%;height:100%;object-fit:cover;opacity:0.6}\n  .entry-content{position:relative;z-index:2;flex:1;padding:20px 140px 20px 20px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:linear-gradient(90deg, rgba(0,0,0,0.2) 0%, transparent 60%)}\n  /* The live instance is the console: real controls, real sensors and one\n     clear disarm keypad. Decorative dashboard cards never sit above it. */\n  .security-console {\n    background: transparent !important;\n    border: none !important;\n    box-shadow: none !important;\n  }\n  .console-hud {\n    background: transparent !important;\n    border: none !important;\n    box-shadow: none !important;\n  }\n\n  /* ── System Status Badge ─────────────────────────────── */\n  .console-system-badge {\n    display: inline-flex;\n    align-items: center;\n    padding: 5px 14px;\n    border-radius: 999px;\n    font-size: 10.5px;\n    font-weight: 900;\n    letter-spacing: 0.8px;\n    text-transform: uppercase;\n    white-space: nowrap;\n    backdrop-filter: blur(16px) saturate(160%);\n    -webkit-backdrop-filter: blur(16px) saturate(160%);\n    border: 1.5px solid currentColor;\n    transition: all 0.35s ease;\n  }\n  .console-system-badge--disarmed {\n    color: #6ee7b7;\n    background: rgba(16,185,129,0.18);\n    border-color: rgba(16,185,129,0.60);\n    box-shadow: 0 0 16px rgba(16,185,129,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--armed_home {\n    color: #fde68a;\n    background: rgba(251,140,0,0.20);\n    border-color: rgba(251,140,0,0.60);\n    box-shadow: 0 0 16px rgba(251,140,0,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--armed_away {\n    color: #fca5a5;\n    background: rgba(229,57,53,0.20);\n    border-color: rgba(229,57,53,0.60);\n    box-shadow: 0 0 16px rgba(229,57,53,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--armed_night {\n    color: #bfdbfe;\n    background: rgba(30,136,229,0.20);\n    border-color: rgba(30,136,229,0.60);\n    box-shadow: 0 0 16px rgba(30,136,229,0.25), inset 0 1px 0 rgba(255,255,255,0.18);\n  }\n  .console-system-badge--triggered {\n    color: #fff;\n    background: rgba(239,68,68,0.35);\n    border-color: rgba(239,68,68,0.80);\n    box-shadow: 0 0 24px rgba(239,68,68,0.60), inset 0 1px 0 rgba(255,255,255,0.25);\n    animation: badgeFlash 0.8s infinite ease-in-out;\n  }\n  @keyframes badgeFlash {\n    0%,100% { opacity:1; box-shadow:0 0 24px rgba(239,68,68,.8); }\n    50%      { opacity:0.7; box-shadow:0 0 8px rgba(239,68,68,.2); }\n  }\n  /* arming state reuses armed_home styling with pulsing */\n  .console-system-badge--arming {\n    color: #fde68a;\n    background: rgba(251,140,0,0.20);\n    border-color: rgba(251,140,0,0.60);\n    animation: badgeArming 1.05s ease-in-out infinite;\n  }\n  @keyframes badgeArming {\n    0%,100% { opacity:0.65; } 50% { opacity:1; }\n  }\n  .console-hud-time{font-size:16px;font-weight:800;letter-spacing:-.02em}\n  .console-hud-temp{font-size:11px;opacity:.8;font-weight:700}\n  .console-hud-temps{display:flex;gap:6px;flex-wrap:wrap;align-items:center}\n  .console-hud-tpill{font-size:10px;font-weight:800;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12)}\n  /* Hide the floating absolute HUD inside security-console to avoid overlap with sensor list */\n  .security-console .hud,.ios-fullscreen .entry-content.security-console ~ .hud,.entry-content.security-console + .hud{display:none!important}\n  /* The .hud inside the article gets hidden when the content is a security-console */\n  @media(max-width:950px){\n    .grid{grid-template-columns:1fr;grid-template-areas:\"instances\" \"activity\" \"modes\" \"access\" \"automations\" \"backup\" \"github\"}\n  }\n\n  /* Sensor column */\n  .sensor-column{position:absolute;right:0;top:0;bottom:0;width:auto;max-width:40%;z-index:4;display:flex;flex-direction:column;gap:7px;align-items:flex-end;justify-content:center;padding:12px 12px 12px 0;pointer-events:none}\n  .sensor-chip{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:16px;font-size:10px;font-weight:800;letter-spacing:.2px;max-width:148px;backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 7px 18px rgba(0,0,0,.24);transition:transform .2s,box-shadow .2s}\n  .sensor-chip-text{display:flex;flex-direction:column;min-width:0;flex:1}\n  .sensor-chip-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\n  .sensor-chip-state{font-size:8px;letter-spacing:.08em;text-transform:uppercase;opacity:.82;margin-top:2px}\n  .sensor-chip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}\n  .sensor-chip-battery{grid-column:1 / -1;margin-top:5px;padding-top:5px;border-top:1px solid currentColor;font-size:9px;line-height:1;opacity:.9}\n  .sensor-chip--open{background:linear-gradient(135deg,rgba(255,149,0,.9),rgba(255,96,0,.64));color:#fff}\n  .sensor-chip--open .sensor-chip-dot{background:#fff;box-shadow:0 0 8px rgba(255,255,255,.95)}\n  .sensor-chip--triggered{background:linear-gradient(135deg,rgba(255,69,58,.96),rgba(190,30,35,.82));animation:chip-pulse .9s ease-in-out infinite}\n  .sensor-chip--closed{background:rgba(15,23,32,.62);color:#eef8f1}\n  .sensor-chip--closed .sensor-chip-dot{background:#34c759;box-shadow:0 0 8px rgba(52,199,.9)}\n  .sensor-chip-battery.low{color:#ffd166;font-weight:900}\n  .buzz-orange{position:relative;border-color:rgba(255,171,64,.92)!important;background:linear-gradient(135deg,rgba(255,149,0,.38),rgba(255,109,0,.16))!important;box-shadow:0 0 0 1px rgba(255,183,77,.45),0 0 25px rgba(255,145,0,.55),inset 0 1px 0 rgba(255,255,255,.3)!important;animation:buzz-orange 1.05s cubic-bezier(.36,.07,.19,.97) infinite}\n  .buzz-orange::after{content:'⚠';margin-left:auto;color:#fff3d1;font-size:14px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.28))}\n  @keyframes buzz-orange{0%,100%{transform:translateX(0) rotate(0)}12%{transform:translateX(-2px) rotate(-.65deg)}25%{transform:translateX(3px) rotate(.8deg)}40%{transform:translateX(-3px) rotate(-.8deg)}55%{transform:translateX(2px) rotate(.55deg)}70%{transform:translateX(-1px) rotate(-.25deg)}}\n  @keyframes chip-pulse{0%,100%{opacity:1}50%{opacity:0.55}}\n\n  /* HUD Overlay */\n  .hud{position:absolute;top:20px;right:24px;text-align:right;z-index:3;color:var(--hud-text-color);text-shadow:var(--text-shadow);display:flex;flex-direction:column;gap:4px}\n  .hud-loc{font-size:13px;font-weight:800;letter-spacing:0.04em;color:#ffffff;background:var(--hud-bg);padding:4px 12px;border-radius:10px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.18);align-self:flex-end}\n  .hud-data{font-size:20px;font-weight:800;letter-spacing:-0.02em;background:var(--hud-bg);padding:6px 14px;border-radius:12px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.08);display:inline-flex;align-items:center;gap:8px;align-self:flex-end}\n  .hud-data i{font-size:14px;opacity:0.7;font-style:normal}\n  .hud-temperatures{display:flex;justify-content:flex-end;gap:5px;flex-wrap:wrap}\n  .hud-temperature{padding:4px 8px;border-radius:999px;background:var(--hud-bg);border:1px solid rgba(255,255,255,.09);font-size:10px;font-weight:800;backdrop-filter:blur(8px)}\n\n  /* Liquid Glass Buttons */\n  .liquid-stack{display:grid;gap:10px}\n  .liquid-btn {\n    border: 1px solid rgba(255, 255, 255, 0.20) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.04) 100%) !important;\n    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    color: #ffffff !important;\n    padding: 14px 18px;\n    border-radius: 18px !important;\n    font-size: 13.5px;\n    font-weight: 800;\n    display: flex;\n    align-items: center;\n    gap: 12px;\n    text-align: left;\n    cursor: pointer;\n    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;\n    transition: all 0.22s cubic-bezier(0.25, 0.8, 0.25, 1);\n    text-shadow: 0 1px 2px rgba(0,0,0,0.3);\n    letter-spacing: 0.5px;\n  }\n  .liquid-btn:hover {\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.08) 100%) !important;\n    border-color: rgba(255, 255, 255, 0.36) !important;\n    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;\n    transform: translateY(-2px);\n  }\n  .btn-sos {\n    background: linear-gradient(135deg, rgba(239, 68, 68, 0.32) 0%, rgba(185, 28, 28, 0.45) 100%) !important;\n    border: 1px solid rgba(252, 165, 165, 0.45) !important;\n    box-shadow: 0 10px 28px rgba(239, 68, 68, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;\n  }\n  .btn-sos:hover {\n    background: linear-gradient(135deg, rgba(239, 68, 68, 0.48) 0%, rgba(185, 28, 28, 0.65) 100%) !important;\n    box-shadow: 0 14px 34px rgba(239, 68, 68, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;\n    transform: translateY(-2px);\n  }\n  .mode-btn-icon{width:26px;height:26px;padding:5px;border-radius:10px;flex:0 0 auto;background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 4px 10px rgba(0,0,0,.16);filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}\n  .liquid-btn.active .mode-btn-icon{background:linear-gradient(135deg,rgba(255,255,255,.36),rgba(255,255,255,.12));border-color:rgba(255,255,255,.42)}\n  .btn-sos .mode-btn-icon{width:28px;height:28px;border-radius:11px;background:rgba(255,255,255,.17)}\n  .liquid-btn:not(.btn-home):not(.btn-away):not(.btn-night):not(.btn-disarm):not(.btn-sos):hover{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.2)}\n  .liquid-btn.active{background:var(--btn-bg, rgba(255,255,255,0.2));border-color:rgba(255,255,255,0.4);box-shadow:0 8px 24px var(--btn-shadow, rgba(255,255,255,0.12))}\n  .liquid-btn:active:not(:disabled) { transform: scale(0.96); }\n  .liquid-btn i{font-size:16px}\n\n  .btn-home {\n    background: linear-gradient(135deg, rgba(251, 140, 0, 0.20) 0%, rgba(251, 140, 0, 0.06) 100%) !important;\n    border: 1px solid rgba(251, 140, 0, 0.38) !important;\n    color: #ffe0b2 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-home.active {\n    background: linear-gradient(135deg, #fb8c00 0%, #d97706 100%) !important;\n    border: 1px solid rgba(254, 215, 170, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(251, 140, 0, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-away {\n    background: linear-gradient(135deg, rgba(229, 57, 53, 0.20) 0%, rgba(229, 57, 53, 0.06) 100%) !important;\n    border: 1px solid rgba(229, 57, 53, 0.38) !important;\n    color: #ffcdd2 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-away.active {\n    background: linear-gradient(135deg, #e53935 0%, #b91c1c 100%) !important;\n    border: 1px solid rgba(254, 202, 202, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(229, 57, 53, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-night {\n    background: linear-gradient(135deg, rgba(30, 136, 229, 0.20) 0%, rgba(30, 136, 229, 0.06) 100%) !important;\n    border: 1px solid rgba(30, 136, 229, 0.38) !important;\n    color: #bbdefb !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-night.active {\n    background: linear-gradient(135deg, #1e88e5 0%, #1d4ed8 100%) !important;\n    border: 1px solid rgba(191, 219, 254, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(30, 136, 229, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-disarm {\n    background: linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(16, 185, 129, 0.05) 100%) !important;\n    border: 1px solid rgba(16, 185, 129, 0.35) !important;\n    color: #a7f3d0 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n    margin-top: 4px;\n  }\n  .btn-disarm.active {\n    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;\n    border: 1px solid rgba(167, 243, 208, 0.85) !important;\n    box-shadow: 0 14px 36px rgba(16, 185, 129, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;\n    color: #ffffff !important;\n    transform: translateY(-2px);\n  }\n\n  .btn-sos {\n    background: linear-gradient(135deg, rgba(239, 68, 68, 0.22) 0%, rgba(185, 28, 28, 0.08) 100%) !important;\n    border: 1px solid rgba(252, 165, 165, 0.35) !important;\n    color: #fca5a5 !important;\n    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;\n  }\n  .btn-sos.active, .btn-sos.flashing {\n    animation: sosFlashingPulse 0.8s infinite ease-in-out !important;\n  }\n\n  @keyframes sosFlashingPulse {\n    0%, 100% {\n      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;\n      border-color: #fca5a5 !important;\n      color: #ffffff !important;\n      box-shadow: 0 0 32px rgba(239, 68, 68, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;\n      transform: scale(1.02);\n    }\n    50% {\n      background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%) !important;\n      border-color: rgba(239, 68, 68, 0.5) !important;\n      color: rgba(255, 255, 255, 0.8) !important;\n      box-shadow: 0 0 10px rgba(239, 68, 68, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;\n      transform: scale(0.98);\n    }\n  }\n  /* btn-disarm visual is handled by .btn-disarm and .btn-disarm.active above */\n\n  .entry-content {\n    background: transparent !important;\n    box-shadow: none !important;\n    border: none !important;\n  }\n\n  .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}\n  .badge.armed_away{background:rgba(229,57,53,.12);color:var(--error-color,#e53935)}\n  .badge.armed_home,.badge.armed_night{background:rgba(251,140,0,.12);color:#fb8c00}\n  .badge.disarmed{background:rgba(67,160,71,.12);color:var(--success-color,#43a047)}\n  .badge.triggered{background:rgba(229,57,53,.2);color:var(--error-color,#e53935);animation:pulse 1s ease-in-out infinite}\n\n  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}\n  .meta{font-size:12px;opacity:.5}\n  .setting-label{font-size:13px;font-weight:700;color:var(--primary-text-color);letter-spacing:0.01em;margin-bottom:2px;display:block}\n  .setting-sublabel{font-size:12px;font-weight:400;opacity:0.55;color:var(--primary-text-color);margin-bottom:6px;display:block}\n  .temp-alert-row{display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap}\n  .temp-alert-row input[type=number]{width:72px;padding:6px 8px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:inherit;font-size:13px;font-weight:700;text-align:center}\n  .temp-alert-status-ok{color:#43a047;font-size:12px}\n  .temp-alert-status-warn{color:#e53935;font-size:12px;font-weight:700}\n\n  /* Generic buttons */\n  button{border:0;border-radius:14px;padding:10px 18px;font:700 13px/1.3 'Outfit',Inter,system-ui,sans-serif;cursor:pointer;white-space:nowrap;hyphens:none;word-break:normal;transition:background 0.2s,opacity .15s,transform .15s cubic-bezier(0.175, 0.885, 0.32, 1.275),box-shadow 0.2s}\n  button:focus-visible{outline:3px solid #38bdf8;outline-offset:2px}\n  button:active:not(:disabled){transform:scale(.94) translateY(1px)}\n  button.primary{background:var(--primary-color,#38bdf8);color:#0f172a;font-weight:800;box-shadow:0 4px 12px rgba(56, 189, 248, 0.35)}\n  button.primary:hover{background:#0284c7;color:#ffffff}\n  button.ghost{background:rgba(255, 255, 255, 0.08);border:1px solid rgba(255, 255, 255, 0.24);color:#ffffff !important}\n  button.ghost:hover{background:rgba(255, 255, 255, 0.16);border-color:rgba(255,255,255,0.36)}\n\n\n  /* FS button */\n  .fs-btn{background:rgba(255,255,255,0.05);padding:8px;border-radius:10px;font-size:16px}\n\n  /* Modal Fixes */\n  .modal-back{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;padding:20px;z-index:999999;backdrop-filter:blur(12px)}\n  .modal-back.open{display:flex}\n  .modal{width:min(400px,100%);max-height:85vh;overflow:hidden;display:grid;grid-template-rows:auto 1fr auto;gap:14px;padding:24px;border-radius:32px;background:rgba(22, 24, 38, 0.95);border:1px solid rgba(255,255,255,0.08);box-shadow:0 30px 100px rgba(0,0,0,0.6);backdrop-filter:blur(28px)}\n  .modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}\n  .modal-head h3{margin:0;font-size:20px;font-weight:800}\n  .modal-body{overflow:auto;padding:5px}\n  .modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:15px}\n  /* PIN modal */\n  .pm .modal{max-width:340px;min-height:unset;grid-template-rows:auto auto auto;background:rgba(22, 24, 38, 0.82) !important;backdrop-filter:blur(16px) saturate(140%) !important;-webkit-backdrop-filter:blur(16px) saturate(140%) !important;border:1px solid rgba(255, 255, 255, 0.12) !important;box-shadow:0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;border-radius:36px;padding:28px;display:flex;flex-direction:column;align-items:center;gap:16px}\n  .pin-input{font-size:28px;letter-spacing:10px;text-align:center;padding:12px;border-radius:16px;border:none;background:rgba(255,255,255,0.02);color:inherit;width:100%;outline:none;box-shadow:inset 0 1px 3px rgba(0,0,0,0.2)}\n  .pin-error{color:var(--error-color,#e53935);font-size:13px;min-height:18px;text-align:center}\n  .pin-grid{display:grid;grid-template-columns:repeat(3,68px);gap:16px;justify-content:center;margin-top:10px}\n  .pin-btn-round{width:68px;height:68px;border-radius:50% !important;border:1px solid rgba(255,255,255,0.1) !important;background:rgba(255,255,255,0.04) !important;color:#fff !important;font-size:24px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.2s, transform 0.15s, border-color 0.2s;box-shadow:0 4px 10px rgba(0,0,0,0.15);padding:0 !important;outline:none}\n  .pin-btn-round:hover{background:rgba(255,255,255,0.12) !important;border-color:rgba(255,255,255,0.2) !important}\n  .pin-btn-round:active{transform:scale(0.92) !important;background:rgba(255,255,255,0.2) !important}\n  .pin-btn-round.action-key{font-size:12px;font-weight:700;letter-spacing:0.3px;text-transform:uppercase;border-color:transparent !important;background:transparent !important;box-shadow:none}\n  .pin-btn-round.action-key:hover{background:rgba(255,255,255,0.05) !important}\n  .pin-btn-round.action-key.enter-key{color:#34c759 !important}\n  .pin-btn-round.action-key.delete-key{color:#ff3b30 !important}\n  /* User card */\n  .user-card {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    padding: 16px 18px;\n    border-radius: 18px;\n    border: 1px solid rgba(255, 255, 255, 0.16) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.025) 100%) !important;\n    backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.08) !important;\n    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.20) !important;\n    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);\n  }\n  .user-card:hover {\n    border-color: rgba(255, 255, 255, 0.25) !important;\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%) !important;\n    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;\n    transform: translateY(-2px);\n  }\n  .user-badge{display:inline-block;padding:4px 10px;border-radius:8px;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#ffffff!important;border:1px solid rgba(255,255,255,0.18)}\n  /* REEMPLAZA los colores neón por tokens legibles */\n  .user-badge.admin { background: #d97706 !important; color: #ffffff !important; font-weight: 900 !important; border: 1px solid rgba(255,255,255,0.3) !important; }\n  .user-badge.admin_old {\n    background: rgba(255,255,255,0.12);\n    color: rgba(255,255,255,0.92);\n    border: 1px solid rgba(255,255,255,0.18);\n    font-weight: 700;\n    letter-spacing: 0.04em;\n  }\n  .user-badge.user { background: #475569 !important; color: #ffffff !important; font-weight: 800 !important; border: 1px solid rgba(255,255,255,0.2) !important; }\n  .user-badge.user_old {\n    background: rgba(255,255,255,0.08);\n    color: rgba(255,255,255,0.75);\n    border: 1px solid rgba(255,255,255,0.12);\n  }\n  /* Role label debajo del nombre */\n  .user-role-label {\n    font-size: 11px;\n    font-weight: 600;\n    letter-spacing: 0.06em;\n    text-transform: uppercase;\n    color: rgba(255,255,255,0.55);  /* muted, no neón */\n    margin-top: 2px;\n  }\n  /* Notif target chip */\n  .notif-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);font-size:12px;font-weight:800;color:#ffffff !important}\n  .notif-chip button{padding:0 4px;border:0;background:none;cursor:pointer;opacity:.75;color:#ffffff}\n  /* Triggered box */\n  .trig-box{padding:12px 14px;border-radius:14px;background:rgba(229,57,53,.08);border:1px dashed var(--error-color,#e53935);font-size:12px;font-weight:600;color:var(--error-color,#e53935)}\n  /* inputs */\n  input[type=\"text\"], input[type=\"password\"], input[type=\"number\"], input[type=\"search\"], select, input[type=\"datetime-local\"], .glass-control {\n    width: 100%;\n    padding: 11px 14px;\n    border-radius: 16px;\n    border: 1px solid rgba(255, 255, 255, 0.16);\n    background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.055));\n    color: var(--primary-text-color);\n    backdrop-filter: blur(18px) saturate(145%);\n    -webkit-backdrop-filter: blur(18px) saturate(145%);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 8px 22px rgba(0, 0, 0, 0.12);\n    font: 700 13px/1.2 'Outfit', Inter, system-ui, sans-serif;\n    outline: none;\n    transition: transform 0.34s cubic-bezier(0.18, 0.89, 0.32, 1.32), border-color 0.22s, box-shadow 0.22s;\n    display: block;\n    box-sizing: border-box;\n  }\n  input[type=\"text\"]:focus, input[type=\"password\"]:focus, input[type=\"number\"]:focus, input[type=\"search\"]:focus, select:focus, input[type=\"datetime-local\"]:focus, .glass-control:focus {\n    transform: scale(1.018);\n    border-color: rgba(112, 188, 255, 0.78);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.23), 0 0 0 4px rgba(0, 122, 255, 0.14), 0 10px 28px rgba(0, 0, 0, 0.16);\n  }\n  .x-never-match input[type=\"text\"],\n  .x-never-match input[type=\"password\"],\n  .x-never-match input[type=\"number\"],\n  .x-never-match input[type=\"search\"],\n  .x-never-match select,\n  .x-never-match input[type=\"datetime-local\"],\n  .x-never-match .glass-control {\n    background: rgba(255, 255, 255, 0.52);\n    border-color: rgba(0, 0, 0, 0.10);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 6px 16px rgba(0, 0, 0, 0.05);\n  }\n  /* search */\n  .search-wrap{display:flex;gap:10px;align-items:center}\n  .search-wrap input{flex:1;min-width:0}\n  /* ── Dual-panel selector modal ───────────────────────────────────────────────────── */\n  #selector-modal .modal{width:min(980px,96vw);height:min(780px,92vh);max-height:92vh;grid-template-rows:auto minmax(0,1fr) auto}\n  #selector-modal .modal-body{min-height:0;height:100%;padding:5px 0}\n  .sel-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;overflow:hidden;min-height:0;height:100%}\n  @media(max-width:600px){.sel-grid{grid-template-columns:1fr}}\n  .sel-panel{display:flex;flex-direction:column;gap:8px;overflow:hidden;min-width:0;min-height:0;padding:12px;border-radius:18px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.07)}\n  .sel-panel-inner{overflow-y:auto;overscroll-behavior:contain;flex:1;min-height:0;display:grid;gap:6px;align-content:start;padding-right:4px}\n  .sel-actions{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}\n  .pick-row{display:grid;grid-template-columns:24px minmax(0,1fr);align-items:center;gap:12px;padding:12px 14px;min-height:48px;border-radius:14px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.035);cursor:pointer;transition:background .12s,border-color .12s}\n  .pick-row:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.24)}\n  .pick-row:has(input:checked){border-color:rgba(56,189,248,.65);background:rgba(56,189,248,.12)}\n  .pick-row input[type=checkbox]{width:22px;height:22px;min-width:22px;min-height:22px;cursor:pointer;accent-color:var(--primary-color,#38bdf8);margin:0}\n  .pick-row-name{font-weight:750;font-size:14px;color:#ffffff;display:flex;align-items:center;gap:6px;flex-wrap:wrap;line-height:1.3}\n  .pick-row-meta{font-size:12px;color:#cbd5e1;opacity:0.92;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\n  .device-facts{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}\n  .device-fact{display:inline-flex;align-items:center;min-height:20px;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:750;line-height:1.1;white-space:nowrap}\n  .device-fact.status-open{color:#ff8a80;background:rgba(255,82,82,.12)}\n  .device-fact.status-closed{color:#7ee2a8;background:rgba(52,199,.12)}\n  .device-fact.power-low{color:#ffd166;background:rgba(255,183,77,.13)}\n  .sel-right-item{display:flex;align-items:center;justify-content:space-between;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.09);background:rgba(255,255,255,0.055);font-size:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.06)}\n  .sel-right-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}\n  .sel-right-facts{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}\n  .mode-sensor-grid .sensor-pill{width:100%;min-width:0;padding:9px 10px;gap:7px}\n  .mode-sensor-grid .sensor-pill .pill-content{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:6px;min-width:0;flex:1}\n  .mode-sensor-grid .sensor-pill .pill-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\n  .mode-sensor-grid .sensor-pill .pill-status{font-size:10px;font-weight:800;opacity:.78;white-space:nowrap}\n  .mode-sensor-grid .sensor-pill .pill-power{font-size:10px;font-weight:700;opacity:.82;white-space:nowrap}\n  .sel-panel-inner::-webkit-scrollbar{width:7px}.sel-panel-inner::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.18);border-radius:99px}\n  /* Activity log */\n  .log-item{display:flex;align-items:flex-start;gap:12px;padding:13px;border-radius:18px;border:1px solid var(--log-item-border, rgba(255,255,255,.05));background:linear-gradient(135deg,color-mix(in srgb,var(--log-item-bg,rgba(255,255,255,.02)) 84%,#fff 16%),var(--log-item-bg,rgba(255,255,255,.02)));color:var(--primary-text-color,#fff);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 7px 18px rgba(0,0,0,.10)}\n  .log-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:13px;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 5px 12px rgba(0,0,0,.12)}\n  .glass-orb{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 2px 4px rgba(255,255,255,0.5),0 2px 6px rgba(0,0,0,0.2);background:rgba(255,255,255,0.3)}\n  .log-item.log-item--armed .log-icon{background:rgba(255,149,0,.16);border-color:rgba(255,183,77,.28)}\n  .log-item.log-item--armed .glass-orb{background:linear-gradient(135deg,#ffb74d,#f57c00)}\n  .log-item.log-item--disarmed .log-icon{background:rgba(52,199,.14);border-color:rgba(105,219,139,.28)}\n  .log-item.log-item--disarmed .glass-orb{background:linear-gradient(135deg,#69db8b,#388e3c)}\n  .log-item.log-item--triggered .log-icon{background:rgba(255,69,58,.16);border-color:rgba(255,139,131,.30)}\n  .log-item.log-item--triggered .glass-orb{background:linear-gradient(135deg,#ff8b83,#d32f2f)}\n  .log-body{flex:1;min-width:0}\n  .log-title{font-weight:700;font-size:13px}\n  .log-meta{font-size:11px;opacity:.55;margin-top:2px}\n  .log-badge{display:inline-block;padding:2px 7px;border-radius:6px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-right:4px}\n  .log-badge.arm{background:rgba(251,140,0,.12);color:#fb8c00}\n  .log-badge.disarm{background:rgba(67,160,71,.12);color:var(--success-color,#43a047)}\n  .log-badge.trigger{background:rgba(229,57,53,.15);color:var(--error-color,#e53935)}\n  button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid color-mix(in srgb,var(--primary-color,#007aff) 72%,#fff);outline-offset:3px}\n  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}.wx canvas{display:none!important}}\n  /* Personalization section styles */\n  .personalize-section {\n    margin-top: 18px;\n    padding: 18px;\n    background: var(--personalize-bg, rgba(255,255,255,0.02));\n    border: 1px solid var(--personalize-border, rgba(255,255,255,0.06));\n    border-radius: 22px;\n    display: grid;\n    gap: 16px;\n  }\n  .personalize-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:\"home temp\" \"panel clock\" \"hub emergency\";gap:14px 16px;align-items:start}\n  .personalize-column{display:contents}\n  .personalize-field{min-width:0;align-self:stretch}\n  .pf-home{grid-area:home}.pf-temp{grid-area:temp}.pf-panel{grid-area:panel}.pf-hub{grid-area:hub}.pf-emergency{grid-area:emergency}.pf-clock{grid-area:clock}\n  .pf-panel,.pf-hub{display:flex;flex-direction:column;gap:8px}\n  .pf-emergency{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:\"emergency-label emergency-label\" \"emergency-input emergency-help\";gap:5px 16px;align-items:start;padding-top:2px}\n  .pf-emergency #lbl-emergency-number{grid-area:emergency-label}.pf-emergency #emergency-number-input{grid-area:emergency-input}.pf-emergency #emergency-number-help{grid-area:emergency-help;margin:0!important}\n  .sos-configuration {\n    padding: 18px;\n    border-radius: 24px;\n    border: 1px solid rgba(255, 59, 48, 0.25);\n    background: linear-gradient(135deg, rgba(255, 59, 48, 0.12), rgba(255, 255, 255, 0.02));\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 12px 28px rgba(255, 59, 48, 0.06), 0 8px 20px rgba(0, 0, 0, 0.12);\n    transition: transform 0.3s ease, box-shadow 0.3s ease;\n  }\n  /* SOS uses the full personalization width so outputs never create a tall,\n     narrow list with unused space beside it. */\n  .sos-configuration{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:\"title action\" \"outputs outputs\" \"help help\";gap:12px 16px;align-items:center}\n  .sos-configuration #lbl-sos-actions{grid-area:title;margin:0!important;white-space:nowrap}\n  .sos-configuration #sos-output-chips{grid-area:outputs;margin:0!important;display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:7px;align-items:stretch;max-height:148px;overflow-y:auto;overflow-x:hidden;padding:2px 5px 2px 2px;overscroll-behavior:contain}\n  .sos-configuration #sos-output-chips .sensor-pill{width:100%;min-width:0;min-height:34px;justify-content:center;padding:7px 10px;font-size:11px;border-radius:12px}\n  .sos-configuration #sos-output-chips .sensor-pill > span{display:block;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}\n  .sos-configuration #sos-output-chips .mode-sensor-none{grid-column:1/-1;padding:18px;min-height:54px}\n  .sos-configuration #btn-select-sos-outputs{grid-area:action;width:auto!important;max-width:230px;min-width:0;white-space:normal;overflow-wrap:anywhere;line-height:1.15}\n  .sos-configuration #sos-output-help{grid-area:help;margin:0!important;max-width:none}\n  .sos-configuration:hover {\n    transform: translateY(-2px);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 16px 36px rgba(255, 59, 48, 0.10), 0 12px 24px rgba(0, 0, 0, 0.16);\n  }\n  .x-never-match .sos-configuration {\n    border-color: rgba(255, 59, 48, 0.3);\n    background: linear-gradient(135deg, rgba(255, 59, 48, 0.08), rgba(0, 0, 0, 0.01));\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 10px 24px rgba(255, 59, 48, 0.05);\n  }\n  #sos-output-chips .sensor-pill{background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.06));border-color:rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 5px 14px rgba(0,0,0,.10)}\n  .background-custom-inputs{flex-direction:column;gap:8px;background:rgba(0,0,0,.15);padding:12px;border-radius:18px;border:1px solid rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}\n  .modal-back.open .modal,\n  .lang-modal-back.open .lang-modal-card,\n  .ios-confirm-backdrop.open .ios-confirm-card {\n    animation: liquidDropIn .48s cubic-bezier(.16,1.24,.32,1) both;\n  }\n  @keyframes liquidDropIn{0%{opacity:0;transform:translateY(18px) scale(.91);filter:blur(5px)}65%{opacity:1;transform:translateY(-3px) scale(1.018);filter:blur(0)}100%{transform:translateY(0) scale(1)}}\n  @keyframes argus-modal-in{0%{opacity:0;transform:scale(.94) translateY(8px)}100%{opacity:1;transform:scale(1) translateY(0)}}\n  @media(max-width:700px){\n    .personalize-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:\"home\" \"temp\" \"panel\" \"hub\" \"clock\" \"emergency\"}\n    .pf-emergency{grid-template-columns:minmax(0,1fr);grid-template-areas:\"emergency-label\" \"emergency-input\" \"emergency-help\"}\n    .personalize-section{padding:14px}\n    .sos-configuration{display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:14px;border-radius:24px}\n    .sos-configuration #lbl-sos-actions{white-space:normal}.sos-configuration #btn-select-sos-outputs{width:100%!important}.sos-configuration #sos-output-help{max-width:none}\n  }\n\n  #argus-canvas-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background-size:cover;background-position:center;background-repeat:no-repeat}\n  #argus-canvas-bg::after{content:\"\";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.3) 100%);z-index:1;pointer-events:none}\n\n.sensor-pill {\n  display:inline-flex; align-items:center; gap:8px;\n  background:var(--argus-pill-bg, rgba(255,255,255,0.04));\n  border:1px solid var(--argus-pill-border, rgba(255,255,255,0.08));\n  border-radius:14px; padding:10px 14px;\n  font-size:13px; color:var(--argus-pill-color, rgba(255,255,255,0.95));\n  backdrop-filter:blur(10px); transition:all 0.2s cubic-bezier(0.4,0,0.2,1);\n  font-weight:700; box-shadow:0 4px 12px rgba(0,0,0,0.08);\n}\n.sensor-pill:hover { background:var(--argus-pill-bg-hover, rgba(255,255,255,0.08)); border-color:rgba(255,255,255,0.25); transform:translateY(-1px); }\n.sensor-pill .pill-dot { width:10px; height:10px; border-radius:50%; background:#34c759; flex-shrink:0; box-shadow:0 0 10px rgba(52,199,0.5); }\n.sensor-pill .pill-dot.open { background:#ff3b30; box-shadow:0 0 10px rgba(255,59,48,0.5); }\n.sensor-pill .pill-dot.unavailable { background:#999; }\n.sensor-pill button { background:none; border:none; color:var(--argus-pill-color, #fff); cursor:pointer; opacity:0.5; padding:4px; font-size:14px; transition:opacity 0.2s; }\n.sensor-pill button:hover { opacity:1; }\n\n.mode-sensor-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:12px; margin-top:12px; }\n.mode-sensor-none { grid-column:1/-1; padding:30px; text-align:center; background:var(--argus-pill-bg,rgba(255,255,255,0.03)); border:2px dashed var(--argus-pill-border,rgba(255,255,255,0.1)); border-radius:20px; color:var(--argus-pill-color-muted,rgba(255,255,255,0.4)); font-size:14px; font-weight:600; }\n.subsection-title { font-size:12px; font-weight:900; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px; color:var(--argus-pill-color-muted,rgba(255,255,255,0.5)); display:block; }\n\n\n/* ── Language Picker ───────────────────────────────────── */\n.lang-pill {\n  display:inline-flex; align-items:center; gap:6px;\n  padding:7px 14px; border-radius:999px;\n  background:rgba(255,255,255,0.10);\n  border:1px solid rgba(255,255,255,0.18);\n  backdrop-filter:blur(12px) saturate(120%);\n  -webkit-backdrop-filter:blur(12px) saturate(120%);\n  color:#fff; font-size:13px; font-weight:700;\n  cursor:pointer; transition:all 0.22s cubic-bezier(0.4,0,0.2,1);\n  box-shadow:0 4px 16px rgba(0,0,0,0.18);\n  white-space:nowrap; flex-shrink:0;\n}\n.lang-pill:hover { background:rgba(255,255,255,0.22); transform:translateY(-1px); }\n.x-never-match .lang-pill {\n  background:rgba(0,0,0,0.07); border-color:rgba(0,0,0,0.15); color:#1e1e2d;\n}\n\n/* Language modal */\n.lang-modal-back { position:fixed; inset:0; background:rgba(0,0,0,0.55); display:none; align-items:center; justify-content:center; z-index:999998; backdrop-filter:blur(4px); }\n.lang-modal-back.open { display:flex; }\n.lang-modal-card {\n  width:min(400px,92vw); border-radius:28px; padding:28px 24px 20px;\n  background:rgba(20,22,35,0.92);\n  border:1px solid rgba(255,255,255,0.14);\n  box-shadow:0 32px 80px rgba(0,0,0,0.55);\n  backdrop-filter:blur(12px) saturate(120%);\n  -webkit-backdrop-filter:blur(12px) saturate(120%);\n  color:#fff;\n  animation: langBounceIn 0.38s cubic-bezier(0.175,0.885,0.32,1.275) forwards;\n}\n.x-never-match .lang-modal-card {\n  background:rgba(255,255,255,0.96); color:#1e1e2d;\n  border-color:rgba(0,0,0,0.12); box-shadow:0 20px 60px rgba(0,0,0,0.25);\n}\n@keyframes langBounceIn {\n  0%   { transform:scale(0.82) translateY(20px); opacity:0; }\n  60%  { transform:scale(1.03) translateY(-4px); opacity:1; }\n  100% { transform:scale(1)    translateY(0);    opacity:1; }\n}\n.lang-modal-title {\n  font-size:18px; font-weight:900; letter-spacing:-0.01em;\n  margin-bottom:20px; text-align:center;\n}\n.lang-grid {\n  display:grid; grid-template-columns:1fr 1fr; gap:10px;\n}\n.lang-option {\n  display:flex; align-items:center; gap:10px;\n  padding:12px 14px; border-radius:16px;\n  background:rgba(255,255,255,0.10);\n  border:1.5px solid rgba(255,255,255,0.18);\n  /* Buttons do not inherit color reliably through the HA shadow DOM. */\n  color:rgba(255,255,255,0.98) !important;\n  text-shadow:0 1px 2px rgba(0,0,0,0.38);\n  cursor:pointer; transition:all 0.18s ease;\n  font-size:14px; font-weight:750;\n}\n.lang-option span:not(.lang-flag) { color:inherit !important; }\n.lang-option:hover { background:rgba(255,255,255,0.16); border-color:rgba(255,255,255,0.28); transform:translateY(-1px); }\n.lang-option.active {\n  background:rgba(3,169,244,0.30); border-color:rgba(76,201,255,0.82);\n  box-shadow:0 0 18px rgba(3,169,244,0.25);\n}\n.lang-flag { font-size:22px; line-height:1; }\n.lang-close-row { display:flex; justify-content:center; margin-top:18px; }\n.lang-close-btn {\n  padding:9px 28px; border-radius:14px;\n  background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15);\n  color:#fff; font-size:13px; font-weight:700; cursor:pointer;\n  transition:background 0.18s;\n}\n.lang-close-btn:hover { background:rgba(255,255,255,0.2); }\n\n/* Walk Test Modal & Delay Styles */\n.walk-test-modal-back { position:fixed; inset:0; background:rgba(0,0,0,0.65); display:none; align-items:center; justify-content:center; z-index:999998; backdrop-filter:blur(6px); }\n.walk-test-modal-back.open { display:flex; }\n.walk-test-modal-card {\n  width:min(520px,94vw); max-height:85vh; border-radius:24px; padding:24px;\n  background:rgba(18,22,34,0.95); border:1px solid rgba(255,255,255,0.14);\n  box-shadow:0 32px 80px rgba(0,0,0,0.6); backdrop-filter:blur(16px);\n  color:#fff; display:flex; flex-direction:column; gap:16px; overflow:hidden;\n  animation: langBounceIn 0.35s cubic-bezier(0.175,0.885,0.32,1.275) forwards;\n}\n.walk-test-header { display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:12px; }\n.walk-test-title { font-size:17px; font-weight:800; display:flex; align-items:center; gap:8px; }\n.walk-test-timer { font-size:12px; font-weight:700; color:#38bdf8; background:rgba(56,189,248,0.12); padding:3px 10px; border-radius:12px; border:1px solid rgba(56,189,248,0.25); }\n.walk-test-progress-bar { width:100%; height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden; }\n.walk-test-progress-fill { height:100%; background:linear-gradient(90deg, #38bdf8, #4ade80); transition:width 0.3s ease; }\n.walk-test-sensor-list { display:grid; gap:8px; max-height:45vh; overflow-y:auto; padding-right:4px; }\n.walk-test-sensor-item {\n  display:flex; align-items:center; justify-content:space-between; padding:10px 14px;\n  border-radius:12px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07);\n  transition:all 0.2s ease;\n}\n.walk-test-sensor-item.tested {\n  background:rgba(74,222,128,0.12); border-color:rgba(74,222,128,0.3);\n}\n.walk-test-sensor-item.just-tested {\n  animation: testPulse 0.8s ease;\n}\n@keyframes testPulse {\n  0% { transform: scale(1); background: rgba(74,222,128,0.4); }\n  50% { transform: scale(1.02); }\n  100% { transform: scale(1); background: rgba(74,222,128,0.12); }\n}\n.pill-delay-btn {\n  background:none; border:none; color:inherit; cursor:pointer; padding:0; margin-left:4px;\n  display:inline-flex; align-items:center;\n}\n.pill-delay-badge {\n  font-size:9.5px; font-weight:800; padding:2px 6px; border-radius:6px;\n  display:inline-flex; align-items:center; gap:2px; transition:transform 0.15s;\n}\n.pill-delay-badge:hover { transform:scale(1.08); }\n.pill-delay-badge.instant { color:#38bdf8; background:rgba(56,189,248,0.15); border:1px solid rgba(56,189,248,0.3); }\n.pill-delay-badge.custom { color:#fbbf24; background:rgba(251,191,36,0.15); border:1px solid rgba(251,191,36,0.3); }\n.pill-delay-badge.inherited { color:rgba(255,255,255,0.5); background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); }\n\n/* Background File Manager Styles */\n.file-card {\n  background: rgba(255, 255, 255, 0.03);\n  border: 1px solid rgba(255, 255, 255, 0.06);\n  border-radius: 12px;\n  padding: 8px;\n  display: flex;\n  flex-direction: column;\n  gap: 6px;\n  position: relative;\n  overflow: hidden;\n  transition: all 0.22s cubic-bezier(0.25, 0.8, 0.25, 1);\n}\n.file-card:hover {\n  background: rgba(255, 255, 255, 0.08) !important;\n  border-color: rgba(255, 255, 255, 0.16) !important;\n  transform: translateY(-2px);\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);\n}\n.x-never-match .file-card {\n  background: rgba(0, 0, 0, 0.02);\n  border-color: rgba(0, 0, 0, 0.07);\n  color: #1c1c1e;\n}\n.x-never-match .file-card:hover {\n  background: rgba(0, 0, 0, 0.05) !important;\n  border-color: rgba(0, 0, 0, 0.12) !important;\n}\n.file-card-preview {\n  position: relative;\n  width: 100%;\n  height: 64px;\n  border-radius: 8px;\n  overflow: hidden;\n  background: rgba(0, 0, 0, 0.2);\n}\n.file-card-preview img, .file-card-preview video {\n  width: 100%;\n  height: 100%;\n  object-fit: cover;\n  display: block;\n}\n.file-card-name {\n  font-size: 10px;\n  font-weight: 700;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  opacity: 0.85;\n}\n.file-card-meta {\n  font-size: 9px;\n  opacity: 0.55;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n.file-card-actions {\n  display: flex;\n  gap: 4px;\n  margin-top: auto;\n}\n.file-card-btn {\n  flex: 1;\n  padding: 4px;\n  font-size: 8px;\n  font-weight: 700;\n  text-transform: uppercase;\n  border: 1px solid rgba(255, 255, 255, 0.12);\n  border-radius: 6px;\n  background: rgba(255, 255, 255, 0.03);\n  color: inherit;\n  cursor: pointer;\n  white-space: nowrap;\n  transition: all 0.15s ease;\n}\n.file-card-btn:hover {\n  background: rgba(255, 255, 255, 0.15);\n  border-color: rgba(255, 255, 255, 0.3);\n}\n.x-never-match .file-card-btn {\n  border-color: rgba(0, 0, 0, 0.12);\n  background: rgba(0, 0, 0, 0.02);\n}\n.x-never-match .file-card-btn:hover {\n  background: rgba(0, 0, 0, 0.08);\n  border-color: rgba(0, 0, 0, 0.25);\n}\n.file-card-btn-delete {\n  padding: 3px 6px;\n  color: #ff3b30;\n  border: 1px solid rgba(255, 59, 48, 0.15);\n  background: rgba(255, 59, 48, 0.05);\n  border-radius: 6px;\n  cursor: pointer;\n  font-size: 9px;\n  transition: all 0.15s ease;\n}\n.file-card-btn-delete:hover {\n  background: rgba(255, 59, 48, 0.25);\n  border-color: rgba(255, 59, 48, 0.45);\n}\n\n.argus-bootstrap-layer {\n  position: fixed;\n  inset: 0;\n  background: rgba(0,0,0,0.88);\n  /* NO backdrop-filter: element is permanently in DOM (display:none toggle).\n     WebKit compositor leak bug — opaque background is visually equivalent. */\n  z-index: 9999;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  color: white;\n  animation: fadeIn 0.4s ease forwards;\n}\n.argus-bootstrap-card {\n  background: rgba(255,255,255,0.05);\n  border: 1px solid rgba(255,255,255,0.1);\n  border-radius: 24px;\n  padding: 40px;\n  max-width: 480px;\n  width: 90%;\n  box-shadow: 0 16px 40px rgba(0,0,0,0.5);\n  text-align: center;\n}\n.argus-bootstrap-card h1 {\n  margin: 0 0 16px;\n  font-weight: 300;\n  font-size: 28px;\n  letter-spacing: 0.5px;\n}\n.argus-bootstrap-card p {\n  color: rgba(255,255,255,0.7);\n  font-size: 16px;\n  line-height: 1.5;\n  margin-bottom: 32px;\n}\n@keyframes argusWelcomeCard {\n  from { opacity: 0; transform: translateY(18px) scale(.96); }\n  65% { opacity: 1; transform: translateY(-3px) scale(1.01); }\n  to { opacity: 1; transform: translateY(0) scale(1); }\n}\n@keyframes argusWelcomeLogo {\n  0%,100% { transform: translateY(0) scale(1); filter: drop-shadow(0 10px 18px rgba(32,145,255,.28)); }\n  50% { transform: translateY(-5px) scale(1.045); filter: drop-shadow(0 16px 26px rgba(32,145,255,.5)); }\n}\n@keyframes argusWelcomeCheck {\n  from { opacity: 0; transform: scale(.55) rotate(-16deg); }\n  70% { opacity: 1; transform: scale(1.1) rotate(4deg); }\n  to { opacity: 1; transform: scale(1) rotate(0); }\n}\n.argus-first-run-card { animation: argusWelcomeCard .58s cubic-bezier(.22,1.2,.36,1) both; }\n.argus-first-run-logo { height:68px; width:68px; border-radius:19px; animation:argusWelcomeLogo 2.4s ease-in-out infinite; }\n.argus-first-run-brand { display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:20px; }\n.argus-first-run-brand h1 { margin:0; font-size:1.65rem; font-weight:850; letter-spacing:-.02em; }\n.argus-first-run-brand p { margin:0; font-size:.92rem; color:rgba(255,255,255,.7); }\n.argus-first-run-thank-icon { width:74px; height:74px; margin:0 auto 18px; display:grid; place-items:center; border-radius:50%; background:rgba(52,199,89,.18); border:1px solid rgba(52,199,89,.45); color:#58e37c; font-size:2.15rem; box-shadow:0 0 32px rgba(52,199,89,.22); animation:argusWelcomeCheck .5s cubic-bezier(.2,1.35,.35,1) both; }\n\n/* ─── tvOS Profile Selector ─── */\n.argus-profile-overlay {\n  position: fixed; inset: 0;\n  background: rgba(0,0,0,0.4); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);\n  /* NO backdrop-filter: causes orphaned compositor layers in WebKit when removed.\n     High-opacity background achieves same visual effect safely. */\n  display: flex; align-items: center; justify-content: center;\n  z-index: 9999;\n  animation: argus-overlay-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;\n}\n@keyframes argus-overlay-in {\n  from { opacity: 0; }\n  to   { opacity: 1; }\n}\n\n/* Título arriba */\n.argus-profile-header {\n  text-align: center;\n  margin-bottom: 36px;\n  animation: argus-slide-down 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;\n}\n@keyframes argus-slide-down {\n  from { opacity: 0; transform: translateY(-20px); }\n  to   { opacity: 1; transform: translateY(0); }\n}\n.argus-profile-header h2 {\n  margin: 0; font-size: 1.6rem; font-weight: 800;\n  color: #fff; letter-spacing: -0.02em;\n}\n.argus-profile-header p {\n  margin: 6px 0 0; font-size: 0.85rem;\n  color: rgba(255,255,255,0.55);\n}\n\n/* Grid de perfiles */\n.argus-profile-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));\n  gap: 36px 24px;\n  max-width: 900px;\n  width: 100%;\n  justify-content: center;\n  animation: argus-grid-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;\n}\n@keyframes argus-grid-in {\n  from { opacity: 0; transform: scale(0.92) translateY(16px); }\n  to   { opacity: 1; transform: scale(1) translateY(0); }\n}\n\n/* Cada perfil */\n@media (max-width: 950px) and (orientation: landscape) {\n  .argus-profile-grid { \n    grid-template-columns: repeat(4, 1fr);\n    padding: 16px;\n  }\n}\n@media (max-width: 600px) and (orientation: portrait) {\n  .argus-profile-grid { \n    grid-template-columns: repeat(2, 1fr);\n    padding: 16px;\n    gap: 20px 16px;\n  }\n}\n@media (max-width: 380px) and (orientation: portrait) {\n  .argus-profile-grid { \n    grid-template-columns: 1fr;\n    padding: 16px;\n  }\n  .argus-profile-item { width: 100%; }\n}\n\n.argus-profile-item {\n  touch-action: manipulation;\n  min-height: 44px;\n  display: flex; flex-direction: column;\n  align-items: center; gap: 10px;\n  cursor: pointer;\n  border-radius: 16px;\n  padding: 14px 8px 10px;\n  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),\n              background 0.2s ease;\n  -webkit-tap-highlight-color: transparent;\n}\n.argus-profile-item:hover {\n  transform: scale(1.08);\n  background: rgba(255,255,255,0.07);\n}\n.argus-profile-item:active {\n  transform: scale(0.96);\n}\n.argus-profile-item:focus-visible {\n  outline: 2px solid rgba(255,255,255,0.6);\n  outline-offset: 4px;\n}\n\n/* Círculo avatar */\n.argus-profile-circle {\n  width: 120px; height: 120px;\n  border-radius: 50%;\n  object-fit: cover;\n  border: 3px solid rgba(255,255,255,0.18);\n  box-shadow: 0 4px 20px rgba(0,0,0,0.35);\n  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.22s;\n  display: flex; align-items: center; justify-content: center;\n  font-size: 2.5rem; font-weight: 800;\n  color: #fff; overflow: hidden; flex-shrink: 0;\n  background: rgba(255,255,255,0.1);\n  position: relative;\n}\n@media (max-width: 600px) and (orientation: portrait) {\n  .argus-profile-circle {\n    width: 76px; height: 76px;\n    font-size: 1.5rem; border-width: 2.5px;\n  }\n}\n@media (max-width: 950px) and (orientation: landscape) {\n  .argus-profile-circle {\n    width: 84px; height: 84px;\n    font-size: 1.8rem; border-width: 2.5px;\n  }\n}\n.argus-profile-item:hover .argus-profile-circle {\n  border-color: rgba(255,255,255,0.55);\n  box-shadow: 0 0 0 3px rgba(255,255,255,0.15), 0 6px 24px rgba(0,0,0,0.4);\n}\n.argus-profile-circle img {\n  width: 100%; height: 100%; border-radius: 50%; object-fit: cover;\n}\n.argus-profile-circle .lock-badge {\n  position: absolute; bottom: 0; right: 0;\n  width: 28px; height: 28px; border-radius: 50%;\n  background: rgba(0,0,0,0.75); display: flex;\n  align-items: center; justify-content: center;\n  font-size: 14px; border: 2px solid rgba(255,255,255,0.2);\n}\n@media (max-width: 600px) {\n  .argus-profile-circle .lock-badge {\n    width: 22px; height: 22px; font-size: 11px; border-width: 1.5px;\n  }\n}\n\n/* Nombre y rol */\n.argus-profile-label {\n  text-align: center;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.argus-profile-label .p-name {\n  font-size: 1rem; font-weight: 700;\n  color: #fff; line-height: 1.2;\n  max-width: 140px; overflow: hidden;\n  text-overflow: ellipsis; white-space: nowrap;\n}\n.argus-profile-label .p-role {\n  font-size: 0.72rem; font-weight: 600;\n  color: rgba(255,255,255,0.6);\n  margin-top: 4px;\n  text-transform: uppercase; letter-spacing: 0.04em;\n}\n@media (max-width: 600px) {\n  .argus-profile-label .p-name { font-size: 0.82rem; max-width: 80px; }\n  .argus-profile-label .p-role { font-size: 0.65rem; margin-top: 2px; }\n}\n\n/* ─── Welcome Screen (Fase 2) ─── */\n.argus-welcome-screen {\n  position: fixed; inset: 0;\n  background: rgba(0,0,0,0.88);\n  /* NO backdrop-filter: Safari/WebKit compositor bug causes blur to persist\n     after element.remove(). Use opaque background instead. */\n  display: flex; flex-direction: column;\n  align-items: center; justify-content: center;\n  z-index: 10000;\n  pointer-events: none;\n}\n.argus-welcome-avatar {\n  width: 110px; height: 110px;\n  border-radius: 50%; overflow: hidden;\n  border: 3px solid rgba(255,255,255,0.3);\n  box-shadow: 0 8px 40px rgba(0,0,0,0.5);\n  display: flex; align-items: center; justify-content: center;\n  font-size: 2.8rem; font-weight: 800; color: #fff;\n  background: rgba(255,255,255,0.12);\n  will-change: transform, width, height, border-radius;\n}\n.argus-welcome-avatar img {\n  width: 100%; height: 100%; object-fit: cover;\n}\n.argus-welcome-text {\n  margin-top: 20px; text-align: center;\n}\n.argus-welcome-text .greeting {\n  font-size: 1.0rem; color: rgba(255,255,255,0.6);\n  font-weight: 500; letter-spacing: 0.02em;\n  margin: 0;\n}\n.argus-welcome-text .wname {\n  font-size: 2.0rem; font-weight: 900;\n  color: #fff; letter-spacing: -0.03em;\n  margin: 6px 0 0;\n  line-height: 1;\n}\n\n/* PIN prompt dentro del selector tvOS */\n.argus-pin-prompt {\n  position: fixed; inset: 0;\n  background: rgba(0,0,0,0.75);\n  backdrop-filter: blur(28px);\n  -webkit-backdrop-filter: blur(28px);\n  display: flex; align-items: center; justify-content: center;\n  z-index: 10001;\n  animation: argus-overlay-in 0.25s ease both;\n}\n.argus-pin-card {\n  background: rgba(255,255,255,0.08);\n  border: 1px solid rgba(255,255,255,0.14);\n  border-radius: 20px; padding: 28px 24px;\n  width: min(340px, 90vw);\n  text-align: center; color: #fff;\n}\n.argus-pin-card h3 {\n  margin: 0 0 4px; font-size: 1.1rem; font-weight: 800;\n}\n.argus-pin-card .pin-sub {\n  font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-bottom: 16px;\n}\n.argus-pin-input {\n  width: 100%; box-sizing: border-box;\n  text-align: center; font-size: 1.6rem;\n  letter-spacing: 0.4em; padding: 12px;\n  border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);\n  background: rgba(255,255,255,0.07); color: #fff;\n  outline: none; margin-bottom: 14px;\n}\n.argus-numpad {\n  display: grid; grid-template-columns: repeat(3,1fr); gap: 10px;\n  margin-bottom: 12px;\n}\n.argus-numpad button {\n  padding: 14px; font-size: 1.15rem; font-weight: 700;\n  border-radius: 12px;\n  border: 1px solid rgba(255,255,255,0.14);\n  background: rgba(255,255,255,0.08); color: #fff;\n  cursor: pointer;\n  transition: background 0.15s, transform 0.1s;\n}\n.argus-numpad button:active { transform: scale(0.93); background: rgba(255,255,255,0.18); }\n.argus-pin-actions {\n  display: flex; gap: 10px; margin-top: 4px;\n}\n.argus-pin-actions button {\n  flex: 1; padding: 12px; border-radius: 12px; font-size: 0.85rem;\n  font-weight: 700; cursor: pointer;\n  border: 1px solid rgba(255,255,255,0.15);\n  background: rgba(255,255,255,0.07); color: #fff;\n  transition: background 0.15s;\n}\n.argus-pin-actions button:hover { background: rgba(255,255,255,0.15); }\n\n@keyframes argus-shake {\n  0%, 100% { transform: translateX(0); }\n  20%       { transform: translateX(-8px); }\n  40%       { transform: translateX(8px); }\n  60%       { transform: translateX(-5px); }\n  80%       { transform: translateX(5px); }\n}\n@keyframes argus-overlay-out {\n  from { opacity: 1; }\n  to   { opacity: 0; }\n}\n\n.user-selector-grid {\n\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));\n  gap: 16px;\n  margin-top: 24px;\n}\n.user-card {\n  background: rgba(255,255,255,0.1);\n  border: 1px solid rgba(255,255,255,0.15);\n  border-radius: 16px;\n  padding: 20px 10px;\n  cursor: pointer;\n  transition: all 0.2s ease;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: 12px;\n}\n.user-card:hover {\n  background: rgba(255,255,255,0.2);\n  transform: translateY(-2px);\n}\n.user-card-own {\n  border-color: rgba(0, 122, 255, 0.55);\n  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.22), 0 8px 24px rgba(0,122,255,0.1);\n}\n.user-card-own:hover {\n  border-color: rgba(0, 122, 255, 0.8);\n}\n.profile-own-badge {\n  font-size: 10px;\n  font-weight: 800;\n  text-transform: uppercase;\n  letter-spacing: 0.08em;\n  color: #007aff;\n  background: rgba(0, 122, 255, 0.12);\n  border-radius: 999px;\n  padding: 2px 8px;\n  margin-top: -4px;\n}\n.user-role-label {\n  font-size: 11px;\n  opacity: 0.55;\n  font-weight: 600;\n  letter-spacing: 0.02em;\n}\n@keyframes shake {\n  0%, 100% { transform: translateX(0); }\n  20%, 60% { transform: translateX(-6px); }\n  40%, 80% { transform: translateX(6px); }\n}\n.user-avatar {\n  width: 56px;\n  height: 56px;\n  border-radius: 50%;\n  background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 20px;\n  font-weight: 600;\n  color: #fff;\n  border: 1px solid rgba(255,255,255,0.3);\n}\n.user-name {\n  font-size: 14px;\n  font-weight: 500;\n  color: rgba(255,255,255,0.9);\n}\n.pin-prompt {\n  display: none;\n  animation: fadeIn 0.3s ease forwards;\n  margin-top: 20px;\n}\n.pin-prompt input {\n  font-size: 24px;\n  letter-spacing: 8px;\n  text-align: center;\n  padding: 10px;\n  border-radius: 12px;\n  border: 1px solid rgba(255,255,255,0.2);\n  background: rgba(0,0,0,0.2);\n  color: white;\n  width: 200px;\n  margin-bottom: 20px;\n}\n.btn-claim {\n  background: #ff3b30;\n  color: white;\n  border: none;\n  padding: 14px 28px;\n  border-radius: 12px;\n  font-size: 16px;\n  font-weight: 600;\n  cursor: pointer;\n  transition: background 0.2s;\n}\n.btn-claim:hover { background: #ff453a; }\n.btn-start {\n  background: #34c759;\n  color: white;\n  border: none;\n  padding: 14px 28px;\n  border-radius: 12px;\n  font-size: 16px;\n  font-weight: 600;\n  cursor: pointer;\n  transition: background 0.2s;\n}\n.btn-start:hover { background: #30d158; }\n.btn-cancel {\n  background: rgba(255,255,255,0.1);\n  color: white;\n  border: none;\n  padding: 14px 28px;\n  border-radius: 12px;\n  font-size: 16px;\n  font-weight: 600;\n  cursor: pointer;\n  margin-left: 10px;\n}\n\n/* Mobile background and HomeKit polish fixes (moved from runtime hack) */\n.entry-icon,.entry-icon>svg,.argus-old-shield,.argus-old-shield>svg{overflow:visible!important;clip-path:none!important;-webkit-clip-path:none!important}\n.entry-icon{contain:layout!important}\n#global-status { display: none !important; }\n#global-status .badge.disarmed,.hero-pill#hero-security-pill{color:#fff!important;background:rgba(18,82,54,.78)!important;border:1px solid rgba(125,255,185,.64)!important;text-shadow:0 1px 2px rgba(0,0,0,.72)!important;opacity:1!important}\n.argus-instance-duplicate-status{display:none!important}\n.pin-prompt,.pin-modal,.modal,.argus-bootstrap-card{color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.55)!important}\n.pin-prompt input,.pin-modal input,.argus-bootstrap-card input{color:#fff!important;background:rgba(8,16,31,.72)!important;border-color:rgba(255,255,255,.24)!important;-webkit-text-fill-color:#fff!important}\n.pin-prompt label,.pin-modal label,.pin-prompt p,.pin-modal p,.argus-bootstrap-card label,.argus-bootstrap-card p{color:rgba(255,255,255,.88)!important}\n#w-activity,.activity-log{max-height:min(58vh,520px)!important;overflow-y:auto!important;overscroll-behavior:contain!important;scrollbar-gutter:stable!important}\n#w-activity .panel-body,.activity-log .panel-body{max-height:inherit!important;overflow-y:auto!important}\n@media(max-width:760px){\n  .hero{display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;gap:12px!important;padding:18px 14px!important}\n  .hero-left{width:100%!important;min-width:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:8px!important}\n  .hero-left>div{text-align:center!important;display:flex!important;flex-direction:column!important;align-items:center!important}\n  .hero-left h1,.hero-left p{text-align:center!important;margin:0 auto!important}\n  .hero-context{display:flex!important;flex-direction:column!important;width:100%!important;margin:4px 0 0!important;align-items:center!important;justify-content:center!important;gap:8px!important}\n  .hero-clock{width:100%!important;min-width:0!important;padding:0!important;border:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:3px!important;line-height:1.12!important}\n  .hero-clock strong,.hero-clock span,#hero-clock-time,#hero-clock-date{width:100%!important;max-width:100%!important;text-align:center!important;display:block!important;margin:0 auto!important;line-height:1.12!important}\n  #hero-profile-container{display:flex!important;justify-content:center!important;align-items:center!important;width:100%!important;margin:2px auto 0!important}\n  .hero-pills{display:grid!important;grid-template-columns:minmax(0,1fr)!important;width:100%!important;min-width:0!important;justify-items:center!important;align-items:center!important;gap:8px!important}\n  .hero-pill{width:min(100%,360px)!important;max-width:100%!important;white-space:normal!important;text-align:center!important;justify-content:center!important;align-items:center!important;line-height:1.25!important;margin:0 auto!important}\n  .dashboard-instances>.panel-head{flex-direction:column!important;align-items:stretch!important;gap:10px!important}\n  #global-status,#global-status .badge{width:100%!important;box-sizing:border-box!important;justify-content:center!important;text-align:center!important;white-space:normal!important;line-height:1.3!important}\n  #w-activity,.activity-log{max-height:46vh!important;overflow-y:auto!important}\n  .argus-mobile-history-overflow-item{display:list-item!important}\n  #w-performance,.performance-card,.device-performance{display:grid!important;grid-template-columns:minmax(0,1fr)!important;justify-items:stretch!important;align-items:center!important;text-align:center!important;gap:10px!important}\n  #w-performance *,.performance-card *,.device-performance *{max-width:100%!important;box-sizing:border-box!important}\n  #w-access .panel-body,#w-settings .panel-body,.sos-actions,.panic-actions{overflow:visible!important;max-height:none!important}\n  .sos-actions button,.panic-actions button,[data-action*=\"sos\"],[data-action*=\"panic\"]{min-height:48px!important;touch-action:manipulation!important}\n  input[type=\"file\"]{max-width:100%!important;width:100%!important;color:#fff!important}\n}\n@media(orientation:landscape) and (max-height:560px) and (max-width:950px){\n  .hero{padding:14px!important;gap:10px!important}\n  .hero-context{grid-template-columns:auto minmax(0,1fr)!important;align-items:center!important}\n  .hero-clock{width:auto!important;justify-items:start!important}\n  .hero-pills{justify-content:flex-start!important}\n}\n  .entry { overflow: hidden; border-radius: 28px; -webkit-mask-image: -webkit-radial-gradient(white, black); }\n\n/* Profile Frosted Glass & Jelly Spring Animation */\n@keyframes jellySpringIn{0%{opacity:0;transform:scale(0.7) translateY(-14px)}45%{opacity:1;transform:scale(1.06) translateY(3px)}70%{transform:scale(0.97) translateY(-1px)}88%{transform:scale(1.01) translateY(1px)}100%{opacity:1;transform:scale(1) translateY(0)}}\n@keyframes jellySpringOut{0%{opacity:1;transform:scale(1) translateY(0)}35%{opacity:0.95;transform:scale(1.04) translateY(2px)}100%{opacity:0;transform:scale(0.72) translateY(-12px)}}\n@keyframes argusSensorArmBlink{0%,100%{border-color:rgba(255,159,10,0.85);box-shadow:0 0 10px rgba(255,159,10,0.5),inset 0 0 6px rgba(255,159,10,0.3);transform:scale(1)}50%{border-color:#ffd60a;box-shadow:0 0 20px 4px rgba(255,214,10,0.85),inset 0 0 12px rgba(255,214,10,0.5);transform:scale(1.02)}}\n\n.hero-profile-dropdown.opening{display:flex!important;animation:jellySpringIn 0.38s cubic-bezier(0.34,1.56,0.64,1) both!important}\n.hero-profile-dropdown.closing{display:flex!important;animation:jellySpringOut 0.28s cubic-bezier(0.4,0,0.2,1) both!important;pointer-events:none!important}\n\n\n.console-sensor.sensor-arming-blink,\n.console-sensor.argus-blocking{border-color:#ffd60a!important;background:linear-gradient(135deg,rgba(255,149,0,0.38),rgba(255,96,0,0.22))!important;animation:argusSensorArmBlink 0.9s ease-in-out infinite!important;color:#fff!important}\n\n/* Keep sensor labels readable and keep the status word intact. */\n.security-console .console-sensor,\n.security-console .console-sensor-card { min-width: 0 !important; }\n.security-console .console-sensor-name {\n  min-width: 0 !important;\n  overflow-wrap: normal !important;\n  word-break: normal !important;\n  hyphens: none !important;\n  white-space: normal !important;\n}\n.security-console .console-sensor-state {\n  flex: 0 0 auto !important;\n  white-space: nowrap !important;\n}\n\n/* Wide spacious SOS selector */\n.emergency-number-card{transition:all 0.3s ease}\n.sos-configuration #sos-output-chips{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))!important;gap:12px!important;width:100%!important;max-height:none!important;overflow:visible!important}\n.sos-output-row{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;padding:10px 14px!important;background:rgba(255,255,255,0.06)!important;border:1px solid rgba(255,255,255,0.12)!important;border-radius:12px!important;width:100%!important;box-sizing:border-box!important}\n.sos-output-row > .sensor-pill{flex:1!important;min-width:0!important;background:transparent!important;border:none!important;box-shadow:none!important;padding:0!important;font-weight:700!important;font-size:12px!important}\n\n/* Initial Dark Loading Curtain to guarantee zero raw DOM / FOUC flash */\n#argus-initial-curtain {\n  position: fixed;\n  inset: 0;\n  background: #080d1a;\n  z-index: 99998;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  transition: opacity 0.35s ease, visibility 0.35s ease;\n}\n#argus-initial-curtain.curtain-hidden {\n  opacity: 0;\n  visibility: hidden;\n  pointer-events: none;\n}\n.argus-curtain-spinner {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: 16px;\n}\n.argus-curtain-icon {\n  font-size: 42px;\n  animation: curtainPulse 1.4s ease-in-out infinite;\n}\n.argus-curtain-bar {\n  width: 120px;\n  height: 4px;\n  border-radius: 999px;\n  background: rgba(255, 255, 255, 0.08);\n  overflow: hidden;\n  position: relative;\n}\n.argus-curtain-fill {\n  width: 40%;\n  height: 100%;\n  background: linear-gradient(90deg, #38bdf8, #818cf8);\n  border-radius: 999px;\n  position: absolute;\n  animation: curtainSlide 1.2s ease-in-out infinite;\n}\n@keyframes curtainPulse {\n  0%, 100% { transform: scale(1); opacity: 0.8; }\n  50% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 16px rgba(56,189,248,0.5)); }\n}\n@keyframes curtainSlide {\n  0% { left: -40%; }\n  100% { left: 100%; }\n}\n\n</style>\n\n<!-- Initial Cold Boot Dark Curtain -->\n<div id=\"argus-initial-curtain\" style=\"position:fixed;inset:0;background:#080d1a;z-index:99998;display:flex;align-items:center;justify-content:center;\">\n  <div class=\"argus-curtain-spinner\">\n    <div class=\"argus-curtain-icon\">🛡️</div>\n    <div class=\"argus-curtain-bar\"><div class=\"argus-curtain-fill\"></div></div>\n  </div>\n</div>\n\n<!-- Bootstrap UI -->\n<div id=\"bootstrap-overlay\" class=\"argus-bootstrap-layer\" style=\"display:none\"></div>\n\n<!-- Language picker modal -->\n<div class=\"lang-modal-back\" id=\"lang-modal\" aria-hidden=\"true\">\n  <div class=\"lang-modal-card\">\n    <div class=\"lang-modal-title\" id=\"lang-modal-title\">🌐 Select Language</div>\n    <div class=\"lang-grid\" id=\"lang-grid\"></div>\n    <div class=\"lang-close-row\">\n      <button class=\"lang-close-btn\" id=\"lang-modal-close\">✕ Close</button>\n    </div>\n  </div>\n</div>\n\n<!-- Walk Test Modal -->\n<div class=\"walk-test-modal-back\" id=\"walk-test-modal\" aria-hidden=\"true\">\n  <div class=\"walk-test-modal-card\">\n    <div class=\"walk-test-header\">\n      <div class=\"walk-test-title\">🚶 <span id=\"walk-test-title-text\">Prueba de Sensores (Walk Test)</span></div>\n      <div class=\"walk-test-timer\" id=\"walk-test-timer\">15:00</div>\n    </div>\n    <p style=\"margin:0;font-size:12px;opacity:0.75;line-height:1.4\" id=\"walk-test-desc-text\">\n      Camina y activa cada sensor. No sonarán sirenas. Se emitirá un aviso sonoro por cada detector probado.\n    </p>\n    <div style=\"display:flex;flex-direction:column;gap:6px\">\n      <div style=\"display:flex;justify-content:space-between;font-size:11.5px;font-weight:700\">\n        <span id=\"walk-test-progress-text\">0 de 0 sensores verificados (0%)</span>\n        <span id=\"walk-test-status-badge\" style=\"color:#38bdf8\">En curso</span>\n      </div>\n      <div class=\"walk-test-progress-bar\">\n        <div class=\"walk-test-progress-fill\" id=\"walk-test-progress-fill\" style=\"width:0%\"></div>\n      </div>\n    </div>\n    <div class=\"walk-test-sensor-list\" id=\"walk-test-sensor-list\"></div>\n    <div style=\"display:flex;justify-content:flex-end;gap:10px;margin-top:4px\">\n      <button class=\"ghost\" id=\"walk-test-close-btn\" style=\"padding:9px 18px;border-radius:12px;font-size:12px;font-weight:700\">Cerrar</button>\n      <button class=\"primary\" id=\"walk-test-stop-btn\" style=\"padding:9px 20px;border-radius:12px;font-size:12px;font-weight:700;background:linear-gradient(135deg,#ef4444,#dc2626)\">Finalizar Prueba</button>\n    </div>\n  </div>\n</div>\n\n<!-- Sensor Delay Modal -->\n<div class=\"walk-test-modal-back\" id=\"sensor-delay-modal\" aria-hidden=\"true\">\n  <div class=\"walk-test-modal-card\" style=\"width:min(420px,92vw)\">\n    <div class=\"walk-test-header\">\n      <div class=\"walk-test-title\">⏱️ <span id=\"sensor-delay-modal-title\">Configurar retardo del sensor</span></div>\n    </div>\n    <div style=\"font-size:13px;font-weight:700;color:#38bdf8\" id=\"sensor-delay-modal-entity\">sensor.example</div>\n    <div style=\"display:flex;flex-direction:column;gap:12px;margin:8px 0\">\n      <label style=\"display:flex;align-items:center;gap:10px;font-size:12.5px;cursor:pointer\">\n        <input type=\"radio\" name=\"sensor-delay-mode\" value=\"default\" id=\"delay-opt-default\" checked>\n        <span id=\"txt-delay-opt-default\">🌐 Heredar retardo global del modo</span>\n      </label>\n      <label style=\"display:flex;align-items:center;gap:10px;font-size:12.5px;cursor:pointer\">\n        <input type=\"radio\" name=\"sensor-delay-mode\" value=\"instant\" id=\"delay-opt-instant\">\n        <span id=\"txt-delay-opt-instant\">⚡ Instantáneo (0s - Disparo inmediato)</span>\n      </label>\n      <label style=\"display:flex;align-items:center;gap:10px;font-size:12.5px;cursor:pointer\">\n        <input type=\"radio\" name=\"sensor-delay-mode\" value=\"custom\" id=\"delay-opt-custom\">\n        <span id=\"txt-delay-opt-custom\">⏱️ Retardo personalizado</span>\n      </label>\n      <div id=\"delay-custom-input-wrap\" style=\"display:none;padding-left:26px;gap:8px;align-items:center\">\n        <input type=\"number\" id=\"sensor-delay-seconds-input\" min=\"1\" max=\"300\" value=\"30\" style=\"width:80px;padding:6px 10px;border-radius:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:13px\">\n        <span style=\"font-size:12px;opacity:0.75\" id=\"txt-delay-seconds-label\">segundos</span>\n      </div>\n    </div>\n    <div style=\"display:flex;justify-content:flex-end;gap:10px;margin-top:6px\">\n      <button class=\"ghost\" id=\"sensor-delay-cancel-btn\" style=\"padding:8px 16px;border-radius:12px;font-size:12px\">Cancelar</button>\n      <button class=\"primary\" id=\"sensor-delay-save-btn\" style=\"padding:8px 20px;border-radius:12px;font-size:12px;font-weight:700\">Guardar</button>\n    </div>\n  </div>\n</div>\n\n<!-- SOS Confirm Modal -->\n<div class=\"ios-confirm-backdrop\" id=\"sos-modal\" style=\"display:none\">\n  <div class=\"ios-confirm-card liquid-glass\" id=\"sos-card\" style=\"position:relative;\">\n    <button id=\"sos-close-x\" style=\"position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.1); border:none; color:white; border-radius:50%; width:32px; height:32px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; opacity:0.8; padding:0; transition:background 0.2s;\">✕</button>\n    <div class=\"ios-confirm-title\" id=\"sos-title-txt\">Confirmar pánico</div>\n    <div class=\"ios-confirm-text\" id=\"sos-text-txt\">Desliza para disparar la alarma inmediatamente.</div>\n    <div class=\"ios-slider-shell\">\n      <div class=\"ios-slider-track\">\n        <div class=\"ios-slider-label\" id=\"sos-label\">Desliza para activar SOS</div>\n        <div class=\"ios-slider-thumb\" id=\"sos-thumb\">🚨</div>\n      </div>\n    </div>\n    <button class=\"ios-confirm-cancel\" id=\"btn-cancel-sos\" style=\"margin-top:16px\">Cancelar</button>\n  </div>\n</div>\n\n\n<div id=\"argus-canvas-bg\"></div>\n\n\n<div class=\"wrap\" style=\"display:none !important;\">\n  <!-- HERO -->\n  <div class=\"glass hero liquid-glass\">\n    <div class=\"hero-left\">\n      <img src=\"/api/argus_static/argus_logo.png\" alt=\"Argus Logo\" style=\"width: 75px; height: 75px; border-radius: 18px; object-fit: cover; box-shadow: 0 8px 24px rgba(0,0,0,0.25); flex-shrink: 0;\">\n      <div>\n        <h1>Argus Home Hub</h1>\n        <p id=\"p-hero-desc\"></p>\n      </div>\n    </div>\n    <div class=\"hero-context\" aria-live=\"polite\">\n      <div class=\"hero-clock\"><strong id=\"hero-clock-time\">--:--</strong><span id=\"hero-clock-date\"></span></div>\n      <div id=\"hero-profile-container\"></div>\n    </div>\n  </div>\n\n  <!-- TWO-COLUMN LAYOUT -->\n  <div class=\"grid hide-legacy\" id=\"widget-grid\">\n\n    <!-- Instances -->\n    <section class=\"glass panel liquid-glass dashboard-instances\" id=\"w-instances\" style=\"grid-column: 1 / -1;\">\n        <div class=\"panel-head\">\n          <h2 id=\"h-instances\"></h2>\n          <div style=\"display:flex;align-items:center;gap:12px\">\n            <div id=\"global-status\"></div>\n          </div>\n        </div>\n        <div id=\"entries\"></div>\n      </section>\n\n      <!-- Activity log -->\n      <section class=\"glass panel liquid-glass activity-panel\" id=\"w-activity\">\n        <div class=\"panel-head\">\n          <h2 id=\"h-activity-log\">📋 Historial de Actividad</h2>\n          <div class=\"panel-actions\">\n            <button class=\"ghost\" id=\"btn-refresh-history\" aria-label=\"Actualizar Historial\" title=\"Actualizar\">🔄 Actualizar</button>\n            <button class=\"ghost\" id=\"btn-export-forensic\" aria-label=\"Exportar Historial\" title=\"Exportar\">📄 Exportar</button>\n            <button class=\"ghost\" id=\"btn-clear-log\" aria-label=\"Limpiar Historial\" style=\"background:rgba(255,69,58,0.12);color:#ff453a !important\" title=\"Limpiar\">🗑️ Limpiar</button>\n          </div>\n        </div>\n        <div id=\"activity-log\" style=\"display:grid;gap:10px;height:280px;overflow-y:auto;margin-top:10px\"></div>\n      </section>\n\n      <!-- Modes -->\n      <section class=\"glass panel liquid-glass modes-panel\" id=\"w-modes\">\n        <div class=\"panel-head\">\n           <h2 id=\"h-modes\"></h2>\n        </div>\n        <div class=\"tabs\" id=\"mode-tabs\" style=\"margin-bottom:15px\"></div>\n        <div id=\"mode-view\"></div>\n      </section>\n\n      <!-- Users & Master PIN Settings -->\n      <section class=\"glass panel liquid-glass access-panel\" id=\"w-access\">\n        <div class=\"panel-head\">\n          <div>\n            <h2 id=\"h-access-title\">Control de Acceso y Usuarios</h2>\n            <p class=\"access-summary\" id=\"p-access-desc\">PIN desactivado · Sin usuarios adicionales</p>\n          </div>\n        </div>\n\n        <div class=\"access-workspace\" id=\"access-workspace\" style=\"display:contents\">\n          <!-- Unified Informative Widget: SOS signals, notifications & audit logging -->\n          <div class=\"system-info-compact-card glass-subpanel\" style=\"padding:14px 18px;border-radius:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);margin-bottom:14px;\">\n            <div style=\"display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:6px;\">\n              <span id=\"system-diagnostics-txt\" style=\"font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;color:rgba(255,255,255,0.85)\">ℹ️ Diagnóstico y Resumen del Sistema</span>\n              <div style=\"display:flex;align-items:center;gap:8px\">\n                <button type=\"button\" class=\"ghost\" id=\"btn-start-walk-test\" style=\"font-size:11px;font-weight:700;padding:2px 10px;border-radius:8px;background:rgba(56,189,248,0.12);color:#38bdf8;border:1px solid rgba(56,189,248,0.3);cursor:pointer\">🚶 Prueba de Sensores</button>\n                <span style=\"font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;background:rgba(74,222,128,0.15);color:#4ade80;border:1px solid rgba(74,222,128,0.3)\">✓ Operativo</span>\n              </div>\n            </div>\n            <div style=\"display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;font-size:11px;\">\n              <div style=\"display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05)\">\n                <span style=\"font-size:16px\">🚨</span>\n                <div><strong style=\"display:block;color:#fff;font-size:11px\">Señales de Auxilio</strong><span style=\"opacity:0.65;font-size:9.5px\">Enlace SOS activo</span></div>\n              </div>\n              <div style=\"display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05)\">\n                <span style=\"font-size:16px\">🔔</span>\n                <div><strong style=\"display:block;color:#fff;font-size:11px\">Notificaciones</strong><span style=\"opacity:0.65;font-size:9.5px\">Push operativas</span></div>\n              </div>\n              <div style=\"display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05)\">\n                <span style=\"font-size:16px\">📋</span>\n                <div><strong style=\"display:block;color:#fff;font-size:11px\">Registro en Vivo</strong><span style=\"opacity:0.65;font-size:9.5px\">Auditoría continua</span></div>\n              </div>\n            </div>\n          </div>\n\n          <!-- Users -->\n          <div class=\"access-section\" id=\"access-users-section\">\n            <h3 id=\"h-users\"></h3>\n            <p class=\"small\" id=\"p-admin-only\" style=\"margin-bottom:14px;color:#fb8c00;font-weight:600\"></p>\n            <div id=\"users-list\" style=\"display:grid;gap:12px;margin-bottom:16px\"></div>\n          </div>\n\n          <!-- Notifications -->\n          <div class=\"access-section\" id=\"access-notifications-section\">\n            <h3 id=\"h-notifications\"></h3>\n            <p class=\"small\" id=\"p-notif-desc\" style=\"margin:0 0 12px;opacity:.72\"></p>\n            <div id=\"notif-targets\" style=\"display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px\"></div>\n            <div style=\"display:flex;gap:8px;align-items:center\">\n              <select id=\"notif-select\" class=\"glass-control\" style=\"flex:1;min-width:0\"></select>\n              <button type=\"button\" class=\"ghost\" id=\"btn-add-notif\" style=\"white-space:nowrap\">＋</button>\n            </div>\n            <div class=\"save-row\" style=\"margin-top:12px\">\n              <button class=\"primary\" id=\"btn-save-notif\" style=\"width:100%\"></button>\n            </div>\n            <div id=\"notif-status\" class=\"status\" style=\"margin-top:8px;text-align:center;font-size:12px;font-weight:bold;min-height:18px\"></div>\n          </div>\n\n          <!-- Master PIN -->\n          <div class=\"access-section\" id=\"access-pin-section\">\n            <h3 id=\"h-settings-pin\">Pin de Armado</h3>\n            <div class=\"subsection\">\n              <div id=\"current-pin-display\" style=\"font-size:13px;font-weight:800;color:#ffffff !important;margin-bottom:15px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);padding:8px 14px;border-radius:10px;display:inline-block\"></div>\n              <div class=\"field-group collapsible collapsed\" id=\"group-current-pin\" style=\"margin-bottom: 12px\">\n                 <div style=\"display:flex; justify-content:space-between; align-items:center;\">\n                   <label id=\"l-current-pin-lbl\"></label>\n                   <a href=\"#\" id=\"lnk-forgot-pin\" style=\"font-size:11px; color:var(--accent-color, #ff4081); text-decoration:none; font-weight:bold; margin-bottom:4px; display:none;\"></a>\n                 </div>\n                 <input type=\"password\" id=\"current-pin\" inputmode=\"numeric\" pattern=\"[0-9]*\" class=\"glass-control\">\n              </div>\n              <p class=\"small\" id=\"p-pin-remove-hint\" style=\"margin:0 0 10px 0; color:var(--primary-color); font-weight:700\">Para quitar el PIN: Introduce el actual y deja los campos de abajo vacíos.</p>\n              <div style=\"display:grid;gap:10px\">\n                <div class=\"field-group\"><label id=\"l-new-pin\"></label><input type=\"password\" id=\"new-pin-1\" inputmode=\"numeric\" pattern=\"[0-9]*\" class=\"glass-control\"></div>\n                <div class=\"field-group\"><label id=\"l-confirm-pin\"></label><input type=\"password\" id=\"new-pin-2\" inputmode=\"numeric\" pattern=\"[0-9]*\" class=\"glass-control\"></div>\n              </div>\n              <div class=\"save-row\" style=\"margin-top:15px\">\n                <button class=\"primary\" id=\"btn-save-pin\" style=\"width:100%\"></button>\n              </div>\n              <div id=\"pin-status\" class=\"status\" style=\"margin-top:8px; text-align:center; font-size:12px; font-weight:bold; min-height:18px;\"></div>\n            </div>\n          </div>\n        </div>\n      </section>\n\n      <!-- Automations -->\n      <section class=\"glass panel liquid-glass automations-panel\" id=\"w-automations\">\n        <h2 id=\"h-automations\"></h2>\n        <div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:16px\">\n          <span class=\"small\" id=\"p-linked-rules\" style=\"opacity:0.7\"></span>\n          <button class=\"primary\" id=\"btn-new-auto\" style=\"padding:6px 12px;font-size:11px\"></button>\n        </div>\n        <div id=\"auto-view\"></div>\n      </section>\n\n      <!-- Backup & Restore -->\n      <section class=\"glass panel liquid-glass backup-panel\" id=\"w-backup\">\n        <h2 id=\"h-backup-title\">Respaldo y Restauración</h2>\n        <p class=\"small\" id=\"p-backup-desc\" style=\"margin-bottom:12px;opacity:0.7\">Guarda una copia de seguridad de tus ajustes o restaura una anterior.</p>\n        <div style=\"display:flex;gap:10px;align-items:center;\">\n          <button class=\"ghost\" id=\"btn-export-config\" style=\"flex:1\">📤 Descargar</button>\n          <div style=\"position:relative; flex:1\">\n            <button class=\"ghost\" style=\"width:100%\" id=\"btn-import-trigger\">📥 Restaurar</button>\n            <input type=\"file\" id=\"import-config-file\" style=\"display:none\" accept=\".json,.argus,application/json\">\n          </div>\n          <button class=\"ghost danger\" id=\"btn-reset-config\" style=\"flex:1\">⚠️ Restablecer</button>\n          <button class=\"primary\" id=\"btn-undo-reset\" style=\"flex:1; display:none;\">↩️ Deshacer</button>\n        </div>\n      </section>\n\n      <!-- GitHub Opt-In -->\n      <section class=\"glass panel liquid-glass github-panel\" id=\"w-github\">\n        <div class=\"github-header\">\n          <h3 id=\"github-title\" style=\"margin:0; font-size:14px; font-weight:700\"></h3>\n          <p id=\"github-desc\" style=\"margin:4px 0 0; font-size:12px; opacity:0.75\"></p>\n        </div>\n        <div class=\"support-actions-grid\">\n          <a id=\"github-action\" class=\"support-link-btn star\" href=\"https://github.com/Chrisalvir1/Argus\" target=\"_blank\" rel=\"noopener noreferrer\">⭐ GitHub</a>\n          <a id=\"paypal-action\" class=\"support-link-btn paypal\" href=\"https://paypal.me/CEstradaAlvir\" target=\"_blank\" rel=\"noopener noreferrer\">☕ PayPal</a>\n          <a id=\"email-action\" class=\"support-link-btn email\" href=\"mailto:chrisalvir01@gmail.com\">✉️ Sugerencias</a>\n        </div>\n      </section>\n\n  </div> <!-- /grid -->\n</div>\n\n<!-- Selector modal (dual-panel) -->\n<div class=\"modal-back\" id=\"selector-modal\" aria-hidden=\"true\">\n  <div class=\"modal\">\n    <div class=\"modal-head\">\n      <h3 id=\"selector-title\">Seleccionar</h3>\n      <button class=\"ghost\" id=\"selector-close\"></button>\n    </div>\n    <div class=\"modal-body\" style=\"overflow:hidden;display:flex;flex-direction:column;gap:10px\">\n      <div class=\"sel-grid\">\n        <!-- LEFT: lista disponible con búsqueda y acciones rápidas -->\n        <div class=\"sel-panel\">\n          <div class=\"subsection-title\" id=\"l-available\">Disponibles</div>\n          <div class=\"search-wrap\" style=\"margin:0\"><input id=\"selector-search\" type=\"search\" placeholder=\"Buscar...\"></div>\n          <div class=\"sel-actions\">\n            <button class=\"ghost\" id=\"selector-select-all\" style=\"padding:5px 10px;font-size:12px\">☑ Todos</button>\n            <button class=\"ghost\" id=\"selector-deselect-all\" style=\"padding:5px 10px;font-size:12px\">☐ Ninguno</button>\n          </div>\n          <div class=\"sel-panel-inner\" id=\"selector-list\"></div>\n        </div>\n        <!-- RIGHT: panel de seleccionados -->\n        <div class=\"sel-panel\">\n          <div class=\"subsection-title\" id=\"l-selected-lbl\">Seleccionados</div>\n          <div class=\"small\" id=\"selector-count\" style=\"margin-bottom:4px\">0 seleccionados</div>\n          <div class=\"sel-panel-inner\" id=\"selector-selected\"></div>\n        </div>\n      </div>\n    </div>\n    <div class=\"modal-footer\">\n      <div style=\"display:flex;gap:10px;width:100%;justify-content:flex-end\">\n        <button class=\"ghost\" id=\"selector-clear\"></button>\n        <button class=\"primary\" id=\"selector-accept\"></button>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- Home name edit modal -->\n<div class=\"modal-back\" id=\"home-name-modal\" aria-hidden=\"true\">\n  <div class=\"modal\" style=\"width:min(400px,96vw)\">\n    <div class=\"modal-head\">\n      <h3 id=\"home-name-modal-h3\">🏡 Nombre del Hogar</h3>\n      <button class=\"ghost\" id=\"home-name-modal-close\">✕</button>\n    </div>\n    <div style=\"display:grid;gap:14px;padding:4px 0\">\n      <p class=\"small\" id=\"home-name-modal-desc\" style=\"margin:0;opacity:.7\">This name appears in the instances panel and in full screen.</p>\n      <div class=\"field-group\">\n        <label id=\"l-home-name-modal-label\">Home name</label>\n        <input type=\"text\" id=\"home-name-input\" placeholder=\"Mi Casa\" maxlength=\"60\" autocomplete=\"off\" class=\"glass-control\">\n      </div>\n      <span class=\"status\" id=\"home-name-status\" style=\"text-align:center\"></span>\n    </div>\n    <div class=\"modal-footer\">\n      <button class=\"ghost\" id=\"home-name-cancel\">Cancelar</button>\n      <button class=\"primary\" id=\"home-name-save\">Guardar</button>\n    </div>\n  </div>\n</div>\n\n<!-- PIN modal -->\n<div class=\"modal-back pm\" id=\"pin-modal\" aria-hidden=\"true\">\n  <div class=\"modal\">\n    <div class=\"modal-head\">\n      <h3 id=\"l-introduce-pin\">🔒</h3>\n      <button class=\"ghost\" id=\"pin-close\" style=\"background:transparent; border:none; color:inherit; font-size:20px; cursor:pointer; padding:4px 8px;\">✕</button>\n    </div>\n    <div style=\"display:grid;gap:10px;width:100%\">\n      <p id=\"l-pin-modal-desc\" class=\"small\" style=\"text-align:center;margin:0;opacity:0.75\"></p>\n      <input id=\"pin-input\" class=\"pin-input\" type=\"password\" inputmode=\"numeric\" pattern=\"[0-9]*\" placeholder=\"••••\" autocomplete=\"off\" maxlength=\"12\" readonly>\n      <div class=\"pin-grid\" id=\"pin-pad\">\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"1\">1</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"2\">2</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"3\">3</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"4\">4</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"5\">5</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"6\">6</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"7\">7</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"8\">8</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"9\">9</button>\n        <button class=\"pin-btn-round action-key delete-key\" type=\"button\" id=\"pin-backspace\">Borrar</button>\n        <button class=\"pin-btn-round\" type=\"button\" data-pin-digit=\"0\">0</button>\n        <button class=\"pin-btn-round action-key enter-key\" type=\"button\" id=\"pin-confirm\">Enter</button>\n      </div>\n      <div id=\"pin-error\" class=\"pin-error\"></div>\n      <div style=\"text-align:center; margin-top: 5px;\">\n        <a href=\"#\" id=\"pin-forgot-link\" style=\"font-size:12px; color:var(--accent-color, #ff4081); text-decoration:none; font-weight:700; display:none;\"></a>\n      </div>\n    </div>\n    <button id=\"pin-cancel\" style=\"display:none\"></button>\n  </div>\n</div>\n\n<!-- History Export modal -->\n<div class=\"modal-back pm\" id=\"history-export-modal\" aria-hidden=\"true\">\n  <div class=\"modal\" style=\"max-width: 440px;\">\n    <div class=\"modal-head\">\n      <h3 id=\"h-history-export-title\">📄 Exportar Historial</h3>\n      <button class=\"ghost\" id=\"history-export-close\" style=\"background:transparent; border:none; color:inherit; font-size:20px; cursor:pointer; padding:4px 8px;\">✕</button>\n    </div>\n    <div style=\"display:grid;gap:14px;padding:6px 0\">\n      <p class=\"small\" id=\"p-history-export-desc\" style=\"margin:0;opacity:.75\">Selecciona el rango de fechas para descargar el reporte.</p>\n      <div style=\"display:grid;grid-template-columns:1fr 1fr;gap:10px;\">\n        <div class=\"field-group\">\n          <label id=\"l-history-export-from\" style=\"font-size:11px;font-weight:700;opacity:0.8;\">📅 Desde</label>\n          <input type=\"date\" id=\"export-history-from\" class=\"glass-control\" style=\"width:100%;box-sizing:border-box;padding:8px 10px;border-radius:10px;color:#fff;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12)\">\n        </div>\n        <div class=\"field-group\">\n          <label id=\"l-history-export-to\" style=\"font-size:11px;font-weight:700;opacity:0.8;\">📅 Hasta</label>\n          <input type=\"date\" id=\"export-history-to\" class=\"glass-control\" style=\"width:100%;box-sizing:border-box;padding:8px 10px;border-radius:10px;color:#fff;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12)\">\n        </div>\n      </div>\n      <div style=\"display:flex;flex-direction:column;gap:8px;margin-top:6px;\">\n        <button class=\"primary\" id=\"btn-do-download-pdf\" style=\"height:44px;font-size:13px;font-weight:800;cursor:pointer;border-radius:12px;box-shadow:0 6px 18px rgba(0,122,255,0.3)\">\n          ⬇️ Descargar PDF\n        </button>\n        <button class=\"glass-control\" id=\"btn-do-download-txt\" style=\"height:40px;font-size:12px;font-weight:700;cursor:pointer;border-radius:12px;background:rgba(255,255,255,0.05);color:#fff;border:1px solid rgba(255,255,255,0.15)\">\n          📑 Descargar reporte (.txt)\n        </button>\n        <button class=\"ghost\" id=\"btn-do-download-json\" style=\"height:36px;font-size:11px;cursor:pointer;opacity:0.75\">\n          💾 Descargar JSON sin procesar\n        </button>\n      </div>\n    </div>\n  </div>\n</div>\n";
 var f = class extends HTMLElement {
 	constructor() {
-		super(), this._showSosConfirm = !1, this._sosEntryIdx = null, this._sosBusy = !1, this._sosSliding = !1, this._sosStartX = 0, this._sosOffsetX = 0, this._sosConfirmed = !1, this.attachShadow({ mode: "open" }).appendChild(d.content.cloneNode(!0)), this._wsId = 1, this._socket = null, this._dashboard = null, this._ui = null, this._available = [], this._mode = "home", this._modeEntryId = null, this._selected = [], this._selectorTarget = null, this._hass = null, this._prevStates = {}, this._notifTargets = [], this._users = [], this._haUsersList = [], this._isAdmin = !0, this._pinCallback = null, this._homeName = "", this._backgroundMode = "none", this._backgroundImages = [], this._temperatureSource = "auto", this._weatherSource = "auto", this._pending = {}, this._lastClockUpdate = 0, this._manualLang = null, this._fullscreenIdx = -1, this._cachedBgUrl = null, this._cachedBgBrightness = void 0, this._hubBgMode = "default", this._hubBgFile = "", this._hubBgSound = !1, this._clockFormat = "auto", this._profileSelectedThisMount = !1, this._welcomeShownThisMount = !1, this._panicOutputs = void 0, this._initPromise = null, this._staticBound = !1, this._postLoadBound = !1;
+		super(), this._showSosConfirm = !1, this._sosEntryIdx = null, this._sosBusy = !1, this._sosSliding = !1, this._sosStartX = 0, this._sosOffsetX = 0, this._sosConfirmed = !1, this.attachShadow({ mode: "open" }).appendChild(d.content.cloneNode(!0)), this._wsId = 1, this._socket = null, this._dashboard = null, this._ui = null, this._available = [], this._mode = "home", this._modeEntryId = null, this._selected = [], this._selectorTarget = null, this._hass = null, this._prevStates = {}, this._notifTargets = [], this._users = [], this._haUsersList = [], this._isAdmin = !0, this._pinCallback = null, this._homeName = "", this._backgroundMode = "none", this._backgroundImages = [], this._temperatureSource = "auto", this._weatherSource = "auto", this._pending = {}, this._lastClockUpdate = 0, this._manualLang = null, this._fullscreenIdx = -1, this._cachedBgUrl = null, this._cachedBgBrightness = void 0, this._hubBgMode = "default", this._hubBgFile = "", this._hubBgSound = !1, this._clockFormat = "auto", this._profileSelectedThisMount = !1, this._welcomeShownThisMount = !1, this._historyPDFLogoPromise = null, this._panicOutputs = void 0, this._initPromise = null, this._staticBound = !1, this._postLoadBound = !1;
 	}
 	_getTimeZone() {
 		return this._hass?.config?.time_zone || void 0;
@@ -1053,15 +1075,18 @@ var f = class extends HTMLElement {
 				e && typeof e == "object" && c(e);
 			}));
 		};
-		c(this._ui?.modes);
+		c(this._ui?.modes), Array.isArray(this._sensors) && this._sensors.forEach((e) => {
+			let t = typeof e == "string" ? e : e?.entity_id || e?.id;
+			t && s.add(t);
+		});
 		let l = !!t && [...s].some((n) => {
 			let r = t.states[n], i = e.states[n];
-			return r?.state !== i?.state || r?.attributes?.battery_level !== i?.attributes?.battery_level || r?.attributes?.battery_percentage !== i?.attributes?.battery_percentage;
+			return r?.state !== i?.state || r?.attributes?.battery_level !== i?.attributes?.battery_level || r?.attributes?.battery_percentage !== i?.attributes?.battery_percentage || r?.attributes?.battery !== i?.attributes?.battery;
 		}), u = !!t && Object.values(e.states).some((e) => {
 			let n = e.entity_id || "", r = e.attributes?.device_class === "battery" || /_battery$/i.test(n), i = t.states[n];
 			return r && i?.state !== e.state;
 		});
-		(n || l || u || i || o || !t) && (this._renderEntries(), this._renderActivityLog(), t || (this._renderModeTabs(), this._renderModeView(), this._renderEntries(), this.dispatchEvent(new CustomEvent("argus-state-update")), this._renderAutomations(), this._renderNotifications(), this._activeAccessSection === "users" && this._renderUsers()));
+		(n || l || u || i || o || !t) && (this._renderEntries(), this._renderActivityLog(), this.dispatchEvent(new CustomEvent("argus-state-update")), t ? (l || u) && this.shadowRoot?.getElementById("mode-view") && this._renderModeView() : (this._renderModeTabs(), this._renderModeView(), this._renderEntries(), this._renderAutomations(), this._renderNotifications(), this._activeAccessSection === "users" && this._renderUsers()));
 	}
 	get hass() {
 		return this._hass;
@@ -1130,6 +1155,120 @@ var f = class extends HTMLElement {
 	_closeLangModal() {
 		this.shadowRoot.getElementById("lang-modal")?.classList.remove("open");
 	}
+	_playWalkTestChime() {
+		try {
+			let e = window.AudioContext || window.webkitAudioContext;
+			if (!e) return;
+			let t = new e(), n = t.createOscillator(), r = t.createGain();
+			n.type = "sine", n.frequency.setValueAtTime(880, t.currentTime), n.frequency.exponentialRampToValueAtTime(1760, t.currentTime + .15), r.gain.setValueAtTime(.18, t.currentTime), r.gain.exponentialRampToValueAtTime(.01, t.currentTime + .35), n.connect(r), r.connect(t.destination), n.start(), n.stop(t.currentTime + .36);
+		} catch {}
+	}
+	async _openWalkTest() {
+		let e = this.shadowRoot.getElementById("walk-test-modal");
+		if (e) try {
+			let t = await this._send("argus/start_walk_test", { timeout_seconds: 900 });
+			this._walkTestSession = t, this._renderWalkTestModal(t), e.classList.add("open"), this._startWalkTestPoll();
+		} catch (e) {
+			alert(e.message || "Error starting walk test");
+		}
+	}
+	_closeWalkTestModal() {
+		this.shadowRoot.getElementById("walk-test-modal")?.classList.remove("open");
+	}
+	async _stopWalkTest() {
+		try {
+			let e = await this._send("argus/stop_walk_test");
+			this._walkTestSession = e, this._renderWalkTestModal(e), this._stopWalkTestPoll();
+		} catch (e) {
+			console.error("Error stopping walk test:", e);
+		}
+	}
+	_startWalkTestPoll() {
+		this._stopWalkTestPoll(), this._walkTestTimer = setInterval(async () => {
+			if (!this.shadowRoot.getElementById("walk-test-modal")?.classList.contains("open") && !this._walkTestSession?.active) {
+				this._stopWalkTestPoll();
+				return;
+			}
+			try {
+				let e = await this._send("argus/get_walk_test_status"), t = this._walkTestSession?.tested_count || 0;
+				this._walkTestSession = e, e.tested_count > t && this._playWalkTestChime(), this._renderWalkTestModal(e), e.active || this._stopWalkTestPoll();
+			} catch {}
+		}, 2e3);
+	}
+	_stopWalkTestPoll() {
+		this._walkTestTimer &&= (clearInterval(this._walkTestTimer), null);
+	}
+	_renderWalkTestModal(e) {
+		let t = this.shadowRoot;
+		if (!t || !e) return;
+		let n = t.getElementById("walk-test-timer"), r = t.getElementById("walk-test-progress-text"), i = t.getElementById("walk-test-status-badge"), a = t.getElementById("walk-test-progress-fill"), o = t.getElementById("walk-test-sensor-list"), s = t.getElementById("walk-test-stop-btn"), c = e.total_sensors || e.sensors?.length || 0, l = e.tested_count || (e.tested_sensors || []).length || 0, u = c > 0 ? Math.round(l / c * 100) : 0, d = e.active !== !1;
+		if (s && (s.style.display = d ? "block" : "none"), n) {
+			let t = e.remaining_seconds ?? 0, r = Math.floor(t / 60), i = t % 60;
+			n.textContent = d ? `${r}:${i.toString().padStart(2, "0")}` : this._t("walk_test_completed") || "Completado";
+		}
+		if (i && (i.textContent = d ? this._t("walk_test_active") || "En curso" : this._t("walk_test_completed") || "Completado", i.style.color = d ? "#38bdf8" : "#4ade80"), r && (r.textContent = this._format("walk_test_progress", {
+			tested: l,
+			total: c,
+			pct: u
+		})), a && (a.style.width = `${u}%`), o) {
+			let t = e.sensors || [], n = e.tested_sensors_detail || {}, r = e.tested_sensors || [];
+			o.innerHTML = t.map((e) => {
+				let t = r.includes(e) || !!n[e], i = n[e], a = (this._hass?.states?.[e])?.attributes?.friendly_name || e, o = "";
+				return i?.timestamp && (o = (/* @__PURE__ */ new Date(i.timestamp * 1e3)).toLocaleTimeString([], {
+					hour: "2-digit",
+					minute: "2-digit",
+					second: "2-digit"
+				})), `
+          <div class="walk-test-sensor-item ${t ? "tested" : ""}">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:18px">${t ? "✅" : "⏳"}</span>
+              <div>
+                <div style="font-size:13px;font-weight:700">${this._escapeHtml(a)}</div>
+                <div style="font-size:10.5px;opacity:0.6">${this._escapeHtml(e)}</div>
+              </div>
+            </div>
+            <div style="text-align:right">
+              <span style="font-size:11px;font-weight:700;color:${t ? "#4ade80" : "rgba(255,255,255,0.5)"}">
+                ${t ? o ? `✓ ${o}` : "✓ Probado" : "Pendiente"}
+              </span>
+            </div>
+          </div>
+        `;
+			}).join("");
+		}
+	}
+	_openSensorDelayModal(e) {
+		this._editingSensorDelayId = e;
+		let t = this.shadowRoot.getElementById("sensor-delay-modal");
+		if (!t) return;
+		let n = (this._hass?.states?.[e])?.attributes?.friendly_name || e, r = this.shadowRoot.getElementById("sensor-delay-modal-entity");
+		r && (r.textContent = `${n} (${e})`);
+		let i = this._currentModeConfig().sensor_settings?.[e] || {}, a = i.type === "instant" || i.delay === 0, o = i.delay, s = this.shadowRoot.getElementById("delay-opt-default"), c = this.shadowRoot.getElementById("delay-opt-instant"), l = this.shadowRoot.getElementById("delay-opt-custom"), u = this.shadowRoot.getElementById("sensor-delay-seconds-input");
+		a && c ? c.checked = !0 : o != null && l ? (l.checked = !0, u && (u.value = String(o))) : s && (s.checked = !0), this._updateDelayOptionsUi(), t.classList.add("open");
+	}
+	_updateDelayOptionsUi() {
+		let e = this.shadowRoot.getElementById("delay-opt-custom"), t = this.shadowRoot.getElementById("delay-custom-input-wrap");
+		t && (t.style.display = e?.checked ? "flex" : "none");
+	}
+	_closeSensorDelayModal() {
+		this.shadowRoot.getElementById("sensor-delay-modal")?.classList.remove("open"), this._editingSensorDelayId = null;
+	}
+	_saveSensorDelay() {
+		let e = this._editingSensorDelayId;
+		if (!e) return;
+		this.shadowRoot.getElementById("delay-opt-default");
+		let t = this.shadowRoot.getElementById("delay-opt-instant"), n = this.shadowRoot.getElementById("delay-opt-custom"), r = this.shadowRoot.getElementById("sensor-delay-seconds-input"), i = this._currentModeConfig();
+		if (i.sensor_settings = i.sensor_settings || {}, t?.checked) i.sensor_settings[e] = {
+			type: "instant",
+			delay: 0
+		};
+		else if (n?.checked) {
+			let t = parseInt(r?.value || "30", 10);
+			i.sensor_settings[e] = { delay: isNaN(t) ? 30 : Math.max(1, t) };
+		} else delete i.sensor_settings[e];
+		let a = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id || "default";
+		this._modeEntryId = a, this._ui.modes.__by_entity__ = this._ui.modes.__by_entity__ || {}, this._ui.modes.__by_entity__[a] = this._ui.modes.__by_entity__[a] || {}, this._ui.modes.__by_entity__[a][this._mode] = { ...i }, this._closeSensorDelayModal(), this._renderModeView(), this._renderEntries(), this.dispatchEvent(new CustomEvent("argus-state-update"));
+	}
 	_setLanguage(e) {
 		let t = this._dashboard?.entry_id || this._dashboard?.entries?.[0]?.entry_id;
 		if (e === "auto") {
@@ -1183,7 +1322,7 @@ var f = class extends HTMLElement {
 		};
 		u("btn-new-auto", "create_ha"), u("btn-save-pin", "update_pin"), u("btn-save-notif", "save_notif"), u("btn-save-user", "save_user"), u("selector-close", "close"), u("selector-clear", "clear"), u("selector-accept", "accept"), u("pin-cancel", "cancel"), u("pin-confirm", "confirm"), u("btn-cancel-sos", "cancel"), u("sos-call-btn", "sos_call"), u("home-name-cancel", "cancel"), u("home-name-save", "save_btn");
 		let d = t("lang-modal-close");
-		d && (d.textContent = `✕ ${e("close")}`), n("lbl-home-name-hdr", e("home_name_lbl")), n("lbl-panel-bg-title", e("bg_panel_title")), n("lbl-hub-bg-title", e("bg_hub_title")), n("s-panel-bg-sound-lbl", e("bg_sound_opt")), n("s-hub-bg-sound-lbl", e("bg_sound_opt")), n("lbl-mas-ajustes", "🎨 " + e("lbl_aesthetic_custom")), n("edit-widgets-label", this._widgetEditing ? "✓ " + e("done") : `⚙️ ${this._t("edit_widgets") || "Config. Widgets"}`), n("lbl-temperature-source", e("temp_displayed")), n("lbl-panel-bg-upload", e("lbl_load_file")), n("lbl-hub-bg-upload", e("lbl_load_file")), n("lbl-uploaded-files-title", e("lbl_uploaded_files")), n("btn-edit-home-name-standalone", e("edit_btn")), n("btn-save-personalization-standalone", e("save_btn")), n("btn-refresh-history", e("history_refresh")), n("btn-export-forensic", "📄 " + (e("export_action") || "Exportar")), n("btn-clear-log", e("clear_log_btn")), n("h-history-export-title", "📄 " + (e("export_history_title") || "Exportar Historial")), n("p-history-export-desc", e("history_export_desc")), n("l-history-export-from", `📅 ${e("history_from")}`), n("l-history-export-to", `📅 ${e("history_to")}`), n("btn-do-download-pdf", e("history_download_pdf")), n("btn-do-download-txt", e("history_download_txt")), n("btn-do-download-json", e("history_download_json")), n("h-access-title", e("access_title")), n("p-access-desc", e("access_desc")), n("btn-access-users", `👥 ${e("users_title").replace(/^👥\s*/, "").replace(/\s(?:y|&|e)\s.*$/i, "")}`), n("btn-access-pin", `🔐 ${e("pin_master_title")}`), n("h-settings-pin", e("pin_master_title")), n("p-pin-remove-hint", e("pin_remove_hint")), n("h-backup-title", e("backup_title")), n("p-backup-desc", e("backup_desc")), n("btn-export-config", e("export_btn")), n("btn-reset-config", e("reset_btn")), n("btn-undo-reset", e("undo_reset_btn")), n("btn-import-trigger", e("import_btn")), n("github-title", e("github_title")), n("github-desc", e("github_desc")), n("github-action", `⭐ ${e("github_action")}`), n("sos-title-txt", e("sos_confirm_title")), n("sos-text-txt", e("sos_confirm_text")), n("sos-label", e("sos_slide")), n("system-diagnostics-txt", "ℹ️ " + (e("system_diagnostics") || "Diagnóstico y Resumen del Sistema")), n("home-name-modal-h3", e("home_name_modal_title")), n("p-home-name-modal-desc", e("home_name_modal_desc")), n("l-home-name-modal-label", e("home_name_label")), n("lang-modal-title", `🌐 ${e("lang_select_title")}`), n("sos-call-help", e("sos_call_help")), n("lbl-emergency-number", e("emergency_number_label")), n("emergency-number-help", e("emergency_help")), n("lbl-sos-actions", e("sos_actions")), n("btn-select-sos-outputs", e("sos_select_outputs")), n("sos-output-help", e("sos_outputs_help")), n("home-name-modal-desc", e("home_name_modal_desc")), n("pin-backspace", e("delete"));
+		d && (d.textContent = `✕ ${e("close")}`), n("lbl-home-name-hdr", e("home_name_lbl")), n("lbl-panel-bg-title", e("bg_panel_title")), n("lbl-hub-bg-title", e("bg_hub_title")), n("s-panel-bg-sound-lbl", e("bg_sound_opt")), n("s-hub-bg-sound-lbl", e("bg_sound_opt")), n("lbl-mas-ajustes", "🎨 " + e("lbl_aesthetic_custom")), n("edit-widgets-label", this._widgetEditing ? "✓ " + e("done") : `⚙️ ${this._t("edit_widgets") || "Config. Widgets"}`), n("lbl-temperature-source", e("temp_displayed")), n("lbl-panel-bg-upload", e("lbl_load_file")), n("lbl-hub-bg-upload", e("lbl_load_file")), n("lbl-uploaded-files-title", e("lbl_uploaded_files")), n("btn-edit-home-name-standalone", e("edit_btn")), n("btn-save-personalization-standalone", e("save_btn")), n("btn-refresh-history", e("history_refresh")), n("btn-export-forensic", "📄 " + (e("export_action") || "Exportar")), n("btn-clear-log", e("clear_log_btn")), n("h-history-export-title", "📄 " + (e("export_history_title") || "Exportar Historial")), n("p-history-export-desc", e("history_export_desc")), n("l-history-export-from", `📅 ${e("history_from")}`), n("l-history-export-to", `📅 ${e("history_to")}`), n("btn-do-download-pdf", e("history_download_pdf")), n("btn-do-download-txt", e("history_download_txt")), n("btn-do-download-json", e("history_download_json")), n("h-access-title", e("access_title")), n("p-access-desc", e("access_desc")), n("btn-access-users", `👥 ${e("users_title").replace(/^👥\s*/, "").replace(/\s(?:y|&|e)\s.*$/i, "")}`), n("btn-access-pin", `🔐 ${e("pin_master_title")}`), n("h-settings-pin", e("pin_master_title")), n("p-pin-remove-hint", e("pin_remove_hint")), n("h-backup-title", e("backup_title")), n("p-backup-desc", e("backup_desc")), n("btn-export-config", e("export_btn")), n("btn-reset-config", e("reset_btn")), n("btn-undo-reset", e("undo_reset_btn")), n("btn-import-trigger", e("import_btn")), n("github-title", e("github_title")), n("github-desc", e("github_desc")), n("github-action", `⭐ ${e("github_action")}`), n("sos-title-txt", e("sos_confirm_title")), n("sos-text-txt", e("sos_confirm_text")), n("sos-label", e("sos_slide")), n("system-diagnostics-txt", "ℹ️ " + (e("system_diagnostics") || "Diagnóstico y Resumen del Sistema")), n("btn-start-walk-test", e("walk_test_btn") || "🚶 Prueba de Sensores"), n("walk-test-title-text", e("walk_test") || "Prueba de Sensores (Walk Test)"), n("walk-test-desc-text", e("walk_test_desc")), n("walk-test-close-btn", e("walk_test_close") || "Cerrar"), n("walk-test-stop-btn", e("walk_test_stop") || "Finalizar Prueba"), n("sensor-delay-modal-title", e("sensor_delay_cfg_title")), n("txt-delay-opt-default", e("sensor_delay_default")), n("txt-delay-opt-instant", e("sensor_delay_instant")), n("txt-delay-opt-custom", e("sensor_delay_custom")), n("txt-delay-seconds-label", e("sensor_delay_seconds") || "segundos"), n("sensor-delay-cancel-btn", e("cancel")), n("sensor-delay-save-btn", e("save_btn")), n("home-name-modal-h3", e("home_name_modal_title")), n("p-home-name-modal-desc", e("home_name_modal_desc")), n("l-home-name-modal-label", e("home_name_label")), n("lang-modal-title", `🌐 ${e("lang_select_title")}`), n("sos-call-help", e("sos_call_help")), n("lbl-emergency-number", e("emergency_number_label")), n("emergency-number-help", e("emergency_help")), n("lbl-sos-actions", e("sos_actions")), n("btn-select-sos-outputs", e("sos_select_outputs")), n("sos-output-help", e("sos_outputs_help")), n("home-name-modal-desc", e("home_name_modal_desc")), n("pin-backspace", e("delete"));
 		let f = t("bg-mode-select-standalone");
 		if (f) {
 			let t = f.value;
@@ -1364,14 +1503,19 @@ var f = class extends HTMLElement {
 	_openHistoryExportModal() {
 		let e = this.shadowRoot.getElementById("history-export-modal");
 		if (!e) return;
-		let t = /* @__PURE__ */ new Date(), n = /* @__PURE__ */ new Date();
+		let t = /* @__PURE__ */ new Date();
+		this._historyPDFLogoPromise ||= this._loadHistoryPDFLogo();
+		let n = /* @__PURE__ */ new Date();
 		n.setDate(t.getDate() - 30);
 		let r = this.shadowRoot.getElementById("export-history-from"), i = this.shadowRoot.getElementById("export-history-to");
-		r && !r.value && (r.value = n.toISOString().split("T")[0]), i && !i.value && (i.value = t.toISOString().split("T")[0]), e.classList.add("open"), e.setAttribute("aria-hidden", "false");
+		r && !r.value && (r.value = this._formatLocalDateInput(n)), i && !i.value && (i.value = this._formatLocalDateInput(t)), e.classList.add("open"), e.setAttribute("aria-hidden", "false");
 	}
 	_closeHistoryExportModal() {
 		let e = this.shadowRoot.getElementById("history-export-modal");
 		e && (e.classList.remove("open"), e.setAttribute("aria-hidden", "true"));
+	}
+	_formatLocalDateInput(e) {
+		return `${e.getFullYear()}-${String(e.getMonth() + 1).padStart(2, "0")}-${String(e.getDate()).padStart(2, "0")}`;
 	}
 	_getFilteredHistory() {
 		let e = Array.isArray(this._forensicTimeline) && this._forensicTimeline.length ? this._forensicTimeline : Array.isArray(this._ui?.audit_log) ? this._ui.audit_log : [], t = this.shadowRoot.getElementById("export-history-from"), n = this.shadowRoot.getElementById("export-history-to"), r = t?.value ? /* @__PURE__ */ new Date(t.value + "T00:00:00") : null, i = n?.value ? /* @__PURE__ */ new Date(n.value + "T00:00:00") : null;
@@ -1390,7 +1534,7 @@ var f = class extends HTMLElement {
 			c += `[${String(t + 1).padStart(3, "0")}] ${r} | [${i}] ${a} | 👤 ${o}\n`;
 		}), c += "\n================================================================================\n", c += `${this._t("history_pdf_footer")}\n`;
 		let l = new Blob([c], { type: "text/plain;charset=utf-8" }), u = URL.createObjectURL(l), d = document.createElement("a");
-		d.href = u, d.download = `argus_historial_${(/* @__PURE__ */ new Date()).toISOString().slice(0, 10)}.txt`, d.click(), setTimeout(() => URL.revokeObjectURL(u), 5e3);
+		d.href = u, d.download = `argus_historial_${this._formatLocalDateInput(/* @__PURE__ */ new Date())}.txt`, d.click(), setTimeout(() => URL.revokeObjectURL(u), 5e3);
 	}
 	async _clearHistory() {
 		let e = this._dashboard?.entries?.[0]?.pin_configured === !0, t = this._activeProfile?.name || this._hass?.user?.name || "Administrador", n = this._dashboard?.entry_id || this._dashboard?.entries?.[0]?.entry_id, r = async () => {
@@ -1459,37 +1603,70 @@ var f = class extends HTMLElement {
 		}[t] || (t.startsWith("auto_") ? "log_action_automation" : t.startsWith("ai_") ? "log_action_analysis" : `log_action_${t}`), r = this._t(n);
 		return r === n ? e || this._t("history_unknown_event") : r;
 	}
+	async _loadHistoryPDFLogo() {
+		try {
+			let e = await fetch(new URL("/api/argus_static/argus_logo.png", window.location.origin), { credentials: "same-origin" });
+			if (!e.ok) return null;
+			let t = await e.blob(), n = URL.createObjectURL(t), r = new Image(), i = new Promise((e, t) => {
+				r.onload = () => e(), r.onerror = () => t(/* @__PURE__ */ Error("Argus logo image could not be decoded"));
+			});
+			try {
+				r.src = n, typeof r.decode == "function" ? await r.decode() : await i;
+			} finally {
+				URL.revokeObjectURL(n);
+			}
+			let a = document.createElement("canvas");
+			a.width = 64, a.height = 64;
+			let o = a.getContext("2d");
+			if (!o) return null;
+			o.fillStyle = "#0c1426", o.fillRect(0, 0, 64, 64);
+			let s = Math.min(64 / r.naturalWidth, 64 / r.naturalHeight), c = r.naturalWidth * s, l = r.naturalHeight * s;
+			o.drawImage(r, (64 - c) / 2, (64 - l) / 2, c, l);
+			let u = await new Promise((e) => a.toBlob(e, "image/jpeg", .92));
+			return u ? {
+				bytes: new Uint8Array(await u.arrayBuffer()),
+				width: 64,
+				height: 64
+			} : null;
+		} catch (e) {
+			return console.warn("Argus PDF logo could not be loaded:", e), null;
+		}
+	}
 	_generateHistoryPDF(e, t) {
-		let n = t.labels, r = Math.max(1, Math.ceil(e.length / 22)), i = Array.from({ length: r }, (e, t) => 5 + t * 2), a = (e) => Array.from(String(e ?? "-").normalize("NFC")).map((e) => {
+		let n = t.labels, r = Math.max(1, Math.ceil(e.length / 22)), i = t.logo, a = i?.bytes?.length ? 5 : null, o = a ? 6 : 5, s = Array.from({ length: r }, (e, t) => o + t * 2), c = (e) => Array.from(String(e ?? "-").normalize("NFC")).map((e) => {
 			let t = e.codePointAt(0);
 			if (t >= 32 && t <= 255) return e;
 			let n = e.normalize("NFKD").replace(/[\u0300-\u036f]/g, "");
 			return Array.from(n).map((e) => e.codePointAt(0) <= 255 ? e : "?").join("") || " ";
-		}).join("").replace(/[\\()]/g, "\\$&").replace(/[\r\n\t]/g, " "), o = (e, t, n, r, i, o) => `BT /${e} ${t} Tf ${n} rg ${r} ${i} Td (${a(o)}) Tj ET\n`, s = [];
+		}).join("").replace(/[\\()]/g, "\\$&").replace(/[\r\n\t]/g, " "), l = (e, t, n, r, i, a) => `BT /${e} ${t} Tf ${n} rg ${r} ${i} Td (${c(a)}) Tj ET\n`, u = [];
 		for (let i = 0; i < r; i++) {
-			let a = e.slice(i * 22, (i + 1) * 22), c = "";
-			c += "q 0.05 0.08 0.15 rg 0 720 612 72 re f Q\n", c += o("F2", 13, "1 1 1", 36, 761, n.title), c += o("F1", 8, "0.82 0.87 0.93", 36, 744, `${n.home}: ${t.homeName}`), c += o("F1", 8, "0.82 0.87 0.93", 36, 731, `${n.range}: ${t.rangeFrom} - ${t.rangeTo}   |   ${n.generated}: ${t.generatedAt}   |   ${n.total}: ${e.length}`), c += "q 0.12 0.18 0.28 rg 36 688 540 20 re f Q\n", c += o("F2", 7.5, "1 1 1", 41, 694, n.date), c += o("F2", 7.5, "1 1 1", 161, 694, n.action), c += o("F2", 7.5, "1 1 1", 301, 694, n.user), c += o("F2", 7.5, "1 1 1", 426, 694, n.detail);
-			let l = 668;
-			a.forEach((e, t) => {
-				t % 2 == 0 && (c += `q 0.96 0.97 0.98 rg 36 ${l - 4} 540 20 re f Q\n`), c += `q 0.88 0.88 0.88 RG 0.5 w 36 ${l - 4} m 576 ${l - 4} l S Q\n`, c += o("F1", 7.2, "0.15 0.15 0.15", 41, l + 2, String(e.ts || "-").slice(0, 22)), c += o("F2", 7.2, "0.1 0.2 0.4", 161, l + 2, String(e.action || "-").slice(0, 24)), c += o("F1", 7.2, "0.2 0.2 0.2", 301, l + 2, String(e.user || "Argus").slice(0, 21)), c += o("F1", 7, "0.3 0.3 0.3", 426, l + 2, String(e.detail || "-").slice(0, 37)), l -= 22;
-			}), e.length || (c += o("F1", 9, "0.4 0.4 0.4", 44, 662, n.empty)), c += "q 0.8 0.8 0.8 RG 0.5 w 36 42 m 576 42 l S Q\n", c += o("F1", 7, "0.5 0.5 0.5", 36, 29, n.footer), c += o("F1", 7, "0.5 0.5 0.5", 496, 29, this._format("history_pdf_page", {
+			let o = e.slice(i * 22, (i + 1) * 22), s = "";
+			s += "q 0.05 0.08 0.15 rg 0 720 612 72 re f Q\n", a && (s += "q 42 0 0 42 534 735 cm /ArgusLogo Do Q\n"), s += l("F2", 13, "1 1 1", 36, 761, n.title), s += l("F1", 8, "0.82 0.87 0.93", 36, 744, `${n.home}: ${t.homeName}`), s += l("F1", 8, "0.82 0.87 0.93", 36, 731, `${n.range}: ${t.rangeFrom} - ${t.rangeTo}   |   ${n.generated}: ${t.generatedAt}   |   ${n.total}: ${e.length}`), s += "q 0.12 0.18 0.28 rg 36 688 540 20 re f Q\n", s += l("F2", 7.5, "1 1 1", 41, 694, n.date), s += l("F2", 7.5, "1 1 1", 161, 694, n.action), s += l("F2", 7.5, "1 1 1", 301, 694, n.user), s += l("F2", 7.5, "1 1 1", 426, 694, n.detail);
+			let c = 668;
+			o.forEach((e, t) => {
+				t % 2 == 0 && (s += `q 0.96 0.97 0.98 rg 36 ${c - 4} 540 20 re f Q\n`), s += `q 0.88 0.88 0.88 RG 0.5 w 36 ${c - 4} m 576 ${c - 4} l S Q\n`, s += l("F1", 7.2, "0.15 0.15 0.15", 41, c + 2, String(e.ts || "-").slice(0, 22)), s += l("F2", 7.2, "0.1 0.2 0.4", 161, c + 2, String(e.action || "-").slice(0, 24)), s += l("F1", 7.2, "0.2 0.2 0.2", 301, c + 2, String(e.user || "Argus").slice(0, 21)), s += l("F1", 7, "0.3 0.3 0.3", 426, c + 2, String(e.detail || "-").slice(0, 37)), c -= 22;
+			}), e.length || (s += l("F1", 9, "0.4 0.4 0.4", 44, 662, n.empty)), s += "q 0.8 0.8 0.8 RG 0.5 w 36 42 m 576 42 l S Q\n", s += l("F1", 7, "0.5 0.5 0.5", 36, 29, n.footer), s += l("F1", 7, "0.5 0.5 0.5", 496, 29, this._format("history_pdf_page", {
 				page: i + 1,
 				pages: r
-			})), s.push(c);
+			})), u.push(s);
 		}
-		let c = "%PDF-1.4\n", l = [0], u = (e, t) => {
-			l[e] = c.length, c += `${e} 0 obj\n${t}\nendobj\n`;
+		let d = "%PDF-1.4\n", f = [0], p = (e, t) => {
+			f[e] = d.length, d += `${e} 0 obj\n${t}\nendobj\n`;
 		};
-		u(1, "<< /Type /Catalog /Pages 2 0 R >>"), u(2, `<< /Type /Pages /Kids [${i.map((e) => `${e} 0 R`).join(" ")}] /Count ${r} /MediaBox [0 0 612 792] >>`), u(3, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>"), u(4, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>"), s.forEach((e, t) => {
-			let n = i[t], r = n + 1;
-			u(n, `<< /Type /Page /Parent 2 0 R /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${r} 0 R >>`), u(r, `<< /Length ${e.length} >>\nstream\n${e}endstream`);
+		if (p(1, "<< /Type /Catalog /Pages 2 0 R >>"), p(2, `<< /Type /Pages /Kids [${s.map((e) => `${e} 0 R`).join(" ")}] /Count ${r} /MediaBox [0 0 612 792] >>`), p(3, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>"), p(4, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>"), a) {
+			let e = Array.from(i.bytes, (e) => String.fromCharCode(e)).join("");
+			p(a, `<< /Type /XObject /Subtype /Image /Width ${i.width} /Height ${i.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${i.bytes.length} >>\nstream\n${e}\nendstream`);
+		}
+		u.forEach((e, t) => {
+			let n = s[t], r = n + 1, i = a ? ` /XObject << /ArgusLogo ${a} 0 R >>` : "";
+			p(n, `<< /Type /Page /Parent 2 0 R /Resources << /Font << /F1 3 0 R /F2 4 0 R >>${i} >> /Contents ${r} 0 R >>`), p(r, `<< /Length ${e.length} >>\nstream\n${e}endstream`);
 		});
-		let d = c.length;
-		c += `xref\n0 ${l.length}\n0000000000 65535 f \n`;
-		for (let e = 1; e < l.length; e++) c += `${String(l[e]).padStart(10, "0")} 00000 n \n`;
-		return c += `trailer\n<< /Size ${l.length} /Root 1 0 R >>\nstartxref\n${d}\n%%EOF`, Uint8Array.from(c, (e) => e.charCodeAt(0) & 255);
+		let m = d.length;
+		d += `xref\n0 ${f.length}\n0000000000 65535 f \n`;
+		for (let e = 1; e < f.length; e++) d += `${String(f[e]).padStart(10, "0")} 00000 n \n`;
+		return d += `trailer\n<< /Size ${f.length} /Root 1 0 R >>\nstartxref\n${m}\n%%EOF`, Uint8Array.from(d, (e) => e.charCodeAt(0) & 255);
 	}
-	_exportHistoryPDF() {
+	async _exportHistoryPDF() {
 		this._closeHistoryExportModal();
 		let e = this._getFilteredHistory().map((e) => {
 			let t = String(e.action || ""), n = String(e.detail || ""), r = this._localizeActivityAction(t), i = this._localizeActivityDetail ? this._localizeActivityDetail(t, n) : n, a = String(e.user || e.actor || "Argus"), o = "";
@@ -1504,7 +1681,7 @@ var f = class extends HTMLElement {
 				user: a,
 				detail: i
 			};
-		}), t = this._homeName || this._t("home_default"), n = /* @__PURE__ */ new Date(), r = n.toISOString().slice(0, 10), i = n.toTimeString().slice(0, 5).replace(":", "-"), a = n.toLocaleString(this._getLocale()), o = this.shadowRoot.getElementById("export-history-from")?.value, s = this.shadowRoot.getElementById("export-history-to")?.value, c = (e, t) => e ? (/* @__PURE__ */ new Date(`${e}T12:00:00`)).toLocaleDateString(this._getLocale()) : t, l = {
+		}), t = this._homeName || this._t("home_default"), n = /* @__PURE__ */ new Date(), r = this._formatLocalDateInput(n), i = n.toTimeString().slice(0, 5).replace(":", "-"), a = n.toLocaleString(this._getLocale()), o = this.shadowRoot.getElementById("export-history-from")?.value, s = this.shadowRoot.getElementById("export-history-to")?.value, c = (e, t) => e ? (/* @__PURE__ */ new Date(`${e}T12:00:00`)).toLocaleDateString(this._getLocale()) : t, l = {
 			title: this._t("history_pdf_title"),
 			home: this._t("history_pdf_home"),
 			range: this._t("history_pdf_range"),
@@ -1516,14 +1693,15 @@ var f = class extends HTMLElement {
 			detail: this._t("history_pdf_detail"),
 			empty: this._t("history_pdf_empty"),
 			footer: this._t("history_pdf_footer")
-		}, u = this._generateHistoryPDF(e, {
+		}, u = await (this._historyPDFLogoPromise || this._loadHistoryPDFLogo()), d = this._generateHistoryPDF(e, {
 			homeName: t,
 			generatedAt: a,
 			labels: l,
+			logo: u,
 			rangeFrom: c(o, this._t("history_range_all")),
 			rangeTo: c(s, this._t("history_range_today"))
-		}), d = new Blob([u], { type: "application/pdf" }), f = URL.createObjectURL(d), p = document.createElement("a");
-		p.href = f, p.download = `argus_historial_${r}_${i}.pdf`, p.style.display = "none", document.body.appendChild(p), p.click(), p.remove(), setTimeout(() => URL.revokeObjectURL(f), 1e4);
+		}), f = new Blob([d], { type: "application/pdf" }), p = URL.createObjectURL(f), m = document.createElement("a");
+		m.href = p, m.download = `argus_historial_${r}_${i}.pdf`, m.style.display = "none", document.body.appendChild(m), m.click(), m.remove(), setTimeout(() => URL.revokeObjectURL(p), 1e4);
 	}
 	_exportForensicTimeline() {
 		this._closeHistoryExportModal();
@@ -1696,7 +1874,11 @@ var f = class extends HTMLElement {
 		};
 		e("btn-cancel-sos")?.addEventListener("click", r), e("sos-close-x")?.addEventListener("click", r), e("sos-modal")?.addEventListener("click", (e) => {
 			e.target.id === "sos-modal" && r();
-		}), e("bg-mode-select-standalone")?.addEventListener("change", () => this._updateBgFieldsVisibility()), e("hub-bg-mode-select")?.addEventListener("change", () => this._updateBgFieldsVisibility()), e("panel-bg-file-input")?.addEventListener("change", (e) => this._handlePanelBgFile(e)), e("hub-bg-file-input")?.addEventListener("change", (e) => this._handleHubBgFile(e));
+		}), e("bg-mode-select-standalone")?.addEventListener("change", () => this._updateBgFieldsVisibility()), e("hub-bg-mode-select")?.addEventListener("change", () => this._updateBgFieldsVisibility()), e("panel-bg-file-input")?.addEventListener("change", (e) => this._handlePanelBgFile(e)), e("hub-bg-file-input")?.addEventListener("change", (e) => this._handleHubBgFile(e)), e("btn-start-walk-test")?.addEventListener("click", () => this._openWalkTest()), e("walk-test-close-btn")?.addEventListener("click", () => this._closeWalkTestModal()), e("walk-test-stop-btn")?.addEventListener("click", () => this._stopWalkTest()), e("walk-test-modal")?.addEventListener("click", (e) => {
+			e.target.id === "walk-test-modal" && this._closeWalkTestModal();
+		}), e("delay-opt-default")?.addEventListener("change", () => this._updateDelayOptionsUi()), e("delay-opt-instant")?.addEventListener("change", () => this._updateDelayOptionsUi()), e("delay-opt-custom")?.addEventListener("change", () => this._updateDelayOptionsUi()), e("sensor-delay-cancel-btn")?.addEventListener("click", () => this._closeSensorDelayModal()), e("sensor-delay-save-btn")?.addEventListener("click", () => this._saveSensorDelay()), e("sensor-delay-modal")?.addEventListener("click", (e) => {
+			e.target.id === "sensor-delay-modal" && this._closeSensorDelayModal();
+		});
 	}
 	async _connect() {
 		if (typeof this._hass?.callWS != "function") throw Error("Home Assistant authenticated WebSocket is unavailable");
@@ -1999,7 +2181,6 @@ var f = class extends HTMLElement {
 			home: "<path d=\"M3 10.5 12 3l9 7.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 19.5z\"/><path d=\"M9 21v-6h6v6\"/>",
 			away: "<path d=\"M12 3 20 6.5v5.2c0 5-3.4 8-8 9.8-4.6-1.8-8-4.8-8-9.8V6.5z\"/><path d=\"M8.5 12h7M12 8.5v7\"/>",
 			night: "<path d=\"M20 15.5A8.5 8.5 0 0 1 8.5 4 8.5 8.5 0 1 0 20 15.5z\"/><path d=\"m17.5 4 .5 1.2L19.2 6l-1.2.5-.5 1.2-.5-1.2-1.2-.5 1.2-.8z\"/>",
-			vacation: "<path d=\"M3 13.5 21 5l-6.8 15-2.3-6.2z\"/><path d=\"m11.9 13.8 3.4 3.4M11.9 13.8 7.2 12\"/>",
 			disarm: "<path d=\"M12 3 20 6.5v5.2c0 5-3.4 8-8 9.8-4.6-1.8-8-4.8-8-9.8V6.5z\"/><path d=\"m8.5 12 2.2 2.2 4.8-5\"/>",
 			sos: "<path d=\"M12 3 21 20H3z\"/><path d=\"M12 9v4.5M12 17h.01\"/>"
 		};
@@ -2010,27 +2191,23 @@ var f = class extends HTMLElement {
 			armed_home: "home",
 			armed_away: "away",
 			armed_night: "night",
-			armed_vacation: "vacation",
 			disarmed: "disarm"
 		}[e] || "disarm", i = {
 			home: "#ffb700",
 			away: "#ff3344",
 			night: "#3898ff",
-			vacation: "#d69cff",
 			disarm: "#00ff8c",
 			triggered: "#ff1744"
 		}[r], a = {
 			home: "rgba(255,183,0,0.65)",
 			away: "rgba(255,51,68,0.7)",
 			night: "rgba(56,152,255,0.65)",
-			vacation: "rgba(214,156,255,0.65)",
 			disarm: "rgba(0,255,140,0.65)",
 			triggered: "rgba(255,23,68,0.85)"
 		}[r], o = {
 			home: "<path d=\"M66 98 100 69l34 29v35H66z\"/><path d=\"M89 133v-22h22v22\"/>",
 			away: "<path d=\"M100 70c18 0 32 14 32 32s-14 32-32 32-32-14-32-32 14-32 32-32z\"/><path d=\"M100 79v46M77 102h46\"/>",
 			night: "<path d=\"M120 70a34 34 0 1 0 13 63 38 38 0 1 1-13-63z\"/><circle cx=\"134\" cy=\"73\" r=\"3\"/>",
-			vacation: "<path d=\"m67 113 66-34-28 66-9-25z\"/><path d=\"m96 120 15 15M96 120l-20-6\"/>",
 			disarm: "<path d=\"m76 104 16 16 34-39\"/>",
 			triggered: "<path d=\"M100 65 139 137H61z\"/><path d=\"M100 90v23M100 124h.01\"/>"
 		}[r];
@@ -2216,8 +2393,7 @@ var f = class extends HTMLElement {
 				disarmed: "Desarmado",
 				home: "En casa",
 				away: "Ausente",
-				night: "Noche",
-				vacation: "Vacaciones"
+				night: "Noche"
 			},
 			en: {
 				title: "Local state schedules",
@@ -2228,8 +2404,7 @@ var f = class extends HTMLElement {
 				disarmed: "Disarmed",
 				home: "Home",
 				away: "Away",
-				night: "Night",
-				vacation: "Vacation"
+				night: "Night"
 			}
 		};
 		return e[this._getCurrentLangCode()] || e.en;
@@ -2240,7 +2415,7 @@ var f = class extends HTMLElement {
 		let n = this.shadowRoot.getElementById("schedule-state"), r = this.shadowRoot.getElementById("schedule-days");
 		if (n) {
 			let t = n.value;
-			n.innerHTML = `<option value="disarmed">${e.disarmed}</option><option value="armed_home">${e.home}</option><option value="armed_away">${e.away}</option><option value="armed_night">${e.night}</option><option value="armed_vacation">${e.vacation}</option>`, n.value = t || "armed_night";
+			n.innerHTML = `<option value="disarmed">${e.disarmed}</option><option value="armed_home">${e.home}</option><option value="armed_away">${e.away}</option><option value="armed_night">${e.night}</option>`, n.value = t || "armed_night";
 		}
 		if (r) {
 			let t = r.value;
@@ -2255,8 +2430,7 @@ var f = class extends HTMLElement {
 			disarmed: e.disarmed,
 			armed_home: e.home,
 			armed_away: e.away,
-			armed_night: e.night,
-			armed_vacation: e.vacation
+			armed_night: e.night
 		})[t] || t, c = (t) => t?.length === 2 ? e.weekend : t?.length === 5 ? e.weekdays : e.all;
 		i.innerHTML = a.length ? a.map((e) => `<div class="schedule-row"><span><strong>${this._escapeHtml(e.time || "")}</strong> · ${this._escapeHtml(s(e.state))} · ${this._escapeHtml(c(e.days))}</span><button class="ghost" data-schedule-delete="${this._escapeHtml(e.id)}" aria-label="${this._escapeHtml(o)}">×</button></div>`).join("") : `<div class="small" style="opacity:.55">${this._escapeHtml(e.empty)}</div>`, i.querySelectorAll("[data-schedule-delete]").forEach((e) => e.addEventListener("click", () => this._deleteStateSchedule(e.dataset.scheduleDelete)));
 	}
@@ -2325,15 +2499,6 @@ var f = class extends HTMLElement {
 				"notte",
 				"ночь",
 				"夜间"
-			],
-			vacation: [
-				"vacaciones",
-				"vacation",
-				"vacances",
-				"férias",
-				"vacanza",
-				"отпуск",
-				"度假"
 			]
 		}, a = Object.entries(i).find(([, e]) => e.some((e) => r.includes(e)))?.[0];
 		if (e === "pin_reset") return this._t("log_detail_pin_reset");
@@ -2345,7 +2510,6 @@ var f = class extends HTMLElement {
 				armed_home: this._t("mode_home"),
 				armed_away: this._t("mode_away"),
 				armed_night: this._t("mode_night"),
-				armed_vacation: this._t("mode_vacation"),
 				triggered: this._t("log_triggered")
 			}, t = this._t("disarmed"), r = n.toLowerCase();
 			for (let [n, i] of Object.entries(e)) if (r.includes(n) || r.includes(i.toLowerCase())) {
@@ -2408,9 +2572,6 @@ var f = class extends HTMLElement {
 			Noche: this._t("mode_night"),
 			Nuit: this._t("mode_night"),
 			Night: this._t("mode_night"),
-			Vacaciones: this._t("mode_vacation"),
-			Vacances: this._t("mode_vacation"),
-			Vacation: this._t("mode_vacation"),
 			Desarmado: this._t("disarmed"),
 			Désarmé: this._t("disarmed"),
 			Disarmed: this._t("disarmed"),
@@ -2574,6 +2735,7 @@ var f = class extends HTMLElement {
 			arming_time: r?.arming_time !== void 0 && r?.arming_time !== null ? r.arming_time : null,
 			entry_delay: r?.entry_delay !== void 0 && r?.entry_delay !== null ? r.entry_delay : null,
 			light_siren_settings: r?.light_siren_settings && typeof r.light_siren_settings == "object" ? r.light_siren_settings : {},
+			sensor_settings: r?.sensor_settings && typeof r.sensor_settings == "object" ? r.sensor_settings : {},
 			mqtt_enabled: r?.mqtt_enabled !== void 0 && r?.mqtt_enabled !== null ? r.mqtt_enabled : null
 		};
 	}
@@ -2738,7 +2900,7 @@ var f = class extends HTMLElement {
       ${t ? "" : `<div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;"><button class="primary" id="save-mode" style="width:100%;height:48px;font-size:14px;box-shadow:0 8px 20px rgba(0,0,0,0.2)">${this._t("save_config")}</button><span id="mode-status" style="display:block;text-align:center;font-size:13px;font-weight:700;min-height:20px;transition:opacity .4s;opacity:1;color:var(--primary-color,#03a9f4)"></span></div>`}
     `, e.querySelector("#mode-instance-select")?.addEventListener("change", (e) => {
 			this._modeEntryId = e.target.value, this._renderModeView(), this._renderEntries(), this.dispatchEvent(new CustomEvent("argus-state-update"));
-		}), t || (e.querySelectorAll("[data-open-selector]").forEach((e) => e.addEventListener("click", () => this._openModal(e.dataset.openSelector))), e.querySelectorAll("[data-remove]").forEach((e) => e.addEventListener("click", () => this._removeChip(e.dataset.remove))), e.querySelectorAll("[data-toggle-delay]").forEach((e) => e.addEventListener("click", () => this._toggleEntrySensor(e.dataset.toggleDelay))), e.querySelector("#save-mode")?.addEventListener("click", () => this._saveMode()));
+		}), t || (e.querySelectorAll("[data-open-selector]").forEach((e) => e.addEventListener("click", () => this._openModal(e.dataset.openSelector))), e.querySelectorAll("[data-remove]").forEach((e) => e.addEventListener("click", () => this._removeChip(e.dataset.remove))), e.querySelectorAll("[data-toggle-delay]").forEach((e) => e.addEventListener("click", () => this._toggleEntrySensor(e.dataset.toggleDelay))), e.querySelectorAll("[data-edit-sensor-delay]").forEach((e) => e.addEventListener("click", () => this._openSensorDelayModal(e.dataset.editSensorDelay))), e.querySelector("#save-mode")?.addEventListener("click", () => this._saveMode()));
 	}
 	_chip(e, t) {
 		let n = this._hass?.states?.[e]?.state, r = [
@@ -2748,22 +2910,31 @@ var f = class extends HTMLElement {
 			"recording",
 			"active",
 			"motion"
-		].includes(n), i = this._hass?.states?.[e]?.attributes?.friendly_name || e, a = !this._isAdmin, o = t === "sensor" || t === "bypass" ? `<span class="pill-dot ${r ? "open" : ""}" title="${n}"></span>` : "", s = "", c = "";
+		].includes(n), i = this._hass?.states?.[e]?.attributes?.friendly_name || e, a = !this._isAdmin, o = t === "sensor" || t === "bypass" ? `<span class="pill-dot ${r ? "open" : ""}" title="${n}"></span>` : "", s = "", c = "", l = "";
 		if (t === "sensor" || t === "bypass" || t === "entry") {
-			let t = this._hass?.states?.[e], n = this._getDevicePower(e, t);
-			if (s = `<span class="pill-status">${r ? this._t("status_open") : this._t("status_closed")}</span>`, n.mains && (c += "<span class=\"pill-power\">🔌 AC</span>"), n.battery !== null) {
-				let e = n.battery === 0, t = n.battery <= 10 && !e, r = e ? "🔋 ❌" : `🔋 ${n.battery}%`;
-				c += `<span class="pill-power ${e ? "dead" : t ? "low" : ""}">${r}</span>`;
+			let n = this._hass?.states?.[e], i = this._getDevicePower(e, n);
+			if (s = `<span class="pill-status">${r ? this._t("status_open") : this._t("status_closed")}</span>`, i.mains && (c += "<span class=\"pill-power\">🔌 AC</span>"), i.battery !== null) {
+				let e = i.battery === 0, t = i.battery <= 10 && !e, n = e ? "🔋 ❌" : `🔋 ${i.battery}%`;
+				c += `<span class="pill-power ${e ? "dead" : t ? "low" : ""}">${n}</span>`;
+			}
+			if (t === "sensor") {
+				let t = this._currentModeConfig().sensor_settings?.[e] || {}, n = t.type === "instant" || t.delay === 0, r = t.delay, i = "inherited", a = "🌐", o = this._t("sensor_delay_default");
+				n ? (i = "instant", a = "⚡ 0s", o = this._t("sensor_delay_instant")) : r != null && (i = "custom", a = `⏱️ ${r}s`, o = `${this._t("sensor_delay_custom")}: ${r}s`), l = `
+          <button type="button" class="pill-delay-btn" data-edit-sensor-delay="${this._escapeHtml(e)}" title="${this._escapeHtml(o)}">
+            <span class="pill-delay-badge ${i}">${a}</span>
+          </button>
+        `;
 			}
 		}
-		let l = this._dashboard?.entries?.some((e) => this._hass?.states?.[e.entity_id]?.state === "triggered"), u = "";
-		return t === "siren" && l && (u = " siren-active"), (t === "sensor" || t === "bypass" || t === "entry") && l && r && (u = " triggered-sensor"), `
-      <span class="sensor-pill${u}">
+		let u = this._dashboard?.entries?.some((e) => this._hass?.states?.[e.entity_id]?.state === "triggered"), d = "";
+		return t === "siren" && u && (d = " siren-active"), (t === "sensor" || t === "bypass" || t === "entry") && u && r && (d = " triggered-sensor"), `
+      <span class="sensor-pill${d}">
         ${o}
         <span class="pill-content">
           <span class="pill-name">${this._escapeHtml(i)}</span>
           ${s}
           ${c}
+          ${l}
         </span>
         ${a ? "" : `<button data-remove="${t}:${e}" style="background:none; border:none; color:inherit; opacity:0.5; padding:0 4px; cursor:pointer; flex-shrink:0;">✕</button>`}
       </span>
@@ -3539,7 +3710,6 @@ var f = class extends HTMLElement {
 			armed_home: "alarm_arm_home",
 			armed_away: "alarm_arm_away",
 			armed_night: "alarm_arm_night",
-			armed_vacation: "alarm_arm_vacation",
 			disarmed: "alarm_disarm"
 		}[(t && this._hass?.states?.[t.entity_id])?.attributes?.panic_previous_state];
 		if (!t?.entity_id || !n) {
@@ -4031,10 +4201,9 @@ var f = class extends HTMLElement {
 			home: "alarm_arm_home",
 			away: "alarm_arm_away",
 			night: "alarm_arm_night",
-			vacation: "alarm_arm_vacation",
 			disarm: "alarm_disarm"
 		};
-		this._t("mode_home"), this._t("mode_away"), this._t("mode_night"), this._t("mode_vacation");
+		this._t("mode_home"), this._t("mode_away"), this._t("mode_night");
 		let a = i[t];
 		if (!a) return;
 		if (this._hass?.user?.name || this._t("user_default"), t === "disarm") {
@@ -5412,7 +5581,6 @@ var v = class extends HTMLElement {
             <button class="basic-mode ${t === "armed_home" ? "active" : ""}" data-service="alarm_arm_home">🏠 ${e.home}</button>
             <button class="basic-mode ${t === "armed_away" ? "active" : ""}" data-service="alarm_arm_away">🔒 ${e.away}</button>
             <button class="basic-mode ${t === "armed_night" ? "active" : ""}" data-service="alarm_arm_night">🌙 ${e.night}</button>
-            <button class="basic-mode ${t === "armed_vacation" ? "active" : ""}" data-service="alarm_arm_vacation">✈️ ${e.vacation}</button>
             <button class="basic-mode ${t === "disarmed" ? "active" : ""}" data-service="alarm_disarm">🔓 ${e.disarm}</button>
           </div>
           <div class="basic-shield">${t === "triggered" ? "🚨" : "🛡️"}</div>
@@ -5471,7 +5639,7 @@ y.has("argus-panel-card") || window.customCards.push({
 	documentationURL: "https://github.com/Chrisalvir1/Argus"
 });
 //#endregion
-//#region node_modules/react/cjs/react.production.js
+//#region ../../../../../Documents/Codex/2026-10-01/ok-tengo-x20/work/Argus/node_modules/react/cjs/react.production.js
 var b = /* @__PURE__ */ o(((e) => {
 	var t = Symbol.for("react.transitional.element"), n = Symbol.for("react.portal"), r = Symbol.for("react.fragment"), i = Symbol.for("react.strict_mode"), a = Symbol.for("react.profiler"), o = Symbol.for("react.consumer"), s = Symbol.for("react.context"), c = Symbol.for("react.forward_ref"), l = Symbol.for("react.suspense"), u = Symbol.for("react.memo"), d = Symbol.for("react.lazy"), f = Symbol.for("react.activity"), p = Symbol.for("react.view_transition"), m = Symbol.iterator;
 	function h(e) {
@@ -5538,7 +5706,7 @@ var b = /* @__PURE__ */ o(((e) => {
 	function ne(e, t) {
 		return typeof e == "object" && e && e.key != null ? O("" + e.key) : t.toString(36);
 	}
-	function A(e) {
+	function re(e) {
 		switch (e.status) {
 			case "fulfilled": return e.value;
 			case "rejected": throw e.reason;
@@ -5553,7 +5721,7 @@ var b = /* @__PURE__ */ o(((e) => {
 		}
 		throw e;
 	}
-	function re(e, r, i, a, o) {
+	function A(e, r, i, a, o) {
 		var s = typeof e;
 		(s === "undefined" || s === "boolean") && (e = null);
 		var c = !1;
@@ -5569,18 +5737,18 @@ var b = /* @__PURE__ */ o(((e) => {
 				case n:
 					c = !0;
 					break;
-				case d: return c = e._init, re(c(e._payload), r, i, a, o);
+				case d: return c = e._init, A(c(e._payload), r, i, a, o);
 			}
 		}
-		if (c) return o = o(e), c = a === "" ? "." + ne(e, 0) : a, C(o) ? (i = "", c != null && (i = c.replace(k, "$&/") + "/"), re(o, r, i, "", function(e) {
+		if (c) return o = o(e), c = a === "" ? "." + ne(e, 0) : a, C(o) ? (i = "", c != null && (i = c.replace(k, "$&/") + "/"), A(o, r, i, "", function(e) {
 			return e;
 		})) : o != null && (te(o) && (o = D(o, i + (o.key == null || e && e.key === o.key ? "" : ("" + o.key).replace(k, "$&/") + "/") + c)), r.push(o)), 1;
 		c = 0;
 		var l = a === "" ? "." : a + ":";
-		if (C(e)) for (var u = 0; u < e.length; u++) a = e[u], s = l + ne(a, u), c += re(a, r, i, s, o);
-		else if (u = h(e), typeof u == "function") for (e = u.call(e), u = 0; !(a = e.next()).done;) a = a.value, s = l + ne(a, u++), c += re(a, r, i, s, o);
+		if (C(e)) for (var u = 0; u < e.length; u++) a = e[u], s = l + ne(a, u), c += A(a, r, i, s, o);
+		else if (u = h(e), typeof u == "function") for (e = u.call(e), u = 0; !(a = e.next()).done;) a = a.value, s = l + ne(a, u++), c += A(a, r, i, s, o);
 		else if (s === "object") {
-			if (typeof e.then == "function") return re(A(e), r, i, a, o);
+			if (typeof e.then == "function") return A(re(e), r, i, a, o);
 			throw r = String(e), Error("Objects are not valid as a React child (found: " + (r === "[object Object]" ? "object with keys {" + Object.keys(e).join(", ") + "}" : r) + "). If you meant to render a collection of children, use an array instead.");
 		}
 		return c;
@@ -5588,7 +5756,7 @@ var b = /* @__PURE__ */ o(((e) => {
 	function j(e, t, n) {
 		if (e == null) return e;
 		var r = [], i = 0;
-		return re(e, r, "", "", function(e) {
+		return A(e, r, "", "", function(e) {
 			return t.call(n, e, i++);
 		}), r;
 	}
@@ -6278,7 +6446,7 @@ var b = /* @__PURE__ */ o(((e) => {
 		}
 		return null;
 	}
-	var E = Object.assign, D = Symbol.for("react.element"), te = Symbol.for("react.transitional.element"), O = Symbol.for("react.portal"), k = Symbol.for("react.fragment"), ne = Symbol.for("react.strict_mode"), A = Symbol.for("react.profiler"), re = Symbol.for("react.consumer"), j = Symbol.for("react.context"), ie = Symbol.for("react.forward_ref"), ae = Symbol.for("react.suspense"), oe = Symbol.for("react.suspense_list"), se = Symbol.for("react.memo"), ce = Symbol.for("react.lazy"), le = Symbol.for("react.activity"), ue = Symbol.for("react.legacy_hidden"), de = Symbol.for("react.memo_cache_sentinel"), fe = Symbol.for("react.view_transition"), pe = Symbol.for("react.recoverable"), me = Symbol.iterator;
+	var E = Object.assign, D = Symbol.for("react.element"), te = Symbol.for("react.transitional.element"), O = Symbol.for("react.portal"), k = Symbol.for("react.fragment"), ne = Symbol.for("react.strict_mode"), re = Symbol.for("react.profiler"), A = Symbol.for("react.consumer"), j = Symbol.for("react.context"), ie = Symbol.for("react.forward_ref"), ae = Symbol.for("react.suspense"), oe = Symbol.for("react.suspense_list"), se = Symbol.for("react.memo"), ce = Symbol.for("react.lazy"), le = Symbol.for("react.activity"), ue = Symbol.for("react.legacy_hidden"), de = Symbol.for("react.memo_cache_sentinel"), fe = Symbol.for("react.view_transition"), pe = Symbol.for("react.recoverable"), me = Symbol.iterator;
 	function he(e) {
 		return typeof e != "object" || !e ? null : (e = me && e[me] || e["@@iterator"], typeof e == "function" ? e : null);
 	}
@@ -6289,7 +6457,7 @@ var b = /* @__PURE__ */ o(((e) => {
 		if (typeof e == "string") return e;
 		switch (e) {
 			case k: return "Fragment";
-			case A: return "Profiler";
+			case re: return "Profiler";
 			case ne: return "StrictMode";
 			case ae: return "Suspense";
 			case oe: return "SuspenseList";
@@ -6299,7 +6467,7 @@ var b = /* @__PURE__ */ o(((e) => {
 		if (typeof e == "object") switch (e.$$typeof) {
 			case O: return "Portal";
 			case j: return e.displayName || "Context";
-			case re: return (e._context.displayName || "Context") + ".Consumer";
+			case A: return (e._context.displayName || "Context") + ".Consumer";
 			case ie:
 				var t = e.render;
 				return e = e.displayName, e ||= (e = t.displayName || t.name || "", e === "" ? "ForwardRef" : "ForwardRef(" + e + ")"), e;
@@ -6317,19 +6485,19 @@ var b = /* @__PURE__ */ o(((e) => {
 		data: null,
 		method: null,
 		action: null
-	}, P = [], F = -1;
-	function be(e) {
+	}, be = [], xe = -1;
+	function P(e) {
 		return { current: e };
 	}
-	function I(e) {
-		0 > F || (e.current = P[F], P[F] = null, F--);
+	function Se(e) {
+		0 > xe || (e.current = be[xe], be[xe] = null, xe--);
 	}
-	function L(e, t) {
-		F++, P[F] = e.current, e.current = t;
+	function F(e, t) {
+		xe++, be[xe] = e.current, e.current = t;
 	}
-	var xe = be(null), R = be(null), Se = be(null), Ce = be(null);
-	function we(e, t) {
-		switch (L(Se, t), L(R, e), L(xe, null), t.nodeType) {
+	var I = P(null), Ce = P(null), we = P(null), Te = P(null);
+	function Ee(e, t) {
+		switch (F(we, t), F(Ce, e), F(I, null), t.nodeType) {
 			case 9:
 			case 11:
 				e = (e = t.documentElement) && (e = e.namespaceURI) ? up(e) : 0;
@@ -6345,29 +6513,29 @@ var b = /* @__PURE__ */ o(((e) => {
 				default: e = 0;
 			}
 		}
-		I(xe), L(xe, e);
+		Se(I), F(I, e);
 	}
-	function Te() {
-		I(xe), I(R), I(Se);
+	function De() {
+		Se(I), Se(Ce), Se(we);
 	}
-	function Ee(e) {
+	function Oe(e) {
 		var t = e.memoizedState;
-		t !== null && (sh._currentValue = t.memoizedState, L(Ce, e)), t = xe.current;
+		t !== null && (sh._currentValue = t.memoizedState, F(Te, e)), t = I.current;
 		var n = dp(t, e.type);
-		t !== n && (L(R, e), L(xe, n));
+		t !== n && (F(Ce, e), F(I, n));
 	}
-	function De(e) {
-		R.current === e && (I(xe), I(R)), Ce.current === e && (I(Ce), sh._currentValue = ye);
+	function ke(e) {
+		Ce.current === e && (Se(I), Se(Ce)), Te.current === e && (Se(Te), sh._currentValue = ye);
 	}
-	var Oe, ke;
-	function Ae(e) {
-		if (Oe === void 0) try {
+	var L, Ae;
+	function R(e) {
+		if (L === void 0) try {
 			throw Error();
 		} catch (e) {
 			var t = e.stack.trim().match(/\n( *(at )?)/);
-			Oe = t && t[1] || "", ke = -1 < e.stack.indexOf("\n    at") ? " (<anonymous>)" : -1 < e.stack.indexOf("@") ? "@unknown:0:0" : "";
+			L = t && t[1] || "", Ae = -1 < e.stack.indexOf("\n    at") ? " (<anonymous>)" : -1 < e.stack.indexOf("@") ? "@unknown:0:0" : "";
 		}
-		return "\n" + Oe + e + ke;
+		return "\n" + L + e + Ae;
 	}
 	var z = !1;
 	function je(e, t) {
@@ -6445,22 +6613,22 @@ var b = /* @__PURE__ */ o(((e) => {
 		} finally {
 			z = !1, Error.prepareStackTrace = n;
 		}
-		return (n = e ? e.displayName || e.name : "") ? Ae(n) : "";
+		return (n = e ? e.displayName || e.name : "") ? R(n) : "";
 	}
 	function Me(e, t) {
 		switch (e.tag) {
 			case 26:
 			case 27:
-			case 5: return Ae(e.type);
-			case 16: return Ae("Lazy");
-			case 13: return e.child !== t && t !== null ? Ae("Suspense Fallback") : Ae("Suspense");
-			case 19: return Ae("SuspenseList");
+			case 5: return R(e.type);
+			case 16: return R("Lazy");
+			case 13: return e.child !== t && t !== null ? R("Suspense Fallback") : R("Suspense");
+			case 19: return R("SuspenseList");
 			case 0:
 			case 15: return je(e.type, !1);
 			case 11: return je(e.type.render, !1);
 			case 1: return je(e.type, !0);
-			case 31: return Ae("Activity");
-			case 30: return Ae("ViewTransition");
+			case 31: return R("Activity");
+			case 30: return R("ViewTransition");
 			default: return "";
 		}
 	}
@@ -6580,11 +6748,11 @@ var b = /* @__PURE__ */ o(((e) => {
 			default: return -1;
 		}
 	}
-	function lt() {
+	function B() {
 		var e = rt;
 		return rt <<= 1, !(rt & 62914560) && (rt = 4194304), e;
 	}
-	function B(e) {
+	function lt(e) {
 		for (var t = [], n = 0; 31 > n; n++) t.push(e);
 		return t;
 	}
@@ -7095,7 +7263,7 @@ var b = /* @__PURE__ */ o(((e) => {
 		En = !1;
 	}
 	var On = null, kn = null, An = null;
-	function jn() {
+	function H() {
 		if (An) return An;
 		var e, t = kn, n = t.length, r, i = "value" in On ? On.value : On.textContent, a = i.length;
 		for (e = 0; e < n && t[e] === i[e]; e++);
@@ -7103,7 +7271,7 @@ var b = /* @__PURE__ */ o(((e) => {
 		for (r = 1; r <= o && t[n - r] === i[a - r]; r++);
 		return An = i.slice(e, 1 < r ? 1 - r : void 0);
 	}
-	function H(e) {
+	function jn(e) {
 		var t = e.keyCode;
 		return "charCode" in e ? (e = e.charCode, e === 0 && t === 13 && (e = 13)) : e = t, e === 10 && (e = 13), 32 <= e || e === 13 ? e : 0;
 	}
@@ -7242,7 +7410,7 @@ var b = /* @__PURE__ */ o(((e) => {
 				var t = Yn[e.key] || e.key;
 				if (t !== "Unidentified") return t;
 			}
-			return e.type === "keypress" ? (e = H(e), e === 13 ? "Enter" : String.fromCharCode(e)) : e.type === "keydown" || e.type === "keyup" ? Xn[e.keyCode] || "Unidentified" : "";
+			return e.type === "keypress" ? (e = jn(e), e === 13 ? "Enter" : String.fromCharCode(e)) : e.type === "keydown" || e.type === "keyup" ? Xn[e.keyCode] || "Unidentified" : "";
 		},
 		code: 0,
 		location: 0,
@@ -7254,13 +7422,13 @@ var b = /* @__PURE__ */ o(((e) => {
 		locale: 0,
 		getModifierState: $n,
 		charCode: function(e) {
-			return e.type === "keypress" ? H(e) : 0;
+			return e.type === "keypress" ? jn(e) : 0;
 		},
 		keyCode: function(e) {
 			return e.type === "keydown" || e.type === "keyup" ? e.keyCode : 0;
 		},
 		which: function(e) {
-			return e.type === "keypress" ? H(e) : e.type === "keydown" || e.type === "keyup" ? e.keyCode : 0;
+			return e.type === "keypress" ? jn(e) : e.type === "keydown" || e.type === "keyup" ? e.keyCode : 0;
 		}
 	})), tr = Pn(E({}, Hn, {
 		pointerId: 0,
@@ -7330,7 +7498,7 @@ var b = /* @__PURE__ */ o(((e) => {
 		}
 	}
 	function vr(e, t) {
-		if (gr) return e === "compositionend" || !cr && mr(e, t) ? (e = jn(), An = kn = On = null, gr = !1, e) : null;
+		if (gr) return e === "compositionend" || !cr && mr(e, t) ? (e = H(), An = kn = On = null, gr = !1, e) : null;
 		switch (e) {
 			case "paste": return null;
 			case "keypress":
@@ -7631,14 +7799,14 @@ var b = /* @__PURE__ */ o(((e) => {
 	function Ni(e, t, n, r, a, o) {
 		var s = 0;
 		if (r = e, typeof r == "function") Ai(r) && (s = 1);
-		else if (typeof r == "string") s = qm(e, n, xe.current) ? 26 : e === "html" || e === "head" || e === "body" ? 27 : 5;
+		else if (typeof r == "string") s = qm(e, n, I.current) ? 26 : e === "html" || e === "head" || e === "body" ? 27 : 5;
 		else a: switch (r) {
 			case le: return e = ki(31, n, t, a), e.elementType = le, e.lanes = o, e;
 			case k: return Pi(n.children, a, o, t);
 			case ne:
 				s = 8, a |= 24;
 				break;
-			case A: return e = ki(12, n, t, a | 2), e.elementType = A, e.lanes = o, e;
+			case re: return e = ki(12, n, t, a | 2), e.elementType = re, e.lanes = o, e;
 			case ae: return e = ki(13, n, t, a), e.elementType = ae, e.lanes = o, e;
 			case oe: return e = ki(19, n, t, a), e.elementType = oe, e.lanes = o, e;
 			case ue:
@@ -7653,7 +7821,7 @@ var b = /* @__PURE__ */ o(((e) => {
 					case j:
 						s = 10;
 						break a;
-					case re:
+					case A:
 						s = 9;
 						break a;
 					case ie:
@@ -7806,12 +7974,12 @@ var b = /* @__PURE__ */ o(((e) => {
 	function da(e) {
 		na === null ? na = [e] : na.push(e);
 	}
-	var fa = be(null), pa = null, ma = null;
+	var fa = P(null), pa = null, ma = null;
 	function ha(e, t, n) {
-		L(fa, t._currentValue), t._currentValue = n;
+		F(fa, t._currentValue), t._currentValue = n;
 	}
 	function ga(e) {
-		e._currentValue = fa.current, I(fa);
+		e._currentValue = fa.current, Se(fa);
 	}
 	function _a(e, t, n) {
 		for (; e !== null;) {
@@ -7869,7 +8037,7 @@ var b = /* @__PURE__ */ o(((e) => {
 					var c = a.type;
 					Rr(a.pendingProps.value, s.value) || (e === null ? e = [c] : e.push(c));
 				}
-			} else if (a === Ce.current) {
+			} else if (a === Te.current) {
 				if (s = a.alternate, s === null) throw Error(i(387));
 				s.memoizedState.memoizedState !== a.memoizedState.memoizedState && (e === null ? e = [sh] : e.push(sh));
 			}
@@ -8007,13 +8175,13 @@ var b = /* @__PURE__ */ o(((e) => {
 		}
 		Va !== null && Va(e, t);
 	};
-	var Ha = be(null);
+	var Ha = P(null);
 	function Ua() {
 		var e = Ha.current;
 		return e === null ? $u.pooledCache : e;
 	}
 	function Wa(e, t) {
-		t === null ? L(Ha, Ha.current) : L(Ha, t.pool);
+		t === null ? F(Ha, Ha.current) : F(Ha, t.pool);
 	}
 	function Ga() {
 		var e = Ua();
@@ -8422,39 +8590,39 @@ var b = /* @__PURE__ */ o(((e) => {
 		var n = e.callbacks;
 		if (n !== null) for (e.callbacks = null, e = 0; e < n.length; e++) xo(n[e], t);
 	}
-	var Co = be(null), wo = be(0);
+	var Co = P(null), wo = P(0);
 	function To(e, t) {
-		e = id, L(wo, e), L(Co, t), id = e | t.baseLanes;
+		e = id, F(wo, e), F(Co, t), id = e | t.baseLanes;
 	}
 	function Eo() {
-		L(wo, id), L(Co, Co.current);
+		F(wo, id), F(Co, Co.current);
 	}
 	function Do() {
-		id = wo.current, I(Co), I(wo);
+		id = wo.current, Se(Co), Se(wo);
 	}
-	var Oo = be(null), ko = null;
+	var Oo = P(null), ko = null;
 	function Ao(e) {
 		var t = e.alternate;
-		L(Fo, Fo.current & 1), L(Oo, e), ko === null && (t === null || Co.current !== null || t.memoizedState !== null) && (ko = e);
+		F(Fo, Fo.current & 1), F(Oo, e), ko === null && (t === null || Co.current !== null || t.memoizedState !== null) && (ko = e);
 	}
 	function jo(e) {
-		L(Fo, Fo.current), L(Oo, e), ko === null && (ko = e);
+		F(Fo, Fo.current), F(Oo, e), ko === null && (ko = e);
 	}
 	function Mo(e) {
-		e.tag === 22 ? (L(Fo, Fo.current), L(Oo, e), ko === null && (ko = e)) : No();
+		e.tag === 22 ? (F(Fo, Fo.current), F(Oo, e), ko === null && (ko = e)) : No();
 	}
 	function No() {
-		L(Fo, Fo.current), L(Oo, Oo.current);
+		F(Fo, Fo.current), F(Oo, Oo.current);
 	}
 	function Po(e) {
-		I(Oo), ko === e && (ko = null), I(Fo);
+		Se(Oo), ko === e && (ko = null), Se(Fo);
 	}
-	var Fo = be(0);
+	var Fo = P(0);
 	function Io(e, t) {
-		L(Oo, Oo.current), L(Fo, t);
+		F(Oo, Oo.current), F(Fo, t);
 	}
 	function Lo(e) {
-		I(Fo), I(Oo), ko === e && (ko = null);
+		Se(Fo), Se(Oo), ko === e && (ko = null);
 	}
 	function Ro(e) {
 		for (var t = e; t !== null;) {
@@ -9814,14 +9982,14 @@ var b = /* @__PURE__ */ o(((e) => {
 	function ll(e, t, n) {
 		switch (t.tag) {
 			case 3:
-				we(t, t.stateNode.containerInfo), ha(t, Oa, e.memoizedState.cache), la();
+				Ee(t, t.stateNode.containerInfo), ha(t, Oa, e.memoizedState.cache), la();
 				break;
 			case 27:
 			case 5:
-				Ee(t);
+				Oe(t);
 				break;
 			case 4:
-				we(t, t.stateNode.containerInfo);
+				Ee(t, t.stateNode.containerInfo);
 				break;
 			case 10:
 				ha(t, t.type, t.memoizedProps.value);
@@ -9889,7 +10057,7 @@ var b = /* @__PURE__ */ o(((e) => {
 			case 1: return r = t.type, a = bc(r, t.pendingProps), Gc(e, t, r, a, n);
 			case 3:
 				a: {
-					if (we(t, t.stateNode.containerInfo), e === null) throw Error(i(387));
+					if (Ee(t, t.stateNode.containerInfo), e === null) throw Error(i(387));
 					r = t.pendingProps;
 					var o = t.memoizedState;
 					a = o.element, po(e, t), bo(t, r, null, n);
@@ -9924,12 +10092,12 @@ var b = /* @__PURE__ */ o(((e) => {
 					t = t.child;
 				}
 				return t;
-			case 26: return Hc(e, t), e === null ? (n = Nm(t.type, null, t.pendingProps, null)) ? t.memoizedState = n : U || (t.stateNode = fp(t.type, t.pendingProps, Se.current, t)) : t.memoizedState = Nm(t.type, e.memoizedProps, t.pendingProps, e.memoizedState), null;
-			case 27: return Ee(t), e === null && U && (r = t.stateNode = hm(t.type, t.pendingProps, Se.current), ea = t, ra = !0, a = ta, Sp(t.type) ? (um = a, ta = lm(r.firstChild)) : ta = a), Mc(e, t, t.pendingProps.children, n), Hc(e, t), e === null && (t.flags |= 4194304), t.child;
-			case 5: return e === null && U && ((a = r = ta) && (r = rm(r, t.type, t.pendingProps, ra), r === null ? a = !1 : (t.stateNode = r, ea = t, ta = lm(r.firstChild), ra = !1, a = !0)), a || aa(t)), Ee(t), a = t.type, o = t.pendingProps, s = e === null ? null : e.memoizedProps, r = o.children, pp(a, o) ? r = null : s !== null && pp(a, s) && (t.flags |= 32), t.memoizedState !== null && (a = Xo(e, t, $o, null, null, n), sh._currentValue = a), Hc(e, t), Mc(e, t, r, n), t.child;
+			case 26: return Hc(e, t), e === null ? (n = Nm(t.type, null, t.pendingProps, null)) ? t.memoizedState = n : U || (t.stateNode = fp(t.type, t.pendingProps, we.current, t)) : t.memoizedState = Nm(t.type, e.memoizedProps, t.pendingProps, e.memoizedState), null;
+			case 27: return Oe(t), e === null && U && (r = t.stateNode = hm(t.type, t.pendingProps, we.current), ea = t, ra = !0, a = ta, Sp(t.type) ? (um = a, ta = lm(r.firstChild)) : ta = a), Mc(e, t, t.pendingProps.children, n), Hc(e, t), e === null && (t.flags |= 4194304), t.child;
+			case 5: return e === null && U && ((a = r = ta) && (r = rm(r, t.type, t.pendingProps, ra), r === null ? a = !1 : (t.stateNode = r, ea = t, ta = lm(r.firstChild), ra = !1, a = !0)), a || aa(t)), Oe(t), a = t.type, o = t.pendingProps, s = e === null ? null : e.memoizedProps, r = o.children, pp(a, o) ? r = null : s !== null && pp(a, s) && (t.flags |= 32), t.memoizedState !== null && (a = Xo(e, t, $o, null, null, n), sh._currentValue = a), Hc(e, t), Mc(e, t, r, n), t.child;
 			case 6: return e === null && U && ((e = n = ta) && (n = im(n, t.pendingProps, ra), n === null ? e = !1 : (t.stateNode = n, ea = t, ta = null, e = !0)), e || aa(t)), null;
 			case 13: return Xc(e, t, n);
-			case 4: return we(t, t.stateNode.containerInfo), r = t.pendingProps, e === null ? t.child = co(t, null, r, n) : Mc(e, t, r, n), t.child;
+			case 4: return Ee(t, t.stateNode.containerInfo), r = t.pendingProps, e === null ? t.child = co(t, null, r, n) : Mc(e, t, r, n), t.child;
 			case 11: return Nc(e, t, t.type, t.pendingProps, n);
 			case 7: return r = t.pendingProps, Hc(e, t), Mc(e, t, r, n), t.child;
 			case 8: return Mc(e, t, t.pendingProps.children, n), t.child;
@@ -9979,7 +10147,7 @@ var b = /* @__PURE__ */ o(((e) => {
 		}
 	}
 	function ml(e, t) {
-		t !== null && (e.flags |= 4), e.flags & 16384 && (t = e.tag === 22 ? 536870912 : lt(), e.lanes |= t, ud |= t);
+		t !== null && (e.flags |= 4), e.flags & 16384 && (t = e.tag === 22 ? 536870912 : B(), e.lanes |= t, ud |= t);
 	}
 	function hl(e, t) {
 		if (!U) switch (e.tailMode) {
@@ -10012,30 +10180,30 @@ var b = /* @__PURE__ */ o(((e) => {
 			case 9:
 			case 14: return gl(t), null;
 			case 1: return gl(t), null;
-			case 3: return n = t.stateNode, r = null, e !== null && (r = e.memoizedState.cache), t.memoizedState.cache !== r && (t.flags |= 2048), ga(Oa), Te(), n.pendingContext && (n.context = n.pendingContext, n.pendingContext = null), (e === null || e.child === null) && (ca(t) ? dl(t) : e === null || e.memoizedState.isDehydrated && !(t.flags & 256) || (t.flags |= 1024, ua())), gl(t), null;
+			case 3: return n = t.stateNode, r = null, e !== null && (r = e.memoizedState.cache), t.memoizedState.cache !== r && (t.flags |= 2048), ga(Oa), De(), n.pendingContext && (n.context = n.pendingContext, n.pendingContext = null), (e === null || e.child === null) && (ca(t) ? dl(t) : e === null || e.memoizedState.isDehydrated && !(t.flags & 256) || (t.flags |= 1024, ua())), gl(t), null;
 			case 26:
 				var a = t.type, o = t.memoizedState;
 				return e === null ? (dl(t), o === null ? (gl(t), fl(t, a, null, r, n)) : (gl(t), pl(t, o))) : o ? o === e.memoizedState ? (gl(t), t.flags &= -16777217) : (dl(t), gl(t), pl(t, o)) : (e = e.memoizedProps, e !== r && dl(t), gl(t), fl(t, a, e, r, n)), null;
 			case 27:
-				if (De(t), n = Se.current, a = t.type, e !== null && t.stateNode != null) e.memoizedProps !== r && dl(t);
+				if (ke(t), n = we.current, a = t.type, e !== null && t.stateNode != null) e.memoizedProps !== r && dl(t);
 				else {
 					if (!r) {
 						if (t.stateNode === null) throw Error(i(166));
 						return gl(t), t.subtreeFlags &= -33554433, null;
 					}
-					e = xe.current, ca(t) ? oa(t, e) : (e = hm(a, r, n), t.stateNode = e, dl(t));
+					e = I.current, ca(t) ? oa(t, e) : (e = hm(a, r, n), t.stateNode = e, dl(t));
 				}
 				return gl(t), t.subtreeFlags &= -33554433, null;
 			case 5:
-				if (De(t), a = t.type, e !== null && t.stateNode != null) e.memoizedProps !== r && dl(t);
+				if (ke(t), a = t.type, e !== null && t.stateNode != null) e.memoizedProps !== r && dl(t);
 				else {
 					if (!r) {
 						if (t.stateNode === null) throw Error(i(166));
 						return gl(t), t.subtreeFlags &= -33554433, null;
 					}
-					if (o = xe.current, ca(t)) oa(t, o);
+					if (o = I.current, ca(t)) oa(t, o);
 					else {
-						var s = lp(Se.current);
+						var s = lp(we.current);
 						switch (o) {
 							case 1:
 								o = s.createElementNS("http://www.w3.org/2000/svg", a);
@@ -10094,7 +10262,7 @@ var b = /* @__PURE__ */ o(((e) => {
 				if (e && t.stateNode != null) e.memoizedProps !== r && dl(t);
 				else {
 					if (typeof r != "string" && t.stateNode === null) throw Error(i(166));
-					if (e = Se.current, ca(t)) {
+					if (e = we.current, ca(t)) {
 						if (e = t.stateNode, n = t.memoizedProps, r = null, a = ea, a !== null) switch (a.tag) {
 							case 27:
 							case 5: r = a.memoizedProps;
@@ -10130,7 +10298,7 @@ var b = /* @__PURE__ */ o(((e) => {
 					if (!a) return t.flags & 256 ? (Po(t), t) : (Po(t), null);
 				}
 				return Po(t), t.flags & 128 ? (t.lanes = n, t) : (n = r !== null, e = e !== null && e.memoizedState !== null, n && (r = t.child, a = null, r.alternate !== null && r.alternate.memoizedState !== null && r.alternate.memoizedState.cachePool !== null && (a = r.alternate.memoizedState.cachePool.pool), o = null, r.memoizedState !== null && r.memoizedState.cachePool !== null && (o = r.memoizedState.cachePool.pool), o !== a && (r.flags |= 2048)), n !== e && n && (t.child.flags |= 8192), ml(t, t.updateQueue), gl(t), null);
-			case 4: return Te(), e === null && Wf(t.stateNode.containerInfo), t.flags |= 67108864, gl(t), null;
+			case 4: return De(), e === null && Wf(t.stateNode.containerInfo), t.flags |= 67108864, gl(t), null;
 			case 10: return ga(t.type), gl(t), null;
 			case 19:
 				if (Lo(t), r = t.memoizedState, r === null) return gl(t), null;
@@ -10166,11 +10334,11 @@ var b = /* @__PURE__ */ o(((e) => {
 						}
 						n = !0;
 					}
-					return r.rendering = e, r.tail = e.sibling, r.renderingStartTime = ze(), e.sibling = null, o = Fo.current, o = a ? o & 1 | 2 : o & 1, r.tailMode === "visible" || r.tailMode === "collapsed" || !n || U ? Io(t, o) : (n = o, L(Oo, t), L(Fo, n), ko === null && (ko = t)), U && Yi(t, r.treeForkCount), e;
+					return r.rendering = e, r.tail = e.sibling, r.renderingStartTime = ze(), e.sibling = null, o = Fo.current, o = a ? o & 1 | 2 : o & 1, r.tailMode === "visible" || r.tailMode === "collapsed" || !n || U ? Io(t, o) : (n = o, F(Oo, t), F(Fo, n), ko === null && (ko = t)), U && Yi(t, r.treeForkCount), e;
 				}
 				return gl(t), null;
 			case 22:
-			case 23: return Po(t), Do(), r = t.memoizedState !== null, e === null ? r && (t.flags |= 8192) : e.memoizedState !== null !== r && (t.flags |= 8192), r ? n & 536870912 && !(t.flags & 128) && (gl(t), t.subtreeFlags & 6 && (t.flags |= 8192)) : gl(t), n = t.updateQueue, n !== null && ml(t, n.retryQueue), n = null, e !== null && e.memoizedState !== null && e.memoizedState.cachePool !== null && (n = e.memoizedState.cachePool.pool), r = null, t.memoizedState !== null && t.memoizedState.cachePool !== null && (r = t.memoizedState.cachePool.pool), r !== n && (t.flags |= 2048), e !== null && I(Ha), null;
+			case 23: return Po(t), Do(), r = t.memoizedState !== null, e === null ? r && (t.flags |= 8192) : e.memoizedState !== null !== r && (t.flags |= 8192), r ? n & 536870912 && !(t.flags & 128) && (gl(t), t.subtreeFlags & 6 && (t.flags |= 8192)) : gl(t), n = t.updateQueue, n !== null && ml(t, n.retryQueue), n = null, e !== null && e.memoizedState !== null && e.memoizedState.cachePool !== null && (n = e.memoizedState.cachePool.pool), r = null, t.memoizedState !== null && t.memoizedState.cachePool !== null && (r = t.memoizedState.cachePool.pool), r !== n && (t.flags |= 2048), e !== null && Se(Ha), null;
 			case 24: return n = null, e !== null && (n = e.memoizedState.cache), t.memoizedState.cache !== n && (t.flags |= 2048), ga(Oa), gl(t), null;
 			case 25: return null;
 			case 30: return t.flags |= 33554432, gl(t), null;
@@ -10180,10 +10348,10 @@ var b = /* @__PURE__ */ o(((e) => {
 	function vl(e, t) {
 		switch (Qi(t), t.tag) {
 			case 1: return e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
-			case 3: return ga(Oa), Te(), e = t.flags, e & 65536 && !(e & 128) ? (t.flags = e & -65537 | 128, t) : null;
+			case 3: return ga(Oa), De(), e = t.flags, e & 65536 && !(e & 128) ? (t.flags = e & -65537 | 128, t) : null;
 			case 26:
 			case 27:
-			case 5: return De(t), null;
+			case 5: return ke(t), null;
 			case 31:
 				if (t.memoizedState !== null) {
 					if (Po(t), t.alternate === null) throw Error(i(340));
@@ -10197,10 +10365,10 @@ var b = /* @__PURE__ */ o(((e) => {
 				}
 				return e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
 			case 19: return Lo(t), e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, e = t.memoizedState, e !== null && (e.rendering = null, e.tail = null), t.flags |= 4, t) : null;
-			case 4: return Te(), null;
+			case 4: return De(), null;
 			case 10: return ga(t.type), null;
 			case 22:
-			case 23: return Po(t), Do(), e !== null && I(Ha), e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
+			case 23: return Po(t), Do(), e !== null && Se(Ha), e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
 			case 24: return ga(Oa), null;
 			case 25: return null;
 			default: return null;
@@ -10209,15 +10377,15 @@ var b = /* @__PURE__ */ o(((e) => {
 	function yl(e, t) {
 		switch (Qi(t), t.tag) {
 			case 3:
-				ga(Oa), Te();
+				ga(Oa), De();
 				break;
 			case 26:
 			case 27:
 			case 5:
-				De(t);
+				ke(t);
 				break;
 			case 4:
-				Te();
+				De();
 				break;
 			case 31:
 				t.memoizedState !== null && Po(t);
@@ -10233,7 +10401,7 @@ var b = /* @__PURE__ */ o(((e) => {
 				break;
 			case 22:
 			case 23:
-				Po(t), Do(), e !== null && I(Ha);
+				Po(t), Do(), e !== null && Se(Ha);
 				break;
 			case 24: ga(Oa);
 		}
@@ -12035,7 +12203,7 @@ var b = /* @__PURE__ */ o(((e) => {
 		r !== null && r.delete(t), e.pingedLanes |= e.suspendedLanes & n, e.warmLanes &= ~n, $u === e && (Y & n) === n && (ad === 4 || ad === 3 && (Y & 62914560) === Y && 300 > ze() - md ? q & 2 ? cd |= n : Vd(e, 0) : cd |= n, ud === Y && (ud = 0)), Ef(e);
 	}
 	function gf(e, t) {
-		t === 0 && (t = lt()), e = wi(e, t), e !== null && (ut(e, t), Ef(e));
+		t === 0 && (t = B()), e = wi(e, t), e !== null && (ut(e, t), Ef(e));
 	}
 	function _f(e) {
 		var t = e.memoizedState, n = 0;
@@ -12292,7 +12460,7 @@ var b = /* @__PURE__ */ o(((e) => {
 				if (c !== void 0) {
 					var l = In, u = e;
 					switch (e) {
-						case "keypress": if (H(n) === 0) break a;
+						case "keypress": if (jn(n) === 0) break a;
 						case "keydown":
 						case "keyup":
 							l = er;
@@ -12438,7 +12606,7 @@ var b = /* @__PURE__ */ o(((e) => {
 					b = void 0;
 				}
 				else gr ? mr(e, n) && (b = "onCompositionEnd") : e === "keydown" && n.keyCode === 229 && (b = "onCompositionStart");
-				b && (dr && n.locale !== "ko" && (gr || b !== "onCompositionStart" ? b === "onCompositionEnd" && gr && (y = jn()) : (On = i, kn = "value" in On ? On.value : On.textContent, gr = !0)), v = Jf(r, b), 0 < v.length && (b = new Jn(b, e, null, n, i), s.push({
+				b && (dr && n.locale !== "ko" && (gr || b !== "onCompositionStart" ? b === "onCompositionEnd" && gr && (y = H()) : (On = i, kn = "value" in On ? On.value : On.textContent, gr = !0)), v = Jf(r, b), 0 < v.length && (b = new Jn(b, e, null, n, i), s.push({
 					event: b,
 					listeners: v
 				}), y ? b.data = y : (y = hr(n), y !== null && (b.data = y)))), (y = ur ? _r(e, n) : vr(e, n)) && (b = Jf(r, "onBeforeInput"), 0 < b.length && (v = new Jn("onBeforeInput", "beforeinput", null, n, i), s.push({
@@ -13833,7 +14001,7 @@ var b = /* @__PURE__ */ o(((e) => {
 		}
 	}
 	function Nm(e, t, n, r) {
-		var a = (a = Se.current) ? bm(a) : null;
+		var a = (a = we.current) ? bm(a) : null;
 		if (!a) throw Error(i(446));
 		switch (e) {
 			case "meta":
@@ -14094,7 +14262,7 @@ var b = /* @__PURE__ */ o(((e) => {
 		_threadCount: 0
 	};
 	function ch(e, t, n, r, i, a, o, s, c) {
-		this.tag = 1, this.containerInfo = e, this.pingCache = this.current = this.pendingChildren = null, this.timeoutHandle = -1, this.callbackNode = this.next = this.pendingContext = this.context = this.cancelPendingCommit = null, this.callbackPriority = 0, this.expirationTimes = B(-1), this.entangledLanes = this.shellSuspendCounter = this.errorRecoveryDisabledLanes = this.expiredLanes = this.warmLanes = this.pingedLanes = this.suspendedLanes = this.pendingLanes = 0, this.entanglements = B(0), this.hiddenUpdates = B(null), this.identifierPrefix = r, this.onUncaughtError = i, this.onCaughtError = a, this.onRecoverableError = o, this.pooledCache = null, this.pooledCacheLanes = 0, this.formState = c, this.transitionTypes = null, this.incompleteTransitions = /* @__PURE__ */ new Map();
+		this.tag = 1, this.containerInfo = e, this.pingCache = this.current = this.pendingChildren = null, this.timeoutHandle = -1, this.callbackNode = this.next = this.pendingContext = this.context = this.cancelPendingCommit = null, this.callbackPriority = 0, this.expirationTimes = lt(-1), this.entangledLanes = this.shellSuspendCounter = this.errorRecoveryDisabledLanes = this.expiredLanes = this.warmLanes = this.pingedLanes = this.suspendedLanes = this.pendingLanes = 0, this.entanglements = lt(0), this.hiddenUpdates = lt(null), this.identifierPrefix = r, this.onUncaughtError = i, this.onCaughtError = a, this.onRecoverableError = o, this.pooledCache = null, this.pooledCacheLanes = 0, this.formState = c, this.transitionTypes = null, this.incompleteTransitions = /* @__PURE__ */ new Map();
 	}
 	function lh(e, t, n, r, i, a, o, s, c, l, u, d) {
 		return e = new ch(e, t, n, o, c, l, u, d, s), t = 1, !0 === a && (t |= 24), a = ki(3, null, null, t), e.current = a, a.stateNode = e, t = ka(), t.refCount++, e.pooledCache = t, t.refCount++, a.memoizedState = {
@@ -14527,7 +14695,7 @@ var b = /* @__PURE__ */ o(((e) => {
 		}
 	}
 	n(), t.exports = ee();
-})), D = /* @__PURE__ */ c(x(), 1), te = E(), O = ".react-grid-layout{transition:height .2s;position:relative}.react-grid-item{transition:left .2s,top .2s,width .2s,height .2s}.react-grid-item img{pointer-events:none;user-select:none}.react-grid-item.cssTransforms{transition-property:transform,width,height}.react-grid-item.resizing{z-index:1;will-change:width, height;transition:none}.react-grid-item.react-draggable-dragging{z-index:3;will-change:transform;transition:none}.react-grid-item.dropping{visibility:hidden}.react-grid-item.react-grid-placeholder{opacity:.2;z-index:2;user-select:none;background:red;transition-duration:.1s}.react-grid-item.react-grid-placeholder.placeholder-resizing{transition:none}.react-grid-item>.react-resizable-handle{opacity:0;width:20px;height:20px;position:absolute}.react-grid-item:hover>.react-resizable-handle{opacity:1}.react-grid-item>.react-resizable-handle:after{content:\"\";border-bottom:2px solid #0006;border-right:2px solid #0006;width:5px;height:5px;position:absolute;bottom:3px;right:3px}.react-resizable-hide>.react-resizable-handle{display:none}.react-grid-item>.react-resizable-handle.react-resizable-handle-sw{cursor:sw-resize;bottom:0;left:0;transform:rotate(90deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-se{cursor:se-resize;bottom:0;right:0}.react-grid-item>.react-resizable-handle.react-resizable-handle-nw{cursor:nw-resize;top:0;left:0;transform:rotate(180deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-ne{cursor:ne-resize;top:0;right:0;transform:rotate(270deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-w,.react-grid-item>.react-resizable-handle.react-resizable-handle-e{cursor:ew-resize;margin-top:-10px;top:50%}.react-grid-item>.react-resizable-handle.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-n,.react-grid-item>.react-resizable-handle.react-resizable-handle-s{cursor:ns-resize;margin-left:-10px;left:50%}.react-grid-item>.react-resizable-handle.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}", k = ".react-resizable{position:relative}.react-resizable-handle{box-sizing:border-box;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMDAwMDAiLz48L2c+PC9zdmc+);background-position:100% 100%;background-repeat:no-repeat;background-origin:content-box;width:20px;height:20px;padding:0 3px 3px 0;position:absolute}.react-resizable-handle-sw{cursor:sw-resize;bottom:0;left:0;transform:rotate(90deg)}.react-resizable-handle-se{cursor:se-resize;bottom:0;right:0}.react-resizable-handle-nw{cursor:nw-resize;top:0;left:0;transform:rotate(180deg)}.react-resizable-handle-ne{cursor:ne-resize;top:0;right:0;transform:rotate(270deg)}.react-resizable-handle-w,.react-resizable-handle-e{cursor:ew-resize;margin-top:-10px;top:50%}.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-resizable-handle-n,.react-resizable-handle-s{cursor:ns-resize;margin-left:-10px;left:50%}.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}", ne = "#widget-grid.grid{grid-template-columns:none!important;grid-auto-flow:initial!important;display:block!important}.argus-dashboard{min-height:100%}.argus-dashboard__toolbar{flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px;padding:12px 16px;display:flex}.argus-dashboard__toolbar button,.argus-widget__drag-handle,.argus-widget__options summary,.argus-widget__menu button{background:#ffffff14;border:1px solid #ffffff1f;border-radius:12px;padding:9px 13px;color:#fff!important;white-space:nowrap!important;hyphens:none!important;word-break:normal!important}.argus-btn-reset-dashboard{color:#f87171!important;background:#ef44441f!important;border:1px solid #ef444452!important;margin-left:14px!important}.argus-dashboard__toolbar button:focus-visible,.argus-widget__drag-handle:focus-visible,.argus-widget__options summary:focus-visible,.argus-widget__menu button:focus-visible{outline-offset:2px;outline:3px solid #76b7ff}.argus-dashboard__feedback{color:#b9d9ff;text-align:right;min-height:20px;padding:0 18px;font-size:12px}.argus-dashboard__visibility{flex-wrap:wrap;gap:6px;display:flex}.argus-dashboard-grid .react-grid-item{transition:transform .18s cubic-bezier(.2,.8,.2,1),width .18s cubic-bezier(.2,.8,.2,1),height .18s cubic-bezier(.2,.8,.2,1)}.argus-dashboard-grid .react-grid-item.react-draggable-dragging{z-index:100;opacity:.98;transition:none}.argus-dashboard-grid .react-grid-placeholder{background:linear-gradient(135deg,#5ea8ff33,#8468ff1f);border:2px solid #5ea8ffc7;border-radius:24px;box-shadow:inset 0 0 0 1px #ffffff14,0 12px 35px #0000002e}.argus-widget{border-radius:24px;width:100%;height:100%;position:relative;overflow:visible;box-shadow:0 14px 34px #0000002e,inset 0 1px #ffffff0f;border:1px solid var(--v2066-border,#ffffff14)!important;background:var(--v2066-glass,#ffffff0f)!important;-webkit-backdrop-filter:blur(24px)saturate(145%)!important}.argus-widget .panel{box-shadow:none!important;-webkit-backdrop-filter:none!important;background:0 0!important;border:none!important}.argus-widget__edit-header{align-items:center;gap:10px;padding:8px 12px;display:none}.argus-dashboard--editing .argus-widget__edit-header{display:flex}.argus-widget__edit-header>strong{text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;overflow:hidden}.argus-widget__drag-handle{cursor:grab;touch-action:none;width:44px;height:40px}.argus-widget__options{position:relative}.argus-widget__options summary{box-sizing:border-box;cursor:pointer;place-items:center;width:38px;height:38px;list-style:none;display:grid}.argus-widget__options summary::-webkit-details-marker{display:none}.argus-widget__menu{z-index:140;background:#0f1623f5;border:1px solid #ffffff24;border-radius:16px;gap:8px;min-width:210px;padding:12px;display:grid;position:absolute;top:44px;right:0;box-shadow:0 18px 46px #00000061}.argus-widget__menu>div{grid-template-columns:repeat(4,1fr);gap:5px;display:grid}.argus-widget__menu button{padding:7px}.argus-widget__menu button.active{background:#3478d4}.argus-widget__content{height:100%;overflow:visible}.argus-dashboard--editing .argus-widget__content{height:calc(100% - 56px)}.argus-widget__content>.panel{overscroll-behavior:contain!important;box-sizing:border-box!important;grid-area:auto!important;width:100%!important;height:100%!important;display:block!important;overflow:hidden auto!important}.argus-widget__content>.panel:has(#hero),.argus-widget__content>.panel:has(.hero),.argus-widget__content>.panel:has(#hero-profile-container),.argus-widget:has(#hero),.argus-widget:has(.hero),.argus-dashboard-grid .react-grid-item:has(#hero),.argus-dashboard-grid .react-grid-item:first-child{z-index:50!important;overflow:visible!important}#profile-dropdown.hero-profile-dropdown{z-index:999999!important;max-height:calc(100vh - 120px)!important;position:absolute!important;top:calc(100% + 12px)!important;right:0!important;overflow-y:auto!important}.argus-dashboard-grid .react-resizable-handle{background:#131925db;border:1px solid #ffffff2e;border-radius:10px;width:34px;height:34px;bottom:8px;right:8px;display:none!important}.argus-dashboard--editing .react-resizable-handle{display:block!important}.argus-dashboard--editing .react-resizable-handle:after{border-color:#9bc7ff;width:10px;height:10px;bottom:9px;right:9px}.alarm-configuration-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:16px;display:grid}@media (width<=760px){.alarm-configuration-grid{grid-template-columns:minmax(0,1fr)}.argus-dashboard__toolbar{justify-content:stretch}.argus-dashboard__toolbar>button{flex:1}.argus-widget__menu{position:fixed;inset:auto 16px 16px}}@media (prefers-reduced-motion:reduce){.argus-dashboard-grid .react-grid-item,.argus-dashboard-grid .react-resizable-handle{transition:none!important}}:host([argus-contrast=high]) .argus-widget,:host(.argus-contrast-high) .argus-widget{-webkit-backdrop-filter:blur(28px)saturate(130%)!important;background:linear-gradient(145deg,#0b101af2,#070a12f7)!important;border:1px solid #ffffff3d!important;box-shadow:0 16px 42px #000000a6,inset 0 1px #ffffff24!important}:host([argus-contrast=high]) .argus-widget strong,:host(.argus-contrast-high) .argus-widget strong,:host([argus-contrast=high]) .argus-widget .panel h1,:host(.argus-contrast-high) .argus-widget .panel h1,:host([argus-contrast=high]) .argus-widget .panel h2,:host(.argus-contrast-high) .argus-widget .panel h2,:host([argus-contrast=high]) .argus-widget .panel h3,:host(.argus-contrast-high) .argus-widget .panel h3,:host([argus-contrast=high]) .argus-widget .panel h4,:host(.argus-contrast-high) .argus-widget .panel h4,:host([argus-contrast=high]) .argus-widget .panel-title,:host(.argus-contrast-high) .argus-widget .panel-title,:host([argus-contrast=high]) .argus-widget .section-title,:host(.argus-contrast-high) .argus-widget .section-title,:host([argus-contrast=high]) .argus-widget .setting-label,:host(.argus-contrast-high) .argus-widget .setting-label{color:#fff!important;text-shadow:0 1px 2px #00000080!important}:host([argus-contrast=high]) .argus-widget p,:host(.argus-contrast-high) .argus-widget p,:host([argus-contrast=high]) .argus-widget small,:host(.argus-contrast-high) .argus-widget small,:host([argus-contrast=high]) .argus-widget .hint,:host(.argus-contrast-high) .argus-widget .hint,:host([argus-contrast=high]) .argus-widget .muted,:host(.argus-contrast-high) .argus-widget .muted,:host([argus-contrast=high]) .argus-widget .setting-help,:host(.argus-contrast-high) .argus-widget .setting-help,:host([argus-contrast=high]) .argus-widget .small,:host(.argus-contrast-high) .argus-widget .small{color:#cbd5e1!important;opacity:1!important}:host([argus-contrast=high]) .argus-dashboard__toolbar button,:host(.argus-contrast-high) .argus-dashboard__toolbar button,:host([argus-contrast=high]) .argus-widget__drag-handle,:host(.argus-contrast-high) .argus-widget__drag-handle,:host([argus-contrast=high]) .argus-widget__options summary,:host(.argus-contrast-high) .argus-widget__options summary,:host([argus-contrast=high]) .argus-widget__menu button,:host(.argus-contrast-high) .argus-widget__menu button{color:#fff!important;background:#ffffff1f!important;border:1px solid #ffffff42!important}:host([argus-contrast=high]) .argus-dashboard__feedback,:host(.argus-contrast-high) .argus-dashboard__feedback{color:#93c5fd!important;font-weight:600!important}:host([argus-contrast=high]) .argus-widget__menu,:host(.argus-contrast-high) .argus-widget__menu{background:#0a0e17fa!important;border:1px solid #ffffff40!important;box-shadow:0 20px 50px #0009!important}@media (prefers-contrast:more){.argus-widget{-webkit-backdrop-filter:blur(28px)saturate(130%)!important;background:linear-gradient(145deg,#0b101af2,#070a12f7)!important;border:1px solid #ffffff3d!important;box-shadow:0 16px 42px #000000a6,inset 0 1px #ffffff24!important}.argus-widget strong,.argus-widget .panel h1,.argus-widget .panel h2,.argus-widget .panel h3,.argus-widget .panel h4,.argus-widget .panel-title,.argus-widget .section-title,.argus-widget .setting-label{color:#fff!important;text-shadow:0 1px 2px #00000080!important}.argus-widget p,.argus-widget small,.argus-widget .hint,.argus-widget .muted,.argus-widget .setting-help,.argus-widget .small{color:#cbd5e1!important;opacity:1!important}.argus-dashboard__toolbar button,.argus-widget__drag-handle,.argus-widget__options summary,.argus-widget__menu button{color:#fff!important;background:#ffffff1f!important;border:1px solid #ffffff42!important}.argus-dashboard__toolbar button:focus-visible,.argus-widget__drag-handle:focus-visible,.argus-widget__options summary:focus-visible,.argus-widget__menu button:focus-visible{outline-offset:2px!important;outline:3px solid #60a5fa!important}.argus-dashboard__feedback{color:#93c5fd!important;font-weight:600!important}.argus-widget__menu{background:#0a0e17fa!important;border:1px solid #ffffff40!important;box-shadow:0 20px 50px #0009!important}}", A = ".argus-widget__content--virtual{min-height:0;padding:12px 14px;display:flex;overflow:auto}.argus-widget__content--virtual>section{width:100%;min-width:0}.argus-insights{color:var(--primary-text-color,#e7eaf0);flex-direction:column;gap:12px;font-size:12px;display:flex}.argus-insights__metrics{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;display:grid}.argus-insights__metrics>div{border:1px solid var(--divider-color,#ffffff1a);background:var(--secondary-background-color,#ffffff09);border-radius:12px;flex-direction:column;gap:4px;min-width:0;padding:10px;display:flex}.argus-insights__metrics strong{font-variant-numeric:tabular-nums;font-size:21px}.argus-insights__metrics span,.argus-insights__axis,.argus-insights__recent time{opacity:.68;font-size:10px}.argus-insights__chart-wrap{border:1px solid var(--divider-color,#ffffff1a);border-radius:12px;padding:10px 10px 5px}.argus-insights__section-title{justify-content:space-between;align-items:center;gap:8px;display:flex}.argus-insights__section-title button{background:var(--secondary-background-color,#ffffff14);color:inherit;cursor:pointer;border:0;border-radius:8px;padding:4px 9px;font-size:18px}.argus-insights__chart{width:100%;height:88px;margin-top:4px;display:block;overflow:visible}.argus-insights__chart rect{fill:var(--secondary-text-color,#64748b);opacity:.35}.argus-insights__chart rect.has-events{fill:var(--primary-color,#03a9f4);opacity:.9}.argus-insights__chart path{stroke:var(--divider-color,#ffffff29);stroke-width:1px}.argus-insights__axis{justify-content:space-between;display:flex}.argus-insights__status{text-transform:capitalize;border-radius:999px;padding:3px 8px;font-size:10px}.argus-insights__status--good{color:#80d889;background:#4caf502b}.argus-insights__status--warn{color:#ffc267;background:#ffa72629}.argus-insights__status--muted{opacity:.65}.argus-insights__issues{color:#ffc267;margin:0;padding-left:18px}.argus-insights__empty,.argus-insights__recent small{opacity:.7;margin:0}.argus-insights__recent{flex-direction:column;gap:6px;display:flex}.argus-insights__recent>div{border-top:1px solid var(--divider-color,#ffffff14);justify-content:space-between;gap:8px;padding-top:5px;display:flex}.argus-insights__recent>div>span{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.argus-floorplan{color:var(--primary-text-color,#e7eaf0);flex-direction:column;gap:10px;font-size:12px;display:flex}.argus-floorplan__editor{flex-direction:column;gap:8px;display:flex}.argus-floorplan__editor>label{align-items:center;gap:8px;display:flex}.argus-floorplan input[type=url],.argus-floorplan select{border:1px solid var(--divider-color,#ffffff29);background:var(--card-background-color,#20252d);min-width:0;color:inherit;border-radius:8px;padding:7px 9px}.argus-floorplan input[type=url]{flex:1}.argus-floorplan__add{gap:6px;display:flex}.argus-floorplan__add select{flex:1}.argus-floorplan button{background:var(--secondary-background-color,#ffffff1a);color:inherit;cursor:pointer;border:0;border-radius:8px;padding:6px 9px}.argus-floorplan button:disabled{opacity:.5;cursor:not-allowed}.argus-floorplan__map{background:var(--secondary-background-color,#ffffff0d);border-radius:12px;min-height:190px;max-height:300px;position:relative;overflow:hidden}.argus-floorplan__map>img{object-fit:contain;width:100%;height:100%;min-height:190px;max-height:300px;display:block}.argus-floorplan__pin{background:#161b22e6;border-radius:999px;align-items:center;gap:4px;max-width:45%;padding:3px 6px 3px 3px;display:flex;position:absolute;transform:translate(-50%,-50%);box-shadow:0 2px 8px #0006}.argus-floorplan__pin>span{color:#fff;background:#788391;border-radius:50%;place-items:center;width:20px;height:20px;font-weight:800;display:grid}.argus-floorplan__pin--safe>span{background:#27ae60}.argus-floorplan__pin--active>span{background:#e74c3c}.argus-floorplan__pin--unavailable>span{background:#788391}.argus-floorplan__pin small{text-overflow:ellipsis;white-space:nowrap;font-size:9px;overflow:hidden}.argus-floorplan__pin button{background:0 0;padding:0 3px}.argus-floorplan__empty{text-align:center;border:1px dashed var(--divider-color,#fff3);opacity:.75;border-radius:12px;flex-direction:column;justify-content:center;align-items:center;min-height:205px;display:flex}.argus-floorplan__empty>span{font-size:38px}.argus-floorplan__empty p{margin:6px 12px}.argus-floorplan__position{grid-template-columns:minmax(80px,1fr) 1fr 1fr;align-items:center;gap:8px;display:grid}.argus-floorplan__position>span{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.argus-floorplan__position label{align-items:center;gap:4px;font-size:10px;display:flex}.argus-floorplan__position input{width:100%;min-width:30px;accent-color:var(--primary-color,#03a9f4)}.argus-floorplan__message{opacity:.8;margin:0}@media (width<=520px){.argus-insights__metrics strong{font-size:17px}.argus-insights__metrics span{font-size:9px}.argus-floorplan__editor>label{flex-direction:column;align-items:stretch}.argus-floorplan__add{flex-wrap:wrap}.argus-floorplan__add select{flex-basis:100%}}", re = /* @__PURE__ */ o(((e) => {
+})), D = /* @__PURE__ */ c(x(), 1), te = E(), O = ".react-grid-layout{transition:height .2s;position:relative}.react-grid-item{transition:left .2s,top .2s,width .2s,height .2s}.react-grid-item img{pointer-events:none;user-select:none}.react-grid-item.cssTransforms{transition-property:transform,width,height}.react-grid-item.resizing{z-index:1;will-change:width, height;transition:none}.react-grid-item.react-draggable-dragging{z-index:3;will-change:transform;transition:none}.react-grid-item.dropping{visibility:hidden}.react-grid-item.react-grid-placeholder{opacity:.2;z-index:2;user-select:none;background:red;transition-duration:.1s}.react-grid-item.react-grid-placeholder.placeholder-resizing{transition:none}.react-grid-item>.react-resizable-handle{opacity:0;width:20px;height:20px;position:absolute}.react-grid-item:hover>.react-resizable-handle{opacity:1}.react-grid-item>.react-resizable-handle:after{content:\"\";border-bottom:2px solid #0006;border-right:2px solid #0006;width:5px;height:5px;position:absolute;bottom:3px;right:3px}.react-resizable-hide>.react-resizable-handle{display:none}.react-grid-item>.react-resizable-handle.react-resizable-handle-sw{cursor:sw-resize;bottom:0;left:0;transform:rotate(90deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-se{cursor:se-resize;bottom:0;right:0}.react-grid-item>.react-resizable-handle.react-resizable-handle-nw{cursor:nw-resize;top:0;left:0;transform:rotate(180deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-ne{cursor:ne-resize;top:0;right:0;transform:rotate(270deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-w,.react-grid-item>.react-resizable-handle.react-resizable-handle-e{cursor:ew-resize;margin-top:-10px;top:50%}.react-grid-item>.react-resizable-handle.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-n,.react-grid-item>.react-resizable-handle.react-resizable-handle-s{cursor:ns-resize;margin-left:-10px;left:50%}.react-grid-item>.react-resizable-handle.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-grid-item>.react-resizable-handle.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}", k = ".react-resizable{position:relative}.react-resizable-handle{box-sizing:border-box;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMDAwMDAiLz48L2c+PC9zdmc+);background-position:100% 100%;background-repeat:no-repeat;background-origin:content-box;width:20px;height:20px;padding:0 3px 3px 0;position:absolute}.react-resizable-handle-sw{cursor:sw-resize;bottom:0;left:0;transform:rotate(90deg)}.react-resizable-handle-se{cursor:se-resize;bottom:0;right:0}.react-resizable-handle-nw{cursor:nw-resize;top:0;left:0;transform:rotate(180deg)}.react-resizable-handle-ne{cursor:ne-resize;top:0;right:0;transform:rotate(270deg)}.react-resizable-handle-w,.react-resizable-handle-e{cursor:ew-resize;margin-top:-10px;top:50%}.react-resizable-handle-w{left:0;transform:rotate(135deg)}.react-resizable-handle-e{right:0;transform:rotate(315deg)}.react-resizable-handle-n,.react-resizable-handle-s{cursor:ns-resize;margin-left:-10px;left:50%}.react-resizable-handle-n{top:0;transform:rotate(225deg)}.react-resizable-handle-s{bottom:0;transform:rotate(45deg)}", ne = "#widget-grid.grid{grid-template-columns:none!important;grid-auto-flow:initial!important;display:block!important}.argus-dashboard{min-height:100%}.argus-dashboard__toolbar{flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px;padding:12px 16px;display:flex}.argus-dashboard__toolbar button,.argus-widget__drag-handle,.argus-widget__options summary,.argus-widget__menu button{background:#ffffff14;border:1px solid #ffffff1f;border-radius:12px;padding:9px 13px;color:#fff!important;white-space:nowrap!important;hyphens:none!important;word-break:normal!important}.argus-btn-reset-dashboard{color:#f87171!important;background:#ef44441f!important;border:1px solid #ef444452!important;margin-left:14px!important}.argus-dashboard__toolbar button:focus-visible,.argus-widget__drag-handle:focus-visible,.argus-widget__options summary:focus-visible,.argus-widget__menu button:focus-visible{outline-offset:2px;outline:3px solid #76b7ff}.argus-dashboard__feedback{color:#b9d9ff;text-align:right;min-height:20px;padding:0 18px;font-size:12px}.argus-dashboard__visibility{flex-wrap:wrap;gap:6px;display:flex}.argus-dashboard-grid .react-grid-item{transition:transform .18s cubic-bezier(.2,.8,.2,1),width .18s cubic-bezier(.2,.8,.2,1),height .18s cubic-bezier(.2,.8,.2,1)}.argus-dashboard-grid .react-grid-item.react-draggable-dragging{z-index:100;opacity:.98;transition:none}.argus-dashboard-grid .react-grid-placeholder{background:linear-gradient(135deg,#5ea8ff33,#8468ff1f);border:2px solid #5ea8ffc7;border-radius:24px;box-shadow:inset 0 0 0 1px #ffffff14,0 12px 35px #0000002e}.argus-widget{border-radius:24px;width:100%;height:100%;position:relative;overflow:visible;box-shadow:0 14px 34px #0000002e,inset 0 1px #ffffff0f;border:1px solid var(--v2066-border,#ffffff14)!important;background:var(--v2066-glass,#ffffff0f)!important;-webkit-backdrop-filter:blur(24px)saturate(145%)!important}.argus-widget .panel{box-shadow:none!important;-webkit-backdrop-filter:none!important;background:0 0!important;border:none!important}.argus-widget__edit-header{align-items:center;gap:10px;padding:8px 12px;display:none}.argus-dashboard--editing .argus-widget__edit-header{display:flex}.argus-widget__edit-header>strong{text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;overflow:hidden}.argus-widget__drag-handle{cursor:grab;touch-action:none;width:44px;height:40px}.argus-widget__options{position:relative}.argus-widget__options summary{box-sizing:border-box;cursor:pointer;place-items:center;width:38px;height:38px;list-style:none;display:grid}.argus-widget__options summary::-webkit-details-marker{display:none}.argus-widget__menu{z-index:140;background:#0f1623f5;border:1px solid #ffffff24;border-radius:16px;gap:8px;min-width:210px;padding:12px;display:grid;position:absolute;top:44px;right:0;box-shadow:0 18px 46px #00000061}.argus-widget__menu>div{grid-template-columns:repeat(4,1fr);gap:5px;display:grid}.argus-widget__menu button{padding:7px}.argus-widget__menu button.active{background:#3478d4}.argus-widget__content{height:100%;overflow:visible}.argus-dashboard--editing .argus-widget__content{height:calc(100% - 56px)}.argus-widget__content>.panel{overscroll-behavior:contain!important;box-sizing:border-box!important;grid-area:auto!important;width:100%!important;height:100%!important;display:block!important;overflow:hidden auto!important}.argus-widget__content>.panel:has(#hero),.argus-widget__content>.panel:has(.hero),.argus-widget__content>.panel:has(#hero-profile-container),.argus-widget:has(#hero),.argus-widget:has(.hero),.argus-dashboard-grid .react-grid-item:has(#hero),.argus-dashboard-grid .react-grid-item:first-child{z-index:50!important;overflow:visible!important}#profile-dropdown.hero-profile-dropdown{z-index:999999!important;max-height:calc(100vh - 120px)!important;position:absolute!important;top:calc(100% + 12px)!important;right:0!important;overflow-y:auto!important}.argus-dashboard-grid .react-resizable-handle{background:#131925db;border:1px solid #ffffff2e;border-radius:10px;width:34px;height:34px;bottom:8px;right:8px;display:none!important}.argus-dashboard--editing .react-resizable-handle{display:block!important}.argus-dashboard--editing .react-resizable-handle:after{border-color:#9bc7ff;width:10px;height:10px;bottom:9px;right:9px}.alarm-configuration-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:16px;display:grid}@media (width<=760px){.alarm-configuration-grid{grid-template-columns:minmax(0,1fr)}.argus-dashboard__toolbar{justify-content:stretch}.argus-dashboard__toolbar>button{flex:1}.argus-widget__menu{position:fixed;inset:auto 16px 16px}}@media (prefers-reduced-motion:reduce){.argus-dashboard-grid .react-grid-item,.argus-dashboard-grid .react-resizable-handle{transition:none!important}}:host([argus-contrast=high]) .argus-widget,:host(.argus-contrast-high) .argus-widget{-webkit-backdrop-filter:blur(28px)saturate(130%)!important;background:linear-gradient(145deg,#0b101af2,#070a12f7)!important;border:1px solid #ffffff3d!important;box-shadow:0 16px 42px #000000a6,inset 0 1px #ffffff24!important}:host([argus-contrast=high]) .argus-widget strong,:host(.argus-contrast-high) .argus-widget strong,:host([argus-contrast=high]) .argus-widget .panel h1,:host(.argus-contrast-high) .argus-widget .panel h1,:host([argus-contrast=high]) .argus-widget .panel h2,:host(.argus-contrast-high) .argus-widget .panel h2,:host([argus-contrast=high]) .argus-widget .panel h3,:host(.argus-contrast-high) .argus-widget .panel h3,:host([argus-contrast=high]) .argus-widget .panel h4,:host(.argus-contrast-high) .argus-widget .panel h4,:host([argus-contrast=high]) .argus-widget .panel-title,:host(.argus-contrast-high) .argus-widget .panel-title,:host([argus-contrast=high]) .argus-widget .section-title,:host(.argus-contrast-high) .argus-widget .section-title,:host([argus-contrast=high]) .argus-widget .setting-label,:host(.argus-contrast-high) .argus-widget .setting-label{color:#fff!important;text-shadow:0 1px 2px #00000080!important}:host([argus-contrast=high]) .argus-widget p,:host(.argus-contrast-high) .argus-widget p,:host([argus-contrast=high]) .argus-widget small,:host(.argus-contrast-high) .argus-widget small,:host([argus-contrast=high]) .argus-widget .hint,:host(.argus-contrast-high) .argus-widget .hint,:host([argus-contrast=high]) .argus-widget .muted,:host(.argus-contrast-high) .argus-widget .muted,:host([argus-contrast=high]) .argus-widget .setting-help,:host(.argus-contrast-high) .argus-widget .setting-help,:host([argus-contrast=high]) .argus-widget .small,:host(.argus-contrast-high) .argus-widget .small{color:#cbd5e1!important;opacity:1!important}:host([argus-contrast=high]) .argus-dashboard__toolbar button,:host(.argus-contrast-high) .argus-dashboard__toolbar button,:host([argus-contrast=high]) .argus-widget__drag-handle,:host(.argus-contrast-high) .argus-widget__drag-handle,:host([argus-contrast=high]) .argus-widget__options summary,:host(.argus-contrast-high) .argus-widget__options summary,:host([argus-contrast=high]) .argus-widget__menu button,:host(.argus-contrast-high) .argus-widget__menu button{color:#fff!important;background:#ffffff1f!important;border:1px solid #ffffff42!important}:host([argus-contrast=high]) .argus-dashboard__feedback,:host(.argus-contrast-high) .argus-dashboard__feedback{color:#93c5fd!important;font-weight:600!important}:host([argus-contrast=high]) .argus-widget__menu,:host(.argus-contrast-high) .argus-widget__menu{background:#0a0e17fa!important;border:1px solid #ffffff40!important;box-shadow:0 20px 50px #0009!important}@media (prefers-contrast:more){.argus-widget{-webkit-backdrop-filter:blur(28px)saturate(130%)!important;background:linear-gradient(145deg,#0b101af2,#070a12f7)!important;border:1px solid #ffffff3d!important;box-shadow:0 16px 42px #000000a6,inset 0 1px #ffffff24!important}.argus-widget strong,.argus-widget .panel h1,.argus-widget .panel h2,.argus-widget .panel h3,.argus-widget .panel h4,.argus-widget .panel-title,.argus-widget .section-title,.argus-widget .setting-label{color:#fff!important;text-shadow:0 1px 2px #00000080!important}.argus-widget p,.argus-widget small,.argus-widget .hint,.argus-widget .muted,.argus-widget .setting-help,.argus-widget .small{color:#cbd5e1!important;opacity:1!important}.argus-dashboard__toolbar button,.argus-widget__drag-handle,.argus-widget__options summary,.argus-widget__menu button{color:#fff!important;background:#ffffff1f!important;border:1px solid #ffffff42!important}.argus-dashboard__toolbar button:focus-visible,.argus-widget__drag-handle:focus-visible,.argus-widget__options summary:focus-visible,.argus-widget__menu button:focus-visible{outline-offset:2px!important;outline:3px solid #60a5fa!important}.argus-dashboard__feedback{color:#93c5fd!important;font-weight:600!important}.argus-widget__menu{background:#0a0e17fa!important;border:1px solid #ffffff40!important;box-shadow:0 20px 50px #0009!important}}", re = /* @__PURE__ */ o(((e) => {
 	var t = Symbol.for("react.transitional.element"), n = Symbol.for("react.fragment");
 	function r(e, n, r) {
 		var i = null;
@@ -14542,9 +14710,9 @@ var b = /* @__PURE__ */ o(((e) => {
 		};
 	}
 	e.Fragment = n, e.jsx = r, e.jsxs = r;
-})), j = (/* @__PURE__ */ o(((e, t) => {
+})), A = (/* @__PURE__ */ o(((e, t) => {
 	t.exports = re();
-})))(), ie = class extends D.Component {
+})))(), j = class extends D.Component {
 	state = {
 		hasError: !1,
 		error: null
@@ -14559,7 +14727,7 @@ var b = /* @__PURE__ */ o(((e) => {
 		console.error("ArgusDashboard ErrorBoundary caught an error:", e, t);
 	}
 	render() {
-		return this.state.hasError ? this.props.fallback ? this.props.fallback : /* @__PURE__ */ (0, j.jsxs)("div", {
+		return this.state.hasError ? this.props.fallback ? this.props.fallback : /* @__PURE__ */ (0, A.jsxs)("div", {
 			style: {
 				padding: "20px",
 				color: "#ff6b6b",
@@ -14568,21 +14736,21 @@ var b = /* @__PURE__ */ o(((e) => {
 				margin: "10px"
 			},
 			children: [
-				/* @__PURE__ */ (0, j.jsx)("h2", {
+				/* @__PURE__ */ (0, A.jsx)("h2", {
 					style: {
 						fontSize: "16px",
 						marginBottom: "8px"
 					},
 					children: "⚠️ Error del Widget"
 				}),
-				/* @__PURE__ */ (0, j.jsx)("p", {
+				/* @__PURE__ */ (0, A.jsx)("p", {
 					style: {
 						fontSize: "12px",
 						opacity: .8
 					},
 					children: "Un componente falló al renderizar."
 				}),
-				/* @__PURE__ */ (0, j.jsx)("pre", {
+				/* @__PURE__ */ (0, A.jsx)("pre", {
 					style: {
 						fontSize: "10px",
 						marginTop: "10px",
@@ -14596,17 +14764,17 @@ var b = /* @__PURE__ */ o(((e) => {
 	}
 };
 //#endregion
-//#region node_modules/react-grid-layout/dist/chunk-76RTO6EO.mjs
-function ae(e) {
+//#region ../../../../../Documents/Codex/2026-10-01/ok-tengo-x20/work/Argus/node_modules/react-grid-layout/dist/chunk-76RTO6EO.mjs
+function ie(e) {
 	let { margin: t, containerPadding: n, containerWidth: r, cols: i } = e;
 	return (r - t[0] * (i - 1) - n[0] * 2) / i;
 }
-function oe(e, t, n) {
+function ae(e, t, n) {
 	return Number.isFinite(e) ? Math.round(t * e + Math.max(0, e - 1) * n) : e;
 }
-function se(e, t, n, r, i, a, o) {
-	let { margin: s, containerPadding: c, rowHeight: l } = e, u = ae(e), d, f, p, m;
-	if (o ? (d = Math.round(o.width), f = Math.round(o.height)) : (d = oe(r, u, s[0]), f = oe(i, l, s[1])), a ? (p = Math.round(a.top), m = Math.round(a.left)) : o ? (p = Math.round(o.top), m = Math.round(o.left)) : (p = Math.round((l + s[1]) * n + c[1]), m = Math.round((u + s[0]) * t + c[0])), !a && !o) {
+function oe(e, t, n, r, i, a, o) {
+	let { margin: s, containerPadding: c, rowHeight: l } = e, u = ie(e), d, f, p, m;
+	if (o ? (d = Math.round(o.width), f = Math.round(o.height)) : (d = ae(r, u, s[0]), f = ae(i, l, s[1])), a ? (p = Math.round(a.top), m = Math.round(a.left)) : o ? (p = Math.round(o.top), m = Math.round(o.left)) : (p = Math.round((l + s[1]) * n + c[1]), m = Math.round((u + s[0]) * t + c[0])), !a && !o) {
 		if (Number.isFinite(r)) {
 			let e = Math.round((u + s[0]) * (t + r) + c[0]) - m - d;
 			e !== s[0] && (d += e - s[0]);
@@ -14623,52 +14791,52 @@ function se(e, t, n, r, i, a, o) {
 		height: f
 	};
 }
-function ce(e, t, n, r, i) {
-	let { margin: a, containerPadding: o, cols: s, rowHeight: c, maxRows: l } = e, u = ae(e), d = Math.round((n - o[0]) / (u + a[0])), f = Math.round((t - o[1]) / (c + a[1]));
-	return d = de(d, 0, s - r), f = de(f, 0, l - i), {
+function se(e, t, n, r, i) {
+	let { margin: a, containerPadding: o, cols: s, rowHeight: c, maxRows: l } = e, u = ie(e), d = Math.round((n - o[0]) / (u + a[0])), f = Math.round((t - o[1]) / (c + a[1]));
+	return d = ue(d, 0, s - r), f = ue(f, 0, l - i), {
 		x: d,
 		y: f
 	};
 }
-function le(e, t, n) {
-	let { margin: r, containerPadding: i, rowHeight: a } = e, o = ae(e);
+function ce(e, t, n) {
+	let { margin: r, containerPadding: i, rowHeight: a } = e, o = ie(e);
 	return {
 		x: Math.round((n - i[0]) / (o + r[0])),
 		y: Math.round((t - i[1]) / (a + r[1]))
 	};
 }
-function ue(e, t, n) {
-	let { margin: r, rowHeight: i } = e, a = ae(e);
+function le(e, t, n) {
+	let { margin: r, rowHeight: i } = e, a = ie(e);
 	return {
 		w: Math.max(1, Math.round((t + r[0]) / (a + r[0]))),
 		h: Math.max(1, Math.round((n + r[1]) / (i + r[1])))
 	};
 }
-function de(e, t, n) {
+function ue(e, t, n) {
 	return Math.max(Math.min(e, n), t);
 }
-function fe(e, t) {
+function de(e, t) {
 	return !(e.i === t.i || e.x + e.w <= t.x || e.x >= t.x + t.w || e.y + e.h <= t.y || e.y >= t.y + t.h);
 }
-function pe(e, t) {
+function fe(e, t) {
 	for (let n = 0; n < e.length; n++) {
 		let r = e[n];
-		if (r !== void 0 && fe(r, t)) return r;
+		if (r !== void 0 && de(r, t)) return r;
 	}
 }
+function pe(e, t) {
+	return e.filter((e) => de(e, t));
+}
 function me(e, t) {
-	return e.filter((e) => fe(e, t));
+	return t === "horizontal" ? ge(e) : t === "vertical" || t === "wrap" ? he(e) : [...e];
 }
-function he(e, t) {
-	return t === "horizontal" ? _e(e) : t === "vertical" || t === "wrap" ? ge(e) : [...e];
-}
-function ge(e) {
+function he(e) {
 	return [...e].sort((e, t) => e.y === t.y ? e.x - t.x : e.y - t.y);
 }
-function _e(e) {
+function ge(e) {
 	return [...e].sort((e, t) => e.x === t.x ? e.y - t.y : e.x - t.x);
 }
-function ve(e) {
+function _e(e) {
 	let t = 0;
 	for (let n = 0; n < e.length; n++) {
 		let r = e[n];
@@ -14679,16 +14847,16 @@ function ve(e) {
 	}
 	return t;
 }
-function M(e, t) {
+function ve(e, t) {
 	for (let n = 0; n < e.length; n++) {
 		let r = e[n];
 		if (r !== void 0 && r.i === t) return r;
 	}
 }
-function N(e) {
+function M(e) {
 	return e.filter((e) => e.static === !0);
 }
-function ye(e) {
+function N(e) {
 	return {
 		i: e.i,
 		x: e.x,
@@ -14708,15 +14876,15 @@ function ye(e) {
 		isBounded: e.isBounded
 	};
 }
-function P(e) {
+function ye(e) {
 	let t = Array(e.length);
 	for (let n = 0; n < e.length; n++) {
 		let r = e[n];
-		r !== void 0 && (t[n] = ye(r));
+		r !== void 0 && (t[n] = N(r));
 	}
 	return t;
 }
-function F(e, t) {
+function be(e, t) {
 	let n = Array(e.length);
 	for (let r = 0; r < e.length; r++) {
 		let i = e[r];
@@ -14724,38 +14892,38 @@ function F(e, t) {
 	}
 	return n;
 }
-function be(e, t, n) {
-	let r = M(e, t);
-	return r ? (r = n(ye(r)), [F(e, r), r]) : [[...e], null];
+function xe(e, t, n) {
+	let r = ve(e, t);
+	return r ? (r = n(N(r)), [be(e, r), r]) : [[...e], null];
 }
-function I(e, t) {
-	let n = N(e);
+function P(e, t) {
+	let n = M(e);
 	for (let r = 0; r < e.length; r++) {
 		let i = e[r];
 		if (i !== void 0) {
 			if (i.x + i.w > t.cols && (i.x = t.cols - i.w), i.x < 0 && (i.x = 0, i.w = t.cols), !i.static) n.push(i);
-			else for (; pe(n, i);) i.y++;
+			else for (; fe(n, i);) i.y++;
 		}
 	}
 	return e;
 }
-function L(e, t, n, r, i, a, o, s, c) {
+function Se(e, t, n, r, i, a, o, s, c) {
 	if (t.static && t.isDraggable !== !0 || t.y === r && t.x === n) return [...e];
 	let l = t.x, u = t.y;
 	typeof n == "number" && (t.x = n), typeof r == "number" && (t.y = r), t.moved = !0;
-	let d = he(e, o);
+	let d = me(e, o);
 	(o === "vertical" && typeof r == "number" ? u >= r : o === "horizontal" && typeof n == "number" && l >= n) && (d = d.reverse());
-	let f = me(d, t), p = f.length > 0;
-	if (p && c) return P(e);
+	let f = pe(d, t), p = f.length > 0;
+	if (p && c) return ye(e);
 	if (p && a) return t.x = l, t.y = u, t.moved = !1, e;
 	let m = [...e];
 	for (let e = 0; e < f.length; e++) {
 		let n = f[e];
-		n !== void 0 && (n.moved || (m = n.static ? xe(m, n, t, i, o) : xe(m, t, n, i, o)));
+		n !== void 0 && (n.moved || (m = n.static ? F(m, n, t, i, o) : F(m, t, n, i, o)));
 	}
 	return m;
 }
-function xe(e, t, n, r, i, a) {
+function F(e, t, n, r, i, a) {
 	let o = i === "horizontal", s = i === "vertical", c = t.static;
 	if (r) {
 		r = !1;
@@ -14765,45 +14933,45 @@ function xe(e, t, n, r, i, a) {
 			w: n.w,
 			h: n.h,
 			i: "-1"
-		}, l = pe(e, a), u = l !== void 0 && l.y + l.h > t.y, d = l !== void 0 && t.x + t.w > l.x;
-		if (!l) return L(e, n, o ? a.x : void 0, s ? a.y : void 0, r, c, i);
-		if (u && s) return L(e, n, void 0, n.y + 1, r, c, i);
+		}, l = fe(e, a), u = l !== void 0 && l.y + l.h > t.y, d = l !== void 0 && t.x + t.w > l.x;
+		if (!l) return Se(e, n, o ? a.x : void 0, s ? a.y : void 0, r, c, i);
+		if (u && s) return Se(e, n, void 0, n.y + 1, r, c, i);
 		if (u && i === null) return t.y = n.y, n.y += n.h, [...e];
-		if (d && o) return L(e, t, n.x, void 0, r, c, i);
+		if (d && o) return Se(e, t, n.x, void 0, r, c, i);
 	}
 	let l = o ? n.x + 1 : void 0, u = s ? n.y + 1 : void 0;
-	return l === void 0 && u === void 0 ? [...e] : L(e, n, l, u, r, c, i);
+	return l === void 0 && u === void 0 ? [...e] : Se(e, n, l, u, r, c, i);
 }
 //#endregion
-//#region node_modules/react-grid-layout/dist/chunk-KDANGDDL.mjs
-function R(e, t, n) {
+//#region ../../../../../Documents/Codex/2026-10-01/ok-tengo-x20/work/Argus/node_modules/react-grid-layout/dist/chunk-KDANGDDL.mjs
+function I(e, t, n) {
 	return Math.max(t, Math.min(n, e));
 }
-var Se = [{
+var Ce = [{
 	name: "gridBounds",
 	constrainPosition(e, t, n, { cols: r, maxRows: i }) {
 		return {
-			x: R(t, 0, Math.max(0, r - e.w)),
-			y: R(n, 0, Math.max(0, i - e.h))
+			x: I(t, 0, Math.max(0, r - e.w)),
+			y: I(n, 0, Math.max(0, i - e.h))
 		};
 	},
 	constrainSize(e, t, n, r, { cols: i, maxRows: a }) {
 		let o = r === "w" || r === "nw" || r === "sw" ? e.x + e.w : i - e.x, s = r === "n" || r === "nw" || r === "ne" ? e.y + e.h : a - e.y;
 		return {
-			w: R(t, 1, Math.max(1, o)),
-			h: R(n, 1, Math.max(1, s))
+			w: I(t, 1, Math.max(1, o)),
+			h: I(n, 1, Math.max(1, s))
 		};
 	}
 }, {
 	name: "minMaxSize",
 	constrainSize(e, t, n) {
 		return {
-			w: R(t, e.minW ?? 1, e.maxW ?? Infinity),
-			h: R(n, e.minH ?? 1, e.maxH ?? Infinity)
+			w: I(t, e.minW ?? 1, e.maxW ?? Infinity),
+			h: I(n, e.minH ?? 1, e.maxH ?? Infinity)
 		};
 	}
 }];
-function Ce(e, t, n, r, i) {
+function we(e, t, n, r, i) {
 	let a = {
 		x: n,
 		y: r
@@ -14812,7 +14980,7 @@ function Ce(e, t, n, r, i) {
 	if (t.constraints) for (let e of t.constraints) e.constrainPosition && (a = e.constrainPosition(t, a.x, a.y, i));
 	return a;
 }
-function we(e, t, n, r, i, a) {
+function Te(e, t, n, r, i, a) {
 	let o = {
 		w: n,
 		h: r
@@ -14821,7 +14989,7 @@ function we(e, t, n, r, i, a) {
 	if (t.constraints) for (let e of t.constraints) e.constrainSize && (o = e.constrainSize(t, o.w, o.h, i, a));
 	return o;
 }
-function Te({ top: e, left: t, width: n, height: r }) {
+function Ee({ top: e, left: t, width: n, height: r }) {
 	let i = `translate(${t}px,${e}px)`;
 	return {
 		transform: i,
@@ -14834,7 +15002,7 @@ function Te({ top: e, left: t, width: n, height: r }) {
 		position: "absolute"
 	};
 }
-function Ee({ top: e, left: t, width: n, height: r }) {
+function De({ top: e, left: t, width: n, height: r }) {
 	return {
 		top: `${e}px`,
 		left: `${t}px`,
@@ -14843,94 +15011,94 @@ function Ee({ top: e, left: t, width: n, height: r }) {
 		position: "absolute"
 	};
 }
-function De(e) {
+function Oe(e) {
 	return e * 100 + "%";
 }
-function Oe(e, t, n, r) {
+function ke(e, t, n, r) {
 	return e + n > r ? t : n;
 }
-function ke(e, t, n) {
+function L(e, t, n) {
 	return e < 0 ? t : n;
 }
 function Ae(e) {
 	return Math.max(0, e);
 }
-function z(e) {
+function R(e) {
 	return Math.max(0, e);
 }
-var je = (e, t, n) => {
+var z = (e, t, n) => {
 	let { left: r, height: i, width: a } = t, o = e.top - (i - e.height);
 	return {
 		left: r,
 		width: a,
-		height: ke(o, e.height, i),
-		top: z(o)
+		height: L(o, e.height, i),
+		top: R(o)
 	};
-}, Me = (e, t, n) => {
+}, je = (e, t, n) => {
 	let { top: r, left: i, height: a, width: o } = t;
 	return {
 		top: r,
 		height: a,
-		width: Oe(e.left, e.width, o, n),
+		width: ke(e.left, e.width, o, n),
 		left: Ae(i)
 	};
-}, Ne = (e, t, n) => {
+}, Me = (e, t, n) => {
 	let { top: r, height: i, width: a } = t, o = e.left + e.width - a;
 	return o < 0 ? {
 		height: i,
 		width: e.left + e.width,
-		top: z(r),
+		top: R(r),
 		left: 0
 	} : {
 		height: i,
 		width: a,
-		top: z(r),
+		top: R(r),
 		left: o
 	};
-}, Pe = (e, t, n) => {
+}, Ne = (e, t, n) => {
 	let { top: r, left: i, height: a, width: o } = t;
 	return {
 		width: o,
 		left: i,
-		height: ke(r, e.height, a),
-		top: z(r)
+		height: L(r, e.height, a),
+		top: R(r)
 	};
-}, Fe = {
-	n: je,
-	ne: (e, t, n) => je(e, Me(e, t, n)),
-	e: Me,
-	se: (e, t, n) => Pe(e, Me(e, t, n)),
-	s: Pe,
-	sw: (e, t, n) => Pe(e, Ne(e, t)),
-	w: Ne,
-	nw: (e, t, n) => je(e, Ne(e, t))
+}, Pe = {
+	n: z,
+	ne: (e, t, n) => z(e, je(e, t, n)),
+	e: je,
+	se: (e, t, n) => Ne(e, je(e, t, n)),
+	s: Ne,
+	sw: (e, t, n) => Ne(e, Me(e, t)),
+	w: Me,
+	nw: (e, t, n) => z(e, Me(e, t))
 };
-function Ie(e, t, n, r) {
-	let i = Fe[e];
+function Fe(e, t, n, r) {
+	let i = Pe[e];
 	return i ? i(t, {
 		...t,
 		...n
 	}, r) : n;
 }
-var Le = {
+var Ie = {
 	type: "transform",
-	scale: 1,
-	calcStyle(e) {
-		return Te(e);
-	}
-}, Re = {
-	type: "absolute",
 	scale: 1,
 	calcStyle(e) {
 		return Ee(e);
 	}
+}, Le = {
+	type: "absolute",
+	scale: 1,
+	calcStyle(e) {
+		return De(e);
+	}
 };
-function ze(e) {
+function Re(e) {
 	return {
 		type: "transform",
 		scale: e,
 		calcStyle(e) {
-			return Te(e);
+			return Ee(e);
 		},
 		calcDragPosition(t, n, r, i) {
 			return {
@@ -14940,115 +15108,115 @@ function ze(e) {
 		}
 	};
 }
-var Be = Le, Ve = {
+var ze = Ie, Be = {
 	cols: 12,
 	rowHeight: 150,
 	margin: [10, 10],
 	containerPadding: null,
 	maxRows: Infinity
-}, He = {
+}, Ve = {
 	enabled: !0,
 	bounded: !1,
 	threshold: 3
-}, Ue = {
+}, He = {
 	enabled: !0,
 	handles: ["se"]
-}, We = {
+}, Ue = {
 	enabled: !1,
 	defaultItem: {
 		w: 1,
 		h: 1
 	}
 };
-function Ge(e, t, n, r, i) {
+function We(e, t, n, r, i) {
 	let a = r === "x" ? "w" : "h";
 	t[r] += 1;
-	let o = e.findIndex((e) => e.i === t.i), s = i ?? N(e).length > 0;
+	let o = e.findIndex((e) => e.i === t.i), s = i ?? M(e).length > 0;
 	for (let i = o + 1; i < e.length; i++) {
 		let o = e[i];
 		if (o !== void 0 && !o.static) {
 			if (!s && o.y > t.y + t.h) break;
-			fe(t, o) && Ge(e, o, n + t[a], r, s);
+			de(t, o) && We(e, o, n + t[a], r, s);
 		}
 	}
 	t[r] = n;
 }
-function Ke(e, t, n, r) {
-	for (t.x = Math.max(t.x, 0), t.y = Math.max(t.y, 0), t.y = Math.min(r, t.y); t.y > 0 && !pe(e, t);) t.y--;
+function Ge(e, t, n, r) {
+	for (t.x = Math.max(t.x, 0), t.y = Math.max(t.y, 0), t.y = Math.min(r, t.y); t.y > 0 && !fe(e, t);) t.y--;
 	let i;
-	for (; (i = pe(e, t)) !== void 0;) Ge(n, t, i.y + i.h, "y");
+	for (; (i = fe(e, t)) !== void 0;) We(n, t, i.y + i.h, "y");
 	return t.y = Math.max(t.y, 0), t;
 }
-function qe(e, t, n, r) {
-	for (t.x = Math.max(t.x, 0), t.y = Math.max(t.y, 0); t.x > 0 && !pe(e, t);) t.x--;
+function Ke(e, t, n, r) {
+	for (t.x = Math.max(t.x, 0), t.y = Math.max(t.y, 0); t.x > 0 && !fe(e, t);) t.x--;
 	let i;
-	for (; (i = pe(e, t)) !== void 0;) if (Ge(r, t, i.x + i.w, "x"), t.x + t.w > n) for (t.x = n - t.w, t.y++; t.x > 0 && !pe(e, t);) t.x--;
+	for (; (i = fe(e, t)) !== void 0;) if (We(r, t, i.x + i.w, "x"), t.x + t.w > n) for (t.x = n - t.w, t.y++; t.x > 0 && !fe(e, t);) t.x--;
 	return t.x = Math.max(t.x, 0), t;
 }
-var Je = {
+var qe = {
 	type: "vertical",
 	allowOverlap: !1,
 	compact(e, t) {
-		let n = N(e), r = ve(n), i = ge(e), a = Array(e.length);
+		let n = M(e), r = _e(n), i = he(e), a = Array(e.length);
 		for (let t = 0; t < i.length; t++) {
 			let o = i[t];
 			if (o === void 0) continue;
-			let s = ye(o);
-			s.static || (s = Ke(n, s, i, r), r = Math.max(r, s.y + s.h), n.push(s));
+			let s = N(o);
+			s.static || (s = Ge(n, s, i, r), r = Math.max(r, s.y + s.h), n.push(s));
 			let c = e.indexOf(o);
 			a[c] = s, s.moved = !1;
 		}
 		return a;
 	}
-}, Ye = {
+}, Je = {
 	type: "horizontal",
 	allowOverlap: !1,
 	compact(e, t) {
-		let n = N(e), r = _e(e), i = Array(e.length);
+		let n = M(e), r = ge(e), i = Array(e.length);
 		for (let a = 0; a < r.length; a++) {
 			let o = r[a];
 			if (o === void 0) continue;
-			let s = ye(o);
-			s.static || (s = qe(n, s, t, r), n.push(s));
+			let s = N(o);
+			s.static || (s = Ke(n, s, t, r), n.push(s));
 			let c = e.indexOf(o);
 			i[c] = s, s.moved = !1;
 		}
 		return i;
 	}
-}, Xe = {
+}, Ye = {
 	type: null,
 	allowOverlap: !1,
 	compact(e, t) {
-		return P(e);
+		return ye(e);
+	}
+}, Xe = {
+	...qe,
+	allowOverlap: !0,
+	compact(e, t) {
+		return ye(e);
 	}
 }, Ze = {
 	...Je,
 	allowOverlap: !0,
 	compact(e, t) {
-		return P(e);
+		return ye(e);
 	}
 }, Qe = {
 	...Ye,
-	allowOverlap: !0,
-	compact(e, t) {
-		return P(e);
-	}
-}, $e = {
-	...Xe,
 	allowOverlap: !0
 };
-function et(e, t = !1, n = !1) {
+function $e(e, t = !1, n = !1) {
 	let r;
-	return r = t ? e === "vertical" ? Ze : e === "horizontal" ? Qe : $e : e === "vertical" ? Je : e === "horizontal" ? Ye : Xe, n ? {
+	return r = t ? e === "vertical" ? Xe : e === "horizontal" ? Ze : Qe : e === "vertical" ? qe : e === "horizontal" ? Je : Ye, n ? {
 		...r,
 		preventCollision: n
 	} : r;
 }
-function tt(e) {
+function et(e) {
 	return Object.keys(e).sort((t, n) => e[t] - e[n]);
 }
-function nt(e, t) {
-	let n = tt(e), r = n[0];
+function tt(e, t) {
+	let n = et(e), r = n[0];
 	if (r === void 0) throw Error("No breakpoints defined");
 	for (let i = 1; i < n.length; i++) {
 		let a = n[i];
@@ -15056,15 +15224,15 @@ function nt(e, t) {
 	}
 	return r;
 }
-function rt(e, t) {
+function nt(e, t) {
 	let n = t[e];
 	if (n === void 0) throw Error(`ResponsiveReactGridLayout: \`cols\` entry for breakpoint ${String(e)} is missing!`);
 	return n;
 }
-function it(e, t, n, r, i, a) {
+function rt(e, t, n, r, i, a) {
 	let o = e[n];
-	if (o) return P(o);
-	let s = e[r], c = tt(t), l = c.slice(c.indexOf(n));
+	if (o) return ye(o);
+	let s = e[r], c = et(t), l = c.slice(c.indexOf(n));
 	for (let t = 0; t < l.length; t++) {
 		let n = l[t];
 		if (n === void 0) continue;
@@ -15074,10 +15242,10 @@ function it(e, t, n, r, i, a) {
 			break;
 		}
 	}
-	let u = I(P(s || []), { cols: i });
-	return (typeof a == "object" && a ? a : et(a)).compact(u, i);
+	let u = P(ye(s || []), { cols: i });
+	return (typeof a == "object" && a ? a : $e(a)).compact(u, i);
 }
-function at(e, t) {
+function it(e, t) {
 	if (Array.isArray(e)) return e;
 	let n = e, r = n[t];
 	if (r !== void 0) return r;
@@ -15089,11 +15257,11 @@ function at(e, t) {
 	return [10, 10];
 }
 //#endregion
-//#region node_modules/prop-types/lib/ReactPropTypesSecret.js
-var ot = /* @__PURE__ */ o(((e, t) => {
+//#region ../../../../../Documents/Codex/2026-10-01/ok-tengo-x20/work/Argus/node_modules/prop-types/lib/ReactPropTypesSecret.js
+var at = /* @__PURE__ */ o(((e, t) => {
 	t.exports = "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED";
-})), st = /* @__PURE__ */ o(((e, t) => {
-	var n = ot();
+})), ot = /* @__PURE__ */ o(((e, t) => {
+	var n = at();
 	function r() {}
 	function i() {}
 	i.resetWarningCache = r, t.exports = function() {
@@ -15132,90 +15300,90 @@ var ot = /* @__PURE__ */ o(((e, t) => {
 		};
 		return a.PropTypes = a, a;
 	};
-})), ct = /* @__PURE__ */ o(((e, t) => {
-	t.exports = st()();
-})), lt = /* @__PURE__ */ c(T(), 1), B = /* @__PURE__ */ c(ct(), 1);
-function ut(e) {
+})), st = /* @__PURE__ */ o(((e, t) => {
+	t.exports = ot()();
+})), ct = /* @__PURE__ */ c(T(), 1), B = /* @__PURE__ */ c(st(), 1);
+function lt(e) {
 	var t, n, r = "";
 	if (typeof e == "string" || typeof e == "number") r += e;
 	else if (typeof e == "object") {
 		if (Array.isArray(e)) {
 			var i = e.length;
-			for (t = 0; t < i; t++) e[t] && (n = ut(e[t])) && (r && (r += " "), r += n);
+			for (t = 0; t < i; t++) e[t] && (n = lt(e[t])) && (r && (r += " "), r += n);
 		} else for (n in e) e[n] && (r && (r += " "), r += n);
 	}
 	return r;
 }
-function dt() {
-	for (var e, t, n = 0, r = "", i = arguments.length; n < i; n++) (e = arguments[n]) && (t = ut(e)) && (r && (r += " "), r += t);
+function ut() {
+	for (var e, t, n = 0, r = "", i = arguments.length; n < i; n++) (e = arguments[n]) && (t = lt(e)) && (r && (r += " "), r += t);
 	return r;
 }
 //#endregion
-//#region node_modules/react-draggable/build/cjs/chunk-ACOTSM7X.mjs
-function ft(e, t) {
+//#region ../../../../../Documents/Codex/2026-10-01/ok-tengo-x20/work/Argus/node_modules/react-draggable/build/cjs/chunk-ACOTSM7X.mjs
+function dt(e, t) {
 	for (let n = 0, r = e.length; n < r; n++) if (t.apply(t, [
 		e[n],
 		n,
 		e
 	])) return e[n];
 }
-function pt(e) {
+function ft(e) {
 	return typeof e == "function" || Object.prototype.toString.call(e) === "[object Function]";
 }
-function mt(e) {
+function pt(e) {
 	return typeof e == "number" && !isNaN(e);
 }
-function ht(e) {
+function mt(e) {
 	return parseInt(e, 10);
 }
-function gt(e, t, n) {
+function ht(e, t, n) {
 	if (e[t]) return /* @__PURE__ */ Error(`Invalid prop ${t} passed to ${n} - do not set this, set it on the child.`);
 }
-var _t = [
+var gt = [
 	"Moz",
 	"Webkit",
 	"O",
 	"ms"
 ];
-function vt(e = "transform") {
+function _t(e = "transform") {
 	if (typeof window > "u") return "";
 	let t = window.document?.documentElement?.style;
 	if (!t || e in t) return "";
-	for (let n = 0; n < _t.length; n++) if (yt(e, _t[n]) in t) return _t[n];
+	for (let n = 0; n < gt.length; n++) if (vt(e, gt[n]) in t) return gt[n];
 	return "";
 }
-function yt(e, t) {
-	return t ? `${t}${bt(e)}` : e;
+function vt(e, t) {
+	return t ? `${t}${yt(e)}` : e;
 }
-function bt(e) {
+function yt(e) {
 	let t = "", n = !0;
 	for (let r = 0; r < e.length; r++) n ? (t += e[r].toUpperCase(), n = !1) : e[r] === "-" ? n = !0 : t += e[r];
 	return t;
 }
-var xt = vt(), St = "";
-function Ct(e, t) {
-	St ||= ft([
+var bt = _t(), xt = "";
+function St(e, t) {
+	xt ||= dt([
 		"matches",
 		"webkitMatchesSelector",
 		"mozMatchesSelector",
 		"msMatchesSelector",
 		"oMatchesSelector"
 	], function(t) {
-		return pt(e[t]);
+		return ft(e[t]);
 	}) ?? "";
-	let n = e[St];
-	return pt(n) ? !!n.call(e, t) : !1;
+	let n = e[xt];
+	return ft(n) ? !!n.call(e, t) : !1;
 }
-function wt(e, t, n) {
+function Ct(e, t, n) {
 	let r = e;
 	do {
-		if (Ct(r, t)) return !0;
+		if (St(r, t)) return !0;
 		if (r === n) return !1;
 		r = r.parentNode;
 	} while (r);
 	return !1;
 }
-function Tt(e, t, n, r) {
+function wt(e, t, n, r) {
 	if (!e) return;
 	let i = {
 		capture: !0,
@@ -15223,7 +15391,7 @@ function Tt(e, t, n, r) {
 	}, a = n;
 	e.addEventListener ? e.addEventListener(t, a, i) : e.attachEvent ? e.attachEvent("on" + t, a) : e["on" + t] = a;
 }
-function Et(e, t, n, r) {
+function Tt(e, t, n, r) {
 	if (!e) return;
 	let i = {
 		capture: !0,
@@ -15231,23 +15399,23 @@ function Et(e, t, n, r) {
 	}, a = n;
 	e.removeEventListener ? e.removeEventListener(t, a, i) : e.detachEvent ? e.detachEvent("on" + t, a) : e["on" + t] = null;
 }
-function Dt(e) {
+function Et(e) {
 	let t = e.clientHeight, n = e.ownerDocument.defaultView.getComputedStyle(e);
-	return t += ht(n.borderTopWidth), t += ht(n.borderBottomWidth), t;
+	return t += mt(n.borderTopWidth), t += mt(n.borderBottomWidth), t;
+}
+function Dt(e) {
+	let t = e.clientWidth, n = e.ownerDocument.defaultView.getComputedStyle(e);
+	return t += mt(n.borderLeftWidth), t += mt(n.borderRightWidth), t;
 }
 function Ot(e) {
-	let t = e.clientWidth, n = e.ownerDocument.defaultView.getComputedStyle(e);
-	return t += ht(n.borderLeftWidth), t += ht(n.borderRightWidth), t;
+	let t = e.clientHeight, n = e.ownerDocument.defaultView.getComputedStyle(e);
+	return t -= mt(n.paddingTop), t -= mt(n.paddingBottom), t;
 }
 function kt(e) {
-	let t = e.clientHeight, n = e.ownerDocument.defaultView.getComputedStyle(e);
-	return t -= ht(n.paddingTop), t -= ht(n.paddingBottom), t;
-}
-function At(e) {
 	let t = e.clientWidth, n = e.ownerDocument.defaultView.getComputedStyle(e);
-	return t -= ht(n.paddingLeft), t -= ht(n.paddingRight), t;
+	return t -= mt(n.paddingLeft), t -= mt(n.paddingRight), t;
 }
-function jt(e, t, n) {
+function At(e, t, n) {
 	let r = t === t.ownerDocument.body ? {
 		left: 0,
 		top: 0
@@ -15257,45 +15425,45 @@ function jt(e, t, n) {
 		y: (e.clientY + t.scrollTop - r.top) / n
 	};
 }
+function jt(e, t) {
+	let n = Nt(e, t, "px");
+	return { [vt("transform", bt)]: n };
+}
 function Mt(e, t) {
-	let n = Pt(e, t, "px");
-	return { [yt("transform", xt)]: n };
+	return Nt(e, t, "");
 }
-function Nt(e, t) {
-	return Pt(e, t, "");
-}
-function Pt({ x: e, y: t }, n, r) {
+function Nt({ x: e, y: t }, n, r) {
 	let i = `translate(${e}${r},${t}${r})`;
 	return n && (i = `translate(${`${typeof n.x == "string" ? n.x : n.x + r}`}, ${`${typeof n.y == "string" ? n.y : n.y + r}`})` + i), i;
 }
-function Ft(e, t) {
-	return e.targetTouches && ft(e.targetTouches, (e) => t === e.identifier) || e.changedTouches && ft(e.changedTouches, (e) => t === e.identifier);
+function Pt(e, t) {
+	return e.targetTouches && dt(e.targetTouches, (e) => t === e.identifier) || e.changedTouches && dt(e.changedTouches, (e) => t === e.identifier);
 }
-function It(e) {
+function Ft(e) {
 	if (e.targetTouches && e.targetTouches[0]) return e.targetTouches[0].identifier;
 	if (e.changedTouches && e.changedTouches[0]) return e.changedTouches[0].identifier;
 }
-function Lt() {
+function It() {
 	return typeof __webpack_nonce__ < "u" ? __webpack_nonce__ : void 0;
 }
-function Rt(e, t) {
+function Lt(e, t) {
 	if (!e) return;
 	let n = e.getElementById("react-draggable-style-el");
 	if (!n) {
 		n = e.createElement("style"), n.type = "text/css", n.id = "react-draggable-style-el";
-		let r = t ?? Lt();
+		let r = t ?? It();
 		r && n.setAttribute("nonce", r), n.innerHTML = ".react-draggable-transparent-selection *::-moz-selection {all: inherit;}\n", n.innerHTML += ".react-draggable-transparent-selection *::selection {all: inherit;}\n", e.getElementsByTagName("head")[0].appendChild(n);
 	}
-	e.body && Vt(e.body, "react-draggable-transparent-selection");
+	e.body && Bt(e.body, "react-draggable-transparent-selection");
+}
+function Rt(e) {
+	window.requestAnimationFrame ? window.requestAnimationFrame(() => {
+		zt(e);
+	}) : zt(e);
 }
 function zt(e) {
-	window.requestAnimationFrame ? window.requestAnimationFrame(() => {
-		Bt(e);
-	}) : Bt(e);
-}
-function Bt(e) {
 	if (e) try {
-		e.body && Ht(e.body, "react-draggable-transparent-selection");
+		e.body && Vt(e.body, "react-draggable-transparent-selection");
 		let t = e.selection;
 		if (t) t.empty();
 		else {
@@ -15304,17 +15472,17 @@ function Bt(e) {
 		}
 	} catch {}
 }
-function Vt(e, t) {
+function Bt(e, t) {
 	e.classList ? e.classList.add(t) : e.className.match(RegExp(`(?:^|\\s)${t}(?!\\S)`)) || (e.className += ` ${t}`);
 }
-function Ht(e, t) {
+function Vt(e, t) {
 	e.classList ? e.classList.remove(t) : e.className = e.className.replace(RegExp(`(?:^|\\s)${t}(?!\\S)`, "g"), "");
 }
-function Ut(e, t, n) {
+function Ht(e, t, n) {
 	if (!e.props.bounds) return [t, n];
 	let { bounds: r } = e.props;
-	r = typeof r == "string" ? r : Yt(r);
-	let i = Xt(e);
+	r = typeof r == "string" ? r : Jt(r);
+	let i = Yt(e);
 	if (typeof r == "string") {
 		let { ownerDocument: e } = i, t = e.defaultView;
 		if (!t) throw Error("Cannot resolve the owner window of the draggable node.");
@@ -15322,31 +15490,31 @@ function Ut(e, t, n) {
 		if (n = r === "parent" ? i.parentNode : i.getRootNode().querySelector(r), !(n instanceof t.HTMLElement)) throw Error("Bounds selector \"" + r + "\" could not find an element.");
 		let a = n, o = t.getComputedStyle(i), s = t.getComputedStyle(a);
 		r = {
-			left: -i.offsetLeft + ht(s.paddingLeft) + ht(o.marginLeft),
-			top: -i.offsetTop + ht(s.paddingTop) + ht(o.marginTop),
-			right: At(a) - Ot(i) - i.offsetLeft + ht(s.paddingRight) - ht(o.marginRight),
-			bottom: kt(a) - Dt(i) - i.offsetTop + ht(s.paddingBottom) - ht(o.marginBottom)
+			left: -i.offsetLeft + mt(s.paddingLeft) + mt(o.marginLeft),
+			top: -i.offsetTop + mt(s.paddingTop) + mt(o.marginTop),
+			right: kt(a) - Dt(i) - i.offsetLeft + mt(s.paddingRight) - mt(o.marginRight),
+			bottom: Ot(a) - Et(i) - i.offsetTop + mt(s.paddingBottom) - mt(o.marginBottom)
 		};
 	}
-	return mt(r.right) && (t = Math.min(t, r.right)), mt(r.bottom) && (n = Math.min(n, r.bottom)), mt(r.left) && (t = Math.max(t, r.left)), mt(r.top) && (n = Math.max(n, r.top)), [t, n];
+	return pt(r.right) && (t = Math.min(t, r.right)), pt(r.bottom) && (n = Math.min(n, r.bottom)), pt(r.left) && (t = Math.max(t, r.left)), pt(r.top) && (n = Math.max(n, r.top)), [t, n];
 }
-function V(e, t, n) {
+function Ut(e, t, n) {
 	return [Math.round(t / e[0]) * e[0], Math.round(n / e[1]) * e[1]];
 }
-function Wt(e) {
+function V(e) {
 	return e.props.axis === "both" || e.props.axis === "x";
 }
-function Gt(e) {
+function Wt(e) {
 	return e.props.axis === "both" || e.props.axis === "y";
 }
-function Kt(e, t, n) {
-	let r = typeof t == "number" ? Ft(e, t) : null;
+function Gt(e, t, n) {
+	let r = typeof t == "number" ? Pt(e, t) : null;
 	if (typeof t == "number" && !r) return null;
-	let i = Xt(n), a = n.props.offsetParent || i.offsetParent || i.ownerDocument.body;
-	return jt(r || e, a, n.props.scale);
+	let i = Yt(n), a = n.props.offsetParent || i.offsetParent || i.ownerDocument.body;
+	return At(r || e, a, n.props.scale);
 }
-function qt(e, t, n) {
-	let r = !mt(e.lastX), i = Xt(e);
+function Kt(e, t, n) {
+	let r = !pt(e.lastX), i = Yt(e);
 	return r ? {
 		node: i,
 		deltaX: 0,
@@ -15365,7 +15533,7 @@ function qt(e, t, n) {
 		y: n
 	};
 }
-function Jt(e, t) {
+function qt(e, t) {
 	let n = e.props.scale;
 	return {
 		node: t.node,
@@ -15377,7 +15545,7 @@ function Jt(e, t) {
 		lastY: e.state.y
 	};
 }
-function Yt(e) {
+function Jt(e) {
 	return {
 		left: e.left,
 		top: e.top,
@@ -15385,12 +15553,12 @@ function Yt(e) {
 		bottom: e.bottom
 	};
 }
-function Xt(e) {
+function Yt(e) {
 	let t = e.findDOMNode();
 	if (!t) throw Error("<DraggableCore>: Unmounted during event!");
 	return t;
 }
-var Zt = {
+var Xt = {
 	touch: {
 		start: "touchstart",
 		move: "touchmove",
@@ -15401,31 +15569,31 @@ var Zt = {
 		move: "mousemove",
 		stop: "mouseup"
 	}
-}, Qt = Zt.mouse, $t = class extends D.Component {
+}, Zt = Xt.mouse, Qt = class extends D.Component {
 	constructor() {
 		super(...arguments), this.dragging = !1, this.lastX = NaN, this.lastY = NaN, this.touchIdentifier = null, this.mounted = !1, this.handleDragStart = (e) => {
 			if (this.props.onMouseDown(e), !this.props.allowAnyClick && (typeof e.button == "number" && e.button !== 0 || e.ctrlKey)) return !1;
 			let t = this.findDOMNode();
 			if (!t || !t.ownerDocument || !t.ownerDocument.body) throw Error("<DraggableCore> not mounted on DragStart!");
 			let { ownerDocument: n } = t;
-			if (this.props.disabled || !(e.target instanceof n.defaultView.Node) || this.props.handle && !wt(e.target, this.props.handle, t) || this.props.cancel && wt(e.target, this.props.cancel, t)) return;
+			if (this.props.disabled || !(e.target instanceof n.defaultView.Node) || this.props.handle && !Ct(e.target, this.props.handle, t) || this.props.cancel && Ct(e.target, this.props.cancel, t)) return;
 			e.type === "touchstart" && !this.props.allowMobileScroll && e.preventDefault();
-			let r = It(e);
+			let r = Ft(e);
 			this.touchIdentifier = r;
-			let i = Kt(e, r, this);
+			let i = Gt(e, r, this);
 			if (i == null) return;
-			let { x: a, y: o } = i, s = qt(this, a, o);
-			this.props.onStart, this.props.onStart(e, s) !== !1 && this.mounted !== !1 && (this.props.enableUserSelectHack && Rt(n, this.props.nonce), this.dragging = !0, this.lastX = a, this.lastY = o, Tt(n, Qt.move, this.handleDrag), Tt(n, Qt.stop, this.handleDragStop));
+			let { x: a, y: o } = i, s = Kt(this, a, o);
+			this.props.onStart, this.props.onStart(e, s) !== !1 && this.mounted !== !1 && (this.props.enableUserSelectHack && Lt(n, this.props.nonce), this.dragging = !0, this.lastX = a, this.lastY = o, wt(n, Zt.move, this.handleDrag), wt(n, Zt.stop, this.handleDragStop));
 		}, this.handleDrag = (e) => {
-			let t = Kt(e, this.touchIdentifier, this);
+			let t = Gt(e, this.touchIdentifier, this);
 			if (t == null) return;
 			let { x: n, y: r } = t;
 			if (Array.isArray(this.props.grid)) {
 				let e = n - this.lastX, t = r - this.lastY;
-				if ([e, t] = V(this.props.grid, e, t), !e && !t) return;
+				if ([e, t] = Ut(this.props.grid, e, t), !e && !t) return;
 				n = this.lastX + e, r = this.lastY + t;
 			}
-			let i = qt(this, n, r);
+			let i = Kt(this, n, r);
 			if (this.props.onDrag(e, i) === !1 || this.mounted === !1) {
 				try {
 					this.handleDragStop(new MouseEvent("mouseup"));
@@ -15438,35 +15606,35 @@ var Zt = {
 			this.lastX = n, this.lastY = r;
 		}, this.handleDragStop = (e) => {
 			if (!this.dragging) return;
-			let t = Kt(e, this.touchIdentifier, this);
+			let t = Gt(e, this.touchIdentifier, this);
 			if (t == null) return;
 			let { x: n, y: r } = t;
 			if (Array.isArray(this.props.grid)) {
 				let e = n - this.lastX || 0, t = r - this.lastY || 0;
-				[e, t] = V(this.props.grid, e, t), n = this.lastX + e, r = this.lastY + t;
+				[e, t] = Ut(this.props.grid, e, t), n = this.lastX + e, r = this.lastY + t;
 			}
-			let i = qt(this, n, r);
+			let i = Kt(this, n, r);
 			if (this.props.onStop(e, i) === !1 || this.mounted === !1) return !1;
 			let a = this.findDOMNode();
-			a && this.props.enableUserSelectHack && zt(a.ownerDocument), this.dragging = !1, this.lastX = NaN, this.lastY = NaN, a && (Et(a.ownerDocument, Qt.move, this.handleDrag), Et(a.ownerDocument, Qt.stop, this.handleDragStop));
-		}, this.onMouseDown = (e) => (Qt = Zt.mouse, this.handleDragStart(e)), this.onMouseUp = (e) => (Qt = Zt.mouse, this.handleDragStop(e)), this.onTouchStart = (e) => (Qt = Zt.touch, this.handleDragStart(e)), this.onTouchEnd = (e) => (Qt = Zt.touch, this.handleDragStop(e));
+			a && this.props.enableUserSelectHack && Rt(a.ownerDocument), this.dragging = !1, this.lastX = NaN, this.lastY = NaN, a && (Tt(a.ownerDocument, Zt.move, this.handleDrag), Tt(a.ownerDocument, Zt.stop, this.handleDragStop));
+		}, this.onMouseDown = (e) => (Zt = Xt.mouse, this.handleDragStart(e)), this.onMouseUp = (e) => (Zt = Xt.mouse, this.handleDragStop(e)), this.onTouchStart = (e) => (Zt = Xt.touch, this.handleDragStart(e)), this.onTouchEnd = (e) => (Zt = Xt.touch, this.handleDragStop(e));
 	}
 	componentDidMount() {
 		this.mounted = !0;
 		let e = this.findDOMNode();
-		e && Tt(e, Zt.touch.start, this.onTouchStart, { passive: !1 });
+		e && wt(e, Xt.touch.start, this.onTouchStart, { passive: !1 });
 	}
 	componentWillUnmount() {
 		this.mounted = !1;
 		let e = this.findDOMNode();
 		if (e) {
 			let { ownerDocument: t } = e;
-			Et(t, Zt.mouse.move, this.handleDrag), Et(t, Zt.touch.move, this.handleDrag), Et(t, Zt.mouse.stop, this.handleDragStop), Et(t, Zt.touch.stop, this.handleDragStop), Et(e, Zt.touch.start, this.onTouchStart, { passive: !1 }), this.props.enableUserSelectHack && zt(t);
+			Tt(t, Xt.mouse.move, this.handleDrag), Tt(t, Xt.touch.move, this.handleDrag), Tt(t, Xt.mouse.stop, this.handleDragStop), Tt(t, Xt.touch.stop, this.handleDragStop), Tt(e, Xt.touch.start, this.onTouchStart, { passive: !1 }), this.props.enableUserSelectHack && Rt(t);
 		}
 	}
 	findDOMNode() {
 		if (this.props?.nodeRef) return this.props.nodeRef.current;
-		let e = lt.default;
+		let e = ct.default;
 		return typeof e.findDOMNode == "function" ? e.findDOMNode(this) : null;
 	}
 	render() {
@@ -15477,7 +15645,7 @@ var Zt = {
 		});
 	}
 };
-$t.displayName = "DraggableCore", $t.propTypes = {
+Qt.displayName = "DraggableCore", Qt.propTypes = {
 	allowAnyClick: B.default.bool,
 	allowMobileScroll: B.default.bool,
 	children: B.default.node.isRequired,
@@ -15496,10 +15664,10 @@ $t.displayName = "DraggableCore", $t.propTypes = {
 	onStop: B.default.func,
 	onMouseDown: B.default.func,
 	scale: B.default.number,
-	className: gt,
-	style: gt,
-	transform: gt
-}, $t.defaultProps = {
+	className: ht,
+	style: ht,
+	transform: ht
+}, Qt.defaultProps = {
 	allowAnyClick: !1,
 	allowMobileScroll: !1,
 	disabled: !1,
@@ -15510,17 +15678,17 @@ $t.displayName = "DraggableCore", $t.propTypes = {
 	onMouseDown: function() {},
 	scale: 1
 };
-var en = class extends D.Component {
+var $t = class extends D.Component {
 	constructor(e) {
 		super(e), this.onDragStart = (e, t) => {
-			if (this.props.onStart(e, Jt(this, t)) === !1) return !1;
+			if (this.props.onStart(e, qt(this, t)) === !1) return !1;
 			this.setState({
 				dragging: !0,
 				dragged: !0
 			});
 		}, this.onDrag = (e, t) => {
 			if (!this.state.dragging) return !1;
-			let n = Jt(this, t), r = {
+			let n = qt(this, t), r = {
 				x: n.x,
 				y: n.y,
 				slackX: 0,
@@ -15529,13 +15697,13 @@ var en = class extends D.Component {
 			if (this.props.bounds) {
 				let { x: e, y: t } = r;
 				r.x += this.state.slackX, r.y += this.state.slackY;
-				let [i, a] = Ut(this, r.x, r.y);
+				let [i, a] = Ht(this, r.x, r.y);
 				r.x = i, r.y = a, r.slackX = this.state.slackX + (e - r.x), r.slackY = this.state.slackY + (t - r.y), n.x = r.x, n.y = r.y, n.deltaX = r.x - this.state.x, n.deltaY = r.y - this.state.y;
 			}
 			if (this.props.onDrag(e, n) === !1) return !1;
 			this.setState(r);
 		}, this.onDragStop = (e, t) => {
-			if (!this.state.dragging || this.props.onStop(e, Jt(this, t)) === !1) return !1;
+			if (!this.state.dragging || this.props.onStop(e, qt(this, t)) === !1) return !1;
 			let n = {
 				dragging: !1,
 				slackX: 0,
@@ -15572,20 +15740,20 @@ var en = class extends D.Component {
 	}
 	findDOMNode() {
 		if (this.props?.nodeRef) return this.props.nodeRef.current;
-		let e = lt.default;
+		let e = ct.default;
 		return typeof e.findDOMNode == "function" ? e.findDOMNode(this) : null;
 	}
 	render() {
 		let { axis: e, bounds: t, children: n, defaultPosition: r, defaultClassName: i, defaultClassNameDragging: a, defaultClassNameDragged: o, position: s, positionOffset: c, scale: l, ...u } = this.props, d = {}, f = null, p = !s || this.state.dragging, m = s || r, h = {
-			x: Wt(this) && p ? this.state.x : m.x,
-			y: Gt(this) && p ? this.state.y : m.y
+			x: V(this) && p ? this.state.x : m.x,
+			y: Wt(this) && p ? this.state.y : m.y
 		};
-		this.state.isElementSVG ? f = Nt(h, c) : d = Mt(h, c);
-		let g = D.Children.only(n), _ = dt(g.props.className || "", i, {
+		this.state.isElementSVG ? f = Mt(h, c) : d = jt(h, c);
+		let g = D.Children.only(n), _ = ut(g.props.className || "", i, {
 			[a]: this.state.dragging,
 			[o]: this.state.dragged
 		});
-		return /* @__PURE__ */ D.createElement($t, {
+		return /* @__PURE__ */ D.createElement(Qt, {
 			...u,
 			onStart: this.onDragStart,
 			onDrag: this.onDrag,
@@ -15600,8 +15768,8 @@ var en = class extends D.Component {
 		}));
 	}
 };
-en.displayName = "Draggable", en.propTypes = {
-	...$t.propTypes,
+$t.displayName = "Draggable", $t.propTypes = {
+	...Qt.propTypes,
 	axis: B.default.oneOf([
 		"both",
 		"x",
@@ -15633,11 +15801,11 @@ en.displayName = "Draggable", en.propTypes = {
 		x: B.default.number,
 		y: B.default.number
 	}),
-	className: gt,
-	style: gt,
-	transform: gt
-}, en.defaultProps = {
-	...$t.defaultProps,
+	className: ht,
+	style: ht,
+	transform: ht
+}, $t.defaultProps = {
+	...Qt.defaultProps,
 	axis: "both",
 	bounds: !1,
 	defaultClassName: "react-draggable",
@@ -15650,8 +15818,8 @@ en.displayName = "Draggable", en.propTypes = {
 	scale: 1
 };
 //#endregion
-//#region node_modules/clsx/dist/clsx.js
-var tn = /* @__PURE__ */ o(((e, t) => {
+//#region ../../../../../Documents/Codex/2026-10-01/ok-tengo-x20/work/Argus/node_modules/clsx/dist/clsx.js
+var en = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		var t, r, i = "";
 		if (typeof e == "string" || typeof e == "number") i += e;
@@ -15668,7 +15836,7 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 		return i;
 	}
 	t.exports = r, t.exports.clsx = r;
-})), nn = /* @__PURE__ */ o(((e, t) => {
+})), tn = /* @__PURE__ */ o(((e, t) => {
 	var n = Object.create, r = Object.defineProperty, i = Object.getOwnPropertyDescriptor, a = Object.getOwnPropertyNames, o = Object.getPrototypeOf, s = Object.prototype.hasOwnProperty, c = (e, t) => {
 		for (var n in t) r(e, n, {
 			get: t[n],
@@ -15685,10 +15853,10 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 		enumerable: !0
 	}) : i, e)), d = (e) => l(r({}, "__esModule", { value: !0 }), e), f = {};
 	c(f, {
-		DraggableCore: () => Te,
-		default: () => Ee
+		DraggableCore: () => De,
+		default: () => Oe
 	}), t.exports = d(f);
-	var p = u(x()), m = u(ct()), h = u(T()), g = tn();
+	var p = u(x()), m = u(st()), h = u(T()), g = en();
 	function _(e, t) {
 		for (let n = 0, r = e.length; n < r; n++) if (t.apply(t, [
 			e[n],
@@ -15760,7 +15928,7 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 		}, a = n;
 		e.addEventListener ? e.addEventListener(t, a, i) : e.attachEvent ? e.attachEvent("on" + t, a) : e["on" + t] = a;
 	}
-	function A(e, t, n, r) {
+	function re(e, t, n, r) {
 		if (!e) return;
 		let i = {
 			capture: !0,
@@ -15768,7 +15936,7 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 		}, a = n;
 		e.removeEventListener ? e.removeEventListener(t, a, i) : e.detachEvent ? e.detachEvent("on" + t, a) : e["on" + t] = null;
 	}
-	function re(e) {
+	function A(e) {
 		let t = e.clientHeight, n = e.ownerDocument.defaultView.getComputedStyle(e);
 		return t += b(n.borderTopWidth), t += b(n.borderBottomWidth), t;
 	}
@@ -15850,8 +16018,8 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 	function ve(e, t, n) {
 		if (!e.props.bounds) return [t, n];
 		let { bounds: r } = e.props;
-		r = typeof r == "string" ? r : I(r);
-		let i = L(e);
+		r = typeof r == "string" ? r : Se(r);
+		let i = F(e);
 		if (typeof r == "string") {
 			let { ownerDocument: e } = i, t = e.defaultView;
 			if (!t) throw Error("Cannot resolve the owner window of the draggable node.");
@@ -15862,7 +16030,7 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 				left: -i.offsetLeft + b(s.paddingLeft) + b(o.marginLeft),
 				top: -i.offsetTop + b(s.paddingTop) + b(o.marginTop),
 				right: ae(a) - j(i) - i.offsetLeft + b(s.paddingRight) - b(o.marginRight),
-				bottom: ie(a) - re(i) - i.offsetTop + b(s.paddingBottom) - b(o.marginBottom)
+				bottom: ie(a) - A(i) - i.offsetTop + b(s.paddingBottom) - b(o.marginBottom)
 			};
 		}
 		return y(r.right) && (t = Math.min(t, r.right)), y(r.bottom) && (n = Math.min(n, r.bottom)), y(r.left) && (t = Math.max(t, r.left)), y(r.top) && (n = Math.max(n, r.top)), [t, n];
@@ -15876,14 +16044,14 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 	function ye(e) {
 		return e.props.axis === "both" || e.props.axis === "y";
 	}
-	function P(e, t, n) {
+	function be(e, t, n) {
 		let r = typeof t == "number" ? ue(e, t) : null;
 		if (typeof t == "number" && !r) return null;
-		let i = L(n), a = n.props.offsetParent || i.offsetParent || i.ownerDocument.body;
+		let i = F(n), a = n.props.offsetParent || i.offsetParent || i.ownerDocument.body;
 		return oe(r || e, a, n.props.scale);
 	}
-	function F(e, t, n) {
-		let r = !y(e.lastX), i = L(e);
+	function xe(e, t, n) {
+		let r = !y(e.lastX), i = F(e);
 		return r ? {
 			node: i,
 			deltaX: 0,
@@ -15902,7 +16070,7 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 			y: n
 		};
 	}
-	function be(e, t) {
+	function P(e, t) {
 		let n = e.props.scale;
 		return {
 			node: t.node,
@@ -15914,7 +16082,7 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 			lastY: e.state.y
 		};
 	}
-	function I(e) {
+	function Se(e) {
 		return {
 			left: e.left,
 			top: e.top,
@@ -15922,12 +16090,12 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 			bottom: e.bottom
 		};
 	}
-	function L(e) {
+	function F(e) {
 		let t = e.findDOMNode();
 		if (!t) throw Error("<DraggableCore>: Unmounted during event!");
 		return t;
 	}
-	var xe = u(x()), R = u(ct()), Se = u(T()), Ce = {
+	var I = u(x()), Ce = u(st()), we = u(T()), Te = {
 		touch: {
 			start: "touchstart",
 			move: "touchmove",
@@ -15938,7 +16106,7 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 			move: "mousemove",
 			stop: "mouseup"
 		}
-	}, we = Ce.mouse, Te = class extends xe.Component {
+	}, Ee = Te.mouse, De = class extends I.Component {
 		constructor() {
 			super(...arguments), this.dragging = !1, this.lastX = NaN, this.lastY = NaN, this.touchIdentifier = null, this.mounted = !1, this.handleDragStart = (e) => {
 				if (this.props.onMouseDown(e), !this.props.allowAnyClick && (typeof e.button == "number" && e.button !== 0 || e.ctrlKey)) return !1;
@@ -15949,12 +16117,12 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 				e.type === "touchstart" && !this.props.allowMobileScroll && e.preventDefault();
 				let r = de(e);
 				this.touchIdentifier = r;
-				let i = P(e, r, this);
+				let i = be(e, r, this);
 				if (i == null) return;
-				let { x: a, y: o } = i, s = F(this, a, o);
-				this.props.onStart, this.props.onStart(e, s) !== !1 && this.mounted !== !1 && (this.props.enableUserSelectHack && pe(n, this.props.nonce), this.dragging = !0, this.lastX = a, this.lastY = o, ne(n, we.move, this.handleDrag), ne(n, we.stop, this.handleDragStop));
+				let { x: a, y: o } = i, s = xe(this, a, o);
+				this.props.onStart, this.props.onStart(e, s) !== !1 && this.mounted !== !1 && (this.props.enableUserSelectHack && pe(n, this.props.nonce), this.dragging = !0, this.lastX = a, this.lastY = o, ne(n, Ee.move, this.handleDrag), ne(n, Ee.stop, this.handleDragStop));
 			}, this.handleDrag = (e) => {
-				let t = P(e, this.touchIdentifier, this);
+				let t = be(e, this.touchIdentifier, this);
 				if (t == null) return;
 				let { x: n, y: r } = t;
 				if (Array.isArray(this.props.grid)) {
@@ -15962,7 +16130,7 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 					if ([e, t] = M(this.props.grid, e, t), !e && !t) return;
 					n = this.lastX + e, r = this.lastY + t;
 				}
-				let i = F(this, n, r);
+				let i = xe(this, n, r);
 				if (this.props.onDrag(e, i) === !1 || this.mounted === !1) {
 					try {
 						this.handleDragStop(new MouseEvent("mouseup"));
@@ -15975,68 +16143,68 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 				this.lastX = n, this.lastY = r;
 			}, this.handleDragStop = (e) => {
 				if (!this.dragging) return;
-				let t = P(e, this.touchIdentifier, this);
+				let t = be(e, this.touchIdentifier, this);
 				if (t == null) return;
 				let { x: n, y: r } = t;
 				if (Array.isArray(this.props.grid)) {
 					let e = n - this.lastX || 0, t = r - this.lastY || 0;
 					[e, t] = M(this.props.grid, e, t), n = this.lastX + e, r = this.lastY + t;
 				}
-				let i = F(this, n, r);
+				let i = xe(this, n, r);
 				if (this.props.onStop(e, i) === !1 || this.mounted === !1) return !1;
 				let a = this.findDOMNode();
-				a && this.props.enableUserSelectHack && me(a.ownerDocument), this.dragging = !1, this.lastX = NaN, this.lastY = NaN, a && (A(a.ownerDocument, we.move, this.handleDrag), A(a.ownerDocument, we.stop, this.handleDragStop));
-			}, this.onMouseDown = (e) => (we = Ce.mouse, this.handleDragStart(e)), this.onMouseUp = (e) => (we = Ce.mouse, this.handleDragStop(e)), this.onTouchStart = (e) => (we = Ce.touch, this.handleDragStart(e)), this.onTouchEnd = (e) => (we = Ce.touch, this.handleDragStop(e));
+				a && this.props.enableUserSelectHack && me(a.ownerDocument), this.dragging = !1, this.lastX = NaN, this.lastY = NaN, a && (re(a.ownerDocument, Ee.move, this.handleDrag), re(a.ownerDocument, Ee.stop, this.handleDragStop));
+			}, this.onMouseDown = (e) => (Ee = Te.mouse, this.handleDragStart(e)), this.onMouseUp = (e) => (Ee = Te.mouse, this.handleDragStop(e)), this.onTouchStart = (e) => (Ee = Te.touch, this.handleDragStart(e)), this.onTouchEnd = (e) => (Ee = Te.touch, this.handleDragStop(e));
 		}
 		componentDidMount() {
 			this.mounted = !0;
 			let e = this.findDOMNode();
-			e && ne(e, Ce.touch.start, this.onTouchStart, { passive: !1 });
+			e && ne(e, Te.touch.start, this.onTouchStart, { passive: !1 });
 		}
 		componentWillUnmount() {
 			this.mounted = !1;
 			let e = this.findDOMNode();
 			if (e) {
 				let { ownerDocument: t } = e;
-				A(t, Ce.mouse.move, this.handleDrag), A(t, Ce.touch.move, this.handleDrag), A(t, Ce.mouse.stop, this.handleDragStop), A(t, Ce.touch.stop, this.handleDragStop), A(e, Ce.touch.start, this.onTouchStart, { passive: !1 }), this.props.enableUserSelectHack && me(t);
+				re(t, Te.mouse.move, this.handleDrag), re(t, Te.touch.move, this.handleDrag), re(t, Te.mouse.stop, this.handleDragStop), re(t, Te.touch.stop, this.handleDragStop), re(e, Te.touch.start, this.onTouchStart, { passive: !1 }), this.props.enableUserSelectHack && me(t);
 			}
 		}
 		findDOMNode() {
 			if (this.props?.nodeRef) return this.props.nodeRef.current;
-			let e = Se.default;
+			let e = we.default;
 			return typeof e.findDOMNode == "function" ? e.findDOMNode(this) : null;
 		}
 		render() {
-			return xe.cloneElement(xe.Children.only(this.props.children), {
+			return I.cloneElement(I.Children.only(this.props.children), {
 				onMouseDown: this.onMouseDown,
 				onMouseUp: this.onMouseUp,
 				onTouchEnd: this.onTouchEnd
 			});
 		}
 	};
-	Te.displayName = "DraggableCore", Te.propTypes = {
-		allowAnyClick: R.default.bool,
-		allowMobileScroll: R.default.bool,
-		children: R.default.node.isRequired,
-		disabled: R.default.bool,
-		enableUserSelectHack: R.default.bool,
+	De.displayName = "DraggableCore", De.propTypes = {
+		allowAnyClick: Ce.default.bool,
+		allowMobileScroll: Ce.default.bool,
+		children: Ce.default.node.isRequired,
+		disabled: Ce.default.bool,
+		enableUserSelectHack: Ce.default.bool,
 		offsetParent: function(e, t) {
 			if (e[t] && e[t].nodeType !== 1) throw Error("Draggable's offsetParent must be a DOM Node.");
 		},
-		grid: R.default.arrayOf(R.default.number),
-		handle: R.default.string,
-		cancel: R.default.string,
-		nodeRef: R.default.object,
-		nonce: R.default.string,
-		onStart: R.default.func,
-		onDrag: R.default.func,
-		onStop: R.default.func,
-		onMouseDown: R.default.func,
-		scale: R.default.number,
+		grid: Ce.default.arrayOf(Ce.default.number),
+		handle: Ce.default.string,
+		cancel: Ce.default.string,
+		nodeRef: Ce.default.object,
+		nonce: Ce.default.string,
+		onStart: Ce.default.func,
+		onDrag: Ce.default.func,
+		onStop: Ce.default.func,
+		onMouseDown: Ce.default.func,
+		scale: Ce.default.number,
 		className: S,
 		style: S,
 		transform: S
-	}, Te.defaultProps = {
+	}, De.defaultProps = {
 		allowAnyClick: !1,
 		allowMobileScroll: !1,
 		disabled: !1,
@@ -16047,17 +16215,17 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 		onMouseDown: function() {},
 		scale: 1
 	};
-	var Ee = class extends p.Component {
+	var Oe = class extends p.Component {
 		constructor(e) {
 			super(e), this.onDragStart = (e, t) => {
-				if (this.props.onStart(e, be(this, t)) === !1) return !1;
+				if (this.props.onStart(e, P(this, t)) === !1) return !1;
 				this.setState({
 					dragging: !0,
 					dragged: !0
 				});
 			}, this.onDrag = (e, t) => {
 				if (!this.state.dragging) return !1;
-				let n = be(this, t), r = {
+				let n = P(this, t), r = {
 					x: n.x,
 					y: n.y,
 					slackX: 0,
@@ -16072,7 +16240,7 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 				if (this.props.onDrag(e, n) === !1) return !1;
 				this.setState(r);
 			}, this.onDragStop = (e, t) => {
-				if (!this.state.dragging || this.props.onStop(e, be(this, t)) === !1) return !1;
+				if (!this.state.dragging || this.props.onStop(e, P(this, t)) === !1) return !1;
 				let n = {
 					dragging: !1,
 					slackX: 0,
@@ -16122,7 +16290,7 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 				[a]: this.state.dragging,
 				[o]: this.state.dragged
 			});
-			return /* @__PURE__ */ p.createElement(Te, {
+			return /* @__PURE__ */ p.createElement(De, {
 				...u,
 				onStart: this.onDragStart,
 				onDrag: this.onDrag,
@@ -16137,8 +16305,8 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 			}));
 		}
 	};
-	Ee.displayName = "Draggable", Ee.propTypes = {
-		...Te.propTypes,
+	Oe.displayName = "Draggable", Oe.propTypes = {
+		...De.propTypes,
 		axis: m.default.oneOf([
 			"both",
 			"x",
@@ -16173,8 +16341,8 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 		className: S,
 		style: S,
 		transform: S
-	}, Ee.defaultProps = {
-		...Te.defaultProps,
+	}, Oe.defaultProps = {
+		...De.defaultProps,
 		axis: "both",
 		bounds: !1,
 		defaultClassName: "react-draggable",
@@ -16185,11 +16353,11 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 			y: 0
 		},
 		scale: 1
-	}, 0 && (t.exports = { DraggableCore: Te });
-})), rn = /* @__PURE__ */ o(((e, t) => {
-	var n = nn(), r = n.DraggableCore, i = n.default || n;
+	}, 0 && (t.exports = { DraggableCore: De });
+})), nn = /* @__PURE__ */ o(((e, t) => {
+	var n = tn(), r = n.DraggableCore, i = n.default || n;
 	t.exports = i, t.exports.default = i, t.exports.DraggableCore = r;
-})), an = /* @__PURE__ */ o(((e) => {
+})), rn = /* @__PURE__ */ o(((e) => {
 	e.__esModule = !0, e.cloneElement = c;
 	var t = n(x());
 	function n(e) {
@@ -16241,10 +16409,10 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 	function c(e, n) {
 		return n.style && e.props.style && (n.style = i(i({}, e.props.style), n.style)), n.className && e.props.className && (n.className = e.props.className + " " + n.className), /*#__PURE__*/ t.default.cloneElement(e, n);
 	}
-})), on = /* @__PURE__ */ o(((e) => {
+})), an = /* @__PURE__ */ o(((e) => {
 	e.__esModule = !0, e.resizableProps = void 0;
-	var t = n(ct());
-	rn();
+	var t = n(st());
+	nn();
 	function n(e) {
 		return e && e.__esModule ? e : { default: e };
 	}
@@ -16303,9 +16471,9 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 			return n.axis === "both" || n.axis === "x" ? t.default.number.isRequired(...e) : t.default.number(...e);
 		}
 	};
-})), sn = /* @__PURE__ */ o(((e) => {
+})), on = /* @__PURE__ */ o(((e) => {
 	e.__esModule = !0, e.default = void 0;
-	var t = o(x()), n = rn(), r = an(), i = on(), a = [
+	var t = o(x()), n = nn(), r = rn(), i = an(), a = [
 		"children",
 		"className",
 		"draggableOpts",
@@ -16501,9 +16669,9 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 		resizeHandles: ["se"],
 		transformScale: 1
 	};
-})), cn = /* @__PURE__ */ o(((e) => {
+})), sn = /* @__PURE__ */ o(((e) => {
 	e.__esModule = !0, e.default = void 0;
-	var t = s(x()), n = o(ct()), r = o(sn()), i = on(), a = [
+	var t = s(x()), n = o(st()), r = o(on()), i = an(), a = [
 		"handle",
 		"handleSize",
 		"onResize",
@@ -16649,11 +16817,11 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 		}
 	};
 	e.default = h, h.propTypes = u(u({}, i.resizableProps), {}, { children: n.default.element });
-})), ln = /* @__PURE__ */ o(((e, t) => {
+})), cn = /* @__PURE__ */ o(((e, t) => {
 	t.exports = function() {
 		throw Error("Don't instantiate Resizable directly! Use require('react-resizable').Resizable");
-	}, t.exports.Resizable = sn().default, t.exports.ResizableBox = cn().default;
-})), un = /* @__PURE__ */ o(((e, t) => {
+	}, t.exports.Resizable = on().default, t.exports.ResizableBox = sn().default;
+})), ln = /* @__PURE__ */ o(((e, t) => {
 	(function(n, r) {
 		typeof e == "object" && t !== void 0 ? r(e) : typeof define == "function" && define.amd ? define(["exports"], r) : (n = typeof globalThis < "u" ? globalThis : n || self, r(n["fast-equals"] = {}));
 	})(e, (function(e) {
@@ -16803,22 +16971,22 @@ var tn = /* @__PURE__ */ o(((e, t) => {
 		}
 		e.circularDeepEqual = D, e.circularShallowEqual = O, e.createCustomCircularEqual = ne, e.createCustomEqual = k, e.deepEqual = w, e.sameValueZeroEqual = o, e.shallowEqual = ee, Object.defineProperty(e, "__esModule", { value: !0 });
 	}));
-})), dn = ln(), fn = un();
-function pn(e) {
-	let { children: t, cols: n, containerWidth: r, margin: i, containerPadding: a, rowHeight: o, maxRows: s, isDraggable: c, isResizable: l, isBounded: u, static: d, useCSSTransforms: f = !0, usePercentages: p = !1, transformScale: m = 1, positionStrategy: h, dragThreshold: g = 0, droppingPosition: _, className: v = "", style: y, handle: b = "", cancel: x = "", x: S, y: C, w, h: T, minW: ee = 1, maxW: E = Infinity, minH: te = 1, maxH: O = Infinity, i: k, resizeHandles: ne, resizeHandle: A, constraints: re = Se, layoutItem: ie, layout: ce = [], onDragStart: fe, onDrag: pe, onDragStop: me, onResizeStart: he, onResize: ge, onResizeStop: _e } = e, [ve, M] = (0, D.useState)(!1), [N, ye] = (0, D.useState)(!1), P = (0, D.useRef)(null), F = (0, D.useRef)({
+})), un = cn(), dn = ln();
+function fn(e) {
+	let { children: t, cols: n, containerWidth: r, margin: i, containerPadding: a, rowHeight: o, maxRows: s, isDraggable: c, isResizable: l, isBounded: u, static: d, useCSSTransforms: f = !0, usePercentages: p = !1, transformScale: m = 1, positionStrategy: h, dragThreshold: g = 0, droppingPosition: _, className: v = "", style: y, handle: b = "", cancel: x = "", x: S, y: C, w, h: T, minW: ee = 1, maxW: E = Infinity, minH: te = 1, maxH: O = Infinity, i: k, resizeHandles: ne, resizeHandle: re, constraints: j = Ce, layoutItem: se, layout: de = [], onDragStart: fe, onDrag: pe, onDragStop: me, onResizeStart: he, onResize: ge, onResizeStop: _e } = e, [ve, M] = (0, D.useState)(!1), [N, ye] = (0, D.useState)(!1), be = (0, D.useRef)(null), xe = (0, D.useRef)({
 		left: 0,
 		top: 0
-	}), be = (0, D.useRef)({
+	}), P = (0, D.useRef)({
 		top: 0,
 		left: 0,
 		width: 0,
 		height: 0
-	}), I = (0, D.useRef)(void 0), L = (0, D.useRef)(ce);
-	L.current = ce;
-	let xe = (0, D.useRef)(null), R = (0, D.useRef)(null), Oe = (0, D.useRef)(!1), ke = (0, D.useRef)({
+	}), Se = (0, D.useRef)(void 0), F = (0, D.useRef)(de);
+	F.current = de;
+	let I = (0, D.useRef)(null), ke = (0, D.useRef)(null), L = (0, D.useRef)(!1), Ae = (0, D.useRef)({
 		x: 0,
 		y: 0
-	}), Ae = (0, D.useRef)(!1), z = (0, D.useMemo)(() => ({
+	}), R = (0, D.useRef)(!1), z = (0, D.useMemo)(() => ({
 		cols: n,
 		containerPadding: a,
 		containerWidth: r,
@@ -16848,8 +17016,8 @@ function pn(e) {
 		i
 	]), Me = (0, D.useCallback)(() => ({
 		...je,
-		layout: L.current
-	}), [je]), Ne = (0, D.useMemo)(() => ie ?? {
+		layout: F.current
+	}), [je]), Ne = (0, D.useMemo)(() => se ?? {
 		i: k,
 		x: S,
 		y: C,
@@ -16860,7 +17028,7 @@ function pn(e) {
 		minH: te,
 		maxH: O
 	}, [
-		ie,
+		se,
 		k,
 		S,
 		C,
@@ -16872,19 +17040,19 @@ function pn(e) {
 		O
 	]), Pe = (0, D.useCallback)((e) => {
 		if (h?.calcStyle) return h.calcStyle(e);
-		if (f) return Te(e);
-		let t = Ee(e);
+		if (f) return Ee(e);
+		let t = De(e);
 		return p ? {
 			...t,
-			left: De(e.left / r),
-			width: De(e.width / r)
+			left: Oe(e.left / r),
+			width: Oe(e.width / r)
 		} : t;
 	}, [
 		h,
 		f,
 		p,
 		r
-	]), Fe = (0, D.useCallback)((e, { node: t }) => {
+	]), Ie = (0, D.useCallback)((e, { node: t }) => {
 		if (!fe) return;
 		let { offsetParent: n } = t;
 		if (!n) return;
@@ -16896,16 +17064,16 @@ function pn(e) {
 			left: a - o + n.scrollLeft,
 			top: s - c + n.scrollTop
 		};
-		if (F.current = l, g > 0) {
+		if (xe.current = l, g > 0) {
 			let t = e;
-			ke.current = {
+			Ae.current = {
 				x: t.clientX,
 				y: t.clientY
-			}, Oe.current = !0, Ae.current = !1, M(!0);
+			}, L.current = !0, R.current = !1, M(!0);
 			return;
 		}
 		M(!0);
-		let u = le(z, l.top, l.left), { x: d, y: f } = Ce(re, Ne, u.x, u.y, Me());
+		let u = ce(z, l.top, l.left), { x: d, y: f } = we(j, Ne, u.x, u.y, Me());
 		fe(k, d, f, {
 			e,
 			node: t,
@@ -16917,41 +17085,41 @@ function pn(e) {
 		z,
 		h,
 		g,
-		re,
+		j,
 		Ne,
 		Me,
 		k
 	]), Le = (0, D.useCallback)((e, { node: t, deltaX: n, deltaY: a }) => {
 		if (!pe || !ve) return;
 		let s = e;
-		if (Oe.current && !Ae.current) {
-			let n = s.clientX - ke.current.x, r = s.clientY - ke.current.y;
+		if (L.current && !R.current) {
+			let n = s.clientX - Ae.current.x, r = s.clientY - Ae.current.y;
 			if (Math.hypot(n, r) < g) return;
-			if (Ae.current = !0, Oe.current = !1, fe) {
-				let n = le(z, F.current.top, F.current.left), { x: r, y: i } = Ce(re, Ne, n.x, n.y, Me());
+			if (R.current = !0, L.current = !1, fe) {
+				let n = ce(z, xe.current.top, xe.current.left), { x: r, y: i } = we(j, Ne, n.x, n.y, Me());
 				fe(k, r, i, {
 					e,
 					node: t,
-					newPosition: F.current
+					newPosition: xe.current
 				});
 			}
 		}
-		let c = F.current.top + a, l = F.current.left + n;
+		let c = xe.current.top + a, l = xe.current.left + n;
 		if (u) {
 			let { offsetParent: e } = t;
 			if (e) {
-				let t = e.clientHeight - oe(T, o, i[1]);
-				c = de(c, 0, t);
-				let n = ae(z), a = r - oe(w, n, i[0]);
-				l = de(l, 0, a);
+				let t = e.clientHeight - ae(T, o, i[1]);
+				c = ue(c, 0, t);
+				let n = ie(z), a = r - ae(w, n, i[0]);
+				l = ue(l, 0, a);
 			}
 		}
 		let d = {
 			top: c,
 			left: l
 		};
-		F.current = d;
-		let f = le(z, c, l), { x: p, y: m } = Ce(re, Ne, f.x, f.y, Me());
+		xe.current = d;
+		let f = ce(z, c, l), { x: p, y: m } = we(j, Ne, f.x, f.y, Me());
 		pe(k, p, m, {
 			e,
 			node: t,
@@ -16970,31 +17138,31 @@ function pn(e) {
 		r,
 		w,
 		k,
-		re,
+		j,
 		Ne,
 		Me
 	]), Re = (0, D.useCallback)((e, { node: t }) => {
 		if (!me || !ve) return;
-		let n = Oe.current;
-		if (Oe.current = !1, Ae.current = !1, ke.current = {
+		let n = L.current;
+		if (L.current = !1, R.current = !1, Ae.current = {
 			x: 0,
 			y: 0
 		}, n) {
-			M(!1), F.current = {
+			M(!1), xe.current = {
 				left: 0,
 				top: 0
 			};
 			return;
 		}
-		let { left: r, top: i } = F.current, a = {
+		let { left: r, top: i } = xe.current, a = {
 			top: i,
 			left: r
 		};
-		M(!1), F.current = {
+		M(!1), xe.current = {
 			left: 0,
 			top: 0
 		};
-		let o = le(z, i, r), { x: s, y: c } = Ce(re, Ne, o.x, o.y, Me());
+		let o = ce(z, i, r), { x: s, y: c } = we(j, Ne, o.x, o.y, Me());
 		me(k, s, c, {
 			e,
 			node: t,
@@ -17004,22 +17172,22 @@ function pn(e) {
 		me,
 		ve,
 		z,
-		re,
+		j,
 		Ne,
 		Me,
 		k
 	]);
-	xe.current = Fe, R.current = Le;
+	I.current = Ie, ke.current = Le;
 	let ze = (0, D.useCallback)((e, { node: t, size: n, handle: i }, a, o) => {
 		let s = o === "onResizeStart" ? he : o === "onResize" ? ge : _e;
 		if (!s) return;
 		let c;
-		c = t ? Ie(i, a, n, r) : {
+		c = t ? Fe(i, a, n, r) : {
 			...n,
 			top: a.top,
 			left: a.left
-		}, be.current = c;
-		let l = ue(z, c.width, c.height), { w: u, h: d } = we(re, Ne, l.w, l.h, i, Me());
+		}, P.current = c;
+		let l = le(z, c.width, c.height), { w: u, h: d } = Te(j, Ne, l.w, l.h, i, Me());
 		s(k, u, d, {
 			e: e.nativeEvent ?? e,
 			node: t,
@@ -17033,12 +17201,12 @@ function pn(e) {
 		r,
 		z,
 		k,
-		re,
+		j,
 		Ne,
 		Me
 	]), Be = (0, D.useCallback)((e, t) => {
 		ye(!0);
-		let n = se(z, S, C, w, T), r = {
+		let n = oe(z, S, C, w, T), r = {
 			...t,
 			handle: t.handle
 		};
@@ -17051,7 +17219,7 @@ function pn(e) {
 		w,
 		T
 	]), Ve = (0, D.useCallback)((e, t) => {
-		let n = se(z, S, C, w, T), r = {
+		let n = oe(z, S, C, w, T), r = {
 			...t,
 			handle: t.handle
 		};
@@ -17064,13 +17232,13 @@ function pn(e) {
 		w,
 		T
 	]), He = (0, D.useCallback)((e, t) => {
-		ye(!1), be.current = {
+		ye(!1), P.current = {
 			top: 0,
 			left: 0,
 			width: 0,
 			height: 0
 		};
-		let n = se(z, S, C, w, T), r = {
+		let n = oe(z, S, C, w, T), r = {
 			...t,
 			handle: t.handle
 		};
@@ -17085,9 +17253,9 @@ function pn(e) {
 	]);
 	(0, D.useEffect)(() => {
 		if (!_) return;
-		let e = P.current;
+		let e = be.current;
 		if (!e) return;
-		let t = I.current || {
+		let t = Se.current || {
 			left: 0,
 			top: 0
 		}, n = ve && (_.left !== t.left || _.top !== t.top);
@@ -17101,28 +17269,28 @@ function pn(e) {
 				x: _.left,
 				y: _.top
 			};
-			xe.current?.(_.e, t);
+			I.current?.(_.e, t);
 		} else if (n) {
 			let t = {
 				node: e,
-				deltaX: _.left - F.current.left,
-				deltaY: _.top - F.current.top,
-				lastX: F.current.left,
-				lastY: F.current.top,
+				deltaX: _.left - xe.current.left,
+				deltaY: _.top - xe.current.top,
+				lastX: xe.current.left,
+				lastY: xe.current.top,
 				x: _.left,
 				y: _.top
 			};
-			R.current?.(_.e, t);
+			ke.current?.(_.e, t);
 		}
-		I.current = _;
+		Se.current = _;
 	}, [
 		_,
 		ve,
 		k
 	]);
-	let Ue = se(z, S, C, w, T, ve ? F.current : null, N ? be.current : null), We = D.Children.only(t), Ge = ae(z), Ke = [oe(ee, Ge, i[0]), oe(te, o, i[1])], qe = [oe(E, Ge, i[0]), oe(O, o, i[1])], Je = We.props, Ye = Je.className, Xe = Je.style, Ze = D.cloneElement(We, {
-		ref: P,
-		className: dt("react-grid-item", Ye, v, {
+	let Ue = oe(z, S, C, w, T, ve ? xe.current : null, N ? P.current : null), We = D.Children.only(t), Ge = ie(z), Ke = [ae(ee, Ge, i[0]), ae(te, o, i[1])], qe = [ae(E, Ge, i[0]), ae(O, o, i[1])], Je = We.props, Ye = Je.className, Xe = Je.style, Ze = D.cloneElement(We, {
+		ref: be,
+		className: ut("react-grid-item", Ye, v, {
 			static: d,
 			resizing: N,
 			"react-draggable": c,
@@ -17135,8 +17303,8 @@ function pn(e) {
 			...Xe,
 			...Pe(Ue)
 		}
-	}), Qe = A;
-	return Ze = /* @__PURE__ */ (0, j.jsx)(dn.Resizable, {
+	}), Qe = re;
+	return Ze = /* @__PURE__ */ (0, A.jsx)(un.Resizable, {
 		draggableOpts: { disabled: !l },
 		className: l ? void 0 : "react-resizable-hide",
 		width: Ue.width,
@@ -17150,23 +17318,23 @@ function pn(e) {
 		resizeHandles: ne,
 		handle: Qe,
 		children: Ze
-	}), Ze = /* @__PURE__ */ (0, j.jsx)($t, {
+	}), Ze = /* @__PURE__ */ (0, A.jsx)(Qt, {
 		disabled: !c,
-		onStart: Fe,
+		onStart: Ie,
 		onDrag: Le,
 		onStop: Re,
 		handle: b,
 		cancel: ".react-resizable-handle" + (x ? "," + x : ""),
 		scale: m,
-		nodeRef: P,
+		nodeRef: be,
 		children: Ze
 	}), Ze;
 }
-var mn = () => {}, hn = "react-grid-layout", gn = !1;
+var pn = () => {}, mn = "react-grid-layout", hn = !1;
 try {
-	gn = /firefox/i.test(navigator.userAgent);
+	hn = /firefox/i.test(navigator.userAgent);
 } catch {}
-function _n(e, t) {
+function gn(e, t) {
 	let n = D.Children.toArray(e), r = D.Children.toArray(t);
 	if (n.length !== r.length) return !1;
 	for (let e = 0; e < n.length; e++) {
@@ -17175,14 +17343,14 @@ function _n(e, t) {
 	}
 	return !0;
 }
-function vn(e, t, n, r) {
+function _n(e, t, n, r) {
 	let i = [], a = /* @__PURE__ */ new Set();
 	D.Children.forEach(t, (t) => {
 		if (!D.isValidElement(t) || t.key === null) return;
 		let n = String(t.key);
 		a.add(n);
 		let r = e.find((e) => e.i === n);
-		if (r) i.push(ye(r));
+		if (r) i.push(N(r));
 		else {
 			let e = t.props["data-grid"];
 			e ? i.push({
@@ -17203,75 +17371,75 @@ function vn(e, t, n, r) {
 			}) : i.push({
 				i: n,
 				x: 0,
-				y: ve(i),
+				y: _e(i),
 				w: 1,
 				h: 1
 			});
 		}
 	});
-	let o = I(i, { cols: n });
+	let o = P(i, { cols: n });
 	return r.compact(o, n);
 }
-function yn(e) {
-	let { children: t, width: n, gridConfig: r, dragConfig: i, resizeConfig: a, dropConfig: o, positionStrategy: s = Be, compactor: c, constraints: l = Se, layout: u = [], droppingItem: d, autoSize: f = !0, className: p = "", style: m = {}, innerRef: h, onLayoutChange: g = mn, onDragStart: _ = mn, onDrag: v = mn, onDragStop: y = mn, onResizeStart: b = mn, onResize: x = mn, onResizeStop: S = mn, onDrop: C = mn, onDropDragOver: w = mn } = e, T = (0, D.useMemo)(() => ({
-		...Ve,
+function vn(e) {
+	let { children: t, width: n, gridConfig: r, dragConfig: i, resizeConfig: a, dropConfig: o, positionStrategy: s = ze, compactor: c, constraints: l = Ce, layout: u = [], droppingItem: d, autoSize: f = !0, className: p = "", style: m = {}, innerRef: h, onLayoutChange: g = pn, onDragStart: _ = pn, onDrag: v = pn, onDragStop: y = pn, onResizeStart: b = pn, onResize: x = pn, onResizeStop: S = pn, onDrop: C = pn, onDropDragOver: w = pn } = e, T = (0, D.useMemo)(() => ({
+		...Be,
 		...r
 	}), [r]), ee = (0, D.useMemo)(() => ({
-		...He,
+		...Ve,
 		...i
 	}), [i]), E = (0, D.useMemo)(() => ({
-		...Ue,
+		...He,
 		...a
 	}), [a]), te = (0, D.useMemo)(() => ({
-		...We,
+		...Ue,
 		...o
-	}), [o]), { cols: O, rowHeight: k, maxRows: ne, margin: A, containerPadding: re } = T, { enabled: ie, bounded: se, handle: le, cancel: ue, threshold: de } = ee, { enabled: fe, handles: pe, handleComponent: he } = E, { enabled: ge, defaultItem: _e, onDragOver: N } = te, P = c ?? et("vertical"), F = P.type, I = P.allowOverlap, xe = P.preventCollision ?? !1, R = (0, D.useMemo)(() => d ?? {
+	}), [o]), { cols: O, rowHeight: k, maxRows: ne, margin: re, containerPadding: j } = T, { enabled: oe, bounded: ce, handle: le, cancel: ue, threshold: de } = ee, { enabled: fe, handles: me, handleComponent: he } = E, { enabled: ge, defaultItem: M, onDragOver: ye } = te, be = c ?? $e("vertical"), P = be.type, F = be.allowOverlap, I = be.preventCollision ?? !1, we = (0, D.useMemo)(() => d ?? {
 		i: "__dropping-elem__",
-		..._e
-	}, [d, _e]), Ce = s.type === "transform", we = s.scale, Te = re ?? A, [Ee, De] = (0, D.useState)(!1), [Oe, ke] = (0, D.useState)(() => vn(u, t, O, P)), [Ae, z] = (0, D.useState)(null), [je, Me] = (0, D.useState)(!1), [Ne, Pe] = (0, D.useState)(null), [Fe, Ie] = (0, D.useState)(), Le = (0, D.useRef)(null), Re = (0, D.useRef)(null), ze = (0, D.useRef)(null), Ge = (0, D.useRef)(0), Ke = (0, D.useRef)(Oe), qe = (0, D.useRef)(u), Je = (0, D.useRef)(t), Ye = (0, D.useRef)(F), Xe = (0, D.useRef)(Oe);
-	Xe.current = Oe, (0, D.useEffect)(() => {
-		De(!0), (0, fn.deepEqual)(Oe, u) || g(Oe);
+		...M
+	}, [d, M]), Te = s.type === "transform", Ee = s.scale, De = j ?? re, [Oe, ke] = (0, D.useState)(!1), [L, Ae] = (0, D.useState)(() => _n(u, t, O, be)), [R, z] = (0, D.useState)(null), [je, Me] = (0, D.useState)(!1), [Ne, Pe] = (0, D.useState)(null), [Fe, Ie] = (0, D.useState)(), Le = (0, D.useRef)(null), Re = (0, D.useRef)(null), We = (0, D.useRef)(null), Ge = (0, D.useRef)(0), Ke = (0, D.useRef)(L), qe = (0, D.useRef)(u), Je = (0, D.useRef)(t), Ye = (0, D.useRef)(P), Xe = (0, D.useRef)(L);
+	Xe.current = L, (0, D.useEffect)(() => {
+		ke(!0), (0, dn.deepEqual)(L, u) || g(L);
 	}, []), (0, D.useEffect)(() => {
-		if (Ae || Ne) return;
-		let e = !(0, fn.deepEqual)(u, qe.current), n = !_n(t, Je.current), r = F !== Ye.current;
+		if (R || Ne) return;
+		let e = !(0, dn.deepEqual)(u, qe.current), n = !gn(t, Je.current), r = P !== Ye.current;
 		if (e || n || r) {
-			let n = vn(e ? u : Oe, t, O, P);
-			(0, fn.deepEqual)(n, Oe) || ke(n);
+			let n = _n(e ? u : L, t, O, be);
+			(0, dn.deepEqual)(n, L) || Ae(n);
 		}
-		qe.current = u, Je.current = t, Ye.current = F;
+		qe.current = u, Je.current = t, Ye.current = P;
 	}, [
 		u,
 		t,
 		O,
-		F,
 		P,
-		Ae,
+		be,
+		R,
 		Ne,
-		Oe
+		L
 	]), (0, D.useEffect)(() => {
-		if (!Ae && !(0, fn.deepEqual)(Oe, Ke.current)) {
-			Ke.current = Oe;
-			let e = Oe.filter((e) => e.i !== R.i);
+		if (!R && !(0, dn.deepEqual)(L, Ke.current)) {
+			Ke.current = L;
+			let e = L.filter((e) => e.i !== we.i);
 			g(e);
 		}
 	}, [
-		Oe,
-		Ae,
+		L,
+		R,
 		g,
-		R.i
+		we.i
 	]);
 	let Ze = (0, D.useMemo)(() => {
 		if (!f) return;
-		let e = ve(Oe), t = Te[1];
-		return e * k + (e - 1) * A[1] + t * 2 + "px";
+		let e = _e(L), t = De[1];
+		return e * k + (e - 1) * re[1] + t * 2 + "px";
 	}, [
 		f,
-		Oe,
+		L,
 		k,
-		A,
-		Te
+		re,
+		De
 	]), Qe = (0, D.useCallback)((e, t, n, r) => {
-		let i = Xe.current, a = M(i, e);
+		let i = Xe.current, a = ve(i, e);
 		if (!a) return;
 		let o = {
 			w: a.w,
@@ -17280,9 +17448,9 @@ function yn(e) {
 			y: a.y,
 			i: e
 		};
-		Le.current = ye(a), ze.current = i, z(o), _(i, a, a, null, r.e, r.node);
-	}, [_]), $e = (0, D.useCallback)((e, t, n, r) => {
-		let i = Xe.current, a = Le.current, o = M(i, e);
+		Le.current = N(a), We.current = i, z(o), _(i, a, a, null, r.e, r.node);
+	}, [_]), et = (0, D.useCallback)((e, t, n, r) => {
+		let i = Xe.current, a = Le.current, o = ve(i, e);
 		if (!o) return;
 		let s = {
 			w: o.w,
@@ -17290,37 +17458,37 @@ function yn(e) {
 			x: o.x,
 			y: o.y,
 			i: e
-		}, c = L(i, o, t, n, !0, xe, F, O, I);
-		v(c, a, o, s, r.e, r.node), ke(P.compact(c, O)), z(s);
+		}, c = Se(i, o, t, n, !0, I, P, O, F);
+		v(c, a, o, s, r.e, r.node), Ae(be.compact(c, O)), z(s);
 	}, [
-		xe,
-		F,
-		O,
 		I,
 		P,
+		O,
+		F,
+		be,
 		v
 	]), tt = (0, D.useCallback)((e, t, n, r) => {
-		if (!Ae) return;
-		let i = Xe.current, a = Le.current, o = M(i, e);
+		if (!R) return;
+		let i = Xe.current, a = Le.current, o = ve(i, e);
 		if (!o) return;
-		let s = L(i, o, t, n, !0, xe, F, O, I), c = P.compact(s, O);
+		let s = Se(i, o, t, n, !0, I, P, O, F), c = be.compact(s, O);
 		y(c, a, o, null, r.e, r.node);
-		let l = ze.current;
-		Le.current = null, ze.current = null, z(null), ke(c), l && !(0, fn.deepEqual)(l, c) && g(c);
+		let l = We.current;
+		Le.current = null, We.current = null, z(null), Ae(c), l && !(0, dn.deepEqual)(l, c) && g(c);
 	}, [
-		Ae,
-		xe,
-		F,
-		O,
+		R,
 		I,
 		P,
+		O,
+		F,
+		be,
 		y,
 		g
 	]), nt = (0, D.useCallback)((e, t, n, r) => {
-		let i = Xe.current, a = M(i, e);
-		a && (Re.current = ye(a), ze.current = i, Me(!0), b(i, a, a, null, r.e, r.node));
+		let i = Xe.current, a = ve(i, e);
+		a && (Re.current = N(a), We.current = i, Me(!0), b(i, a, a, null, r.e, r.node));
 	}, [b]), rt = (0, D.useCallback)((e, t, n, r) => {
-		let i = Xe.current, a = Re.current, { handle: o } = r, s = !1, c, l, [u, d] = be(i, e, (e) => (c = e.x, l = e.y, [
+		let i = Xe.current, a = Re.current, { handle: o } = r, s = !1, c, l, [u, d] = xe(i, e, (e) => (c = e.x, l = e.y, [
 			"sw",
 			"w",
 			"nw",
@@ -17334,7 +17502,7 @@ function yn(e) {
 			"ne",
 			"n",
 			"nw"
-		].includes(o) && (l = e.y + (e.h - n), n = e.y !== l && l < 0 ? e.h : n, l = l < 0 ? 0 : l), s = !0), xe && !I && me(i, {
+		].includes(o) && (l = e.y + (e.h - n), n = e.y !== l && l < 0 ? e.h : n, l = l < 0 ? 0 : l), s = !0), I && !F && pe(i, {
 			...e,
 			w: t,
 			h: n,
@@ -17343,7 +17511,7 @@ function yn(e) {
 		}).filter((t) => t.i !== e.i).length > 0 && (l = e.y, n = e.h, c = e.x, t = e.w, s = !1), e.w = t, e.h = n, e));
 		if (!d) return;
 		let f = u;
-		s && c !== void 0 && l !== void 0 && (f = L(u, d, c, l, !0, xe, F, O, I));
+		s && c !== void 0 && l !== void 0 && (f = Se(u, d, c, l, !0, I, P, O, F));
 		let p = {
 			w: d.w,
 			h: d.h,
@@ -17352,61 +17520,61 @@ function yn(e) {
 			i: e,
 			static: !0
 		};
-		x(f, a, d, p, r.e, r.node), ke(P.compact(f, O)), z(p);
+		x(f, a, d, p, r.e, r.node), Ae(be.compact(f, O)), z(p);
 	}, [
-		xe,
-		F,
-		O,
 		I,
 		P,
+		O,
+		F,
+		be,
 		x
 	]), it = (0, D.useCallback)((e, t, n, r) => {
-		let i = Xe.current, a = Re.current, o = M(i, e), s = P.compact(i, O);
+		let i = Xe.current, a = Re.current, o = ve(i, e), s = be.compact(i, O);
 		S(s, a, o ?? null, null, r.e, r.node);
-		let c = ze.current;
-		Re.current = null, ze.current = null, z(null), Me(!1), ke(s), c && !(0, fn.deepEqual)(c, s) && g(s);
+		let c = We.current;
+		Re.current = null, We.current = null, z(null), Me(!1), Ae(s), c && !(0, dn.deepEqual)(c, s) && g(s);
 	}, [
 		O,
-		P,
+		be,
 		S,
 		g
 	]), at = (0, D.useCallback)(() => {
 		let e = Xe.current;
-		if (!e.some((e) => e.i === R.i)) {
+		if (!e.some((e) => e.i === we.i)) {
 			Pe(null), z(null), Ie(void 0);
 			return;
 		}
-		let t = P.compact(e.filter((e) => e.i !== R.i), O);
-		ke(t), Pe(null), z(null), Ie(void 0);
+		let t = be.compact(e.filter((e) => e.i !== we.i), O);
+		Ae(t), Pe(null), z(null), Ie(void 0);
 	}, [
-		R.i,
+		we.i,
 		O,
-		P
+		be
 	]), ot = (0, D.useCallback)((e) => {
-		if (e.preventDefault(), e.stopPropagation(), gn && !e.nativeEvent.target?.classList.contains(hn)) return !1;
-		let t = N ? N(e.nativeEvent) : w(e);
+		if (e.preventDefault(), e.stopPropagation(), hn && !e.nativeEvent.target?.classList.contains(mn)) return !1;
+		let t = ye ? ye(e.nativeEvent) : w(e);
 		if (t === !1) return Ne && at(), !1;
 		let { dragOffsetX: r = 0, dragOffsetY: i = 0, ...a } = t ?? {}, o = {
-			...R,
+			...we,
 			...a
 		}, s = e.currentTarget.getBoundingClientRect(), c = {
 			cols: O,
-			margin: A,
+			margin: re,
 			maxRows: ne,
 			rowHeight: k,
 			containerWidth: n,
-			containerPadding: Te
-		}, l = ae(c), u = oe(o.w, l, A[0]), d = oe(o.h, k, A[1]), f = u / 2, p = d / 2, m = e.clientX - s.left + r - f, h = e.clientY - s.top + i - p, g = Math.max(0, m), _ = Math.max(0, h), v = {
-			left: g / we,
-			top: _ / we,
+			containerPadding: De
+		}, l = ie(c), u = ae(o.w, l, re[0]), d = ae(o.h, k, re[1]), f = u / 2, p = d / 2, m = e.clientX - s.left + r - f, h = e.clientY - s.top + i - p, g = Math.max(0, m), _ = Math.max(0, h), v = {
+			left: g / Ee,
+			top: _ / Ee,
 			e: e.nativeEvent
 		};
 		if (Ne) Fe && (Fe.left !== v.left || Fe.top !== v.top) && Ie(v);
 		else {
-			let e = ce(c, _, g, o.w, o.h);
-			Pe(/* @__PURE__ */ (0, j.jsx)("div", {}, o.i)), Ie(v);
+			let e = se(c, _, g, o.w, o.h);
+			Pe(/* @__PURE__ */ (0, A.jsx)("div", {}, o.i)), Ie(v);
 			let t = Xe.current.filter((e) => e.i !== o.i);
-			ke([...t, {
+			Ae([...t, {
 				...o,
 				x: e.x,
 				y: e.y,
@@ -17417,45 +17585,45 @@ function yn(e) {
 	}, [
 		Ne,
 		Fe,
-		R,
-		N,
+		we,
+		ye,
 		w,
 		at,
-		we,
+		Ee,
 		O,
-		A,
+		re,
 		ne,
 		k,
 		n,
-		Te
+		De
 	]), st = (0, D.useCallback)((e) => {
 		e.preventDefault(), e.stopPropagation(), Ge.current--, Ge.current < 0 && (Ge.current = 0), Ge.current === 0 && at();
 	}, [at]), ct = (0, D.useCallback)((e) => {
 		e.preventDefault(), e.stopPropagation(), Ge.current++;
-	}, []), lt = (0, D.useCallback)((e) => {
+	}, []), B = (0, D.useCallback)((e) => {
 		e.preventDefault(), e.stopPropagation();
-		let t = Xe.current, n = t.find((e) => e.i === R.i);
+		let t = Xe.current, n = t.find((e) => e.i === we.i);
 		Ge.current = 0, at(), C(t, n, e.nativeEvent);
 	}, [
-		R.i,
+		we.i,
 		at,
 		C
-	]), B = (0, D.useCallback)((e, t) => {
+	]), lt = (0, D.useCallback)((e, t) => {
 		if (!e || !e.key) return null;
-		let r = M(Oe, String(e.key));
+		let r = ve(L, String(e.key));
 		if (!r) return null;
-		let i = typeof r.isDraggable == "boolean" ? r.isDraggable : !r.static && ie, a = typeof r.isResizable == "boolean" ? r.isResizable : !r.static && fe, o = r.resizeHandles || [...pe], c = i && se && r.isBounded !== !1, u = he;
-		return /* @__PURE__ */ (0, j.jsx)(pn, {
+		let i = typeof r.isDraggable == "boolean" ? r.isDraggable : !r.static && oe, a = typeof r.isResizable == "boolean" ? r.isResizable : !r.static && fe, o = r.resizeHandles || [...me], c = i && ce && r.isBounded !== !1, u = he;
+		return /* @__PURE__ */ (0, A.jsx)(fn, {
 			containerWidth: n,
 			cols: O,
-			margin: A,
-			containerPadding: Te,
+			margin: re,
+			containerPadding: De,
 			maxRows: ne,
 			rowHeight: k,
 			cancel: ue,
 			handle: le,
 			onDragStart: Qe,
-			onDrag: $e,
+			onDrag: et,
 			onDragStop: tt,
 			onResizeStart: nt,
 			onResize: rt,
@@ -17463,9 +17631,9 @@ function yn(e) {
 			isDraggable: i,
 			isResizable: a,
 			isBounded: c,
-			useCSSTransforms: Ce && Ee,
-			usePercentages: !Ee,
-			transformScale: we,
+			useCSSTransforms: Te && Oe,
+			usePercentages: !Oe,
+			transformScale: Ee,
 			positionStrategy: s,
 			dragThreshold: de,
 			w: r.w,
@@ -17483,91 +17651,91 @@ function yn(e) {
 			resizeHandle: u,
 			constraints: l,
 			layoutItem: r,
-			layout: Oe,
+			layout: L,
 			children: e
 		}, r.i);
 	}, [
-		Oe,
+		L,
 		n,
 		O,
-		A,
-		Te,
+		re,
+		De,
 		ne,
 		k,
 		ue,
 		le,
 		Qe,
-		$e,
+		et,
 		tt,
 		nt,
 		rt,
 		it,
-		ie,
+		oe,
 		fe,
-		se,
-		Ce,
+		ce,
+		Te,
+		Oe,
 		Ee,
-		we,
 		s,
 		de,
 		Fe,
-		pe,
+		me,
 		he,
 		l
-	]), ut = () => Ae ? /* @__PURE__ */ (0, j.jsx)(pn, {
-		w: Ae.w,
-		h: Ae.h,
-		x: Ae.x,
-		y: Ae.y,
-		i: Ae.i,
+	]), dt = () => R ? /* @__PURE__ */ (0, A.jsx)(fn, {
+		w: R.w,
+		h: R.h,
+		x: R.x,
+		y: R.y,
+		i: R.i,
 		className: `react-grid-placeholder ${je ? "placeholder-resizing" : ""}`,
 		containerWidth: n,
 		cols: O,
-		margin: A,
-		containerPadding: Te,
+		margin: re,
+		containerPadding: De,
 		maxRows: ne,
 		rowHeight: k,
 		isDraggable: !1,
 		isResizable: !1,
 		isBounded: !1,
-		useCSSTransforms: Ce,
-		transformScale: we,
+		useCSSTransforms: Te,
+		transformScale: Ee,
 		constraints: l,
-		layout: Oe,
-		children: /* @__PURE__ */ (0, j.jsx)("div", {})
-	}) : null, ft = dt(hn, p), pt = {
+		layout: L,
+		children: /* @__PURE__ */ (0, A.jsx)("div", {})
+	}) : null, ft = ut(mn, p), pt = {
 		height: Ze,
 		...m
 	};
-	return /* @__PURE__ */ (0, j.jsxs)("div", {
+	return /* @__PURE__ */ (0, A.jsxs)("div", {
 		ref: h,
 		className: ft,
 		style: pt,
-		onDrop: ge ? lt : void 0,
+		onDrop: ge ? B : void 0,
 		onDragLeave: ge ? st : void 0,
 		onDragEnter: ge ? ct : void 0,
 		onDragOver: ge ? ot : void 0,
 		children: [
-			D.Children.map(t, (e) => D.isValidElement(e) ? B(e) : null),
-			ge && Ne && B(Ne, !0),
-			ut()
+			D.Children.map(t, (e) => D.isValidElement(e) ? lt(e) : null),
+			ge && Ne && lt(Ne, !0),
+			dt()
 		]
 	});
 }
-var bn = {
+var yn = {
 	lg: 1200,
 	md: 996,
 	sm: 768,
 	xs: 480,
 	xxs: 0
-}, xn = {
+}, bn = {
 	lg: 12,
 	md: 10,
 	sm: 6,
 	xs: 4,
 	xxs: 2
-}, Sn = () => {};
-function Cn(e, t, n, r) {
+}, xn = () => {};
+function Sn(e, t, n, r) {
 	let i = [];
 	D.Children.forEach(t, (t) => {
 		if (!D.isValidElement(t) || t.key === null) return;
@@ -17596,21 +17764,21 @@ function Cn(e, t, n, r) {
 			}) : i.push({
 				i: n,
 				x: 0,
-				y: ve(i),
+				y: _e(i),
 				w: 1,
 				h: 1
 			});
 		}
 	});
-	let a = I(i, { cols: n });
+	let a = P(i, { cols: n });
 	return r.compact(a, n);
 }
-function wn(e) {
-	let { children: t, width: n, breakpoint: r, breakpoints: i = bn, cols: a = xn, layouts: o = {}, rowHeight: s = 150, maxRows: c = Infinity, margin: l = [10, 10], containerPadding: u = null, compactor: d, onBreakpointChange: f = Sn, onLayoutChange: p = Sn, onWidthChange: m = Sn, ...h } = e, g = d ?? et("vertical"), _ = g.type, v = g.allowOverlap, y = (0, D.useMemo)(() => r ?? nt(i, n), []), b = (0, D.useMemo)(() => rt(y, a), [y, a]), x = (0, D.useMemo)(() => it(o, i, y, y, b, _), []), [S, C] = (0, D.useState)(y), [w, T] = (0, D.useState)(b), [ee, E] = (0, D.useState)(x), [te, O] = (0, D.useState)(o), k = (0, D.useRef)(n), ne = (0, D.useRef)(r), A = (0, D.useRef)(i), re = (0, D.useRef)(a), ie = (0, D.useRef)(o), ae = (0, D.useRef)(_), oe = (0, D.useRef)(te);
+function Cn(e) {
+	let { children: t, width: n, breakpoint: r, breakpoints: i = yn, cols: a = bn, layouts: o = {}, rowHeight: s = 150, maxRows: c = Infinity, margin: l = [10, 10], containerPadding: u = null, compactor: d, onBreakpointChange: f = xn, onLayoutChange: p = xn, onWidthChange: m = xn, ...h } = e, g = d ?? $e("vertical"), _ = g.type, v = g.allowOverlap, y = (0, D.useMemo)(() => r ?? tt(i, n), []), b = (0, D.useMemo)(() => nt(y, a), [y, a]), x = (0, D.useMemo)(() => rt(o, i, y, y, b, _), []), [S, C] = (0, D.useState)(y), [w, T] = (0, D.useState)(b), [ee, E] = (0, D.useState)(x), [te, O] = (0, D.useState)(o), k = (0, D.useRef)(n), ne = (0, D.useRef)(r), re = (0, D.useRef)(i), j = (0, D.useRef)(a), ie = (0, D.useRef)(o), ae = (0, D.useRef)(_), oe = (0, D.useRef)(te);
 	(0, D.useEffect)(() => {
 		oe.current = te;
 	}, [te]);
-	let se = (0, D.useMemo)(() => (0, fn.deepEqual)(o, ie.current) ? null : it(o, i, S, S, w, g), [
+	let se = (0, D.useMemo)(() => (0, dn.deepEqual)(o, ie.current) ? null : rt(o, i, S, S, w, g), [
 		o,
 		i,
 		S,
@@ -17621,7 +17789,7 @@ function wn(e) {
 		se !== null && (E(se), O(o), oe.current = o, ie.current = o);
 	}, [se, o]), (0, D.useEffect)(() => {
 		if (_ !== ae.current) {
-			let e = g.compact(P(ce), w), t = {
+			let e = g.compact(ye(ce), w), t = {
 				...oe.current,
 				[S]: e
 			};
@@ -17636,17 +17804,17 @@ function wn(e) {
 		S,
 		p
 	]), (0, D.useEffect)(() => {
-		let e = n !== k.current, o = r !== ne.current, s = !(0, fn.deepEqual)(i, A.current), c = !(0, fn.deepEqual)(a, re.current);
+		let e = n !== k.current, o = r !== ne.current, s = !(0, dn.deepEqual)(i, re.current), c = !(0, dn.deepEqual)(a, j.current);
 		if (e || o || s || c) {
-			let e = r ?? nt(i, n), o = rt(e, a), d = S;
+			let e = r ?? tt(i, n), o = nt(e, a), d = S;
 			if (d !== e || s || c) {
 				let n = { ...oe.current };
-				n[d] || (n[d] = P(ee));
-				let r = it(n, i, e, d, o, g);
-				r = Cn(r, t, o, g), n[e] = r, C(e), T(o), E(r), O(n), oe.current = n, f(e, o), p(r, n);
+				n[d] || (n[d] = ye(ee));
+				let r = rt(n, i, e, d, o, g);
+				r = Sn(r, t, o, g), n[e] = r, C(e), T(o), E(r), O(n), oe.current = n, f(e, o), p(r, n);
 			}
-			let h = at(l, e), _ = u ? at(u, e) : null;
-			m(n, h, o, _), k.current = n, ne.current = r, A.current = i, re.current = a;
+			let h = it(l, e), _ = u ? it(u, e) : null;
+			m(n, h, o, _), k.current = n, ne.current = r, re.current = i, j.current = a;
 		}
 	}, [
 		n,
@@ -17672,7 +17840,7 @@ function wn(e) {
 			[S]: e
 		};
 		E(e), O(t), oe.current = t, p(e, t);
-	}, [S, p]), ue = (0, D.useMemo)(() => at(l, S), [l, S]), de = (0, D.useMemo)(() => u === null ? null : at(u, S), [u, S]), fe = (0, D.useMemo)(() => ({
+	}, [S, p]), ue = (0, D.useMemo)(() => it(l, S), [l, S]), de = (0, D.useMemo)(() => u === null ? null : it(u, S), [u, S]), fe = (0, D.useMemo)(() => ({
 		cols: w,
 		rowHeight: s,
 		maxRows: c,
@@ -17685,7 +17853,7 @@ function wn(e) {
 		ue,
 		de
 	]);
-	return /* @__PURE__ */ (0, j.jsx)(yn, {
+	return /* @__PURE__ */ (0, A.jsx)(vn, {
 		...h,
 		width: n,
 		gridConfig: fe,
@@ -17695,8 +17863,8 @@ function wn(e) {
 		children: t
 	});
 }
-function Tn(e) {
-	let { children: t, width: n, breakpoint: r, breakpoints: i, cols: a, layouts: o, onBreakpointChange: s, onLayoutChange: c, onWidthChange: l, rowHeight: u, maxRows: d, margin: f, containerPadding: p, droppingItem: m, compactType: h, preventCollision: g = !1, allowOverlap: _ = !1, verticalCompact: v, isDraggable: y = !0, isBounded: b = !1, draggableHandle: x, draggableCancel: S, isResizable: C = !0, resizeHandles: w = ["se"], resizeHandle: T, isDroppable: ee = !1, useCSSTransforms: E = !0, transformScale: D = 1, autoSize: te, className: O, style: k, innerRef: ne, onDragStart: A, onDrag: re, onDragStop: ie, onResizeStart: ae, onResize: oe, onResizeStop: se, onDrop: ce, onDropDragOver: le } = e, ue = h === void 0 ? "vertical" : h;
+function wn(e) {
+	let { children: t, width: n, breakpoint: r, breakpoints: i, cols: a, layouts: o, onBreakpointChange: s, onLayoutChange: c, onWidthChange: l, rowHeight: u, maxRows: d, margin: f, containerPadding: p, droppingItem: m, compactType: h, preventCollision: g = !1, allowOverlap: _ = !1, verticalCompact: v, isDraggable: y = !0, isBounded: b = !1, draggableHandle: x, draggableCancel: S, isResizable: C = !0, resizeHandles: w = ["se"], resizeHandle: T, isDroppable: ee = !1, useCSSTransforms: E = !0, transformScale: D = 1, autoSize: te, className: O, style: k, innerRef: ne, onDragStart: re, onDrag: j, onDragStop: ie, onResizeStart: ae, onResize: oe, onResizeStop: se, onDrop: ce, onDropDragOver: le } = e, ue = h === void 0 ? "vertical" : h;
 	v === !1 && (ue = null);
 	let de = {
 		enabled: y,
@@ -17708,9 +17876,9 @@ function Tn(e) {
 		handles: w,
 		handleComponent: T
 	}, pe = { enabled: ee }, me;
-	me = E ? D === 1 ? Le : ze(D) : Re;
-	let he = et(ue, _, g);
-	return /* @__PURE__ */ (0, j.jsx)(wn, {
+	me = E ? D === 1 ? Ie : Re(D) : Le;
+	let he = $e(ue, _, g);
+	return /* @__PURE__ */ (0, A.jsx)(Cn, {
 		width: n,
 		breakpoint: r,
 		breakpoints: i,
@@ -17733,8 +17901,8 @@ function Tn(e) {
 		onBreakpointChange: s,
 		onLayoutChange: c,
 		onWidthChange: l,
-		onDragStart: A,
-		onDrag: re,
+		onDragStart: re,
+		onDrag: j,
 		onDragStop: ie,
 		onResizeStart: ae,
 		onResize: oe,
@@ -17744,9 +17912,9 @@ function Tn(e) {
 		children: t
 	});
 }
-Tn.displayName = "ResponsiveReactGridLayout";
-var En = Tn, Dn = "react-grid-layout";
-function On(e) {
+wn.displayName = "ResponsiveReactGridLayout";
+var Tn = wn, En = "react-grid-layout";
+function Dn(e) {
 	function t(t) {
 		let { measureBeforeMount: n = !1, className: r, style: i, ...a } = t, [o, s] = (0, D.useState)(1280), [c, l] = (0, D.useState)(!1), u = (0, D.useRef)(null), d = (0, D.useRef)(null);
 		return (0, D.useEffect)(() => {
@@ -17765,11 +17933,11 @@ function On(e) {
 			return n.observe(e), d.current = n, () => {
 				t !== null && cancelAnimationFrame(t), n.unobserve(e), n.disconnect();
 			};
-		}, [c]), n && !c ? /* @__PURE__ */ (0, j.jsx)("div", {
-			className: dt(r, Dn),
+		}, [c]), n && !c ? /* @__PURE__ */ (0, A.jsx)("div", {
+			className: ut(r, En),
 			style: i,
 			ref: u
-		}) : /* @__PURE__ */ (0, j.jsx)(e, {
+		}) : /* @__PURE__ */ (0, A.jsx)(e, {
 			innerRef: u,
 			className: r,
 			style: i,
@@ -17781,19 +17949,19 @@ function On(e) {
 }
 //#endregion
 //#region src/features/dashboard/layout.ts
-var kn = {
+var On = {
 	lg: 1200,
 	md: 996,
 	sm: 768,
 	xs: 480,
 	xxs: 0
-}, An = {
+}, kn = {
 	lg: 12,
 	md: 8,
 	sm: 4,
 	xs: 2,
 	xxs: 2
-}, jn = {
+}, An = {
 	S: {
 		w: 3,
 		h: 3
@@ -17820,16 +17988,14 @@ var kn = {
 	minH: 1,
 	maxW: 12,
 	maxH: 12
-}), Mn = {
+}), jn = {
 	lg: [
 		H("activity-history", 0, 0, 6, 4),
 		H("automations", 6, 0, 6, 4),
 		H("backup-restore", 0, 4, 6, 4),
 		H("access-control", 6, 4, 6, 4),
 		H("alarm-configuration", 0, 8, 12, 5),
-		H("security-status", 0, 13, 12, 2),
-		H("security-insights", 0, 15, 6, 5),
-		H("floorplan", 6, 15, 6, 5)
+		H("security-status", 0, 13, 12, 2)
 	],
 	md: [
 		H("activity-history", 0, 0, 4, 4),
@@ -17837,9 +18003,7 @@ var kn = {
 		H("backup-restore", 0, 4, 4, 4),
 		H("access-control", 4, 4, 4, 4),
 		H("alarm-configuration", 0, 8, 8, 5),
-		H("security-status", 0, 13, 8, 2),
-		H("security-insights", 0, 15, 4, 5),
-		H("floorplan", 4, 15, 4, 5)
+		H("security-status", 0, 13, 8, 2)
 	],
 	sm: [
 		H("activity-history", 0, 0, 4, 4),
@@ -17847,9 +18011,7 @@ var kn = {
 		H("backup-restore", 0, 8, 4, 4),
 		H("access-control", 0, 12, 4, 4),
 		H("alarm-configuration", 0, 16, 4, 5),
-		H("security-status", 0, 21, 4, 2),
-		H("security-insights", 0, 23, 4, 5),
-		H("floorplan", 0, 28, 4, 5)
+		H("security-status", 0, 21, 4, 2)
 	],
 	xs: [
 		H("activity-history", 0, 0, 2, 4),
@@ -17857,9 +18019,7 @@ var kn = {
 		H("backup-restore", 0, 8, 2, 4),
 		H("access-control", 0, 12, 2, 4),
 		H("alarm-configuration", 0, 16, 2, 5),
-		H("security-status", 0, 21, 2, 2),
-		H("security-insights", 0, 23, 2, 5),
-		H("floorplan", 0, 28, 2, 5)
+		H("security-status", 0, 21, 2, 2)
 	],
 	xxs: [
 		H("activity-history", 0, 0, 2, 4),
@@ -17867,35 +18027,33 @@ var kn = {
 		H("backup-restore", 0, 8, 2, 4),
 		H("access-control", 0, 12, 2, 4),
 		H("alarm-configuration", 0, 16, 2, 5),
-		H("security-status", 0, 21, 2, 2),
-		H("security-insights", 0, 23, 2, 5),
-		H("floorplan", 0, 28, 2, 5)
+		H("security-status", 0, 21, 2, 2)
 	]
 };
-function Nn(e, t, n) {
-	return Object.entries(jn).map(([r, i]) => ({
+function Mn(e, t, n) {
+	return Object.entries(An).map(([r, i]) => ({
 		size: r,
 		distance: Math.abs(Math.min(i.w, n) - e) + Math.abs(i.h - t)
 	})).sort((e, t) => e.distance - t.distance)[0]?.size ?? "S";
 }
-function Pn(e, t) {
-	let n = jn[e];
+function Nn(e, t) {
+	let n = An[e];
 	return {
 		w: Math.min(n.w, t),
 		h: n.h
 	};
 }
-function Fn(e, t) {
+function Pn(e, t) {
 	return e.some((e) => e.i !== t.i && t.x < e.x + e.w && t.x + t.w > e.x && t.y < e.y + e.h && t.y + t.h > e.y);
 }
-function In(e, t, n) {
+function Fn(e, t, n) {
 	for (let r = 0; r < 240; r++) for (let i = 0; i <= n - t.w; i++) {
 		let n = {
 			...t,
 			x: i,
 			y: r
 		};
-		if (!Fn(e, n)) return n;
+		if (!Pn(e, n)) return n;
 	}
 	return {
 		...t,
@@ -17903,10 +18061,10 @@ function In(e, t, n) {
 		y: Math.max(0, ...e.map((e) => e.y + e.h))
 	};
 }
-function Ln(e) {
+function In(e) {
 	let t = {};
-	return Object.keys(An).forEach((n) => {
-		let r = An[n], i = Array.isArray(e?.[n]) ? e[n] : [], a = /* @__PURE__ */ new Map();
+	return Object.keys(kn).forEach((n) => {
+		let r = kn[n], i = Array.isArray(e?.[n]) ? e[n] : [], a = /* @__PURE__ */ new Map();
 		for (let e of i) {
 			if (!e || typeof e != "object" || typeof e.i != "string" || !e.i || ![
 				e.x,
@@ -17927,15 +18085,15 @@ function Ln(e) {
 				maxH: 12
 			});
 		}
-		let o = (Mn[n] || []).map((e) => ({
+		let o = (jn[n] || []).map((e) => ({
 			...e,
 			...a.get(e.i),
 			maxW: r
-		})), s = new Set(o.map((e) => e.i)), c = [...a.values()].filter((e) => !s.has(e.i));
-		t[n] = [...o, ...c];
+		})), s = new Set(o.map((e) => e.i)), c = /* @__PURE__ */ new Set(["security-insights", "floorplan"]), l = [...a.values()].filter((e) => !s.has(e.i) && !c.has(e.i));
+		t[n] = [...o, ...l];
 	}), t;
 }
-var Rn = class {
+var Ln = class {
 	key(e, t) {
 		return `argus:dashboard-layout:${e}:${t}`;
 	}
@@ -17954,7 +18112,7 @@ var Rn = class {
 	}
 	async load(e, t) {
 		let n = this.read(e, t);
-		return n ? Ln(n.layouts) : null;
+		return n ? In(n.layouts) : null;
 	}
 	async save(e, t, n) {
 		let r = this.read(e, t);
@@ -17972,7 +18130,7 @@ var Rn = class {
 		let r = this.read(e, t);
 		this.write(e, t, {
 			layoutVersion: 1,
-			layouts: r?.layouts ?? Ln(null),
+			layouts: r?.layouts ?? In(null),
 			visibility: n,
 			updatedAt: (/* @__PURE__ */ new Date()).toISOString()
 		});
@@ -17982,8 +18140,8 @@ var Rn = class {
 			localStorage.removeItem(this.key(e, t));
 		} catch {}
 	}
-}, zn = On(En);
-function Bn({ widget: e, node: t, editing: n, size: r, onSize: i, onHide: a, onReset: o }) {
+}, Rn = Dn(Tn);
+function zn({ widget: e, node: t, editing: n, size: r, onSize: i, onHide: a, onReset: o }) {
 	let s = (0, D.useRef)(null);
 	(0, D.useLayoutEffect)(() => {
 		t && (s.current?.appendChild(t), t.draggable = !1, t.querySelector(":scope > .panel-edit-overlay")?.remove(), n ? t.setAttribute("inert", "") : t.removeAttribute("inert"));
@@ -17995,46 +18153,46 @@ function Bn({ widget: e, node: t, editing: n, size: r, onSize: i, onHide: a, onR
 		}
 		return t;
 	};
-	return /* @__PURE__ */ (0, j.jsxs)("article", {
+	return /* @__PURE__ */ (0, A.jsxs)("article", {
 		className: "argus-widget",
-		children: [/* @__PURE__ */ (0, j.jsxs)("header", {
+		children: [/* @__PURE__ */ (0, A.jsxs)("header", {
 			className: "argus-widget__edit-header",
 			children: [
-				/* @__PURE__ */ (0, j.jsx)("button", {
+				/* @__PURE__ */ (0, A.jsx)("button", {
 					type: "button",
 					className: "argus-widget__drag-handle",
 					"aria-label": `${c("drag", "Mover")} ${e.title}`,
 					title: c("drag", "Arrastrar para mover"),
 					children: "⋮⋮"
 				}),
-				/* @__PURE__ */ (0, j.jsx)("strong", { children: e.title }),
-				/* @__PURE__ */ (0, j.jsxs)("details", {
+				/* @__PURE__ */ (0, A.jsx)("strong", { children: e.title }),
+				/* @__PURE__ */ (0, A.jsxs)("details", {
 					className: "argus-widget__options",
-					children: [/* @__PURE__ */ (0, j.jsx)("summary", {
+					children: [/* @__PURE__ */ (0, A.jsx)("summary", {
 						"aria-label": `${c("settings", "Opciones")} ${e.title}`,
 						title: c("settings", "Opciones"),
 						children: "•••"
-					}), /* @__PURE__ */ (0, j.jsxs)("div", {
+					}), /* @__PURE__ */ (0, A.jsxs)("div", {
 						className: "argus-widget__menu",
 						children: [
-							/* @__PURE__ */ (0, j.jsx)("span", { children: c("size", "Tamaño") }),
-							/* @__PURE__ */ (0, j.jsx)("div", { children: [
+							/* @__PURE__ */ (0, A.jsx)("span", { children: c("size", "Tamaño") }),
+							/* @__PURE__ */ (0, A.jsx)("div", { children: [
 								"S",
 								"M",
 								"L",
 								"XL"
-							].map((e) => /* @__PURE__ */ (0, j.jsx)("button", {
+							].map((e) => /* @__PURE__ */ (0, A.jsx)("button", {
 								type: "button",
 								className: e === r ? "active" : "",
 								onClick: () => i(e),
 								children: e
 							}, e)) }),
-							/* @__PURE__ */ (0, j.jsx)("button", {
+							/* @__PURE__ */ (0, A.jsx)("button", {
 								type: "button",
 								onClick: o,
 								children: c("reset_widget", "Restablecer widget")
 							}),
-							/* @__PURE__ */ (0, j.jsx)("button", {
+							/* @__PURE__ */ (0, A.jsx)("button", {
 								type: "button",
 								onClick: a,
 								children: c("hide_widget", "Ocultar widget")
@@ -18043,15 +18201,15 @@ function Bn({ widget: e, node: t, editing: n, size: r, onSize: i, onHide: a, onR
 					})]
 				})
 			]
-		}), /* @__PURE__ */ (0, j.jsx)("div", {
+		}), /* @__PURE__ */ (0, A.jsx)("div", {
 			className: `argus-widget__content${e.kind === "access-control" ? " argus-widget__content--access" : ""}${e.content ? " argus-widget__content--virtual" : ""}`,
 			ref: s,
 			children: e.content
 		})]
 	});
 }
-function Vn({ widgets: e, nodes: t, storage: n, userId: r, dashboardId: i, onEditing: a, registerEditor: o }) {
-	let s = (0, D.useMemo)(() => Object.fromEntries(e.map((e) => [e.id, e.visible])), [e]), [c, l] = (0, D.useState)(Mn), [u, d] = (0, D.useState)(s), [f, p] = (0, D.useState)(!1), [m, h] = (0, D.useState)(!1), [g, _] = (0, D.useState)("lg"), [v, y] = (0, D.useState)(""), [, b] = (0, D.useState)(0), [x, S] = (0, D.useState)(0), C = (0, D.useRef)(Mn), w = (0, D.useRef)(void 0), T = (0, D.useRef)(!1), ee = (0, D.useRef)(null), E = (e, t) => {
+function Bn({ widgets: e, nodes: t, storage: n, userId: r, dashboardId: i, onEditing: a, registerEditor: o }) {
+	let s = (0, D.useMemo)(() => Object.fromEntries(e.map((e) => [e.id, e.visible])), [e]), [c, l] = (0, D.useState)(jn), [u, d] = (0, D.useState)(s), [f, p] = (0, D.useState)(!1), [m, h] = (0, D.useState)(!1), [g, _] = (0, D.useState)("lg"), [v, y] = (0, D.useState)(""), [, b] = (0, D.useState)(0), [x, S] = (0, D.useState)(0), C = (0, D.useRef)(jn), w = (0, D.useRef)(void 0), T = (0, D.useRef)(!1), ee = (0, D.useRef)(null), E = (e, t) => {
 		if (typeof window._argusT == "function") {
 			let t = window._argusT(e);
 			if (t && t !== e) return t;
@@ -18067,14 +18225,14 @@ function Vn({ widgets: e, nodes: t, storage: n, userId: r, dashboardId: i, onEdi
 		let e = !0;
 		return clearTimeout(w.current), h(!1), Promise.all([n.load(r, i), n.loadVisibility?.(r, i)]).then(([t, n]) => {
 			if (!e) return;
-			let r = Ln(t);
+			let r = In(t);
 			l(r), C.current = r, d({
 				...s,
 				...n
 			}), h(!0);
 		}).catch(() => {
 			if (!e) return;
-			let t = Ln(null);
+			let t = In(null);
 			l(t), C.current = t, d(s), y(E("dashboard_load_failed", "No se pudo cargar el diseño guardado")), h(!0);
 		}), () => {
 			e = !1;
@@ -18120,7 +18278,7 @@ function Vn({ widgets: e, nodes: t, storage: n, userId: r, dashboardId: i, onEdi
 		};
 		d(a), n.saveVisibility?.(r, i, a).catch(() => y(E("dashboard_save_failed", "No se pudo guardar el diseño"))), y(t ? E("widget_visible", "Widget visible") : E("hide_widget", "Widget oculto"));
 	}, k = (e, t, n) => {
-		let r = C.current, i = r[g] || [], a = i.filter((t) => t.i !== e), o = Fn(a, t) ? In(a, t, An[g]) : t, s = {
+		let r = C.current, i = r[g] || [], a = i.filter((t) => t.i !== e), o = Pn(a, t) ? Fn(a, t, kn[g]) : t, s = {
 			...r,
 			[g]: i.map((t) => t.i === e ? o : t)
 		};
@@ -18128,18 +18286,18 @@ function Vn({ widgets: e, nodes: t, storage: n, userId: r, dashboardId: i, onEdi
 	}, ne = (e, t) => {
 		let n = (C.current[g] || []).find((t) => t.i === e);
 		if (!n) return;
-		let r = Pn(t, An[g]);
+		let r = Nn(t, kn[g]);
 		k(e, {
 			...n,
 			...r,
-			x: Math.max(0, Math.min(n.x, An[g] - r.w))
+			x: Math.max(0, Math.min(n.x, kn[g] - r.w))
 		}, `${E("size", "Tamaño")} ${t}`);
-	}, A = (e) => {
-		let t = (Mn[g] || []).find((t) => t.i === e);
+	}, re = (e) => {
+		let t = (jn[g] || []).find((t) => t.i === e);
 		t && k(e, { ...t }, E("reset_widget", "Widget restablecido"));
-	}, re = (e, t, n) => {
+	}, ie = (e, t, n) => {
 		if (!n?.i) return;
-		let r = An[g], i = Math.min(r, Math.max(1, n.w)), a = Math.max(1, n.h), o = {
+		let r = kn[g], i = Math.min(r, Math.max(1, n.w)), a = Math.max(1, n.h), o = {
 			...n,
 			w: i,
 			h: a,
@@ -18157,29 +18315,29 @@ function Vn({ widgets: e, nodes: t, storage: n, userId: r, dashboardId: i, onEdi
 			y(E("dashboard_save_failed", "No se pudo guardar el diseño"));
 			return;
 		}
-		let e = Ln(null);
+		let e = In(null);
 		d(s), l(e), C.current = e, S((e) => e + 1), te(e, !0), y(E("reset_dashboard_done", "Diseño predeterminado restaurado"));
 	}, oe = c[g] || [];
-	return m ? /* @__PURE__ */ (0, j.jsxs)("section", {
+	return m ? /* @__PURE__ */ (0, A.jsxs)("section", {
 		className: `argus-dashboard ${f ? "argus-dashboard--editing" : ""}`,
 		ref: ee,
 		children: [
-			/* @__PURE__ */ (0, j.jsxs)("nav", {
+			/* @__PURE__ */ (0, A.jsxs)("nav", {
 				className: "argus-dashboard__toolbar",
 				"aria-label": E("edit_dashboard", "Edición del tablero"),
-				children: [/* @__PURE__ */ (0, j.jsx)("button", {
+				children: [/* @__PURE__ */ (0, A.jsx)("button", {
 					type: "button",
 					onClick: () => p((e) => !e),
 					children: f ? "✓ " + E("edit_dashboard_done", "Listo") : "❖ " + E("edit_dashboard", "Editar tablero")
-				}), f && /* @__PURE__ */ (0, j.jsxs)(j.Fragment, { children: [/* @__PURE__ */ (0, j.jsx)("button", {
+				}), f && /* @__PURE__ */ (0, A.jsxs)(A.Fragment, { children: [/* @__PURE__ */ (0, A.jsx)("button", {
 					type: "button",
 					className: "argus-btn-reset-dashboard",
 					onClick: ae,
 					children: E("reset_dashboard", "Restablecer diseño")
-				}), /* @__PURE__ */ (0, j.jsx)("div", {
+				}), /* @__PURE__ */ (0, A.jsx)("div", {
 					className: "argus-dashboard__visibility",
 					"aria-label": E("hide_widget", "Widgets ocultos"),
-					children: e.filter((e) => u[e.id] === !1).map((e) => /* @__PURE__ */ (0, j.jsxs)("button", {
+					children: e.filter((e) => u[e.id] === !1).map((e) => /* @__PURE__ */ (0, A.jsxs)("button", {
 						type: "button",
 						onClick: () => O(e.id, !0),
 						children: [
@@ -18191,16 +18349,16 @@ function Vn({ widgets: e, nodes: t, storage: n, userId: r, dashboardId: i, onEdi
 					}, e.id))
 				})] })]
 			}),
-			/* @__PURE__ */ (0, j.jsx)("div", {
+			/* @__PURE__ */ (0, A.jsx)("div", {
 				className: "argus-dashboard__feedback",
 				"aria-live": "polite",
 				children: v
 			}),
-			/* @__PURE__ */ (0, j.jsx)(ie, { children: /* @__PURE__ */ (0, j.jsx)(zn, {
+			/* @__PURE__ */ (0, A.jsx)(j, { children: /* @__PURE__ */ (0, A.jsx)(Rn, {
 				className: "argus-dashboard-grid",
 				layouts: c,
-				breakpoints: kn,
-				cols: An,
+				breakpoints: On,
+				cols: kn,
 				rowHeight: 92,
 				margin: [16, 16],
 				containerPadding: [16, 16],
@@ -18216,10 +18374,10 @@ function Vn({ widgets: e, nodes: t, storage: n, userId: r, dashboardId: i, onEdi
 				onLayoutChange: (e, t) => {
 					f && (l(t), C.current = t);
 				},
-				onResizeStop: re,
+				onResizeStop: ie,
 				onDragStop: (e, t, n) => {
 					if (n?.i) {
-						if (Fn((C.current[g] || []).filter((e) => e.i !== n.i), n)) {
+						if (Pn((C.current[g] || []).filter((e) => e.i !== n.i), n)) {
 							l({ ...C.current }), y(E("position_collision", "Posición bloqueada por colisión"));
 							return;
 						}
@@ -18228,23 +18386,23 @@ function Vn({ widgets: e, nodes: t, storage: n, userId: r, dashboardId: i, onEdi
 				},
 				useCSSTransforms: !0,
 				children: e.filter((e) => u[e.id] !== !1 && (t.has(e.id) || !!e.content)).map((e) => {
-					let n = oe.find((t) => t.i === e.id), r = n ? Nn(n.w, n.h, An[g]) : e.size;
-					return /* @__PURE__ */ (0, j.jsx)("div", { children: /* @__PURE__ */ (0, j.jsx)(ie, { children: /* @__PURE__ */ (0, j.jsx)(Bn, {
+					let n = oe.find((t) => t.i === e.id), r = n ? Mn(n.w, n.h, kn[g]) : e.size;
+					return /* @__PURE__ */ (0, A.jsx)("div", { children: /* @__PURE__ */ (0, A.jsx)(j, { children: /* @__PURE__ */ (0, A.jsx)(zn, {
 						widget: e,
 						node: t.get(e.id),
 						editing: f,
 						size: r,
 						onSize: (t) => ne(e.id, t),
 						onHide: () => O(e.id, !1),
-						onReset: () => A(e.id)
+						onReset: () => re(e.id)
 					}) }) }, e.id);
 				})
 			}, x) })
 		]
-	}) : /* @__PURE__ */ (0, j.jsx)("section", {
+	}) : /* @__PURE__ */ (0, A.jsx)("section", {
 		className: "argus-dashboard",
 		ref: ee,
-		children: /* @__PURE__ */ (0, j.jsx)("div", {
+		children: /* @__PURE__ */ (0, A.jsx)("div", {
 			className: "argus-dashboard__feedback",
 			"aria-live": "polite",
 			children: E("loading_dashboard", "Cargando tablero…")
@@ -18253,21 +18411,21 @@ function Vn({ widgets: e, nodes: t, storage: n, userId: r, dashboardId: i, onEdi
 }
 //#endregion
 //#region src/features/dashboard/components/SecurityConsole.css?inline
-var Hn = ".entry{position:relative;overflow:hidden;container:argus-console/inline-size;-webkit-backdrop-filter:blur(40px)saturate(190%)brightness(1.12)!important;background:linear-gradient(135deg,#ffffff1f 0%,#ffffff08 100%)!important;border:1px solid #ffffff38!important;border-radius:28px!important;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s!important;box-shadow:inset 0 1.5px #ffffff73,inset 0 -1px #ffffff1a,0 24px 64px #00000073,0 4px 16px #00000040!important}.security-console,.entry-content,.entry-content.security-console{box-shadow:none!important;box-shadow:none!important;background:0 0!important;border:none!important}.security-console .console-hud{box-shadow:none!important;background:0 0!important;border:none!important}.console-hud-loc{box-sizing:border-box!important;text-overflow:ellipsis!important;white-space:nowrap!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;letter-spacing:.04em!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;background:linear-gradient(135deg,#fff3 0%,#ffffff0d 100%)!important;border:1px solid #ffffff47!important;border-radius:999px!important;align-items:center!important;max-width:clamp(140px,26vw,260px)!important;height:38px!important;padding:0 16px!important;font-size:11.5px!important;font-weight:850!important;display:inline-flex!important;overflow:hidden!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff73,inset 0 -1px #0003,0 8px 24px #00000059!important}.argus-connection-pill{-webkit-backdrop-filter:blur(24px)saturate(190%)!important;letter-spacing:.05em!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;white-space:nowrap!important;background:linear-gradient(135deg,#ffffff29 0%,#ffffff0a 100%)!important;border:1px solid #ffffff3d!important;border-radius:999px!important;align-items:center!important;gap:8px!important;max-width:max-content!important;height:38px!important;padding:0 16px!important;font-size:11px!important;font-weight:850!important;display:inline-flex!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff61,inset 0 -1px #00000026,0 8px 24px #00000059!important}.argus-connection-dot{background:#10b981!important;border-radius:50%!important;width:8px!important;height:8px!important;box-shadow:0 0 12px #10b981!important}.argus-connection-pill[data-online=false] .argus-connection-dot{background:#ef4444!important;box-shadow:0 0 12px #ef4444!important}.console-hud-right{min-width:0!important;box-shadow:none!important;background:0 0!important;border:0!important;justify-content:flex-end!important;align-items:center!important;gap:8px!important;height:38px!important;display:inline-flex!important}.console-system-badge{box-sizing:border-box!important;letter-spacing:.02em!important;text-transform:none!important;white-space:nowrap!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;border-radius:999px!important;align-items:center!important;height:38px!important;padding:0 18px!important;font-size:12px!important;font-weight:800!important;display:inline-flex!important;transform:translate(0,0)!important}.console-system-badge--disarmed{color:#34d399!important;text-shadow:0 0 10px #10b981b3!important;background:linear-gradient(135deg,#10b98152 0%,#0596691f 100%)!important;border:1.5px solid #10b981a6!important;box-shadow:inset 0 1.5px #ffffff80,0 0 24px #10b98166,0 8px 24px #00000059!important}.console-system-badge--armed_home,.console-system-badge--armed_away,.console-system-badge--armed_night,.console-system-badge--pending{color:#fbbf24!important;text-shadow:0 0 10px #f59e0bcc!important;background:linear-gradient(135deg,#f59e0b59 0%,#d9770624 100%)!important;border:1.5px solid #f59e0bb3!important;box-shadow:inset 0 1.5px #ffffff8c,0 0 24px #f59e0b73,0 8px 24px #00000059!important}.console-system-badge--triggered{color:#f87171!important;text-shadow:0 0 12px #ef4444d9!important;background:linear-gradient(135deg,#ef44446b 0%,#b91c1c29 100%)!important;border:1.5px solid #ef4444d9!important;animation:.9s ease-in-out infinite argusTriggerBadgePulse!important;box-shadow:inset 0 1.5px #fff9,0 0 32px #ef444499,0 8px 24px #00000059!important}@keyframes argusTriggerBadgePulse{0%,to{opacity:.85;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}.security-console .entry-icon{will-change:transform;animation:5s ease-in-out infinite float-icon;transform:translate(0,0);box-shadow:none!important;background:0 0!important;border:none!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;display:flex!important}.security-console .entry-icon svg{filter:drop-shadow(0 14px 28px #0009)drop-shadow(0 0 45px #10b9818c)!important;width:100%!important;max-width:220px!important;height:auto!important}@keyframes float-icon{0%,to{transform:translate(0,0)scale(1)}50%{transform:translateY(-6px)scale(1.015)}}.entry.argus-waiting .entry-icon>svg{transform-origin:50%!important;filter:drop-shadow(0 0 26px #ffb839f2)saturate(1.35)!important;animation:1.05s ease-in-out infinite argusArmingShield!important}.argus-shield-status{color:#ffd27a;letter-spacing:.12em;text-align:center;background:#ff950033;border:1px solid #ffb8398c;border-radius:999px;width:max-content;max-width:200px;margin:7px auto 0;padding:5px 14px;font-size:9.5px;font-weight:850;animation:1.05s ease-in-out infinite argusArmingLabel;display:block;box-shadow:inset 0 1px #fff6,0 6px 18px #0000004d}@keyframes argusArmingShield{0%,to{opacity:.55;transform:scale(.94)}50%{opacity:1;transform:scale(1.07)}}@keyframes argusArmingLabel{0%,to{opacity:.62}50%{opacity:1}}.security-console .liquid-stack{width:100%!important;box-shadow:none!important;background:0 0!important;border:none!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;display:grid!important}.security-console .liquid-btn{text-align:center!important;letter-spacing:.03em!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;cursor:pointer!important;background:linear-gradient(135deg,#ffffff2e 0%,#ffffff0d 100%)!important;border:1px solid #ffffff40!important;border-radius:20px!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:5px!important;min-height:68px!important;padding:12px 6px!important;font-size:11.5px!important;font-weight:850!important;line-height:1.15!important;transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s,background .25s,border-color .25s!important;display:flex!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff6b,inset 0 -1px #0003,0 10px 28px #00000059!important}.security-console .liquid-btn:hover{background:linear-gradient(135deg,#ffffff3d 0%,#ffffff14 100%)!important;border-color:#fff6!important;transform:translateY(-3px)translate(0,0)scale(1.025)!important;box-shadow:inset 0 1.5px #ffffff8c,0 14px 34px #00000073!important}.security-console .liquid-btn span:first-child,.security-console .liquid-btn .mode-btn-icon{filter:drop-shadow(0 2px 6px #0006)!important;font-size:20px!important;line-height:1!important}.security-console .liquid-btn span:last-child{color:#fff!important;font-size:11px!important;font-weight:850!important}.security-console .btn-home.active{background:linear-gradient(135deg,#fb8c00 0%,#d97706 100%)!important;border:1px solid #fed7aad9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #fb8c0099!important}.security-console .btn-away.active{background:linear-gradient(135deg,#e53935 0%,#b91c1c 100%)!important;border:1px solid #fecacad9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #e5393599!important}.security-console .btn-night.active{background:linear-gradient(135deg,#1e88e5 0%,#1d4ed8 100%)!important;border:1px solid #bfdbfed9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #1e88e599!important}.security-console .console-sensors{scrollbar-width:none;grid-template-columns:1fr;gap:8px;max-height:none!important;box-shadow:none!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;filter:none!important;isolation:auto!important;contain:none!important;background:0 0!important;border:none!important;outline:none!important;margin:0!important;padding:0!important;display:grid!important;overflow:visible!important}.security-console .console-sensors::-webkit-scrollbar{display:none}.security-console .console-sensors.console-sensors--compact,.security-console .console-sensors[data-count=\"3\"],.security-console .console-sensors[data-count=\"4\"],.security-console .console-sensors[data-count=\"5\"],.security-console .console-sensors[data-count=\"6\"]{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))!important;gap:6px!important}.security-console .console-sensors.console-sensors--micro,.security-console .console-sensors[data-count=\"7\"],.security-console .console-sensors[data-count=\"8\"],.security-console .console-sensors[data-count=\"9\"],.security-console .console-sensors[data-count=\"10\"],.security-console .console-sensors[data-count=\"11\"],.security-console .console-sensors[data-count=\"12\"]{scrollbar-width:thin;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))!important;gap:4px!important;max-height:280px!important;overflow-y:auto!important}.console-sensor{color:#fff!important;text-shadow:0 1px 3px #00000080!important;box-sizing:border-box!important;background:linear-gradient(135deg,#ffffff29 0%,#ffffff0a 100%)!important;border:1px solid #ffffff3d!important;border-radius:999px!important;grid-template-columns:auto minmax(0,1fr) auto!important;align-items:center!important;gap:10px!important;min-height:68px!important;padding:10px 16px!important;transition:background .35s,box-shadow .35s,border-color .35s!important;display:grid!important;box-shadow:inset 0 1.5px #ffffff61,inset 0 -1px #00000026,0 4px 12px #00000040!important}.console-sensor:hover{transform:translateY(-2px)scale(1.02)!important;box-shadow:inset 0 1.5px #ffffff80,0 8px 18px #00000059!important}.console-sensor.open{background:linear-gradient(135deg,#ef444459 0%,#b91c1c29 100%)!important;border-color:#ef4444a6!important;box-shadow:inset 0 1.5px #ffffff73,0 0 16px #ef444459,0 4px 12px #00000040!important}.console-sensor-icon{filter:drop-shadow(0 2px 4px #0006)!important;justify-content:center!important;align-items:center!important;font-size:18px!important;display:flex!important}.argus-lock-icon{filter:drop-shadow(0 0 6px);width:25px;height:25px;transform-style:preserve-3d;perspective:240px;transition:color .35s,filter .35s;overflow:visible}.argus-lock-icon.is-open{color:#ff4f6d;animation:1.15s cubic-bezier(.22,.75,.2,1) both argus-lock-open}.argus-lock-icon.is-closed{color:#35e6a0;animation:1.15s cubic-bezier(.22,.75,.2,1) both argus-lock-closed}.argus-lock-icon.is-bypassed{color:#94a3b8;filter:none}.argus-lock-body{fill:color-mix(in srgb, currentColor 28%, transparent);stroke:currentColor;stroke-width:2px}.argus-lock-shackle{fill:none;stroke:currentColor;stroke-width:4px;stroke-linecap:round;transform-origin:15px 21px;transition:transform .85s cubic-bezier(.22,.75,.2,1)}.argus-lock-icon.is-open .argus-lock-shackle{transform:rotate(-28deg)translate(-1px,-2px)}.argus-lock-keyhole,.argus-lock-keyline{fill:currentColor;stroke:currentColor;stroke-width:2px;stroke-linecap:round}@keyframes argus-lock-open{0%{opacity:.82;transform:translate(0,0)scale(1)rotateY(0)}42%{opacity:1;filter:drop-shadow(0 0 18px)drop-shadow(0 16px 18px #0000008c);transform:translate3d(0,-3px,60px)scale(1.58)rotateY(-12deg)rotate(-4deg)}72%{transform:translate3d(0,-1px,34px)scale(1.34)rotateY(-6deg)rotate(-2deg)}to{opacity:1;transform:translate(0,0)scale(1)rotateY(0)rotate(0)}}@keyframes argus-lock-closed{0%{opacity:.82;transform:translate(0,0)scale(1)rotateY(0)}42%{opacity:1;filter:drop-shadow(0 0 18px)drop-shadow(0 16px 18px #0000008c);transform:translate3d(0,-3px,60px)scale(1.58)rotateY(12deg)rotate(4deg)}72%{transform:translate3d(0,-1px,34px)scale(1.34)rotateY(6deg)rotate(2deg)}to{opacity:1;transform:translate(0,0)scale(1)rotateY(0)rotate(0)}}@media (prefers-reduced-motion:reduce){.argus-lock-icon{animation:none!important}.argus-lock-shackle{transition:none!important}}.console-sensor-name{letter-spacing:.02em!important;text-overflow:clip!important;white-space:normal!important;overflow-wrap:break-word!important;word-break:normal!important;hyphens:none!important;color:#fff!important;min-width:0!important;font-size:11.5px!important;font-weight:850!important;line-height:1.25!important;overflow:visible!important}.console-sensor-state{letter-spacing:.02em!important;text-transform:none!important;white-space:nowrap!important;align-items:center!important;gap:4px!important;font-size:11px!important;font-weight:800!important;display:inline-flex!important}.entry.ios-fullscreen .console-sensors{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))!important;gap:10px!important;max-height:none!important;overflow-y:visible!important}.entry.ios-fullscreen .console-sensor{min-width:0!important;padding:12px 14px!important}.entry.ios-fullscreen .console-sensor-name{white-space:normal!important;text-overflow:clip!important;overflow-wrap:break-word!important;word-break:normal!important;hyphens:none!important;line-height:1.25!important;overflow:visible!important}@media (width<=900px){.entry:not(.ios-fullscreen) .security-console .console-sensors,.entry:not(.ios-fullscreen) .security-console .console-sensors.console-sensors--compact,.entry:not(.ios-fullscreen) .security-console .console-sensors.console-sensors--micro{grid-template-columns:minmax(0,1fr)!important;max-height:none!important;overflow:visible!important}.entry:not(.ios-fullscreen) .security-console .console-sensor{width:100%!important;min-width:0!important}.entry:not(.ios-fullscreen) .security-console .console-sensor-name{writing-mode:horizontal-tb!important;word-break:normal!important;overflow-wrap:normal!important;hyphens:none!important}}.console-empty{text-align:center!important;color:#ffffffa6!important;border:1px dashed #ffffff40!important;border-radius:20px!important;padding:24px!important;font-size:12px!important;font-weight:800!important}@media (width>=901px){.entry:not(.ios-fullscreen) .security-console{box-shadow:none!important;background:0 0!important;grid-template-rows:auto 1fr!important;grid-template-columns:minmax(200px,350px) 1fr minmax(220px,380px)!important;justify-content:center!important;align-items:center!important;gap:16px 36px!important;padding:24px 28px 20px!important;display:grid!important}.entry:not(.ios-fullscreen) .security-console .console-hud{display:contents!important}.entry:not(.ios-fullscreen) .security-console .console-hud-loc{grid-area:1/1!important;place-self:center start!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .argus-connection-pill{grid-area:1/2!important;place-self:center!important;margin:0!important;position:static!important;transform:none!important}.entry:not(.ios-fullscreen) .security-console .console-hud-right{grid-area:1/3!important;place-self:center end!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack{grid-area:2/1!important;align-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .entry-icon{grid-area:2/2!important;place-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .console-sensors{grid-area:2/3!important;align-self:center!important;margin:0!important}}@container argus-console (width>=901px){.entry:not(.ios-fullscreen) .security-console{box-shadow:none!important;background:0 0!important;grid-template-rows:auto 1fr!important;grid-template-columns:minmax(170px,1fr) minmax(140px,200px) minmax(180px,1.2fr)!important;justify-content:center!important;align-items:center!important;gap:14px 20px!important;padding:20px 24px 18px!important;display:grid!important}.entry:not(.ios-fullscreen) .security-console .console-hud{display:contents!important}.entry:not(.ios-fullscreen) .security-console .console-hud-loc{grid-area:1/1!important;place-self:center start!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .argus-connection-pill{grid-area:1/2!important;place-self:center!important;margin:0!important;position:static!important;transform:none!important}.entry:not(.ios-fullscreen) .security-console .console-hud-right{grid-area:1/3!important;place-self:center end!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack{grid-area:2/1!important;align-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .entry-icon{grid-area:2/2!important;place-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .console-sensors{grid-area:2/3!important;align-self:center!important;margin:0!important}}@media (width<=900px){.entry:not(.ios-fullscreen) .security-console{box-sizing:border-box!important;width:100%!important;box-shadow:none!important;background:0 0!important;flex-direction:column!important;align-items:center!important;gap:14px!important;padding:18px 14px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .console-hud{width:100%!important;box-shadow:none!important;background:0 0!important;flex-flow:wrap!important;justify-content:center!important;align-items:center!important;gap:8px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack,.entry:not(.ios-fullscreen) .security-console .console-sensors{width:100%!important;max-width:440px!important}}@container argus-console (width<=900px){.entry:not(.ios-fullscreen) .security-console{box-sizing:border-box!important;width:100%!important;box-shadow:none!important;background:0 0!important;flex-direction:column!important;align-items:center!important;gap:14px!important;padding:18px 14px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .console-hud{width:100%!important;box-shadow:none!important;background:0 0!important;flex-flow:wrap!important;justify-content:center!important;align-items:center!important;gap:8px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack,.entry:not(.ios-fullscreen) .security-console .console-sensors{width:100%!important;max-width:440px!important}}.entry.ios-fullscreen{box-sizing:border-box!important;width:100dvw!important;height:100%!important;min-height:100dvh!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;background:0 0!important;border:none!important;border-radius:0!important;flex-direction:column!important;margin:0!important;padding:0!important;display:flex!important;position:relative!important;overflow:visible!important}.entry.ios-fullscreen .entry-exit-fs{top:max(16px, env(safe-area-inset-top))!important;left:max(16px, env(safe-area-inset-left))!important;z-index:100000!important;-webkit-backdrop-filter:blur(20px)!important;color:#fff!important;cursor:pointer!important;background:#000000a6!important;border:1px solid #ffffff4d!important;border-radius:16px!important;padding:10px 16px!important;font-size:20px!important;font-weight:900!important;position:fixed!important;box-shadow:inset 0 1px #fff6,0 8px 24px #00000080!important}@media (width<=900px),(orientation:portrait){.entry.ios-fullscreen .security-console{padding:max(64px, calc(env(safe-area-inset-top) + 48px)) 16px max(32px, env(safe-area-inset-bottom))!important;box-sizing:border-box!important;width:100%!important;max-width:480px!important;min-height:100%!important;box-shadow:none!important;background:0 0!important;flex-direction:column!important;justify-content:flex-start!important;align-items:center!important;gap:16px!important;margin:0 auto!important;display:flex!important}.entry.ios-fullscreen .security-console .console-hud{width:100%!important;box-shadow:none!important;background:0 0!important;flex-flow:wrap!important;justify-content:center!important;align-items:center!important;gap:8px!important;display:flex!important}.entry.ios-fullscreen .security-console .entry-icon{margin:6px auto!important;display:flex!important}.entry.ios-fullscreen .security-console .entry-icon svg{max-width:min(50vw,220px)!important}.entry.ios-fullscreen .security-console .liquid-stack{width:100%!important;max-width:440px!important}.entry.ios-fullscreen .security-console .console-sensors{width:100%!important;max-width:440px!important;max-height:300px!important;box-shadow:none!important;background:0 0!important}}@media (width>=901px) and (orientation:landscape),(width>=901px),(orientation:landscape) and (height<=600px){.entry.ios-fullscreen .security-console{padding:max(56px, env(safe-area-inset-top)) max(48px, env(safe-area-inset-right)) max(32px, env(safe-area-inset-bottom)) max(48px, env(safe-area-inset-left))!important;box-sizing:border-box!important;width:100%!important;max-width:1600px!important;height:100%!important;min-height:100dvh!important;box-shadow:none!important;background:0 0!important;grid-template-rows:auto 1fr!important;grid-template-columns:minmax(280px,380px) 1fr minmax(280px,440px)!important;justify-content:center!important;align-items:center!important;gap:20px 48px!important;margin:0 auto!important;display:grid!important}.entry.ios-fullscreen .security-console .console-hud{display:contents!important}.entry.ios-fullscreen .security-console .console-hud-loc{grid-area:1/1!important;place-self:center start!important;margin:0!important}.entry.ios-fullscreen .security-console .argus-connection-pill{grid-area:1/2!important;place-self:center!important;margin:0!important;position:static!important;transform:none!important}.entry.ios-fullscreen .security-console .console-hud-right{grid-area:1/3!important;place-self:center end!important;margin:0!important}.entry.ios-fullscreen .security-console .liquid-stack{grid-area:2/1!important;align-self:center!important;width:100%!important}.entry.ios-fullscreen .security-console .entry-icon{grid-area:2/2!important;place-self:center!important}.entry.ios-fullscreen .security-console .entry-icon svg{max-width:min(35vw,360px)!important}.entry.ios-fullscreen .security-console .console-sensors{width:100%!important;max-height:520px!important;box-shadow:none!important;background:0 0!important;grid-area:2/3!important;align-self:center!important}}.security-console .console-sensor{grid-template-columns:28px minmax(0,1fr)!important;min-width:0!important}.security-console .console-sensor-icon{grid-area:1/1/span 2}.security-console .console-sensor-name{grid-area:1/2}.security-console .console-sensor-state{flex-wrap:wrap;grid-area:2/2}.security-console .liquid-btn:disabled{opacity:.45;cursor:not-allowed}@media (prefers-reduced-motion:reduce){.security-console *,.security-console :before,.security-console :after{transition:none!important;animation:none!important}}";
+var Vn = ".entry{position:relative;overflow:hidden;container:argus-console/inline-size;-webkit-backdrop-filter:blur(40px)saturate(190%)brightness(1.12)!important;background:linear-gradient(135deg,#ffffff1f 0%,#ffffff08 100%)!important;border:1px solid #ffffff38!important;border-radius:28px!important;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s!important;box-shadow:inset 0 1.5px #ffffff73,inset 0 -1px #ffffff1a,0 24px 64px #00000073,0 4px 16px #00000040!important}.security-console,.entry-content,.entry-content.security-console{box-shadow:none!important;box-shadow:none!important;background:0 0!important;border:none!important}.security-console .console-hud{box-shadow:none!important;background:0 0!important;border:none!important}.console-hud-loc{box-sizing:border-box!important;text-overflow:ellipsis!important;white-space:nowrap!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;letter-spacing:.04em!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;background:linear-gradient(135deg,#fff3 0%,#ffffff0d 100%)!important;border:1px solid #ffffff47!important;border-radius:999px!important;align-items:center!important;max-width:clamp(140px,26vw,260px)!important;height:38px!important;padding:0 16px!important;font-size:11.5px!important;font-weight:850!important;display:inline-flex!important;overflow:hidden!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff73,inset 0 -1px #0003,0 8px 24px #00000059!important}.argus-connection-pill{-webkit-backdrop-filter:blur(24px)saturate(190%)!important;letter-spacing:.05em!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;white-space:nowrap!important;background:linear-gradient(135deg,#ffffff29 0%,#ffffff0a 100%)!important;border:1px solid #ffffff3d!important;border-radius:999px!important;align-items:center!important;gap:8px!important;max-width:max-content!important;height:38px!important;padding:0 16px!important;font-size:11px!important;font-weight:850!important;display:inline-flex!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff61,inset 0 -1px #00000026,0 8px 24px #00000059!important}.argus-connection-dot{background:#10b981!important;border-radius:50%!important;width:8px!important;height:8px!important;box-shadow:0 0 12px #10b981!important}.argus-connection-pill[data-online=false] .argus-connection-dot{background:#ef4444!important;box-shadow:0 0 12px #ef4444!important}.console-hud-right{min-width:0!important;box-shadow:none!important;background:0 0!important;border:0!important;justify-content:flex-end!important;align-items:center!important;gap:8px!important;height:38px!important;display:inline-flex!important}.console-system-badge{box-sizing:border-box!important;letter-spacing:.02em!important;text-transform:none!important;white-space:nowrap!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;border-radius:999px!important;align-items:center!important;height:38px!important;padding:0 18px!important;font-size:12px!important;font-weight:800!important;display:inline-flex!important;transform:translate(0,0)!important}.console-system-badge--disarmed{color:#34d399!important;text-shadow:0 0 10px #10b981b3!important;background:linear-gradient(135deg,#10b98152 0%,#0596691f 100%)!important;border:1.5px solid #10b981a6!important;box-shadow:inset 0 1.5px #ffffff80,0 0 24px #10b98166,0 8px 24px #00000059!important}.console-system-badge--armed_home,.console-system-badge--armed_away,.console-system-badge--armed_night,.console-system-badge--pending{color:#fbbf24!important;text-shadow:0 0 10px #f59e0bcc!important;background:linear-gradient(135deg,#f59e0b59 0%,#d9770624 100%)!important;border:1.5px solid #f59e0bb3!important;box-shadow:inset 0 1.5px #ffffff8c,0 0 24px #f59e0b73,0 8px 24px #00000059!important}.console-system-badge--triggered{color:#f87171!important;text-shadow:0 0 12px #ef4444d9!important;background:linear-gradient(135deg,#ef44446b 0%,#b91c1c29 100%)!important;border:1.5px solid #ef4444d9!important;animation:.9s ease-in-out infinite argusTriggerBadgePulse!important;box-shadow:inset 0 1.5px #fff9,0 0 32px #ef444499,0 8px 24px #00000059!important}@keyframes argusTriggerBadgePulse{0%,to{opacity:.85;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}.security-console .entry-icon{will-change:transform;animation:5s ease-in-out infinite float-icon;transform:translate(0,0);box-shadow:none!important;background:0 0!important;border:none!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;display:flex!important}.security-console .entry-icon svg{filter:drop-shadow(0 14px 28px #0009)drop-shadow(0 0 45px #10b9818c)!important;width:100%!important;max-width:220px!important;height:auto!important}@keyframes float-icon{0%,to{transform:translate(0,0)scale(1)}50%{transform:translateY(-6px)scale(1.015)}}.entry.argus-waiting .entry-icon>svg{transform-origin:50%!important;filter:drop-shadow(0 0 26px #ffb839f2)saturate(1.35)!important;animation:1.05s ease-in-out infinite argusArmingShield!important}.argus-shield-status{color:#ffd27a;letter-spacing:.12em;text-align:center;background:#ff950033;border:1px solid #ffb8398c;border-radius:999px;width:max-content;max-width:200px;margin:7px auto 0;padding:5px 14px;font-size:9.5px;font-weight:850;animation:1.05s ease-in-out infinite argusArmingLabel;display:block;box-shadow:inset 0 1px #fff6,0 6px 18px #0000004d}@keyframes argusArmingShield{0%,to{opacity:.55;transform:scale(.94)}50%{opacity:1;transform:scale(1.07)}}@keyframes argusArmingLabel{0%,to{opacity:.62}50%{opacity:1}}.security-console .liquid-stack{width:100%!important;box-shadow:none!important;background:0 0!important;border:none!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;display:grid!important}.security-console .liquid-btn{text-align:center!important;letter-spacing:.03em!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;cursor:pointer!important;background:linear-gradient(135deg,#ffffff2e 0%,#ffffff0d 100%)!important;border:1px solid #ffffff40!important;border-radius:20px!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:5px!important;min-height:68px!important;padding:12px 6px!important;font-size:11.5px!important;font-weight:850!important;line-height:1.15!important;transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s,background .25s,border-color .25s!important;display:flex!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff6b,inset 0 -1px #0003,0 10px 28px #00000059!important}.security-console .liquid-btn:hover{background:linear-gradient(135deg,#ffffff3d 0%,#ffffff14 100%)!important;border-color:#fff6!important;transform:translateY(-3px)translate(0,0)scale(1.025)!important;box-shadow:inset 0 1.5px #ffffff8c,0 14px 34px #00000073!important}.security-console .liquid-btn span:first-child,.security-console .liquid-btn .mode-btn-icon{filter:drop-shadow(0 2px 6px #0006)!important;font-size:20px!important;line-height:1!important}.security-console .liquid-btn span:last-child{color:#fff!important;font-size:11px!important;font-weight:850!important}.security-console .btn-home.active{background:linear-gradient(135deg,#fb8c00 0%,#d97706 100%)!important;border:1px solid #fed7aad9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #fb8c0099!important}.security-console .btn-away.active{background:linear-gradient(135deg,#e53935 0%,#b91c1c 100%)!important;border:1px solid #fecacad9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #e5393599!important}.security-console .btn-night.active{background:linear-gradient(135deg,#1e88e5 0%,#1d4ed8 100%)!important;border:1px solid #bfdbfed9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #1e88e599!important}.security-console .console-sensors{scrollbar-width:none;grid-template-columns:1fr;gap:8px;max-height:none!important;box-shadow:none!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;filter:none!important;isolation:auto!important;contain:none!important;background:0 0!important;border:none!important;outline:none!important;margin:0!important;padding:0!important;display:grid!important;overflow:visible!important}.security-console .console-sensors::-webkit-scrollbar{display:none}.security-console .console-sensors.console-sensors--compact,.security-console .console-sensors[data-count=\"3\"],.security-console .console-sensors[data-count=\"4\"],.security-console .console-sensors[data-count=\"5\"],.security-console .console-sensors[data-count=\"6\"]{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))!important;gap:6px!important}.security-console .console-sensors.console-sensors--micro,.security-console .console-sensors[data-count=\"7\"],.security-console .console-sensors[data-count=\"8\"],.security-console .console-sensors[data-count=\"9\"],.security-console .console-sensors[data-count=\"10\"],.security-console .console-sensors[data-count=\"11\"],.security-console .console-sensors[data-count=\"12\"]{scrollbar-width:thin;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))!important;gap:4px!important;max-height:280px!important;overflow-y:auto!important}.console-sensor{color:#fff!important;text-shadow:0 1px 3px #00000080!important;box-sizing:border-box!important;background:linear-gradient(135deg,#ffffff29 0%,#ffffff0a 100%)!important;border:1px solid #ffffff3d!important;border-radius:999px!important;grid-template-columns:auto minmax(0,1fr) auto!important;align-items:center!important;gap:10px!important;min-height:68px!important;padding:10px 16px!important;transition:background .35s,box-shadow .35s,border-color .35s!important;display:grid!important;box-shadow:inset 0 1.5px #ffffff61,inset 0 -1px #00000026,0 4px 12px #00000040!important}.console-sensor:hover{transform:translateY(-2px)scale(1.02)!important;box-shadow:inset 0 1.5px #ffffff80,0 8px 18px #00000059!important}.console-sensor.open{background:linear-gradient(135deg,#ef444459 0%,#b91c1c29 100%)!important;border-color:#ef4444a6!important;box-shadow:inset 0 1.5px #ffffff73,0 0 16px #ef444459,0 4px 12px #00000040!important}.console-sensor.unavailable{background:linear-gradient(135deg,#94a3b826 0%,#64748b0d 100%)!important;border-style:dashed!important;border-color:#94a3b859!important}.console-sensor-icon{filter:drop-shadow(0 2px 4px #0006)!important;justify-content:center!important;align-items:center!important;font-size:18px!important;display:flex!important}.argus-lock-icon{filter:drop-shadow(0 0 6px);width:25px;height:25px;transform-style:preserve-3d;perspective:240px;transition:color .35s,filter .35s;overflow:visible}.argus-lock-icon.is-open{color:#ff4f6d;animation:1.15s cubic-bezier(.22,.75,.2,1) both argus-lock-open}.argus-lock-icon.is-closed{color:#35e6a0;animation:1.15s cubic-bezier(.22,.75,.2,1) both argus-lock-closed}.argus-lock-icon.is-bypassed{color:#94a3b8;filter:none}.argus-lock-body{fill:color-mix(in srgb, currentColor 28%, transparent);stroke:currentColor;stroke-width:2px}.argus-lock-shackle{fill:none;stroke:currentColor;stroke-width:4px;stroke-linecap:round;transform-origin:15px 21px;transition:transform .85s cubic-bezier(.22,.75,.2,1)}.argus-lock-icon.is-open .argus-lock-shackle{transform:rotate(-28deg)translate(-1px,-2px)}.argus-lock-keyhole,.argus-lock-keyline{fill:currentColor;stroke:currentColor;stroke-width:2px;stroke-linecap:round}@keyframes argus-lock-open{0%{opacity:.82;transform:translate(0,0)scale(1)rotateY(0)}42%{opacity:1;filter:drop-shadow(0 0 18px)drop-shadow(0 16px 18px #0000008c);transform:translate3d(0,-3px,60px)scale(1.58)rotateY(-12deg)rotate(-4deg)}72%{transform:translate3d(0,-1px,34px)scale(1.34)rotateY(-6deg)rotate(-2deg)}to{opacity:1;transform:translate(0,0)scale(1)rotateY(0)rotate(0)}}@keyframes argus-lock-closed{0%{opacity:.82;transform:translate(0,0)scale(1)rotateY(0)}42%{opacity:1;filter:drop-shadow(0 0 18px)drop-shadow(0 16px 18px #0000008c);transform:translate3d(0,-3px,60px)scale(1.58)rotateY(12deg)rotate(4deg)}72%{transform:translate3d(0,-1px,34px)scale(1.34)rotateY(6deg)rotate(2deg)}to{opacity:1;transform:translate(0,0)scale(1)rotateY(0)rotate(0)}}@media (prefers-reduced-motion:reduce){.argus-lock-icon{animation:none!important}.argus-lock-shackle{transition:none!important}}.console-sensor-name{letter-spacing:.02em!important;text-overflow:clip!important;white-space:normal!important;overflow-wrap:break-word!important;word-break:normal!important;hyphens:none!important;color:#fff!important;min-width:0!important;font-size:11.5px!important;font-weight:850!important;line-height:1.25!important;overflow:visible!important}.console-sensor-state{letter-spacing:.02em!important;text-transform:none!important;white-space:nowrap!important;align-items:center!important;gap:4px!important;font-size:11px!important;font-weight:800!important;display:inline-flex!important}.entry.ios-fullscreen .console-sensors{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))!important;gap:10px!important;max-height:none!important;overflow-y:visible!important}.entry.ios-fullscreen .console-sensor{min-width:0!important;padding:12px 14px!important}.entry.ios-fullscreen .console-sensor-name{white-space:normal!important;text-overflow:clip!important;overflow-wrap:break-word!important;word-break:normal!important;hyphens:none!important;line-height:1.25!important;overflow:visible!important}@media (width<=900px){.entry:not(.ios-fullscreen) .security-console .console-sensors,.entry:not(.ios-fullscreen) .security-console .console-sensors.console-sensors--compact,.entry:not(.ios-fullscreen) .security-console .console-sensors.console-sensors--micro{grid-template-columns:minmax(0,1fr)!important;max-height:none!important;overflow:visible!important}.entry:not(.ios-fullscreen) .security-console .console-sensor{width:100%!important;min-width:0!important}.entry:not(.ios-fullscreen) .security-console .console-sensor-name{writing-mode:horizontal-tb!important;word-break:normal!important;overflow-wrap:normal!important;hyphens:none!important}}.console-empty{text-align:center!important;color:#ffffffa6!important;border:1px dashed #ffffff40!important;border-radius:20px!important;padding:24px!important;font-size:12px!important;font-weight:800!important}@media (width>=901px){.entry:not(.ios-fullscreen) .security-console{box-shadow:none!important;background:0 0!important;grid-template-rows:auto 1fr!important;grid-template-columns:minmax(200px,350px) 1fr minmax(220px,380px)!important;justify-content:center!important;align-items:center!important;gap:16px 36px!important;padding:24px 28px 20px!important;display:grid!important}.entry:not(.ios-fullscreen) .security-console .console-hud{display:contents!important}.entry:not(.ios-fullscreen) .security-console .console-hud-loc{grid-area:1/1!important;place-self:center start!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .argus-connection-pill{grid-area:1/2!important;place-self:center!important;margin:0!important;position:static!important;transform:none!important}.entry:not(.ios-fullscreen) .security-console .console-hud-right{grid-area:1/3!important;place-self:center end!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack{grid-area:2/1!important;align-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .entry-icon{grid-area:2/2!important;place-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .console-sensors{grid-area:2/3!important;align-self:center!important;margin:0!important}}@container argus-console (width>=901px){.entry:not(.ios-fullscreen) .security-console{box-shadow:none!important;background:0 0!important;grid-template-rows:auto 1fr!important;grid-template-columns:minmax(200px,320px) minmax(160px,220px) minmax(280px,1fr)!important;justify-content:center!important;align-items:center!important;gap:14px 20px!important;padding:20px 24px 18px!important;display:grid!important}.entry:not(.ios-fullscreen) .security-console .console-hud{display:contents!important}.entry:not(.ios-fullscreen) .security-console .console-hud-loc{grid-area:1/1!important;place-self:center start!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .argus-connection-pill{grid-area:1/2!important;place-self:center!important;margin:0!important;position:static!important;transform:none!important}.entry:not(.ios-fullscreen) .security-console .console-hud-right{grid-area:1/3!important;place-self:center end!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack{grid-area:2/1!important;align-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .entry-icon{grid-area:2/2!important;place-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .console-sensors{grid-area:2/3!important;align-self:center!important;margin:0!important}}@media (width<=900px){.entry:not(.ios-fullscreen) .security-console{box-sizing:border-box!important;width:100%!important;box-shadow:none!important;background:0 0!important;flex-direction:column!important;align-items:center!important;gap:14px!important;padding:18px 14px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .console-hud{width:100%!important;box-shadow:none!important;background:0 0!important;flex-flow:wrap!important;justify-content:center!important;align-items:center!important;gap:8px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack,.entry:not(.ios-fullscreen) .security-console .console-sensors{width:100%!important;max-width:440px!important}}@container argus-console (width<=900px){.entry:not(.ios-fullscreen) .security-console{box-sizing:border-box!important;width:100%!important;box-shadow:none!important;background:0 0!important;flex-direction:column!important;align-items:center!important;gap:14px!important;padding:18px 14px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .console-hud{width:100%!important;box-shadow:none!important;background:0 0!important;flex-flow:wrap!important;justify-content:center!important;align-items:center!important;gap:8px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack,.entry:not(.ios-fullscreen) .security-console .console-sensors{width:100%!important;max-width:440px!important}}.entry.ios-fullscreen{box-sizing:border-box!important;width:100dvw!important;height:100%!important;min-height:100dvh!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;background:0 0!important;border:none!important;border-radius:0!important;flex-direction:column!important;margin:0!important;padding:0!important;display:flex!important;position:relative!important;overflow:visible!important}.entry.ios-fullscreen .entry-exit-fs{top:max(16px, env(safe-area-inset-top))!important;left:max(16px, env(safe-area-inset-left))!important;z-index:100000!important;-webkit-backdrop-filter:blur(20px)!important;color:#fff!important;cursor:pointer!important;background:#000000a6!important;border:1px solid #ffffff4d!important;border-radius:16px!important;padding:10px 16px!important;font-size:20px!important;font-weight:900!important;position:fixed!important;box-shadow:inset 0 1px #fff6,0 8px 24px #00000080!important}@media (width<=900px),(orientation:portrait){.entry.ios-fullscreen .security-console{padding:max(64px, calc(env(safe-area-inset-top) + 48px)) 16px max(32px, env(safe-area-inset-bottom))!important;box-sizing:border-box!important;width:100%!important;max-width:480px!important;min-height:100%!important;box-shadow:none!important;background:0 0!important;flex-direction:column!important;justify-content:flex-start!important;align-items:center!important;gap:16px!important;margin:0 auto!important;display:flex!important}.entry.ios-fullscreen .security-console .console-hud{width:100%!important;box-shadow:none!important;background:0 0!important;flex-flow:wrap!important;justify-content:center!important;align-items:center!important;gap:8px!important;display:flex!important}.entry.ios-fullscreen .security-console .entry-icon{margin:6px auto!important;display:flex!important}.entry.ios-fullscreen .security-console .entry-icon svg{max-width:min(50vw,220px)!important}.entry.ios-fullscreen .security-console .liquid-stack{width:100%!important;max-width:440px!important}.entry.ios-fullscreen .security-console .console-sensors{width:100%!important;max-width:440px!important;max-height:300px!important;box-shadow:none!important;background:0 0!important}}@media (width>=901px) and (orientation:landscape),(width>=901px),(orientation:landscape) and (height<=600px){.entry.ios-fullscreen .security-console{padding:max(56px, env(safe-area-inset-top)) max(48px, env(safe-area-inset-right)) max(32px, env(safe-area-inset-bottom)) max(48px, env(safe-area-inset-left))!important;box-sizing:border-box!important;width:100%!important;max-width:1600px!important;height:100%!important;min-height:100dvh!important;box-shadow:none!important;background:0 0!important;grid-template-rows:auto 1fr!important;grid-template-columns:minmax(280px,380px) 1fr minmax(280px,440px)!important;justify-content:center!important;align-items:center!important;gap:20px 48px!important;margin:0 auto!important;display:grid!important}.entry.ios-fullscreen .security-console .console-hud{display:contents!important}.entry.ios-fullscreen .security-console .console-hud-loc{grid-area:1/1!important;place-self:center start!important;margin:0!important}.entry.ios-fullscreen .security-console .argus-connection-pill{grid-area:1/2!important;place-self:center!important;margin:0!important;position:static!important;transform:none!important}.entry.ios-fullscreen .security-console .console-hud-right{grid-area:1/3!important;place-self:center end!important;margin:0!important}.entry.ios-fullscreen .security-console .liquid-stack{grid-area:2/1!important;align-self:center!important;width:100%!important}.entry.ios-fullscreen .security-console .entry-icon{grid-area:2/2!important;place-self:center!important}.entry.ios-fullscreen .security-console .entry-icon svg{max-width:min(35vw,360px)!important}.entry.ios-fullscreen .security-console .console-sensors{width:100%!important;max-height:520px!important;box-shadow:none!important;background:0 0!important;grid-area:2/3!important;align-self:center!important}}.security-console .console-sensor{grid-template-columns:28px minmax(0,1fr)!important;min-width:0!important}.security-console .console-sensor-icon{grid-area:1/1/span 2}.security-console .console-sensor-name{grid-area:1/2}.security-console .console-sensor-state{flex-wrap:wrap;grid-area:2/2}.security-console .liquid-btn:disabled{opacity:.45;cursor:not-allowed}@media (prefers-reduced-motion:reduce){.security-console *,.security-console :before,.security-console :after{transition:none!important;animation:none!important}}";
 //#endregion
 //#region src/features/dashboard/components/SensorChip.tsx
-function Un({ isOpen: e, isBypassed: t, label: n }) {
-	return /* @__PURE__ */ (0, j.jsxs)("svg", {
+function Hn({ isOpen: e, isBypassed: t, label: n }) {
+	return /* @__PURE__ */ (0, A.jsxs)("svg", {
 		className: `argus-lock-icon ${e ? "is-open" : "is-closed"} ${t ? "is-bypassed" : ""}`,
 		viewBox: "0 0 48 48",
 		role: "img",
 		"aria-label": n,
 		children: [
-			/* @__PURE__ */ (0, j.jsx)("path", {
+			/* @__PURE__ */ (0, A.jsx)("path", {
 				className: "argus-lock-shackle",
 				d: "M15 21v-7a9 9 0 0 1 18 0v7"
 			}),
-			/* @__PURE__ */ (0, j.jsx)("rect", {
+			/* @__PURE__ */ (0, A.jsx)("rect", {
 				className: "argus-lock-body",
 				x: "8",
 				y: "19",
@@ -18275,24 +18433,24 @@ function Un({ isOpen: e, isBypassed: t, label: n }) {
 				height: "25",
 				rx: "8"
 			}),
-			/* @__PURE__ */ (0, j.jsx)("circle", {
+			/* @__PURE__ */ (0, A.jsx)("circle", {
 				className: "argus-lock-keyhole",
 				cx: "24",
 				cy: "31",
 				r: "3"
 			}),
-			/* @__PURE__ */ (0, j.jsx)("path", {
+			/* @__PURE__ */ (0, A.jsx)("path", {
 				className: "argus-lock-keyline",
 				d: "M24 34v5"
 			})
 		]
 	});
 }
-function Wn({ id: e, name: t, isOpen: n, isBlocking: r, isBypassed: i, isUnavailable: a, unavailableLabel: o, battery: s, iconHtml: c, statusLabelOpen: l, statusLabelClosed: u, bypassedLabel: d, isLockLike: f }) {
-	let p = null;
+function Un({ id: e, name: t, isOpen: n, isBlocking: r, isBypassed: i, isUnavailable: a, unavailableLabel: o, battery: s, delay: c, iconHtml: l, statusLabelOpen: u, statusLabelClosed: d, bypassedLabel: f, isLockLike: p }) {
+	let m = null;
 	if (s !== null) {
 		let e = s === 0, t = s <= 10 && !e, n = e ? "🔋 ❌" : `🔋 ${s}%`;
-		(e || t) && (p = /* @__PURE__ */ (0, j.jsx)("span", {
+		(e || t) && (m = /* @__PURE__ */ (0, A.jsx)("span", {
 			style: {
 				marginLeft: "8px",
 				fontSize: "10px",
@@ -18308,48 +18466,97 @@ function Wn({ id: e, name: t, isOpen: n, isBlocking: r, isBypassed: i, isUnavail
 			children: n
 		}));
 	}
-	let m = a || i ? "#94a3b8" : r ? "#fde047" : n ? "#f87171" : "#34d399", h = f || i ? "none" : r ? "pulse 1s infinite" : n ? "pulse 2s infinite" : "none", g = a || i ? "#94a3b8" : r ? "#fde047" : n ? "#f87171" : "#34d399", _ = i ? .6 : 1, v = a ? o || "No disponible" : n ? l : u, y = i ? `${d || "Omitido"} · ${v}` : v, b = `${t}: ${y}${s === null ? "" : ` (Batería: ${s}%)`}`;
-	return /* @__PURE__ */ (0, j.jsxs)("div", {
-		className: `console-sensor ${n && !i ? "open" : ""}`,
-		style: { opacity: _ },
-		title: b,
-		"aria-label": b,
+	let h = null;
+	if (c !== void 0) {
+		let e = c === 0;
+		h = /* @__PURE__ */ (0, A.jsx)("span", {
+			style: {
+				marginLeft: "6px",
+				fontSize: "9px",
+				fontWeight: 700,
+				color: e ? "#38bdf8" : "#fbbf24",
+				background: "rgba(255,255,255,0.08)",
+				padding: "2px 5px",
+				borderRadius: "6px"
+			},
+			children: e ? "⚡ 0s" : `⏱️ ${c}s`
+		});
+	}
+	let g = a || i ? "#94a3b8" : r ? "#fde047" : n ? "#f87171" : "#34d399", _ = p || i ? "none" : r ? "pulse 1s infinite" : n ? "pulse 2s infinite" : "none", v = a || i ? "#94a3b8" : r ? "#fde047" : n ? "#f87171" : "#34d399", y = i ? .6 : 1, b = a ? o || "No disponible" : n ? u : d, x = i ? `${f || "Omitido"} · ${b}` : b, S = `${t}: ${x}${s === null ? "" : ` (Batería: ${s}%)`}`;
+	return /* @__PURE__ */ (0, A.jsxs)("div", {
+		className: `console-sensor ${a ? "unavailable" : ""} ${n && !i ? "open" : ""}`,
+		style: { opacity: y },
+		title: S,
+		"aria-label": S,
 		tabIndex: 0,
 		role: "status",
 		children: [
-			/* @__PURE__ */ (0, j.jsx)("span", {
+			/* @__PURE__ */ (0, A.jsx)("span", {
 				className: "console-sensor-icon",
-				"aria-hidden": f ? void 0 : "true",
+				"aria-hidden": p ? void 0 : "true",
 				style: {
 					display: "flex",
 					alignItems: "center",
 					justifyContent: "center",
-					color: m,
-					animation: h
+					color: g,
+					animation: _
 				},
-				children: a ? /* @__PURE__ */ (0, j.jsx)("span", { children: "?" }) : f ? /* @__PURE__ */ (0, j.jsx)(Un, {
+				children: a ? /* @__PURE__ */ (0, A.jsxs)("svg", {
+					viewBox: "0 0 24 24",
+					width: "22",
+					height: "22",
+					stroke: "currentColor",
+					strokeWidth: "2",
+					fill: "none",
+					strokeLinecap: "round",
+					strokeLinejoin: "round",
+					style: { opacity: .75 },
+					children: [
+						/* @__PURE__ */ (0, A.jsx)("circle", {
+							cx: "12",
+							cy: "12",
+							r: "10"
+						}),
+						/* @__PURE__ */ (0, A.jsx)("line", {
+							x1: "12",
+							y1: "8",
+							x2: "12",
+							y2: "12"
+						}),
+						/* @__PURE__ */ (0, A.jsx)("line", {
+							x1: "12",
+							y1: "16",
+							x2: "12.01",
+							y2: "16"
+						})
+					]
+				}) : p ? /* @__PURE__ */ (0, A.jsx)(Hn, {
 					isOpen: n,
 					isBypassed: i,
-					label: b
-				}) : /* @__PURE__ */ (0, j.jsx)("span", { dangerouslySetInnerHTML: { __html: c } })
+					label: S
+				}) : /* @__PURE__ */ (0, A.jsx)("span", { dangerouslySetInnerHTML: { __html: l } })
 			}),
-			/* @__PURE__ */ (0, j.jsx)("span", {
+			/* @__PURE__ */ (0, A.jsx)("span", {
 				className: "console-sensor-name",
 				title: t,
 				style: { color: r && !i ? "#fde047" : "#ffffff" },
 				children: t
 			}),
-			/* @__PURE__ */ (0, j.jsxs)("span", {
+			/* @__PURE__ */ (0, A.jsxs)("span", {
 				className: "console-sensor-state",
-				style: { color: g },
-				children: [y, p]
+				style: { color: v },
+				children: [
+					x,
+					h,
+					m
+				]
 			})
 		]
 	});
 }
 //#endregion
 //#region src/features/dashboard/components/SecurityConsole.tsx
-function Gn({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r }) {
+function Wn({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r }) {
 	let [i, a] = (0, D.useState)(0);
 	(0, D.useEffect)(() => {
 		let t = () => a((e) => e + 1);
@@ -18369,15 +18576,14 @@ function Gn({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 			let e = s?.states?.[d.entity_id]?.attributes?.arming_blocking_sensors || [];
 			return e.length ? (m("waiting_sensors_count") || "ESPERANDO {count} SENSOR(ES)").replace("{count}", String(e.length)) : m("waiting_sensors") || "ESPERANDO SENSORES";
 		}
-		return p === "unknown" || p === "unavailable" ? m("unavailable") : p === "arming" ? m("arming") : p === "pending" ? m("pending") : p === "armed_vacation" ? m("system_armed") + " · " + m("mode_vacation") : p === "disarmed" ? m("system_disarmed") || "SISTEMA DESARMADO" : p === "armed_home" ? (m("system_armed") || "ARMADO") + " · " + (m("mode_home") || "CASA") : p === "armed_away" ? (m("system_armed") || "ARMADO") + " · " + (m("mode_away") || "AUSENTE") : p === "armed_night" ? (m("system_armed") || "ARMADO") + " · " + (m("mode_night") || "NOCHE") : m("system_armed") || "ARMADO";
-	}, S = () => e._getIntelligentSVG?.(v ? "pending" : p, null, e._isNight, g, u) || "", C = [], w = s?.states?.[d.entity_id]?.attributes?.arming_blocking_sensors || [];
+		return p === "unknown" || p === "unavailable" ? m("unavailable") : p === "arming" ? m("arming") : p === "pending" ? m("pending") : p === "disarmed" ? m("system_disarmed") || "SISTEMA DESARMADO" : p === "armed_home" ? (m("system_armed") || "ARMADO") + " · " + (m("mode_home") || "CASA") : p === "armed_away" ? (m("system_armed") || "ARMADO") + " · " + (m("mode_away") || "AUSENTE") : p === "armed_night" ? (m("system_armed") || "ARMADO") + " · " + (m("mode_night") || "NOCHE") : m("system_armed") || "ARMADO";
+	}, S = () => e._getIntelligentSVG?.(v ? "pending" : p, null, e._isNight, g, u) || "", C = [], w = s?.states?.[d.entity_id]?.attributes?.arming_blocking_sensors || [], T = {};
 	if (d.entity_id) {
-		let t = e._ui?.modes?.__by_entity__?.[d.entity_id] || e._ui?.modes || {}, n = t[p.replace("armed_", "")] || {};
-		g && (n = [
+		let t = e._ui?.modes?.__by_entity__?.[d.entity_id] || e._ui?.modes || {};
+		T = t[p.replace("armed_", "")] || {}, g && (T = [
 			"away",
 			"home",
-			"night",
-			"vacation"
+			"night"
 		].map((e) => t[e]).find((e) => (e?.sensors || []).some((e) => [
 			"on",
 			"open",
@@ -18386,28 +18592,27 @@ function Gn({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 			"active",
 			"motion"
 		].includes(s?.states?.[e]?.state))) || {});
-		let r = n.sensors || [];
-		if (p === "disarmed" || y || !r.length) {
-			let n = /* @__PURE__ */ new Set();
+		let n = T.sensors || [];
+		if (p === "disarmed" || y || !n.length) {
+			let r = /* @__PURE__ */ new Set();
 			[
 				"away",
 				"home",
-				"night",
-				"vacation"
+				"night"
 			].forEach((e) => {
-				t[e]?.sensors && t[e].sensors.forEach((e) => n.add(e));
-			}), Array.isArray(e._sensors) && e._sensors.forEach((e) => n.add(typeof e == "string" ? e : e.entity_id || e.id)), r = Array.from(n);
+				t[e]?.sensors && t[e].sensors.forEach((e) => r.add(e));
+			}), Array.isArray(e._sensors) && e._sensors.forEach((e) => r.add(typeof e == "string" ? e : e.entity_id || e.id)), n = Array.from(r);
 		}
-		let i = n.bypassed_sensors || [];
-		r.forEach((e) => {
+		let r = T.bypassed_sensors || [];
+		n.forEach((e) => {
 			C.push({
 				id: e,
-				isBypassed: i.includes(e)
+				isBypassed: r.includes(e)
 			});
 		});
 	}
-	let T = C, ee = T.length, E = ee >= 7 ? "console-sensors--micro" : ee >= 3 ? "console-sensors--compact" : "";
-	return C.map((e) => e.id), /* @__PURE__ */ (0, j.jsxs)(j.Fragment, { children: [/* @__PURE__ */ (0, j.jsx)("style", { dangerouslySetInnerHTML: { __html: Hn } }), /* @__PURE__ */ (0, j.jsxs)("div", {
+	let ee = C, E = ee.length, te = E >= 7 ? "console-sensors--micro" : E >= 3 ? "console-sensors--compact" : "";
+	return C.map((e) => e.id), /* @__PURE__ */ (0, A.jsxs)(A.Fragment, { children: [/* @__PURE__ */ (0, A.jsx)("style", { dangerouslySetInnerHTML: { __html: Vn } }), /* @__PURE__ */ (0, A.jsxs)("div", {
 		className: `entry ${t ? "ios-fullscreen" : ""} ${v ? "argus-waiting" : ""}`,
 		style: {
 			position: "relative",
@@ -18415,8 +18620,8 @@ function Gn({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 			height: "100%"
 		},
 		children: [
-			/* @__PURE__ */ (0, j.jsx)("div", { dangerouslySetInnerHTML: { __html: f } }),
-			e._kioskLocked && !t && /* @__PURE__ */ (0, j.jsxs)("button", {
+			/* @__PURE__ */ (0, A.jsx)("div", { dangerouslySetInnerHTML: { __html: f } }),
+			e._kioskLocked && !t && /* @__PURE__ */ (0, A.jsxs)("button", {
 				className: "btn-unlock-kiosk",
 				onClick: r,
 				style: {
@@ -18437,7 +18642,7 @@ function Gn({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 				},
 				children: ["🔓 ", m("unlock_kiosk") || "Desbloquear kiosco"]
 			}),
-			t ? /* @__PURE__ */ (0, j.jsx)("button", {
+			t ? /* @__PURE__ */ (0, A.jsx)("button", {
 				"aria-label": m("fullscreen_title"),
 				className: "ghost entry-exit-fs",
 				onClick: n,
@@ -18459,7 +18664,7 @@ function Gn({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 					cursor: "pointer"
 				},
 				children: "✕"
-			}) : /* @__PURE__ */ (0, j.jsx)("button", {
+			}) : /* @__PURE__ */ (0, A.jsx)("button", {
 				"aria-label": m("fullscreen_title"),
 				className: "ghost fs-btn entry-fs",
 				onClick: n,
@@ -18482,56 +18687,72 @@ function Gn({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 				},
 				children: "⛶"
 			}),
-			/* @__PURE__ */ (0, j.jsxs)("div", {
+			/* @__PURE__ */ (0, A.jsxs)("div", {
 				className: "entry-content security-console",
 				children: [
-					/* @__PURE__ */ (0, j.jsxs)("div", {
+					/* @__PURE__ */ (0, A.jsxs)("div", {
 						className: "console-hud",
 						children: [
-							/* @__PURE__ */ (0, j.jsxs)("span", {
+							/* @__PURE__ */ (0, A.jsxs)("span", {
 								className: "console-hud-loc",
 								children: ["🏡 ", h]
 							}),
-							/* @__PURE__ */ (0, j.jsxs)("div", {
+							/* @__PURE__ */ (0, A.jsxs)("div", {
 								className: "argus-connection-pill",
 								"data-online": _ ? "true" : "false",
-								children: [/* @__PURE__ */ (0, j.jsx)("i", { className: "argus-connection-dot" }), /* @__PURE__ */ (0, j.jsx)("span", {
+								children: [/* @__PURE__ */ (0, A.jsx)("i", { className: "argus-connection-dot" }), /* @__PURE__ */ (0, A.jsx)("span", {
 									className: "argus-connection-label",
 									children: _ ? m("connected") || "CONECTADO" : m("disconnected") || "DESCONECTADO"
 								})]
 							}),
-							/* @__PURE__ */ (0, j.jsx)("div", {
+							/* @__PURE__ */ (0, A.jsxs)("div", {
 								className: "console-hud-right",
-								children: /* @__PURE__ */ (0, j.jsx)("span", {
+								children: [e._isAdmin && /* @__PURE__ */ (0, A.jsxs)("button", {
+									type: "button",
+									onClick: () => e._openWalkTest?.(),
+									title: m("walk_test") || "Prueba de Sensores (Walk Test)",
+									style: {
+										marginRight: "8px",
+										padding: "3px 8px",
+										borderRadius: "8px",
+										fontSize: "11px",
+										fontWeight: 700,
+										background: "rgba(255,255,255,0.08)",
+										color: "#fff",
+										border: "1px solid rgba(255,255,255,0.18)",
+										cursor: "pointer"
+									},
+									children: ["🚶‍♂️ ", m("walk_test_btn") || "Walk Test"]
+								}), /* @__PURE__ */ (0, A.jsx)("span", {
 									className: `console-system-badge console-system-badge--${g ? "triggered" : p}`,
 									children: x()
-								})
+								})]
 							})
 						]
 					}),
-					/* @__PURE__ */ (0, j.jsxs)("div", {
+					/* @__PURE__ */ (0, A.jsxs)("div", {
 						className: "entry-icon",
-						children: [/* @__PURE__ */ (0, j.jsx)("div", { dangerouslySetInnerHTML: { __html: S() } }), v && /* @__PURE__ */ (0, j.jsx)("span", {
+						children: [/* @__PURE__ */ (0, A.jsx)("div", { dangerouslySetInnerHTML: { __html: S() } }), v && /* @__PURE__ */ (0, A.jsx)("span", {
 							className: "argus-shield-status",
 							children: w.length ? m("waiting_sensors") || "ESPERANDO SENSORES" : m("arming") || "ARMANDO…"
 						})]
 					}),
-					/* @__PURE__ */ (0, j.jsxs)("div", {
+					/* @__PURE__ */ (0, A.jsxs)("div", {
 						className: "liquid-stack",
 						children: [
-							/* @__PURE__ */ (0, j.jsx)("button", {
+							/* @__PURE__ */ (0, A.jsx)("button", {
 								disabled: b,
 								className: `liquid-btn btn-home ${p === "armed_home" ? "active" : ""}`,
 								onClick: () => e._handleAction(u, "home"),
 								dangerouslySetInnerHTML: { __html: e._modeButtonIcon("home") + `<span>${m("mode_home") || "CASA"}</span>` }
 							}),
-							/* @__PURE__ */ (0, j.jsx)("button", {
+							/* @__PURE__ */ (0, A.jsx)("button", {
 								disabled: b,
 								className: `liquid-btn btn-away ${p === "armed_away" ? "active" : ""}`,
 								onClick: () => e._handleAction(u, "away"),
 								dangerouslySetInnerHTML: { __html: e._modeButtonIcon("away") + `<span>${m("mode_away") || "AUSENTE"}</span>` }
 							}),
-							/* @__PURE__ */ (0, j.jsx)("button", {
+							/* @__PURE__ */ (0, A.jsx)("button", {
 								disabled: b,
 								className: `liquid-btn btn-night ${p === "armed_night" ? "active" : ""}`,
 								onClick: () => e._handleAction(u, "night"),
@@ -18539,15 +18760,31 @@ function Gn({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 							})
 						]
 					}),
-					/* @__PURE__ */ (0, j.jsx)("div", {
-						className: `console-sensors ${E}`,
-						"data-count": ee,
-						children: T.length === 0 ? /* @__PURE__ */ (0, j.jsx)("div", {
+					/* @__PURE__ */ (0, A.jsx)("div", {
+						className: `console-sensors ${te}`,
+						"data-count": E,
+						children: ee.length === 0 ? /* @__PURE__ */ (0, A.jsx)("div", {
 							className: "console-empty",
 							children: m("no_sensors_configured") || "Sin sensores configurados"
-						}) : T.map((t) => {
-							let n = s?.states?.[t.id], r = String(t.name || n?.attributes?.friendly_name || t.id).trim().replace(/\s+\(?dps\s*\d+\)?\s*$/i, "").replace(/\s+(?:puerta|door|window|ventana)\s*$/i, "").trim(), i = /door|puerta|port[oó]n|gate|lock|cerradura|window|ventana/i.test(`${t.id} ${r}`), a = v && w.includes(t.id), o = !n || ["unknown", "unavailable"].includes(n.state), c = e.isSensorActive ? e.isSensorActive(n) : n?.state === "on", l = null;
-							return n?.attributes?.battery_level === void 0 ? n?.attributes?.battery !== void 0 && (l = n.attributes.battery) : l = n.attributes.battery_level, /* @__PURE__ */ (0, j.jsx)(Wn, {
+						}) : ee.map((t) => {
+							let n = s?.states?.[t.id], r = String(t.name || n?.attributes?.friendly_name || t.id).trim().replace(/\s+\(?dps\s*\d+\)?\s*$/i, "").replace(/\s+(?:puerta|door|window|ventana)\s*$/i, "").trim(), i = /door|puerta|port[oó]n|gate|lock|cerradura|window|ventana/i.test(`${t.id} ${r}`), a = v && w.includes(t.id), o = !n || ["unknown", "unavailable"].includes(n.state), c = !o && (typeof e?.isSensorActive == "function" ? !!e.isSensorActive(n) : [
+								"on",
+								"open",
+								"unlocked",
+								"recording",
+								"active",
+								"motion"
+							].includes(String(n?.state || "").toLowerCase())), l = null;
+							if (typeof e?._getSensorBattery == "function" && (l = e._getSensorBattery(t.id, n)), l === null && n?.attributes) {
+								let e = [
+									n.attributes.battery_level,
+									n.attributes.battery,
+									n.attributes.battery_percentage
+								].find((e) => e != null && e !== "" && Number.isFinite(Number(e)));
+								e !== void 0 && (l = Math.max(0, Math.min(100, Math.round(Number(e)))));
+							}
+							let u = T?.sensor_settings?.[t.id]?.delay;
+							return /* @__PURE__ */ (0, A.jsx)(Un, {
 								id: t.id,
 								name: r,
 								isOpen: c,
@@ -18556,6 +18793,7 @@ function Gn({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 								isBlocking: a,
 								isBypassed: t.isBypassed,
 								battery: l,
+								delay: u,
 								iconHtml: e._getSensorIcon?.(n, t) || "",
 								statusLabelOpen: m("status_open") || "ABIERTO",
 								statusLabelClosed: m("status_closed") || "CERRADO",
@@ -18571,7 +18809,7 @@ function Gn({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 }
 //#endregion
 //#region src/features/safety/slide-action.ts
-var Kn = "argus-slide-action-styles", qn = {
+var Gn = "argus-slide-action-styles", Kn = {
 	es: {
 		slide_disarm: "Desliza para desarmar",
 		slide_sos: "Desliza para activar SOS",
@@ -18595,7 +18833,7 @@ var Kn = "argus-slide-action-styles", qn = {
 		cancel: "Cancel"
 	}
 };
-function Jn(e) {
+function qn(e) {
 	if (typeof e?._getProfileGesture == "function") return e._getProfileGesture() === "touch";
 	if (e?.getAttribute?.("argus-gesture") === "touch") return !0;
 	try {
@@ -18606,32 +18844,32 @@ function Jn(e) {
 	} catch {}
 	return !1;
 }
-function Yn(e) {
+function Jn(e) {
 	if (typeof e._getCurrentLangCode == "function") return e._getCurrentLangCode();
 	let t = e._manualLang || e._lang;
 	if (!t) try {
 		t = localStorage.getItem("argus_lang");
 	} catch {}
-	if ((!t || t === "auto") && (t = e._ui?.manual_lang || e._ui?.language || e._hass?.language || "en"), t = String(t || "en").trim(), qn[t]) return t;
+	if ((!t || t === "auto") && (t = e._ui?.manual_lang || e._ui?.language || e._hass?.language || "en"), t = String(t || "en").trim(), Kn[t]) return t;
 	let n = t.split(/[-_]/)[0].toLowerCase();
-	return qn[n] ? n : n.startsWith("es") ? "es" : "en";
+	return Kn[n] ? n : n.startsWith("es") ? "es" : "en";
 }
-function Xn(e, t) {
-	let n = Yn(e);
+function Yn(e, t) {
+	let n = Jn(e);
 	if (e._t) {
 		let n = e._t(t);
 		if (n && n !== t) return n;
 	}
-	return (qn[n] || qn.es)[t] || qn.es[t] || t;
+	return (Kn[n] || Kn.es)[t] || Kn.es[t] || t;
 }
-var Zn = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"26\" height=\"26\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"11\" width=\"18\" height=\"11\" rx=\"2\" ry=\"2\"/><path d=\"M7 11V7a5 5 0 0 1 9.9-1\"/></svg>", Qn = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"26\" height=\"26\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z\"/><line x1=\"12\" y1=\"9\" x2=\"12\" y2=\"13\"/><line x1=\"12\" y1=\"17\" x2=\"12.01\" y2=\"17\"/></svg>", $n = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"26\" height=\"26\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"4.93\" y1=\"4.93\" x2=\"19.07\" y2=\"19.07\"/></svg>";
-function er(e) {
+var Xn = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"26\" height=\"26\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"11\" width=\"18\" height=\"11\" rx=\"2\" ry=\"2\"/><path d=\"M7 11V7a5 5 0 0 1 9.9-1\"/></svg>", Zn = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"26\" height=\"26\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z\"/><line x1=\"12\" y1=\"9\" x2=\"12\" y2=\"13\"/><line x1=\"12\" y1=\"17\" x2=\"12.01\" y2=\"17\"/></svg>", Qn = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"26\" height=\"26\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"4.93\" y1=\"4.93\" x2=\"19.07\" y2=\"19.07\"/></svg>";
+function $n(e) {
 	let t = e.shadowRoot;
-	if (!t || t.getElementById(Kn)) return;
+	if (!t || t.getElementById(Gn)) return;
 	let n = document.createElement("style");
-	n.id = Kn, n.textContent = "\n/* ── Slide-to-action base ─────────────────────────────────────────── */\n.argus-sta-wrap {\n  width: 100%;\n  grid-column: 1 / -1;\n  position: relative;\n}\n\n/* Disarm wrapper: hidden by default, shown only when armed */\n.argus-sta-wrap--disarm {\n  display: none;\n}\n.argus-sta-wrap--disarm.sta-armed {\n  display: block;\n}\n\n/* The pill track — 3D Liquid Glass */\n.argus-sta-track {\n  position: relative;\n  width: 100%;\n  height: 64px;\n  border-radius: 999px;\n  overflow: hidden;\n  user-select: none;\n  -webkit-user-select: none;\n  cursor: pointer;\n  box-sizing: border-box;\n  backdrop-filter: blur(32px) saturate(190%) brightness(1.08);\n  -webkit-backdrop-filter: blur(32px) saturate(190%) brightness(1.08);\n  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.03) 100%);\n  border: 1px solid rgba(255, 255, 255, 0.25);\n  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.35), inset 0 2px 8px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.35);\n  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;\n  transform: translate3d(0,0,0);\n}\n.argus-sta-track--disarm {\n  border-color: rgba(52, 211, 153, 0.55);\n  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.4), 0 0 20px rgba(16, 185, 129, 0.2), 0 8px 24px rgba(0,0,0,0.35);\n}\n.argus-sta-track--sos {\n  border-color: rgba(248, 113, 113, 0.55);\n  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.4), 0 0 20px rgba(239, 68, 68, 0.2), 0 8px 24px rgba(0,0,0,0.35);\n}\n\n/* Fill bar that follows the thumb */\n.argus-sta-fill {\n  position: absolute;\n  left: 0; top: 0; bottom: 0;\n  border-radius: inherit;\n  pointer-events: none;\n  will-change: width;\n  transition: width 0.04s linear;\n}\n.argus-sta-track--disarm .argus-sta-fill {\n  background: linear-gradient(90deg, rgba(16,185,129,0.35), rgba(5,150,105,0.12));\n}\n.argus-sta-track--sos .argus-sta-fill {\n  background: linear-gradient(90deg, rgba(239,68,68,0.38), rgba(185,28,28,0.12));\n}\n\n/* The large circular thumb (left side) */\n.argus-sta-thumb {\n  position: absolute;\n  left: 4px;\n  top: 4px;\n  width: 56px;\n  height: 56px;\n  border-radius: 50%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: grab;\n  z-index: 4;\n  will-change: transform;\n  touch-action: none;\n  -webkit-tap-highlight-color: transparent;\n  backdrop-filter: blur(20px) saturate(190%);\n  -webkit-backdrop-filter: blur(20px) saturate(190%);\n  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;\n}\n.argus-sta-thumb:active { cursor: grabbing; }\n\n.argus-sta-track--disarm .argus-sta-thumb {\n  background: radial-gradient(circle at 35% 35%, rgba(52, 211, 153, 0.35), rgba(10, 24, 20, 0.95));\n  border: 1.5px solid rgba(52, 211, 153, 0.85);\n  box-shadow:\n    inset 0 1.5px 0 rgba(255, 255, 255, 0.65),\n    0 8px 24px rgba(0, 0, 0, 0.5),\n    0 0 20px rgba(16, 185, 129, 0.45);\n  color: #ffffff;\n}\n.argus-sta-track--sos .argus-sta-thumb {\n  background: radial-gradient(circle at 35% 35%, rgba(248, 113, 113, 0.35), rgba(28, 12, 16, 0.95));\n  border: 1.5px solid rgba(248, 113, 113, 0.85);\n  box-shadow:\n    inset 0 1.5px 0 rgba(255, 255, 255, 0.65),\n    0 8px 24px rgba(0, 0, 0, 0.5),\n    0 0 20px rgba(239, 68, 68, 0.45);\n  color: #ffffff;\n}\n.argus-sta-track--sos.sos-pulsing .argus-sta-thumb {\n  animation: staThumbPulse 0.8s infinite ease-in-out;\n}\n@keyframes staThumbPulse {\n  0%, 100% {\n    box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset, 0 6px 24px rgba(0,0,0,.5), 0 0 32px rgba(239,68,68,0.90);\n    border-color: rgba(239,68,68,0.90);\n  }\n  50% {\n    box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset, 0 6px 24px rgba(0,0,0,.5), 0 0 8px rgba(239,68,68,0.25);\n    border-color: rgba(239,68,68,0.30);\n  }\n}\n\n/* The specular highlight ring on thumb */\n.argus-sta-thumb::after {\n  content: '';\n  position: absolute;\n  inset: 0;\n  border-radius: 50%;\n  background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.18) 0%, transparent 60%);\n  pointer-events: none;\n}\n\n/* Text label — centered, crisp solid white */\n.argus-sta-label {\n  position: absolute;\n  left: 68px;\n  right: 14px;\n  top: 50%;\n  transform: translateY(-50%);\n  text-align: center;\n  font-size: 13px;\n  font-weight: 700;\n  letter-spacing: 0.5px;\n  pointer-events: none;\n  z-index: 2;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #ffffff !important;\n  text-shadow: 0 1px 3px rgba(0,0,0,0.7);\n  transition: opacity 0.12s ease;\n}\n.argus-sta-track--disarm .argus-sta-label { color: #ffffff !important; }\n.argus-sta-track--sos .argus-sta-label    { color: #ffffff !important; }\n\n/* Spring snap-back animation */\n.argus-sta-thumb--snap {\n  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) !important;\n}\n\n/* PIN modal overlay */\n.argus-sta-pin {\n  position: absolute;\n  inset: 0;\n  border-radius: inherit;\n  display: none;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  gap: 9px;\n  z-index: 10;\n  backdrop-filter: blur(28px) saturate(160%);\n  -webkit-backdrop-filter: blur(28px) saturate(160%);\n  background: rgba(8,12,22,0.95);\n}\n.argus-sta-pin.open { display: flex; }\n.argus-sta-pin input {\n  width: 120px;\n  padding: 8px 12px;\n  border-radius: 10px;\n  border: 1px solid rgba(16,185,129,0.3);\n  background: rgba(255,255,255,0.05);\n  color: #fff;\n  font-size: 20px;\n  font-weight: 700;\n  text-align: center;\n  letter-spacing: 8px;\n  outline: none;\n}\n.argus-sta-pin input.pin-shake {\n  animation: pinShake 0.38s ease both;\n  border-color: rgba(239,68,68,0.6) !important;\n}\n@keyframes pinShake {\n  10%,90%{transform:translateX(-2px)}\n  20%,80%{transform:translateX(4px)}\n  30%,50%,70%{transform:translateX(-4px)}\n  40%,60%{transform:translateX(4px)}\n}\n.argus-sta-pin .pin-row { display:flex; gap:8px; }\n.argus-sta-pin button {\n  padding: 6px 14px;\n  border-radius: 8px;\n  font-size: 11px;\n  font-weight: 700;\n  cursor: pointer;\n  border: 1px solid rgba(255,255,255,0.14);\n  color: #fff;\n  background: rgba(255,255,255,0.08);\n}\n.argus-sta-pin .pin-ok {\n  background: linear-gradient(135deg, #10b981, #059669);\n  border-color: rgba(167,243,208,0.4);\n}\n.argus-sta-pin .pin-err {\n  font-size: 10px;\n  color: #fca5a5;\n  min-height: 14px;\n}\n\n/* ── Accessible Button Mode (Touch) ─────────────────────────────── */\n.argus-sta-wrap.sta-mode-touch {\n  margin-top: 4px;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-thumb,\n.argus-sta-wrap.sta-mode-touch .argus-sta-fill {\n  display: none !important;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-track {\n  height: 56px !important;\n  min-height: 56px !important;\n  border-radius: 16px !important;\n  display: flex !important;\n  align-items: center !important;\n  justify-content: center !important;\n  cursor: pointer !important;\n  padding: 0 16px !important;\n  text-align: center !important;\n  transform: none !important;\n  box-sizing: border-box !important;\n  outline: none !important;\n  transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease !important;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-track:active {\n  transform: scale(0.97) !important;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-track:focus-visible {\n  outline: 3px solid #ffffff !important;\n  outline-offset: 2px !important;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-label {\n  position: static !important;\n  left: auto !important;\n  right: auto !important;\n  top: auto !important;\n  transform: none !important;\n  display: inline-flex !important;\n  align-items: center !important;\n  justify-content: center !important;\n  gap: 10px !important;\n  width: 100% !important;\n  font-size: 15px !important;\n  font-weight: 800 !important;\n  letter-spacing: 0.04em !important;\n  text-transform: uppercase !important;\n  color: #ffffff !important;\n  pointer-events: none !important;\n  opacity: 1 !important;\n  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7) !important;\n}\n\n/* Red SOS Normal Touch Button */\n.argus-sta-wrap--sos.sta-mode-touch .argus-sta-track {\n  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;\n  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;\n  box-shadow: 0 4px 18px rgba(220, 38, 38, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;\n}\n.argus-sta-wrap--sos.sta-mode-touch .argus-sta-track:hover {\n  filter: brightness(1.1) !important;\n  box-shadow: 0 6px 24px rgba(220, 38, 38, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;\n}\n\n/* Red SOS Button Active / Triggered: Letters blink noticeably at medium speed */\n.argus-sta-wrap--sos.sta-mode-touch.sos-active .argus-sta-track {\n  background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%) !important;\n  border-color: #fca5a5 !important;\n  box-shadow: 0 0 28px rgba(239, 68, 68, 0.85), inset 0 0 14px rgba(255, 255, 255, 0.35) !important;\n}\n.argus-sta-wrap--sos.sta-mode-touch.sos-active .argus-sta-label,\n.argus-sta-wrap--sos.sta-mode-touch.sos-active .argus-sta-label span,\n.argus-sta-wrap--sos.sta-mode-touch.sos-active .sta-sos-text {\n  animation: sosLettersBlink 0.75s ease-in-out infinite !important;\n}\n\n@keyframes sosLettersBlink {\n  0%, 100% {\n    opacity: 1;\n    text-shadow: 0 0 14px rgba(255, 255, 255, 1), 0 0 28px rgba(255, 255, 255, 0.9);\n  }\n  50% {\n    opacity: 0.08;\n    text-shadow: none;\n  }\n}\n\n/* Green Disarm Normal Touch Button (Only appears when armed via .sta-armed) */\n.argus-sta-wrap--disarm.sta-mode-touch .argus-sta-track {\n  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;\n  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;\n  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;\n}\n.argus-sta-wrap--disarm.sta-mode-touch .argus-sta-track:hover {\n  filter: brightness(1.1) !important;\n  box-shadow: 0 6px 24px rgba(16, 185, 129, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-pin {\n  border-radius: 16px !important;\n}\n", t.appendChild(n);
+	n.id = Gn, n.textContent = "\n/* ── Slide-to-action base ─────────────────────────────────────────── */\n.argus-sta-wrap {\n  width: 100%;\n  grid-column: 1 / -1;\n  position: relative;\n}\n\n/* Disarm wrapper: hidden by default, shown only when armed */\n.argus-sta-wrap--disarm {\n  display: none;\n}\n.argus-sta-wrap--disarm.sta-armed {\n  display: block;\n}\n\n/* The pill track — 3D Liquid Glass */\n.argus-sta-track {\n  position: relative;\n  width: 100%;\n  height: 64px;\n  border-radius: 999px;\n  overflow: hidden;\n  user-select: none;\n  -webkit-user-select: none;\n  cursor: pointer;\n  box-sizing: border-box;\n  backdrop-filter: blur(32px) saturate(190%) brightness(1.08);\n  -webkit-backdrop-filter: blur(32px) saturate(190%) brightness(1.08);\n  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.03) 100%);\n  border: 1px solid rgba(255, 255, 255, 0.25);\n  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.35), inset 0 2px 8px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.35);\n  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;\n  transform: translate3d(0,0,0);\n}\n.argus-sta-track--disarm {\n  border-color: rgba(52, 211, 153, 0.55);\n  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.4), 0 0 20px rgba(16, 185, 129, 0.2), 0 8px 24px rgba(0,0,0,0.35);\n}\n.argus-sta-track--sos {\n  border-color: rgba(248, 113, 113, 0.55);\n  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.4), 0 0 20px rgba(239, 68, 68, 0.2), 0 8px 24px rgba(0,0,0,0.35);\n}\n\n/* Fill bar that follows the thumb */\n.argus-sta-fill {\n  position: absolute;\n  left: 0; top: 0; bottom: 0;\n  border-radius: inherit;\n  pointer-events: none;\n  will-change: width;\n  transition: width 0.04s linear;\n}\n.argus-sta-track--disarm .argus-sta-fill {\n  background: linear-gradient(90deg, rgba(16,185,129,0.35), rgba(5,150,105,0.12));\n}\n.argus-sta-track--sos .argus-sta-fill {\n  background: linear-gradient(90deg, rgba(239,68,68,0.38), rgba(185,28,28,0.12));\n}\n\n/* The large circular thumb (left side) */\n.argus-sta-thumb {\n  position: absolute;\n  left: 4px;\n  top: 4px;\n  width: 56px;\n  height: 56px;\n  border-radius: 50%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: grab;\n  z-index: 4;\n  will-change: transform;\n  touch-action: none;\n  -webkit-tap-highlight-color: transparent;\n  backdrop-filter: blur(20px) saturate(190%);\n  -webkit-backdrop-filter: blur(20px) saturate(190%);\n  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;\n}\n.argus-sta-thumb:active { cursor: grabbing; }\n\n.argus-sta-track--disarm .argus-sta-thumb {\n  background: radial-gradient(circle at 35% 35%, rgba(52, 211, 153, 0.35), rgba(10, 24, 20, 0.95));\n  border: 1.5px solid rgba(52, 211, 153, 0.85);\n  box-shadow:\n    inset 0 1.5px 0 rgba(255, 255, 255, 0.65),\n    0 8px 24px rgba(0, 0, 0, 0.5),\n    0 0 20px rgba(16, 185, 129, 0.45);\n  color: #ffffff;\n}\n.argus-sta-track--sos .argus-sta-thumb {\n  background: radial-gradient(circle at 35% 35%, rgba(248, 113, 113, 0.35), rgba(28, 12, 16, 0.95));\n  border: 1.5px solid rgba(248, 113, 113, 0.85);\n  box-shadow:\n    inset 0 1.5px 0 rgba(255, 255, 255, 0.65),\n    0 8px 24px rgba(0, 0, 0, 0.5),\n    0 0 20px rgba(239, 68, 68, 0.45);\n  color: #ffffff;\n}\n.argus-sta-track--sos.sos-pulsing .argus-sta-thumb {\n  animation: staThumbPulse 0.8s infinite ease-in-out;\n}\n@keyframes staThumbPulse {\n  0%, 100% {\n    box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset, 0 6px 24px rgba(0,0,0,.5), 0 0 32px rgba(239,68,68,0.90);\n    border-color: rgba(239,68,68,0.90);\n  }\n  50% {\n    box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset, 0 6px 24px rgba(0,0,0,.5), 0 0 8px rgba(239,68,68,0.25);\n    border-color: rgba(239,68,68,0.30);\n  }\n}\n\n/* The specular highlight ring on thumb */\n.argus-sta-thumb::after {\n  content: '';\n  position: absolute;\n  inset: 0;\n  border-radius: 50%;\n  background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.18) 0%, transparent 60%);\n  pointer-events: none;\n}\n\n/* Text label — centered, crisp solid white */\n.argus-sta-label {\n  position: absolute;\n  left: 68px;\n  right: 14px;\n  top: 50%;\n  transform: translateY(-50%);\n  text-align: center;\n  font-size: 13px;\n  font-weight: 700;\n  letter-spacing: 0.5px;\n  pointer-events: none;\n  z-index: 2;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #ffffff !important;\n  text-shadow: 0 1px 3px rgba(0,0,0,0.7);\n  transition: opacity 0.12s ease;\n}\n.argus-sta-track--disarm .argus-sta-label { color: #ffffff !important; }\n.argus-sta-track--sos .argus-sta-label    { color: #ffffff !important; }\n\n/* Spring snap-back animation */\n.argus-sta-thumb--snap {\n  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) !important;\n}\n\n/* PIN modal overlay */\n.argus-sta-pin {\n  position: absolute;\n  inset: 0;\n  border-radius: inherit;\n  display: none;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  gap: 9px;\n  z-index: 10;\n  backdrop-filter: blur(28px) saturate(160%);\n  -webkit-backdrop-filter: blur(28px) saturate(160%);\n  background: rgba(8,12,22,0.95);\n}\n.argus-sta-pin.open { display: flex; }\n.argus-sta-pin input {\n  width: 120px;\n  padding: 8px 12px;\n  border-radius: 10px;\n  border: 1px solid rgba(16,185,129,0.3);\n  background: rgba(255,255,255,0.05);\n  color: #fff;\n  font-size: 20px;\n  font-weight: 700;\n  text-align: center;\n  letter-spacing: 8px;\n  outline: none;\n}\n.argus-sta-pin input.pin-shake {\n  animation: pinShake 0.38s ease both;\n  border-color: rgba(239,68,68,0.6) !important;\n}\n@keyframes pinShake {\n  10%,90%{transform:translateX(-2px)}\n  20%,80%{transform:translateX(4px)}\n  30%,50%,70%{transform:translateX(-4px)}\n  40%,60%{transform:translateX(4px)}\n}\n.argus-sta-pin .pin-row { display:flex; gap:8px; }\n.argus-sta-pin button {\n  padding: 6px 14px;\n  border-radius: 8px;\n  font-size: 11px;\n  font-weight: 700;\n  cursor: pointer;\n  border: 1px solid rgba(255,255,255,0.14);\n  color: #fff;\n  background: rgba(255,255,255,0.08);\n}\n.argus-sta-pin .pin-ok {\n  background: linear-gradient(135deg, #10b981, #059669);\n  border-color: rgba(167,243,208,0.4);\n}\n.argus-sta-pin .pin-err {\n  font-size: 10px;\n  color: #fca5a5;\n  min-height: 14px;\n}\n\n/* ── Accessible Button Mode (Touch) ─────────────────────────────── */\n.argus-sta-wrap.sta-mode-touch {\n  margin-top: 4px;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-thumb,\n.argus-sta-wrap.sta-mode-touch .argus-sta-fill {\n  display: none !important;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-track {\n  height: 56px !important;\n  min-height: 56px !important;\n  border-radius: 16px !important;\n  display: flex !important;\n  align-items: center !important;\n  justify-content: center !important;\n  cursor: pointer !important;\n  padding: 0 16px !important;\n  text-align: center !important;\n  transform: none !important;\n  box-sizing: border-box !important;\n  outline: none !important;\n  transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease !important;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-track:active {\n  transform: scale(0.97) !important;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-track:focus-visible {\n  outline: 3px solid #ffffff !important;\n  outline-offset: 2px !important;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-label {\n  position: static !important;\n  left: auto !important;\n  right: auto !important;\n  top: auto !important;\n  transform: none !important;\n  display: inline-flex !important;\n  align-items: center !important;\n  justify-content: center !important;\n  gap: 10px !important;\n  width: 100% !important;\n  font-size: 15px !important;\n  font-weight: 800 !important;\n  letter-spacing: 0.04em !important;\n  text-transform: uppercase !important;\n  color: #ffffff !important;\n  pointer-events: none !important;\n  opacity: 1 !important;\n  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7) !important;\n}\n\n/* Red SOS Normal Touch Button */\n.argus-sta-wrap--sos.sta-mode-touch .argus-sta-track {\n  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;\n  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;\n  box-shadow: 0 4px 18px rgba(220, 38, 38, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;\n}\n.argus-sta-wrap--sos.sta-mode-touch .argus-sta-track:hover {\n  filter: brightness(1.1) !important;\n  box-shadow: 0 6px 24px rgba(220, 38, 38, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;\n}\n\n/* Red SOS Button Active / Triggered: Letters blink noticeably at medium speed */\n.argus-sta-wrap--sos.sta-mode-touch.sos-active .argus-sta-track {\n  background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%) !important;\n  border-color: #fca5a5 !important;\n  box-shadow: 0 0 28px rgba(239, 68, 68, 0.85), inset 0 0 14px rgba(255, 255, 255, 0.35) !important;\n}\n.argus-sta-wrap--sos.sta-mode-touch.sos-active .argus-sta-label,\n.argus-sta-wrap--sos.sta-mode-touch.sos-active .argus-sta-label span,\n.argus-sta-wrap--sos.sta-mode-touch.sos-active .sta-sos-text {\n  animation: sosLettersBlink 0.75s ease-in-out infinite !important;\n}\n\n@keyframes sosLettersBlink {\n  0%, 100% {\n    opacity: 1;\n    text-shadow: 0 0 14px rgba(255, 255, 255, 1), 0 0 28px rgba(255, 255, 255, 0.9);\n  }\n  50% {\n    opacity: 0.08;\n    text-shadow: none;\n  }\n}\n\n/* Green Disarm Normal Touch Button (Only appears when armed via .sta-armed) */\n.argus-sta-wrap--disarm.sta-mode-touch .argus-sta-track {\n  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;\n  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;\n  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;\n}\n.argus-sta-wrap--disarm.sta-mode-touch .argus-sta-track:hover {\n  filter: brightness(1.1) !important;\n  box-shadow: 0 6px 24px rgba(16, 185, 129, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-pin {\n  border-radius: 16px !important;\n}\n", t.appendChild(n);
 }
-function tr(e, t, n) {
+function er(e, t, n) {
 	let r = document.createElement("div");
 	r.className = `argus-sta-wrap argus-sta-wrap--${e}`;
 	let i = document.createElement("div");
@@ -18652,7 +18890,7 @@ function tr(e, t, n) {
 		pin: c
 	};
 }
-function nr(e, t, n, r, i, a, o, s) {
+function tr(e, t, n, r, i, a, o, s) {
 	let c = new AbortController();
 	e._staControllers ||= /* @__PURE__ */ new Map(), e._staControllers.set(n, c);
 	let l = !1, u = 0, d = 0, f = 0, p = 0, m = 0, h = !1, g = 0;
@@ -18664,19 +18902,19 @@ function nr(e, t, n, r, i, a, o, s) {
 	n.addEventListener("keydown", (e) => {
 		e.target === n && (e.key === "Enter" || e.key === " ") && (e.preventDefault(), _());
 	}), n.addEventListener("touchstart", (t) => {
-		Jn(e) && (p = t.touches[0].clientX, m = t.touches[0].clientY, h = !1);
+		qn(e) && (p = t.touches[0].clientX, m = t.touches[0].clientY, h = !1);
 	}, { passive: !0 }), n.addEventListener("touchmove", (t) => {
-		if (Jn(e)) {
+		if (qn(e)) {
 			let e = Math.abs(t.touches[0].clientX - p), n = Math.abs(t.touches[0].clientY - m);
 			(e > 10 || n > 10) && (h = !0);
 		}
 	}, { passive: !0 }), n.addEventListener("touchend", (t) => {
-		if (Jn(e)) {
+		if (qn(e)) {
 			if (h || o.classList.contains("open") || t.target && t.target.closest?.(".argus-sta-pin")) return;
 			t.preventDefault(), _();
 		}
 	}), n.addEventListener("click", (t) => {
-		if (Jn(e)) {
+		if (qn(e)) {
 			if (o.classList.contains("open") || t.target && t.target.closest?.(".argus-sta-pin")) return;
 			_();
 		}
@@ -18701,7 +18939,7 @@ function nr(e, t, n, r, i, a, o, s) {
 		l && (d = y(e - u));
 	}
 	function C() {
-		l && (l = !1, i.style.cursor = "grab", d >= f * .8 ? (_(), b()) : (Jn(e) && Math.abs(d) < 6 && _(), b()), d = 0);
+		l && (l = !1, i.style.cursor = "grab", d >= f * .8 ? (_(), b()) : (qn(e) && Math.abs(d) < 6 && _(), b()), d = 0);
 	}
 	i.addEventListener("mousedown", (e) => {
 		e.preventDefault(), x(e.clientX);
@@ -18722,7 +18960,7 @@ function nr(e, t, n, r, i, a, o, s) {
 		l = !1, d = 0, b();
 	}, { signal: c.signal });
 }
-function rr(e, t, n) {
+function nr(e, t, n) {
 	if (t.querySelector(".argus-sta-wrap")) {
 		t._staRefresh?.();
 		return;
@@ -18736,12 +18974,12 @@ function rr(e, t, n) {
 		let t = i();
 		return !!e._hass?.states?.[r]?.attributes?.argus_panic_active || t === "triggered";
 	}
-	let { wrap: o, track: s, fill: c, thumb: l, label: u, pin: d } = tr("disarm", Xn(e, "slide_disarm"), Zn);
-	nr(e, "disarm", s, c, l, u, d, () => {
+	let { wrap: o, track: s, fill: c, thumb: l, label: u, pin: d } = er("disarm", Yn(e, "slide_disarm"), Xn);
+	tr(e, "disarm", s, c, l, u, d, () => {
 		e._handleAction?.(n, "disarm");
 	});
-	let { wrap: f, track: p, fill: m, thumb: h, label: g, pin: _ } = tr("sos", Xn(e, "slide_sos"), Qn);
-	nr(e, "sos", p, m, h, g, _, (t) => {
+	let { wrap: f, track: p, fill: m, thumb: h, label: g, pin: _ } = er("sos", Yn(e, "slide_sos"), Zn);
+	tr(e, "sos", p, m, h, g, _, (t) => {
 		if (e._dashboard?.entries?.[n]?.entry_id, a()) e._handleAction?.(n, "disarm");
 		else {
 			e._sosEntryIdx = n, e.shadowRoot?.getElementById("sos-modal")?.classList.add("open");
@@ -18752,45 +18990,45 @@ function rr(e, t, n) {
 	if (!v) return;
 	v.querySelectorAll(".btn-disarm, .btn-sos, .argus-disarm-btn").forEach((e) => e.remove()), v.appendChild(o), v.appendChild(f);
 	function y() {
-		let t = i(), n = a(), r = t !== "disarmed" && t !== "unavailable", d = Jn(e);
+		let t = i(), n = a(), r = t !== "disarmed" && t !== "unavailable", d = qn(e);
 		if (o.classList.toggle("sta-armed", r || n), o.classList.toggle("sta-mode-touch", d), f.classList.toggle("sta-mode-touch", d), f.classList.toggle("sos-active", n), p.classList.toggle("sos-pulsing", n), d) {
-			u.innerHTML = `<span style="font-size: 20px; display: inline-flex; align-items: center;">🔓</span><span style="font-size: 15px; font-weight: 800; letter-spacing: 0.04em;">${Xn(e, "tap_disarm")}</span>`, s.setAttribute("aria-label", Xn(e, "tap_disarm"));
-			let t = n ? Xn(e, "tap_sos_stop") : Xn(e, "tap_sos");
+			u.innerHTML = `<span style="font-size: 20px; display: inline-flex; align-items: center;">🔓</span><span style="font-size: 15px; font-weight: 800; letter-spacing: 0.04em;">${Yn(e, "tap_disarm")}</span>`, s.setAttribute("aria-label", Yn(e, "tap_disarm"));
+			let t = n ? Yn(e, "tap_sos_stop") : Yn(e, "tap_sos");
 			g.innerHTML = `<span style="font-size: 20px; display: inline-flex; align-items: center;">${n ? "⏹️" : "🚨"}</span><span class="sta-sos-text" style="font-size: 15px; font-weight: 800; letter-spacing: 0.04em;">${t}</span>`, p.setAttribute("aria-label", t);
 		} else {
-			u.textContent = Xn(e, "slide_disarm"), s.setAttribute("aria-label", u.textContent), l.style.transform = "", c.style.width = "";
-			let t = n ? Xn(e, "slide_sos_stop") : Xn(e, "slide_sos");
-			g.textContent = t, p.setAttribute("aria-label", g.textContent), h.innerHTML = n ? $n : Qn, h.style.transform = "", m.style.width = "";
+			u.textContent = Yn(e, "slide_disarm"), s.setAttribute("aria-label", u.textContent), l.style.transform = "", c.style.width = "";
+			let t = n ? Yn(e, "slide_sos_stop") : Yn(e, "slide_sos");
+			g.textContent = t, p.setAttribute("aria-label", g.textContent), h.innerHTML = n ? Qn : Zn, h.style.transform = "", m.style.width = "";
 		}
 	}
 	y(), t._staRefresh = y;
 }
-function ir(e) {
+function rr(e) {
 	for (let [t, n] of e._staControllers || []) t.isConnected || (n.abort(), e._staControllers.delete(t));
-	er(e);
+	$n(e);
 	let t = e.shadowRoot;
 	t && t.querySelectorAll(".entry").forEach((t, n) => {
 		if (!t.dataset.entityId) {
 			let r = e._dashboard?.entries?.[n]?.entity_id;
 			r && (t.dataset.entityId = r);
 		}
-		rr(e, t, n), t._staRefresh?.();
+		nr(e, t, n), t._staRefresh?.();
 	});
 }
-function ar(e) {
+function ir(e) {
 	if (!e || e.__argusSlideToAction) return;
 	e.__argusSlideToAction = !0;
 	let t = e.prototype, n = t._renderEntries;
 	t._renderEntries = function(...e) {
 		let t = n?.call(this, ...e);
 		return requestAnimationFrame(() => {
-			ir(this), setTimeout(() => ir(this), 100);
+			rr(this), setTimeout(() => rr(this), 100);
 		}), t;
 	};
 	let r = t._refreshLocalizedUi;
 	if (t._refreshLocalizedUi = function(...e) {
 		let t = r?.call(this, ...e);
-		return ir(this), t;
+		return rr(this), t;
 	}, Object.getOwnPropertyDescriptor(t, "_hass")?.set || t.set_hass) {
 		let e = t.set_hass;
 		t.set_hass = function(t) {
@@ -18800,14 +19038,14 @@ function ar(e) {
 }
 //#endregion
 //#region src/features/dashboard/components/SecurityConsoleRoot.tsx
-function or(e) {
+function ar(e) {
 	let t = e.shadowRoot;
 	if (!t) return;
 	let n = t.getElementById("entries");
-	n && (e.hasAttribute?.("compact") || e.classList?.contains("argus-compact") || e._cardConfig?.compact || e._profileSelectedThisMount || e._currentProfile || e._bootstrap?.has_active_session) && (e._reactConsoleRoot ||= (n.innerHTML = "", (0, te.createRoot)(n)), e._reactConsoleRoot.render(/* @__PURE__ */ (0, j.jsx)(sr, { panel: e })));
+	n && (e.hasAttribute?.("compact") || e.classList?.contains("argus-compact") || e._cardConfig?.compact || e._profileSelectedThisMount || e._currentProfile || e._bootstrap?.has_active_session) && (e._reactConsoleRoot ||= (n.innerHTML = "", (0, te.createRoot)(n)), e._reactConsoleRoot.render(/* @__PURE__ */ (0, A.jsx)(or, { panel: e })));
 }
-typeof window < "u" && (window.mountSecurityConsole = or);
-function sr({ panel: e }) {
+typeof window < "u" && (window.mountSecurityConsole = ar);
+function or({ panel: e }) {
 	let [t, n] = (0, D.useState)(0), [r, i] = (0, D.useState)(e.classList.contains("fullscreen-active")), a = (0, D.useRef)(null);
 	return (0, D.useEffect)(() => {
 		let t = () => {
@@ -18826,7 +19064,7 @@ function sr({ panel: e }) {
 		if (!a.current) return;
 		let t = setTimeout(() => {
 			try {
-				typeof ir == "function" && ir(e);
+				typeof rr == "function" && rr(e);
 			} catch (e) {
 				console.error("Argus: Failed to attach SOS sliders", e);
 			}
@@ -18836,13 +19074,13 @@ function sr({ panel: e }) {
 		t,
 		r,
 		e
-	]), /* @__PURE__ */ (0, j.jsx)("div", {
+	]), /* @__PURE__ */ (0, A.jsx)("div", {
 		ref: a,
 		style: {
 			width: "100%",
 			height: "100%"
 		},
-		children: /* @__PURE__ */ (0, j.jsx)(Gn, {
+		children: /* @__PURE__ */ (0, A.jsx)(Wn, {
 			panel: e,
 			isFullscreen: r,
 			onToggleFullscreen: () => {
@@ -18856,321 +19094,24 @@ function sr({ panel: e }) {
 		})
 	});
 }
-function cr(e) {
+function sr(e) {
 	if (!e || e.__argusReactSecurityConsole) return;
 	e.__argusReactSecurityConsole = !0;
 	let t = e.prototype.connectedCallback, n = e.prototype._load;
 	e.prototype._renderEntries, e.prototype.connectedCallback = function() {
 		let e = t?.call(this);
-		return or(this), e;
+		return ar(this), e;
 	}, e.prototype._load = async function(...e) {
 		let t = await n?.apply(this, e);
-		return or(this), t;
+		return ar(this), t;
 	}, e.prototype._renderEntries = function() {
-		or(this);
+		ar(this);
 	};
-}
-//#endregion
-//#region src/features/dashboard/components/SecurityInsights.tsx
-function lr(e, t = 14, n = Date.now()) {
-	let r = Array.from({ length: t }, (e, r) => {
-		let i = new Date(n);
-		return i.setHours(0, 0, 0, 0), i.setDate(i.getDate() - (t - 1 - r)), {
-			date: i,
-			count: 0
-		};
-	}), i = new Map(r.map((e, t) => [e.date.toDateString(), t]));
-	for (let t of e) {
-		let e = new Date(String(t.ts || "")), n = i.get(new Date(e.getFullYear(), e.getMonth(), e.getDate()).toDateString());
-		n !== void 0 && r[n].count++;
-	}
-	return r;
-}
-function ur({ panel: e }) {
-	let [t, n] = (0, D.useState)([]), [r, i] = (0, D.useState)(null), [a, o] = (0, D.useState)(null), [s, c] = (0, D.useState)(!0), [l, u] = (0, D.useState)(""), d = e._dashboard?.entry_id || e._dashboard?.entries?.[0]?.entry_id, f = async () => {
-		if (!e._send) {
-			u("La conexión de Argus no está disponible"), c(!1);
-			return;
-		}
-		c(!0), u("");
-		let t = (t) => e._send(t, d ? { entry_id: d } : {}), [r, a, s] = await Promise.allSettled([
-			e._send("argus/get_forensic_timeline", {
-				limit: 500,
-				...d ? { entry_id: d } : {}
-			}),
-			t("argus/get_stats"),
-			t("argus/get_health")
-		]);
-		r.status === "fulfilled" && n(Array.isArray(r.value?.timeline) ? r.value.timeline : []), a.status === "fulfilled" && i(a.value), s.status === "fulfilled" && o(s.value), r.status === "rejected" && a.status === "rejected" && s.status === "rejected" && u("No se pudieron cargar los datos. Comprueba tus permisos y vuelve a intentarlo."), c(!1);
-	};
-	(0, D.useEffect)(() => {
-		f();
-	}, [d]);
-	let p = (0, D.useMemo)(() => lr(t), [t]), m = Math.max(1, ...p.map((e) => e.count)), h = Array.isArray(a?.issues) ? a.issues.slice(0, 3) : [];
-	return /* @__PURE__ */ (0, j.jsxs)("section", {
-		className: "argus-insights",
-		"aria-label": "Resumen de seguridad",
-		children: [
-			/* @__PURE__ */ (0, j.jsxs)("div", {
-				className: "argus-insights__metrics",
-				children: [
-					/* @__PURE__ */ (0, j.jsxs)("div", { children: [/* @__PURE__ */ (0, j.jsx)("strong", { children: r?.triggers_30d ?? "—" }), /* @__PURE__ */ (0, j.jsx)("span", { children: "Alertas · 30 días" })] }),
-					/* @__PURE__ */ (0, j.jsxs)("div", { children: [/* @__PURE__ */ (0, j.jsx)("strong", { children: r?.armings_30d ?? "—" }), /* @__PURE__ */ (0, j.jsx)("span", { children: "Armados · 30 días" })] }),
-					/* @__PURE__ */ (0, j.jsxs)("div", { children: [/* @__PURE__ */ (0, j.jsx)("strong", { children: a?.readiness_score == null ? "—" : `${a.readiness_score}%` }), /* @__PURE__ */ (0, j.jsx)("span", { children: "Preparación" })] })
-				]
-			}),
-			/* @__PURE__ */ (0, j.jsxs)("div", {
-				className: "argus-insights__chart-wrap",
-				children: [
-					/* @__PURE__ */ (0, j.jsxs)("div", {
-						className: "argus-insights__section-title",
-						children: [/* @__PURE__ */ (0, j.jsx)("strong", { children: "Actividad diaria" }), /* @__PURE__ */ (0, j.jsx)("button", {
-							type: "button",
-							onClick: () => void f(),
-							disabled: s,
-							"aria-label": "Actualizar actividad",
-							children: "↻"
-						})]
-					}),
-					/* @__PURE__ */ (0, j.jsxs)("svg", {
-						className: "argus-insights__chart",
-						viewBox: "0 0 280 92",
-						role: "img",
-						"aria-label": "Eventos registrados por día durante los últimos 14 días",
-						children: [
-							/* @__PURE__ */ (0, j.jsx)("title", { children: "Eventos registrados por día durante los últimos 14 días" }),
-							p.map((e, t) => {
-								let n = Math.max(e.count ? 5 : 2, e.count / m * 66);
-								return /* @__PURE__ */ (0, j.jsx)("g", { children: /* @__PURE__ */ (0, j.jsx)("rect", {
-									x: t * 20 + 2,
-									y: 78 - n,
-									width: "12",
-									height: n,
-									rx: "3",
-									className: e.count ? "has-events" : "",
-									children: /* @__PURE__ */ (0, j.jsxs)("title", { children: [
-										e.date.toLocaleDateString(),
-										": ",
-										e.count,
-										" eventos"
-									] })
-								}) }, e.date.toISOString());
-							}),
-							/* @__PURE__ */ (0, j.jsx)("path", { d: "M0 79.5H280" })
-						]
-					}),
-					/* @__PURE__ */ (0, j.jsxs)("div", {
-						className: "argus-insights__axis",
-						children: [/* @__PURE__ */ (0, j.jsx)("span", { children: "14 días atrás" }), /* @__PURE__ */ (0, j.jsx)("span", { children: "Hoy" })]
-					})
-				]
-			}),
-			/* @__PURE__ */ (0, j.jsxs)("div", {
-				className: "argus-insights__section-title",
-				children: [/* @__PURE__ */ (0, j.jsx)("strong", { children: "Estado del sistema" }), /* @__PURE__ */ (0, j.jsx)("span", {
-					className: `argus-insights__status argus-insights__status--${a?.status === "ready" ? "good" : a?.status ? "warn" : "muted"}`,
-					children: a?.status || (s ? "Cargando" : "Sin datos")
-				})]
-			}),
-			h.length > 0 ? /* @__PURE__ */ (0, j.jsx)("ul", {
-				className: "argus-insights__issues",
-				children: h.map((e, t) => /* @__PURE__ */ (0, j.jsx)("li", { children: String(e?.message || e?.detail || e?.title || e) }, `${e?.code || e?.message || "issue"}-${t}`))
-			}) : /* @__PURE__ */ (0, j.jsx)("p", {
-				className: "argus-insights__empty",
-				children: l || (s ? "Consultando preparación…" : a ? "No se reportan problemas." : "El resumen requiere permisos de administrador.")
-			}),
-			/* @__PURE__ */ (0, j.jsxs)("div", {
-				className: "argus-insights__recent",
-				children: [
-					/* @__PURE__ */ (0, j.jsx)("strong", { children: "Últimos eventos" }),
-					t.slice(0, 3).map((e, t) => /* @__PURE__ */ (0, j.jsxs)("div", { children: [/* @__PURE__ */ (0, j.jsx)("span", { children: e.action || "Evento" }), /* @__PURE__ */ (0, j.jsx)("time", { children: e.ts ? new Date(e.ts).toLocaleString() : "" })] }, `${e.ts}-${t}`)),
-					!t.length && /* @__PURE__ */ (0, j.jsx)("small", { children: l || (s ? "Cargando historial…" : "No hay eventos disponibles.") })
-				]
-			})
-		]
-	});
-}
-//#endregion
-//#region src/features/dashboard/components/FloorplanWidget.tsx
-function dr(e, t) {
-	if (!t || t === "unknown" || t === "unavailable") return "unavailable";
-	let n = e.domain || e.entity_id.split(".")[0];
-	return n === "lock" ? t === "locked" ? "safe" : t === "unlocked" ? "active" : "unavailable" : n === "cover" ? t === "closed" ? "safe" : t === "open" ? "active" : "unavailable" : [
-		"on",
-		"open",
-		"motion",
-		"occupied",
-		"detected",
-		"problem",
-		"tampered"
-	].includes(t.toLowerCase()) ? "active" : "safe";
-}
-var fr = {
-	image_url: "",
-	markers: []
-};
-function pr({ panel: e }) {
-	let [t, n] = (0, D.useState)(() => structuredClone(e._ui?.floorplan || fr)), [r, i] = (0, D.useState)(""), [a, o] = (0, D.useState)(!1), [s, c] = (0, D.useState)(""), [, l] = (0, D.useState)(0), u = e._currentProfile?.role === "admin";
-	(0, D.useEffect)(() => {
-		let e = window.setInterval(() => l((e) => e + 1), 5e3);
-		return () => window.clearInterval(e);
-	}, []);
-	let d = (0, D.useMemo)(() => (e._available || []).filter((e) => [
-		"binary_sensor",
-		"lock",
-		"cover"
-	].includes(e.domain || e.entity_id.split(".")[0])), [e._available]), f = e._hass?.states || {}, p = (e) => n((t) => ({
-		...t,
-		...e
-	})), m = () => {
-		let e = d.find((e) => e.entity_id === s);
-		e && !t.markers.some((t) => t.entity_id === e.entity_id) && (p({ markers: [...t.markers, {
-			entity_id: e.entity_id,
-			label: e.name || e.entity_id,
-			x: 50,
-			y: 50
-		}] }), c(""));
-	}, h = async () => {
-		if (e._send) {
-			o(!0), i("");
-			try {
-				let r = e._dashboard?.entry_id || e._dashboard?.entries?.[0]?.entry_id, a = (await e._send("argus/save_ui", {
-					floorplan: t,
-					...r ? { entry_id: r } : {}
-				})).ui?.floorplan || t;
-				e._ui = e._ui || {}, e._ui.floorplan = a, n(structuredClone(a)), i("Plano guardado.");
-			} catch {
-				i("No se pudo guardar. Se requiere perfil administrador.");
-			} finally {
-				o(!1);
-			}
-		}
-	};
-	return /* @__PURE__ */ (0, j.jsxs)("section", {
-		className: "argus-floorplan",
-		"aria-label": "Plano interactivo de sensores",
-		children: [
-			u && /* @__PURE__ */ (0, j.jsxs)("div", {
-				className: "argus-floorplan__editor",
-				children: [/* @__PURE__ */ (0, j.jsxs)("label", { children: ["Imagen del plano", /* @__PURE__ */ (0, j.jsx)("input", {
-					type: "url",
-					value: t.image_url,
-					placeholder: "/local/plano.png o https://…",
-					onChange: (e) => p({ image_url: e.target.value })
-				})] }), /* @__PURE__ */ (0, j.jsxs)("div", {
-					className: "argus-floorplan__add",
-					children: [
-						/* @__PURE__ */ (0, j.jsxs)("select", {
-							"aria-label": "Sensor para agregar",
-							value: s,
-							onChange: (e) => c(e.target.value),
-							children: [/* @__PURE__ */ (0, j.jsx)("option", {
-								value: "",
-								children: "Seleccionar sensor…"
-							}), d.filter((e) => !t.markers.some((t) => t.entity_id === e.entity_id)).map((e) => /* @__PURE__ */ (0, j.jsxs)("option", {
-								value: e.entity_id,
-								children: [e.name || e.entity_id, e.area ? ` · ${e.area}` : ""]
-							}, e.entity_id))]
-						}),
-						/* @__PURE__ */ (0, j.jsx)("button", {
-							type: "button",
-							onClick: m,
-							disabled: !s,
-							children: "Agregar"
-						}),
-						/* @__PURE__ */ (0, j.jsx)("button", {
-							type: "button",
-							onClick: () => void h(),
-							disabled: a,
-							children: a ? "Guardando…" : "Guardar"
-						})
-					]
-				})]
-			}),
-			t.image_url ? /* @__PURE__ */ (0, j.jsxs)("div", {
-				className: "argus-floorplan__map",
-				children: [/* @__PURE__ */ (0, j.jsx)("img", {
-					src: t.image_url,
-					alt: "Plano de la vivienda",
-					referrerPolicy: "no-referrer"
-				}), t.markers.map((e) => {
-					let n = d.find((t) => t.entity_id === e.entity_id) || {
-						entity_id: e.entity_id,
-						domain: e.entity_id.split(".")[0]
-					}, r = dr(n, f[e.entity_id]?.state), i = e.label || n.name || e.entity_id;
-					return /* @__PURE__ */ (0, j.jsxs)("div", {
-						className: `argus-floorplan__pin argus-floorplan__pin--${r}`,
-						style: {
-							left: `${e.x}%`,
-							top: `${e.y}%`
-						},
-						title: `${i}: ${f[e.entity_id]?.state || "sin conexión"}`,
-						children: [
-							/* @__PURE__ */ (0, j.jsx)("span", {
-								"aria-hidden": "true",
-								children: r === "active" ? "!" : r === "safe" ? "✓" : "?"
-							}),
-							/* @__PURE__ */ (0, j.jsx)("small", { children: i }),
-							u && /* @__PURE__ */ (0, j.jsx)("button", {
-								type: "button",
-								"aria-label": `Quitar ${i}`,
-								onClick: () => p({ markers: t.markers.filter((t) => t.entity_id !== e.entity_id) }),
-								children: "×"
-							})
-						]
-					}, e.entity_id);
-				})]
-			}) : /* @__PURE__ */ (0, j.jsxs)("div", {
-				className: "argus-floorplan__empty",
-				children: [
-					/* @__PURE__ */ (0, j.jsx)("span", {
-						"aria-hidden": "true",
-						children: "⌂"
-					}),
-					/* @__PURE__ */ (0, j.jsx)("strong", { children: "Configura el plano de tu vivienda" }),
-					/* @__PURE__ */ (0, j.jsx)("p", { children: "Añade una imagen y coloca sensores para ver su estado en tiempo real." })
-				]
-			}),
-			u && t.markers.map((e) => /* @__PURE__ */ (0, j.jsxs)("div", {
-				className: "argus-floorplan__position",
-				children: [
-					/* @__PURE__ */ (0, j.jsx)("span", { children: e.label || e.entity_id }),
-					/* @__PURE__ */ (0, j.jsxs)("label", { children: ["X ", /* @__PURE__ */ (0, j.jsx)("input", {
-						"aria-label": `${e.entity_id} posición horizontal`,
-						type: "range",
-						min: "0",
-						max: "100",
-						value: e.x,
-						onChange: (n) => p({ markers: t.markers.map((t) => t.entity_id === e.entity_id ? {
-							...t,
-							x: Number(n.target.value)
-						} : t) })
-					})] }),
-					/* @__PURE__ */ (0, j.jsxs)("label", { children: ["Y ", /* @__PURE__ */ (0, j.jsx)("input", {
-						"aria-label": `${e.entity_id} posición vertical`,
-						type: "range",
-						min: "0",
-						max: "100",
-						value: e.y,
-						onChange: (n) => p({ markers: t.markers.map((t) => t.entity_id === e.entity_id ? {
-							...t,
-							y: Number(n.target.value)
-						} : t) })
-					})] })
-				]
-			}, `position-${e.entity_id}`)),
-			r && /* @__PURE__ */ (0, j.jsx)("p", {
-				className: "argus-floorplan__message",
-				role: "status",
-				children: r
-			})
-		]
-	});
 }
 //#endregion
 //#region src/features/dashboard/index.tsx
-typeof window < "u" && (window.mountSecurityConsole = or);
-function mr(e) {
+typeof window < "u" && (window.mountSecurityConsole = ar);
+function cr(e) {
 	let t = (t) => e._t?.(t) || t;
 	return [
 		{
@@ -19226,28 +19167,10 @@ function mr(e) {
 			size: "S",
 			visible: !0,
 			t
-		},
-		{
-			id: "security-insights",
-			kind: "custom",
-			title: "Seguridad · 30 días",
-			size: "L",
-			visible: !0,
-			t,
-			content: /* @__PURE__ */ (0, j.jsx)(ur, { panel: e })
-		},
-		{
-			id: "floorplan",
-			kind: "custom",
-			title: "Plano de sensores",
-			size: "L",
-			visible: !0,
-			t,
-			content: /* @__PURE__ */ (0, j.jsx)(pr, { panel: e })
 		}
 	];
 }
-var hr = class extends Rn {
+var lr = class extends Ln {
 	panel;
 	constructor(e) {
 		super(), this.panel = e;
@@ -19273,7 +19196,7 @@ var hr = class extends Rn {
 	}
 	async load(e, t) {
 		let n = this.record().layouts;
-		return n ? Ln(n) : super.load(e, t);
+		return n ? In(n) : super.load(e, t);
 	}
 	async save(e, t, n) {
 		await super.save(e, t, n), await this.remote({ layouts: n });
@@ -19286,27 +19209,27 @@ var hr = class extends Rn {
 	}
 	async reset(e, t) {
 		await super.reset(e, t), await this.remote({
-			layouts: Ln(null),
+			layouts: In(null),
 			visibility: {}
 		});
 	}
 };
-function gr(e) {
+function ur(e) {
 	let t = e.shadowRoot?.getElementById("edit-widgets-label");
 	(t?.closest("button") || t)?.remove(), e.shadowRoot?.querySelectorAll(".panel-edit-overlay,.widget-drag-handle").forEach((e) => e.remove());
 	let n = e.shadowRoot?.getElementById("argus-react-editor-only");
 	n || (n = document.createElement("style"), n.id = "argus-react-editor-only", n.textContent = "#edit-widgets-label,.panel-edit-overlay,.widget-drag-handle{display:none!important}", e.shadowRoot.appendChild(n));
 }
-function _r(e) {
-	gr(e);
+function dr(e) {
+	ur(e);
 	let t = e.shadowRoot?.getElementById("widget-grid"), n = e._dashboard?.entry_id || e._dashboard?.entries?.[0]?.entry_id || "default";
 	if (!t) return;
-	let r = mr(e), i = e._argusDashboardStorage ||= new hr(e), a = /* @__PURE__ */ new Map();
+	let r = cr(e), i = e._argusDashboardStorage ||= new lr(e), a = /* @__PURE__ */ new Map();
 	if (r.forEach((t) => {
 		let n = t.nativeId ? e.shadowRoot.getElementById(t.nativeId) : null;
 		n && a.set(t.id, n);
 	}), e._argusReactRoot) {
-		e._argusReactRoot.render(/* @__PURE__ */ (0, j.jsx)(Vn, {
+		e._argusReactRoot.render(/* @__PURE__ */ (0, A.jsx)(Bn, {
 			widgets: r,
 			nodes: a,
 			storage: i,
@@ -19322,14 +19245,14 @@ function _r(e) {
 		return;
 	}
 	let o = e.shadowRoot.getElementById("argus-react-dashboard-style");
-	if (o || (o = document.createElement("style"), o.id = "argus-react-dashboard-style", o.textContent = O + k + ne + A, e.shadowRoot.appendChild(o)), !e.shadowRoot.getElementById("argus-access-scroll-fix")) {
+	if (o || (o = document.createElement("style"), o.id = "argus-react-dashboard-style", o.textContent = O + k + ne, e.shadowRoot.appendChild(o)), !e.shadowRoot.getElementById("argus-access-scroll-fix")) {
 		let t = document.createElement("style");
 		t.id = "argus-access-scroll-fix", t.textContent = ".argus-widget__content--access{display:flex;min-height:0;overflow:hidden}.argus-widget__content--access>#w-access{display:flex!important;flex-direction:column!important;width:100%!important;height:100%!important;min-height:0!important;max-height:none!important;overflow:hidden!important}.argus-widget__content--access>#w-access>.panel-head{flex:0 0 auto!important}.argus-widget__content--access>#w-access>#access-workspace{display:block!important;flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;padding-right:4px}", e.shadowRoot.appendChild(t);
 	}
 	let s = document.createElement("div");
 	s.id = "argus-react-dashboard-root", t.appendChild(s);
 	let c = (0, te.createRoot)(s);
-	e._argusReactRoot = c, c.render(/* @__PURE__ */ (0, j.jsx)(Vn, {
+	e._argusReactRoot = c, c.render(/* @__PURE__ */ (0, A.jsx)(Bn, {
 		widgets: r,
 		nodes: a,
 		storage: i,
@@ -19343,35 +19266,35 @@ function _r(e) {
 		}
 	}));
 }
-function vr(e) {
+function fr(e) {
 	if (!e || e.__argusReactDashboard) return;
 	e.__argusReactDashboard = !0;
 	let t = e.prototype, n = t.connectedCallback, r = t._load, i = t._refreshLocalizedUi;
 	t.connectedCallback = function() {
 		let e = n?.call(this);
-		return gr(this), e;
+		return ur(this), e;
 	}, t._load = async function() {
 		let e = await r?.call(this);
-		return _r(this), e;
+		return dr(this), e;
 	}, t._refreshLocalizedUi = function() {
 		let e = i?.call(this);
-		return _r(this), e;
+		return dr(this), e;
 	}, t._toggleWidgetEditing = function() {
 		this._argusReactSetEditing?.(!this._widgetEditing);
 	};
 }
 //#endregion
 //#region src/features/media/client.ts
-function yr(e) {
+function pr(e) {
 	let t = e._hass?.auth?.accessToken;
 	return t ? { Authorization: `Bearer ${t}` } : {};
 }
-function br(e) {
+function mr(e) {
 	let t = e?.prototype;
 	t && !t.__argusMediaClient && (t.__argusMediaClient = !0, t._loadUploadedFiles = async function() {
 		try {
 			let e = await fetch("/api/argus/media", {
-				headers: yr(this),
+				headers: pr(this),
 				credentials: "same-origin"
 			});
 			if (!e.ok) throw Error(`HTTP ${e.status}`);
@@ -19385,7 +19308,7 @@ function br(e) {
 		try {
 			let t = await fetch(`/api/argus/media/${encodeURIComponent(e)}`, {
 				method: "DELETE",
-				headers: yr(this),
+				headers: pr(this),
 				credentials: "same-origin"
 			});
 			if (!t.ok) throw Error(`HTTP ${t.status}`);
@@ -19403,16 +19326,16 @@ function br(e) {
 }
 //#endregion
 //#region src/features/security/client.ts
-var xr = (e, t) => e.getElementById(t), Sr = (e, t, n) => e._t?.(t) ?? n;
-function Cr(e) {
+var hr = (e, t) => e.getElementById(t), gr = (e, t, n) => e._t?.(t) ?? n;
+function _r(e) {
 	let t = e?.prototype;
 	t && !t.__argusSecurityClient && (t.__argusSecurityClient = !0, t._savePin = async function() {
-		let e = this.shadowRoot.getElementById("pin-status"), t = this._dashboard?.entries?.[0], n = xr(this.shadowRoot, "current-pin")?.value ?? "", r = xr(this.shadowRoot, "new-pin-1")?.value ?? "", i = xr(this.shadowRoot, "new-pin-2")?.value ?? "", a = (t) => {
+		let e = this.shadowRoot.getElementById("pin-status"), t = this._dashboard?.entries?.[0], n = hr(this.shadowRoot, "current-pin")?.value ?? "", r = hr(this.shadowRoot, "new-pin-1")?.value ?? "", i = hr(this.shadowRoot, "new-pin-2")?.value ?? "", a = (t) => {
 			e && (e.textContent = t, e.className = "status err");
 		};
 		if (!t?.entry_id) return a("No Argus config entry is available");
-		if (t.pin_configured && !n) return a(Sr(this, "pin_incorrect", "PIN incorrecto"));
-		if (r !== i) return a(Sr(this, "pin_mismatch", "Los PIN no coinciden"));
+		if (t.pin_configured && !n) return a(gr(this, "pin_incorrect", "PIN incorrecto"));
+		if (r !== i) return a(gr(this, "pin_mismatch", "Los PIN no coinciden"));
 		if (r && !/^\d{4,12}$/.test(r)) return a("PIN: se requieren entre 4 y 12 dígitos");
 		if (!this._send) return a("Argus WebSocket is unavailable");
 		try {
@@ -19420,13 +19343,13 @@ function Cr(e) {
 				entry_id: t.entry_id,
 				pin: r,
 				current_pin: n
-			}), t.pin_configured = !!r, e && (e.textContent = r ? Sr(this, "pin_updated", "PIN actualizado") : Sr(this, "pin_deleted", "PIN eliminado"), e.className = "status ok");
+			}), t.pin_configured = !!r, e && (e.textContent = r ? gr(this, "pin_updated", "PIN actualizado") : gr(this, "pin_deleted", "PIN eliminado"), e.className = "status ok");
 			for (let e of [
 				"current-pin",
 				"new-pin-1",
 				"new-pin-2"
 			]) {
-				let t = xr(this.shadowRoot, e);
+				let t = hr(this.shadowRoot, e);
 				t && (t.value = "");
 			}
 			this._syncAccessSummary?.(), window.setTimeout(() => {
@@ -19442,35 +19365,35 @@ function Cr(e) {
 }
 //#endregion
 //#region src/features/premium/index.ts
-var wr = "argus-hdr-promotion-styles";
-function Tr(e) {
-	Er(e);
+var vr = "argus-hdr-promotion-styles";
+function yr(e) {
+	br(e);
 }
-function Er(e) {
+function br(e) {
 	if (!e || e.__argusPremiumHDRApplied) return;
 	e.__argusPremiumHDRApplied = !0;
 	let t = e.prototype.connectedCallback;
 	e.prototype.connectedCallback = function() {
 		let e = typeof t == "function" ? t.call(this) : void 0;
-		return Dr(this), e;
+		return xr(this), e;
 	};
 }
-function Dr(e) {
+function xr(e) {
 	let t = e.shadowRoot;
-	if (!t || t.getElementById(wr)) return;
+	if (!t || t.getElementById(vr)) return;
 	let n = document.createElement("style");
-	n.id = wr, n.textContent = "\n    @supports (color: color(rec2020 1 1 1)) {\n      :host {\n        --argus-accent-green: color(rec2020 0.15 0.85 0.35);\n        --argus-accent-amber: color(rec2020 0.95 0.70 0.10);\n        --argus-accent-red: color(rec2020 0.95 0.15 0.20);\n        --argus-accent-blue: color(rec2020 0.15 0.55 0.95);\n        --argus-accent-purple: color(rec2020 0.70 0.20 0.90);\n        --argus-glow-green: rgba(30, 220, 90, 0.45);\n        --argus-glow-amber: rgba(255, 180, 20, 0.45);\n        --argus-glow-red: rgba(255, 40, 50, 0.55);\n      }\n    }\n\n    @supports (color: color(display-p3 1 1 1)) and (not (color: color(rec2020 1 1 1))) {\n      :host {\n        --argus-accent-green: color(display-p3 0.22 0.82 0.38);\n        --argus-accent-amber: color(display-p3 0.98 0.72 0.15);\n        --argus-accent-red: color(display-p3 0.98 0.20 0.25);\n        --argus-accent-blue: color(display-p3 0.20 0.58 0.95);\n        --argus-accent-purple: color(display-p3 0.68 0.25 0.88);\n        --argus-glow-green: rgba(34, 197, 94, 0.40);\n        --argus-glow-amber: rgba(245, 158, 11, 0.40);\n        --argus-glow-red: rgba(239, 68, 68, 0.50);\n      }\n    }\n\n    :host {\n      --argus-accent-green: #10b981;\n      --argus-accent-amber: #f59e0b;\n      --argus-accent-red: #ef4444;\n      --argus-accent-blue: #3b82f6;\n      --argus-accent-purple: #8b5cf6;\n      --argus-glow-green: rgba(16, 185, 129, 0.35);\n      --argus-glow-amber: rgba(245, 158, 11, 0.35);\n      --argus-glow-red: rgba(239, 68, 68, 0.45);\n    }\n\n    .entry-icon,\n    .argus-shield-svg,\n    .liquid-btn,\n    .console-sensor,\n    .argus-sta-thumb {\n      transform: translate3d(0, 0, 0);\n      backface-visibility: hidden;\n      -webkit-backface-visibility: hidden;\n      perspective: 1000px;\n    }\n\n    .entry-icon {\n      will-change: transform;\n      animation: float-icon 5s ease-in-out infinite;\n    }\n\n    @keyframes float-icon {\n      0%, 100% {\n        transform: translate3d(0, 0, 0) scale3d(1, 1, 1);\n      }\n      50% {\n        transform: translate3d(0, -6px, 0) scale3d(1.015, 1.015, 1);\n      }\n    }\n\n    @media (prefers-reduced-motion: reduce) {\n      .entry-icon {\n        animation: none !important;\n        transform: none !important;\n      }\n    }\n  ", t.appendChild(n);
+	n.id = vr, n.textContent = "\n    @supports (color: color(rec2020 1 1 1)) {\n      :host {\n        --argus-accent-green: color(rec2020 0.15 0.85 0.35);\n        --argus-accent-amber: color(rec2020 0.95 0.70 0.10);\n        --argus-accent-red: color(rec2020 0.95 0.15 0.20);\n        --argus-accent-blue: color(rec2020 0.15 0.55 0.95);\n        --argus-accent-purple: color(rec2020 0.70 0.20 0.90);\n        --argus-glow-green: rgba(30, 220, 90, 0.45);\n        --argus-glow-amber: rgba(255, 180, 20, 0.45);\n        --argus-glow-red: rgba(255, 40, 50, 0.55);\n      }\n    }\n\n    @supports (color: color(display-p3 1 1 1)) and (not (color: color(rec2020 1 1 1))) {\n      :host {\n        --argus-accent-green: color(display-p3 0.22 0.82 0.38);\n        --argus-accent-amber: color(display-p3 0.98 0.72 0.15);\n        --argus-accent-red: color(display-p3 0.98 0.20 0.25);\n        --argus-accent-blue: color(display-p3 0.20 0.58 0.95);\n        --argus-accent-purple: color(display-p3 0.68 0.25 0.88);\n        --argus-glow-green: rgba(34, 197, 94, 0.40);\n        --argus-glow-amber: rgba(245, 158, 11, 0.40);\n        --argus-glow-red: rgba(239, 68, 68, 0.50);\n      }\n    }\n\n    :host {\n      --argus-accent-green: #10b981;\n      --argus-accent-amber: #f59e0b;\n      --argus-accent-red: #ef4444;\n      --argus-accent-blue: #3b82f6;\n      --argus-accent-purple: #8b5cf6;\n      --argus-glow-green: rgba(16, 185, 129, 0.35);\n      --argus-glow-amber: rgba(245, 158, 11, 0.35);\n      --argus-glow-red: rgba(239, 68, 68, 0.45);\n    }\n\n    .entry-icon,\n    .argus-shield-svg,\n    .liquid-btn,\n    .console-sensor,\n    .argus-sta-thumb {\n      transform: translate3d(0, 0, 0);\n      backface-visibility: hidden;\n      -webkit-backface-visibility: hidden;\n      perspective: 1000px;\n    }\n\n    .entry-icon {\n      will-change: transform;\n      animation: float-icon 5s ease-in-out infinite;\n    }\n\n    @keyframes float-icon {\n      0%, 100% {\n        transform: translate3d(0, 0, 0) scale3d(1, 1, 1);\n      }\n      50% {\n        transform: translate3d(0, -6px, 0) scale3d(1.015, 1.015, 1);\n      }\n    }\n\n    @media (prefers-reduced-motion: reduce) {\n      .entry-icon {\n        animation: none !important;\n        transform: none !important;\n      }\n    }\n  ", t.appendChild(n);
 }
 //#endregion
 //#region src/features/motion/index.ts
-var Or = "argus-motion-system-v2049", kr = "__argusMotionV2049", Ar = ".user-card,.liquid-btn,.mode-btn,.lang-pill,.entry-fs,.fs-btn,.file-card-btn,.pick-row,.widget-size-btn,.widget-toggle-btn,.argus-disarm-btn,[data-login-digit],#btn-submit-login-pin,#btn-cancel-login,#btn-complete-setup,#btn-claim-admin", jr = "\n:host{--argus-motion-fast:120ms;--argus-motion-ease:cubic-bezier(.22,.8,.25,1)}\n#widget-grid,.dashboard-instances,#widget-grid>.dashboard-instances,#widget-grid>.dashboard-instances>.entry{animation:none!important;transition:none!important;opacity:1!important;transform:none!important;visibility:visible!important}\n#widget-grid.argus-motion-dashboard-enter,.dashboard-instances.argus-motion-dashboard-enter,.argus-motion-dashboard-prep{animation:none!important;transition:none!important;opacity:1!important;transform:none!important}\n.dashboard-instances>.entry{will-change:auto!important}\n.user-card.is-entering{pointer-events:none;box-shadow:0 0 0 1px rgba(120,190,255,.45),0 10px 24px rgba(0,60,140,.18)}\n.argus-motion-press{transform:scale(.982)!important;transition:transform var(--argus-motion-fast) var(--argus-motion-ease)!important}\n:host(.argus-perf-essential) .argus-motion-press{transition:none!important;transform:none!important}\n@media(prefers-reduced-motion:reduce){.argus-motion-press{transition:none!important;transform:none!important}}\n";
-function Mr(e) {
+var Sr = "argus-motion-system-v2049", Cr = "__argusMotionV2049", wr = ".user-card,.liquid-btn,.mode-btn,.lang-pill,.entry-fs,.fs-btn,.file-card-btn,.pick-row,.widget-size-btn,.widget-toggle-btn,.argus-disarm-btn,[data-login-digit],#btn-submit-login-pin,#btn-cancel-login,#btn-complete-setup,#btn-claim-admin", Tr = "\n:host{--argus-motion-fast:120ms;--argus-motion-ease:cubic-bezier(.22,.8,.25,1)}\n#widget-grid,.dashboard-instances,#widget-grid>.dashboard-instances,#widget-grid>.dashboard-instances>.entry{animation:none!important;transition:none!important;opacity:1!important;transform:none!important;visibility:visible!important}\n#widget-grid.argus-motion-dashboard-enter,.dashboard-instances.argus-motion-dashboard-enter,.argus-motion-dashboard-prep{animation:none!important;transition:none!important;opacity:1!important;transform:none!important}\n.dashboard-instances>.entry{will-change:auto!important}\n.user-card.is-entering{pointer-events:none;box-shadow:0 0 0 1px rgba(120,190,255,.45),0 10px 24px rgba(0,60,140,.18)}\n.argus-motion-press{transform:scale(.982)!important;transition:transform var(--argus-motion-fast) var(--argus-motion-ease)!important}\n:host(.argus-perf-essential) .argus-motion-press{transition:none!important;transform:none!important}\n@media(prefers-reduced-motion:reduce){.argus-motion-press{transition:none!important;transform:none!important}}\n";
+function Er(e) {
 	if (window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches) return "essential";
 	let t = String(e._argusPerfProfile || e.dataset?.argusPerf || "").toLowerCase();
 	return t === "essential" || e.classList.contains("argus-perf-essential") ? "essential" : t === "light" ? "light" : "full";
 }
-function Nr(e) {
-	if (e[kr]) return e[kr];
+function Dr(e) {
+	if (e[Cr]) return e[Cr];
 	let t = {
 		panel: e,
 		active: !1,
@@ -19483,37 +19406,37 @@ function Nr(e) {
 		profileControl: null,
 		api: null
 	};
-	return Object.defineProperty(e, kr, {
+	return Object.defineProperty(e, Cr, {
 		value: t,
 		writable: !0,
 		configurable: !0
 	}), t;
 }
-function Pr(e, t) {
+function Or(e, t) {
 	let n = requestAnimationFrame(() => {
 		e.rafs.delete(n), e.active && t();
 	});
 	return e.rafs.add(n), n;
 }
-function Fr(e, t, n, r, i) {
+function kr(e, t, n, r, i) {
 	t.addEventListener(n, r, i), e.cleanups.add(() => t.removeEventListener(n, r, i));
 }
-function Ir(e) {
+function Ar(e) {
 	let t = e.shadowRoot;
 	if (!t) return;
-	let n = t.getElementById(Or);
-	n ? n.textContent !== jr && (n.textContent = jr) : (n = document.createElement("style"), n.id = Or, n.textContent = jr, t.appendChild(n));
+	let n = t.getElementById(Sr);
+	n ? n.textContent !== Tr && (n.textContent = Tr) : (n = document.createElement("style"), n.id = Sr, n.textContent = Tr, t.appendChild(n));
 }
-function Lr(e) {
+function jr(e) {
 	e.profileControl?.classList.remove("is-entering"), e.profileControl = null, e.panel.shadowRoot?.getElementById("bootstrap-overlay")?.removeAttribute("aria-busy");
 }
-function Rr(e, t) {
-	Lr(e), e.profileControl = t, t?.classList.add("is-entering"), e.panel.shadowRoot?.getElementById("bootstrap-overlay")?.setAttribute("aria-busy", "true");
+function Mr(e, t) {
+	jr(e), e.profileControl = t, t?.classList.add("is-entering"), e.panel.shadowRoot?.getElementById("bootstrap-overlay")?.setAttribute("aria-busy", "true");
 }
-function zr(e) {
+function Nr(e) {
 	!e.observer && e.panel.shadowRoot && (e.observer = new MutationObserver((t) => {
-		t.some((e) => [...e.addedNodes].some((e) => e instanceof Element && e.id !== Or)) && (e.observerFrame ||= Pr(e, () => {
-			e.observerFrame = 0, Ir(e.panel);
+		t.some((e) => [...e.addedNodes].some((e) => e instanceof Element && e.id !== Sr)) && (e.observerFrame ||= Or(e, () => {
+			e.observerFrame = 0, Ar(e.panel);
 		}));
 	}), e.observer.observe(e.panel.shadowRoot, {
 		childList: !0,
@@ -19521,64 +19444,64 @@ function zr(e) {
 		attributes: !1
 	}));
 }
-function Br(e) {
+function Pr(e) {
 	let t = e.panel.shadowRoot;
 	if (!t) return;
 	let n = (t) => {
 		t && (t.classList.remove("argus-motion-press"), e.pressed.delete(t));
 	};
-	Fr(e, t, "pointerdown", (t) => {
-		if (Mr(e.panel) === "essential") return;
-		let n = t.target?.closest?.(Ar);
+	kr(e, t, "pointerdown", (t) => {
+		if (Er(e.panel) === "essential") return;
+		let n = t.target?.closest?.(wr);
 		n && !n.disabled && (n.classList.add("argus-motion-press"), e.pressed.add(n));
 	}, !0), [
 		"pointerup",
 		"pointercancel",
 		"pointerleave"
-	].forEach((r) => Fr(e, t, r, (e) => {
+	].forEach((r) => kr(e, t, r, (e) => {
 		let t = e.target;
-		n(t?.closest?.(Ar));
-	}, !0)), Fr(e, t, "click", (t) => {
+		n(t?.closest?.(wr));
+	}, !0)), kr(e, t, "click", (t) => {
 		let n = t.target, r = n?.closest?.(".user-card");
-		r && r.dataset.isOwn === "true" && r.dataset.pinRequired !== "true" && Rr(e, r), n?.closest?.("#btn-submit-login-pin,#btn-complete-setup,#btn-claim-admin") && Rr(e, n.closest("button")), n?.closest?.("#btn-cancel-login") && Lr(e);
+		r && r.dataset.isOwn === "true" && r.dataset.pinRequired !== "true" && Mr(e, r), n?.closest?.("#btn-submit-login-pin,#btn-complete-setup,#btn-claim-admin") && Mr(e, n.closest("button")), n?.closest?.("#btn-cancel-login") && jr(e);
 	}, !0);
 }
-function Vr(e) {
-	!e.active && e.panel.shadowRoot && (e.active = !0, Ir(e.panel), Br(e), zr(e), e.api = Object.freeze({
+function Fr(e) {
+	!e.active && e.panel.shadowRoot && (e.active = !0, Ar(e.panel), Pr(e), Nr(e), e.api = Object.freeze({
 		animateView: () => {},
 		stagger: () => {},
 		transitionBackground: () => () => {},
 		animateDashboard: () => {}
 	}));
 }
-function Hr(e) {
-	e.active = !1, e.observer?.disconnect(), e.observer = null, e.observerFrame && cancelAnimationFrame(e.observerFrame), e.observerFrame = 0, e.rafs.forEach(cancelAnimationFrame), e.rafs.clear(), e.timers.forEach(clearTimeout), e.timers.clear(), e.cleanups.forEach((e) => e()), e.cleanups.clear(), e.pressed.forEach((e) => e.classList.remove("argus-motion-press")), e.pressed.clear(), Lr(e);
+function Ir(e) {
+	e.active = !1, e.observer?.disconnect(), e.observer = null, e.observerFrame && cancelAnimationFrame(e.observerFrame), e.observerFrame = 0, e.rafs.forEach(cancelAnimationFrame), e.rafs.clear(), e.timers.forEach(clearTimeout), e.timers.clear(), e.cleanups.forEach((e) => e()), e.cleanups.clear(), e.pressed.forEach((e) => e.classList.remove("argus-motion-press")), e.pressed.clear(), jr(e);
 }
-function Ur(e) {
+function Lr(e) {
 	let t = e?.prototype;
 	if (!t || t.__argusMotionSystemV2049) return;
 	t.__argusMotionSystemV2049 = !0;
 	let n = t.connectedCallback, r = t.disconnectedCallback, i = t._load;
 	t.connectedCallback = function() {
-		let e = n?.call(this), t = Nr(this);
-		return this.shadowRoot ? Vr(t) : queueMicrotask(() => Vr(t)), e;
+		let e = n?.call(this), t = Dr(this);
+		return this.shadowRoot ? Fr(t) : queueMicrotask(() => Fr(t)), e;
 	}, t.disconnectedCallback = function() {
-		let e = this[kr];
-		return e && Hr(e), r?.call(this);
+		let e = this[Cr];
+		return e && Ir(e), r?.call(this);
 	}, t._load = async function(...e) {
-		let t = Nr(this);
+		let t = Dr(this);
 		try {
 			let n = await i?.apply(this, e);
-			return !t.active && this.isConnected && Vr(t), Ir(this), Lr(t), n;
+			return !t.active && this.isConnected && Fr(t), Ar(this), jr(t), n;
 		} catch (e) {
-			throw Lr(t), e;
+			throw jr(t), e;
 		}
 	};
 }
 //#endregion
 //#region src/features/render/stable.ts
-var Wr = "__argusStableRenderV2050";
-function Gr(e) {
+var Rr = "__argusStableRenderV2050";
+function zr(e) {
 	let t = e.shadowRoot;
 	if (!t) return;
 	let n = /* @__PURE__ */ new Date(), r = e._formatTime ? e._formatTime(n) : n.toLocaleTimeString([], {
@@ -19593,7 +19516,7 @@ function Gr(e) {
 		e && e.textContent !== r && (e.textContent = r);
 	});
 }
-function Kr(e, t, n, r, i, a, o) {
+function Br(e, t, n, r, i, a, o) {
 	return [
 		t?.entity_id || "",
 		t?.entry_id || "",
@@ -19614,7 +19537,7 @@ function Kr(e, t, n, r, i, a, o) {
 		String(e._getCurrentLangCode?.() || e._manualLang || e._ui?.language || e._hass?.language || "")
 	].join("|");
 }
-function qr(e, t) {
+function Vr(e, t) {
 	t && !t._argusDelegated && (t._argusDelegated = !0, t.addEventListener("click", (t) => {
 		let n = t.target;
 		if (n.closest?.("button[data-action=\"unlock-kiosk\"]")) {
@@ -19644,18 +19567,18 @@ function qr(e, t) {
 		o?.dataset?.idx != null && o?.dataset?.action && e._handleAction?.(o.dataset.idx, o.dataset.action);
 	}));
 }
-function Jr(e) {
+function Hr(e) {
 	let t = e?.prototype;
-	if (!t || t[Wr]) return;
-	t[Wr] = !0;
+	if (!t || t[Rr]) return;
+	t[Rr] = !0;
 	let n = t._renderEntries, r = Object.getOwnPropertyDescriptor(t, "hass") || Object.getOwnPropertyDescriptor(Object.getPrototypeOf(t), "hass");
 	t._updateLiveClocks = function() {
-		Gr(this);
+		zr(this);
 	}, t._updateHeroClock = function() {
-		Gr(this);
+		zr(this);
 	}, t._startClock = function() {
-		this._clockInterval && clearInterval(this._clockInterval), Gr(this), this._clockInterval = setInterval(() => {
-			this._dashboard && Gr(this);
+		this._clockInterval && clearInterval(this._clockInterval), zr(this), this._clockInterval = setInterval(() => {
+			this._dashboard && zr(this);
 		}, 1e3);
 	}, t._renderEntries = function(e = !1) {
 		let t = this.shadowRoot;
@@ -19663,7 +19586,7 @@ function Jr(e) {
 		let r = t.getElementById("entries"), i = this._dashboard?.entries || [];
 		if (this._instanceSignatures = this._instanceSignatures || /* @__PURE__ */ new Map(), !r || !i.length) {
 			let r = n?.call(this, e);
-			return qr(this, t.getElementById("entries")), Gr(this), r;
+			return Vr(this, t.getElementById("entries")), zr(this), r;
 		}
 		let a = [...r.querySelectorAll("article.entry")];
 		if (!e && a.length === i.length && a.every((e) => e.querySelector(".entry-content"))) {
@@ -19675,8 +19598,7 @@ function Jr(e) {
 					[
 						"away",
 						"home",
-						"night",
-						"vacation"
+						"night"
 					].forEach((n) => {
 						(e[n]?.sensors || []).forEach((e) => t.add(e));
 					}), d = [...t];
@@ -19684,7 +19606,7 @@ function Jr(e) {
 				let f = u.bypassed_sensors || [], p = d.filter((e) => !f.includes(e)).map((e) => {
 					let t = this._hass?.states?.[e], n = this._getSensorBattery?.(e, t) ?? t?.attributes?.battery_level ?? t?.attributes?.battery_percentage ?? "";
 					return `${e}:${t?.state || ""}:${n}`;
-				}).join(","), m = Kr(this, n, a, o, p, s, c);
+				}).join(","), m = Br(this, n, a, o, p, s, c);
 				if (this._instanceSignatures.get(t) !== m) {
 					e = !1;
 					break;
@@ -19698,7 +19620,7 @@ function Jr(e) {
 					let t = ((e) => this._t?.(e) || e)(e ? "system_armed" : "system_disarmed"), n = `<i class="hero-live" style="background:${e ? "#ffb54d" : "#55df91"};box-shadow:0 0 9px ${e ? "#ffb54d" : "#55df91"}"></i>${this._escapeHtml?.(t) || t}`;
 					a.innerHTML !== n && (a.innerHTML = n);
 				}
-				Gr(this), qr(this, r);
+				zr(this), Vr(this, r);
 				return;
 			}
 		}
@@ -19712,8 +19634,7 @@ function Jr(e) {
 				[
 					"away",
 					"home",
-					"night",
-					"vacation"
+					"night"
 				].forEach((n) => {
 					(e[n]?.sensors || []).forEach((e) => t.add(e));
 				}), d = [...t];
@@ -19721,9 +19642,9 @@ function Jr(e) {
 			let f = u.bypassed_sensors || [], p = d.filter((e) => !f.includes(e)).map((e) => {
 				let t = this._hass?.states?.[e], n = this._getSensorBattery?.(e, t) ?? t?.attributes?.battery_level ?? t?.attributes?.battery_percentage ?? "";
 				return `${e}:${t?.state || ""}:${n}`;
-			}).join(","), m = Kr(this, n, a, o, p, s, c);
+			}).join(","), m = Br(this, n, a, o, p, s, c);
 			this._instanceSignatures.set(t, m), e.dataset.renderSig = m;
-		}), qr(this, r), Gr(this), o;
+		}), Vr(this, r), zr(this), o;
 	};
 	let i = r?.get, a = r?.set;
 	a && Object.defineProperty(t, "hass", {
@@ -19744,7 +19665,7 @@ function Jr(e) {
 				let i = t.language !== e.language;
 				i && !this._manualLang && this._refreshLocalizedUi?.();
 				let a = this._dashboard.entries.some((n) => n.entity_id && t.states[n.entity_id]?.state !== e.states[n.entity_id]?.state), o = [...n].some((n) => t.states[n]?.state !== e.states[n]?.state || t.states[n]?.attributes?.battery_level !== e.states[n]?.attributes?.battery_level || t.states[n]?.attributes?.battery_percentage !== e.states[n]?.attributes?.battery_percentage), s = this._temperatureSource === "auto" ? null : this._temperatureSource, c = s && t.states[s]?.state !== e.states[s]?.state, l = this._weatherSource && this._weatherSource !== "auto" ? this._weatherSource : Object.values(e.states).find((e) => e.entity_id?.startsWith("weather."))?.entity_id, u = l && (t.states[l]?.state !== e.states[l]?.state || t.states[l]?.attributes?.temperature !== e.states[l]?.attributes?.temperature), d = a || o || c || u || i;
-				this._hass = e, this._updateTheme?.(), d ? (this._renderEntries?.(i), this._renderActivityLog?.()) : Gr(this);
+				this._hass = e, this._updateTheme?.(), d ? (this._renderEntries?.(i), this._renderActivityLog?.()) : zr(this);
 				return;
 			}
 			return a.call(this, e);
@@ -19758,30 +19679,30 @@ function Jr(e) {
 }
 //#endregion
 //#region src/features/render/alarm.ts
-var Yr = "argus-v2050-alarm-visuals", Xr = {
+var Ur = "argus-v2050-alarm-visuals", Wr = {
 	armed_home: /EN CASA|HOME|EM CASA|CASA|在家|ДОМА/i,
 	armed_away: /AUSENTE|AWAY|ASSENTE|外出|УШЁЛ/i,
 	armed_night: /NOCHE|NIGHT|NOITE|NOTTE|夜间|НОЧЬ/i
 };
-function Zr(e, t) {
+function Gr(e, t) {
 	let n = t?.entity_id || t?.alarm_entity_id, r = n ? e._hass?.states?.[n]?.state : void 0;
 	return String(r || t?.state || t?.alarm_state || t?.attributes?.state || "").toLowerCase();
 }
-function Qr(e, t, n) {
+function Kr(e, t, n) {
 	e.classList.toggle("active", n), e.classList.toggle("argus-action-active", n), e.dataset.argusAction = t, t === "sos" && e.classList.toggle("flashing", n);
 }
-function $r(e) {
+function qr(e) {
 	let t = e.shadowRoot;
 	if (!t) return;
-	let n = t.getElementById(Yr);
-	n || (n = document.createElement("style"), n.id = Yr, t.appendChild(n)), n.textContent = "\n.entry .liquid-stack .liquid-btn{border-radius:13px!important;color:rgba(255,255,255,.92)!important}\n.entry.argus-arming .entry-icon>svg,.entry.argus-waiting .entry-icon>svg{transform-origin:center!important;animation:argusArmingShield 1.05s ease-in-out infinite!important;filter:drop-shadow(0 0 26px rgba(255,184,57,.95)) saturate(1.35)!important;will-change:transform,opacity}\n.argus-shield-status{display:block;margin:7px auto 0;padding:5px 10px;width:max-content;max-width:180px;border:1px solid rgba(255,184,57,.45);border-radius:999px;background:rgba(255,149,0,.13);color:#ffd27a;font-size:9px;font-weight:800;letter-spacing:.12em;text-align:center;animation:argusArmingLabel 1.05s ease-in-out infinite}\n.entry .console-sensor.argus-blocking,.entry .console-sensor.argus-triggered-sensor{border-color:#ff8a1f!important;background:linear-gradient(135deg,rgba(249,115,22,.32),rgba(194,65,12,.18))!important;animation:argusTriggeredSensor .72s ease-in-out infinite!important;will-change:transform,opacity}\n@keyframes argusArmingShield{0%,100%{opacity:.55;transform:scale3d(.94,.94,1)}50%{opacity:1;transform:scale3d(1.07,1.07,1)}}\n@keyframes argusArmingLabel{0%,100%{opacity:.62}50%{opacity:1}}\n@keyframes argusTriggeredSensor{0%,100%{opacity:.62;transform:scale3d(1,1,1)}50%{opacity:1;transform:scale3d(1.02,1.02,1)}}\n";
+	let n = t.getElementById(Ur);
+	n || (n = document.createElement("style"), n.id = Ur, t.appendChild(n)), n.textContent = "\n.entry .liquid-stack .liquid-btn{border-radius:13px!important;color:rgba(255,255,255,.92)!important}\n.entry.argus-arming .entry-icon>svg,.entry.argus-waiting .entry-icon>svg{transform-origin:center!important;animation:argusArmingShield 1.05s ease-in-out infinite!important;filter:drop-shadow(0 0 26px rgba(255,184,57,.95)) saturate(1.35)!important;will-change:transform,opacity}\n.argus-shield-status{display:block;margin:7px auto 0;padding:5px 10px;width:max-content;max-width:180px;border:1px solid rgba(255,184,57,.45);border-radius:999px;background:rgba(255,149,0,.13);color:#ffd27a;font-size:9px;font-weight:800;letter-spacing:.12em;text-align:center;animation:argusArmingLabel 1.05s ease-in-out infinite}\n.entry .console-sensor.argus-blocking,.entry .console-sensor.argus-triggered-sensor{border-color:#ff8a1f!important;background:linear-gradient(135deg,rgba(249,115,22,.32),rgba(194,65,12,.18))!important;animation:argusTriggeredSensor .72s ease-in-out infinite!important;will-change:transform,opacity}\n@keyframes argusArmingShield{0%,100%{opacity:.55;transform:scale3d(.94,.94,1)}50%{opacity:1;transform:scale3d(1.07,1.07,1)}}\n@keyframes argusArmingLabel{0%,100%{opacity:.62}50%{opacity:1}}\n@keyframes argusTriggeredSensor{0%,100%{opacity:.62;transform:scale3d(1,1,1)}50%{opacity:1;transform:scale3d(1.02,1.02,1)}}\n";
 }
-function ei(e) {
+function Jr(e) {
 	if (!e.shadowRoot) return;
-	$r(e);
+	qr(e);
 	let t = e.shadowRoot.querySelectorAll(".entry");
 	Array.from(t).forEach((t, n) => {
-		let r = e._dashboard?.entries?.[n] || {}, i = r.attributes || e._hass?.states?.[r.entity_id]?.attributes || {}, a = Zr(e, r), o = i.arming_blocking_sensors || [], s = a === "arming" || !!i.arming_waiting_for_sensors || !!o.length;
+		let r = e._dashboard?.entries?.[n] || {}, i = r.attributes || e._hass?.states?.[r.entity_id]?.attributes || {}, a = Gr(e, r), o = i.arming_blocking_sensors || [], s = a === "arming" || !!i.arming_waiting_for_sensors || !!o.length;
 		t.classList.toggle("argus-arming", s), t.classList.toggle("argus-waiting", s);
 		let c = t.querySelector(".entry-icon"), l = t.querySelector(".argus-shield-status");
 		if (s && c) {
@@ -19792,11 +19713,11 @@ function ei(e) {
 		let u = t.querySelector(".liquid-stack");
 		u && Array.from(u.querySelectorAll(".liquid-btn,button")).forEach((e) => {
 			let t = e, n = String(t.textContent || "");
-			if (/SOS|PÁNICO|PANIC|PANIQUE|PÂNICO|PANICO|紧急|ПАНИКА/i.test(n)) Qr(t, "sos", !!i.argus_panic_active);
-			else if (/DESARMAR|DISARM|DESARMADO|DISARMED|DÉSARMER|DÉSARMÉ|OFF|已撤防|СНЯТО/i.test(n)) Qr(t, "disarm", a === "disarmed");
+			if (/SOS|PÁNICO|PANIC|PANIQUE|PÂNICO|PANICO|紧急|ПАНИКА/i.test(n)) Kr(t, "sos", !!i.argus_panic_active);
+			else if (/DESARMAR|DISARM|DESARMADO|DISARMED|DÉSARMER|DÉSARMÉ|OFF|已撤防|СНЯТО/i.test(n)) Kr(t, "disarm", a === "disarmed");
 			else {
-				let e = Object.entries(Xr).find(([, e]) => e.test(n));
-				e && Qr(t, e[0], a === e[0]);
+				let e = Object.entries(Wr).find(([, e]) => e.test(n));
+				e && Kr(t, e[0], a === e[0]);
 			}
 		});
 		let d = new Set((i.triggered_sensors || []).map(String)), f = new Set(o.map((t) => String(e._dashboard?.available_entities?.find((e) => e.entity_id === t)?.name || t).toLocaleLowerCase()));
@@ -19806,51 +19727,51 @@ function ei(e) {
 		});
 	});
 }
-function ti(e) {
+function Yr(e) {
 	let t = e?.prototype;
 	if (!t || t.__v2050AlarmVisuals) return;
 	t.__v2050AlarmVisuals = !0;
 	let n = t.connectedCallback, r = t._load, i = t._renderEntries;
 	t.connectedCallback = function() {
 		let e = n?.call(this);
-		return ei(this), e;
+		return Jr(this), e;
 	}, t._load = async function(...e) {
 		let t = await r?.apply(this, e);
-		return ei(this), t;
+		return Jr(this), t;
 	}, t._renderEntries = function(...e) {
 		let t = i?.apply(this, e);
-		return ei(this), t;
+		return Jr(this), t;
 	};
 }
 //#endregion
 //#region src/features/widgets/responsive.ts
-var ni = "argus-v2049-responsive-widgets", ri = "#w-access,.access-view,.access-content,.access-sections,.users-list,.user-list,.users-grid,[role=\"tabpanel\"],.users-modal,.access-modal,.argus-users-modal";
-function ii(e) {
+var Xr = "argus-v2049-responsive-widgets", Zr = "#w-access,.access-view,.access-content,.access-sections,.users-list,.user-list,.users-grid,[role=\"tabpanel\"],.users-modal,.access-modal,.argus-users-modal";
+function Qr(e) {
 	let t = e.shadowRoot;
 	if (!t) return;
-	let n = t.getElementById(ni);
-	n || (n = document.createElement("style"), n.id = ni, t.appendChild(n)), n.textContent = "\n#w-access{display:flex!important;flex-direction:column!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;box-sizing:border-box!important}\n#w-access>.panel-head,#w-access>.access-summary,#w-access>.tabs{flex:0 0 auto!important}\n#w-access :is(.panel-body,#access-view,.access-view,.access-content,.access-sections,.users-list,.user-list,.users-grid,[role=\"tabpanel\"]){flex:1 1 auto!important;min-width:0!important;min-height:0!important;max-height:none!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;scrollbar-gutter:stable!important;box-sizing:border-box!important}\n:is(.users-modal,.access-modal,.argus-users-modal,.modal,[role=\"dialog\"]){max-width:min(94vw,760px)!important;max-height:min(88dvh,720px)!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;box-sizing:border-box!important}\n/* Backup: title plus an explicit responsive button grid. */\n#w-backup{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-auto-rows:max-content!important;place-content:center!important;align-items:center!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow:hidden!important;box-sizing:border-box!important;padding:16px!important;gap:12px!important;text-align:center!important}\n#w-backup>h2,#w-backup>.panel-head,#w-backup>.panel-title{grid-column:1/-1!important;width:100%!important;margin:0 0 2px!important;text-align:center!important}\n#w-backup>:not(.panel-edit-overlay){min-width:0!important;max-width:100%!important;box-sizing:border-box!important;margin-top:0!important;margin-bottom:0!important}\n#w-backup :is(.panel-body,.actions,.backup-actions,.button-row,.controls){display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-column:1/-1!important;gap:12px!important;width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;box-sizing:border-box!important;flex-wrap:wrap!important}\n#w-backup :is(button,a,ha-button,mwc-button){width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;padding-inline:8px!important;white-space:normal!important;overflow-wrap:anywhere!important;text-align:center!important;justify-content:center!important;box-sizing:border-box!important;font-size:clamp(11px,1.1vw,14px)!important}\n/* Support: compact centered group with 3-column actions grid */\n#w-github{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow:hidden!important;box-sizing:border-box!important;padding:16px!important;gap:14px!important;text-align:center!important}\n#w-github>:not(.panel-edit-overlay){min-width:0!important;max-width:100%!important;margin:0!important;box-sizing:border-box!important}\n#w-github :is(h2,h3,.panel-head,.panel-title,.github-header){width:100%!important;margin:0!important;text-align:center!important}\n#w-github :is(.panel-body,.actions,.support-actions,.support-actions-grid){display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;width:100%!important;max-width:440px!important;margin:0!important;padding:0!important;box-sizing:border-box!important}\n#w-github :is(button,a,ha-button,mwc-button,.support-link-btn){width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;white-space:nowrap!important;text-align:center!important;justify-content:center!important;box-sizing:border-box!important}\n#w-backup .panel-edit-overlay,#w-github .panel-edit-overlay{position:absolute!important;inset:0!important;margin:0!important;max-width:none!important}\n@media(max-width:460px){#w-backup{grid-template-columns:1fr!important;overflow-y:auto!important}#w-backup :is(.panel-body,.actions,.backup-actions,.button-row,.controls){grid-template-columns:1fr!important}#w-backup :is(button,a,ha-button,mwc-button){font-size:13px!important}#w-github{padding:14px!important;gap:10px!important}#w-github :is(.panel-body,.actions,.support-actions,.support-actions-grid){grid-template-columns:1fr!important;gap:6px!important}}\n";
+	let n = t.getElementById(Xr);
+	n || (n = document.createElement("style"), n.id = Xr, t.appendChild(n)), n.textContent = "\n#w-access{display:flex!important;flex-direction:column!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;box-sizing:border-box!important}\n#w-access>.panel-head,#w-access>.access-summary,#w-access>.tabs{flex:0 0 auto!important}\n#w-access :is(.panel-body,#access-view,.access-view,.access-content,.access-sections,.users-list,.user-list,.users-grid,[role=\"tabpanel\"]){flex:1 1 auto!important;min-width:0!important;min-height:0!important;max-height:none!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;scrollbar-gutter:stable!important;box-sizing:border-box!important}\n:is(.users-modal,.access-modal,.argus-users-modal,.modal,[role=\"dialog\"]){max-width:min(94vw,760px)!important;max-height:min(88dvh,720px)!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;box-sizing:border-box!important}\n/* Backup: title plus an explicit responsive button grid. */\n#w-backup{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-auto-rows:max-content!important;place-content:center!important;align-items:center!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow:hidden!important;box-sizing:border-box!important;padding:16px!important;gap:12px!important;text-align:center!important}\n#w-backup>h2,#w-backup>.panel-head,#w-backup>.panel-title{grid-column:1/-1!important;width:100%!important;margin:0 0 2px!important;text-align:center!important}\n#w-backup>:not(.panel-edit-overlay){min-width:0!important;max-width:100%!important;box-sizing:border-box!important;margin-top:0!important;margin-bottom:0!important}\n#w-backup :is(.panel-body,.actions,.backup-actions,.button-row,.controls){display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-column:1/-1!important;gap:12px!important;width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;box-sizing:border-box!important;flex-wrap:wrap!important}\n#w-backup :is(button,a,ha-button,mwc-button){width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;padding-inline:8px!important;white-space:normal!important;overflow-wrap:anywhere!important;text-align:center!important;justify-content:center!important;box-sizing:border-box!important;font-size:clamp(11px,1.1vw,14px)!important}\n/* Support: compact centered group with 3-column actions grid */\n#w-github{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow:hidden!important;box-sizing:border-box!important;padding:16px!important;gap:14px!important;text-align:center!important}\n#w-github>:not(.panel-edit-overlay){min-width:0!important;max-width:100%!important;margin:0!important;box-sizing:border-box!important}\n#w-github :is(h2,h3,.panel-head,.panel-title,.github-header){width:100%!important;margin:0!important;text-align:center!important}\n#w-github :is(.panel-body,.actions,.support-actions,.support-actions-grid){display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;width:100%!important;max-width:440px!important;margin:0!important;padding:0!important;box-sizing:border-box!important}\n#w-github :is(button,a,ha-button,mwc-button,.support-link-btn){width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;white-space:nowrap!important;text-align:center!important;justify-content:center!important;box-sizing:border-box!important}\n#w-backup .panel-edit-overlay,#w-github .panel-edit-overlay{position:absolute!important;inset:0!important;margin:0!important;max-width:none!important}\n@media(max-width:460px){#w-backup{grid-template-columns:1fr!important;overflow-y:auto!important}#w-backup :is(.panel-body,.actions,.backup-actions,.button-row,.controls){grid-template-columns:1fr!important}#w-backup :is(button,a,ha-button,mwc-button){font-size:13px!important}#w-github{padding:14px!important;gap:10px!important}#w-github :is(.panel-body,.actions,.support-actions,.support-actions-grid){grid-template-columns:1fr!important;gap:6px!important}}\n";
 }
-function ai(e) {
+function $r(e) {
 	let t = e.shadowRoot;
-	t && t.querySelectorAll(ri).forEach((e) => {
+	t && t.querySelectorAll(Zr).forEach((e) => {
 		let t = e;
 		t.style.touchAction = "pan-y", t.style.setProperty("-webkit-overflow-scrolling", "touch"), t.scrollHeight > t.clientHeight && (t.style.overflowY = "auto");
 	});
 }
-function oi(e) {
-	ii(e), ai(e);
+function ei(e) {
+	Qr(e), $r(e);
 }
-function si(e) {
+function ti(e) {
 	let t = e?.prototype;
 	if (!t || t.__v2049ResponsiveWidgets) return;
 	t.__v2049ResponsiveWidgets = !0;
 	let n = t.connectedCallback, r = t.disconnectedCallback, i = t._load, a = t._renderEntries;
 	t.connectedCallback = function() {
 		let e = n?.call(this);
-		return oi(this), this._v2049Observer?.disconnect?.(), this._v2049Frame = 0, this._v2049Observer = new MutationObserver(() => {
+		return ei(this), this._v2049Observer?.disconnect?.(), this._v2049Frame = 0, this._v2049Observer = new MutationObserver(() => {
 			this._v2049Frame ||= requestAnimationFrame(() => {
-				this._v2049Frame = 0, oi(this);
+				this._v2049Frame = 0, ei(this);
 			});
 		}), this.shadowRoot && this._v2049Observer.observe(this.shadowRoot, {
 			childList: !0,
@@ -19860,41 +19781,41 @@ function si(e) {
 		return this._v2049Observer?.disconnect?.(), this._v2049Observer = null, this._v2049Frame && cancelAnimationFrame(this._v2049Frame), this._v2049Frame = 0, r?.call(this);
 	}, t._load = async function(...e) {
 		let t = await i?.apply(this, e);
-		return oi(this), t;
+		return ei(this), t;
 	}, t._renderEntries = function(...e) {
 		let t = a?.apply(this, e);
-		return oi(this), t;
+		return ei(this), t;
 	};
 }
 //#endregion
 //#region src/features/widgets/layouts.ts
-var ci = "argus-v2050-widget-layouts";
-function li(e) {
+var ni = "argus-v2050-widget-layouts";
+function ri(e) {
 	let t = e.shadowRoot;
 	if (!t) return;
-	let n = t.getElementById(ci);
-	n || (n = document.createElement("style"), n.id = ci, t.appendChild(n)), n.textContent = "\n#w-access{display:flex!important;flex-direction:column!important;min-width:0!important;min-height:0!important;height:100%!important;overflow:hidden!important}\n#w-access .panel-body,#w-access #access-view,#w-access .access-view,#w-access .access-content,#w-access .users-list,#w-access .user-list{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;overscroll-behavior:contain!important}\n#w-backup{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:14px!important;padding:16px!important;box-sizing:border-box!important;height:100%!important;min-height:0!important;overflow:hidden!important;text-align:center!important}\n#w-backup h2,#w-backup .panel-head,#w-backup .panel-title{margin:0!important;width:100%!important;text-align:center!important;flex:0 0 auto!important}\n#w-backup .panel-body,#w-backup .actions,#w-backup .backup-actions,#w-backup .button-row,#w-backup .controls{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important;width:100%!important;max-width:100%!important;margin:0!important;padding:0!important;box-sizing:border-box!important}\n#w-backup button,#w-backup a,#w-backup ha-button,#w-backup mwc-button{width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;white-space:normal!important;overflow-wrap:anywhere!important;justify-content:center!important;text-align:center!important;font-size:clamp(11px,1.1vw,14px)!important;box-sizing:border-box!important}\n#w-github{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:14px!important;padding:16px!important;box-sizing:border-box!important;height:100%!important;min-height:0!important;overflow:hidden!important;text-align:center!important}\n#w-github h2,#w-github h3,#w-github .panel-head,#w-github .panel-title,#w-github .github-header{margin:0!important;width:100%!important;text-align:center!important}\n#w-github :is(.panel-body,.actions,.support-actions,.support-actions-grid){display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;width:100%!important;max-width:440px!important;margin:0!important;padding:0!important;box-sizing:border-box!important}\n#w-github :is(button,a,ha-button,mwc-button,.support-link-btn){width:100%!important;max-width:100%!important;margin:0!important;justify-content:center!important;box-sizing:border-box!important}\n#w-backup .panel-edit-overlay,#w-github .panel-edit-overlay,#w-access .panel-edit-overlay{position:absolute!important;inset:0!important}\n@media(max-width:520px){#w-backup .panel-body,#w-backup .actions,#w-backup .backup-actions,#w-backup .button-row,#w-backup .controls{grid-template-columns:1fr!important}#w-backup{overflow-y:auto!important}}\n";
+	let n = t.getElementById(ni);
+	n || (n = document.createElement("style"), n.id = ni, t.appendChild(n)), n.textContent = "\n#w-access{display:flex!important;flex-direction:column!important;min-width:0!important;min-height:0!important;height:100%!important;overflow:hidden!important}\n#w-access .panel-body,#w-access #access-view,#w-access .access-view,#w-access .access-content,#w-access .users-list,#w-access .user-list{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;overscroll-behavior:contain!important}\n#w-backup{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:14px!important;padding:16px!important;box-sizing:border-box!important;height:100%!important;min-height:0!important;overflow:hidden!important;text-align:center!important}\n#w-backup h2,#w-backup .panel-head,#w-backup .panel-title{margin:0!important;width:100%!important;text-align:center!important;flex:0 0 auto!important}\n#w-backup .panel-body,#w-backup .actions,#w-backup .backup-actions,#w-backup .button-row,#w-backup .controls{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important;width:100%!important;max-width:100%!important;margin:0!important;padding:0!important;box-sizing:border-box!important}\n#w-backup button,#w-backup a,#w-backup ha-button,#w-backup mwc-button{width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;white-space:normal!important;overflow-wrap:anywhere!important;justify-content:center!important;text-align:center!important;font-size:clamp(11px,1.1vw,14px)!important;box-sizing:border-box!important}\n#w-github{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:14px!important;padding:16px!important;box-sizing:border-box!important;height:100%!important;min-height:0!important;overflow:hidden!important;text-align:center!important}\n#w-github h2,#w-github h3,#w-github .panel-head,#w-github .panel-title,#w-github .github-header{margin:0!important;width:100%!important;text-align:center!important}\n#w-github :is(.panel-body,.actions,.support-actions,.support-actions-grid){display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;width:100%!important;max-width:440px!important;margin:0!important;padding:0!important;box-sizing:border-box!important}\n#w-github :is(button,a,ha-button,mwc-button,.support-link-btn){width:100%!important;max-width:100%!important;margin:0!important;justify-content:center!important;box-sizing:border-box!important}\n#w-backup .panel-edit-overlay,#w-github .panel-edit-overlay,#w-access .panel-edit-overlay{position:absolute!important;inset:0!important}\n@media(max-width:520px){#w-backup .panel-body,#w-backup .actions,#w-backup .backup-actions,#w-backup .button-row,#w-backup .controls{grid-template-columns:1fr!important}#w-backup{overflow-y:auto!important}}\n";
 }
-function ui(e) {
+function ii(e) {
 	let t = e.shadowRoot;
 	t && t.querySelectorAll("#w-access,.access-content,.users-list,.user-list,[role=tabpanel],.users-modal,.access-modal").forEach((e) => {
 		let t = e;
 		t.style.touchAction = "pan-y", t.style.setProperty("-webkit-overflow-scrolling", "touch"), t.scrollHeight > t.clientHeight && (t.style.overflowY = "auto");
 	});
 }
-function di(e) {
-	li(e), ui(e);
+function ai(e) {
+	ri(e), ii(e);
 }
-function fi(e) {
+function oi(e) {
 	let t = e?.prototype;
 	if (!t || t.__v2050WidgetLayouts) return;
 	t.__v2050WidgetLayouts = !0;
 	let n = t.connectedCallback, r = t.disconnectedCallback, i = t._load, a = t._renderEntries;
 	t.connectedCallback = function() {
 		let e = n?.call(this);
-		return di(this), this._v2050LayoutObs?.disconnect?.(), this._v2050LayoutFrame = 0, this._v2050LayoutObs = new MutationObserver(() => {
+		return ai(this), this._v2050LayoutObs?.disconnect?.(), this._v2050LayoutFrame = 0, this._v2050LayoutObs = new MutationObserver(() => {
 			this._v2050LayoutFrame ||= requestAnimationFrame(() => {
-				this._v2050LayoutFrame = 0, di(this);
+				this._v2050LayoutFrame = 0, ai(this);
 			});
 		}), this.shadowRoot && this._v2050LayoutObs.observe(this.shadowRoot, {
 			childList: !0,
@@ -19904,30 +19825,30 @@ function fi(e) {
 		return this._v2050LayoutObs?.disconnect?.(), this._v2050LayoutObs = null, this._v2050LayoutFrame && cancelAnimationFrame(this._v2050LayoutFrame), this._v2050LayoutFrame = 0, r?.call(this);
 	}, t._load = async function(...e) {
 		let t = await i?.apply(this, e);
-		return di(this), t;
+		return ai(this), t;
 	}, t._renderEntries = function(...e) {
 		let t = a?.apply(this, e);
-		return di(this), t;
+		return ai(this), t;
 	};
 }
 //#endregion
 //#region src/features/more-info/hook.ts
-var pi = "argus-more-info-hook-installed", mi = "argus-more-info-dialog-styles";
-function hi(e, t) {
+var si = "argus-more-info-hook-installed", ci = "argus-more-info-dialog-styles";
+function li(e, t) {
 	if (!e || !e.startsWith("alarm_control_panel.")) return !1;
 	if (e.includes("argus")) return !0;
 	let n = t?.states?.[e];
 	return !!(n?.attributes?.argus_version || n?.attributes?.argus_entry_id);
 }
-function gi(e) {
-	if (!e || typeof e.getElementById == "function" && e.getElementById(mi)) return;
+function ui(e) {
+	if (!e || typeof e.getElementById == "function" && e.getElementById(ci)) return;
 	let t = e.createElement("style");
-	t.id = mi, t.textContent = "\n    ha-more-info-dialog:has(.argus-more-info-active) ha-dialog,\n    ha-more-info-dialog:has(.argus-more-info-active) .mdc-dialog__surface {\n      --ha-dialog-border-radius: 28px !important;\n      --mdc-shape-medium: 28px !important;\n      background: rgba(7, 17, 31, 0.94) !important;\n      backdrop-filter: blur(32px) saturate(170%) !important;\n      -webkit-backdrop-filter: blur(32px) saturate(170%) !important;\n      border: 1px solid rgba(255, 255, 255, 0.16) !important;\n      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.65) !important;\n      max-width: 640px !important;\n      width: min(92vw, 620px) !important;\n    }\n    .argus-more-info-container {\n      width: 100%;\n      box-sizing: border-box;\n      padding: 0;\n      margin: 0;\n      overflow: hidden;\n      border-radius: 24px;\n    }\n    .argus-more-info-container argus-panel-v2018 {\n      display: block;\n      width: 100%;\n    }\n  ", (e.head || e.body || e).appendChild(t);
+	t.id = ci, t.textContent = "\n    ha-more-info-dialog:has(.argus-more-info-active) ha-dialog,\n    ha-more-info-dialog:has(.argus-more-info-active) .mdc-dialog__surface {\n      --ha-dialog-border-radius: 28px !important;\n      --mdc-shape-medium: 28px !important;\n      background: rgba(7, 17, 31, 0.94) !important;\n      backdrop-filter: blur(32px) saturate(170%) !important;\n      -webkit-backdrop-filter: blur(32px) saturate(170%) !important;\n      border: 1px solid rgba(255, 255, 255, 0.16) !important;\n      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.65) !important;\n      max-width: 640px !important;\n      width: min(92vw, 620px) !important;\n    }\n    .argus-more-info-container {\n      width: 100%;\n      box-sizing: border-box;\n      padding: 0;\n      margin: 0;\n      overflow: hidden;\n      border-radius: 24px;\n    }\n    .argus-more-info-container argus-panel-v2018 {\n      display: block;\n      width: 100%;\n    }\n  ", (e.head || e.body || e).appendChild(t);
 }
-function _i(e, t) {
+function di(e, t) {
 	if (!e) return;
 	let n = e._entityId || e.entityId || e.params?.entityId;
-	if (!hi(n, t)) return;
+	if (!li(n, t)) return;
 	let r = e.shadowRoot;
 	if (!r) return;
 	let i = r.querySelector("more-info-content") || r.querySelector("more-info-alarm_control_panel") || r.querySelector(".content") || r.querySelector("ha-dialog");
@@ -19954,17 +19875,17 @@ function _i(e, t) {
 		o && o !== a ? (o.style.display = "none", o.parentNode?.insertBefore(a, o)) : i.appendChild(a);
 	}
 }
-function vi(e) {
-	if (typeof window > "u" || typeof document > "u" || window[pi]) return;
-	window[pi] = !0;
+function fi(e) {
+	if (typeof window > "u" || typeof document > "u" || window[si]) return;
+	window[si] = !0;
 	try {
-		gi(document);
+		ui(document);
 	} catch {}
 	let t = (e) => {
 		e.detail?.entityId && requestAnimationFrame(() => {
 			try {
 				let e = document.querySelector("home-assistant"), t = e?.shadowRoot?.querySelector("ha-more-info-dialog") || document.querySelector("ha-more-info-dialog");
-				t && _i(t, e?.hass);
+				t && di(t, e?.hass);
 			} catch {}
 		});
 	};
@@ -19975,7 +19896,7 @@ function vi(e) {
 		typeof MutationObserver < "u" && document.body && new MutationObserver(() => {
 			try {
 				let e = document.querySelector("home-assistant"), t = e?.shadowRoot?.querySelector("ha-more-info-dialog") || document.querySelector("ha-more-info-dialog");
-				t && _i(t, e?.hass);
+				t && di(t, e?.hass);
 			} catch {}
 		}).observe(document.body, {
 			childList: !0,
@@ -19985,10 +19906,10 @@ function vi(e) {
 }
 //#endregion
 //#region src/app/index.ts
-function yi(e) {
+function pi(e) {
 	e ||= customElements.get("argus-panel-v2018");
 	let t = e;
-	t && !t.__argusTypedFrontend && (t.__argusTypedFrontend = !0, Cr(t), br(t), Tr(t), Ur(t), Jr(t), ti(t), ar(t), si(t), fi(t), vi(t), vr(t), cr(t));
+	t && !t.__argusTypedFrontend && (t.__argusTypedFrontend = !0, _r(t), mr(t), yr(t), Lr(t), Hr(t), Yr(t), ir(t), ti(t), oi(t), fi(t), fr(t), sr(t));
 }
 //#endregion
-export { yi as applyArgusFrontend };
+export { pi as applyArgusFrontend };

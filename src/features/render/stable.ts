@@ -139,7 +139,7 @@ export function applyStableInstancesRender(C: ArgusPanelConstructor | undefined)
         if (state === 'disarmed' || !sList.length) {
           const modes = this._ui?.modes?.__by_entity__?.[e.entity_id!] || this._ui?.modes || {};
           const all = new Set<string>();
-          ['away', 'home', 'night', 'vacation'].forEach(m => {
+          ['away', 'home', 'night'].forEach(m => {
             (modes[m]?.sensors || []).forEach((s: string) => all.add(s));
           });
           sList = [...all];
@@ -195,7 +195,7 @@ export function applyStableInstancesRender(C: ArgusPanelConstructor | undefined)
       if (state === 'disarmed' || !sList.length) {
         const modes = this._ui?.modes?.__by_entity__?.[e.entity_id!] || this._ui?.modes || {};
         const all = new Set<string>();
-        ['away', 'home', 'night', 'vacation'].forEach(m => {
+        ['away', 'home', 'night'].forEach(m => {
           (modes[m]?.sensors || []).forEach((s: string) => all.add(s));
         });
         sList = [...all];

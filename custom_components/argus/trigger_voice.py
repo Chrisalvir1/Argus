@@ -5,7 +5,7 @@ import asyncio
 from homeassistant.components.alarm_control_panel import AlarmControlPanelState
 from .arming_voice import async_announce_alarm_triggered
 _ACTIVE={"on","open","unlocked","active","motion","recording"}
-_MODE_STATES={"home":AlarmControlPanelState.ARMED_HOME,"away":AlarmControlPanelState.ARMED_AWAY,"night":AlarmControlPanelState.ARMED_NIGHT,"vacation":AlarmControlPanelState.ARMED_VACATION}
+_MODE_STATES={"home":AlarmControlPanelState.ARMED_HOME,"away":AlarmControlPanelState.ARMED_AWAY,"night":AlarmControlPanelState.ARMED_NIGHT}
 def _trigger_entity(panel) -> str | None:
  value=str(getattr(panel,"_triggered_by","") or "")
  if panel.hass.states.get(value):return value

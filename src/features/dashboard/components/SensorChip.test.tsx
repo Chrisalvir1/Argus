@@ -11,3 +11,13 @@ it('shows an unavailable sensor without a closed lock or a safe status', () => {
   expect(html).not.toContain('Cerrado');
   expect(html).not.toContain('argus-lock-shackle');
 });
+
+it('renders instant and custom delay badges correctly', () => {
+  const instantHtml = renderToStaticMarkup(<SensorChip id="binary_sensor.patio" name="Patio" isOpen={false}
+    isBlocking={false} battery={null} delay={0} iconHtml="" statusLabelOpen="Abierto" statusLabelClosed="Cerrado" />);
+  expect(instantHtml).toContain('⚡ 0s');
+
+  const delayedHtml = renderToStaticMarkup(<SensorChip id="binary_sensor.garage" name="Garaje" isOpen={false}
+    isBlocking={false} battery={null} delay={45} iconHtml="" statusLabelOpen="Abierto" statusLabelClosed="Cerrado" />);
+  expect(delayedHtml).toContain('⏱️ 45s');
+});

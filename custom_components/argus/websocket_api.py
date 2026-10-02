@@ -194,6 +194,9 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_argus_get_profile_theme)
     websocket_api.async_register_command(hass, ws_argus_save_profile_theme)
     websocket_api.async_register_command(hass, ws_argus_validate_master_pin)
+    websocket_api.async_register_command(hass, ws_argus_start_walk_test)
+    websocket_api.async_register_command(hass, ws_argus_stop_walk_test)
+    websocket_api.async_register_command(hass, ws_argus_get_walk_test_status)
 
 
 @websocket_api.websocket_command({
@@ -533,7 +536,7 @@ async def ws_argus_get_mode_config(hass, connection, msg) -> None:
 
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/save_mode_config",
-    vol.Required("mode"): vol.In(["disarmed", "home", "away", "night", "vacation"]),
+    vol.Required("mode"): vol.In(["disarmed", "home", "away", "night"]),
     vol.Optional("entity_id", default=""): str,
     vol.Optional("entry_id"): str,
     vol.Required("config"): dict,
@@ -1337,7 +1340,7 @@ async def ws_argus_logout_profile(hass, connection, msg) -> None:
 @websocket_api.websocket_command({
     vol.Required("type"): "argus/perform_alarm_action",
     vol.Optional("entry_id"): str,
-    vol.Required("action"): vol.In(["arm_home", "arm_away", "arm_night", "arm_vacation", "disarm", "sos"]),
+    vol.Required("action"): vol.In(["arm_home", "arm_away", "arm_night", "disarm", "sos"]),
     vol.Optional("code"): str,
 })
 @websocket_api.async_response
@@ -1570,3 +1573,83 @@ async def ws_argus_save_profile_theme(hass, connection, msg) -> None:
             
     await async_save_ui_data(hass, {"users": users}, entry_id)
     connection.send_result(msg["id"], {"success": True})
+
+
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/start_walk_test",
+    vol.Optional("entry_id"): str,
+    vol.Optional("timeout_seconds", default=900): int,
+})
+@websocket_api.async_response
+async def ws_argus_start_walk_test(hass, connection, msg) -> None:
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
+    try:
+        profile, _ = await _require_argus_session(hass, connection, entry_id)
+    except ArgusAuthError as err:
+        connection.send_error(msg["id"], err.code, err.message)
+        return
+
+    from .const import DOMAIN, DATA_PANELS
+    from .core.walk_test import async_get_walk_test_manager
+    panels = hass.data.get(DOMAIN, {}).get(DATA_PANELS, {})
+    panel = panels.get(entry_id)
+    sensors = panel._all_sensors() if panel and hasattr(panel, "_all_sensors") else []
+
+    wt_mgr = async_get_walk_test_manager(hass)
+    session = wt_mgr.start_walk_test(
+        entry_id=entry_id,
+        sensors=sensors,
+        timeout_seconds=msg.get("timeout_seconds", 900),
+        started_by=profile.get("name", "Usuario"),
+    )
+    await async_append_audit_log(
+        hass, "walk_test_started", f"Prueba de sensores iniciada ({len(sensors)} sensores en monitoreo)",
+        user=profile.get("name", "Usuario"), entry_id=entry_id
+    )
+    connection.send_result(msg["id"], session.to_dict())
+
+
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/stop_walk_test",
+    vol.Optional("entry_id"): str,
+})
+@websocket_api.async_response
+async def ws_argus_stop_walk_test(hass, connection, msg) -> None:
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
+    try:
+        profile, _ = await _require_argus_session(hass, connection, entry_id)
+    except ArgusAuthError as err:
+        connection.send_error(msg["id"], err.code, err.message)
+        return
+
+    from .core.walk_test import async_get_walk_test_manager
+    wt_mgr = async_get_walk_test_manager(hass)
+    report = wt_mgr.stop_walk_test(entry_id)
+    if report:
+        tested = report.get("tested_count", 0)
+        total = report.get("total_sensors", 0)
+        await async_append_audit_log(
+            hass, "walk_test_completed", f"Prueba de sensores completada: {tested} de {total} sensores verificados",
+            user=profile.get("name", "Usuario"), entry_id=entry_id
+        )
+    connection.send_result(msg["id"], report or {"active": False})
+
+
+@websocket_api.websocket_command({
+    vol.Required("type"): "argus/get_walk_test_status",
+    vol.Optional("entry_id"): str,
+})
+@websocket_api.async_response
+async def ws_argus_get_walk_test_status(hass, connection, msg) -> None:
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
+    try:
+        await _require_argus_session(hass, connection, entry_id)
+    except ArgusAuthError as err:
+        connection.send_error(msg["id"], err.code, err.message)
+        return
+
+    from .core.walk_test import async_get_walk_test_manager
+    wt_mgr = async_get_walk_test_manager(hass)
+    session = wt_mgr.get_session(entry_id)
+    connection.send_result(msg["id"], session.to_dict() if session else {"active": False, "entry_id": entry_id})
+

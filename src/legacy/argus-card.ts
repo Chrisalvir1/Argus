@@ -337,7 +337,6 @@ class ArgusPanelCard extends HTMLElement {
             <button class="basic-mode ${state==='armed_home'?'active':''}" data-service="alarm_arm_home">🏠 ${copy.home}</button>
             <button class="basic-mode ${state==='armed_away'?'active':''}" data-service="alarm_arm_away">🔒 ${copy.away}</button>
             <button class="basic-mode ${state==='armed_night'?'active':''}" data-service="alarm_arm_night">🌙 ${copy.night}</button>
-            <button class="basic-mode ${state==='armed_vacation'?'active':''}" data-service="alarm_arm_vacation">✈️ ${copy.vacation}</button>
             <button class="basic-mode ${state==='disarmed'?'active':''}" data-service="alarm_disarm">🔓 ${copy.disarm}</button>
           </div>
           <div class="basic-shield">${state==='triggered'?'🚨':'🛡️'}</div>

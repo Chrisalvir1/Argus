@@ -21,7 +21,6 @@ _ARMED_STATES = {
     AlarmControlPanelState.ARMED_HOME,
     AlarmControlPanelState.ARMED_AWAY,
     AlarmControlPanelState.ARMED_NIGHT,
-    AlarmControlPanelState.ARMED_VACATION,
 }
 
 

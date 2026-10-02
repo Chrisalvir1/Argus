@@ -22,7 +22,6 @@ _VALID_TARGETS = {
     "armed_home",
     "armed_away",
     "armed_night",
-    "armed_vacation",
 }
 
 
@@ -65,7 +64,6 @@ def _patch_homekit_security_system() -> bool:
         "armed_home": homekit.HK_ALARM_STAY_ARMED,
         "armed_away": homekit.HK_ALARM_AWAY_ARMED,
         "armed_night": homekit.HK_ALARM_NIGHT_ARMED,
-        "armed_vacation": homekit.HK_ALARM_AWAY_ARMED,
     }
 
     @callback

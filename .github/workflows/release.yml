@@ -97,7 +97,8 @@ jobs:
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
             gh release upload "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 --clobber
           elif [[ -f "$NOTES" ]]; then
-            gh release create "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 --title "Argus Home Hub $GITHUB_REF_NAME — Security, HAP & Dashboard Improvements" --notes-file "$NOTES"
+            TITLE="$(sed -n '1s/^# //p' "$NOTES")"
+            gh release create "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 --title "$TITLE" --notes-file "$NOTES"
           else
             gh release create "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 --title "Argus Home Hub $GITHUB_REF_NAME" --generate-notes
           fi

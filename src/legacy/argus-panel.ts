@@ -5,7 +5,7 @@
  * Fixes: inline CSS animated weather (rain/storm/snow/stars/moon/sun),
  *        temperature from dedicated local sensor with weather fallback,
  *        DESARMADO button active state when disarmed,
- *        per-instance fullscreen, vacation quick action, numeric PIN dial pad,
+ *        per-instance fullscreen, numeric PIN dial pad,
  *        mode tabs including disarmed.
  * v0.9.26: Fix light-mode invisible text (mode-section-title/sensor-pill),
  *          selector panel-right not showing selected items,
@@ -60,7 +60,6 @@ const TEXTS = {
     'armed_away': 'Ausente',
     'armed_home': 'En Casa',
     'armed_night': 'Noche',
-    'armed_vacation': 'Vacaciones',
     'arming': 'Armando',
     'automations': 'Automatizaciones',
     'available': 'Disponibles',
@@ -92,7 +91,6 @@ const TEXTS = {
     'btn_home': '🏠 En Casa',
     'btn_night': '🌙 Noche',
     'btn_sos': '🚨 SOS / PÁNICO',
-    'btn_vacation': '✈️ Vacaciones',
     'bypass_lbl': '🚫 Omitir',
     'cancel': 'Cancelar',
     'cancel_btn': 'Cancelar',
@@ -295,7 +293,6 @@ const TEXTS = {
     'mode_away': 'Ausente',
     'mode_home': 'En Casa',
     'mode_night': 'Noche',
-    'mode_vacation': 'Vacaciones',
     'modes': 'Modos / SOS',
     'modes_sos': 'Modos / SOS',
     'system_diagnostics': 'Diagnóstico y Resumen del Sistema',
@@ -475,13 +472,27 @@ const TEXTS = {
     'user_role_label': 'Rol del Usuario',
     'username': 'Nombre de Usuario',
     'users_title': '👥 Control de Acceso y Usuarios',
-    'vacation': 'Vacaciones',
     'wait_if_open': 'Esperar armado en espera',
     'waiting_sensors': 'Esperando sensores',
     'waiting_sensors_count': 'Esperando {count} sensor(es)',
     'welcome_greeting': '¡Hola de nuevo!',
     'welcome_profile': 'Bienvenido, {name}',
     'wrong_pin': 'PIN incorrecto',
+    'walk_test': 'Prueba de Sensores (Walk Test)',
+    'walk_test_btn': '🚶 Prueba de Sensores',
+    'walk_test_desc': 'Camina y prueba cada sensor sin activar sirenas. Recibirás un aviso sonoro cuando responda cada detector.',
+    'walk_test_active': 'Prueba de sensores en curso',
+    'walk_test_completed': 'Prueba completada',
+    'walk_test_stop': 'Finalizar Prueba',
+    'walk_test_close': 'Cerrar',
+    'walk_test_progress': '{tested} de {total} sensores verificados ({pct}%)',
+    'walk_test_waiting': 'Esperando activación de sensores...',
+    'walk_test_time_left': 'Tiempo restante',
+    'sensor_delay_cfg_title': 'Configurar retardo del sensor',
+    'sensor_delay_instant': '⚡ Instantáneo (0s - Disparo inmediato)',
+    'sensor_delay_custom': '⏱️ Retardo personalizado',
+    'sensor_delay_default': '🌐 Heredar retardo global del modo',
+    'sensor_delay_seconds': 'Segundos de retardo',
   },
   'en': {
     'accept': 'Accept',
@@ -510,7 +521,6 @@ const TEXTS = {
     'armed_away': 'Away',
     'armed_home': 'Home',
     'armed_night': 'Night',
-    'armed_vacation': 'Vacation',
     'arming': 'Arming',
     'automations': 'Automations',
     'available': 'Available',
@@ -542,7 +552,6 @@ const TEXTS = {
     'btn_home': '🏠 Home',
     'btn_night': '🌙 Night',
     'btn_sos': '🚨 SOS / PANIC',
-    'btn_vacation': '✈️ Vacation',
     'bypass_lbl': '🚫 Bypass',
     'cancel': 'Cancel',
     'cancel_btn': 'Cancel',
@@ -745,7 +754,6 @@ const TEXTS = {
     'mode_away': 'Away',
     'mode_home': 'Home',
     'mode_night': 'Night',
-    'mode_vacation': 'Vacation',
     'modes': 'Modes / SOS',
     'modes_sos': 'Modes / SOS',
     'system_diagnostics': 'System Diagnostics & Summary',
@@ -925,13 +933,27 @@ const TEXTS = {
     'user_role_label': 'User Role',
     'username': 'Username',
     'users_title': '👥 Users & Access Control',
-    'vacation': 'Vacation',
     'wait_if_open': 'Wait for sensors to close',
     'waiting_sensors': 'Waiting for sensors',
     'waiting_sensors_count': 'Waiting for {count} sensor(s)',
     'welcome_greeting': 'Welcome back!',
     'welcome_profile': 'Welcome, {name}',
     'wrong_pin': 'Wrong PIN',
+    'walk_test': 'Walk Test (Sensor Verification)',
+    'walk_test_btn': '🚶 Sensor Walk Test',
+    'walk_test_desc': 'Walk and test each sensor without sounding sirens. You will hear an audio chime each time a detector triggers.',
+    'walk_test_active': 'Walk test session in progress',
+    'walk_test_completed': 'Walk test completed',
+    'walk_test_stop': 'End Test',
+    'walk_test_close': 'Close',
+    'walk_test_progress': '{tested} of {total} sensors verified ({pct}%)',
+    'walk_test_waiting': 'Waiting for sensor triggers...',
+    'walk_test_time_left': 'Time remaining',
+    'sensor_delay_cfg_title': 'Configure Sensor Delay',
+    'sensor_delay_instant': '⚡ Instant (0s - Immediate trigger)',
+    'sensor_delay_custom': '⏱️ Custom delay',
+    'sensor_delay_default': '🌐 Inherit mode global delay',
+    'sensor_delay_seconds': 'Delay seconds',
   },
 };
 
@@ -1401,10 +1423,6 @@ _tmpl.innerHTML = `
     background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(29, 78, 216, 0.92));
     box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(59, 130, 246, 0.42), 0 2px 8px rgba(0, 0, 0, 0.25);
   }
-  .tab-bubble.bubble-vacation {
-    background: linear-gradient(135deg, rgba(168, 85, 247, 0.95), rgba(126, 34, 206, 0.92));
-    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 24px rgba(168, 85, 247, 0.42), 0 2px 8px rgba(0, 0, 0, 0.25);
-  }
   .tab-bubble.bubble-sos {
     background: linear-gradient(135deg, rgba(220, 38, 38, 0.98), rgba(153, 27, 27, 0.95));
     box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.55), 0 8px 26px rgba(220, 38, 38, 0.55), 0 2px 8px rgba(0, 0, 0, 0.25);
@@ -1805,12 +1823,6 @@ _tmpl.innerHTML = `
     border-color: rgba(30,136,229,0.60);
     box-shadow: 0 0 16px rgba(30,136,229,0.25), inset 0 1px 0 rgba(255,255,255,0.18);
   }
-  .console-system-badge--armed_vacation {
-    color: #e9d5ff;
-    background: rgba(156,39,176,0.20);
-    border-color: rgba(156,39,176,0.60);
-    box-shadow: 0 0 16px rgba(156,39,176,0.25), inset 0 1px 0 rgba(255,255,255,0.18);
-  }
   .console-system-badge--triggered {
     color: #fff;
     background: rgba(239,68,68,0.35);
@@ -1911,7 +1923,7 @@ _tmpl.innerHTML = `
   .mode-btn-icon{width:26px;height:26px;padding:5px;border-radius:10px;flex:0 0 auto;background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 4px 10px rgba(0,0,0,.16);filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}
   .liquid-btn.active .mode-btn-icon{background:linear-gradient(135deg,rgba(255,255,255,.36),rgba(255,255,255,.12));border-color:rgba(255,255,255,.42)}
   .btn-sos .mode-btn-icon{width:28px;height:28px;border-radius:11px;background:rgba(255,255,255,.17)}
-  .liquid-btn:not(.btn-home):not(.btn-away):not(.btn-night):not(.btn-vacation):not(.btn-disarm):not(.btn-sos):hover{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.2)}
+  .liquid-btn:not(.btn-home):not(.btn-away):not(.btn-night):not(.btn-disarm):not(.btn-sos):hover{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.2)}
   .liquid-btn.active{background:var(--btn-bg, rgba(255,255,255,0.2));border-color:rgba(255,255,255,0.4);box-shadow:0 8px 24px var(--btn-shadow, rgba(255,255,255,0.12))}
   .liquid-btn:active:not(:disabled) { transform: scale(0.96); }
   .liquid-btn i{font-size:16px}
@@ -1954,20 +1966,6 @@ _tmpl.innerHTML = `
     background: linear-gradient(135deg, #1e88e5 0%, #1d4ed8 100%) !important;
     border: 1px solid rgba(191, 219, 254, 0.85) !important;
     box-shadow: 0 14px 36px rgba(30, 136, 229, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
-    color: #ffffff !important;
-    transform: translateY(-2px);
-  }
-
-  .btn-vacation {
-    background: linear-gradient(135deg, rgba(156, 39, 176, 0.20) 0%, rgba(156, 39, 176, 0.06) 100%) !important;
-    border: 1px solid rgba(156, 39, 176, 0.38) !important;
-    color: #e1bee7 !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
-  }
-  .btn-vacation.active {
-    background: linear-gradient(135deg, #9c27b0 0%, #7e22ce 100%) !important;
-    border: 1px solid rgba(245, 208, 254, 0.85) !important;
-    box-shadow: 0 14px 36px rgba(156, 39, 176, 0.60), inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
     color: #ffffff !important;
     transform: translateY(-2px);
   }
@@ -2022,7 +2020,7 @@ _tmpl.innerHTML = `
   }
 
   .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
-  .badge.armed_away,.badge.armed_vacation{background:rgba(229,57,53,.12);color:var(--error-color,#e53935)}
+  .badge.armed_away{background:rgba(229,57,53,.12);color:var(--error-color,#e53935)}
   .badge.armed_home,.badge.armed_night{background:rgba(251,140,0,.12);color:#fb8c00}
   .badge.disarmed{background:rgba(67,160,71,.12);color:var(--success-color,#43a047)}
   .badge.triggered{background:rgba(229,57,53,.2);color:var(--error-color,#e53935);animation:pulse 1s ease-in-out infinite}
@@ -2360,6 +2358,51 @@ _tmpl.innerHTML = `
   transition:background 0.18s;
 }
 .lang-close-btn:hover { background:rgba(255,255,255,0.2); }
+
+/* Walk Test Modal & Delay Styles */
+.walk-test-modal-back { position:fixed; inset:0; background:rgba(0,0,0,0.65); display:none; align-items:center; justify-content:center; z-index:999998; backdrop-filter:blur(6px); }
+.walk-test-modal-back.open { display:flex; }
+.walk-test-modal-card {
+  width:min(520px,94vw); max-height:85vh; border-radius:24px; padding:24px;
+  background:rgba(18,22,34,0.95); border:1px solid rgba(255,255,255,0.14);
+  box-shadow:0 32px 80px rgba(0,0,0,0.6); backdrop-filter:blur(16px);
+  color:#fff; display:flex; flex-direction:column; gap:16px; overflow:hidden;
+  animation: langBounceIn 0.35s cubic-bezier(0.175,0.885,0.32,1.275) forwards;
+}
+.walk-test-header { display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:12px; }
+.walk-test-title { font-size:17px; font-weight:800; display:flex; align-items:center; gap:8px; }
+.walk-test-timer { font-size:12px; font-weight:700; color:#38bdf8; background:rgba(56,189,248,0.12); padding:3px 10px; border-radius:12px; border:1px solid rgba(56,189,248,0.25); }
+.walk-test-progress-bar { width:100%; height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden; }
+.walk-test-progress-fill { height:100%; background:linear-gradient(90deg, #38bdf8, #4ade80); transition:width 0.3s ease; }
+.walk-test-sensor-list { display:grid; gap:8px; max-height:45vh; overflow-y:auto; padding-right:4px; }
+.walk-test-sensor-item {
+  display:flex; align-items:center; justify-content:space-between; padding:10px 14px;
+  border-radius:12px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07);
+  transition:all 0.2s ease;
+}
+.walk-test-sensor-item.tested {
+  background:rgba(74,222,128,0.12); border-color:rgba(74,222,128,0.3);
+}
+.walk-test-sensor-item.just-tested {
+  animation: testPulse 0.8s ease;
+}
+@keyframes testPulse {
+  0% { transform: scale(1); background: rgba(74,222,128,0.4); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); background: rgba(74,222,128,0.12); }
+}
+.pill-delay-btn {
+  background:none; border:none; color:inherit; cursor:pointer; padding:0; margin-left:4px;
+  display:inline-flex; align-items:center;
+}
+.pill-delay-badge {
+  font-size:9.5px; font-weight:800; padding:2px 6px; border-radius:6px;
+  display:inline-flex; align-items:center; gap:2px; transition:transform 0.15s;
+}
+.pill-delay-badge:hover { transform:scale(1.08); }
+.pill-delay-badge.instant { color:#38bdf8; background:rgba(56,189,248,0.15); border:1px solid rgba(56,189,248,0.3); }
+.pill-delay-badge.custom { color:#fbbf24; background:rgba(251,191,36,0.15); border:1px solid rgba(251,191,36,0.3); }
+.pill-delay-badge.inherited { color:rgba(255,255,255,0.5); background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); }
 
 /* Background File Manager Styles */
 .file-card {
@@ -3064,6 +3107,65 @@ _tmpl.innerHTML = `
   </div>
 </div>
 
+<!-- Walk Test Modal -->
+<div class="walk-test-modal-back" id="walk-test-modal" aria-hidden="true">
+  <div class="walk-test-modal-card">
+    <div class="walk-test-header">
+      <div class="walk-test-title">🚶 <span id="walk-test-title-text">Prueba de Sensores (Walk Test)</span></div>
+      <div class="walk-test-timer" id="walk-test-timer">15:00</div>
+    </div>
+    <p style="margin:0;font-size:12px;opacity:0.75;line-height:1.4" id="walk-test-desc-text">
+      Camina y activa cada sensor. No sonarán sirenas. Se emitirá un aviso sonoro por cada detector probado.
+    </p>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:700">
+        <span id="walk-test-progress-text">0 de 0 sensores verificados (0%)</span>
+        <span id="walk-test-status-badge" style="color:#38bdf8">En curso</span>
+      </div>
+      <div class="walk-test-progress-bar">
+        <div class="walk-test-progress-fill" id="walk-test-progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+    <div class="walk-test-sensor-list" id="walk-test-sensor-list"></div>
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:4px">
+      <button class="ghost" id="walk-test-close-btn" style="padding:9px 18px;border-radius:12px;font-size:12px;font-weight:700">Cerrar</button>
+      <button class="primary" id="walk-test-stop-btn" style="padding:9px 20px;border-radius:12px;font-size:12px;font-weight:700;background:linear-gradient(135deg,#ef4444,#dc2626)">Finalizar Prueba</button>
+    </div>
+  </div>
+</div>
+
+<!-- Sensor Delay Modal -->
+<div class="walk-test-modal-back" id="sensor-delay-modal" aria-hidden="true">
+  <div class="walk-test-modal-card" style="width:min(420px,92vw)">
+    <div class="walk-test-header">
+      <div class="walk-test-title">⏱️ <span id="sensor-delay-modal-title">Configurar retardo del sensor</span></div>
+    </div>
+    <div style="font-size:13px;font-weight:700;color:#38bdf8" id="sensor-delay-modal-entity">sensor.example</div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin:8px 0">
+      <label style="display:flex;align-items:center;gap:10px;font-size:12.5px;cursor:pointer">
+        <input type="radio" name="sensor-delay-mode" value="default" id="delay-opt-default" checked>
+        <span id="txt-delay-opt-default">🌐 Heredar retardo global del modo</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:10px;font-size:12.5px;cursor:pointer">
+        <input type="radio" name="sensor-delay-mode" value="instant" id="delay-opt-instant">
+        <span id="txt-delay-opt-instant">⚡ Instantáneo (0s - Disparo inmediato)</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:10px;font-size:12.5px;cursor:pointer">
+        <input type="radio" name="sensor-delay-mode" value="custom" id="delay-opt-custom">
+        <span id="txt-delay-opt-custom">⏱️ Retardo personalizado</span>
+      </label>
+      <div id="delay-custom-input-wrap" style="display:none;padding-left:26px;gap:8px;align-items:center">
+        <input type="number" id="sensor-delay-seconds-input" min="1" max="300" value="30" style="width:80px;padding:6px 10px;border-radius:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:13px">
+        <span style="font-size:12px;opacity:0.75" id="txt-delay-seconds-label">segundos</span>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:6px">
+      <button class="ghost" id="sensor-delay-cancel-btn" style="padding:8px 16px;border-radius:12px;font-size:12px">Cancelar</button>
+      <button class="primary" id="sensor-delay-save-btn" style="padding:8px 20px;border-radius:12px;font-size:12px;font-weight:700">Guardar</button>
+    </div>
+  </div>
+</div>
+
 <!-- SOS Confirm Modal -->
 <div class="ios-confirm-backdrop" id="sos-modal" style="display:none">
   <div class="ios-confirm-card liquid-glass" id="sos-card" style="position:relative;">
@@ -3150,7 +3252,10 @@ _tmpl.innerHTML = `
           <div class="system-info-compact-card glass-subpanel" style="padding:14px 18px;border-radius:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);margin-bottom:14px;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:6px;">
               <span id="system-diagnostics-txt" style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;color:rgba(255,255,255,0.85)">ℹ️ Diagnóstico y Resumen del Sistema</span>
-              <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;background:rgba(74,222,128,0.15);color:#4ade80;border:1px solid rgba(74,222,128,0.3)">✓ Operativo</span>
+              <div style="display:flex;align-items:center;gap:8px">
+                <button type="button" class="ghost" id="btn-start-walk-test" style="font-size:11px;font-weight:700;padding:2px 10px;border-radius:8px;background:rgba(56,189,248,0.12);color:#38bdf8;border:1px solid rgba(56,189,248,0.3);cursor:pointer">🚶 Prueba de Sensores</button>
+                <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;background:rgba(74,222,128,0.15);color:#4ade80;border:1px solid rgba(74,222,128,0.3)">✓ Operativo</span>
+              </div>
             </div>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;font-size:11px;">
               <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05)">
@@ -3422,6 +3527,7 @@ class ArgusPanel extends HTMLElement {
     this._clockFormat = 'auto';
     this._profileSelectedThisMount = false;
     this._welcomeShownThisMount = false;
+    this._historyPDFLogoPromise = null;
     this._panicOutputs = undefined;
     this._initPromise = null;
     this._staticBound = false;
@@ -3670,12 +3776,17 @@ class ArgusPanel extends HTMLElement {
       });
     };
     collectConfiguredSensors(this._ui?.modes);
+    if (Array.isArray(this._sensors)) this._sensors.forEach(sensor => {
+      const id = typeof sensor === 'string' ? sensor : sensor?.entity_id || sensor?.id;
+      if (id) configuredSensors.add(id);
+    });
     const sensorChanged = Boolean(oldHass) && [...configuredSensors].some(id => {
       const previous = oldHass.states[id];
       const current = hass.states[id];
       return previous?.state !== current?.state
         || previous?.attributes?.battery_level !== current?.attributes?.battery_level
-        || previous?.attributes?.battery_percentage !== current?.attributes?.battery_percentage;
+        || previous?.attributes?.battery_percentage !== current?.attributes?.battery_percentage
+        || previous?.attributes?.battery !== current?.attributes?.battery;
     });
 
     const batteryChanged = Boolean(oldHass) && Object.values(hass.states).some(current => {
@@ -3688,13 +3799,19 @@ class ArgusPanel extends HTMLElement {
     if (alarmChanged || sensorChanged || batteryChanged || tempChanged || clockChanged || weatherChanged || !oldHass) {
       this._renderEntries();
       this._renderActivityLog();
+      // Refresh React views from the newest Home Assistant state snapshot.
+      this.dispatchEvent(new CustomEvent("argus-state-update"));
       // Only re-render setup views if they are visible or if it's the first load
       if (!oldHass) {
         this._renderModeTabs();
-        this._renderModeView(); this._renderEntries(); this.dispatchEvent(new CustomEvent("argus-state-update"));
+        this._renderModeView(); this._renderEntries();
         this._renderAutomations();
         this._renderNotifications();
         if (this._activeAccessSection === 'users') this._renderUsers();
+      } else if (sensorChanged || batteryChanged) {
+        if (this.shadowRoot?.getElementById('mode-view')) {
+          this._renderModeView();
+        }
       }
     }
   }
@@ -3783,6 +3900,246 @@ class ArgusPanel extends HTMLElement {
 
   _closeLangModal() {
     this.shadowRoot.getElementById('lang-modal')?.classList.remove('open');
+  }
+
+  /* ── Walk Test (Sensor Verification) ────────────────────────────────── */
+  _playWalkTestChime() {
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(880, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(1760, ctx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.18, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.36);
+    } catch (e) {
+      // Audio autoplay policy fallback
+    }
+  }
+
+  async _openWalkTest() {
+    const modal = this.shadowRoot.getElementById('walk-test-modal');
+    if (!modal) return;
+    try {
+      const res = await this._send('argus/start_walk_test', { timeout_seconds: 900 });
+      this._walkTestSession = res;
+      this._renderWalkTestModal(res);
+      modal.classList.add('open');
+      this._startWalkTestPoll();
+    } catch (err: any) {
+      alert(err.message || 'Error starting walk test');
+    }
+  }
+
+  _closeWalkTestModal() {
+    this.shadowRoot.getElementById('walk-test-modal')?.classList.remove('open');
+  }
+
+  async _stopWalkTest() {
+    try {
+      const res = await this._send('argus/stop_walk_test');
+      this._walkTestSession = res;
+      this._renderWalkTestModal(res);
+      this._stopWalkTestPoll();
+    } catch (err: any) {
+      console.error('Error stopping walk test:', err);
+    }
+  }
+
+  _startWalkTestPoll() {
+    this._stopWalkTestPoll();
+    this._walkTestTimer = setInterval(async () => {
+      const modal = this.shadowRoot.getElementById('walk-test-modal');
+      if (!modal?.classList.contains('open') && !this._walkTestSession?.active) {
+        this._stopWalkTestPoll();
+        return;
+      }
+      try {
+        const status = await this._send('argus/get_walk_test_status');
+        const prevTested = this._walkTestSession?.tested_count || 0;
+        this._walkTestSession = status;
+        if (status.tested_count > prevTested) {
+          this._playWalkTestChime();
+        }
+        this._renderWalkTestModal(status);
+        if (!status.active) {
+          this._stopWalkTestPoll();
+        }
+      } catch (e) {
+        // WS error
+      }
+    }, 2000);
+  }
+
+  _stopWalkTestPoll() {
+    if (this._walkTestTimer) {
+      clearInterval(this._walkTestTimer);
+      this._walkTestTimer = null;
+    }
+  }
+
+  _renderWalkTestModal(session: any) {
+    const root = this.shadowRoot;
+    if (!root || !session) return;
+
+    const timerEl = root.getElementById('walk-test-timer');
+    const progTextEl = root.getElementById('walk-test-progress-text');
+    const badgeEl = root.getElementById('walk-test-status-badge');
+    const fillEl = root.getElementById('walk-test-progress-fill');
+    const listEl = root.getElementById('walk-test-sensor-list');
+    const stopBtn = root.getElementById('walk-test-stop-btn') as HTMLElement | null;
+
+    const total = session.total_sensors || session.sensors?.length || 0;
+    const tested = session.tested_count || (session.tested_sensors || []).length || 0;
+    const pct = total > 0 ? Math.round((tested / total) * 100) : 0;
+    const isActive = session.active !== false;
+
+    if (stopBtn) {
+      stopBtn.style.display = isActive ? 'block' : 'none';
+    }
+
+    if (timerEl) {
+      const rem = session.remaining_seconds ?? 0;
+      const m = Math.floor(rem / 60);
+      const s = rem % 60;
+      timerEl.textContent = isActive ? `${m}:${s.toString().padStart(2, '0')}` : (this._t('walk_test_completed') || 'Completado');
+    }
+
+    if (badgeEl) {
+      badgeEl.textContent = isActive ? (this._t('walk_test_active') || 'En curso') : (this._t('walk_test_completed') || 'Completado');
+      badgeEl.style.color = isActive ? '#38bdf8' : '#4ade80';
+    }
+
+    if (progTextEl) {
+      progTextEl.textContent = this._format('walk_test_progress', { tested, total, pct });
+    }
+
+    if (fillEl) {
+      fillEl.style.width = `${pct}%`;
+    }
+
+    if (listEl) {
+      const sensors: string[] = session.sensors || [];
+      const testedMap = session.tested_sensors_detail || {};
+      const testedList: string[] = session.tested_sensors || [];
+
+      listEl.innerHTML = sensors.map(id => {
+        const isTested = testedList.includes(id) || Boolean(testedMap[id]);
+        const testInfo = testedMap[id];
+        const stateObj = this._hass?.states?.[id];
+        const name = stateObj?.attributes?.friendly_name || id;
+
+        let timeStr = '';
+        if (testInfo?.timestamp) {
+          const d = new Date(testInfo.timestamp * 1000);
+          timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+
+        return `
+          <div class="walk-test-sensor-item ${isTested ? 'tested' : ''}">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:18px">${isTested ? '✅' : '⏳'}</span>
+              <div>
+                <div style="font-size:13px;font-weight:700">${this._escapeHtml(name)}</div>
+                <div style="font-size:10.5px;opacity:0.6">${this._escapeHtml(id)}</div>
+              </div>
+            </div>
+            <div style="text-align:right">
+              <span style="font-size:11px;font-weight:700;color:${isTested ? '#4ade80' : 'rgba(255,255,255,0.5)'}">
+                ${isTested ? (timeStr ? `✓ ${timeStr}` : '✓ Probado') : 'Pendiente'}
+              </span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+
+  /* ── Per-Sensor Delay Settings ────────────────────────────────────── */
+  _openSensorDelayModal(entityId: string) {
+    this._editingSensorDelayId = entityId;
+    const modal = this.shadowRoot.getElementById('sensor-delay-modal');
+    if (!modal) return;
+
+    const stateObj = this._hass?.states?.[entityId];
+    const name = stateObj?.attributes?.friendly_name || entityId;
+    const entityLbl = this.shadowRoot.getElementById('sensor-delay-modal-entity');
+    if (entityLbl) entityLbl.textContent = `${name} (${entityId})`;
+
+    const cfg = this._currentModeConfig();
+    const sSettings = cfg.sensor_settings?.[entityId] || {};
+    const isInstant = sSettings.type === 'instant' || sSettings.delay === 0;
+    const customDelay = sSettings.delay;
+
+    const optDefault = this.shadowRoot.getElementById('delay-opt-default') as HTMLInputElement | null;
+    const optInstant = this.shadowRoot.getElementById('delay-opt-instant') as HTMLInputElement | null;
+    const optCustom  = this.shadowRoot.getElementById('delay-opt-custom') as HTMLInputElement | null;
+    const secInp     = this.shadowRoot.getElementById('sensor-delay-seconds-input') as HTMLInputElement | null;
+
+    if (isInstant && optInstant) {
+      optInstant.checked = true;
+    } else if (customDelay !== undefined && customDelay !== null && optCustom) {
+      optCustom.checked = true;
+      if (secInp) secInp.value = String(customDelay);
+    } else if (optDefault) {
+      optDefault.checked = true;
+    }
+
+    this._updateDelayOptionsUi();
+    modal.classList.add('open');
+  }
+
+  _updateDelayOptionsUi() {
+    const optCustom = this.shadowRoot.getElementById('delay-opt-custom') as HTMLInputElement | null;
+    const wrap = this.shadowRoot.getElementById('delay-custom-input-wrap');
+    if (wrap) {
+      wrap.style.display = optCustom?.checked ? 'flex' : 'none';
+    }
+  }
+
+  _closeSensorDelayModal() {
+    this.shadowRoot.getElementById('sensor-delay-modal')?.classList.remove('open');
+    this._editingSensorDelayId = null;
+  }
+
+  _saveSensorDelay() {
+    const entityId = this._editingSensorDelayId;
+    if (!entityId) return;
+
+    const optDefault = this.shadowRoot.getElementById('delay-opt-default') as HTMLInputElement | null;
+    const optInstant = this.shadowRoot.getElementById('delay-opt-instant') as HTMLInputElement | null;
+    const optCustom  = this.shadowRoot.getElementById('delay-opt-custom') as HTMLInputElement | null;
+    const secInp     = this.shadowRoot.getElementById('sensor-delay-seconds-input') as HTMLInputElement | null;
+
+    const cfg = this._currentModeConfig();
+    cfg.sensor_settings = cfg.sensor_settings || {};
+
+    if (optInstant?.checked) {
+      cfg.sensor_settings[entityId] = { type: 'instant', delay: 0 };
+    } else if (optCustom?.checked) {
+      const val = parseInt(secInp?.value || '30', 10);
+      cfg.sensor_settings[entityId] = { delay: isNaN(val) ? 30 : Math.max(1, val) };
+    } else {
+      delete cfg.sensor_settings[entityId];
+    }
+
+    let eId = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id || 'default';
+    this._modeEntryId = eId;
+    this._ui.modes.__by_entity__ = this._ui.modes.__by_entity__ || {};
+    this._ui.modes.__by_entity__[eId] = this._ui.modes.__by_entity__[eId] || {};
+    this._ui.modes.__by_entity__[eId][this._mode] = { ...cfg };
+
+    this._closeSensorDelayModal();
+    this._renderModeView();
+    this._renderEntries();
+    this.dispatchEvent(new CustomEvent("argus-state-update"));
   }
 
   _setLanguage(code) {
@@ -3947,6 +4304,18 @@ class ArgusPanel extends HTMLElement {
     set('sos-text-txt',         t('sos_confirm_text'));
     set('sos-label',            t('sos_slide'));
     set('system-diagnostics-txt', 'ℹ️ ' + (t('system_diagnostics') || 'Diagnóstico y Resumen del Sistema'));
+    set('btn-start-walk-test', t('walk_test_btn') || '🚶 Prueba de Sensores');
+    set('walk-test-title-text', t('walk_test') || 'Prueba de Sensores (Walk Test)');
+    set('walk-test-desc-text', t('walk_test_desc'));
+    set('walk-test-close-btn', t('walk_test_close') || 'Cerrar');
+    set('walk-test-stop-btn', t('walk_test_stop') || 'Finalizar Prueba');
+    set('sensor-delay-modal-title', t('sensor_delay_cfg_title'));
+    set('txt-delay-opt-default', t('sensor_delay_default'));
+    set('txt-delay-opt-instant', t('sensor_delay_instant'));
+    set('txt-delay-opt-custom', t('sensor_delay_custom'));
+    set('txt-delay-seconds-label', t('sensor_delay_seconds') || 'segundos');
+    set('sensor-delay-cancel-btn', t('cancel'));
+    set('sensor-delay-save-btn', t('save_btn'));
 
     set('home-name-modal-h3',   t('home_name_modal_title'));
     set('p-home-name-modal-desc', t('home_name_modal_desc'));
@@ -4350,12 +4719,15 @@ class ArgusPanel extends HTMLElement {
     const m = this.shadowRoot.getElementById('history-export-modal');
     if (!m) return;
     const now = new Date();
+    // Warm the logo while the user chooses the date range, avoiding network
+    // work after the PDF button's click gesture (notably Safari).
+    this._historyPDFLogoPromise ||= this._loadHistoryPDFLogo();
     const fromDate = new Date();
     fromDate.setDate(now.getDate() - 30);
     const fromInput = this.shadowRoot.getElementById('export-history-from') as HTMLInputElement | null;
     const toInput = this.shadowRoot.getElementById('export-history-to') as HTMLInputElement | null;
-    if (fromInput && !fromInput.value) fromInput.value = fromDate.toISOString().split('T')[0];
-    if (toInput && !toInput.value) toInput.value = now.toISOString().split('T')[0];
+    if (fromInput && !fromInput.value) fromInput.value = this._formatLocalDateInput(fromDate);
+    if (toInput && !toInput.value) toInput.value = this._formatLocalDateInput(now);
     m.classList.add('open');
     m.setAttribute('aria-hidden', 'false');
   }
@@ -4366,6 +4738,10 @@ class ArgusPanel extends HTMLElement {
       m.classList.remove('open');
       m.setAttribute('aria-hidden', 'true');
     }
+  }
+
+  _formatLocalDateInput(date) {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
   }
 
   _getFilteredHistory() {
@@ -4424,7 +4800,7 @@ class ArgusPanel extends HTMLElement {
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
-    anchor.download = `argus_historial_${new Date().toISOString().slice(0, 10)}.txt`;
+    anchor.download = `argus_historial_${this._formatLocalDateInput(new Date())}.txt`;
     anchor.click();
     setTimeout(() => URL.revokeObjectURL(url), 5000);
   }
@@ -4514,6 +4890,45 @@ class ArgusPanel extends HTMLElement {
     return translated !== key ? translated : (rawAction || this._t('history_unknown_event'));
   }
 
+  async _loadHistoryPDFLogo() {
+    try {
+      const response = await fetch(new URL('/api/argus_static/argus_logo.png', window.location.origin), { credentials: 'same-origin' });
+      if (!response.ok) return null;
+      const imageBlob = await response.blob();
+      const imageUrl = URL.createObjectURL(imageBlob);
+      const bitmap = new Image();
+      const loaded = new Promise<void>((resolve, reject) => {
+        bitmap.onload = () => resolve();
+        bitmap.onerror = () => reject(new Error('Argus logo image could not be decoded'));
+      });
+      try {
+        bitmap.src = imageUrl;
+        if (typeof bitmap.decode === 'function') await bitmap.decode();
+        else await loaded;
+      } finally {
+        URL.revokeObjectURL(imageUrl);
+      }
+      const size = 64;
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const context = canvas.getContext('2d');
+      if (!context) return null;
+      // Preserve the PNG's transparency against the report's dark header.
+      context.fillStyle = '#0c1426';
+      context.fillRect(0, 0, size, size);
+      const scale = Math.min(size / bitmap.naturalWidth, size / bitmap.naturalHeight);
+      const width = bitmap.naturalWidth * scale;
+      const height = bitmap.naturalHeight * scale;
+      context.drawImage(bitmap, (size - width) / 2, (size - height) / 2, width, height);
+      const jpeg = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.92));
+      return jpeg ? { bytes: new Uint8Array(await jpeg.arrayBuffer()), width: size, height: size } : null;
+    } catch (error) {
+      console.warn('Argus PDF logo could not be loaded:', error);
+      return null;
+    }
+  }
+
   _generateHistoryPDF(events, metadata) {
     const labels = metadata.labels;
     const PAGE_WIDTH = 612;
@@ -4523,7 +4938,10 @@ class ArgusPanel extends HTMLElement {
     const CONTENT_WIDTH = PAGE_WIDTH - MARGIN_LEFT * 2;
     const itemsPerPage = 22;
     const pagesCount = Math.max(1, Math.ceil(events.length / itemsPerPage));
-    const pageObjIds = Array.from({ length: pagesCount }, (_, index) => 5 + index * 2);
+    const logo = metadata.logo;
+    const logoObjectId = logo?.bytes?.length ? 5 : null;
+    const firstPageObjectId = logoObjectId ? 6 : 5;
+    const pageObjIds = Array.from({ length: pagesCount }, (_, index) => firstPageObjectId + index * 2);
 
     // Standard PDF fonts use WinAnsiEncoding. Keep Latin characters (including
     // Spanish accents) as single bytes so stream lengths and xref offsets agree.
@@ -4540,6 +4958,7 @@ class ArgusPanel extends HTMLElement {
       const pageEvents = events.slice(page * itemsPerPage, (page + 1) * itemsPerPage);
       let stream = '';
       stream += `q 0.05 0.08 0.15 rg 0 ${PAGE_HEIGHT - 72} ${PAGE_WIDTH} 72 re f Q\n`;
+      if (logoObjectId) stream += 'q 42 0 0 42 534 735 cm /ArgusLogo Do Q\n';
       stream += text('F2', 13, '1 1 1', MARGIN_LEFT, PAGE_HEIGHT - 31, labels.title);
       stream += text('F1', 8, '0.82 0.87 0.93', MARGIN_LEFT, PAGE_HEIGHT - 48, `${labels.home}: ${metadata.homeName}`);
       stream += text('F1', 8, '0.82 0.87 0.93', MARGIN_LEFT, PAGE_HEIGHT - 61, `${labels.range}: ${metadata.rangeFrom} - ${metadata.rangeTo}   |   ${labels.generated}: ${metadata.generatedAt}   |   ${labels.total}: ${events.length}`);
@@ -4575,10 +4994,15 @@ class ArgusPanel extends HTMLElement {
     addObject(2, `<< /Type /Pages /Kids [${pageObjIds.map(id => `${id} 0 R`).join(' ')}] /Count ${pagesCount} /MediaBox [0 0 ${PAGE_WIDTH} ${PAGE_HEIGHT}] >>`);
     addObject(3, '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>');
     addObject(4, '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>');
+    if (logoObjectId) {
+      const image = Array.from(logo.bytes, byte => String.fromCharCode(byte)).join('');
+      addObject(logoObjectId, `<< /Type /XObject /Subtype /Image /Width ${logo.width} /Height ${logo.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${logo.bytes.length} >>\nstream\n${image}\nendstream`);
+    }
     pages.forEach((stream, index) => {
       const pageId = pageObjIds[index];
       const contentId = pageId + 1;
-      addObject(pageId, `<< /Type /Page /Parent 2 0 R /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${contentId} 0 R >>`);
+      const imageResource = logoObjectId ? ` /XObject << /ArgusLogo ${logoObjectId} 0 R >>` : '';
+      addObject(pageId, `<< /Type /Page /Parent 2 0 R /Resources << /Font << /F1 3 0 R /F2 4 0 R >>${imageResource} >> /Contents ${contentId} 0 R >>`);
       addObject(contentId, `<< /Length ${stream.length} >>\nstream\n${stream}endstream`);
     });
     const xrefOffset = document.length;
@@ -4588,7 +5012,7 @@ class ArgusPanel extends HTMLElement {
     return Uint8Array.from(document, char => char.charCodeAt(0) & 0xff);
   }
 
-  _exportHistoryPDF() {
+  async _exportHistoryPDF() {
     this._closeHistoryExportModal();
     const rawEvents = this._getFilteredHistory();
     const events = rawEvents.map(ev => {
@@ -4606,7 +5030,7 @@ class ArgusPanel extends HTMLElement {
 
     const homeName = this._homeName || this._t('home_default');
     const now = new Date();
-    const dateStr = now.toISOString().slice(0, 10);
+    const dateStr = this._formatLocalDateInput(now);
     const timeStr = now.toTimeString().slice(0, 5).replace(':', '-');
     const generatedAt = now.toLocaleString(this._getLocale());
     const fromValue = (this.shadowRoot.getElementById('export-history-from') as HTMLInputElement | null)?.value;
@@ -4618,8 +5042,9 @@ class ArgusPanel extends HTMLElement {
       action: this._t('history_pdf_action'), user: this._t('history_pdf_user'), detail: this._t('history_pdf_detail'),
       empty: this._t('history_pdf_empty'), footer: this._t('history_pdf_footer'),
     };
+    const logo = await (this._historyPDFLogoPromise || this._loadHistoryPDFLogo());
     const pdfData = this._generateHistoryPDF(events, {
-      homeName, generatedAt, labels,
+      homeName, generatedAt, labels, logo,
       rangeFrom: formatDate(fromValue, this._t('history_range_all')),
       rangeTo: formatDate(toValue, this._t('history_range_today')),
     });
@@ -4876,6 +5301,19 @@ class ArgusPanel extends HTMLElement {
     s('hub-bg-mode-select')?.addEventListener('change', () => this._updateBgFieldsVisibility());
     s('panel-bg-file-input')?.addEventListener('change', e => this._handlePanelBgFile(e));
     s('hub-bg-file-input')?.addEventListener('change', e => this._handleHubBgFile(e));
+
+    // Walk Test & Sensor Delay
+    s('btn-start-walk-test')?.addEventListener('click', () => this._openWalkTest());
+    s('walk-test-close-btn')?.addEventListener('click', () => this._closeWalkTestModal());
+    s('walk-test-stop-btn')?.addEventListener('click', () => this._stopWalkTest());
+    s('walk-test-modal')?.addEventListener('click', e => { if (e.target.id === 'walk-test-modal') this._closeWalkTestModal(); });
+
+    s('delay-opt-default')?.addEventListener('change', () => this._updateDelayOptionsUi());
+    s('delay-opt-instant')?.addEventListener('change', () => this._updateDelayOptionsUi());
+    s('delay-opt-custom')?.addEventListener('change', () => this._updateDelayOptionsUi());
+    s('sensor-delay-cancel-btn')?.addEventListener('click', () => this._closeSensorDelayModal());
+    s('sensor-delay-save-btn')?.addEventListener('click', () => this._saveSensorDelay());
+    s('sensor-delay-modal')?.addEventListener('click', e => { if (e.target.id === 'sensor-delay-modal') this._closeSensorDelayModal(); });
   }
 
   /* ── WebSocket ───────────────────────────────────────────────────── */
@@ -5321,23 +5759,21 @@ class ArgusPanel extends HTMLElement {
       home: '<path d="M3 10.5 12 3l9 7.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 19.5z"/><path d="M9 21v-6h6v6"/>',
       away: '<path d="M12 3 20 6.5v5.2c0 5-3.4 8-8 9.8-4.6-1.8-8-4.8-8-9.8V6.5z"/><path d="M8.5 12h7M12 8.5v7"/>',
       night: '<path d="M20 15.5A8.5 8.5 0 0 1 8.5 4 8.5 8.5 0 1 0 20 15.5z"/><path d="m17.5 4 .5 1.2L19.2 6l-1.2.5-.5 1.2-.5-1.2-1.2-.5 1.2-.8z"/>',
-      vacation: '<path d="M3 13.5 21 5l-6.8 15-2.3-6.2z"/><path d="m11.9 13.8 3.4 3.4M11.9 13.8 7.2 12"/>',
-      disarm: '<path d="M12 3 20 6.5v5.2c0 5-3.4 8-8 9.8-4.6-1.8-8-4.8-8-9.8V6.5z"/><path d="m8.5 12 2.2 2.2 4.8-5"/>',
+            disarm: '<path d="M12 3 20 6.5v5.2c0 5-3.4 8-8 9.8-4.6-1.8-8-4.8-8-9.8V6.5z"/><path d="m8.5 12 2.2 2.2 4.8-5"/>',
       sos: '<path d="M12 3 21 20H3z"/><path d="M12 9v4.5M12 17h.01"/>'
     };
     return `<svg class="mode-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[mode] || paths.disarm}</svg>`;
   }
 
   _renderPremiumStatusIcon(state, triggered, uid = '0') {
-    const mode = triggered ? 'triggered' : ({ armed_home:'home', armed_away:'away', armed_night:'night', armed_vacation:'vacation', disarmed:'disarm' }[state] || 'disarm');
-    const accent = { home:'#ffb700', away:'#ff3344', night:'#3898ff', vacation:'#d69cff', disarm:'#00ff8c', triggered:'#ff1744' }[mode];
-    const glowColor = { home:'rgba(255,183,0,0.65)', away:'rgba(255,51,68,0.7)', night:'rgba(56,152,255,0.65)', vacation:'rgba(214,156,255,0.65)', disarm:'rgba(0,255,140,0.65)', triggered:'rgba(255,23,68,0.85)' }[mode];
+    const mode = triggered ? 'triggered' : ({ armed_home:'home', armed_away:'away', armed_night:'night', disarmed:'disarm' }[state] || 'disarm');
+    const accent = { home:'#ffb700', away:'#ff3344', night:'#3898ff', disarm:'#00ff8c', triggered:'#ff1744' }[mode];
+    const glowColor = { home:'rgba(255,183,0,0.65)', away:'rgba(255,51,68,0.7)', night:'rgba(56,152,255,0.65)', disarm:'rgba(0,255,140,0.65)', triggered:'rgba(255,23,68,0.85)' }[mode];
     const symbol = {
       home:'<path d="M66 98 100 69l34 29v35H66z"/><path d="M89 133v-22h22v22"/>',
       away:'<path d="M100 70c18 0 32 14 32 32s-14 32-32 32-32-14-32-32 14-32 32-32z"/><path d="M100 79v46M77 102h46"/>',
       night:'<path d="M120 70a34 34 0 1 0 13 63 38 38 0 1 1-13-63z"/><circle cx="134" cy="73" r="3"/>',
-      vacation:'<path d="m67 113 66-34-28 66-9-25z"/><path d="m96 120 15 15M96 120l-20-6"/>',
-      disarm:'<path d="m76 104 16 16 34-39"/>',
+            disarm:'<path d="m76 104 16 16 34-39"/>',
       triggered:'<path d="M100 65 139 137H61z"/><path d="M100 90v23M100 124h.01"/>'
     }[mode];
     return `<svg viewBox="0 0 200 200" width="100%" height="100%" style="filter:drop-shadow(0 0 35px ${glowColor}) drop-shadow(0 0 70px ${glowColor}) drop-shadow(0 20px 40px rgba(0,0,0,.7));max-width:180px;margin:auto;display:block;overflow:visible" aria-label="${this._escapeHtml(mode)}"><defs><linearGradient id="premium-${mode}-${uid}" x1="20%" y1="5%" x2="85%" y2="100%"><stop stop-color="#ffffff" stop-opacity=".85"/><stop offset=".18" stop-color="${accent}" stop-opacity=".98"/><stop offset=".65" stop-color="${accent}" stop-opacity=".4"/><stop offset="1" stop-color="#01040a" stop-opacity=".85"/></linearGradient><linearGradient id="shield-inner-${mode}-${uid}" x1="0%" y1="0%" x2="100%" y2="100%"><stop stop-color="#ffffff" stop-opacity=".3"/><stop offset=".35" stop-color="${accent}" stop-opacity=".15"/><stop offset="1" stop-color="transparent"/></linearGradient><filter id="premium-glow-${mode}-${uid}" filterUnits="userSpaceOnUse" x="-80" y="-80" width="360" height="360" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="5.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M100 22 157 46v42c0 42-23 69-57 87-34-18-57-45-57-87V46z" fill="url(#premium-${mode}-${uid})" stroke="${accent}" stroke-width="3.5" filter="url(#premium-glow-${mode}-${uid})"/><path d="M100 28 152 50v38c0 38-21 62-52 79-31-17-52-41-52-79V50z" fill="url(#shield-inner-${mode}-${uid})"/><path d="M100 31 148 51" stroke="#fff" stroke-opacity=".85" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="105" r="43" fill="rgba(2,6,14,.55)" stroke="rgba(255,255,255,.35)" stroke-width="2"/><g fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#premium-glow-${mode}-${uid})">${symbol}</g><circle cx="100" cy="105" r="55" fill="none" stroke="${accent}" stroke-opacity=".65" stroke-width="2.5"><animate attributeName="r" values="50;62;50" dur="3.2s" repeatCount="indefinite"/><animate attributeName="opacity" values=".8;.08;.8" dur="3.2s" repeatCount="indefinite"/></circle></svg>`;
@@ -5590,8 +6026,8 @@ class ArgusPanel extends HTMLElement {
 
   _scheduleText() {
     const copy = {
-      es:{title:'Horarios locales de estado',all:'Todos los días',weekdays:'Lunes a viernes',weekend:'Fin de semana',empty:'Sin horarios. Argus conservará el último estado confirmado.',disarmed:'Desarmado',home:'En casa',away:'Ausente',night:'Noche',vacation:'Vacaciones'},
-      en:{title:'Local state schedules',all:'Every day',weekdays:'Monday to Friday',weekend:'Weekend',empty:'No schedules. Argus will preserve the last confirmed state.',disarmed:'Disarmed',home:'Home',away:'Away',night:'Night',vacation:'Vacation'},
+      es:{title:'Horarios locales de estado',all:'Todos los días',weekdays:'Lunes a viernes',weekend:'Fin de semana',empty:'Sin horarios. Argus conservará el último estado confirmado.',disarmed:'Desarmado',home:'En casa',away:'Ausente',night:'Noche'},
+      en:{title:'Local state schedules',all:'Every day',weekdays:'Monday to Friday',weekend:'Weekend',empty:'No schedules. Argus will preserve the last confirmed state.',disarmed:'Disarmed',home:'Home',away:'Away',night:'Night'},
     };
     return copy[this._getCurrentLangCode()] || copy.en;
   }
@@ -5603,7 +6039,7 @@ class ArgusPanel extends HTMLElement {
     const daysSelect = this.shadowRoot.getElementById('schedule-days');
     if (stateSelect) {
       const current = stateSelect.value;
-      stateSelect.innerHTML = `<option value="disarmed">${text.disarmed}</option><option value="armed_home">${text.home}</option><option value="armed_away">${text.away}</option><option value="armed_night">${text.night}</option><option value="armed_vacation">${text.vacation}</option>`;
+      stateSelect.innerHTML = `<option value="disarmed">${text.disarmed}</option><option value="armed_home">${text.home}</option><option value="armed_away">${text.away}</option><option value="armed_night">${text.night}</option>`;
       stateSelect.value = current || 'armed_night';
     }
     if (daysSelect) {
@@ -5614,7 +6050,7 @@ class ArgusPanel extends HTMLElement {
     const list = this.shadowRoot.getElementById('schedule-list'); if (!list) return;
     const schedules = Array.isArray(this._ui?.state_schedule) ? this._ui.state_schedule : [];
     const deleteLabel = ({es:'Eliminar horario',en:'Delete schedule'} as Record<string,string>)[this._getCurrentLangCode()] || 'Delete schedule';
-    const labelForState = state => ({disarmed:text.disarmed,armed_home:text.home,armed_away:text.away,armed_night:text.night,armed_vacation:text.vacation}[state] || state);
+    const labelForState = state => ({disarmed:text.disarmed,armed_home:text.home,armed_away:text.away,armed_night:text.night}[state] || state);
     const labelForDays = days => days?.length === 2 ? text.weekend : days?.length === 5 ? text.weekdays : text.all;
     list.innerHTML = schedules.length ? schedules.map(item => `<div class="schedule-row"><span><strong>${this._escapeHtml(item.time || '')}</strong> · ${this._escapeHtml(labelForState(item.state))} · ${this._escapeHtml(labelForDays(item.days))}</span><button class="ghost" data-schedule-delete="${this._escapeHtml(item.id)}" aria-label="${this._escapeHtml(deleteLabel)}">×</button></div>`).join('') : `<div class="small" style="opacity:.55">${this._escapeHtml(text.empty)}</div>`;
     list.querySelectorAll('[data-schedule-delete]').forEach(button => button.addEventListener('click', () => this._deleteStateSchedule(button.dataset.scheduleDelete)));
@@ -5651,7 +6087,6 @@ class ArgusPanel extends HTMLElement {
       home: ['en casa', 'home', 'casa', 'maison', 'em casa', 'дом', '在家'],
       away: ['ausente', 'away', 'absent', 'fora', 'fuori', 'ушёл', '外出'],
       night: ['noche', 'night', 'nuit', 'noite', 'notte', 'ночь', '夜间'],
-      vacation: ['vacaciones', 'vacation', 'vacances', 'férias', 'vacanza', 'отпуск', '度假'],
     };
     const findMode = () => {
       return Object.entries(modes).find(([, terms]) => terms.some(term => normalized.includes(term)))?.[0];
@@ -5670,7 +6105,6 @@ class ArgusPanel extends HTMLElement {
         armed_home: this._t('mode_home'),
         armed_away: this._t('mode_away'),
         armed_night: this._t('mode_night'),
-        armed_vacation: this._t('mode_vacation'),
         triggered: this._t('log_triggered'),
       };
       let foundMode = this._t('disarmed');
@@ -5750,9 +6184,6 @@ class ArgusPanel extends HTMLElement {
       'Noche': this._t('mode_night'),
       'Nuit': this._t('mode_night'),
       'Night': this._t('mode_night'),
-      'Vacaciones': this._t('mode_vacation'),
-      'Vacances': this._t('mode_vacation'),
-      'Vacation': this._t('mode_vacation'),
       'Desarmado': this._t('disarmed'),
       'Désarmé': this._t('disarmed'),
       'Disarmed': this._t('disarmed'),
@@ -6005,6 +6436,7 @@ class ArgusPanel extends HTMLElement {
       arming_time: (cfg?.arming_time !== undefined && cfg?.arming_time !== null) ? cfg.arming_time : null,
       entry_delay: (cfg?.entry_delay !== undefined && cfg?.entry_delay !== null) ? cfg.entry_delay : null,
       light_siren_settings: cfg?.light_siren_settings && typeof cfg.light_siren_settings === 'object' ? cfg.light_siren_settings : {},
+      sensor_settings: cfg?.sensor_settings && typeof cfg.sensor_settings === 'object' ? cfg.sensor_settings : {},
       mqtt_enabled: (cfg?.mqtt_enabled !== undefined && cfg?.mqtt_enabled !== null) ? cfg.mqtt_enabled : null,
     };
   }
@@ -6217,6 +6649,9 @@ class ArgusPanel extends HTMLElement {
       el.querySelectorAll('[data-toggle-delay]').forEach(btn =>
         btn.addEventListener('click', () => this._toggleEntrySensor(btn.dataset.toggleDelay))
       );
+      el.querySelectorAll('[data-edit-sensor-delay]').forEach(btn =>
+        btn.addEventListener('click', () => this._openSensorDelayModal(btn.dataset.editSensorDelay))
+      );
       el.querySelector('#save-mode')?.addEventListener('click', () => this._saveMode());
     }
   }
@@ -6233,6 +6668,7 @@ class ArgusPanel extends HTMLElement {
 
     let stateLabel = '';
     let powerHtml = '';
+    let delayHtml = '';
     if (type === 'sensor' || type === 'bypass' || type === 'entry') {
       const stateObj = this._hass?.states?.[entityId];
       const power = this._getDevicePower(entityId, stateObj);
@@ -6245,6 +6681,33 @@ class ArgusPanel extends HTMLElement {
         const batText = isDead ? '🔋 ❌' : `🔋 ${power.battery}%`;
         const cls = isDead ? 'dead' : (isLow ? 'low' : '');
         powerHtml += `<span class="pill-power ${cls}">${batText}</span>`;
+      }
+
+      if (type === 'sensor') {
+        const cfg = this._currentModeConfig();
+        const sSettings = cfg.sensor_settings?.[entityId] || {};
+        const isInstant = sSettings.type === 'instant' || sSettings.delay === 0;
+        const customDelay = sSettings.delay;
+
+        let badgeCls = 'inherited';
+        let badgeTxt = '🌐';
+        let titleTxt = this._t('sensor_delay_default');
+
+        if (isInstant) {
+          badgeCls = 'instant';
+          badgeTxt = '⚡ 0s';
+          titleTxt = this._t('sensor_delay_instant');
+        } else if (customDelay !== undefined && customDelay !== null) {
+          badgeCls = 'custom';
+          badgeTxt = `⏱️ ${customDelay}s`;
+          titleTxt = `${this._t('sensor_delay_custom')}: ${customDelay}s`;
+        }
+
+        delayHtml = `
+          <button type="button" class="pill-delay-btn" data-edit-sensor-delay="${this._escapeHtml(entityId)}" title="${this._escapeHtml(titleTxt)}">
+            <span class="pill-delay-badge ${badgeCls}">${badgeTxt}</span>
+          </button>
+        `;
       }
     }
 
@@ -6262,6 +6725,7 @@ class ArgusPanel extends HTMLElement {
           <span class="pill-name">${this._escapeHtml(name)}</span>
           ${stateLabel}
           ${powerHtml}
+          ${delayHtml}
         </span>
         ${readonly ? '' : `<button data-remove="${type}:${entityId}" style="background:none; border:none; color:inherit; opacity:0.5; padding:0 4px; cursor:pointer; flex-shrink:0;">✕</button>`}
       </span>
@@ -7346,7 +7810,7 @@ class ArgusPanel extends HTMLElement {
     const previous = live?.attributes?.panic_previous_state;
     const restoreService = {
       armed_home: 'alarm_arm_home', armed_away: 'alarm_arm_away',
-      armed_night: 'alarm_arm_night', armed_vacation: 'alarm_arm_vacation',
+      armed_night: 'alarm_arm_night',
       disarmed: 'alarm_disarm',
     }[previous];
     if (!entry?.entity_id || !restoreService) {
@@ -8128,12 +8592,12 @@ class ArgusPanel extends HTMLElement {
 
     const serviceMap = {
       home: 'alarm_arm_home', away: 'alarm_arm_away',
-      night: 'alarm_arm_night', vacation: 'alarm_arm_vacation',
+      night: 'alarm_arm_night',
       disarm: 'alarm_disarm',
     };
     const modeLabels = {
       home: this._t('mode_home'), away: this._t('mode_away'),
-      night: this._t('mode_night'), vacation: this._t('mode_vacation'),
+      night: this._t('mode_night'),
     };
     const service = serviceMap[action];
     if (!service) return;

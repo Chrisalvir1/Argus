@@ -14,6 +14,7 @@ interface SensorChipProps {
   statusLabelClosed: string;
   bypassedLabel?: string;
   isLockLike?: boolean;
+  delay?: number;
 }
 
 function PremiumLockIcon({ isOpen, isBypassed, label }: { isOpen: boolean; isBypassed?: boolean; label: string }) {
@@ -27,7 +28,7 @@ function PremiumLockIcon({ isOpen, isBypassed, label }: { isOpen: boolean; isByp
   );
 }
 
-export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, isUnavailable, unavailableLabel, battery, iconHtml, statusLabelOpen, statusLabelClosed, bypassedLabel, isLockLike }: SensorChipProps) {
+export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, isUnavailable, unavailableLabel, battery, delay, iconHtml, statusLabelOpen, statusLabelClosed, bypassedLabel, isLockLike }: SensorChipProps) {
   let batHtml = null;
   if (battery !== null) {
     const isDead = battery === 0;
@@ -46,6 +47,19 @@ export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, isUnavail
     }
   }
 
+  let delayHtml = null;
+  if (delay !== undefined) {
+    const isInstant = delay === 0;
+    delayHtml = (
+      <span style={{
+        marginLeft: '6px', fontSize: '9px', fontWeight: 700, color: isInstant ? '#38bdf8' : '#fbbf24',
+        background: 'rgba(255,255,255,0.08)', padding: '2px 5px', borderRadius: '6px',
+      }}>
+        {isInstant ? '⚡ 0s' : `⏱️ ${delay}s`}
+      </span>
+    );
+  }
+
   const iconColor = isUnavailable ? '#94a3b8' : isBypassed ? '#94a3b8' : (isBlocking ? '#fde047' : (isOpen ? '#f87171' : '#34d399'));
   const iconAnimation = isLockLike ? 'none' : (isBypassed ? 'none' : (isBlocking ? 'pulse 1s infinite' : (isOpen ? 'pulse 2s infinite' : 'none')));
   const stateColor = isUnavailable ? '#94a3b8' : isBypassed ? '#94a3b8' : (isBlocking ? '#fde047' : (isOpen ? '#f87171' : '#34d399'));
@@ -57,7 +71,7 @@ export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, isUnavail
 
   return (
     <div
-      className={`console-sensor ${isOpen && !isBypassed ? 'open' : ''}`}
+      className={`console-sensor ${isUnavailable ? 'unavailable' : ''} ${isOpen && !isBypassed ? 'open' : ''}`}
       style={{ opacity }}
       title={fullLabel}
       aria-label={fullLabel}
@@ -69,11 +83,22 @@ export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, isUnavail
         aria-hidden={isLockLike ? undefined : 'true'}
         style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: iconColor, animation: iconAnimation }}
       >
-        {isUnavailable ? <span>?</span> : isLockLike ? <PremiumLockIcon isOpen={isOpen} isBypassed={isBypassed} label={fullLabel} /> : <span dangerouslySetInnerHTML={{ __html: iconHtml }} />}
+        {isUnavailable ? (
+          <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.75 }}>
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+        ) : isLockLike ? (
+          <PremiumLockIcon isOpen={isOpen} isBypassed={isBypassed} label={fullLabel} />
+        ) : (
+          <span dangerouslySetInnerHTML={{ __html: iconHtml }} />
+        )}
       </span>
       <span className="console-sensor-name" title={name} style={{ color: isBlocking && !isBypassed ? '#fde047' : '#ffffff' }}>{name}</span>
       <span className="console-sensor-state" style={{ color: stateColor }}>
         {labelText}
+        {delayHtml}
         {batHtml}
       </span>
     </div>
