@@ -4908,20 +4908,22 @@ class ArgusPanel extends HTMLElement {
       } finally {
         URL.revokeObjectURL(imageUrl);
       }
-      const size = 64;
+      const size = 384;
       const canvas = document.createElement('canvas');
       canvas.width = size;
       canvas.height = size;
       const context = canvas.getContext('2d');
       if (!context) return null;
-      // Preserve the PNG's transparency against the report's dark header.
-      context.fillStyle = '#0c1426';
+      context.imageSmoothingEnabled = true;
+      context.imageSmoothingQuality = 'high';
+      // Match PDF header dark blue background
+      context.fillStyle = '#0d1426';
       context.fillRect(0, 0, size, size);
       const scale = Math.min(size / bitmap.naturalWidth, size / bitmap.naturalHeight);
       const width = bitmap.naturalWidth * scale;
       const height = bitmap.naturalHeight * scale;
       context.drawImage(bitmap, (size - width) / 2, (size - height) / 2, width, height);
-      const jpeg = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.92));
+      const jpeg = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.95));
       return jpeg ? { bytes: new Uint8Array(await jpeg.arrayBuffer()), width: size, height: size } : null;
     } catch (error) {
       console.warn('Argus PDF logo could not be loaded:', error);
@@ -4954,14 +4956,20 @@ class ArgusPanel extends HTMLElement {
     const text = (font, size, color, x, y, value) => `BT /${font} ${size} Tf ${color} rg ${x} ${y} Td (${toPdfText(value)}) Tj ET\n`;
     const pages = [];
 
+    const logoSize = 46;
+    const textX = logoObjectId ? MARGIN_LEFT + logoSize + 12 : MARGIN_LEFT;
+
     for (let page = 0; page < pagesCount; page++) {
       const pageEvents = events.slice(page * itemsPerPage, (page + 1) * itemsPerPage);
       let stream = '';
       stream += `q 0.05 0.08 0.15 rg 0 ${PAGE_HEIGHT - 72} ${PAGE_WIDTH} 72 re f Q\n`;
-      if (logoObjectId) stream += 'q 42 0 0 42 534 735 cm /ArgusLogo Do Q\n';
-      stream += text('F2', 13, '1 1 1', MARGIN_LEFT, PAGE_HEIGHT - 31, labels.title);
-      stream += text('F1', 8, '0.82 0.87 0.93', MARGIN_LEFT, PAGE_HEIGHT - 48, `${labels.home}: ${metadata.homeName}`);
-      stream += text('F1', 8, '0.82 0.87 0.93', MARGIN_LEFT, PAGE_HEIGHT - 61, `${labels.range}: ${metadata.rangeFrom} - ${metadata.rangeTo}   |   ${labels.generated}: ${metadata.generatedAt}   |   ${labels.total}: ${events.length}`);
+      if (logoObjectId) {
+        const logoY = PAGE_HEIGHT - 72 + Math.round((72 - logoSize) / 2);
+        stream += `q ${logoSize} 0 0 ${logoSize} ${MARGIN_LEFT} ${logoY} cm /ArgusLogo Do Q\n`;
+      }
+      stream += text('F2', 13, '1 1 1', textX, PAGE_HEIGHT - 31, labels.title);
+      stream += text('F1', 8, '0.82 0.87 0.93', textX, PAGE_HEIGHT - 48, `${labels.home}: ${metadata.homeName}`);
+      stream += text('F1', 7.5, '0.82 0.87 0.93', textX, PAGE_HEIGHT - 61, `${labels.range}: ${metadata.rangeFrom} - ${metadata.rangeTo}   |   ${labels.generated}: ${metadata.generatedAt}   |   ${labels.total}: ${events.length}`);
 
       const tableTop = PAGE_HEIGHT - 86;
       stream += `q 0.12 0.18 0.28 rg ${MARGIN_LEFT} ${tableTop - 18} ${CONTENT_WIDTH} 20 re f Q\n`;
@@ -6656,14 +6664,24 @@ class ArgusPanel extends HTMLElement {
     }
   }
 
+  _renderLiquidGlassClockSvg(badgeType, labelText) {
+    const isInstant = badgeType === 'instant';
+    const isCustom = badgeType === 'custom';
+    const color = isInstant ? '#38bdf8' : (isCustom ? '#fbbf24' : 'rgba(255,255,255,0.7)');
+    const clockSvg = `<svg class="liquid-glass-clock" viewBox="0 0 20 20" width="13" height="13" style="vertical-align:middle;filter:drop-shadow(0 0 3px ${color});flex-shrink:0"><circle cx="10" cy="10" r="8" fill="rgba(255,255,255,0.08)" stroke="${color}" stroke-width="1.4"/><path d="M5 6 A 7 7 0 0 1 15 6" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="0.8" stroke-linecap="round"/>${isInstant ? `<path d="M11 4 L8 10 L11 10 L9 16 L14 9 L11 9 Z" fill="${color}"/>` : `<line x1="10" y1="10" x2="10" y2="5.5" stroke="${color}" stroke-width="1.3" stroke-linecap="round"/><line x1="10" y1="10" x2="13.5" y2="10" stroke="${color}" stroke-width="1.3" stroke-linecap="round"/><circle cx="10" cy="10" r="1.2" fill="${color}"/>`}</svg>`;
+    return `${clockSvg}${labelText ? `<span style="margin-left:3px;font-size:9px;font-weight:800">${labelText}</span>` : ''}`;
+  }
+
   _chip(entityId, type) {
     const raw = this._hass?.states?.[entityId]?.state;
-    const isTr = ['on', 'unlocked', 'open', 'recording', 'active', 'motion'].includes(raw);
+    const rawStr = String(raw || '').toLowerCase();
+    const isTr = ['on', 'unlocked', 'open', 'recording', 'active', 'motion', 'abierto', 'activa'].includes(rawStr);
+    const isUnavail = !this._hass?.states?.[entityId] || ['unknown', 'unavailable', 'desconectado'].includes(rawStr);
     const name = this._hass?.states?.[entityId]?.attributes?.friendly_name || entityId;
     const readonly = !this._isAdmin;
 
     const dot = type === 'sensor' || type === 'bypass'
-    ? `<span class="pill-dot ${isTr ? 'open' : ''}" title="${raw}"></span>`
+    ? `<span class="pill-dot ${isUnavail ? 'unavailable' : (isTr ? 'open' : '')}" title="${raw}"></span>`
     : '';
 
     let stateLabel = '';
@@ -6672,7 +6690,9 @@ class ArgusPanel extends HTMLElement {
     if (type === 'sensor' || type === 'bypass' || type === 'entry') {
       const stateObj = this._hass?.states?.[entityId];
       const power = this._getDevicePower(entityId, stateObj);
-      stateLabel = `<span class="pill-status">${isTr ? this._t('status_open') : this._t('status_closed')}</span>`;
+      stateLabel = isUnavail
+        ? `<span class="pill-status unavailable">${this._t('unavailable')}</span>`
+        : `<span class="pill-status">${isTr ? this._t('status_open') : this._t('status_closed')}</span>`;
       
       if (power.mains) powerHtml += '<span class="pill-power">🔌 AC</span>';
       if (power.battery !== null) {
@@ -6690,22 +6710,22 @@ class ArgusPanel extends HTMLElement {
         const customDelay = sSettings.delay;
 
         let badgeCls = 'inherited';
-        let badgeTxt = '🌐';
+        let badgeContent = this._renderLiquidGlassClockSvg('default', '');
         let titleTxt = this._t('sensor_delay_default');
 
         if (isInstant) {
           badgeCls = 'instant';
-          badgeTxt = '⚡ 0s';
+          badgeContent = this._renderLiquidGlassClockSvg('instant', '0s');
           titleTxt = this._t('sensor_delay_instant');
         } else if (customDelay !== undefined && customDelay !== null) {
           badgeCls = 'custom';
-          badgeTxt = `⏱️ ${customDelay}s`;
+          badgeContent = this._renderLiquidGlassClockSvg('custom', `${customDelay}s`);
           titleTxt = `${this._t('sensor_delay_custom')}: ${customDelay}s`;
         }
 
         delayHtml = `
           <button type="button" class="pill-delay-btn" data-edit-sensor-delay="${this._escapeHtml(entityId)}" title="${this._escapeHtml(titleTxt)}">
-            <span class="pill-delay-badge ${badgeCls}">${badgeTxt}</span>
+            <span class="pill-delay-badge ${badgeCls}">${badgeContent}</span>
           </button>
         `;
       }

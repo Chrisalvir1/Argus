@@ -7,7 +7,10 @@
 - Restore original Argus logo in activity history PDF and fix local calendar date formatting (Costa Rica UTC-6).
 - Implement Sensor Walk Test (Alarmo feature) with countdown timer, sensor status tracking, audit logging, and Web Audio chime.
 - Implement per-sensor delays (Alarmo feature) supporting instant triggers (0s), custom delays, and visual badges on sensor chips.
-- Improve visual styling for unavailable sensors with dedicated dashed-border cards and aligned alert SVG icons.
+- Improve visual styling for unavailable sensors with dedicated dashed-border cards, aligned alert SVG icons, and synchronized status in Modos view.
+- Introduce Liquid Glass clock SVG icons for instant (0s) and custom sensor delays.
+- Rebalance sensor chip proportions with right-aligned status badges and container max-width to eliminate wasted blank space in fullscreen.
+- Upgrade PDF activity report logo to high-definition 1024x1024 artwork rendered at 384x384, positioned on the left side of the header with metadata on the right.
 
 ## [2.5.0] - 2026-10-01
 

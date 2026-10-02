@@ -28,6 +28,25 @@ function PremiumLockIcon({ isOpen, isBypassed, label }: { isOpen: boolean; isByp
   );
 }
 
+export function LiquidGlassClockIcon({ isInstant, size = 13 }: { isInstant?: boolean; size?: number }) {
+  const color = isInstant ? '#38bdf8' : '#fbbf24';
+  return (
+    <svg className="liquid-glass-clock" viewBox="0 0 20 20" width={size} height={size} style={{ verticalAlign: 'middle', filter: `drop-shadow(0 0 4px ${color})`, flexShrink: 0 }}>
+      <circle cx="10" cy="10" r="8" fill="rgba(255,255,255,0.08)" stroke={color} strokeWidth="1.4" />
+      <path d="M5 6 A 7 7 0 0 1 15 6" fill="none" stroke="rgba(255,255,255,0.65)" strokeWidth="0.8" strokeLinecap="round" />
+      {isInstant ? (
+        <path d="M11 4 L8 10 L11 10 L9 16 L14 9 L11 9 Z" fill={color} />
+      ) : (
+        <>
+          <line x1="10" y1="10" x2="10" y2="5.5" stroke={color} strokeWidth="1.3" strokeLinecap="round" />
+          <line x1="10" y1="10" x2="13.5" y2="10" stroke={color} strokeWidth="1.3" strokeLinecap="round" />
+          <circle cx="10" cy="10" r="1.2" fill={color} />
+        </>
+      )}
+    </svg>
+  );
+}
+
 export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, isUnavailable, unavailableLabel, battery, delay, iconHtml, statusLabelOpen, statusLabelClosed, bypassedLabel, isLockLike }: SensorChipProps) {
   let batHtml = null;
   if (battery !== null) {
@@ -36,10 +55,11 @@ export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, isUnavail
     const batText = isDead ? '🔋 ❌' : `🔋 ${battery}%`;
     if (isDead || isLow) {
       batHtml = (
-        <span style={{
-          marginLeft: '8px', fontSize: '10px', fontWeight: 700, color: '#ff5252',
+        <span className="console-battery-badge" style={{
+          fontSize: '10px', fontWeight: 700, color: '#ff5252',
           background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(4px)', padding: '2px 6px',
-          borderRadius: '10px', border: '1px solid rgba(255,82,82,0.3)', textShadow: '0 0 5px rgba(255,82,82,0.5)'
+          borderRadius: '10px', border: '1px solid rgba(255,82,82,0.3)', textShadow: '0 0 5px rgba(255,82,82,0.5)',
+          whiteSpace: 'nowrap',
         }}>
           {batText}
         </span>
@@ -51,11 +71,18 @@ export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, isUnavail
   if (delay !== undefined) {
     const isInstant = delay === 0;
     delayHtml = (
-      <span style={{
-        marginLeft: '6px', fontSize: '9px', fontWeight: 700, color: isInstant ? '#38bdf8' : '#fbbf24',
-        background: 'rgba(255,255,255,0.08)', padding: '2px 5px', borderRadius: '6px',
-      }}>
-        {isInstant ? '⚡ 0s' : `⏱️ ${delay}s`}
+      <span className="console-delay-badge" style={{
+        display: 'inline-flex', alignItems: 'center', gap: '3px',
+        fontSize: '9.5px', fontWeight: 800, color: isInstant ? '#38bdf8' : '#fbbf24',
+        background: isInstant ? 'rgba(56,189,248,0.18)' : 'rgba(251,191,36,0.18)',
+        border: `1px solid ${isInstant ? 'rgba(56,189,248,0.4)' : 'rgba(251,191,36,0.4)'}`,
+        padding: '2px 6px', borderRadius: '8px',
+        backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+        boxShadow: `0 0 8px ${isInstant ? 'rgba(56,189,248,0.25)' : 'rgba(251,191,36,0.25)'}`,
+        whiteSpace: 'nowrap',
+      }} title={isInstant ? 'Retardo: Instantáneo (0s)' : `Retardo: ${delay}s`}>
+        <LiquidGlassClockIcon isInstant={isInstant} size={12} />
+        <span>{isInstant ? '0s' : `${delay}s`}</span>
       </span>
     );
   }
@@ -81,7 +108,7 @@ export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, isUnavail
       <span
         className="console-sensor-icon"
         aria-hidden={isLockLike ? undefined : 'true'}
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: iconColor, animation: iconAnimation }}
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: iconColor, animation: iconAnimation, flexShrink: 0 }}
       >
         {isUnavailable ? (
           <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.75 }}>
@@ -95,12 +122,16 @@ export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, isUnavail
           <span dangerouslySetInnerHTML={{ __html: iconHtml }} />
         )}
       </span>
-      <span className="console-sensor-name" title={name} style={{ color: isBlocking && !isBypassed ? '#fde047' : '#ffffff' }}>{name}</span>
-      <span className="console-sensor-state" style={{ color: stateColor }}>
-        {labelText}
+      <div className="console-sensor-main">
+        <span className="console-sensor-name" title={name} style={{ color: isBlocking && !isBypassed ? '#fde047' : '#ffffff' }}>{name}</span>
+      </div>
+      <div className="console-sensor-status-wrap">
+        <span className="console-sensor-state" style={{ color: stateColor }}>
+          {labelText}
+        </span>
         {delayHtml}
         {batHtml}
-      </span>
+      </div>
     </div>
   );
 }

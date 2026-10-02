@@ -72,7 +72,19 @@ class TestV251AuditAndCleanup(unittest.TestCase):
         self.assertIn("/api/argus_static/argus_logo.png", PANEL_SRC)
         self.assertIn("date.getFullYear()", PANEL_SRC)
         self.assertNotIn("toISOString().slice(0, 10)", PANEL_SRC)
+        # High resolution 384x384 logo and left-positioned header
+        self.assertIn("const size = 384;", PANEL_SRC)
+        self.assertIn("MARGIN_LEFT + logoSize + 12", PANEL_SRC)
+
+    def test_liquid_glass_clock_and_unavailable_sensor_consistency(self):
+        """Sensor delay badges must render Liquid Glass clock and chips must accurately flag unavailable sensors."""
+        self.assertIn("_renderLiquidGlassClockSvg", PANEL_SRC)
+        self.assertIn("liquid-glass-clock", PANEL_SRC)
+        self.assertIn("LiquidGlassClockIcon", (ROOT / "src" / "features" / "dashboard" / "components" / "SensorChip.tsx").read_text())
+        self.assertIn("isUnavail", PANEL_SRC)
+        self.assertIn("statusLabelClosed", CONSOLE_SRC)
 
 
 if __name__ == "__main__":
     unittest.main()
+

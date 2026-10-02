@@ -1616,17 +1616,17 @@ var f = class extends HTMLElement {
 				URL.revokeObjectURL(n);
 			}
 			let a = document.createElement("canvas");
-			a.width = 64, a.height = 64;
+			a.width = 384, a.height = 384;
 			let o = a.getContext("2d");
 			if (!o) return null;
-			o.fillStyle = "#0c1426", o.fillRect(0, 0, 64, 64);
-			let s = Math.min(64 / r.naturalWidth, 64 / r.naturalHeight), c = r.naturalWidth * s, l = r.naturalHeight * s;
-			o.drawImage(r, (64 - c) / 2, (64 - l) / 2, c, l);
-			let u = await new Promise((e) => a.toBlob(e, "image/jpeg", .92));
+			o.imageSmoothingEnabled = !0, o.imageSmoothingQuality = "high", o.fillStyle = "#0d1426", o.fillRect(0, 0, 384, 384);
+			let s = Math.min(384 / r.naturalWidth, 384 / r.naturalHeight), c = r.naturalWidth * s, l = r.naturalHeight * s;
+			o.drawImage(r, (384 - c) / 2, (384 - l) / 2, c, l);
+			let u = await new Promise((e) => a.toBlob(e, "image/jpeg", .95));
 			return u ? {
 				bytes: new Uint8Array(await u.arrayBuffer()),
-				width: 64,
-				height: 64
+				width: 384,
+				height: 384
 			} : null;
 		} catch (e) {
 			return console.warn("Argus PDF logo could not be loaded:", e), null;
@@ -1638,10 +1638,10 @@ var f = class extends HTMLElement {
 			if (t >= 32 && t <= 255) return e;
 			let n = e.normalize("NFKD").replace(/[\u0300-\u036f]/g, "");
 			return Array.from(n).map((e) => e.codePointAt(0) <= 255 ? e : "?").join("") || " ";
-		}).join("").replace(/[\\()]/g, "\\$&").replace(/[\r\n\t]/g, " "), l = (e, t, n, r, i, a) => `BT /${e} ${t} Tf ${n} rg ${r} ${i} Td (${c(a)}) Tj ET\n`, u = [];
+		}).join("").replace(/[\\()]/g, "\\$&").replace(/[\r\n\t]/g, " "), l = (e, t, n, r, i, a) => `BT /${e} ${t} Tf ${n} rg ${r} ${i} Td (${c(a)}) Tj ET\n`, u = [], d = a ? 94 : 36;
 		for (let i = 0; i < r; i++) {
 			let o = e.slice(i * 22, (i + 1) * 22), s = "";
-			s += "q 0.05 0.08 0.15 rg 0 720 612 72 re f Q\n", a && (s += "q 42 0 0 42 534 735 cm /ArgusLogo Do Q\n"), s += l("F2", 13, "1 1 1", 36, 761, n.title), s += l("F1", 8, "0.82 0.87 0.93", 36, 744, `${n.home}: ${t.homeName}`), s += l("F1", 8, "0.82 0.87 0.93", 36, 731, `${n.range}: ${t.rangeFrom} - ${t.rangeTo}   |   ${n.generated}: ${t.generatedAt}   |   ${n.total}: ${e.length}`), s += "q 0.12 0.18 0.28 rg 36 688 540 20 re f Q\n", s += l("F2", 7.5, "1 1 1", 41, 694, n.date), s += l("F2", 7.5, "1 1 1", 161, 694, n.action), s += l("F2", 7.5, "1 1 1", 301, 694, n.user), s += l("F2", 7.5, "1 1 1", 426, 694, n.detail);
+			s += "q 0.05 0.08 0.15 rg 0 720 612 72 re f Q\n", a && (s += "q 46 0 0 46 36 733 cm /ArgusLogo Do Q\n"), s += l("F2", 13, "1 1 1", d, 761, n.title), s += l("F1", 8, "0.82 0.87 0.93", d, 744, `${n.home}: ${t.homeName}`), s += l("F1", 7.5, "0.82 0.87 0.93", d, 731, `${n.range}: ${t.rangeFrom} - ${t.rangeTo}   |   ${n.generated}: ${t.generatedAt}   |   ${n.total}: ${e.length}`), s += "q 0.12 0.18 0.28 rg 36 688 540 20 re f Q\n", s += l("F2", 7.5, "1 1 1", 41, 694, n.date), s += l("F2", 7.5, "1 1 1", 161, 694, n.action), s += l("F2", 7.5, "1 1 1", 301, 694, n.user), s += l("F2", 7.5, "1 1 1", 426, 694, n.detail);
 			let c = 668;
 			o.forEach((e, t) => {
 				t % 2 == 0 && (s += `q 0.96 0.97 0.98 rg 36 ${c - 4} 540 20 re f Q\n`), s += `q 0.88 0.88 0.88 RG 0.5 w 36 ${c - 4} m 576 ${c - 4} l S Q\n`, s += l("F1", 7.2, "0.15 0.15 0.15", 41, c + 2, String(e.ts || "-").slice(0, 22)), s += l("F2", 7.2, "0.1 0.2 0.4", 161, c + 2, String(e.action || "-").slice(0, 24)), s += l("F1", 7.2, "0.2 0.2 0.2", 301, c + 2, String(e.user || "Argus").slice(0, 21)), s += l("F1", 7, "0.3 0.3 0.3", 426, c + 2, String(e.detail || "-").slice(0, 37)), c -= 22;
@@ -1650,21 +1650,21 @@ var f = class extends HTMLElement {
 				pages: r
 			})), u.push(s);
 		}
-		let d = "%PDF-1.4\n", f = [0], p = (e, t) => {
-			f[e] = d.length, d += `${e} 0 obj\n${t}\nendobj\n`;
+		let f = "%PDF-1.4\n", p = [0], m = (e, t) => {
+			p[e] = f.length, f += `${e} 0 obj\n${t}\nendobj\n`;
 		};
-		if (p(1, "<< /Type /Catalog /Pages 2 0 R >>"), p(2, `<< /Type /Pages /Kids [${s.map((e) => `${e} 0 R`).join(" ")}] /Count ${r} /MediaBox [0 0 612 792] >>`), p(3, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>"), p(4, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>"), a) {
+		if (m(1, "<< /Type /Catalog /Pages 2 0 R >>"), m(2, `<< /Type /Pages /Kids [${s.map((e) => `${e} 0 R`).join(" ")}] /Count ${r} /MediaBox [0 0 612 792] >>`), m(3, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>"), m(4, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>"), a) {
 			let e = Array.from(i.bytes, (e) => String.fromCharCode(e)).join("");
-			p(a, `<< /Type /XObject /Subtype /Image /Width ${i.width} /Height ${i.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${i.bytes.length} >>\nstream\n${e}\nendstream`);
+			m(a, `<< /Type /XObject /Subtype /Image /Width ${i.width} /Height ${i.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${i.bytes.length} >>\nstream\n${e}\nendstream`);
 		}
 		u.forEach((e, t) => {
 			let n = s[t], r = n + 1, i = a ? ` /XObject << /ArgusLogo ${a} 0 R >>` : "";
-			p(n, `<< /Type /Page /Parent 2 0 R /Resources << /Font << /F1 3 0 R /F2 4 0 R >>${i} >> /Contents ${r} 0 R >>`), p(r, `<< /Length ${e.length} >>\nstream\n${e}endstream`);
+			m(n, `<< /Type /Page /Parent 2 0 R /Resources << /Font << /F1 3 0 R /F2 4 0 R >>${i} >> /Contents ${r} 0 R >>`), m(r, `<< /Length ${e.length} >>\nstream\n${e}endstream`);
 		});
-		let m = d.length;
-		d += `xref\n0 ${f.length}\n0000000000 65535 f \n`;
-		for (let e = 1; e < f.length; e++) d += `${String(f[e]).padStart(10, "0")} 00000 n \n`;
-		return d += `trailer\n<< /Size ${f.length} /Root 1 0 R >>\nstartxref\n${m}\n%%EOF`, Uint8Array.from(d, (e) => e.charCodeAt(0) & 255);
+		let h = f.length;
+		f += `xref\n0 ${p.length}\n0000000000 65535 f \n`;
+		for (let e = 1; e < p.length; e++) f += `${String(p[e]).padStart(10, "0")} 00000 n \n`;
+		return f += `trailer\n<< /Size ${p.length} /Root 1 0 R >>\nstartxref\n${h}\n%%EOF`, Uint8Array.from(f, (e) => e.charCodeAt(0) & 255);
 	}
 	async _exportHistoryPDF() {
 		this._closeHistoryExportModal();
@@ -2902,41 +2902,51 @@ var f = class extends HTMLElement {
 			this._modeEntryId = e.target.value, this._renderModeView(), this._renderEntries(), this.dispatchEvent(new CustomEvent("argus-state-update"));
 		}), t || (e.querySelectorAll("[data-open-selector]").forEach((e) => e.addEventListener("click", () => this._openModal(e.dataset.openSelector))), e.querySelectorAll("[data-remove]").forEach((e) => e.addEventListener("click", () => this._removeChip(e.dataset.remove))), e.querySelectorAll("[data-toggle-delay]").forEach((e) => e.addEventListener("click", () => this._toggleEntrySensor(e.dataset.toggleDelay))), e.querySelectorAll("[data-edit-sensor-delay]").forEach((e) => e.addEventListener("click", () => this._openSensorDelayModal(e.dataset.editSensorDelay))), e.querySelector("#save-mode")?.addEventListener("click", () => this._saveMode()));
 	}
+	_renderLiquidGlassClockSvg(e, t) {
+		let n = e === "instant", r = n ? "#38bdf8" : e === "custom" ? "#fbbf24" : "rgba(255,255,255,0.7)";
+		return `${`<svg class="liquid-glass-clock" viewBox="0 0 20 20" width="13" height="13" style="vertical-align:middle;filter:drop-shadow(0 0 3px ${r});flex-shrink:0"><circle cx="10" cy="10" r="8" fill="rgba(255,255,255,0.08)" stroke="${r}" stroke-width="1.4"/><path d="M5 6 A 7 7 0 0 1 15 6" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="0.8" stroke-linecap="round"/>${n ? `<path d="M11 4 L8 10 L11 10 L9 16 L14 9 L11 9 Z" fill="${r}"/>` : `<line x1="10" y1="10" x2="10" y2="5.5" stroke="${r}" stroke-width="1.3" stroke-linecap="round"/><line x1="10" y1="10" x2="13.5" y2="10" stroke="${r}" stroke-width="1.3" stroke-linecap="round"/><circle cx="10" cy="10" r="1.2" fill="${r}"/>`}</svg>`}${t ? `<span style="margin-left:3px;font-size:9px;font-weight:800">${t}</span>` : ""}`;
+	}
 	_chip(e, t) {
-		let n = this._hass?.states?.[e]?.state, r = [
+		let n = this._hass?.states?.[e]?.state, r = String(n || "").toLowerCase(), i = [
 			"on",
 			"unlocked",
 			"open",
 			"recording",
 			"active",
-			"motion"
-		].includes(n), i = this._hass?.states?.[e]?.attributes?.friendly_name || e, a = !this._isAdmin, o = t === "sensor" || t === "bypass" ? `<span class="pill-dot ${r ? "open" : ""}" title="${n}"></span>` : "", s = "", c = "", l = "";
+			"motion",
+			"abierto",
+			"activa"
+		].includes(r), a = !this._hass?.states?.[e] || [
+			"unknown",
+			"unavailable",
+			"desconectado"
+		].includes(r), o = this._hass?.states?.[e]?.attributes?.friendly_name || e, s = !this._isAdmin, c = t === "sensor" || t === "bypass" ? `<span class="pill-dot ${a ? "unavailable" : i ? "open" : ""}" title="${n}"></span>` : "", l = "", u = "", d = "";
 		if (t === "sensor" || t === "bypass" || t === "entry") {
-			let n = this._hass?.states?.[e], i = this._getDevicePower(e, n);
-			if (s = `<span class="pill-status">${r ? this._t("status_open") : this._t("status_closed")}</span>`, i.mains && (c += "<span class=\"pill-power\">🔌 AC</span>"), i.battery !== null) {
-				let e = i.battery === 0, t = i.battery <= 10 && !e, n = e ? "🔋 ❌" : `🔋 ${i.battery}%`;
-				c += `<span class="pill-power ${e ? "dead" : t ? "low" : ""}">${n}</span>`;
+			let n = this._hass?.states?.[e], r = this._getDevicePower(e, n);
+			if (l = a ? `<span class="pill-status unavailable">${this._t("unavailable")}</span>` : `<span class="pill-status">${i ? this._t("status_open") : this._t("status_closed")}</span>`, r.mains && (u += "<span class=\"pill-power\">🔌 AC</span>"), r.battery !== null) {
+				let e = r.battery === 0, t = r.battery <= 10 && !e, n = e ? "🔋 ❌" : `🔋 ${r.battery}%`;
+				u += `<span class="pill-power ${e ? "dead" : t ? "low" : ""}">${n}</span>`;
 			}
 			if (t === "sensor") {
-				let t = this._currentModeConfig().sensor_settings?.[e] || {}, n = t.type === "instant" || t.delay === 0, r = t.delay, i = "inherited", a = "🌐", o = this._t("sensor_delay_default");
-				n ? (i = "instant", a = "⚡ 0s", o = this._t("sensor_delay_instant")) : r != null && (i = "custom", a = `⏱️ ${r}s`, o = `${this._t("sensor_delay_custom")}: ${r}s`), l = `
+				let t = this._currentModeConfig().sensor_settings?.[e] || {}, n = t.type === "instant" || t.delay === 0, r = t.delay, i = "inherited", a = this._renderLiquidGlassClockSvg("default", ""), o = this._t("sensor_delay_default");
+				n ? (i = "instant", a = this._renderLiquidGlassClockSvg("instant", "0s"), o = this._t("sensor_delay_instant")) : r != null && (i = "custom", a = this._renderLiquidGlassClockSvg("custom", `${r}s`), o = `${this._t("sensor_delay_custom")}: ${r}s`), d = `
           <button type="button" class="pill-delay-btn" data-edit-sensor-delay="${this._escapeHtml(e)}" title="${this._escapeHtml(o)}">
             <span class="pill-delay-badge ${i}">${a}</span>
           </button>
         `;
 			}
 		}
-		let u = this._dashboard?.entries?.some((e) => this._hass?.states?.[e.entity_id]?.state === "triggered"), d = "";
-		return t === "siren" && u && (d = " siren-active"), (t === "sensor" || t === "bypass" || t === "entry") && u && r && (d = " triggered-sensor"), `
-      <span class="sensor-pill${d}">
-        ${o}
+		let f = this._dashboard?.entries?.some((e) => this._hass?.states?.[e.entity_id]?.state === "triggered"), p = "";
+		return t === "siren" && f && (p = " siren-active"), (t === "sensor" || t === "bypass" || t === "entry") && f && i && (p = " triggered-sensor"), `
+      <span class="sensor-pill${p}">
+        ${c}
         <span class="pill-content">
-          <span class="pill-name">${this._escapeHtml(i)}</span>
-          ${s}
-          ${c}
+          <span class="pill-name">${this._escapeHtml(o)}</span>
           ${l}
+          ${u}
+          ${d}
         </span>
-        ${a ? "" : `<button data-remove="${t}:${e}" style="background:none; border:none; color:inherit; opacity:0.5; padding:0 4px; cursor:pointer; flex-shrink:0;">✕</button>`}
+        ${s ? "" : `<button data-remove="${t}:${e}" style="background:none; border:none; color:inherit; opacity:0.5; padding:0 4px; cursor:pointer; flex-shrink:0;">✕</button>`}
       </span>
     `;
 	}
@@ -18411,7 +18421,7 @@ function Bn({ widgets: e, nodes: t, storage: n, userId: r, dashboardId: i, onEdi
 }
 //#endregion
 //#region src/features/dashboard/components/SecurityConsole.css?inline
-var Vn = ".entry{position:relative;overflow:hidden;container:argus-console/inline-size;-webkit-backdrop-filter:blur(40px)saturate(190%)brightness(1.12)!important;background:linear-gradient(135deg,#ffffff1f 0%,#ffffff08 100%)!important;border:1px solid #ffffff38!important;border-radius:28px!important;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s!important;box-shadow:inset 0 1.5px #ffffff73,inset 0 -1px #ffffff1a,0 24px 64px #00000073,0 4px 16px #00000040!important}.security-console,.entry-content,.entry-content.security-console{box-shadow:none!important;box-shadow:none!important;background:0 0!important;border:none!important}.security-console .console-hud{box-shadow:none!important;background:0 0!important;border:none!important}.console-hud-loc{box-sizing:border-box!important;text-overflow:ellipsis!important;white-space:nowrap!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;letter-spacing:.04em!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;background:linear-gradient(135deg,#fff3 0%,#ffffff0d 100%)!important;border:1px solid #ffffff47!important;border-radius:999px!important;align-items:center!important;max-width:clamp(140px,26vw,260px)!important;height:38px!important;padding:0 16px!important;font-size:11.5px!important;font-weight:850!important;display:inline-flex!important;overflow:hidden!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff73,inset 0 -1px #0003,0 8px 24px #00000059!important}.argus-connection-pill{-webkit-backdrop-filter:blur(24px)saturate(190%)!important;letter-spacing:.05em!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;white-space:nowrap!important;background:linear-gradient(135deg,#ffffff29 0%,#ffffff0a 100%)!important;border:1px solid #ffffff3d!important;border-radius:999px!important;align-items:center!important;gap:8px!important;max-width:max-content!important;height:38px!important;padding:0 16px!important;font-size:11px!important;font-weight:850!important;display:inline-flex!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff61,inset 0 -1px #00000026,0 8px 24px #00000059!important}.argus-connection-dot{background:#10b981!important;border-radius:50%!important;width:8px!important;height:8px!important;box-shadow:0 0 12px #10b981!important}.argus-connection-pill[data-online=false] .argus-connection-dot{background:#ef4444!important;box-shadow:0 0 12px #ef4444!important}.console-hud-right{min-width:0!important;box-shadow:none!important;background:0 0!important;border:0!important;justify-content:flex-end!important;align-items:center!important;gap:8px!important;height:38px!important;display:inline-flex!important}.console-system-badge{box-sizing:border-box!important;letter-spacing:.02em!important;text-transform:none!important;white-space:nowrap!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;border-radius:999px!important;align-items:center!important;height:38px!important;padding:0 18px!important;font-size:12px!important;font-weight:800!important;display:inline-flex!important;transform:translate(0,0)!important}.console-system-badge--disarmed{color:#34d399!important;text-shadow:0 0 10px #10b981b3!important;background:linear-gradient(135deg,#10b98152 0%,#0596691f 100%)!important;border:1.5px solid #10b981a6!important;box-shadow:inset 0 1.5px #ffffff80,0 0 24px #10b98166,0 8px 24px #00000059!important}.console-system-badge--armed_home,.console-system-badge--armed_away,.console-system-badge--armed_night,.console-system-badge--pending{color:#fbbf24!important;text-shadow:0 0 10px #f59e0bcc!important;background:linear-gradient(135deg,#f59e0b59 0%,#d9770624 100%)!important;border:1.5px solid #f59e0bb3!important;box-shadow:inset 0 1.5px #ffffff8c,0 0 24px #f59e0b73,0 8px 24px #00000059!important}.console-system-badge--triggered{color:#f87171!important;text-shadow:0 0 12px #ef4444d9!important;background:linear-gradient(135deg,#ef44446b 0%,#b91c1c29 100%)!important;border:1.5px solid #ef4444d9!important;animation:.9s ease-in-out infinite argusTriggerBadgePulse!important;box-shadow:inset 0 1.5px #fff9,0 0 32px #ef444499,0 8px 24px #00000059!important}@keyframes argusTriggerBadgePulse{0%,to{opacity:.85;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}.security-console .entry-icon{will-change:transform;animation:5s ease-in-out infinite float-icon;transform:translate(0,0);box-shadow:none!important;background:0 0!important;border:none!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;display:flex!important}.security-console .entry-icon svg{filter:drop-shadow(0 14px 28px #0009)drop-shadow(0 0 45px #10b9818c)!important;width:100%!important;max-width:220px!important;height:auto!important}@keyframes float-icon{0%,to{transform:translate(0,0)scale(1)}50%{transform:translateY(-6px)scale(1.015)}}.entry.argus-waiting .entry-icon>svg{transform-origin:50%!important;filter:drop-shadow(0 0 26px #ffb839f2)saturate(1.35)!important;animation:1.05s ease-in-out infinite argusArmingShield!important}.argus-shield-status{color:#ffd27a;letter-spacing:.12em;text-align:center;background:#ff950033;border:1px solid #ffb8398c;border-radius:999px;width:max-content;max-width:200px;margin:7px auto 0;padding:5px 14px;font-size:9.5px;font-weight:850;animation:1.05s ease-in-out infinite argusArmingLabel;display:block;box-shadow:inset 0 1px #fff6,0 6px 18px #0000004d}@keyframes argusArmingShield{0%,to{opacity:.55;transform:scale(.94)}50%{opacity:1;transform:scale(1.07)}}@keyframes argusArmingLabel{0%,to{opacity:.62}50%{opacity:1}}.security-console .liquid-stack{width:100%!important;box-shadow:none!important;background:0 0!important;border:none!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;display:grid!important}.security-console .liquid-btn{text-align:center!important;letter-spacing:.03em!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;cursor:pointer!important;background:linear-gradient(135deg,#ffffff2e 0%,#ffffff0d 100%)!important;border:1px solid #ffffff40!important;border-radius:20px!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:5px!important;min-height:68px!important;padding:12px 6px!important;font-size:11.5px!important;font-weight:850!important;line-height:1.15!important;transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s,background .25s,border-color .25s!important;display:flex!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff6b,inset 0 -1px #0003,0 10px 28px #00000059!important}.security-console .liquid-btn:hover{background:linear-gradient(135deg,#ffffff3d 0%,#ffffff14 100%)!important;border-color:#fff6!important;transform:translateY(-3px)translate(0,0)scale(1.025)!important;box-shadow:inset 0 1.5px #ffffff8c,0 14px 34px #00000073!important}.security-console .liquid-btn span:first-child,.security-console .liquid-btn .mode-btn-icon{filter:drop-shadow(0 2px 6px #0006)!important;font-size:20px!important;line-height:1!important}.security-console .liquid-btn span:last-child{color:#fff!important;font-size:11px!important;font-weight:850!important}.security-console .btn-home.active{background:linear-gradient(135deg,#fb8c00 0%,#d97706 100%)!important;border:1px solid #fed7aad9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #fb8c0099!important}.security-console .btn-away.active{background:linear-gradient(135deg,#e53935 0%,#b91c1c 100%)!important;border:1px solid #fecacad9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #e5393599!important}.security-console .btn-night.active{background:linear-gradient(135deg,#1e88e5 0%,#1d4ed8 100%)!important;border:1px solid #bfdbfed9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #1e88e599!important}.security-console .console-sensors{scrollbar-width:none;grid-template-columns:1fr;gap:8px;max-height:none!important;box-shadow:none!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;filter:none!important;isolation:auto!important;contain:none!important;background:0 0!important;border:none!important;outline:none!important;margin:0!important;padding:0!important;display:grid!important;overflow:visible!important}.security-console .console-sensors::-webkit-scrollbar{display:none}.security-console .console-sensors.console-sensors--compact,.security-console .console-sensors[data-count=\"3\"],.security-console .console-sensors[data-count=\"4\"],.security-console .console-sensors[data-count=\"5\"],.security-console .console-sensors[data-count=\"6\"]{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))!important;gap:6px!important}.security-console .console-sensors.console-sensors--micro,.security-console .console-sensors[data-count=\"7\"],.security-console .console-sensors[data-count=\"8\"],.security-console .console-sensors[data-count=\"9\"],.security-console .console-sensors[data-count=\"10\"],.security-console .console-sensors[data-count=\"11\"],.security-console .console-sensors[data-count=\"12\"]{scrollbar-width:thin;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))!important;gap:4px!important;max-height:280px!important;overflow-y:auto!important}.console-sensor{color:#fff!important;text-shadow:0 1px 3px #00000080!important;box-sizing:border-box!important;background:linear-gradient(135deg,#ffffff29 0%,#ffffff0a 100%)!important;border:1px solid #ffffff3d!important;border-radius:999px!important;grid-template-columns:auto minmax(0,1fr) auto!important;align-items:center!important;gap:10px!important;min-height:68px!important;padding:10px 16px!important;transition:background .35s,box-shadow .35s,border-color .35s!important;display:grid!important;box-shadow:inset 0 1.5px #ffffff61,inset 0 -1px #00000026,0 4px 12px #00000040!important}.console-sensor:hover{transform:translateY(-2px)scale(1.02)!important;box-shadow:inset 0 1.5px #ffffff80,0 8px 18px #00000059!important}.console-sensor.open{background:linear-gradient(135deg,#ef444459 0%,#b91c1c29 100%)!important;border-color:#ef4444a6!important;box-shadow:inset 0 1.5px #ffffff73,0 0 16px #ef444459,0 4px 12px #00000040!important}.console-sensor.unavailable{background:linear-gradient(135deg,#94a3b826 0%,#64748b0d 100%)!important;border-style:dashed!important;border-color:#94a3b859!important}.console-sensor-icon{filter:drop-shadow(0 2px 4px #0006)!important;justify-content:center!important;align-items:center!important;font-size:18px!important;display:flex!important}.argus-lock-icon{filter:drop-shadow(0 0 6px);width:25px;height:25px;transform-style:preserve-3d;perspective:240px;transition:color .35s,filter .35s;overflow:visible}.argus-lock-icon.is-open{color:#ff4f6d;animation:1.15s cubic-bezier(.22,.75,.2,1) both argus-lock-open}.argus-lock-icon.is-closed{color:#35e6a0;animation:1.15s cubic-bezier(.22,.75,.2,1) both argus-lock-closed}.argus-lock-icon.is-bypassed{color:#94a3b8;filter:none}.argus-lock-body{fill:color-mix(in srgb, currentColor 28%, transparent);stroke:currentColor;stroke-width:2px}.argus-lock-shackle{fill:none;stroke:currentColor;stroke-width:4px;stroke-linecap:round;transform-origin:15px 21px;transition:transform .85s cubic-bezier(.22,.75,.2,1)}.argus-lock-icon.is-open .argus-lock-shackle{transform:rotate(-28deg)translate(-1px,-2px)}.argus-lock-keyhole,.argus-lock-keyline{fill:currentColor;stroke:currentColor;stroke-width:2px;stroke-linecap:round}@keyframes argus-lock-open{0%{opacity:.82;transform:translate(0,0)scale(1)rotateY(0)}42%{opacity:1;filter:drop-shadow(0 0 18px)drop-shadow(0 16px 18px #0000008c);transform:translate3d(0,-3px,60px)scale(1.58)rotateY(-12deg)rotate(-4deg)}72%{transform:translate3d(0,-1px,34px)scale(1.34)rotateY(-6deg)rotate(-2deg)}to{opacity:1;transform:translate(0,0)scale(1)rotateY(0)rotate(0)}}@keyframes argus-lock-closed{0%{opacity:.82;transform:translate(0,0)scale(1)rotateY(0)}42%{opacity:1;filter:drop-shadow(0 0 18px)drop-shadow(0 16px 18px #0000008c);transform:translate3d(0,-3px,60px)scale(1.58)rotateY(12deg)rotate(4deg)}72%{transform:translate3d(0,-1px,34px)scale(1.34)rotateY(6deg)rotate(2deg)}to{opacity:1;transform:translate(0,0)scale(1)rotateY(0)rotate(0)}}@media (prefers-reduced-motion:reduce){.argus-lock-icon{animation:none!important}.argus-lock-shackle{transition:none!important}}.console-sensor-name{letter-spacing:.02em!important;text-overflow:clip!important;white-space:normal!important;overflow-wrap:break-word!important;word-break:normal!important;hyphens:none!important;color:#fff!important;min-width:0!important;font-size:11.5px!important;font-weight:850!important;line-height:1.25!important;overflow:visible!important}.console-sensor-state{letter-spacing:.02em!important;text-transform:none!important;white-space:nowrap!important;align-items:center!important;gap:4px!important;font-size:11px!important;font-weight:800!important;display:inline-flex!important}.entry.ios-fullscreen .console-sensors{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))!important;gap:10px!important;max-height:none!important;overflow-y:visible!important}.entry.ios-fullscreen .console-sensor{min-width:0!important;padding:12px 14px!important}.entry.ios-fullscreen .console-sensor-name{white-space:normal!important;text-overflow:clip!important;overflow-wrap:break-word!important;word-break:normal!important;hyphens:none!important;line-height:1.25!important;overflow:visible!important}@media (width<=900px){.entry:not(.ios-fullscreen) .security-console .console-sensors,.entry:not(.ios-fullscreen) .security-console .console-sensors.console-sensors--compact,.entry:not(.ios-fullscreen) .security-console .console-sensors.console-sensors--micro{grid-template-columns:minmax(0,1fr)!important;max-height:none!important;overflow:visible!important}.entry:not(.ios-fullscreen) .security-console .console-sensor{width:100%!important;min-width:0!important}.entry:not(.ios-fullscreen) .security-console .console-sensor-name{writing-mode:horizontal-tb!important;word-break:normal!important;overflow-wrap:normal!important;hyphens:none!important}}.console-empty{text-align:center!important;color:#ffffffa6!important;border:1px dashed #ffffff40!important;border-radius:20px!important;padding:24px!important;font-size:12px!important;font-weight:800!important}@media (width>=901px){.entry:not(.ios-fullscreen) .security-console{box-shadow:none!important;background:0 0!important;grid-template-rows:auto 1fr!important;grid-template-columns:minmax(200px,350px) 1fr minmax(220px,380px)!important;justify-content:center!important;align-items:center!important;gap:16px 36px!important;padding:24px 28px 20px!important;display:grid!important}.entry:not(.ios-fullscreen) .security-console .console-hud{display:contents!important}.entry:not(.ios-fullscreen) .security-console .console-hud-loc{grid-area:1/1!important;place-self:center start!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .argus-connection-pill{grid-area:1/2!important;place-self:center!important;margin:0!important;position:static!important;transform:none!important}.entry:not(.ios-fullscreen) .security-console .console-hud-right{grid-area:1/3!important;place-self:center end!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack{grid-area:2/1!important;align-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .entry-icon{grid-area:2/2!important;place-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .console-sensors{grid-area:2/3!important;align-self:center!important;margin:0!important}}@container argus-console (width>=901px){.entry:not(.ios-fullscreen) .security-console{box-shadow:none!important;background:0 0!important;grid-template-rows:auto 1fr!important;grid-template-columns:minmax(200px,320px) minmax(160px,220px) minmax(280px,1fr)!important;justify-content:center!important;align-items:center!important;gap:14px 20px!important;padding:20px 24px 18px!important;display:grid!important}.entry:not(.ios-fullscreen) .security-console .console-hud{display:contents!important}.entry:not(.ios-fullscreen) .security-console .console-hud-loc{grid-area:1/1!important;place-self:center start!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .argus-connection-pill{grid-area:1/2!important;place-self:center!important;margin:0!important;position:static!important;transform:none!important}.entry:not(.ios-fullscreen) .security-console .console-hud-right{grid-area:1/3!important;place-self:center end!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack{grid-area:2/1!important;align-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .entry-icon{grid-area:2/2!important;place-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .console-sensors{grid-area:2/3!important;align-self:center!important;margin:0!important}}@media (width<=900px){.entry:not(.ios-fullscreen) .security-console{box-sizing:border-box!important;width:100%!important;box-shadow:none!important;background:0 0!important;flex-direction:column!important;align-items:center!important;gap:14px!important;padding:18px 14px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .console-hud{width:100%!important;box-shadow:none!important;background:0 0!important;flex-flow:wrap!important;justify-content:center!important;align-items:center!important;gap:8px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack,.entry:not(.ios-fullscreen) .security-console .console-sensors{width:100%!important;max-width:440px!important}}@container argus-console (width<=900px){.entry:not(.ios-fullscreen) .security-console{box-sizing:border-box!important;width:100%!important;box-shadow:none!important;background:0 0!important;flex-direction:column!important;align-items:center!important;gap:14px!important;padding:18px 14px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .console-hud{width:100%!important;box-shadow:none!important;background:0 0!important;flex-flow:wrap!important;justify-content:center!important;align-items:center!important;gap:8px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack,.entry:not(.ios-fullscreen) .security-console .console-sensors{width:100%!important;max-width:440px!important}}.entry.ios-fullscreen{box-sizing:border-box!important;width:100dvw!important;height:100%!important;min-height:100dvh!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;background:0 0!important;border:none!important;border-radius:0!important;flex-direction:column!important;margin:0!important;padding:0!important;display:flex!important;position:relative!important;overflow:visible!important}.entry.ios-fullscreen .entry-exit-fs{top:max(16px, env(safe-area-inset-top))!important;left:max(16px, env(safe-area-inset-left))!important;z-index:100000!important;-webkit-backdrop-filter:blur(20px)!important;color:#fff!important;cursor:pointer!important;background:#000000a6!important;border:1px solid #ffffff4d!important;border-radius:16px!important;padding:10px 16px!important;font-size:20px!important;font-weight:900!important;position:fixed!important;box-shadow:inset 0 1px #fff6,0 8px 24px #00000080!important}@media (width<=900px),(orientation:portrait){.entry.ios-fullscreen .security-console{padding:max(64px, calc(env(safe-area-inset-top) + 48px)) 16px max(32px, env(safe-area-inset-bottom))!important;box-sizing:border-box!important;width:100%!important;max-width:480px!important;min-height:100%!important;box-shadow:none!important;background:0 0!important;flex-direction:column!important;justify-content:flex-start!important;align-items:center!important;gap:16px!important;margin:0 auto!important;display:flex!important}.entry.ios-fullscreen .security-console .console-hud{width:100%!important;box-shadow:none!important;background:0 0!important;flex-flow:wrap!important;justify-content:center!important;align-items:center!important;gap:8px!important;display:flex!important}.entry.ios-fullscreen .security-console .entry-icon{margin:6px auto!important;display:flex!important}.entry.ios-fullscreen .security-console .entry-icon svg{max-width:min(50vw,220px)!important}.entry.ios-fullscreen .security-console .liquid-stack{width:100%!important;max-width:440px!important}.entry.ios-fullscreen .security-console .console-sensors{width:100%!important;max-width:440px!important;max-height:300px!important;box-shadow:none!important;background:0 0!important}}@media (width>=901px) and (orientation:landscape),(width>=901px),(orientation:landscape) and (height<=600px){.entry.ios-fullscreen .security-console{padding:max(56px, env(safe-area-inset-top)) max(48px, env(safe-area-inset-right)) max(32px, env(safe-area-inset-bottom)) max(48px, env(safe-area-inset-left))!important;box-sizing:border-box!important;width:100%!important;max-width:1600px!important;height:100%!important;min-height:100dvh!important;box-shadow:none!important;background:0 0!important;grid-template-rows:auto 1fr!important;grid-template-columns:minmax(280px,380px) 1fr minmax(280px,440px)!important;justify-content:center!important;align-items:center!important;gap:20px 48px!important;margin:0 auto!important;display:grid!important}.entry.ios-fullscreen .security-console .console-hud{display:contents!important}.entry.ios-fullscreen .security-console .console-hud-loc{grid-area:1/1!important;place-self:center start!important;margin:0!important}.entry.ios-fullscreen .security-console .argus-connection-pill{grid-area:1/2!important;place-self:center!important;margin:0!important;position:static!important;transform:none!important}.entry.ios-fullscreen .security-console .console-hud-right{grid-area:1/3!important;place-self:center end!important;margin:0!important}.entry.ios-fullscreen .security-console .liquid-stack{grid-area:2/1!important;align-self:center!important;width:100%!important}.entry.ios-fullscreen .security-console .entry-icon{grid-area:2/2!important;place-self:center!important}.entry.ios-fullscreen .security-console .entry-icon svg{max-width:min(35vw,360px)!important}.entry.ios-fullscreen .security-console .console-sensors{width:100%!important;max-height:520px!important;box-shadow:none!important;background:0 0!important;grid-area:2/3!important;align-self:center!important}}.security-console .console-sensor{grid-template-columns:28px minmax(0,1fr)!important;min-width:0!important}.security-console .console-sensor-icon{grid-area:1/1/span 2}.security-console .console-sensor-name{grid-area:1/2}.security-console .console-sensor-state{flex-wrap:wrap;grid-area:2/2}.security-console .liquid-btn:disabled{opacity:.45;cursor:not-allowed}@media (prefers-reduced-motion:reduce){.security-console *,.security-console :before,.security-console :after{transition:none!important;animation:none!important}}";
+var Vn = ".entry{position:relative;overflow:hidden;container:argus-console/inline-size;-webkit-backdrop-filter:blur(40px)saturate(190%)brightness(1.12)!important;background:linear-gradient(135deg,#ffffff1f 0%,#ffffff08 100%)!important;border:1px solid #ffffff38!important;border-radius:28px!important;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s!important;box-shadow:inset 0 1.5px #ffffff73,inset 0 -1px #ffffff1a,0 24px 64px #00000073,0 4px 16px #00000040!important}.security-console,.entry-content,.entry-content.security-console{box-shadow:none!important;box-shadow:none!important;background:0 0!important;border:none!important}.security-console .console-hud{box-shadow:none!important;background:0 0!important;border:none!important}.console-hud-loc{box-sizing:border-box!important;text-overflow:ellipsis!important;white-space:nowrap!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;letter-spacing:.04em!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;background:linear-gradient(135deg,#fff3 0%,#ffffff0d 100%)!important;border:1px solid #ffffff47!important;border-radius:999px!important;align-items:center!important;max-width:clamp(140px,26vw,260px)!important;height:38px!important;padding:0 16px!important;font-size:11.5px!important;font-weight:850!important;display:inline-flex!important;overflow:hidden!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff73,inset 0 -1px #0003,0 8px 24px #00000059!important}.argus-connection-pill{-webkit-backdrop-filter:blur(24px)saturate(190%)!important;letter-spacing:.05em!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;white-space:nowrap!important;background:linear-gradient(135deg,#ffffff29 0%,#ffffff0a 100%)!important;border:1px solid #ffffff3d!important;border-radius:999px!important;align-items:center!important;gap:8px!important;max-width:max-content!important;height:38px!important;padding:0 16px!important;font-size:11px!important;font-weight:850!important;display:inline-flex!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff61,inset 0 -1px #00000026,0 8px 24px #00000059!important}.argus-connection-dot{background:#10b981!important;border-radius:50%!important;width:8px!important;height:8px!important;box-shadow:0 0 12px #10b981!important}.argus-connection-pill[data-online=false] .argus-connection-dot{background:#ef4444!important;box-shadow:0 0 12px #ef4444!important}.console-hud-right{min-width:0!important;box-shadow:none!important;background:0 0!important;border:0!important;justify-content:flex-end!important;align-items:center!important;gap:8px!important;height:38px!important;display:inline-flex!important}.console-system-badge{box-sizing:border-box!important;letter-spacing:.02em!important;text-transform:none!important;white-space:nowrap!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;border-radius:999px!important;align-items:center!important;height:38px!important;padding:0 18px!important;font-size:12px!important;font-weight:800!important;display:inline-flex!important;transform:translate(0,0)!important}.console-system-badge--disarmed{color:#34d399!important;text-shadow:0 0 10px #10b981b3!important;background:linear-gradient(135deg,#10b98152 0%,#0596691f 100%)!important;border:1.5px solid #10b981a6!important;box-shadow:inset 0 1.5px #ffffff80,0 0 24px #10b98166,0 8px 24px #00000059!important}.console-system-badge--armed_home,.console-system-badge--armed_away,.console-system-badge--armed_night,.console-system-badge--pending{color:#fbbf24!important;text-shadow:0 0 10px #f59e0bcc!important;background:linear-gradient(135deg,#f59e0b59 0%,#d9770624 100%)!important;border:1.5px solid #f59e0bb3!important;box-shadow:inset 0 1.5px #ffffff8c,0 0 24px #f59e0b73,0 8px 24px #00000059!important}.console-system-badge--triggered{color:#f87171!important;text-shadow:0 0 12px #ef4444d9!important;background:linear-gradient(135deg,#ef44446b 0%,#b91c1c29 100%)!important;border:1.5px solid #ef4444d9!important;animation:.9s ease-in-out infinite argusTriggerBadgePulse!important;box-shadow:inset 0 1.5px #fff9,0 0 32px #ef444499,0 8px 24px #00000059!important}@keyframes argusTriggerBadgePulse{0%,to{opacity:.85;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}.security-console .entry-icon{will-change:transform;animation:5s ease-in-out infinite float-icon;transform:translate(0,0);box-shadow:none!important;background:0 0!important;border:none!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;display:flex!important}.security-console .entry-icon svg{filter:drop-shadow(0 14px 28px #0009)drop-shadow(0 0 45px #10b9818c)!important;width:100%!important;max-width:220px!important;height:auto!important}@keyframes float-icon{0%,to{transform:translate(0,0)scale(1)}50%{transform:translateY(-6px)scale(1.015)}}.entry.argus-waiting .entry-icon>svg{transform-origin:50%!important;filter:drop-shadow(0 0 26px #ffb839f2)saturate(1.35)!important;animation:1.05s ease-in-out infinite argusArmingShield!important}.argus-shield-status{color:#ffd27a;letter-spacing:.12em;text-align:center;background:#ff950033;border:1px solid #ffb8398c;border-radius:999px;width:max-content;max-width:200px;margin:7px auto 0;padding:5px 14px;font-size:9.5px;font-weight:850;animation:1.05s ease-in-out infinite argusArmingLabel;display:block;box-shadow:inset 0 1px #fff6,0 6px 18px #0000004d}@keyframes argusArmingShield{0%,to{opacity:.55;transform:scale(.94)}50%{opacity:1;transform:scale(1.07)}}@keyframes argusArmingLabel{0%,to{opacity:.62}50%{opacity:1}}.security-console .liquid-stack{width:100%!important;box-shadow:none!important;background:0 0!important;border:none!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;display:grid!important}.security-console .liquid-btn{text-align:center!important;letter-spacing:.03em!important;-webkit-backdrop-filter:blur(24px)saturate(190%)!important;color:#fff!important;text-shadow:0 1px 3px #00000080!important;cursor:pointer!important;background:linear-gradient(135deg,#ffffff2e 0%,#ffffff0d 100%)!important;border:1px solid #ffffff40!important;border-radius:20px!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:5px!important;min-height:68px!important;padding:12px 6px!important;font-size:11.5px!important;font-weight:850!important;line-height:1.15!important;transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s,background .25s,border-color .25s!important;display:flex!important;transform:translate(0,0)!important;box-shadow:inset 0 1.5px #ffffff6b,inset 0 -1px #0003,0 10px 28px #00000059!important}.security-console .liquid-btn:hover{background:linear-gradient(135deg,#ffffff3d 0%,#ffffff14 100%)!important;border-color:#fff6!important;transform:translateY(-3px)translate(0,0)scale(1.025)!important;box-shadow:inset 0 1.5px #ffffff8c,0 14px 34px #00000073!important}.security-console .liquid-btn span:first-child,.security-console .liquid-btn .mode-btn-icon{filter:drop-shadow(0 2px 6px #0006)!important;font-size:20px!important;line-height:1!important}.security-console .liquid-btn span:last-child{color:#fff!important;font-size:11px!important;font-weight:850!important}.security-console .btn-home.active{background:linear-gradient(135deg,#fb8c00 0%,#d97706 100%)!important;border:1px solid #fed7aad9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #fb8c0099!important}.security-console .btn-away.active{background:linear-gradient(135deg,#e53935 0%,#b91c1c 100%)!important;border:1px solid #fecacad9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #e5393599!important}.security-console .btn-night.active{background:linear-gradient(135deg,#1e88e5 0%,#1d4ed8 100%)!important;border:1px solid #bfdbfed9!important;box-shadow:inset 0 1.5px #fff9,0 12px 32px #1e88e599!important}.security-console .console-sensors{scrollbar-width:none;width:100%!important;max-width:440px!important;max-height:none!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;filter:none!important;isolation:auto!important;contain:none!important;background:0 0!important;border:none!important;outline:none!important;flex-direction:column!important;gap:7px!important;margin:0!important;padding:0!important;display:flex!important;overflow:visible!important}.security-console .console-sensors::-webkit-scrollbar{display:none}.security-console .console-sensors.console-sensors--compact,.security-console .console-sensors[data-count=\"3\"],.security-console .console-sensors[data-count=\"4\"],.security-console .console-sensors[data-count=\"5\"],.security-console .console-sensors[data-count=\"6\"]{gap:6px!important}.security-console .console-sensors.console-sensors--micro,.security-console .console-sensors[data-count=\"7\"],.security-console .console-sensors[data-count=\"8\"],.security-console .console-sensors[data-count=\"9\"],.security-console .console-sensors[data-count=\"10\"],.security-console .console-sensors[data-count=\"11\"],.security-console .console-sensors[data-count=\"12\"]{scrollbar-width:thin;gap:5px!important;max-height:320px!important;overflow-y:auto!important}.console-sensor{color:#fff!important;text-shadow:0 1px 3px #00000080!important;box-sizing:border-box!important;background:linear-gradient(135deg,#ffffff29 0%,#ffffff0a 100%)!important;border:1px solid #ffffff3d!important;border-radius:999px!important;justify-content:space-between!important;align-items:center!important;gap:12px!important;min-height:48px!important;padding:8px 16px!important;transition:background .35s,box-shadow .35s,border-color .35s,transform .2s!important;display:flex!important;box-shadow:inset 0 1.5px #ffffff61,inset 0 -1px #00000026,0 4px 12px #00000040!important}.console-sensor:hover{transform:translateY(-2px)scale(1.02)!important;box-shadow:inset 0 1.5px #ffffff80,0 8px 18px #00000059!important}.console-sensor.open{background:linear-gradient(135deg,#ef444459 0%,#b91c1c29 100%)!important;border-color:#ef4444a6!important;box-shadow:inset 0 1.5px #ffffff73,0 0 16px #ef444459,0 4px 12px #00000040!important}.console-sensor.unavailable{background:linear-gradient(135deg,#94a3b826 0%,#64748b0d 100%)!important;border-style:dashed!important;border-color:#94a3b859!important}.console-sensor-icon{filter:drop-shadow(0 2px 4px #0006)!important;justify-content:center!important;align-items:center!important;font-size:18px!important;display:flex!important}.argus-lock-icon{filter:drop-shadow(0 0 6px);width:25px;height:25px;transform-style:preserve-3d;perspective:240px;transition:color .35s,filter .35s;overflow:visible}.argus-lock-icon.is-open{color:#ff4f6d;animation:1.15s cubic-bezier(.22,.75,.2,1) both argus-lock-open}.argus-lock-icon.is-closed{color:#35e6a0;animation:1.15s cubic-bezier(.22,.75,.2,1) both argus-lock-closed}.argus-lock-icon.is-bypassed{color:#94a3b8;filter:none}.argus-lock-body{fill:color-mix(in srgb, currentColor 28%, transparent);stroke:currentColor;stroke-width:2px}.argus-lock-shackle{fill:none;stroke:currentColor;stroke-width:4px;stroke-linecap:round;transform-origin:15px 21px;transition:transform .85s cubic-bezier(.22,.75,.2,1)}.argus-lock-icon.is-open .argus-lock-shackle{transform:rotate(-28deg)translate(-1px,-2px)}.argus-lock-keyhole,.argus-lock-keyline{fill:currentColor;stroke:currentColor;stroke-width:2px;stroke-linecap:round}@keyframes argus-lock-open{0%{opacity:.82;transform:translate(0,0)scale(1)rotateY(0)}42%{opacity:1;filter:drop-shadow(0 0 18px)drop-shadow(0 16px 18px #0000008c);transform:translate3d(0,-3px,60px)scale(1.58)rotateY(-12deg)rotate(-4deg)}72%{transform:translate3d(0,-1px,34px)scale(1.34)rotateY(-6deg)rotate(-2deg)}to{opacity:1;transform:translate(0,0)scale(1)rotateY(0)rotate(0)}}@keyframes argus-lock-closed{0%{opacity:.82;transform:translate(0,0)scale(1)rotateY(0)}42%{opacity:1;filter:drop-shadow(0 0 18px)drop-shadow(0 16px 18px #0000008c);transform:translate3d(0,-3px,60px)scale(1.58)rotateY(12deg)rotate(4deg)}72%{transform:translate3d(0,-1px,34px)scale(1.34)rotateY(6deg)rotate(2deg)}to{opacity:1;transform:translate(0,0)scale(1)rotateY(0)rotate(0)}}@media (prefers-reduced-motion:reduce){.argus-lock-icon{animation:none!important}.argus-lock-shackle{transition:none!important}}.console-sensor-main{flex:auto!important;align-items:center!important;min-width:0!important;display:flex!important}.console-sensor-name{letter-spacing:.02em!important;white-space:nowrap!important;text-overflow:ellipsis!important;color:#fff!important;min-width:0!important;font-size:11.5px!important;font-weight:850!important;line-height:1.25!important;overflow:hidden!important}.console-sensor-status-wrap{flex-shrink:0!important;align-items:center!important;gap:6px!important;margin-left:auto!important;display:inline-flex!important}.console-sensor-state{letter-spacing:.02em!important;text-transform:none!important;white-space:nowrap!important;align-items:center!important;gap:4px!important;font-size:11px!important;font-weight:800!important;display:inline-flex!important}.entry.ios-fullscreen .console-sensors{flex-direction:column!important;gap:8px!important;width:100%!important;max-width:480px!important;max-height:520px!important;display:flex!important;overflow-y:auto!important}.entry.ios-fullscreen .console-sensor{min-width:0!important;min-height:50px!important;padding:8px 16px!important}.entry.ios-fullscreen .console-sensor-name{white-space:nowrap!important;text-overflow:ellipsis!important;line-height:1.25!important;overflow:hidden!important}@media (width<=900px){.entry:not(.ios-fullscreen) .security-console .console-sensors,.entry:not(.ios-fullscreen) .security-console .console-sensors.console-sensors--compact,.entry:not(.ios-fullscreen) .security-console .console-sensors.console-sensors--micro{grid-template-columns:minmax(0,1fr)!important;max-height:none!important;overflow:visible!important}.entry:not(.ios-fullscreen) .security-console .console-sensor{width:100%!important;min-width:0!important}.entry:not(.ios-fullscreen) .security-console .console-sensor-name{writing-mode:horizontal-tb!important;word-break:normal!important;overflow-wrap:normal!important;hyphens:none!important}}.console-empty{text-align:center!important;color:#ffffffa6!important;border:1px dashed #ffffff40!important;border-radius:20px!important;padding:24px!important;font-size:12px!important;font-weight:800!important}@media (width>=901px){.entry:not(.ios-fullscreen) .security-console{box-shadow:none!important;background:0 0!important;grid-template-rows:auto 1fr!important;grid-template-columns:minmax(200px,350px) 1fr minmax(220px,380px)!important;justify-content:center!important;align-items:center!important;gap:16px 36px!important;padding:24px 28px 20px!important;display:grid!important}.entry:not(.ios-fullscreen) .security-console .console-hud{display:contents!important}.entry:not(.ios-fullscreen) .security-console .console-hud-loc{grid-area:1/1!important;place-self:center start!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .argus-connection-pill{grid-area:1/2!important;place-self:center!important;margin:0!important;position:static!important;transform:none!important}.entry:not(.ios-fullscreen) .security-console .console-hud-right{grid-area:1/3!important;place-self:center end!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack{grid-area:2/1!important;align-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .entry-icon{grid-area:2/2!important;place-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .console-sensors{grid-area:2/3!important;align-self:center!important;margin:0!important}}@container argus-console (width>=901px){.entry:not(.ios-fullscreen) .security-console{box-shadow:none!important;background:0 0!important;grid-template-rows:auto 1fr!important;grid-template-columns:minmax(200px,320px) minmax(160px,220px) minmax(280px,1fr)!important;justify-content:center!important;align-items:center!important;gap:14px 20px!important;padding:20px 24px 18px!important;display:grid!important}.entry:not(.ios-fullscreen) .security-console .console-hud{display:contents!important}.entry:not(.ios-fullscreen) .security-console .console-hud-loc{grid-area:1/1!important;place-self:center start!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .argus-connection-pill{grid-area:1/2!important;place-self:center!important;margin:0!important;position:static!important;transform:none!important}.entry:not(.ios-fullscreen) .security-console .console-hud-right{grid-area:1/3!important;place-self:center end!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack{grid-area:2/1!important;align-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .entry-icon{grid-area:2/2!important;place-self:center!important;margin:0!important}.entry:not(.ios-fullscreen) .security-console .console-sensors{grid-area:2/3!important;align-self:center!important;margin:0!important}}@media (width<=900px){.entry:not(.ios-fullscreen) .security-console{box-sizing:border-box!important;width:100%!important;box-shadow:none!important;background:0 0!important;flex-direction:column!important;align-items:center!important;gap:14px!important;padding:18px 14px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .console-hud{width:100%!important;box-shadow:none!important;background:0 0!important;flex-flow:wrap!important;justify-content:center!important;align-items:center!important;gap:8px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack,.entry:not(.ios-fullscreen) .security-console .console-sensors{width:100%!important;max-width:440px!important}}@container argus-console (width<=900px){.entry:not(.ios-fullscreen) .security-console{box-sizing:border-box!important;width:100%!important;box-shadow:none!important;background:0 0!important;flex-direction:column!important;align-items:center!important;gap:14px!important;padding:18px 14px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .console-hud{width:100%!important;box-shadow:none!important;background:0 0!important;flex-flow:wrap!important;justify-content:center!important;align-items:center!important;gap:8px!important;display:flex!important}.entry:not(.ios-fullscreen) .security-console .liquid-stack,.entry:not(.ios-fullscreen) .security-console .console-sensors{width:100%!important;max-width:440px!important}}.entry.ios-fullscreen{box-sizing:border-box!important;width:100dvw!important;height:100%!important;min-height:100dvh!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;background:0 0!important;border:none!important;border-radius:0!important;flex-direction:column!important;margin:0!important;padding:0!important;display:flex!important;position:relative!important;overflow:visible!important}.entry.ios-fullscreen .entry-exit-fs{top:max(16px, env(safe-area-inset-top))!important;left:max(16px, env(safe-area-inset-left))!important;z-index:100000!important;-webkit-backdrop-filter:blur(20px)!important;color:#fff!important;cursor:pointer!important;background:#000000a6!important;border:1px solid #ffffff4d!important;border-radius:16px!important;padding:10px 16px!important;font-size:20px!important;font-weight:900!important;position:fixed!important;box-shadow:inset 0 1px #fff6,0 8px 24px #00000080!important}@media (width<=900px),(orientation:portrait){.entry.ios-fullscreen .security-console{padding:max(64px, calc(env(safe-area-inset-top) + 48px)) 16px max(32px, env(safe-area-inset-bottom))!important;box-sizing:border-box!important;width:100%!important;max-width:480px!important;min-height:100%!important;box-shadow:none!important;background:0 0!important;flex-direction:column!important;justify-content:flex-start!important;align-items:center!important;gap:16px!important;margin:0 auto!important;display:flex!important}.entry.ios-fullscreen .security-console .console-hud{width:100%!important;box-shadow:none!important;background:0 0!important;flex-flow:wrap!important;justify-content:center!important;align-items:center!important;gap:8px!important;display:flex!important}.entry.ios-fullscreen .security-console .entry-icon{margin:6px auto!important;display:flex!important}.entry.ios-fullscreen .security-console .entry-icon svg{max-width:min(50vw,220px)!important}.entry.ios-fullscreen .security-console .liquid-stack{width:100%!important;max-width:440px!important}.entry.ios-fullscreen .security-console .console-sensors{width:100%!important;max-width:440px!important;max-height:300px!important;box-shadow:none!important;background:0 0!important}}@media (width>=901px) and (orientation:landscape),(width>=901px),(orientation:landscape) and (height<=600px){.entry.ios-fullscreen .security-console{padding:max(56px, env(safe-area-inset-top)) max(48px, env(safe-area-inset-right)) max(32px, env(safe-area-inset-bottom)) max(48px, env(safe-area-inset-left))!important;box-sizing:border-box!important;width:100%!important;max-width:1600px!important;height:100%!important;min-height:100dvh!important;box-shadow:none!important;background:0 0!important;grid-template-rows:auto 1fr!important;grid-template-columns:minmax(280px,380px) 1fr minmax(280px,440px)!important;justify-content:center!important;align-items:center!important;gap:20px 48px!important;margin:0 auto!important;display:grid!important}.entry.ios-fullscreen .security-console .console-hud{display:contents!important}.entry.ios-fullscreen .security-console .console-hud-loc{grid-area:1/1!important;place-self:center start!important;margin:0!important}.entry.ios-fullscreen .security-console .argus-connection-pill{grid-area:1/2!important;place-self:center!important;margin:0!important;position:static!important;transform:none!important}.entry.ios-fullscreen .security-console .console-hud-right{grid-area:1/3!important;place-self:center end!important;margin:0!important}.entry.ios-fullscreen .security-console .liquid-stack{grid-area:2/1!important;align-self:center!important;width:100%!important}.entry.ios-fullscreen .security-console .entry-icon{grid-area:2/2!important;place-self:center!important}.entry.ios-fullscreen .security-console .entry-icon svg{max-width:min(35vw,360px)!important}.entry.ios-fullscreen .security-console .console-sensors{width:100%!important;max-height:520px!important;box-shadow:none!important;background:0 0!important;grid-area:2/3!important;align-self:center!important}}.security-console .console-sensor{justify-content:space-between!important;align-items:center!important;min-width:0!important;display:flex!important}.security-console .liquid-btn:disabled{opacity:.45;cursor:not-allowed}@media (prefers-reduced-motion:reduce){.security-console *,.security-console :before,.security-console :after{transition:none!important;animation:none!important}}";
 //#endregion
 //#region src/features/dashboard/components/SensorChip.tsx
 function Hn({ isOpen: e, isBypassed: t, label: n }) {
@@ -18446,13 +18456,73 @@ function Hn({ isOpen: e, isBypassed: t, label: n }) {
 		]
 	});
 }
-function Un({ id: e, name: t, isOpen: n, isBlocking: r, isBypassed: i, isUnavailable: a, unavailableLabel: o, battery: s, delay: c, iconHtml: l, statusLabelOpen: u, statusLabelClosed: d, bypassedLabel: f, isLockLike: p }) {
+function Un({ isInstant: e, size: t = 13 }) {
+	let n = e ? "#38bdf8" : "#fbbf24";
+	return /* @__PURE__ */ (0, A.jsxs)("svg", {
+		className: "liquid-glass-clock",
+		viewBox: "0 0 20 20",
+		width: t,
+		height: t,
+		style: {
+			verticalAlign: "middle",
+			filter: `drop-shadow(0 0 4px ${n})`,
+			flexShrink: 0
+		},
+		children: [
+			/* @__PURE__ */ (0, A.jsx)("circle", {
+				cx: "10",
+				cy: "10",
+				r: "8",
+				fill: "rgba(255,255,255,0.08)",
+				stroke: n,
+				strokeWidth: "1.4"
+			}),
+			/* @__PURE__ */ (0, A.jsx)("path", {
+				d: "M5 6 A 7 7 0 0 1 15 6",
+				fill: "none",
+				stroke: "rgba(255,255,255,0.65)",
+				strokeWidth: "0.8",
+				strokeLinecap: "round"
+			}),
+			e ? /* @__PURE__ */ (0, A.jsx)("path", {
+				d: "M11 4 L8 10 L11 10 L9 16 L14 9 L11 9 Z",
+				fill: n
+			}) : /* @__PURE__ */ (0, A.jsxs)(A.Fragment, { children: [
+				/* @__PURE__ */ (0, A.jsx)("line", {
+					x1: "10",
+					y1: "10",
+					x2: "10",
+					y2: "5.5",
+					stroke: n,
+					strokeWidth: "1.3",
+					strokeLinecap: "round"
+				}),
+				/* @__PURE__ */ (0, A.jsx)("line", {
+					x1: "10",
+					y1: "10",
+					x2: "13.5",
+					y2: "10",
+					stroke: n,
+					strokeWidth: "1.3",
+					strokeLinecap: "round"
+				}),
+				/* @__PURE__ */ (0, A.jsx)("circle", {
+					cx: "10",
+					cy: "10",
+					r: "1.2",
+					fill: n
+				})
+			] })
+		]
+	});
+}
+function Wn({ id: e, name: t, isOpen: n, isBlocking: r, isBypassed: i, isUnavailable: a, unavailableLabel: o, battery: s, delay: c, iconHtml: l, statusLabelOpen: u, statusLabelClosed: d, bypassedLabel: f, isLockLike: p }) {
 	let m = null;
 	if (s !== null) {
 		let e = s === 0, t = s <= 10 && !e, n = e ? "🔋 ❌" : `🔋 ${s}%`;
 		(e || t) && (m = /* @__PURE__ */ (0, A.jsx)("span", {
+			className: "console-battery-badge",
 			style: {
-				marginLeft: "8px",
 				fontSize: "10px",
 				fontWeight: 700,
 				color: "#ff5252",
@@ -18461,7 +18531,8 @@ function Un({ id: e, name: t, isOpen: n, isBlocking: r, isBypassed: i, isUnavail
 				padding: "2px 6px",
 				borderRadius: "10px",
 				border: "1px solid rgba(255,82,82,0.3)",
-				textShadow: "0 0 5px rgba(255,82,82,0.5)"
+				textShadow: "0 0 5px rgba(255,82,82,0.5)",
+				whiteSpace: "nowrap"
 			},
 			children: n
 		}));
@@ -18469,17 +18540,29 @@ function Un({ id: e, name: t, isOpen: n, isBlocking: r, isBypassed: i, isUnavail
 	let h = null;
 	if (c !== void 0) {
 		let e = c === 0;
-		h = /* @__PURE__ */ (0, A.jsx)("span", {
+		h = /* @__PURE__ */ (0, A.jsxs)("span", {
+			className: "console-delay-badge",
 			style: {
-				marginLeft: "6px",
-				fontSize: "9px",
-				fontWeight: 700,
+				display: "inline-flex",
+				alignItems: "center",
+				gap: "3px",
+				fontSize: "9.5px",
+				fontWeight: 800,
 				color: e ? "#38bdf8" : "#fbbf24",
-				background: "rgba(255,255,255,0.08)",
-				padding: "2px 5px",
-				borderRadius: "6px"
+				background: e ? "rgba(56,189,248,0.18)" : "rgba(251,191,36,0.18)",
+				border: `1px solid ${e ? "rgba(56,189,248,0.4)" : "rgba(251,191,36,0.4)"}`,
+				padding: "2px 6px",
+				borderRadius: "8px",
+				backdropFilter: "blur(8px)",
+				WebkitBackdropFilter: "blur(8px)",
+				boxShadow: `0 0 8px ${e ? "rgba(56,189,248,0.25)" : "rgba(251,191,36,0.25)"}`,
+				whiteSpace: "nowrap"
 			},
-			children: e ? "⚡ 0s" : `⏱️ ${c}s`
+			title: e ? "Retardo: Instantáneo (0s)" : `Retardo: ${c}s`,
+			children: [/* @__PURE__ */ (0, A.jsx)(Un, {
+				isInstant: e,
+				size: 12
+			}), /* @__PURE__ */ (0, A.jsx)("span", { children: e ? "0s" : `${c}s` })]
 		});
 	}
 	let g = a || i ? "#94a3b8" : r ? "#fde047" : n ? "#f87171" : "#34d399", _ = p || i ? "none" : r ? "pulse 1s infinite" : n ? "pulse 2s infinite" : "none", v = a || i ? "#94a3b8" : r ? "#fde047" : n ? "#f87171" : "#34d399", y = i ? .6 : 1, b = a ? o || "No disponible" : n ? u : d, x = i ? `${f || "Omitido"} · ${b}` : b, S = `${t}: ${x}${s === null ? "" : ` (Batería: ${s}%)`}`;
@@ -18499,7 +18582,8 @@ function Un({ id: e, name: t, isOpen: n, isBlocking: r, isBypassed: i, isUnavail
 					alignItems: "center",
 					justifyContent: "center",
 					color: g,
-					animation: _
+					animation: _,
+					flexShrink: 0
 				},
 				children: a ? /* @__PURE__ */ (0, A.jsxs)("svg", {
 					viewBox: "0 0 24 24",
@@ -18536,17 +18620,23 @@ function Un({ id: e, name: t, isOpen: n, isBlocking: r, isBypassed: i, isUnavail
 					label: S
 				}) : /* @__PURE__ */ (0, A.jsx)("span", { dangerouslySetInnerHTML: { __html: l } })
 			}),
-			/* @__PURE__ */ (0, A.jsx)("span", {
-				className: "console-sensor-name",
-				title: t,
-				style: { color: r && !i ? "#fde047" : "#ffffff" },
-				children: t
+			/* @__PURE__ */ (0, A.jsx)("div", {
+				className: "console-sensor-main",
+				children: /* @__PURE__ */ (0, A.jsx)("span", {
+					className: "console-sensor-name",
+					title: t,
+					style: { color: r && !i ? "#fde047" : "#ffffff" },
+					children: t
+				})
 			}),
-			/* @__PURE__ */ (0, A.jsxs)("span", {
-				className: "console-sensor-state",
-				style: { color: v },
+			/* @__PURE__ */ (0, A.jsxs)("div", {
+				className: "console-sensor-status-wrap",
 				children: [
-					x,
+					/* @__PURE__ */ (0, A.jsx)("span", {
+						className: "console-sensor-state",
+						style: { color: v },
+						children: x
+					}),
 					h,
 					m
 				]
@@ -18556,7 +18646,7 @@ function Un({ id: e, name: t, isOpen: n, isBlocking: r, isBypassed: i, isUnavail
 }
 //#endregion
 //#region src/features/dashboard/components/SecurityConsole.tsx
-function Wn({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r }) {
+function Gn({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r }) {
 	let [i, a] = (0, D.useState)(0);
 	(0, D.useEffect)(() => {
 		let t = () => a((e) => e + 1);
@@ -18767,38 +18857,49 @@ function Wn({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 							className: "console-empty",
 							children: m("no_sensors_configured") || "Sin sensores configurados"
 						}) : ee.map((t) => {
-							let n = s?.states?.[t.id], r = String(t.name || n?.attributes?.friendly_name || t.id).trim().replace(/\s+\(?dps\s*\d+\)?\s*$/i, "").replace(/\s+(?:puerta|door|window|ventana)\s*$/i, "").trim(), i = /door|puerta|port[oó]n|gate|lock|cerradura|window|ventana/i.test(`${t.id} ${r}`), a = v && w.includes(t.id), o = !n || ["unknown", "unavailable"].includes(n.state), c = !o && (typeof e?.isSensorActive == "function" ? !!e.isSensorActive(n) : [
+							let n = String(t.id || "").trim(), r = s?.states?.[n];
+							if (!r && s?.states) {
+								let e = n.toLowerCase();
+								r = s.states[e] || Object.values(s.states).find((t) => String(t?.entity_id || "").toLowerCase() === e);
+							}
+							let i = String(t.name || r?.attributes?.friendly_name || n).trim().replace(/\s+\(?dps\s*\d+\)?\s*$/i, "").replace(/\s+(?:puerta|door|window|ventana)\s*$/i, "").trim(), a = /door|puerta|port[oó]n|gate|lock|cerradura|window|ventana/i.test(`${n} ${i}`), o = v && w.includes(n), c = String(r?.state || "").toLowerCase(), l = !r || [
+								"unknown",
+								"unavailable",
+								"desconectado"
+							].includes(c), u = !l && (typeof e?.isSensorActive == "function" ? !!e.isSensorActive(r) : [
 								"on",
 								"open",
 								"unlocked",
 								"recording",
 								"active",
-								"motion"
-							].includes(String(n?.state || "").toLowerCase())), l = null;
-							if (typeof e?._getSensorBattery == "function" && (l = e._getSensorBattery(t.id, n)), l === null && n?.attributes) {
+								"motion",
+								"abierto",
+								"activa"
+							].includes(c)), d = null;
+							if (typeof e?._getSensorBattery == "function" && (d = e._getSensorBattery(n, r)), d === null && r?.attributes) {
 								let e = [
-									n.attributes.battery_level,
-									n.attributes.battery,
-									n.attributes.battery_percentage
+									r.attributes.battery_level,
+									r.attributes.battery,
+									r.attributes.battery_percentage
 								].find((e) => e != null && e !== "" && Number.isFinite(Number(e)));
-								e !== void 0 && (l = Math.max(0, Math.min(100, Math.round(Number(e)))));
+								e !== void 0 && (d = Math.max(0, Math.min(100, Math.round(Number(e)))));
 							}
-							let u = T?.sensor_settings?.[t.id]?.delay;
-							return /* @__PURE__ */ (0, A.jsx)(Un, {
+							let f, p = T?.sensor_settings?.[t.id] || T?.sensor_settings?.[n];
+							return p ? p.type === "instant" || p.delay === 0 ? f = 0 : p.delay !== void 0 && p.delay !== null && (f = Number(p.delay)) : ((T?.entry_sensors || []).includes(t.id) || (T?.entry_sensors || []).includes(n)) && (f = T?.entry_delay !== void 0 && T?.entry_delay !== null ? Number(T.entry_delay) : void 0), /* @__PURE__ */ (0, A.jsx)(Wn, {
 								id: t.id,
-								name: r,
-								isOpen: c,
-								isUnavailable: o,
+								name: i,
+								isOpen: u,
+								isUnavailable: l,
 								unavailableLabel: m("unavailable"),
-								isBlocking: a,
+								isBlocking: o,
 								isBypassed: t.isBypassed,
-								battery: l,
-								delay: u,
-								iconHtml: e._getSensorIcon?.(n, t) || "",
+								battery: d,
+								delay: f,
+								iconHtml: e._getSensorIcon?.(r, t) || "",
 								statusLabelOpen: m("status_open") || "ABIERTO",
 								statusLabelClosed: m("status_closed") || "CERRADO",
 								bypassedLabel: m("bypassed_sensor") || "OMITIDO",
-								isLockLike: i
+								isLockLike: a
 							}, t.id);
 						})
 					})
@@ -18809,7 +18910,7 @@ function Wn({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 }
 //#endregion
 //#region src/features/safety/slide-action.ts
-var Gn = "argus-slide-action-styles", Kn = {
+var Kn = "argus-slide-action-styles", qn = {
 	es: {
 		slide_disarm: "Desliza para desarmar",
 		slide_sos: "Desliza para activar SOS",
@@ -18833,7 +18934,7 @@ var Gn = "argus-slide-action-styles", Kn = {
 		cancel: "Cancel"
 	}
 };
-function qn(e) {
+function Jn(e) {
 	if (typeof e?._getProfileGesture == "function") return e._getProfileGesture() === "touch";
 	if (e?.getAttribute?.("argus-gesture") === "touch") return !0;
 	try {
@@ -18844,32 +18945,32 @@ function qn(e) {
 	} catch {}
 	return !1;
 }
-function Jn(e) {
+function Yn(e) {
 	if (typeof e._getCurrentLangCode == "function") return e._getCurrentLangCode();
 	let t = e._manualLang || e._lang;
 	if (!t) try {
 		t = localStorage.getItem("argus_lang");
 	} catch {}
-	if ((!t || t === "auto") && (t = e._ui?.manual_lang || e._ui?.language || e._hass?.language || "en"), t = String(t || "en").trim(), Kn[t]) return t;
+	if ((!t || t === "auto") && (t = e._ui?.manual_lang || e._ui?.language || e._hass?.language || "en"), t = String(t || "en").trim(), qn[t]) return t;
 	let n = t.split(/[-_]/)[0].toLowerCase();
-	return Kn[n] ? n : n.startsWith("es") ? "es" : "en";
+	return qn[n] ? n : n.startsWith("es") ? "es" : "en";
 }
-function Yn(e, t) {
-	let n = Jn(e);
+function Xn(e, t) {
+	let n = Yn(e);
 	if (e._t) {
 		let n = e._t(t);
 		if (n && n !== t) return n;
 	}
-	return (Kn[n] || Kn.es)[t] || Kn.es[t] || t;
+	return (qn[n] || qn.es)[t] || qn.es[t] || t;
 }
-var Xn = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"26\" height=\"26\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"11\" width=\"18\" height=\"11\" rx=\"2\" ry=\"2\"/><path d=\"M7 11V7a5 5 0 0 1 9.9-1\"/></svg>", Zn = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"26\" height=\"26\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z\"/><line x1=\"12\" y1=\"9\" x2=\"12\" y2=\"13\"/><line x1=\"12\" y1=\"17\" x2=\"12.01\" y2=\"17\"/></svg>", Qn = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"26\" height=\"26\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"4.93\" y1=\"4.93\" x2=\"19.07\" y2=\"19.07\"/></svg>";
-function $n(e) {
+var Zn = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"26\" height=\"26\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"11\" width=\"18\" height=\"11\" rx=\"2\" ry=\"2\"/><path d=\"M7 11V7a5 5 0 0 1 9.9-1\"/></svg>", Qn = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"26\" height=\"26\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z\"/><line x1=\"12\" y1=\"9\" x2=\"12\" y2=\"13\"/><line x1=\"12\" y1=\"17\" x2=\"12.01\" y2=\"17\"/></svg>", $n = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"26\" height=\"26\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"4.93\" y1=\"4.93\" x2=\"19.07\" y2=\"19.07\"/></svg>";
+function er(e) {
 	let t = e.shadowRoot;
-	if (!t || t.getElementById(Gn)) return;
+	if (!t || t.getElementById(Kn)) return;
 	let n = document.createElement("style");
-	n.id = Gn, n.textContent = "\n/* ── Slide-to-action base ─────────────────────────────────────────── */\n.argus-sta-wrap {\n  width: 100%;\n  grid-column: 1 / -1;\n  position: relative;\n}\n\n/* Disarm wrapper: hidden by default, shown only when armed */\n.argus-sta-wrap--disarm {\n  display: none;\n}\n.argus-sta-wrap--disarm.sta-armed {\n  display: block;\n}\n\n/* The pill track — 3D Liquid Glass */\n.argus-sta-track {\n  position: relative;\n  width: 100%;\n  height: 64px;\n  border-radius: 999px;\n  overflow: hidden;\n  user-select: none;\n  -webkit-user-select: none;\n  cursor: pointer;\n  box-sizing: border-box;\n  backdrop-filter: blur(32px) saturate(190%) brightness(1.08);\n  -webkit-backdrop-filter: blur(32px) saturate(190%) brightness(1.08);\n  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.03) 100%);\n  border: 1px solid rgba(255, 255, 255, 0.25);\n  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.35), inset 0 2px 8px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.35);\n  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;\n  transform: translate3d(0,0,0);\n}\n.argus-sta-track--disarm {\n  border-color: rgba(52, 211, 153, 0.55);\n  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.4), 0 0 20px rgba(16, 185, 129, 0.2), 0 8px 24px rgba(0,0,0,0.35);\n}\n.argus-sta-track--sos {\n  border-color: rgba(248, 113, 113, 0.55);\n  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.4), 0 0 20px rgba(239, 68, 68, 0.2), 0 8px 24px rgba(0,0,0,0.35);\n}\n\n/* Fill bar that follows the thumb */\n.argus-sta-fill {\n  position: absolute;\n  left: 0; top: 0; bottom: 0;\n  border-radius: inherit;\n  pointer-events: none;\n  will-change: width;\n  transition: width 0.04s linear;\n}\n.argus-sta-track--disarm .argus-sta-fill {\n  background: linear-gradient(90deg, rgba(16,185,129,0.35), rgba(5,150,105,0.12));\n}\n.argus-sta-track--sos .argus-sta-fill {\n  background: linear-gradient(90deg, rgba(239,68,68,0.38), rgba(185,28,28,0.12));\n}\n\n/* The large circular thumb (left side) */\n.argus-sta-thumb {\n  position: absolute;\n  left: 4px;\n  top: 4px;\n  width: 56px;\n  height: 56px;\n  border-radius: 50%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: grab;\n  z-index: 4;\n  will-change: transform;\n  touch-action: none;\n  -webkit-tap-highlight-color: transparent;\n  backdrop-filter: blur(20px) saturate(190%);\n  -webkit-backdrop-filter: blur(20px) saturate(190%);\n  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;\n}\n.argus-sta-thumb:active { cursor: grabbing; }\n\n.argus-sta-track--disarm .argus-sta-thumb {\n  background: radial-gradient(circle at 35% 35%, rgba(52, 211, 153, 0.35), rgba(10, 24, 20, 0.95));\n  border: 1.5px solid rgba(52, 211, 153, 0.85);\n  box-shadow:\n    inset 0 1.5px 0 rgba(255, 255, 255, 0.65),\n    0 8px 24px rgba(0, 0, 0, 0.5),\n    0 0 20px rgba(16, 185, 129, 0.45);\n  color: #ffffff;\n}\n.argus-sta-track--sos .argus-sta-thumb {\n  background: radial-gradient(circle at 35% 35%, rgba(248, 113, 113, 0.35), rgba(28, 12, 16, 0.95));\n  border: 1.5px solid rgba(248, 113, 113, 0.85);\n  box-shadow:\n    inset 0 1.5px 0 rgba(255, 255, 255, 0.65),\n    0 8px 24px rgba(0, 0, 0, 0.5),\n    0 0 20px rgba(239, 68, 68, 0.45);\n  color: #ffffff;\n}\n.argus-sta-track--sos.sos-pulsing .argus-sta-thumb {\n  animation: staThumbPulse 0.8s infinite ease-in-out;\n}\n@keyframes staThumbPulse {\n  0%, 100% {\n    box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset, 0 6px 24px rgba(0,0,0,.5), 0 0 32px rgba(239,68,68,0.90);\n    border-color: rgba(239,68,68,0.90);\n  }\n  50% {\n    box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset, 0 6px 24px rgba(0,0,0,.5), 0 0 8px rgba(239,68,68,0.25);\n    border-color: rgba(239,68,68,0.30);\n  }\n}\n\n/* The specular highlight ring on thumb */\n.argus-sta-thumb::after {\n  content: '';\n  position: absolute;\n  inset: 0;\n  border-radius: 50%;\n  background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.18) 0%, transparent 60%);\n  pointer-events: none;\n}\n\n/* Text label — centered, crisp solid white */\n.argus-sta-label {\n  position: absolute;\n  left: 68px;\n  right: 14px;\n  top: 50%;\n  transform: translateY(-50%);\n  text-align: center;\n  font-size: 13px;\n  font-weight: 700;\n  letter-spacing: 0.5px;\n  pointer-events: none;\n  z-index: 2;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #ffffff !important;\n  text-shadow: 0 1px 3px rgba(0,0,0,0.7);\n  transition: opacity 0.12s ease;\n}\n.argus-sta-track--disarm .argus-sta-label { color: #ffffff !important; }\n.argus-sta-track--sos .argus-sta-label    { color: #ffffff !important; }\n\n/* Spring snap-back animation */\n.argus-sta-thumb--snap {\n  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) !important;\n}\n\n/* PIN modal overlay */\n.argus-sta-pin {\n  position: absolute;\n  inset: 0;\n  border-radius: inherit;\n  display: none;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  gap: 9px;\n  z-index: 10;\n  backdrop-filter: blur(28px) saturate(160%);\n  -webkit-backdrop-filter: blur(28px) saturate(160%);\n  background: rgba(8,12,22,0.95);\n}\n.argus-sta-pin.open { display: flex; }\n.argus-sta-pin input {\n  width: 120px;\n  padding: 8px 12px;\n  border-radius: 10px;\n  border: 1px solid rgba(16,185,129,0.3);\n  background: rgba(255,255,255,0.05);\n  color: #fff;\n  font-size: 20px;\n  font-weight: 700;\n  text-align: center;\n  letter-spacing: 8px;\n  outline: none;\n}\n.argus-sta-pin input.pin-shake {\n  animation: pinShake 0.38s ease both;\n  border-color: rgba(239,68,68,0.6) !important;\n}\n@keyframes pinShake {\n  10%,90%{transform:translateX(-2px)}\n  20%,80%{transform:translateX(4px)}\n  30%,50%,70%{transform:translateX(-4px)}\n  40%,60%{transform:translateX(4px)}\n}\n.argus-sta-pin .pin-row { display:flex; gap:8px; }\n.argus-sta-pin button {\n  padding: 6px 14px;\n  border-radius: 8px;\n  font-size: 11px;\n  font-weight: 700;\n  cursor: pointer;\n  border: 1px solid rgba(255,255,255,0.14);\n  color: #fff;\n  background: rgba(255,255,255,0.08);\n}\n.argus-sta-pin .pin-ok {\n  background: linear-gradient(135deg, #10b981, #059669);\n  border-color: rgba(167,243,208,0.4);\n}\n.argus-sta-pin .pin-err {\n  font-size: 10px;\n  color: #fca5a5;\n  min-height: 14px;\n}\n\n/* ── Accessible Button Mode (Touch) ─────────────────────────────── */\n.argus-sta-wrap.sta-mode-touch {\n  margin-top: 4px;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-thumb,\n.argus-sta-wrap.sta-mode-touch .argus-sta-fill {\n  display: none !important;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-track {\n  height: 56px !important;\n  min-height: 56px !important;\n  border-radius: 16px !important;\n  display: flex !important;\n  align-items: center !important;\n  justify-content: center !important;\n  cursor: pointer !important;\n  padding: 0 16px !important;\n  text-align: center !important;\n  transform: none !important;\n  box-sizing: border-box !important;\n  outline: none !important;\n  transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease !important;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-track:active {\n  transform: scale(0.97) !important;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-track:focus-visible {\n  outline: 3px solid #ffffff !important;\n  outline-offset: 2px !important;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-label {\n  position: static !important;\n  left: auto !important;\n  right: auto !important;\n  top: auto !important;\n  transform: none !important;\n  display: inline-flex !important;\n  align-items: center !important;\n  justify-content: center !important;\n  gap: 10px !important;\n  width: 100% !important;\n  font-size: 15px !important;\n  font-weight: 800 !important;\n  letter-spacing: 0.04em !important;\n  text-transform: uppercase !important;\n  color: #ffffff !important;\n  pointer-events: none !important;\n  opacity: 1 !important;\n  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7) !important;\n}\n\n/* Red SOS Normal Touch Button */\n.argus-sta-wrap--sos.sta-mode-touch .argus-sta-track {\n  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;\n  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;\n  box-shadow: 0 4px 18px rgba(220, 38, 38, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;\n}\n.argus-sta-wrap--sos.sta-mode-touch .argus-sta-track:hover {\n  filter: brightness(1.1) !important;\n  box-shadow: 0 6px 24px rgba(220, 38, 38, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;\n}\n\n/* Red SOS Button Active / Triggered: Letters blink noticeably at medium speed */\n.argus-sta-wrap--sos.sta-mode-touch.sos-active .argus-sta-track {\n  background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%) !important;\n  border-color: #fca5a5 !important;\n  box-shadow: 0 0 28px rgba(239, 68, 68, 0.85), inset 0 0 14px rgba(255, 255, 255, 0.35) !important;\n}\n.argus-sta-wrap--sos.sta-mode-touch.sos-active .argus-sta-label,\n.argus-sta-wrap--sos.sta-mode-touch.sos-active .argus-sta-label span,\n.argus-sta-wrap--sos.sta-mode-touch.sos-active .sta-sos-text {\n  animation: sosLettersBlink 0.75s ease-in-out infinite !important;\n}\n\n@keyframes sosLettersBlink {\n  0%, 100% {\n    opacity: 1;\n    text-shadow: 0 0 14px rgba(255, 255, 255, 1), 0 0 28px rgba(255, 255, 255, 0.9);\n  }\n  50% {\n    opacity: 0.08;\n    text-shadow: none;\n  }\n}\n\n/* Green Disarm Normal Touch Button (Only appears when armed via .sta-armed) */\n.argus-sta-wrap--disarm.sta-mode-touch .argus-sta-track {\n  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;\n  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;\n  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;\n}\n.argus-sta-wrap--disarm.sta-mode-touch .argus-sta-track:hover {\n  filter: brightness(1.1) !important;\n  box-shadow: 0 6px 24px rgba(16, 185, 129, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-pin {\n  border-radius: 16px !important;\n}\n", t.appendChild(n);
+	n.id = Kn, n.textContent = "\n/* ── Slide-to-action base ─────────────────────────────────────────── */\n.argus-sta-wrap {\n  width: 100%;\n  grid-column: 1 / -1;\n  position: relative;\n}\n\n/* Disarm wrapper: hidden by default, shown only when armed */\n.argus-sta-wrap--disarm {\n  display: none;\n}\n.argus-sta-wrap--disarm.sta-armed {\n  display: block;\n}\n\n/* The pill track — 3D Liquid Glass */\n.argus-sta-track {\n  position: relative;\n  width: 100%;\n  height: 64px;\n  border-radius: 999px;\n  overflow: hidden;\n  user-select: none;\n  -webkit-user-select: none;\n  cursor: pointer;\n  box-sizing: border-box;\n  backdrop-filter: blur(32px) saturate(190%) brightness(1.08);\n  -webkit-backdrop-filter: blur(32px) saturate(190%) brightness(1.08);\n  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.03) 100%);\n  border: 1px solid rgba(255, 255, 255, 0.25);\n  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.35), inset 0 2px 8px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.35);\n  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;\n  transform: translate3d(0,0,0);\n}\n.argus-sta-track--disarm {\n  border-color: rgba(52, 211, 153, 0.55);\n  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.4), 0 0 20px rgba(16, 185, 129, 0.2), 0 8px 24px rgba(0,0,0,0.35);\n}\n.argus-sta-track--sos {\n  border-color: rgba(248, 113, 113, 0.55);\n  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.4), 0 0 20px rgba(239, 68, 68, 0.2), 0 8px 24px rgba(0,0,0,0.35);\n}\n\n/* Fill bar that follows the thumb */\n.argus-sta-fill {\n  position: absolute;\n  left: 0; top: 0; bottom: 0;\n  border-radius: inherit;\n  pointer-events: none;\n  will-change: width;\n  transition: width 0.04s linear;\n}\n.argus-sta-track--disarm .argus-sta-fill {\n  background: linear-gradient(90deg, rgba(16,185,129,0.35), rgba(5,150,105,0.12));\n}\n.argus-sta-track--sos .argus-sta-fill {\n  background: linear-gradient(90deg, rgba(239,68,68,0.38), rgba(185,28,28,0.12));\n}\n\n/* The large circular thumb (left side) */\n.argus-sta-thumb {\n  position: absolute;\n  left: 4px;\n  top: 4px;\n  width: 56px;\n  height: 56px;\n  border-radius: 50%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: grab;\n  z-index: 4;\n  will-change: transform;\n  touch-action: none;\n  -webkit-tap-highlight-color: transparent;\n  backdrop-filter: blur(20px) saturate(190%);\n  -webkit-backdrop-filter: blur(20px) saturate(190%);\n  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;\n}\n.argus-sta-thumb:active { cursor: grabbing; }\n\n.argus-sta-track--disarm .argus-sta-thumb {\n  background: radial-gradient(circle at 35% 35%, rgba(52, 211, 153, 0.35), rgba(10, 24, 20, 0.95));\n  border: 1.5px solid rgba(52, 211, 153, 0.85);\n  box-shadow:\n    inset 0 1.5px 0 rgba(255, 255, 255, 0.65),\n    0 8px 24px rgba(0, 0, 0, 0.5),\n    0 0 20px rgba(16, 185, 129, 0.45);\n  color: #ffffff;\n}\n.argus-sta-track--sos .argus-sta-thumb {\n  background: radial-gradient(circle at 35% 35%, rgba(248, 113, 113, 0.35), rgba(28, 12, 16, 0.95));\n  border: 1.5px solid rgba(248, 113, 113, 0.85);\n  box-shadow:\n    inset 0 1.5px 0 rgba(255, 255, 255, 0.65),\n    0 8px 24px rgba(0, 0, 0, 0.5),\n    0 0 20px rgba(239, 68, 68, 0.45);\n  color: #ffffff;\n}\n.argus-sta-track--sos.sos-pulsing .argus-sta-thumb {\n  animation: staThumbPulse 0.8s infinite ease-in-out;\n}\n@keyframes staThumbPulse {\n  0%, 100% {\n    box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset, 0 6px 24px rgba(0,0,0,.5), 0 0 32px rgba(239,68,68,0.90);\n    border-color: rgba(239,68,68,0.90);\n  }\n  50% {\n    box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset, 0 6px 24px rgba(0,0,0,.5), 0 0 8px rgba(239,68,68,0.25);\n    border-color: rgba(239,68,68,0.30);\n  }\n}\n\n/* The specular highlight ring on thumb */\n.argus-sta-thumb::after {\n  content: '';\n  position: absolute;\n  inset: 0;\n  border-radius: 50%;\n  background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.18) 0%, transparent 60%);\n  pointer-events: none;\n}\n\n/* Text label — centered, crisp solid white */\n.argus-sta-label {\n  position: absolute;\n  left: 68px;\n  right: 14px;\n  top: 50%;\n  transform: translateY(-50%);\n  text-align: center;\n  font-size: 13px;\n  font-weight: 700;\n  letter-spacing: 0.5px;\n  pointer-events: none;\n  z-index: 2;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: #ffffff !important;\n  text-shadow: 0 1px 3px rgba(0,0,0,0.7);\n  transition: opacity 0.12s ease;\n}\n.argus-sta-track--disarm .argus-sta-label { color: #ffffff !important; }\n.argus-sta-track--sos .argus-sta-label    { color: #ffffff !important; }\n\n/* Spring snap-back animation */\n.argus-sta-thumb--snap {\n  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) !important;\n}\n\n/* PIN modal overlay */\n.argus-sta-pin {\n  position: absolute;\n  inset: 0;\n  border-radius: inherit;\n  display: none;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  gap: 9px;\n  z-index: 10;\n  backdrop-filter: blur(28px) saturate(160%);\n  -webkit-backdrop-filter: blur(28px) saturate(160%);\n  background: rgba(8,12,22,0.95);\n}\n.argus-sta-pin.open { display: flex; }\n.argus-sta-pin input {\n  width: 120px;\n  padding: 8px 12px;\n  border-radius: 10px;\n  border: 1px solid rgba(16,185,129,0.3);\n  background: rgba(255,255,255,0.05);\n  color: #fff;\n  font-size: 20px;\n  font-weight: 700;\n  text-align: center;\n  letter-spacing: 8px;\n  outline: none;\n}\n.argus-sta-pin input.pin-shake {\n  animation: pinShake 0.38s ease both;\n  border-color: rgba(239,68,68,0.6) !important;\n}\n@keyframes pinShake {\n  10%,90%{transform:translateX(-2px)}\n  20%,80%{transform:translateX(4px)}\n  30%,50%,70%{transform:translateX(-4px)}\n  40%,60%{transform:translateX(4px)}\n}\n.argus-sta-pin .pin-row { display:flex; gap:8px; }\n.argus-sta-pin button {\n  padding: 6px 14px;\n  border-radius: 8px;\n  font-size: 11px;\n  font-weight: 700;\n  cursor: pointer;\n  border: 1px solid rgba(255,255,255,0.14);\n  color: #fff;\n  background: rgba(255,255,255,0.08);\n}\n.argus-sta-pin .pin-ok {\n  background: linear-gradient(135deg, #10b981, #059669);\n  border-color: rgba(167,243,208,0.4);\n}\n.argus-sta-pin .pin-err {\n  font-size: 10px;\n  color: #fca5a5;\n  min-height: 14px;\n}\n\n/* ── Accessible Button Mode (Touch) ─────────────────────────────── */\n.argus-sta-wrap.sta-mode-touch {\n  margin-top: 4px;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-thumb,\n.argus-sta-wrap.sta-mode-touch .argus-sta-fill {\n  display: none !important;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-track {\n  height: 56px !important;\n  min-height: 56px !important;\n  border-radius: 16px !important;\n  display: flex !important;\n  align-items: center !important;\n  justify-content: center !important;\n  cursor: pointer !important;\n  padding: 0 16px !important;\n  text-align: center !important;\n  transform: none !important;\n  box-sizing: border-box !important;\n  outline: none !important;\n  transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease !important;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-track:active {\n  transform: scale(0.97) !important;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-track:focus-visible {\n  outline: 3px solid #ffffff !important;\n  outline-offset: 2px !important;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-label {\n  position: static !important;\n  left: auto !important;\n  right: auto !important;\n  top: auto !important;\n  transform: none !important;\n  display: inline-flex !important;\n  align-items: center !important;\n  justify-content: center !important;\n  gap: 10px !important;\n  width: 100% !important;\n  font-size: 15px !important;\n  font-weight: 800 !important;\n  letter-spacing: 0.04em !important;\n  text-transform: uppercase !important;\n  color: #ffffff !important;\n  pointer-events: none !important;\n  opacity: 1 !important;\n  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7) !important;\n}\n\n/* Red SOS Normal Touch Button */\n.argus-sta-wrap--sos.sta-mode-touch .argus-sta-track {\n  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;\n  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;\n  box-shadow: 0 4px 18px rgba(220, 38, 38, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;\n}\n.argus-sta-wrap--sos.sta-mode-touch .argus-sta-track:hover {\n  filter: brightness(1.1) !important;\n  box-shadow: 0 6px 24px rgba(220, 38, 38, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;\n}\n\n/* Red SOS Button Active / Triggered: Letters blink noticeably at medium speed */\n.argus-sta-wrap--sos.sta-mode-touch.sos-active .argus-sta-track {\n  background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%) !important;\n  border-color: #fca5a5 !important;\n  box-shadow: 0 0 28px rgba(239, 68, 68, 0.85), inset 0 0 14px rgba(255, 255, 255, 0.35) !important;\n}\n.argus-sta-wrap--sos.sta-mode-touch.sos-active .argus-sta-label,\n.argus-sta-wrap--sos.sta-mode-touch.sos-active .argus-sta-label span,\n.argus-sta-wrap--sos.sta-mode-touch.sos-active .sta-sos-text {\n  animation: sosLettersBlink 0.75s ease-in-out infinite !important;\n}\n\n@keyframes sosLettersBlink {\n  0%, 100% {\n    opacity: 1;\n    text-shadow: 0 0 14px rgba(255, 255, 255, 1), 0 0 28px rgba(255, 255, 255, 0.9);\n  }\n  50% {\n    opacity: 0.08;\n    text-shadow: none;\n  }\n}\n\n/* Green Disarm Normal Touch Button (Only appears when armed via .sta-armed) */\n.argus-sta-wrap--disarm.sta-mode-touch .argus-sta-track {\n  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;\n  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;\n  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;\n}\n.argus-sta-wrap--disarm.sta-mode-touch .argus-sta-track:hover {\n  filter: brightness(1.1) !important;\n  box-shadow: 0 6px 24px rgba(16, 185, 129, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;\n}\n.argus-sta-wrap.sta-mode-touch .argus-sta-pin {\n  border-radius: 16px !important;\n}\n", t.appendChild(n);
 }
-function er(e, t, n) {
+function tr(e, t, n) {
 	let r = document.createElement("div");
 	r.className = `argus-sta-wrap argus-sta-wrap--${e}`;
 	let i = document.createElement("div");
@@ -18890,7 +18991,7 @@ function er(e, t, n) {
 		pin: c
 	};
 }
-function tr(e, t, n, r, i, a, o, s) {
+function nr(e, t, n, r, i, a, o, s) {
 	let c = new AbortController();
 	e._staControllers ||= /* @__PURE__ */ new Map(), e._staControllers.set(n, c);
 	let l = !1, u = 0, d = 0, f = 0, p = 0, m = 0, h = !1, g = 0;
@@ -18902,19 +19003,19 @@ function tr(e, t, n, r, i, a, o, s) {
 	n.addEventListener("keydown", (e) => {
 		e.target === n && (e.key === "Enter" || e.key === " ") && (e.preventDefault(), _());
 	}), n.addEventListener("touchstart", (t) => {
-		qn(e) && (p = t.touches[0].clientX, m = t.touches[0].clientY, h = !1);
+		Jn(e) && (p = t.touches[0].clientX, m = t.touches[0].clientY, h = !1);
 	}, { passive: !0 }), n.addEventListener("touchmove", (t) => {
-		if (qn(e)) {
+		if (Jn(e)) {
 			let e = Math.abs(t.touches[0].clientX - p), n = Math.abs(t.touches[0].clientY - m);
 			(e > 10 || n > 10) && (h = !0);
 		}
 	}, { passive: !0 }), n.addEventListener("touchend", (t) => {
-		if (qn(e)) {
+		if (Jn(e)) {
 			if (h || o.classList.contains("open") || t.target && t.target.closest?.(".argus-sta-pin")) return;
 			t.preventDefault(), _();
 		}
 	}), n.addEventListener("click", (t) => {
-		if (qn(e)) {
+		if (Jn(e)) {
 			if (o.classList.contains("open") || t.target && t.target.closest?.(".argus-sta-pin")) return;
 			_();
 		}
@@ -18939,7 +19040,7 @@ function tr(e, t, n, r, i, a, o, s) {
 		l && (d = y(e - u));
 	}
 	function C() {
-		l && (l = !1, i.style.cursor = "grab", d >= f * .8 ? (_(), b()) : (qn(e) && Math.abs(d) < 6 && _(), b()), d = 0);
+		l && (l = !1, i.style.cursor = "grab", d >= f * .8 ? (_(), b()) : (Jn(e) && Math.abs(d) < 6 && _(), b()), d = 0);
 	}
 	i.addEventListener("mousedown", (e) => {
 		e.preventDefault(), x(e.clientX);
@@ -18960,7 +19061,7 @@ function tr(e, t, n, r, i, a, o, s) {
 		l = !1, d = 0, b();
 	}, { signal: c.signal });
 }
-function nr(e, t, n) {
+function rr(e, t, n) {
 	if (t.querySelector(".argus-sta-wrap")) {
 		t._staRefresh?.();
 		return;
@@ -18974,12 +19075,12 @@ function nr(e, t, n) {
 		let t = i();
 		return !!e._hass?.states?.[r]?.attributes?.argus_panic_active || t === "triggered";
 	}
-	let { wrap: o, track: s, fill: c, thumb: l, label: u, pin: d } = er("disarm", Yn(e, "slide_disarm"), Xn);
-	tr(e, "disarm", s, c, l, u, d, () => {
+	let { wrap: o, track: s, fill: c, thumb: l, label: u, pin: d } = tr("disarm", Xn(e, "slide_disarm"), Zn);
+	nr(e, "disarm", s, c, l, u, d, () => {
 		e._handleAction?.(n, "disarm");
 	});
-	let { wrap: f, track: p, fill: m, thumb: h, label: g, pin: _ } = er("sos", Yn(e, "slide_sos"), Zn);
-	tr(e, "sos", p, m, h, g, _, (t) => {
+	let { wrap: f, track: p, fill: m, thumb: h, label: g, pin: _ } = tr("sos", Xn(e, "slide_sos"), Qn);
+	nr(e, "sos", p, m, h, g, _, (t) => {
 		if (e._dashboard?.entries?.[n]?.entry_id, a()) e._handleAction?.(n, "disarm");
 		else {
 			e._sosEntryIdx = n, e.shadowRoot?.getElementById("sos-modal")?.classList.add("open");
@@ -18990,45 +19091,45 @@ function nr(e, t, n) {
 	if (!v) return;
 	v.querySelectorAll(".btn-disarm, .btn-sos, .argus-disarm-btn").forEach((e) => e.remove()), v.appendChild(o), v.appendChild(f);
 	function y() {
-		let t = i(), n = a(), r = t !== "disarmed" && t !== "unavailable", d = qn(e);
+		let t = i(), n = a(), r = t !== "disarmed" && t !== "unavailable", d = Jn(e);
 		if (o.classList.toggle("sta-armed", r || n), o.classList.toggle("sta-mode-touch", d), f.classList.toggle("sta-mode-touch", d), f.classList.toggle("sos-active", n), p.classList.toggle("sos-pulsing", n), d) {
-			u.innerHTML = `<span style="font-size: 20px; display: inline-flex; align-items: center;">🔓</span><span style="font-size: 15px; font-weight: 800; letter-spacing: 0.04em;">${Yn(e, "tap_disarm")}</span>`, s.setAttribute("aria-label", Yn(e, "tap_disarm"));
-			let t = n ? Yn(e, "tap_sos_stop") : Yn(e, "tap_sos");
+			u.innerHTML = `<span style="font-size: 20px; display: inline-flex; align-items: center;">🔓</span><span style="font-size: 15px; font-weight: 800; letter-spacing: 0.04em;">${Xn(e, "tap_disarm")}</span>`, s.setAttribute("aria-label", Xn(e, "tap_disarm"));
+			let t = n ? Xn(e, "tap_sos_stop") : Xn(e, "tap_sos");
 			g.innerHTML = `<span style="font-size: 20px; display: inline-flex; align-items: center;">${n ? "⏹️" : "🚨"}</span><span class="sta-sos-text" style="font-size: 15px; font-weight: 800; letter-spacing: 0.04em;">${t}</span>`, p.setAttribute("aria-label", t);
 		} else {
-			u.textContent = Yn(e, "slide_disarm"), s.setAttribute("aria-label", u.textContent), l.style.transform = "", c.style.width = "";
-			let t = n ? Yn(e, "slide_sos_stop") : Yn(e, "slide_sos");
-			g.textContent = t, p.setAttribute("aria-label", g.textContent), h.innerHTML = n ? Qn : Zn, h.style.transform = "", m.style.width = "";
+			u.textContent = Xn(e, "slide_disarm"), s.setAttribute("aria-label", u.textContent), l.style.transform = "", c.style.width = "";
+			let t = n ? Xn(e, "slide_sos_stop") : Xn(e, "slide_sos");
+			g.textContent = t, p.setAttribute("aria-label", g.textContent), h.innerHTML = n ? $n : Qn, h.style.transform = "", m.style.width = "";
 		}
 	}
 	y(), t._staRefresh = y;
 }
-function rr(e) {
+function ir(e) {
 	for (let [t, n] of e._staControllers || []) t.isConnected || (n.abort(), e._staControllers.delete(t));
-	$n(e);
+	er(e);
 	let t = e.shadowRoot;
 	t && t.querySelectorAll(".entry").forEach((t, n) => {
 		if (!t.dataset.entityId) {
 			let r = e._dashboard?.entries?.[n]?.entity_id;
 			r && (t.dataset.entityId = r);
 		}
-		nr(e, t, n), t._staRefresh?.();
+		rr(e, t, n), t._staRefresh?.();
 	});
 }
-function ir(e) {
+function ar(e) {
 	if (!e || e.__argusSlideToAction) return;
 	e.__argusSlideToAction = !0;
 	let t = e.prototype, n = t._renderEntries;
 	t._renderEntries = function(...e) {
 		let t = n?.call(this, ...e);
 		return requestAnimationFrame(() => {
-			rr(this), setTimeout(() => rr(this), 100);
+			ir(this), setTimeout(() => ir(this), 100);
 		}), t;
 	};
 	let r = t._refreshLocalizedUi;
 	if (t._refreshLocalizedUi = function(...e) {
 		let t = r?.call(this, ...e);
-		return rr(this), t;
+		return ir(this), t;
 	}, Object.getOwnPropertyDescriptor(t, "_hass")?.set || t.set_hass) {
 		let e = t.set_hass;
 		t.set_hass = function(t) {
@@ -19038,14 +19139,14 @@ function ir(e) {
 }
 //#endregion
 //#region src/features/dashboard/components/SecurityConsoleRoot.tsx
-function ar(e) {
+function or(e) {
 	let t = e.shadowRoot;
 	if (!t) return;
 	let n = t.getElementById("entries");
-	n && (e.hasAttribute?.("compact") || e.classList?.contains("argus-compact") || e._cardConfig?.compact || e._profileSelectedThisMount || e._currentProfile || e._bootstrap?.has_active_session) && (e._reactConsoleRoot ||= (n.innerHTML = "", (0, te.createRoot)(n)), e._reactConsoleRoot.render(/* @__PURE__ */ (0, A.jsx)(or, { panel: e })));
+	n && (e.hasAttribute?.("compact") || e.classList?.contains("argus-compact") || e._cardConfig?.compact || e._profileSelectedThisMount || e._currentProfile || e._bootstrap?.has_active_session) && (e._reactConsoleRoot ||= (n.innerHTML = "", (0, te.createRoot)(n)), e._reactConsoleRoot.render(/* @__PURE__ */ (0, A.jsx)(sr, { panel: e })));
 }
-typeof window < "u" && (window.mountSecurityConsole = ar);
-function or({ panel: e }) {
+typeof window < "u" && (window.mountSecurityConsole = or);
+function sr({ panel: e }) {
 	let [t, n] = (0, D.useState)(0), [r, i] = (0, D.useState)(e.classList.contains("fullscreen-active")), a = (0, D.useRef)(null);
 	return (0, D.useEffect)(() => {
 		let t = () => {
@@ -19064,7 +19165,7 @@ function or({ panel: e }) {
 		if (!a.current) return;
 		let t = setTimeout(() => {
 			try {
-				typeof rr == "function" && rr(e);
+				typeof ir == "function" && ir(e);
 			} catch (e) {
 				console.error("Argus: Failed to attach SOS sliders", e);
 			}
@@ -19080,7 +19181,7 @@ function or({ panel: e }) {
 			width: "100%",
 			height: "100%"
 		},
-		children: /* @__PURE__ */ (0, A.jsx)(Wn, {
+		children: /* @__PURE__ */ (0, A.jsx)(Gn, {
 			panel: e,
 			isFullscreen: r,
 			onToggleFullscreen: () => {
@@ -19094,24 +19195,24 @@ function or({ panel: e }) {
 		})
 	});
 }
-function sr(e) {
+function cr(e) {
 	if (!e || e.__argusReactSecurityConsole) return;
 	e.__argusReactSecurityConsole = !0;
 	let t = e.prototype.connectedCallback, n = e.prototype._load;
 	e.prototype._renderEntries, e.prototype.connectedCallback = function() {
 		let e = t?.call(this);
-		return ar(this), e;
+		return or(this), e;
 	}, e.prototype._load = async function(...e) {
 		let t = await n?.apply(this, e);
-		return ar(this), t;
+		return or(this), t;
 	}, e.prototype._renderEntries = function() {
-		ar(this);
+		or(this);
 	};
 }
 //#endregion
 //#region src/features/dashboard/index.tsx
-typeof window < "u" && (window.mountSecurityConsole = ar);
-function cr(e) {
+typeof window < "u" && (window.mountSecurityConsole = or);
+function lr(e) {
 	let t = (t) => e._t?.(t) || t;
 	return [
 		{
@@ -19170,7 +19271,7 @@ function cr(e) {
 		}
 	];
 }
-var lr = class extends Ln {
+var ur = class extends Ln {
 	panel;
 	constructor(e) {
 		super(), this.panel = e;
@@ -19214,17 +19315,17 @@ var lr = class extends Ln {
 		});
 	}
 };
-function ur(e) {
+function dr(e) {
 	let t = e.shadowRoot?.getElementById("edit-widgets-label");
 	(t?.closest("button") || t)?.remove(), e.shadowRoot?.querySelectorAll(".panel-edit-overlay,.widget-drag-handle").forEach((e) => e.remove());
 	let n = e.shadowRoot?.getElementById("argus-react-editor-only");
 	n || (n = document.createElement("style"), n.id = "argus-react-editor-only", n.textContent = "#edit-widgets-label,.panel-edit-overlay,.widget-drag-handle{display:none!important}", e.shadowRoot.appendChild(n));
 }
-function dr(e) {
-	ur(e);
+function fr(e) {
+	dr(e);
 	let t = e.shadowRoot?.getElementById("widget-grid"), n = e._dashboard?.entry_id || e._dashboard?.entries?.[0]?.entry_id || "default";
 	if (!t) return;
-	let r = cr(e), i = e._argusDashboardStorage ||= new lr(e), a = /* @__PURE__ */ new Map();
+	let r = lr(e), i = e._argusDashboardStorage ||= new ur(e), a = /* @__PURE__ */ new Map();
 	if (r.forEach((t) => {
 		let n = t.nativeId ? e.shadowRoot.getElementById(t.nativeId) : null;
 		n && a.set(t.id, n);
@@ -19266,35 +19367,35 @@ function dr(e) {
 		}
 	}));
 }
-function fr(e) {
+function pr(e) {
 	if (!e || e.__argusReactDashboard) return;
 	e.__argusReactDashboard = !0;
 	let t = e.prototype, n = t.connectedCallback, r = t._load, i = t._refreshLocalizedUi;
 	t.connectedCallback = function() {
 		let e = n?.call(this);
-		return ur(this), e;
+		return dr(this), e;
 	}, t._load = async function() {
 		let e = await r?.call(this);
-		return dr(this), e;
+		return fr(this), e;
 	}, t._refreshLocalizedUi = function() {
 		let e = i?.call(this);
-		return dr(this), e;
+		return fr(this), e;
 	}, t._toggleWidgetEditing = function() {
 		this._argusReactSetEditing?.(!this._widgetEditing);
 	};
 }
 //#endregion
 //#region src/features/media/client.ts
-function pr(e) {
+function mr(e) {
 	let t = e._hass?.auth?.accessToken;
 	return t ? { Authorization: `Bearer ${t}` } : {};
 }
-function mr(e) {
+function hr(e) {
 	let t = e?.prototype;
 	t && !t.__argusMediaClient && (t.__argusMediaClient = !0, t._loadUploadedFiles = async function() {
 		try {
 			let e = await fetch("/api/argus/media", {
-				headers: pr(this),
+				headers: mr(this),
 				credentials: "same-origin"
 			});
 			if (!e.ok) throw Error(`HTTP ${e.status}`);
@@ -19308,7 +19409,7 @@ function mr(e) {
 		try {
 			let t = await fetch(`/api/argus/media/${encodeURIComponent(e)}`, {
 				method: "DELETE",
-				headers: pr(this),
+				headers: mr(this),
 				credentials: "same-origin"
 			});
 			if (!t.ok) throw Error(`HTTP ${t.status}`);
@@ -19326,16 +19427,16 @@ function mr(e) {
 }
 //#endregion
 //#region src/features/security/client.ts
-var hr = (e, t) => e.getElementById(t), gr = (e, t, n) => e._t?.(t) ?? n;
-function _r(e) {
+var gr = (e, t) => e.getElementById(t), _r = (e, t, n) => e._t?.(t) ?? n;
+function vr(e) {
 	let t = e?.prototype;
 	t && !t.__argusSecurityClient && (t.__argusSecurityClient = !0, t._savePin = async function() {
-		let e = this.shadowRoot.getElementById("pin-status"), t = this._dashboard?.entries?.[0], n = hr(this.shadowRoot, "current-pin")?.value ?? "", r = hr(this.shadowRoot, "new-pin-1")?.value ?? "", i = hr(this.shadowRoot, "new-pin-2")?.value ?? "", a = (t) => {
+		let e = this.shadowRoot.getElementById("pin-status"), t = this._dashboard?.entries?.[0], n = gr(this.shadowRoot, "current-pin")?.value ?? "", r = gr(this.shadowRoot, "new-pin-1")?.value ?? "", i = gr(this.shadowRoot, "new-pin-2")?.value ?? "", a = (t) => {
 			e && (e.textContent = t, e.className = "status err");
 		};
 		if (!t?.entry_id) return a("No Argus config entry is available");
-		if (t.pin_configured && !n) return a(gr(this, "pin_incorrect", "PIN incorrecto"));
-		if (r !== i) return a(gr(this, "pin_mismatch", "Los PIN no coinciden"));
+		if (t.pin_configured && !n) return a(_r(this, "pin_incorrect", "PIN incorrecto"));
+		if (r !== i) return a(_r(this, "pin_mismatch", "Los PIN no coinciden"));
 		if (r && !/^\d{4,12}$/.test(r)) return a("PIN: se requieren entre 4 y 12 dígitos");
 		if (!this._send) return a("Argus WebSocket is unavailable");
 		try {
@@ -19343,13 +19444,13 @@ function _r(e) {
 				entry_id: t.entry_id,
 				pin: r,
 				current_pin: n
-			}), t.pin_configured = !!r, e && (e.textContent = r ? gr(this, "pin_updated", "PIN actualizado") : gr(this, "pin_deleted", "PIN eliminado"), e.className = "status ok");
+			}), t.pin_configured = !!r, e && (e.textContent = r ? _r(this, "pin_updated", "PIN actualizado") : _r(this, "pin_deleted", "PIN eliminado"), e.className = "status ok");
 			for (let e of [
 				"current-pin",
 				"new-pin-1",
 				"new-pin-2"
 			]) {
-				let t = hr(this.shadowRoot, e);
+				let t = gr(this.shadowRoot, e);
 				t && (t.value = "");
 			}
 			this._syncAccessSummary?.(), window.setTimeout(() => {
@@ -19365,35 +19466,35 @@ function _r(e) {
 }
 //#endregion
 //#region src/features/premium/index.ts
-var vr = "argus-hdr-promotion-styles";
-function yr(e) {
-	br(e);
-}
+var yr = "argus-hdr-promotion-styles";
 function br(e) {
+	xr(e);
+}
+function xr(e) {
 	if (!e || e.__argusPremiumHDRApplied) return;
 	e.__argusPremiumHDRApplied = !0;
 	let t = e.prototype.connectedCallback;
 	e.prototype.connectedCallback = function() {
 		let e = typeof t == "function" ? t.call(this) : void 0;
-		return xr(this), e;
+		return Sr(this), e;
 	};
 }
-function xr(e) {
+function Sr(e) {
 	let t = e.shadowRoot;
-	if (!t || t.getElementById(vr)) return;
+	if (!t || t.getElementById(yr)) return;
 	let n = document.createElement("style");
-	n.id = vr, n.textContent = "\n    @supports (color: color(rec2020 1 1 1)) {\n      :host {\n        --argus-accent-green: color(rec2020 0.15 0.85 0.35);\n        --argus-accent-amber: color(rec2020 0.95 0.70 0.10);\n        --argus-accent-red: color(rec2020 0.95 0.15 0.20);\n        --argus-accent-blue: color(rec2020 0.15 0.55 0.95);\n        --argus-accent-purple: color(rec2020 0.70 0.20 0.90);\n        --argus-glow-green: rgba(30, 220, 90, 0.45);\n        --argus-glow-amber: rgba(255, 180, 20, 0.45);\n        --argus-glow-red: rgba(255, 40, 50, 0.55);\n      }\n    }\n\n    @supports (color: color(display-p3 1 1 1)) and (not (color: color(rec2020 1 1 1))) {\n      :host {\n        --argus-accent-green: color(display-p3 0.22 0.82 0.38);\n        --argus-accent-amber: color(display-p3 0.98 0.72 0.15);\n        --argus-accent-red: color(display-p3 0.98 0.20 0.25);\n        --argus-accent-blue: color(display-p3 0.20 0.58 0.95);\n        --argus-accent-purple: color(display-p3 0.68 0.25 0.88);\n        --argus-glow-green: rgba(34, 197, 94, 0.40);\n        --argus-glow-amber: rgba(245, 158, 11, 0.40);\n        --argus-glow-red: rgba(239, 68, 68, 0.50);\n      }\n    }\n\n    :host {\n      --argus-accent-green: #10b981;\n      --argus-accent-amber: #f59e0b;\n      --argus-accent-red: #ef4444;\n      --argus-accent-blue: #3b82f6;\n      --argus-accent-purple: #8b5cf6;\n      --argus-glow-green: rgba(16, 185, 129, 0.35);\n      --argus-glow-amber: rgba(245, 158, 11, 0.35);\n      --argus-glow-red: rgba(239, 68, 68, 0.45);\n    }\n\n    .entry-icon,\n    .argus-shield-svg,\n    .liquid-btn,\n    .console-sensor,\n    .argus-sta-thumb {\n      transform: translate3d(0, 0, 0);\n      backface-visibility: hidden;\n      -webkit-backface-visibility: hidden;\n      perspective: 1000px;\n    }\n\n    .entry-icon {\n      will-change: transform;\n      animation: float-icon 5s ease-in-out infinite;\n    }\n\n    @keyframes float-icon {\n      0%, 100% {\n        transform: translate3d(0, 0, 0) scale3d(1, 1, 1);\n      }\n      50% {\n        transform: translate3d(0, -6px, 0) scale3d(1.015, 1.015, 1);\n      }\n    }\n\n    @media (prefers-reduced-motion: reduce) {\n      .entry-icon {\n        animation: none !important;\n        transform: none !important;\n      }\n    }\n  ", t.appendChild(n);
+	n.id = yr, n.textContent = "\n    @supports (color: color(rec2020 1 1 1)) {\n      :host {\n        --argus-accent-green: color(rec2020 0.15 0.85 0.35);\n        --argus-accent-amber: color(rec2020 0.95 0.70 0.10);\n        --argus-accent-red: color(rec2020 0.95 0.15 0.20);\n        --argus-accent-blue: color(rec2020 0.15 0.55 0.95);\n        --argus-accent-purple: color(rec2020 0.70 0.20 0.90);\n        --argus-glow-green: rgba(30, 220, 90, 0.45);\n        --argus-glow-amber: rgba(255, 180, 20, 0.45);\n        --argus-glow-red: rgba(255, 40, 50, 0.55);\n      }\n    }\n\n    @supports (color: color(display-p3 1 1 1)) and (not (color: color(rec2020 1 1 1))) {\n      :host {\n        --argus-accent-green: color(display-p3 0.22 0.82 0.38);\n        --argus-accent-amber: color(display-p3 0.98 0.72 0.15);\n        --argus-accent-red: color(display-p3 0.98 0.20 0.25);\n        --argus-accent-blue: color(display-p3 0.20 0.58 0.95);\n        --argus-accent-purple: color(display-p3 0.68 0.25 0.88);\n        --argus-glow-green: rgba(34, 197, 94, 0.40);\n        --argus-glow-amber: rgba(245, 158, 11, 0.40);\n        --argus-glow-red: rgba(239, 68, 68, 0.50);\n      }\n    }\n\n    :host {\n      --argus-accent-green: #10b981;\n      --argus-accent-amber: #f59e0b;\n      --argus-accent-red: #ef4444;\n      --argus-accent-blue: #3b82f6;\n      --argus-accent-purple: #8b5cf6;\n      --argus-glow-green: rgba(16, 185, 129, 0.35);\n      --argus-glow-amber: rgba(245, 158, 11, 0.35);\n      --argus-glow-red: rgba(239, 68, 68, 0.45);\n    }\n\n    .entry-icon,\n    .argus-shield-svg,\n    .liquid-btn,\n    .console-sensor,\n    .argus-sta-thumb {\n      transform: translate3d(0, 0, 0);\n      backface-visibility: hidden;\n      -webkit-backface-visibility: hidden;\n      perspective: 1000px;\n    }\n\n    .entry-icon {\n      will-change: transform;\n      animation: float-icon 5s ease-in-out infinite;\n    }\n\n    @keyframes float-icon {\n      0%, 100% {\n        transform: translate3d(0, 0, 0) scale3d(1, 1, 1);\n      }\n      50% {\n        transform: translate3d(0, -6px, 0) scale3d(1.015, 1.015, 1);\n      }\n    }\n\n    @media (prefers-reduced-motion: reduce) {\n      .entry-icon {\n        animation: none !important;\n        transform: none !important;\n      }\n    }\n  ", t.appendChild(n);
 }
 //#endregion
 //#region src/features/motion/index.ts
-var Sr = "argus-motion-system-v2049", Cr = "__argusMotionV2049", wr = ".user-card,.liquid-btn,.mode-btn,.lang-pill,.entry-fs,.fs-btn,.file-card-btn,.pick-row,.widget-size-btn,.widget-toggle-btn,.argus-disarm-btn,[data-login-digit],#btn-submit-login-pin,#btn-cancel-login,#btn-complete-setup,#btn-claim-admin", Tr = "\n:host{--argus-motion-fast:120ms;--argus-motion-ease:cubic-bezier(.22,.8,.25,1)}\n#widget-grid,.dashboard-instances,#widget-grid>.dashboard-instances,#widget-grid>.dashboard-instances>.entry{animation:none!important;transition:none!important;opacity:1!important;transform:none!important;visibility:visible!important}\n#widget-grid.argus-motion-dashboard-enter,.dashboard-instances.argus-motion-dashboard-enter,.argus-motion-dashboard-prep{animation:none!important;transition:none!important;opacity:1!important;transform:none!important}\n.dashboard-instances>.entry{will-change:auto!important}\n.user-card.is-entering{pointer-events:none;box-shadow:0 0 0 1px rgba(120,190,255,.45),0 10px 24px rgba(0,60,140,.18)}\n.argus-motion-press{transform:scale(.982)!important;transition:transform var(--argus-motion-fast) var(--argus-motion-ease)!important}\n:host(.argus-perf-essential) .argus-motion-press{transition:none!important;transform:none!important}\n@media(prefers-reduced-motion:reduce){.argus-motion-press{transition:none!important;transform:none!important}}\n";
-function Er(e) {
+var Cr = "argus-motion-system-v2049", wr = "__argusMotionV2049", Tr = ".user-card,.liquid-btn,.mode-btn,.lang-pill,.entry-fs,.fs-btn,.file-card-btn,.pick-row,.widget-size-btn,.widget-toggle-btn,.argus-disarm-btn,[data-login-digit],#btn-submit-login-pin,#btn-cancel-login,#btn-complete-setup,#btn-claim-admin", Er = "\n:host{--argus-motion-fast:120ms;--argus-motion-ease:cubic-bezier(.22,.8,.25,1)}\n#widget-grid,.dashboard-instances,#widget-grid>.dashboard-instances,#widget-grid>.dashboard-instances>.entry{animation:none!important;transition:none!important;opacity:1!important;transform:none!important;visibility:visible!important}\n#widget-grid.argus-motion-dashboard-enter,.dashboard-instances.argus-motion-dashboard-enter,.argus-motion-dashboard-prep{animation:none!important;transition:none!important;opacity:1!important;transform:none!important}\n.dashboard-instances>.entry{will-change:auto!important}\n.user-card.is-entering{pointer-events:none;box-shadow:0 0 0 1px rgba(120,190,255,.45),0 10px 24px rgba(0,60,140,.18)}\n.argus-motion-press{transform:scale(.982)!important;transition:transform var(--argus-motion-fast) var(--argus-motion-ease)!important}\n:host(.argus-perf-essential) .argus-motion-press{transition:none!important;transform:none!important}\n@media(prefers-reduced-motion:reduce){.argus-motion-press{transition:none!important;transform:none!important}}\n";
+function Dr(e) {
 	if (window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches) return "essential";
 	let t = String(e._argusPerfProfile || e.dataset?.argusPerf || "").toLowerCase();
 	return t === "essential" || e.classList.contains("argus-perf-essential") ? "essential" : t === "light" ? "light" : "full";
 }
-function Dr(e) {
-	if (e[Cr]) return e[Cr];
+function Or(e) {
+	if (e[wr]) return e[wr];
 	let t = {
 		panel: e,
 		active: !1,
@@ -19406,37 +19507,37 @@ function Dr(e) {
 		profileControl: null,
 		api: null
 	};
-	return Object.defineProperty(e, Cr, {
+	return Object.defineProperty(e, wr, {
 		value: t,
 		writable: !0,
 		configurable: !0
 	}), t;
 }
-function Or(e, t) {
+function kr(e, t) {
 	let n = requestAnimationFrame(() => {
 		e.rafs.delete(n), e.active && t();
 	});
 	return e.rafs.add(n), n;
 }
-function kr(e, t, n, r, i) {
+function Ar(e, t, n, r, i) {
 	t.addEventListener(n, r, i), e.cleanups.add(() => t.removeEventListener(n, r, i));
 }
-function Ar(e) {
+function jr(e) {
 	let t = e.shadowRoot;
 	if (!t) return;
-	let n = t.getElementById(Sr);
-	n ? n.textContent !== Tr && (n.textContent = Tr) : (n = document.createElement("style"), n.id = Sr, n.textContent = Tr, t.appendChild(n));
+	let n = t.getElementById(Cr);
+	n ? n.textContent !== Er && (n.textContent = Er) : (n = document.createElement("style"), n.id = Cr, n.textContent = Er, t.appendChild(n));
 }
-function jr(e) {
+function Mr(e) {
 	e.profileControl?.classList.remove("is-entering"), e.profileControl = null, e.panel.shadowRoot?.getElementById("bootstrap-overlay")?.removeAttribute("aria-busy");
 }
-function Mr(e, t) {
-	jr(e), e.profileControl = t, t?.classList.add("is-entering"), e.panel.shadowRoot?.getElementById("bootstrap-overlay")?.setAttribute("aria-busy", "true");
+function Nr(e, t) {
+	Mr(e), e.profileControl = t, t?.classList.add("is-entering"), e.panel.shadowRoot?.getElementById("bootstrap-overlay")?.setAttribute("aria-busy", "true");
 }
-function Nr(e) {
+function Pr(e) {
 	!e.observer && e.panel.shadowRoot && (e.observer = new MutationObserver((t) => {
-		t.some((e) => [...e.addedNodes].some((e) => e instanceof Element && e.id !== Sr)) && (e.observerFrame ||= Or(e, () => {
-			e.observerFrame = 0, Ar(e.panel);
+		t.some((e) => [...e.addedNodes].some((e) => e instanceof Element && e.id !== Cr)) && (e.observerFrame ||= kr(e, () => {
+			e.observerFrame = 0, jr(e.panel);
 		}));
 	}), e.observer.observe(e.panel.shadowRoot, {
 		childList: !0,
@@ -19444,64 +19545,64 @@ function Nr(e) {
 		attributes: !1
 	}));
 }
-function Pr(e) {
+function Fr(e) {
 	let t = e.panel.shadowRoot;
 	if (!t) return;
 	let n = (t) => {
 		t && (t.classList.remove("argus-motion-press"), e.pressed.delete(t));
 	};
-	kr(e, t, "pointerdown", (t) => {
-		if (Er(e.panel) === "essential") return;
-		let n = t.target?.closest?.(wr);
+	Ar(e, t, "pointerdown", (t) => {
+		if (Dr(e.panel) === "essential") return;
+		let n = t.target?.closest?.(Tr);
 		n && !n.disabled && (n.classList.add("argus-motion-press"), e.pressed.add(n));
 	}, !0), [
 		"pointerup",
 		"pointercancel",
 		"pointerleave"
-	].forEach((r) => kr(e, t, r, (e) => {
+	].forEach((r) => Ar(e, t, r, (e) => {
 		let t = e.target;
-		n(t?.closest?.(wr));
-	}, !0)), kr(e, t, "click", (t) => {
+		n(t?.closest?.(Tr));
+	}, !0)), Ar(e, t, "click", (t) => {
 		let n = t.target, r = n?.closest?.(".user-card");
-		r && r.dataset.isOwn === "true" && r.dataset.pinRequired !== "true" && Mr(e, r), n?.closest?.("#btn-submit-login-pin,#btn-complete-setup,#btn-claim-admin") && Mr(e, n.closest("button")), n?.closest?.("#btn-cancel-login") && jr(e);
+		r && r.dataset.isOwn === "true" && r.dataset.pinRequired !== "true" && Nr(e, r), n?.closest?.("#btn-submit-login-pin,#btn-complete-setup,#btn-claim-admin") && Nr(e, n.closest("button")), n?.closest?.("#btn-cancel-login") && Mr(e);
 	}, !0);
 }
-function Fr(e) {
-	!e.active && e.panel.shadowRoot && (e.active = !0, Ar(e.panel), Pr(e), Nr(e), e.api = Object.freeze({
+function Ir(e) {
+	!e.active && e.panel.shadowRoot && (e.active = !0, jr(e.panel), Fr(e), Pr(e), e.api = Object.freeze({
 		animateView: () => {},
 		stagger: () => {},
 		transitionBackground: () => () => {},
 		animateDashboard: () => {}
 	}));
 }
-function Ir(e) {
-	e.active = !1, e.observer?.disconnect(), e.observer = null, e.observerFrame && cancelAnimationFrame(e.observerFrame), e.observerFrame = 0, e.rafs.forEach(cancelAnimationFrame), e.rafs.clear(), e.timers.forEach(clearTimeout), e.timers.clear(), e.cleanups.forEach((e) => e()), e.cleanups.clear(), e.pressed.forEach((e) => e.classList.remove("argus-motion-press")), e.pressed.clear(), jr(e);
-}
 function Lr(e) {
+	e.active = !1, e.observer?.disconnect(), e.observer = null, e.observerFrame && cancelAnimationFrame(e.observerFrame), e.observerFrame = 0, e.rafs.forEach(cancelAnimationFrame), e.rafs.clear(), e.timers.forEach(clearTimeout), e.timers.clear(), e.cleanups.forEach((e) => e()), e.cleanups.clear(), e.pressed.forEach((e) => e.classList.remove("argus-motion-press")), e.pressed.clear(), Mr(e);
+}
+function Rr(e) {
 	let t = e?.prototype;
 	if (!t || t.__argusMotionSystemV2049) return;
 	t.__argusMotionSystemV2049 = !0;
 	let n = t.connectedCallback, r = t.disconnectedCallback, i = t._load;
 	t.connectedCallback = function() {
-		let e = n?.call(this), t = Dr(this);
-		return this.shadowRoot ? Fr(t) : queueMicrotask(() => Fr(t)), e;
+		let e = n?.call(this), t = Or(this);
+		return this.shadowRoot ? Ir(t) : queueMicrotask(() => Ir(t)), e;
 	}, t.disconnectedCallback = function() {
-		let e = this[Cr];
-		return e && Ir(e), r?.call(this);
+		let e = this[wr];
+		return e && Lr(e), r?.call(this);
 	}, t._load = async function(...e) {
-		let t = Dr(this);
+		let t = Or(this);
 		try {
 			let n = await i?.apply(this, e);
-			return !t.active && this.isConnected && Fr(t), Ar(this), jr(t), n;
+			return !t.active && this.isConnected && Ir(t), jr(this), Mr(t), n;
 		} catch (e) {
-			throw jr(t), e;
+			throw Mr(t), e;
 		}
 	};
 }
 //#endregion
 //#region src/features/render/stable.ts
-var Rr = "__argusStableRenderV2050";
-function zr(e) {
+var zr = "__argusStableRenderV2050";
+function Br(e) {
 	let t = e.shadowRoot;
 	if (!t) return;
 	let n = /* @__PURE__ */ new Date(), r = e._formatTime ? e._formatTime(n) : n.toLocaleTimeString([], {
@@ -19516,7 +19617,7 @@ function zr(e) {
 		e && e.textContent !== r && (e.textContent = r);
 	});
 }
-function Br(e, t, n, r, i, a, o) {
+function Vr(e, t, n, r, i, a, o) {
 	return [
 		t?.entity_id || "",
 		t?.entry_id || "",
@@ -19537,7 +19638,7 @@ function Br(e, t, n, r, i, a, o) {
 		String(e._getCurrentLangCode?.() || e._manualLang || e._ui?.language || e._hass?.language || "")
 	].join("|");
 }
-function Vr(e, t) {
+function Hr(e, t) {
 	t && !t._argusDelegated && (t._argusDelegated = !0, t.addEventListener("click", (t) => {
 		let n = t.target;
 		if (n.closest?.("button[data-action=\"unlock-kiosk\"]")) {
@@ -19567,18 +19668,18 @@ function Vr(e, t) {
 		o?.dataset?.idx != null && o?.dataset?.action && e._handleAction?.(o.dataset.idx, o.dataset.action);
 	}));
 }
-function Hr(e) {
+function Ur(e) {
 	let t = e?.prototype;
-	if (!t || t[Rr]) return;
-	t[Rr] = !0;
+	if (!t || t[zr]) return;
+	t[zr] = !0;
 	let n = t._renderEntries, r = Object.getOwnPropertyDescriptor(t, "hass") || Object.getOwnPropertyDescriptor(Object.getPrototypeOf(t), "hass");
 	t._updateLiveClocks = function() {
-		zr(this);
+		Br(this);
 	}, t._updateHeroClock = function() {
-		zr(this);
+		Br(this);
 	}, t._startClock = function() {
-		this._clockInterval && clearInterval(this._clockInterval), zr(this), this._clockInterval = setInterval(() => {
-			this._dashboard && zr(this);
+		this._clockInterval && clearInterval(this._clockInterval), Br(this), this._clockInterval = setInterval(() => {
+			this._dashboard && Br(this);
 		}, 1e3);
 	}, t._renderEntries = function(e = !1) {
 		let t = this.shadowRoot;
@@ -19586,7 +19687,7 @@ function Hr(e) {
 		let r = t.getElementById("entries"), i = this._dashboard?.entries || [];
 		if (this._instanceSignatures = this._instanceSignatures || /* @__PURE__ */ new Map(), !r || !i.length) {
 			let r = n?.call(this, e);
-			return Vr(this, t.getElementById("entries")), zr(this), r;
+			return Hr(this, t.getElementById("entries")), Br(this), r;
 		}
 		let a = [...r.querySelectorAll("article.entry")];
 		if (!e && a.length === i.length && a.every((e) => e.querySelector(".entry-content"))) {
@@ -19606,7 +19707,7 @@ function Hr(e) {
 				let f = u.bypassed_sensors || [], p = d.filter((e) => !f.includes(e)).map((e) => {
 					let t = this._hass?.states?.[e], n = this._getSensorBattery?.(e, t) ?? t?.attributes?.battery_level ?? t?.attributes?.battery_percentage ?? "";
 					return `${e}:${t?.state || ""}:${n}`;
-				}).join(","), m = Br(this, n, a, o, p, s, c);
+				}).join(","), m = Vr(this, n, a, o, p, s, c);
 				if (this._instanceSignatures.get(t) !== m) {
 					e = !1;
 					break;
@@ -19620,7 +19721,7 @@ function Hr(e) {
 					let t = ((e) => this._t?.(e) || e)(e ? "system_armed" : "system_disarmed"), n = `<i class="hero-live" style="background:${e ? "#ffb54d" : "#55df91"};box-shadow:0 0 9px ${e ? "#ffb54d" : "#55df91"}"></i>${this._escapeHtml?.(t) || t}`;
 					a.innerHTML !== n && (a.innerHTML = n);
 				}
-				zr(this), Vr(this, r);
+				Br(this), Hr(this, r);
 				return;
 			}
 		}
@@ -19642,9 +19743,9 @@ function Hr(e) {
 			let f = u.bypassed_sensors || [], p = d.filter((e) => !f.includes(e)).map((e) => {
 				let t = this._hass?.states?.[e], n = this._getSensorBattery?.(e, t) ?? t?.attributes?.battery_level ?? t?.attributes?.battery_percentage ?? "";
 				return `${e}:${t?.state || ""}:${n}`;
-			}).join(","), m = Br(this, n, a, o, p, s, c);
+			}).join(","), m = Vr(this, n, a, o, p, s, c);
 			this._instanceSignatures.set(t, m), e.dataset.renderSig = m;
-		}), Vr(this, r), zr(this), o;
+		}), Hr(this, r), Br(this), o;
 	};
 	let i = r?.get, a = r?.set;
 	a && Object.defineProperty(t, "hass", {
@@ -19665,7 +19766,7 @@ function Hr(e) {
 				let i = t.language !== e.language;
 				i && !this._manualLang && this._refreshLocalizedUi?.();
 				let a = this._dashboard.entries.some((n) => n.entity_id && t.states[n.entity_id]?.state !== e.states[n.entity_id]?.state), o = [...n].some((n) => t.states[n]?.state !== e.states[n]?.state || t.states[n]?.attributes?.battery_level !== e.states[n]?.attributes?.battery_level || t.states[n]?.attributes?.battery_percentage !== e.states[n]?.attributes?.battery_percentage), s = this._temperatureSource === "auto" ? null : this._temperatureSource, c = s && t.states[s]?.state !== e.states[s]?.state, l = this._weatherSource && this._weatherSource !== "auto" ? this._weatherSource : Object.values(e.states).find((e) => e.entity_id?.startsWith("weather."))?.entity_id, u = l && (t.states[l]?.state !== e.states[l]?.state || t.states[l]?.attributes?.temperature !== e.states[l]?.attributes?.temperature), d = a || o || c || u || i;
-				this._hass = e, this._updateTheme?.(), d ? (this._renderEntries?.(i), this._renderActivityLog?.()) : zr(this);
+				this._hass = e, this._updateTheme?.(), d ? (this._renderEntries?.(i), this._renderActivityLog?.()) : Br(this);
 				return;
 			}
 			return a.call(this, e);
@@ -19679,30 +19780,30 @@ function Hr(e) {
 }
 //#endregion
 //#region src/features/render/alarm.ts
-var Ur = "argus-v2050-alarm-visuals", Wr = {
+var Wr = "argus-v2050-alarm-visuals", Gr = {
 	armed_home: /EN CASA|HOME|EM CASA|CASA|在家|ДОМА/i,
 	armed_away: /AUSENTE|AWAY|ASSENTE|外出|УШЁЛ/i,
 	armed_night: /NOCHE|NIGHT|NOITE|NOTTE|夜间|НОЧЬ/i
 };
-function Gr(e, t) {
+function Kr(e, t) {
 	let n = t?.entity_id || t?.alarm_entity_id, r = n ? e._hass?.states?.[n]?.state : void 0;
 	return String(r || t?.state || t?.alarm_state || t?.attributes?.state || "").toLowerCase();
 }
-function Kr(e, t, n) {
+function qr(e, t, n) {
 	e.classList.toggle("active", n), e.classList.toggle("argus-action-active", n), e.dataset.argusAction = t, t === "sos" && e.classList.toggle("flashing", n);
 }
-function qr(e) {
+function Jr(e) {
 	let t = e.shadowRoot;
 	if (!t) return;
-	let n = t.getElementById(Ur);
-	n || (n = document.createElement("style"), n.id = Ur, t.appendChild(n)), n.textContent = "\n.entry .liquid-stack .liquid-btn{border-radius:13px!important;color:rgba(255,255,255,.92)!important}\n.entry.argus-arming .entry-icon>svg,.entry.argus-waiting .entry-icon>svg{transform-origin:center!important;animation:argusArmingShield 1.05s ease-in-out infinite!important;filter:drop-shadow(0 0 26px rgba(255,184,57,.95)) saturate(1.35)!important;will-change:transform,opacity}\n.argus-shield-status{display:block;margin:7px auto 0;padding:5px 10px;width:max-content;max-width:180px;border:1px solid rgba(255,184,57,.45);border-radius:999px;background:rgba(255,149,0,.13);color:#ffd27a;font-size:9px;font-weight:800;letter-spacing:.12em;text-align:center;animation:argusArmingLabel 1.05s ease-in-out infinite}\n.entry .console-sensor.argus-blocking,.entry .console-sensor.argus-triggered-sensor{border-color:#ff8a1f!important;background:linear-gradient(135deg,rgba(249,115,22,.32),rgba(194,65,12,.18))!important;animation:argusTriggeredSensor .72s ease-in-out infinite!important;will-change:transform,opacity}\n@keyframes argusArmingShield{0%,100%{opacity:.55;transform:scale3d(.94,.94,1)}50%{opacity:1;transform:scale3d(1.07,1.07,1)}}\n@keyframes argusArmingLabel{0%,100%{opacity:.62}50%{opacity:1}}\n@keyframes argusTriggeredSensor{0%,100%{opacity:.62;transform:scale3d(1,1,1)}50%{opacity:1;transform:scale3d(1.02,1.02,1)}}\n";
+	let n = t.getElementById(Wr);
+	n || (n = document.createElement("style"), n.id = Wr, t.appendChild(n)), n.textContent = "\n.entry .liquid-stack .liquid-btn{border-radius:13px!important;color:rgba(255,255,255,.92)!important}\n.entry.argus-arming .entry-icon>svg,.entry.argus-waiting .entry-icon>svg{transform-origin:center!important;animation:argusArmingShield 1.05s ease-in-out infinite!important;filter:drop-shadow(0 0 26px rgba(255,184,57,.95)) saturate(1.35)!important;will-change:transform,opacity}\n.argus-shield-status{display:block;margin:7px auto 0;padding:5px 10px;width:max-content;max-width:180px;border:1px solid rgba(255,184,57,.45);border-radius:999px;background:rgba(255,149,0,.13);color:#ffd27a;font-size:9px;font-weight:800;letter-spacing:.12em;text-align:center;animation:argusArmingLabel 1.05s ease-in-out infinite}\n.entry .console-sensor.argus-blocking,.entry .console-sensor.argus-triggered-sensor{border-color:#ff8a1f!important;background:linear-gradient(135deg,rgba(249,115,22,.32),rgba(194,65,12,.18))!important;animation:argusTriggeredSensor .72s ease-in-out infinite!important;will-change:transform,opacity}\n@keyframes argusArmingShield{0%,100%{opacity:.55;transform:scale3d(.94,.94,1)}50%{opacity:1;transform:scale3d(1.07,1.07,1)}}\n@keyframes argusArmingLabel{0%,100%{opacity:.62}50%{opacity:1}}\n@keyframes argusTriggeredSensor{0%,100%{opacity:.62;transform:scale3d(1,1,1)}50%{opacity:1;transform:scale3d(1.02,1.02,1)}}\n";
 }
-function Jr(e) {
+function Yr(e) {
 	if (!e.shadowRoot) return;
-	qr(e);
+	Jr(e);
 	let t = e.shadowRoot.querySelectorAll(".entry");
 	Array.from(t).forEach((t, n) => {
-		let r = e._dashboard?.entries?.[n] || {}, i = r.attributes || e._hass?.states?.[r.entity_id]?.attributes || {}, a = Gr(e, r), o = i.arming_blocking_sensors || [], s = a === "arming" || !!i.arming_waiting_for_sensors || !!o.length;
+		let r = e._dashboard?.entries?.[n] || {}, i = r.attributes || e._hass?.states?.[r.entity_id]?.attributes || {}, a = Kr(e, r), o = i.arming_blocking_sensors || [], s = a === "arming" || !!i.arming_waiting_for_sensors || !!o.length;
 		t.classList.toggle("argus-arming", s), t.classList.toggle("argus-waiting", s);
 		let c = t.querySelector(".entry-icon"), l = t.querySelector(".argus-shield-status");
 		if (s && c) {
@@ -19713,11 +19814,11 @@ function Jr(e) {
 		let u = t.querySelector(".liquid-stack");
 		u && Array.from(u.querySelectorAll(".liquid-btn,button")).forEach((e) => {
 			let t = e, n = String(t.textContent || "");
-			if (/SOS|PÁNICO|PANIC|PANIQUE|PÂNICO|PANICO|紧急|ПАНИКА/i.test(n)) Kr(t, "sos", !!i.argus_panic_active);
-			else if (/DESARMAR|DISARM|DESARMADO|DISARMED|DÉSARMER|DÉSARMÉ|OFF|已撤防|СНЯТО/i.test(n)) Kr(t, "disarm", a === "disarmed");
+			if (/SOS|PÁNICO|PANIC|PANIQUE|PÂNICO|PANICO|紧急|ПАНИКА/i.test(n)) qr(t, "sos", !!i.argus_panic_active);
+			else if (/DESARMAR|DISARM|DESARMADO|DISARMED|DÉSARMER|DÉSARMÉ|OFF|已撤防|СНЯТО/i.test(n)) qr(t, "disarm", a === "disarmed");
 			else {
-				let e = Object.entries(Wr).find(([, e]) => e.test(n));
-				e && Kr(t, e[0], a === e[0]);
+				let e = Object.entries(Gr).find(([, e]) => e.test(n));
+				e && qr(t, e[0], a === e[0]);
 			}
 		});
 		let d = new Set((i.triggered_sensors || []).map(String)), f = new Set(o.map((t) => String(e._dashboard?.available_entities?.find((e) => e.entity_id === t)?.name || t).toLocaleLowerCase()));
@@ -19727,51 +19828,51 @@ function Jr(e) {
 		});
 	});
 }
-function Yr(e) {
+function Xr(e) {
 	let t = e?.prototype;
 	if (!t || t.__v2050AlarmVisuals) return;
 	t.__v2050AlarmVisuals = !0;
 	let n = t.connectedCallback, r = t._load, i = t._renderEntries;
 	t.connectedCallback = function() {
 		let e = n?.call(this);
-		return Jr(this), e;
+		return Yr(this), e;
 	}, t._load = async function(...e) {
 		let t = await r?.apply(this, e);
-		return Jr(this), t;
+		return Yr(this), t;
 	}, t._renderEntries = function(...e) {
 		let t = i?.apply(this, e);
-		return Jr(this), t;
+		return Yr(this), t;
 	};
 }
 //#endregion
 //#region src/features/widgets/responsive.ts
-var Xr = "argus-v2049-responsive-widgets", Zr = "#w-access,.access-view,.access-content,.access-sections,.users-list,.user-list,.users-grid,[role=\"tabpanel\"],.users-modal,.access-modal,.argus-users-modal";
-function Qr(e) {
-	let t = e.shadowRoot;
-	if (!t) return;
-	let n = t.getElementById(Xr);
-	n || (n = document.createElement("style"), n.id = Xr, t.appendChild(n)), n.textContent = "\n#w-access{display:flex!important;flex-direction:column!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;box-sizing:border-box!important}\n#w-access>.panel-head,#w-access>.access-summary,#w-access>.tabs{flex:0 0 auto!important}\n#w-access :is(.panel-body,#access-view,.access-view,.access-content,.access-sections,.users-list,.user-list,.users-grid,[role=\"tabpanel\"]){flex:1 1 auto!important;min-width:0!important;min-height:0!important;max-height:none!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;scrollbar-gutter:stable!important;box-sizing:border-box!important}\n:is(.users-modal,.access-modal,.argus-users-modal,.modal,[role=\"dialog\"]){max-width:min(94vw,760px)!important;max-height:min(88dvh,720px)!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;box-sizing:border-box!important}\n/* Backup: title plus an explicit responsive button grid. */\n#w-backup{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-auto-rows:max-content!important;place-content:center!important;align-items:center!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow:hidden!important;box-sizing:border-box!important;padding:16px!important;gap:12px!important;text-align:center!important}\n#w-backup>h2,#w-backup>.panel-head,#w-backup>.panel-title{grid-column:1/-1!important;width:100%!important;margin:0 0 2px!important;text-align:center!important}\n#w-backup>:not(.panel-edit-overlay){min-width:0!important;max-width:100%!important;box-sizing:border-box!important;margin-top:0!important;margin-bottom:0!important}\n#w-backup :is(.panel-body,.actions,.backup-actions,.button-row,.controls){display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-column:1/-1!important;gap:12px!important;width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;box-sizing:border-box!important;flex-wrap:wrap!important}\n#w-backup :is(button,a,ha-button,mwc-button){width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;padding-inline:8px!important;white-space:normal!important;overflow-wrap:anywhere!important;text-align:center!important;justify-content:center!important;box-sizing:border-box!important;font-size:clamp(11px,1.1vw,14px)!important}\n/* Support: compact centered group with 3-column actions grid */\n#w-github{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow:hidden!important;box-sizing:border-box!important;padding:16px!important;gap:14px!important;text-align:center!important}\n#w-github>:not(.panel-edit-overlay){min-width:0!important;max-width:100%!important;margin:0!important;box-sizing:border-box!important}\n#w-github :is(h2,h3,.panel-head,.panel-title,.github-header){width:100%!important;margin:0!important;text-align:center!important}\n#w-github :is(.panel-body,.actions,.support-actions,.support-actions-grid){display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;width:100%!important;max-width:440px!important;margin:0!important;padding:0!important;box-sizing:border-box!important}\n#w-github :is(button,a,ha-button,mwc-button,.support-link-btn){width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;white-space:nowrap!important;text-align:center!important;justify-content:center!important;box-sizing:border-box!important}\n#w-backup .panel-edit-overlay,#w-github .panel-edit-overlay{position:absolute!important;inset:0!important;margin:0!important;max-width:none!important}\n@media(max-width:460px){#w-backup{grid-template-columns:1fr!important;overflow-y:auto!important}#w-backup :is(.panel-body,.actions,.backup-actions,.button-row,.controls){grid-template-columns:1fr!important}#w-backup :is(button,a,ha-button,mwc-button){font-size:13px!important}#w-github{padding:14px!important;gap:10px!important}#w-github :is(.panel-body,.actions,.support-actions,.support-actions-grid){grid-template-columns:1fr!important;gap:6px!important}}\n";
-}
+var Zr = "argus-v2049-responsive-widgets", Qr = "#w-access,.access-view,.access-content,.access-sections,.users-list,.user-list,.users-grid,[role=\"tabpanel\"],.users-modal,.access-modal,.argus-users-modal";
 function $r(e) {
 	let t = e.shadowRoot;
-	t && t.querySelectorAll(Zr).forEach((e) => {
+	if (!t) return;
+	let n = t.getElementById(Zr);
+	n || (n = document.createElement("style"), n.id = Zr, t.appendChild(n)), n.textContent = "\n#w-access{display:flex!important;flex-direction:column!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;box-sizing:border-box!important}\n#w-access>.panel-head,#w-access>.access-summary,#w-access>.tabs{flex:0 0 auto!important}\n#w-access :is(.panel-body,#access-view,.access-view,.access-content,.access-sections,.users-list,.user-list,.users-grid,[role=\"tabpanel\"]){flex:1 1 auto!important;min-width:0!important;min-height:0!important;max-height:none!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;scrollbar-gutter:stable!important;box-sizing:border-box!important}\n:is(.users-modal,.access-modal,.argus-users-modal,.modal,[role=\"dialog\"]){max-width:min(94vw,760px)!important;max-height:min(88dvh,720px)!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;box-sizing:border-box!important}\n/* Backup: title plus an explicit responsive button grid. */\n#w-backup{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-auto-rows:max-content!important;place-content:center!important;align-items:center!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow:hidden!important;box-sizing:border-box!important;padding:16px!important;gap:12px!important;text-align:center!important}\n#w-backup>h2,#w-backup>.panel-head,#w-backup>.panel-title{grid-column:1/-1!important;width:100%!important;margin:0 0 2px!important;text-align:center!important}\n#w-backup>:not(.panel-edit-overlay){min-width:0!important;max-width:100%!important;box-sizing:border-box!important;margin-top:0!important;margin-bottom:0!important}\n#w-backup :is(.panel-body,.actions,.backup-actions,.button-row,.controls){display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-column:1/-1!important;gap:12px!important;width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;box-sizing:border-box!important;flex-wrap:wrap!important}\n#w-backup :is(button,a,ha-button,mwc-button){width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;padding-inline:8px!important;white-space:normal!important;overflow-wrap:anywhere!important;text-align:center!important;justify-content:center!important;box-sizing:border-box!important;font-size:clamp(11px,1.1vw,14px)!important}\n/* Support: compact centered group with 3-column actions grid */\n#w-github{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow:hidden!important;box-sizing:border-box!important;padding:16px!important;gap:14px!important;text-align:center!important}\n#w-github>:not(.panel-edit-overlay){min-width:0!important;max-width:100%!important;margin:0!important;box-sizing:border-box!important}\n#w-github :is(h2,h3,.panel-head,.panel-title,.github-header){width:100%!important;margin:0!important;text-align:center!important}\n#w-github :is(.panel-body,.actions,.support-actions,.support-actions-grid){display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;width:100%!important;max-width:440px!important;margin:0!important;padding:0!important;box-sizing:border-box!important}\n#w-github :is(button,a,ha-button,mwc-button,.support-link-btn){width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;white-space:nowrap!important;text-align:center!important;justify-content:center!important;box-sizing:border-box!important}\n#w-backup .panel-edit-overlay,#w-github .panel-edit-overlay{position:absolute!important;inset:0!important;margin:0!important;max-width:none!important}\n@media(max-width:460px){#w-backup{grid-template-columns:1fr!important;overflow-y:auto!important}#w-backup :is(.panel-body,.actions,.backup-actions,.button-row,.controls){grid-template-columns:1fr!important}#w-backup :is(button,a,ha-button,mwc-button){font-size:13px!important}#w-github{padding:14px!important;gap:10px!important}#w-github :is(.panel-body,.actions,.support-actions,.support-actions-grid){grid-template-columns:1fr!important;gap:6px!important}}\n";
+}
+function ei(e) {
+	let t = e.shadowRoot;
+	t && t.querySelectorAll(Qr).forEach((e) => {
 		let t = e;
 		t.style.touchAction = "pan-y", t.style.setProperty("-webkit-overflow-scrolling", "touch"), t.scrollHeight > t.clientHeight && (t.style.overflowY = "auto");
 	});
 }
-function ei(e) {
-	Qr(e), $r(e);
-}
 function ti(e) {
+	$r(e), ei(e);
+}
+function ni(e) {
 	let t = e?.prototype;
 	if (!t || t.__v2049ResponsiveWidgets) return;
 	t.__v2049ResponsiveWidgets = !0;
 	let n = t.connectedCallback, r = t.disconnectedCallback, i = t._load, a = t._renderEntries;
 	t.connectedCallback = function() {
 		let e = n?.call(this);
-		return ei(this), this._v2049Observer?.disconnect?.(), this._v2049Frame = 0, this._v2049Observer = new MutationObserver(() => {
+		return ti(this), this._v2049Observer?.disconnect?.(), this._v2049Frame = 0, this._v2049Observer = new MutationObserver(() => {
 			this._v2049Frame ||= requestAnimationFrame(() => {
-				this._v2049Frame = 0, ei(this);
+				this._v2049Frame = 0, ti(this);
 			});
 		}), this.shadowRoot && this._v2049Observer.observe(this.shadowRoot, {
 			childList: !0,
@@ -19781,41 +19882,41 @@ function ti(e) {
 		return this._v2049Observer?.disconnect?.(), this._v2049Observer = null, this._v2049Frame && cancelAnimationFrame(this._v2049Frame), this._v2049Frame = 0, r?.call(this);
 	}, t._load = async function(...e) {
 		let t = await i?.apply(this, e);
-		return ei(this), t;
+		return ti(this), t;
 	}, t._renderEntries = function(...e) {
 		let t = a?.apply(this, e);
-		return ei(this), t;
+		return ti(this), t;
 	};
 }
 //#endregion
 //#region src/features/widgets/layouts.ts
-var ni = "argus-v2050-widget-layouts";
-function ri(e) {
+var ri = "argus-v2050-widget-layouts";
+function ii(e) {
 	let t = e.shadowRoot;
 	if (!t) return;
-	let n = t.getElementById(ni);
-	n || (n = document.createElement("style"), n.id = ni, t.appendChild(n)), n.textContent = "\n#w-access{display:flex!important;flex-direction:column!important;min-width:0!important;min-height:0!important;height:100%!important;overflow:hidden!important}\n#w-access .panel-body,#w-access #access-view,#w-access .access-view,#w-access .access-content,#w-access .users-list,#w-access .user-list{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;overscroll-behavior:contain!important}\n#w-backup{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:14px!important;padding:16px!important;box-sizing:border-box!important;height:100%!important;min-height:0!important;overflow:hidden!important;text-align:center!important}\n#w-backup h2,#w-backup .panel-head,#w-backup .panel-title{margin:0!important;width:100%!important;text-align:center!important;flex:0 0 auto!important}\n#w-backup .panel-body,#w-backup .actions,#w-backup .backup-actions,#w-backup .button-row,#w-backup .controls{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important;width:100%!important;max-width:100%!important;margin:0!important;padding:0!important;box-sizing:border-box!important}\n#w-backup button,#w-backup a,#w-backup ha-button,#w-backup mwc-button{width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;white-space:normal!important;overflow-wrap:anywhere!important;justify-content:center!important;text-align:center!important;font-size:clamp(11px,1.1vw,14px)!important;box-sizing:border-box!important}\n#w-github{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:14px!important;padding:16px!important;box-sizing:border-box!important;height:100%!important;min-height:0!important;overflow:hidden!important;text-align:center!important}\n#w-github h2,#w-github h3,#w-github .panel-head,#w-github .panel-title,#w-github .github-header{margin:0!important;width:100%!important;text-align:center!important}\n#w-github :is(.panel-body,.actions,.support-actions,.support-actions-grid){display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;width:100%!important;max-width:440px!important;margin:0!important;padding:0!important;box-sizing:border-box!important}\n#w-github :is(button,a,ha-button,mwc-button,.support-link-btn){width:100%!important;max-width:100%!important;margin:0!important;justify-content:center!important;box-sizing:border-box!important}\n#w-backup .panel-edit-overlay,#w-github .panel-edit-overlay,#w-access .panel-edit-overlay{position:absolute!important;inset:0!important}\n@media(max-width:520px){#w-backup .panel-body,#w-backup .actions,#w-backup .backup-actions,#w-backup .button-row,#w-backup .controls{grid-template-columns:1fr!important}#w-backup{overflow-y:auto!important}}\n";
+	let n = t.getElementById(ri);
+	n || (n = document.createElement("style"), n.id = ri, t.appendChild(n)), n.textContent = "\n#w-access{display:flex!important;flex-direction:column!important;min-width:0!important;min-height:0!important;height:100%!important;overflow:hidden!important}\n#w-access .panel-body,#w-access #access-view,#w-access .access-view,#w-access .access-content,#w-access .users-list,#w-access .user-list{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;overscroll-behavior:contain!important}\n#w-backup{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:14px!important;padding:16px!important;box-sizing:border-box!important;height:100%!important;min-height:0!important;overflow:hidden!important;text-align:center!important}\n#w-backup h2,#w-backup .panel-head,#w-backup .panel-title{margin:0!important;width:100%!important;text-align:center!important;flex:0 0 auto!important}\n#w-backup .panel-body,#w-backup .actions,#w-backup .backup-actions,#w-backup .button-row,#w-backup .controls{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important;width:100%!important;max-width:100%!important;margin:0!important;padding:0!important;box-sizing:border-box!important}\n#w-backup button,#w-backup a,#w-backup ha-button,#w-backup mwc-button{width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;white-space:normal!important;overflow-wrap:anywhere!important;justify-content:center!important;text-align:center!important;font-size:clamp(11px,1.1vw,14px)!important;box-sizing:border-box!important}\n#w-github{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:14px!important;padding:16px!important;box-sizing:border-box!important;height:100%!important;min-height:0!important;overflow:hidden!important;text-align:center!important}\n#w-github h2,#w-github h3,#w-github .panel-head,#w-github .panel-title,#w-github .github-header{margin:0!important;width:100%!important;text-align:center!important}\n#w-github :is(.panel-body,.actions,.support-actions,.support-actions-grid){display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;width:100%!important;max-width:440px!important;margin:0!important;padding:0!important;box-sizing:border-box!important}\n#w-github :is(button,a,ha-button,mwc-button,.support-link-btn){width:100%!important;max-width:100%!important;margin:0!important;justify-content:center!important;box-sizing:border-box!important}\n#w-backup .panel-edit-overlay,#w-github .panel-edit-overlay,#w-access .panel-edit-overlay{position:absolute!important;inset:0!important}\n@media(max-width:520px){#w-backup .panel-body,#w-backup .actions,#w-backup .backup-actions,#w-backup .button-row,#w-backup .controls{grid-template-columns:1fr!important}#w-backup{overflow-y:auto!important}}\n";
 }
-function ii(e) {
+function ai(e) {
 	let t = e.shadowRoot;
 	t && t.querySelectorAll("#w-access,.access-content,.users-list,.user-list,[role=tabpanel],.users-modal,.access-modal").forEach((e) => {
 		let t = e;
 		t.style.touchAction = "pan-y", t.style.setProperty("-webkit-overflow-scrolling", "touch"), t.scrollHeight > t.clientHeight && (t.style.overflowY = "auto");
 	});
 }
-function ai(e) {
-	ri(e), ii(e);
-}
 function oi(e) {
+	ii(e), ai(e);
+}
+function si(e) {
 	let t = e?.prototype;
 	if (!t || t.__v2050WidgetLayouts) return;
 	t.__v2050WidgetLayouts = !0;
 	let n = t.connectedCallback, r = t.disconnectedCallback, i = t._load, a = t._renderEntries;
 	t.connectedCallback = function() {
 		let e = n?.call(this);
-		return ai(this), this._v2050LayoutObs?.disconnect?.(), this._v2050LayoutFrame = 0, this._v2050LayoutObs = new MutationObserver(() => {
+		return oi(this), this._v2050LayoutObs?.disconnect?.(), this._v2050LayoutFrame = 0, this._v2050LayoutObs = new MutationObserver(() => {
 			this._v2050LayoutFrame ||= requestAnimationFrame(() => {
-				this._v2050LayoutFrame = 0, ai(this);
+				this._v2050LayoutFrame = 0, oi(this);
 			});
 		}), this.shadowRoot && this._v2050LayoutObs.observe(this.shadowRoot, {
 			childList: !0,
@@ -19825,30 +19926,30 @@ function oi(e) {
 		return this._v2050LayoutObs?.disconnect?.(), this._v2050LayoutObs = null, this._v2050LayoutFrame && cancelAnimationFrame(this._v2050LayoutFrame), this._v2050LayoutFrame = 0, r?.call(this);
 	}, t._load = async function(...e) {
 		let t = await i?.apply(this, e);
-		return ai(this), t;
+		return oi(this), t;
 	}, t._renderEntries = function(...e) {
 		let t = a?.apply(this, e);
-		return ai(this), t;
+		return oi(this), t;
 	};
 }
 //#endregion
 //#region src/features/more-info/hook.ts
-var si = "argus-more-info-hook-installed", ci = "argus-more-info-dialog-styles";
-function li(e, t) {
+var ci = "argus-more-info-hook-installed", li = "argus-more-info-dialog-styles";
+function ui(e, t) {
 	if (!e || !e.startsWith("alarm_control_panel.")) return !1;
 	if (e.includes("argus")) return !0;
 	let n = t?.states?.[e];
 	return !!(n?.attributes?.argus_version || n?.attributes?.argus_entry_id);
 }
-function ui(e) {
-	if (!e || typeof e.getElementById == "function" && e.getElementById(ci)) return;
+function di(e) {
+	if (!e || typeof e.getElementById == "function" && e.getElementById(li)) return;
 	let t = e.createElement("style");
-	t.id = ci, t.textContent = "\n    ha-more-info-dialog:has(.argus-more-info-active) ha-dialog,\n    ha-more-info-dialog:has(.argus-more-info-active) .mdc-dialog__surface {\n      --ha-dialog-border-radius: 28px !important;\n      --mdc-shape-medium: 28px !important;\n      background: rgba(7, 17, 31, 0.94) !important;\n      backdrop-filter: blur(32px) saturate(170%) !important;\n      -webkit-backdrop-filter: blur(32px) saturate(170%) !important;\n      border: 1px solid rgba(255, 255, 255, 0.16) !important;\n      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.65) !important;\n      max-width: 640px !important;\n      width: min(92vw, 620px) !important;\n    }\n    .argus-more-info-container {\n      width: 100%;\n      box-sizing: border-box;\n      padding: 0;\n      margin: 0;\n      overflow: hidden;\n      border-radius: 24px;\n    }\n    .argus-more-info-container argus-panel-v2018 {\n      display: block;\n      width: 100%;\n    }\n  ", (e.head || e.body || e).appendChild(t);
+	t.id = li, t.textContent = "\n    ha-more-info-dialog:has(.argus-more-info-active) ha-dialog,\n    ha-more-info-dialog:has(.argus-more-info-active) .mdc-dialog__surface {\n      --ha-dialog-border-radius: 28px !important;\n      --mdc-shape-medium: 28px !important;\n      background: rgba(7, 17, 31, 0.94) !important;\n      backdrop-filter: blur(32px) saturate(170%) !important;\n      -webkit-backdrop-filter: blur(32px) saturate(170%) !important;\n      border: 1px solid rgba(255, 255, 255, 0.16) !important;\n      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.65) !important;\n      max-width: 640px !important;\n      width: min(92vw, 620px) !important;\n    }\n    .argus-more-info-container {\n      width: 100%;\n      box-sizing: border-box;\n      padding: 0;\n      margin: 0;\n      overflow: hidden;\n      border-radius: 24px;\n    }\n    .argus-more-info-container argus-panel-v2018 {\n      display: block;\n      width: 100%;\n    }\n  ", (e.head || e.body || e).appendChild(t);
 }
-function di(e, t) {
+function fi(e, t) {
 	if (!e) return;
 	let n = e._entityId || e.entityId || e.params?.entityId;
-	if (!li(n, t)) return;
+	if (!ui(n, t)) return;
 	let r = e.shadowRoot;
 	if (!r) return;
 	let i = r.querySelector("more-info-content") || r.querySelector("more-info-alarm_control_panel") || r.querySelector(".content") || r.querySelector("ha-dialog");
@@ -19875,17 +19976,17 @@ function di(e, t) {
 		o && o !== a ? (o.style.display = "none", o.parentNode?.insertBefore(a, o)) : i.appendChild(a);
 	}
 }
-function fi(e) {
-	if (typeof window > "u" || typeof document > "u" || window[si]) return;
-	window[si] = !0;
+function pi(e) {
+	if (typeof window > "u" || typeof document > "u" || window[ci]) return;
+	window[ci] = !0;
 	try {
-		ui(document);
+		di(document);
 	} catch {}
 	let t = (e) => {
 		e.detail?.entityId && requestAnimationFrame(() => {
 			try {
 				let e = document.querySelector("home-assistant"), t = e?.shadowRoot?.querySelector("ha-more-info-dialog") || document.querySelector("ha-more-info-dialog");
-				t && di(t, e?.hass);
+				t && fi(t, e?.hass);
 			} catch {}
 		});
 	};
@@ -19896,7 +19997,7 @@ function fi(e) {
 		typeof MutationObserver < "u" && document.body && new MutationObserver(() => {
 			try {
 				let e = document.querySelector("home-assistant"), t = e?.shadowRoot?.querySelector("ha-more-info-dialog") || document.querySelector("ha-more-info-dialog");
-				t && di(t, e?.hass);
+				t && fi(t, e?.hass);
 			} catch {}
 		}).observe(document.body, {
 			childList: !0,
@@ -19906,10 +20007,10 @@ function fi(e) {
 }
 //#endregion
 //#region src/app/index.ts
-function pi(e) {
+function mi(e) {
 	e ||= customElements.get("argus-panel-v2018");
 	let t = e;
-	t && !t.__argusTypedFrontend && (t.__argusTypedFrontend = !0, _r(t), mr(t), yr(t), Lr(t), Hr(t), Yr(t), ir(t), ti(t), oi(t), fi(t), fr(t), sr(t));
+	t && !t.__argusTypedFrontend && (t.__argusTypedFrontend = !0, vr(t), hr(t), br(t), Rr(t), Ur(t), Xr(t), ar(t), ni(t), si(t), pi(t), pr(t), cr(t));
 }
 //#endregion
-export { pi as applyArgusFrontend };
+export { mi as applyArgusFrontend };

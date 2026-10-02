@@ -189,27 +189,33 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
               <div className="console-empty">{t('no_sensors_configured') || 'Sin sensores configurados'}</div>
             ) : (
               sortedSensors.map((sensor: any) => {
-                const sState = hass?.states?.[sensor.id];
-                const rawName = String(sensor.name || sState?.attributes?.friendly_name || sensor.id).trim();
+                const normalizedId = String(sensor.id || '').trim();
+                let sState = hass?.states?.[normalizedId];
+                if (!sState && hass?.states) {
+                  const lower = normalizedId.toLowerCase();
+                  sState = hass.states[lower] || Object.values(hass.states).find((st: any) => String(st?.entity_id || '').toLowerCase() === lower);
+                }
+                const rawName = String(sensor.name || sState?.attributes?.friendly_name || normalizedId).trim();
                 // Keep the configured sensor name, removing only generated type
                 // suffixes that Argus appended to the display label.
                 const sName = rawName
                   .replace(/\s+\(?dps\s*\d+\)?\s*$/i, '')
                   .replace(/\s+(?:puerta|door|window|ventana)\s*$/i, '')
                   .trim();
-                const isLockLike = /door|puerta|port[oó]n|gate|lock|cerradura|window|ventana/i.test(`${sensor.id} ${sName}`);
-                const isBlocking = isWaiting && blockingSensors.includes(sensor.id);
-                const isUnavailable = !sState || ['unknown', 'unavailable'].includes(sState.state);
-                const intrusionStates = ['on', 'open', 'unlocked', 'recording', 'active', 'motion'];
+                const isLockLike = /door|puerta|port[oó]n|gate|lock|cerradura|window|ventana/i.test(`${normalizedId} ${sName}`);
+                const isBlocking = isWaiting && blockingSensors.includes(normalizedId);
+                const sStateStr = String(sState?.state || '').toLowerCase();
+                const isUnavailable = !sState || ['unknown', 'unavailable', 'desconectado'].includes(sStateStr);
+                const intrusionStates = ['on', 'open', 'unlocked', 'recording', 'active', 'motion', 'abierto', 'activa'];
                 const isOpen = !isUnavailable && (
                   typeof panel?.isSensorActive === 'function'
                     ? Boolean(panel.isSensorActive(sState))
-                    : intrusionStates.includes(String(sState?.state || '').toLowerCase())
+                    : intrusionStates.includes(sStateStr)
                 );
                 
                 let power: number | null = null;
                 if (typeof panel?._getSensorBattery === 'function') {
-                  power = panel._getSensorBattery(sensor.id, sState);
+                  power = panel._getSensorBattery(normalizedId, sState);
                 }
                 if (power === null && sState?.attributes) {
                   const direct = [sState.attributes.battery_level, sState.attributes.battery, sState.attributes.battery_percentage]
@@ -219,7 +225,17 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
                   }
                 }
 
-                const customDelay = eCfg?.sensor_settings?.[sensor.id]?.delay;
+                let effectiveDelay: number | undefined = undefined;
+                const sSettings = eCfg?.sensor_settings?.[sensor.id] || eCfg?.sensor_settings?.[normalizedId];
+                if (sSettings) {
+                  if (sSettings.type === 'instant' || sSettings.delay === 0) {
+                    effectiveDelay = 0;
+                  } else if (sSettings.delay !== undefined && sSettings.delay !== null) {
+                    effectiveDelay = Number(sSettings.delay);
+                  }
+                } else if ((eCfg?.entry_sensors || []).includes(sensor.id) || (eCfg?.entry_sensors || []).includes(normalizedId)) {
+                  effectiveDelay = eCfg?.entry_delay !== undefined && eCfg?.entry_delay !== null ? Number(eCfg.entry_delay) : undefined;
+                }
 
                 return (
                   <SensorChip 
@@ -232,7 +248,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
                     isBlocking={isBlocking}
                     isBypassed={sensor.isBypassed}
                     battery={power}
-                    delay={customDelay}
+                    delay={effectiveDelay}
                     iconHtml={panel._getSensorIcon?.(sState, sensor) || ''}
                     statusLabelOpen={t('status_open') || 'ABIERTO'}
                     statusLabelClosed={t('status_closed') || 'CERRADO'}
