@@ -11,12 +11,14 @@ This release polishes the security console layout, refines sensor delay visualiz
 - **Liquid Glass Clock Icon:** Added custom 3D Liquid Glass SVG clock icons for sensor delays (cyan instant `0s` and amber custom seconds) across both the security console chips and mode configuration views.
 - **High-Resolution PDF Logo & Layout:** Upgraded PDF activity export with the official high-definition 1024x1024 Argus artwork rendered at 384x384 ultra-sharp resolution. Relocated the logo to the left side of the header followed by the report title, home name, date range, and generation timestamp.
 - **Sensor Availability Synchronization:** Fixed a display discrepancy where unavailable or offline sensors previously rendered as "Cerrado" in the modes view; both the security console and modes views now consistently display "No disponible" with grey indicator styling.
+- **Apple macOS Bootloader Splash Screen:** Replaced the legacy shield loading icon with the official Argus logo and an authentic Apple macOS boot progress bar on cold boot and page refresh.
 - **Robust Entity Lookup:** Added resilient case-insensitive and normalized entity resolution for configured partition sensors in Home Assistant.
 
 ## Actualización
 
 Actualización correctiva y de refinamiento visual para Argus:
 
+- **Pantalla de inicio estilo Apple macOS:** Se reemplazó el escudo de carga por el logotipo oficial de Argus y una barra de progreso suave idéntica a la de inicio de macOS al encender o refrescar la página.
 - **Diseño compacto y balanceado de sensores:** Se eliminó el espacio vacío innecesario a la derecha de los sensores en pantalla completa, organizando el nombre a la izquierda y el estado/batería/retardo a la derecha con un ancho acotado y elegante.
 - **Reloj Liquid Glass 3D:** Distintivos de retardo instantáneo (0s) y personalizado con icono SVG de reloj Liquid Glass de alta definición en la consola principal y en la configuración de modos.
 - **Logo oficial en alta resolución en PDF:** Se integró el logotipo oficial en alta definición (1024x1024) renderizado a 384x384 nítido, ubicado a la izquierda del encabezado seguido de la información del reporte.

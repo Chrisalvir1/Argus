@@ -3032,64 +3032,79 @@ _tmpl.innerHTML = `
 .sos-output-row{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;padding:10px 14px!important;background:rgba(255,255,255,0.06)!important;border:1px solid rgba(255,255,255,0.12)!important;border-radius:12px!important;width:100%!important;box-sizing:border-box!important}
 .sos-output-row > .sensor-pill{flex:1!important;min-width:0!important;background:transparent!important;border:none!important;box-shadow:none!important;padding:0!important;font-weight:700!important;font-size:12px!important}
 
-/* Initial Dark Loading Curtain to guarantee zero raw DOM / FOUC flash */
+/* Initial Cold Boot Dark Curtain (Apple macOS boot aesthetic) */
 #argus-initial-curtain {
   position: fixed;
   inset: 0;
-  background: #080d1a;
+  background: #000000;
   z-index: 99998;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.35s ease, visibility 0.35s ease;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s ease;
 }
 #argus-initial-curtain.curtain-hidden {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
 }
-.argus-curtain-spinner {
+.argus-boot-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  justify-content: center;
+  transform: translate3d(0, 0, 0);
 }
-.argus-curtain-icon {
-  font-size: 42px;
-  animation: curtainPulse 1.4s ease-in-out infinite;
+.argus-boot-logo {
+  width: 96px;
+  height: 96px;
+  border-radius: 24px;
+  object-fit: cover;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 45px rgba(56, 189, 248, 0.12);
+  animation: appleBootLogo 1.6s ease-in-out infinite alternate;
 }
-.argus-curtain-bar {
-  width: 120px;
-  height: 4px;
+.argus-apple-progressbar {
+  width: 175px;
+  height: 4.5px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.12);
+  margin-top: 36px;
   overflow: hidden;
   position: relative;
+  box-shadow: inset 0 0.5px 1px rgba(0, 0, 0, 0.6);
 }
-.argus-curtain-fill {
-  width: 40%;
+.argus-apple-progressbar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #38bdf8, #818cf8);
+  background: #ffffff;
   border-radius: 999px;
   position: absolute;
-  animation: curtainSlide 1.2s ease-in-out infinite;
+  top: 0;
+  left: 0;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.75);
+  animation: appleBootProgress 2.2s cubic-bezier(0.2, 0.8, 0.25, 1) infinite;
 }
-@keyframes curtainPulse {
-  0%, 100% { transform: scale(1); opacity: 0.8; }
-  50% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 16px rgba(56,189,248,0.5)); }
+@keyframes appleBootLogo {
+  0% { transform: scale(1); opacity: 0.92; }
+  100% { transform: scale(1.02); opacity: 1; filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.22)); }
 }
-@keyframes curtainSlide {
-  0% { left: -40%; }
-  100% { left: 100%; }
+@keyframes appleBootProgress {
+  0% { width: 0%; transform: translateX(0); }
+  25% { width: 35%; }
+  60% { width: 68%; }
+  85% { width: 88%; }
+  100% { width: 100%; }
 }
 
 </style>
 
-<!-- Initial Cold Boot Dark Curtain -->
-<div id="argus-initial-curtain" style="position:fixed;inset:0;background:#080d1a;z-index:99998;display:flex;align-items:center;justify-content:center;">
-  <div class="argus-curtain-spinner">
-    <div class="argus-curtain-icon">🛡️</div>
-    <div class="argus-curtain-bar"><div class="argus-curtain-fill"></div></div>
+<!-- Initial Cold Boot Apple macOS Screen -->
+<div id="argus-initial-curtain">
+  <div class="argus-boot-container">
+    <img class="argus-boot-logo" src="/api/argus_static/argus_logo.png" alt="Argus" />
+    <div class="argus-apple-progressbar">
+      <div class="argus-apple-progressbar-fill"></div>
+    </div>
   </div>
 </div>
 
