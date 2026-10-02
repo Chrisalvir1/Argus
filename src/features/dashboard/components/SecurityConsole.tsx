@@ -190,10 +190,20 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
             ) : (
               sortedSensors.map((sensor: any) => {
                 const normalizedId = String(sensor.id || '').trim();
-                let sState = hass?.states?.[normalizedId];
-                if (!sState && hass?.states) {
+                // Always read from panel._hass which is updated on every hass change
+                const liveHass = panel._hass || hass;
+                let sState = liveHass?.states?.[normalizedId];
+                if (!sState && liveHass?.states) {
+                  // Try lowercase, then find by entity_id match
                   const lower = normalizedId.toLowerCase();
-                  sState = hass.states[lower] || Object.values(hass.states).find((st: any) => String(st?.entity_id || '').toLowerCase() === lower);
+                  sState = liveHass.states[lower]
+                    || Object.values(liveHass.states).find((st: any) =>
+                        String(st?.entity_id || '').toLowerCase() === lower
+                    );
+                }
+                // Also try panel helper if available
+                if (!sState && typeof panel?._getEntityState === 'function') {
+                  sState = panel._getEntityState(normalizedId);
                 }
                 const rawName = String(sensor.name || sState?.attributes?.friendly_name || normalizedId).trim();
                 // Keep the configured sensor name, removing only generated type
@@ -205,6 +215,8 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
                 const isLockLike = /door|puerta|port[oó]n|gate|lock|cerradura|window|ventana/i.test(`${normalizedId} ${sName}`);
                 const isBlocking = isWaiting && blockingSensors.includes(normalizedId);
                 const sStateStr = String(sState?.state || '').toLowerCase();
+                // Only mark unavailable if state is explicitly unknown/unavailable/disconnected
+                // (NOT when sState is simply missing from hass.states snapshot – could be stale)
                 const isUnavailable = !sState || ['unknown', 'unavailable', 'desconectado'].includes(sStateStr);
                 const intrusionStates = ['on', 'open', 'unlocked', 'recording', 'active', 'motion', 'abierto', 'activa'];
                 const isOpen = !isUnavailable && (

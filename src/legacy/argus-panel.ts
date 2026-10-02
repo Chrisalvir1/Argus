@@ -5646,6 +5646,20 @@ class ArgusPanel extends HTMLElement {
 
   /* ── Entries (alarm instances) ───────────────────────────────────── */
 
+  /** Resolve an entity state from the live hass object.
+   * Tries exact match first, then lowercase, then linear scan.
+   * Returns null if not found. */
+  _getEntityState(entityId: string) {
+    if (!entityId || !this._hass?.states) return null;
+    const st = this._hass.states[entityId];
+    if (st) return st;
+    const lower = entityId.toLowerCase();
+    if (this._hass.states[lower]) return this._hass.states[lower];
+    return Object.values(this._hass.states).find((s: any) =>
+      String(s?.entity_id || '').toLowerCase() === lower
+    ) || null;
+  }
+
   _getSensorBattery(sensorId, sensorState) {
     return this._getDevicePower(sensorId, sensorState).battery;
   }
