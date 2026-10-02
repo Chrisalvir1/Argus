@@ -365,7 +365,7 @@
 .console-sensor {
   display: flex !important;
   align-items: center !important;
-  justify-content: space-between !important;
+  justify-content: flex-start !important;
   gap: 8px !important;
   padding: 5px 12px !important;
   border-radius: 999px !important;
@@ -435,10 +435,11 @@
 @media (prefers-reduced-motion: reduce) { .argus-lock-icon { animation: none !important; } .argus-lock-shackle { transition: none !important; } }
 
 .console-sensor-main {
-  flex: 1 1 auto !important;
+  flex: 0 1 auto !important;
   min-width: 0 !important;
   display: flex !important;
   align-items: center !important;
+  overflow: hidden !important;
 }
 
 .console-sensor-name {
@@ -458,7 +459,7 @@
   align-items: center !important;
   gap: 5px !important;
   flex-shrink: 0 !important;
-  margin-left: auto !important;
+  margin-left: 10px !important;
 }
 
 .console-sensor-state {
@@ -909,11 +910,11 @@
   }
 }
 
-/* Ensure sensor chip maintains horizontal flex layout with status on the right */
+/* Ensure sensor chip: icon → name → status, all close together — no void gap */
 .security-console .console-sensor {
   display: flex !important;
   align-items: center !important;
-  justify-content: space-between !important;
+  justify-content: flex-start !important;
   min-width: 0 !important;
 }
 .security-console .liquid-btn:disabled { opacity: .45; cursor: not-allowed; }
