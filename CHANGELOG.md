@@ -1,3 +1,10 @@
+## [2.5.4] - 2026-10-01
+
+### Snug Sensor Chips & Void Gap Elimination
+- Eliminate empty void gap between sensor name and status label using a tight `flex-start` layout (`gap: 8px`).
+- Change sensor chip width to `fit-content` so each pill neatly wraps its content without stretching across the column.
+- Align sensor pills to the right edge on desktop and center on mobile.
+
 ## [2.5.3] - 2026-10-01
 
 ### Compact UI & Tuya Local Sensor Fix
