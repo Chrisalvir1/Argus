@@ -1,3 +1,10 @@
+## [2.5.5] - 2026-10-02
+
+### Authentic macOS Boot Progress & Offline Connection Guard
+- Replace infinite CSS looping animation on bootloader with state-driven progress bar that reflects real HA connection and loading stages.
+- Halt progress bar and display "Sin conexión con Home Assistant" with reload action when Home Assistant is offline.
+- Rapidly and smoothly complete progress bar to 100% and fade out curtain only when HA is connected and profiles/dashboard are fully ready.
+
 ## [2.5.4] - 2026-10-01
 
 ### Snug Sensor Chips & Void Gap Elimination

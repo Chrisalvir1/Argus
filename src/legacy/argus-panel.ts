@@ -116,6 +116,9 @@ const TEXTS = {
     'confirm': 'Confirmar',
     'confirm_pin': 'Confirmar PIN',
     'connected': 'CONECTADO',
+    'connection_lost': 'Sin conexión con Home Assistant',
+    'disconnected': 'DESCONECTADO',
+    'retry': 'Refrescar',
     'create_ha': '+ Crear en HA',
     'current_pin': 'PIN Actual',
     'customize': 'Personalizar',
@@ -577,6 +580,9 @@ const TEXTS = {
     'confirm': 'Confirm',
     'confirm_pin': 'Confirm PIN',
     'connected': 'CONNECTED',
+    'connection_lost': 'No connection to Home Assistant',
+    'disconnected': 'DISCONNECTED',
+    'retry': 'Reload',
     'create_ha': '+ Create in HA',
     'current_pin': 'Current PIN',
     'customize': 'Customize',
@@ -3081,19 +3087,50 @@ _tmpl.innerHTML = `
   position: absolute;
   top: 0;
   left: 0;
+  width: 15%;
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.75);
-  animation: appleBootProgress 2.2s cubic-bezier(0.2, 0.8, 0.25, 1) infinite;
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, box-shadow 0.3s ease;
+  will-change: width;
+}
+.argus-boot-status {
+  margin-top: 22px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.02em;
+  text-align: center;
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  animation: argusBootFadeIn 0.3s ease;
+}
+.argus-boot-status.status-error {
+  color: #f87171;
+}
+.argus-boot-reload-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.argus-boot-reload-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 @keyframes appleBootLogo {
   0% { transform: scale(1); opacity: 0.92; }
   100% { transform: scale(1.02); opacity: 1; filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.22)); }
 }
-@keyframes appleBootProgress {
-  0% { width: 0%; transform: translateX(0); }
-  25% { width: 35%; }
-  60% { width: 68%; }
-  85% { width: 88%; }
-  100% { width: 100%; }
+@keyframes argusBootFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 </style>
@@ -3103,8 +3140,9 @@ _tmpl.innerHTML = `
   <div class="argus-boot-container">
     <img class="argus-boot-logo" src="/api/argus_static/argus_logo.png" alt="Argus" />
     <div class="argus-apple-progressbar">
-      <div class="argus-apple-progressbar-fill"></div>
+      <div id="argus-boot-fill" class="argus-apple-progressbar-fill"></div>
     </div>
+    <div id="argus-boot-status" class="argus-boot-status" style="display:none;"></div>
   </div>
 </div>
 
@@ -3745,6 +3783,20 @@ class ArgusPanel extends HTMLElement {
   set hass(hass) {
     const oldHass = this._hass;
     this._hass = hass;
+
+    // React to connection transitions while boot curtain is active
+    if (oldHass && oldHass.connected !== hass.connected) {
+      const c = this.shadowRoot?.getElementById('argus-initial-curtain');
+      if (c && !c.classList.contains('curtain-hidden')) {
+        if (hass.connected === false) {
+          this._setBootProgress(15, this._t('connection_lost') || 'Sin conexión con Home Assistant', true);
+        } else {
+          this._setBootProgress(35);
+          this._ensureInitialized();
+        }
+      }
+    }
+
     const isCardMode = this.hasAttribute('compact') || this.classList.contains('argus-compact') || Boolean(this._cardConfig?.compact);
     if (!isCardMode && (this._loadState === 'profile_selection' || this._loadState === 'legacy_claim')) return;
     if (!this._dashboard?.entries?.length) {
@@ -4453,6 +4505,22 @@ class ArgusPanel extends HTMLElement {
   connectedCallback() {
     // Restore persisted language
     try { this._manualLang = localStorage.getItem('argus_lang') || null; } catch(e) {}
+
+    // Listen to Home Assistant connection-status events during boot
+    this._connStatusHandler = (ev: any) => {
+      const status = ev?.detail;
+      const c = this.shadowRoot?.getElementById('argus-initial-curtain');
+      if (c && !c.classList.contains('curtain-hidden')) {
+        if (status === 'disconnected') {
+          this._setBootProgress(15, this._t('connection_lost') || 'Sin conexión con Home Assistant', true);
+        } else if (status === 'connected') {
+          this._setBootProgress(35);
+          this._ensureInitialized();
+        }
+      }
+    };
+    window.addEventListener('connection-status', this._connStatusHandler);
+
     this._ensureInitialized();
     this._initContrastMode();
     this._initGestureMode();
@@ -4553,6 +4621,10 @@ class ArgusPanel extends HTMLElement {
     }
   }
   disconnectedCallback() {
+    if (this._connStatusHandler) {
+      window.removeEventListener('connection-status', this._connStatusHandler);
+      this._connStatusHandler = null;
+    }
     for (const controller of this._staControllers?.values() || []) controller.abort();
     this._staControllers?.clear();
     this._reactConsoleRoot?.unmount();
@@ -4600,27 +4672,79 @@ class ArgusPanel extends HTMLElement {
     }, 1000);
   }
 
+  _setBootProgress(percent: number, statusText?: string, isError = false) {
+    const curtain = this.shadowRoot?.getElementById('argus-initial-curtain');
+    if (!curtain || curtain.classList.contains('curtain-hidden')) return;
+    const fill = this.shadowRoot?.getElementById('argus-boot-fill') as HTMLElement | null;
+    if (fill) {
+      fill.style.width = `${Math.min(100, Math.max(0, percent))}%`;
+      if (isError) {
+        fill.style.backgroundColor = '#f87171';
+        fill.style.boxShadow = '0 0 8px rgba(248, 113, 113, 0.7)';
+      } else {
+        fill.style.backgroundColor = '#ffffff';
+        fill.style.boxShadow = '0 0 8px rgba(255, 255, 255, 0.75)';
+      }
+    }
+    const status = this.shadowRoot?.getElementById('argus-boot-status') as HTMLElement | null;
+    if (status) {
+      if (statusText) {
+        status.style.display = 'flex';
+        status.className = `argus-boot-status ${isError ? 'status-error' : ''}`;
+        const retryLabel = this._t('retry') || 'Refrescar';
+        status.innerHTML = isError
+          ? `<span>${this._escapeHtml(statusText)}</span> <button type="button" class="argus-boot-reload-btn" id="argus-boot-reload-btn">${this._escapeHtml(retryLabel)}</button>`
+          : `<span>${this._escapeHtml(statusText)}</span>`;
+        status.querySelector('#argus-boot-reload-btn')?.addEventListener('click', () => {
+          window.location.reload();
+        });
+      } else {
+        status.style.display = 'none';
+        status.innerHTML = '';
+      }
+    }
+  }
+
+  async _completeBootAndReveal() {
+    const curtain = this.shadowRoot?.getElementById('argus-initial-curtain');
+    if (!curtain || curtain.classList.contains('curtain-hidden')) return;
+
+    this._setBootProgress(100);
+    await new Promise(r => setTimeout(r, 280));
+
+    curtain.classList.add('curtain-hidden');
+    setTimeout(() => {
+      try { curtain.remove(); } catch (_) {}
+    }, 400);
+  }
+
+  _hideInitialCurtain() {
+    return this._completeBootAndReveal();
+  }
+
   _ensureInitialized() {
     // Lovelace can attach the element before assigning hass.  Waiting for the
     // authenticated hass object avoids a permanent blank panel after a reload.
     if (!this.isConnected || !this._hass || this._dashboard || this._initPromise) return;
+
+    if (this._hass.connected === false) {
+      this._setBootProgress(15, this._t('connection_lost') || 'Sin conexión con Home Assistant', true);
+      return;
+    }
+
+    this._setBootProgress(35);
     this._initPromise = this._init()
       .catch(err => {
         console.error('Argus initialization failed:', err);
         if (this.isConnected) {
-          this._hideInitialCurtain();
-          this._renderInitializationError(err);
+          this._setBootProgress(15, (this._t('connection_lost') || 'Sin conexión con Home Assistant') + ': ' + (err.message || ''), true);
+          setTimeout(() => {
+            this._completeBootAndReveal();
+            this._renderInitializationError(err);
+          }, 1800);
         }
       })
       .finally(() => { this._initPromise = null; });
-  }
-
-  _hideInitialCurtain() {
-    const c = this.shadowRoot.getElementById('argus-initial-curtain');
-    if (c) {
-      c.classList.add('curtain-hidden');
-      setTimeout(() => c.remove(), 350);
-    }
   }
 
   _bindSOS() {
@@ -4704,8 +4828,10 @@ class ArgusPanel extends HTMLElement {
       this._bindStatic();
       this._staticBound = true;
     }
+    this._setBootProgress(45);
     await this._connect();
     this._applyTranslations();
+    this._setBootProgress(70);
     await this._load();
     // Onboarding and login are valid initialized states, not failures that
     // should spawn a new WebSocket/retry loop.
@@ -9693,7 +9819,6 @@ class ArgusPanel extends HTMLElement {
     
     // Limpiar overlays anteriores por si acaso
     this.shadowRoot.querySelectorAll('.argus-profile-overlay, .argus-welcome-screen').forEach(el => el.remove());
-    this._hideInitialCurtain();
 
     // ── Render Fase 1 (Selector grid tvOS) ────────────────────────
     const overlay = document.createElement('div');
@@ -9761,6 +9886,7 @@ class ArgusPanel extends HTMLElement {
       ${actionsHtml}
     `;
     this.shadowRoot.appendChild(overlay);
+    this._hideInitialCurtain();
 
     // Salir
     overlay.querySelector('#argus-exit-ha').addEventListener('click', () => {
