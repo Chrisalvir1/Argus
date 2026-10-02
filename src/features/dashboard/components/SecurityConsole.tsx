@@ -218,7 +218,10 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
                 // Only mark unavailable if state is explicitly unknown/unavailable/disconnected
                 // (NOT when sState is simply missing from hass.states snapshot – could be stale)
                 const isUnavailable = !sState || ['unknown', 'unavailable', 'desconectado'].includes(sStateStr);
-                const intrusionStates = ['on', 'open', 'unlocked', 'recording', 'active', 'motion', 'abierto', 'activa'];
+                // Tuya Local / Omni Tuya Local sensors may report "true"/"false", "1"/"0",
+                // "detected", "tamper", "vibration" instead of standard HA "on"/"off"
+                const intrusionStates = ['on', 'open', 'unlocked', 'recording', 'active', 'motion',
+                  'abierto', 'activa', 'true', '1', 'detected', 'tamper', 'vibration', 'triggered'];
                 const isOpen = !isUnavailable && (
                   typeof panel?.isSensorActive === 'function'
                     ? Boolean(panel.isSensorActive(sState))

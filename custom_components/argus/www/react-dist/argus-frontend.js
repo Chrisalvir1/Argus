@@ -2914,7 +2914,7 @@ var f = class extends HTMLElement {
 		return `${`<svg class="liquid-glass-clock" viewBox="0 0 20 20" width="13" height="13" style="vertical-align:middle;filter:drop-shadow(0 0 3px ${r});flex-shrink:0"><circle cx="10" cy="10" r="8" fill="rgba(255,255,255,0.08)" stroke="${r}" stroke-width="1.4"/><path d="M5 6 A 7 7 0 0 1 15 6" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="0.8" stroke-linecap="round"/>${n ? `<path d="M11 4 L8 10 L11 10 L9 16 L14 9 L11 9 Z" fill="${r}"/>` : `<line x1="10" y1="10" x2="10" y2="5.5" stroke="${r}" stroke-width="1.3" stroke-linecap="round"/><line x1="10" y1="10" x2="13.5" y2="10" stroke="${r}" stroke-width="1.3" stroke-linecap="round"/><circle cx="10" cy="10" r="1.2" fill="${r}"/>`}</svg>`}${t ? `<span style="margin-left:3px;font-size:9px;font-weight:800">${t}</span>` : ""}`;
 	}
 	_chip(e, t) {
-		let n = this._hass?.states?.[e]?.state, r = String(n || "").toLowerCase(), i = [
+		let n = this._getEntityState(e), r = n?.state, i = String(r || "").toLowerCase(), a = [
 			"on",
 			"unlocked",
 			"open",
@@ -2922,38 +2922,44 @@ var f = class extends HTMLElement {
 			"active",
 			"motion",
 			"abierto",
-			"activa"
-		].includes(r), a = !this._hass?.states?.[e] || [
+			"activa",
+			"true",
+			"1",
+			"detected",
+			"tamper",
+			"vibration",
+			"triggered"
+		], o = [
 			"unknown",
 			"unavailable",
 			"desconectado"
-		].includes(r), o = this._hass?.states?.[e]?.attributes?.friendly_name || e, s = !this._isAdmin, c = t === "sensor" || t === "bypass" ? `<span class="pill-dot ${a ? "unavailable" : i ? "open" : ""}" title="${n}"></span>` : "", l = "", u = "", d = "";
+		], s = a.includes(i), c = !n || o.includes(i), l = n?.attributes?.friendly_name || this._hass?.states?.[e]?.attributes?.friendly_name || e, u = !this._isAdmin, d = t === "sensor" || t === "bypass" ? `<span class="pill-dot ${c ? "unavailable" : s ? "open" : ""}" title="${r}"></span>` : "", f = "", p = "", m = "";
 		if (t === "sensor" || t === "bypass" || t === "entry") {
-			let n = this._hass?.states?.[e], r = this._getDevicePower(e, n);
-			if (l = a ? `<span class="pill-status unavailable">${this._t("unavailable")}</span>` : `<span class="pill-status">${i ? this._t("status_open") : this._t("status_closed")}</span>`, r.mains && (u += "<span class=\"pill-power\">🔌 AC</span>"), r.battery !== null) {
-				let e = r.battery === 0, t = r.battery <= 10 && !e, n = e ? "🔋 ❌" : `🔋 ${r.battery}%`;
-				u += `<span class="pill-power ${e ? "dead" : t ? "low" : ""}">${n}</span>`;
+			let r = n, i = this._getDevicePower(e, r);
+			if (f = c ? `<span class="pill-status unavailable">${this._t("unavailable")}</span>` : `<span class="pill-status">${s ? this._t("status_open") : this._t("status_closed")}</span>`, i.mains && (p += "<span class=\"pill-power\">🔌 AC</span>"), i.battery !== null) {
+				let e = i.battery === 0, t = i.battery <= 10 && !e, n = e ? "🔋 ❌" : `🔋 ${i.battery}%`;
+				p += `<span class="pill-power ${e ? "dead" : t ? "low" : ""}">${n}</span>`;
 			}
 			if (t === "sensor") {
 				let t = this._currentModeConfig().sensor_settings?.[e] || {}, n = t.type === "instant" || t.delay === 0, r = t.delay, i = "inherited", a = this._renderLiquidGlassClockSvg("default", ""), o = this._t("sensor_delay_default");
-				n ? (i = "instant", a = this._renderLiquidGlassClockSvg("instant", "0s"), o = this._t("sensor_delay_instant")) : r != null && (i = "custom", a = this._renderLiquidGlassClockSvg("custom", `${r}s`), o = `${this._t("sensor_delay_custom")}: ${r}s`), d = `
+				n ? (i = "instant", a = this._renderLiquidGlassClockSvg("instant", "0s"), o = this._t("sensor_delay_instant")) : r != null && (i = "custom", a = this._renderLiquidGlassClockSvg("custom", `${r}s`), o = `${this._t("sensor_delay_custom")}: ${r}s`), m = `
           <button type="button" class="pill-delay-btn" data-edit-sensor-delay="${this._escapeHtml(e)}" title="${this._escapeHtml(o)}">
             <span class="pill-delay-badge ${i}">${a}</span>
           </button>
         `;
 			}
 		}
-		let f = this._dashboard?.entries?.some((e) => this._hass?.states?.[e.entity_id]?.state === "triggered"), p = "";
-		return t === "siren" && f && (p = " siren-active"), (t === "sensor" || t === "bypass" || t === "entry") && f && i && (p = " triggered-sensor"), `
-      <span class="sensor-pill${p}">
-        ${c}
+		let h = this._dashboard?.entries?.some((e) => this._hass?.states?.[e.entity_id]?.state === "triggered"), g = "";
+		return t === "siren" && h && (g = " siren-active"), (t === "sensor" || t === "bypass" || t === "entry") && h && s && (g = " triggered-sensor"), `
+      <span class="sensor-pill${g}">
+        ${d}
         <span class="pill-content">
-          <span class="pill-name">${this._escapeHtml(o)}</span>
-          ${l}
-          ${u}
-          ${d}
+          <span class="pill-name">${this._escapeHtml(l)}</span>
+          ${f}
+          ${p}
+          ${m}
         </span>
-        ${s ? "" : `<button data-remove="${t}:${e}" style="background:none; border:none; color:inherit; opacity:0.5; padding:0 4px; cursor:pointer; flex-shrink:0;">✕</button>`}
+        ${u ? "" : `<button data-remove="${t}:${e}" style="background:none; border:none; color:inherit; opacity:0.5; padding:0 4px; cursor:pointer; flex-shrink:0;">✕</button>`}
       </span>
     `;
 	}
@@ -18882,7 +18888,13 @@ function Gn({ panel: e, isFullscreen: t, onToggleFullscreen: n, onUnlockKiosk: r
 								"active",
 								"motion",
 								"abierto",
-								"activa"
+								"activa",
+								"true",
+								"1",
+								"detected",
+								"tamper",
+								"vibration",
+								"triggered"
 							].includes(l)), f = null;
 							if (typeof e?._getSensorBattery == "function" && (f = e._getSensorBattery(n, i)), f === null && i?.attributes) {
 								let e = [

@@ -6702,11 +6702,18 @@ class ArgusPanel extends HTMLElement {
   }
 
   _chip(entityId, type) {
-    const raw = this._hass?.states?.[entityId]?.state;
+    // Use _getEntityState for robust case-insensitive + alias resolution
+    const stateObjFull = this._getEntityState(entityId);
+    const raw = stateObjFull?.state;
     const rawStr = String(raw || '').toLowerCase();
-    const isTr = ['on', 'unlocked', 'open', 'recording', 'active', 'motion', 'abierto', 'activa'].includes(rawStr);
-    const isUnavail = !this._hass?.states?.[entityId] || ['unknown', 'unavailable', 'desconectado'].includes(rawStr);
-    const name = this._hass?.states?.[entityId]?.attributes?.friendly_name || entityId;
+    // Tuya Local / Omni Tuya Local sensors may report "true"/"false", "1"/"0",
+    // "detected", "tamper", "vibration" instead of standard HA "on"/"off"
+    const OPEN_STATES = ['on', 'unlocked', 'open', 'recording', 'active', 'motion',
+      'abierto', 'activa', 'true', '1', 'detected', 'tamper', 'vibration', 'triggered'];
+    const UNAVAIL_STATES = ['unknown', 'unavailable', 'desconectado'];
+    const isTr = OPEN_STATES.includes(rawStr);
+    const isUnavail = !stateObjFull || UNAVAIL_STATES.includes(rawStr);
+    const name = stateObjFull?.attributes?.friendly_name || this._hass?.states?.[entityId]?.attributes?.friendly_name || entityId;
     const readonly = !this._isAdmin;
 
     const dot = type === 'sensor' || type === 'bypass'
@@ -6717,7 +6724,7 @@ class ArgusPanel extends HTMLElement {
     let powerHtml = '';
     let delayHtml = '';
     if (type === 'sensor' || type === 'bypass' || type === 'entry') {
-      const stateObj = this._hass?.states?.[entityId];
+      const stateObj = stateObjFull;
       const power = this._getDevicePower(entityId, stateObj);
       stateLabel = isUnavail
         ? `<span class="pill-status unavailable">${this._t('unavailable')}</span>`

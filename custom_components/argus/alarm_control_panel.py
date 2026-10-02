@@ -93,7 +93,14 @@ ARMED_STATES = {
 
 # Argus accepts locks and several binary-sensor style entities as intrusion
 # sensors.  Home Assistant represents their active state with different values.
-_INTRUSION_ACTIVE_STATES = {STATE_ON, "open", "unlocked", "active", "motion", "recording"}
+# Tuya Local / Omni Tuya Local integrations may report "true"/"false", "1"/"0",
+# "detected", "tamper", or "vibration" instead of standard HA "on"/"off".
+_INTRUSION_ACTIVE_STATES = {
+    STATE_ON,
+    "open", "unlocked", "active", "motion", "recording",
+    # Tuya Local / Omni Tuya Local boolean representations
+    "true", "1", "detected", "tamper", "vibration",
+}
 
 
 async def async_setup_entry(
