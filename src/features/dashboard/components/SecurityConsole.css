@@ -531,15 +531,15 @@
   font-weight: 800 !important;
 }
 
-/* ── 3x3 DESKTOP & WIDE CONTAINER GRID (Conectado Perfectly Centered Above Shield) ──────────── */
+/* ── 3x3 DESKTOP & WIDE CONTAINER GRID (Conectado & Shield 100% Centered) ──────────── */
 @media (min-width: 901px) {
   .entry:not(.ios-fullscreen) .security-console {
     display: grid !important;
-    grid-template-columns: minmax(200px, 350px) 1fr minmax(220px, 380px) !important;
+    grid-template-columns: 1fr auto 1fr !important;
     grid-template-rows: auto 1fr !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 16px 36px !important;
+    gap: 16px 28px !important;
     padding: 24px 28px 20px !important;
     background: transparent !important;
     box-shadow: none !important;
@@ -562,7 +562,7 @@
     grid-row: 1 !important;
     justify-self: center !important;
     align-self: center !important;
-    margin: 0 !important;
+    margin: 0 auto !important;
     position: static !important;
     transform: none !important;
   }
@@ -580,6 +580,7 @@
     grid-row: 2 !important;
     align-self: center !important;
     margin: 0 !important;
+    max-width: 320px !important;
   }
 
   .entry:not(.ios-fullscreen) .security-console .entry-icon {
@@ -587,13 +588,17 @@
     grid-row: 2 !important;
     justify-self: center !important;
     align-self: center !important;
-    margin: 0 !important;
+    margin: 0 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   .entry:not(.ios-fullscreen) .security-console .console-sensors {
     grid-column: 3 !important;
     grid-row: 2 !important;
     align-self: center !important;
+    justify-self: end !important;
     margin: 0 !important;
   }
 }
@@ -601,7 +606,7 @@
 @container argus-console (min-width: 901px) {
   .entry:not(.ios-fullscreen) .security-console {
     display: grid !important;
-    grid-template-columns: minmax(200px, 320px) minmax(160px, 220px) minmax(280px, 1fr) !important;
+    grid-template-columns: 1fr auto 1fr !important;
     grid-template-rows: auto 1fr !important;
     align-items: center !important;
     justify-content: center !important;
@@ -628,7 +633,7 @@
     grid-row: 1 !important;
     justify-self: center !important;
     align-self: center !important;
-    margin: 0 !important;
+    margin: 0 auto !important;
     position: static !important;
     transform: none !important;
   }
@@ -646,6 +651,7 @@
     grid-row: 2 !important;
     align-self: center !important;
     margin: 0 !important;
+    max-width: 320px !important;
   }
 
   .entry:not(.ios-fullscreen) .security-console .entry-icon {
@@ -653,13 +659,17 @@
     grid-row: 2 !important;
     justify-self: center !important;
     align-self: center !important;
-    margin: 0 !important;
+    margin: 0 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   .entry:not(.ios-fullscreen) .security-console .console-sensors {
     grid-column: 3 !important;
     grid-row: 2 !important;
     align-self: center !important;
+    justify-self: end !important;
     margin: 0 !important;
   }
 }
@@ -840,7 +850,7 @@
 @media (min-width: 901px) and (orientation: landscape), (min-width: 901px), (orientation: landscape) and (max-height: 600px) {
   .entry.ios-fullscreen .security-console {
     display: grid !important;
-    grid-template-columns: minmax(280px, 380px) 1fr minmax(280px, 440px) !important;
+    grid-template-columns: 1fr auto 1fr !important;
     grid-template-rows: auto 1fr !important;
     align-items: center !important;
     justify-content: center !important;
@@ -874,7 +884,7 @@
     grid-row: 1 !important;
     justify-self: center !important;
     align-self: center !important;
-    margin: 0 !important;
+    margin: 0 auto !important;
     position: static !important;
     transform: none !important;
   }
@@ -891,6 +901,7 @@
     grid-column: 1 !important;
     grid-row: 2 !important;
     width: 100% !important;
+    max-width: 360px !important;
     align-self: center !important;
   }
 
@@ -899,6 +910,10 @@
     grid-row: 2 !important;
     justify-self: center !important;
     align-self: center !important;
+    margin: 0 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   .entry.ios-fullscreen .security-console .entry-icon svg {

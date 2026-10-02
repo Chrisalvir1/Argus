@@ -1,3 +1,11 @@
+## [2.5.6] - 2026-10-02
+
+### Centered Security Console & Resilient Sensor Resolution
+- Perfect horizontal centering of the `CONECTADO` pill and central shield icon in the Security Console across desktop and wide containers via balanced `1fr auto 1fr` grid layouts.
+- Resilient sensor resolution in both `SecurityConsole.tsx` and `argus-panel.ts` with prefix trimming (`sensor_`), preposition normalization (`_de_`, `_del_`, `_la_`), domain swaps (`binary_sensor.` <-> `sensor.`), `friendly_name` matching, and keyword token matching (resolving Omni Tuya Local entities like `binary_sensor.sensor_puerta_de_bodega`).
+- Deep-sleep attribute recovery fallback for Tuya/Omni Tuya Local contact sensors reporting temporary sleep states.
+- Include `disarmed` mode in the dashboard sensor collection fallback union.
+
 ## [2.5.5] - 2026-10-02
 
 ### Authentic macOS Boot Progress & Offline Connection Guard

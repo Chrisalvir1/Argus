@@ -5773,17 +5773,60 @@ class ArgusPanel extends HTMLElement {
   /* ── Entries (alarm instances) ───────────────────────────────────── */
 
   /** Resolve an entity state from the live hass object.
-   * Tries exact match first, then lowercase, then linear scan.
+   * Tries exact match, lowercase, common Tuya/HA naming variations,
+   * friendly_name matching, and distinct token matching.
    * Returns null if not found. */
   _getEntityState(entityId: string) {
     if (!entityId || !this._hass?.states) return null;
-    const st = this._hass.states[entityId];
-    if (st) return st;
-    const lower = entityId.toLowerCase();
+    const rawId = String(entityId).trim();
+    if (this._hass.states[rawId]) return this._hass.states[rawId];
+    const lower = rawId.toLowerCase();
     if (this._hass.states[lower]) return this._hass.states[lower];
-    return Object.values(this._hass.states).find((s: any) =>
-      String(s?.entity_id || '').toLowerCase() === lower
-    ) || null;
+
+    const allStates = Object.values(this._hass.states) as any[];
+    const byId = allStates.find((s: any) => String(s?.entity_id || '').toLowerCase() === lower);
+    if (byId) return byId;
+
+    // Try variations with/without sensor_ prefix, prepositions, or domain
+    const objectId = lower.includes('.') ? lower.split('.')[1] : lower;
+    const domain = lower.includes('.') ? lower.split('.')[0] : 'binary_sensor';
+    const altIds = [
+      `${domain}.${objectId.replace(/^sensor_/, '')}`,
+      `${domain}.sensor_${objectId}`,
+      `${domain}.${objectId.replace(/_de_|_del_|_la_|_el_/g, '_')}`,
+      `${domain}.${objectId.replace(/^sensor_/, '').replace(/_de_|_del_|_la_|_el_/g, '_')}`,
+      `binary_sensor.${objectId}`,
+      `binary_sensor.${objectId.replace(/^sensor_/, '')}`,
+      `sensor.${objectId}`,
+      `sensor.${objectId.replace(/^sensor_/, '')}`,
+    ];
+    for (const alt of altIds) {
+      if (this._hass.states[alt]) return this._hass.states[alt];
+      const match = allStates.find((s: any) => String(s?.entity_id || '').toLowerCase() === alt);
+      if (match) return match;
+    }
+
+    // Match by friendly_name exact lowercase or normalized
+    const byFriendlyName = allStates.find((s: any) => {
+      const fn = String(s?.attributes?.friendly_name || '').toLowerCase().trim();
+      return fn === lower || fn === objectId.replace(/_/g, ' ') || fn === objectId.replace(/^sensor_/, '').replace(/_/g, ' ');
+    });
+    if (byFriendlyName) return byFriendlyName;
+
+    // Token matching: find binary_sensor / sensor containing distinct tokens (e.g. "bodega")
+    const cleanTokens = lower.replace(/^(binary_)?sensor\./, '').split(/[_\s-]+/).filter(t => t.length > 2 && !['sensor', 'puerta', 'door'].includes(t));
+    if (cleanTokens.length > 0) {
+      const byToken = allStates.find((s: any) => {
+        const eId = String(s?.entity_id || '').toLowerCase();
+        const fn = String(s?.attributes?.friendly_name || '').toLowerCase();
+        const isSensorDomain = eId.startsWith('binary_sensor.') || eId.startsWith('sensor.');
+        if (!isSensorDomain) return false;
+        return cleanTokens.every(token => eId.includes(token) || fn.includes(token));
+      });
+      if (byToken) return byToken;
+    }
+
+    return null;
   }
 
   _getSensorBattery(sensorId, sensorState) {

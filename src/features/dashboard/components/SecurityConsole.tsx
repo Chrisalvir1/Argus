@@ -96,7 +96,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
     let sList = eCfg.sensors || [];
     if (state === 'disarmed' || isPending || !sList.length) {
       const allSensors = new Set<string>();
-      ['away', 'home', 'night'].forEach(m => {
+      ['disarmed', 'away', 'home', 'night'].forEach(m => {
         if (modes[m]?.sensors) {
           modes[m].sensors.forEach((s: string) => allSensors.add(s));
         }
@@ -192,18 +192,49 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
                 const normalizedId = String(sensor.id || '').trim();
                 // Always read from panel._hass which is updated on every hass change
                 const liveHass = panel._hass || hass;
-                let sState = liveHass?.states?.[normalizedId];
-                if (!sState && liveHass?.states) {
-                  // Try lowercase, then find by entity_id match
-                  const lower = normalizedId.toLowerCase();
-                  sState = liveHass.states[lower]
-                    || Object.values(liveHass.states).find((st: any) =>
-                        String(st?.entity_id || '').toLowerCase() === lower
-                    );
-                }
-                // Also try panel helper if available
-                if (!sState && typeof panel?._getEntityState === 'function') {
+                let sState: any = null;
+                // 1. Try panel's multi-tier resolver first
+                if (typeof panel?._getEntityState === 'function') {
                   sState = panel._getEntityState(normalizedId);
+                }
+                // 2. Direct or lowercase lookup
+                if (!sState && liveHass?.states) {
+                  sState = liveHass.states[normalizedId] || liveHass.states[normalizedId.toLowerCase()];
+                }
+                // 3. Resilient scan: entity_id match, friendly_name match, and keyword token match
+                if (!sState && liveHass?.states) {
+                  const allStates = Object.values(liveHass.states) as any[];
+                  const lower = normalizedId.toLowerCase();
+                  const objectId = lower.includes('.') ? lower.split('.')[1] : lower;
+                  const domain = lower.includes('.') ? lower.split('.')[0] : 'binary_sensor';
+                  const altIds = [
+                    `${domain}.${objectId.replace(/^sensor_/, '')}`,
+                    `${domain}.sensor_${objectId}`,
+                    `${domain}.${objectId.replace(/_de_|_del_|_la_|_el_/g, '_')}`,
+                    `${domain}.${objectId.replace(/^sensor_/, '').replace(/_de_|_del_|_la_|_el_/g, '_')}`,
+                    `binary_sensor.${objectId}`,
+                    `sensor.${objectId}`,
+                  ];
+                  sState = allStates.find((st: any) => {
+                    const eId = String(st?.entity_id || '').toLowerCase();
+                    const fn = String(st?.attributes?.friendly_name || '').toLowerCase().trim();
+                    if (eId === lower || fn === lower) return true;
+                    if (altIds.includes(eId)) return true;
+                    return false;
+                  });
+                  if (!sState) {
+                    // Token fallback (e.g. "bodega")
+                    const cleanTokens = lower.replace(/^(binary_)?sensor\./, '').split(/[_\s-]+/).filter(t => t.length > 2 && !['sensor', 'puerta', 'door'].includes(t));
+                    if (cleanTokens.length > 0) {
+                      sState = allStates.find((st: any) => {
+                        const eId = String(st?.entity_id || '').toLowerCase();
+                        const fn = String(st?.attributes?.friendly_name || '').toLowerCase();
+                        const isSensorDomain = eId.startsWith('binary_sensor.') || eId.startsWith('sensor.');
+                        if (!isSensorDomain) return false;
+                        return cleanTokens.every(t => eId.includes(t) || fn.includes(t));
+                      });
+                    }
+                  }
                 }
                 const rawName = String(sensor.name || sState?.attributes?.friendly_name || normalizedId).trim();
                 // Keep the configured sensor name, removing only generated type
@@ -215,9 +246,16 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
                 const isLockLike = /door|puerta|port[oó]n|gate|lock|cerradura|window|ventana/i.test(`${normalizedId} ${sName}`);
                 const isBlocking = isWaiting && blockingSensors.includes(normalizedId);
                 const sStateStr = String(sState?.state || '').toLowerCase();
-                // Only mark unavailable if state is explicitly unknown/unavailable/disconnected
-                // (NOT when sState is simply missing from hass.states snapshot – could be stale)
-                const isUnavailable = !sState || ['unknown', 'unavailable', 'desconectado'].includes(sStateStr);
+                let isUnavailable = !sState || ['unknown', 'unavailable', 'desconectado'].includes(sStateStr);
+                
+                // If marked unavailable by Tuya Local due to sleep mode, check contact attributes
+                if (isUnavailable && sState?.attributes) {
+                  const attrContact = sState.attributes.contact ?? sState.attributes.door ?? sState.attributes.opening ?? sState.attributes.last_state;
+                  if (attrContact !== undefined && attrContact !== null && !['unknown', 'unavailable', 'desconectado'].includes(String(attrContact).toLowerCase())) {
+                    isUnavailable = false;
+                  }
+                }
+
                 // Tuya Local / Omni Tuya Local sensors may report "true"/"false", "1"/"0",
                 // "detected", "tamper", "vibration" instead of standard HA "on"/"off"
                 const intrusionStates = ['on', 'open', 'unlocked', 'recording', 'active', 'motion',
