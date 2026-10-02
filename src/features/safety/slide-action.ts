@@ -420,7 +420,7 @@ function buildTrack(kind, labelText, icon) {
   const pin = document.createElement('div');
   pin.className = 'argus-sta-pin';
   pin.innerHTML = `
-    <input type="password" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="••••"/>
+    <input type="password" inputmode="numeric" maxlength="12" autocomplete="off" placeholder="••••"/>
     <div class="pin-err"></div>
     <div class="pin-row">
       <button class="pin-cancel" type="button">✕</button>
@@ -433,6 +433,9 @@ function buildTrack(kind, labelText, icon) {
 }
 
 function attachDrag(panel, kind, track, fill, thumb, label, pin, onDone) {
+  const controller = new AbortController();
+  panel._staControllers ||= new Map();
+  panel._staControllers.set(track, controller);
   const PAD = 4;
   let dragging = false, startX = 0, curX = 0, maxX = 0;
   let touchStartX = 0, touchStartY = 0, touchMoved = false;
@@ -447,14 +450,11 @@ function attachDrag(panel, kind, track, fill, thumb, label, pin, onDone) {
     if (now - lastActionTime < 450) return;
     lastActionTime = now;
     if (pin.classList.contains('open')) return;
-    if (kind === 'disarm' && pinRequired(panel)) {
-      openPin();
-    } else {
-      onDone();
-    }
+    onDone();
   }
 
   track.addEventListener('keydown', e => {
+    if (e.target !== track) return;
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       executeAction();
@@ -493,7 +493,7 @@ function attachDrag(panel, kind, track, fill, thumb, label, pin, onDone) {
     }
   });
 
-  function getMax() { return track.getBoundingClientRect().width - 56 - PAD * 2; }
+  function getMax() { return Math.max(1, track.getBoundingClientRect().width - 56 - PAD * 2); }
 
   function moveTo(x) {
     maxX = getMax();
@@ -542,52 +542,13 @@ function attachDrag(panel, kind, track, fill, thumb, label, pin, onDone) {
   }
 
   thumb.addEventListener('mousedown', e => { e.preventDefault(); start(e.clientX); });
-  window.addEventListener('mousemove', e => { if (dragging) move(e.clientX); });
-  window.addEventListener('mouseup', () => { if (dragging) end(); });
+  window.addEventListener('mousemove', e => { if (dragging) move(e.clientX); }, { signal: controller.signal });
+  window.addEventListener('mouseup', () => { if (dragging) end(); }, { signal: controller.signal });
   thumb.addEventListener('touchstart', e => { e.preventDefault(); start(e.touches[0].clientX); }, { passive: false });
-  window.addEventListener('touchmove', e => { if (dragging) { e.preventDefault(); move(e.touches[0].clientX); } }, { passive: false });
-  window.addEventListener('touchend', () => { if (dragging) end(); });
+  window.addEventListener('touchmove', e => { if (dragging) { e.preventDefault(); move(e.touches[0].clientX); } }, { passive: false, signal: controller.signal });
+  window.addEventListener('touchend', () => { if (dragging) end(); }, { signal: controller.signal });
+  window.addEventListener('touchcancel', () => { dragging = false; curX = 0; snapBack(); }, { signal: controller.signal });
 
-  // PIN logic
-  function openPin() { pin.classList.add('open'); pin.querySelector('input').focus(); }
-
-  const input = pin.querySelector('input');
-  const errDiv = pin.querySelector('.pin-err');
-
-  function tryPin() {
-    const code = input.value;
-    if (doCheckPin(panel, code)) {
-      pin.classList.remove('open');
-      input.value = ''; errDiv.textContent = '';
-      onDone(code);
-    } else {
-      input.classList.add('pin-shake');
-      errDiv.textContent = t(panel, 'wrong_pin');
-      setTimeout(() => { input.classList.remove('pin-shake'); errDiv.textContent = ''; input.value = ''; }, 700);
-    }
-  }
-
-  pin.querySelector('.pin-ok').addEventListener('click', tryPin);
-  input.addEventListener('keydown', e => { if (e.key === 'Enter') tryPin(); });
-  pin.querySelector('.pin-cancel').addEventListener('click', () => {
-    pin.classList.remove('open');
-    input.value = ''; errDiv.textContent = '';
-  });
-}
-
-function pinRequired(panel) {
-  return Boolean(
-    panel._entries?.[0]?.pin_configured ||
-    panel._dashboard?.entries?.[0]?.pin_configured ||
-    panel._ui?.master_pin_configured ||
-    panel._pinConfigured
-  );
-}
-
-function doCheckPin(panel, code) {
-  if (typeof panel._verifyPin === 'function') return panel._verifyPin(code);
-  if (typeof panel._checkMasterPin === 'function') return panel._checkMasterPin(code);
-  return false;
 }
 
 function mountOnEntry(panel, entry, idx) {
@@ -614,11 +575,8 @@ function mountOnEntry(panel, entry, idx) {
   const { wrap: dWrap, track: dTrack, fill: dFill, thumb: dThumb, label: dLabel, pin: dPin } =
     buildTrack('disarm', t(panel, 'slide_disarm'), ICON_DISARM);
 
-  attachDrag(panel, 'disarm', dTrack, dFill, dThumb, dLabel, dPin, (pin) => {
-    const realEntryId = panel._dashboard?.entries?.[idx]?.entry_id || '';
-    if (typeof panel._send === 'function') {
-      panel._send('argus/perform_alarm_action', { action: 'disarm', entry_id: realEntryId, ...(pin ? { code: pin } : {}) }).catch(() => {});
-    }
+  attachDrag(panel, 'disarm', dTrack, dFill, dThumb, dLabel, dPin, () => {
+    panel._handleAction?.(idx, 'disarm');
   });
 
   // ── SOS SLIDER ─────────────────────────────────────────────────────
@@ -629,9 +587,7 @@ function mountOnEntry(panel, entry, idx) {
     const realEntryId = panel._dashboard?.entries?.[idx]?.entry_id || '';
     const panic = getPanic();
     if (panic) {
-      if (typeof panel._send === 'function') {
-        panel._send('argus/perform_alarm_action', { action: 'disarm', entry_id: realEntryId, ...(pin ? { code: pin } : {}) }).catch(() => {});
-      }
+      panel._handleAction?.(idx, 'disarm');
     } else {
       // Always use the same confirmation flow for SOS, including touch/slider
       // activation. This prevents accidental calls and keeps the disarm path
@@ -694,6 +650,9 @@ function mountOnEntry(panel, entry, idx) {
 }
 
 export function applyToAllEntries(panel) {
+  for (const [track, controller] of panel._staControllers || []) {
+    if (!track.isConnected) { controller.abort(); panel._staControllers.delete(track); }
+  }
   injectStyles(panel);
   const root = panel.shadowRoot;
   if (!root) return;

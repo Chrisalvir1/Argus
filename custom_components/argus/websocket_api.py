@@ -165,6 +165,12 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_argus_sync_presence_rules)
     websocket_api.async_register_command(hass, ws_argus_verify_master_pin_for_screen_unlock)
 
+    from .media_websocket import ws_upload, ws_list, ws_delete
+    # Private-media compatibility endpoints.
+    websocket_api.async_register_command(hass, ws_upload)
+    websocket_api.async_register_command(hass, ws_list)
+    websocket_api.async_register_command(hass, ws_delete)
+
     # Existing endpoints
     websocket_api.async_register_command(hass, ws_argus_dashboard)
     websocket_api.async_register_command(hass, ws_argus_save_ui)
@@ -197,7 +203,7 @@ def async_register_websocket_api(hass: HomeAssistant) -> None:
 })
 @websocket_api.async_response
 async def ws_argus_import_alarmo(hass, connection, msg) -> None:
-    entry_id = msg.get("entry_id")
+    entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
     try:
         profile, _ = await _require_argus_admin(hass, connection, entry_id)
     except ArgusAuthError as err:
@@ -443,6 +449,7 @@ _SAVE_UI_SCHEMA = {
     vol.Optional("entry_id"): str,
     vol.Optional("zones"): list,
     vol.Optional("dashboard"): dict,
+    vol.Optional("floorplan"): dict,
     vol.Optional("notif_targets"): list,
     vol.Optional("emergency_number"): vol.All(str, vol.Length(min=1, max=16), vol.Match(r"^[0-9+()\-\s]+$")),
     vol.Optional("panic_outputs"): list,
@@ -643,13 +650,21 @@ async def ws_argus_validate_master_pin(hass, connection, msg) -> None:
     if not entry:
         connection.send_error(msg["id"], "not_found", "Argus config entry not found")
         return
+    ha_user_id, _ = _get_ha_actor(connection)
+    key = f"validate:{ha_user_id}:{entry_id}"
+    limiter = _limiter(hass, entry_id)
+    if limiter.is_blocked(key):
+        connection.send_error(msg["id"], "rate_limited", "Too many failed attempts; try again later")
+        return
     current = entry.options.get("code") or entry.data.get("code") or ""
     if not current:
         connection.send_result(msg["id"], {"valid": True, "pin_configured": False})
         return
     if not verify_pin(msg["pin"], current):
+        limiter.record_failure(key)
         connection.send_error(msg["id"], "invalid_pin", "Incorrect PIN")
         return
+    limiter.reset(key)
     connection.send_result(msg["id"], {"valid": True, "pin_configured": True})
 
 
@@ -776,14 +791,14 @@ async def ws_argus_save_advanced_config(hass, connection, msg) -> None:
         return
     config = copy.deepcopy(msg["config"])
     guest = config.get("guest_code")
-    if guest and not str(guest).startswith("scrypt:"):
+    if guest and not str(guest).startswith(("scrypt:", "pbkdf2_sha256:")):
         if not validate_pin(str(guest)):
             connection.send_error(msg["id"], "invalid_pin", "Guest PIN does not satisfy the security policy")
             return
         config["guest_code"] = hash_pin(str(guest))
 
     duress = config.get("duress_pin")
-    if duress and not str(duress).startswith("scrypt:"):
+    if duress and not str(duress).startswith(("scrypt:", "pbkdf2_sha256:")):
         if not validate_pin(str(duress)):
             connection.send_error(msg["id"], "invalid_pin", "Duress PIN does not satisfy the security policy")
             return
@@ -888,7 +903,7 @@ async def ws_argus_update_master_pin(hass, connection, msg) -> None:
         return
 
     current = entry.options.get("code") or entry.data.get("code") or ""
-    if current and not verify_pin(msg["current_pin"], current):
+    if current and not verify_pin(msg.get("current_pin", ""), current):
         blocked = limiter.record_failure(key)
         await async_append_audit_log(
             hass,
@@ -1442,7 +1457,7 @@ async def ws_argus_get_ha_persons(hass, connection, msg) -> None:
 async def ws_argus_save_user_access_pin(hass, connection, msg) -> None:
     entry_id = _resolve_entry_id(hass, msg.get("entry_id"))
     try:
-        profile, ha_user_id = await _authenticate_profile(hass, connection, entry_id)
+        profile, ha_user_id = await _require_argus_session(hass, connection, entry_id)
     except ArgusAuthError as err:
         connection.send_error(msg["id"], err.code, err.message)
         return

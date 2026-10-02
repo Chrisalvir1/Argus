@@ -1,6 +1,8 @@
 """Argus Alarm State Machine Definitions and Transition Logic."""
 from __future__ import annotations
 
+from typing import Any
+
 # Mode constants
 STATE_DISARMED = "disarmed"
 STATE_ARMED_HOME = "armed_home"

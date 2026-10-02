@@ -30,12 +30,13 @@ def hash_pin(pin: str) -> str:
     if not validate_pin(pin):
         raise ValueError("PIN does not satisfy the Argus security policy")
     salt = os.urandom(16)
+    prefix = _PREFIX if hasattr(hashlib, "scrypt") else "pbkdf2_sha256"
     if hasattr(hashlib, "scrypt"):
         digest = hashlib.scrypt(pin.encode(), salt=salt, n=2**14, r=8, p=1)
     else:
         digest = hashlib.pbkdf2_hmac("sha256", pin.encode(), salt, 100000)
     return ":".join(
-        (_PREFIX, base64.b64encode(salt).decode(), base64.b64encode(digest).decode())
+        (prefix, base64.b64encode(salt).decode(), base64.b64encode(digest).decode())
     )
 
 
@@ -43,25 +44,30 @@ def verify_pin(pin: str | None, stored: str | None) -> bool:
     """Compare a PIN against a current hash or legacy plaintext value."""
     if not pin or not stored:
         return False
-    if not stored.startswith(f"{_PREFIX}:"):
+    if not stored.startswith((f"{_PREFIX}:", "pbkdf2_sha256:")):
         return hmac.compare_digest(str(pin), str(stored))
     try:
-        _, raw_salt, raw_digest = stored.split(":", 2)
-        salt = base64.b64decode(raw_salt)
-        if hasattr(hashlib, "scrypt"):
+        prefix, raw_salt, raw_digest = stored.split(":", 2)
+        salt = base64.b64decode(raw_salt, validate=True)
+        expected = base64.b64decode(raw_digest, validate=True)
+        # Older fallback hashes were mislabeled scrypt but have a 32-byte digest.
+        use_pbkdf2 = prefix == "pbkdf2_sha256" or (prefix == _PREFIX and len(expected) == 32)
+        if not use_pbkdf2 and hasattr(hashlib, "scrypt"):
             digest = hashlib.scrypt(
                 str(pin).encode(), salt=salt, n=2**14, r=8, p=1
             )
-        else:
+        elif use_pbkdf2:
             digest = hashlib.pbkdf2_hmac("sha256", str(pin).encode(), salt, 100000)
-        return hmac.compare_digest(digest, base64.b64decode(raw_digest))
+        else:
+            return False
+        return hmac.compare_digest(digest, expected)
     except (ValueError, TypeError):
         return False
 
 
 def needs_rehash(stored: str | None) -> bool:
     """Return whether a stored credential still uses the legacy format."""
-    return bool(stored) and not str(stored).startswith(f"{_PREFIX}:")
+    return bool(stored) and not str(stored).startswith((f"{_PREFIX}:", "pbkdf2_sha256:"))
 
 
 @dataclass

@@ -7,6 +7,7 @@ import voluptuous as vol
 from homeassistant.components import websocket_api
 
 from .media import async_get_media_manager
+from .auth import ArgusAuthError, _require_ha_admin
 
 _MAX_UPLOAD_BYTES = 50 * 1024 * 1024
 _MAX_ENCODED_BYTES = (_MAX_UPLOAD_BYTES * 4 // 3) + 1024
@@ -19,6 +20,11 @@ _MAX_ENCODED_BYTES = (_MAX_UPLOAD_BYTES * 4 // 3) + 1024
 })
 @websocket_api.async_response
 async def ws_upload(hass, connection, msg) -> None:
+    try:
+        _require_ha_admin(connection)
+    except ArgusAuthError as err:
+        connection.send_error(msg["id"], err.code, err.message)
+        return
     try:
         encoded = msg["data"].split(",", 1)[-1]
         if len(encoded) > _MAX_ENCODED_BYTES:
@@ -36,6 +42,11 @@ async def ws_upload(hass, connection, msg) -> None:
 @websocket_api.websocket_command({vol.Required("type"): "argus/list_uploaded_files"})
 @websocket_api.async_response
 async def ws_list(hass, connection, msg) -> None:
+    try:
+        _require_ha_admin(connection)
+    except ArgusAuthError as err:
+        connection.send_error(msg["id"], err.code, err.message)
+        return
     connection.send_result(msg["id"], await (await async_get_media_manager(hass)).async_list())
 
 
@@ -45,6 +56,11 @@ async def ws_list(hass, connection, msg) -> None:
 })
 @websocket_api.async_response
 async def ws_delete(hass, connection, msg) -> None:
+    try:
+        _require_ha_admin(connection)
+    except ArgusAuthError as err:
+        connection.send_error(msg["id"], err.code, err.message)
+        return
     deleted = await (await async_get_media_manager(hass)).async_delete(msg["filename"])
     if deleted:
         connection.send_result(msg["id"], {"success": True})

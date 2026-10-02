@@ -55,12 +55,12 @@ def _display_title(hass, entity_id, current):
 def install_safety_runtime():
     """Install the v2.0.48 state-machine and persistence repairs once.
 
-    Home Assistant's HomeKit bridge maps ARMING to current=OFF and
-    target=AWAY. Consequently ARMING can never preserve a requested HOME or
-    NIGHT target. While an Argus request is waiting, publish the requested
-    ARMED_* target to HomeKit but gate sensor triggering behind _arm_request.
-    Argus still exposes the real progress and blockers through attributes and
-    its two binary sensors. Only _async_complete_arming commits the transition.
+    While an Argus request is waiting, keep the canonical entity state at
+    ARMING and gate sensor triggering behind _arm_request. Publish the requested
+    ARMED_* mode and blockers as generic attributes and binary sensors so
+    bridges can represent progress. Only _async_complete_arming commits the
+    transition. The native HomeKit adapter separately maps that target to its
+    protocol's characteristics.
     """
     global _INSTALLED
     if _INSTALLED:
@@ -108,7 +108,7 @@ def install_safety_runtime():
         ))
 
     async def reliable_arm(self, target, code=None, *, origin="service"):
-        # A new HomeKit target replaces an unfinished request deterministically.
+        # A new external arm target replaces an unfinished request deterministically.
         pending = getattr(self, "_arm_request", None)
         if pending:
             if pending.get("target") == target:
@@ -121,9 +121,9 @@ def install_safety_runtime():
         request = getattr(self, "_arm_request", None)
         if request:
             request["published_target_state"] = target.value
-            # Never publish ARMED_* before sensors and countdown finish. The
-            # HomeKit adapter reads arming_target and preserves the requested
-            # TargetState while the real entity state remains ARMING.
+            # Never publish ARMED_* before sensors and countdown finish.
+            # Bridges can read arming_target while the canonical state remains
+            # ARMING; protocol-specific adapters may map that target separately.
             if self._alarm_state != AlarmControlPanelState.ARMING:
                 _LOGGER.error(
                     "Argus arming invariant repaired: expected ARMING, got %s",

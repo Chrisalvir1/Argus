@@ -188,7 +188,7 @@ class PresenceManager:
             except asyncio.CancelledError:
                 pass
             finally:
-                if rule_id in self._pending_tasks:
+                if self._pending_tasks.get(rule_id) is asyncio.current_task():
                     del self._pending_tasks[rule_id]
 
         self._pending_tasks[rule_id] = self.hass.async_create_task(_arm_task())

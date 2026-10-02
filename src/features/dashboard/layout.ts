@@ -37,6 +37,8 @@ export const defaultLayouts: Layouts = {
     item('access-control', 6, 4, 6, 4),
     item('alarm-configuration', 0, 8, 12, 5),
     item('security-status', 0, 13, 12, 2),
+    item('security-insights', 0, 15, 6, 5),
+    item('floorplan', 6, 15, 6, 5),
   ],
   md: [
     item('activity-history', 0, 0, 4, 4),
@@ -45,6 +47,8 @@ export const defaultLayouts: Layouts = {
     item('access-control', 4, 4, 4, 4),
     item('alarm-configuration', 0, 8, 8, 5),
     item('security-status', 0, 13, 8, 2),
+    item('security-insights', 0, 15, 4, 5),
+    item('floorplan', 4, 15, 4, 5),
   ],
   sm: [
     item('activity-history', 0, 0, 4, 4),
@@ -53,6 +57,8 @@ export const defaultLayouts: Layouts = {
     item('access-control', 0, 12, 4, 4),
     item('alarm-configuration', 0, 16, 4, 5),
     item('security-status', 0, 21, 4, 2),
+    item('security-insights', 0, 23, 4, 5),
+    item('floorplan', 0, 28, 4, 5),
   ],
   xs: [
     item('activity-history', 0, 0, 2, 4),
@@ -61,6 +67,8 @@ export const defaultLayouts: Layouts = {
     item('access-control', 0, 12, 2, 4),
     item('alarm-configuration', 0, 16, 2, 5),
     item('security-status', 0, 21, 2, 2),
+    item('security-insights', 0, 23, 2, 5),
+    item('floorplan', 0, 28, 2, 5),
   ],
   xxs: [
     item('activity-history', 0, 0, 2, 4),
@@ -69,6 +77,8 @@ export const defaultLayouts: Layouts = {
     item('access-control', 0, 12, 2, 4),
     item('alarm-configuration', 0, 16, 2, 5),
     item('security-status', 0, 21, 2, 2),
+    item('security-insights', 0, 23, 2, 5),
+    item('floorplan', 0, 28, 2, 5),
   ],
 };
 
@@ -126,23 +136,23 @@ export function mergeLayouts(saved: Layouts | null): Layouts {
   (Object.keys(COLS) as ArgusBreakpoint[]).forEach(bp => {
     const cols = COLS[bp];
     const source: Layout[] = Array.isArray(saved?.[bp]) ? (saved![bp] as Layout[]) : [];
-    const map = new Map<string, Layout>(source.map(x => [x.i, x]));
+    const clean = new Map<string, Layout>();
+    for (const value of source) {
+      if (!value || typeof value !== 'object' || typeof value.i !== 'string' || !value.i) continue;
+      if (![value.x, value.y, value.w, value.h].every(Number.isFinite)) continue;
+      const w = Math.min(cols, Math.max(1, Math.round(value.w)));
+      clean.set(value.i, {
+        ...value, w, h: Math.min(12, Math.max(1, Math.round(value.h))),
+        x: Math.max(0, Math.min(Math.round(value.x), cols - w)),
+        y: Math.max(0, Math.round(value.y)),
+        minW: Math.min(cols, Math.max(1, value.minW || 1)), maxW: cols,
+        minH: 1, maxH: 12,
+      });
+    }
     const defaults = (defaultLayouts[bp] || []) as Layout[];
-    const known = defaults.map(base => {
-      const old = map.get(base.i);
-      if (!old) return { ...base };
-      const w = Math.min(Math.max(1, old.w), cols);
-      return { ...base, ...old, w, x: Math.max(0, Math.min(old.x, cols - w)), y: Math.max(0, old.y) };
-    });
+    const known = defaults.map(base => ({ ...base, ...clean.get(base.i), maxW: cols }));
     const knownIds = new Set(known.map(x => x.i));
-    const extra = source
-      .filter(x => !knownIds.has(x.i))
-      .map(x => ({
-        ...x,
-        w: Math.min(Math.max(1, x.w), cols),
-        x: Math.max(0, Math.min(x.x, cols - Math.min(x.w, cols))),
-        y: Math.max(0, x.y),
-      }));
+    const extra = [...clean.values()].filter(x => !knownIds.has(x.i));
     result[bp] = [...known, ...extra];
   });
   return result;
@@ -161,7 +171,7 @@ export class LocalStorageDashboardLayoutStorage implements DashboardLayoutStorag
     }
   }
   private write(u: string, d: string, value: StoredDashboardLayout) {
-    localStorage.setItem(this.key(u, d), JSON.stringify(value));
+    try { localStorage.setItem(this.key(u, d), JSON.stringify(value)); } catch { /* Recovery cache is optional. */ }
   }
   async load(u: string, d: string) {
     const value = this.read(u, d);
@@ -189,7 +199,6 @@ export class LocalStorageDashboardLayoutStorage implements DashboardLayoutStorag
     });
   }
   async reset(u: string, d: string) {
-    localStorage.removeItem(this.key(u, d));
+    try { localStorage.removeItem(this.key(u, d)); } catch { /* Recovery cache is optional. */ }
   }
 }
-

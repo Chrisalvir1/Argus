@@ -23,11 +23,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version-file: '.python-version'
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: npm
@@ -36,7 +36,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -c 'import sys; assert sys.version_info >= (3, 11, 0), f"Need Python 3.11+, got {sys.version}"; print(sys.version)'
+          python -c 'import sys; assert (3, 12, 0) <= sys.version_info < (3, 15, 0), f"Need Python 3.12-3.14, got {sys.version}"; print(sys.version)'
           test "$(node -p "process.versions.node.split('.')[0]")" = "24"
           VERSION="$(python -c 'import json; print(json.load(open("custom_components/argus/manifest.json"))["version"])')"
           if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
@@ -71,14 +71,16 @@ jobs:
           cd ../..
           test -s argus.zip
           unzip -tq argus.zip
-          test "$(unzip -p argus.zip manifest.json | python -c 'import json,sys; print(json.load(sys.stdin)["version"])')" = "${GITHUB_REF_NAME#v}"
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            test "$(unzip -p argus.zip manifest.json | python -c 'import json,sys; print(json.load(sys.stdin)["version"])')" = "${GITHUB_REF_NAME#v}"
+          fi
           if unzip -l argus.zip | grep -Eq '(__pycache__|\.pyc$)'; then
             echo 'Python cache artifacts found in release archive' >&2
             exit 1
           fi
           sha256sum argus.zip > argus.zip.sha256
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: argus
           path: |
@@ -93,9 +95,9 @@ jobs:
           VERSION="${GITHUB_REF_NAME#v}"
           NOTES="docs/RELEASE_NOTES_${VERSION}.md"
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            gh release upload "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 --clobber || gh release upload "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 || true
+            gh release upload "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 --clobber
           elif [[ -f "$NOTES" ]]; then
-            gh release create "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 --title "Argus Home Hub $GITHUB_REF_NAME" --notes-file "$NOTES" || true
+            gh release create "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 --title "Argus Home Hub $GITHUB_REF_NAME — Security, HAP & Dashboard Improvements" --notes-file "$NOTES"
           else
-            gh release create "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 --title "Argus Home Hub $GITHUB_REF_NAME" --generate-notes || true
+            gh release create "$GITHUB_REF_NAME" argus.zip argus.zip.sha256 --title "Argus Home Hub $GITHUB_REF_NAME" --generate-notes
           fi

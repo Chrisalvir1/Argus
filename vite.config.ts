@@ -17,6 +17,6 @@ export default defineConfig({
     outDir: 'custom_components/argus/www/react-dist',
     emptyOutDir: true,
     cssCodeSplit: false,
-    rollupOptions: { output: { inlineDynamicImports: true } },
+    rollupOptions: { output: { codeSplitting: false } },
   },
 });

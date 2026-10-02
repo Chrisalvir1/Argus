@@ -20,7 +20,7 @@ export type Layouts = ResponsiveLayouts<ArgusBreakpoint>;
 
 export interface ArgusWidgetDefinition {
   id: string;
-  nativeId: string;
+  nativeId?: string;
   kind: ArgusWidgetKind;
   title: string;
   icon?: React.ReactNode;
@@ -30,6 +30,7 @@ export interface ArgusWidgetDefinition {
   locked?: boolean;
   visible: boolean;
   t?: (key: string) => string;
+  content?: React.ReactNode;
 }
 
 export interface StoredWidgetLayout {
@@ -61,4 +62,3 @@ export interface DashboardLayoutStorage {
 }
 
 export type { LayoutItem, ResponsiveLayouts };
-

@@ -17,6 +17,7 @@ from homeassistant.components import persistent_notification
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import STATE_ON
 from homeassistant.core import HomeAssistant, callback
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.event import (
@@ -292,7 +293,12 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     @property
     def extra_state_attributes(self) -> dict:
-        attrs = {"config_entry_id": self._config_entry.entry_id}
+        attrs = {
+            "config_entry_id": self._config_entry.entry_id,
+            # HA exposes code_arm_required=False so HomeKit can arm without
+            # bouncing state; Argus still gives its own UI this policy flag.
+            "argus_arm_pin_required": bool(self._code_arm_required),
+        }
         if getattr(self, "_arm_lock_bounces", 0) > 0:
             attrs["arm_lock_bounces"] = self._arm_lock_bounces
         if self._triggered_by:
@@ -316,6 +322,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             attrs["arming_origin"] = self._arm_request["origin"]
             attrs["arming_blocking_sensors"] = list(self._arm_request["blocking_sensors"])
             attrs["arming_waiting_for_sensors"] = bool(self._arm_request["wait_for_sensors"])
+            attrs["argus_arming_transition"] = (
+                self._alarm_state == AlarmControlPanelState.ARMING
+            )
+            # Retained for the built-in HomeKit-specific target adapter.
             attrs["argus_homekit_transition"] = (
                 self._alarm_state == AlarmControlPanelState.ARMING
             )
@@ -1100,15 +1110,6 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             await self._async_persist_stable_state("trigger_timeout")
         self.hass.async_create_task(_do_reset())
 
-    @callback
-    def _async_finish_arming(self, _now) -> None:
-        """Arming countdown finished — move to target armed state."""
-        if self._arm_request and self._arming_target:
-            self._alarm_state = self._arming_target
-            self._arming_listener = None
-            self.async_write_ha_state()
-            self.hass.async_create_task(self._async_mqtt_publish())
-
     # ── Siren ───────────────────────────────────────────────────────
     def _get_siren_entities(self) -> list[str]:
         """Return list of siren entities from UI config or fallback to single entity.
@@ -1194,7 +1195,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                         supported = set(attrs.get("supported_color_modes") or [])
                         rgb = settings.get("rgb_color")
                         hs = settings.get("hs_color")
-                        if rgb and (supported.intersection(_COLOR_MODES) or not supported or "rgb" in supported):
+                        if rgb and (supported.intersection({"hs", "xy", "rgb", "rgbw", "rgbww"}) or not supported or "rgb" in supported):
                             svc_data["rgb_color"] = rgb
                         elif hs and ("hs" in supported or not supported):
                             svc_data["hs_color"] = hs
@@ -1350,7 +1351,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             await async_append_audit_log(
                 self.hass, "disarm_blocked", "Too many failed attempts", user=user_id, entry_id=self._config_entry.entry_id
             )
-            return
+            raise HomeAssistantError("Too many failed PIN attempts; try again later")
 
         has_personal_pin = any(
             user.get("enabled", True)
@@ -1358,35 +1359,18 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             and (user.get("master_pin_hash") or user.get("pin") or user.get("access_pin_hash"))
             for user in self._ui_config.get("users", [])
         )
-        if (self._code or has_personal_pin) and not self._validate_code(code):
+        adv = self._ui_config.get("advanced", {})
+        duress_pin = adv.get("duress_pin")
+        is_duress = bool(code and duress_pin and verify_pin(code, duress_pin))
+        if (self._code or has_personal_pin) and not is_duress and not self._validate_code(code):
             limiter.record_failure(user_id or "default")
             _LOGGER.warning("Argus: Disarm rejected — invalid or missing code")
             await async_append_audit_log(
                 self.hass, "disarm_rejected", "Invalid or missing code", user=user_id, entry_id=self._config_entry.entry_id
             )
-            return
+            raise HomeAssistantError("Invalid or missing alarm PIN")
 
         limiter.reset(user_id or "default")
-
-        # Check Duress PIN (PIN de Coacción)
-        adv = self._ui_config.get("advanced", {})
-        duress_pin = adv.get("duress_pin")
-        if code and duress_pin and verify_pin(code, duress_pin):
-            _LOGGER.warning("ARGUS DURESS: Coercion PIN entered! Executing visual disarm and silent SOS panic.")
-            await async_append_audit_log(
-                self.hass, "duress_pin_triggered", "Coercion PIN entered", user=user_id, severity="critical", entry_id=self._config_entry.entry_id
-            )
-            self._cancel_timers()
-            await self._async_siren(False)
-            self._alarm_state = AlarmControlPanelState.DISARMED
-            self.async_write_ha_state()
-            await self._async_mqtt_publish()
-            await self._async_persist_stable_state("disarm")
-            self.hass.bus.async_fire("argus_state_changed", {
-                "entity_id": self.entity_id, "state": "disarmed", "duress": True, "entry_id": self._config_entry.entry_id
-            })
-            self.hass.async_create_task(self.async_alarm_trigger())
-            return
 
         # Find which user code matches
         caller_name = None
@@ -1426,10 +1410,26 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self.hass.bus.async_fire("argus_disarmed", {
             "entity_id": self.entity_id, "user": caller_name, "entry_id": self._config_entry.entry_id
         })
-        await self._async_notify_configured(
-            "🔓 ARGUS — Desarmado",
-            f"El sistema fue desarmado por {caller_name or 'Argus'}.",
-        )
+        if is_duress:
+            # Keep the ordinary disarmed state and never invoke audible SOS.
+            # Integrators can route this explicit event to their silent response.
+            await async_append_audit_log(
+                self.hass, "duress_pin_triggered", "Coercion PIN entered",
+                user=user_id, severity="critical", entry_id=self._config_entry.entry_id,
+            )
+            self.hass.bus.async_fire("argus_duress_activated", {
+                "entity_id": self.entity_id, "entry_id": self._config_entry.entry_id,
+            })
+            await self._async_notify_configured(
+                "ARGUS — Coacción / Duress",
+                "PIN de coacción utilizado. Revisa la situación de inmediato.",
+                {"priority": "high", "ttl": 0},
+            )
+        else:
+            await self._async_notify_configured(
+                "🔓 ARGUS — Desarmado",
+                f"El sistema fue desarmado por {caller_name or 'Argus'}.",
+            )
         await async_append_audit_log(self.hass, "disarmed", f"Sistema desarmado por {caller_name}", user=caller_name, entry_id=self._config_entry.entry_id)
         _LOGGER.info("Argus: Disarmed by %s", caller_name)
         await self._async_sync_panels(AlarmControlPanelState.DISARMED)
@@ -1483,7 +1483,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         if self._code_arm_required and not restoring_panic and not self._validate_code(code):
             _LOGGER.warning("Argus: Arm rejected — invalid code")
             await async_append_audit_log(self.hass, "arm_rejected", f"Invalid code for {target.value}", user="Argus", entry_id=self._config_entry.entry_id)
-            return
+            raise HomeAssistantError("Invalid or missing alarm PIN")
 
         # Every source shares the policy/bypass evaluator.
         _MODE_KEY_MAP = {

@@ -5,3 +5,19 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      react:
+        patterns:
+          - react
+          - react-dom
+          - '@types/react*'
+      frontend-tooling:
+        patterns:
+          - vite
+          - vitest
+          - '@vitejs/plugin-react'

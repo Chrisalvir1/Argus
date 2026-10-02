@@ -15,7 +15,8 @@ from typing import Any
 _LOGGER = logging.getLogger(__name__)
 _INSTALLED = False
 _LISTENER_UNSUB = None
-_MARKER_ATTRIBUTE = "argus_homekit_transition"
+_MARKER_ATTRIBUTE = "argus_arming_transition"
+_LEGACY_MARKER_ATTRIBUTE = "argus_homekit_transition"
 _TARGET_ATTRIBUTE = "arming_target"
 _VALID_TARGETS = {
     "armed_home",
@@ -33,7 +34,10 @@ def resolve_argus_arming_target(
     state_value = getattr(state, "value", state)
     if state_value != "arming" or not isinstance(attributes, Mapping):
         return None
-    if attributes.get(_MARKER_ATTRIBUTE) is not True:
+    if (
+        attributes.get(_MARKER_ATTRIBUTE) is not True
+        and attributes.get(_LEGACY_MARKER_ATTRIBUTE) is not True
+    ):
         return None
     target = getattr(attributes.get(_TARGET_ATTRIBUTE), "value", attributes.get(_TARGET_ATTRIBUTE))
     return target if target in _VALID_TARGETS else None
