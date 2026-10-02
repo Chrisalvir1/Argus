@@ -1,3 +1,12 @@
+## [2.5.3] - 2026-10-01
+
+### Compact UI & Tuya Local Sensor Fix
+- Reduce sensor chip height from 48px to 34px with tighter padding and smaller lock icons for a compact, information-dense layout.
+- Support Omni Tuya Local / Tuya Local sensor states (`true`, `false`, `1`, `0`, `detected`, `tamper`, `vibration`) in UI and backend so correctly connected sensors no longer show "No disponible".
+- Add `_getEntityState()` helper with case-insensitive and linear-scan fallback for robust entity resolution.
+- Accelerate profile selection transition from ~2.4s to ~550ms with instant tactile click feedback.
+- Replace legacy shield loading icon with official Argus logo and Apple macOS-style boot progress bar on cold boot and page refresh.
+
 ## [2.5.2] - 2026-10-01
 
 ### Corrective and Visual Polish Release
