@@ -117,6 +117,34 @@
   height: 38px !important;
 }
 
+.security-console .entry-fs {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  padding: 0 !important;
+  border-radius: 12px !important;
+  font-size: 16px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.20) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+  flex-shrink: 0 !important;
+}
+
+.security-console .entry-fs:hover {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.38) !important;
+  transform: translateY(-1px) scale(1.04) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35) !important;
+}
+
 .console-system-badge {
   display: inline-flex !important;
   align-items: center !important;
@@ -318,15 +346,16 @@
 .security-console .console-sensors {
   display: flex !important;
   flex-direction: column !important;
-  align-items: flex-end !important;
+  align-items: flex-start !important;
   gap: 6px !important;
-  width: 100% !important;
-  max-width: 360px !important;
-  justify-self: end !important;
+  width: fit-content !important;
+  max-width: 340px !important;
+  justify-self: center !important;
+  align-self: center !important;
+  margin: 0 auto !important;
   max-height: none !important;
   overflow: visible !important;
   padding: 0 !important;
-  margin: 0 !important;
   scrollbar-width: none;
   background: transparent !important;
   background-color: transparent !important;
@@ -579,7 +608,9 @@
     grid-column: 1 !important;
     grid-row: 2 !important;
     align-self: center !important;
-    margin: 0 !important;
+    justify-self: center !important;
+    margin: 0 auto !important;
+    width: 100% !important;
     max-width: 320px !important;
   }
 
@@ -598,8 +629,10 @@
     grid-column: 3 !important;
     grid-row: 2 !important;
     align-self: center !important;
-    justify-self: end !important;
-    margin: 0 !important;
+    justify-self: center !important;
+    margin: 0 auto !important;
+    width: fit-content !important;
+    max-width: 340px !important;
   }
 }
 
@@ -650,7 +683,9 @@
     grid-column: 1 !important;
     grid-row: 2 !important;
     align-self: center !important;
-    margin: 0 !important;
+    justify-self: center !important;
+    margin: 0 auto !important;
+    width: 100% !important;
     max-width: 320px !important;
   }
 
@@ -669,8 +704,10 @@
     grid-column: 3 !important;
     grid-row: 2 !important;
     align-self: center !important;
-    justify-self: end !important;
-    margin: 0 !important;
+    justify-self: center !important;
+    margin: 0 auto !important;
+    width: fit-content !important;
+    max-width: 340px !important;
   }
 }
 
@@ -923,9 +960,13 @@
   .entry.ios-fullscreen .security-console .console-sensors {
     grid-column: 3 !important;
     grid-row: 2 !important;
-    width: 100% !important;
+    width: fit-content !important;
+    max-width: 380px !important;
     max-height: 520px !important;
     align-self: center !important;
+    justify-self: center !important;
+    margin: 0 auto !important;
+    align-items: flex-start !important;
     background: transparent !important;
     box-shadow: none !important;
   }

@@ -1,3 +1,10 @@
+## [2.5.7] - 2026-10-02
+
+### Unobstructed Fullscreen & Symmetrical Sensor Grid
+- Relocated the fullscreen toggle button (`⛶`) from the bottom-right corner to the top-right console HUD (`console-hud-right`) next to the status badge, eliminating any obstruction with sensor chips regardless of the number of active sensors.
+- Aligned sensor chips cleanly on their left axis (`align-items: flex-start`) with centered container positioning in Column 3, removing the jagged right-staircase effect while preserving the snug name-to-status spacing without void gaps.
+- Symmetrically balanced Column 1 (`liquid-stack`), Column 2 (`entry-icon`), and Column 3 (`console-sensors`) with centered grid tracks across desktop and container queries.
+
 ## [2.5.6] - 2026-10-02
 
 ### Centered Security Console & Resilient Sensor Resolution

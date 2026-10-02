@@ -133,10 +133,8 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
           </button>
         )}
         
-        {isFullscreen ? (
+        {isFullscreen && (
           <button aria-label={t('fullscreen_title')} className="ghost entry-exit-fs" onClick={onToggleFullscreen} title={t('fullscreen_title') || 'Salir de pantalla completa'} style={{position:'fixed',top:'max(16px, env(safe-area-inset-top))',left:'max(16px, env(safe-area-inset-left))',zIndex:100000,padding:'10px 16px',fontSize:'20px',fontWeight:900,background:'rgba(0,0,0,.65)',backdropFilter:'blur(16px)',borderRadius:'14px',color:'white',border:'1px solid rgba(255,255,255,.25)',boxShadow:'0 8px 24px rgba(0,0,0,.5)',cursor:'pointer'}}>✕</button>
-        ) : (
-          <button aria-label={t('fullscreen_title')} className="ghost fs-btn entry-fs" onClick={onToggleFullscreen} title={t('fullscreen_title') || 'Pantalla completa'} style={{position:'absolute',bottom:'20px',right:'20px',zIndex:10,padding:'10px 15px',fontSize:'18px',background:'rgba(0,0,0,0.45)',backdropFilter:'blur(12px)',borderRadius:'14px',opacity:0.85,color:'white',border:'1px solid rgba(255,255,255,0.22)',boxShadow:'0 8px 20px rgba(0,0,0,0.35)',cursor:'pointer'}}>⛶</button>
         )}
 
         <div className="entry-content security-console">
@@ -170,6 +168,35 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
               <span className={`console-system-badge console-system-badge--${triggered ? 'triggered' : state}`}>
                 {getBadgeText()}
               </span>
+              {!isFullscreen && (
+                <button
+                  aria-label={t('fullscreen_title')}
+                  className="ghost fs-btn entry-fs"
+                  onClick={onToggleFullscreen}
+                  title={t('fullscreen_title') || 'Pantalla completa'}
+                  style={{
+                    marginLeft: '8px',
+                    width: '38px',
+                    height: '38px',
+                    minWidth: '38px',
+                    padding: '0',
+                    fontSize: '16px',
+                    background: 'rgba(255,255,255,0.08)',
+                    backdropFilter: 'blur(12px)',
+                    WebkitBackdropFilter: 'blur(12px)',
+                    borderRadius: '12px',
+                    color: 'white',
+                    border: '1px solid rgba(255,255,255,0.18)',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  ⛶
+                </button>
+              )}
             </div>
           </div>
 
