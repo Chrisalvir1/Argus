@@ -2572,7 +2572,7 @@ _tmpl.innerHTML = `
      High-opacity background achieves same visual effect safely. */
   display: flex; align-items: center; justify-content: center;
   z-index: 9999;
-  animation: argus-overlay-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: argus-overlay-in 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 @keyframes argus-overlay-in {
   from { opacity: 0; }
@@ -2583,10 +2583,10 @@ _tmpl.innerHTML = `
 .argus-profile-header {
   text-align: center;
   margin-bottom: 36px;
-  animation: argus-slide-down 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+  animation: argus-slide-down 0.25s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
 }
 @keyframes argus-slide-down {
-  from { opacity: 0; transform: translateY(-20px); }
+  from { opacity: 0; transform: translateY(-12px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 .argus-profile-header h2 {
@@ -2606,10 +2606,10 @@ _tmpl.innerHTML = `
   max-width: 900px;
   width: 100%;
   justify-content: center;
-  animation: argus-grid-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+  animation: argus-grid-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
 }
 @keyframes argus-grid-in {
-  from { opacity: 0; transform: scale(0.92) translateY(16px); }
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
   to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 
@@ -9758,6 +9758,12 @@ class ArgusPanel extends HTMLElement {
         const requiresPin = item.getAttribute('data-requires-pin') === 'true';
         const userObj = users.find(u => u.id === userId);
 
+        const circle = item.querySelector('.argus-profile-circle') as HTMLElement | null;
+        if (circle) {
+          circle.style.transform = 'scale(0.92)';
+          circle.style.transition = 'transform 0.1s ease';
+        }
+
         if (isOwn) {
           if (requiresPin) {
             overlay.remove();
@@ -9770,6 +9776,7 @@ class ArgusPanel extends HTMLElement {
               this._profileSelectedThisMount = true;
               await this._runProfileWelcomeAnimation(userObj);
             } catch (err) {
+              if (circle) circle.style.transform = '';
               overlay.dataset.processing = '';
               alert(err.message || 'Error seleccionando perfil');
             }
@@ -9945,25 +9952,26 @@ class ArgusPanel extends HTMLElement {
     const avatar = overlay.querySelector('#welcome-avatar-flying') as HTMLElement;
     const textGroup = overlay.querySelector('#welcome-text-anim') as HTMLElement;
     if (avatar && textGroup) {
-      avatar.style.transform = 'scale(0.8)';
+      avatar.style.transform = 'scale(0.88)';
       avatar.style.opacity = '0';
       textGroup.style.opacity = '0';
-      textGroup.style.transform = 'translateY(15px)';
+      textGroup.style.transform = 'translateY(8px)';
 
       await new Promise(r => requestAnimationFrame(r));
       
-      avatar.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease';
+      avatar.style.transition = 'transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s ease';
       avatar.style.transform = 'scale(1)';
       avatar.style.opacity = '1';
       
-      textGroup.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, opacity 0.5s ease 0.15s';
+      textGroup.style.transition = 'transform 0.18s cubic-bezier(0.16, 1, 0.3, 1) 0.03s, opacity 0.15s ease 0.03s';
       textGroup.style.transform = 'translateY(0)';
       textGroup.style.opacity = '1';
 
-      await new Promise(r => setTimeout(r, 1300));
+      // Snappy confirmation glance while dashboard finishes preparing
+      await new Promise(r => setTimeout(r, 260));
       await dashboardPromise;
 
-      textGroup.style.transition = 'opacity 0.25s ease';
+      textGroup.style.transition = 'opacity 0.12s ease';
       textGroup.style.opacity = '0';
 
       const rect = avatar.getBoundingClientRect();
@@ -9989,24 +9997,24 @@ class ArgusPanel extends HTMLElement {
       const moveX = destX - (rect.left + rect.width / 2);
       const moveY = destY - (rect.top + rect.height / 2);
       
-      // Smooth elastic transition to exact top-bar coordinates
-      avatar.style.transition = 'transform 0.65s cubic-bezier(0.25, 1.25, 0.5, 1), opacity 0.35s ease 0.45s';
+      // Fast fluid glide to destination top-bar coordinates
+      avatar.style.transition = 'transform 0.24s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.16s ease 0.08s';
       avatar.style.transform = `translate(${moveX}px, ${moveY}px) scale(${targetScale})`;
       
-      overlay.style.transition = 'background-color 0.55s ease 0.1s';
+      overlay.style.transition = 'background-color 0.22s ease';
       overlay.style.backgroundColor = 'transparent';
       
-      await new Promise(r => setTimeout(r, 650));
+      await new Promise(r => setTimeout(r, 240));
       
-      // Reveal real top-bar avatar on landing with an elastic bounce
+      // Reveal real top-bar avatar on landing
       if (liveDestEl) {
         liveDestEl.style.opacity = '1';
-        liveDestEl.style.transform = 'scale(1.1)';
-        setTimeout(() => { if (liveDestEl) liveDestEl.style.transform = 'scale(1)'; }, 180);
+        liveDestEl.style.transform = 'scale(1.05)';
+        setTimeout(() => { if (liveDestEl) liveDestEl.style.transform = 'scale(1)'; }, 90);
       }
     }
 
-    await new Promise(r => setTimeout(r, 120));
+    await new Promise(r => setTimeout(r, 30));
     await dashboardPromise;
     
     this._nukeAllLoginOverlays();
