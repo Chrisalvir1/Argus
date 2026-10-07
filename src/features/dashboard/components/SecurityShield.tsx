@@ -1,7 +1,8 @@
 import React, { useId } from 'react';
+import { SecurityEmblem3D, type EmblemProps } from './SecurityEmblem3D';
 
 /** Three selectable Argus emblems; the default is the animated security core. */
-export function SecurityShield({ state, label, variant = 'core', pulse = '', pulseKey = '' }: { state: string; label: string; variant?: string; pulse?: string; pulseKey?: string }) {
+function SecurityShieldFallback({ state, label, variant = 'core', pulse = '', pulseKey = '' }: { state: string; label: string; variant?: string; pulse?: string; pulseKey?: string }) {
   const id = useId().replace(/:/g, '');
   const armed = state.startsWith('armed_');
   return <svg key={`${state}:${pulse}:${pulseKey}`} className={`console-shield-art console-shield console-shield--${variant} ${pulse ? `console-shield-pulse console-shield-pulse--${pulse}` : ''}`} data-state={state} data-pulse-key={pulseKey} viewBox="0 0 240 256" role="img" aria-label={label}>
@@ -27,4 +28,8 @@ export function SecurityShield({ state, label, variant = 'core', pulse = '', pul
     </g> : variant === 'crystal' ? <g className="console-shield-crystal" fill="none" stroke="currentColor" strokeWidth="4" strokeLinejoin="round"><path d="m120 76 44 48-44 52-44-52z"/><path d="m120 76 0 100m-44-52h88"/>{armed ? <path d="m101 126 13 13 27-29" strokeWidth="5"/> : <circle cx="120" cy="124" r="8" fill="currentColor"/>}</g>
       : <g className="console-shield-argus" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"><path d="M76 124q44-50 88 0-44 50-88 0z"/><circle cx="120" cy="124" r="17" fill="currentColor" fillOpacity=".18"/><circle cx="120" cy="124" r="6" fill="currentColor"/>{armed && <path d="m103 124 12 12 25-27"/>}</g>}
   </svg>;
+}
+
+export function SecurityShield(props: EmblemProps) {
+  return <SecurityEmblem3D {...props} fallback={<SecurityShieldFallback {...props} />} />;
 }

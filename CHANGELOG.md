@@ -1,3 +1,11 @@
+## [2.6.3] - 2026-10-07
+
+- Reemplazar el emblema plano por tres emblemas interactivos en 3D con cristales facetados, reflejos y color según el modo.
+- Añadir inclinación por puntero, transición al cambiar de estado y ondas con sacudida visual para alertas de sensor y SOS.
+- Limitar el renderizado para ahorrar recursos, detenerlo cuando el panel no está visible y respetar movimiento reducido y rendimiento esencial; conservar una alternativa si WebGL no está disponible.
+- Corregir el manejo de listas de sensores vacías para que Casa no herede sensores de otros modos.
+- Evitar ejecutar dos veces el comando original al armar el sistema y usar el ID de la alarma seleccionada al validar sensores.
+
 ## [2.6.2] - 2026-10-07
 
 - Mejorar cabecera: nombre de hogar proporcionado, indicador de conexión Argus en línea/desconectado y ajuste de pantalla completa horizontal.

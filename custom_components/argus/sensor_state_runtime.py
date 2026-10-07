@@ -34,7 +34,7 @@ def open_blocking_sensors(panel, target) -> list[str]:
     """Return the canonical, de-duplicated blocker list for a mode."""
     mode_key = target.value.replace("armed_", "")
     config = panel._mode_config(mode_key) if hasattr(panel, "_mode_config") else {}
-    sensors = config.get("sensors") or panel._sensors_for_state(target)
+    sensors = config.get("sensors") if "sensors" in config else panel._sensors_for_state(target)
     bypassed = set(
         config.get("bypassed_sensors")
         or config.get("bypassedSensors")

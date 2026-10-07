@@ -89,14 +89,18 @@ def install_safety_runtime():
             or config.get("requireClosed") is False
         ):
             return "allow"
-        sensors = config.get("sensors") or self._sensors_for_state(
+        # An explicitly saved empty list means this mode has no sensors.
+        # Do not inherit another mode's/static sensors through truthiness.
+        if "sensors" in config and not config.get("sensors"):
+            return "allow"
+        sensors = config.get("sensors") if "sensors" in config else self._sensors_for_state(
             AlarmControlPanelState(f"armed_{mode_key}")
         )
         return "pending" if sensors else original_policy(self, mode_key)
 
     def safe_open(self, target):
         config = self._mode_config(target.value.replace("armed_", ""))
-        sensors = config.get("sensors") or self._sensors_for_state(target)
+        sensors = config.get("sensors") if "sensors" in config else self._sensors_for_state(target)
         bypassed = set(
             config.get("bypassed_sensors")
             or config.get("bypassedSensors")

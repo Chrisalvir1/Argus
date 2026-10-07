@@ -8846,7 +8846,7 @@ class ArgusPanel extends HTMLElement {
     }
 
     // FIX-3: leer modeCfg desde la ruta canónica __by_entity__
-    const _armEid = this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id;
+    const _armEid = e.entity_id || this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id;
     const modeCfg = (this._ui?.modes?.__by_entity__?.[_armEid]?.[action])
                  || (this._ui?.modes?.[action])
                  || {};

@@ -11,11 +11,13 @@
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "react-grid-layout": "^2.3.0",
-    "react-resizable": "4.0.2"
+    "react-resizable": "4.0.2",
+    "three": "^0.186.1"
   },
   "devDependencies": {
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.186.0",
     "@vitejs/plugin-react": "6.1.2",
     "source-map-js": "1.2.2",
     "typescript": "7.0.2",
