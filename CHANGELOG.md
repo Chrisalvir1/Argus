@@ -1,3 +1,9 @@
+## [2.6.5] - 2026-10-07
+
+- Restaurar el lienzo 3D de Núcleo de seguridad, Escudo de cristal y Emblema Argus; reservar su espacio correctamente en la consola.
+- Reducir los tirones al desplazarse: limitar la resolución de WebGL y pausar el renderizado durante el scroll.
+- Recuperar una bienvenida de perfil suave y dejar que el tablero termine de cargar después del vuelo del avatar.
+
 ## [2.6.4] - 2026-10-07
 
 - Corregir el armado por modo: las listas vacías de Casa y Noche son autoritativas y nunca heredan sensores de Ausente.

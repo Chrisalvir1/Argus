@@ -10139,13 +10139,6 @@ class ArgusPanel extends HTMLElement {
     // Remove login screens beneath
     this.shadowRoot.querySelectorAll('.argus-profile-overlay, .argus-pin-prompt').forEach(el => el.remove());
 
-    // Start loading dashboard in the background so it's ready when animation finishes
-    let dashboardPromise = Promise.resolve();
-    if (!this._dashboardLoading) {
-      this._dashboardLoading = true;
-      dashboardPromise = this._load().catch(e => console.error("Load error during animation:", e)).finally(() => { this._dashboardLoading = false; });
-    }
-
     const avatar = overlay.querySelector('#welcome-avatar-flying') as HTMLElement;
     const textGroup = overlay.querySelector('#welcome-text-anim') as HTMLElement;
     if (avatar && textGroup) {
@@ -10156,19 +10149,16 @@ class ArgusPanel extends HTMLElement {
 
       await new Promise(r => requestAnimationFrame(r));
       
-      avatar.style.transition = 'transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s ease';
+      avatar.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease';
       avatar.style.transform = 'scale(1)';
       avatar.style.opacity = '1';
       
-      textGroup.style.transition = 'transform 0.18s cubic-bezier(0.16, 1, 0.3, 1) 0.03s, opacity 0.15s ease 0.03s';
+      textGroup.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.06s, opacity 0.3s ease 0.06s';
       textGroup.style.transform = 'translateY(0)';
       textGroup.style.opacity = '1';
 
-      // Snappy confirmation glance while dashboard finishes preparing
-      await new Promise(r => setTimeout(r, 260));
-      // Dashboard initialization can wait on Home Assistant/WebSocket work. Keep
-      // the welcome transition bounded so its shrinking avatar cannot freeze above the UI.
-      await Promise.race([dashboardPromise, new Promise(resolve => setTimeout(resolve, 1600))]);
+      // Keep the flight free of dashboard mounting and WebGL shader compilation.
+      await new Promise(r => setTimeout(r, 600));
 
       textGroup.style.transition = 'opacity 0.12s ease';
       textGroup.style.opacity = '0';
@@ -10198,19 +10188,18 @@ class ArgusPanel extends HTMLElement {
       const moveY = destY - (rect.top + rect.height / 2);
       
       // Fast fluid glide to destination top-bar coordinates
-      avatar.style.transition = 'transform 0.24s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.16s ease 0.08s';
+      avatar.style.transition = 'transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.2s ease 0.5s';
       avatar.style.transform = `translate(${moveX}px, ${moveY}px) scale(${targetScale})`;
       
-      overlay.style.transition = 'background-color 0.22s ease';
+      overlay.style.transition = 'background-color 0.7s ease';
       overlay.style.backgroundColor = 'transparent';
       
-      await new Promise(r => setTimeout(r, 240));
+      await new Promise(r => setTimeout(r, 700));
       
       // Reveal real top-bar avatar on landing
       if (liveDestEl) {
         liveDestEl.style.opacity = '1';
-        liveDestEl.style.transform = 'scale(1.05)';
-        setTimeout(() => { if (liveDestEl) liveDestEl.style.transform = 'scale(1)'; }, 90);
+        liveDestEl.style.transform = 'scale(1)';
       }
     }
 
@@ -10228,6 +10217,11 @@ class ArgusPanel extends HTMLElement {
       }
       overlay.remove();
       this._nukeAllLoginOverlays();
+      if (!this._dashboardLoading) {
+        this._dashboardLoading = true;
+        void this._load().catch(e => console.error('Load error after profile animation:', e))
+          .finally(() => { this._dashboardLoading = false; });
+      }
     }
   }
 

@@ -223,7 +223,7 @@
 
 /* The canvas owns only the emblem; labels and alarm controls remain accessible DOM. */
  :host .entry.entry .security-console.security-console { position:relative !important; isolation:isolate !important; }
-:host .entry.entry .security-console.security-console .entry-icon { position:static !important; z-index:auto !important; }
+:host .entry.entry .security-console.security-console .entry-icon { position:static !important; z-index:auto !important; will-change:auto !important; transform:none !important; animation:none !important; min-height:260px !important; padding-top:210px !important; box-sizing:border-box !important; }
 :host .entry.entry .security-console.security-console .console-emblem-3d { position:absolute; inset:0; width:100%; height:100%; z-index:1; pointer-events:none; touch-action:pan-y; }
 :host .entry.entry .security-console.security-console .console-emblem-3d canvas { display:block; width:100%; height:100%; }
 :host .entry.entry .security-console.security-console .console-hud,

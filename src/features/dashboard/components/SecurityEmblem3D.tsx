@@ -18,7 +18,8 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
     let renderer: THREE.WebGLRenderer;
     try { renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'low-power' }); }
     catch { setFailed(true); return; }
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+    renderer.setPixelRatio(1);
+    renderer.transmissionResolutionScale = 0.5;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 0.9;
@@ -115,22 +116,24 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
     scene.add(new THREE.HemisphereLight(0xb9dfff, 0x080e20, .65));
     const key = new THREE.DirectionalLight(0xe9f4ff, 2); key.position.set(-3, 4, 5); scene.add(key);
     const rim = new THREE.PointLight(accent, 18, 12); rim.position.set(2, -1, 3); scene.add(rim);
-    let width = 0, height = 0, visible = true, lost = false, frame = 0, last = 0, previousState = '', previousPulse = '', transitionAt = 0, pulseAt = -10, deployAt = -10, previousPatrolling = false, interactionUntil = 0;
+    let width = 0, height = 0, visible = true, lost = false, frame = 0, last = 0, previousState = '', previousPulse = '', transitionAt = 0, pulseAt = -10, deployAt = -10, previousPatrolling = false, interactionUntil = 0, scrollingUntil = 0;
     const pointer = new THREE.Vector2();
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const host = el.getRootNode() instanceof ShadowRoot ? (el.getRootNode() as ShadowRoot).host : el.closest('argus-panel');
     const essential = () => motion.matches || !!host?.classList.contains('argus-perf-essential');
-    const resize = new ResizeObserver(entries => { const box = entries[0].contentRect; width = box.width; height = box.height; if (width > 0 && height > 0) { renderer.setSize(width, height, false); camera.aspect = width / height; camera.position.z = Math.max(9.2, 4.8 / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect)); camera.updateProjectionMatrix(); } }); resize.observe(el);
+    const resize = new ResizeObserver(entries => { const box = entries[0].contentRect; width = box.width; height = box.height; if (width > 0 && height > 0) { renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25, Math.sqrt(600000 / (width * height)))); renderer.setSize(width, height, false); camera.aspect = width / height; camera.position.z = Math.max(9.2, 4.8 / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect)); camera.updateProjectionMatrix(); } }); resize.observe(el);
     const observer = new IntersectionObserver(entries => { visible = entries[0].isIntersecting; }); observer.observe(el);
     const interactionSurface = el.closest('.security-console') || el;
     const move = (event: Event) => { if (!(event instanceof PointerEvent)) return; const box = el.getBoundingClientRect(); pointer.set((event.clientX-box.left)/box.width-.5, (event.clientY-box.top)/box.height-.5); interactionUntil = performance.now() + 2200; };
     const wake = () => { interactionUntil = performance.now() + 2200; };
     const leave = () => pointer.set(0,0);
+    const onScroll = () => { scrollingUntil = performance.now() + 180; };
+    window.addEventListener('scroll', onScroll, { capture: true, passive: true });
     const contextLost = (event: Event) => { event.preventDefault(); lost = true; setFailed(true); };
     interactionSurface.addEventListener('pointermove', move); interactionSurface.addEventListener('pointerdown', wake); interactionSurface.addEventListener('pointerleave', leave); renderer.domElement.addEventListener('webglcontextlost', contextLost);
     const animate = (now: number) => {
       frame = requestAnimationFrame(animate);
-      if (lost || !visible || document.hidden || width <= 0 || height <= 0 || now-last < 33) return;
+      if (lost || !visible || document.hidden || now < scrollingUntil || width <= 0 || height <= 0 || now-last < 33) return;
       const t = now / 1000, p = latest.current, reduced = essential();
       const changed = p.state !== previousState || `${p.pulse}:${p.pulseKey}` !== previousPulse;
       if (reduced && !changed && now-last < 1000) return;
@@ -216,6 +219,7 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
     }; frame = requestAnimationFrame(animate);
     return () => {
       cancelAnimationFrame(frame); resize.disconnect(); observer.disconnect();
+      window.removeEventListener('scroll', onScroll, true);
       interactionSurface.removeEventListener('pointermove', move); interactionSurface.removeEventListener('pointerdown', wake); interactionSurface.removeEventListener('pointerleave', leave); renderer.domElement.removeEventListener('webglcontextlost', contextLost);
       geometries.forEach(g => g.dispose()); scene.traverse(object => { if (object instanceof THREE.Line) (object.material as THREE.Material).dispose(); });
       glass.dispose(); dark.dispose(); light.dispose(); lensMaterial.dispose(); guardGlass.dispose(); guardGlow.dispose(); glintTexture.dispose(); glintMaterial.dispose(); glintSmallMaterial.dispose(); waveMaterials.forEach(material => material.dispose()); environment.dispose(); renderer.dispose(); renderer.domElement.remove();
