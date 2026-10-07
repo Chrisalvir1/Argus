@@ -1,0 +1,111 @@
+/* A restrained glass material shared by the security console controls. */
+:host .entry.entry .security-console.security-console {
+  --console-accent: #69d5b0;
+  --console-glass: linear-gradient(155deg, rgba(255,255,255,.14), rgba(255,255,255,.045) 65%), rgba(24,32,44,.72);
+  --console-edge: rgba(255,255,255,.2);
+  --console-shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 6px 20px rgba(0,0,0,.15);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  color: #f4f6fa;
+  text-shadow: none !important;
+}
+:host .entry.entry .security-console.security-console[data-alarm-state="armed_home"] { --console-accent:#ffc47c; }
+:host .entry.entry .security-console.security-console[data-alarm-state="armed_away"] { --console-accent:#9abfff; }
+:host .entry.entry .security-console.security-console[data-alarm-state="armed_night"] { --console-accent:#c6b7ff; }
+:host .entry.entry .security-console.security-console[data-alarm-state="pending"],
+:host .entry.entry .security-console.security-console[data-alarm-state="arming"] { --console-accent:#ffd47c; }
+:host .entry.entry .security-console.security-console[data-alarm-state="triggered"] { --console-accent:#ff8e98; }
+:host .entry.entry .security-console.security-console .console-hud-loc { display:flex !important; align-items:center !important; gap:10px !important; font-weight:600 !important; font-size:17px !important; }
+:host .entry.entry .security-console.security-console .console-hud-loc svg { flex-shrink:0; opacity:.8; }
+:host .entry.entry .security-console.security-console .liquid-btn,
+:host .entry.entry .security-console.security-console .console-hud-right button,
+:host .entry.entry .security-console.security-console .argus-connection-pill {
+  background:var(--console-glass) !important;
+  border:1px solid var(--console-edge) !important;
+  box-shadow:var(--console-shadow) !important;
+  backdrop-filter:blur(16px) saturate(125%) !important;
+  -webkit-backdrop-filter:blur(16px) saturate(125%) !important;
+  text-shadow:none !important;
+  transition:background-color 220ms ease, border-color 220ms ease, color 220ms ease, box-shadow 220ms ease, transform 160ms cubic-bezier(.2,.8,.2,1) !important;
+}
+:host .entry.entry .security-console.security-console .liquid-btn { color:#eef2f8 !important; padding:12px 8px !important; }
+:host .entry.entry .security-console.security-console .liquid-btn span:last-child { font-size:13px !important; font-weight:600 !important; letter-spacing:0 !important; text-shadow:none !important; }
+:host .entry.entry .security-console.security-console .liquid-btn .mode-btn-icon { box-shadow:none !important; border:0 !important; background:rgba(255,255,255,.07) !important; }
+:host .entry.entry .security-console.security-console .liquid-btn.active {
+  color:var(--console-accent) !important;
+  border-color:var(--console-accent) !important;
+  background:linear-gradient(155deg, rgba(255,255,255,.12), transparent), color-mix(in srgb, var(--console-accent) 14%, #18202c) !important;
+  box-shadow:inset 0 0 0 1px var(--console-accent), var(--console-shadow) !important;
+}
+@media (hover:hover) {
+  :host .entry.entry .security-console.security-console button:not(:disabled):hover { transform:translateY(-1px) !important; border-color:rgba(255,255,255,.42) !important; }
+}
+:host .entry.entry .security-console.security-console button:not(:disabled):active { transform:scale(.98) !important; }
+:host .entry.entry .security-console.security-console .console-system-badge {
+  color:var(--console-accent) !important;
+  background:rgba(24,32,44,.85) !important;
+  border:1px solid color-mix(in srgb, var(--console-accent) 45%, transparent) !important;
+  font-weight:600 !important; letter-spacing:.01em !important; font-size:13px !important;
+  text-shadow:none !important; animation:none !important;
+  transition:color 220ms ease, border-color 220ms ease !important;
+}
+:host .entry.entry .security-console.security-console .console-shield-art { animation:console-state-enter 240ms cubic-bezier(.2,.8,.2,1) both; }
+@keyframes console-state-enter { from { opacity:.45; transform:translateY(3px) scale(.98); } to { opacity:1; transform:none; } }
+:host .entry.entry .security-console.security-console .console-sensor {
+  background:rgba(24,32,44,.8) !important; border-color:rgba(255,255,255,.12) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.045) !important;
+  flex-shrink:0 !important; transition:border-color 200ms ease, background-color 200ms ease !important;
+  text-shadow:none !important;
+}
+:host .entry.entry .security-console.security-console .console-sensor.open { border-color:rgba(255,142,152,.65) !important; background:rgba(75,31,42,.8) !important; }
+:host .entry.entry .security-console.security-console .console-sensor.unavailable { border-style:dashed !important; }
+:host .entry.entry .security-console.security-console .console-sensor-icon { animation:none !important; filter:none !important; }
+:host .entry.entry .security-console.security-console .console-sensor-name { font-weight:500 !important; font-size:13px !important; }
+:host .entry.entry .security-console.security-console .console-sensor-state { font-weight:600 !important; text-shadow:none !important; }
+:host .entry.entry .security-console.security-console .console-battery-badge,
+:host .entry.entry .security-console.security-console .console-delay-badge { backdrop-filter:none !important; -webkit-backdrop-filter:none !important; text-shadow:none !important; box-shadow:none !important; }
+:host .entry.entry .security-console.security-console .argus-sta-wrap { box-shadow:none !important; border-color:rgba(255,142,152,.5) !important; }
+:host .entry.entry .security-console.security-console .argus-sta-wrap * { text-shadow:none !important; }
+:host .entry.entry .security-console.security-console .console-sensor:focus-visible { outline:3px solid #7dd3fc !important; outline-offset:2px !important; }
+/* Contrast mode uses an opaque material; selection remains visible without color. */
+:host(.argus-contrast-high) .entry.entry .security-console.security-console { --console-glass:#000; --console-edge:#fff; --console-accent:#fff; --console-shadow:none; color:#fff !important; }
+:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-sensor,
+:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-system-badge,
+:host(.argus-contrast-high) .entry.entry .security-console.security-console .argus-sta-wrap { background:#000 !important; border:2px solid #fff !important; box-shadow:none !important; }
+:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn,
+:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-hud-right button,
+:host(.argus-contrast-high) .entry.entry .security-console.security-console .argus-connection-pill { backdrop-filter:none !important; -webkit-backdrop-filter:none !important; }
+:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn.active { background:#fff !important; color:#000 !important; border-color:#fff !important; box-shadow:none !important; }
+:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-sensor-name,
+:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-sensor-state { color:#fff !important; }
+@media (prefers-reduced-motion:reduce) {
+  :host .entry.entry .security-console.security-console *,
+  :host .entry.entry .security-console.security-console *::before,
+  :host .entry.entry .security-console.security-console *::after { animation:none !important; transition:none !important; }
+}
+:host(.argus-perf-essential) .entry.entry .security-console.security-console * { animation:none !important; transition:none !important; }
+/* Opening animations follow the HA device class, independently of its name. */
+:host .entry.entry .security-console.security-console .argus-opening-icon { width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; overflow:visible; }
+:host .entry.entry .security-console.security-console .argus-opening-frame { fill:none; }
+:host .entry.entry .security-console.security-console .argus-door-leaf { fill:color-mix(in srgb, currentColor 15%, transparent); transform-origin:13px 26px; transition:transform 500ms cubic-bezier(.2,.8,.2,1); }
+:host .entry.entry .security-console.security-console .argus-door-leaf circle { fill:currentColor; stroke:none; }
+:host .entry.entry .security-console.security-console .argus-opening-icon--door.is-open .argus-door-leaf { transform:skewY(-12deg) scaleX(.4); }
+:host .entry.entry .security-console.security-console .argus-garage-leaf { fill:color-mix(in srgb, currentColor 15%, transparent); transition:transform 500ms cubic-bezier(.2,.8,.2,1); }
+:host .entry.entry .security-console.security-console .argus-opening-icon--garage.is-open .argus-garage-leaf { transform:translateY(-19px); }
+:host .entry.entry .security-console.security-console .argus-opening-icon.is-bypassed { opacity:.6; }
+@media (prefers-reduced-motion:reduce) {
+  :host .entry.entry .security-console.security-console .argus-door-leaf,
+  :host .entry.entry .security-console.security-console .argus-garage-leaf { transition:none !important; }
+}
+:host(.argus-perf-essential) .entry.entry .security-console.security-console .argus-door-leaf,
+:host(.argus-perf-essential) .entry.entry .security-console.security-console .argus-garage-leaf { transition:none !important; }
+:host .entry.entry .security-console.security-console .argus-window-leaf { fill:color-mix(in srgb, currentColor 15%, transparent); transform-origin:9px 24px; transition:transform 500ms cubic-bezier(.2,.8,.2,1); }
+:host .entry.entry .security-console.security-console .argus-opening-icon--window.is-open .argus-window-leaf { transform:skewY(-12deg) scaleX(.4); }
+:host .entry.entry .security-console.security-console .argus-motion-waves { opacity:0; transition:opacity 220ms ease; }
+:host .entry.entry .security-console.security-console .argus-opening-icon--motion.is-open .argus-motion-waves { opacity:1; animation:console-motion-detected 600ms ease-out; }
+@keyframes console-motion-detected { from { opacity:.25; transform:translateX(-2px); } to { opacity:1; transform:none; } }
+@media (prefers-reduced-motion:reduce) {
+  :host .entry.entry .security-console.security-console .argus-window-leaf,
+  :host .entry.entry .security-console.security-console .argus-motion-waves { transition:none !important; animation:none !important; }
+}
+:host(.argus-perf-essential) .entry.entry .security-console.security-console .argus-window-leaf,
+:host(.argus-perf-essential) .entry.entry .security-console.security-console .argus-motion-waves { transition:none !important; animation:none !important; }

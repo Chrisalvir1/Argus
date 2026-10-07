@@ -1,7 +1,9 @@
+import glassStyles from './ConsoleGlass.css?inline';
+import balanceStyles from './ConsoleBalance.css?inline';
 import styles from "./SecurityConsole.css?inline";
 
 import React, { useEffect, useState } from 'react';
-import { SensorChip } from './SensorChip';
+import { SensorChip, getSensorVisual } from './SensorChip';
 
 interface SecurityConsoleProps {
   panel: any;
@@ -95,7 +97,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
     if (triggered) {
       eCfg = ['away', 'home', 'night']
         .map(m => modes[m])
-        .find(config => (config?.sensors || []).some((id: string) => ['on', 'open', 'unlocked', 'recording', 'active', 'motion'].includes(hass?.states?.[id]?.state)))
+        .find(config => (config?.sensors || []).some((id: string) => ['on', 'open', 'opening', 'unlocked', 'recording', 'active', 'motion'].includes(hass?.states?.[id]?.state)))
         || {};
     }
     
@@ -130,7 +132,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: styles }} />
+      <style dangerouslySetInnerHTML={{ __html: styles + balanceStyles + glassStyles }} />
       <div data-entry-index={idx} className={`entry ${isFullscreen ? 'ios-fullscreen' : ''} ${isWaiting ? 'argus-waiting' : ''}`} style={{ position: 'relative', width: '100%', height: '100%' }}>
         <div dangerouslySetInnerHTML={{ __html: bgHtml }} />
         {panel._kioskLocked && !isFullscreen && (
@@ -143,14 +145,15 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
           <button aria-label={t('fullscreen_title')} className="ghost entry-exit-fs" onClick={onToggleFullscreen} title={t('fullscreen_title') || 'Salir de pantalla completa'} style={{position:'fixed',top:'max(16px, env(safe-area-inset-top))',left:'max(16px, env(safe-area-inset-left))',zIndex:100000,padding:'10px 16px',fontSize:'20px',fontWeight:900,background:'rgba(0,0,0,.65)',backdropFilter:'blur(16px)',borderRadius:'14px',color:'white',border:'1px solid rgba(255,255,255,.25)',boxShadow:'0 8px 24px rgba(0,0,0,.5)',cursor:'pointer'}}>✕</button>
         )}
 
-        <div className="entry-content security-console">
+        <div className="entry-content security-console" data-alarm-state={isWaiting ? 'pending' : state}>
           <div className="console-hud">
-            <span className="console-hud-loc">🏡 {fullHudLoc}</span>
+            <span className="console-hud-loc"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-7h6v7"/></svg>{fullHudLoc}</span>
             <div className="argus-connection-pill" data-online={isOnline ? 'true' : 'false'}>
               <i className="argus-connection-dot"></i>
               <span className="argus-connection-label">{isOnline ? (t('connected') || 'CONECTADO') : (t('disconnected') || 'DESCONECTADO')}</span>
             </div>
             <div className="console-hud-right">
+              <button type="button" aria-label="Configurar modo nocturno" onClick={() => panel._openNightSettings?.()}>☾ Modo nocturno</button>
               {panel._isAdmin && (
                 <button
                   type="button"
@@ -168,12 +171,9 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
                     cursor: 'pointer',
                   }}
                 >
-                  🚶‍♂️ {t('walk_test_btn') || 'Walk Test'}
+                  {(t('walk_test_btn') || 'Prueba de sensores').replace(/🚶(?:‍♂️)?/gu, '').trim()}
                 </button>
               )}
-              <span className={`console-system-badge console-system-badge--${triggered ? 'triggered' : state}`}>
-                {getBadgeText()}
-              </span>
               {!isFullscreen && (
                 <button
                   aria-label={t('fullscreen_title')}
@@ -207,14 +207,17 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
           </div>
 
           <div className="entry-icon">
-            <div dangerouslySetInnerHTML={{ __html: getIconSvg() }} />
+            <div className="console-shield-art" key={isWaiting ? 'pending' : state} dangerouslySetInnerHTML={{ __html: getIconSvg() }} />
+              <span role="status" aria-live="polite" className={`console-system-badge console-system-badge--${triggered ? 'triggered' : state}`}>
+                {getBadgeText()}
+              </span>
             {isWaiting && <span className="argus-shield-status">{blockingSensors.length ? (t('waiting_sensors') || 'ESPERANDO SENSORES') : (t('arming') || 'ARMANDO…')}</span>}
           </div>
 
           <div className="liquid-stack">
-            <button disabled={actionsDisabled} className={`liquid-btn btn-home ${state==='armed_home'?'active':''}`} onClick={() => panel._handleAction(idx, 'home')} dangerouslySetInnerHTML={{ __html: panel._modeButtonIcon('home') + `<span>${t('mode_home') || 'CASA'}</span>` }} />
-            <button disabled={actionsDisabled} className={`liquid-btn btn-away ${state==='armed_away'?'active':''}`} onClick={() => panel._handleAction(idx, 'away')} dangerouslySetInnerHTML={{ __html: panel._modeButtonIcon('away') + `<span>${t('mode_away') || 'AUSENTE'}</span>` }} />
-            <button disabled={actionsDisabled} className={`liquid-btn btn-night ${state==='armed_night'?'active':''}`} onClick={() => panel._handleAction(idx, 'night')} dangerouslySetInnerHTML={{ __html: panel._modeButtonIcon('night') + `<span>${t('mode_night') || 'NOCHE'}</span>` }} />
+            <button type="button" aria-pressed={state === 'armed_home'} disabled={actionsDisabled} className={`liquid-btn btn-home ${state==='armed_home'?'active':''}`} onClick={() => panel._handleAction(idx, 'home')} dangerouslySetInnerHTML={{ __html: panel._modeButtonIcon('home') + `<span>${t('mode_home') || 'CASA'}</span>` }} />
+            <button type="button" aria-pressed={state === 'armed_away'} disabled={actionsDisabled} className={`liquid-btn btn-away ${state==='armed_away'?'active':''}`} onClick={() => panel._handleAction(idx, 'away')} dangerouslySetInnerHTML={{ __html: panel._modeButtonIcon('away') + `<span>${t('mode_away') || 'AUSENTE'}</span>` }} />
+            <button type="button" aria-pressed={state === 'armed_night'} disabled={actionsDisabled} className={`liquid-btn btn-night ${state==='armed_night'?'active':''}`} onClick={() => panel._handleAction(idx, 'night')} dangerouslySetInnerHTML={{ __html: panel._modeButtonIcon('night') + `<span>${t('mode_night') || 'NOCHE'}</span>` }} />
           </div>
 
           <div className={`console-sensors ${gridClass}`} data-count={sensorCount}>
@@ -241,7 +244,8 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
                   .replace(/\s+\(?dps\s*\d+\)?\s*$/i, '')
                   .replace(/\s+(?:puerta|door|window|ventana)\s*$/i, '')
                   .trim();
-                const isLockLike = /door|puerta|port[oó]n|gate|lock|cerradura|window|ventana/i.test(`${normalizedId} ${sName}`);
+                const visualType = getSensorVisual(normalizedId, sState?.attributes?.device_class);
+                const isLockLike = visualType === 'lock';
                 const isBlocking = isWaiting && blockingSensors.includes(normalizedId);
                 const sStateStr = String(sState?.state || '').toLowerCase();
                 let isUnavailable = !sState || ['unknown', 'unavailable', 'offline', 'disconnected', 'desconectado'].includes(sStateStr);
@@ -252,7 +256,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
 
                 // Tuya Local / Omni Tuya Local sensors may report "true"/"false", "1"/"0",
                 // "detected", "tamper", "vibration" instead of standard HA "on"/"off"
-                const intrusionStates = ['on', 'open', 'unlocked', 'recording', 'active', 'motion',
+                const intrusionStates = ['on', 'open', 'opening', 'unlocked', 'recording', 'active', 'motion',
                   'abierto', 'activa', 'true', '1', 'detected', 'tamper', 'vibration', 'triggered'];
                 const isOpen = !isUnavailable && (
                   typeof panel?.isSensorActive === 'function'
@@ -301,6 +305,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
                     statusLabelClosed={t('status_closed') || 'CERRADO'}
                     bypassedLabel={t('bypassed_sensor') || 'OMITIDO'}
                     isLockLike={isLockLike}
+                    visualType={visualType}
                   />
                 );
               })

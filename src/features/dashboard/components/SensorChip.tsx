@@ -1,5 +1,18 @@
 import React from 'react';
 
+export type SensorVisual = 'door' | 'garage' | 'window' | 'motion' | 'lock' | 'generic';
+
+// HA metadata is authoritative; names and friendly names do not participate.
+export function getSensorVisual(entityId: string, deviceClass?: string): SensorVisual {
+  if (entityId.startsWith('lock.')) return 'lock';
+  if (deviceClass === 'window') return 'window';
+  if (deviceClass === 'motion' || deviceClass === 'occupancy' || deviceClass === 'presence') return 'motion';
+  if (deviceClass === 'door') return 'door';
+  if (deviceClass === 'garage_door' || deviceClass === 'garage') return 'garage';
+  if (deviceClass === 'lock' || deviceClass === 'opening' || !deviceClass) return 'lock';
+  return 'generic';
+}
+
 interface SensorChipProps {
   id: string;
   name: string;
@@ -14,6 +27,7 @@ interface SensorChipProps {
   statusLabelClosed: string;
   bypassedLabel?: string;
   isLockLike?: boolean;
+  visualType?: SensorVisual;
   delay?: number;
 }
 
@@ -26,6 +40,34 @@ function PremiumLockIcon({ isOpen, isBypassed, label }: { isOpen: boolean; isByp
       <path className="argus-lock-keyline" d="M24 34v5" />
     </svg>
   );
+}
+
+function OpeningIcon({ type, isOpen, isBypassed, label }: { type: 'door' | 'garage'; isOpen: boolean; isBypassed?: boolean; label: string }) {
+  return <svg className={`argus-opening-icon argus-opening-icon--${type} ${isOpen ? 'is-open' : 'is-closed'} ${isBypassed ? 'is-bypassed' : ''}`} viewBox="0 0 48 48" role="img" aria-label={label}>
+    {type === 'door' ? <>
+      <path className="argus-opening-frame" d="M10 43V5h28v38M7 43h34" />
+      <g className="argus-door-leaf"><path d="M13 8h22v35H13z"/><circle cx="29" cy="26" r="1.5"/></g>
+    </> : <>
+      <path className="argus-opening-frame" d="M4 19 24 5l20 14v24H4z" />
+
+      <svg x="10" y="20" width="28" height="23" viewBox="0 0 28 23" overflow="hidden">
+        <g className="argus-garage-leaf"><path d="M1 1h26v21H1zM1 7h26M1 14h26"/></g>
+      </svg>
+    </>}
+  </svg>;
+}
+
+function WindowOrMotionIcon({ type, isActive, label }: { type: 'window' | 'motion'; isActive: boolean; label: string }) {
+  return <svg className={`argus-opening-icon argus-opening-icon--${type} ${isActive ? 'is-open' : 'is-closed'}`} viewBox="0 0 48 48" role="img" aria-label={label}>
+    {type === 'window' ? <>
+      <path className="argus-opening-frame" d="M6 7h36v34H6zM24 7v34M6 24h36" />
+      <g className="argus-window-leaf"><path d="M9 10h12v28H9zM9 24h12"/></g>
+    </> : <>
+      <circle cx="23" cy="10" r="4"/>
+      <path d="m19 20 6-5 6 8M24 16l-4 13-8 10M20 29l10 10M19 20l-8 5"/>
+      <g className="argus-motion-waves"><path d="M35 12q8 10 0 20M39 7q12 15 0 30"/></g>
+    </>}
+  </svg>;
 }
 
 export function LiquidGlassClockIcon({ isInstant, size = 13 }: { isInstant?: boolean; size?: number }) {
@@ -47,15 +89,16 @@ export function LiquidGlassClockIcon({ isInstant, size = 13 }: { isInstant?: boo
   );
 }
 
-export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, isUnavailable, unavailableLabel, battery, delay, iconHtml, statusLabelOpen, statusLabelClosed, bypassedLabel, isLockLike }: SensorChipProps) {
+export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, isUnavailable, unavailableLabel, battery, delay, iconHtml, statusLabelOpen, statusLabelClosed, bypassedLabel, isLockLike, visualType }: SensorChipProps) {
+  const visual = visualType || (isLockLike ? 'lock' : 'generic');
   let batHtml = null;
   if (battery !== null) {
     const isDead = battery === 0;
     const isLow = battery <= 10 && !isDead;
-    const batText = isDead ? '🔋 ❌' : `🔋 ${battery}%`;
+    const batText = isDead ? '0%' : `${battery}%`;
     if (isDead || isLow) {
       batHtml = (
-        <span className="console-battery-badge" style={{
+        <span className="console-battery-badge" title={isDead ? 'Batería agotada (0%)' : `Batería baja (${battery}%)`} style={{
           fontSize: '10px', fontWeight: 700, color: '#ff5252',
           background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(4px)', padding: '2px 6px',
           borderRadius: '10px', border: '1px solid rgba(255,82,82,0.3)', textShadow: '0 0 5px rgba(255,82,82,0.5)',
@@ -107,7 +150,7 @@ export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, isUnavail
     >
       <span
         className="console-sensor-icon"
-        aria-hidden={isLockLike ? undefined : 'true'}
+        aria-hidden={visual === 'generic' ? 'true' : undefined}
         style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: iconColor, animation: iconAnimation, flexShrink: 0 }}
       >
         {isUnavailable ? (
@@ -116,7 +159,11 @@ export function SensorChip({ id, name, isOpen, isBlocking, isBypassed, isUnavail
             <line x1="12" y1="8" x2="12" y2="12" />
             <line x1="12" y1="16" x2="12.01" y2="16" />
           </svg>
-        ) : isLockLike ? (
+        ) : visual === 'window' || visual === 'motion' ? (
+          <WindowOrMotionIcon type={visual} isActive={isOpen} label={fullLabel} />
+        ) : visual === 'door' || visual === 'garage' ? (
+          <OpeningIcon type={visual} isOpen={isOpen} isBypassed={isBypassed} label={fullLabel} />
+        ) : visual === 'lock' ? (
           <PremiumLockIcon isOpen={isOpen} isBypassed={isBypassed} label={fullLabel} />
         ) : (
           <span dangerouslySetInnerHTML={{ __html: iconHtml }} />

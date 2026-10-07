@@ -1,3 +1,4 @@
+import { applyNightMode } from '../features/night';
 import '../legacy/argus-panel';
 import '../legacy/argus-card';
 import{applyReactDashboardLayout}from'../features/dashboard';
@@ -36,4 +37,5 @@ import type{ArgusPanelConstructor}from'../core/panel';
   applyLegacyAfterTypedClients(C);
   applyReactDashboardLayout(C);
   applyReactSecurityConsole(C);
+  applyNightMode(C);
  }

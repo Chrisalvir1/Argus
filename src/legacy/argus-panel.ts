@@ -4629,6 +4629,8 @@ class ArgusPanel extends HTMLElement {
     }
   }
   disconnectedCallback() {
+    this._argusNightCleanup?.();
+    this._argusNightCleanup = null;
     if (this._connStatusHandler) {
       window.removeEventListener('connection-status', this._connStatusHandler);
       this._connStatusHandler = null;
