@@ -988,3 +988,32 @@
     transition: none !important;
   }
 }
+
+/* Keep the selected console reachable at short heights and with browser zoom. */
+.entry.ios-fullscreen {
+  height: 100vh !important;
+  height: 100dvh !important;
+  min-height: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+.entry.ios-fullscreen .security-console {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  padding-top: max(64px, env(safe-area-inset-top)) !important;
+  padding-bottom: max(20px, env(safe-area-inset-bottom)) !important;
+}
+@media (max-width: 480px), (max-height: 480px) {
+  .entry.ios-fullscreen .console-hud { flex-wrap: wrap !important; height: auto !important; }
+  .entry.ios-fullscreen .console-hud-right { flex-wrap: wrap !important; justify-content: center !important; }
+  .entry.ios-fullscreen .liquid-stack { flex-wrap: wrap !important; }
+  .entry.ios-fullscreen .console-sensors { max-height: none !important; overflow: visible !important; }
+}
+
+.entry.ios-fullscreen .liquid-btn {
+  min-width: 44px !important;
+  min-height: 44px !important;
+}

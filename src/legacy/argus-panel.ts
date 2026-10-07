@@ -4022,14 +4022,19 @@ class ArgusPanel extends HTMLElement {
 
   _startWalkTestPoll() {
     this._stopWalkTestPoll();
+    const generation = this._walkTestPollGeneration;
     this._walkTestTimer = setInterval(async () => {
+      if (this._walkTestPollInFlight || !this.isConnected) return;
+      this._walkTestPollInFlight = true;
       const modal = this.shadowRoot.getElementById('walk-test-modal');
       if (!modal?.classList.contains('open') && !this._walkTestSession?.active) {
         this._stopWalkTestPoll();
+        this._walkTestPollInFlight = false;
         return;
       }
       try {
         const status = await this._send('argus/get_walk_test_status');
+        if (!this.isConnected || generation !== this._walkTestPollGeneration) return;
         const prevTested = this._walkTestSession?.tested_count || 0;
         this._walkTestSession = status;
         if (status.tested_count > prevTested) {
@@ -4040,12 +4045,15 @@ class ArgusPanel extends HTMLElement {
           this._stopWalkTestPoll();
         }
       } catch (e) {
-        // WS error
+        console.warn('Argus walk test status unavailable', e);
+      } finally {
+        this._walkTestPollInFlight = false;
       }
     }, 2000);
   }
 
   _stopWalkTestPoll() {
+    this._walkTestPollGeneration = (this._walkTestPollGeneration || 0) + 1;
     if (this._walkTestTimer) {
       clearInterval(this._walkTestTimer);
       this._walkTestTimer = null;
@@ -4632,6 +4640,8 @@ class ArgusPanel extends HTMLElement {
     this._argusReactRoot?.unmount();
     this._argusReactRoot = null;
     if (this._clockInterval) clearInterval(this._clockInterval);
+    this._stopWalkTestPoll?.();
+    if (this._loadRetryTimeout) { clearTimeout(this._loadRetryTimeout); this._loadRetryTimeout = null; }
     if (this._initRetryTimer) clearTimeout(this._initRetryTimer);
     if (this._socket) {
       this._socket.close();
@@ -5787,45 +5797,6 @@ class ArgusPanel extends HTMLElement {
     const byId = allStates.find((s: any) => String(s?.entity_id || '').toLowerCase() === lower);
     if (byId) return byId;
 
-    // Try variations with/without sensor_ prefix, prepositions, or domain
-    const objectId = lower.includes('.') ? lower.split('.')[1] : lower;
-    const domain = lower.includes('.') ? lower.split('.')[0] : 'binary_sensor';
-    const altIds = [
-      `${domain}.${objectId.replace(/^sensor_/, '')}`,
-      `${domain}.sensor_${objectId}`,
-      `${domain}.${objectId.replace(/_de_|_del_|_la_|_el_/g, '_')}`,
-      `${domain}.${objectId.replace(/^sensor_/, '').replace(/_de_|_del_|_la_|_el_/g, '_')}`,
-      `binary_sensor.${objectId}`,
-      `binary_sensor.${objectId.replace(/^sensor_/, '')}`,
-      `sensor.${objectId}`,
-      `sensor.${objectId.replace(/^sensor_/, '')}`,
-    ];
-    for (const alt of altIds) {
-      if (this._hass.states[alt]) return this._hass.states[alt];
-      const match = allStates.find((s: any) => String(s?.entity_id || '').toLowerCase() === alt);
-      if (match) return match;
-    }
-
-    // Match by friendly_name exact lowercase or normalized
-    const byFriendlyName = allStates.find((s: any) => {
-      const fn = String(s?.attributes?.friendly_name || '').toLowerCase().trim();
-      return fn === lower || fn === objectId.replace(/_/g, ' ') || fn === objectId.replace(/^sensor_/, '').replace(/_/g, ' ');
-    });
-    if (byFriendlyName) return byFriendlyName;
-
-    // Token matching: find binary_sensor / sensor containing distinct tokens (e.g. "bodega")
-    const cleanTokens = lower.replace(/^(binary_)?sensor\./, '').split(/[_\s-]+/).filter(t => t.length > 2 && !['sensor', 'puerta', 'door'].includes(t));
-    if (cleanTokens.length > 0) {
-      const byToken = allStates.find((s: any) => {
-        const eId = String(s?.entity_id || '').toLowerCase();
-        const fn = String(s?.attributes?.friendly_name || '').toLowerCase();
-        const isSensorDomain = eId.startsWith('binary_sensor.') || eId.startsWith('sensor.');
-        if (!isSensorDomain) return false;
-        return cleanTokens.every(token => eId.includes(token) || fn.includes(token));
-      });
-      if (byToken) return byToken;
-    }
-
     return null;
   }
 
@@ -6140,7 +6111,7 @@ class ArgusPanel extends HTMLElement {
 
     const target = targetEl || this.shadowRoot.querySelector('.entry');
     const fsBtn = target?.querySelector('.entry-fs') || target?.querySelector('[data-fullscreen]');
-    const idx = parseInt(fsBtn?.dataset?.fullscreen ?? 0);
+    const idx = parseInt(target?.dataset?.entryIndex ?? fsBtn?.dataset?.fullscreen ?? '0');
     const validIdx = (isNaN(idx) || idx < 0) ? 0 : idx;
     const entry = this._dashboard?.entries?.[validIdx] || this._dashboard?.entries?.[0];
 
@@ -6156,7 +6127,8 @@ class ArgusPanel extends HTMLElement {
 
     const requestFS = this.requestFullscreen || this.webkitRequestFullscreen || target?.requestFullscreen || target?.webkitRequestFullscreen;
     if (requestFS) {
-      requestFS.call(this).catch(() => {});
+      const owner = (this.requestFullscreen || this.webkitRequestFullscreen) ? this : target;
+      try { Promise.resolve(requestFS.call(owner)).catch(() => {}); } catch (_) {}
     }
   }
 
@@ -8846,7 +8818,7 @@ class ArgusPanel extends HTMLElement {
 
           // FIX v0.9.32 — Bug 1: al desarmar, forzar re-render inmediato para
           // quitar la clase siren-active/triggered-sensor de todas las píldoras.
-          setTimeout(() => { this._renderModeView(); this._renderEntries(); this.dispatchEvent(new CustomEvent("argus-state-update")); this._load(); }, 300);
+          setTimeout(() => { this._renderModeView(); this._renderEntries(); this.dispatchEvent(new CustomEvent("argus-state-update")); }, 300);
           return true;
         } catch (err) {
           const pinErr = this.shadowRoot.getElementById('pin-error');
@@ -8905,7 +8877,7 @@ class ArgusPanel extends HTMLElement {
           entry_id: e.entry_id,
           ...(pin ? { code: pin } : {})
         });
-        setTimeout(() => this._load(), 800);
+        setTimeout(() => { this._renderModeView(); this._renderEntries(); this.dispatchEvent(new CustomEvent('argus-state-update')); }, 800);
         return true;
       } catch (err) {
         const msg = err?.message || (typeof err === 'string' ? err : JSON.stringify(err));

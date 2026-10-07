@@ -29,8 +29,8 @@ function Host({ widget, node, editing, size, onSize, onHide, onReset }: HostProp
   }, [node, editing]);
 
   const getT = (k: string, f: string) => {
-    if (typeof (window as any)._argusT === 'function') {
-      const v = (window as any)._argusT(k);
+    if (widget.t) {
+      const v = widget.t(k);
       if (v && v !== k) return v;
     }
     return f;
@@ -93,7 +93,8 @@ export function ArgusDashboard({
   onEditing: (v: boolean) => void;
   registerEditor: (setter: EditorSetter) => void;
 }) {
-  const defaults = useMemo(() => Object.fromEntries(widgets.map(w => [w.id, w.visible])), [widgets]);
+  const defaultsKey = widgets.map(w => `${w.id}:${w.visible}`).join('|');
+  const defaults = useMemo(() => Object.fromEntries(widgets.map(w => [w.id, w.visible])), [defaultsKey]);
   const [layouts, setLayouts] = useState<Layouts>(defaultLayouts);
   const [visibility, setVisibility] = useState<Record<string, boolean>>(defaults);
   const [editing, setEditing] = useState(false);
@@ -109,8 +110,8 @@ export function ArgusDashboard({
   const containerRef = useRef<HTMLElement>(null);
 
   const getT = (k: string, f: string) => {
-    if (typeof (window as any)._argusT === 'function') {
-      const v = (window as any)._argusT(k);
+    if (widgets[0]?.t) {
+      const v = widgets[0].t(k);
       if (v && v !== k) return v;
     }
     return f;

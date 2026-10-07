@@ -239,7 +239,12 @@ export function applyStableInstancesRender(C: ArgusPanelConstructor | undefined)
           const languageChanged = (oldHass as any).language !== (hass as any).language;
           if (languageChanged && !this._manualLang) this._refreshLocalizedUi?.();
           
-          const alarmChanged = this._dashboard.entries.some((e: any) => e.entity_id && oldHass.states[e.entity_id]?.state !== hass.states[e.entity_id]?.state);
+          const alarmChanged = this._dashboard.entries.some((e: any) => {
+            if (!e.entity_id) return false;
+            const before = oldHass.states[e.entity_id];
+            const after = hass.states[e.entity_id];
+            return before?.state !== after?.state || JSON.stringify(before?.attributes || {}) !== JSON.stringify(after?.attributes || {});
+          });
           const sensorChanged = [...configured].some(id => 
             oldHass.states[id]?.state !== hass.states[id]?.state ||
             oldHass.states[id]?.attributes?.battery_level !== hass.states[id]?.attributes?.battery_level ||
@@ -255,11 +260,12 @@ export function applyStableInstancesRender(C: ArgusPanelConstructor | undefined)
             oldHass.states[weatherEnt]?.attributes?.temperature !== hass.states[weatherEnt]?.attributes?.temperature
           );
           
-          const relevant = alarmChanged || sensorChanged || tempChanged || weatherChanged || languageChanged;
+          const connectionChanged = (oldHass as any).connected !== (hass as any).connected;
+          const relevant = alarmChanged || sensorChanged || tempChanged || weatherChanged || languageChanged || connectionChanged;
           this._hass = hass;
           this._updateTheme?.();
           if (relevant) {
-            this._renderEntries?.(languageChanged);
+            this._renderEntries?.(languageChanged || connectionChanged);
             this._renderActivityLog?.();
           } else {
             updateClocks(this);

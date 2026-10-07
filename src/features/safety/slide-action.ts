@@ -661,7 +661,8 @@ export function applyToAllEntries(panel) {
       const eid = panel._dashboard?.entries?.[idx]?.entity_id;
       if (eid) entry.dataset.entityId = eid;
     }
-    mountOnEntry(panel, entry, idx);
+    const entryIdx = Number(entry.dataset.entryIndex ?? idx);
+    mountOnEntry(panel, entry, entryIdx);
     entry._staRefresh?.();
   });
 }

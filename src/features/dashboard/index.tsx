@@ -16,6 +16,7 @@ type Panel=HTMLElement&{
  shadowRoot:ShadowRoot;_currentProfile?:{id?:string;role?:string};_hass?:{user?:{id?:string};states?:Record<string,{state:string;attributes?:Record<string,unknown>}>};
  _dashboard?:{entry_id?:string;entries?:Array<{entry_id?:string}>};_ui?:{dashboard?:Record<string,unknown>};
  _argusDashboardStorage?:PanelDashboardStorage;_widgetEditing?:boolean;_argusReactRoot?:Root;_argusReactSetEditing?:(v:boolean)=>void;
+ _argusWidgetNodes?:Map<string,HTMLElement>;
  _send?:(type:string,payload:Record<string,unknown>)=>Promise<any>;
  _t?:(key:string)=>string;
 };
@@ -66,10 +67,12 @@ function renderDashboard(panel: Panel) {
 
   const activeWidgets = buildWidgetDefs(panel);
   const storage = panel._argusDashboardStorage ||= new PanelDashboardStorage(panel);
-  const nodes = new Map<string, HTMLElement>();
+  const nodes = panel._argusWidgetNodes ||= new Map<string, HTMLElement>();
   activeWidgets.forEach(w => {
-    const node = w.nativeId ? panel.shadowRoot.getElementById(w.nativeId) : null;
-    if (node) nodes.set(w.id, node);
+    if (!nodes.has(w.id)) {
+      const node = w.nativeId ? panel.shadowRoot.getElementById(w.nativeId) : null;
+      if (node) nodes.set(w.id, node);
+    }
   });
 
   if (panel._argusReactRoot) {

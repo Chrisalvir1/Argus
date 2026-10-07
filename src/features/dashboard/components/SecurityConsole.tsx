@@ -8,9 +8,10 @@ interface SecurityConsoleProps {
   isFullscreen: boolean;
   onToggleFullscreen: () => void;
   onUnlockKiosk: () => void;
+  entryIndex?: number;
 }
 
-export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnlockKiosk }: SecurityConsoleProps) {
+export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnlockKiosk, entryIndex }: SecurityConsoleProps) {
   const [tick, setTick] = useState(0);
 
   useEffect(() => {
@@ -30,11 +31,16 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   
   const configuredEntity = panel._cardConfig?.entity || panel._config?.entity;
   const configuredEntry = panel._cardConfig?.entry_id || panel._config?.entry_id || dashboard?.entry_id;
-  let idx = Math.max(0, dashboard?.entries?.findIndex((value: any) =>
+  const foundIdx = dashboard?.entries?.findIndex((value: any) =>
     configuredEntity ? value.entity_id === configuredEntity : value.entry_id === configuredEntry
-  ) ?? 0);
+  ) ?? -1;
+  if (entryIndex === undefined && dashboard?.entries?.length && (configuredEntity || configuredEntry) && foundIdx < 0) {
+    return <div role="status">{panel._t?.('unavailable') || 'No disponible'}: {configuredEntity || configuredEntry}</div>;
+  }
+  const idx = entryIndex ?? (foundIdx >= 0 ? foundIdx : 0);
   let entry = dashboard?.entries?.[idx];
   if (!entry) {
+    if (dashboard?.entries?.length && foundIdx < 0) return null;
     const entityId = panel._cardConfig?.entity || panel._config?.entity || 'alarm_control_panel.argus';
     if (!entityId || !hass?.states?.[entityId]) return null;
     entry = { entity_id: entityId };
@@ -125,7 +131,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: styles }} />
-      <div className={`entry ${isFullscreen ? 'ios-fullscreen' : ''} ${isWaiting ? 'argus-waiting' : ''}`} style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <div data-entry-index={idx} className={`entry ${isFullscreen ? 'ios-fullscreen' : ''} ${isWaiting ? 'argus-waiting' : ''}`} style={{ position: 'relative', width: '100%', height: '100%' }}>
         <div dangerouslySetInnerHTML={{ __html: bgHtml }} />
         {panel._kioskLocked && !isFullscreen && (
           <button className="btn-unlock-kiosk" onClick={onUnlockKiosk} style={{position:'absolute',top:'16px',right:'16px',zIndex:99,padding:'8px 14px',background:'rgba(220,38,38,0.85)',color:'white',border:'none',borderRadius:'10px',fontWeight:600,fontSize:'13px',cursor:'pointer',backdropFilter:'blur(8px)',boxShadow:'0 4px 12px rgba(0,0,0,0.4)'}}>
@@ -228,41 +234,6 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
                 if (!sState && liveHass?.states) {
                   sState = liveHass.states[normalizedId] || liveHass.states[normalizedId.toLowerCase()];
                 }
-                // 3. Resilient scan: entity_id match, friendly_name match, and keyword token match
-                if (!sState && liveHass?.states) {
-                  const allStates = Object.values(liveHass.states) as any[];
-                  const lower = normalizedId.toLowerCase();
-                  const objectId = lower.includes('.') ? lower.split('.')[1] : lower;
-                  const domain = lower.includes('.') ? lower.split('.')[0] : 'binary_sensor';
-                  const altIds = [
-                    `${domain}.${objectId.replace(/^sensor_/, '')}`,
-                    `${domain}.sensor_${objectId}`,
-                    `${domain}.${objectId.replace(/_de_|_del_|_la_|_el_/g, '_')}`,
-                    `${domain}.${objectId.replace(/^sensor_/, '').replace(/_de_|_del_|_la_|_el_/g, '_')}`,
-                    `binary_sensor.${objectId}`,
-                    `sensor.${objectId}`,
-                  ];
-                  sState = allStates.find((st: any) => {
-                    const eId = String(st?.entity_id || '').toLowerCase();
-                    const fn = String(st?.attributes?.friendly_name || '').toLowerCase().trim();
-                    if (eId === lower || fn === lower) return true;
-                    if (altIds.includes(eId)) return true;
-                    return false;
-                  });
-                  if (!sState) {
-                    // Token fallback (e.g. "bodega")
-                    const cleanTokens = lower.replace(/^(binary_)?sensor\./, '').split(/[_\s-]+/).filter(t => t.length > 2 && !['sensor', 'puerta', 'door'].includes(t));
-                    if (cleanTokens.length > 0) {
-                      sState = allStates.find((st: any) => {
-                        const eId = String(st?.entity_id || '').toLowerCase();
-                        const fn = String(st?.attributes?.friendly_name || '').toLowerCase();
-                        const isSensorDomain = eId.startsWith('binary_sensor.') || eId.startsWith('sensor.');
-                        if (!isSensorDomain) return false;
-                        return cleanTokens.every(t => eId.includes(t) || fn.includes(t));
-                      });
-                    }
-                  }
-                }
                 const rawName = String(sensor.name || sState?.attributes?.friendly_name || normalizedId).trim();
                 // Keep the configured sensor name, removing only generated type
                 // suffixes that Argus appended to the display label.
@@ -273,15 +244,11 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
                 const isLockLike = /door|puerta|port[oó]n|gate|lock|cerradura|window|ventana/i.test(`${normalizedId} ${sName}`);
                 const isBlocking = isWaiting && blockingSensors.includes(normalizedId);
                 const sStateStr = String(sState?.state || '').toLowerCase();
-                let isUnavailable = !sState || ['unknown', 'unavailable', 'desconectado'].includes(sStateStr);
+                let isUnavailable = !sState || ['unknown', 'unavailable', 'offline', 'disconnected', 'desconectado'].includes(sStateStr);
                 
                 // If marked unavailable by Tuya Local due to sleep mode, check contact attributes
-                if (isUnavailable && sState?.attributes) {
-                  const attrContact = sState.attributes.contact ?? sState.attributes.door ?? sState.attributes.opening ?? sState.attributes.last_state;
-                  if (attrContact !== undefined && attrContact !== null && !['unknown', 'unavailable', 'desconectado'].includes(String(attrContact).toLowerCase())) {
-                    isUnavailable = false;
-                  }
-                }
+                const availability = sState?.attributes;
+                if (availability && (availability.available === false || availability.online === false || availability.connected === false || availability.is_online === false)) isUnavailable = true;
 
                 // Tuya Local / Omni Tuya Local sensors may report "true"/"false", "1"/"0",
                 // "detected", "tamper", "vibration" instead of standard HA "on"/"off"

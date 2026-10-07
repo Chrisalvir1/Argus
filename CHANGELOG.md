@@ -1,3 +1,21 @@
+## [2.5.8] - 2026-10-07
+
+### Responsive Console, Accurate State and Dependency Security
+- Refresh the security console when alarm attributes or Home Assistant connectivity change, so blocking sensors and connection status do not remain stale.
+- Render every configured alarm instance in the full panel and honor explicit instance selection; remove fuzzy sensor matching that could show a similarly named sensor.
+- Preserve hidden dashboard widget nodes so they can be restored, stabilize layout hydration, and scope dashboard translations to the owning panel.
+- Avoid full dashboard reloads after arm/disarm actions and prevent overlapping Walk Test polls; cancel outstanding panel timers when disconnected.
+- Improve fullscreen sizing with dynamic viewport height, safe-area spacing, vertical scrolling, compact wrapping and 44px touch targets. Route fullscreen actions to the selected alarm.
+- Update nanoid, React Vite plugin, Vite, react-grid-layout and source-map-js. The source-map-js update resolves the reported high-severity advisory.
+
+### Pantalla adaptable, estados precisos y seguridad de dependencias
+- Actualizar la consola cuando cambian atributos de alarma o la conexión de Home Assistant para evitar sensores bloqueantes y conexión desactualizados.
+- Mostrar todas las alarmas configuradas en el panel completo, respetar la instancia seleccionada y retirar la búsqueda aproximada de sensores.
+- Conservar los nodos de widgets ocultos para restaurarlos, estabilizar la carga del diseño y aislar las traducciones por panel.
+- Evitar recargar todo el panel al armar/desarmar, impedir consultas Walk Test simultáneas y limpiar temporizadores al desconectar.
+- Adaptar pantalla completa al viewport dinámico, áreas seguras y pantallas pequeñas; permitir desplazamiento y botones táctiles de 44px.
+- Actualizar dependencias de frontend y corregir la alerta alta de source-map-js.
+
 ## [2.5.7] - 2026-10-02
 
 ### Unobstructed Fullscreen & Symmetrical Sensor Grid

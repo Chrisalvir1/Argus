@@ -83,33 +83,31 @@ function SecurityConsoleRoot({ panel }: { panel: any }) {
     return () => clearTimeout(timer);
   }, [tick, isFullscreen, panel]);
 
+  const entries = panel._dashboard?.entries || [];
+  const cardMode = panel.hasAttribute?.('compact') || panel.classList?.contains('argus-compact') || Boolean(panel._cardConfig?.compact);
+  const explicitlySelected = panel._cardConfig?.entity || panel._cardConfig?.entry_id || panel._config?.entity || panel._config?.entry_id;
+  const renderAllEntries = !cardMode && !explicitlySelected && entries.length > 1;
+  const indexes: Array<number | undefined> = isFullscreen && panel._fullscreenIdx >= 0 ? [panel._fullscreenIdx] : renderAllEntries ? entries.map((_: unknown, index: number) => index) : [undefined];
+
   return (
     <div ref={rootRef} style={{ width: '100%', height: '100%' }}>
-      <SecurityConsole 
-        panel={panel} 
+      {indexes.map(index => <SecurityConsole
+        key={index ?? 'selected'}
+        panel={panel}
+        entryIndex={index}
         isFullscreen={isFullscreen}
         onToggleFullscreen={() => {
           if (isFullscreen) {
-            if (typeof panel._exitFullscreenView === 'function') {
-              panel._exitFullscreenView();
-            } else {
-              panel.classList.remove('fullscreen-active');
-              document.body.style.overflow = '';
-              setIsFullscreen(false);
-            }
+            if (typeof panel._exitFullscreenView === 'function') panel._exitFullscreenView();
+            else { panel.classList.remove('fullscreen-active'); document.body.style.overflow = ''; setIsFullscreen(false); }
           } else {
-            const entryEl = panel.shadowRoot?.querySelector('.entry');
-            if (typeof panel._toggleFullscreen === 'function') {
-              panel._toggleFullscreen(entryEl);
-            } else {
-              panel.classList.add('fullscreen-active');
-              document.body.style.overflow = 'hidden';
-              setIsFullscreen(true);
-            }
+            const entryEl = panel.shadowRoot?.querySelector(`.entry[data-entry-index="${index ?? 0}"]`);
+            if (typeof panel._toggleFullscreen === 'function') panel._toggleFullscreen(entryEl);
+            else { panel.classList.add('fullscreen-active'); document.body.style.overflow = 'hidden'; setIsFullscreen(true); }
           }
         }}
         onUnlockKiosk={() => panel._requestKioskUnlock()}
-      />
+      />)}
     </div>
   );
 }
