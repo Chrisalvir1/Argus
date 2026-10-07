@@ -222,7 +222,13 @@
 :host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-pulse--sensor,:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-pulse--sos,:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-alert-rings * { animation:none !important; }
 
 /* The canvas owns only the emblem; labels and alarm controls remain accessible DOM. */
-:host .entry.entry .security-console.security-console .console-emblem-3d { width:clamp(150px,19vw,280px); height:clamp(172px,22vw,318px); max-width:100%; touch-action:pan-y; }
+ :host .entry.entry .security-console.security-console { position:relative !important; isolation:isolate !important; }
+:host .entry.entry .security-console.security-console .entry-icon { position:static !important; z-index:auto !important; }
+:host .entry.entry .security-console.security-console .console-emblem-3d { position:absolute; inset:0; width:100%; height:100%; z-index:1; pointer-events:none; touch-action:pan-y; }
 :host .entry.entry .security-console.security-console .console-emblem-3d canvas { display:block; width:100%; height:100%; }
-@media (max-height:540px) and (orientation:landscape) { :host .entry.entry .security-console.security-console .console-emblem-3d { width:140px; height:155px; } }
-:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-emblem-3d { background:#080e18; border-radius:20px; }
+:host .entry.entry .security-console.security-console .console-hud,
+:host .entry.entry .security-console.security-console .liquid-stack,
+:host .entry.entry .security-console.security-console .console-sensors { position:relative; z-index:2; }
+:host .entry.entry .security-console.security-console .console-system-badge,
+:host .entry.entry .security-console.security-console .argus-shield-status { position:relative; z-index:2; }
+:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-emblem-3d { background:transparent; }

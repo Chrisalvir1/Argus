@@ -1,6 +1,7 @@
 """Dynamic TTS and event payloads for Argus arming and alarm events."""
 from __future__ import annotations
 import logging
+import asyncio
 from homeassistant.components import persistent_notification
 from homeassistant.helpers import device_registry as dr, entity_registry as er
 from .const import *
@@ -8,6 +9,7 @@ from .storage import async_load_ui_data
 from .i18n import translate, _TRANSLATIONS
 
 _LOGGER = logging.getLogger(__name__)
+_PLAYER_LOCKS: dict[str, asyncio.Lock] = {}
 
 def _detect_tts_language(hass, tts_entity_id: str) -> str | None:
     """Infer the language directly from the configured TTS entity or its metadata."""
@@ -130,16 +132,33 @@ async def _async_speak(hass, options, message, lang):
       )
       return
   for player in dict.fromkeys(players):
-      try:
-          await hass.services.async_call("tts", "speak", {"entity_id": tts, "media_player_entity_id": player, "message": message, "cache": True}, blocking=False)
-      except Exception:
-          _LOGGER.exception("Argus could not announce on %s", player)
-          persistent_notification.async_create(
-              hass,
-              translate(lang, "tts_error_play_body", player=player),
-              title=translate(lang, "tts_error_play_title"),
-              notification_id=f"argus_voice_error_{player.replace('.', '_')}"
-          )
+      async def deliver(target=player, speak_tts=tts, speak_message=message, speak_lang=lang):
+          try:
+              lock = _PLAYER_LOCKS.setdefault(target, asyncio.Lock())
+              async with lock:
+                  await asyncio.wait_for(
+                      hass.services.async_call(
+                          "tts", "speak",
+                          {"entity_id": speak_tts, "media_player_entity_id": target, "message": speak_message, "cache": True},
+                          blocking=True,
+                      ),
+                      timeout=3.0,
+                  )
+          except asyncio.TimeoutError:
+              _LOGGER.warning("Argus voice announcement timed out for %s", target)
+          except Exception as err:  # noqa: BLE001 — voice must not interrupt alarm state transitions.
+              _LOGGER.warning("Argus could not announce on %s: %s", target, err)
+              persistent_notification.async_create(
+                  hass,
+                  translate(speak_lang, "tts_error_play_body", player=target),
+                  title=translate(speak_lang, "tts_error_play_title"),
+                  notification_id=f"argus_voice_error_{target.replace('.', '_')}"
+              )
+      create_task = getattr(hass, "async_create_task", None)
+      if callable(create_task):
+          create_task(deliver())
+      else:
+          await deliver()
 
 async def async_announce_arming_wait_update(hass, config_entry, *, alarm_entity_id, target, previous_open, current_open):
   previous = list(dict.fromkeys(previous_open))

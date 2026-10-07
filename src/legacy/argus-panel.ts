@@ -2754,7 +2754,6 @@ _tmpl.innerHTML = `
   display: flex; align-items: center; justify-content: center;
   font-size: 2.8rem; font-weight: 800; color: #fff;
   background: rgba(255,255,255,0.12);
-  will-change: transform, width, height, border-radius;
 }
 .argus-welcome-avatar img {
   width: 100%; height: 100%; object-fit: cover;
@@ -10091,6 +10090,9 @@ class ArgusPanel extends HTMLElement {
       || this.shadowRoot.querySelector('#hero-profile-container .user-avatar')
       || this.shadowRoot.querySelector('#hero-profile-container img')
       || this.shadowRoot.querySelector('#hero-profile-container .hero-profile-pill');
+    const destStyle = destEl ? { opacity: destEl.style.opacity, transition: destEl.style.transition, transform: destEl.style.transform } : null;
+    let liveDestEl: HTMLElement | null = null;
+    let liveDestStyle: { opacity: string; transition: string; transform: string } | null = null;
     
     if (destEl) {
       destEl.style.opacity = '0';
@@ -10130,6 +10132,7 @@ class ArgusPanel extends HTMLElement {
       </div>
     `;
     this.shadowRoot.appendChild(overlay);
+    try {
 
     // Wait 1 frame so the overlay covers the screen instantly
     await new Promise(r => requestAnimationFrame(r));
@@ -10163,7 +10166,9 @@ class ArgusPanel extends HTMLElement {
 
       // Snappy confirmation glance while dashboard finishes preparing
       await new Promise(r => setTimeout(r, 260));
-      await dashboardPromise;
+      // Dashboard initialization can wait on Home Assistant/WebSocket work. Keep
+      // the welcome transition bounded so its shrinking avatar cannot freeze above the UI.
+      await Promise.race([dashboardPromise, new Promise(resolve => setTimeout(resolve, 1600))]);
 
       textGroup.style.transition = 'opacity 0.12s ease';
       textGroup.style.opacity = '0';
@@ -10171,7 +10176,7 @@ class ArgusPanel extends HTMLElement {
       const rect = avatar.getBoundingClientRect();
       
       // Accurately measure destination profile avatar position
-      const liveDestEl: HTMLElement | null = this.shadowRoot.getElementById('hero-profile-avatar') 
+      liveDestEl = this.shadowRoot.getElementById('hero-profile-avatar')
         || this.shadowRoot.querySelector('#hero-profile-container .user-avatar')
         || this.shadowRoot.querySelector('#hero-profile-container img')
         || this.shadowRoot.querySelector('#hero-profile-container .hero-profile-pill');
@@ -10179,6 +10184,7 @@ class ArgusPanel extends HTMLElement {
       let destX = window.innerWidth / 2, destY = 60, targetScale = 0.35;
       
       if (liveDestEl) {
+        if (liveDestEl !== destEl) liveDestStyle = { opacity: liveDestEl.style.opacity, transition: liveDestEl.style.transition, transform: liveDestEl.style.transform };
         const destRect = liveDestEl.getBoundingClientRect();
         if (destRect.width > 0 && destRect.height > 0) {
           destX = destRect.left + destRect.width / 2;
@@ -10209,9 +10215,20 @@ class ArgusPanel extends HTMLElement {
     }
 
     await new Promise(r => setTimeout(r, 30));
-    await dashboardPromise;
-    
-    this._nukeAllLoginOverlays();
+    } finally {
+      if (destEl && destStyle) {
+        destEl.style.opacity = destStyle.opacity;
+        destEl.style.transition = destStyle.transition;
+        destEl.style.transform = destStyle.transform;
+      }
+      if (liveDestEl && liveDestEl !== destEl && liveDestStyle) {
+        liveDestEl.style.opacity = liveDestStyle.opacity;
+        liveDestEl.style.transition = liveDestStyle.transition;
+        liveDestEl.style.transform = liveDestStyle.transform;
+      }
+      overlay.remove();
+      this._nukeAllLoginOverlays();
+    }
   }
 
   _nukeAllLoginOverlays() {

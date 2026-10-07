@@ -1,3 +1,10 @@
+## [2.6.4] - 2026-10-07
+
+- Corregir el armado por modo: las listas vacías de Casa y Noche son autoritativas y nunca heredan sensores de Ausente.
+- Ejecutar avisos y anuncios de voz en tareas independientes con timeout para que un dispositivo de notificación desconectado no detenga la respuesta de armado.
+- Mejorar el emblema de seguridad: facetas de cristal se despliegan hacia las esquinas en Ausente/SOS y forman protecciones «L»; el lente se cierra brevemente durante el pulso y vuelve a patrullar.
+- Evitar que la bienvenida de perfil quede bloqueada esperando indefinidamente la carga del tablero; siempre restaurar el avatar y retirar las capas de bienvenida.
+
 ## [2.6.3] - 2026-10-07
 
 - Reemplazar el emblema plano por tres emblemas interactivos en 3D con cristales facetados, reflejos y color según el modo.

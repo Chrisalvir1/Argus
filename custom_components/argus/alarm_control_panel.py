@@ -66,6 +66,23 @@ from .arming_voice import async_announce_arming_wait_update
 
 _LOGGER = logging.getLogger(__name__)
 
+
+async def _async_deliver_notify(hass, service: str, payload: dict, entity_id: str | None = None) -> None:
+    """Deliver optional notifications without letting offline targets pollute HA core logs."""
+    try:
+        await asyncio.wait_for(
+            hass.services.async_call(
+                "notify", service, payload,
+                target={"entity_id": entity_id} if entity_id else None,
+                blocking=True,
+            ),
+            timeout=3.0,
+        )
+    except asyncio.TimeoutError:
+        _LOGGER.warning("Argus: notify.%s timed out for %s", service, entity_id or "configured target")
+    except Exception as err:  # noqa: BLE001 — notifications are best effort.
+        _LOGGER.warning("Argus: notify.%s failed for %s: %s", service, entity_id or "configured target", err)
+
 _MODE_LABELS = {
     'armed_home': 'En Casa',
     'armed_away': 'Ausente',
@@ -207,9 +224,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                     payload = {"title": str(title)[:128], "message": str(message)[:2000]}
                     if isinstance(data, dict):
                         payload["data"] = data
-                    await self.hass.services.async_call(
-                        "notify", "send_message", payload,
-                        target={"entity_id": entity_id}, blocking=False,
+                    self.hass.async_create_task(
+                        _async_deliver_notify(self.hass, "send_message", payload, entity_id)
                     )
                 except Exception:  # noqa: BLE001
                     _LOGGER.exception("Argus: notification error for %s", entity_id)
@@ -227,7 +243,9 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 payload = {"title": str(title)[:128], "message": str(message)[:2000]}
                 if isinstance(data, dict):
                     payload["data"] = data
-                await self.hass.services.async_call("notify", target, payload, blocking=False)
+                self.hass.async_create_task(
+                    _async_deliver_notify(self.hass, target, payload)
+                )
             except Exception:  # noqa: BLE001
                 _LOGGER.exception("Argus: notification error for notify.%s", target)
 
@@ -441,10 +459,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         # 3 – static YAML fallback
         if state == AlarmControlPanelState.ARMED_HOME:
-            return self._sensors_home or self._sensors_away
+            return list(self._sensors_home or [])
         if state == AlarmControlPanelState.ARMED_NIGHT:
-            return self._sensors_night or self._sensors_away
-        return self._sensors_away  # ARMED_AWAY
+            return list(self._sensors_night or [])
+        return list(self._sensors_away or [])  # ARMED_AWAY
 
     def _all_sensors(self) -> list[str]:
         """Return the union of all sensors across every mode config source."""
@@ -478,7 +496,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     def _open_blocking_sensors(self, target: AlarmControlPanelState) -> list[str]:
         config = self._mode_config(target.value.replace("armed_", ""))
-        sensors = config.get("sensors") or self._sensors_for_state(target)
+        sensors = config.get("sensors") if "sensors" in config else self._sensors_for_state(target)
         bypassed = config.get("bypassed_sensors") or config.get("bypassedSensors") or []
         return [sensor for sensor in sensors if sensor not in bypassed and (state := self.hass.states.get(sensor)) and state.state in _INTRUSION_ACTIVE_STATES]
 

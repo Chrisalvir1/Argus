@@ -162,7 +162,7 @@ class TestV2056ArmingRuntime(unittest.TestCase):
         self.assertEqual(calls, [("tts", "speak", {
             "entity_id": "tts.test", "media_player_entity_id": "media_player.kitchen",
             "message": "closed Front door; remaining Back door", "cache": True
-        }, False)])
+        }, True)])
 
 
 if __name__ == "__main__":

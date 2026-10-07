@@ -89,8 +89,7 @@ def install_safety_runtime():
             or config.get("requireClosed") is False
         ):
             return "allow"
-        # An explicitly saved empty list means this mode has no sensors.
-        # Do not inherit another mode's/static sensors through truthiness.
+        # Empty mode lists are authoritative; static defaults are mode-specific.
         if "sensors" in config and not config.get("sensors"):
             return "allow"
         sensors = config.get("sensors") if "sensors" in config else self._sensors_for_state(
