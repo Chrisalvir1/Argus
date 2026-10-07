@@ -1,3 +1,13 @@
+## [2.6.2] - 2026-10-07
+
+- Mejorar cabecera: nombre de hogar proporcionado, indicador de conexión Argus en línea/desconectado y ajuste de pantalla completa horizontal.
+- Añadir núcleo de seguridad como emblema predeterminado y opciones Escudo de cristal / Emblema Argus por perfil.
+- Animar el núcleo con anillo lento, respiración leve y cambio 3D del símbolo. Paleta: verde desarmado, naranja casa, rojo ausente, azul noche.
+- Añadir respuesta háptica visual breve al abrir sensor y un pulso marcado para SOS, sin repetir con cada actualización HA.
+- Simplificar ajustes del modo nocturno y explicar condiciones que impiden activarlo.
+- Añadir sensor AmbientLightSensor del dispositivo cuando el navegador lo soporte y selector de varias luces como fuentes para modo nocturno.
+- Respetar alto contraste, movimiento reducido y modo de rendimiento esencial.
+
 ## [2.6.1] - 2026-10-07
 
 - Corregir la paleta: Casa naranja, Ausente rojo y Noche azul en controles y estado de armado.

@@ -47,9 +47,9 @@ function install(panel: any) {
     .argus-night-settings button{min-height:44px;margin:6px}
   `;
   panel.shadowRoot.appendChild(style);
-  const fullscreen = () => panel.classList.contains('fullscreen-active');
+  const fullscreen = () => panel.classList.contains('fullscreen-active') || Boolean(panel.shadowRoot.querySelector('.entry.ios-fullscreen'));
   const states = () => panel._hass?.states || {};
-  const validNumber = (s: any) => s && !['unknown','unavailable','offline','disconnected'].includes(s.state) && s.state !== '' && Number.isFinite(Number(s.state));
+  const validNumber = (s: any) => s && !['unknown','unavailable','offline','disconnected'].includes(s.state) && s.state !== '' && s.state !== null && s.state !== undefined && Number.isFinite(Number(s.state));
   function stopAmbient() {
     if (ambient) { try { ambient.stop(); } catch {} ambient = null; }
     ambientLux = null;
@@ -118,6 +118,8 @@ function install(panel: any) {
   }
   function tick() {
     if (disposed) return;
+    const status = panel.shadowRoot.querySelector('.argus-night-status');
+    const explain = (text: string) => { if (status) status.textContent = text; };
     const currentKey = key();
     if (loadedKey !== currentKey) {
       setNight(false); loadedKey = currentKey;
@@ -127,6 +129,7 @@ function install(panel: any) {
     }
     readDeviceSensor();
     if (!config.enabled || !fullscreen() || document.visibilityState !== 'visible') {
+      explain(!config.enabled ? 'Desactivado.' : !fullscreen() ? 'Abre el panel en pantalla completa para activarlo.' : 'El panel está oculto.');
       setNight(false); if (wakeLock) { void wakeLock.release(); wakeLock = null; } return;
     }
     const all = states();
@@ -134,7 +137,7 @@ function install(panel: any) {
     const presence = config.presence && ['on','home','occupied','detected'].includes(all[config.presence]?.state);
     if (ambientLux !== null || config.lux) {
       const sensor = all[config.lux];
-      if (ambientLux === null && !validNumber(sensor)) { setNight(false); return; }
+      if (ambientLux === null && !validNumber(sensor)) { explain('El sensor de luz elegido no tiene datos. Revisa el sensor o elige luces/horario.'); setNight(false); return; }
       const lux = ambientLux ?? Number(sensor.state);
       if (lux >= config.threshold * 1.5) bright = true;
       else if (lux <= config.threshold) bright = false;
@@ -149,6 +152,7 @@ function install(panel: any) {
       const hour = new Date().getHours();
       bright = !(config.start > config.end ? hour >= config.start || hour < config.end : hour >= config.start && hour < config.end);
     }
+    explain(panel.classList.contains('argus-contrast-high') ? 'El alto contraste mantiene los colores normales. Desactívalo para usar la pantalla roja.' : alarm ? 'Una alarma mantiene los colores normales.' : presence ? 'Se detecta presencia.' : bright ? 'Esperando oscuridad según la fuente elegida.' : Date.now() - lastTouch < config.idle * 1000 ? 'Esperando el tiempo sin interacción.' : 'Pantalla roja activa.');
     setNight(!panel.classList.contains('argus-contrast-high') && !bright && !presence && !alarm && Date.now() - lastTouch >= config.idle * 1000);
   }
   const activity = (event: Event) => {
@@ -172,6 +176,7 @@ function install(panel: any) {
     const title = document.createElement('h2'); title.textContent = 'Modo nocturno · Pantalla completa'; form.appendChild(title);
     const checkbox = document.createElement('input'); checkbox.type='checkbox'; checkbox.checked=config.enabled;
     const label = document.createElement('label'); label.textContent='Activar automáticamente'; label.appendChild(checkbox); form.appendChild(label);
+    const status=document.createElement('p');status.className='argus-night-status';status.setAttribute('role','status');form.appendChild(status);
     const intro=document.createElement('p');intro.textContent='En pantalla completa, Argus se vuelve rojo y tenue durante la noche. Toca la pantalla para recuperar los colores. No cambia el modo de la alarma.';form.appendChild(intro);
     function number(text:string,value:number,min:number,max:number,parent:HTMLElement=form) { const label=document.createElement('label');label.textContent=text;const input=document.createElement('input');input.type='number';input.min=String(min);input.max=String(max);input.required=true;input.value=String(value);label.appendChild(input);parent.appendChild(label);return input; }
     function hour(text:string,value:number) {const label=document.createElement('label');label.textContent=text;const input=document.createElement('input');input.type='time';input.required=true;input.step='3600';input.value=String(value).padStart(2,'0')+':00';label.appendChild(input);form.appendChild(label);return input;}

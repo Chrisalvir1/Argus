@@ -157,3 +157,66 @@
 @container argus-console (max-width:520px) {
   :host .entry.entry .security-console.security-console .console-hud-loc { flex-basis:100% !important; max-width:100% !important; }
 }
+/* Home identity uses the same material and silhouette as adjacent controls. */
+:host .entry.entry .security-console.security-console .console-hud-loc {
+  background:var(--console-glass) !important; border:1px solid var(--console-edge) !important;
+  box-shadow:var(--console-shadow) !important; border-radius:12px !important;
+  padding:10px 12px !important; min-height:44px !important; box-sizing:border-box !important;
+  line-height:1.35 !important; align-self:stretch !important;
+}
+:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-hud-loc { background:#000 !important; border:2px solid #fff !important; box-shadow:none !important; }
+@container argus-console (max-width:520px) {
+  :host .entry.entry .security-console.security-console .console-hud { display:grid !important; grid-template-columns:minmax(0,1fr) !important; gap:8px !important; justify-items:stretch !important; }
+  :host .entry.entry .security-console.security-console .console-hud-loc { width:100% !important; }
+  :host .entry.entry .security-console.security-console .argus-connection-pill { justify-content:center !important; }
+  :host .entry.entry .security-console.security-console .console-hud-right { display:grid !important; grid-template-columns:repeat(2,minmax(0,1fr)) !important; width:100% !important; }
+  :host .entry.entry .security-console.security-console .console-hud-right button { width:100% !important; height:auto !important; white-space:normal !important; line-height:1.3 !important; }
+}
+/* Short landscape screens keep the sensors beside the controls, not below. */
+@media (orientation:landscape) and (max-height:600px) and (min-width:600px) {
+  :host .entry.entry.ios-fullscreen .entry-content.security-console.security-console {
+    grid-template-columns:minmax(150px,1fr) minmax(100px,.65fr) minmax(210px,1.3fr) !important;
+    grid-template-areas:"header header header" "controls emblem sensors" !important;
+    grid-template-rows:max-content minmax(0,1fr) !important; grid-auto-rows:auto !important;
+    height:100dvh !important; min-height:0 !important; padding:64px 16px 12px !important;
+    gap:12px !important; align-content:stretch !important;
+  }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .console-hud-loc { flex-basis:180px !important; max-width:260px !important; }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon svg { width:120px !important; }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .liquid-btn { min-height:64px !important; }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .console-sensors { align-self:stretch !important; min-height:0 !important; max-height:100% !important; height:auto !important; overflow-y:auto !important; gap:6px !important; }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .console-sensor { min-height:40px !important; padding:8px !important; gap:6px !important; }
+}
+:host .entry.entry .security-console.security-console[data-alarm-state="disarmed"] { --console-accent:#45d49a; }
+:host .entry.entry .security-console.security-console[data-alarm-state="armed_home"] { --console-accent:#ffad55; }
+:host .entry.entry .security-console.security-console[data-alarm-state="armed_away"] { --console-accent:#ff6674; }
+:host .entry.entry .security-console.security-console[data-alarm-state="armed_night"] { --console-accent:#69aaff; }
+:host .entry.entry .security-console.security-console .console-shield { perspective:700px; transform-style:preserve-3d; filter:drop-shadow(0 10px 12px color-mix(in srgb,var(--console-accent) 28%,transparent)); }
+:host .entry.entry .security-console.security-console .console-shield-ring { transform-origin:120px 124px; animation:argus-core-rotate 24s linear infinite; stroke-dasharray:190 120; }
+:host .entry.entry .security-console.security-console .console-shield-core { animation:argus-core-breathe 4s ease-in-out infinite; transform-origin:120px 124px; }
+:host .entry.entry .security-console.security-console .console-shield-symbol { animation:argus-core-arrive 700ms cubic-bezier(.2,.8,.2,1) both; }
+:host .entry.entry .security-console.security-console .console-shield--crystal { animation:argus-crystal-float 6s ease-in-out infinite; }
+:host .entry.entry .security-console.security-console .console-shield--argus { animation:argus-emblem-float 7s ease-in-out infinite; }
+@keyframes argus-core-rotate { to { transform:rotate(360deg); } }
+@keyframes argus-core-breathe { 0%,100% { transform:scale(1); opacity:.85; } 50% { transform:scale(1.07); opacity:1; } }
+@keyframes argus-core-arrive { 0% { opacity:.15; transform:translateZ(-24px) scale(.72) rotateX(-24deg); } 70% { opacity:1; transform:translateZ(8px) scale(1.08) rotateX(5deg); } 100% { opacity:1; transform:translateZ(0) scale(1) rotateX(0); } }
+@keyframes argus-crystal-float { 0%,100% { transform:rotateY(-5deg) translateY(0); } 50% { transform:rotateY(5deg) translateY(-4px); } }
+@keyframes argus-emblem-float { 0%,100% { transform:rotateX(2deg) translateY(0); } 50% { transform:rotateX(-3deg) translateY(-3px); } }
+:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-shield { filter:none !important; }
+@media (prefers-reduced-motion:reduce) { :host .entry.entry .security-console.security-console .console-shield-ring,:host .entry.entry .security-console.security-console .console-shield-core,:host .entry.entry .security-console.security-console .console-shield-symbol,:host .entry.entry .security-console.security-console .console-shield--crystal,:host .entry.entry .security-console.security-console .console-shield--argus { animation:none !important; } }
+:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-ring,:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-core,:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-symbol,:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield--crystal,:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield--argus { animation:none !important; }
+/* Visual haptics: one short, tactile response per alert transition. */
+:host .entry.entry .security-console.security-console .console-shield-pulse--sensor { animation:argus-haptic-sensor 460ms cubic-bezier(.25,.75,.25,1) both; }
+:host .entry.entry .security-console.security-console .console-shield-pulse--sos { animation:argus-haptic-sos 900ms cubic-bezier(.25,.75,.25,1) both; }
+:host .entry.entry .security-console.security-console .console-shield-alert-rings circle { transform-origin:120px 124px; opacity:0; }
+:host .entry.entry .security-console.security-console .console-shield-pulse--sensor .console-shield-alert-rings circle { animation:argus-alert-wave 650ms ease-out both; }
+:host .entry.entry .security-console.security-console .console-shield-pulse--sensor .console-shield-alert-rings circle:nth-child(2) { animation-delay:130ms; }
+:host .entry.entry .security-console.security-console .console-shield-pulse--sos .console-shield-alert-rings circle { animation:argus-alert-wave 850ms ease-out both; animation-delay:0ms; }
+:host .entry.entry .security-console.security-console .console-shield-pulse--sos .console-shield-alert-rings circle:nth-child(2) { animation-delay:260ms; }
+@keyframes argus-haptic-sensor { 0%,100% { transform:translate3d(0,0,0) rotateY(0); } 18% { transform:translate3d(-3px,1px,0) rotateY(-2deg); } 36% { transform:translate3d(3px,-1px,0) rotateY(2deg); } 54% { transform:translate3d(-2px,0,0) rotateY(-1deg); } 72% { transform:translate3d(1px,0,0); } }
+@keyframes argus-haptic-sos { 0%,100% { transform:translate3d(0,0,0) rotateY(0) scale(1); } 12% { transform:translate3d(-4px,1px,0) rotateY(-3deg) scale(1.015); } 24% { transform:translate3d(4px,-1px,0) rotateY(3deg) scale(1.015); } 36% { transform:translate3d(-3px,0,0) rotateY(-2deg); } 48% { transform:translate3d(3px,0,0) rotateY(2deg); } 60% { transform:translate3d(-2px,0,0); } 72% { transform:translate3d(2px,0,0); } }
+@keyframes argus-alert-wave { 0% { opacity:.8; transform:scale(.72); } 100% { opacity:0; transform:scale(1.42); } }
+:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-shield-pulse--sensor,
+:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-shield-pulse--sos { filter:none !important; }
+@media (prefers-reduced-motion:reduce) { :host .entry.entry .security-console.security-console .console-shield-pulse--sensor,:host .entry.entry .security-console.security-console .console-shield-pulse--sos,:host .entry.entry .security-console.security-console .console-shield-alert-rings * { animation:none !important; } }
+:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-pulse--sensor,:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-pulse--sos,:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-alert-rings * { animation:none !important; }

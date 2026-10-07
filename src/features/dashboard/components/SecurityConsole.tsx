@@ -115,6 +115,16 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   
   // Battery alerts strictly for configured active sensors
   const modeSensorIds = activeSensors.map(s => s.id);
+  const openSensorIds = sortedSensors.filter((sensor: any) => {
+    const entity = hass?.states?.[sensor.id];
+    if (!entity || ['unknown', 'unavailable', 'offline'].includes(String(entity.state).toLowerCase())) return false;
+    return typeof panel?.isSensorActive === 'function'
+      ? Boolean(panel.isSensorActive(entity))
+      : ['on', 'open', 'opening', 'motion', 'detected', 'triggered', 'unlocked'].includes(String(entity.state).toLowerCase());
+  }).map((sensor: any) => sensor.id);
+  const panicActive = Boolean(hass?.states?.[entry.entity_id]?.attributes?.argus_panic_active);
+  const pulse = triggered || panicActive ? 'sos' : openSensorIds.length ? 'sensor' : '';
+  const pulseKey = pulse === 'sos' ? `sos:${entry.entity_id}` : openSensorIds.join('|');
 
   return (
     <>
@@ -193,7 +203,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
           </div>
 
           <div className="entry-icon">
-            <SecurityShield state={isWaiting ? 'pending' : state} label={getBadgeText()} />
+            <SecurityShield state={isWaiting ? 'pending' : state} label={getBadgeText()} variant={panel._getProfileShieldStyle?.() || 'core'} pulse={pulse} pulseKey={pulseKey} />
               <span role="status" aria-live="polite" className={`console-system-badge console-system-badge--${triggered ? 'triggered' : state}`}>
                 {getBadgeText()}
               </span>

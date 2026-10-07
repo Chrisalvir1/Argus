@@ -8965,6 +8965,23 @@ class ArgusPanel extends HTMLElement {
     return 'standard';
   }
 
+  _getProfileShieldStyle(): string {
+    const profId = this._currentProfile?.id || 'default';
+    try {
+      const stored = localStorage.getItem(`argus_shield_${profId}`);
+      if (stored === 'crystal' || stored === 'argus') return stored;
+    } catch (_) {}
+    return 'core';
+  }
+
+  _setProfileShieldStyle(style: string): void {
+    if (!['core', 'crystal', 'argus'].includes(style)) return;
+    const profId = this._currentProfile?.id || 'default';
+    try { localStorage.setItem(`argus_shield_${profId}`, style); } catch (_) {}
+    this.dispatchEvent(new CustomEvent('argus-state-update'));
+    window.dispatchEvent(new CustomEvent('argus-state-update'));
+  }
+
   _setContrastMode(mode: string): void {
     const profId = this._currentProfile?.id || 'default';
     try {
@@ -9197,6 +9214,15 @@ class ArgusPanel extends HTMLElement {
         </div>
         ` : ''}
 
+        <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:10px;">
+          <label for="dropdown-shield-select" style="font-size:11.5px;font-weight:700;opacity:.85;">✧ Emblema de seguridad</label>
+          <select id="dropdown-shield-select" class="glass-control" aria-label="Emblema de seguridad" style="width:100%;height:38px;border-radius:10px;padding:0 12px;font-size:12.5px;font-weight:700;background:rgba(255,255,255,.06);border:1px solid var(--v2066-border);color:var(--v2066-text);outline:none;cursor:pointer;">
+            <option value="core" ${this._getProfileShieldStyle() === 'core' ? 'selected' : ''}>Núcleo de seguridad · Predeterminado</option>
+            <option value="crystal" ${this._getProfileShieldStyle() === 'crystal' ? 'selected' : ''}>Escudo de cristal</option>
+            <option value="argus" ${this._getProfileShieldStyle() === 'argus' ? 'selected' : ''}>Emblema Argus</option>
+          </select>
+        </div>
+
         <!-- Home Name Section -->
         <div class="profile-card-tile" style="margin-top: 4px;">
           <div style="display: flex; flex-direction: column; min-width: 0; flex: 1 1 auto; gap: 3px;">
@@ -9278,6 +9304,8 @@ class ArgusPanel extends HTMLElement {
         this._setContrastMode((e.target as HTMLSelectElement).value);
       });
     }
+    const shieldSelect = container.querySelector('#dropdown-shield-select');
+    shieldSelect?.addEventListener('change', (e: Event) => this._setProfileShieldStyle((e.target as HTMLSelectElement).value));
     this._initContrastMode();
 
     // Gesture dropdown change listener (WCAG 2.5.1)
