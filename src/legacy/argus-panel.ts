@@ -4093,7 +4093,9 @@ class ArgusPanel extends HTMLElement {
     }
 
     if (progTextEl) {
-      progTextEl.textContent = this._format('walk_test_progress', { tested, total, pct });
+      progTextEl.textContent = this._getCurrentLangCode() === 'es'
+        ? `${tested} de ${total} sensores verificados (${pct}%). Prueba de todos los modos.`
+        : `${tested} of ${total} sensors verified (${pct}%). Testing all modes.`;
     }
 
     if (fillEl) {

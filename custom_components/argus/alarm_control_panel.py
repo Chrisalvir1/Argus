@@ -308,6 +308,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         }
         if getattr(self, "_arm_lock_bounces", 0) > 0:
             attrs["arm_lock_bounces"] = self._arm_lock_bounces
+        if self._triggered_mode:
+            attrs["triggered_mode"] = self._triggered_mode
         if self._triggered_by:
             attrs["triggered_by"] = self._triggered_by
         if self._panic_active:

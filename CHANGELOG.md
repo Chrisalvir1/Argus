@@ -1,3 +1,15 @@
+## [2.6.1] - 2026-10-07
+
+- Corregir la paleta: Casa naranja, Ausente rojo y Noche azul en controles y estado de armado.
+- Corregir texto del modo seleccionado, nombre del hogar y superficies en alto contraste.
+- Unificar la forma de la cabecera, reducir el nombre del hogar y mostrar «Argus en línea» / «Argus desconectado» según conexión HA.
+- Mostrar sensores del modo activo, incluidos los omitidos, sin sustituir listas vacías por todos los modos; exponer triggered_mode para conservar el contexto de alarma.
+- Renovar el SVG del escudo con capas, símbolos por estado y animaciones finitas que respetan movimiento reducido.
+- Aclarar el contador de la prueba de sensores y que esta prueba abarca todos los modos.
+- Simplificar ajustes nocturnos y plegar opciones avanzadas.
+- Añadir varias luces como fuente nocturna: todas deben estar apagadas y disponibles.
+- Intentar leer AmbientLightSensor del dispositivo cuando el navegador lo permita; alternativas mediante sensor HA, luces o horario y limpieza del sensor al salir.
+
 ## [2.6.0] - 2026-10-06
 
 - Reorganización de cabecera, controles, escudo y sensores con distribución adaptable a móvil, tablet y pantalla completa.

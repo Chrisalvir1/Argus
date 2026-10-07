@@ -1,8 +1,9 @@
+import { SecurityShield } from './SecurityShield';
 import glassStyles from './ConsoleGlass.css?inline';
 import balanceStyles from './ConsoleBalance.css?inline';
 import styles from "./SecurityConsole.css?inline";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { SensorChip, getSensorVisual } from './SensorChip';
 
 interface SecurityConsoleProps {
@@ -15,6 +16,7 @@ interface SecurityConsoleProps {
 
 export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnlockKiosk, entryIndex }: SecurityConsoleProps) {
   const [tick, setTick] = useState(0);
+  const lastArmedMode = useRef<Record<string, string>>({});
 
   useEffect(() => {
     // Listen for updates from the panel
@@ -92,30 +94,14 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   if (entry.entity_id) {
     const modes = panel._ui?.modes?.__by_entity__?.[entry.entity_id] || panel._ui?.modes || {};
     
-    eCfg = modes[state.replace('armed_', '')] || {};
-    
-    if (triggered) {
-      eCfg = ['away', 'home', 'night']
-        .map(m => modes[m])
-        .find(config => (config?.sensors || []).some((id: string) => ['on', 'open', 'opening', 'unlocked', 'recording', 'active', 'motion'].includes(hass?.states?.[id]?.state)))
-        || {};
-    }
-    
-    let sList = eCfg.sensors || [];
-    if (state === 'disarmed' || isPending || !sList.length) {
-      const allSensors = new Set<string>();
-      ['disarmed', 'away', 'home', 'night'].forEach(m => {
-        if (modes[m]?.sensors) {
-          modes[m].sensors.forEach((s: string) => allSensors.add(s));
-        }
-      });
-      if (Array.isArray(panel._sensors)) {
-        panel._sensors.forEach((s: any) => allSensors.add(typeof s === 'string' ? s : s.entity_id || s.id));
-      }
-      sList = Array.from(allSensors);
-    }
-    
-    const sByps = eCfg.bypassed_sensors || [];
+    const attrs = hass?.states?.[entry.entity_id]?.attributes || {};
+    if (state.startsWith('armed_')) lastArmedMode.current[entry.entity_id] = state.slice(6);
+    const target = String(attrs.arming_target || attrs.triggered_mode || attrs.panic_previous_state || '').replace(/^armed_/, '');
+    const mode = state.startsWith('armed_') ? state.slice(6)
+      : isPending || triggered ? (target || lastArmedMode.current[entry.entity_id] || 'disarmed') : 'disarmed';
+    eCfg = modes[mode] || {};
+    const sByps: string[] = eCfg.bypassed_sensors || [];
+    const sList = [...new Set<string>([...(eCfg.sensors || []), ...sByps])];
     sList.forEach((s: string) => {
        activeSensors.push({ id: s, isBypassed: sByps.includes(s) });
     });
@@ -148,9 +134,9 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
         <div className="entry-content security-console" data-alarm-state={isWaiting ? 'pending' : state}>
           <div className="console-hud">
             <span className="console-hud-loc"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-7h6v7"/></svg>{fullHudLoc}</span>
-            <div className="argus-connection-pill" data-online={isOnline ? 'true' : 'false'}>
+            <div role="status" aria-live="polite" className="argus-connection-pill" data-online={isOnline ? 'true' : 'false'}>
               <i className="argus-connection-dot"></i>
-              <span className="argus-connection-label">{isOnline ? (t('connected') || 'CONECTADO') : (t('disconnected') || 'DESCONECTADO')}</span>
+              <span className="argus-connection-label">{isOnline ? 'Argus en línea' : 'Argus desconectado'}</span>
             </div>
             <div className="console-hud-right">
               <button type="button" aria-label="Configurar modo nocturno" onClick={() => panel._openNightSettings?.()}>☾ Modo nocturno</button>
@@ -207,7 +193,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
           </div>
 
           <div className="entry-icon">
-            <div className="console-shield-art" key={isWaiting ? 'pending' : state} dangerouslySetInnerHTML={{ __html: getIconSvg() }} />
+            <SecurityShield state={isWaiting ? 'pending' : state} label={getBadgeText()} />
               <span role="status" aria-live="polite" className={`console-system-badge console-system-badge--${triggered ? 'triggered' : state}`}>
                 {getBadgeText()}
               </span>

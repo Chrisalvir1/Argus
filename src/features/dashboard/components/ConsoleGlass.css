@@ -109,3 +109,51 @@
 }
 :host(.argus-perf-essential) .entry.entry .security-console.security-console .argus-window-leaf,
 :host(.argus-perf-essential) .entry.entry .security-console.security-console .argus-motion-waves { transition:none !important; animation:none !important; }
+/* Mode palette matches Argus modes throughout the console. */
+:host .entry.entry .security-console.security-console[data-alarm-state="armed_home"] { --console-accent:#ffad55; }
+:host .entry.entry .security-console.security-console[data-alarm-state="armed_away"] { --console-accent:#ff7b85; }
+:host .entry.entry .security-console.security-console[data-alarm-state="armed_night"] { --console-accent:#72b6ff; }
+:host .entry.entry .security-console.security-console .liquid-btn span { color:inherit !important; filter:none !important; }
+:host .entry.entry .security-console.security-console .console-shield { color:var(--console-accent); transition:color 320ms ease !important; }
+:host .entry.entry .security-console.security-console .console-shield-symbol { animation:shield-symbol-arrive 420ms cubic-bezier(.2,.8,.2,1) both; transform-origin:120px 124px; }
+@keyframes shield-symbol-arrive { from { opacity:0; transform:scale(.88); } to { opacity:1; transform:scale(1); } }
+:host .entry.entry .security-console.security-console .console-shield-check { stroke-dasharray:70; stroke-dashoffset:0; animation:shield-check-draw 450ms ease-out; }
+@keyframes shield-check-draw { from { stroke-dashoffset:70; } to { stroke-dashoffset:0; } }
+:host(.argus-contrast-high) .entry.entry .security-console.security-console { background:#000 !important; --console-accent:#fff !important; }
+:host(.argus-contrast-high) .entry.entry .security-console.security-console .console-hud-loc { background:#000 !important; color:#fff !important; text-shadow:none !important; }
+:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn.active span { color:#000 !important; }
+:host(.argus-contrast-high) .entry.entry .security-console.security-console .argus-sta-wrap { border-radius:32px !important; overflow:hidden !important; }
+@media (prefers-reduced-motion:reduce) {
+  :host .entry.entry .security-console.security-console .console-shield-symbol,
+  :host .entry.entry .security-console.security-console .console-shield-check { animation:none !important; }
+}
+:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-symbol,
+:host(.argus-perf-essential) .entry.entry .security-console.security-console .console-shield-check { animation:none !important; }
+:host .entry.entry .security-console.security-console .btn-home { --console-accent:#ffad55; }
+:host .entry.entry .security-console.security-console .btn-away { --console-accent:#ff7b85; }
+:host .entry.entry .security-console.security-console .btn-night { --console-accent:#72b6ff; }
+:host .entry.entry .security-console.security-console .liquid-btn .mode-btn-icon { color:var(--console-accent) !important; }
+:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn { --console-accent:#fff; }
+:host(.argus-contrast-high) .entry.entry .security-console.security-console .liquid-btn.active .mode-btn-icon { color:#000 !important; }
+/* Compact home label and a common silhouette for header controls. */
+:host .entry.entry .security-console.security-console .console-hud-loc {
+  flex:0 1 360px !important; width:auto !important; max-width:360px !important;
+  border-radius:12px !important; padding:0 !important; background:transparent !important;
+  font-size:15px !important; overflow-wrap:anywhere !important;
+}
+:host .entry.entry .security-console.security-console .console-hud { justify-content:space-between !important; }
+:host .entry.entry .security-console.security-console .argus-connection-pill {
+  border-radius:12px !important; height:44px !important; min-height:44px !important;
+  padding:0 12px !important; font-size:12px !important; font-weight:600 !important;
+  letter-spacing:0 !important; text-transform:none !important; flex-shrink:0 !important;
+}
+:host .entry.entry .security-console.security-console .argus-connection-label { font-size:12px !important; letter-spacing:0 !important; text-transform:none !important; }
+:host .entry.entry .security-console.security-console .argus-connection-dot { background:#34d399 !important; box-shadow:none !important; }
+:host .entry.entry .security-console.security-console .argus-connection-pill[data-online="false"] .argus-connection-dot { background:#ff7b85 !important; }
+/* The badge keeps the mode color even when high contrast uses opaque surfaces. */
+:host .entry.entry .security-console.security-console .console-system-badge--armed_home { color:#ffad55 !important; border-color:#ffad55 !important; }
+:host .entry.entry .security-console.security-console .console-system-badge--armed_away { color:#ff7b85 !important; border-color:#ff7b85 !important; }
+:host .entry.entry .security-console.security-console .console-system-badge--armed_night { color:#72b6ff !important; border-color:#72b6ff !important; }
+@container argus-console (max-width:520px) {
+  :host .entry.entry .security-console.security-console .console-hud-loc { flex-basis:100% !important; max-width:100% !important; }
+}

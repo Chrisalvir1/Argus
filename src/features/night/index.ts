@@ -1,7 +1,7 @@
 import type { ArgusPanelConstructor } from '../../core/panel';
 
-type Config = { enabled: boolean; lux: string; presence: string; brightness: string; threshold: number; idle: number; start: number; end: number };
-const defaults: Config = { enabled: false, lux: '', presence: '', brightness: '', threshold: 10, idle: 30, start: 22, end: 7 };
+type Config = { enabled: boolean; deviceSensor: boolean; lights: string[]; lux: string; presence: string; brightness: string; threshold: number; idle: number; start: number; end: number };
+const defaults: Config = { enabled: false, deviceSensor: true, lights: [], lux: '', presence: '', brightness: '', threshold: 10, idle: 30, start: 22, end: 7 };
 
 export function applyNightMode(C: ArgusPanelConstructor) {
   const proto = C.prototype as any;
@@ -29,6 +29,7 @@ function install(panel: any) {
   const key = () => `argus:night:${panel._hass?.user?.id || 'anonymous'}:${panel._cardConfig?.entry_id || panel._dashboard?.entry_id || 'default'}`;
   let config = { ...defaults }, loadedKey = '', lastTouch = Date.now(), bright = true, night = false, disposed = false;
   let wakeLock: any = null, requesting = false, blockClickUntil = 0, previousBrightness: number | null = null;
+  let ambient: any = null, ambientLux: number | null = null, ambientTried = false;
   let changedEntity = '', lastBrightness: number | null = null, hardwarePending = false;
   const style = document.createElement('style');
   style.textContent = `
@@ -49,6 +50,30 @@ function install(panel: any) {
   const fullscreen = () => panel.classList.contains('fullscreen-active');
   const states = () => panel._hass?.states || {};
   const validNumber = (s: any) => s && !['unknown','unavailable','offline','disconnected'].includes(s.state) && s.state !== '' && Number.isFinite(Number(s.state));
+  function stopAmbient() {
+    if (ambient) { try { ambient.stop(); } catch {} ambient = null; }
+    ambientLux = null;
+  }
+  function readDeviceSensor() {
+    if (!config.deviceSensor || !config.enabled || !fullscreen() || document.visibilityState !== 'visible') {
+      stopAmbient(); ambientTried = false; return;
+    }
+    if (ambient || ambientTried) return;
+    ambientTried = true;
+    const Sensor = (window as any).AmbientLightSensor;
+    if (!Sensor || !window.isSecureContext) return;
+    try {
+      const sensor = new Sensor({ frequency: 1 });
+      ambient = sensor;
+      sensor.addEventListener('reading', () => {
+        if (disposed || ambient !== sensor) return;
+        const value = sensor.illuminance;
+        ambientLux = typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : null;
+      });
+      sensor.addEventListener('error', () => { if (ambient === sensor) stopAmbient(); });
+      sensor.start();
+    } catch { stopAmbient(); }
+  }
   async function keepAwake() {
     if (wakeLock || requesting || disposed || !fullscreen() || !config.enabled || document.visibilityState !== 'visible') return;
     const api = (navigator as any).wakeLock;
@@ -96,20 +121,30 @@ function install(panel: any) {
     const currentKey = key();
     if (loadedKey !== currentKey) {
       setNight(false); loadedKey = currentKey;
+      stopAmbient(); ambientTried = false;
       try { config = { ...defaults, ...JSON.parse(localStorage.getItem(currentKey) || '{}') }; } catch { config = { ...defaults }; }
+      config.lights = Array.isArray(config.lights) ? [...new Set(config.lights.filter(id => typeof id === 'string' && id.startsWith('light.')))] : [];
     }
+    readDeviceSensor();
     if (!config.enabled || !fullscreen() || document.visibilityState !== 'visible') {
       setNight(false); if (wakeLock) { void wakeLock.release(); wakeLock = null; } return;
     }
     const all = states();
     const alarm = (panel._dashboard?.entries || []).some((e: any) => all[e.entity_id]?.state === 'triggered' || all[e.entity_id]?.attributes?.argus_panic_active);
     const presence = config.presence && ['on','home','occupied','detected'].includes(all[config.presence]?.state);
-    if (config.lux) {
+    if (ambientLux !== null || config.lux) {
       const sensor = all[config.lux];
-      if (!validNumber(sensor)) { setNight(false); return; }
-      const lux = Number(sensor.state);
+      if (ambientLux === null && !validNumber(sensor)) { setNight(false); return; }
+      const lux = ambientLux ?? Number(sensor.state);
       if (lux >= config.threshold * 1.5) bright = true;
       else if (lux <= config.threshold) bright = false;
+    } else if (config.lights.length) {
+      // Unavailable/missing lights are not evidence of darkness.
+      bright = !config.lights.every(id => {
+        const light = all[id];
+        const a = light?.attributes;
+        return light?.state === 'off' && a?.available !== false && a?.online !== false && a?.connected !== false && a?.is_online !== false;
+      });
     } else {
       const hour = new Date().getHours();
       bright = !(config.start > config.end ? hour >= config.start || hour < config.end : hour >= config.start && hour < config.end);
@@ -137,25 +172,38 @@ function install(panel: any) {
     const title = document.createElement('h2'); title.textContent = 'Modo nocturno · Pantalla completa'; form.appendChild(title);
     const checkbox = document.createElement('input'); checkbox.type='checkbox'; checkbox.checked=config.enabled;
     const label = document.createElement('label'); label.textContent='Activar automáticamente'; label.appendChild(checkbox); form.appendChild(label);
+    const intro=document.createElement('p');intro.textContent='En pantalla completa, Argus se vuelve rojo y tenue durante la noche. Toca la pantalla para recuperar los colores. No cambia el modo de la alarma.';form.appendChild(intro);
+    function number(text:string,value:number,min:number,max:number,parent:HTMLElement=form) { const label=document.createElement('label');label.textContent=text;const input=document.createElement('input');input.type='number';input.min=String(min);input.max=String(max);input.required=true;input.value=String(value);label.appendChild(input);parent.appendChild(label);return input; }
+    function hour(text:string,value:number) {const label=document.createElement('label');label.textContent=text;const input=document.createElement('input');input.type='time';input.required=true;input.step='3600';input.value=String(value).padStart(2,'0')+':00';label.appendChild(input);form.appendChild(label);return input;}
+    const start=hour('Desde',config.start), end=hour('Hasta',config.end), idle=number('Volver al rojo tras no tocar la pantalla (segundos)',config.idle,5,600);
+    const advanced=document.createElement('details');const summary=document.createElement('summary');summary.textContent='Opciones avanzadas · sensores y brillo';advanced.appendChild(summary);form.appendChild(advanced);
     function select(text:string, domain:string, value:string) {
       const label=document.createElement('label');label.textContent=text;const select=document.createElement('select');
-      const empty=document.createElement('option');empty.value='';empty.textContent=domain==='sensor'?'Usar horario local':'Sin configurar';select.appendChild(empty);
-      Object.values(states()).filter((s:any)=>s.entity_id.startsWith(domain+'.')).forEach((s:any)=>{const option=document.createElement('option');option.value=s.entity_id;option.textContent=s.attributes?.friendly_name || s.entity_id;select.appendChild(option);});
-      select.value=value;label.appendChild(select);form.appendChild(label);return select;
+      const empty=document.createElement('option');empty.value='';empty.textContent=domain==='sensor'?'Usar el horario de arriba':'No usar';select.appendChild(empty);
+      Object.values(states()).filter((s:any)=>s.entity_id.startsWith(domain+'.') && (domain!=='sensor' || s.attributes?.device_class==='illuminance' || ['lx','lux'].includes(s.attributes?.unit_of_measurement) || s.entity_id===value)).forEach((s:any)=>{const option=document.createElement('option');option.value=s.entity_id;option.textContent=s.attributes?.friendly_name || s.entity_id;select.appendChild(option);});
+      select.value=value;label.appendChild(select);advanced.appendChild(label);return select;
     }
-    const lux=select('Sensor de iluminación (lux)','sensor',config.lux), presence=select('Sensor de presencia','binary_sensor',config.presence), brightness=select('Brillo físico: entidad number de la pantalla (opcional)','number',config.brightness);
-    function number(text:string,value:number,min:number,max:number) { const label=document.createElement('label');label.textContent=text;const input=document.createElement('input');input.type='number';input.min=String(min);input.max=String(max);input.required=true;input.value=String(value);label.appendChild(input);form.appendChild(label);return input; }
-    const threshold=number('Entrar por debajo de (lux)',config.threshold,1,1000), idle=number('Tiempo sin interacción (segundos)',config.idle,5,600), start=number('Horario nocturno: hora inicial',config.start,0,23), end=number('Horario nocturno: hora final',config.end,0,23);
-    const note=document.createElement('p');note.textContent='El primer toque recupera los colores. El brillo físico requiere una entidad de Home Assistant que controle esta pantalla. Mantenerla encendida depende del navegador y del sistema.';form.appendChild(note);
+    const deviceLabel=document.createElement('label');deviceLabel.textContent='Usar el sensor de luz de este dispositivo si está disponible';
+    const deviceSensor=document.createElement('input');deviceSensor.type='checkbox';deviceSensor.checked=config.deviceSensor;deviceLabel.appendChild(deviceSensor);advanced.appendChild(deviceLabel);
+    const deviceStatus=document.createElement('p');deviceStatus.textContent=ambientLux !== null ? 'Sensor del dispositivo activo.' : 'Si este navegador no permite leer el sensor, se usará el sensor de HA, las luces elegidas o el horario.';advanced.appendChild(deviceStatus);
+    const lightsLabel=document.createElement('label');lightsLabel.textContent='Ponerse rojo cuando todas estas luces estén apagadas';advanced.appendChild(lightsLabel);
+    const lightList=document.createElement('div');lightList.style.cssText='max-height:180px;overflow:auto';lightsLabel.appendChild(lightList);
+    const lightInputs: HTMLInputElement[]=[];
+    const lightIds=[...new Set<string>([...Object.keys(states()).filter(id=>id.startsWith('light.')), ...config.lights])];
+    lightIds.forEach(id=>{const row=document.createElement('label');row.style.display='flex';row.style.alignItems='center';const input=document.createElement('input');input.type='checkbox';input.value=id;input.checked=config.lights.includes(id);row.appendChild(input);row.appendChild(document.createTextNode(states()[id]?.attributes?.friendly_name || id));lightList.appendChild(row);lightInputs.push(input);});
+    const help=document.createElement('p');help.textContent='Prioridad: sensor del dispositivo, sensor de luz de HA, luces seleccionadas y horario. Una luz encendida o sin conexión conserva los colores cuando se usa la opción de luces. Presencia recupera los colores.';advanced.appendChild(help);
+    const lux=select('Detectar oscuridad con un sensor de luz','sensor',config.lux), presence=select('Recuperar colores al detectar presencia','binary_sensor',config.presence), brightness=select('Control de brillo de esta pantalla en HA','number',config.brightness);
+    const threshold=number('Umbral de oscuridad (lux)',config.threshold,1,1000,advanced);
+    const note=document.createElement('p');note.textContent='Solo funciona en pantalla completa. Con alto contraste conserva la visualización normal. Sin un control de brillo de la pantalla, solo se atenúa el panel.';form.appendChild(note);
     const close=document.createElement('button');close.type='button';close.textContent='Cancelar';close.onclick=()=>overlay.remove();form.appendChild(close);
     const save=document.createElement('button');save.type='submit';save.textContent='Guardar';form.appendChild(save);
-    form.onsubmit=event=>{event.preventDefault();config={enabled:checkbox.checked,lux:lux.value,presence:presence.value,brightness:brightness.value,threshold:Number(threshold.value),idle:Number(idle.value),start:Number(start.value),end:Number(end.value)};try {localStorage.setItem(key(),JSON.stringify(config));}catch{note.textContent='No se pudo guardar la configuración en este navegador.';return;}overlay.remove();transition();};
+    form.onsubmit=event=>{event.preventDefault();stopAmbient();ambientTried=false;config={enabled:checkbox.checked,deviceSensor:deviceSensor.checked,lights:lightInputs.filter(input=>input.checked).map(input=>input.value),lux:lux.value,presence:presence.value,brightness:brightness.value,threshold:Number(threshold.value),idle:Number(idle.value),start:Number(start.value.split(':')[0]),end:Number(end.value.split(':')[0])};try {localStorage.setItem(key(),JSON.stringify(config));}catch{note.textContent='No se pudo guardar la configuración en este navegador.';return;}overlay.remove();transition();};
     overlay.addEventListener('keydown',event=>{
       if(event.key==='Escape') {event.stopPropagation();overlay.remove();}
-      if(event.key==='Tab') {const nodes=[...form.querySelectorAll<HTMLElement>('input,select,button')];const first=nodes[0],last=nodes[nodes.length-1];if(event.shiftKey && panel.shadowRoot.activeElement===first){event.preventDefault();last.focus();}else if(!event.shiftKey && panel.shadowRoot.activeElement===last){event.preventDefault();first.focus();}}
+      if(event.key==='Tab') {const nodes=[...form.querySelectorAll<HTMLElement>('input,select,button,summary')].filter(node=>node.getClientRects().length>0);const first=nodes[0],last=nodes[nodes.length-1];if(event.shiftKey && panel.shadowRoot.activeElement===first){event.preventDefault();last.focus();}else if(!event.shiftKey && panel.shadowRoot.activeElement===last){event.preventDefault();first.focus();}}
     });
     panel.shadowRoot.appendChild(overlay);checkbox.focus();
   };
   tick();
-  return () => { disposed=true; clearInterval(timer); setNight(false); void hardware(false); if(wakeLock) void wakeLock.release();style.remove();panel.shadowRoot.querySelector('.argus-night-settings')?.remove();panel.shadowRoot.removeEventListener('pointerdown',activity,true);panel.shadowRoot.removeEventListener('keydown',activity,true);panel.shadowRoot.removeEventListener('click',click,true);panel.removeEventListener('argus-fullscreen-changed',transition);document.removeEventListener('visibilitychange',transition); };
+  return () => { disposed=true; stopAmbient(); clearInterval(timer); setNight(false); void hardware(false); if(wakeLock) void wakeLock.release();style.remove();panel.shadowRoot.querySelector('.argus-night-settings')?.remove();panel.shadowRoot.removeEventListener('pointerdown',activity,true);panel.shadowRoot.removeEventListener('keydown',activity,true);panel.shadowRoot.removeEventListener('click',click,true);panel.removeEventListener('argus-fullscreen-changed',transition);document.removeEventListener('visibilitychange',transition); };
 }
