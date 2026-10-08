@@ -6586,14 +6586,21 @@ class ArgusPanel extends HTMLElement {
     this._modeEntryId = entityId;
     this._mode = this._mode || 'disarmed';
 
+    const hadEntityScope = Boolean(this._ui.modes.__by_entity__[entityId]);
     if (!this._ui.modes.__by_entity__[entityId] || typeof this._ui.modes.__by_entity__[entityId] !== 'object' || Array.isArray(this._ui.modes.__by_entity__[entityId])) {
       this._ui.modes.__by_entity__[entityId] = {};
+      for (const mode of ['disarmed', 'home', 'away', 'night']) {
+        const legacy = this._ui.modes[mode];
+        if (legacy && typeof legacy === 'object' && !Array.isArray(legacy)) {
+          this._ui.modes.__by_entity__[entityId][mode] = { ...emptyCfg, ...legacy };
+        }
+      }
     }
 
     // Migration/Ensure valid
     if (!this._ui.modes.__by_entity__[entityId][this._mode] || typeof this._ui.modes.__by_entity__[entityId][this._mode] !== 'object' || Array.isArray(this._ui.modes.__by_entity__[entityId][this._mode])) {
         let legacy = {};
-        if (this._ui.modes[this._mode] && typeof this._ui.modes[this._mode] === 'object' && !Array.isArray(this._ui.modes[this._mode])) {
+        if (!hadEntityScope && this._ui.modes[this._mode] && typeof this._ui.modes[this._mode] === 'object' && !Array.isArray(this._ui.modes[this._mode])) {
           legacy = this._ui.modes[this._mode];
         }
         this._ui.modes.__by_entity__[entityId][this._mode] = { ...emptyCfg, ...legacy };
@@ -7026,6 +7033,7 @@ class ArgusPanel extends HTMLElement {
       if (status) { status.textContent = '…'; status.className = 'status'; }
       try {
         await this._send('argus/save_mode_config', {
+          entry_id: this._dashboard?.entries?.find(entry => entry.entity_id === _eid)?.entry_id || this._dashboard?.entry_id,
           entity_id: _eid,
           mode: this._mode,
           config: cfg,
@@ -8844,11 +8852,10 @@ class ArgusPanel extends HTMLElement {
       return;
     }
 
-    // FIX-3: leer modeCfg desde la ruta canónica __by_entity__
+    // The entity scope is authoritative, including modes with no configuration.
     const _armEid = e.entity_id || this._modeEntryId || this._dashboard?.entries?.[0]?.entity_id;
-    const modeCfg = (this._ui?.modes?.__by_entity__?.[_armEid]?.[action])
-                 || (this._ui?.modes?.[action])
-                 || {};
+    const scopedModes = this._ui?.modes?.__by_entity__?.[_armEid];
+    const modeCfg = scopedModes ? (scopedModes[action] || {}) : (this._ui?.modes?.[action] || {});
 
     // FIX-5: bloqueo require_closed con detalle de sensores abiertos
     if (modeCfg.require_closed) {

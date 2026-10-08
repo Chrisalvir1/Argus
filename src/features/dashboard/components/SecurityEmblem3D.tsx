@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 export type EmblemProps = { state: string; label: string; variant?: string; pulse?: string; pulseKey?: string };
-const colors: Record<string, number> = { disarmed: 0x35e7a1, armed_home: 0xffa338, armed_away: 0xff405b, armed_night: 0x319aff, triggered: 0xff2549, unavailable: 0x8293a8, unknown: 0x8293a8, pending: 0xffc354, arming: 0xffc354 };
+const colors: Record<string, number> = { disarmed: 0x35e7a1, armed_home: 0xffa338, armed_away: 0xff3028, armed_night: 0x319aff, triggered: 0xff1810, unavailable: 0x8293a8, unknown: 0x8293a8, pending: 0xffc354, arming: 0xffc354 };
 
 /** Locally rendered geometry: no network assets, external services or continuous HA polling. */
 export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNode }) {
@@ -24,7 +24,12 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 0.9;
     renderer.setClearColor(0x000000, 0);
-    el.appendChild(renderer.domElement);
+    // Mount directly on the console: legacy entry-icon containment must not
+    // turn the emblem column into the viewport for the four corner guards.
+    const surface = el.closest('.entry') as HTMLElement || el;
+    renderer.domElement.className = 'console-emblem-canvas';
+    renderer.domElement.setAttribute('aria-hidden', 'true');
+    surface.appendChild(renderer.domElement);
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 30);
     camera.position.set(0, 0, 9.2);
@@ -94,10 +99,13 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
     const guardGlass = new THREE.MeshPhysicalMaterial({ color: 0x91bce8, metalness: .12, roughness: .075, transmission: .42, thickness: .22, ior: 1.48, clearcoat: 1, clearcoatRoughness: .035, envMapIntensity: 2.6 });
     const guardGlow = new THREE.LineBasicMaterial({ color: accent, transparent: true, opacity: .58, toneMapped: false });
     const guardShape = new THREE.Shape();
-    guardShape.moveTo(-.30, -.24); guardShape.lineTo(-.30, .25); guardShape.quadraticCurveTo(-.30, .30, -.25, .30);
-    guardShape.lineTo(.24, .30); guardShape.quadraticCurveTo(.30, .30, .30, .24); guardShape.lineTo(.30, .17);
-    guardShape.lineTo(-.16, .17); guardShape.quadraticCurveTo(-.17, .17, -.17, .16); guardShape.lineTo(-.17, -.24);
-    guardShape.quadraticCurveTo(-.17, -.30, -.23, -.30); guardShape.lineTo(-.24, -.30); guardShape.quadraticCurveTo(-.30, -.30, -.30, -.24); guardShape.closePath();
+    guardShape.moveTo(-.30, -.24); guardShape.lineTo(-.30, .10);
+    guardShape.quadraticCurveTo(-.30, .30, -.10, .30);
+    guardShape.lineTo(.24, .30); guardShape.quadraticCurveTo(.30, .30, .30, .24);
+    guardShape.lineTo(.30, .18); guardShape.lineTo(-.10, .18);
+    guardShape.quadraticCurveTo(-.18, .18, -.18, .10); guardShape.lineTo(-.18, -.24);
+    guardShape.quadraticCurveTo(-.18, -.30, -.24, -.30);
+    guardShape.quadraticCurveTo(-.30, -.30, -.30, -.24); guardShape.closePath();
     for (let i = 0; i < 4; i++) {
       const sx = i === 0 || i === 3 ? -1 : 1;
       const sy = i < 2 ? 1 : -1;
@@ -116,15 +124,23 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
     scene.add(new THREE.HemisphereLight(0xb9dfff, 0x080e20, .65));
     const key = new THREE.DirectionalLight(0xe9f4ff, 2); key.position.set(-3, 4, 5); scene.add(key);
     const rim = new THREE.PointLight(accent, 18, 12); rim.position.set(2, -1, 3); scene.add(rim);
-    let width = 0, height = 0, visible = true, lost = false, frame = 0, last = 0, previousState = '', previousPulse = '', transitionAt = 0, pulseAt = -10, deployAt = -10, previousPatrolling = false, interactionUntil = 0, scrollingUntil = 0;
+    let width = 0, height = 0, visible = true, lost = false, frame = 0, last = 0, previousState = '', previousPulse = '', transitionAt = 0, pulseAt = -10, deployAt = -10, previousPatrolling = false, interactionUntil = 0, scrollingUntil = 0, cornerRadius = 28;
     const pointer = new THREE.Vector2();
+    const anchor = new THREE.Vector2();
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const host = el.getRootNode() instanceof ShadowRoot ? (el.getRootNode() as ShadowRoot).host : el.closest('argus-panel');
     const essential = () => motion.matches || !!host?.classList.contains('argus-perf-essential');
-    const resize = new ResizeObserver(entries => { const box = entries[0].contentRect; width = box.width; height = box.height; if (width > 0 && height > 0) { renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25, Math.sqrt(600000 / (width * height)))); renderer.setSize(width, height, false); camera.aspect = width / height; camera.position.z = Math.max(9.2, 4.8 / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect)); camera.updateProjectionMatrix(); } }); resize.observe(el);
-    const observer = new IntersectionObserver(entries => { visible = entries[0].isIntersecting; }); observer.observe(el);
-    const interactionSurface = el.closest('.security-console') || el;
-    const move = (event: Event) => { if (!(event instanceof PointerEvent)) return; const box = el.getBoundingClientRect(); pointer.set((event.clientX-box.left)/box.width-.5, (event.clientY-box.top)/box.height-.5); interactionUntil = performance.now() + 2200; };
+    const resize = new ResizeObserver(entries => { const box = entries[0].contentRect; width = box.width; height = box.height; if (width > 0 && height > 0) { renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25, Math.sqrt(600000 / (width * height)))); renderer.setSize(width, height, false); camera.aspect = width / height; camera.position.z = Math.max(9.2, 4.8 / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect)); camera.updateProjectionMatrix();
+      cornerRadius = Number.parseFloat(getComputedStyle(surface).borderTopLeftRadius) || 0;
+      const iconBox = el.closest('.entry-icon')?.getBoundingClientRect();
+      const surfaceBox = surface.getBoundingClientRect();
+      const vh = 2 * camera.position.z * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+      if (iconBox) anchor.set(((iconBox.left + iconBox.width/2 - surfaceBox.left)/width-.5)*vh*camera.aspect,
+                             (.5-(iconBox.top + 105 - surfaceBox.top)/height)*vh);
+    } }); resize.observe(surface);
+    const observer = new IntersectionObserver(entries => { visible = entries[0].isIntersecting; }); observer.observe(surface);
+    const interactionSurface = surface;
+    const move = (event: Event) => { if (!(event instanceof PointerEvent)) return; const box = surface.getBoundingClientRect(); pointer.set((event.clientX-box.left)/box.width-.5, (event.clientY-box.top)/box.height-.5); interactionUntil = performance.now() + 2200; };
     const wake = () => { interactionUntil = performance.now() + 2200; };
     const leave = () => pointer.set(0,0);
     const onScroll = () => { scrollingUntil = performance.now() + 180; };
@@ -143,8 +159,11 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
       if (pulseId !== previousPulse) { previousPulse = pulseId; if (p.pulse) pulseAt = t; }
       accent.lerp(new THREE.Color(colors[p.state] ?? colors.unknown), .12);
       light.color.copy(accent); light.emissive.copy(accent); rim.color.copy(accent);
-      glassTint.set(0x426187).lerp(accent, .68); glass.color.lerp(glassTint, reduced ? 1 : .1);
-      guardGlass.color.lerp(glassTint.set(0x91bce8).lerp(accent, .22), reduced ? 1 : .1);
+      dark.color.lerp(glassTint.set(0x122944).lerp(accent, .38), reduced ? 1 : .12);
+      glassTint.set(0x18243a).lerp(accent, .92); glass.color.lerp(glassTint, reduced ? 1 : .16);
+      guardGlass.color.lerp(accent, reduced ? 1 : .16);
+      guardGlass.emissive.copy(accent);
+      guardGlass.emissiveIntensity = .24;
       guardGlow.color.copy(accent);
       lensMaterial.emissive.copy(accent);
       rotor.children.forEach(child => { if (child instanceof THREE.Line) (child.material as THREE.LineBasicMaterial).color.copy(accent); });
@@ -152,21 +171,22 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
       const alarmed = p.state === 'triggered' || p.pulse === 'sos';
       const patrolling = alarmed || p.state === 'armed_away';
       const awayAge = p.state === 'armed_away' ? t-transitionAt : Infinity;
-      const sosAge = alarmed ? t-pulseAt : Infinity;
-      if (patrolling && !previousPatrolling) deployAt = t;
+      const sosAge = alarmed ? Math.min(t-pulseAt, t-transitionAt) : Infinity;
+      if ((patrolling && !previousPatrolling) || (alarmed && changed)) deployAt = t;
       previousPatrolling = patrolling;
-      const burstAge = alarmed ? sosAge : awayAge;
-      const burst = !reduced && burstAge >= 0 && burstAge < .9 ? (1-burstAge/.9) ** 2 : 0;
+      const burstAge = (alarmed ? sosAge : awayAge) - .65;
+      const burst = !reduced && burstAge >= 0 && burstAge < .4 ? Math.sin(Math.PI*burstAge/.4) : 0;
       const deploymentAge = t-deployAt;
-      const deployment = reduced ? Number(patrolling) : patrolling ? 1-(1-Math.min(1, Math.max(0, deploymentAge)/.62))**3 : 0;
+      const deployment = reduced ? Number(patrolling) : patrolling ? 1-(1-Math.min(1, Math.max(0, deploymentAge-1.05)/.85))**3 : 0;
       const shake = !reduced ? Math.sin(t*82)*.105*burst : 0;
       const engaged = p.state !== 'disarmed' && p.state !== 'unavailable' && p.state !== 'unknown';
       const awake = engaged || performance.now() < interactionUntil;
       const viewHeight = 2 * camera.position.z * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
       const viewWidth = viewHeight * camera.aspect;
-      const gazeTargets = [[-.38*viewWidth,.36*viewHeight],[.38*viewWidth,.36*viewHeight],[.38*viewWidth,-.36*viewHeight],[-.38*viewWidth,-.36*viewHeight],[0,0]];
-      const gaze = patrolling && !reduced ? gazeTargets[Math.floor(t*1.15) % gazeTargets.length] : [pointer.x*.55, -pointer.y*.55];
-      const gazeMix = patrolling || awake || p.pulse === 'sensor' ? 1 : 0;
+      const gazeTargets = [[-.18,.16],[.18,.16],[.18,-.16],[-.18,-.16],[0,0]];
+      const awayLensLocked = p.state === 'armed_away' && !alarmed;
+      const gaze = patrolling && !reduced && !awayLensLocked ? gazeTargets[Math.floor(t*1.15) % gazeTargets.length] : [pointer.x*.55, -pointer.y*.55];
+      const gazeMix = awayLensLocked ? 0 : (patrolling || awake || p.pulse === 'sensor' ? 1 : 0);
       const gazeX = gaze[0]*gazeMix, gazeY = gaze[1]*gazeMix;
       const blend = reduced ? 1 : .1;
       lensAssembly.position.x += (gazeX-lensAssembly.position.x)*blend;
@@ -185,35 +205,46 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
       }
       root.rotation.x += ((reduced ? 0 : pointer.y*.16 + Math.sin(t*.6)*.018 + Math.sin(t*76)*.045*burst)-root.rotation.x)*.22;
       root.rotation.y += ((reduced ? 0 : pointer.x*.25 + Math.sin(t*.45)*.035 + Math.cos(t*71)*.05*burst)-root.rotation.y)*.22;
-      root.position.set(shake, Math.cos(t*74)*.035*burst, 0);
+      root.position.set(anchor.x+shake, anchor.y+Math.cos(t*74)*.035*burst, 0);
       const arriving = Math.max(0, 1-(t-transitionAt)/.8);
-      root.scale.setScalar(reduced ? 1 : 1 + Math.sin(t*1.6)*.009 - arriving*.07);
+      const emblemScale = viewHeight * 210 / (height * 3.2);
+      root.scale.setScalar(emblemScale * (reduced ? 1 : 1 + Math.sin(t*1.6)*.009 - arriving*.07));
       cornerGuards.forEach((guard, index) => {
-        guard.visible = patrolling && deployment > .72;
+        guard.visible = patrolling && (reduced || deploymentAge >= 1.05);
         const sx = index === 0 || index === 3 ? -1 : 1;
         const sy = index < 2 ? 1 : -1;
-        guard.position.set(sx*(viewWidth/2-.62), sy*(viewHeight/2-.62), 0);
-        const guardArrival = Math.max(0, Math.min(1, (deployment-.72)/.28));
-        const guardScale = reduced ? 1 : (guard.visible ? .35 + guardArrival*.65 + (alarmed ? burst*.045 : 0) : .35);
-        guard.scale.set(sx*guardScale, sy*guardScale, guardScale);
-        guard.rotation.z = !reduced && alarmed ? Math.sin(t*76+index)*.04*burst : (!reduced && arriving>0 ? Math.sin(arriving*Math.PI)*.035 : 0);
+        // Small rounded glass Ls sit just inside the panel's rounded border.
+        const size = viewHeight * 42 / height;
+        const radiusX = viewWidth * cornerRadius / width;
+        const radiusY = viewHeight * cornerRadius / height;
+        const insetX = radiusX + size*.30;
+        const insetY = radiusY + size*.30;
+        const targetX = sx*(viewWidth/2-insetX-size*.30);
+        const targetY = sy*(viewHeight/2-insetY-size*.30);
+        guard.position.set(THREE.MathUtils.lerp(anchor.x+sx*.72*emblemScale, targetX, deployment), THREE.MathUtils.lerp(anchor.y+sy*.72*emblemScale, targetY, deployment), 0);
+        const guardScale = THREE.MathUtils.lerp(.6, size, deployment);
+        guard.scale.set(-sx*guardScale, sy*guardScale, guardScale);
+        guard.rotation.z = reduced ? 0 : (1-deployment)*Math.PI*2;
       });
-      rotor.rotation.z = !reduced && props.variant === 'core' && !alarmed ? t*.045 : 0;
+      const modeProgress = Math.min(1, Math.max(0, (t-transitionAt)/.85));
+      const modeTurn = reduced ? 0 : Math.PI*2*(1-(1-modeProgress)**3);
+      rotor.rotation.z = modeTurn + (!reduced && props.variant === 'core' && !alarmed ? Math.sin(t*.3)*.035 : 0);
       crystalPieces.forEach((piece, index) => {
         const deploy = deployment;
-        const sx = index === 0 || index === 3 ? 1 : -1;
+        const sx = index === 0 || index === 3 ? -1 : 1;
         const sy = index < 2 ? 1 : -1;
-        const cornerX = sx*(viewWidth/2-.78), cornerY = sy*(viewHeight/2-.72);
-        piece.visible = deploy < .98;
-        piece.position.set(cornerX*deploy, cornerY*deploy, 0);
+        const cornerX = sx*(viewWidth/2-.78)-anchor.x, cornerY = sy*(viewHeight/2-.72)-anchor.y;
+        piece.visible = deploy < .65;
+        piece.position.set(cornerX*deploy/emblemScale, cornerY*deploy/emblemScale, 0);
         piece.scale.setScalar(1-.75*deploy);
         const modeArc = piece.userData.modeArc as THREE.Object3D | undefined;
         if (modeArc) modeArc.visible = !patrolling || deploy < .58;
+        piece.rotation.y = reduced ? 0 : Math.sin(modeProgress*Math.PI)*.5;
         const slowDrift = patrolling && !reduced ? Math.sin(t*1.35+index)*.045 : 0;
         piece.rotation.z = slowDrift + (!reduced && burst > 0 ? Math.sin(t*76+index)*.08*burst : 0);
       });
       light.emissiveIntensity = reduced ? .65 : .7 + Math.sin(t*2)*.1 + (elapsed < duration || alarmed ? .35 : 0);
-      lensMaterial.emissiveIntensity = sleeping ? .004 : alarmed ? .025 : awake ? .012 : .006;
+      lensMaterial.emissiveIntensity = sleeping ? .004 : alarmed ? .055 : p.state === 'armed_away' ? .045 : awake ? .012 : .006;
       waves.forEach((wave, i) => { const age = elapsed-i*.18; wave.visible = !reduced && age >= 0 && age < .8; wave.scale.setScalar(1+Math.max(0,age)*.55); waveMaterials[i].opacity = Math.max(0, 1-age/.8); waveMaterials[i].color.copy(accent); waveMaterials[i].emissive.copy(accent); });
       renderer.render(scene, camera);
     }; frame = requestAnimationFrame(animate);

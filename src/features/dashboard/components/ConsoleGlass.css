@@ -232,3 +232,6 @@
 :host .entry.entry .security-console.security-console .console-system-badge,
 :host .entry.entry .security-console.security-console .argus-shield-status { position:relative; z-index:2; }
 :host(.argus-contrast-high) .entry.entry .security-console.security-console .console-emblem-3d { background:transparent; }
+
+/* The WebGL canvas is a direct child of the console, outside legacy icon containment. */
+:host .entry.entry > canvas.console-emblem-canvas { position:absolute !important; inset:0 !important; width:100% !important; height:100% !important; display:block !important; z-index:1; pointer-events:none; }

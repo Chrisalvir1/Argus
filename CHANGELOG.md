@@ -1,3 +1,11 @@
+## [2.6.6] - 2026-10-08
+
+- Corregir el alcance de sensores por modo para que Casa no recupere sensores de configuraciones antiguas o de otros modos.
+- Anunciar por TTS el modo confirmado aunque el armado de Casa no tenga sensores pendientes.
+- Evitar cortar la síntesis TTS por un timeout corto y confirmar que Argus ya terminó de armar.
+- Centrar en vertical móvil el hogar, el estado de Argus y los controles de cabecera.
+- Mejorar los emblemas 3D: tinte de cristal más intenso, giro al cambiar de modo, lente fijo rojo en Ausente y L curvas adaptadas al radio real del panel.
+
 ## [2.6.5] - 2026-10-07
 
 - Restaurar el lienzo 3D de Núcleo de seguridad, Escudo de cristal y Emblema Argus; reservar su espacio correctamente en la consola.

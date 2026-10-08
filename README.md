@@ -5,6 +5,13 @@
 
 **Sistema Integral de Seguridad Residencial Inteligente, Local y Profesional para Home Assistant**
 
+### Novedades de la versión 2.6.6
+
+- El modo Casa usa exclusivamente sus sensores configurados y confirma el armado por TTS.
+- El aviso de voz identifica a Argus y no cancela la síntesis con un timeout prematuro.
+- La cabecera del panel queda centrada en móvil vertical.
+- Los emblemas muestran cristales más intensos y protecciones L que se ajustan a las esquinas del panel.
+
 
 
 <br>

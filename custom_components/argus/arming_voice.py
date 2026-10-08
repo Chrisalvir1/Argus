@@ -142,7 +142,10 @@ async def _async_speak(hass, options, message, lang):
                           {"entity_id": speak_tts, "media_player_entity_id": target, "message": speak_message, "cache": True},
                           blocking=True,
                       ),
-                      timeout=3.0,
+                      # Some TTS engines take several seconds to synthesize and
+                      # hand off audio. A short timeout cancels synthesis and
+                      # leaves the speaker playing a clipped announcement.
+                      timeout=15.0,
                   )
           except asyncio.TimeoutError:
               _LOGGER.warning("Argus voice announcement timed out for %s", target)
@@ -160,10 +163,10 @@ async def _async_speak(hass, options, message, lang):
       else:
           await deliver()
 
-async def async_announce_arming_wait_update(hass, config_entry, *, alarm_entity_id, target, previous_open, current_open):
+async def async_announce_arming_wait_update(hass, config_entry, *, alarm_entity_id, target, previous_open, current_open, committed=False):
   previous = list(dict.fromkeys(previous_open))
   current = list(dict.fromkeys(current_open))
-  if previous == current: return
+  if previous == current and not committed: return
   lang = await _get_language(hass, config_entry)
   current_info = [_sensor_identity(hass, e) for e in current]
   prev_set, cur_set = set(previous), set(current)
@@ -179,7 +182,9 @@ async def async_announce_arming_wait_update(hass, config_entry, *, alarm_entity_
   }
   options = _options(hass, config_entry)
   
-  if not current:
+  if committed:
+      template = translate(lang, "msg_armed")
+  elif not current:
       template = options.get(CONF_ARMING_VOICE_MESSAGE_COMPLETE) or translate(lang, "msg_complete")
   # A transition must always say what closed as well as what remains.  The
   # former "last" branch hid the close event whenever exactly one sensor was
@@ -207,7 +212,8 @@ async def async_announce_arming_wait_update(hass, config_entry, *, alarm_entity_
       "open_count": len(current), "open_sensors": current_info, "open_sensor_names": names,
       "recently_closed": closed, "recently_opened": opened, "all_closed": not current, "message": message
   })
-  await _async_speak(hass, options, message, lang)
+  if current or committed:
+      await _async_speak(hass, options, message, lang)
 
 async def async_announce_arming_cancelled(hass, config_entry, *, alarm_entity_id, target, source):
   lang = await _get_language(hass, config_entry)

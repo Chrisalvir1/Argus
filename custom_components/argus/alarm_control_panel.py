@@ -398,7 +398,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
                 return val
 
         # Priority 2: flat legacy config
-        if mode_key:
+        if mode_key and self.entity_id not in modes.get("__by_entity__", {}):
             flat_cfg = modes.get(mode_key, {})
             if key in flat_cfg:
                 val = flat_cfg[key]
@@ -431,31 +431,15 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
           2. Flat/legacy config → modes[mode_key]
           3. Static YAML config (fallback)
         """
-        modes = self._ui_config.get("modes", {})
         mode_key = state.value.replace("armed_", "")
-
-        # 1 – per-entity config written by the JS panel via argus/save_mode_config
+        modes = self._ui_config.get("modes", {})
         by_entity = modes.get("__by_entity__", {})
-        m_cfg = by_entity.get(self.entity_id, {}).get(mode_key)
-
-        # 2 – flat legacy config (written by older versions / direct saves)
-        if not m_cfg:
-            m_cfg = modes.get(mode_key)
-
-        if m_cfg:
-            sensors  = m_cfg.get("sensors") or []
-            # Accept both camelCase (JS) and snake_case (Python) key names
-            bypassed = (
-                m_cfg.get("bypassed_sensors")
-                or m_cfg.get("bypassedSensors")
-                or []
-            )
-            active = [s for s in sensors if s not in bypassed]
-            _LOGGER.debug(
-                "Argus [%s] mode=%s sensors=%s bypassed=%s active=%s",
-                self.entity_id, mode_key, sensors, bypassed, active,
-            )
-            return active
+        scoped = by_entity.get(self.entity_id)
+        if isinstance(scoped, dict) or mode_key in modes:
+            m_cfg = self._mode_config(mode_key)
+            sensors = m_cfg.get("sensors") or []
+            bypassed = m_cfg.get("bypassed_sensors") or m_cfg.get("bypassedSensors") or []
+            return [sensor for sensor in dict.fromkeys(sensors) if sensor not in bypassed]
 
         # 3 – static YAML fallback
         if state == AlarmControlPanelState.ARMED_HOME:
@@ -492,7 +476,12 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
     def _mode_config(self, mode_key: str) -> dict:
         modes = self._ui_config.get("modes", {})
-        return modes.get("__by_entity__", {}).get(self.entity_id, {}).get(mode_key) or modes.get(mode_key) or {}
+        scoped = modes.get("__by_entity__", {}).get(self.entity_id)
+        if isinstance(scoped, dict):
+            config = scoped.get(mode_key)
+            return config if isinstance(config, dict) else {}
+        config = modes.get(mode_key)
+        return config if isinstance(config, dict) else {}
 
     def _open_blocking_sensors(self, target: AlarmControlPanelState) -> list[str]:
         config = self._mode_config(target.value.replace("armed_", ""))
@@ -975,14 +964,7 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
         self._triggered_mode = self._alarm_state.value.replace("armed_", "")
 
         mode_key = self._alarm_state.value.replace("armed_", "")
-        # FIX-2b: leer desde __by_entity__ (misma prioridad que _sensors_for_state)
-        _modes = self._ui_config.get("modes", {})
-        _by_e  = _modes.get("__by_entity__", {})
-        mode_cfg = (
-            _by_e.get(self.entity_id, {}).get(mode_key)
-            or _modes.get(mode_key)
-            or {}
-        )
+        mode_cfg = self._mode_config(mode_key)
 
         # Per-mode entry list or global entry list
         entry_list = mode_cfg.get("entry_sensors")
@@ -1553,6 +1535,8 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
 
         policy = self._open_sensor_policy(mode_key) if mode_key else "allow"
         open_sensors = self._open_blocking_sensors(target) if mode_key else []
+        _LOGGER.info("Argus arm request: entity=%s target=%s origin=%s policy=%s sensors=%s blockers=%s",
+                     self.entity_id, target.value, origin, policy, self._sensors_for_state(target), open_sensors)
         if open_sensors and policy == "block" and not restoring_panic:
             open_names = [
                 self.hass.states.get(eid).attributes.get("friendly_name", eid)
@@ -1710,6 +1694,10 @@ class ArgusAlarmPanel(AlarmControlPanelEntity, RestoreEntity):
             f"El sistema se armó en modo {_MODE_LABELS.get(mode, mode)}.",
         )
         await async_append_audit_log(self.hass, "armed", f"Modo: {_MODE_LABELS.get(target.value if hasattr(target, 'value') else str(target), target)}", user=user_name, entry_id=self._config_entry.entry_id)
+        self.hass.async_create_task(async_announce_arming_wait_update(
+            self.hass, self._config_entry, alarm_entity_id=self.entity_id,
+            target=target.value, previous_open=[], current_open=[], committed=True,
+        ))
         _LOGGER.info("Argus: Armado → %s", target)
         await self._async_sync_panels(target)
 

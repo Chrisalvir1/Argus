@@ -96,7 +96,12 @@
 }
 @container argus-console (max-width: 520px) {
   :host .entry.entry .entry-content.security-console.security-console { grid-template-columns:minmax(0,1fr) !important; grid-template-areas:"header" "emblem" "controls" "sensors" !important; grid-template-rows:auto auto auto auto !important; padding:20px 16px !important; gap:20px !important; }
-  :host .entry.entry .security-console.security-console .console-hud-right { width:100% !important; justify-content:flex-start !important; }
+  :host .entry.entry .security-console.security-console .console-hud { flex-direction:column !important; align-items:center !important; justify-content:center !important; width:100% !important; gap:10px !important; }
+  :host .entry.entry .security-console.security-console .console-hud-loc { flex:0 0 auto !important; width:100% !important; max-width:100% !important; justify-content:center !important; text-align:center !important; box-sizing:border-box !important; }
+  :host .entry.entry .security-console.security-console .argus-connection-pill { align-self:center !important; justify-content:center !important; }
+  :host .entry.entry .security-console.security-console .console-hud-right { display:grid !important; grid-template-columns:repeat(2,minmax(0,1fr)) !important; width:100% !important; justify-content:center !important; justify-items:stretch !important; }
+  :host .entry.entry .security-console.security-console .console-hud-right button { width:100% !important; min-width:0 !important; justify-content:center !important; text-align:center !important; }
+  :host .entry.entry .security-console.security-console .console-hud-right button:last-child { grid-column:1 / -1 !important; width:50% !important; justify-self:center !important; }
   :host .entry.entry .security-console.security-console .entry-icon svg { width:160px !important; }
   :host .entry.entry .security-console.security-console .console-sensor { grid-template-columns:20px minmax(0,1fr) !important; }
   :host .entry.entry .security-console.security-console .console-sensor-status-wrap { grid-column:2 !important; justify-content:flex-start !important; max-width:none !important; }
