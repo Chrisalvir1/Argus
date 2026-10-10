@@ -34,6 +34,31 @@ jobs:
       - run: python -m compileall -q custom_components/argus tests
       - run: python -m unittest discover -s tests -v
 
+  home-assistant-core-compatibility:
+    name: Home Assistant Core 2026.10.0 integration API smoke tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
+        with:
+          repository: home-assistant/core
+          ref: 2026.10.0
+          path: home-assistant-core
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.14.2'
+      - name: Install Home Assistant Core 2026.10.0 test dependencies
+        run: |
+          python -m pip install uv==0.12.19
+          cd home-assistant-core
+          uv pip install --system -r requirements.txt -r requirements_test.txt
+          uv pip install --system -e . --no-deps
+      - name: Import Argus against real Core entities and websocket APIs
+        run: PYTHONPATH="$GITHUB_WORKSPACE" python -m pytest -q tests_core
+      - name: Run existing Argus regression suite on the exact Core runtime
+        run: PYTHONPATH="$GITHUB_WORKSPACE" python -m unittest discover -s tests -v
+
   javascript-syntax:
     name: JavaScript syntax checks (Node 24 LTS)
     runs-on: ubuntu-latest
