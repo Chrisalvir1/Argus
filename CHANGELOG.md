@@ -1,6 +1,7 @@
-## Unreleased
+## [2.6.7] - 2026-10-10
 
-- Incorporar diagnóstico de Argus con conteos agregados de entidades disponibles y estado de configuración TTS. La salida omite IDs de entidades, PIN, destinos TTS y nombres de reproductores.
+- Añadir un diagnóstico descargable de configuración con conteos agregados y estado básico de TTS. Omite IDs de entidades, PIN, destinos TTS y nombres de reproductores.
+- Mantener la suite compatible con Home Assistant Core 2026.10 y conservar el flujo de armado existente.
 
 ## [2.6.6] - 2026-10-08
 
