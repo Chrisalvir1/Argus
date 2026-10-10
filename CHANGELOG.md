@@ -1,3 +1,7 @@
+## Unreleased
+
+- Incorporar diagnóstico de Argus con conteos agregados de entidades disponibles y estado de configuración TTS. La salida omite IDs de entidades, PIN, destinos TTS y nombres de reproductores.
+
 ## [2.6.6] - 2026-10-08
 
 - Corregir el alcance de sensores por modo para que Casa no recupere sensores de configuraciones antiguas o de otros modos.
