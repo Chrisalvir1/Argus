@@ -3,6 +3,8 @@
 
 # Argus Home Hub 🛡️
 
+Home Assistant puede generar un paquete de diagnóstico de Argus con conteos de entidades y estado básico de TTS. Los datos se agregan sin incluir IDs de entidades, PIN, entidad TTS ni nombres de reproductores.
+
 **Sistema Integral de Seguridad Residencial Inteligente, Local y Profesional para Home Assistant**
 
 ### Novedades de la versión 2.6.6
