@@ -1,0 +1,19 @@
+# Argus · Fase 1 · Auditoría local
+
+Objetivo: establecer la línea base antes de tocar diseño o seguridad. Entorno: http://127.0.0.1:8123/argus.
+
+| Área | Clasificación | Hallazgo y decisión |
+| --- | --- | --- |
+| React, Vite y Home Assistant | Existe y funciona en las verificaciones de base | Home Assistant aloja el elemento del panel. ReactPanelHost monta React, argus-panel-bridge enlaza la consola al panel existente y Vite escribe el bundle en custom_components/argus/www/react-dist. Reutilizar este punto de entrada. |
+| Estado, hooks y persistencia | Existe; requiere adaptación | SecurityConsole usa hooks para navegación local y lee entidades y atributos de Home Assistant. Las acciones pasan por el puente y WebSocket. El backend gestiona autorización y persistencia en auth.py, storage.py y dashboard_storage.py. Mantener una sola fuente de estado de seguridad. |
+| Núcleo y zonas | Existe; requiere adaptación | SecurityShield y SecurityEmblem3D dibujan el núcleo original con Three.js, geometría de cristales y respaldo SVG. Las zonas se seleccionan desde la consola y abren detalle. Conservar esa implementación y medir legibilidad y coste de render en fase 3. |
+| Composición y responsive | Existe; requiere adaptación | ConsoleBalance.css y SecurityConsole.css ya tienen container queries y reglas de pantalla completa. Revisar las reglas de viewport que compiten con el ancho real del contenedor. La equivalencia visual exacta no está verificada. |
+| Contexto derecho y salud | Existe; requiere adaptación | SecurityContext y SecurityConsole muestran estado, detalle, sensores pendientes, diagnóstico, batería e incidente. No se encontró en ese panel el bloque completo de los tres indicadores ni la lista de actividad importante. Reutilizar historial y estados existentes para integrarlos. |
+| Armado, bypass y reincorporación | Existe; comportamiento integral no verificado | alarm_control_panel.py y websocket_api.py tienen armado en espera y bypass por ciclo. La consola envía omisión y reincorporación al backend. Probar permisos, expiración y sensor recuperado activo en fase 6. |
+| Verificación | Existe; requiere adaptación | core/walk_test.py gestiona sesión y sensores verificados. El frontend ofrece diagnóstico y prueba física. No se encontró el flujo completo de prueba guiada por tipo ni una distinción explícita guiada/libre. Reutilizar el gestor de sesiones. |
+| SOS, llamada, PIN y avisos | Existe; comportamiento integral no verificado | SlideAction ofrece deslizar/tocar, hay enlace tel:, notificaciones y un teclado existente en argus-panel.ts con presentación contextual. El backend tiene SOS independiente. Faltan pruebas integradas de permisos, foco, envío de avisos y detención. |
+| Rendimiento y accesibilidad | Existe; requiere validación | Hay control adaptativo de frames y preferencias de movimiento reducido. Medir renders y comprobar navegación por teclado con la composición final. |
+
+Línea base: el laboratorio responde HTTP 200. Pasaron 56 pruebas de frontend y TypeScript. Python ejecutó 209 pruebas con 7 fallos, 1 error y 13 omitidas. Los fallos abarcan contratos de layout, automatizaciones, versiones, runtimes y PIN. El error de desarmado ocurre en un doble de prueba que no implementa el método de autorización; el caso de PIN inválido y coacción queda sin validar por esa prueba. No ajustar expectativas de pruebas sin separar contratos antiguos de regresiones.
+
+La URL de la preview aprobada devuelve HTTP 401 sin sesión y el adjunto contiene únicamente el texto. El directorio local .argus-visual-preview contiene una implementación, pero falta confirmar que coincide con la referencia aprobada. Usar esa referencia verificable antes de certificar fidelidad en fase 2. El repositorio ya contenía cambios ajenos a la auditoría. Mantener el checkpoint limitado a este informe.
