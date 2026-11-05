@@ -189,3 +189,10 @@
 - Evolución de la consola: agrupar controles a la izquierda, conservar la geometría, lente, halo y segmentos del núcleo, y usar la derecha para información accionable de Home Assistant. En pantallas estrechas, apilar el contexto. Mantener el detalle seleccionado al recibir una alarma y ofrecer acceso explícito al incidente y a la llamada.
 - Reglas del motor solicitadas: SOS y armado son independientes. Una intrusión permanece enclavada hasta desarme. Batería baja es advertencia, mientras que un sensor obligatorio no operativo bloquea el armado. Toda omisión es por ciclo y la reincorporación requiere confirmación y estado normal. La prueba física debe controlar en el motor qué eventos quedan excluidos de la sirena y permitir SOS.
 - Entregar para revisión local antes de publicar. Validar los flujos con sensores reales y no publicar release ni tag automáticamente.
+
+## Consolidación de Fases 1–8 y Fase 8 completada (2.9.151)
+
+- Consolidar conjuntamente fuentes Python/React, integración WebSocket, pruebas y bundle usado por Home Assistant.
+- Fase 8 validó el foco contextual/modal, SOS completo/parcial/vertical y por toque, llamada con marcador simulado y coexistencia de SOS e intrusión.
+- Safari nativo conserva pendientes Tab/Opción+Tab/Escape y retorno del foco. Tacto y lectores de pantalla físicos siguen pendientes.
+- Fase 9 requiere medición de navegador antes de optimizar y conserva el diseño aprobado.

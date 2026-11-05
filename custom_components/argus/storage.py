@@ -35,9 +35,11 @@ def _store(hass: HomeAssistant, entry_id: str | None = None) -> Store:
 
 
 def _default_payload() -> dict:
+    from .zones import default_zones
     return {
         "first_run": True,
-        "zones": [], "modes": {"home": {}, "away": {}, "night": {}},
+        "zones": default_zones(), "zones_initialized": True,
+        "modes": {"home": {}, "away": {}, "night": {}},
         "dashboard": {"layout": "grid", "dense": False}, "audit_log": [],
         "advanced": {"guest_code": None, "guest_code_enabled": False, "duress_pin": None},
         "automations": [], "notif_targets": [],
@@ -132,6 +134,15 @@ async def async_load_ui_data(hass: HomeAssistant, entry_id: str | None = None) -
                 data["users"] = _sanitize_users(data["users"])
                 
         data["legacy_migration_complete"] = True
+        changed = True
+    # Existing installations with an empty zone list receive three empty
+    # crystals once. The marker lets administrators intentionally delete all
+    # zones later without the defaults coming back on every reload.
+    if not isinstance(raw, dict) or not raw.get("zones_initialized"):
+        if not data.get("zones"):
+            from .zones import default_zones
+            data["zones"] = default_zones()
+        data["zones_initialized"] = True
         changed = True
     for field, prefix in (("panel_bg_file", "panel_bg"), ("hub_bg_file", "hub_bg")):
         value = data.get(field, "")
@@ -240,6 +251,11 @@ async def async_save_ui_data(
                 if isinstance(e_id, str) and "." in e_id and len(e_id.split(".")) == 2:
                     valid_outputs.append(e_id)
             safe_updates["panic_outputs"] = valid_outputs
+
+        if "zones" in safe_updates:
+            from .zones import sanitize_zones
+            safe_updates["zones"] = sanitize_zones(safe_updates["zones"])
+            safe_updates["zones_initialized"] = True
 
         if "clock_format" in safe_updates:
             if safe_updates["clock_format"] not in ["auto", "12h", "24h"]:
@@ -398,7 +414,8 @@ async def async_get_audit_log(hass: HomeAssistant, entry_id: str | None = None) 
 
 
 async def async_save_alarm_runtime_state(
-    hass: HomeAssistant, entry_id: str, state: str, *, source: str
+    hass: HomeAssistant, entry_id: str, state: str, *, source: str,
+    cycle_bypassed_sensors: list[str] | None = None,
 ) -> None:
     # Keep older persisted vacation states secure while exposing only the supported modes.
     if state == "armed_vacation":
@@ -411,6 +428,7 @@ async def async_save_alarm_runtime_state(
             "state": state,
             "updated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "source": str(source)[:64],
+            "cycle_bypassed_sensors": cycle_bypassed_sensors or [] if state != "disarmed" else [],
         }
         await _store(hass, entry_id).async_save(current)
 

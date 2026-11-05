@@ -10,16 +10,7 @@ from .const import (
  CONF_SENSORS_HOME,CONF_SENSORS_NIGHT,CONF_ENTRY_SENSORS,
  CONF_LINKED_ALARM_PANELS,CONF_TRIGGER_TIME,DEFAULT_ARMING_TIME,DEFAULT_ENTRY_DELAY,
  DEFAULT_MQTT_TOPIC_COMMAND,DEFAULT_MQTT_TOPIC_STATE,DEFAULT_NAME,DEFAULT_TRIGGER_TIME,DOMAIN,
- CONF_ARMING_VOICE_ENABLED,CONF_ARMING_VOICE_TTS,CONF_ARMING_VOICE_PLAYERS,
- CONF_ARMING_VOICE_MESSAGE_START,CONF_ARMING_VOICE_MESSAGE_REMAINING,
- CONF_ARMING_VOICE_MESSAGE_LAST,CONF_ARMING_VOICE_MESSAGE_COMPLETE,
- CONF_ARMING_VOICE_MESSAGE_CANCELLED,CONF_ARMING_VOICE_MESSAGE_TRIGGERED,
- CONF_ARMING_VOICE_MESSAGE_ADDITIONAL_TRIGGERED,DEFAULT_ARMING_VOICE_MESSAGE_START,
- DEFAULT_ARMING_VOICE_MESSAGE_REMAINING,DEFAULT_ARMING_VOICE_MESSAGE_LAST,
- DEFAULT_ARMING_VOICE_MESSAGE_COMPLETE,DEFAULT_ARMING_VOICE_MESSAGE_CANCELLED,
- DEFAULT_ARMING_VOICE_MESSAGE_TRIGGERED,DEFAULT_ARMING_VOICE_MESSAGE_ADDITIONAL_TRIGGERED,
 )
-_VOICE_KEYS=(CONF_ARMING_VOICE_ENABLED,CONF_ARMING_VOICE_TTS,CONF_ARMING_VOICE_PLAYERS,CONF_ARMING_VOICE_MESSAGE_START,CONF_ARMING_VOICE_MESSAGE_REMAINING,CONF_ARMING_VOICE_MESSAGE_LAST,CONF_ARMING_VOICE_MESSAGE_COMPLETE,CONF_ARMING_VOICE_MESSAGE_CANCELLED,CONF_ARMING_VOICE_MESSAGE_TRIGGERED,CONF_ARMING_VOICE_MESSAGE_ADDITIONAL_TRIGGERED)
 class ArgusConfigFlow(config_entries.ConfigFlow,domain=DOMAIN):
  VERSION=2
  async def async_step_user(self,user_input=None):
@@ -32,36 +23,6 @@ class ArgusConfigFlow(config_entries.ConfigFlow,domain=DOMAIN):
  @callback
  def async_get_options_flow(config_entry):return ArgusOptionsFlow()
 class ArgusOptionsFlow(config_entries.OptionsFlow):
- """Voice-only options screen.
-
- v2.0.48: saving this screen no longer wipes stored voice settings. A key
- that is absent from the submitted form keeps its stored value; only a field
- the user explicitly emptied clears it. (The v2.0.46 flow popped every voice
- key missing from the form, which silently deleted the TTS entity and the
- media players on save and killed every voice announcement.)
- """
+ """Keep legacy voice options intact and direct edits to the Argus panel."""
  async def async_step_init(self,user_input=None):
-  values=dict(self.config_entry.data);values.update(self.config_entry.options)
-  if user_input is not None:
-   submitted=dict(self.config_entry.options)
-   for key in _VOICE_KEYS:
-    if key not in user_input:continue
-    value=user_input[key]
-    if value in (None,"",[]):submitted.pop(key,None)
-    else:submitted[key]=value
-   return self.async_create_entry(title="",data=submitted)
-  tts_value=values.get(CONF_ARMING_VOICE_TTS)
-  tts_marker=vol.Optional(CONF_ARMING_VOICE_TTS,default=tts_value) if tts_value else vol.Optional(CONF_ARMING_VOICE_TTS)
-  schema=vol.Schema({
-   vol.Optional(CONF_ARMING_VOICE_ENABLED,default=bool(values.get(CONF_ARMING_VOICE_ENABLED,False))):selector.BooleanSelector(),
-   tts_marker:selector.EntitySelector(selector.EntitySelectorConfig(domain="tts")),
-   vol.Optional(CONF_ARMING_VOICE_PLAYERS,default=values.get(CONF_ARMING_VOICE_PLAYERS,[])):selector.EntitySelector(selector.EntitySelectorConfig(multiple=True, domain="media_player")),
-   vol.Optional(CONF_ARMING_VOICE_MESSAGE_START,default=values.get(CONF_ARMING_VOICE_MESSAGE_START,DEFAULT_ARMING_VOICE_MESSAGE_START)):selector.TextSelector(selector.TextSelectorConfig(multiline=True)),
-   vol.Optional(CONF_ARMING_VOICE_MESSAGE_REMAINING,default=values.get(CONF_ARMING_VOICE_MESSAGE_REMAINING,DEFAULT_ARMING_VOICE_MESSAGE_REMAINING)):selector.TextSelector(selector.TextSelectorConfig(multiline=True)),
-   vol.Optional(CONF_ARMING_VOICE_MESSAGE_LAST,default=values.get(CONF_ARMING_VOICE_MESSAGE_LAST,DEFAULT_ARMING_VOICE_MESSAGE_LAST)):selector.TextSelector(selector.TextSelectorConfig(multiline=True)),
-   vol.Optional(CONF_ARMING_VOICE_MESSAGE_COMPLETE,default=values.get(CONF_ARMING_VOICE_MESSAGE_COMPLETE,DEFAULT_ARMING_VOICE_MESSAGE_COMPLETE)):selector.TextSelector(selector.TextSelectorConfig(multiline=True)),
-   vol.Optional(CONF_ARMING_VOICE_MESSAGE_CANCELLED,default=values.get(CONF_ARMING_VOICE_MESSAGE_CANCELLED,DEFAULT_ARMING_VOICE_MESSAGE_CANCELLED)):selector.TextSelector(selector.TextSelectorConfig(multiline=True)),
-   vol.Optional(CONF_ARMING_VOICE_MESSAGE_TRIGGERED,default=values.get(CONF_ARMING_VOICE_MESSAGE_TRIGGERED,DEFAULT_ARMING_VOICE_MESSAGE_TRIGGERED)):selector.TextSelector(selector.TextSelectorConfig(multiline=True)),
-   vol.Optional(CONF_ARMING_VOICE_MESSAGE_ADDITIONAL_TRIGGERED,default=values.get(CONF_ARMING_VOICE_MESSAGE_ADDITIONAL_TRIGGERED,DEFAULT_ARMING_VOICE_MESSAGE_ADDITIONAL_TRIGGERED)):selector.TextSelector(selector.TextSelectorConfig(multiline=True)),
-  })
-  return self.async_show_form(step_id="init",data_schema=schema)
+  return self.async_abort(reason="voice_settings_in_panel")

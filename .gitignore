@@ -9,3 +9,10 @@ __pycache__/
 test_output.log
 test_output.txt
 *.test-output.log
+.venv/
+.tools-venv/
+.runtime/
+local/config/*
+!local/config/configuration.yaml
+!local/config/custom_components/
+local/config/custom_components/*

@@ -11,8 +11,10 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class TestV210RuntimeContract(unittest.TestCase):
     @unittest.skipIf("tomllib" not in globals(), "Requires Python 3.11+")
-    def test_python_312_is_pinned_and_supported(self):
-        self.assertEqual((ROOT / ".python-version").read_text().strip(), "3.12")
+    def test_python_pin_is_in_the_supported_range(self):
+        pin = tuple(map(int, (ROOT / ".python-version").read_text().strip().split(".")))
+        self.assertGreaterEqual(len(pin), 2)
+        self.assertTrue((3, 12) <= pin[:2] < (3, 15))
         project = tomllib.loads((ROOT / "pyproject.toml").read_text())
         self.assertEqual(project["project"]["requires-python"], ">=3.12,<3.15")
         for workflow in ("validate.yml", "release.yml"):
@@ -24,12 +26,12 @@ class TestV210RuntimeContract(unittest.TestCase):
                 self.assertIn("python: ['3.12', '3.13', '3.14']", source)
             self.assertIn("(3, 12, 0) <= sys.version_info < (3, 15, 0)", source)
 
-    def test_node_24_lts_and_typescript_702_are_enforced(self):
+    def test_node_26_and_typescript_702_are_enforced(self):
         package = (ROOT / "package.json").read_text()
         self.assertTrue('"typescript":"7.0.2"' in package or '"typescript": "7.0.2"' in package)
         for workflow in ("validate.yml", "release.yml"):
             source = (ROOT / ".github" / "workflows" / workflow).read_text()
-            self.assertIn("node-version: '24'", source)
+            self.assertIn("node-version: '26.13.0'", source)
             self.assertIn("Version 7.0.2", source)
 
     def test_ecmascript_2025_strict_contract(self):

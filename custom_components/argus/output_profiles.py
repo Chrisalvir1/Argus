@@ -270,8 +270,7 @@ async def ws_argus_test_light_output(hass, connection, msg) -> None:
     connection.send_result(msg["id"], {"success": True, "entity_id": entity_id, "method": method, "color_applied": "rgb_color" in data or "hs_color" in data})
 
 
-async def _async_siren_with_output_profiles(self, activate: bool) -> None:
-    sirens = self._get_siren_entities()
+async def _async_dispatch_with_output_profiles(self, activate: bool, sirens) -> None:
     tasks = getattr(self, "_argus_flash_tasks", None)
     if not isinstance(tasks, dict):
         tasks = {}
@@ -282,28 +281,19 @@ async def _async_siren_with_output_profiles(self, activate: bool) -> None:
         self._argus_light_restore = snapshots
 
     if not activate:
-        for task in list(tasks.values()):
-            task.cancel()
-        tasks.clear()
-        restored: set[str] = set()
         for entity_id in sirens:
+            task = tasks.pop(entity_id, None)
+            if task:
+                task.cancel()
             domain = entity_id.split(".", 1)[0]
             try:
                 if domain == "light":
                     await _restore_light_state(self.hass, entity_id, snapshots.pop(entity_id, None))
-                    restored.add(entity_id)
                     continue
                 service = "alarm_disarm" if domain == "alarm_control_panel" else "turn_off"
                 await self.hass.services.async_call(domain, service, {"entity_id": entity_id}, blocking=False)
             except Exception:
                 _LOGGER.exception("Argus failed to stop output %s", entity_id)
-        for entity_id, snapshot in list(snapshots.items()):
-            if entity_id not in restored:
-                try:
-                    await _restore_light_state(self.hass, entity_id, snapshot)
-                except Exception:
-                    _LOGGER.exception("Argus failed to restore light %s", entity_id)
-        snapshots.clear()
         return
 
     for entity_id in sirens:
@@ -340,4 +330,4 @@ def install_output_profile_runtime() -> None:
     if getattr(ArgusAlarmPanel, "__argus_output_profiles_installed", False):
         return
     ArgusAlarmPanel.__argus_output_profiles_installed = True
-    ArgusAlarmPanel._async_siren = _async_siren_with_output_profiles
+    ArgusAlarmPanel._async_dispatch_sirens = _async_dispatch_with_output_profiles

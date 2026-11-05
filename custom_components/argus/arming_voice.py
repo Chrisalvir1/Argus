@@ -6,97 +6,33 @@ from homeassistant.components import persistent_notification
 from homeassistant.helpers import device_registry as dr, entity_registry as er
 from .const import *
 from .storage import async_load_ui_data
-from .i18n import translate, _TRANSLATIONS
+from .i18n import translate
 
 _LOGGER = logging.getLogger(__name__)
 _PLAYER_LOCKS: dict[str, asyncio.Lock] = {}
 
-def _detect_tts_language(hass, tts_entity_id: str) -> str | None:
-    """Infer the language directly from the configured TTS entity or its metadata."""
-    if not tts_entity_id:
-        return None
-    candidates = [str(tts_entity_id).lower()]
-    
-    state = hass.states.get(tts_entity_id) if hasattr(hass, "states") else None
-    if state and state.attributes:
-        for attr_key in ("language", "friendly_name", "voice"):
-            val = state.attributes.get(attr_key)
-            if val:
-                candidates.append(str(val).lower())
-        opts = state.attributes.get("options")
-        if isinstance(opts, dict):
-            for opt_val in opts.values():
-                candidates.append(str(opt_val).lower())
-                
-    try:
-        registry = er.async_get(hass)
-        entry = registry.async_get(tts_entity_id)
-        if entry:
-            if entry.name:
-                candidates.append(str(entry.name).lower())
-            if entry.original_name:
-                candidates.append(str(entry.original_name).lower())
-            if entry.unique_id:
-                candidates.append(str(entry.unique_id).lower())
-            if entry.options and isinstance(entry.options, dict):
-                for opt_val in entry.options.values():
-                    candidates.append(str(opt_val).lower())
-    except Exception:
-        pass
-
-    full_text = " ".join(candidates)
-
-    if any(tok in full_text for tok in [
-        "espanol", "español", "spanish", "es-es", "es_es", "es-419", "es_419",
-        "es-mx", "es_mx", "es-us", "es_us", "es-ar", "es_ar", "es-co", "es_co",
-        "_es", "-es", ".es", " es", "es "
-    ]):
-        return "es"
-
-    if any(tok in full_text for tok in [
-        "portugues", "português", "portuguese", "pt-br", "pt_br", "pt-pt", "pt_pt",
-        "_pt", "-pt", ".pt", " pt", "pt "
-    ]):
-        return "pt"
-
-    if any(tok in full_text for tok in [
-        "russian", "ruso", "русский", "ru-ru", "ru_ru", "_ru", "-ru", ".ru", " ru", "ru "
-    ]):
-        return "ru"
-
-    if any(tok in full_text for tok in [
-        "chinese", "chino", "中文", "zh-cn", "zh_cn", "zh-tw", "zh_tw", "zh-hans", "zh-hant",
-        "_zh", "-zh", ".zh", " zh", "zh "
-    ]):
-        return "zh"
-
-    if any(tok in full_text for tok in [
-        "english", "ingles", "inglés", "en-us", "en_us", "en-gb", "en_gb", "en-au", "en_au", "en-ca", "en_ca",
-        "_en", "-en", ".en", " en", "en "
-    ]):
+async def _get_language(hass, config_entry):
+    ui_data = await async_load_ui_data(hass, config_entry.entry_id)
+    lang = str(ui_data.get("language") or "").split("-")[0].split("_")[0].lower()
+    if lang in {"es", "en"}:
+        return lang
+    if lang and lang != "auto":
         return "en"
 
-    return None
-
-async def _get_language(hass, config_entry):
-    options = _options(hass, config_entry)
-    tts_entity = str(options.get(CONF_ARMING_VOICE_TTS, "") or "")
-    if tts_entity:
-        detected = _detect_tts_language(hass, tts_entity)
-        if detected:
-            return detected
-    ui_data = await async_load_ui_data(hass, config_entry.entry_id)
-    lang = ui_data.get("language")
-    if lang:
-        return str(lang).split("-")[0].lower()
-    ha_lang = getattr(hass.config, "language", None)
-    if ha_lang:
-        return str(ha_lang).split("-")[0].lower()
-    return "es"
+    ha_lang = str(getattr(hass.config, "language", "") or "").split("-")[0].split("_")[0].lower()
+    if ha_lang.startswith("es"):
+        return "es"
+    if ha_lang.startswith("en"):
+        return "en"
+    return "en" if ha_lang else "es"
 
 def _options(hass, entry):
-    merged = dict(entry.options)
+    merged = dict(getattr(entry, "data", {}) or {})
+    merged.update(getattr(entry, "options", {}) or {})
     merged.update(hass.data.get(DOMAIN, {}).get("arming_voice_yaml", {}))
+    # The Argus panel is the single editable source after importing legacy
+    # Options/YAML values; these values must win at runtime too.
+    merged.update(hass.data.get(DOMAIN, {}).get("arming_voice_ui", {}).get(entry.entry_id, {}))
     return merged
 
 def _sensor_identity(hass, entity_id):
@@ -115,12 +51,75 @@ def _sensor_identity(hass, entity_id):
         "identifiers": sorted(f"{a}:{b}" for a,b in (device.identifiers if device else set())),
         "connections": sorted(f"{a}:{b}" for a,b in (device.connections if device else set()))
     }
+
+def _count_labels(lang, zones, sensors):
+    """Build spoken counts with correct singular/plural wording."""
+    if lang == "es":
+        return {
+            "zone_count_label": f"{zones} {'zona' if zones == 1 else 'zonas'}",
+            "sensor_count_label": f"{sensors} {'sensor' if sensors == 1 else 'sensores'}",
+            "sensor_open_agreement": "abierto" if sensors == 1 else "abiertos",
+        }
+    return {
+        "zone_count_label": f"{zones} {'zone' if zones == 1 else 'zones'}",
+        "sensor_count_label": f"{sensors} {'sensor' if sensors == 1 else 'sensors'}",
+    }
+
+def _join_spoken_list(items, lang):
+    """Join spoken names with a natural conjunction before the final item."""
+    items = [str(item) for item in items if item]
+    if len(items) < 2:
+        return items[0] if items else ""
+    conjunction = "y" if lang == "es" else "and"
+    if len(items) == 2:
+        return f"{items[0]} {conjunction} {items[1]}"
+    return f"{', '.join(items[:-1])} {conjunction} {items[-1]}"
+
+def _has_voice_placeholder(template, *names):
+    """Return whether a custom phrase explicitly inserts any dynamic value."""
+    template = str(template or "")
+    return any("{" + name + "}" in template for name in names)
+
+def _append_voice_sentence(message, sentence):
+    """Append an automatic spoken detail without breaking custom punctuation."""
+    message = str(message or "").strip()
+    sentence = str(sentence or "").strip()
+    if not sentence:
+        return message
+    if not message:
+        return sentence
+    if message.endswith((".", "!", "?", "…")):
+        return f"{message} {sentence}"
+    return f"{message}. {sentence}"
+
+def _auto_open_summary(lang, zone_count, sensor_count, names, *, remaining=False):
+    """Describe the open sensors assigned to the selected mode in plain speech."""
+    if not names:
+        return ""
+    labels = _count_labels(lang, zone_count, sensor_count)
+    joined = _join_spoken_list(names, lang)
+    if lang == "es":
+        intro = "Todavía hay" if remaining else "Hay"
+        return f"{intro} {labels['zone_count_label']} con {labels['sensor_count_label']} {labels['sensor_open_agreement']}: {joined}."
+    intro = "There are still" if remaining else "There are"
+    return f"{intro} {labels['zone_count_label']} with {labels['sensor_count_label']} open: {joined}."
+
+def _format_voice_template(template, values):
+    if isinstance(template, str) and "{" in template:
+        try:
+            class _SafeValues(dict):
+                def __missing__(self, key): return "{" + key + "}"
+            return template.format_map(_SafeValues(values))
+        except Exception:
+            return template
+    return template
+
 async def _async_speak(hass, options, message, lang):
   if not options.get(CONF_ARMING_VOICE_ENABLED, False): return
   tts = str(options.get(CONF_ARMING_VOICE_TTS, "") or "")
   players = options.get(CONF_ARMING_VOICE_PLAYERS, [])
   if isinstance(players, str): players = [players]
-  players = [player for player in players if player]
+  players = [player for player in players if player][:5]
   if not message or not message.strip(" `´'\".,!?:;-"): return
   if not tts or not players:
       _LOGGER.error("Argus: voice announcements enabled but incomplete (tts=%r, players=%r). Announcement skipped: %s", tts or None, players or None, message)
@@ -168,51 +167,92 @@ async def async_announce_arming_wait_update(hass, config_entry, *, alarm_entity_
   current = list(dict.fromkeys(current_open))
   if previous == current and not committed: return
   lang = await _get_language(hass, config_entry)
-  current_info = [_sensor_identity(hass, e) for e in current]
+  ui_data = await async_load_ui_data(hass, config_entry.entry_id)
+  zones = ui_data.get("zones", [])
+  mode_key = {"armed_home": "home", "armed_away": "away", "armed_night": "night"}.get(target, target)
+  zone_by_sensor = {
+      entity_id: zone for zone in zones
+      if zone.get("enabled", True) and mode_key in zone.get("modes", [])
+      for entity_id in zone.get("entity_ids", [])
+  }
+  def with_zone(entity_id, *, status="pending"):
+      info = _sensor_identity(hass, entity_id)
+      zone = zone_by_sensor.get(entity_id)
+      if zone:
+          info["zone_number"] = zone.get("number")
+          info["area"] = zone.get("area", "")
+          area = str(zone.get("area") or "").strip()
+          if lang == "es":
+              prefix = f"Zona de {area}" if area else "Zona sin área"
+              state_text = {"pending": "sigue abierto", "closed": "se cerró", "opened": "se abrió"}[status]
+              info["spoken_name"] = f"{prefix}, sensor {info['name']} {state_text}"
+          elif lang == "en":
+              prefix = f"Zone {area}" if area else "Zone without an area"
+              state_text = {"pending": "still open", "closed": "closed", "opened": "opened"}[status]
+              info["spoken_name"] = f"{prefix}, sensor {info['name']} {state_text}"
+          else:
+              info["spoken_name"] = f"{area or info['name']}, {info['name']}"
+      else:
+          info["spoken_name"] = info["name"]
+      return info
+  current_info = [with_zone(e, status="pending") for e in current]
   prev_set, cur_set = set(previous), set(current)
-  closed = [_sensor_identity(hass, e) for e in previous if e not in cur_set]
-  opened = [_sensor_identity(hass, e) for e in current if e not in prev_set]
-  names = [i["name"] for i in current_info]
+  closed = [with_zone(e, status="closed") for e in previous if e not in cur_set]
+  opened = [with_zone(e, status="opened") for e in current if e not in prev_set]
+  names = [i["spoken_name"] for i in current_info]
   mode = translate(lang, target)
   
   values = {
-      "count": len(current), "total": len(prev_set | cur_set), "sensors": ", ".join(names),
-      "closed": ", ".join(i["name"] for i in closed), "opened": ", ".join(i["name"] for i in opened),
-      "mode": mode, "home": config_entry.title
+      "count": len(current), "total": len(prev_set | cur_set), "sensors": _join_spoken_list(names, lang),
+      "closed": _join_spoken_list([i["spoken_name"] for i in closed], lang),
+      "opened": _join_spoken_list([i["spoken_name"] for i in opened], lang),
+      "mode": mode, "home": config_entry.title,
+        "zone_count": len({i.get("zone_number") or i["entity_id"] for i in current_info}),
+      **_count_labels(lang, len({i.get("zone_number") or i["entity_id"] for i in current_info}), len(current)),
   }
   options = _options(hass, config_entry)
   
   if committed:
-      template = translate(lang, "msg_armed")
+      message_key, translation_key = CONF_ARMING_VOICE_MESSAGE_ARMED, "msg_armed"
   elif not current:
-      template = options.get(CONF_ARMING_VOICE_MESSAGE_COMPLETE) or translate(lang, "msg_complete")
+      message_key, translation_key = CONF_ARMING_VOICE_MESSAGE_COMPLETE, "msg_complete"
   # A transition must always say what closed as well as what remains.  The
   # former "last" branch hid the close event whenever exactly one sensor was
   # left, which made the voice flow look stalled even while it was progressing.
+  elif closed and len(current) == 1:
+      message_key, translation_key = CONF_ARMING_VOICE_MESSAGE_LAST, "msg_last"
   elif closed:
-      template = options.get(CONF_ARMING_VOICE_MESSAGE_REMAINING) or translate(lang, "msg_remaining")
+      message_key, translation_key = CONF_ARMING_VOICE_MESSAGE_REMAINING, "msg_remaining"
   elif len(current) == 1 and previous:
-      template = options.get(CONF_ARMING_VOICE_MESSAGE_LAST) or translate(lang, "msg_last")
+      message_key, translation_key = CONF_ARMING_VOICE_MESSAGE_LAST, "msg_last"
   else:
-      template = options.get(CONF_ARMING_VOICE_MESSAGE_START) or translate(lang, "msg_start")
+      message_key, translation_key = CONF_ARMING_VOICE_MESSAGE_START, "msg_start"
+  custom_template = options.get(message_key)
+  template = custom_template or translate(lang, translation_key)
   
-  if isinstance(template, str) and "{" in template:
-      try:
-          # We use safe mapping equivalent to i18n's logic to prevent crashes on missing keys in custom templates
-          class _SafeValues(dict):
-              def __missing__(self, key): return "{" + key + "}"
-          message = template.format_map(_SafeValues(values))
-      except Exception:
-          message = template
-  else:
-      message = template
+  message = _format_voice_template(template, values)
+  if custom_template:
+      if message_key == CONF_ARMING_VOICE_MESSAGE_START and current and not _has_voice_placeholder(custom_template, "sensors"):
+          message = _append_voice_sentence(message, _auto_open_summary(lang, values["zone_count"], len(current), names))
+      elif message_key == CONF_ARMING_VOICE_MESSAGE_REMAINING:
+          if closed and not _has_voice_placeholder(custom_template, "closed"):
+              message = _append_voice_sentence(message, _join_spoken_list([item["spoken_name"] for item in closed], lang))
+          if current and not _has_voice_placeholder(custom_template, "sensors"):
+              message = _append_voice_sentence(message, _auto_open_summary(lang, values["zone_count"], len(current), names, remaining=True))
+      elif translation_key == "msg_last":
+          if closed and not _has_voice_placeholder(custom_template, "closed"):
+              message = _append_voice_sentence(message, _join_spoken_list([item["spoken_name"] for item in closed], lang))
+          if current and not _has_voice_placeholder(custom_template, "sensors"):
+              message = _append_voice_sentence(message, _auto_open_summary(lang, values["zone_count"], len(current), names, remaining=True))
 
   hass.bus.async_fire("argus_arming_wait_update", {
       "entry_id": config_entry.entry_id, "alarm_entity_id": alarm_entity_id, "mode": target, "mode_name": mode,
       "open_count": len(current), "open_sensors": current_info, "open_sensor_names": names,
       "recently_closed": closed, "recently_opened": opened, "all_closed": not current, "message": message
   })
-  if current or committed:
+  # Speak the all-closed transition too. Previously the event and message
+  # existed, but this guard silently dropped it before the armed announcement.
+  if current or committed or (previous and not current):
       await _async_speak(hass, options, message, lang)
 
 async def async_announce_arming_cancelled(hass, config_entry, *, alarm_entity_id, target, source):
@@ -240,31 +280,146 @@ async def async_announce_alarm_triggered(hass, config_entry, *, alarm_entity_id,
   options = _options(hass, config_entry)
   sensor = _sensor_identity(hass, sensor_entity_id)
   all_info = [_sensor_identity(hass, e) for e in dict.fromkeys(triggered_sensor_ids)]
+  ui_data = await async_load_ui_data(hass, config_entry.entry_id)
+  mode_key = {"armed_home": "home", "armed_away": "away", "armed_night": "night"}.get(mode, mode)
+  zone_by_sensor = {
+      entity_id: zone for zone in ui_data.get("zones", [])
+      if zone.get("enabled", True) and mode_key in zone.get("modes", [])
+      for entity_id in zone.get("entity_ids", [])
+  }
+  def spoken_identity(info):
+      zone = zone_by_sensor.get(info["entity_id"])
+      if not zone:
+          state = info.get("state")
+          suffix = " abierto" if state in {"on", "open", "unlocked", "active", "motion", "recording"} else ""
+          return f"{info['name']}{suffix}"
+      area = str(zone.get("area") or "").strip()
+      state = info.get("state")
+      suffix = " abierto" if state in {"on", "open", "unlocked", "active", "motion", "recording"} else ""
+      if lang == "es":
+          prefix = f"Zona de {area}" if area else "Zona sin área"
+          info["zone_number"] = zone.get("number")
+          return f"{prefix}, sensor {info['name']}{suffix}"
+      if lang == "en":
+          prefix = f"Zone {area}" if area else "Zone without an area"
+          info["zone_number"] = zone.get("number")
+          return f"{prefix}, sensor {info['name']}{' open' if suffix else ''}"
+      return f"{area}, {info['name']}" if area else info["name"]
+  sensor["spoken_name"] = spoken_identity(sensor)
+  for info in all_info:
+      info["spoken_name"] = spoken_identity(info)
   mode_name = translate(lang, str(mode or "")) if mode else translate(lang, "desconocido")
   
   values = {
-      "sensor":sensor["name"], "sensors": ", ".join(i["name"] for i in all_info),
+      "sensor":sensor["spoken_name"], "sensors": _join_spoken_list([i["spoken_name"] for i in all_info], lang),
       "count": len(all_info), "sensor_entity_id": sensor_entity_id, "sensor_state": sensor["state"],
       "mode": mode_name, "home": config_entry.title, "source": source, "triggered_by": source
   }
+  zone_count = len({i.get("zone_number") or i["entity_id"] for i in all_info})
+  values["zone_count"] = zone_count
+  values.update(_count_labels(lang, zone_count, len(all_info)))
   
   key = CONF_ARMING_VOICE_MESSAGE_ADDITIONAL_TRIGGERED if additional else CONF_ARMING_VOICE_MESSAGE_TRIGGERED
   msg_key = "msg_additional" if additional else "msg_triggered"
   
   template = options.get(key)
   if template:
-      try:
-          message = template.format(**values)
-      except:
-          message = template
+      message = _format_voice_template(template, values)
+      if not _has_voice_placeholder(template, "sensors", "sensor"):
+          message = _append_voice_sentence(
+              message,
+              _auto_open_summary(lang, zone_count, len(all_info), [item["spoken_name"] for item in all_info]),
+          )
+      elif _has_voice_placeholder(template, "sensor") and not _has_voice_placeholder(template, "sensors"):
+          # The custom phrase already names the first sensor; add any other
+          # triggered sensors automatically without repeating that one.
+          other_info = [item for item in all_info if item["entity_id"] != sensor_entity_id]
+          other_zones = len({item.get("zone_number") or item["entity_id"] for item in other_info})
+          message = _append_voice_sentence(
+              message,
+              _auto_open_summary(lang, other_zones, len(other_info), [item["spoken_name"] for item in other_info]),
+          )
   else:
       message = translate(lang, msg_key, **values)
 
   hass.bus.async_fire("argus_alarm_triggered", {
       "entry_id": config_entry.entry_id, "alarm_entity_id": alarm_entity_id, "mode": mode, "mode_name": mode_name,
-      "sensor":sensor, "sensor_name":sensor["name"], "sensor_entity_id": sensor_entity_id,
-      "triggered_sensors":all_info, "triggered_sensor_names": [i["name"] for i in all_info],
+      "sensor":sensor, "sensor_name":sensor["spoken_name"], "sensor_entity_id": sensor_entity_id,
+      "triggered_sensors":all_info, "triggered_sensor_names": [i["spoken_name"] for i in all_info],
       "triggered_sensor_count": len(all_info), "additional":additional, "source": source, "message": message
+  })
+  await _async_speak(hass, options, message, lang)
+
+async def async_announce_alarm_sensor_closed(hass, config_entry, *, alarm_entity_id, sensor_entity_id, open_sensor_ids, mode):
+  """Announce a closed intrusion sensor without clearing the latched alarm."""
+  lang = await _get_language(hass, config_entry)
+  options = _options(hass, config_entry)
+  ui_data = await async_load_ui_data(hass, config_entry.entry_id)
+  mode_key = {"armed_home": "home", "armed_away": "away", "armed_night": "night"}.get(mode, mode)
+  zone_by_sensor = {
+      entity_id: zone for zone in ui_data.get("zones", [])
+      if zone.get("enabled", True) and mode_key in zone.get("modes", [])
+      for entity_id in zone.get("entity_ids", [])
+  }
+  def format_sensor(entity_id, status):
+      info = _sensor_identity(hass, entity_id)
+      zone = zone_by_sensor.get(entity_id)
+      if zone:
+          area = str(zone.get("area") or "").strip()
+          if lang == "es":
+              prefix = f"Zona de {area}" if area else "Zona sin área"
+              return f"{prefix}, sensor {info['name']} {status}"
+          if lang == "en":
+              prefix = f"Zone {area}" if area else "Zone without an area"
+              return f"{prefix}, sensor {info['name']} {status}"
+      return f"{info['name']} {status}"
+  if lang == "es":
+      closed = format_sensor(sensor_entity_id, "se cerró")
+      open_names = [format_sensor(e, "abierto") for e in open_sensor_ids]
+  elif lang == "en":
+      closed = format_sensor(sensor_entity_id, "closed")
+      open_names = [format_sensor(e, "open") for e in open_sensor_ids]
+  else:
+      closed = format_sensor(sensor_entity_id, "closed")
+      open_names = [format_sensor(e, "open") for e in open_sensor_ids]
+  zones = {zone_by_sensor[e].get("number") or e for e in open_sensor_ids if e in zone_by_sensor}
+  zone_count = len(zones)
+  values = {
+      "closed": closed, "sensors": _join_spoken_list(open_names, lang) or "ninguno",
+      "count": len(open_sensor_ids), "zone_count": zone_count, "mode": translate(lang, mode),
+      "home": config_entry.title,
+      **_count_labels(lang, zone_count, len(open_sensor_ids)),
+  }
+  if lang == "es":
+      values["open_status"] = (
+          f"Hay {values['zone_count_label']} con {values['sensor_count_label']} {values['sensor_open_agreement']}: {_join_spoken_list(open_names, lang)}."
+          if open_names else "Ya no quedan sensores abiertos."
+      )
+  elif lang == "en":
+      values["open_status"] = (
+          f"There are {values['zone_count_label']} with {values['sensor_count_label']} open: {_join_spoken_list(open_names, lang)}."
+          if open_names else "No sensors remain open."
+      )
+  else:
+      values["open_status"] = (
+          _auto_open_summary(lang, zone_count, len(open_sensor_ids), open_names)
+          if open_names else "No sensors remain open."
+      )
+  custom_template = options.get(CONF_ARMING_VOICE_MESSAGE_ALARM_SENSOR_CLOSED)
+  template = custom_template or translate(lang, "msg_alarm_sensor_closed")
+  message = _format_voice_template(template, values)
+  if custom_template:
+      if not _has_voice_placeholder(custom_template, "closed"):
+          message = _append_voice_sentence(message, closed)
+      if open_names and not _has_voice_placeholder(custom_template, "open_status", "sensors"):
+          message = _append_voice_sentence(message, values["open_status"])
+      elif not open_names and not _has_voice_placeholder(custom_template, "open_status", "sensors"):
+          message = _append_voice_sentence(message, "Ya no quedan sensores abiertos." if lang == "es" else "No sensors remain open.")
+  hass.bus.async_fire("argus_alarm_sensor_closed", {
+      "entry_id": config_entry.entry_id, "alarm_entity_id": alarm_entity_id,
+      "sensor_entity_id": sensor_entity_id, "closed_sensor": closed,
+      "open_sensor_count": len(open_sensor_ids), "open_zone_count": zone_count,
+      "open_sensors": open_names, "alarm_remains_active": True, "message": message,
   })
   await _async_speak(hass, options, message, lang)
 def install_cancel_announcement():return None

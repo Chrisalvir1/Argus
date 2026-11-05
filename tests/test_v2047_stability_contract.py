@@ -30,10 +30,13 @@ class TestV2048StabilityContract(unittest.TestCase):
         self.assertIn("cancelled_from_off", source)
         self.assertIn("async_announce_arming_cancelled", source)
 
-    def test_voice_form_preserves_missing_fields(self):
+    def test_voice_settings_move_into_argus_without_dropping_old_values(self):
         source = (COMPONENT / "config_flow.py").read_text(encoding="utf-8")
-        self.assertIn("if key not in user_input:continue", source)
-        self.assertNotIn("else:submitted.pop(key,None)", source)
+        resolver = (COMPONENT / "voice_settings.py").read_text(encoding="utf-8")
+        api = (COMPONENT / "websocket_api.py").read_text(encoding="utf-8")
+        self.assertIn('async_abort(reason="voice_settings_in_panel")', source)
+        self.assertIn("if key not in ui", resolver)
+        self.assertIn('async_save_ui_data(hass, {"arming_voice": values}, entry_id)', api)
 
     def test_tts_failure_is_visible(self):
         source = (COMPONENT / "arming_voice.py").read_text(encoding="utf-8")

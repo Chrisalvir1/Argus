@@ -11,6 +11,7 @@ import logging
 from datetime import timedelta
 
 from homeassistant.components.alarm_control_panel import AlarmControlPanelState
+from homeassistant.core import callback
 from homeassistant.helpers.event import async_track_time_interval
 
 from .arming_state_machine import decide_arming_wait, is_active_sensor_state
@@ -40,6 +41,7 @@ def open_blocking_sensors(panel, target) -> list[str]:
         or config.get("bypassedSensors")
         or []
     )
+    bypassed.update(getattr(panel, "_cycle_bypassed", ()))
     return [
         entity_id
         for entity_id in dict.fromkeys(sensors)
@@ -67,7 +69,8 @@ def install_sensor_state_runtime() -> None:
         return {
             entity_id
             for entity_id in dict.fromkeys(self._sensors_for_state(state))
-            if is_sensor_active(self.hass, entity_id)
+            if entity_id not in getattr(self, "_cycle_bypassed", ())
+            and is_sensor_active(self.hass, entity_id)
         }
 
     def open_blocking_override(self, target):
@@ -135,6 +138,8 @@ def install_sensor_state_runtime() -> None:
                 )
                 return
             if request is not getattr(self, "_arm_request", None):
+                return
+            if request.get("wait_for_sensors") and open_blocking_sensors(self, request["target"]):
                 return
 
             # A live request is authoritative. A stale counter used to return
@@ -358,6 +363,7 @@ def install_sensor_state_runtime() -> None:
         self._argus_sensor_watchdog_unsub = None
         await original_remove(self)
 
+    @callback
     def sensor_changed_with_reconciliation(self, event):
         result = original_sensor_changed(self, event)
         schedule_reconcile(self, "state_change")

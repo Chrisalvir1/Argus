@@ -1,3 +1,8 @@
+## [2.9.151] - 2026-11-04
+- Consolidación local del backend, frontend, pruebas y bundle de las Fases 1–8.
+- Fase 8 completada con validación disponible. PIN, SOS y confirmaciones comprobados en laboratorio aislado.
+- Pendientes específicos de Safari nativo, tacto y lectores de pantalla físicos conservados en documentación.
+
 ## [2.9.150] - 2026-11-04
 - Cierre local de Fase 7: diagnóstico contextual y pruebas guiadas y libres por zona.
 - Recuperar progreso y último informe confirmado tras reconexión WebSocket. Incorporar selección de zona por teclado y foco visible.

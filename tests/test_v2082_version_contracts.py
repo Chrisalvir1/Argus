@@ -1,11 +1,16 @@
 import os
 import json
+import re
 import unittest
 
 class TestVersionContracts(unittest.TestCase):
     def setUp(self):
         self.project_root = os.path.dirname(os.path.dirname(__file__))
-        self.version = "2.6.6"
+        const_path = os.path.join(self.project_root, "custom_components", "argus", "const.py")
+        with open(const_path, "r", encoding="utf-8") as f:
+            match = re.search(r'^VERSION = "([^"]+)"$', f.read(), re.MULTILINE)
+        self.assertIsNotNone(match, "VERSION must be present in const.py")
+        self.version = match.group(1)
 
     def test_manifest_version(self):
         manifest_path = os.path.join(self.project_root, "custom_components", "argus", "manifest.json")

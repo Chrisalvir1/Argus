@@ -23,8 +23,16 @@ def _load_runtime(panel_type, scheduled_calls):
     alarm_component = types.ModuleType("homeassistant.components.alarm_control_panel")
     alarm_component.AlarmControlPanelState = types.SimpleNamespace(ARMING="arming")
     event_module = types.ModuleType("homeassistant.helpers.event")
+    core = types.ModuleType("homeassistant.core")
+
+    def loop_callback(fn):
+        fn.is_loop_callback = True
+        return fn
+
+    core.callback = loop_callback
 
     def schedule(_hass, delay, callback):
+        assert callback.is_loop_callback
         scheduled_calls.append((delay, callback))
         return lambda: None
 
@@ -35,6 +43,7 @@ def _load_runtime(panel_type, scheduled_calls):
         "homeassistant": types.ModuleType("homeassistant"),
         "homeassistant.components": types.ModuleType("homeassistant.components"),
         "homeassistant.components.alarm_control_panel": alarm_component,
+        "homeassistant.core": core,
         "homeassistant.helpers": types.ModuleType("homeassistant.helpers"),
         "homeassistant.helpers.event": event_module,
     }

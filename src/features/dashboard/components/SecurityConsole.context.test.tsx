@@ -1,0 +1,60 @@
+import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { afterEach, expect, it, vi } from 'vitest';
+import { SecurityConsole } from './SecurityConsole';
+
+afterEach(() => vi.unstubAllGlobals());
+
+function renderContext(admin: boolean, doorState = 'off') {
+  vi.stubGlobal('document', {});
+  const alarm = 'alarm_control_panel.fixture';
+  const door = 'binary_sensor.door';
+  const window = 'binary_sensor.window';
+  const panel = {
+    classList: { contains: () => false },
+    _dashboard: { entries: [{ entity_id: alarm, entry_id: 'fixture' }] },
+    _ui: {
+      zones: [{ id: 'patio', area: 'Patio', entity_ids: [door, window] }],
+      modes: { away: { sensors: [door, window] } },
+    },
+    _hass: { connected: true, states: {
+      [alarm]: { state: 'armed_away', attributes: { cycle_bypassed_sensors: [window] } },
+      [door]: { state: doorState, attributes: { friendly_name: 'Puerta', device_class: 'door', battery_level: 8 } },
+      [window]: { state: 'off', attributes: { friendly_name: 'Ventana', device_class: 'window' } },
+    } },
+    _isAdmin: admin,
+    _t: (key: string) => key === 'bypassed_sensor' ? 'OMITIDO' : key,
+    _getSensorBattery: (_id: string, entity: { attributes?: { battery_level?: number } }) =>
+      entity?.attributes?.battery_level ?? null,
+  };
+  return renderToStaticMarkup(<SecurityConsole panel={panel} isFullscreen={false}
+    onToggleFullscreen={() => {}} onUnlockKiosk={() => {}} />);
+}
+
+it('shows low battery and confirmed partial protection without inventing a battery reading', () => {
+  const html = renderContext(true);
+  expect(html).toContain('Batería baja (8%)');
+  expect(html).toContain('Protección parcial: 1 sensor(es) omitido(s) · Patio');
+  expect(html).toContain('Ventana: OMITIDO');
+  expect(html).not.toMatch(/Ventana: OMITIDO[^"]*Batería/);
+  expect(html).toContain('Reincorporar al armado');
+});
+
+it('keeps partial protection visible but hides the administrative action for a standard profile', () => {
+  const html = renderContext(false);
+  expect(html).toContain('Ventana: OMITIDO');
+  expect(html).not.toContain('Reincorporar al armado');
+});
+
+it('classifies a live open HA contact without an optional panel helper', () => {
+  const html = renderContext(false, 'on');
+  expect(html).toContain('Zonas que requieren atención: 1.');
+  expect(html).toContain('<dt>Listas</dt><dd>0</dd>');
+  expect(html).toContain('<dt>Pendientes</dt><dd>1</dd>');
+});
+
+it('shows that a recovered sensor remains omitted even for a standard profile', () => {
+  const html = renderContext(false);
+  expect(html).toContain('Sensor recuperado. Sigue omitido en este armado.');
+  expect(html).toContain('Protección parcial');
+});

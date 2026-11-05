@@ -15,7 +15,7 @@ _CLOSED_VALUES = frozenset({
     "off", "closed", "closing", "locked", "locking", "standby", "safe",
     "clear", "cerrado", "idle", "inactive",
 })
-_UNAVAILABLE_VALUES = frozenset({"unknown", "unavailable", "none", ""})
+_UNAVAILABLE_VALUES = frozenset({"unknown", "unavailable", "offline", "none", ""})
 
 
 class ArmingWaitDecision(NamedTuple):

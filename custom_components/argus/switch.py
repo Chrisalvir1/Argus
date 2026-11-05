@@ -69,7 +69,7 @@ class ArgusPanicSwitch(SwitchEntity):
         self.async_write_ha_state()
 
     async def async_turn_off(self, **kwargs) -> None:
-        """Stop panic while restoring the exact pre-panic state."""
+        """Stop panic independently from the armed state."""
         panel = self._panel
         if panel is None:
             return

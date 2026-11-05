@@ -1,7 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SecurityConsole } from './SecurityConsole';
-import { createRoot } from 'react-dom/client';
-import { applyToAllEntries } from '../../safety/slide-action';
+import { installSlideActionStyles } from '../../safety/slide-action';
+import { useArgusPanelBridge } from '../argus-panel-bridge';
+
+import { ReactPanelHost } from '../react-panel-host';
+
+const panelHosts = new WeakMap<object, ReactPanelHost>();
 
 export function mountSecurityConsole(panel: any) {
   const shadow = panel.shadowRoot;
@@ -15,28 +19,25 @@ export function mountSecurityConsole(panel: any) {
     return;
   }
   
-  if (!panel._reactConsoleRoot) {
-    container.innerHTML = '';
-    panel._reactConsoleRoot = createRoot(container);
-  }
-  
-  panel._reactConsoleRoot.render(
-    <SecurityConsoleRoot panel={panel} />
-  );
+  let host = panelHosts.get(panel);
+  if (!host) { host = new ReactPanelHost(); panelHosts.set(panel, host); }
+  host.mount(panel);
 }
 
 if (typeof window !== 'undefined') {
   (window as any).mountSecurityConsole = mountSecurityConsole;
 }
 
-function SecurityConsoleRoot({ panel }: { panel: any }) {
-  const [tick, setTick] = useState(0);
+export function SecurityConsoleRoot({ panel }: { panel: any }) {
+  const bridge = useArgusPanelBridge(panel);
   const [isFullscreen, setIsFullscreen] = useState(panel.classList.contains('fullscreen-active'));
-  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    installSlideActionStyles(panel);
+  }, [panel]);
 
   useEffect(() => {
     const onUpdate = () => {
-      setTick(t => t + 1);
       setIsFullscreen(panel.classList.contains('fullscreen-active'));
     };
     
@@ -66,33 +67,16 @@ function SecurityConsoleRoot({ panel }: { panel: any }) {
     };
   }, [panel]);
 
-  // Re-apply slide-to-action sliders whenever React renders or fullscreen changes
-  useEffect(() => {
-    if (!rootRef.current) return;
-    
-    const timer = setTimeout(() => {
-      try {
-        if (typeof applyToAllEntries === 'function') {
-          applyToAllEntries(panel);
-        }
-      } catch (e) {
-        console.error("Argus: Failed to attach SOS sliders", e);
-      }
-    }, 40);
-
-    return () => clearTimeout(timer);
-  }, [tick, isFullscreen, panel]);
-
-  const entries = panel._dashboard?.entries || [];
-  const cardMode = panel.hasAttribute?.('compact') || panel.classList?.contains('argus-compact') || Boolean(panel._cardConfig?.compact);
-  const explicitlySelected = panel._cardConfig?.entity || panel._cardConfig?.entry_id || panel._config?.entity || panel._config?.entry_id;
+  const entries = bridge.entries;
+  const cardMode = bridge.cardMode;
+  const explicitlySelected = bridge.selectedEntity || bridge.selectedEntry;
   const renderAllEntries = !cardMode && !explicitlySelected && entries.length > 1;
-  const indexes: Array<number | undefined> = isFullscreen && panel._fullscreenIdx >= 0 ? [panel._fullscreenIdx] : renderAllEntries ? entries.map((_: unknown, index: number) => index) : [undefined];
+  const indexes: Array<number | undefined> = bridge.fullscreen && bridge.fullscreenIndex >= 0 ? [bridge.fullscreenIndex] : renderAllEntries ? entries.map((_: unknown, index: number) => index) : [undefined];
 
   return (
-    <div ref={rootRef} style={{ width: '100%', height: '100%' }}>
+    <div style={{ width: '100%', height: 'auto' }}>
       {indexes.map(index => <SecurityConsole
-        key={index ?? 'selected'}
+        key={index ?? bridge.selectedEntry ?? bridge.selectedEntity ?? 0}
         panel={panel}
         entryIndex={index}
         isFullscreen={isFullscreen}
@@ -118,7 +102,6 @@ export function applyReactSecurityConsole(C: any) {
   
   const connected = C.prototype.connectedCallback;
   const load = C.prototype._load;
-  const renderEntries = C.prototype._renderEntries;
   
   C.prototype.connectedCallback = function() {
     const res = connected?.call(this);
@@ -134,5 +117,12 @@ export function applyReactSecurityConsole(C: any) {
 
   C.prototype._renderEntries = function() {
     mountSecurityConsole(this);
+  };
+
+  const disconnected = C.prototype.disconnectedCallback;
+  C.prototype.disconnectedCallback = function() {
+    panelHosts.get(this)?.unmount();
+    panelHosts.delete(this);
+    return disconnected?.call(this);
   };
 }

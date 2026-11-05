@@ -29,7 +29,7 @@ jobs:
           python-version-file: '.python-version'
       - uses: actions/setup-node@v7
         with:
-          node-version: '24'
+          node-version: '26.13.0'
           cache: npm
 
       - name: Validate runtimes, version and Python sources
@@ -37,7 +37,7 @@ jobs:
         run: |
           set -euo pipefail
           python -c 'import sys; assert (3, 12, 0) <= sys.version_info < (3, 15, 0), f"Need Python 3.12-3.14, got {sys.version}"; print(sys.version)'
-          test "$(node -p "process.versions.node.split('.')[0]")" = "24"
+          test "$(node -p "process.versions.node")" = "26.13.0"
           VERSION="$(python -c 'import json; print(json.load(open("custom_components/argus/manifest.json"))["version"])')"
           if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
             test "${GITHUB_REF_NAME#v}" = "$VERSION"
