@@ -58,3 +58,13 @@ it('shows that a recovered sensor remains omitted even for a standard profile', 
   expect(html).toContain('Sensor recuperado. Sigue omitido en este armado.');
   expect(html).toContain('Protección parcial');
 });
+
+// These active values were supported before sensor classification moved to the bridge.
+it.each(['recording', 'active', 'abierto', 'activa', 'true', '1', 'tamper', 'vibration'])(
+  'preserves contextual pending status for the active HA value %s', state => {
+    const html = renderContext(false, state);
+    expect(html).toContain('Zonas que requieren atención: 1.');
+    expect(html).toContain('<dt>Listas</dt><dd>0</dd>');
+    expect(html).toContain('<dt>Pendientes</dt><dd>1</dd>');
+  },
+);

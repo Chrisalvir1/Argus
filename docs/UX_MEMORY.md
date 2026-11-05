@@ -196,3 +196,27 @@
 - Fase 8 validó el foco contextual/modal, SOS completo/parcial/vertical y por toque, llamada con marcador simulado y coexistencia de SOS e intrusión.
 - Safari nativo conserva pendientes Tab/Opción+Tab/Escape y retorno del foco. Tacto y lectores de pantalla físicos siguen pendientes.
 - Fase 9 requiere medición de navegador antes de optimizar y conserva el diseño aprobado.
+
+
+## Estado vigente — cierre de fluidez en Safari (2026-11-05, 2.9.151)
+
+Esta entrada prevalece sobre notas históricas que den por resuelta la fluidez global o mezclen PIN de alarma y perfil.
+
+- Checkpoint anterior: `e3ece2c`, consolidación de Fases 1–8 en 2.9.151. La instrucción posterior del usuario autoriza versionado y checkpoint local 2.9.152; sigue prohibido publicar, crear tags, hacer push o desplegar. No iniciar Fase 10 ni otra fase adicional de optimización.
+- Diseño premium, responsive, cristales, halo y lente congelados. Conservar animaciones, scroll nativo y accesibilidad. No tocar autenticación, SOS, armado/desarmado, alarmas enclavadas, bypass, permisos, pruebas físicas ni contratos WebSocket para corregir fluidez.
+- Correcciones locales vigentes: título de alarma «Introduce el PIN de armado» y descripción específica para desarmar; perfil mantiene su prompt y `argus/verify_access_pin`; desarme mantiene `argus/perform_alarm_action` con `code`. No intercambiar credenciales ni registrar PIN. La prueba de presentación de Safari no equivale a un desarme autenticado real.
+- Renderizado: el observer del host compara el perfil gráfico efectivo antes de reiniciar adaptación; los cambios de clase ajenos al rendimiento no deben reasignar el buffer. Las notificaciones de tamaño sin cambio de superficie actualizan anclaje sin reasignar resolución. Usar actualización conjunta de tamaño/DPR para evitar el doble resize interno de setPixelRatio + setSize.
+- Evidencia nativa Safari: clase ajena al perfil → 0 escrituras del buffer, misma instancia. Seis anchos controlados 92%/100% → 24 escrituras antes y 12 después; mismos anchos medidos y un solo Canvas. Esto NO demuestra 50% más fluidez ni ausencia de tirones. El ensayo fue programático dentro del inspector, no un gesto físico de trackpad ni un ensayo del sidebar real.
+- Línea base de pruebas al terminar la corrección: 79 frontend/17 archivos, 4 backend críticas, TypeScript y build aprobados. Los fallos conocidos de la suite backend amplia permanecen documentados en PHASE9_VALIDATION.md; no presentar toda esa suite como aprobada.
+- **Fluidez global de Safari todavía abierta.** No usar los 60 FPS de Chrome/Apple M2 como prueba de scroll o transiciones de Safari. La medición temporal rAF de Safari se interrumpió y no es comparación válida. PerformanceObserver no expuso longtask en la sesión. No hay cifras válidas de latencia, style/layout/paint o fotogramas perdidos por escenario.
+- Siguiente trabajo acotado: medir A) scroll lento/rápido con núcleo activo, B) fullscreen repetido, C) sidebar HA abierto/cerrado y cambios de columnas, D) acceso/salida de perfil. Separar espera de autenticación/datos, montaje React, layout y animación. Buscar solo causas reproducibles; no atribuir todo a Three.js ni eliminar efectos indiscriminadamente.
+- Comparar antes/después únicamente con condiciones equivalentes; si no existe una base anterior comparable, decirlo. Confirmar nitidez, proporciones, hit-testing de cristales, foco, SOS y responsive tras las correcciones.
+- Si la automatización de Safari no es fiable, preparar las cuatro acciones manuales breves para el usuario y dejar explícitamente pendiente la validación humana. Clasificar cada escenario: corregido/verificado en Safari, corregido/pendiente visual o todavía reproducible. No declarar cierre global sin evidencia apropiada o pendientes humanos expresos.
+- Laboratorio utilizado: origen independiente 127.0.0.1:18127, contactos virtuales y salidas externas aisladas. No modificar la instalación operativa. Hay perfiles F7 acumulados en ese laboratorio: no extrapolar sus problemas de selector a la instalación del usuario sin reproducirlos allí.
+- Documentación de referencia: docs/SAFARI_UX_2.9.151.md; diagnóstico repetible scripts/diagnostics/safari-resize-probe.js; especificación de continuación adjunta 781341fc-d519-477a-8849-39900e550a33/Texto pegado.txt.
+
+### Punto de control local 2.9.152 (2026-11-05)
+
+- Se versionan localmente las correcciones ya implementadas de coste de resize WebGL, etiquetas del PIN de armado y estados activos del bridge contextual. Bundle de producción local, `manifest.json`, `const.py` y cache-buster quedan alineados en 2.9.152.
+- Safari nativo completó las acciones de scroll, fullscreen, sidebar de HA y salida/entrada de perfil contra el bundle 2.9.151. Los cuatro escenarios siguen pendientes de verificación visual sostenida; no afirmar fluidez total. Ver evidencia y limitaciones en `docs/SAFARI_UX_2.9.151.md` y `docs/safari-native-ux-2.9.151-evidence.txt`.
+- La nueva versión identifica este checkpoint local; no es una publicación ni certifica mediciones físicas. Mantener diseño, motor de seguridad y versión responsive congelados.

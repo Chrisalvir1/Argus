@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
+let showPin: (...args: any[]) => void;
 let submitPin: () => Promise<void>;
 let handleAction: (index: number, action: string) => Promise<void>;
 
@@ -15,6 +16,7 @@ beforeAll(async () => {
   const prototype = elements.get('argus-panel-v2018')!.prototype;
   handleAction = prototype._handleAction;
   submitPin = prototype._submitPin;
+  showPin = prototype._showPinModal;
 });
 
 afterAll(() => vi.unstubAllGlobals());
@@ -82,4 +84,26 @@ describe('authenticated disarm in the real panel', () => {
       expect(panel._setOptimisticAlarmState).toHaveBeenCalledExactlyOnceWith(entityId, 'disarmed');
     },
   );
+});
+
+it('resets the shared keypad and describes the alarm PIN without invoking profile authentication', () => {
+  const input = { value: 'old value', focus: vi.fn() };
+  const error = { textContent: 'old error', style: { color: '' } };
+  const description = { textContent: '' };
+  const box = { classList: { remove: vi.fn() }, style: {} };
+  const modal = { classList: { remove: vi.fn(), add: vi.fn() }, style: { removeProperty: vi.fn() }, dataset: {},
+    querySelector: () => box, setAttribute: vi.fn() };
+  const shadow = { activeElement: {}, appendChild: vi.fn(),
+    getElementById: (id: string) => ({ 'pin-modal': modal, 'pin-input': input, 'pin-error': error, 'l-pin-modal-desc': description }[id]),
+    querySelector: () => null };
+  const confirm = vi.fn();
+  const panel = { shadowRoot: shadow, classList: { contains: () => false },
+    _getCurrentLangCode: () => 'es', _t: () => 'Ingresa tu PIN de seguridad para continuar.' };
+  showPin.call(panel, confirm, 'disarm');
+  expect(input.value).toBe('');
+  expect(error.textContent).toBe('');
+  expect(description.textContent).toBe('Introduce el PIN de armado para desarmar el sistema.');
+  expect((panel as any)._pinCallback).toBe(confirm);
+  expect(confirm).not.toHaveBeenCalled();
+  expect(input.focus).toHaveBeenCalledWith({ preventScroll: true });
 });

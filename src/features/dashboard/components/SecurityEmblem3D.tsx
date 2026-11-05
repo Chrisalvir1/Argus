@@ -262,17 +262,20 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
       const budget = lightGraphics ? 4_000_000 : 8_000_000;
       const minimumRatio = Math.min(nativeRatio, lightGraphics ? 1 : 1.75);
       const requestedRatio = Math.max(minimumRatio, nativeRatio * quality);
-      renderer.setPixelRatio(Math.min(requestedRatio, Math.sqrt(budget / (width * height))));
-      renderer.setSize(width, height, false);
+      // setPixelRatio itself calls setSize. Applying both separately allocated
+      // the WebGL drawing buffer twice on each sidebar/fullscreen resize.
+      renderer.setDrawingBufferSize(width, height,
+        Math.min(requestedRatio, Math.sqrt(budget / (width * height))));
     };
     const schedule = () => { if (!disposed && !lost && visible && !document.hidden && !frame) frame = window.requestAnimationFrame(tick); };
     wakeFrame.current = schedule;
     const resize = new ResizeObserver(() => {
       const bounds = surface.getBoundingClientRect();
+      const sizeChanged = width !== bounds.width || height !== bounds.height;
       width = bounds.width;
       height = bounds.height;
       if (width <= 0 || height <= 0) return;
-      updateResolution();
+      if (sizeChanged) updateResolution();
       camera.aspect = width / height;
       camera.position.z = Math.max(9.2, 4.8 / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect));
       camera.updateProjectionMatrix();
@@ -560,7 +563,17 @@ export function SecurityEmblem3D(props: EmblemProps & { fallback: React.ReactNod
     const suspend = () => { window.cancelAnimationFrame(frame); frame = 0; last = 0; adaptive.reset(); };
     const onVisibility = () => { if (document.hidden) suspend(); else schedule(); };
     const onMotion = () => { suspend(); updateResolution(); schedule(); };
-    const profileObserver = new MutationObserver(onMotion);
+    // Fullscreen and login classes do not change the graphics profile. Resetting
+    // adaptation/reallocating the drawing buffer on every host class mutation
+    // made those transitions perform unnecessary WebGL work.
+    const graphicsProfile = () => `${essential()}:${host?.classList.contains('argus-perf-light')}`;
+    let previousGraphicsProfile = graphicsProfile();
+    const profileObserver = new MutationObserver(() => {
+      const next = graphicsProfile();
+      if (next === previousGraphicsProfile) return;
+      previousGraphicsProfile = next;
+      onMotion();
+    });
     if (host) profileObserver.observe(host, { attributes: true, attributeFilter: ['class', 'data-argus-perf'] });
     const intersection = new IntersectionObserver(entries => {
       visible = entries.some(entry => entry.isIntersecting);

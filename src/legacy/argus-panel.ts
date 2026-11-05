@@ -230,7 +230,7 @@ const TEXTS = {
     'initialization_error_desc': 'No se pudo conectar con el backend autorizado de Home Assistant.',
     'initialization_error_title': 'No se pudo iniciar Argus',
     'instances': 'Panel de Seguridad Argus',
-    'introduce_pin': 'Introduce tu Pin perfil Argus',
+    'introduce_pin': 'Introduce el PIN de armado',
     'invalid_config': 'Archivo de configuración no válido.',
     'invalid_pin_msg': 'PIN incorrecto',
     'is_admin': '¿Es Administrador?',
@@ -362,7 +362,7 @@ const TEXTS = {
     'pin_reset_confirm': '¿Restablecer el PIN?',
     'pin_updated': 'PIN actualizado exitosamente',
     'profile_is_yours': 'Tu Perfil',
-    'profile_needs_pin': 'Este perfil requiere Pin perfil Argus.',
+    'profile_needs_pin': 'Este perfil requiere PIN de perfil.',
     'profile_no_pin_access': 'Acceso libre sin PIN.',
     'remove_btn': 'Eliminar',
     'reset_btn': 'Restablecer a Valores de Fábrica',
@@ -693,7 +693,7 @@ const TEXTS = {
     'initialization_error_desc': 'Could not connect to authorized Home Assistant backend.',
     'initialization_error_title': 'Could not start Argus',
     'instances': 'Argus Security Panel',
-    'introduce_pin': 'Enter your security PIN',
+    'introduce_pin': 'Enter the arming PIN',
     'invalid_config': 'Invalid configuration file.',
     'invalid_pin_msg': 'Incorrect PIN',
     'is_admin': 'Is Administrator?',
@@ -9307,6 +9307,10 @@ class ArgusPanel extends HTMLElement {
       err.textContent = '';
       err.style.color = '';
     }
+    const description = this.shadowRoot.getElementById('l-pin-modal-desc');
+    if (description) description.textContent = presentation === 'disarm'
+      ? (this._getCurrentLangCode() === 'es' ? 'Introduce el PIN de armado para desarmar el sistema.' : 'Enter the arming PIN to disarm the system.')
+      : this._t('pin_modal_desc');
     this._pinCallback = onConfirm;
     if (this._pinCloseTimer) {
       clearTimeout(this._pinCloseTimer);

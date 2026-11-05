@@ -9702,7 +9702,7 @@ var L = [
 		initialization_error_desc: "No se pudo conectar con el backend autorizado de Home Assistant.",
 		initialization_error_title: "No se pudo iniciar Argus",
 		instances: "Panel de Seguridad Argus",
-		introduce_pin: "Introduce tu Pin perfil Argus",
+		introduce_pin: "Introduce el PIN de armado",
 		invalid_config: "Archivo de configuración no válido.",
 		invalid_pin_msg: "PIN incorrecto",
 		is_admin: "¿Es Administrador?",
@@ -9833,7 +9833,7 @@ var L = [
 		pin_reset_confirm: "¿Restablecer el PIN?",
 		pin_updated: "PIN actualizado exitosamente",
 		profile_is_yours: "Tu Perfil",
-		profile_needs_pin: "Este perfil requiere Pin perfil Argus.",
+		profile_needs_pin: "Este perfil requiere PIN de perfil.",
 		profile_no_pin_access: "Acceso libre sin PIN.",
 		remove_btn: "Eliminar",
 		reset_btn: "Restablecer a Valores de Fábrica",
@@ -10163,7 +10163,7 @@ var L = [
 		initialization_error_desc: "Could not connect to authorized Home Assistant backend.",
 		initialization_error_title: "Could not start Argus",
 		instances: "Argus Security Panel",
-		introduce_pin: "Enter your security PIN",
+		introduce_pin: "Enter the arming PIN",
 		invalid_config: "Invalid configuration file.",
 		invalid_pin_msg: "Incorrect PIN",
 		is_admin: "Is Administrator?",
@@ -14066,11 +14066,13 @@ var ne = class extends HTMLElement {
 	}
 	_showPinModal(e, t = null) {
 		let n = this.shadowRoot.getElementById("pin-modal"), r = this.shadowRoot.getElementById("pin-input"), i = this.shadowRoot.getElementById("pin-error"), a = this.shadowRoot.querySelector(".wrap");
-		r.value = "", i && (i.textContent = "", i.style.color = ""), this._pinCallback = e, this._pinCloseTimer &&= (clearTimeout(this._pinCloseTimer), null), n.classList.remove("pin-closing");
-		let o = n.querySelector(".modal");
-		o && (o.classList.remove("dial-elastic", "pin-rejected"), o.style.position = "", o.style.left = "", o.style.top = "", o.style.transform = "");
-		let s = this.classList.contains("fullscreen-active"), c = null;
-		if (s && (c = this.shadowRoot.querySelector(".entry.ios-fullscreen") || this.shadowRoot.querySelector(".entry") || this.shadowRoot.querySelector("article")), t === "disarm") {
+		r.value = "", i && (i.textContent = "", i.style.color = "");
+		let o = this.shadowRoot.getElementById("l-pin-modal-desc");
+		o && (o.textContent = t === "disarm" ? this._getCurrentLangCode() === "es" ? "Introduce el PIN de armado para desarmar el sistema." : "Enter the arming PIN to disarm the system." : this._t("pin_modal_desc")), this._pinCallback = e, this._pinCloseTimer &&= (clearTimeout(this._pinCloseTimer), null), n.classList.remove("pin-closing");
+		let s = n.querySelector(".modal");
+		s && (s.classList.remove("dial-elastic", "pin-rejected"), s.style.position = "", s.style.left = "", s.style.top = "", s.style.transform = "");
+		let c = this.classList.contains("fullscreen-active"), l = null;
+		if (c && (l = this.shadowRoot.querySelector(".entry.ios-fullscreen") || this.shadowRoot.querySelector(".entry") || this.shadowRoot.querySelector("article")), t === "disarm") {
 			let e = this.shadowRoot.querySelector(".context-pin-slot"), t = e?.closest(".security-console"), i = !!(t && getComputedStyle(t).gridTemplateAreas.includes("controls emblem sensors") && e.parentElement.clientWidth >= 230);
 			this._pinReturnFocus = this.shadowRoot.activeElement;
 			for (let e of [
@@ -14081,14 +14083,14 @@ var ne = class extends HTMLElement {
 				"backdrop-filter",
 				"-webkit-backdrop-filter"
 			]) n.style.removeProperty(e);
-			n.dataset.disarmPresentation = i ? "context" : "dialog", n.setAttribute("role", "dialog"), n.setAttribute("aria-labelledby", "l-introduce-pin"), n.setAttribute("aria-describedby", "l-pin-modal-desc"), i || n.setAttribute("aria-modal", "true"), (i ? e : c || this.shadowRoot).appendChild(n), n.classList.add("open"), n.setAttribute("aria-hidden", "false"), r.focus({ preventScroll: !0 });
-		} else s && c ? (n.style.position = "absolute", n.style.inset = "0", n.style.zIndex = "99999999", n.style.background = "rgba(0, 0, 0, 0.55)", n.style.backdropFilter = "none", n.style.webkitBackdropFilter = "none", o && (o.offsetWidth, o.classList.add("dial-elastic")), c.appendChild(n)) : (n.style.position = "fixed", n.style.inset = "0", n.style.zIndex = "999999", n.style.background = "rgba(0, 0, 0, 0.3)", n.style.backdropFilter = "none", n.style.webkitBackdropFilter = "none", a && a.classList.add("wrap-blurred")), n.classList.add("open"), n.setAttribute("aria-hidden", "false"), o && requestAnimationFrame(() => {
-			let e = this.shadowRoot.querySelector(".console-emblem-viewport"), t = o.getBoundingClientRect(), n = e?.getBoundingClientRect(), r = (window.innerWidth - t.width) / 2, i = (window.innerHeight - t.height) / 2;
+			n.dataset.disarmPresentation = i ? "context" : "dialog", n.setAttribute("role", "dialog"), n.setAttribute("aria-labelledby", "l-introduce-pin"), n.setAttribute("aria-describedby", "l-pin-modal-desc"), i || n.setAttribute("aria-modal", "true"), (i ? e : l || this.shadowRoot).appendChild(n), n.classList.add("open"), n.setAttribute("aria-hidden", "false"), r.focus({ preventScroll: !0 });
+		} else c && l ? (n.style.position = "absolute", n.style.inset = "0", n.style.zIndex = "99999999", n.style.background = "rgba(0, 0, 0, 0.55)", n.style.backdropFilter = "none", n.style.webkitBackdropFilter = "none", s && (s.offsetWidth, s.classList.add("dial-elastic")), l.appendChild(n)) : (n.style.position = "fixed", n.style.inset = "0", n.style.zIndex = "999999", n.style.background = "rgba(0, 0, 0, 0.3)", n.style.backdropFilter = "none", n.style.webkitBackdropFilter = "none", a && a.classList.add("wrap-blurred")), n.classList.add("open"), n.setAttribute("aria-hidden", "false"), s && requestAnimationFrame(() => {
+			let e = this.shadowRoot.querySelector(".console-emblem-viewport"), t = s.getBoundingClientRect(), n = e?.getBoundingClientRect(), r = (window.innerWidth - t.width) / 2, i = (window.innerHeight - t.height) / 2;
 			if (n) {
 				let e = window.matchMedia("(max-width: 760px), (orientation: portrait)").matches, a = n.right + 20;
 				!e && a + t.width <= window.innerWidth - 16 && (r = a), i = n.top + (n.height - t.height) / 2;
 			}
-			o.style.position = "fixed", o.style.left = `${Math.max(16, Math.min(r, window.innerWidth - t.width - 16))}px`, o.style.top = `${Math.max(16, Math.min(i, window.innerHeight - t.height - 16))}px`, o.offsetWidth, o.classList.add("dial-elastic");
+			s.style.position = "fixed", s.style.left = `${Math.max(16, Math.min(r, window.innerWidth - t.width - 16))}px`, s.style.top = `${Math.max(16, Math.min(i, window.innerHeight - t.height - 16))}px`, s.offsetWidth, s.classList.add("dial-elastic");
 		}), setTimeout(() => r.focus(), 60);
 	}
 	_closePinModal() {
@@ -33308,19 +33310,19 @@ function yh(e) {
 			let e = ke?.classList.contains("argus-perf-light") ? .75 : 1, t = Ae() ? .6 : Math.min(e, we.quality), n = t <= .7;
 			f.dataset.argusRenderQuality = n ? "light" : "full", C.transmission = n ? 0 : .8, l.transmissionResolutionScale = n ? .25 : .5;
 			let r = Math.min(window.devicePixelRatio || 1, 2), i = n ? 4e6 : 8e6, a = Math.max(Math.min(r, n ? 1 : 1.75), r * t);
-			l.setPixelRatio(Math.min(a, Math.sqrt(i / (V * H)))), l.setSize(V, H, !1);
+			l.setDrawingBufferSize(V, H, Math.min(a, Math.sqrt(i / (V * H))));
 		}, Me = () => {
 			W || ge || !U || document.hidden || _e || (_e = window.requestAnimationFrame(Ge));
 		};
 		a.current = Me;
 		let Ne = new ResizeObserver(() => {
-			let e = f.getBoundingClientRect();
+			let e = f.getBoundingClientRect(), t = V !== e.width || H !== e.height;
 			if (V = e.width, H = e.height, V <= 0 || H <= 0) return;
-			je(), g.aspect = V / H, g.position.z = Math.max(9.2, 4.8 / (2 * Math.tan(Fa.degToRad(g.fov / 2)) * g.aspect)), g.updateProjectionMatrix(), Ce = Number.parseFloat(getComputedStyle(f).borderTopLeftRadius) || 0;
-			let t = d?.getBoundingClientRect();
-			if (he = t ? Math.min(t.width, t.height) : Math.min(V, H), t) {
-				let n = 2 * g.position.z * Math.tan(Fa.degToRad(g.fov / 2)), r = n * g.aspect;
-				De.set(((t.left + t.width / 2 - e.left) / V - .5) * r, -((t.top + t.height / 2 - e.top) / H - .5) * n);
+			t && je(), g.aspect = V / H, g.position.z = Math.max(9.2, 4.8 / (2 * Math.tan(Fa.degToRad(g.fov / 2)) * g.aspect)), g.updateProjectionMatrix(), Ce = Number.parseFloat(getComputedStyle(f).borderTopLeftRadius) || 0;
+			let n = d?.getBoundingClientRect();
+			if (he = n ? Math.min(n.width, n.height) : Math.min(V, H), n) {
+				let t = 2 * g.position.z * Math.tan(Fa.degToRad(g.fov / 2)), r = t * g.aspect;
+				De.set(((n.left + n.width / 2 - e.left) / V - .5) * r, -((n.top + n.height / 2 - e.top) / H - .5) * t);
 			} else De.set(0, 0);
 			Me();
 		});
@@ -33449,16 +33451,19 @@ function yh(e) {
 			document.hidden ? Ke() : Me();
 		}, Je = () => {
 			Ke(), je(), Me();
-		}, Ye = new MutationObserver(Je);
-		ke && Ye.observe(ke, {
+		}, Ye = () => `${Ae()}:${ke?.classList.contains("argus-perf-light")}`, Xe = Ye(), Ze = new MutationObserver(() => {
+			let e = Ye();
+			e !== Xe && (Xe = e, Je());
+		});
+		ke && Ze.observe(ke, {
 			attributes: !0,
 			attributeFilter: ["class", "data-argus-perf"]
 		});
-		let Xe = new IntersectionObserver((e) => {
+		let Qe = new IntersectionObserver((e) => {
 			U = e.some((e) => e.isIntersecting), U ? Me() : Ke();
 		});
-		return Xe.observe(f), document.addEventListener("visibilitychange", qe), Oe.addEventListener("change", Je), Me(), () => {
-			W = !0, a.current = () => {}, Ke(), Ne.disconnect(), Xe.disconnect(), Ye.disconnect(), delete f.dataset.argusRenderQuality, document.removeEventListener("visibilitychange", qe), Oe.removeEventListener("change", Je), Pe.removeEventListener("click", ze), Pe.removeEventListener("pointermove", Fe), Pe.removeEventListener("pointerdown", Ie), Pe.removeEventListener("pointerleave", Le), l.domElement.removeEventListener("webglcontextlost", Be), m.remove(), E.forEach((e) => e.dispose()), h.traverse((e) => {
+		return Qe.observe(f), document.addEventListener("visibilitychange", qe), Oe.addEventListener("change", Je), Me(), () => {
+			W = !0, a.current = () => {}, Ke(), Ne.disconnect(), Qe.disconnect(), Ze.disconnect(), delete f.dataset.argusRenderQuality, document.removeEventListener("visibilitychange", qe), Oe.removeEventListener("change", Je), Pe.removeEventListener("click", ze), Pe.removeEventListener("pointermove", Fe), Pe.removeEventListener("pointerdown", Ie), Pe.removeEventListener("pointerleave", Le), l.domElement.removeEventListener("webglcontextlost", Be), m.remove(), E.forEach((e) => e.dispose()), h.traverse((e) => {
 				e instanceof el && e.material.dispose();
 			}), C.dispose(), w.dispose(), T.dispose(), te.dispose(), le.dispose(), ue.dispose(), de.dispose(), P.forEach((e) => e.dispose()), ie.dispose(), ae.dispose(), se.dispose(), B.forEach((e) => e.dispose()), y.dispose(), l.dispose(), l.domElement.remove();
 		};
@@ -33870,10 +33875,18 @@ function jh(e) {
 			"on",
 			"open",
 			"opening",
+			"unlocked",
+			"recording",
+			"active",
 			"motion",
+			"abierto",
+			"activa",
+			"true",
+			"1",
 			"detected",
-			"triggered",
-			"unlocked"
+			"tamper",
+			"vibration",
+			"triggered"
 		].includes(String(t?.state ?? "").toLowerCase()),
 		modeButtonIcon: (t) => e?._modeButtonIcon?.(t) || "",
 		handleAction: (t, n) => e?._handleAction?.(t, n),

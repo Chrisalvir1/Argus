@@ -45,7 +45,8 @@ export function useArgusPanelBridge(panel: any): ArgusPanelBridge {
     translate: (key: string) => panel?._t?.(key) || key,
     getEntityState: (entityId: string) => panel?._getEntityState?.(entityId) || panel?._hass?.states?.[entityId],
     isSensorActive: (entity: any) => panel?.isSensorActive?.(entity) ??
-      ['on', 'open', 'opening', 'motion', 'detected', 'triggered', 'unlocked'].includes(String(entity?.state ?? '').toLowerCase()),
+      ['on', 'open', 'opening', 'unlocked', 'recording', 'active', 'motion',
+        'abierto', 'activa', 'true', '1', 'detected', 'tamper', 'vibration', 'triggered'].includes(String(entity?.state ?? '').toLowerCase()),
     modeButtonIcon: (mode: string) => panel?._modeButtonIcon?.(mode) || '',
     handleAction: (index: number, action: string) => panel?._handleAction?.(index, action),
     entries: panel?._dashboard?.entries || [],

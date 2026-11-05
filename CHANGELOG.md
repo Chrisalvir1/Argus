@@ -1,3 +1,16 @@
+## [2.9.152] - 2026-11-05
+
+### Fixed
+- Evitar reasignaciones redundantes del buffer Three.js ante cambios de clase ajenos al perfil gráfico y ante notificaciones de tamaño sin cambio real.
+- Reducir a una sola operación el ajuste de tamaño y densidad del buffer WebGL durante redimensionados.
+- Distinguir el PIN de armado del PIN de perfil en el teclado compartido, manteniendo el flujo de autenticación existente.
+- Conservar estados activos de sensores contextuales como `recording`, `active`, `abierto`, `activa`, `tamper` y `vibration`.
+
+### Validated
+- Recorridos de scroll, pantalla completa, barra lateral de Home Assistant y cambio de perfil ejecutados en Safari nativo sobre el bundle 2.9.151.
+- Fluidez visual de esos recorridos sigue pendiente de verificación sostenida; las métricas de rAF estuvieron contaminadas por Inspector/automatización y no atribuyen causalidad.
+- Documentada evidencia Safari, limitaciones y procedimiento manual en `docs/SAFARI_UX_2.9.151.md`.
+
 ## [2.9.151] - 2026-11-04
 - Consolidación local del backend, frontend, pruebas y bundle de las Fases 1–8.
 - Fase 8 completada con validación disponible. PIN, SOS y confirmaciones comprobados en laboratorio aislado.
