@@ -258,7 +258,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
           </button>
         )}
         
-        <div className="entry-content security-console" data-alarm-state={isWaiting ? 'pending' : state} style={modeAccentStyles}>
+        <div className="entry-content security-console" data-context-expanded={isWaiting || verificationOpen || selectedZone ? "true" : "false"} data-alarm-state={isWaiting ? 'pending' : state} style={modeAccentStyles}>
           <div className="console-hud">
             <span className="console-hud-loc"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-7h6v7"/></svg>{fullHudLoc}</span>
             <div role="status" aria-live="polite" className="argus-connection-pill" data-online={isOnline ? 'true' : 'false'}>
@@ -346,11 +346,11 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
             overviewAttention={showOverview && pendingZones > 0}
             accent={state.startsWith('armed_') && !alarmActive ? modeAccentStyles['--console-accent'] : undefined}
             indicatorScope={required && modeName ? modeName : undefined}
-            indicators={[
+            indicators={configuredZones.length ? [
               { label: 'Zonas', value: zoneChecks.length },
               { label: 'Listas', value: readyZones },
               { label: 'Pendientes', value: pendingZones },
-            ]}
+            ] : undefined}
             selection={<>
               <button hidden={verificationOpen || !configuredZones.length} ref={verificationOrigin} className="context-tool context-verify-entry" data-pending={pendingZones > 0 ? "true" : "false"} type="button"
                 onClick={() => setVerificationOpen(true)}>
@@ -431,7 +431,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
               : confirmedState !== state ? 'Esperando confirmación del servidor.'
               : isPending ? [pendingModeLabel && `Modo solicitado: ${pendingModeLabel}.`, isWaiting && `Condiciones pendientes: ${blockingSensors.length}.`].filter(Boolean).join(' ')
               : state.startsWith('armed_') ? [degraded && 'Protección degradada: sensor sin conexión.', cycleBypassed.length && `Protección parcial: ${cycleBypassed.length} sensor(es) omitido(s)${affectedZones.length ? ' · ' + affectedZones.join(', ') : ''}.`, statusDetail].filter(Boolean).join(' ')
-              : showOverview ? statusDetail : undefined}
+              : showOverview && configuredZones.length ? statusDetail : undefined}
             view={selectedZone && !incidentOpen ? selectedZone.area || zones.find((zone: any) => zone.id === selectedZoneId)?.name
               : testing && !incidentOpen ? `Modo de prueba · ${walk.tested_count || 0} de ${walk.total_sensors || 0} verificados`
               : diagnosticOpen && !incidentOpen ? 'Diagnóstico de sensores' : undefined}

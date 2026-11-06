@@ -1,3 +1,10 @@
+## [3.0.3] - 2026-11-06
+
+- Corregir zonas desactivadas que aparecían en el panel; arreglar `yaml` no definido en ajustes TTS.
+- Aplicar alto contraste al historial dentro del widget y mejorar legibilidad y distribución vertical dinámica del núcleo.
+- Añadir giro ligero CSS cuando WebGL no está disponible o está activo rendimiento esencial; respetar movimiento reducido.
+- Ver docs/RELEASE_NOTES_3.0.3.md para alcance y límites de validación.
+
 ## [3.0.2] - 2026-11-06
 
 - Sincronizar el cargador frontend con la versión publicada; corrige las pruebas de versión que impedían crear la release 3.0.1.

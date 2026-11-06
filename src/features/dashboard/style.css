@@ -197,3 +197,16 @@
 :host(:is([argus-contrast="high"], .argus-contrast-high)) :is(button,a,summary):not(:disabled) {
   border-color:#94a3b8;
 }
+
+/* Override widget-specific glass rules with equal specificity in high contrast. */
+:host(:is([argus-contrast="high"], .argus-contrast-high)) #argus-dashboard-root-v3 .argus-widget[data-widget-kind="activity-history"] #activity-log .log-item {
+  background: #000 !important;
+  background-image: none !important;
+  border: 2px solid #fff !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+:host(:is([argus-contrast="high"], .argus-contrast-high)) #argus-dashboard-root-v3 #activity-log :is(.log-body,.log-title,.log-meta,.log-badge) {
+  color: #fff !important;
+  opacity: 1 !important;
+}
