@@ -1,5 +1,7 @@
 ## [3.0.0] - 2026-11-06
 
+Detalles completos: [notas v3.0.0](docs/RELEASE_NOTES_3.0.0.md), [migración](docs/MIGRATION_3.0.0.md) y [YAML opcional](examples/configuration.yaml).
+
 - Integra el desarrollo local del dashboard, núcleo adaptativo, responsive, diagnóstico y seguridad de interacción.
 - Conserva funcionamiento sin zonas y configuración heredada de v2.6.8.
 - Preserva destinos TTS y etiquetas antiguas durante la migración.

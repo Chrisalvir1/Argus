@@ -1,0 +1,20 @@
+# Argus v3.0.0 — configuración YAML opcional compatible con HA 2026.11.
+# Cree la integración desde Ajustes → Dispositivos y servicios.
+# La configuración recomendada de voz está en Argus → Modos / SOS → Voz de Argus.
+# Sustituya estas entidades de ejemplo por entidades reales de su instalación.
+argus:
+  arming_voice:
+    enabled: true
+    tts_entity: tts.motor_de_ejemplo
+    media_players:
+      - media_player.altavoz_de_ejemplo
+    # Vacío utiliza el mensaje predeterminado de cada acción.
+    message_start: ""
+    message_remaining: ""
+    message_last: ""
+    message_complete: ""
+    message_armed: ""
+    message_cancelled: ""
+    message_triggered: ""
+    message_additional_triggered: ""
+    message_alarm_sensor_closed: ""

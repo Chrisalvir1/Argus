@@ -83,7 +83,7 @@ React, TypeScript y Vite para la interfaz; núcleo original Three.js con calidad
 ### 📲 Notificaciones Móviles Inteligentes y Alertas Críticas (iOS y Android)
 Argus se integra de forma directa y nativa con la aplicación Home Assistant Companion para alertarte de cualquier evento de seguridad en tu móvil:
 - **Alertas Críticas de Máxima Prioridad:** Notificaciones push de emergencia con sonido de sirena estridente que ignoran automáticamente el modo silencioso o No Molestar del dispositivo.
-- **Acciones Rápidas desde el Mensaje:** Botones interactivos directamente en la notificación (*Desarmar*, *Ver Cámaras*, *Silenciar Sirena*, *Activar Luces*) para actuar de inmediato sin perder tiempo abriendo la aplicación.
+- **Destinos configurables:** Selecciona los servicios móviles disponibles en Home Assistant. La entrega depende de la aplicación Companion y de la configuración del dispositivo.
 
 ### 📦 Copias de Seguridad Cifradas (.argus)
 - **Exportación e Importación Completa:** Descarga y restaura perfiles, sensores, configuraciones de modos y ajustes de seguridad en archivos protegidos con cifrado AES-GCM.
@@ -156,14 +156,14 @@ Argus cuenta con una suite completa de pruebas unitarias y verificación de cont
 
 ```bash
 # Compilar el frontend en React 19
-npm install
+npm ci
 npm run build
 
 # Ejecutar pruebas unitarias de frontend
 npm test
 
 # Ejecutar suite de pruebas unitarias de backend Python
-python3 -m unittest discover tests
+python3 scripts/test_backend.py
 ```
 
 ---
@@ -186,3 +186,10 @@ python3 -m unittest discover tests
 ## 📄 Licencia
 
 Este proyecto está bajo la Licencia **MIT**. Consulta el archivo [LICENSE](LICENSE) para más información.
+
+## Documentación de v3.0.0
+
+- [Novedades y funcionamiento](docs/RELEASE_NOTES_3.0.0.md)
+- [Migración desde v2.6.8](docs/MIGRATION_3.0.0.md)
+- [Validación y limitaciones](docs/RELEASE_VALIDATION_3.0.0.md)
+- [YAML opcional de voz](examples/configuration.yaml)
