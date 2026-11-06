@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SecurityEmblem3D, type EmblemProps } from './SecurityEmblem3D';
 import { MODE_PALETTE } from './mode-palette';
 
@@ -10,8 +10,8 @@ function SecurityShieldFallback({ label, state, pulse, zones, zonesEnabled }: Em
     : state === 'armed_away' ? MODE_PALETTE.away.css : state === 'armed_night' ? MODE_PALETTE.night.css
     : state === 'disarmed' ? MODE_PALETTE.disarmed.css : '#a4aab4';
   return <svg role="img" aria-label={[label, ...(zones || []).map(zone => `Zona ${zone.number}: ${zone.area || "Sin área"}`)].join(". ")} className="console-emblem-unavailable" viewBox="0 0 160 160"
-    style={{ width: '70%', height: '70%', maxWidth: 200, maxHeight: 200 }}>
-    <circle opacity={count ? 1 : 0} cx="80" cy="80" r="55" fill="none" stroke={accent} strokeWidth="15" strokeDasharray={count ? `${(2 * Math.PI * 55 / count) * .79} ${(2 * Math.PI * 55 / count) * .21}` : undefined}
+    style={{ width: '90%', height: '90%', maxWidth: 380, maxHeight: 380 }}>
+    <circle className={state === 'disarmed' && !zones?.length ? 'console-core-light-orbit' : undefined} opacity={count ? 1 : 0} cx="80" cy="80" r="55" fill="none" stroke={accent} strokeWidth="15" strokeDasharray={count ? `${(2 * Math.PI * 55 / count) * .79} ${(2 * Math.PI * 55 / count) * .21}` : undefined}
       strokeDashoffset={zones?.length ? (2 * Math.PI * 55 / zones.length) * .395 : undefined} />
     {zones?.map((zone, index) => {
       const angle = index * 2 * Math.PI / zones.length - Math.PI / 2;
@@ -32,5 +32,19 @@ function SecurityShieldFallback({ label, state, pulse, zones, zonesEnabled }: Em
 }
 
 export function SecurityShield(props: EmblemProps) {
-  return <SecurityEmblem3D {...props} fallback={<SecurityShieldFallback {...props} />} />;
+  const anchor = useRef<HTMLSpanElement>(null);
+  const [lightweight, setLightweight] = useState(false);
+  useEffect(() => {
+    const host = (anchor.current?.getRootNode() as ShadowRoot)?.host;
+    if (!host) return;
+    const update = () => setLightweight(host.classList.contains('argus-perf-essential'));
+    update();
+    const observer = new MutationObserver(update);
+    observer.observe(host, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
+  const fallback = <SecurityShieldFallback {...props} />;
+  return <span ref={anchor} style={{display: 'contents'}}>
+    {lightweight ? fallback : <SecurityEmblem3D {...props} fallback={fallback} />}
+  </span>;
 }

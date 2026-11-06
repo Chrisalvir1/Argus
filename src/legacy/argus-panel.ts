@@ -7589,6 +7589,7 @@ class ArgusPanel extends HTMLElement {
         if (!details.isConnected) return;
         (details as any).__voiceLoaded = true;
         const values = data.values || {};
+        const yaml = new Set<string>(Array.isArray(data.yaml_keys) ? data.yaml_keys : []);
         const defaultMessages = data.default_messages || {};
         const assignedZones = Array.isArray(data.assigned_zones) ? data.assigned_zones : [];
         const modeNames: Record<string, string> = {disarmed: 'Desarmado', home: 'En Casa', away: 'Ausente', night: 'Noche', sos: 'SOS'};

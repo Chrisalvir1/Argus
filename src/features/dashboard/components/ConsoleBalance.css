@@ -1026,3 +1026,58 @@
 :host(.argus-contrast-high) .log-item * { color: #fff !important; opacity: 1 !important; text-shadow: none !important; }
 :host([argus-contrast="high"]) .log-meta,
 :host(.argus-contrast-high) .log-meta { color: #fff !important; }
+@media (max-width: 760px) and (orientation: portrait) {
+  :host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon {
+    width: 100% !important;
+    min-height: 0 !important;
+    height: clamp(270px, 39dvh, 440px) !important;
+    transition: height 350ms ease;
+  }
+  :host .entry.entry.ios-fullscreen .security-console.security-console[data-context-expanded="true"] .entry-icon {
+    height: clamp(190px, 26dvh, 280px) !important;
+  }
+  :host .entry.entry.ios-fullscreen .console-emblem-viewport {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon { transition: none !important; }
+}
+
+/* Readable at wall-panel distance; do not shrink labels to fit a short screen. */
+:host .entry.entry .security-console.security-console .console-hud-loc,
+:host .entry.entry .security-console.security-console .argus-connection-pill {
+  font-size: clamp(16px, 1.8cqw, 22px) !important;
+  height: auto !important;
+  min-height: 44px !important;
+}
+:host .entry.entry .security-console.security-console .console-modes-vertical > .liquid-btn .console-mode-label,
+:host .entry.entry .security-console.security-console .argus-sta-label {
+  font-size: clamp(17px, 2cqw, 24px) !important;
+  line-height: 1.25 !important;
+  white-space: normal !important;
+}
+:host .entry.entry .security-console.security-console .console-modes-vertical > .liquid-btn {
+  min-height: 52px !important;
+}
+:host .security-context p { font-size: clamp(16px, 1.8cqw, 21px) !important; line-height: 1.4; }
+:host .security-context header > strong { font-size: clamp(24px, 2.6cqw, 32px) !important; }
+:host .security-context .context-eyebrow,
+:host .security-console .console-section-title { font-size: 16px !important; letter-spacing: .06em !important; }
+@media (max-width: 480px) {
+  :host .entry.entry .security-console.security-console .console-hud {
+    grid-template-columns: minmax(0,1fr) auto !important;
+  }
+  :host .entry.entry .security-console.security-console .console-hud-loc { grid-column: 1 / -1 !important; white-space: normal !important; }
+}
+/* No WebGL required: only the unlabelled outer ring rotates. */
+.console-core-light-orbit {
+  transform-origin: 80px 80px;
+  animation: argus-light-core-orbit 28s linear infinite;
+}
+@keyframes argus-light-core-orbit { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .console-core-light-orbit { animation: none !important; }
+}
