@@ -57,6 +57,10 @@ def sanitize_zones(value: object, valid_entities: set[str] | None = None, valid_
         # only its area label is user-editable.
         name = f"Zona {number}"
         area = str(zone.get("area") or "").strip()
+        # Preserve custom labels from older stores as the editable area subtitle.
+        legacy_name = str(zone.get("name") or "").strip()
+        if "area" not in zone and legacy_name and not re.fullmatch(r"Zona\s*\d+", legacy_name, re.IGNORECASE):
+            area = legacy_name
         if len(area) > 80:
             raise ValueError("zone area is too long")
         # SOS is an output-only emergency configuration, not an arming mode

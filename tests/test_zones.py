@@ -16,7 +16,8 @@ def test_sanitize_zones_preserves_manual_links_and_deduplicates():
         [{"id": "zone-1", "name": "  Entrada ", "entity_ids": ["binary_sensor.door", "binary_sensor.door"], "device_ids": ["dev-1", "dev-1"]}],
         {"binary_sensor.door"}, {"dev-1"},
     )
-    assert zones[0]["name"] == "Entrada"
+    assert zones[0]["name"] == "Zona 1"
+    assert zones[0]["area"] == "Entrada"
     assert zones[0]["entity_ids"] == ["binary_sensor.door"]
     assert zones[0]["device_ids"] == ["dev-1"]
 

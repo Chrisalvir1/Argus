@@ -58,7 +58,8 @@ def _merge_defaults(data: object) -> dict:
     result = _default_payload()
     if isinstance(data, dict):
         result.update(copy.deepcopy(data))
-    result.pop("tts_targets", None)
+    # Preserve legacy and unknown fields during upgrades; newer UI versions may
+    # no longer edit them, but loading configuration must not discard user data.
     if not isinstance(result.get("runtime"), dict):
         result["runtime"] = {"alarm_states": {}}
     result["runtime"].setdefault("alarm_states", {})

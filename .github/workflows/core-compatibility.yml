@@ -30,3 +30,6 @@ jobs:
           uv pip install --system -e . --no-deps
       - name: Test Argus diagnostics and Core contracts
         run: PYTHONPATH="$GITHUB_WORKSPACE" python -m pytest -q tests_core
+
+      - name: Run isolated legacy backend regressions
+        run: PYTHONPATH="$GITHUB_WORKSPACE" python scripts/test_backend.py

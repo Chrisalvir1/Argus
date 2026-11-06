@@ -23,7 +23,8 @@ class TestV210RuntimeContract(unittest.TestCase):
                 self.assertIn("python-version-file: '.python-version'", source)
             else:
                 self.assertIn("python-version: ${{ matrix.python }}", source)
-                self.assertIn("python: ['3.14', '3.15']", source)
+                self.assertIn("python: ['3.14']", source)
+                self.assertIn("homeassistant==2026.11.0", source)
             self.assertIn("(3, 14, 0) <= sys.version_info < (3, 16, 0)", source)
 
     def test_node_26_and_typescript_702_are_enforced(self):

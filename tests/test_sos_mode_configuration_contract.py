@@ -6,7 +6,7 @@ PANEL = (Path(__file__).resolve().parents[1] / "src" / "legacy" / "argus-panel.t
 
 
 def test_sos_view_has_no_zone_summary_and_uses_shared_output_selector():
-    sos_view = PANEL.split("if (this._mode === 'sos') {", 1)[1].split("const cfg = this._currentModeConfig();", 1)[0]
+    sos_view = PANEL.split("  _renderModeView()", 1)[1].split("if (this._mode === 'sos') {", 1)[1].split("const cfg = this._currentModeConfig();", 1)[0]
     assert "mode-zone-summary" not in sos_view
     assert "_openModal('alarm_device')" in sos_view
     assert "_renderModeZoneSummary" not in sos_view

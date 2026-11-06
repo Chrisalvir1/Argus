@@ -1,3 +1,12 @@
+## [3.0.0] - 2026-11-06
+
+- Integra el desarrollo local del dashboard, núcleo adaptativo, responsive, diagnóstico y seguridad de interacción.
+- Conserva funcionamiento sin zonas y configuración heredada de v2.6.8.
+- Preserva destinos TTS y etiquetas antiguas durante la migración.
+- Centraliza la voz en Modos / SOS y conserva opciones anteriores.
+- Prepara compatibilidad y pruebas con Home Assistant Core 2026.11.0.
+- Añade guía de actualización y notas de publicación.
+
 ## 2.9.159 — Corrección contextual local
 
 Selector contextual compartido, diagnóstico humanizado y actualización por cambios HA; compatibilidad previa para pruebas físicas. TypeScript, build y 81 pruebas frontend aprobados. Validación integral de navegador y laboratorio aún pendiente.

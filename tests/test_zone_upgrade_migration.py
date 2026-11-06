@@ -104,6 +104,18 @@ class ZoneUpgradeMigrationTests(unittest.TestCase):
         with patch.object(storage, "Store", MemoryStore):
             return asyncio.run(storage.async_load_ui_data(self.hass, self.entry_id))
 
+    def test_upgrade_preserves_legacy_targets_and_unknown_configuration(self):
+        legacy = {"tts_targets": ["media_player.living_room"],
+                  "custom_automation_settings": {"enabled": True}, "zones": []}
+        result = self.upgrade(legacy)
+        for key, value in legacy.items():
+            self.assertEqual(result[key], value)
+        # Reloading must preserve the same values as the initial migration.
+        with patch.object(storage, "Store", MemoryStore):
+            reloaded = asyncio.run(storage.async_load_ui_data(self.hass, self.entry_id))
+        for key, value in legacy.items():
+            self.assertEqual(reloaded[key], value)
+
     def test_v268_upgrade_keeps_explicitly_empty_zones_empty(self):
         # Shape of the official release's legacy Store: no migration marker.
         old_modes = {

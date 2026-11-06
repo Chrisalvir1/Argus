@@ -118,7 +118,9 @@ class TestWalkTestAndSensorDelays(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(session.is_expired)
         self.assertFalse(session.record_trigger("binary_sensor.door", "on"))
 
-    def test_walk_test_manager_start_and_stop(self):
+    @patch("homeassistant.helpers.event.async_track_state_change_event")
+    @patch("homeassistant.helpers.event.async_call_later")
+    def test_walk_test_manager_start_and_stop(self, timeout, observe):
         bus = SimpleNamespace(async_fire=Mock())
         hass = SimpleNamespace(data={}, bus=bus)
         mgr = async_get_walk_test_manager(hass)
@@ -127,7 +129,8 @@ class TestWalkTestAndSensorDelays(unittest.IsolatedAsyncioTestCase):
         session = mgr.start_walk_test("inst_1", sensors, timeout_seconds=600, started_by="Bob")
 
         self.assertTrue(mgr.is_active("inst_1"))
-        bus.async_fire.assert_called_with("argus_walk_test_started", session.to_dict())
+        bus.async_fire.assert_any_call("argus_walk_test_started", session.to_dict())
+        bus.async_fire.assert_called_with("argus_walk_test_updated", session.to_dict())
 
         session.record_trigger("binary_sensor.front_door", "on")
         report = mgr.stop_walk_test("inst_1")
@@ -135,7 +138,8 @@ class TestWalkTestAndSensorDelays(unittest.IsolatedAsyncioTestCase):
         self.assertFalse(mgr.is_active("inst_1"))
         self.assertIsNotNone(report)
         self.assertEqual(report["tested_count"], 1)
-        bus.async_fire.assert_called_with("argus_walk_test_stopped", report)
+        bus.async_fire.assert_any_call("argus_walk_test_stopped", report)
+        bus.async_fire.assert_called_with("argus_walk_test_updated", report)
 
     def test_per_sensor_instant_and_custom_delays(self):
         """Verify per-sensor delay customization logic."""

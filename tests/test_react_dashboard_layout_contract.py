@@ -72,14 +72,14 @@ class TestReactDashboardLayoutContract(unittest.TestCase):
         self.assertIn('>.argus-widget__content>.panel{overflow:hidden!important',self.style)
         self.assertNotIn('overscroll-behavior-y:contain!important',self.legacy)
     def test_mode_tabs_stay_in_one_mobile_row_and_only_disarmed_is_green(self):
-        self.assertIn('grid-template-columns:repeat(6,minmax(0,1fr))!important',self.style)
+        self.assertIn('grid-template-columns:repeat(7,minmax(0,1fr))!important',self.style)
         self.assertIn('rgba(168, 85, 247, 0.96)',self.legacy)
         self.assertIn('bubble-disarmed',self.legacy)
         self.assertIn('bubble-sos',self.legacy)
     def test_each_widget_reflows_to_its_own_width(self):
         self.assertIn('container-type:size;container-name:argus-widget',self.style)
         self.assertIn('@container argus-widget (max-width:760px)',self.style)
-        self.assertIn('grid-template-columns:repeat(6,minmax(0,1fr))!important',self.style)
+        self.assertIn('grid-template-columns:repeat(7,minmax(0,1fr))!important',self.style)
         self.assertIn('grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))!important',self.style)
         self.assertIn('grid-template-columns:repeat(auto-fit,minmax(min(100%,112px),1fr))',self.style)
         self.assertIn('data-widget-kind="access-control"] #access-workspace .access-section{min-width:0;max-width:100%}',self.style)

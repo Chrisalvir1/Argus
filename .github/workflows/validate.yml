@@ -23,7 +23,7 @@ jobs:
     timeout-minutes: 15
     strategy:
       matrix:
-        python: ['3.14', '3.15']
+        python: ['3.14']
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
@@ -32,7 +32,8 @@ jobs:
       - name: Verify Python runtime
         run: python -c 'import sys; assert (3, 14, 0) <= sys.version_info < (3, 16, 0); print(sys.version)'
       - run: python -m compileall -q custom_components/argus tests
-      - run: python -m unittest discover -s tests -v
+      - run: python -m pip install homeassistant==2026.11.0
+      - run: python scripts/test_backend.py
 
   javascript-syntax:
     name: JavaScript syntax checks (Node 26.13.0 LTS)

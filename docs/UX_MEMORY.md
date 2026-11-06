@@ -270,3 +270,15 @@ Esta entrada prevalece sobre notas históricas que den por resuelta la fluidez g
 - Validado en esta máquina: 80 pruebas frontend, TypeScript, build, 4 smoke checks de Core/diagnósticos, check_config y HTTP 200 en `http://127.0.0.1:8123/argus`; el log confirma que inicia la integración Argus `2.9.158`.
 - La suite backend amplia NO está verde: última ejecución, 222 pruebas, 9 fallos, 5 errores y 13 skips (195 pasaron). Los errores son mocks async que devuelven `None` y un fixture de alarma sin `_require_alarm_actor_permission`; los fallos cubren contratos de texto/evento antiguos y fixtures walk-test con expectativas previas. No se atribuyen a HA 2026.11 sin evidencia; no esconder ni presentar como aprobada. Nueve contratos de versión/runtime dirigidos sí pasan. Detalle en `docs/LOCAL_HA_2026.11_MIGRATION.md`.
 - El único servidor del proyecto activo para el usuario debe ser `127.0.0.1:8123`. No levantar laboratorio alternativo ni previews en otros puertos.
+
+## 2026-11-06 — Preparación autorizada de v3.0.0
+
+- El usuario autoriza completar migración desde v2.6.8, documentación, paquete, commit local, tag y release en GitHub tras resolver las verificaciones pendientes.
+- Rama de preparación: codex/prepare-v3.0.0-20261106; integración con origin/main todavía sin cerrar. Respaldos y checkpoints previos conservados.
+- Conservar configuración, IDs, automatizaciones, PIN, TTS y funcionamiento sin activar Zonas. Las nuevas funciones son optativas.
+- Corregido borrado de tts_targets al cargar almacenamiento; regresión de preservación aprobada. Restaurada ruta OptionsFlow hacia configuración de voz del panel sin reemplazar opciones.
+- Node local: .runtime/node-v26.13.0-darwin-arm64/bin. Python: .venv/bin/python (3.14.10).
+- Frontend: 88 pruebas, TypeScript y build aprobados. Migración de zonas: 7 pruebas aprobadas. Seguridad crítica: 4 pruebas aprobadas.
+- La suite unittest conjunta presenta contaminación entre mocks; observación de sensores pasa aislada. Fixtures actualizados para PIN, autorización, salidas y eventos de progreso. No se cambió la política de seguridad.
+- Pendientes: contratos de automatizaciones y sensores, ejecución de pruebas de estilo pytest, integración HA 2026.11, actualización completa sobre copia v2.6.8, documentación v3, reconstrucción ZIP y publicación.
+- No declarar v3.0.0 publicada: todavía no existe publicación ni tag final. No prometer ausencia absoluta de errores.

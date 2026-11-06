@@ -151,7 +151,11 @@ class CriticalAlarmRuntime(unittest.IsolatedAsyncioTestCase):
                 panel._require_alarm_actor_permission.assert_awaited_once_with("sos")
                 self.assertTrue(panel._panic_active)
                 self.assertEqual(panel._alarm_state, state)
-                await alarm.ArgusAlarmPanel.async_stop_panic(panel)
+                with self.assertRaises(alarm.HomeAssistantError):
+                    await alarm.ArgusAlarmPanel.async_stop_panic(panel, "0000")
+                self.assertTrue(panel._panic_active)
+                self.assertEqual(panel._alarm_state, state)
+                await alarm.ArgusAlarmPanel.async_stop_panic(panel, "1111")
                 self.assertFalse(panel._panic_active)
                 self.assertEqual(panel._alarm_state, state)
                 expected_outputs = [] if state == alarm.AlarmControlPanelState.TRIGGERED else ["siren.fixture"]
