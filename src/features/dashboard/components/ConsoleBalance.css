@@ -1242,3 +1242,60 @@
   :host .entry.entry.ios-fullscreen .security-console.security-console .console-modes-vertical { order: -1 !important; }
   :host .entry.entry.ios-fullscreen .security-console.security-console .security-context { order: 0 !important; }
 }
+
+/* Low landscape panels: keep navigation in view while sensor details scroll. */
+@media (orientation: landscape) and (max-height: 600px) {
+  :host .entry.entry.ios-fullscreen { overflow: hidden !important; }
+  :host .entry.entry.ios-fullscreen .entry-content.security-console.security-console {
+    display: grid !important;
+    grid-template-areas: 'header header' 'controls emblem' 'sensors sensors' !important;
+    grid-template-columns: minmax(0, 1fr) minmax(120px, .65fr) !important;
+    grid-template-rows: auto minmax(120px, 1fr) minmax(90px, .8fr) !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    min-height: 0 !important;
+    max-height: 100dvh !important;
+    box-sizing: border-box !important;
+    padding: 10px 16px !important;
+    gap: 10px !important;
+    align-content: stretch !important;
+    overflow: hidden !important;
+  }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .console-hud {
+    grid-area: header !important;
+    position: static !important;
+    transform: none !important;
+    grid-template-areas: 'home online tools' !important;
+    grid-template-columns: minmax(0,1fr) auto auto !important;
+  }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon {
+    grid-area: emblem !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    align-self: stretch !important;
+  }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .console-emblem-viewport {
+    width: min(100%, 180px) !important;
+    height: 100% !important;
+    max-height: 200px !important;
+    min-height: 0 !important;
+  }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .console-modes-vertical {
+    grid-area: controls !important;
+    min-height: 0 !important;
+    max-width: none !important;
+    overflow-y: auto !important;
+  }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .console-sensors {
+    grid-area: sensors !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    overflow-y: auto !important;
+    align-self: stretch !important;
+  }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .security-context {
+    max-height: 100% !important;
+    overflow-y: auto !important;
+  }
+}

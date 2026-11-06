@@ -1,3 +1,9 @@
+## [3.7.1] - 2026-11-06
+
+- Distribución acotada para fullscreen horizontal de poca altura: cabecera, controles/núcleo y sensores desplazables.
+- Evitar que los detalles de zonas desplacen las áreas principales fuera del viewport.
+- Validación visual en Echo Show físico pendiente.
+
 ## [3.7.0] - 2026-11-06
 
 - Verificación de zonas en fullscreen, selección global persistente y acceso a todas las zonas con atención.
