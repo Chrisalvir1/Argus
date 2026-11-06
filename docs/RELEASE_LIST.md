@@ -2,6 +2,8 @@
 
 | Versión | Descripción | Notas |
 |---|---|---|
+| 3.7.0 | Verificación fullscreen y contexto de zonas | [Notas](RELEASE_NOTES_3.7.0.md) |
+| 3.0.6 | TTS directo, selectores y ajustes responsive | [Notas](RELEASE_NOTES_3.0.6.md) |
 | 3.0.5 | Núcleo vertical adaptativo, cabecera móvil y zonas legibles | [Notas](RELEASE_NOTES_3.0.5.md) |
 | 3.0.4 | Sensores directos por zona, emblema SVG y ajustes móviles | [Notas](RELEASE_NOTES_3.0.4.md) |
 | 3.0.3 | Legibilidad, zonas/TTS, contraste y giro CSS ligero | [Notas](RELEASE_NOTES_3.0.3.md) |

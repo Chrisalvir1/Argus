@@ -1,3 +1,7 @@
+## 2026-11-06 — v3.7.0
+
+Versionado solicitado por el usuario. Incluye todos los cambios locales de verificación fullscreen y contexto. No confundir filtrado de zona seleccionada con detección incompleta. Validación visual de los últimos ajustes en hardware pendiente. No modificar configuración operativa durante las comprobaciones.
+
 ## 2026-11-05 — Versión local 2.9.160: estados completos de sensor
 
 - El diagnóstico contextual muestra estado interpretado según clase de entidad, conexión, batería y, para contactos que siguen abiertos, la hora de inicio (`last_changed`). No extrapolar «abierto/cerrado» a sensores de movimiento ni a entidades informativas.

@@ -253,7 +253,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
   }));
   const walk = panel._walkTestEntryId === entry.entry_id ? panel._walkTestSession : null;
   const testing = Boolean(walk?.active);
-  const selectContextZone = (id: string | null) => { setSelectedZoneId(id); setVerificationOpen(Boolean(id)); setDiagnosticOpen(false); setChooseTest(false); setIncidentOpen(false); };
+  const selectContextZone = (id: string | null) => { setSelectedZoneId(id); setVerificationOpen(true); setDiagnosticOpen(false); setChooseTest(false); setIncidentOpen(false); };
   const selectedZone = configuredZones.find((zone: any) => zone.id === selectedZoneId);
   const incidentZone = zones.find((zone: any) => zone.triggered);
   const incidentSensor = triggeredSensorId && hass?.states?.[triggeredSensorId];
@@ -488,6 +488,7 @@ export function SecurityConsole({ panel, isFullscreen, onToggleFullscreen, onUnl
 
           >
             {bypassError && <small role="alert">{bypassError}</small>}
+            {selectedZone && !testing && !incidentOpen && <button type="button" className="context-back" onClick={() => { setSelectedZoneId(null); setDiagnosticOpen(false); }}>Ver todas las zonas que requieren atención</button>}
             {selectedZone && !testing && !incidentOpen && <div className="context-sensor-row">
               <small>{selectedZoneStatus === 'ready' ? 'Zona lista' : selectedZoneStatus === 'pending' ? 'Zona pendiente' :
                 selectedZoneStatus === 'notApplicable' ? 'No aplica a este modo' : 'Zona sin verificar'}</small>

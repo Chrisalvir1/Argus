@@ -1,3 +1,9 @@
+## [3.7.0] - 2026-11-06
+
+- Verificación de zonas en fullscreen, selección global persistente y acceso a todas las zonas con atención.
+- Contexto horizontal con scroll y orden vertical con áreas seguras.
+- Incluye todos los cambios de v3.0.6. Ver docs/RELEASE_NOTES_3.7.0.md y sus limitaciones de validación visual.
+
 ## [3.0.6] - 2026-11-06
 
 Ajustes responsive, configuración directa TTS y organización de selectores. Véase docs/RELEASE_NOTES_3.0.6.md.

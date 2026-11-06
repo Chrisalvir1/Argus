@@ -1208,3 +1208,37 @@
   font-size: clamp(14px, 4cqw, 18px) !important;
   white-space: nowrap !important;
 }
+
+/* Keep verification visible in the active fullscreen panel at every width. */
+:host .entry.entry.ios-fullscreen .security-console.security-console .context-verification-dialog:not([hidden]) {
+  position: fixed !important;
+  inset: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) auto !important;
+  width: min(680px, calc(100vw - 32px)) !important;
+  height: auto !important;
+  max-height: calc(100dvh - 32px) !important;
+  overflow: auto !important;
+  z-index: 100001 !important;
+}
+
+/* Fullscreen content starts below the HUD, including iPhone safe areas. */
+:host .entry.entry.ios-fullscreen .security-console.security-console .console-hud {
+  z-index: 20 !important;
+}
+@media (orientation: landscape) {
+  :host .entry.entry.ios-fullscreen .security-console.security-console .security-context {
+    max-height: calc(100dvh - 120px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+    overflow-y: auto !important;
+    align-self: center !important;
+    min-height: 0 !important;
+  }
+}
+@media (max-width: 760px) and (orientation: portrait) {
+  :host .entry.entry.ios-fullscreen .security-console.security-console {
+    padding-top: max(16px, env(safe-area-inset-top)) !important;
+    padding-bottom: max(16px, env(safe-area-inset-bottom)) !important;
+  }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .console-hud { order: -3 !important; }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .entry-icon { order: -2 !important; }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .console-modes-vertical { order: -1 !important; }
+  :host .entry.entry.ios-fullscreen .security-console.security-console .security-context { order: 0 !important; }
+}
